@@ -14,32 +14,16 @@ use Codeception\Util\ReflectionHelper;
 use Illuminate\Contracts\Auth\Authenticatable;
 use Illuminate\Database\Eloquent\Model as EloquentModel;
 use Illuminate\Support\Collection;
+use Symfony\Component\Console\Output\OutputInterface;
 
 /**
  *
- * This module allows you to run functional tests for Laravel 5.
+ * This module allows you to run functional tests for Laravel 5.1+
  * It should **not** be used for acceptance tests.
  * See the Acceptance tests section below for more details.
  *
- * As of Codeception 2.2 this module only works for Laravel 5.1 and later releases.
- * If you want to test a Laravel 5.0 application you have to use Codeception 2.1.
- * You can also upgrade your Laravel application to 5.1, for more details check the Laravel Upgrade Guide
- * at <https://laravel.com/docs/master/upgrade>.
- *
  * ## Demo project
- * <https://github.com/janhenkgerritsen/codeception-laravel5-sample>
- *
- * ## Status
- *
- * * Maintainer: **Jan-Henk Gerritsen**
- * * Stability: **stable**
- *
- * ## Example
- *
- *     modules:
- *         enabled:
- *             - Laravel5:
- *                 environment_file: .env.testing
+ * <https://github.com/codeception/codeception-laravel5-sample>
  *
  * ## Config
  *
@@ -60,6 +44,27 @@ use Illuminate\Support\Collection;
  * * disable_model_events: `boolean`, default `false` - disable model events.
  * * url: `string`, default `` - the application URL.
  *
+ * ### Example #1 (`functional.suite.yml`)
+ *
+ * Enabling module:
+ *
+ * ```yml
+ * modules:
+ *     enabled:
+ *         - Laravel5
+ * ```
+ *
+ * ### Example #2 (`functional.suite.yml`)
+ *
+ * Enabling module with custom .env file
+ *
+ * ```yml
+ * modules:
+ *     enabled:
+ *         - Laravel5:
+ *             environment_file: .env.testing
+ * ```
+ *
  * ## API
  *
  * * app - `Illuminate\Foundation\Application`
@@ -78,17 +83,21 @@ use Illuminate\Support\Collection;
  * ## Acceptance tests
  *
  * You should not use this module for acceptance tests.
- * If you want to use Laravel functionality with your acceptance tests,
- * for example to do test setup, you can initialize the Laravel functionality
- * by adding the following lines of code to the `_bootstrap.php` file of your test suite:
+ * If you want to use Eloquent within your acceptance tests (paired with WebDriver) enable only
+ * ORM part of this module:
  *
- *     require 'bootstrap/autoload.php';
- *     $app = require 'bootstrap/app.php';
- *     $app->loadEnvironmentFrom('.env.testing');
- *     $app->instance('request', new \Illuminate\Http\Request);
- *     $app->make('Illuminate\Contracts\Http\Kernel')->bootstrap();
+ * ### Example (`acceptance.suite.yml`)
  *
- *
+ * ```yaml
+ * modules:
+ *     enabled:
+ *         - WebDriver:
+ *             browser: chrome
+ *             url: http://127.0.0.1:8000
+ *         - Laravel5:
+ *             part: ORM
+ *             environment_file: .env.testing
+ * ```
  */
 class Laravel5 extends Framework implements ActiveRecord, PartedModule
 {
@@ -208,6 +217,10 @@ class Laravel5 extends Framework implements ActiveRecord, PartedModule
                     $connection->disconnect();
                 }
             }
+
+            // Remove references to Faker in factories to prevent memory leak
+            unset($this->app[\Faker\Generator::class]);
+            unset($this->app[\Illuminate\Database\Eloquent\Factory::class]);
         }
     }
 
@@ -410,18 +423,26 @@ class Laravel5 extends Framework implements ActiveRecord, PartedModule
      * <?php
      * $I->callArtisan('command:name');
      * $I->callArtisan('command:name', ['parameter' => 'value']);
-     * ?>
      * ```
-
+     * Use 3rd parameter to pass in custom `OutputInterface`
+     *
      * @param string $command
      * @param array $parameters
+     * @param OutputInterface $output
+     * @return string
      */
-    public function callArtisan($command, $parameters = [])
+    public function callArtisan($command, $parameters = [], OutputInterface $output = null)
     {
         $console = $this->app->make('Illuminate\Contracts\Console\Kernel');
-        $console->call($command, $parameters);
-
-        return trim($console->output());
+        if (!$output) {
+            $console->call($command, $parameters);
+            $output = trim($console->output());
+            $this->debug($output);
+            return $output;
+        }
+        
+        $console->call($command, $parameters, $output);
+            
     }
 
     /**
@@ -554,9 +575,9 @@ class Laravel5 extends Framework implements ActiveRecord, PartedModule
 
         if ($rootNamespace && !(strpos($action, '\\') === 0)) {
             return $rootNamespace . '\\' . $action;
-        } else {
-            return trim($action, '\\');
         }
+
+        return trim($action, '\\');
     }
 
     /**

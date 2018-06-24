@@ -25,7 +25,7 @@ use app\models\Utilities;
 ?>
 <?=
 
-PbGridView::widget([
+PBGridView::widget([
     'id' => 'TbG_Profesor',
     //'showExport' => true,
     //'fnExportEXCEL' => "exportExcel",
@@ -33,7 +33,13 @@ PbGridView::widget([
     'dataProvider' => $model,
     'columns' =>
     [
+        /*[
+            'class' => '\yii\grid\CheckboxColumn',
+        ],*/
         [
+            'class' => 'app\widgets\PbGridView\PbCheckboxColumn',
+        ],
+        /*[
             'name' => 'rb_profesor',
             'class' => 'yii\grid\RadioButtonColumn',
             'radioOptions' => function ($model) {
@@ -42,7 +48,7 @@ PbGridView::widget([
                     'checked' => $model['id'] == $model['id']
                 ];
             }
-        ],
+        ],*/
         [
             'attribute' => 'nombre',
             'header' => Yii::t("formulario", "Name"),

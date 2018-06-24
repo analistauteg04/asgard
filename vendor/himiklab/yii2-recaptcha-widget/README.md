@@ -2,6 +2,8 @@ Google reCAPTCHA widget for Yii2
 ================================
 Based on reCaptcha API 2.0.
 
+[![Packagist](https://img.shields.io/packagist/dt/himiklab/yii2-recaptcha-widget.svg)]() [![Packagist](https://img.shields.io/packagist/v/himiklab/yii2-recaptcha-widget.svg)]()  [![license](https://img.shields.io/badge/License-MIT-yellow.svg)]()
+
 Installation
 ------------
 The preferred way to install this extension is through [composer](http://getcomposer.org/download/).
@@ -46,7 +48,7 @@ public function rules()
 {
   return [
       // ...
-      [['reCaptcha'], \himiklab\yii2\recaptcha\ReCaptchaValidator::className(), 'secret' => 'your secret key', 'uncheckedMessage' => 'Please confirm that you are a bot.']
+      [['reCaptcha'], \himiklab\yii2\recaptcha\ReCaptchaValidator::className(), 'secret' => 'your secret key', 'uncheckedMessage' => 'Please confirm that you are not a bot.']
   ];
 }
 ```
@@ -89,17 +91,17 @@ For example:
 or
 
 ```php
-<?= \himiklab\yii2\recaptcha\ReCaptcha::widget([
-    'name' => 'reCaptcha',
-    'siteKey' => 'your siteKey',
-    'widgetOptions' => ['class' => 'col-sm-offset-3']
-]) ?>
+<?= $form->field($model, 'reCaptcha')->widget(\himiklab\yii2\recaptcha\ReCaptcha::className()) ?>
 ```
 
 or
 
 ```php
-<?= $form->field($model, 'reCaptcha')->widget(\himiklab\yii2\recaptcha\ReCaptcha::className()) ?>
+<?= \himiklab\yii2\recaptcha\ReCaptcha::widget([
+    'name' => 'reCaptcha',
+    'siteKey' => 'your siteKey',
+    'widgetOptions' => ['class' => 'col-sm-offset-3']
+]) ?>
 ```
 
 or simply
