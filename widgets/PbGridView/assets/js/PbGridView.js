@@ -177,8 +177,22 @@
         applyFilterData: function (data) {
             var $grid = $(this);
             var settings = gridData[$grid.attr('id')].settings;
+            
+            // fixed data array
             data['PBgetFilter'] = true;
-
+            var newData = new Object();
+            $.each(data, function(index, value){
+                newData[index] = [value];
+            });
+            data = newData;
+            
+            $.each($(settings.filterSelector).serializeArray(), function () {
+                if (!(this.name in data)) {
+                    data[this.name] = [];
+                }
+                data[this.name].push(this.value);
+            });
+            
             var namesInFilter = Object.keys(data);
 
             $.each(yii.getQueryParams(settings.filterUrl), function (name, value) {
