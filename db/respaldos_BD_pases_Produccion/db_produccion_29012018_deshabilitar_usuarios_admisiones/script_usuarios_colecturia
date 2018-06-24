@@ -1,0 +1,52 @@
+usu_sha:
+60sU04pqQwiP0I5NLm0pbLFhU8x_eUJw
+usu_password:
+PMLFqAeA3TjsRNVHHkSrEzMwZDI4OTVlNjU1YzBjMTgxNzQ2NWM3YTQ3NTk1MjcwZWMzZjYxYThlMGFlZjgyZGQ3YzA5MjM1ZWFjMTY3MWXB0IJRlKOw/a2OCww0lEq+NsDMShqFj8ufvXsVXRlIqUwkv6yvkFcw0Y9+adGlvMMfTI/GXubd9+VqnfYSfdjl
+
+-------------------------------------------------------------------------------
+
+INSERT INTO db_asgard.`persona` (`per_id`, `per_pri_nombre`, `per_seg_nombre`, `per_pri_apellido`, `per_seg_apellido`, `per_cedula`, `per_ruc`, `per_pasaporte`, `etn_id`, `eciv_id`, `per_genero`, `pai_id_nacimiento`, `pro_id_nacimiento`, `can_id_nacimiento`, `per_fecha_nacimiento`, `per_celular`, `per_correo`, `per_foto`, `tsan_id`, `per_domicilio_sector`, `per_domicilio_cpri`, `per_domicilio_csec`, `per_domicilio_num`, `per_domicilio_ref`, `per_domicilio_telefono`, `pai_id_domicilio`, `pro_id_domicilio`, `can_id_domicilio`, `per_trabajo_nombre`, `per_trabajo_direccion`, `per_trabajo_telefono`, `per_trabajo_ext`, `pai_id_trabajo`, `pro_id_trabajo`, `can_id_trabajo`, `per_estado`, `per_fecha_creacion`, `per_fecha_modificacion`, `per_estado_logico`) VALUES
+(241, 'Joselin', 'Patricia', 'Aguilar', 'Guamán', '0922366034', NULL, NULL, 1, 1, 'M', 57, 10, 87, NULL, NULL, NULL, NULL, 7, NULL, NULL, NULL, NULL, NULL, NULL, 57, 10, 87, NULL, NULL, NULL, NULL, 57, 10, 87, '1', '2018-01-29 16:15:00', NULL, '1');
+
+INSERT INTO db_asgard.`usuario` (`usu_id`, `per_id`, `usu_user`, `usu_sha`, `usu_password`, `usu_time_pass`, `usu_session`, `usu_last_login`, `usu_link_activo`, `usu_estado`, `usu_estado_logico`) VALUES
+(241, 241, 'colecturia@uteg.edu.ec', '60sU04pqQwiP0I5NLm0pbLFhU8x_eUJw', 'PMLFqAeA3TjsRNVHHkSrEzMwZDI4OTVlNjU1YzBjMTgxNzQ2NWM3YTQ3NTk1MjcwZWMzZjYxYThlMGFlZjgyZGQ3YzA5MjM1ZWFjMTY3MWXB0IJRlKOw/a2OCww0lEq+NsDMShqFj8ufvXsVXRlIqUwkv6yvkFcw0Y9+adGlvMMfTI/GXubd9+VqnfYSfdjl', NULL, NULL, NULL, NULL, '1', '1');
+
+-------------------------------------------------------------------------------
+INSERT INTO db_asgard.`persona` (`per_id`, `per_pri_nombre`, `per_seg_nombre`, `per_pri_apellido`, `per_seg_apellido`, `per_cedula`, `per_ruc`, `per_pasaporte`, `etn_id`, `eciv_id`, `per_genero`, `pai_id_nacimiento`, `pro_id_nacimiento`, `can_id_nacimiento`, `per_fecha_nacimiento`, `per_celular`, `per_correo`, `per_foto`, `tsan_id`, `per_domicilio_sector`, `per_domicilio_cpri`, `per_domicilio_csec`, `per_domicilio_num`, `per_domicilio_ref`, `per_domicilio_telefono`, `pai_id_domicilio`, `pro_id_domicilio`, `can_id_domicilio`, `per_trabajo_nombre`, `per_trabajo_direccion`, `per_trabajo_telefono`, `per_trabajo_ext`, `pai_id_trabajo`, `pro_id_trabajo`, `can_id_trabajo`, `per_estado`, `per_fecha_creacion`, `per_fecha_modificacion`, `per_estado_logico`) VALUES
+(242, 'Erika', 'Elizabeth', 'Mera', 'Ortega', '0925355141', NULL, NULL, 1, 1, 'M', 57, 10, 87, NULL, NULL, NULL, NULL, 7, NULL, NULL, NULL, NULL, NULL, NULL, 57, 10, 87, NULL, NULL, NULL, NULL, 57, 10, 87, '1', '2018-01-29 16:15:00', NULL, '1');
+
+
+INSERT INTO db_asgard.`usuario` (`usu_id`, `per_id`, `usu_user`, `usu_sha`, `usu_password`, `usu_time_pass`, `usu_session`, `usu_last_login`, `usu_link_activo`, `usu_estado`, `usu_estado_logico`) VALUES
+(242, 242, 'colecturia01@uteg.edu.ec', '60sU04pqQwiP0I5NLm0pbLFhU8x_eUJw', 'PMLFqAeA3TjsRNVHHkSrEzMwZDI4OTVlNjU1YzBjMTgxNzQ2NWM3YTQ3NTk1MjcwZWMzZjYxYThlMGFlZjgyZGQ3YzA5MjM1ZWFjMTY3MWXB0IJRlKOw/a2OCww0lEq+NsDMShqFj8ufvXsVXRlIqUwkv6yvkFcw0Y9+adGlvMMfTI/GXubd9+VqnfYSfdjl', NULL, NULL, NULL, NULL, '1', '1');
+--------------
+
+update db_asgard.usuario 
+set usu_estado = '0'
+where usu_id = 112; 
+-----
+
+-------------------------------------------------------------------------------
+INSERT INTO db_asgard.`persona` (`per_id`, `per_pri_nombre`, `per_seg_nombre`, `per_pri_apellido`, `per_seg_apellido`, `per_cedula`, `per_ruc`, `per_pasaporte`, `etn_id`, `eciv_id`, `per_genero`, `pai_id_nacimiento`, `pro_id_nacimiento`, `can_id_nacimiento`, `per_fecha_nacimiento`, `per_celular`, `per_correo`, `per_foto`, `tsan_id`, `per_domicilio_sector`, `per_domicilio_cpri`, `per_domicilio_csec`, `per_domicilio_num`, `per_domicilio_ref`, `per_domicilio_telefono`, `pai_id_domicilio`, `pro_id_domicilio`, `can_id_domicilio`, `per_trabajo_nombre`, `per_trabajo_direccion`, `per_trabajo_telefono`, `per_trabajo_ext`, `pai_id_trabajo`, `pro_id_trabajo`, `can_id_trabajo`, `per_estado`, `per_fecha_creacion`, `per_fecha_modificacion`, `per_estado_logico`) VALUES
+(243, 'Juan', 'Diego', 'Vanegas', 'Calderón', '0930628771', NULL, NULL, 1, 1, 'M', 57, 10, 87, NULL, NULL, NULL, NULL, 7, NULL, NULL, NULL, NULL, NULL, NULL, 57, 10, 87, NULL, NULL, NULL, NULL, 57, 10, 87, '1', '2018-01-29 17:25:00', NULL, '1');
+
+
+INSERT INTO db_asgard.`usuario` (`usu_id`, `per_id`, `usu_user`, `usu_sha`, `usu_password`, `usu_time_pass`, `usu_session`, `usu_last_login`, `usu_link_activo`, `usu_estado`, `usu_estado_logico`) VALUES
+(243, 243, 'supervisorcolecturia@uteg.edu.ec', '60sU04pqQwiP0I5NLm0pbLFhU8x_eUJw', 'PMLFqAeA3TjsRNVHHkSrEzMwZDI4OTVlNjU1YzBjMTgxNzQ2NWM3YTQ3NTk1MjcwZWMzZjYxYThlMGFlZjgyZGQ3YzA5MjM1ZWFjMTY3MWXB0IJRlKOw/a2OCww0lEq+NsDMShqFj8ufvXsVXRlIqUwkv6yvkFcw0Y9+adGlvMMfTI/GXubd9+VqnfYSfdjl', NULL, NULL, NULL, NULL, '1', '1');
+--------------
+
+INSERT INTO `grup_rol` (`grol_id`, `gru_id`, `rol_id`, `grol_estado`,`grol_estado_logico`) VALUES
+(16, 9, 16, '1','1');
+
+INSERT INTO `usua_grol` (`ugro_id`, `usu_id`, `grol_id`, `ugro_estado`, `ugro_estado_logico`) VALUES
+(236, 241, 16, '1', '1'),
+(237, 242, 16, '1', '1');
+
+INSERT INTO `usua_grol` (`ugro_id`, `usu_id`, `grol_id`, `ugro_estado`, `ugro_estado_logico`) VALUES
+(238, 243, 9, '1', '1');
+
+INSERT INTO `grup_obmo_grup_rol` (`gogr_id`, `grol_id`, `gmod_id`, `gogr_estado`, `gogr_estado_logico`) VALUES
+(61, 16, 27, '1', '1'),
+(62, 16, 28, '1', '1'),
+(63, 16, 38, '1', '1'),
+(64, 16, 44, '1', '1');
+

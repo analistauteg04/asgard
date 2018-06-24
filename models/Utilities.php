@@ -1,0 +1,504 @@
+<?php
+
+/*
+ * To change this license header, choose License Headers in Project Properties.
+ * To change this template file, choose Tools | Templates
+ * and open the template in the editor.
+ */
+
+namespace app\models;
+
+use Yii;
+use yii\helpers\Url;
+
+/**
+ * Description of Utilities
+ *
+ * @author eduardocueva
+ */
+class Utilities {
+
+    public static function sendEmail($titleMessage = "", $from, $to = array(), $subject, $body, $files = array(), $template = "/mail/layouts/mailing", $fileRoute = "/mail/layouts/files") {
+        if (function_exists('proc_open')) {
+            //self::putMessageLogFile("Mail function exist");
+        } else {
+            self::putMessageLogFile("Error Mail function not exist");
+        }
+        $routeBase = Yii::$app->basePath;
+        $socialNetwork = Yii::$app->params["socialNetworks"];
+
+        $mail = Yii::$app->mailer->compose("@app" . $template, [
+            'titleMessage' => $titleMessage,
+            'body' => $body,
+            'socialNetwork' => $socialNetwork,
+            'bannerImg' => 'banner.jpg',
+            'facebook' => 'facebook.png',
+            'twitter' => 'twitter.png',
+            'youtube' => 'youtube.png',
+            'pathImg' => $routeBase . "/" . $fileRoute . "/",
+        ]);
+        $mail->setFrom($from);
+        $mail->setTo($to);
+        $mail->setSubject($subject);
+        foreach ($files as $key2 => $value2) {
+            $mail->attach($value2);
+        }
+        try {
+            $mail->send();
+        } catch (Exception $ex) {
+            self::putMessageLogFile($ex);
+        }
+    }
+
+    /**
+     * Function getMailMessage
+     * @author  Diana Lopez <dlopez@uteg.edu.ec>
+     * @param      
+     * @return  
+     */
+    public static function getMailMessage($file, $slack = array(), $lang = "es") {
+        $routeBase = Yii::$app->basePath . "/mail/layouts/messages/";
+        $content = "";
+        if (is_dir($routeBase . $lang)) {
+            $routeBase .= $lang . "/" . $file;
+        } elseif (is_dir($routeBase . "en")) {
+            $routeBase .= "en/" . $file;
+        } else
+            return $content;
+        if (is_file($routeBase))
+            $content = file_get_contents($routeBase);
+        if (count($slack) > 0) {
+            foreach ($slack as $key => $value) {
+                $content = str_replace($key, $value, $content);
+            }
+        }
+        return $content;
+    }
+
+    /**
+     * Función escribir en log del sistema
+     *
+     * @access public
+     * @author Eduardo Cueva
+     * @param  string $message       Escribe variable en archivo de logs.
+     */
+    public static function putMessageLogFile($message) {
+        if (is_array($message))
+            $message = json_encode($message);
+            $message = date("Y-m-d H:i:s") . " " . $message . "\n";
+        if (!is_dir(dirname(Yii::$app->params["logfile"]))) {
+            mkdir(dirname(Yii::$app->params["logfile"]), 0777, true);
+            chmod(dirname(Yii::$app->params["logfile"]), 0777);
+            touch(Yii::$app->params["logfile"]);
+        }
+        //se escribe en el fichero
+        file_put_contents(Yii::$app->params["logfile"], $message, FILE_APPEND | LOCK_EX);
+    }
+
+    /**
+     * Función que devuelve la ip del usuario en session
+     *
+     * @access public
+     * @author Eduardo Cueva
+     * @return string   $ip         Retorna la IP del cliente o usuario
+     */
+    public static function getClientRealIP() {
+        $ip = $_SERVER['REMOTE_ADDR'];
+        if (!empty($_SERVER['HTTP_CLIENT_IP']))
+            $ip = $_SERVER['HTTP_CLIENT_IP'];
+        if (!empty($_SERVER['HTTP_X_FORWARDED_FOR']))
+            $ip = $_SERVER['HTTP_X_FORWARDED_FOR'];
+        return $ip;
+    }
+
+    /**
+     * Function ajaxResponse
+     * @author  Diana Lopez <dlopez@uteg.edu.ec>
+     * @param      
+     * @return  
+     */
+    public static function ajaxResponse($status, $type, $label, $error, $message, $addicionalData = array()) {
+        $arroout = array();
+        $arroout["status"] = $status;
+        $arroout["type"] = $type;
+        $arroout["label"] = $label;
+        $arroout["error"] = $error;
+        $arroout["message"] = $message;
+        if (count($addicionalData) > 0) {
+            $arroout["data"] = $addicionalData;
+        }
+        return json_encode($arroout);
+    }
+    
+    public static function createTemporalFile($filename) {
+        $nombre_tmp = tempnam(sys_get_temp_dir() . $filename . "_" . date("Ymdhis"), "PB");
+        return $nombre_tmp;
+    }
+
+    public static function removeTemporalFile($filename) {
+        unlink($filename);
+    }
+    
+    /**
+     * Función que mueve un archivo a otro directorio
+     *
+     * @access public
+     * @author Eduardo Cueva
+     * @param string $dirFileIni Directorio Inicial
+     * @param string $dirFileEnd Directorio Final
+     * @return bool       Estado del movimiento del archivo
+     */
+    public static function moveUploadFile($dirFileIni, $dirFileEnd) {
+        $dirFileEnd = Yii::$app->basePath . str_replace("../", "", $dirFileEnd);
+        if (is_file($dirFileIni)) {
+            if (self::verificarDirectorio(dirname($dirFileEnd))) {
+                if (move_uploaded_file($dirFileIni, $dirFileEnd)) {
+                    return true;
+                }
+            }
+        }
+        return false;
+    }
+
+    /**
+     * Función que cambia la dimenision de una imagen
+     *
+     * @access public
+     * @author Eduardo Cueva
+     * @param string $dirImg Ruta de la Imagen
+     * @param string $newwidth Ancho de la imagen. Ejemplo: 600
+     * @param string $newheight Altura de la imagen. Ejemplo: 500
+     * @return bool       Estado del movimiento del archivo
+     */
+    public static function changeSizeImage($dirImg, $newwidth, $newheight, $x1 = 0, $y1 = 0, $w = 0, $h = 0) {
+        $w = ($w!=0)?$w:$newwidth;
+        $h = ($h!=0)?$h:$newheight;
+        
+        $arrIm = explode(".", $dirImg);
+        $typeImage = $arrIm[count($arrIm) - 1];
+        $dirImg = Yii::$app->basePath . str_replace("../", "", $dirImg);
+
+        list( $width_old, $height_old ) = getimagesize($dirImg);
+
+        $thumb = imagecreatetruecolor($newwidth, $newheight);
+
+        if (strtolower($typeImage) == "png") {
+            $source = imagecreatefrompng($dirImg);
+            imagecopyresized($thumb, $source, 0, 0, 0, 0, $newwidth, $newheight, $width_old, $height_old);
+            imagepng($thumb, $dirImg, 100);
+
+            $im = imagecreatefrompng($dirImg);
+            $dest = imagecreatetruecolor($w, $h);
+
+            imagecopyresampled($dest, $im, 0, 0, $x1, $y1, $w, $h, $w, $h);
+            imagepng($dest, $dirImg, 100);
+        } else {
+            $source = imagecreatefromjpeg($dirImg);
+            imagecopyresized($thumb, $source, 0, 0, 0, 0, $newwidth, $newheight, $width_old, $height_old);
+            imagejpeg($thumb, $dirImg, 100);
+
+            $im = imagecreatefromjpeg($dirImg);
+            $dest = imagecreatetruecolor($w, $h);
+
+            imagecopyresampled($dest, $im, 0, 0, $x1, $y1, $w, $h, $w, $h);
+            imagejpeg($dest, $dirImg, 100);
+        }
+    }
+
+    /**
+     * Función que cambia la extension de una imagen a jpg
+     *
+     * @access public
+     * @author Eduardo Cueva
+     * @param string $dirImg Ruta de la Imagen
+     * @param string $ext Extension que se desea cambiar
+     * @return bool       Estado del movimiento del archivo
+     */
+    public static function changeIMGtoJPG($dirImg) {
+        $dirImg = Yii::$app->basePath . str_replace("../", "", $dirImg);
+        if (is_file($dirImg)) {
+            $arrIm = explode(".", basename($dirImg));
+            $typeImage = $arrIm[count($arrIm) - 1];
+            if (strtolower($typeImage) == "png") {
+                $image = imagecreatefrompng($dirImg);
+                $newFile = preg_replace("/\.(png|Png|PNG)$/", '.jpg', $dirImg);
+                imagejpeg($image, $newFile, "100");
+                imagedestroy($image);
+                unlink($dirImg);
+            } if(strtolower($typeImage) == "gif") {
+                $image = imagecreatefromgif($dirImg);
+                $newFile = preg_replace("/\.(gif|Gif|GIF)$/", '.jpg', $dirImg);
+                imagejpeg($image, $newFile, "100");
+                imagedestroy($image);
+                unlink($dirImg);
+            }
+        }
+    }
+    
+    /**
+     * Función que cambia la extension de una imagen a jpg
+     *
+     * @access public
+     * @author Eduardo Cueva
+     * @param string    $icon Nombre del Icono
+     * @return string         Devuelve string css del icono
+     */
+    public static function getIcon($icon){
+        $cssIcon = "";
+        switch ($icon){
+            case 'edit': 
+                $cssIcon = "glyphicon glyphicon-pencil";
+                break;
+            case 'view':
+                $cssIcon = "glyphicon glyphicon-eye-open";
+                break;
+            case 'remove':
+                $cssIcon = "glyphicon glyphicon-remove";
+                break;
+        }
+        return $cssIcon;
+    }
+    
+    /**
+     * Función que verifica si un directorio existe caso contrario intenta crearlo
+     *
+     * @access public
+     * @author Eduardo Cueva
+     * @param  string   $folder     Directorio a verificar si existe o no
+     * @return bool     $bool       Retorna la IP del cliente o usuario
+     */
+    public static function verificarDirectorio($folder) {
+        if (!file_exists($folder)) {
+            if (mkdir($folder, 0755, true)) {
+                //chown($folder, Yii::$app->params['userWebServer']);
+                return true;
+            } else {
+                self::putMessageLogFile("Error: System cannot create folder: $folder");
+                return false;
+            }
+        } else
+            return true;
+    }
+
+    /**
+     * Función que crea desencripta un mensaje a traves de una clave utilizando AES con metodo de encriptacion
+     *
+     * @access public
+     * @author Eduardo Cueva
+     * @param  string   $filename        Archivo a obtener el content type.
+     * @return string   $contentType     Content Type del Archivo.
+     */
+    public static function mimeContentType($filename) {
+
+        $mime_types = array(
+            'txt' => 'text/plain',
+            'htm' => 'text/html',
+            'html' => 'text/html',
+            'php' => 'text/html',
+            'css' => 'text/css',
+            'js' => 'application/javascript',
+            'json' => 'application/json',
+            'xml' => 'application/xml',
+            'swf' => 'application/x-shockwave-flash',
+            'flv' => 'video/x-flv',
+            // images
+            'png' => 'image/png',
+            'jpe' => 'image/jpeg',
+            'jpeg' => 'image/jpeg',
+            'jpg' => 'image/jpeg',
+            'gif' => 'image/gif',
+            'bmp' => 'image/bmp',
+            'ico' => 'image/vnd.microsoft.icon',
+            'tiff' => 'image/tiff',
+            'tif' => 'image/tiff',
+            'svg' => 'image/svg+xml',
+            'svgz' => 'image/svg+xml',
+            // archives
+            'zip' => 'application/zip',
+            'rar' => 'application/x-rar-compressed',
+            'exe' => 'application/x-msdownload',
+            'msi' => 'application/x-msdownload',
+            'cab' => 'application/vnd.ms-cab-compressed',
+            // audio/video
+            'mp3' => 'audio/mpeg',
+            'qt' => 'video/quicktime',
+            'mov' => 'video/quicktime',
+            // adobe
+            'pdf' => 'application/pdf',
+            'psd' => 'image/vnd.adobe.photoshop',
+            'ai' => 'application/postscript',
+            'eps' => 'application/postscript',
+            'ps' => 'application/postscript',
+            // ms office
+            'doc' => 'application/msword',
+            'rtf' => 'application/rtf',
+            'xls' => 'application/vnd.ms-excel',
+            'ppt' => 'application/vnd.ms-powerpoint',
+            // open office
+            'odt' => 'application/vnd.oasis.opendocument.text',
+            'ods' => 'application/vnd.oasis.opendocument.spreadsheet',
+        );
+
+        $ext = strtolower(array_pop(explode('.', $filename)));
+        if (array_key_exists($ext, $mime_types)) {
+            return $mime_types[$ext];
+        } elseif (function_exists('finfo_open')) {
+            $finfo = finfo_open(FILEINFO_MIME);
+            $mimetype = finfo_file($finfo, $filename);
+            finfo_close($finfo);
+            return $mimetype;
+        } else {
+            return 'application/octet-stream';
+        }
+    }
+    
+    public static function generarReporteXLS($nombarch, $nameReport, $arrHeader, $arrData, $colPosition = array() ){
+        ini_set('memory_limit', '256M');
+        if(count($colPosition) == 0){
+            $colPosition = array("A","B","C","D","E","F","G","H","I","J","K","L","M","N","O","P","Q","R","S","T","U");
+        }
+        if(count($arrData) == 0){
+            echo Yii::t("reportes","No Reports");
+            return;
+        }
+        if(count($arrHeader) == 0){
+            echo Yii::t("reportes","No Reports");
+            return;
+        }
+        $negrita = array(
+            'font' => array(
+                'bold' => true,
+            ),
+        );
+        $border = array(
+            'allborders' =>
+                array(
+                    'borders' => array(
+                        'allborders' => array(
+                            'style' => \PHPExcel_Style_Border::BORDER_THIN,
+                            'color' => array('argb' => 'FF000000'),
+                        ),
+                    ),
+                ),
+            'top' =>
+                array(
+                    'borders' => array(
+                        'top' => array(
+                            'style' => \PHPExcel_Style_Border::BORDER_MEDIUM,
+                            'color' => array('argb' => 'FF000000'),
+                        ),
+                    ),
+                ),
+            'bottom' =>
+                array(
+                    'borders' => array(
+                        'bottom' => array(
+                            'style' => \PHPExcel_Style_Border::BORDER_MEDIUM,
+                            'color' => array('argb' => 'FF000000'),
+                        ),
+                    ),
+                ),
+            'right' =>
+                array(
+                    'borders' => array(
+                        'right' => array(
+                            'style' => \PHPExcel_Style_Border::BORDER_MEDIUM,
+                            'color' => array('argb' => 'FF000000'),
+                        ),
+                    ),
+                ),
+            'left' =>
+                array(
+                    'borders' => array(
+                        'left' => array(
+                            'style' => \PHPExcel_Style_Border::BORDER_MEDIUM,
+                            'color' => array('argb' => 'FF000000'),
+                        ),
+                    ),
+                ),
+        );
+        try{
+            $objPHPExcel = new \PHPExcel();
+            $objPHPExcel->getProperties()->setCreator(Yii::$app->session->get("PB_nombres"))
+                    ->setLastModifiedBy(Yii::$app->session->get("PB_nombres"))
+                    ->setTitle("Office 2007 XLSX")
+                    ->setSubject("Office 2007 XLSX $nombarch")
+                    ->setDescription("$nombarch for Office 2007 XLSX, generated using PHP classes.")
+                    ->setKeywords("office 2007 openxml php")
+                    ->setCategory("$nombarch result file");
+            $objPHPExcel->getActiveSheet()->mergeCells('C6:D6');
+            $objPHPExcel->getActiveSheet()->mergeCells('C7:D7');
+            $objPHPExcel->getActiveSheet()->mergeCells('C4:N4');
+            $objPHPExcel->getActiveSheet()->getStyle("C4")->getFont()->setSize(36);
+            $objPHPExcel->getActiveSheet()->getStyle("C4")->getFont()->setBold(True);
+            $objPHPExcel->getActiveSheet()->getStyle("C6")->getFont()->setSize(16);
+            $objPHPExcel->getActiveSheet()->getStyle("C6")->getFont()->setBold(True);
+            $objPHPExcel->getActiveSheet()->getStyle("E6")->getFont()->setSize(16);
+            $objPHPExcel->getActiveSheet()->getStyle("C7")->getFont()->setSize(16);
+            $objPHPExcel->getActiveSheet()->getStyle("C7")->getFont()->setBold(True);
+            $objPHPExcel->getActiveSheet()->getStyle("E7")->getFont()->setSize(16);
+
+            $objPHPExcel->setActiveSheetIndex(0)
+                    ->setCellValue('C4', $nameReport)
+                    ->setCellValue('C6', Yii::t("reportes","Produced by"))
+                    ->setCellValue('E6', Yii::$app->session->get("PB_nombres"))
+                    ->setCellValue('C7', Yii::t("reportes","Date"))
+                    ->setCellValue('E7', date("Y-m-d H:i:s"));
+
+            // seteo de bordes cabecera de reporte
+            $objPHPExcel->getActiveSheet()->getStyle("B2:S2")->applyFromArray($border["top"]);
+            $objPHPExcel->getActiveSheet()->getStyle("B10:S10")->applyFromArray($border["bottom"]);
+            $objPHPExcel->getActiveSheet()->getStyle("B2:B10")->applyFromArray($border["left"]);
+            $objPHPExcel->getActiveSheet()->getStyle("S2:S10")->applyFromArray($border["right"]);
+            $objPHPExcel->getActiveSheet()->getStyle("B$i:D$i")->applyFromArray($border);
+            $objDrawing = new \PHPExcel_Worksheet_Drawing();
+            $objDrawing->setName('Logo');
+            $objDrawing->setDescription('Logo');
+            $objDrawing->setPath(Yii::$app->basePath . "/themes/" . Yii::$app->view->theme->themeName . "/assets/img/logos/logo.png");
+            //$objDrawing->setHeight(80);
+            $objDrawing->setWidth(300);
+            $objDrawing->setCoordinates('O4');
+            //$objDrawing->setOffsetX(1);
+            //$objDrawing->setOffsetY(5);
+            $objDrawing->setWorksheet($objPHPExcel->getActiveSheet());
+
+            $i='12';
+
+            for($i=0; $i<count($arrHeader); $i++){
+                $j = 12;
+                $objPHPExcel->getActiveSheet()->getStyle($colPosition[$i] . $j)->getFont()->setBold(True);
+                $objPHPExcel->setActiveSheetIndex(0)->setCellValue($colPosition[$i] . $j, $arrHeader[$i]);
+            }
+            $i = 12;
+            foreach($arrData as $key => $value){
+                $k = 0;
+                $j = $i + 1;
+                foreach($value as $key2 => $value2){
+                    $objPHPExcel->setActiveSheetIndex(0)->setCellValue($colPosition[$k] . $j, $value2);
+                    $k++;
+                }
+                $i++;
+            }
+            $objWriter = \PHPExcel_IOFactory::createWriter($objPHPExcel, 'Excel5');
+            $objWriter->save('php://output');
+        }catch(Exception $e){
+            echo Yii::t("reportes","Error to export Excel");
+        }
+
+    }
+    
+    public static function zipFiles($nombreZip, $arr_files = array()){
+        $zip = new \ZipArchive();
+        $filename = self::createTemporalFile($nombreZip);
+
+        if ($zip->open($filename, \ZipArchive::CREATE)!==TRUE) {
+            self::putMessageLogFile("cannot open <$filename>");
+        }
+        for($i=0; count($arr_files)>0; $i++){
+            $zip->addFile($arr_files[$i]["ruta"],$arr_files[$i]["name"]);
+        }
+        $zip->close();
+        return $filename;
+    }
+
+}
