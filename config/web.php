@@ -75,11 +75,11 @@ $config = [
             'enablePrettyUrl' => true,
             'showScriptName' => false,
             'enableStrictParsing' => false,
-            'baseUrl' => '/asgard_v2',
+            'baseUrl' => '/asgard',
         ],
         'request' => [
             'enableCsrfValidation'=>false,
-            'baseUrl' => '/asgard_v2',
+            'baseUrl' => '/asgard',
             'parsers' => [
                 'application/json' => 'yii\web\JsonParser',
             ],
