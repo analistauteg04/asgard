@@ -32,5 +32,62 @@ class CController extends \yii\web\Controller {
         }
         return parent::runAction($id, $params);
     }
+    
+    public function beforeAction($action)
+    {
+        $this->createMenuModule();
+        
+        if (parent::beforeAction($action)) {
+            $request = array_merge($_GET, $_POST);
+            if(isset($request['pdf']) && $request['pdf'] == true){
+                $this->layout = '@themes/' . Yii::$app->getView()->theme->themeName . '/layouts/pdf';
+            }
+            $error = Yii::$app->getErrorHandler()->exception;
+            if ($error !== null) {
+                $this->layout = '@themes/' . Yii::$app->getView()->theme->themeName . '/layouts/error';
+                if (Yii::$app->request->isAjax) {
+                    return $error['statusCode'];//$error['message'];
+                } else {
+                    $error = new Error(404, "", "");
+                    return $this->render('@themes/' . Yii::$app->getView()->theme->themeName . '/layouts/error.php',["mensaje" => $error->getMessageByError()]);
+                }
+            }
+            return true;  // or false if needed
+        } else {
+            return false;
+        }
+        
+        //
+        // Esto es para cambiar el tema antes de devolver el render
+        // $this->getView()->theme = Yii::createObject([
+        //      'class' => '\yii\base\Theme',
+        //      'pathMap' => ['@app/views' => '@app/themes/basic'],
+        //      'baseUrl' => '@web/themes/basic',
+        //  ]);
+        // 
+        
+    }
+    
+    public function createMenuModule(){
+        $ctr = Yii::$app->controller->id;
+        $acc = Yii::$app->controller->action->id;
+        $mod = Yii::$app->controller->module->id;
+        $route = $this->route;
+        $session = Yii::$app->session;
+        $objModule = \app\models\ObjetoModulo::findIdentityByEntity(trim($route));
+        $objModPadre = \app\models\ObjetoModulo::findIdentity($objModule->omod_padre_id);
+        $module = \app\models\Modulo::findIdentity($objModule->mod_id);
+        $session->set('PB_module_id', $objModule->mod_id);
+        $session->set('PB_objmodule_id', $objModule->omod_id);
+        
+        $this->getView()->title = Yii::t($objModule->omod_lang_file,$objModule->omod_nombre);
+        $this->getView()->params["Module_name"]    = Yii::t($module->mod_lang_file,$module->mod_nombre);
+        $this->getView()->params["ObjModPadre_name"] = Yii::t($objModPadre->omod_lang_file,$objModPadre->omod_nombre);
+        $this->getView()->params["ObjModule_name"] = Yii::t($objModule->omod_lang_file,$objModule->omod_nombre);
+        $this->getView()->params["mod_id"] = $module->mod_id;
+        $this->getView()->params["omod_id"] = $objModule->omod_id;
+        $this->getView()->params["omod_padre_id"] = $objModule->omod_padre_id;
+
+    }
 
 }
