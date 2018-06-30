@@ -122,5 +122,16 @@ function actualizarperiodcanGrid() {
     }
 }
 
+function exportPdf(){
+    var ObjData = new Object();
+    ObjData.search = $('#txt_buscarDatapc').val();
+    ObjData.f_ini = $('#txt_fecha_inipc').val();
+    ObjData.f_fin = $('#txt_fecha_finpc').val();
+    ObjData.mes = $('#cmb_mes option:selected').val();
+    var rptData = base64_encode(JSON.stringify(ObjData));
+    window.location.href = $('#txth_base').val() + "/adminmetodoingreso/exportpdf?pdf=true&rptData="+rptData;
+    console.log("export pdf");
+}
+
 
 

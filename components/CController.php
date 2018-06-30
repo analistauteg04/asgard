@@ -3,6 +3,9 @@
 namespace app\components;
 
 use Yii;
+use yii\base\InlineAction;
+use yii\helpers\Url;
+use app\models\Error;
 
 /**
  * Description of CController
@@ -11,6 +14,14 @@ use Yii;
  */
 class CController extends \yii\web\Controller {
 
+    public $freportini = "";
+    public $freportend = "";
+    public $modulo = array();
+    public $botones = array();
+    public $id_modulo = 0;
+    public $id_objeto_modulo = 0;
+    public $id_moduloPadre = 0;
+    
     public function init() {
         return parent::init();
     }
@@ -26,7 +37,7 @@ class CController extends \yii\web\Controller {
         $isUser = $session->get('PB_isuser', FALSE);
         $route = $this->getRoute() . "/login";
         $usu = new \app\models\Usuario;
-        $usu->regenerateSession();
+        //$usu->regenerateSession();
         if ($isUser == FALSE && $route != "site/login") {
             $this->redirect(Yii::$app->urlManager->createUrl(["site/login"]));
         }

@@ -21,6 +21,7 @@
         "yiisoft/yii2-swiftmailer": "~2.0.0",
         "mpdf/mpdf": "*",
         "phpoffice/phpspreadsheet": "*",
+        "phpoffice/phpexcel": "*",
         "bower-asset/font-awesome": "~4.0",
         "branchonline/yii2-lightbox": "*",
         "cebe/yii2-gravatar": "1.*",

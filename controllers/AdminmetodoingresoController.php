@@ -8,6 +8,7 @@ use app\models\MetodoIngreso;
 use app\models\NivelInteres;
 use app\models\PeriodoMetodoIngreso;
 use app\models\Curso;
+use app\models\ExportFile;
 use yii\helpers\ArrayHelper;
 
 class AdminmetodoingresoController extends \app\components\CController {
@@ -337,6 +338,47 @@ class AdminmetodoingresoController extends \app\components\CController {
                 echo Utilities::ajaxResponse('NO_OK', 'alert', Yii::t("jslang", "Sucess"), false, $message);
             }
             return;
+        }
+    }
+    
+    public function actionExportpdf(){
+        $pdf = false;
+        $per_id = @Yii::$app->session->get("PB_perid");
+        $mod_periodo = new PeriodoMetodoIngreso;
+        $rptData = isset($_GET['rptData']) ? base64_decode($_GET['rptData']) : NULL;
+        
+        if($_GET["pdf"] == 1 || $_GET["pdf"] == TRUE)
+            $pdf = true;
+        try{
+            ini_set('memory_limit', '256M');
+            $arrSearch = $resp_periodo = [];
+            if($rptData){
+                $arrSearch = json_decode($rptData, true);
+                $arrSearch["f_ini"] = trim($data['f_ini']);
+                $arrSearch["f_fin"] = trim($data['f_fin']);
+                $arrSearch["mes"] = trim($data['mes']);
+                $arrSearch["search"] = trim($data['search']);
+            }
+            if($arrSearch["f_ini"]!="" || $arrSearch["f_fin"]!="" || $arrSearch["mes"]!="" || $arrSearch["search"]!="" )
+                $resp_periodo = $mod_periodo->listarPeriodos($arrSearch);
+            else
+                $resp_periodo = $mod_periodo->listarPeriodos();
+            // cambiar a plantilla diferente
+            $this->layout = '@themes/' . Yii::$app->getView()->theme->themeName . '/layouts/pdf_rpt';
+            // se exporta a pdf
+            if($pdf){
+                $nameFile='Documento-'. date("Ymdhis");
+                $report = new ExportFile();
+                // se puede enviar una vista tambien o un html
+                $report->createReportPdf($this->render('solicitudpdf',[
+                        'mod_periodo' => $resp_periodo
+                                ]));
+                $report->mpdf->Output($nameFile . ".pdf", ExportFile::OUTPUT_TO_DOWNLOAD);
+                return;
+            }
+
+        }catch(Exception $e){
+            echo $e;
         }
     }
 

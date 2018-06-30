@@ -25,7 +25,8 @@ class AppAsset extends AssetBundle {
     public $js = [
         'js/PBscripts.js',
         'js/PBvalidation.js',
-        'js/cedulaRucPass.js', 
+        'js/cedulaRucPass.js',
+        'js/base64.js',
     ];
     public $jsOptions = ['position' => \yii\web\View::POS_END];
     public $depends = [

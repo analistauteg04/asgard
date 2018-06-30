@@ -49,11 +49,13 @@
 use yii\helpers\Html;
 use app\assets\FontAwesomeAsset;
 use app\assets\AppAsset;
+use app\themes\adminLTE\resources\AdminLTEAsset;
+use app\vendor\penblu\magnificpopup\MagnificPopupAsset;
 
 $assetsAdminLTE = AdminLTEAsset::register($this);
 $assetsApp = AppAsset::register($this);
 $assetsFont = FontAwesomeAsset::register($this);
-
+$assetsPopup    = MagnificPopupAsset::register($this);
 $directoryAsset = $assetsAdminLTE->baseUrl;
 ?>
 <?php $this->beginPage() ?>

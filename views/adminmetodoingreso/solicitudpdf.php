@@ -5,21 +5,18 @@ use yii\widgets\DetailView;
 use yii\helpers\Url;
 use app\widgets\PbGridView\PbGridView;
 use yii\data\ArrayDataProvider;
-use kartik\date\DatePicker;
 use yii\helpers\ArrayHelper;
-use yii\jui\AutoComplete;
 use yii\web\JsExpression;
 
 ?>
-<?= Html::hiddenInput('txth_ids', '', ['id' => 'txth_ids']); ?>
- <div>        
+<div>        
     <?=
     PbGridView::widget([
         //'dataProvider' => new yii\data\ArrayDataProvider(array()),
         'id' => 'Pbgperiodo',
         'showExport' => true,
         //'fnExportEXCEL' => "exportExcel",
-        'fnExportPDF' => "exportPdf",
+        //'fnExportPDF' => "exportPdf",
         'dataProvider' => $mod_periodo,
         'columns' => [            
             [

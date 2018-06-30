@@ -40,18 +40,20 @@ use yii\helpers\Html;
                 </a>
             </li>
              */ ?>
+            <?php if($fnExportEXCEL != "javascript:"): ?>
             <li title="Microsoft Excel 95+">
                 <a class="export-xls" href="<?php echo $fnExportEXCEL;?>" data-format="application/vnd.ms-excel" tabindex="-1">
                     <i class="text-success fa fa-file-excel-o"></i> <?= PbGridView::t("gridview", "EXCEL") ?>
                 </a>
             </li>
-            <?php /*
+            <?php endif; ?>
+            <?php if($fnExportPDF != "javascript:"): ?>
             <li title="Portable Document Format">
                 <a class="export-pdf" href="<?php echo $fnExportPDF;?>" data-format="application/pdf" tabindex="-1">
                     <i class="text-danger fa fa-file-pdf-o"></i> <?= PbGridView::t("gridview", "PDF") ?>
                 </a>
             </li>
-            */ ?>
+            <?php endif; ?>
         </ul>
     </div>
     <?php endif; ?>
