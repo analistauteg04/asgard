@@ -594,17 +594,17 @@
     },
     {
         "name": "codeception/base",
-        "version": "2.4.2",
-        "version_normalized": "2.4.2.0",
+        "version": "2.4.3",
+        "version_normalized": "2.4.3.0",
         "source": {
             "type": "git",
             "url": "https://github.com/Codeception/base.git",
-            "reference": "b41e442cbf8b7a269b74492a12fb1cf2bd06c3b8"
+            "reference": "a1416d3cd829bf8decb491143b3e8f8e02ee827f"
         },
         "dist": {
             "type": "zip",
-            "url": "https://api.github.com/repos/Codeception/base/zipball/b41e442cbf8b7a269b74492a12fb1cf2bd06c3b8",
-            "reference": "b41e442cbf8b7a269b74492a12fb1cf2bd06c3b8",
+            "url": "https://api.github.com/repos/Codeception/base/zipball/a1416d3cd829bf8decb491143b3e8f8e02ee827f",
+            "reference": "a1416d3cd829bf8decb491143b3e8f8e02ee827f",
             "shasum": ""
         },
         "require": {
@@ -647,7 +647,7 @@
             "stecman/symfony-console-completion": "For BASH autocompletion",
             "symfony/phpunit-bridge": "For phpunit-bridge support"
         },
-        "time": "2018-05-26T22:24:57+00:00",
+        "time": "2018-06-26T14:35:46+00:00",
         "bin": [
             "codecept"
         ],
@@ -1808,6 +1808,66 @@
                 "email": "me@mikevanriel.com"
             }
         ]
+    },
+    {
+        "name": "phpoffice/phpexcel",
+        "version": "1.8.1",
+        "version_normalized": "1.8.1.0",
+        "source": {
+            "type": "git",
+            "url": "https://github.com/PHPOffice/PHPExcel.git",
+            "reference": "372c7cbb695a6f6f1e62649381aeaa37e7e70b32"
+        },
+        "dist": {
+            "type": "zip",
+            "url": "https://api.github.com/repos/PHPOffice/PHPExcel/zipball/372c7cbb695a6f6f1e62649381aeaa37e7e70b32",
+            "reference": "372c7cbb695a6f6f1e62649381aeaa37e7e70b32",
+            "shasum": ""
+        },
+        "require": {
+            "ext-xml": "*",
+            "ext-xmlwriter": "*",
+            "php": ">=5.2.0"
+        },
+        "time": "2015-05-01T07:00:55+00:00",
+        "type": "library",
+        "installation-source": "dist",
+        "autoload": {
+            "psr-0": {
+                "PHPExcel": "Classes/"
+            }
+        },
+        "notification-url": "https://packagist.org/downloads/",
+        "license": [
+            "LGPL"
+        ],
+        "authors": [
+            {
+                "name": "Maarten Balliauw",
+                "homepage": "http://blog.maartenballiauw.be"
+            },
+            {
+                "name": "Mark Baker"
+            },
+            {
+                "name": "Franck Lefevre",
+                "homepage": "http://blog.rootslabs.net"
+            },
+            {
+                "name": "Erik Tilt"
+            }
+        ],
+        "description": "PHPExcel - OpenXML - Read, Create and Write Spreadsheet documents in PHP - Spreadsheet engine",
+        "homepage": "http://phpexcel.codeplex.com",
+        "keywords": [
+            "OpenXML",
+            "excel",
+            "php",
+            "spreadsheet",
+            "xls",
+            "xlsx"
+        ],
+        "abandoned": "phpoffice/phpspreadsheet"
     },
     {
         "name": "phpoffice/phpspreadsheet",
@@ -3246,17 +3306,17 @@
     },
     {
         "name": "symfony/browser-kit",
-        "version": "v4.1.0",
-        "version_normalized": "4.1.0.0",
+        "version": "v4.1.1",
+        "version_normalized": "4.1.1.0",
         "source": {
             "type": "git",
             "url": "https://github.com/symfony/browser-kit.git",
-            "reference": "16355a5d0f1499c77efee5ff68d8ea61624d4da1"
+            "reference": "ff9ac5d5808a530b2e7f6abcf3a2412d4f9bcd62"
         },
         "dist": {
             "type": "zip",
-            "url": "https://api.github.com/repos/symfony/browser-kit/zipball/16355a5d0f1499c77efee5ff68d8ea61624d4da1",
-            "reference": "16355a5d0f1499c77efee5ff68d8ea61624d4da1",
+            "url": "https://api.github.com/repos/symfony/browser-kit/zipball/ff9ac5d5808a530b2e7f6abcf3a2412d4f9bcd62",
+            "reference": "ff9ac5d5808a530b2e7f6abcf3a2412d4f9bcd62",
             "shasum": ""
         },
         "require": {
@@ -3270,7 +3330,7 @@
         "suggest": {
             "symfony/process": ""
         },
-        "time": "2018-04-06T10:52:03+00:00",
+        "time": "2018-06-04T17:31:56+00:00",
         "type": "library",
         "extra": {
             "branch-alias": {
@@ -3305,17 +3365,17 @@
     },
     {
         "name": "symfony/console",
-        "version": "v4.1.0",
-        "version_normalized": "4.1.0.0",
+        "version": "v4.1.1",
+        "version_normalized": "4.1.1.0",
         "source": {
             "type": "git",
             "url": "https://github.com/symfony/console.git",
-            "reference": "2d5d973bf9933d46802b01010bd25c800c87c242"
+            "reference": "70591cda56b4b47c55776ac78e157c4bb6c8b43f"
         },
         "dist": {
             "type": "zip",
-            "url": "https://api.github.com/repos/symfony/console/zipball/2d5d973bf9933d46802b01010bd25c800c87c242",
-            "reference": "2d5d973bf9933d46802b01010bd25c800c87c242",
+            "url": "https://api.github.com/repos/symfony/console/zipball/70591cda56b4b47c55776ac78e157c4bb6c8b43f",
+            "reference": "70591cda56b4b47c55776ac78e157c4bb6c8b43f",
             "shasum": ""
         },
         "require": {
@@ -3340,7 +3400,7 @@
             "symfony/lock": "",
             "symfony/process": ""
         },
-        "time": "2018-05-30T07:26:09+00:00",
+        "time": "2018-05-31T10:17:53+00:00",
         "type": "library",
         "extra": {
             "branch-alias": {
@@ -3375,8 +3435,8 @@
     },
     {
         "name": "symfony/css-selector",
-        "version": "v4.1.0",
-        "version_normalized": "4.1.0.0",
+        "version": "v4.1.1",
+        "version_normalized": "4.1.1.0",
         "source": {
             "type": "git",
             "url": "https://github.com/symfony/css-selector.git",
@@ -3430,8 +3490,8 @@
     },
     {
         "name": "symfony/dom-crawler",
-        "version": "v4.1.0",
-        "version_normalized": "4.1.0.0",
+        "version": "v4.1.1",
+        "version_normalized": "4.1.1.0",
         "source": {
             "type": "git",
             "url": "https://github.com/symfony/dom-crawler.git",
@@ -3489,8 +3549,8 @@
     },
     {
         "name": "symfony/event-dispatcher",
-        "version": "v4.1.0",
-        "version_normalized": "4.1.0.0",
+        "version": "v4.1.1",
+        "version_normalized": "4.1.1.0",
         "source": {
             "type": "git",
             "url": "https://github.com/symfony/event-dispatcher.git",
@@ -3554,23 +3614,23 @@
     },
     {
         "name": "symfony/finder",
-        "version": "v4.1.0",
-        "version_normalized": "4.1.0.0",
+        "version": "v4.1.1",
+        "version_normalized": "4.1.1.0",
         "source": {
             "type": "git",
             "url": "https://github.com/symfony/finder.git",
-            "reference": "087e2ee0d74464a4c6baac4e90417db7477dc238"
+            "reference": "84714b8417d19e4ba02ea78a41a975b3efaafddb"
         },
         "dist": {
             "type": "zip",
-            "url": "https://api.github.com/repos/symfony/finder/zipball/087e2ee0d74464a4c6baac4e90417db7477dc238",
-            "reference": "087e2ee0d74464a4c6baac4e90417db7477dc238",
+            "url": "https://api.github.com/repos/symfony/finder/zipball/84714b8417d19e4ba02ea78a41a975b3efaafddb",
+            "reference": "84714b8417d19e4ba02ea78a41a975b3efaafddb",
             "shasum": ""
         },
         "require": {
             "php": "^7.1.3"
         },
-        "time": "2018-05-16T14:33:22+00:00",
+        "time": "2018-06-19T21:38:16+00:00",
         "type": "library",
         "extra": {
             "branch-alias": {
@@ -3723,8 +3783,8 @@
     },
     {
         "name": "symfony/yaml",
-        "version": "v4.1.0",
-        "version_normalized": "4.1.0.0",
+        "version": "v4.1.1",
+        "version_normalized": "4.1.1.0",
         "source": {
             "type": "git",
             "url": "https://github.com/symfony/yaml.git",
