@@ -100,24 +100,26 @@ class Modulo extends \yii\db\ActiveRecord {
      * @return mixed $menu      Arreglos de Modulos
      */
     public function getModulos() {
-        $iduser = Yii::$app->session->get('PB_iduser', FALSE);
-
+        $iduser    = Yii::$app->session->get('PB_iduser', FALSE);
+        $idempresa = Yii::$app->session->get('PB_idempresa', FALSE);
+        
         $sql = "SELECT 
                     DISTINCT(modu.mod_id),modu.*
                 FROM 
-                    grup_rol as grol 
-                    JOIN usua_grol as ugrol on ugrol.grol_id = grol.grol_id
-                    JOIN usuario as usu on ugrol.usu_id=usu.usu_id 
+                    usua_grol_eper as ugep JOIN empresa_persona as eper on ugep.eper_id=eper.eper_id 
+                    JOIN usuario as usu on ugep.usu_id=usu.usu_id 
+                    JOIN grup_rol as grol on ugep.grol_id=grol.grol_id 
                     JOIN grup_obmo_grup_rol as gogr on grol.grol_id=gogr.grol_id 
                     JOIN grup_obmo as gob on gogr.gmod_id=gob.gmod_id 
                     JOIN objeto_modulo as omod on gob.omod_id=omod.omod_id 
                     JOIN modulo as modu on omod.mod_id=modu.mod_id 
                 WHERE 
                     usu.usu_id=$iduser AND 
+                    eper.emp_id=$idempresa AND 
                     usu.usu_estado_logico=1 AND 
                     usu.usu_estado=1 AND 
-                    ugrol.ugro_estado_logico=1 AND 
-                    ugrol.ugro_estado=1 AND 
+                    eper.eper_estado_logico=1 AND 
+                    eper.eper_estado=1 AND 
                     grol.grol_estado_logico=1 AND 
                     grol.grol_estado=1 AND 
                     gogr.gogr_estado_logico=1 AND 
@@ -127,7 +129,9 @@ class Modulo extends \yii\db\ActiveRecord {
                     omod.omod_estado_logico=1 AND 
                     omod.omod_estado=1 AND 
                     modu.mod_estado_logico=1 AND 
-                    modu.mod_estado=1 
+                    modu.mod_estado=1 AND 
+                    ugep.ugep_estado_logico=1 AND 
+                    ugep.ugep_estado=1 
                 ORDER BY modu.mod_orden;";
         $res = Yii::$app->db->createCommand($sql)->queryAll();
         return $res;
@@ -147,7 +151,7 @@ class Modulo extends \yii\db\ActiveRecord {
                     omod_entidad AS url
                 FROM 
                     grup_rol as grol 
-                    JOIN usua_grol as ugrol on ugrol.grol_id = grol.grol_id
+                    JOIN usua_grol_eper as ugrol on ugrol.grol_id = grol.grol_id
                     JOIN usuario as usu on ugrol.usu_id=usu.usu_id 
                     JOIN grup_obmo_grup_rol as gogr on grol.grol_id=gogr.grol_id 
                     JOIN grup_obmo as gob on gogr.gmod_id=gob.gmod_id 
@@ -157,8 +161,8 @@ class Modulo extends \yii\db\ActiveRecord {
                     usu.usu_id=$iduser AND 
                     usu.usu_estado_logico=1 AND 
                     usu.usu_estado=1 AND 
-                    ugrol.ugro_estado_logico=1 AND 
-                    ugrol.ugro_estado=1 AND 
+                    ugrol.ugep_estado_logico=1 AND 
+                    ugrol.ugep_estado=1 AND 
                     grol.grol_estado_logico=1 AND 
                     grol.grol_estado=1 AND 
                     gogr.gogr_estado_logico=1 AND 

@@ -169,6 +169,9 @@ kbd{
 .body-loginr{
     background: rgba(0, 0, 0, 0) url("../../../img/bg/bgFormulario.jpg") repeat fixed center center / cover;
 }
+.body-loginemp{
+    background: rgba(0, 0, 0, 0) url("../../../img/bg/bgFormularioemp.jpg") repeat fixed center center / cover;
+}
 .body-loginrvista{
     background: rgba(0, 0, 0, 0) url("../../../img/bg/bgVista.jpg") repeat fixed center center / cover;
 }

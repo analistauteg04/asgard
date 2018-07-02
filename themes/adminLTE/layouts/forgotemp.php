@@ -81,11 +81,11 @@ $this->title = $this->params["siteName"];
         <![endif]-->
 
     </head>
-    <body class="login-page skin-blue body-loginr">
+    <body class="login-page skin-blue body-loginemp">
         <?php $this->beginBody() ?>
         <div class="login-box">
             <!-- /.login-box-body -->
-            <?= $this->render('index-forgot', ['directoryAsset' => $directoryAsset, 'model' => $model, 'logo' => 'logo.png', 'return' => 'site/login']) ?>
+            <?= $this->render('index-forgot', ['directoryAsset' => $directoryAsset, 'model' => $model, 'logo' => 'logoemp.png', 'return' => 'site/loginemp']) ?>
         </div><!-- /.login-box -->
 
         <!-- Modal -->

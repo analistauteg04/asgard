@@ -205,11 +205,14 @@ class Usuario extends \yii\db\ActiveRecord implements IdentityInterface {
             $session->open();
             //$session->close();
             $model_persona = Persona::findIdentity($this->per_id);
+            $model_empresa  = Empresa::getEmpresasXUsuario($this->usu_id);
             $nombre_persona = $model_persona->per_pri_nombre;
             $apellido_persona = $model_persona->per_pri_apellido;
             $session->set('PB_isuser', true);
             $session->set('PB_username', $this->usu_user);
             $session->set('PB_nombres', $nombre_persona . " " . $apellido_persona);
+            $session->set('PB_idempresa', $model_empresa[0]["emp_id"]);
+            $session->set('PB_empresa', $model_empresa[0]["emp_nombre_comercial"]);
             $session->set('PB_perid', $this->per_id);
             $session->set('PB_iduser', $this->usu_id);
             $session->set('PB_yii_lang', Yii::$app->language);
@@ -337,7 +340,9 @@ class Usuario extends \yii\db\ActiveRecord implements IdentityInterface {
                 FROM 
                     usuario as usu 
                     INNER JOIN persona as per on per.per_id=usu.per_id                   
-                    INNER JOIN usua_grol as ug on usu.usu_id = ug.usu_id
+                    INNER JOIN usua_grol_eper as ug on usu.usu_id = ug.usu_id
+                    INNER JOIN empresa_persona AS ep ON ug.eper_id = ep.eper_id
+                    INNER JOIN empresa AS em ON ep.emp_id = em.emp_id
                     INNER JOIN grup_rol AS grol ON grol.grol_id = ug.grol_id 
                     INNER JOIN grupo AS gru ON gru.gru_id = grol.gru_id 
                     INNER JOIN rol AS rol ON rol.rol_id = grol.rol_id  
@@ -347,6 +352,9 @@ class Usuario extends \yii\db\ActiveRecord implements IdentityInterface {
                WHERE                   
                     $str_search
                     usu.usu_estado_logico=1 AND 
+                    ug.ugep_estado_logico=1 AND 
+                    ep.eper_estado_logico=1 AND 
+                    em.emp_estado_logico=1 AND 
                     per.per_estado_logico=1 AND                 
                     rol.rol_estado_logico=1 AND
                     gru.gru_estado_logico=1  

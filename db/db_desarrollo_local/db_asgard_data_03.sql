@@ -193,6 +193,13 @@ INSERT INTO `usuario` (`usu_id`, `per_id`, `usu_user`, `usu_sha`, `usu_password`
 (68, 68, 'glamota@uteg.edu.ec', '60sU04pqQwiP0I5NLm0pbLFhU8x_eUJw', 'PMLFqAeA3TjsRNVHHkSrEzMwZDI4OTVlNjU1YzBjMTgxNzQ2NWM3YTQ3NTk1MjcwZWMzZjYxYThlMGFlZjgyZGQ3YzA5MjM1ZWFjMTY3MWXB0IJRlKOw/a2OCww0lEq+NsDMShqFj8ufvXsVXRlIqUwkv6yvkFcw0Y9+adGlvMMfTI/GXubd9+VqnfYSfdjl', NULL, NULL, NULL, NULL, '1', '1'),
 (69, 69, 'directortalento@uteg.edu.ec', '60sU04pqQwiP0I5NLm0pbLFhU8x_eUJw', 'PMLFqAeA3TjsRNVHHkSrEzMwZDI4OTVlNjU1YzBjMTgxNzQ2NWM3YTQ3NTk1MjcwZWMzZjYxYThlMGFlZjgyZGQ3YzA5MjM1ZWFjMTY3MWXB0IJRlKOw/a2OCww0lEq+NsDMShqFj8ufvXsVXRlIqUwkv6yvkFcw0Y9+adGlvMMfTI/GXubd9+VqnfYSfdjl', NULL, NULL, NULL, NULL, '1', '1');
 
+INSERT INTO `empresa` (`emp_id`, `temp_id`, `emp_razon_social`, `emp_nombre_comercial`, `emp_alias`, `emp_ruc`, `emp_dominio`, `emp_imap_domain`, `emp_imap_port`, `emp_imap_user`, `emp_imap_pass`, `emp_direccion`, `emp_telefono`, `emp_descripcion`, `emp_estado`, `emp_fecha_creacion`, `emp_fecha_modificacion`, `emp_estado_logico`) VALUES
+(1, 2, 'Empresa S.A', 'Empresa', 'Empresa', '', 'empresa.com', 'empresa.com', '587', '', '', NULL, NULL, NULL, '1', CURRENT_TIMESTAMP, NULL, '1');
+
+INSERT INTO `empresa_persona`(`eper_id`, `emp_id`, `per_id`, `eper_estado`, `eper_fecha_creacion`, `eper_fecha_modificacion`, `eper_estado_logico`) VALUES
+(1, 1, 1, '1', '2015-04-10 13:00:00', NULL, '1'),
+(2, 1, 2, '1', '2015-04-10 13:00:00', NULL, '1');
+
 -- --------------------------------------------------------
 --
 -- Volcado de datos para la tabla `IDIOMA`
@@ -288,42 +295,42 @@ INSERT INTO `grup_rol` (`grol_id`, `gru_id`, `rol_id`, `grol_estado`,`grol_estad
 --
 -- Volcado de datos para la tabla `USUA_GROL`
 --
-INSERT INTO `usua_grol` (`ugro_id`, `usu_id`, `grol_id`, `ugro_estado`, `ugro_estado_logico`) VALUES
-(1, 1, 1, '1', '1'),
-(2, 2, 2, '1', '1'),
-(3, 3, 1, '1', '1'),
-(4, 4, 1, '1', '1'),
-(5, 5, 1, '1', '1'),
-(6, 11, 5, '1', '1'),
-(7, 12, 6, '1', '1'),  
-(8, 13, 7, '1', '1'),
-(9, 14, 8, '1', '1'),
-(10, 15, 8, '1', '1'),
-(11, 16, 8, '1', '1'),
-(12, 17, 8, '1', '1'),
-(13, 18, 8, '1', '1'),
-(14, 19, 8, '1', '1'),
-(15, 20, 9, '1', '1'),
-(16, 51, 13, '1', '1'),
-(17, 8, 14, '1', '1'),
-(18, 52, 15, '1', '1'),
-(19, 53, 9, '1', '1'),
-(20, 54, 17, '1', '1'),
-(21, 58, 8, '1', '1'), /* Nuevo */
-(22, 59, 8, '1', '1'),
-(23, 60, 8, '1', '1'),
-(24, 61, 8, '1', '1'),
-(25, 62, 8, '1', '1'),
-(26, 63, 8, '1', '1'),
-(27, 64, 8, '1', '1'),
-(28, 65, 8, '1', '1'),
-(29, 66, 7, '1', '1'),
-(30, 56, 18, '1', '1'),
-(31, 57, 18, '1', '1'),
+INSERT INTO `usua_grol_eper` (`ugep_id`, `usu_id`, `eper_id`, `grol_id`, `ugep_estado`, `ugep_estado_logico`) VALUES
+(1, 1, 1, 1, '1', '1'),
+(2, 2, 1, 2, '1', '1'),
+(3, 3, 1, 1, '1', '1'),
+(4, 4, 1, 1, '1', '1'),
+(5, 5, 1, 1, '1', '1'),
+(6, 11, 1, 5, '1', '1'),
+(7, 12, 1, 6, '1', '1'),  
+(8, 13, 1, 7, '1', '1'),
+(9, 14, 1, 8, '1', '1'),
+(10, 15, 1, 8, '1', '1'),
+(11, 16, 1, 8, '1', '1'),
+(12, 17, 1, 8, '1', '1'),
+(13, 18, 1, 8, '1', '1'),
+(14, 19, 1, 8, '1', '1'),
+(15, 20, 1, 9, '1', '1'),
+(16, 51, 1, 13, '1', '1'),
+(17, 8, 1, 14, '1', '1'),
+(18, 52, 1, 15, '1', '1'),
+(19, 53, 1, 9, '1', '1'),
+(20, 54, 1, 17, '1', '1'),
+(21, 58, 1, 8, '1', '1'), /* Nuevo */
+(22, 59, 1, 8, '1', '1'),
+(23, 60, 1, 8, '1', '1'),
+(24, 61, 1, 8, '1', '1'),
+(25, 62, 1, 8, '1', '1'),
+(26, 63, 1, 8, '1', '1'),
+(27, 64, 1, 8, '1', '1'),
+(28, 65, 1, 8, '1', '1'),
+(29, 66, 1, 7, '1', '1'),
+(30, 56, 1, 18, '1', '1'),
+(31, 57, 1, 18, '1', '1'),
 
-(32, 67, 19, '1', '1'),
-(33, 68, 19, '1', '1'),
-(34, 69, 20, '1', '1');
+(32, 67, 1, 19, '1', '1'),
+(33, 68, 1, 19, '1', '1'),
+(34, 69, 1, 20, '1', '1');
 
 -- --------------------------------------------------------
 --

@@ -58,7 +58,7 @@ $this->params['breadcrumbs'][] = $this->title;
 </div>
 <div class="login-box-body col-md-6">
     <div class="login-logo">
-        <a href="<?= Html::encode(Yii::$app->params['web']) ?>"><img src="<?= Html::encode($directoryAsset . "/img/logos/logo.png") ?>" alt="logo" /></a>
+        <a href="<?= Html::encode(Yii::$app->params['web']) ?>"><img src="<?= Html::encode($directoryAsset . "/img/logos/$logo") ?>" alt="logo" /></a>
     </div><!-- /.login-logo -->
     <?php if (Yii::$app->session->hasFlash('error')): ?>
         <div class="alert alert-error">
@@ -91,7 +91,7 @@ $this->params['breadcrumbs'][] = $this->title;
     ?>
     <div class="row">
         <div class="col-xs-4">
-            <a href="<?= Yii::$app->urlManager->createUrl(["site/login"]) ?>" class="btn btn-primary btn-block btn-flat" style="margin-top: 4px;"><?= Html::encode(Yii::t('register', 'Back')) . "&nbsp;<i class='fa fa-arrow-circle-left'></i>" ?></a>
+            <a href="<?= Yii::$app->urlManager->createUrl([$return]) ?>" class="btn btn-primary btn-block btn-flat" style="margin-top: 4px;"><?= Html::encode(Yii::t('register', 'Back')) . "&nbsp;<i class='fa fa-arrow-circle-left'></i>" ?></a>
         </div><!-- /.col -->
         <div class="col-xs-4"></div>
         <div class="col-xs-4">

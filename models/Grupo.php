@@ -91,14 +91,20 @@ class Grupo extends \yii\db\ActiveRecord {
                     p.per_cedula AS dni
                 FROM 
                     usuario AS u 
-                    INNER JOIN usua_grol as ug on u.usu_id = ug.usu_id
+                    INNER JOIN usua_grol_eper AS ug ON u.usu_id = ug.usu_id
+                    INNER JOIN empresa_persona AS ep ON ug.eper_id = ep.eper_id
+                    INNER JOIN empresa AS e ON ep.emp_id = e.emp_id
                     INNER JOIN grup_rol AS gr ON gr.grol_id = ug.grol_id 
                     INNER JOIN grupo AS g ON g.gru_id = gr.gru_id 
                     INNER JOIN persona AS p ON p.per_id = u.per_id 
                 WHERE 
                     u.usu_user = :user AND 
-                    ug.ugro_estado_logico=1 AND 
-                    ug.ugro_estado=1 AND 
+                    ug.ugep_estado_logico=1 AND 
+                    ug.ugep_estado=1 AND 
+                    ep.eper_estado_logico=1 AND 
+                    ep.eper_estado=1 AND
+                    e.emp_estado_logico=1 AND 
+                    e.emp_estado=1 AND
                     gr.grol_estado_logico=1 AND 
                     gr.grol_estado=1 AND 
                     p.per_estado_logico=1 AND 

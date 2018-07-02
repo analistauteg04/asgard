@@ -130,7 +130,6 @@ function exportPdf(){
     ObjData.mes = $('#cmb_mes option:selected').val();
     var rptData = base64_encode(JSON.stringify(ObjData));
     window.location.href = $('#txth_base').val() + "/adminmetodoingreso/exportpdf?pdf=true&rptData="+rptData;
-    console.log("export pdf");
 }
 
 

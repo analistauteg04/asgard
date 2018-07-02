@@ -15,6 +15,7 @@ use app\models\Usuario;
 use app\models\Utilities;
 use app\models\Modulo;
 use app\models\Grupo;
+use app\models\Empresa;
 
 class SiteController extends CController {
 
@@ -25,11 +26,16 @@ class SiteController extends CController {
         return [
             'access' => [
                 'class' => AccessControl::className(),
-                'only' => ['login', 'logout'],
+                'only' => ['login', 'loginemp', 'logout'],
                 'rules' => [
                         [
                         'allow' => true,
                         'actions' => ['login'],
+                        'roles' => ['?', '@'], // usuarios invitados
+                    ],
+                    [
+                        'allow' => true,
+                        'actions' => ['loginemp'],
                         'roles' => ['?', '@'], // usuarios invitados
                     ],
                         [
@@ -72,6 +78,11 @@ class SiteController extends CController {
                         'actions' => ['portalestudiante'],
                         'roles' => ['@'], // usuarios autenticados
                     ],
+                        [
+                        'allow' => true,
+                        'actions' => ['changeempresa'],
+                        'roles' => ['@'], // usuarios autenticados
+                    ],
                 ],
             ],
             'verbs' => [
@@ -105,7 +116,8 @@ class SiteController extends CController {
      */
     public function actionIndex() {
         if (\Yii::$app->user->isGuest) {
-            return $this->redirect(Url::base(true) . '/site/login');
+            $link1 = Utilities::getLoginUrl();
+            return $this->redirect(Url::base(true) . $link1);
         }
 
         return $this->render('index');
@@ -174,7 +186,8 @@ class SiteController extends CController {
 
     public function actionDash() {
         if (\Yii::$app->user->isGuest) {
-            return $this->redirect(Url::base(true) . '/site/login');
+            $link1 = Utilities::getLoginUrl();
+            return $this->redirect(Url::base(true) . $link1);
         }
         $mod = new Modulo();
         $link = $mod->getFirstModuleLink();
@@ -212,7 +225,8 @@ class SiteController extends CController {
     
     public function actionPortalestudiante(){
         if (\Yii::$app->user->isGuest) {
-            return $this->redirect(Url::base(true) . '/site/login');
+            $link1 = Utilities::getLoginUrl();
+            return $this->redirect(Url::base(true) . $link1);
         }
         $this->layout = '@themes/' . Yii::$app->getView()->theme->themeName . '/layouts/dash.php';
         return $this->render('portalestudiante', [
@@ -221,13 +235,14 @@ class SiteController extends CController {
     }
 
     /**
-     * Login action.
+     * Login action Asgard.
      *
      * @return string
      */
     public function actionLogin() {
         if (!\Yii::$app->user->isGuest) {
-            return $this->redirect(Url::base(true) . '/site/login');
+            $link1 = Utilities::getLoginUrl();
+            return $this->redirect(Url::base(true) . $link1);
         }
         $model = new LoginForm();
 
@@ -248,6 +263,46 @@ class SiteController extends CController {
             ]);
         }
     }
+    
+    /**
+     * Login action Multiple Empresa.
+     *
+     * @return string
+     */
+    public function actionLoginemp() {
+        if (!\Yii::$app->user->isGuest) {
+            return $this->redirect(Url::base(true) . '/site/loginemp');
+        }
+        $model = new LoginForm();
+
+        if ($model->load(Yii::$app->request->post()) && $model->login()) {
+            // setting default url
+            $mod = new Modulo();
+            $link = $mod->getFirstModuleLink();
+            $url = Url::base(true) . "/" . $link["url"];
+            return $this->goBack($url);
+        } else {
+            if ($model->getErrorSession())
+                Yii::$app->session->setFlash('loginFormSubmitted');
+            return $this->renderFile('@themes/' . \Yii::$app->getView()->theme->themeName . '/layouts/loginemp.php', [
+                        'model' => $model,
+            ]);
+        }
+    }
+
+    public function actionChangeempresa(){
+        $id = isset($_GET['id'])?$_GET['id']:0;
+        if($id > 0){
+            $model_empresa = Empresa::findIdentity($id);
+            Yii::$app->session->set('PB_idempresa',$id);
+            Yii::$app->session->set('PB_empresa',$model_empresa->emp_nombre_comercial);
+        }
+        //return $this->redirect(Yii::$app->request->referrer);
+        $mod = new Modulo();
+        $link = $mod->getFirstModuleLink();
+        $url = Url::base(true) . "/" . $link["url"];
+        return $this->goBack($url);
+    }
 
     /**
      * Logout action.
@@ -256,14 +311,16 @@ class SiteController extends CController {
      */
     public function actionLogout() {
         $usuario = new Usuario();
+        $link1 = Utilities::getLoginUrl();
         $usuario->destroySession();
         Yii::$app->user->logout();
-        return $this->redirect(Url::base(true) . '/site/login');
+        return $this->redirect(Url::base(true) . $link1);
     }
 
     public function actionForgotpass() {
         if (!\Yii::$app->user->isGuest) {
-            return $this->redirect(Url::base(true) . '/site/login');
+            $link1 = Utilities::getLoginUrl();
+            return $this->redirect(Url::base(true) . $link1);
         }
         $model = new ForgotpassForm();
         if ($model->load(Yii::$app->request->post()) && $model->verificarCuenta()) {
@@ -276,6 +333,26 @@ class SiteController extends CController {
             if ($model->getErrorSession())
                 Yii::$app->session->setFlash('forgotFormSubmitted');
             return $this->renderFile('@themes/' . \Yii::$app->getView()->theme->themeName . '/layouts/forgot.php', [
+                        'model' => $model,
+            ]);
+        }
+    }
+    
+    public function actionForgotpassemp() {
+        if (!\Yii::$app->user->isGuest) {
+            return $this->redirect(Url::base(true) . 'site/loginemp');
+        }
+        $model = new ForgotpassForm();
+        if ($model->load(Yii::$app->request->post()) && $model->verificarCuenta()) {
+            // se limpia los campos
+            $model->unsetAttributes();
+            return $this->renderFile('@themes/' . \Yii::$app->getView()->theme->themeName . '/layouts/forgotemp.php', [
+                        'model' => $model,
+            ]);
+        } else {
+            if ($model->getErrorSession())
+                Yii::$app->session->setFlash('forgotFormSubmitted');
+            return $this->renderFile('@themes/' . \Yii::$app->getView()->theme->themeName . '/layouts/forgotemp.php', [
                         'model' => $model,
             ]);
         }
@@ -298,14 +375,16 @@ class SiteController extends CController {
             } else {
                 $model = new LoginForm();
                 Yii::$app->session->setFlash('error', Yii::t("login", "<h4>Error</h4>Account is disabled. Please confirm the account with link activation in your email account or reset your password."));
-                return $this->redirect(Url::base(true) . '/site/login');
+                $link1 = Utilities::getLoginUrl();
+                return $this->redirect(Url::base(true) . $link1);
             }
         }
     }
 
     public function actionUpdatepass() {
         if (!\Yii::$app->user->isGuest) {
-            return $this->redirect(Url::base(true) . '/site/login');
+            $link1 = Utilities::getLoginUrl();
+            return $this->redirect(Url::base(true) . $link1);
         }
         $data = Yii::$app->request->get();
         if (isset($data["wg"])) {

@@ -6,6 +6,7 @@ use Yii;
 use yii\base\InlineAction;
 use yii\helpers\Url;
 use app\models\Error;
+use app\models\Utilities;
 
 /**
  * Description of CController
@@ -38,8 +39,8 @@ class CController extends \yii\web\Controller {
         $route = $this->getRoute() . "/login";
         $usu = new \app\models\Usuario;
         //$usu->regenerateSession();
-        if ($isUser == FALSE && $route != "site/login") {
-            $this->redirect(Yii::$app->urlManager->createUrl(["site/login"]));
+        if ($isUser == FALSE && $route != 'site/login' ) {
+            $this->redirect(Yii::$app->urlManager->createUrl([Utilities::getLoginUrl()]));
         }
         return parent::runAction($id, $params);
     }

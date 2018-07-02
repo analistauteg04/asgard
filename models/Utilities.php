@@ -500,5 +500,13 @@ class Utilities {
         $zip->close();
         return $filename;
     }
+    
+    public static function getLoginUrl(){
+        $link = '/site/login';
+        if(Yii::$app->session->get('PB_idempresa') != 1){
+            $link = '/site/loginemp';
+        }
+        return $link;
+    }
 
 }

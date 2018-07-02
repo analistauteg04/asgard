@@ -101,6 +101,7 @@ class Accion extends \yii\db\ActiveRecord {
      */
     public function getAccionesXObjModulo($id_omodpadre, $omod_id){
         $usu_id    = Yii::$app->session->get('PB_iduser', FALSE);
+        $idempresa = Yii::$app->session->get('PB_idempresa', FALSE);
         
         $sql = "SELECT 
                     om.omod_id,
@@ -128,8 +129,10 @@ class Accion extends \yii\db\ActiveRecord {
                     INNER JOIN grup_obmo AS go ON om.omod_id = go.omod_id 
                     INNER JOIN grup_obmo_grup_rol AS gg ON go.gmod_id = gg.gmod_id
                     INNER JOIN grup_rol AS gr ON gg.grol_id = gr.grol_id
-                    INNER JOIN usua_grol AS ug ON gr.grol_id = ug.grol_id
+                    INNER JOIN usua_grol_eper AS ug ON gr.grol_id = ug.grol_id
                     INNER JOIN usuario AS us ON ug.usu_id = us.usu_id
+                    INNER JOIN empresa_persona AS ep ON ug.eper_id = ep.eper_id
+                    INNER JOIN empresa AS em ON ep.emp_id = em.emp_id
                     INNER JOIN obmo_acci AS oa ON om.omod_id = oa.omod_id 
                     INNER JOIN accion AS ac ON oa.acc_id = ac.acc_id 
                 WHERE 
@@ -137,10 +140,19 @@ class Accion extends \yii\db\ActiveRecord {
                     om.omod_id=:omod_id AND
                     -- om.omod_tipo='A' AND 
                     us.usu_id=:usu_id AND 
+                    em.emp_id=:emp_id AND 
                     go.gmod_estado_logico=1 AND 
                     gg.gogr_estado_logico=1 AND 
                     gr.grol_estado_logico=1 AND 
+                    gr.grol_estado=1 AND 
+                    ug.ugep_estado_logico=1 AND 
+                    ug.ugep_estado=1 AND 
                     us.usu_estado_logico=1 AND 
+                    us.usu_estado=1 AND 
+                    ep.eper_estado_logico=1 AND 
+                    ep.eper_estado=1 AND 
+                    em.emp_estado=1 AND 
+                    em.emp_estado_logico=1 AND
                     om.omod_estado_logico=1 AND 
                     om.omod_estado_visible=1 AND
                     oa.oacc_estado_logico=1 AND 
@@ -149,6 +161,7 @@ class Accion extends \yii\db\ActiveRecord {
         $comando = Yii::$app->db->createCommand($sql);
         $comando->bindParam(":omodp_id", $id_omodpadre, \PDO::PARAM_INT);
         $comando->bindParam(":usu_id", $usu_id, \PDO::PARAM_INT);
+        $comando->bindParam(":emp_id", $idempresa, \PDO::PARAM_INT);
         $comando->bindParam(":omod_id", $omod_id, \PDO::PARAM_INT);
         
         return $comando->queryAll();
@@ -160,7 +173,7 @@ class Accion extends \yii\db\ActiveRecord {
             $objmod_id = $session->get('PB_objmodule_id');
         }
         $usu_id    = Yii::$app->session->get('PB_iduser', FALSE);
-        
+        $idempresa = Yii::$app->session->get('PB_idempresa', FALSE);
         $sql = "SELECT 
                     om.omod_entidad AS route
                 FROM 
@@ -168,21 +181,37 @@ class Accion extends \yii\db\ActiveRecord {
                     INNER JOIN grup_obmo AS go ON om.omod_id = go.omod_id 
                     INNER JOIN grup_obmo_grup_rol AS gg ON go.gmod_id = gg.gmod_id
                     INNER JOIN grup_rol AS gr ON gg.grol_id = gr.grol_id
-                    INNER JOIN usua_grol AS ug ON gr.grol_id = ug.grol_id
+                    INNER JOIN usua_grol_eper AS ug ON gr.grol_id = ug.grol_id
                     INNER JOIN usuario AS us ON ug.usu_id = us.usu_id
+                    INNER JOIN empresa_persona AS ep ON ug.eper_id = ep.eper_id
+                    INNER JOIN empresa AS em ON ep.emp_id = em.emp_id
                     INNER JOIN obmo_acci AS oa ON om.omod_id = oa.omod_id 
                     INNER JOIN accion AS ac ON oa.acc_id = ac.acc_id 
                 WHERE 
                     om.omod_padre_id=:omod_id AND 
                     om.omod_tipo='A' AND 
                     us.usu_id=:usu_id AND 
+                    em.emp_id=:emp_id AND
                     go.gmod_estado_logico=1 AND 
+                    go.gmod_estado=1 AND 
                     gg.gogr_estado_logico=1 AND 
+                    gg.gogr_estado=1 AND 
                     gr.grol_estado_logico=1 AND 
+                    gr.grol_estado=1 AND
+                    ug.ugep_estado_logico=1 AND 
+                    ug.ugep_estado=1 AND
                     us.usu_estado_logico=1 AND 
+                    us.usu_estado=1 AND 
+                    ep.eper_estado_logico=1 AND 
+                    ep.eper_estado=1 AND
+                    em.emp_estado_logico=1 AND 
+                    em.emp_estado=1 AND
+                    om.omod_estado=1 AND 
                     om.omod_estado_logico=1 AND 
                     om.omod_estado_visible=1 AND
                     oa.oacc_estado_logico=1 AND 
+                    oa.oacc_estado=1 AND 
+                    ac.acc_estado=1 AND
                     ac.acc_estado_logico=1 
                 UNION
                 SELECT 
@@ -192,20 +221,32 @@ class Accion extends \yii\db\ActiveRecord {
                     INNER JOIN grup_obmo AS go ON om.omod_id = go.omod_id 
                     INNER JOIN grup_obmo_grup_rol AS gg ON go.gmod_id = gg.gmod_id
                     INNER JOIN grup_rol AS gr ON gg.grol_id = gr.grol_id
-                    INNER JOIN usua_grol AS ug ON gr.grol_id = ug.grol_id
+                    INNER JOIN usua_grol_eper AS ug ON gr.grol_id = ug.grol_id
                     INNER JOIN usuario AS us ON ug.usu_id = us.usu_id
+                    INNER JOIN empresa_persona AS ep ON ug.eper_id = ep.eper_id
+                    INNER JOIN empresa AS em ON ep.emp_id = em.emp_id
                 WHERE 
                     om.omod_padre_id=:omod_id AND 
                     om.omod_tipo='P' AND 
                     us.usu_id=:usu_id AND 
+                    em.emp_id=:emp_id AND
                     go.gmod_estado_logico=1 AND 
-                    gg.gogr_estado_logico=1 AND 
-                    gr.grol_estado_logico=1 AND 
-                    us.usu_estado_logico=1 
+                    go.gmod_estado=1 AND 
+                    gg.gogr_estado_logico=1 AND
+                    gg.gogr_estado=1 AND
+                    ug.ugep_estado_logico=1 AND 
+                    ug.ugep_estado=1 AND
+                    us.usu_estado_logico=1 AND 
+                    us.usu_estado=1 AND
+                    ep.eper_estado_logico=1 AND 
+                    ep.eper_estado=1 AND 
+                    em.emp_estado=1 AND
+                    em.emp_estado_logico=1 
                 ORDER BY route;";
         $comando = Yii::$app->db->createCommand($sql);
         $comando->bindParam(":omod_id", $objmod_id, \PDO::PARAM_INT);
         $comando->bindParam(":usu_id", $usu_id, \PDO::PARAM_INT);
+        $comando->bindParam(":emp_id", $idempresa, \PDO::PARAM_INT);
         $result = $comando->queryAll();
         $actions = array();
         $actionsArr = "";

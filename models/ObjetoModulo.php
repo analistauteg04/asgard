@@ -131,6 +131,7 @@ class ObjetoModulo extends \yii\db\ActiveRecord {
      */
     public function getObjetoModulosXModulo($moduloid) {
         $usu_id = Yii::$app->session->get('PB_iduser', FALSE);
+        $idempresa = Yii::$app->session->get('PB_idempresa', FALSE);
         $sql = "SELECT 
                     om.omod_id,
                     om.omod_padre_id,
@@ -149,13 +150,14 @@ class ObjetoModulo extends \yii\db\ActiveRecord {
                     INNER JOIN grup_obmo AS go ON om.omod_id = go.omod_id 
                     INNER JOIN grup_obmo_grup_rol AS gg ON go.gmod_id = gg.gmod_id
                     INNER JOIN grup_rol AS gr ON gg.grol_id = gr.grol_id
-                    INNER JOIN usua_grol as ug on ug.grol_id = gr.grol_id
+                    INNER JOIN usua_grol_eper AS ug ON gr.grol_id = ug.grol_id
                     INNER JOIN usuario AS us ON ug.usu_id = us.usu_id
+                    INNER JOIN empresa_persona AS ep ON ug.eper_id = ep.eper_id
+                    INNER JOIN empresa AS em ON ep.emp_id = em.emp_id
                 WHERE 
                     om.mod_id=:mod_id AND 
                     us.usu_id=:usu_id AND 
-                    ug.ugro_estado_logico=1 AND 
-                    ug.ugro_estado=1 AND
+                    em.emp_id=:emp_id AND 
                     mo.mod_estado=1 AND 
                     mo.mod_estado_logico=1 AND 
                     go.gmod_estado_logico=1 AND 
@@ -164,8 +166,14 @@ class ObjetoModulo extends \yii\db\ActiveRecord {
                     gg.gogr_estado=1 AND 
                     gr.grol_estado_logico=1 AND 
                     gr.grol_estado=1 AND 
+                    ug.ugep_estado_logico=1 AND 
+                    ug.ugep_estado=1 AND 
                     us.usu_estado_logico=1 AND 
                     us.usu_estado=1 AND 
+                    ep.eper_estado_logico=1 AND 
+                    ep.eper_estado=1 AND 
+                    em.emp_estado=1 AND 
+                    em.emp_estado_logico=1 AND 
                     om.omod_id=om.omod_padre_id AND 
                     om.omod_estado_logico=1 AND 
                     om.omod_estado=1 AND 
@@ -174,6 +182,7 @@ class ObjetoModulo extends \yii\db\ActiveRecord {
         $comando = Yii::$app->db->createCommand($sql);
         $comando->bindParam(":mod_id", $moduloid, \PDO::PARAM_INT);
         $comando->bindParam(":usu_id", $usu_id, \PDO::PARAM_INT);
+        $comando->bindParam(":emp_id", $idempresa, \PDO::PARAM_INT);
         return $comando->queryAll();
     }
 
@@ -190,6 +199,7 @@ class ObjetoModulo extends \yii\db\ActiveRecord {
      * */
     public function getObjModHijosXObjModPadre($id_module, $id_omod, $id_omodpadre) {
         $usu_id = Yii::$app->session->get('PB_iduser', FALSE);
+        $idempresa = Yii::$app->session->get('PB_idempresa', FALSE);
         $sql = "SELECT 
                     om.* 
                 FROM 
@@ -198,15 +208,16 @@ class ObjetoModulo extends \yii\db\ActiveRecord {
                     INNER JOIN grup_obmo AS go ON om.omod_id = go.omod_id 
                     INNER JOIN grup_obmo_grup_rol AS gg ON go.gmod_id = gg.gmod_id
                     INNER JOIN grup_rol AS gr ON gg.grol_id = gr.grol_id
-                    INNER JOIN usua_grol as ug on ug.grol_id = gr.grol_id
+                    INNER JOIN usua_grol_eper AS ug ON gr.grol_id = ug.grol_id
                     INNER JOIN usuario AS us ON ug.usu_id = us.usu_id
+                    INNER JOIN empresa_persona AS ep ON ug.eper_id = ep.eper_id
+                    INNER JOIN empresa AS em ON ep.emp_id = em.emp_id
                 WHERE 
                     om.mod_id=:mod_id AND 
                     us.usu_id=:usu_id AND 
-                    ug.ugro_estado_logico=1 AND 
-                    ug.ugro_estado=1 AND
+                    em.emp_id=:emp_id AND 
                     om.omod_padre_id=:omod_padre AND 
-                    om.omod_id <> :omod_id AND 
+                    om.omod_id<>:omod_id AND 
                     mo.mod_estado=1 AND 
                     mo.mod_estado_logico=1 AND 
                     go.gmod_estado_logico=1 AND 
@@ -215,8 +226,14 @@ class ObjetoModulo extends \yii\db\ActiveRecord {
                     gg.gogr_estado=1 AND 
                     gr.grol_estado_logico=1 AND 
                     gr.grol_estado=1 AND 
+                    ug.ugep_estado_logico=1 AND 
+                    ug.ugep_estado=1 AND 
                     us.usu_estado_logico=1 AND 
                     us.usu_estado=1 AND 
+                    ep.eper_estado_logico=1 AND 
+                    ep.eper_estado=1 AND 
+                    em.emp_estado=1 AND 
+                    em.emp_estado_logico=1 AND 
                     om.omod_tipo='S' AND 
                     om.omod_estado_logico=1 AND 
                     om.omod_estado=1 AND 
@@ -226,6 +243,7 @@ class ObjetoModulo extends \yii\db\ActiveRecord {
         $comando = Yii::$app->db->createCommand($sql);
         $comando->bindParam(":mod_id", $id_module, \PDO::PARAM_INT);
         $comando->bindParam(":usu_id", $usu_id, \PDO::PARAM_INT);
+        $comando->bindParam(":emp_id", $idempresa, \PDO::PARAM_INT);
         $comando->bindParam(":omod_padre", $id_omodpadre, \PDO::PARAM_INT);
         $comando->bindParam(":omod_id", $id_omod, \PDO::PARAM_INT);
         $arrayObjMod = $comando->queryAll();
@@ -241,6 +259,7 @@ class ObjetoModulo extends \yii\db\ActiveRecord {
      */
     public function getModuleByObjModule($omod_id) {
         $usu_id = Yii::$app->session->get('PB_iduser', FALSE);
+        $idempresa = Yii::$app->session->get('PB_idempresa', FALSE);
         $sql = "SELECT 
                     mo.* 
                 FROM 
@@ -249,13 +268,14 @@ class ObjetoModulo extends \yii\db\ActiveRecord {
                     INNER JOIN grup_obmo AS go ON om.omod_id = go.omod_id 
                     INNER JOIN grup_obmo_grup_rol AS gg ON go.gmod_id = gg.gmod_id
                     INNER JOIN grup_rol AS gr ON gg.grol_id = gr.grol_id
-                    INNER JOIN usua_grol as ug on ug.grol_id = gr.grol_id
+                    INNER JOIN usua_grol_eper AS ug ON gr.grol_id = ug.grol_id
                     INNER JOIN usuario AS us ON ug.usu_id = us.usu_id
+                    INNER JOIN empresa_persona AS ep ON ug.eper_id = ep.eper_id
+                    INNER JOIN empresa AS em ON ep.emp_id = em.emp_id
                 WHERE 
                     us.usu_id=:usu_id AND 
+                    em.emp_id=:emp_id AND 
                     om.omod_id=:omod_id AND 
-                    ug.ugro_estado_logico=1 AND 
-                    ug.ugro_estado=1 AND 
                     mo.mod_estado=1 AND 
                     mo.mod_estado_logico=1 AND 
                     go.gmod_estado_logico=1 AND 
@@ -264,8 +284,14 @@ class ObjetoModulo extends \yii\db\ActiveRecord {
                     gg.gogr_estado=1 AND 
                     gr.grol_estado_logico=1 AND 
                     gr.grol_estado=1 AND 
+                    ug.ugep_estado_logico=1 AND 
+                    ug.ugep_estado=1 AND 
                     us.usu_estado_logico=1 AND 
                     us.usu_estado=1 AND 
+                    ep.eper_estado_logico=1 AND 
+                    ep.eper_estado=1 AND 
+                    em.emp_estado=1 AND 
+                    em.emp_estado_logico=1 AND 
                     om.omod_estado_logico=1 AND 
                     om.omod_estado=1 AND 
                     om.omod_estado_visible=1  
@@ -273,6 +299,7 @@ class ObjetoModulo extends \yii\db\ActiveRecord {
 
         $comando = Yii::$app->db->createCommand($sql);
         $comando->bindParam(":usu_id", $usu_id, \PDO::PARAM_INT);
+        $comando->bindParam(":emp_id", $idempresa, \PDO::PARAM_INT);
         $comando->bindParam(":omod_id", $omod_id, \PDO::PARAM_INT);
         $arrMod = $comando->queryOne();
         return $arrMod;

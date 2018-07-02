@@ -259,6 +259,7 @@ create table if not exists `persona_contacto` (
  foreign key (per_id) references `persona`(per_id),
  foreign key (tpar_id) references `tipo_parentesco`(tpar_id) 
 );
+
 -- --------------------------------------------------------
 --
 -- Estructura de tabla para la tabla `tipo_empresa`
@@ -273,6 +274,50 @@ create table if not exists `tipo_empresa` (
  `temp_estado_logico` varchar(1) not null
 ) ;
 
+-- --------------------------------------------------------
+
+--
+-- Estructura de tabla para la tabla `empresa`
+--
+
+CREATE TABLE IF NOT EXISTS `empresa` (
+  `emp_id` bigint(20) NOT NULL AUTO_INCREMENT PRIMARY KEY,
+  `temp_id` bigint(20) NOT NULL,
+  `emp_razon_social` varchar(200) DEFAULT NULL,
+  `emp_nombre_comercial` varchar(200) NOT NULL,
+  `emp_alias` varchar(200) DEFAULT NULL,
+  `emp_ruc` varchar(20) DEFAULT NULL,
+  `emp_dominio` varchar(100) DEFAULT NULL,
+  `emp_imap_domain` varchar(200) DEFAULT NULL,
+  `emp_imap_port` varchar(20) DEFAULT NULL,
+  `emp_imap_user` varchar(100) DEFAULT NULL,
+  `emp_imap_pass` varchar(200) DEFAULT NULL,
+  `emp_direccion` varchar(45) DEFAULT NULL,
+  `emp_telefono` varchar(50) DEFAULT NULL,
+  `emp_descripcion` varchar(50) DEFAULT NULL,
+  `emp_estado` varchar(1) DEFAULT NULL,
+  `emp_fecha_creacion` timestamp NULL DEFAULT NULL,
+  `emp_fecha_modificacion` timestamp NULL DEFAULT NULL,
+  `emp_estado_logico` varchar(1) DEFAULT NULL,
+  FOREIGN KEY (temp_id) REFERENCES `tipo_empresa`(temp_id)
+) ;
+
+-- --------------------------------------------------------
+
+--
+-- Estructura de tabla para la tabla `empresa_persona`
+--
+
+CREATE TABLE IF NOT EXISTS `empresa_persona` (
+  `eper_id` bigint(20) NOT NULL AUTO_INCREMENT PRIMARY KEY,
+  `emp_id` bigint(20) NOT NULL,
+  `per_id` bigint(20) NOT NULL,
+  `eper_estado` varchar(1) NOT NULL,
+  `eper_fecha_creacion` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,
+  `eper_fecha_modificacion` timestamp NULL DEFAULT NULL,
+  `eper_estado_logico` varchar(1) NOT NULL,
+  FOREIGN KEY (emp_id) REFERENCES `empresa`(emp_id)
+) ;
 
 -- --------------------------------------------------------
 --
@@ -556,18 +601,20 @@ create table if not exists `registro_operacion` (
 ) ;
 -- --------------------------------------------------------
 --
--- Estructura de tabla para la tabla `usua_grol`
+-- Estructura de tabla para la tabla `usua_grol_eper`
 --
-create table if not exists `usua_grol` (
- `ugro_id` bigint(20) not null auto_increment primary key,
- `usu_id` bigint(20) not null,
- `grol_id` bigint(20) not null,
- `ugro_estado` varchar(1) not null,
- `ugro_fecha_creacion` timestamp not null default current_timestamp on update current_timestamp,
- `ugro_fecha_modificacion` timestamp null default null,
- `ugro_estado_logico` varchar(1) not null,
- foreign key (usu_id) references `usuario`(usu_id),
- foreign key (grol_id) references `grup_rol`(grol_id)
+CREATE TABLE IF NOT EXISTS `usua_grol_eper` (
+  `ugep_id` bigint(20) NOT NULL AUTO_INCREMENT PRIMARY KEY,
+  `eper_id` bigint(20) NULL DEFAULT NULL,
+  `usu_id` bigint(20) NOT NULL,
+  `grol_id` bigint(20) NOT NULL,
+  `ugep_estado` varchar(1) NOT NULL,
+  `ugep_fecha_creacion` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+  `ugep_fecha_modificacion` timestamp NULL DEFAULT NULL,
+  `ugep_estado_logico` varchar(1) NOT NULL,
+  FOREIGN KEY (eper_id) REFERENCES `empresa_persona`(eper_id),
+  FOREIGN KEY (usu_id) REFERENCES `usuario`(usu_id),
+  FOREIGN KEY (grol_id) REFERENCES `grup_rol`(grol_id)
 ) ;
 
 -- --------------------------------------------------------

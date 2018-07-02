@@ -353,14 +353,14 @@ class AdminmetodoingresoController extends \app\components\CController {
             ini_set('memory_limit', '256M');
             $arrSearch = $resp_periodo = [];
             if($rptData){
-                $arrSearch = json_decode($rptData, true);
+                $data = json_decode($rptData, true);
                 $arrSearch["f_ini"] = trim($data['f_ini']);
                 $arrSearch["f_fin"] = trim($data['f_fin']);
                 $arrSearch["mes"] = trim($data['mes']);
                 $arrSearch["search"] = trim($data['search']);
             }
             if($arrSearch["f_ini"]!="" || $arrSearch["f_fin"]!="" || $arrSearch["mes"]!="" || $arrSearch["search"]!="" )
-                $resp_periodo = $mod_periodo->listarPeriodos($arrSearch);
+                $resp_periodo = $mod_periodo->listarPeriodos($arrSearch); 
             else
                 $resp_periodo = $mod_periodo->listarPeriodos();
             // cambiar a plantilla diferente

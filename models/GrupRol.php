@@ -18,7 +18,7 @@ use Yii;
  * @property GrupObmoGrupRol[] $grupObmoGrupRols
  * @property Grupo $gru
  * @property Rol $rol
- * @property UsuaGrol[] $usuaGrols
+ * @property UsuaGrolEper[] $usuaGrols
  */
 class GrupRol extends \yii\db\ActiveRecord
 {
@@ -88,9 +88,9 @@ class GrupRol extends \yii\db\ActiveRecord
     /**
      * @return \yii\db\ActiveQuery
      */
-    public function getUsuaGrols()
+    public function getUsuaGrolEpers()
     {
-        return $this->hasMany(UsuaGrol::className(), ['grol_id' => 'grol_id']);
+        return $this->hasMany(UsuaGrolEper::className(), ['grol_id' => 'grol_id']);
     }
 
 }

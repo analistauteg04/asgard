@@ -177,7 +177,7 @@ class InscripcionutegController extends \yii\web\Controller {
                         // array de files
                         $file1 = Url::base(true) . "/files/archivo.pdf";
                         $rutaFile = array($file1);
-                        $link_asgard = Url::base(true) . "/site/login";
+                        $link_asgard = Url::base(true) . Utilities::getLoginUrl();
                         // enviar correo electrónico para activacion de cuenta.
                         $nombres = $pri_nombre . " " . $pri_apellido;
                         $tituloMensaje = Yii::t("register", "Successful Registration");
@@ -208,7 +208,7 @@ class InscripcionutegController extends \yii\web\Controller {
                     }
                 } else {
                     //envío de correo con los datos del acceso.
-                    $link_asgard = Url::base(true) . "/site/login";
+                    $link_asgard = Url::base(true) . Utilities::getLoginUrl();
                     $usuario = ucwords(strtolower($pri_nombre)) . " " . ucwords(strtolower($pri_apellido));
                     $tituloMensaje = Yii::t("register", "Existing Record");
                     $asunto = Yii::t("register", "User Register") . " " . Yii::$app->params["siteName"];

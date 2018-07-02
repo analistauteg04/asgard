@@ -51,6 +51,9 @@ use \app\assets\AppAsset;
 use yii\helpers\Html;
 use yii\bootstrap\Nav;
 use yii\bootstrap\NavBar;
+use app\models\Empresa;
+
+$empresas = Empresa::getListaEmpresasxUserID(Yii::$app->session->get("PB_iduser"));
 ?>
 
 <header class="main-header">
@@ -77,6 +80,22 @@ use yii\bootstrap\NavBar;
         <div class="navbar-custom-menu">
             <ul class="nav navbar-nav">
                 <!-- User Account Menu -->
+                <li class="dropdown notifications-menu">
+                    <a href="javascript:" class="dropdown-toggle" data-toggle="dropdown">
+                      <span class="hidden-xs"><?= @Yii::$app->session->get("PB_empresa") ?></span>
+                    </a>
+                    <ul class="dropdown-menu">
+                      <li class="header">Empresas a la que Pertenece:</li>
+                      <li>
+                        <!-- inner menu: contains the actual data -->
+                        <ul class="menu">
+                            <?php foreach($empresas as $index => $value){
+                                echo '<li><a href="'. Yii::$app->urlManager->createUrl(["site/changeempresa/?id=$value[id]"]) .'" data-id="'.$value['id'].'">' . $value['name'] . '</a></li>';
+                            } ?>
+                        </ul>
+                      </li>
+                    </ul>
+                </li>
                 <li class="dropdown user user-menu">
                     <!-- Menu Toggle Button -->
                     <a href="javascript:" class="dropdown-toggle usuSession" data-toggle="dropdown">
