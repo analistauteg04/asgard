@@ -46,15 +46,6 @@ $config = [
                 ],
             ],
         ],
-        'db' => require(__DIR__ . '/db.php'),
-        'db_asgard' => require(__DIR__ . '/db_asgard.php'),
-        //'db_pagoext' => require(__DIR__ . '/db_pagoext.php'),
-        'db_facturacion' => require(__DIR__ . '/db_facturacion.php'),
-        'db_academico' => require(__DIR__ . '/db_academico.php'),
-        'db_captacion' => require(__DIR__ . '/db_captacion.php'),
-        'db_claustro' => require(__DIR__ . '/db_claustro.php'),
-        'db_general' => require(__DIR__ . '/db_general.php'),
-        'db_crm' => require(__DIR__ . '/db_crm.php'),
         'view' => [
             'theme' => [
                 'class' => '\app\components\CTheme',
@@ -109,6 +100,20 @@ $config = [
     ],
     'params' => $params,
 ];
+/******************************************************************************/
+// se agregan multiples base de datos
+/******************************************************************************/
+$dir_data = __DIR__ . '/../data/';
+$listFiles = scandir($dir_data);
+$urlDir = "";
+foreach ($listFiles as $key) {
+    if (preg_match("/\.php$/", strtolower(trim($key)))) {
+        $arr_data = require($dir_data . $key);
+        $arr_key = array_keys($arr_data);
+        $item = str_replace(".php", "", strtolower(trim($key)));
+        $config['components'][$item] = $arr_data;
+    }
+}
 /******************************************************************************/
 // se agregan listado de modulos y configuracion de urlmanager rules
 /******************************************************************************/
