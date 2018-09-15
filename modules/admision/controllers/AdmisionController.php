@@ -12,7 +12,7 @@ class AdmisionController extends \app\components\CController
 {
     public function actionIndex()
     {
-        $var = Adminsion::mesagetest();
+        $var = Admision::mesagetest();
         return $this->render('index', array("var"=> $var));
     }
 

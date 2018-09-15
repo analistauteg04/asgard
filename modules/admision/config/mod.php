@@ -1,8 +1,7 @@
 <?php
-//return ['app' =>  'app\modules\app\Module'];
-return ['app' => [
+return ['admision' => [
             'class' => 'app\modules\admision\Module',
-            'db2' => [
+            'db_admision' => [
                 'class' => 'app\components\CConnection',
                 'dsn' => 'mysql:host=localhost;dbname=db_crm',
                 'username' => 'uteg',

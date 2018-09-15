@@ -57,7 +57,7 @@ mysql -u${USER} -p${PASS} < $CURRENT_DIR/base_nueva_prod/data/db_facturacion_dat
 mysql -uroot -p${ROOT_PASS} -e "GRANT ALL PRIVILEGES ON db_facturacion.* TO '${USER}'@'localhost';"
 
 # FLUSH PRIVILEGES
-echo "Aplicado Permisos......"
+echo "Aplicando Permisos......"
 mysql -uroot -p${ROOT_PASS} -e "FLUSH PRIVILEGES;"
 
 echo "Script Finalizado!!! ;)"

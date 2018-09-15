@@ -4,7 +4,7 @@ namespace app\modules\admision\models;
 
 use Yii;
 
-class App extends \yii\base\Object 
+class Admision extends \yii\db\ActiveRecord
 {
     private static $users = [
         '100' => [

@@ -1,6 +1,5 @@
 <?php
 use yii\helpers\Html;
-use yii\models\framework\App;
 
 /* @var $this yii\web\View */
 $this->title = 'About';
