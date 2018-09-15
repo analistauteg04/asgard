@@ -8,16 +8,17 @@ use app\models\Utilities;
 use yii\helpers\ArrayHelper;
 use yii\base\Exception;
 use yii\base\Security;
-use app\models\NivelInteres;
 use app\models\Persona;
 use app\models\Pais;
 use app\models\Provincia;
 use app\models\Canton;
-use app\models\Carrera;
+use app\models\EstudioAcademico;
 use app\models\MedioPublicitario;
 use app\models\SolicitudCaptacion;
+use app\models\Modalidad;
 use app\models\Usuario;
 use app\models\PreInteresado;
+use app\models\UnidadAcademica;
 use yii\helpers\Url;
 
 class InscripcionController extends \yii\web\Controller {
@@ -27,8 +28,7 @@ class InscripcionController extends \yii\web\Controller {
         $mod_metodo = new MetodoIngreso();
         $per_id = Yii::$app->session->get("PB_perid");
         $mod_persona = Persona::findIdentity($per_id);
-        $mod_pais = new Pais();
-
+        $mod_modalidad = new Modalidad();
         if (Yii::$app->request->isAjax) {
             $data = Yii::$app->request->post();
             if (isset($data["getprovincias"])) {
@@ -45,30 +45,38 @@ class InscripcionController extends \yii\web\Controller {
             }
 
             if (isset($data["getmetodo"])) {
-                $metodos = $mod_metodo->obtenerMetodoIngXNivelInt($data['nint_id']);
+                $metodos = $mod_metodo->consultarMetodoIngNivelInt($data['nint_id']);
                 $message = array("metodos" => $metodos);
                 echo Utilities::ajaxResponse('OK', 'alert', Yii::t('jslang', 'Success'), 'false', $message);
                 return;
             }
 
             if (isset($data["getarea"])) {
-                //obtener el codigo de area del pais                
-                $area = $mod_pais->consultarCodigoArea($data["codarea"]);
+                //obtener el codigo de area del pais
+                $mod_areapais = new Pais();
+                $area = $mod_areapais->consultarCodigoArea($data["codarea"]);
                 $message = array("area" => $area);
+                echo Utilities::ajaxResponse('OK', 'alert', Yii::t('jslang', 'Success'), 'false', $message);
+                return;
+            }
+
+            if (isset($data["getmodalidad"])) {
+                $modalidad = $mod_modalidad->consultarModalidad($data["nint_id"]);
+                $message = array("modalidad" => $modalidad);
                 echo Utilities::ajaxResponse('OK', 'alert', Yii::t('jslang', 'Success'), 'false', $message);
                 return;
             }
         }
         $arr_pais_dom = Pais::find()->select("pai_id AS id, pai_nombre AS value")->where(["pai_estado_logico" => "1", "pai_estado" => "1"])->asArray()->all();
-        $pais_id = 57; //Ecuador
+        $pais_id = 1; //Ecuador
         $arr_prov_dom = Provincia::provinciaXPais($pais_id);
         $arr_ciu_dom = Canton::cantonXProvincia($arr_prov_dom[0]["id"]);
-        $mod_carrera = new Carrera();
-        $fac_id = 1;
-        $arr_ninteres = NivelInteres::find()->select("nint_id AS id, nint_nombre AS name")->where(["nint_estado_logico" => "1", "nint_estado" => "1"])->asArray()->all();
-        $arr_metodos = $mod_metodo->obtenerMetodoIngXNivelInt(2);
+        $mod_carrera = new EstudioAcademico();
+        //$fac_id = 1;
+        $arr_metodos = $mod_metodo->consultarMetodoIngNivelInt(2);
         $arr_medio = MedioPublicitario::find()->select("mpub_id AS id, mpub_nombre AS value")->where(["mpub_estado_logico" => "1", "mpub_estado" => "1"])->asArray()->all();
-
+        $arr_ninteres = UnidadAcademica::find()->select("uaca_id AS id, uaca_nombre AS name")->where(["uaca_estado_logico" => "1", "uaca_estado" => "1"])->asArray()->all();
+        $arr_modalidad = $mod_modalidad->consultarModalidad(1);
         return $this->render('index', [
                     "tipos_dni" => array("CED" => Yii::t("formulario", "DNI Document"), "PASS" => Yii::t("formulario", "Passport")),
                     "tipos_dni2" => array("CED" => Yii::t("formulario", "DNI Document1"), "PASS" => Yii::t("formulario", "Passport1")),
@@ -79,6 +87,7 @@ class InscripcionController extends \yii\web\Controller {
                     "arr_ninteres" => ArrayHelper::map($arr_ninteres, "id", "name"),
                     "arr_metodos" => ArrayHelper::map($arr_metodos, "id", "name"),
                     "arr_medio" => ArrayHelper::map($arr_medio, "id", "value"),
+                    "arr_modalidad" => ArrayHelper::map($arr_modalidad, "id", "name"),
         ]);
     }
 
@@ -95,13 +104,14 @@ class InscripcionController extends \yii\web\Controller {
             $carrera = $data["carrera"];
             $mediopub = $data["medio"];
             $pasaporte = $data["pasaporte"];
+            $unidad = $data["unidad"];
+            $modalidad = $data["modalidad"];
             $con = \Yii::$app->db;
             $transaction = $con->beginTransaction();
             try {
                 $mod_personapreins = new \app\models\PersonaPreins();
                 // obtener nacionalidad y codigo de area
                 $arr_region = $mod_personapreins->consultaDatosRegion($pais);
-                $paisvive = $arr_region["pai_nombre"];
                 $mod_personapreins->ppre_pri_nombre = ucwords(strtolower($pri_nombre));
                 $mod_personapreins->ppre_pri_apellido = ucwords(strtolower($pri_apellido));
                 if ($tipo_dni == "CED") {
@@ -119,7 +129,9 @@ class InscripcionController extends \yii\web\Controller {
                 $mod_personapreins->pai_id_domicilio = $pais;
                 $mod_personapreins->ppre_celular = $celular;
                 $mod_personapreins->ppre_correo = strtolower($correo);
-                $mod_personapreins->ppre_tipo_formulario = 'On';
+                $mod_personapreins->ppre_tipo_formulario = 'Ot';
+                $mod_personapreins->uaca_id = $unidad;
+                $mod_personapreins->mod_id = $modalidad;
                 $mod_personapreins->ppre_fecha_registro = date("Y-m-d H:i:s");
                 $mod_personapreins->ppre_estado = "1";
                 $mod_personapreins->ppre_estado_logico = "1";
@@ -158,6 +170,7 @@ class InscripcionController extends \yii\web\Controller {
                         $existecorreo = $mod_personapreins->ConsultaRegistropreinscorreo(strtolower($correo));
                         if (($ppre_id == $existecorreo["ppre_id"]) or ( !$existecorreo)) {
                             //Actualizar la preinscripción.     
+                            // $modelo= $existe_interesado["ppre_id"]."-".ucwords(strtolower($pri_nombre))."-".ucwords(strtolower($pri_apellido))."-".$mod_personapreins->ppre_nacionalidad."-".$pais."-".$pais."-".$celular."-".strtolower($correo);
                             $resp_personapreins = $mod_personapreins->actualizaPreinscripcion($ppre_id, ucwords(strtolower($pri_nombre)), ucwords(strtolower($pri_apellido)), $mod_personapreins->ppre_nacionalidad, $pais, $pais, $celular, strtolower($correo));
                             if ($resp_personapreins) {
                                 $per_id = $ppre_id;
@@ -175,9 +188,12 @@ class InscripcionController extends \yii\web\Controller {
                     if ($exito == 1) {
                         $link = Url::base(true) . "/inscripcion/crear?ppre_id=" . base64_encode($per_id);
                         // array de files
-                        $file1 = Url::base(true) . "/files/archivo.pdf";
-                        $rutaFile = array($file1);
-                        $link_asgard = Url::base(true) . Utilities::getLoginUrl();
+                        if (($unidad ==1) && ($modalidad==1)) {
+                            $file1 = Url::base(true) . "/files/archivo.pdf";
+                            $rutaFile = array($file1);
+                        }
+                                     
+                        $link_asgard = Url::base(true) . "/site/login";
                         // enviar correo electrónico para activacion de cuenta.
                         $nombres = $pri_nombre . " " . $pri_apellido;
                         $tituloMensaje = Yii::t("register", "Successful Registration");
@@ -189,15 +205,24 @@ class InscripcionController extends \yii\web\Controller {
                                     "[[primer_apellido]]" => $mod_personapreins->ppre_pri_apellido,
                                     "[[dni]]" => $dnis,
                                     "[[numero_dni]]" => $numidentificacion,
-                                    "[[pais]]" => $paisvive,
+                                    "[[pais]]" => 'Ecuador',
                                     "[[celular]]" => $celular,
                                     "[[mail]]" => $mod_personapreins->ppre_correo,
                                     "[[user]]" => $nombres, "[[username]]" => $mod_personapreins->ppre_correo,
                                     "[[link_verification]]" => $link), Yii::$app->language);
                         $bodyjefe = Utilities::getMailMessage("Reviewadmissions", array("[[link_asgard]]" => $link_asgard), Yii::$app->language);
-                        Utilities::sendEmail($tituloMensaje, Yii::$app->params["adminEmail"], [$mod_personapreins->ppre_correo => $pri_apellido . " " . $pri_nombre], $asunto, $body, $rutaFile);
+                        //$bodysupervisor = Utilities::getMailMessage("Supervisoradmissions", array("[[link_asgard]]" => $link_asgard), Yii::$app->language);
+                        if (!empty($rutaFile)) {
+                            Utilities::sendEmail($tituloMensaje, Yii::$app->params["adminEmail"], [$mod_personapreins->ppre_correo => $pri_apellido . " " . $pri_nombre], $asunto, $body, $rutaFile);
+                        } else {
+                            Utilities::sendEmail($tituloMensaje, Yii::$app->params["adminEmail"], [$mod_personapreins->ppre_correo => $pri_apellido . " " . $pri_nombre], $asunto, $body);
+                        }
+                        
                         Utilities::sendEmail($tituloMensaje, Yii::$app->params["adminEmail"], [Yii::$app->params["soporteEmail"] => "Soporte"], $asunto, $body);
                         Utilities::sendEmail($tituloMensaje1, Yii::$app->params["adminEmail"], [Yii::$app->params["admisiones"] => "Jefe"], $asunto1, $bodyjefe);
+                        //Utilities::sendEmail($tituloMensaje1, Yii::$app->params["adminEmail"], [Yii::$app->params["supervisoradmision1"] => "Supervisor"], $asunto1, $bodysupervisor);
+                        //Utilities::sendEmail($tituloMensaje1, Yii::$app->params["adminEmail"], [Yii::$app->params["supervisoradmision2"] => "Supervisor"], $asunto1, $bodysupervisor);
+
                         $transaction->commit();
                         $message = array(
                             "wtmessage" => Yii::t("notificaciones", "La infomación ha sido grabada. Por favor para activar su cuenta revise su correo electrónico y siga los pasos."),
@@ -207,7 +232,7 @@ class InscripcionController extends \yii\web\Controller {
                     }
                 } else {
                     //envío de correo con los datos del acceso.
-                    $link_asgard = Url::base(true) . Utilities::getLoginUrl();
+                    $link_asgard = Url::base(true) . "/site/login";
                     $usuario = ucwords(strtolower($pri_nombre)) . " " . ucwords(strtolower($pri_apellido));
                     $tituloMensaje = Yii::t("register", "Existing Record");
                     $asunto = Yii::t("register", "User Register") . " " . Yii::$app->params["siteName"];
@@ -282,34 +307,44 @@ class InscripcionController extends \yii\web\Controller {
                         $mod_pint->pint_estado_preinteresado = "1";
                         $mod_pint->pint_estado = "1";
                         $mod_pint->pint_estado_logico = "1";
-
                         if ($mod_pint->save()) {
                             $mod_solcap = new SolicitudCaptacion();
                             $mod_solcap->per_id = $per_id;
                             $mod_solcap->pint_id = 1;
-                            $mod_solcap->ming_id = "1";
+                            $mod_solcap->uaca_id = $resp_perpreins["unidad"]; 
+                            $mod_solcap->ming_id = $resp_perpreins["modalidad"]; 
                             $mod_solcap->rcap_fecha_ingreso = $resp_perpreins["fecha_registro"]; //date("Y-m-d H:i:s");
                             $mod_solcap->rcap_estado = "1";
+                            $mod_solcap->rcap_fecha_creacion = date(Yii::$app->params["dateTimeByDefault"]);
                             $mod_solcap->rcap_estado_logico = "1";
-
                             if ($mod_solcap->save()) {
                                 $mod_usuario = new \app\models\Usuario();
                                 $mod_usuario->usu_estado = "0";
                                 $mod_usuario->usu_estado_logico = "1";
                                 if ($mod_usuario->crearUsuario($correo, $pass, $per_id)) {
                                     $usu_id = $mod_usuario->usu_id;
-
                                     // tercero se crea los permisos del usuario creado grupo3 rol3
-                                    $grupo_rol = new \app\models\UsuaGrol();
-                                    $grupo_rol->grol_id = 10;
-                                    $grupo_rol->usu_id = $usu_id;
-                                    $grupo_rol->ugro_estado = "1";
-                                    $grupo_rol->ugro_estado_logico = "1";
-
-                                    if (!$grupo_rol->save()) {
-                                        $mod_usuario->delete();
-                                        $mod_persona->delete();
-                                        throw new Exception('Error grupo no creado.');
+                                    //NO GUARDA REVISAR PORQUE                                    
+                                    $empresa_persona = new \app\models\EmpresaPersona();                                    
+                                    $empresa_persona->emp_id = 1; //esto ver si no esquemado OJO
+                                    $empresa_persona->per_id = $per_id;
+                                    $empresa_persona->eper_estado = "1";
+                                    $empresa_persona->eper_estado_logico = "1";
+                                    // AQUI guardar en empresa_persona                                                            
+                                    if ($empresa_persona->save()) {
+                                        // crear modelo empresa_persona 
+                                        $grupo_rol = new \app\models\UsuaGrolEper();
+                                        $grupo_rol->eper_id = $empresa_persona->eper_id;
+                                        $grupo_rol->usu_id = $usu_id;
+                                        $grupo_rol->grol_id = 10;
+                                        $grupo_rol->ugep_estado = "1";
+                                        $grupo_rol->ugep_estado_logico = "1";
+                                        if (!$grupo_rol->save()) {
+                                            $mod_usuario->delete();
+                                            $empresa_persona->delete();
+                                            $mod_persona->delete();
+                                            throw new Exception('Error grupo no creado.');
+                                        }
                                     }
                                     // generar link de activación
                                     $link = $mod_usuario->generarLinkActivacion();
@@ -317,7 +352,6 @@ class InscripcionController extends \yii\web\Controller {
                                     throw new Exception('Error solicitud de captacion no creada.');
                                 }
                             } else {
-
                                 throw new Exception('Error usuario no creado.');
                             }
                             $transaction->commit();

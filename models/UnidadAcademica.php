@@ -1,8 +1,8 @@
 <?php
 
 namespace app\models;
-use yii\data\ArrayDataProvider;
 
+use yii\data\ArrayDataProvider;
 use Yii;
 
 /**
@@ -16,29 +16,26 @@ use Yii;
  * @property string $uaca_fecha_modificacion
  * @property string $uaca_estado_logico
  */
-class UnidadAcademica extends \yii\db\ActiveRecord
-{
+class UnidadAcademica extends \yii\db\ActiveRecord {
+
     /**
      * @inheritdoc
      */
-    public static function tableName()
-    {
+    public static function tableName() {
         return 'unidad_academica';
     }
 
     /**
      * @return \yii\db\Connection the database connection used by this AR class.
      */
-    public static function getDb()
-    {
+    public static function getDb() {
         return Yii::$app->get('db_academico');
     }
 
     /**
      * @inheritdoc
      */
-    public function rules()
-    {
+    public function rules() {
         return [
             [['uaca_nombre', 'uaca_descripcion', 'uaca_estado', 'uaca_estado_logico'], 'required'],
             [['uaca_fecha_creacion', 'uaca_fecha_modificacion'], 'safe'],
@@ -51,8 +48,7 @@ class UnidadAcademica extends \yii\db\ActiveRecord
     /**
      * @inheritdoc
      */
-    public function attributeLabels()
-    {
+    public function attributeLabels() {
         return [
             'uaca_id' => 'Uaca ID',
             'uaca_nombre' => 'Uaca Nombre',
@@ -63,4 +59,74 @@ class UnidadAcademica extends \yii\db\ActiveRecord
             'uaca_estado_logico' => 'Uaca Estado Logico',
         ];
     }
+
+    /** Se debe cambiar esta funcion que regrese el codigo de area ***ojo***
+     * Function consultarCodigoArea
+     * @author  Byron Villacreses <developer@uteg.edu.ec>
+     * @property integer car_id      
+     * @return  
+     */
+    public static function consultarIdsUnid_Academica($TextAlias) {
+        $con = \Yii::$app->db_academico;
+        $sql = "SELECT uaca_id Ids
+                    FROM " . $con->dbname . ".unidad_academica  
+                WHERE uaca_estado_logico=1 AND uaca_nombre=:uaca_nombre ";
+        $comando = $con->createCommand($sql);
+        $comando->bindParam(":uaca_nombre", $TextAlias, \PDO::PARAM_STR);
+        //return $comando->queryAll();
+        $rawData = $comando->queryScalar();
+        if ($rawData === false)
+            return 0; //en caso de que existe problema o no retorne nada tiene 1 por defecto 
+        return $rawData;
+    }
+    
+    /**
+     * Function consulta el nombre de unidad academica
+     * @author  Kleber Loayza <analistadesarrollo03@uteg.edu.ec>;
+     * @property       
+     * @return  
+     */
+    public function consultarUnidadAcademicas() {
+        $con = \Yii::$app->db_academico;
+        $estado = 1;
+        $sql = "
+                    SELECT 
+                        unia.uaca_nombre as name,
+                        unia.uaca_id as id
+                    FROM 
+                        " . $con->dbname . ".unidad_academica as unia            
+                    WHERE   
+                        unia.uaca_estado_logico=:estado AND 
+                        unia.uaca_estado=:estado
+               ";
+        $comando = $con->createCommand($sql);
+        $comando->bindParam(":estado", $estado, \PDO::PARAM_STR);
+        $resultData = $comando->queryAll();
+        return $resultData;
+    }
+
+    /**
+     * Function consulta el nombre de unidad academica
+     * @author  Giovanni Vergara <analistadesarrollo02@uteg.edu.ec>;
+     * @property       
+     * @return  
+     */
+    public function consultarNombreunidad($unidad) {
+        $con = \Yii::$app->db_academico;
+        $estado = 1;
+        $sql = "SELECT 
+                    unia.uaca_nombre as nombre_unidad
+                FROM 
+                    " . $con->dbname . ".unidad_academica as unia            
+                WHERE   
+                    unia.uaca_id=:unidad AND
+                    unia.uaca_estado_logico=:estado AND 
+                    unia.uaca_estado=:estado";
+        $comando = $con->createCommand($sql);
+        $comando->bindParam(":estado", $estado, \PDO::PARAM_STR);
+        $comando->bindParam(":unidad", $unidad, \PDO::PARAM_INT);
+        $resultData = $comando->queryOne();
+        return $resultData;
+    }
+
 }

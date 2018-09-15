@@ -10,6 +10,9 @@ and open the template in the editor.
 
 .barexport {
     position: relative;
+}
+
+.barexportp {
     top: 20px;
 }
 
@@ -247,4 +250,12 @@ div.DTFC_LeftFootWrapper table {
     border-top: none;
 }
 
+/* Estilos tablas */
 
+table.dataTable{
+    /*background-color: #FFFFFF;*//*#f9f9f9;*/
+}
+
+.table-striped > tbody > tr:nth-of-type(odd) {
+    /*background-color: #FFFFFF;*//*#f9f9f9;*/
+}

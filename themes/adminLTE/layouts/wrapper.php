@@ -134,10 +134,10 @@ use app\models\Accion;
                             $acc_nombre = Yii::t($acc_lang_file, $value["acc_nombre"]);
                             if(isset($value["oacc_function"]) && $value["oacc_tipo_boton"] == 1){
                                 $function = 'onclick="'.$value["oacc_function"].'()"';
-                                if(!$isImg) // data-toggle="tooltip" data-placement="top" title="'.$acc_nombre.'"
+                                //if(!$isImg) // data-toggle="tooltip" data-placement="top" title="'.$acc_nombre.'"
                                     $botones .= '<button type="button" class="btn btn-default btnAccion" data-trigger="hover" '.$function.'><i class="'.$acc_imagen.'"></i>&nbsp;&nbsp;'.$acc_nombre.'</button>';
                             }else{
-                                if(!$isImg) // data-toggle="tooltip" data-placement="top" title="'.$acc_nombre.'"
+                                //if(!$isImg) // data-toggle="tooltip" data-placement="top" title="'.$acc_nombre.'"
                                     $botones .= '<a href="'.Yii::$app->urlManager->createUrl($value["oacc_cont_accion"]).'" class="btn-default"><button type="button" class="btn btn-default btnAccion" data-trigger="hover"><i class="'.$acc_imagen.'"></i>&nbsp;&nbsp;'.$acc_nombre.'</button></a>';
                             }
                         }

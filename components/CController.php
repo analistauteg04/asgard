@@ -38,6 +38,7 @@ class CController extends \yii\web\Controller {
         $isUser = $session->get('PB_isuser', FALSE);
         $route = $this->getRoute() . "/login";
         $usu = new \app\models\Usuario;
+        
         //$usu->regenerateSession();
         if ($isUser == FALSE && $route != 'site/login' ) {
             $this->redirect(Yii::$app->urlManager->createUrl([Utilities::getLoginUrl()]));
@@ -92,10 +93,10 @@ class CController extends \yii\web\Controller {
         $session->set('PB_module_id', $objModule->mod_id);
         $session->set('PB_objmodule_id', $objModule->omod_id);
         
-        $this->getView()->title = Yii::t($objModule->omod_lang_file,$objModule->omod_nombre);
-        $this->getView()->params["Module_name"]    = Yii::t($module->mod_lang_file,$module->mod_nombre);
-        $this->getView()->params["ObjModPadre_name"] = Yii::t($objModPadre->omod_lang_file,$objModPadre->omod_nombre);
-        $this->getView()->params["ObjModule_name"] = Yii::t($objModule->omod_lang_file,$objModule->omod_nombre);
+        $this->getView()->title = ($objModule->omod_lang_file != "")?Yii::t($objModule->omod_lang_file,$objModule->omod_nombre):$objModule->omod_nombre;
+        $this->getView()->params["Module_name"]    = ($module->mod_lang_file != "")?Yii::t($module->mod_lang_file,$module->mod_nombre):$module->mod_nombre;
+        $this->getView()->params["ObjModPadre_name"] = ($objModPadre->omod_lang_file != "")?Yii::t($objModPadre->omod_lang_file,$objModPadre->omod_nombre):$objModPadre->omod_nombre;
+        $this->getView()->params["ObjModule_name"] = ($objModule->omod_lang_file != "")?Yii::t($objModule->omod_lang_file,$objModule->omod_nombre):$objModule->omod_nombre;
         $this->getView()->params["mod_id"] = $module->mod_id;
         $this->getView()->params["omod_id"] = $objModule->omod_id;
         $this->getView()->params["omod_padre_id"] = $objModule->omod_padre_id;

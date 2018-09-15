@@ -19,15 +19,17 @@ use yii\web\JsExpression;
 <div>
     <form class="form-horizontal">
         <?=
-        $this->render('_formBuscarSolPen', [
-            'arrEjecutivo' => $arrEjecutivo]);
+        $this->render('_form_Buscarsolpendiente', [
+            'arrEjecutivo' => $arrEjecutivo,
+            'grupo' => $grupo,    
+                ]);            
         ?>
     </form>
 </div>
 <div>
     <?=
-    $this->render('_listarSolPendienteGrid', [
-        'model' => $model,
+    $this->render('_listarsolpendiente_grid', [
+        'model' => $model,        
         'url' => $url]);
     ?>
 </div>

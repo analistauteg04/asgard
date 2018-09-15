@@ -80,21 +80,6 @@ use app\components\CFileInputAjax;
             </div>
         <?php } ?>
     </div>
-    <div class='col-md-12'>
-        <?php if (!empty($arch5)) { ?>
-            <div class="col-md-6 doc_beca cinteres">
-                <div class="form-group">
-                    <label for="txth_doc_beca" class="col-sm-4 control-label keyupmce"><?= Yii::t("formulario", "Scholarship document") ?></label>
-                    <div class="col-sm-7">                
-                        <?php
-                        echo "<a href='" . Url::to(['/site/getimage', 'route' => "$arch5"]) . "' download='" . $arch5 . "' ><span class='glyphicon glyphicon-download-alt'></span>Descargar Imagen</a>"
-                        ?>
-                    </div>
-                </div>
-            </div>
-        <?php } ?>
-    </div>
-    
     <div class="col-md-12">    
         <h4><b><span id="lbl_Personeria"><?= Yii::t("formulario", "Payment files") ?></span></b></h4>  
     </div>

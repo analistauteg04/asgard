@@ -149,12 +149,7 @@ class Item extends \yii\db\ActiveRecord
         $sql = "SELECT 	s.scat_id,
                         i.ite_id,
                         scat_nombre subcategoria,
-                        ite_nombre item,
-                        ifnull((select di.dite_porcentaje 
-                                from ". $con->dbname . ".descuento_item di 
-                                where di.ite_id = i.ite_id
-                                    and di.dite_estado = '1'
-                                    and di.dite_estado_logico = '1'),' ') descuento
+                        ite_nombre item
                 FROM " . $con->dbname . ".item i inner join " . $con->dbname . ".sub_categoria s on s.scat_id = i.scat_id
                 WHERE i.ite_estado = :estado
                     and i.ite_estado_logico = :estado

@@ -324,6 +324,13 @@ Yii Software LLC (http://www.yiisoft.com) Copyright © 2008
 	50%{ background-color:#FFFFFF; }
 	100%{}
 }
+/* CCS para check */
+.input-group-addon-border-left{
+    border-left: 1px solid #ccc !important;
+}
+.input-group-addon-pointer{
+    cursor: pointer;
+}
 /* CCS para el reloj */
 .time-box {
     font-size: 35px;

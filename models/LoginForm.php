@@ -13,6 +13,7 @@ class LoginForm extends Model {
 
     public $username;
     public $password;
+    public $empresa_id;
     private $_user = false;
     private $_errorSession = false;
 
@@ -62,7 +63,7 @@ class LoginForm extends Model {
      * @param      
      * @return  
      */
-    public function login() {
+    public function login($empresa_alias = NULL) {
         if ($this->validate()) {
             $usuario = Usuario::findByUsername($this->username);
             if (isset($usuario)) {
@@ -71,7 +72,20 @@ class LoginForm extends Model {
                 if ($status_activo == 1) { // si es usuario activo
                     if ($status && isset($status)) {
                         //$usuario->init();
-                        $usuario->createSession();
+                        $emp_id = NULL;
+                        if(isset($empresa_alias)){
+                            $empresa_model = Empresa::findOne(['emp_alias' => $empresa_alias, 'emp_estado' => 1, 'emp_estado_logico' => 1]);
+                            $emp_id = isset($empresa_model->emp_id)?$empresa_model->emp_id:NULL;
+                        }
+                        $usuario->createSession($emp_id);
+                        // agregar link dash session
+                        $ws = new \app\webservices\WsEducativa();
+                        $arr_out = $ws->autenticar_usuario($this->username, $this->password);
+                        if($arr_out["status"] == "OK")
+                            Usuario::addVarSession("PB_educativa", $arr_out["data"]->result);
+                        else
+                            Usuario::addVarSession("PB_educativa", Yii::$app->params['url_educativa']);
+                        
                         Yii::$app->user->login($usuario, 0);
                         Yii::$app->user->setIdentity($usuario);
                     } else { // error password

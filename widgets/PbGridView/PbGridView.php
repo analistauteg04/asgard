@@ -34,6 +34,10 @@ class PbGridView extends GridView {
     public $fnExportEXCEL = null;
     public $pajax = true;
     public $timepajax = 20000; // 5000 Milisegundos -> 5 Segundos
+    public $addButton = false;
+    public $addButton_fn = null;
+    public $addButton_link = null;
+    public $addButton_popup = false;
 
     public function init() {
         parent::init();
@@ -66,6 +70,11 @@ class PbGridView extends GridView {
             'fnExportPDF' => (isset($this->fnExportPDF))?"javascript:".$this->fnExportPDF."()":"javascript:",
             'fnExportEXCEL' => (isset($this->fnExportEXCEL))?"javascript:".$this->fnExportEXCEL."()":"javascript:",
             'showExport' => $this->showExport,
+            'addButton' => $this->addButton,
+            'addButton_fn' => $this->addButton_fn,
+            'addButton_lk' => $this->addButton_link,
+            'addButton_pp' => $this->addButton_popup,
+            'totalCount' => $this->dataProvider->totalCount,
             ]);
         echo Html::tag($tag, $content, $this->options);
         if($this->pajax)

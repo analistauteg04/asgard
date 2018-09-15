@@ -45,6 +45,7 @@
 use yii\helpers\Url;
 use yii\helpers\Html;
 
+//print_r($respPerinteresado);
 ?>
 <?= Html::hiddenInput('txth_ftem_id', 0, ['id' => 'txth_ftem_id']); ?>
 <?= Html::hiddenInput('txth_errorFile', Yii::t("formulario", "The file extension is not valid or exceeds the maximum size in MB recommending him try again"), ['id' => 'txth_errorFile']); ?>
@@ -61,7 +62,7 @@ use yii\helpers\Html;
             <div class="tab-pane active" id="paso1">
                 <form class="form-horizontal">
                     <?=
-                    $this->render('_formTab1View', [
+                    $this->render('_form_tab1_view', [
                         'paises_nac' => $arr_pais_nac,
                         'provincias_nac' => $arr_prov_nac,
                         'cantones_nac' => $arr_ciu_nac,
@@ -105,7 +106,7 @@ use yii\helpers\Html;
             <div class="tab-pane" id="paso2">
                 <form class="form-horizontal">
                     <?=
-                    $this->render('_formTab2View', [
+                    $this->render('_form_tab2_view', [
                         'paises_dom' => $arr_pais_dom,
                         'provincias_dom' => $arr_prov_dom,
                         'cantones_dom' => $arr_ciu_dom,
@@ -127,7 +128,7 @@ use yii\helpers\Html;
             <div class="tab-pane" id="paso3">
                 <form class="form-horizontal">
                     <?=
-                    $this->render('_formTab3View', [
+                    $this->render('_form_tab3_view', [
                         'paises_med' => $arr_pais_med,
                         'provincias_med' => $arr_prov_med,
                         'cantones_med' => $arr_ciu_med,
@@ -176,7 +177,7 @@ use yii\helpers\Html;
             <div class="tab-pane" id="paso4">
                 <form class="form-horizontal">
                     <?=
-                    $this->render('_formTab4View', [
+                    $this->render('_form_tab4_view', [
                         'ninstruc_mad' => $arr_ninstruc_mad,
                         'ninstruc_pad' => $arr_ninstruc_pad,
                         /*                           */
@@ -191,7 +192,7 @@ use yii\helpers\Html;
             <div class="tab-pane" id="paso5">
                 <form class="form-horizontal">
                     <?=
-                    $this->render('_formTab5View', [
+                    $this->render('_form_tab5_view', [
                         'tipo_discap' => $arr_tip_discap,
                         'tipo_discap_fam' => $arr_tip_discap_fam,
                         'tipparent_dis' => $arr_tipparent_dis,

@@ -10,6 +10,17 @@ namespace app\models;
 
 use Yii;
 use yii\helpers\Url;
+use PhpOffice\PhpSpreadsheet\Spreadsheet;
+use PhpOffice\PhpSpreadsheet\Writer\Xlsx;
+use PhpOffice\PhpSpreadsheet\Worksheet\Drawing;
+use PhpOffice\PhpSpreadsheet\Style\Alignment;
+use PhpOffice\PhpSpreadsheet\Style\Fill;
+use PhpOffice\PhpSpreadsheet\Style\Color;
+use PhpOffice\PhpSpreadsheet\Worksheet\PageSetup;
+use PhpOffice\PhpSpreadsheet\IOFactory;
+use PhpOffice\PhpSpreadsheet\Style\Border;
+
+
 
 /**
  * Description of Utilities
@@ -352,8 +363,7 @@ class Utilities {
         }
     }
     
-    public static function generarReporteXLS($nombarch, $nameReport, $arrHeader, $arrData, $colPosition = array() ){
-        ini_set('memory_limit', '256M');
+    public static function generarReporteXLS($nombarch, $nameReport, $arrHeader, $arrData, $colPosition = array(), $typeExp = "Xls"){
         if(count($colPosition) == 0){
             $colPosition = array("A","B","C","D","E","F","G","H","I","J","K","L","M","N","O","P","Q","R","S","T","U");
         }
@@ -375,7 +385,7 @@ class Utilities {
                 array(
                     'borders' => array(
                         'allborders' => array(
-                            'style' => \PHPExcel_Style_Border::BORDER_THIN,
+                            'style' => Border::BORDER_THIN,
                             'color' => array('argb' => 'FF000000'),
                         ),
                     ),
@@ -384,7 +394,7 @@ class Utilities {
                 array(
                     'borders' => array(
                         'top' => array(
-                            'style' => \PHPExcel_Style_Border::BORDER_MEDIUM,
+                            'style' => Border::BORDER_MEDIUM,
                             'color' => array('argb' => 'FF000000'),
                         ),
                     ),
@@ -393,7 +403,7 @@ class Utilities {
                 array(
                     'borders' => array(
                         'bottom' => array(
-                            'style' => \PHPExcel_Style_Border::BORDER_MEDIUM,
+                            'style' => Border::BORDER_MEDIUM,
                             'color' => array('argb' => 'FF000000'),
                         ),
                     ),
@@ -402,7 +412,7 @@ class Utilities {
                 array(
                     'borders' => array(
                         'right' => array(
-                            'style' => \PHPExcel_Style_Border::BORDER_MEDIUM,
+                            'style' => Border::BORDER_MEDIUM,
                             'color' => array('argb' => 'FF000000'),
                         ),
                     ),
@@ -411,14 +421,14 @@ class Utilities {
                 array(
                     'borders' => array(
                         'left' => array(
-                            'style' => \PHPExcel_Style_Border::BORDER_MEDIUM,
+                            'style' => Border::BORDER_MEDIUM,
                             'color' => array('argb' => 'FF000000'),
                         ),
                     ),
                 ),
         );
         try{
-            $objPHPExcel = new \PHPExcel();
+            $objPHPExcel = new Spreadsheet();
             $objPHPExcel->getProperties()->setCreator(Yii::$app->session->get("PB_nombres"))
                     ->setLastModifiedBy(Yii::$app->session->get("PB_nombres"))
                     ->setTitle("Office 2007 XLSX")
@@ -451,7 +461,8 @@ class Utilities {
             $objPHPExcel->getActiveSheet()->getStyle("B2:B10")->applyFromArray($border["left"]);
             $objPHPExcel->getActiveSheet()->getStyle("S2:S10")->applyFromArray($border["right"]);
             $objPHPExcel->getActiveSheet()->getStyle("B$i:D$i")->applyFromArray($border);
-            $objDrawing = new \PHPExcel_Worksheet_Drawing();
+            
+            $objDrawing = new drawing();
             $objDrawing->setName('Logo');
             $objDrawing->setDescription('Logo');
             $objDrawing->setPath(Yii::$app->basePath . "/themes/" . Yii::$app->view->theme->themeName . "/assets/img/logos/logo.png");
@@ -479,7 +490,7 @@ class Utilities {
                 }
                 $i++;
             }
-            $objWriter = \PHPExcel_IOFactory::createWriter($objPHPExcel, 'Excel5');
+            $objWriter = IOFactory::createWriter($objPHPExcel, $typeExp);
             $objWriter->save('php://output');
         }catch(Exception $e){
             echo Yii::t("reportes","Error to export Excel");
@@ -503,10 +514,19 @@ class Utilities {
     
     public static function getLoginUrl(){
         $link = '/site/login';
-        if(Yii::$app->session->get('PB_idempresa') != 1){
+        if(Yii::$app->session->get('PB_idempresa') != null && Yii::$app->session->get('PB_idempresa') != 1){
             $link = '/site/loginemp';
         }
         return $link;
+    }
+    
+    public static function genero() {
+        return [
+            //'0' => Yii::t("formulario", "-Select-"),
+            'M' => Yii::t("perfil", "Male"),
+            'F' => Yii::t("perfil", "Female"),
+            'G' => Yii::t("perfil", "GLBT"),
+        ];
     }
 
 }

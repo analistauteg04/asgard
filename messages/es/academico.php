@@ -4,22 +4,22 @@
  * The Asgard framework is free software. It is released under the terms of
  * the following BSD License.
  *
- * Copyright (C) 2017 by Asgard Software 
+ * Copyright (C) 2015 by Asgard Software (http://www.penblu.com)
  * All rights reserved.
  *
  * Redistribution and use in source and binary forms, with or without
  * modification, are permitted provided that the following conditions
  * are met:
  *
- *  - Redistributions of source code must retain the above copyright
- *    notice, this list of conditions and the following disclaimer.
- *  - Redistributions in binary form must reproduce the above copyright
- *    notice, this list of conditions and the following disclaimer in
- *    the documentation and/or other materials provided with the
- *    distribution.
- *  - Neither the name of Asgard Software nor the names of its
- *    contributors may be used to endorse or promote products derived
- *    from this software without specific prior written permission.
+ * - Redistributions of source code must retain the above copyright
+ * notice, this list of conditions and the following disclaimer.
+ * - Redistributions in binary form must reproduce the above copyright
+ * notice, this list of conditions and the following disclaimer in
+ * the documentation and/or other materials provided with the
+ * distribution.
+ * - Neither the name of Asgard Software nor the names of its
+ * contributors may be used to endorse or promote products derived
+ * from this software without specific prior written permission.
  *
  * THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS
  * "AS IS" AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT
@@ -36,11 +36,16 @@
  *
  * Asgard is based on code by
  * Yii Software LLC (http://www.yiisoft.com) Copyright Â© 2008
- *
+ * 
+ * Este Archivo contiene lenguajes para ser utilizados en Javascript por defecto
+ * @author Eduardo Cueva
+ * @email  ecueva@penblu.com edu19432@gmail.com
+ * @copyright Copyright &copy; Penblu 2012=>
+ * @license GPLv2 http://www.opensource.org/licenses/gpl-license.php 
+ * 
  * Authors:
- * 
- * Diana Lopez <dlopez@uteg.edu.ec>
- * 
+ *
+ * Diana Lopez <dianalopez784@gmail.com>
  */
 
 return [
@@ -52,6 +57,7 @@ return [
     'Code' => 'Código',
     'Course Management' => 'Administración de Cursos',
     'Create CAN Period online' => 'Crear Período CAN Online',
+    'Create Period' => 'Crear Período Método Ingreso',
     'Date from' => 'Fecha Inicial',
     'Date until' => 'Fecha Final',
     'December' => 'Diciembre',
@@ -72,6 +78,7 @@ return [
     'September' => 'Septiembre',
     'Update Lecturing Period' => 'Modificar Período Lectivo',
     'Update CAN Period online' => 'Modificar Período CAN Online',
+    'Update Period' => 'Modificar Período Ingreso',
     'November' => 'Noviembre',
     'Year' => 'Año',    
 ];

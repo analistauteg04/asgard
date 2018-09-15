@@ -91,7 +91,7 @@ $this->title = $this->params["siteName"];
 
         <!-- Modal -->
         <?= $this->render('modal.php', ['directoryAsset' => $directoryAsset]); ?>
-
+  
         <?php $this->endBody() ?>
     </body>
 </html>

@@ -548,6 +548,15 @@ function requestHttpAjax(link, arrParams, callback, loading, isUploadFile, dataT
     });
 }
 
+function existsRequestRecursive()
+{
+    return (current_setTimeout) ? true : false;
+}
+
+function clearResquestRecursive()
+{
+    clearTimeout(current_setTimeout);
+}
 
 function showResponse(type, status, label, message) {
     switch (type) {
@@ -668,15 +677,19 @@ function showAlert(status, label, message) {
     // colocando el tipo de alerta
     var evalabel = label.toLowerCase();
     if (status == "OK") {
-        if (evalabel != "success" && evalabel != "info") {
+        if (evalabel == "success" || objLang.Success == label) {
+            evalabel = "success";
+        } else {
             evalabel = "info";
         }
     } else {
-        if (evalabel != "error" && evalabel != "warning") {
+        if (evalabel == "error" || objLang.Error == label) {
+            evalabel = "error";
+        } else {
             evalabel = "warning";
         }
     }
-    $(idModal + ">div>div>div.modal-header>img.img-modal").attr("class", evalabel + "-modalPB");
+    $(idModal + ">div.modal-dialog>div.modal-content>div.modal-header>span#img-modal").attr("class", evalabel + "-modalPB");
 
     //execute modal
     $(idModal).modal();
@@ -728,6 +741,206 @@ function searchIdByObject(obj, key) {
         }
     }
     return 0;
+}
+
+function reloadPage() {
+    location.reload();
+}
+
+function generatePassword() {
+    var ramdonPass = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789!¡@#$&/()=?¿-+*^{}[]";
+    var newpass = "";
+    for (var i = 0; i < 10; i++)
+        newpass += ramdonPass.charAt(Math.floor(Math.random() * ramdonPass.length));
+    return newpass;
+}
+
+//storagedata
+//storagedata.elementId
+//storagedata.elementId.data = array index 0,1,2,3,... value array index 0,1,2,3,...
+//storagedata.elementId.label = array index 0,1,2,3,... value array index column0,column2,column2,column3,...
+//storagedata.elementId.btnactions = array index 0,1,2,3,... value is object {id, href, onclick, title, class, tipo_accion} 
+//storagedata.elementId.trmessage
+function addItemGridContent(elementId) {
+    var storage = sessionStorage.getItem(elementId);
+    var arr_data = JSON.parse(storage);
+    var size_arr = arr_data.data.length;
+    var size_btn = arr_data.btnactions.length;
+    var arr_btn = arr_data.btnactions;
+    var sizeCol = getSizeColumnsGrid(elementId);
+    var trs = "";
+    if (size_arr > 0) {
+        $('#' + elementId + ' >table >tbody').html(""); // seteando todo el tbody a vacio
+        for (var i = 0; i < size_arr; i++) {
+            trs += "<tr data-key='" + arr_data.label[i][0] + "'>";
+            for (var j = 0; j < sizeCol - 1; j++) {
+                if (j != 0)
+                    trs += "<td>" + arr_data.label[i][j] + "</td>";
+                else
+                    trs += "<td>" + (i + 1) + "</td>";
+            }
+            if (size_btn > 0) {
+                trs += "<td style='text-align: center;'>";
+                for (var j = 0; j < arr_btn[i].length; j++) {//size_btn[i][j]
+                    var onclick = ((arr_btn[i][j].onclick).trim() != "") ? arr_btn[i][j].onclick : "javascript:";
+                    var href = ((arr_btn[i][j].href).trim() != "") ? arr_btn[i][j].href : "javascript:";
+                    var cclass = getIcon(arr_btn[i][j].tipo_accion) + " " + arr_btn[i][j].class;
+                    var title = arr_btn[i][j].title;
+                    var id = arr_btn[i][j].id + "_" + j;
+                    trs += "<a id='" + id + "' href='" + href + "' data-toggle='tooltip' data-original-title='" + title + "' ><span class='" + cclass + "'></span></a>";
+                }
+                trs += "</td>";
+            } else {
+                trs += "<td></td>";
+            }
+            trs += "</tr>";
+        }
+        $('#' + elementId + ' >table >tbody').html(trs);
+    } else { // se llena el tbody con la variable sessionStorage trmessage que contiene el mensaje que indica que no hay datos en el grid
+        if (storage.trmessage != "")
+            $('#' + elementId + ' >table >tbody').html(storage.trmessage);
+        else {
+            var trmessage = "<tr>";
+            var colspan = $('#' + elementId + ' >table >thead > tr > td').length;
+            trmessage += "<td colspan='" + colspan + "'>" + objLang.No_data_found + "</td></tr>";
+        }
+    }
+}
+
+function getSizeColumnsGrid(elementId) {
+    var size = 0;
+    $('#' + elementId + ' >table >thead >tr >th').each(function () {
+        size++;
+    });
+    return size;
+}
+
+function getIcon(icon) {
+    var iconCss = "";
+    switch (icon) {
+        case 'delete':
+            iconCss = 'glyphicon glyphicon-remove';
+            break;
+        case 'view':
+            iconCss = 'glyphicon glyphicon-eye-open';
+            break;
+        case 'edit':
+            iconCss = 'glyphicon glyphicon-pencil';
+            break;
+        default:
+            iconCss = 'glyphicon glyphicon-tasks';
+            break;
+    }
+    return iconCss;
+}
+
+function createActionGrid(id, href, title, className, type) {
+    var actionHtml = '<a id="' + id + '" href="' + href + '" title="" data-toggle="tooltip" data-original-title="' + title + '">';
+    actionHtml += '<span class="' + getIcon(type) + '"></span></a>';
+}
+
+function removeItemGridContent(elementId, indice, callback) {
+    callback = callback || null;
+    var storage = sessionStorage.getItem(elementId);
+    var arr_data = JSON.parse(storage);
+    var size_arr = arr_data.data.length;
+    var newarr_data = new Array();
+    var j = 0;
+    for (var i = 0; i < size_arr; i++) {
+        if (arr_data.data[i][0] != indice) {
+            arr_data.data[i][0] = elementId + "_" + j;
+            newarr_data[j] = arr_data.data[i];
+            j++;
+        }
+    }
+    arr_data.data = newarr_data;
+    sessionStorage[elementId] = JSON.stringify(arr_data);
+    addItemGridContent(elementId);
+    callback();
+}
+
+function loadSessionCampos(elementId, data, btnactions) {
+    sessionStorage.removeItem(elementId);
+    var arrData = new Object();
+    arrData.data = data;
+    arrData.btnactions = btnactions;
+    sessionStorage[elementId] = JSON.stringify(arrData);
+    var sizetheadtb = $('#' + elementId + ' >table >thead >tr >th').length;
+    var sizetbodytb = $('#' + elementId + ' >table >tbody >tr >td').length;
+    if (sizetheadtb > sizetbodytb) { // si las columnas de las cabecera son mayores que las columnas del cuerpo entonces se debe guardar el primer tr que contiene el mensaje que la tabla esta vacia
+        var trmessage = $('#' + elementId + ' >table >tbody').html();
+        arrData.trmessage = trmessage;
+        sessionStorage[elementId] = JSON.stringify(arrData);
+    }
+}
+
+/**
+ Funcion para mostrar un mensaje de alerta cuando hay un error
+ @function resetSession
+ @author Eduardo Cueva
+ @param  {string} message   - Url del sitio a pedir informacion
+ @param  {string} label     - Es la etiqueta de la imagen en la alerta. Esta puede ser {error, info, success, warning}
+ @param  {string} status    - Status de la accion. Los valores pueden ser {error, info, warning, ok}
+ @param  {string} callback  - Funcion a ejecutar
+ @param  {string} lblAccept - Nombre del boton que se va a mostrar
+ @param  {object} style     - Objecto con las varibles estilo que se desean que esten en el alert. Ejemplo: messageGM.htmloptions.style.width
+ */
+function resetSession(message, label, status, callback, lblAccept, style) {
+    var messagePB = new Object();
+    messagePB.wtmessage = message;
+    messagePB.title = label;
+    var objAcciones = new Object();
+    objAcciones.id = "btnid2alert";
+    objAcciones.class = "btn-primary clclass praclose";
+    lblAccept = lblAccept || null;
+    if (lblAccept)
+        objAcciones.value = lblAccept;
+    else
+        objAcciones.value = objLang.Accept;
+    callback = callback || null;
+    if (callback)
+        objAcciones.callback = callback;
+    messagePB.acciones = new Array();
+    messagePB.acciones[0] = objAcciones;
+    style = style || null
+    if (style) {
+        messagePB.htmloptions = new Object();
+        messagePB.htmloptions.style = style;
+    }
+    showAlert(status, label, messagePB);
+}
+
+function searchIdByObject(obj, key) {
+    for (var i = 0; i < obj.length; i++) {
+        var item = obj[i];
+        if (item.search(key) != -1) {
+            item = item.replace(key, "");
+            return item;
+        }
+    }
+    return 0;
+}
+
+function confirmDelete(callback, params, message, title) {
+    params = params || null;
+    var messagePB = new Object();
+    messagePB.wtmessage = message || objLang.Are_you_sure_you_want_to_delete_this_record_;
+    messagePB.title = title || objLang.Delete;
+    var objAccept = new Object();
+    objAccept.id = "btnid2del";
+    objAccept.class = "btn-danger clclass praclose";
+    objAccept.value = title || objLang.Delete;
+    objAccept.callback = callback;
+    if(params){
+        objAccept.paramCallback = params;
+    }
+    messagePB.acciones = new Array();
+    messagePB.acciones[0] = objAccept;
+    showAlert('OK', 'info', messagePB);
+}
+
+function goHome() {
+    window.location = $('#txth_base').val();
 }
 
 window.onload = showClockTime;

@@ -1,4 +1,5 @@
 <?php
+
 /*
  * The Asgard framework is free software. It is released under the terms of
  * the following BSD License.
@@ -50,6 +51,7 @@ return [
     "Applications approved" => "Solicitudes Aprobadas",
     "Application date" => "Fecha Solicitud",
     "Application for Registration" => "Crear Solicitud de Inscripción",
+    "Application for Registration - ULINK" => "Crear Solicitud de Inscripción -ULINK",
     "Application number" => "Núm. Solicitud",
     "Applications pending" => "Solicitudes Pendientes",
     "Applications pre approved" => "Solicitudes Pre-aprobadas",
@@ -57,6 +59,7 @@ return [
     "Approve/Denies" => "Aprueba/Reprueba",
     "Approval Result" => "Resultado Aprobación:",
     "Approval Payment" => "Aprobación de Pago",
+    "Cancel Request" => "Anular Solicitud",
     "Contact Information" => "Información de Contacto",
     "Create Application" => "Crear Solicitud",
     "Attach document" => "Adjuntar documentos",
@@ -67,18 +70,18 @@ return [
     "Does not meet acceptance conditions on identity document" => "No cumple condiciones de aceptación en documento de identidad:",
     "Family Information" => "Información Familiar",
     "Home Information" => "Información Domicilio",
-    "Income Method" => "Método Ingreso",    
-    "Level Interest" => "Nivel Estudio Interés", 
-    "Level Inter" => "Niv. Interés", 
-    "Observation" => "Observación",
-    "Payment approval" => "Fecha Aprobación Pago",    
+    "Income Method" => "Método Ingreso",
+    "Level Interest" => "Nivel Estudio Interés",
+    "Level Inter" => "Niv. Interés",
+    "Manage Approved Requests" => "Administrar Solicitudes Aprobadas",
+    "Payment approval" => "Fecha Aprobación Pago",
     "Payment date" => "Fecha Pago",
     "Payment date load" => "Fecha Cargo Pago",
     "Personal Information" => "Información Personal",
-    "Pre-Approval Application" => "Pre-Aprobación Solicitud",   
-    "Pre-Approval Result" => "Resultado Pre-Aprobación:",        
+    "Pre-Approval Application" => "Pre-Aprobación Solicitud",
+    "Pre-Approval Result" => "Resultado Pre-Aprobación:",
     "Registry date" => "Fecha Registro",
-    "Requests Status" => "Estado de Solicitudes",       
+    "Requests Status" => "Estado de Solicitudes",
     "Review" => "Revisión",
     "Search by Dni or Names" => "Buscar por Dni o Nombres",
     "Search by Income Method" => "Buscar por Método de Ingreso",

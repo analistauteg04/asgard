@@ -69,7 +69,7 @@ return array (
   'himiklab/yii2-recaptcha-widget' => 
   array (
     'name' => 'himiklab/yii2-recaptcha-widget',
-    'version' => '1.2.0.0',
+    'version' => '1.2.1.0',
     'alias' => 
     array (
       '@himiklab/yii2/recaptcha' => $vendorDir . '/himiklab/yii2-recaptcha-widget',

@@ -1,19 +1,21 @@
 <?php
 
 namespace app\models;
-
-use Yii;
 use yii\data\ArrayDataProvider;
+use Yii;
 
 /**
  * This is the model class for table "solicitud_inscripcion".
  *
- * @property integer $sins_id
- * @property integer $int_id
- * @property integer $nint_id
- * @property integer $ming_id
- * @property integer $car_id
- * @property integer $rsin_id
+ * @property int $sins_id
+ * @property int $int_id
+ * @property int $uaca_id
+ * @property int $mod_id
+ * @property int $ming_id
+ * @property int $eaca_id
+ * @property int $emp_id
+ * @property string $num_solicitud
+ * @property int $rsin_id
  * @property string $sins_fecha_solicitud
  * @property string $sins_fecha_preaprobacion
  * @property string $sins_fecha_aprobacion
@@ -21,55 +23,70 @@ use yii\data\ArrayDataProvider;
  * @property string $sins_fecha_prenoprobacion
  * @property string $sins_preobservacion
  * @property string $sins_observacion
- * @property integer $sins_usuario_preaprueba
- * @property integer $sins_usuario_aprueba
+ * @property string $sins_beca
+ * @property int $sins_usuario_preaprueba
+ * @property int $sins_usuario_aprueba
  * @property string $sins_estado
  * @property string $sins_fecha_creacion
  * @property string $sins_fecha_modificacion
  * @property string $sins_estado_logico
  *
  * @property Interesado $int
- * @property NivelInteres $nint
  * @property MetodoIngreso $ming
  * @property ResSolInscripcion $rsin
+ * @property SolicitudRechazada[] $solicitudRechazadas
  * @property SolicitudinsDocumento[] $solicitudinsDocumentos
  */
-class SolicitudInscripcion extends \yii\db\ActiveRecord {
-
+class SolicitudInscripcion extends \yii\db\ActiveRecord
+{
     /**
-     * @inheritdoc
+     * {@inheritdoc}
      */
-    public static function tableName() {
-        return \Yii::$app->db_captacion->dbname . '.solicitud_inscripcion';
+    public static function tableName()
+    {
+        return 'solicitud_inscripcion';
     }
 
     /**
-     * @inheritdoc
+     * @return \yii\db\Connection the database connection used by this AR class.
      */
-    public function rules() {
+    public static function getDb()
+    {
+        return Yii::$app->get('db_captacion');
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function rules()
+    {
         return [
-            [['int_id', 'nint_id', 'ming_id', 'car_id', 'rsin_id', 'sins_estado', 'sins_estado_logico'], 'required'],
-            [['int_id', 'nint_id', 'ming_id', 'car_id', 'rsin_id', 'sins_usuario_preaprueba', 'sins_usuario_aprueba'], 'integer'],
+            [['int_id', 'eaca_id', 'rsin_id', 'sins_estado', 'sins_estado_logico'], 'required'],
+            [['int_id', 'uaca_id', 'mod_id', 'ming_id', 'eaca_id', 'emp_id', 'rsin_id', 'sins_usuario_preaprueba', 'sins_usuario_aprueba'], 'integer'],
             [['sins_fecha_solicitud', 'sins_fecha_preaprobacion', 'sins_fecha_aprobacion', 'sins_fecha_reprobacion', 'sins_fecha_prenoprobacion', 'sins_fecha_creacion', 'sins_fecha_modificacion'], 'safe'],
+            [['num_solicitud'], 'string', 'max' => 10],
             [['sins_preobservacion', 'sins_observacion'], 'string', 'max' => 1000],
-            [['sins_estado', 'sins_estado_logico'], 'string', 'max' => 1],
+            [['sins_beca', 'sins_estado', 'sins_estado_logico'], 'string', 'max' => 1],
             [['int_id'], 'exist', 'skipOnError' => true, 'targetClass' => Interesado::className(), 'targetAttribute' => ['int_id' => 'int_id']],
-            [['nint_id'], 'exist', 'skipOnError' => true, 'targetClass' => NivelInteres::className(), 'targetAttribute' => ['nint_id' => 'nint_id']],
             [['ming_id'], 'exist', 'skipOnError' => true, 'targetClass' => MetodoIngreso::className(), 'targetAttribute' => ['ming_id' => 'ming_id']],
             [['rsin_id'], 'exist', 'skipOnError' => true, 'targetClass' => ResSolInscripcion::className(), 'targetAttribute' => ['rsin_id' => 'rsin_id']],
         ];
     }
 
     /**
-     * @inheritdoc
+     * {@inheritdoc}
      */
-    public function attributeLabels() {
+    public function attributeLabels()
+    {
         return [
             'sins_id' => 'Sins ID',
             'int_id' => 'Int ID',
-            'nint_id' => 'Nint ID',
+            'uaca_id' => 'Uaca ID',
+            'mod_id' => 'Mod ID',
             'ming_id' => 'Ming ID',
-            'car_id' => 'Car ID',
+            'eaca_id' => 'Eaca ID',
+            'emp_id' => 'Emp ID',
+            'num_solicitud' => 'Num Solicitud',
             'rsin_id' => 'Rsin ID',
             'sins_fecha_solicitud' => 'Sins Fecha Solicitud',
             'sins_fecha_preaprobacion' => 'Sins Fecha Preaprobacion',
@@ -78,6 +95,7 @@ class SolicitudInscripcion extends \yii\db\ActiveRecord {
             'sins_fecha_prenoprobacion' => 'Sins Fecha Prenoprobacion',
             'sins_preobservacion' => 'Sins Preobservacion',
             'sins_observacion' => 'Sins Observacion',
+            'sins_beca' => 'Sins Beca',
             'sins_usuario_preaprueba' => 'Sins Usuario Preaprueba',
             'sins_usuario_aprueba' => 'Sins Usuario Aprueba',
             'sins_estado' => 'Sins Estado',
@@ -90,45 +108,50 @@ class SolicitudInscripcion extends \yii\db\ActiveRecord {
     /**
      * @return \yii\db\ActiveQuery
      */
-    public function getInt() {
+    public function getInt()
+    {
         return $this->hasOne(Interesado::className(), ['int_id' => 'int_id']);
     }
 
     /**
      * @return \yii\db\ActiveQuery
      */
-    public function getNint() {
-        return $this->hasOne(NivelInteres::className(), ['nint_id' => 'nint_id']);
-    }
-
-    /**
-     * @return \yii\db\ActiveQuery
-     */
-    public function getMing() {
+    public function getMing()
+    {
         return $this->hasOne(MetodoIngreso::className(), ['ming_id' => 'ming_id']);
     }
 
     /**
      * @return \yii\db\ActiveQuery
      */
-    public function getRsin() {
+    public function getRsin()
+    {
         return $this->hasOne(ResSolInscripcion::className(), ['rsin_id' => 'rsin_id']);
     }
 
     /**
      * @return \yii\db\ActiveQuery
      */
-    public function getSolicitudinsDocumentos() {
-        return $this->hasMany(SolicitudinsDocumento::className(), ['sins_id' => 'sins_id']);
+    public function getSolicitudRechazadas()
+    {
+        return $this->hasMany(SolicitudRechazada::className(), ['sins_id' => 'sins_id']);
     }
 
+    /**
+     * @return \yii\db\ActiveQuery
+     */
+    public function getSolicitudinsDocumentos()
+    {
+        return $this->hasMany(SolicitudinsDocumento::className(), ['sins_id' => 'sins_id']);
+    }
+    
     public static function getSolicitudes($estado_inscripcion1, $estado_inscripcion2, $per_id, $resp_gruporol, $arrFiltro = array(), $onlyData = false) {
         $con = \Yii::$app->db_captacion;
         $con1 = \Yii::$app->db_academico;
         $con2 = \Yii::$app->db;
+        $con3 = \Yii::$app->db_facturacion;
         $estado = 1;
-        $columnsAdd = "";
-        //$resp_gruporol = $resp_gruporol['grol_id'];
+        $columnsAdd = "";    
 
         if (isset($arrFiltro) && count($arrFiltro) > 0) {
             $str_search = "(per.per_pri_nombre like :search OR ";
@@ -151,7 +174,7 @@ class SolicitudInscripcion extends \yii\db\ActiveRecord {
                     per.per_seg_apellido as per_seg_apellido,";
         }
 
-        $sql = "SELECT
+        $sql =  "SELECT
                     lpad(sins_id,4,'0') as num_solicitud,
                     sins_fecha_solicitud as fecha_solicitud,
                     per.per_id as persona,
@@ -161,9 +184,13 @@ class SolicitudInscripcion extends \yii\db\ActiveRecord {
                     per.per_seg_nombre as per_seg_nombre,
                     per.per_pri_apellido as per_pri_apellido,
                     per.per_seg_apellido as per_seg_apellido,
-                    nint.nint_nombre as nint_nombre,
-                    ming.ming_nombre as ming_nombre,
-                    car.car_nombre,
+                    uaca.uaca_nombre as nint_nombre,
+                    ifnull((select ming.ming_nombre 
+                            from " . $con->dbname . ".metodo_ingreso as ming 
+                            where sins.ming_id = ming.ming_id AND
+                                  ming.ming_estado = :estado AND
+                                  ming.ming_estado_logico = :estado),'NA') as ming_nombre,
+                    eac.eaca_nombre,
                     concat(per.per_pri_nombre ,' ', ifnull(per.per_seg_nombre,' ')) as per_nombres,
                     concat(per.per_pri_apellido ,' ', ifnull(per.per_seg_apellido,' ')) as per_apellidos,
                     sins.sins_fecha_solicitud as fecha_solicitud,
@@ -176,34 +203,53 @@ class SolicitudInscripcion extends \yii\db\ActiveRecord {
                     sins_fecha_aprobacion,
                     sins_fecha_reprobacion,
                     sins_fecha_prenoprobacion,
-                    sins_observacion,
+                    sins_observacion,                    
                     $columnsAdd
                     :resp_gruporol as roladmin,
                     sins.sins_usuario_preaprueba as usu_preaprueba,
-                    $per_id as 'usu_autenticado'
+                    $per_id as 'usu_autenticado',
+                    case when ifnull((select opag_estado_pago
+                               from " . $con3->dbname . ".orden_pago op
+                               where op.sins_id = sins.sins_id),'N') = 'N' then 'No generado'
+                         when (select opag_estado_pago
+                               from " . $con3->dbname . ".orden_pago op
+                               where op.sins_id = sins.sins_id) = 'P' then 'Pendiente' 
+                         else 'Pagado' end as pago,
+                    ifnull((select fp.fpag_nombre
+                            from " . $con3->dbname . ".registro_pago rp inner join " . $con3->dbname . ".desglose_pago dp
+                                on dp.dpag_id = rp.dpag_id inner join " . $con3->dbname . ".orden_pago op on op.opag_id = dp.opag_id
+                                inner join " . $con3->dbname . ".forma_pago fp on fp.fpag_id = rp.fpag_id
+                            where sins.sins_id = op.sins_id),'') as forma_pago, sins.uaca_id,
+                    ifnull((select count(*) from " . $con->dbname . ".solicitudins_documento sd 
+                            where sd.sins_id = sins.sins_id and sd.sdoc_estado = :estado and sd.sdoc_estado_logico = :estado),0) as numDocumento
                 FROM 
                     " . $con->dbname . ".solicitud_inscripcion as sins
-                    INNER JOIN " . $con->dbname . ".interesado as inte on sins.int_id = inte.int_id
-                    INNER JOIN " . $con->dbname . ".pre_interesado as pint on inte.pint_id = pint.pint_id
-                    INNER JOIN " . $con2->dbname . ".persona as per on pint.per_id = per.per_id 
-                    INNER JOIN " . $con->dbname . ".nivel_interes as nint on sins.nint_id = nint.nint_id 
-                    INNER JOIN " . $con->dbname . ".metodo_ingreso as ming on sins.ming_id = ming.ming_id
+                    INNER JOIN " . $con->dbname . ".interesado as inte on sins.int_id = inte.int_id                    
+                    INNER JOIN " . $con2->dbname . ".persona as per on inte.per_id = per.per_id 
+                    INNER JOIN " . $con1->dbname . ".unidad_academica as uaca on sins.uaca_id = uaca.uaca_id                     
+                    INNER JOIN " . $con1->dbname . ".modalidad as m on sins.mod_id = m.mod_id
                     INNER JOIN " . $con->dbname . ".res_sol_inscripcion as rsol on rsol.rsin_id = sins.rsin_id
-                    INNER JOIN " . $con->dbname . ".interesado_ejecutivo as intej on (intej.int_id = inte.int_id or intej.pint_id = pint.pint_id)
-                    INNER JOIN " . $con1->dbname . ".carrera as car on car.car_id = sins.car_id 
+                    INNER JOIN " . $con->dbname . ".interesado_ejecutivo as intej on intej.int_id = inte.int_id
+                    INNER JOIN " . $con1->dbname . ".estudio_academico as eac on eac.eaca_id = sins.eaca_id 
                 WHERE 
                     $str_search
                     sins.rsin_id in(:pendiente, :noaprobado) AND
                     sins.sins_estado_logico=:estado AND
+                    sins.sins_estado=:estado AND        
                     inte.int_estado_logico=:estado AND
-                    pint.pint_estado_logico=:estado AND
-                    per.per_estado_logico=:estado AND
-                    sins.sins_estado=:estado AND
-                    inte.int_estado=:estado AND
-                    pint.pint_estado=:estado AND
+                    inte.int_estado=:estado AND                    
+                    per.per_estado_logico=:estado AND						
                     per.per_estado=:estado AND
-                    car.car_estado=:estado AND
-                    car.car_estado_logico=:estado ";
+                    uaca.uaca_estado = :estado AND
+                    uaca.uaca_estado_logico = :estado AND                    
+                    m.mod_estado = :estado AND 
+                    m.mod_estado_logico = :estado AND
+                    rsol.rsin_estado = :estado AND
+                    rsol.rsin_estado_logico = :estado AND
+                    intej.ieje_estado = :estado AND
+                    intej.ieje_estado_logico = :estado AND        
+                    eac.eaca_estado=:estado AND
+                    eac.eaca_estado_logico=:estado ";
 
         if (($estado_inscripcion1 != 1) and ( !empty($resp_gruporol))) {
             $sql .= " AND intej.per_id <> :per_id";
@@ -264,7 +310,7 @@ class SolicitudInscripcion extends \yii\db\ActiveRecord {
         }
     }
 
-    public static function ConsultarSolInteresado($int_id, $arrFiltro = array(), $onlyData = false) {
+    public static function getSolicitudesXInteresado($int_id, $arrFiltro = array(), $onlyData = false) {
         $con = \Yii::$app->db_captacion;
         $con1 = \Yii::$app->db_academico;
         $con2 = \Yii::$app->db;
@@ -277,9 +323,6 @@ class SolicitudInscripcion extends \yii\db\ActiveRecord {
             $str_search .= "per.per_seg_nombre like :search OR ";
             $str_search .= "per.per_pri_nombre like :search OR ";
             $str_search .= "per.per_cedula like :search) AND ";
-            if ($arrFiltro['modalidad'] != "" && $arrFiltro['modalidad'] > 0) {
-                $str_search .= "sins.mod_id = :modalidad AND ";
-            }            
             if ($arrFiltro['carrera'] != "" && $arrFiltro['carrera'] > 0) {
                 $str_search .= "car.car_id = :carrera AND ";
             }
@@ -298,22 +341,17 @@ class SolicitudInscripcion extends \yii\db\ActiveRecord {
 
         $sql = "SELECT 
                     lpad(sins.sins_id,4,'0') as num_solicitud,
+                    sins.sins_id,
                     sins.sins_fecha_solicitud as fecha_solicitud,
-                    per.per_cedula as per_dni,                    
-                    concat(per.per_pri_apellido ,' ', ifnull(per.per_pri_nombre,' ')) as per_nombre,
-                    nint.uaca_nombre as nint_nombre,                    
-                    (
-                        CASE 
-                            WHEN ming.ming_id = 1 THEN 'CAN'
-                            WHEN ming.ming_id = 2 THEN 'EXA'
-                            WHEN ming.ming_id = 3 THEN 'HOM'
-                            WHEN ming.ming_id = 4 THEN 'PRO'
-                            ELSE 'N/A'
-                        END) AS abr_metodo,
-                    modali.mod_nombre as modalidad,
-                    ming.ming_nombre as ming_nombre,
-                    CONCAT(SUBSTRING(car.car_nombre, 1,10),'','...' )as abre_carrera,
-                    car.car_nombre as carrera,                    
+                    per.per_cedula as per_dni,
+                    concat(per.per_pri_nombre ,' ', ifnull(per.per_seg_nombre, ' ')) as per_nombres,
+                    concat(per.per_pri_apellido ,' ', ifnull(per.per_seg_apellido,' ')) as per_apellidos,
+                    uaca.uaca_nombre as nint_nombre,
+                    ifnull((select ming.ming_nombre 
+                            from " . $con->dbname . ".metodo_ingreso as ming 
+                            where sins.ming_id = ming.ming_id and
+                                  ming.ming_estado = :estado and ming.ming_estado_logico = :estado),'') as ming_nombre,
+                    eac.eaca_nombre as carrera,
                     rsol.rsin_nombre as estado,
                     $columnsAdd
                     (CASE when ifnull((SELECT (CASE WHEN ord.opag_estado_pago = 'P' 
@@ -325,33 +363,32 @@ class SolicitudInscripcion extends \yii\db\ActiveRecord {
                     ELSE  (SELECT (CASE WHEN ord.opag_estado_pago = 'P' 
                                             THEN 'Pendiente' else 'Pagado' END) as estado_pago 
                                    FROM " . $con3->dbname . ".orden_pago as ord 
-                                   WHERE ord.sins_id = sins.sins_id AND ord.opag_estado_logico=:estado AND  ord.opag_estado=:estado) END) as estado_pago                                 
+                                   WHERE ord.sins_id = sins.sins_id AND ord.opag_estado_logico=:estado AND  ord.opag_estado=:estado) END) as estado_pago,
+                    (select count(*) numdocumentos from " . $con->dbname . ".solicitudins_documento sid where sid.sins_id = sins.sins_id) as numDocumentos,
+                    per_nac_ecuatoriano, inte.int_id, ifnull(sins_beca,0) beca, sins.uaca_id, sins.rsin_id
                 FROM 
                     " . $con->dbname . ".solicitud_inscripcion as sins
-                    INNER JOIN " . $con->dbname . ".interesado as inte on sins.int_id = inte.int_id
-                    INNER JOIN " . $con->dbname . ".pre_interesado as pint on inte.pint_id = pint.pint_id
-                    INNER JOIN " . $con2->dbname . ".persona as per on pint.per_id = per.per_id 
-                    INNER JOIN " . $con1->dbname . ".unidad_academica as nint on sins.nint_id = nint.uaca_id 
-                    INNER JOIN " . $con->dbname . ".metodo_ingreso as ming on sins.ming_id = ming.ming_id
+                    INNER JOIN " . $con->dbname . ".interesado as inte on sins.int_id = inte.int_id                    
+                    INNER JOIN " . $con2->dbname . ".persona as per on inte.per_id = per.per_id 
+                    INNER JOIN " . $con1->dbname . ".unidad_academica as uaca on sins.uaca_id = uaca.uaca_id                     
                     INNER JOIN " . $con->dbname . ".res_sol_inscripcion as rsol on rsol.rsin_id = sins.rsin_id
-                    INNER JOIN " . $con1->dbname . ".carrera as car on sins.car_id = car.car_id
-                    INNER JOIN " . $con1->dbname . ".modalidad as modali on sins.mod_id = modali.mod_id
+                    INNER JOIN " . $con1->dbname . ".estudio_academico as eac on sins.eaca_id = eac.eaca_id
                 WHERE  
                     $str_search 
                     sins.sins_estado_logico=:estado AND 
-                    inte.int_estado_logico=:estado AND 
-                    pint.pint_estado_logico=:estado AND
+                    inte.int_estado_logico=:estado AND                     
                     per.per_estado_logico=:estado AND 
-                    car.car_estado_logico =:estado AND 
-                    nint.uaca_estado_logico =:estado AND 
+                    rsol.rsin_estado=:estado AND
+                    uaca.uaca_estado = :estado AND
+                    eac.eaca_estado_logico =:estado AND 
                     sins.sins_estado=:estado AND 
-                    inte.int_estado=:estado AND 
-                    pint.pint_estado=:estado AND
+                    inte.int_estado=:estado AND                     
                     per.per_estado=:estado AND
-                    car.car_estado =:estado AND
-                    nint.uaca_estado =:estado AND
-                    pint.per_id =:int_id
-                    ORDER BY fecha_solicitud DESC";
+                    rsol.rsin_estado_logico=:estado AND
+                    uaca.uaca_estado_logico = :estado AND
+                    eac.eaca_estado =:estado                  
+                ORDER BY fecha_solicitud DESC";
+        
         $comando = $con->createCommand($sql);
         $comando->bindParam(":estado", $estado, \PDO::PARAM_STR);
         $comando->bindParam(":int_id", $int_id, \PDO::PARAM_INT);
@@ -359,14 +396,10 @@ class SolicitudInscripcion extends \yii\db\ActiveRecord {
             $search_cond = "%" . $arrFiltro["search"] . "%";
             $fecha_ini = $arrFiltro["f_ini"];
             $fecha_fin = $arrFiltro["f_fin"];
-            $modalidad = $arrFiltro["modalidad"];
             $carrera = $arrFiltro["carrera"];
             $comando->bindParam(":search", $search_cond, \PDO::PARAM_STR);
-            if ($arrFiltro['modalidad'] != "" && $arrFiltro['modalidad'] > 0) {
-                $comando->bindParam(":modalidad", $modalidad, \PDO::PARAM_INT);
-            }
             if ($arrFiltro['carrera'] != "" && $arrFiltro['carrera'] > 0) {
-                $comando->bindParam(":carrera", $carrera, \PDO::PARAM_INT);
+                $comando->bindParam(":carrera", $carrera, \PDO::PARAM_STR);
             }
             if ($arrFiltro['f_ini'] != "" && $arrFiltro['f_fin'] != "") {
                 $comando->bindParam(":fec_ini", $fecha_ini, \PDO::PARAM_STR);
@@ -385,13 +418,14 @@ class SolicitudInscripcion extends \yii\db\ActiveRecord {
                     'num_solicitud',
                     'fecha_solicitud',
                     'per_dni',
-                    'per_nombres',
+                    'per_pri_nombre',
+                    'per_seg_nombre',
+                    'per_pri_apellido',
+                    'per_seg_apellido',
                     'nint_nombre',
-                    'modalidad',
-                    'ming_nombre',                    
-                    'carrera',
-                    'estado',
-                    'estado_pago',
+                    'ming_nombre',
+                    'per_nombres',
+                    'per_apellidos',
                 ],
             ],
         ]);
@@ -402,7 +436,7 @@ class SolicitudInscripcion extends \yii\db\ActiveRecord {
         }
     }
 
-    public static function obtenerSolInteresado($int_id) {
+    public static function obtenerSolicitudXInteresado($int_id) {
         $con = \Yii::$app->db_captacion;
         $con2 = \Yii::$app->db;
         $estado = 1;
@@ -545,33 +579,30 @@ class SolicitudInscripcion extends \yii\db\ActiveRecord {
     public function Obtenerdatosolicitud($sins_id) {
         $con = \Yii::$app->db_captacion;
         $con2 = \Yii::$app->db_facturacion;
+        $con3 = \Yii::$app->db_academico;
         $estado = 1;
         $estado_precio = 'A';
 
-        $sql = "SELECT imni.imni_id, 
-                       (case when sins.sins_beca = '1' then 0 
-                            else format(ipre.ipre_precio+(ipre.ipre_precio*ifnull(ipre.ipre_porcentaje_iva,0)),2) end) as precio,
-                       sins.nint_id as nivel_interes,
-                       sins.ming_id as metodo_ingreso,
-                       ming.ming_nombre as nombre_metodo_ingreso,
-                       nint.nint_nombre as nombre_nivel_interes
+        $sql = "SELECT  imni.imni_id, 
+                        (case when sins.sins_beca = '1' then 0 
+                              else format(ipre.ipre_precio+(ipre.ipre_precio*ifnull(ipre.ipre_porcentaje_iva,0)),2) end) as precio,
+                        sins.nint_id as nivel_interes,
+                        sins.ming_id as metodo_ingreso,
+                        sins.mod_id,
+                        (select ming.ming_nombre from " . $con->dbname . ".metodo_ingreso ming where ming.ming_id = sins.ming_id and ming.ming_estado = :estado AND ming.ming_estado_logico = :estado) as nombre_metodo_ingreso,
+                        (select nint.nint_nombre from " . $con->dbname . ".nivel_interes nint where  nint.nint_id = sins.nint_id and nint.nint_estado = :estado AND nint.nint_estado_logico = :estado) as nombre_nivel_interes,
+                        (select m.mod_nombre from " . $con3->dbname . ".modalidad m where  m.mod_id = sins.mod_id and m.mod_estado = :estado AND m.mod_estado_logico = :estado) as nombre_modalidad
                 FROM " . $con->dbname . ".solicitud_inscripcion sins INNER JOIN " . $con2->dbname . ".item_metodo_nivel imni 
-                    on (sins.ming_id = imni.ming_id and sins.nint_id = imni.nint_id)
-                    INNER JOIN " . $con2->dbname . ".item_precio ipre on imni.ite_id = ipre.ite_id
-                    INNER JOIN " . $con->dbname . ".metodo_ingreso ming on ming.ming_id = sins.ming_id
-                    INNER JOIN " . $con->dbname . ".nivel_interes nint on nint.nint_id = sins.nint_id
-                WHERE ipre.ipre_estado_precio = :estado_precio AND
-                      sins.sins_id = :sins_id AND
-                      sins.sins_estado = :estado AND
-                      sins.sins_estado_logico = :estado AND
-                      imni.imni_estado = :estado AND
-                      imni.imni_estado_logico = :estado AND
-                      ipre.ipre_estado = :estado AND
-                      ipre.ipre_estado_logico = :estado AND 
-                      ming.ming_estado = :estado AND
-                      ming.ming_estado_logico = :estado AND
-                      nint.nint_estado = :estado AND
-                      nint.nint_estado_logico = :estado";
+                     on ((sins.ming_id = imni.ming_id and sins.nint_id = imni.nint_id and sins.mod_id = imni.mod_id) or (sins.nint_id = imni.nint_id and sins.mod_id = imni.mod_id and sins.car_id = imni.car_id))
+                     INNER JOIN " . $con2->dbname . ".item_precio ipre on imni.ite_id = ipre.ite_id	
+                WHERE ipre.ipre_estado_precio =:estado_precio AND
+                       sins.sins_id = :sins_id AND
+                       sins.sins_estado = :estado AND
+                       sins.sins_estado_logico = :estado AND
+                       imni.imni_estado =:estado AND
+                       imni.imni_estado_logico = :estado AND
+                       ipre.ipre_estado = :estado AND
+                       ipre.ipre_estado_logico = :estado";                                               
 
         $comando = $con->createCommand($sql);
         $comando->bindParam(":estado", $estado, \PDO::PARAM_STR);
@@ -591,23 +622,43 @@ class SolicitudInscripcion extends \yii\db\ActiveRecord {
     public function Validarsolicitud($int_id, $nint_id, $ming_id, $car_id) {
         $con = \Yii::$app->db_captacion;
         $estado = 1;
-
-        $sql = "SELECT 'S' existe
-                FROM " . $con->dbname . ".solicitud_inscripcion sins
-                WHERE sins.int_id = :int_id AND
-                      sins.nint_id = :nint_id AND
-                      sins.ming_id = :ming_id AND
-                      sins.car_id = :car_id AND
-                      sins.rsin_id <> 4 AND
-                      sins.sins_estado = :estado AND
-                      sins.sins_estado_logico = :estado";
-
+        
+        if ($nint_id!=3) { 
+            $sql = "SELECT 'S' existe
+                    FROM " . $con->dbname . ".solicitud_inscripcion sins
+                    WHERE sins.int_id = :int_id AND
+                          sins.uaca_id = :uaca_id AND
+                          sins.ming_id = :ming_id AND
+                          sins.eaca_id = :eaca_id AND
+                          sins.rsin_id <> 4 AND
+                          sins.sins_estado = :estado AND
+                          sins.sins_estado_logico = :estado";
+        } else {
+            if ($nint_id==3) { 
+                $sql = "SELECT 'S' existe
+                        FROM " . $con->dbname . ".solicitud_inscripcion sins
+                        WHERE sins.int_id = :int_id AND
+                              sins.uaca_id = :uaca_id AND                          
+                              sins.eaca_id = :eaca_id AND
+                              sins.rsin_id <> 4 AND
+                              sins.sins_estado = :estado AND
+                              sins.sins_estado_logico = :estado";
+            } else {
+                $sql = "SELECT 'S' existe
+                        FROM " . $con->dbname . ".solicitud_inscripcion sins
+                        WHERE sins.int_id = :int_id AND                                                 
+                              sins.eaca_id = :eaca_id AND
+                              sins.rsin_id <> 4 AND
+                              sins.sins_estado = :estado AND
+                              sins.sins_estado_logico = :estado";
+            }
+        }
         $comando = $con->createCommand($sql);
         $comando->bindParam(":estado", $estado, \PDO::PARAM_STR);
         $comando->bindParam(":int_id", $int_id, \PDO::PARAM_INT);
-        $comando->bindParam(":nint_id", $nint_id, \PDO::PARAM_INT);
+        $comando->bindParam(":uaca_id", $nint_id, \PDO::PARAM_INT);
         $comando->bindParam(":ming_id", $ming_id, \PDO::PARAM_INT);
-        $comando->bindParam(":car_id", $car_id, \PDO::PARAM_INT);
+        $comando->bindParam(":eaca_id", $car_id, \PDO::PARAM_INT);
         $resultData = $comando->queryOne();
         return $resultData;
     }
@@ -840,9 +891,9 @@ class SolicitudInscripcion extends \yii\db\ActiveRecord {
                     per.per_seg_nombre as per_seg_nombre,
                     per.per_pri_apellido as per_pri_apellido,
                     per.per_seg_apellido as per_seg_apellido,
-                    nint.nint_nombre as nint_nombre,
+                    uaca.uaca_nombre as nint_nombre,
                     ming.ming_nombre as ming_nombre,
-                    car.car_nombre,
+                    eaca.eaca_nombre as car_nombre,
                     concat(per.per_pri_nombre ,' ', ifnull(per.per_seg_nombre,' ')) as per_nombres,
                     concat(per.per_pri_apellido ,' ', ifnull(per.per_seg_apellido,' ')) as per_apellidos,
                     sins.sins_fecha_solicitud as fecha_solicitud,
@@ -860,29 +911,28 @@ class SolicitudInscripcion extends \yii\db\ActiveRecord {
                     sins.sins_usuario_preaprueba as usu_preaprueba                    
                 FROM 
                     " . $con->dbname . ".solicitud_inscripcion as sins
-                    INNER JOIN " . $con->dbname . ".interesado as inte on sins.int_id = inte.int_id
-                    INNER JOIN " . $con->dbname . ".pre_interesado as pint on inte.pint_id = pint.pint_id
-                    INNER JOIN " . $con2->dbname . ".persona as per on pint.per_id = per.per_id 
-                    INNER JOIN " . $con->dbname . ".nivel_interes as nint on sins.nint_id = nint.nint_id 
+                    INNER JOIN " . $con->dbname . ".interesado as inte on sins.int_id = inte.int_id                    
+                    INNER JOIN " . $con2->dbname . ".persona as per on inte.per_id = per.per_id 
+                    INNER JOIN " . $con1->dbname . ".unidad_academica as uaca on sins.uaca_id = uaca.uaca_id 
                     INNER JOIN " . $con->dbname . ".metodo_ingreso as ming on sins.ming_id = ming.ming_id
                     INNER JOIN " . $con->dbname . ".res_sol_inscripcion as rsol on rsol.rsin_id = sins.rsin_id                    
-                    INNER JOIN " . $con->dbname . ".interesado_ejecutivo as intej on (intej.int_id = sins.int_id) or (intej.pint_id = pint.pint_id)                     
-                    INNER JOIN " . $con1->dbname . ".carrera as car on car.car_id = sins.car_id 
+                    INNER JOIN " . $con->dbname . ".interesado_ejecutivo as intej on intej.int_id = sins.int_id 
+                    INNER JOIN " . $con1->dbname . ".estudio_academico as eaca on eaca.eaca_id = sins.eaca_id 
                 WHERE 
                     $str_search
                     sins.rsin_id = :aprobada AND
                     sins.sins_estado_logico=:estado AND
-                    inte.int_estado_logico=:estado AND
-                    pint.pint_estado_logico=:estado AND
+                    inte.int_estado_logico=:estado AND                    
                     per.per_estado_logico=:estado AND
                     sins.sins_estado=:estado AND
-                    inte.int_estado=:estado AND
-                    pint.pint_estado=:estado AND
+                    inte.int_estado=:estado AND                    
                     per.per_estado=:estado AND
                     intej.ieje_estado = :estado AND
                     intej.ieje_estado_logico = :estado AND
-                    car.car_estado=:estado AND
-                    car.car_estado_logico=:estado 
+                    uaca.uaca_estado = :estado AND
+                    uaca.uaca_estado_logico = :estado AND
+                    eaca.eaca_estado=:estado AND
+                    eaca.eaca_estado_logico=:estado                    
                 ORDER BY fecha_solicitud DESC";
 
         $comando = $con->createCommand($sql);
@@ -929,4 +979,108 @@ class SolicitudInscripcion extends \yii\db\ActiveRecord {
         }
     }
 
+    /**
+     * Function ObtenerPrecio
+     * @author  Grace Viteri <analistadesarrollo01@uteg.edu.ec>
+     * @param   
+     * @return  $resultData (el precio del curso por metodo de ingreso y nivel de interes y otros datos de solicitud)
+     */
+    public function ObtenerPrecio($ming_id, $nint_id, $mod_id, $car_id) {
+        $con = \Yii::$app->db_captacion;
+        $con2 = \Yii::$app->db_facturacion;
+        $con1 = \Yii::$app->db_academico;
+        $estado = 1;
+        $estado_precio = 'A';
+        if (($nint_id!=3) and ($nint_id >0)) { 
+            $sql = "SELECT  imni.imni_id, 
+                            ipre.ipre_precio+(ipre.ipre_precio*ifnull(ipre.ipre_porcentaje_iva,0)) as precio,	   
+                            ming.ming_nombre as nombre_metodo_ingreso,
+                            ua.uaca_nombre as nombre_nivel_interes
+                    FROM " . $con2->dbname . ".item_metodo_nivel imni INNER JOIN " . $con2->dbname . ".item_precio ipre on imni.ite_id = ipre.ite_id
+                         INNER JOIN " . $con->dbname . ".metodo_ingreso ming on ming.ming_id = imni.ming_id
+                         INNER JOIN " . $con1->dbname . ".unidad_academica ua on ua.uaca_id = imni.uaca_id                    
+                    WHERE imni.ming_id = :ming_id AND 
+                          imni.uaca_id = :nint_id AND
+                          imni.mod_id = :mod_id AND
+                          ipre.ipre_estado_precio = :estado_precio AND
+                          now() between ipre.ipre_fecha_inicio and ipre.ipre_fecha_fin AND
+                          imni.imni_estado = :estado AND
+                          imni.imni_estado_logico = :estado AND
+                          ipre.ipre_estado = :estado AND
+                          ipre.ipre_estado_logico = :estado AND 
+                          ming.ming_estado = :estado AND
+                          ming.ming_estado_logico = :estado AND
+                          ua.uaca_estado = :estado AND
+                          ua.uaca_estado_logico = :estado";
+        } 
+        
+        if ($nint_id ==3) {
+            $sql = "SELECT  imni.imni_id, 
+                            ipre.ipre_precio+(ipre.ipre_precio*ifnull(ipre.ipre_porcentaje_iva,0)) as precio,	   
+                            null as nombre_metodo_ingreso,
+                            ua.uaca_nombre as nombre_nivel_interes                            
+                    FROM " . $con2->dbname . ".item_metodo_nivel imni INNER JOIN " . $con2->dbname . ".item_precio ipre on imni.ite_id = ipre.ite_id                         
+                         INNER JOIN " . $con1->dbname . ".unidad_academica ua on ua.uaca_id = imni.uaca_id                         
+                    WHERE imni.uaca_id = :nint_id AND
+                          imni.mod_id = :mod_id AND
+                          imni.car_id = :car_id AND
+                          ipre.ipre_estado_precio = :estado_precio AND
+                          now() between ipre.ipre_fecha_inicio and ipre.ipre_fecha_fin AND
+                          imni.imni_estado = :estado AND
+                          imni.imni_estado_logico = :estado AND
+                          ipre.ipre_estado = :estado AND
+                          ipre.ipre_estado_logico = :estado AND                          
+                          ua.uaca_estado = :estado AND
+                          ua.uaca_estado_logico = :estado";
+        }
+        
+        if (empty($nint_id)) {
+            $sql = "SELECT  imni.imni_id, 
+                            ipre.ipre_precio+(ipre.ipre_precio*ifnull(ipre.ipre_porcentaje_iva,0)) as precio,	   
+                            null as nombre_metodo_ingreso,
+                            null as nombre_nivel_interes                            
+                    FROM " . $con2->dbname . ".item_metodo_nivel imni INNER JOIN " . $con2->dbname . ".item_precio ipre 
+                        on imni.ite_id = ipre.ite_id                                                                      
+                    WHERE imni.car_id = :car_id AND
+                          ipre.ipre_estado_precio = :estado_precio AND
+                          now() between ipre.ipre_fecha_inicio and ipre.ipre_fecha_fin AND
+                          imni.imni_estado = :estado AND
+                          imni.imni_estado_logico = :estado AND
+                          ipre.ipre_estado = :estado AND
+                          ipre.ipre_estado_logico = :estado";
+        }
+        $comando = $con->createCommand($sql);
+        $comando->bindParam(":estado", $estado, \PDO::PARAM_STR);
+        $comando->bindParam(":ming_id", $ming_id, \PDO::PARAM_INT);
+        $comando->bindParam(":nint_id", $nint_id, \PDO::PARAM_INT);
+        $comando->bindParam(":mod_id", $mod_id, \PDO::PARAM_INT);        
+        $comando->bindParam(":car_id", $car_id, \PDO::PARAM_INT);        
+        $comando->bindParam(":estado_precio", $estado_precio, \PDO::PARAM_STR);
+        $resultData = $comando->queryOne();
+        return $resultData;
+    }
+    
+    /**
+     * Function consultarDocumxSolic
+     * @author  Grace Viteri <analistadesarrollo01@uteg.edu.ec>
+     * @param   
+     * @return  $resultData (número de documentos adjuntos)
+     */
+    public function consultarDocumxSolic($sins_id) {
+        $con = \Yii::$app->db_captacion;
+        $estado = 1;
+
+        $sql = "SELECT ifnull(count(*),0) numDocumentos	
+                FROM " . $con->dbname . ".solicitudins_documento sdoc
+                WHERE sdoc.sins_id = :sins_id AND                           
+                      sdoc.sdoc_estado = :estado AND
+                      sdoc.sdoc_estado_logico = :estado";
+
+        $comando = $con->createCommand($sql);
+        $comando->bindParam(":estado", $estado, \PDO::PARAM_STR);
+        $comando->bindParam(":sins_id", $sins_id, \PDO::PARAM_INT);
+        $comando->bindParam(":dadj_id", $dadj_id, \PDO::PARAM_INT);
+        $resultData = $comando->queryOne();
+        return $resultData;
+    }
 }

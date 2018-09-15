@@ -27,7 +27,6 @@ use app\models\EstadoCivil;
 class FichaController extends \app\components\CController {
 
     public function actionCreate() {
-        //obtener el codigo de area del pais en informacion personal
         $mod_pais = new Pais();
         if (Yii::$app->request->isAjax) {
             $data = Yii::$app->request->post();
@@ -43,7 +42,8 @@ class FichaController extends \app\components\CController {
                 echo Utilities::ajaxResponse('OK', 'alert', Yii::t('jslang', 'Success'), 'false', $message);
                 return;
             }
-            if (isset($data["getarea"])) {                
+            if (isset($data["getarea"])) {
+                //obtener el codigo de area del pais en informacion personal                
                 $area = $mod_pais->consultarCodigoArea($data["codarea"]);
                 $message = array("area" => $area);
                 echo Utilities::ajaxResponse('OK', 'alert', Yii::t('jslang', 'Success'), 'false', $message);
@@ -96,14 +96,13 @@ class FichaController extends \app\components\CController {
         $arr_tipparent_enf = TipoParentesco::find()->select("tpar_id AS id, tpar_nombre AS value")->where(["tpar_estado_logico" => "1", "tpar_estado" => "1"])->asArray()->all();
 
         $area = $mod_pais->consultarCodigoArea($respPerinteresado['pai_id_domicilio']);
-        //print_r($respPerinteresado);
         return $this->render('create', [
                     "arr_etnia" => ArrayHelper::map($arr_etnia, "id", "value"),
-                    "arr_civil" => array("1" => Yii::t("formulario", "Single"),
-                        "2" => Yii::t("formulario", "Married"),
-                        "3" => Yii::t("formulario", "Viudo"),
-                        "4" => Yii::t("formulario", "Divorciado"),
-                        "5" => Yii::t("formulario", "Unión de hecho")),
+                    "arr_civil" => array("1" => Yii::t("general", "Single"),
+                        "2" => Yii::t("general", "Married"),
+                        "3" => Yii::t("general", "Widower"),
+                        "4" => Yii::t("general", "Divorced"),
+                        "5" => Yii::t("general", "Civil Union")),
                     "tipo_dni" => array("CED" => Yii::t("formulario", "DNI Document"), "PASS" => Yii::t("formulario", "Passport")),
                     "genero" => array("M" => Yii::t("formulario", "Male"), "F" => Yii::t("formulario", "Female")),
                     "tipos_sangre" => ArrayHelper::map($tipos_sangre, "id", "value"),
@@ -147,7 +146,7 @@ class FichaController extends \app\components\CController {
 
     public function actionGuardarficha() {
         $modperinteresado = new Persona();
-        $user_ingresa = Yii::$app->session->get("PB_perid");
+        $user_ingresa = Yii::$app->session->get("PB_iduser");
         if (Yii::$app->request->isAjax) {
             $modInteresado = new Interesado();
             $data = Yii::$app->request->post();
@@ -155,7 +154,7 @@ class FichaController extends \app\components\CController {
                 $per_id = $_SESSION['persona_ingresa'];
             } else {
                 unset($_SESSION['persona_ingresa']);
-                $per_id = Yii::$app->session->get("PB_perid");                
+                $per_id = Yii::$app->session->get("PB_perid");
             }
             //$per_id = 54;
             if ($data["upload_file"]) {
@@ -251,7 +250,7 @@ class FichaController extends \app\components\CController {
             //FORM 5 Datos Adicionales
             $discapacidad = $data["discapacidadi"]; //rd
             $tip_discapacidad = $data["tipoi"];
-            $porc_discapacidad = $data["porcentajei"];            
+            $porc_discapacidad = $data["porcentajei"];
             $enfermedad = $data["enfermedad"];
             $discapacidad_fam = $data["discapacidad_fam"];
             $enfermedad_fam = $data["enfermedad_fam"];
@@ -396,7 +395,7 @@ class FichaController extends \app\components\CController {
                     if (empty($miembros_salario) && empty($miembros_hogar) && (($instr_madre == 1) or empty($instr_madre)) && (($instr_padre == 1) or empty($instr_padre))) {
                         $sinmiembros = 1;
                     }
-                  
+
                     $resp_existe_infofamilia = $modInteresado->consultaInfofamilia($per_id);
                     if ($sinmiembros != 1) {
                         if ($resp_existe_infofamilia) {
@@ -471,21 +470,16 @@ class FichaController extends \app\components\CController {
                     }
                     //Se asigna menú de interesado (cambio de rol)
                     $msg = "asignación de rol";
-                    $resp_consrol = $modInteresado->consultaGruporolinteresado($per_id, 11);
+                    $resp_consrol = $modInteresado->consultaGruporolinteresado($per_id);
                     if ($resp_consrol["grol_id"] == 11) {
                         //Ya tiene asignado el rol de interesado.
                         $exito = 1;
                         $mensaje = "La infomación ha sido actualizada.";
                     } else {
-                        //$per_id = Yii::$app->session->get("PB_perid");
-                        //f ($per_id != 1) {
                         $resprol = $modInteresado->modificaGruporol($per_id, 11);
                         if ($resprol) {
                             $exito = 1;
                         }
-                        /* } else { 
-                          $exito = 1;
-                          } */
                     }
                 }
                 if ($exito) {
@@ -529,6 +523,7 @@ class FichaController extends \app\components\CController {
 
     public function actionView() {
         $mod_pais = new Pais();
+        // $usu_id = Yii::$app->session->get("PB_iduser");
         if (Yii::$app->request->isAjax) {
             $data = Yii::$app->request->post();
             if (isset($data["getprovincias"])) {
@@ -616,16 +611,16 @@ class FichaController extends \app\components\CController {
         // Consultar otra etnia
         $respotraetnia = $modperinteresado->consultarOtraetnia($per_id);
         //$respinfoadicional = $modInteresado->consultaInfoadicional($per_id);
-        //print_r($respinfoadicional);  
+
         $area = $mod_pais->consultarCodigoArea($respPerinteresado['pai_id_nacimiento']);
         $area_dom = $mod_pais->consultarCodigoArea($respPerinteresado['pai_id_domicilio']);
         return $this->render('view', [
                     "arr_etnia" => ArrayHelper::map($arr_etnia, "id", "value"),
-                    "arr_civil" => array("1" => Yii::t("formulario", "Single"),
-                        "2" => Yii::t("formulario", "Married"),
-                        "3" => Yii::t("formulario", "Viudo"),
-                        "4" => Yii::t("formulario", "Divorciado"),
-                        "5" => Yii::t("formulario", "Unión de hecho")),
+                    "arr_civil" => array("1" => Yii::t("general", "Single"),
+                        "2" => Yii::t("general", "Married"),
+                        "3" => Yii::t("general", "Viudo"),
+                        "4" => Yii::t("general", "Divorciado"),
+                        "5" => Yii::t("general", "Unión de hecho")),
                     "tipo_dni" => array("CED" => Yii::t("formulario", "DNI Document"), "PASS" => Yii::t("formulario", "Passport")),
                     "genero" => array("M" => Yii::t("formulario", "Male"), "F" => Yii::t("formulario", "Female")),
                     "tipos_sangre" => ArrayHelper::map($tipos_sangre, "id", "value"),
@@ -679,7 +674,7 @@ class FichaController extends \app\components\CController {
         ]);
     }
 
-    public function actionVerfichainteresado() {
+    public function actionVerfichaxinteresado() {
         $mod_pais = new Pais();
         if (Yii::$app->request->isAjax) {
             $data = Yii::$app->request->post();
@@ -772,13 +767,13 @@ class FichaController extends \app\components\CController {
         $respotraetnia = $modperinteresado->consultarOtraetnia($per_id);
         $area = $mod_pais->consultarCodigoArea($respPerinteresado['pai_id_nacimiento']);
         $area_dom = $mod_pais->consultarCodigoArea($respPerinteresado['pai_id_domicilio']);
-        return $this->render('verfichainteresado', [
+        return $this->render('verfichaxinteresado', [
                     "arr_etnia" => ArrayHelper::map($arr_etnia, "id", "value"),
-                    "arr_civil" => array("1" => Yii::t("formulario", "Single"),
-                        "2" => Yii::t("formulario", "Married"),
-                        "3" => Yii::t("formulario", "Viudo"),
-                        "4" => Yii::t("formulario", "Divorciado"),
-                        "5" => Yii::t("formulario", "Unión de hecho")),
+                    "arr_civil" => array("1" => Yii::t("general", "Single"),
+                        "2" => Yii::t("general", "Married"),
+                        "3" => Yii::t("general", "Widower"),
+                        "4" => Yii::t("general", "Divorced"),
+                        "5" => Yii::t("general", "Civil Union")),
                     "tipo_dni" => array("CED" => Yii::t("formulario", "DNI Document"), "PASS" => Yii::t("formulario", "Passport")),
                     "genero" => array("M" => Yii::t("formulario", "Male"), "F" => Yii::t("formulario", "Female")),
                     "tipos_sangre" => ArrayHelper::map($tipos_sangre, "id", "value"),
@@ -1032,23 +1027,23 @@ class FichaController extends \app\components\CController {
         $arr_pais_cuat = Pais::find()->select("pai_id AS id, pai_nombre AS value")->where(["pai_estado_logico" => "1", "pai_estado" => "1"])->asArray()->all();
         $arr_prov_cuat = Provincia::provinciaXPais($pais_id);
         $arr_ciu_cuat = Canton::cantonXProvincia($arr_prov_cuat[0]["id"]);
-        
+
         $arr_tip_instaca_med = TipoInstitucionAca::find()->select("tiac_id AS id, tiac_nombre AS value")->where(["tiac_estado_logico" => "1", "tiac_estado" => "1"])->asArray()->all();
         $arr_tip_instaca_ter = TipoInstitucionAca::find()->select("tiac_id AS id, tiac_nombre AS value")->where(["tiac_estado_logico" => "1", "tiac_estado" => "1"])->asArray()->all();
-        $arr_tip_instaca_cuat = TipoInstitucionAca::find()->select("tiac_id AS id, tiac_nombre AS value")->where(["tiac_estado_logico" => "1", "tiac_estado" => "1"])->asArray()->all();        
+        $arr_tip_instaca_cuat = TipoInstitucionAca::find()->select("tiac_id AS id, tiac_nombre AS value")->where(["tiac_estado_logico" => "1", "tiac_estado" => "1"])->asArray()->all();
 
         $arr_tipparent_dis = TipoParentesco::find()->select("tpar_id AS id, tpar_nombre AS value")->where(["tpar_estado_logico" => "1", "tpar_estado" => "1"])->asArray()->all();
         $arr_tipparent_enf = TipoParentesco::find()->select("tpar_id AS id, tpar_nombre AS value")->where(["tpar_estado_logico" => "1", "tpar_estado" => "1"])->asArray()->all();
 
         $area = $mod_pais->consultarCodigoArea($respPerinteresado['pai_id_domicilio']);
-        //print_r($respPerinteresado);
+
         return $this->render('createins', [
                     "arr_etnia" => ArrayHelper::map($arr_etnia, "id", "value"),
-                    "arr_civil" => array("1" => Yii::t("formulario", "Single"),
-                        "2" => Yii::t("formulario", "Married"),
-                        "3" => Yii::t("formulario", "Viudo"),
-                        "4" => Yii::t("formulario", "Divorciado"),
-                        "5" => Yii::t("formulario", "Unión de hecho")),
+                    "arr_civil" => array("1" => Yii::t("general", "Single"),
+                        "2" => Yii::t("general", "Married"),
+                        "3" => Yii::t("general", "Widower"),
+                        "4" => Yii::t("general", "Divorced"),
+                        "5" => Yii::t("general", "Civil Union")),
                     "tipo_dni" => array("CED" => Yii::t("formulario", "DNI Document"), "PASS" => Yii::t("formulario", "Passport")),
                     "genero" => array("M" => Yii::t("formulario", "Male"), "F" => Yii::t("formulario", "Female")),
                     "tipos_sangre" => ArrayHelper::map($tipos_sangre, "id", "value"),
@@ -1071,11 +1066,11 @@ class FichaController extends \app\components\CController {
                     /*                     * */
                     "arr_pais_cuat" => ArrayHelper::map($arr_pais_cuat, "id", "value"),
                     "arr_prov_cuat" => ArrayHelper::map($arr_prov_cuat, "id", "value"),
-                    "arr_ciu_cuat" => ArrayHelper::map($arr_ciu_cuat, "id", "value"),                    
+                    "arr_ciu_cuat" => ArrayHelper::map($arr_ciu_cuat, "id", "value"),
                     /*                     * */
                     "arr_tip_instaca_med" => ArrayHelper::map($arr_tip_instaca_med, "id", "value"),
                     "arr_tip_instaca_ter" => ArrayHelper::map($arr_tip_instaca_ter, "id", "value"),
-                    "arr_tip_instaca_cuat" => ArrayHelper::map($arr_tip_instaca_cuat, "id", "value"),                    
+                    "arr_tip_instaca_cuat" => ArrayHelper::map($arr_tip_instaca_cuat, "id", "value"),
                     /*                     * */
                     "arr_tipparent_dis" => ArrayHelper::map($arr_tipparent_dis, "id", "value"),
                     "arr_tipparent_enf" => ArrayHelper::map($arr_tipparent_enf, "id", "value"),
@@ -1083,5 +1078,5 @@ class FichaController extends \app\components\CController {
                     "area" => $area,
         ]);
     }
-        
+
 }

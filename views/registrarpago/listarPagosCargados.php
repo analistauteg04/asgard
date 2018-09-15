@@ -17,7 +17,7 @@ use yii\web\JsExpression;
 <div>
     <form class="form-horizontal">
         <?=
-        $this->render('_formBuscarPagos', [
+        $this->render('_form_BuscarPagoscargados', [
             //'arrCarreras' => $arrCarreras,
             'arrEstados' => $arrEstados
             ]);
@@ -26,7 +26,7 @@ use yii\web\JsExpression;
 </div>
 <div>
     <?=
-    $this->render('_listarPagosGrid', [
+    $this->render('_listarpagoscargados_grid', [
         'model' => $model,
         'url' => $url]);
     ?>

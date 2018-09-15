@@ -44,10 +44,13 @@
 
 return [
     'class' => 'yii\swiftmailer\Mailer',
+//    'useFileTransport' => true, // false if use other transport
     'useFileTransport' => false,
     'transport' => [
         'class' => 'Swift_SmtpTransport',
-        'host' => 'smtp.gmail.com', // e.g. smtp.mandrillapp.com or smtp.gmail.com        
+        'host' => 'smtp.gmail.com', // e.g. smtp.mandrillapp.com or smtp.gmail.com
+        //'username' => 'procesosonline@uteg.edu.ec',
+        //'password' => 'Ut3g2017P4oc3sos',
         'username' => 'facultadonline@uteg.edu.ec',
         'password' => 'F@cult@d0nline2o17',
         'port' => '587', // Port 25 is a very common port too

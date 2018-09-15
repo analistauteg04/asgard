@@ -1,10 +1,10 @@
 <?php
 
 /*
- * The Asgard framework is free software. It is released under the terms of
+ * The PenBlu framework is free software. It is released under the terms of
  * the following BSD License.
  *
- * Copyright (C) 2017 by Asgard Software 
+ * Copyright (C) 2015 by PenBlu Software (http://www.penblu.com)
  * All rights reserved.
  *
  * Redistribution and use in source and binary forms, with or without
@@ -17,7 +17,7 @@
  *    notice, this list of conditions and the following disclaimer in
  *    the documentation and/or other materials provided with the
  *    distribution.
- *  - Neither the name of Asgard Software nor the names of its
+ *  - Neither the name of PenBlu Software nor the names of its
  *    contributors may be used to endorse or promote products derived
  *    from this software without specific prior written permission.
  *
@@ -34,13 +34,22 @@
  * ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE
  * POSSIBILITY OF SUCH DAMAGE.
  *
- * Asgard is based on code by
- * Yii Software LLC (http://www.yiisoft.com) Copyright Â© 2008
+ * PenBlu is based on code by
+ * Yii Software LLC (http://www.yiisoft.com) Copyright © 2008
  *
+ * 
+ * Este Archivo contiene lenguajes para ser utilizados en Javascript por defecto
+ * @author Eduardo Cueva
+ * @email  ecueva@penblu.com edu19432@gmail.com
+ * @copyright Copyright &copy; Penblu 2012=>
+ * @license GPLv2 http://www.opensource.org/licenses/gpl-license.php 
+ * 
  * Authors:
+ *
+ * Eduardo Cueva <edu19432@gmail.com>
  * 
- * Diana Lopez <dlopez@uteg.edu.ec>
- * 
+ * Update:
+ * Diana Lopez <dianalopez784@gmail.com>
  */
 
 return [

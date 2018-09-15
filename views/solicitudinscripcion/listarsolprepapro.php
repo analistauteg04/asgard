@@ -17,7 +17,7 @@ use yii\web\JsExpression;
 <div>
     <form class="form-horizontal">
         <?=
-        $this->render('_formBuscarSolPreAp', [
+        $this->render('_form_Buscarsolprepapro', [
         //'arrCarreras' => $arrCarreras
         ]);
         ?>
@@ -25,7 +25,7 @@ use yii\web\JsExpression;
 </div>
 <div>
     <?=
-        $this->render('_listarSolPreAproGrid', [
+        $this->render('_listarsolprepapro_grid', [
         'model' => $model,        
         'url' => $url]);
     ?>

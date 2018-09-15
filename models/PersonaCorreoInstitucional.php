@@ -159,12 +159,5 @@ class PersonaCorreoInstitucional extends \yii\db\ActiveRecord
             return FALSE;
         }
     }
-   /* public function crearCorreoInstitucional($per_id, $etniaotra){
-        $modperprofesor = new Persona();
-        return $modperprofesor.crearOtraEtnia($per_id, $etniaotra);
-    }
-    public function modificarCorreoInstitucional($per_id){
-    $modperprofesor = new Persona();
-    return $modperprofesor.crearOtraEtnia($per_id, $etniaotra);
-    }*/
+ 
 }

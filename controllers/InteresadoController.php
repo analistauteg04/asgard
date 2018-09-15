@@ -26,8 +26,8 @@ class InteresadoController extends \app\components\CController {
         }         
         $model_solicitud = new SolicitudInscripcion();
         $resp_estados = $model_solicitud->Consultaestadosolicitud();
-        $arrEstados = ArrayHelper::map(array_merge([["id" => "0", "value" => Yii::t("formulario", "Grid")], ["id" => "5", "value" => Yii::t("formulario", "Pendiente Ficha Datos")], ["id" => "6", "value" => Yii::t("formulario", "Pendiente Crear Solicitud")], ["id" => "7", "value" => Yii::t("formulario", "Pagada")], ["id" => "8", "value" => Yii::t("formulario", "Pendiente de Pago")]], $resp_estados), "id", "value");                
-        return $this->render('listarInteresados', [
+        $arrEstados = ArrayHelper::map(array_merge([["id" => "0", "value" => Yii::t("formulario", "Grid")], ["id" => "6", "value" => Yii::t("formulario", "Pendiente Crear Solicitud")]], $resp_estados), "id", "value");                
+        return $this->render('listarinteresados', [
                              'model' => $model,
                              'arrEstados' => $arrEstados,
             ]);
@@ -46,7 +46,7 @@ class InteresadoController extends \app\components\CController {
         } else {
             $model = Interesado::consultaPreinteresadas(); 
         }                               
-        return $this->render('listarPreinteresados', [
+        return $this->render('listarpreinteresados', [
                              'model' => $model,                             
             ]);
     }

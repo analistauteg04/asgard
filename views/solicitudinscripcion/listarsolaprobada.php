@@ -10,7 +10,7 @@ use yii\helpers\Html;
 <div>
     <form class="form-horizontal">
         <?=
-        $this->render('_formBuscarSolApro', [
+        $this->render('_form_Buscarsolaprobada', [
         //'arrCarreras' => $arrCarreras
         ]);
         ?>
@@ -18,7 +18,7 @@ use yii\helpers\Html;
 </div>
 <div>
     <?=
-        $this->render('_listarSolAproGrid', [
+        $this->render('_listarsolaprobada_grid', [
         'model' => $model,        
         'url' => $url]);
     ?>

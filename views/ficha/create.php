@@ -45,6 +45,7 @@
 use yii\helpers\Url;
 use yii\helpers\Html;
 
+//print_r($respPerinteresado);
 session_start();
 $_SESSION['persona_ingresa'] = base64_decode($_GET['ids']);
 
@@ -67,7 +68,7 @@ $_SESSION['persona_ingresa'] = base64_decode($_GET['ids']);
             <div class="tab-pane active" id="paso1">
                 <form class="form-horizontal">
                     <?=
-                    $this->render('_formTab1', [
+                    $this->render('_form_tab1', [
                         'paises_nac' => $arr_pais_nac,
                         'provincias_nac' => $arr_prov_nac,
                         'cantones_nac' => $arr_ciu_nac,
@@ -103,7 +104,7 @@ $_SESSION['persona_ingresa'] = base64_decode($_GET['ids']);
             <div class="tab-pane" id="paso2">
                 <form class="form-horizontal">
                     <?=
-                    $this->render('_formTab2', [
+                    $this->render('_form_tab2', [
                         'paises_dom' => $arr_pais_dom,
                         'provincias_dom' => $arr_prov_nac,
                         'cantones_dom' => $arr_ciu_nac,
@@ -126,7 +127,7 @@ $_SESSION['persona_ingresa'] = base64_decode($_GET['ids']);
             <div class="tab-pane" id="paso3">
                 <form class="form-horizontal">
                     <?=
-                    $this->render('_formTab3', [
+                    $this->render('_form_tab3', [
                         'paises_med' => $arr_pais_med,
                         'provincias_med' => $arr_prov_med,
                         'cantones_med' => $arr_ciu_med,
@@ -148,7 +149,7 @@ $_SESSION['persona_ingresa'] = base64_decode($_GET['ids']);
             <div class="tab-pane" id="paso4">
                 <form class="form-horizontal">
                     <?=
-                    $this->render('_formTab4', [
+                    $this->render('_form_tab4', [
                         'ninstruc_mad' => $arr_ninstruc_mad,
                         'ninstruc_pad' => $arr_ninstruc_pad,
                     ]);
@@ -158,7 +159,7 @@ $_SESSION['persona_ingresa'] = base64_decode($_GET['ids']);
             <div class="tab-pane" id="paso5">
                 <form class="form-horizontal">
                     <?=
-                    $this->render('_formTab5', [
+                    $this->render('_form_tab5', [
                         'tipo_discap' => $arr_tip_discap,
                         'tipo_discap_fam' => $arr_tip_discap_fam,
                         'tipparent_dis' => $arr_tipparent_dis,

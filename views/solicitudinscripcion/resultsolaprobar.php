@@ -1,10 +1,8 @@
 <?php
 
 use yii\helpers\Html;
-use yii\helpers\ArrayHelper;
 use yii\helpers\Url;
-use yii\widgets\ActiveForm;
-use app\components\CFileInputAjax;
+
 ?>
 <?= Html::hiddenInput('txth_sins_id', $sins_id, ['id' => 'txth_sins_id']); ?>
 <?= Html::hiddenInput('txth_int_id', $int_id, ['id' => 'txth_int_id']); ?>
@@ -18,7 +16,7 @@ use app\components\CFileInputAjax;
         <div class="form-group">
             <label for="txt_nombres" class="col-sm-4  control-label" id="lbl_nombres"><?= Yii::t("formulario", "Names") ?></label> 
             <div class="col-sm-8  ">
-                <input type="text" class="form-control" id="txt_nombres" disabled="true" value="<?= $nombres?>" placeholder="<?= Yii::t("formulario", "Names")?>">                
+                <input type="text" class="form-control" value="<?= $nombres ?>" id="txt_nombres" disabled="true">                
             </div>
         </div>
     </div>   
@@ -27,91 +25,102 @@ use app\components\CFileInputAjax;
         <div class="form-group">
             <label for="txt_apellidos" class="col-sm-4  control-label" id="lbl_nombres"><?= Yii::t("formulario", "Last Names") ?></label> 
             <div class="col-sm-8 ">
-                <input type="text" class="form-control" id="txt_apellidos" disabled="true" value="<?= $apellidos?>" placeholder="<?= Yii::t("formulario", "Last Names")?>">
+                <input type="text" class="form-control" value="<?= $apellidos ?>" id="txt_apellidos" disabled="true">                
             </div>
         </div>
     </div> 
     
     <div class="col-md-6 col-sm-6 col-xs-6 col-lg-6">
         <div class="form-group">
-            <label for="txt_nivelint" class="col-sm-4 control-label" id="lbl_nombres"><?= Yii::t("solicitud_ins", "Level Interest") ?></label> 
+            <label for="txt_nivelint" class="col-sm-4 control-label" id="lbl_nombres"><?= Yii::t("formulario", "Academic unit") ?></label> 
             <div class="col-sm-8 ">
-                <input type="text" class="form-control" id="txt_nivelint" disabled="true" value="<?= $nivelint?>" placeholder="<?= Yii::t("formulario", "Level Interest")?>">                 
+                <input type="text" class="form-control" value="<?= $nivelint ?>" id="txt_nivelint" disabled="true"> 
             </div>
         </div>
     </div> 
     
     <div class="col-md-6 col-sm-6 col-xs-6 col-lg-6">
         <div class="form-group">
-            <label for="txt_carrera" class="col-sm-4 control-label" id="lbl_nombres"><?= Yii::t("academico", "Career") ?></label> 
+            <label for="txt_carrera" class="col-sm-4 control-label" id="lbl_nombres"><?= Yii::t("academico", "Career") ."/". Yii::t("formulario", "Program") ?></label> 
             <div class="col-sm-8 ">
-                <input type="text" class="form-control" id="txt_carrera" disabled="true" value="<?= $carrera?>" placeholder="<?= Yii::t("formulario", "Career")?>">                 
+                <input type="text" class="form-control" value="<?= $carrera ?>" id="txt_carrera" disabled="true"> 
             </div>
         </div>
     </div>    
-    
-    <div class="col-md-12 col-sm-12 col-xs-12 col-lg-12">
-        <h4><b><span id="lbl_Personeria"><?= Yii::t("formulario", "Attached Files") ?></span></b></h4>    
-    </div>
-    
-    <div class="col-md-6 col-sm-6 col-xs-6 col-lg-6 doc_titulo cinteres">
-        <div class="form-group">
-            <label for="txth_doc_titulo" class="col-sm-4 control-label keyupmce"><?= Yii::t("formulario", "Title") ?></label>
-            <div class="col-sm-7 ">  
-                <?php
-                echo "<a href='" . Url::to(['/site/getimage', 'route' => "$arch1"]) . "' download='" . $arch1 . "' ><span class='glyphicon glyphicon-download-alt'></span>Descargar Imagen</a>"                
-                ?>
-            </div>
+    <?php if ($nint_id!=3) { ?>
+        <div class="col-md-12 col-sm-12 col-xs-12 col-lg-12">
+            <h4><b><span id="lbl_Personeria"><?= Yii::t("formulario", "Attached Files") ?></span></b></h4>    
         </div>
-    </div>
-   
-    <div class="col-md-6 col-sm-6 col-xs-6 col-lg-6 doc_dni cinteres">
-        <div class="form-group">
-            <label for="txth_doc_dni" class="col-sm-4 control-label keyupmce"><?= Yii::t("formulario", "DNI") ?></label>
-            <div class="col-sm-7 ">                
-                <?php
-                echo "<a href='" . Url::to(['/site/getimage', 'route' => "$arch2"]) . "' download='" . $arch2 . "' ><span class='glyphicon glyphicon-download-alt'></span>Descargar Imagen</a>"
-                ?>
-            </div>
-        </div>
-    </div>
-            
-    <div class="col-md-6 col-sm-6 col-xs-6 col-lg-6  doc_foto cinteres">
-        <div class="form-group">
-            <label for="txth_doc_foto" class="col-sm-4 control-label keyupmce"><?= Yii::t("formulario", "Photo") ?></label>
-            <div class="col-sm-7 ">                
-                <?php
-                echo "<a href='" . Url::to(['/site/getimage', 'route' => "$arch4"]) . "' download='" . $arch4 . "' ><span class='glyphicon glyphicon-download-alt'></span>Descargar Imagen</a>"
-                ?>
-            </div>
-        </div>
-    </div>  
-    
-    <?php if ($txth_extranjero == "1") { ?>
-        <div class="col-md-6 col-sm-6 col-xs-6 col-lg-6  doc_certvota cinteres">
+
+        <div class="col-md-6 col-sm-6 col-xs-6 col-lg-6 doc_titulo cinteres">
             <div class="form-group">
-                <label for="txth_doc_certvota" class="col-sm-4  control-label keyupmce"><?= Yii::t("formulario", "Voting Certificate") ?></label>
-                <div class="col-sm-7">                
+                <label for="txth_doc_titulo" class="col-sm-4 control-label keyupmce"><?= Yii::t("formulario", "Title") ?></label>
+                <div class="col-sm-7 ">  
                     <?php
-                    echo "<a href='" . Url::to(['/site/getimage', 'route' => "$arch3"]) . "' download='" . $arch3 . "' ><span class='glyphicon glyphicon-download-alt'></span>Descargar Imagen</a>"
+                    echo "<a href='" . Url::to(['/site/getimage', 'route' => "$arch1"]) . "' download='" . $arch1 . "' ><span class='glyphicon glyphicon-download-alt'></span>Descargar Imagen</a>"                
                     ?>
                 </div>
             </div>
         </div>
-    <?php } ?>
-    
-    <?php if (!empty($arch5)) { ?>
-        <div class="col-md-6  doc_beca cinteres">
+
+        <div class="col-md-6 col-sm-6 col-xs-6 col-lg-6 doc_dni cinteres">
             <div class="form-group">
-                <label for="txth_doc_beca" class="col-sm-4 control-label keyupmce"><?= Yii::t("formulario", "Scholarship document") ?></label>
+                <label for="txth_doc_dni" class="col-sm-4 control-label keyupmce"><?= Yii::t("formulario", "DNI") ?></label>
                 <div class="col-sm-7 ">                
                     <?php
-                    echo "<a href='" . Url::to(['/site/getimage', 'route' => "$arch5"]) . "' download='" . $arch5 . "' ><span class='glyphicon glyphicon-download-alt'></span>Descargar Imagen</a>"
+                    echo "<a href='" . Url::to(['/site/getimage', 'route' => "$arch2"]) . "' download='" . $arch2 . "' ><span class='glyphicon glyphicon-download-alt'></span>Descargar Imagen</a>"
                     ?>
                 </div>
             </div>
         </div>
+
+        <div class="col-md-6 col-sm-6 col-xs-6 col-lg-6  doc_foto cinteres">
+            <div class="form-group">
+                <label for="txth_doc_foto" class="col-sm-4 control-label keyupmce"><?= Yii::t("formulario", "Photo") ?></label>
+                <div class="col-sm-7 ">                
+                    <?php
+                    echo "<a href='" . Url::to(['/site/getimage', 'route' => "$arch4"]) . "' download='" . $arch4 . "' ><span class='glyphicon glyphicon-download-alt'></span>Descargar Imagen</a>"
+                    ?>
+                </div>
+            </div>
+        </div>  
+
+        <?php if ($txth_extranjero == "1") { ?>
+            <div class="col-md-6 col-sm-6 col-xs-6 col-lg-6  doc_certvota cinteres">
+                <div class="form-group">
+                    <label for="txth_doc_certvota" class="col-sm-4  control-label keyupmce"><?= Yii::t("formulario", "Voting Certificate") ?></label>
+                    <div class="col-sm-7">                
+                        <?php
+                        echo "<a href='" . Url::to(['/site/getimage', 'route' => "$arch3"]) . "' download='" . $arch3 . "' ><span class='glyphicon glyphicon-download-alt'></span>Descargar Imagen</a>"
+                        ?>
+                    </div>
+                </div>
+            </div>
+        <?php } ?>
+
+        <?php if (!empty($arch5)) { ?>
+            <div class="col-md-6  doc_beca cinteres">
+                <div class="form-group">
+                    <label for="txth_doc_beca" class="col-sm-4 control-label keyupmce"><?= Yii::t("formulario", "Scholarship document") ?></label>
+                    <div class="col-sm-7 ">                
+                        <?php
+                        echo "<a href='" . Url::to(['/site/getimage', 'route' => "$arch5"]) . "' download='" . $arch5 . "' ><span class='glyphicon glyphicon-download-alt'></span>Descargar Imagen</a>"
+                        ?>
+                    </div>
+                </div>
+            </div>
+        <?php } ?>
     <?php } ?>
+    <div class="col-md-6 col-sm-6 col-xs-6 col-lg-6  doc_foto cinteres">
+        <div class="form-group">
+            <label for="txth_doc_pago" class="col-sm-4 control-label keyupmce"><?= Yii::t("formulario", "Payment") ?></label>
+            <div class="col-sm-7 ">                
+                <?php                    
+                    echo "<a href='" . Url::to(['/site/getimage', 'route' => "/uploads/documento/" . $per_id . "/" . $img_pago]) . "' download='" . $img_pago . "' ><span class='glyphicon glyphicon-download-alt'></span>Descargar Pago</a>"
+                ?>
+            </div>
+        </div>
+    </div> 
     
     <div class="col-md-12 col-sm-12 col-xs-12 col-lg-12">
         <h4><b><span id="lbl_solicitud"><?= Yii::t("solicitud_ins", "Approval Result") ?></span></b></h4>

@@ -12,7 +12,7 @@ use yii\helpers\Html;
 <div>
     <form class="form-horizontal">
         <?=
-        $this->render('_formBuscaAsignacion', [
+        $this->render('_formBuscaAsignacion', [         
         'arrEjecutivos' => $arrEjecutivos,
         'arrEstados' => $arrEstados]);
         ?>

@@ -79,10 +79,10 @@ $(document).ready(function () {
         
         if (parseFloat(arrParams.pago) > parseFloat(arrParams.totpago))
         {
-            alert("Esta tratando de ingresar un pago mayor al valor de su servicio. $" + parseFloat(arrParams.totpago));
+            alert("Está tratando de ingresar un pago mayor al valor de su servicio. $" + parseFloat(arrParams.totpago));
         } else if (parseFloat(arrParams.pago) < parseFloat(arrParams.totpago))
         {
-            alert("Esta tratando de ingresar un pago menor al valor de su servicio. $" + parseFloat(arrParams.totpago));
+            alert("Está tratando de ingresar un pago menor al valor de su servicio. $" + parseFloat(arrParams.totpago));
         }
         else {
             if (!validateForm()) {
@@ -90,7 +90,7 @@ $(document).ready(function () {
                     showAlert(response.status, response.label, response.message);
                     setTimeout(function () {
                         if (arrParams.vista == 'adm') {
-                            parent.window.location.href = $('#txth_base').val() + "/registrarpago/listarpagosolicadm";
+                            parent.window.location.href = $('#txth_base').val() + "/registrarpago/listarpagosolicitudadm";
                         } else {
                             parent.window.location.href = $('#txth_base').val() + "/registrarpago/listarpagosolicitud";
                         }
@@ -118,6 +118,7 @@ $(document).ready(function () {
         arrParams.numero_transaccion = $('#txt_numero_transaccion').val();
         arrParams.fecha_transaccion = $('#txt_fecha_transaccion').val();
         arrParams.estado_revision = "AP";
+        arrParams.documento = $('#txth_doc_titulo').val();
         arrParams.observacion = "";
         arrParams.int_id = $('#txth_int').val();
         arrParams.sins_id = $('#txth_sins').val();
@@ -137,7 +138,7 @@ $(document).ready(function () {
                     // alert(response.message.wtmessage);
                     showAlert(response.status, response.label, response.message);
                     setTimeout(function () {
-                        parent.window.location.href = $('#txth_base').val() + "/registrarpago/listarpagosolregadm";
+                        parent.window.location.href = $('#txth_base').val() + "/registrarpago/listarpagosolicitudregistroadm";
                     }, 2000);
 
                 }, true);

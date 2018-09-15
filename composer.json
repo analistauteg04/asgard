@@ -21,15 +21,13 @@
         "yiisoft/yii2-swiftmailer": "~2.0.0",
         "mpdf/mpdf": "*",
         "phpoffice/phpspreadsheet": "*",
-        "phpoffice/phpexcel": "*",
-        "bower-asset/font-awesome": "~4.0",
+        "bower-asset/font-awesome": "*",
         "branchonline/yii2-lightbox": "*",
         "cebe/yii2-gravatar": "1.*",
         "bower-asset/toastr": "*",
         "odaialali/yii2-toastr": "1.0b",
         "kartik-v/yii2-widget-fileinput": "@dev",
-        "himiklab/yii2-recaptcha-widget": "*",
-        "paypal/rest-api-sdk-php": "*"  
+        "himiklab/yii2-recaptcha-widget": "*"        
     },
     "require-dev": {
         "yiisoft/yii2-debug": "~2.0.0",

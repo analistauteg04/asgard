@@ -59,7 +59,7 @@ use yii\helpers\Html;
             <div class="tab-pane active" id="paso1">
                 <form class="form-horizontal">
                     <?=
-                    $this->render('_formTab1', [
+                    $this->render('_form_tab1', [
                         'paises_nac' => $arr_pais_nac,
                         'provincias_nac' => $arr_prov_nac,
                         'cantones_nac' => $arr_ciu_nac,
@@ -110,7 +110,6 @@ use yii\helpers\Html;
                         'cgen_direccion' => $respContGeneral['direccion'],
                         'per_foto' => $respPersona['per_foto'],
                         'otraetnia' => $respotraetnia['oetn_nombre'],
-                        'arr_tipparent' => $arr_tipparent,
                     ]);
                     ?>
                 </form>

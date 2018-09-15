@@ -104,7 +104,7 @@ class Pais extends \yii\db\ActiveRecord {
      * @property integer $perid       
      * @return  
      */
-    public function consultarCodigoArea($pai_id) {
+    public function consultarCodigoArea($pai_id=57) {
         $con = \Yii::$app->db_asgard;
         $estado = 1;
         $sql = "SELECT 

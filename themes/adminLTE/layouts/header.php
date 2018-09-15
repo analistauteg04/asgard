@@ -82,7 +82,7 @@ $empresas = Empresa::getListaEmpresasxUserID(Yii::$app->session->get("PB_iduser"
                 <!-- User Account Menu -->
                 <li class="dropdown notifications-menu">
                     <a href="javascript:" class="dropdown-toggle" data-toggle="dropdown">
-                      <span class="hidden-xs"><?= @Yii::$app->session->get("PB_empresa") ?></span>
+                      <span class="hidden-xs"><?= @Yii::$app->session->get("PB_empresa") ?>&nbsp;&nbsp;<i class="glyphicon glyphicon-menu-down"></i></span>
                     </a>
                     <ul class="dropdown-menu">
                       <li class="header">Empresas a la que Pertenece:</li>
@@ -90,7 +90,8 @@ $empresas = Empresa::getListaEmpresasxUserID(Yii::$app->session->get("PB_iduser"
                         <!-- inner menu: contains the actual data -->
                         <ul class="menu">
                             <?php foreach($empresas as $index => $value){
-                                echo '<li><a href="'. Yii::$app->urlManager->createUrl(["site/changeempresa/?id=$value[id]"]) .'" data-id="'.$value['id'].'">' . $value['name'] . '</a></li>';
+                                $indexpath = ($value['id'] == @Yii::$app->session->get("PB_idempresa"))?">":"";
+                                echo '<li><a href="'. Yii::$app->urlManager->createUrl(["site/changeempresa/?id=$value[id]"]) .'" data-id="'.$value['id'].'">' . $indexpath . " " . $value['name'] . '</a></li>';
                             } ?>
                         </ul>
                       </li>

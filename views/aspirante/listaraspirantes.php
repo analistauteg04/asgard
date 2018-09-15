@@ -17,14 +17,14 @@ use yii\web\JsExpression;
 <div>
     <form class="form-horizontal">
         <?=
-        $this->render('_formBuscarAspirant', [
+        $this->render('_form_BuscarAspirantes', [
             'arrCarreras' => $arrCarreras]);
         ?>
     </form>
 </div>
 <div>
     <?=
-    $this->render('_listarAspirantesGrid', [
+    $this->render('_listaraspirantes_grid', [
         'model' => $model,
         'url' => $url]);
     ?>

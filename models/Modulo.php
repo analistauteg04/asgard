@@ -3,6 +3,8 @@
 namespace app\models;
 
 use Yii;
+use \yii\data\ActiveDataProvider;
+use \yii\data\ArrayDataProvider;
 
 /**
  * This is the model class for table "modulo".
@@ -102,7 +104,6 @@ class Modulo extends \yii\db\ActiveRecord {
     public function getModulos() {
         $iduser    = Yii::$app->session->get('PB_iduser', FALSE);
         $idempresa = Yii::$app->session->get('PB_idempresa', FALSE);
-        
         $sql = "SELECT 
                     DISTINCT(modu.mod_id),modu.*
                 FROM 
@@ -175,6 +176,53 @@ class Modulo extends \yii\db\ActiveRecord {
                     modu.mod_estado=1  
                 ORDER BY modu.mod_orden;";
         $res = Yii::$app->db->createCommand($sql)->queryOne();
+        return $res;
+    }
+    
+    function getAllModules($search = NULL, $dataProvider = false){
+        $iduser = Yii::$app->session->get('PB_iduser', FALSE);
+        $search_cond = "%".$search."%";
+        $str_search = "";
+        if(isset($search)){
+            $str_search  = "(m.mod_nombre like :search OR ";
+            $str_search .= "a.apl_nombre like :search OR ";
+            $str_search .= "m.mod_tipo like :search) AND ";
+        }
+        $sql = "SELECT 
+                    m.mod_id as id,
+                    m.mod_nombre as Nombre,
+                    m.mod_tipo as Tipo,
+                    a.apl_nombre as Aplicacion,
+                    m.mod_orden as Orden,
+                    m.mod_estado as Estado
+                FROM 
+                    modulo as m 
+                    INNER JOIN aplicacion as a on m.apl_id = a.apl_id
+                WHERE 
+                    $str_search
+                    m.mod_estado_logico=1 AND 
+                    -- m.mod_estado=1 AND 
+                    -- a.apl_estado=1 AND
+                    a.apl_estado_logico=1 
+                ORDER BY m.mod_orden;";
+        $comando = Yii::$app->db->createCommand($sql);
+        if(isset($search)){
+            $comando->bindParam(":search",$search_cond, \PDO::PARAM_STR);
+        }
+        $res = $comando->queryAll();
+        if($dataProvider){
+            $dataProvider = new ArrayDataProvider([
+                'key' => 'mod_id',
+                'allModels' => $res,
+                'pagination' => [
+                    'pageSize' => Yii::$app->params["pageSize"],
+                ],
+                'sort' => [
+                    'attributes' => ['Nombre', 'Aplicacion', 'Tipo', 'Orden', 'Estado'],
+                ],
+            ]);
+            return $dataProvider;
+        }
         return $res;
     }
 

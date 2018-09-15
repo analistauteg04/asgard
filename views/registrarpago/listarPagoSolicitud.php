@@ -17,7 +17,7 @@ use yii\web\JsExpression;
 <div>
     <form class="form-horizontal">
         <?=
-        $this->render('_formBuscarPagosolic', [
+        $this->render('_form_BuscarPagoSolicitud', [
             
         ]);
         ?>
@@ -25,7 +25,7 @@ use yii\web\JsExpression;
 </div>
 <div>
     <?=
-        $this->render('_listarPagosolicGrid', [
+        $this->render('_listarpagosolicitud_grid', [
         'model' => $model,
         'url' => $url]);
     ?>

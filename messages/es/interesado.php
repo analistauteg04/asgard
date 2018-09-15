@@ -4,7 +4,7 @@
  * The Asgard framework is free software. It is released under the terms of
  * the following BSD License.
  *
- * Copyright (C) 2017 by Asgard Software 
+ * Copyright (C) 2015 by Asgard Software 
  * All rights reserved.
  *
  * Redistribution and use in source and binary forms, with or without
@@ -50,29 +50,28 @@ return [
     "Application number" => "Núm. Solicitud",
     "Approve/Denies" => "Aprueba/Reprueba",
     "Assignment of interested" => "Asignación de Interesado",
-    "Aspirants" => "Aspirantes",    
+    "Aspirants" => "Aspirantes",
     "Contact Information" => "Información de Contacto",
     "Create Application" => "Crear Solicitud",
     "Do you have any catastrophic illness?" => "Tienes alguna enfermedad catastrófica",
-    "Do you have any type of disability?" => "Tienes algún tipo de discapacidad",    
+    "Do you have any type of disability?" => "Tienes algún tipo de discapacidad",
     "Family Information" => "Información Familiar",
     "Home Information" => "Información Domicilio",
     "New Register" => "Nuevo Registro",
-    "Observation" => "Observación",    
     "Personal Information" => "Información Personal",
     "Pre Interested" => "Pre-Interesados",
     "Request Inquiry" => "Consulta de Solicitudes",
-    "Review" => "Revisión",    
+    "Review" => "Revisión",
     "State" => "Estado",
     "UTEG - Information Candidate" => "UTEG - Información Aspirante",
     "UTEG - Payment Denied" => "UTEG - Pago Denegado",
     "UTEG - Payment Made" => "UTEG - Pago Realizado",
     "UTEG - Pre-Registration Online" => "UTEG - Pre-Inscripción Online",
-    "UTEG - Registration Online" => "UTEG - Inscripción Online",
+    "UTEG - Registration Online" => "UTEG - Inscripción",
     "UTEG - Rejected Payment" => "UTEG - Pago Rechazado",
     "You have a  family' member  with Severe Disability" => "Tienes a cargo un familiar con Discapacidad Severa",
     "You have a family' member  with Catastrophic Illness" => "Tienes a cargo un familiar con Enfermedad Catastrófica",
-    "Interested" => "Interesados",        
+    "Interested" => "Interesados",
 ];
 
 

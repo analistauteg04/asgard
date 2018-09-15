@@ -38,7 +38,17 @@ PbGridView::widget([
             'attribute' => 'Nombres',
             'header' => Yii::t("formulario", "First Names"),
             'value' => 'per_nombresc',
-        ],   
+        ], 
+        [
+            'attribute' => 'Unidad',
+            'header' => Yii::t("formulario", "Aca. Uni."),
+            'value' => 'unidad',
+        ],
+        [
+            'attribute' => 'Modalidad',
+            'header' => Yii::t("formulario", "Mode"),
+            'value' => 'modalidad',
+        ],
         [
             'attribute' => 'Estado',
             'header' => Yii::t("formulario", "Status"),

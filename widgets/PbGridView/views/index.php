@@ -6,11 +6,14 @@ use yii\helpers\Html;
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-
+$class = "class='barexport barexportp'";
+if($totalCount == 0){
+    $class = "class='barexport'";
+}
 ?>
-<div style="text-align: right;" <?php if(!$isSummary): echo "class='barexport'"; endif;?> >
-    <?php if($showExport): ?>
+<div style="text-align: right;" <?php if(!$isSummary): echo $class; endif;?> >
     <div class="btn-group">
+        <?php if($showExport): ?>
         <button id="exportbutton" class="btn btn-default dropdown-toggle" href="javascript:" title="<?= Html::encode(PbGridView::t("gridview", "Export")) ?>" data-toggle="dropdown" aria-expanded="false">
             <i class="glyphicon glyphicon-export"></i>
             <span class="caret"></span>
@@ -55,6 +58,14 @@ use yii\helpers\Html;
             </li>
             <?php endif; ?>
         </ul>
+        <?php endif; ?>
+        <?php if($addButton): ?>
+            <?php if($addButton_fn): ?>
+        <button type="button" class="btn btn-default btn-flat" onclick="<?php echo $addButton_fn;?>"><i class="glyphicon glyphicon-plus"></i></button>
+            <?php else: ?>
+        <a class="btn btn-default btn-flat <?php if($addButton_pp):echo "pbpopup"; endif; ?>" href="<?php echo $addButton_lk;?>" role="button"><i class="glyphicon glyphicon-plus"></i></a>
+            <?php endif; ?>
+        <?php endif; ?>
     </div>
-    <?php endif; ?>
+    
 </div>

@@ -80,4 +80,61 @@ class PreInteresado extends \yii\db\ActiveRecord
     {
         return $this->hasMany(InteresadoEjecutivo::className(), ['pint_id' => 'pint_id']);
     }
+    /**
+     * Function ConsultaRegistropreins
+     * @author  Grace Viteri <analistadesarrollo01@uteg.edu.ec>
+     * @property    $cedula, $pasaporte    
+     * @return  
+     */
+    /**
+     * Function modificaPersona
+     * @author  Kleber Loayza <analistadesarrollo03@uteg.edu.ec>
+     * @property integer $userid
+     * @return  
+     */
+    public function insertarPreInteresado($con,$parameters,$keys,$name_table) {
+        $trans = $con->getTransaction(); 
+        $param_sql .= "" . $keys[0];
+        $bdet_sql .= "'" . $parameters[0]."'";
+        for ($i = 1; $i < count($parameters); $i++) {
+            if (isset($parameters[$i])) {
+                $param_sql .= ", " . $keys[$i];
+                $bdet_sql .= ", '" . $parameters[$i]."'";
+            }
+        }
+        try {
+            $sql = "INSERT INTO " . $con->dbname.'.'.$name_table . " ($param_sql) VALUES($bdet_sql);";                        
+            $comando = $con->createCommand($sql);
+            $result = $comando->execute();
+            $idtable=$con->getLastInsertID($con->dbname . '.' . $name_table);
+            if ($trans !== null)
+                $trans->commit();
+            return $idtable;
+        } catch (Exception $ex) {
+            if ($trans !== null){
+                $trans->rollback();            
+            }
+            return 0;
+        }
+    }
+    public function consultaPreInteresadoById($per_id) {
+        $con = \Yii::$app->db_captacion;
+        $estado = 1;
+        $sql = "
+                    SELECT
+                    ifnull(pint_id,0) as pint_id
+                    FROM db_captacion.pre_interesado 
+                    WHERE 
+                            per_id = $per_id
+                       and pint_estado = $estado
+                       and pint_estado_logico=$estado
+                ";
+        $comando = $con->createCommand($sql);
+        $resultData = $comando->queryOne();
+        if(empty($resultData['pint_id']))
+            return 0;
+        else {
+            return $resultData['pint_id'];    
+        }
+    }
 }

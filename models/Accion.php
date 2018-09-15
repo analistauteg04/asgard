@@ -3,6 +3,8 @@
 namespace app\models;
 
 use Yii;
+use \yii\data\ActiveDataProvider;
+use \yii\data\ArrayDataProvider;
 
 /**
  * This is the model class for table "accion".
@@ -70,15 +72,6 @@ class Accion extends \yii\db\ActiveRecord {
     }
     
     /**
-     * @inheritdoc
-     * @return AccionQuery the active query used by this AR class.
-     */
-    public static function find()
-    {
-        return new AccionQuery(get_called_class());
-    }
-    
-    /**
      * Función para Obtener el menu de acciones 
      * Los Tipos de botones registrados en el Objeto Modulo son:
      * 0=>Botones normales que ejecutan un accion o entidad
@@ -90,8 +83,8 @@ class Accion extends \yii\db\ActiveRecord {
      * A=>Accion
      * 
      * Los tipos de botones son:
-     * 1=>Botones que ejecutan la accion de un enlace
-     * 2=>Botones que ejecutan una funcion javascript
+     * 0=>Botones que ejecutan la accion de un enlace
+     * 1=>Botones que ejecutan una funcion javascript
      *
      * @author Eduardo Cueva <ecueva@penblu.com>
      * @access public
@@ -136,13 +129,15 @@ class Accion extends \yii\db\ActiveRecord {
                     INNER JOIN obmo_acci AS oa ON om.omod_id = oa.omod_id 
                     INNER JOIN accion AS ac ON oa.acc_id = ac.acc_id 
                 WHERE 
-                    om.omod_padre_id=:omodp_id AND 
-                    om.omod_id=:omod_id AND
-                    -- om.omod_tipo='A' AND 
+                    om.omod_padre_id=:omod_id AND 
+                    -- om.omod_id=:omod_id AND
+                    om.omod_tipo='A' AND 
                     us.usu_id=:usu_id AND 
                     em.emp_id=:emp_id AND 
                     go.gmod_estado_logico=1 AND 
+                    go.gmod_estado=1 AND 
                     gg.gogr_estado_logico=1 AND 
+                    gg.gogr_estado=1 AND 
                     gr.grol_estado_logico=1 AND 
                     gr.grol_estado=1 AND 
                     ug.ugep_estado_logico=1 AND 
@@ -151,15 +146,18 @@ class Accion extends \yii\db\ActiveRecord {
                     us.usu_estado=1 AND 
                     ep.eper_estado_logico=1 AND 
                     ep.eper_estado=1 AND 
+                    em.emp_estado_logico=1 AND 
                     em.emp_estado=1 AND 
-                    em.emp_estado_logico=1 AND
                     om.omod_estado_logico=1 AND 
-                    om.omod_estado_visible=1 AND
+                    om.omod_estado=1 AND 
+                    -- om.omod_estado_visible=1 AND
+                    oa.oacc_estado=1 AND 
                     oa.oacc_estado_logico=1 AND 
+                    ac.acc_estado=1 AND 
                     ac.acc_estado_logico=1 
                 ORDER BY om.omod_nombre;";
         $comando = Yii::$app->db->createCommand($sql);
-        $comando->bindParam(":omodp_id", $id_omodpadre, \PDO::PARAM_INT);
+        //$comando->bindParam(":omodp_id", $id_omodpadre, \PDO::PARAM_INT);
         $comando->bindParam(":usu_id", $usu_id, \PDO::PARAM_INT);
         $comando->bindParam(":emp_id", $idempresa, \PDO::PARAM_INT);
         $comando->bindParam(":omod_id", $omod_id, \PDO::PARAM_INT);
@@ -281,5 +279,50 @@ class Accion extends \yii\db\ActiveRecord {
                     ],
             ]];
         }
+    }
+    
+    function getAllAcciones($search = NULL, $dataProvider = false){
+        $iduser = Yii::$app->session->get('PB_iduser', FALSE);
+        $search_cond = "%".$search."%";
+        $str_search = "";
+        if(isset($search)){
+            $str_search  = "(a.acc_nombre like :search OR ";
+            $str_search .= "a.acc_tipo like :search OR ";
+            $str_search .= "a.acc_descripcion like :search OR ";
+            $str_search .= "a.acc_url_accion like :search) AND ";
+        }
+        $sql = "SELECT 
+                    a.acc_id as id,
+                    a.acc_nombre as Nombre,
+                    a.acc_tipo as Tipo,
+                    a.acc_url_accion as Link,
+                    a.acc_descripcion as Descripcion,
+                    a.acc_estado as Estado
+                FROM 
+                    accion as a 
+                WHERE 
+                    $str_search
+                    -- a.acc_estado=1 AND
+                    a.acc_estado_logico=1 
+                ORDER BY a.acc_id;";
+        $comando = Yii::$app->db->createCommand($sql);
+        if(isset($search)){
+            $comando->bindParam(":search",$search_cond, \PDO::PARAM_STR);
+        }
+        $res = $comando->queryAll();
+        if($dataProvider){
+            $dataProvider = new ArrayDataProvider([
+                'key' => 'acc_id',
+                'allModels' => $res,
+                'pagination' => [
+                    'pageSize' => Yii::$app->params["pageSize"],
+                ],
+                'sort' => [
+                    'attributes' => ['Nombre', 'Tipo', 'Link', 'Estado', 'Descripcion'],
+                ],
+            ]);
+            return $dataProvider;
+        }
+        return $res;
     }
 }

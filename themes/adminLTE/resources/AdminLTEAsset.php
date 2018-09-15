@@ -66,12 +66,14 @@ class AdminLTEAsset extends AssetBundle
         'css/skins/_all-skins.min.css',
         'css/styleLTE.css',
         'plugins/iCheck/square/blue.css',
+        'plugins/colorpicker/bootstrap-colorpicker.min.css',
         'plugins/datepicker/datepicker3.css',
         ];
     public $js = [
         'js/app.min.js',  
         'plugins/fastclick/fastclick.min.js',
         'plugins/iCheck/icheck.min.js',
+        'plugins/colorpicker/bootstrap-colorpicker.min.js',
         'plugins/browser-detect/browser-detect.js',
         'plugins/jsession-timeout/jSessionTimeOut.js',
         'plugins/date-format/date.format.js',

@@ -29,6 +29,8 @@ $(document).ready(function () {
         arrParams.pais = $('#cmb_pais_dom').val();
         arrParams.celular = $('#txt_celular').val();
         arrParams.pasaporte = $('#txt_pasaporte').val();
+        arrParams.unidad = $('#cmb_ninteres').val();
+        arrParams.modalidad = $('#cmb_modalidad').val();
         if (!validateForm()) {
             requestHttpAjax(link, arrParams, function (response) {
                 showAlert(response.status, response.label, response.message);
@@ -57,5 +59,19 @@ $(document).ready(function () {
             $('#Divcedula').show();
         }
     });
+
+    $('#cmb_ninteres').change(function () {
+        var link = $('#txth_base').val() + "/inscripcion/index";
+        var arrParams = new Object();
+        arrParams.nint_id = $(this).val();
+        arrParams.getmodalidad = true;
+        requestHttpAjax(link, arrParams, function (response) {
+            if (response.status == "OK") {
+                data = response.message;
+                setComboData(data.modalidad, "cmb_modalidad");
+            }
+        }, true);
+    });
+
 });
 

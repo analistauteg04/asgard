@@ -1,6 +1,6 @@
 <?php
 
-/*
+/* 
  * The PenBlu framework is free software. It is released under the terms of
  * the following BSD License.
  *
@@ -8,7 +8,7 @@
  * All rights reserved.
  *
  * Redistribution and use in source and binary forms, with or without
- * modification, are permitted provided that the following conditions
+ * modification, are permitted provided that the following conditions 
  * are met:
  *
  *  - Redistributions of source code must retain the above copyright
@@ -34,25 +34,16 @@
  * ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE
  * POSSIBILITY OF SUCH DAMAGE.
  *
- * PenBlu is based on code by
+ * PenBlu is based on code by 
  * Yii Software LLC (http://www.yiisoft.com) Copyright © 2008
  *
- * 
- * Este Archivo contiene lenguajes para ser utilizados en Javascript por defecto
- * @author Eduardo Cueva
- * @email  ecueva@penblu.com edu19432@gmail.com
- * @copyright Copyright &copy; Penblu 2012=>
- * @license GPLv2 http://www.opensource.org/licenses/gpl-license.php 
- * 
  * Authors:
  *
- * Eduardo Cueva <edu19432@gmail.com>
- * 
- * Update:
- * Diana Lopez <dianalopez784@gmail.com>
+ * Eduardo Cueva <ecueva@penblu.com>
  */
 
 return [
+    "Actions" => "Acciones",
     "Back" => "Regresar",
     "Clear" => "Limpiar",
     "Create" => "Crear",
@@ -64,6 +55,17 @@ return [
     "Save" => "Guardar",
     "Search" => "Buscar",
     "Send" => "Enviar",
+    "-- Select Action --" => "-- Seleccione una Acción --",
     "Update" => "Editar",
     "Close" => "Cerrar",
+    "View" => "Ver",
+    "Edit" => "Editar",
+    "Action Name" => "Nombre",
+    "Type of Action" => "Tipo de Acción",
+    "Link to Action" => "Link de la Acción",
+    "Status Action" => "Estado",
+    "Action Description" => "Descripción",
+    "Action Enabled" => "Acción Activada",
+    "Action Disabled" => "Acción Inactiva",
+    "Action Image" => "Imagen",
 ];

@@ -44,8 +44,6 @@ use Yii;
  * @property integer $pai_id_trabajo
  * @property integer $pro_id_trabajo
  * @property integer $can_id_trabajo
- * @property string $ppre_tipo_formulario
- * @property string $ppre_fecha_registro
  * @property string $ppre_estado
  * @property string $ppre_fecha_creacion
  * @property string $ppre_fecha_modificacion
@@ -62,40 +60,36 @@ use Yii;
  * @property Canton $canIdTrabajo
  * @property Etnia $etn
  */
-class PersonaPreins extends \yii\db\ActiveRecord
-{
+class PersonaPreins extends \yii\db\ActiveRecord {
+
     /**
      * @inheritdoc
      */
-    public static function tableName()
-    {
+    public static function tableName() {
         return 'persona_preins';
     }
 
     /**
      * @return \yii\db\Connection the database connection used by this AR class.
      */
-    public static function getDb()
-    {
+    public static function getDb() {
         return Yii::$app->get('db_asgard');
     }
 
     /**
      * @inheritdoc
      */
-    public function rules()
-    {
+    public function rules() {
         return [
             [['ppre_cedula', 'ppre_estado', 'ppre_estado_logico'], 'required'],
             [['etn_id', 'eciv_id', 'pai_id_nacimiento', 'pro_id_nacimiento', 'can_id_nacimiento', 'tsan_id', 'pai_id_domicilio', 'pro_id_domicilio', 'can_id_domicilio', 'pai_id_trabajo', 'pro_id_trabajo', 'can_id_trabajo'], 'integer'],
-            [['ppre_fecha_nacimiento', 'ppre_fecha_registro', 'ppre_fecha_creacion', 'ppre_fecha_modificacion'], 'safe'],
+            [['ppre_fecha_nacimiento', 'ppre_fecha_creacion', 'ppre_fecha_modificacion'], 'safe'],
             [['ppre_pri_nombre', 'ppre_seg_nombre', 'ppre_pri_apellido', 'ppre_seg_apellido', 'ppre_nacionalidad', 'ppre_correo', 'ppre_domicilio_sector', 'ppre_trabajo_nombre'], 'string', 'max' => 250],
             [['ppre_cedula', 'ppre_ruc'], 'string', 'max' => 15],
             [['ppre_pasaporte', 'ppre_celular', 'ppre_domicilio_telefono', 'ppre_trabajo_telefono', 'ppre_trabajo_ext'], 'string', 'max' => 50],
             [['ppre_genero', 'ppre_nac_ecuatoriano', 'ppre_estado', 'ppre_estado_logico'], 'string', 'max' => 1],
             [['ppre_foto', 'ppre_domicilio_cpri', 'ppre_domicilio_csec', 'ppre_domicilio_ref', 'ppre_trabajo_direccion'], 'string', 'max' => 500],
             [['ppre_domicilio_num'], 'string', 'max' => 100],
-            [['ppre_tipo_formulario'], 'string', 'max' => 2],
             [['ppre_cedula'], 'unique'],
             [['pai_id_nacimiento'], 'exist', 'skipOnError' => true, 'targetClass' => Pais::className(), 'targetAttribute' => ['pai_id_nacimiento' => 'pai_id']],
             [['tsan_id'], 'exist', 'skipOnError' => true, 'targetClass' => TipoSangre::className(), 'targetAttribute' => ['tsan_id' => 'tsan_id']],
@@ -113,8 +107,7 @@ class PersonaPreins extends \yii\db\ActiveRecord
     /**
      * @inheritdoc
      */
-    public function attributeLabels()
-    {
+    public function attributeLabels() {
         return [
             'ppre_id' => 'Ppre ID',
             'ppre_pri_nombre' => 'Ppre Pri Nombre',
@@ -153,8 +146,6 @@ class PersonaPreins extends \yii\db\ActiveRecord
             'pai_id_trabajo' => 'Pai Id Trabajo',
             'pro_id_trabajo' => 'Pro Id Trabajo',
             'can_id_trabajo' => 'Can Id Trabajo',
-            'ppre_tipo_formulario' => 'Ppre Tipo Formulario',
-            'ppre_fecha_registro' => 'Ppre Fecha Registro',
             'ppre_estado' => 'Ppre Estado',
             'ppre_fecha_creacion' => 'Ppre Fecha Creacion',
             'ppre_fecha_modificacion' => 'Ppre Fecha Modificacion',
@@ -165,94 +156,84 @@ class PersonaPreins extends \yii\db\ActiveRecord
     /**
      * @return \yii\db\ActiveQuery
      */
-    public function getPaiIdNacimiento()
-    {
+    public function getPaiIdNacimiento() {
         return $this->hasOne(Pais::className(), ['pai_id' => 'pai_id_nacimiento']);
     }
 
     /**
      * @return \yii\db\ActiveQuery
      */
-    public function getTsan()
-    {
+    public function getTsan() {
         return $this->hasOne(TipoSangre::className(), ['tsan_id' => 'tsan_id']);
     }
 
     /**
      * @return \yii\db\ActiveQuery
      */
-    public function getProIdNacimiento()
-    {
+    public function getProIdNacimiento() {
         return $this->hasOne(Provincia::className(), ['pro_id' => 'pro_id_nacimiento']);
     }
 
     /**
      * @return \yii\db\ActiveQuery
      */
-    public function getPaiIdDomicilio()
-    {
+    public function getPaiIdDomicilio() {
         return $this->hasOne(Pais::className(), ['pai_id' => 'pai_id_domicilio']);
     }
 
     /**
      * @return \yii\db\ActiveQuery
      */
-    public function getProIdDomicilio()
-    {
+    public function getProIdDomicilio() {
         return $this->hasOne(Provincia::className(), ['pro_id' => 'pro_id_domicilio']);
     }
 
     /**
      * @return \yii\db\ActiveQuery
      */
-    public function getCanIdDomicilio()
-    {
+    public function getCanIdDomicilio() {
         return $this->hasOne(Canton::className(), ['can_id' => 'can_id_domicilio']);
     }
 
     /**
      * @return \yii\db\ActiveQuery
      */
-    public function getPaiIdTrabajo()
-    {
+    public function getPaiIdTrabajo() {
         return $this->hasOne(Pais::className(), ['pai_id' => 'pai_id_trabajo']);
     }
 
     /**
      * @return \yii\db\ActiveQuery
      */
-    public function getProIdTrabajo()
-    {
+    public function getProIdTrabajo() {
         return $this->hasOne(Provincia::className(), ['pro_id' => 'pro_id_trabajo']);
     }
 
     /**
      * @return \yii\db\ActiveQuery
      */
-    public function getCanIdTrabajo()
-    {
+    public function getCanIdTrabajo() {
         return $this->hasOne(Canton::className(), ['can_id' => 'can_id_trabajo']);
     }
 
     /**
      * @return \yii\db\ActiveQuery
      */
-    public function getEtn()
-    {
+    public function getEtn() {
         return $this->hasOne(Etnia::className(), ['etn_id' => 'etn_id']);
     }
-    
+
     /**
      * Function ConsultaRegistropreins
      * @author  Grace Viteri <analistadesarrollo01@uteg.edu.ec>
      * @property    $cedula, $pasaporte    
      * @return  
      */
-    public function ConsultaRegistropreins($cedula, $pasaporte) {
+    public function ConsultaRegistropreins($cedula, $pasaporte=null) {
         $con = \Yii::$app->db_asgard;
         $estado = 1;
         $sql = "SELECT
-                    per.ppre_id 
+                    ifnull(per.ppre_id,0) as ppre_id
                 FROM " . $con->dbname . ".persona_preins per                    
                 WHERE (per.ppre_cedula = :cedula or per.ppre_pasaporte =:pasaporte) AND
                        per.ppre_estado = :estado AND
@@ -262,7 +243,7 @@ class PersonaPreins extends \yii\db\ActiveRecord
         $comando->bindParam(":cedula", $cedula, \PDO::PARAM_STR);
         $comando->bindParam(":pasaporte", $pasaporte, \PDO::PARAM_STR);
         $resultData = $comando->queryOne();
-        return $resultData;
+        return $resultData;        
     }
 
     /**
@@ -298,8 +279,7 @@ class PersonaPreins extends \yii\db\ActiveRecord
         $estado = 1;
         $sql = "SELECT                     
                 pai_nacionalidad,
-                pai_codigo_fono,
-                pai_nombre
+                pai_codigo_fono
                FROM " . $con->dbname . ".pais                     
                WHERE 
                     pai_id = :pai_id AND
@@ -324,7 +304,10 @@ class PersonaPreins extends \yii\db\ActiveRecord
                         per.ppre_celular as celular,
                         per.ppre_correo as correo,
                         per.pai_id_domicilio as pais,
-                        per.ppre_fecha_registro as fecha_registro
+                        per.ppre_fecha_registro as fecha_registro,
+                        per.uaca_id as unidad,
+                        per.mod_id as modalidad
+                        
                 FROM " . $con->dbname . ".persona_preins per                    
                 WHERE per.ppre_id = :per_id AND
                       per.ppre_estado = :estado AND
@@ -375,5 +358,38 @@ class PersonaPreins extends \yii\db\ActiveRecord
 
         $response = $comando->execute();
         return $response;
+    }
+
+    /**
+     * Function modificaPersona
+     * @author  Kleber Loayza <analistadesarrollo03@uteg.edu.ec>
+     * @property integer $userid
+     * @return  
+     */
+    public function insertarPersonaIns($con, $parameters, $keys, $name_table) {
+        $trans = $con->getTransaction(); 
+        $param_sql .= "" . $keys[0];
+        $bdet_sql .= "'" . $parameters[0]."'";
+        for ($i = 1; $i < count($parameters); $i++) {
+            if (isset($parameters[$i])) {
+                $param_sql .= ", " . $keys[$i];
+                $bdet_sql .= ", '" . $parameters[$i]."'";
+            }
+        }
+        try {
+            $sql = "INSERT INTO " . $con->dbname.'.'.$name_table . " ($param_sql) VALUES($bdet_sql);";
+            $comando = $con->createCommand($sql);
+            $result = $comando->execute();
+            $idtable=$con->getLastInsertID($con->dbname . '.' . $name_table);
+            if ($trans !== null){
+                $trans->commit();                            
+                return $idtable;
+            }
+        } catch (Exception $ex) {
+            if ($trans !== null){
+                $trans->rollback();            
+            }
+            return 0;
+        }
     }
 }

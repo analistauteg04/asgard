@@ -11,7 +11,7 @@ $(document).ready(function () {
         var link = $('#txth_base').val() + "/solicitudinscripcion/create";
         var arrParams = new Object();
         arrParams.nint_id = $(this).val();
-        arrParams.getmodalidad = true;
+        arrParams.getmodalidad = true;        
         requestHttpAjax(link, arrParams, function (response) {
             if (response.status == "OK") {
                 data = response.message;
@@ -23,28 +23,68 @@ $(document).ready(function () {
                     arrParams.getcarrera = true;
                     requestHttpAjax(link, arrParams, function (response) {
                         if (response.status == "OK") {
-                            data = response.message;
-                            setComboData(data.carrera, "cmb_carrera");
-                            arrParams.getmetodo = true;
-                            requestHttpAjax(link, arrParams, function (response) {
-                                if (response.status == "OK") {
-                                    data = response.message;
-                                    setComboData(data.metodos, "cmb_metodos");
-                                }
-                            }, true);
+                            data = response.message;                           
+                            setComboData(data.carrera, "cmb_carrera");                        
                         }
                     }, true);
                 }
             }
         }, true);
+        //métodos.
+        var arrParams = new Object();
+        arrParams.nint_id = $('#cmb_ninteres').val();
+        arrParams.metodo = $('#cmb_metodos').val();
+        arrParams.getmetodo = true;        
+        requestHttpAjax(link, arrParams, function (response) {
+            if (response.status == "OK") {
+                data = response.message;
+                setComboData(data.metodos, "cmb_metodos");                       
+                //Descuentos.
+                var arrParams = new Object();
+                arrParams.nint_id = $('#cmb_ninteres').val();
+                arrParams.unidada = $('#cmb_ninteres').val();
+                arrParams.moda_id = $('#cmb_modalidad').val();                
+                arrParams.metodo = $('#cmb_metodos').val();               
+                arrParams.getdescuento = true;                 
+                requestHttpAjax(link, arrParams, function (response) {
+                    if (response.status == "OK") {
+                        data = response.message;                                   
+                          setComboData(data.descuento, "cmb_descuento");                                   
+                    }
+                }, true);
+            }
+        }, true);
+                 
+        
+        //Sólo mostrar el bloque de beca Fundación Cala cuando sea Unidad:Grado y Método:examen.                  
+        if (arrParams.nint_id==1) {
+            if ($('#cmb_metodos')==2) {
+                $('#divBeca').css('display', 'block');
+            } else {
+                $('#divBeca').css('display', 'none');
+            }
+        } else {
+            $('#divBeca').css('display', 'none');
+        }
+        //No mostrar el campo método ingreso cuando sea Unidad:Educación Continua.
+        if (arrParams.nint_id > 2) {           
+            $('#divMetodo').css('display', 'none');
+            $('#divDocumento').css('display', 'none');    
+            $('#lbl_carrera').text('Programa');
+        } else {
+            $('#divMetodo').css('display', 'block');
+            $('#divDocumento').css('display', 'block'); 
+            $('#lbl_carrera').text('Carrera');
+        }  
     });
 
     $('#cmb_modalidad').change(function () {
-        var link = $('#txth_base').val() + "/gestion/create";
+        var link = $('#txth_base').val() + "/solicitudinscripcion/create";
         var arrParams = new Object();
         arrParams.unidada = $('#cmb_ninteres').val();
         arrParams.moda_id = $(this).val();
         arrParams.getcarrera = true;
+        arrParams.nint_id = $('#cmb_ninteres').val();
         requestHttpAjax(link, arrParams, function (response) {
             if (response.status == "OK") {
                 data = response.message;
@@ -53,11 +93,24 @@ $(document).ready(function () {
                 requestHttpAjax(link, arrParams, function (response) {
                     if (response.status == "OK") {
                         data = response.message;
-                        setComboData(data.metodos, "cmb_metodos");
+                        setComboData(data.metodos, "cmb_metodos");                                                           
                     }
                 }, true);
             }
-        }, true);
+        }, true);          
+        //Descuentos.
+        var arrParams = new Object();
+        arrParams.nint_id = $('#cmb_ninteres').val();
+        arrParams.unidada = $('#cmb_ninteres').val();
+        arrParams.moda_id = $('#cmb_modalidad').val();
+        arrParams.metodo = $('#cmb_metodos').val();               
+        arrParams.getdescuento = true;                 
+        requestHttpAjax(link, arrParams, function (response) {
+            if (response.status == "OK") {
+                data = response.message;                                   
+                  setComboData(data.descuento, "cmb_descuento");                                   
+            }
+        }, true);   
     });
 
     $('#cmb_unidad').change(function () {
@@ -239,7 +292,7 @@ $(document).ready(function () {
     });
 
     $('#sendInscripcion').click(function () {
-        var link = $('#txth_base').val() + "/solicitudinscripcion/guardarsolinteresado";
+        var link = $('#txth_base').val() + "/solicitudinscripcion/guardarsolinsxinteresado";
         var arrParams = new Object();
         arrParams.persona_id = $('#txth_ids').val();
         arrParams.ninteres = $('#cmb_ninteres').val();
@@ -253,12 +306,22 @@ $(document).ready(function () {
         arrParams.arc_extranjero = $('#txth_extranjero').val();
         arrParams.arc_nacional = $('#txth_nac').val();
         arrParams.arc_doc_beca = $('#txth_doc_beca').val();
-
+        arrParams.emp_id = 1;
+        if ($('input[name=opt_declara_Dctosi]:checked').val() == 1) {
+            arrParams.descuento_id = $('#cmb_descuento').val();
+        }                
         if ($('input[name=opt_declara_si]:checked').val() == 1) {
             arrParams.beca = 1;
         } else {
             arrParams.beca = 0;
         }
+        
+        if ($('input[name=opt_subir_si]:checked').val() == 1) {
+            arrParams.subirDocumentos = 1;            
+        } else {
+            arrParams.subirDocumentos = 0;
+        }
+        
         if (!validateForm()) {
             requestHttpAjax(link, arrParams, function (response) {
                 showAlert(response.status, response.label, response.message);
@@ -268,7 +331,34 @@ $(document).ready(function () {
                         window.location.href = $('#txth_base').val() + "/interesado/listarinteresados";
                     } else
                     {
-                        window.location.href = $('#txth_base').val() + "/solicitudinscripcion/listarsolinteresado";
+                        window.location.href = $('#txth_base').val() + "/solicitudinscripcion/listarsolicitudxinteresado";
+                    }
+                }, 5000);
+            }, true);
+        }
+    });
+
+    $('#sendInscripcionUlink').click(function () {
+        var link = $('#txth_base').val() + "/solicitudinscripcion/guardarsolinsxinteresado";
+        var arrParams = new Object();
+        arrParams.persona_id = $('#txth_ids').val();
+        arrParams.carrera = $('#cmb_servicios').val();               
+        arrParams.emp_id = null;
+        arrParams.metodoing = null;
+        arrParams.ming_id = null;
+        arrParams.modalidad = null;   
+        arrParams.nint_id = null;
+        
+        if (!validateForm()) {
+            requestHttpAjax(link, arrParams, function (response) {
+                showAlert(response.status, response.label, response.message);
+                setTimeout(function () {
+                    if (arrParams.persona_id > '0')
+                    {
+                        window.location.href = $('#txth_base').val() + "/interesado/listarinteresados";
+                    } else
+                    {
+                        window.location.href = $('#txth_base').val() + "/solicitudinscripcion/listarsolicitudxinteresado";
                     }
                 }, 5000);
             }, true);
@@ -407,21 +497,132 @@ $(document).ready(function () {
     $('#opt_declara_si').change(function () {
         if ($('#opt_declara_si').val() == 1) {
             $('#divDeclarabeca').css('display', 'block');
+            $('#votacion').css('display', 'none');
             $("#opt_declara_no").prop("checked", "");
         } else {
             $('#divDeclarabeca').css('display', 'none');
+            $('#votacion').css('display', 'block');
         }
     });
 
     $('#opt_declara_no').change(function () {
         if ($('#opt_declara_no').val() == 2) {
             $('#divDeclarabeca').css('display', 'none');
+            $('#votacion').css('display', 'block');
             $("#opt_declara_si").prop("checked", "");
         } else {
             $('#divDeclarabeca').css('display', 'block');
+            $('#votacion').css('display', 'none');
+        }
+    });
+    
+     //Control del div de Descuentos.
+    $('#opt_declara_Dctosi').change(function () {
+        if ($('#opt_declara_Dctosi').val() == 1) {
+            $('#divDescuento').css('display', 'block');           
+            $("#opt_declara_Dctono").prop("checked", "");
+        } else {
+            $('#divDescuento').css('display', 'none');           
+        }
+               
+    });
+
+    $('#opt_declara_Dctono').change(function () {
+        if ($('#opt_declara_Dctono').val() == 2) {
+            $('#divDescuento').css('display', 'none');            
+            $("#opt_declara_Dctosi").prop("checked", "");
+        } else {
+            $('#divDescuento').css('display', 'block');            
+        }
+    });
+    
+    $('#btnAnular').click(function () {
+        var link = $('#txth_base').val() + "/solicitudinscripcion/grabaranulacion";
+        var arrParams = new Object();
+        arrParams.observacion = $('#txt_observacion').val();
+        arrParams.sins_id = $('#txth_sins_id').val();
+      
+        if (!validateForm()) {
+            requestHttpAjax(link, arrParams, function (response) {
+                showAlert(response.status, response.label, response.message);
+                setTimeout(function () {                    
+                    parent.window.location.href = $('#txth_base').val() + "/solicitudinscripcion/listarsolaprobadmin";                    
+                }, 5000);
+            }, true);
+        }
+    });
+    
+    $('#sendDocumentos').click(function () {
+        var link = $('#txth_base').val() + "/solicitudinscripcion/guardardocumentos";
+        var arrParams = new Object();        
+        arrParams.sins_id = $('#txth_ids').val();
+        arrParams.persona_id = $('#txth_idp').val();
+        arrParams.interesado_id = $('#txth_int_id').val();
+        arrParams.arc_extranjero = $('#txth_extranjero').val();        
+        arrParams.arc_doc_titulo = $('#txth_doc_titulo').val();
+        arrParams.arc_doc_dni = $('#txth_doc_dni').val();
+        arrParams.arc_doc_certvota = $('#txth_doc_certvota').val();
+        arrParams.arc_doc_foto = $('#txth_doc_foto').val();                
+        arrParams.arc_doc_beca = $('#txth_doc_beca').val();
+        
+        if ($('input[name=opt_declara_si]:checked').val() == 1) {
+            arrParams.beca = 1;
+        } else {
+            arrParams.beca = 0;
+        }
+        if (!validateForm()) {
+            requestHttpAjax(link, arrParams, function (response) {
+                showAlert(response.status, response.label, response.message);
+                setTimeout(function () {                                      
+                    window.location.href = $('#txth_base').val() + "/solicitudinscripcion/listarsolicitudxinteresado?ids="+base64_encode(arrParams.persona_id);                   
+                }, 5000);
+            }, true);
+        }
+    });
+    
+    //Control del div Subida Documentos.
+    $('#opt_subir_si').change(function () {
+        if ($('#opt_subir_si').val() == 1) {
+            $('#DivDocumentos').css('display', 'block');           
+            $("#opt_subir_no").prop("checked", "");
+        } else {
+            $('#DivDocumentos').css('display', 'none');           
         }
     });
 
+    $('#opt_subir_no').change(function () {
+        if ($('#opt_subir_no').val() == 2) {
+            $('#DivDocumentos').css('display', 'none');            
+            $("#opt_subir_si").prop("checked", "");
+        } else {
+            $('#DivDocumentos').css('display', 'block');          
+        }
+    });
+    
+    $('#cmb_metodos').change(function () {
+        var link = $('#txth_base').val() + "/solicitudinscripcion/create";
+        var arrParams = new Object();
+         if ($('#cmb_metodos').val() == 2) {
+            if ($('#cmb_ninteres').val()==1) { 
+                $('#divBeca').css('display', 'block');                        
+            } else {
+                $('#divBeca').css('display', 'none');          
+            }
+        } else {
+            $('#divBeca').css('display', 'none');          
+        }        
+        //Descuentos.
+        arrParams.unidada = $('#cmb_ninteres').val();
+        arrParams.moda_id = $('#cmb_modalidad').val();
+        arrParams.metodo = $('#cmb_metodos').val();               
+        arrParams.getdescuento = true;                 
+        requestHttpAjax(link, arrParams, function (response) {
+            if (response.status == "OK") {
+                data = response.message;                                   
+                  setComboData(data.descuento, "cmb_descuento");                                   
+            }
+        }, true);       
+    });
 });
 
 function setComboDataselect(arr_data, element_id, texto) {
@@ -457,7 +658,6 @@ function actualizarGrid() {
         $('#TbG_PERSONAS').PbGridView('applyFilterData', {'f_ini': f_ini, 'f_fin': f_fin, 'modalidad': modalidad, 'carrera': carrera, 'search': search});
         setTimeout(hideLoadingPopup, 2000);
     }
-
 }
 
 function actualizarGridPend() {

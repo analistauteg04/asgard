@@ -3,6 +3,8 @@
 namespace app\models;
 
 use Yii;
+use \yii\data\ActiveDataProvider;
+use \yii\data\ArrayDataProvider;
 
 /**
  * This is the model class for table "rol".
@@ -139,13 +141,54 @@ class Rol extends \yii\db\ActiveRecord {
                     g.rol_id AS id,
                     g.rol_nombre AS name
                 FROM 
-                    rol AS g  
+                    " . $con->dbname . ".rol AS g  
                 WHERE 
                     g.rol_estado = 1 AND 
                     g.rol_estado_logico=1";
         $comando = $con->createCommand($sql);
         $result = $comando->queryAll();
         return $result;
+    }
+    
+    function getAllRolesGrid($search = NULL, $dataProvider = false){
+        $iduser = Yii::$app->session->get('PB_iduser', FALSE);
+        $search_cond = "%".$search."%";
+        $str_search = "";
+        if(isset($search)){
+            $str_search  = "(r.rol_nombre like :search OR ";
+            $str_search .= "r.rol_descripcion like :search) AND ";
+        }
+        $sql = "SELECT 
+                    r.rol_id as id,
+                    r.rol_nombre as Nombre,
+                    r.rol_descripcion as Descripcion,
+                    r.rol_estado as Estado
+                FROM 
+                    rol as r 
+                WHERE 
+                    $str_search
+                    -- r.rol_estado=1 AND
+                    r.rol_estado_logico=1 
+                ORDER BY r.rol_id;";
+        $comando = Yii::$app->db->createCommand($sql);
+        if(isset($search)){
+            $comando->bindParam(":search",$search_cond, \PDO::PARAM_STR);
+        }
+        $res = $comando->queryAll();
+        if($dataProvider){
+            $dataProvider = new ArrayDataProvider([
+                'key' => 'rol_id',
+                'allModels' => $res,
+                'pagination' => [
+                    'pageSize' => Yii::$app->params["pageSize"],
+                ],
+                'sort' => [
+                    'attributes' => ['Nombre', 'Descripcion', 'Estado'],
+                ],
+            ]);
+            return $dataProvider;
+        }
+        return $res;
     }
 
 }

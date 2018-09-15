@@ -54,13 +54,18 @@ use app\models\ObjetoModulo;
                         $omod_nombre = Yii::t($omod_lang_file, $row1['omod_nombre']);
                         $icon = "fa fa-circle-o";
                         $classObj = "";
-                        if ($row1['omod_entidad'] == $rutaControl) {
+                        $omod_entidad = $row1['omod_entidad'];
+                        if($row1['omod_entidad'] == ""){
+                            $omod_arr = $mod->getFirstObjModuleByParent($row1['omod_id']);
+                            $omod_entidad = $omod_arr["omod_entidad"];
+                        }
+                        if ($omod_entidad == $rutaControl){
                             $classObj = 'class="active"';
                             $icon = "fa fa-circle";
                         }
                         $menu .= "<li $classObj>";
                         //$menu.=Html::a($omod_nombre, Url::home() . $row1['omod_entidad']);
-                        $menu .= "<a href='" . Url::home() . $row1['omod_entidad'] . "'><i class='" . $icon . "'></i>" . $omod_nombre . "</a>";
+                        $menu .= "<a href='" . Url::home() . $omod_entidad . "'><i class='" . $icon . "'></i>" . $omod_nombre . "</a>";
                         $menu .= '</li>';
                     }
                     $menu .= '</ul>';

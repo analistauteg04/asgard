@@ -6,15 +6,16 @@ return [
     'web' => 'http://www.uteg.edu.ec',
     'version' => '1.0',
     'adminEmail' => 'web@uteg.edu.ec',
-    'soporteEmail' => 'dlopez@uteg.edu.ec',
-    'admisiones' => 'analistadesarrollo01@uteg.edu.ec', //'jefeadmisiones@uteg.edu.ec', //'analistadesarrollo02@uteg.edu.ec', 
-    'colecturia' => 'analistadesarrollo01@uteg.edu.ec', //'colecturia@uteg.edu.ec', //'analistadesarrollo02@uteg.edu.ec',    
-    'jefetalento' => 'analistadesarrollo01@uteg.edu.ec', //'directortalento@uteg.edu.ec', //
-    'analistatalento' => 'analistadesarrollo01@uteg.edu.ec', //'kmunoz@uteg.edu.ec', //
-    'analistanomina' => 'analistadesarrollo01@uteg.edu.ec', // 'glamota@uteg.edu.ec',
+    'soporteEmail' => 'dlopez@uteg.edu.ec',  //'analistadesarrollo01@uteg.edu.ec',
+    'admisiones' => 'analistadesarrollo01@uteg.edu.ec',  //'admisionesonline@uteg.edu.ec',
+    'colecturia' => 'analistadesarrollo01@uteg.edu.ec', //'colecturia@uteg.edu.ec',  
+    'jefetalento' => 'directortalento@uteg.edu.ec', //'analistadesarrollo01@uteg.edu.ec', //
+    'analistatalento' => 'kmunoz@uteg.edu.ec', //'analistadesarrollo01@uteg.edu.ec', //
+    'analistanomina' => 'glamota@uteg.edu.ec', //'analistadesarrollo01@uteg.edu.ec', // 
     'contactoEmail' => 'pruebacontacto@uteg.edu.ec',
     'culture' => 'es-ES',
     'dateTimeByDefault' => 'Y-m-d H:i:s',
+    'TimeByDefault' => 'H:i:s',
     'dateByDefault' => 'Y-m-d',
     'dateByDatePicker' => 'yyyy-mm-dd',
     'cookieSession' => 3600 * 24 * 30,
@@ -37,10 +38,13 @@ return [
         'youtube' => 'https://www.youtube.com/channel/UC8_6Fr2MGrNkr-kM7BZzkdQ',
     ],
     // Variables VPOS                     
+    
     'Vposvector' => "1EBCFD349F229E00",
     'VposacquirerId' => '8',
+    
     'VposcommerceId' => '7687',
     'VpospurchaseCurrencyCode' => '840',
+ 
     'VposcommerceMallId' => '000001',
     'Vposlanguage' => 'SP',
     'VposbillingAddress' => 'Direccion ABC',
@@ -52,72 +56,52 @@ return [
     'VposshippingAddress' => 'Direccion ABC',
     'VposterminalCode' => '000001',
     'VposIVA' => 0.12,
-    'VposReserved1' => 'SP',
-    'VposReserved4' => '000',
-    'VposReserved5' => '000',
-    'VposReserved9' => '000',
-    'VposReserved10' => '000',
-    'VposReserved11' => 'Valor Reservado ABC',
+    //desarrollo
+    'VposllaveVPOSCryptoPub' => "-----BEGIN PUBLIC KEY-----\n".
+"MIGfMA0GCSqGSIb3DQEBAQUAA4GNADCBiQKBgQDTJt+hUZiShEKFfs7DShsXCkoq\n".
+"TEjv0SFkTM04qHyHFU90Da8Ep1F0gI2SFpCkLmQtsXKOrLrQTF0100dL/gDQlLt0\n".
+"Ut8kM/PRLEM5thMPqtPq6G1GTjqmcsPzUUL18+tYwN3xFi4XBog4Hdv0ml1SRkVO\n".
+"DRr1jPeilfsiFwiO8wIDAQAB\n".
+"-----END PUBLIC KEY-----",
     
-    // Variables VPOS Pruebas                    
-    'Vposvector_p' => "1EBCFD349F229E00",
-    'VposacquirerId_p' => '119',
-    'VposcommerceId_p' => '7725',
-    'VpospurchaseOperationNumber_p' => '123401201',
-    'VpospurchaseAmount_p' => '10000',    
-    'VposcommerceMallId_p' => '0',
-    'VposterminalCode_p' => '00000000',
-    'VposIVA_p' => 0.12,
-    
-    //URL
-    'url_biblioteca' => 'https://www.biblionline.pearson.com',
-    'url_educativa' => 'https://campusvirtual.uteg.edu.ec',
-    
-    //desarrollo llaves de cifrado publica de Alignet
-    'VposllaveVPOSCryptoPub' => "-----BEGIN PUBLIC KEY-----\n" .
-    "MIGfMA0GCSqGSIb3DQEBAQUAA4GNADCBiQKBgQDTJt+hUZiShEKFfs7DShsXCkoq\n" .
-    "TEjv0SFkTM04qHyHFU90Da8Ep1F0gI2SFpCkLmQtsXKOrLrQTF0100dL/gDQlLt0\n" .
-    "Ut8kM/PRLEM5thMPqtPq6G1GTjqmcsPzUUL18+tYwN3xFi4XBog4Hdv0ml1SRkVO\n" .
-    "DRr1jPeilfsiFwiO8wIDAQAB\n" .
-    "-----END PUBLIC KEY-----",
-      //desarrollo llave de firma privada de su comercio
-    'VposllaveComercioFirmaPriv' => "-----BEGIN RSA PRIVATE KEY-----\n" .
-    "MIICXQIBAAKBgQC6Jfa9E/EbMhL0n6wSn5rav5kWL7b7OUiIE1YYCNbXpDmpRqJv\n" .
-    "/lBVv4M5N/cYfkGV0J42B8vlOEjfWfOpkRGRmkYQ64mGdoUA50hszDNY13WdBAnx\n" .
-    "WHhNtxYdlBSd7igaxAieQ6zwGggvlEx8s1pOvGFe4zAwbStrx3uZobFO4wIDAQAB\n" .
-    "AoGBAKeWKi9L1tN/H2WwowAZRRcPS8mXp4tBpTUtA2OcAaAer/LgLrnZIYYxZviK\n" .
-    "lCEu+ejg6q8GEeEJ7UF4AFB21HLSeVxY72tlm68Z/DRGvLrwubsBkfJ7+DV4Yabj\n" .
-    "8kn3I2vs0FapcTKTofVVJHogE9mhXSNnNusDqy53o4mH6tyxAkEA2122w4SHkfNz\n" .
-    "Wi1eSLMZX/qcr+7kGcMckOb3NkORu9cH9yJIEoVLNUoUEsMmWNDMSmyQWWyxATEe\n" .
-    "xSTXZjf+1QJBANk8IawNIkajkJBT/5nyG+qqPCoDy5t+wC4/4jJIxhwGww0zPZDT\n" .
-    "qVmpyfCV4TYbvzfhyDF3ioSap6lFcRKKItcCQFheoz6WSArquOBuAFpnE+TPT4ms\n" .
-    "QeWC7SIOeS46AB5cnI/ZFpGncsmv4vA//1WuH24n1+q+V3v0bsHaeo9qJVUCQExq\n" .
-    "uLWbUSlkNGBxDAMNhgCArfVhrGggqF4cnudtbjNBta+ZDNk7e+FMtvro3nZ4QEXa\n" .
-    "KOAt2w5WkRAcm3AYI7UCQQCBKxXLYNzx343zzbXOKZHBdrbZ3oRSAi7zMRNt1gHT\n" .
-    "yn16rEfVUiHmGgJeTZMdqE+zOZAE13Oi8pA9ZsCmlEyA\n" .
-    "-----END RSA PRIVATE KEY-----",
-    
-    //llave de firma publica de Alignet
-    'VposllaveVPOSFirmaPub' => "-----BEGIN PUBLIC KEY-----\n" .
-    "MIGfMA0GCSqGSIb3DQEBAQUAA4GNADCBiQKBgQCvJS8zLPeePN+fbJeIvp/jjvLW\n" .
-    "Aedyx8UcfS1eM/a+Vv2yHTxCLy79dEIygDVE6CTKbP1eqwsxRg2Z/dI+/e14WDRs\n" .
-    "g0QzDdjVFIuXLKJ0zIgDw6kQd1ovbqpdTn4wnnvwUCNpBASitdjpTcNTKONfXMtH\n" .
-    "pIs4aIDXarTYJGWlyQIDAQAB\n" .
-    "-----END PUBLIC KEY-----",
-    // llaves de cifrado privado de su comercio.
-    'VposllaveComercioCryptoPriv' => "-----BEGIN RSA PRIVATE KEY-----\n" .
-    "MIICXQIBAAKBgQDDWHEHbBSnuaDZK1pS1XGHE61fyoY+lJ4+GwQ8/fKM8O1+FT7a\n" .
-    "rYJfjt8N6G0H7bU+SQXYIJB5nOxK4hPp1eFxsGOho4b1A0EDBleBlSigeKRrPKno\n" .
-    "6UdXc9lml5LmzHif6prE1K2iy84JqNrPCMnR/dqalbZhDRdXn75FlUVovQIDAQAB\n" .
-    "AoGAfAtdOulW9GrbyQvOf2sqfCvynDFura6SDb36IwDfVMBpDvdOwm4Lq8J9wccl\n" .
-    "9TLtNHAKVgPXumH7alHFc2dtkDZFROKf+rJ9zEcmXQg62zaoPC9ZjqVjhcQVkEcc\n" .
-    "0jhRCdZ9e4VBfvPIglt1GPYlLtQs8GeeMtR6UUHa8ubybAECQQD5si6GY5SrYWuA\n" .
-    "tzsfcYG9MOjG33mkpM7VKhCSRqKTvviAtcTL50erHBh3hJI9vkZkIPW3s/KsU4/k\n" .
-    "Vm+VHM2RAkEAyEb8K2Ez8GC7OCZ/2XfpLjEnkYLLZi8czJQ+H8qu+svykCLlcWrk\n" .
-    "/KBJWx7+nl9F9RagT8u940rIP2pEa5rCbQJBALAvlPqIm2eONw+8uoAGVHhNYYKq\n" .
-    "Pyf4jmUE6Gp+YssDjk8rcvA5gm1vRqhWp+XfM8YFJ7x2wb3svHRutQ8vIrECQE/a\n" .
-    "DZz2KpFC4CKpJvx8FNq3+oDH13Usf50J1iMy2sVgH5xcbYLlDduzxMux9e8LKYdo\n" .
-    "uA5Yu6MuI90074a/s5kCQQCgO5taB7LBdQYXCThk5tyYAXurToH6XIq0nG6hx8th\n" .
-    "9LIbpeY6Sdq2pcjKYB77lxCeseSjSrMpvlDaQXTfzyYH\n" .
-    "-----END RSA PRIVATE KEY-----",
+  
+    'VposllaveComercioFirmaPriv' => "-----BEGIN RSA PRIVATE KEY-----\n".
+"MIICWwIBAAKBgQCwKB2x2HztWmG0Z1gLTIcKhckC6L2ftaJlyCfjNXy/HQcinFxf\n".
+"pyb595y9QePxCbJrYa3RD0ZAFaKvBLqA1rrG2uZuverrOG4KTr/1unXgEjfOIexq\n".
+"n0lufFIPG4Ymc5M8RoAE49OZ8dATri6vNQefG3EunsG+xbBBFQhlL+HpBwIDAQAB\n".
+"AoGAAMbcgqlCu8U3QxVllP8sZUZ7wXCHTYn+glZknqLgvvMA0g1AdweEq3uFDGya\n".
+"9bgmOkT/ADoCBExUIFN0AxdvUWlKhshVPtDunZn25uP1sCHdTkqY0g6mDbulEEZV\n".
+"T+1R+HWMlw6jmwWxXYJhda8sswpJYFkmzQUXWoVFy1pJH6ECQQDnF3iGunaC6F/N\n".
+"Ad210osPatPqGzc1pgV/TNm7KjBGVQ7QhI8AU9N5zFEBF6bYrOPHyb1zC8rHYerX\n".
+"baitFsz3AkEAwyTSBY8bFbF77kBv1hA0odvl7jIPkIQRj1wW6EEoG54KdCrB3Zjg\n".
+"x2UFVk7IBTRzlptdNxggYS+tYaTP7Y4QcQJAXWLKvgdUJQqqzDnY0sVGlPBiutRM\n".
+"t01kI1F3G3+tCn8NAY7QCx3U8/9xLLPWJPGZCv+no3o8c95J/My/wVLZeQJAL7IG\n".
+"KxmpEwpIMhlJvFZFpvHqJufRag79g76MUsPqG6XrBC2XKKQ+/D0yqr+in7MMNVlP\n".
+"1TFuaJKQm/b+Yx9/4QJAX+YoHflg5tBY4QQ1vTEmt4Q1511O4TaC64TdjaEZDadK\n".
+"qedOMrLOYzIk4xKqNkoixE5f1oFhF2rtrRuHyD2m4Q==\n".
+"-----END RSA PRIVATE KEY-----",
+
+    //desarrollo
+    'VposllaveVPOSFirmaPub' => "-----BEGIN PUBLIC KEY-----\n".
+"MIGfMA0GCSqGSIb3DQEBAQUAA4GNADCBiQKBgQCvJS8zLPeePN+fbJeIvp/jjvLW\n".
+"Aedyx8UcfS1eM/a+Vv2yHTxCLy79dEIygDVE6CTKbP1eqwsxRg2Z/dI+/e14WDRs\n".
+"g0QzDdjVFIuXLKJ0zIgDw6kQd1ovbqpdTn4wnnvwUCNpBASitdjpTcNTKONfXMtH\n".
+"pIs4aIDXarTYJGWlyQIDAQAB\n".
+"-----END PUBLIC KEY-----",
+   
+    'VposllaveComercioCryptoPriv' => "-----BEGIN RSA PRIVATE KEY-----\n".
+"MIICXAIBAAKBgQCrRYRy6pqSuM2FEuO+0V8R83rOt7UFyMNw5toOIxda8IuziOj/\n".
+"XyU7S9BDLyGYNc/GY/4tZ25b5JclNrg6dI9Kwt05UYSKazX+0EKQYscga/ZtiEVv\n".
+"fL7lksO7ENB7CQe2dfzduOBsQGU9P9XVvnEw+qa6Traq3QqghxV6Pulb6wIDAQAB\n".
+"AoGAfhTV9RbZpYsf2IfYWl+dIgTgcg7w1wo9Pf7jpSaWCd8sqITwKRZsvSMJdHvc\n".
+"ukVa6EwyEFClAEbeMYn/wyCNXqKNZ7PsDkhi+YWkqXMVoF+qnc5QygtIdQodLCbV\n".
+"wkrm2vqRVh2HnoSuI53Cw1xvubxfj64RpF5wCTGWuy4P0GECQQDVaHIGyAa/lb3i\n".
+"Swd2QmGJ1a+irH1L3UoUkPTafYXKP07qZMjsa4VXEfudo4/yIeASsNzggVaOiarE\n".
+"pWDPgF/bAkEAzXQ29HVCzJZIns6tHoIgkd71LCQQOq8/1yP7/bI8f9YveM7q7t0g\n".
+"iSQCCekKWz5qKyr0JgU4dYNdnYybEsH5MQJBAJphjmuddFRQTSdRQ7qnVsxRi1dR\n".
+"FOs20IqEOr18pLakicBC3J87QSC136IwWse8/c5Hp+G5bxZ6PNE5GgnCQpUCQAbd\n".
+"kVCN8pN/miGkamiQlKILP0ogUmKDpLB9xVfu8tKax69Tysn8na+3glHudagi581V\n".
+"fB8hIYfbwe8X2b7AuKECQCtubYGegG2LhuSm28tRGLjB/Xe3aQMSr8IJedwsVOLg\n".
+"mjyNn76/ccvjT7ptBMUMLN9Cm+feZ0HmdMBzFHO+dgA=\n".
+"-----END RSA PRIVATE KEY-----",    
 ];

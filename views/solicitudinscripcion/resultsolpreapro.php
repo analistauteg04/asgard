@@ -18,7 +18,7 @@ use app\components\CFileInputAjax;
         <div class="form-group">
             <label for="txt_nombres" class="col-sm-4 control-label" id="lbl_nombres"><?= Yii::t("formulario", "Names") ?></label> 
             <div class="col-sm-8 ">
-                <input type="text" class="form-control" id="txt_nombres" disabled="true" value="<?= $nombres?>" placeholder="<?= Yii::t("formulario", "Names")?>">                
+                <input type="text" class="form-control" value="<?= $nombres ?>" id="txt_nombres" disabled="true">                 
             </div>
         </div>
     </div>   
@@ -27,25 +27,25 @@ use app\components\CFileInputAjax;
         <div class="form-group">
             <label for="txt_apellidos" class="col-sm-4 control-label" id="lbl_nombres"><?= Yii::t("formulario", "Last Names") ?></label> 
             <div class="col-sm-8 ">
-                <input type="text" class="form-control" id="txt_apellidos" disabled="true" value="<?= $apellidos?>" placeholder="<?= Yii::t("formulario", "Last Names")?>">
+                <input type="text" class="form-control" value="<?= $apellidos ?>" id="txt_apellidos" disabled="true">                 
             </div>
         </div>
     </div> 
     
     <div class="col-md-6 col-sm-6 col-xs-6 col-lg-6">
         <div class="form-group">
-            <label for="txt_nivelint" class="col-sm-4 control-label" id="lbl_nombres"><?= Yii::t("solicitud_ins", "Level Interest") ?></label> 
+            <label for="txt_nivelint" class="col-sm-4 control-label" id="lbl_nombres"><?= Yii::t("formulario", "Academic unit") ?></label> 
             <div class="col-sm-8 ">
-                <input type="text" class="form-control" id="txt_nivelint" disabled="true" value="<?= $nivelint?>" placeholder="<?= Yii::t("formulario", "Level Interest")?>">                 
+                <input type="text" class="form-control" value="<?= $nivelint ?>" id="txt_nivelint" disabled="true">                 
             </div>
         </div>
     </div> 
     
     <div class="col-md-6 col-sm-6 col-xs-6 col-lg-6">
         <div class="form-group">
-            <label for="txt_carrera" class="col-sm-4 control-label" id="lbl_nombres"><?= Yii::t("academico", "Career") ?></label> 
+            <label for="txt_carrera" class="col-sm-4 control-label" id="lbl_nombres"><?= Yii::t("academico", "Career") . "/" . Yii::t("formulario", "Program") ?></label> 
             <div class="col-sm-8 ">
-                <input type="text" class="form-control" id="txt_carrera" disabled="true" value="<?= $carrera?>" placeholder="<?= Yii::t("formulario", "Career")?>"> 
+                <input type="text" class="form-control" value="<?= $carrera ?>" id="txt_carrera" disabled="true">                 
             </div>
         </div>
     </div>    

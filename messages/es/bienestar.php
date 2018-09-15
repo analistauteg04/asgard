@@ -4,7 +4,7 @@
  * The Asgard framework is free software. It is released under the terms of
  * the following BSD License.
  *
- * Copyright (C) 2017 by Asgard Software 
+ * Copyright (C) 2015 by Asgard Software 
  * All rights reserved.
  *
  * Redistribution and use in source and binary forms, with or without

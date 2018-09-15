@@ -70,14 +70,12 @@ class Aspirante extends \yii\db\ActiveRecord {
     }
 
     /**
-     * Function consultarAspirantes
+     * Function getAspirantes
      * @author  Grace Viteri <analistadesarrollo01@uteg.edu.ec>
      * @param   
      * @return  $resultData (información del aspirante)
      */
-
-    public static function consultarAspirantes($resp_gruporol, $arrFiltro = array(), $onlyData = false) {
-
+    public static function getAspirantes($resp_gruporol, $arrFiltro = array(), $onlyData = false) {
         $con = \Yii::$app->db_captacion;
         $con2 = \Yii::$app->db;
         $con3 = \Yii::$app->db_academico;
@@ -91,27 +89,29 @@ class Aspirante extends \yii\db\ActiveRecord {
             $str_search .= "per.per_seg_nombre like :search OR ";
             $str_search .= "per.per_pri_apellido like :search OR ";
             $str_search .= "per.per_cedula like :search) AND ";
-            if ($arrFiltro['carrera'] != "" && $arrFiltro['carrera'] > 0) {
+            // YA NO EXISTE TABLA CARRERA MODICAR 
+            /*if ($arrFiltro['carrera'] != "" && $arrFiltro['carrera'] > 0) {
                 $str_search .= "car.car_id = :carrera AND ";
-            }
+            }*/
             if ($arrFiltro['f_ini'] != "" && $arrFiltro['f_fin'] != "") {
                 $str_search .= "sins.sins_fecha_solicitud >= :fec_ini AND ";
                 $str_search .= "sins.sins_fecha_solicitud <= :fec_fin AND ";
             }
-            $str_search .= "(SELECT pmin_codigo 
-                        FROM db_academico.asignacion_curso ascu
-                        INNER JOIN db_academico.curso cur on cur.cur_id = ascu.cur_id
-                        INNER JOIN db_academico.periodo_metodo_ingreso pmi on pmi.pmin_id = cur.pmin_id
+            // YA NO ES ASI LA ASIGNACION DE PARALELOS DEBE MODIFICARSE
+            /*$str_search .= "(SELECT pmin_codigo 
+                        FROM db_academico.asignacion_paralelo ascu
+                        INNER JOIN db_academico.paralelo cur on cur.par_id = ascu.par_id
+                        -- INNER JOIN db_academico.periodo_metodo_ingreso pmi on pmi.pmin_id = cur.pmin_id
                         WHERE asp_id = asp.asp_id AND 
-                        pmi.nint_id = sins.nint_id AND
+                        pmi.uaca_id = sins.uaca_id AND
                         pmi.ming_id = sins.ming_id AND
-                        ascu.sins_id = sins.sins_id AND
+                        -- ascu.sins_id = sins.sins_id AND
                         ascu.acur_estado = :estado AND
                         ascu.acur_estado_logico = :estado AND
-                        cur.cur_estado = :estado AND
-                        cur.cur_estado_logico = :estado AND
+                        cur.par_estado = :estado AND
+                        cur.par_estado_logico = :estado AND
                         pmi.pmin_estado = :estado AND
-                        pmi.pmin_estado_logico = :estado) like :codigocan AND ";
+                        pmi.pmin_estado_logico = :estado) like :codigocan AND ";*/
         } else {
             $columnsAdd = "sins.sins_id as solicitud_id,
                     per.per_id as persona, 
@@ -122,72 +122,70 @@ class Aspirante extends \yii\db\ActiveRecord {
         }
 
         $sql = "SELECT distinct lpad(sins.sins_id,4,'0') as solicitud,
-                       sins.sins_id as id_solicitud,
-                       SUBSTRING(sins.sins_fecha_solicitud,1,10) as sins_fecha_solicitud,                          
-                       per.per_id as per_id,
-                       per.per_cedula as per_dni,
-                       per.per_pri_nombre as per_nombres,
-                       per.per_pri_apellido as per_apellidos,
-                       ming.ming_id,                                              
-                       (
-                        CASE 
-                            WHEN ming.ming_id = 1 THEN 'CAN'
-                            WHEN ming.ming_id = 2 THEN 'EXA'
-                            WHEN ming.ming_id = 3 THEN 'HOM'
-                            WHEN ming.ming_id = 4 THEN 'PRO'
-                            ELSE 'N/A'
-                        END) AS abr_metodo,
-                       ming.ming_nombre,                       
-                       car.car_nombre as carrera,
+                sins.sins_id as id_solicitud,
+                SUBSTRING(sins.sins_fecha_solicitud,1,10) as sins_fecha_solicitud, 
+                per.per_id as per_id,
+                per.per_cedula as per_dni,
+                per.per_pri_nombre as per_nombres,
+                per.per_pri_apellido as per_apellidos,
+                ming.ming_id, 
+                (
+                CASE 
+                WHEN ming.ming_id = 1 THEN 'CAN'
+                WHEN ming.ming_id = 2 THEN 'EXA'
+                WHEN ming.ming_id = 3 THEN 'HOM'
+                WHEN ming.ming_id = 4 THEN 'PRO'
+                ELSE 'N/A'
+                END) AS abr_metodo,
+                ming.ming_nombre, 
+                car.eaca_nombre as carrera,
                        $columnsAdd
-                       ifnull((SELECT cur.cur_descripcion 
-                                FROM " . $con3->dbname . ".asignacion_curso ascu
-                                INNER JOIN  " . $con3->dbname . ".curso cur on cur.cur_id = ascu.cur_id
+                       ifnull((SELECT cur.par_descripcion 
+                                FROM " . $con3->dbname . ".asignacion_paralelo ascu
+                                INNER JOIN  " . $con3->dbname . ".paralelo cur on cur.par_id = ascu.par_id
                                 WHERE asp_id = asp.asp_id AND
-                                    ascu.sins_id = sins.sins_id AND
-                                    ascu.acur_estado = :estado AND
-                                    ascu.acur_estado_logico = :estado AND
-                                    cur.cur_estado = :estado AND
-                                    cur.cur_estado_logico = :estado	
+                                    -- ascu.sins_id = sins.sins_id AND
+                                    ascu.apar_estado = :estado AND
+                                    ascu.apar_estado_logico = :estado AND
+                                    cur.par_estado = :estado AND
+                                    cur.par_estado_logico = :estado	
                                    ), 'N/A') as curso,
-                       ifnull((SELECT pmin_codigo 
-                                FROM " . $con3->dbname . ".asignacion_curso ascu
-                                INNER JOIN  " . $con3->dbname . ".curso cur on cur.cur_id = ascu.cur_id
+                       /*ifnull((SELECT pmin_codigo 
+                                FROM " . $con3->dbname . ".asignacion_paralelo ascu
+                                INNER JOIN  " . $con3->dbname . ".paralelo cur on cur.par_id = ascu.par_id
                                 INNER JOIN  " . $con3->dbname . ".periodo_metodo_ingreso pmi on pmi.pmin_id = cur.pmin_id
                                 WHERE   asp_id = asp.asp_id AND                                       
-                                        pmi.nint_id = sins.nint_id AND
+                                        pmi.uaca_id = sins.uaca_id AND
                                         pmi.ming_id = sins.ming_id AND
-                                        ascu.sins_id = sins.sins_id AND
-                                        ascu.acur_estado = :estado AND
-                                        ascu.acur_estado_logico = :estado AND
-                                        cur.cur_estado = :estado AND
-                                        cur.cur_estado_logico = :estado AND
-                                        pmi.pmin_estado = :estado AND
-                                        pmi.pmin_estado_logico = :estado    
-                                     ), 'N/A') as can,            
+                                        -- ascu.sins_id = sins.sins_id AND
+                                        ascu.apar_estado = :estado AND
+                                        ascu.apar_estado_logico = :estado AND
+                                        cur.par_estado = :estado AND
+                                        cur.par_estado_logico = :estado -- AND
+                                        -- pmi.pmin_estado = :estado AND
+                                        -- pmi.pmin_estado_logico = :estado    
+                                     ), 'N/A') as can,          
                        ifnull((SELECT concat ('Período ', DATE(pmi.pmin_fecha_desde), ' / ', DATE(pmi.pmin_fecha_hasta)) 
-                                FROM " . $con3->dbname . ".asignacion_curso ascu
-                                INNER JOIN  " . $con3->dbname . ".curso cur on cur.cur_id = ascu.cur_id
+                                FROM " . $con3->dbname . ".asignacion_paralelo ascu
+                                INNER JOIN  " . $con3->dbname . ".paralelo cur on cur.par_id = ascu.par_id
                                 INNER JOIN  " . $con3->dbname . ".periodo_metodo_ingreso pmi on pmi.pmin_id = cur.pmin_id
                                 WHERE   asp_id = asp.asp_id AND                                       
-                                        pmi.nint_id = sins.nint_id AND
+                                        pmi.uaca_id = sins.uaca_id AND
                                         pmi.ming_id = sins.ming_id AND
-                                        ascu.sins_id = sins.sins_id AND
-                                        ascu.acur_estado = :estado AND
-                                        ascu.acur_estado_logico = :estado AND
-                                        cur.cur_estado = :estado AND
-                                        cur.cur_estado_logico = :estado AND
-                                        pmi.pmin_estado = :estado AND
-                                        pmi.pmin_estado_logico = :estado    
-                                     ), 'N/A') as periodo,                     
+                                        -- ascu.sins_id = sins.sins_id AND
+                                        ascu.apar_estado = :estado AND
+                                        ascu.apar_estado_logico = :estado -- AND
+                                        -- pmi.pmin_estado = :estado AND
+                                        -- pmi.pmin_estado_logico = :estado    
+                                     ), 'N/A') as periodo,  */                     
                         asp.asp_id,                        
-                       $resp_gruporol as rol
-                FROM " . $con->dbname . ".aspirante asp INNER JOIN " . $con->dbname . ".interesado inte on inte.int_id = asp.int_id
-                     INNER JOIN " . $con->dbname . ".pre_interesado pint on pint.pint_id = inte.pint_id
-                     INNER JOIN " . $con2->dbname . ".persona per on pint.per_id = per.per_id
+                       $resp_gruporol as rol,
+                       (case when sins_beca = 1 then 'ICF' else 'No Aplica' end) as beca 
+                FROM " . $con->dbname . ".aspirante asp INNER JOIN " . $con->dbname . ".interesado inte on inte.int_id = asp.int_id                     
+                     INNER JOIN " . $con2->dbname . ".persona per on inte.per_id = per.per_id
                      INNER JOIN " . $con->dbname . ".solicitud_inscripcion sins on sins.int_id = inte.int_id
                      INNER JOIN " . $con->dbname . ".metodo_ingreso ming on ming.ming_id = sins.ming_id
-                     INNER JOIN " . $con3->dbname . ".carrera car on car.car_id = sins.car_id
+                     INNER JOIN " . $con3->dbname . ".estudio_academico car on car.eaca_id = sins.eaca_id
                      INNER JOIN " . $con1->dbname . ".orden_pago opag on opag.sins_id = sins.sins_id                     
                      
                 WHERE  
@@ -196,17 +194,15 @@ class Aspirante extends \yii\db\ActiveRecord {
                        asp.asp_estado_logico = :estado AND
                        asp.asp_estado = :estado AND 
                        inte.int_estado_logico = :estado AND
-                       inte.int_estado = :estado AND
-                       pint.pint_estado_logico = :estado AND
-                       pint.pint_estado = :estado AND
+                       inte.int_estado = :estado AND                       
                        per.per_estado_logico = :estado AND
                        per.per_estado = :estado AND
                        sins.sins_estado = :estado AND
                        sins.sins_estado_logico = :estado AND
                        ming.ming_estado_logico = :estado AND
                        ming.ming_estado = :estado AND
-                       car.car_estado_logico = :estado AND
-                       car.car_estado = :estado                         
+                       car.eaca_estado_logico = :estado AND
+                       car.eaca_estado = :estado                         
                 ORDER BY SUBSTRING(sins.sins_fecha_solicitud,1,10) desc";
         $comando = $con->createCommand($sql);
         $comando->bindParam(":estado", $estado, \PDO::PARAM_STR);
@@ -220,7 +216,7 @@ class Aspirante extends \yii\db\ActiveRecord {
             $codigocan = "%" . $arrFiltro["codigocan"] . "%";
             $comando->bindParam(":search", $search_cond, \PDO::PARAM_STR);
             if ($arrFiltro['carrera'] != "" && $arrFiltro['carrera'] > 0) {
-                $comando->bindParam(":carrera", $carrera, \PDO::PARAM_STR);
+                $comando->bindParam(":carrera", $carrera, \PDO::PARAM_INT);
             }
             if ($arrFiltro['f_ini'] != "" && $arrFiltro['f_fin'] != "") {
                 $comando->bindParam(":fec_ini", $fecha_ini, \PDO::PARAM_STR);
@@ -228,6 +224,13 @@ class Aspirante extends \yii\db\ActiveRecord {
             }
             $comando->bindParam(":codigocan", $codigocan, \PDO::PARAM_STR);
         }
+        Utilities::putMessageLogFile('codigocan:' . $codigocan);
+        Utilities::putMessageLogFile('carrera:' . $carrera);
+        Utilities::putMessageLogFile('fecha_ini:' . $fecha_ini);
+        Utilities::putMessageLogFile('fecha_fin:' . $fecha_fin);
+        Utilities::putMessageLogFile('search_cond:' . $search_cond);
+
+        Utilities::putMessageLogFile('sql:' . $sql);
         $resultData = $comando->queryAll();
         $dataProvider = new ArrayDataProvider([
             'key' => 'id',

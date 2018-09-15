@@ -48,9 +48,9 @@ use kartik\date\DatePicker;
     </div>
     <div class="col-md-12 col-sm-12 col-xs-12 col-lg-12">
         <div class="form-group">
-            <label for="cmb_ejecutivo" class="col-sm-2 col-md-2 col-xs-2 col-lg-2 control-label"><?= Yii::t("formulario", "Executive") ?></label>
+            <label for="cmb_agente" class="col-sm-2 col-md-2 col-xs-2 col-lg-2 control-label"><?= Yii::t("formulario", "Executive") ?></label>
             <div class="col-sm-3 col-md-3 col-xs-3 col-lg-3">
-                <?= Html::dropDownList("cmb_ejecutivo", 0, $arrEjecutivos, ["class" => "form-control PBvalidation", "id" => "cmb_ejecutivo"]) ?>                                       
+                <?= Html::dropDownList("cmb_agente", 0, $arrEjecutivos, ["class" => "form-control PBvalidation", "id" => "cmb_agente"]) ?>                                       
             </div>
             <div class="col-sm-5">&nbsp;</div>
         </div>

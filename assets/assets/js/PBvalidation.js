@@ -189,6 +189,7 @@ function validateType(type, valor, ref) {
             if (!result.response) {
                 result.errorMessage = objLang.Invalid_phone_number_;
             }
+            break;
         case 'telefono_sin':
             result.response = validarExpresion(/^((\d{7}))$/, valor);
             if (!result.response) {
@@ -255,7 +256,7 @@ function validateType(type, valor, ref) {
             break;
         case 'fecha_aten':
             var fecha_atiende = valor;
-            if (fecha_atiende >= $('#txt_fecha_recepcion').val() && fecha_atiende <= fecha_actual)
+            if (fecha_atiende >= $('#txt_fecha_recepcion').val())
             {
                 result.response = validarExpresion(/^(19|20)\d\d[-](0[1-9]|1[012])[-](0[1-9]|[12][0-9]|3[01])/, valor);
             }

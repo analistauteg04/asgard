@@ -16,30 +16,22 @@ class AsignacionejecutivoController extends \app\components\CController {
         $data = Yii::$app->request->get();
         $mod_ejecutivo = new InteresadoEjecutivo();
         $per_id = Yii::$app->session->get("PB_perid");
-        $user_id = Yii::$app->session->get("PB_iduser");
-        $model_interesado = new Interesado();
-        $resp_grupo = $model_interesado->consultagrupo($user_id);
-        $model = null;
-        // if el grupo es 8 0 10 enviar On caso contrario Ot, esto debe cambiar segun las nuevas tablas
-        if ($resp_grupo["grupo_id"] == '8' || $resp_grupo["grupo_id"] == '10') {
-            $tipoform = 'On';
-        } else {
-            $tipoform = 'Ot';
-        }
-        $resp_ejecutivos = $mod_ejecutivo->consultarEjecutivos($per_id);
+        //$user_id = Yii::$app->session->get("PB_iduser");        
+        $model = null;       
+        $resp_ejecutivos = $mod_ejecutivo->consultarAgentes();
         if ($data['PBgetFilter']) {
             $arrSearch["f_ini"] = $data['f_ini'];
             $arrSearch["f_fin"] = $data['f_fin'];
             $arrSearch["ejecutivo"] = $data['ejecutivo'];
             $arrSearch["search"] = $data['search'];
-            $model = InteresadoEjecutivo::obtenerInteresados($tipoform, $arrSearch);
+            $model = InteresadoEjecutivo::consultarInteresados($arrSearch);
         } else {
-            $model = InteresadoEjecutivo::obtenerInteresados($tipoform, $arrSearch);
+            $model = InteresadoEjecutivo::consultarInteresados();
         }
-        $arregloEjecutivo = ArrayHelper::map(array_merge([["id" => "0", "value" => Yii::t("formulario", "Grid")]], $resp_ejecutivos), "id", "value");
+
         return $this->render('listarasignacion', [
                     'model' => $model,
-                    'arrEjecutivos' => $arregloEjecutivo,
+                    'arrEjecutivos' => ArrayHelper::map(array_merge([["id" => "0", "name" => "Todas"]],$resp_ejecutivos), "id", "name"),
         ]);
     }
 
@@ -49,12 +41,11 @@ class AsignacionejecutivoController extends \app\components\CController {
         $asp_id = base64_decode($_GET["asp"]);        
         $nom_interesado = base64_decode($_GET["nom_interesado"]);
         $per_id = Yii::$app->session->get("PB_perid");
-        $user_id = Yii::$app->session->get("PB_iduser");
-        
+        $user_id = Yii::$app->session->get("PB_iduser");        
         $mod_ejecutivo = new InteresadoEjecutivo();
         
         if (Yii::$app->request->isAjax) {
-            $data = Yii::$app->request->post();
+            $data = Yii::$app->request->get();
             $nivel = $data["nivel"];
             $modalidad = $data["modalidad"];
             if (isset($data["getagente"])) {
@@ -65,8 +56,15 @@ class AsignacionejecutivoController extends \app\components\CController {
             }
         }
         //Obtener el nivel de interés y modalidad de la persona conectada.                    
-        $resp_nivel = $mod_ejecutivo->consultarNivel($per_id);
+        $resp_nivel = $mod_ejecutivo->consultarNivelAgente($per_id);
         $resp_modalidad = $mod_ejecutivo->consultarModalidad($per_id);
+        if (empty($nivel) && empty($modalidad)) {
+            $resp_nivel_mod = $mod_ejecutivo->consultarNivelModal($per_id);
+            if ($resp_nivel_mod) {
+                $nivel = $resp_nivel_mod["uaca_id"];
+                $modalidad = $resp_nivel_mod["mod_id"];
+            }            
+        }
         $resp_ejecutivos = $mod_ejecutivo->consultarListaEjecutivos($nivel, $modalidad, $per_id); 
        
         return $this->render('asignar', [
@@ -77,7 +75,7 @@ class AsignacionejecutivoController extends \app\components\CController {
                     "int_id" => $int_id,
                     "pint_id" => $pint_id,
                     "asp_id" => $asp_id,                    
-                    "per_id" => $per_id,
+                    "per_id" => $per_id,                        
         ]);
       
     }
@@ -97,7 +95,7 @@ class AsignacionejecutivoController extends \app\components\CController {
 
             try {
                 $mod_inteje = new InteresadoEjecutivo();
-                $resp_busca = $mod_inteje->buscarAsignacion($pint_id, $int_id);
+                $resp_busca = $mod_inteje->consultarAsignacion($pint_id, $int_id);
                 if (!$resp_busca) { //Si no existe asignación se ingresa
                     $resp_inteje = $mod_inteje->insertarAsignacion($pint_id, $int_id, $asp_id, $ejecutivo_id, $usu_id);
 
@@ -117,7 +115,6 @@ class AsignacionejecutivoController extends \app\components\CController {
                         $exito = 1;
                     }
                 }
-
                 if ($exito) {
                     $transaction->commit();
                     $message = array(
@@ -160,8 +157,15 @@ class AsignacionejecutivoController extends \app\components\CController {
             }
         }
         //Obtener el nivel de interés y modalidad de la persona conectada.                    
-        $resp_nivel = $mod_ejecutivo->consultarNivel($per_id);
+        $resp_nivel = $mod_ejecutivo->consultarNivelAgente($per_id);
         $resp_modalidad = $mod_ejecutivo->consultarModalidad($per_id);
+        if (empty($nivel) && empty($modalidad)) {
+            $resp_nivel_mod = $mod_ejecutivo->consultarNivelModal($per_id);
+            if ($resp_nivel_mod) {
+                $nivel = $resp_nivel_mod["uaca_id"];
+                $modalidad = $resp_nivel_mod["mod_id"];
+            }            
+        }
         $resp_ejecutivos = $mod_ejecutivo->consultarListaEjecutivos($nivel, $modalidad, $per_id); 
        
         return $this->render('reasignar', [
@@ -192,7 +196,7 @@ class AsignacionejecutivoController extends \app\components\CController {
 
             try {
                 $mod_inteje = new InteresadoEjecutivo();
-                $resp_busca = $mod_inteje->buscarAsignacion($pint_id, $int_id);
+                $resp_busca = $mod_inteje->consultarAsignacion($pint_id, $int_id);
                 $codigo = $resp_busca['ieje_id'];
             
                 $mensaje = $codigo;

@@ -45,6 +45,7 @@
 use yii\helpers\Url;
 use yii\helpers\Html;
 
+//print_r($respPerinteresado);
 session_start();
 $_SESSION['persona_ingresa'] = base64_decode($_GET['ids']);
 
@@ -64,7 +65,7 @@ $_SESSION['persona_ingresa'] = base64_decode($_GET['ids']);
             <div class="tab-pane active" id="paso1">
                 <form class="form-horizontal">
                     <?=
-                    $this->render('_formTab1Create', [
+                    $this->render('_form_tab1_ins', [
                         'paises_nac' => $arr_pais_nac,
                         'provincias_nac' => $arr_prov_nac,
                         'cantones_nac' => $arr_ciu_nac,
@@ -116,7 +117,7 @@ $_SESSION['persona_ingresa'] = base64_decode($_GET['ids']);
             <div class="tab-pane" id="paso2">
                 <form class="form-horizontal">
                     <?=
-                    $this->render('_formTab2Create', [
+                    $this->render('_form_tab2_ins', [
                         'paises_med' => $arr_pais_med,
                         'provincias_med' => $arr_prov_med,
                         'cantones_med' => $arr_ciu_med,

@@ -104,7 +104,6 @@ class ChangepassForm extends Model {
                 ->where(['usu_id' => $user_pass->usu_id])
                 ->orderBy(['usu_id' => SORT_DESC])
                 ->one();
-        Utilities::putMessageLogFile("id: $user_pass->usu_id");
                 //$usuario = Usuario::findIdentity($user_pass->usu_id);
                 if (isset($usuario) && $usuario->usu_estado == "1" && isset($user_pass)) {
                     $usuario->generateAuthKey(); // generacion de hash
@@ -116,7 +115,7 @@ class ChangepassForm extends Model {
                     $user_pass->upas_fecha_fin = date("Y-m-d H:i:s");
                     $user_pass->save();
                     // send email
-                    $link_asgard= Url::base(true);
+                    $link_asgard = Url::base(true) . Utilities::getLoginUrl(); //Url::base(true);
                     $persona = Persona::findIdentity($usuario->per_id);
                     $nombres = $persona->per_pri_nombre . " " . $persona->per_pri_apellido;
                     $tituloMensaje = Yii::t("passreset", "Change Password Successfull");

@@ -75,7 +75,6 @@ return array(
     'Insufficient Storage' => 'Almacenamiento insuficiente.',
     'The server encountered an error processing your request' => 'El servidor encontro un error procesando su petición.',
     'Invalid phone number.' => 'Número de teléfono no válido.',
-    'Invalid url' => 'Url inválida',
     'Loaded' => 'Cargado',
     'Loading File' => 'Cargando Archivo',
     'Maximum {sizeMax} characters.' => 'Máximo {sizeMax} caracteres.',
@@ -115,10 +114,5 @@ return array(
     'Your browser is {browser} with version {version}. This may be not compatible or the system may not function properly. We recommend using the browsers mentioned above this text.' => 'Su navegador es {browser} con la version {version}. Este puede ser no compatible o el sistema puede no funcionar correctamente. Se recomienda utilizar los navegadores mencionados arriba de este texto.',
     'Page moved permanently' => 'Página movida permanentemente.',
     'N/A' => 'N/A',
-    'The attention date can not be before the reception date or today' => 'La fecha atención no puede ser antes de la fecha recepción, o de hoy.',
-    'The next date can not be before the attention date' => 'No es válido, La fecha próxima atención no puede ser antes de la fecha atención.',
-    'Invalid time' => 'No es válido, el formato hora es HH:MM',
-    'The reception date can not be after the today' => 'No es válido, La fecha recepción no puede ser después de hoy. ',
-    'The attention date can not be after the today' => 'No es válido, La fecha atención no puede ser después de hoy. ',
 );
 ?>

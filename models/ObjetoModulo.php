@@ -3,6 +3,8 @@
 namespace app\models;
 
 use Yii;
+use \yii\data\ActiveDataProvider;
+use \yii\data\ArrayDataProvider;
 
 /**
  * This is the model class for table "objeto_modulo".
@@ -31,6 +33,9 @@ use Yii;
  */
 class ObjetoModulo extends \yii\db\ActiveRecord {
 
+    public static $typeObjMod = ["P","S","A"];
+    public static $typeBtnObjMod = ["0","1"];
+    
     /**
      * @inheritdoc
      */
@@ -118,8 +123,9 @@ class ObjetoModulo extends \yii\db\ActiveRecord {
      * @param string $route Ruta de Objeto Modulo
      * @return mixed       Arreglos de Objetos Modulos
      */
-    public static function findIdentityByEntity($route) {
-        return static::findOne(['omod_entidad' => $route]);
+    public static function findIdentityByEntity($route){
+        //return static::findOne(['omod_entidad' => $route, 'omod_tipo' => $type]);
+        return static::findOne(['omod_entidad' => $route, 'omod_estado_logico' => 1, 'omod_estado' => 1]);
     }
 
     /**
@@ -304,6 +310,55 @@ class ObjetoModulo extends \yii\db\ActiveRecord {
         $arrMod = $comando->queryOne();
         return $arrMod;
     }
+    
+    public function getFirstObjModuleByParent($omod_id){
+        $usu_id = Yii::$app->session->get('PB_iduser', FALSE);
+        $idempresa = Yii::$app->session->get('PB_idempresa', FALSE);
+        $sql = "SELECT 
+                    om.* 
+                FROM 
+                    objeto_modulo AS om 
+                    INNER JOIN modulo AS mo ON om.mod_id = mo.mod_id 
+                    INNER JOIN grup_obmo AS go ON om.omod_id = go.omod_id 
+                    INNER JOIN grup_obmo_grup_rol AS gg ON go.gmod_id = gg.gmod_id
+                    INNER JOIN grup_rol AS gr ON gg.grol_id = gr.grol_id
+                    INNER JOIN usua_grol_eper AS ug ON gr.grol_id = ug.grol_id
+                    INNER JOIN usuario AS us ON ug.usu_id = us.usu_id
+                    INNER JOIN empresa_persona AS ep ON ug.eper_id = ep.eper_id
+                    INNER JOIN empresa AS em ON ep.emp_id = em.emp_id
+                WHERE 
+                    us.usu_id=:usu_id AND 
+                    em.emp_id=:emp_id AND 
+                    om.omod_padre_id=:omod_id AND 
+                    om.omod_tipo <> 'P' AND 
+                    mo.mod_estado=1 AND 
+                    mo.mod_estado_logico=1 AND 
+                    go.gmod_estado_logico=1 AND 
+                    go.gmod_estado=1 AND 
+                    gg.gogr_estado_logico=1 AND 
+                    gg.gogr_estado=1 AND 
+                    gr.grol_estado_logico=1 AND 
+                    gr.grol_estado=1 AND 
+                    ug.ugep_estado_logico=1 AND 
+                    ug.ugep_estado=1 AND 
+                    us.usu_estado_logico=1 AND 
+                    us.usu_estado=1 AND 
+                    ep.eper_estado_logico=1 AND 
+                    ep.eper_estado=1 AND 
+                    em.emp_estado=1 AND 
+                    em.emp_estado_logico=1 AND 
+                    om.omod_estado_logico=1 AND 
+                    om.omod_estado=1 AND 
+                    om.omod_estado_visible=1  
+                ORDER BY om.omod_orden;";
+
+        $comando = Yii::$app->db->createCommand($sql);
+        $comando->bindParam(":usu_id", $usu_id, \PDO::PARAM_INT);
+        $comando->bindParam(":emp_id", $idempresa, \PDO::PARAM_INT);
+        $comando->bindParam(":omod_id", $omod_id, \PDO::PARAM_INT);
+        $arrMod = $comando->queryOne();
+        return $arrMod;
+    }
 
     /**
      * Función para obtener todos los padres de un objeto modulo
@@ -323,7 +378,13 @@ class ObjetoModulo extends \yii\db\ActiveRecord {
             if ($id_objModulo == $fila['omod_padre_id']) {
                 $objmod_lang_file = isset($fila["omod_lang_file"]) ? $fila["omod_lang_file"] : "menu";
                 $omod_nombre = Yii::t($objmod_lang_file, $fila['omod_nombre']);
-                $obj[] = array($omod_nombre, $fila['omod_entidad']); // se agrega al padre
+                $omod_entidad = $fila['omod_entidad'];
+                if($omod_entidad == ""){
+                    $mod = new ObjetoModulo();
+                    $omod_arr = $mod->getFirstObjModuleByParent($fila['omod_id']);
+                    $omod_entidad = $omod_arr["omod_entidad"];
+                }
+                $obj[] = array($omod_nombre, $omod_entidad); // se agrega al padre
                 $mod = Modulo::findIdentity($fila['mod_id']); // se agrega al modulo
                 $mod_lang_file = isset($mod["mod_lang_file"]) ? $mod["mod_lang_file"] : "menu";
                 $mod_nombre = Yii::t($mod_lang_file, $mod['mod_nombre']);
@@ -338,6 +399,75 @@ class ObjetoModulo extends \yii\db\ActiveRecord {
             }
         } else
             return array();
+    }
+    
+    function getAllObjModules($search = NULL, $dataProvider = false){
+        $iduser = Yii::$app->session->get('PB_iduser', FALSE);
+        $search_cond = "%".$search."%";
+        $str_search = "";
+        if(isset($search)){
+            $str_search  = "(m.mod_nombre like :search OR ";
+            $str_search .= "o.omod_nombre like :search OR ";
+            $str_search .= "a.apl_nombre like :search OR ";
+            $str_search .= "o.omod_tipo like :search) AND ";
+        }
+        $sql = "SELECT 
+                    o.omod_id as id,
+                    o.omod_nombre as Nombre,
+                    o.omod_padre_id as Padre,
+                    m.mod_nombre as Modulo,
+                    o.omod_tipo as Tipo,
+                    a.apl_nombre as Aplicacion,
+                    o.omod_orden as Orden,
+                    o.omod_estado_visible Visibilidad,
+                    o.omod_estado as Estado
+                FROM 
+                    objeto_modulo as o 
+                    INNER JOIN modulo as m on o.mod_id = m.mod_id
+                    INNER JOIN aplicacion as a on m.apl_id = a.apl_id
+                WHERE 
+                    $str_search
+                    m.mod_estado_logico=1 AND 
+                    o.omod_estado_logico=1 AND
+                    -- o.omod_estado=1 AND
+                    -- m.mod_estado=1 AND 
+                    -- a.apl_estado=1 AND
+                    a.apl_estado_logico=1 
+                ORDER BY o.omod_id;";
+        $comando = Yii::$app->db->createCommand($sql);
+        if(isset($search)){
+            $comando->bindParam(":search",$search_cond, \PDO::PARAM_STR);
+        }
+        $res = $comando->queryAll();
+        if($dataProvider){
+            $dataProvider = new ArrayDataProvider([
+                'key' => 'omod_id',
+                'allModels' => $res,
+                'pagination' => [
+                    'pageSize' => Yii::$app->params["pageSize"],
+                ],
+                'sort' => [
+                    'attributes' => ['Nombre', 'Modulo', 'Padre', 'Aplicacion', 'Tipo', 'Orden', 'Estado', 'Visibilidad'],
+                ],
+            ]);
+            return $dataProvider;
+        }
+        return $res;
+    }
+    
+    public static function getAllTypesObjModules(){
+        return [
+            Yii::t('modulo',"P => Principal SubModule"),
+            Yii::t('modulo',"S => Secundary SubModule"),
+            Yii::t('modulo',"A => Action SubModule")
+        ];
+    }
+    
+    public static function getAllTypesBtnObjModules(){
+        return [
+            Yii::t('modulo',"0 => Execute a Link"),
+            Yii::t('modulo',"1 => Execute a JS Function"),
+        ];
     }
 
 }

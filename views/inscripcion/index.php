@@ -52,7 +52,7 @@ $this->title = 'Formulario de Pre-Inscripción';
             </div>
         </div>
     </div>
-    
+
     <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12" style="display: none;" id="Divpasaporte">
         <div class="form-group">
             <label for="txt_pasaporte" class="col-lg-3 col-md-3 col-sm-3 col-xs-3 control-label"><?= Yii::t("formulario", "Number") ?> <span class="text-danger">*</span></label>
@@ -75,7 +75,7 @@ $this->title = 'Formulario de Pre-Inscripción';
         <div class="form-group">            
             <label for="cmb_pais_dom" class="col-lg-3 col-md-3 col-sm-3 col-xs-3 control-label"><?= Yii::t("formulario", "Country") ?> <span class="text-danger">*</span></label>
             <div class="col-lg-9 col-md-9 col-sm-9 col-xs-9">
-                <?= Html::dropDownList("cmb_pais_dom", 57, $arr_pais_dom, ["class" => "form-control", "id" => "cmb_pais_dom"]) ?>
+                <?= Html::dropDownList("cmb_pais_dom", 1, $arr_pais_dom, ["class" => "form-control", "id" => "cmb_pais_dom"]) ?>
             </div>
         </div>
     </div>
@@ -90,8 +90,19 @@ $this->title = 'Formulario de Pre-Inscripción';
                 <input type="text" class="form-control PBvalidation" id="txt_celular" data-type="celular_sin" data-keydown="true" placeholder="<?= Yii::t("formulario", "CellPhone") ?>">
             </div>
         </div>
-    </div>
-
+    </div>    
+    <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
+        <div class="form-group">
+            <label for="cmb_ninteres" class="col-lg-3 col-md-3 col-sm-3 col-xs-3 control-label"><?= Yii::t("formulario", "Academic unit") ?> <span class="text-danger">*</span></label>		
+            <div class="col-lg-3 col-md-3 col-sm-3 col-xs-3"> 
+                <?= Html::dropDownList("cmb_ninteres", 1, $arr_ninteres, ["class" => "form-control", "id" => "cmb_ninteres"]) ?>
+            </div>
+            <label for="cmb_modalidad" class="col-lg-1 col-md-1 col-sm-1 col-xs-1 control-label"><?= Yii::t("formulario", "Mode") ?> <span class="text-danger">*</span></label>		
+            <div class="col-lg-5 col-md-5 col-sm-5 col-xs-5"> 
+                <?= Html::dropDownList("cmb_modalidad", 1, $arr_modalidad, ["class" => "form-control", "id" => "cmb_modalidad"]) ?>
+            </div>
+        </div>
+    </div> 
     <div class="row"> 
         <div class="col-lg-9 col-md-9 col-sm-9 col-xs-9"></div>
 

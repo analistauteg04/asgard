@@ -16,6 +16,7 @@ use app\models\Utilities;
 use app\models\Modulo;
 use app\models\Grupo;
 use app\models\Empresa;
+use app\models\Dash;
 
 class SiteController extends CController {
 
@@ -33,7 +34,7 @@ class SiteController extends CController {
                         'actions' => ['login'],
                         'roles' => ['?', '@'], // usuarios invitados
                     ],
-                    [
+                        [
                         'allow' => true,
                         'actions' => ['loginemp'],
                         'roles' => ['?', '@'], // usuarios invitados
@@ -193,33 +194,15 @@ class SiteController extends CController {
         $link = $mod->getFirstModuleLink();
         $url = Url::base(true) . "/" . $link["url"];
         $url_biblioteca = Yii::$app->params['url_biblioteca'];
-        $url_educativa = Yii::$app->params['url_educativa'];
-        $modules = [
-                ['title' => 'Biblioteca Virtual',
-                'image' => 'data:image/svg+xml;base64,PD94bWwgdmVyc2lvbj0iMS4wIiBlbmNvZGluZz0iVVRGLTgiIHN0YW5kYWxvbmU9InllcyI/PjxzdmcgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIiB3aWR0aD0iMjQyIiBoZWlnaHQ9IjIwMCIgdmlld0JveD0iMCAwIDI0MiAyMDAiIHByZXNlcnZlQXNwZWN0UmF0aW89Im5vbmUiPjwhLS0KU291cmNlIFVSTDogaG9sZGVyLmpzLzEwMCV4MjAwCkNyZWF0ZWQgd2l0aCBIb2xkZXIuanMgMi42LjAuCkxlYXJuIG1vcmUgYXQgaHR0cDovL2hvbGRlcmpzLmNvbQooYykgMjAxMi0yMDE1IEl2YW4gTWFsb3BpbnNreSAtIGh0dHA6Ly9pbXNreS5jbwotLT48ZGVmcz48c3R5bGUgdHlwZT0idGV4dC9jc3MiPjwhW0NEQVRBWyNob2xkZXJfMTYxZmYwNTNkMDggdGV4dCB7IGZpbGw6I0FBQUFBQTtmb250LXdlaWdodDpib2xkO2ZvbnQtZmFtaWx5OkFyaWFsLCBIZWx2ZXRpY2EsIE9wZW4gU2Fucywgc2Fucy1zZXJpZiwgbW9ub3NwYWNlO2ZvbnQtc2l6ZToxMnB0IH0gXV0+PC9zdHlsZT48L2RlZnM+PGcgaWQ9ImhvbGRlcl8xNjFmZjA1M2QwOCI+PHJlY3Qgd2lkdGg9IjI0MiIgaGVpZ2h0PSIyMDAiIGZpbGw9IiNFRUVFRUUiLz48Zz48dGV4dCB4PSI4OS44NTkzNzUiIHk9IjEwNS4xIj4yNDJ4MjAwPC90ZXh0PjwvZz48L2c+PC9zdmc+',
-                'detail' => 'Permite a nuestros estudiantes acceder a los libros digitales desde cualquier lugar y en cualquier momento.',
-                'link' => $url_biblioteca,
-                'target' => '_blank'],
-                ['title' => 'Campus Virtual',
-                'image' => 'data:image/svg+xml;base64,PD94bWwgdmVyc2lvbj0iMS4wIiBlbmNvZGluZz0iVVRGLTgiIHN0YW5kYWxvbmU9InllcyI/PjxzdmcgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIiB3aWR0aD0iMjQyIiBoZWlnaHQ9IjIwMCIgdmlld0JveD0iMCAwIDI0MiAyMDAiIHByZXNlcnZlQXNwZWN0UmF0aW89Im5vbmUiPjwhLS0KU291cmNlIFVSTDogaG9sZGVyLmpzLzEwMCV4MjAwCkNyZWF0ZWQgd2l0aCBIb2xkZXIuanMgMi42LjAuCkxlYXJuIG1vcmUgYXQgaHR0cDovL2hvbGRlcmpzLmNvbQooYykgMjAxMi0yMDE1IEl2YW4gTWFsb3BpbnNreSAtIGh0dHA6Ly9pbXNreS5jbwotLT48ZGVmcz48c3R5bGUgdHlwZT0idGV4dC9jc3MiPjwhW0NEQVRBWyNob2xkZXJfMTYxZmYwNTNkMDggdGV4dCB7IGZpbGw6I0FBQUFBQTtmb250LXdlaWdodDpib2xkO2ZvbnQtZmFtaWx5OkFyaWFsLCBIZWx2ZXRpY2EsIE9wZW4gU2Fucywgc2Fucy1zZXJpZiwgbW9ub3NwYWNlO2ZvbnQtc2l6ZToxMnB0IH0gXV0+PC9zdHlsZT48L2RlZnM+PGcgaWQ9ImhvbGRlcl8xNjFmZjA1M2QwOCI+PHJlY3Qgd2lkdGg9IjI0MiIgaGVpZ2h0PSIyMDAiIGZpbGw9IiNFRUVFRUUiLz48Zz48dGV4dCB4PSI4OS44NTkzNzUiIHk9IjEwNS4xIj4yNDJ4MjAwPC90ZXh0PjwvZz48L2c+PC9zdmc+',
-                'detail' => 'Los programas que se ofertan bajo la modalidad Online para los distintos niveles de educación, son impartidos a través de la plataforma en internet “Campus Virtual UTEG”.',
-                'link' => $url_educativa,
-                'target' => '_blank'],
-                ['title' => 'Videos',
-                'image' => 'data:image/svg+xml;base64,PD94bWwgdmVyc2lvbj0iMS4wIiBlbmNvZGluZz0iVVRGLTgiIHN0YW5kYWxvbmU9InllcyI/PjxzdmcgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIiB3aWR0aD0iMjQyIiBoZWlnaHQ9IjIwMCIgdmlld0JveD0iMCAwIDI0MiAyMDAiIHByZXNlcnZlQXNwZWN0UmF0aW89Im5vbmUiPjwhLS0KU291cmNlIFVSTDogaG9sZGVyLmpzLzEwMCV4MjAwCkNyZWF0ZWQgd2l0aCBIb2xkZXIuanMgMi42LjAuCkxlYXJuIG1vcmUgYXQgaHR0cDovL2hvbGRlcmpzLmNvbQooYykgMjAxMi0yMDE1IEl2YW4gTWFsb3BpbnNreSAtIGh0dHA6Ly9pbXNreS5jbwotLT48ZGVmcz48c3R5bGUgdHlwZT0idGV4dC9jc3MiPjwhW0NEQVRBWyNob2xkZXJfMTYxZmYwNTNkMDggdGV4dCB7IGZpbGw6I0FBQUFBQTtmb250LXdlaWdodDpib2xkO2ZvbnQtZmFtaWx5OkFyaWFsLCBIZWx2ZXRpY2EsIE9wZW4gU2Fucywgc2Fucy1zZXJpZiwgbW9ub3NwYWNlO2ZvbnQtc2l6ZToxMnB0IH0gXV0+PC9zdHlsZT48L2RlZnM+PGcgaWQ9ImhvbGRlcl8xNjFmZjA1M2QwOCI+PHJlY3Qgd2lkdGg9IjI0MiIgaGVpZ2h0PSIyMDAiIGZpbGw9IiNFRUVFRUUiLz48Zz48dGV4dCB4PSI4OS44NTkzNzUiIHk9IjEwNS4xIj4yNDJ4MjAwPC90ZXh0PjwvZz48L2c+PC9zdmc+',
-                'detail' => 'Cras justo odio, dapibus ac facilisis in, egestas eget quam. Donec id elit non mi porta gravida at eget metus. Nullam id dolor id nibh ultricies vehicula ut id elit.',
-                'link' => Url::base(true) . "/site/portalestudiante",
-                'target' => ''],
-                ['title' => 'Asgard System',
-                'image' => 'data:image/svg+xml;base64,PD94bWwgdmVyc2lvbj0iMS4wIiBlbmNvZGluZz0iVVRGLTgiIHN0YW5kYWxvbmU9InllcyI/PjxzdmcgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIiB3aWR0aD0iMjQyIiBoZWlnaHQ9IjIwMCIgdmlld0JveD0iMCAwIDI0MiAyMDAiIHByZXNlcnZlQXNwZWN0UmF0aW89Im5vbmUiPjwhLS0KU291cmNlIFVSTDogaG9sZGVyLmpzLzEwMCV4MjAwCkNyZWF0ZWQgd2l0aCBIb2xkZXIuanMgMi42LjAuCkxlYXJuIG1vcmUgYXQgaHR0cDovL2hvbGRlcmpzLmNvbQooYykgMjAxMi0yMDE1IEl2YW4gTWFsb3BpbnNreSAtIGh0dHA6Ly9pbXNreS5jbwotLT48ZGVmcz48c3R5bGUgdHlwZT0idGV4dC9jc3MiPjwhW0NEQVRBWyNob2xkZXJfMTYxZmYwNTNkMDggdGV4dCB7IGZpbGw6I0FBQUFBQTtmb250LXdlaWdodDpib2xkO2ZvbnQtZmFtaWx5OkFyaWFsLCBIZWx2ZXRpY2EsIE9wZW4gU2Fucywgc2Fucy1zZXJpZiwgbW9ub3NwYWNlO2ZvbnQtc2l6ZToxMnB0IH0gXV0+PC9zdHlsZT48L2RlZnM+PGcgaWQ9ImhvbGRlcl8xNjFmZjA1M2QwOCI+PHJlY3Qgd2lkdGg9IjI0MiIgaGVpZ2h0PSIyMDAiIGZpbGw9IiNFRUVFRUUiLz48Zz48dGV4dCB4PSI4OS44NTkzNzUiIHk9IjEwNS4xIj4yNDJ4MjAwPC90ZXh0PjwvZz48L2c+PC9zdmc+',
-                'detail' => 'Cras justo odio, dapibus ac facilisis in, egestas eget quam. Donec id elit non mi porta gravida at eget metus. Nullam id dolor id nibh ultricies vehicula ut id elit.',
-                'link' => $url,
-                'target' => ''
-            ],
-        ];
+        $url_educativa = Yii::$app->session->get("PB_educativa", "");//Yii::$app->params['url_educativa'];
+
+        $modules = Dash::find()->all();
         $this->layout = '@themes/' . Yii::$app->getView()->theme->themeName . '/layouts/dash.php';
         return $this->render('dash', [
                     'modules' => $modules,
+                    'url_video' => Url::base(true) . "/site/portalestudiante",
+                    'url_asgard' => $url,
+                    'url_educativa' => $url_educativa
         ]);
     }
     
@@ -229,13 +212,136 @@ class SiteController extends CController {
             return $this->redirect(Url::base(true) . $link1);
         }
         $this->layout = '@themes/' . Yii::$app->getView()->theme->themeName . '/layouts/dash.php';
-        return $this->render('portalestudiante', [
 
+        $modules_1 = [
+                ['title' => 'Video 1',
+                'sub_title' => 'Como ingresar al Campus Virtual UTEG',
+                'detail' => 'https://player.vimeo.com/video/239000405',
+                'link' => $url,
+                'target' => ''],
+                ['title' => 'Video 2',
+                'sub_title' => 'Escritorio del Campus Virtual UTEG',
+                'detail' => 'https://player.vimeo.com/video/238999051',
+                'link' => $url,
+                'target' => ''],
+                ['title' => 'Video 3',
+                'sub_title' => 'Como acceder a nuestra aula virtual',
+                'detail' => 'https://player.vimeo.com/video/239000199',
+                'link' => $url,
+                'target' => ''],
+                ['title' => 'Video 4',
+                'sub_title' => 'Opciones del menú: "Introducción a la materia"',
+                'detail' => 'https://player.vimeo.com/video/238998005',
+                'link' => $url,
+                'target' => ''],
+                ['title' => 'Video 5',
+                'sub_title' => 'Opciones del menú: "Material de estudio"',
+                'detail' => 'https://player.vimeo.com/video/238997815',
+                'link' => $url,
+                'target' => ''],
+                ['title' => 'Video 6',
+                'sub_title' => 'Estructura de unidades de una materia',
+                'detail' => 'https://player.vimeo.com/video/238999807',
+                'link' => $url,
+                'target' => ''],
+                ['title' => 'Video 7',
+                'sub_title' => 'Cronograma de actividades',
+                'detail' => 'https://player.vimeo.com/video/239000087',
+                'link' => $url,
+                'target' => ''],
+                ['title' => 'Video 8',
+                'sub_title' => 'Acceder a bibliotecas y calificaciones',
+                'detail' => 'https://player.vimeo.com/video/239022371',
+                'link' => $url,
+                'target' => ''],
+                ['title' => 'Video 9',
+                'sub_title' => 'Acceder a los foros',
+                'detail' => 'https://player.vimeo.com/video/238998716',
+                'link' => $url,
+                'target' => ''],
+                ['title' => 'Video 10',
+                'sub_title' => 'Como acceder al Chat',
+                'detail' => 'https://player.vimeo.com/video/238999673',
+                'link' => $url,
+                'target' => ''],
+                ['title' => 'Video 11',
+                'sub_title' => 'Como acceder a la clase en vivo',
+                'detail' => 'https://player.vimeo.com/video/239000541',
+                'link' => $url,
+                'target' => ''],
+                ['title' => 'Video 12',
+                'sub_title' => 'Explicación para acceder al taller',
+                'detail' => 'https://player.vimeo.com/video/213758590',
+                'link' => $url,
+                'target' => ''],
+        ];
+
+
+        /* Inicio - Para archivos descargables */
+        $folderResources = 'recusos_portal'; //nombre de la carpeta para presentar Instructivos Generales 
+        $root = Yii::$app->basePath . Yii::$app->params["documentFolder"] . $folderResources;
+        if (Yii::$app->request->isAjax) {
+            $data = Yii::$app->request->post();
+            $postDir = rawurldecode($root . (isset($data['dir']) ? $data['dir'] : null ));
+            $checkbox = ( isset($data['multiSelect']) && $data['multiSelect'] == 'true' ) ? "<input type='checkbox' />" : null;
+            $onlyFolders = ( isset($data['onlyFolders']) && $data['onlyFolders'] == 'true' ) ? true : false;
+            $onlyFiles = ( isset($data['onlyFiles']) && $data['onlyFiles'] == 'true' ) ? true : false;
+
+            if (file_exists($postDir)) {
+                $files = scandir($postDir);
+                $returnDir = substr($postDir, strlen($root));
+                $htmlCode = "";
+                natcasesort($files);
+                if (count($files) > 2) { // The 2 accounts for . and ..
+                    $htmlCode .= "<ul class='jqueryFileTree'>";
+                    foreach ($files as $file) {
+                        $htmlRel = htmlentities($returnDir . $file, ENT_QUOTES);
+                        $htmlName = htmlentities($file);
+                        $ext = preg_replace('/^.*\./', '', $file);
+                        if (file_exists($postDir . $file) && $file != '.' && $file != '..') {
+                            if (is_dir($postDir . $file) && (!$onlyFiles || $onlyFolders))
+                                $htmlCode .= "<li class='directory collapsed'>{$checkbox}<a rel='" . $htmlRel . "/'>" . $htmlName . "</a></li>";
+                            else if (!$onlyFolders || $onlyFiles)
+                                $htmlCode .= "<li class='file ext_{$ext}'>{$checkbox}<a rel='" . $htmlRel . "'>" . $htmlName . "</a></li>";
+                        }
+                    }
+                    $htmlCode .= "</ul>";
+                    return $htmlCode;
+                }
+            }
+            return;
+        }else {
+            $data = Yii::$app->request->get();
+            if ($data["dfile"]) {
+                $root = $root . str_replace("../", "", $data["dfile"]);
+                if (file_exists($root)) {
+                    $mimeType = Utilities::mimeContentType(basename($root));
+                    Header("Content-type: $mimeType");
+                    Header('Content-Disposition: attachment; filename="' . basename($root) . '"');
+                    readfile($root);
+                }
+                return;
+            }
+        }
+        $this->layout = '@themes/' . Yii::$app->getView()->theme->themeName . '/layouts/repositorio.php';
+
+        /* Inicio - Para archivos descargables */
+
+        return $this->render('portalestudiante', [
+                    'modules_1' => $modules_1,
+                    'modules_3' => $modules_3,
+                    'modules_4' => $modules_4,
+                    'modules_5' => $modules_5,
+                    'modules_6' => $modules_6,
+                    'modules_7' => $modules_7,
+                    //'currentPath' => Url::base() . Yii::$app->params["documentFolder"] . '/resourcesfiles',
+                    'rootfolder' => '/',
+                    'script' => Url::base() . '/site/portalestudiante',
         ]);
     }
 
     /**
-     * Login action Asgard.
+     * Login action.
      *
      * @return string
      */
@@ -245,13 +351,14 @@ class SiteController extends CController {
             return $this->redirect(Url::base(true) . $link1);
         }
         $model = new LoginForm();
-
-        if ($model->load(Yii::$app->request->post()) && $model->login()) {
+        $empresa_alias = isset($_GET['emp'])?$_GET['emp']:NULL;
+        
+        if ($model->load(Yii::$app->request->post()) && $model->login($empresa_alias)) {
             // setting default url
             $mod = new Modulo();
             $link = $mod->getFirstModuleLink();
-            //$url = Url::base(true) . "/" . $link["url"];
-            $url = Url::base(true) . "/site/dash";
+            $url = Url::base(true) . "/" . $link["url"];
+             //$url = Url::base(true) . "/site/dash";
 
 
             return $this->goBack($url);
@@ -263,7 +370,7 @@ class SiteController extends CController {
             ]);
         }
     }
-    
+
     /**
      * Login action Multiple Empresa.
      *
@@ -312,8 +419,8 @@ class SiteController extends CController {
     public function actionLogout() {
         $usuario = new Usuario();
         $link1 = Utilities::getLoginUrl();
-        $usuario->destroySession();
-        Yii::$app->user->logout();
+        //$usuario->destroySession();
+        Yii::$app->user->logout(true);
         return $this->redirect(Url::base(true) . $link1);
     }
 
@@ -453,7 +560,7 @@ class SiteController extends CController {
         $fondo = imagecolorallocate($im, 255, 255, 255);
         $ct = imagecolorallocate($im, 0, 0, 0);
         imagefilledrectangle($im, 0, 0, 150, 30, $fondo);
-        // Imprimir un mensaje de error
+// Imprimir un mensaje de error
         imagestring($im, 1, 5, 5, Yii::t('jslang', 'Bad Request') . ": " . $route, $ct);
         ImagePng($im); // Mostramos la imagen
         ImageDestroy($im); // Liberamos la memoria que ocupaba la imagen

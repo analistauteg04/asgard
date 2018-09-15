@@ -17,12 +17,12 @@ use yii\base\Security;
 class RegistrarpagoController extends \app\components\CController {
 
     /**
-     * Function Listarpagosolicadm: Consulta las solicitudes con pagos realizados.
+     * Function Listarpagosolicitudadm: Consulta las solicitudes con pagos realizados.
      * @author  Grace Viteri <analistadesarrollo01@uteg.edu.ec>
      * @param   Ninguno. 
      * @return  
      */
-    public function actionListarpagosolicadm() {
+    public function actionListarpagosolicitudadm() {
         $per_id = @Yii::$app->session->get("PB_iduser");
         $model_interesado = new Interesado();
         $resp_gruporol = $model_interesado->consultagruporol($per_id);
@@ -36,7 +36,7 @@ class RegistrarpagoController extends \app\components\CController {
             $arrSearch["f_estado"] = $data['f_estado'];
             $arrSearch["search"] = $data['search'];
             $resp_pago = $mod_pago->listarPagosolicitud($arrSearch, $resp_gruporol["grol_id"]);
-            return $this->renderPartial('_listarPagsoladmGrid', [
+            return $this->renderPartial('_listarpagosolicitudadm_grid', [
                         "model" => $resp_pago,
             ]);
         } else {
@@ -49,7 +49,7 @@ class RegistrarpagoController extends \app\components\CController {
             }
         }
         $arrEstados = ArrayHelper::map([["id" => "T", "value" => "Todos"], ["id" => "P", "value" => "Pendiente"], ["id" => "S", "value" => "Pagada"]], "id", "value");
-        return $this->render('listarPagosolicAdm', [
+        return $this->render('listarpagosolicitudadm', [
                     'model' => $resp_pago,
                     'arrEstados' => $arrEstados
         ]);
@@ -92,7 +92,7 @@ class RegistrarpagoController extends \app\components\CController {
             }
         }
 
-        return $this->render('validarPagoCarga', [
+        return $this->render('validarpagocarga', [
                     'model' => $resp_pago,
                     'persona_pago' => $persona_pago,
                     'sins_id' => $sins_id,
@@ -137,8 +137,8 @@ class RegistrarpagoController extends \app\components\CController {
             $int_id = $resp_cliord["int_id"];
         }
 
-        return $this->render('revisarPagoCarga', [
-                    "revision" => array("AP" => Yii::t("formulario", "APPROVED"), "RE" => Yii::t("formulario", "REJECTED")),
+        return $this->render('revisarpagocarga', [
+                    "revision" => array("AP" => Yii::t("formulario", "APPROVED"), "RE" => Yii::t("formulario", "Rejected")),
                     'opag_id' => $opag_id,
                     'idd' => $idd,
                     'sins_id' => $sins_id,
@@ -164,9 +164,33 @@ class RegistrarpagoController extends \app\components\CController {
      * @return  
      */
     public function actionCrearpago() {
+        //$per_id = Yii::$app->session->get("PB_perid");  
+        //online que sube doc capturar asi el id de la persona 
         if (Yii::$app->request->isAjax) {
             $data = Yii::$app->request->post();
-
+            $per_id = $_SESSION['personaid'];
+            if ($data["upload_file"]) {
+                if (empty($_FILES)) {
+                    echo json_encode(['error' => Yii::t("notificaciones", "Error to process File {file}. Try again.", ['{file}' => basename($files['name'])])]);
+                    return;
+                }
+                //Recibe Parametros
+                $files = $_FILES[key($_FILES)];
+                $arrIm = explode(".", basename($files['name']));
+                $typeFile = strtolower($arrIm[count($arrIm) - 1]);
+                $dirFileEnd = Yii::$app->params["documentFolder"] . "documento/" . $per_id . "/" . $data["name_file"] . "." . $typeFile;
+                $status = Utilities::moveUploadFile($files['tmp_name'], $dirFileEnd);
+                \app\models\Utilities::putMessageLogFile('el per id de esta interesado: ' . $per_id);
+                if ($status) {
+                    return true;
+                } else {
+                    echo json_encode(['error' => Yii::t("notificaciones", "Error to process File {file}. Try again.", ['{file}' => basename($files['name'])])]);
+                    return;
+                }
+            }
+            $arrIm = explode(".", basename($data["documento"]));
+            $typeFile = strtolower($arrIm[count($arrIm) - 1]);
+            $imagen = $arrIm[0] . "." . $typeFile;
             $opag_id = $data["opag_id"];
             $estado_revision = $data["estado_revision"];
             $observacion = ucwords(strtolower($data["observacion"]));
@@ -189,21 +213,19 @@ class RegistrarpagoController extends \app\components\CController {
             $con = \Yii::$app->db_facturacion;
             $transaction = $con->beginTransaction();
             $con2 = \Yii::$app->db_captacion;
-            $transaction2 = $con2->beginTransaction();
-            $con3 = \Yii::$app->db_academico;
-            $transaction3 = $con3->beginTransaction();
+            $transaction2 = $con2->beginTransaction();            
 
-            try {
+            try {  
                 $usuario_aprueba = @Yii::$app->user->identity->usu_id;   //Se obtiene el id del usuario.                            
-                $mod_ordpago = new OrdenPago();
+                $mod_ordpago = new OrdenPago();                
                 if ($controladm == '1') {
                     //Insertar en tabla info_carga_prepago
                     $fecha_registro = date(Yii::$app->params["dateTimeByDefault"]);
-                    $creadetalle = $mod_ordpago->insertarCargaprepago($opag_id, $fpag_id, $dcar_valor, null, 'PE', null, null, $numero_transaccion, $fecha_transaccion, $fecha_registro);
+                    $creadetalle = $mod_ordpago->insertarCargaprepago($opag_id, $fpag_id, $dcar_valor, $imagen, 'PE', null, null, $numero_transaccion, $fecha_transaccion, $fecha_registro);
                     $idd = $creadetalle;
                 }
                 //Obtener datos grabados en tablas temporales                        
-                $resp_cargo = $mod_ordpago->consultarCargo($idd, $opag_id);
+                $resp_cargo = $mod_ordpago->consultarCargo($idd, $opag_id);                
                 if ($resp_cargo['existe'] == 'S') {
                     $valor_det = $resp_cargo['valor'];
                     $fpag_id = $resp_cargo['fpag_id'];
@@ -216,21 +238,18 @@ class RegistrarpagoController extends \app\components\CController {
                     $num_transaccion = $resp_cargo['icpr_num_transaccion'];
                     $fecha_transaccion = $resp_cargo['icpr_fecha_transaccion'];
                     $total_pagado = $resp_cargo['total_pagado'];
-
-                    if ($banderacrea == 1) {
+                    if ($banderacrea == 1) {                        
                         $creg_total = $valortotal;
                         $creg_resultado = 'OK';
                         $creg_fecha_pago_total = $fechapagtotal;
                         $creg_pagado = $total_pagado + $valor_det;
-
                         if ($valortotal > $creg_pagado) {
                             $creg_estado_pago = 'NP'; //Pago Revisado                           
                         } else {
                             $creg_estado_pago = 'SP'; //Pago Realizado en su totalidad.                          
                         }
-
                         //Obtención de las cuotas pendientes de pago.
-                        $resp_desglose = $mod_ordpago->obtenerDesglosepagopend($opag_id);
+                        $resp_desglose = $mod_ordpago->obtenerDesglosepagopend($opag_id);                        
                         if ($resp_desglose) {
                             for ($i = 0; $i < count($resp_desglose); $i++) {
                                 $valor_sobra = $valor_det;
@@ -247,7 +266,7 @@ class RegistrarpagoController extends \app\components\CController {
                                         $resp_actcabcar = $mod_ordpago->actualizaDesglosepago($resp_desglose[$i]['id'], 'S', $usuario_aprueba);
                                     }
                                 }
-                            }
+                            }                            
                             //actualizar en detalle_cargo la gestión realizada.                                                                                    
                             $resp_actcar = $mod_ordpago->actualizaDetallecargo($idd, $dcar_estado_revisa, $estado_revision, $observacion, $usuario_aprueba, $valor_det);
                             if ($resp_actcar) {
@@ -258,98 +277,26 @@ class RegistrarpagoController extends \app\components\CController {
                                     $fecha_pago_total = date(Yii::$app->params["dateTimeByDefault"]);
                                 } else {
                                     $ccar_estado_pagado = 'P';
-                                }
-
-                                //if ($resp_actcabcar) {
+                                }                                
                                 //actualiza datos de la orden de pago.                                         
                                 $resp_opag = $mod_ordpago->actualizaOrdenpago($opag_id, $opag_estado_pagado, $creg_pagado, $fecha_pago_total, $usuario_aprueba);
                                 if ($resp_opag) {
-                                    if ($creg_estado_pago == 'SP') {
-                                        $resp_encuentra = $mod_ordpago->encuentraAspirante($int_id);
-                                        if ($resp_encuentra) {
-                                            $asp = $resp_encuentra['asp_id'];
-                                            $continua = 1;
-                                        } else {
-                                            //Se asigna al interesado como aspirante
-                                            $resp_asp = $mod_ordpago->insertarAspirante($int_id);
-                                            if ($resp_asp) {
-                                                $asp = $resp_asp;
-                                                $resp_inte = $mod_ordpago->actualizaEstadointeresado($int_id);
-                                                if ($resp_inte) {
-                                                    $continua = 1;
-                                                }
-                                            }
-                                        }
-                                        if ($continua == 1) {
-                                            //Se obtienen el método de ingreso y el nivel de interés según la solicitud.
-                                            $mod_sol = new SolicitudInscripcion();
-                                            $resp_sol = $mod_sol->Obtenerdatosolicitud($sins_id);
-                                            //Se obtiene el curso para luego registrarlo.
-                                            if ($resp_sol) {
-                                                //Giovanni Vergara Zarate 18/01/2018 no se va a registrar ya al curso por defecto, debe hacerse desde un administrador
-                                                //$resp_curso = $mod_ordpago->consultaCurso($resp_sol["metodo_ingreso"], $resp_sol["nivel_interes"]);
-                                                //if ($resp_curso) {
-                                                //Registro al curso (temporalmente)                                                     
-                                                //$resp_ingcurso = $mod_ordpago->insertarRegistrocurso($resp_curso['cur_id'], $asp);
-                                                //if ($resp_ingcurso) {
-                                                //envio de correo                                                                    
-                                                $mod_persona = new Persona();
-                                                $resp_persona = $mod_persona->consultaPersonaId($per_id);
-                                                $correo = $resp_persona["usu_user"];
-                                                $apellidos = $resp_persona["per_pri_apellido"];
-                                                $nombres = $resp_persona["per_pri_nombre"];
-
-                                                //información del aspirante
-                                                $identi = $resp_persona["per_cedula"];
-                                                $cel_fono = $resp_persona["per_celular"];
-                                                $mail_asp = $resp_persona["per_correo"];
-
-                                                $link = "http://www.uteg.edu.ec"; //Url::base(true) . "/formservicio/pago?ord_pago=" . base64_encode($resp_opago);
-                                                $metodo_ingreso = $resp_sol["nombre_metodo_ingreso"];
-                                                if ($resp_sol["metodo_ingreso"] == 1) {
-                                                    $leyenda = "el curso de nivelación";
-                                                }
-                                                if ($resp_sol["metodo_ingreso"] == 2) {
-                                                    $leyenda = "la preparación para el examen de admisión";
-                                                }
-                                                $file1 = Url::base(true) . "/files/Bienvenida.pdf";
-                                                $rutaFile = array($file1);
-                                                $tituloMensaje = Yii::t("interesado", "UTEG - Registration Online");
-                                                $asunto = Yii::t("interesado", "UTEG - Registration Online");
-                                                $body = Utilities::getMailMessage("Applicantrecord", array("[[nombre]]" => $nombres, "[[apellido]]" => $apellidos, "[[metodo]]" => $metodo_ingreso, "[[fecha]]" => $resp_curso['fecha'], "[[leyenda]]" => $leyenda, "[[link]]" => $link), Yii::$app->language);
-                                                Utilities::sendEmail($tituloMensaje, Yii::$app->params["adminEmail"], [$correo => $apellidos . " " . $nombres], $asunto, $body, $rutaFile);
-                                                Utilities::sendEmail($tituloMensaje, Yii::$app->params["adminEmail"], [Yii::$app->params["soporteEmail"] => "Soporte"], $asunto, $body);
-                                                // envio de correo a colecturia de la informacion del aspirante
-                                                $asuntos = Yii::t("interesado", "UTEG - Information Candidate");
-                                                $bodies = Utilities::getMailMessage("candidateinfo", array("[[nombre]]" => $nombres, "[[apellido]]" => $apellidos, "[[numero_dni]]" => $identi, "[[celular]]" => $cel_fono, "[[mail]]" => $mail_asp), Yii::$app->language);
-                                                Utilities::sendEmail($asuntos, Yii::$app->params["adminEmail"], [Yii::$app->params["colecturia"] => "Colecturia"], $asuntos, $bodies);
-
-                                                $exito = 1;
-                                                //}
-                                                //}
-                                            }
-                                        }
-                                    }
-                                } else {
-                                    $exito = 1;
+                                    $exito = 1;                               
                                 }
                             } //fin de actualizar detalle cargo
                         } //fin de obtener registros de desglose
                     } //fin  $banderacrea 
                     else { //En el caso cuando no aprueba el pago.
-                        //actualizar en detalle_cargo la gestión realizada                                                                            
+                        //actualizar en detalle_cargo la gestión realizada.                        
                         $resp_actdetcar = $mod_ordpago->actualizaDetallecargo($idd, $dcar_estado_revisa, $estado_revision, $observacion, $usuario_aprueba, $valor_det);
                         if ($resp_actdetcar) {
                             $exito = 1;
                         }
                     }
                 }  //fin cuando aprueba el pago. 
-
-
                 if ($exito) {
                     $transaction->commit();
-                    $transaction2->commit();
-                    $transaction3->commit();
+                    $transaction2->commit();                                  
                     $message = array(
                         "wtmessage" => Yii::t("notificaciones", "La infomación ha sido grabada. "),
                         "title" => Yii::t('jslang', 'Success'),
@@ -357,20 +304,18 @@ class RegistrarpagoController extends \app\components\CController {
                     echo Utilities::ajaxResponse('OK', 'alert', Yii::t("jslang", "Sucess"), false, $message);
                 } else {
                     $transaction->rollback();
-                    $transaction2->rollback();
-                    $transaction3->rollback();
+                    $transaction2->rollback();                    
                     $message = array(
-                        "wtmessage" => Yii::t("notificaciones", "Error al grabar." . $mensaje),
+                        "wtmessage" => Yii::t("notificaciones", "Error al grabar1." . $mensaje),
                         "title" => Yii::t('jslang', 'Success'),
                     );
                     echo Utilities::ajaxResponse('NO_OK', 'alert', Yii::t("jslang", "Sucess"), false, $message);
                 }
             } catch (Exception $ex) {
                 $transaction->rollback();
-                $transaction2->rollback();
-                $transaction3->rollback();
+                $transaction2->rollback();                             
                 $message = array(
-                    "wtmessage" => Yii::t("notificaciones", "Error al grabar." . $mensaje),
+                    "wtmessage" => Yii::t("notificaciones", "Error al grabar2." . $mensaje),
                     "title" => Yii::t('jslang', 'Success'),
                 );
                 echo Utilities::ajaxResponse('NO_OK', 'alert', Yii::t("jslang", "Sucess"), false, $message);
@@ -380,7 +325,7 @@ class RegistrarpagoController extends \app\components\CController {
     }
 
     /**
-     * Function Listarpagosolicitud: Consulta las solicitudes con pagos realizados.
+     * Function Listarpagosolicitudadm: Consulta las solicitudes con pagos realizados.
      * @author  Giovanni Vergara <analistadesarrollo02@uteg.edu.ec>
      * @param   Ninguno. 
      * @return  
@@ -402,7 +347,7 @@ class RegistrarpagoController extends \app\components\CController {
                 $rol = 0;
                 $resp_pago = $model_pag->listarSolicitud($per_ids, null, $rol, $arrSearch);
             }
-            return $this->renderPartial('_listarPagosolicGrid', [
+            return $this->renderPartial('_listarpagosolicitud_grid', [
                         "model" => $resp_pago,
             ]);
         } else {
@@ -423,7 +368,7 @@ class RegistrarpagoController extends \app\components\CController {
                 
             }
         }
-        return $this->render('listarPagoSolicitud', [
+        return $this->render('listarpagosolicitud', [
                     'model' => $resp_pago,
         ]);
     }
@@ -446,7 +391,7 @@ class RegistrarpagoController extends \app\components\CController {
                 
             }
         }
-        return $this->render('cargarDocPagos', [
+        return $this->render('cargardocpagos', [
                     "arr_forma_pago" => ArrayHelper::map($arr_forma_pago, "id", "value"), 'model' => $resp_doc,
                     "opago" => $ccar_id,
                     "vista" => $_GET["vista"],
@@ -544,12 +489,12 @@ class RegistrarpagoController extends \app\components\CController {
     }
 
     /**
-     * Function ListarPagosolRegadm: Consulta las solicitudes con pagos realizados para registro de pagos por parte de Colecturía.
+     * Function Listarpagosolicitudregistroadm: Consulta las solicitudes con pagos realizados para registro de pagos por parte de Colecturía.
      * @author  Grace Viteri <analistadesarrollo01@uteg.edu.ec>
      * @param   Ninguno. 
      * @return  
      */
-    public function actionListarpagosolregadm() {
+    public function actionListarpagosolicitudregistroadm() {
         $per_id = @Yii::$app->session->get("PB_iduser");
         $model_interesado = new Interesado();
         $resp_gruporol = $model_interesado->consultagruporol($per_id);
@@ -563,7 +508,7 @@ class RegistrarpagoController extends \app\components\CController {
             $arrSearch["f_estado"] = $data['f_estado'];
             $arrSearch["search"] = $data['search'];
             $resp_pago = $mod_pago->listarSolicitudesadm($arrSearch, $resp_gruporol["grol_id"]);
-            return $this->renderPartial('_listarPagsolregGrid', [
+            return $this->renderPartial('_listarpagosolicitudregistroadm_grid', [
                         "model" => $resp_pago,
             ]);
         } else {
@@ -574,9 +519,9 @@ class RegistrarpagoController extends \app\components\CController {
             if (isset($data["op"]) && $data["op"] == '1') {
                 
             }
-        }        
-        return $this->render('listarPagosolRegadm', [
-                    'model' => $resp_pago,                   
+        }
+        return $this->render('listarpagosolicitudregistroadm', [
+                    'model' => $resp_pago,
         ]);
     }
 
@@ -608,7 +553,7 @@ class RegistrarpagoController extends \app\components\CController {
                 
             }
         }
-        return $this->render('registrarPagoAdm', [
+        return $this->render('registrarpagoadm', [
                     "arr_forma_pago" => ArrayHelper::map($arr_forma_pago, "id", "value"),
                     'model' => $resp_doc,
                     'saldo_pendiente' => $saldo_pendiente,
@@ -673,7 +618,7 @@ class RegistrarpagoController extends \app\components\CController {
             $arrSearch["f_estado"] = $data['f_estado'];
             $arrSearch["search"] = $data['search'];
             $resp_pago = $mod_pago->listarPagoscargados($arrSearch);
-            return $this->renderPartial('_listarPagosGrid', [
+            return $this->renderPartial('_listarpagoscargados_grid', [
                         "model" => $resp_pago,
             ]);
         } else {
@@ -686,10 +631,24 @@ class RegistrarpagoController extends \app\components\CController {
             }
         }
         $arrEstados = ArrayHelper::map([["id" => "T", "value" => "Todos"], ["id" => "P", "value" => "Pendiente"], ["id" => "S", "value" => "Pagada"]/* , ["id" => "NA", "value" => "No Disponible"] */], "id", "value");
-        return $this->render('listarPagosCargados', [
+        return $this->render('listarpagoscargados', [
                     'model' => $resp_pago,
                     'arrEstados' => $arrEstados
         ]);
-    } 
+    }
+
+    /**
+     * Function Datosfactura: Registrar datos de factura.
+     * @author  Grace Viteri <analistadesarrollo01@uteg.edu.ec>
+     * @param   Ninguno. 
+     * @return  
+     */
+    public function actionDatosfactura() {
+        $opago = base64_decode($_GET["ids"]);
+        return $this->render('datosfactura', [
+                    "tipo_dni" => array("1" => Yii::t("formulario", "DNI Document"), "2" => Yii::t("formulario", "RUC")),
+                    "opago" => $opago,
+        ]);
+    }
 
 }

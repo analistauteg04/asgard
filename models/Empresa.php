@@ -181,9 +181,49 @@ class Empresa extends \yii\db\ActiveRecord {
 
         $command = Yii::$app->db->createCommand($sql);
         
-        if($user_id != 1){
+        if($user_id != 1){ 
             $command->bindParam(':id', $user_id, \PDO::PARAM_INT);
         }
         return $command->queryAll();
     }
+    
+    /**
+     * Function to get array 
+     * @author  Byron Villacress <developer@uteg.edu.ec>
+     * @param   string  $username    
+     * @return  mixed   $res        New array 
+     */
+    public static function getAllEmpresa() {
+        $con = \Yii::$app->db;
+        $sql = "SELECT emp_id Ids,emp_razon_social Nombre 
+            FROM " . $con->dbname . ".empresa WHERE emp_estado_logico=1 AND emp_estado=1;";  
+        $comando = $con->createCommand($sql);
+        return $comando->queryAll();
+    }
+    
+    /**
+     * Function consulta id de empresas segun el nombre. 
+     * @author Giovanni Vergara <analistadesarrollo02@uteg.edu.ec>;
+     * @param
+     * @return
+     */
+    public function consultarEmpresaId($nombre) {
+        $con = \Yii::$app->db_asgard;
+        $estado = 1;
+        $sql = "SELECT 
+                   empr.emp_id as id
+                FROM 
+                   " . $con->dbname . ".empresa  empr ";
+        $sql .= "  WHERE
+                   (empr.emp_razon_social = :nombre or empr.emp_nombre_comercial = :nombre or empr.emp_alias = :nombre) AND
+                   empr.emp_estado = :estado AND
+                   empr.emp_estado_logico = :estado";
+
+        $comando = $con->createCommand($sql);
+        $comando->bindParam(":estado", $estado, \PDO::PARAM_STR);
+        $comando->bindParam(":nombre", $nombre, \PDO::PARAM_STR);
+        $resultData = $comando->queryOne();
+        return $resultData;
+    }
+    
 }

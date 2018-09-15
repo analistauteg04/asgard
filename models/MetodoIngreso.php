@@ -25,7 +25,7 @@ class MetodoIngreso extends \yii\db\ActiveRecord {
      */
     public static function tableName() {
         //return 'metodo_ingreso';
-        return \Yii::$app->db_captacion->dbname . '.metodo_ingreso';
+        return \Yii::$app->db_captacion->dbname.'.metodo_ingreso';
     }
 
     /**
@@ -33,11 +33,11 @@ class MetodoIngreso extends \yii\db\ActiveRecord {
      */
     public function rules() {
         return [
-            [['ming_nombre', 'ming_descripcion', 'ming_estado', 'ming_estado_logico'], 'required'],
-            [['ming_fecha_creacion', 'ming_fecha_modificacion'], 'safe'],
-            [['ming_nombre'], 'string', 'max' => 300],
-            [['ming_descripcion'], 'string', 'max' => 500],
-            [['ming_estado', 'ming_estado_logico'], 'string', 'max' => 1],
+                [['ming_nombre', 'ming_descripcion', 'ming_estado', 'ming_estado_logico'], 'required'],
+                [['ming_fecha_creacion', 'ming_fecha_modificacion'], 'safe'],
+                [['ming_nombre'], 'string', 'max' => 300],
+                [['ming_descripcion'], 'string', 'max' => 500],
+                [['ming_estado', 'ming_estado_logico'], 'string', 'max' => 1],
         ];
     }
 
@@ -70,37 +70,39 @@ class MetodoIngreso extends \yii\db\ActiveRecord {
         return $this->hasMany(SolicitudInscripcion::className(), ['ming_id' => 'ming_id']);
     }
 
+    
     /**
-     * Function obtenerMetodoIngXNivelInt
+     * Function consultarMetodoIngNivelInt
      * @author  
      * @property       
      * @return  
      */
-    public function obtenerMetodoIngXNivelInt($nint_id) {
+    public function consultarMetodoIngNivelInt($uaca_id) {
         $con = \Yii::$app->db_captacion;
+        $con1 = \Yii::$app->db_academico;
         $estado = 1;
         $sql = "SELECT 
                     ming.ming_id as id,
                     ming.ming_nombre as name
                 FROM 
                     " . $con->dbname . ".nivelint_metodo as nmet                
-                INNER JOIN " . $con->dbname . ".nivel_interes as nint on nmet.nint_id = nint.nint_id
+                INNER JOIN " . $con1->dbname . ".unidad_academica as uaca on nmet.uaca_id = uaca.uaca_id
                 INNER JOIN " . $con->dbname . ".metodo_ingreso as ming on nmet.ming_id = ming.ming_id                    
                 WHERE 
                     nmet.nmet_estado_logico=:estado AND 
-                    nint.nint_estado_logico=:estado AND 
+                    uaca.uaca_estado_logico=:estado AND 
                     ming.ming_estado_logico=:estado AND 
                     nmet.nmet_estado=:estado AND 
-                    nint.nint_estado=:estado AND 
+                    uaca.uaca_estado=:estado AND 
                     ming.ming_estado=:estado AND
-                    nint.nint_id=:id_nint";
+                    nmet.uaca_id=:id_nint";
         $comando = $con->createCommand($sql);
         $comando->bindParam(":estado", $estado, \PDO::PARAM_STR);
-        $comando->bindParam(":id_nint", $nint_id, \PDO::PARAM_INT);
+        $comando->bindParam(":id_nint", $uaca_id, \PDO::PARAM_INT);
         $resultData = $comando->queryAll();
         return $resultData;
     }
-
+    
     public function obtenerNombreNivel($nivel_id) {
         $con = \Yii::$app->db_captacion;
         $estado = 1;
@@ -116,7 +118,7 @@ class MetodoIngreso extends \yii\db\ActiveRecord {
         $resultData = $comando->queryOne();
         return $resultData;
     }
-
+    
     public function obtenerNombremetodo($metodo_id) {
         $con = \Yii::$app->db_captacion;
         $estado = 1;
@@ -132,7 +134,6 @@ class MetodoIngreso extends \yii\db\ActiveRecord {
         $resultData = $comando->queryOne();
         return $resultData;
     }
-
     public function obtenerNombreconocio($mediopub) {
         $con = \Yii::$app->db_captacion;
         $estado = 1;

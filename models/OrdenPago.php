@@ -3,7 +3,6 @@
 namespace app\models;
 
 use Yii;
-
 /**
  * This is the model class for table "orden_pago".
  *
@@ -14,10 +13,8 @@ use Yii;
  * @property double $opag_subtotal
  * @property double $opag_iva
  * @property double $opag_total
- * @property double $opag_valor_pagado
  * @property string $opag_fecha_generacion
  * @property string $opag_estado_pago
- * @property string $opag_fecha_pago_total
  * @property string $opag_observacion
  * @property integer $opag_usu_ingreso
  * @property integer $opag_usu_modifica
@@ -33,34 +30,31 @@ use Yii;
  */
 use yii\data\ArrayDataProvider;
 
-class OrdenPago extends \yii\db\ActiveRecord
-{
+class OrdenPago extends \yii\db\ActiveRecord {
+
     /**
      * @inheritdoc
      */
-    public static function tableName()
-    {
+    public static function tableName() {
         return 'orden_pago';
     }
 
     /**
      * @return \yii\db\Connection the database connection used by this AR class.
      */
-    public static function getDb()
-    {
+    public static function getDb() {
         return Yii::$app->get('db_facturacion');
     }
 
     /**
      * @inheritdoc
      */
-    public function rules()
-    {
+    public function rules() {
         return [
             [['sins_id', 'sgen_id', 'com_id', 'opag_usu_ingreso', 'opag_usu_modifica'], 'integer'],
             [['opag_subtotal', 'opag_iva', 'opag_total', 'opag_usu_ingreso', 'opag_estado', 'opag_estado_logico'], 'required'],
-            [['opag_subtotal', 'opag_iva', 'opag_total', 'opag_valor_pagado'], 'number'],
-            [['opag_fecha_generacion', 'opag_fecha_pago_total', 'opag_fecha_creacion', 'opag_fecha_modificacion'], 'safe'],
+            [['opag_subtotal', 'opag_iva', 'opag_total'], 'number'],
+            [['opag_fecha_generacion', 'opag_fecha_creacion', 'opag_fecha_modificacion'], 'safe'],
             [['opag_estado_pago', 'opag_estado', 'opag_estado_logico'], 'string', 'max' => 1],
             [['opag_observacion'], 'string', 'max' => 200],
             [['sgen_id'], 'exist', 'skipOnError' => true, 'targetClass' => SolicitudGeneral::className(), 'targetAttribute' => ['sgen_id' => 'sgen_id']],
@@ -70,8 +64,7 @@ class OrdenPago extends \yii\db\ActiveRecord
     /**
      * @inheritdoc
      */
-    public function attributeLabels()
-    {
+    public function attributeLabels() {
         return [
             'opag_id' => 'Opag ID',
             'sins_id' => 'Sins ID',
@@ -80,10 +73,8 @@ class OrdenPago extends \yii\db\ActiveRecord
             'opag_subtotal' => 'Opag Subtotal',
             'opag_iva' => 'Opag Iva',
             'opag_total' => 'Opag Total',
-            'opag_valor_pagado' => 'Opag Valor Pagado',
             'opag_fecha_generacion' => 'Opag Fecha Generacion',
             'opag_estado_pago' => 'Opag Estado Pago',
-            'opag_fecha_pago_total' => 'Opag Fecha Pago Total',
             'opag_observacion' => 'Opag Observacion',
             'opag_usu_ingreso' => 'Opag Usu Ingreso',
             'opag_usu_modifica' => 'Opag Usu Modifica',
@@ -97,35 +88,31 @@ class OrdenPago extends \yii\db\ActiveRecord
     /**
      * @return \yii\db\ActiveQuery
      */
-    public function getDesglosePagos()
-    {
+    public function getDesglosePagos() {
         return $this->hasMany(DesglosePago::className(), ['opag_id' => 'opag_id']);
     }
 
     /**
      * @return \yii\db\ActiveQuery
      */
-    public function getInfoCargaPrepagos()
-    {
+    public function getInfoCargaPrepagos() {
         return $this->hasMany(InfoCargaPrepago::className(), ['opag_id' => 'opag_id']);
     }
 
     /**
      * @return \yii\db\ActiveQuery
      */
-    public function getInfoFacturas()
-    {
+    public function getInfoFacturas() {
         return $this->hasMany(InfoFactura::className(), ['opag_id' => 'opag_id']);
     }
 
     /**
      * @return \yii\db\ActiveQuery
      */
-    public function getSgen()
-    {
+    public function getSgen() {
         return $this->hasOne(SolicitudGeneral::className(), ['sgen_id' => 'sgen_id']);
     }
-    
+
     /**
      * Function listarSolicitudesadm
      * @author  Grace Viteri <analistadesarrollo01@uteg.edu.ec>
@@ -136,9 +123,10 @@ class OrdenPago extends \yii\db\ActiveRecord
         $con = \Yii::$app->db_captacion;
         $con1 = \Yii::$app->db;
         $con2 = \Yii::$app->db_facturacion;
+        $con3 = \Yii::$app->db_academico;
         $estado = 1;
         $estado_pago = 'P';
-        
+        $rolgrupo = '';
         $columnsAdd = "";
         if (isset($arrFiltro) && count($arrFiltro) > 0) {
             $str_search .= "(per.per_pri_nombre like :search OR ";
@@ -148,7 +136,6 @@ class OrdenPago extends \yii\db\ActiveRecord
                 $str_search .= "sins.sins_fecha_solicitud >= :fec_ini AND ";
                 $str_search .= "sins.sins_fecha_solicitud <= :fec_fin AND ";
             }
-           
         } else {
             $columnsAdd = "sins.sins_id as solicitud_id,
           per.per_id as persona,
@@ -157,13 +144,17 @@ class OrdenPago extends \yii\db\ActiveRecord
           per.per_pri_apellido as per_pri_apellido,
           per.per_seg_apellido as per_seg_apellido,";
         }
+        if(!empty($resp_gruporol))
+            {
+                $rolgrupo = ", ".$resp_gruporol. " as rol";
+            }
         $sql = "SELECT  lpad(sins.sins_id,4,'0') as solicitud, 
                         sins.sins_fecha_solicitud,
                         per.per_id,
                         per.per_cedula identificacion,
                         concat(per.per_pri_apellido) apellidos, 
                         concat(per.per_pri_nombre) nombres,
-                        nint_descripcion nivel,
+                        uaca_descripcion nivel,
                         ming_descripcion metodo,
                         ifnull(opag.opag_id,'') orden,
                         opag_estado_pago estado, 
@@ -173,26 +164,24 @@ class OrdenPago extends \yii\db\ActiveRecord
                                       from " . $con2->dbname . ".info_carga_prepago icp 
                                       where icp.opag_id = opag.opag_id 
                                             and icp.icpr_estado = :estado 
-                                            and icp.icpr_estado_logico = :estado),'P') when 'P' then 'Pendiente' else 'No Aprobada' end) as estado_desc_pago,
-                        $resp_gruporol as rol
-                FROM " . $con->dbname . ".solicitud_inscripcion sins INNER JOIN " . $con->dbname . ".nivel_interes nint on nint.nint_id = sins.nint_id
+                                            and icp.icpr_estado_logico = :estado),'P') when 'P' then 'Pendiente' else 'No Aprobada' end) as estado_desc_pago
+                        
+                $rolgrupo
+                FROM " . $con->dbname . ".solicitud_inscripcion sins INNER JOIN " . $con3->dbname . ".unidad_academica uaca on uaca.uaca_id = sins.uaca_id
                      INNER JOIN " . $con->dbname . ".metodo_ingreso ming on ming.ming_id = sins.ming_id
                      INNER JOIN " . $con->dbname . ".interesado inte on sins.int_id = inte.int_id
-                     INNER JOIN " . $con->dbname . ".pre_interesado pint on pint.pint_id = inte.pint_id
-                     INNER JOIN " . $con1->dbname . ".persona per on pint.per_id = per.per_id
-                     INNER JOIN " . $con2->dbname . ".orden_pago opag on sins.sins_id = opag.sins_id                     
+                     INNER JOIN " . $con1->dbname . ".persona per on inte.per_id = per.per_id
+                     INNER JOIN " . $con2->dbname . ".orden_pago opag on sins.sins_id = opag.sins_id
                 WHERE 
                       $str_search
                       sins.sins_estado = :estado AND
                       sins.sins_estado_logico = :estado AND
-                      nint.nint_estado = :estado AND
-                      nint.nint_estado_logico = :estado AND
+                      uaca.uaca_estado = :estado AND
+                      uaca.uaca_estado_logico = :estado AND
                       ming.ming_estado = :estado AND
                       ming.ming_estado_logico = :estado AND
                       inte.int_estado_logico = :estado AND
-                      inte.int_estado = :estado AND
-                      pint.pint_estado_logico = :estado AND
-                      pint.pint_estado = :estado AND
+                      inte.int_estado = :estado AND                      
                       per.per_estado = :estado AND
                       per.per_estado_logico = :estado AND
                       opag.opag_estado = :estado AND
@@ -268,9 +257,8 @@ class OrdenPago extends \yii\db\ActiveRecord
         $sql = "SELECT 
                     orp.opag_id,  
                     inte.int_id,
-                    ite.ite_nombre, 
-                    (case when sins.sins_beca = '1' then 0.00 
-                       else format(itp.ipre_precio+(itp.ipre_precio*ifnull(ipre_porcentaje_iva,0)),2) end) as ipre_precio, 
+                    ite.ite_nombre,                     
+                    format(orp.opag_total,2) as ipre_precio,   
                     format((round(orp.opag_total,2) - ifnull(orp.opag_valor_pagado,0)),2) as pendiente,   
                     (case orp.opag_estado_pago when 'P' then 'Pendiente' when 'R' then 'Revisando' when 'S' then 'Pagado' end) as estado,
                     orp.opag_id as orden_id,
@@ -288,11 +276,12 @@ class OrdenPago extends \yii\db\ActiveRecord
                     lpad(sins.sins_id,'4','0') as solicitud,
                     sins.sins_fecha_solicitud,
                     :rol as rol
-                FROM " . $con2->dbname . ".pre_interesado pint INNER JOIN " . $con1->dbname . ".persona per on  per.per_id = pint.per_id
-                    INNER JOIN " . $con2->dbname . ".interesado inte on inte.pint_id = pint.pint_id     
+                FROM " . $con1->dbname . ".persona per 
+                    INNER JOIN " . $con2->dbname . ".interesado inte on inte.per_id = per.per_id
                     INNER JOIN " . $con2->dbname . ".solicitud_inscripcion sins on sins.int_id = inte.int_id
                     INNER JOIN  " . $con->dbname . ".orden_pago orp on sins.sins_id = orp.sins_id
-                    INNER JOIN " . $con->dbname . ".item_metodo_nivel imni on (sins.ming_id = imni.ming_id and sins.nint_id = imni.nint_id)
+                    INNER JOIN " . $con->dbname . ".item_metodo_nivel imni on ((sins.ming_id = imni.ming_id and sins.uaca_id = imni.uaca_id and sins.mod_id = imni.mod_id)
+                                or (sins.uaca_id = imni.uaca_id and sins.mod_id = imni.mod_id and sins.uaca_id = imni.eaca_id))
                     INNER JOIN " . $con->dbname . ".item_precio itp ON itp.ite_id = imni.ite_id
                     INNER JOIN " . $con->dbname . ".item ite ON ite.ite_id = itp.ite_id                           
                     WHERE $str_search per.per_id = " . $per_id . " AND ";
@@ -304,16 +293,14 @@ class OrdenPago extends \yii\db\ActiveRecord
                 orp.opag_estado_logico = :estado AND                
                 itp.ipre_estado_logico = :estado AND
                 ite.ite_estado_logico = :estado AND    
-                imni.imni_estado_logico = :estado AND
-                pint.pint_estado_logico = :estado AND
+                imni.imni_estado_logico = :estado AND                
                 inte.int_estado_logico = :estado AND
                 sins.sins_estado_logico = :estado AND
                 orp.opag_estado = :estado AND                
                 itp.ipre_estado = :estado AND
                 ite.ite_estado = :estado AND
                 imni.imni_estado = :estado AND
-                inte.int_estado = :estado AND
-                pint.pint_estado = :estado AND
+                inte.int_estado = :estado AND                
                 sins.sins_estado = :estado
            ORDER BY sins.sins_fecha_solicitud desc";
 
@@ -1004,21 +991,23 @@ class OrdenPago extends \yii\db\ActiveRecord
      * @param   
      * @return  
      */
-    public function actualizaEstadointeresado($int_id) {
+    public function actualizaEstadointeresado($int_id, $usu_id) {
         $con = \Yii::$app->db_captacion;
         $estado = 1;
         $estado_interesado = 0;
         $fecha_modificacion = date(Yii::$app->params["dateTimeByDefault"]);
-
+        
         $comando = $con->createCommand
                 ("UPDATE " . $con->dbname . ".interesado 
                 SET int_fecha_modificacion = :fecha_modificacion,
-                    int_estado_interesado = :estado_interesado
+                    int_estado_interesado = :estado_interesado,
+                    int_usuario_modifica = :usu_id
                 WHERE int_id = :int_id and int_estado =:estado AND
                       int_estado_logico = :estado");
 
         $comando->bindParam(":estado", $estado, \PDO::PARAM_STR);
         $comando->bindParam(":int_id", $int_id, \PDO::PARAM_INT);
+        $comando->bindParam(":usu_id", $usu_id, \PDO::PARAM_INT);
         $comando->bindParam(":fecha_modificacion", $fecha_modificacion, \PDO::PARAM_STR);
         $comando->bindParam(":estado_interesado", $estado_interesado, \PDO::PARAM_STR);
 
@@ -1036,46 +1025,48 @@ class OrdenPago extends \yii\db\ActiveRecord
         $con = \Yii::$app->db_facturacion;
         $con1 = \Yii::$app->db_captacion;
         $con2 = \Yii::$app->db_asgard;
+        $con3 = \Yii::$app->db_academico;
         $estado = 1;
         $estado_pago = 'P';
 
         if ($tiposolicitud == 'SI') {  //Cuando se trata de una SI= solicitud de inscripción, a carrera de UTEG.
-            $sql = "SELECT ite.ite_nombre as curso,                       
-                           opag.opag_subtotal,
-                           opag.opag_iva,
-                           opag.opag_total as precio,
-                           usu.usu_user as email,
-                           concat(per.per_pri_nombre, ' ', per.per_seg_nombre) as nombres,
-                           concat(per.per_pri_apellido,' ', per.per_seg_apellido) as apellidos,
-                           per.per_cedula as identificacion,
-                           ifnull(per.per_domicilio_telefono, per.per_celular) as telefono,
-                           concat(per.per_domicilio_cpri, ' ', per.per_domicilio_csec, ' ', per.per_domicilio_num) as domicilio,
-                           lpad(opag.sins_id,4,'0') as solicitud
-                    FROM " . $con->dbname . ".orden_pago opag INNER JOIN " . $con1->dbname . ".solicitud_inscripcion sins on sins.sins_id = opag.sins_id
-                    INNER JOIN " . $con->dbname . ".item_metodo_nivel imni on (imni.ming_id = sins.ming_id and imni.nint_id = sins.nint_id)
-                    INNER JOIN " . $con->dbname . ".item ite on ite.ite_id = imni.ite_id                
-                    INNER JOIN " . $con1->dbname . ".interesado inte on inte.int_id = sins.int_id
-                    INNER JOIN " . $con1->dbname . ".pre_interesado pint on pint.pint_id = inte.pint_id
-                    INNER JOIN " . $con2->dbname . ".persona per on per.per_id = pint.per_id
-                    INNER JOIN " . $con2->dbname . ".usuario usu on usu.per_id = per.per_id
-                    WHERE opag.opag_id = :opag_id AND 
-                          opag.opag_estado_pago = :estado_pago AND                          
-                          opag.opag_estado = :estado AND
-                          sins.sins_estado = :estado AND
-                          imni.imni_estado = :estado AND
-                          ite.ite_estado = :estado AND                      
-                          inte.int_estado = :estado AND
-                          pint.pint_estado = :estado AND
-                          per.per_estado = :estado AND
-                          usu.usu_estado = :estado AND
-                          opag.opag_estado_logico = :estado AND
-                          sins.sins_estado_logico = :estado AND
-                          imni.imni_estado_logico = :estado AND
-                          ite.ite_estado_logico = :estado AND                      
-                          inte.int_estado_logico = :estado AND
-                          pint.pint_estado_logico = :estado AND
-                          per.per_estado_logico = :estado AND
-                          usu.usu_estado_logico = :estado";
+            $sql = "SELECT (case when sins.uaca_id=3 then 
+                                (select ite.ite_nombre from " . $con->dbname . ".item ite inner join " . $con->dbname . ".item_metodo_nivel imni on ite.ite_id = imni.ite_id 
+                                 where imni.uaca_id = sins.uaca_id and imni.mod_id = sins.mod_id and imni.eaca_id = sins.eaca_id
+                                        and imni.imni_estado = :estado and imni.imni_estado_logico = :estado and ite.ite_estado = :estado and ite.ite_estado_logico = :estado) 
+                            when sins.uaca_id!=3 then 
+                                (select ite.ite_nombre from " . $con->dbname . ".item ite inner join " . $con->dbname . ".item_metodo_nivel imni on ite.ite_id = imni.ite_id 
+                                 where imni.ming_id = sins.ming_id and imni.uaca_id = sins.uaca_id and imni.mod_id = sins.mod_id
+                                       and imni.imni_estado = :estado and imni.imni_estado_logico = :estado and ite.ite_estado = :estado and ite.ite_estado_logico = :estado) end) as curso,
+                            opag.opag_subtotal, 
+                            opag.opag_iva, 
+                            opag.opag_total as precio, 
+                            usu.usu_user as email,
+                            concat(per.per_pri_nombre, ' ', per.per_seg_nombre) as nombres, 
+                            concat(per.per_pri_apellido,' ', per.per_seg_apellido) as apellidos, 
+                            per.per_cedula as identificacion, 
+                            ifnull(per.per_domicilio_telefono, per.per_celular) as telefono, 
+                            concat(per.per_domicilio_cpri, ' ', per.per_domicilio_csec, ' ', per.per_domicilio_num) as domicilio, 
+                            lpad(opag.sins_id,4,'0') as solicitud, 
+                            eaca_nombre as carrera 
+                    FROM " . $con->dbname . ".orden_pago opag INNER JOIN " . $con1->dbname . ".solicitud_inscripcion sins on sins.sins_id = opag.sins_id  
+                          INNER JOIN " . $con1->dbname . ".interesado inte on inte.int_id = sins.int_id 
+                          INNER JOIN " . $con2->dbname . ".persona per on per.per_id = inte.per_id INNER JOIN " . $con2->dbname . ".usuario usu on usu.per_id = per.per_id 
+                          INNER JOIN " . $con3->dbname . ".estudio_academico ea on ea.eaca_id = sins.eaca_id 
+                    WHERE opag.opag_id = :opag_id 
+                          AND opag.opag_estado_pago = :estado_pago 
+                          AND opag.opag_estado = :estado
+                          AND sins.sins_estado = :estado 
+                          AND sins.sins_estado_logico = :estado
+                          AND opag.opag_estado_logico = :estado  
+                          AND inte.int_estado = :estado                          
+                          AND per.per_estado = :estado
+                          AND usu.usu_estado = :estado
+                          AND ea.eaca_estado = :estado
+                          AND inte.int_estado_logico = :estado                          
+                          AND per.per_estado_logico = :estado 
+                          AND usu.usu_estado_logico = :estado 
+                          AND ea.eaca_estado_logico = :estado";                   
         }
         $comando = $con->createCommand($sql);
         $comando->bindParam(":estado", $estado, \PDO::PARAM_STR);
@@ -1194,16 +1185,18 @@ class OrdenPago extends \yii\db\ActiveRecord
         $rol_2 = 4;
         $rol_3 = 5;
 
-        $sql = "SELECT rol_id
-                FROM " . $con->dbname . ".usuario usu INNER JOIN " . $con->dbname . ".usua_grol ugrol on usu.usu_id = ugrol.usu_id
-                     INNER JOIN " . $con->dbname . ".grup_rol grol on ugrol.grol_id = grol.grol_id
+        $sql = "SELECT 
+                     rol_id
+                FROM " . $con->dbname . ".usuario usu 
+                INNER JOIN " . $con->dbname . ".usua_grol_eper ugrol on usu.usu_id = ugrol.usu_id
+                INNER JOIN " . $con->dbname . ".grup_rol grol on ugrol.grol_id = grol.grol_id
                 WHERE usu.per_id = :per_id AND
                       grol.rol_id in (:rol1,:rol2,:rol3) AND
                       usu.usu_estado_logico = :estado AND
-                      ugrol.ugro_estado_logico = :estado AND
+                      ugrol.ugep_estado_logico = :estado AND
                       grol.grol_estado_logico = :estado AND
                       usu.usu_estado = :estado AND
-                      ugrol.ugro_estado = :estado AND
+                      ugrol.ugep_estado = :estado AND
                       grol.grol_estado = :estado";
         $comando = $con->createCommand($sql);
         $comando->bindParam(":estado", $estado, \PDO::PARAM_STR);
@@ -1367,6 +1360,7 @@ class OrdenPago extends \yii\db\ActiveRecord
         $con = \Yii::$app->db_captacion;
         $con1 = \Yii::$app->db;
         $con2 = \Yii::$app->db_facturacion;
+        $con3 = \Yii::$app->db_academico;
         $estado = 1;
         $columnsAdd = "";
         if (isset($arrFiltro) && count($arrFiltro) > 0) {
@@ -1394,7 +1388,7 @@ class OrdenPago extends \yii\db\ActiveRecord
                         per.per_cedula identificacion,
                         concat(per.per_pri_apellido) apellidos, 
                         concat(per.per_pri_nombre) nombres,
-                        nint_descripcion nivel,
+                        uaca_descripcion nivel,
                         ming_descripcion metodo,
                         ifnull(opag.opag_id,'') orden,
                         opag.opag_estado_pago estado, 
@@ -1411,11 +1405,10 @@ class OrdenPago extends \yii\db\ActiveRecord
                                             FROM " . $con2->dbname . ".info_carga_prepago icp 
                                             where icp.opag_id = opag.opag_id and icp.icpr_resultado = 'AP' 
                                                 and icp.icpr_estado = :estado and icp.icpr_estado_logico = :estado) end) as imagen_pago
-                FROM " . $con->dbname . ".solicitud_inscripcion sins INNER JOIN " . $con->dbname . ".nivel_interes nint on nint.nint_id = sins.nint_id
+                FROM " . $con->dbname . ".solicitud_inscripcion sins INNER JOIN " . $con3->dbname . ".unidad_academica uaca on uaca.uaca_id = sins.uaca_id
                      INNER JOIN " . $con->dbname . ".metodo_ingreso ming on ming.ming_id = sins.ming_id
-                     INNER JOIN " . $con->dbname . ".interesado inte on sins.int_id = inte.int_id
-                     INNER JOIN " . $con->dbname . ".pre_interesado pint on pint.pint_id = inte.pint_id
-                     INNER JOIN " . $con1->dbname . ".persona per on pint.per_id = per.per_id
+                     INNER JOIN " . $con->dbname . ".interesado inte on sins.int_id = inte.int_id                     
+                     INNER JOIN " . $con1->dbname . ".persona per on inte.per_id = per.per_id
                      LEFT JOIN " . $con2->dbname . ".orden_pago opag on sins.sins_id = opag.sins_id                       
                 WHERE $str_search
                       exists (select icpr.opag_id 
@@ -1426,14 +1419,12 @@ class OrdenPago extends \yii\db\ActiveRecord
                                     and icpr.icpr_estado_logico = :estado) AND
                       sins.sins_estado = :estado AND
                       sins.sins_estado_logico = :estado AND
-                      nint.nint_estado = :estado AND
-                      nint.nint_estado_logico = :estado AND
+                      uaca.uaca_estado = :estado AND
+                      uaca.uaca_estado_logico = :estado AND
                       ming.ming_estado = :estado AND
                       ming.ming_estado_logico = :estado AND
                       inte.int_estado_logico = :estado AND                                            
-                      inte.int_estado = :estado AND     
-                      pint.pint_estado_logico = :estado AND
-                      pint.pint_estado = :estado AND
+                      inte.int_estado = :estado AND                           
                       per.per_estado = :estado AND
                       per.per_estado_logico = :estado AND
                       opag.opag_estado = :estado AND
@@ -1704,6 +1695,7 @@ class OrdenPago extends \yii\db\ActiveRecord
         $con = \Yii::$app->db_captacion;
         $con1 = \Yii::$app->db;
         $con2 = \Yii::$app->db_facturacion;
+        $con3 = \Yii::$app->db_academico;
         $estado = 1;
         $columnsAdd = "";
         if (isset($arrFiltro) && count($arrFiltro) > 0) {
@@ -1731,32 +1723,32 @@ class OrdenPago extends \yii\db\ActiveRecord
                         per.per_cedula identificacion,
                         concat(per.per_pri_apellido) apellidos, 
                         concat(per.per_pri_nombre) nombres,
-                        nint_descripcion nivel,
+                        uaca_nombre nivel,
                         ming_descripcion metodo,
                         ifnull(opag.opag_id,'') orden,
                         opag.opag_estado_pago estado, 
                         per.per_correo as correo,
                         $columnsAdd
-                        (case opag.opag_estado_pago when 'P' then 'Pendiente' when 'S' then 'Pagada' end) as estado_desc_pago,
-                        $resp_gruporol as rol
-                FROM " . $con->dbname . ".solicitud_inscripcion sins INNER JOIN " . $con->dbname . ".nivel_interes nint on nint.nint_id = sins.nint_id
+                        (case opag.opag_estado_pago when 'P' then 'Pendiente' when 'S' then 'Pagada' end) as estado_desc_pago";
+        if ($resp_gruporol != "") {
+        $sql .=  ", $resp_gruporol   as rol";
+        }
+
+        $sql .= " FROM " . $con->dbname . ".solicitud_inscripcion sins INNER JOIN " . $con3->dbname . ".unidad_academica uaca on uaca.uaca_id = sins.uaca_id
                      INNER JOIN " . $con->dbname . ".metodo_ingreso ming on ming.ming_id = sins.ming_id
-                     INNER JOIN " . $con->dbname . ".interesado inte on sins.int_id = inte.int_id
-                     INNER JOIN " . $con->dbname . ".pre_interesado pint on pint.pint_id = inte.pint_id
-                     INNER JOIN " . $con1->dbname . ".persona per on pint.per_id = per.per_id
+                     INNER JOIN " . $con->dbname . ".interesado inte on sins.int_id = inte.int_id                     
+                     INNER JOIN " . $con1->dbname . ".persona per on inte.per_id = per.per_id
                      INNER JOIN " . $con2->dbname . ".orden_pago opag on sins.sins_id = opag.sins_id                     
                 WHERE 
                       $str_search                         
                       sins.sins_estado = :estado AND
                       sins.sins_estado_logico = :estado AND
-                      nint.nint_estado = :estado AND
-                      nint.nint_estado_logico = :estado AND
+                      uaca.uaca_estado = :estado AND
+                      uaca.uaca_estado_logico = :estado AND
                       ming.ming_estado = :estado AND
                       ming.ming_estado_logico = :estado AND
                       inte.int_estado_logico = :estado AND
-                      inte.int_estado = :estado AND                                            
-                      pint.pint_estado_logico = :estado AND
-                      pint.pint_estado = :estado AND
+                      inte.int_estado = :estado AND                                                                  
                       per.per_estado = :estado AND
                       per.per_estado_logico = :estado AND
                       opag.opag_estado = :estado AND
@@ -1795,6 +1787,175 @@ class OrdenPago extends \yii\db\ActiveRecord
             return $resultData;
         } else {
             return $dataProvider;
+        }
+    }
+
+    /**
+     * Function consultaOrdenPago consulta de orden de pago por solicitud.
+     * @author  Grace Viteri <analistadesarrollo01@uteg.edu.ec>
+     * @param   
+     * @return  
+     */
+    public function consultaOrdenPago($sins_id) {
+        $con = \Yii::$app->db_facturacion;
+        $estado = 1;
+
+        $sql = "SELECT opag.opag_id, opag_estado_pago, dpag_id
+                FROM " . $con->dbname . ".orden_pago opag INNER JOIN " . $con->dbname . ".desglose_pago dpag
+                    ON dpag.opag_id = opag.opag_id
+                WHERE  opag.sins_id = :sins_id AND
+                       opag_estado_logico = :estado AND
+                       opag_estado = :estado AND
+                       dpag_estado_logico = :estado AND
+                       dpag_estado = :estado";
+        $comando = $con->createCommand($sql);
+        $comando->bindParam(":estado", $estado, \PDO::PARAM_STR);
+        $comando->bindParam(":sins_id", $sins_id, \PDO::PARAM_INT);
+        $resultData = $comando->queryOne();
+        return $resultData;
+    }
+
+    /**
+     * Function insertarOrdenAnulada (Graba la orden de pago y solicitud anulada y detalle de anulación.)
+     * @author  Grace Viteri <analistadesarrollo01@uteg.edu.ec>
+     * @param   
+     * @return  
+     */
+    public function insertarOrdenAnulada($opag_id, $sins_id, $observacion, $usuario) {
+        $con = \Yii::$app->db_facturacion;
+
+        $trans = $con->getTransaction(); // se obtiene la transacción actual
+        if ($trans !== null) {
+            $trans = null; // si existe la transacción entonces no se crea una
+        } else {
+            $trans = $con->beginTransaction(); // si no existe la transacción entonces se crea una
+        }
+        $param_sql = "opan_estado_logico";
+        $bdpago_sql = "1";
+
+        $param_sql .= ", opan_estado";
+        $bdpago_sql .= ", 1";
+
+        if (isset($opag_id)) {
+            $param_sql .= ", opag_id";
+            $bdpago_sql .= ", :opag_id";
+        }
+
+        if (isset($sins_id)) {
+            $param_sql .= ", sins_id";
+            $bdpago_sql .= ", :sins_id";
+        }
+
+        if (isset($observacion)) {
+            $param_sql .= ", opan_observacion";
+            $bdpago_sql .= ", :opan_observacion";
+        }
+
+        if (isset($usuario)) {
+            $param_sql .= ", opan_usu_anula";
+            $bdpago_sql .= ", :opan_usu_anula";
+        }
+        try {
+            $sql = "INSERT INTO " . $con->dbname . ".orden_pago_anulada ($param_sql) VALUES($bdpago_sql)";
+            $comando = $con->createCommand($sql);
+
+            if (isset($opag_id)) {
+                $comando->bindParam(':opag_id', $opag_id, \PDO::PARAM_INT);
+            }
+            if (isset($sins_id)) {
+                $comando->bindParam(':sins_id', $sins_id, \PDO::PARAM_INT);
+            }
+            if (isset($observacion)) {
+                $comando->bindParam(':opan_observacion', $observacion, \PDO::PARAM_STR);
+            }
+            if (isset($usuario)) {
+                $comando->bindParam(':opan_usu_anula', $usuario, \PDO::PARAM_INT);
+            }
+            $result = $comando->execute();
+            if ($trans !== null)
+                $trans->commit();
+            return $con->getLastInsertID($con->dbname . '.orden_pago_anulada');
+        } catch (Exception $ex) {
+            if ($trans !== null)
+                $trans->rollback();
+            return FALSE;
+        }
+    }
+    
+     /**
+     * Function insertarSolicDscto (Crea la solicitud descuento)
+     * @author  Grace Viteri <analistadesarrollo01@uteg.edu.ec>
+     * @param   
+     * @return  
+     */
+    public function insertarSolicDscto($sins_id, $ddit_id, $sdes_precio, $sdes_porcentaje, $sdes_valor) {
+        $con = \Yii::$app->db_facturacion;
+
+        $trans = $con->getTransaction(); // se obtiene la transacción actual
+        if ($trans !== null) {
+            $trans = null; // si existe la transacción entonces no se crea una
+        } else {
+            $trans = $con->beginTransaction(); // si no existe la transacción entonces se crea una
+        }
+
+        $param_sql = "sdes_estado_logico";
+        $bdsoldes_sql = "1";
+
+        $param_sql .= ", sdes_estado";
+        $bdsoldes_sql .= ", 1";
+                
+        if (isset($sins_id)) {
+            $param_sql .= ", sins_id";
+            $bdsoldes_sql .= ", :sins_id";
+        }
+
+        if (isset($ddit_id)) {
+            $param_sql .= ", ddit_id";
+            $bdsoldes_sql .= ", :ddit_id";
+        }
+
+        if (isset($sdes_precio)) {
+            $param_sql .= ", sdes_precio";
+            $bdsoldes_sql .= ", :sdes_precio";
+        }
+
+        if (isset($sdes_porcentaje)) {
+            $param_sql .= ", sdes_porcentaje";
+            $bdsoldes_sql .= ", :sdes_porcentaje";
+        }
+
+        if (isset($sdes_valor)) {
+            $param_sql .= ", sdes_valor";
+            $bdsoldes_sql .= ", :sdes_valor";
+        }
+
+        try {
+            $sql = "INSERT INTO " . $con->dbname . ".solicitud_descuento ($param_sql) VALUES($bdsoldes_sql)";
+            $comando = $con->createCommand($sql);
+
+            if (isset($sins_id))
+                $comando->bindParam(':sins_id', $sins_id, \PDO::PARAM_INT);
+
+            if (isset($ddit_id))
+                $comando->bindParam(':ddit_id', $ddit_id, \PDO::PARAM_INT);
+
+            if (isset($sdes_precio))
+                $comando->bindParam(':sdes_precio', $sdes_precio, \PDO::PARAM_INT);
+
+            if (isset($sdes_porcentaje))
+                $comando->bindParam(':sdes_porcentaje', $sdes_porcentaje, \PDO::PARAM_INT);
+
+            if (isset($sdes_valor))
+                $comando->bindParam(':sdes_valor', $sdes_valor, \PDO::PARAM_INT);            
+
+            $result = $comando->execute();
+            if ($trans !== null)
+                $trans->commit();
+            return $con->getLastInsertID($con->dbname . '.solicitud_descuento');
+        } catch (Exception $ex) {
+            if ($trans !== null)
+                $trans->rollback();
+            return FALSE;
         }
     }
 

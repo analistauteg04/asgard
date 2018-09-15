@@ -10,13 +10,13 @@ use yii\helpers\Html;
 <div>
     <form class="form-horizontal">
         <?=
-        $this->render('_formBuscarPreintere');
+        $this->render('_form_Buscarpreinteresado');
         ?>
     </form>
 </div>
 <div>
     <?=
-        $this->render('_listarPreintereGrid', [
+        $this->render('_listarpreinteresado_grid', [
             'model' => $model,
             'url' => $url]);
     ?>

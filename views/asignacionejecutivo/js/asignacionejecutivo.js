@@ -68,7 +68,7 @@ $(document).ready(function () {
 
 function actualizarGrid(){
     var search = $('#txt_buscarData').val();
-    var ejecutivo = $('#cmb_ejecutivo option:selected').val();
+    var ejecutivo = $('#cmb_agente option:selected').val();
     var f_ini = $('#txt_fecha_ini').val();
     var f_fin = $('#txt_fecha_fin').val();
     //Buscar almenos una clase con el nombre para ejecutar

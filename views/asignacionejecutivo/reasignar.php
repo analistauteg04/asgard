@@ -30,7 +30,7 @@ use yii\helpers\Url;
     </div>      
     <div class="col-md-12">
         <div class="form-group">
-            <label for="cmb_nivel" class="col-sm-4 control-label keyupmce"><?= Yii::t("solicitud_ins", "Level Inter") ?></label>
+            <label for="cmb_nivel" class="col-sm-4 control-label keyupmce"><?= Yii::t("formulario", "Academic unit") ?></label>
             <div class="col-sm-8">                
                 <?= Html::dropDownList("cmb_nivel", 0, $arr_nivel, ["class" => "form-control PBvalidation", "id" => "cmb_nivel"]) ?>               
             </div>
