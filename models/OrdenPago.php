@@ -829,16 +829,14 @@ class OrdenPago extends \yii\db\ActiveRecord {
                                icpr.icpr_estado_logico = :estado) observacion,
                         $resp_gruporol as rol
                 FROM " . $con->dbname . ".orden_pago opag INNER JOIN " . $con1->dbname . ".solicitud_inscripcion sins on opag.sins_id = sins.sins_id                        
-                        INNER JOIN " . $con1->dbname . ".interesado inte on inte.int_id = sins.int_id
-                        INNER JOIN " . $con1->dbname . ".pre_interesado pint on pint.pint_id = inte.pint_id
-                        INNER JOIN " . $con2->dbname . ".persona per on per.per_id = pint.per_id      
+                        INNER JOIN " . $con1->dbname . ".interesado inte on inte.int_id = sins.int_id                        
+                        INNER JOIN " . $con2->dbname . ".persona per on per.per_id = inte.per_id      
                 WHERE   opag.opag_id = :opag_id AND 
                         opag.opag_estado = :estado AND
                         opag.opag_estado_logico = :estado AND
                         sins.sins_estado = :estado AND   
                         sins.sins_estado_logico = :estado AND   
-                        inte.int_estado_logico = :estado AND                        
-                        pint.pint_estado_logico = :estado AND
+                        inte.int_estado_logico = :estado AND                                                
                         per.per_estado = :estado AND
                         per.per_estado_logico = :estado";
 
