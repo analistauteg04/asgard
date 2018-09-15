@@ -190,7 +190,7 @@ class SolicitudInscripcion extends \yii\db\ActiveRecord
                             where sins.ming_id = ming.ming_id AND
                                   ming.ming_estado = :estado AND
                                   ming.ming_estado_logico = :estado),'NA') as ming_nombre,
-                    eac.eaca_nombre,
+                    eac.eaca_nombre car_nombre,
                     concat(per.per_pri_nombre ,' ', ifnull(per.per_seg_nombre,' ')) as per_nombres,
                     concat(per.per_pri_apellido ,' ', ifnull(per.per_seg_apellido,' ')) as per_apellidos,
                     sins.sins_fecha_solicitud as fecha_solicitud,
@@ -324,7 +324,7 @@ class SolicitudInscripcion extends \yii\db\ActiveRecord
             $str_search .= "per.per_pri_nombre like :search OR ";
             $str_search .= "per.per_cedula like :search) AND ";
             if ($arrFiltro['carrera'] != "" && $arrFiltro['carrera'] > 0) {
-                $str_search .= "car.car_id = :carrera AND ";
+                $str_search .= "sins.car_id = :carrera AND ";
             }
             if ($arrFiltro['f_ini'] != "" && $arrFiltro['f_fin'] != "") {
                 $str_search .= "sins.sins_fecha_solicitud >= :fec_ini AND ";
@@ -345,12 +345,13 @@ class SolicitudInscripcion extends \yii\db\ActiveRecord
                     sins.sins_fecha_solicitud as fecha_solicitud,
                     per.per_cedula as per_dni,
                     concat(per.per_pri_nombre ,' ', ifnull(per.per_seg_nombre, ' ')) as per_nombres,
-                    concat(per.per_pri_apellido ,' ', ifnull(per.per_seg_apellido,' ')) as per_apellidos,
+                    concat(per.per_pri_apellido ,' ', ifnull(per.per_seg_apellido,' ')) as per_apellidos,                    
                     uaca.uaca_nombre as nint_nombre,
                     ifnull((select ming.ming_nombre 
                             from " . $con->dbname . ".metodo_ingreso as ming 
                             where sins.ming_id = ming.ming_id and
                                   ming.ming_estado = :estado and ming.ming_estado_logico = :estado),'') as ming_nombre,
+                    sins.eaca_id,
                     eac.eaca_nombre as carrera,
                     rsol.rsin_nombre as estado,
                     $columnsAdd
@@ -375,6 +376,7 @@ class SolicitudInscripcion extends \yii\db\ActiveRecord
                     INNER JOIN " . $con1->dbname . ".estudio_academico as eac on sins.eaca_id = eac.eaca_id
                 WHERE  
                     $str_search 
+                    per.per_id = :per_id AND
                     sins.sins_estado_logico=:estado AND 
                     inte.int_estado_logico=:estado AND                     
                     per.per_estado_logico=:estado AND 
@@ -391,7 +393,7 @@ class SolicitudInscripcion extends \yii\db\ActiveRecord
         
         $comando = $con->createCommand($sql);
         $comando->bindParam(":estado", $estado, \PDO::PARAM_STR);
-        $comando->bindParam(":int_id", $int_id, \PDO::PARAM_INT);
+        $comando->bindParam(":per_id", $int_id, \PDO::PARAM_INT);
         if (isset($arrFiltro) && count($arrFiltro) > 0) {
             $search_cond = "%" . $arrFiltro["search"] . "%";
             $fecha_ini = $arrFiltro["f_ini"];
@@ -586,14 +588,14 @@ class SolicitudInscripcion extends \yii\db\ActiveRecord
         $sql = "SELECT  imni.imni_id, 
                         (case when sins.sins_beca = '1' then 0 
                               else format(ipre.ipre_precio+(ipre.ipre_precio*ifnull(ipre.ipre_porcentaje_iva,0)),2) end) as precio,
-                        sins.nint_id as nivel_interes,
+                        sins.uaca_id as nivel_interes,
                         sins.ming_id as metodo_ingreso,
                         sins.mod_id,
                         (select ming.ming_nombre from " . $con->dbname . ".metodo_ingreso ming where ming.ming_id = sins.ming_id and ming.ming_estado = :estado AND ming.ming_estado_logico = :estado) as nombre_metodo_ingreso,
-                        (select nint.nint_nombre from " . $con->dbname . ".nivel_interes nint where  nint.nint_id = sins.nint_id and nint.nint_estado = :estado AND nint.nint_estado_logico = :estado) as nombre_nivel_interes,
+                        (select uaca.uaca_nombre from " . $con3->dbname . ".unidad_academica uaca where uaca.uaca_id = sins.uaca_id and uaca.uaca_estado = :estado AND uaca.uaca_estado_logico = :estado) as nombre_nivel_interes,
                         (select m.mod_nombre from " . $con3->dbname . ".modalidad m where  m.mod_id = sins.mod_id and m.mod_estado = :estado AND m.mod_estado_logico = :estado) as nombre_modalidad
                 FROM " . $con->dbname . ".solicitud_inscripcion sins INNER JOIN " . $con2->dbname . ".item_metodo_nivel imni 
-                     on ((sins.ming_id = imni.ming_id and sins.nint_id = imni.nint_id and sins.mod_id = imni.mod_id) or (sins.nint_id = imni.nint_id and sins.mod_id = imni.mod_id and sins.car_id = imni.car_id))
+                     on ((sins.ming_id = imni.ming_id and sins.uaca_id = imni.uaca_id and sins.mod_id = imni.mod_id) or (sins.uaca_id = imni.uaca_id and sins.mod_id = imni.mod_id and sins.eaca_id = imni.eaca_id))
                      INNER JOIN " . $con2->dbname . ".item_precio ipre on imni.ite_id = ipre.ite_id	
                 WHERE ipre.ipre_estado_precio =:estado_precio AND
                        sins.sins_id = :sins_id AND
