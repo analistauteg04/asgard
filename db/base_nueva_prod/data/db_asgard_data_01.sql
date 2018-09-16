@@ -34,7 +34,7 @@ INSERT INTO `continente` (`cont_id`, `cont_nombre`, `cont_descripcion`, `cont_us
 INSERT INTO `pais` (`pai_id`, `cont_id`, `pai_nombre`, `pai_capital`, `pai_iso2`, `pai_iso3`, `pai_codigo_fono`, `pai_descripcion`, `pai_nacionalidad`, `pai_usuario_ingreso`, `pai_usuario_modifica`, `pai_estado`, `pai_fecha_creacion`, `pai_fecha_modificacion`, `pai_estado_logico`) VALUES
 (1, 1, 'Ecuador', 'Quito', NULL, NULL, '0', 'Ecuador', 'Ecuatoriano/a', NULL, NULL, '1', '2017-01-01 05:00:00', NULL, '1'),
 (2, 1, 'Antigua y Barbuda', 'Saint John', NULL, NULL, '0', 'Antigua Y Barbuda', 'Antiguano', NULL, NULL, '1', '2017-01-01 05:00:00', NULL, '1'),
-(3, 1, 'Agentina', 'Buenos Aires', NULL, NULL, '0', 'Agentina', 'Argentino/a', NULL, NULL, '1', '2017-01-01 05:00:00', NULL, '1'),
+(3, 1, 'Argentina', 'Buenos Aires', NULL, NULL, '0', 'Agentina', 'Argentino/a', NULL, NULL, '1', '2017-01-01 05:00:00', NULL, '1'),
 (4, 1, 'Bahamas', 'Nassau', NULL, NULL, '0', 'Bahamas', 'Bahameño/ña', NULL, NULL, '1', '2017-01-01 05:00:00', NULL, '1'),
 (5, 1, 'Barbados', 'Bridgetown', NULL, NULL, '0', 'Barbados', 'Barbadense', NULL, NULL, '1', '2017-01-01 05:00:00', NULL, '1'),
 (6, 1, 'Belice', 'Belmopán', NULL, NULL, '0', 'Belice', 'Beliceño/ña', NULL, NULL, '1', '2017-01-01 05:00:00', NULL, '1'),
