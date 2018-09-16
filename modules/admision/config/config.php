@@ -8,7 +8,6 @@ $arr_conf = [
                 '<module:admision>/<controller:\w+>/<action:\w+>/<id:\w+>' => '<module>/<controller>/<action>',
             ]
         ],
-        'db_crm' => require(__DIR__ . '/../data/db_crm.php'),
     ],
     'params' => [
         // list of parameters

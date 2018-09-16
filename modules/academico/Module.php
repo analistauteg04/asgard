@@ -1,14 +1,14 @@
 <?php
-namespace app\modules\admision;
+namespace app\modules\academico;
 
 use Yii;
 
 class Module extends \yii\base\Module
 {
-    public $db_admision;    // se debe colocar el identificador de la base que se define en el archivo de modulos: mod.php
+    public $db_academico;    // se debe colocar el identificador de la base que se define en el archivo de modulos: mod.php
     public $class;  // se debe colocar el la clase de la conexion de la base que se define en el archivo de modulos: mod.php
-    public $controllerNamespace = 'app\modules\admision\controllers';
-    private static $module_name = 'admision';
+    public $controllerNamespace = 'app\modules\academico\controllers';
+    private static $module_name = 'academico';
     
     public function init()
     {

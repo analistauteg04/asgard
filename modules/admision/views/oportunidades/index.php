@@ -25,7 +25,7 @@ use yii\web\JsExpression;
 </div>
 <div>
     <?=
-    $this->render('_listarOportunidadesGrid', [
+    $this->render('index-grid', [
         'model' => $model,
     ]);
     ?>
