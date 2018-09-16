@@ -171,7 +171,7 @@ class RegistrarpagoController extends \app\components\CController {
             $per_id = $_SESSION['personaid'];
             if ($data["upload_file"]) {
                 if (empty($_FILES)) {
-                    echo json_encode(['error' => Yii::t("notificaciones", "Error to process File {file}. Try again.", ['{file}' => basename($files['name'])])]);
+                    return json_encode(['error' => Yii::t("notificaciones", "Error to process File {file}. Try again.", ['{file}' => basename($files['name'])])]);
                     return;
                 }
                 //Recibe Parametros
@@ -184,7 +184,7 @@ class RegistrarpagoController extends \app\components\CController {
                 if ($status) {
                     return true;
                 } else {
-                    echo json_encode(['error' => Yii::t("notificaciones", "Error to process File {file}. Try again.", ['{file}' => basename($files['name'])])]);
+                    return json_encode(['error' => Yii::t("notificaciones", "Error to process File {file}. Try again.", ['{file}' => basename($files['name'])])]);
                     return;
                 }
             }
@@ -301,7 +301,7 @@ class RegistrarpagoController extends \app\components\CController {
                         "wtmessage" => Yii::t("notificaciones", "La infomación ha sido grabada. "),
                         "title" => Yii::t('jslang', 'Success'),
                     );
-                    echo Utilities::ajaxResponse('OK', 'alert', Yii::t("jslang", "Sucess"), false, $message);
+                    return Utilities::ajaxResponse('OK', 'alert', Yii::t("jslang", "Sucess"), false, $message);
                 } else {
                     $transaction->rollback();
                     $transaction2->rollback();                    
@@ -309,7 +309,7 @@ class RegistrarpagoController extends \app\components\CController {
                         "wtmessage" => Yii::t("notificaciones", "Error al grabar1." . $mensaje),
                         "title" => Yii::t('jslang', 'Success'),
                     );
-                    echo Utilities::ajaxResponse('NO_OK', 'alert', Yii::t("jslang", "Sucess"), false, $message);
+                    return Utilities::ajaxResponse('NO_OK', 'alert', Yii::t("jslang", "Sucess"), false, $message);
                 }
             } catch (Exception $ex) {
                 $transaction->rollback();
@@ -318,7 +318,7 @@ class RegistrarpagoController extends \app\components\CController {
                     "wtmessage" => Yii::t("notificaciones", "Error al grabar2." . $mensaje),
                     "title" => Yii::t('jslang', 'Success'),
                 );
-                echo Utilities::ajaxResponse('NO_OK', 'alert', Yii::t("jslang", "Sucess"), false, $message);
+                return Utilities::ajaxResponse('NO_OK', 'alert', Yii::t("jslang", "Sucess"), false, $message);
             }
             return;
         }
@@ -411,7 +411,7 @@ class RegistrarpagoController extends \app\components\CController {
             $data = Yii::$app->request->post();
             if ($data["upload_file"]) {
                 if (empty($_FILES)) {
-                    echo json_encode(['error' => Yii::t("notificaciones", "Error to process File {file}. Try again.", ['{file}' => basename($files['name'])])]);
+                    return json_encode(['error' => Yii::t("notificaciones", "Error to process File {file}. Try again.", ['{file}' => basename($files['name'])])]);
                     return;
                 }
                 //Recibe Parametros
@@ -423,7 +423,7 @@ class RegistrarpagoController extends \app\components\CController {
                 if ($status) {
                     return true;
                 } else {
-                    echo json_encode(['error' => Yii::t("notificaciones", "Error to process File {file}. Try again.", ['{file}' => basename($files['name'])])]);
+                    return json_encode(['error' => Yii::t("notificaciones", "Error to process File {file}. Try again.", ['{file}' => basename($files['name'])])]);
                     return;
                 }
             }
@@ -467,14 +467,14 @@ class RegistrarpagoController extends \app\components\CController {
                         "wtmessage" => Yii::t("notificaciones", "Documento ha sido cargado."),
                         "title" => Yii::t('jslang', 'Success'),
                     );
-                    echo \app\models\Utilities::ajaxResponse('OK', 'alert', Yii::t("jslang", "Sucess"), false, $message);
+                    return \app\models\Utilities::ajaxResponse('OK', 'alert', Yii::t("jslang", "Sucess"), false, $message);
                 } else {
                     $transaction->rollback();
                     $message = array(
                         "wtmessage" => Yii::t("notificaciones", "Error: Documento No ha sido cargado."),
                         "title" => Yii::t('jslang', 'Success'),
                     );
-                    echo \app\models\Utilities::ajaxResponse('OK', 'alert', Yii::t("jslang", "Sucess"), false, $message);
+                    return \app\models\Utilities::ajaxResponse('OK', 'alert', Yii::t("jslang", "Sucess"), false, $message);
                 }
             } catch (Exception $ex) {
                 $transaction->rollback();
@@ -482,7 +482,7 @@ class RegistrarpagoController extends \app\components\CController {
                     "wtmessage" => Yii::t("notificaciones", "Error al grabar."),
                     "title" => Yii::t('jslang', 'Success'),
                 );
-                echo \app\models\Utilities::ajaxResponse('NO_OK', 'alert', Yii::t("jslang", "Sucess"), false, $message);
+                return \app\models\Utilities::ajaxResponse('NO_OK', 'alert', Yii::t("jslang", "Sucess"), false, $message);
             }
             return;
         }

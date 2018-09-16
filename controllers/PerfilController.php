@@ -37,13 +37,13 @@ class PerfilController extends \app\components\CController {
             if (isset($data["getprovincias"])) {
                 $provincias = Provincia::find()->select("pro_id AS id, pro_nombre AS name")->where(["pro_estado_logico" => "1", "pro_estado" => "1", "pai_id" => $data['pai_id']])->asArray()->all();
                 $message = array("provincias" => $provincias);
-                echo Utilities::ajaxResponse('OK', 'alert', Yii::t('jslang', 'Success'), 'false', $message);
+                return Utilities::ajaxResponse('OK', 'alert', Yii::t('jslang', 'Success'), 'false', $message);
                 return;
             }
             if (isset($data["getcantones"])) {
                 $cantones = Canton::find()->select("can_id AS id, can_nombre AS name")->where(["can_estado_logico" => "1", "can_estado" => "1", "pro_id" => $data['prov_id']])->asArray()->all();
                 $message = array("cantones" => $cantones);
-                echo Utilities::ajaxResponse('OK', 'alert', Yii::t('jslang', 'Success'), 'false', $message);
+                return Utilities::ajaxResponse('OK', 'alert', Yii::t('jslang', 'Success'), 'false', $message);
                 return;
             }
             if (isset($data["getarea"])) {
@@ -51,7 +51,7 @@ class PerfilController extends \app\components\CController {
                 //$mod_areapais = new Pais();
                 $area = $mod_areapais->consultarCodigoArea($data["codarea"]);
                 $message = array("area" => $area);
-                echo Utilities::ajaxResponse('OK', 'alert', Yii::t('jslang', 'Success'), 'false', $message);
+                return Utilities::ajaxResponse('OK', 'alert', Yii::t('jslang', 'Success'), 'false', $message);
                 return;
             }
         }
@@ -123,7 +123,7 @@ class PerfilController extends \app\components\CController {
 
             if ($data["upload_file"]) {
                 if (empty($_FILES)) {
-                    echo json_encode(['error' => Yii::t("notificaciones", "Error to process File {file}. Try again.", ['{file}' => basename($files['name'])])]);
+                    return json_encode(['error' => Yii::t("notificaciones", "Error to process File {file}. Try again.", ['{file}' => basename($files['name'])])]);
                     return;
                 }
                 //Recibe Paramentros
@@ -135,7 +135,7 @@ class PerfilController extends \app\components\CController {
                 if ($status) {
                     return true;
                 } else {
-                    echo json_encode(['error' => Yii::t("notificaciones", "Error to process File {file}. Try again.", ['{file}' => basename($files['name'])])]);
+                    return json_encode(['error' => Yii::t("notificaciones", "Error to process File {file}. Try again.", ['{file}' => basename($files['name'])])]);
                     return;
                 }
             }
@@ -257,7 +257,7 @@ class PerfilController extends \app\components\CController {
                         "wtmessage" => Yii::t("notificaciones", "La infomación ha sido grabada."),
                         "title" => Yii::t('jslang', 'Success'),
                     );
-                    echo \app\models\Utilities::ajaxResponse('OK', 'alert', Yii::t("jslang", "Sucess"), false, $message);
+                    return \app\models\Utilities::ajaxResponse('OK', 'alert', Yii::t("jslang", "Sucess"), false, $message);
                     return;
                 } else {
                     $transaction->rollback();
@@ -265,7 +265,7 @@ class PerfilController extends \app\components\CController {
                         "wtmessage" => Yii::t("notificaciones", "Error al grabar."),
                         "title" => Yii::t('jslang', 'Success'),
                     );
-                    echo \app\models\Utilities::ajaxResponse('NO_OK', 'alert', Yii::t("jslang", "Sucess"), false, $message);
+                    return \app\models\Utilities::ajaxResponse('NO_OK', 'alert', Yii::t("jslang", "Sucess"), false, $message);
                     return;
                 }
             } catch (Exception $ex) {
@@ -274,7 +274,7 @@ class PerfilController extends \app\components\CController {
                     "wtmessage" => Yii::t("notificaciones", "Error al grabar."),
                     "title" => Yii::t('jslang', 'Success'),
                 );
-                echo \app\models\Utilities::ajaxResponse('NO_OK', 'alert', Yii::t("jslang", "Sucess"), false, $message);
+                return \app\models\Utilities::ajaxResponse('NO_OK', 'alert', Yii::t("jslang", "Sucess"), false, $message);
                 return;
             }
         }

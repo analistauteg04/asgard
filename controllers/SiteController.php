@@ -548,7 +548,7 @@ class SiteController extends CController {
                         ImageDestroy($im); // Liberamos la memoria que ocupaba la imagen
                     } elseif (strtolower($typeImage) == "pdf") {
                         Header("Content-type: application/pdf");
-                        echo file_get_contents($url_image);
+                        return file_get_contents($url_image);
                     }
                     exit();
                 }
