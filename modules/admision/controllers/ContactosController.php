@@ -3,12 +3,15 @@
 namespace app\modules\admision\controllers;
 
 use Yii;
+use app\modules\admision\models\EstadoContacto;
+use app\modules\admision\models\PersonaGestion;
+use yii\helpers\ArrayHelper;
 
 class ContactosController extends \app\components\CController
 {
     public function actionIndex() {
         \app\models\Utilities::putMessageLogFile('hola');
-        /*$per_id = @Yii::$app->session->get("PB_iduser");
+        $per_id = @Yii::$app->session->get("PB_iduser");
         $estado_contacto = EstadoContacto::find()->select("econ_id AS id, econ_nombre AS name")->where(["econ_estado_logico" => "1", "econ_estado" => "1"])->asArray()->all();
         $modPersonaGestion = new PersonaGestion();
         $data = Yii::$app->request->get();
@@ -26,10 +29,10 @@ class ContactosController extends \app\components\CController
         if (Yii::$app->request->isAjax) {
             $data = Yii::$app->request->post();
         }
-        return $this->render('listarContactos', [
+        return $this->render('index', [
                     'model' => $mod_gestion,
                     'arr_contacto' => ArrayHelper::map(array_merge([["id" => "0", "name" => "Todas"]], $estado_contacto), "id", "name"),
-        ]);*/
+        ]);
     }
 
 }
