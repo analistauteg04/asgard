@@ -40,17 +40,17 @@ use app\widgets\PbGridView\PbGridView;
 
             [
                 'class' => 'yii\grid\ActionColumn',
-                'header' => Yii::t("formulario", "Actions"),
-                'template' => '{view} {update} {opportunities}', //    
+                'header' => Yii::t("formulario", "Actions"),//{update} 
+                'template' => '{view} {opportunities}', //    
                 'buttons' => [
                     'view' => function ($url, $model) {
-                        return Html::a('<span class="glyphicon glyphicon-eye-open"></span>', Url::to(['admisiones/vercontacto', 'codigo' => base64_encode($model["pestion_id"]), 'tper' => base64_encode($model["tipo_persona"])]), ["data-toggle" => "tooltip", "title" => "Ver Contacto", "data-pjax" => 0]);
+                        return Html::a('<span class="glyphicon glyphicon-eye-open"></span>', Url::to(['contactos/view', 'codigo' => base64_encode($model["pestion_id"]), 'tper' => base64_encode($model["tipo_persona"])]), ["data-toggle" => "tooltip", "title" => "Ver Contacto", "data-pjax" => 0]);
                     },
-                    'update' => function ($url, $model) {
-                        return Html::a('<span class="glyphicon glyphicon-edit"></span>', Url::to(['admisiones/actualizarcontacto', 'codigo' => base64_encode($model["pestion_id"]), 'tper_id' => base64_encode($model["tipo_persona"])]), ["data-toggle" => "tooltip", "title" => "Modificar Contacto", "data-pjax" => 0]);
-                    },
+                    //'update' => function ($url, $model) {
+                    //    return Html::a('<span class="glyphicon glyphicon-edit"></span>', Url::to(['admisiones/actualizarcontacto', 'codigo' => base64_encode($model["pestion_id"]), 'tper_id' => base64_encode($model["tipo_persona"])]), ["data-toggle" => "tooltip", "title" => "Modificar Contacto", "data-pjax" => 0]);
+                    //},
                     'opportunities' => function ($url, $model) {
-                        return Html::a('<span class="glyphicon glyphicon-th-large"></span>', Url::to(['admisiones/listaroportxcontacto', 'pgid' => base64_encode($model['pestion_id'])]), ["data-toggle" => "tooltip", "title" => "Lista de Oportunidades", "data-pjax" => 0]);
+                        return Html::a('<span class="glyphicon glyphicon-th-large"></span>', Url::to(['contactos/listaroportunidad', 'pgid' => base64_encode($model['pestion_id'])]), ["data-toggle" => "tooltip", "title" => "Lista de Oportunidades", "data-pjax" => 0]);
                     },
                 ],
             ],
