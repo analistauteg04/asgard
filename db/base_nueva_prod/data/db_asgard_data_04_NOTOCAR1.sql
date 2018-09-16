@@ -162,44 +162,41 @@ INSERT INTO `configuracion_seguridad` (`cseg_id`, `tpas_id`, `cseg_long_pass`, `
 --
 INSERT INTO `grupo` (`gru_id`, `cseg_id`, `gru_nombre`, `gru_descripcion`, `gru_observacion`, `gru_estado`, `gru_estado_logico`) VALUES
 (1, 3, 'Super Admin',  'Super Admin', NULL, '1', '1'),
-(2, 1, 'Pre Interesado', 'Pre Interesado', NULL, '1', '1'),
-(3, 1, 'Interesado', 'Interesado', NULL, '1', '1'),
-(4, 1, 'Aspirante', 'Aspirante', NULL, '1', '1'),
-(5, 1, 'Estudiante', 'Estudiante', NULL, '1', '1'),
-(6, 2, 'Docente', 'Docente', NULL, '1', '1'),
-(7, 3, 'Sistemas', 'Sistemas', NULL, '1', '1'),
-(8, 2, 'Admisiones', 'Admisiones', NULL, '1', '1'),
-(9, 2, 'Colecturia', 'Colecturia', NULL, '1', '1'),
-(10, 2, 'Online', 'Online', NULL, '1', '1'),
-(11, 2, 'Financiero', 'Financiero', NULL, '1', '1'),
-(12, 2, 'Grado', 'Grado', NULL, '1', '1'),
-(13, 2, 'Posgrado', 'Grado', NULL, '1', '1');
+(2, 3, 'Sistemas', 'Sistemas', NULL, '1', '1'),
+(3, 2, 'Admisiones', 'Admisiones', NULL, '1', '1'),
+(4, 2, 'Financiero', 'Financiero', NULL, '1', '1'),
+(5, 2, 'Colecturia', 'Colecturia', NULL, '1', '1'),
+(6, 2, 'Online', 'Online', NULL, '1', '1'),
+(7, 2, 'Grado', 'Grado', NULL, '1', '1'),
+(8, 2, 'Posgrado', 'Grado', NULL, '1', '1'),
+(9, 1, 'Interesado', 'Interesado', NULL, '1', '1'),
+(10, 1, 'Aspirante', 'Aspirante', NULL, '1', '1'),
+(11, 1, 'Estudiante', 'Estudiante', NULL, '1', '1'),
+(12, 2, 'Docente', 'Docente', NULL, '1', '1'),
+
 -- --------------------------------------------------------
 --
 -- Volcado de datos para la tabla `ROL`
 --
 INSERT INTO `rol` (`rol_id`, `rol_nombre`, `rol_descripcion`, `rol_estado`, `rol_estado_logico`) VALUES
 (1, 'Super Administrador', 'Super Administrador', '1', '1'),
-(2, 'Pre Interesado', 'Pre Interesado', '1', '1'),
-(3, 'Interesado', 'Interesado', '1', '1'),
-(4, 'Aspirante', 'Aspirante', '1', '1'),
-(5, 'Estudiante', 'Estudiante', '1', '1'),
-(6, 'Docente', 'Docente', '1', '1'),
-(7, 'Admin Sistemas', 'Admin Sistemas', '1', '1'),
-(8, 'Admin Administrativo', 'Admin Administrativo', '1', '1'),
-(9, 'Director', 'Director', '1', '1'),
-(10, 'Jefe', 'Jefe', '1', '1'),
-(11, 'Coordinador Senior', 'Coordinador Senior', '1', '1'),
-(12, 'Coordinador Junior', 'Coordinador Junior', '1', '1'),
-(13, 'Supervisor Senior', 'Supervisor Senior', '1', '1'),
-(14, 'Supervisor Junior', 'Supervisor Junior', '1', '1'),
-(15, 'Analista Senior', 'Analista Senior', '1', '1'),
-(16, 'Analista Junior', 'Analista Junior', '1', '1'),
-(17, 'Asistente Senior', 'Asistente Senior', '1', '1'),
-(18, 'Asistente Junior', 'Asistente Junior', '1', '1'),
-(19, 'Ejecutivo Comercial', 'Ejecutivo Comercial', '1', '1'),
-(20, 'Secretaria', 'Secretaria', '1', '1'),
-(21, 'Administrador Plataforma', 'Administrador Plataforma', '1', '1');
+(2, 'Admin Sistemas', 'Admin Sistemas', '1', '1'),
+(3, 'Admin Administrativo', 'Admin Administrativo', '1', '1'),
+(4, 'Gerente', 'Docente', '1', '1'),
+(5, 'Director', 'Director', '1', '1'),
+(6, 'Jefe', 'Jefe', '1', '1'),
+(7, 'Coordinador', 'Coordinador Senior', '1', '1'),
+(8, 'Supervisor', 'Supervisor Senior', '1', '1'),
+(9, 'Analista', 'Analista Senior', '1', '1'),
+(10, 'Asistente', 'Asistente Senior', '1', '1'),
+(11, 'Lider', 'Lider', '1', '1'),
+(12, 'Agente', 'Ejecutivo Comercial', '1', '1'),
+(13, 'Secretaria', 'Secretaria', '1', '1'),
+(14, 'Interesado', 'Interesado', '1', '1'),
+(15, 'Aspirante', 'Aspirante', '1', '1'),
+(16, 'Estudiante', 'Estudiante', '1', '1'),
+(17, 'Docente', 'Docente', '1', '1');
+
 -- --------------------------------------------------------
 --
 -- Volcado de datos para la tabla `GRUP_ROL`
@@ -224,6 +221,47 @@ INSERT INTO `grup_rol` (`grol_id`, `gru_id`, `rol_id`, `grol_estado`, `grol_esta
 (17, 10, 21, '1', '1'),
 (18, 10, 11, '1', '1'),
 (19, 12, 10, '1', '1');
+
+
+INSERT INTO `grup_rol` (`grol_id`, `gru_id`, `rol_id`, `grol_estado`, `grol_estado_logico`) VALUES
+(1, 1, 1, '1', '1'),
+(2, 2, 2, '1', '1'),
+
+(3, 3, 6, '1', '1'),
+(4, 3, 11, '1', '1'),
+(5, 3, 12, '1', '1'),
+
+(6, 4, 6, '1', '1'),
+(7, 4, 8, '1', '1'),
+(8, 4, 9, '1', '1'),
+(9, 4, 10, '1', '1'),
+
+(10, 5, 6, '1', '1'),
+(11, 5, 8, '1', '1'),
+(12, 5, 9, '1', '1'),
+(13, 5, 10, '1', '1'),
+
+(14, 6, 2, '1', '1'),
+(15, 6, 6, '1', '1'),
+(16, 6, 7, '1', '1'),
+(17, 6, 9, '1', '1'),
+(18, 6, 10, '1', '1'),
+
+(19, 7, 6, '1', '1'),
+(20, 7, 7, '1', '1'),
+(21, 7, 9, '1', '1'),
+(22, 7, 10, '1', '1'),
+
+(23, 8, 6, '1', '1'),
+(24, 8, 7, '1', '1'),
+(25, 8, 9, '1', '1'),
+(26, 8, 10, '1', '1'),
+
+
+(27, 9, 14, '1', '1'),
+(28, 10, 15, '1', '1'),
+(29, 11, 16, '1', '1'),
+(30, 12, 17, '1', '1');
 
 
 

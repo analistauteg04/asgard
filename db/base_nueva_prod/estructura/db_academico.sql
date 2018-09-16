@@ -112,8 +112,6 @@ create table if not exists `modalidad` (
   `mod_id` bigint(20) not null auto_increment primary key, 
   `mod_nombre` varchar(300) not null,
   `mod_descripcion` varchar(500) not null,
-  `mod_nivel_grado` bigint(20) null,
-  `mod_nivel_posgrado` bigint(20) null,
   `mod_usuario_ingreso` bigint(20) not null,
   `mod_usuario_modifica` bigint(20)  null,
   `mod_estado` varchar(1) not null,

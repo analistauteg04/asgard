@@ -36,13 +36,13 @@ class InscripcionulinkController extends \yii\web\Controller {
             if (isset($data["getprovincias"])) {
                 $provincias = Provincia::find()->select("pro_id AS id, pro_nombre AS name")->where(["pro_estado_logico" => "1", "pro_estado" => "1", "pai_id" => $data['pai_id']])->asArray()->all();
                 $message = array("provincias" => $provincias);
-                return Utilities::ajaxResponse('OK', 'alert', Yii::t('jslang', 'Success'), 'false', $message);
+                echo Utilities::ajaxResponse('OK', 'alert', Yii::t('jslang', 'Success'), 'false', $message);
                 return;
             }
             if (isset($data["getcantones"])) {
                 $cantones = Canton::find()->select("can_id AS id, can_nombre AS name")->where(["can_estado_logico" => "1", "can_estado" => "1", "pro_id" => $data['prov_id']])->asArray()->all();
                 $message = array("cantones" => $cantones);
-                return Utilities::ajaxResponse('OK', 'alert', Yii::t('jslang', 'Success'), 'false', $message);
+                echo Utilities::ajaxResponse('OK', 'alert', Yii::t('jslang', 'Success'), 'false', $message);
                 return;
             }
             if (isset($data["getarea"])) {
@@ -50,7 +50,7 @@ class InscripcionulinkController extends \yii\web\Controller {
                 $mod_areapais = new Pais();
                 $area = $mod_areapais->consultarCodigoArea($data["codarea"]);
                 $message = array("area" => $area);
-                return Utilities::ajaxResponse('OK', 'alert', Yii::t('jslang', 'Success'), 'false', $message);
+                echo Utilities::ajaxResponse('OK', 'alert', Yii::t('jslang', 'Success'), 'false', $message);
                 return;
             }
         }
@@ -186,14 +186,14 @@ class InscripcionulinkController extends \yii\web\Controller {
                             "wtmessage" => Yii::t("notificaciones", "La infomación ha sido grabada. "),
                             "title" => Yii::t('jslang', 'Success'),
                         );
-                        return Utilities::ajaxResponse('OK', 'alert', Yii::t("jslang", "Sucess"), false, $message);
+                        echo Utilities::ajaxResponse('OK', 'alert', Yii::t("jslang", "Sucess"), false, $message);
                     } else {
                         $transaction->rollback();
                         $message = array(
                             "wtmessage" => Yii::t("notificaciones", "Error al grabar." . $este),
                             "title" => Yii::t('jslang', 'Error'),
                         );
-                        return Utilities::ajaxResponse('NO_OK', 'alert', Yii::t("jslang", "Error"), false, $message);
+                        echo Utilities::ajaxResponse('NO_OK', 'alert', Yii::t("jslang", "Error"), false, $message);
                     }
                 } else {
                     $mensaje = 'Ya hay registros en los campos, celular, teléfonos o correo';
@@ -202,7 +202,7 @@ class InscripcionulinkController extends \yii\web\Controller {
                         "wtmessage" => Yii::t("notificaciones", "Error al grabar. " . $mensaje),
                         "title" => Yii::t('jslang', 'Error'),
                     );
-                    return Utilities::ajaxResponse('NO_OK', 'alert', Yii::t("jslang", "Error"), false, $message);
+                    echo Utilities::ajaxResponse('NO_OK', 'alert', Yii::t("jslang", "Error"), false, $message);
                 }
             } catch (Exception $ex) {
                 $transaction->rollback();
@@ -210,7 +210,7 @@ class InscripcionulinkController extends \yii\web\Controller {
                     "wtmessage" => $ex->getMessage(), Yii::t("notificaciones", "Error al grabar."),
                     "title" => Yii::t('jslang', 'Error'),
                 );
-                return Utilities::ajaxResponse('NO_OK', 'alert', Yii::t("jslang", "Error"), true, $message);
+                echo Utilities::ajaxResponse('NO_OK', 'alert', Yii::t("jslang", "Error"), true, $message);
             }
         }
     }

@@ -8,7 +8,8 @@ USE `db_asgard`;
 -- Volcado de datos para la tabla `MODULO`
 --
 INSERT INTO `modulo` (`mod_id`, `apl_id`, `mod_nombre`, `mod_tipo`, `mod_dir_imagen`, `mod_url`, `mod_orden`, `mod_lang_file`, `mod_estado_visible`, `mod_estado`, `mod_fecha_creacion`, `mod_fecha_actualizacion`, `mod_estado_logico`) VALUES
-(1, 1, 'Configuraciones', 'Configuraciones', 'glyphicon glyphicon-cog', 'grupo/index', 1, 'menu', '1', '1', '2018-09-15 22:44:54', NULL, '1');
+(1, 1, 'Configuraciones', 'Configuraciones', 'glyphicon glyphicon-cog', 'grupo/index', 1, 'menu', '1', '1', '2018-09-15 22:44:54', NULL, '1'),
+(2, 1, 'Admisiones', 'Admisiones', 'glyphicon glyphicon-cog', 'admisiones/listarcontactos', 1, 'menu', '1', '1', '2018-09-15 22:44:54', NULL, '1');
 
 --
 -- Volcado de datos para la tabla `objeto_modulo`

@@ -61,11 +61,11 @@ INSERT INTO `unidad_academica` (`uaca_id`, `uaca_nombre`, `uaca_descripcion`, `u
 --
 -- Volcado de datos para la tabla `modalidad`
 -- 
-INSERT INTO `modalidad` (`mod_id`, `mod_nombre`,`mod_descripcion`, `mod_nivel_grado`, `mod_nivel_posgrado`, `mod_usuario_ingreso`, `mod_estado`, `mod_estado_logico`) VALUES
-(1, 'Online', 'Online', 1, null, 1, '1', '1'),
-(2, 'Presencial', 'Presencial', 1, null, 1, '1', '1'),
-(3, 'Semipresencial', 'Semipresencial', 1, 2, 1 , '1', '1'),
-(4, 'Distancia', 'Distancia', 1, null, 1, '1', '1');
+INSERT INTO `modalidad` (`mod_id`, `mod_nombre`,`mod_descripcion`, `mod_usuario_ingreso`, `mod_estado`, `mod_estado_logico`) VALUES
+(1, 'Online', 'Online', 1, '1', '1'),
+(2, 'Presencial', 'Presencial', 1, '1', '1'),
+(3, 'Semipresencial', 'Semipresencial', 1 , '1', '1'),
+(4, 'Distancia', 'Distancia', 1, '1', '1');
 
 -- --------------------------------------------------------
 --
