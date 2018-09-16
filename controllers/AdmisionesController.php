@@ -461,8 +461,9 @@ class AdmisionesController extends \app\components\CController {
             $con = \Yii::$app->db_crm;
             $conagente = $mod_gestion->consultarAgenteAutenticado($per_id);
             //$emp_id, $mest_id, $eaca_id, $uaca_id, $mod_id, $eopo_id 
+            //$nombreoportunidad = $mod_gestion->consultarNombreOportunidad($empresa, $modulo_estudio, $estudio_academico, $unidad_academica, $modalidad, $estado_oportunidad);
             $nombreoportunidad = $mod_gestion->consultarNombreOportunidad($empresa, $modulo_estudio, $estudio_academico, $unidad_academica, $modalidad, $estado_oportunidad);
-            $agente = $conagente["padm_id"];
+  
             $transaction = $con->beginTransaction();
             try {
                 $gcrm_codigo = $mod_gestion->consultarUltimoCodcrm();
@@ -470,15 +471,34 @@ class AdmisionesController extends \app\components\CController {
                 $codportunidad = 1 + $gcrm_codigo;
                 $fecha_registro = date(Yii::$app->params["dateTimeByDefault"]);
                 if ($agente > 0) {
-                    if ($nombreoportunidad["eopo_nombre"] == '' || $nombreoportunidad["eopo_nombre"] == 'Ganada' || $nombreoportunidad["eopo_nombre"] == 'Perdida') {
+                    //if ($nombreoportunidad["eopo_nombre"] == '' || $nombreoportunidad["eopo_nombre"] == 'Ganada' || $nombreoportunidad["eopo_nombre"] == 'Perdida') {
+                    if ($nombreoportunidad["Ids"] == '' || $nombreoportunidad["Ids"] == '4' || $nombreoportunidad["Ids"] == '5') {
                         $res_gestion = $mod_gestion->insertarOportunidad($codportunidad, $empresa, $pges_id, $modulo_estudio, $estudio_academico, $unidad_academica, $modalidad, $tipo_oportunidad, $sub_carrera, $canal_conocimiento, $estado_oportunidad, $fecha_registro, $agente, $usuario);
                         if ($res_gestion) {
-                            $transaction->commit();
-                            $message = array(
-                                "wtmessage" => Yii::t("notificaciones", "La infomación ha sido grabada. "),
-                                "title" => Yii::t('jslang', 'Success'),
-                            );
-                            echo Utilities::ajaxResponse('OK', 'alert', Yii::t("jslang", "Sucess"), false, $message);
+                            $opo_id=$res_gestion;
+                            $padm_id=$agente;
+                            $eopo_id = $estado_oportunidad; // En curso por defecto
+                            $bact_fecha_registro=$fecha_registro;
+                            $bact_fecha_proxima_atencion=$fecha_registro;
+                            
+                            $bact_descripcion = (!$nombreoportunidad["Ids"])?'Inicio de Operaciones':'';
+                            $res_actividad=$mod_gestion->insertarActividad($opo_id,$usuario, $padm_id, $eopo_id, $bact_fecha_registro, $bact_descripcion, $bact_fecha_proxima_atencion);
+                            if ($res_actividad) {
+                                $transaction->commit();
+                                $message = array(
+                                    "wtmessage" => Yii::t("notificaciones", "La infomación ha sido grabada. "),
+                                    "title" => Yii::t('jslang', 'Success'),
+                                );
+                                echo Utilities::ajaxResponse('OK', 'alert', Yii::t("jslang", "Sucess"), false, $message);                                
+                            }else{
+                                $transaction->rollback();
+                                $message = array(
+                                    "wtmessage" => Yii::t("notificaciones", "Error al grabar"),
+                                    "title" => Yii::t('jslang', 'Bad Request'),
+                                );
+                                echo Utilities::ajaxResponse('NO_OK', 'alert', Yii::t("jslang", "Bad Request"), false, $message);                                
+                            }
+                            
                         } else {
                             $transaction->rollback();
                             $message = array(
