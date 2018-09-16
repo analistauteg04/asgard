@@ -38,7 +38,7 @@ use app\widgets\PbGridView\PbGridView;
                 'template' => '{view}',
                 'buttons' => [
                     'view' => function ($url, $model) {
-                        return Html::a('<span>' . substr($model['des_estudio'], 0, 30) . '... </span>', Url::to(['listaroportunidades']), ["data-toggle" => "tooltip", "title" => $model['des_estudio']]);
+                        return Html::a('<span>' . substr($model['des_estudio'], 0, 30) . '... </span>', "javascript:", ["data-toggle" => "tooltip", "title" => $model['des_estudio']]);
                     },
                 ],
             ],
