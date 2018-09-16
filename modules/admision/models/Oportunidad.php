@@ -1,6 +1,6 @@
 <?php
 
-namespace app\models;
+namespace app\modules\admision\models;
 
 use yii\data\ArrayDataProvider;
 use DateTime;
@@ -45,7 +45,7 @@ use Yii;
  * @property PersonalAdmision $padm
  * @property EstadoOportunidad $eopo
  */
-class Oportunidad extends \yii\db\ActiveRecord {
+class Oportunidad extends \app\modules\admision\components\CActiveRecord {
 
     /**
      * {@inheritdoc}

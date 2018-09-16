@@ -1,6 +1,6 @@
 <?php
 
-namespace app\models;
+namespace app\modules\admision\models;
 
 use Yii;
 
@@ -17,7 +17,7 @@ use Yii;
  *
  * @property PersonaGestion[] $personaGestions
  */
-class EstadoContacto extends \yii\db\ActiveRecord {
+class EstadoContacto extends \app\modules\admision\components\CActiveRecord {
 
     /**
      * {@inheritdoc}

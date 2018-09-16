@@ -1,6 +1,6 @@
 <?php
 
-namespace app\models;
+namespace app\modules\admision\models;
 
 use Yii;
 
@@ -18,7 +18,7 @@ use Yii;
  *
  * @property Oportunidad[] $oportunidads
  */
-class EstadoOportunidad extends \yii\db\ActiveRecord {
+class EstadoOportunidad extends \app\modules\admision\components\CActiveRecord {
 
     /**
      * {@inheritdoc}

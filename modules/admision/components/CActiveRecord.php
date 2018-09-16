@@ -1,5 +1,5 @@
 <?php
-namespace app\modules\admision\data;
+namespace app\modules\admision\components;
 
 use Yii;
 use yii\base\Application;

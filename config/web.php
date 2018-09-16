@@ -121,6 +121,7 @@ $dir_mod = __DIR__ . '/../modules/';
 $listDirs = scandir($dir_mod);
 $arr_rules = $config['components']['urlManager']['rules'];
 $arr_new_rules = array();
+$arr_new_items = array();
 foreach ($listDirs as $modulo) {// se obtiene los directorios dentro de modules
     if($modulo != "." && $modulo != ".."){
         $modFile = $dir_mod . $modulo . "/config/mod.php";
@@ -135,10 +136,18 @@ foreach ($listDirs as $modulo) {// se obtiene los directorios dentro de modules
                 $url_manager = $arr_conf['components']['urlManager']['rules'];
                 $arr_new_rules = array_merge($arr_new_rules, $url_manager);
             }
+            foreach($arr_conf['components'] as $keyC => $valueC){
+                if ($keyC != "urlManager") {
+                    $comp_manager[$keyC] = $arr_conf['components'][$keyC];
+                    $arr_new_items = array_merge($arr_new_items, $comp_manager);
+                }
+            }
         }
     }
 }
 $config['components']['urlManager']['rules'] = array_merge($arr_rules, $arr_new_rules);
+$arr_comp = $config['components'];
+$config['components'] = array_merge($arr_comp, $arr_new_items);
 /******************************************************************************/
 if (YII_ENV_DEV) {
     // configuration adjustments for 'dev' environment
