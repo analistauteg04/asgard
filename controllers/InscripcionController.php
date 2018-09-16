@@ -34,20 +34,20 @@ class InscripcionController extends \yii\web\Controller {
             if (isset($data["getprovincias"])) {
                 $provincias = Provincia::find()->select("pro_id AS id, pro_nombre AS name")->where(["pro_estado_logico" => "1", "pro_estado" => "1", "pai_id" => $data['pai_id']])->asArray()->all();
                 $message = array("provincias" => $provincias);
-                echo Utilities::ajaxResponse('OK', 'alert', Yii::t('jslang', 'Success'), 'false', $message);
+                return Utilities::ajaxResponse('OK', 'alert', Yii::t('jslang', 'Success'), 'false', $message);
                 return;
             }
             if (isset($data["getcantones"])) {
                 $cantones = Canton::find()->select("can_id AS id, can_nombre AS name")->where(["can_estado_logico" => "1", "can_estado" => "1", "pro_id" => $data['prov_id']])->asArray()->all();
                 $message = array("cantones" => $cantones);
-                echo Utilities::ajaxResponse('OK', 'alert', Yii::t('jslang', 'Success'), 'false', $message);
+                return Utilities::ajaxResponse('OK', 'alert', Yii::t('jslang', 'Success'), 'false', $message);
                 return;
             }
 
             if (isset($data["getmetodo"])) {
                 $metodos = $mod_metodo->consultarMetodoIngNivelInt($data['nint_id']);
                 $message = array("metodos" => $metodos);
-                echo Utilities::ajaxResponse('OK', 'alert', Yii::t('jslang', 'Success'), 'false', $message);
+                return Utilities::ajaxResponse('OK', 'alert', Yii::t('jslang', 'Success'), 'false', $message);
                 return;
             }
 
@@ -56,14 +56,14 @@ class InscripcionController extends \yii\web\Controller {
                 $mod_areapais = new Pais();
                 $area = $mod_areapais->consultarCodigoArea($data["codarea"]);
                 $message = array("area" => $area);
-                echo Utilities::ajaxResponse('OK', 'alert', Yii::t('jslang', 'Success'), 'false', $message);
+                return Utilities::ajaxResponse('OK', 'alert', Yii::t('jslang', 'Success'), 'false', $message);
                 return;
             }
 
             if (isset($data["getmodalidad"])) {
                 $modalidad = $mod_modalidad->consultarModalidad($data["nint_id"]);
                 $message = array("modalidad" => $modalidad);
-                echo Utilities::ajaxResponse('OK', 'alert', Yii::t('jslang', 'Success'), 'false', $message);
+                return Utilities::ajaxResponse('OK', 'alert', Yii::t('jslang', 'Success'), 'false', $message);
                 return;
             }
         }
@@ -228,7 +228,7 @@ class InscripcionController extends \yii\web\Controller {
                             "wtmessage" => Yii::t("notificaciones", "La infomación ha sido grabada. Por favor para activar su cuenta revise su correo electrónico y siga los pasos."),
                             "title" => Yii::t('jslang', 'Success'),
                         );
-                        echo Utilities::ajaxResponse('OK', 'alert', Yii::t("jslang", "Sucess"), false, $message);
+                        return Utilities::ajaxResponse('OK', 'alert', Yii::t("jslang", "Sucess"), false, $message);
                     }
                 } else {
                     //envío de correo con los datos del acceso.
@@ -248,7 +248,7 @@ class InscripcionController extends \yii\web\Controller {
                     "wtmessage" => $ex->getMessage(), //Yii::t("notificaciones", "Error al grabar."),
                     "title" => Yii::t('jslang', 'Error'),
                 );
-                echo Utilities::ajaxResponse('NO_OK', 'alert', Yii::t("jslang", "Error"), true, $message);
+                return Utilities::ajaxResponse('NO_OK', 'alert', Yii::t("jslang", "Error"), true, $message);
             }
         }
     }
@@ -359,7 +359,7 @@ class InscripcionController extends \yii\web\Controller {
                                 "wtmessage" => Yii::t("notificaciones", "La infomación ha sido grabada. Por favor para activar su cuenta revise su correo Electrónico y siga los pasos."),
                                 "title" => Yii::t('jslang', 'Success'),
                             );
-                            echo Utilities::ajaxResponse('OK', 'alert', Yii::t("jslang", "Sucess"), false, $message);
+                            return Utilities::ajaxResponse('OK', 'alert', Yii::t("jslang", "Sucess"), false, $message);
                             //activación del usuario.
                             return $this->redirect($link);
                         } else {
@@ -378,7 +378,7 @@ class InscripcionController extends \yii\web\Controller {
                 "wtmessage" => $ex->getMessage(), //Yii::t("notificaciones", "Error al grabar."),
                 "title" => Yii::t('jslang', 'Error'),
             );
-            echo Utilities::ajaxResponse('NO_OK', 'alert', Yii::t("jslang", "Error"), true, $message);
+            return Utilities::ajaxResponse('NO_OK', 'alert', Yii::t("jslang", "Error"), true, $message);
         }
     }
 

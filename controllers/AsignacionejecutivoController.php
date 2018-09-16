@@ -51,7 +51,7 @@ class AsignacionejecutivoController extends \app\components\CController {
             if (isset($data["getagente"])) {
                 $resp_agentes = $mod_ejecutivo->consultarListaEjecutivos($data["nivel"], $data["modalidad"], $per_id);            
                 $message = array("agentes" => $resp_agentes);
-                echo Utilities::ajaxResponse('OK', 'alert', Yii::t('jslang', 'Success'), 'false', $message);
+                return Utilities::ajaxResponse('OK', 'alert', Yii::t('jslang', 'Success'), 'false', $message);
                 return;
             }
         }
@@ -121,7 +121,7 @@ class AsignacionejecutivoController extends \app\components\CController {
                         "wtmessage" => Yii::t("notificaciones", "La infomación ha sido grabada. "),
                         "title" => Yii::t('jslang', 'Success'),
                     );
-                    echo Utilities::ajaxResponse('OK', 'alert', Yii::t("jslang", "Sucess"), false, $message);
+                    return Utilities::ajaxResponse('OK', 'alert', Yii::t("jslang", "Sucess"), false, $message);
                 }
             } catch (Exception $ex) {
                 $transaction->rollback();
@@ -129,7 +129,7 @@ class AsignacionejecutivoController extends \app\components\CController {
                     "wtmessage" => Yii::t("notificaciones", "Error al grabar."),
                     "title" => Yii::t('jslang', 'Success'),
                 );
-                echo Utilities::ajaxResponse('NO_OK', 'alert', Yii::t("jslang", "Sucess"), false, $message);
+                return Utilities::ajaxResponse('NO_OK', 'alert', Yii::t("jslang", "Sucess"), false, $message);
             }
             return;
         }
@@ -152,7 +152,7 @@ class AsignacionejecutivoController extends \app\components\CController {
             if (isset($data["getagente"])) {
                 $resp_agentes = $mod_ejecutivo->consultarListaEjecutivos($data["nivel"], $data["modalidad"], $per_id);            
                 $message = array("agentes" => $resp_agentes);
-                echo Utilities::ajaxResponse('OK', 'alert', Yii::t('jslang', 'Success'), 'false', $message);
+                return Utilities::ajaxResponse('OK', 'alert', Yii::t('jslang', 'Success'), 'false', $message);
                 return;
             }
         }
@@ -230,14 +230,14 @@ class AsignacionejecutivoController extends \app\components\CController {
                         "wtmessage" => Yii::t("notificaciones", "La infomación ha sido grabada. "),
                         "title" => Yii::t('jslang', 'Success'),
                     );
-                    echo Utilities::ajaxResponse('OK', 'alert', Yii::t("jslang", "Sucess"), false, $message);
+                    return Utilities::ajaxResponse('OK', 'alert', Yii::t("jslang", "Sucess"), false, $message);
                 } else {
                     $transaction->rollback();
                     $message = array(
                         "wtmessage" => Yii::t("notificaciones", $mensaje),
                         "title" => Yii::t('jslang', 'Success'),
                     );
-                    echo Utilities::ajaxResponse('OK', 'alert', Yii::t("jslang", "Sucess"), false, $message);
+                    return Utilities::ajaxResponse('OK', 'alert', Yii::t("jslang", "Sucess"), false, $message);
                 }
             } catch (Exception $ex) {
                 $transaction->rollback();
@@ -245,7 +245,7 @@ class AsignacionejecutivoController extends \app\components\CController {
                     "wtmessage" => Yii::t("notificaciones", "Error al grabar."),
                     "title" => Yii::t('jslang', 'Success'),
                 );
-                echo Utilities::ajaxResponse('NO_OK', 'alert', Yii::t("jslang", "Sucess"), false, $message);
+                return Utilities::ajaxResponse('NO_OK', 'alert', Yii::t("jslang", "Sucess"), false, $message);
             }
             return;
         }

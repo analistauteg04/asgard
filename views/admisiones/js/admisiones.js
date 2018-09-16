@@ -30,7 +30,7 @@ $(document).ready(function () {
         } else {
             $('#divoportunidad_perdida').css('display', 'none');
         }
-    });
+    });   
     $('#btn_grabarOportunidad').click(function () {
         var sub_carrera=($('#cmb_subcarrera').val()!=0 && $('#cmb_subcarrera').val()!='')?$('#cmb_subcarrera').val():0;
         var link = $('#txth_base').val() + "/admisiones/guardaroportunidad";
