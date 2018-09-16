@@ -7,8 +7,41 @@ USE `db_asgard`;
 -- Volcado de datos para la tabla `usuario`
 --
 
-
 INSERT INTO `usuario` (`usu_id`, `per_id`, `usu_user`, `usu_sha`, `usu_password`, `usu_time_pass`, `usu_session`, `usu_last_login`, `usu_link_activo`, `usu_estado`, `usu_fecha_creacion`, `usu_fecha_modificacion`, `usu_estado_logico`) VALUES
+(1, 1, 'dlopez@uteg.edu.ec', 'jkYnLjpgwzse50H4VbKE7zsbvTnC2uIb', '+Y97uXDhL0F9CQaHKKLcbjdmOGUyYTZkZWQxYWYyOGI0ZjhiNzViNDNkM2JkODlkMDMxZGMwYzg1MWM5NjhkMWIxMDI1YzlhY2M3YjUxZTSaXXoLsPecZttR73ENLIgbcsBkgGJ0huoMwIynpIoZv1mEbcqHxwiqBU8ryDMUPNGYoA/M0XhPLYH7dtlD6otV', NULL, NULL, NULL, NULL, '1', '2017-09-28 05:14:00', NULL, '1'),
+(2, 2, 'jefedesarrollo@uteg.edu.ec', 'aP0XxgvEdoBZ8sr19fnN34L_PxTqu3wd', 'HiafLl62OR9qInOO705nwDI3NTczY2Q5MDViYjM5NWFlYTFlZGZkZTdlNTA2MThhMTUzNjc1MjhlYTlkZGZjMDBhMjA2ZTZhMDFmMThkZTcbj9uW0LIhjc0Z1IwPfDMMAfqHOfxNRiKCxVPFWrGNLxzaIPDXaUGGCQH8cyM00AFArFj4MpKR7+fCPiSxXVuF', NULL, NULL, NULL, NULL, '1', '2017-09-27 09:02:00', NULL, '1'),
+(3, 3, 'analistadesarrollo01@uteg.edu.ec', 'aP0XxgvEdoBZ8sr19fnN34L_PxTqu3wd', 'HiafLl62OR9qInOO705nwDI3NTczY2Q5MDViYjM5NWFlYTFlZGZkZTdlNTA2MThhMTUzNjc1MjhlYTlkZGZjMDBhMjA2ZTZhMDFmMThkZTcbj9uW0LIhjc0Z1IwPfDMMAfqHOfxNRiKCxVPFWrGNLxzaIPDXaUGGCQH8cyM00AFArFj4MpKR7+fCPiSxXVuF', NULL, NULL, NULL, NULL, '1', '2017-09-27 09:02:00', NULL, '1'),
+(4, 4, 'analistadesarrollo02@uteg.edu.ec', 'aP0XxgvEdoBZ8sr19fnN34L_PxTqu3wd', 'HiafLl62OR9qInOO705nwDI3NTczY2Q5MDViYjM5NWFlYTFlZGZkZTdlNTA2MThhMTUzNjc1MjhlYTlkZGZjMDBhMjA2ZTZhMDFmMThkZTcbj9uW0LIhjc0Z1IwPfDMMAfqHOfxNRiKCxVPFWrGNLxzaIPDXaUGGCQH8cyM00AFArFj4MpKR7+fCPiSxXVuF', NULL, NULL, NULL, NULL, '1', '2017-09-27 09:02:00', NULL, '1'),
+(5, 5, 'analistadesarrollo03@uteg.edu.ec', 'aP0XxgvEdoBZ8sr19fnN34L_PxTqu3wd', 'HiafLl62OR9qInOO705nwDI3NTczY2Q5MDViYjM5NWFlYTFlZGZkZTdlNTA2MThhMTUzNjc1MjhlYTlkZGZjMDBhMjA2ZTZhMDFmMThkZTcbj9uW0LIhjc0Z1IwPfDMMAfqHOfxNRiKCxVPFWrGNLxzaIPDXaUGGCQH8cyM00AFArFj4MpKR7+fCPiSxXVuF', NULL, NULL, NULL, NULL, '1', '2017-09-27 09:02:00', NULL, '1'),
+(6, 6, 'abejarano@uteg.edu.ec', 'hXiPmZ2Rw2ZZLMkhZ52MXAyU10jzzDJb', 'sn0ZtNfYI9LMSCKF+IUwDDMzZWJlMjhhMGVjMjQ1NzkwNTU0ZmRiNmEwNzM2YjdkMGYzOGU5MWIxYzk3ZGQxMWQwNDc5NjA3ZjdkZDJmYTH1kLkvd9zBO50mgAsIW9hyruABSo8PbR8kBfi5lYUy8TXHbV/N9qDTlta2ucFge0PxZfhUhvlYtY4Hs/qxKj8h', NULL, NULL, NULL, NULL, '1', '2017-10-25 02:53:00', NULL, '1'),
+(7, 7, 'admisiones01@uteg.edu.ec', '60sU04pqQwiP0I5NLm0pbLFhU8x_eUJw', 'PMLFqAeA3TjsRNVHHkSrEzMwZDI4OTVlNjU1YzBjMTgxNzQ2NWM3YTQ3NTk1MjcwZWMzZjYxYThlMGFlZjgyZGQ3YzA5MjM1ZWFjMTY3MWXB0IJRlKOw/a2OCww0lEq+NsDMShqFj8ufvXsVXRlIqUwkv6yvkFcw0Y9+adGlvMMfTI/GXubd9+VqnfYSfdjl', NULL, NULL, NULL, NULL, '1', '2018-05-17 23:20:00', NULL, '1'),
+(8, 8, 'admisiones02@uteg.edu.ec', '60sU04pqQwiP0I5NLm0pbLFhU8x_eUJw', 'PMLFqAeA3TjsRNVHHkSrEzMwZDI4OTVlNjU1YzBjMTgxNzQ2NWM3YTQ3NTk1MjcwZWMzZjYxYThlMGFlZjgyZGQ3YzA5MjM1ZWFjMTY3MWXB0IJRlKOw/a2OCww0lEq+NsDMShqFj8ufvXsVXRlIqUwkv6yvkFcw0Y9+adGlvMMfTI/GXubd9+VqnfYSfdjl', NULL, NULL, NULL, NULL, '1', '2018-05-17 23:25:00', NULL, '1'),
+(9, 9, 'admisiones03@uteg.edu.ec', '60sU04pqQwiP0I5NLm0pbLFhU8x_eUJw', 'PMLFqAeA3TjsRNVHHkSrEzMwZDI4OTVlNjU1YzBjMTgxNzQ2NWM3YTQ3NTk1MjcwZWMzZjYxYThlMGFlZjgyZGQ3YzA5MjM1ZWFjMTY3MWXB0IJRlKOw/a2OCww0lEq+NsDMShqFj8ufvXsVXRlIqUwkv6yvkFcw0Y9+adGlvMMfTI/GXubd9+VqnfYSfdjl', NULL, NULL, NULL, NULL, '1', '2018-05-17 23:25:00', NULL, '1'),
+(10, 10, 'admisiones04@uteg.edu.ec', '60sU04pqQwiP0I5NLm0pbLFhU8x_eUJw', 'PMLFqAeA3TjsRNVHHkSrEzMwZDI4OTVlNjU1YzBjMTgxNzQ2NWM3YTQ3NTk1MjcwZWMzZjYxYThlMGFlZjgyZGQ3YzA5MjM1ZWFjMTY3MWXB0IJRlKOw/a2OCww0lEq+NsDMShqFj8ufvXsVXRlIqUwkv6yvkFcw0Y9+adGlvMMfTI/GXubd9+VqnfYSfdjl', NULL, NULL, NULL, NULL, '1', '2018-05-17 23:25:00', NULL, '1'),
+(11, 11, 'admisiones05@uteg.edu.ec', '60sU04pqQwiP0I5NLm0pbLFhU8x_eUJw', 'PMLFqAeA3TjsRNVHHkSrEzMwZDI4OTVlNjU1YzBjMTgxNzQ2NWM3YTQ3NTk1MjcwZWMzZjYxYThlMGFlZjgyZGQ3YzA5MjM1ZWFjMTY3MWXB0IJRlKOw/a2OCww0lEq+NsDMShqFj8ufvXsVXRlIqUwkv6yvkFcw0Y9+adGlvMMfTI/GXubd9+VqnfYSfdjl', NULL, NULL, NULL, NULL, '1', '2018-05-17 23:25:00', NULL, '1'),
+(12, 12, 'admisiones06@uteg.edu.ec', '60sU04pqQwiP0I5NLm0pbLFhU8x_eUJw', 'PMLFqAeA3TjsRNVHHkSrEzMwZDI4OTVlNjU1YzBjMTgxNzQ2NWM3YTQ3NTk1MjcwZWMzZjYxYThlMGFlZjgyZGQ3YzA5MjM1ZWFjMTY3MWXB0IJRlKOw/a2OCww0lEq+NsDMShqFj8ufvXsVXRlIqUwkv6yvkFcw0Y9+adGlvMMfTI/GXubd9+VqnfYSfdjl', NULL, NULL, NULL, NULL, '1', '2018-05-17 23:25:00', NULL, '1'),
+(13, 13, 'ventasposgrado01@uteg.edu.ec', '60sU04pqQwiP0I5NLm0pbLFhU8x_eUJw', 'PMLFqAeA3TjsRNVHHkSrEzMwZDI4OTVlNjU1YzBjMTgxNzQ2NWM3YTQ3NTk1MjcwZWMzZjYxYThlMGFlZjgyZGQ3YzA5MjM1ZWFjMTY3MWXB0IJRlKOw/a2OCww0lEq+NsDMShqFj8ufvXsVXRlIqUwkv6yvkFcw0Y9+adGlvMMfTI/GXubd9+VqnfYSfdjl', NULL, NULL, NULL, NULL, '1', '2018-05-17 23:25:00', NULL, '1'),
+(14, 14, 'ventasposgrado02@uteg.edu.ec', '60sU04pqQwiP0I5NLm0pbLFhU8x_eUJw', 'PMLFqAeA3TjsRNVHHkSrEzMwZDI4OTVlNjU1YzBjMTgxNzQ2NWM3YTQ3NTk1MjcwZWMzZjYxYThlMGFlZjgyZGQ3YzA5MjM1ZWFjMTY3MWXB0IJRlKOw/a2OCww0lEq+NsDMShqFj8ufvXsVXRlIqUwkv6yvkFcw0Y9+adGlvMMfTI/GXubd9+VqnfYSfdjl', NULL, NULL, NULL, NULL, '1', '2018-05-17 23:25:00', NULL, '1'),
+(15, 15, 'ventasposgrado03@uteg.edu.ec', '60sU04pqQwiP0I5NLm0pbLFhU8x_eUJw', 'PMLFqAeA3TjsRNVHHkSrEzMwZDI4OTVlNjU1YzBjMTgxNzQ2NWM3YTQ3NTk1MjcwZWMzZjYxYThlMGFlZjgyZGQ3YzA5MjM1ZWFjMTY3MWXB0IJRlKOw/a2OCww0lEq+NsDMShqFj8ufvXsVXRlIqUwkv6yvkFcw0Y9+adGlvMMfTI/GXubd9+VqnfYSfdjl', NULL, NULL, NULL, NULL, '1', '2018-05-17 23:25:00', NULL, '1'),
+(16, 16, 'lidercontactcenter@uteg.edu.ec', '60sU04pqQwiP0I5NLm0pbLFhU8x_eUJw', 'PMLFqAeA3TjsRNVHHkSrEzMwZDI4OTVlNjU1YzBjMTgxNzQ2NWM3YTQ3NTk1MjcwZWMzZjYxYThlMGFlZjgyZGQ3YzA5MjM1ZWFjMTY3MWXB0IJRlKOw/a2OCww0lEq+NsDMShqFj8ufvXsVXRlIqUwkv6yvkFcw0Y9+adGlvMMfTI/GXubd9+VqnfYSfdjl', NULL, NULL, NULL, NULL, '1', '2018-08-01 12:15:00', NULL, '1'),
+(17, 17, 'contactcenter01@uteg.edu.ec', '60sU04pqQwiP0I5NLm0pbLFhU8x_eUJw', 'PMLFqAeA3TjsRNVHHkSrEzMwZDI4OTVlNjU1YzBjMTgxNzQ2NWM3YTQ3NTk1MjcwZWMzZjYxYThlMGFlZjgyZGQ3YzA5MjM1ZWFjMTY3MWXB0IJRlKOw/a2OCww0lEq+NsDMShqFj8ufvXsVXRlIqUwkv6yvkFcw0Y9+adGlvMMfTI/GXubd9+VqnfYSfdjl', NULL, NULL, NULL, NULL, '1', '2018-08-01 12:15:00', NULL, '1'),
+(18, 18, 'contactcenter02@uteg.edu.ec', '60sU04pqQwiP0I5NLm0pbLFhU8x_eUJw', 'PMLFqAeA3TjsRNVHHkSrEzMwZDI4OTVlNjU1YzBjMTgxNzQ2NWM3YTQ3NTk1MjcwZWMzZjYxYThlMGFlZjgyZGQ3YzA5MjM1ZWFjMTY3MWXB0IJRlKOw/a2OCww0lEq+NsDMShqFj8ufvXsVXRlIqUwkv6yvkFcw0Y9+adGlvMMfTI/GXubd9+VqnfYSfdjl', NULL, NULL, NULL, NULL, '1', '2018-08-01 12:15:00', NULL, '1'),
+(19, 19, 'contactcenter03@uteg.edu.ec', '60sU04pqQwiP0I5NLm0pbLFhU8x_eUJw', 'PMLFqAeA3TjsRNVHHkSrEzMwZDI4OTVlNjU1YzBjMTgxNzQ2NWM3YTQ3NTk1MjcwZWMzZjYxYThlMGFlZjgyZGQ3YzA5MjM1ZWFjMTY3MWXB0IJRlKOw/a2OCww0lEq+NsDMShqFj8ufvXsVXRlIqUwkv6yvkFcw0Y9+adGlvMMfTI/GXubd9+VqnfYSfdjl', NULL, NULL, NULL, NULL, '1', '2018-08-01 12:15:00', NULL, '1'),
+(20, 20, 'contactcenter04@uteg.edu.ec', '60sU04pqQwiP0I5NLm0pbLFhU8x_eUJw', 'PMLFqAeA3TjsRNVHHkSrEzMwZDI4OTVlNjU1YzBjMTgxNzQ2NWM3YTQ3NTk1MjcwZWMzZjYxYThlMGFlZjgyZGQ3YzA5MjM1ZWFjMTY3MWXB0IJRlKOw/a2OCww0lEq+NsDMShqFj8ufvXsVXRlIqUwkv6yvkFcw0Y9+adGlvMMfTI/GXubd9+VqnfYSfdjl', NULL, NULL, NULL, NULL, '1', '2018-08-01 12:15:00', NULL, '1'),
+(21, 21, 'supervisorcolecturia@uteg.edu.ec', 'rpvwbGDLI7ilrqY_FwySkKJ4jTnDh3Wb', 'at0l/8F1Iql4VdQzARfFZzkxYzE4ODM3OWNmNTVkN2U5OThhODE4YjZjZjZmNDM4MjU0ZWVjYzE5NDFlZWUwOTg5YjU2MjdkNmNjMjczMjnTjulnuDx09CqSNXcAf3Ch6rKAlCnMls6WeVJdq5heXynGF5kJKIUGZrFLnMMGM18ujL4bkh3tGMd1zWbPbsSu', NULL, NULL, NULL, NULL, '1', '2018-01-30 20:13:00', NULL, '1'),
+(22, 22, 'colecturia@uteg.edu.ec', '5ZSDLiC_OFlbibkEQ7ILDbUULNJjYpOX', 'EN/O1jrjQgSHZE6w+bd/nzI0MzJiYzFmZmMzNWMyNzRlMzIyZjdlZjdiMWJhYjJkNzkwMDYzNTAwZmFkMzljY2JiZGFmNWQ5MDI5MWI3Nzc1IMolYpiaYr9M2WC5m5c0JWGU5kQqWtB2gqoQ7gaGsJqiyn7F6x3hpOz5AUU0QrLmerh67ejvhUAAow9Pjefb', NULL, NULL, NULL, NULL, '1', '2018-01-30 20:19:00', NULL, '1'),
+(23, 23, 'aalcivar@uteg.edu.ec', 'DI8IHwXsfNeFrNwdwI_cSwb_Gu7MmFf4', 'uGiTkVrUkRBXTiO2ktA4WTcwMTI1OWI0MTM4YzYwYjBlNDAyODVmMDA2NmZhZjc0MWNmMmZjNGI2OTdjNzEwYWE2M2RjYmI3ZWYxYzQ1MTSui71RbleQi0pTbykQBgrrfDnwAgJkDbij0mICOqkZK1UGn9stLQKZt4TYXU/lQKW9PVWZ9DfiW5KOPHR67Zov', NULL, NULL, NULL, NULL, '1', '2018-07-22 19:44:00', NULL, '1'),
+(24, 24, 'xmosquera@uteg.edu.ec', '60sU04pqQwiP0I5NLm0pbLFhU8x_eUJw', 'PMLFqAeA3TjsRNVHHkSrEzMwZDI4OTVlNjU1YzBjMTgxNzQ2NWM3YTQ3NTk1MjcwZWMzZjYxYThlMGFlZjgyZGQ3YzA5MjM1ZWFjMTY3MWXB0IJRlKOw/a2OCww0lEq+NsDMShqFj8ufvXsVXRlIqUwkv6yvkFcw0Y9+adGlvMMfTI/GXubd9+VqnfYSfdjl', NULL, NULL, NULL, NULL, '1', '2018-08-01 23:59:00', NULL, '1'),
+(25, 25, 'decanasemipresencial@uteg.edu.ec', '60sU04pqQwiP0I5NLm0pbLFhU8x_eUJw', 'PMLFqAeA3TjsRNVHHkSrEzMwZDI4OTVlNjU1YzBjMTgxNzQ2NWM3YTQ3NTk1MjcwZWMzZjYxYThlMGFlZjgyZGQ3YzA5MjM1ZWFjMTY3MWXB0IJRlKOw/a2OCww0lEq+NsDMShqFj8ufvXsVXRlIqUwkv6yvkFcw0Y9+adGlvMMfTI/GXubd9+VqnfYSfdjl', NULL, NULL, NULL, NULL, '1', '2018-08-02 15:46:00', NULL, '1'),
+(26, 26, 'decanoposgrado@uteg.edu.ec', '60sU04pqQwiP0I5NLm0pbLFhU8x_eUJw', 'PMLFqAeA3TjsRNVHHkSrEzMwZDI4OTVlNjU1YzBjMTgxNzQ2NWM3YTQ3NTk1MjcwZWMzZjYxYThlMGFlZjgyZGQ3YzA5MjM1ZWFjMTY3MWXB0IJRlKOw/a2OCww0lEq+NsDMShqFj8ufvXsVXRlIqUwkv6yvkFcw0Y9+adGlvMMfTI/GXubd9+VqnfYSfdjl', NULL, NULL, NULL, NULL, '1', '2018-08-02 15:46:00', NULL, '1'),
+(27, 27, 'secretariaonline@uteg.edu.ec', 'Zso9HhfUjWAo4oTOqx3dx6bJkab3yOhp', 'VXu9Ab+jhCp7EQLtSjtnPTcwZGM5MjVmODc5MmFlN2I3ZmQ3Nzk3NGNjOWMyZGVjN2NjYWM5OWM3OGZjMzIxNmFlYmVlY2QxMGVjNWNhOWIL04zbRKowoUHAejOfzVcXsbXouO37UTxuNnOeKuWgT+W3IvNSYiGC/l1ej3FB7z/DUzjQXD6p9VR7viiYqYX+', NULL, NULL, NULL, NULL, '1', '2018-03-13 19:24:00', NULL, '1'),
+(28, 28, 'ahernandez@uteg.edu.ec', '60sU04pqQwiP0I5NLm0pbLFhU8x_eUJw', 'PMLFqAeA3TjsRNVHHkSrEzMwZDI4OTVlNjU1YzBjMTgxNzQ2NWM3YTQ3NTk1MjcwZWMzZjYxYThlMGFlZjgyZGQ3YzA5MjM1ZWFjMTY3MWXB0IJRlKOw/a2OCww0lEq+NsDMShqFj8ufvXsVXRlIqUwkv6yvkFcw0Y9+adGlvMMfTI/GXubd9+VqnfYSfdjl', NULL, NULL, NULL, NULL, '1', '2018-04-05 23:57:00', NULL, '1'),
+(29, 29, 'administradorplataforma@uteg.edu.ec', '60sU04pqQwiP0I5NLm0pbLFhU8x_eUJw', 'PMLFqAeA3TjsRNVHHkSrEzMwZDI4OTVlNjU1YzBjMTgxNzQ2NWM3YTQ3NTk1MjcwZWMzZjYxYThlMGFlZjgyZGQ3YzA5MjM1ZWFjMTY3MWXB0IJRlKOw/a2OCww0lEq+NsDMShqFj8ufvXsVXRlIqUwkv6yvkFcw0Y9+adGlvMMfTI/GXubd9+VqnfYSfdjl', NULL, NULL, NULL, NULL, '1', '2018-04-13 04:06:00', NULL, '1'),
+
+
+
+
+
 (30, 30, 'jperdomo1973@hotmail.com', 'JedLwGzMjlfn9yc3NAc6rX1rDyvLYCD8', 'LRH0azcb3M5qp4MvQe+gqzM5MWRlMjE4ZjRjNGQxYWYyODMwNzMxNTdhNmNlNTZjZGYwYWE0YTFjMjNlNTQ1NDI3YWE5ZjNjZmU1MzQ1ZDF6uiE3gFPIvlny2Bkv/aiCJMXTBiVhYK+pwS2qeMzrXkvHvLnDMvJWsIuURVmweBjbAklH2QNQJMntY/8k5gPl', NULL, NULL, NULL, NULL, '1', '2017-10-01 07:59:00', NULL, '1'),
 (31, 31, 'alerova272@gmail.com', 'B2-uae3UPpKMkpAhFwTaGrX2T7LKtjjq', '4rT5e2PXvde3wh6WrysE+TJhMDMwNWI1YmNlMDU2N2VmM2JiYTU2ZDU5NTIwM2Y0MGQ2OTI0N2Y5NmQ1MTBiYmU4MGIyYzkzOWI2ODIzY2NLaRdwdHhN4wsnjGJBfa4huKR6t/88VjHUCK3I1WtatD8VGOoam36ylNK/efm1sWVI3vTGFeZjA+YcvYoQn+Q8', NULL, NULL, NULL, NULL, '1', '2017-10-03 12:38:00', NULL, '1'),
 (32, 32, 'jsemblantes96@gmail.com', '5Xiqgcuk5QLqUC1dkzrcXtOojh1Bcsg3', '/rPdCpPvV2pWEZaTnxD/4zYzNTgzODVhMWNiZGNjYWU4NzQxYjVjMTRiMDNhZjJkNGE0Y2U3Y2ZiNDk0OTc1ZjQ0MzhlM2NkZGE4YWVjYTfdIvQX9DJSchT7vceTDzK+05+Dnma3Ls+cptxxht2+/uzD60/C9T7mqMX5nSW3eGoRi6GXVZ4OHfwlKV2QsqlT', NULL, NULL, NULL, NULL, '1', '2017-11-29 22:07:00', NULL, '1'),
@@ -230,6 +263,35 @@ INSERT INTO `usuario` (`usu_id`, `per_id`, `usu_user`, `usu_sha`, `usu_password`
 -- Volcado de datos para la tabla `empresa_persona`
 --
 INSERT INTO `empresa_persona` (`eper_id`, `emp_id`, `per_id`, `eper_estado`, `eper_fecha_creacion`, `eper_fecha_modificacion`, `eper_estado_logico`) VALUES
+(1, 1, 1, '1', '2017-05-10 23:00:00', NULL, '1'),
+(2, 1, 2, '1', '2017-05-10 23:00:00', NULL, '1'),
+(3, 1, 3, '1', '2017-05-10 23:00:00', NULL, '1'),
+(4, 1, 4, '1', '2017-05-10 23:00:00', NULL, '1'),
+(5, 1, 5, '1', '2017-05-10 23:00:00', NULL, '1'),
+(6, 1, 6, '1', '2017-05-10 23:00:00', NULL, '1'),
+(7, 1, 7, '1', '2017-05-10 23:00:00', NULL, '1'),
+(8, 1, 8, '1', '2017-05-10 23:00:00', NULL, '1'),
+(9, 1, 9, '1', '2017-05-10 23:00:00', NULL, '1'),
+(10, 1, 10, '1', '2017-05-10 23:00:00', NULL, '1'),
+(11, 1, 11, '1', '2017-05-10 23:00:00', NULL, '1'),
+(12, 1, 12, '1', '2017-05-10 23:00:00', NULL, '1'),
+(13, 1, 13, '1', '2017-05-10 23:00:00', NULL, '1'),
+(14, 1, 14, '1', '2017-05-10 23:00:00', NULL, '1'),
+(15, 1, 15, '1', '2017-05-10 23:00:00', NULL, '1'),
+(16, 1, 16, '1', '2017-05-10 23:00:00', NULL, '1'),
+(17, 1, 17, '1', '2017-05-10 23:00:00', NULL, '1'),
+(18, 1, 18, '1', '2017-05-10 23:00:00', NULL, '1'),
+(19, 1, 19, '1', '2017-05-10 23:00:00', NULL, '1'),
+(20, 1, 20, '1', '2018-08-01 14:43:07', NULL, '1'),
+(21, 1, 21, '1', '2017-05-10 23:00:00', NULL, '1'),
+(22, 1, 22, '1', '2017-05-10 23:00:00', NULL, '1'),
+(23, 1, 23, '1', '2017-05-10 23:00:00', NULL, '1'),
+(24, 1, 24, '1', '2017-05-10 23:00:00', NULL, '1'),
+(25, 1, 25, '1', '2017-05-10 23:00:00', NULL, '1'),
+(26, 1, 26, '1', '2017-05-10 23:00:00', NULL, '1'),
+(27, 1, 27, '1', '2017-05-10 23:00:00', NULL, '1'),
+(28, 1, 28, '1', '2018-08-02 00:00:03', NULL, '1'),
+(29, 1, 29, '1', '2018-08-02 15:59:11', NULL, '1'),
 (30, 1, 30, '1', '2017-05-10 23:00:00', NULL, '1'),
 (31, 1, 31, '1', '2017-05-10 23:00:00', NULL, '1'),
 (32, 1, 32, '1', '2017-05-10 23:00:00', NULL, '1'),
@@ -450,6 +512,35 @@ INSERT INTO `empresa_persona` (`eper_id`, `emp_id`, `per_id`, `eper_estado`, `ep
 -- Volcado de datos para la tabla `usua_grol_eper`
 --
 INSERT INTO `usua_grol_eper` (`ugep_id`, `eper_id`, `usu_id`, `grol_id`, `ugep_estado`, `ugep_fecha_creacion`, `ugep_fecha_modificacion`, `ugep_estado_logico`) VALUES
+(1, 1, 1, 1, '1', '2017-09-27 09:02:00', NULL, '1'),
+(2, 2, 2, 1, '1', '2017-09-27 09:02:00', NULL, '1'),
+(3, 3, 3, 1, '1', '2017-09-27 09:02:00', NULL, '1'),
+(4, 4, 4, 1, '1', '2017-09-27 09:02:00', NULL, '1'),
+(5, 5, 5, 6, '1', '2017-09-27 09:02:00', NULL, '1'),
+(6, 6, 6, 7, '1', '2018-05-29 19:59:00', NULL, '1'),
+(7, 7, 7, 7, '1', '2018-05-25 03:34:00', NULL, '1'),
+(8, 8, 8, 7, '1', '2018-05-25 03:34:00', NULL, '1'),
+(9, 9, 9, 7, '1', '2018-05-17 23:30:00', NULL, '1'),
+(10, 10, 10, 8, '1', '2017-09-27 09:02:00', NULL, '1'),
+(11, 11, 11, 8, '1', '2017-09-27 09:02:00', NULL, '1'),
+(12, 12, 12, 8, '1', '2018-01-31 21:15:00', NULL, '1'),
+(13, 13, 13, 8, '1', '2018-05-17 23:30:00', NULL, '1'),
+(14, 14, 14, 8, '1', '2018-05-17 23:30:00', NULL, '1'),
+(15, 15, 15, 8, '1', '2018-05-17 23:30:00', NULL, '1'),
+(16, 16, 16, 8, '1', '2018-05-17 23:30:00', NULL, '1'),
+(17, 17, 17, 8, '1', '2018-05-17 23:30:00', NULL, '1'),
+(18, 18, 18, 8, '1', '2018-05-24 04:05:00', NULL, '1'),
+(19, 19, 19, 8, '1', '2018-05-24 04:05:00', NULL, '1'),
+(20, 20, 20, 8, '1', '2018-08-01 19:36:00', NULL, '1'),
+(21, 21, 21, 9, '1', '2018-01-30 03:39:00', NULL, '1'),
+(22, 22, 22, 14, '1', '2017-10-03 07:45:00', NULL, '1'),
+(23, 23, 23, 15, '1', '2017-11-06 20:36:00', NULL, '1'),
+(24, 24, 24, 16, '1', '2018-01-30 02:42:00', NULL, '1'),
+(25, 25, 25, 16, '1', '2018-01-30 02:42:00', NULL, '1'),
+(26, 26, 26, 17, '1', '2018-03-27 20:18:00', NULL, '1'),
+(27, 27, 27, 18, '1', '2018-04-06 00:01:00', NULL, '1'),
+(28, 28, 28, 19, '1', '2018-08-02 17:46:00', NULL, '1'),
+(29, 29, 29, 19, '1', '2018-08-02 16:04:00', NULL, '1'),
 (30, 30, 30, 11, '1', '2017-10-01 08:14:00', NULL, '1'),
 (31, 31, 31, 11, '1', '2017-10-03 12:57:00', NULL, '1'),
 (32, 32, 32, 11, '1', '2017-10-10 05:31:00', NULL, '1'),
@@ -665,6 +756,15 @@ INSERT INTO `usua_grol_eper` (`ugep_id`, `eper_id`, `usu_id`, `grol_id`, `ugep_e
 (242, 242, 242, 11, '1', '2018-08-11 16:43:00', NULL, '1'),
 (243, 243, 243,	11, '1', '2018-08-10 10:06:48',	NULL, '1'),
 (244, 244, 244,	11, '1', '2018-08-14 13:56:11', NULL, '1');
+
+--
+-- Volcado de datos para la tabla `user_passreset`
+--
+INSERT INTO `user_passreset` (`upas_id`, `usu_id`, `upas_token`, `upas_remote_ip_inactivo`, `upas_remote_ip_activo`, `upas_link`, `upas_fecha_inicio`, `upas_fecha_fin`, `upas_estado_activo`, `upas_fecha_creacion`, `upas_fecha_modificacion`, `upas_estado_logico`) VALUES
+(1, 241, NULL, '190.152.39.58', NULL, '', '2018-08-03 19:10:04', NULL, '1', NULL, NULL, '1'),
+(2, 242, NULL, '201.218.21.42', NULL, '', '2018-08-09 19:45:14', NULL, '1', NULL, NULL, '1'),
+(3, 243, NULL, '131.196.8.252', NULL,	'https://www.uteg.edu.ec/asgard/site/updatepass?wg=Y4TwEt0IRYovdfkWtUKtOGdqrBYoA72H', '2018-08-03 18:44:39', NULL, '1',	NULL, NULL, '1'),
+(4, 244, NULL, '181.211.183.131', NULL,	'https://www.uteg.edu.ec/asgard/site/updatepass?wg=jtTSGSaQvaYJXT2gWwpuIbKT20o9K3', '2018-08-14 13:11:45', NULL, '1', NULL, NULL, '1');
 
 --
 -- Volcado de datos para la tabla `persona_contacto`
