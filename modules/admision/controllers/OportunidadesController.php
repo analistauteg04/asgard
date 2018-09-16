@@ -107,7 +107,7 @@ class OportunidadesController extends \app\components\CController
         $academic_study_data = $modoportunidad->consultarCarreraModalidad(1, 1);
         $knowledge_channel_data = $modoportunidad->consultarConocimientoCanal(1);
         $arr_carrerra2 = $modoportunidad->consultarTipoCarrera();
-        $arr_subcarrera = $modoportunidad->consultarSubCarrera(1);
+        $arr_subcarrera = $modoportunidad->consultarSubCarrera($respOportunidad["tcar_id"]);
         $arr_moduloEstudio = $modestudio->consultarEstudioEmpresa($respOportunidad["empresa"]); // tomar id de impresa
         $respRolPerAutentica = $modoportunidad->consultarAgenteAutenticado($per_id);
         $empresa = $empresa_mod->getAllEmpresa();
@@ -247,7 +247,7 @@ class OportunidadesController extends \app\components\CController
             $sub_carrera = ($data["sub_carrera"] != 0) ? $data["sub_carrera"] : null;
             $usuario = @Yii::$app->user->identity->usu_id;
             $con = \Yii::$app->db_crm;
-            $agente = $mod_gestion->consultarAgenteAutenticado($per_id);
+            $agente = $mod_gestion->consultarAgenteAutenticado($per_id); //QUITAR 1 AGENTE ADMIN
             //$emp_id, $mest_id, $eaca_id, $uaca_id, $mod_id, $eopo_id 
             //$nombreoportunidad = $mod_gestion->consultarNombreOportunidad($empresa, $modulo_estudio, $estudio_academico, $unidad_academica, $modalidad, $estado_oportunidad);
             $nombreoportunidad = $mod_gestion->consultarNombreOportunidad($empresa, $modulo_estudio, $estudio_academico, $unidad_academica, $modalidad, $estado_oportunidad);

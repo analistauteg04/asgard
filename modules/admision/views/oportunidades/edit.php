@@ -150,7 +150,7 @@ $fecha_actual = date("Y-m-d");
                 <div class="form-group">
                     <label for="cmb_nivelestudio_act" class="col-sm-5 col-md-5 col-xs-5 col-lg-5 control-label keyupmce"><?= Yii::t("crm", "Service Line") ?></label>
                     <div class="col-sm-7 col-md-7 col-xs-7 col-lg-7">
-                        <?= Html::dropDownList("cmb_nivelestudio_act", $dataOportunidad["uaca_id"], $arr_linea_servicio, ["class" => "form-control", "id" => "cmb_nivelestudio_act", "data-ref" => "edit"]) ?>
+                        <?= Html::dropDownList("cmb_nivelestudio_act", $dataOportunidad["uaca_id"], $arr_linea_servicio, ["class" => "form-control", "id" => "cmb_nivelestudio_act",]) ?>
                     </div>
                 </div>
             </div>
@@ -215,7 +215,7 @@ $fecha_actual = date("Y-m-d");
                 <div class="form-group">
                     <label for="cmb_carrera2" class="col-sm-5 col-md-5 col-xs-5 col-lg-5 control-label keyupmce"><?= Yii::t("academico", "Career") ?></label>
                     <div class="col-sm-7 col-md-7 col-xs-7 col-lg-7">
-                        <?= Html::dropDownList("cmb_carrera2", $dataOportunidad["tcar_id"], $arr_carrerra2, ["class" => "form-control", "id" => "cmb_carrera2"]) ?>
+                        <?= Html::dropDownList("cmb_carrera2", $dataOportunidad["tcar_id"], $arr_carrerra2, ["class" => "form-control", "id" => "cmb_carrera2", "data-ref" => "edit"]) ?>
                     </div>
                 </div>
             </div>
@@ -223,7 +223,7 @@ $fecha_actual = date("Y-m-d");
                 <div class="form-group">
                     <label for="cmb_subcarrera" class="col-sm-5 col-md-5 col-xs-5 col-lg-5 control-label keyupmce"><?= Yii::t("formulario", "Sub Carrier") ?></label>
                     <div class="col-sm-7 col-md-7 col-xs-7 col-lg-7">
-                        <?= Html::dropDownList("cmb_subcarrera", $dataOportunidad["tsca_id"], $arr_subcarrerra, ["class" => "form-control", "id" => "cmb_subcarrera"]) ?>
+                        <?= Html::dropDownList("cmb_subcarrera", $dataOportunidad["subcarera_id"], $arr_subcarrerra, ["class" => "form-control", "id" => "cmb_subcarrera"]) ?>
                     </div>
                 </div>
             </div>

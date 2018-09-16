@@ -455,7 +455,7 @@ class AdmisionesController extends \app\components\CController {
             $sub_carrera = ($data["sub_carrera"]!=0)?$data["sub_carrera"]:null;
             $usuario = @Yii::$app->user->identity->usu_id;
             $con = \Yii::$app->db_crm;
-            $agente = $mod_gestion->consultarAgenteAutenticado($per_id);
+            $agente = 1;//$mod_gestion->consultarAgenteAutenticado($per_id); //QUITAR AGENTE ADMIN
             //$emp_id, $mest_id, $eaca_id, $uaca_id, $mod_id, $eopo_id 
             //$nombreoportunidad = $mod_gestion->consultarNombreOportunidad($empresa, $modulo_estudio, $estudio_academico, $unidad_academica, $modalidad, $estado_oportunidad);
             $nombreoportunidad = $mod_gestion->consultarNombreOportunidad($empresa, $modulo_estudio, $estudio_academico, $unidad_academica, $modalidad, $estado_oportunidad);

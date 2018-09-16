@@ -21,8 +21,44 @@ $(document).ready(function () {
             $('#cmb_subcarrera').html("<option value='0'>Ninguno</option>");
         }
     });
+    $('#cmb_nivelestudio').change(function () {
+        var link = $('#txth_base').val() + "/admision/oportunidades/new";
+        var arrParams = new Object();
+        arrParams.nint_id = $(this).val();
+        arrParams.getmodalidad = true;
+        requestHttpAjax(link, arrParams, function (response) {
+            if (response.status == "OK") {
+                data = response.message;
+                setComboData(data.modalidad, "cmb_modalidad");
+                var arrParams = new Object();
+                if (data.modalidad.length > 0) {
+                    arrParams.unidada = $('#cmb_nivelestudio').val();
+                    arrParams.moda_id = data.modalidad[0].id;
+                    arrParams.getoportunidad = true;
+                    requestHttpAjax(link, arrParams, function (response) {
+                        if (response.status == "OK") {
+                            data = response.message;
+                            setComboData(data.oportunidad, "cmb_tipo_oportunidad");
+                        }
+                    }, true);
+                    var arrParams = new Object();
+                    if (data.modalidad.length > 0) {
+                        arrParams.unidada = $('#cmb_nivelestudio').val();
+                        arrParams.moda_id = data.modalidad[0].id;
+                        arrParams.getcarrera = true;
+                        requestHttpAjax(link, arrParams, function (response) {
+                            if (response.status == "OK") {
+                                data = response.message;
+                                setComboData(data.carrera, "cmb_carrera1");
+                            }
+                        }, true);
+                    }
+                }
+            }
+        }, true);
+    });
     $('#cmb_nivelestudio_act').change(function () {
-        var link = $('#txth_base').val() + "/admision/oportunidades/actualizaroportunidad";
+        var link = $('#txth_base').val() + "/admision/oportunidades/edit";
         var arrParams = new Object();
         arrParams.ninter_id = $(this).val();
         arrParams.getmodalidad = true;
@@ -55,8 +91,21 @@ $(document).ready(function () {
             }
         }, true);
     });
+    $('#cmb_modalidad').change(function () {
+        var link = $('#txth_base').val() + "/admision/oportunidades/new";
+        var arrParams = new Object();
+        arrParams.unidada = $('#cmb_nivelestudio').val();
+        arrParams.moda_id = $(this).val();
+        arrParams.getcarrera = true;
+        requestHttpAjax(link, arrParams, function (response) {
+            if (response.status == "OK") {
+                data = response.message;
+                setComboData(data.carrera, "cmb_carrera1");
+            }
+        }, true);
+    });
     $('#cmb_modalidad_act').change(function () {
-        var link = $('#txth_base').val() + "/admision/admisiones/actualizaroportunidad";
+        var link = $('#txth_base').val() + "/admision/oportunidades/edit";
         var arrParams = new Object();
         arrParams.unidada = $('#cmb_nivelestudio_act').val();
         arrParams.moda_id = $(this).val();
