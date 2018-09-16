@@ -41,32 +41,32 @@ class AdmisionesController extends \app\components\CController {
             if (isset($data["getprovincias"])) {
                 $provincias = Provincia::find()->select("pro_id AS id, pro_nombre AS name")->where(["pro_estado_logico" => "1", "pro_estado" => "1", "pai_id" => $data['pai_id']])->asArray()->all();
                 $message = array("provincias" => $provincias);
-                echo Utilities::ajaxResponse('OK', 'alert', Yii::t('jslang', 'Success'), 'false', $message);
-                return;
+                return Utilities::ajaxResponse('OK', 'alert', Yii::t('jslang', 'Success'), 'false', $message);
+           
             }
             if (isset($data["getcantones"])) {
                 $cantones = Canton::find()->select("can_id AS id, can_nombre AS name")->where(["can_estado_logico" => "1", "can_estado" => "1", "pro_id" => $data['prov_id']])->asArray()->all();
                 $message = array("cantones" => $cantones);
-                echo Utilities::ajaxResponse('OK', 'alert', Yii::t('jslang', 'Success'), 'false', $message);
-                return;
+                return Utilities::ajaxResponse('OK', 'alert', Yii::t('jslang', 'Success'), 'false', $message);
+                
             }
             if (isset($data["getarea"])) {
                 $area = $mod_pais->consultarCodigoArea($data["codarea"]);
                 $message = array("area" => $area);
-                echo Utilities::ajaxResponse('OK', 'alert', Yii::t('jslang', 'Success'), 'false', $message);
-                return;
+                return Utilities::ajaxResponse('OK', 'alert', Yii::t('jslang', 'Success'), 'false', $message);
+                
             }
             if (isset($data["getsubcarrera"])) {
                 $subcarrera = $modcanal->consultarSubCarrera($data["car_id"]);
                 $message = array("subcarrera" => $subcarrera);
-                echo Utilities::ajaxResponse('OK', 'alert', Yii::t('jslang', 'Success'), 'false', $message);
-                return;
+                return Utilities::ajaxResponse('OK', 'alert', Yii::t('jslang', 'Success'), 'false', $message);
+                
             }
             if (isset($data["getcarrera"])) {
                 $carrera = $modcanal->consultarCarreraModalidad($data["unidada"], $data["moda_id"]);
                 $message = array("carrera" => $carrera);
-                echo Utilities::ajaxResponse('OK', 'alert', Yii::t('jslang', 'Success'), 'false', $message);
-                return;
+                return Utilities::ajaxResponse('OK', 'alert', Yii::t('jslang', 'Success'), 'false', $message);
+              
             }
         }
         $arr_pais = Pais::find()->select("pai_id AS id, pai_nombre AS value, pai_codigo_fono AS code")->where(["pai_estado_logico" => "1", "pai_estado" => "1"])->asArray()->all();
@@ -148,13 +148,13 @@ class AdmisionesController extends \app\components\CController {
                         "wtmessage" => Yii::t("formulario", "The information have been saved"),
                         "title" => Yii::t('jslang', 'Success'),
                     );
-                    echo Utilities::ajaxResponse('OK', 'alert', Yii::t("jslang", "Sucess"), false, $message);
+                    return Utilities::ajaxResponse('OK', 'alert', Yii::t("jslang", "Sucess"), false, $message);
                 } else {
                     $message = array(
                         "wtmessage" => Yii::t("formulario", "Error"),
                         "title" => Yii::t('jslang', 'Bad Request'),
                     );
-                    echo Utilities::ajaxResponse('NO_OK', 'alert', Yii::t("jslang", "Bad Request"), false, $message);
+                    return Utilities::ajaxResponse('NO_OK', 'alert', Yii::t("jslang", "Bad Request"), false, $message);
                 }
             } catch (Exception $ex) {
                 $transaction->rollback();
@@ -162,7 +162,7 @@ class AdmisionesController extends \app\components\CController {
                     "wtmessage" => Yii::t("formulario", "Error"),
                     "title" => Yii::t('jslang', 'Bad Request'),
                 );
-                echo Utilities::ajaxResponse('NO_OK', 'alert', Yii::t("jslang", "Bad Request"), false, $message);
+                return Utilities::ajaxResponse('NO_OK', 'alert', Yii::t("jslang", "Bad Request"), false, $message);
             }
             return;
         }
@@ -257,14 +257,14 @@ class AdmisionesController extends \app\components\CController {
                         "wtmessage" => Yii::t("formulario", "The information have been saved"),
                         "title" => Yii::t('jslang', 'Success'),
                     );
-                    echo Utilities::ajaxResponse('OK', 'alert', Yii::t("jslang", "Sucess"), false, $message);
+                    return Utilities::ajaxResponse('OK', 'alert', Yii::t("jslang", "Sucess"), false, $message);
                 } else {
                     $transaction->rollback();
                     $message = array(
                         "wtmessage" => Yii::t("formulario", "Error: " . $error_message),
                         "title" => Yii::t('jslang', 'Bad Request'),
                     );
-                    echo Utilities::ajaxResponse('NO_OK', 'alert', Yii::t("jslang", "Bad Request"), false, $message);
+                    return Utilities::ajaxResponse('NO_OK', 'alert', Yii::t("jslang", "Bad Request"), false, $message);
                 }
             } catch (Exception $ex) {
                 $transaction->rollback();
@@ -272,7 +272,7 @@ class AdmisionesController extends \app\components\CController {
                     "wtmessage" => Yii::t("formulario", "Error: " . $error_message),
                     "title" => Yii::t('jslang', 'Bad Request'),
                 );
-                echo Utilities::ajaxResponse('NO_OK', 'alert', Yii::t("jslang", "Bad Request"), false, $message);
+                return Utilities::ajaxResponse('NO_OK', 'alert', Yii::t("jslang", "Bad Request"), false, $message);
             }
             return;
         }
@@ -415,14 +415,14 @@ class AdmisionesController extends \app\components\CController {
                         "wtmessage" => Yii::t("formulario", "The information have been saved"),
                         "title" => Yii::t('jslang', 'Success'),
                     );
-                    echo Utilities::ajaxResponse('OK', 'alert', Yii::t("jslang", "Sucess"), false, $message);
+                    return Utilities::ajaxResponse('OK', 'alert', Yii::t("jslang", "Sucess"), false, $message);
                 } else {
                     //$transaction->rollback();
                     $message = array(
                         "wtmessage" => Yii::t("formulario", "Mensaje: " . $error_message),
                         "title" => Yii::t('jslang', 'Bad Request'),
                     );
-                    echo Utilities::ajaxResponse('NO_OK', 'alert', Yii::t("jslang", "Bad Request"), false, $message);
+                    return Utilities::ajaxResponse('NO_OK', 'alert', Yii::t("jslang", "Bad Request"), false, $message);
                 }
             } catch (Exception $ex) {
                 $transaction->rollback();
@@ -430,7 +430,7 @@ class AdmisionesController extends \app\components\CController {
                     "wtmessage" => Yii::t("formulario", "Mensaje: " . $error_message),
                     "title" => Yii::t('jslang', 'Bad Request'),
                 );
-                echo Utilities::ajaxResponse('NO_OK', 'alert', Yii::t("jslang", "Bad Request"), false, $message);
+                return Utilities::ajaxResponse('NO_OK', 'alert', Yii::t("jslang", "Bad Request"), false, $message);
             }
             return;
         }
@@ -452,13 +452,14 @@ class AdmisionesController extends \app\components\CController {
             $estado_oportunidad = $data["id_estado_oportunidad"];
             $estudio_academico = $data["id_estudio_academico"];
             $canal_conocimiento = $data["canal_conocimiento"];
-            $sub_carrera = $data["sub_carrera"];
+            $sub_carrera = ($data["sub_carrera"]!=0)?$data["sub_carrera"]:null;
             $usuario = @Yii::$app->user->identity->usu_id;
             $con = \Yii::$app->db_crm;
             $conagente = $mod_gestion->consultarAgenteAutenticado($per_id);
             //$emp_id, $mest_id, $eaca_id, $uaca_id, $mod_id, $eopo_id 
+            //$nombreoportunidad = $mod_gestion->consultarNombreOportunidad($empresa, $modulo_estudio, $estudio_academico, $unidad_academica, $modalidad, $estado_oportunidad);
             $nombreoportunidad = $mod_gestion->consultarNombreOportunidad($empresa, $modulo_estudio, $estudio_academico, $unidad_academica, $modalidad, $estado_oportunidad);
-            $agente = $conagente["padm_id"];
+  
             $transaction = $con->beginTransaction();
             try {
                 $gcrm_codigo = $mod_gestion->consultarUltimoCodcrm();
@@ -466,22 +467,41 @@ class AdmisionesController extends \app\components\CController {
                 $codportunidad = 1 + $gcrm_codigo;
                 $fecha_registro = date(Yii::$app->params["dateTimeByDefault"]);
                 if ($agente > 0) {
-                    if ($nombreoportunidad["eopo_nombre"] == '' || $nombreoportunidad["eopo_nombre"] == 'Ganada' || $nombreoportunidad["eopo_nombre"] == 'Perdida') {
+                    //if ($nombreoportunidad["eopo_nombre"] == '' || $nombreoportunidad["eopo_nombre"] == 'Ganada' || $nombreoportunidad["eopo_nombre"] == 'Perdida') {
+                    if ($nombreoportunidad["Ids"] == '' || $nombreoportunidad["Ids"] == '4' || $nombreoportunidad["Ids"] == '5') {
                         $res_gestion = $mod_gestion->insertarOportunidad($codportunidad, $empresa, $pges_id, $modulo_estudio, $estudio_academico, $unidad_academica, $modalidad, $tipo_oportunidad, $sub_carrera, $canal_conocimiento, $estado_oportunidad, $fecha_registro, $agente, $usuario);
                         if ($res_gestion) {
-                            $transaction->commit();
-                            $message = array(
-                                "wtmessage" => Yii::t("notificaciones", "La infomación ha sido grabada. "),
-                                "title" => Yii::t('jslang', 'Success'),
-                            );
-                            echo Utilities::ajaxResponse('OK', 'alert', Yii::t("jslang", "Sucess"), false, $message);
+                            $opo_id=$res_gestion;
+                            $padm_id=$agente;
+                            $eopo_id = $estado_oportunidad; // En curso por defecto
+                            $bact_fecha_registro=$fecha_registro;
+                            $bact_fecha_proxima_atencion=$fecha_registro;
+                            
+                            $bact_descripcion = (!$nombreoportunidad["Ids"])?'Inicio de Operaciones':'';
+                            $res_actividad=$mod_gestion->insertarActividad($opo_id,$usuario, $padm_id, $eopo_id, $bact_fecha_registro, $bact_descripcion, $bact_fecha_proxima_atencion);
+                            if ($res_actividad) {
+                                $transaction->commit();
+                                $message = array(
+                                    "wtmessage" => Yii::t("notificaciones", "La infomación ha sido grabada. "),
+                                    "title" => Yii::t('jslang', 'Success'),
+                                );
+                                return Utilities::ajaxResponse('OK', 'alert', Yii::t("jslang", "Sucess"), false, $message);                                
+                            }else{
+                                $transaction->rollback();
+                                $message = array(
+                                    "wtmessage" => Yii::t("notificaciones", "Error al grabar"),
+                                    "title" => Yii::t('jslang', 'Bad Request'),
+                                );
+                                return Utilities::ajaxResponse('NO_OK', 'alert', Yii::t("jslang", "Bad Request"), false, $message);                                
+                            }
+                            
                         } else {
                             $transaction->rollback();
                             $message = array(
                                 "wtmessage" => Yii::t("notificaciones", "Error al grabar"),
                                 "title" => Yii::t('jslang', 'Bad Request'),
                             );
-                            echo Utilities::ajaxResponse('NO_OK', 'alert', Yii::t("jslang", "Bad Request"), false, $message);
+                            return Utilities::ajaxResponse('NO_OK', 'alert', Yii::t("jslang", "Bad Request"), false, $message);
                         }
                     } else {
                         $transaction->rollback();
@@ -489,7 +509,7 @@ class AdmisionesController extends \app\components\CController {
                             "wtmessage" => Yii::t("notificaciones", "Error al grabar, Existe una oportunidad con estos datos."),
                             "title" => Yii::t('jslang', 'Bad Request'),
                         );
-                        echo Utilities::ajaxResponse('NO_OK', 'alert', Yii::t("jslang", "Bad Request"), false, $message);
+                        return Utilities::ajaxResponse('NO_OK', 'alert', Yii::t("jslang", "Bad Request"), false, $message);
                     }
                 } else {
                     $transaction->rollback();
@@ -497,7 +517,7 @@ class AdmisionesController extends \app\components\CController {
                         "wtmessage" => Yii::t("notificaciones", "Error al grabar. Usuario no cuenta con permisos"),
                         "title" => Yii::t('jslang', 'Bad Request'),
                     );
-                    echo Utilities::ajaxResponse('NO_OK', 'alert', Yii::t("jslang", "Bad Request"), false, $message);
+                    return Utilities::ajaxResponse('NO_OK', 'alert', Yii::t("jslang", "Bad Request"), false, $message);
                 }
             } catch (Exception $ex) {
                 $transaction->rollback();
@@ -505,7 +525,7 @@ class AdmisionesController extends \app\components\CController {
                     "wtmessage" => Yii::t("notificaciones", "Error al grabar." . $mensaje),
                     "title" => Yii::t('jslang', 'Bad Request'),
                 );
-                echo Utilities::ajaxResponse('NO_OK', 'alert', Yii::t("jslang", "Bad Request"), false, $message);
+                return Utilities::ajaxResponse('NO_OK', 'alert', Yii::t("jslang", "Bad Request"), false, $message);
             }
             return;
         }
@@ -549,14 +569,14 @@ class AdmisionesController extends \app\components\CController {
                             "wtmessage" => Yii::t("notificaciones", "La información ha sido grabada. "),
                             "title" => Yii::t('jslang', 'Success'),
                         );
-                        echo Utilities::ajaxResponse('OK', 'alert', Yii::t("jslang", "Sucess"), false, $message);
+                        return Utilities::ajaxResponse('OK', 'alert', Yii::t("jslang", "Sucess"), false, $message);
                     } else {
                         $transaction->rollback();
                         $message = array(
                             "wtmessage" => Yii::t("notificaciones", "Error al grabar." . $mensaje),
                             "title" => Yii::t('jslang', 'Bad Request'),
                         );
-                        echo Utilities::ajaxResponse('NO_OK', 'alert', Yii::t("jslang", "Bad Request"), false, $message);
+                        return Utilities::ajaxResponse('NO_OK', 'alert', Yii::t("jslang", "Bad Request"), false, $message);
                     }
                 }
             } catch (Exception $ex) {
@@ -565,7 +585,7 @@ class AdmisionesController extends \app\components\CController {
                     "wtmessage" => Yii::t("notificaciones", "Error al grabar." . $mensaje),
                     "title" => Yii::t('jslang', 'Bad Request'),
                 );
-                echo Utilities::ajaxResponse('NO_OK', 'alert', Yii::t("jslang", "Bad Request"), false, $message);
+                return Utilities::ajaxResponse('NO_OK', 'alert', Yii::t("jslang", "Bad Request"), false, $message);
             }
             return;
         }
@@ -812,14 +832,14 @@ class AdmisionesController extends \app\components\CController {
                             "wtmessage" => Yii::t("notificaciones", "La infomación ha sido grabada. "),
                             "title" => Yii::t('jslang', 'Success'),
                         );
-                        echo Utilities::ajaxResponse('OK', 'alert', Yii::t("jslang", "Sucess"), false, $message);
+                        return Utilities::ajaxResponse('OK', 'alert', Yii::t("jslang", "Sucess"), false, $message);
                     } else {
                         $transaction->rollback();
                         $message = array(
                             "wtmessage" => Yii::t("notificaciones", "Error al grabar."),
                             "title" => Yii::t('jslang', 'Success'),
                         );
-                        echo Utilities::ajaxResponse('NO_OK', 'alert', Yii::t("jslang", "Sucess"), false, $message);
+                        return Utilities::ajaxResponse('NO_OK', 'alert', Yii::t("jslang", "Sucess"), false, $message);
                     }
                 } else {
                     $transaction->rollback();
@@ -827,7 +847,7 @@ class AdmisionesController extends \app\components\CController {
                         "wtmessage" => Yii::t("notificaciones", "Error al grabar, el usuario autenticado no tiene permisos." . $mensaje),
                         "title" => Yii::t('jslang', 'Success'),
                     );
-                    echo Utilities::ajaxResponse('NO_OK', 'alert', Yii::t("jslang", "Sucess"), false, $message);
+                    return Utilities::ajaxResponse('NO_OK', 'alert', Yii::t("jslang", "Sucess"), false, $message);
                 }
             } catch (Exception $ex) {
                 $transaction->rollback();
@@ -835,7 +855,7 @@ class AdmisionesController extends \app\components\CController {
                     "wtmessage" => Yii::t("notificaciones", "Error al grabar." . $mensaje),
                     "title" => Yii::t('jslang', 'Success'),
                 );
-                echo Utilities::ajaxResponse('NO_OK', 'alert', Yii::t("jslang", "Sucess"), false, $message);
+                return Utilities::ajaxResponse('NO_OK', 'alert', Yii::t("jslang", "Sucess"), false, $message);
             }
             return;
         }
@@ -871,14 +891,14 @@ class AdmisionesController extends \app\components\CController {
                             "wtmessage" => Yii::t("notificaciones", "La infomación ha sido actualizada. "),
                             "title" => Yii::t('jslang', 'Success'),
                         );
-                        echo Utilities::ajaxResponse('OK', 'alert', Yii::t("jslang", "Sucess"), false, $message);
+                        return Utilities::ajaxResponse('OK', 'alert', Yii::t("jslang", "Sucess"), false, $message);
                     } else {
                         $transaction->rollback();
                         $message = array(
                             "wtmessage" => Yii::t("notificaciones", "Error al grabar."),
                             "title" => Yii::t('jslang', 'Success'),
                         );
-                        echo Utilities::ajaxResponse('NO_OK', 'alert', Yii::t("jslang", "Sucess"), false, $message);
+                        return Utilities::ajaxResponse('NO_OK', 'alert', Yii::t("jslang", "Sucess"), false, $message);
                     }
                 } else {
                     $transaction->rollback();
@@ -886,7 +906,7 @@ class AdmisionesController extends \app\components\CController {
                         "wtmessage" => Yii::t("notificaciones", "Error al grabar, el usuario autenticado no tiene permisos." . $mensaje),
                         "title" => Yii::t('jslang', 'Success'),
                     );
-                    echo Utilities::ajaxResponse('NO_OK', 'alert', Yii::t("jslang", "Sucess"), false, $message);
+                    return Utilities::ajaxResponse('NO_OK', 'alert', Yii::t("jslang", "Sucess"), false, $message);
                 }
             } catch (Exception $ex) {
                 $transaction->rollback();
@@ -894,7 +914,7 @@ class AdmisionesController extends \app\components\CController {
                     "wtmessage" => Yii::t("notificaciones", "Error al grabar." . $mensaje),
                     "title" => Yii::t('jslang', 'Success'),
                 );
-                echo Utilities::ajaxResponse('NO_OK', 'alert', Yii::t("jslang", "Sucess"), false, $message);
+                return Utilities::ajaxResponse('NO_OK', 'alert', Yii::t("jslang", "Sucess"), false, $message);
             }
             return;
         }
@@ -944,8 +964,8 @@ class AdmisionesController extends \app\components\CController {
             $data = Yii::$app->request->post();
             if ($data["upload_file"]) {
                 if (empty($_FILES)) {
-                    echo json_encode(['error' => Yii::t("notificaciones", "Error to process File {file}. Try again.", ['{file}' => basename($files['name'])])]);
-                    return;
+                    return json_encode(['error' => Yii::t("notificaciones", "Error to process File {file}. Try again.", ['{file}' => basename($files['name'])])]);
+                   
                 }
                 //Recibe Parámetros
                 $files = $_FILES[key($_FILES)];
@@ -957,8 +977,8 @@ class AdmisionesController extends \app\components\CController {
                     if ($status) {
                         return true;
                     } else {
-                        echo json_encode(['error' => Yii::t("notificaciones", "Error to process File {file}. Try again.", ['{file}' => basename($files['name'])])]);
-                        return;
+                        return json_encode(['error' => Yii::t("notificaciones", "Error to process File {file}. Try again.", ['{file}' => basename($files['name'])])]);
+                       
                     }
                 }
             }
@@ -969,13 +989,13 @@ class AdmisionesController extends \app\components\CController {
                         "wtmessage" => Yii::t("notificaciones", "Archivo procesado correctamente." . $carga_archivo['data']),
                         "title" => Yii::t('jslang', 'Success'),
                     );
-                    echo Utilities::ajaxResponse('OK', 'alert', Yii::t("jslang", "Success"), false, $message);
+                    return Utilities::ajaxResponse('OK', 'alert', Yii::t("jslang", "Success"), false, $message);
                 } else {
                     $message = array(
                         "wtmessage" => Yii::t("notificaciones", "Error al procesar el archivo. " . $carga_archivo['message']),
                         "title" => Yii::t('jslang', 'Error'),
                     );
-                    echo Utilities::ajaxResponse('NO_OK', 'alert', Yii::t("jslang", "Error"), true, $message);
+                    return Utilities::ajaxResponse('NO_OK', 'alert', Yii::t("jslang", "Error"), true, $message);
                 }
                 return;
             }
@@ -1083,26 +1103,25 @@ class AdmisionesController extends \app\components\CController {
             if (isset($data["getmodalidad"])) {
                 $modalidad = $modalidad_model->consultarModalidad($data["nint_id"]);
                 $message = array("modalidad" => $modalidad);
-                echo Utilities::ajaxResponse('OK', 'alert', Yii::t('jslang', 'Success'), 'false', $message);
-                return;
+                return Utilities::ajaxResponse('OK', 'alert', Yii::t('jslang', 'Success'), 'false', $message);
+                
             }
             if (isset($data["getoportunidad"])) {
                 $oportunidad = $modTipoOportunidad->consultarOporxUnidad($data["unidada"]);
                 $message = array("oportunidad" => $oportunidad);
-                echo Utilities::ajaxResponse('OK', 'alert', Yii::t('jslang', 'Success'), 'false', $message);
-                return;
+                return Utilities::ajaxResponse('OK', 'alert', Yii::t('jslang', 'Success'), 'false', $message);
+                
             }
             if (isset($data["getsubcarrera"])) {
                 $subcarrera = $modcanal->consultarSubCarrera($data["car_id"]);
                 $message = array("subcarrera" => $subcarrera);
-                echo Utilities::ajaxResponse('OK', 'alert', Yii::t('jslang', 'Success'), 'false', $message);
-                return;
+                return Utilities::ajaxResponse('OK', 'alert', Yii::t('jslang', 'Success'), 'false', $message);
+                
             }
             if (isset($data["getcarrera"])) {
                 $carrera = $modcanal->consultarCarreraModalidad($data["unidada"], $data["moda_id"]);
                 $message = array("carrera" => $carrera);
-                echo Utilities::ajaxResponse('OK', 'alert', Yii::t('jslang', 'Success'), 'false', $message);
-                return;
+                return Utilities::ajaxResponse('OK', 'alert', Yii::t('jslang', 'Success'), 'false', $message);
             }
         }
         $arr_carrerra2 = $modcanal->consultarTipoCarrera();
@@ -1234,14 +1253,14 @@ class AdmisionesController extends \app\components\CController {
                         "wtmessage" => Yii::t("notificaciones", "La infomación ha sido actualizada."),
                         "title" => Yii::t('jslang', 'Success'),
                     );
-                    echo Utilities::ajaxResponse('OK', 'alert', Yii::t("jslang", "Sucess"), false, $message);
+                    return Utilities::ajaxResponse('OK', 'alert', Yii::t("jslang", "Sucess"), false, $message);
                 } else {
                     $transaction->rollback();
                     $message = array(
                         "wtmessage" => Yii::t("notificaciones", "Error al grabar." . $mensaje),
                         "title" => Yii::t('jslang', 'Success'),
                     );
-                    echo Utilities::ajaxResponse('NO_OK', 'alert', Yii::t("jslang", "Sucess"), false, $message);
+                    return Utilities::ajaxResponse('NO_OK', 'alert', Yii::t("jslang", "Sucess"), false, $message);
                 }
             } catch (Exception $ex) {
                 $transaction->rollback();
@@ -1249,7 +1268,7 @@ class AdmisionesController extends \app\components\CController {
                     "wtmessage" => Yii::t("notificaciones", "Error al grabar." . $mensaje),
                     "title" => Yii::t('jslang', 'Success'),
                 );
-                echo Utilities::ajaxResponse('NO_OK', 'alert', Yii::t("jslang", "Sucess"), false, $message);
+                return Utilities::ajaxResponse('NO_OK', 'alert', Yii::t("jslang", "Sucess"), false, $message);
             }
             return;
         }
@@ -1353,14 +1372,14 @@ class AdmisionesController extends \app\components\CController {
                             "wtmessage" => Yii::t("notificaciones", "La infomación ha sido grabada. "),
                             "title" => Yii::t('jslang', 'Success'),
                         );
-                        echo Utilities::ajaxResponse('OK', 'alert', Yii::t("jslang", "Sucess"), false, $message);
+                        return Utilities::ajaxResponse('OK', 'alert', Yii::t("jslang", "Sucess"), false, $message);
                     } else {
                         $transaction->rollback();
                         $message = array(
                             "wtmessage" => Yii::t("notificaciones", "Error al grabar. " . $mensaje),
                             "title" => Yii::t('jslang', 'Success'),
                         );
-                        echo Utilities::ajaxResponse('NO_OK', 'alert', Yii::t("jslang", "Sucess"), false, $message);
+                        return Utilities::ajaxResponse('NO_OK', 'alert', Yii::t("jslang", "Sucess"), false, $message);
                     }
                 } else {
                     $mensaje = 'Registro ya existente';
@@ -1369,7 +1388,7 @@ class AdmisionesController extends \app\components\CController {
                         "wtmessage" => Yii::t("notificaciones", "No se puede guardar el contacto " . $mensaje),
                         "title" => Yii::t('jslang', 'Success'),
                     );
-                    echo Utilities::ajaxResponse('NO_OK', 'alert', Yii::t("jslang", "Sucess"), false, $message);
+                    return Utilities::ajaxResponse('NO_OK', 'alert', Yii::t("jslang", "Sucess"), false, $message);
                 }
             } catch (Exception $ex) {
                 $transaction->rollback();
@@ -1377,7 +1396,7 @@ class AdmisionesController extends \app\components\CController {
                     "wtmessage" => Yii::t("notificaciones", "Error al grabar." . $mensaje),
                     "title" => Yii::t('jslang', 'Success'),
                 );
-                echo Utilities::ajaxResponse('NO_OK', 'alert', Yii::t("jslang", "Sucess"), false, $message);
+                return Utilities::ajaxResponse('NO_OK', 'alert', Yii::t("jslang", "Sucess"), false, $message);
             }
             return;
         }
@@ -1455,20 +1474,20 @@ class AdmisionesController extends \app\components\CController {
             if (isset($data["getmodalidad"])) {
                 $modalidad = $modalidad_model->consultarModalidad($data["ninter_id"]);
                 $message = array("modalidad" => $modalidad);
-                echo Utilities::ajaxResponse('OK', 'alert', Yii::t('jslang', 'Success'), 'false', $message);
-                return;
+                return Utilities::ajaxResponse('OK', 'alert', Yii::t('jslang', 'Success'), 'false', $message);
+                
             }
             if (isset($data["getoportunidad"])) {
                 $oportunidad = $modTipoOportunidad->consultarOporxUnidad($data["unidada"]);
                 $message = array("oportunidad" => $oportunidad);
-                echo Utilities::ajaxResponse('OK', 'alert', Yii::t('jslang', 'Success'), 'false', $message);
-                return;
+                return Utilities::ajaxResponse('OK', 'alert', Yii::t('jslang', 'Success'), 'false', $message);
+                
             }
             if (isset($data["getsubcarrera"])) {
                 $subcarrera = $modoportunidad->consultarSubCarrera($data["car_id"]);
                 $message = array("subcarrera" => $subcarrera);
-                echo Utilities::ajaxResponse('OK', 'alert', Yii::t('jslang', 'Success'), 'false', $message);
-                return;
+                return Utilities::ajaxResponse('OK', 'alert', Yii::t('jslang', 'Success'), 'false', $message);
+                
             }
             if (isset($data["getcarrera"])) {
                 if ($data["unidada"] < 3) {
@@ -1477,8 +1496,8 @@ class AdmisionesController extends \app\components\CController {
                     $carrera = $modestudio->consultarCursoModalidad($data["unidada"], $data["moda_id"]);
                 }
                 $message = array("carrera" => $carrera);
-                echo Utilities::ajaxResponse('OK', 'alert', Yii::t('jslang', 'Success'), 'false', $message);
-                return;
+                return Utilities::ajaxResponse('OK', 'alert', Yii::t('jslang', 'Success'), 'false', $message);
+               
             }
         }
 
@@ -1501,15 +1520,7 @@ class AdmisionesController extends \app\components\CController {
                     'pges_id' => $pges_id,
                         //'per_id' => $per_id,
         ]);
-        /* } else {             
-          $message = array(
-          "wtmessage" => Yii::t("notificaciones", "El agente ". $respOportunidad["agente"]. " puede modificar esta oportunidad o un Supervisor. "),
-          "title" => Yii::t('jslang', 'Success'),
-          );
-          echo Utilities::ajaxResponse('NOK', 'alert', Yii::t("jslang", "Sucess"), false, $message);
-          return;
-          };
-         */
+ 
     }
 
 }

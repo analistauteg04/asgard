@@ -2,6 +2,7 @@
 
 namespace app\modules\admision\models;
 
+use app\models\admision\models\Oportunidad;
 use yii\data\ArrayDataProvider;
 use Yii;
 
