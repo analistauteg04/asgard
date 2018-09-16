@@ -1044,7 +1044,7 @@ class AdmisionesController extends \app\components\CController {
         if (Yii::$app->request->isAjax) {
             $data = Yii::$app->request->post();
         }
-        return $this->render('listarOportXContacto', [
+        return $this->render('_listarOportXContactGrid', [
                     'model' => $ListOportXContact,
                     "tipo_dni" => array("CED" => Yii::t("formulario", "DNI Document"), "PASS" => Yii::t("formulario", "Passport")),
                     'personalData' => $contactManage,
