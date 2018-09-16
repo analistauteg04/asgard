@@ -8,7 +8,7 @@ class ActividadesController extends \app\components\CController
 {
     public function actionIndex()
     {
-
+        
     }
 
     public function actionView()

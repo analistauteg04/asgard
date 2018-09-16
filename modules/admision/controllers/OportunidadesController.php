@@ -7,7 +7,7 @@ use Yii;
 class OportunidadesController extends \app\components\CController
 {
     public function actionIndex(){
-
+        return "test";
     }
 
     public function actionView()
