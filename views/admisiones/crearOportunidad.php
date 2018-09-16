@@ -1,6 +1,7 @@
 <?php
 
 use yii\helpers\Html;
+use yii\helpers\ArrayHelper;
 
 if (!empty($personalData['pges_cedula'])) {
     $tipodoc = "Cédula";
@@ -205,7 +206,7 @@ $fecha_actual = date("Y-m-d");
                 <div class="form-group">
                     <label for="cmb_carrera2" class="col-sm-5 col-md-5 col-xs-5 col-lg-5 control-label keyupmce"><?= Yii::t("academico", "Career") ?></label>
                     <div class="col-sm-7 col-md-7 col-xs-7 col-lg-7">
-                        <?= Html::dropDownList("cmb_carrera2", 1, $arr_carrerra2, ["class" => "form-control", "id" => "cmb_carrera2"]) ?>
+                        <?= Html::dropDownList("cmb_carrera2", 0,['0' => Yii::t('formulario', 'Any')] + $arr_carrerra2, ["class" => "form-control", "id" => "cmb_carrera2"]) ?>
                     </div>
                 </div>
             </div>
@@ -213,7 +214,7 @@ $fecha_actual = date("Y-m-d");
                 <div class="form-group">
                     <label for="cmb_subcarrera" class="col-sm-5 col-md-5 col-xs-5 col-lg-5 control-label keyupmce"><?= Yii::t("formulario", "Sub Carrier") ?></label>
                     <div class="col-sm-7 col-md-7 col-xs-7 col-lg-7">
-                        <?= Html::dropDownList("cmb_subcarrera", 1, $arr_subcarrerra, ["class" => "form-control", "id" => "cmb_subcarrera"]) ?>
+                        <?= Html::dropDownList("cmb_subcarrera", 0, ['0' => Yii::t('formulario', 'Any')] + $arr_subcarrerra, ["class" => "form-control", "id" => "cmb_subcarrera"]) ?>
                     </div>
                 </div>
             </div>

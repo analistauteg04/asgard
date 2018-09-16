@@ -100,6 +100,7 @@ return [
     "Attention Date" => "Fecha Atención",
     "Attention Hour" => "Hora Atención",
     "Attention Next" => "Próxima Atención",
+    "Any" => "Ninguno",
     "Auditive" => "Auditiva",
     "Average" => "Promediar",
     "B. Date" => "F. Nacimiento",

@@ -21,14 +21,14 @@ class AdministracioncursoController extends \app\components\CController {
             if (isset($data["getmetodo"])) {
                 $metodo = $mod_metodo->consultarMetodoIngNivelInt($data['nint_id']);
                 $message = array("metodo" => $metodo);
-                echo Utilities::ajaxResponse('OK', 'alert', Yii::t('jslang', 'Success'), 'false', $message);
-                return;
+                return Utilities::ajaxResponse('OK', 'alert', Yii::t('jslang', 'Success'), 'false', $message);
+                
             }
             if (isset($data["getmodalidad"])) {
                 $modalidad = $mod_modalidad->consultarModalidad($data["nint_id"]);
                 $message = array("modalidad" => $modalidad);
-                echo Utilities::ajaxResponse('OK', 'alert', Yii::t('jslang', 'Success'), 'false', $message);
-                return;
+                return Utilities::ajaxResponse('OK', 'alert', Yii::t('jslang', 'Success'), 'false', $message);
+                
             }
         }
         $arr_ninteres = UnidadAcademica::find()->select("uaca_id AS id, uaca_nombre AS name")->where(["uaca_estado_logico" => "1", "uaca_estado" => "1"])->asArray()->all();
@@ -111,14 +111,14 @@ class AdministracioncursoController extends \app\components\CController {
                         "wtmessage" => Yii::t("notificaciones", "La infomación ha sido grabada. "),
                         "title" => Yii::t('jslang', 'Success'),
                     );
-                    echo Utilities::ajaxResponse('OK', 'alert', Yii::t("jslang", "Sucess"), false, $message);
+                    return Utilities::ajaxResponse('OK', 'alert', Yii::t("jslang", "Sucess"), false, $message);
                 } else {
                     $transaction->rollback();
                     $message = array(
                         "wtmessage" => Yii::t("notificaciones", "Error al grabar. " . $mensaje),
                         "title" => Yii::t('jslang', 'Success'),
                     );
-                    echo Utilities::ajaxResponse('NO_OK', 'alert', Yii::t("jslang", "Sucess"), false, $message);
+                    return Utilities::ajaxResponse('NO_OK', 'alert', Yii::t("jslang", "Sucess"), false, $message);
                 }
             } catch (Exception $ex) {
                 $transaction->rollback();
@@ -126,7 +126,7 @@ class AdministracioncursoController extends \app\components\CController {
                     "wtmessage" => Yii::t("notificaciones", "Error al grabar. " . $mensaje),
                     "title" => Yii::t('jslang', 'Success'),
                 );
-                echo Utilities::ajaxResponse('NO_OK', 'alert', Yii::t("jslang", "Sucess"), false, $message);
+                return Utilities::ajaxResponse('NO_OK', 'alert', Yii::t("jslang", "Sucess"), false, $message);
             }
             return;
         }
@@ -171,14 +171,14 @@ class AdministracioncursoController extends \app\components\CController {
                         "wtmessage" => Yii::t("notificaciones", "La infomación ha sido grabada. "),
                         "title" => Yii::t('jslang', 'Success'),
                     );
-                    echo Utilities::ajaxResponse('OK', 'alert', Yii::t("jslang", "Sucess"), false, $message);
+                    return Utilities::ajaxResponse('OK', 'alert', Yii::t("jslang", "Sucess"), false, $message);
                 } else {
                     $transaction->rollback();
                     $message = array(
                         "wtmessage" => Yii::t("notificaciones", "Error al grabar." . $mensaje),
                         "title" => Yii::t('jslang', 'Success'),
                     );
-                    echo Utilities::ajaxResponse('NO_OK', 'alert', Yii::t("jslang", "Sucess"), false, $message);
+                    return Utilities::ajaxResponse('NO_OK', 'alert', Yii::t("jslang", "Sucess"), false, $message);
                 }
             } catch (Exception $ex) {
                 $transaction->rollback();
@@ -186,7 +186,7 @@ class AdministracioncursoController extends \app\components\CController {
                     "wtmessage" => Yii::t("notificaciones", "Error al grabar." . $mensaje),
                     "title" => Yii::t('jslang', 'Success'),
                 );
-                echo Utilities::ajaxResponse('NO_OK', 'alert', Yii::t("jslang", "Sucess"), false, $message);
+                return Utilities::ajaxResponse('NO_OK', 'alert', Yii::t("jslang", "Sucess"), false, $message);
             }
             return;
         }
@@ -198,8 +198,8 @@ class AdministracioncursoController extends \app\components\CController {
             if (isset($data["getparalelo"])) {
                 $paralelo = Paralelo::find()->select("par_id AS id, par_descripcion AS name")->where(["par_estado_logico" => "1", "par_estado" => "1", "pmin_id" => $data['periodo']])->asArray()->all();
                 $message = array("paralelo" => $paralelo);
-                echo Utilities::ajaxResponse('OK', 'alert', Yii::t('jslang', 'Success'), 'false', $message);
-                return;
+                return Utilities::ajaxResponse('OK', 'alert', Yii::t('jslang', 'Success'), 'false', $message);
+               
             }
         }
 
@@ -234,14 +234,14 @@ class AdministracioncursoController extends \app\components\CController {
             if (isset($data["getmetodo"])) {
                 $metodo = $mod_metodo->consultarMetodoIngNivelInt($data['nint_id']);
                 $message = array("metodo" => $metodo);
-                echo Utilities::ajaxResponse('OK', 'alert', Yii::t('jslang', 'Success'), 'false', $message);
-                return;
+                return Utilities::ajaxResponse('OK', 'alert', Yii::t('jslang', 'Success'), 'false', $message);
+               
             }
             if (isset($data["getmodalidad"])) {
                 $modalidad = $mod_modalidad->consultarModalidad($data["nint_id"]);
                 $message = array("modalidad" => $modalidad);
-                echo Utilities::ajaxResponse('OK', 'alert', Yii::t('jslang', 'Success'), 'false', $message);
-                return;
+                return Utilities::ajaxResponse('OK', 'alert', Yii::t('jslang', 'Success'), 'false', $message);
+                
             }
         }
         $arr_ninteres = UnidadAcademica::find()->select("uaca_id AS id, uaca_nombre AS name")->where(["uaca_estado_logico" => "1", "uaca_estado" => "1"])->asArray()->all();
@@ -308,14 +308,14 @@ class AdministracioncursoController extends \app\components\CController {
                         "wtmessage" => Yii::t("notificaciones", "La infomación ha sido actualizada. "),
                         "title" => Yii::t('jslang', 'Success'),
                     );
-                    echo Utilities::ajaxResponse('OK', 'alert', Yii::t("jslang", "Sucess"), false, $message);
+                    return Utilities::ajaxResponse('OK', 'alert', Yii::t("jslang", "Sucess"), false, $message);
                 } else {
                     $transaction->rollback();
                     $message = array(
                         "wtmessage" => Yii::t("notificaciones", "Error al actualizar." . $mensaje),
                         "title" => Yii::t('jslang', 'Success'),
                     );
-                    echo Utilities::ajaxResponse('NO_OK', 'alert', Yii::t("jslang", "Sucess"), false, $message);
+                    return Utilities::ajaxResponse('NO_OK', 'alert', Yii::t("jslang", "Sucess"), false, $message);
                 }
             } catch (Exception $ex) {
                 $transaction->rollback();
@@ -323,7 +323,7 @@ class AdministracioncursoController extends \app\components\CController {
                     "wtmessage" => Yii::t("notificaciones", "Error al actualizar." . $mensaje),
                     "title" => Yii::t('jslang', 'Success'),
                 );
-                echo Utilities::ajaxResponse('NO_OK', 'alert', Yii::t("jslang", "Sucess"), false, $message);
+                return Utilities::ajaxResponse('NO_OK', 'alert', Yii::t("jslang", "Sucess"), false, $message);
             }
             return;
         }
@@ -364,14 +364,14 @@ class AdministracioncursoController extends \app\components\CController {
                         "wtmessage" => Yii::t("notificaciones", "La asignación ha sido grabada. "),
                         "title" => Yii::t('jslang', 'Success'),
                     );
-                    echo Utilities::ajaxResponse('OK', 'alert', Yii::t("jslang", "Sucess"), false, $message);
+                    return Utilities::ajaxResponse('OK', 'alert', Yii::t("jslang", "Sucess"), false, $message);
                 } else {
                     $transaction->rollback();
                     $message = array(
                         "wtmessage" => Yii::t("notificaciones", "Error al grabar." . $mensaje),
                         "title" => Yii::t('jslang', 'Success'),
                     );
-                    echo Utilities::ajaxResponse('NO_OK', 'alert', Yii::t("jslang", "Sucess"), false, $message);
+                    return Utilities::ajaxResponse('NO_OK', 'alert', Yii::t("jslang", "Sucess"), false, $message);
                 }
             } catch (Exception $ex) {
                 $transaction->rollback();
@@ -379,7 +379,7 @@ class AdministracioncursoController extends \app\components\CController {
                     "wtmessage" => Yii::t("notificaciones", "Error al grabar." . $mensaje),
                     "title" => Yii::t('jslang', 'Success'),
                 );
-                echo Utilities::ajaxResponse('NO_OK', 'alert', Yii::t("jslang", "Sucess"), false, $message);
+                return Utilities::ajaxResponse('NO_OK', 'alert', Yii::t("jslang", "Sucess"), false, $message);
             }
             return;
         }

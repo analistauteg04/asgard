@@ -2,7 +2,7 @@ $(document).ready(function () {
 
     /***************filtra facultad segun nivel estudio interes vista listar evaluaciones**********************/
     $('#cmb_estadocontacto').change(function () {
-        var link = $('#txth_base').val() + "/admisiones/listarclientes";
+        var link = $('#txth_base').val() + "/admision/admisiones/listarclientes";
         var arrParams = new Object();
         arrParams.esta_id = $(this).val();
         arrParams.getfase = true;
@@ -32,7 +32,7 @@ $(document).ready(function () {
         }
     });
     $('#btn_grabarOportunidad').click(function () {
-        var link = $('#txth_base').val() + "/admisiones/guardaroportunidad";
+        var link = $('#txth_base').val() + "/admision/admisiones/guardaroportunidad";
         var arrParams = new Object();
         arrParams.id_pgest = $('#txth_pgid').val();
         arrParams.empresa = $('#cmb_empresa').val();
@@ -49,8 +49,8 @@ $(document).ready(function () {
                 showAlert(response.status, response.label, response.message);
                 setTimeout(function () {
                     if (response.status == "OK") {
-                        //parent.window.location.href = $('#txth_base').val() + "/admisiones/listaroportxcontacto?pgid=".arrParams.id_pgest;
-                        parent.window.location.href = $('#txth_base').val() + "/admisiones/listarcontactos";
+                        //parent.window.location.href = $('#txth_base').val() + "/admision/admisiones/listaroportxcontacto?pgid=".arrParams.id_pgest;
+                        parent.window.location.href = $('#txth_base').val() + "/admision/admisiones/listarcontactos";
                     }
                 }, 3000);
             }, true);
@@ -58,7 +58,7 @@ $(document).ready(function () {
 
     });
     $('#cmb_pais').change(function () {
-        var link = $('#txth_base').val() + "/admisiones/crearcontacto";
+        var link = $('#txth_base').val() + "/admision/admisiones/crearcontacto";
         var arrParams = new Object();
         arrParams.pai_id = $(this).val();
         arrParams.getprovincias = true;
@@ -86,7 +86,7 @@ $(document).ready(function () {
     });
 
     $('#cmb_nivelestudio_act').change(function () {
-        var link = $('#txth_base').val() + "/admisiones/actualizaroportunidad";
+        var link = $('#txth_base').val() + "/admision/admisiones/actualizaroportunidad";
         var arrParams = new Object();
         arrParams.ninter_id = $(this).val();
         arrParams.getmodalidad = true;
@@ -121,7 +121,7 @@ $(document).ready(function () {
     });
 
     $('#cmb_nivelestudio').change(function () {
-        var link = $('#txth_base').val() + "/admisiones/crearoportunidad";
+        var link = $('#txth_base').val() + "/admision/admisiones/crearoportunidad";
         var arrParams = new Object();
         arrParams.nint_id = $(this).val();
         arrParams.getmodalidad = true;
@@ -157,7 +157,7 @@ $(document).ready(function () {
         }, true);
     });
     $('#cmb_modalidad').change(function () {
-        var link = $('#txth_base').val() + "/admisiones/crearoportunidad";
+        var link = $('#txth_base').val() + "/admision/admisiones/crearoportunidad";
         var arrParams = new Object();
         arrParams.unidada = $('#cmb_nivelestudio').val();
         arrParams.moda_id = $(this).val();
@@ -171,7 +171,7 @@ $(document).ready(function () {
     });
 
     $('#cmb_modalidad_act').change(function () {
-        var link = $('#txth_base').val() + "/admisiones/actualizaroportunidad";
+        var link = $('#txth_base').val() + "/admision/admisiones/actualizaroportunidad";
         var arrParams = new Object();
         arrParams.unidada = $('#cmb_nivelestudio_act').val();
         arrParams.moda_id = $(this).val();
@@ -234,7 +234,7 @@ $(document).ready(function () {
     });
 
     $('#cmb_prov').change(function () {
-        var link = $('#txth_base').val() + "/admisiones/crearcontacto";
+        var link = $('#txth_base').val() + "/admision/admisiones/crearcontacto";
         var arrParams = new Object();
         arrParams.prov_id = $(this).val();
         arrParams.getcantones = true;
@@ -266,7 +266,7 @@ $(document).ready(function () {
     });
 
     $('#cmb_carrera2').change(function () {
-        var link = $('#txth_base').val() + "/admisiones/crearoportunidad";
+        var link = $('#txth_base').val() + "/admision/admisiones/crearoportunidad";
         var arrParams = new Object();
         arrParams.car_id = $(this).val();
         arrParams.getsubcarrera = true;
@@ -278,7 +278,7 @@ $(document).ready(function () {
         }, true);
     });
     $('#btn_grabarContactTemporal').click(function () {
-        var link = $('#txth_base').val() + "/admisiones/guardaractuacontactpend";
+        var link = $('#txth_base').val() + "/admision/admisiones/guardaractuacontactpend";
         var arrParams = new Object();
         arrParams.id_pertemp = $('#txth_idpt').val();
         arrParams.cont_name = $('#txt_name').val();
@@ -303,11 +303,11 @@ $(document).ready(function () {
     $('#btn_editcliente').click(function () {
         var codigo = $('#txth_pcon_id').val();
         var tper_id = $('#txth_tper_id').val();
-        window.location.href = $('#txth_base').val() + "/admisiones/actualizarcontacto?codigo=" + codigo + "&tper_id=" + tper_id;
+        window.location.href = $('#txth_base').val() + "/admision/admisiones/actualizarcontacto?codigo=" + codigo + "&tper_id=" + tper_id;
     });
 
     $('#btn_updatecliente').click(function () {
-        var link = $('#txth_base').val() + "/admisiones/guardaractuacontacto";
+        var link = $('#txth_base').val() + "/admision/admisiones/guardaractuacontacto";
         var arrParams = new Object();
         camposnulos('#txt_celular');
         camposnulos('#txt_celular2');
@@ -359,13 +359,13 @@ $(document).ready(function () {
             requestHttpAjax(link, arrParams, function (response) {
                 showAlert(response.status, response.label, response.message);
                 setTimeout(function () {
-                    window.location.href = $('#txth_base').val() + "/admisiones/listarcontactos";
+                    window.location.href = $('#txth_base').val() + "/admision/admisiones/listarcontactos";
                 }, 3000);
             }, true);
         }
     });
     $('#btn_grabarCliente').click(function () {
-        var link = $('#txth_base').val() + "/admisiones/guardarcontacto";
+        var link = $('#txth_base').val() + "/admision/admisiones/guardarcontacto";
         var arrParams = new Object();
         // funcion que permite verificar si viene vacío, remover la validación.
         camposnulos('#txt_celular');
@@ -488,13 +488,13 @@ $(document).ready(function () {
             requestHttpAjax(link, arrParams, function (response) {
                 showAlert(response.status, response.label, response.message);
                 setTimeout(function () {
-                    window.location.href = $('#txth_base').val() + "/admisiones/listarcontactos";
+                    window.location.href = $('#txth_base').val() + "/admision/admisiones/listarcontactos";
                 }, 3000);
             }, true);
         }
     });
     $('#btn_grabar').click(function () {
-        var link = $('#txth_base').val() + "/admisiones/guardaroportunidad";
+        var link = $('#txth_base').val() + "/admision/admisiones/guardaroportunidad";
         var arrParams = new Object();
         arrParams.agenteauten = $('#txth_idag').val();
         arrParams.personauten = $('#txth_idpa').val();
@@ -525,7 +525,7 @@ $(document).ready(function () {
                 showAlert(response.status, response.label, response.message);
                 setTimeout(function () {
                     //sessionStorage.clear();
-                    window.location.href = $('#txth_base').val() + "/admisiones/listarcontactos";
+                    window.location.href = $('#txth_base').val() + "/admision/admisiones/listarcontactos";
                 }, 3000);
             }, true);
         }
@@ -534,26 +534,26 @@ $(document).ready(function () {
     $('#btn_Neopera').click(function () {
         var persona = $('#txth_ids').val();
         var pgid = $('#txth_pgid').val();
-        window.location.href = $('#txth_base').val() + "/admisiones/nuevagestion?id=" + persona + "&pgid=" + pgid;
+        window.location.href = $('#txth_base').val() + "/admision/admisiones/nuevagestion?id=" + persona + "&pgid=" + pgid;
     });
     $('#btn_crearoportunidad').click(function () {
         var pgid = $('#txth_pgid').val();
-        window.location.href = $('#txth_base').val() + "/admisiones/crearoportunidad?pgid=" + pgid;
+        window.location.href = $('#txth_base').val() + "/admision/admisiones/crearoportunidad?pgid=" + pgid;
     });
     $('#btn_crearactividad').click(function () {
         var opid = $('#txth_opid').val();
         var pgid = $('#txth_pgid').val();
-        window.location.href = $('#txth_base').val() + "/admisiones/crearactividad?opid=" + opid + "&pgid=" + pgid;
+        window.location.href = $('#txth_base').val() + "/admision/admisiones/crearactividad?opid=" + opid + "&pgid=" + pgid;
     });
     $('#btn_editaractividad').click(function () {
         var opid = $('#txth_opid').val();
         var pgid = $('#txth_pgid').val();
         var acid = $('#txth_acid').val();
-        window.location.href = $('#txth_base').val() + "/admisiones/actualizaractividad?opid=" + opid + "&pgid=" + pgid+ "&acid=" + acid;
+        window.location.href = $('#txth_base').val() + "/admision/admisiones/actualizaractividad?opid=" + opid + "&pgid=" + pgid+ "&acid=" + acid;
     });
 
     $('#btn_grabaractividad').click(function () {
-        var link = $('#txth_base').val() + "/admisiones/guardaractividad";
+        var link = $('#txth_base').val() + "/admision/admisiones/guardaractividad";
         var arrParams = new Object();
         //Datos Gestión 
         arrParams.oportunidad = $('#txth_opo_id').val();
@@ -573,13 +573,13 @@ $(document).ready(function () {
                 setTimeout(function () {
                     var opor_id = $('#txth_opo_id').val();
                     var pges_id = $('#txth_pgid').val();
-                    window.location.href = $('#txth_base').val() + "/admisiones/listaractixoport?opor_id=" + opor_id + "&pges_id=" + pges_id;
+                    window.location.href = $('#txth_base').val() + "/admision/admisiones/listaractixoport?opor_id=" + opor_id + "&pges_id=" + pges_id;
                 }, 3000);
             }, true);
         }
     });
     $('#btn_actualizaractividad').click(function () {
-        var link = $('#txth_base').val() + "/admisiones/guardaractactividad";
+        var link = $('#txth_base').val() + "/admision/admisiones/guardaractactividad";
         var arrParams = new Object();
         //Datos Gestión 
         arrParams.bact_id = $('#txth_acid').val();
@@ -595,7 +595,7 @@ $(document).ready(function () {
                 setTimeout(function () {
                     var opor_id = $('#txth_opo_id').val();
                     var pges_id = $('#txth_pgid').val();
-                    window.location.href = $('#txth_base').val() + "/admisiones/listaractixoport?opor_id=" + opor_id + "&pges_id=" + pges_id;
+                    window.location.href = $('#txth_base').val() + "/admision/admisiones/listaractixoport?opor_id=" + opor_id + "&pges_id=" + pges_id;
                 }, 3000);
             }, true);
         }
@@ -603,7 +603,7 @@ $(document).ready(function () {
 
 
     $('#btn_actualizarOportunidad').click(function () {
-        var link = $('#txth_base').val() + "/admisiones/guardaractoportunidad";
+        var link = $('#txth_base').val() + "/admision/admisiones/guardaractoportunidad";
         var arrParams = new Object();       
         arrParams.pgid = $('#txth_pgid').val();
         arrParams.opo_id = $('#txth_opoid').val();        
@@ -621,7 +621,7 @@ $(document).ready(function () {
             requestHttpAjax(link, arrParams, function (response) {
                 showAlert(response.status, response.label, response.message);
                 setTimeout(function () {
-                    window.location.href = $('#txth_base').val() + "/admisiones/listaroportunidades";
+                    window.location.href = $('#txth_base').val() + "/admision/admisiones/listaroportunidades";
                 }, 3000);
             }, true);
         }
@@ -680,10 +680,10 @@ $(document).ready(function () {
         var codigo = $('#txth_opoid').val();
         var persona = $('#txth_pgid').val();       
         
-        window.location.href = $('#txth_base').val() + "/admisiones/actualizaroportunidad?codigo=" + codigo + "&pgesid=" + persona;
+        window.location.href = $('#txth_base').val() + "/admision/admisiones/actualizaroportunidad?codigo=" + codigo + "&pgesid=" + persona;
        
          /*
-            var link = $('#txth_base').val() + "/admisiones/actualizaroportunidad?codigo=" + codigo + "&pgesid=" + persona;
+            var link = $('#txth_base').val() + "/admision/admisiones/actualizaroportunidad?codigo=" + codigo + "&pgesid=" + persona;
             var arrParams = new Object();     
             arrParams.opo_id = $('#txth_opoid').val();   
             requestHttpAjax(link, arrParams, function (response) {
@@ -691,7 +691,7 @@ $(document).ready(function () {
                 setTimeout(function () {  
                     if (response.status == "NOK") {
                         data = response.message;
-                        window.location.href = $('#txth_base').val() + "/admisiones/listaroportunidades";     
+                        window.location.href = $('#txth_base').val() + "/admision/admisiones/listaroportunidades";     
                     }
                 }, 3000);
             }, true);*/      
@@ -700,7 +700,7 @@ $(document).ready(function () {
 });
 function cargarLeads(proceso) {
     var arrParams = new Object();
-    var link = $('#txth_base').val() + "/admisiones/cargarleads";
+    var link = $('#txth_base').val() + "/admision/admisiones/cargarleads";
     arrParams.procesar_file = true;
     arrParams.tipo_proceso = proceso;
     arrParams.emp_id = $('#cmb_empresa option:selected').val();
@@ -710,13 +710,13 @@ function cargarLeads(proceso) {
         requestHttpAjax(link, arrParams, function (response) {
             showAlert(response.status, response.label, response.message);
             setTimeout(function () {
-                window.location.href = $('#txth_base').val() + "/admisiones/listarcontactos";
+                window.location.href = $('#txth_base').val() + "/admision/admisiones/listarcontactos";
             }, 3000);
         }, true);
     }
 }
 function grabarContactoGestion(ptem_id) {
-    var link = $('#txth_base').val() + "/admisiones/guardarcontacto";
+    var link = $('#txth_base').val() + "/admision/admisiones/guardarcontacto";
     var arrParams = new Object();
     arrParams.id_pertemp = ptem_id;
     if (!validateForm()) {
@@ -724,14 +724,14 @@ function grabarContactoGestion(ptem_id) {
             showAlert(response.status, response.label, response.message);
             setTimeout(function () {
                 if (response.status == "OK") {
-                    parent.window.location.href = $('#txth_base').val() + "/admisiones/listarclientes";
+                    parent.window.location.href = $('#txth_base').val() + "/admision/admisiones/listarclientes";
                 }
             }, 3000);
         }, true);
     }
 }
 function grabarInteresado(pgest_id) {
-    var link = $('#txth_base').val() + "/admisiones/guardarinteresado";
+    var link = $('#txth_base').val() + "/admision/admisiones/guardarinteresado";
     var arrParams = new Object();
     arrParams.id_pgest = pgest_id;
     if (!validateForm()) {
@@ -797,7 +797,7 @@ function exportExcel() {
     var interesado = $('#txt_buscarDataPersona').val();
     var f_atencion = $('#txt_fecha_atencion').val();
     var estado = $('#cmb_estado option:selected').val();
-    window.location.href = $('#txth_base').val() + "/admisiones/expexcel?agente=" + agente + "&interesado=" + interesado + "&f_atencion=" + f_atencion + "&estado=" + estado;
+    window.location.href = $('#txth_base').val() + "/admision/admisiones/expexcel?agente=" + agente + "&interesado=" + interesado + "&f_atencion=" + f_atencion + "&estado=" + estado;
 }
 
 function camposnulos(campo) {
