@@ -908,7 +908,7 @@ class Oportunidad extends \yii\db\ActiveRecord {
             return FALSE;
         }
     }
-
+    
     /**     * **
      * Function insertarPersonaContratante grabar a personas contratantes.
      * @author  Byron Villacreses <developer@uteg.edu.ec>
@@ -1810,8 +1810,9 @@ class Oportunidad extends \yii\db\ActiveRecord {
         if (!empty((isset($eaca_id)))) {
             $filtro .= "opo.eaca_id = :eaca_id AND ";
         }
+        // eopo_nombre   
         $sql = "SELECT                    
-                    eopo_nombre                    
+                       opo.eopo_id Ids             
                 FROM 
                    " . $con->dbname . ".oportunidad opo "
                 . " INNER JOIN " . $con->dbname . ".estado_oportunidad eopo ON eopo.eopo_id = opo.eopo_id ";
