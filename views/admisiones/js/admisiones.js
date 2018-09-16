@@ -32,6 +32,7 @@ $(document).ready(function () {
         }
     });
     $('#btn_grabarOportunidad').click(function () {
+        var sub_carrera=($('#cmb_subcarrera').val()!=0 && $('#cmb_subcarrera').val()!='')?$('#cmb_subcarrera').val():0;
         var link = $('#txth_base').val() + "/admisiones/guardaroportunidad";
         var arrParams = new Object();
         arrParams.id_pgest = $('#txth_pgid').val();
@@ -43,7 +44,7 @@ $(document).ready(function () {
         arrParams.id_estudio_academico = $('#cmb_carrera1').val();
         arrParams.canal_conocimiento = $('#cmb_knowledge_channel').val();
         arrParams.carrera2 = $('#cmb_carrera2').val();
-        arrParams.sub_carrera = $('#cmb_subcarrera').val();
+        arrParams.sub_carrera = sub_carrera;
         if (!validateForm()) {
             requestHttpAjax(link, arrParams, function (response) {
                 showAlert(response.status, response.label, response.message);
@@ -266,18 +267,22 @@ $(document).ready(function () {
     });
 
     $('#cmb_carrera2').change(function () {
-        var link = $('#txth_base').val() + "/admisiones/crearoportunidad";
-        var arrParams = new Object();
-        arrParams.car_id = $(this).val();
-        arrParams.getsubcarrera = true;
-        requestHttpAjax(link, arrParams, function (response) {
-            if (response.status == "OK") {
-                data = response.message;
-                setComboData(data.subcarrera, "cmb_subcarrera");
-            }
-        }, true);
+        if ($(this).val() != 0) {
+            var link = $('#txth_base').val() + "/admisiones/crearoportunidad";
+            var arrParams = new Object();
+            arrParams.car_id = $(this).val();
+            arrParams.getsubcarrera = true;
+            requestHttpAjax(link, arrParams, function (response) {
+                if (response.status == "OK") {
+                    data = response.message;
+                    setComboData(data.subcarrera, "cmb_subcarrera");
+                }
+            }, true);
+        }else{
+            $('#cmb_subcarrera').html("<option value='0'>Ninguno</option>");
+        }
     });
-    $('#btn_grabarContactTemporal').click(function () {
+        $('#btn_grabarContactTemporal').click(function () {
         var link = $('#txth_base').val() + "/admisiones/guardaractuacontactpend";
         var arrParams = new Object();
         arrParams.id_pertemp = $('#txth_idpt').val();
