@@ -1,9 +1,7 @@
 <?php
 
-namespace app\models;
+namespace app\modules\admision\models;
 
-use app\models\Oportunidad;
-use app\models\PersonaGestion;
 use yii\data\ArrayDataProvider;
 use Yii;
 
@@ -74,7 +72,7 @@ use Yii;
  * @property ConocimientoCanal $ccan
  * @property PersonaGestionContacto[] $personaGestionContactos
  */
-class PersonaGestion extends \yii\db\ActiveRecord
+class PersonaGestion extends \app\modules\admision\components\CActiveRecord
 {
     /**
      * {@inheritdoc}

@@ -1,6 +1,6 @@
 <?php
 
-namespace app\models;
+namespace app\modules\admision\models;
 
 use Yii;
 
@@ -18,7 +18,7 @@ use Yii;
  *
  * @property GestionCrm[] $gestionCrms
  */
-class TipoOportunidadVenta extends \yii\db\ActiveRecord
+class TipoOportunidadVenta extends \app\modules\admision\components\CActiveRecord
 {
     /**
      * @inheritdoc

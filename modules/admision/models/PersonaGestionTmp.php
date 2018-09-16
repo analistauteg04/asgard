@@ -1,6 +1,6 @@
 <?php
 
-namespace app\models;
+namespace app\modules\admision\models;
 
 use Yii;
 use yii\base\Exception;
@@ -21,7 +21,7 @@ use app\model\Utilities;
  * @property string $pgest_numero
  * @property string $pgest_correo
  */
-class PersonaGestionTmp extends \yii\db\ActiveRecord
+class PersonaGestionTmp extends \app\modules\admision\components\CActiveRecord
 {
     /**
      * {@inheritdoc}

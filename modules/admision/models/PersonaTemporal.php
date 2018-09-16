@@ -1,6 +1,6 @@
 <?php
 
-namespace app\models;
+namespace app\modules\admision\models;
 use yii\data\ArrayDataProvider;
 
 use Yii;
@@ -34,7 +34,7 @@ use Yii;
  * @property string $tper_fecha_modificacion
  * @property string $tper_estado_logico
  */
-class PersonaTemporal extends \yii\db\ActiveRecord
+class PersonaTemporal extends \app\modules\admision\components\CActiveRecord
 {
     /**
      * {@inheritdoc}

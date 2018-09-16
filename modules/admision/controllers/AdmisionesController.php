@@ -1,36 +1,32 @@
 <?php
 
-namespace app\controllers;
+namespace app\modules\admision\controllers;
 
 use Yii;
 use \app\models\Interesado;
 use app\models\InteresadoEjecutivo;
-use \app\models\SolicitudCaptacion;
-use \app\models\PreInteresado;
 use app\models\Pais;
 use yii\base\Security;
 use app\models\Provincia;
 use app\models\Canton;
 use app\models\Persona;
-use \app\models\PersonaPreins;
-use \app\models\EstadoOportunidad;
+use \app\modules\admision\models\EstadoOportunidad;
 use app\models\EmpresaPersona;
-use app\models\Oportunidad;
+use app\modules\admision\models\Oportunidad;
 use app\models\Utilities;
 use app\models\EstudioAcademico;
-use app\models\PersonaGestion;
-use app\models\PersonaTemporal;
+use app\modules\admision\models\PersonaGestion;
+use app\modules\admision\models\PersonaTemporal;
 use app\models\Modalidad;
 use \app\models\Usuario;
 use app\models\TipoOportunidadVenta;
 use yii\helpers\ArrayHelper;
-use app\models\EstadoContacto;
+use app\modules\admision\models\EstadoContacto;
 use app\models\UnidadAcademica;
 use app\models\UsuaGrolEper;
 use app\models\ModuloEstudio;
 use app\models\Empresa;
 use app\models\TipoCarrera;
-use app\models\TipoSubCarrera;
 
 class AdmisionesController extends \app\components\CController {
 
