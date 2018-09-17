@@ -163,31 +163,7 @@ class Interesado extends \app\modules\admision\components\CActiveRecord {
             return FALSE;
         }
     }
-
-    /**
-     * Function consultaDatosinteresado
-     * @author  Grace Viteri <analistadesarrollo01@uteg.edu.ec>
-     * @param   $usuario_id (id del usuario).  
-     * @return  $resultData (id del interesado).
-     */
-    public function consultaDatosinteresado($per_id) {
-        $con = \Yii::$app->db_captacion;
-        $estado = 1;
-
-        $sql = "SELECT int_id FROM " . $con->dbname . ".interesado inte                    
-                INNER JOIN " . $con->dbname . ".pre_interesado prei ON prei.pint_id = inte.pint_id
-                WHERE  prei.per_id = :per_id AND
-                    inte.int_estado_logico = :estado AND 
-                    inte.int_estado = :estado";
-
-        $comando = $con->createCommand($sql);
-        $comando->bindParam(":estado", $estado, \PDO::PARAM_STR);
-        $comando->bindParam(":per_id", $per_id, \PDO::PARAM_INT);
-        $resultData = $comando->queryOne();
-        return $resultData;
-    }
-
-    public function consultaInteresadoById($per_id) {
+    public function consultaInteresadoByPerId($per_id) {
         $con = \Yii::$app->db_captacion;
         $estado = 1;
         $sql = "
@@ -195,11 +171,13 @@ class Interesado extends \app\modules\admision\components\CActiveRecord {
                     ifnull(int_id,0) as int_id
                     FROM db_captacion.interesado
                     WHERE 
-                    per_id = $per_id
-                    and int_estado = $estado
-                    and int_estado_logico=$estado
+                    per_id = :per_id
+                    and int_estado = :estado
+                    and int_estado_logico=:estado
                 ";
         $comando = $con->createCommand($sql);
+        $comando->bindParam(':per_id', $per_id, \PDO::PARAM_INT);
+        $comando->bindParam(':estado', $estado, \PDO::PARAM_STR);
         $resultData = $comando->queryOne();
         if (empty($resultData['int_id']))
             return 0;
@@ -731,28 +709,6 @@ class Interesado extends \app\modules\admision\components\CActiveRecord {
         ]);
         return $dataProvider;
     }
-
-    public function consultaDatosPreInteresado($per_id) {
-        $con = \Yii::$app->db_captacion;
-        $con1 = \Yii::$app->db_asgard;
-        $estado = 1;
-        $sql = "SELECT  
-                  pint.pint_id as id                
-                FROM 
-                  " . $con1->dbname . ".usuario usu,  
-                  " . $con->dbname . ".pre_interesado pint 
-                WHERE 
-                  usu.per_id = :per_id " . " AND 
-                  usu.per_id = pint.per_id AND
-                  pint.pint_estado = :estado AND
-                  pint.pint_estado_logico = :estado";
-        $comando = $con->createCommand($sql);
-        $comando->bindParam(":estado", $estado, \PDO::PARAM_STR);
-        $comando->bindParam(":per_id", $per_id, \PDO::PARAM_INT);
-        $resultData = $comando->queryOne();
-        return $resultData;
-    }
-
     public function consultaInfofamilia($per_id) {
         $con = \Yii::$app->db_captacion;
         $estado = 1;
@@ -999,188 +955,26 @@ class Interesado extends \app\modules\admision\components\CActiveRecord {
         return $resultData;
     }
 
-    public static function consultaInteresadoxejecutivo($per_id, $resp_gruporol, $arrFiltro = array(), $onlyData = false) {
-
+    public static function consultarInteresados($arrFiltro = array(), $onlyData = false) {
         $con = \Yii::$app->db_captacion;
-        $con2 = \Yii::$app->db;
-        $con3 = \Yii::$app->db_facturacion;
         $estado = 1;
-        $columnsAdd = "";
-
-        if (isset($arrFiltro) && count($arrFiltro) > 0) {
-            $str_search = "(base.per_pri_nombre like :search OR ";
-            $str_search .= "base.per_seg_nombre like :search OR ";
-            $str_search .= "base.per_pri_apellido like :search OR ";
-            $str_search .= "base.per_dni like :search) ";
-            if ($arrFiltro['estadosol'] != "" && $arrFiltro['estadosol'] > 0) {
-                $str_search .= " AND base.id_estado = :estadosol ";
-            }
-            if ($arrFiltro['f_ini'] != "" && $arrFiltro['f_fin'] != "") {
-                $str_search .= "  AND fecha_registro >= :fec_ini ";
-                $str_search .= "  AND fecha_registro <= :fec_fin ";
-            }
-        } else {
-            $columnsAdd = "
-                    per.per_id as per_id";
-        }
-
         $sql = "
-                SELECT
-                    base.*, 8 grupo_rol
-                    from (
-                            SELECT 
-                                    '0000' as num_solicitud,
-                                    'N/A' as fecha_solicitud,
-                                    per.per_id as per_id,
-                                    per.per_cedula as per_dni,
-                                    per.per_pri_nombre as per_pri_nombre, 
-                                    per.per_seg_nombre as per_seg_nombre,
-                                    per.per_pri_apellido as per_pri_apellido,
-                                    per.per_seg_apellido as per_seg_apellido,
-                                    concat(per.per_pri_nombre ,' ', ifnull(per.per_seg_nombre,' ')) as per_nombres,
-                                    concat(per.per_pri_apellido ,' ', ifnull(per.per_seg_apellido,' ')) as per_apellidos,
-                                    per.per_nac_ecuatoriano as nacionalidad,			
-                                    inte.int_id,
-                                    null as asp_id,
-                                    (SELECT ieje.per_id FROM " . $con->dbname . ".interesado_ejecutivo ieje WHERE (ieje.int_id = inte.int_id) AND ieje.ieje_estado = :estado AND ieje.ieje_estado_logico = :estado) as idejecutivo,
-                                    (SELECT concat(per.per_pri_apellido ,' ', per.per_seg_apellido, ' ', per.per_pri_nombre ,' ', per.per_seg_nombre) as ejecutivo 
-                                            FROM " . $con->dbname . ".interesado_ejecutivo ieje INNER JOIN " . $con2->dbname . ".persona per on ieje.per_id = per.per_id
-                                            WHERE ieje.int_id = inte.int_id AND	ieje.ieje_estado = :estado AND ieje.ieje_estado_logico = :estado) as ejecutivo,
-                                    6 as id_estado,
-                                    'Pendiente Crear Solicitud' as estado_proceso,
-                                    'N' as id_estado_pago,
-                                    'N/A' as estado_pago,
-                                    Date_format(inte.int_fecha_creacion,'%Y-%m %d') as fecha_registro
-                            FROM " . $con->dbname . ".interesado as inte		
-                            INNER JOIN " . $con2->dbname . ".persona as per on inte.per_id = per.per_id 		
-                            WHERE inte.int_estado_interesado=:estado AND
-                                    not exists(select 'S' from " . $con->dbname . ".solicitud_inscripcion as soli where soli.int_id = inte.int_id and soli.sins_estado = :estado and soli.sins_estado_logico = :estado) AND 
-                                    inte.int_estado_logico=:estado AND		
-                                    per.per_estado_logico=:estado AND
-                                    inte.int_estado=:estado AND 
-                                    per.per_estado=:estado
-                            UNION 
-                            SELECT
-                                    lpad(soli.sins_id,4,'0') as num_solicitud,
-                                    Date_format(soli.sins_fecha_solicitud,'%Y-%m-%d') as fecha_solicitud,
-                                    per.per_id as per_id,
-                                    per.per_cedula as per_dni,
-                                    per.per_pri_nombre as per_pri_nombre, 
-                                    per.per_seg_nombre as per_seg_nombre,
-                                    per.per_pri_apellido as per_pri_apellido,
-                                    per.per_seg_apellido as per_seg_apellido,
-                                    concat(per.per_pri_nombre ,' ', ifnull(per.per_seg_nombre,' ')) as per_nombres,
-                                    concat(per.per_pri_apellido ,' ', ifnull(per.per_seg_apellido,' ')) as per_apellidos,
-                                    per.per_nac_ecuatoriano as nacionalidad,			
-                                    inte.int_id,
-                                    null as asp_id,
-                                    (SELECT ieje.per_id FROM " . $con->dbname . ".interesado_ejecutivo ieje WHERE ieje.int_id = inte.int_id AND	ieje.ieje_estado = :estado AND ieje.ieje_estado_logico = :estado) as idejecutivo,			
-                                    (SELECT concat(per.per_pri_apellido ,' ', per.per_seg_apellido, ' ', per.per_pri_nombre ,' ', per.per_seg_nombre) as ejecutivo 
-                                         FROM " . $con->dbname . ".interesado_ejecutivo ieje INNER JOIN " . $con2->dbname . ".persona per on ieje.per_id = per.per_id
-                                             WHERE ieje.int_id = inte.int_id AND ieje.ieje_estado =:estado AND ieje.ieje_estado_logico = :estado) as ejecutivo,
-                                    rsol.rsin_id as id_estado,
-                                    concat('Solicitud ',rsol.rsin_nombre) as estado_proceso, 
-                                    (SELECT opag_estado_pago from " . $con3->dbname . ".orden_pago op where op.sins_id = soli.sins_id and op.opag_estado= :estado and op.opag_estado_logico= :estado) as id_estado_pago,
-                                    (CASE when (select opag_estado_pago from " . $con3->dbname . ".orden_pago op where op.sins_id = soli.sins_id and op.opag_estado= :estado and op.opag_estado_logico= :estado) ='P' then 'Generada Pendiente'
-                                            when ifnull((select opag_estado_pago from " . $con3->dbname . ".orden_pago op where op.sins_id = soli.sins_id and op.opag_estado= :estado and op.opag_estado_logico= :estado),'N') = 'N' then 'N/A'
-                                            else 'Generada Pagada' end) estado_pago,
-                                    Date_format(inte.int_fecha_creacion,'%Y-%m %d') as fecha_registro
-                            FROM " . $con->dbname . ".interesado as inte		
-                                INNER JOIN " . $con2->dbname . ".persona as per on inte.per_id = per.per_id
-                                INNER JOIN " . $con->dbname . ".solicitud_inscripcion as soli on soli.int_id = inte.int_id
-                                INNER JOIN " . $con->dbname . ".res_sol_inscripcion rsol on rsol.rsin_id = soli.rsin_id		
-                            WHERE 
-                                inte.int_estado_interesado=:estado AND
-                                inte.int_estado_logico=:estado AND		
-                                soli.sins_estado_logico=:estado AND 
-                                rsol.rsin_estado_logico = :estado AND		
-                                per.per_estado_logico=:estado AND
-                                inte.int_estado=:estado AND 
-                                per.per_estado=:estado AND
-                                soli.sins_estado=:estado AND
-                                rsol.rsin_estado = :estado
-                            UNION
-                            SELECT 
-                                    lpad(solic.sins_id,4,'0') as num_solicitud,
-                                    Date_format(solic.sins_fecha_solicitud,'%Y-%m-%d') as fecha_solicitud,
-                                    per.per_id as per_id,
-                                    per.per_cedula as per_dni,
-                                    per.per_pri_nombre as per_pri_nombre, 
-                                    per.per_seg_nombre as per_seg_nombre,
-                                    per.per_pri_apellido as per_pri_apellido,
-                                    per.per_seg_apellido as per_seg_apellido,
-                                    concat(per.per_pri_nombre ,' ', ifnull(per.per_seg_nombre,' ')) as per_nombres,
-                                    concat(per.per_pri_apellido ,' ', ifnull(per.per_seg_apellido,' ')) as per_apellidos,
-                                    per.per_nac_ecuatoriano as nacionalidad,		
-                                    inte.int_id,
-                                    asp.asp_id,
-                                    (SELECT ieje.per_id FROM " . $con->dbname . ".interesado_ejecutivo ieje 
-                                        WHERE (ieje.int_id = inte.int_id or ieje.asp_id = asp.asp_id) AND ieje.ieje_estado = :estado AND ieje.ieje_estado_logico =:estado) as idejecutivo,
-                                    (SELECT concat(per.per_pri_apellido ,' ', per.per_seg_apellido, ' ', per.per_pri_nombre ,' ', per.per_seg_nombre) as ejecutivo 
-                                        FROM " . $con->dbname . ".interesado_ejecutivo ieje INNER JOIN " . $con2->dbname . ".persona per on ieje.per_id = per.per_id 
-                                        WHERE (ieje.int_id = inte.int_id or ieje.asp_id = asp.asp_id) AND ieje.ieje_estado = :estado AND ieje.ieje_estado_logico = :estado) as ejecutivo,	
-                                    rsol.rsin_id as id_estado,
-                                    CONCAT('Solicitud ',rsol.rsin_nombre) as estado_proceso, 
-                                    ifnull((select opag_estado_pago from " . $con3->dbname . ".orden_pago op where op.sins_id = solic.sins_id and op.opag_estado= :estado and op.opag_estado_logico= :estado),'N') as id_estado_pago,
-                                    (CASE when ifnull((select opag_estado_pago from " . $con3->dbname . ".orden_pago op where op.sins_id = solic.sins_id and op.opag_estado= :estado and op.opag_estado_logico= :estado),'N') ='N' then 'No Aplica'
-                                          when (select opag_estado_pago from " . $con3->dbname . ".orden_pago op where op.sins_id = solic.sins_id and op.opag_estado= :estado and op.opag_estado_logico= :estado) ='P' then 'Generada Pendiente' 
-                                          else 'Generada Pagada' end) estado_pago,
-                                    Date_format(inte.int_fecha_creacion,'%Y-%m %d') as fecha_registro
-                            FROM " . $con->dbname . ".aspirante as asp
-                                INNER JOIN " . $con->dbname . ".interesado as inte on inte.int_id = asp.int_id
-                                INNER JOIN " . $con2->dbname . ".persona as per on inte.per_id = per.per_id
-                                INNER JOIN " . $con->dbname . ".solicitud_inscripcion as solic on solic.int_id = inte.int_id
-                                INNER JOIN " . $con->dbname . ".res_sol_inscripcion rsol on rsol.rsin_id = solic.rsin_id 
-                            WHERE asp.asp_estado_logico = :estado AND
-                                inte.int_estado_logico=:estado AND 
-                                per.per_estado_logico= :estado AND
-                                solic.sins_estado_logico=:estado AND
-                                rsol.rsin_estado_logico = :estado AND
-                                asp.asp_estado = :estado AND
-                                per.per_estado=:estado AND
-                                solic.sins_estado=:estado AND
-                                rsol.rsin_estado = :estado
-                    ) base ";
-        // if ($resp_gruporol != '5' && $resp_gruporol != '6' && $resp_gruporol != '7' && $resp_gruporol != '1' && $resp_gruporol != '14' && $resp_gruporol != '15' ) {
-        if ($resp_gruporol == '8') {
-            $sql1 = "  where base.idejecutivo = :per_id ";
-        }
-
-        if (empty($sql1)) {
-            if (!empty($str_search)) {
-                $sql .= " where " . $str_search . " ORDER BY fecha_registro DESC";
-            } else {
-                $sql .= " ORDER BY fecha_registro DESC";
-            }
-        } else {
-            if (!empty($str_search)) {
-                $sql .= $sql1 . "AND " . $str_search . " ORDER BY fecha_registro DESC";
-            } else {
-                $sql .= $sql1 . " ORDER BY fecha_registro DESC";
-            }
-        }
-
+                select 
+                    inte.int_id as id,
+                    concat(per.per_pri_nombre,' ',per.per_seg_nombre) as nombres,
+                    concat(per.per_pri_apellido,' ',per.per_seg_apellido) as apellidos,
+                    sins.sins_fecha_solicitud as fecha_solicitud,
+                    ifnull(per.per_cedula,per.per_pasaporte) as DNI,
+                    rsin.rsin_descripcion as estado_proceso,
+                    sins.num_solicitud
+                from db_captacion.interesado inte
+                    join db_asgard.persona as per on inte.per_id=per.per_id
+                    join db_captacion.solicitud_inscripcion as sins on sins.int_id=inte.int_id
+                    join db_captacion.res_sol_inscripcion as rsin on sins.rsin_id=rsin.rsin_id
+                    join db_captacion.interesado_empresa as iemp on iemp.int_id=inte.int_id
+                ";
         $comando = $con->createCommand($sql);
         $comando->bindParam(":estado", $estado, \PDO::PARAM_STR);
-        $comando->bindParam(":per_id", $per_id, \PDO::PARAM_INT);
-        $comando->bindParam(":resp_gruporol", $resp_gruporol, \PDO::PARAM_INT);
-
-        if (isset($arrFiltro) && count($arrFiltro) > 0) {
-            $search_cond = "%" . $arrFiltro["search"] . "%";
-            $fecha_ini = $arrFiltro["f_ini"] . " 00:00:00";
-            $fecha_fin = $arrFiltro["f_fin"] . " 23:59:59";
-            $estadoSol = $arrFiltro["estadosol"];
-            $comando->bindParam(":search", $search_cond, \PDO::PARAM_STR);
-
-            if ($arrFiltro['estadosol'] != "" && $arrFiltro['estadosol'] > 0) {
-                $comando->bindParam(":estadosol", $estadoSol, \PDO::PARAM_STR);
-            }
-            if ($arrFiltro['f_ini'] != "" && $arrFiltro['f_fin'] != "") {
-                $comando->bindParam(":fec_ini", $fecha_ini, \PDO::PARAM_STR);
-                $comando->bindParam(":fec_fin", $fecha_fin, \PDO::PARAM_STR);
-            }
-        }
-
         $resultData = $comando->queryAll();
         $dataProvider = new ArrayDataProvider([
             'key' => 'id',

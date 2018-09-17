@@ -19,9 +19,9 @@ class InteresadosController extends \app\components\CController {
             $arrSearch["f_fin"] = $data['f_fin'];
             $arrSearch["estadosol"] = $data['estadosol'];
             $arrSearch["search"] = $data['search'];
-            $model = Interesado::consultaInteresadoxejecutivo($per_id, $resp_gruporol["grol_id"], $arrSearch);
+            $model = Interesado::consultaInteresadoxejecutivo($arrSearch);
         } else {
-            $model = Interesado::consultaInteresadoxejecutivo($per_id, $resp_gruporol["grol_id"]);
+            $model = Interesado::consultaInteresadoxejecutivo();
         }
         $model_solicitud = new SolicitudInscripcion();
         $resp_estados = $model_solicitud->Consultaestadosolicitud();
