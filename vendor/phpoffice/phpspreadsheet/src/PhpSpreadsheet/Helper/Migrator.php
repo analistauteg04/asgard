@@ -5,22 +5,6 @@ namespace PhpOffice\PhpSpreadsheet\Helper;
 class Migrator
 {
     /**
-     * @var string[]
-     */
-    private $from;
-
-    /**
-     * @var string[]
-     */
-    private $to;
-
-    public function __construct()
-    {
-        $this->from = array_keys($this->getMapping());
-        $this->to = array_values($this->getMapping());
-    }
-
-    /**
      * Return the ordered mapping from old PHPExcel class names to new PhpSpreadsheet one.
      *
      * @return string[]
@@ -220,6 +204,7 @@ class Migrator
             'PHPExcel_Settings' => \PhpOffice\PhpSpreadsheet\Settings::class,
             'PHPExcel_Style' => \PhpOffice\PhpSpreadsheet\Style\Style::class,
             'PHPExcel_Worksheet' => \PhpOffice\PhpSpreadsheet\Worksheet\Worksheet::class,
+            'PHPExcel' => \PhpOffice\PhpSpreadsheet\Spreadsheet::class,
         ];
 
         $methods = [
@@ -264,25 +249,19 @@ class Migrator
     {
         $patterns = [
             '/*.md',
+            '/*.php',
+            '/*.phtml',
             '/*.txt',
             '/*.TXT',
-            '/*.php',
-            '/*.phpt',
-            '/*.php3',
-            '/*.php4',
-            '/*.php5',
-            '/*.phtml',
         ];
+
+        $from = array_keys($this->getMapping());
+        $to = array_values($this->getMapping());
 
         foreach ($patterns as $pattern) {
             foreach (glob($path . $pattern) as $file) {
-                if (strpos($path, '/vendor/') !== false) {
-                    echo $file . " skipped\n";
-
-                    continue;
-                }
                 $original = file_get_contents($file);
-                $converted = $this->replace($original);
+                $converted = str_replace($from, $to, $original);
 
                 if ($original !== $converted) {
                     echo $file . " converted\n";
@@ -310,24 +289,5 @@ class Migrator
         if ($confirm === 'y') {
             $this->recursiveReplace($path);
         }
-    }
-
-    /**
-     * Migrate the given code from PHPExcel to PhpSpreadsheet.
-     *
-     * @param string $original
-     *
-     * @return string
-     */
-    public function replace($original)
-    {
-        $converted = str_replace($this->from, $this->to, $original);
-
-        // The string "PHPExcel" gets special treatment because of how common it might be.
-        // This regex requires a word boundary around the string, and it can't be
-        // preceded by $ or -> (goal is to filter out cases where a variable is named $PHPExcel or similar)
-        $converted = preg_replace('~(?<!\$|->)(\b|\\\\)PHPExcel\b~', '\\' . \PhpOffice\PhpSpreadsheet\Spreadsheet::class, $converted);
-
-        return $converted;
     }
 }

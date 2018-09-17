@@ -224,16 +224,6 @@ class Calculation
             'functionCall' => 'acosh',
             'argumentCount' => '1',
         ],
-        'ACOT' => [
-            'category' => Category::CATEGORY_MATH_AND_TRIG,
-            'functionCall' => [MathTrig::class, 'ACOT'],
-            'argumentCount' => '1',
-        ],
-        'ACOTH' => [
-            'category' => Category::CATEGORY_MATH_AND_TRIG,
-            'functionCall' => [MathTrig::class, 'ACOTH'],
-            'argumentCount' => '1',
-        ],
         'ADDRESS' => [
             'category' => Category::CATEGORY_LOOKUP_AND_REFERENCE,
             'functionCall' => [LookupRef::class, 'cellAddress'],
@@ -369,31 +359,6 @@ class Calculation
             'functionCall' => [Statistical::class, 'BINOMDIST'],
             'argumentCount' => '4',
         ],
-        'BITAND' => [
-            'category' => Category::CATEGORY_ENGINEERING,
-            'functionCall' => [Engineering::class, 'BITAND'],
-            'argumentCount' => '2',
-        ],
-        'BITOR' => [
-            'category' => Category::CATEGORY_ENGINEERING,
-            'functionCall' => [Engineering::class, 'BITOR'],
-            'argumentCount' => '2',
-        ],
-        'BITXOR' => [
-            'category' => Category::CATEGORY_ENGINEERING,
-            'functionCall' => [Engineering::class, 'BITOR'],
-            'argumentCount' => '2',
-        ],
-        'BITLSHIFT' => [
-            'category' => Category::CATEGORY_ENGINEERING,
-            'functionCall' => [Engineering::class, 'BITLSHIFT'],
-            'argumentCount' => '2',
-        ],
-        'BITRSHIFT' => [
-            'category' => Category::CATEGORY_ENGINEERING,
-            'functionCall' => [Engineering::class, 'BITRSHIFT'],
-            'argumentCount' => '2',
-        ],
         'CEILING' => [
             'category' => Category::CATEGORY_MATH_AND_TRIG,
             'functionCall' => [MathTrig::class, 'CEILING'],
@@ -460,11 +425,6 @@ class Calculation
             'functionCall' => [Engineering::class, 'COMPLEX'],
             'argumentCount' => '2,3',
         ],
-        'CONCAT' => [
-            'category' => Category::CATEGORY_TEXT_AND_DATA,
-            'functionCall' => [TextData::class, 'CONCATENATE'],
-            'argumentCount' => '1+',
-        ],
         'CONCATENATE' => [
             'category' => Category::CATEGORY_TEXT_AND_DATA,
             'functionCall' => [TextData::class, 'CONCATENATE'],
@@ -493,16 +453,6 @@ class Calculation
         'COSH' => [
             'category' => Category::CATEGORY_MATH_AND_TRIG,
             'functionCall' => 'cosh',
-            'argumentCount' => '1',
-        ],
-        'COT' => [
-            'category' => Category::CATEGORY_MATH_AND_TRIG,
-            'functionCall' => [MathTrig::class, 'COT'],
-            'argumentCount' => '1',
-        ],
-        'COTH' => [
-            'category' => Category::CATEGORY_MATH_AND_TRIG,
-            'functionCall' => [MathTrig::class, 'COTH'],
             'argumentCount' => '1',
         ],
         'COUNT' => [
@@ -569,16 +519,6 @@ class Calculation
             'category' => Category::CATEGORY_STATISTICAL,
             'functionCall' => [Statistical::class, 'CRITBINOM'],
             'argumentCount' => '3',
-        ],
-        'CSC' => [
-            'category' => Category::CATEGORY_MATH_AND_TRIG,
-            'functionCall' => [MathTrig::class, 'CSC'],
-            'argumentCount' => '1',
-        ],
-        'CSCH' => [
-            'category' => Category::CATEGORY_MATH_AND_TRIG,
-            'functionCall' => [MathTrig::class, 'CSCH'],
-            'argumentCount' => '1',
         ],
         'CUBEKPIMEMBER' => [
             'category' => Category::CATEGORY_CUBE,
@@ -795,17 +735,7 @@ class Calculation
             'functionCall' => [Engineering::class, 'ERF'],
             'argumentCount' => '1,2',
         ],
-        'ERF.PRECISE' => [
-            'category' => Category::CATEGORY_ENGINEERING,
-            'functionCall' => [Engineering::class, 'ERFPRECISE'],
-            'argumentCount' => '1',
-        ],
         'ERFC' => [
-            'category' => Category::CATEGORY_ENGINEERING,
-            'functionCall' => [Engineering::class, 'ERFC'],
-            'argumentCount' => '1',
-        ],
-        'ERFC.PRECISE' => [
             'category' => Category::CATEGORY_ENGINEERING,
             'functionCall' => [Engineering::class, 'ERFC'],
             'argumentCount' => '1',
@@ -822,7 +752,7 @@ class Calculation
         ],
         'EXACT' => [
             'category' => Category::CATEGORY_TEXT_AND_DATA,
-            'functionCall' => [TextData::class, 'EXACT'],
+            'functionCall' => [Functions::class, 'DUMMY'],
             'argumentCount' => '2',
         ],
         'EXP' => [
@@ -894,13 +824,6 @@ class Calculation
             'category' => Category::CATEGORY_STATISTICAL,
             'functionCall' => [Statistical::class, 'FORECAST'],
             'argumentCount' => '3',
-        ],
-        'FORMULATEXT' => [
-            'category' => Category::CATEGORY_LOOKUP_AND_REFERENCE,
-            'functionCall' => [LookupRef::class, 'FORMULATEXT'],
-            'argumentCount' => '1',
-            'passCellReference' => true,
-            'passByReference' => [true],
         ],
         'FREQUENCY' => [
             'category' => Category::CATEGORY_STATISTICAL,
@@ -1038,26 +961,6 @@ class Calculation
             'functionCall' => [Engineering::class, 'IMCOS'],
             'argumentCount' => '1',
         ],
-        'IMCOSH' => [
-            'category' => Category::CATEGORY_ENGINEERING,
-            'functionCall' => [Engineering::class, 'IMCOSH'],
-            'argumentCount' => '1',
-        ],
-        'IMCOT' => [
-            'category' => Category::CATEGORY_ENGINEERING,
-            'functionCall' => [Engineering::class, 'IMCOT'],
-            'argumentCount' => '1',
-        ],
-        'IMCSC' => [
-            'category' => Category::CATEGORY_ENGINEERING,
-            'functionCall' => [Engineering::class, 'IMCSC'],
-            'argumentCount' => '1',
-        ],
-        'IMCSCH' => [
-            'category' => Category::CATEGORY_ENGINEERING,
-            'functionCall' => [Engineering::class, 'IMCSCH'],
-            'argumentCount' => '1',
-        ],
         'IMDIV' => [
             'category' => Category::CATEGORY_ENGINEERING,
             'functionCall' => [Engineering::class, 'IMDIV'],
@@ -1098,24 +1001,9 @@ class Calculation
             'functionCall' => [Engineering::class, 'IMREAL'],
             'argumentCount' => '1',
         ],
-        'IMSEC' => [
-            'category' => Category::CATEGORY_ENGINEERING,
-            'functionCall' => [Engineering::class, 'IMSEC'],
-            'argumentCount' => '1',
-        ],
-        'IMSECH' => [
-            'category' => Category::CATEGORY_ENGINEERING,
-            'functionCall' => [Engineering::class, 'IMSECH'],
-            'argumentCount' => '1',
-        ],
         'IMSIN' => [
             'category' => Category::CATEGORY_ENGINEERING,
             'functionCall' => [Engineering::class, 'IMSIN'],
-            'argumentCount' => '1',
-        ],
-        'IMSINH' => [
-            'category' => Category::CATEGORY_ENGINEERING,
-            'functionCall' => [Engineering::class, 'IMSINH'],
             'argumentCount' => '1',
         ],
         'IMSQRT' => [
@@ -1132,11 +1020,6 @@ class Calculation
             'category' => Category::CATEGORY_ENGINEERING,
             'functionCall' => [Engineering::class, 'IMSUM'],
             'argumentCount' => '1+',
-        ],
-        'IMTAN' => [
-            'category' => Category::CATEGORY_ENGINEERING,
-            'functionCall' => [Engineering::class, 'IMTAN'],
-            'argumentCount' => '1',
         ],
         'INDEX' => [
             'category' => Category::CATEGORY_LOOKUP_AND_REFERENCE,
@@ -1229,11 +1112,6 @@ class Calculation
         'ISODD' => [
             'category' => Category::CATEGORY_INFORMATION,
             'functionCall' => [Functions::class, 'isOdd'],
-            'argumentCount' => '1',
-        ],
-        'ISOWEEKNUM' => [
-            'category' => Category::CATEGORY_DATE_AND_TIME,
-            'functionCall' => [DateTime::class, 'ISOWEEKNUM'],
             'argumentCount' => '1',
         ],
         'ISPMT' => [
@@ -1516,11 +1394,6 @@ class Calculation
             'functionCall' => [Financial::class, 'NPV'],
             'argumentCount' => '2+',
         ],
-        'NUMBERVALUE' => [
-            'category' => Category::CATEGORY_TEXT_AND_DATA,
-            'functionCall' => [TextData::class, 'NUMBERVALUE'],
-            'argumentCount' => '1+',
-        ],
         'OCT2BIN' => [
             'category' => Category::CATEGORY_ENGINEERING,
             'functionCall' => [Engineering::class, 'OCTTOBIN'],
@@ -1572,11 +1445,6 @@ class Calculation
             'category' => Category::CATEGORY_LOGICAL,
             'functionCall' => [Logical::class, 'logicalOr'],
             'argumentCount' => '1+',
-        ],
-        'PDURATION' => [
-            'category' => Category::CATEGORY_FINANCIAL,
-            'functionCall' => [Financial::class, 'PDURATION'],
-            'argumentCount' => '3',
         ],
         'PEARSON' => [
             'category' => Category::CATEGORY_STATISTICAL,
@@ -1759,11 +1627,6 @@ class Calculation
             'functionCall' => [LookupRef::class, 'ROWS'],
             'argumentCount' => '1',
         ],
-        'RRI' => [
-            'category' => Category::CATEGORY_FINANCIAL,
-            'functionCall' => [Financial::class, 'RRI'],
-            'argumentCount' => '3',
-        ],
         'RSQ' => [
             'category' => Category::CATEGORY_STATISTICAL,
             'functionCall' => [Statistical::class, 'RSQ'],
@@ -1783,16 +1646,6 @@ class Calculation
             'category' => Category::CATEGORY_TEXT_AND_DATA,
             'functionCall' => [TextData::class, 'SEARCHINSENSITIVE'],
             'argumentCount' => '2,3',
-        ],
-        'SEC' => [
-            'category' => Category::CATEGORY_MATH_AND_TRIG,
-            'functionCall' => [MathTrig::class, 'SEC'],
-            'argumentCount' => '1',
-        ],
-        'SECH' => [
-            'category' => Category::CATEGORY_MATH_AND_TRIG,
-            'functionCall' => [MathTrig::class, 'SECH'],
-            'argumentCount' => '1',
         ],
         'SECOND' => [
             'category' => Category::CATEGORY_DATE_AND_TIME,
@@ -1985,11 +1838,6 @@ class Calculation
             'functionCall' => [TextData::class, 'TEXTFORMAT'],
             'argumentCount' => '2',
         ],
-        'TEXTJOIN' => [
-            'category' => Category::CATEGORY_TEXT_AND_DATA,
-            'functionCall' => [TextData::class, 'TEXTJOIN'],
-            'argumentCount' => '3+',
-        ],
         'TIME' => [
             'category' => Category::CATEGORY_DATE_AND_TIME,
             'functionCall' => [DateTime::class, 'TIME'],
@@ -2050,16 +1898,6 @@ class Calculation
             'functionCall' => [Functions::class, 'TYPE'],
             'argumentCount' => '1',
         ],
-        'UNICHAR' => [
-            'category' => Category::CATEGORY_TEXT_AND_DATA,
-            'functionCall' => [TextData::class, 'CHARACTER'],
-            'argumentCount' => '1',
-        ],
-        'UNICODE' => [
-            'category' => Category::CATEGORY_TEXT_AND_DATA,
-            'functionCall' => [TextData::class, 'ASCIICODE'],
-            'argumentCount' => '1',
-        ],
         'UPPER' => [
             'category' => Category::CATEGORY_TEXT_AND_DATA,
             'functionCall' => [TextData::class, 'UPPERCASE'],
@@ -2076,16 +1914,6 @@ class Calculation
             'argumentCount' => '1',
         ],
         'VAR' => [
-            'category' => Category::CATEGORY_STATISTICAL,
-            'functionCall' => [Statistical::class, 'VARFunc'],
-            'argumentCount' => '1+',
-        ],
-        'VAR.P' => [
-            'category' => Category::CATEGORY_STATISTICAL,
-            'functionCall' => [Statistical::class, 'VARP'],
-            'argumentCount' => '1+',
-        ],
-        'VAR.S' => [
             'category' => Category::CATEGORY_STATISTICAL,
             'functionCall' => [Statistical::class, 'VARFunc'],
             'argumentCount' => '1+',
@@ -2144,11 +1972,6 @@ class Calculation
             'category' => Category::CATEGORY_FINANCIAL,
             'functionCall' => [Financial::class, 'XNPV'],
             'argumentCount' => '3',
-        ],
-        'XOR' => [
-            'category' => Category::CATEGORY_LOGICAL,
-            'functionCall' => [Logical::class, 'logicalXor'],
-            'argumentCount' => '1+',
         ],
         'YEAR' => [
             'category' => Category::CATEGORY_DATE_AND_TIME,
@@ -2572,10 +2395,10 @@ class Calculation
 
         if (self::$functionReplaceToLocale === null) {
             self::$functionReplaceToLocale = [];
-            foreach (self::$localeFunctions as $localeFunctionName) {
+            foreach (array_values(self::$localeFunctions) as $localeFunctionName) {
                 self::$functionReplaceToLocale[] = '$1' . trim($localeFunctionName) . '$2';
             }
-            foreach (self::$localeBoolean as $localeBoolean) {
+            foreach (array_values(self::$localeBoolean) as $localeBoolean) {
                 self::$functionReplaceToLocale[] = '$1' . trim($localeBoolean) . '$2';
             }
         }
@@ -2591,10 +2414,10 @@ class Calculation
     {
         if (self::$functionReplaceFromLocale === null) {
             self::$functionReplaceFromLocale = [];
-            foreach (self::$localeFunctions as $localeFunctionName) {
+            foreach (array_values(self::$localeFunctions) as $localeFunctionName) {
                 self::$functionReplaceFromLocale[] = '/(@?[^\w\.])' . preg_quote($localeFunctionName, '/') . '([\s]*\()/Ui';
             }
-            foreach (self::$localeBoolean as $excelBoolean) {
+            foreach (array_values(self::$localeBoolean) as $excelBoolean) {
                 self::$functionReplaceFromLocale[] = '/(@?[^\w\.])' . preg_quote($excelBoolean, '/') . '([^\w\.])/Ui';
             }
         }
