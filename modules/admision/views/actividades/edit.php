@@ -114,7 +114,7 @@ if (!empty($personalData['pges_cedula'])) {
             <div class="form-group">
                 <label for="cmb_nivelestudio" class="col-sm-5 col-md-5 col-xs-5 col-lg-5 control-label keyupmce"><?= Yii::t("crm", "Service Line") ?></label>
                 <div class="col-sm-7 col-md-7 col-xs-7 col-lg-7">
-                    <?= Html::dropDownList("cmb_nivelestudio", $oportunidad_contacto['unidad_academica'], $arr_linea_servicio, ["class" => "form-control", "id" => "cmb_nivelestudio", "disabled" => true]) ?>
+                    <?= Html::dropDownList("cmb_nivelestudio", $oportunidad_contacto['uaca_id'], $arr_linea_servicio, ["class" => "form-control", "id" => "cmb_nivelestudio", "disabled" => true]) ?>
                 </div>
             </div>
         </div>
@@ -122,7 +122,7 @@ if (!empty($personalData['pges_cedula'])) {
             <div class="form-group">
                 <label for="cmb_modalidad" class="col-sm-5 col-md-5 col-xs-5 col-lg-5 control-label keyupmce"><?= Yii::t("crm", "Moda") ?></label>
                 <div class="col-sm-7 col-md-7 col-xs-7 col-lg-7">
-                    <?= Html::dropDownList("cmb_modalidad", $oportunidad_contacto['modalidad'], $arr_modalidad, ["class" => "form-control", "id" => "cmb_modalidad", "disabled" => true]) ?>
+                    <?= Html::dropDownList("cmb_modalidad", $oportunidad_contacto['mod_id'], $arr_modalidad, ["class" => "form-control", "id" => "cmb_modalidad", "disabled" => true]) ?>
                 </div>
             </div>
         </div>
@@ -132,7 +132,7 @@ if (!empty($personalData['pges_cedula'])) {
             <div class="form-group">
                 <label for="cmb_tipo_oportunidad" class="col-sm-5 col-md-5 col-xs-5 col-lg-5 control-label keyupmce"><?= Yii::t("crm", "Opportunity type") ?></label>
                 <div class="col-sm-7 col-md-7 col-xs-7 col-lg-7">
-                    <?= Html::dropDownList("cmb_tipo_oportunidad", $oportunidad_contacto['tipo_oportunidad'], $arr_tipo_oportunidad, ["class" => "form-control", "id" => "cmb_tipo_oportunidad", "disabled" => true]) ?>
+                    <?= Html::dropDownList("cmb_tipo_oportunidad", $oportunidad_contacto['tove_id'], $arr_tipo_oportunidad, ["class" => "form-control", "id" => "cmb_tipo_oportunidad", "disabled" => true]) ?>
                 </div>
             </div>
         </div>

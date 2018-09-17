@@ -10,6 +10,7 @@ use app\modules\admision\models\EstadoOportunidad;
 use app\modules\academico\models\UnidadAcademica;
 use app\modules\academico\models\Modalidad;
 use app\models\Empresa;
+use app\models\Utilities;
 use yii\helpers\ArrayHelper;
 
 class ActividadesController extends \app\components\CController
@@ -82,11 +83,11 @@ class ActividadesController extends \app\components\CController
         $oport_model = new Oportunidad();
         $empresa_mod = new Empresa();
         $empresa = $empresa_mod->getAllEmpresa();
+        $oport_contac = $oport_model->consultarOportunidadById($opor_id);
         $contactManage = $persges_mod->consultarPersonaGestion($pges_id);
         $modalidad_data = $modalidad_model->consultarModalidad(0);
         $actividad_data = $oport_model->consultarActividadById($act_id);
         $oportunidad_perdidad = $oport_model->consultarOportunidadPerdida();
-        $oport_contac = $oport_model->consultarOportunidadById($opor_id);
         $unidad_acad_data = $uni_aca_model->consultarUnidadAcademicas();
         $tipo_oportunidad_data = $modTipoOportunidad->consultarOporxUnidad(1);
         $academic_study_data = $oport_model->consultarCarreraModalidad(1, 1);
@@ -146,7 +147,7 @@ class ActividadesController extends \app\components\CController
 
     public function actionSave()
     {
-        per_id = @Yii::$app->session->get("PB_perid");
+        $per_id = @Yii::$app->session->get("PB_perid");
         $usu_id = @Yii::$app->user->identity->usu_id;
         $fecproxima = null;
         if (Yii::$app->request->isAjax) {
@@ -235,7 +236,6 @@ class ActividadesController extends \app\components\CController
                 $padm_id = $padm_class['padm_id'];
                 $act_id = base64_decode($data['bact_id']);
                 if ($padm_id > 0) {
-                    \app\models\Utilities::putMessageLogFile('argumentos de actualizar: ' . $act_id . "-" . $usu_id . "-" . $padm_id . "-" . $fecatiende . "-" . $observacion . "-" . $fecproxima);
                     $actividad_id = $mod_gestion->actualizarActividad($act_id, $usu_id, $padm_id, $fecatiende, $observacion, $fecproxima);
                     if ($actividad_id) {
                         $exito = 1;
