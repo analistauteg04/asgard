@@ -164,7 +164,7 @@ class OportunidadesController extends \app\components\CController
         ]);
     }
 
-    public function actionNew()
+    public function actionNewoportunidad()
     {
         $per_id = @Yii::$app->session->get("PB_perid");
         $pges_id = base64_decode($_GET["pgid"]);
