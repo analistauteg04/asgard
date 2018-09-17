@@ -361,6 +361,10 @@ $I->click(['link' => 'Login']);
  * `param` $context
 
 
+### connectionOpenHandler
+__not documented__
+
+
 ### createAndSetCsrfCookie
  
 This function creates the CSRF Cookie.

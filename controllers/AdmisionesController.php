@@ -698,7 +698,7 @@ class AdmisionesController extends \app\components\CController {
         $empresa_mod = new Empresa();
         $empresa = $empresa_mod->getAllEmpresa();
         $contactManage = $persges_mod->consultarPersonaGestion($pges_id);
-        $modalidad_data = $modalidad_model->consultarModalidad(0);
+        $modalidad_data = $modalidad_model->consultarModalidad(1);
         $oport_contac = $oport_model->consultarOportunidadById($opor_id);
         $oportunidad_perdidad = $oport_model->consultarOportunidadPerdida();
         $unidad_acad_data = $uni_aca_model->consultarUnidadAcademicas();
@@ -734,7 +734,7 @@ class AdmisionesController extends \app\components\CController {
         $empresa_mod = new Empresa();
         $empresa = $empresa_mod->getAllEmpresa();
         $contactManage = $persges_mod->consultarPersonaGestion($pges_id);
-        $modalidad_data = $modalidad_model->consultarModalidad(0);
+        $modalidad_data = $modalidad_model->consultarModalidad(1);
         $actividad_data = $oport_model->consultarActividadById($act_id);
         $oportunidad_perdidad = $oport_model->consultarOportunidadPerdida();
         $oport_contac = $oport_model->consultarOportunidadById($opor_id);
@@ -772,7 +772,7 @@ class AdmisionesController extends \app\components\CController {
         $empresa_mod = new Empresa();
         $empresa = $empresa_mod->getAllEmpresa();
         $contactManage = $persges_mod->consultarPersonaGestion($pges_id);
-        $modalidad_data = $modalidad_model->consultarModalidad(0);
+        $modalidad_data = $modalidad_model->consultarModalidad(1);
         $actividad_data = $oport_model->consultarActividadById($act_id);
         $oportunidad_perdidad = $oport_model->consultarOportunidadPerdida();
         $oport_contac = $oport_model->consultarOportunidadById($opor_id);
@@ -1094,7 +1094,7 @@ class AdmisionesController extends \app\components\CController {
         $state_oportunidad_model = new EstadoOportunidad();
         //$academic_study = new EstudioAcademico();
         $unidad_acad_data = $uni_aca_model->consultarUnidadAcademicas();
-        $modalidad_data = $modalidad_model->consultarModalidad(0);
+        $modalidad_data = $modalidad_model->consultarModalidad(1);
         $modcanal = new Oportunidad();
         $tipo_oportunidad_data = $modTipoOportunidad->consultarOporxUnidad(1);
         $state_oportunidad_data = $state_oportunidad_model->consultarEstadOportunidad();
@@ -1421,7 +1421,7 @@ class AdmisionesController extends \app\components\CController {
         $modalidad_model = new Modalidad();
         $state_oportunidad_model = new EstadoOportunidad();
         $unidad_acad_data = $uni_aca_model->consultarUnidadAcademicas();
-        $modalidad_data = $modalidad_model->consultarModalidad(0);
+        $modalidad_data = $modalidad_model->consultarModalidad(1);
         $modcanal = new Oportunidad();
         $tipo_oportunidad_data = TipoOportunidadVenta::find()->select("tove_id AS id, tove_nombre AS name")->where(["tove_estado_logico" => "1", "tove_estado" => "1"])->asArray()->all();
         $state_oportunidad_data = $state_oportunidad_model->consultarEstadOportunidad();
@@ -1463,7 +1463,7 @@ class AdmisionesController extends \app\components\CController {
         $contactManage = $persges_mod->consultarPersonaGestion($pges_id);
         $respOportunidad = $modoportunidad->consultarOportunidadById($opor_id);
         $unidad_acad_data = $uni_aca_model->consultarUnidadAcademicas();
-        $modalidad_data = $modalidad_model->consultarModalidad(0);
+        $modalidad_data = $modalidad_model->consultarModalidad(1);
         $tipo_oportunidad_data = $modTipoOportunidad->consultarOporxUnidad(1);
         $state_oportunidad_data = $state_oportunidad_model->consultarEstadOportunidad();
         $academic_study_data = $modoportunidad->consultarCarreraModalidad(1, 1);

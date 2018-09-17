@@ -26,56 +26,25 @@ class NameFilterIterator extends RecursiveFilterIterator
      * @var int
      */
     protected $filterMin;
-
     /**
      * @var int
      */
     protected $filterMax;
 
     /**
-     * @throws \Exception
+     * @param RecursiveIterator $iterator
+     * @param string            $filter
      */
-    public function __construct(RecursiveIterator $iterator, string $filter)
+    public function __construct(RecursiveIterator $iterator, $filter)
     {
         parent::__construct($iterator);
-
         $this->setFilter($filter);
     }
 
-    public function accept(): bool
-    {
-        $test = $this->getInnerIterator()->current();
-
-        if ($test instanceof TestSuite) {
-            return true;
-        }
-
-        $tmp = \PHPUnit\Util\Test::describe($test);
-
-        if ($test instanceof WarningTestCase) {
-            $name = $test->getMessage();
-        } else {
-            if ($tmp[0] !== '') {
-                $name = \implode('::', $tmp);
-            } else {
-                $name = $tmp[1];
-            }
-        }
-
-        $accepted = @\preg_match($this->filter, $name, $matches);
-
-        if ($accepted && isset($this->filterMax)) {
-            $set      = \end($matches);
-            $accepted = $set >= $this->filterMin && $set <= $this->filterMax;
-        }
-
-        return (bool) $accepted;
-    }
-
     /**
-     * @throws \Exception
+     * @param string $filter
      */
-    protected function setFilter(string $filter): void
+    protected function setFilter($filter)
     {
         if (RegularExpression::safeMatch($filter, '') === false) {
             // Handles:
@@ -110,7 +79,7 @@ class NameFilterIterator extends RecursiveFilterIterator
 
             // Escape delimiters in regular expression. Do NOT use preg_quote,
             // to keep magic characters.
-            $filter = \sprintf('/%s/i', \str_replace(
+            $filter = \sprintf('/%s/', \str_replace(
                 '/',
                 '\\/',
                 $filter
@@ -118,5 +87,38 @@ class NameFilterIterator extends RecursiveFilterIterator
         }
 
         $this->filter = $filter;
+    }
+
+    /**
+     * @return bool
+     */
+    public function accept()
+    {
+        $test = $this->getInnerIterator()->current();
+
+        if ($test instanceof TestSuite) {
+            return true;
+        }
+
+        $tmp = \PHPUnit\Util\Test::describe($test, false);
+
+        if ($test instanceof WarningTestCase) {
+            $name = $test->getMessage();
+        } else {
+            if ($tmp[0] != '') {
+                $name = \implode('::', $tmp);
+            } else {
+                $name = $tmp[1];
+            }
+        }
+
+        $accepted = @\preg_match($this->filter, $name, $matches);
+
+        if ($accepted && isset($this->filterMax)) {
+            $set      = \end($matches);
+            $accepted = $set >= $this->filterMin && $set <= $this->filterMax;
+        }
+
+        return $accepted;
     }
 }

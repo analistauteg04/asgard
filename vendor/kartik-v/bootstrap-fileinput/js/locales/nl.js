@@ -24,7 +24,7 @@
         msgNo: 'Nee',
         msgNoFilesSelected: '',
         msgCancelled: 'Geannuleerd',
-        msgPlaceholder: 'Selecteer {files}...',
+        msgPlaceholder: 'Select {files}...',
         msgZoomModalHeading: 'Gedetailleerd voorbeeld',
         msgFileRequired: 'U moet een bestand kiezen om te uploaden.',
         msgSizeTooSmall: 'Bestand "{name}" (<b>{size} KB</b>) is te klein en moet groter zijn dan <b>{minSize} KB</b>.',
@@ -79,10 +79,10 @@
         fileActionSettings: {
             removeTitle: 'Verwijder bestand',
             uploadTitle: 'bestand uploaden',
-            uploadRetryTitle: 'Opnieuw uploaden',
+            uploadRetryTitle: 'Retry upload',
             downloadTitle: 'Download file',
             zoomTitle: 'Bekijk details',
-            dragTitle: 'Verplaatsen / herindelen',
+            dragTitle: 'Move / Rearrange',
             indicatorNewTitle: 'Nog niet geupload',
             indicatorSuccessTitle: 'geupload',
             indicatorErrorTitle: 'fout uploaden',
@@ -92,9 +92,9 @@
             prev: 'Toon vorig bestand',
             next: 'Toon volgend bestand',
             toggleheader: 'Toggle header',
-            fullscreen: 'Toggle volledig scherm',
-            borderless: 'Toggle randloze modus',
-            close: 'Sluit gedetailleerde weergave'
+            fullscreen: 'Toggle full screen',
+            borderless: 'Toggle borderless mode',
+            close: 'Close detailed preview'
         }
     };
 })(window.jQuery);
