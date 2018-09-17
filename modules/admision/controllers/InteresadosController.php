@@ -3,9 +3,11 @@
 namespace app\modules\admision\controllers;
 
 use Yii;
+use app\modules\admision\models\Interesado;
+use app\modules\admision\models\SolicitudInscripcion;
+use yii\helpers\ArrayHelper;
 
 class InteresadosController extends \app\components\CController {
-
     public function actionIndex() {
         $per_id = @Yii::$app->session->get("PB_perid");
         $model_interesado = new Interesado();
@@ -24,7 +26,7 @@ class InteresadosController extends \app\components\CController {
         $model_solicitud = new SolicitudInscripcion();
         $resp_estados = $model_solicitud->Consultaestadosolicitud();
         $arrEstados = ArrayHelper::map(array_merge([["id" => "0", "value" => Yii::t("formulario", "Grid")], ["id" => "6", "value" => Yii::t("formulario", "Pendiente Crear Solicitud")]], $resp_estados), "id", "value");
-        return $this->render('listarinteresados', [
+        return $this->render('index', [
                     'model' => $model,
                     'arrEstados' => $arrEstados,
         ]);

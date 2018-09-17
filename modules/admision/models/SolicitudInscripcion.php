@@ -1,6 +1,6 @@
 <?php
 
-namespace app\models;
+namespace app\modules\admision\models;
 use yii\data\ArrayDataProvider;
 use Yii;
 
@@ -37,8 +37,7 @@ use Yii;
  * @property SolicitudRechazada[] $solicitudRechazadas
  * @property SolicitudinsDocumento[] $solicitudinsDocumentos
  */
-class SolicitudInscripcion extends \yii\db\ActiveRecord
-{
+class SolicitudInscripcion extends \app\modules\admision\components\CActiveRecord {
     /**
      * {@inheritdoc}
      */
