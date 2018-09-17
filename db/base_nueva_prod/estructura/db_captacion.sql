@@ -297,25 +297,6 @@ create table if not exists `info_academico` (
 );
 
 -- --------------------------------------------------------
---
--- Estructura de tabla para la tabla `interesado_ejecutivo` 
---
-create table if not exists `interesado_ejecutivo` (
- `ieje_id` bigint(20) not null auto_increment primary key,
- `int_id` bigint(20)  null,
- `asp_id` bigint(20)  null,
- `per_id` bigint(20) not null,
- `ieje_usuario` bigint(20) null,
- `ieje_estado_asignacion` varchar(1) null,
- `ieje_estado` varchar(1) not null, 
- `ieje_fecha_creacion` timestamp not null default current_timestamp,
- `ieje_fecha_modificacion` timestamp null default null,
- `ieje_estado_logico` varchar(1) not null, 
- foreign key (int_id) references `interesado`(int_id), 
- foreign key (asp_id) references `aspirante`(asp_id)
-);
-
--- --------------------------------------------------------
 -- Estructura de tabla para la tabla `medio_publicitario`
 --
 create table if not exists `medio_publicitario` (
