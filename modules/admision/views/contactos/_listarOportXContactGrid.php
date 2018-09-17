@@ -56,7 +56,7 @@ use app\widgets\PbGridView\PbGridView;
                         return Html::a('<span class="glyphicon glyphicon-eye-open"></span>', Url::to(['oportunidades/view', 'opor_id' => base64_encode($model["id"]), 'pges_id' => base64_encode($model["pges_id"])]), ["data-toggle" => "tooltip", "title" => "Ver Oportunidad", "data-pjax" => 0]);
                     },
                     'activities' => function ($url, $model) {
-                        return Html::a('<span class="glyphicon glyphicon-th-large"></span>', Url::to(['admisiones/listaractixoport', 'opor_id' => base64_encode($model["id"]), 'pges_id' => base64_encode($model["pges_id"])]), ["data-toggle" => "tooltip", "title" => "Ver Actividades", "data-pjax" => 0]);
+                        return Html::a('<span class="glyphicon glyphicon-th-large"></span>', Url::to(['actividades/listaractividades', 'opor_id' => base64_encode($model["id"]), 'pges_id' => base64_encode($model["pges_id"])]), ["data-toggle" => "tooltip", "title" => "Ver Actividades", "data-pjax" => 0]);
                     },                    
                     'interested' => function ($url, $model) {
                         $mod_per = new Persona();
