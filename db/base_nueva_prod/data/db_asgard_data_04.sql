@@ -174,29 +174,32 @@ INSERT INTO `grupo` (`gru_id`, `cseg_id`, `gru_nombre`, `gru_descripcion`, `gru_
 (11, 2, 'Financiero', 'Financiero', NULL, '1', '1'),
 (12, 2, 'Grado', 'Grado', NULL, '1', '1'),
 (13, 2, 'Posgrado', 'Grado', NULL, '1', '1');
-
 -- --------------------------------------------------------
 --
 -- Volcado de datos para la tabla `ROL`
 --
 INSERT INTO `rol` (`rol_id`, `rol_nombre`, `rol_descripcion`, `rol_estado`, `rol_estado_logico`) VALUES
 (1, 'Super Administrador', 'Super Administrador', '1', '1'),
-(2, 'Admin Sistemas', 'Admin Sistemas', '1', '1'),
-(3, 'Admin Administrativo', 'Admin Administrativo', '1', '1'),
-(4, 'Gerente', 'Docente', '1', '1'),
-(5, 'Director', 'Director', '1', '1'),
-(6, 'Jefe', 'Jefe', '1', '1'),
-(7, 'Coordinador', 'Coordinador Senior', '1', '1'),
-(8, 'Supervisor', 'Supervisor Senior', '1', '1'),
-(9, 'Analista', 'Analista Senior', '1', '1'),
-(10, 'Asistente', 'Asistente Senior', '1', '1'),
-(11, 'Lider', 'Lider', '1', '1'),
-(12, 'Agente', 'Ejecutivo Comercial', '1', '1'),
-(13, 'Secretaria', 'Secretaria', '1', '1'),
-(14, 'Interesado', 'Interesado', '1', '1'),
-(15, 'Aspirante', 'Aspirante', '1', '1'),
-(16, 'Estudiante', 'Estudiante', '1', '1'),
-(17, 'Docente', 'Docente', '1', '1');
+(2, 'Pre Interesado', 'Pre Interesado', '1', '1'),
+(3, 'Interesado', 'Interesado', '1', '1'),
+(4, 'Aspirante', 'Aspirante', '1', '1'),
+(5, 'Estudiante', 'Estudiante', '1', '1'),
+(6, 'Docente', 'Docente', '1', '1'),
+(7, 'Admin Sistemas', 'Admin Sistemas', '1', '1'),
+(8, 'Admin Administrativo', 'Admin Administrativo', '1', '1'),
+(9, 'Director', 'Director', '1', '1'),
+(10, 'Jefe', 'Jefe', '1', '1'),
+(11, 'Coordinador Senior', 'Coordinador Senior', '1', '1'),
+(12, 'Coordinador Junior', 'Coordinador Junior', '1', '1'),
+(13, 'Supervisor Senior', 'Supervisor Senior', '1', '1'),
+(14, 'Supervisor Junior', 'Supervisor Junior', '1', '1'),
+(15, 'Analista Senior', 'Analista Senior', '1', '1'),
+(16, 'Analista Junior', 'Analista Junior', '1', '1'),
+(17, 'Asistente Senior', 'Asistente Senior', '1', '1'),
+(18, 'Asistente Junior', 'Asistente Junior', '1', '1'),
+(19, 'Ejecutivo Comercial', 'Ejecutivo Comercial', '1', '1'),
+(20, 'Secretaria', 'Secretaria', '1', '1'),
+(21, 'Administrador Plataforma', 'Administrador Plataforma', '1', '1');
 -- --------------------------------------------------------
 --
 -- Volcado de datos para la tabla `GRUP_ROL`
@@ -221,6 +224,8 @@ INSERT INTO `grup_rol` (`grol_id`, `gru_id`, `rol_id`, `grol_estado`, `grol_esta
 (17, 10, 21, '1', '1'),
 (18, 10, 11, '1', '1'),
 (19, 12, 10, '1', '1');
+
+
 
 -- --------------------------------------------------------
 --
