@@ -33,7 +33,7 @@ $_SESSION['persona_solicita'] = base64_decode($_GET['ids']);
             <div class="form-group">
                 <label for="cmb_ninteres" class="col-sm-5 col-md-5 col-xs-5 col-lg-5 control-label"><?= Yii::t("formulario", "Academic unit") ?></label>
                 <div class="col-sm-7 col-md-7 col-xs-7 col-lg-7">
-                    <?= Html::dropDownList("cmb_ninteres", 1, $arr_ninteres, ["class" => "form-control", "id" => "cmb_ninteres"]) ?>
+                    <?= Html::dropDownList("cmb_ninteres", 1, $arr_unidad, ["class" => "form-control", "id" => "cmb_ninteres"]) ?>
                 </div>
             </div>  
         </div>

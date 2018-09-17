@@ -60,6 +60,7 @@ class SolicitudesController extends \app\components\CController {
         $modestudio = new ModuloEstudio();
         $modItemMetNivel = new ItemMetodoNivel();
         $modDescuento = new DetalleDescuentoItem();
+        $modUnidad = new UnidadAcademica();
 
         if (Yii::$app->request->isAjax) {
             $data = Yii::$app->request->post();
@@ -94,15 +95,15 @@ class SolicitudesController extends \app\components\CController {
                 return;
             }
         }
-        $arr_ninteres = UnidadAcademica::find()->select("uaca_id AS id, uaca_nombre AS name")->where(["uaca_estado_logico" => "1", "uaca_estado" => "1"])->asArray()->all();
+        $arr_unidadac = $modUnidad->consultarUnidadAcademicas();
         $arr_modalidad = $mod_modalidad->consultarModalidad(1);
-        $arr_metodos = $mod_metodo->consultarMetodoIngNivelInt($arr_ninteres[0]["id"]);
+        $arr_metodos = $mod_metodo->consultarMetodoIngNivelInt($arr_unidadac[0]["id"]);
         $arr_carrera = $modcanal->consultarCarreraModalidad(1, 1);
         //Descuentos.
         $resp_item = $modItemMetNivel->consultarXitemMetniv(1, 1, 1);
         $arr_descuento = $modDescuento->consultarDesctoxitem($resp_item["ite_id"]);
         return $this->render('new', [
-                    "arr_ninteres" => ArrayHelper::map($arr_ninteres, "id", "name"),
+                    "arr_unidad" => ArrayHelper::map($arr_unidadac, "id", "name"),
                     "arr_metodos" => ArrayHelper::map($arr_metodos, "id", "name"),
                     "txth_extranjero" => $mod_persona->per_nac_ecuatoriano,
                     "arr_carrera" => ArrayHelper::map($arr_carrera, "id", "name"),
