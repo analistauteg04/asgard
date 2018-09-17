@@ -20,12 +20,12 @@ class DecToRoman
 		}
 	}
 
-	public function convert($number, $toUpper = true)
+	public function convert($number)
 	{
 		$this->ensureNumberIsAnInteger($number);
 		$this->ensureNumberIsWithinBounds($number);
 
-		return $this->constructRomanString($number, $toUpper);
+		return $this->constructRomanString($number);
 	}
 
 	private function ensureNumberIsAnInteger($number)
@@ -56,7 +56,7 @@ class DecToRoman
 		return $valueOfOne * ($hasFiveSymbol ? 9 : 4) - 1;
 	}
 
-	private function constructRomanString($number, $toUpper)
+	private function constructRomanString($number)
 	{
 		$romanNumber = '';
 
@@ -72,10 +72,6 @@ class DecToRoman
 			if ($number === 0) {
 				break;
 			}
-		}
-
-		if (!$toUpper) {
-			$romanNumber = strtolower($romanNumber);
 		}
 
 		return $romanNumber;

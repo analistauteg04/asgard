@@ -268,4 +268,15 @@ INSERT INTO `asignatura` (`asi_id`, `scon_id`, `asi_nombre`, `asi_descripcion`, 
 (4, 1, 'Desarrollo del Pensamiento - CAN', 'Desarrollo del Pensamiento - CAN', 1, '1', '2018-05-08 22:16:52', NULL, '1'),
 (5, 1, 'Emprendimiento - CAN', 'Emprendimiento - CAN', 1, '1', '2018-05-08 22:16:52', NULL, '1');
 
+-- --------------------------------------------------------
+--
+-- Volcado de datos para la tabla `modalidad_unidad_academico`
+--
+INSERT INTO `modalidad_unidad_academico` (`muac_id`,`uaca_id`,`mod_id`, `emp_id`,`muac_usuario_ingreso`,`muac_estado`, `muac_fecha_creacion`, `muac_estado_logico`) VALUES
+(1,1,1,1,1,'1','2018-09-17 14:35:00','1'),
+(2,1,2,1,1,'1','2018-09-17 14:35:00','1'),
+(3,1,3,1,1,'1','2018-09-17 14:35:00','1'),
+(4,1,4,1,1,'1','2018-09-17 14:35:00','1'),
+(5,2,3,1,1,'1','2018-09-17 14:35:00','1');
+
 

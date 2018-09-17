@@ -554,7 +554,6 @@ class Html extends BaseReader
         $row = 0;
         $column = 'A';
         $content = '';
-        $this->rowspan = [];
         $this->processDomElement($dom, $spreadsheet->getActiveSheet(), $row, $column, $content);
 
         // Return

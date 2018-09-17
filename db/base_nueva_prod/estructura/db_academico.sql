@@ -559,3 +559,23 @@ create table if not exists `modulo_estudio_empresa` (
   `meem_estado_logico` varchar(1) not null,   
   foreign key (mest_id) references `modulo_estudio`(mest_id)
 );
+
+-- --------------------------------------------------------
+-- 
+-- Estructura de tabla para la tabla `modalidad_unidad_academico`
+-- 
+create table if not exists `modalidad_unidad_academico` (
+  `muac_id` bigint(20) not null auto_increment primary key,
+  `uaca_id` bigint(20) not null,
+  `mod_id` bigint(20) not null,
+  `emp_id` bigint(20) not null,
+  `muac_usuario_ingreso` bigint(20) not null,
+  `muac_usuario_modifica` bigint(20)  null,  
+  `muac_estado` varchar(1) not null,
+  `muac_fecha_creacion` timestamp not null default current_timestamp,
+  `muac_fecha_modificacion` timestamp null default null,
+  `muac_estado_logico` varchar(1) not null,
+
+  foreign key (uaca_id) references `unidad_academica`(uaca_id),
+  foreign key (mod_id) references `modalidad`(mod_id)
+);
