@@ -23,6 +23,22 @@ create table if not exists `interesado` (
  `int_estado_logico` varchar(1) not null
 );
 
+--
+-- Estructura de tabla para la tabla `interesado_empresa` 
+--
+create table if not exists `interesado_empresa` (
+ `iemp_id` bigint(20) not null auto_increment primary key, 
+ `int_id` bigint(20) not null,
+ `emp_id` bigint(20) not null,
+ `iemp_estado_interesado` varchar(1) null,  
+ `iemp_usuario_ingreso` bigint(20) not null,
+ `iemp_usuario_modifica` bigint(20) null,
+ `iemp_estado` varchar(1) not null,
+ `iemp_fecha_creacion` timestamp not null default current_timestamp,
+ `iemp_fecha_modificacion` timestamp null default null,
+ `iemp_estado_logico` varchar(1) not null,
+foreign key (int_id) references `interesado`(int_id)
+);
 -- --------------------------------------------------------
 --
 -- Estructura de tabla para la tabla `metodo_ingreso`
