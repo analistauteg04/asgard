@@ -11,11 +11,11 @@ USE `db_captacion`;
 --
 -- Volcado de datos para la tabla `metodo_ingreso`
 --
-INSERT INTO `metodo_ingreso` (`ming_id`, `ming_nombre`, `ming_descripcion`, `ming_estado`, `ming_estado_logico`) VALUES
-(1, 'Curso de admisión y nivelación', 'Curso de admisión y nivelación', '1', '1'),
-(2, 'Examen de admisión', 'Examen de admisión', '1', '1'),
-(3, 'Homologación', 'Homologación', '1', '1'),
-(4, 'Propedéutico', 'Propedéutico', '1', '1');
+INSERT INTO `metodo_ingreso` (`ming_id`, `ming_nombre`, `ming_descripcion`, `ming_alias`, `ming_estado`, `ming_estado_logico`) VALUES
+(1, 'Curso de admisión y nivelación', 'Curso de admisión y nivelación', 'CAN', '1', '1'),
+(2, 'Examen de admisión', 'Examen de admisión', 'Examen', '1', '1'),
+(3, 'Homologación', 'Homologación', 'Homologación', '1', '1'),
+(4, 'Propedéutico', 'Propedéutico', 'Propedéutico', '1', '1');
 
 -- --------------------------------------------------------
 --
