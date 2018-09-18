@@ -338,61 +338,49 @@ class SolicitudInscripcion extends \app\modules\admision\components\CActiveRecor
                     per.per_seg_apellido as per_seg_apellido,";
         }
 
-        $sql = "SELECT 
-                    lpad(sins.sins_id,4,'0') as num_solicitud,
-                    sins.sins_id,
-                    sins.sins_fecha_solicitud as fecha_solicitud,
-                    per.per_cedula as per_dni,
-                    concat(per.per_pri_nombre ,' ', ifnull(per.per_seg_nombre, ' ')) as per_nombres,
-                    concat(per.per_pri_apellido ,' ', ifnull(per.per_seg_apellido,' ')) as per_apellidos,                    
-                    uaca.uaca_nombre as nint_nombre,
-                    ifnull((select ming.ming_nombre 
-                            from " . $con->dbname . ".metodo_ingreso as ming 
-                            where sins.ming_id = ming.ming_id and
-                                  ming.ming_estado = :estado and ming.ming_estado_logico = :estado),'') as ming_nombre,
-                    sins.eaca_id,
-                    eac.eaca_nombre as carrera,
-                    rsol.rsin_nombre as estado,
-                    $columnsAdd
-                    (CASE when ifnull((SELECT (CASE WHEN ord.opag_estado_pago = 'P' 
-                                                    THEN 'Pendiente'  WHEN ord.opag_estado_pago = 'S' 
-                                                    THEN 'Pagado' else 'No Disponible' END) as estado_pago 
-                                           FROM " . $con3->dbname . ".orden_pago as ord 
-                                           WHERE ord.sins_id = sins.sins_id AND ord.opag_estado_logico=:estado AND  ord.opag_estado=:estado), ' ')= ' ' 
-                    THEN 'No Disponible' 
-                    ELSE  (SELECT (CASE WHEN ord.opag_estado_pago = 'P' 
-                                            THEN 'Pendiente' else 'Pagado' END) as estado_pago 
-                                   FROM " . $con3->dbname . ".orden_pago as ord 
-                                   WHERE ord.sins_id = sins.sins_id AND ord.opag_estado_logico=:estado AND  ord.opag_estado=:estado) END) as estado_pago,
-                    (select count(*) numdocumentos from " . $con->dbname . ".solicitudins_documento sid where sid.sins_id = sins.sins_id) as numDocumentos,
-                    per_nac_ecuatoriano, inte.int_id, ifnull(sins_beca,0) beca, sins.uaca_id, sins.rsin_id
-                FROM 
-                    " . $con->dbname . ".solicitud_inscripcion as sins
-                    INNER JOIN " . $con->dbname . ".interesado as inte on sins.int_id = inte.int_id                    
-                    INNER JOIN " . $con2->dbname . ".persona as per on inte.per_id = per.per_id 
-                    INNER JOIN " . $con1->dbname . ".unidad_academica as uaca on sins.uaca_id = uaca.uaca_id                     
-                    INNER JOIN " . $con->dbname . ".res_sol_inscripcion as rsol on rsol.rsin_id = sins.rsin_id
-                    INNER JOIN " . $con1->dbname . ".estudio_academico as eac on sins.eaca_id = eac.eaca_id
-                WHERE  
-                    $str_search 
-                    per.per_id = :per_id AND
-                    sins.sins_estado_logico=:estado AND 
-                    inte.int_estado_logico=:estado AND                     
-                    per.per_estado_logico=:estado AND 
-                    rsol.rsin_estado=:estado AND
-                    uaca.uaca_estado = :estado AND
-                    eac.eaca_estado_logico =:estado AND 
-                    sins.sins_estado=:estado AND 
-                    inte.int_estado=:estado AND                     
-                    per.per_estado=:estado AND
-                    rsol.rsin_estado_logico=:estado AND
-                    uaca.uaca_estado_logico = :estado AND
-                    eac.eaca_estado =:estado                  
-                ORDER BY fecha_solicitud DESC";
+        $sql = " 
+                    SELECT 
+                        lpad(sins.sins_id,4,'0') as num_solicitud,
+                        sins.sins_id,
+                        sins.sins_fecha_solicitud as fecha_solicitud,
+                        per.per_cedula as per_dni,
+                        concat(per.per_pri_nombre ,' ', ifnull(per.per_seg_nombre, ' ')) as per_nombres,
+                        concat(per.per_pri_apellido ,' ', ifnull(per.per_seg_apellido,' ')) as per_apellidos,                    
+                        uaca.uaca_nombre as nint_nombre,
+                        ming.ming_nombre as metodo_ingreso,
+                        sins.eaca_id,
+                        eac.eaca_nombre as carrera,
+                        rsol.rsin_nombre as estado
+                    FROM 
+                        db_captacion.interesado as inte
+                        JOIN db_captacion.solicitud_inscripcion as sins on sins.int_id = inte.int_id                    
+                        JOIN db_asgard.persona as per on inte.per_id = per.per_id 
+                        JOIN db_academico.unidad_academica as uaca on sins.uaca_id = uaca.uaca_id                     
+                        JOIN db_captacion.res_sol_inscripcion as rsol on rsol.rsin_id = sins.rsin_id
+                        JOIN db_academico.estudio_academico as eac on sins.eaca_id = eac.eaca_id
+                        JOIN db_captacion.metodo_ingreso as ming on sins.ming_id = ming.ming_id
+                    WHERE  
+                        $str_search
+                        inte.int_id = :int_id AND
+                        sins.sins_estado_logico=:estado AND 
+                        inte.int_estado_logico=:estado AND                     
+                        per.per_estado_logico=:estado AND 
+                        rsol.rsin_estado=:estado AND
+                        uaca.uaca_estado = :estado AND
+                        eac.eaca_estado_logico =:estado AND 
+                        sins.sins_estado=:estado AND 
+                        inte.int_estado=:estado AND                     
+                        per.per_estado=:estado AND
+                        rsol.rsin_estado_logico=:estado AND
+                        uaca.uaca_estado_logico = :estado AND
+                        eac.eaca_estado = :estado
+                        ORDER BY fecha_solicitud DESC
+               "
+                ;
         
         $comando = $con->createCommand($sql);
         $comando->bindParam(":estado", $estado, \PDO::PARAM_STR);
-        $comando->bindParam(":per_id", $int_id, \PDO::PARAM_INT);
+        $comando->bindParam(":int_id", $int_id, \PDO::PARAM_INT);
         if (isset($arrFiltro) && count($arrFiltro) > 0) {
             $search_cond = "%" . $arrFiltro["search"] . "%";
             $fecha_ini = $arrFiltro["f_ini"];

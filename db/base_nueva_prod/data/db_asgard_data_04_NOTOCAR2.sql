@@ -8,8 +8,11 @@ USE `db_asgard`;
 -- Volcado de datos para la tabla `MODULO`
 --
 INSERT INTO `modulo` (`mod_id`, `apl_id`, `mod_nombre`, `mod_tipo`, `mod_dir_imagen`, `mod_url`, `mod_orden`, `mod_lang_file`, `mod_estado_visible`, `mod_estado`, `mod_fecha_creacion`, `mod_fecha_actualizacion`, `mod_estado_logico`) VALUES
-(1, 1, 'Configuraciones', 'Configuraciones', 'glyphicon glyphicon-cog', 'grupo/index', 1, 'menu', '1', '1', '2018-09-15 22:44:54', NULL, '1'),
-(2, 1, 'Admisiones', 'Admisiones', 'glyphicon glyphicon-cog', 'admisiones/listarcontactos', 1, 'menu', '1', '1', '2018-09-15 22:44:54', NULL, '1');
+(1, 1, 'Configuraciones', 'Configuraciones', 'glyphicon glyphicon-cog', 'grupo/index', 1, 'menu', '1', '1', '2018-09-16 08:44:54', NULL, '1'),
+(2, 1, 'Admisiones', 'Admisiones', 'glyphicon glyphicon-cog', 'admisiones/listarcontactos', 2, 'menu', '1', '1', '2018-09-16 08:44:54', NULL, '1'),
+(3, 1, 'Financiero', 'Financiero', 'glyphicon glyphicon-cog', 'financiero', 3, 'menu', '1', '1', '2018-09-18 05:06:44', NULL, '1'),
+(4, 1, 'Academico', 'Academico', 'glyphicon glyphicon-cog', 'financiero', 4, 'menu', '1', '1', '2018-09-18 05:06:58', NULL, '1');
+
 
 --
 -- Volcado de datos para la tabla `objeto_modulo`
@@ -70,7 +73,28 @@ INSERT INTO `objeto_modulo` (`omod_id`, `mod_id`, `omod_padre_id`, `omod_nombre`
 (53, 1, 26, 'Eliminar Accion', 'S', '0', '', '', '', 'acciones/delete', 1, '0', 'accion', '1', '2018-09-15 22:48:06', NULL, '1'),
 (54, 1, 18, 'Eliminar Permiso', 'S', '0', '', '', '', 'permisos/delete', 1, '0', 'grupo', '1', '2018-09-15 22:48:06', NULL, '1'),
 (55, 1, 35, 'Eliminar Modulo', 'S', '0', '', '', '', 'modulos/delete', 1, '0', 'modulo', '1', '2018-09-15 22:48:06', NULL, '1'),
-(56, 1, 43, 'Eliminar SubModulo', 'S', '0', '', '', '', 'objetomodulos/delete', 1, '0', 'objetomodulo', '1', '2018-09-15 22:48:06', NULL, '1');
+(56, 1, 43, 'Eliminar SubModulo', 'S', '0', '', '', '', 'objetomodulos/delete', 1, '0', 'objetomodulo', '1', '2018-09-15 22:48:06', NULL, '1'),
+
+(57, 2, 57, 'Contactos', 'P', '0', '', '', '', 'admision/contactos/index', 1, '1', 'contacto', '1', '2018-09-18 00:29:05', NULL, '1'),
+(58, 2, 57, 'Nuevo Contacto', 'S', '0', '', '', '', 'admision/contactos/new', 1, '0', 'contacto', '1', '2018-09-18 01:00:12', NULL, '1'),
+(59, 2, 57, 'Nuevo Contacto', 'A', '0', '', '', '', 'admision/contactos/new', 1, '1', 'contacto', '1', '2018-09-18 01:03:59', NULL, '1'),
+(60, 2, 58, 'Guardar Contacto', 'A', '0', '', '', '', 'admision/contactos/save', 1, '1', 'contacto', '1', '2018-09-18 01:08:29', NULL, '1'),
+(61, 2, 57, 'Ver Contacto', 'S', '0', '', '', '', 'admision/contactos/view', 1, '0', 'contacto', '1', '2018-09-18 01:10:55', NULL, '1'),
+(62, 2, 57, 'Editar Contacto', 'S', '0', '', '', '', 'admision/contactos/edit', 1, '0', 'contacto', '1', '2018-09-18 01:13:20', NULL, '1'),
+(63, 2, 61, 'Editar Contacto', 'A', '0', '', '', '', 'admision/contactos/edit', 1, '1', 'contacto', '1', '2018-09-18 01:15:00', NULL, '1'),
+(64, 2, 62, 'Actualizar Contacto', 'A', '0', '', '', '', 'admision/contactos/update', 1, '1', 'contacto', '1', '2018-09-18 01:16:57', NULL, '1'),
+
+(65, 2, 65, 'Oportunidades', 'P', '0', '', '', '', 'admision/oportunidades/index', 1, '1', 'oportunidad', '1', '2018-09-18 00:29:05', NULL, '1'),
+(66, 2, 73, 'Nuevo Oportunidad', 'S', '0', '', '', '', 'admision/oportunidades/newoportunidadxcontacto', 1, '0', 'oportunidad', '1', '2018-09-18 01:00:12', NULL, '1'),
+(67, 2, 73, 'Nuevo Oportunidad', 'A', '0', '', '', '', 'admision/oportunidades/newoportunidadxcontacto', 1, '1', 'oportunidad', '1', '2018-09-18 01:03:59', NULL, '1'),
+(68, 2, 66, 'Guardar Oportunidad', 'A', '0', '', '', '', 'admision/oportunidades/save', 1, '1', 'oportunidad', '1', '2018-09-18 01:08:29', NULL, '1'),
+(69, 2, 65, 'Ver Oportunidad', 'S', '0', '', '', '', 'admision/oportunidades/view', 1, '0', 'oportunidad', '1', '2018-09-18 01:10:55', NULL, '1'),
+(70, 2, 65, 'Editar Oportunidad', 'S', '0', '', '', '', 'admision/oportunidades/edit', 1, '0', 'oportunidad', '1', '2018-09-18 01:13:20', NULL, '1'),
+(71, 2, 69, 'Editar Oportunidad', 'A', '0', '', '', '', 'admision/oportunidades/edit', 1, '1', 'oportunidad', '1', '2018-09-18 01:15:00', NULL, '1'),
+(72, 2, 70, 'Actualizar Oportunidad', 'A', '0', '', '', '', 'admision/oportunidades/update', 1, '1', 'oportunidad', '1', '2018-09-18 01:16:57', NULL, '1'),
+
+
+(73, 2, 57, 'Listar', 'S', '0', '', '', '', 'admision/contactos/listaroportunidad', 1, '1', 'contacto', '1', '2018-09-15 22:48:06', NULL, '1');
 
 -- --------------------------------------------------------
 --
@@ -100,7 +124,18 @@ INSERT INTO `obmo_acci` (`oacc_id`, `omod_id`, `acc_id`, `oacc_tipo_boton`, `oac
 (21, 45, 1, '0', 'objetomodulos/new', '', '1', '1'),
 (22, 46, 4, '1', '', 'save', '1', '1'),
 (23, 49, 12, '1', '', 'edit', '1', '1'),
-(24, 50, 4, '1', '', 'update', '1', '1');
+(24, 50, 4, '1', '', 'update', '1', '1'),
+
+(25, 59, 1, '0', 'admision/contactos/new', '', '1', '1'),
+(26, 60, 4, '1', '', 'save', '1', '1'),
+(27, 63, 12, '1', '', 'edit', '1', '1'),
+(28, 64, 2, '1', '', 'update', '1', '1'),
+
+
+(29, 67, 1, '1', '', 'newOportunidadXContacto', '1', '1'),
+(30, 68, 4, '1', '', 'save', '1', '1'),
+(31, 71, 12, '1', '', 'edit', '1', '1'),
+(32, 72, 2, '1', '', 'update', '1', '1');
 -- --------------------------------------------------------
 --
 -- Volcado de datos para la tabla `grup_obmo`
@@ -161,7 +196,27 @@ INSERT INTO `grup_obmo` (`gmod_id`, `gru_id`, `omod_id`, `gmod_estado`,  `gmod_e
 (53, 1, 53, '1', '1'),
 (54, 1, 54, '1', '1'),
 (55, 1, 55, '1', '1'),
-(56, 1, 56, '1', '1');
+(56, 1, 56, '1', '1'),
+
+(57, 1, 57, '1', '1'),
+(58, 1, 58, '1', '1'),
+(59, 1, 59, '1', '1'),
+(60, 1, 60, '1', '1'),
+(61, 1, 61, '1', '1'),
+(62, 1, 62, '1', '1'),
+(63, 1, 63, '1', '1'),
+(64, 1, 64, '1', '1'),
+
+(65, 1, 65, '1', '1'),
+(66, 1, 66, '1', '1'),
+(67, 1, 67, '1', '1'),
+(68, 1, 68, '1', '1'),
+(69, 1, 69, '1', '1'),
+(70, 1, 70, '1', '1'),
+(71, 1, 71, '1', '1'),
+(72, 1, 72, '1', '1'),
+
+(73, 1, 73, '1', '1');
 -- --------------------------------------------------------
 --
 -- Volcado de datos para la tabla `GRUP_OBMO_GRUP_ROL`
@@ -222,5 +277,25 @@ INSERT INTO `grup_obmo_grup_rol` (`gogr_id`, `grol_id`, `gmod_id`, `gogr_estado`
 (53, 1, 53, '1', '1'),
 (54, 1, 54, '1', '1'),
 (55, 1, 55, '1', '1'),
-(56, 1, 56, '1', '1');
+(56, 1, 56, '1', '1'),
+(57, 1, 57, '1', '1'),
+(58, 1, 58, '1', '1'),
+(59, 1, 59, '1', '1'),
+(60, 1, 60, '1', '1'),
+(61, 1, 61, '1', '1'),
+(62, 1, 62, '1', '1'),
+(63, 1, 63, '1', '1'),
+(64, 1, 64, '1', '1'),
+
+(65, 1, 65, '1', '1'),
+(66, 1, 66, '1', '1'),
+(67, 1, 67, '1', '1'),
+(68, 1, 68, '1', '1'),
+(69, 1, 69, '1', '1'),
+(70, 1, 70, '1', '1'),
+(71, 1, 71, '1', '1'),
+(72, 1, 72, '1', '1'),
+
+(73, 1, 73, '1', '1');
+
 

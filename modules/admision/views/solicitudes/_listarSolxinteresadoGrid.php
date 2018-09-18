@@ -41,7 +41,7 @@ use app\models\Utilities;
                 'attribute' => 'Nombres',
                 'header' => Yii::t("formulario", "First Names"),
                 //'value' => 'per_nombres',
-                'value' => 'per_pri_nombre',
+                'value' => 'per_nombres',
             ],
             [
                 'attribute' => 'Apellidos',
@@ -57,7 +57,7 @@ use app\models\Utilities;
             [
                 'attribute' => 'Metodo Ingreso',
                 'header' => Yii::t("solicitud_ins", "Income Method"),
-                'value' => 'ming_nombre',
+                'value' => 'metodo_ingreso',
             ],
             [
                 'attribute' => 'Carrera',
@@ -68,11 +68,6 @@ use app\models\Utilities;
                 'attribute' => 'Estado',
                 'header' => Yii::t("formulario", "Status"),
                 'value' => 'estado',
-            ],
-            [
-                'attribute' => 'Pago',
-                'header' => 'Pago',
-                'value' => 'estado_pago',
             ],
             [
                 'class' => 'yii\grid\ActionColumn',

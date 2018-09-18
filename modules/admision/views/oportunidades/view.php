@@ -18,9 +18,6 @@ $fecha_actual = date("Y-m-d");
 ?>
 <?= Html::hiddenInput('txth_opoid', base64_encode($opo_id), ['id' => 'txth_opoid']); ?>
 <?= Html::hiddenInput('txth_pgid', base64_encode($pges_id), ['id' => 'txth_pgid']); ?>
-<div class="col-md-12">    
-    <h3><span id="lbl_titulo"><?= Yii::t("crm", "See opportunity") ?></span></h3><br/>    
-</div>
 <form class="form-horizontal" enctype="multipart/form-data" > 
     <div class="col-md-12 col-xs-12 col-sm-12 col-lg-12 ">
         <div class="col-md-7 col-sm-7 col-xs-7 col-lg-7">

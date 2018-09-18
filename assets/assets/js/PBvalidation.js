@@ -378,7 +378,7 @@ function validateForm(widthAlert) {
     if (stresponse) {
         var type = "alert";
         var label = "error";
-        var status = "OK";
+        var status = "NO_OK";
         var messagew = {};
         if (widthAlert) {
             messagew = {

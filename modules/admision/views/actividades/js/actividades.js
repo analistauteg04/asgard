@@ -28,7 +28,7 @@ $(document).ready(function () {
                 setTimeout(function () {
                     var opor_id = $('#txth_opo_id').val();
                     var pges_id = $('#txth_pgid').val();
-                    window.location.href = $('#txth_base').val() + "/admision/actividades/listaractividades?opor_id=" + opor_id + "&pges_id=" + pges_id;
+                    window.location.href = $('#txth_base').val() + "/admision/actividades/listaractividadxoportunidad?opor_id=" + opor_id + "&pges_id=" + pges_id;
                 }, 3000);
             }, true);
         }
@@ -50,7 +50,7 @@ $(document).ready(function () {
                 setTimeout(function () {
                     var opor_id = $('#txth_opo_id').val();
                     var pges_id = $('#txth_pgid').val();
-                    window.location.href = $('#txth_base').val() + "/admision/actividades/listaractividades?opor_id=" + opor_id + "&pges_id=" + pges_id;
+                    window.location.href = $('#txth_base').val() + "/admision/actividades/listaractividadxoportunidad?opor_id=" + opor_id + "&pges_id=" + pges_id;
                 }, 3000);
             }, true);
         }
@@ -90,7 +90,7 @@ function save(){
             setTimeout(function () {
                 var opor_id = $('#txth_opo_id').val();
                 var pges_id = $('#txth_pgid').val();
-                window.location.href = $('#txth_base').val() + "/admision/actividades/listaractividades?opor_id=" + opor_id + "&pges_id=" + pges_id;
+                window.location.href = $('#txth_base').val() + "/admision/actividades/listaractividadxoportunidad?opor_id=" + opor_id + "&pges_id=" + pges_id;
             }, 3000);
         }, true);
     }
@@ -113,7 +113,7 @@ function update(){
             setTimeout(function () {
                 var opor_id = $('#txth_opo_id').val();
                 var pges_id = $('#txth_pgid').val();
-                window.location.href = $('#txth_base').val() + "/admision/actividades/listaractividades?opor_id=" + opor_id + "&pges_id=" + pges_id;
+                window.location.href = $('#txth_base').val() + "/admision/actividades/listaractividadxoportunidad?opor_id=" + opor_id + "&pges_id=" + pges_id;
             }, 3000);
         }, true);
     }

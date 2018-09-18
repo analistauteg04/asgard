@@ -8,7 +8,7 @@ USE `db_asgard`;
 --
 INSERT INTO `accion` (`acc_id`, `acc_nombre`, `acc_url_accion`, `acc_tipo`, `acc_descripcion`, `acc_lang_file`, `acc_dir_imagen`, `acc_estado`, `acc_estado_logico`) VALUES
 (1, 'Create', 'Create', 'General', 'Create', 'accion', 'glyphicon glyphicon-file', '1', '1'),
-(2, 'Update', 'Update', 'General', 'Update', 'accion', 'glyphicon glyphicon-edit', '1', '1'),
+(2, 'Update', 'Update', 'General', 'Update', 'accion', 'glyphicon glyphicon-floppy-disk', '1', '1'),
 (3, 'Delete', 'Delete', 'General', 'Delete', 'accion', 'glyphicon glyphicon-trash', '1', '1'),
 (4, 'Save', 'Save', 'General', 'Save', 'accion', 'glyphicon glyphicon-floppy-disk', '1', '1'),
 (5, 'Search', 'Search', 'General', 'Search', 'accion', 'glyphicon glyphicon-search', '1', '1'),
@@ -172,7 +172,7 @@ INSERT INTO `grupo` (`gru_id`, `cseg_id`, `gru_nombre`, `gru_descripcion`, `gru_
 (9, 1, 'Interesado', 'Interesado', NULL, '1', '1'),
 (10, 1, 'Aspirante', 'Aspirante', NULL, '1', '1'),
 (11, 1, 'Estudiante', 'Estudiante', NULL, '1', '1'),
-(12, 2, 'Docente', 'Docente', NULL, '1', '1'),
+(12, 2, 'Docente', 'Docente', NULL, '1', '1');
 
 -- --------------------------------------------------------
 --
@@ -201,28 +201,6 @@ INSERT INTO `rol` (`rol_id`, `rol_nombre`, `rol_descripcion`, `rol_estado`, `rol
 --
 -- Volcado de datos para la tabla `GRUP_ROL`
 --
-INSERT INTO `grup_rol` (`grol_id`, `gru_id`, `rol_id`, `grol_estado`, `grol_estado_logico`) VALUES
-(1, 1, 1, '1', '1'),
-(2, 7, 10, '1', '1'),
-(3, 7, 15, '1', '1'),
-(4, 7, 16, '1', '1'),
-(5, 8, 10, '1', '1'),
-(6, 8, 11, '1', '1'),
-(7, 8, 13, '1', '1'),
-(8, 8, 19, '1', '1'),
-(9, 9, 10, '1', '1'),
-(10, 2, 2, '1', '1'),
-(11, 3, 3, '1', '1'),
-(12, 4, 4, '1', '1'),
-(13, 11, 11, '1', '1'),
-(14, 10, 10, '1', '1'),
-(15, 10, 20, '1', '1'),
-(16, 9, 16, '1', '1'),
-(17, 10, 21, '1', '1'),
-(18, 10, 11, '1', '1'),
-(19, 12, 10, '1', '1');
-
-
 INSERT INTO `grup_rol` (`grol_id`, `gru_id`, `rol_id`, `grol_estado`, `grol_estado_logico`) VALUES
 (1, 1, 1, '1', '1'),
 (2, 2, 2, '1', '1'),

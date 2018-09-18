@@ -56,7 +56,7 @@ return [
     "Search" => "Buscar",
     "Send" => "Enviar",
     "-- Select Action --" => "-- Seleccione una Acción --",
-    "Update" => "Editar",
+    "Update" => "Actualizar",
     "Close" => "Cerrar",
     "View" => "Ver",
     "Edit" => "Editar",
