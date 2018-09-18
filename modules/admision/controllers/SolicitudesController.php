@@ -36,12 +36,50 @@ class SolicitudesController extends \app\components\CController {
             $respSolicitud = $modSolicitud->consultarSolicitudes();                      
         }
         $arrCarreras = ArrayHelper::map(array_merge([["id" => "0", "value" => Yii::t("formulario", "Grid")]], $modEstacademico->consultarCarrera()), "id", "value");
-        $arrEstados = ArrayHelper::map([["id" => "P", "value" => "Pendiente"], ["id" => "S", "value" => "Pagado"], ["id" => "NA", "value" => "No Disponible"]], "id", "value");
+        $resp_estados = $modSolicitud->Consultaestadosolicitud();
+        $arrEstados = ArrayHelper::map(array_merge([["id" => "0", "value" => Yii::t("formulario", "Grid")]], $resp_estados), "id", "value");         
         return $this->render('index', [
                         'model' => $respSolicitud,
                         'arrCarreras' => $arrCarreras,
                         'arrEstados' => $arrEstados
             ]);
+    }
+    
+     /**
+     * Function 
+     * @author  Giovanni Vergara <analistadesarrollo02@uteg.edu.ec>
+     * @param   Ninguno. 
+     * @return  Una vista que recibe las solicitudes del usuario logeado.
+     */
+    public function actionListarsolicitudxinteresado() {
+        $per_id = @Yii::$app->session->get("PB_perid");
+        $per_ids = base64_decode($_GET['ids']);
+        $mod_carrera = new EstudioAcademico();
+        $model = null;
+        $fac_id = 1;
+        $data = Yii::$app->request->get();
+
+        if ($data['PBgetFilter']) {
+            $arrSearch["f_ini"] = $data['f_ini'];
+            $arrSearch["f_fin"] = $data['f_fin'];
+            $arrSearch["carrera"] = $data['carrera'];
+            $arrSearch["estado"] = $data['estado'];
+            $arrSearch["search"] = $data['search'];
+            
+            $model = SolicitudInscripcion::getSolicitudesXInteresado($per_id, $arrSearch);      
+        } else {
+            if (empty($per_ids)) {  //vista para el interesado
+                $model = SolicitudInscripcion::getSolicitudesXInteresado($per_id);            
+            }
+        }
+
+        $arrCarreras = ArrayHelper::map(array_merge([["id" => "0", "value" => Yii::t("formulario", "Grid")]], $mod_carrera->consultarCarrera()), "id", "value");
+        $arrEstados = ArrayHelper::map([["id" => "P", "value" => "Pendiente"], ["id" => "S", "value" => "Pagado"], ["id" => "NA", "value" => "No Disponible"]], "id", "value");
+        return $this->render('listarSolicitudxinteresado', [
+                    'model' => $model,
+                    'arrCarreras' => $arrCarreras,
+                    'arrEstados' => $arrEstados
+        ]);
     }
 
     public function actionView() {
@@ -122,5 +160,6 @@ class SolicitudesController extends \app\components\CController {
     public function actionUpdate() {
         
     }
+    
 
 }

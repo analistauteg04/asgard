@@ -5,14 +5,17 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
+
 use yii\helpers\Html;
 use yii\helpers\Url;
 use app\widgets\PbGridView\PbGridView;
+use app\models\Utilities;
+
 ?>
 <?=
     PbGridView::widget([
         //'dataProvider' => new yii\data\ArrayDataProvider(array()),
-        'id' => 'Tbg_Solicitudes',
+        'id' => 'TbG_PERSONAS',
         'showExport' => true,
         'fnExportEXCEL' => "exportExcel",
         //'fnExportPDF' => "exportPdf",
@@ -47,9 +50,9 @@ use app\widgets\PbGridView\PbGridView;
                 
             ],
             [
-                'attribute' => 'Unidad Académica',
+                'attribute' => 'Nivel Interes',
                 'header' => Yii::t("formulario", "Academic unit"),
-                'value' => 'uaca_nombre',
+                'value' => 'nint_nombre',
             ],
             [
                 'attribute' => 'Metodo Ingreso',
@@ -69,19 +72,36 @@ use app\widgets\PbGridView\PbGridView;
             [
                 'attribute' => 'Pago',
                 'header' => 'Pago',
-                'value' => 'pago',
+                'value' => 'estado_pago',
             ],
             [
                 'class' => 'yii\grid\ActionColumn',
-                'header' => Yii::t("formulario", "Actions"),                
-                'template' => '{view}', 
-                'buttons' => [                
+                'header' => Yii::t("formulario", "Actions"),
+                'template' => '{view}{update}', //
+                'buttons' => [
                     'view' => function ($url, $model) {
-                        return Html::a('<span class="glyphicon glyphicon-eye-open"></span>', Url::to(['admision/solicitudes/view', 'id' => base64_encode($model['sins_id'])]), ["data-toggle" => "tooltip", "title" => "Ver Solicitud", "data-pjax" => 0]);
-                    },                                             
+                        if ($model['estado_pago'] != 'No Disponible') {
+                            return Html::a('<span class="glyphicon glyphicon-download-alt"></span>', Url::to(['registrarpago/listarpagosolicitud', 'ids' => base64_encode($model['persona'])]), ["data-toggle" => "tooltip", "title" => "Listar Pagos", "data-pjax" => 0]);
+                        }
+                        else {
+                            return '<span class="glyphicon glyphicon-download-alt"></span>';
+                        }
+                    },
+                    'update' => function ($url, $model) {
+                        if ($model['nint_id'] != 3) {
+                            if ($model['numDocumentos'] == 0)  {    
+                                if ($model['rsin_id'] == 1) {
+                                    return Html::a('<span class="glyphicon glyphicon-upload"></span>', Url::to(['solicitudinscripcion/subirdocumentos', 'ids' => base64_encode($model['persona']), 'sins_id' => base64_encode($model['sins_id']), 'solicitud' => base64_encode($model['num_solicitud']), 'int_id' => base64_encode($model['int_id']), 'beca' => base64_encode($model['beca']), 'apellidos' => base64_encode($model['per_apellidos']), 'nombres' => base64_encode($model['per_nombres']), 'nacionalidad' => base64_encode($model['per_nac_ecuatoriano'])]), ["data-toggle" => "tooltip", "title" => "Subir Documentos", "data-pjax" => 0]);
+                                } else {
+                                    return '<span class="glyphicon glyphicon-upload"></span>';
+                                }
+                            }   else {
+                                return '<span class="glyphicon glyphicon-upload"></span>';
+                            }
+                        }
+                    }
                 ],
             ],
-           
         ],
     ])
     ?>
