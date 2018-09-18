@@ -663,15 +663,15 @@ class SolicitudInscripcion extends \app\modules\admision\components\CActiveRecor
         $con = \Yii::$app->db_captacion;
         $estado = 1;
 
-        $sql = "SELECT cdoc.con_id id, con.con_nombre name
-                FROM " . $con->dbname . ".consideracion_documento cdoc INNER JOIN " . $con->dbname . ".consideracion con on cdoc.con_id = con.con_id
-                WHERE cdoc.dadj_id = :dadj_id AND
-                      cdoc.cdoc_tiponacext = :tiponacext AND
-                      cdoc.cdoc_estado_logico = :estado AND
-                      cdoc.cdoc_estado = :estado AND
-                      con.con_estado_logico = :estado AND
-                      con.con_estado = :estado
-                ORDER BY cdoc.con_id";
+        $sql = "SELECT sndo.snoa_id id, snoa.snoa_nombre name
+                FROM " . $con->dbname . ".solicitud_noaprobada_documento sndo INNER JOIN " . $con->dbname . ".solicitud_noaprobada snoa on sndo.snoa_id = snoa.snoa_id
+                WHERE sndo.dadj_id = :dadj_id AND
+                      sndo.sndo_tiponacext = :tiponacext AND
+                      sndo.sndo_estado_logico = :estado AND
+                      sndo.sndo_estado = :estado AND
+                      snoa.snoa_estado_logico = :estado AND
+                      snoa.snoa_estado = :estado
+                ORDER BY sndo.snoa_id";
 
         $comando = $con->createCommand($sql);
         $comando->bindParam(":estado", $estado, \PDO::PARAM_STR);
@@ -737,8 +737,8 @@ class SolicitudInscripcion extends \app\modules\admision\components\CActiveRecor
         }
 
         if (isset($con_id)) {
-            $param_sql .= ", con_id";
-            $bsrec_sql .= ", :con_id";
+            $param_sql .= ", snoa_id";
+            $bsrec_sql .= ", :snoa_id";
         }
 
         if (isset($srec_etapa)) {
@@ -767,7 +767,7 @@ class SolicitudInscripcion extends \app\modules\admision\components\CActiveRecor
                 $comando->bindParam(':dadj_id', $dadj_id, \PDO::PARAM_INT);
 
             if (isset($con_id))
-                $comando->bindParam(':con_id', $con_id, \PDO::PARAM_INT);
+                $comando->bindParam(':snoa_id', $con_id, \PDO::PARAM_INT);
 
             if (isset($srec_etapa))
                 $comando->bindParam(':srec_etapa', $srec_etapa, \PDO::PARAM_STR);
@@ -799,14 +799,14 @@ class SolicitudInscripcion extends \app\modules\admision\components\CActiveRecor
         $con = \Yii::$app->db_captacion;
         $estado = 1;
 
-        $sql = "SELECT srec_observacion observacion, con.con_nombre condicion
-                FROM " . $con->dbname . ".solicitud_rechazada srec INNER JOIN " . $con->dbname . ".consideracion con on con.con_id = srec.con_id
+        $sql = "SELECT srec_observacion observacion, snoa.snoa_nombre condicion
+                FROM " . $con->dbname . ".solicitud_rechazada srec INNER JOIN " . $con->dbname . ".solicitud_noaprobada snoa on snoa.snoa_id = srec.snoa_id
                 WHERE   srec.sins_id = :sins_id AND
                         srec.srec_etapa = :etapa AND
                         srec.srec_estado = :estado AND
-                        con.con_estado = :estado AND
+                        snoa.snoa_estado = :estado AND
                         srec.srec_estado_logico = :estado AND
-                        con.con_estado_logico = :estado";
+                        snoa.snoa_estado_logico = :estado";
 
         $comando = $con->createCommand($sql);
         $comando->bindParam(":estado", $estado, \PDO::PARAM_STR);
@@ -1103,13 +1103,13 @@ class SolicitudInscripcion extends \app\modules\admision\components\CActiveRecor
             if ($arrFiltro['estadoSol'] != "" && $arrFiltro['estadoSol'] > 0) {
                 $str_search .= "sins.rsin_id = :estadosol AND ";
             }
-        } else {
+        } /*else {
             $columnsAdd = "per.per_id as persona, 
                     per.per_pri_nombre as per_pri_nombre, 
                     per.per_seg_nombre as per_seg_nombre,
                     per.per_pri_apellido as per_pri_apellido,
                     per.per_seg_apellido as per_seg_apellido,";
-        }
+        }*/
 
         $sql =  "SELECT
                     lpad(sins_id,4,'0') as num_solicitud,
@@ -1142,8 +1142,7 @@ class SolicitudInscripcion extends \app\modules\admision\components\CActiveRecor
                     sins_fecha_reprobacion,
                     sins_fecha_prenoprobacion,
                     sins_observacion, 		
-                    sins.sins_usuario_preaprueba as usu_preaprueba,
-                    $columnsAdd
+                    sins.sins_usuario_preaprueba as usu_preaprueba,                    
                     case when ifnull((select opag_estado_pago
                                             from " . $con3->dbname . ".orden_pago op
                                             where op.sins_id = sins.sins_id),'N') = 'N' then 'No generado'
