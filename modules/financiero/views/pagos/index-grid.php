@@ -68,12 +68,12 @@ use yii\web\JsExpression;
                 'buttons' => [
                     'view' => function ($url, $model) {
                         if ($model['estado'] != 'P') {
-                            return Html::a('<span class="glyphicon glyphicon-thumbs-up"></span>', Url::to(['registrarpago/validarpagocarga', 'ido' => $model['orden']]), ["data-toggle" => "tooltip", "title" => "Ver Pagos", "data-pjax" => 0]);
+                            return Html::a('<span class="glyphicon glyphicon-thumbs-up"></span>', Url::to(['pagos/validarpagocarga', 'ido' => $model['orden']]), ["data-toggle" => "tooltip", "title" => "Ver Pagos", "data-pjax" => 0]);
                         }
                     },
                     'upload' => function ($url, $model) {
                         if ($model['rol'] == 1) {
-                            return Html::a('<span class="glyphicon glyphicon-download-alt"></span>', Url::to(['registrarpago/cargardocpagos', 'ids' => base64_encode($model['orden']), 'estado' => base64_encode($model['estado_desc_pago']), 'vista' => 'adm']), ["data-toggle" => "tooltip", "title" => "Subir Documento", "data-pjax" => 0]);
+                            return Html::a('<span class="glyphicon glyphicon-download-alt"></span>', Url::to(['pagos/cargardocpagos', 'ids' => base64_encode($model['orden']), 'estado' => base64_encode($model['estado_desc_pago']), 'vista' => 'adm']), ["data-toggle" => "tooltip", "title" => "Subir Documento", "data-pjax" => 0]);
                         }
                     },
                 ],
