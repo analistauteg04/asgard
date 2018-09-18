@@ -5,12 +5,7 @@ use yii\helpers\Html;
 $fecha_actual = date("Y-m-d");
 ?>
 <?= Html::hiddenInput('txth_idpa', $persona_autentica, ['id' => 'txth_idpa']); ?>
-<div class="col-md-12"> 
-    <h3><span id="lbl_titulo"><?= Yii::t("formulario", "Create contact") ?></span><br/> 
-</div>
-<div class="col-md-12"> 
-    <br/> 
-</div>
+
 <div class="col-md-12 col-xs-12 col-sm-12 col-lg-12">
     <p class="text-danger"> <?= Yii::t("formulario", "Fields with * are required") ?> </p>
 </div>
@@ -348,12 +343,5 @@ $fecha_actual = date("Y-m-d");
                 </div>
             </div>
         </div> 
-    </div> 
-
-    <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12"> 
-        <div class="col-md-10"></div>
-        <div class="col-md-2">
-            <a id="btn_grabarCliente" href="javascript:" class="btn btn-primary btn-block"> <?= Yii::t("accion", "Save") ?></a> 
-        </div>
     </div> 
 </form>

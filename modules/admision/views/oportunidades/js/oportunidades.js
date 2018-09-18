@@ -136,63 +136,6 @@ $(document).ready(function () {
         }
     });
 
-    //*********** FUNCIONES QUE SE DEBEN REMOVER CUANDO ESTEN HABILITADOS LOS MENUS **********
-    $('#btn_editaoportunidad').click(function () {
-        var codigo = $('#txth_opoid').val();
-        var persona = $('#txth_pgid').val();
-        window.location.href = $('#txth_base').val() + "/admision/oportunidades/edit?codigo=" + codigo + "&pgesid=" + persona;
-    });
-    $('#btn_actualizarOportunidad').click(function () {
-        var link = $('#txth_base').val() + "/admision/oportunidades/update";
-        var arrParams = new Object();
-        arrParams.pgid = $('#txth_pgid').val();
-        arrParams.opo_id = $('#txth_opoid').val();
-        arrParams.uaca_id = $('#cmb_nivelestudio_act').val();
-        arrParams.modalidad = $('#cmb_modalidad_act').val();
-        arrParams.empresa = $('#cmb_empresa').val();
-        arrParams.tipoOport = $('#cmb_tipo_oportunidad').val();
-        arrParams.estado = $('#cmb_state_opportunity').val();
-        arrParams.carreraestudio = $('#cmb_carrera_estudio').val();
-        arrParams.canal = $('#cmb_ccanal').val();
-        arrParams.carrera2 = $('#cmb_carrera2').val();
-        arrParams.subcarrera = $('#cmb_subcarrera').val();
-
-        if (!validateForm()) {
-            requestHttpAjax(link, arrParams, function (response) {
-                showAlert(response.status, response.label, response.message);
-                setTimeout(function () {
-                    window.location.href = $('#txth_base').val() + "/admision/oportunidades/index";
-                }, 3000);
-            }, true);
-        }
-    });
-    $('#btn_grabarOportunidad').click(function () {
-        var sub_carrera = ($('#cmb_subcarrera').val() != 0 && $('#cmb_subcarrera').val() != '') ? $('#cmb_subcarrera').val() : 0;
-        var link = $('#txth_base').val() + "/admision/oportunidades/save";
-        var arrParams = new Object();
-        arrParams.id_pgest = $('#txth_pgid').val();
-        arrParams.empresa = $('#cmb_empresa').val();
-        arrParams.id_unidad_academica = $('#cmb_nivelestudio').val();
-        arrParams.id_modalidad = $('#cmb_modalidad').val();
-        arrParams.id_tipo_oportunidad = $('#cmb_tipo_oportunidad').val();
-        arrParams.id_estado_oportunidad = $('#cmb_state_opportunity').val();
-        arrParams.id_estudio_academico = $('#cmb_carrera1').val();
-        arrParams.canal_conocimiento = $('#cmb_knowledge_channel').val();
-        arrParams.carrera2 = $('#cmb_carrera2').val();
-        arrParams.sub_carrera = sub_carrera;
-        if (!validateForm()) {
-            requestHttpAjax(link, arrParams, function (response) {
-                showAlert(response.status, response.label, response.message);
-                setTimeout(function () {
-                    if (response.status == "OK") {
-                        //parent.window.location.href = $('#txth_base').val() + "/admision/admisiones/listaroportxcontacto?pgid=".arrParams.id_pgest;
-                        parent.window.location.href = $('#txth_base').val() + "/admision/contactos/index";
-                    }
-                }, 3000);
-            }, true);
-        }
-
-    });
 });
 
 function actualizarGridGestion() {

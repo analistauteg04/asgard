@@ -164,7 +164,7 @@ class OportunidadesController extends \app\components\CController
         ]);
     }
 
-    public function actionNewoportunidad()
+    public function actionNewoportunidadxcontacto()
     {
         $per_id = @Yii::$app->session->get("PB_perid");
         $pges_id = base64_decode($_GET["pgid"]);
@@ -212,7 +212,7 @@ class OportunidadesController extends \app\components\CController
         }
         $arr_carrerra2 = $modcanal->consultarTipoCarrera();
         $arr_subcarrera = $modcanal->consultarSubCarrera(1);
-        return $this->render('new', [
+        return $this->render('newoportunidadxcontacto', [
             'personalData' => $contactManage,
             'arr_linea_servicio' => ArrayHelper::map($unidad_acad_data, "id", "name"),
             'arr_modalidad' => ArrayHelper::map($modalidad_data, "id", "name"),

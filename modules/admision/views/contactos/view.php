@@ -20,12 +20,7 @@ if (!empty($arr_datosc['cedula'])) {
 <?= Html::hiddenInput('txth_idc', '', ['id' => 'txth_idc']); ?>
 <?= Html::hiddenInput('txth_pcon_id', base64_encode($pges_id), ['id' => 'txth_pcon_id']); ?>
 <?= Html::hiddenInput('txth_tper_id', base64_encode($tper_id), ['id' => 'txth_tper_id']); ?>
-<div class="col-md-12"> 
-    <h3><span id="lbl_titulo"><?= Yii::t("formulario", "View Client") ?></span><br/> 
-</div>
-<div class="col-md-12"> 
-    <br/> 
-</div>
+
 <form class="form-horizontal" enctype="multipart/form-data" >
     <div class="col-md-12 col-xs-12 col-sm-12 col-lg-12 ">
         <div class="col-md-7 col-sm-7 col-xs-7 col-lg-7">
@@ -322,10 +317,4 @@ if (!empty($arr_datosc['cedula'])) {
             </div>    
         </div> 
     <?php } ?>
-    <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12"> 
-        <div class="col-md-10"></div>
-        <div class="col-md-2">
-            <a id="btn_editcliente" href="javascript:" class="btn btn-primary btn-block"> <?= Yii::t("accion", "Update") ?></a> 
-        </div>
-    </div> 
 </form>

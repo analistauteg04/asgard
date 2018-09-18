@@ -18,9 +18,6 @@ if (!empty($personalData['pges_cedula'])) {
 $fecha_actual = date("Y-m-d");
 ?>
 <?= Html::hiddenInput('txth_pgid', $_GET["pgid"], ['id' => 'txth_pgid']); ?>
-<div class="col-md-12">    
-    <h3><span id="lbl_titulo"><?= Yii::t("crm", "Create sale opportunity") ?></span></h3><br/>    
-</div>
 <form class="form-horizontal" enctype="multipart/form-data" > 
     <div class="col-md-12 col-xs-12 col-sm-12 col-lg-12 ">
         <div class="col-md-7 col-sm-7 col-xs-7 col-lg-7">
