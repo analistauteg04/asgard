@@ -58,7 +58,7 @@ class SolicitudesController extends \app\components\CController {
      */
     public function actionListarsolicitudxinteresado() {
         $per_id = @Yii::$app->session->get("PB_perid");
-        $per_ids = base64_decode($_GET['ids']);
+        $per_ids = base64_decode($_GET['id']);
         $mod_carrera = new EstudioAcademico();
         $model = null;
         $fac_id = 1;

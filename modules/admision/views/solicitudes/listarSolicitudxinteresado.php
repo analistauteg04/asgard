@@ -17,7 +17,7 @@ use yii\web\JsExpression;
 <div class="col-md-12 col-sm-12 col-xs-12 col-lg-12">
     <form class="form-horizontal">
         <?=
-        $this->render('_form_BuscarSolicitud', [
+        $this->render('_formBuscarSolxinteresado', [
         'arrCarreras' => $arrCarreras,
         'arrEstados' => $arrEstados]);
         ?>
@@ -25,7 +25,7 @@ use yii\web\JsExpression;
 </div>
 <div class="col-md-12 col-sm-12 col-xs-12 col-lg-12">
     <?=
-        $this->render('_listarsolicitud_grid', [
+        $this->render('_listarSolxinteresadoGrid', [
         'model' => $model,
         'url' => $url]);
     ?>

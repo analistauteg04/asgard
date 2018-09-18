@@ -17,9 +17,14 @@ PbGridView::widget([
             'value' => 'DNI',
         ],
         [
-            'attribute' => 'Interesado',
-            'header' => Yii::t("formulario", "Interested"),
-            'value' => 'interesado',
+            'attribute' => 'Nombres',
+            'header' => Yii::t("formulario", "Name"),
+            'value' => 'nombres',
+        ],
+        [
+            'attribute' => 'Apellidos',
+            'header' => Yii::t("formulario", "Last Names"),
+            'value' => 'apellidos',
         ],
         [
             'attribute' => 'Empresa',
@@ -32,7 +37,7 @@ PbGridView::widget([
             'template' => '{solicitudes} ', //
             'buttons' => [
                 'solicitudes' => function ($url, $model) {
-                    return Html::a('<span class="glyphicon glyphicon-th-large"></span>', Url::to(['admision/solicitud/solicitudxinteresado', 'ids' => base64_encode($model['id'])]), ["data-toggle" => "tooltip", "title" => "Mostrar Solicitudes", "data-pjax" => 0]);
+                    return Html::a('<span class="glyphicon glyphicon-th-large"></span>', Url::to(['/admision/solicitudes/listarsolicitudxinteresado', 'id' => base64_encode($model['id'])]), ["data-toggle" => "tooltip", "title" => "Mostrar Solicitudes", "data-pjax" => 0]);
                 },
             ],
         ],
