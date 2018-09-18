@@ -747,7 +747,6 @@ class Oportunidad extends \app\modules\admision\components\CActiveRecord {
     public function consultarCarreraModalidad($unidad, $modalidad) {
         $con = \Yii::$app->db_academico;
         $estado = 1;
-
         $sql = "
                 SELECT 
                         eac.eaca_id as id,

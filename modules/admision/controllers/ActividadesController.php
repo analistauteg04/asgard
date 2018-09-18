@@ -15,7 +15,7 @@ use yii\helpers\ArrayHelper;
 
 class ActividadesController extends \app\components\CController
 {
-    public function actionListaractividades()
+    public function actionListaractividadxoportunidad()
     {
         $modoportunidad = new Oportunidad();
         $pges_id = base64_decode($_GET["pges_id"]);

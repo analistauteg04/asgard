@@ -21,12 +21,7 @@ if (!empty($arr_datosc['cedula'])) {
 <?= Html::hiddenInput('txth_pges_id', base64_encode($pges_id), ['id' => 'txth_pges_id']); ?>
 <?= Html::hiddenInput('txth_tper_id', base64_encode($tper_id), ['id' => 'txth_tper_id']); ?>
 <?= Html::hiddenInput('txth_pgco_id', base64_encode($arr_datosb["pgco_id"]), ['id' => 'txth_pgco_id']); ?>
-<div class="col-md-12"> 
-    <h3><span id="lbl_titulo"><?= Yii::t("formulario", "Update Contact") ?></span><br/> 
-</div>
-<div class="col-md-12"> 
-    <br/> 
-</div>
+
 <div class="col-md-12 col-xs-12 col-sm-12 col-lg-12">
     <p class="text-danger"> <?= Yii::t("formulario", "Fields with * are required") ?> </p>
 </div>
@@ -358,11 +353,4 @@ if (!empty($arr_datosc['cedula'])) {
             </div>  
         </div> 
     <?php } ?>
-
-    <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12"> 
-        <div class="col-md-10"></div>
-        <div class="col-md-2">
-            <a id="btn_updatecliente" href="javascript:" class="btn btn-primary btn-block"> <?= Yii::t("accion", "Save") ?></a> 
-        </div>
-    </div> 
 </form>
