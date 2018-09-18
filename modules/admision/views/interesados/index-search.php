@@ -24,7 +24,7 @@ use kartik\date\DatePicker;
     <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">  
         <div class="col-sm-8"></div>
         <div class="col-sm-2">                
-            <a id="btn_buscarDataPreins" href="javascript:" class="btn btn-primary btn-block"> <?= Yii::t("formulario", "Search") ?></a>
+            <a id="btn_buscarInteresado" href="javascript:" class="btn btn-primary btn-block"> <?= Yii::t("formulario", "Search") ?></a>
         </div>
     </div>
 </div></br>

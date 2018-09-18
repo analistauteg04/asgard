@@ -15,6 +15,7 @@ class InteresadosController extends \app\components\CController {
 
         if ($data['PBgetFilter']) {
             $arrSearch["search"] = $data['search'];
+            $arrSearch["company"] = $data['company'];
             $model = $interesado_model->consultarInteresados($arrSearch);
         } else {
             $model = $interesado_model->consultarInteresados();
