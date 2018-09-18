@@ -207,9 +207,10 @@ $(document).ready(function () {
      * @param   
      * @return  Grabar la pre-aprobación.
      */
+    /***** BORRAR DESPUES *****/
     $('#btn_Preaprobarsolicitud').click(function () {
         var arrParams = new Object();
-        var link = $('#txth_base').val() + "/solicitudinscripcion/guardaraprobacion";
+        var link = $('#txth_base').val() + "/admision/solicitudes/saverevision";
         arrParams.sins_id = $('#txth_sins_id').val();
         arrParams.resultado = $('#cmb_revision').val();
         arrParams.per_id = $('#txth_per_id').val();
@@ -779,3 +780,40 @@ function SaveDocumentos(){
     }    
 }
 
+function Saverevision() {
+    var arrParams = new Object();
+    var link = $('#txth_base').val() + "/admision/solicitudes/saverevision";
+    arrParams.sins_id = $('#txth_sins_id').val();
+    arrParams.resultado = $('#cmb_revision').val();
+    arrParams.per_id = $('#txth_per_id').val();
+
+    if ($('#cmb_revision').val() == "4") {
+        arreglo_check();
+        arrParams.condicionestitulo = condiciontitulo;
+        arrParams.condicionesdni = condiciondni;
+        //Condiciones que indican que se ha seleccionado un(os) checkboxes.
+        if (len > 0) {
+            arrParams.titulo = 1;
+            arrParams.observacion = obstitulo;
+        }
+        if (len1 > 0) {
+            arrParams.dni = 1;
+            if (arrParams.observacion == "") {
+                arrParams.observacion = obsdni;
+            } else {
+                arrParams.observacion = arrParams.observacion + "<br/>" + obsdni;
+            }
+        }
+    }
+    arrParams.banderapreaprueba = '1';
+    if (!validateForm()) {
+        requestHttpAjax(link, arrParams, function (response) {
+            showAlert(response.status, response.label, response.message);
+
+            setTimeout(function () {
+                parent.window.location.href = $('#txth_base').val() + "/solicitudinscripcion/listarsolpendiente";
+            }, 2000);
+
+        }, true);
+    }
+}

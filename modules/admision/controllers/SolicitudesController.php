@@ -11,7 +11,7 @@ use app\modules\admision\models\Oportunidad;
 use app\modules\admision\models\ModuloEstudio;
 use app\modules\admision\models\ItemMetodoNivel;
 use app\modules\admision\models\DetalleDescuentoItem;
-use app\modules\admision\models\Persona;
+use app\models\Persona;
 use app\modules\admision\models\UnidadAcademica;
 use app\modules\admision\models\SolicitudinsDocumento;
 use app\modules\admision\models\OrdenPago;
@@ -75,7 +75,54 @@ class SolicitudesController extends \app\components\CController {
     }
 
     public function actionView() {
-        
+        $sins_id = base64_decode($_GET['ids']);
+        $numSolicitud = base64_decode($_GET['num_solicitud']);
+        $interesado = base64_decode($_GET['int']);
+        $per_id = base64_decode($_GET['perid']);
+        $apellidos = base64_decode($_GET['apellidos']);
+        $nombres = base64_decode($_GET['nombres']);
+        $nivelint = base64_decode($_GET['uaca_nombre']);
+        $carrera = base64_decode($_GET['carrera']);
+        $fec_prenoapro = base64_decode($_GET['fec_prenopro']);
+        $mod_persona = Persona::findIdentity($per_id);
+        $nacionalidad = $mod_persona->per_nac_ecuatoriano;
+
+        $mod_solins = new SolicitudInscripcion();
+        $resp_arch1 = $mod_solins->Obtenerdocumentosxsolicitud($sins_id, 1);
+        $resp_arch2 = $mod_solins->Obtenerdocumentosxsolicitud($sins_id, 2);
+        $resp_arch3 = $mod_solins->Obtenerdocumentosxsolicitud($sins_id, 3);
+        $resp_arch4 = $mod_solins->Obtenerdocumentosxsolicitud($sins_id, 4);
+        $resp_arch5 = $mod_solins->Obtenerdocumentosxsolicitud($sins_id, 5);
+
+        if ($nacionalidad == '1') {
+            $tiponacext = 'N';
+        } else {
+            $tiponacext = 'E';
+        }
+        $resp_condtitulo = $mod_solins->consultarSolnoaprobada(1, $tiponacext);
+        $resp_conddni = $mod_solins->consultarSolnoaprobada(2, $tiponacext);
+        $resp_rechazo = $mod_solins->consultaSolicitudRechazada($sins_id, 'P');
+
+        return $this->render('view', [
+                    "revision" => array("3" => Yii::t("formulario", "Pre Approved"), "4" => Yii::t("formulario", "Not approved")),
+                    "apellidos" => $apellidos,
+                    "nombres" => $nombres,
+                    "nivelint" => $nivelint,
+                    "carrera" => $carrera,
+                    "arch1" => $resp_arch1['sdoc_archivo'],
+                    "arch2" => $resp_arch2['sdoc_archivo'],
+                    "arch3" => $resp_arch3['sdoc_archivo'],
+                    "arch4" => $resp_arch4['sdoc_archivo'],
+                    "arch5" => $resp_arch5['sdoc_archivo'],
+                    "txth_extranjero" => $nacionalidad,
+                    "sins_id" => $sins_id,
+                    "per_id" => $per_id,
+                    "fec_prenoapro" => $fec_prenoapro,
+                    "arr_condtitulo" => $resp_condtitulo,
+                    "arr_conddni" => $resp_conddni,
+                    "resp_rechazo" => $resp_rechazo,
+                    "numSolicitud" => $numSolicitud,
+        ]);
     }
 
     public function actionEdit() {
@@ -728,5 +775,276 @@ class SolicitudesController extends \app\components\CController {
             return Utilities::ajaxResponse('NO_OK', 'alert', Yii::t("jslang", "Error"), false, $message);
         }
     }
+    public function actionSaverevision() {
+        $per_sistema = @Yii::$app->session->get("PB_perid");
+        if (Yii::$app->request->isAjax) {
+            $data = Yii::$app->request->post();
+            $resultado = $data["resultado"];
+            $observacion = ucwords(strtolower($data["observacion"]));
+            $banderapreaprueba = $data["banderapreaprueba"];
+            $sins_id = $data["sins_id"];
+            $int_id = $data["int_id"];
+            $per_id = $data["per_id"];
+            $condicionesTitulo = $data["condicionestitulo"];
+            $condicionesDni = $data["condicionesdni"];
+            $titulo = $data["titulo"];
+            $dni = $data["dni"];
 
+            $con = \Yii::$app->db_captacion;
+            $transaction = $con->beginTransaction();
+            $con2 = \Yii::$app->db_facturacion;
+            $transaction2 = $con2->beginTransaction();
+            try {  
+                $mod_solins = new SolicitudInscripcion();
+                $mod_ordenpago = new OrdenPago();
+                $respusuario = $mod_solins->consultaDatosusuario($per_sistema);
+                if ($banderapreaprueba == 0) {  //etapa de Aprobación.                                    
+                    if ($resultado == 2) { 
+                        //consultar estado del pago.     
+                        Utilities::putMessageLogFile('solicitud:'.$sins_id);
+                        $resp_pago = $mod_ordenpago->consultaOrdenPago($sins_id);    
+                        if ($resp_pago["opag_estado_pago"] == 'S') {  
+                            Utilities::putMessageLogFile('solicitud:'.$resp_pago["opag_estado_pago"]);
+                            $respsolins = $mod_solins->apruebaSolicitud($sins_id, $resultado, $observacion, $banderapreaprueba, $respusuario['usu_id']);                         
+                            if ($respsolins) {                                   
+                                //Se genera id de aspirante y correo de bienvenida.                                
+                                $resp_encuentra = $mod_ordenpago->encuentraAspirante($int_id);                                
+                                if ($resp_encuentra) {                                     
+                                    $asp = $resp_encuentra['asp_id'];                                  
+                                    $continua = 1;
+                                } else {
+                                    //Se asigna al interesado como aspirante                                    
+                                    $resp_asp = $mod_ordenpago->insertarAspirante($int_id);                                                                     
+                                    if ($resp_asp) {  
+                                        Utilities::putMessageLogFile('inserción');
+                                        $asp = $resp_asp;  
+                                        $continua = 1; 
+                                    }    
+                                }                                             
+                            }                            
+                            if ($continua == 1) {   
+                                $resp_inte = $mod_ordenpago->actualizaEstadointeresado($int_id, $respusuario['usu_id']);                                                                             
+                                if ($resp_inte) {     
+                                    //Se obtienen el método de ingreso y el nivel de interés según la solicitud.                                                
+                                    $resp_sol = $mod_solins->Obtenerdatosolicitud($sins_id);
+                                    //Se obtiene el curso para luego registrarlo.
+                                    if ($resp_sol) {  
+                                        $mod_persona = new Persona();
+                                        \app\models\Utilities::putMessageLogFile('perId:' . $per_id);   
+                                        $resp_persona = $mod_persona->consultaPersonaId($per_id);                                        
+                                        $correo = $resp_persona["usu_user"];
+                                        $apellidos = $resp_persona["per_pri_apellido"];
+                                        $nombres = $resp_persona["per_pri_nombre"];
+                                        //información del aspirante.
+                                        $identi = $resp_persona["per_cedula"];
+                                        $cel_fono = $resp_persona["per_celular"];
+                                        $mail_asp = $resp_persona["per_correo"];
+
+                                        $link = "http://www.uteg.edu.ec";
+                                        $metodo_ingreso = $resp_sol["nombre_metodo_ingreso"];                                        
+                                        if ($resp_sol["metodo_ingreso"] == 1) {
+                                            $leyenda = "el curso de nivelación";
+                                        }
+                                        if ($resp_sol["metodo_ingreso"] == 2) {
+                                            $leyenda = "la preparación para el examen de admisión";
+                                        }
+                                        $modalidad = ($resp_sol["nombre_modalidad"]);                            
+
+                                        if ($resp_sol["nivel_interes"]==1){  //Grado
+                                            switch ($resp_sol["mod_id"]) {
+                                                case 1:
+                                                    $file1 = Url::base(true) . "/files/Bienvenida UTEG ONLINE.pdf";
+                                                    $rutaFile = array($file1);  
+                                                    break;
+                                                case 2:
+                                                    $file1 = Url::base(true) . "/files/BienvenidaPresencial.pdf";
+                                                    $rutaFile = array($file1);  
+                                                    break;
+                                                case 3:
+                                                    $file1 = Url::base(true) . "/files/BienvenidaSemiPresencial.pdf";
+                                                    $rutaFile = array($file1);  
+                                                    break;
+                                            }
+                                        } else {
+                                            if ($resp_sol["nivel_interes"]==2){   //Posgrado
+                                                $file1 = Url::base(true) . "/files/BienvenidaPosgrado.pdf";
+                                                $rutaFile = array($file1);  
+                                            }
+                                        }
+                                        $tituloMensaje = Yii::t("interesado", "UTEG - Registration Online");
+                                        $asunto = Yii::t("interesado", "UTEG - Registration Online");
+                                        $body = Utilities::getMailMessage("Applicantrecord", array("[[nombre]]" => $nombres, "[[apellido]]" => $apellidos, "[[modalidad]]" => $modalidad, "[[link]]" => $link), Yii::$app->language);                                        
+                                       // if (!empty($rutaFile)) {
+                                       //     Utilities::sendEmail($tituloMensaje, Yii::$app->params["adminEmail"], [$correo => $apellidos . " " . $nombres], $asunto, $body, $rutaFile);
+                                       // } else {
+                                            Utilities::sendEmail($tituloMensaje, Yii::$app->params["adminEmail"], [$correo => $apellidos . " " . $nombres], $asunto, $body);
+                                       // }
+                                        Utilities::sendEmail($tituloMensaje, Yii::$app->params["adminEmail"], [Yii::$app->params["soporteEmail"] => "Soporte"], $asunto, $body);
+                                        $exito = 1;
+                                    }
+                                }
+                            }
+                        } else {
+                                $mensaje = 'La solicitud se encuentra pendiente de pago.';
+                            }                             
+                    } else { //No aprueban la solicitud  
+                        $respsolins = $mod_solins->apruebaSolicitud($sins_id, $resultado, $observacion, $banderapreaprueba, $respusuario['usu_id']);                         
+                        if ($respsolins) {
+                            $srec_etapa = "A";  //Aprobación                            
+                            //Grabar en tabla de solicitudes rechazadas.
+                            if ($titulo == 1) {
+                                $obs_rechazo = "No cumple condiciones de aceptación en título.";
+                                for ($c = 0; $c < count($condicionesTitulo); $c++) {
+                                    $resp_rechtit = $mod_solins->Insertarsolicitudrechazada($sins_id, 1, $condicionesTitulo[$c], $srec_etapa, $obs_rechazo, $respusuario['usu_id']);
+                                    if ($resp_rechtit) {
+                                        $ok = "1";
+                                    } else {
+                                        $ok = "0";
+                                    }
+                                }
+                            }
+                            if ($dni == 1) {
+                                $obs_rechazo = "No cumple condiciones de aceptación en documento de identidad.";
+                                for ($a = 0; $a < count($condicionesDni); $a++) {
+                                    $resp_rechdni = $mod_solins->Insertarsolicitudrechazada($sins_id, 2, $condicionesDni[$a], $srec_etapa, $obs_rechazo, $respusuario['usu_id']);
+                                    if ($resp_rechdni) {
+                                        $ok = "1";
+                                    } else {
+                                        $ok = "0";
+                                    }
+                                }
+                            }
+                            if ($ok == "1") {
+                                //Se envía correo.
+                                $mod_persona = new Persona();
+                                $resp_persona = $mod_persona->consultaPersonaId($per_id);
+                                $correo = $resp_persona["usu_user"];
+                                $pri_apellido = $resp_persona["per_pri_apellido"];
+                                $pri_nombre = $resp_persona["per_pri_nombre"];
+                                $nombre_completo = $resp_persona["per_pri_apellido"] . " " . $resp_persona["per_seg_apellido"] . " " . $resp_persona["per_pri_nombre"] . " " . $resp_persona["per_seg_nombre"];
+                                $estado = "NO APROBADA";
+                                //Obtener datos del rechazo.
+                                $resp_rechazo = $mod_solins->consultaSolicitudRechazada($sins_id, 'A');
+                                if ($resp_rechazo) {
+                                    $obs_condicion = "";
+                                    for ($r = 0; $r < count($resp_rechazo); $r++) {
+                                        if ($obs_condicion <> $resp_rechazo[$r]['observacion']) {
+                                            $obs_condicion = $resp_rechazo[$r]['observacion'];
+                                            $obs_correo = $obs_correo . "<br/><b>" . $obs_condicion . ":</b><br/>" . "&nbsp;&nbsp;&nbsp;No " . $resp_rechazo[$r]['condicion'];
+                                        } else {
+                                            $obs_correo = $obs_correo . "<br/>" . "&nbsp;&nbsp;&nbsp; No " . $resp_rechazo[$r]['condicion'];
+                                        }
+                                    }
+                                }
+                                $tituloMensaje = Yii::t("interesado", "UTEG - Registration Online");
+                                $asunto = Yii::t("interesado", "UTEG - Registration Online");
+                                $body = Utilities::getMailMessage("Requestapplicantdenied", array("[[observacion]]" => $obs_correo), Yii::$app->language);
+                                $bodyadmision = Utilities::getMailMessage("Requestadmissions", array("[[nombre_aspirante]]" => $nombre_completo, "[[estado_solicitud]]" => $estado), Yii::$app->language);
+                                Utilities::sendEmail($tituloMensaje, Yii::$app->params["adminEmail"], [$correo => $pri_apellido . " " . $pri_nombre], $asunto, $body);
+                                Utilities::sendEmail($tituloMensaje, Yii::$app->params["adminEmail"], [Yii::$app->params["soporteEmail"] => "Soporte"], $asunto, $body);
+                                Utilities::sendEmail($tituloMensaje, Yii::$app->params["adminEmail"], [Yii::$app->params["admisiones"] => "Jefe"], $asunto, $bodyadmision);
+                                Utilities::sendEmail($tituloMensaje, Yii::$app->params["adminEmail"], [Yii::$app->params["soporteEmail"] => "Soporte"], $asunto, $bodyadmision);
+                                $exito = 1;
+                            } else {
+                                $message = array
+                                    ("wtmessage" => Yii::t("notificaciones", "No ha seleccionado condiciones de No Aprobado."), "title" =>
+                                    Yii::t('jslang', 'Success'),
+                                );
+                            }
+                        }                   
+                } 
+            } else {  //Pre-Aprobación de la solicitud                
+                if ($resultado == 3) {  
+                    //Verificar que se hayan subido los documentos.
+                    $respConsulta = $mod_solins->consultarDocumxSolic($sins_id);
+                    if ($respConsulta['numDocumentos']>0) {
+                        $respsolins = $mod_solins->apruebaSolicitud($sins_id, $resultado, $observacion, $banderapreaprueba, $respusuario['usu_id']);  $mensaje = 3;
+                        if ($respsolins) {
+                            $exito = 1;
+                        }
+                    } else {
+                        $mensaje='No se han subido los documentos.';
+                    }                    
+                } else {
+                    if ($resultado == 4) {
+                        $respsolins = $mod_solins->apruebaSolicitud($sins_id, $resultado, $observacion, $banderapreaprueba, $respusuario['usu_id']);
+                        if ($respsolins) {
+                            $srec_etapa = "P";  //Preaprobación                       
+                            //Grabar en tabla de solicitudes rechazadas.
+                            if ($titulo == 1) {
+                                $obs_rechazo = "No cumple condiciones de aceptación en título.";
+                                for ($c = 0; $c < count($condicionesTitulo); $c++) {
+                                    $resp_rechtit = $mod_solins->Insertarsolicitudrechazada($sins_id, 1, $condicionesTitulo[$c], $srec_etapa, $obs_rechazo, $respusuario['usu_id']);
+                                    if ($resp_rechtit) {
+                                        $ok = "1";
+                                    } else {
+                                        $ok = "0";
+                                    }
+                                }
+                            }
+                            if ($dni == 1) {
+                                $obs_rechazo = "No cumple condiciones de aceptación en documento de identidad.";
+                                for ($a = 0; $a < count($condicionesDni); $a++) {
+                                    $resp_rechdni = $mod_solins->Insertarsolicitudrechazada($sins_id, 2, $condicionesDni[$a], $srec_etapa, $obs_rechazo, $respusuario['usu_id']);
+                                    if ($resp_rechdni) {
+                                        $ok = "1";
+                                    } else {
+                                        $ok = "0";
+                                    }
+                                }
+                            }
+                        } else {
+                            $ok = "0";
+                        }
+                        if ($ok == "1") {
+                            Utilities::putMessageLogFile($sins_id);                            
+                            $link = Url::base(true);
+                            $tituloMensaje = Yii::t("interesado", "UTEG - Registration Online");
+                            $asunto = Yii::t("interesado", "UTEG - Registration Online");
+                            $bodyadmision = Utilities::getMailMessage("Prereviewadmissions", array("[[link_asgard]]" => $link), Yii::$app->language);
+                            Utilities::sendEmail($tituloMensaje, Yii::$app->params["adminEmail"], [Yii::$app->params["admisiones"] => "Jefe"], $asunto, $bodyadmision);
+                            Utilities::sendEmail($tituloMensaje, Yii::$app->params["adminEmail"], [Yii::$app->params["soporteEmail"] => "Soporte"], $asunto, $bodyadmision);
+                            $exito = 1;
+                        } else {
+                            $message = array
+                                ("wtmessage" => Yii::t("notificaciones", "No ha seleccionado condiciones de No Aprobado."), "title" =>
+                                Yii::t('jslang', 'Success'),
+                            );
+                        }
+                    }
+                }
+            }
+            if ($exito) {
+                $transaction->commit();
+                $transaction2->commit();
+                $message = array(
+                    "wtmessage" => Yii::t("notificaciones", "La información ha sido grabada."),
+                    "title" => Yii::t('jslang', 'Success'),
+                );
+                return \app\models\Utilities::ajaxResponse('OK', 'alert', Yii::t("jslang", "Sucess"), false, $message);
+            } else {
+                //$paso = 1;
+                $transaction->rollback();
+                $transaction2->rollback();
+                if (empty($message)) {
+                    $message = array
+                        (
+                        "wtmessage" => Yii::t("notificaciones", "Error al grabar. " . $mensaje), "title" =>
+                        Yii::t('jslang', 'Success'),
+                    );
+                }
+                return \app\models\Utilities::ajaxResponse('NO_OK', 'alert', Yii::t("jslang", "Sucess"), false, $message);
+            }
+          } catch (Exception $ex) {                
+                $transaction->rollback();
+                $transaction2->rollback();
+                $message = array(
+                    "wtmessage" => Yii::t("notificaciones", "Error al grabar." . $mensaje),
+                    "title" => Yii::t('jslang', 'Success'),
+                );
+                return \app\models\Utilities::ajaxResponse('NO_OK', 'alert', Yii::t("jslang", "Sucess"), false, $message);
+            }
+            return;
+        }
+    }
 }
