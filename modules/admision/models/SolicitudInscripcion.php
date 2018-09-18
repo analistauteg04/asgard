@@ -1113,7 +1113,7 @@ class SolicitudInscripcion extends \app\modules\admision\components\CActiveRecor
                 $str_search .= "sins.eaca_id = :carrera AND ";
             }
             if ($arrFiltro['estadoSol'] != "" && $arrFiltro['estadoSol'] > 0) {
-                $str_search .= " AND sins.rsin_id = :estadosol ";
+                $str_search .= "sins.rsin_id = :estadosol AND ";
             }
         } else {
             $columnsAdd = "per.per_id as persona, 
@@ -1185,7 +1185,7 @@ class SolicitudInscripcion extends \app\modules\admision\components\CActiveRecor
                     m.mod_estado = :estado AND 
                     m.mod_estado_logico = :estado AND
                     rsol.rsin_estado = :estado AND
-                    rsol.rsin_estado_logico = :estado AND                    
+                    rsol.rsin_estado_logico = :estado AND        
                     eac.eaca_estado=:estado AND
                     eac.eaca_estado_logico=:estado ";
        

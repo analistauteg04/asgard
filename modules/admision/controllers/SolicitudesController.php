@@ -33,7 +33,7 @@ class SolicitudesController extends \app\components\CController {
             $arrSearch["f_ini"] = $data['f_ini'];
             $arrSearch["f_fin"] = $data['f_fin'];
             $arrSearch["carrera"] = $data['carrera'];
-            $arrSearch["estado"] = $data['estado'];
+            $arrSearch["estadoSol"] = $data['estadoSol'];
             $arrSearch["search"] = $data['search'];
                       
             $respSolicitud = $modSolicitud->consultarSolicitudes($arrSearch);                      

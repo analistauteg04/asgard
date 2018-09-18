@@ -290,7 +290,8 @@ $(document).ready(function () {
             }, true);
         }
     });
-
+    
+    /*** BORRAR DESPUES ***/
     $('#sendInscripcion').click(function () {
         var link = $('#txth_base').val() + "/admision/solicitudes/save";
         var arrParams = new Object();
@@ -337,7 +338,8 @@ $(document).ready(function () {
             }, true);
         }
     });
-
+    /*** BORRAR DESPUES ***/
+    
     $('#sendInscripcionUlink').click(function () {
         var link = $('#txth_base').val() + "/admision/solicitudes/save";
         var arrParams = new Object();
@@ -653,6 +655,7 @@ function actualizarGrid() {
     var estadoSol = $('#cmb_estado option:selected').val();
     var f_ini = $('#txt_fecha_ini').val();
     var f_fin = $('#txt_fecha_fin').val();
+    
     //Buscar almenos una clase con el nombre para ejecutar
     if (!$(".blockUI").length) {
         showLoadingPopup();
@@ -696,4 +699,51 @@ function actualizarGridaprobada() {
         $('#TbG_PERSONAS').PbGridView('applyFilterData', {'f_ini': f_ini, 'f_fin': f_fin, 'search': search});
         setTimeout(hideLoadingPopup, 2000);
     }
+}
+
+function Save() {
+    var link = $('#txth_base').val() + "/admision/solicitudes/save";
+        var arrParams = new Object();
+        arrParams.persona_id = $('#txth_ids').val();
+        arrParams.ninteres = $('#cmb_ninteres').val();
+        arrParams.modalidad = $('#cmb_modalidad').val();
+        arrParams.metodoing = $('#cmb_metodos').val();
+        arrParams.carrera = $('#cmb_carrera').val();
+        arrParams.arc_doc_titulo = $('#txth_doc_titulo').val();
+        arrParams.arc_doc_dni = $('#txth_doc_dni').val();
+        arrParams.arc_doc_certvota = $('#txth_doc_certvota').val();
+        arrParams.arc_doc_foto = $('#txth_doc_foto').val();
+        arrParams.arc_extranjero = $('#txth_extranjero').val();
+        arrParams.arc_nacional = $('#txth_nac').val();
+        arrParams.arc_doc_beca = $('#txth_doc_beca').val();
+        arrParams.emp_id = 1;
+        if ($('input[name=opt_declara_Dctosi]:checked').val() == 1) {
+            arrParams.descuento_id = $('#cmb_descuento').val();
+        }
+        if ($('input[name=opt_declara_si]:checked').val() == 1) {
+            arrParams.beca = 1;
+        } else {
+            arrParams.beca = 0;
+        }
+
+        if ($('input[name=opt_subir_si]:checked').val() == 1) {
+            arrParams.subirDocumentos = 1;
+        } else {
+            arrParams.subirDocumentos = 0;
+        }
+
+        if (!validateForm()) {
+            requestHttpAjax(link, arrParams, function (response) {
+                showAlert(response.status, response.label, response.message);
+                setTimeout(function () {
+                    if (arrParams.persona_id > '0')
+                    {
+                        window.location.href = $('#txth_base').val() + "/interesado/listarinteresados";
+                    } else
+                    {
+                        window.location.href = $('#txth_base').val() + "/solicitudinscripcion/listarsolicitudxinteresado";
+                    }
+                }, 5000);
+            }, true);
+        }
 }
