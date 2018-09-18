@@ -356,7 +356,7 @@ class OrdenPago extends \app\modules\financiero\components\CActiveRecord {
         $sql = "SELECT  icpr.opag_id orden, icpr.icpr_id id, 
                         format(icpr.icpr_valor,2) valor, 
                         fpag.fpag_nombre formapago, 
-                        icpr_fecha_pago fechapago,
+                        ifnull(icpr_fecha_pago,'') as fechapago,
                         icpr_fecha_registro fechacargo, 
                         icpr.icpr_imagen imagen,
                         (case when icpr_resultado = 'AP' then 'Aprobado'

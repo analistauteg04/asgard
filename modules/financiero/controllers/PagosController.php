@@ -158,7 +158,7 @@ class PagosController extends \app\components\CController {
         ]);
     }
 
-    public function actionSavepago() {        
+    public function actionSavepago() {
         //online que sube doc capturar asi el id de la persona 
         if (Yii::$app->request->isAjax) {
             $data = Yii::$app->request->post();
@@ -408,6 +408,101 @@ class PagosController extends \app\components\CController {
             }
             return;
         }
+    }
+
+    public function actionListarpagoscargados() {
+        $mod_pago = new OrdenPago();
+
+        $data = null;
+        $data = Yii::$app->request->get();
+        if ($data['PBgetFilter']) {
+            $arrSearch["f_ini"] = $data['f_ini'];
+            $arrSearch["f_fin"] = $data['f_fin'];
+            $arrSearch["f_estado"] = $data['f_estado'];
+            $arrSearch["search"] = $data['search'];
+            $resp_pago = $mod_pago->listarPagoscargados($arrSearch);
+            return $this->renderPartial('_listarpagoscargados_grid', [
+                        "model" => $resp_pago,
+            ]);
+        } else {
+            $resp_pago = $mod_pago->listarPagoscargados();
+        }
+        if (Yii::$app->request->isAjax) {
+            $data = Yii::$app->request->get();
+            if (isset($data["op"]) && $data["op"] == '1') {
+                
+            }
+        }
+        $arrEstados = ArrayHelper::map([["id" => "T", "value" => "Todos"], ["id" => "P", "value" => "Pendiente"], ["id" => "S", "value" => "Pagada"]/* , ["id" => "NA", "value" => "No Disponible"] */], "id", "value");
+        return $this->render('listarpagoscargados', [
+                    'model' => $resp_pago,
+                    'arrEstados' => $arrEstados
+        ]);
+    }
+
+    public function actionIndexadm() {
+        $per_id = @Yii::$app->session->get("PB_iduser");
+        $model_interesado = new Interesado();
+        $resp_gruporol = $model_interesado->consultagruporol($per_id);
+        $mod_pago = new OrdenPago();
+        $data = null;
+        $data = Yii::$app->request->get();
+
+        if ($data['PBgetFilter']) {
+            $arrSearch["f_ini"] = $data['f_ini'];
+            $arrSearch["f_fin"] = $data['f_fin'];
+            $arrSearch["f_estado"] = $data['f_estado'];
+            $arrSearch["search"] = $data['search'];
+            $resp_pago = $mod_pago->listarSolicitudesadm($arrSearch, $resp_gruporol["grol_id"]);
+            return $this->renderPartial('_indexadm_grid', [
+                        "model" => $resp_pago,
+            ]);
+        } else {
+            $resp_pago = $mod_pago->listarSolicitudesadm(null, $resp_gruporol["grol_id"]);
+        }
+        if (Yii::$app->request->isAjax) {
+            $data = Yii::$app->request->get();
+            if (isset($data["op"]) && $data["op"] == '1') {
+                
+            }
+        }
+        return $this->render('indexadm', [
+                    'model' => $resp_pago,
+        ]);
+    }
+
+    public function actionRegistrarpagoadm() {
+        $opag_id = $_GET["ido"];
+        $per_id = $_GET["per_id"];
+
+        $mod_opago = new OrdenPago();
+        $arr_forma_pago = $mod_opago->formaPago("1");
+
+        $resp_orden = $mod_opago->listarSolicitud($per_id, $opag_id, 0);
+        $valor_total = $resp_orden['ipre_precio'];
+        $saldo_pendiente = $resp_orden['pendiente'];
+        $int_id = $resp_orden['int_id'];
+        $sins_id = $resp_orden['solicitud'];
+
+        $resp_doc = $mod_opago->listarDocumento($opag_id);
+        $data = null;
+
+        if (Yii::$app->request->isAjax) {
+            $data = Yii::$app->request->get();
+            if (isset($data["op"]) && $data["op"] == '1') {
+                
+            }
+        }
+        return $this->render('registrarpagoadm', [
+                    "arr_forma_pago" => ArrayHelper::map($arr_forma_pago, "id", "value"),
+                    'model' => $resp_doc,
+                    'saldo_pendiente' => $saldo_pendiente,
+                    'valor_total' => $valor_total,
+                    'opag_id' => $opag_id,
+                    'int_id' => $int_id,
+                    'sins_id' => $sins_id,
+                    'per_id' => $per_id,
+        ]);
     }
 
     public function actionUpdate() {
