@@ -14,7 +14,7 @@ $(document).ready(function () {
         arrParams.getmodalidad = true;
         requestHttpAjax(link, arrParams, function (response) {
             if (response.status == "OK") {
-                data = response.message;
+                data = response.message;               
                 setComboData(data.modalidad, "cmb_modalidad");
                 var arrParams = new Object();
                 if (data.modalidad.length > 0) {
@@ -309,6 +309,7 @@ $(document).ready(function () {
         arrParams.emp_id = 1;
         if ($('input[name=opt_declara_Dctosi]:checked').val() == 1) {
             arrParams.descuento_id = $('#cmb_descuento').val();
+            arrParams.marcadescuento = '1';
         }
         if ($('input[name=opt_declara_si]:checked').val() == 1) {
             arrParams.beca = 1;
@@ -649,13 +650,14 @@ function exportExcel() {
 function actualizarGrid() {
     var search = $('#txt_buscarData').val();
     var modalidad = $('#cmb_modalidades option:selected').val();
-    var carrera = $('#cmb_carreras option:selected').val();
+    var carrera = $('#cmb_carrera option:selected').val();
+    var estadoSol = $('#cmb_estado option:selected').val();
     var f_ini = $('#txt_fecha_ini').val();
     var f_fin = $('#txt_fecha_fin').val();
     //Buscar almenos una clase con el nombre para ejecutar
     if (!$(".blockUI").length) {
         showLoadingPopup();
-        $('#TbG_PERSONAS').PbGridView('applyFilterData', {'f_ini': f_ini, 'f_fin': f_fin, 'modalidad': modalidad, 'carrera': carrera, 'search': search});
+        $('#Tbg_Solicitudes').PbGridView('applyFilterData', {'f_ini': f_ini, 'f_fin': f_fin, 'modalidad': modalidad, 'carrera': carrera, 'search': search, 'estadoSol': estadoSol});
         setTimeout(hideLoadingPopup, 2000);
     }
 }

@@ -517,6 +517,7 @@ return [
     "Search" => "Buscar",
     "Sector" => "Sector",
     "See File" => "Ver Expediente",
+    "Select" => "Seleccionar",
     "Self-evaluation (20%)" => "Autoevaluación (20%)",
     "Semester" => "Semestre",
     "Send" => "Enviar",

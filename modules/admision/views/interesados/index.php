@@ -11,7 +11,7 @@ use yii\helpers\Html;
     <form class="form-horizontal">
         <?=
         $this->render('index-search', [    
-            'arrEstados' => $arrEstados]);
+            'arr_empresa' => $arr_empresa]);
         ?>
     </form>
 </div>
