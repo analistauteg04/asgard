@@ -13,14 +13,6 @@ use yii\helpers\ArrayHelper;
  */
 ?>
 <div class="row">
-    <div class="col-md-12 col-xs-12 col-sm-12 col-lg-12">
-        <div class="form-group">
-            <label for="txt_buscarData" class="col-sm-2 col-md-2 col-xs-2 col-lg-2 control-label"><?= Yii::t("formulario", "Search") ?></label>
-            <div class="col-sm-8 col-md-8 col-xs-8 col-lg-8">
-                <input type="text" class="form-control" value="" id="txt_buscarData" placeholder="<?= Yii::t("solicitud_ins", "Search by Dni or Names")?>">
-            </div>
-        </div>
-    </div>
     <div class="col-md-12">
         <div class="form-group">
             <label for="lbl_inicio" class="col-sm-2 col-md-2 col-xs-2 col-lg-2 control-label"><?= Yii::t("formulario", "Start date") ?></label>
@@ -53,15 +45,6 @@ use yii\helpers\ArrayHelper;
                 );
                 ?>
             </div>
-        </div>
-    </div>
-    <div class="col-md-12 col-xs-12 col-lg-12 col-sm-12">
-        <div class="form-group">
-            <label for="cmb_carrera" class="col-sm-2 col-md-2 col-xs-2 col-lg-2 control-label"><?= Yii::t("academico", "Career") ."/".Yii::t("formulario", "Program") ?></label>
-            <div class="col-sm-3 col-md-3 col-xs-3 col-lg-3">
-                <?= Html::dropDownList("cmb_carrera", 0, $arrCarreras, ["class" => "form-control", "id" => "cmb_carrera"]) ?>
-            </div>
-            <div class="col-sm-5">&nbsp;</div>
         </div>
     </div>
     <div class="col-md-12 col-xs-12 col-lg-12 col-sm-12">
