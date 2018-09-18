@@ -531,5 +531,216 @@ class SolicitudesController extends \app\components\CController {
         
     }
     
+    
+    public function actionSubirdocumentos() {
+        $solicitud = base64_decode($_GET['solicitud']);
+        $apellidos = base64_decode($_GET['apellidos']);
+        $nombres = base64_decode($_GET['nombres']);
+        $nacionalidad = base64_decode($_GET['nacionalidad']);
+        if (empty($nacionalidad)) {
+            $nacionalidad=0;
+        }
+        $per_id = $_GET['ids'];
+        $sins_id = $_GET['sins_id'];
+        $int_id = $_GET['int_id'];
+        $beca = $_GET['beca'];
 
+        return $this->render('subirDocumentos', [
+                    "cliente" => $apellidos . ' ' . $nombres,
+                    "solicitud" => $solicitud,
+                    "txth_extranjero" => $nacionalidad,
+                    "per_id" => $per_id,
+                    "sins_id" => $sins_id,
+                    "int_id" => $int_id,
+                    "beca" => $beca,
+        ]);
+    }
+    
+    public function actionSavedocumentos() {
+        if (Yii::$app->request->isAjax) {
+            $data = Yii::$app->request->post();
+            if ($_SESSION['persona_solicita'] != '') {// tomar el de parametro)
+                $per_id = $_SESSION['persona_solicita'];
+            } else {
+                unset($_SESSION['persona_ingresa']);
+                $per_id = Yii::$app->session->get("PB_perid");
+            }
+            //$per_id = @Yii::$app->session->get("PB_perid");
+            $sins_id = $data["sins_id"];
+            $interesado_id = $data["interesado_id"];
+            $es_extranjero = $data["arc_extranjero"];
+            $beca = $data["beca"];
+            if ($data["upload_file"]) {
+                if (empty($_FILES)) {
+                    return json_encode(['error' => Yii::t("notificaciones", "Error to process File {file}. Try again.", ['{file}' => basename($files['name'])])]);
+                    return;
+                }
+                //Recibe Parámetros.
+                $files = $_FILES[key($_FILES)];
+                $arrIm = explode(".", basename($files['name']));
+                $typeFile = strtolower($arrIm[count($arrIm) - 1]);
+                $dirFileEnd = Yii::$app->params["documentFolder"] . "solicitudinscripcion/" . $per_id . "/" . $data["name_file"] . "_per_" . $per_id . "." . $typeFile;
+                $status = Utilities::moveUploadFile($files['tmp_name'], $dirFileEnd);
+                if ($status) {
+                    return true;
+                } else {
+                    return json_encode(['error' => Yii::t("notificaciones", "Error to process File {file}. Try again.", ['{file}' => basename($files['name'])])]);
+                    return;
+                }
+                $titulo_archivo = "";
+                if (isset($data["arc_doc_titulo"]) && $data["arc_doc_titulo"] != "") {
+                    $arrIm = explode(".", basename($data["arc_doc_titulo"]));
+                    $typeFile = strtolower($arrIm[count($arrIm) - 1]);
+                    $titulo_archivo = Yii::$app->params["documentFolder"] . "solicitudinscripcion/" . $per_id . "/doc_titulo_per_" . $per_id . "." . $typeFile;
+                }
+                $dni_archivo = "";
+                if (isset($data["arc_doc_dni"]) && $data["arc_doc_dni"] != "") {
+                    $arrIm = explode(".", basename($data["arc_doc_dni"]));
+                    $typeFile = strtolower($arrIm[count($arrIm) - 1]);
+                    $dni_archivo = Yii::$app->params["documentFolder"] . "solicitudinscripcion/" . $per_id . "/doc_dni_per_" . $per_id . "." . $typeFile;
+                }
+                $certvota_archivo = "";
+                if (isset($data["arc_doc_certvota"]) && $data["arc_doc_certvota"] != "") {
+                    $arrIm = explode(".", basename($data["arc_doc_certvota"]));
+                    $typeFile = strtolower($arrIm[count($arrIm) - 1]);
+                    $certvota_archivo = Yii::$app->params["documentFolder"] . "solicitudinscripcion/" . $per_id . "/doc_certvota_per_" . $per_id . "." . $typeFile;
+                }
+                $foto_archivo = "";
+                if (isset($data["arc_doc_foto"]) && $data["arc_doc_foto"] != "") {
+                    $arrIm = explode(".", basename($data["arc_doc_foto"]));
+                    $typeFile = strtolower($arrIm[count($arrIm) - 1]);
+                    $foto_archivo = Yii::$app->params["documentFolder"] . "solicitudinscripcion/" . $per_id . "/doc_foto_per_" . $per_id . "." . $typeFile;
+                }
+                $beca_archivo = "";
+                if (isset($data["arc_doc_beca"]) && $data["arc_doc_beca"] != "") {
+                    $arrIm = explode(".", basename($data["arc_doc_beca"]));
+                    $typeFile = strtolower($arrIm[count($arrIm) - 1]);
+                    $beca_archivo = Yii::$app->params["documentFolder"] . "solicitudinscripcion/" . $per_id . "/doc_beca_per_" . $per_id . "." . $typeFile;
+                }
+            }
+        }
+        $con = \Yii::$app->db_captacion;
+        $transaction = $con->beginTransaction();
+        try {
+            if (isset($data["arc_doc_titulo"]) && $data["arc_doc_titulo"] != "") {
+                $arrIm = explode(".", basename($data["arc_doc_titulo"]));
+                $typeFile = strtolower($arrIm[count($arrIm) - 1]);
+                $titulo_archivo = Yii::$app->params["documentFolder"] . "solicitudinscripcion/" . $per_id . "/doc_titulo_per_" . $per_id . "." . $typeFile;
+            }
+            if (isset($data["arc_doc_dni"]) && $data["arc_doc_dni"] != "") {
+                $arrIm = explode(".", basename($data["arc_doc_dni"]));
+                $typeFile = strtolower($arrIm[count($arrIm) - 1]);
+                $dni_archivo = Yii::$app->params["documentFolder"] . "solicitudinscripcion/" . $per_id . "/doc_dni_per_" . $per_id . "." . $typeFile;
+            }
+            if (isset($data["arc_doc_certvota"]) && $data["arc_doc_certvota"] != "") {
+                $arrIm = explode(".", basename($data["arc_doc_certvota"]));
+                $typeFile = strtolower($arrIm[count($arrIm) - 1]);
+                $certvota_archivo = Yii::$app->params["documentFolder"] . "solicitudinscripcion/" . $per_id . "/doc_certvota_per_" . $per_id . "." . $typeFile;
+            }
+            if (isset($data["arc_doc_foto"]) && $data["arc_doc_foto"] != "") {
+                $arrIm = explode(".", basename($data["arc_doc_foto"]));
+                $typeFile = strtolower($arrIm[count($arrIm) - 1]);
+                $foto_archivo = Yii::$app->params["documentFolder"] . "solicitudinscripcion/" . $per_id . "/doc_foto_per_" . $per_id . "." . $typeFile;
+            }
+            if (isset($data["arc_doc_beca"]) && $data["arc_doc_beca"] != "") {
+                $arrIm = explode(".", basename($data["arc_doc_beca"]));
+                $typeFile = strtolower($arrIm[count($arrIm) - 1]);
+                $beca_archivo = Yii::$app->params["documentFolder"] . "solicitudinscripcion/" . $per_id . "/doc_beca_per_" . $per_id . "." . $typeFile;
+            }
+            if (!empty($titulo_archivo) && !empty($dni_archivo) && !empty($foto_archivo)) {
+                Utilities::putMessageLogFile('aqui entro');
+                if (!empty($titulo_archivo)) {
+                    Utilities::putMessageLogFile("s1");
+                    $mod_solinsxdoc1 = new SolicitudinsDocumento();
+                    //1-Título, 2-DNI,3-Cert votación, 4-Foto, 5-Doc-Beca                       
+                    $mod_solinsxdoc1->sins_id = $sins_id;
+                    $mod_solinsxdoc1->int_id = $interesado_id;
+                    $mod_solinsxdoc1->dadj_id = 1;
+                    $mod_solinsxdoc1->sdoc_archivo = $titulo_archivo;
+                    $mod_solinsxdoc1->sdoc_estado = "1";
+                    $mod_solinsxdoc1->sdoc_estado_logico = "1";
+                    Utilities::putMessageLogFile('sol:'.$sins_id);
+                    if ($mod_solinsxdoc1->save()) {
+                        Utilities::putMessageLogFile("s2");
+                        $mod_solinsxdoc2 = new SolicitudinsDocumento();
+                        $mod_solinsxdoc2->sins_id = $sins_id;
+                        $mod_solinsxdoc2->int_id = $interesado_id;
+                        $mod_solinsxdoc2->dadj_id = 2;
+                        $mod_solinsxdoc2->sdoc_archivo = $dni_archivo;
+                        $mod_solinsxdoc2->sdoc_estado = "1";
+                        $mod_solinsxdoc2->sdoc_estado_logico = "1";
+
+                        if ($mod_solinsxdoc2->save()) {
+                            Utilities::putMessageLogFile("s3");
+                            $mod_solinsxdoc3 = new SolicitudinsDocumento();
+                            $mod_solinsxdoc3->sins_id = $sins_id;
+                            $mod_solinsxdoc3->int_id = $interesado_id;
+                            $mod_solinsxdoc3->dadj_id = 4;
+                            $mod_solinsxdoc3->sdoc_archivo = $foto_archivo;
+                            $mod_solinsxdoc3->sdoc_estado = "1";
+                            $mod_solinsxdoc3->sdoc_estado_logico = "1";
+
+                            if ($mod_solinsxdoc3->save()) {
+                                Utilities::putMessageLogFile("s4");
+                                if ($es_extranjero == "1") {
+                                    $mod_solinsxdoc4 = new SolicitudinsDocumento();
+                                    $mod_solinsxdoc4->sins_id = $sins_id;
+                                    $mod_solinsxdoc4->int_id = $interesado_id;
+                                    $mod_solinsxdoc4->dadj_id = 3;
+                                    $mod_solinsxdoc4->sdoc_archivo = $certvota_archivo;
+                                    $mod_solinsxdoc4->sdoc_estado = "1";
+                                    $mod_solinsxdoc4->sdoc_estado_logico = "1";
+
+                                    if (!$mod_solinsxdoc4->save()) {
+                                        Utilities::putMessageLogFile("1");
+                                        throw new Exception('Error doc certvot no creado.');
+                                    }
+                                }
+                                Utilities::putMessageLogFile("s5");
+                                if ($beca == "1") {
+                                    $mod_solinsxdoc5 = new SolicitudinsDocumento();
+                                    $mod_solinsxdoc5->sins_id = $sins_id;
+                                    $mod_solinsxdoc5->int_id = $interesado_id;
+                                    $mod_solinsxdoc5->dadj_id = 5;
+                                    $mod_solinsxdoc5->sdoc_archivo = $beca_archivo;
+                                    $mod_solinsxdoc5->sdoc_estado = "1";
+                                    $mod_solinsxdoc5->sdoc_estado_logico = "1";
+                                    if (!$mod_solinsxdoc5->save()) {
+                                        throw new Exception('Error doc beca no creado.');
+                                    }
+                                }
+                            } else {
+                                Utilities::putMessageLogFile("2");
+                                throw new Exception('Error doc foto no creado.');
+                            }
+                        } else {
+                            Utilities::putMessageLogFile("3");
+                            throw new Exception('Error doc dni no creado.');
+                        }
+                    } else {
+                        Utilities::putMessageLogFile("4");
+                        throw new Exception('Error doc titulo no creado.');
+                    }
+                    $transaction->commit();
+                    $message = array(
+                        "wtmessage" => Yii::t("notificaciones", "La infomación ha sido grabada."),
+                        "title" => Yii::t('jslang', 'Success'),
+                    );
+                    return Utilities::ajaxResponse('OK', 'alert', Yii::t("jslang", "Sucess"), false, $message);
+                } else {
+                    Utilities::putMessageLogFile($mod_solins->getErrors());
+                    throw new Exception('Tiene que subir todos los documentos.Titulo:' . isset($data["arc_doc_titulo"]) . 'Persona:' . $per_id);
+                }
+            }
+        } catch (Exception $ex) {
+            Utilities::putMessageLogFile("55");
+            $transaction->rollback();
+            //Utilities::putMessageLogFile($mod_solins->getErrors());
+            $message = array(
+                "wtmessage" => $ex->getMessage(),
+                "title" => Yii::t('jslang', 'Error'),
+            );
+            return Utilities::ajaxResponse('NO_OK', 'alert', Yii::t("jslang", "Error"), false, $message);
+        }
+    }
 }
