@@ -58,8 +58,9 @@ class SolicitudesController extends \app\components\CController {
      */
     public function actionListarsolicitudxinteresado() {
         $per_id = @Yii::$app->session->get("PB_perid");
-        $per_ids = base64_decode($_GET['id']);
+        $inte_id = base64_decode($_GET['id']);
         $mod_carrera = new EstudioAcademico();
+        $SolIns_model=new SolicitudInscripcion();
         $model = null;
         $fac_id = 1;
         $data = Yii::$app->request->get();
@@ -71,10 +72,10 @@ class SolicitudesController extends \app\components\CController {
             $arrSearch["estado"] = $data['estado'];
             $arrSearch["search"] = $data['search'];
             
-            $model = SolicitudInscripcion::getSolicitudesXInteresado($per_id, $arrSearch);      
+            $model = $SolIns_model->getSolicitudesXInteresado($inte_id, $arrSearch);      
         } else {
             if (empty($per_ids)) {  //vista para el interesado
-                $model = SolicitudInscripcion::getSolicitudesXInteresado($per_id);            
+                $model = $SolIns_model->getSolicitudesXInteresado($inte_id);            
             }
         }
 
