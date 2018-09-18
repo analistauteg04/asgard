@@ -313,30 +313,30 @@ create table if not exists `medio_publicitario` (
 -- --------------------------------------------------------
 -- Estructura de tabla para la tabla `consideracion`
 --
-create table if not exists `consideracion` (
- `con_id` bigint(20) not null auto_increment primary key,
- `con_nombre` varchar(200) not null,
- `con_descripcion` varchar(200) not null, 
- `con_estado` varchar(1) not null,
- `con_fecha_creacion` timestamp not null default current_timestamp,
- `con_fecha_modificacion` timestamp null default null,
- `con_estado_logico` varchar(1) not null
+create table if not exists `solicitud_noaprobada` (
+ `snoa_id` bigint(20) not null auto_increment primary key,
+ `snoa_nombre` varchar(200) not null,
+ `snoa_descripcion` varchar(200) not null, 
+ `snoa_estado` varchar(1) not null,
+ `snoa_fecha_creacion` timestamp not null default current_timestamp,
+ `snoa_fecha_modificacion` timestamp null default null,
+ `snoa_estado_logico` varchar(1) not null
 );
 
 -- -----------------------------------------------------------
 -- Estructura de tabla para la tabla `consideracion_documento`
 --
-create table if not exists `consideracion_documento` (
- `cdoc_id` bigint(20) not null auto_increment primary key,
- `con_id` bigint(20) not null,
+create table if not exists `solicitud_noaprobada_documento` (
+ `sndo_id` bigint(20) not null auto_increment primary key,
+ `snoa_id` bigint(20) not null,
  `dadj_id` bigint(20) not null,
- `cdoc_tiponacext` varchar(1) not null,
- `cdoc_estado` varchar(1) not null,
- `cdoc_fecha_creacion` timestamp not null default current_timestamp,
- `cdoc_fecha_modificacion` timestamp null default null,
- `cdoc_estado_logico` varchar(1) not null,
+ `sndo_tiponacext` varchar(1) not null,
+ `sndo_estado` varchar(1) not null,
+ `sndo_fecha_creacion` timestamp not null default current_timestamp,
+ `sndo_fecha_modificacion` timestamp null default null,
+ `sndo_estado_logico` varchar(1) not null,
  foreign key (dadj_id) references `documento_adjuntar`(dadj_id),
- foreign key (con_id) references `consideracion`(con_id)
+ foreign key (snoa_id) references `solicitud_noaprobada`(snoa_id)
 );
 
 -- --------------------------------------------------------
@@ -346,7 +346,7 @@ create table if not exists `solicitud_rechazada` (
  `srec_id` bigint(20) not null auto_increment primary key,
  `sins_id` bigint(20) not null,
  `dadj_id` bigint(20) not null,
- `con_id` bigint(20) not null,
+ `snoa_id` bigint(20) not null,
  `srec_etapa` varchar(1) not null,
  `srec_observacion` varchar(300) not null,
  `usu_id` bigint(20) not null,
@@ -356,7 +356,7 @@ create table if not exists `solicitud_rechazada` (
  `srec_estado_logico` varchar(1) not null,
  foreign key (sins_id) references `solicitud_inscripcion`(sins_id), 
  foreign key (dadj_id) references `documento_adjuntar`(dadj_id),
- foreign key (con_id) references `consideracion`(con_id)
+ foreign key (snoa_id) references `solicitud_noaprobada`(snoa_id)
 );
 
 -- --------------------------------------------------------

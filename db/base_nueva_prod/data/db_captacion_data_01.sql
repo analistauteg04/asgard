@@ -98,7 +98,7 @@ INSERT INTO `medio_publicitario` (`mpub_id`, `mpub_nombre`, `mpub_descripcion`, 
 --
 -- Volcado de datos para la tabla `consideracion` 
 --
-INSERT INTO `consideracion` (`con_id`, `con_nombre`, `con_descripcion`, `con_estado`, `con_estado_logico`) VALUES
+INSERT INTO `solicitud_noaprobada` (`snoa_id`, `snoa_nombre`, `snoa_descripcion`, `snoa_estado`, `snoa_estado_logico`) VALUES
 (1, 'Original escaneado a color (por ambos lados)', 'Original escaneado a color (por ambos lados)', '1', '1'),
 (2, 'Refrendado en la parte posterior por el Ministerio de Educación del Ecuador', 'Refrendado en la parte posterior por el Ministerio de Educación del Ecuador', '1', '1'),
 (3, 'Tamaño A4', 'Tamaño A4', '1', '1'),
@@ -117,7 +117,7 @@ INSERT INTO `consideracion` (`con_id`, `con_nombre`, `con_descripcion`, `con_est
 --
 -- Volcado de datos para la tabla `consideracion_documento` 
 --
-INSERT INTO `consideracion_documento` (`cdoc_id`, `con_id`, `dadj_id`, `cdoc_tiponacext`, `cdoc_estado`, `cdoc_estado_logico`) VALUES
+INSERT INTO `solicitud_noaprobada_documento` (`sndo_id`, `snoa_id`, `dadj_id`, `sndo_tiponacext`, `sndo_estado`, `sndo_estado_logico`) VALUES
 (1, 1, 1, 'N', '1', '1'),
 (2, 2, 1, 'N', '1', '1'),
 (3, 3, 1, 'N', '1', '1'),

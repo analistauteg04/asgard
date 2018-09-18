@@ -1104,17 +1104,19 @@ class SolicitudInscripcion extends \app\modules\admision\components\CActiveRecor
             $str_search = "(per.per_pri_nombre like :search OR ";
             $str_search .= "per.per_seg_nombre like :search OR ";
             $str_search .= "per.per_pri_apellido like :search OR ";
-            $str_search .= "per.per_cedula like :search) AND ";
-            if ($arrFiltro['ejecutivo'] != "" && $arrFiltro['ejecutivo'] > 0) {
-                $str_search .= "intej.per_id  = :ejecutivo AND ";
-            }
+            $str_search .= "per.per_cedula like :search) AND ";            
             if ($arrFiltro['f_ini'] != "" && $arrFiltro['f_fin'] != "") {
                 $str_search .= "sins.sins_fecha_solicitud >= :fec_ini AND ";
                 $str_search .= "sins.sins_fecha_solicitud <= :fec_fin AND ";
             }
+            if ($arrFiltro['carrera'] != "" && $arrFiltro['carrera'] > 0) {
+                $str_search .= "sins.eaca_id = :carrera AND ";
+            }
+            if ($arrFiltro['estadoSol'] != "" && $arrFiltro['estadoSol'] > 0) {
+                $str_search .= " AND sins.rsin_id = :estadosol ";
+            }
         } else {
-            $columnsAdd = "sins.sins_id as solicitud_id,
-                    per.per_id as persona, 
+            $columnsAdd = "per.per_id as persona, 
                     per.per_pri_nombre as per_pri_nombre, 
                     per.per_seg_nombre as per_seg_nombre,
                     per.per_pri_apellido as per_pri_apellido,
@@ -1144,6 +1146,7 @@ class SolicitudInscripcion extends \app\modules\admision\components\CActiveRecor
                     concat(per.per_pri_nombre ,' ', ifnull(per.per_seg_nombre,' ')) as per_nombres,
                     concat(per.per_pri_apellido ,' ', ifnull(per.per_seg_apellido,' ')) as per_apellidos,
                     sins.sins_fecha_solicitud as fecha_solicitud,
+                    sins.rsin_id,
                     rsol.rsin_nombre as estado,
                     sins.sins_id,                     
                     sins_fecha_preaprobacion,
@@ -1152,6 +1155,7 @@ class SolicitudInscripcion extends \app\modules\admision\components\CActiveRecor
                     sins_fecha_prenoprobacion,
                     sins_observacion, 		
                     sins.sins_usuario_preaprueba as usu_preaprueba,
+                    $columnsAdd
                     case when ifnull((select opag_estado_pago
                                             from " . $con3->dbname . ".orden_pago op
                                             where op.sins_id = sins.sins_id),'N') = 'N' then 'No generado'
@@ -1188,25 +1192,26 @@ class SolicitudInscripcion extends \app\modules\admision\components\CActiveRecor
         $sql .= " ORDER BY fecha_solicitud DESC";
         $comando = $con->createCommand($sql);
         $comando->bindParam(":estado", $estado, \PDO::PARAM_STR);
-       /* $comando->bindParam(":pendiente", $estado_inscripcion1, \PDO::PARAM_INT);
-        $comando->bindParam(":noaprobado", $estado_inscripcion2, \PDO::PARAM_INT);
-        $comando->bindParam(":per_id", $per_id, \PDO::PARAM_INT);
-        $comando->bindParam(":resp_gruporol", $resp_gruporol, \PDO::PARAM_INT);
-
+       
         if (isset($arrFiltro) && count($arrFiltro) > 0) {
             $search_cond = "%" . $arrFiltro["search"] . "%";
+            $comando->bindParam(":search", $search_cond, \PDO::PARAM_STR);
             $fecha_ini = $arrFiltro["f_ini"];
             $fecha_fin = $arrFiltro["f_fin"];
-            $ejecutivo = $arrFiltro["ejecutivo"];
-            $comando->bindParam(":search", $search_cond, \PDO::PARAM_STR);
-            if ($arrFiltro['ejecutivo'] != "" && $arrFiltro['ejecutivo'] > 0) {
-                $comando->bindParam(":ejecutivo", $ejecutivo, \PDO::PARAM_STR);
-            }
+                       
             if ($arrFiltro['f_ini'] != "" && $arrFiltro['f_fin'] != "") {
                 $comando->bindParam(":fec_ini", $fecha_ini, \PDO::PARAM_STR);
                 $comando->bindParam(":fec_fin", $fecha_fin, \PDO::PARAM_STR);
             }
-        }*/
+            $carrera = $arrFiltro["carrera"];            
+            if ($arrFiltro['carrera'] != "" && $arrFiltro['carrera'] > 0) {
+                $comando->bindParam(":carrera", $carrera, \PDO::PARAM_INT);
+            }
+            $estadoSol = $arrFiltro["estadoSol"];
+            if ($arrFiltro['estadoSol'] != "" && $arrFiltro['estadoSol'] > 0) {
+                $comando->bindParam(":estadosol", $estadoSol, \PDO::PARAM_INT);
+            }
+        }
         $resultData = $comando->queryAll();
         $dataProvider = new ArrayDataProvider([
             'key' => 'id',
