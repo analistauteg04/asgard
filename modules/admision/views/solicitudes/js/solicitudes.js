@@ -14,7 +14,7 @@ $(document).ready(function () {
         arrParams.getmodalidad = true;
         requestHttpAjax(link, arrParams, function (response) {
             if (response.status == "OK") {
-                data = response.message;
+                data = response.message;               
                 setComboData(data.modalidad, "cmb_modalidad");
                 var arrParams = new Object();
                 if (data.modalidad.length > 0) {
@@ -309,6 +309,7 @@ $(document).ready(function () {
         arrParams.emp_id = 1;
         if ($('input[name=opt_declara_Dctosi]:checked').val() == 1) {
             arrParams.descuento_id = $('#cmb_descuento').val();
+            arrParams.marcadescuento = '1';
         }
         if ($('input[name=opt_declara_si]:checked').val() == 1) {
             arrParams.beca = 1;

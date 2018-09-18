@@ -125,6 +125,7 @@ class SolicitudesController extends \app\components\CController {
         $usu_id = @Yii::$app->session->get("PB_iduser");
         $envi_correo = 0;
         $es_nacional = " ";
+        $valida = " ";
         if (Yii::$app->request->isAjax) {
             $data = Yii::$app->request->post();
             if ($_SESSION['persona_solicita'] != '') {// tomar el de parametro)
@@ -195,6 +196,10 @@ class SolicitudesController extends \app\components\CController {
             $es_nacional = $data["arc_nacional"];
             $beca = $data["beca"];
             $descuento = $data["descuento_id"];
+            $marca_desc = $data["marcadescuento"];
+            if ($marca_desc == '1' && $marca_desc == '0') {
+                $valida = 1;
+            }
             if ($es_extranjero == "0" || $es_nacional == "0") {
                 $certvota_archivo = 1;
             }
@@ -233,6 +238,7 @@ class SolicitudesController extends \app\components\CController {
             $mod_id = $data["modalidad"];
             $car_id = $data["carrera"];
             $emp_id = $data["emp_id"];
+            if ($nint_id > '0'  and $ming_id > '0' and $mod_id > '0' and $car_id > '0' and $valida = 1) {
             $sins_fechasol = date(Yii::$app->params["dateTimeByDefault"]);
             if (($nint_id == 3) or empty($nint_id)) {
                 $ming_id = null; //Curso.
@@ -461,6 +467,15 @@ class SolicitudesController extends \app\components\CController {
                     "title" => Yii::t('jslang', 'Success'),
                 );
                 return Utilities::ajaxResponse('OK', 'alert', Yii::t("jslang", "Sucess"), false, $message);
+            }
+            } else {
+                $transaction->rollback();
+                $transaction1->rollback();
+                $message = array(
+                    "wtmessage" => Yii::t("notificaciones", "Error al grabar. Debe seleccionar opciones de las listas"),
+                    "title" => Yii::t('jslang', 'Success'),
+                );
+                return Utilities::ajaxResponse('NO_OK', 'alert', Yii::t("jslang", "Error"), false, $message);
             }
         } catch (Exception $ex) {
             $transaction->rollback();
