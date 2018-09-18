@@ -653,13 +653,13 @@ class SolicitudInscripcion extends \app\modules\admision\components\CActiveRecor
     }
 
     /**
-     * Function Consultarconsideraciondoc
+     * Function consultarSolnoaprobada
      * @author  Grace Viteri <analistadesarrollo01@uteg.edu.ec>
      * @param   
-     * @return  $resultData (Retornar las consideraciones a tomar en cuenta en la revisión de documentos según 
-     *                      el documento y la nacionalidad).
+     * @return  $resultData (Retornar los criterios a tomar en cuenta en la revisión de documentos según 
+     *                      el documento y la nacionalidad cuando no se aprueba una solicitud).
      */
-    public function Consultarconsideraciondoc($dadj_id, $tiponacext) {
+    public function consultarSolnoaprobada($dadj_id, $tiponacext) {
         $con = \Yii::$app->db_captacion;
         $estado = 1;
 

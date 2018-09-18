@@ -9,45 +9,56 @@ use yii\helpers\Url;
 
 <form class="form-horizontal" enctype="multipart/form-data" id="formsolicitud">
     <div class="col-md-12 col-sm-12 col-xs-12 col-lg-12">
-        <h3><span id="lbl_solicitud"><?= Yii::t("solicitud_ins", "Pre-Approval Application") ?></span></h3>
+        <h3><span id="lbl_solicitud"><?= Yii::t("Solicitudes", "See Request") ?></span></h3>
     </div>        
-    
-    <div class="col-md-6 col-sm-6 col-xs-6 col-lg-6">
-        <div class="form-group">
-            <label for="txt_nombres" class="col-sm-4 control-label" id="lbl_nombres"><?= Yii::t("formulario", "Names") ?></label> 
-            <div class="col-sm-8 ">
-                <input type="text" class="form-control" value="<?= $nombres ?>" id="txt_nombres" disabled="true">                 
+    <div class="col-md-12 col-sm-12 col-xs-12 col-lg-12">
+        <div class="col-md-6 col-sm-6 col-xs-6 col-lg-6">
+            <div class="form-group">
+                <label for="txt_numsolicitud" class="col-sm-4 col-md-4 col-xs-4 col-lg-4 control-label" id="lbl_solicitud"><?= Yii::t("Solicitud", "Request #") ?></label> 
+                <div class="col-sm-8 ">
+                    <input type="text" class="form-control" value="<?= $numSolicitud ?>" id="txt_numsolicitud" disabled="true">                 
+                </div>
             </div>
         </div>
     </div>   
-    
-    <div class="col-md-6 col-sm-6 col-xs-6 col-lg-6">
-        <div class="form-group">
-            <label for="txt_apellidos" class="col-sm-4 control-label" id="lbl_nombres"><?= Yii::t("formulario", "Last Names") ?></label> 
-            <div class="col-sm-8 ">
-                <input type="text" class="form-control" value="<?= $apellidos ?>" id="txt_apellidos" disabled="true">                 
+    <div class="col-md-12 col-sm-12 col-xs-12 col-lg-12">
+        <div class="col-md-6 col-sm-6 col-xs-6 col-lg-6">
+            <div class="form-group">
+                <label for="txt_nombres" class="col-sm-4 control-label" id="lbl_nombres"><?= Yii::t("formulario", "Names") ?></label> 
+                <div class="col-sm-8 ">
+                    <input type="text" class="form-control" value="<?= $nombres ?>" id="txt_nombres" disabled="true">                 
+                </div>
             </div>
-        </div>
+        </div>   
+    
+        <div class="col-md-6 col-sm-6 col-xs-6 col-lg-6">
+            <div class="form-group">
+                <label for="txt_apellidos" class="col-sm-4 control-label" id="lbl_apellidos"><?= Yii::t("formulario", "Last Names") ?></label> 
+                <div class="col-sm-8 ">
+                    <input type="text" class="form-control" value="<?= $apellidos ?>" id="txt_apellidos" disabled="true">                 
+                </div>
+            </div>
+        </div> 
     </div> 
-    
-    <div class="col-md-6 col-sm-6 col-xs-6 col-lg-6">
-        <div class="form-group">
-            <label for="txt_nivelint" class="col-sm-4 control-label" id="lbl_nombres"><?= Yii::t("formulario", "Academic unit") ?></label> 
-            <div class="col-sm-8 ">
-                <input type="text" class="form-control" value="<?= $nivelint ?>" id="txt_nivelint" disabled="true">                 
+    <div class="col-md-12 col-sm-12 col-xs-12 col-lg-12">
+        <div class="col-md-6 col-sm-6 col-xs-6 col-lg-6">
+            <div class="form-group">
+                <label for="txt_nivelint" class="col-sm-4 control-label" id="lbl_unidad"><?= Yii::t("formulario", "Academic unit") ?></label> 
+                <div class="col-sm-8 ">
+                    <input type="text" class="form-control" value="<?= $nivelint ?>" id="txt_nivelint" disabled="true">                 
+                </div>
             </div>
-        </div>
+        </div> 
+    
+        <div class="col-md-6 col-sm-6 col-xs-6 col-lg-6">
+            <div class="form-group">
+                <label for="txt_carrera" class="col-sm-4 control-label" id="lbl_carrera"><?= Yii::t("academico", "Career") . "/" . Yii::t("formulario", "Program") ?></label> 
+                <div class="col-sm-8 ">
+                    <input type="text" class="form-control" value="<?= $carrera ?>" id="txt_carrera" disabled="true">                 
+                </div>
+            </div>
+        </div>    
     </div> 
-    
-    <div class="col-md-6 col-sm-6 col-xs-6 col-lg-6">
-        <div class="form-group">
-            <label for="txt_carrera" class="col-sm-4 control-label" id="lbl_nombres"><?= Yii::t("academico", "Career") . "/" . Yii::t("formulario", "Program") ?></label> 
-            <div class="col-sm-8 ">
-                <input type="text" class="form-control" value="<?= $carrera ?>" id="txt_carrera" disabled="true">                 
-            </div>
-        </div>
-    </div>    
-    
     <div class="col-md-12 col-sm-12 col-xs-12 col-lg-12">
         <h4><b><span id="lbl_Personeria"><?= Yii::t("formulario", "Attached Files") ?></span></b></h4>    
     </div>
