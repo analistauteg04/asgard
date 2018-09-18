@@ -10,7 +10,7 @@ use app\modules\admision\models\Oportunidad;
 use app\modules\admision\models\ModuloEstudio;
 use app\modules\admision\models\ItemMetodoNivel;
 use app\modules\admision\models\DetalleDescuentoItem;
-use app\modules\admision\models\Persona;
+use app\models\Persona;
 use app\modules\admision\models\UnidadAcademica;
 use app\modules\admision\models\SolicitudinsDocumento;
 use app\modules\admision\models\OrdenPago;
