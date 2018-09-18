@@ -89,7 +89,52 @@ class SolicitudesController extends \app\components\CController {
     }
 
     public function actionView() {
-        
+        $sins_id = base64_decode($_GET['ids']);
+        $interesado = base64_decode($_GET['int']);
+        $per_id = base64_decode($_GET['perid']);
+        $apellidos = base64_decode($_GET['apellidos']);
+        $nombres = base64_decode($_GET['nombres']);
+        $nivelint = base64_decode($_GET['uaca_nombre']);
+        $carrera = base64_decode($_GET['carrera']);
+        $fec_prenoapro = base64_decode($_GET['fec_prenopro']);
+        $mod_persona = Persona::findIdentity($per_id);
+        $nacionalidad = $mod_persona->per_nac_ecuatoriano;
+
+        $mod_solins = new SolicitudInscripcion();
+        $resp_arch1 = $mod_solins->Obtenerdocumentosxsolicitud($sins_id, 1);
+        $resp_arch2 = $mod_solins->Obtenerdocumentosxsolicitud($sins_id, 2);
+        $resp_arch3 = $mod_solins->Obtenerdocumentosxsolicitud($sins_id, 3);
+        $resp_arch4 = $mod_solins->Obtenerdocumentosxsolicitud($sins_id, 4);
+        $resp_arch5 = $mod_solins->Obtenerdocumentosxsolicitud($sins_id, 5);
+
+        if ($nacionalidad == '1') {
+            $tiponacext = 'N';
+        } else {
+            $tiponacext = 'E';
+        }
+        $resp_condtitulo = $mod_solins->Consultarconsideraciondoc(1, $tiponacext);
+        $resp_conddni = $mod_solins->Consultarconsideraciondoc(2, $tiponacext);
+        $resp_rechazo = $mod_solins->consultaSolicitudRechazada($sins_id, 'P');
+
+        return $this->render('view', [
+                    "revision" => array("3" => Yii::t("formulario", "Pre Approved"), "4" => Yii::t("formulario", "Not approved")),
+                    "apellidos" => $apellidos,
+                    "nombres" => $nombres,
+                    "nivelint" => $nivelint,
+                    "carrera" => $carrera,
+                    "arch1" => $resp_arch1['sdoc_archivo'],
+                    "arch2" => $resp_arch2['sdoc_archivo'],
+                    "arch3" => $resp_arch3['sdoc_archivo'],
+                    "arch4" => $resp_arch4['sdoc_archivo'],
+                    "arch5" => $resp_arch5['sdoc_archivo'],
+                    "txth_extranjero" => $nacionalidad,
+                    "sins_id" => $sins_id,
+                    "per_id" => $per_id,
+                    "fec_prenoapro" => $fec_prenoapro,
+                    "arr_condtitulo" => $resp_condtitulo,
+                    "arr_conddni" => $resp_conddni,
+                    "resp_rechazo" => $resp_rechazo,
+        ]);
     }
 
     public function actionEdit() {

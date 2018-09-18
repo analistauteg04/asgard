@@ -349,6 +349,7 @@ return [
     "List Charged Payment" => "Listar Pagos Cargados",
     "List Oportunity for Contact" => "Lista Oportunidades por Contacto",
     "List Payment" => "Listar pagos",
+    "List Requests"=> "Listar Solicitudes",
     "Load of Schedules by Academic Unit" => "Carga de Cronogramas  por Unidad Académica",
     "Lost Opportunity" => "Oportunidad Perdida",
     "Magazine Article Published" => "Revista Artículo Publicado",
