@@ -963,15 +963,17 @@ class Interesado extends \app\modules\admision\components\CActiveRecord {
             $str_search = "(per.per_pri_nombre like :search OR ";
             $str_search .= "per.per_seg_nombre like :search OR ";
             $str_search .= "per.per_pri_apellido like :search OR ";
+            $str_search .= "per.per_pasaporte like :search OR ";
             $str_search .= "per.per_cedula like :search) AND ";
             if ($arrFiltro['company'] != "" && $arrFiltro['company'] > 0) {
-                $str_search .= "intej.per_id  = :ejecutivo AND ";
+                $str_search .= "iemp.emp_id  = :emp_id AND ";
             }
         }
         $sql = "
                 select 
                 inte.int_id as id,
-                concat(per.per_pri_nombre,' ',per.per_seg_nombre,' ',per.per_pri_apellido,' ',per.per_seg_apellido) as interesado,
+                concat(per.per_pri_nombre,' ',per.per_seg_nombre) as nombres,
+                concat(per.per_pri_apellido,' ',per.per_seg_apellido) as apellidos,
                 ifnull(per.per_cedula,per.per_pasaporte) as DNI,
                 emp.emp_nombre_comercial as empresa
                 from db_captacion.interesado inte
@@ -991,7 +993,12 @@ class Interesado extends \app\modules\admision\components\CActiveRecord {
         $comando = $con->createCommand($sql);
         $comando->bindParam(":estado", $estado, \PDO::PARAM_STR);
         if (isset($arrFiltro) && count($arrFiltro) > 0) {
-            
+            $search_cond = "%" . $arrFiltro["search"] . "%";
+            $empresa = $arrFiltro["company"];
+            $comando->bindParam(":search", $search_cond, \PDO::PARAM_STR);
+            if ($arrFiltro['company'] != "" && $arrFiltro['company'] > 0) {
+                $comando->bindParam(":emp_id", $empresa, \PDO::PARAM_STR);
+            }
         }
         $resultData = $comando->queryAll();
         $dataProvider = new ArrayDataProvider([
@@ -1003,7 +1010,8 @@ class Interesado extends \app\modules\admision\components\CActiveRecord {
             'sort' => [
                 'attributes' => [
                     'DNI',
-                    'interesado',                    
+                    'nombres',                    
+                    'apellidos',                    
                     'empresa',
                 ],
             ],

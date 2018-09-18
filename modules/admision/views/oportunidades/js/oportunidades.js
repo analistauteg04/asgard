@@ -5,7 +5,7 @@ $(document).ready(function () {
     $('#cmb_carrera2').change(function () {
         var ref = $(this).attr("data-ref");
         if ($(this).val() != 0) {
-            var link = $('#txth_base').val() + "/admision/oportunidades/new";
+            var link = $('#txth_base').val() + "/admision/oportunidades/newoportunidad";
             if (ref == "edit")
                 link = $('#txth_base').val() + "/admision/oportunidades/edit";
             var arrParams = new Object();
