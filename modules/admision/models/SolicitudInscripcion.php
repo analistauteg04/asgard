@@ -1084,4 +1084,156 @@ class SolicitudInscripcion extends \app\modules\admision\components\CActiveRecor
         $resultData = $comando->queryOne();
         return $resultData;
     }
+    
+    
+     /**
+     * Function consultarSolicitudes. Muestra todas las solicitudes.
+     * @author  Grace Viteri <analistadesarrollo01@uteg.edu.ec>
+     * @param   
+     * @return  
+     */
+    public function consultarSolicitudes($arrFiltro = array(), $onlyData = false) {
+        $con = \Yii::$app->db_captacion;
+        $con1 = \Yii::$app->db_academico;
+        $con2 = \Yii::$app->db;
+        $con3 = \Yii::$app->db_facturacion;
+        $estado = 1;
+        $columnsAdd = "";    
+
+        if (isset($arrFiltro) && count($arrFiltro) > 0) {
+            $str_search = "(per.per_pri_nombre like :search OR ";
+            $str_search .= "per.per_seg_nombre like :search OR ";
+            $str_search .= "per.per_pri_apellido like :search OR ";
+            $str_search .= "per.per_cedula like :search) AND ";
+            if ($arrFiltro['ejecutivo'] != "" && $arrFiltro['ejecutivo'] > 0) {
+                $str_search .= "intej.per_id  = :ejecutivo AND ";
+            }
+            if ($arrFiltro['f_ini'] != "" && $arrFiltro['f_fin'] != "") {
+                $str_search .= "sins.sins_fecha_solicitud >= :fec_ini AND ";
+                $str_search .= "sins.sins_fecha_solicitud <= :fec_fin AND ";
+            }
+        } else {
+            $columnsAdd = "sins.sins_id as solicitud_id,
+                    per.per_id as persona, 
+                    per.per_pri_nombre as per_pri_nombre, 
+                    per.per_seg_nombre as per_seg_nombre,
+                    per.per_pri_apellido as per_pri_apellido,
+                    per.per_seg_apellido as per_seg_apellido,";
+        }
+
+        $sql =  "SELECT
+                    lpad(sins_id,4,'0') as num_solicitud,
+                    sins_fecha_solicitud as fecha_solicitud,
+                    per.per_id as persona,
+                    inte.int_id as int_id,
+                    per.per_cedula as per_dni,
+                    per.per_pri_nombre as per_pri_nombre, 
+                    per.per_seg_nombre as per_seg_nombre,
+                    per.per_pri_apellido as per_pri_apellido,
+                    per.per_seg_apellido as per_seg_apellido,
+                    sins.uaca_id,
+                    uaca.uaca_nombre,
+                    sins.eaca_id,
+                    eac.eaca_nombre as carrera,
+                    ifnull((select ming.ming_alias 
+                                    from " . $con->dbname . ".metodo_ingreso as ming 
+                                    where sins.ming_id = ming.ming_id AND
+                                    ming.ming_estado = :estado AND
+                                    ming.ming_estado_logico = :estado),'NA') as ming_nombre,
+                    eac.eaca_nombre car_nombre,
+                    concat(per.per_pri_nombre ,' ', ifnull(per.per_seg_nombre,' ')) as per_nombres,
+                    concat(per.per_pri_apellido ,' ', ifnull(per.per_seg_apellido,' ')) as per_apellidos,
+                    sins.sins_fecha_solicitud as fecha_solicitud,
+                    rsol.rsin_nombre as estado,
+                    sins.sins_id,                     
+                    sins_fecha_preaprobacion,
+                    sins_fecha_aprobacion,
+                    sins_fecha_reprobacion,
+                    sins_fecha_prenoprobacion,
+                    sins_observacion, 		
+                    sins.sins_usuario_preaprueba as usu_preaprueba,
+                    case when ifnull((select opag_estado_pago
+                                            from " . $con3->dbname . ".orden_pago op
+                                            where op.sins_id = sins.sins_id),'N') = 'N' then 'No generado'
+                     when (select opag_estado_pago
+                               from " . $con3->dbname . ".orden_pago op
+                               where op.sins_id = sins.sins_id) = 'P' then 'Pendiente' 
+                    else 'Pagado' end as pago                
+                                    
+                FROM 
+                    " . $con->dbname . ".solicitud_inscripcion as sins
+                    INNER JOIN " . $con->dbname . ".interesado as inte on sins.int_id = inte.int_id                    
+                    INNER JOIN " . $con2->dbname . ".persona as per on inte.per_id = per.per_id 
+                    INNER JOIN " . $con1->dbname . ".unidad_academica as uaca on sins.uaca_id = uaca.uaca_id                     
+                    INNER JOIN " . $con1->dbname . ".modalidad as m on sins.mod_id = m.mod_id
+                    INNER JOIN " . $con->dbname . ".res_sol_inscripcion as rsol on rsol.rsin_id = sins.rsin_id                    
+                    INNER JOIN " . $con1->dbname . ".estudio_academico as eac on eac.eaca_id = sins.eaca_id 
+                WHERE 
+                    $str_search                   
+                    sins.sins_estado_logico=:estado AND
+                    sins.sins_estado=:estado AND        
+                    inte.int_estado_logico=:estado AND
+                    inte.int_estado=:estado AND                    
+                    per.per_estado_logico=:estado AND						
+                    per.per_estado=:estado AND
+                    uaca.uaca_estado = :estado AND
+                    uaca.uaca_estado_logico = :estado AND                    
+                    m.mod_estado = :estado AND 
+                    m.mod_estado_logico = :estado AND
+                    rsol.rsin_estado = :estado AND
+                    rsol.rsin_estado_logico = :estado AND                    
+                    eac.eaca_estado=:estado AND
+                    eac.eaca_estado_logico=:estado ";
+       
+        $sql .= " ORDER BY fecha_solicitud DESC";
+        $comando = $con->createCommand($sql);
+        $comando->bindParam(":estado", $estado, \PDO::PARAM_STR);
+       /* $comando->bindParam(":pendiente", $estado_inscripcion1, \PDO::PARAM_INT);
+        $comando->bindParam(":noaprobado", $estado_inscripcion2, \PDO::PARAM_INT);
+        $comando->bindParam(":per_id", $per_id, \PDO::PARAM_INT);
+        $comando->bindParam(":resp_gruporol", $resp_gruporol, \PDO::PARAM_INT);
+
+        if (isset($arrFiltro) && count($arrFiltro) > 0) {
+            $search_cond = "%" . $arrFiltro["search"] . "%";
+            $fecha_ini = $arrFiltro["f_ini"];
+            $fecha_fin = $arrFiltro["f_fin"];
+            $ejecutivo = $arrFiltro["ejecutivo"];
+            $comando->bindParam(":search", $search_cond, \PDO::PARAM_STR);
+            if ($arrFiltro['ejecutivo'] != "" && $arrFiltro['ejecutivo'] > 0) {
+                $comando->bindParam(":ejecutivo", $ejecutivo, \PDO::PARAM_STR);
+            }
+            if ($arrFiltro['f_ini'] != "" && $arrFiltro['f_fin'] != "") {
+                $comando->bindParam(":fec_ini", $fecha_ini, \PDO::PARAM_STR);
+                $comando->bindParam(":fec_fin", $fecha_fin, \PDO::PARAM_STR);
+            }
+        }*/
+        $resultData = $comando->queryAll();
+        $dataProvider = new ArrayDataProvider([
+            'key' => 'id',
+            'allModels' => $resultData,
+            'pagination' => [
+                'pageSize' => Yii::$app->params["pageSize"],
+            ],
+            'sort' => [
+                'attributes' => [
+                    'num_solicitud',
+                    'fecha_solicitud',
+                    'per_dni',
+                    'per_pri_nombre',
+                    'per_seg_nombre',
+                    'per_pri_apellido',
+                    'per_seg_apellido',
+                    'nint_nombre',
+                    'ming_nombre',
+                    'per_nombres',
+                    'per_apellidos',
+                ],
+            ],
+        ]);
+        if ($onlyData) {
+            return $resultData;
+        } else {
+            return $dataProvider;
+        }
+    }
 }

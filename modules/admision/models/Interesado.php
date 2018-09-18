@@ -2,6 +2,8 @@
 
 namespace app\modules\admision\models;
 
+use yii\data\ArrayDataProvider;
+use DateTime;
 use Yii;
 /**
  * This is the model class for table "interesado".
@@ -22,7 +24,6 @@ use Yii;
  * @property InformacionFamilia[] $informacionFamilias
  * @property SolicitudInscripcion[] $solicitudInscripcions
  */
-use yii\data\ArrayDataProvider;
 
 class Interesado extends \app\modules\admision\components\CActiveRecord {
 

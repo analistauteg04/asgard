@@ -292,7 +292,7 @@ $(document).ready(function () {
     });
 
     $('#sendInscripcion').click(function () {
-        var link = $('#txth_base').val() + "/solicitudinscripcion/guardarsolinsxinteresado";
+        var link = $('#txth_base').val() + "/admision/solicitudes/save";
         var arrParams = new Object();
         arrParams.persona_id = $('#txth_ids').val();
         arrParams.ninteres = $('#cmb_ninteres').val();
@@ -339,7 +339,7 @@ $(document).ready(function () {
     });
 
     $('#sendInscripcionUlink').click(function () {
-        var link = $('#txth_base').val() + "/solicitudinscripcion/guardarsolinsxinteresado";
+        var link = $('#txth_base').val() + "/admision/solicitudes/save";
         var arrParams = new Object();
         arrParams.persona_id = $('#txth_ids').val();
         arrParams.carrera = $('#cmb_servicios').val();

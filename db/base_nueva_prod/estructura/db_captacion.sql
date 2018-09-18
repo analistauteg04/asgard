@@ -46,6 +46,7 @@ create table if not exists `metodo_ingreso` (
  `ming_id` bigint(20) not null auto_increment primary key,
  `ming_nombre` varchar(300) not null,
  `ming_descripcion` varchar(500) not null,
+ `ming_alias` varchar(50) not null,
  `ming_estado` varchar(1) not null,
  `ming_fecha_creacion` timestamp not null default current_timestamp,
  `ming_fecha_modificacion` timestamp null default null,
