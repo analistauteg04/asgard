@@ -318,34 +318,16 @@ class SolicitudInscripcion extends \app\modules\admision\components\CActiveRecor
         $columnsAdd = "";
 
         if (isset($arrFiltro) && count($arrFiltro) > 0) {
-            $str_search = "(per.per_pri_nombre like :search OR ";
-            $str_search .= "per.per_seg_nombre like :search OR ";
-            $str_search .= "per.per_pri_nombre like :search OR ";
-            $str_search .= "per.per_cedula like :search) AND ";
-            if ($arrFiltro['carrera'] != "" && $arrFiltro['carrera'] > 0) {
-                $str_search .= "sins.car_id = :carrera AND ";
-            }
             if ($arrFiltro['f_ini'] != "" && $arrFiltro['f_fin'] != "") {
                 $str_search .= "sins.sins_fecha_solicitud >= :fec_ini AND ";
                 $str_search .= "sins.sins_fecha_solicitud <= :fec_fin AND ";
             }
-        } else {
-            $columnsAdd = "sins.sins_id as solicitud_id,
-                    per.per_id as persona, 
-                    per.per_pri_nombre as per_pri_nombre, 
-                    per.per_seg_nombre as per_seg_nombre,
-                    per.per_pri_apellido as per_pri_apellido,
-                    per.per_seg_apellido as per_seg_apellido,";
         }
-
         $sql = " 
                     SELECT 
                         lpad(sins.sins_id,4,'0') as num_solicitud,
                         sins.sins_id,
                         sins.sins_fecha_solicitud as fecha_solicitud,
-                        per.per_cedula as per_dni,
-                        concat(per.per_pri_nombre ,' ', ifnull(per.per_seg_nombre, ' ')) as per_nombres,
-                        concat(per.per_pri_apellido ,' ', ifnull(per.per_seg_apellido,' ')) as per_apellidos,                    
                         uaca.uaca_nombre as nint_nombre,
                         ming.ming_nombre as metodo_ingreso,
                         sins.eaca_id,
@@ -354,7 +336,6 @@ class SolicitudInscripcion extends \app\modules\admision\components\CActiveRecor
                     FROM 
                         db_captacion.interesado as inte
                         JOIN db_captacion.solicitud_inscripcion as sins on sins.int_id = inte.int_id                    
-                        JOIN db_asgard.persona as per on inte.per_id = per.per_id 
                         JOIN db_academico.unidad_academica as uaca on sins.uaca_id = uaca.uaca_id                     
                         JOIN db_captacion.res_sol_inscripcion as rsol on rsol.rsin_id = sins.rsin_id
                         JOIN db_academico.estudio_academico as eac on sins.eaca_id = eac.eaca_id
@@ -364,13 +345,11 @@ class SolicitudInscripcion extends \app\modules\admision\components\CActiveRecor
                         inte.int_id = :int_id AND
                         sins.sins_estado_logico=:estado AND 
                         inte.int_estado_logico=:estado AND                     
-                        per.per_estado_logico=:estado AND 
                         rsol.rsin_estado=:estado AND
                         uaca.uaca_estado = :estado AND
                         eac.eaca_estado_logico =:estado AND 
                         sins.sins_estado=:estado AND 
                         inte.int_estado=:estado AND                     
-                        per.per_estado=:estado AND
                         rsol.rsin_estado_logico=:estado AND
                         uaca.uaca_estado_logico = :estado AND
                         eac.eaca_estado = :estado
@@ -382,14 +361,8 @@ class SolicitudInscripcion extends \app\modules\admision\components\CActiveRecor
         $comando->bindParam(":estado", $estado, \PDO::PARAM_STR);
         $comando->bindParam(":int_id", $int_id, \PDO::PARAM_INT);
         if (isset($arrFiltro) && count($arrFiltro) > 0) {
-            $search_cond = "%" . $arrFiltro["search"] . "%";
             $fecha_ini = $arrFiltro["f_ini"];
-            $fecha_fin = $arrFiltro["f_fin"];
-            $carrera = $arrFiltro["carrera"];
-            $comando->bindParam(":search", $search_cond, \PDO::PARAM_STR);
-            if ($arrFiltro['carrera'] != "" && $arrFiltro['carrera'] > 0) {
-                $comando->bindParam(":carrera", $carrera, \PDO::PARAM_STR);
-            }
+            $fecha_fin = $arrFiltro["f_fin"];            
             if ($arrFiltro['f_ini'] != "" && $arrFiltro['f_fin'] != "") {
                 $comando->bindParam(":fec_ini", $fecha_ini, \PDO::PARAM_STR);
                 $comando->bindParam(":fec_fin", $fecha_fin, \PDO::PARAM_STR);
@@ -406,15 +379,8 @@ class SolicitudInscripcion extends \app\modules\admision\components\CActiveRecor
                 'attributes' => [
                     'num_solicitud',
                     'fecha_solicitud',
-                    'per_dni',
-                    'per_pri_nombre',
-                    'per_seg_nombre',
-                    'per_pri_apellido',
-                    'per_seg_apellido',
                     'nint_nombre',
-                    'ming_nombre',
-                    'per_nombres',
-                    'per_apellidos',
+                    'metodo_ingreso',                    
                 ],
             ],
         ]);
