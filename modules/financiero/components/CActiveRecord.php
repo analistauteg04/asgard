@@ -1,5 +1,5 @@
 <?php
-namespace app\modules\financiero\data;
+namespace app\modules\financiero\components;
 
 use Yii;
 use yii\base\Application;
