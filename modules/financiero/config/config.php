@@ -5,7 +5,7 @@ return [
         'urlManager' => [
             'class' => 'yii\web\UrlManager',
             'rules' => [
-                '<module:admision>/<controller:\w+>/<action:\w+>/<id:\w+>' => '<module>/<controller>/<action>',
+                '<module:financiero>/<controller:\w+>/<action:\w+>/<id:\w+>' => '<module>/<controller>/<action>',
             ]
         ]
     ],

@@ -1,6 +1,6 @@
 <?php
 
-namespace app\modules\admision\models;
+namespace app\modules\financiero\models;
 
 use yii\data\ArrayDataProvider;
 use DateTime;
@@ -31,7 +31,7 @@ use Yii;
  * @property SolicitudGeneral $sgen
  */
 
-class OrdenPago extends \app\modules\admision\components\CActiveRecord {
+class OrdenPago extends \app\modules\financiero\components\CActiveRecord {
 
     /**
      * @inheritdoc

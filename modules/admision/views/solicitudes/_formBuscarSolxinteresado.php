@@ -13,6 +13,7 @@ use yii\helpers\ArrayHelper;
  */
 ?>
 <div class="row">
+    
     <div class="col-md-12">
         <div class="form-group">
             <label for="lbl_inicio" class="col-sm-2 col-md-2 col-xs-2 col-lg-2 control-label"><?= Yii::t("formulario", "Start date") ?></label>
