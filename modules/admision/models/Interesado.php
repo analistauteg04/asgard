@@ -959,6 +959,15 @@ class Interesado extends \app\modules\admision\components\CActiveRecord {
     public function consultarInteresados($arrFiltro = array(), $onlyData = false) {
         $con = \Yii::$app->db_captacion;
         $estado = 1;
+        if (isset($arrFiltro) && count($arrFiltro) > 0) {
+            $str_search = "(per.per_pri_nombre like :search OR ";
+            $str_search .= "per.per_seg_nombre like :search OR ";
+            $str_search .= "per.per_pri_apellido like :search OR ";
+            $str_search .= "per.per_cedula like :search) AND ";
+            if ($arrFiltro['company'] != "" && $arrFiltro['company'] > 0) {
+                $str_search .= "intej.per_id  = :ejecutivo AND ";
+            }
+        }
         $sql = "
                 select 
                 inte.int_id as id,
@@ -969,9 +978,21 @@ class Interesado extends \app\modules\admision\components\CActiveRecord {
                 join db_asgard.persona as per on inte.per_id=per.per_id
                 join db_captacion.interesado_empresa as iemp on iemp.int_id=inte.int_id
                 join db_asgard.empresa as emp on emp.emp_id=iemp.emp_id
+                where $str_search
+                inte.int_estado_logico=:estado AND
+                inte.int_estado=:estado AND                    
+                per.per_estado_logico=:estado AND						
+                per.per_estado=:estado AND
+                iemp.iemp_estado_logico=:estado AND						
+                iemp.iemp_estado=:estado AND
+                emp.emp_estado_logico=:estado AND						
+                emp.emp_estado=:estado
                 ";
         $comando = $con->createCommand($sql);
         $comando->bindParam(":estado", $estado, \PDO::PARAM_STR);
+        if (isset($arrFiltro) && count($arrFiltro) > 0) {
+            
+        }
         $resultData = $comando->queryAll();
         $dataProvider = new ArrayDataProvider([
             'key' => 'id',
