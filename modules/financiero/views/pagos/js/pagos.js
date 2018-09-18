@@ -8,7 +8,7 @@ $(document).ready(function () {
      */
     $('#btn_enviar').click(function () {
         var arrParams = new Object();
-        var link = $('#txth_base').val() + "/admision/pagos/crearpago";
+        var link = $('#txth_base').val() + "/financiero/pagos/crearpago";
 
         arrParams.opag_id = $('#txth_ids').val();
         arrParams.estado_revision = $('#cmb_revision').val();
@@ -49,7 +49,7 @@ $(document).ready(function () {
                 showAlert(response.status, response.label, response.message);
 
                 setTimeout(function () {
-                    parent.window.location.href = $('#txth_base').val() + "/admision/pagos/validarpagocarga?ido=" + arrParams.opag_id;
+                    parent.window.location.href = $('#txth_base').val() + "/financiero/pagos/validarpagocarga?ido=" + arrParams.opag_id;
                 }, 2000);
 
             }, true);
@@ -62,7 +62,7 @@ $(document).ready(function () {
 
     $('#cmd_enviarData').click(function () {
         var arrParams = new Object();
-        var link = $('#txth_base').val() + "/admision/pagos/crearcargapago";
+        var link = $('#txth_base').val() + "/financiero/pagos/crearcargapago";
         var idpago = $('#txth_ids').val();
         var pg = $('#txth_pg').val();
         arrParams.idpago = $('#txth_ids').val();
@@ -87,9 +87,9 @@ $(document).ready(function () {
                     showAlert(response.status, response.label, response.message);
                     setTimeout(function () {
                         if (arrParams.vista == 'adm') {
-                            parent.window.location.href = $('#txth_base').val() + "/admision/pagos/listarpagosolicitudadm";
+                            parent.window.location.href = $('#txth_base').val() + "/financiero/pagos/listarpagosolicitudadm";
                         } else {
-                            parent.window.location.href = $('#txth_base').val() + "/admision/pagos/listarpagosolicitud";
+                            parent.window.location.href = $('#txth_base').val() + "/financiero/pagos/listarpagosolicitud";
                         }
                     }, 4000);
                 }, true);
@@ -105,7 +105,7 @@ $(document).ready(function () {
      */
     $('#cmd_registrarPagoadm').click(function () {
         var arrParams = new Object();
-        var link = $('#txth_base').val() + "/admision/pagos/crearpago";
+        var link = $('#txth_base').val() + "/financiero/pagos/crearpago";
         var valor_pendiente = $('#txth_saldo_pendiente').val();
 
         arrParams.opag_id = $('#txth_ids').val();
@@ -134,7 +134,7 @@ $(document).ready(function () {
                 requestHttpAjax(link, arrParams, function (response) {              
                     showAlert(response.status, response.label, response.message);
                     setTimeout(function () {
-                        parent.window.location.href = $('#txth_base').val() + "/admision/pagos/listarpagosolicitudregistroadm";
+                        parent.window.location.href = $('#txth_base').val() + "/financiero/pagos/listarpagosolicitudregistroadm";
                     }, 2000);
 
                 }, true);
@@ -176,7 +176,7 @@ function exportExcel(){
     var search = $('#txt_buscarData').val();   
     var f_ini = $('#txt_fecha_ini').val();
     var f_fin = $('#txt_fecha_fin').val();
-    window.location.href = $('#txth_base').val() + "/admision/pagos/expexcel?search="+search+"&f_ini="+f_ini+"&f_fin="+f_fin;
+    window.location.href = $('#txth_base').val() + "/financiero/pagos/expexcel?search="+search+"&f_ini="+f_ini+"&f_fin="+f_fin;
 }
 
 function actualizarGrid(){

@@ -1,12 +1,12 @@
 <?php
 
-namespace app\modules\admision\controllers;
+namespace app\modules\financiero\controllers;
 
 use Yii;
 //use app\models\Utilities;
 use yii\helpers\ArrayHelper;
 //use yii\web\UploadedFile;
-use app\modules\admision\models\OrdenPago;
+use app\modules\financiero\models\OrdenPago;
 //use app\modules\admision\models\SolicitudInscripcion;
 //use app\models\Persona;
 use app\modules\admision\models\Interesado;
