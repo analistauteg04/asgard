@@ -5,9 +5,7 @@ namespace app\modules\admision\messages;
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
- return [
-     "Request #" => "Solicitud",
+ return [    
      "Request by Interested" => "Solicitudes por Interesado",
-     "See Request" => "Ver Solicitud",
-     
+     "See Request" => "Ver Solicitud",     
  ];

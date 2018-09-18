@@ -9,12 +9,12 @@ use yii\helpers\Url;
 
 <form class="form-horizontal" enctype="multipart/form-data" id="formsolicitud">
     <div class="col-md-12 col-sm-12 col-xs-12 col-lg-12">
-        <h3><span id="lbl_solicitud"><?= Yii::t("Solicitudes", "See Request") ?></span></h3>
+        <h3><span id="lbl_solicitud"><?= Yii::t("solicitud_ins", "See Request") ?></span></h3>
     </div>        
     <div class="col-md-12 col-sm-12 col-xs-12 col-lg-12">
         <div class="col-md-6 col-sm-6 col-xs-6 col-lg-6">
             <div class="form-group">
-                <label for="txt_numsolicitud" class="col-sm-4 col-md-4 col-xs-4 col-lg-4 control-label" id="lbl_solicitud"><?= Yii::t("Solicitud", "Request #") ?></label> 
+                <label for="txt_numsolicitud" class="col-sm-4 col-md-4 col-xs-4 col-lg-4 control-label" id="lbl_solicitud"><?= Yii::t("solicitud_ins", "Request #") ?></label> 
                 <div class="col-sm-8 ">
                     <input type="text" class="form-control" value="<?= $numSolicitud ?>" id="txt_numsolicitud" disabled="true">                 
                 </div>
@@ -133,7 +133,7 @@ use yii\helpers\Url;
     </div> 
     
     <div class="col-md-12 col-sm-12 col-xs-12 col-lg-12">
-        <h4><span id="lbl_solicitud"><?= Yii::t("solicitud_ins", "Pre-Approval Result") ?></span></h4>
+        <h4><span id="lbl_solicitud"><?= Yii::t("solicitud_ins", "Result Review") ?></span></h4>
     </div> 
         
     <div class="col-md-6 col-sm-6 col-xs-6 col-lg-6">

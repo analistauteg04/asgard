@@ -1,11 +1,6 @@
 
 $(document).ready(function () {
-    var condiciontitulo = new Array();
-    var condiciondni = new Array();
-    var len = condiciontitulo.length;
-    var len1 = condiciondni.length;
-    var obstitulo = "";
-    var obsdni = "";
+    
 
     $('#cmb_ninteres').change(function () {
         var link = $('#txth_base').val() + "/solicitudinscripcion/create";
@@ -252,6 +247,7 @@ $(document).ready(function () {
      * @param   
      * @return  Grabar la Aprobación.
      */
+    /****BORRAR DESPUÉS*****/
     $('#btn_Aprobarsolicitud').click(function () {
         var arrParams = new Object();
         var link = $('#txth_base').val() + "/solicitudinscripcion/guardaraprobacion";
@@ -334,40 +330,14 @@ $(document).ready(function () {
                         window.location.href = $('#txth_base').val() + "/interesado/listarinteresados";
                     } else
                     {
-                        window.location.href = $('#txth_base').val() + "/solicitudinscripcion/listarsolicitudxinteresado";
+                        window.location.href = $('#txth_base').val() + "/admision/solicitudes/listarsolicitudxinteresado?ids="+ base64_encode(arrParams.persona_id);
                     }
                 }, 5000);
             }, true);
         }
     });
     /*** BORRAR DESPUES ***/
-    
-    $('#sendInscripcionUlink').click(function () {
-        var link = $('#txth_base').val() + "/admision/solicitudes/save";
-        var arrParams = new Object();
-        arrParams.persona_id = $('#txth_ids').val();
-        arrParams.carrera = $('#cmb_servicios').val();
-        arrParams.emp_id = null;
-        arrParams.metodoing = null;
-        arrParams.ming_id = null;
-        arrParams.modalidad = null;
-        arrParams.nint_id = null;
-
-        if (!validateForm()) {
-            requestHttpAjax(link, arrParams, function (response) {
-                showAlert(response.status, response.label, response.message);
-                setTimeout(function () {
-                    if (arrParams.persona_id > '0')
-                    {
-                        window.location.href = $('#txth_base').val() + "/interesado/listarinteresados";
-                    } else
-                    {
-                        window.location.href = $('#txth_base').val() + "/solicitudinscripcion/listarsolicitudxinteresado";
-                    }
-                }, 5000);
-            }, true);
-        }
-    });
+        
 
     /**
      * Function evento change de la lista de valores de "Resultado" de las pantallas de 
@@ -745,7 +715,7 @@ function Save() {
                     window.location.href = $('#txth_base').val() + "/interesado/listarinteresados";
                 } else
                 {
-                    window.location.href = $('#txth_base').val() + "/solicitudinscripcion/listarsolicitudxinteresado";
+                    window.location.href = $('#txth_base').val() + "/admision/solicitudes/listarsolicitudxinteresado?ids="+ base64_encode(arrParams.persona_id);
                 }
             }, 5000);
         }, true);
@@ -774,15 +744,21 @@ function SaveDocumentos(){
         requestHttpAjax(link, arrParams, function (response) {
             showAlert(response.status, response.label, response.message);
             setTimeout(function () {
-                window.location.href = $('#txth_base').val() + "/solicitudinscripcion/listarsolicitudxinteresado?ids=" + base64_encode(arrParams.persona_id);
+                window.location.href = $('#txth_base').val() + "/admision/solicitudes/listarsolicitudxinteresado?ids=" + base64_encode(arrParams.persona_id);
             }, 5000);
         }, true);
     }    
 }
-
-function Saverevision() {
+//Guarda la Pre-revisión de solicitudes de inscripción.
+function SavePrerevision() {
     var arrParams = new Object();
     var link = $('#txth_base').val() + "/admision/solicitudes/saverevision";
+    var condiciontitulo = new Array();
+    var condiciondni = new Array();
+    var len = condiciontitulo.length;
+    var len1 = condiciondni.length;
+    var obstitulo = "";
+    var obsdni = "";
     arrParams.sins_id = $('#txth_sins_id').val();
     arrParams.resultado = $('#cmb_revision').val();
     arrParams.per_id = $('#txth_per_id').val();
@@ -811,7 +787,54 @@ function Saverevision() {
             showAlert(response.status, response.label, response.message);
 
             setTimeout(function () {
-                parent.window.location.href = $('#txth_base').val() + "/solicitudinscripcion/listarsolpendiente";
+                parent.window.location.href = $('#txth_base').val() + "/admision/solicitudes/index";
+            }, 2000);
+
+        }, true);
+    }
+}
+
+//Guarda la Revisión final de solicitudes de inscripción.
+function SaveRevision() {
+    var arrParams = new Object();
+    var link = $('#txth_base').val() + "/admision/solicitudes/saverevision";
+    var condiciontitulo = new Array();
+    var condiciondni = new Array();
+    var len = condiciontitulo.length;
+    var len1 = condiciondni.length;
+    var obstitulo = "";
+    var obsdni = "";
+    arrParams.sins_id = $('#txth_sins_id').val();
+    arrParams.int_id = $('#txth_int_id').val();
+    arrParams.resultado = $('#cmb_revision').val();
+    arrParams.observacion = $('#txt_observacion').val();
+    arrParams.per_id = $('#txth_per_id').val();
+
+    if ($('#cmb_revision').val() == "4") {
+        arreglo_check();
+        arrParams.condicionestitulo = condiciontitulo;
+        arrParams.condicionesdni = condiciondni;
+        //Condiciones que indican que se ha seleccionado un(os) checkboxes.
+        if (len > 0) {
+            arrParams.titulo = 1;
+            arrParams.observacion = obstitulo;
+        }
+        if (len1 > 0) {
+            arrParams.dni = 1;
+            if (arrParams.observacion == "") {
+                arrParams.observacion = obsdni;
+            } else {
+                arrParams.observacion = arrParams.observacion + "<br/>" + obsdni;
+            }
+        }
+    }
+    arrParams.banderapreaprueba = '0';
+    if (!validateForm()) {
+        requestHttpAjax(link, arrParams, function (response) {
+            showAlert(response.status, response.label, response.message);
+
+            setTimeout(function () {
+                parent.window.location.href = $('#txth_base').val() + "/admision/solicitudes/index";
             }, 2000);
 
         }, true);
