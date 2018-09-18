@@ -8,8 +8,6 @@ $baseDir = dirname($vendorDir);
 return array(
     'cebe\\gravatar\\' => array($vendorDir . '/cebe/yii2-gravatar'),
     'Prophecy\\' => array($vendorDir . '/phpspec/prophecy/src'),
-    'PayPal' => array($vendorDir . '/paypal/rest-api-sdk-php/lib'),
-    'PHPExcel' => array($vendorDir . '/phpoffice/phpexcel/Classes'),
     'HTMLPurifier' => array($vendorDir . '/ezyang/htmlpurifier/library'),
     'Diff' => array($vendorDir . '/phpspec/php-diff/lib'),
     'Codeception\\' => array($vendorDir . '/codeception/specify/src'),

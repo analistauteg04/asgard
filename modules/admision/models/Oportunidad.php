@@ -664,6 +664,7 @@ class Oportunidad extends \app\modules\admision\components\CActiveRecord {
      * @return
      */
     public function consultarSubCarrera($tcar_id) {
+        $ninguno []= Array('id' => '0', 'name' => Yii::t('formulario', 'Any'));
         $con = \Yii::$app->db_crm;
         $estado = 1;
         $sql = "SELECT 
@@ -681,6 +682,7 @@ class Oportunidad extends \app\modules\admision\components\CActiveRecord {
         $comando->bindParam(":estado", $estado, \PDO::PARAM_STR);
         $comando->bindParam(":tcar_id", $tcar_id, \PDO::PARAM_INT);
         $resultData = $comando->queryAll();
+        $resultData = array_merge($ninguno,$resultData) ;
         return $resultData;
     }
 
