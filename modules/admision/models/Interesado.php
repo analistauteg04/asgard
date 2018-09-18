@@ -955,23 +955,19 @@ class Interesado extends \app\modules\admision\components\CActiveRecord {
         return $resultData;
     }
 
-    public static function consultarInteresados($arrFiltro = array(), $onlyData = false) {
+    public function consultarInteresados($arrFiltro = array(), $onlyData = false) {
         $con = \Yii::$app->db_captacion;
         $estado = 1;
         $sql = "
                 select 
-                    inte.int_id as id,
-                    concat(per.per_pri_nombre,' ',per.per_seg_nombre) as nombres,
-                    concat(per.per_pri_apellido,' ',per.per_seg_apellido) as apellidos,
-                    sins.sins_fecha_solicitud as fecha_solicitud,
-                    ifnull(per.per_cedula,per.per_pasaporte) as DNI,
-                    rsin.rsin_descripcion as estado_proceso,
-                    sins.num_solicitud
+                inte.int_id as id,
+                concat(per.per_pri_nombre,' ',per.per_seg_nombre,' ',per.per_pri_apellido,' ',per.per_seg_apellido) as interesado,
+                ifnull(per.per_cedula,per.per_pasaporte) as DNI,
+                emp.emp_nombre_comercial as empresa
                 from db_captacion.interesado inte
-                    join db_asgard.persona as per on inte.per_id=per.per_id
-                    join db_captacion.solicitud_inscripcion as sins on sins.int_id=inte.int_id
-                    join db_captacion.res_sol_inscripcion as rsin on sins.rsin_id=rsin.rsin_id
-                    join db_captacion.interesado_empresa as iemp on iemp.int_id=inte.int_id
+                join db_asgard.persona as per on inte.per_id=per.per_id
+                join db_captacion.interesado_empresa as iemp on iemp.int_id=inte.int_id
+                join db_asgard.empresa as emp on emp.emp_id=iemp.emp_id
                 ";
         $comando = $con->createCommand($sql);
         $comando->bindParam(":estado", $estado, \PDO::PARAM_STR);
@@ -984,13 +980,9 @@ class Interesado extends \app\modules\admision\components\CActiveRecord {
             ],
             'sort' => [
                 'attributes' => [
-                    'num_solicitud',
-                    'fecha_solicitud',
-                    'per_dni',
-                    'per_nombres',
-                    'per_apellidos',
-                    'persona_id',
-                    'estado',
+                    'DNI',
+                    'interesado',                    
+                    'empresa',
                 ],
             ],
         ]);

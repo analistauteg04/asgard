@@ -190,12 +190,13 @@ class Empresa extends \yii\db\ActiveRecord {
     /**
      * Function to get array 
      * @author  Byron Villacress <developer@uteg.edu.ec>
+     * @modified  Kleber Loayza <analistadesarrollo03@uteg.edu.ec>
      * @param   string  $username    
      * @return  mixed   $res        New array 
      */
     public static function getAllEmpresa() {
         $con = \Yii::$app->db;
-        $sql = "SELECT emp_id Ids,emp_razon_social Nombre 
+        $sql = "SELECT emp_id as id,emp_razon_social as value 
             FROM " . $con->dbname . ".empresa WHERE emp_estado_logico=1 AND emp_estado=1;";  
         $comando = $con->createCommand($sql);
         return $comando->queryAll();
