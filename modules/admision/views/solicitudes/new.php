@@ -33,7 +33,7 @@ $_SESSION['persona_solicita'] = base64_decode($_GET['ids']);
             <div class="form-group">
                 <label for="cmb_ninteres" class="col-sm-5 col-md-5 col-xs-5 col-lg-5 control-label"><?= Yii::t("formulario", "Academic unit") ?></label>
                 <div class="col-sm-7 col-md-7 col-xs-7 col-lg-7">
-                    <?= Html::dropDownList("cmb_ninteres", 1, $arr_unidad, ["class" => "form-control", "id" => "cmb_ninteres"]) ?>
+                    <?= Html::dropDownList("cmb_ninteres", 0, array_merge([Yii::t("formulario", "Select")],$arr_unidad), ["class" => "form-control", "id" => "cmb_ninteres"]) ?>
                 </div>
             </div>  
         </div>
@@ -41,7 +41,7 @@ $_SESSION['persona_solicita'] = base64_decode($_GET['ids']);
             <div class="form-group">
                 <label for="cmb_modalidad" class="col-sm-5 col-md-5 col-xs-5 col-lg-5 control-label"><?= Yii::t("formulario", "Mode") ?></label>
                 <div class="col-sm-7 col-md-7 col-xs-7 col-lg-7">
-                    <?= Html::dropDownList("cmb_modalidad", 1, $arr_modalidad, ["class" => "form-control", "id" => "cmb_modalidad"]) ?>
+                    <?= Html::dropDownList("cmb_modalidad", 0, array_merge([Yii::t("formulario", "Select")],$arr_modalidad), ["class" => "form-control", "id" => "cmb_modalidad"]) ?>
                 </div>
             </div>
         </div>
@@ -51,7 +51,7 @@ $_SESSION['persona_solicita'] = base64_decode($_GET['ids']);
             <div class="form-group">
                 <label for="cmb_carrera" id="lbl_carrera" class="col-sm-5 col-md-5 col-xs-5 col-lg-5 control-label keyupmce"><?= Yii::t("academico", "Career") ?></label>
                 <div class="col-sm-7 col-md-7 col-xs-7 col-lg-7">
-                    <?= Html::dropDownList("cmb_carrera", 1, $arr_carrera, ["class" => "form-control", "id" => "cmb_carrera"]) ?>
+                    <?= Html::dropDownList("cmb_carrera", 0, array_merge([Yii::t("formulario", "Select")],$arr_carrera), ["class" => "form-control", "id" => "cmb_carrera"]) ?>
                 </div>
             </div> 
         </div>
@@ -59,7 +59,7 @@ $_SESSION['persona_solicita'] = base64_decode($_GET['ids']);
             <div class="form-group">
                 <label for="cmb_metodos" class="col-sm-5 col-md-5 col-xs-5 col-lg-5 control-label keyupmce"><?= Yii::t("solicitud_ins", "Income Method") ?></label>
                 <div class="col-sm-7 col-md-7 col-xs-7 col-lg-7">
-                    <?= Html::dropDownList("cmb_metodos", 1, $arr_metodos, ["class" => "form-control", "id" => "cmb_metodos"]) ?>
+                    <?= Html::dropDownList("cmb_metodos", 0, array_merge([Yii::t("formulario", "Select")],$arr_metodos), ["class" => "form-control", "id" => "cmb_metodos"]) ?>
                 </div>
             </div>
         </div>
@@ -90,7 +90,7 @@ $_SESSION['persona_solicita'] = base64_decode($_GET['ids']);
             <div class="form-group">
                 <label for="cmb_descuento" class="col-sm-5 col-md-5 col-xs-5 col-lg-5 control-label keyupmce"><?= Yii::t("formulario", "Discount") ?></label>
                 <div class="col-sm-7 col-md-7 col-xs-7 col-lg-7">
-                    <?= Html::dropDownList("cmb_descuento", 1, $arr_descuento, ["class" => "form-control", "id" => "cmb_descuento"]) ?>
+                    <?= Html::dropDownList("cmb_descuento", 0, array_merge([Yii::t("formulario", "Select")],$arr_descuento), ["class" => "form-control", "id" => "cmb_descuento"]) ?>
                 </div>
             </div>    
         </div>  
