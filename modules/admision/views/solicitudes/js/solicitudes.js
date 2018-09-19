@@ -300,7 +300,6 @@ $(document).ready(function () {
         var arrParams = new Object();
         arrParams.persona_id = $('#txth_ids').val();
         arrParams.int_id = $('#txth_intId').val();
-        alert(arrParams.int_id);
         arrParams.ninteres = $('#cmb_ninteres').val();
         arrParams.modalidad = $('#cmb_modalidad').val();
         arrParams.metodoing = $('#cmb_metodos').val();

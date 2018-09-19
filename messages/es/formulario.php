@@ -488,6 +488,7 @@ return [
     "Report of Respondents" => "Reporte de Encuestados",
     "Request #" => "Solicitud",
     "Request by Interested" => "Solicitudes por Interesado",    
+    "Request Data" => "Datos Solicitud",    
     "Respondent" => "Encuestado",
     "Research Projects" => "Proyectos de Investigaciones",
     "Responsable" => "Responsable",

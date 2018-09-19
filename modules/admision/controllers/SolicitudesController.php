@@ -197,7 +197,7 @@ class SolicitudesController extends \app\components\CController {
         return $this->render('new', [
                     "arr_unidad" => ArrayHelper::map($arr_unidadac, "id", "name"),
                     "arr_metodos" => ArrayHelper::map($arr_metodos, "id", "name"),
-                    "txth_extranjero" => $dataPersona['per_nacionalidad'],
+                    "arr_persona" => $dataPersona,
                     "arr_carrera" => ArrayHelper::map($arr_carrera, "id", "name"),
                     "arr_modalidad" => ArrayHelper::map($arr_modalidad, "id", "name"),
                     "arr_descuento" => ArrayHelper::map($arr_descuento, "id", "name"),
