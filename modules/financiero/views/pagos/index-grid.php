@@ -9,6 +9,7 @@ use kartik\date\DatePicker;
 use yii\helpers\ArrayHelper;
 use yii\jui\AutoComplete;
 use yii\web\JsExpression;
+use app\modules\admision\Module as admision;
 ?>
 
 <div>
@@ -28,7 +29,7 @@ use yii\web\JsExpression;
             ],
             [
                 'attribute' => 'fecha',
-                'header' => Yii::t("solicitud_ins", "Application date"),
+                'header' => admision::t("Solicitudes", "Application date"),
                 'value' => 'sins_fecha_solicitud',
             ],
             [

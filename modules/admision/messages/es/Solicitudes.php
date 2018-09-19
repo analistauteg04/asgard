@@ -7,5 +7,7 @@ namespace app\modules\admision\messages;
  */
  return [    
      "Request by Interested" => "Solicitudes por Interesado",
-     "See Request" => "Ver Solicitud",     
+     "See Request" => "Ver Solicitud",  
+     "Application date" => "Fecha Solicitud",
+     "DNI 1" => "DNI",
  ];
