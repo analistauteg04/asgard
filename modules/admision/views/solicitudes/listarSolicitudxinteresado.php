@@ -23,7 +23,7 @@ if (!empty($personalData['per_cedula'])) {
     }
 }
 ?>
-<?= Html::hiddenInput('txth_ids', , ['id' => 'txth_ids']); ?>
+<?= Html::hiddenInput('txth_ids', '', ['id' => 'txth_ids']); ?>
 <div class="col-md-12 col-sm-12 col-xs-12 col-lg-12">
     <h3><span id="lbl_Personeria"><?= Yii::t("formulario", "Request by Interested") ?></span></h3>
 </div>
