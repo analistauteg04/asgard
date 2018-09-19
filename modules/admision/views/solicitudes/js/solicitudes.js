@@ -293,6 +293,7 @@ $(document).ready(function () {
         var link = $('#txth_base').val() + "/admision/solicitudes/save";
         var arrParams = new Object();
         arrParams.persona_id = $('#txth_ids').val();
+        arrParams.int_id = $('#txth_intId').val();
         arrParams.ninteres = $('#cmb_ninteres').val();
         arrParams.modalidad = $('#cmb_modalidad').val();
         arrParams.metodoing = $('#cmb_metodos').val();
@@ -330,7 +331,7 @@ $(document).ready(function () {
                         window.location.href = $('#txth_base').val() + "/interesado/listarinteresados";
                     } else
                     {
-                        window.location.href = $('#txth_base').val() + "/admision/solicitudes/listarsolicitudxinteresado?ids="+ base64_encode(arrParams.persona_id);
+                        window.location.href = $('#txth_base').val() + "/admision/solicitudes/listarsolicitudxinteresado?id="+ base64_encode(arrParams.int_id);
                     }
                 }, 5000);
             }, true);
@@ -597,6 +598,11 @@ $(document).ready(function () {
                 setComboData(data.descuento, "cmb_descuento");
             }
         }, true);
+    });
+    
+    $('#btnNewSolicitud').click(function () {        
+        var int_id = $('#txth_ids').val();
+        window.location.href = $('#txth_base').val() + "/admision/solicitudes/new?ids=" + int_id;
     });
 });
 

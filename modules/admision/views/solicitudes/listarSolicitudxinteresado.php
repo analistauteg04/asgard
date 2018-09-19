@@ -23,7 +23,7 @@ if (!empty($personalData['per_cedula'])) {
     }
 }
 ?>
-<?= Html::hiddenInput('txth_ids', '', ['id' => 'txth_ids']); ?>
+<?= Html::hiddenInput('txth_ids', , ['id' => 'txth_ids']); ?>
 <div class="col-md-12 col-sm-12 col-xs-12 col-lg-12">
     <h3><span id="lbl_Personeria"><?= Yii::t("formulario", "Request by Interested") ?></span></h3>
 </div>
@@ -54,7 +54,17 @@ if (!empty($personalData['per_cedula'])) {
                 <span for="txt_nombre1" class="col-sm-8 col-md-8 col-xs-8 col-lg-8  control-label" id="lbl_nombre1"><?= $personalData['per_cedula'] ?> </span> 
             </div>
         </div> 
-    </div>    
+    </div>  
+    <div class='col-md-12 col-sm-12 col-xs-12 col-lg-12'>
+        <div class="col-md-10 col-sm-10 col-xs-10 col-lg-10">
+           
+        </div> 
+        <div class="col-md-2 col-sm-2 col-xs-2 col-lg-2">
+            <div class="form-group">
+               <a id="btnNewSolicitud" href="javascript:" class="btn btn-primary btn-block"> <?= Yii::t("accion", "Nuevo") ?> </a>
+            </div>
+        </div> 
+    </div>   
 </div>
 <div class="col-md-12 col-sm-12 col-xs-12 col-lg-12">
     <?=

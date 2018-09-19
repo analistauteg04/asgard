@@ -21,6 +21,7 @@ $_SESSION['persona_solicita'] = base64_decode($_GET['ids']);
 <?= Html::hiddenInput('txth_ids', base64_decode($_GET['ids']), ['id' => 'txth_ids']); ?>
 <?= Html::hiddenInput('txth_nac', base64_decode($_GET['nac']), ['id' => 'txth_nac']); ?>
 <?= Html::hiddenInput('txth_extranjero', $txth_extranjero, ['id' => 'txth_extranjero']); ?>
+<?= Html::hiddenInput('txth_intId', base64_decode($int_id), ['id' => 'txth_intId']); ?>
 <form class="form-horizontal" enctype="multipart/form-data" id="formsolicitud">
     <div class="col-md-12 col-xs-12 col-sm-12 col-lg-12">
         <h3><span id="lbl_solicitud"><?= Yii::t("solicitud_ins", "Application for Registration") ?></span></h3>

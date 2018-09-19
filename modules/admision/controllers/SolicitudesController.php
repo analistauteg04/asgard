@@ -14,7 +14,7 @@ use app\modules\admision\models\DetalleDescuentoItem;
 use app\models\Persona;
 use app\modules\admision\models\UnidadAcademica;
 use app\modules\admision\models\SolicitudinsDocumento;
-use app\modules\admision\models\OrdenPago;
+use app\modules\financiero\models\OrdenPago;
 use app\modules\admision\models\Interesado;
 use yii\helpers\Url;
 use yii\base\Exception;
@@ -58,19 +58,19 @@ class SolicitudesController extends \app\components\CController {
      * @return  Una vista que recibe las solicitudes del usuario logeado.
      */
     public function actionListarsolicitudxinteresado() {
-        $per_id = @Yii::$app->session->get("PB_perid");
-        $inte_id = base64_decode($_GET['id']);
+        $per_id = @Yii::$app->session->get("PB_perid");        
+        $inte_id = base64_decode($_GET['id']);        
         $mod_carrera = new EstudioAcademico();
         $interesado_model = new Interesado();
         $persona_model = new Persona();
-        $SolIns_model = new SolicitudInscripcion();
-        $model = null;
+        $SolIns_model = new SolicitudInscripcion();      
         $per_id = $interesado_model->getPersonaxIdInteresado($inte_id);
         $personaData = $persona_model->consultaPersonaId($per_id);
         $model = $SolIns_model->getSolicitudesXInteresado($inte_id);
         return $this->render('listarSolicitudxinteresado', [
                     'model' => $model,
-                    'personalData' => $personaData,
+                    'personalData' => $personaData,                    
+                    
         ]);
     }
 
@@ -140,7 +140,15 @@ class SolicitudesController extends \app\components\CController {
         $modItemMetNivel = new ItemMetodoNivel();
         $modDescuento = new DetalleDescuentoItem();
         $modUnidad = new UnidadAcademica();
-
+        $modInteresado = new Interesado();
+        
+        $perIds= base64_decode($_GET['ids']);
+        if (empty($perIds)) {
+            $respInteresado = $modInteresado->consultarIdinteresado($per_id);
+        } else {
+            $respInteresado = $modInteresado->consultarIdinteresado($perIds);
+        }        
+        
         if (Yii::$app->request->isAjax) {
             $data = Yii::$app->request->post();
             if (isset($data["getmetodo"])) {
@@ -188,7 +196,8 @@ class SolicitudesController extends \app\components\CController {
                     "arr_carrera" => ArrayHelper::map($arr_carrera, "id", "name"),
                     "arr_modalidad" => ArrayHelper::map($arr_modalidad, "id", "name"),
                     "arr_descuento" => ArrayHelper::map($arr_descuento, "id", "name"),
-                    "item" => $resp_item["ite_id"]
+                    "item" => $resp_item["ite_id"],
+                    "int_id" => $respInteresado["int_id"],
         ]);
     }
 
@@ -205,55 +214,9 @@ class SolicitudesController extends \app\components\CController {
             } else {
                 unset($_SESSION['persona_ingresa']);
                 $per_id = Yii::$app->session->get("PB_perid");
-            }
-            if ($data["upload_file"]) {
-                if (empty($_FILES)) {
-                    return json_encode(['error' => Yii::t("notificaciones", "Error to process File {file}. Try again.", ['{file}' => basename($files['name'])])]);
-                    return;
-                }
-                //Recibe Paramentros
-                $files = $_FILES[key($_FILES)];
-                $arrIm = explode(".", basename($files['name']));
-                $typeFile = strtolower($arrIm[count($arrIm) - 1]);
-                $dirFileEnd = Yii::$app->params["documentFolder"] . "solicitudinscripcion/" . $per_id . "/" . $data["name_file"] . "_per_" . $per_id . "." . $typeFile;
-                $status = Utilities::moveUploadFile($files['tmp_name'], $dirFileEnd);
-                if ($status) {
-                    return true;
-                } else {
-                    return json_encode(['error' => Yii::t("notificaciones", "Error to process File {file}. Try again.", ['{file}' => basename($files['name'])])]);
-                    return;
-                }
-                $titulo_archivo = "";
-                if (isset($data["arc_doc_titulo"]) && $data["arc_doc_titulo"] != "") {
-                    $arrIm = explode(".", basename($data["arc_doc_titulo"]));
-                    $typeFile = strtolower($arrIm[count($arrIm) - 1]);
-                    $titulo_archivo = Yii::$app->params["documentFolder"] . "solicitudinscripcion/" . $per_id . "/doc_titulo_per_" . $per_id . "." . $typeFile;
-                }
-                $dni_archivo = "archivo";
-                if (isset($data["arc_doc_dni"]) && $data["arc_doc_dni"] != "") {
-                    $arrIm = explode(".", basename($data["arc_doc_dni"]));
-                    $typeFile = strtolower($arrIm[count($arrIm) - 1]);
-                    $dni_archivo = Yii::$app->params["documentFolder"] . "solicitudinscripcion/" . $per_id . "/doc_dni_per_" . $per_id . "." . $typeFile;
-                }
-                $certvota_archivo = "";
-                if (isset($data["arc_doc_certvota"]) && $data["arc_doc_certvota"] != "") {
-                    $arrIm = explode(".", basename($data["arc_doc_certvota"]));
-                    $typeFile = strtolower($arrIm[count($arrIm) - 1]);
-                    $certvota_archivo = Yii::$app->params["documentFolder"] . "solicitudinscripcion/" . $per_id . "/doc_certvota_per_" . $per_id . "." . $typeFile;
-                }
-                $foto_archivo = "";
-                if (isset($data["arc_doc_foto"]) && $data["arc_doc_foto"] != "") {
-                    $arrIm = explode(".", basename($data["arc_doc_foto"]));
-                    $typeFile = strtolower($arrIm[count($arrIm) - 1]);
-                    $foto_archivo = Yii::$app->params["documentFolder"] . "solicitudinscripcion/" . $per_id . "/doc_foto_per_" . $per_id . "." . $typeFile;
-                }
-                $beca_archivo = "";
-                if (isset($data["arc_doc_beca"]) && $data["arc_doc_beca"] != "") {
-                    $arrIm = explode(".", basename($data["arc_doc_beca"]));
-                    $typeFile = strtolower($arrIm[count($arrIm) - 1]);
-                    $beca_archivo = Yii::$app->params["documentFolder"] . "solicitudinscripcion/" . $per_id . "/doc_beca_per_" . $per_id . "." . $typeFile;
-                }
-            }
+            }   
+            $per_id = 1004;
+           
         }
         $con = \Yii::$app->db_captacion;
         $con1 = \Yii::$app->db_facturacion;
@@ -275,31 +238,7 @@ class SolicitudesController extends \app\components\CController {
             if ($es_extranjero == "0" || $es_nacional == "0") {
                 $certvota_archivo = 1;
             }
-            if (isset($data["arc_doc_titulo"]) && $data["arc_doc_titulo"] != "") {
-                $arrIm = explode(".", basename($data["arc_doc_titulo"]));
-                $typeFile = strtolower($arrIm[count($arrIm) - 1]);
-                $titulo_archivo = Yii::$app->params["documentFolder"] . "solicitudinscripcion/" . $per_id . "/doc_titulo_per_" . $per_id . "." . $typeFile;
-            }
-            if (isset($data["arc_doc_dni"]) && $data["arc_doc_dni"] != "") {
-                $arrIm = explode(".", basename($data["arc_doc_dni"]));
-                $typeFile = strtolower($arrIm[count($arrIm) - 1]);
-                $dni_archivo = Yii::$app->params["documentFolder"] . "solicitudinscripcion/" . $per_id . "/doc_dni_per_" . $per_id . "." . $typeFile;
-            }
-            if (isset($data["arc_doc_certvota"]) && $data["arc_doc_certvota"] != "") {
-                $arrIm = explode(".", basename($data["arc_doc_certvota"]));
-                $typeFile = strtolower($arrIm[count($arrIm) - 1]);
-                $certvota_archivo = Yii::$app->params["documentFolder"] . "solicitudinscripcion/" . $per_id . "/doc_certvota_per_" . $per_id . "." . $typeFile;
-            }
-            if (isset($data["arc_doc_foto"]) && $data["arc_doc_foto"] != "") {
-                $arrIm = explode(".", basename($data["arc_doc_foto"]));
-                $typeFile = strtolower($arrIm[count($arrIm) - 1]);
-                $foto_archivo = Yii::$app->params["documentFolder"] . "solicitudinscripcion/" . $per_id . "/doc_foto_per_" . $per_id . "." . $typeFile;
-            }
-            if (isset($data["arc_doc_beca"]) && $data["arc_doc_beca"] != "") {
-                $arrIm = explode(".", basename($data["arc_doc_beca"]));
-                $typeFile = strtolower($arrIm[count($arrIm) - 1]);
-                $beca_archivo = Yii::$app->params["documentFolder"] . "solicitudinscripcion/" . $per_id . "/doc_beca_per_" . $per_id . "." . $typeFile;
-            }
+           
             $mod_interesado = new Interesado();
             $id_int = $mod_interesado->getInteresadoxIdPersona($per_id); //REVISAR SI LA VALIDACION ES CORRECTA
             if (!isset($id_int["int_id"])) {
@@ -342,6 +281,7 @@ class SolicitudesController extends \app\components\CController {
                 }
                 if ($errorprecio != 0) {
                     //Validar que no exista el registro en solicitudes.
+                    //$mensaje= "intId:".$interesado_id." UacaId:".$nint_id. " metIng:" .$ming_id. "carrId:".$car_id;
                     $resp_valida = $mod_solins->Validarsolicitud($interesado_id, $nint_id, $ming_id, $car_id);
                     if (empty($resp_valida['existe'])) {
                         $mod_solins->int_id = $interesado_id;
@@ -367,88 +307,7 @@ class SolicitudesController extends \app\components\CController {
                             \app\models\Utilities::putMessageLogFile($mod_solins->getErrors());
                             $id_sins = $mod_solins->sins_id;
                             \app\models\Utilities::putMessageLogFile('solicitud: ' . $id_sins);
-                        } else {
-                            if (!empty($titulo_archivo) && !empty($dni_archivo) && !empty($certvota_archivo) && !empty($foto_archivo)) {
-                                if ($mod_solins->save()) {
-                                    $mod_solinsxdoc1 = new SolicitudinsDocumento();
-                                    //1-Título, 2-DNI,3-Cert votación, 4-Foto, 5-Doc-Beca                               
-                                    $id_sins = $mod_solins->sins_id;
-                                    $mod_solinsxdoc1->sins_id = $id_sins;
-                                    $mod_solinsxdoc1->int_id = $interesado_id;
-                                    $mod_solinsxdoc1->dadj_id = 1;
-                                    $mod_solinsxdoc1->sdoc_archivo = $titulo_archivo;
-                                    $mod_solinsxdoc1->sdoc_estado = "1";
-                                    $mod_solinsxdoc1->sdoc_estado_logico = "1";
-                                    \app\models\Utilities::putMessageLogFile('solicitud: ' . $id_sins);
-                                    \app\models\Utilities::putMessageLogFile('int_id: ' . $interesado_id);
-                                    \app\models\Utilities::putMessageLogFile('sdoc_archivo: ' . $titulo_archivo);
-                                    if ($mod_solinsxdoc1->save()) {
-                                        \app\models\Utilities::putMessageLogFile($mod_solins->getErrors());
-                                        $mod_solinsxdoc2 = new SolicitudinsDocumento();
-                                        $mod_solinsxdoc2->sins_id = $id_sins;
-                                        $mod_solinsxdoc2->int_id = $interesado_id;
-                                        $mod_solinsxdoc2->dadj_id = 2;
-                                        $mod_solinsxdoc2->sdoc_archivo = $dni_archivo;
-                                        $mod_solinsxdoc2->sdoc_estado = "1";
-                                        $mod_solinsxdoc2->sdoc_estado_logico = "1";
-                                        if ($mod_solinsxdoc2->save()) {
-                                            $mod_solinsxdoc3 = new SolicitudinsDocumento();
-                                            $mod_solinsxdoc3->sins_id = $id_sins;
-                                            $mod_solinsxdoc3->int_id = $interesado_id;
-                                            $mod_solinsxdoc3->dadj_id = 4;
-                                            $mod_solinsxdoc3->sdoc_archivo = $foto_archivo;
-                                            $mod_solinsxdoc3->sdoc_estado = "1";
-                                            $mod_solinsxdoc3->sdoc_estado_logico = "1";
-                                            if ($mod_solinsxdoc3->save()) {
-                                                if ($es_extranjero == "1") {
-                                                    if ($es_nacional != "0") {
-                                                        $mod_solinsxdoc4 = new SolicitudinsDocumento();
-                                                        $mod_solinsxdoc4->sins_id = $id_sins;
-                                                        $mod_solinsxdoc4->int_id = $interesado_id;
-                                                        $mod_solinsxdoc4->dadj_id = 3;
-                                                        $mod_solinsxdoc4->sdoc_archivo = $certvota_archivo;
-                                                        $mod_solinsxdoc4->sdoc_estado = "1";
-                                                        $mod_solinsxdoc4->sdoc_estado_logico = "1";
-                                                        if (!$mod_solinsxdoc4->save()) {
-                                                            $mod_solins->delete();
-                                                            $envi_correo = 1;
-                                                            throw new Exception('Error doc certvot no creado.');
-                                                        }
-                                                    }
-                                                }
-                                                if ($beca == "1") {
-                                                    $mod_solinsxdoc5 = new SolicitudinsDocumento();
-                                                    $mod_solinsxdoc5->sins_id = $id_sins;
-                                                    $mod_solinsxdoc5->int_id = $interesado_id;
-                                                    $mod_solinsxdoc5->dadj_id = 5;
-                                                    $mod_solinsxdoc5->sdoc_archivo = $beca_archivo;
-                                                    $mod_solinsxdoc5->sdoc_estado = "1";
-                                                    $mod_solinsxdoc5->sdoc_estado_logico = "1";
-                                                    if (!$mod_solinsxdoc5->save()) {
-                                                        $mod_solins->delete();
-                                                        $envi_correo = 1;
-                                                        throw new Exception('Error doc beca no creada.');
-                                                    }
-                                                }
-                                            } else {
-                                                Utilities::putMessageLogFile("2");
-                                                throw new Exception('Error doc foto no creado.');
-                                            }
-                                        } else {
-                                            Utilities::putMessageLogFile("3");
-                                            throw new Exception('Error doc dni no creado.');
-                                        }
-                                    } else {
-                                        Utilities::putMessageLogFile("4");
-                                        throw new Exception('Error doc titulo no creado.');
-                                    }
-                                } else {
-                                    throw new Exception('Error solicitud no creada.');
-                                }
-                            } else {
-                                throw new Exception('Tiene que subir todos los documentos.');
-                            }
-                        }
+                        } 
                     } else {
                         //Solicitud ya se encuentra creada.
                         throw new Exception('Ya se encuentra creada una solicitud con los mismos datos.');
