@@ -1,6 +1,7 @@
 <?php
 
 use yii\helpers\Html;
+use app\modules\admision\Module;
 
 if (!empty($personalData['pges_cedula'])) {
     $tipodoc = "Cédula";
@@ -20,7 +21,7 @@ $fecha_actual = date("Y-m-d");
 <?= Html::hiddenInput('txth_pgid', base64_encode($pges_id), ['id' => 'txth_pgid']); ?>
 <?= Html::hiddenInput('txth_opoid', base64_encode($opo_id), ['id' => 'txth_opoid']); ?>
 <div class="col-md-12">    
-    <h3><span id="lbl_titulo"><?= Yii::t("crm", "Update Opportunity") ?></span></h3><br/>    
+    <h3><span id="lbl_titulo"><?= Module::t("crm", "Update Opportunity") ?></span></h3><br/>    
 </div>
 <form class="form-horizontal" enctype="multipart/form-data" > 
     <div class="col-md-12 col-xs-12 col-sm-12 col-lg-12 ">
@@ -132,7 +133,7 @@ $fecha_actual = date("Y-m-d");
     } ?>
         <div class="col-md-7 col-sm-7 col-xs-7 col-lg-7">
             <div class="form-group">
-                <h4><span id="lbl_general"><?= Yii::t("crm", "Opportunity Data") ?></span></h4> 
+                <h4><span id="lbl_general"><?= Module::t("crm", "Opportunity Data") ?></span></h4> 
             </div>
         </div>
         <div class='col-md-12 col-sm-12 col-xs-12 col-lg-12'>
@@ -148,7 +149,7 @@ $fecha_actual = date("Y-m-d");
         <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
             <div class="col-lg-6 col-md-6 col-sm-6 col-xs-6">
                 <div class="form-group">
-                    <label for="cmb_nivelestudio_act" class="col-sm-5 col-md-5 col-xs-5 col-lg-5 control-label keyupmce"><?= Yii::t("crm", "Service Line") ?></label>
+                    <label for="cmb_nivelestudio_act" class="col-sm-5 col-md-5 col-xs-5 col-lg-5 control-label keyupmce"><?= Module::t("crm", "Academic Unit") ?></label>
                     <div class="col-sm-7 col-md-7 col-xs-7 col-lg-7">
                         <?= Html::dropDownList("cmb_nivelestudio_act", $dataOportunidad["uaca_id"], $arr_linea_servicio, ["class" => "form-control", "id" => "cmb_nivelestudio_act",]) ?>
                     </div>
@@ -156,7 +157,7 @@ $fecha_actual = date("Y-m-d");
             </div>
             <div class="col-lg-6 col-md-6 col-sm-6 col-xs-6">
                 <div class="form-group">
-                    <label for="cmb_modalidad_act" class="col-sm-5 col-md-5 col-xs-5 col-lg-5 control-label keyupmce"><?= Yii::t("crm", "Moda") ?></label>
+                    <label for="cmb_modalidad_act" class="col-sm-5 col-md-5 col-xs-5 col-lg-5 control-label keyupmce"><?= Module::t("crm", "Moda") ?></label>
                     <div class="col-sm-7 col-md-7 col-xs-7 col-lg-7">
                         <?= Html::dropDownList("cmb_modalidad_act", $dataOportunidad["mod_id"], $arr_modalidad, ["class" => "form-control", "id" => "cmb_modalidad_act"]) ?>
                     </div>
@@ -166,7 +167,7 @@ $fecha_actual = date("Y-m-d");
         <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
             <div class="col-lg-6 col-md-6 col-sm-6 col-xs-6">
                 <div class="form-group">
-                    <label for="cmb_tipo_oportunidad" class="col-sm-5 col-md-5 col-xs-5 col-lg-5 control-label keyupmce"><?= Yii::t("crm", "Opportunity type") ?></label>
+                    <label for="cmb_tipo_oportunidad" class="col-sm-5 col-md-5 col-xs-5 col-lg-5 control-label keyupmce"><?= Module::t("crm", "Opportunity type") ?></label>
                     <div class="col-sm-7 col-md-7 col-xs-7 col-lg-7">
                         <?= Html::dropDownList("cmb_tipo_oportunidad", $dataOportunidad["tove_id"], $arr_tipo_oportunidad, ["class" => "form-control", "id" => "cmb_tipo_oportunidad"]) ?>
                     </div>
@@ -174,7 +175,7 @@ $fecha_actual = date("Y-m-d");
             </div>
             <div class="col-lg-6 col-md-6 col-sm-6 col-xs-6">
                 <div class="form-group">
-                    <label for="cmb_state_opportunity" class="col-sm-5 col-md-5 col-xs-5 col-lg-5 control-label keyupmce"><?= Yii::t("crm", "Opportunity state") ?></label>
+                    <label for="cmb_state_opportunity" class="col-sm-5 col-md-5 col-xs-5 col-lg-5 control-label keyupmce"><?= Module::t("crm", "Opportunity state") ?></label>
                     <div class="col-sm-7 col-md-7 col-xs-7 col-lg-7">
                         <?= Html::dropDownList("cmb_state_opportunity", $dataOportunidad["eopo_id"], $arr_state_oportunidad, ["class" => "form-control", "id" => "cmb_state_opportunity", "disabled" => "true"]) ?>
                     </div>
@@ -184,7 +185,7 @@ $fecha_actual = date("Y-m-d");
         <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
             <div class="col-lg-6 col-md-6 col-sm-6 col-xs-6">
                 <div class="form-group">
-                    <label for="cmb_carrera_estudio" class="col-sm-5 col-md-5 col-xs-5 col-lg-5 control-label keyupmce"><?= Yii::t("crm", "Academic Study") ?></label>
+                    <label for="cmb_carrera_estudio" class="col-sm-5 col-md-5 col-xs-5 col-lg-5 control-label keyupmce"><?= Module::t("crm", "Academic Study") ?></label>
                     <div class="col-sm-7 col-md-7 col-xs-7 col-lg-7">
                         <?php if (empty($dataOportunidad["eaca_id"])) { ?>
                             <?= Html::dropDownList("cmb_carrera_estudio", $dataOportunidad["mest_id"], $arr_moduloEstudio, ["class" => "form-control", "id" => "cmb_carrera_estudio"]) ?>
@@ -198,7 +199,7 @@ $fecha_actual = date("Y-m-d");
             </div>
             <div class="col-lg-6 col-md-6 col-sm-6 col-xs-6">
                 <div class="form-group">
-                    <label for="cmb_ccanal" class="col-sm-5 col-md-5 col-xs-5 col-lg-5 control-label keyupmce"><?= Yii::t("crm", "Contact Channel") ?></label>
+                    <label for="cmb_ccanal" class="col-sm-5 col-md-5 col-xs-5 col-lg-5 control-label keyupmce"><?= Module::t("crm", "Contact Channel") ?></label>
                     <div class="col-sm-7 col-md-7 col-xs-7 col-lg-7">
                         <?= Html::dropDownList("cmb_ccanal", $dataOportunidad["ccan_id"], $arr_knowledge_channel, ["class" => "form-control", "id" => "cmb_ccanal"]) ?>
                     </div>
@@ -207,7 +208,7 @@ $fecha_actual = date("Y-m-d");
         </div>
         <div class="col-md-7 col-sm-7 col-xs-7 col-lg-7">
             <div class="form-group">
-                <h4><span id="lbl_general"><?= Yii::t("crm", "Another interest carreer") ?></span></h4> 
+                <h4><span id="lbl_general"><?= Module::t("crm", "Another interest carreer") ?></span></h4> 
             </div>
         </div>
         <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">

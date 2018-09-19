@@ -4,6 +4,8 @@ use yii\helpers\Html;
 use yii\helpers\Url;
 use \app\models\Persona;
 use app\widgets\PbGridView\PbGridView;
+use app\modules\admision\Module;
+
 ?>
 <?= Html::hiddenInput('txth_ids', '', ['id' => 'txth_ids']); ?>
 <div>        
@@ -14,17 +16,17 @@ use app\widgets\PbGridView\PbGridView;
         'columns' => [
             [
                 'attribute' => 'Contacto',
-                'header' => Yii::t("crm", "Contact"),
+                'header' => Module::t("crm", "Contact"),
                 'value' => 'cliente',
             ],
             [
                 'attribute' => 'Tipo persona',
-                'header' => Yii::t("crm", "Contact Type"),
+                'header' => Module::t("crm", "Contact Type"),
                 'value' => 'des_tipo_persona',
             ],
             [
               'attribute' => 'Estado',
-              'header' => Yii::t("crm", "Contact Status"),
+              'header' => Module::t("crm", "Contact Status"),
               'value' => 'estado_contacto',
             ], 
             [

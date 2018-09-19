@@ -4,6 +4,7 @@ use yii\helpers\Html;
 use yii\helpers\Url;
 use app\widgets\PbGridView\PbGridView;
 use yii\data\ArrayDataProvider;
+use app\modules\admision\Module;
 
 //echo 'bbb '.base64_decode($_GET['codigo']);
 /*
@@ -42,7 +43,7 @@ PbGridView::widget([
         ],
         [
             'attribute' => 'Estado',
-            'header' => Yii::t("crm", "Opportunity state"),
+            'header' => Module::t("crm", "Opportunity state"),
             'value' => 'estado_oportunidad',
         ],
         [

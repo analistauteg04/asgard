@@ -3,6 +3,7 @@
 use yii\helpers\Html;
 use yii\helpers\Url;
 use kartik\date\DatePicker;
+use app\modules\admision\Module;
 
 if (!empty($personalData['pges_cedula'])) {
     $tipodoc = "Cédula";
@@ -22,7 +23,7 @@ if (!empty($personalData['pges_cedula'])) {
 <?= Html::hiddenInput('txth_pgid', base64_encode($personalData["pges_id"]), ['id' => 'txth_pgid']); ?>
 <?= Html::hiddenInput('txth_acid', base64_encode($actividad_oportunidad["bact_id"]), ['id' => 'txth_acid']); ?>
 <div class="col-md-12">    
-    <h3><span id="lbl_titulo"><?= Yii::t("crm", "Update Activity") ?></span><br/>    
+    <h3><span id="lbl_titulo"><?= Module::t("crm", "Update Activity") ?></span><br/>    
 </div>
 <div class="col-md-12">    
     <br/>    
@@ -112,7 +113,7 @@ if (!empty($personalData['pges_cedula'])) {
     <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
         <div class="col-lg-6 col-md-6 col-sm-6 col-xs-6">
             <div class="form-group">
-                <label for="cmb_nivelestudio" class="col-sm-5 col-md-5 col-xs-5 col-lg-5 control-label keyupmce"><?= Yii::t("crm", "Service Line") ?></label>
+                <label for="cmb_nivelestudio" class="col-sm-5 col-md-5 col-xs-5 col-lg-5 control-label keyupmce"><?= Module::t("crm", "Service Line") ?></label>
                 <div class="col-sm-7 col-md-7 col-xs-7 col-lg-7">
                     <?= Html::dropDownList("cmb_nivelestudio", $oportunidad_contacto['unidad_academica'], $arr_linea_servicio, ["class" => "form-control", "id" => "cmb_nivelestudio", "disabled" => true]) ?>
                 </div>
@@ -120,7 +121,7 @@ if (!empty($personalData['pges_cedula'])) {
         </div>
         <div class="col-lg-6 col-md-6 col-sm-6 col-xs-6">
             <div class="form-group">
-                <label for="cmb_modalidad" class="col-sm-5 col-md-5 col-xs-5 col-lg-5 control-label keyupmce"><?= Yii::t("crm", "Moda") ?></label>
+                <label for="cmb_modalidad" class="col-sm-5 col-md-5 col-xs-5 col-lg-5 control-label keyupmce"><?= Module::t("crm", "Moda") ?></label>
                 <div class="col-sm-7 col-md-7 col-xs-7 col-lg-7">
                     <?= Html::dropDownList("cmb_modalidad", $oportunidad_contacto['modalidad'], $arr_modalidad, ["class" => "form-control", "id" => "cmb_modalidad", "disabled" => true]) ?>
                 </div>
@@ -130,7 +131,7 @@ if (!empty($personalData['pges_cedula'])) {
     <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
         <div class="col-lg-6 col-md-6 col-sm-6 col-xs-6">
             <div class="form-group">
-                <label for="cmb_tipo_oportunidad" class="col-sm-5 col-md-5 col-xs-5 col-lg-5 control-label keyupmce"><?= Yii::t("crm", "Opportunity type") ?></label>
+                <label for="cmb_tipo_oportunidad" class="col-sm-5 col-md-5 col-xs-5 col-lg-5 control-label keyupmce"><?= Module::t("crm", "Opportunity type") ?></label>
                 <div class="col-sm-7 col-md-7 col-xs-7 col-lg-7">
                     <?= Html::dropDownList("cmb_tipo_oportunidad", $oportunidad_contacto['tipo_oportunidad'], $arr_tipo_oportunidad, ["class" => "form-control", "id" => "cmb_tipo_oportunidad", "disabled" => true]) ?>
                 </div>
@@ -141,7 +142,7 @@ if (!empty($personalData['pges_cedula'])) {
     <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
         <div class="col-lg-6 col-md-6 col-sm-6 col-xs-6">
             <div class="form-group">
-                <label for="cmb_carrera1" class="col-sm-5 col-md-5 col-xs-5 col-lg-5 control-label keyupmce"><?= Yii::t("crm", "Academic Study") ?></label>
+                <label for="cmb_carrera1" class="col-sm-5 col-md-5 col-xs-5 col-lg-5 control-label keyupmce"><?= Module::t("crm", "Academic Study") ?></label>
                 <div class="col-sm-7 col-md-7 col-xs-7 col-lg-7">
                     <?= Html::dropDownList("cmb_carrera1", $oportunidad_contacto['eaca_id'], $arr_academic_study, ["class" => "form-control", "id" => "cmb_carrera1", "disabled" => true]) ?>
                 </div>
@@ -149,7 +150,7 @@ if (!empty($personalData['pges_cedula'])) {
         </div>
         <div class="col-lg-6 col-md-6 col-sm-6 col-xs-6">
             <div class="form-group">
-                <label for="cmb_knowledge_channel" class="col-sm-5 col-md-5 col-xs-5 col-lg-5 control-label keyupmce"><?= Yii::t("crm", "Contact Channel") ?></label>
+                <label for="cmb_knowledge_channel" class="col-sm-5 col-md-5 col-xs-5 col-lg-5 control-label keyupmce"><?= Module::t("crm", "Contact Channel") ?></label>
                 <div class="col-sm-7 col-md-7 col-xs-7 col-lg-7">
                     <?= Html::dropDownList("cmb_knowledge_channel", $oportunidad_contacto['ccan_id'], $arr_knowledge_channel, ["class" => "form-control", "id" => "cmb_knowledge_channel", "disabled" => true]) ?>
                 </div>
@@ -248,7 +249,7 @@ if (!empty($personalData['pges_cedula'])) {
     <div class='col-md-12 col-sm-12 col-xs-12 col-lg-12'>
         <div class="col-lg-6 col-md-6 col-sm-6 col-xs-6">
             <div class="form-group">
-                <label for="cmb_state_opportunity" class="col-sm-5 col-md-5 col-xs-5 col-lg-5 control-label keyupmce"><?= Yii::t("crm", "Opportunity state") ?></label>
+                <label for="cmb_state_opportunity" class="col-sm-5 col-md-5 col-xs-5 col-lg-5 control-label keyupmce"><?= Module::t("crm", "Opportunity state") ?></label>
                 <div class="col-sm-7 col-md-7 col-xs-7 col-lg-7">
                     <?= Html::dropDownList("cmb_state_opportunity", $actividad_oportunidad['eopo_id'], $arr_state_oportunidad, ["class" => "form-control", "id" => "cmb_state_opportunity", "disabled" => true]) ?>
                 </div>
@@ -262,7 +263,7 @@ if (!empty($personalData['pges_cedula'])) {
         ?>
         <div class="col-lg-6 col-md-6 col-sm-6 col-xs-6" id="divoportunidad_perdida" style="<?php echo $enable ?>">
             <div class="form-group">
-                <label for="cmb_lost_opportunity" class="col-sm-5 col-md-5 col-xs-5 col-lg-5 control-label keyupmce"><?= Yii::t("crm", "Lost Opportunity") ?></label>
+                <label for="cmb_lost_opportunity" class="col-sm-5 col-md-5 col-xs-5 col-lg-5 control-label keyupmce"><?= Module::t("crm", "Lost Opportunity") ?></label>
                 <div class="col-sm-7 col-md-7 col-xs-7 col-lg-7">
                     <?= Html::dropDownList("cmb_lost_opportunity", $oportunidad_contacto['oportunidad_perdida'], $arr_oportunidad_perdida, ["class" => "form-control", "id" => "cmb_lost_opportunity", "disabled" => true]) ?>
                 </div>

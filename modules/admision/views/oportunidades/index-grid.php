@@ -3,6 +3,7 @@
 use yii\helpers\Html;
 use yii\helpers\Url;
 use app\widgets\PbGridView\PbGridView;
+use app\modules\admision\Module;
 ?>
 <?= Html::hiddenInput('txth_ids', '', ['id' => 'txth_ids']); ?>
 <div>        
@@ -13,12 +14,12 @@ use app\widgets\PbGridView\PbGridView;
         'columns' => [
             [
                 'attribute' => 'Number',
-                'header' => Yii::t("crm", "No Opportunity"),
+                'header' => Module::t("crm", "No Opportunity"),
                 'value' => 'opo_codigo',
             ],
             [
                 'attribute' => "Contacto",
-                'header' => Yii::t("crm", "Contact"),
+                'header' => Module::t("crm", "Contact"),
                 'value' => 'contacto',
             ],
             [
@@ -28,13 +29,13 @@ use app\widgets\PbGridView\PbGridView;
             ],           
             /*[
               'attribute' => 'Estudio Academico',
-              'header' => Yii::t("crm", "Career/Program/Course"),
+              'header' => Module::t("crm", "Career/Program/Course"),
               'value' => 'des_estudio',
             ], */
 
             [
                 'class' => 'yii\grid\ActionColumn',
-                'header' => Yii::t("crm", "Career/Program/Course"),
+                'header' => Module::t("crm", "Career/Program/Course"),
                 'template' => '{view}',
                 'buttons' => [
                     'view' => function ($url, $model) {
@@ -44,7 +45,7 @@ use app\widgets\PbGridView\PbGridView;
             ],
             [
                 'attribute' => 'Modalidad',
-                'header' => Yii::t("crm", "Moda"),
+                'header' => Module::t("crm", "Moda"),
                 'value' => 'des_modalidad',
             ],
             [

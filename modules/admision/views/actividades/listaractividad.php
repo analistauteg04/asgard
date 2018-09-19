@@ -1,6 +1,7 @@
 <?php
 
 use yii\helpers\Html;
+use app\modules\admision\Module;
 
 if (!empty($personalData['pges_cedula'])) {
     $tipodoc = "Cédula";
@@ -78,7 +79,7 @@ if (!empty($personalData['pges_cedula'])) {
     <div class='col-md-12 col-sm-12 col-xs-12 col-lg-12'>
         <div class="col-md-6 col-sm-6 col-xs-6 col-lg-6">
             <div class="form-group">
-                <label for="txt_linea" class="col-sm-3 col-md-3 col-xs-3 col-lg-3 control-label" id="lbl_nombre1"><?= Yii::t("crm", "Service Line") ?> </label>
+                <label for="txt_linea" class="col-sm-3 col-md-3 col-xs-3 col-lg-3 control-label" id="lbl_nombre1"><?= Module::t("crm", "Service Line") ?> </label>
                 <span for="txt_linea" class="col-sm-8 col-md-8 col-xs-8 col-lg-8  control-label" id="lbl_nombre1"><?= $oportuniData['unidad_academica'] ?> </span> 
             </div>
         </div> 

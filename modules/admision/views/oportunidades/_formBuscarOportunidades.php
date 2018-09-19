@@ -1,5 +1,6 @@
 <?php
 use yii\helpers\Html;
+use app\modules\admision\Module;
 /*
  * To change this license header, choose License Headers in Project Properties.
  * To change this template file, choose Tools | Templates
@@ -20,7 +21,7 @@ use yii\helpers\Html;
     <div class="col-md-12 col-sm-12 col-xs-12 col-lg-12">
         <div class="col-md-12">
             <div class="form-group">
-                <label for="txt_buscarDataPersona" class="col-sm-2 col-md-2 col-xs-2 col-lg-2 control-label"><?= Yii::t("crm", "Contact") ?></label>
+                <label for="txt_buscarDataPersona" class="col-sm-2 col-md-2 col-xs-2 col-lg-2 control-label"><?= Module::t("crm", "Contact") ?></label>
                 <div class="col-sm-9 col-md-9 col-xs-9 col-lg-9">
                     <input type="text" class="form-control" value="" id="txt_buscarDataPersona" placeholder="<?= Yii::t("formulario", "Search by Contact Names") ?>">
                 </div>
