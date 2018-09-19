@@ -220,9 +220,7 @@ class SolicitudesController extends \app\components\CController {
             } else {
                 unset($_SESSION['persona_ingresa']);
                 $per_id = Yii::$app->session->get("PB_perid");
-            }   
-            $per_id = 1004;
-           
+            }                          
         }
         $con = \Yii::$app->db_captacion;
         $con1 = \Yii::$app->db_facturacion;

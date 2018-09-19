@@ -76,7 +76,7 @@ class OportunidadesController extends \app\components\CController
             'arr_academic_study' => ArrayHelper::map($academic_study_data, "id", "name"),
             "arr_knowledge_channel" => ArrayHelper::map($knowledge_channel_data, "id", "name"),
             "tipo_dni" => array("CED" => Yii::t("formulario", "DNI Document"), "PASS" => Yii::t("formulario", "Passport")),
-            'arr_empresa' => ArrayHelper::map($empresa, "Ids", "Nombre"),
+            'arr_empresa' => ArrayHelper::map($empresa, "id", "value"),
             'arr_oportunidad' => $respOportunidad,
             "arr_modulo_estudio" => ArrayHelper::map($arr_carrerra1, "id", "name"),
             "opo_id" => $opor_id,
@@ -223,14 +223,14 @@ class OportunidadesController extends \app\components\CController
             "tipo_dni" => array("CED" => Yii::t("formulario", "DNI Document"), "PASS" => Yii::t("formulario", "Passport")),
             "arr_carrerra2" => ArrayHelper::map($arr_carrerra2, "id", "name"),
             "arr_subcarrerra" => ArrayHelper::map($arr_subcarrera, "id", "name"),
-            'arr_empresa' => ArrayHelper::map($empresa, "Ids", "Nombre"),
+            'arr_empresa' => ArrayHelper::map($empresa, "id", "value"),
         ]);
     }
 
     public function actionSave()
     {
-        $per_id = @Yii::$app->session->get("PB_perid"); //ESTO DESCOMENTAR AL FINAL
-        //$per_id = 5;
+       // $per_id = @Yii::$app->session->get("PB_perid"); //ESTO DESCOMENTAR AL FINAL
+        $per_id = 6;
         $mod_gestion = new Oportunidad();
         //$scli_id = 2;
         if (Yii::$app->request->isAjax) {
