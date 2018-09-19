@@ -7,4 +7,7 @@ namespace app\modules\financiero\messages;
  */
  return [
      "List Payment" => "Listar pagos",
+     "Outstanding balance" => "Saldo Pendiente",
+     "Upload Payments" => "Cargar Pagos",
+     "Registration Payments for Collections" => "Registro Pagos por Colecturía",
  ];

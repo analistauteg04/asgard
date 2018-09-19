@@ -13,6 +13,8 @@ use yii\widgets\DetailView;
 use yii\jui\AutoComplete;
 use yii\web\JsExpression;
 use app\models\Utilities;
+use app\modules\financiero\Module as financiero;
+
 $leyendarc = '<div class="col-md-12 col-sm-12 col-xs-12 col-lg-12">
           <div class="form-group">
           <div class="col-sm-10 col-md-10 col-xs-10 col-lg-10">
@@ -22,7 +24,7 @@ $leyendarc = '<div class="col-md-12 col-sm-12 col-xs-12 col-lg-12">
           </div>'; 
 ?>
 <div class="col-md-12">    
-    <h3><span id="lbl_Personeria">Cargar Pagos</span>
+    <h3><span id="lbl_Personeria"><?= financiero::t("Pagos", "Upload Payments") ?></span>
 </div>
 <?= Html::hiddenInput('txth_ids', base64_decode($_GET['ids']), ['id' => 'txth_ids']); ?>
 <?= Html::hiddenInput('txth_tot', base64_decode($_GET['tot']), ['id' => 'txth_tot']); ?>

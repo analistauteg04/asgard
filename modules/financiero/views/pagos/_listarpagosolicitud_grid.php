@@ -10,6 +10,7 @@ use yii\helpers\ArrayHelper;
 use yii\jui\AutoComplete;
 use yii\web\JsExpression;
 use app\models\Utilities;
+use app\modules\financiero\Module as financiero;
 ?>
 <div>
     <?=
@@ -43,7 +44,7 @@ use app\models\Utilities;
             ],
             [
                 'attribute' => 'Saldo Pendiente',
-                'header' => Yii::t("formulario", "Outstanding balance"),
+                'header' => financiero::t("Pagos", "Outstanding balance"),
                 'value' => 'pendiente',
             ],            
             [
