@@ -300,6 +300,7 @@ $(document).ready(function () {
         var arrParams = new Object();
         arrParams.persona_id = $('#txth_ids').val();
         arrParams.int_id = $('#txth_intId').val();
+        alert(arrParams.int_id);
         arrParams.ninteres = $('#cmb_ninteres').val();
         arrParams.modalidad = $('#cmb_modalidad').val();
         arrParams.metodoing = $('#cmb_metodos').val();
@@ -332,12 +333,12 @@ $(document).ready(function () {
             requestHttpAjax(link, arrParams, function (response) {
                 showAlert(response.status, response.label, response.message);
                 setTimeout(function () {
-                    if (arrParams.persona_id > '0')
+                    if (arrParams.persona_id == '0')
                     {
-                        window.location.href = $('#txth_base').val() + "/interesado/listarinteresados";
+                        window.location.href = $('#txth_base').val() + "/admision/interesados/index";
                     } else
                     {
-                        window.location.href = $('#txth_base').val() + "/admision/solicitudes/listarsolicitudxinteresado?id="+ base64_encode(arrParams.int_id);
+                        window.location.href = $('#txth_base').val() + "/admision/solicitudes/listarsolicitudxinteresado?id="+ arrParams.int_id;
                     }
                 }, 5000);
             }, true);
@@ -607,8 +608,8 @@ $(document).ready(function () {
     });
     
     $('#btnNewSolicitud').click(function () {        
-        var int_id = $('#txth_ids').val();
-        window.location.href = $('#txth_base').val() + "/admision/solicitudes/new?ids=" + int_id;
+        var per_id = $('#txth_per_id').val();
+        window.location.href = $('#txth_base').val() + "/admision/solicitudes/new?per_id=" + per_id;
     });
 });
 
