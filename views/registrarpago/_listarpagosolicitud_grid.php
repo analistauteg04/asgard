@@ -14,13 +14,11 @@ use app\models\Utilities;
 <div>
     <?=
     PbGridView::widget([
-        //'dataProvider' => new yii\data\ArrayDataProvider(array()),
         'id' => 'TbG_SOLICITUD',
         //'showExport' => true,
         //'fnExportEXCEL' => "exportExcel",
         //'fnExportPDF' => "exportPdf",
-        'dataProvider' => $model,
-        //'pajax' => false,
+        'dataProvider' => $model,     
         'columns' =>
         [          
             [
@@ -60,7 +58,7 @@ use app\models\Utilities;
                 'buttons' => [
                     'view' => function ($url, $model) {
                         if ($model['rol'] == 1) {
-                            return Html::a('<span class="glyphicon glyphicon-check"></span>', Url::to(['registrarpago/cargardocpagos', 'ids' => base64_encode($model['opag_id']), 'tot' => base64_encode($model['ipre_precio']), 'estado' => base64_encode($model['estado']), 'pe' => base64_encode($model['pendiente'])]), ["data-toggle" => "tooltip", "title" => "Subir Documento", "data-pjax" => 0]);
+                            return Html::a('<span class="glyphicon glyphicon-check"></span>', Url::to(['pagos/cargardocpagos', 'ids' => base64_encode($model['opag_id']), 'tot' => base64_encode($model['ipre_precio']), 'estado' => base64_encode($model['estado']), 'pe' => base64_encode($model['pendiente'])]), ["data-toggle" => "tooltip", "title" => "Subir Documento", "data-pjax" => 0]);
                         }
                     }
                 ],

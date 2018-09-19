@@ -368,7 +368,7 @@ class RegistrarpagoController extends \app\components\CController {
                 
             }
         }
-        return $this->render('listarpagosolicitud', [
+        return $this->render('listarPagoSolicitud', [
                     'model' => $resp_pago,
         ]);
     }

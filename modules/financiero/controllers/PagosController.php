@@ -505,6 +505,83 @@ class PagosController extends \app\components\CController {
         ]);
     }
 
+    public function actionExpexcel() {
+        $per_id = @Yii::$app->session->get("PB_perid");
+        $data = Yii::$app->request->get();
+        $per_ids = base64_decode($data['ids']);
+        $arrSearch["search"] = $data["search"];
+        $arrSearch["f_ini"] = $data["f_ini"];
+        $arrSearch["f_fin"] = $data["f_fin"];
+        $arrData = array();
+        $model_pag = new OrdenPago();
+        if (empty($per_ids)) {  //vista para el interesado
+            $rol = 1;
+            $arrData = $model_pag->listarSolicitud($per_id, null, $rol, $arrSearch, true);
+        } else {   //vista para el jefe o agente.
+            $rol = 0;
+            $arrData = $model_pag->listarSolicitud($per_ids, null, $rol, $arrSearch, true);
+        }
+
+        $nombarch = "ControlpagosReport-" . date("YmdHis");
+        $content_type = Utilities::mimeContentType("xls");
+        header("Content-Type: $content_type");
+        header("Content-Disposition: attachment;filename=" . $nombarch . ".xls");
+        header('Cache-Control: max-age=0');
+        $arrHeader = array(
+            Yii::t("formulario", "Request #"),
+            Yii::t("solicitud_ins", "Application date"),
+            Yii::t("solicitud_ins", "Income Method"),
+            Yii::t("formulario", "Status"),
+            "Pago");
+        $nameReport = yii::t("formulario", "Control Payments");
+        $colPosition = array("C", "D", "E", "F", "G", "H", "I", "J", "K", "L");
+        Utilities::generarReporteXLS($nombarch, $nameReport, $arrHeader, $arrData, $colPosition);
+        return;
+    }
+    
+    public function actionListarpagosolicitud() {
+        $per_id = Yii::$app->session->get("PB_perid");
+        $per_ids = base64_decode($_GET['ids']);
+        $model_pag = new OrdenPago();
+        $data = Yii::$app->request->get();
+        if ($data['PBgetFilter']) {
+            $arrSearch["f_ini"] = $data['f_ini'];
+            $arrSearch["f_fin"] = $data['f_fin'];
+            $arrSearch["search"] = $data['search'];
+
+            if (empty($per_ids)) {  //vista para el interesado  
+                $rol = 1;
+                $resp_pago = $model_pag->listarSolicitud($per_id, null, $rol, $arrSearch);
+            } else {
+                $rol = 0;
+                $resp_pago = $model_pag->listarSolicitud($per_ids, null, $rol, $arrSearch);
+            }
+            return $this->renderPartial('_listarpagosolicitud_grid', [
+                        "model" => $resp_pago,
+            ]);
+        } else {
+            if (empty($per_ids)) {  //vista para el interesado  
+                $rol = 1;
+                $resp_pago = $model_pag->listarSolicitud($per_id, null, $rol);
+            } else {
+                $rol = 0;
+                $resp_pago = $model_pag->listarSolicitud($per_ids, null, $rol);
+            }
+        }
+        //verificar rol de la persona que esta en sesión
+        $resp_rol = $model_pag->encuentraRol($per_id);
+        $data = null;
+        if (Yii::$app->request->isAjax) {
+            $data = Yii::$app->request->get();
+            if (isset($data["op"]) && $data["op"] == '1') {
+                
+            }
+        }
+        return $this->render('listarpagosolicitud', [
+                    'model' => $resp_pago,
+        ]);
+    }
+
     public function actionUpdate() {
         
     }
