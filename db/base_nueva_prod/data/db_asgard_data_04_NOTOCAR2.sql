@@ -94,7 +94,7 @@ INSERT INTO `objeto_modulo` (`omod_id`, `mod_id`, `omod_padre_id`, `omod_nombre`
 (72, 2, 70, 'Actualizar Oportunidad', 'A', '0', '', '', '', 'admision/oportunidades/update', 1, '1', 'oportunidad', '1', '2018-09-18 01:16:57', NULL, '1'),
 
 
-(73, 2, 57, 'Listar', 'S', '0', '', '', '', 'admision/contactos/listaroportunidad', 1, '1', 'contacto', '1', '2018-09-15 22:48:06', NULL, '1');
+(73, 2, 57, 'Listar', 'S', '0', '', '', '', 'admision/contactos/listaroportunidad', 1, '0', 'contacto', '1', '2018-09-15 22:48:06', NULL, '1');
 
 -- --------------------------------------------------------
 --
