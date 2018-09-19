@@ -131,24 +131,18 @@ class SolicitudesController extends \app\components\CController {
 
     public function actionNew() {
         $mod_metodo = new MetodoIngreso();
-        $per_id = @Yii::$app->session->get("PB_perid");
-        $mod_persona = Persona::findIdentity($per_id);
+        $per_id = base64_decode($_GET['per_id']);        
         $mod_carrera = new EstudioAcademico();
+        $persona_model=new Persona();
         $mod_modalidad = new Modalidad();
         $modcanal = new Oportunidad();
         $modestudio = new ModuloEstudio();
         $modItemMetNivel = new ItemMetodoNivel();
         $modDescuento = new DetalleDescuentoItem();
         $modUnidad = new UnidadAcademica();
+        $dataPersona=$persona_model->consultaPersonaId($per_id);
         $modInteresado = new Interesado();
-        
-        $perIds= base64_decode($_GET['ids']);
-        if (empty($perIds)) {
-            $respInteresado = $modInteresado->consultarIdinteresado($per_id);
-        } else {
-            $respInteresado = $modInteresado->consultarIdinteresado($perIds);
-        }        
-        
+        $inte_id = $modInteresado->consultarIdinteresado($per_id);        
         if (Yii::$app->request->isAjax) {
             $data = Yii::$app->request->post();
             if (isset($data["getmetodo"])) {
@@ -192,12 +186,13 @@ class SolicitudesController extends \app\components\CController {
         return $this->render('new', [
                     "arr_unidad" => ArrayHelper::map($arr_unidadac, "id", "name"),
                     "arr_metodos" => ArrayHelper::map($arr_metodos, "id", "name"),
-                    "txth_extranjero" => $mod_persona->per_nac_ecuatoriano,
+                    "txth_extranjero" => $dataPersona['per_nacionalidad'],
                     "arr_carrera" => ArrayHelper::map($arr_carrera, "id", "name"),
                     "arr_modalidad" => ArrayHelper::map($arr_modalidad, "id", "name"),
                     "arr_descuento" => ArrayHelper::map($arr_descuento, "id", "name"),
                     "item" => $resp_item["ite_id"],
-                    "int_id" => $respInteresado["int_id"],
+                    "int_id" => $inte_id,
+                    "per_id" => $per_id
         ]);
     }
 
