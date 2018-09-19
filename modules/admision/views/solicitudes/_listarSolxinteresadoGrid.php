@@ -62,7 +62,11 @@ PbGridView::widget([
                     return Html::a('<span class="glyphicon glyphicon-usd"></span>', Url::to(['/financiero/pagos/listarpagosolicitud', 'id_sol' => base64_encode($model['sins_id'])]), ["data-toggle" => "tooltip", "title" => "Pago de Solicitud", "data-pjax" => 0]);
                 },
                 'upload' => function ($url, $model) {
-                    return Html::a('<span class="glyphicon glyphicon-folder-open"></span>', Url::to(['/admision/solicitudes/subirdocumentos', 'id_sol' => base64_encode($model['sins_id'])]), ["data-toggle" => "tooltip", "title" => "Subir Documentos Interesado", "data-pjax" => 0]);
+                    if ($model['numDocumentos'] == 0)  {  
+                        return Html::a('<span class="glyphicon glyphicon-folder-open"></span>', Url::to(['/admision/solicitudes/subirdocumentos', 'id_sol' => base64_encode($model['sins_id'])]), ["data-toggle" => "tooltip", "title" => "Subir Documentos Interesado", "data-pjax" => 0]);
+                    } else {
+                        return '<span class="glyphicon glyphicon-folder-open"></span>';
+                    }
                 }
             ],
         ],
