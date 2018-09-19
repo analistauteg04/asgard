@@ -2,6 +2,7 @@
 
 use yii\helpers\Html;
 use yii\helpers\Url;
+use app\modules\financiero\Module as financiero;
 ?>
 <?= Html::hiddenInput('txth_ids', $opag_id, ['id' => 'txth_ids']); ?>
 <?= Html::hiddenInput('txth_idd', $idd, ['id' => 'txth_idd']); ?>
@@ -14,7 +15,7 @@ use yii\helpers\Url;
 <form class="form-horizontal" enctype="multipart/form-data" >
     <div class="col-md-10 col-sm-10 col-xs-10 col-lg-10">
         <div class="form-group">
-            <h3><span id="lbl_Personeria"><?= Yii::t("solicitud_ins", "Approval Payment") ?></span></h3>                 
+            <h3><span id="lbl_Personeria"><?= financiero::t("Pagos", "Approval Payment") ?></span></h3>                 
         </div>
     </div>
     <?php if (base64_decode($_GET['fpag']) == 'Transferencia' || base64_decode($_GET['fpag']) == 'Depósito') { ?>

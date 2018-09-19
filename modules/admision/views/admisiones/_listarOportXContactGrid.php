@@ -4,6 +4,8 @@ use yii\helpers\Html;
 use yii\helpers\Url;
 use \app\models\Persona;
 use app\widgets\PbGridView\PbGridView;
+use app\modules\admision\Module;
+
 ?>
 <?= Html::hiddenInput('txth_ids', '', ['id' => 'txth_ids']); ?>
 <div>        
@@ -14,27 +16,27 @@ use app\widgets\PbGridView\PbGridView;
         'columns' => [
             [
                 'attribute' => 'Number',
-                'header' => Yii::t("crm", "No Opportunity"),
+                'header' => Module::t("crm", "No Opportunity"),
                 'value' => 'codigo',
             ],
             [
                 'attribute' => "Linea Servicio",
-                'header' => Yii::t("crm", "Service Line"),
+                'header' => Module::t("crm", "Service Line"),
                 'value' => 'linea_servicio',
             ],
             [
                 'attribute' => 'Modalidad',
-                'header' => Yii::t("crm", "Moda"),
+                'header' => Module::t("crm", "Moda"),
                 'value' => 'modalidad',
             ],
             [
                 'attribute' => 'Tipo Oportunidad',
-                'header' => Yii::t("crm", "Opportunity type"),
+                'header' => Module::t("crm", "Opportunity type"),
                 'value' => 'tipo_oportunidad',
             ],
             [
                 'class' => 'yii\grid\ActionColumn',
-                'header' => Yii::t("crm", "Career/Program/Course"),
+                'header' => Module::t("crm", "Career/Program/Course"),
                 'template' => '{view}',
                 'buttons' => [
                     'view' => function ($url, $model) {
@@ -44,7 +46,7 @@ use app\widgets\PbGridView\PbGridView;
             ],
             [
                 'attribute' => 'Estado Oportunidad',
-                'header' => Yii::t("crm", "Opportunity state"),
+                'header' => Module::t("crm", "Opportunity state"),
                 'value' => 'estado_oportunidad',
             ],
             [

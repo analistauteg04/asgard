@@ -250,7 +250,13 @@ $(document).ready(function () {
     /****BORRAR DESPUÉS*****/
     $('#btn_Aprobarsolicitud').click(function () {
         var arrParams = new Object();
-        var link = $('#txth_base').val() + "/solicitudinscripcion/guardaraprobacion";
+        var link = $('#txth_base').val() + "/admision/solicitudes/saverevision";
+        var condiciontitulo = new Array();
+        var condiciondni = new Array();
+        var len = condiciontitulo.length;
+        var len1 = condiciondni.length;
+        var obstitulo = "";
+        var obsdni = "";
         arrParams.sins_id = $('#txth_sins_id').val();
         arrParams.int_id = $('#txth_int_id').val();
         arrParams.resultado = $('#cmb_revision').val();
@@ -281,7 +287,7 @@ $(document).ready(function () {
                 showAlert(response.status, response.label, response.message);
 
                 setTimeout(function () {
-                    parent.window.location.href = $('#txth_base').val() + "/solicitudinscripcion/listarsolprepapro";
+                    parent.window.location.href = $('#txth_base').val() + "/admision/solicitudes/index";
                 }, 2000);
 
             }, true);

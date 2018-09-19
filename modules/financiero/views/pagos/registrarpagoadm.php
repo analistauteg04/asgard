@@ -13,6 +13,7 @@ use yii\widgets\DetailView;
 use yii\jui\AutoComplete;
 use yii\web\JsExpression;
 use app\models\Utilities;
+use app\modules\financiero\Module as financiero;
 session_start();
 $_SESSION['personaid'] = $per_id;
 $leyendarc = '<div class="col-md-12 col-sm-12 col-xs-12 col-lg-12">
@@ -24,7 +25,7 @@ $leyendarc = '<div class="col-md-12 col-sm-12 col-xs-12 col-lg-12">
           </div>';
 ?>
 <div class="col-md-12 col-sm-12 col-xs-12 col-lg-12 ">    
-    <h3><span id="lbl_Personeria"><?= Yii::t("formulario", "Payment Registration") ?></span>
+    <h3><span id="lbl_Personeria"><?= financiero::t("Pagos", "Payment Registration") ?></span>
 </div>
 <?= Html::hiddenInput('txth_ids', $opag_id, ['id' => 'txth_ids']); ?>
 <?= Html::hiddenInput('txth_total', $valor_total, ['id' => 'txth_total']); ?>
@@ -35,7 +36,7 @@ $leyendarc = '<div class="col-md-12 col-sm-12 col-xs-12 col-lg-12">
 <form class="form-horizontal">
     <div class="col-md-12 col-sm-12 col-xs-12 col-lg-12">
         <div class="form-group">
-            <label for="cmb_forma_pago" class="col-sm-2  control-label"><?= Yii::t("formulario", "Paid form") ?></label>
+            <label for="cmb_forma_pago" class="col-sm-2  control-label"><?= financiero::t("Pagos", "Paid form") ?></label>
             <div class="col-sm-10 ">
                 <?php
                 $habilita = '';
@@ -54,16 +55,16 @@ $leyendarc = '<div class="col-md-12 col-sm-12 col-xs-12 col-lg-12">
     </div>     
     <div class="col-md-12 col-sm-12 col-xs-12 col-lg-12">
         <div class="form-group">            
-            <label for="txt_pago" class="col-sm-2 control-label"><?= Yii::t("formulario", "Pay Total") ?></label>
+            <label for="txt_pago" class="col-sm-2 control-label"><?= financiero::t("Pagos", "Pay Total") ?></label>
             <div class="col-sm-10 ">
                 <?php
                 if ($saldo_pendiente <= '0') {
                     ?>
-                    <input type="text" class="form-control PBvalidation keyupmce" id="txt_pago" data-type="dinero" readonly = "readonly" data-keydown="true" placeholder="<?= Yii::t("formulario", "Pay Total") ?>">
+                    <input type="text" class="form-control PBvalidation keyupmce" id="txt_pago" data-type="dinero" readonly = "readonly" data-keydown="true" placeholder="<?= financiero::t("Pagos", "Pay Total") ?>">
                     <?php
                 } else {
                     ?>
-                    <input type="text" class="form-control PBvalidation keyupmce" id="txt_pago" data-type="dinero" data-keydown="true" placeholder="<?= Yii::t("formulario", "Pay Total") ?>">
+                    <input type="text" class="form-control PBvalidation keyupmce" id="txt_pago" data-type="dinero" data-keydown="true" placeholder="<?= financiero::t("Pagos", "Pay Total") ?>">
                     <?php
                 }
                 ?>

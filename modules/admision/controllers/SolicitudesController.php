@@ -58,7 +58,9 @@ class SolicitudesController extends \app\components\CController {
      * @return  Una vista que recibe las solicitudes del usuario logeado.
      */
     public function actionListarsolicitudxinteresado() {
-        $per_id = @Yii::$app->session->get("PB_perid");        
+        $per_id = @Yii::$app->session->get("PB_perid");  
+        $per_Ids= base64_decode($_GET['perid']);  
+        
         $inte_id = base64_decode($_GET['id']);        
         $mod_carrera = new EstudioAcademico();
         $interesado_model = new Interesado();
@@ -70,20 +72,21 @@ class SolicitudesController extends \app\components\CController {
         return $this->render('listarSolicitudxinteresado', [
                     'model' => $model,
                     'personalData' => $personaData,                    
-                    
         ]);
     }
 
     public function actionView() {
         $sins_id = base64_decode($_GET['ids']);
+        $int_id = base64_decode($_GET['int']);
         $numSolicitud = base64_decode($_GET['num_solicitud']);
-        $interesado = base64_decode($_GET['int']);
-        $per_id = base64_decode($_GET['perid']);
         $apellidos = base64_decode($_GET['apellidos']);
         $nombres = base64_decode($_GET['nombres']);
         $nivelint = base64_decode($_GET['uaca_nombre']);
         $carrera = base64_decode($_GET['carrera']);
-        $fec_prenoapro = base64_decode($_GET['fec_prenopro']);
+        $per_id = base64_decode($_GET['perid']);
+        $fec_repro = base64_decode($_GET['fec_repro']);
+        $obs_repro = base64_decode($_GET['obs_repro']);
+        $nint = base64_decode($_GET['nint']);        
         $mod_persona = Persona::findIdentity($per_id);
         $nacionalidad = $mod_persona->per_nac_ecuatoriano;
 
@@ -93,7 +96,11 @@ class SolicitudesController extends \app\components\CController {
         $resp_arch3 = $mod_solins->Obtenerdocumentosxsolicitud($sins_id, 3);
         $resp_arch4 = $mod_solins->Obtenerdocumentosxsolicitud($sins_id, 4);
         $resp_arch5 = $mod_solins->Obtenerdocumentosxsolicitud($sins_id, 5);
-
+        
+        $mod_ordenpago = new OrdenPago();
+        $resp_ordenpago = $mod_ordenpago->consultarImagenpago($sins_id);
+        $img_pago = $resp_ordenpago["imagen_pago"];
+        
         if ($nacionalidad == '1') {
             $tiponacext = 'N';
         } else {
@@ -101,10 +108,10 @@ class SolicitudesController extends \app\components\CController {
         }
         $resp_condtitulo = $mod_solins->consultarSolnoaprobada(1, $tiponacext);
         $resp_conddni = $mod_solins->consultarSolnoaprobada(2, $tiponacext);
-        $resp_rechazo = $mod_solins->consultaSolicitudRechazada($sins_id, 'P');
+        $resp_rechazo = $mod_solins->consultaSolicitudRechazada($sins_id, 'A');
 
         return $this->render('view', [
-                    "revision" => array("3" => Yii::t("formulario", "Pre Approved"), "4" => Yii::t("formulario", "Not approved")),
+                    "revision" => array("2" => Yii::t("formulario", "APPROVED"), "4" => Yii::t("formulario", "Not approved")),
                     "apellidos" => $apellidos,
                     "nombres" => $nombres,
                     "nivelint" => $nivelint,
@@ -116,11 +123,15 @@ class SolicitudesController extends \app\components\CController {
                     "arch5" => $resp_arch5['sdoc_archivo'],
                     "txth_extranjero" => $nacionalidad,
                     "sins_id" => $sins_id,
+                    "int_id" => $int_id,
                     "per_id" => $per_id,
-                    "fec_prenoapro" => $fec_prenoapro,
+                    "fec_repro" => $fec_repro,
+                    "obs_repro" => $obs_repro,
                     "arr_condtitulo" => $resp_condtitulo,
                     "arr_conddni" => $resp_conddni,
                     "resp_rechazo" => $resp_rechazo,
+                    "nint_id" => $nint,
+                    "img_pago" => $img_pago,                                
                     "numSolicitud" => $numSolicitud,
         ]);
     }
@@ -620,6 +631,7 @@ class SolicitudesController extends \app\components\CController {
             return Utilities::ajaxResponse('NO_OK', 'alert', Yii::t("jslang", "Error"), false, $message);
         }
     }
+    
     public function actionSaverevision() {
         $per_sistema = @Yii::$app->session->get("PB_perid");
         if (Yii::$app->request->isAjax) {
@@ -627,9 +639,9 @@ class SolicitudesController extends \app\components\CController {
             $resultado = $data["resultado"];
             $observacion = ucwords(strtolower($data["observacion"]));
             $banderapreaprueba = $data["banderapreaprueba"];
-            $sins_id = $data["sins_id"];
-            $int_id = $data["int_id"];
-            $per_id = $data["per_id"];
+            $sins_id = base64_decode($data["sins_id"]);
+            $int_id = base64_decode($data["int_id"]);
+            $per_id = base64_decode($data["per_id"]);
             $condicionesTitulo = $data["condicionestitulo"];
             $condicionesDni = $data["condicionesdni"];
             $titulo = $data["titulo"];
@@ -646,28 +658,28 @@ class SolicitudesController extends \app\components\CController {
                 if ($banderapreaprueba == 0) {  //etapa de Aprobación.                                    
                     if ($resultado == 2) { 
                         //consultar estado del pago.     
-                        Utilities::putMessageLogFile('solicitud:'.$sins_id);
-                        $resp_pago = $mod_ordenpago->consultaOrdenPago($sins_id);    
+                        Utilities::putMessageLogFile('solicitud:'.$sins_id);                        
+                        $resp_pago = $mod_ordenpago->consultaOrdenPago($sins_id);                        
                         if ($resp_pago["opag_estado_pago"] == 'S') {  
                             Utilities::putMessageLogFile('solicitud:'.$resp_pago["opag_estado_pago"]);
-                            $respsolins = $mod_solins->apruebaSolicitud($sins_id, $resultado, $observacion, $banderapreaprueba, $respusuario['usu_id']);                         
-                            if ($respsolins) {                                   
+                            $respsolins = $mod_solins->apruebaSolicitud($sins_id, $resultado, $observacion, $banderapreaprueba, $respusuario['usu_id']);                                                     
+                            if ($respsolins) {                                     
                                 //Se genera id de aspirante y correo de bienvenida.                                
-                                $resp_encuentra = $mod_ordenpago->encuentraAspirante($int_id);                                
-                                if ($resp_encuentra) {                                     
+                                $resp_encuentra = $mod_ordenpago->encuentraAspirante($int_id);                                    
+                                if ($resp_encuentra) {                                           
                                     $asp = $resp_encuentra['asp_id'];                                  
                                     $continua = 1;
-                                } else {
+                                } else {  
                                     //Se asigna al interesado como aspirante                                    
                                     $resp_asp = $mod_ordenpago->insertarAspirante($int_id);                                                                     
-                                    if ($resp_asp) {  
+                                    if ($resp_asp) {                                          
                                         Utilities::putMessageLogFile('inserción');
                                         $asp = $resp_asp;  
                                         $continua = 1; 
                                     }    
                                 }                                             
                             }                            
-                            if ($continua == 1) {   
+                            if ($continua == 1) { 
                                 $resp_inte = $mod_ordenpago->actualizaEstadointeresado($int_id, $respusuario['usu_id']);                                                                             
                                 if ($resp_inte) {     
                                     //Se obtienen el método de ingreso y el nivel de interés según la solicitud.                                                

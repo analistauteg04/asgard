@@ -9,10 +9,11 @@ use kartik\date\DatePicker;
 use yii\helpers\ArrayHelper;
 use yii\jui\AutoComplete;
 use yii\web\JsExpression;
+use app\modules\financiero\Module as financiero;
 ?>
 
 <div class="col-md-12">
-    <h3><span id="lbl_Personeria"><?= Yii::t("formulario", "Registration Payments for Collections") ?></span></h3>
+    <h3><span id="lbl_Personeria"><?= financiero::t("Pagos", "Registration Payments for Collections") ?></span></h3>
 </div>
 <div>
     <form class="form-horizontal">
