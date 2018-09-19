@@ -4,11 +4,11 @@ use yii\helpers\Html;
 use yii\helpers\Url;
 use app\widgets\PbGridView\PbGridView;
 use yii\data\ArrayDataProvider;
-
+use app\modules\financiero\Module as financiero;
 ?>
 <?= Html::hiddenInput('txth_ids', $opag_id, ['id' => 'txth_ids']); ?>
 <div class="col-md-12 col-sm-12 col-xs-12 col-lg-12 ">
-    <h3><span id="lbl_Personeria"><?= Yii::t("formulario", "Payments made") ?></span></h3>
+    <h3><span id="lbl_Personeria"><?= financiero::t("Pagos", "Payments made") ?></span></h3>
     <br>
 </div>
 
@@ -59,22 +59,22 @@ PbGridView::widget([
     [
         [
             'attribute' => 'formapago',
-            'header' => Yii::t("solicitud_ins", "Way to pay"),
+            'header' => financiero::t("Pagos", "Way to pay"),
             'value' => 'formapago',
         ],
         [
             'attribute' => 'valor',
-            'header' => Yii::t("solicitud_ins", "Amount Paid"),
+            'header' => financiero::t("Pagos", "Amount Paid"),
             'value' => 'valor',
         ],
         [
             'attribute' => 'fechaprobacion',
-            'header' => Yii::t("solicitud_ins", "Payment approval"),
+            'header' => financiero::t("Pagos", "Payment approval"),
             'value' => 'fechapago',
         ],
         [
             'attribute' => 'fechacargo',
-            'header' => Yii::t("solicitud_ins", "Payment date load"),
+            'header' => financiero::t("Pagos", "Payment date load"),
             'value' => 'fechacargo',
         ],
         [
