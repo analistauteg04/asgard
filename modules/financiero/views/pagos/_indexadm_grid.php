@@ -18,24 +18,24 @@ use yii\web\JsExpression;
         //'showExport' => true,
         //'fnExportEXCEL' => "exportExcel",
         //'fnExportPDF' => "exportPdf",
-        'dataProvider' => $model,
+        'dataProvider' => $model,        
         'columns' =>
-        [
+        [      
             [
                 'attribute' => 'solicitud',
-                'header' => Yii::t("formulario", "Request #"),
+                'header' => Yii::t("formulario", "Request #"),            
                 'value' => 'solicitud',
             ],
             [
                 'attribute' => 'fecha',
-                'header' => Yii::t("solicitud_ins", "Application date"),
+                'header' => Yii::t("solicitud_ins", "Application date"),                
                 'value' => 'sins_fecha_solicitud',
             ],
             [
                 'attribute' => 'dni',
                 'header' => Yii::t("formulario", "DNI 1"),
                 'value' => 'identificacion',
-            ],
+            ], 
             [
                 'attribute' => 'Nombres',
                 'header' => Yii::t("formulario", "First Names"),
@@ -47,15 +47,15 @@ use yii\web\JsExpression;
                 'value' => 'apellidos',
             ],
             [
-                'attribute' => 'NivelInteres',
-                'header' => Yii::t("solicitud_ins", "Level Interest"),
+                'attribute' => 'Unidad',
+                'header' => Yii::t("formulario", "Academic unit"),
                 'value' => 'nivel',
             ],
             [
                 'attribute' => 'MetodoIngreso',
                 'header' => Yii::t("solicitud_ins", "Income Method"),
                 'value' => 'metodo',
-            ],
+            ],            
             [
                 'attribute' => 'estado',
                 'header' => Yii::t("formulario", "Status"),
@@ -64,16 +64,18 @@ use yii\web\JsExpression;
             [
                 'class' => 'yii\grid\ActionColumn',
                 'header' => Yii::t("formulario", "Actions"),
-                'template' => '{view} {upload}', 
+                //'headerOptions' => ['width' => '30'],
+                'template' => '{view}', //
                 'buttons' => [
                     'view' => function ($url, $model) {
-                        if ($model['estado'] != 'P') {
-                            return Html::a('<span class="glyphicon glyphicon-thumbs-up"></span>', Url::to(['pagos/validarpagocarga', 'ido' => $model['orden']]), ["data-toggle" => "tooltip", "title" => "Ver Pagos", "data-pjax" => 0]);
-                        }
-                    },
-                    'upload' => function ($url, $model) {
-                        if ($model['rol'] == 1) {
-                            return Html::a('<span class="glyphicon glyphicon-download-alt"></span>', Url::to(['pagos/cargardocpagos', 'ids' => base64_encode($model['orden']), 'estado' => base64_encode($model['estado_desc_pago']), 'vista' => 'adm']), ["data-toggle" => "tooltip", "title" => "Subir Documento", "data-pjax" => 0]);
+                        if ($model['estado'] == 'P') {
+                            if ($model['rol'] == 5 || $model['rol'] == 6 || $model['rol'] == 7 || $model['rol'] == 8 || $model['rol'] == 15) {
+                                return '<span class = "glyphicon glyphicon-check">  </span>';
+                            } else {
+                                return Html::a('<span class="glyphicon glyphicon-check"></span>', Url::to(['pagos/registrarpagoadm', 'ido' => $model['orden'], 'per_id' => $model['per_id']]), ["data-toggle" => "tooltip", "title" => "Registrar Pagos", "data-pjax" => 0]);
+                            }
+                        } else {
+                            return Html::a('<span class="glyphicon glyphicon-thumbs-up"></span>', Url::to(['pagos/registrarpagoadm', 'ido' => $model['orden'], 'per_id' => $model['per_id']]), ["data-toggle" => "tooltip", "title" => "Registrar Pagos", "data-pjax" => 0]);
                         }
                     },
                 ],

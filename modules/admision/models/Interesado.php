@@ -955,6 +955,7 @@ class Interesado extends \app\modules\admision\components\CActiveRecord {
         $resultData = $comando->queryOne();
         return $resultData;
     }
+    
     public function getPersonaxIdInteresado($int_id) {
         $con = \Yii::$app->db_asgard;
         $con2 = \Yii::$app->db_captacion;
@@ -974,6 +975,31 @@ class Interesado extends \app\modules\admision\components\CActiveRecord {
         $resultData = $comando->queryOne();
         if(count($resultData)>0){
             return $resultData['per_id'];
+        }else{
+            return 0;
+        }        
+    }
+    
+    public function consultarIdinteresado($per_id) {
+        $con = \Yii::$app->db_asgard;
+        $con2 = \Yii::$app->db_captacion;
+        $estado = 1;
+        $sql = "SELECT 
+                    inte.int_id AS int_id
+                FROM 
+                   " . $con2->dbname . ".interesado inte                  
+                INNER JOIN " . $con->dbname . ".persona per on inte.per_id = per.per_id               
+                WHERE  per.per_id = :per_id AND
+                    per.per_estado = :estado AND
+                    per.per_estado_logico = :estado AND
+                    inte.int_estado_logico=:estado AND 
+                    inte.int_estado=:estado";                    
+        $comando = $con->createCommand($sql);
+        $comando->bindParam(":estado", $estado, \PDO::PARAM_STR);
+        $comando->bindParam(":per_id", $per_id, \PDO::PARAM_INT);
+        $resultData = $comando->queryOne();
+        if(count($resultData)>0){
+            return $resultData['int_id'];
         }else{
             return 0;
         }
@@ -1082,45 +1108,7 @@ class Interesado extends \app\modules\admision\components\CActiveRecord {
         return $resultData;
     }
 
-    /**
-     * Function modifica el estado de pre interesado cuando ya es interesado
-     * @author  Giovanni Vergara <analistadesarrollo02@uteg.edu.ec>
-     * @property integer $userid       
-     * @return  
-     */
-    public function modificaPreInteresado($pint_id) {
-        $con = \Yii::$app->db_captacion;
-        $trans = $con->getTransaction(); // se obtiene la transacción actual
-        if ($trans !== null) {
-            $trans = null; // si existe la transacción entonces no se crea una
-        } else {
-            $trans = $con->beginTransaction(); // si no existe la transacción entonces se crea una
-        }
-        $estado_preinteresado = 0;
-        $estado = 1;
-        try {
-            $comando = $con->createCommand
-                    ("UPDATE " . $con->dbname . ".pre_interesado 		       
-                      SET pint_estado_preinteresado = :estado_preinteresado
-                      WHERE pint_id = :pint_id AND 
-                      pint_estado = :estado AND
-                      pint_estado_logico = :estado");
-
-            $comando->bindParam(":estado", $estado, \PDO::PARAM_STR);
-            $comando->bindParam(":estado_preinteresado", $estado_preinteresado, \PDO::PARAM_STR);
-            $comando->bindParam(":pint_id", $pint_id, \PDO::PARAM_INT);
-            $response = $comando->execute();
-
-            if ($trans !== null)
-                $trans->commit();
-            return $response;
-        } catch (Exception $ex) {
-            if ($trans !== null)
-                $trans->rollback();
-            return FALSE;
-        }
-    }
-
+    
     /**
      * Function modificaGruporol (modifica el grupo rol id)
      * @author  Grace Viteri <analistadesarrollo01@uteg.edu.ec>
@@ -1161,86 +1149,7 @@ class Interesado extends \app\modules\admision\components\CActiveRecord {
                 $trans->rollback();
             return FALSE;
         }
-    }
-
-    /**
-     * Function consultaPreinteresadas (consulta las personas pre-interesadas que no han 
-     *                                  activado cuenta en asgard.)
-     * @author  Grace Viteri <analistadesarrollo01@uteg.edu.ec>
-     * @property      
-     * @return  
-     */
-    public static function consultaPreinteresadas($arrFiltro = array(), $onlyData = false) {
-        $con = \Yii::$app->db;
-        $estado = 1;
-
-        if (isset($arrFiltro) && count($arrFiltro) > 0) {
-            $str_search = "(ppre.ppre_pri_nombre  like :search OR ";
-            $str_search .= "ppre.ppre_pri_apellido like :search OR ";
-            $str_search .= "ppre.ppre_cedula like :search) AND ";
-            if ($arrFiltro['f_ini'] != "" && $arrFiltro['f_fin'] != "") {
-                $str_search .= "ppre.ppre_fecha_registro >= :fec_ini AND ";
-                $str_search .= "ppre.ppre_fecha_registro <= :fec_fin AND ";
-            }
-        }
-
-        $sql = "SELECT ppre.ppre_fecha_registro as fecha_registro, 
-                        ppre.ppre_cedula as dni, 
-                        ppre.ppre_pri_nombre as nombres, 
-                        ppre.ppre_pri_apellido as apellidos,
-                        ppre_celular as celular, ppre_correo  as correo
-                 FROM " . $con->dbname . ".persona_preins ppre
-                 WHERE $str_search
-                       not ppre_cedula in (select per_cedula
-                                           from persona per
-                                            where per_estado = :estado and
-                                                  per_estado_logico = :estado) and
-                       ppre_estado = :estado and
-                       ppre_estado_logico = :estado 
-                 ORDER BY ppre.ppre_fecha_registro desc";
-
-        $comando = $con->createCommand($sql);
-        $comando->bindParam(":estado", $estado, \PDO::PARAM_STR);
-
-        if (isset($arrFiltro) && count($arrFiltro) > 0) {
-            $search_cond = "%" . $arrFiltro["search"] . "%";
-            $fecha_ini = $arrFiltro["f_ini"] . " 00:00:00";
-            $fecha_fin = $arrFiltro["f_fin"] . " 23:59:59";
-            $comando->bindParam(":search", $search_cond, \PDO::PARAM_STR);
-
-            if ($arrFiltro['estadosol'] != "" && $arrFiltro['estadosol'] > 0) {
-                $comando->bindParam(":estadosol", $estadoSol, \PDO::PARAM_STR);
-            }
-            if ($arrFiltro['f_ini'] != "" && $arrFiltro['f_fin'] != "") {
-                $comando->bindParam(":fec_ini", $fecha_ini, \PDO::PARAM_STR);
-                $comando->bindParam(":fec_fin", $fecha_fin, \PDO::PARAM_STR);
-            }
-        }
-
-        $resultData = $comando->queryAll();
-        $dataProvider = new ArrayDataProvider([
-            'key' => 'id',
-            'allModels' => $resultData,
-            'pagination' => [
-                'pageSize' => Yii::$app->params["pageSize"],
-            ],
-            'sort' => [
-                'attributes' => [
-                    'ppre_fecha_registro',
-                    'ppre_cedula',
-                    'per_dni',
-                    'ppre_pri_nombre',
-                    'ppre_pri_apellido'
-                ],
-            ],
-        ]);
-
-        if ($onlyData) {
-            return $resultData;
-        } else {
-            return $dataProvider;
-        }
-    }
+    }   
 
     /**
      * Function modificarInfoAcaInteresado

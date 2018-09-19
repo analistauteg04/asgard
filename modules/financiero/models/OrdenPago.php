@@ -356,7 +356,7 @@ class OrdenPago extends \app\modules\financiero\components\CActiveRecord {
         $sql = "SELECT  icpr.opag_id orden, icpr.icpr_id id, 
                         format(icpr.icpr_valor,2) valor, 
                         fpag.fpag_nombre formapago, 
-                        icpr_fecha_pago fechapago,
+                        ifnull(icpr_fecha_pago,'') as fechapago,
                         icpr_fecha_registro fechacargo, 
                         icpr.icpr_imagen imagen,
                         (case when icpr_resultado = 'AP' then 'Aprobado'
@@ -919,7 +919,7 @@ class OrdenPago extends \app\modules\financiero\components\CActiveRecord {
                         ifnull(icpr.icpr_imagen,'') as dcar_imagen,
                         (case icpr.icpr_revisado when 'PE' then 'Pendiente' when 'RE' then 'Revisado' end) as dcar_revisado,
                         (case icpr.icpr_resultado when 'AP' then 'Aprobado' when 'RE' then 'Reprobado'  else '' end) as dcar_resultado,
-                        icpr.icpr_observacion,
+                         ifnull(icpr.icpr_observacion,'') as icpr_observacion,
                         icpr.icpr_num_transaccion,
                         icpr.icpr_fecha_transaccion
                 FROM " . $con->dbname . ".info_carga_prepago icpr " . " INNER JOIN " . $con->dbname . ".forma_pago fp ON fp.fpag_id = icpr.fpag_id                                          

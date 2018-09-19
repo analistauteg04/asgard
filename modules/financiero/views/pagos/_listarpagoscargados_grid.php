@@ -13,22 +13,22 @@ use yii\web\JsExpression;
 
 <div>
     <?=
-    PbGridView::widget([
+    PbGridView::widget([  
         'id' => 'TbG_Solicitudes',
         //'showExport' => true,
         //'fnExportEXCEL' => "exportExcel",
         //'fnExportPDF' => "exportPdf",
-        'dataProvider' => $model,
+        'dataProvider' => $model,   
         'columns' =>
-        [
+        [        
             [
                 'attribute' => 'solicitud',
-                'header' => Yii::t("formulario", "Request #"),
+                'header' => Yii::t("formulario", "Request #"),            
                 'value' => 'solicitud',
             ],
             [
                 'attribute' => 'fecha',
-                'header' => Yii::t("solicitud_ins", "Application date"),
+                'header' => Yii::t("solicitud_ins", "Application date"),             
                 'value' => 'sins_fecha_solicitud',
             ],
             [
@@ -47,8 +47,8 @@ use yii\web\JsExpression;
                 'value' => 'apellidos',
             ],
             [
-                'attribute' => 'NivelInteres',
-                'header' => Yii::t("solicitud_ins", "Level Interest"),
+                'attribute' => 'Unidad',
+                'header' => Yii::t("formulario", "Academic unit"),
                 'value' => 'nivel',
             ],
             [
@@ -63,19 +63,16 @@ use yii\web\JsExpression;
             ],
             [
                 'class' => 'yii\grid\ActionColumn',
-                'header' => Yii::t("formulario", "Actions"),
-                'template' => '{view} {upload}', 
+                'header' => Yii::t("formulario", "Actions"),         
+                'template' => '{view}',           
                 'buttons' => [
                     'view' => function ($url, $model) {
-                        if ($model['estado'] != 'P') {
+                        if ($model['estado'] == 'P') {
+                            return Html::a('<span class="glyphicon glyphicon-check"></span>', Url::to(['pagos/validarpagocarga', 'ido' => $model['orden']]), ["data-toggle" => "tooltip", "title" => "Ver Pagos", "data-pjax" => 0]);
+                        } else {
                             return Html::a('<span class="glyphicon glyphicon-thumbs-up"></span>', Url::to(['pagos/validarpagocarga', 'ido' => $model['orden']]), ["data-toggle" => "tooltip", "title" => "Ver Pagos", "data-pjax" => 0]);
                         }
-                    },
-                    'upload' => function ($url, $model) {
-                        if ($model['rol'] == 1) {
-                            return Html::a('<span class="glyphicon glyphicon-download-alt"></span>', Url::to(['pagos/cargardocpagos', 'ids' => base64_encode($model['orden']), 'estado' => base64_encode($model['estado_desc_pago']), 'vista' => 'adm']), ["data-toggle" => "tooltip", "title" => "Subir Documento", "data-pjax" => 0]);
-                        }
-                    },
+                    },                   
                 ],
             ],
         ],
