@@ -23,7 +23,6 @@ class PagosController extends \app\components\CController {
         $mod_pago = new OrdenPago();
         $data = null;
         $data = Yii::$app->request->get();
-
         if ($data['PBgetFilter']) {
             $arrSearch["f_ini"] = $data['f_ini'];
             $arrSearch["f_fin"] = $data['f_fin'];

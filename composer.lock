@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "e9c716d0a0e44bb5c278da8702c8c308",
+    "content-hash": "159e0c2a4916ab6fa4441fd067cad541",
     "packages": [
         {
             "name": "bower-asset/bootstrap",
@@ -661,16 +661,16 @@
         },
         {
             "name": "kartik-v/yii2-widget-fileinput",
-            "version": "dev-master",
+            "version": "v1.0.7",
             "source": {
                 "type": "git",
                 "url": "https://github.com/kartik-v/yii2-widget-fileinput.git",
-                "reference": "32e28f3a7de00727983ddd4a4c5a9f231aa05d79"
+                "reference": "11ee1be58d98e80db46b76a22068c07ec722cccb"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/kartik-v/yii2-widget-fileinput/zipball/32e28f3a7de00727983ddd4a4c5a9f231aa05d79",
-                "reference": "32e28f3a7de00727983ddd4a4c5a9f231aa05d79",
+                "url": "https://api.github.com/repos/kartik-v/yii2-widget-fileinput/zipball/11ee1be58d98e80db46b76a22068c07ec722cccb",
+                "reference": "11ee1be58d98e80db46b76a22068c07ec722cccb",
                 "shasum": ""
             },
             "require": {
@@ -712,7 +712,7 @@
                 "widget",
                 "yii2"
             ],
-            "time": "2018-09-07T22:18:00+00:00"
+            "time": "2018-09-07T13:41:20+00:00"
         },
         {
             "name": "markbaker/complex",
@@ -4218,8 +4218,7 @@
     "aliases": [],
     "minimum-stability": "stable",
     "stability-flags": {
-        "odaialali/yii2-toastr": 10,
-        "kartik-v/yii2-widget-fileinput": 20
+        "odaialali/yii2-toastr": 10
     },
     "prefer-stable": false,
     "prefer-lowest": false,
