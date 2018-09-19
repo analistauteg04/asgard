@@ -59,10 +59,10 @@ PbGridView::widget([
             'template' => '{payments} {upload}', //
             'buttons' => [
                 'payments' => function ($url, $model) {
-                    return Html::a('<span class="glyphicon glyphicon-usd"></span>', Url::to(['registrarpago/listarpagosolicitud', 'ids' => base64_encode($model['persona'])]), ["data-toggle" => "tooltip", "title" => "Listar Pagos", "data-pjax" => 0]);
+                    return Html::a('<span class="glyphicon glyphicon-usd"></span>', Url::to(['/financiero/pagos/listarpagosolicitud', 'id_sol' => base64_encode($model['sins_id'])]), ["data-toggle" => "tooltip", "title" => "Pago de Solicitud", "data-pjax" => 0]);
                 },
                 'upload' => function ($url, $model) {
-                    return Html::a('<span class="glyphicon glyphicon-folder-open"></span>', Url::to(['admision/solicitudes/subirdocumentos', 'ids' => base64_encode($model['sins_id']), 'sins_id' => base64_encode($model['sins_id']), 'solicitud' => base64_encode($model['num_solicitud']), 'int_id' => base64_encode($model['int_id']), 'beca' => base64_encode($model['beca']), 'apellidos' => base64_encode($model['per_apellidos']), 'nombres' => base64_encode($model['per_nombres']), 'nacionalidad' => base64_encode($model['per_nac_ecuatoriano'])]), ["data-toggle" => "tooltip", "title" => "Subir Documentos", "data-pjax" => 0]);
+                    return Html::a('<span class="glyphicon glyphicon-folder-open"></span>', Url::to(['/admision/solicitudes/subirdocumentos', 'id_sol' => base64_encode($model['sins_id'])]), ["data-toggle" => "tooltip", "title" => "Subir Documentos Interesado", "data-pjax" => 0]);
                 }
             ],
         ],

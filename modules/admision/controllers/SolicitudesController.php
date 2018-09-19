@@ -424,26 +424,17 @@ class SolicitudesController extends \app\components\CController {
     }
 
     public function actionSubirdocumentos() {
-        $solicitud = base64_decode($_GET['solicitud']);
-        $apellidos = base64_decode($_GET['apellidos']);
-        $nombres = base64_decode($_GET['nombres']);
-        $nacionalidad = base64_decode($_GET['nacionalidad']);
-        if (empty($nacionalidad)) {
-            $nacionalidad = 0;
-        }
-        $per_id = $_GET['ids'];
-        $sins_id = $_GET['sins_id'];
-        $int_id = $_GET['int_id'];
-        $beca = $_GET['beca'];
-
+        $sol_id = base64_decode($_GET['id_sol']);
+        $sol_model=new SolicitudInscripcion();
+        $datosSolicitud=$sol_model->consultarInteresadoPorSol_id($sol_id); 
         return $this->render('subirDocumentos', [
-                    "cliente" => $apellidos . ' ' . $nombres,
-                    "solicitud" => $solicitud,
-                    "txth_extranjero" => $nacionalidad,
-                    "per_id" => $per_id,
-                    "sins_id" => $sins_id,
-                    "int_id" => $int_id,
-                    "beca" => $beca,
+                    "cliente" => $datosSolicitud['per_apellidos'] . ' ' . $datosSolicitud['per_nombres'],
+                    "solicitud" => $datosSolicitud['sins_id'],
+                    "txth_extranjero" => $datosSolicitud[''],
+                    "per_id" => $datosSolicitud['per_id'],
+                    "sins_id" => $datosSolicitud['sins_id'],
+                    "int_id" => $datosSolicitud['int_id'],
+                    "beca" => $datosSolicitud['sins_beca'],
         ]);
     }
 
