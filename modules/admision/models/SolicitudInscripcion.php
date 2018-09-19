@@ -390,7 +390,40 @@ class SolicitudInscripcion extends \app\modules\admision\components\CActiveRecor
             return $dataProvider;
         }
     }
-
+    public static function consultarInteresadoPorSol_id($sins_id) {
+        $con = \Yii::$app->db_captacion;
+        $con2 = \Yii::$app->db;
+        $estado = 1;
+        $sql = "
+                SELECT 
+                    per.per_cedula as per_dni,
+                    per.per_id,
+                    concat(per.per_pri_nombre ,' ', per.per_seg_nombre) as per_nombres,
+                    concat(per.per_pri_apellido ,' ', per.per_seg_apellido) as per_apellidos,
+                    sins.sins_id,
+                    inte.int_id,
+                    sins.sins_beca,
+                    sins.sins_fecha_solicitud as fecha_solicitud,
+                    lpad(sins.sins_id,4,'0') as num_solicitud,
+                    per.per_nacionalidad
+                FROM 
+                    " . $con->dbname . ".solicitud_inscripcion as sins
+                    INNER JOIN " . $con->dbname . ".interesado as inte on sins.int_id = inte.int_id
+                    INNER JOIN " . $con2->dbname . ".persona as per on inte.per_id = per.per_id 
+                WHERE 
+                    sins.sins_estado_logico=:estado AND 
+                    inte.int_estado_logico=:estado AND 
+                    per.per_estado_logico=:estado AND 
+                    sins.sins_estado=:estado AND 
+                    inte.int_estado=:estado AND 
+                    per.per_estado=:estado AND
+                    sins.sins_id=:sins_id";
+        $comando = $con->createCommand($sql);
+        $comando->bindParam(":estado", $estado, \PDO::PARAM_STR);
+        $comando->bindParam(":sins_id", $sins_id, \PDO::PARAM_INT);
+        $resultData = $comando->queryOne();
+        return $resultData;
+    }
     public static function obtenerSolicitudXInteresado($int_id) {
         $con = \Yii::$app->db_captacion;
         $con2 = \Yii::$app->db;
