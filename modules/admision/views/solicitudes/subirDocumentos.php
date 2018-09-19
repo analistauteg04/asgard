@@ -13,13 +13,13 @@ $leyenda = '<div class="col-md-12 col-xs-12 col-sm-12 col-lg-12">
           </div>';
 
 session_start();
-$_SESSION['persona_solicita'] = base64_decode($per_id);  
+$_SESSION['persona_solicita'] = base64_encode($per_id);  
 ?>
-<?= Html::hiddenInput('txth_idp', base64_decode($per_id), ['id' => 'txth_idp']); ?>
-<?= Html::hiddenInput('txth_ids', base64_decode($sins_id), ['id' => 'txth_ids']); ?>
+<?= Html::hiddenInput('txth_idp', base64_encode($per_id), ['id' => 'txth_idp']); ?>
+<?= Html::hiddenInput('txth_ids', base64_encode($sins_id), ['id' => 'txth_ids']); ?>
 <?= Html::hiddenInput('txth_extranjero', $txth_extranjero, ['id' => 'txth_extranjero']); ?>
-<?= Html::hiddenInput('txth_int_id', base64_decode($int_id), ['id' => 'txth_int_id']); ?>
-<?= Html::hiddenInput('txth_beca', base64_decode($beca), ['id' => 'txth_beca']); ?>
+<?= Html::hiddenInput('txth_int_id', base64_encode($int_id), ['id' => 'txth_int_id']); ?>
+<?= Html::hiddenInput('txth_beca', base64_encode($beca), ['id' => 'txth_beca']); ?>
 <form class="form-horizontal" enctype="multipart/form-data" id="formsolicitud">
     <div class="col-md-12 col-xs-12 col-sm-12 col-lg-12">
         <h3><span id="lbl_solicitud"><?= Yii::t("formulario", "Upload documents") ?></span></h3>

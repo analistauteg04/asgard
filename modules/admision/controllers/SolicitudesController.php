@@ -457,12 +457,11 @@ class SolicitudesController extends \app\components\CController {
             } else {
                 unset($_SESSION['persona_ingresa']);
                 $per_id = Yii::$app->session->get("PB_perid");
-            }
-            //$per_id = @Yii::$app->session->get("PB_perid");
-            $sins_id = $data["sins_id"];
-            $interesado_id = $data["interesado_id"];
-            $es_extranjero = $data["arc_extranjero"];
-            $beca = $data["beca"];
+            }            
+            $sins_id = base64_decode($data["sins_id"]);
+            $interesado_id = base64_decode($data["interesado_id"]);
+            $es_extranjero = base64_decode($data["arc_extranjero"]);
+            $beca = base64_decode($data["beca"]);
             if ($data["upload_file"]) {
                 if (empty($_FILES)) {
                     return json_encode(['error' => Yii::t("notificaciones", "Error to process File {file}. Try again.", ['{file}' => basename($files['name'])])]);
@@ -542,6 +541,7 @@ class SolicitudesController extends \app\components\CController {
             }
             if (!empty($titulo_archivo) && !empty($dni_archivo) && !empty($foto_archivo)) {
                 Utilities::putMessageLogFile('aqui entro');
+                $mensaje = 'sol:'.$sins_id . ' inte:'. $interesado_id. ' extr:'.$es_extranjero. ' beca:'.$beca;            
                 if (!empty($titulo_archivo)) {
                     Utilities::putMessageLogFile("s1");
                     $mod_solinsxdoc1 = new SolicitudinsDocumento();
@@ -612,7 +612,7 @@ class SolicitudesController extends \app\components\CController {
                         }
                     } else {
                         Utilities::putMessageLogFile("4");
-                        throw new Exception('Error doc titulo no creado.');
+                        throw new Exception('Error doc titulo no creado.'.$mensaje);
                     }
                     $transaction->commit();
                     $message = array(

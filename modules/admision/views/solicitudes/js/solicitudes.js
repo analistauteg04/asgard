@@ -535,7 +535,7 @@ $(document).ready(function () {
     
     /***BORRAR DESPUES ***/
     $('#sendDocumentos').click(function () {
-        var link = $('#txth_base').val() + "/solicitudinscripcion/guardardocumentos";
+        var link = $('#txth_base').val() + "/admision/solicitudes/savedocumentos";
         var arrParams = new Object();
         arrParams.sins_id = $('#txth_ids').val();
         arrParams.persona_id = $('#txth_idp').val();
@@ -556,7 +556,7 @@ $(document).ready(function () {
             requestHttpAjax(link, arrParams, function (response) {
                 showAlert(response.status, response.label, response.message);
                 setTimeout(function () {
-                    window.location.href = $('#txth_base').val() + "/solicitudinscripcion/listarsolicitudxinteresado?ids=" + base64_encode(arrParams.persona_id);
+                    window.location.href = $('#txth_base').val() + "/admision/solicitudes/listarsolicitudxinteresado?id=" + arrParams.interesado_id;
                 }, 5000);
             }, true);
         }

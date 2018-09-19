@@ -332,7 +332,8 @@ class SolicitudInscripcion extends \app\modules\admision\components\CActiveRecor
                         ming.ming_nombre as metodo_ingreso,
                         sins.eaca_id,
                         eac.eaca_nombre as carrera,
-                        rsol.rsin_nombre as estado
+                        rsol.rsin_nombre as estado,
+                        (select count(*) numdocumentos from " . $con->dbname . ".solicitudins_documento sid where sid.sins_id = sins.sins_id) as numDocumentos
                     FROM 
                         db_captacion.interesado as inte
                         JOIN db_captacion.solicitud_inscripcion as sins on sins.int_id = inte.int_id                    
@@ -1102,13 +1103,7 @@ class SolicitudInscripcion extends \app\modules\admision\components\CActiveRecor
             if ($arrFiltro['estadoSol'] != "" && $arrFiltro['estadoSol'] > 0) {
                 $str_search .= "sins.rsin_id = :estadosol AND ";
             }
-        } /*else {
-            $columnsAdd = "per.per_id as persona, 
-                    per.per_pri_nombre as per_pri_nombre, 
-                    per.per_seg_nombre as per_seg_nombre,
-                    per.per_pri_apellido as per_pri_apellido,
-                    per.per_seg_apellido as per_seg_apellido,";
-        }*/
+        } 
 
         $sql =  "SELECT
                     lpad(sins_id,4,'0') as num_solicitud,
