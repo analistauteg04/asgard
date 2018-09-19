@@ -284,8 +284,7 @@ class SolicitudesController extends \app\components\CController {
                     }
                 }
                 if ($errorprecio != 0) {
-                    //Validar que no exista el registro en solicitudes.
-                    //$mensaje= "intId:".$interesado_id." UacaId:".$nint_id. " metIng:" .$ming_id. "carrId:".$car_id;
+                    //Validar que no exista el registro en solicitudes.                    
                     $resp_valida = $mod_solins->Validarsolicitud($interesado_id, $nint_id, $ming_id, $car_id);
                     if (empty($resp_valida['existe'])) {
                         $mod_solins->int_id = $interesado_id;
@@ -446,7 +445,7 @@ class SolicitudesController extends \app\components\CController {
         if (Yii::$app->request->isAjax) {
             $data = Yii::$app->request->post();
             if ($_SESSION['persona_solicita'] != '') {// tomar el de parametro)
-                $per_id = $_SESSION['persona_solicita'];
+                $per_id = base64_decode($_SESSION['persona_solicita']);
             } else {
                 unset($_SESSION['persona_ingresa']);
                 $per_id = Yii::$app->session->get("PB_perid");
