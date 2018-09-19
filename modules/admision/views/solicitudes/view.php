@@ -4,8 +4,9 @@ use yii\helpers\Html;
 use yii\helpers\Url;
 
 ?>
-<?= Html::hiddenInput('txth_sins_id', $sins_id, ['id' => 'txth_sins_id']); ?>
-<?= Html::hiddenInput('txth_per_id', $per_id, ['id' => 'txth_per_id']); ?>
+<?= Html::hiddenInput('txth_sins_id', base64_encode($sins_id), ['id' => 'txth_sins_id']); ?>
+<?= Html::hiddenInput('txth_per_id', base64_encode($per_id), ['id' => 'txth_per_id']); ?>
+<?= Html::hiddenInput('txth_int_id', base64_encode($int_id), ['id' => 'txth_int_id']); ?>
 
 <form class="form-horizontal" enctype="multipart/form-data" id="formsolicitud">
     <div class="col-md-12 col-sm-12 col-xs-12 col-lg-12">
@@ -226,7 +227,7 @@ use yii\helpers\Url;
             <label for="" class="col-sm-10  control-label keyupmce"></label>
             <div class="col-md-2 col-sm-2 col-xs-4 col-lg-2">     
                 <?php if (empty($fec_prenoapro)) { ?> 
-                    <a id="btn_Preaprobarsolicitud" href="javascript:" class="btn btn-primary btn-block"> <?= Yii::t("formulario", "Send") ?></a>
+                    <a id="btn_Aprobarsolicitud" href="javascript:" class="btn btn-primary btn-block"> <?= Yii::t("formulario", "Send") ?></a>
                 <?php } ?>  
             </div>                                                                                  
         </div>    
