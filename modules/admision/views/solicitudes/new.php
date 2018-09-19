@@ -52,7 +52,7 @@ $_SESSION['persona_solicita'] = base64_encode($_GET['ids']);
                 <div class="form-group">
                     <label for="txt_nombres" class="col-sm-5 col-md-5 col-xs-5 col-lg-5 control-label" id="lbl_nombre1"><?= Yii::t("formulario", "Names") ?>:</label>
                     <div class="col-sm-7 col-md-7 col-xs-7 col-lg-7">
-                        <input type="text" class="form-control PBvalidation keyupmce" value="<?php echo  $arr_persona['per_pri_nombre']." ".$arr_persona['per_seg_nombre']  ?>" id="txt_nombres" disabled data-type="alfa" placeholder="<?= Yii::t("formulario", "First Name") ?>">
+                        <input type="text" class="form-control keyupmce" value="<?php echo  $arr_persona['per_pri_nombre']." ".$arr_persona['per_seg_nombre']  ?>" id="txt_nombres" disabled data-type="alfa" placeholder="<?= Yii::t("formulario", "First Name") ?>">
                     </div>
                 </div>
             </div> 
@@ -60,7 +60,7 @@ $_SESSION['persona_solicita'] = base64_encode($_GET['ids']);
                 <div class="form-group">
                     <label for="txt_apellidos" class="col-sm-5 col-md-5 col-xs-5 col-lg-5 control-label" id="lbl_apellido1"><?= Yii::t("formulario", "Last Names") ?>: </label>
                     <div class="col-sm-7 col-md-7 col-xs-7 col-lg-7">
-                        <input type="text" class="form-control PBvalidation keyupmce" value="<?php echo  $arr_persona['per_pri_apellido']." ".$arr_persona['per_seg_apellido']  ?>" id="txt_apellidos" disabled data-type="alfa" placeholder="<?= Yii::t("formulario", "First Name") ?>">
+                        <input type="text" class="form-control keyupmce" value="<?php echo  $arr_persona['per_pri_apellido']." ".$arr_persona['per_seg_apellido']  ?>" id="txt_apellidos" disabled data-type="alfa" placeholder="<?= Yii::t("formulario", "First Name") ?>">
                     </div>
                 </div>
             </div> 
@@ -70,7 +70,7 @@ $_SESSION['persona_solicita'] = base64_encode($_GET['ids']);
                 <div class="form-group">
                     <label for="txt_cedula" class="col-sm-5 col-md-5 col-xs-5 col-lg-5 control-label" id="lbl_nombre1"><?= $tipodoc ?>:</label>
                     <div class="col-sm-7 col-md-7 col-xs-7 col-lg-7">
-                        <input type="text" class="form-control PBvalidation keyupmce" value="<?php echo  $arr_persona['per_cedula'] ?>" id="txt_cedula" data-type="alfa" disabled placeholder="<?= Yii::t("formulario", "First Name") ?>">
+                        <input type="text" class="form-control keyupmce" value="<?php echo  $arr_persona['per_cedula'] ?>" id="txt_cedula" data-type="alfa" disabled placeholder="<?= Yii::t("formulario", "First Name") ?>">
                     </div>
                 </div>
             </div> 
