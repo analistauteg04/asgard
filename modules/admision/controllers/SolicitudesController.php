@@ -58,7 +58,9 @@ class SolicitudesController extends \app\components\CController {
      * @return  Una vista que recibe las solicitudes del usuario logeado.
      */
     public function actionListarsolicitudxinteresado() {
-        $per_id = @Yii::$app->session->get("PB_perid");        
+        $per_id = @Yii::$app->session->get("PB_perid");  
+        $per_Ids= base64_decode($_GET['perid']);  
+        
         $inte_id = base64_decode($_GET['id']);        
         $mod_carrera = new EstudioAcademico();
         $interesado_model = new Interesado();
@@ -70,7 +72,6 @@ class SolicitudesController extends \app\components\CController {
         return $this->render('listarSolicitudxinteresado', [
                     'model' => $model,
                     'personalData' => $personaData,                    
-                    
         ]);
     }
 

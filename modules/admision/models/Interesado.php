@@ -1025,7 +1025,8 @@ class Interesado extends \app\modules\admision\components\CActiveRecord {
                 concat(per.per_pri_nombre,' ',per.per_seg_nombre) as nombres,
                 concat(per.per_pri_apellido,' ',per.per_seg_apellido) as apellidos,
                 ifnull(per.per_cedula,per.per_pasaporte) as DNI,
-                emp.emp_nombre_comercial as empresa
+                emp.emp_nombre_comercial as empresa,
+                per.per_id
                 from db_captacion.interesado inte
                 join db_asgard.persona as per on inte.per_id=per.per_id
                 join db_captacion.interesado_empresa as iemp on iemp.int_id=inte.int_id
