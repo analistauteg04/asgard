@@ -45,6 +45,7 @@
 
 return [    
     "Academic Study" => 'Estudio Académico',
+    "Academic Unit" => 'Unidad Academica',
     "Another interest carreer" => "Otra carrera de interés",
     'Contacts' => 'Contactos',
     "Provisional Contacts" => "Contactos Pendientes", 
