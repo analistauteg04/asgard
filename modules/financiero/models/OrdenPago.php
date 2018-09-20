@@ -235,12 +235,13 @@ class OrdenPago extends \app\modules\financiero\components\CActiveRecord {
     }
 
     /**
-     * Function listarSolicitud
-     * @author  Giovanni Vergara <analistadesarrollo02@uteg.edu.ec>
+     * Function  listarSolicitud
+     * @author   Giovanni Vergara <analistadesarrollo02@uteg.edu.ec>
+     * @modified Kleber Loayza <analistadesarrollo03@uteg.edu.ec>
      * @param   
-     * @return  $resultData (información de las solicitudes pendientes .)
+     * @return   $resultData (información de las solicitudes pendientes .)
      */
-    public function listarSolicitud($per_id, $opag_id, $rol, $arrFiltro = array(), $onlyData = false) {
+    public function listarSolicitud($sol_id, $opag_id, $rol, $arrFiltro = array(), $onlyData = false) {
         $con = \Yii::$app->db_facturacion;
         $con1 = \Yii::$app->db_asgard;
         $con2 = \Yii::$app->db_captacion;
@@ -285,7 +286,7 @@ class OrdenPago extends \app\modules\financiero\components\CActiveRecord {
                                 or (sins.uaca_id = imni.uaca_id and sins.mod_id = imni.mod_id and sins.uaca_id = imni.eaca_id))
                     INNER JOIN " . $con->dbname . ".item_precio itp ON itp.ite_id = imni.ite_id
                     INNER JOIN " . $con->dbname . ".item ite ON ite.ite_id = itp.ite_id                           
-                    WHERE $str_search per.per_id = " . $per_id . " AND ";
+                    WHERE $str_search sins.sins_id = " . $sol_id . " AND ";
 
         if (!empty($opag_id)) {
             $sql .= "orp.opag_id = ifnull(" . $opag_id . ",orp.opag_id) AND ";

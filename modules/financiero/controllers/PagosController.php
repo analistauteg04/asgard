@@ -540,20 +540,19 @@ class PagosController extends \app\components\CController {
     
     public function actionListarpagosolicitud() {
         $per_id = Yii::$app->session->get("PB_perid");
-        $per_ids = base64_decode($_GET['ids']);
+        $sol_id = base64_decode($_GET['id_sol']);
         $model_pag = new OrdenPago();
         $data = Yii::$app->request->get();
         if ($data['PBgetFilter']) {
             $arrSearch["f_ini"] = $data['f_ini'];
             $arrSearch["f_fin"] = $data['f_fin'];
             $arrSearch["search"] = $data['search'];
-
             if (empty($per_ids)) {  //vista para el interesado  
                 $rol = 1;
-                $resp_pago = $model_pag->listarSolicitud($per_id, null, $rol, $arrSearch);
+                $resp_pago = $model_pag->listarSolicitud($sol_id, null, $rol, $arrSearch);
             } else {
                 $rol = 0;
-                $resp_pago = $model_pag->listarSolicitud($per_ids, null, $rol, $arrSearch);
+                $resp_pago = $model_pag->listarSolicitud($sol_id, null, $rol, $arrSearch);
             }
             return $this->renderPartial('_listarpagosolicitud_grid', [
                         "model" => $resp_pago,

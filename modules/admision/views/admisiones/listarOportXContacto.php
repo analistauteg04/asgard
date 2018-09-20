@@ -112,13 +112,7 @@ if (!empty($personalData['pges_cedula'])) {
                 </div>
             </div> 
         </div> 
-    <?php } ?>
-    <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12"> 
-        <div class="col-md-10"></div>
-        <div class="col-md-2">
-            <a id="btn_crearoportunidad" href="javascript:" class="btn btn-primary btn-block"> <?= Yii::t("formulario", "New Opportunity") ?></a> 
-        </div>
-    </div>  
+    <?php } ?>    
 </div>
 <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12"> 
     <div>
