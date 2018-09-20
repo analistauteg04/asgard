@@ -167,6 +167,7 @@ class OportunidadesController extends \app\components\CController
     public function actionNewoportunidadxcontacto()
     {
         $per_id = @Yii::$app->session->get("PB_perid");
+        $emp_id = @Yii::$app->session->get("PB_idempresa");
         $pges_id = base64_decode($_GET["pgid"]);
         $persges_mod = new PersonaGestion();
         $contactManage = $persges_mod->consultarPersonaGestion($pges_id);
@@ -224,6 +225,7 @@ class OportunidadesController extends \app\components\CController
             "arr_carrerra2" => ArrayHelper::map($arr_carrerra2, "id", "name"),
             "arr_subcarrerra" => ArrayHelper::map($arr_subcarrera, "id", "name"),
             'arr_empresa' => ArrayHelper::map($empresa, "id", "value"),
+            "emp_id" => $emp_id,
         ]);
     }
 

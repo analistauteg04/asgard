@@ -6,7 +6,7 @@ use app\models\Utilities;
 use app\modules\admision\models\SolicitudInscripcion;
 use app\modules\admision\models\MetodoIngreso;
 use app\modules\admision\models\EstudioAcademico;
-use app\modules\admision\models\Modalidad;
+use app\modules\academico\models\Modalidad;
 use app\modules\admision\models\Oportunidad;
 use app\modules\admision\models\ModuloEstudio;
 use app\modules\admision\models\ItemMetodoNivel;
