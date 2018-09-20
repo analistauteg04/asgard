@@ -15,13 +15,13 @@ class Module extends \yii\base\Module
         parent::init();
         //\Yii::$app->urlManager->addRules(['<module:app>/<controller:\w+>/<action:\w+>/<id:\w+>' => '<module>/<controller>/<action>']);
         Yii::configure($this, require(__DIR__ . '/config/config.php'));
-        $this->registerTranslations();
+        self::registerTranslations();
         //\Yii::$app->view->theme->pathMap[your_module_name.'/views'] = [your_module_name.'/themes/'.\Yii::$app->view->theme->active.'/views']; // para usar temas
     }
 
-    public function registerTranslations()
+    public static function registerTranslations()
     {
-        $fileMap = $this->getMessageFileMap();
+        $fileMap = self::getMessageFileMap();
         Yii::$app->i18n->translations['modules/'. self::$module_name .'/*'] = [
             'class' => 'yii\i18n\PhpMessageSource',
             //'sourceLanguage' => 'es',
@@ -31,7 +31,7 @@ class Module extends \yii\base\Module
         ];
     }
     
-    private function getMessageFileMap(){
+    private static function getMessageFileMap(){
         // read directory message
         $arrLangFiles = array();
         $dir_messages = __DIR__ . DIRECTORY_SEPARATOR . "messages";

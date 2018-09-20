@@ -216,6 +216,12 @@ class SolicitudesController extends \app\components\CController {
         if (Yii::$app->request->isAjax) {
             $data = Yii::$app->request->post();
             $per_id = base64_decode($data["persona_id"]);
+//            if ($_SESSION['persona_solicita'] != '') {// tomar el de parametro)
+//                $per_id = $_SESSION['persona_solicita'];
+//            } else {
+//                unset($_SESSION['persona_ingresa']);
+//                $per_id = Yii::$app->session->get("PB_perid");
+//            }                          
         }
         $con = \Yii::$app->db_captacion;
         $con1 = \Yii::$app->db_facturacion;

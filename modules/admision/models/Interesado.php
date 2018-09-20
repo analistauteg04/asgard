@@ -1022,8 +1022,8 @@ class Interesado extends \app\modules\admision\components\CActiveRecord {
         $sql = "
                 select 
                 inte.int_id as id,
-                concat(per.per_pri_nombre,' ',per.per_seg_nombre) as nombres,
-                concat(per.per_pri_apellido,' ',per.per_seg_apellido) as apellidos,
+                ifnull(concat(per.per_pri_nombre,' ',per.per_seg_nombre),'') as nombres,
+                ifnull(concat(per.per_pri_apellido,' ',per.per_seg_apellido),'') as apellidos,
                 ifnull(per.per_cedula,per.per_pasaporte) as DNI,
                 emp.emp_nombre_comercial as empresa,
                 per.per_id

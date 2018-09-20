@@ -11,6 +11,7 @@ use yii\jui\AutoComplete;
 use yii\web\JsExpression;
 use app\modules\admision\Module as admision;
 
+admision::registerTranslations(); // trae las traducciones del modulo 
 ?>
 
 <div>

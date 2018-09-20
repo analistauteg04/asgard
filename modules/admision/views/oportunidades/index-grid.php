@@ -72,7 +72,7 @@ use app\modules\admision\Module;
                         return Html::a('<span class="glyphicon glyphicon-eye-open"></span>', Url::to(['oportunidades/view', 'opor_id' => base64_encode($model["opo_id"]), 'pges_id' => base64_encode($model["pges_id"])]), ["data-toggle" => "tooltip", "title" => "Ver Oportunidad", "data-pjax" => 0]);
                     },
                     'update' => function ($url, $model) {
-                        return Html::a('<span class="glyphicon glyphicon-th-large"></span>', Url::to(['oportunidades/listaractixoport', 'opor_id' => base64_encode($model["opo_id"]), 'pges_id' => base64_encode($model["pges_id"])]), ["data-toggle" => "tooltip", "title" => "Ver Actividades", "data-pjax" => 0]);
+                        return Html::a('<span class="glyphicon glyphicon-th-large"></span>', Url::to(['/admisiones/listaractixoport', 'opor_id' => base64_encode($model["opo_id"]), 'pges_id' => base64_encode($model["pges_id"])]), ["data-toggle" => "tooltip", "title" => "Ver Actividades", "data-pjax" => 0]);
                     },
                 ],
             ],
