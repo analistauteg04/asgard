@@ -391,9 +391,11 @@ class SolicitudInscripcion extends \app\modules\admision\components\CActiveRecor
             return $dataProvider;
         }
     }
+    
     public static function consultarInteresadoPorSol_id($sins_id) {
         $con = \Yii::$app->db_captacion;
         $con2 = \Yii::$app->db;
+        $con1 = \Yii::$app->db_academico;
         $estado = 1;
         $sql = "
                 SELECT 
@@ -406,11 +408,19 @@ class SolicitudInscripcion extends \app\modules\admision\components\CActiveRecor
                     sins.sins_beca,
                     sins.sins_fecha_solicitud as fecha_solicitud,
                     lpad(sins.sins_id,4,'0') as num_solicitud,
-                    per.per_nacionalidad
+                    per.per_nac_ecuatoriano,
+                    sins.uaca_id,
+                    uaca_nombre,
+                    eac.eaca_nombre as carrera,
+                    sins.sins_fecha_reprobacion,
+                    sins.sins_observacion,
+                    sins.rsin_id
                 FROM 
                     " . $con->dbname . ".solicitud_inscripcion as sins
                     INNER JOIN " . $con->dbname . ".interesado as inte on sins.int_id = inte.int_id
                     INNER JOIN " . $con2->dbname . ".persona as per on inte.per_id = per.per_id 
+                    INNER JOIN " . $con1->dbname . ".unidad_academica as uaca on uaca.uaca_id = sins.uaca_id   
+                    INNER JOIN " . $con1->dbname . ".estudio_academico as eac on sins.eaca_id = eac.eaca_id
                 WHERE 
                     sins.sins_estado_logico=:estado AND 
                     inte.int_estado_logico=:estado AND 
@@ -425,6 +435,7 @@ class SolicitudInscripcion extends \app\modules\admision\components\CActiveRecor
         $resultData = $comando->queryOne();
         return $resultData;
     }
+    
     public static function obtenerSolicitudXInteresado($int_id) {
         $con = \Yii::$app->db_captacion;
         $con2 = \Yii::$app->db;

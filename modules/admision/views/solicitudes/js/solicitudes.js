@@ -539,7 +539,7 @@ $(document).ready(function () {
         var link = $('#txth_base').val() + "/admision/solicitudes/savedocumentos";
         var arrParams = new Object();
         arrParams.sins_id = $('#txth_ids').val();
-        arrParams.persona_id = $('#txth_idp').val();
+        arrParams.persona_id = $('#txth_idp').val();        
         arrParams.interesado_id = $('#txth_int_id').val();
         arrParams.arc_extranjero = $('#txth_extranjero').val();
         arrParams.arc_doc_titulo = $('#txth_doc_titulo').val();

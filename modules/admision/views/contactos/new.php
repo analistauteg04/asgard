@@ -139,7 +139,6 @@ $fecha_actual = date("Y-m-d");
             </div> 
         </div>
     </div> 
-
     <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12"> 
         <div class="col-lg-6 col-md-6 col-sm-6 col-xs-6">
             <div class="form-group">
@@ -243,7 +242,6 @@ $fecha_actual = date("Y-m-d");
             </div>
         </div>
     </div> 
-
     <div id="estudiante" style="display: block;">        
         <div id="beneficio" style="display: none;">
             <div class="col-md-12 col-xs-12 col-sm-12 col-lg-12 ">
@@ -310,7 +308,6 @@ $fecha_actual = date("Y-m-d");
                     </div>
                 </div>               
             </div> 
-
             <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">                 
                 <div class="col-lg-6 col-md-6 col-sm-6 col-xs-6">
                     <div class="form-group">
@@ -320,14 +317,13 @@ $fecha_actual = date("Y-m-d");
                         </div>
                     </div>
                 </div>
-
                 <div class="col-lg-6 col-md-6 col-sm-6 col-xs-6">
                     <div class="form-group">
                         <label for="cmb_pais" class="col-sm-5 col-md-5 col-xs-5 col-lg-5 control-label"><?= Yii::t("formulario", "Country") ?> <span class="text-danger">*</span> </label>
                         <div class="col-sm-7 col-md-7 col-xs-7 col-lg-7">
                             <select id="cmb_pais_contacto" name="cmb_pais_contacto" class="form-control pai_combo">
                                 <?php
-                                $pai_id_nacimiento = 57;
+                                $pai_id_nacimiento = 1;
                                 $code = "";
                                 foreach ($arr_pais as $key => $value) {
 
