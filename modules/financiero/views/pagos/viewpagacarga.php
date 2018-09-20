@@ -3,6 +3,9 @@
 use yii\helpers\Html;
 use yii\helpers\Url;
 use app\modules\financiero\Module as financiero;
+use app\modules\admision\Module as admision;
+
+admision::registerTranslations();
 ?>
 <?= Html::hiddenInput('txth_ids', $opag_id, ['id' => 'txth_ids']); ?>
 <?= Html::hiddenInput('txth_idd', $idd, ['id' => 'txth_idd']); ?>
@@ -21,7 +24,7 @@ use app\modules\financiero\Module as financiero;
     <?php if (base64_decode($_GET['fpag']) == 'Transferencia' || base64_decode($_GET['fpag']) == 'Depósito') { ?>
         <div class="col-md-12 col-sm-12 col-xs-12 col-lg-12">
             <div class="form-group">
-                <label for="txt_solicitud" class="col-sm-4 col-md-4 col-xs-4 col-lg-4 control-label" id="lbl_solicitud"><?= Yii::t("solicitud_ins", "Document") ?></label>
+                <label for="txt_solicitud" class="col-sm-4 col-md-4 col-xs-4 col-lg-4 control-label" id="lbl_solicitud"><?= admision::t("Solicitudes", "Document") ?></label>
                 <div class="col-sm-8 col-md-8 col-xs-8 col-lg-8 ">
                     <?php
                     echo "<a href='" . Url::to(['/site/getimage', 'route' => "/uploads/documento/$per_id/$imagen"]) . "' download='" . $imagen . "' ><span class='glyphicon glyphicon-download-alt'></span>Descargar Imagen</a>"

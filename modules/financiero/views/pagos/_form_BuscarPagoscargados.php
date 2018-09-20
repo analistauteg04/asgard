@@ -5,6 +5,9 @@ use yii\helpers\Html;
 use yii\helpers\Url;
 use kartik\date\DatePicker;
 use yii\helpers\ArrayHelper;
+use app\modules\admision\Module as admision;
+
+admision::registerTranslations();
 
 /* 
  * To change this license header, choose License Headers in Project Properties.
@@ -17,7 +20,7 @@ use yii\helpers\ArrayHelper;
         <div class="form-group">
             <label for="txt_buscarDataPagosCargados" class="col-sm-2 col-md-2 col-xs-2 col-lg-2 control-label"><?= Yii::t("formulario", "Search") ?></label>
             <div class="col-sm-8 col-md-8 col-xs-8 col-lg-8">
-                <input type="text" class="form-control" value="" id="txt_buscarDataPago" placeholder="<?= Yii::t("solicitud_ins", "Search by Income Method or Names")?>">
+                <input type="text" class="form-control" value="" id="txt_buscarDataPago" placeholder="<?= admision::t("Solicitudes", "Search by Income Method or Names")?>">
             </div>
         </div>
     </div>

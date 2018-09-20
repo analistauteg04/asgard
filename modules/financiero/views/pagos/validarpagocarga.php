@@ -5,6 +5,9 @@ use yii\helpers\Url;
 use app\widgets\PbGridView\PbGridView;
 use yii\data\ArrayDataProvider;
 use app\modules\financiero\Module as financiero;
+use app\modules\admision\Module as admision;
+
+admision::registerTranslations();
 ?>
 <?= Html::hiddenInput('txth_ids', $opag_id, ['id' => 'txth_ids']); ?>
 <div class="col-md-12 col-sm-12 col-xs-12 col-lg-12 ">
@@ -14,7 +17,7 @@ use app\modules\financiero\Module as financiero;
 
 <div class="col-md-6 col-sm-6 col-xs-6 col-lg-6">
     <div class="form-group">
-        <label for="txt_solicitud" class="col-sm-4 control-label" id="lbl_solicitud"><?= Yii::t("solicitud_ins", "Application number") ?></label>
+        <label for="txt_solicitud" class="col-sm-4 control-label" id="lbl_solicitud"><?= admision::t("Solicitudes", "Application number") ?></label>
         <div class="col-sm-8 ">
             <?= $sins_id ?>
         </div>

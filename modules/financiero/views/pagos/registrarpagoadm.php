@@ -14,6 +14,9 @@ use yii\jui\AutoComplete;
 use yii\web\JsExpression;
 use app\models\Utilities;
 use app\modules\financiero\Module as financiero;
+use app\modules\admision\Module as admision;
+
+admision::registerTranslations();
 session_start();
 $_SESSION['personaid'] = $per_id;
 $leyendarc = '<div class="col-md-12 col-sm-12 col-xs-12 col-lg-12">
@@ -73,16 +76,16 @@ $leyendarc = '<div class="col-md-12 col-sm-12 col-xs-12 col-lg-12">
     </div>
     <div class="col-md-12 col-sm-12 col-xs-12 col-lg-12">
         <div class="form-group">            
-            <label for="txt_numero_transaccion" class="col-sm-2 control-label"><?= Yii::t("formulario", "Transaction Number") ?></label>
+            <label for="txt_numero_transaccion" class="col-sm-2 control-label"><?= financiero::t("Pagos", "Transaction Number") ?></label>
             <div class="col-sm-10 ">
                 <?php
                 if ($saldo_pendiente <= '0') {
                     ?>
-                    <input type="text" class="form-control PBvalidation keyupmce" id="txt_numero_transaccion" data-type="number" readonly = "readonly" data-keydown="true" placeholder="<?= Yii::t("formulario", "Transaction Number") ?>">
+                    <input type="text" class="form-control PBvalidation keyupmce" id="txt_numero_transaccion" data-type="number" readonly = "readonly" data-keydown="true" placeholder="<?= financiero::t("Pagos", "Transaction Number") ?>">
                     <?php
                 } else {
                     ?>
-                    <input type="text" class="form-control PBvalidation keyupmce" id="txt_numero_transaccion" data-type="number" data-keydown="true" placeholder="<?= Yii::t("formulario", "Transaction Number") ?>">
+                    <input type="text" class="form-control PBvalidation keyupmce" id="txt_numero_transaccion" data-type="number" data-keydown="true" placeholder="<?= financiero::t("Pagos", "Transaction Number") ?>">
                     <?php
                 }
                 ?>
@@ -91,7 +94,7 @@ $leyendarc = '<div class="col-md-12 col-sm-12 col-xs-12 col-lg-12">
     </div>    
     <div class="col-md-12 col-sm-12 col-xs-12 col-lg-12">
         <div class="form-group">            
-            <label for="txt_fecha_transaccion" class="col-sm-2 control-label"><?= Yii::t("formulario", "Transaction Date") ?></label>
+            <label for="txt_fecha_transaccion" class="col-sm-2 control-label"><?= financiero::t("Pagos", "Transaction Date") ?></label>
             <div class="col-sm-10 ">
                 <?php
                 if ($saldo_pendiente <= '0') {
@@ -102,7 +105,7 @@ $leyendarc = '<div class="col-md-12 col-sm-12 col-xs-12 col-lg-12">
                         'value' => '',
                         "disabled" => "disabled",
                         'type' => DatePicker::TYPE_INPUT,
-                        'options' => ["class" => "form-control PBvalidation keyupmce", "id" => "txt_fecha_transaccion", "data-type" => "fecha", "data-keydown" => "true", "placeholder" => Yii::t("formulario", "Transaction Date")],
+                        'options' => ["class" => "form-control PBvalidation keyupmce", "id" => "txt_fecha_transaccion", "data-type" => "fecha", "data-keydown" => "true", "placeholder" => financiero::t("Pagos", "Transaction Date")],
                         'pluginOptions' => [
                             'autoclose' => true,
                             'format' => Yii::$app->params["dateByDatePicker"],
@@ -117,7 +120,7 @@ $leyendarc = '<div class="col-md-12 col-sm-12 col-xs-12 col-lg-12">
                         'name' => 'txt_fecha_transaccion',
                         'value' => '',
                         'type' => DatePicker::TYPE_INPUT,
-                        'options' => ["class" => "form-control PBvalidation keyupmce", "id" => "txt_fecha_transaccion", "data-type" => "fecha", "data-keydown" => "true", "placeholder" => Yii::t("formulario", "Transaction Date")],
+                        'options' => ["class" => "form-control PBvalidation keyupmce", "id" => "txt_fecha_transaccion", "data-type" => "fecha", "data-keydown" => "true", "placeholder" => financiero::t("Pagos", "Transaction Date")],
                         'pluginOptions' => [
                             'autoclose' => true,
                             'format' => Yii::$app->params["dateByDatePicker"],
@@ -152,7 +155,7 @@ $leyendarc = '<div class="col-md-12 col-sm-12 col-xs-12 col-lg-12">
                         'browseClass' => 'btn btn-primary btn-block',
                         'browseIcon' => '<i class="fa fa-folder-open"></i> ',
                         'browseLabel' => "Subir Archivo",
-                        'uploadUrl' => Url::to(['/registrarpago/crearpago']),
+                        'uploadUrl' => Url::to(['pagos/savepago']),
                         'maxFileSize' => Yii::$app->params["MaxFileSize"], // en Kbytes
                         'uploadExtraData' => 'javascript:function (previewId,index) {
                         var name_pago= $("#txth_doc_titulo").val();
@@ -235,27 +238,27 @@ $leyendarc = '<div class="col-md-12 col-sm-12 col-xs-12 col-lg-12">
         'columns' => [          
             [
                 'attribute' => 'Forma',
-                'header' => Yii::t("formulario", "Paid form"),
+                'header' => financiero::t("Pagos", "Paid form"),
                 'value' => 'fpag_nombre',
             ],
             [
                 'attribute' => 'Total',
-                'header' => Yii::t("formulario", "Pay Total"),
+                'header' => financiero::t("Pagos", "Pay Total"),
                 'value' => 'dcar_valor',
             ],
             [
                 'attribute' => 'Numtrans',
-                'header' => Yii::t("formulario", "Transaction Number"),
+                'header' => financiero::t("Pagos", "Transaction Number"),
                 'value' => 'icpr_num_transaccion',
             ],
             [
                 'attribute' => 'Fechatrans',
-                'header' => Yii::t("formulario", "Transaction Date"),
+                'header' => financiero::t("Pagos", "Transaction Date"),
                 'value' => 'icpr_fecha_transaccion',
             ],
             [
                 'attribute' => 'Revisado',
-                'header' => 'Revisado',
+                'header' => admision::t("Solicitudes",'Reviewed'),
                 'value' => 'dcar_revisado',
             ],
             [
