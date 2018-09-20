@@ -2,7 +2,6 @@
 
 use yii\helpers\Html;
 use app\modules\admision\Module;
-//print_r($arr_oportunidad);
 if (!empty($personalData['pges_cedula'])) {
     $tipodoc = "Cédula";
     $dni = $personalData['pges_cedula'];
@@ -197,13 +196,11 @@ $fecha_actual = date("Y-m-d");
                     <?php if (empty($arr_oportunidad["eaca_id"])) { ?>
                         <label for="cmb_modulo_estudio" class="col-sm-5 col-md-5 col-xs-5 col-lg-5 control-label keyupmce"><?= Module::t("crm", "Academic Study") ?></label>
                         <div class="col-sm-7 col-md-7 col-xs-7 col-lg-7">
-                            <!--<? Html::dropDownList("cmb_modulo_estudio", $arr_oportunidad["mest_id"], $arr_modulo_estudio, ["class" => "form-control", "id" => "cmb_modulo_estudio", "disabled" => "true"]) ?>-->
                             <input type="text" class="form-control PBvalidation keyupmce" value="<?= $arr_oportunidad['moestudio'] ?>" disabled  data-type="alfa">                        
                         </div>
                     <?php } else { ?>
                         <label for="cmb_academic_study" class="col-sm-5 col-md-5 col-xs-5 col-lg-5 control-label keyupmce"><?= Module::t("crm", "Academic Study") ?></label>
                         <div class="col-sm-7 col-md-7 col-xs-7 col-lg-7">
-                            <!--<? Html::dropDownList("cmb_academic_study", $arr_oportunidad["eaca_id"], $arr_academic_study, ["class" => "form-control", "id" => "cmb_academic_study", "disabled" => "true"]) ?>-->
                             <input type="text" class="form-control PBvalidation keyupmce" value="<?= $arr_oportunidad['esacademico'] ?>" disabled  data-type="alfa">
                                                 </div>
                     <?php } ?>
@@ -229,7 +226,6 @@ $fecha_actual = date("Y-m-d");
                 <div class="form-group">
                     <label for="cmb_carrera2" class="col-sm-5 col-md-5 col-xs-5 col-lg-5 control-label keyupmce"><?= Yii::t("academico", "Career") ?></label>
                     <div class="col-sm-7 col-md-7 col-xs-7 col-lg-7">
-                        <!--<? Html::dropDownList("cmb_carrera2", 1, $arr_carrerra2, ["class" => "form-control", "id" => "cmb_carrera2", "disabled" => "true"]) ?>-->
                         <input type="text" class="form-control keyupmce" value="<?= $tipocarrera["tcar_nombre"] ?>" disabled  data-type="alfa">
                     </div>
                 </div>
@@ -238,7 +234,6 @@ $fecha_actual = date("Y-m-d");
                 <div class="form-group">
                     <label for="cmb_subcarrera" class="col-sm-5 col-md-5 col-xs-5 col-lg-5 control-label keyupmce"><?= Yii::t("formulario", "Sub Carrier") ?></label>
                     <div class="col-sm-7 col-md-7 col-xs-7 col-lg-7">
-                        <!--<? Html::dropDownList("cmb_subcarrera", 1, $arr_subcarrerra, ["class" => "form-control", "id" => "cmb_subcarrera", "disabled" => "true"]) ?>-->
                         <input type="text" class="form-control keyupmce" value="<?= $arr_oportunidad["sub_carrera"] ?>" disabled  data-type="alfa">
                     </div>
                 </div>
