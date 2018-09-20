@@ -29,7 +29,11 @@ use app\models\Empresa;
 use app\models\TipoCarrera;
 
 class AdmisionesController extends \app\components\CController {
-
+    public function actionIndex(){
+        return $this->render('index', [
+           
+        ]);
+    }
     public function actionCrearcontacto() {
         $per_id = @Yii::$app->session->get("PB_perid");
         $modcanal = new Oportunidad();
