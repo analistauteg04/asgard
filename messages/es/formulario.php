@@ -501,6 +501,7 @@ return [
     "Sale Opportunity" => "Oportunidad de Venta",
     "Sale Opportunity Type" => "Tipo Oportunidad",
     "Saturday" => "Sábado",
+    
     "Save" => "Grabar",
     "Save Profile" => "Guardar Perfil",
     "Save in Mangage Contact" => "Guardar en contacto gestion",
@@ -565,6 +566,7 @@ return [
     "The person belong to enterprise have not been saved" => "La persona de la empresa no ha sido guardada",
     "The person have not been saved" => "La persona no ha sido guardada",
     "The pre-interested person have not been saved" => "La pre interesado no ha sido guardado",
+    "The enterprise interested hasn't been saved" => "El interesado que pertence a la empresa en cuestion no ha sido guardado",
     "The information have been saved" => "La informacion ha sido guardada",
     "Thursday" => "Jueves",
     "Title" => "Título",

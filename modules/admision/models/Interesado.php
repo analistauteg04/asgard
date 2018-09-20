@@ -955,7 +955,26 @@ class Interesado extends \app\modules\admision\components\CActiveRecord {
         $resultData = $comando->queryOne();
         return $resultData['int_id'];
     }
-    
+    public function consultaInteresadoById($per_id) {
+        $con = \Yii::$app->db_captacion;
+        $estado = 1;
+        $sql = "
+                    SELECT
+                    ifnull(int_id,0) as int_id
+                    FROM db_captacion.interesado
+                    WHERE 
+                    per_id = $per_id
+                    and int_estado = $estado
+                    and int_estado_logico=$estado
+                ";
+        $comando = $con->createCommand($sql);
+        $resultData = $comando->queryOne();
+        if (empty($resultData['int_id']))
+            return 0;
+        else {
+            return $resultData['int_id'];
+        }
+    }
     public function getPersonaxIdInteresado($int_id) {
         $con = \Yii::$app->db_asgard;
         $con2 = \Yii::$app->db_captacion;

@@ -257,7 +257,21 @@ function update(){
         }, true);
     }
 }
-
+function grabarInteresado(pgest_id) {
+    var link = $('#txth_base').val() + "/admision/interesados/guardarinteresado";
+    var arrParams = new Object();
+    arrParams.id_pgest = pgest_id;
+    if (!validateForm()) {
+        requestHttpAjax(link, arrParams, function (response) {
+            showAlert(response.status, response.label, response.message);
+            setTimeout(function () {
+                if (response.status == "OK") {
+                    parent.window.location.href = $('#txth_base').val() + "/admision/interesados/index";
+                }
+            }, 3000);
+        }, true);
+    }
+}
 function camposnulos(campo) {
     if ($(campo).val() == "")
     {

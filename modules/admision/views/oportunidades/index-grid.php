@@ -2,6 +2,7 @@
 
 use yii\helpers\Html;
 use yii\helpers\Url;
+use app\models\Persona;
 use app\widgets\PbGridView\PbGridView;
 use app\modules\admision\Module;
 ?>
@@ -26,13 +27,12 @@ use app\modules\admision\Module;
                 'attribute' => 'Unidad',
                 'header' => Yii::t("formulario", "Academic unit"),
                 'value' => 'des_unidad',
-            ],           
-            /*[
+            ],
+            /* [
               'attribute' => 'Estudio Academico',
               'header' => Module::t("crm", "Career/Program/Course"),
               'value' => 'des_estudio',
-            ], */
-
+              ], */
             [
                 'class' => 'yii\grid\ActionColumn',
                 'header' => Module::t("crm", "Career/Program/Course"),
@@ -66,14 +66,15 @@ use app\modules\admision\Module;
             [
                 'class' => 'yii\grid\ActionColumn',
                 'header' => Yii::t("formulario", "Actions"),
-                'template' => '{view} {update}',//    
+                'template' => '{view} {activities} {interested}', //    
                 'buttons' => [
                     'view' => function ($url, $model) {
                         return Html::a('<span class="glyphicon glyphicon-eye-open"></span>', Url::to(['oportunidades/view', 'opor_id' => base64_encode($model["opo_id"]), 'pges_id' => base64_encode($model["pges_id"])]), ["data-toggle" => "tooltip", "title" => "Ver Oportunidad", "data-pjax" => 0]);
                     },
-                    'update' => function ($url, $model) {
+                    'activities' => function ($url, $model) {
                         return Html::a('<span class="glyphicon glyphicon-th-large"></span>', Url::to(['/admisiones/listaractixoport', 'opor_id' => base64_encode($model["opo_id"]), 'pges_id' => base64_encode($model["pges_id"])]), ["data-toggle" => "tooltip", "title" => "Ver Actividades", "data-pjax" => 0]);
                     },
+                    
                 ],
             ],
         ],
