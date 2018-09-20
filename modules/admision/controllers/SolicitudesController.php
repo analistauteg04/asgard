@@ -532,8 +532,7 @@ class SolicitudesController extends \app\components\CController {
                 $beca_archivo = Yii::$app->params["documentFolder"] . "solicitudinscripcion/" . $per_id . "/doc_beca_per_" . $per_id . "." . $typeFile;
             }
             if (!empty($titulo_archivo) && !empty($dni_archivo) && !empty($foto_archivo)) {
-                Utilities::putMessageLogFile('aqui entro');
-                $mensaje = 'sol:'.$sins_id . ' inte:'. $interesado_id. ' extr:'.$es_extranjero. ' beca:'.$beca;            
+                Utilities::putMessageLogFile('aqui entro');                
                 if (!empty($titulo_archivo)) {
                     Utilities::putMessageLogFile("s1");
                     $mod_solinsxdoc1 = new SolicitudinsDocumento();
