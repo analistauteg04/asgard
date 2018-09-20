@@ -208,21 +208,14 @@ class SolicitudesController extends \app\components\CController {
     }
 
     public function actionSave() {
-        $per_id = @Yii::$app->session->get("PB_perid");
+        //$per_id = @Yii::$app->session->get("PB_perid");
         $usu_id = @Yii::$app->session->get("PB_iduser");
         $envi_correo = 0;
         $es_nacional = " ";
         $valida = " ";
         if (Yii::$app->request->isAjax) {
             $data = Yii::$app->request->post();
-            if ($_SESSION['persona_solicita'] != '') {// tomar el de parametro)
-                $per_id = $_SESSION['persona_solicita'];
-            } else {
-                unset($_SESSION['persona_ingresa']);
-                $per_id = Yii::$app->session->get("PB_perid");
-            }   
-            $per_id = 1004;
-           
+            $per_id = base64_decode($data["persona_id"]);
         }
         $con = \Yii::$app->db_captacion;
         $con1 = \Yii::$app->db_facturacion;
@@ -244,10 +237,9 @@ class SolicitudesController extends \app\components\CController {
             if ($es_extranjero == "0" || $es_nacional == "0") {
                 $certvota_archivo = 1;
             }
-           
             $mod_interesado = new Interesado();
-            $id_int = $mod_interesado->getInteresadoxIdPersona($per_id); //REVISAR SI LA VALIDACION ES CORRECTA
-            if (!isset($id_int["int_id"])) {
+            $id_int = $mod_interesado->getInteresadoxIdPersona($per_id);
+            if (!isset($id_int)) {
                 throw new Exception('Error id interesado no creado.');
             }
             $nint_id = $data["ninteres"];
@@ -269,7 +261,7 @@ class SolicitudesController extends \app\components\CController {
                     $fec_preobservacion = null;
                 }
 
-                $interesado_id = $id_int["int_id"];
+                $interesado_id = $id_int;
                 $subirDocumentos = $data["subirDocumentos"];
                 $mod_solins = new SolicitudInscripcion();
                 $errorprecio = 1;

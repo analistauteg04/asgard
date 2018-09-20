@@ -312,6 +312,7 @@ $(document).ready(function () {
         arrParams.arc_nacional = $('#txth_nac').val();
         arrParams.arc_doc_beca = $('#txth_doc_beca').val();
         arrParams.emp_id = 1;
+        alert(arrParams.persona_id);
         if ($('input[name=opt_declara_Dctosi]:checked').val() == 1) {
             arrParams.descuento_id = $('#cmb_descuento').val();
             arrParams.marcadescuento = '1';
