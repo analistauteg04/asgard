@@ -127,7 +127,7 @@ $(document).ready(function () {
         if (parseFloat(arrParams.valor) > parseFloat(arrParams.totpago))
         {
             alert("Esta tratando de ingresar un pago mayor al valor de su servicio. " + parseFloat(arrParams.totpago));
-        } else if (parseFloat(arrParams.valor) > parseFloat(valor_pendiente))
+        } else if (parseFloat(arrParams.valor) < parseFloat(arrParams.totpago))
         {
             alert("Esta tratando de ingresar un pago mayor a su valor pendiente. " + parseFloat(valor_pendiente));
         } else {
