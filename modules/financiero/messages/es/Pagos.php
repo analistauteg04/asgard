@@ -6,9 +6,11 @@ namespace app\modules\financiero\messages;
  * and open the template in the editor.
  */
  return [
+     "Apply Discount" => "Aplica Descuento",
      "Amount Paid" => "Valor Pagado",
      "Approval Payment" => "Aprobación de Pago",
      "Control Payments" => "Control de Pagos",
+     "Discount" => "Descuento",
      "List Payment" => "Listar pagos",
      "Outstanding balance" => "Saldo Pendiente",
      "Paid form" => "Forma Pago",

@@ -140,12 +140,14 @@ use yii\helpers\Url;
     <div class="col-md-6 col-sm-6 col-xs-6 col-lg-6">
         <div class="form-group">
             <label for="cmb_revision" class="col-sm-4 col-md-4 col-xs-4 col-lg-4 control-label keyupmce"><?= Yii::t("formulario", "Result") ?></label>
-            <div class="col-sm-4 col-md-4 col-xs-4 col-lg-4">    
-                <?php if (empty($personaData["fecha_reprobacion"])) { ?> 
+            <div class="col-sm-4 col-md-4 col-xs-4 col-lg-4">
+                
+                <?php if ($personaData["rsin_id"]==1)  { ?> 
                     <?= Html::dropDownList("cmb_revision", 0, $revision, ["class" => "form-control PBvalidation", "id" => "cmb_revision"]) ?> 
                 <?php } else {?>                
-                    <input type="text" value= "No Aprobado" readonly="readonly" class="form-control" id="txt_resultado" data-type="alfa" data-keydown="true" >  
-                <?php } ?>                
+                    <?= Html::dropDownList("cmb_revision", $personaData["rsin_id"], $revision, ["class" => "form-control PBvalidation", "id" => "cmb_revision", "disabled"=>"true"]) ?> 
+                <?php } ?>      
+                    
             </div>
         </div>
     </div>
@@ -226,8 +228,10 @@ use yii\helpers\Url;
         <div class="form-group">
             <label for="" class="col-sm-10  control-label keyupmce"></label>
             <div class="col-md-2 col-sm-2 col-xs-4 col-lg-2">     
-                <?php if (empty($personaData["fecha_reprobacion"])) { ?> 
-                    <a id="btn_Aprobarsolicitud" href="javascript:" class="btn btn-primary btn-block"> <?= Yii::t("formulario", "Send") ?></a>
+                <?php if (empty($personaData["fecha_reprobacion"])) { ?>                 
+                    <?php if ($personaData["rsin_id"] == 1) { ?> 
+                        <a id="btn_Aprobarsolicitud" href="javascript:" class="btn btn-primary btn-block"> <?= Yii::t("formulario", "Send") ?></a>
+                    <?php } ?>
                 <?php } ?>  
             </div>                                                                                  
         </div>    

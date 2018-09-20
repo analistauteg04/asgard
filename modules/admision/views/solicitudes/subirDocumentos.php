@@ -3,6 +3,7 @@
 use yii\helpers\Html;
 use yii\helpers\Url;
 use app\components\CFileInputAjax;
+use app\modules\admision\Module as admision;
 $leyenda = '<div class="col-md-12 col-xs-12 col-sm-12 col-lg-12">
           <div class="form-group">
           <div class="col-sm-10 col-md-10 col-xs-10 col-lg-10">
@@ -26,7 +27,7 @@ $_SESSION['persona_solicita'] = base64_encode($per_id);
     
     <div class="col-md-12 col-xs-12 col-sm-12 col-lg-12">
         <div class="form-group">
-            <label for="txt_solicitud" class="col-sm-4 col-md-4 col-xs-4 col-lg-4 control-label"><?= Yii::t("formulario", "Request #") ?></label>
+            <label for="txt_solicitud" class="col-sm-4 col-md-4 col-xs-4 col-lg-4 control-label"><?= admision::t("Solicitudes", "Request #") ?></label>
             <div class="col-sm-7 col-md-7 col-xs-7 col-lg-7">
                 <input type="text" class="form-control" value="<?= $solicitud ?>" id="txt_solicitud" disabled="true">
             </div>
@@ -43,7 +44,7 @@ $_SESSION['persona_solicita'] = base64_encode($per_id);
     </div>
     
     <div class="col-md-12 col-xs-12 col-sm-12 col-lg-12">
-        <h4><span id="lbl_Personeria"><?= Yii::t("solicitud_ins", "Attach document") ?></span></h4>    
+        <h4><span id="lbl_Personeria"><?= admision::t("Solicitudes", "Attach document") ?></span></h4>    
     </div>
     <div class="col-md-12 col-xs-12 col-sm-12 col-lg-12">
         <?php echo $leyenda; ?>
@@ -51,7 +52,7 @@ $_SESSION['persona_solicita'] = base64_encode($per_id);
     
     <div class="col-md-12 col-xs-12 col-sm-12 col-lg-12 doc_titulo cinteres">
         <div class="form-group">
-            <label for="txth_doc_titulo" class="col-sm-4 col-md-4 col-xs-4 col-lg-4 control-label keyupmce"><?= Yii::t("formulario", "Titulo") ?></label>
+            <label for="txth_doc_titulo" class="col-sm-4 col-md-4 col-xs-4 col-lg-4 control-label keyupmce"><?= admision::t("Solicitudes", "Title") ?></label>
             <div class="col-sm-7 col-md-7 col-xs-7 col-lg-7">
                 <?= Html::hiddenInput('txth_doc_titulo', '', ['id' => 'txth_doc_titulo']); ?>
                 <?php
@@ -166,7 +167,7 @@ $_SESSION['persona_solicita'] = base64_encode($per_id);
 
     <div class="col-md-12 col-xs-12 col-sm-12 col-lg-12 doc_certvota cinteres" <?= ($txth_extranjero == "0") ? 'style="display:none;"' : "" ?> >
         <div class="form-group">
-            <label for="txth_doc_certvota" class="col-sm-4 col-md-4 col-xs-4 col-lg-4 control-label keyupmce"><?= Yii::t("formulario", "Certificado Votación") ?></label>
+            <label for="txth_doc_certvota" class="col-sm-4 col-md-4 col-xs-4 col-lg-4 control-label keyupmce"><?= admision::t("Solicitudes", "Voting Certificate") ?></label>
             <div class="col-sm-7 col-md-7 col-xs-7 col-lg-7">
                 <?= Html::hiddenInput('txth_doc_certvota', '', ['id' => 'txth_doc_certvota']); ?>
                 <?php
@@ -280,7 +281,7 @@ $_SESSION['persona_solicita'] = base64_encode($per_id);
     </div>
     <div class="col-md-12 col-xs-12 col-sm-12 col-lg-12">        
         <div class="form-group">
-            <label for="txt_declararbeca" class="col-sm-5 control-label"><?= Yii::t("formulario", "Apply Cala Foundation scholarship") ?></label>
+            <label for="txt_declararbeca" class="col-sm-5 control-label"><?= admision::t("Solicitudes", "Apply Cala Foundation scholarship") ?></label>
             <div class="col-sm-7">  
                 <?php if (base64_decode($beca) ==1) { ?>
                     <label><input type="radio" name="opt_declara_si"  id="opt_declara_si" value="1" checked disabled="true"><b>Si</b></label>
@@ -296,7 +297,7 @@ $_SESSION['persona_solicita'] = base64_encode($per_id);
     <?php if (base64_decode($beca) ==1) { ?>
         <div class="col-md-12 col-xs-12 col-sm-12 col-lg-12" id="divDeclarabeca">
             <div class="form-group">
-                <label for="txth_doc_beca" class="col-sm-4 col-md-4 col-xs-4 col-lg-4 control-label keyupmce"><?= Yii::t("formulario", "Scholarship document") ?></label>
+                <label for="txth_doc_beca" class="col-sm-4 col-md-4 col-xs-4 col-lg-4 control-label keyupmce"><?= admision::t("Solicitudes", "Scholarship document") ?></label>
                 <div class="col-sm-7 col-md-7 col-xs-7 col-lg-7">
 
                     <?= Html::hiddenInput('txth_doc_beca', '', ['id' => 'txth_doc_beca']); ?>
