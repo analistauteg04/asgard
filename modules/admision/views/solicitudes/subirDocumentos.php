@@ -16,7 +16,7 @@ $_SESSION['persona_solicita'] = base64_encode($per_id);
 ?>
 <?= Html::hiddenInput('txth_idp', base64_encode($per_id), ['id' => 'txth_idp']); ?>
 <?= Html::hiddenInput('txth_ids', base64_encode($sins_id), ['id' => 'txth_ids']); ?>
-<?= Html::hiddenInput('txth_extranjero', $txth_extranjero, ['id' => 'txth_extranjero']); ?>
+<?= Html::hiddenInput('txth_extranjero', base64_encode($txth_extranjero), ['id' => 'txth_extranjero']); ?>
 <?= Html::hiddenInput('txth_int_id', base64_encode($int_id), ['id' => 'txth_int_id']); ?>
 <?= Html::hiddenInput('txth_beca', base64_encode($beca), ['id' => 'txth_beca']); ?>
 <form class="form-horizontal" enctype="multipart/form-data" id="formsolicitud">
@@ -69,7 +69,7 @@ $_SESSION['persona_solicita'] = base64_encode($per_id);
                         'browseClass' => 'btn btn-primary btn-block',
                         'browseIcon' => '<i class="fa fa-folder-open"></i> ',
                         'browseLabel' => "Subir Archivo",
-                        'uploadUrl' => Url::to(['/solicitudinscripcion/guardardocumentos']),
+                        'uploadUrl' => Url::to(['/admision/solicitudes/savedocumentos']),
                         'maxFileSize' => Yii::$app->params["MaxFileSize"], // en Kbytes
                         'uploadExtraData' => 'javascript:function (previewId,index) {
             return {"upload_file": true, "name_file": "doc_titulo"};
@@ -126,7 +126,7 @@ $_SESSION['persona_solicita'] = base64_encode($per_id);
                         'browseClass' => 'btn btn-primary btn-block',
                         'browseIcon' => '<i class="fa fa-folder-open"></i> ',
                         'browseLabel' => "Subir Archivo",
-                        'uploadUrl' => Url::to(['/solicitudinscripcion/guardardocumentos']),
+                        'uploadUrl' => Url::to(['/admision/solicitudes/savedocumentos']),
                         'maxFileSize' => Yii::$app->params["MaxFileSize"], // en Kbytes
                         'uploadExtraData' => 'javascript:function (previewId,index) {
             return {"upload_file": true, "name_file": "doc_dni"};
@@ -184,7 +184,7 @@ $_SESSION['persona_solicita'] = base64_encode($per_id);
                         'browseClass' => 'btn btn-primary btn-block',
                         'browseIcon' => '<i class="fa fa-folder-open"></i> ',
                         'browseLabel' => "Subir Archivo",
-                        'uploadUrl' => Url::to(['/solicitudinscripcion/guardardocumentos']),
+                        'uploadUrl' => Url::to(['/admision/solicitudes/savedocumentos']),
                         'maxFileSize' => Yii::$app->params["MaxFileSize"], // en Kbytes
                         'uploadExtraData' => 'javascript:function (previewId,index) {
             return {"upload_file": true, "name_file": "doc_certvota"};
@@ -241,7 +241,7 @@ $_SESSION['persona_solicita'] = base64_encode($per_id);
                         'browseClass' => 'btn btn-primary btn-block',
                         'browseIcon' => '<i class="fa fa-folder-open"></i> ',
                         'browseLabel' => "Subir Archivo",
-                        'uploadUrl' => Url::to(['/solicitudinscripcion/guardardocumentos']),
+                        'uploadUrl' => Url::to(['/admision/solicitudes/savedocumentos']),
                         'maxFileSize' => Yii::$app->params["MaxFileSize"], // en Kbytes
                         'uploadExtraData' => 'javascript:function (previewId,index) {
             return {"upload_file": true, "name_file": "doc_foto"};
@@ -315,7 +315,7 @@ $_SESSION['persona_solicita'] = base64_encode($per_id);
                             'browseClass' => 'btn btn-primary btn-block',
                             'browseIcon' => '<i class="fa fa-folder-open"></i> ',
                             'browseLabel' => "Subir Archivo",
-                            'uploadUrl' => Url::to(['/solicitudinscripcion/guardardocumentos']),
+                            'uploadUrl' => Url::to(['/admision/solicitudes/savedocumentos']),
                             'maxFileSize' => Yii::$app->params["MaxFileSize"], // en Kbytes
                             'uploadExtraData' => 'javascript:function (previewId,index) {
                 return {"upload_file": true, "name_file": "doc_beca"};

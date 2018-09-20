@@ -17,7 +17,7 @@ use yii\helpers\Url;
             <div class="form-group">
                 <label for="txt_numsolicitud" class="col-sm-4 col-md-4 col-xs-4 col-lg-4 control-label" id="lbl_solicitud"><?= Yii::t("solicitud_ins", "Request #") ?></label> 
                 <div class="col-sm-8 ">
-                    <input type="text" class="form-control" value="<?= $numSolicitud ?>" id="txt_numsolicitud" disabled="true">                 
+                    <input type="text" class="form-control" value="<?= $personaData["num_solicitud"] ?>" id="txt_numsolicitud" disabled="true">                 
                 </div>
             </div>
         </div>
@@ -27,7 +27,7 @@ use yii\helpers\Url;
             <div class="form-group">
                 <label for="txt_nombres" class="col-sm-4 control-label" id="lbl_nombres"><?= Yii::t("formulario", "Names") ?></label> 
                 <div class="col-sm-8 ">
-                    <input type="text" class="form-control" value="<?= $nombres ?>" id="txt_nombres" disabled="true">                 
+                    <input type="text" class="form-control" value="<?= $personaData["per_nombres"] ?>" id="txt_nombres" disabled="true">                 
                 </div>
             </div>
         </div>   
@@ -36,7 +36,7 @@ use yii\helpers\Url;
             <div class="form-group">
                 <label for="txt_apellidos" class="col-sm-4 control-label" id="lbl_apellidos"><?= Yii::t("formulario", "Last Names") ?></label> 
                 <div class="col-sm-8 ">
-                    <input type="text" class="form-control" value="<?= $apellidos ?>" id="txt_apellidos" disabled="true">                 
+                    <input type="text" class="form-control" value="<?= $personaData["per_apellidos"] ?>" id="txt_apellidos" disabled="true">                 
                 </div>
             </div>
         </div> 
@@ -46,7 +46,7 @@ use yii\helpers\Url;
             <div class="form-group">
                 <label for="txt_nivelint" class="col-sm-4 control-label" id="lbl_unidad"><?= Yii::t("formulario", "Academic unit") ?></label> 
                 <div class="col-sm-8 ">
-                    <input type="text" class="form-control" value="<?= $nivelint ?>" id="txt_nivelint" disabled="true">                 
+                    <input type="text" class="form-control" value="<?= $personaData["uaca_nombre"] ?>" id="txt_nivelint" disabled="true">                 
                 </div>
             </div>
         </div> 
@@ -55,7 +55,7 @@ use yii\helpers\Url;
             <div class="form-group">
                 <label for="txt_carrera" class="col-sm-4 control-label" id="lbl_carrera"><?= Yii::t("academico", "Career") . "/" . Yii::t("formulario", "Program") ?></label> 
                 <div class="col-sm-8 ">
-                    <input type="text" class="form-control" value="<?= $carrera ?>" id="txt_carrera" disabled="true">                 
+                    <input type="text" class="form-control" value="<?= $personaData["carrera"] ?>" id="txt_carrera" disabled="true">                 
                 </div>
             </div>
         </div>    
@@ -141,7 +141,7 @@ use yii\helpers\Url;
         <div class="form-group">
             <label for="cmb_revision" class="col-sm-4 col-md-4 col-xs-4 col-lg-4 control-label keyupmce"><?= Yii::t("formulario", "Result") ?></label>
             <div class="col-sm-4 col-md-4 col-xs-4 col-lg-4">    
-                <?php if (empty($fec_prenoapro)) { ?> 
+                <?php if (empty($personaData["fecha_reprobacion"])) { ?> 
                     <?= Html::dropDownList("cmb_revision", 0, $revision, ["class" => "form-control PBvalidation", "id" => "cmb_revision"]) ?> 
                 <?php } else {?>                
                     <input type="text" value= "No Aprobado" readonly="readonly" class="form-control" id="txt_resultado" data-type="alfa" data-keydown="true" >  
@@ -150,7 +150,7 @@ use yii\helpers\Url;
         </div>
     </div>
     
-    <?php if (empty($fec_prenoapro)) { ?> 
+    <?php if (empty($personaData["fecha_reprobacion"])) { ?> 
         <div class="col-md-12 col-sm-12 col-xs-12 col-lg-12" id="Divnoaprobado" style="display: none;">
             <div class="col-md-6 col-sm-6 col-xs-6 col-lg-6">
                 <div class="form-group">
@@ -226,7 +226,7 @@ use yii\helpers\Url;
         <div class="form-group">
             <label for="" class="col-sm-10  control-label keyupmce"></label>
             <div class="col-md-2 col-sm-2 col-xs-4 col-lg-2">     
-                <?php if (empty($fec_prenoapro)) { ?> 
+                <?php if (empty($personaData["fecha_reprobacion"])) { ?> 
                     <a id="btn_Aprobarsolicitud" href="javascript:" class="btn btn-primary btn-block"> <?= Yii::t("formulario", "Send") ?></a>
                 <?php } ?>  
             </div>                                                                                  

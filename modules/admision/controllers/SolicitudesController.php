@@ -77,20 +77,13 @@ class SolicitudesController extends \app\components\CController {
 
     public function actionView() {
         $sins_id = base64_decode($_GET['ids']);
-        $int_id = base64_decode($_GET['int']);
-        $numSolicitud = base64_decode($_GET['num_solicitud']);
-        $apellidos = base64_decode($_GET['apellidos']);
-        $nombres = base64_decode($_GET['nombres']);
-        $nivelint = base64_decode($_GET['uaca_nombre']);
-        $carrera = base64_decode($_GET['carrera']);
-        $per_id = base64_decode($_GET['perid']);
-        $fec_repro = base64_decode($_GET['fec_repro']);
-        $obs_repro = base64_decode($_GET['obs_repro']);
-        $nint = base64_decode($_GET['nint']);        
-        $mod_persona = Persona::findIdentity($per_id);
-        $nacionalidad = $mod_persona->per_nac_ecuatoriano;
-
+        $int_id = base64_decode($_GET['int']);      
+        $per_id = base64_decode($_GET['perid']);     
+              
         $mod_solins = new SolicitudInscripcion();
+        $personaData = $mod_solins->consultarInteresadoPorSol_id($sins_id);
+        $nacionalidad = $personaData["per_nac_ecuatoriano"];                
+        
         $resp_arch1 = $mod_solins->Obtenerdocumentosxsolicitud($sins_id, 1);
         $resp_arch2 = $mod_solins->Obtenerdocumentosxsolicitud($sins_id, 2);
         $resp_arch3 = $mod_solins->Obtenerdocumentosxsolicitud($sins_id, 3);
@@ -112,10 +105,7 @@ class SolicitudesController extends \app\components\CController {
 
         return $this->render('view', [
                     "revision" => array("2" => Yii::t("formulario", "APPROVED"), "4" => Yii::t("formulario", "Not approved")),
-                    "apellidos" => $apellidos,
-                    "nombres" => $nombres,
-                    "nivelint" => $nivelint,
-                    "carrera" => $carrera,
+                    "personaData" => $personaData,                                   
                     "arch1" => $resp_arch1['sdoc_archivo'],
                     "arch2" => $resp_arch2['sdoc_archivo'],
                     "arch3" => $resp_arch3['sdoc_archivo'],
@@ -124,15 +114,11 @@ class SolicitudesController extends \app\components\CController {
                     "txth_extranjero" => $nacionalidad,
                     "sins_id" => $sins_id,
                     "int_id" => $int_id,
-                    "per_id" => $per_id,
-                    "fec_repro" => $fec_repro,
-                    "obs_repro" => $obs_repro,
+                    "per_id" => $per_id,                  
                     "arr_condtitulo" => $resp_condtitulo,
                     "arr_conddni" => $resp_conddni,
-                    "resp_rechazo" => $resp_rechazo,
-                    "nint_id" => $nint,
-                    "img_pago" => $img_pago,                                
-                    "numSolicitud" => $numSolicitud,
+                    "resp_rechazo" => $resp_rechazo,                  
+                    "img_pago" => $img_pago,                                           
         ]);
     }
 
@@ -433,7 +419,7 @@ class SolicitudesController extends \app\components\CController {
         return $this->render('subirDocumentos', [
                     "cliente" => $datosSolicitud['per_apellidos'] . ' ' . $datosSolicitud['per_nombres'],
                     "solicitud" => $datosSolicitud['sins_id'],
-                    "txth_extranjero" => $datosSolicitud[''],
+                    "txth_extranjero" => $datosSolicitud['per_nac_ecuatoriano'],
                     "per_id" => $datosSolicitud['per_id'],
                     "sins_id" => $datosSolicitud['sins_id'],
                     "int_id" => $datosSolicitud['int_id'],
@@ -449,7 +435,8 @@ class SolicitudesController extends \app\components\CController {
             } else {
                 unset($_SESSION['persona_ingresa']);
                 $per_id = Yii::$app->session->get("PB_perid");
-            }            
+            }   
+            //$per_id = base64_decode($data['persona_id']);
             $sins_id = base64_decode($data["sins_id"]);
             $interesado_id = base64_decode($data["interesado_id"]);
             $es_extranjero = base64_decode($data["arc_extranjero"]);
