@@ -22,7 +22,7 @@ $(document).ready(function () {
         }
     });
     $('#cmb_nivelestudio').change(function () {
-        var link = $('#txth_base').val() + "/admision/oportunidades/new";
+        var link = $('#txth_base').val() + "/admision/oportunidades/newoportunidadxcontacto";
         var arrParams = new Object();
         arrParams.nint_id = $(this).val();
         arrParams.getmodalidad = true;
@@ -92,7 +92,7 @@ $(document).ready(function () {
         }, true);
     });
     $('#cmb_modalidad').change(function () {
-        var link = $('#txth_base').val() + "/admision/oportunidades/new";
+        var link = $('#txth_base').val() + "/admision/oportunidades/newoportunidadxcontacto";
         var arrParams = new Object();
         arrParams.unidada = $('#cmb_nivelestudio').val();
         arrParams.moda_id = $(this).val();

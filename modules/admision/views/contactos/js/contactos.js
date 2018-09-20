@@ -53,6 +53,13 @@ $(document).ready(function () {
         actualizarGridContacto();
     });
     
+    $('#btn_cargar').click(function () {
+        cargarLeads('LEADS');
+    });
+    $('#btn_cargarLotes').click(function () {
+        cargarLeads('LOTES');
+    });
+    
 });
 
 function actualizarGridContacto() {
@@ -265,5 +272,23 @@ function camposnulos(campo) {
     } else
     {
         $(campo).addClass("PBvalidation");
+    }
+}
+
+function cargarLeads(proceso) {
+    var arrParams = new Object();
+    var link = $('#txth_base').val() + "/admision/contactos/cargarleads";
+    arrParams.procesar_file = true;
+    arrParams.tipo_proceso = proceso;
+    arrParams.emp_id = $('#cmb_empresa option:selected').val();
+    arrParams.archivo = $('#txth_doc_adj_leads2').val() + "." + $('#txth_doc_adj_leads').val().split('.').pop();
+
+    if (!validateForm()) {
+        requestHttpAjax(link, arrParams, function (response) {
+            showAlert(response.status, response.label, response.message);
+            setTimeout(function () {
+                window.location.href = $('#txth_base').val() + "/admision/contactos/index";
+            }, 3000);
+        }, true);
     }
 }

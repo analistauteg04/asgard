@@ -51,12 +51,12 @@ admision::registerTranslations(); // trae las traducciones del modulo
             ],
             [
                 'attribute' => 'NivelInteres',
-                'header' => Yii::t("solicitud_ins", "Level Interest"),
+                'header' => admision::t("Solicitudes", "Level Interest"),
                 'value' => 'nivel',
             ],
             [
                 'attribute' => 'MetodoIngreso',
-                'header' => Yii::t("solicitud_ins", "Income Method"),
+                'header' => admision::t("Solicitudes", "Income Method"),
                 'value' => 'metodo',
             ],
             [
