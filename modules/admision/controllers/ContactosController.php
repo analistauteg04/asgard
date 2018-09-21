@@ -11,6 +11,7 @@ use app\models\Provincia;
 use app\models\Canton;
 use app\models\Utilities;
 use yii\helpers\ArrayHelper;
+use app\modules\admision\Module as Admision;
 
 class ContactosController extends \app\components\CController
 {
@@ -245,14 +246,14 @@ class ContactosController extends \app\components\CController
             if (!empty($data["celular"])) {
                 $celular = $data["celular"];
             }
+            if (!empty($data["correo"])) {
+                $correo = strtolower($data["correo"]);
+            }
             if (!empty($data["celular2"])) {
                 $celular2 = $data["celular2"];
             }
             if (!empty($data["telefono"])) {
                 $telefono = $data["telefono"];
-            }
-            if (!empty($data["correo"])) {
-                $correo = strtolower($data["correo"]);
             }
             $medio = $data["medio"];
             $contacto = $data["contacto"];
@@ -280,6 +281,13 @@ class ContactosController extends \app\components\CController
             $con = \Yii::$app->db_crm;
             $transaction = $con->beginTransaction();
             try {
+                if(!Utilities::validateTypeField($correo, "correo") && !Utilities::validateTypeField($celular, "number")){
+                    $message = array(
+                        "wtmessage" => Admision::t("crm", "Please enter at least one valid email or a cell phone."),
+                        "title" => Yii::t('jslang', 'Success'),
+                    );
+                    return Utilities::ajaxResponse('NO_OK', 'alert', Yii::t("jslang", "Error"), true, $message);
+                }
                 $mod_pergestion = new PersonaGestion();
                 $mod_gestion = new Oportunidad();
                 if (!empty($celular) || !empty($correo) || !empty($telefono) || !empty($celular2)) {
@@ -315,7 +323,7 @@ class ContactosController extends \app\components\CController
                             "wtmessage" => Yii::t("notificaciones", "Error al grabar. " . $mensaje),
                             "title" => Yii::t('jslang', 'Success'),
                         );
-                        return Utilities::ajaxResponse('NO_OK', 'alert', Yii::t("jslang", "Sucess"), false, $message);
+                        return Utilities::ajaxResponse('NO_OK', 'alert', Yii::t("jslang", "Sucess"), true, $message);
                     }
                 } else {
                     $mensaje = 'Registro ya existente';
@@ -324,7 +332,7 @@ class ContactosController extends \app\components\CController
                         "wtmessage" => Yii::t("notificaciones", "No se puede guardar el contacto " . $mensaje),
                         "title" => Yii::t('jslang', 'Success'),
                     );
-                    return Utilities::ajaxResponse('NO_OK', 'alert', Yii::t("jslang", "Sucess"), false, $message);
+                    return Utilities::ajaxResponse('NO_OK', 'alert', Yii::t("jslang", "Sucess"), true, $message);
                 }
             } catch (Exception $ex) {
                 $transaction->rollback();
@@ -332,7 +340,7 @@ class ContactosController extends \app\components\CController
                     "wtmessage" => Yii::t("notificaciones", "Error al grabar." . $mensaje),
                     "title" => Yii::t('jslang', 'Success'),
                 );
-                return Utilities::ajaxResponse('NO_OK', 'alert', Yii::t("jslang", "Sucess"), false, $message);
+                return Utilities::ajaxResponse('NO_OK', 'alert', Yii::t("jslang", "Error"), true, $message);
             }
             return;
         }

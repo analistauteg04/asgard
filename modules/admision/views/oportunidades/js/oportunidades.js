@@ -2,6 +2,12 @@ $(document).ready(function () {
     $('#btn_buscarGestion').click(function () {
         actualizarGridGestion();
     });
+    $('#cmb_empresa').change(function(){
+        if($(this).val() > 1)
+            $('.subcareers').hide();
+        else
+            $('.subcareers').show();
+    });
     $('#cmb_carrera2').change(function () {
         var ref = $(this).attr("data-ref");
         if ($(this).val() != 0) {

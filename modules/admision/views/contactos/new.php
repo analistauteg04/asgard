@@ -183,7 +183,7 @@ $fecha_actual = date("Y-m-d");
                 <label for="txt_celular" class="col-sm-5 col-md-5 col-xs-5 col-lg-5 control-label"><?= Yii::t("formulario", "CellPhone") ?> </label> 
                 <div class="col-sm-7 col-md-7 col-xs-7 col-lg-7">
 
-                    <input type="text" class="form-control PBvalidation" value="" id="txt_celular" data-type="number" data-keydown="true" placeholder="<?= Yii::t("formulario", "CellPhone") ?>">
+                    <input type="text" class="form-control PBvalidations" value="" id="txt_celular" data-type="number" data-keydown="true" placeholder="<?= Yii::t("formulario", "CellPhone") ?>">
 
                 </div>
             </div>
@@ -212,7 +212,7 @@ $fecha_actual = date("Y-m-d");
             <div class="form-group">
                 <label for="txt_correo" class="col-sm-5 col-md-5 col-xs-5 col-lg-5 control-label"><?= Yii::t("formulario", "Email") ?> </label>
                 <div class="col-sm-7 col-md-7 col-xs-7 col-lg-7">
-                    <input type="text" class="form-control PBvalidation keyupmce" value="" id="txt_correo" data-type="email" data-keydown="true" placeholder="<?= Yii::t("formulario", "Email") ?>">
+                    <input type="text" class="form-control PBvalidations keyupmce" value="" id="txt_correo" data-type="email" data-keydown="true" placeholder="<?= Yii::t("formulario", "Email") ?>">
                 </div>
             </div>
         </div>
