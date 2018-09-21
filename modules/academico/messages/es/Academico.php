@@ -9,5 +9,6 @@ namespace app\modules\academico\messages;
      "Academic unit" => "Unidad Académica",
      "Attach document" => "Adjuntar Documentos",
      "Career/Program" => "Carrera/Program",
+     "List Admitted" => "Listar Admitidos",
      "Modality" => "Modalidad",
  ];

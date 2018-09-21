@@ -395,8 +395,7 @@ class ContactosController extends \app\components\CController
             if (!empty($data["correo"])) {
                 $correo = strtolower($data["correo"]);
             }
-            $medio = $data["medio"];
-
+            $medio = $data["medio"];            
             //Información de contacto.
             $pgco_id = base64_decode($data["perges_contacto"]);
             if ($pgco_id > 0) {
@@ -446,8 +445,13 @@ class ContactosController extends \app\components\CController
                 $respPergestion = $mod_pergestion->actualizarPersonaGestion($con, $pges_id, $values_act, $keys_act, 'persona_gestion');
                 if ($respPergestion) {
                     if ($pgco_id > 0) {  //Existe información para contactar.
-                        //$mensaje = 'Id:'.$pgco_id. ' Nombre1:'.$nombre1_pcontacto. ' Nombre2:'. $nombre2_pcontacto . ' Apellido1:'. $apellido1_pcontacto. ' Apellido2:'.$apellido2_pcontacto . ' Correo:' .$correo_pcontacto . ' Telefono:'. $telefono_pcontacto . ' Celular:' . $celular_pcontacto . ' País:' .$pais_pcontacto;
-                        $exito = $mod_pergestion->modificarPercontXid($pgco_id, $nombre1_pcontacto, $nombre2_pcontacto, $apellido1_pcontacto, $apellido2_pcontacto, $correo_pcontacto, $telefono_pcontacto, $celular_pcontacto, $pais_pcontacto);
+                       // $mensaje = 'Id:'.$pgco_id. ' Nombre1:'.$nombre1_pcontacto. ' Nombre2:'. $nombre2_pcontacto . ' Apellido1:'. $apellido1_pcontacto. ' Apellido2:'.$apellido2_pcontacto . ' Correo:' .$correo_pcontacto . ' Telefono:'. $telefono_pcontacto . ' Celular:' . $celular_pcontacto . ' País:' .$pais_pcontacto;
+                        $respModifica = $mod_pergestion->modificarPercontXid($pgco_id, $nombre1_pcontacto, $nombre2_pcontacto, $apellido1_pcontacto, $apellido2_pcontacto, $correo_pcontacto, $telefono_pcontacto, $celular_pcontacto, $pais_pcontacto);
+                        if ($respModifica) {
+                            $exito = 1;
+                        }  else {
+                            $mensaje = "No se actualizó la información.";
+                        }                      
                     } else {
                         $exito = 1;
                     }
@@ -470,7 +474,7 @@ class ContactosController extends \app\components\CController
             } catch (Exception $ex) {
                 $transaction->rollback();
                 $message = array(
-                    "wtmessage" => Yii::t("notificaciones", "Error al grabar." . $mensaje),
+                    "wtmessage" => Yii::t("notificaciones", "Error al grabar."),
                     "title" => Yii::t('jslang', 'Success'),
                 );
                 return Utilities::ajaxResponse('NO_OK', 'alert', Yii::t("jslang", "Sucess"), false, $message);

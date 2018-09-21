@@ -1640,7 +1640,7 @@ class PersonaGestion extends \app\modules\admision\components\CActiveRecord
                       SET pgco_primer_nombre = :pgco_primer_nombre,
                           pgco_segundo_nombre = :pgco_segundo_nombre,
                           pgco_primer_apellido = :pgco_primer_apellido,
-                          pgco_segundo_apellido = :pgco_segundo_apellido,                          
+                          pgco_segundo_apellido = :pgco_segundo_apellido,                        
                           pgco_correo = :pgco_correo,
                           pgco_telefono = :pgco_telefono,
                           pgco_celular = :pgco_celular,

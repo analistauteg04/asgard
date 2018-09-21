@@ -160,7 +160,6 @@ class OportunidadesController extends \app\components\CController
             'arr_moduloEstudio' => ArrayHelper::map($arr_moduloEstudio, "Ids", "Nombre"),
             'opo_id' => $opor_id,
             'pges_id' => $pges_id,
-                        //'per_id' => $per_id,
         ]);
     }
 
@@ -334,8 +333,7 @@ class OportunidadesController extends \app\components\CController
     }
 
     public function actionUpdate()
-    {
-        //$per_id = @Yii::$app->session->get("PB_perid");
+    {      
         $mod_oportunidad = new Oportunidad();
         if (Yii::$app->request->isAjax) {
             $data = Yii::$app->request->post();
@@ -357,16 +355,19 @@ class OportunidadesController extends \app\components\CController
             }
             $canal_conocimiento = $data["canal"];
             $sub_carrera = $data["subcarrera"];
+            if ($sub_carrera == 0) {
+                $sub_carrera = null;
+            }
             $usuario = @Yii::$app->user->identity->usu_id;
 
             $con = \Yii::$app->db_crm;
             $transaction = $con->beginTransaction();
-            try {
+            try {              
                 $nombreoportunidad = $mod_oportunidad->consultarNombreOportunidad($empresa, $mest_id, $eaca_id, $unidad_academica, $modalidad, $estado_oportunidad);
-                //$mensaje = 'opo:' . $opo_id . ' mest_id:' . $mest_id . ' eaca_id:' . $eaca_id . ' unidad:' . $unidad_academica . ' modalidad:' . $modalidad . ' tipoOpor:' . $tipo_oportunidad . ' subCarr:' . $sub_carrera . ' Canal:' . $canal_conocimiento . ' estado:' . $estado_oportunidad . ' usuario:' . $usuario;
+                //$mensaje = 'opo:' . $opo_id . ' mest_id:' . $mest_id . ' eaca_id:' . $eaca_id . ' unidad:' . $unidad_academica . ' modalidad:' . $modalidad . ' tipoOpor:' . $tipo_oportunidad . ' subCarr:' . $sub_carrera . ' Canal:' . $canal_conocimiento . ' estado:' . $estado_oportunidad . ' usuario:' . $usuario;               
                 if ($nombreoportunidad["eopo_nombre"] == '' || $nombreoportunidad["eopo_nombre"] == 'Ganada' || $nombreoportunidad["eopo_nombre"] == 'Perdida') {
                     $respuesta = $mod_oportunidad->modificarOportunixId($empresa, $opo_id, $mest_id, $eaca_id, $unidad_academica, $modalidad, $tipo_oportunidad, $sub_carrera, $canal_conocimiento, null, null, null, $usuario, null);
-                    if ($respuesta) {
+                    if ($respuesta) {                       
                         $transaction->commit();
                         $message = array(
                             "wtmessage" => Yii::t("notificaciones", "La información ha sido grabada. "),

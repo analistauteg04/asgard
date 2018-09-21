@@ -8,6 +8,7 @@ use app\modules\academico\models\EstudioAcademico;
 use app\modules\admision\models\Interesado;
 use yii\helpers\ArrayHelper;
 
+
 class AspirantesController extends \app\components\CController {
     public function actionIndex() {
         $per_id = @Yii::$app->session->get("PB_perid");
