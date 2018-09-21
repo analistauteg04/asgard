@@ -1655,7 +1655,7 @@ class Oportunidad extends \app\modules\admision\components\CActiveRecord {
         $con2 = \Yii::$app->db_academico;
         $estado = 1;
 
-        $sql = "SELECT                	
+        $sql = "SELECT              	
                         concat(ifnull(per_pri_nombre,''), ' ', ifnull(per_pri_apellido,'')) as agente,                       
                         opo.uaca_id,
                         opo.emp_id as empresa,
@@ -1678,7 +1678,7 @@ class Oportunidad extends \app\modules\admision\components\CActiveRecord {
                         and mest.mest_estado = :estado
                         and mest.mest_estado_logico = :estado),'') as moestudio,
                         opo.ccan_id,
-                        opo.opo_id,                                            
+                        opo.opo_id,                                       
                         opo.tsca_id as subcarera_id,                       
                         ifnull((select tsc.tsca_nombre from " . $con->dbname . ".tipo_sub_carrera tsc
                         where tsc.tsca_id = opo.tsca_id

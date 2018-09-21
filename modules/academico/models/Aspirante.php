@@ -121,38 +121,28 @@ class Aspirante extends \yii\db\ActiveRecord {
                     per.per_seg_apellido as per_seg_apellido,";
         }
 
-        $sql = "SELECT distinct lpad(sins.sins_id,4,'0') as solicitud,
-                sins.sins_id as id_solicitud,
-                SUBSTRING(sins.sins_fecha_solicitud,1,10) as sins_fecha_solicitud, 
-                per.per_id as per_id,
-                per.per_cedula as per_dni,
-                per.per_pri_nombre as per_nombres,
-                per.per_pri_apellido as per_apellidos,
-                ming.ming_id, 
-                (
-                CASE 
-                WHEN ming.ming_id = 1 THEN 'CAN'
-                WHEN ming.ming_id = 2 THEN 'EXA'
-                WHEN ming.ming_id = 3 THEN 'HOM'
-                WHEN ming.ming_id = 4 THEN 'PRO'
-                ELSE 'N/A'
-                END) AS abr_metodo,
-                ming.ming_nombre, 
-                car.eaca_nombre as carrera,
-                       $columnsAdd
-                       ifnull((SELECT cur.par_descripcion 
-                                FROM " . $con3->dbname . ".asignacion_paralelo ascu
-                                INNER JOIN  " . $con3->dbname . ".paralelo cur on cur.par_id = ascu.par_id
-                                WHERE asp_id = asp.asp_id AND
-                                    -- ascu.sins_id = sins.sins_id AND
-                                    ascu.apar_estado = :estado AND
-                                    ascu.apar_estado_logico = :estado AND
-                                    cur.par_estado = :estado AND
-                                    cur.par_estado_logico = :estado	
-                                   ), 'N/A') as curso,
-                                        
+        $sql = "SELECT  distinct lpad(sins.sins_id,4,'0') as solicitud,
+                        sins.sins_id,
+                        sins.int_id,
+                        SUBSTRING(sins.sins_fecha_solicitud,1,10) as sins_fecha_solicitud, 
+                        per.per_id as per_id,
+                        per.per_cedula as per_dni,
+                        per.per_pri_nombre as per_nombres,
+                        per.per_pri_apellido as per_apellidos,
+                        ming.ming_id, 
+                        (
+                        CASE 
+                        WHEN ming.ming_id = 1 THEN 'CAN'
+                        WHEN ming.ming_id = 2 THEN 'EXA'
+                        WHEN ming.ming_id = 3 THEN 'HOM'
+                        WHEN ming.ming_id = 4 THEN 'PRO'
+                        ELSE 'N/A'
+                        END) AS abr_metodo,
+                        ming.ming_nombre, 
+                        car.eaca_nombre as carrera,
+                        $columnsAdd                                                             
                         asp.asp_id,                        
-                       $resp_gruporol as rol,
+                        $resp_gruporol as rol,
                        (case when sins_beca = 1 then 'ICF' else 'No Aplica' end) as beca 
                 FROM " . $con->dbname . ".aspirante asp INNER JOIN " . $con->dbname . ".interesado inte on inte.int_id = asp.int_id                     
                      INNER JOIN " . $con2->dbname . ".persona per on inte.per_id = per.per_id
@@ -160,7 +150,6 @@ class Aspirante extends \yii\db\ActiveRecord {
                      INNER JOIN " . $con->dbname . ".metodo_ingreso ming on ming.ming_id = sins.ming_id
                      INNER JOIN " . $con3->dbname . ".estudio_academico car on car.eaca_id = sins.eaca_id
                      INNER JOIN " . $con1->dbname . ".orden_pago opag on opag.sins_id = sins.sins_id                     
-                     
                 WHERE  
                        $str_search 
                        opag.opag_estado_pago = :estado_opago AND

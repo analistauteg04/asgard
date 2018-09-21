@@ -106,7 +106,7 @@ if (!empty($personalData['pges_cedula'])) {
     </div>
     <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12"> 
         <div class="col-md-10"></div>
-        <div class="col-md-2">
+       <!-- <div class="col-md-2">
             <?php 
             $eopor = $oportuniData['eopo_id'];
             if ($eopor == 4 || $eopor == 5) {
@@ -123,7 +123,7 @@ if (!empty($personalData['pges_cedula'])) {
             <a id="btn_crearactividad" href="javascript:" class="btn btn-primary btn-block"> <?= Yii::t("formulario", "New Activity") ?></a> 
             <?php 
         } ?>
-        </div>
+        </div>-->
     </div>  
 </div>
 <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12"> 

@@ -66,14 +66,14 @@ use app\modules\admision\Module;
             [
                 'class' => 'yii\grid\ActionColumn',
                 'header' => Yii::t("formulario", "Actions"),
-                'template' => '{view} {activities} {interested}', //    
-                'template' => '{view} {update}', //    
+                'template' => '{view} {activities}', //    
+         
                 'buttons' => [
                     'view' => function ($url, $model) {
                         return Html::a('<span class="glyphicon glyphicon-eye-open"></span>', Url::to(['oportunidades/view', 'opor_id' => base64_encode($model["opo_id"]), 'pges_id' => base64_encode($model["pges_id"])]), ["data-toggle" => "tooltip", "title" => "Ver Oportunidad", "data-pjax" => 0]);
                     },
                     'activities' => function ($url, $model) {
-                        return Html::a('<span class="glyphicon glyphicon-th-large"></span>', Url::to(['/admisiones/listaractixoport', 'opor_id' => base64_encode($model["opo_id"]), 'pges_id' => base64_encode($model["pges_id"])]), ["data-toggle" => "tooltip", "title" => "Ver Actividades", "data-pjax" => 0]);
+                        return Html::a('<span class="glyphicon glyphicon-th-large"></span>', Url::to(['actividades/listaractividadxoportunidad', 'opor_id' => base64_encode($model["opo_id"]), 'pges_id' => base64_encode($model["pges_id"])]), ["data-toggle" => "tooltip", "title" => "Ver Actividades", "data-pjax" => 0]);
                     },
                     
                 ],

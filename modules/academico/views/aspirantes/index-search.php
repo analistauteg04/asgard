@@ -58,10 +58,10 @@ use kartik\date\DatePicker;
             <div class="col-sm-3 col-md-3 col-xs-3 col-lg-3">
                 <?= Html::dropDownList("cmb_carrera", 0, $arrCarreras, ["class" => "form-control", "id" => "cmb_carrera"]) ?>
             </div>
-            <label for="txt_buscarCodigo" class="col-sm-2 col-md-2 col-xs-2 col-lg-2 control-label"><?= Yii::t("academico", "Code") ?></label>
+           <!-- <label for="txt_buscarCodigo" class="col-sm-2 col-md-2 col-xs-2 col-lg-2 control-label"><?= Yii::t("academico", "Code") ?></label>
             <div class="col-sm-3 col-md-3 col-xs-3 col-lg-3">
                 <input type="text" class="form-control" value="" id="txt_buscarCodigo" placeholder="<?= Yii::t("formulario", "Search by code of can or test")?>">
-            </div>
+            </div> -->
         </div>
     </div> 
     <div class="col-md-12 col-sm-12 col-xs-12 col-lg-12">

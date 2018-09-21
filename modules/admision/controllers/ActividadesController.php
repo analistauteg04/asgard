@@ -44,14 +44,14 @@ class ActividadesController extends \app\components\CController
         $oport_model = new Oportunidad();
         $empresa_mod = new Empresa();
         $empresa = $empresa_mod->getAllEmpresa();
-        $contactManage = $persges_mod->consultarPersonaGestion($pges_id);
-        $modalidad_data = $modalidad_model->consultarModalidad(0);
+        $contactManage = $persges_mod->consultarPersonaGestion($pges_id);        
         $actividad_data = $oport_model->consultarActividadById($act_id);
         $oportunidad_perdidad = $oport_model->consultarOportunidadPerdida();
         $oport_contac = $oport_model->consultarOportunidadById($opor_id);
+        $modalidad_data = $modalidad_model->consultarModalidad($oport_contac["uaca_id"]);
         $unidad_acad_data = $uni_aca_model->consultarUnidadAcademicas();
-        $tipo_oportunidad_data = $modTipoOportunidad->consultarOporxUnidad(1);
-        $academic_study_data = $oport_model->consultarCarreraModalidad(1, 1);
+        $tipo_oportunidad_data = $modTipoOportunidad->consultarOporxUnidad($oport_contac["uaca_id"]);
+        $academic_study_data = $oport_model->consultarCarreraModalidad($oport_contac["uaca_id"], $oport_contac["mod_id"]);
         $state_oportunidad_data = $state_oportunidad_model->consultarEstadOportunidad();
         $knowledge_channel_data = $oport_model->consultarConocimientoCanal(1);
         return $this->render('view', [
@@ -66,7 +66,7 @@ class ActividadesController extends \app\components\CController
             'arr_academic_study' => ArrayHelper::map($academic_study_data, "id", "name"),
             "arr_knowledge_channel" => ArrayHelper::map($knowledge_channel_data, "id", "name"),
             "tipo_dni" => array("CED" => Yii::t("formulario", "DNI Document"), "PASS" => Yii::t("formulario", "Passport")),
-            'arr_empresa' => ArrayHelper::map($empresa, "Ids", "Nombre"),
+            'arr_empresa' => ArrayHelper::map($empresa, "id", "value"),
         ]);
     }
 
@@ -85,12 +85,12 @@ class ActividadesController extends \app\components\CController
         $empresa = $empresa_mod->getAllEmpresa();
         $oport_contac = $oport_model->consultarOportunidadById($opor_id);
         $contactManage = $persges_mod->consultarPersonaGestion($pges_id);
-        $modalidad_data = $modalidad_model->consultarModalidad(0);
+        $modalidad_data = $modalidad_model->consultarModalidad($oport_contac["uaca_id"]);
         $actividad_data = $oport_model->consultarActividadById($act_id);
         $oportunidad_perdidad = $oport_model->consultarOportunidadPerdida();
         $unidad_acad_data = $uni_aca_model->consultarUnidadAcademicas();
-        $tipo_oportunidad_data = $modTipoOportunidad->consultarOporxUnidad(1);
-        $academic_study_data = $oport_model->consultarCarreraModalidad(1, 1);
+        $tipo_oportunidad_data = $modTipoOportunidad->consultarOporxUnidad($oport_contac["uaca_id"]);
+        $academic_study_data = $oport_model->consultarCarreraModalidad($oport_contac["uaca_id"], $oport_contac["mod_id"]);
         $state_oportunidad_data = $state_oportunidad_model->consultarEstadOportunidad();
         $knowledge_channel_data = $oport_model->consultarConocimientoCanal(1);
         return $this->render('edit', [
@@ -105,7 +105,7 @@ class ActividadesController extends \app\components\CController
             'arr_academic_study' => ArrayHelper::map($academic_study_data, "id", "name"),
             "arr_knowledge_channel" => ArrayHelper::map($knowledge_channel_data, "id", "name"),
             "tipo_dni" => array("CED" => Yii::t("formulario", "DNI Document"), "PASS" => Yii::t("formulario", "Passport")),
-            'arr_empresa' => ArrayHelper::map($empresa, "Ids", "Nombre"),
+            'arr_empresa' => ArrayHelper::map($empresa, "id", "value"),
         ]);
     }
 
@@ -141,7 +141,7 @@ class ActividadesController extends \app\components\CController
             'arr_academic_study' => ArrayHelper::map($academic_study_data, "id", "name"),
             "arr_knowledge_channel" => ArrayHelper::map($knowledge_channel_data, "id", "name"),
             "tipo_dni" => array("CED" => Yii::t("formulario", "DNI Document"), "PASS" => Yii::t("formulario", "Passport")),
-            'arr_empresa' => ArrayHelper::map($empresa, "Ids", "Nombre"),
+            'arr_empresa' => ArrayHelper::map($empresa, "id", "value"),
         ]);
     }
 

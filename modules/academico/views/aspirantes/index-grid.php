@@ -63,28 +63,15 @@ use app\widgets\PbGridView\PbGridView;
                 'header' => Yii::t("formulario", "Scholarship"),
                 'value' => 'beca',
             ],      
-            [
-                'class' => 'yii\grid\ActionColumn',
-                'header' => Yii::t("formulario", "Course"),
-                'template' => '{view}', //
-                'buttons' => [
-                    'view' => function ($url, $model) {
-                        return Html::a('<span>' . $model['curso'] . '</span>', Url::to(['listaraspirantes']), ["data-toggle" => "tooltip", "title" => $model['periodo']]);
-                    },
-                ],
-            ],
+           
             [
                 'class' => 'yii\grid\ActionColumn',
                 'header' => Yii::t("formulario", "Actions"),
                 'template' => '{autoriza} ', //
                 'buttons' => [                    
-                    'autoriza' => function ($url, $model) {
-                        if ($model['rol'] == 15 || $model['rol'] == 1 || $model['rol'] == 17) {
-                            return Html::a('<span class="glyphicon glyphicon-download-alt"></span>', Url::to(['aspirante/documentosaspirantes', 'sol_id' => base64_encode($model['id_solicitud']), 'ids' => base64_encode($model['per_id']), 'int' => base64_encode($model['int_id']), 'perid' => base64_encode($model['persona']), 'apellidos' => base64_encode($model['per_apellidos']), 'nombres' => base64_encode($model['per_nombres']), 'nint_nombre' => base64_encode($model['nint_nombre']), 'car_nombre' => base64_encode($model['car_nombre'])]), ["data-toggle" => "tooltip", "title" => "Ver Archivos", "data-pjax" => 0]);
-                        } else {
-                            return '<span class = "glyphicon glyphicon-download-alt">  </span>';
-                        }
-                    },
+                    'autoriza' => function ($url, $model) {                                                                           
+                        return Html::a('<span class="glyphicon glyphicon-download-alt"></span>', Url::to(['/admision/solicitudes/view', 'ids' => base64_encode($model['sins_id']), 'int' => base64_encode($model['int_id']), 'perid' => base64_encode($model['per_id'])]), ["data-toggle" => "tooltip", "title" => "Ver Documentos", "data-pjax" => 0]);                        
+                    },   
                     /*'asigna' => function ($url, $model) {
                         if ($model['rol'] == 15 || $model['rol'] == 1) {
                             return Html::a('<span class="glyphicon glyphicon-edit"></span>', Url::to(['administracioncurso/asigna', 'popup' => "true", 'asp' => base64_encode($model['asp_id']), 'apellidos' => base64_encode($model['per_apellidos']), 'nombres' => base64_encode($model['per_nombres']), 'ming' => base64_encode($model['ming_id']), 'sins_id' => base64_encode($model['id_solicitud'])]), ["data-toggle" => "tooltip", "class" => "pbpopup", "title" => "Asignar/Reasignar Curso", "data-pjax" => 0]);
