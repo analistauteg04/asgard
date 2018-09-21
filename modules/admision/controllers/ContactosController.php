@@ -13,8 +13,8 @@ use app\models\Utilities;
 use yii\helpers\ArrayHelper;
 use app\modules\admision\Module as Admision;
 
-class ContactosController extends \app\components\CController
-{
+class ContactosController extends \app\components\CController {
+
     public function actionIndex() {
         $per_id = @Yii::$app->session->get("PB_iduser");
         $estado_contacto = EstadoContacto::find()->select("econ_id AS id, econ_nombre AS name")->where(["econ_estado_logico" => "1", "econ_estado" => "1"])->asArray()->all();
@@ -39,7 +39,7 @@ class ContactosController extends \app\components\CController
                     'arr_contacto' => ArrayHelper::map(array_merge([["id" => "0", "name" => "Todas"]], $estado_contacto), "id", "name"),
         ]);
     }
-    
+
     public function actionNew() {
         $per_id = @Yii::$app->session->get("PB_perid");
         $modcanal = new Oportunidad();
@@ -52,31 +52,26 @@ class ContactosController extends \app\components\CController
                 $provincias = Provincia::find()->select("pro_id AS id, pro_nombre AS name")->where(["pro_estado_logico" => "1", "pro_estado" => "1", "pai_id" => $data['pai_id']])->asArray()->all();
                 $message = array("provincias" => $provincias);
                 return Utilities::ajaxResponse('OK', 'alert', Yii::t('jslang', 'Success'), 'false', $message);
-           
             }
             if (isset($data["getcantones"])) {
                 $cantones = Canton::find()->select("can_id AS id, can_nombre AS name")->where(["can_estado_logico" => "1", "can_estado" => "1", "pro_id" => $data['prov_id']])->asArray()->all();
                 $message = array("cantones" => $cantones);
                 return Utilities::ajaxResponse('OK', 'alert', Yii::t('jslang', 'Success'), 'false', $message);
-                
             }
             if (isset($data["getarea"])) {
                 $area = $mod_pais->consultarCodigoArea($data["codarea"]);
                 $message = array("area" => $area);
                 return Utilities::ajaxResponse('OK', 'alert', Yii::t('jslang', 'Success'), 'false', $message);
-                
             }
             if (isset($data["getsubcarrera"])) {
                 $subcarrera = $modcanal->consultarSubCarrera($data["car_id"]);
                 $message = array("subcarrera" => $subcarrera);
                 return Utilities::ajaxResponse('OK', 'alert', Yii::t('jslang', 'Success'), 'false', $message);
-                
             }
             if (isset($data["getcarrera"])) {
                 $carrera = $modcanal->consultarCarreraModalidad($data["unidada"], $data["moda_id"]);
                 $message = array("carrera" => $carrera);
                 return Utilities::ajaxResponse('OK', 'alert', Yii::t('jslang', 'Success'), 'false', $message);
-              
             }
         }
         $arr_pais = Pais::find()->select("pai_id AS id, pai_nombre AS value, pai_codigo_fono AS code")->where(["pai_estado_logico" => "1", "pai_estado" => "1"])->asArray()->all();
@@ -96,7 +91,6 @@ class ContactosController extends \app\components\CController
         ]);
     }
 
-    
     public function actionView() {
         $modcanal = new Oportunidad();
         $mod_pais = new Pais();
@@ -146,7 +140,7 @@ class ContactosController extends \app\components\CController
                     "pges_id" => $pges_id,
         ]);
     }
-    
+
     public function actionEdit() {
         $modcanal = new Oportunidad();
         $mod_pais = new Pais();
@@ -154,17 +148,15 @@ class ContactosController extends \app\components\CController
         $tper = base64_decode($_GET["tper_id"]);
         if (Yii::$app->request->isAjax) {
             $data = Yii::$app->request->post();
-             if (isset($data["getprovincias"])) {
+            if (isset($data["getprovincias"])) {
                 $provincias = Provincia::find()->select("pro_id AS id, pro_nombre AS name")->where(["pro_estado_logico" => "1", "pro_estado" => "1", "pai_id" => $data['pai_id']])->asArray()->all();
                 $message = array("provincias" => $provincias);
                 return Utilities::ajaxResponse('OK', 'alert', Yii::t('jslang', 'Success'), 'false', $message);
-           
             }
             if (isset($data["getcantones"])) {
                 $cantones = Canton::find()->select("can_id AS id, can_nombre AS name")->where(["can_estado_logico" => "1", "can_estado" => "1", "pro_id" => $data['prov_id']])->asArray()->all();
                 $message = array("cantones" => $cantones);
                 return Utilities::ajaxResponse('OK', 'alert', Yii::t('jslang', 'Success'), 'false', $message);
-                
             }
         }
 
@@ -210,7 +202,7 @@ class ContactosController extends \app\components\CController
                     "arr_datosb" => $arra_para_contacto,
         ]);
     }
-    
+
     public function actionSave() {
         $per_id = @Yii::$app->session->get("PB_perid");
         $usuario_ingreso = @Yii::$app->session->get("PB_iduser");
@@ -281,7 +273,7 @@ class ContactosController extends \app\components\CController
             $con = \Yii::$app->db_crm;
             $transaction = $con->beginTransaction();
             try {
-                if(!Utilities::validateTypeField($correo, "correo") && !Utilities::validateTypeField($celular, "number")){
+                if (!Utilities::validateTypeField($correo, "correo") && !Utilities::validateTypeField($celular, "number")) {
                     $message = array(
                         "wtmessage" => Admision::t("crm", "Please enter at least one valid email or a cell phone."),
                         "title" => Yii::t('jslang', 'Success'),
@@ -345,7 +337,7 @@ class ContactosController extends \app\components\CController
             return;
         }
     }
-    
+
     public function actionUpdate() {
         $per_id = @Yii::$app->session->get("PB_perid");
         $celular = null;
@@ -395,7 +387,7 @@ class ContactosController extends \app\components\CController
             if (!empty($data["correo"])) {
                 $correo = strtolower($data["correo"]);
             }
-            $medio = $data["medio"];            
+            $medio = $data["medio"];
             //Información de contacto.
             $pgco_id = base64_decode($data["perges_contacto"]);
             if ($pgco_id > 0) {
@@ -445,13 +437,9 @@ class ContactosController extends \app\components\CController
                 $respPergestion = $mod_pergestion->actualizarPersonaGestion($con, $pges_id, $values_act, $keys_act, 'persona_gestion');
                 if ($respPergestion) {
                     if ($pgco_id > 0) {  //Existe información para contactar.
-                       // $mensaje = 'Id:'.$pgco_id. ' Nombre1:'.$nombre1_pcontacto. ' Nombre2:'. $nombre2_pcontacto . ' Apellido1:'. $apellido1_pcontacto. ' Apellido2:'.$apellido2_pcontacto . ' Correo:' .$correo_pcontacto . ' Telefono:'. $telefono_pcontacto . ' Celular:' . $celular_pcontacto . ' País:' .$pais_pcontacto;
-                        $respModifica = $mod_pergestion->modificarPercontXid($pgco_id, $nombre1_pcontacto, $nombre2_pcontacto, $apellido1_pcontacto, $apellido2_pcontacto, $correo_pcontacto, $telefono_pcontacto, $celular_pcontacto, $pais_pcontacto);
-                        if ($respModifica) {
-                            $exito = 1;
-                        }  else {
-                            $mensaje = "No se actualizó la información.";
-                        }                      
+                        //$mensaje = 'Id:'.$pgco_id. ' Nombre1:'.$nombre1_pcontacto. ' Nombre2:'. $nombre2_pcontacto . ' Apellido1:'. $apellido1_pcontacto. ' Apellido2:'.$apellido2_pcontacto . ' Correo:' .$correo_pcontacto . ' Telefono:'. $telefono_pcontacto . ' Celular:' . $celular_pcontacto . ' País:' .$pais_pcontacto;
+                        $respPerconta = $mod_pergestion->modificarPercontXid($pgco_id, $nombre1_pcontacto, $nombre2_pcontacto, $apellido1_pcontacto, $apellido2_pcontacto, $correo_pcontacto, $telefono_pcontacto, $celular_pcontacto, $pais_pcontacto);
+                        $exito = 1;
                     } else {
                         $exito = 1;
                     }
@@ -482,7 +470,7 @@ class ContactosController extends \app\components\CController
             return;
         }
     }
-    
+
     public function actionListaroportunidad() {
         $per_id = @Yii::$app->session->get("PB_iduser");
         $pges_id = base64_decode($_GET["pgid"]);
@@ -500,7 +488,7 @@ class ContactosController extends \app\components\CController
                     'personalData' => $contactManage,
         ]);
     }
-    
+
     public function actionCargarleads() {
         $per_id = @Yii::$app->session->get("PB_perid");
         $mod_gestion = new Oportunidad();
@@ -509,7 +497,6 @@ class ContactosController extends \app\components\CController
             if ($data["upload_file"]) {
                 if (empty($_FILES)) {
                     return json_encode(['error' => Yii::t("notificaciones", "Error to process File {file}. Try again.", ['{file}' => basename($files['name'])])]);
-                   
                 }
                 //Recibe Parámetros
                 $files = $_FILES[key($_FILES)];
@@ -522,7 +509,6 @@ class ContactosController extends \app\components\CController
                         return true;
                     } else {
                         return json_encode(['error' => Yii::t("notificaciones", "Error to process File {file}. Try again.", ['{file}' => basename($files['name'])])]);
-                       
                     }
                 }
             }
@@ -547,7 +533,7 @@ class ContactosController extends \app\components\CController
             return $this->render('cargarleads', []);
         }
     }
-    
+
     public function actionListarcontactos() {
         $per_id = @Yii::$app->session->get("PB_iduser");
         $estado_contacto = EstadoContacto::find()->select("econ_id AS id, econ_nombre AS name")->where(["econ_estado_logico" => "1", "econ_estado" => "1"])->asArray()->all();
@@ -572,25 +558,25 @@ class ContactosController extends \app\components\CController
                     'arr_contacto' => ArrayHelper::map(array_merge([["id" => "0", "name" => "Todas"]], $estado_contacto), "id", "name"),
         ]);
     }
-    
+
     // estado_contacto     ->    Estado del Contacto
     // estado_oportunidad  ->    Estado de Oportunidad
     // oportunidad_perdida ->    Estado de Oportunidad Perdida
     // modalidad           ->    Modalidad Academica
-    
-    public function actionExport(){
+
+    public function actionExport() {
         $mod_oportunidad = new Oportunidad;
-        $Data = $mod_oportunidad->consultarOportUnidadAcademica();  
-        $arrayIds=array();
+        $Data = $mod_oportunidad->consultarOportUnidadAcademica();
+        $arrayIds = array();
         for ($i = 0; $i < sizeof($Data); $i++) {
             if (in_array($Data[$i]['eopo_id'], $arrayIds)) {
-                $arrayIds[]=$Data[$i]['eopo_id'];
-                $arrDataCols[]=$Data[$i]['eopo_nombre'];
+                $arrayIds[] = $Data[$i]['eopo_id'];
+                $arrDataCols[] = $Data[$i]['eopo_nombre'];
             }
         }
         Utilities::putMessageLogFile($arrayIds);
         Utilities::putMessageLogFile($arrDataCols);
-        
+
         exit;
         ini_set('memory_limit', '256M');
         $content_type = Utilities::mimeContentType("xls");
@@ -598,27 +584,26 @@ class ContactosController extends \app\components\CController
         header("Content-Type: $content_type");
         header("Content-Disposition: attachment;filename=" . $nombarch . ".xls");
         header('Cache-Control: max-age=0');
-        
+
         $colPosition = array("C", "D", "E", "F", "G", "H", "I", "J", "K");
-        $arrHeader = array("#","Grado Lead","Online Lead","Posgrado Lead","Base Grado","Base Online","Base Posgrado","Suma","Promedio");
+        $arrHeader = array("#", "Grado Lead", "Online Lead", "Posgrado Lead", "Base Grado", "Base Online", "Base Posgrado", "Suma", "Promedio");
         //$arrDataCols = ["En Contacto", "Calificado", "No Calificado"];
         //$arrDataCols = ["En curso", "En espera", "Ganada", "Perdida", "Listo para pago", "Total"];
         //$arrDataCols = ["Precio", "Insatisfacción con malla académica", "No existe carrera", "Calidad de docentes", "Atención recibida", "Ubicación", "Otra Universidad", "Modalidad de Estudios", "Motivo personal", "Viaje imprevisto", "No contesta el teléfono ni correos"];
         $arrData = array();
-        for($i=0; $i<count($arrDataCols); $i++){
-            $j=0;
-            for($j=0; $j<count($arrHeader); $j++){
-                if($j == 0){
+        for ($i = 0; $i < count($arrDataCols); $i++) {
+            $j = 0;
+            for ($j = 0; $j < count($arrHeader); $j++) {
+                if ($j == 0) {
                     $arrData[$i][$j] = $arrDataCols[$i];
-                }else {
+                } else {
                     $arrData[$i][$j] = "data $i $j";
-                } 
+                }
             }
         }
         $nameReport = yii::t("formulario", "Application Reports");
         Utilities::generarReporteXLS($nombarch, $nameReport, $arrHeader, $arrData, $colPosition);
         exit;
     }
-
 
 }

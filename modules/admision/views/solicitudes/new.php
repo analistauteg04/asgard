@@ -5,8 +5,10 @@ use yii\helpers\Url;
 use app\modules\admision\Module as admision;
 use app\modules\academico\Module as academico;
 use app\modules\financiero\Module as financiero;
+use app\modules\academico\Module as aspirante;
 academico::registerTranslations();
 financiero::registerTranslations();
+aspirante::registerTranslations();
 
 $tipodoc = '';
 if (!empty($personalData['per_cedula'])) {
@@ -44,7 +46,7 @@ $_SESSION['persona_solicita'] = base64_encode($_GET['ids']);
     <div class="col-md-12 col-sm-12 col-xs-12 col-lg-12">
         <div class="col-md-7 col-sm-7 col-xs-7 col-lg-7">
             <div class="form-group">
-                <h4><span id="lbl_general"><?= admision::t("Solicitudes", "Data General Interested") ?></span></h4> 
+                <h4><span id="lbl_general"><?= aspirante::t("Aspirantes", "Data General Aspirants") ?></span></h4> 
             </div>
         </div>    
         <div class='col-md-12 col-sm-12 col-xs-12 col-lg-12'>

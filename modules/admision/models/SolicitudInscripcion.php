@@ -401,8 +401,8 @@ class SolicitudInscripcion extends \app\modules\admision\components\CActiveRecor
                 SELECT 
                     per.per_cedula as per_dni,
                     per.per_id,
-                    concat(per.per_pri_nombre ,' ', per.per_seg_nombre) as per_nombres,
-                    concat(per.per_pri_apellido ,' ', per.per_seg_apellido) as per_apellidos,
+                    concat(ifnull(per.per_pri_nombre,'') ,' ', ifnull(per.per_seg_nombre,'')) as per_nombres,
+                    concat(ifnull(per.per_pri_apellido,'') ,' ', ifnull(per.per_seg_apellido,'')) as per_apellidos,
                     sins.sins_id,
                     inte.int_id,
                     sins.sins_beca,
