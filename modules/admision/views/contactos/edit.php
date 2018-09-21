@@ -1,4 +1,5 @@
 <?php
+
 use yii\helpers\Html;
 use yii\helpers\Url;
 use kartik\date\DatePicker;
@@ -63,7 +64,7 @@ if (!empty($arr_datosc['cedula'])) {
         <div class='col-md-12 col-sm-12 col-xs-12 col-lg-12'>
             <div class="col-md-6 col-sm-6 col-xs-6 col-lg-6">
                 <div class="form-group">
-                    <label for="txt_nombre1" class="col-sm-5 col-md-5 col-xs-5 col-lg-5 control-label" id="lbl_nombre1"><?= Yii::t("formulario", "First Name") ?> </label>
+                    <label for="txt_nombre1" class="col-sm-5 col-md-5 col-xs-5 col-lg-5 control-label" id="lbl_nombre1"><?= Yii::t("formulario", "First Name") ?><span class="text-danger">*</span></label>
                     <div class="col-sm-7 col-md-7 col-xs-7 col-lg-7">
                         <input type="text" class="form-control PBvalidation keyupmce" value="<?= $arra_pnomb_con ?>" id="txt_nombre1" data-type="alfa" placeholder="<?= Yii::t("formulario", "First Name") ?>">
                     </div>
@@ -81,7 +82,7 @@ if (!empty($arr_datosc['cedula'])) {
         <div class='col-md-12 col-sm-12 col-xs-12 col-lg-12'>
             <div class="col-md-6 col-sm-6 col-xs-6 col-lg-6">
                 <div class="form-group">
-                    <label for="txt_apellido1" class="col-sm-5 col-md-5 col-xs-5 col-lg-5 control-label" id="lbl_apellido1"><?= Yii::t("formulario", "Last Name") ?> </label>
+                    <label for="txt_apellido1" class="col-sm-5 col-md-5 col-xs-5 col-lg-5 control-label" id="lbl_apellido1"><?= Yii::t("formulario", "Last Name") ?><span class="text-danger">*</span></label>
                     <div class="col-sm-7 col-md-7 col-xs-7 col-lg-7">
                         <input type="text" class="form-control PBvalidation keyupmce" value="<?= $arra_papellido_con ?>" id="txt_apellido1" data-type="alfa" placeholder="<?= Yii::t("formulario", "Last Name") ?>">
                     </div>
@@ -173,7 +174,7 @@ if (!empty($arr_datosc['cedula'])) {
     <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12"> 
         <div class="col-lg-6 col-md-6 col-sm-6 col-xs-6">
             <div class="form-group">
-                <label for="cmb_pais" class="col-sm-5 col-md-5 col-xs-5 col-lg-5 control-label"><?= Yii::t("formulario", "Country") ?> </label>
+                <label for="cmb_pais" class="col-sm-5 col-md-5 col-xs-5 col-lg-5 control-label"><?= Yii::t("formulario", "Country") ?><span class="text-danger">*</span></label>
                 <div class="col-sm-7 col-md-7 col-xs-7 col-lg-7">
                     <?= Html::dropDownList("cmb_pais", $pais, $arr_pais, ["class" => "form-control", "id" => "cmb_pais"]) ?> 
                 </div>
@@ -181,7 +182,7 @@ if (!empty($arr_datosc['cedula'])) {
         </div>
         <div class="col-lg-6 col-md-6 col-sm-6 col-xs-6">
             <div class="form-group">
-                <label for="cmb_prov" class="col-sm-5 col-md-5 col-xs-5 col-lg-5 control-label"><?= Yii::t("formulario", "State") ?> </label>
+                <label for="cmb_prov" class="col-sm-5 col-md-5 col-xs-5 col-lg-5 control-label"><?= Yii::t("formulario", "State") ?><span class="text-danger">*</span></label>
                 <div class="col-sm-7 col-md-7 col-xs-7 col-lg-7">
                     <?= Html::dropDownList("cmb_prov", $provincia, $arr_prov, ["class" => "form-control", "id" => "cmb_prov"]) ?>
                 </div>
@@ -191,7 +192,7 @@ if (!empty($arr_datosc['cedula'])) {
     <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12"> 
         <div class="col-lg-6 col-md-6 col-sm-6 col-xs-6">
             <div class="form-group">
-                <label for="cmb_ciu" class="col-sm-5 col-md-5 col-xs-5 col-lg-5 control-label"><?= Yii::t("formulario", "City") ?> </label>
+                <label for="cmb_ciu" class="col-sm-5 col-md-5 col-xs-5 col-lg-5 control-label"><?= Yii::t("formulario", "City") ?><span class="text-danger">*</span></label>
                 <div class="col-sm-7 col-md-7 col-xs-7 col-lg-7">
                     <?= Html::dropDownList("cmb_ciu", $ciudad, $arr_ciu, ["class" => "form-control can_combo", "id" => "cmb_ciu"]) ?>
                 </div>
@@ -236,7 +237,7 @@ if (!empty($arr_datosc['cedula'])) {
         </div>
         <div class="col-lg-6 col-md-6 col-sm-6 col-xs-6">
             <div class="form-group">
-                <label for="cmb_medio" class="col-sm-5 col-md-5 col-xs-5 col-lg-5 control-label"><?= Yii::t("formulario", "Half Contact") ?> </label>
+                <label for="cmb_medio" class="col-sm-5 col-md-5 col-xs-5 col-lg-5 control-label"><?= Yii::t("formulario", "Channel Contact") ?><span class="text-danger">*</span></label>
                 <div class="col-sm-7 col-md-7 col-xs-7 col-lg-7">
                     <?= Html::dropDownList("cmb_medio", $mcon_id, $arr_conocimiento, ["class" => "form-control pro_combo", "id" => "cmb_medio"]) ?>
                 </div>
@@ -279,9 +280,9 @@ if (!empty($arr_datosc['cedula'])) {
             <div class='col-md-12 col-sm-12 col-xs-12 col-lg-12'>
                 <div class="col-md-6 col-sm-6 col-xs-6 col-lg-6">
                     <div class="form-group">
-                        <label for="txt_nombrebene1" class="col-sm-5 col-md-5 col-xs-5 col-lg-5 control-label" id="lbl_nombrebene1"><?= Yii::t("formulario", "First Name") ?> </label>
+                        <label for="txt_nombrebene1" class="col-sm-5 col-md-5 col-xs-5 col-lg-5 control-label" id="lbl_nombrebene1"><?= Yii::t("formulario", "First Name") ?><span class="text-danger">*</span></label>
                         <div class="col-sm-7 col-md-7 col-xs-7 col-lg-7">
-                            <input type="text" class="form-control keyupmce" value="<?= $arr_datosb["pgco_primer_nombre"] ?>" id="txt_nombrebene1" data-type="alfa" placeholder="<?= Yii::t("formulario", "First Name") ?>">
+                            <input type="text" class="form-control keyupmce PBvalidation" value="<?= $arr_datosb["pgco_primer_nombre"] ?>" id="txt_nombrebene1" data-type="alfa" placeholder="<?= Yii::t("formulario", "First Name") ?>">
                         </div>
                     </div>
                 </div> 
@@ -297,9 +298,9 @@ if (!empty($arr_datosc['cedula'])) {
             <div class='col-md-12 col-sm-12 col-xs-12 col-lg-12'>
                 <div class="col-md-6 col-sm-6 col-xs-6 col-lg-6">
                     <div class="form-group">
-                        <label for="txt_apellidobene1" class="col-sm-5 col-md-5 col-xs-5 col-lg-5 control-label" id="lbl_apellidobene1"><?= Yii::t("formulario", "Last Name") ?> </label>
+                        <label for="txt_apellidobene1" class="col-sm-5 col-md-5 col-xs-5 col-lg-5 control-label" id="lbl_apellidobene1"><?= Yii::t("formulario", "Last Name") ?><span class="text-danger">*</span></label>
                         <div class="col-sm-7 col-md-7 col-xs-7 col-lg-7">
-                            <input type="text" class="form-control keyupmce" value="<?= $arr_datosb["pgco_primer_apellido"] ?>" id="txt_apellidobene1" data-type="alfa" placeholder="<?= Yii::t("formulario", "Last Name") ?>">
+                            <input type="text" class="form-control keyupmce PBvalidation" value="<?= $arr_datosb["pgco_primer_apellido"] ?>" id="txt_apellidobene1" data-type="alfa" placeholder="<?= Yii::t("formulario", "Last Name") ?>">
                         </div>
                     </div>
                 </div> 
@@ -316,11 +317,8 @@ if (!empty($arr_datosc['cedula'])) {
                 <div class="col-lg-6 col-md-6 col-sm-6 col-xs-6">
                     <div class="form-group">
                         <label for="txt_celularbene" class="col-sm-5 col-md-5 col-xs-5 col-lg-5 control-label"><?= Yii::t("formulario", "CellPhone") ?> </label> 
-                        <div class="col-sm-7 col-md-7 col-xs-7 col-lg-7">
-                            <div class="input-group">
-                               <!-- <span id="lbl_codeCountrybeni" class="input-group-addon"><?= $area ?></span> -->
-                                <input type="text" class="form-control" value="<?= $arr_datosb["pgco_celular"] ?>" id="txt_celularbene" data-type="celular_sin" data-keydown="true" placeholder="<?= Yii::t("formulario", "CellPhone") ?>">
-                            </div>
+                        <div class="col-sm-7 col-md-7 col-xs-7 col-lg-7">                        
+                            <input type="text" class="form-control" value="<?= $arr_datosb["pgco_celular"] ?>" id="txt_celularbene" data-type="celular_sin" data-keydown="true" placeholder="<?= Yii::t("formulario", "CellPhone") ?>">                          
                         </div>
                     </div>
                 </div> 
