@@ -58,7 +58,7 @@ class OportunidadesController extends \app\components\CController
         $modalidad_model = new Modalidad();
         $state_oportunidad_model = new EstadoOportunidad();
         $unidad_acad_data = $uni_aca_model->consultarUnidadAcademicas();
-        $modalidad_data = $modalidad_model->consultarModalidad(0);
+        $modalidad_data = $modalidad_model->consultarModalidad($respOportunidad["uaca_id"]);
         $modcanal = new Oportunidad();
         $tipo_oportunidad_data = TipoOportunidadVenta::find()->select("tove_id AS id, tove_nombre AS name")->where(["tove_estado_logico" => "1", "tove_estado" => "1"])->asArray()->all();
         $state_oportunidad_data = $state_oportunidad_model->consultarEstadOportunidad();
@@ -101,7 +101,7 @@ class OportunidadesController extends \app\components\CController
         $contactManage = $persges_mod->consultarPersonaGestion($pges_id);
         $respOportunidad = $modoportunidad->consultarOportunidadById($opor_id);
         $unidad_acad_data = $uni_aca_model->consultarUnidadAcademicas();
-        $modalidad_data = $modalidad_model->consultarModalidad(0);
+        $modalidad_data = $modalidad_model->consultarModalidad($respOportunidad["uaca_id"]);
         $tipo_oportunidad_data = $modTipoOportunidad->consultarOporxUnidad(1);
         $state_oportunidad_data = $state_oportunidad_model->consultarEstadOportunidad();
         $academic_study_data = $modoportunidad->consultarCarreraModalidad(1, 1);
@@ -173,6 +173,7 @@ class OportunidadesController extends \app\components\CController
         $contactManage = $persges_mod->consultarPersonaGestion($pges_id);
         $uni_aca_model = new UnidadAcademica();
         $modalidad_model = new Modalidad();
+        $modestudio = new ModuloEstudio();
         $modTipoOportunidad = new TipoOportunidadVenta();
         $state_oportunidad_model = new EstadoOportunidad();
         //$academic_study = new EstudioAcademico();
@@ -183,6 +184,7 @@ class OportunidadesController extends \app\components\CController
         $state_oportunidad_data = $state_oportunidad_model->consultarEstadOportunidad();
         $academic_study_data = $modcanal->consultarCarreraModalidad(1, 1);
         $knowledge_channel_data = $modcanal->consultarConocimientoCanal(1);
+        $arr_moduloEstudio = $modestudio->consultarEstudioEmpresa($respOportunidad["empresa"]); // tomar id de impresa
         $empresa_mod = new Empresa();
         $empresa = $empresa_mod->getAllEmpresa();
         if (Yii::$app->request->isAjax) {
@@ -202,6 +204,12 @@ class OportunidadesController extends \app\components\CController
             if (isset($data["getsubcarrera"])) {
                 $subcarrera = $modcanal->consultarSubCarrera($data["car_id"]);
                 $message = array("subcarrera" => $subcarrera);
+                return Utilities::ajaxResponse('OK', 'alert', Yii::t('jslang', 'Success'), 'false', $message);
+
+            }
+            if (isset($data["getmodalidaemp"])) {
+                $modalidaemp = $modestudio->consultarEstudioEmpresa($data["empresa"]);
+                $message = array("modalidaemp" => $modalidaemp);
                 return Utilities::ajaxResponse('OK', 'alert', Yii::t('jslang', 'Success'), 'false', $message);
 
             }
@@ -239,7 +247,7 @@ class OportunidadesController extends \app\components\CController
             $data = Yii::$app->request->post();
             $pges_id = base64_decode($data["id_pgest"]);
             $empresa = $data["empresa"];
-            $modulo_estudio = null;
+            $modulo_estudio = $data["modulo_estudio"];
             $unidad_academica = $data["id_unidad_academica"];
             $modalidad = $data["id_modalidad"];
             $tipo_oportunidad = $data["id_tipo_oportunidad"];

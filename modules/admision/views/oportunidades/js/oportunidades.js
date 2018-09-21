@@ -3,10 +3,29 @@ $(document).ready(function () {
         actualizarGridGestion();
     });
     $('#cmb_empresa').change(function(){
-        if($(this).val() > 1)
+        var link = $('#txth_base').val() + "/admision/oportunidades/newoportunidadxcontacto";
+        if($(this).val() > 1){
             $('.subcareers').hide();
-        else
+            var arrParams = new Object();
+            arrParams.empresa = $(this).val();
+            arrParams.getmodalidaemp = true;
+            requestHttpAjax(link, arrParams, function (response) {
+                if (response.status == "OK") {
+                    data = response.message;
+                    setComboData(data.modalidaemp, "cmb_modalidad_estudio");
+                    $('.ccmodestudio').removeClass("hide");
+                    $('.ccmodestudio').addClass("show");
+                    $('.ccmodalidad').removeClass("show");
+                    $('.ccmodalidad').addClass("hide");
+                }
+            }, true);
+        }else{
             $('.subcareers').show();
+            $('.ccmodestudio').removeClass("show");
+            $('.ccmodestudio').addClass("hide");
+            $('.ccmodalidad').removeClass("hide");
+            $('.ccmodalidad').addClass("show");
+        }
     });
     $('#cmb_carrera2').change(function () {
         var ref = $(this).attr("data-ref");
@@ -203,6 +222,7 @@ function save(){
     arrParams.canal_conocimiento = $('#cmb_knowledge_channel').val();
     arrParams.carrera2 = $('#cmb_carrera2').val();
     arrParams.sub_carrera = sub_carrera;
+    arrParams.modulo_estudio = $('#cmb_modalidad_estudio').val();
     if (!validateForm()) {
         requestHttpAjax(link, arrParams, function (response) {
             showAlert(response.status, response.label, response.message);

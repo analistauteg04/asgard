@@ -2,6 +2,8 @@
 
 namespace app\modules\academico\models;
 
+use yii\data\ArrayDataProvider;
+use DateTime;
 use Yii;
 
 /**
