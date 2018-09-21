@@ -1041,15 +1041,16 @@ class Interesado extends \app\modules\admision\components\CActiveRecord {
         $sql = "
                 select 
                 inte.int_id as id,
-                ifnull(concat(per.per_pri_nombre,' ',per.per_seg_nombre),'') as nombres,
-                ifnull(concat(per.per_pri_apellido,' ',per.per_seg_apellido),'') as apellidos,
+                concat(ifnull(per.per_pri_nombre,''),' ',ifnull(per.per_seg_nombre,'')) as nombres,
+                concat(ifnull(per.per_pri_apellido,''),' ',ifnull(per.per_seg_apellido,'')) as apellidos,
                 ifnull(per.per_cedula,per.per_pasaporte) as DNI,
                 emp.emp_nombre_comercial as empresa,
+                inte.int_fecha_creacion as fecha_interes,
                 per.per_id
                 from db_captacion.interesado inte
                 join db_asgard.persona as per on inte.per_id=per.per_id
                 join db_captacion.interesado_empresa as iemp on iemp.int_id=inte.int_id
-                join db_asgard.empresa as emp on emp.emp_id=iemp.emp_id
+                join db_asgard.empresa as emp on emp.emp_id=iemp.emp_i
                 where $str_search
                 inte.int_estado_logico=:estado AND
                 inte.int_estado=:estado AND                    
@@ -1059,6 +1060,7 @@ class Interesado extends \app\modules\admision\components\CActiveRecord {
                 iemp.iemp_estado=:estado AND
                 emp.emp_estado_logico=:estado AND						
                 emp.emp_estado=:estado
+                order by inte.int_fecha_creacion desc
                 ";
         $comando = $con->createCommand($sql);
         $comando->bindParam(":estado", $estado, \PDO::PARAM_STR);
