@@ -3,6 +3,7 @@
 namespace app\modules\admision\models;
 
 use yii\data\ArrayDataProvider;
+use app\models\Utilities;
 use DateTime;
 use Yii;
 /**
@@ -1680,19 +1681,10 @@ class Interesado extends \app\modules\admision\components\CActiveRecord {
     }
 
     public function enviarCorreoBienvenida($email_info) {
-        $tituloMensaje = Yii::t("register", "Successful Registration");
-        $asunto = Yii::t("BienvenidaADContacto", "User Register");
-        $body = Utilities::getMailMessage("register", array(
-                    "[[nombres]]" => $data_to_send["nombre"],
-                    "[[apellidos]]" => $data_to_send["apellido"],
-                ), Yii::$app->language);
-        Utilities::sendEmail($tituloMensaje, Yii::$app->params["adminEmail"], [ $data_to_send["correo"] => $data_to_send["nombre"] . " " . $data_to_send["apellido"]], $asunto, $body);
-        
-        $message = array(
-            "wtmessage" => Yii::t("notificaciones", "La infomación ha sido grabada. Por favor para activar su cuenta revise su correo electrónico y siga los pasos."),
-            "title" => Yii::t('jslang', 'Success'),
-        );
-        echo Utilities::ajaxResponse('OK', 'alert', Yii::t("jslang", "Sucess"), false, $message);
+        $tituloMensaje = Yii::t("interesado", "UTEG - Registration");
+        $asunto = Yii::t("interesado", "UTEG - Registration Online");
+        $body = Utilities::getMailMessage("BienvenidaADContacto",array("[[nombre]]" => $email_info['nombres']), Yii::$app->language);
+        Utilities::sendEmail($tituloMensaje, Yii::$app->params["admisiones"], [Yii::$app->params["admisiones"] => "Soporte"], $asunto, $body);
     }
 
     /**

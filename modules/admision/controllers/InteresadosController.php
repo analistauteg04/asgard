@@ -140,10 +140,17 @@ class InteresadosController extends \app\components\CController {
                                             \app\models\Utilities::putMessageLogFile('intereso empresa ingresado con id: ' . $iemp_id);
                                             \app\models\Utilities::putMessageLogFile(' proceso terminado, enviano correo ');
                                             $email_info = array(
-                                                "nombre" => $pgest['pges_pri_nombre'],
-                                                "apellido" => $pgest['pges_pri_apellido'],
-                                                "correo" => $pgest['pges_correo']
+                                                "nombres" => $pgest['pges_pri_nombre']. " ". $pgest['pges_seg_nombre'],
+                                                "apellidos" => $pgest['pges_pri_apellido']. " ". $pgest['pges_seg_apellido'],
+                                                "correo" => $pgest['pges_correo'],
+                                                "telefono" => isset($pgest['pges_celular'])?$pgest['pges_celular']:$pgest['pges_domicilio_telefono'],
+                                                "identificacion" => isset($pgest['pges_cedula'])?$pgest['pges_cedula']:$pgest['pges_pasaporte']
                                             );
+                                                $outemail=$mod_interesado->enviarCorreoBienvenida($email_info);
+                                                if($outemail==0){
+                                                    $error_message .= Yii::t("formulario", "The email hasn't been sent");
+                                                    $error++;        
+                                                }
                                         } else {
                                             $error_message .= Yii::t("formulario", "The enterprise interested hasn't been saved");
                                             $error++;
@@ -175,7 +182,7 @@ class InteresadosController extends \app\components\CController {
 
                 if ($error == 0) {
                     $message = array(
-                        "wtmessage" => Yii::t("formulario", "The information have been saved"),
+                        "wtmessage" => Yii::t("formulario", "The information have been saved and the information has been sent to your email"),
                         "title" => Yii::t('jslang', 'Success'),
                     );
                     return Utilities::ajaxResponse('OK', 'alert', Yii::t("jslang", "Sucess"), false, $message);
