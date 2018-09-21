@@ -11,6 +11,7 @@ use app\models\Provincia;
 use app\models\Canton;
 use app\models\Utilities;
 use yii\helpers\ArrayHelper;
+use app\modules\admision\Module as Admision;
 
 class ContactosController extends \app\components\CController
 {
@@ -245,14 +246,14 @@ class ContactosController extends \app\components\CController
             if (!empty($data["celular"])) {
                 $celular = $data["celular"];
             }
+            if (!empty($data["correo"])) {
+                $correo = strtolower($data["correo"]);
+            }
             if (!empty($data["celular2"])) {
                 $celular2 = $data["celular2"];
             }
             if (!empty($data["telefono"])) {
                 $telefono = $data["telefono"];
-            }
-            if (!empty($data["correo"])) {
-                $correo = strtolower($data["correo"]);
             }
             $medio = $data["medio"];
             $contacto = $data["contacto"];
@@ -280,6 +281,13 @@ class ContactosController extends \app\components\CController
             $con = \Yii::$app->db_crm;
             $transaction = $con->beginTransaction();
             try {
+                if(!Utilities::validateTypeField($correo, "correo") && !Utilities::validateTypeField($celular, "number")){
+                    $message = array(
+                        "wtmessage" => Admision::t("crm", "Please enter at least one valid email or a cell phone."),
+                        "title" => Yii::t('jslang', 'Success'),
+                    );
+                    return Utilities::ajaxResponse('NO_OK', 'alert', Yii::t("jslang", "Error"), true, $message);
+                }
                 $mod_pergestion = new PersonaGestion();
                 $mod_gestion = new Oportunidad();
                 if (!empty($celular) || !empty($correo) || !empty($telefono) || !empty($celular2)) {
@@ -315,7 +323,7 @@ class ContactosController extends \app\components\CController
                             "wtmessage" => Yii::t("notificaciones", "Error al grabar. " . $mensaje),
                             "title" => Yii::t('jslang', 'Success'),
                         );
-                        return Utilities::ajaxResponse('NO_OK', 'alert', Yii::t("jslang", "Sucess"), false, $message);
+                        return Utilities::ajaxResponse('NO_OK', 'alert', Yii::t("jslang", "Sucess"), true, $message);
                     }
                 } else {
                     $mensaje = 'Registro ya existente';
@@ -324,7 +332,7 @@ class ContactosController extends \app\components\CController
                         "wtmessage" => Yii::t("notificaciones", "No se puede guardar el contacto " . $mensaje),
                         "title" => Yii::t('jslang', 'Success'),
                     );
-                    return Utilities::ajaxResponse('NO_OK', 'alert', Yii::t("jslang", "Sucess"), false, $message);
+                    return Utilities::ajaxResponse('NO_OK', 'alert', Yii::t("jslang", "Sucess"), true, $message);
                 }
             } catch (Exception $ex) {
                 $transaction->rollback();
@@ -332,7 +340,7 @@ class ContactosController extends \app\components\CController
                     "wtmessage" => Yii::t("notificaciones", "Error al grabar." . $mensaje),
                     "title" => Yii::t('jslang', 'Success'),
                 );
-                return Utilities::ajaxResponse('NO_OK', 'alert', Yii::t("jslang", "Sucess"), false, $message);
+                return Utilities::ajaxResponse('NO_OK', 'alert', Yii::t("jslang", "Error"), true, $message);
             }
             return;
         }
@@ -559,6 +567,53 @@ class ContactosController extends \app\components\CController
                     'model' => $mod_gestion,
                     'arr_contacto' => ArrayHelper::map(array_merge([["id" => "0", "name" => "Todas"]], $estado_contacto), "id", "name"),
         ]);
+    }
+    
+    // estado_contacto     ->    Estado del Contacto
+    // estado_oportunidad  ->    Estado de Oportunidad
+    // oportunidad_perdida ->    Estado de Oportunidad Perdida
+    // modalidad           ->    Modalidad Academica
+    
+    public function actionExport(){
+        $mod_oportunidad = new Oportunidad;
+        $Data = $mod_oportunidad->consultarOportUnidadAcademica();  
+        $arrayIds=array();
+        for ($i = 0; $i < sizeof($Data); $i++) {
+            if (in_array($Data[$i]['eopo_id'], $arrayIds)) {
+                $arrayIds[]=$Data[$i]['eopo_id'];
+                $arrDataCols[]=$Data[$i]['eopo_nombre'];
+            }
+        }
+        Utilities::putMessageLogFile($arrayIds);
+        Utilities::putMessageLogFile($arrDataCols);
+        
+        exit;
+        ini_set('memory_limit', '256M');
+        $content_type = Utilities::mimeContentType("xls");
+        $nombarch = "Report-" . date("YmdHis") . ".xls";
+        header("Content-Type: $content_type");
+        header("Content-Disposition: attachment;filename=" . $nombarch . ".xls");
+        header('Cache-Control: max-age=0');
+        
+        $colPosition = array("C", "D", "E", "F", "G", "H", "I", "J", "K");
+        $arrHeader = array("#","Grado Lead","Online Lead","Posgrado Lead","Base Grado","Base Online","Base Posgrado","Suma","Promedio");
+        //$arrDataCols = ["En Contacto", "Calificado", "No Calificado"];
+        //$arrDataCols = ["En curso", "En espera", "Ganada", "Perdida", "Listo para pago", "Total"];
+        //$arrDataCols = ["Precio", "Insatisfacción con malla académica", "No existe carrera", "Calidad de docentes", "Atención recibida", "Ubicación", "Otra Universidad", "Modalidad de Estudios", "Motivo personal", "Viaje imprevisto", "No contesta el teléfono ni correos"];
+        $arrData = array();
+        for($i=0; $i<count($arrDataCols); $i++){
+            $j=0;
+            for($j=0; $j<count($arrHeader); $j++){
+                if($j == 0){
+                    $arrData[$i][$j] = $arrDataCols[$i];
+                }else {
+                    $arrData[$i][$j] = "data $i $j";
+                } 
+            }
+        }
+        $nameReport = yii::t("formulario", "Application Reports");
+        Utilities::generarReporteXLS($nombarch, $nameReport, $arrHeader, $arrData, $colPosition);
+        exit;
     }
 
 

@@ -529,4 +529,58 @@ class Utilities {
         ];
     }
 
+    public static function validateTypeField($field, $type){
+        $status = false;
+        switch($type) {
+            case 'number'://solo numeros
+                if(preg_match("/^(?:\+|-)?\d+$/", $field))
+                    $status = true;
+                break;
+            case 'alfa'://solo letras
+                if (preg_match("/^([a-zA-ZáéíóúÁÉÍÓÚÑñ '])+$/", $field))
+                    $status = true;
+                break;
+            case 'alfanumerico':
+                if (preg_match("/^([a-zA-Z áéíóúÁÉÍÓÚÑñ0-9])+$/", $field))
+                    $status = true;
+                break;
+            case 'direccion':
+                if (preg_match("/^([a-zA-Z áéíóúÁÉÍÓÚÑñ0-9 ./-])+$/", $field))
+                    $status = true;
+                break;
+            case 'email'://email        
+                if (preg_match("/^[\w-\.]{3,}@([\w-]{2,}\.)*([\w-]{2,}\.)[\w-]{2,4}$/", $field))
+                    $status = true;
+                break;
+            case 'telefono':
+                if (preg_match("/^(((\d{6,9}[ ]?\/[ ]?)(\d{6,9}[ ]?\/[ ]?)*\d{6,9})|(\d{6,9}))$/", $field))
+                    $status = true;
+                break;
+            case 'celular':
+                if (preg_match("/^(((\d{9,13}[ ]?\/[ ]?)(\d{9,10}[ ]?\/[ ]?)*\d{9,13})|(\d{9,13}))$/", $field))
+                    $status = true;
+                break;
+            case 'dinero':
+                if (preg_match("/^((\d{1,9})(\.\d{1,2})?)$/", $field))
+                    $status = true;
+                break;
+            case 'fecha':
+                if (preg_match("/^(19|20)\d\d[-](0[1-9]|1[012])[-](0[1-9]|[12][0-9]|3[01])/", $field))
+                    $status = true;
+                break;
+            case 'tiempo':
+                if (preg_match("/^(0[1-9]|1\d|2[0-3]):([0-5]\d)$/", $field))
+                    $status = true;
+                break;
+            case 'url' :
+                if (preg_match("/^(http|https)\:\/\/[a-z0-9\.-]+\.[a-z]{2,4}/", $field))
+                    $status = true;
+                break;
+            default :// all
+                if (preg_match("/^(.|\n)+$/", $field))
+                    $status = true;
+                break;
+        }
+        return $status;
+    }
 }

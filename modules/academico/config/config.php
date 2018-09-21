@@ -1,5 +1,6 @@
 <?php
 $arr_conf = [
+//return  [
     'components' => [
         // list of component configurations
         'urlManager' => [

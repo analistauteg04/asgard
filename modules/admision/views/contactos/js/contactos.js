@@ -186,9 +186,9 @@ function save() {
         $('#txt_correobeni').removeClass("PBvalidation");
 
         if (arrParams.celularbeni == '' && arrParams.telefonobeni == '' && arrParams.correobeni == '') {
-            $('#txt_celular').addClass("PBvalidation");
+            //$('#txt_celular').addClass("PBvalidation");
             $('#txt_telefono_con').addClass("PBvalidation");
-            $('#txt_correo').addClass("PBvalidation");
+            //$('#txt_correo').addClass("PBvalidation");
         }
 
     } else {
@@ -218,9 +218,11 @@ function save() {
     if (!validateForm()) {
         requestHttpAjax(link, arrParams, function (response) {
             showAlert(response.status, response.label, response.message);
-            setTimeout(function () {
-                window.location.href = $('#txth_base').val() + "/admision/contactos/index";
-            }, 3000);
+            if (response.status == "OK"){
+                setTimeout(function () {
+                    window.location.href = $('#txth_base').val() + "/admision/contactos/index";
+                }, 3000);
+            }
         }, true);
     }
 }
@@ -277,9 +279,11 @@ function update() {
     if (!validateForm()) {
         requestHttpAjax(link, arrParams, function (response) {
             showAlert(response.status, response.label, response.message);
-            setTimeout(function () {
-                window.location.href = $('#txth_base').val() + "/admision/contactos/index";
-            }, 3000);
+            if (response.status){
+                setTimeout(function () {
+                    window.location.href = $('#txth_base').val() + "/admision/contactos/index";
+                }, 3000);
+            }
         }, true);
     }
 }

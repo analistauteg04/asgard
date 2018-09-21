@@ -180,10 +180,16 @@ $fecha_actual = date("Y-m-d");
         </div>
         <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
             <div class="col-lg-6 col-md-6 col-sm-6 col-xs-6">
-                <div class="form-group">
+                <div class="form-group ccmodalidad">
                     <label for="cmb_carrera1" class="col-sm-5 col-md-5 col-xs-5 col-lg-5 control-label keyupmce"><?= Module::t("crm", "Academic Study") ?></label>
                     <div class="col-sm-7 col-md-7 col-xs-7 col-lg-7">
                         <?= Html::dropDownList("cmb_carrera1", 1, $arr_academic_study, ["class" => "form-control", "id" => "cmb_carrera1"]) ?>
+                    </div>
+                </div>
+                <div class="form-group ccmodestudio hide">
+                    <label for="cmb_carrera1" class="col-sm-5 col-md-5 col-xs-5 col-lg-5 control-label keyupmce"><?= Module::t("crm", "Academic Study") ?></label>
+                    <div class="col-sm-7 col-md-7 col-xs-7 col-lg-7">
+                        <?= Html::dropDownList("cmb_modalidad_estudio", 1, array(), ["class" => "form-control", "id" => "cmb_modalidad_estudio"]) ?>
                     </div>
                 </div>
             </div>
@@ -196,12 +202,12 @@ $fecha_actual = date("Y-m-d");
                 </div>
             </div>
         </div>
-        <div class="col-md-7 col-sm-7 col-xs-7 col-lg-7">
+        <div class="col-md-7 col-sm-7 col-xs-7 col-lg-7 subcareers">
             <div class="form-group">
                 <h4><span id="lbl_general"><?= Module::t("crm", "Another interest carreer") ?></span></h4> 
             </div>
         </div>
-        <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
+        <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12 subcareers">
             <div class="col-lg-6 col-md-6 col-sm-6 col-xs-6">
                 <div class="form-group">
                     <label for="cmb_carrera2" class="col-sm-5 col-md-5 col-xs-5 col-lg-5 control-label keyupmce"><?= Yii::t("academico", "Career") ?></label>

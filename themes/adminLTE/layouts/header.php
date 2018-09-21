@@ -71,6 +71,7 @@ $empresas = Empresa::getListaEmpresasxUserID(Yii::$app->session->get("PB_iduser"
     <nav class="navbar navbar-static-top" role="navigation">
         <!-- Sidebar toggle button-->
         <a href="javascript:" class="sidebar-toggle" data-toggle="offcanvas" role="button">
+            <i class="fas fa-bars"></i>
             <span class="sr-only">Toggle navigation</span>
             <span class="icon-bar"></span>
             <span class="icon-bar"></span>
