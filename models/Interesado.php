@@ -163,7 +163,9 @@ class Interesado extends \yii\db\ActiveRecord {
             return FALSE;
         }
     }
-
+    
+    
+    
     /**
      * Function consultaDatosinteresado
      * @author  Grace Viteri <analistadesarrollo01@uteg.edu.ec>

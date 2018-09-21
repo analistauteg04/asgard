@@ -2,6 +2,9 @@
 
 use yii\helpers\Html;
 use app\modules\admision\Module as admision;
+use app\modules\academico\Module as aspirante;
+
+aspirante::registerTranslations();
 
 $tipodoc='';
 if (!empty($personalData['per_cedula'])) {
@@ -19,10 +22,10 @@ if (!empty($personalData['per_cedula'])) {
 ?>
 <?= Html::hiddenInput('txth_per_id', base64_encode($personalData['per_id']), ['id' => 'txth_per_id']); ?>
 <div class="col-md-12 col-sm-12 col-xs-12 col-lg-12">
-    <h3><span id="lbl_Personeria"><?= admision::t("Solicitudes", "Request by Interested") ?></span></h3>
+    <h3><span id="lbl_Personeria"><?= aspirante::t("Aspirantes", "Request by aspirants") ?></span></h3>
 </div>
 <div class="col-md-12 col-sm-12 col-xs-12 col-lg-12">
-    <h4><span id="lbl_general"><?= admision::t("Solicitudes", "Data General Interested") ?></span></h4> 
+    <h4><span id="lbl_general"><?= aspirante::t("Aspirantes", "Data General Aspirants") ?></span></h4> 
 </div>
 <div class="col-md-12 col-sm-12 col-xs-12 col-lg-12">       
     <div class='col-md-12 col-sm-12 col-xs-12 col-lg-12'>
