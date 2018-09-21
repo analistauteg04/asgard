@@ -44,7 +44,7 @@ $_SESSION['persona_solicita'] = base64_encode($per_id);
     </div>
     
     <div class="col-md-12 col-xs-12 col-sm-12 col-lg-12">
-        <h4><span id="lbl_Personeria"><?= admision::t("Solicitudes", "Attach document") ?></span></h4>    
+        <h4><span id="lbl_Personeria"><?= Yii::t("formulario", "Attach document") ?></span></h4>    
     </div>
     <div class="col-md-12 col-xs-12 col-sm-12 col-lg-12">
         <?php echo $leyenda; ?>

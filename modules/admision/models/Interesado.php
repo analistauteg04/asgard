@@ -1050,7 +1050,7 @@ class Interesado extends \app\modules\admision\components\CActiveRecord {
                 from db_captacion.interesado inte
                 join db_asgard.persona as per on inte.per_id=per.per_id
                 join db_captacion.interesado_empresa as iemp on iemp.int_id=inte.int_id
-                join db_asgard.empresa as emp on emp.emp_id=iemp.emp_i
+                join db_asgard.empresa as emp on emp.emp_id=iemp.emp_id
                 where $str_search
                 inte.int_estado_logico=:estado AND
                 inte.int_estado=:estado AND                    
