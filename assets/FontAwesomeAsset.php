@@ -12,10 +12,14 @@ use yii\web\AssetBundle;
 
 class FontAwesomeAsset extends AssetBundle {
 
-    public $sourcePath = '@bower/font-awesome';
+    public $sourcePath = '@bower/font-awesome/web-fonts-with-css';
     public $baseUrl = '@web';
     public $css = [
-        'css/font-awesome.min.css',
+        'css/fontawesome-all.min.css',
+        'css/brands.min.css',
+        'css/regular.min.css',
+        'css/solid.min.css',
+        'css/v4-shims.min.css',
     ];
     public $js = [];
     public $depends = [
