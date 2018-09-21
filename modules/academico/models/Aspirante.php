@@ -196,14 +196,7 @@ class Aspirante extends \yii\db\ActiveRecord {
                 $comando->bindParam(":fec_fin", $fecha_fin, \PDO::PARAM_STR);
             }
             $comando->bindParam(":codigocan", $codigocan, \PDO::PARAM_STR);
-        }
-        Utilities::putMessageLogFile('codigocan:' . $codigocan);
-        Utilities::putMessageLogFile('carrera:' . $carrera);
-        Utilities::putMessageLogFile('fecha_ini:' . $fecha_ini);
-        Utilities::putMessageLogFile('fecha_fin:' . $fecha_fin);
-        Utilities::putMessageLogFile('search_cond:' . $search_cond);
-
-        Utilities::putMessageLogFile('sql:' . $sql);
+        }        
         $resultData = $comando->queryAll();
         $dataProvider = new ArrayDataProvider([
             'key' => 'id',
