@@ -1,9 +1,8 @@
 <?php
 
-namespace app\modules\admision\models;
+namespace app\modules\academico\models;
 
 use yii\data\ArrayDataProvider;
-use DateTime;
 use Yii;
 
 /**

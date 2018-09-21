@@ -1,7 +1,7 @@
 <?php
-return ['admision' => [
+return ['academico' => [
             'class' => 'app\modules\academico\Module',
-            'db_admision' => [
+            'db_academico' => [
                 'class' => 'app\components\CConnection',
                 'dsn' => 'mysql:host=localhost;dbname=db_academico',
                 'username' => 'uteg',
