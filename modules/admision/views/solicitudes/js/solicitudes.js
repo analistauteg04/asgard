@@ -311,8 +311,7 @@ $(document).ready(function () {
         arrParams.arc_extranjero = $('#txth_extranjero').val();
         arrParams.arc_nacional = $('#txth_nac').val();
         arrParams.arc_doc_beca = $('#txth_doc_beca').val();
-        arrParams.emp_id = 1;
-        alert(arrParams.persona_id);
+        arrParams.emp_id = 1;    
         if ($('input[name=opt_declara_Dctosi]:checked').val() == 1) {
             arrParams.descuento_id = $('#cmb_descuento').val();
             arrParams.marcadescuento = '1';
@@ -539,7 +538,7 @@ $(document).ready(function () {
         var link = $('#txth_base').val() + "/admision/solicitudes/savedocumentos";
         var arrParams = new Object();
         arrParams.sins_id = $('#txth_ids').val();
-        arrParams.persona_id = $('#txth_idp').val();
+        arrParams.persona_id = $('#txth_idp').val();        
         arrParams.interesado_id = $('#txth_int_id').val();
         arrParams.arc_extranjero = $('#txth_extranjero').val();
         arrParams.arc_doc_titulo = $('#txth_doc_titulo').val();

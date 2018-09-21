@@ -11,6 +11,9 @@ use yii\jui\AutoComplete;
 use yii\web\JsExpression;
 use app\models\Utilities;
 use app\modules\financiero\Module as financiero;
+use app\modules\admision\Module as admision;
+
+admision::registerTranslations();
 ?>
 <div>
     <?=
@@ -29,17 +32,17 @@ use app\modules\financiero\Module as financiero;
             ],
             [
                 'attribute' => 'fecha',
-                'header' => Yii::t("solicitud_ins", "Application date"),                
+                'header' => admision::t("Solicitudes", "Application date"),                
                 'value' => 'sins_fecha_solicitud',
             ],           
             [
                 'attribute' => 'Metodo',
-                'header' => Yii::t("solicitud_ins", "Income Method"),
+                'header' => admision::t("Solicitudes", "Income Method"),
                 'value' => 'ite_nombre',
             ],
             [
                 'attribute' => 'Total',
-                'header' => "Total",
+                'header' => admision::t("Solicitudes", "Total"),
                 'value' => 'ipre_precio',
             ],
             [

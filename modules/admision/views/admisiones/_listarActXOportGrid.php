@@ -17,7 +17,6 @@ use app\modules\admision\Module;
 
 <?=
 
-//   print_r($model);
 PbGridView::widget([
     'id' => 'Pbgestion',
     //'showExport' => true,

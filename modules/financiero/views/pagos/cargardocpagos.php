@@ -14,6 +14,10 @@ use yii\jui\AutoComplete;
 use yii\web\JsExpression;
 use app\models\Utilities;
 use app\modules\financiero\Module as financiero;
+use app\modules\admision\Module as admision;
+
+admision::registerTranslations();
+
 
 $leyendarc = '<div class="col-md-12 col-sm-12 col-xs-12 col-lg-12">
           <div class="form-group">
@@ -36,7 +40,7 @@ $per_id = Yii::$app->session->get("PB_perid");
 <form class="form-horizontal">
     <div class="col-md-12 col-sm-12 col-xs-12 col-lg-12">
         <div class="form-group">
-            <label for="cmb_parentesco_con" class="col-sm-2 col-md-2 col-xs-2 col-lg-2 control-label"><?= Yii::t("formulario", "Paid form") ?></label>
+            <label for="cmb_parentesco_con" class="col-sm-2 col-md-2 col-xs-2 col-lg-2 control-label"><?= financiero::t("Pagos", "Paid form") ?></label>
             <div class="col-sm-10 col-md-10 col-xs-10 col-lg-10">
                 <?php                
                 if (base64_decode($_GET['estado']) != 'Pendiente') {
@@ -55,16 +59,16 @@ $per_id = Yii::$app->session->get("PB_perid");
     </div>     
     <div class="col-md-12 col-sm-12 col-xs-12 col-lg-12">
         <div class="form-group">            
-            <label for="txt_pago" class="col-sm-2 col-md-2 col-xs-2 col-lg-2  control-label"><?= Yii::t("formulario", "Pay Total") ?></label>
+            <label for="txt_pago" class="col-sm-2 col-md-2 col-xs-2 col-lg-2  control-label"><?= financiero::t("Pagos", "Pay Total") ?></label>
             <div class="col-sm-10 col-md-10 col-xs-10 col-lg-10 ">
                 <?php
                 if (base64_decode($_GET['estado']) != 'Pendiente') {
                     ?>
-                    <input type="text" class="form-control PBvalidation keyupmce" id="txt_pago" data-type="dinero" readonly = "readonly" data-keydown="true" placeholder="<?= Yii::t("formulario", "Pay Total") ?>">
+                    <input type="text" class="form-control PBvalidation keyupmce" id="txt_pago" data-type="dinero" readonly = "readonly" data-keydown="true" placeholder="<?= financiero::t("Pagos", "Pay Total") ?>">
                     <?php
                 } else {
                     ?>
-                    <input type="text" class="form-control PBvalidation keyupmce" id="txt_pago" data-type="dinero" data-keydown="true" placeholder="<?= Yii::t("formulario", "Pay Total") ?>">
+                    <input type="text" class="form-control PBvalidation keyupmce" id="txt_pago" data-type="dinero" data-keydown="true" placeholder="<?= financiero::t("Pagos", "Pay Total") ?>">
                     <?php
                 }
                 ?>
@@ -73,16 +77,16 @@ $per_id = Yii::$app->session->get("PB_perid");
     </div>
     <div class="col-md-12 col-sm-12 col-xs-12 col-lg-12">
         <div class="form-group">            
-            <label for="txt_numtransaccion" class="col-sm-2 col-md-2 col-xs-2 col-lg-2  control-label"><?= Yii::t("solicitud_ins", "Transaction number") ?></label>
+            <label for="txt_numtransaccion" class="col-sm-2 col-md-2 col-xs-2 col-lg-2  control-label"><?= admision::t("Solicitudes", "Transaction number") ?></label>
             <div class="col-sm-10 col-md-10 col-xs-10 col-lg-10 ">
                 <?php
                 if (base64_decode($_GET['estado']) != 'Pendiente') {
                     ?>
-                    <input type="text" class="form-control PBvalidation keyupmce" id="txt_numtransaccion" data-type="number" readonly = "readonly" data-keydown="true" placeholder="<?= Yii::t("solicitud_ins", "Transaction number") ?>">
+                    <input type="text" class="form-control PBvalidation keyupmce" id="txt_numtransaccion" data-type="number" readonly = "readonly" data-keydown="true" placeholder="<?= admision::t("Solicitudes", "Transaction number") ?>">
                     <?php
                 } else {
                     ?>
-                    <input type="text" class="form-control PBvalidation keyupmce" id="txt_numtransaccion" data-type="number" data-keydown="true" placeholder="<?= Yii::t("solicitud_ins", "Transaction number") ?>">
+                    <input type="text" class="form-control PBvalidation keyupmce" id="txt_numtransaccion" data-type="number" data-keydown="true" placeholder="<?= admision::t("Solicitudes", "Transaction number") ?>">
                     <?php
                 }
                 ?>
@@ -91,7 +95,7 @@ $per_id = Yii::$app->session->get("PB_perid");
     </div>
     <div class="col-md-12 col-sm-12 col-xs-12 col-lg-12">
         <div class="form-group">
-            <label for="txt_fecha_transaccion" class="col-sm-2 col-md-2 col-xs-2 col-lg-2  control-label"><?= Yii::t("solicitud_ins", "Transaction date") ?></label>
+            <label for="txt_fecha_transaccion" class="col-sm-2 col-md-2 col-xs-2 col-lg-2  control-label"><?= admision::t("Solicitudes", "Transaction date") ?></label>
             <div class="col-sm-10 col-md-10 col-xs-10 col-lg-10 ">
                 <?=
                 DatePicker::widget([
@@ -99,7 +103,7 @@ $per_id = Yii::$app->session->get("PB_perid");
                     'value' => '',
                     'disabled' => $habilita,                    
                     'type' => DatePicker::TYPE_INPUT,
-                    'options' => ["class" => "form-control PBvalidation keyupmce", "id" => "txt_fecha_transaccion", "data-type" => "fecha", "data-keydown" => "true", "placeholder" => Yii::t("solicitud_ins", "Transaction date")],
+                    'options' => ["class" => "form-control PBvalidation keyupmce", "id" => "txt_fecha_transaccion", "data-type" => "fecha", "data-keydown" => "true", "placeholder" => admision::t("Solicitudes", "Transaction date")],
                     'pluginOptions' => [
                         'autoclose' => true,
                         'format' => Yii::$app->params["dateByDatePicker"],
@@ -131,7 +135,7 @@ $per_id = Yii::$app->session->get("PB_perid");
                         'browseClass' => 'btn btn-primary btn-block',
                         'browseIcon' => '<i class="fa fa-folder-open"></i> ',
                         'browseLabel' => "Subir Archivo",
-                        'uploadUrl' => Url::to(['/registrarpago/crearcargapago']),
+                        'uploadUrl' => Url::to(['pagos/savecarga']),
                         'maxFileSize' => Yii::$app->params["MaxFileSize"], // en Kbytes
                         'uploadExtraData' => 'javascript:function (previewId,index) {
                         var name_pago= $("#txth_doc_titulo").val();
@@ -211,12 +215,12 @@ $per_id = Yii::$app->session->get("PB_perid");
         'columns' => [   
             [
                 'attribute' => 'Forma',
-                'header' => Yii::t("formulario", "Paid form"),
+                'header' => financiero::t("Pagos", "Paid form"),
                 'value' => 'fpag_nombre',
             ],
             [
                 'attribute' => 'Total',
-                'header' => Yii::t("formulario", "Pay Total"),
+                'header' => financiero::t("Pagos", "Pay Total"),
                 'value' => 'dcar_valor',
             ],
             [
@@ -226,7 +230,7 @@ $per_id = Yii::$app->session->get("PB_perid");
             ],
             [
                 'attribute' => 'Revisado',
-                'header' => 'Revisado',
+                'header' => admision::t("Solicitudes", "Revisado"),
                 'value' => 'dcar_revisado',
             ],
             [
@@ -236,7 +240,7 @@ $per_id = Yii::$app->session->get("PB_perid");
             ],
             [
                 'attribute' => 'Observación',
-                'header' => 'Observación',
+                'header' => Yii::t("formulario", "Observation"),
                 'value' => 'icpr_observacion',
             ],
         ],

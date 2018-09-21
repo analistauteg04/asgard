@@ -156,7 +156,7 @@ class OportunidadesController extends \app\components\CController
             "tipo_dni" => array("CED" => Yii::t("formulario", "DNI Document"), "PASS" => Yii::t("formulario", "Passport")),
             "arr_carrerra2" => ArrayHelper::map($arr_carrerra2, "id", "name"),
             "arr_subcarrerra" => ArrayHelper::map($arr_subcarrera, "id", "name"),
-            'arr_empresa' => ArrayHelper::map($empresa, "Ids", "Nombre"),
+            'arr_empresa' => ArrayHelper::map($empresa, "id", "value"),
             'arr_moduloEstudio' => ArrayHelper::map($arr_moduloEstudio, "Ids", "Nombre"),
             'opo_id' => $opor_id,
             'pges_id' => $pges_id,
@@ -167,6 +167,7 @@ class OportunidadesController extends \app\components\CController
     public function actionNewoportunidadxcontacto()
     {
         $per_id = @Yii::$app->session->get("PB_perid");
+        $emp_id = @Yii::$app->session->get("PB_idempresa");
         $pges_id = base64_decode($_GET["pgid"]);
         $persges_mod = new PersonaGestion();
         $contactManage = $persges_mod->consultarPersonaGestion($pges_id);
@@ -176,7 +177,7 @@ class OportunidadesController extends \app\components\CController
         $state_oportunidad_model = new EstadoOportunidad();
         //$academic_study = new EstudioAcademico();
         $unidad_acad_data = $uni_aca_model->consultarUnidadAcademicas();
-        $modalidad_data = $modalidad_model->consultarModalidad(0);
+        $modalidad_data = $modalidad_model->consultarModalidad(1);
         $modcanal = new Oportunidad();
         $tipo_oportunidad_data = $modTipoOportunidad->consultarOporxUnidad(1);
         $state_oportunidad_data = $state_oportunidad_model->consultarEstadOportunidad();
@@ -224,6 +225,7 @@ class OportunidadesController extends \app\components\CController
             "arr_carrerra2" => ArrayHelper::map($arr_carrerra2, "id", "name"),
             "arr_subcarrerra" => ArrayHelper::map($arr_subcarrera, "id", "name"),
             'arr_empresa' => ArrayHelper::map($empresa, "id", "value"),
+            "emp_id" => $emp_id,
         ]);
     }
 

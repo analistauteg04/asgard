@@ -26,7 +26,7 @@ $(document).ready(function () {
         // actualizar codigo pais
         $("#lbl_codeCountry").text($("#cmb_pais option:selected").attr("data-code"));
     });
-    
+
     $('#cmb_prov').change(function () {
         var link = $('#txth_base').val() + "/admision/contactos/edit";
         var arrParams = new Object();
@@ -39,7 +39,26 @@ $(document).ready(function () {
             }
         }, true);
     });
-    
+
+    //Control del div de beneficiario
+    $('#rdo_beneficio').change(function () {
+        if ($('#rdo_beneficio').val() == 1) {
+            $("#rdo_beneficio_no").prop("checked", "");
+            $('#beneficio').css('display', 'none');
+        } else {
+            $('#beneficio').css('display', 'block');
+        }
+    });
+
+    $('#rdo_beneficio_no').change(function () {
+        if ($('#rdo_beneficio_no').val() == 2) {
+            $("#rdo_beneficio").prop("checked", "");
+            $('#beneficio').css('display', 'block');
+        } else {
+            $('#beneficio').css('display', 'none');
+        }
+    });
+
     function camposnulos(campo) {
         if ($(campo).val() == "")
         {
@@ -52,7 +71,14 @@ $(document).ready(function () {
     $('#btn_buscarContacto').click(function () {
         actualizarGridContacto();
     });
-    
+
+    $('#btn_cargar').click(function () {
+        cargarLeads('LEADS');
+    });
+    $('#btn_cargarLotes').click(function () {
+        cargarLeads('LOTES');
+    });
+
 });
 
 function actualizarGridContacto() {
@@ -67,18 +93,18 @@ function actualizarGridContacto() {
     }
 }
 
-function edit(){
+function edit() {
     var codigo = $('#txth_pcon_id').val();
     var tper_id = $('#txth_tper_id').val();
     window.location.href = $('#txth_base').val() + "/admision/contactos/edit?codigo=" + codigo + "&tper_id=" + tper_id;
 }
 
-function newOportunidadXContacto(){
+function newOportunidadXContacto() {
     var pgid = $('#txth_pgid').val();
     window.location.href = $('#txth_base').val() + "/admision/oportunidades/newoportunidadxcontacto?pgid=" + pgid;
 }
 
-function save(){
+function save() {
     var link = $('#txth_base').val() + "/admision/contactos/save";
     var arrParams = new Object();
     // funcion que permite verificar si viene vacío, remover la validación.
@@ -199,7 +225,7 @@ function save(){
     }
 }
 
-function update(){
+function update() {
     var link = $('#txth_base').val() + "/admision/contactos/update";
     var arrParams = new Object();
     camposnulos('#txt_celular');
@@ -279,5 +305,23 @@ function camposnulos(campo) {
     } else
     {
         $(campo).addClass("PBvalidation");
+    }
+}
+
+function cargarLeads(proceso) {
+    var arrParams = new Object();
+    var link = $('#txth_base').val() + "/admision/contactos/cargarleads";
+    arrParams.procesar_file = true;
+    arrParams.tipo_proceso = proceso;
+    arrParams.emp_id = $('#cmb_empresa option:selected').val();
+    arrParams.archivo = $('#txth_doc_adj_leads2').val() + "." + $('#txth_doc_adj_leads').val().split('.').pop();
+
+    if (!validateForm()) {
+        requestHttpAjax(link, arrParams, function (response) {
+            showAlert(response.status, response.label, response.message);
+            setTimeout(function () {
+                window.location.href = $('#txth_base').val() + "/admision/contactos/index";
+            }, 3000);
+        }, true);
     }
 }

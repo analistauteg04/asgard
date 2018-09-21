@@ -137,7 +137,7 @@ $fecha_actual = date("Y-m-d");
                 <div class="form-group">
                     <label for="cmb_empresa" class="col-sm-5 col-md-5 col-xs-5 col-lg-5 control-label keyupmce"><?= Yii::t("formulario", "Company") ?></label>
                     <div class="col-sm-7 col-md-7 col-xs-7 col-lg-7">
-                        <?= Html::dropDownList("cmb_empresa", 0, $arr_empresa, ["class" => "form-control", "id" => "cmb_empresa", "disabled" => "true"]) ?>
+                        <?= Html::dropDownList("cmb_empresa", $emp_id, $arr_empresa, ["class" => "form-control", "id" => "cmb_empresa",]) ?>
                     </div>
                 </div>
             </div>           

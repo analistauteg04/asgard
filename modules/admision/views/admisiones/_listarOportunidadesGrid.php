@@ -27,13 +27,7 @@ use app\modules\admision\Module;
                 'attribute' => 'Unidad',
                 'header' => Yii::t("formulario", "Academic unit"),
                 'value' => 'des_unidad',
-            ],           
-            /*[
-              'attribute' => 'Estudio Academico',
-              'header' => Module::t("crm", "Career/Program/Course"),
-              'value' => 'des_estudio',
-            ], */  
-             
+            ],              
             [
                 'class' => 'yii\grid\ActionColumn',
                 'header' => Module::t("crm", "Career/Program/Course"),

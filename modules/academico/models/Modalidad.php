@@ -2,6 +2,8 @@
 
 namespace app\modules\academico\models;
 
+use yii\data\ArrayDataProvider;
+use DateTime;
 use Yii;
 
 /**
@@ -87,37 +89,22 @@ class Modalidad extends \app\modules\academico\components\CActiveRecord {
      * @property       
      * @return  
      */
-    public function consultarModalidad($nivelinteres) {
+    public function consultarModalidad($uaca_id) {
         $con = \Yii::$app->db_academico;
         $estado = 1;
-        if ($nivelinteres > 0) {
-            $filtro = " (moda.mod_nivel_grado=:nivelinteres OR moda.mod_nivel_posgrado=:nivelinteres) AND ";
-        }
-        if ($nivelinteres < 3) {                     
-            $sql = "SELECT 
-                        moda.mod_id as id,
-                        moda.mod_nombre as name
-                    FROM 
-                        " . $con->dbname . ".modalidad as moda            
-                    WHERE ";                          
-            $sql .= $filtro;
-            $sql .=  " moda.mod_estado_logico=:estado AND 
-                       moda.mod_estado=:estado";
-        } else {
-            $sql = "SELECT distinct me.mod_id as id, 
-                           m.mod_nombre as name
-                    FROM " . $con->dbname . ".modulo_estudio me inner join " . $con->dbname . ".modalidad m
-                         on m.mod_id = me.mod_id
-                    WHERE uaca_id = :nivelinteres
-                    and me.mest_estado = :estado
-                    and me.mest_estado_logico = :estado
-                    and m.mod_estado = :estado
-                    and m.mod_estado_logico = :estado";    
-        }
+            $sql = "SELECT moda.mod_id as id,
+                           moda.mod_nombre as name
+                    FROM " . $con->dbname . ".modalidad_unidad_academico mua "
+                    . "inner join " . $con->dbname . ".modalidad moda ON moda.mod_id = mua.mod_id
+                    WHERE uaca_id = :uaca_id 
+                    and mua.muac_estado_logico = :estado
+                    and mua.muac_estado = :estado
+                    and moda.mod_estado_logico = :estado
+                    and moda.mod_estado = :estado";        
         
         $comando = $con->createCommand($sql);
         $comando->bindParam(":estado", $estado, \PDO::PARAM_STR);
-        $comando->bindParam(":nivelinteres", $nivelinteres, \PDO::PARAM_INT);
+        $comando->bindParam(":uaca_id", $uaca_id, \PDO::PARAM_INT);
         $resultData = $comando->queryAll();
         return $resultData;
     }

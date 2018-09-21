@@ -1,14 +1,8 @@
 <?php
 
 use yii\helpers\Html;
-use yii\widgets\DetailView;
-use yii\helpers\Url;
-use app\widgets\PbGridView\PbGridView;
-use yii\data\ArrayDataProvider;
-use kartik\date\DatePicker;
-use yii\helpers\ArrayHelper;
-use yii\jui\AutoComplete;
-use yii\web\JsExpression;
+use app\modules\admision\Module as admision;
+
 $tipodoc='';
 if (!empty($personalData['per_cedula'])) {
     $tipodoc = "Cédula";
@@ -25,14 +19,12 @@ if (!empty($personalData['per_cedula'])) {
 ?>
 <?= Html::hiddenInput('txth_per_id', base64_encode($personalData['per_id']), ['id' => 'txth_per_id']); ?>
 <div class="col-md-12 col-sm-12 col-xs-12 col-lg-12">
-    <h3><span id="lbl_Personeria"><?= Yii::t("formulario", "Request by Interested") ?></span></h3>
+    <h3><span id="lbl_Personeria"><?= admision::t("Solicitudes", "Request by Interested") ?></span></h3>
 </div>
 <div class="col-md-12 col-sm-12 col-xs-12 col-lg-12">
-    <div class="col-md-7 col-sm-7 col-xs-7 col-lg-7">
-        <div class="form-group">
-            <h4><span id="lbl_general"><?= Yii::t("formulario", "Data General Interested") ?></span></h4> 
-        </div>
-    </div>    
+    <h4><span id="lbl_general"><?= admision::t("Solicitudes", "Data General Interested") ?></span></h4> 
+</div>
+<div class="col-md-12 col-sm-12 col-xs-12 col-lg-12">       
     <div class='col-md-12 col-sm-12 col-xs-12 col-lg-12'>
         <div class="col-md-6 col-sm-6 col-xs-6 col-lg-6">
             <div class="form-group">

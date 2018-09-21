@@ -9,8 +9,9 @@
 use yii\helpers\Html;
 use yii\helpers\Url;
 use app\widgets\PbGridView\PbGridView;
-use app\models\Utilities;
-
+use app\modules\admision\Module as admision;
+use app\modules\academico\Module as academico;
+academico::registerTranslations();
 ?>
 <?=
 
@@ -25,27 +26,27 @@ PbGridView::widget([
     [
         [
             'attribute' => 'Solicitud #',
-            'header' => Yii::t("formulario", "Request #"),
+            'header' => admision::t("Solicitudes", "Request #"),
             'value' => 'num_solicitud',
         ],
         [
             'attribute' => 'Fecha Solicitud ',
-            'header' => Yii::t("solicitud_ins", "Application date"),
+            'header' => admision::t("Solicitudes", "Application date"),
             'value' => 'fecha_solicitud',
         ],
         [
             'attribute' => 'Nivel Interes',
-            'header' => Yii::t("formulario", "Academic unit"),
+            'header' => academico::t("Academico", "Academic unit"),
             'value' => 'nint_nombre',
         ],
         [
             'attribute' => 'Metodo Ingreso',
-            'header' => Yii::t("solicitud_ins", "Income Method"),
+            'header' => admision::t("Solicitudes", "Income Method"),
             'value' => 'metodo_ingreso',
         ],
         [
             'attribute' => 'Carrera',
-            'header' => Yii::t("academico", "Career") . "/" . Yii::t("formulario", "Program"),
+            'header' => academico::t("Academico", "Career/Program"),
             'value' => 'carrera',
         ],
         [

@@ -1,5 +1,7 @@
 <?php
+
 use yii\helpers\Html;
+
 $fecha_actual = date("Y-m-d");
 ?>
 <?= Html::hiddenInput('txth_idpa', $persona_autentica, ['id' => 'txth_idpa']); ?>
@@ -41,7 +43,6 @@ $fecha_actual = date("Y-m-d");
                 <label for="txt_tipo_persona" class="col-sm-5 control-label"><?= Yii::t("formulario", "Person type") ?></label>
                 <div class="col-sm-7"> 
                     <label><input type="radio" name="opt_tipo_persona_n" id="opt_tipo_persona_n" value="1" checked><b>Natural</b></label>
-                    <!-- <label><input type="radio" name="opt_tipo_persona_j" id="opt_tipo_persona_j" value="2"><b>Jurídica</b></label> -->
                 </div> 
                 <div class="col-md-4"> 
                 </div> 
@@ -247,7 +248,7 @@ $fecha_actual = date("Y-m-d");
             </div>
         </div>
     </div> 
-    
+
     <div id="estudiante" style="display: block;">        
         <div id="beneficio" style="display: none;">
             <div class="col-md-12 col-xs-12 col-sm-12 col-lg-12 ">
@@ -314,7 +315,7 @@ $fecha_actual = date("Y-m-d");
                     </div>
                 </div>               
             </div> 
-            
+
             <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">                 
                 <div class="col-lg-6 col-md-6 col-sm-6 col-xs-6">
                     <div class="form-group">
@@ -324,7 +325,7 @@ $fecha_actual = date("Y-m-d");
                         </div>
                     </div>
                 </div>
-                
+
                 <div class="col-lg-6 col-md-6 col-sm-6 col-xs-6">
                     <div class="form-group">
                         <label for="cmb_pais" class="col-sm-5 col-md-5 col-xs-5 col-lg-5 control-label"><?= Yii::t("formulario", "Country") ?> <span class="text-danger">*</span> </label>
@@ -348,7 +349,7 @@ $fecha_actual = date("Y-m-d");
             </div>
         </div> 
     </div> 
-    
+
     <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12"> 
         <div class="col-md-10"></div>
         <div class="col-md-2">

@@ -2,7 +2,13 @@
 
 namespace app\modules\admision\models;
 
-use app\models\admision\models\Oportunidad;
+use app\modules\admision\models\Oportunidad;
+use app\models\GrupRol;
+use app\models\Persona;
+use app\modules\admision\models\PersonaGestion;
+use app\modules\admision\models\EstadoOportunidad;
+use app\modules\admision\models\EstadoContacto;
+use app\modules\admision\models\TipoOportunidadVenta;
 use yii\data\ArrayDataProvider;
 use Yii;
 
@@ -1155,7 +1161,7 @@ class PersonaGestion extends \app\modules\admision\components\CActiveRecord
             $sql = "SELECT * FROM " . $con->dbname . ".persona_gestion_tmp;";
         }else{
             //PROCESO LOTES LOTES
-            $sql = "SELECT * FROM " . $con->dbname . ".temporal_contactos;";
+            $sql = "SELECT * FROM " . $con->dbname . ".temporal_contactos LIMIT 10;";
         }       
         $comando = $con->createCommand($sql);
         return $comando->queryAll();
@@ -1225,7 +1231,7 @@ class PersonaGestion extends \app\modules\admision\components\CActiveRecord
                                 $tipoportunidad = 5;
                                 break;
                         }
-                        $padm_id=$agente;
+                    $padm_id=$agente['agente_id'];
                         //-------------------------------------------
                         //$pgco_id = $mod_oportunidad->insertarPersonaGestionContactoLeads($con, $pges_id,$Data[$i]);                        
                         $opo_id = $mod_oportunidad->insertarOportunidadLeads($con,$opo_codigo,$emp_id,$pges_id,$padm_id,$Data[$i] );
@@ -1358,7 +1364,7 @@ class PersonaGestion extends \app\modules\admision\components\CActiveRecord
                             $tipoportunidad = 5;
                             break;
                     }
-                    $padm_id = $agente;
+                    $padm_id=$agente['agente_id'];
                     //-------------------------------------------
 
                     $opo_id=$mod_oportunidad->existeOportunidad_Unidad_Modalidad($pges_id,$uaca_id, $mod_id);

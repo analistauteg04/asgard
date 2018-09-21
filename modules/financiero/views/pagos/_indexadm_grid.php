@@ -9,6 +9,9 @@ use kartik\date\DatePicker;
 use yii\helpers\ArrayHelper;
 use yii\jui\AutoComplete;
 use yii\web\JsExpression;
+use app\modules\admision\Module as admision;
+
+admision::registerTranslations();
 ?>
 
 <div>
@@ -28,7 +31,7 @@ use yii\web\JsExpression;
             ],
             [
                 'attribute' => 'fecha',
-                'header' => Yii::t("solicitud_ins", "Application date"),                
+                'header' => admision::t("Solicitudes", "Application date"),                
                 'value' => 'sins_fecha_solicitud',
             ],
             [
@@ -53,7 +56,7 @@ use yii\web\JsExpression;
             ],
             [
                 'attribute' => 'MetodoIngreso',
-                'header' => Yii::t("solicitud_ins", "Income Method"),
+                'header' => admision::t("Solicitudes", "Income Method"),
                 'value' => 'metodo',
             ],            
             [
@@ -63,8 +66,7 @@ use yii\web\JsExpression;
             ],
             [
                 'class' => 'yii\grid\ActionColumn',
-                'header' => Yii::t("formulario", "Actions"),
-                //'headerOptions' => ['width' => '30'],
+                'header' => Yii::t("formulario", "Actions"),               
                 'template' => '{view}', //
                 'buttons' => [
                     'view' => function ($url, $model) {
