@@ -46,20 +46,16 @@ class InteresadosController extends \app\components\CController {
             $data = Yii::$app->request->post();
             $id_pgest = $data["id_pgest"];
             $pergest = new PersonaGestion();
-            \app\models\Utilities::putMessageLogFile('persona gestion id: ' . $id_pgest);
             $pgest = $pergest->consultarPersonaGestion($id_pgest);
             $con = \Yii::$app->db_asgard;
             $transaction = $con->beginTransaction();
             try {
                 $identificacion = '';
-                \app\models\Utilities::putMessageLogFile('cedula: ' . $pgest['pges_cedula']);
-                \app\models\Utilities::putMessageLogFile('pasaporte: ' . $pgest['pges_pasaporte']);
                 if (isset($pgest['pges_cedula']) && strlen($pgest['pges_cedula']) > 0) {
                     $identificacion = $pgest['pges_cedula'];
                 } else {
                     $identificacion = $pgest['pges_pasaporte'];
                 }
-                \app\models\Utilities::putMessageLogFile('identificacion: ' . $identificacion);
                 if (isset($identificacion) && strlen($identificacion) > 0) {
                     $id_persona = 0;
                     $mod_persona = new Persona();
@@ -86,7 +82,6 @@ class InteresadosController extends \app\components\CController {
                         $id_persona = $mod_persona->insertarPersona($con, $parametros_per, $keys_per, 'persona');
                     }
                     if ($id_persona > 0) {
-                        \app\models\Utilities::putMessageLogFile('persona con id: ' . $id_persona);
                         $concap = \Yii::$app->db_captacion;
                         $mod_emp_persona = new EmpresaPersona();
                         $emp_id = 1;
@@ -97,7 +92,6 @@ class InteresadosController extends \app\components\CController {
                             $emp_per_id = $mod_emp_persona->insertarEmpresaPersona($con, $parametros, $keys, 'empresa_persona');
                         }
                         if ($emp_per_id > 0) {
-                            \app\models\Utilities::putMessageLogFile('empresa persona con id: ' . $emp_per_id);
                             $usuario = new Usuario();
                             $usuario_id = $usuario->consultarIdUsuario($id_persona, $pgest['pges_correo']);
                             if ($usuario_id == 0) {
@@ -109,7 +103,6 @@ class InteresadosController extends \app\components\CController {
                                 $usuario_id = $usuario->crearUsuarioTemporal($con, $parametros, $keys, 'usuario');
                             }
                             if ($usuario_id > 0) {
-                                \app\models\Utilities::putMessageLogFile('usuario con id: ' . $usuario_id);
                                 $mod_us_gr_ep = new UsuaGrolEper();
                                 $grol_id = 10;
                                 $keys = ['eper_id', 'usu_id', 'grol_id', 'ugep_estado', 'ugep_estado_logico'];
@@ -118,8 +111,7 @@ class InteresadosController extends \app\components\CController {
                                 if ($us_gr_ep_id == 0)
                                     $us_gr_ep_id = $mod_us_gr_ep->insertarUsuaGrolEper($con, $parametros, $keys, 'usua_grol_eper');
                                 if ($us_gr_ep_id > 0) {
-                                    \app\models\Utilities::putMessageLogFile('usua grol con id: ' . $us_gr_ep_id);
-                                    $mod_interesado = new Interesado(); // se guarda con estado_interesado 1                        
+                                    $mod_interesado = new Interesado(); // se guarda con estado_interesado 1
                                     $interesado_id = $mod_interesado->consultaInteresadoById($id_persona);
                                     $keys = ['per_id', 'int_estado_interesado', 'int_usuario_ingreso', 'int_estado', 'int_estado_logico'];
                                     $parametros = [$id_persona, 1, $usuario_id, 1, 1];
@@ -127,12 +119,9 @@ class InteresadosController extends \app\components\CController {
                                         $interesado_id = $mod_interesado->insertarInteresado($concap, $parametros, $keys, 'interesado');
                                     }
                                     if ($interesado_id > 0) {
-                                        \app\models\Utilities::putMessageLogFile('entro al interesado con id: ' . $interesado_id);
-                                        $mod_inte_emp = new InteresadoEmpresa(); // se guarda con estado_interesado 1                        
+                                        $mod_inte_emp = new InteresadoEmpresa(); // se guarda con estado_interesado 1
                                         $iemp_id = $mod_inte_emp->consultaInteresadoEmpresaById($interesado_id, $emp_id);
                                         if ($iemp_id == 0) {
-                                            \app\models\Utilities::putMessageLogFile('proceso a crear el interesado empresa ');
-                                            \app\models\Utilities::putMessageLogFile('int_id: '.$interesado_id.', emp_id: '. $emp_id.', usu_id: '. $usuario_id);
                                             $iemp_id = $mod_inte_emp->crearInteresadoEmpresa($interesado_id, $emp_id, $usuario_id);
                                             \app\models\Utilities::putMessageLogFile('intereso empresa ingresado con id: ' . $iemp_id);
                                         }

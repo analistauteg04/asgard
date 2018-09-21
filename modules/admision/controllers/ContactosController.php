@@ -64,7 +64,7 @@ class ContactosController extends \app\components\CController
                 $area = $mod_pais->consultarCodigoArea($data["codarea"]);
                 $message = array("area" => $area);
                 return Utilities::ajaxResponse('OK', 'alert', Yii::t('jslang', 'Success'), 'false', $message);
-                
+
             }
             if (isset($data["getsubcarrera"])) {
                 $subcarrera = $modcanal->consultarSubCarrera($data["car_id"]);
