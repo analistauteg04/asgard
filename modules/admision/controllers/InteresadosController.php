@@ -126,8 +126,6 @@ class InteresadosController extends \app\components\CController {
                                             \app\models\Utilities::putMessageLogFile('intereso empresa ingresado con id: ' . $iemp_id);
                                         }
                                         if ($iemp_id > 0) {
-                                            \app\models\Utilities::putMessageLogFile('intereso empresa ingresado con id: ' . $iemp_id);
-                                            \app\models\Utilities::putMessageLogFile(' proceso terminado, enviano correo ');
                                             $email_info = array(
                                                 "nombres" => $pgest['pges_pri_nombre']. " ". $pgest['pges_seg_nombre'],
                                                 "apellidos" => $pgest['pges_pri_apellido']. " ". $pgest['pges_seg_apellido'],
