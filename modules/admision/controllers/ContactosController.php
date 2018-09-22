@@ -563,41 +563,54 @@ class ContactosController extends \app\components\CController {
     // estado_oportunidad  ->    Estado de Oportunidad
     // oportunidad_perdida ->    Estado de Oportunidad Perdida
     // modalidad           ->    Modalidad Academica
-
-    public function actionExport() {
-        $mod_oportunidad = new Oportunidad;
+   
+    public function actionExport(){
+        $mod_oportunidad = new Oportunidad();
         $Data = $mod_oportunidad->consultarOportUnidadAcademica();
-        $arrayIds = array();
-        for ($i = 0; $i < sizeof($Data); $i++) {
-            if (in_array($Data[$i]['eopo_id'], $arrayIds)) {
-                $arrayIds[] = $Data[$i]['eopo_id'];
-                $arrDataCols[] = $Data[$i]['eopo_nombre'];
+        $arrayIdsCols=array();
+        for ($i = 0; $i < sizeof($Data); $i++) {          
+            if (!in_array($Data[$i]['eopo_id'],$arrayIdsCols)) {
+                $arrayIdsCols[]=$Data[$i]['eopo_id'];
+                $arrDataCols[]=$Data[$i]['eopo_nombre'];
             }
         }
-        Utilities::putMessageLogFile($arrayIds);
-        Utilities::putMessageLogFile($arrDataCols);
-
-        exit;
+        $aux="";
+        $fil=-1;
+        $sumafila=0;
+        //$arrayData=array();
+        for ($i = 0; $i < sizeof($Data); $i++) {
+            $uaca_id=$Data[$i]['uaca_id'];
+            $CantUnidad=$Data[$i]['CantUnidad'];
+            if($Data[$i]['eopo_id']!=$aux){
+                $fil++;
+                $sumafila=0;
+                $sumafila+=$CantUnidad;
+                $aux=$Data[$i]['eopo_id'];
+                $arrayData[$fil][0]=$Data[$i]['eopo_nombre'];
+                $this->retonaMatrix($arrayData, $uaca_id, $fil, $CantUnidad,$sumafila);               
+            }else{
+                $sumafila+=$CantUnidad;
+                $this->retonaMatrix($arrayData, $uaca_id, $fil, $CantUnidad,$sumafila);
+            }
+        }
+       
         ini_set('memory_limit', '256M');
         $content_type = Utilities::mimeContentType("xls");
         $nombarch = "Report-" . date("YmdHis") . ".xls";
         header("Content-Type: $content_type");
         header("Content-Disposition: attachment;filename=" . $nombarch . ".xls");
         header('Cache-Control: max-age=0');
-
+       
         $colPosition = array("C", "D", "E", "F", "G", "H", "I", "J", "K");
-        $arrHeader = array("#", "Grado Lead", "Online Lead", "Posgrado Lead", "Base Grado", "Base Online", "Base Posgrado", "Suma", "Promedio");
-        //$arrDataCols = ["En Contacto", "Calificado", "No Calificado"];
-        //$arrDataCols = ["En curso", "En espera", "Ganada", "Perdida", "Listo para pago", "Total"];
-        //$arrDataCols = ["Precio", "Insatisfacción con malla académica", "No existe carrera", "Calidad de docentes", "Atención recibida", "Ubicación", "Otra Universidad", "Modalidad de Estudios", "Motivo personal", "Viaje imprevisto", "No contesta el teléfono ni correos"];
+        $arrHeader = array("#","Grado Lead","Posgrado Lead","Online Lead","Base Grado","Base Posgrado","Base Online","Suma","Promedio");
         $arrData = array();
-        for ($i = 0; $i < count($arrDataCols); $i++) {
-            $j = 0;
-            for ($j = 0; $j < count($arrHeader); $j++) {
-                if ($j == 0) {
+        for($i=0; $i<count($arrDataCols); $i++){
+            $j=0;
+            for($j=0; $j<count($arrHeader); $j++){
+                if($j == 0){
                     $arrData[$i][$j] = $arrDataCols[$i];
-                } else {
-                    $arrData[$i][$j] = "data $i $j";
+                }else {
+                    $arrData[$i][$j] = $arrayData[$i][$j]; //"data $i $j";
                 }
             }
         }
@@ -605,5 +618,30 @@ class ContactosController extends \app\components\CController {
         Utilities::generarReporteXLS($nombarch, $nameReport, $arrHeader, $arrData, $colPosition);
         exit;
     }
+    public function retonaMatrix(&$arrayData,$uaca_id,$fil,$CantUnidad,$sumafila) {
+        switch ($uaca_id) {
+            case '1'://GRADO
+                $arrayData[$fil][1] = $CantUnidad;
+                break;
+            case '2'://POSGRADO
+                $arrayData[$fil][2] = $CantUnidad;
+                break;
+            case '3'://EDUCACION CONTINUA
+                $arrayData[$fil][3] = $CantUnidad;
+                break;
+            case '4'://Base Grado
+                $arrayData[$fil][3] = $CantUnidad;
+                break;
+            case '5'://Base Posgrado
+                $arrayData[$fil][3] = $CantUnidad;
+                break;
+            case '6'://Base Online
+                $arrayData[$fil][3] = $CantUnidad;
+                break;
+        }
+        $arrayData[$fil][7]=$sumafila;//SUMA
+        $arrayData[$fil][8]=$sumafila/6;//PROMEDIO
+    }
+
 
 }

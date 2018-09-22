@@ -2,6 +2,8 @@
 
 namespace app\modules\admision\models;
 
+use app\modules\academico\models\EstudioAcademico;
+use app\modules\admision\models\PersonaGestionTmp;
 use yii\data\ArrayDataProvider;
 use DateTime;
 use Yii;
@@ -1881,11 +1883,11 @@ class Oportunidad extends \app\modules\admision\components\CActiveRecord {
     /** Se debe cambiar esta funcion que regrese el codigo de area ***ojo***
      * Function consultarCodigoArea
      * @author  Byron Villacreses <developer@uteg.edu.ec>
-     * @property integer car_id      
-     * @return  
+     * @property integer car_id     
+     * @return 
      */
     public function consultarOportUnidadAcademica() {
-        $con = \Yii::$app->db_crm;       
+        $con = \Yii::$app->db_crm;      
         $sql = "SELECT A.eopo_id,B.eopo_nombre,A.uaca_id,C.uaca_nombre,COUNT(A.uaca_id) CantUnidad
                         FROM " . $con->dbname . ".oportunidad A
                                 INNER JOIN " . $con->dbname . ".estado_oportunidad B ON B.eopo_id=A.eopo_id

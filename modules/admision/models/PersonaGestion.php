@@ -9,6 +9,7 @@ use app\modules\admision\models\PersonaGestion;
 use app\modules\admision\models\EstadoOportunidad;
 use app\modules\admision\models\EstadoContacto;
 use app\modules\admision\models\TipoOportunidadVenta;
+use app\modules\academico\models\Modalidad;
 use yii\data\ArrayDataProvider;
 use Yii;
 
