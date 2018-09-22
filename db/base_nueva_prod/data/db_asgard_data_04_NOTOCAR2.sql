@@ -94,7 +94,15 @@ INSERT INTO `objeto_modulo` (`omod_id`, `mod_id`, `omod_padre_id`, `omod_nombre`
 (72, 2, 70, 'Actualizar Oportunidad', 'A', '0', '', '', '', 'admision/oportunidades/update', 1, '1', 'oportunidad', '1', '2018-09-18 01:16:57', NULL, '1'),
 
 
-(73, 2, 57, 'Listar', 'S', '0', '', '', '', 'admision/contactos/listaroportunidad', 1, '0', 'contacto', '1', '2018-09-15 22:48:06', NULL, '1');
+(73, 2, 57, 'Listar Oportunidad por Contacto', 'S', '0', '', '', '', 'admision/contactos/listaroportunidad', 1, '0', 'contacto', '1', '2018-09-16 03:48:06', NULL, '1'),
+(74, 2, 73, 'Actividades por Oportunidad', 'S', '0', '', '', '', 'admision/actividades/listaractividadxoportunidad', 1, '0', 'contacto', '1', '2018-09-21 00:00:30', NULL, '1'),
+(75, 2, 1, 'Crear Actividad', 'S', '0', '', '', '', 'admision/actividades/newactividad', 1, '0', 'contacto', '1', '2018-09-21 00:03:04', NULL, '1'),
+(76, 2, 74, 'Crear Actividad', 'A', '0', '', '', '', 'admision/actividades/listaractividadxoportunidad', 1, '1', 'contacto', '1', '2018-09-21 00:10:53', NULL, '1'),
+(77, 2, 75, 'Guardar Actividad', 'A', '0', '', '', '', 'admision/actividades/newactividad', 1, '1', 'contacto', '1', '2018-09-21 00:15:13', NULL, '1'),
+(78, 2, 78, 'Aspirantes', 'P', '0', '', '', '', 'admision/interesados/index', 3, '1', 'Solicitudes', '1', '2018-09-22 00:05:23', NULL, '1'),
+(79, 2, 78, 'Solicitudes por Aspirante', 'S', '0', '', '', '', 'admision/solicitudes/listarsolicitudxinteresado', 1, '1', 'Solicitudes', '1', '2018-09-22 00:35:31', NULL, '1'),
+(80, 2, 79, 'Crear Solicitud de Inscripcion', 'S', '0', '', '', '', 'admision/solicitudes/new', 1, '1', 'Solicitudes', '1', '2018-09-22 00:47:12', NULL, '1'),
+(81, 2, 79, 'Crear Solicitud', 'A', '0', '', '', '', 'admision/solicitudes/listarsolicitudxinteresado', 1, '1', 'Solicitudes', '1', '2018-09-22 14:07:01', NULL, '1');
 
 -- --------------------------------------------------------
 --
@@ -135,7 +143,12 @@ INSERT INTO `obmo_acci` (`oacc_id`, `omod_id`, `acc_id`, `oacc_tipo_boton`, `oac
 (29, 67, 1, '1', '', 'newOportunidadXContacto', '1', '1'),
 (30, 68, 4, '1', '', 'save', '1', '1'),
 (31, 71, 12, '1', '', 'edit', '1', '1'),
-(32, 72, 2, '1', '', 'update', '1', '1');
+(32, 72, 2, '1', '', 'update', '1', '1'),
+
+(33, 76, 1, '1', '', 'newItem', '1', '1'),
+(34, 77, 4, '1', '', 'save', '1', '1'),
+(35, 81, 1, '1', '', 'NewSolicitud', '1', '1');
+
 -- --------------------------------------------------------
 --
 -- Volcado de datos para la tabla `grup_obmo`
@@ -216,7 +229,17 @@ INSERT INTO `grup_obmo` (`gmod_id`, `gru_id`, `omod_id`, `gmod_estado`,  `gmod_e
 (71, 1, 71, '1', '1'),
 (72, 1, 72, '1', '1'),
 
-(73, 1, 73, '1', '1');
+(73, 1, 73, '1', '1'),
+
+(74, 1, 74, '1', '1'),
+(75, 1, 75, '1', '1'),
+(76, 1, 76, '1', '1'),
+(77, 1, 77, '1', '1'),
+(78, 1, 78, '1', '1'),
+(79, 1, 79, '1', '1'),
+(80, 1, 80, '1', '1'),
+(81, 1, 81, '1', '1');
+
 -- --------------------------------------------------------
 --
 -- Volcado de datos para la tabla `GRUP_OBMO_GRUP_ROL`
@@ -296,6 +319,15 @@ INSERT INTO `grup_obmo_grup_rol` (`gogr_id`, `grol_id`, `gmod_id`, `gogr_estado`
 (71, 1, 71, '1', '1'),
 (72, 1, 72, '1', '1'),
 
-(73, 1, 73, '1', '1');
+(73, 1, 73, '1', '1'),
+
+(74, 1, 74, '1', '1'),
+(75, 1, 75, '1', '1'),
+(76, 1, 76, '1', '1'),
+(77, 1, 77, '1', '1'),
+(78, 1, 78, '1', '1'),
+(79, 1, 79, '1', '1'),
+(80, 1, 80, '1', '1'),
+(81, 1, 81, '1', '1');
 
 

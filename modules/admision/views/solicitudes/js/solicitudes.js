@@ -606,6 +606,7 @@ $(document).ready(function () {
         }, true);
     });
     
+    /**** BORRAR ****/
     $('#btnNewSolicitud').click(function () {        
         var per_id = $('#txth_per_id').val();
         window.location.href = $('#txth_base').val() + "/admision/solicitudes/new?per_id=" + per_id;
@@ -686,6 +687,10 @@ function actualizarGridaprobada() {
     }
 }
 
+function NewSolicitud() {
+    var per_id = $('#txth_per_id').val();
+    window.location.href = $('#txth_base').val() + "/admision/solicitudes/new?per_id=" + per_id;
+}
 //Guarda Solicitud de inscripción
 function Save() {
     var link = $('#txth_base').val() + "/admision/solicitudes/save";
