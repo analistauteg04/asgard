@@ -195,8 +195,7 @@ class Oportunidad extends \app\modules\admision\components\CActiveRecord {
                 FROM 
                    " . $con->dbname . ".conocimiento_canal  ccan ";
         $sql .= "  
-                WHERE
-                   -- ccan.ccan_conocimiento = :opcion or ccan.ccan_canal = :opcion AND
+                WHERE                   
                    ccan.ccan_estado = :estado AND
                    ccan.ccan_estado_logico = :estado
                 ORDER BY name asc";
@@ -254,7 +253,6 @@ class Oportunidad extends \app\modules\admision\components\CActiveRecord {
                       end as 'curso'
                 FROM  " . $con->dbname . ".oportunidad op                  
                     inner join " . $con->dbname . ".persona_gestion pges on pges.pges_id = op.pges_id
-                    -- inner join " . $con->dbname . ".persona_gestion_contacto pgc on pgc.pges_id = pges.pges_id
                     inner join " . $con1->dbname . ".tipo_persona tp on tp.tper_id = pges.tper_id
                     inner join " . $con->dbname . ".estado_oportunidad eo on eo.eopo_id = op.eopo_id
                     inner join " . $con->dbname . ".personal_admision padm on padm.padm_id = op.padm_id
@@ -445,8 +443,6 @@ class Oportunidad extends \app\modules\admision\components\CActiveRecord {
 
         if (isset($arrFiltro) && count($arrFiltro) > 0) {
             $search_cond = "%" . $arrFiltro["interesado"] . "%";
-            /* $fecha_atencion_ini = $arrFiltro["f_atencion"] . " 00:00:00";
-              $fecha_atencion_fin = $arrFiltro["f_atencion"] . " 23:59:59"; */
             $agente = "%" . $arrFiltro["agente"] . "%";
             $estado_ate = $arrFiltro["estado"];
 
@@ -1075,7 +1071,7 @@ class Oportunidad extends \app\modules\admision\components\CActiveRecord {
      * @param
      * @return
      */
-    public function insertarActividad($opo_id, $usu_id, $padm_id, $eopo_id, $bact_fecha_registro, $bact_descripcion, $bact_fecha_proxima_atencion) {
+    public function insertarActividad($opo_id, $usu_id, $padm_id, $eopo_id, $bact_fecha_registro, $oact_id, $bact_fecha_proxima_atencion) {
         $con = \Yii::$app->db_crm;
         $trans = $con->getTransaction(); // se obtiene la transacción actual
         if ($trans !== null) {
@@ -1116,9 +1112,9 @@ class Oportunidad extends \app\modules\admision\components\CActiveRecord {
         }
         
         
-        if (isset($bact_descripcion)) {
-            $param_sql .= ", bact_descripcion";
-            $bdet_sql .= ", :bact_descripcion";
+        if (isset($oact_id)) {
+            $param_sql .= ", oact_id";
+            $bdet_sql .= ", :oact_id";
         }
         if (isset($bact_fecha_proxima_atencion)) {
             $param_sql .= ", bact_fecha_proxima_atencion";
@@ -1143,8 +1139,8 @@ class Oportunidad extends \app\modules\admision\components\CActiveRecord {
             if (!empty((isset($bact_fecha_registro)))) {
                 $comando->bindParam(':bact_fecha_registro', $bact_fecha_registro, \PDO::PARAM_STR);
             }
-            if (!empty((isset($bact_descripcion)))) {
-                $comando->bindParam(':bact_descripcion', $bact_descripcion, \PDO::PARAM_STR);
+            if (!empty((isset($oact_id)))) {
+                $comando->bindParam(':oact_id', $oact_id, \PDO::PARAM_STR);
             }
             if (!empty((isset($bact_fecha_proxima_atencion)))) {
                 $comando->bindParam(':bact_fecha_proxima_atencion', $bact_fecha_proxima_atencion, \PDO::PARAM_STR);
@@ -1166,7 +1162,7 @@ class Oportunidad extends \app\modules\admision\components\CActiveRecord {
      * @param
      * @return
      */
-    public function actualizarActividad($act_id, $usu_id, $padm_id, $fecatiende, $observacion, $fecproxima) {
+    public function actualizarActividad($act_id, $usu_id, $padm_id, $fecatiende, $oact_id, $fecproxima) {
         $con = \Yii::$app->db_crm;
         $estado = 1;
         $fecha_modificacion = date(Yii::$app->params["dateTimeByDefault"]);
@@ -1184,7 +1180,7 @@ class Oportunidad extends \app\modules\admision\components\CActiveRecord {
                           padm_id = ifnull(:padm_id, padm_id),
                           bact_fecha_modificacion = :bact_fecha_modificacion,
                           bact_fecha_registro = :bact_fecha_registro,
-                          bact_descripcion = :observacion,
+                          oact_id = :oact_id,
                           bact_fecha_proxima_atencion = :bact_fecha_proxima_atencion,
                           -- bact_usuario_modif = :usu_id,
                           usu_id = :usu_id
@@ -1194,7 +1190,7 @@ class Oportunidad extends \app\modules\admision\components\CActiveRecord {
                     );
             $comando->bindParam(":estado", $estado, \PDO::PARAM_STR);
             $comando->bindParam(":bact_fecha_registro", $fecatiende, \PDO::PARAM_STR);
-            $comando->bindParam(":observacion", $observacion, \PDO::PARAM_STR);
+            $comando->bindParam(":oact_id", $oact_id, \PDO::PARAM_INT);
             $comando->bindParam(":bact_fecha_proxima_atencion", $fecproxima, \PDO::PARAM_STR);            
             $comando->bindParam(":bact_id", $act_id, \PDO::PARAM_INT);
             $comando->bindParam(":usu_id", $usu_id, \PDO::PARAM_INT);
@@ -1231,12 +1227,14 @@ class Oportunidad extends \app\modules\admision\components\CActiveRecord {
                         ba.padm_id agente_id,                        
                         opo.opo_id,
                         eopo.eopo_nombre as estado_oportunidad,
-                        ifnull(ba.bact_descripcion, '') as observacion
+                        ba.oact_id as id_observacion,
+                        ifnull(oac.oact_nombre, '') as observacion
                 FROM " . $con->dbname . ".oportunidad opo 
                          inner join " . $con->dbname . ".bitacora_actividades ba on opo.opo_id = ba.opo_id
                          inner join " . $con->dbname . ".estado_oportunidad eopo on eopo.eopo_id = ba.eopo_id    
                          inner join " . $con->dbname . ".personal_admision pa on pa.padm_id = ba.padm_id
-                         inner join " . $con1->dbname . ".persona per on per.per_id = pa.per_id		 
+                         inner join " . $con1->dbname . ".persona per on per.per_id = pa.per_id	
+                         inner join " . $con->dbname . ".observacion_actividades oac on oac.oact_id = ba.oact_id    
                 WHERE 	opo.opo_id = :opo_id
                         and opo.opo_estado = :estado
                         and opo.opo_estado_logico = :estado                                                
@@ -1417,113 +1415,7 @@ class Oportunidad extends \app\modules\admision\components\CActiveRecord {
         $comando->bindParam(":pges_id", $pges_id, \PDO::PARAM_INT);
         $resultData = $comando->queryOne();
         return $resultData;
-    }
-
-    /**
-     * Function consultarOportuTodas consulta todas las gestiones. 
-     * @author Grace Viteri <analistadesarrollo01@uteg.edu.ec>;
-     * @param 
-     * @return
-     */
-    /* public function consultarOportuTodas($arrFiltro = array()) {
-      $con = \Yii::$app->db_crm;
-      $con1 = \Yii::$app->db;
-      $con2 = \Yii::$app->db_academico;
-      $estado = 1;
-
-      if (isset($arrFiltro) && count($arrFiltro) > 0) {
-      if ($arrFiltro['interesado'] != "") {
-      $str_search = "(interesado like :interesado) AND ";
-      }
-      if ($arrFiltro['agente'] != "") {
-      $str_search .= "(agente like :agente OR cod_agente like :agente) AND ";
-      }
-      if ($arrFiltro['f_atencion'] != "") {
-      $str_search .= "(fecha_atencion >= :fec_atencion_ini and fecha_atencion <= :fec_atencion_fin) AND ";
-      }
-      if ($arrFiltro['estado'] > 0) {
-      $str_search .= "estado = :estado_ate AND";
-      }
-      }
-
-      $sql = "SELECT * FROM ( SELECT
-      concat(ifnull(pges_pri_apellido,''), ' ',ifnull(pges_seg_apellido,''), ' ', ifnull(pges_pri_nombre,''), ' ', ifnull(pges_seg_nombre,'')) as interesado,
-      op.opo_id,
-      pges_correo,
-      pges_celular,
-      ifnull((select pai_nombre from " . $con1->dbname . ".pais p
-      where p.pai_id = pg.pai_id_nacimiento
-      and p.pai_estado = :estado
-      and p.pai_estado_logico = :estado),'') as pais,
-      concat(ifnull(per_pri_nombre,''), ' ', ifnull(per_pri_apellido,'')) as agente,
-      concat(padm_codigo,'-',m.mod_nombre) as cod_agente,
-      ba.bact_fecha_registro as fecha_atencion,
-      ba.bact_fecha_proxima_atencion as fecha_proxima_atencion,
-      eo.eopo_descripcion as estado_des,
-      eo.eopo_id as estado
-      FROM " . $con->dbname . ".bitacora_actividades ba inner join " . $con->dbname . ".oportunidad op on op.opo_id = ba.opo_id
-      inner join " . $con->dbname . ".persona_beneficiario pb on pb.pben_id = op.pben_id
-      inner join " . $con->dbname . ".persona_gestion pg on pg.pges_id = pb.pges_id
-      inner join " . $con->dbname . ".estado_oportunidad eo on eo.eopo_id =  op.eopo_id
-      inner join " . $con->dbname . ".personal_admision pa on pa.padm_id = ba.padm_id
-      inner join " . $con1->dbname . ".persona per on per.per_id = pa.per_id
-      inner join " . $con->dbname . ".personal_admision_cargo pac on pa.padm_id = pac.padm_id
-      inner join " . $con->dbname . ".personal_nivel_modalidad pnm on (pnm.paca_id = pac.paca_id)
-      inner join " . $con2->dbname . ".modalidad m on m.mod_id = pnm.mod_id
-      WHERE 	ba.bact_estado = :estado
-      and ba.bact_estado_logico = :estado
-      and op.opo_estado = :estado
-      and op.opo_estado_logico = :estado
-      and pb.pben_estado = :estado
-      and pb.pben_estado_logico = :estado
-      and pg.pges_estado = :estado
-      and pg.pges_estado_logico = :estado
-      and eo.eopo_estado = :estado
-      and eo.eopo_estado_logico = :estado
-      and pa.padm_estado = :estado
-      and pa.padm_estado_logico = :estado
-      and per.per_estado = :estado
-      and per.per_estado_logico = :estado
-      and pac.paca_estado = :estado
-      and pac.paca_estado_logico = :estado
-      and pnm.pnmo_estado = :estado
-      and pnm.pnmo_estado_logico = :estado
-      and m.mod_estado = :estado
-      and m.mod_estado_logico = :estado
-      ORDER BY ba.bact_id desc) a ";
-
-      If (!empty($str_search)) {
-      $sql .= "WHERE $str_search "
-      . "opo_id = opo_id";
-      }
-
-      $comando = $con->createCommand($sql);
-      $comando->bindParam(":estado", $estado, \PDO::PARAM_STR);
-
-      if (isset($arrFiltro) && count($arrFiltro) > 0) {
-      $search_cond = "%" . $arrFiltro["interesado"] . "%";
-      $fecha_atencion_ini = $arrFiltro["f_atencion"] . " 00:00:00";
-      $fecha_atencion_fin = $arrFiltro["f_atencion"] . " 23:59:59";
-      $agente = "%" . $arrFiltro["agente"] . "%";
-      $estado_ate = $arrFiltro["estado"];
-
-      if ($arrFiltro['interesado'] != "") {
-      $comando->bindParam(":interesado", $search_cond, \PDO::PARAM_STR);
-      }
-      if ($arrFiltro['agente'] != "") {
-      $comando->bindParam(":agente", $agente, \PDO::PARAM_STR);
-      }
-      if ($arrFiltro['f_atencion'] != "") {
-      $comando->bindParam(":fec_atencion_ini", $fecha_atencion_ini, \PDO::PARAM_STR);
-      $comando->bindParam(":fec_atencion_fin", $fecha_atencion_fin, \PDO::PARAM_STR);
-      }
-      if ($arrFiltro['estado'] > 0) {
-      $comando->bindParam(":estado_ate", $estado_ate, \PDO::PARAM_INT);
-      }
-      }
-      $resultData = $comando->queryAll();
-      return $resultData;
-      } */
+    }   
 
     /**
      * Function modifica los datos de una oportunidad de venta.
@@ -1895,6 +1787,29 @@ class Oportunidad extends \app\modules\admision\components\CActiveRecord {
                 WHERE A.opo_estado_logico=1 GROUP BY A.uaca_id,A.eopo_id ORDER BY A.eopo_id; ";
         $comando = $con->createCommand($sql);
         return $comando->queryAll();
+    }
+    
+    /** Function consulta las observaciones de la actividad 
+     * @author Giovanni Vergara <analistadesarrollo02@uteg.edu.ec>;
+     * @param
+     * @return
+     */
+    public function consultarObseractividad() {
+        $con = \Yii::$app->db_crm;
+        $estado = 1;
+        $sql = "SELECT 
+                   oact.oact_id as id,
+                   oact.oact_nombre as name
+                FROM 
+                   " . $con->dbname . ".observacion_actividades oact 
+                WHERE 
+                   oact.oact_estado = :estado AND 
+                   oact.oact_estado_logico = :estado ";
+
+        $comando = $con->createCommand($sql);
+        $comando->bindParam(":estado", $estado, \PDO::PARAM_STR);
+        $resultData = $comando->queryAll();
+        return $resultData;
     }
 
 }

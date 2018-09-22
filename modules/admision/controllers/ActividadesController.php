@@ -54,6 +54,7 @@ class ActividadesController extends \app\components\CController
         $academic_study_data = $oport_model->consultarCarreraModalidad($oport_contac["uaca_id"], $oport_contac["mod_id"]);
         $state_oportunidad_data = $state_oportunidad_model->consultarEstadOportunidad();
         $knowledge_channel_data = $oport_model->consultarConocimientoCanal(1);
+        $observacion = $oport_model->consultarObseractividad();
         return $this->render('view', [
             'personalData' => $contactManage,
             'oportunidad_contacto' => $oport_contac,
@@ -67,6 +68,7 @@ class ActividadesController extends \app\components\CController
             "arr_knowledge_channel" => ArrayHelper::map($knowledge_channel_data, "id", "name"),
             "tipo_dni" => array("CED" => Yii::t("formulario", "DNI Document"), "PASS" => Yii::t("formulario", "Passport")),
             'arr_empresa' => ArrayHelper::map($empresa, "id", "value"),
+            'arr_observacion' => ArrayHelper::map($observacion, "id", "name"),
         ]);
     }
 
@@ -93,6 +95,7 @@ class ActividadesController extends \app\components\CController
         $academic_study_data = $oport_model->consultarCarreraModalidad($oport_contac["uaca_id"], $oport_contac["mod_id"]);
         $state_oportunidad_data = $state_oportunidad_model->consultarEstadOportunidad();
         $knowledge_channel_data = $oport_model->consultarConocimientoCanal(1);
+        $observacion = $oport_model->consultarObseractividad();
         return $this->render('edit', [
             'personalData' => $contactManage,
             'oportunidad_contacto' => $oport_contac,
@@ -106,6 +109,7 @@ class ActividadesController extends \app\components\CController
             "arr_knowledge_channel" => ArrayHelper::map($knowledge_channel_data, "id", "name"),
             "tipo_dni" => array("CED" => Yii::t("formulario", "DNI Document"), "PASS" => Yii::t("formulario", "Passport")),
             'arr_empresa' => ArrayHelper::map($empresa, "id", "value"),
+            'arr_observacion' => ArrayHelper::map($observacion, "id", "name"),
         ]);
     }
 
@@ -130,6 +134,7 @@ class ActividadesController extends \app\components\CController
         $academic_study_data = $oport_model->consultarCarreraModalidad(1, 1);
         $state_oportunidad_data = $state_oportunidad_model->consultarEstadOportunidad();
         $knowledge_channel_data = $oport_model->consultarConocimientoCanal(1);
+        $observacion = $oport_model->consultarObseractividad();
         return $this->render('new', [
             'personalData' => $contactManage,
             'oportunidad_contacto' => $oport_contac,
@@ -142,6 +147,7 @@ class ActividadesController extends \app\components\CController
             "arr_knowledge_channel" => ArrayHelper::map($knowledge_channel_data, "id", "name"),
             "tipo_dni" => array("CED" => Yii::t("formulario", "DNI Document"), "PASS" => Yii::t("formulario", "Passport")),
             'arr_empresa' => ArrayHelper::map($empresa, "id", "value"),
+            'arr_observacion' => ArrayHelper::map($observacion, "id", "name"),
         ]);
     }
 
@@ -154,7 +160,7 @@ class ActividadesController extends \app\components\CController
             $data = Yii::$app->request->post();
             $mod_gestion = new Oportunidad();
             $fecatiende = $data["fecatencion"] . ' ' . $data["horatencion"];
-            $observacion = ucwords(strtolower($data["observacion"]));
+            $observacion = $data["observacion"];
             if (!empty($data["fecproxima"])) {
                 $fecproxima = $data["fecproxima"] . ' ' . $data["horproxima"];
             }
@@ -224,7 +230,7 @@ class ActividadesController extends \app\components\CController
             $data = Yii::$app->request->post();
             $mod_gestion = new Oportunidad();
             $fecatiende = $data["fecatencion"] . ' ' . $data["horatencion"];
-            $observacion = ucwords(strtolower($data["observacion"]));
+            $observacion = $data["observacion"];
             if (!empty($data["fecproxima"])) {
                 $fecproxima = $data["fecproxima"] . ' ' . $data["horproxima"];
             }

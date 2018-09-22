@@ -377,6 +377,22 @@ create table if not exists `oportunidad` (
 
 -- --------------------------------------------------------
 --
+-- Estructura de tabla `observacion_actividades`
+--
+create table if not exists `observacion_actividades` (
+ `oact_id` bigint(20) not null auto_increment primary key,
+ `oact_nombre` varchar(250) default null,
+ `oact_descripcion` varchar(500) default null,
+ `oact_estado` varchar(1) not null,
+ `oact_usuario` bigint(20) not null,
+ `oact_usuario_modif` bigint(20) default null,
+ `oact_fecha_creacion` timestamp not null default current_timestamp,
+ `oact_fecha_modificacion` timestamp null default null,
+ `oact_estado_logico` varchar(1) not null
+);
+
+-- --------------------------------------------------------
+--
 -- Estructura de tabla `bitacora_actividades`
 --
 create table if not exists `bitacora_actividades` (
@@ -385,8 +401,9 @@ create table if not exists `bitacora_actividades` (
  `usu_id` bigint(20) default null,
  `padm_id` bigint(20) default null,
  `eopo_id` bigint(20) not null,
+ `oact_id` bigint(20) not null,
  `bact_fecha_registro` timestamp null default null,
- `bact_descripcion` varchar(1000) not null,
+ -- `bact_descripcion` varchar(1000) not null,
  `bact_fecha_proxima_atencion` timestamp null default null, 
  `bact_estado` varchar(1) not null,
  `bact_usuario` bigint(20) not null,
@@ -396,5 +413,6 @@ create table if not exists `bitacora_actividades` (
  `bact_estado_logico` varchar(1) not null,
  foreign key (opo_id) references `oportunidad`(opo_id),
  foreign key (eopo_id) references `estado_oportunidad`(eopo_id),
- foreign key (padm_id) references `personal_admision`(padm_id)
+ foreign key (padm_id) references `personal_admision`(padm_id),
+ foreign key (oact_id) references `observacion_actividades`(oact_id)
 );

@@ -436,3 +436,12 @@ INSERT INTO `personal_nivel_modalidad` (`pnmo_id`, `padm_id`, `uaca_id`, `mod_id
 (67, 18, 2, 2, 1, '1', '1'),
 (68, 18, 2, 3, 1, '1', '1'),
 (69, 18, 2, 4, 1, '1', '1');
+
+-- --------------------------------------------------------
+--
+-- Volcado de datos para la tabla `observacion_actividades`
+--
+INSERT INTO `observacion_actividades` (`oact_id`, `oact_nombre`, `oact_descripcion`, `oact_estado`, `oact_usuario`, `oact_usuario_modif`, `oact_fecha_creacion`,  `oact_fecha_modificacion`,  `oact_estado_logico`) VALUES
+(1, 'Observacion 1', 'Observacion 1', '1', 1, null, '2018-09-22 00:00:00', NULL, '1'),
+(2, 'Observacion 2', 'Observacion 2', '1', 1, null, '2018-09-22 00:00:00', NULL, '1'),
+(3, 'Observacion 3', 'Observacion 3', '1', 1, null, '2018-09-22 00:00:00', NULL, '1');
