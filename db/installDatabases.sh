@@ -4,12 +4,21 @@ USER='uteg'
 PASS='Utegadmin2016*'
 CURRENT_DIR=`pwd`
 
-echo -n Escriba el password del Usuario Root de Mysql: 
+echo -n "Escriba el password del Usuario Root de Mysql:"
 read -s ROOT_PASS
-echo $ROOT_PASS
+echo ""
+echo -n "Instalar en Produccion (1) o Desarrollo (2):"
+read -s PROD
+echo ""
 
 # CREACION DEL USUARIO MYSQL
 mysql -uroot -p${ROOT_PASS} -e "CREATE USER ${USER}@localhost IDENTIFIED BY '${PASS}';"
+
+if [ $PROD -eq 1 ]; then
+    echo "INSTALANDO en Produccion......"
+else
+    echo "INSTALANDO en Desarrollo......"
+fi
 
 # DATABASE ASGARD
 echo "SUBIENDO db_asgard......"
@@ -17,7 +26,12 @@ mysql -u${USER} -p${PASS} < $CURRENT_DIR/base_nueva_prod/estructura/db_asgard.sq
 mysql -u${USER} -p${PASS} < $CURRENT_DIR/base_nueva_prod/data/db_asgard_data_01.sql
 mysql -u${USER} -p${PASS} < $CURRENT_DIR/base_nueva_prod/data/db_asgard_data_02.sql
 mysql -u${USER} -p${PASS} < $CURRENT_DIR/base_nueva_prod/data/db_asgard_data_03.sql
-mysql -u${USER} -p${PASS} < $CURRENT_DIR/base_nueva_prod/data/db_asgard_data_04.sql
+if [ $PROD -eq 1 ]; then
+    mysql -u${USER} -p${PASS} < $CURRENT_DIR/base_nueva_prod/data/db_asgard_data_04_NOTOCAR1.sql
+    mysql -u${USER} -p${PASS} < $CURRENT_DIR/base_nueva_prod/data/db_asgard_data_04_NOTOCAR2.sql
+else
+    mysql -u${USER} -p${PASS} < $CURRENT_DIR/base_nueva_prod/data/db_asgard_data_04.sql
+fi
 mysql -u${USER} -p${PASS} < $CURRENT_DIR/base_nueva_prod/data/db_asgard_data_05.sql
 mysql -u${USER} -p${PASS} < $CURRENT_DIR/base_nueva_prod/data/db_asgard_data_06.sql
 mysql -u${USER} -p${PASS} < $CURRENT_DIR/base_nueva_prod/data/db_asgard_data_07.sql
