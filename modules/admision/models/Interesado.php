@@ -1683,7 +1683,17 @@ class Interesado extends \app\modules\admision\components\CActiveRecord {
     public function enviarCorreoBienvenida($email_info) {
         $tituloMensaje = Yii::t("interesado", "UTEG - Registration");
         $asunto = Yii::t("interesado", "UTEG - Registration Online");
-        $body = Utilities::getMailMessage("BienvenidaADContacto",array("[[nombre]]" => $email_info['nombres']), Yii::$app->language);
+        $body = Utilities::getMailMessage("BienvenidaADContacto",
+            array(
+                "[[nombres]]" => $email_info['nombres'],
+                "[[apellidos]]" => $email_info['apellidos'],
+                "[[correo]]" => $email_info['correo'],
+                "[[telefono]]" => $email_info['telefono'],
+                "[[webmail]]" => Yii::$app->params["adminEmail"],
+                "[[identificacion]]" => $email_info['identificacion'],
+                "[[link_asgard]]" => $email_info["link_asgard"],
+            ), 
+            Yii::$app->language);
         Utilities::sendEmail($tituloMensaje, Yii::$app->params["admisiones"], [Yii::$app->params["admisiones"] => "Soporte"], $asunto, $body);
     }
 

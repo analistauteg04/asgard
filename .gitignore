@@ -1,6 +1,7 @@
-nbproject/*
-runtime/*
-web/assets/*
+/nbproject/
+/runtime/
+/web/assets/
+/vendor/
 
 
 # Compiled source #
