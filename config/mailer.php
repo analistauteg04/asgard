@@ -70,4 +70,14 @@ return [
             ],
         ],
     ],
+    /*'transport' => [
+        'class' => 'Swift_SmtpTransport',
+        'constructArgs' => ['localhost', 25],
+            'plugins' => [
+            [
+                'class' => 'Swift_Plugins_ThrottlerPlugin',
+                'constructArgs' => [20],
+            ],
+        ],
+    ],*/
 ];
