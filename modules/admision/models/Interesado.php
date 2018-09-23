@@ -1694,10 +1694,9 @@ class Interesado extends \app\modules\admision\components\CActiveRecord {
                 "[[link_asgard]]" => $email_info["link_asgard"],
             ), 
             Yii::$app->language);
-        Utilities::putMessageLogFile($email_info);
         Utilities::sendEmail($tituloMensaje,
-            $email_info['correo'], // a quien se envia el correo
-            [Yii::$app->params["admisiones"] => "Soporte"], // quien envia el correo
+            Yii::$app->params["admisiones"], // a quien se envia el correo
+            [$email_info['correo'] => $email_info['nombres'] . " " . $email_info['apellidos']], // quien envia el correo
             $asunto, $body);
     }
 
