@@ -3,6 +3,9 @@
 use yii\helpers\Html;
 use yii\helpers\Url;
 use app\widgets\PbGridView\PbGridView;
+use app\modules\academico\Module as academico;
+use app\modules\admision\Module as admision;
+admision::registerTranslations();
 
 ?>
 <?= Html::hiddenInput('txth_ids', '', ['id' => 'txth_ids']); ?>
@@ -20,12 +23,12 @@ use app\widgets\PbGridView\PbGridView;
         [
             [
                 'attribute' => 'solicitud',
-                'header' => Yii::t("formulario", "Request #"),
+                'header' => admision::t("Solicitudes", "Request #"),
                 'value' => 'solicitud',
             ],
             [
                 'attribute' => 'fecha',
-                'header' => Yii::t("solicitud_ins", "Application date"),
+                'header' => admision::t("Solicitudes", "Application date"),
                 'value' => 'sins_fecha_solicitud',
             ],
             [
@@ -45,7 +48,7 @@ use app\widgets\PbGridView\PbGridView;
             ],
             [
                 'class' => 'yii\grid\ActionColumn',
-                'header' => Yii::t("formulario", "Method of Entry"),
+                'header' => admision::t("Solicitudes", "Income Method"),
                 'template' => '{view}',
                 'buttons' => [
                     'view' => function ($url, $model) {
@@ -55,30 +58,30 @@ use app\widgets\PbGridView\PbGridView;
             ],
             [
                 'attribute' => 'carrera',
-                'header' => Yii::t("academico", "Career"),
+                'header' => academico::t("Academico", "Career/Program"),
                 'value' => 'carrera',
             ],
             [
                 'attribute' => 'beca',
-                'header' => Yii::t("formulario", "Scholarship"),
+                'header' => admision::t("Solicitudes", "Scholarship"),
                 'value' => 'beca',
             ],      
            
             [
                 'class' => 'yii\grid\ActionColumn',
                 'header' => Yii::t("formulario", "Actions"),
-                'template' => '{autoriza} ', //
+                'template' => '{view} {matricula} {homologa}', //
                 'buttons' => [                    
-                    'autoriza' => function ($url, $model) {                                                                           
-                        return Html::a('<span class="glyphicon glyphicon-download-alt"></span>', Url::to(['/admision/solicitudes/view', 'ids' => base64_encode($model['sins_id']), 'int' => base64_encode($model['int_id']), 'perid' => base64_encode($model['per_id'])]), ["data-toggle" => "tooltip", "title" => "Ver Documentos", "data-pjax" => 0]);                        
+                    'view' => function ($url, $model) {                                                                           
+                        return Html::a('<span class="glyphicon glyphicon-th-list"></span>', Url::to(['/admision/solicitudes/view', 'ids' => base64_encode($model['sins_id']), 'int' => base64_encode($model['int_id']), 'perid' => base64_encode($model['per_id'])]), ["data-toggle" => "tooltip", "title" => "Ver Solicitud", "data-pjax" => 0]);                        
                     },   
-                    /*'asigna' => function ($url, $model) {
-                        if ($model['rol'] == 15 || $model['rol'] == 1) {
-                            return Html::a('<span class="glyphicon glyphicon-edit"></span>', Url::to(['administracioncurso/asigna', 'popup' => "true", 'asp' => base64_encode($model['asp_id']), 'apellidos' => base64_encode($model['per_apellidos']), 'nombres' => base64_encode($model['per_nombres']), 'ming' => base64_encode($model['ming_id']), 'sins_id' => base64_encode($model['id_solicitud'])]), ["data-toggle" => "tooltip", "class" => "pbpopup", "title" => "Asignar/Reasignar Curso", "data-pjax" => 0]);
-                        } else {
-                            return '<span class = "glyphicon glyphicon-edit">  </span>';
-                        }
-                    },*/
+                    'matricula' => function ($url, $model) {                                                                           
+                        return Html::a('<span class="glyphicon glyphicon-list-alt"></span>', Url::to(['/academico/matriculacion/newmetodoingreso', 'sids' => base64_encode($model['sins_id']), 'asp' => base64_encode($model['asp_id'])]), ["data-toggle" => "tooltip", "title" => "Matricular por Método Ingreso", "data-pjax" => 0]);                        
+                    },   
+                    'homologa' => function ($url, $model) {                                                                           
+                        return Html::a('<span class="glyphicon glyphicon-check"></span>', Url::to(['/academico/matriculacion/newhomologacion', 'sids' => base64_encode($model['sins_id']), 'asp' => base64_encode($model['asp_id'])]), ["data-toggle" => "tooltip", "title" => "Matricular por Homologación", "data-pjax" => 0]);                        
+                    },
+                    
                 ],
             ],
         ],

@@ -23,13 +23,13 @@ class AspirantesController extends \app\components\CController {
             $arrSearch["carrera"] = $data['carrera'];
             $arrSearch["search"] = $data['search'];
             $arrSearch["codigocan"] = $data['codigocan'];
-            $mod_aspirante = Aspirante::getAspirantes($resp_gruporol["grol_id"], $arrSearch);
+            $mod_aspirante = Aspirante::getAspirantes($arrSearch);
 
             return $this->renderPartial('index-grid', [
                         "model" => $mod_aspirante,                        
             ]);
         } else {
-            $mod_aspirante = Aspirante::getAspirantes($resp_gruporol["grol_id"]);
+            $mod_aspirante = Aspirante::getAspirantes();
         }
         if (Yii::$app->request->isAjax) {//
             $data = Yii::$app->request->get();

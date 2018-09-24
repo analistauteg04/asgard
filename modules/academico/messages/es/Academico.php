@@ -11,4 +11,5 @@ namespace app\modules\academico\messages;
      "Career/Program" => "Carrera/Programa",
      "List Admitted" => "Listar Admitidos",
      "Modality" => "Modalidad",
+     "Registration by Homologation" => "Matriculación por Homologación",
  ];

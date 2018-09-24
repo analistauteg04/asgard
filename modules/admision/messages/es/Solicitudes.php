@@ -19,6 +19,7 @@ namespace app\modules\admision\messages;
      "Request #" => "Solicitud",
      "Request by Interested" => "Solicitudes por Interesado",     
      "Reviewed" => "Revisado",
+     "Scholarship" => "Beca",
      "Scholarship document" => "Documento Beca",
      "Search by Income Method" => "Buscar por Método de Ingreso",
      "Search by Income Method or Names" => "Buscar por Método de Ingreso o Nombres",
