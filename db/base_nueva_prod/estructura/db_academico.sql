@@ -501,7 +501,7 @@ create table if not exists `paralelo` (
 create table if not exists `matriculacion` (
   `mat_id` bigint(20) not null auto_increment primary key, 
   `daca_id` bigint(20) null, 
-  `asp_id` bigint(20) null, 
+  `adm_id` bigint(20) null, 
   `est_id` bigint(20) null,    
   `sins_id` bigint(20) null,
   `mat_fecha_matriculacion` timestamp null default null,

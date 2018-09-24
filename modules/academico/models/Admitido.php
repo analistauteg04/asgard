@@ -6,52 +6,59 @@ use Yii;
 use yii\data\ArrayDataProvider;
 
 /**
- * This is the model class for table "aspirante".
+ * This is the model class for table "admitido".
  *
- * @property integer $asp_id
- * @property integer $int_id
- * @property string $asp_estado
- * @property string $asp_fecha_creacion
- * @property string $asp_fecha_modificacion
- * @property string $asp_estado_logico
+ * @property int $adm_id
+ * @property int $int_id
+ * @property string $adm_estado_admitido
+ * @property string $adm_estado
+ * @property string $adm_fecha_creacion
+ * @property string $adm_fecha_modificacion
+ * @property string $adm_estado_logico
  *
  * @property Interesado $int
- * @property InteresadoEjecutivo[] $interesadoEjecutivos
  */
-class Aspirante extends \yii\db\ActiveRecord {
+class Admitido extends \yii\db\ActiveRecord {
 
     /**
-     * @inheritdoc
+     * {@inheritdoc}
      */
     public static function tableName() {
-        //return 'aspirante';
-        return \Yii::$app->db_captacion->dbname . '.aspirante';
+        return 'admitido';
     }
 
     /**
-     * @inheritdoc
+     * @return \yii\db\Connection the database connection used by this AR class.
+     */
+    public static function getDb() {
+        return Yii::$app->get('db_captacion');
+    }
+
+    /**
+     * {@inheritdoc}
      */
     public function rules() {
         return [
-            [['int_id', 'asp_estado', 'asp_estado_logico'], 'required'],
+            [['int_id', 'adm_estado', 'adm_estado_logico'], 'required'],
             [['int_id'], 'integer'],
-            [['asp_fecha_creacion', 'asp_fecha_modificacion'], 'safe'],
-            [['asp_estado', 'asp_estado_logico'], 'string', 'max' => 1],
+            [['adm_fecha_creacion', 'adm_fecha_modificacion'], 'safe'],
+            [['adm_estado_admitido', 'adm_estado', 'adm_estado_logico'], 'string', 'max' => 1],
             [['int_id'], 'exist', 'skipOnError' => true, 'targetClass' => Interesado::className(), 'targetAttribute' => ['int_id' => 'int_id']],
         ];
     }
 
     /**
-     * @inheritdoc
+     * {@inheritdoc}
      */
     public function attributeLabels() {
         return [
-            'asp_id' => 'Asp ID',
+            'adm_id' => 'Adm ID',
             'int_id' => 'Int ID',
-            'asp_estado' => 'Asp Estado',
-            'asp_fecha_creacion' => 'Asp Fecha Creacion',
-            'asp_fecha_modificacion' => 'Asp Fecha Modificacion',
-            'asp_estado_logico' => 'Asp Estado Logico',
+            'adm_estado_admitido' => 'Adm Estado Admitido',
+            'adm_estado' => 'Adm Estado',
+            'adm_fecha_creacion' => 'Adm Fecha Creacion',
+            'adm_fecha_modificacion' => 'Adm Fecha Modificacion',
+            'adm_estado_logico' => 'Adm Estado Logico',
         ];
     }
 
@@ -70,12 +77,12 @@ class Aspirante extends \yii\db\ActiveRecord {
     }
 
     /**
-     * Function getAspirantes
+     * Function getAdmitidos
      * @author  Grace Viteri <analistadesarrollo01@uteg.edu.ec>
      * @param   
      * @return  $resultData (información del aspirante)
      */
-    public static function getAspirantes($arrFiltro = array(), $onlyData = false) {
+    public static function getAdmitidos($arrFiltro = array(), $onlyData = false) {
         $con = \Yii::$app->db_captacion;
         $con2 = \Yii::$app->db;
         $con3 = \Yii::$app->db_academico;
@@ -96,7 +103,7 @@ class Aspirante extends \yii\db\ActiveRecord {
             if ($arrFiltro['f_ini'] != "" && $arrFiltro['f_fin'] != "") {
                 $str_search .= "sins.sins_fecha_solicitud >= :fec_ini AND ";
                 $str_search .= "sins.sins_fecha_solicitud <= :fec_fin AND ";
-            }         
+            }
         } else {
             $columnsAdd = "sins.sins_id as solicitud_id,
                     per.per_id as persona, 
@@ -127,9 +134,9 @@ class Aspirante extends \yii\db\ActiveRecord {
                         sins.eaca_id,
                         car.eaca_nombre as carrera,
                         $columnsAdd                                                             
-                        asp.asp_id,                                               
+                        admi.adm_id,                                               
                        (case when sins_beca = 1 then 'ICF' else 'No Aplica' end) as beca 
-                FROM " . $con->dbname . ".aspirante asp INNER JOIN " . $con->dbname . ".interesado inte on inte.int_id = asp.int_id                     
+                FROM " . $con->dbname . ".admitido admi INNER JOIN " . $con->dbname . ".interesado inte on inte.int_id = admi.int_id                     
                      INNER JOIN " . $con2->dbname . ".persona per on inte.per_id = per.per_id
                      INNER JOIN " . $con->dbname . ".solicitud_inscripcion sins on sins.int_id = inte.int_id
                      INNER JOIN " . $con->dbname . ".metodo_ingreso ming on ming.ming_id = sins.ming_id
@@ -138,8 +145,8 @@ class Aspirante extends \yii\db\ActiveRecord {
                 WHERE  
                        $str_search 
                        opag.opag_estado_pago = :estado_opago AND
-                       asp.asp_estado_logico = :estado AND
-                       asp.asp_estado = :estado AND 
+                       admi.adm_estado_logico = :estado AND
+                       admi.adm_estado = :estado AND 
                        inte.int_estado_logico = :estado AND
                        inte.int_estado = :estado AND                       
                        per.per_estado_logico = :estado AND
@@ -153,7 +160,7 @@ class Aspirante extends \yii\db\ActiveRecord {
                 ORDER BY SUBSTRING(sins.sins_fecha_solicitud,1,10) desc";
         $comando = $con->createCommand($sql);
         $comando->bindParam(":estado", $estado, \PDO::PARAM_STR);
-        $comando->bindParam(":estado_opago", $estado_opago, \PDO::PARAM_STR);        
+        $comando->bindParam(":estado_opago", $estado_opago, \PDO::PARAM_STR);
         if (isset($arrFiltro) && count($arrFiltro) > 0) {
             $search_cond = "%" . $arrFiltro["search"] . "%";
             $fecha_ini = $arrFiltro["f_ini"] . " 00:00:00";
@@ -168,8 +175,8 @@ class Aspirante extends \yii\db\ActiveRecord {
                 $comando->bindParam(":fec_ini", $fecha_ini, \PDO::PARAM_STR);
                 $comando->bindParam(":fec_fin", $fecha_fin, \PDO::PARAM_STR);
             }
-           // $comando->bindParam(":codigocan", $codigocan, \PDO::PARAM_STR);
-        }        
+            // $comando->bindParam(":codigocan", $codigocan, \PDO::PARAM_STR);
+        }
         $resultData = $comando->queryAll();
         $dataProvider = new ArrayDataProvider([
             'key' => 'id',
