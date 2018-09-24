@@ -16,9 +16,11 @@ use app\models\UsuaGrolEper;
 use app\models\Empresa;
 use yii\helpers\ArrayHelper;
 
-class InteresadosController extends \app\components\CController {
+class InteresadosController extends \app\components\CController
+{
 
-    public function actionIndex() {
+    public function actionIndex()
+    {
         $per_id = @Yii::$app->session->get("PB_perid");
         $interesado_model = new Interesado();
         $data = Yii::$app->request->get();
@@ -34,12 +36,13 @@ class InteresadosController extends \app\components\CController {
         $arr_empresas = $empresa_model->getAllEmpresa();
         $arrEmpresa = ArrayHelper::map($arr_empresas, "id", "value");
         return $this->render('index', [
-                    'model' => $model,
-                    'arr_empresa' => $arrEmpresa,
+            'model' => $model,
+            'arr_empresa' => $arrEmpresa,
         ]);
     }
 
-    public function actionGuardarinteresado() {
+    public function actionGuardarinteresado()
+    {
         $per_id = @Yii::$app->session->get("PB_perid");
         $error = 0;
         if (Yii::$app->request->isAjax) {
@@ -60,13 +63,7 @@ class InteresadosController extends \app\components\CController {
                     $id_persona = 0;
                     $mod_persona = new Persona();
                     $keys_per = [
-                        'per_pri_nombre', 'per_seg_nombre', 'per_pri_apellido', 'per_seg_apellido'
-                        , 'per_cedula', 'etn_id', 'eciv_id', 'per_genero', 'pai_id_nacimiento', 'pro_id_nacimiento'
-                        , 'can_id_nacimiento', 'per_fecha_nacimiento', 'per_celular', 'per_correo'
-                        , 'tsan_id', 'per_domicilio_sector', 'per_domicilio_cpri', 'per_domicilio_csec'
-                        , 'per_domicilio_num', 'per_domicilio_ref', 'per_domicilio_telefono'
-                        , 'pai_id_domicilio', 'pro_id_domicilio', 'can_id_domicilio'
-                        , 'per_nac_ecuatoriano', 'per_nacionalidad', 'per_foto', 'per_estado', 'per_estado_logico'
+                        'per_pri_nombre', 'per_seg_nombre', 'per_pri_apellido', 'per_seg_apellido', 'per_cedula', 'etn_id', 'eciv_id', 'per_genero', 'pai_id_nacimiento', 'pro_id_nacimiento', 'can_id_nacimiento', 'per_fecha_nacimiento', 'per_celular', 'per_correo', 'tsan_id', 'per_domicilio_sector', 'per_domicilio_cpri', 'per_domicilio_csec', 'per_domicilio_num', 'per_domicilio_ref', 'per_domicilio_telefono', 'pai_id_domicilio', 'pro_id_domicilio', 'can_id_domicilio', 'per_nac_ecuatoriano', 'per_nacionalidad', 'per_foto', 'per_estado', 'per_estado_logico'
                     ];
                     $parametros_per = [
                         $pgest['pges_pri_nombre'], null, $pgest['pges_pri_apellido'], null,
@@ -123,21 +120,25 @@ class InteresadosController extends \app\components\CController {
                                         $iemp_id = $mod_inte_emp->consultaInteresadoEmpresaById($interesado_id, $emp_id);
                                         if ($iemp_id == 0) {
                                             $iemp_id = $mod_inte_emp->crearInteresadoEmpresa($interesado_id, $emp_id, $usuario_id);
-                                            \app\models\Utilities::putMessageLogFile('intereso empresa ingresado con id: ' . $iemp_id);
                                         }
                                         if ($iemp_id > 0) {
+                                            // GENERAR LINK DE CAMBIO DE CLAVE
+                                            $usuarioNew = Usuario::findIdentity($usuario_id);
+                                            $link = $usuarioNew->generarLinkActivacion();
+
                                             $email_info = array(
-                                                "nombres" => $pgest['pges_pri_nombre']. " ". $pgest['pges_seg_nombre'],
-                                                "apellidos" => $pgest['pges_pri_apellido']. " ". $pgest['pges_seg_apellido'],
+                                                "nombres" => $pgest['pges_pri_nombre'] . " " . $pgest['pges_seg_nombre'],
+                                                "apellidos" => $pgest['pges_pri_apellido'] . " " . $pgest['pges_seg_apellido'],
                                                 "correo" => $pgest['pges_correo'],
-                                                "telefono" => isset($pgest['pges_celular'])?$pgest['pges_celular']:$pgest['pges_domicilio_telefono'],
-                                                "identificacion" => isset($pgest['pges_cedula'])?$pgest['pges_cedula']:$pgest['pges_pasaporte']
+                                                "telefono" => isset($pgest['pges_celular']) ? $pgest['pges_celular'] : $pgest['pges_domicilio_telefono'],
+                                                "identificacion" => isset($pgest['pges_cedula']) ? $pgest['pges_cedula'] : $pgest['pges_pasaporte'],
+                                                "link_asgard" => $link,
                                             );
-                                                $outemail=$mod_interesado->enviarCorreoBienvenida($email_info);
-                                                if($outemail==0){
-                                                    $error_message .= Yii::t("formulario", "The email hasn't been sent");
-                                                    $error++;        
-                                                }
+                                            $outemail = $mod_interesado->enviarCorreoBienvenida($email_info);
+                                            /*if ($outemail == 0) {
+                                                $error_message .= Yii::t("formulario", "The email hasn't been sent");
+                                                $error++;
+                                            }*/
                                         } else {
                                             $error_message .= Yii::t("formulario", "The enterprise interested hasn't been saved");
                                             $error++;
@@ -193,24 +194,29 @@ class InteresadosController extends \app\components\CController {
         }
     }
 
-    public function actionView() {
-        
+    public function actionView()
+    {
+
     }
 
-    public function actionEdit() {
-        
+    public function actionEdit()
+    {
+
     }
 
-    public function actionNew() {
+    public function actionNew()
+    {
         return $this->render('new');
     }
 
-    public function actionSave() {
-        
+    public function actionSave()
+    {
+
     }
 
-    public function actionUpdate() {
-        
+    public function actionUpdate()
+    {
+
     }
 
 }

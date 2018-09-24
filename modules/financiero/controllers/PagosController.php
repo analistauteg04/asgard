@@ -173,7 +173,6 @@ class PagosController extends \app\components\CController {
                 $typeFile = strtolower($arrIm[count($arrIm) - 1]);
                 $dirFileEnd = Yii::$app->params["documentFolder"] . "documento/" . $per_id . "/" . $data["name_file"] . "." . $typeFile;
                 $status = Utilities::moveUploadFile($files['tmp_name'], $dirFileEnd);
-                \app\models\Utilities::putMessageLogFile('el per id de esta interesado: ' . $per_id);
                 if ($status) {
                     return true;
                 } else {
@@ -540,6 +539,7 @@ class PagosController extends \app\components\CController {
     
     public function actionListarpagosolicitud() {
         $per_id = Yii::$app->session->get("PB_perid");
+        //  $per_ids = base64_decode($_GET['ids']);
         $sol_id = base64_decode($_GET['id_sol']);
         $model_pag = new OrdenPago();
         $data = Yii::$app->request->get();
@@ -547,24 +547,24 @@ class PagosController extends \app\components\CController {
             $arrSearch["f_ini"] = $data['f_ini'];
             $arrSearch["f_fin"] = $data['f_fin'];
             $arrSearch["search"] = $data['search'];
-            if (empty($per_ids)) {  //vista para el interesado  
+            //if (empty($per_ids)) {  //vista para el interesado  
                 $rol = 1;
                 $resp_pago = $model_pag->listarSolicitud($sol_id, null, $rol, $arrSearch);
-            } else {
+           /* } else {
                 $rol = 0;
                 $resp_pago = $model_pag->listarSolicitud($sol_id, null, $rol, $arrSearch);
-            }
+            }*/
             return $this->renderPartial('_listarpagosolicitud_grid', [
                         "model" => $resp_pago,
             ]);
         } else {
-            if (empty($per_ids)) {  //vista para el interesado  
+           // if (empty($per_ids)) {  //vista para el interesado  
                 $rol = 1;
-                $resp_pago = $model_pag->listarSolicitud($per_id, null, $rol);
-            } else {
+                $resp_pago = $model_pag->listarSolicitud($sol_id, null, $rol);
+            /*} else {
                 $rol = 0;
-                $resp_pago = $model_pag->listarSolicitud($per_ids, null, $rol);
-            }
+                $resp_pago = $model_pag->listarSolicitud($sol_id, null, $rol);
+            }*/
         }
         //verificar rol de la persona que esta en sesión
         $resp_rol = $model_pag->encuentraRol($per_id);

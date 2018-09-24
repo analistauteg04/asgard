@@ -4,12 +4,21 @@ USER='root'
 PASS='Utegadmin2016*'
 CURRENT_DIR=`pwd`
 
-echo -n Escriba el password del Usuario Root de Mysql: 
+echo -n "Escriba el password del Usuario Root de Mysql:"
 read -s ROOT_PASS
-echo $ROOT_PASS
+echo ""
+echo -n "Instalar en Produccion (1) o Desarrollo (2):"
+read -s PROD
+echo ""
 
 # CREACION DEL USUARIO MYSQL
 mysql -uroot -p${ROOT_PASS} -e "CREATE USER ${USER}@localhost IDENTIFIED BY '${PASS}';"
+
+if [ $PROD -eq 1 ]; then
+    echo "INSTALANDO en Produccion......"
+else
+    echo "INSTALANDO en Desarrollo......"
+fi
 
 # DATABASE ASGARD
 echo "SUBIENDO db_asgard......"

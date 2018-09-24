@@ -119,7 +119,6 @@ class InteresadoEmpresa extends \app\modules\admision\components\CActiveRecord {
         }
         try {
             $sql = "INSERT INTO " . $con->dbname . ".interesado_empresa ($param_sql) VALUES($bsol_sql);";
-            \app\models\Utilities::putMessageLogFile('sql: '.$sql);
 //            if (isset($int_id))
 //                $comando->bindParam(':int_id', $int_id, \PDO::PARAM_INT);
 //            if (isset($emp_id))

@@ -267,13 +267,13 @@ class OportunidadesController extends \app\components\CController
                 //$per_gest = $mod_pergestion->consultarPersonaGestion($pges_id);
                 $codportunidad = 1 + $gcrm_codigo;
                 $fecha_registro = date(Yii::$app->params["dateTimeByDefault"]);
-                if ($agente > 0) {
+                if ($agente['padm_id'] > 0) {
                     //if ($nombreoportunidad["eopo_nombre"] == '' || $nombreoportunidad["eopo_nombre"] == 'Ganada' || $nombreoportunidad["eopo_nombre"] == 'Perdida') {
                     if ($nombreoportunidad["Ids"] == '' || $nombreoportunidad["Ids"] == '4' || $nombreoportunidad["Ids"] == '5') {
-                        $res_gestion = $mod_gestion->insertarOportunidad($codportunidad, $empresa, $pges_id, $modulo_estudio, $estudio_academico, $unidad_academica, $modalidad, $tipo_oportunidad, $sub_carrera, $canal_conocimiento, $estado_oportunidad, $fecha_registro, $agente, $usuario);
+                        $res_gestion = $mod_gestion->insertarOportunidad($codportunidad, $empresa, $pges_id, $modulo_estudio, $estudio_academico, $unidad_academica, $modalidad, $tipo_oportunidad, $sub_carrera, $canal_conocimiento, $estado_oportunidad, $fecha_registro, $agente['padm_id'], $usuario);
                         if ($res_gestion) {
                             $opo_id = $res_gestion;
-                            $padm_id = $agente;
+                            $padm_id = $agente['padm_id'];
                             $eopo_id = $estado_oportunidad; // En curso por defecto
                             $bact_fecha_registro = $fecha_registro;
                             $bact_fecha_proxima_atencion = $fecha_registro;

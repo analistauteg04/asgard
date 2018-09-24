@@ -11,7 +11,10 @@ use yii\helpers\Url;
 use app\widgets\PbGridView\PbGridView;
 use app\modules\admision\Module as admision;
 use app\modules\academico\Module as academico;
+use app\modules\financiero\Module as financiero;
 academico::registerTranslations();
+financiero::registerTranslations();
+
 ?>
 <?=
 
@@ -50,9 +53,14 @@ PbGridView::widget([
             'value' => 'carrera',
         ],
         [
-            'attribute' => 'Estado',
-            'header' => Yii::t("formulario", "Status"),
+            'attribute' => 'Estado Solicitud',
+            'header' => admision::t("Solicitudes", "State Request"),
             'value' => 'estado',
+        ],  
+        [
+            'attribute' => 'Estado Pago',
+            'header' => financiero::t("Pagos", "Payment status"),
+            'value' => 'estado_pago',
         ],
         [
             'class' => 'yii\grid\ActionColumn',
@@ -60,7 +68,7 @@ PbGridView::widget([
             'template' => '{payments} {upload}', //
             'buttons' => [
                 'payments' => function ($url, $model) {
-                    return Html::a('<span class="glyphicon glyphicon-usd"></span>', Url::to(['/financiero/pagos/listarpagosolicitud', 'id_sol' => base64_encode($model['sins_id'])]), ["data-toggle" => "tooltip", "title" => "Pago de Solicitud", "data-pjax" => 0]);
+                    return Html::a('<span class="glyphicon glyphicon-usd"></span>', Url::to(['/financiero/pagos/listarpagosolicitud', 'id_sol' => base64_encode($model['sins_id'])/*, 'ids' => $_GET['perid']*/]), ["data-toggle" => "tooltip", "title" => "Pago de Solicitud", "data-pjax" => 0]);
                 },
                 'upload' => function ($url, $model) {
                     if ($model['numDocumentos'] == 0)  {  

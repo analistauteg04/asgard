@@ -226,10 +226,8 @@ class AdmisionesController extends \app\components\CController {
                         1, 1
                     ];
                     $pergestion_id = $mod_pergestion->insertarPersonaGest($con, $parameters, $keys, 'persona_gestion');
-                    \app\models\Utilities::putMessageLogFile('el id insertado es: ' . $pergestion_id);
                 }
                 if ($pergestion_id > 0) {
-                    \app\models\Utilities::putMessageLogFile('Persona gestion ingresada');
                     $percontrat_id = $mod_gestion->consultarIdPersonaContratante($pergestion_id);
                     if ($percontrat_id == 0) {
                         $keys = ['pges_id', 'pcon_estado', 'pcon_estado_logico'];
@@ -237,9 +235,7 @@ class AdmisionesController extends \app\components\CController {
                         $pergestion_id = $mod_gestion->insertarPersonaContrat($con, $parametros, $keys, 'persona_contratante');
                     }
                     if ($percontrat_id > 0) {
-                        \app\models\Utilities::putMessageLogFile('Persona contratante ingresada');
                         $perben_id = $mod_gestion->consultarIdPersonaBeneficiario($pergestion_id);
-                        \app\models\Utilities::putMessageLogFile('Persona beneficiario: ' . $perben_id);
                         if ($perben_id == 0) {
                             $keys = ['pges_id', 'pcon_id', 'pben_estado', 'pben_estado_logico'];
                             $parametros = [$pergestion_id, $percontrat_id, 1, 1];
@@ -289,20 +285,16 @@ class AdmisionesController extends \app\components\CController {
             $data = Yii::$app->request->post();
             $id_pgest = $data["id_pgest"];
             $pergest = new PersonaGestion();
-            \app\models\Utilities::putMessageLogFile('persona gestion id: ' . $id_pgest);
             $pgest = $pergest->consultarPersonaGestion($id_pgest);
             $con = \Yii::$app->db_asgard;
             $transaction = $con->beginTransaction();
             try {
-                $identificacion='';
-                \app\models\Utilities::putMessageLogFile('cedula: ' . $pgest['pges_cedula']);                                
-                \app\models\Utilities::putMessageLogFile('pasaporte: ' . $pgest['pges_pasaporte']);                                
+                $identificacion='';                           
                 if (isset($pgest['pges_cedula']) && strlen($pgest['pges_cedula']) > 0) {
                     $identificacion = $pgest['pges_cedula'];
                 } else {
                     $identificacion = $pgest['pges_pasaporte'];
-                }
-                \app\models\Utilities::putMessageLogFile('identificacion: ' . $identificacion);                
+                }            
                 if (isset($identificacion) && strlen($identificacion) > 0) {
                     $id_persona = 0;
                     $mod_persona = new Persona();
@@ -329,7 +321,6 @@ class AdmisionesController extends \app\components\CController {
                         $id_persona = $mod_persona->insertarPersona($con, $parametros_per, $keys_per, 'persona');
                     }
                     if ($id_persona > 0) {
-                        \app\models\Utilities::putMessageLogFile('persona con id: ' . $id_persona);
                         $concap = \Yii::$app->db_captacion;
                         $mod_emp_persona = new EmpresaPersona();
                         $emp_id = 1;
@@ -340,7 +331,6 @@ class AdmisionesController extends \app\components\CController {
                             $emp_per_id = $mod_emp_persona->insertarEmpresaPersona($con, $parametros, $keys, 'empresa_persona');
                         }
                         if ($emp_per_id > 0) {
-                            \app\models\Utilities::putMessageLogFile('empresa persona con id: ' . $emp_per_id);
                             $usuario = new Usuario();
                             $usuario_id = $usuario->consultarIdUsuario($id_persona, $pgest['pges_correo']);
                             if ($usuario_id == 0) {
@@ -352,7 +342,6 @@ class AdmisionesController extends \app\components\CController {
                                 $usuario_id = $usuario->crearUsuarioTemporal($con, $parametros, $keys, 'usuario');
                             }
                             if ($usuario_id > 0) {
-                                \app\models\Utilities::putMessageLogFile('usuario con id: ' . $usuario_id);
                                 $mod_us_gr_ep = new UsuaGrolEper();
                                 $grol_id = 10;
                                 $keys = ['eper_id', 'usu_id', 'grol_id', 'ugep_estado', 'ugep_estado_logico'];
@@ -361,7 +350,6 @@ class AdmisionesController extends \app\components\CController {
                                 if ($us_gr_ep_id == 0)
                                     $us_gr_ep_id = $mod_us_gr_ep->insertarUsuaGrolEper($con, $parametros, $keys, 'usua_grol_eper');
                                 if ($us_gr_ep_id > 0) {
-                                    \app\models\Utilities::putMessageLogFile('usua grol con id: ' . $us_gr_ep_id);
                                     $mod_interesado = new Interesado(); // se guarda con estado_interesado 1                        
                                     $interesado_id = $mod_interesado->consultaInteresadoById($id_persona);
                                     $keys = ['per_id', 'int_estado_interesado', 'int_usuario_ingreso', 'int_estado', 'int_estado_logico'];
@@ -370,7 +358,6 @@ class AdmisionesController extends \app\components\CController {
                                         $interesado_id = $mod_interesado->insertarInteresado($concap, $parametros, $keys, 'interesado');
                                     }
                                     if ($interesado_id > 0) {
-                                        \app\models\Utilities::putMessageLogFile('entro al interesado con id: ' . $interesado_id);
                                         $mod_int_ejecutivo = new InteresadoEjecutivo();
                                         $interesadoEjecutivo_id = $mod_int_ejecutivo->consultarInteresadoEjecutivoById($interesado_id);
                                         if ($interesadoEjecutivo_id == 0) {
@@ -379,7 +366,6 @@ class AdmisionesController extends \app\components\CController {
                                             $interesadoEjecutivo_id = $mod_int_ejecutivo->insertarInteresadoEjecutivo($concap, $parametros, $keys, 'interesado_ejecutivo');
                                         }
                                         if ($interesadoEjecutivo_id > 0) {
-                                            \app\models\Utilities::putMessageLogFile('entro al interesado ejecutivo con id: ' . $interesadoEjecutivo_id);
                                             $email_info = array(
                                                 "nombre" => $pgest['pges_pri_nombre'],
                                                 "apellido" => $pgest['pges_pri_apellido'],
@@ -885,7 +871,6 @@ class AdmisionesController extends \app\components\CController {
                 $padm_id = $padm_class['padm_id'];
                 $act_id = base64_decode($data['bact_id']);
                 if ($padm_id > 0) {
-                    \app\models\Utilities::putMessageLogFile('argumentos de actualizar: ' . $act_id . "-" . $usu_id . "-" . $padm_id . "-" . $fecatiende . "-" . $observacion . "-" . $fecproxima);
                     $actividad_id = $mod_gestion->actualizarActividad($act_id, $usu_id, $padm_id, $fecatiende, $observacion, $fecproxima);
                     if ($actividad_id) {
                         $exito = 1;

@@ -481,8 +481,7 @@ class Persona extends \yii\db\ActiveRecord {
             }
         }
         try {
-            $sql = "INSERT INTO " . $con->dbname.'.'.$name_table . " ($param_sql) VALUES($bdet_sql);";                       
-            \app\models\Utilities::putMessageLogFile('sql:'.$sql);
+            $sql = "INSERT INTO " . $con->dbname.'.'.$name_table . " ($param_sql) VALUES($bdet_sql);";
             $comando = $con->createCommand($sql);
             $result = $comando->execute();
             $idtable=$con->getLastInsertID($con->dbname . '.' . $name_table);

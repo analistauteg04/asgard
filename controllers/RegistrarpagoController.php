@@ -180,7 +180,6 @@ class RegistrarpagoController extends \app\components\CController {
                 $typeFile = strtolower($arrIm[count($arrIm) - 1]);
                 $dirFileEnd = Yii::$app->params["documentFolder"] . "documento/" . $per_id . "/" . $data["name_file"] . "." . $typeFile;
                 $status = Utilities::moveUploadFile($files['tmp_name'], $dirFileEnd);
-                \app\models\Utilities::putMessageLogFile('el per id de esta interesado: ' . $per_id);
                 if ($status) {
                     return true;
                 } else {

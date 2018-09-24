@@ -211,7 +211,6 @@ class InscripcionesController extends \yii\web\Controller {
             $fecha_registro = date(Yii::$app->params["dateTimeByDefault"]);
             $con = \Yii::$app->db_crm;
             $transaction = $con->beginTransaction();
-            \app\models\Utilities::putMessageLogFile('id_empresa: ' . $emp_id . ' Estado Contacto '. $econ_id . ' Tipo persona '. $tipo_persona. ' conempresa '.$conempresa);
             try {
                 $mod_pergestion = new PersonaGestion();
                 $mod_gestion = new Oportunidad();
