@@ -163,7 +163,7 @@ create table if not exists `solicitud_general` (
   `sgen_id` bigint(20) not null auto_increment primary key,    
   `psol_id` bigint(20) null,
   `per_id` bigint(20) null,
-  `asp_id` bigint(20) null,
+  `adm_id` bigint(20) null,
   `psol_fecha_solicitud` timestamp null,
   `sgen_estado` varchar(1) not null,
   `sgen_fecha_creacion` timestamp not null default current_timestamp,

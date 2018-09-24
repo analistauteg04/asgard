@@ -443,9 +443,9 @@ INSERT INTO `interesado_empresa` (`iemp_id`, `int_id`, `emp_id`, `iemp_estado`, 
 (215, 215, 1, '1', 1215, NULL, '2018-08-14 23:56:11', NULL, '1');
 
 --
--- Volcado de datos para la tabla `aspirante`
+-- Volcado de datos para la tabla `admitido`
 --
-INSERT INTO `aspirante` (`asp_id`, `int_id`, `asp_estado_aspirante`, `asp_estado`, `asp_fecha_creacion`, `asp_fecha_modificacion`, `asp_estado_logico`) VALUES
+INSERT INTO `admitido` (`adm_id`, `int_id`, `adm_estado_admitido`, `adm_estado`, `adm_fecha_creacion`, `adm_fecha_modificacion`, `adm_estado_logico`) VALUES
 (1, 1, NULL, '1', '2010-10-18 01:22:00', NULL, '1'),
 (2, 2, NULL, '1', '2011-10-18 01:22:00', NULL, '1'),
 (3, 3, NULL, '1', '2029-11-17 17:48:00', NULL, '1'),

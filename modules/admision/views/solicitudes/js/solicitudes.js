@@ -656,6 +656,7 @@ function save() {
     arrParams.arc_nacional = $('#txth_nac').val();
     arrParams.arc_doc_beca = $('#txth_doc_beca').val();
     arrParams.emp_id = 1;
+   
     if ($('input[name=opt_declara_Dctosi]:checked').val() == 1) {
         arrParams.descuento_id = $('#cmb_descuento').val();
         arrParams.marcadescuento = '1';
@@ -681,7 +682,7 @@ function save() {
                     window.location.href = $('#txth_base').val() + "/admision/interesados/index";
                 } else
                 {
-                    window.location.href = $('#txth_base').val() + "/admision/solicitudes/listarsolicitudxinteresado?id=" + arrParams.int_id;
+                    window.location.href = $('#txth_base').val() + "/admision/solicitudes/listarsolicitudxinteresado?id="+ arrParams.int_id;
                 }
             }, 5000);
         }, true);
