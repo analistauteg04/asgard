@@ -22,8 +22,8 @@ class MatriculacionController extends \app\components\CController {
         ]);    
     }
     
-    public function actionNew() {
-    return $this->render('new', [
+    public function actionNewmetodoingreso() {
+    return $this->render('newmetodoingreso', [
            
         ]);    
     }
