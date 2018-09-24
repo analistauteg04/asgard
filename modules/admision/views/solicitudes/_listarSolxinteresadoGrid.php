@@ -11,7 +11,9 @@ use yii\helpers\Url;
 use app\widgets\PbGridView\PbGridView;
 use app\modules\admision\Module as admision;
 use app\modules\academico\Module as academico;
+use app\modules\financiero\Module as financiero;
 academico::registerTranslations();
+financiero::registerTranslations();
 
 ?>
 <?=
@@ -51,9 +53,14 @@ PbGridView::widget([
             'value' => 'carrera',
         ],
         [
-            'attribute' => 'Estado',
-            'header' => Yii::t("formulario", "Status"),
+            'attribute' => 'Estado Solicitud',
+            'header' => admision::t("Solicitudes", "State Request"),
             'value' => 'estado',
+        ],  
+        [
+            'attribute' => 'Estado Pago',
+            'header' => financiero::t("Pagos", "Payment status"),
+            'value' => 'estado_pago',
         ],
         [
             'class' => 'yii\grid\ActionColumn',

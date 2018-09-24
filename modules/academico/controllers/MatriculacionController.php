@@ -15,6 +15,13 @@ class MatriculacionController extends \app\components\CController {
            
         ]);    
     }
+
+    public function actionNewhomologacion() {
+    return $this->render('newHomologacion', [
+           
+        ]);    
+    }
+    
     public function actionNewmetodoingreso() {
     return $this->render('newmetodoingreso', [
            

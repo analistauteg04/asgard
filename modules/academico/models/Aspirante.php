@@ -75,7 +75,7 @@ class Aspirante extends \yii\db\ActiveRecord {
      * @param   
      * @return  $resultData (información del aspirante)
      */
-    public static function getAspirantes($resp_gruporol, $arrFiltro = array(), $onlyData = false) {
+    public static function getAspirantes($arrFiltro = array(), $onlyData = false) {
         $con = \Yii::$app->db_captacion;
         $con2 = \Yii::$app->db;
         $con3 = \Yii::$app->db_academico;
@@ -90,28 +90,13 @@ class Aspirante extends \yii\db\ActiveRecord {
             $str_search .= "per.per_pri_apellido like :search OR ";
             $str_search .= "per.per_cedula like :search) AND ";
             // YA NO EXISTE TABLA CARRERA MODICAR 
-            /*if ($arrFiltro['carrera'] != "" && $arrFiltro['carrera'] > 0) {
-                $str_search .= "car.car_id = :carrera AND ";
-            }*/
+            if ($arrFiltro['carrera'] != "" && $arrFiltro['carrera'] > 0) {
+                $str_search .= "sins.eaca_id = :carrera AND ";
+            }
             if ($arrFiltro['f_ini'] != "" && $arrFiltro['f_fin'] != "") {
                 $str_search .= "sins.sins_fecha_solicitud >= :fec_ini AND ";
                 $str_search .= "sins.sins_fecha_solicitud <= :fec_fin AND ";
-            }
-            // YA NO ES ASI LA ASIGNACION DE PARALELOS DEBE MODIFICARSE
-            /*$str_search .= "(SELECT pmin_codigo 
-                        FROM db_academico.asignacion_paralelo ascu
-                        INNER JOIN db_academico.paralelo cur on cur.par_id = ascu.par_id
-                        -- INNER JOIN db_academico.periodo_metodo_ingreso pmi on pmi.pmin_id = cur.pmin_id
-                        WHERE asp_id = asp.asp_id AND 
-                        pmi.uaca_id = sins.uaca_id AND
-                        pmi.ming_id = sins.ming_id AND
-                        -- ascu.sins_id = sins.sins_id AND
-                        ascu.acur_estado = :estado AND
-                        ascu.acur_estado_logico = :estado AND
-                        cur.par_estado = :estado AND
-                        cur.par_estado_logico = :estado AND
-                        pmi.pmin_estado = :estado AND
-                        pmi.pmin_estado_logico = :estado) like :codigocan AND ";*/
+            }         
         } else {
             $columnsAdd = "sins.sins_id as solicitud_id,
                     per.per_id as persona, 
@@ -139,10 +124,10 @@ class Aspirante extends \yii\db\ActiveRecord {
                         ELSE 'N/A'
                         END) AS abr_metodo,
                         ming.ming_nombre, 
+                        sins.eaca_id,
                         car.eaca_nombre as carrera,
                         $columnsAdd                                                             
-                        asp.asp_id,                        
-                        $resp_gruporol as rol,
+                        asp.asp_id,                                               
                        (case when sins_beca = 1 then 'ICF' else 'No Aplica' end) as beca 
                 FROM " . $con->dbname . ".aspirante asp INNER JOIN " . $con->dbname . ".interesado inte on inte.int_id = asp.int_id                     
                      INNER JOIN " . $con2->dbname . ".persona per on inte.per_id = per.per_id
@@ -168,12 +153,11 @@ class Aspirante extends \yii\db\ActiveRecord {
                 ORDER BY SUBSTRING(sins.sins_fecha_solicitud,1,10) desc";
         $comando = $con->createCommand($sql);
         $comando->bindParam(":estado", $estado, \PDO::PARAM_STR);
-        $comando->bindParam(":estado_opago", $estado_opago, \PDO::PARAM_STR);
-        $comando->bindParam(":resp_gruporol", $resp_gruporol, \PDO::PARAM_INT);
+        $comando->bindParam(":estado_opago", $estado_opago, \PDO::PARAM_STR);        
         if (isset($arrFiltro) && count($arrFiltro) > 0) {
             $search_cond = "%" . $arrFiltro["search"] . "%";
-            $fecha_ini = $arrFiltro["f_ini"];
-            $fecha_fin = $arrFiltro["f_fin"];
+            $fecha_ini = $arrFiltro["f_ini"] . " 00:00:00";
+            $fecha_fin = $arrFiltro["f_fin"] . " 23:59:59";
             $carrera = $arrFiltro["carrera"];
             $codigocan = "%" . $arrFiltro["codigocan"] . "%";
             $comando->bindParam(":search", $search_cond, \PDO::PARAM_STR);
@@ -184,7 +168,7 @@ class Aspirante extends \yii\db\ActiveRecord {
                 $comando->bindParam(":fec_ini", $fecha_ini, \PDO::PARAM_STR);
                 $comando->bindParam(":fec_fin", $fecha_fin, \PDO::PARAM_STR);
             }
-            $comando->bindParam(":codigocan", $codigocan, \PDO::PARAM_STR);
+           // $comando->bindParam(":codigocan", $codigocan, \PDO::PARAM_STR);
         }        
         $resultData = $comando->queryAll();
         $dataProvider = new ArrayDataProvider([

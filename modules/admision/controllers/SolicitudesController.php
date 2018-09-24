@@ -537,7 +537,7 @@ class SolicitudesController extends \app\components\CController {
                             $mod_solinsxdoc3->sdoc_estado_logico = "1";
 
                             if ($mod_solinsxdoc3->save()) {
-                                if ($es_extranjero == "1") {
+                                if ($es_extranjero == "1" or (empty($es_extranjero))) {
                                     $mod_solinsxdoc4 = new SolicitudinsDocumento();
                                     $mod_solinsxdoc4->sins_id = $sins_id;
                                     $mod_solinsxdoc4->int_id = $interesado_id;
