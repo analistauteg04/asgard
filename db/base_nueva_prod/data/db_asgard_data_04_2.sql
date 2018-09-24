@@ -74,7 +74,6 @@ INSERT INTO `objeto_modulo` (`omod_id`, `mod_id`, `omod_padre_id`, `omod_nombre`
 (54, 1, 18, 'Eliminar Permiso', 'S', '0', '', '', '', 'permisos/delete', 1, '0', 'grupo', '1', '2018-09-15 22:48:06', NULL, '1'),
 (55, 1, 35, 'Eliminar Modulo', 'S', '0', '', '', '', 'modulos/delete', 1, '0', 'modulo', '1', '2018-09-15 22:48:06', NULL, '1'),
 (56, 1, 43, 'Eliminar SubModulo', 'S', '0', '', '', '', 'objetomodulos/delete', 1, '0', 'objetomodulo', '1', '2018-09-15 22:48:06', NULL, '1'),
-
 (57, 2, 57, 'Contactos', 'P', '0', '', '', '', 'admision/contactos/index', 1, '1', 'contacto', '1', '2018-09-18 00:29:05', NULL, '1'),
 (58, 2, 57, 'Nuevo Contacto', 'S', '0', '', '', '', 'admision/contactos/new', 1, '0', 'contacto', '1', '2018-09-18 01:00:12', NULL, '1'),
 (59, 2, 57, 'Nuevo Contacto', 'A', '0', '', '', '', 'admision/contactos/new', 1, '1', 'contacto', '1', '2018-09-18 01:03:59', NULL, '1'),
@@ -83,7 +82,6 @@ INSERT INTO `objeto_modulo` (`omod_id`, `mod_id`, `omod_padre_id`, `omod_nombre`
 (62, 2, 57, 'Editar Contacto', 'S', '0', '', '', '', 'admision/contactos/edit', 1, '0', 'contacto', '1', '2018-09-18 01:13:20', NULL, '1'),
 (63, 2, 61, 'Editar Contacto', 'A', '0', '', '', '', 'admision/contactos/edit', 1, '1', 'contacto', '1', '2018-09-18 01:15:00', NULL, '1'),
 (64, 2, 62, 'Actualizar Contacto', 'A', '0', '', '', '', 'admision/contactos/update', 1, '1', 'contacto', '1', '2018-09-18 01:16:57', NULL, '1'),
-
 (65, 2, 65, 'Oportunidades', 'P', '0', '', '', '', 'admision/oportunidades/index', 1, '1', 'oportunidad', '1', '2018-09-18 00:29:05', NULL, '1'),
 (66, 2, 73, 'Nuevo Oportunidad', 'S', '0', '', '', '', 'admision/oportunidades/newoportunidadxcontacto', 1, '0', 'oportunidad', '1', '2018-09-18 01:00:12', NULL, '1'),
 (67, 2, 73, 'Nuevo Oportunidad', 'A', '0', '', '', '', 'admision/oportunidades/newoportunidadxcontacto', 1, '1', 'oportunidad', '1', '2018-09-18 01:03:59', NULL, '1'),
@@ -103,14 +101,16 @@ INSERT INTO `objeto_modulo` (`omod_id`, `mod_id`, `omod_padre_id`, `omod_nombre`
 (81, 2, 79, 'Crear Solicitud', 'A', '0', '', '', '', 'admision/solicitudes/listarsolicitudxinteresado', 1, '1', 'Solicitudes', '1', '2018-09-22 14:07:01', NULL, '1'),
 (82, 2, 80, 'Guardar Solicitud Inscripcion', 'A', '0', '', '', '', 'admision/solicitudes/new', '1', '1', 'Solicitudes', '1', '2018-09-22 14:07:01', NULL, '1'),
 (83, 2, 83, 'Solicitudes', 'P', '0', '', '', '', 'admision/solicitudes/index', '1', '1', 'Solicitudes', '1', '2018-09-22 14:07:01', NULL, '1'),
-(84, 4, 84, 'Solicitudes', 'P', '0', '', '', '', 'academico/aspirantes/index', '1', '1', 'Academico', '1', '2018-09-22 14:07:01', NULL, '1'),
+(84, 4, 84, 'Solicitudes', 'P', '0', '', '', '', 'academico/admitidos/index', '1', '1', 'Academico', '1', '2018-09-22 14:07:01', NULL, '1'),
 (85, 3, 85, 'Listar Pagos', 'P', '0', '', '', '', 'financiero/pagos/index', '1', '1', 'Pagos', '1', '2018-09-22 14:07:01', NULL, '1'),
 (86, 3, 86, 'Registro Pagos por Colecturia', 'P', '0', '', '', '', 'financiero/pagos/index', '1', '1', 'Pagos', '1', '2018-09-22 14:07:01', NULL, '1'),
 (87, 3, 87, 'Listar Pagos Cargados', 'P', '0', '', '', '', 'financiero/pagos/indexadm', '1', '1', 'Pagos', '1', '2018-09-22 14:07:01', NULL, '1'),
 (88, 3, 79, 'Listar Pagos Solicitud', 'S', '0', '', '', '', 'financiero/pagos/listarpagosolicitud', '1', '1', 'Pagos', '1', '2018-09-22 14:07:01', NULL, '1'),
 (89, 3, 85, 'Validar Pago Carga', 'S', '0', '', '', '', 'financiero/pagos/validarpagocarga', '1', '1', 'Pagos', '1', '2018-09-22 14:07:01', NULL, '1'),
 (90, 3, 85, 'Cargar Documentos Pagos', 'S', '0', '', '', '', 'financiero/pagos/cargardocpagos', '1', '1', 'Pagos', '1', '2018-09-22 14:07:01', NULL, '1'),
-(91, 3, 84, 'Ver Solicitud', 'S', '0', '', '', '', 'admision/solicitudes/view', '1', '1', 'Solicitudes', '1', '2018-09-22 14:07:01', NULL, '1');
+(91, 4, 84, 'Ver Solicitud', 'S', '0', '', '', '', 'admision/solicitudes/view', '1', '1', 'Solicitudes', '1', '2018-09-22 14:07:01', NULL, '1'),
+(92, 4, 84, 'Metodo de Ingreso', 'S', '0', '', '', '', 'academico/matriculacion/newmetodoingreso', '1', '1', 'Solicitudes', '1', '2018-09-22 14:07:01', NULL, '1'),
+(93, 4, 84, 'Homologacion', 'S', '0', '', '', '', 'academico/matriculacion/newhomologacion', '1', '1', 'Solicitudes', '1', '2018-09-22 14:07:01', NULL, '1');
 -- --------------------------------------------------------
 --
 -- Volcado de datos para la tabla `OBMO_ACCI`
@@ -236,9 +236,7 @@ INSERT INTO `grup_obmo` (`gmod_id`, `gru_id`, `omod_id`, `gmod_estado`,  `gmod_e
 (70, 1, 70, '1', '1'),
 (71, 1, 71, '1', '1'),
 (72, 1, 72, '1', '1'),
-
 (73, 1, 73, '1', '1'),
-
 (74, 1, 74, '1', '1'),
 (75, 1, 75, '1', '1'),
 (76, 1, 76, '1', '1'),
@@ -255,7 +253,11 @@ INSERT INTO `grup_obmo` (`gmod_id`, `gru_id`, `omod_id`, `gmod_estado`,  `gmod_e
 (87, 1, 87, '1', '1'),
 (88, 1, 88, '1', '1'),
 (89, 1, 89, '1', '1'),
-(90, 1, 90, '1', '1');
+(90, 1, 90, '1', '1'),
+(91, 1, 91, '1', '1'),
+(92, 1, 92, '1', '1'),
+(93, 1, 93, '1', '1');
+
 
 -- --------------------------------------------------------
 --
@@ -354,4 +356,7 @@ INSERT INTO `grup_obmo_grup_rol` (`gogr_id`, `grol_id`, `gmod_id`, `gogr_estado`
 (87, 1, 87, '1', '1'),
 (88, 1, 88, '1', '1'),
 (89, 1, 89, '1', '1'),
-(90, 1, 90, '1', '1');
+(90, 1, 90, '1', '1'),
+(91, 1, 91, '1', '1'),
+(92, 1, 92, '1', '1'),
+(93, 1, 93, '1', '1');
