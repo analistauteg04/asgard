@@ -1,6 +1,6 @@
 
 $(document).ready(function () {
-    
+
 
     $('#cmb_ninteres').change(function () {
         var link = $('#txth_base').val() + "/solicitudinscripcion/create";
@@ -9,7 +9,7 @@ $(document).ready(function () {
         arrParams.getmodalidad = true;
         requestHttpAjax(link, arrParams, function (response) {
             if (response.status == "OK") {
-                data = response.message;               
+                data = response.message;
                 setComboData(data.modalidad, "cmb_modalidad");
                 var arrParams = new Object();
                 if (data.modalidad.length > 0) {
@@ -293,58 +293,6 @@ $(document).ready(function () {
             }, true);
         }
     });
-    
-    /*** BORRAR DESPUES ***/
-    $('#sendInscripcion').click(function () {
-        var link = $('#txth_base').val() + "/admision/solicitudes/save";
-        var arrParams = new Object();
-        arrParams.persona_id = $('#txth_ids').val();
-        arrParams.int_id = $('#txth_intId').val();
-        arrParams.ninteres = $('#cmb_ninteres').val();
-        arrParams.modalidad = $('#cmb_modalidad').val();
-        arrParams.metodoing = $('#cmb_metodos').val();
-        arrParams.carrera = $('#cmb_carrera').val();
-        arrParams.arc_doc_titulo = $('#txth_doc_titulo').val();
-        arrParams.arc_doc_dni = $('#txth_doc_dni').val();
-        arrParams.arc_doc_certvota = $('#txth_doc_certvota').val();
-        arrParams.arc_doc_foto = $('#txth_doc_foto').val();
-        arrParams.arc_extranjero = $('#txth_extranjero').val();
-        arrParams.arc_nacional = $('#txth_nac').val();
-        arrParams.arc_doc_beca = $('#txth_doc_beca').val();
-        arrParams.emp_id = 1;    
-        if ($('input[name=opt_declara_Dctosi]:checked').val() == 1) {
-            arrParams.descuento_id = $('#cmb_descuento').val();
-            arrParams.marcadescuento = '1';
-        }
-        if ($('input[name=opt_declara_si]:checked').val() == 1) {
-            arrParams.beca = 1;
-        } else {
-            arrParams.beca = 0;
-        }
-
-        if ($('input[name=opt_subir_si]:checked').val() == 1) {
-            arrParams.subirDocumentos = 1;
-        } else {
-            arrParams.subirDocumentos = 0;
-        }
-
-        if (!validateForm()) {
-            requestHttpAjax(link, arrParams, function (response) {
-                showAlert(response.status, response.label, response.message);
-                setTimeout(function () {
-                    if (arrParams.persona_id == '0')
-                    {
-                        window.location.href = $('#txth_base').val() + "/admision/interesados/index";
-                    } else
-                    {
-                        window.location.href = $('#txth_base').val() + "/admision/solicitudes/listarsolicitudxinteresado?id="+ arrParams.int_id;
-                    }
-                }, 5000);
-            }, true);
-        }
-    });
-    /*** BORRAR DESPUES ***/
-        
 
     /**
      * Function evento change de la lista de valores de "Resultado" de las pantallas de 
@@ -532,13 +480,13 @@ $(document).ready(function () {
             }, true);
         }
     });
-    
+
     /***BORRAR DESPUES ***/
     $('#sendDocumentos').click(function () {
         var link = $('#txth_base').val() + "/admision/solicitudes/savedocumentos";
         var arrParams = new Object();
         arrParams.sins_id = $('#txth_ids').val();
-        arrParams.persona_id = $('#txth_idp').val();        
+        arrParams.persona_id = $('#txth_idp').val();
         arrParams.interesado_id = $('#txth_int_id').val();
         arrParams.arc_extranjero = $('#txth_extranjero').val();
         arrParams.arc_doc_titulo = $('#txth_doc_titulo').val();
@@ -605,9 +553,9 @@ $(document).ready(function () {
             }
         }, true);
     });
-    
+
     /**** BORRAR ****/
-    $('#btnNewSolicitud').click(function () {        
+    $('#btnNewSolicitud').click(function () {
         var per_id = $('#txth_per_id').val();
         window.location.href = $('#txth_base').val() + "/admision/solicitudes/new?per_id=" + per_id;
     });
@@ -641,7 +589,7 @@ function actualizarGrid() {
     var estadoSol = $('#cmb_estado option:selected').val();
     var f_ini = $('#txt_fecha_ini').val();
     var f_fin = $('#txt_fecha_fin').val();
-    
+
     //Buscar almenos una clase con el nombre para ejecutar
     if (!$(".blockUI").length) {
         showLoadingPopup();
@@ -691,11 +639,11 @@ function NewSolicitud() {
     var per_id = $('#txth_per_id').val();
     window.location.href = $('#txth_base').val() + "/admision/solicitudes/new?per_id=" + per_id;
 }
-//Guarda Solicitud de inscripción
-function Save() {
+function save() {
     var link = $('#txth_base').val() + "/admision/solicitudes/save";
     var arrParams = new Object();
     arrParams.persona_id = $('#txth_ids').val();
+    arrParams.int_id = $('#txth_intId').val();
     arrParams.ninteres = $('#cmb_ninteres').val();
     arrParams.modalidad = $('#cmb_modalidad').val();
     arrParams.metodoing = $('#cmb_metodos').val();
@@ -710,6 +658,7 @@ function Save() {
     arrParams.emp_id = 1;
     if ($('input[name=opt_declara_Dctosi]:checked').val() == 1) {
         arrParams.descuento_id = $('#cmb_descuento').val();
+        arrParams.marcadescuento = '1';
     }
     if ($('input[name=opt_declara_si]:checked').val() == 1) {
         arrParams.beca = 1;
@@ -727,19 +676,19 @@ function Save() {
         requestHttpAjax(link, arrParams, function (response) {
             showAlert(response.status, response.label, response.message);
             setTimeout(function () {
-                if (arrParams.persona_id > '0')
+                if (arrParams.persona_id == '0')
                 {
-                    window.location.href = $('#txth_base').val() + "/interesado/listarinteresados";
+                    window.location.href = $('#txth_base').val() + "/admision/interesados/index";
                 } else
                 {
-                    window.location.href = $('#txth_base').val() + "/admision/solicitudes/listarsolicitudxinteresado?ids="+ base64_encode(arrParams.persona_id);
+                    window.location.href = $('#txth_base').val() + "/admision/solicitudes/listarsolicitudxinteresado?id=" + arrParams.int_id;
                 }
             }, 5000);
         }, true);
     }
 }
 //Guarda Documentos de solicitudes de inscripción.
-function SaveDocumentos(){
+function SaveDocumentos() {
     var link = $('#txth_base').val() + "/admision/solicitudes/savedocumentos";
     var arrParams = new Object();
     arrParams.sins_id = $('#txth_ids').val();
@@ -764,7 +713,7 @@ function SaveDocumentos(){
                 window.location.href = $('#txth_base').val() + "/admision/solicitudes/listarsolicitudxinteresado?ids=" + base64_encode(arrParams.persona_id);
             }, 5000);
         }, true);
-    }    
+    }
 }
 //Guarda la Pre-revisión de solicitudes de inscripción.
 function SavePrerevision() {

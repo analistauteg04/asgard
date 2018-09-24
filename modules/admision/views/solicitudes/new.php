@@ -119,7 +119,6 @@ $_SESSION['persona_solicita'] = base64_encode($_GET['ids']);
             </div>
         </div>
     </div>
-
     <div class="col-md-12 col-xs-12 col-sm-12 col-lg-12" id="divBeca" style="display: none">        
         <div class="form-group">
             <label for="txt_declararbeca" class="col-sm-5 control-label"><?= admision::t("Solicitudes", "Apply Cala Foundation scholarship") ?></label>
@@ -128,8 +127,7 @@ $_SESSION['persona_solicita'] = base64_encode($_GET['ids']);
                 <label><input type="radio" name="opt_declara_no"  id="opt_declara_no" value="2" checked><b>No</b></label>                                              
             </div>            
         </div>        
-    </div> 
-
+    </div>
     <div class="col-md-12 col-xs-12 col-sm-12 col-lg-12" id="divAplicaDescuento" style="display: block">               
         <div class="form-group">
             <label for="txt_declararDescuento" class="col-sm-5 control-label"><?= financiero::t("Pagos", "Apply Discount") ?></label>
@@ -150,12 +148,5 @@ $_SESSION['persona_solicita'] = base64_encode($_GET['ids']);
             </div>    
         </div>  
     </div>     
-
-    <div class="row"> 
-        <div class="col-md-9"></div>
-        <div class="col-md-2 col-xs-4 col-lg-2 col-sm-2">
-            <a id="sendInscripcion" href="javascript:" class="btn btn-primary btn-block"> <?= Yii::t("accion", "Save") ?> </a>
-        </div>
-    </div>
-    <?= Html::hiddenInput('txth_extranjero', $txth_extranjero, ['id' => 'txth_extranjero']); ?>
+<?= Html::hiddenInput('txth_extranjero', $txth_extranjero, ['id' => 'txth_extranjero']); ?>
 </form>
