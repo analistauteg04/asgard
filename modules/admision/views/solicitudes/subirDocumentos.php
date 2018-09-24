@@ -14,6 +14,7 @@ $leyenda = '<div class="col-md-12 col-xs-12 col-sm-12 col-lg-12">
 
 session_start();
 $_SESSION['persona_solicita'] = base64_encode($per_id);  
+
 ?>
 <?= Html::hiddenInput('txth_idp', base64_encode($per_id), ['id' => 'txth_idp']); ?>
 <?= Html::hiddenInput('txth_ids', base64_encode($sins_id), ['id' => 'txth_ids']); ?>

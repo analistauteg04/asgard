@@ -314,8 +314,7 @@ class SolicitudInscripcion extends \app\modules\admision\components\CActiveRecor
         $con1 = \Yii::$app->db_academico;
         $con2 = \Yii::$app->db;
         $con3 = \Yii::$app->db_facturacion;
-        $estado = 1;
-        $columnsAdd = "";
+        $estado = 1;        
 
         if (isset($arrFiltro) && count($arrFiltro) > 0) {
             if ($arrFiltro['f_ini'] != "" && $arrFiltro['f_fin'] != "") {
@@ -333,14 +332,16 @@ class SolicitudInscripcion extends \app\modules\admision\components\CActiveRecor
                         sins.eaca_id,
                         eac.eaca_nombre as carrera,
                         rsol.rsin_nombre as estado,
-                        (select count(*) numdocumentos from " . $con->dbname . ".solicitudins_documento sid where sid.sins_id = sins.sins_id) as numDocumentos
+                        (select count(*) numdocumentos from " . $con->dbname . ".solicitudins_documento sid where sid.sins_id = sins.sins_id) as numDocumentos,
+                        (case when op.opag_estado_pago = 'S' then 'Pagado' else 'Pendiente' end) as estado_pago
                     FROM 
-                        db_captacion.interesado as inte
-                        JOIN db_captacion.solicitud_inscripcion as sins on sins.int_id = inte.int_id                    
-                        JOIN db_academico.unidad_academica as uaca on sins.uaca_id = uaca.uaca_id                     
-                        JOIN db_captacion.res_sol_inscripcion as rsol on rsol.rsin_id = sins.rsin_id
-                        JOIN db_academico.estudio_academico as eac on sins.eaca_id = eac.eaca_id
-                        JOIN db_captacion.metodo_ingreso as ming on sins.ming_id = ming.ming_id
+                        " . $con->dbname . ".interesado as inte
+                        JOIN " . $con->dbname . ".solicitud_inscripcion as sins on sins.int_id = inte.int_id                    
+                        JOIN " . $con1->dbname . ".unidad_academica as uaca on sins.uaca_id = uaca.uaca_id                     
+                        JOIN " . $con->dbname . ".res_sol_inscripcion as rsol on rsol.rsin_id = sins.rsin_id
+                        JOIN " . $con1->dbname . ".estudio_academico as eac on sins.eaca_id = eac.eaca_id
+                        JOIN " . $con->dbname . ".metodo_ingreso as ming on sins.ming_id = ming.ming_id
+                        JOIN " . $con3->dbname . ".orden_pago as op on op.sins_id = sins.sins_id
                     WHERE  
                         $str_search
                         inte.int_id = :int_id AND
@@ -353,8 +354,10 @@ class SolicitudInscripcion extends \app\modules\admision\components\CActiveRecor
                         inte.int_estado=:estado AND                     
                         rsol.rsin_estado_logico=:estado AND
                         uaca.uaca_estado_logico = :estado AND
-                        eac.eaca_estado = :estado
-                        ORDER BY fecha_solicitud DESC
+                        eac.eaca_estado = :estado AND
+                        op.opag_estado = :estado AND
+                        op.opag_estado_logico = :estado
+                    ORDER BY fecha_solicitud DESC
                "
                 ;
         
@@ -398,7 +401,7 @@ class SolicitudInscripcion extends \app\modules\admision\components\CActiveRecor
         $con1 = \Yii::$app->db_academico;
         $estado = 1;
         $sql = "
-                SELECT 
+                SELECT
                     per.per_cedula as per_dni,
                     per.per_id,
                     concat(ifnull(per.per_pri_nombre,'') ,' ', ifnull(per.per_seg_nombre,'')) as per_nombres,
