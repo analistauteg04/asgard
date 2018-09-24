@@ -3,13 +3,13 @@
 namespace app\modules\academico\controllers;
 
 use Yii;
-use app\modules\academico\models\Aspirante;
+use app\modules\academico\models\Admitido;
 use app\modules\academico\models\EstudioAcademico;
 use app\modules\admision\models\Interesado;
 use yii\helpers\ArrayHelper;
 
 
-class AspirantesController extends \app\components\CController {
+class AdmitidosController extends \app\components\CController {
     public function actionIndex() {
         $per_id = @Yii::$app->session->get("PB_perid");
         $model_interesado = new Interesado();
@@ -23,13 +23,13 @@ class AspirantesController extends \app\components\CController {
             $arrSearch["carrera"] = $data['carrera'];
             $arrSearch["search"] = $data['search'];
             $arrSearch["codigocan"] = $data['codigocan'];
-            $mod_aspirante = Aspirante::getAspirantes($arrSearch);
+            $mod_aspirante = Admitido::getAdmitidos($arrSearch);
 
             return $this->renderPartial('index-grid', [
                         "model" => $mod_aspirante,                        
             ]);
         } else {
-            $mod_aspirante = Aspirante::getAspirantes();
+            $mod_aspirante = Admitido::getAdmitidos();
         }
         if (Yii::$app->request->isAjax) {//
             $data = Yii::$app->request->get();

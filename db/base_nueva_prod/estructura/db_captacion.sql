@@ -172,16 +172,16 @@ create table if not exists `solicitudins_documento` (
 
 -- --------------------------------------------------------
 --
--- Estructura de tabla para la tabla `aspirante` 
+-- Estructura de tabla para la tabla `admitido` 
 --
-create table if not exists `aspirante` (
- `asp_id` bigint(20) not null auto_increment primary key,
+create table if not exists `admitido` (
+ `adm_id` bigint(20) not null auto_increment primary key,
  `int_id` bigint(20) not null,
- `asp_estado_aspirante` varchar(1) null,
- `asp_estado` varchar(1) not null,
- `asp_fecha_creacion` timestamp not null default current_timestamp,
- `asp_fecha_modificacion` timestamp null default null,
- `asp_estado_logico` varchar(1) not null, 
+ `adm_estado_admitido` varchar(1) null,
+ `adm_estado` varchar(1) not null,
+ `adm_fecha_creacion` timestamp not null default current_timestamp,
+ `adm_fecha_modificacion` timestamp null default null,
+ `adm_estado_logico` varchar(1) not null, 
  foreign key (int_id) references `interesado`(int_id) 
 );
 
