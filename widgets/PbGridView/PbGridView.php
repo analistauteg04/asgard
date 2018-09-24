@@ -120,7 +120,6 @@ class PbGridView extends GridView {
         }
 
         return "<thead>\n" . $content . "\n</thead>";
-        //\app\models\Utilities::putMessageLogFile($table);
     }
     
     /**

@@ -118,7 +118,6 @@ class UsuarioController extends CController
         if (Yii::$app->request->isAjax) {
             $model = new Usuario();
             $data = Yii::$app->request->post();
-            //Utilities::putMessageLogFile($data);
             $accion = isset($data['ACCION']) ? $data['ACCION'] : "";
             if ($accion == "Create") {
                 //Nuevo Registro
@@ -178,7 +177,6 @@ class UsuarioController extends CController
     public function actionUpdate() {
         $usuADO = new Usuario();
         $Ids = isset($_GET['id']) ? base64_decode($_GET['id']) : NULL;
-        //Utilities::putMessageLogFile($Ids);
         if (Yii::$app->request->isAjax) {
             $data = Yii::$app->request->post();
         }

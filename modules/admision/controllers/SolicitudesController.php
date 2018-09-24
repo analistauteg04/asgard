@@ -149,7 +149,6 @@ class SolicitudesController extends \app\components\CController {
                 return;
             }
             if (isset($data["getmodalidad"])) {
-                \app\models\Utilities::putMessageLogFile('nivel interes: ' . $data["nint_id"]);
                 $modalidad = $mod_modalidad->consultarModalidad($data["nint_id"]);
                 $message = array("modalidad" => $modalidad);
                 return Utilities::ajaxResponse('OK', 'alert', Yii::t('jslang', 'Success'), 'false', $message);
@@ -295,9 +294,7 @@ class SolicitudesController extends \app\components\CController {
                     }
                     if ($subirDocumentos == 0) {
                         $mod_solins->save();
-                        \app\models\Utilities::putMessageLogFile($mod_solins->getErrors());
                         $id_sins = $mod_solins->sins_id;
-                        \app\models\Utilities::putMessageLogFile('solicitud: ' . $id_sins);
                     }
                 } else {
                     //Solicitud ya se encuentra creada.
@@ -512,9 +509,7 @@ class SolicitudesController extends \app\components\CController {
                 $beca_archivo = Yii::$app->params["documentFolder"] . "solicitudinscripcion/" . $per_id . "/doc_beca_per_" . $per_id . "." . $typeFile;
             }
             if (!empty($titulo_archivo) && !empty($dni_archivo) && !empty($foto_archivo)) {
-                Utilities::putMessageLogFile('aqui entro');
                 if (!empty($titulo_archivo)) {
-                    Utilities::putMessageLogFile("s1");
                     $mod_solinsxdoc1 = new SolicitudinsDocumento();
                     //1-Título, 2-DNI,3-Cert votación, 4-Foto, 5-Doc-Beca                       
                     $mod_solinsxdoc1->sins_id = $sins_id;
@@ -523,9 +518,7 @@ class SolicitudesController extends \app\components\CController {
                     $mod_solinsxdoc1->sdoc_archivo = $titulo_archivo;
                     $mod_solinsxdoc1->sdoc_estado = "1";
                     $mod_solinsxdoc1->sdoc_estado_logico = "1";
-                    Utilities::putMessageLogFile('sol:' . $sins_id);
                     if ($mod_solinsxdoc1->save()) {
-                        Utilities::putMessageLogFile("s2");
                         $mod_solinsxdoc2 = new SolicitudinsDocumento();
                         $mod_solinsxdoc2->sins_id = $sins_id;
                         $mod_solinsxdoc2->int_id = $interesado_id;
@@ -535,7 +528,6 @@ class SolicitudesController extends \app\components\CController {
                         $mod_solinsxdoc2->sdoc_estado_logico = "1";
 
                         if ($mod_solinsxdoc2->save()) {
-                            Utilities::putMessageLogFile("s3");
                             $mod_solinsxdoc3 = new SolicitudinsDocumento();
                             $mod_solinsxdoc3->sins_id = $sins_id;
                             $mod_solinsxdoc3->int_id = $interesado_id;
@@ -545,7 +537,6 @@ class SolicitudesController extends \app\components\CController {
                             $mod_solinsxdoc3->sdoc_estado_logico = "1";
 
                             if ($mod_solinsxdoc3->save()) {
-                                Utilities::putMessageLogFile("s4");
                                 if ($es_extranjero == "1") {
                                     $mod_solinsxdoc4 = new SolicitudinsDocumento();
                                     $mod_solinsxdoc4->sins_id = $sins_id;
@@ -556,11 +547,9 @@ class SolicitudesController extends \app\components\CController {
                                     $mod_solinsxdoc4->sdoc_estado_logico = "1";
 
                                     if (!$mod_solinsxdoc4->save()) {
-                                        Utilities::putMessageLogFile("1");
                                         throw new Exception('Error doc certvot no creado.');
                                     }
                                 }
-                                Utilities::putMessageLogFile("s5");
                                 if ($beca == "1") {
                                     $mod_solinsxdoc5 = new SolicitudinsDocumento();
                                     $mod_solinsxdoc5->sins_id = $sins_id;
@@ -574,15 +563,12 @@ class SolicitudesController extends \app\components\CController {
                                     }
                                 }
                             } else {
-                                Utilities::putMessageLogFile("2");
                                 throw new Exception('Error doc foto no creado.');
                             }
                         } else {
-                            Utilities::putMessageLogFile("3");
                             throw new Exception('Error doc dni no creado.');
                         }
                     } else {
-                        Utilities::putMessageLogFile("4");
                         throw new Exception('Error doc titulo no creado.' . $mensaje);
                     }
                     $transaction->commit();
@@ -592,14 +578,11 @@ class SolicitudesController extends \app\components\CController {
                     );
                     return Utilities::ajaxResponse('OK', 'alert', Yii::t("jslang", "Sucess"), false, $message);
                 } else {
-                    Utilities::putMessageLogFile($mod_solins->getErrors());
                     throw new Exception('Tiene que subir todos los documentos.Titulo:' . isset($data["arc_doc_titulo"]) . 'Persona:' . $per_id);
                 }
             }
         } catch (Exception $ex) {
-            Utilities::putMessageLogFile("55");
             $transaction->rollback();
-            //Utilities::putMessageLogFile($mod_solins->getErrors());
             $message = array(
                 "wtmessage" => $ex->getMessage(),
                 "title" => Yii::t('jslang', 'Error'),
@@ -634,10 +617,8 @@ class SolicitudesController extends \app\components\CController {
                 if ($banderapreaprueba == 0) {  //etapa de Aprobación.                                    
                     if ($resultado == 2) {
                         //consultar estado del pago.     
-                        Utilities::putMessageLogFile('solicitud:' . $sins_id);
                         $resp_pago = $mod_ordenpago->consultaOrdenPago($sins_id);
                         if ($resp_pago["opag_estado_pago"] == 'S') {
-                            Utilities::putMessageLogFile('solicitud:' . $resp_pago["opag_estado_pago"]);
                             $respsolins = $mod_solins->apruebaSolicitud($sins_id, $resultado, $observacion, $banderapreaprueba, $respusuario['usu_id']);
                             if ($respsolins) {
                                 //Se genera id de aspirante y correo de bienvenida.                                
@@ -649,7 +630,6 @@ class SolicitudesController extends \app\components\CController {
                                     //Se asigna al interesado como aspirante                                    
                                     $resp_asp = $mod_ordenpago->insertarAspirante($int_id);
                                     if ($resp_asp) {
-                                        Utilities::putMessageLogFile('inserción');
                                         $asp = $resp_asp;
                                         $continua = 1;
                                     }
@@ -663,7 +643,6 @@ class SolicitudesController extends \app\components\CController {
                                     //Se obtiene el curso para luego registrarlo.
                                     if ($resp_sol) {
                                         $mod_persona = new Persona();
-                                        \app\models\Utilities::putMessageLogFile('perId:' . $per_id);
                                         $resp_persona = $mod_persona->consultaPersonaId($per_id);
                                         $correo = $resp_persona["usu_user"];
                                         $apellidos = $resp_persona["per_pri_apellido"];
@@ -831,7 +810,6 @@ class SolicitudesController extends \app\components\CController {
                                 $ok = "0";
                             }
                             if ($ok == "1") {
-                                Utilities::putMessageLogFile($sins_id);
                                 $link = Url::base(true);
                                 $tituloMensaje = Yii::t("interesado", "UTEG - Registration Online");
                                 $asunto = Yii::t("interesado", "UTEG - Registration Online");

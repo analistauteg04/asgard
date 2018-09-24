@@ -35,7 +35,6 @@ class ConsumirWsdl {
             'login' => $this->usuario,
             'password' => $this->clave
         );
-        //Utilities::putMessageLogFile($options);
         try {
             //$cliente = new SoapClient($wdsl);
             $cliente = new SoapClient($wdsl, $options);
@@ -44,16 +43,12 @@ class ConsumirWsdl {
             $arroout["error"] = 0;
             $arroout["message"] = 'Respuesta Ok WebService: ' . $metodo;
             $arroout["data"] = $response;
-            Utilities::putMessageLogFile($arroout);
             return $arroout;
         } catch (\SoapFault $e) {
-            Utilities::putMessageLogFile($e->getMessage());
-            //Utilities::putMessageLogFile($cliente->__getFunctions());
             $arroout["status"] = "NO";
             $arroout["error"] = $e->getCode();
             $arroout["message"] = $e->getMessage();
             $arroout["data"] = null;
-             Utilities::putMessageLogFile($arroout);
             return $arroout;
         }
         
@@ -71,7 +66,6 @@ class ConsumirWsdl {
             'id_grupo' => 0
         );       
         $param=array();
-        //Utilities::putMessageLogFile($param);
         $metodo = 'obtener_idiomas';
         return ConsumirWsdl::webServiceCliente($wdsl, $param, $metodo);
     }

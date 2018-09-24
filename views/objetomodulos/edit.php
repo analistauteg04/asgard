@@ -5,7 +5,6 @@ use yii\helpers\Html;
 use app\models\Aplicacion;
 use app\models\Modulo;
 use app\models\ObjetoModulo;
-app\models\Utilities::putMessageLogFile($arr_omodulos);
 ?>
 
 <form class="form-horizontal">
