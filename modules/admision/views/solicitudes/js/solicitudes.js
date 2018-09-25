@@ -1,5 +1,11 @@
 
 $(document).ready(function () {
+    var condiciontitulo = new Array();
+    var condiciondni = new Array();
+    var len = condiciontitulo.length;
+    var len1 = condiciondni.length;
+    var obstitulo = "";
+    var obsdni = "";
 
     $('input[name=opt_tipo_DNI]:radio').change(function(){
         if($(this).val() == 1){//ced
@@ -254,59 +260,6 @@ $(document).ready(function () {
     });
 
     /**
-     * Function evento click en botón de Aprobación
-     * @author  Grace Viteri <analistadesarrollo01@uteg.edu.ec>
-     * @param   
-     * @return  Grabar la Aprobación.
-     */
-    /****BORRAR DESPUÉS*****/
-    $('#btn_Aprobarsolicitud').click(function () {
-        var arrParams = new Object();
-        var link = $('#txth_base').val() + "/admision/solicitudes/saverevision";
-        var condiciontitulo = new Array();
-        var condiciondni = new Array();
-        var len = condiciontitulo.length;
-        var len1 = condiciondni.length;
-        var obstitulo = "";
-        var obsdni = "";
-        arrParams.sins_id = $('#txth_sins_id').val();
-        arrParams.int_id = $('#txth_int_id').val();
-        arrParams.resultado = $('#cmb_revision').val();
-        arrParams.observacion = $('#txt_observacion').val();
-        arrParams.per_id = $('#txth_per_id').val();
-
-        if ($('#cmb_revision').val() == "4") {
-            arreglo_check();
-            arrParams.condicionestitulo = condiciontitulo;
-            arrParams.condicionesdni = condiciondni;
-            //Condiciones que indican que se ha seleccionado un(os) checkboxes.
-            if (len > 0) {
-                arrParams.titulo = 1;
-                arrParams.observacion = obstitulo;
-            }
-            if (len1 > 0) {
-                arrParams.dni = 1;
-                if (arrParams.observacion == "") {
-                    arrParams.observacion = obsdni;
-                } else {
-                    arrParams.observacion = arrParams.observacion + "<br/>" + obsdni;
-                }
-            }
-        }
-        arrParams.banderapreaprueba = '0';
-        if (!validateForm()) {
-            requestHttpAjax(link, arrParams, function (response) {
-                showAlert(response.status, response.label, response.message);
-
-                setTimeout(function () {
-                    parent.window.location.href = $('#txth_base').val() + "/admision/solicitudes/index";
-                }, 2000);
-
-            }, true);
-        }
-    });
-
-    /**
      * Function evento change de la lista de valores de "Resultado" de las pantallas de 
      *          Pre-Aprobación y Aprobación de Solicitudes.
      * @author  Grace Viteri <analistadesarrollo01@uteg.edu.ec>
@@ -493,35 +446,6 @@ $(document).ready(function () {
         }
     });
 
-    /***BORRAR DESPUES ***/
-    $('#sendDocumentos').click(function () {
-        var link = $('#txth_base').val() + "/admision/solicitudes/savedocumentos";
-        var arrParams = new Object();
-        arrParams.sins_id = $('#txth_ids').val();
-        arrParams.persona_id = $('#txth_idp').val();
-        arrParams.interesado_id = $('#txth_int_id').val();
-        arrParams.arc_extranjero = $('#txth_extranjero').val();
-        arrParams.arc_doc_titulo = $('#txth_doc_titulo').val();
-        arrParams.arc_doc_dni = $('#txth_doc_dni').val();
-        arrParams.arc_doc_certvota = $('#txth_doc_certvota').val();
-        arrParams.arc_doc_foto = $('#txth_doc_foto').val();
-        arrParams.arc_doc_beca = $('#txth_doc_beca').val();
-
-        if ($('input[name=opt_declara_si]:checked').val() == 1) {
-            arrParams.beca = 1;
-        } else {
-            arrParams.beca = 0;
-        }
-        if (!validateForm()) {
-            requestHttpAjax(link, arrParams, function (response) {
-                showAlert(response.status, response.label, response.message);
-                setTimeout(function () {
-                    window.location.href = $('#txth_base').val() + "/admision/solicitudes/listarsolicitudxinteresado?id=" + arrParams.interesado_id;
-                }, 5000);
-            }, true);
-        }
-    });
-
     //Control del div Subida Documentos.
     $('#opt_subir_si').change(function () {
         if ($('#opt_subir_si').val() == 1) {
@@ -565,12 +489,7 @@ $(document).ready(function () {
             }
         }, true);
     });
-
-    /**** BORRAR ****/
-    $('#btnNewSolicitud').click(function () {
-        var per_id = $('#txth_per_id').val();
-        window.location.href = $('#txth_base').val() + "/admision/solicitudes/new?per_id=" + per_id;
-    });
+  
 });
 
 function setComboDataselect(arr_data, element_id, texto) {
@@ -651,6 +570,7 @@ function NewSolicitud() {
     var per_id = $('#txth_per_id').val();
     window.location.href = $('#txth_base').val() + "/admision/solicitudes/new?per_id=" + per_id;
 }
+
 function save() {
     var link = $('#txth_base').val() + "/admision/solicitudes/save";
     var arrParams = new Object();
@@ -728,82 +648,33 @@ function SaveDocumentos() {
         requestHttpAjax(link, arrParams, function (response) {
             showAlert(response.status, response.label, response.message);
             setTimeout(function () {
-                window.location.href = $('#txth_base').val() + "/admision/solicitudes/listarsolicitudxinteresado?ids=" + base64_encode(arrParams.persona_id);
+                window.location.href = $('#txth_base').val() + "/admision/solicitudes/listarsolicitudxinteresado?id=" + arrParams.interesado_id;
             }, 5000);
         }, true);
     }
 }
-//Guarda la Pre-revisión de solicitudes de inscripción.
-function SavePrerevision() {
-    var arrParams = new Object();
-    var link = $('#txth_base').val() + "/admision/solicitudes/saverevision";
-    var condiciontitulo = new Array();
-    var condiciondni = new Array();
-    var len = condiciontitulo.length;
-    var len1 = condiciondni.length;
-    var obstitulo = "";
-    var obsdni = "";
-    arrParams.sins_id = $('#txth_sins_id').val();
-    arrParams.resultado = $('#cmb_revision').val();
-    arrParams.per_id = $('#txth_per_id').val();
 
-    if ($('#cmb_revision').val() == "4") {
-        arreglo_check();
-        arrParams.condicionestitulo = condiciontitulo;
-        arrParams.condicionesdni = condiciondni;
-        //Condiciones que indican que se ha seleccionado un(os) checkboxes.
-        if (len > 0) {
-            arrParams.titulo = 1;
-            arrParams.observacion = obstitulo;
-        }
-        if (len1 > 0) {
-            arrParams.dni = 1;
-            if (arrParams.observacion == "") {
-                arrParams.observacion = obsdni;
-            } else {
-                arrParams.observacion = arrParams.observacion + "<br/>" + obsdni;
-            }
-        }
-    }
-    arrParams.banderapreaprueba = '1';
-    if (!validateForm()) {
-        requestHttpAjax(link, arrParams, function (response) {
-            showAlert(response.status, response.label, response.message);
-
-            setTimeout(function () {
-                parent.window.location.href = $('#txth_base').val() + "/admision/solicitudes/index";
-            }, 2000);
-
-        }, true);
-    }
-}
 
 //Guarda la Revisión final de solicitudes de inscripción.
-function SaveRevision() {
+function Approve() {
     var arrParams = new Object();
-    var link = $('#txth_base').val() + "/admision/solicitudes/saverevision";
-    var condiciontitulo = new Array();
-    var condiciondni = new Array();
-    var len = condiciontitulo.length;
-    var len1 = condiciondni.length;
-    var obstitulo = "";
-    var obsdni = "";
+    var link = $('#txth_base').val() + "/admision/solicitudes/saverevision";  
     arrParams.sins_id = $('#txth_sins_id').val();
     arrParams.int_id = $('#txth_int_id').val();
     arrParams.resultado = $('#cmb_revision').val();
     arrParams.observacion = $('#txt_observacion').val();
     arrParams.per_id = $('#txth_per_id').val();
 
-    if ($('#cmb_revision').val() == "4") {
-        arreglo_check();
+    if ($('#cmb_revision').val() == "4") {               
+        arreglo_check();               
         arrParams.condicionestitulo = condiciontitulo;
-        arrParams.condicionesdni = condiciondni;
+        arrParams.condicionesdni = condiciondni;               
         //Condiciones que indican que se ha seleccionado un(os) checkboxes.
-        if (len > 0) {
+        if (len > 0) {                   
             arrParams.titulo = 1;
             arrParams.observacion = obstitulo;
         }
-        if (len1 > 0) {
+        if (len1 > 0) {                   
             arrParams.dni = 1;
             if (arrParams.observacion == "") {
                 arrParams.observacion = obsdni;
@@ -812,7 +683,7 @@ function SaveRevision() {
             }
         }
     }
-    arrParams.banderapreaprueba = '0';
+    arrParams.banderapreaprueba = '0';        
     if (!validateForm()) {
         requestHttpAjax(link, arrParams, function (response) {
             showAlert(response.status, response.label, response.message);
