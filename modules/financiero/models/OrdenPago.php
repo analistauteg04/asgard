@@ -1041,17 +1041,17 @@ class OrdenPago extends \app\modules\financiero\components\CActiveRecord {
                             opag.opag_subtotal, 
                             opag.opag_iva, 
                             opag.opag_total as precio, 
-                            usu.usu_user as email,
+                            (select usu.usu_user from " . $con2->dbname . ".usuario usu where usu.per_id = per.per_id and usu.usu_estado_logico = '1' and ((usu.usu_estado = '0' and usu.usu_link_activo is not null) or (usu.usu_estado = '1' and ifnull(usu.usu_link_activo,'')=''))) as email,
                             concat(ifnull(per.per_pri_nombre,''), ' ', ifnull(per.per_seg_nombre,'')) as nombres, 
                             concat(ifnull(per.per_pri_apellido,''),' ', ifnull(per.per_seg_apellido,'')) as apellidos, 
                             per.per_cedula as identificacion, 
                             ifnull(per.per_domicilio_telefono, per.per_celular) as telefono, 
                             concat(per.per_domicilio_cpri, ' ', per.per_domicilio_csec, ' ', per.per_domicilio_num) as domicilio, 
                             lpad(opag.sins_id,4,'0') as solicitud, 
-                            eaca_nombre as carrera 
+                            eaca_nombre as carrera                            
                     FROM " . $con->dbname . ".orden_pago opag INNER JOIN " . $con1->dbname . ".solicitud_inscripcion sins on sins.sins_id = opag.sins_id  
                           INNER JOIN " . $con1->dbname . ".interesado inte on inte.int_id = sins.int_id 
-                          INNER JOIN " . $con2->dbname . ".persona per on per.per_id = inte.per_id INNER JOIN " . $con2->dbname . ".usuario usu on usu.per_id = per.per_id 
+                          INNER JOIN " . $con2->dbname . ".persona per on per.per_id = inte.per_id                          
                           INNER JOIN " . $con3->dbname . ".estudio_academico ea on ea.eaca_id = sins.eaca_id 
                     WHERE opag.opag_id = :opag_id 
                           AND opag.opag_estado_pago = :estado_pago 
@@ -1060,12 +1060,10 @@ class OrdenPago extends \app\modules\financiero\components\CActiveRecord {
                           AND sins.sins_estado_logico = :estado
                           AND opag.opag_estado_logico = :estado  
                           AND inte.int_estado = :estado                          
-                          AND per.per_estado = :estado
-                          AND usu.usu_estado = :estado
+                          AND per.per_estado = :estado                          
                           AND ea.eaca_estado = :estado
                           AND inte.int_estado_logico = :estado                          
-                          AND per.per_estado_logico = :estado 
-                          AND usu.usu_estado_logico = :estado 
+                          AND per.per_estado_logico = :estado                           
                           AND ea.eaca_estado_logico = :estado";                   
         }
         $comando = $con->createCommand($sql);
