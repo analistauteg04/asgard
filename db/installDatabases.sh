@@ -1,6 +1,6 @@
 #!/bin/bash
 
-USER='root'
+USER='uteg'
 PASS='Utegadmin2016*'
 CURRENT_DIR=`pwd`
 
