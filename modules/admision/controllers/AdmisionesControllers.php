@@ -466,9 +466,9 @@ class AdmisionesController extends \app\components\CController {
                             $eopo_id = $estado_oportunidad; // En curso por defecto
                             $bact_fecha_registro=$fecha_registro;
                             $bact_fecha_proxima_atencion=$fecha_registro;
-                            
+                            $oact_id =1;
                             $bact_descripcion = (!$nombreoportunidad["Ids"])?'Inicio de Operaciones':'';
-                            $res_actividad=$mod_gestion->insertarActividad($opo_id,$usuario, $padm_id, $eopo_id, $bact_fecha_registro, $bact_descripcion, $bact_fecha_proxima_atencion);
+                            $res_actividad=$mod_gestion->insertarActividad($opo_id,$usuario, $padm_id, $eopo_id, $bact_fecha_registro, $oact_id, $bact_descripcion, $bact_fecha_proxima_atencion);
                             if ($res_actividad) {
                                 $transaction->commit();
                                 $message = array(
@@ -786,12 +786,14 @@ class AdmisionesController extends \app\components\CController {
     public function actionGuardaractividad() {
         $per_id = @Yii::$app->session->get("PB_perid");
         $usu_id = @Yii::$app->user->identity->usu_id;
+        $descripcion = '';
         $fecproxima = null;
         if (Yii::$app->request->isAjax) {
             $data = Yii::$app->request->post();
             $mod_gestion = new Oportunidad();
             $fecatiende = $data["fecatencion"] . ' ' . $data["horatencion"];
             $observacion = ucwords(strtolower($data["observacion"]));
+            $descripcion = ucwords(strtolower($data["descripcion"]));
             if (!empty($data["fecproxima"])) {
                 $fecproxima = $data["fecproxima"] . ' ' . $data["horproxima"];
             }
@@ -804,7 +806,7 @@ class AdmisionesController extends \app\components\CController {
                 if ($padm_id > 0) {
                     $opo_id = base64_decode($data['oportunidad']);
                     $eopo_id = $data['estado_oportunidad'];
-                    $actividad_id = $mod_gestion->insertarActividad($opo_id, $usu_id, $padm_id, $eopo_id, $fecatiende, $observacion, $fecproxima);
+                    $actividad_id = $mod_gestion->insertarActividad($opo_id, $usu_id, $padm_id, $eopo_id, $fecatiende, $observacion, $descripcion, $fecproxima);
                     if ($actividad_id) {
                         $oporper = null;
                         if ($eopo_id == 5) {

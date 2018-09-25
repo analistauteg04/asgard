@@ -279,8 +279,9 @@ class OportunidadesController extends \app\components\CController
                             $bact_fecha_proxima_atencion = $fecha_registro;
 
                             //$bact_descripcion = (!$nombreoportunidad["Ids"]) ? 'Inicio de Operaciones' : '';
-                            $bact_descripcion = 1;
-                            $res_actividad = $mod_gestion->insertarActividad($opo_id, $usuario, $padm_id, $eopo_id, $bact_fecha_registro, $bact_descripcion, $bact_fecha_proxima_atencion);
+                            $oact_id =1;
+                            $bact_descripcion = "";
+                            $res_actividad = $mod_gestion->insertarActividad($opo_id, $usuario, $padm_id, $eopo_id, $bact_fecha_registro, $oact_id, $bact_descripcion, $bact_fecha_proxima_atencion);
                             if ($res_actividad) {
                                 $transaction->commit();
                                 $message = array(
