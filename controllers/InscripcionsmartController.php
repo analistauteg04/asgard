@@ -131,7 +131,7 @@ class InscripcionsmartController extends \yii\web\Controller {
             }
             switch ($nivelestudio) { // esto cambiarlo hacer funcion que consulte el usaurio y traer el id           
                 case "3":
-                    $agente = 17;
+                    $agente = 15;
                     $tipoportunidad = 8;
                     $pagina = "registersmart";
                     break;
@@ -162,7 +162,7 @@ class InscripcionsmartController extends \yii\web\Controller {
                         if ($res_oportunidad) {
                             $oact_id = 1;
                             $descripcion = 'Registro subido desde formulario de inscripción';
-                            $res_actividad = $mod_gestion->insertarActividad($res_oportunidad, $usuario, $agente["agente_id"] , $estado, $fecha_registro, $oact_id, $descripcion, $fecha_registro);
+                            $res_actividad = $mod_gestion->insertarActividad($res_oportunidad, $usuario, $agente, $estado, $fecha_registro, $oact_id, $descripcion, $fecha_registro);
                              if ($res_actividad) {
                                 $exito = 1;
                             }
