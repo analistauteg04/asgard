@@ -7,7 +7,7 @@ aspirante::registerTranslations();
 
 <?= Html::hiddenInput('txth_ids', '', ['id' => 'txth_ids']); ?>
 <div class="col-md-12">
-    <h3><span id="lbl_Personeria"><?= aspirante::t("Aspirantes", "Aspirants") ?></span></h3>
+    <h3><span id="lbl_Personeria"><?= aspirante::t("Aspirante", "Aspirants") ?></span></h3>
 </div>
 
 <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">  
