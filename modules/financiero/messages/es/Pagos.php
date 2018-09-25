@@ -9,6 +9,7 @@ namespace app\modules\financiero\messages;
      "Apply Discount" => "Aplica Descuento",
      "Amount Paid" => "Valor Pagado",
      "Approval Payment" => "Aprobación de Pago",
+     "Billing Data" => "Datos de Facturación",
      "Control Payments" => "Control de Pagos",
      "Discount" => "Descuento",
      "List Payment" => "Listar pagos",

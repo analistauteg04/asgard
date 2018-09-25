@@ -129,6 +129,7 @@ class SolicitudesController extends \app\components\CController {
     public function actionNew() {
         $mod_metodo = new MetodoIngreso();
         $per_id = base64_decode($_GET['per_id']);
+        Yii::$app->session->set('persona_solicita', base64_encode($_GET['ids']));
         $mod_carrera = new EstudioAcademico();
         $persona_model = new Persona();
         $mod_modalidad = new Modalidad();

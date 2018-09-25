@@ -12,7 +12,7 @@ read -s PROD
 echo ""
 
 # CREACION DEL USUARIO MYSQL
-mysql -uroot -p${ROOT_PASS} -e "CREATE USER ${USER}@localhost IDENTIFIED BY '${PASS}';"
+mysql -uroot -p${ROOT_PASS} -e "CREATE USER IF NOT EXISTS ${USER}@localhost IDENTIFIED BY '${PASS}';"
 
 if [ $PROD -eq 1 ]; then
     echo "INSTALANDO en Produccion......"
