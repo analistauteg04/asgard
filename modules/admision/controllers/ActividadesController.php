@@ -125,9 +125,9 @@ class ActividadesController extends \app\components\CController
         $oport_model = new Oportunidad();
         $empresa_mod = new Empresa();
         $empresa = $empresa_mod->getAllEmpresa();
-        $contactManage = $persges_mod->consultarPersonaGestion($pges_id);
-        $modalidad_data = $modalidad_model->consultarModalidad(0);
+        $contactManage = $persges_mod->consultarPersonaGestion($pges_id);       
         $oport_contac = $oport_model->consultarOportunidadById($opor_id);
+        $modalidad_data = $modalidad_model->consultarModalidad($oport_contac["mod_id"]);
         $oportunidad_perdidad = $oport_model->consultarOportunidadPerdida();
         $unidad_acad_data = $uni_aca_model->consultarUnidadAcademicas();
         $tipo_oportunidad_data = $modTipoOportunidad->consultarOporxUnidad(1);
