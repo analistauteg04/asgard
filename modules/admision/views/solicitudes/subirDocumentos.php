@@ -354,12 +354,6 @@ $_SESSION['persona_solicita'] = base64_encode($per_id);
                 </div>
             </div>
         </div>
-    <?php } ?>
-    <div class="row"> 
-        <div class="col-md-9"></div>
-        <div class="col-md-2 col-xs-4 col-lg-2 col-sm-2">
-            <a id="sendDocumentos" href="javascript:" class="btn btn-primary btn-block"> <?= Yii::t("accion", "Save") ?> </a>
-        </div>
-    </div>
+    <?php } ?>    
  </form>
     
