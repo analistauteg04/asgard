@@ -94,7 +94,7 @@ class SolicitudesController extends \app\components\CController {
         $resp_ordenpago = $mod_ordenpago->consultarImagenpago($sins_id);
         $img_pago = $resp_ordenpago["imagen_pago"];
 
-        if ($nacionalidad == '1') {
+        if (($nacionalidad == '1') or empty($nacionalidad)) {
             $tiponacext = 'N';
         } else {
             $tiponacext = 'E';

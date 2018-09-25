@@ -18,7 +18,8 @@ INSERT INTO `accion` (`acc_id`, `acc_nombre`, `acc_url_accion`, `acc_tipo`, `acc
 (9, 'Back', 'Back', 'General', 'Back', 'accion', 'glyphicon glyphicon-triangle-right', '1', '1'),
 (10, 'Next', 'Next', 'General', 'Next', 'accion', 'glyphicon glyphicon-triangle-left', '1', '1'),
 (11, 'Clear', 'Clear', 'General', 'Clear', 'accion', 'glyphicon glyphicon-leaf', '1', '1'),
-(12, 'Edit', 'Edit', 'General', 'Edit', 'accion', 'glyphicon glyphicon-pencil', '1', '1');
+(12, 'Edit', 'Edit', 'General', 'Edit', 'accion', 'glyphicon glyphicon-pencil', '1', '1'),
+(13, 'Approve', 'Approve', 'General', 'Approve', 'accion', 'glyphicon glyphicon-ok', '1', '1');
 -- --------------------------------------------------------
 --
 -- Volcado de datos para la tabla `tipo_empresa`
