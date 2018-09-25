@@ -1070,7 +1070,7 @@ class Oportunidad extends \app\modules\admision\components\CActiveRecord {
      * @param
      * @return
      */
-    public function insertarActividad($opo_id, $usu_id, $padm_id, $eopo_id, $bact_fecha_registro, $oact_id, $bact_fecha_proxima_atencion) {
+    public function insertarActividad($opo_id, $usu_id, $padm_id, $eopo_id, $bact_fecha_registro, $oact_id, $bact_descripcion, $bact_fecha_proxima_atencion) {
         $con = \Yii::$app->db_crm;
         $trans = $con->getTransaction(); // se obtiene la transacción actual
         if ($trans !== null) {
@@ -1108,12 +1108,14 @@ class Oportunidad extends \app\modules\admision\components\CActiveRecord {
         if (isset($usu_id)) {
             $param_sql .= ", bact_usuario";
             $bdet_sql .= ", :usu_id";
-        }
-        
-        
+        } 
         if (isset($oact_id)) {
             $param_sql .= ", oact_id";
             $bdet_sql .= ", :oact_id";
+        }
+        if (isset($bact_descripcion)) {
+            $param_sql .= ", bact_descripcion";
+            $bdet_sql .= ", :bact_descripcion";
         }
         if (isset($bact_fecha_proxima_atencion)) {
             $param_sql .= ", bact_fecha_proxima_atencion";
@@ -1139,7 +1141,10 @@ class Oportunidad extends \app\modules\admision\components\CActiveRecord {
                 $comando->bindParam(':bact_fecha_registro', $bact_fecha_registro, \PDO::PARAM_STR);
             }
             if (!empty((isset($oact_id)))) {
-                $comando->bindParam(':oact_id', $oact_id, \PDO::PARAM_STR);
+                $comando->bindParam(':oact_id', $oact_id, \PDO::PARAM_INT);
+            }
+            if (!empty((isset($bact_descripcion)))) {
+                $comando->bindParam(':bact_descripcion', $bact_descripcion, \PDO::PARAM_STR);
             }
             if (!empty((isset($bact_fecha_proxima_atencion)))) {
                 $comando->bindParam(':bact_fecha_proxima_atencion', $bact_fecha_proxima_atencion, \PDO::PARAM_STR);
@@ -1161,7 +1166,7 @@ class Oportunidad extends \app\modules\admision\components\CActiveRecord {
      * @param
      * @return
      */
-    public function actualizarActividad($act_id, $usu_id, $padm_id, $fecatiende, $oact_id, $fecproxima) {
+    public function actualizarActividad($act_id, $usu_id, $padm_id, $fecatiende, $oact_id, $bact_descripcion,$fecproxima) {
         $con = \Yii::$app->db_crm;
         $estado = 1;
         $fecha_modificacion = date(Yii::$app->params["dateTimeByDefault"]);
@@ -1180,6 +1185,7 @@ class Oportunidad extends \app\modules\admision\components\CActiveRecord {
                           bact_fecha_modificacion = :bact_fecha_modificacion,
                           bact_fecha_registro = :bact_fecha_registro,
                           oact_id = :oact_id,
+                          bact_descripcion = :bact_descripcion,
                           bact_fecha_proxima_atencion = :bact_fecha_proxima_atencion,
                           -- bact_usuario_modif = :usu_id,
                           usu_id = :usu_id
@@ -1194,6 +1200,7 @@ class Oportunidad extends \app\modules\admision\components\CActiveRecord {
             $comando->bindParam(":bact_id", $act_id, \PDO::PARAM_INT);
             $comando->bindParam(":usu_id", $usu_id, \PDO::PARAM_INT);
             $comando->bindParam(":padm_id", $padm_id, \PDO::PARAM_INT);
+            $comando->bindParam(":bact_descripcion", $bact_descripcion, \PDO::PARAM_STR);
             $comando->bindParam(":bact_fecha_modificacion", $fecha_modificacion, \PDO::PARAM_STR);
             $response = $comando->execute();
             if ($trans !== null)

@@ -1,5 +1,5 @@
 $(document).ready(function () {
-    //*********** FUNCIONES QUE SE DEBEN REMOVER CUANDO ESTEN HABILITADOS LOS MENUS **********
+//*********** FUNCIONES QUE SE DEBEN REMOVER CUANDO ESTEN HABILITADOS LOS MENUS **********
 });
 function newItem() {
     var opid = $('#txth_opid').val();
@@ -33,7 +33,6 @@ function save() {
         }, true);
     }
 }
-
 function update() {
     var link = $('#txth_base').val() + "/admision/actividades/update";
     var arrParams = new Object();

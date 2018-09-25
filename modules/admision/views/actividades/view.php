@@ -4,6 +4,7 @@ use yii\helpers\Html;
 use yii\helpers\Url;
 use kartik\date\DatePicker;
 use app\modules\admision\Module;
+
 if (!empty($personalData['pges_cedula'])) {
     $tipodoc = "Cédula";
     $dni = $personalData['pges_cedula'];
@@ -236,7 +237,6 @@ if (!empty($personalData['pges_cedula'])) {
             $enable = "display: block;";
         else
             $enable = "display: none;";
-
         ?>
         <div class="col-lg-6 col-md-6 col-sm-6 col-xs-6" id="divoportunidad_perdida" style="<?php echo $enable ?>">
             <div class="form-group">
@@ -257,7 +257,5 @@ if (!empty($personalData['pges_cedula'])) {
                 </div>
             </div>
         </div>  
-    </div>      
+    </div>  
 </form>
-
-

@@ -403,7 +403,7 @@ create table if not exists `bitacora_actividades` (
  `eopo_id` bigint(20) not null,
  `oact_id` bigint(20) not null,
  `bact_fecha_registro` timestamp null default null,
- -- `bact_descripcion` varchar(1000) not null,
+ `bact_descripcion` varchar(1000) null,
  `bact_fecha_proxima_atencion` timestamp null default null, 
  `bact_estado` varchar(1) not null,
  `bact_usuario` bigint(20) not null,

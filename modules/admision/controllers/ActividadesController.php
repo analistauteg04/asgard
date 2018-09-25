@@ -125,9 +125,9 @@ class ActividadesController extends \app\components\CController
         $oport_model = new Oportunidad();
         $empresa_mod = new Empresa();
         $empresa = $empresa_mod->getAllEmpresa();
-        $contactManage = $persges_mod->consultarPersonaGestion($pges_id);
-        $modalidad_data = $modalidad_model->consultarModalidad(0);
+        $contactManage = $persges_mod->consultarPersonaGestion($pges_id);       
         $oport_contac = $oport_model->consultarOportunidadById($opor_id);
+        $modalidad_data = $modalidad_model->consultarModalidad($oport_contac["mod_id"]);
         $oportunidad_perdidad = $oport_model->consultarOportunidadPerdida();
         $unidad_acad_data = $uni_aca_model->consultarUnidadAcademicas();
         $tipo_oportunidad_data = $modTipoOportunidad->consultarOporxUnidad(1);
@@ -161,6 +161,7 @@ class ActividadesController extends \app\components\CController
             $mod_gestion = new Oportunidad();
             $fecatiende = $data["fecatencion"] . ' ' . $data["horatencion"];
             $observacion = $data["observacion"];
+            $descripcion = ucwords(strtolower($data["descripcion"]));
             if (!empty($data["fecproxima"])) {
                 $fecproxima = $data["fecproxima"] . ' ' . $data["horproxima"];
             }
@@ -173,7 +174,7 @@ class ActividadesController extends \app\components\CController
                 if ($padm_id > 0) {
                     $opo_id = base64_decode($data['oportunidad']);
                     $eopo_id = $data['estado_oportunidad'];
-                    $actividad_id = $mod_gestion->insertarActividad($opo_id, $usu_id, $padm_id, $eopo_id, $fecatiende, $observacion, $fecproxima);
+                    $actividad_id = $mod_gestion->insertarActividad($opo_id, $usu_id, $padm_id, $eopo_id, $fecatiende, $observacion, $descripcion, $fecproxima);
                     if ($actividad_id) {
                         $oporper = null;
                         if ($eopo_id == 5) {
@@ -231,6 +232,7 @@ class ActividadesController extends \app\components\CController
             $mod_gestion = new Oportunidad();
             $fecatiende = $data["fecatencion"] . ' ' . $data["horatencion"];
             $observacion = $data["observacion"];
+            $descripcion = ucwords(strtolower($data["descripcion"]));
             if (!empty($data["fecproxima"])) {
                 $fecproxima = $data["fecproxima"] . ' ' . $data["horproxima"];
             }
@@ -242,7 +244,7 @@ class ActividadesController extends \app\components\CController
                 $padm_id = $padm_class['padm_id'];
                 $act_id = base64_decode($data['bact_id']);
                 if ($padm_id > 0) {
-                    $actividad_id = $mod_gestion->actualizarActividad($act_id, $usu_id, $padm_id, $fecatiende, $observacion, $fecproxima);
+                    $actividad_id = $mod_gestion->actualizarActividad($act_id, $usu_id, $padm_id, $fecatiende, $observacion, $descripcion, $fecproxima);
                     if ($actividad_id) {
                         $exito = 1;
                     }
