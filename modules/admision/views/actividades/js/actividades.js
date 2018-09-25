@@ -7,6 +7,24 @@ $(document).ready(function () {
         var pgid = $('#txth_pgid').val();
         window.location.href = $('#txth_base').val() + "/admision/actividades/newactividad?opid=" + opid + "&pgid=" + pgid;
     });
+    $('#cmb_state_opportunity').change(function () {        
+        if ($('#cmb_state_opportunity').val() == 5 || $('#cmb_state_opportunity').val() == 4) {            
+            $("#txt_fecha_proxima").prop("disabled", true);
+            $("#txt_hora_proxima").prop("disabled", true);
+            $('#txt_fecha_proxima').removeClass("PBvalidation");
+            $('#txt_hora_proxima').removeClass("PBvalidation");
+        }else{
+            $("#txt_fecha_proxima").prop("disabled", false);
+            $("#txt_hora_proxima").prop("disabled", false);
+             $('#txt_fecha_proxima').addClass("PBvalidation");
+             $('#txt_hora_proxima').addClass("PBvalidation");
+        }
+        if ($('#cmb_state_opportunity').val() == 5) {            
+            $('#divoportunidad_perdida').css('display', 'block');
+        } else {
+            $('#divoportunidad_perdida').css('display', 'none');
+        }
+    });     
     $('#btn_grabaractividad').click(function () {
         var link = $('#txth_base').val() + "/admision/actividades/save";
         var arrParams = new Object();
@@ -15,7 +33,8 @@ $(document).ready(function () {
         arrParams.estado_oportunidad = $('#cmb_state_opportunity').val();
         arrParams.fecatencion = $('#txt_fecha_atencion').val();
         arrParams.horatencion = $('#txt_hora_atencion').val();
-        arrParams.observacion = $('#cmb_observacion').val();        
+        arrParams.observacion = $('#cmb_observacion').val();   
+        arrParams.descripcion = $('#txt_descripcion').val();
         if(arrParams.estado_oportunidad==5){
             arrParams.oportunidad_perdida=$('#cmb_lost_opportunity').val();            
         }
@@ -40,7 +59,8 @@ $(document).ready(function () {
         arrParams.bact_id = $('#txth_acid').val();
         arrParams.fecatencion = $('#txt_fecha_atencion').val();
         arrParams.horatencion = $('#txt_hora_atencion').val();
-        arrParams.observacion = $('#cmb_observacion').val();     
+        arrParams.observacion = $('#cmb_observacion').val();  
+        arrParams.descripcion = $('#txt_descripcion').val();
         //Datos Próxima Atención
         arrParams.fecproxima = $('#txt_fecha_proxima').val();
         arrParams.horproxima = $('#txt_hora_proxima').val();
@@ -77,7 +97,8 @@ function save(){
     arrParams.estado_oportunidad = $('#cmb_state_opportunity').val();
     arrParams.fecatencion = $('#txt_fecha_atencion').val();
     arrParams.horatencion = $('#txt_hora_atencion').val();
-    arrParams.observacion = $('#cmb_observacion').val();       
+    arrParams.observacion = $('#cmb_observacion').val();   
+    arrParams.descripcion = $('#txt_descripcion').val();    
     if(arrParams.estado_oportunidad==5){
         arrParams.oportunidad_perdida=$('#cmb_lost_opportunity').val();            
     }
@@ -103,7 +124,8 @@ function update(){
     arrParams.bact_id = $('#txth_acid').val();
     arrParams.fecatencion = $('#txt_fecha_atencion').val();
     arrParams.horatencion = $('#txt_hora_atencion').val();
-    arrParams.observacion = $('#cmb_observacion').val();      
+    arrParams.observacion = $('#cmb_observacion').val(); 
+    arrParams.descripcion = $('#txt_descripcion').val();
     //Datos Próxima Atención
     arrParams.fecproxima = $('#txt_fecha_proxima').val();
     arrParams.horproxima = $('#txt_hora_proxima').val();

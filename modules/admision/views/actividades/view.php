@@ -104,7 +104,7 @@ if (!empty($personalData['pges_cedula'])) {
             <div class="form-group">
                 <label for="cmb_empresa" class="col-sm-5 col-md-5 col-xs-5 col-lg-5 control-label keyupmce"><?= Yii::t("formulario", "Company") ?></label>
                 <div class="col-sm-7 col-md-7 col-xs-7 col-lg-7">
-                    <?= Html::dropDownList("cmb_empresa", $oportunidad_contacto['empresa'], $arr_empresa, ["class" => "form-control", "id" => "cmb_empresa", "disabled" => true]) ?>
+<?= Html::dropDownList("cmb_empresa", $oportunidad_contacto['empresa'], $arr_empresa, ["class" => "form-control", "id" => "cmb_empresa", "disabled" => true]) ?>
                 </div>
             </div>
         </div>           
@@ -114,7 +114,7 @@ if (!empty($personalData['pges_cedula'])) {
             <div class="form-group">
                 <label for="cmb_nivelestudio" class="col-sm-5 col-md-5 col-xs-5 col-lg-5 control-label keyupmce"><?= Module::t("crm", "Service Line") ?></label>
                 <div class="col-sm-7 col-md-7 col-xs-7 col-lg-7">
-                    <?= Html::dropDownList("cmb_nivelestudio", $oportunidad_contacto['uaca_id'], $arr_linea_servicio, ["class" => "form-control", "id" => "cmb_nivelestudio", "disabled" => true]) ?>
+<?= Html::dropDownList("cmb_nivelestudio", $oportunidad_contacto['uaca_id'], $arr_linea_servicio, ["class" => "form-control", "id" => "cmb_nivelestudio", "disabled" => true]) ?>
                 </div>
             </div>
         </div>
@@ -122,7 +122,7 @@ if (!empty($personalData['pges_cedula'])) {
             <div class="form-group">
                 <label for="cmb_modalidad" class="col-sm-5 col-md-5 col-xs-5 col-lg-5 control-label keyupmce"><?= Module::t("crm", "Moda") ?></label>
                 <div class="col-sm-7 col-md-7 col-xs-7 col-lg-7">
-                    <?= Html::dropDownList("cmb_modalidad", $oportunidad_contacto['mod_id'], $arr_modalidad, ["class" => "form-control", "id" => "cmb_modalidad", "disabled" => true]) ?>
+<?= Html::dropDownList("cmb_modalidad", $oportunidad_contacto['mod_id'], $arr_modalidad, ["class" => "form-control", "id" => "cmb_modalidad", "disabled" => true]) ?>
                 </div>
             </div>
         </div>
@@ -132,7 +132,7 @@ if (!empty($personalData['pges_cedula'])) {
             <div class="form-group">
                 <label for="cmb_tipo_oportunidad" class="col-sm-5 col-md-5 col-xs-5 col-lg-5 control-label keyupmce"><?= Module::t("crm", "Opportunity type") ?></label>
                 <div class="col-sm-7 col-md-7 col-xs-7 col-lg-7">
-                    <?= Html::dropDownList("cmb_tipo_oportunidad", $oportunidad_contacto['tove_id'], $arr_tipo_oportunidad, ["class" => "form-control", "id" => "cmb_tipo_oportunidad", "disabled" => true]) ?>
+<?= Html::dropDownList("cmb_tipo_oportunidad", $oportunidad_contacto['tove_id'], $arr_tipo_oportunidad, ["class" => "form-control", "id" => "cmb_tipo_oportunidad", "disabled" => true]) ?>
                 </div>
             </div>
         </div>
@@ -143,7 +143,7 @@ if (!empty($personalData['pges_cedula'])) {
             <div class="form-group">
                 <label for="cmb_carrera1" class="col-sm-5 col-md-5 col-xs-5 col-lg-5 control-label keyupmce"><?= Module::t("crm", "Academic Study") ?></label>
                 <div class="col-sm-7 col-md-7 col-xs-7 col-lg-7">
-                    <?= Html::dropDownList("cmb_carrera1", $oportunidad_contacto['eaca_id'], $arr_academic_study, ["class" => "form-control", "id" => "cmb_carrera1", "disabled" => true]) ?>
+<?= Html::dropDownList("cmb_carrera1", $oportunidad_contacto['eaca_id'], $arr_academic_study, ["class" => "form-control", "id" => "cmb_carrera1", "disabled" => true]) ?>
                 </div>
             </div>
         </div>
@@ -151,7 +151,7 @@ if (!empty($personalData['pges_cedula'])) {
             <div class="form-group">
                 <label for="cmb_knowledge_channel" class="col-sm-5 col-md-5 col-xs-5 col-lg-5 control-label keyupmce"><?= Module::t("crm", "Contact Channel") ?></label>
                 <div class="col-sm-7 col-md-7 col-xs-7 col-lg-7">
-                    <?= Html::dropDownList("cmb_knowledge_channel", $oportunidad_contacto['ccan_id'], $arr_knowledge_channel, ["class" => "form-control", "id" => "cmb_knowledge_channel", "disabled" => true]) ?>
+<?= Html::dropDownList("cmb_knowledge_channel", $oportunidad_contacto['ccan_id'], $arr_knowledge_channel, ["class" => "form-control", "id" => "cmb_knowledge_channel", "disabled" => true]) ?>
                 </div>
             </div>
         </div>
@@ -227,7 +227,7 @@ if (!empty($personalData['pges_cedula'])) {
             <div class="form-group">
                 <label for="cmb_state_opportunity" class="col-sm-5 col-md-5 col-xs-5 col-lg-5 control-label keyupmce"><?= Module::t("crm", "Opportunity state") ?></label>
                 <div class="col-sm-7 col-md-7 col-xs-7 col-lg-7">
-                    <?= Html::dropDownList("cmb_state_opportunity", $actividad_oportunidad['eopo_id'], $arr_state_oportunidad, ["class" => "form-control", "id" => "cmb_state_opportunity", "disabled" => true]) ?>
+<?= Html::dropDownList("cmb_state_opportunity", $actividad_oportunidad['eopo_id'], $arr_state_oportunidad, ["class" => "form-control", "id" => "cmb_state_opportunity", "disabled" => true]) ?>
                 </div>
             </div>
         </div>
@@ -236,7 +236,6 @@ if (!empty($personalData['pges_cedula'])) {
             $enable = "display: block;";
         else
             $enable = "display: none;";
-
         ?>
         <div class="col-lg-6 col-md-6 col-sm-6 col-xs-6" id="divoportunidad_perdida" style="<?php echo $enable ?>">
             <div class="form-group">
@@ -252,11 +251,18 @@ if (!empty($personalData['pges_cedula'])) {
             <div class="form-group">
                 <label for="txt_observacion" class="col-sm-5 col-md-5 col-xs-5 col-lg-5 control-label" id="lbl_descripcion"><?= Yii::t("formulario", "Observation") ?> </label>
                 <div class="col-sm-7 col-md-7 col-xs-7 col-lg-7">
-                    <!--<textarea  class="form-control keyupmce" id="txt_observacion" disabled = "true"><?php //echo $actividad_oportunidad['bact_descripcion']; ?></textarea>-->
                     <?= Html::dropDownList("cmb_observacion", $actividad_oportunidad["oact_id"], $arr_observacion, ["class" => "form-control", "id" => "cmb_observacion", "disabled" => true]) ?>                
                 </div>
             </div>
-        </div>  
+        </div> 
+        <div class="col-md-6 col-sm-6 col-xs-6 col-lg-6">            
+            <div class="form-group">
+                <label for="txt_descripcion" class="col-sm-5 col-md-5 col-xs-5 col-lg-5 control-label" id="lbl_descripcion"><?= Yii::t("formulario", "Comments") ?> </label>
+                <div class="col-sm-7 col-md-7 col-xs-7 col-lg-7">
+                    <textarea  class="form-control keyupmce" id="txt_descripcion" disabled="true"><?= $actividad_oportunidad["bact_descripcion"] ?></textarea>                  
+                </div>
+            </div>
+        </div>
     </div>  
     <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">   
         <div class="col-md-10"></div>
