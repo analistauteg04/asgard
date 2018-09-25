@@ -257,13 +257,7 @@ if (!empty($personalData['pges_cedula'])) {
                 </div>
             </div>
         </div>  
-    </div>  
-    <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">   
-        <div class="col-md-10"></div>
-        <div class="col-md-2">
-            <a id="btn_editaractividad" href="javascript:" class="btn btn-primary btn-block"> <?= Yii::t("accion", "Edit") ?></a>                                   
-        </div>
-    </div>     
+    </div>      
 </form>
 
 
