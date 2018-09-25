@@ -1,7 +1,6 @@
 <?php
 
 namespace app\controllers;
-
 use Yii;
 use app\models\MetodoIngreso;
 use app\models\Utilities;
@@ -16,13 +15,13 @@ use app\models\Canton;
 use app\models\EstudioAcademico;
 use app\models\MedioPublicitario;
 use app\models\SolicitudCaptacion;
-use app\models\Modalidad;
+use app\modules\academico\models\Modalidad;
 use app\models\Usuario;
 use app\models\PreInteresado;
-use app\models\UnidadAcademica;
+use app\modules\academico\models\UnidadAcademica;
 use yii\helpers\Url;
-use app\models\PersonaGestion;
-use app\models\Oportunidad;
+use app\modules\admision\models\PersonaGestion;
+use app\modules\admision\models\Oportunidad;
 use app\models\Empresa;
 use app\models\EstadoContacto;
 
@@ -245,6 +244,8 @@ class InscripcionesController extends \yii\web\Controller {
                     if ($exito) {
                         $transaction->commit();
                         //$usuario = ucwords(strtolower($nombre1)) . " " . ucwords(strtolower($nombre2));
+                        $file1 = Url::base(true) . "/files/inscripcion.pdf";
+                        $rutaFile = array($file1);
                         $tituloMensaje = Yii::t("register", "User Register");
                         $asunto = Yii::t("register", "User Register") . " " . Yii::$app->params["siteName"];
                         $body = Utilities::getMailMessage($pagina, array(
@@ -256,7 +257,7 @@ class InscripcionesController extends \yii\web\Controller {
                                     "[[mail]]" => $correo,
                                     "[[unidad_academica]]" => $nombre_unidad["nombre_unidad"],
                                     "[[modalidad]]" => $nombre_modalidad["nombre_modalidad"]), Yii::$app->language);
-                        Utilities::sendEmail($tituloMensaje, Yii::$app->params["adminEmail"], [$correo => $nombre1 . " " . $nombre2], $asunto, $body);
+                        Utilities::sendEmail($tituloMensaje, Yii::$app->params["adminEmail"], [$correo => $nombre1 . " " . $nombre2], $asunto, $body, $rutaFile);
                         Utilities::sendEmail($tituloMensaje, Yii::$app->params["adminEmail"], [Yii::$app->params["soporteEmail"] => "Soporte"], $asunto, $body);
                         $message = array(
                             "wtmessage" => Yii::t("notificaciones", "La infomación ha sido grabada. "),

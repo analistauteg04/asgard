@@ -211,7 +211,6 @@ class InscripcionController extends \yii\web\Controller {
                                     "[[user]]" => $nombres, "[[username]]" => $mod_personapreins->ppre_correo,
                                     "[[link_verification]]" => $link), Yii::$app->language);
                         $bodyjefe = Utilities::getMailMessage("Reviewadmissions", array("[[link_asgard]]" => $link_asgard), Yii::$app->language);
-                        //$bodysupervisor = Utilities::getMailMessage("Supervisoradmissions", array("[[link_asgard]]" => $link_asgard), Yii::$app->language);
                         if (!empty($rutaFile)) {
                             Utilities::sendEmail($tituloMensaje, Yii::$app->params["adminEmail"], [$mod_personapreins->ppre_correo => $pri_apellido . " " . $pri_nombre], $asunto, $body, $rutaFile);
                         } else {
@@ -219,10 +218,7 @@ class InscripcionController extends \yii\web\Controller {
                         }
                         
                         Utilities::sendEmail($tituloMensaje, Yii::$app->params["adminEmail"], [Yii::$app->params["soporteEmail"] => "Soporte"], $asunto, $body);
-                        Utilities::sendEmail($tituloMensaje1, Yii::$app->params["adminEmail"], [Yii::$app->params["admisiones"] => "Jefe"], $asunto1, $bodyjefe);
-                        //Utilities::sendEmail($tituloMensaje1, Yii::$app->params["adminEmail"], [Yii::$app->params["supervisoradmision1"] => "Supervisor"], $asunto1, $bodysupervisor);
-                        //Utilities::sendEmail($tituloMensaje1, Yii::$app->params["adminEmail"], [Yii::$app->params["supervisoradmision2"] => "Supervisor"], $asunto1, $bodysupervisor);
-
+                        Utilities::sendEmail($tituloMensaje1, Yii::$app->params["adminEmail"], [Yii::$app->params["admisiones"] => "Jefe"], $asunto1, $bodyjefe);                        
                         $transaction->commit();
                         $message = array(
                             "wtmessage" => Yii::t("notificaciones", "La infomación ha sido grabada. Por favor para activar su cuenta revise su correo electrónico y siga los pasos."),

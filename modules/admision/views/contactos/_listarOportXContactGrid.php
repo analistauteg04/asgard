@@ -19,8 +19,8 @@ use app\modules\admision\Module;
                 'value' => 'codigo',
             ],
             [
-                'attribute' => "Linea Servicio",
-                'header' => Module::t("crm", "Service Line"),
+                'attribute' => "Unidad",
+                'header' => Yii::t("formulario", "Academic unit"),
                 'value' => 'linea_servicio',
             ],
             [
