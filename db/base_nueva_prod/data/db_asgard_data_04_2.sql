@@ -115,7 +115,9 @@ INSERT INTO `objeto_modulo` (`omod_id`, `mod_id`, `omod_padre_id`, `omod_nombre`
 (95, 4, 74, 'Ver Actividad', 'S', '0', '', '', '', 'admision/actividades/view', '1', '1', 'Admision', '1', '2018-09-22 14:07:01', NULL, '1'),
 (96, 4, 95, 'Edicion Actividad', 'A', '0', '', '', '', 'admision/actividades/view', '1', '0', 'Admision', '1', '2018-09-22 14:07:01', NULL, '1'),
 (97, 4, 95, 'Editar Actividad', 'S', '0', '', '', '', 'admision/actividades/edit', '1', '1', 'Admision', '1', '2018-09-22 14:07:01', NULL, '1'),
-(98, 4, 97, 'Guardar Edicion Actividad', 'A', '0', '', '', '', 'admision/actividades/edit', '1', '1', 'Admision', '1', '2018-09-22 14:07:01', NULL, '1');
+(98, 4, 97, 'Guardar Edicion Actividad', 'A', '0', '', '', '', 'admision/actividades/edit', '1', '1', 'Admision', '1', '2018-09-22 14:07:01', NULL, '1'),
+(99, 4, 91, 'Enviar Solicitud', 'A', '0', '', '', '', 'admision/solicitudes/view', '1', '1', 'Admision', '1', '2018-09-22 14:07:01', NULL, '1'),
+(100, 4, 83, 'Subir Documentos Solicitud', 'S', '0', '', '', '', 'admision/solicitudes/subirDocumentos', '1', '1', 'Admision', '1', '2018-09-22 14:07:01', NULL, '1'),
 -- --------------------------------------------------------
 --
 -- Volcado de datos para la tabla `OBMO_ACCI`
@@ -159,7 +161,8 @@ INSERT INTO `obmo_acci` (`oacc_id`, `omod_id`, `acc_id`, `oacc_tipo_boton`, `oac
 (36, 82, 4, '1', '', 'save', '1', '1'),
 (37, 94, 4, '1', '', 'saveMethod', '1', '1'),
 (38, 96, 12, '1', '', 'edit', '1', '1'),
-(39, 98, 4, '1', '', 'update', '1', '1');
+(39, 98, 4, '1', '', 'update', '1', '1'),
+(40, 99, 13, '1', '', 'Approve', '1', '1');
 -- --------------------------------------------------------
 --
 -- Volcado de datos para la tabla `grup_obmo`
@@ -262,7 +265,8 @@ INSERT INTO `grup_obmo` (`gmod_id`, `gru_id`, `omod_id`, `gmod_estado`,  `gmod_e
 (95, 1, 95, '1', '1'),
 (96, 1, 96, '1', '1'),
 (97, 1, 97, '1', '1'),
-(98, 1, 98, '1', '1');
+(98, 1, 98, '1', '1'),
+(99, 1, 99, '1', '1');
 
 
 -- --------------------------------------------------------
