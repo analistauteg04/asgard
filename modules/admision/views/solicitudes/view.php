@@ -97,7 +97,7 @@ use yii\helpers\Url;
         </div>
     </div>        
     
-    <?php if ($txth_extranjero == "1") { ?>
+    <?php if (($txth_extranjero == "1") or (empty($txth_extranjero))) { ?>
         <div class="col-md-6  doc_certvota cinteres">
             <div class="form-group">
                 <label for="txth_doc_certvota" class="col-sm-4 control-label keyupmce"><?= Yii::t("formulario", "Voting Certificate") ?></label>
