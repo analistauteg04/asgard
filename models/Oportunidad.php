@@ -1068,7 +1068,7 @@ class Oportunidad extends \yii\db\ActiveRecord {
      * @param
      * @return
      */
-    public function insertarActividad($opo_id, $usu_id, $padm_id, $eopo_id, $bact_fecha_registro, $bact_descripcion, $bact_fecha_proxima_atencion) {
+    public function insertarActividad($opo_id, $usu_id, $padm_id, $eopo_id, $bact_fecha_registro, $oact_id, $bact_descripcion, $bact_fecha_proxima_atencion) {
         $con = \Yii::$app->db_crm;
         $trans = $con->getTransaction(); // se obtiene la transacción actual
         if ($trans !== null) {
@@ -1106,9 +1106,11 @@ class Oportunidad extends \yii\db\ActiveRecord {
         if (isset($usu_id)) {
             $param_sql .= ", bact_usuario";
             $bdet_sql .= ", :usu_id";
+        } 
+        if (isset($oact_id)) {
+            $param_sql .= ", oact_id";
+            $bdet_sql .= ", :oact_id";
         }
-        
-        
         if (isset($bact_descripcion)) {
             $param_sql .= ", bact_descripcion";
             $bdet_sql .= ", :bact_descripcion";
@@ -1135,6 +1137,9 @@ class Oportunidad extends \yii\db\ActiveRecord {
             }
             if (!empty((isset($bact_fecha_registro)))) {
                 $comando->bindParam(':bact_fecha_registro', $bact_fecha_registro, \PDO::PARAM_STR);
+            }
+            if (!empty((isset($oact_id)))) {
+                $comando->bindParam(':oact_id', $oact_id, \PDO::PARAM_INT);
             }
             if (!empty((isset($bact_descripcion)))) {
                 $comando->bindParam(':bact_descripcion', $bact_descripcion, \PDO::PARAM_STR);
