@@ -101,7 +101,7 @@ INSERT INTO `objeto_modulo` (`omod_id`, `mod_id`, `omod_padre_id`, `omod_nombre`
 (81, 2, 79, 'Crear Solicitud', 'A', '0', '', '', '', 'admision/solicitudes/listarsolicitudxinteresado', 1, '1', 'Solicitudes', '1', '2018-09-22 14:07:01', NULL, '1'),
 (82, 2, 80, 'Guardar Solicitud Inscripcion', 'A', '0', '', '', '', 'admision/solicitudes/new', '1', '1', 'Solicitudes', '1', '2018-09-22 14:07:01', NULL, '1'),
 (83, 2, 83, 'Solicitudes', 'P', '0', '', '', '', 'admision/solicitudes/index', '1', '1', 'Solicitudes', '1', '2018-09-22 14:07:01', NULL, '1'),
-(84, 4, 84, 'Solicitudes', 'P', '0', '', '', '', 'academico/admitidos/index', '1', '1', 'Academico', '1', '2018-09-22 14:07:01', NULL, '1'),
+(84, 4, 84, 'Listar Admitidos', 'P', '0', '', '', '', 'academico/admitidos/index', '1', '1', 'Academico', '1', '2018-09-22 14:07:01', NULL, '1'),
 (85, 3, 85, 'Listar Pagos', 'P', '0', '', '', '', 'financiero/pagos/index', '1', '1', 'Pagos', '1', '2018-09-22 14:07:01', NULL, '1'),
 (86, 3, 86, 'Registro Pagos por Colecturia', 'P', '0', '', '', '', 'financiero/pagos/index', '1', '1', 'Pagos', '1', '2018-09-22 14:07:01', NULL, '1'),
 (87, 3, 87, 'Listar Pagos Cargados', 'P', '0', '', '', '', 'financiero/pagos/indexadm', '1', '1', 'Pagos', '1', '2018-09-22 14:07:01', NULL, '1'),
