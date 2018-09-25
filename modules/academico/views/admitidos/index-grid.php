@@ -52,7 +52,7 @@ admision::registerTranslations();
                 'template' => '{view}',
                 'buttons' => [
                     'view' => function ($url, $model) {
-                        return Html::a('<span>' . $model['abr_metodo'] . '</span>', Url::to(['listaraspirantes']), ["data-toggle" => "tooltip", "title" => $model['ming_nombre']]);
+                        return Html::a('<span>' . $model['abr_metodo'] . '</span>', Url::to(['#']), ["data-toggle" => "tooltip", "title" => $model['ming_nombre']]);
                     },
                 ],
             ],
