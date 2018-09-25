@@ -49,7 +49,8 @@ class PagosController extends \app\components\CController {
     }
 
     public function actionCargardocpagos() {
-        $ccar_id = base64_decode($_GET["ids"]);
+        //$ccar_id = base64_decode($_GET["ids"]);
+        $ccar_id = isset($_GET['ids']) ? base64_decode($_GET['ids']) : 1;//NULL
         $model_pag = new OrdenPago();
         $arr_forma_pago = $model_pag->formaPago('2');
         $resp_doc = $model_pag->listarDocumento($ccar_id);
