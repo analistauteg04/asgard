@@ -77,11 +77,18 @@ academico::registerTranslations();
             [
                 'class' => 'yii\grid\ActionColumn',
                 'header' => Yii::t("formulario", "Actions"),                
-                'template' => '{view}', 
+                'template' => '{view} {documentos}', 
                 'buttons' => [                
                     'view' => function ($url, $model) {
                         return Html::a('<span class="glyphicon glyphicon-check"></span>', Url::to(['/admision/solicitudes/view', 'ids' => base64_encode($model['sins_id']), 'int' => base64_encode($model['int_id']), 'perid' => base64_encode($model['persona'])]), ["data-toggle" => "tooltip", "title" => "Ver Solicitud", "data-pjax" => 0]);                        
-                    },                                             
+                    },                           
+                    'documentos' => function ($url, $model) {
+                        if ($model['numDocumentos'] == 0)  {  
+                            return Html::a('<span class="glyphicon glyphicon-folder-open"></span>', Url::to(['/admision/solicitudes/subirdocumentos', 'id_sol' => base64_encode($model['sins_id']), 'int' => base64_encode($model['int_id']), 'perid' => base64_encode($model['persona'])]), ["data-toggle" => "tooltip", "title" => "Subir Dcoumentos", "data-pjax" => 0]); 
+                        } else {
+                            return '<span class="glyphicon glyphicon-folder-open"></span>';
+                        }
+                    },     
                 ],
             ],
            

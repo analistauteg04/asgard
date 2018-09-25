@@ -1157,8 +1157,9 @@ class SolicitudInscripcion extends \app\modules\admision\components\CActiveRecor
                      when (select opag_estado_pago
                                from " . $con3->dbname . ".orden_pago op
                                where op.sins_id = sins.sins_id) = 'P' then 'Pendiente' 
-                    else 'Pagado' end as pago                
-                                    
+                    else 'Pagado' end as pago,
+                    ifnull((select count(*) from " . $con->dbname . ".solicitudins_documento sd 
+                            where sd.sins_id = sins.sins_id and sd.sdoc_estado = :estado and sd.sdoc_estado_logico = :estado),0) as numDocumentos                               
                 FROM 
                     " . $con->dbname . ".solicitud_inscripcion as sins
                     INNER JOIN " . $con->dbname . ".interesado as inte on sins.int_id = inte.int_id                    
