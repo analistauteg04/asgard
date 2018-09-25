@@ -117,7 +117,7 @@ INSERT INTO `objeto_modulo` (`omod_id`, `mod_id`, `omod_padre_id`, `omod_nombre`
 (97, 4, 95, 'Editar Actividad', 'S', '0', '', '', '', 'admision/actividades/edit', '1', '1', 'Admision', '1', '2018-09-22 14:07:01', NULL, '1'),
 (98, 4, 97, 'Guardar Edicion Actividad', 'A', '0', '', '', '', 'admision/actividades/edit', '1', '1', 'Admision', '1', '2018-09-22 14:07:01', NULL, '1'),
 (99, 4, 91, 'Enviar Solicitud', 'A', '0', '', '', '', 'admision/solicitudes/view', '1', '1', 'Admision', '1', '2018-09-22 14:07:01', NULL, '1'),
-(100, 4, 83, 'Subir Documentos Solicitud', 'S', '0', '', '', '', 'admision/solicitudes/subirDocumentos', '1', '1', 'Admision', '1', '2018-09-22 14:07:01', NULL, '1'),
+(100, 4, 83, 'Subir Documentos Solicitud', 'S', '0', '', '', '', 'admision/solicitudes/subirDocumentos', '1', '1', 'Admision', '1', '2018-09-22 14:07:01', NULL, '1');
 -- --------------------------------------------------------
 --
 -- Volcado de datos para la tabla `OBMO_ACCI`
