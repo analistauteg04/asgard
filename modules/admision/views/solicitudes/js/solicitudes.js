@@ -1,7 +1,19 @@
 
 $(document).ready(function () {
 
-
+    $('input[name=opt_tipo_DNI]:radio').change(function(){
+        if($(this).val() == 1){//ced
+            $('#txt_dni_fac').attr("data-lengthMin","10");
+            $('#txt_dni_fac').attr("data-lengthMax", "10");
+            $('#txt_dni_fac').attr("placeholder", $('#txth_ced_lb').val());
+            $('label[for=txt_cedula_fac]').text($('#txth_ced_lb').val());
+        }else{
+            $('#txt_dni_fac').attr("data-lengthMin", "13");
+            $('#txt_dni_fac').attr("data-lengthMax", "13");
+            $('#txt_dni_fac').attr("placeholder", $('#txth_ruc_lb').val());
+            $('label[for=txt_cedula_fac]').text($('#txth_ruc_lb').val());
+        }
+    });
     $('#cmb_ninteres').change(function () {
         var link = $('#txth_base').val() + "/solicitudinscripcion/create";
         var arrParams = new Object();
@@ -656,7 +668,12 @@ function save() {
     arrParams.arc_nacional = $('#txth_nac').val();
     arrParams.arc_doc_beca = $('#txth_doc_beca').val();
     arrParams.emp_id = 1;
-   
+    arrParams.nombres_fac   = $('#txt_nombres_fac').val();
+    arrParams.apellidos_fac = $('#txt_apellidos_fac').val();
+    arrParams.dir_fac  = $('#txt_dir_fac').val();
+    arrParams.tel_fac  = $('#txt_tel_fac').val();
+    arrParams.tipo_DNI = $('input[name=opt_tipo_DNI]:radio').val();
+    arrParams.dni_fac  = $('#txt_dni_fac').val();
     if ($('input[name=opt_declara_Dctosi]:checked').val() == 1) {
         arrParams.descuento_id = $('#cmb_descuento').val();
         arrParams.marcadescuento = '1';
@@ -682,7 +699,7 @@ function save() {
                     window.location.href = $('#txth_base').val() + "/admision/interesados/index";
                 } else
                 {
-                    window.location.href = $('#txth_base').val() + "/admision/solicitudes/listarsolicitudxinteresado?id="+ arrParams.int_id;
+                    window.location.href = $('#txth_base').val() + "/admision/solicitudes/listarsolicitudxinteresado?id=" + arrParams.int_id;
                 }
             }, 5000);
         }, true);

@@ -7,6 +7,10 @@ use yii\base\Exception;
 use PhpOffice\PhpSpreadsheet\Spreadsheet;
 use PhpOffice\PhpSpreadsheet\Writer\Xlsx;
 use app\model\Utilities;
+use app\modules\academico\models\EstudioAcademico;
+use app\modules\admision\models\PersonaGestionTmp;
+use app\modules\academico\models\UnidadAcademica;
+use app\modules\academico\models\Modalidad;
 
 
 /**
@@ -78,7 +82,7 @@ class PersonaGestionTmp extends \app\modules\admision\components\CActiveRecord
         return parent::findByCondition($condition);
     }
     
-    public static function uploadFile($file){
+    public function uploadFile($file){
         $filaError=0;
         $chk_ext = explode(".", $file);
         $con = \Yii::$app->db_crm;
@@ -93,7 +97,8 @@ class PersonaGestionTmp extends \app\modules\admision\components\CActiveRecord
             try{
                 $handle = fopen($file, "r");
                 $cont = 0;
-                PersonaGestionTmp::deletetablaTemp($con);
+                $this->deletetablaTemp($con);
+                //PersonaGestionTmp::deletetablaTemp($con);
                 while (($data = fgetcsv($handle, ",")) !== FALSE) {
                     $filaError++;
                     if($cont != 0){
@@ -155,8 +160,8 @@ class PersonaGestionTmp extends \app\modules\admision\components\CActiveRecord
                     }
                     unset($dataArr[1]); // Se elimina la cabecera de titulos del file
                 }
-
-                PersonaGestionTmp::deletetablaTemp($con);
+                $this->deletetablaTemp($con);
+                //PersonaGestionTmp::deletetablaTemp($con);
                 $filaError=1;
                 foreach($dataArr as $val){
                     $filaError++;
@@ -195,7 +200,7 @@ class PersonaGestionTmp extends \app\modules\admision\components\CActiveRecord
         }
     }
     
-    public static function deletetablaTemp($con) {
+    public function deletetablaTemp($con) {
             $sql = "DELETE FROM " . $con->dbname . ".persona_gestion_tmp";            
             $command = $con->createCommand($sql);       
             $command->execute();

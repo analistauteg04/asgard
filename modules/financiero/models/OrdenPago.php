@@ -921,12 +921,12 @@ class OrdenPago extends \app\modules\financiero\components\CActiveRecord {
                         (case icpr.icpr_revisado when 'PE' then 'Pendiente' when 'RE' then 'Revisado' end) as dcar_revisado,
                         (case icpr.icpr_resultado when 'AP' then 'Aprobado' when 'RE' then 'Reprobado'  else '' end) as dcar_resultado,
                          ifnull(icpr.icpr_observacion,'') as icpr_observacion,
-                        icpr.icpr_num_transaccion,
-                        icpr.icpr_fecha_transaccion
-                FROM " . $con->dbname . ".info_carga_prepago icpr " . " INNER JOIN " . $con->dbname . ".forma_pago fp ON fp.fpag_id = icpr.fpag_id                                          
+                        icpr.icpr_num_transaccion,icpr.icpr_fecha_transaccion
+                FROM " . $con->dbname . ".info_carga_prepago icpr "
+                            . "INNER JOIN " . $con->dbname . ".forma_pago fp ON fp.fpag_id = icpr.fpag_id                                          
                 WHERE icpr.opag_id = " . $opag_id . " AND                        
                       icpr.icpr_estado_logico = :estado AND 
-                      icpr.icpr_estado = :estado";
+                      icpr.icpr_estado = :estado ";
         $comando = $con->createCommand($sql);
         $comando->bindParam(":estado", $estado, \PDO::PARAM_STR);
         $resultData = $comando->queryall();
