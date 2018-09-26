@@ -68,4 +68,5 @@ return [
     "Action Enabled" => "Acción Activada",
     "Action Disabled" => "Acción Inactiva",
     "Action Image" => "Imagen",
+    "Approve" => "Aprobar",
 ];
