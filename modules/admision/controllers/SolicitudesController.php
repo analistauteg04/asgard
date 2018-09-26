@@ -376,10 +376,11 @@ class SolicitudesController extends \app\components\CController {
                 }
                 $carrera = $informacion_interesado["carrera"];
 
+                $tipoDNI = ((SolicitudInscripcion::$arr_DNI[$dataTipDNI]) ? SolicitudInscripcion::$arr_DNI[$dataTipDNI] : SolicitudInscripcion::$arr_DNI["3"]);
                 $tituloMensaje = Yii::t("interesado", "UTEG - Registration Online");
                 $asunto = Yii::t("interesado", "UTEG - Registration Online");
                 $body = Utilities::getMailMessage("Paidinterested", array("[[nombre]]" => $nombres, "[[metodo]]" => $metodo, "[[precio]]" => $val_total, "[[link]]" => $link, "[[link1]]" => $link1, "[[link_pypal]]" => $link_paypal), Yii::$app->language);
-                $bodyadmision = Utilities::getMailMessage("Paidadmissions", array("[[nombre]]" => $pri_nombre, "[[apellido]]" => $pri_apellido, "[[correo]]" => $correo, "[[identificacion]]" => $identificacion, "[[curso]]" => $curso, "[[telefono]]" => $telefono), Yii::$app->language);
+                $bodyadmision = Utilities::getMailMessage("Paidadmissions", array("[[nombre]]" => $pri_nombre, "[[apellido]]" => $pri_apellido, "[[correo]]" => $correo, "[[identificacion]]" => $identificacion, "[[tipoDNI]]" => $tipoDNI, "[[curso]]" => $curso, "[[telefono]]" => $telefono), Yii::$app->language);
                 $bodycolecturia = Utilities::getMailMessage("Approvedapplicationcollected", array("[[nombres_completos]]" => $nombres, "[[metodo]]" => $metodo), Yii::$app->language);
                 Utilities::sendEmail($tituloMensaje, Yii::$app->params["adminEmail"], [$correo => $pri_apellido . " " . $pri_nombre], $asunto, $body);
                 Utilities::sendEmail($tituloMensaje, Yii::$app->params["adminEmail"], [Yii::$app->params["admisiones"] => "Jefe"], $asunto, $bodyadmision);
@@ -428,6 +429,42 @@ class SolicitudesController extends \app\components\CController {
                     "int_id" => $datosSolicitud['int_id'],
                     "beca" => $datosSolicitud['sins_beca'],
         ]);
+    }
+
+    public function actionActualizardocumentos() {
+        $sol_id = base64_decode($_GET['id_sol']);        
+        $sol_model = new SolicitudInscripcion();
+        $datosSolicitud = $sol_model->consultarInteresadoPorSol_id($sol_id);
+        return $this->render('subirDocumentos', [
+                    "cliente" => $datosSolicitud['per_apellidos'] . ' ' . $datosSolicitud['per_nombres'],
+                    "solicitud" => $datosSolicitud['sins_id'],
+                    "txth_extranjero" => $datosSolicitud['per_nac_ecuatoriano'],
+                    "per_id" => $datosSolicitud['per_id'],
+                    "sins_id" => $datosSolicitud['sins_id'],
+                    "int_id" => $datosSolicitud['int_id'],
+                    "beca" => $datosSolicitud['sins_beca'],
+        ]);
+    }
+
+    public function actionDescargafactura(){
+        $nombreZip = "facturas_" . time();
+        $content_type = Utilities::mimeContentType($nombreZip . ".zip");
+        header("Content-Type: $content_type");
+        header("Content-Disposition: attachment;filename=" . $nombreZip . ".zip");
+        header('Cache-Control: max-age=0');
+
+        // se deben zippear 2 files el xml y el pdf
+        $arr_files = array(
+            array("ruta" => Yii::$app->basePath . "/uploads/ficha/silueta_default.png",
+             "name" => basename(Yii::$app->basePath . "/uploads/ficha/silueta_default.png")),
+            array("ruta" => Yii::$app->basePath . "/uploads/ficha/Silueta-opc-4.png",
+             "name" => basename(Yii::$app->basePath . "/uploads/ficha/Silueta-opc-4.png")),
+        );
+        $tmpDir = Utilities::zipFiles($nombreZip, $arr_files);
+        $file = file_get_contents($tmpDir);
+        Utilities::removeTemporalFile($tmpDir);
+        echo $file;
+        exit();
     }
 
     public function actionSavedocumentos() {

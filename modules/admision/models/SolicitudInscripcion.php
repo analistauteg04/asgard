@@ -38,6 +38,9 @@ use Yii;
  * @property SolicitudinsDocumento[] $solicitudinsDocumentos
  */
 class SolicitudInscripcion extends \app\modules\admision\components\CActiveRecord {
+
+    public static $arr_DNI = array("1" => "CED", "2" => "RUC", "3" => "PASS");
+
     /**
      * {@inheritdoc}
      */
@@ -1255,9 +1258,8 @@ class SolicitudInscripcion extends \app\modules\admision\components\CActiveRecor
     {
         $con = \Yii::$app->db_captacion;
         $estado = 1;
-
-        $arr_DNI = array("1" => "CED", "2" => "RUC", "3" => "PASS");
-        $tipo = (($arr_DNI[$dataTipDNI]) ? $arr_DNI[$dataTipDNI] : $arr_DNI["3"]);
+        $tipo = ((self::$arr_DNI[$dataTipDNI]) ? self::$arr_DNI[$dataTipDNI] : self::$arr_DNI["3"]);
+        
         $sql = "INSERT INTO solicitud_datos_factura 
                 (sins_id, sdfa_nombres, sdfa_apellidos, sdfa_tipo_dni, sdfa_dni, sdfa_direccion, sdfa_telefono, sdfa_estado, sdfa_estado_logico) VALUES
                 (:id, :nombres, :apellidos, :tipo_dni, :dni, :direccion, :telefono, :estado, :estado);";

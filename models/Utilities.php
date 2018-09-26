@@ -505,7 +505,7 @@ class Utilities {
         if ($zip->open($filename, \ZipArchive::CREATE)!==TRUE) {
             self::putMessageLogFile("cannot open <$filename>");
         }
-        for($i=0; count($arr_files)>0; $i++){
+        for($i=0; $i<count($arr_files); $i++){
             $zip->addFile($arr_files[$i]["ruta"],$arr_files[$i]["name"]);
         }
         $zip->close();
