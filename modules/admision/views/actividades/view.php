@@ -4,7 +4,6 @@ use yii\helpers\Html;
 use yii\helpers\Url;
 use kartik\date\DatePicker;
 use app\modules\admision\Module;
-
 if (!empty($personalData['pges_cedula'])) {
     $tipodoc = "Cédula";
     $dni = $personalData['pges_cedula'];
@@ -113,7 +112,7 @@ if (!empty($personalData['pges_cedula'])) {
     <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
         <div class="col-lg-6 col-md-6 col-sm-6 col-xs-6">
             <div class="form-group">
-                <label for="cmb_nivelestudio" class="col-sm-5 col-md-5 col-xs-5 col-lg-5 control-label keyupmce"><?= Module::t("crm", "Service Line") ?></label>
+                <label for="cmb_nivelestudio" class="col-sm-5 col-md-5 col-xs-5 col-lg-5 control-label keyupmce"><?= Yii::t("formulario", "Academic unit") ?></label>
                 <div class="col-sm-7 col-md-7 col-xs-7 col-lg-7">
                     <?= Html::dropDownList("cmb_nivelestudio", $oportunidad_contacto['uaca_id'], $arr_linea_servicio, ["class" => "form-control", "id" => "cmb_nivelestudio", "disabled" => true]) ?>
                 </div>
@@ -144,7 +143,14 @@ if (!empty($personalData['pges_cedula'])) {
             <div class="form-group">
                 <label for="cmb_carrera1" class="col-sm-5 col-md-5 col-xs-5 col-lg-5 control-label keyupmce"><?= Module::t("crm", "Academic Study") ?></label>
                 <div class="col-sm-7 col-md-7 col-xs-7 col-lg-7">
-                    <?= Html::dropDownList("cmb_carrera1", $oportunidad_contacto['eaca_id'], $arr_academic_study, ["class" => "form-control", "id" => "cmb_carrera1", "disabled" => true]) ?>
+                    <?php if (empty($oportunidad_contacto["eaca_id"])) { ?>
+                            <?= Html::dropDownList("cmb_carrera1", $oportunidad_contacto["mest_id"], $arr_estudio, ["class" => "form-control", "id" => "cmb_carrera_estudio", "disabled" => true]) ?>
+                        <?php 
+                    } else { ?>
+                            <?= Html::dropDownList("cmb_carrera1", $oportunidad_contacto["eaca_id"], $arr_academic_study, ["class" => "form-control", "id" => "cmb_carrera_estudio", "disabled" => true]) ?>
+                        <?php 
+                    } ?>
+                    <!--<? Html::dropDownList("cmb_carrera1", $oportunidad_contacto['eaca_id'], $arr_academic_study, ["class" => "form-control", "id" => "cmb_carrera1", "disabled" => true]) ?>-->
                 </div>
             </div>
         </div>

@@ -1610,10 +1610,10 @@ class Oportunidad extends \app\modules\admision\components\CActiveRecord {
                         and pa.padm_estado_logico = :estado
                         and per.per_estado = :estado
                         and per.per_estado_logico = :estado
-                        and uaca.uaca_estado = :estado
-                        and uaca.uaca_estado_logico = :estado
-                        and moda.mod_estado = :estado
-                        and moda.mod_estado_logico = :estado
+                        -- and uaca.uaca_estado = :estado
+                        -- and uaca.uaca_estado_logico = :estado
+                        -- and moda.mod_estado = :estado
+                        -- and moda.mod_estado_logico = :estado
                         and top.tove_estado = :estado
                         and top.tove_estado_logico = :estado
                         and eop.eopo_estado = :estado
