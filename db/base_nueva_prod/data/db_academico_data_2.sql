@@ -34,7 +34,6 @@ INSERT INTO `periodo_academico` (`sem_id`, `blo_id`, `paca_anio_academico`, `pac
 ('2', '1', '2018-2019', '1', '1', '1', '1'),
 ('2', '2', '2018-2019', '1', '1', '1', '1');
 
-
 -- --------------------------------------------------------
 --
 -- Volcado de datos para la tabla `paralelo`

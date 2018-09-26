@@ -145,7 +145,7 @@ class Matriculacion extends \yii\db\ActiveRecord {
         return $this->hasOne(Estudiante::className(), ['est_id' => 'est_id']);
     }
     
-    public function insertarmatriculacion($daca_id, $adm_id, $est_id, $sins_id, $mat_fecha_matriculacion, $mat_usuario_ingreso) {
+    public function insertarMatriculacion($daca_id, $adm_id, $est_id, $sins_id, $mat_fecha_matriculacion, $mat_usuario_ingreso) {
 
         $con = \Yii::$app->db_academico;       
         $trans = $con->getTransaction(); // se obtiene la transacción actual
@@ -219,6 +219,106 @@ class Matriculacion extends \yii\db\ActiveRecord {
                 $trans->rollback();
             return FALSE;
         }
+    }
+    
+    
+    public function insertarAsignacionxMeting($par_id, $mat_id, $mest_id, $apar_descripcion, $apar_fecha_asignacion, $apar_usuario_asignacion) {
+
+        $con = \Yii::$app->db_academico;       
+        $trans = $con->getTransaction(); // se obtiene la transacción actual
+        if ($trans !== null) {
+            $trans = null; // si existe la transacción entonces no se crea una
+        } else {
+            $trans = $con->beginTransaction(); // si no existe la transacción entonces se crea una
+        }
+                
+        $param_sql = "apar_estado_logico";
+        $bsol_sql = "1";
+
+        $param_sql .= ", apar_estado";
+        $bsol_sql .= ", 1";
+        if (isset($par_id)) {
+            $param_sql .= ", par_id";
+            $bsol_sql .= ", :par_id";
+        }
+
+        if (isset($mat_id)) {
+            $param_sql .= ", mat_id";
+            $bsol_sql .= ", :mat_id";
+        }
+
+        if (isset($mest_id)) {
+            $param_sql .= ", mest_id";
+            $bsol_sql .= ", :mest_id";
+        }
+
+        if (isset($apar_descripcion)) {
+            $param_sql .= ", apar_descripcion";
+            $bsol_sql .= ", :apar_descripcion";
+        }
+
+        if (isset($apar_fecha_asignacion)) {
+            $param_sql .= ", apar_fecha_asignacion";
+            $bsol_sql .= ", :apar_fecha_asignacion";
+        }
+        if (isset($apar_usuario_asignacion)) {
+            $param_sql .= ", apar_usuario_asignacion";
+            $bsol_sql .= ", :apar_usuario_asignacion";
+        }        
+        
+        try {
+            $sql = "INSERT INTO " . $con->dbname . ".asignacion_paralelo ($param_sql) VALUES($bsol_sql)";
+            $comando = $con->createCommand($sql);
+
+            if (isset($par_id))
+                $comando->bindParam(':par_id', $par_id, \PDO::PARAM_INT);
+
+            if (isset($mat_id))
+                $comando->bindParam(':mat_id', $mat_id, \PDO::PARAM_INT);
+
+            if (isset($mest_id))
+                $comando->bindParam(':mest_id', $mest_id, \PDO::PARAM_INT);
+
+            if (isset($apar_descripcion))
+                $comando->bindParam(':apar_descripcion', $apar_descripcion, \PDO::PARAM_STR);
+
+            if (isset($apar_fecha_asignacion))
+                $comando->bindParam(':apar_fecha_asignacion', $apar_fecha_asignacion, \PDO::PARAM_STR);
+
+            if (isset($apar_usuario_asignacion))
+                $comando->bindParam(':apar_usuario_asignacion', $apar_usuario_asignacion, \PDO::PARAM_STR);
+
+            $result = $comando->execute();
+            if ($trans !== null)
+                $trans->commit();
+            return $con->getLastInsertID($con->dbname . '.asignacion_paralelo');
+        } catch (Exception $ex) {
+            if ($trans !== null)
+                $trans->rollback();
+            return FALSE;
+        }
+    }
+    
+     /**
+     * Function Consultaestadosolicitud
+     * @author  Grace Viteri <analistadesarrollo01@uteg.edu.ec>
+     * @param   
+     * @return  $resultData (Retornar los estados de las solicitudes).
+     */
+    public function consultaPeriodoAcademico() {
+        $con = \Yii::$app->db_academico;
+        $estado = 1;
+
+        $sql = "SELECT mes_id_academico, pami_fecha_inicio, pami_fecha_fin
+                FROM " . $con->dbname . ".periodo_academico_met_ingreso pmi 
+                WHERE pmi.pami_estado_logico = :estado AND
+                      pmi.pami_estado = :estado
+                ORDER BY pmi.pami_id";
+
+        $comando = $con->createCommand($sql);
+        $comando->bindParam(":estado", $estado, \PDO::PARAM_STR);
+        $resultData = $comando->queryAll();
+        return $resultData;
     }
 
 }

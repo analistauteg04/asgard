@@ -360,13 +360,14 @@ create table if not exists `periodo_academico` (
 
 -- --------------------------------------------------------
 -- 
--- Estructura de tabla para la tabla `periodo_academico`
+-- Estructura de tabla para la tabla `periodo_academico_met_ingreso`
 -- 
 create table if not exists `periodo_academico_met_ingreso` (
   `pami_id` bigint(20) not null auto_increment primary key,
   `mes_id_academico` bigint(20) not null,
   `pami_fecha_inicio` timestamp null,
   `pami_fecha_fin` timestamp null,
+  `pami_codigo` varchar(10) not null,
   `pami_usuario_ingreso` bigint(20) not null,
   `pami_usuario_modifica` bigint(20)  null,
   `pami_estado` varchar(1) not null,
@@ -409,12 +410,12 @@ create table if not exists `profesor` (
 -- 
 -- Estructura de tabla para la tabla `planificacion`
 -- 
-
 create table if not exists `planificacion_estudio_academico` (
   `peac_id` bigint(20) not null auto_increment primary key, 
   `uaca_id` bigint(20) not null,
   `mod_id` bigint(20) not null,
-  `paca_id` bigint(20) not null,
+  `paca_id` bigint(20) null,
+  `pami_id` bigint(20) null,
   `made_id` bigint(20) not null,
   `peac_usuario_ingreso` bigint(20) not null,
   `peac_usuario_modifica` bigint(20)  null,
@@ -425,15 +426,14 @@ create table if not exists `planificacion_estudio_academico` (
   foreign key (uaca_id) references `unidad_academica`(uaca_id),
   foreign key (mod_id) references `modalidad`(mod_id),
   foreign key (paca_id) references `periodo_academico`(paca_id),
-  foreign key (made_id) references `malla_academica_detalle`(made_id)
-
+  foreign key (made_id) references `malla_academica_detalle`(made_id),
+  foreign key (pami_id) references `periodo_academico_met_ingreso`(pami_id)
 );
 
 -- --------------------------------------------------------
 -- 
 -- Estructura de tabla para la tabla `distributivo_horario`
 -- 
-
 create table if not exists `distributivo_horario` (
   `dhor_id` bigint(20) not null auto_increment primary key, 
   `dia_id` bigint(20) not null, 
@@ -452,7 +452,6 @@ create table if not exists `distributivo_horario` (
 -- 
 -- Estructura de tabla para la tabla `distributivo_academico`
 -- 
-
 create table if not exists `distributivo_academico` (
   `daca_id` bigint(20) not null auto_increment primary key, 
   `peac_id` bigint(20) not null,
@@ -477,10 +476,10 @@ create table if not exists `distributivo_academico` (
 --  
 -- Estructura de tabla para la tabla `paralelo`
 -- 
-
 create table if not exists `paralelo` (
   `par_id` bigint(20) not null auto_increment primary key, 
-  `paca_id` bigint(20)  not null,
+  `paca_id` bigint(20)  null,
+  `pmin_id` bigint(20)  null,
   `par_nombre` varchar(300) not null,
   `par_descripcion` varchar(500) not null,
   `par_usuario_ingreso` bigint(20) not null,
@@ -489,15 +488,14 @@ create table if not exists `paralelo` (
   `par_fecha_creacion` timestamp not null default current_timestamp,
   `par_fecha_modificacion` timestamp null default null,
   `par_estado_logico` varchar(1) not null,
-  foreign key (paca_id) references `periodo_academico`(paca_id)
-  
+  foreign key (paca_id) references `periodo_academico`(paca_id),
+  foreign key (pmin_id) references `periodo_academico_met_ingreso`(pmin_id)  
 );
 
 -- --------------------------------------------------------
 -- 
 -- Estructura de tabla para la tabla `matriculacion`
 -- 
-
 create table if not exists `matriculacion` (
   `mat_id` bigint(20) not null auto_increment primary key, 
   `daca_id` bigint(20) null, 
@@ -520,7 +518,6 @@ create table if not exists `matriculacion` (
 -- 
 -- Estructura de tabla para la tabla `asignacion_paralelo`
 -- 
-
 create table if not exists `asignacion_paralelo` (
   `apar_id` bigint(20) not null auto_increment primary key, 
   `par_id` bigint(20) not null, 

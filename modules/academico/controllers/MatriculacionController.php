@@ -6,6 +6,7 @@ use Yii;
 use app\modules\academico\models\Aspirante;
 use app\modules\academico\models\EstudioAcademico;
 use app\modules\admision\models\Interesado;
+use app\modules\admision\models\SolicitudInscripcion;
 use yii\helpers\ArrayHelper;
 
 
@@ -23,8 +24,12 @@ class MatriculacionController extends \app\components\CController {
     }
     
     public function actionNewmetodoingreso() {
-    return $this->render('newmetodoingreso', [
-           
+        $sins_id = base64_decode($_GET['sids']);
+        $mod_solins = new SolicitudInscripcion();
+        $personaData = $mod_solins->consultarInteresadoPorSol_id($sins_id);
+        return $this->render('newmetodoingreso', [
+                            'personalData' => $personaData,                            
+            
         ]);    
     }
     public function actionView() {
