@@ -84,7 +84,7 @@ academico::registerTranslations();
                     },                           
                     'documentos' => function ($url, $model) {
                         if ($model['numDocumentos'] == 0)  {  
-                            return Html::a('<span class="glyphicon glyphicon-folder-open"></span>', Url::to(['/admision/solicitudes/subirdocumentos', 'id_sol' => base64_encode($model['sins_id']), 'int' => base64_encode($model['int_id']), 'perid' => base64_encode($model['persona'])]), ["data-toggle" => "tooltip", "title" => "Subir Dcoumentos", "data-pjax" => 0]); 
+                            return Html::a('<span class="glyphicon glyphicon-folder-open"></span>', Url::to(['/admision/solicitudes/subirdocumentos', 'id_sol' => base64_encode($model['sins_id']), 'int' => base64_encode($model['int_id']), 'perid' => base64_encode($model['persona']), 'opcion' => base64_encode(2)]), ["data-toggle" => "tooltip", "title" => "Subir Dcoumentos", "data-pjax" => 0]); 
                         } else {
                             return '<span class="glyphicon glyphicon-folder-open"></span>';
                         }

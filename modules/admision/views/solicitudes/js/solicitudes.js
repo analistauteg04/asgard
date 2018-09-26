@@ -1,11 +1,5 @@
 
-$(document).ready(function () {
-    var condiciontitulo = new Array();
-    var condiciondni = new Array();
-    var len = condiciontitulo.length;
-    var len1 = condiciondni.length;
-    var obstitulo = "";
-    var obsdni = "";
+$(document).ready(function () {    
 
     $('input[name=opt_tipo_DNI]:radio').change(function(){
         if($(this).val() == 1){//ced
@@ -300,79 +294,7 @@ $(document).ready(function () {
         } else {
             $('#Divconddni').css('visibility', 'hidden');
         }
-    });
-
-    /**
-     * Function arreglo_check, forma arreglo con las condiciones elegidas tanto para los documentos: título y documento de identidad.
-     * @author  Grace Viteri <analistadesarrollo01@uteg.edu.ec>
-     * @param   
-     * @return  
-     */
-    function arreglo_check() {
-        if ($('#chk_titulo').prop('checked')) {
-            obstitulo = $('#chk_titulo').attr('placeholder');
-            if ($('#chk_contitulo0').prop('checked')) {
-                if (len == 0) {
-                    condiciontitulo[0] = $('#txth_cond_titulo0').val();
-                } else {
-                    condiciontitulo[len] = $('#txth_cond_titulo0').val();
-                }
-                len = len + 1;
-            }
-            if ($('#chk_contitulo1').prop('checked')) {
-                if (len == 0) {
-                    condiciontitulo[0] = $('#txth_cond_titulo1').val();
-                } else {
-                    condiciontitulo[len] = $('#txth_cond_titulo1').val();
-                }
-                len = len + 1;
-            }
-            if ($('#chk_contitulo2').prop('checked')) {
-                if (len == 0) {
-                    condiciontitulo[0] = $('#txth_cond_titulo2').val();
-                } else {
-                    condiciontitulo[len] = $('#txth_cond_titulo2').val();
-                }
-                len = len + 1;
-            }
-            if ($('#chk_contitulo3').prop('checked')) {
-                if (len == 0) {
-                    condiciontitulo[0] = $('#txth_cond_titulo3').val();
-                } else {
-                    condiciontitulo[len] = $('#txth_cond_titulo3').val();
-                }
-                len = len + 1;
-            }
-        }
-
-        if ($('#chk_documento').prop('checked')) {
-            obsdni = $('#chk_documento').attr('placeholder');
-            if ($('#chk_conddni0').prop('checked')) {
-                if (len1 == 0) {
-                    condiciondni[0] = $('#txth_cond_dni0').val();
-                } else {
-                    condiciondni[len1] = $('#txth_cond_dni0').val();
-                }
-                len1 = len1 + 1;
-            }
-            if ($('#chk_conddni1').prop('checked')) {
-                if (len1 == 0) {
-                    condiciondni[0] = $('#txth_cond_dni1').val();
-                } else {
-                    condiciondni[len1] = $('#txth_cond_dni1').val();
-                }
-                len1 = len1 + 1;
-            }
-            if ($('#chk_conddni2').prop('checked')) {
-                if (len1 == 0) {
-                    condiciondni[0] = $('#txth_cond_dni2').val();
-                } else {
-                    condiciondni[len1] = $('#txth_cond_dni2').val();
-                }
-                len1 = len1 + 1;
-            }
-        }
-    }
+    });  
 
     $('#btn_buscarData').click(function () {
         actualizarGrid();
@@ -638,7 +560,8 @@ function SaveDocumentos() {
     arrParams.arc_doc_certvota = $('#txth_doc_certvota').val();
     arrParams.arc_doc_foto = $('#txth_doc_foto').val();
     arrParams.arc_doc_beca = $('#txth_doc_beca').val();
-
+    arrParams.opcion = $('#txth_opcion').val();
+    
     if ($('input[name=opt_declara_si]:checked').val() == 1) {
         arrParams.beca = 1;
     } else {
@@ -648,33 +571,116 @@ function SaveDocumentos() {
         requestHttpAjax(link, arrParams, function (response) {
             showAlert(response.status, response.label, response.message);
             setTimeout(function () {
-                window.location.href = $('#txth_base').val() + "/admision/solicitudes/listarsolicitudxinteresado?id=" + arrParams.interesado_id;
+                if (arrParams.opcion==1) {
+                    window.location.href = $('#txth_base').val() + "/admision/solicitudes/listarsolicitudxinteresado?id=" + arrParams.interesado_id;
+                }   else {
+                    window.location.href = $('#txth_base').val() + "/admision/solicitudes/index";                    
+                }             
             }, 5000);
         }, true);
     }
 }
+ var condiciontitulo = new Array();
+ var condiciondni = new Array();
+ var len = condiciontitulo.length;
+ var len1 = condiciondni.length;
+ var obstitulo = "";
+ var obsdni = "";
 
+ /**
+    * Function arreglo_check, forma arreglo con las condiciones elegidas tanto para los documentos: título y documento de identidad.
+    * @author  Grace Viteri <analistadesarrollo01@uteg.edu.ec>
+    * @param   
+    * @return  
+*/
+function arreglo_check() {
+   if ($('#chk_titulo').prop('checked')) {
+       obstitulo = $('#chk_titulo').attr('placeholder');
+       if ($('#chk_contitulo0').prop('checked')) {
+           if (len == 0) {
+               condiciontitulo[0] = $('#txth_cond_titulo0').val();
+           } else {
+               condiciontitulo[len] = $('#txth_cond_titulo0').val();
+           }
+           len = len + 1;
+       }
+       if ($('#chk_contitulo1').prop('checked')) {
+           if (len == 0) {
+               condiciontitulo[0] = $('#txth_cond_titulo1').val();
+           } else {
+               condiciontitulo[len] = $('#txth_cond_titulo1').val();
+           }
+           len = len + 1;
+       }
+       if ($('#chk_contitulo2').prop('checked')) {
+           if (len == 0) {
+               condiciontitulo[0] = $('#txth_cond_titulo2').val();
+           } else {
+               condiciontitulo[len] = $('#txth_cond_titulo2').val();
+           }
+           len = len + 1;
+       }
+       if ($('#chk_contitulo3').prop('checked')) {
+           if (len == 0) {
+               condiciontitulo[0] = $('#txth_cond_titulo3').val();
+           } else {
+               condiciontitulo[len] = $('#txth_cond_titulo3').val();
+           }
+           len = len + 1;
+       }
+   }
 
+   if ($('#chk_documento').prop('checked')) {
+       obsdni = $('#chk_documento').attr('placeholder');
+       if ($('#chk_conddni0').prop('checked')) {
+           if (len1 == 0) {
+               condiciondni[0] = $('#txth_cond_dni0').val();
+           } else {
+               condiciondni[len1] = $('#txth_cond_dni0').val();
+           }
+           len1 = len1 + 1;
+       }
+       if ($('#chk_conddni1').prop('checked')) {
+           if (len1 == 0) {
+               condiciondni[0] = $('#txth_cond_dni1').val();
+           } else {
+               condiciondni[len1] = $('#txth_cond_dni1').val();
+           }
+           len1 = len1 + 1;
+       }
+       if ($('#chk_conddni2').prop('checked')) {
+           if (len1 == 0) {
+               condiciondni[0] = $('#txth_cond_dni2').val();
+           } else {
+               condiciondni[len1] = $('#txth_cond_dni2').val();
+           }
+           len1 = len1 + 1;
+       }
+   }
+}
+    
 //Guarda la Revisión final de solicitudes de inscripción.
 function Approve() {
     var arrParams = new Object();
-    var link = $('#txth_base').val() + "/admision/solicitudes/saverevision";  
+    var link = $('#txth_base').val() + "/admision/solicitudes/saverevision"; 
+   
     arrParams.sins_id = $('#txth_sins_id').val();
     arrParams.int_id = $('#txth_int_id').val();
     arrParams.resultado = $('#cmb_revision').val();
     arrParams.observacion = $('#txt_observacion').val();
     arrParams.per_id = $('#txth_per_id').val();
+    arrParams.estado_sol = $('#txth_rsin_id').val();
 
-    if ($('#cmb_revision').val() == "4") {               
-        arreglo_check();               
+    if ($('#cmb_revision').val() == "4") {        
+        arreglo_check();             
         arrParams.condicionestitulo = condiciontitulo;
         arrParams.condicionesdni = condiciondni;               
         //Condiciones que indican que se ha seleccionado un(os) checkboxes.
-        if (len > 0) {                   
+        if (len > 0) {                
             arrParams.titulo = 1;
             arrParams.observacion = obstitulo;
         }
-        if (len1 > 0) {                   
+        if (len1 > 0) {     
             arrParams.dni = 1;
             if (arrParams.observacion == "") {
                 arrParams.observacion = obsdni;
@@ -682,7 +688,7 @@ function Approve() {
                 arrParams.observacion = arrParams.observacion + "<br/>" + obsdni;
             }
         }
-    }
+    }  
     arrParams.banderapreaprueba = '0';        
     if (!validateForm()) {
         requestHttpAjax(link, arrParams, function (response) {
