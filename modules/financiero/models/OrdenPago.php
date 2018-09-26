@@ -944,12 +944,12 @@ class OrdenPago extends \app\modules\financiero\components\CActiveRecord {
     }
 
     /**
-     * Function insertarAspirante (Crea aspirante)
+     * Function insertarAdmitido (Crea aspirante)
      * @author  Grace Viteri <analistadesarrollo01@uteg.edu.ec>
      * @param   
      * @return  
      */
-    public function insertarAspirante($int_id) {
+    public function insertarAdmitido($int_id) {
         $con = \Yii::$app->db_captacion;
         $trans = $con->getTransaction(); // se obtiene la transacción actual
         if ($trans !== null) {
@@ -957,10 +957,10 @@ class OrdenPago extends \app\modules\financiero\components\CActiveRecord {
         } else {
             $trans = $con->beginTransaction(); // si no existe la transacción entonces se crea una
         }
-        $param_sql = "asp_estado_logico";
+        $param_sql = "adm_estado_logico";
         $basp_sql = "1";
 
-        $param_sql .= ", asp_estado";
+        $param_sql .= ", adm_estado";
         $basp_sql .= ", 1";
 
         if (isset($int_id)) {
@@ -968,7 +968,7 @@ class OrdenPago extends \app\modules\financiero\components\CActiveRecord {
             $basp_sql .= ", :int_id";
         }
         try {
-            $sql = "INSERT INTO " . $con->dbname . ".aspirante ($param_sql) VALUES($basp_sql)";
+            $sql = "INSERT INTO " . $con->dbname . ".admitido ($param_sql) VALUES($basp_sql)";
             $comando = $con->createCommand($sql);
 
             if (isset($int_id))
@@ -977,7 +977,7 @@ class OrdenPago extends \app\modules\financiero\components\CActiveRecord {
             $result = $comando->execute();
             if ($trans !== null)
                 $trans->commit();
-            return $con->getLastInsertID($con->dbname . '.aspirante');
+            return $con->getLastInsertID($con->dbname . '.admitido');
         } catch (Exception $ex) {
             if ($trans !== null)
                 $trans->rollback();
@@ -1149,20 +1149,20 @@ class OrdenPago extends \app\modules\financiero\components\CActiveRecord {
     }
 
     /**
-     * Function encuentraAspirante Verifica si ya está registrado como aspirante.
+     * Function encuentraAdmitido Verifica si ya está registrado como aspirante.
      * @author  Grace Viteri <analistadesarrollo02@uteg.edu.ec>
      * @param   
      * @return  
      */
-    public function encuentraAspirante($int_id) {
+    public function encuentraAdmitido($int_id) {
         $con = \Yii::$app->db_captacion;
         $estado = 1;
 
-        $sql = "SELECT asp.asp_id
-                FROM " . $con->dbname . ".aspirante asp
+        $sql = "SELECT asp.adm_id
+                FROM " . $con->dbname . ".admitido asp
                 WHERE asp.int_id = :int_id AND
-                      asp.asp_estado = :estado AND
-                      asp.asp_estado_logico = :estado";
+                      asp.adm_estado = :estado AND
+                      asp.adm_estado_logico = :estado";
         $comando = $con->createCommand($sql);
         $comando->bindParam(":estado", $estado, \PDO::PARAM_STR);
         $comando->bindParam(":int_id", $int_id, \PDO::PARAM_INT);
