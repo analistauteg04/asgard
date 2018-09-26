@@ -980,7 +980,8 @@ class Oportunidad extends \app\modules\admision\components\CActiveRecord {
         $opo_hora_ini_contacto = $hora_atiende[0]; //date('h:i',strtotime($hora_atiende[0]));
         $opo_hora_fin_contacto = $hora_atiende[2]; //date('h:i',strtotime($hora_atiende[2]));
         $opo_usuario = @Yii::$app->session->get("PB_iduser"); // 1 equivale al usuario administrador
-        $fecha_registro = date(Yii::$app->params["dateTimeByDefault"], strtotime($data['fecha_registro']));
+        //$fecha_registro = date(Yii::$app->params["dateTimeByDefault"], strtotime($data['fecha_registro']));
+        $fecha_registro=($data['fecha_registro']!='')? date(Yii::$app->params["dateTimeByDefault"], strtotime($data['fecha_registro'])):NULL ;
 
         $sql = "INSERT INTO " . $con->dbname . ".oportunidad
             (opo_codigo,emp_id,pges_id,eaca_id,uaca_id,mod_id,tove_id,ccan_id,
@@ -1046,17 +1047,19 @@ class Oportunidad extends \app\modules\admision\components\CActiveRecord {
     public function insertarActividadLotes($con, $opo_id, $padm_id, $eopo_id, $bact_descripcion) {
         //bact_id 
         $usuario = @Yii::$app->session->get("PB_iduser");
+        $oact_id=1;//Observacion de Actividades
         $bact_usuario=$usuario;
         $sql = "INSERT INTO " . $con->dbname . ".bitacora_actividades
-                (opo_id,usu_id,padm_id,eopo_id,bact_fecha_registro,bact_descripcion,
+                (opo_id,usu_id,padm_id,eopo_id,bact_fecha_registro,bact_descripcion,oact_id,
                  bact_usuario,bact_estado,bact_estado_logico)VALUES
-                (:opo_id,:usu_id,:padm_id,:eopo_id,CURRENT_TIMESTAMP(),:bact_descripcion,:bact_usuario,1,1); ";
+                (:opo_id,:usu_id,:padm_id,:eopo_id,CURRENT_TIMESTAMP(),:bact_descripcion,:oact_id,:bact_usuario,1,1); ";
 
         $command = $con->createCommand($sql);
         $command->bindParam(":opo_id", $opo_id, \PDO::PARAM_INT);
         $command->bindParam(":usu_id", $usuario, \PDO::PARAM_INT);
         $command->bindParam(":padm_id", $padm_id, \PDO::PARAM_INT);
         $command->bindParam(":eopo_id", $eopo_id, \PDO::PARAM_INT);
+        $command->bindParam(":oact_id", $oact_id, \PDO::PARAM_INT);
         $command->bindParam(":bact_usuario", $bact_usuario, \PDO::PARAM_INT);
         $command->bindParam(":bact_descripcion", $bact_descripcion, \PDO::PARAM_STR);
 
@@ -1499,7 +1502,7 @@ class Oportunidad extends \app\modules\admision\components\CActiveRecord {
         $mod_pergestion = new PersonaGestion();
         if ($tipoProceso == "LEADS") {
             $path = Yii::$app->basePath . Yii::$app->params['documentFolder'] . "leads/" . $fname;       
-            return $mod_pergestion->insertarDtosPersonaGestion($emp_id, $tipoProceso);
+            //return $mod_pergestion->insertarDtosPersonaGestion($emp_id, $tipoProceso);
             $carga_archivo = $mod_perTemp->uploadFile($path);
             if ($carga_archivo['status']) {
                 return $mod_pergestion->insertarDtosPersonaGestion($emp_id, $tipoProceso);
