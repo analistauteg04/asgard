@@ -1276,4 +1276,26 @@ class SolicitudInscripcion extends \app\modules\admision\components\CActiveRecor
         $resultData = $comando->execute();
         return $resultData;
     }
+    
+     /**
+     * Function consultarDatosfacturaxIdsol. Muestra todas las solicitudes.
+     * @author  Grace Viteri <analistadesarrollo01@uteg.edu.ec>
+     * @param   
+     * @return  
+     */
+     public function consultarDatosfacturaxIdsol($sins_id) {        
+        $con2 = \Yii::$app->db_captacion;
+        $estado = 1;
+        $sql = "SELECT sdfa_nombres, sdfa_apellidos, sdfa_direccion, sdfa_dni, sdfa_tipo_dni, sdfa_telefono 
+                FROM " . $con2->dbname . ".solicitud_datos_factura 
+                WHERE sins_id = :sins_id
+                and sdfa_estado = :estado
+                and sdfa_estado_logico = :estado";                  
+        $comando = $con2->createCommand($sql);
+        $comando->bindParam(":estado", $estado, \PDO::PARAM_STR);
+        $comando->bindParam(":sins_id", $sins_id, \PDO::PARAM_INT);
+        $resultData = $comando->queryOne();
+        
+        return $resultData;                
+    }
 }
