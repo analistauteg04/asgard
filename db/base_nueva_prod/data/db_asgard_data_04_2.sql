@@ -96,7 +96,7 @@ INSERT INTO `objeto_modulo` (`omod_id`, `mod_id`, `omod_padre_id`, `omod_nombre`
 (76, 2, 74, 'Crear Actividad', 'A', '0', '', '', '', 'admision/actividades/listaractividadxoportunidad', 1, '1', 'contacto', '1', '2018-09-21 00:10:53', NULL, '1'),
 (77, 2, 75, 'Guardar Actividad', 'A', '0', '', '', '', 'admision/actividades/newactividad', 1, '1', 'contacto', '1', '2018-09-21 00:15:13', NULL, '1'),
 (78, 2, 78, 'Aspirantes', 'P', '0', '', '', '', 'admision/interesados/index', 3, '1', 'Solicitudes', '1', '2018-09-22 00:05:23', NULL, '1'),
-(79, 2, 78, 'Solicitudes por Aspirante', 'S', '0', '', '', '', 'admision/solicitudes/listarsolicitudxinteresado', 1, '1', 'Solicitudes', '1', '2018-09-22 00:35:31', NULL, '1'),
+(79, 2, 78, 'Solicitudes por Aspirante', 'S', '0', '', '', '', 'admision/solicitudes/listarsolicitudxinteresado', 1, '0', 'Solicitudes', '1', '2018-09-22 00:35:31', NULL, '1'),
 (80, 2, 79, 'Crear Solicitud de Inscripcion', 'S', '0', '', '', '', 'admision/solicitudes/new', 1, '1', 'Solicitudes', '1', '2018-09-22 00:47:12', NULL, '1'),
 (81, 2, 79, 'Crear Solicitud', 'A', '0', '', '', '', 'admision/solicitudes/listarsolicitudxinteresado', 1, '1', 'Solicitudes', '1', '2018-09-22 14:07:01', NULL, '1'),
 (82, 2, 80, 'Guardar Solicitud Inscripcion', 'A', '0', '', '', '', 'admision/solicitudes/new', '1', '1', 'Solicitudes', '1', '2018-09-22 14:07:01', NULL, '1'),
@@ -106,11 +106,11 @@ INSERT INTO `objeto_modulo` (`omod_id`, `mod_id`, `omod_padre_id`, `omod_nombre`
 (86, 3, 86, 'Registro Pagos por Colecturia', 'P', '0', '', '', '', 'financiero/pagos/indexadm', '1', '1', 'Pagos', '1', '2018-09-22 14:07:01', NULL, '1'),
 (87, 3, 87, 'Listar Pagos Cargados', 'P', '0', '', '', '', 'financiero/pagos/listarpagoscargados', '1', '1', 'Pagos', '1', '2018-09-22 14:07:01', NULL, '1'),
 (88, 3, 79, 'Listar Pagos Solicitud', 'S', '0', '', '', '', 'financiero/pagos/listarpagosolicitud', '1', '1', 'Pagos', '1', '2018-09-22 14:07:01', NULL, '1'),
-(89, 3, 85, 'Validar Pago Carga', 'S', '0', '', '', '', 'financiero/pagos/validarpagocarga', '1', '1', 'Pagos', '1', '2018-09-22 14:07:01', NULL, '1'),
-(90, 3, 85, 'Cargar Documentos Pagos', 'S', '0', '', '', '', 'financiero/pagos/cargardocpagos', '1', '1', 'Pagos', '1', '2018-09-22 14:07:01', NULL, '1'),
-(91, 4, 84, 'Ver Solicitud', 'S', '0', '', '', '', 'admision/solicitudes/view', '1', '1', 'Solicitudes', '1', '2018-09-22 14:07:01', NULL, '1'),
-(92, 4, 84, 'Metodo de Ingreso', 'S', '0', '', '', '', 'academico/matriculacion/newmetodoingreso', '1', '1', 'Solicitudes', '1', '2018-09-22 14:07:01', NULL, '1'),
-(93, 4, 84, 'Homologacion', 'S', '0', '', '', '', 'academico/matriculacion/newhomologacion', '1', '1', 'Solicitudes', '1', '2018-09-22 14:07:01', NULL, '1'),
+(89, 3, 85, 'Validar Pago Carga', 'S', '0', '', '', '', 'financiero/pagos/validarpagocarga', '1', '0', 'Pagos', '1', '2018-09-22 14:07:01', NULL, '1'),
+(90, 3, 85, 'Cargar Documentos Pagos', 'S', '0', '', '', '', 'financiero/pagos/cargardocpagos', '1', '0', 'Pagos', '1', '2018-09-22 14:07:01', NULL, '1'),
+(91, 4, 84, 'Ver Solicitud', 'S', '0', '', '', '', 'admision/solicitudes/view', '1', '0', 'Solicitudes', '1', '2018-09-22 14:07:01', NULL, '1'),
+(92, 4, 84, 'Metodo de Ingreso', 'S', '0', '', '', '', 'academico/matriculacion/newmetodoingreso', '1', '0', 'Solicitudes', '1', '2018-09-22 14:07:01', NULL, '1'),
+(93, 4, 84, 'Homologacion', 'S', '0', '', '', '', 'academico/matriculacion/newhomologacion', '1', '0', 'Solicitudes', '1', '2018-09-22 14:07:01', NULL, '1'),
 (94, 4, 92, 'Guardar Metodo Ingreso', 'A', '0', '', '', '', 'academico/matriculacion/newmetodoingreso', '1', '1', 'Academico', '1', '2018-09-22 14:07:01', NULL, '1'),
 (95, 4, 74, 'Ver Actividad', 'S', '0', '', '', '', 'admision/actividades/view', '1', '1', 'Admision', '1', '2018-09-22 14:07:01', NULL, '1'),
 (96, 4, 95, 'Edicion Actividad', 'A', '0', '', '', '', 'admision/actividades/view', '1', '0', 'Admision', '1', '2018-09-22 14:07:01', NULL, '1'),
@@ -118,7 +118,8 @@ INSERT INTO `objeto_modulo` (`omod_id`, `mod_id`, `omod_padre_id`, `omod_nombre`
 (98, 4, 97, 'Guardar Edicion Actividad', 'A', '0', '', '', '', 'admision/actividades/edit', '1', '1', 'Admision', '1', '2018-09-22 14:07:01', NULL, '1'),
 (99, 4, 91, 'Enviar Solicitud', 'A', '0', '', '', '', 'admision/solicitudes/view', '1', '1', 'Admision', '1', '2018-09-22 14:07:01', NULL, '1'),
 (100, 4, 83, 'Subir Documentos Solicitud', 'S', '0', '', '', '', 'admision/solicitudes/subirDocumentos', '1', '1', 'Admision', '1', '2018-09-22 14:07:01', NULL, '1'),
-(101, 4, 100, 'Guardar Documentos Solicitud', 'A', '0', '', '', '', 'admision/solicitudes/subirDocumentos', '1', '1', 'Admision', '1', '2018-09-22 14:07:01', NULL, '1');
+(101, 4, 100, 'Guardar Documentos Solicitud', 'A', '0', '', '', '', 'admision/solicitudes/subirDocumentos', '1', '1', 'Admision', '1', '2018-09-22 14:07:01', NULL, '1'),
+(102, 4, 90, 'Guardar Cargar Documento Pago', 'A', '0', '', '', '', 'financiero/pagos/cargardocpagos', '1', '1', 'Admision', '1', '2018-09-22 14:07:01', NULL, '1');
 -- --------------------------------------------------------
 --
 -- Volcado de datos para la tabla `OBMO_ACCI`
@@ -164,7 +165,8 @@ INSERT INTO `obmo_acci` (`oacc_id`, `omod_id`, `acc_id`, `oacc_tipo_boton`, `oac
 (38, 96, 12, '1', '', 'edit', '1', '1'),
 (39, 98, 4, '1', '', 'update', '1', '1'),
 (40, 99, 13, '1', '', 'Approve', '1', '1'),
-(41, 101, 4, '1', '', 'SaveDocumentos', '1', '1');
+(41, 101, 4, '1', '', 'SaveDocumentos', '1', '1'),
+(42, 102, 4, '1', '', 'enviardata', '1', '1');
 -- --------------------------------------------------------
 --
 -- Volcado de datos para la tabla `grup_obmo`
@@ -270,7 +272,8 @@ INSERT INTO `grup_obmo` (`gmod_id`, `gru_id`, `omod_id`, `gmod_estado`,  `gmod_e
 (98, 1, 98, '1', '1'),
 (99, 1, 99, '1', '1'),
 (100, 1, 100, '1', '1'),
-(101, 1, 101, '1', '1');
+(101, 1, 101, '1', '1'),
+(102, 1, 102, '1', '1');
 
 
 -- --------------------------------------------------------
@@ -378,4 +381,5 @@ INSERT INTO `grup_obmo_grup_rol` (`gogr_id`, `grol_id`, `gmod_id`, `gogr_estado`
 (98, 1, 98, '1', '1'),
 (99, 1, 99, '1', '1'),
 (100, 1, 100, '1', '1'),
-(101, 1, 101, '1', '1');
+(101, 1, 101, '1', '1'),
+(102, 1, 102, '1', '1');

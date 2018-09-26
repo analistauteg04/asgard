@@ -30,6 +30,7 @@ $leyendarc = '<div class="col-md-12 col-sm-12 col-xs-12 col-lg-12">
 <div class="col-md-12">    
     <h3><span id="lbl_Personeria"><?= financiero::t("Pagos", "Upload Payments") ?></span>
 </div>
+<?= Html::hiddenInput('txth_idsol', ($_GET['sins_id']), ['id' => 'txth_idsol']); ?>
 <?= Html::hiddenInput('txth_ids', base64_decode($_GET['ids']), ['id' => 'txth_ids']); ?>
 <?= Html::hiddenInput('txth_tot', base64_decode($_GET['tot']), ['id' => 'txth_tot']); ?>
 <?= Html::hiddenInput('txth_vista', $vista, ['id' => 'txth_vista']); ?>
@@ -186,11 +187,7 @@ $per_id = Yii::$app->session->get("PB_perid");
     </div>    
          
     <?php if (base64_decode($_GET['estado']) == 'Pendiente') { ?>
-        <div class="col-md-12 col-sm-12 col-xs-12 col-lg-12">
-            <div class="col-sm-2 col-md-2 col-xs-4 col-lg-2 ">              
-                <a id="cmd_enviarData" href="javascript:" class="btn btn-primary btn-block"> <?= Yii::t("formulario", "Send") ?> <span class=""></span></a>
-            </div>                                 
-        </div>                
+        <div></div>                
         <?php
     } else {
          $leyenda = '<div class="col-md-12 col-sm-12 col-xs-12 col-lg-12">

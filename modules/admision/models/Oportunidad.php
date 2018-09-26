@@ -238,30 +238,30 @@ class Oportunidad extends \app\modules\admision\components\CActiveRecord {
                     op.opo_id as id,
                     op.opo_codigo as codigo,
                     concat(ifnull(agent.per_pri_nombre,''), ' ', ifnull(agent.per_pri_apellido,'')) as agente, 
-                    -- uac.uaca_nombre as linea_servicio,
-                    -- moda.mod_nombre as modalidad,
-                    (select uac.uaca_nombre from " . $con2->dbname . ".unidad_academica uac where uac.uaca_id = op.uaca_id) as linea_servicio,
-                    (select moda.mod_nombre from " . $con2->dbname . ".modalidad moda where moda.mod_id = op.mod_id) as modalidad,
+                    uac.uaca_nombre as linea_servicio,
+                    moda.mod_nombre as modalidad,
+                    -- (select uac.uaca_nombre from " . $con2->dbname . ".unidad_academica uac where uac.uaca_id = op.uaca_id) as linea_servicio,
+                    -- (select moda.mod_nombre from " . $con2->dbname . ".modalidad moda where moda.mod_id = op.mod_id) as modalidad,
                     pges.pges_cedula as identificacion,
                     eo.eopo_id as estado_oportunidad_id,
                     eo.eopo_nombre as estado_oportunidad,
                     tov.tove_nombre as tipo_oportunidad,
-                    (select eaca.eaca_nombre from " . $con2->dbname . ".estudio_academico eaca where eaca.eaca_id = op.eaca_id) as curso
-                    -- case uac.uaca_id
-                    --  when 1 then (select eaca.eaca_nombre from " . $con2->dbname . ".estudio_academico eaca where eaca.eaca_id = op.eaca_id)
-                    --  when 2 then (select eaca.eaca_nombre from " . $con2->dbname . ".estudio_academico eaca where eaca.eaca_id = op.eaca_id)
-                      -- when 3 then (select mes.mest_nombre from " . $con2->dbname . ".modulo_estudio mes where mes.mest_id = op.mest_id)
-                      -- when 4 then (select mes.mest_nombre from " . $con2->dbname . ".modulo_estudio mes where mes.mest_id = op.mest_id)
-                    --  else null
-                    --  end as 'curso'
+                    -- (select eaca.eaca_nombre from " . $con2->dbname . ".estudio_academico eaca where eaca.eaca_id = op.eaca_id) as curso
+                     case uac.uaca_id
+                     when 1 then (select eaca.eaca_nombre from " . $con2->dbname . ".estudio_academico eaca where eaca.eaca_id = op.eaca_id)
+                     when 2 then (select eaca.eaca_nombre from " . $con2->dbname . ".estudio_academico eaca where eaca.eaca_id = op.eaca_id)
+                      when 3 then (select mes.mest_nombre from " . $con2->dbname . ".modulo_estudio mes where mes.mest_id = op.mest_id)
+                      when 4 then (select mes.mest_nombre from " . $con2->dbname . ".modulo_estudio mes where mes.mest_id = op.mest_id)
+                      else null
+                      end as 'curso'
                 FROM  " . $con->dbname . ".oportunidad op                  
                     inner join " . $con->dbname . ".persona_gestion pges on pges.pges_id = op.pges_id
                     inner join " . $con1->dbname . ".tipo_persona tp on tp.tper_id = pges.tper_id
                     inner join " . $con->dbname . ".estado_oportunidad eo on eo.eopo_id = op.eopo_id
                     inner join " . $con->dbname . ".personal_admision padm on padm.padm_id = op.padm_id
                     inner join " . $con1->dbname . ".persona agent on agent.per_id = padm.per_id                    
-                    -- inner join " . $con2->dbname . ".modalidad moda on moda.mod_id = op.mod_id
-                    -- inner join " . $con2->dbname . ".unidad_academica uac on uac.uaca_id = op.uaca_id
+                    inner join " . $con2->dbname . ".modalidad moda on moda.mod_id = op.mod_id
+                    inner join " . $con2->dbname . ".unidad_academica uac on uac.uaca_id = op.uaca_id
                     inner join " . $con->dbname . ".tipo_oportunidad_venta tov on tov.tove_id = op.tove_id
                     
                 WHERE ";
@@ -1610,10 +1610,10 @@ class Oportunidad extends \app\modules\admision\components\CActiveRecord {
                         and pa.padm_estado_logico = :estado
                         and per.per_estado = :estado
                         and per.per_estado_logico = :estado
-                        and uaca.uaca_estado = :estado
-                        and uaca.uaca_estado_logico = :estado
-                        and moda.mod_estado = :estado
-                        and moda.mod_estado_logico = :estado
+                        -- and uaca.uaca_estado = :estado
+                        -- and uaca.uaca_estado_logico = :estado
+                        -- and moda.mod_estado = :estado
+                        -- and moda.mod_estado_logico = :estado
                         and top.tove_estado = :estado
                         and top.tove_estado_logico = :estado
                         and eop.eopo_estado = :estado

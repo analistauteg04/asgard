@@ -83,7 +83,23 @@ $this->title = 'Formulario de Pre-Inscripción';
                 <input type="text" class="form-control PBvalidation" id="txt_celular" data-type="number" data-keydown="true" placeholder="<?= Yii::t("formulario", "CellPhone") ?>">
             </div>
         </div>
-    </div>     
+    </div>  
+    <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
+        <div class="form-group">            
+            <label for="cmb_ninteres" class="col-lg-3 col-md-3 col-sm-3 col-xs-3 control-label"><?= Yii::t("formulario", "Academic unit") ?> <span class="text-danger">*</span></label>
+            <div class="col-lg-9 col-md-9 col-sm-9 col-xs-9">
+                <?= Html::dropDownList("cmb_ninteres", 0, $arr_ninteres, ["class" => "form-control", "id" => "cmb_ninteres"]) ?>
+            </div>
+        </div>
+    </div>
+    <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
+        <div class="form-group">            
+            <label for="cmb_modalidad" class="col-lg-3 col-md-3 col-sm-3 col-xs-3 control-label"><?= Yii::t("formulario", "Mode") ?> <span class="text-danger">*</span></label>
+            <div class="col-lg-9 col-md-9 col-sm-9 col-xs-9">
+                <?= Html::dropDownList("cmb_modalidad", 0, $arr_modalidad, ["class" => "form-control", "id" => "cmb_modalidad"]) ?>
+            </div>
+        </div>
+    </div>
     <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
         <div class="form-group">            
             <label for="cmb_modulo" class="col-lg-3 col-md-3 col-sm-3 col-xs-3 control-label"><?= Yii::t("formulario", "Module") ?> <span class="text-danger">*</span></label>
@@ -99,7 +115,7 @@ $this->title = 'Formulario de Pre-Inscripción';
                 <?= Html::dropDownList("cmb_conuteg", 0, $arr_conuteg, ["class" => "form-control", "id" => "cmb_conuteg"]) ?>
             </div>
         </div>
-    </div>
+    </div>    
     <div class="row"> 
         <div class="col-lg-9 col-md-9 col-sm-9 col-xs-9"></div>
 

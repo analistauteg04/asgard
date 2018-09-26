@@ -441,7 +441,18 @@ INSERT INTO `personal_nivel_modalidad` (`pnmo_id`, `padm_id`, `uaca_id`, `mod_id
 --
 -- Volcado de datos para la tabla `observacion_actividades`
 --
-INSERT INTO `observacion_actividades` (`oact_id`, `oact_nombre`, `oact_descripcion`, `oact_estado`, `oact_usuario`, `oact_usuario_modif`, `oact_fecha_creacion`,  `oact_fecha_modificacion`,  `oact_estado_logico`) VALUES
-(1, 'Observacion 1', 'Observacion 1', '1', 1, null, '2018-09-22 00:00:00', NULL, '1'),
-(2, 'Observacion 2', 'Observacion 2', '1', 1, null, '2018-09-22 00:00:00', NULL, '1'),
-(3, 'Observacion 3', 'Observacion 3', '1', 1, null, '2018-09-22 00:00:00', NULL, '1');
+INSERT INTO `observacion_actividades` (`oact_id`, `oact_nombre`, `oact_descripcion`, `oact_estado`, `oact_usuario`, `oact_usuario_modif`, `oact_fecha_creacion`, `oact_fecha_modificacion`, `oact_estado_logico`) VALUES
+(1, 'Interesado', 'Interesado', '1', 1, NULL, '2018-09-22 05:00:00', NULL, '1'),
+(2, 'No contesta', 'No contesta', '1', 1, NULL, '2018-09-22 05:00:00', NULL, '1'),
+(3, 'Volver a llamar', 'Volver a llamar', '1', 1, NULL, '2018-09-22 05:00:00', NULL, '1'),
+(4, 'Virtual', 'Virtual', '1', 1, NULL, '2018-09-22 05:00:00', NULL, '1'),
+(5, 'Distancia', 'Distancia', '1', 1, NULL, '2018-09-22 05:00:00', NULL, '1'),
+(6, 'Mensaje a tercero', 'Mensaje a tercero', '1', 1, NULL, '2018-09-22 05:00:00', NULL, '1'),
+(7, 'Matriculado', 'Matriculado', '1', 1, NULL, '2018-09-22 05:00:00', NULL, '1'),
+(8, 'Estudiante nuevo', 'Estudiante nuevo', '1', 1, NULL, '2018-09-22 05:00:00', NULL, '1'),
+(9, 'Estudiante antiguo', 'Estudiante antiguo', '1', 1, NULL, '2018-09-22 05:00:00', NULL, '1'),
+(10, 'Egresado', 'Egresado', '1', 1, NULL, '2018-09-22 05:00:00', NULL, '1'),
+(11, 'Visita la universidad', 'Visita la universidad', '1', 1, NULL, '2018-09-22 05:00:00', NULL, '1'),
+(12, 'Aplazado', 'Aplazado', '1', 1, NULL, '2018-09-22 05:00:00', NULL, '1'),
+(13, 'Enviar email', 'Enviar email', '1', 1, NULL, '2018-09-22 05:00:00', NULL, '1'),
+(14, 'Descartado', 'Descartado', '1', 1, NULL, '2018-09-22 05:00:00', NULL, '1');

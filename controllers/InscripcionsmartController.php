@@ -1,6 +1,7 @@
 <?php
 
 namespace app\controllers;
+
 use Yii;
 use app\models\MetodoIngreso;
 use app\models\Utilities;
@@ -26,9 +27,10 @@ class InscripcionsmartController extends \yii\web\Controller {
         $this->layout = '@themes/' . \Yii::$app->getView()->theme->themeName . '/layouts/basic.php';
         $mod_metodo = new MetodoIngreso();
         $per_id = Yii::$app->session->get("PB_perid");
-        $mod_persona = Persona::findIdentity($per_id);      
+        $mod_persona = Persona::findIdentity($per_id);
         $mod_pergestion = new PersonaGestion();
         $modestudio = new ModuloEstudio();
+        $mod_modalidad = new Modalidad();
         if (Yii::$app->request->isAjax) {
             $data = Yii::$app->request->post();
             if (isset($data["getprovincias"])) {
@@ -40,6 +42,12 @@ class InscripcionsmartController extends \yii\web\Controller {
             if (isset($data["getcantones"])) {
                 $cantones = Canton::find()->select("can_id AS id, can_nombre AS name")->where(["can_estado_logico" => "1", "can_estado" => "1", "pro_id" => $data['prov_id']])->asArray()->all();
                 $message = array("cantones" => $cantones);
+                return Utilities::ajaxResponse('OK', 'alert', Yii::t('jslang', 'Success'), 'false', $message);
+                return;
+            }
+            if (isset($data["getmodalidad"])) {
+                $modalidad = $mod_modalidad->consultarModalidad($data["nint_id"]);
+                $message = array("modalidad" => $modalidad);
                 return Utilities::ajaxResponse('OK', 'alert', Yii::t('jslang', 'Success'), 'false', $message);
                 return;
             }
@@ -58,7 +66,9 @@ class InscripcionsmartController extends \yii\web\Controller {
         $arr_ciu_dom = Canton::cantonXProvincia($arr_prov_dom[0]["id"]);
         $arr_medio = MedioPublicitario::find()->select("mpub_id AS id, mpub_nombre AS value")->where(["mpub_estado_logico" => "1", "mpub_estado" => "1"])->asArray()->all();
         $arr_conuteg = $mod_pergestion->consultarConociouteg();
-        $arr_carrerra1 = $modestudio->consultarEstudioEmpresa(3); 
+        $arr_carrerra1 = $modestudio->consultarEstudioEmpresa(3);
+        $arr_ninteres = UnidadAcademica::find()->select("uaca_id AS id, uaca_nombre AS name")->where(["uaca_id" => "3"])->asArray()->all();
+        $arr_modalidad = $mod_modalidad->consultarModalidad(3);
         return $this->render('index', [
                     "tipos_dni" => array("CED" => Yii::t("formulario", "DNI Document"), "PASS" => Yii::t("formulario", "Passport")),
                     "tipos_dni2" => array("CED" => Yii::t("formulario", "DNI Document1"), "PASS" => Yii::t("formulario", "Passport1")),
@@ -69,6 +79,8 @@ class InscripcionsmartController extends \yii\web\Controller {
                     "arr_medio" => ArrayHelper::map($arr_medio, "id", "value"),
                     "arr_conuteg" => ArrayHelper::map($arr_conuteg, "id", "name"),
                     "arr_carrerra1" => ArrayHelper::map($arr_carrerra1, "id", "name"),
+                    "arr_ninteres" => ArrayHelper::map($arr_ninteres, "id", "name"),
+                    "arr_modalidad" => ArrayHelper::map($arr_modalidad, "id", "name"),
         ]);
     }
 
@@ -87,7 +99,7 @@ class InscripcionsmartController extends \yii\web\Controller {
         $pagina = "";
         $conempresa = $mod_empresa->consultarEmpresaId('smart'); // 3 smart
         $emp_id = $conempresa["id"];
-        $gcrm_codigo["id"] = 0;        
+        $gcrm_codigo["id"] = 0;
         $correo = strtolower($data["correo"]);
         if (Yii::$app->request->isAjax) {
             $data = Yii::$app->request->post();
@@ -97,7 +109,7 @@ class InscripcionsmartController extends \yii\web\Controller {
             $apellido2 = null;
             $conestcontacto = $mod_estcontacto->consultarEstadoContacto();
             $econ_id = $conestcontacto[0]["id"];
-            $tipo_persona = $mod_persona->consultarTipoPersona('Natural'); 
+            $tipo_persona = $mod_persona->consultarTipoPersona('Natural');
             $empresa = "";
             $telefono_empresa = null;
             $direccion = null;
@@ -116,8 +128,8 @@ class InscripcionsmartController extends \yii\web\Controller {
             $celularbeni2 = null;
             $telefonobeni = null;
             $correobeni = strtolower($data["correo"]);
-            $nivelestudio = 3; //  ver bien esto
-            $modalidad = 1;     //  ver bien esto
+            $nivelestudio = $data["unidad"]; 
+            $modalidad = $data["modalidad"]; 
             $tipo_dni = $data["tipo_dni"];
             $cedula = $data["cedula"];
             $pasaporte = $data["pasaporte"];
@@ -152,18 +164,18 @@ class InscripcionsmartController extends \yii\web\Controller {
                     $busqueda = 1;
                 }
                 if ($cons_persona["registro"] == 0 || $busqueda = 0) {
-                    $resp_consulta = $mod_pergestion->consultarMaxPergest(); 
+                    $resp_consulta = $mod_pergestion->consultarMaxPergest();
                     $pges_codigo = $resp_consulta["maximo"];
                     $resp_persona = $mod_pergestion->insertarPersonaGestion($pges_codigo, $tipo_persona, $conoce_uteg, $carrera, $nombre1, $nombre2, $apellido1, $apellido2, $cedula, null, $pasaporte, null, null, null, null, $pais, $provincia, $ciudad, null, null, $celular, $correo, null, null, null, null, null, null, null, $telefono, $celular2, null, null, null, null, null, null, null, null, null, null, $econ_id, $medio, $empresa, $contacto_empresa, $numero_contacto, $telefono_empresa, $direccion, $cargo, $usuario);
                     if ($resp_persona) {
-                        $gcrm_codigo = $mod_gestion->consultarUltimoCodcrm();                
-                        $codigocrm = 1 + $gcrm_codigo;   
+                        $gcrm_codigo = $mod_gestion->consultarUltimoCodcrm();
+                        $codigocrm = 1 + $gcrm_codigo;
                         $res_oportunidad = $mod_gestion->insertarOportunidad($codigocrm, $emp_id, $resp_persona, $carrera, null, $nivelestudio, $modalidad, $tipoportunidad, $subcarera, $canal, $estado, $fecha_registro, $agente, $usuario);
                         if ($res_oportunidad) {
                             $oact_id = 1;
                             $descripcion = 'Registro subido desde formulario de inscripción';
                             $res_actividad = $mod_gestion->insertarActividad($res_oportunidad, $usuario, $agente, $estado, $fecha_registro, $oact_id, $descripcion, $fecha_registro);
-                             if ($res_actividad) {
+                            if ($res_actividad) {
                                 $exito = 1;
                             }
                         }
