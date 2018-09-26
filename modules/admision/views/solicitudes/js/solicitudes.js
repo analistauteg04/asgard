@@ -6,12 +6,12 @@ $(document).ready(function () {
             $('#txt_dni_fac').attr("data-lengthMin","10");
             $('#txt_dni_fac').attr("data-lengthMax", "10");
             $('#txt_dni_fac').attr("placeholder", $('#txth_ced_lb').val());
-            $('label[for=txt_cedula_fac]').text($('#txth_ced_lb').val());
+            $('label[for=txt_dni_fac]').text($('#txth_ced_lb').val() + ":");
         }else{
             $('#txt_dni_fac').attr("data-lengthMin", "13");
             $('#txt_dni_fac').attr("data-lengthMax", "13");
             $('#txt_dni_fac').attr("placeholder", $('#txth_ruc_lb').val());
-            $('label[for=txt_cedula_fac]').text($('#txth_ruc_lb').val());
+            $('label[for=txt_dni_fac]').text($('#txth_ruc_lb').val() + ":");
         }
     });
     $('#cmb_ninteres').change(function () {

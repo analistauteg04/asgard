@@ -77,18 +77,26 @@ academico::registerTranslations();
             [
                 'class' => 'yii\grid\ActionColumn',
                 'header' => Yii::t("formulario", "Actions"),                
-                'template' => '{view} {documentos}', 
+                'template' => '{view} {documentos} {factura}', 
                 'buttons' => [                
                     'view' => function ($url, $model) {
                         return Html::a('<span class="glyphicon glyphicon-check"></span>', Url::to(['/admision/solicitudes/view', 'ids' => base64_encode($model['sins_id']), 'int' => base64_encode($model['int_id']), 'perid' => base64_encode($model['persona'])]), ["data-toggle" => "tooltip", "title" => "Ver Solicitud", "data-pjax" => 0]);                        
                     },                           
                     'documentos' => function ($url, $model) {
                         if ($model['numDocumentos'] == 0)  {  
-                            return Html::a('<span class="glyphicon glyphicon-folder-open"></span>', Url::to(['/admision/solicitudes/subirdocumentos', 'id_sol' => base64_encode($model['sins_id']), 'int' => base64_encode($model['int_id']), 'perid' => base64_encode($model['persona']), 'opcion' => base64_encode(2)]), ["data-toggle" => "tooltip", "title" => "Subir Dcoumentos", "data-pjax" => 0]); 
+                            return Html::a('<span class="glyphicon glyphicon-folder-open"></span>', Url::to(['/admision/solicitudes/subirdocumentos', 'id_sol' => base64_encode($model['sins_id']), 'int' => base64_encode($model['int_id']), 'perid' => base64_encode($model['persona']), 'opcion' => base64_encode(2)]), ["data-toggle" => "tooltip", "title" => "Subir Documentos", "data-pjax" => 0]); 
                         } else {
-                            return '<span class="glyphicon glyphicon-folder-open"></span>';
+                            if($model['rsin_id'] == 4)
+                                return Html::a('<span class="glyphicon glyphicon-folder-open"></span>', Url::to(['/admision/solicitudes/actualizardocumentos', 'id_sol' => base64_encode($model['sins_id']), 'int' => base64_encode($model['int_id']), 'perid' => base64_encode($model['persona']), 'opcion' => base64_encode(2)]), ["data-toggle" => "tooltip", "title" => "Actualizar Documentos", "data-pjax" => 0]); 
+                            else
+                                return '<span class="glyphicon glyphicon-folder-open"></span>';
                         }
-                    },     
+                    },  
+                    'factura' => function ($url, $model) {
+                        if ($model['pago'] != "No generado") {
+                            return Html::a('<span class="glyphicon glyphicon-usd"></span>', Url::to(['/admision/solicitudes/descargafactura', 'id_sol' => base64_encode($model['sins_id']), 'int' => base64_encode($model['int_id']), 'perid' => base64_encode($model['persona']), 'opcion' => base64_encode(2)]), ["data-toggle" => "tooltip", "title" => "Descargar Factura", "data-pjax" => 0]);
+                        }
+                    },  
                 ],
             ],
            

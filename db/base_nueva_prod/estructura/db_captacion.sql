@@ -372,3 +372,22 @@ create table if not exists `usuarios_inactivos` (
  `uina_fecha_modificacion` timestamp null default null,
  `uina_estado_logico` varchar(1) not null
 );
+
+-- --------------------------------------------------------
+-- Estructura de tabla para la tabla `usuarios_inactivos`
+--
+create table if not exists `solicitud_datos_factura` (
+ `sdfa_id` bigint(20) not null auto_increment primary key,
+ `sins_id` bigint(20) not null,
+ `sdfa_nombres` varchar(50) not null,
+ `sdfa_apellidos` varchar(50) not null,
+ `sdfa_tipo_dni` varchar(5) not null,
+ `sdfa_dni` varchar(50) not null,
+ `sdfa_direccion` varchar(200) not null,
+ `sdfa_telefono` varchar(50) not null,
+ `sdfa_estado` varchar(1) not null,
+ `sdfa_fecha_creacion` timestamp not null default current_timestamp,
+ `sdfa_fecha_modificacion` timestamp null default null,
+ `sdfa_estado_logico` varchar(1) not null,
+ foreign key (sins_id) references `solicitud_inscripcion`(sins_id)
+);

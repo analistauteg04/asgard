@@ -5,7 +5,8 @@ Los datos son los siguientes:
 <br /><br />
 Nombre: [[nombre]]<br /> 
 Apellidos: [[apellido]]<br /> 
-Cedula: [[identificacion]]<br /> 
+Tipo Dni: [[tipoDNI]]<br /> 
+Dni: [[identificacion]]<br /> 
 Correo: [[correo]]<br /> 
 Telefono: [[telefono]]<br /> 
 <br /><br/>
