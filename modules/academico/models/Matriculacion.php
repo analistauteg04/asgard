@@ -144,5 +144,81 @@ class Matriculacion extends \yii\db\ActiveRecord {
     public function getEst() {
         return $this->hasOne(Estudiante::className(), ['est_id' => 'est_id']);
     }
+    
+    public function insertarmatriculacion($daca_id, $adm_id, $est_id, $sins_id, $mat_fecha_matriculacion, $mat_usuario_ingreso) {
+
+        $con = \Yii::$app->db_academico;       
+        $trans = $con->getTransaction(); // se obtiene la transacción actual
+        if ($trans !== null) {
+            $trans = null; // si existe la transacción entonces no se crea una
+        } else {
+            $trans = $con->beginTransaction(); // si no existe la transacción entonces se crea una
+        }
+        $param_sql = "mat_estado_logico";
+        $bsol_sql = "1";
+
+        $param_sql .= ", mat_estado";
+        $bsol_sql .= ", 1";
+        if (isset($daca_id)) {
+            $param_sql .= ", daca_id";
+            $bsol_sql .= ", :daca_id";
+        }
+
+        if (isset($adm_id)) {
+            $param_sql .= ", adm_id";
+            $bsol_sql .= ", :adm_id";
+        }
+
+        if (isset($est_id)) {
+            $param_sql .= ", est_id";
+            $bsol_sql .= ", :est_id";
+        }
+
+        if (isset($sins_id)) {
+            $param_sql .= ", sins_id";
+            $bsol_sql .= ", :sins_id";
+        }
+
+        if (isset($mat_fecha_matriculacion)) {
+            $param_sql .= ", mat_fecha_matriculacion";
+            $bsol_sql .= ", :mat_fecha_matriculacion";
+        }
+        if (isset($mat_usuario_ingreso)) {
+            $param_sql .= ", mat_usuario_ingreso";
+            $bsol_sql .= ", :mat_usuario_ingreso";
+        }        
+        
+        try {
+            $sql = "INSERT INTO " . $con->dbname . ".matriculacion ($param_sql) VALUES($bsol_sql)";
+            $comando = $con->createCommand($sql);
+
+            if (isset($daca_id))
+                $comando->bindParam(':daca_id', $daca_id, \PDO::PARAM_INT);
+
+            if (isset($adm_id))
+                $comando->bindParam(':adm_id', $adm_id, \PDO::PARAM_INT);
+
+            if (isset($est_id))
+                $comando->bindParam(':est_id', $est_id, \PDO::PARAM_INT);
+
+            if (isset($sins_id))
+                $comando->bindParam(':sins_id', $sins_id, \PDO::PARAM_INT);
+
+            if (isset($mat_fecha_matriculacion))
+                $comando->bindParam(':mat_fecha_matriculacion', $mat_fecha_matriculacion, \PDO::PARAM_STR);
+
+            if (isset($mat_usuario_ingreso))
+                $comando->bindParam(':mat_usuario_ingreso', $mat_usuario_ingreso, \PDO::PARAM_INT);
+
+            $result = $comando->execute();
+            if ($trans !== null)
+                $trans->commit();
+            return $con->getLastInsertID($con->dbname . '.matriculacion');
+        } catch (Exception $ex) {
+            if ($trans !== null)
+                $trans->rollback();
+            return FALSE;
+        }
+    }
 
 }
