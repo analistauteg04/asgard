@@ -9,14 +9,14 @@ use app\modules\admision\models\TipoOportunidadVenta;
 use app\modules\admision\models\EstadoOportunidad;
 use app\modules\academico\models\UnidadAcademica;
 use app\modules\academico\models\Modalidad;
+use app\models\ModuloEstudio;
 use app\models\Empresa;
 use app\models\Utilities;
 use yii\helpers\ArrayHelper;
 
-class ActividadesController extends \app\components\CController
-{
-    public function actionListaractividadxoportunidad()
-    {
+class ActividadesController extends \app\components\CController {
+
+    public function actionListaractividadxoportunidad() {
         $modoportunidad = new Oportunidad();
         $pges_id = base64_decode($_GET["pges_id"]);
         $opor_id = base64_decode($_GET["opor_id"]);
@@ -25,55 +25,61 @@ class ActividadesController extends \app\components\CController
         $mod_gestion = $modoportunidad->consultarOportunHist($opor_id);
         $mod_oportu = $modoportunidad->consultarOportunidadById($opor_id);
         return $this->render('listaractividad', [
-            'model' => $mod_gestion,
-            'personalData' => $contactManage,
-            'oportuniData' => $mod_oportu,
+                    'model' => $mod_gestion,
+                    'personalData' => $contactManage,
+                    'oportuniData' => $mod_oportu,
         ]);
     }
 
-    public function actionView()
-    {
+    public function actionView() {
         $opor_id = base64_decode($_GET["opid"]);
         $act_id = base64_decode($_GET["acid"]);
         $pges_id = base64_decode($_GET["pgid"]);
         $persges_mod = new PersonaGestion();
         $uni_aca_model = new UnidadAcademica();
+        $modestudio = new ModuloEstudio();
         $modTipoOportunidad = new TipoOportunidadVenta();
         $modalidad_model = new Modalidad();
         $state_oportunidad_model = new EstadoOportunidad();
         $oport_model = new Oportunidad();
         $empresa_mod = new Empresa();
         $empresa = $empresa_mod->getAllEmpresa();
-        $contactManage = $persges_mod->consultarPersonaGestion($pges_id);        
+        $contactManage = $persges_mod->consultarPersonaGestion($pges_id);
         $actividad_data = $oport_model->consultarActividadById($act_id);
         $oportunidad_perdidad = $oport_model->consultarOportunidadPerdida();
         $oport_contac = $oport_model->consultarOportunidadById($opor_id);
+        if ($oport_contac["empresa"] > 1) {
+            $estudio = $modestudio->consultarEstudioEmpresa($oport_contac["empresa"]);
+        } else {
+            $estudio = $arr_carrerra1 = $oport_model->consultarCarreraModalidad(1, 1);
+        }
         $modalidad_data = $modalidad_model->consultarModalidad($oport_contac["uaca_id"]);
-        $unidad_acad_data = $uni_aca_model->consultarUnidadAcademicas();
+        //$unidad_acad_data = $uni_aca_model->consultarUnidadAcademicas();
+        $unidad_acad_data = UnidadAcademica::find()->select("uaca_id AS id, uaca_nombre AS name")->where(["uaca_usuario_ingreso" => "1"])->asArray()->all();
         $tipo_oportunidad_data = $modTipoOportunidad->consultarOporxUnidad($oport_contac["uaca_id"]);
         $academic_study_data = $oport_model->consultarCarreraModalidad($oport_contac["uaca_id"], $oport_contac["mod_id"]);
         $state_oportunidad_data = $state_oportunidad_model->consultarEstadOportunidad();
         $knowledge_channel_data = $oport_model->consultarConocimientoCanal(1);
         $observacion = $oport_model->consultarObseractividad();
         return $this->render('view', [
-            'personalData' => $contactManage,
-            'oportunidad_contacto' => $oport_contac,
-            'actividad_oportunidad' => $actividad_data,
-            'arr_modalidad' => ArrayHelper::map($modalidad_data, "id", "name"),
-            'arr_oportunidad_perdida' => ArrayHelper::map($oportunidad_perdidad, "id", "name"),
-            'arr_linea_servicio' => ArrayHelper::map($unidad_acad_data, "id", "name"),
-            'arr_tipo_oportunidad' => ArrayHelper::map($tipo_oportunidad_data, "id", "name"),
-            'arr_state_oportunidad' => ArrayHelper::map($state_oportunidad_data, "id", "name"),
-            'arr_academic_study' => ArrayHelper::map($academic_study_data, "id", "name"),
-            "arr_knowledge_channel" => ArrayHelper::map($knowledge_channel_data, "id", "name"),
-            "tipo_dni" => array("CED" => Yii::t("formulario", "DNI Document"), "PASS" => Yii::t("formulario", "Passport")),
-            'arr_empresa' => ArrayHelper::map($empresa, "id", "value"),
-            'arr_observacion' => ArrayHelper::map($observacion, "id", "name"),
+                    'personalData' => $contactManage,
+                    'oportunidad_contacto' => $oport_contac,
+                    'actividad_oportunidad' => $actividad_data,
+                    'arr_modalidad' => ArrayHelper::map($modalidad_data, "id", "name"),
+                    'arr_oportunidad_perdida' => ArrayHelper::map($oportunidad_perdidad, "id", "name"),
+                    'arr_linea_servicio' => ArrayHelper::map($unidad_acad_data, "id", "name"),
+                    'arr_tipo_oportunidad' => ArrayHelper::map($tipo_oportunidad_data, "id", "name"),
+                    'arr_state_oportunidad' => ArrayHelper::map($state_oportunidad_data, "id", "name"),
+                    'arr_academic_study' => ArrayHelper::map($academic_study_data, "id", "name"),
+                    "arr_knowledge_channel" => ArrayHelper::map($knowledge_channel_data, "id", "name"),
+                    "tipo_dni" => array("CED" => Yii::t("formulario", "DNI Document"), "PASS" => Yii::t("formulario", "Passport")),
+                    'arr_empresa' => ArrayHelper::map($empresa, "id", "value"),
+                    'arr_observacion' => ArrayHelper::map($observacion, "id", "name"),
+                    'arr_estudio' => ArrayHelper::map($estudio, "id", "name"),
         ]);
     }
 
-    public function actionEdit()
-    {
+    public function actionEdit() {
         $opor_id = base64_decode($_GET["opid"]);
         $act_id = base64_decode($_GET["acid"]);
         $pges_id = base64_decode($_GET["pgid"]);
@@ -97,24 +103,23 @@ class ActividadesController extends \app\components\CController
         $knowledge_channel_data = $oport_model->consultarConocimientoCanal(1);
         $observacion = $oport_model->consultarObseractividad();
         return $this->render('edit', [
-            'personalData' => $contactManage,
-            'oportunidad_contacto' => $oport_contac,
-            'actividad_oportunidad' => $actividad_data,
-            'arr_modalidad' => ArrayHelper::map($modalidad_data, "id", "name"),
-            'arr_oportunidad_perdida' => ArrayHelper::map($oportunidad_perdidad, "id", "name"),
-            'arr_linea_servicio' => ArrayHelper::map($unidad_acad_data, "id", "name"),
-            'arr_tipo_oportunidad' => ArrayHelper::map($tipo_oportunidad_data, "id", "name"),
-            'arr_state_oportunidad' => ArrayHelper::map($state_oportunidad_data, "id", "name"),
-            'arr_academic_study' => ArrayHelper::map($academic_study_data, "id", "name"),
-            "arr_knowledge_channel" => ArrayHelper::map($knowledge_channel_data, "id", "name"),
-            "tipo_dni" => array("CED" => Yii::t("formulario", "DNI Document"), "PASS" => Yii::t("formulario", "Passport")),
-            'arr_empresa' => ArrayHelper::map($empresa, "id", "value"),
-            'arr_observacion' => ArrayHelper::map($observacion, "id", "name"),
+                    'personalData' => $contactManage,
+                    'oportunidad_contacto' => $oport_contac,
+                    'actividad_oportunidad' => $actividad_data,
+                    'arr_modalidad' => ArrayHelper::map($modalidad_data, "id", "name"),
+                    'arr_oportunidad_perdida' => ArrayHelper::map($oportunidad_perdidad, "id", "name"),
+                    'arr_linea_servicio' => ArrayHelper::map($unidad_acad_data, "id", "name"),
+                    'arr_tipo_oportunidad' => ArrayHelper::map($tipo_oportunidad_data, "id", "name"),
+                    'arr_state_oportunidad' => ArrayHelper::map($state_oportunidad_data, "id", "name"),
+                    'arr_academic_study' => ArrayHelper::map($academic_study_data, "id", "name"),
+                    "arr_knowledge_channel" => ArrayHelper::map($knowledge_channel_data, "id", "name"),
+                    "tipo_dni" => array("CED" => Yii::t("formulario", "DNI Document"), "PASS" => Yii::t("formulario", "Passport")),
+                    'arr_empresa' => ArrayHelper::map($empresa, "id", "value"),
+                    'arr_observacion' => ArrayHelper::map($observacion, "id", "name"),
         ]);
     }
 
-    public function actionNewactividad()
-    {
+    public function actionNewactividad() {
         $opor_id = base64_decode($_GET["opid"]);
         $pges_id = base64_decode($_GET["pgid"]);
         $persges_mod = new PersonaGestion();
@@ -125,7 +130,7 @@ class ActividadesController extends \app\components\CController
         $oport_model = new Oportunidad();
         $empresa_mod = new Empresa();
         $empresa = $empresa_mod->getAllEmpresa();
-        $contactManage = $persges_mod->consultarPersonaGestion($pges_id);       
+        $contactManage = $persges_mod->consultarPersonaGestion($pges_id);
         $oport_contac = $oport_model->consultarOportunidadById($opor_id);
         $modalidad_data = $modalidad_model->consultarModalidad($oport_contac["mod_id"]);
         $oportunidad_perdidad = $oport_model->consultarOportunidadPerdida();
@@ -136,23 +141,22 @@ class ActividadesController extends \app\components\CController
         $knowledge_channel_data = $oport_model->consultarConocimientoCanal(1);
         $observacion = $oport_model->consultarObseractividad();
         return $this->render('new', [
-            'personalData' => $contactManage,
-            'oportunidad_contacto' => $oport_contac,
-            'arr_modalidad' => ArrayHelper::map($modalidad_data, "id", "name"),
-            'arr_linea_servicio' => ArrayHelper::map($unidad_acad_data, "id", "name"),
-            'arr_oportunidad_perdida' => ArrayHelper::map($oportunidad_perdidad, "id", "name"),
-            'arr_tipo_oportunidad' => ArrayHelper::map($tipo_oportunidad_data, "id", "name"),
-            'arr_state_oportunidad' => ArrayHelper::map($state_oportunidad_data, "id", "name"),
-            'arr_academic_study' => ArrayHelper::map($academic_study_data, "id", "name"),
-            "arr_knowledge_channel" => ArrayHelper::map($knowledge_channel_data, "id", "name"),
-            "tipo_dni" => array("CED" => Yii::t("formulario", "DNI Document"), "PASS" => Yii::t("formulario", "Passport")),
-            'arr_empresa' => ArrayHelper::map($empresa, "id", "value"),
-            'arr_observacion' => ArrayHelper::map($observacion, "id", "name"),
+                    'personalData' => $contactManage,
+                    'oportunidad_contacto' => $oport_contac,
+                    'arr_modalidad' => ArrayHelper::map($modalidad_data, "id", "name"),
+                    'arr_linea_servicio' => ArrayHelper::map($unidad_acad_data, "id", "name"),
+                    'arr_oportunidad_perdida' => ArrayHelper::map($oportunidad_perdidad, "id", "name"),
+                    'arr_tipo_oportunidad' => ArrayHelper::map($tipo_oportunidad_data, "id", "name"),
+                    'arr_state_oportunidad' => ArrayHelper::map($state_oportunidad_data, "id", "name"),
+                    'arr_academic_study' => ArrayHelper::map($academic_study_data, "id", "name"),
+                    "arr_knowledge_channel" => ArrayHelper::map($knowledge_channel_data, "id", "name"),
+                    "tipo_dni" => array("CED" => Yii::t("formulario", "DNI Document"), "PASS" => Yii::t("formulario", "Passport")),
+                    'arr_empresa' => ArrayHelper::map($empresa, "id", "value"),
+                    'arr_observacion' => ArrayHelper::map($observacion, "id", "name"),
         ]);
     }
 
-    public function actionSave()
-    {
+    public function actionSave() {
         $per_id = @Yii::$app->session->get("PB_perid");
         $usu_id = @Yii::$app->user->identity->usu_id;
         $fecproxima = null;
@@ -222,8 +226,7 @@ class ActividadesController extends \app\components\CController
         }
     }
 
-    public function actionUpdate()
-    {
+    public function actionUpdate() {
         $per_id = @Yii::$app->session->get("PB_perid");
         $usu_id = @Yii::$app->user->identity->usu_id;
         $fecproxima = null;
@@ -282,4 +285,5 @@ class ActividadesController extends \app\components\CController
             return;
         }
     }
+
 }
