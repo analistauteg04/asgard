@@ -345,8 +345,8 @@ create table if not exists `bloque_academico` (
 -- Semestre
 create table if not exists `periodo_academico` (
   `paca_id` bigint(20) not null auto_increment primary key, 
-  `sem_id` bigint(20) not null,
-  `blo_id` bigint(20) not null,
+  `saca_id` bigint(20) not null,
+  `baca_id` bigint(20) not null,
   `paca_anio_academico` varchar(10) not null,
   `paca_usuario_ingreso` bigint(20) not null,
   `paca_usuario_modifica` bigint(20)  null,
@@ -437,8 +437,8 @@ create table if not exists `planificacion_estudio_academico` (
 create table if not exists `distributivo_horario` (
   `dhor_id` bigint(20) not null auto_increment primary key, 
   `dia_id` bigint(20) not null, 
-  `dhor_hora_inicio` timestamp null default null,
-  `dhor_hora_fin` timestamp null default null,
+  `dhor_hora_inicio` varchar(8) null default null,
+  `dhor_hora_fin` varchar(8) null default null,
   `dhor_usuario_ingreso` bigint(20) not null,
   `dhor_usuario_modifica` bigint(20)  null,
   `dhor_fecha_registro` timestamp null default null,
