@@ -276,6 +276,7 @@ class OrdenPago extends \app\modules\financiero\components\CActiveRecord {
                                           icpr.icpr_estado = :estado  AND
                                           icpr.icpr_estado_logico = :estado) end) as valor_cargado,
                     lpad(sins.sins_id,'4','0') as solicitud,
+                    sins.sins_id,
                     sins.sins_fecha_solicitud,
                     :rol as rol
                 FROM " . $con1->dbname . ".persona per 

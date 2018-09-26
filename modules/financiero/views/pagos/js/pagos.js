@@ -61,42 +61,6 @@ $(document).ready(function () {
         $('.mfp-close').trigger('click');
     }
     // BORRAR LUEGO
-    $('#cmd_enviarData').click(function () {
-        var arrParams = new Object();
-        var link = $('#txth_base').val() + "/financiero/pagos/savecarga";
-        var idpago = $('#txth_ids').val();
-        var pg = $('#txth_pg').val();
-        arrParams.idpago = $('#txth_ids').val();
-        arrParams.totpago = $('#txth_tot').val();
-        arrParams.pago = $('#txt_pago').val();
-        arrParams.documento = $('#txth_doc_titulo').val();
-        arrParams.metodopago = $('#cmb_forma_pago').val();
-        arrParams.numtransaccion = $('#txt_numtransaccion').val();
-        arrParams.fechatransaccion = $('#txt_fecha_transaccion').val();
-        arrParams.vista = $('#txth_vista').val();
-
-        if (parseFloat(arrParams.pago) > parseFloat(arrParams.totpago))
-        {
-            alert("Está tratando de ingresar un pago mayor al valor de su servicio. $" + parseFloat(arrParams.totpago));
-        } else if (parseFloat(arrParams.pago) < parseFloat(arrParams.totpago))
-        {
-            alert("Está tratando de ingresar un pago menor al valor de su servicio. $" + parseFloat(arrParams.totpago));
-        } else {
-            if (!validateForm()) {
-                requestHttpAjax(link, arrParams, function (response) {
-                    showAlert(response.status, response.label, response.message);
-                    setTimeout(function () {
-                        if (arrParams.vista == 'adm') {
-                            parent.window.location.href = $('#txth_base').val() + "/financiero/pagos/index";
-                        } else {
-                            parent.window.location.href = $('#txth_base').val() + "/financiero/pagos/listarpagosolicitud";
-                        }
-                    }, 4000);
-                }, true);
-            }
-        }
-    });
-
     /**
      * Function evento click en botón de Registrarpagoadm
      * @author  Grace Viteri <analistadesarrollo01@uteg.edu.ec>
@@ -179,7 +143,41 @@ function exportExcel() {
     var f_fin = $('#txt_fecha_fin').val();
     window.location.href = $('#txth_base').val() + "/financiero/pagos/expexcel?search=" + search + "&f_ini=" + f_ini + "&f_fin=" + f_fin;
 }
+function enviardata(){
+    var arrParams = new Object();
+        var link = $('#txth_base').val() + "/financiero/pagos/savecarga";
+        var idsol = $('#txth_idsol').val();
+        var pg = $('#txth_pg').val();
+        arrParams.idpago = $('#txth_ids').val();
+        arrParams.totpago = $('#txth_tot').val();
+        arrParams.pago = $('#txt_pago').val();
+        arrParams.documento = $('#txth_doc_titulo').val();
+        arrParams.metodopago = $('#cmb_forma_pago').val();
+        arrParams.numtransaccion = $('#txt_numtransaccion').val();
+        arrParams.fechatransaccion = $('#txt_fecha_transaccion').val();
+        arrParams.vista = $('#txth_vista').val();
 
+        if (parseFloat(arrParams.pago) > parseFloat(arrParams.totpago))
+        {
+            alert("Está tratando de ingresar un pago mayor al valor de su servicio. $" + parseFloat(arrParams.totpago));
+        } else if (parseFloat(arrParams.pago) < parseFloat(arrParams.totpago))
+        {
+            alert("Está tratando de ingresar un pago menor al valor de su servicio. $" + parseFloat(arrParams.totpago));
+        } else {
+            if (!validateForm()) {
+                requestHttpAjax(link, arrParams, function (response) {
+                    showAlert(response.status, response.label, response.message);
+                    setTimeout(function () {
+                        if (arrParams.vista == 'adm') {
+                            parent.window.location.href = $('#txth_base').val() + "/financiero/pagos/index";
+                        } else {
+                            parent.window.location.href = $('#txth_base').val() + "/financiero/pagos/listarpagosolicitud?id_sol="+idsol;
+                        }
+                    }, 4000);
+                }, true);
+            }
+        }
+}
 function actualizarGrid() {
     var search = $('#txt_buscarData').val();
     var f_ini = $('#txt_fecha_ini').val();
