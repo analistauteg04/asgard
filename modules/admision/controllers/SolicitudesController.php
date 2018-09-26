@@ -226,8 +226,8 @@ class SolicitudesController extends \app\components\CController {
 
             $dataNombres = $data["nombres_fac"];
             $dataApellidos = $data["apellidos_fac"];
-            $dataTipDNI = $data["descuento_id"];
-            $dataDNI = $data["tipo_DNI"];
+            $dataTipDNI = $data["tipo_DNI"];
+            $dataDNI = $data["dni_fac"];
             $dataDireccion = $data["dir_fac"];
             $dataTelefono = $data["tel_fac"];
 

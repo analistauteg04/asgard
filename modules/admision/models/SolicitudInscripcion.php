@@ -1257,7 +1257,7 @@ class SolicitudInscripcion extends \app\modules\admision\components\CActiveRecor
         $estado = 1;
 
         $arr_DNI = array("1" => "CED", "2" => "RUC", "3" => "PASS");
-
+        $tipo = (($arr_DNI[$dataTipDNI]) ? $arr_DNI[$dataTipDNI] : $arr_DNI["3"]);
         $sql = "INSERT INTO solicitud_datos_factura 
                 (sins_id, sdfa_nombres, sdfa_apellidos, sdfa_tipo_dni, sdfa_dni, sdfa_direccion, sdfa_telefono, sdfa_estado, sdfa_estado_logico) VALUES
                 (:id, :nombres, :apellidos, :tipo_dni, :dni, :direccion, :telefono, :estado, :estado);";
@@ -1266,7 +1266,7 @@ class SolicitudInscripcion extends \app\modules\admision\components\CActiveRecor
         $comando->bindParam(":id", $sins_id, \PDO::PARAM_INT);
         $comando->bindParam(":nombres", $dataNombres, \PDO::PARAM_STR);
         $comando->bindParam(":apellidos", $dataApellidos, \PDO::PARAM_STR);
-        $comando->bindParam(":tipo_dni", (($arr_DNI[$dataTipDNI])?$arr_DNI[$dataTipDNI]:$arr_DNI["3"]), \PDO::PARAM_STR);
+        $comando->bindParam(":tipo_dni", $tipo, \PDO::PARAM_STR);
         $comando->bindParam(":dni", $dataDNI, \PDO::PARAM_STR);
         $comando->bindParam(":direccion", $dataDireccion, \PDO::PARAM_STR);
         $comando->bindParam(":telefono", $dataTelefono, \PDO::PARAM_STR);
