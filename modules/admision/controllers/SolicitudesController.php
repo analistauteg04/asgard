@@ -223,6 +223,14 @@ class SolicitudesController extends \app\components\CController {
             $beca = $data["beca"];
             $descuento = $data["descuento_id"];
             $marca_desc = $data["marcadescuento"];
+
+            $dataNombres = $data["nombres_fac"];
+            $dataApellidos = $data["apellidos_fac"];
+            $dataTipDNI = $data["descuento_id"];
+            $dataDNI = $data["tipo_DNI"];
+            $dataDireccion = $data["dir_fac"];
+            $dataTelefono = $data["tel_fac"];
+
             if ($marca_desc == '1' && $marca_desc == '0') {
                 $valida = 1;
             }
@@ -296,6 +304,10 @@ class SolicitudesController extends \app\components\CController {
                     if ($subirDocumentos == 0) {
                         $mod_solins->save();
                         $id_sins = $mod_solins->sins_id;
+                        if(!$mod_solins->crearDatosFacturaSolicitud($id_sins, $dataNombres, 
+                        $dataApellidos, $dataTipDNI, $dataDNI, $dataDireccion, $dataTelefono)){
+                            throw new Exception('Problemas al registrar Datos a Facturar.');
+                        }
                     }
                 } else {
                     //Solicitud ya se encuentra creada.
