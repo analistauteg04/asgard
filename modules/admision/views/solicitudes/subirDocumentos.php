@@ -21,6 +21,8 @@ $_SESSION['persona_solicita'] = base64_encode($per_id);
 <?= Html::hiddenInput('txth_extranjero', base64_encode($txth_extranjero), ['id' => 'txth_extranjero']); ?>
 <?= Html::hiddenInput('txth_int_id', base64_encode($int_id), ['id' => 'txth_int_id']); ?>
 <?= Html::hiddenInput('txth_beca', base64_encode($beca), ['id' => 'txth_beca']); ?>
+<?= Html::hiddenInput('txth_opcion', base64_decode($_GET['opcion']), ['id' => 'txth_opcion']); ?>
+
 <form class="form-horizontal" enctype="multipart/form-data" id="formsolicitud">
     <div class="col-md-12 col-xs-12 col-sm-12 col-lg-12">
         <h3><span id="lbl_solicitud"><?= Yii::t("formulario", "Upload documents") ?></span></h3>

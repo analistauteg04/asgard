@@ -164,7 +164,7 @@ INSERT INTO `obmo_acci` (`oacc_id`, `omod_id`, `acc_id`, `oacc_tipo_boton`, `oac
 (38, 96, 12, '1', '', 'edit', '1', '1'),
 (39, 98, 4, '1', '', 'update', '1', '1'),
 (40, 99, 13, '1', '', 'Approve', '1', '1'),
-(41, 101, 4, '1', '', 'save', '1', '1');
+(41, 101, 4, '1', '', 'SaveDocumentos', '1', '1');
 -- --------------------------------------------------------
 --
 -- Volcado de datos para la tabla `grup_obmo`
