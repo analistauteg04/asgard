@@ -29,6 +29,7 @@
         "penblu/magnificpopup": "*",
         "odaialali/yii2-toastr": "1.0b",
         "kartik-v/yii2-widget-fileinput": "*",
+        "kartik-v/yii2-widget-datepicker": "*",
         "himiklab/yii2-recaptcha-widget": "*"        
     },
     "require-dev": {
