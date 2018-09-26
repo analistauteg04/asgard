@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "159e0c2a4916ab6fa4441fd067cad541",
+    "content-hash": "4c76203c1f990be2c53f4ff9eb7cbb6b",
     "packages": [
         {
             "name": "bower-asset/bootstrap",
@@ -557,16 +557,16 @@
         },
         {
             "name": "kartik-v/bootstrap-fileinput",
-            "version": "v4.5.0",
+            "version": "v4.5.1",
             "source": {
                 "type": "git",
                 "url": "https://github.com/kartik-v/bootstrap-fileinput.git",
-                "reference": "e3126b482e72022b819f4aae58096f3f17d55a90"
+                "reference": "7fbc8473783febfd123178dd00c9f5ee1bf73531"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/kartik-v/bootstrap-fileinput/zipball/e3126b482e72022b819f4aae58096f3f17d55a90",
-                "reference": "e3126b482e72022b819f4aae58096f3f17d55a90",
+                "url": "https://api.github.com/repos/kartik-v/bootstrap-fileinput/zipball/7fbc8473783febfd123178dd00c9f5ee1bf73531",
+                "reference": "7fbc8473783febfd123178dd00c9f5ee1bf73531",
                 "shasum": ""
             },
             "type": "library",
@@ -606,7 +606,7 @@
                 "progress",
                 "upload"
             ],
-            "time": "2018-08-30T02:05:20+00:00"
+            "time": "2018-09-25T15:16:57+00:00"
         },
         {
             "name": "kartik-v/yii2-krajee-base",
@@ -1012,6 +1012,88 @@
                 "random"
             ],
             "time": "2018-07-02T15:55:56+00:00"
+        },
+        {
+            "name": "penblu/blockui",
+            "version": "1.0.0",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/PenBlu/yii-blockui.git",
+                "reference": "45e1bbdf173d843de28158a9bba536bf4f27716a"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/PenBlu/yii-blockui/zipball/45e1bbdf173d843de28158a9bba536bf4f27716a",
+                "reference": "45e1bbdf173d843de28158a9bba536bf4f27716a",
+                "shasum": ""
+            },
+            "require": {
+                "yiisoft/yii2": "*"
+            },
+            "type": "yii2-extension",
+            "autoload": {
+                "psr-4": {
+                    "penblu\\blockui\\": ""
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "GPL-2.0"
+            ],
+            "authors": [
+                {
+                    "name": "Eduardo Cueva",
+                    "email": "ecueva@penblu.com"
+                }
+            ],
+            "description": "Extension creada por PenBlu para el uso de la libreria jquery-blockui",
+            "keywords": [
+                "blockui",
+                "extension",
+                "yii2"
+            ],
+            "time": "2018-09-26T03:17:17+00:00"
+        },
+        {
+            "name": "penblu/magnificpopup",
+            "version": "1.0.0",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/PenBlu/yii-magnificpopup.git",
+                "reference": "2787054fc77f4220f12f234a96d3290fb5c12271"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/PenBlu/yii-magnificpopup/zipball/2787054fc77f4220f12f234a96d3290fb5c12271",
+                "reference": "2787054fc77f4220f12f234a96d3290fb5c12271",
+                "shasum": ""
+            },
+            "require": {
+                "yiisoft/yii2": "*"
+            },
+            "type": "yii2-extension",
+            "autoload": {
+                "psr-4": {
+                    "penblu\\magnificpopup\\": ""
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "GPL-2.0"
+            ],
+            "authors": [
+                {
+                    "name": "Eduardo Cueva",
+                    "email": "ecueva@penblu.com"
+                }
+            ],
+            "description": "Extension creada por PenBlu para el uso de la libreria jquery-magnificpopup",
+            "keywords": [
+                "extension",
+                "magnificpopup",
+                "yii2"
+            ],
+            "time": "2018-09-26T03:17:27+00:00"
         },
         {
             "name": "phpoffice/phpspreadsheet",
