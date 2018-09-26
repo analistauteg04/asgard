@@ -1162,7 +1162,7 @@ class PersonaGestion extends \app\modules\admision\components\CActiveRecord
             $sql = "SELECT * FROM " . $con->dbname . ".persona_gestion_tmp;";
         }else{
             //PROCESO LOTES LOTES
-            $sql = "SELECT * FROM " . $con->dbname . ".temporal_contactos LIMIT 10;";
+            $sql = "SELECT * FROM " . $con->dbname . ".temporal_contactos LIMIT 100;";
         }       
         $comando = $con->createCommand($sql);
         return $comando->queryAll();
