@@ -1595,7 +1595,9 @@ class Oportunidad extends \app\modules\admision\components\CActiveRecord {
                         (case when (opo.tsca_id > 0) then
                                 (select tcar_id from " . $con->dbname . ".tipo_sub_carrera tsc where tsc.tsca_id = opo.tsca_id and tsc.tsca_estado = :estado and tsc.tsca_estado_logico = :estado)
                                 else 0 end) as tcar_id,                   
-                        per.per_id                      
+                        per.per_id,
+                        opo.pges_id,
+                        opo.padm_id
                 FROM " . $con->dbname . ".oportunidad opo                                                
                          inner join " . $con->dbname . ".personal_admision pa on pa.padm_id = opo.padm_id
                          inner join " . $con1->dbname . ".persona per on per.per_id = pa.per_id	
@@ -1609,11 +1611,7 @@ class Oportunidad extends \app\modules\admision\components\CActiveRecord {
                         and pa.padm_estado = :estado
                         and pa.padm_estado_logico = :estado
                         and per.per_estado = :estado
-                        and per.per_estado_logico = :estado
-                        -- and uaca.uaca_estado = :estado
-                        -- and uaca.uaca_estado_logico = :estado
-                        -- and moda.mod_estado = :estado
-                        -- and moda.mod_estado_logico = :estado
+                        and per.per_estado_logico = :estado                        
                         and top.tove_estado = :estado
                         and top.tove_estado_logico = :estado
                         and eop.eopo_estado = :estado
@@ -1822,6 +1820,5 @@ class Oportunidad extends \app\modules\admision\components\CActiveRecord {
         $comando->bindParam(":estado", $estado, \PDO::PARAM_STR);
         $resultData = $comando->queryAll();
         return $resultData;
-    }
-
+    }    
 }
