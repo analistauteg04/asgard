@@ -61,12 +61,12 @@ class MatriculacionController extends \app\components\CController {
                     $descripcion = "Asignación por Matrícula Método Ingreso.";
                     $mod_Matriculacion = new Matriculacion();
                     $resp_matriculacion = $mod_Matriculacion->insertarMatriculacion(null, $adm_id, null, $sins_id, $fecha, $usu_id);
-                    if ($resp_matriculacion) {
+                   /* if ($resp_matriculacion) {
                         $resp_Asigna = $mod_Matriculacion->insertarAsignacionxMeting($par_id, $resp_matriculacion, null, $descripcion, $fecha, $usu_id);
-                        if ($resp_Asigna) {
+                        if ($resp_Asigna) {*/
                             $exito = '1';
-                        }
-                    }
+                    /*    }
+                    }*/
                     if ($exito) {
                         $transaction->commit();                        
                         $message = array(
