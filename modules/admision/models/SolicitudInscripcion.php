@@ -422,13 +422,15 @@ class SolicitudInscripcion extends \app\modules\admision\components\CActiveRecor
                     eac.eaca_nombre as carrera,
                     sins.sins_fecha_reprobacion,
                     sins.sins_observacion,
-                    sins.rsin_id
+                    sins.rsin_id,
+                    m.mod_nombre
                 FROM 
                     " . $con->dbname . ".solicitud_inscripcion as sins
                     INNER JOIN " . $con->dbname . ".interesado as inte on sins.int_id = inte.int_id
                     INNER JOIN " . $con2->dbname . ".persona as per on inte.per_id = per.per_id 
                     INNER JOIN " . $con1->dbname . ".unidad_academica as uaca on uaca.uaca_id = sins.uaca_id   
                     INNER JOIN " . $con1->dbname . ".estudio_academico as eac on sins.eaca_id = eac.eaca_id
+                    INNER JOIN " . $con1->dbname . ".modalidad as m on m.mod_id = sins.mod_id   
                 WHERE 
                     sins.sins_estado_logico=:estado AND 
                     inte.int_estado_logico=:estado AND 
@@ -436,7 +438,9 @@ class SolicitudInscripcion extends \app\modules\admision\components\CActiveRecor
                     sins.sins_estado=:estado AND 
                     inte.int_estado=:estado AND 
                     per.per_estado=:estado AND
-                    sins.sins_id=:sins_id";
+                    sins.sins_id=:sins_id AND
+                    m.mod_estado=:estado AND
+                    m.mod_estado_logico=:estado";
         $comando = $con->createCommand($sql);
         $comando->bindParam(":estado", $estado, \PDO::PARAM_STR);
         $comando->bindParam(":sins_id", $sins_id, \PDO::PARAM_INT);

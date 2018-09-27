@@ -49,20 +49,31 @@ class MatriculacionController extends \app\components\CController {
         if (Yii::$app->request->isAjax) {
             $data = Yii::$app->request->post();
             $par_id = $data["par_id"];
+            $per_id = $data["per_id"];
             $adm_id = base64_decode($data["adm_id"]);
             $sins_id = base64_decode($data["sins_id"]);
             $con = \Yii::$app->db_academico;
             $transaction = $con->beginTransaction();
             try {
-                $fecha = date(Yii::$app->params["dateTimeByDefault"]);
-                $descripcion = "Asignación por Matrícula Método Ingreso.";
-                $mod_Matriculacion = new Matriculacion();
-                $resp_matriculacion = $mod_Matriculacion->insertarMatriculacion(null, $adm_id, null, $sins_id, $fecha, $usu_id);
-                if ($resp_matriculacion) {
-                    $resp_Asigna = $mod_Matriculacion->insertarAsignacionxMeting($par_id, $resp_matriculacion, null, $descripcion, $fecha, $usu_id);
-                    if ($resp_Asigna) {
-                        $exito = '1';
-                    }
+                if (($per_id!=0) and ($par_id!=0)) {   
+                    //Verificar que no tenga una matrícula.
+                    $mod_Matriculacion = new Matriculacion();
+                    $resp_consMatricula = $mod_Matriculacion->consultaMatriculaxId($adm_id, $sins_id);
+                    if (!$resp_consMatricula) {
+                        $fecha = date(Yii::$app->params["dateTimeByDefault"]);
+                        $descripcion = "Asignación por Matrícula Método Ingreso.";
+                        $resp_matriculacion = $mod_Matriculacion->insertarMatriculacion(null, $adm_id, null, $sins_id, $fecha, $usu_id);
+                        if ($resp_matriculacion) {
+                            $resp_Asigna = $mod_Matriculacion->insertarAsignacionxMeting($par_id, $resp_matriculacion, null, $descripcion, $fecha, $usu_id);
+                            if ($resp_Asigna) {
+                                $exito = '1';
+                            }
+                        }
+                    } else {
+                        $mensaje = "¡Ya existe matrícula.!";
+                    }                   
+                } else {
+                    $mensaje = "¡Seleccione Período Académico y Paralelo.!";
                 }
                 if ($exito) {
                     $transaction->commit();

@@ -40,7 +40,6 @@ INSERT INTO `periodo_academico` (`paca_id`,`saca_id`, `baca_id`, `paca_anio_acad
 --
 
 INSERT INTO `periodo_academico_met_ingreso` (`pami_id`, `mes_id_academico`, `pami_fecha_inicio`, `pami_fecha_fin`, `pami_codigo`, `pami_usuario_ingreso`, `pami_estado`, `pami_estado_logico`) VALUES
--- Periodo Academico Online
 (1, 9, '2018-09-01', '2018-09-30', 'CAN092018', 1, '1', '1'),
 (2, 10, '2018-10-01', '2018-10-31', 'CAN102018', 1, '1', '1');
 
@@ -51,7 +50,7 @@ INSERT INTO `periodo_academico_met_ingreso` (`pami_id`, `mes_id_academico`, `pam
 
 INSERT INTO `paralelo` (`par_id`,`paca_id`, `pami_id`, `par_nombre`, `par_descripcion`, `par_usuario_ingreso`, `par_usuario_modifica`, `par_estado`, `par_estado_logico`) VALUES 
 (1, NULL, 1, '0001', '0001', 1, 1, '1', '1'),
-(2, NULL, 2, '0002', '0002', 1, 1, '1', '1');
+(2, NULL, 1, '0002', '0002', 1, 1, '1', '1');
 
 
 INSERT INTO `profesor` (`pro_id`,`per_id`,`pro_usuario_ingreso`,`pro_usuario_modifica`,`pro_estado`,`pro_estado_logico`)VALUES
@@ -373,6 +372,8 @@ INSERT INTO `malla_academica_detalle` (`made_id`,`maca_id`,`asi_id`,`uest_id`,`n
 (163,33,3,1,1,6,'',1,1,1),
 (164,33,4,1,1,6,'',1,1,1),
 (165,33,5,1,1,6,'',1,1,1);
+
+
 INSERT INTO `planificacion_estudio_academico` (`peac_id`,`uaca_id`,`pami_id`,`mod_id`,`paca_id`, `maca_id`, `peac_usuario_ingreso`,`peac_estado`,`peac_estado_logico`) VALUES 
 -- Online
 (1,1,1,1,null, 1 , 1,'1','1'),
@@ -382,35 +383,35 @@ INSERT INTO `planificacion_estudio_academico` (`peac_id`,`uaca_id`,`pami_id`,`mo
 (5,1,1,1,null, 5 , 1,'1','1'),
 (6,1,1,1,null, 6 , 1,'1','1'),
 -- Presencial
-(7,1,1,1,null, 7 , 1,'1','1'),
-(8,1,1,1,null, 8 , 1,'1','1'),
-(9,1,1,1,null, 9 , 1,'1','1'),
-(10,1,1,1,null, 10 , 1,'1','1'),
-(11,1,1,1,null, 11 , 1,'1','1'),
-(12,1,1,1,null, 12 , 1,'1','1'),
-(13,1,1,1,null, 13 , 1,'1','1'),
-(14,1,1,1,null, 14 , 1,'1','1'),
-(15,1,1,1,null, 15 , 1,'1','1'),
-(16,1,1,1,null, 16 , 1,'1','1'),
-(17,1,1,1,null, 17 , 1,'1','1'),
-(18,1,1,1,null, 18 , 1,'1','1'),
+(7,1,1,2,null, 7 , 1,'1','1'),
+(8,1,1,2,null, 8 , 1,'1','1'),
+(9,1,1,2,null, 9 , 1,'1','1'),
+(10,1,1,2,null, 10 , 1,'1','1'),
+(11,1,1,2,null, 11 , 1,'1','1'),
+(12,1,1,2,null, 12 , 1,'1','1'),
+(13,1,1,2,null, 13 , 1,'1','1'),
+(14,1,1,2,null, 14 , 1,'1','1'),
+(15,1,1,2,null, 15 , 1,'1','1'),
+(16,1,1,2,null, 16 , 1,'1','1'),
+(17,1,1,2,null, 17 , 1,'1','1'),
+(18,1,1,2,null, 18 , 1,'1','1'),
 -- Semi Presencial
-(19,1,1,1,null, 19 , 1,'1','1'),
-(20,1,1,1,null, 20 , 1,'1','1'),
-(21,1,1,1,null, 21 , 1,'1','1'),
-(22,1,1,1,null, 22 , 1,'1','1'),
-(23,1,1,1,null, 23 , 1,'1','1'),
-(24,1,1,1,null, 24 , 1,'1','1'),
-(25,1,1,1,null, 25 , 1,'1','1'),
-(26,1,1,1,null, 26 , 1,'1','1'),
-(27,1,1,1,null, 27 , 1,'1','1'),
+(19,1,1,3,null, 19 , 1,'1','1'),
+(20,1,1,3,null, 20 , 1,'1','1'),
+(21,1,1,3,null, 21 , 1,'1','1'),
+(22,1,1,3,null, 22 , 1,'1','1'),
+(23,1,1,3,null, 23 , 1,'1','1'),
+(24,1,1,3,null, 24 , 1,'1','1'),
+(25,1,1,3,null, 25 , 1,'1','1'),
+(26,1,1,3,null, 26 , 1,'1','1'),
+(27,1,1,3,null, 27 , 1,'1','1'),
 -- Distancia
-(28,1,1,1,null, 28 , 1,'1','1'),
-(29,1,1,1,null, 29 , 1,'1','1'),
-(30,1,1,1,null, 30 , 1,'1','1'),
-(31,1,1,1,null, 31 , 1,'1','1'),
-(32,1,1,1,null, 32 , 1,'1','1'),
-(33,1,1,1,null, 33 , 1,'1','1');
+(28,1,1,4,null, 28 , 1,'1','1'),
+(29,1,1,4,null, 29 , 1,'1','1'),
+(30,1,1,4,null, 30 , 1,'1','1'),
+(31,1,1,4,null, 31 , 1,'1','1'),
+(32,1,1,4,null, 32 , 1,'1','1'),
+(33,1,1,4,null, 33 , 1,'1','1');
 
 INSERT INTO `distributivo_horario` (`dhor_id`,`dia_id`,`dhor_hora_inicio`,`dhor_hora_fin`, `dhor_descripcion`, `dhor_usuario_ingreso`, `dhor_estado`,`dhor_estado_logico`) VALUES 
 (1,1,'07:00','13:00','Matutino',1,1,1),
