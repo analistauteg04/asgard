@@ -439,6 +439,7 @@ create table if not exists `distributivo_horario` (
   `dia_id` bigint(20) not null, 
   `dhor_hora_inicio` varchar(8) null default null,
   `dhor_hora_fin` varchar(8) null default null,
+  `dhor_descripcion` varchar(8) null default null,
   `dhor_usuario_ingreso` bigint(20) not null,
   `dhor_usuario_modifica` bigint(20)  null,
   `dhor_fecha_registro` timestamp null default null,
