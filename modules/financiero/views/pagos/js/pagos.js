@@ -370,9 +370,9 @@ function cargarFactura() {
     if (!validateForm()) {
         requestHttpAjax(link, arrParams, function (response) {
             showAlert(response.status, response.label, response.message);
-            //setTimeout(function () {
-            //    window.location.href = $('#txth_base').val() + "/admision/contactos/index";
-            //}, 3000);
+            setTimeout(function () {
+                window.location.href = $('#txth_base').val() + "/admision/solicitudes/index";
+            }, 3000);
         }, true);
     }
 }

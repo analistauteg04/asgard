@@ -2026,6 +2026,28 @@ class OrdenPago extends \app\modules\financiero\components\CActiveRecord {
         }
     }
     
+    /** ***
+     * Function Obtiene grol_id a partir de Id Persona y Empresa
+     * @author  Byron Villacreses <developer@uteg.edu.ec>
+     * @property integer car_id      
+     * @return  
+     */
+    public function consultarInteresadoPersona($sins_id) {
+        $con = \Yii::$app->db_captacion;        
+        $sql = "SELECT B.per_id Ids
+                    FROM " . $con->dbname . ".solicitud_inscripcion A
+                            INNER JOIN " . $con->dbname . ".interesado B ON A.int_id=B.int_id
+                WHERE A.sins_id=:sins_id AND A.sins_estado=1;";
+
+        $comando = $con->createCommand($sql);
+        $comando->bindParam(":sins_id", $sins_id, \PDO::PARAM_INT);
+        $rawData=$comando->queryScalar();        
+        if ($rawData === false)
+            return 0; //Falso si no Existe
+        return $rawData;//Si Existe en la Tabla
+        
+    }
+    
 
 
 

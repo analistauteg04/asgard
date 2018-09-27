@@ -17,8 +17,8 @@ use app\modules\financiero\Module as financiero;
 use app\modules\admision\Module as admision;
 
 admision::registerTranslations();
-$per_id = Yii::$app->session->get("PB_perid");
-
+//$per_id = Yii::$app->session->get("PB_perid");
+Utilities::putMessageLogFile($per_id);
 $leyendarc = '<div class="col-md-12 col-sm-12 col-xs-12 col-lg-12">
           <div class="form-group">
           <div class="col-sm-10 col-md-10 col-xs-10 col-lg-10">
@@ -101,9 +101,10 @@ $leyendarc = '<div class="col-md-12 col-sm-12 col-xs-12 col-lg-12">
                         'uploadUrl' => Url::to(['pagos/savefactura']),
                         'maxFileSize' => Yii::$app->params["MaxFileSize"], // en Kbytes
                         'uploadExtraData' => 'javascript:function (previewId,index) {
-                        var name_pago= $("#txth_doc_titulo").val();
-            return {"upload_file": true, "name_file": name_pago};
-        }',
+                                var name_pago= $("#txth_doc_titulo").val();
+                                var name_perid= $("#txth_per").val();
+                                return {"upload_file": true, "name_file": name_pago,"name_perid": name_perid};
+                    }',
                     ],
                     'pluginEvents' => [
                         "filebatchselected" => "function (event) {                        
