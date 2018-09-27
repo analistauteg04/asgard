@@ -74,4 +74,46 @@ class DocumentoAdjuntar extends \yii\db\ActiveRecord
     {
         return $this->hasMany(SolicitudinsDocumento::className(), ['dadj_id' => 'dadj_id']);
     }
+
+    /**
+     * Function desactivarDocumentosxSolicitud marca los documentos con estado = 0 
+     * @author  Developer Uteg <developer@uteg.edu.ec>
+     * @param   int     $sins_id        Id de la solicitud
+     * @return  $resultData (Retorna true si se realizo la operacion o false si fue error).
+     */
+    public static function desactivarDocumentosxSolicitud($sins_id){
+        $con = \Yii::$app->db_captacion;
+        $estado = 0;
+
+        $sql = "UPDATE solicitudins_documento 
+                SET sdoc_estado = :estado 
+                WHERE sins_id = :id;";
+
+        $comando = $con->createCommand($sql);
+        $comando->bindParam(":id", $sins_id, \PDO::PARAM_INT);
+        $comando->bindParam(":estado", $estado, \PDO::PARAM_STR);
+        $resultData = $comando->execute();
+        return $resultData;
+    }
+
+    /**
+     * Function addLabelTimeDocumentos renombra el documento agregando una varible de tiempo 
+     * @author  Developer Uteg <developer@uteg.edu.ec>
+     * @param   int     $sins_id        Id de la solicitud
+     * @param   string  $file           Uri del Archivo a modificar
+     * @param   int     $timeSt         Parametro a agregar al nombre del archivo
+     * @return  $newFile | FALSE (Retorna el nombre del nuevo archivo o false si fue error).
+     */
+    public static function addLabelTimeDocumentos($sins_id, $file, $timeSt){
+        $arrIm = explode(".", basename($file));
+        $typeFile = strtolower($arrIm[count($arrIm) - 1]);
+        $baseFile = Yii::$app->basePath;
+        $search  = ".$typeFile";
+        $replace = "_$timeSt" . ".$typeFile";
+        $newFile = str_replace($search, $replace, $file);
+        if(rename($baseFile . $file, $baseFile . $newFile)){
+            return $newFile;
+        }
+        return FALSE;
+    }
 }

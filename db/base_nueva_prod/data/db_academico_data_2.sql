@@ -6,7 +6,7 @@ USE `db_academico`;
 -- --------------------------------------------------------
 --
 -- Volcado de datos para la tabla `semestre`
---
+-- 
 INSERT INTO `semestre_academico` (`saca_id`, `saca_nombre`, `saca_descripcion`, `saca_fecha_registro`, `saca_usuario_ingreso`, `saca_usuario_modifica`, `saca_estado`, `saca_estado_logico`) VALUES 
 (1, 'Abril - Agosto', 'Abril - Agosto', NULL, '1', '1', '1', '1'),
 (2, 'Octubre - Febrero', 'Octubre - Febrero', NULL, '1', '1', '1', '1');
@@ -36,18 +36,39 @@ INSERT INTO `periodo_academico` (`paca_id`,`saca_id`, `baca_id`, `paca_anio_acad
 
 -- --------------------------------------------------------
 --
+-- Volcado de datos para la tabla `periodo_academico_met_ingreso`
+--
+
+INSERT INTO `periodo_academico_met_ingreso` (`pami_id`, `mes_id_academico`, `pami_fecha_inicio`, `pami_fecha_fin`, `pami_codigo`, `pami_usuario_ingreso`, `pami_estado`, `pami_estado_logico`) VALUES
+(1, 1, '2018-01-01', '2018-01-31', 'CAN012018', 1, '1', '1'), 
+(2, 2, '2018-02-01', '2018-02-28', 'CAN022018', 1, '1', '1'), 
+(3, 3, '2018-03-01', '2018-03-31', 'CAN032018', 1, '1', '1'), 
+(4, 4, '2018-04-01', '2018-04-30', 'CAN042018', 1, '1', '1'), 
+(5, 5, '2018-05-01', '2018-05-31', 'CAN052018', 1, '1', '1'), 
+(6, 6, '2018-06-01', '2018-06-30', 'CAN062018', 1, '1', '1'), 
+(7, 7, '2018-07-01', '2018-07-31', 'CAN072018', 1, '1', '1'),
+(8, 8, '2018-08-01', '2018-08-31', 'CAN082018', 1, '1', '1'),
+(9, 9, '2018-09-01', '2018-09-30', 'CAN092018', 1, '1', '1'),
+(10, 10, '2018-10-01', '2018-10-31', 'CAN102018', 1, '1', '1');
+
+-- --------------------------------------------------------
+--
 -- Volcado de datos para la tabla `paralelo`
 --
 
 INSERT INTO `paralelo` (`par_id`,`paca_id`, `pami_id`, `par_nombre`, `par_descripcion`, `par_usuario_ingreso`, `par_usuario_modifica`, `par_estado`, `par_estado_logico`) VALUES 
-('1','1', null, '0001', '0001', '1', '1', '1', '1'),
-('2','2', null, '0001', '0001', '1', '1', '1', '1'),
-('3','3', null, '0001', '0001', '1', '1', '1', '1'),
-('4','4', null, '0001', '0001', '1', '1', '1', '1'),
-('5','5', null, '0001', '0001', '1', '1', '1', '1'),
-('6','6', null, '0001', '0001', '1', '1', '1', '1'),
-('7','7', null, '0001', '0001', '1', '1', '1', '1'),
-('8','8', null, '0001', '0001', '1', '1', '1', '1');
+(1,'1', null, '0001', '0001', '1', '1', '1', '1'),
+(2,'2', null, '0001', '0001', '1', '1', '1', '1'),
+(3,'3', null, '0001', '0001', '1', '1', '1', '1'),
+(4,'4', null, '0001', '0001', '1', '1', '1', '1'),
+(5,'5', null, '0001', '0001', '1', '1', '1', '1'),
+(6,'6', null, '0001', '0001', '1', '1', '1', '1'),
+(7,'7', null, '0001', '0001', '1', '1', '1', '1'),
+(8,'8', null, '0001', '0001', '1', '1', '1', '1'),
+
+(9, NULL, 8, '0001', '0001', 1, 1, '1', '1'),
+(10, NULL, 9, '0001', '0001', 1, 1, '1', '1'),
+(11, NULL, 10, '0001', '0001', 1, 1, '1', '1');
 
 
 INSERT INTO `profesor` (`pro_id`,`per_id`,`pro_usuario_ingreso`,`pro_usuario_modifica`,`pro_estado`,`pro_estado_logico`)VALUES
@@ -301,7 +322,54 @@ INSERT INTO `malla_academica_detalle` (`made_id`,`maca_id`,`asi_id`,`uest_id`,`n
 -- (110,11,5,1,1,6,'',1,1,1);
 
 INSERT INTO `planificacion_estudio_academico` (`peac_id`,`uaca_id`,`pami_id`,`mod_id`,`paca_id`, `maca_id`, `peac_usuario_ingreso`,`peac_estado`,`peac_estado_logico`) VALUES 
-(1,1,null,1,1,1,1,1,1);
+(1,1,null,1,1,1,1,1,1),
+
+(2,1,9,1,null, 1,1,'1','1'),
+(3,1,9,1,null, 2,1,'1','1'),
+(4,1,9,1,null, 3,1,'1','1'),
+(5,1,9,1,null, 4,1,'1','1'),
+(6,1,9,1,null, 5,1,'1','1'),
+(7,1,9,1,null, 6,1,'1','1'),
+(8,1,9,1,null, 7,1,'1','1'),
+(9,1,9,1,null, 8,1,'1','1'),
+(10,1,9,1,null, 9,1,'1','1'),
+(11,1,9,1,null, 10,1,'1','1'),
+(12,1,9,1,null, 11,1,'1','1'),
+(13,1,9,1,null, 12,1,'1','1'),
+(14,1,9,1,null, 13,1,'1','1'),
+(15,1,9,1,null, 14,1,'1','1'),
+(16,1,9,1,null, 15,1,'1','1'),
+(17,1,9,1,null, 16,1,'1','1'),
+(18,1,9,1,null, 17,1,'1','1'),
+(19,1,9,1,null, 18,1,'1','1'),
+(20,1,9,1,null, 19,1,'1','1'),
+(21,1,9,1,null, 20,1,'1','1'),
+(22,1,9,1,null, 21,1,'1','1'),
+(23,1,9,1,null, 22,1,'1','1'), 
+
+(24,1,10,1,null, 1,1,'1','1'),
+(25,1,10,1,null, 2,1,'1','1'),
+(26,1,10,1,null, 3,1,'1','1'),
+(27,1,10,1,null, 4,1,'1','1'),
+(28,1,10,1,null, 5,1,'1','1'),
+(29,1,10,1,null, 6,1,'1','1'),
+(30,1,10,1,null, 7,1,'1','1'),
+(31,1,10,1,null, 8,1,'1','1'),
+(32,1,10,1,null, 9,1,'1','1'),
+(33,1,10,1,null, 10,1,'1','1'),
+(34,1,10,1,null, 11,1,'1','1'),
+(35,1,10,1,null, 12,1,'1','1'),
+(36,1,10,1,null, 13,1,'1','1'),
+(37,1,10,1,null, 14,1,'1','1'),
+(38,1,10,1,null, 15,1,'1','1'),
+(39,1,10,1,null, 16,1,'1','1'),
+(40,1,10,1,null, 17,1,'1','1'),
+(41,1,10,1,null, 18,1,'1','1'),
+(42,1,10,1,null, 19,1,'1','1'),
+(43,1,10,1,null, 20,1,'1','1'),
+(44,1,10,1,null, 21,1,'1','1'),
+(45,1,10,1,null, 22,1,'1','1');
+
 
 INSERT INTO `distributivo_horario` (`dhor_id`,`dia_id`,`dhor_hora_inicio`,`dhor_hora_fin`, `dhor_usuario_ingreso`,`dhor_estado`,`dhor_estado_logico`) VALUES 
 (1,1,'07:00','13:00',1,1,1);
@@ -309,12 +377,6 @@ INSERT INTO `distributivo_horario` (`dhor_id`,`dia_id`,`dhor_hora_inicio`,`dhor_
 
 INSERT INTO `distributivo_academico` (`daca_id`,`peac_id`,`pro_id`,`dhor_id`, `daca_fecha_registro`, `daca_usuario_ingreso`,`daca_estado`,`daca_estado_logico`) VALUES 
 (1,1,1,1,'2018-01-01',1,1,1);
-
-
-
-INSERT INTO `matriculacion` (`mat_id`,`daca_id`,`adm_id`,`est_id`,`sins_id`, `mat_fecha_matriculacion`, `mat_usuario_ingreso`,`mat_estado`,`mat_estado_logico`) VALUES 
-(1,1,1,null,1,'2018-01-01',1,1,1);
-
 
 
 

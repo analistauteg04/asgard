@@ -20,6 +20,8 @@ use yii\helpers\Url;
 use yii\base\Exception;
 use yii\helpers\ArrayHelper;
 use Yii;
+use app\modules\admision\models\DocumentoAdjuntar;
+use app\models\SolicitudInscripcion;
 
 class SolicitudesController extends \app\components\CController {
 
@@ -487,7 +489,6 @@ class SolicitudesController extends \app\components\CController {
             if ($data["upload_file"]) {
                 if (empty($_FILES)) {
                     return json_encode(['error' => Yii::t("notificaciones", "Error to process File {file}. Try again.", ['{file}' => basename($files['name'])])]);
-                    return;
                 }
                 //Recibe Parámetros.
                 $files = $_FILES[key($_FILES)];
@@ -499,7 +500,6 @@ class SolicitudesController extends \app\components\CController {
                     return true;
                 } else {
                     return json_encode(['error' => Yii::t("notificaciones", "Error to process File {file}. Try again.", ['{file}' => basename($files['name'])])]);
-                    return;
                 }
                 $titulo_archivo = "";
                 if (isset($data["arc_doc_titulo"]) && $data["arc_doc_titulo"] != "") {
@@ -535,31 +535,47 @@ class SolicitudesController extends \app\components\CController {
         }
         $con = \Yii::$app->db_captacion;
         $transaction = $con->beginTransaction();
+        $timeSt = time();
         try {
             if (isset($data["arc_doc_titulo"]) && $data["arc_doc_titulo"] != "") {
                 $arrIm = explode(".", basename($data["arc_doc_titulo"]));
                 $typeFile = strtolower($arrIm[count($arrIm) - 1]);
                 $titulo_archivo = Yii::$app->params["documentFolder"] . "solicitudinscripcion/" . $per_id . "/doc_titulo_per_" . $per_id . "." . $typeFile;
+                $titulo_archivo = DocumentoAdjuntar::addLabelTimeDocumentos($sins_id, $titulo_archivo, $timeSt);
+                if($titulo_archivo === FALSE)
+                    throw new Exception('Error doc Titulo no renombrado.');
             }
             if (isset($data["arc_doc_dni"]) && $data["arc_doc_dni"] != "") {
                 $arrIm = explode(".", basename($data["arc_doc_dni"]));
                 $typeFile = strtolower($arrIm[count($arrIm) - 1]);
                 $dni_archivo = Yii::$app->params["documentFolder"] . "solicitudinscripcion/" . $per_id . "/doc_dni_per_" . $per_id . "." . $typeFile;
+                $dni_archivo = DocumentoAdjuntar::addLabelTimeDocumentos($sins_id, $dni_archivo, $timeSt);
+                if ($dni_archivo === FALSE)
+                    throw new Exception('Error doc Dni no renombrado.');
             }
             if (isset($data["arc_doc_certvota"]) && $data["arc_doc_certvota"] != "") {
                 $arrIm = explode(".", basename($data["arc_doc_certvota"]));
                 $typeFile = strtolower($arrIm[count($arrIm) - 1]);
                 $certvota_archivo = Yii::$app->params["documentFolder"] . "solicitudinscripcion/" . $per_id . "/doc_certvota_per_" . $per_id . "." . $typeFile;
+                $certvota_archivo = DocumentoAdjuntar::addLabelTimeDocumentos($sins_id, $certvota_archivo, $timeSt);
+                if ($certvota_archivo === FALSE)
+                    throw new Exception('Error doc certificado vot. no renombrado.');
             }
             if (isset($data["arc_doc_foto"]) && $data["arc_doc_foto"] != "") {
                 $arrIm = explode(".", basename($data["arc_doc_foto"]));
                 $typeFile = strtolower($arrIm[count($arrIm) - 1]);
                 $foto_archivo = Yii::$app->params["documentFolder"] . "solicitudinscripcion/" . $per_id . "/doc_foto_per_" . $per_id . "." . $typeFile;
+                $foto_archivo = DocumentoAdjuntar::addLabelTimeDocumentos($sins_id, $foto_archivo, $timeSt);
+                if ($foto_archivo === FALSE)
+                    throw new Exception('Error doc Foto no renombrado.');
             }
             if (isset($data["arc_doc_beca"]) && $data["arc_doc_beca"] != "") {
                 $arrIm = explode(".", basename($data["arc_doc_beca"]));
                 $typeFile = strtolower($arrIm[count($arrIm) - 1]);
                 $beca_archivo = Yii::$app->params["documentFolder"] . "solicitudinscripcion/" . $per_id . "/doc_beca_per_" . $per_id . "." . $typeFile;
+                $beca_archivo = DocumentoAdjuntar::addLabelTimeDocumentos($sins_id, $beca_archivo, $timeSt);
+                if ($beca_archivo === FALSE)
+                    throw new Exception('Error doc Beca no renombrado.');
             }
             if (!empty($titulo_archivo) && !empty($dni_archivo) && !empty($foto_archivo)) {
                 if (!empty($titulo_archivo)) {
@@ -623,6 +639,204 @@ class SolicitudesController extends \app\components\CController {
                         }
                     } else {
                         throw new Exception('Error doc titulo no creado.' . $mensaje);
+                    }
+                    $transaction->commit();
+                    $message = array(
+                        "wtmessage" => Yii::t("notificaciones", "La infomación ha sido grabada."),
+                        "title" => Yii::t('jslang', 'Success'),
+                    );
+                    return Utilities::ajaxResponse('OK', 'alert', Yii::t("jslang", "Sucess"), false, $message);
+                } else {
+                    throw new Exception('Tiene que subir todos los documentos.Titulo:' . isset($data["arc_doc_titulo"]) . 'Persona:' . $per_id);
+                }
+            }
+        } catch (Exception $ex) {
+            $transaction->rollback();
+            $message = array(
+                "wtmessage" => $ex->getMessage(),
+                "title" => Yii::t('jslang', 'Error'),
+            );
+            return Utilities::ajaxResponse('NO_OK', 'alert', Yii::t("jslang", "Error"), false, $message);
+        }
+    }
+
+    public function actionUpdatedocumentos()
+    {
+        if (Yii::$app->request->isAjax) {
+            $data = Yii::$app->request->post();
+            if ($_SESSION['persona_solicita'] != '') {// tomar el de parametro)
+                $per_id = base64_decode($_SESSION['persona_solicita']);
+            } else {
+                unset($_SESSION['persona_ingresa']);
+                $per_id = Yii::$app->session->get("PB_perid");
+            }
+            //$per_id = base64_decode($data['persona_id']);
+            $sins_id = base64_decode($data["sins_id"]);
+            $interesado_id = base64_decode($data["interesado_id"]);
+            $es_extranjero = base64_decode($data["arc_extranjero"]);
+            $beca = base64_decode($data["beca"]);
+            if ($data["upload_file"]) {
+                if (empty($_FILES)) {
+                    return json_encode(['error' => Yii::t("notificaciones", "Error to process File {file}. Try again.", ['{file}' => basename($files['name'])])]);
+                }
+                //Recibe Parámetros.
+                $files = $_FILES[key($_FILES)];
+                $arrIm = explode(".", basename($files['name']));
+                $typeFile = strtolower($arrIm[count($arrIm) - 1]);
+                $dirFileEnd = Yii::$app->params["documentFolder"] . "solicitudinscripcion/" . $per_id . "/" . $data["name_file"] . "_per_" . $per_id . "." . $typeFile;
+                $status = Utilities::moveUploadFile($files['tmp_name'], $dirFileEnd);
+                if ($status) {
+                    return true;
+                } else {
+                    return json_encode(['error' => Yii::t("notificaciones", "Error to process File {file}. Try again.", ['{file}' => basename($files['name'])])]);
+                }
+                $titulo_archivo = "";
+                if (isset($data["arc_doc_titulo"]) && $data["arc_doc_titulo"] != "") {
+                    $arrIm = explode(".", basename($data["arc_doc_titulo"]));
+                    $typeFile = strtolower($arrIm[count($arrIm) - 1]);
+                    $titulo_archivo = Yii::$app->params["documentFolder"] . "solicitudinscripcion/" . $per_id . "/doc_titulo_per_" . $per_id . "." . $typeFile;
+                }
+                $dni_archivo = "";
+                if (isset($data["arc_doc_dni"]) && $data["arc_doc_dni"] != "") {
+                    $arrIm = explode(".", basename($data["arc_doc_dni"]));
+                    $typeFile = strtolower($arrIm[count($arrIm) - 1]);
+                    $dni_archivo = Yii::$app->params["documentFolder"] . "solicitudinscripcion/" . $per_id . "/doc_dni_per_" . $per_id . "." . $typeFile;
+                }
+                $certvota_archivo = "";
+                if (isset($data["arc_doc_certvota"]) && $data["arc_doc_certvota"] != "") {
+                    $arrIm = explode(".", basename($data["arc_doc_certvota"]));
+                    $typeFile = strtolower($arrIm[count($arrIm) - 1]);
+                    $certvota_archivo = Yii::$app->params["documentFolder"] . "solicitudinscripcion/" . $per_id . "/doc_certvota_per_" . $per_id . "." . $typeFile;
+                }
+                $foto_archivo = "";
+                if (isset($data["arc_doc_foto"]) && $data["arc_doc_foto"] != "") {
+                    $arrIm = explode(".", basename($data["arc_doc_foto"]));
+                    $typeFile = strtolower($arrIm[count($arrIm) - 1]);
+                    $foto_archivo = Yii::$app->params["documentFolder"] . "solicitudinscripcion/" . $per_id . "/doc_foto_per_" . $per_id . "." . $typeFile;
+                }
+                $beca_archivo = "";
+                if (isset($data["arc_doc_beca"]) && $data["arc_doc_beca"] != "") {
+                    $arrIm = explode(".", basename($data["arc_doc_beca"]));
+                    $typeFile = strtolower($arrIm[count($arrIm) - 1]);
+                    $beca_archivo = Yii::$app->params["documentFolder"] . "solicitudinscripcion/" . $per_id . "/doc_beca_per_" . $per_id . "." . $typeFile;
+                }
+            }
+        }
+        $con = \Yii::$app->db_captacion;
+        $transaction = $con->beginTransaction();
+        $timeSt = time();
+        try {
+            if (isset($data["arc_doc_titulo"]) && $data["arc_doc_titulo"] != "") {
+                $arrIm = explode(".", basename($data["arc_doc_titulo"]));
+                $typeFile = strtolower($arrIm[count($arrIm) - 1]);
+                $titulo_archivo = Yii::$app->params["documentFolder"] . "solicitudinscripcion/" . $per_id . "/doc_titulo_per_" . $per_id . "." . $typeFile;
+                $titulo_archivo = DocumentoAdjuntar::addLabelTimeDocumentos($sins_id, $titulo_archivo, $timeSt);
+                if ($titulo_archivo === false)
+                    throw new Exception('Error doc Titulo no renombrado.');
+            }
+            if (isset($data["arc_doc_dni"]) && $data["arc_doc_dni"] != "") {
+                $arrIm = explode(".", basename($data["arc_doc_dni"]));
+                $typeFile = strtolower($arrIm[count($arrIm) - 1]);
+                $dni_archivo = Yii::$app->params["documentFolder"] . "solicitudinscripcion/" . $per_id . "/doc_dni_per_" . $per_id . "." . $typeFile;
+                $dni_archivo = DocumentoAdjuntar::addLabelTimeDocumentos($sins_id, $dni_archivo, $timeSt);
+                if ($dni_archivo === false)
+                    throw new Exception('Error doc Dni no renombrado.');
+            }
+            if (isset($data["arc_doc_certvota"]) && $data["arc_doc_certvota"] != "") {
+                $arrIm = explode(".", basename($data["arc_doc_certvota"]));
+                $typeFile = strtolower($arrIm[count($arrIm) - 1]);
+                $certvota_archivo = Yii::$app->params["documentFolder"] . "solicitudinscripcion/" . $per_id . "/doc_certvota_per_" . $per_id . "." . $typeFile;
+                $certvota_archivo = DocumentoAdjuntar::addLabelTimeDocumentos($sins_id, $certvota_archivo, $timeSt);
+                if ($certvota_archivo === false)
+                    throw new Exception('Error doc certificado vot. no renombrado.');
+            }
+            if (isset($data["arc_doc_foto"]) && $data["arc_doc_foto"] != "") {
+                $arrIm = explode(".", basename($data["arc_doc_foto"]));
+                $typeFile = strtolower($arrIm[count($arrIm) - 1]);
+                $foto_archivo = Yii::$app->params["documentFolder"] . "solicitudinscripcion/" . $per_id . "/doc_foto_per_" . $per_id . "." . $typeFile;
+                $foto_archivo = DocumentoAdjuntar::addLabelTimeDocumentos($sins_id, $foto_archivo, $timeSt);
+                if ($foto_archivo === false)
+                    throw new Exception('Error doc Foto no renombrado.');
+            }
+            if (isset($data["arc_doc_beca"]) && $data["arc_doc_beca"] != "") {
+                $arrIm = explode(".", basename($data["arc_doc_beca"]));
+                $typeFile = strtolower($arrIm[count($arrIm) - 1]);
+                $beca_archivo = Yii::$app->params["documentFolder"] . "solicitudinscripcion/" . $per_id . "/doc_beca_per_" . $per_id . "." . $typeFile;
+                $beca_archivo = DocumentoAdjuntar::addLabelTimeDocumentos($sins_id, $beca_archivo, $timeSt);
+                if ($beca_archivo === false)
+                    throw new Exception('Error doc Beca no renombrado.');
+            }
+            if (!empty($titulo_archivo) && !empty($dni_archivo) && !empty($foto_archivo)) {
+                if (!empty($titulo_archivo)) {
+                    // Se inactiva los documentos anteriores
+                    if(!DocumentoAdjuntar::desactivarDocumentosxSolicitud($sins_id))
+                        throw new Exception('Error no se reemplazo files.');
+                    $mod_solinsxdoc1 = new SolicitudinsDocumento();
+                    //1-Título, 2-DNI,3-Cert votación, 4-Foto, 5-Doc-Beca                       
+                    $mod_solinsxdoc1->sins_id = $sins_id;
+                    $mod_solinsxdoc1->int_id = $interesado_id;
+                    $mod_solinsxdoc1->dadj_id = 1;
+                    $mod_solinsxdoc1->sdoc_archivo = $titulo_archivo;
+                    $mod_solinsxdoc1->sdoc_estado = "1";
+                    $mod_solinsxdoc1->sdoc_estado_logico = "1";
+                    if ($mod_solinsxdoc1->save()) {
+                        $mod_solinsxdoc2 = new SolicitudinsDocumento();
+                        $mod_solinsxdoc2->sins_id = $sins_id;
+                        $mod_solinsxdoc2->int_id = $interesado_id;
+                        $mod_solinsxdoc2->dadj_id = 2;
+                        $mod_solinsxdoc2->sdoc_archivo = $dni_archivo;
+                        $mod_solinsxdoc2->sdoc_estado = "1";
+                        $mod_solinsxdoc2->sdoc_estado_logico = "1";
+
+                        if ($mod_solinsxdoc2->save()) {
+                            $mod_solinsxdoc3 = new SolicitudinsDocumento();
+                            $mod_solinsxdoc3->sins_id = $sins_id;
+                            $mod_solinsxdoc3->int_id = $interesado_id;
+                            $mod_solinsxdoc3->dadj_id = 4;
+                            $mod_solinsxdoc3->sdoc_archivo = $foto_archivo;
+                            $mod_solinsxdoc3->sdoc_estado = "1";
+                            $mod_solinsxdoc3->sdoc_estado_logico = "1";
+
+                            if ($mod_solinsxdoc3->save()) {
+                                if ($es_extranjero == "1" or (empty($es_extranjero))) {
+                                    $mod_solinsxdoc4 = new SolicitudinsDocumento();
+                                    $mod_solinsxdoc4->sins_id = $sins_id;
+                                    $mod_solinsxdoc4->int_id = $interesado_id;
+                                    $mod_solinsxdoc4->dadj_id = 3;
+                                    $mod_solinsxdoc4->sdoc_archivo = $certvota_archivo;
+                                    $mod_solinsxdoc4->sdoc_estado = "1";
+                                    $mod_solinsxdoc4->sdoc_estado_logico = "1";
+
+                                    if (!$mod_solinsxdoc4->save()) {
+                                        throw new Exception('Error doc certvot no creado.');
+                                    }
+                                }
+                                if ($beca == "1") {
+                                    $mod_solinsxdoc5 = new SolicitudinsDocumento();
+                                    $mod_solinsxdoc5->sins_id = $sins_id;
+                                    $mod_solinsxdoc5->int_id = $interesado_id;
+                                    $mod_solinsxdoc5->dadj_id = 5;
+                                    $mod_solinsxdoc5->sdoc_archivo = $beca_archivo;
+                                    $mod_solinsxdoc5->sdoc_estado = "1";
+                                    $mod_solinsxdoc5->sdoc_estado_logico = "1";
+                                    if (!$mod_solinsxdoc5->save()) {
+                                        throw new Exception('Error doc beca no creado.');
+                                    }
+                                }
+                            } else {
+                                throw new Exception('Error doc foto no creado.');
+                            }
+                        } else {
+                            throw new Exception('Error doc dni no creado.');
+                        }
+                    } else {
+                        throw new Exception('Error doc titulo no creado.' . $mensaje);
+                    }
+                    // se cambia a pendiente la solicitud para revision.
+                    $solicitudInscripcion = SolicitudInscripcion::findOne($sins_id);
+                    $solicitudInscripcion->rsin_id = 1;
+                    if(!$solicitudInscripcion->save()){
+                        throw new Exception('Error al actualizar Solicitud.');
                     }
                     $transaction->commit();
                     $message = array(
