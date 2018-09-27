@@ -1957,5 +1957,76 @@ class OrdenPago extends \app\modules\financiero\components\CActiveRecord {
             return FALSE;
         }
     }
+    
+    /** Se debe cambiar esta funcion que regrese el codigo de area ***ojo***
+     * Function consultarCodigoArea
+     * @author  Byron Villacreses <developer@uteg.edu.ec>
+     * @property integer car_id      
+     * @return  
+     */
+    public function insertarDtosFactDoct($data) {
+        $con = \Yii::$app->db_facturacion;
+        $trans = $con->getTransaction(); // se obtiene la transacción actual
+        if ($trans !== null) {
+            $trans = null; // si existe la transacción entonces no se crea una
+        } else {
+            $trans = $con->beginTransaction(); // si no existe la transacción entonces se crea una
+        }
+        try {
+            $per_id=@Yii::$app->session->get("PB_perid");
+            $usuingreso=@Yii::$app->session->get("PB_iduser");
+            $rpfa_revisado=1;
+            $sins_id=1;
+            //create table if not exists `registro_pago_factura` (                    
+            //rpfa_id,fpag_id,sins_id,rpfa_num_solicitud,rpfa_valor_documento,rpfa_fecha_documento,rpfa_numero_documento,
+            //rpfa_imagen,rpfa_revisado,rpfa_fecha_transaccion,rpfa_usuario_transaccion,rpfa_estado,rpfa_fecha_creacion,
+            //rpfa_fecha_modificacion,rpfa_estado_logico,  
+
+            $rpfa_fecha_documento=($data['rpfa_fecha_documento']!='')? date(Yii::$app->params["dateTimeByDefault"], strtotime($data['rpfa_fecha_documento'])):NULL ;
+            
+            $sql = "INSERT INTO " . $con->dbname . ".registro_pago_factura
+                (sins_id,rpfa_num_solicitud,rpfa_valor_documento,rpfa_fecha_documento,
+                rpfa_numero_documento,rpfa_imagen,rpfa_revisado,rpfa_fecha_transaccion,
+                rpfa_estado,rpfa_estado_logico,rpfa_usuario_transaccion) VALUES
+                (:sins_id,:rpfa_num_solicitud,:rpfa_valor_documento,:rpfa_fecha_documento,
+                :rpfa_numero_documento,:rpfa_imagen,:rpfa_revisado,CURRENT_TIMESTAMP(),1,1,:rpfa_usuario_transaccion)";
+            
+            $command = $con->createCommand($sql);
+            $command->bindParam(":sins_id", $sins_id, \PDO::PARAM_INT);
+            $command->bindParam(":rpfa_num_solicitud", $data["rpfa_num_solicitud"], \PDO::PARAM_STR);
+            $command->bindParam(":rpfa_valor_documento", $data["rpfa_valor_documento"], \PDO::PARAM_STR);
+            $command->bindParam(":rpfa_fecha_documento", $data["rpfa_fecha_documento"], \PDO::PARAM_STR);
+            $command->bindParam(":rpfa_numero_documento", $data["rpfa_numero_documento"], \PDO::PARAM_STR);
+            $command->bindParam(":rpfa_imagen", $data["documento"], \PDO::PARAM_STR);
+            $command->bindParam(":rpfa_revisado", $rpfa_revisado, \PDO::PARAM_STR);
+            $command->bindParam(":rpfa_usuario_transaccion", $usuingreso, \PDO::PARAM_STR);
+
+            $command->execute();
+            //return $con->getLastInsertID();
+
+            if ($trans !== null)
+                $trans->commit();
+
+            $arroout["status"] = TRUE;
+            $arroout["error"] = null;
+            $arroout["message"] = null;
+            $arroout["data"] = $rawData;
+            return $arroout;
+            
+        } catch (Exception $ex) {
+            fclose($handle);
+            if ($trans !== null)
+                $trans->rollback();
+
+            $arroout["status"] = FALSE;
+            $arroout["error"] = $ex->getCode();
+            $arroout["message"] = $ex->getMessage();
+            $arroout["data"] = $rawData;
+            return $arroout;
+        }
+    }
+    
+
+
 
 }

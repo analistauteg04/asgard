@@ -584,5 +584,75 @@ class PagosController extends \app\components\CController {
     public function actionUpdate() {
         
     }
+    
+    public function actionCargardocfact() {
+        //$ccar_id = base64_decode($_GET["ids"]);
+        $ccar_id = isset($_GET['ids']) ? base64_decode($_GET['ids']) : 1;//NULL
+        $model_pag = new OrdenPago();
+        //$arr_forma_pago = $model_pag->formaPago('2');
+        //$resp_doc = $model_pag->listarDocumento($ccar_id);
+        $data = null;
+        if (Yii::$app->request->isAjax) {
+            $data = Yii::$app->request->get();
+            if (isset($data["op"]) && $data["op"] == '1') {
+                
+            }
+        }
+        return $this->render('cargardocfact', [
+                    //"arr_forma_pago" => ArrayHelper::map($arr_forma_pago, "id", "value"), 'model' => $resp_doc,
+                    //"opago" => $ccar_id,
+                    //"vista" => $_GET["vista"],
+        ]);
+    }
+    
+    public function actionSavefactura() {
+        $per_id = Yii::$app->session->get("PB_perid");
+        $modcargapago = new OrdenPago();
+        if (Yii::$app->request->isAjax) {
+            $data = Yii::$app->request->post();
+            if ($data["upload_file"]) {
+                if (empty($_FILES)) {
+                    echo json_encode(['error' => Yii::t("notificaciones", "Error to process File {file}. Try again.", ['{file}' => basename($files['name'])])]);
+                    return;
+                }
+                //Recibe Parametros
+                $files = $_FILES[key($_FILES)];
+                $arrIm = explode(".", basename($files['name']));
+                $typeFile = strtolower($arrIm[count($arrIm) - 1]);
+                $dirFileEnd = Yii::$app->params["documentFolder"] . "facturas/" . $per_id . "/" . $data["name_file"] . "." . $typeFile;
+                $status = Utilities::moveUploadFile($files['tmp_name'], $dirFileEnd);
+                if ($status) {
+                    return true;
+                } else {
+                    echo json_encode(['error' => Yii::t("notificaciones", "Error to process File {file}. Try again.", ['{file}' => basename($files['name'])])]);
+                    return;
+                }
+            }            
+            if ($data["procesar_file"]) {
+                $carga_archivo = $modcargapago->insertarDtosFactDoct($data);
+                if ($carga_archivo['status']) {
+                    $message = array(
+                        "wtmessage" => Yii::t("notificaciones", "Archivo procesado correctamente." . $carga_archivo['data']),
+                        "title" => Yii::t('jslang', 'Success'),
+                    );
+                    return Utilities::ajaxResponse('OK', 'alert', Yii::t("jslang", "Success"), false, $message);
+                } else {
+                    $message = array(
+                        "wtmessage" => Yii::t("notificaciones", "Error al procesar el archivo. " . $carga_archivo['message']),
+                        "title" => Yii::t('jslang', 'Error'),
+                    );
+                    return Utilities::ajaxResponse('NO_OK', 'alert', Yii::t("jslang", "Error"), true, $message);
+                }
+                return;
+            }
+
+            return;
+        }else {
+            return $this->render('cargarleads', []);
+        }
+        
+    }
+ 
+
 
 }

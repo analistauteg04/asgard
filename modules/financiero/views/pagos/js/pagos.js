@@ -135,6 +135,11 @@ $(document).ready(function () {
     $('#btn_buscarPagoscargados').click(function () {
         actualizarGridPagosCargados();
     });
+    $('#btn_cargar').click(function () {
+        cargarFactura();
+    });
+
+    
 });
 
 function exportExcel() {
@@ -346,5 +351,27 @@ function Savepagosadm() {
 
             }, true);
         }
+    }
+}
+
+
+function cargarFactura() {
+    var arrParams = new Object();
+    var link = $('#txth_base').val() + "/financiero/pagos/savefactura";
+    arrParams.procesar_file = true;
+    arrParams.rpfa_num_solicitud = $('#txt_rpfa_num_solicitud').val();
+    arrParams.rpfa_valor_documento = $('#txt_rpfa_valor_documento').val();    
+    arrParams.rpfa_numero_documento = $('#txt_rpfa_numero_documento').val();
+    arrParams.rpfa_fecha_documento = $('#txt_rpfa_fecha_documento').val();
+    arrParams.documento = $('#txth_doc_titulo').val();
+    //arrParams.archivo = $('#txth_doc_adj_leads2').val() + "." + $('#txth_doc_adj_leads').val().split('.').pop();
+
+    if (!validateForm()) {
+        requestHttpAjax(link, arrParams, function (response) {
+            showAlert(response.status, response.label, response.message);
+            //setTimeout(function () {
+            //    window.location.href = $('#txth_base').val() + "/admision/contactos/index";
+            //}, 3000);
+        }, true);
     }
 }
