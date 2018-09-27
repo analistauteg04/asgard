@@ -586,11 +586,7 @@ class PagosController extends \app\components\CController {
     }
     
     public function actionCargardocfact() {
-        //$ccar_id = base64_decode($_GET["ids"]);
-        $ccar_id = isset($_GET['ids']) ? base64_decode($_GET['ids']) : 1;//NULL
-        $model_pag = new OrdenPago();
-        //$arr_forma_pago = $model_pag->formaPago('2');
-        //$resp_doc = $model_pag->listarDocumento($ccar_id);
+        $sins_id = isset($_GET['ids']) ? base64_decode($_GET['ids']) : 1;//NULL
         $data = null;
         if (Yii::$app->request->isAjax) {
             $data = Yii::$app->request->get();
@@ -598,10 +594,8 @@ class PagosController extends \app\components\CController {
                 
             }
         }
-        return $this->render('cargardocfact', [
-                    //"arr_forma_pago" => ArrayHelper::map($arr_forma_pago, "id", "value"), 'model' => $resp_doc,
-                    //"opago" => $ccar_id,
-                    //"vista" => $_GET["vista"],
+        return $this->render('cargardocfact', [                    
+            "sins_id" => $sins_id,
         ]);
     }
     

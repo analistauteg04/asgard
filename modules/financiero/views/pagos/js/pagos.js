@@ -359,6 +359,7 @@ function cargarFactura() {
     var arrParams = new Object();
     var link = $('#txth_base').val() + "/financiero/pagos/savefactura";
     arrParams.procesar_file = true;
+    arrParams.sins_id = $('#txt_rpfa_num_solicitud').val();//$('#txth_sins_id').val();
     arrParams.rpfa_num_solicitud = $('#txt_rpfa_num_solicitud').val();
     arrParams.rpfa_valor_documento = $('#txt_rpfa_valor_documento').val();    
     arrParams.rpfa_numero_documento = $('#txt_rpfa_numero_documento').val();

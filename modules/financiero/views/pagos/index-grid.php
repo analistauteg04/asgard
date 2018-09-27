@@ -67,7 +67,7 @@ admision::registerTranslations(); // trae las traducciones del modulo
             [
                 'class' => 'yii\grid\ActionColumn',
                 'header' => Yii::t("formulario", "Actions"),
-                'template' => '{view} {upload} {uploadFact}',
+                'template' => '{view} {upload}',
                 'buttons' => [
                     'view' => function ($url, $model) {
                         if ($model['estado'] != 'P') {
@@ -79,11 +79,7 @@ admision::registerTranslations(); // trae las traducciones del modulo
                             return Html::a('<span class="glyphicon glyphicon-download-alt"></span>', Url::to(['pagos/cargardocpagos', 'ids' => base64_encode($model['orden']), 'estado' => base64_encode($model['estado_desc_pago']), 'vista' => 'adm']), ["data-toggle" => "tooltip", "title" => "Subir Documento", "data-pjax" => 0]);
                         }
                     },
-                    'uploadFact' => function ($url, $model) {
-                        if ($model['rol'] == 1) {
-                            return Html::a('<span class="glyphicon glyphicon-download-alt"></span>', Url::to(['pagos/cargardocfact', 'ids' => base64_encode($model['orden']), 'estado' => base64_encode($model['estado_desc_pago']), 'vista' => 'adm']), ["data-toggle" => "tooltip", "title" => "Subir Factura", "data-pjax" => 0]);
-                        }
-                    },
+                    
                 ],
             ],
 

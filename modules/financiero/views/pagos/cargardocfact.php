@@ -30,22 +30,13 @@ $leyendarc = '<div class="col-md-12 col-sm-12 col-xs-12 col-lg-12">
 <div class="col-md-12">   
     <h3><span id="lbl_Personeria"><?= financiero::t("Pagos", "Carga Factura") ?></span>
 </div>
-<?php
-/*<?= Html::hiddenInput('txth_ids', base64_decode($_GET['ids']), ['id' => 'txth_ids']); ?>
-<?= Html::hiddenInput('txth_tot', base64_decode($_GET['tot']), ['id' => 'txth_tot']); ?>
-<?= Html::hiddenInput('txth_vista', $vista, ['id' => 'txth_vista']); ?>
-<?=
-Html::hiddenInput('txth_pg', base64_decode($_GET['pg']), ['id' => 'txth_pg']);
-$per_id = Yii::$app->session->get("PB_perid");*/
-?>
-<form class="form-horizontal">
-       
-    
+<?= Html::hiddenInput('txth_sins_id',$sins_id,['id' =>'txth_sins_id']); ?>
+<form class="form-horizontal">      
     <div class="col-md-12 col-sm-12 col-xs-12 col-lg-12">
         <div class="form-group">            
             <label for="txt_rpfa_num_solicitud" class="col-sm-2 col-md-2 col-xs-2 col-lg-2  control-label"><?= admision::t("Solicitudes", "Número de Solicitud") ?></label>
             <div class="col-sm-10 col-md-10 col-xs-10 col-lg-10 ">
-                <input type="text" class="form-control PBvalidation keyupmce" id="txt_rpfa_num_solicitud" data-type="number"  data-keydown="true" placeholder="<?= admision::t("Solicitudes", "Número de Solicitud") ?>">
+                <input type="text" class="form-control PBvalidation keyupmce" value="<?= $sins_id ?>" disabled id="txt_rpfa_num_solicitud" data-type="number"  data-keydown="true" placeholder="<?= admision::t("Solicitudes", "Número de Solicitud") ?>">
             </div>
         </div>
     </div>

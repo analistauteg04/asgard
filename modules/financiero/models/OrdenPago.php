@@ -1973,10 +1973,10 @@ class OrdenPago extends \app\modules\financiero\components\CActiveRecord {
             $trans = $con->beginTransaction(); // si no existe la transacción entonces se crea una
         }
         try {
-            $per_id=@Yii::$app->session->get("PB_perid");
+            //$per_id=@Yii::$app->session->get("PB_perid");
             $usuingreso=@Yii::$app->session->get("PB_iduser");
             $rpfa_revisado=1;
-            $sins_id=1;
+      
             //create table if not exists `registro_pago_factura` (                    
             //rpfa_id,fpag_id,sins_id,rpfa_num_solicitud,rpfa_valor_documento,rpfa_fecha_documento,rpfa_numero_documento,
             //rpfa_imagen,rpfa_revisado,rpfa_fecha_transaccion,rpfa_usuario_transaccion,rpfa_estado,rpfa_fecha_creacion,
@@ -1992,7 +1992,7 @@ class OrdenPago extends \app\modules\financiero\components\CActiveRecord {
                 :rpfa_numero_documento,:rpfa_imagen,:rpfa_revisado,CURRENT_TIMESTAMP(),1,1,:rpfa_usuario_transaccion)";
             
             $command = $con->createCommand($sql);
-            $command->bindParam(":sins_id", $sins_id, \PDO::PARAM_INT);
+            $command->bindParam(":sins_id", $data["sins_id"], \PDO::PARAM_INT);
             $command->bindParam(":rpfa_num_solicitud", $data["rpfa_num_solicitud"], \PDO::PARAM_STR);
             $command->bindParam(":rpfa_valor_documento", $data["rpfa_valor_documento"], \PDO::PARAM_STR);
             $command->bindParam(":rpfa_fecha_documento", $data["rpfa_fecha_documento"], \PDO::PARAM_STR);
