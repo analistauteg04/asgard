@@ -580,6 +580,38 @@ function SaveDocumentos() {
         }, true);
     }
 }
+function UpdateDocumentos() {
+    var link = $('#txth_base').val() + "/admision/solicitudes/updatedocumentos";
+    var arrParams = new Object();
+    arrParams.sins_id = $('#txth_ids').val();
+    arrParams.persona_id = $('#txth_idp').val();
+    arrParams.interesado_id = $('#txth_int_id').val();
+    arrParams.arc_extranjero = $('#txth_extranjero').val();
+    arrParams.arc_doc_titulo = $('#txth_doc_titulo').val();
+    arrParams.arc_doc_dni = $('#txth_doc_dni').val();
+    arrParams.arc_doc_certvota = $('#txth_doc_certvota').val();
+    arrParams.arc_doc_foto = $('#txth_doc_foto').val();
+    arrParams.arc_doc_beca = $('#txth_doc_beca').val();
+    arrParams.opcion = $('#txth_opcion').val();
+
+    if ($('input[name=opt_declara_si]:checked').val() == 1) {
+        arrParams.beca = 1;
+    } else {
+        arrParams.beca = 0;
+    }
+    if (!validateForm()) {
+        requestHttpAjax(link, arrParams, function (response) {
+            showAlert(response.status, response.label, response.message);
+            setTimeout(function () {
+                if (arrParams.opcion == 1) {
+                    window.location.href = $('#txth_base').val() + "/admision/solicitudes/listarsolicitudxinteresado?id=" + arrParams.interesado_id;
+                } else {
+                    window.location.href = $('#txth_base').val() + "/admision/solicitudes/index";
+                }
+            }, 5000);
+        }, true);
+    }
+}
  var condiciontitulo = new Array();
  var condiciondni = new Array();
  var len = condiciontitulo.length;

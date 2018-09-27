@@ -1251,8 +1251,7 @@ class SolicitudInscripcion extends \app\modules\admision\components\CActiveRecor
      * @param   string  $dataDNI        Valor del DNI
      * @param   string  $dataDireccion  Direccion de la persona a Facturar
      * @param   string  $dataTelefono   Telefono de la persona a Facturar
-     * @return  $resultData (Retornar los criterios a tomar en cuenta en la revisión de documentos según 
-     *                      el documento y la nacionalidad cuando no se aprueba una solicitud).
+     * @return  $resultData (Retorna true si se realizo la operacion o false si fue error).
      */
     public function crearDatosFacturaSolicitud($sins_id, $dataNombres, $dataApellidos, $dataTipDNI, $dataDNI, $dataDireccion, $dataTelefono)
     {
