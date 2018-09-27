@@ -416,7 +416,7 @@ create table if not exists `planificacion_estudio_academico` (
   `mod_id` bigint(20) not null,
   `paca_id` bigint(20) null,
   `pami_id` bigint(20) null,
-  `made_id` bigint(20) not null,
+  `maca_id` bigint(20) not null,
   `peac_usuario_ingreso` bigint(20) not null,
   `peac_usuario_modifica` bigint(20)  null,
   `peac_estado` varchar(1) not null,
@@ -426,7 +426,7 @@ create table if not exists `planificacion_estudio_academico` (
   foreign key (uaca_id) references `unidad_academica`(uaca_id),
   foreign key (mod_id) references `modalidad`(mod_id),
   foreign key (paca_id) references `periodo_academico`(paca_id),
-  foreign key (made_id) references `malla_academica_detalle`(made_id),
+  foreign key (maca_id) references `malla_academica`(maca_id),
   foreign key (pami_id) references `periodo_academico_met_ingreso`(pami_id)
 );
 

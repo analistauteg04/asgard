@@ -300,7 +300,7 @@ INSERT INTO `malla_academica_detalle` (`made_id`,`maca_id`,`asi_id`,`uest_id`,`n
 -- (109,11,4,1,1,6,'',1,1,1),
 -- (110,11,5,1,1,6,'',1,1,1);
 
-INSERT INTO `planificacion_estudio_academico` (`peac_id`,`uaca_id`,`pami_id`,`mod_id`,`paca_id`, `made_id`, `peac_usuario_ingreso`,`peac_estado`,`peac_estado_logico`) VALUES 
+INSERT INTO `planificacion_estudio_academico` (`peac_id`,`uaca_id`,`pami_id`,`mod_id`,`paca_id`, `maca_id`, `peac_usuario_ingreso`,`peac_estado`,`peac_estado_logico`) VALUES 
 (1,1,null,1,1,1,1,1,1);
 
 INSERT INTO `distributivo_horario` (`dhor_id`,`dia_id`,`dhor_hora_inicio`,`dhor_hora_fin`, `dhor_usuario_ingreso`,`dhor_estado`,`dhor_estado_logico`) VALUES 
