@@ -586,6 +586,7 @@ class PagosController extends \app\components\CController {
     }
     
     public function actionCargardocfact() {
+        $mod_cargapago = new OrdenPago();
         $sins_id = isset($_GET['ids']) ? base64_decode($_GET['ids']) : 1;//NULL
         $data = null;
         if (Yii::$app->request->isAjax) {
@@ -596,12 +597,13 @@ class PagosController extends \app\components\CController {
         }
         return $this->render('cargardocfact', [                    
             "sins_id" => $sins_id,
+            "per_id" => $mod_cargapago->consultarInteresadoPersona($sins_id)
         ]);
     }
     
-    public function actionSavefactura() {
-        $per_id = Yii::$app->session->get("PB_perid");
+    public function actionSavefactura() {        
         $modcargapago = new OrdenPago();
+        $per_id = $modcargapago->consultarInteresadoPersona($sins_id);//Yii::$app->session->get("PB_perid");
         if (Yii::$app->request->isAjax) {
             $data = Yii::$app->request->post();
             if ($data["upload_file"]) {
@@ -613,7 +615,8 @@ class PagosController extends \app\components\CController {
                 $files = $_FILES[key($_FILES)];
                 $arrIm = explode(".", basename($files['name']));
                 $typeFile = strtolower($arrIm[count($arrIm) - 1]);
-                $dirFileEnd = Yii::$app->params["documentFolder"] . "facturas/" . $per_id . "/" . $data["name_file"] . "." . $typeFile;
+                //$dirFileEnd = Yii::$app->params["documentFolder"] . "facturas/" . $per_id . "/" . $data["name_file"] . "." . $typeFile;
+                $dirFileEnd = Yii::$app->params["documentFolder"] . "facturas/" . $data["name_perid"]  . "/" . $data["name_file"] . "." . $typeFile;
                 $status = Utilities::moveUploadFile($files['tmp_name'], $dirFileEnd);
                 if ($status) {
                     return true;
