@@ -1,5 +1,23 @@
 $(document).ready(function () {
 //*********** FUNCIONES QUE SE DEBEN REMOVER CUANDO ESTEN HABILITADOS LOS MENUS **********
+    $('#cmb_state_opportunity').change(function () {
+        if ($('#cmb_state_opportunity').val() == 5 || $('#cmb_state_opportunity').val() == 4 || $('#cmb_state_opportunity').val() == 3) {
+            $("#txt_fecha_proxima").prop("disabled", true);
+            $("#txt_hora_proxima").prop("disabled", true);
+            $('#txt_fecha_proxima').removeClass("PBvalidation");
+            $('#txt_hora_proxima').removeClass("PBvalidation");
+        } else {
+            $("#txt_fecha_proxima").prop("disabled", false);
+            $("#txt_hora_proxima").prop("disabled", false);
+            $('#txt_fecha_proxima').addClass("PBvalidation");
+            $('#txt_hora_proxima').addClass("PBvalidation");
+        }
+        if ($('#cmb_state_opportunity').val() == 5) {
+            $('#divoportunidad_perdida').css('display', 'block');
+        } else {
+            $('#divoportunidad_perdida').css('display', 'none');
+        }
+    });
 });
 function newItem() {
     var opid = $('#txth_opid').val();
@@ -20,8 +38,14 @@ function save() {
         arrParams.oportunidad_perdida = $('#cmb_lost_opportunity').val();
     }
     //Datos Próxima Atención
-    arrParams.fecproxima = $('#txt_fecha_proxima').val();
-    arrParams.horproxima = $('#txt_hora_proxima').val();
+    if (arrParams.estado_oportunidad == 5 || arrParams.estado_oportunidad == 4 || arrParams.estado_oportunidad == 3) {
+        arrParams.fecproxima = '';
+        arrParams.horproxima = '';
+    } else {
+        arrParams.fecproxima = $('#txt_fecha_proxima').val();
+        arrParams.horproxima = $('#txt_hora_proxima').val();
+    }
+
     if (!validateForm()) {
         requestHttpAjax(link, arrParams, function (response) {
             showAlert(response.status, response.label, response.message);

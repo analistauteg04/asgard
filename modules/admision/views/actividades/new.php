@@ -203,7 +203,8 @@ if (!empty($personalData['pges_cedula'])) {
                 </div>
                 <div class="col-sm-3 col-md-3 col-xs-3 col-lg-3">                    
                     <label hidden for="txt_hora_proxima" class="col-sm-4 col-md-4 col-xs-4 col-lg-4  control-label"><?= Yii::t("formulario", "Next Hour") ?> </label>                                    
-                    <input type="text" class="form-control PBvalidation keyupmce" value="" id="txt_hora_proxima" data-type="tiempo" data-keydown="true" placeholder="<?= Yii::t('formulario', 'HH:MM') ?>"></div> 
+                    <input type="text" class="form-control PBvalidation keyupmce" value="" id="txt_hora_proxima" data-type="tiempo" data-keydown="true" placeholder="<?= Yii::t('formulario', 'HH:MM') ?>">
+                </div> 
             </div>                    
         </div>                 
     </div>    
