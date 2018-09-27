@@ -16,6 +16,7 @@ function save() {
     arrParams.fecatencion = $('#txt_fecha_atencion').val();
     arrParams.horatencion = $('#txt_hora_atencion').val();
     arrParams.observacion = $('#cmb_observacion').val();
+    arrParams.descripcion = $('#txt_descripcion').val();
     if (arrParams.estado_oportunidad == 5) {
         arrParams.oportunidad_perdida = $('#cmb_lost_opportunity').val();
     }
@@ -41,6 +42,7 @@ function update() {
     arrParams.fecatencion = $('#txt_fecha_atencion').val();
     arrParams.horatencion = $('#txt_hora_atencion').val();
     arrParams.observacion = $('#cmb_observacion').val();
+    arrParams.descripcion = $('#txt_descripcion').val();
     //Datos Próxima Atención
     arrParams.fecproxima = $('#txt_fecha_proxima').val();
     arrParams.horproxima = $('#txt_hora_proxima').val();

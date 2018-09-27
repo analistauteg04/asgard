@@ -247,7 +247,7 @@ class SolicitudesController extends \app\components\CController {
             $ming_id = $data["metodoing"];
             $mod_id = $data["modalidad"];
             $car_id = $data["carrera"];
-            $emp_id = $data["emp_id"];            
+            $emp_id = $data["emp_id"];
             if ($nint_id < '1' and $ming_id < '1' and $mod_id < '1' and $car_id < '1' and $valida = 1) {
                 throw new Exception('Debe seleccionar opciones de las listas.');
             }
@@ -305,8 +305,7 @@ class SolicitudesController extends \app\components\CController {
                     if ($subirDocumentos == 0) {
                         $mod_solins->save();
                         $id_sins = $mod_solins->sins_id;
-                        if(!$mod_solins->crearDatosFacturaSolicitud($id_sins, ucwords(strtolower($dataNombres)), 
-                                    ucwords(strtolower($dataApellidos)), $dataTipDNI, $dataDNI, ucwords(strtolower($dataDireccion)), $dataTelefono)){
+                        if (!$mod_solins->crearDatosFacturaSolicitud($id_sins, ucwords(strtolower($dataNombres)), ucwords(strtolower($dataApellidos)), $dataTipDNI, $dataDNI, ucwords(strtolower($dataDireccion)), $dataTelefono)) {
                             throw new Exception('Problemas al registrar Datos a Facturar.');
                         }
                     }
@@ -377,10 +376,10 @@ class SolicitudesController extends \app\components\CController {
                 }
                 $carrera = $informacion_interesado["carrera"];
                 $tipoDNI = ((SolicitudInscripcion::$arr_DNI[$dataTipDNI]) ? SolicitudInscripcion::$arr_DNI[$dataTipDNI] : SolicitudInscripcion::$arr_DNI["3"]);
-                
-                /*Obtención de datos de la factura */
+
+                /* Obtención de datos de la factura */
                 $respDatoFactura = $mod_solins->consultarDatosfacturaxIdsol($id_sins);
-                
+
                 $tituloMensaje = Yii::t("interesado", "UTEG - Registration Online");
                 $asunto = Yii::t("interesado", "UTEG - Registration Online");
                 $body = Utilities::getMailMessage("Paidinterested", array("[[nombre]]" => $nombres, "[[metodo]]" => $metodo, "[[precio]]" => $val_total, "[[link]]" => $link, "[[link1]]" => $link1, "[[link_pypal]]" => $link_paypal), Yii::$app->language);
@@ -404,7 +403,7 @@ class SolicitudesController extends \app\components\CController {
                     "title" => Yii::t('jslang', 'Success'),
                 );
                 return Utilities::ajaxResponse('OK', 'alert', Yii::t("jslang", "Sucess"), false, $message);
-            }            
+            }
         } catch (Exception $ex) {
             $transaction->rollback();
             $transaction1->rollback();
@@ -421,7 +420,7 @@ class SolicitudesController extends \app\components\CController {
     }
 
     public function actionSubirdocumentos() {
-        $sol_id = base64_decode($_GET['id_sol']);        
+        $sol_id = base64_decode($_GET['id_sol']);
         $sol_model = new SolicitudInscripcion();
         $datosSolicitud = $sol_model->consultarInteresadoPorSol_id($sol_id);
         return $this->render('subirDocumentos', [
@@ -436,7 +435,7 @@ class SolicitudesController extends \app\components\CController {
     }
 
     public function actionActualizardocumentos() {
-        $sol_id = base64_decode($_GET['id_sol']);        
+        $sol_id = base64_decode($_GET['id_sol']);
         $sol_model = new SolicitudInscripcion();
         $datosSolicitud = $sol_model->consultarInteresadoPorSol_id($sol_id);
         return $this->render('subirDocumentos', [
@@ -450,7 +449,7 @@ class SolicitudesController extends \app\components\CController {
         ]);
     }
 
-    public function actionDescargafactura(){
+    public function actionDescargafactura() {
         $nombreZip = "facturas_" . time();
         $content_type = Utilities::mimeContentType($nombreZip . ".zip");
         header("Content-Type: $content_type");
@@ -460,9 +459,9 @@ class SolicitudesController extends \app\components\CController {
         // se deben zippear 2 files el xml y el pdf
         $arr_files = array(
             array("ruta" => Yii::$app->basePath . "/uploads/ficha/silueta_default.png",
-             "name" => basename(Yii::$app->basePath . "/uploads/ficha/silueta_default.png")),
+                "name" => basename(Yii::$app->basePath . "/uploads/ficha/silueta_default.png")),
             array("ruta" => Yii::$app->basePath . "/uploads/ficha/Silueta-opc-4.png",
-             "name" => basename(Yii::$app->basePath . "/uploads/ficha/Silueta-opc-4.png")),
+                "name" => basename(Yii::$app->basePath . "/uploads/ficha/Silueta-opc-4.png")),
         );
         $tmpDir = Utilities::zipFiles($nombreZip, $arr_files);
         $file = file_get_contents($tmpDir);
@@ -541,7 +540,7 @@ class SolicitudesController extends \app\components\CController {
                 $typeFile = strtolower($arrIm[count($arrIm) - 1]);
                 $titulo_archivo = Yii::$app->params["documentFolder"] . "solicitudinscripcion/" . $per_id . "/doc_titulo_per_" . $per_id . "." . $typeFile;
                 $titulo_archivo = DocumentoAdjuntar::addLabelTimeDocumentos($sins_id, $titulo_archivo, $timeSt);
-                if($titulo_archivo === FALSE)
+                if ($titulo_archivo === FALSE)
                     throw new Exception('Error doc Titulo no renombrado.');
             }
             if (isset($data["arc_doc_dni"]) && $data["arc_doc_dni"] != "") {
@@ -605,7 +604,7 @@ class SolicitudesController extends \app\components\CController {
                             $mod_solinsxdoc3->sdoc_estado_logico = "1";
 
                             if ($mod_solinsxdoc3->save()) {
-                                if ($es_extranjero == "1" or (empty($es_extranjero))) {
+                                if ($es_extranjero == "1" or ( empty($es_extranjero))) {
                                     $mod_solinsxdoc4 = new SolicitudinsDocumento();
                                     $mod_solinsxdoc4->sins_id = $sins_id;
                                     $mod_solinsxdoc4->int_id = $interesado_id;
@@ -659,8 +658,7 @@ class SolicitudesController extends \app\components\CController {
         }
     }
 
-    public function actionUpdatedocumentos()
-    {
+    public function actionUpdatedocumentos() {
         if (Yii::$app->request->isAjax) {
             $data = Yii::$app->request->post();
             if ($_SESSION['persona_solicita'] != '') {// tomar el de parametro)
@@ -768,7 +766,7 @@ class SolicitudesController extends \app\components\CController {
             if (!empty($titulo_archivo) && !empty($dni_archivo) && !empty($foto_archivo)) {
                 if (!empty($titulo_archivo)) {
                     // Se inactiva los documentos anteriores
-                    if(!DocumentoAdjuntar::desactivarDocumentosxSolicitud($sins_id))
+                    if (!DocumentoAdjuntar::desactivarDocumentosxSolicitud($sins_id))
                         throw new Exception('Error no se reemplazo files.');
                     $mod_solinsxdoc1 = new SolicitudinsDocumento();
                     //1-Título, 2-DNI,3-Cert votación, 4-Foto, 5-Doc-Beca                       
@@ -797,7 +795,7 @@ class SolicitudesController extends \app\components\CController {
                             $mod_solinsxdoc3->sdoc_estado_logico = "1";
 
                             if ($mod_solinsxdoc3->save()) {
-                                if ($es_extranjero == "1" or (empty($es_extranjero))) {
+                                if ($es_extranjero == "1" or ( empty($es_extranjero))) {
                                     $mod_solinsxdoc4 = new SolicitudinsDocumento();
                                     $mod_solinsxdoc4->sins_id = $sins_id;
                                     $mod_solinsxdoc4->int_id = $interesado_id;
@@ -834,7 +832,7 @@ class SolicitudesController extends \app\components\CController {
                     // se cambia a pendiente la solicitud para revision.
                     $solicitudInscripcion = SolicitudInscripcion::findOne($sins_id);
                     $solicitudInscripcion->rsin_id = 1;
-                    if(!$solicitudInscripcion->save()){
+                    if (!$solicitudInscripcion->save()) {
                         throw new Exception('Error al actualizar Solicitud.');
                     }
                     $transaction->commit();
@@ -877,21 +875,21 @@ class SolicitudesController extends \app\components\CController {
             $transaction = $con->beginTransaction();
             $con2 = \Yii::$app->db_facturacion;
             $transaction2 = $con2->beginTransaction();
-            try {            
-                if ($rsin_id!=2) { 
+            try {
+                if ($rsin_id != 2) {
                     $mod_solins = new SolicitudInscripcion();
                     $mod_ordenpago = new OrdenPago();
-                    $respusuario = $mod_solins->consultaDatosusuario($per_sistema);  
+                    $respusuario = $mod_solins->consultaDatosusuario($per_sistema);
                     if ($banderapreaprueba == 0) {  //etapa de Aprobación.                    
                         if ($resultado == 2) {
                             //consultar estado del pago.     
-                            $resp_pago = $mod_ordenpago->consultaOrdenPago($sins_id);  
+                            $resp_pago = $mod_ordenpago->consultaOrdenPago($sins_id);
                             if ($resp_pago["opag_estado_pago"] == 'S') {
                                 $respsolins = $mod_solins->apruebaSolicitud($sins_id, $resultado, $observacion, $banderapreaprueba, $respusuario['usu_id']);
-                                if ($respsolins) {   
+                                if ($respsolins) {
                                     //Se genera id de aspirante y correo de bienvenida.                                
                                     $resp_encuentra = $mod_ordenpago->encuentraAdmitido($int_id);
-                                    if ($resp_encuentra) {   
+                                    if ($resp_encuentra) {
                                         $asp = $resp_encuentra['adm_id'];
                                         $continua = 1;
                                     } else {
@@ -1038,7 +1036,7 @@ class SolicitudesController extends \app\components\CController {
                             //Verificar que se hayan subido los documentos.
                             $respConsulta = $mod_solins->consultarDocumxSolic($sins_id);
                             if ($respConsulta['numDocumentos'] > 0) {
-                                $respsolins = $mod_solins->apruebaSolicitud($sins_id, $resultado, $observacion, $banderapreaprueba, $respusuario['usu_id']);                                
+                                $respsolins = $mod_solins->apruebaSolicitud($sins_id, $resultado, $observacion, $banderapreaprueba, $respusuario['usu_id']);
                                 if ($respsolins) {
                                     $exito = 1;
                                 }
@@ -1113,18 +1111,17 @@ class SolicitudesController extends \app\components\CController {
                             );
                         }
                         return \app\models\Utilities::ajaxResponse('NO_OK', 'alert', Yii::t("jslang", "Sucess"), false, $message);
-                    } 
-                    
-                }  else {
-                        $transaction->rollback();
-                        $transaction2->rollback();                        
-                        $message = array
-                            (
-                            "wtmessage" => Yii::t("notificaciones", "Solicitud se encuentra Aprobada."), "title" =>
-                            Yii::t('jslang', 'Success'),
-                        );                        
-                        return \app\models\Utilities::ajaxResponse('NO_OK', 'alert', Yii::t("jslang", "Sucess"), false, $message);
                     }
+                } else {
+                    $transaction->rollback();
+                    $transaction2->rollback();
+                    $message = array
+                        (
+                        "wtmessage" => Yii::t("notificaciones", "Solicitud se encuentra Aprobada."), "title" =>
+                        Yii::t('jslang', 'Success'),
+                    );
+                    return \app\models\Utilities::ajaxResponse('NO_OK', 'alert', Yii::t("jslang", "Sucess"), false, $message);
+                }
             } catch (Exception $ex) {
                 $transaction->rollback();
                 $transaction2->rollback();
@@ -1136,6 +1133,43 @@ class SolicitudesController extends \app\components\CController {
             }
             return;
         }
+    }
+
+    public function actionExpexcel() {
+        $per_id = @Yii::$app->session->get("PB_perid");
+        $data = Yii::$app->request->get();
+        $per_ids = base64_decode($data['ids']);
+        $arrSearch["search"] = $data["search"];
+        $arrSearch["carrera"] = $data["carrera"];
+        $arrSearch["f_ini"] = $data["f_ini"];
+        $arrSearch["f_fin"] = $data["f_fin"];
+        $arrData = array();
+        if (empty($per_ids)) {  //vista para el interesado
+            $arrData = SolicitudInscripcion::getSolicitudesXInteresado($per_id, $arrSearch, true);
+        } else {   //vista para el jefe o agente.
+            $arrData = SolicitudInscripcion::getSolicitudesXInteresado($per_ids, $arrSearch, true);
+        }
+
+        $nombarch = "InscripcionReport-" . date("YmdHis");
+        $content_type = Utilities::mimeContentType("xls");
+        header("Content-Type: $content_type");
+        header("Content-Disposition: attachment;filename=" . $nombarch . ".xls");
+        header('Cache-Control: max-age=0');
+        $arrHeader = array(
+            Yii::t("formulario", "Request #"),
+            Yii::t("solicitud_ins", "Application date"),
+            Yii::t("formulario", "DNI 1"),
+            Yii::t("formulario", "First Names"),
+            Yii::t("formulario", "Last Names"),
+            Yii::t("solicitud_ins", "Level Inter"),
+            Yii::t("solicitud_ins", "Income Method"),
+            Yii::t("academico", "Career"),
+            Yii::t("formulario", "Status"),
+            "Pago");
+        $nameReport = yii::t("formulario", "Application Reports");
+        $colPosition = array("C", "D", "E", "F", "G", "H", "I", "J", "K", "L");
+        Utilities::generarReporteXLS($nombarch, $nameReport, $arrHeader, $arrData, $colPosition);
+        return;
     }
 
 }
