@@ -74,6 +74,8 @@ INSERT INTO `objeto_modulo` (`omod_id`, `mod_id`, `omod_padre_id`, `omod_nombre`
 (54, 1, 18, 'Eliminar Permiso', 'S', '0', '', '', '', 'permisos/delete', 1, '0', 'grupo', '1', '2018-09-15 22:48:06', NULL, '1'),
 (55, 1, 35, 'Eliminar Modulo', 'S', '0', '', '', '', 'modulos/delete', 1, '0', 'modulo', '1', '2018-09-15 22:48:06', NULL, '1'),
 (56, 1, 43, 'Eliminar SubModulo', 'S', '0', '', '', '', 'objetomodulos/delete', 1, '0', 'objetomodulo', '1', '2018-09-15 22:48:06', NULL, '1'),
+
+
 (57, 2, 57, 'Contactos', 'P', '0', '', '', '', 'admision/contactos/index', 1, '1', 'contacto', '1', '2018-09-18 00:29:05', NULL, '1'),
 (58, 2, 57, 'Nuevo Contacto', 'S', '0', '', '', '', 'admision/contactos/new', 1, '0', 'contacto', '1', '2018-09-18 01:00:12', NULL, '1'),
 (59, 2, 57, 'Nuevo Contacto', 'A', '0', '', '', '', 'admision/contactos/new', 1, '1', 'contacto', '1', '2018-09-18 01:03:59', NULL, '1'),
@@ -82,6 +84,8 @@ INSERT INTO `objeto_modulo` (`omod_id`, `mod_id`, `omod_padre_id`, `omod_nombre`
 (62, 2, 57, 'Editar Contacto', 'S', '0', '', '', '', 'admision/contactos/edit', 1, '0', 'contacto', '1', '2018-09-18 01:13:20', NULL, '1'),
 (63, 2, 61, 'Editar Contacto', 'A', '0', '', '', '', 'admision/contactos/edit', 1, '1', 'contacto', '1', '2018-09-18 01:15:00', NULL, '1'),
 (64, 2, 62, 'Actualizar Contacto', 'A', '0', '', '', '', 'admision/contactos/update', 1, '1', 'contacto', '1', '2018-09-18 01:16:57', NULL, '1'),
+
+
 (65, 2, 65, 'Oportunidades', 'P', '0', '', '', '', 'admision/oportunidades/index', 1, '1', 'oportunidad', '1', '2018-09-18 00:29:05', NULL, '1'),
 (66, 2, 73, 'Nuevo Oportunidad', 'S', '0', '', '', '', 'admision/oportunidades/newoportunidadxcontacto', 1, '0', 'oportunidad', '1', '2018-09-18 01:00:12', NULL, '1'),
 (67, 2, 73, 'Nuevo Oportunidad', 'A', '0', '', '', '', 'admision/oportunidades/newoportunidadxcontacto', 1, '1', 'oportunidad', '1', '2018-09-18 01:03:59', NULL, '1'),
