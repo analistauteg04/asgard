@@ -156,24 +156,26 @@ INSERT INTO `modulo_estudio` (`mest_id`, `uaca_id`, `mod_id`, `mest_codigo`, `me
 (4, 3, 2, 'EVPL01', 'Event Planner', 'Event Planner', 1, null, '1', '2018-05-08 22:43:48', null, '1'),
 (5, 3, 2, 'PGET01', 'Programa Gerencia Estratégica del TH (4 módulos)', 'Programa Gerencia Estratégica del TH (4 módulos)', 1, null, '1', '2018-05-08 22:43:48', null, '1'),
 (6, 3, 2, 'PEDA01', 'Pedagogía', 'Pedagogía', 1, null, '1', '2018-05-08 22:43:48', null, '1'),
-(7, 3, 2, 'RECI01', 'Redacción Científica', 'Redacción Científica', 1, null, '1', '2018-05-08 22:43:48', null, '1'),
+(7, 3, 2, 'RECI01', 'Programa para docentes:  Redacción Científica', 'Programa para docentes:  Redacción Científica', 1, null, '1', '2018-05-08 22:43:48', null, '1'),
 (8, 3, 2, 'DHCR01', 'Desarrollo Habilidades Comerciales para Retail', 'Desarrollo Habilidades Comerciales para Retail', 1, null, '1', '2018-05-08 22:43:48', null, '1'),
 (9, 3, 1, 'CUON01', 'Cursos Online', 'Cursos Online', 1, null, '1', '2018-05-08 22:43:48', null, '1'),
 (10, 4, 2, 'IDIF01', 'Idioma Inglés, Francés', 'Idioma Inglés, Francés', 1, null, '1', '2018-05-08 22:43:48', null, '1'),
-(11, 3, 2, 'PTHA01', 'Actualidad Laboral', 'Programa de Talento Humano: Actualidad Laboral', 1, null, '1', '2018-09-26 10:15:00', null, '1'),
-(12, 3, 2, 'ESDI01', 'Estrategias directivas', 'Programa de habilidades Gerenciales: Estrategias directivas', 1, null, '1', '2018-09-26 10:15:00', null, '1'),
+(11, 3, 2, 'PTHA01', 'Programa de Talento Humano: Actualidad Laboral', 'Programa de Talento Humano: Actualidad Laboral', 1, null, '1', '2018-09-26 10:15:00', null, '1'),
+(12, 3, 2, 'ESDI01', 'Programa de habilidades Gerenciales: Estrategias directivas', 'Programa de habilidades Gerenciales: Estrategias directivas', 1, null, '1', '2018-09-26 10:15:00', null, '1'),
 (13, 3, 2, 'IFIN01', 'Illustrator y fotoshop: intermedio', 'Illustrator y fotoshop: intermedio', 1, null, '1', '2018-09-26 10:15:00', null, '1'),
 (14, 3, 2, 'TNCV01', 'Técnicas de negociación y cierre de ventas', 'Técnicas de negociación y cierre de ventas', 1, null, '1', '2018-09-26 10:15:00', null, '1'),
 (15, 3, 2, 'NEMA01', 'Neuromarketing', 'Neuromarketing', 1, null, '1', '2018-09-26 10:15:00', null, '1'),
-(16, 3, 2, 'DCYC01', 'Descripción de cargos y selección por competencias (módulo 2)', 'Programa de Talento Humano: Descripción de cargos y selección por competencias (módulo 2)', 1, null, '1', '2018-09-26 10:15:00', null, '1'),
-(17, 3, 2, 'MCDI01', 'Manejo de clientes difíciles', 'Técnicas de ventas: Manejo de clientes difíciles', 1, null, '1', '2018-09-26 10:15:00', null, '1'),
-(18, 3, 2, 'NEEF01', 'Negociación efectiva', 'Programa de habilidades Gerenciales: Negociación efectiva', 1, null, '1', '2018-09-26 10:15:00', null, '1'),
-(19, 3, 2, 'PYDI01', 'Presupuesto y diferenciación de ingresos', 'Dirección en Finanzas: Presupuesto y diferenciación de ingresos', 1, null, '1', '2018-09-26 10:15:00', null, '1'),
+(16, 3, 2, 'DCYC01', 'Programa de Talento Humano: Descripción de cargos y selección por competencias (módulo 2)', 'Programa de Talento Humano: Descripción de cargos y selección por competencias (módulo 2)', 1, null, '1', '2018-09-26 10:15:00', null, '1'),
+(17, 3, 2, 'MCDI01', 'Técnicas de ventas:  Manejo de clientes difíciles', 'Técnicas de ventas: Manejo de clientes difíciles', 1, null, '1', '2018-09-26 10:15:00', null, '1'),
+(18, 3, 2, 'NEEF01', 'Programa de habilidades Gerenciales: Negociación efectiva', 'Programa de habilidades Gerenciales: Negociación efectiva', 1, null, '1', '2018-09-26 10:15:00', null, '1'),
+(19, 3, 2, 'PYDI01', 'Dirección en Finanzas: Presupuesto y diferenciación de ingresos', 'Dirección en Finanzas: Presupuesto y diferenciación de ingresos', 1, null, '1', '2018-09-26 10:15:00', null, '1'),
 (20, 3, 2, 'VAEM01', 'Valoración aduanera para empresarios', 'Valoración aduanera para empresarios', 1, null, '1', '2018-09-26 10:15:00', null, '1'),
 (21, 3, 2, 'CUSE01', 'Curso de seguros', 'Curso de seguros', 1, null, '1', '2018-09-26 10:15:00', null, '1'),
-(22, 3, 2, 'PETH01', 'Plan estratégico del Talento Humano (módulo 3)', 'Programa de Talento Humano: Plan estratégico del Talento Humano (módulo 3)', 1, null, '1', '2018-09-26 10:15:00', null, '1'),
+(22, 3, 2, 'PETH01', 'Programa de Talento Humano:  Plan estratégico del Talento Humano (módulo 3)', 'Programa de Talento Humano: Plan estratégico del Talento Humano (módulo 3)', 1, null, '1', '2018-09-26 10:15:00', null, '1'),
 (23, 3, 2, 'TLMC01', 'Taller de liderazgo y manejo de conflictos', 'Taller de liderazgo y manejo de conflictos', 1, null, '1', '2018-09-26 10:15:00', null, '1'),
-(24, 3, 2, 'HAPE01', 'Habilidades pedagógicas', 'Programa para docentes: Habilidades pedagógicas', 1, null, '1', '2018-09-26 10:15:00', null, '1');
+(24, 3, 2, 'HAPE01', 'Programa para docentes: Habilidades pedagógicas', 'Programa para docentes: Habilidades pedagógicas', 1, null, '1', '2018-09-26 10:15:00', null, '1'),
+(25, 3, 2, 'PPTH01', 'Promoción programa talento humano', 'Promoción programa talento humano', 1, null, '1', '2018-09-26 10:15:00', null, '1'),
+(26, 3, 2, 'PPPD01', 'Promoción programa para docentes', 'Promoción progrma para docentes', 1, null, '1', '2018-09-26 10:15:00', null, '1');
 
 
 -- --------------------------------------------------------
@@ -230,7 +232,9 @@ INSERT INTO `modulo_estudio_empresa` (`meem_id`,`mest_id`,`emp_id`,`meem_fecha_i
 (35,4,3,'2018-09-01 00:00:00','2018-12-31 00:00:00',1,null,'1','1','2018-09-01 18:30:00',null,'1'),
 (36,22,3,'2018-09-01 00:00:00','2018-12-31 00:00:00',1,null,'1','1','2018-09-01 18:30:00',null,'1'),
 (37,7,3,'2018-09-01 00:00:00','2018-12-31 00:00:00',1,null,'1','1','2018-09-01 18:30:00',null,'1'),
-(38,23,3,'2018-09-01 00:00:00','2018-12-31 00:00:00',1,null,'1','1','2018-09-01 18:30:00',null,'1');
+(38,23,3,'2018-09-01 00:00:00','2018-12-31 00:00:00',1,null,'1','1','2018-09-01 18:30:00',null,'1'),
+(39,25,3,'2018-09-01 00:00:00','2018-12-31 00:00:00',1,null,'1','1','2018-09-01 18:30:00',null,'1'),
+(40,26,3,'2018-09-01 00:00:00','2018-12-31 00:00:00',1,null,'1','1','2018-09-01 18:30:00',null,'1');
 
 -- --------------------------------------------------------
 --
