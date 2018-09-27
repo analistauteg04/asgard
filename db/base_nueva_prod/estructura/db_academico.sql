@@ -479,7 +479,7 @@ create table if not exists `distributivo_academico` (
 create table if not exists `paralelo` (
   `par_id` bigint(20) not null auto_increment primary key, 
   `paca_id` bigint(20)  null,
-  `pmin_id` bigint(20)  null,
+  `pami_id` bigint(20)  null,
   `par_nombre` varchar(300) not null,
   `par_descripcion` varchar(500) not null,
   `par_usuario_ingreso` bigint(20) not null,
@@ -489,7 +489,7 @@ create table if not exists `paralelo` (
   `par_fecha_modificacion` timestamp null default null,
   `par_estado_logico` varchar(1) not null,
   foreign key (paca_id) references `periodo_academico`(paca_id),
-  foreign key (pmin_id) references `periodo_academico_met_ingreso`(pmin_id)  
+  foreign key (pami_id) references `periodo_academico_met_ingreso`(pami_id)  
 );
 
 -- --------------------------------------------------------

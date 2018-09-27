@@ -39,15 +39,15 @@ INSERT INTO `periodo_academico` (`paca_id`,`saca_id`, `baca_id`, `paca_anio_acad
 -- Volcado de datos para la tabla `paralelo`
 --
 
-INSERT INTO `paralelo` (`par_id`,`paca_id`, `par_nombre`, `par_descripcion`, `par_usuario_ingreso`, `par_usuario_modifica`, `par_estado`, `par_estado_logico`) VALUES 
-('1','1', '0001', '0001', '1', '1', '1', '1'),
-('2','2', '0001', '0001', '1', '1', '1', '1'),
-('3','3', '0001', '0001', '1', '1', '1', '1'),
-('4','4', '0001', '0001', '1', '1', '1', '1'),
-('5', '5','0001', '0001', '1', '1', '1', '1'),
-('6','6', '0001', '0001', '1', '1', '1', '1'),
-('7','7', '0001', '0001', '1', '1', '1', '1'),
-('8','8', '0001', '0001', '1', '1', '1', '1');
+INSERT INTO `paralelo` (`par_id`,`paca_id`, `pami_id`, `par_nombre`, `par_descripcion`, `par_usuario_ingreso`, `par_usuario_modifica`, `par_estado`, `par_estado_logico`) VALUES 
+('1','1', null, '0001', '0001', '1', '1', '1', '1'),
+('2','2', null, '0001', '0001', '1', '1', '1', '1'),
+('3','3', null, '0001', '0001', '1', '1', '1', '1'),
+('4','4', null, '0001', '0001', '1', '1', '1', '1'),
+('5','5', null, '0001', '0001', '1', '1', '1', '1'),
+('6','6', null, '0001', '0001', '1', '1', '1', '1'),
+('7','7', null, '0001', '0001', '1', '1', '1', '1'),
+('8','8', null, '0001', '0001', '1', '1', '1', '1');
 
 
 INSERT INTO `profesor` (`pro_id`,`per_id`,`pro_usuario_ingreso`,`pro_usuario_modifica`,`pro_estado`,`pro_estado_logico`)VALUES
@@ -300,8 +300,8 @@ INSERT INTO `malla_academica_detalle` (`made_id`,`maca_id`,`asi_id`,`uest_id`,`n
 -- (109,11,4,1,1,6,'',1,1,1),
 -- (110,11,5,1,1,6,'',1,1,1);
 
-INSERT INTO `planificacion_estudio_academico` (`peac_id`,`uaca_id`,`mod_id`,`paca_id`, `made_id`, `peac_usuario_ingreso`,`peac_estado`,`peac_estado_logico`) VALUES 
-(1,1,1,1,1,1,1,1);
+INSERT INTO `planificacion_estudio_academico` (`peac_id`,`uaca_id`,`pami_id`,`mod_id`,`paca_id`, `made_id`, `peac_usuario_ingreso`,`peac_estado`,`peac_estado_logico`) VALUES 
+(1,1,null,1,1,1,1,1,1);
 
 INSERT INTO `distributivo_horario` (`dhor_id`,`dia_id`,`dhor_hora_inicio`,`dhor_hora_fin`, `dhor_usuario_ingreso`,`dhor_estado`,`dhor_estado_logico`) VALUES 
 (1,1,'07:00','13:00',1,1,1);
