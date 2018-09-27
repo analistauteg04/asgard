@@ -218,6 +218,8 @@ create table if not exists `orden_pago` (
   foreign key (sgen_id) references `solicitud_general` (sgen_id)
 ) ;
 
+
+
 -- --------------------------------------------------------
 -- 
 -- Estructura de tabla para la tabla `desglose_pago`
@@ -281,6 +283,32 @@ create table if not exists `registro_pago` (
   foreign key (dpag_id) references `desglose_pago` (dpag_id),
   foreign key (fpag_id) references `forma_pago` (fpag_id)
 );
+
+-- --------------------------------------------------------
+--
+-- Estructura de tabla para la tabla `registro_pago_factura`
+--
+create table if not exists `registro_pago_factura` (
+  `rpfa_id` bigint(20) not null auto_increment primary key,     
+  `fpag_id` bigint(20) null,
+  `sins_id` bigint(20) null,  
+  `rpfa_num_solicitud` varchar(10) null,
+  `rpfa_valor_documento` double not null,
+  `rpfa_fecha_documento` timestamp null default null,
+  `rpfa_numero_documento` varchar(50) not null,
+  `rpfa_imagen` varchar(100) null,  
+  `rpfa_observacion` text null,
+  `rpfa_revisado` varchar(2) not null,     
+  `rpfa_fecha_transaccion` timestamp null,
+  `rpfa_usuario_transaccion` bigint(20) not null,
+  `rpfa_codigo_autorizacion` varchar(10) null,
+  `rpfa_estado` varchar(1) not null,   
+  `rpfa_fecha_creacion` timestamp not null default current_timestamp,
+  `rpfa_fecha_modificacion` timestamp null default null,
+  `rpfa_estado_logico` varchar(1) not null,
+  foreign key (fpag_id) references `forma_pago` (fpag_id)
+);
+
 
 -- --------------------------------------------------------
 -- 
