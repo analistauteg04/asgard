@@ -21,7 +21,6 @@ use yii\base\Exception;
 use yii\helpers\ArrayHelper;
 use Yii;
 use app\modules\admision\models\DocumentoAdjuntar;
-use app\models\SolicitudInscripcion;
 
 class SolicitudesController extends \app\components\CController {
 

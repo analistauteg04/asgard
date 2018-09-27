@@ -268,8 +268,7 @@ class Matriculacion extends \yii\db\ActiveRecord {
         
         try {
             $sql = "INSERT INTO " . $con->dbname . ".asignacion_paralelo ($param_sql) VALUES($bsol_sql)";
-            $comando = $con->createCommand($sql);
-
+            $comando = $con->createCommand($sql);   
             if (isset($par_id))
                 $comando->bindParam(':par_id', $par_id, \PDO::PARAM_INT);
 
@@ -286,7 +285,7 @@ class Matriculacion extends \yii\db\ActiveRecord {
                 $comando->bindParam(':apar_fecha_asignacion', $apar_fecha_asignacion, \PDO::PARAM_STR);
 
             if (isset($apar_usuario_asignacion))
-                $comando->bindParam(':apar_usuario_asignacion', $apar_usuario_asignacion, \PDO::PARAM_STR);
+                $comando->bindParam(':apar_usuario_asignacion', $apar_usuario_asignacion, \PDO::PARAM_INT);
 
             $result = $comando->execute();
             if ($trans !== null)

@@ -522,7 +522,7 @@ create table if not exists `asignacion_paralelo` (
   `apar_id` bigint(20) not null auto_increment primary key, 
   `par_id` bigint(20) not null, 
   `mat_id` bigint(20) not null, 
-  `mest_id` bigint(20) not null, 
+  `mest_id` bigint(20) null, 
   `apar_descripcion` varchar(500) not null,   
   `apar_fecha_asignacion` timestamp null default null,
   `apar_usuario_asignacion` int not null,
