@@ -4,6 +4,8 @@ use yii\helpers\Html;
 use app\modules\academico\Module as academico;
 $tipodoc = 'Cédula';
 ?>
+<?= Html::hiddenInput('txth_sins_id', base64_encode($personalData["sins_id"]), ['id' => 'txth_sins_id']); ?>
+<?= Html::hiddenInput('txth_adm_id', base64_encode($personalData[""]), ['id' => 'txth_adm_id']); ?>
 <form class="form-horizontal">
 <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
     <h3><span id="lbl_index"><?= 'Método Ingreso' ?></span></h3>
