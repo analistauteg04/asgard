@@ -120,7 +120,10 @@ INSERT INTO `objeto_modulo` (`omod_id`, `mod_id`, `omod_padre_id`, `omod_nombre`
 (101, 4, 100, 'Guardar Documentos Solicitud', 'A', '0', '', '', '', 'admision/solicitudes/subirDocumentos', '1', '1', 'Admision', '1', '2018-09-22 14:07:01', NULL, '1'),
 (102, 4, 90, 'Guardar Cargar Documento Pago', 'A', '0', '', '', '', 'financiero/pagos/cargardocpagos', '1', '1', 'Admision', '1', '2018-09-22 14:07:01', NULL, '1'),
 (103, 2, 83, 'Actualizar Documentos', 'S', '0', '', '', '', 'admision/solicitudes/actualizardocumentos', '1', '0', 'Admision', '1', '2018-09-22 14:07:01', NULL, '1'),
-(104, 2, 103, 'Guardar Actualizar Documentos', 'A', '0', '', '', '', 'admision/solicitudes/actualizardocumentos', '1', '0', 'Admision', '1', '2018-09-22 14:07:01', NULL, '1');
+(104, 2, 103, 'Guardar Actualizar Documentos', 'A', '0', '', '', '', 'admision/solicitudes/actualizardocumentos', '1', '0', 'Admision', '1', '2018-09-22 14:07:01', NULL, '1'),
+(105, 2, 65, 'Reasignar Agente', 'S', '0', '', '', '', 'admision/agentes/reasignagente', '1', '0', 'Admision', '1', '2018-09-22 14:07:01', NULL, '1'),
+(106, 2, 105, 'Guardar Reasignar Agente', 'A', '0', '', '', '', 'admision/agentes/reasignagente', '1', '0', 'Admision', '1', '2018-09-22 14:07:01', NULL, '1');
+
 
 -- --------------------------------------------------------
 --
@@ -169,7 +172,8 @@ INSERT INTO `obmo_acci` (`oacc_id`, `omod_id`, `acc_id`, `oacc_tipo_boton`, `oac
 (40, 99, 13, '1', '', 'Approve', '1', '1'),
 (41, 101, 4, '1', '', 'SaveDocumentos', '1', '1'),
 (42, 102, 4, '1', '', 'enviardata', '1', '1'),
-(44, 104, 4, '1', '', 'UpdateDocumentos', '1', '1');
+(43, 104, 4, '1', '', 'UpdateDocumentos', '1', '1'),
+(44, 106, 4, '1', '', 'guardarAgente', '1', '1');
 -- --------------------------------------------------------
 --
 -- Volcado de datos para la tabla `grup_obmo`
@@ -278,7 +282,9 @@ INSERT INTO `grup_obmo` (`gmod_id`, `gru_id`, `omod_id`, `gmod_estado`,  `gmod_e
 (101, 1, 101, '1', '1'),
 (102, 1, 102, '1', '1'),
 (103, 1, 103, '1', '1'),
-(104, 1, 104, '1', '1');
+(104, 1, 104, '1', '1'),
+(105, 1, 105, '1', '1'),
+(106, 1, 105, '1', '1');
 
 
 -- --------------------------------------------------------
@@ -389,4 +395,6 @@ INSERT INTO `grup_obmo_grup_rol` (`gogr_id`, `grol_id`, `gmod_id`, `gogr_estado`
 (101, 1, 101, '1', '1'),
 (102, 1, 102, '1', '1'),
 (103, 1, 103, '1', '1'),
-(104, 1, 104, '1', '1');
+(104, 1, 104, '1', '1'),
+(105, 1, 105, '1', '1'),
+(106, 1, 106, '1', '1');

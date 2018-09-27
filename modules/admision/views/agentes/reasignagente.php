@@ -35,16 +35,5 @@ use app\modules\admision\Module;
             </div>
         </div>
     </div>    
-    <div class="col-md-12"> 
-        <div class="form-group">
-            <div class="col-sm-4">                                                  
-            </div>  
-            <div class="col-sm-4">                                  
-                <a id="btn_ReasignarAgente" class="btn btn-primary btn-block"> <?= Yii::t("formulario", "Send") ?></a>                                   
-            </div> 
-            <div class="col-sm-4">                                                  
-            </div>  
-        </div>    
-    </div>  
 </form>
 
