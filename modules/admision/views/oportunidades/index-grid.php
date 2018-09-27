@@ -70,7 +70,7 @@ use app\modules\admision\Module;
                         return Html::a('<span class="glyphicon glyphicon-th-large"></span>', Url::to(['actividades/listaractividadxoportunidad', 'opor_id' => base64_encode($model["opo_id"]), 'pges_id' => base64_encode($model["pges_id"])]), ["data-toggle" => "tooltip", "title" => "Ver Actividades", "data-pjax" => 0]);
                     },
                     'reasigna' => function ($url, $model) {
-                        return Html::a('<span class="glyphicon glyphicon-edit"></span>', Url::to(['agentes/reasignagente', 'popup' => "true", 'opor_id' => base64_encode($model["opo_id"])]), ["class" => "pbpopup", "data-toggle" => "tooltip", "title" => "Re-Asignar Agente", "data-pjax" => 0]);
+                        return Html::a('<span class="glyphicon glyphicon-random"></span>', Url::to(['/admision/agentes/reasignagente', 'opor_id' => base64_encode($model['opo_id'])]), ["data-toggle" => "tooltip", "title" => "Re-Asignar Agente", "data-pjax" => 0]);
                     },
                 ],
             ],
