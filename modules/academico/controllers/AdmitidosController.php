@@ -11,9 +11,7 @@ use yii\helpers\ArrayHelper;
 
 class AdmitidosController extends \app\components\CController {
     public function actionIndex() {
-        $per_id = @Yii::$app->session->get("PB_perid");
-        $model_interesado = new Interesado();
-        $resp_gruporol = $model_interesado->consultagruporol($per_id); 
+        $per_id = @Yii::$app->session->get("PB_perid");    
         $mod_carrera = new EstudioAcademico();
       
         $data = Yii::$app->request->get();

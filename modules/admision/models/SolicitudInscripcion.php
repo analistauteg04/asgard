@@ -416,6 +416,8 @@ class SolicitudInscripcion extends \app\modules\admision\components\CActiveRecor
                     lpad(sins.sins_id,4,'0') as num_solicitud,
                     per.per_nac_ecuatoriano,
                     sins.uaca_id,
+                    sins.mod_id,
+                    sins.eaca_id,
                     uaca_nombre,
                     eac.eaca_nombre as carrera,
                     sins.sins_fecha_reprobacion,

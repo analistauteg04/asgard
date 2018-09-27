@@ -300,23 +300,55 @@ class Matriculacion extends \yii\db\ActiveRecord {
     }
     
      /**
-     * Function Consultaestadosolicitud
+     * Function consultaPeriodoAcademico
      * @author  Grace Viteri <analistadesarrollo01@uteg.edu.ec>
      * @param   
-     * @return  $resultData (Retornar los estados de las solicitudes).
+     * @return  $resultData (Retornar los períodos académicos de los métodos de ingreso).
      */
-    public function consultaPeriodoAcademico() {
+    public function consultaPeriodoAcademico($uaca_id, $mod_id, $eaca_id) {
         $con = \Yii::$app->db_academico;
         $estado = 1;
 
-        $sql = "SELECT mes_id_academico, pami_fecha_inicio, pami_fecha_fin
-                FROM " . $con->dbname . ".periodo_academico_met_ingreso pmi 
-                WHERE pmi.pami_estado_logico = :estado AND
-                      pmi.pami_estado = :estado
+        $sql = "SELECT pmi.pami_id id, pmi.pami_codigo value
+                FROM " . $con->dbname . ".periodo_academico_met_ingreso pmi inner join " . $con->dbname . ".planificacion_estudio_academico pea
+                        on pea.pami_id = pmi.pami_id 
+                    INNER JOIN " . $con->dbname . ".malla_academica ma on ma.maca_id = pea.maca_id
+                WHERE pea.uaca_id = :uaca_id AND
+                      pea.mod_id = :mod_id AND
+                      ma.eaca_id = :eaca_id AND
+                      pmi.pami_estado_logico = :estado AND
+                      pmi.pami_estado = :estado AND
+                      pea.peac_estado = :estado AND
+                      pea.peac_estado_logico = :estado
                 ORDER BY pmi.pami_id";
 
         $comando = $con->createCommand($sql);
         $comando->bindParam(":estado", $estado, \PDO::PARAM_STR);
+        $comando->bindParam(":eaca_id", $eaca_id, \PDO::PARAM_INT);
+        $comando->bindParam(":mod_id", $mod_id, \PDO::PARAM_INT);
+        $comando->bindParam(":uaca_id", $uaca_id, \PDO::PARAM_INT);
+        $resultData = $comando->queryAll();
+        return $resultData;
+    }
+    
+    /**
+     * Function consultaPeriodoAcademico
+     * @author  Grace Viteri <analistadesarrollo01@uteg.edu.ec>
+     * @param   
+     * @return  $resultData (Retornar los períodos académicos).
+     */
+    public function consultaParalelo() {
+        $con = \Yii::$app->db_academico;
+        $estado = 1;
+
+        $sql = "SELECT par_id id, par_nombre value
+                FROM " . $con->dbname . ".paralelo
+                WHERE pami_id is not null AND
+                      par_estado = :estado AND
+                      par_estado_logico = :estado";
+
+        $comando = $con->createCommand($sql);
+        $comando->bindParam(":estado", $estado, \PDO::PARAM_STR);       
         $resultData = $comando->queryAll();
         return $resultData;
     }
