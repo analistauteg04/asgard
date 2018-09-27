@@ -11,6 +11,7 @@ use app\widgets\PbGridView\PbGridView;
 use app\modules\admision\Module as admision;
 use app\modules\academico\Module as academico;
 academico::registerTranslations();
+
 ?>
 <?=
     PbGridView::widget([
@@ -51,18 +52,23 @@ academico::registerTranslations();
             ],
             [
                 'attribute' => 'Unidad Académica',
-                'header' => academico::t("Academico", "Academic unit"),
+                'header' => academico::t("Academico", "Aca. Uni."),
                 'value' => 'uaca_nombre',
             ],
             [
                 'attribute' => 'Metodo Ingreso',
-                'header' => admision::t("Solicitudes", "Income Method"),
+                'header' => academico::t("Academico", "Income Method"),
                 'value' => 'ming_nombre',
-            ],
+            ],            
             [
-                'attribute' => 'Carrera',
+                'class' => 'yii\grid\ActionColumn',
                 'header' => academico::t("Academico", "Career/Program"),
-                'value' => 'carrera',
+                'template' => '{view}',
+                'buttons' => [
+                    'view' => function ($url, $model) {
+                        return Html::a('<span>' . substr($model['carrera'], 0, 20) . '... </span>', Url::to(['#']), ["data-toggle" => "tooltip", "title" => $model['carrera']]);
+                    },
+                ],
             ],
             [
                 'attribute' => 'Estado',

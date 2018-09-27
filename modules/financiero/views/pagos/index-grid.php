@@ -10,6 +10,8 @@ use yii\helpers\ArrayHelper;
 use yii\jui\AutoComplete;
 use yii\web\JsExpression;
 use app\modules\admision\Module as admision;
+use app\modules\academico\Module as academico;
+academico::registerTranslations();
 
 admision::registerTranslations(); // trae las traducciones del modulo 
 ?>
@@ -50,8 +52,8 @@ admision::registerTranslations(); // trae las traducciones del modulo
                 'value' => 'apellidos',
             ],
             [
-                'attribute' => 'NivelInteres',
-                'header' => admision::t("Solicitudes", "Level Interest"),
+                'attribute' => 'UnidadAcademica',
+                'header' => academico::t("Academico", "Aca. Uni."),
                 'value' => 'nivel',
             ],
             [

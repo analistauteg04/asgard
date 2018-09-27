@@ -7,8 +7,10 @@ namespace app\modules\academico\messages;
  */
  return [
      "Academic unit" => "Unidad Académica",
+     "Aca. Uni." => "Uni. Aca.",
      "Attach document" => "Adjuntar Documentos",
      "Career/Program" => "Carrera/Programa",
+     "Income Method" => "Mét. Ing",
      "List Admitted" => "Listar Admitidos",
      "Modality" => "Modalidad",
      "Registration by Homologation" => "Matriculación por Homologación",
