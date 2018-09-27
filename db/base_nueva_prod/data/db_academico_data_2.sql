@@ -151,7 +151,6 @@ INSERT INTO `malla_academica_detalle` (`made_id`,`maca_id`,`asi_id`,`uest_id`,`n
 
 INSERT INTO `planificacion_estudio_academico` (`peac_id`,`uaca_id`,`pami_id`,`mod_id`,`paca_id`, `maca_id`, `peac_usuario_ingreso`,`peac_estado`,`peac_estado_logico`) VALUES 
 (1,1,null,1,1,1,1,1,1),
-
 (2,1,9,1,null, 1,1,'1','1'),
 (3,1,9,1,null, 2,1,'1','1'),
 (4,1,9,1,null, 3,1,'1','1'),

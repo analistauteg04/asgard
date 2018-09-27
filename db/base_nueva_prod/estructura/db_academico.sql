@@ -498,7 +498,7 @@ create table if not exists `paralelo` (
 -- 
 create table if not exists `matriculacion` (
   `mat_id` bigint(20) not null auto_increment primary key, 
-  `daca_id` bigint(20) null, 
+  `paca_id` bigint(20) null, 
   `adm_id` bigint(20) null, 
   `est_id` bigint(20) null,    
   `sins_id` bigint(20) null,
@@ -509,9 +509,8 @@ create table if not exists `matriculacion` (
   `mat_fecha_creacion` timestamp not null default current_timestamp,
   `mat_fecha_modificacion` timestamp null default null,
   `mat_estado_logico` varchar(1) not null,
-  foreign key (daca_id) references `distributivo_academico`(daca_id),
+  foreign key (paca_id) references `planificacion_estudio_academico`(paca_id),
   foreign key (est_id) references `estudiante`(est_id)
-  
 );
 
 -- --------------------------------------------------------
