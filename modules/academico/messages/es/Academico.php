@@ -11,7 +11,10 @@ namespace app\modules\academico\messages;
      "Attach document" => "Adjuntar Documentos",
      "Career/Program" => "Carrera/Programa",
      "Income Method" => "Mét. Ing",
+     "Lecturing Period" => "Período Académico",
      "List Admitted" => "Listar Admitidos",
      "Modality" => "Modalidad",
+     "Parallel" => "Paralelo",
+     "Registered" => "Matriculado",
      "Registration by Homologation" => "Matriculación por Homologación",
  ];

@@ -6,6 +6,7 @@ use app\widgets\PbGridView\PbGridView;
 use app\modules\academico\Module as academico;
 use app\modules\admision\Module as admision;
 admision::registerTranslations();
+academico::registerTranslations();
 
 ?>
 <?= Html::hiddenInput('txth_ids', '', ['id' => 'txth_ids']); ?>
@@ -66,7 +67,11 @@ admision::registerTranslations();
                 'header' => admision::t("Solicitudes", "Scholarship"),
                 'value' => 'beca',
             ],      
-           
+            [
+                'attribute' => 'matriculado',
+                'header' => academico::t("Academico", "Registered"),
+                'value' => 'matriculado',
+            ],
             [
                 'class' => 'yii\grid\ActionColumn',
                 'header' => Yii::t("formulario", "Actions"),
@@ -75,8 +80,12 @@ admision::registerTranslations();
                     'view' => function ($url, $model) {                                                                           
                         return Html::a('<span class="glyphicon glyphicon-th-list"></span>', Url::to(['/admision/solicitudes/view', 'ids' => base64_encode($model['sins_id']), 'int' => base64_encode($model['int_id']), 'perid' => base64_encode($model['per_id'])]), ["data-toggle" => "tooltip", "title" => "Ver Solicitud", "data-pjax" => 0]);                        
                     },   
-                    'matricula' => function ($url, $model) {                                                                           
-                        return Html::a('<span class="glyphicon glyphicon-list-alt"></span>', Url::to(['/academico/matriculacion/newmetodoingreso', 'sids' => base64_encode($model['sins_id']), 'adm' => base64_encode($model['adm_id'])]), ["data-toggle" => "tooltip", "title" => "Matricular por Método Ingreso", "data-pjax" => 0]);                        
+                    'matricula' => function ($url, $model) {   
+                        if ($model["matriculado"]=='NO') {
+                            return Html::a('<span class="glyphicon glyphicon-list-alt"></span>', Url::to(['/academico/matriculacion/newmetodoingreso', 'sids' => base64_encode($model['sins_id']), 'adm' => base64_encode($model['adm_id'])]), ["data-toggle" => "tooltip", "title" => "Matricular por Método Ingreso", "data-pjax" => 0]);                        
+                        } else {
+                            return '<span class="glyphicon glyphicon-th-list"></span>';
+                        }
                     },   
                     'homologa' => function ($url, $model) {                                                                           
                         return Html::a('<span class="glyphicon glyphicon-check"></span>', Url::to(['/academico/matriculacion/newhomologacion', 'sids' => base64_encode($model['sins_id']), 'asp' => base64_encode($model['asp_id'])]), ["data-toggle" => "tooltip", "title" => "Matricular por Homologación", "data-pjax" => 0]);                        

@@ -135,7 +135,8 @@ class Admitido extends \yii\db\ActiveRecord {
                         car.eaca_nombre as carrera,
                         $columnsAdd                                                             
                         admi.adm_id,                                               
-                       (case when sins_beca = 1 then 'ICF' else 'No Aplica' end) as beca 
+                       (case when sins_beca = 1 then 'ICF' else 'No Aplica' end) as beca,
+                       ifnull((select 'SI' existe from db_academico.matriculacion m where m.adm_id = admi.adm_id and m.sins_id = sins.sins_id and m.mat_estado = :estado and m.mat_estado_logico = :estado),'NO') as matriculado
                 FROM " . $con->dbname . ".admitido admi INNER JOIN " . $con->dbname . ".interesado inte on inte.int_id = admi.int_id                     
                      INNER JOIN " . $con2->dbname . ".persona per on inte.per_id = per.per_id
                      INNER JOIN " . $con->dbname . ".solicitud_inscripcion sins on sins.int_id = inte.int_id

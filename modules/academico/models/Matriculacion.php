@@ -352,4 +352,28 @@ class Matriculacion extends \yii\db\ActiveRecord {
         return $resultData;
     }
 
+    /**
+     * Function consultaPeriodoAcademico
+     * @author  Grace Viteri <analistadesarrollo01@uteg.edu.ec>
+     * @param   
+     * @return  $resultData (Retornar los períodos académicos de los métodos de ingreso).
+     */
+    public function consultaMatriculaxId($adm_id, $sins_id) {
+        $con = \Yii::$app->db_academico;
+        $estado = 1;
+
+        $sql = "SELECT 'S' existe 
+                FROM db_academico.matriculacion m
+                WHERE adm_id = :adm_id
+                    and sins_id = :sins_id
+                    and mat_estado = :estado
+                    and mat_estado_logico = :estado";
+
+        $comando = $con->createCommand($sql);
+        $comando->bindParam(":estado", $estado, \PDO::PARAM_STR);
+        $comando->bindParam(":adm_id", $adm_id, \PDO::PARAM_INT);
+        $comando->bindParam(":sins_id", $sins_id, \PDO::PARAM_INT);        
+        $resultData = $comando->queryOne();
+        return $resultData;
+    }
 }

@@ -4,6 +4,7 @@ use yii\helpers\Html;
 use yii\helpers\Url;
 use kartik\date\DatePicker;
 use app\modules\admision\Module;
+
 if (!empty($personalData['pges_cedula'])) {
     $tipodoc = "Cédula";
     $dni = $personalData['pges_cedula'];
@@ -144,12 +145,12 @@ if (!empty($personalData['pges_cedula'])) {
                 <label for="cmb_carrera1" class="col-sm-5 col-md-5 col-xs-5 col-lg-5 control-label keyupmce"><?= Module::t("crm", "Academic Study") ?></label>
                 <div class="col-sm-7 col-md-7 col-xs-7 col-lg-7">
                     <?php if (empty($oportunidad_contacto["eaca_id"])) { ?>
-                            <?= Html::dropDownList("cmb_carrera1", $oportunidad_contacto["mest_id"], $arr_estudio, ["class" => "form-control", "id" => "cmb_carrera_estudio", "disabled" => true]) ?>
-                        <?php 
-                    } else { ?>
-                            <?= Html::dropDownList("cmb_carrera1", $oportunidad_contacto["eaca_id"], $arr_academic_study, ["class" => "form-control", "id" => "cmb_carrera_estudio", "disabled" => true]) ?>
-                        <?php 
-                    } ?>
+                        <?= Html::dropDownList("cmb_carrera1", $oportunidad_contacto["mest_id"], $arr_estudio, ["class" => "form-control", "id" => "cmb_carrera_estudio", "disabled" => true]) ?>
+                    <?php } else {
+                        ?>
+                        <?= Html::dropDownList("cmb_carrera1", $oportunidad_contacto["eaca_id"], $arr_academic_study, ["class" => "form-control", "id" => "cmb_carrera_estudio", "disabled" => true]) ?>
+                    <?php }
+                    ?>
                     <!--<? Html::dropDownList("cmb_carrera1", $oportunidad_contacto['eaca_id'], $arr_academic_study, ["class" => "form-control", "id" => "cmb_carrera1", "disabled" => true]) ?>-->
                 </div>
             </div>
@@ -258,10 +259,18 @@ if (!empty($personalData['pges_cedula'])) {
             <div class="form-group">
                 <label for="txt_observacion" class="col-sm-5 col-md-5 col-xs-5 col-lg-5 control-label" id="lbl_descripcion"><?= Yii::t("formulario", "Observation") ?> </label>
                 <div class="col-sm-7 col-md-7 col-xs-7 col-lg-7">
-                    <!--<textarea  class="form-control keyupmce" id="txt_observacion" disabled = "true"><?php //echo $actividad_oportunidad['bact_descripcion']; ?></textarea>-->
+                    <!--<textarea  class="form-control keyupmce" id="txt_observacion" disabled = "true"><?php //echo $actividad_oportunidad['bact_descripcion'];  ?></textarea>-->
                     <?= Html::dropDownList("cmb_observacion", $actividad_oportunidad["oact_id"], $arr_observacion, ["class" => "form-control", "id" => "cmb_observacion", "disabled" => true]) ?>                
                 </div>
             </div>
         </div>  
+        <div class="col-md-6 col-sm-6 col-xs-6 col-lg-6">            
+            <div class="form-group">
+                <label for="txt_descripcion" class="col-sm-5 col-md-5 col-xs-5 col-lg-5 control-label" id="lbl_descripcion"><?= Yii::t("formulario", "Comments") ?> </label>
+                <div class="col-sm-7 col-md-7 col-xs-7 col-lg-7">
+                    <textarea  class="form-control keyupmce" id="txt_descripcion" disabled = "true"><?= $actividad_oportunidad["bact_descripcion"] ?></textarea>                  
+                </div>
+            </div>
+        </div>
     </div>  
 </form>
