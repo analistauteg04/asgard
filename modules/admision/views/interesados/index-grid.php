@@ -8,6 +8,8 @@ use app\widgets\PbGridView\PbGridView;
 
 PbGridView::widget([
     'id' => 'TbG_Interesado',
+    'showExport' => true,
+    'fnExportEXCEL' => "exportExcel",
     'dataProvider' => $model,
     'columns' =>
     [

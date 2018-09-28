@@ -85,13 +85,13 @@ class DocumentoAdjuntar extends \yii\db\ActiveRecord
         $con = \Yii::$app->db_captacion;
         $estado = 0;
 
-        $sql = "UPDATE solicitudins_documento 
+        $sql = "UPDATE ".\Yii::$app->db_captacion->dbname.".solicitudins_documento 
                 SET sdoc_estado = :estado 
                 WHERE sins_id = :id;";
 
         $comando = $con->createCommand($sql);
         $comando->bindParam(":id", $sins_id, \PDO::PARAM_INT);
-        $comando->bindParam(":estado", $estado, \PDO::PARAM_STR);
+        $comando->bindParam(":estado", $estado, \PDO::PARAM_INT);
         $resultData = $comando->execute();
         return $resultData;
     }

@@ -83,7 +83,8 @@ academico::registerTranslations();
             [
                 'class' => 'yii\grid\ActionColumn',
                 'header' => Yii::t("formulario", "Actions"),                
-                'template' => '{view} {documentos} {factura} ', 
+                //'template' => '{view} {documentos} {factura} ', 
+                'template' => '{view} {documentos}', 
                 'buttons' => [                
                     'view' => function ($url, $model) {
                         return Html::a('<span class="glyphicon glyphicon-check"></span>', Url::to(['/admision/solicitudes/view', 'ids' => base64_encode($model['sins_id']), 'int' => base64_encode($model['int_id']), 'perid' => base64_encode($model['persona'])]), ["data-toggle" => "tooltip", "title" => "Ver Solicitud", "data-pjax" => 0]);                        
@@ -98,12 +99,11 @@ academico::registerTranslations();
                                 return '<span class="glyphicon glyphicon-folder-open"></span>';
                         }
                     },  
-                    'factura' => function ($url, $model) {
+                    /*'factura' => function ($url, $model) {
                         if ($model['pago'] != "No generado") {
                             return Html::a('<span class="glyphicon glyphicon-usd"></span>', Url::to(['/admision/solicitudes/descargafactura', 'id_sol' => base64_encode($model['sins_id']), 'int' => base64_encode($model['int_id']), 'perid' => base64_encode($model['persona']), 'opcion' => base64_encode(2)]), ["data-toggle" => "tooltip", "title" => "Descargar Factura", "data-pjax" => 0]);
                         }
-                    },
-                    
+                    },*/
                 ],
             ],
            

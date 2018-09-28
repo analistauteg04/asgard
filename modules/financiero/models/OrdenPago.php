@@ -1729,13 +1729,14 @@ class OrdenPago extends \app\modules\financiero\components\CActiveRecord {
                         per.per_correo as correo,
                         $columnsAdd
                         (case opag.opag_estado_pago when 'P' then 'Pendiente' when 'S' then 'Pagada' end) as estado_desc_pago";
-        if ($resp_gruporol != "") {
+        if ($resp_gruporol != "") {//rpfa_imagen
         $sql .=  ", $resp_gruporol   as rol";
         }
 
-        $sql .= " FROM " . $con->dbname . ".solicitud_inscripcion sins INNER JOIN " . $con3->dbname . ".unidad_academica uaca on uaca.uaca_id = sins.uaca_id
+        $sql .= " FROM " . $con->dbname . ".solicitud_inscripcion sins 
+                     INNER JOIN " . $con3->dbname . ".unidad_academica uaca on uaca.uaca_id = sins.uaca_id
                      INNER JOIN " . $con->dbname . ".metodo_ingreso ming on ming.ming_id = sins.ming_id
-                     INNER JOIN " . $con->dbname . ".interesado inte on sins.int_id = inte.int_id                     
+                     INNER JOIN " . $con->dbname . ".interesado inte on sins.int_id = inte.int_id                      
                      INNER JOIN " . $con1->dbname . ".persona per on inte.per_id = per.per_id
                      INNER JOIN " . $con2->dbname . ".orden_pago opag on sins.sins_id = opag.sins_id                     
                 WHERE 
@@ -1973,15 +1974,8 @@ class OrdenPago extends \app\modules\financiero\components\CActiveRecord {
             $trans = $con->beginTransaction(); // si no existe la transacción entonces se crea una
         }
         try {
-            //$per_id=@Yii::$app->session->get("PB_perid");
             $usuingreso=@Yii::$app->session->get("PB_iduser");
             $rpfa_revisado=1;
-      
-            //create table if not exists `registro_pago_factura` (                    
-            //rpfa_id,fpag_id,sins_id,rpfa_num_solicitud,rpfa_valor_documento,rpfa_fecha_documento,rpfa_numero_documento,
-            //rpfa_imagen,rpfa_revisado,rpfa_fecha_transaccion,rpfa_usuario_transaccion,rpfa_estado,rpfa_fecha_creacion,
-            //rpfa_fecha_modificacion,rpfa_estado_logico,  
-
             $rpfa_fecha_documento=($data['rpfa_fecha_documento']!='')? date(Yii::$app->params["dateTimeByDefault"], strtotime($data['rpfa_fecha_documento'])):NULL ;
             
             $sql = "INSERT INTO " . $con->dbname . ".registro_pago_factura
@@ -2002,7 +1996,6 @@ class OrdenPago extends \app\modules\financiero\components\CActiveRecord {
             $command->bindParam(":rpfa_usuario_transaccion", $usuingreso, \PDO::PARAM_STR);
 
             $command->execute();
-            //return $con->getLastInsertID();
 
             if ($trans !== null)
                 $trans->commit();
@@ -2033,20 +2026,33 @@ class OrdenPago extends \app\modules\financiero\components\CActiveRecord {
      * @return  
      */
     public function consultarInteresadoPersona($sins_id) {
-        $con = \Yii::$app->db_captacion;        
-        $sql = "SELECT B.per_id Ids
+        $con = \Yii::$app->db_captacion; 
+        $con2 = \Yii::$app->db_facturacion;  
+        $sql = "SELECT B.per_id,C.opag_total
                     FROM " . $con->dbname . ".solicitud_inscripcion A
                             INNER JOIN " . $con->dbname . ".interesado B ON A.int_id=B.int_id
+                            INNER JOIN " . $con2->dbname . ".orden_pago C ON A.sins_id=C.sins_id
                 WHERE A.sins_id=:sins_id AND A.sins_estado=1;";
 
+        $comando = $con->createCommand($sql);
+        $comando->bindParam(":sins_id", $sins_id, \PDO::PARAM_INT);
+        return $comando->queryAll();        
+    }
+    
+     public static function consultarRutaFile($sins_id) {
+         $con = \Yii::$app->db_facturacion; 
+         $sql = "SELECT rpfa_imagen Ruta "
+                 . " FROM " . $con->dbname . ".registro_pago_factura "
+                 . " WHERE sins_id=:sins_id AND rpfa_estado=1;";
+         
         $comando = $con->createCommand($sql);
         $comando->bindParam(":sins_id", $sins_id, \PDO::PARAM_INT);
         $rawData=$comando->queryScalar();        
         if ($rawData === false)
             return 0; //Falso si no Existe
         return $rawData;//Si Existe en la Tabla
-        
-    }
+         
+     }
     
 
 

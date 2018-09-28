@@ -588,22 +588,24 @@ class PagosController extends \app\components\CController {
     public function actionCargardocfact() {
         $mod_cargapago = new OrdenPago();
         $sins_id = isset($_GET['ids']) ? base64_decode($_GET['ids']) : 1;//NULL
-        $data = null;
+        $data = null;        
         if (Yii::$app->request->isAjax) {
             $data = Yii::$app->request->get();
             if (isset($data["op"]) && $data["op"] == '1') {
                 
             }
         }
+        $rowData=$mod_cargapago->consultarInteresadoPersona($sins_id);
         return $this->render('cargardocfact', [                    
             "sins_id" => $sins_id,
-            "per_id" => $mod_cargapago->consultarInteresadoPersona($sins_id)
+            "per_id" =>  isset($rowData[0]['per_id']) ? $rowData[0]['per_id'] :0,
+            "opag_total" =>  isset($rowData[0]['opag_total']) ? $rowData[0]['opag_total'] :0,
         ]);
     }
     
     public function actionSavefactura() {        
-        $modcargapago = new OrdenPago();
-        $per_id = $modcargapago->consultarInteresadoPersona($sins_id);//Yii::$app->session->get("PB_perid");
+        $modcargapago = new OrdenPago();       
+        $rowData = $modcargapago->consultarInteresadoPersona($sins_id);
         if (Yii::$app->request->isAjax) {
             $data = Yii::$app->request->post();
             if ($data["upload_file"]) {
@@ -615,7 +617,6 @@ class PagosController extends \app\components\CController {
                 $files = $_FILES[key($_FILES)];
                 $arrIm = explode(".", basename($files['name']));
                 $typeFile = strtolower($arrIm[count($arrIm) - 1]);
-                //$dirFileEnd = Yii::$app->params["documentFolder"] . "facturas/" . $per_id . "/" . $data["name_file"] . "." . $typeFile;
                 $dirFileEnd = Yii::$app->params["documentFolder"] . "facturas/" . $data["name_perid"]  . "/" . $data["name_file"] . "." . $typeFile;
                 $status = Utilities::moveUploadFile($files['tmp_name'], $dirFileEnd);
                 if ($status) {
@@ -648,6 +649,35 @@ class PagosController extends \app\components\CController {
             return $this->render('cargarleads', []);
         }
         
+    }
+    public function actionDescargafactura() {
+        $nombreZip = "facturas_" . time();
+        $content_type = Utilities::mimeContentType($nombreZip . ".zip");
+        header("Content-Type: $content_type");
+        header("Content-Disposition: attachment;filename=" . $nombreZip . ".zip");
+        header('Cache-Control: max-age=0');
+        $sins_id = isset($_GET['ids']) ? base64_decode($_GET['ids']) : 1;//NULL
+        $ruta= OrdenPago::consultarRutaFile($sins_id);
+       
+        $Path=Yii::$app->basePath ."/uploads/" .$ruta;
+        Utilities::putMessageLogFile($Path);
+
+        // se deben zippear 2 files el xml y el pdf
+        /*$arr_files = array(
+            array("ruta" => Yii::$app->basePath . "/uploads/ficha/silueta_default.png",
+                "name" => basename(Yii::$app->basePath . "/uploads/ficha/silueta_default.png")),
+            array("ruta" => Yii::$app->basePath . "/uploads/ficha/Silueta-opc-4.png",
+                "name" => basename(Yii::$app->basePath . "/uploads/ficha/Silueta-opc-4.png")),
+        );*/
+        $arr_files = array(
+            array("ruta" => Yii::$app->basePath . "/uploads/" .$ruta,
+                "name" => basename(Yii::$app->basePath . "/uploads/" .$ruta)),            
+        );
+        $tmpDir = Utilities::zipFiles($nombreZip, $arr_files);
+        $file = file_get_contents($tmpDir);
+        Utilities::removeTemporalFile($tmpDir);
+        echo $file;
+        exit();
     }
  
 

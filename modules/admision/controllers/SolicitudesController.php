@@ -726,40 +726,40 @@ class SolicitudesController extends \app\components\CController {
             if (isset($data["arc_doc_titulo"]) && $data["arc_doc_titulo"] != "") {
                 $arrIm = explode(".", basename($data["arc_doc_titulo"]));
                 $typeFile = strtolower($arrIm[count($arrIm) - 1]);
-                $titulo_archivo = Yii::$app->params["documentFolder"] . "solicitudinscripcion/" . $per_id . "/doc_titulo_per_" . $per_id . "." . $typeFile;
-                $titulo_archivo = DocumentoAdjuntar::addLabelTimeDocumentos($sins_id, $titulo_archivo, $timeSt);
+                $titulo_archivoOld = Yii::$app->params["documentFolder"] . "solicitudinscripcion/" . $per_id . "/doc_titulo_per_" . $per_id . "." . $typeFile;
+                $titulo_archivo = DocumentoAdjuntar::addLabelTimeDocumentos($sins_id, $titulo_archivoOld, $timeSt);
                 if ($titulo_archivo === false)
                     throw new Exception('Error doc Titulo no renombrado.');
             }
             if (isset($data["arc_doc_dni"]) && $data["arc_doc_dni"] != "") {
                 $arrIm = explode(".", basename($data["arc_doc_dni"]));
                 $typeFile = strtolower($arrIm[count($arrIm) - 1]);
-                $dni_archivo = Yii::$app->params["documentFolder"] . "solicitudinscripcion/" . $per_id . "/doc_dni_per_" . $per_id . "." . $typeFile;
-                $dni_archivo = DocumentoAdjuntar::addLabelTimeDocumentos($sins_id, $dni_archivo, $timeSt);
+                $dni_archivoOld = Yii::$app->params["documentFolder"] . "solicitudinscripcion/" . $per_id . "/doc_dni_per_" . $per_id . "." . $typeFile;
+                $dni_archivo = DocumentoAdjuntar::addLabelTimeDocumentos($sins_id, $dni_archivoOld, $timeSt);
                 if ($dni_archivo === false)
                     throw new Exception('Error doc Dni no renombrado.');
             }
             if (isset($data["arc_doc_certvota"]) && $data["arc_doc_certvota"] != "") {
                 $arrIm = explode(".", basename($data["arc_doc_certvota"]));
                 $typeFile = strtolower($arrIm[count($arrIm) - 1]);
-                $certvota_archivo = Yii::$app->params["documentFolder"] . "solicitudinscripcion/" . $per_id . "/doc_certvota_per_" . $per_id . "." . $typeFile;
-                $certvota_archivo = DocumentoAdjuntar::addLabelTimeDocumentos($sins_id, $certvota_archivo, $timeSt);
+                $certvota_archivoOld = Yii::$app->params["documentFolder"] . "solicitudinscripcion/" . $per_id . "/doc_certvota_per_" . $per_id . "." . $typeFile;
+                $certvota_archivo = DocumentoAdjuntar::addLabelTimeDocumentos($sins_id, $certvota_archivoOld, $timeSt);
                 if ($certvota_archivo === false)
                     throw new Exception('Error doc certificado vot. no renombrado.');
             }
             if (isset($data["arc_doc_foto"]) && $data["arc_doc_foto"] != "") {
                 $arrIm = explode(".", basename($data["arc_doc_foto"]));
                 $typeFile = strtolower($arrIm[count($arrIm) - 1]);
-                $foto_archivo = Yii::$app->params["documentFolder"] . "solicitudinscripcion/" . $per_id . "/doc_foto_per_" . $per_id . "." . $typeFile;
-                $foto_archivo = DocumentoAdjuntar::addLabelTimeDocumentos($sins_id, $foto_archivo, $timeSt);
+                $foto_archivoOld = Yii::$app->params["documentFolder"] . "solicitudinscripcion/" . $per_id . "/doc_foto_per_" . $per_id . "." . $typeFile;
+                $foto_archivo = DocumentoAdjuntar::addLabelTimeDocumentos($sins_id, $foto_archivoOld, $timeSt);
                 if ($foto_archivo === false)
                     throw new Exception('Error doc Foto no renombrado.');
             }
             if (isset($data["arc_doc_beca"]) && $data["arc_doc_beca"] != "") {
                 $arrIm = explode(".", basename($data["arc_doc_beca"]));
                 $typeFile = strtolower($arrIm[count($arrIm) - 1]);
-                $beca_archivo = Yii::$app->params["documentFolder"] . "solicitudinscripcion/" . $per_id . "/doc_beca_per_" . $per_id . "." . $typeFile;
-                $beca_archivo = DocumentoAdjuntar::addLabelTimeDocumentos($sins_id, $beca_archivo, $timeSt);
+                $beca_archivoOld = Yii::$app->params["documentFolder"] . "solicitudinscripcion/" . $per_id . "/doc_beca_per_" . $per_id . "." . $typeFile;
+                $beca_archivo = DocumentoAdjuntar::addLabelTimeDocumentos($sins_id, $beca_archivoOld, $timeSt);
                 if ($beca_archivo === false)
                     throw new Exception('Error doc Beca no renombrado.');
             }
@@ -769,64 +769,27 @@ class SolicitudesController extends \app\components\CController {
                     if (!DocumentoAdjuntar::desactivarDocumentosxSolicitud($sins_id))
                         throw new Exception('Error no se reemplazo files.');
                     $mod_solinsxdoc1 = new SolicitudinsDocumento();
-                    //1-Título, 2-DNI,3-Cert votación, 4-Foto, 5-Doc-Beca                       
-                    $mod_solinsxdoc1->sins_id = $sins_id;
-                    $mod_solinsxdoc1->int_id = $interesado_id;
-                    $mod_solinsxdoc1->dadj_id = 1;
-                    $mod_solinsxdoc1->sdoc_archivo = $titulo_archivo;
-                    $mod_solinsxdoc1->sdoc_estado = "1";
-                    $mod_solinsxdoc1->sdoc_estado_logico = "1";
-                    if ($mod_solinsxdoc1->save()) {
-                        $mod_solinsxdoc2 = new SolicitudinsDocumento();
-                        $mod_solinsxdoc2->sins_id = $sins_id;
-                        $mod_solinsxdoc2->int_id = $interesado_id;
-                        $mod_solinsxdoc2->dadj_id = 2;
-                        $mod_solinsxdoc2->sdoc_archivo = $dni_archivo;
-                        $mod_solinsxdoc2->sdoc_estado = "1";
-                        $mod_solinsxdoc2->sdoc_estado_logico = "1";
-
-                        if ($mod_solinsxdoc2->save()) {
-                            $mod_solinsxdoc3 = new SolicitudinsDocumento();
-                            $mod_solinsxdoc3->sins_id = $sins_id;
-                            $mod_solinsxdoc3->int_id = $interesado_id;
-                            $mod_solinsxdoc3->dadj_id = 4;
-                            $mod_solinsxdoc3->sdoc_archivo = $foto_archivo;
-                            $mod_solinsxdoc3->sdoc_estado = "1";
-                            $mod_solinsxdoc3->sdoc_estado_logico = "1";
-
-                            if ($mod_solinsxdoc3->save()) {
-                                if ($es_extranjero == "1" or ( empty($es_extranjero))) {
-                                    $mod_solinsxdoc4 = new SolicitudinsDocumento();
-                                    $mod_solinsxdoc4->sins_id = $sins_id;
-                                    $mod_solinsxdoc4->int_id = $interesado_id;
-                                    $mod_solinsxdoc4->dadj_id = 3;
-                                    $mod_solinsxdoc4->sdoc_archivo = $certvota_archivo;
-                                    $mod_solinsxdoc4->sdoc_estado = "1";
-                                    $mod_solinsxdoc4->sdoc_estado_logico = "1";
-
-                                    if (!$mod_solinsxdoc4->save()) {
+                    //1-Título, 2-DNI,3-Cert votación, 4-Foto, 5-Doc-Beca  
+                    if($mod_solinsxdoc1->insertNewDocument($sins_id, $interesado_id, 1, $titulo_archivo)){
+                        if($mod_solinsxdoc1->insertNewDocument($sins_id, $interesado_id, 2, $dni_archivo)){
+                            if($mod_solinsxdoc1->insertNewDocument($sins_id, $interesado_id, 4, $foto_archivo)){
+                                if ($es_extranjero == "1" or (empty($es_extranjero))) {
+                                    if (!$mod_solinsxdoc1->insertNewDocument($sins_id, $interesado_id, 3, $certvota_archivo)) {
                                         throw new Exception('Error doc certvot no creado.');
                                     }
-                                }
-                                if ($beca == "1") {
-                                    $mod_solinsxdoc5 = new SolicitudinsDocumento();
-                                    $mod_solinsxdoc5->sins_id = $sins_id;
-                                    $mod_solinsxdoc5->int_id = $interesado_id;
-                                    $mod_solinsxdoc5->dadj_id = 5;
-                                    $mod_solinsxdoc5->sdoc_archivo = $beca_archivo;
-                                    $mod_solinsxdoc5->sdoc_estado = "1";
-                                    $mod_solinsxdoc5->sdoc_estado_logico = "1";
-                                    if (!$mod_solinsxdoc5->save()) {
-                                        throw new Exception('Error doc beca no creado.');
+                                    if ($beca == "1") {
+                                        if(!$mod_solinsxdoc1->insertNewDocument($sins_id, $interesado_id, 5, $beca_archivo)){
+                                            throw new Exception('Error doc beca no creado.');
+                                        }
                                     }
                                 }
-                            } else {
+                            }else{
                                 throw new Exception('Error doc foto no creado.');
                             }
-                        } else {
+                        }else{
                             throw new Exception('Error doc dni no creado.');
                         }
-                    } else {
+                    }else{
                         throw new Exception('Error doc titulo no creado.' . $mensaje);
                     }
                     // se cambia a pendiente la solicitud para revision.
@@ -844,6 +807,8 @@ class SolicitudesController extends \app\components\CController {
                 } else {
                     throw new Exception('Tiene que subir todos los documentos.Titulo:' . isset($data["arc_doc_titulo"]) . 'Persona:' . $per_id);
                 }
+            } else {
+                throw new Exception('Tiene que subir todos los documentos.Titulo:' . isset($data["arc_doc_titulo"]) . 'Persona:' . $per_id);
             }
         } catch (Exception $ex) {
             $transaction->rollback();
@@ -1134,27 +1099,45 @@ class SolicitudesController extends \app\components\CController {
             return;
         }
     }
-
-    public function actionExpexcel() {
-        $per_id = @Yii::$app->session->get("PB_perid");
-        $data = Yii::$app->request->get();
-        $per_ids = base64_decode($data['ids']);
-        $arrSearch["search"] = $data["search"];
-        $arrSearch["carrera"] = $data["carrera"];
-        $arrSearch["f_ini"] = $data["f_ini"];
-        $arrSearch["f_fin"] = $data["f_fin"];
-        $arrData = array();
-        if (empty($per_ids)) {  //vista para el interesado
-            $arrData = SolicitudInscripcion::getSolicitudesXInteresado($per_id, $arrSearch, true);
-        } else {   //vista para el jefe o agente.
-            $arrData = SolicitudInscripcion::getSolicitudesXInteresado($per_ids, $arrSearch, true);
-        }
-
-        $nombarch = "InscripcionReport-" . date("YmdHis");
+    
+    public function actionExport(){
+        ini_set('memory_limit', '256M');
         $content_type = Utilities::mimeContentType("xls");
+        $nombarch = "Report-" . date("YmdHis") . ".xls";
         header("Content-Type: $content_type");
         header("Content-Disposition: attachment;filename=" . $nombarch . ".xls");
         header('Cache-Control: max-age=0');
+        
+        $colPosition = array("C", "D", "E", "F", "G", "H", "I", "J", "K");
+        $arrHeader = array("#","Grado Lead","Online Lead","Posgrado Lead","Base Grado","Base Online","Base Posgrado","Suma","Promedio");
+        $arrDataCols = ["En Contacto", "Calificado", "No Calificado"];
+        //$arrDataCols = ["En curso", "En espera", "Ganada", "Perdida", "Listo para pago", "Total"];
+        //$arrDataCols = ["Precio", "Insatisfacción con malla académica", "No existe carrera", "Calidad de docentes", "Atención recibida", "Ubicación", "Otra Universidad", "Modalidad de Estudios", "Motivo personal", "Viaje imprevisto", "No contesta el teléfono ni correos"];
+        $arrData = array();
+        for($i=0; $i<count($arrDataCols); $i++){
+            $j=0;
+            for($j=0; $j<count($arrHeader); $j++){
+                if($j == 0){
+                    $arrData[$i][$j] = $arrDataCols[$i];
+                }else {
+                    $arrData[$i][$j] = "data $i $j";
+                } 
+            }
+        }
+        $nameReport = yii::t("formulario", "Application Reports");
+        Utilities::generarReporteXLS($nombarch, $nameReport, $arrHeader, $arrData, $colPosition);
+        exit;
+    }
+    
+    public function actionExpexcel() {
+        ini_set('memory_limit', '256M');
+        $content_type = Utilities::mimeContentType("xls");
+        $nombarch = "Report-" . date("YmdHis") . ".xls";
+        header("Content-Type: $content_type");
+        header("Content-Disposition: attachment;filename=" . $nombarch . ".xls");
+        header('Cache-Control: max-age=0');
+        $colPosition = array("C", "D", "E", "F", "G", "H", "I", "J", "K", "L");
+        
         $arrHeader = array(
             Yii::t("formulario", "Request #"),
             Yii::t("solicitud_ins", "Application date"),
@@ -1166,10 +1149,19 @@ class SolicitudesController extends \app\components\CController {
             Yii::t("academico", "Career"),
             Yii::t("formulario", "Status"),
             "Pago");
+        
+        $per_id = @Yii::$app->session->get("PB_perid");
+        $data = Yii::$app->request->get();
+        $per_ids = base64_decode($data['ids']);      
+        
+        $arrData = SolicitudInscripcion::getSolicitudesXInteresado($per_ids, array(), true);             
+             
+        \app\models\Utilities::putMessageLogFile($arrData);
+                
+        
         $nameReport = yii::t("formulario", "Application Reports");
-        $colPosition = array("C", "D", "E", "F", "G", "H", "I", "J", "K", "L");
         Utilities::generarReporteXLS($nombarch, $nameReport, $arrHeader, $arrData, $colPosition);
-        return;
+        exit;              
     }
 
 }

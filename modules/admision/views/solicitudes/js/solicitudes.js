@@ -427,12 +427,14 @@ function setComboDataselect(arr_data, element_id, texto) {
 }
 
 function exportExcel() {
-    var search = $('#txt_buscarData').val();
+    /*var search = $('#txt_buscarData').val();
     var modalidad = $('#cmb_modalidades option:selected').val();
     var carrera = $('#cmb_carreras option:selected').val();
     var f_ini = $('#txt_fecha_ini').val();
-    var f_fin = $('#txt_fecha_fin').val();
-    window.location.href = $('#txth_base').val() + "/solicitudinscripcion/expexcel?search=" + search + "&modalidad=" + modalidad + "&carrera=" + carrera + "&f_ini=" + f_ini + "&f_fin=" + f_fin;
+    var f_fin = $('#txt_fecha_fin').val();*/
+    //window.location.href = $('#txth_base').val() + "/admision/solicitudes/expexcel?search=" + search + "&modalidad=" + modalidad + "&carrera=" + carrera + "&f_ini=" + f_ini + "&f_fin=" + f_fin;
+   // window.location.href = $('#txth_base').val() + "/admision/solicitudes/export";
+   window.location.href = $('#txth_base').val() + "/admision/solicitudes/expexcel";
 }
 
 function actualizarGrid() {
@@ -602,13 +604,15 @@ function UpdateDocumentos() {
     if (!validateForm()) {
         requestHttpAjax(link, arrParams, function (response) {
             showAlert(response.status, response.label, response.message);
-            setTimeout(function () {
-                if (arrParams.opcion == 1) {
-                    window.location.href = $('#txth_base').val() + "/admision/solicitudes/listarsolicitudxinteresado?id=" + arrParams.interesado_id;
-                } else {
-                    window.location.href = $('#txth_base').val() + "/admision/solicitudes/index";
-                }
-            }, 5000);
+            if (response.status == 'OK'){
+                setTimeout(function () {
+                    if (arrParams.opcion == 1) {
+                        window.location.href = $('#txth_base').val() + "/admision/solicitudes/listarsolicitudxinteresado?id=" + arrParams.interesado_id;
+                    } else {
+                        window.location.href = $('#txth_base').val() + "/admision/solicitudes/index";
+                    }
+                }, 5000);
+            }
         }, true);
     }
 }
@@ -725,11 +729,11 @@ function Approve() {
     if (!validateForm()) {
         requestHttpAjax(link, arrParams, function (response) {
             showAlert(response.status, response.label, response.message);
-
-            setTimeout(function () {
-                parent.window.location.href = $('#txth_base').val() + "/admision/solicitudes/index";
-            }, 2000);
-
+            if(response.status == "OK"){
+                setTimeout(function () {
+                    parent.window.location.href = $('#txth_base').val() + "/admision/solicitudes/index";
+                }, 2000);
+            }
         }, true);
     }
 }

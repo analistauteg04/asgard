@@ -117,4 +117,22 @@ class SolicitudinsDocumento extends \app\modules\admision\components\CActiveReco
         return $resultData;
     }
 
+    public function insertNewDocument($sins_id, $int_id, $dadj_id, $sdoc_archivo){
+        $con = \Yii::$app->db_captacion;
+        $estado = 1;
+
+        $sql = "INSERT INTO " . \Yii::$app->db_captacion->dbname . ".solicitudins_documento 
+                (sins_id, int_id, dadj_id, sdoc_archivo, sdoc_estado, sdoc_estado_logico)
+                VALUES(:sins_id, :int_id, :dadj_id, :sdoc_archivo, :estado, :estado)";
+
+        $comando = $con->createCommand($sql);
+        $comando->bindParam(":sins_id", $sins_id, \PDO::PARAM_INT);
+        $comando->bindParam(":int_id", $int_id, \PDO::PARAM_INT);
+        $comando->bindParam(":dadj_id", $dadj_id, \PDO::PARAM_INT);
+        $comando->bindParam(":sdoc_archivo", $sdoc_archivo, \PDO::PARAM_STR);
+        $comando->bindParam(":estado", $estado, \PDO::PARAM_INT);
+        $resultData = $comando->execute();
+        return $resultData;
+    }
+
 }
