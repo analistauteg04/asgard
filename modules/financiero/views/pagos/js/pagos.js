@@ -371,7 +371,7 @@ function cargarFactura() {
         requestHttpAjax(link, arrParams, function (response) {
             showAlert(response.status, response.label, response.message);
             setTimeout(function () {
-                window.location.href = $('#txth_base').val() + "/admision/solicitudes/index";
+                window.location.href = $('#txth_base').val() + "/financiero/pagos/index";
             }, 3000);
         }, true);
     }

@@ -73,6 +73,7 @@ INSERT INTO `objeto_modulo` (`omod_id`, `mod_id`, `omod_padre_id`, `omod_nombre`
 (54, 1, 18, 'Eliminar Permiso', 'S', '0', '', '', '', 'permisos/delete', 1, '0', 'grupo', '1', '2018-09-15 22:48:06', NULL, '1'),
 (55, 1, 35, 'Eliminar Modulo', 'S', '0', '', '', '', 'modulos/delete', 1, '0', 'modulo', '1', '2018-09-15 22:48:06', NULL, '1'),
 (56, 1, 43, 'Eliminar SubModulo', 'S', '0', '', '', '', 'objetomodulos/delete', 1, '0', 'objetomodulo', '1', '2018-09-15 22:48:06', NULL, '1'),
+-- Contactos
 (57, 2, 57, 'Contactos', 'P', '0', '', '', '', 'admision/contactos/index', 1, '1', 'contacto', '1', '2018-09-18 00:29:05', NULL, '1'),
 (58, 2, 57, 'Nuevo Contacto', 'S', '0', '', '', '', 'admision/contactos/new', 1, '0', 'contacto', '1', '2018-09-18 01:00:12', NULL, '1'),
 (59, 2, 57, 'Nuevo Contacto', 'A', '0', '', '', '', 'admision/contactos/new', 1, '1', 'contacto', '1', '2018-09-18 01:03:59', NULL, '1'),
@@ -81,50 +82,59 @@ INSERT INTO `objeto_modulo` (`omod_id`, `mod_id`, `omod_padre_id`, `omod_nombre`
 (62, 2, 57, 'Editar Contacto', 'S', '0', '', '', '', 'admision/contactos/edit', 1, '0', 'contacto', '1', '2018-09-18 01:13:20', NULL, '1'),
 (63, 2, 61, 'Editar Contacto', 'A', '0', '', '', '', 'admision/contactos/edit', 1, '1', 'contacto', '1', '2018-09-18 01:15:00', NULL, '1'),
 (64, 2, 62, 'Actualizar Contacto', 'A', '0', '', '', '', 'admision/contactos/update', 1, '1', 'contacto', '1', '2018-09-18 01:16:57', NULL, '1'),
+-- Oportunidades
 (65, 2, 65, 'Oportunidades', 'P', '0', '', '', '', 'admision/oportunidades/index', 1, '1', 'oportunidad', '1', '2018-09-18 00:29:05', NULL, '1'),
-(66, 2, 73, 'Nuevo Oportunidad', 'S', '0', '', '', '', 'admision/oportunidades/newoportunidadxcontacto', 1, '0', 'oportunidad', '1', '2018-09-18 01:00:12', NULL, '1'),
-(67, 2, 73, 'Nuevo Oportunidad', 'A', '0', '', '', '', 'admision/oportunidades/newoportunidadxcontacto', 1, '1', 'oportunidad', '1', '2018-09-18 01:03:59', NULL, '1'),
+(66, 2, 65, 'Nuevo Oportunidad', 'S', '0', '', '', '', 'admision/oportunidades/newoportunidadxcontacto', 1, '0', 'oportunidad', '1', '2018-09-18 01:00:12', NULL, '1'),
+(67, 2, 65, 'Nuevo Oportunidad', 'A', '0', '', '', '', 'admision/oportunidades/newoportunidadxcontacto', 1, '1', 'oportunidad', '1', '2018-09-18 01:03:59', NULL, '1'),
 (68, 2, 66, 'Guardar Oportunidad', 'A', '0', '', '', '', 'admision/oportunidades/save', 1, '1', 'oportunidad', '1', '2018-09-18 01:08:29', NULL, '1'),
 (69, 2, 65, 'Ver Oportunidad', 'S', '0', '', '', '', 'admision/oportunidades/view', 1, '0', 'oportunidad', '1', '2018-09-18 01:10:55', NULL, '1'),
 (70, 2, 65, 'Editar Oportunidad', 'S', '0', '', '', '', 'admision/oportunidades/edit', 1, '0', 'oportunidad', '1', '2018-09-18 01:13:20', NULL, '1'),
 (71, 2, 69, 'Editar Oportunidad', 'A', '0', '', '', '', 'admision/oportunidades/edit', 1, '1', 'oportunidad', '1', '2018-09-18 01:15:00', NULL, '1'),
 (72, 2, 70, 'Actualizar Oportunidad', 'A', '0', '', '', '', 'admision/oportunidades/update', 1, '1', 'oportunidad', '1', '2018-09-18 01:16:57', NULL, '1'),
 (73, 2, 57, 'Listar Oportunidad por Contacto', 'S', '0', '', '', '', 'admision/contactos/listaroportunidad', 1, '0', 'contacto', '1', '2018-09-16 03:48:06', NULL, '1'),
+-- Actividades
 (74, 2, 73, 'Actividades por Oportunidad', 'S', '0', '', '', '', 'admision/actividades/listaractividadxoportunidad', 1, '0', 'contacto', '1', '2018-09-21 00:00:30', NULL, '1'),
-(75, 2, 1, 'Crear Actividad', 'S', '0', '', '', '', 'admision/actividades/newactividad', 1, '0', 'contacto', '1', '2018-09-21 00:03:04', NULL, '1'),
+(75, 2, 74, 'Crear Actividad', 'S', '0', '', '', '', 'admision/actividades/newactividad', 1, '0', 'contacto', '1', '2018-09-21 00:03:04', NULL, '1'),
 (76, 2, 74, 'Crear Actividad', 'A', '0', '', '', '', 'admision/actividades/listaractividadxoportunidad', 1, '1', 'contacto', '1', '2018-09-21 00:10:53', NULL, '1'),
 (77, 2, 75, 'Guardar Actividad', 'A', '0', '', '', '', 'admision/actividades/newactividad', 1, '1', 'contacto', '1', '2018-09-21 00:15:13', NULL, '1'),
-(78, 2, 78, 'Aspirantes', 'P', '0', '', '', '', 'admision/interesados/index', 3, '1', 'Solicitudes', '1', '2018-09-22 00:05:23', NULL, '1'),
-(79, 2, 78, 'Solicitudes por Aspirante', 'S', '0', '', '', '', 'admision/solicitudes/listarsolicitudxinteresado', 1, '0', 'Solicitudes', '1', '2018-09-22 00:35:31', NULL, '1'),
-(80, 2, 79, 'Crear Solicitud de Inscripcion', 'S', '0', '', '', '', 'admision/solicitudes/new', 1, '1', 'Solicitudes', '1', '2018-09-22 00:47:12', NULL, '1'),
-(81, 2, 79, 'Crear Solicitud', 'A', '0', '', '', '', 'admision/solicitudes/listarsolicitudxinteresado', 1, '1', 'Solicitudes', '1', '2018-09-22 14:07:01', NULL, '1'),
-(82, 2, 80, 'Guardar Solicitud Inscripcion', 'A', '0', '', '', '', 'admision/solicitudes/new', '1', '1', 'Solicitudes', '1', '2018-09-22 14:07:01', NULL, '1'),
-(83, 2, 83, 'Solicitudes', 'P', '0', '', '', '', 'admision/solicitudes/index', '1', '1', 'Solicitudes', '1', '2018-09-22 14:07:01', NULL, '1'),
-(84, 4, 84, 'Listar Admitidos', 'P', '0', '', '', '', 'academico/admitidos/index', '1', '1', 'Academico', '1', '2018-09-22 14:07:01', NULL, '1'),
-(85, 3, 85, 'Listar Pagos', 'P', '0', '', '', '', 'financiero/pagos/index', '1', '1', 'Pagos', '1', '2018-09-22 14:07:01', NULL, '1'),
-(86, 3, 86, 'Registro Pagos por Colecturia', 'P', '0', '', '', '', 'financiero/pagos/indexadm', '1', '1', 'Pagos', '1', '2018-09-22 14:07:01', NULL, '1'),
-(87, 3, 87, 'Listar Pagos Cargados', 'P', '0', '', '', '', 'financiero/pagos/listarpagoscargados', '1', '1', 'Pagos', '1', '2018-09-22 14:07:01', NULL, '1'),
-(88, 3, 79, 'Listar Pagos Solicitud', 'S', '0', '', '', '', 'financiero/pagos/listarpagosolicitud', '1', '1', 'Pagos', '1', '2018-09-22 14:07:01', NULL, '1'),
-(89, 3, 85, 'Validar Pago Carga', 'S', '0', '', '', '', 'financiero/pagos/validarpagocarga', '1', '0', 'Pagos', '1', '2018-09-22 14:07:01', NULL, '1'),
-(90, 3, 85, 'Cargar Documentos Pagos', 'S', '0', '', '', '', 'financiero/pagos/cargardocpagos', '1', '0', 'Pagos', '1', '2018-09-22 14:07:01', NULL, '1'),
-(91, 4, 84, 'Ver Solicitud', 'S', '0', '', '', '', 'admision/solicitudes/view', '1', '0', 'Solicitudes', '1', '2018-09-22 14:07:01', NULL, '1'),
-(92, 4, 84, 'Metodo de Ingreso', 'S', '0', '', '', '', 'academico/matriculacion/newmetodoingreso', '1', '0', 'Solicitudes', '1', '2018-09-22 14:07:01', NULL, '1'),
-(93, 4, 84, 'Homologacion', 'S', '0', '', '', '', 'academico/matriculacion/newhomologacion', '1', '0', 'Solicitudes', '1', '2018-09-22 14:07:01', NULL, '1'),
-(94, 4, 92, 'Guardar Metodo Ingreso', 'A', '0', '', '', '', 'academico/matriculacion/newmetodoingreso', '1', '1', 'Academico', '1', '2018-09-22 14:07:01', NULL, '1'),
-(95, 4, 74, 'Ver Actividad', 'S', '0', '', '', '', 'admision/actividades/view', '1', '1', 'Admision', '1', '2018-09-22 14:07:01', NULL, '1'),
-(96, 4, 95, 'Edicion Actividad', 'A', '0', '', '', '', 'admision/actividades/view', '1', '0', 'Admision', '1', '2018-09-22 14:07:01', NULL, '1'),
-(97, 4, 95, 'Editar Actividad', 'S', '0', '', '', '', 'admision/actividades/edit', '1', '1', 'Admision', '1', '2018-09-22 14:07:01', NULL, '1'),
-(98, 4, 97, 'Guardar Edicion Actividad', 'A', '0', '', '', '', 'admision/actividades/edit', '1', '1', 'Admision', '1', '2018-09-22 14:07:01', NULL, '1'),
-(99, 4, 91, 'Enviar Solicitud', 'A', '0', '', '', '', 'admision/solicitudes/view', '1', '1', 'Admision', '1', '2018-09-22 14:07:01', NULL, '1'),
-(100, 4, 83, 'Subir Documentos Solicitud', 'S', '0', '', '', '', 'admision/solicitudes/subirDocumentos', '1', '1', 'Admision', '1', '2018-09-22 14:07:01', NULL, '1'),
-(101, 4, 100, 'Guardar Documentos Solicitud', 'A', '0', '', '', '', 'admision/solicitudes/subirDocumentos', '1', '1', 'Admision', '1', '2018-09-22 14:07:01', NULL, '1'),
-(102, 4, 90, 'Guardar Cargar Documento Pago', 'A', '0', '', '', '', 'financiero/pagos/cargardocpagos', '1', '1', 'Admision', '1', '2018-09-22 14:07:01', NULL, '1'),
-(103, 2, 83, 'Actualizar Documentos', 'S', '0', '', '', '', 'admision/solicitudes/actualizardocumentos', '1', '0', 'Admision', '1', '2018-09-22 14:07:01', NULL, '1'),
-(104, 2, 103, 'Guardar Actualizar Documentos', 'A', '0', '', '', '', 'admision/solicitudes/actualizardocumentos', '1', '0', 'Admision', '1', '2018-09-22 14:07:01', NULL, '1'),
+(78, 4, 74, 'Ver Actividad', 'S', '0', '', '', '', 'admision/actividades/view', '1', '1', 'Admision', '1', '2018-09-22 14:07:01', NULL, '1'),
+(79, 4, 78, 'Edicion Actividad', 'A', '0', '', '', '', 'admision/actividades/view', '1', '0', 'Admision', '1', '2018-09-22 14:07:01', NULL, '1'),
+(80, 4, 78, 'Editar Actividad', 'S', '0', '', '', '', 'admision/actividades/edit', '1', '1', 'Admision', '1', '2018-09-22 14:07:01', NULL, '1'),
+(81, 4, 80, 'Guardar Edicion Actividad', 'A', '0', '', '', '', 'admision/actividades/edit', '1', '1', 'Admision', '1', '2018-09-22 14:07:01', NULL, '1'),
+-- Aspirantes
+(82, 2, 82, 'Aspirantes', 'P', '0', '', '', '', 'admision/interesados/index', 3, '1', 'Solicitudes', '1', '2018-09-22 00:05:23', NULL, '1'),
+(83, 2, 82, 'Solicitudes por Aspirante', 'S', '0', '', '', '', 'admision/solicitudes/listarsolicitudxinteresado', 1, '0', 'Solicitudes', '1', '2018-09-22 00:35:31', NULL, '1'),
+(84, 2, 83, 'Solicitud por Aspirante', 'A', '0', '', '', '', 'admision/solicitudes/listarsolicitudxinteresado', 1, '1', 'Solicitudes', '1', '2018-09-22 14:07:01', NULL, '1'),
+-- Solicitud
+(85, 2, 85, 'Solicitudes', 'P', '0', '', '', '', 'admision/solicitudes/index', '1', '1', 'Solicitudes', '1', '2018-09-22 14:07:01', NULL, '1'),
+(86, 2, 85, 'Crear Solicitud de Inscripcion', 'S', '0', '', '', '', 'admision/solicitudes/new', 1, '1', 'Solicitudes', '1', '2018-09-22 00:47:12', NULL, '1'),
+(87, 2, 86, 'Guardar Solicitud Inscripcion', 'A', '0', '', '', '', 'admision/solicitudes/new', '1', '1', 'Solicitudes', '1', '2018-09-22 14:07:01', NULL, '1'),
+(88, 4, 85, 'Ver Solicitud', 'S', '0', '', '', '', 'admision/solicitudes/view', '1', '0', 'Solicitudes', '1', '2018-09-22 14:07:01', NULL, '1'),
+(89, 4, 85, 'Subir Documentos Solicitud', 'S', '0', '', '', '', 'admision/solicitudes/subirDocumentos', '1', '1', 'Admision', '1', '2018-09-22 14:07:01', NULL, '1'),
+(90, 4, 89, 'Enviar Solicitud', 'A', '0', '', '', '', 'admision/solicitudes/view', '1', '1', 'Admision', '1', '2018-09-22 14:07:01', NULL, '1'),
+(91, 4, 89, 'Guardar Documentos Solicitud', 'A', '0', '', '', '', 'admision/solicitudes/subirDocumentos', '1', '1', 'Admision', '1', '2018-09-22 14:07:01', NULL, '1'),
+(92, 2, 88, 'Actualizar Documentos', 'S', '0', '', '', '', 'admision/solicitudes/actualizardocumentos', '1', '0', 'Admision', '1', '2018-09-22 14:07:01', NULL, '1'),
+(93, 2, 92, 'Guardar Actualizar Documentos', 'A', '0', '', '', '', 'admision/solicitudes/actualizardocumentos', '1', '0', 'Admision', '1', '2018-09-22 14:07:01', NULL, '1'),
+-- Pagos
+(94, 3, 94, 'Listar Pagos', 'P', '0', '', '', '', 'financiero/pagos/index', '1', '1', 'Pagos', '1', '2018-09-22 14:07:01', NULL, '1'),
+(95, 3, 95, 'Registro Pagos por Colecturia', 'P', '0', '', '', '', 'financiero/pagos/indexadm', '1', '1', 'Pagos', '1', '2018-09-22 14:07:01', NULL, '1'),
+(96, 3, 96, 'Listar Pagos Cargados', 'P', '0', '', '', '', 'financiero/pagos/listarpagoscargados', '1', '1', 'Pagos', '1', '2018-09-22 14:07:01', NULL, '1'),
+(97, 3, 96, 'Listar Pagos Solicitud', 'S', '0', '', '', '', 'financiero/pagos/listarpagosolicitud', '1', '1', 'Pagos', '1', '2018-09-22 14:07:01', NULL, '1'),
+(98, 3, 94, 'Validar Pago Carga', 'S', '0', '', '', '', 'financiero/pagos/validarpagocarga', '1', '0', 'Pagos', '1', '2018-09-22 14:07:01', NULL, '1'),
+(99, 3, 94, 'Cargar Documentos Pagos', 'S', '0', '', '', '', 'financiero/pagos/cargardocpagos', '1', '0', 'Pagos', '1', '2018-09-22 14:07:01', NULL, '1'),
+(100, 4, 99, 'Guardar Cargar Documento Pago', 'A', '0', '', '', '', 'financiero/pagos/cargardocpagos', '1', '1', 'Admision', '1', '2018-09-22 14:07:01', NULL, '1'),
+-- Matriculacion
+(101, 4, 101, 'Listar Admitidos', 'P', '0', '', '', '', 'academico/admitidos/index', '1', '1', 'Academico', '1', '2018-09-22 14:07:01', NULL, '1'),
+(102, 4, 101, 'Homologacion', 'S', '0', '', '', '', 'academico/matriculacion/newhomologacion', '1', '0', 'Solicitudes', '1', '2018-09-22 14:07:01', NULL, '1'),
+(103, 4, 101, 'Metodo de Ingreso', 'S', '0', '', '', '', 'academico/matriculacion/newmetodoingreso', '1', '0', 'Solicitudes', '1', '2018-09-22 14:07:01', NULL, '1'),
+(104, 4, 103, 'Guardar Metodo Ingreso', 'A', '0', '', '', '', 'academico/matriculacion/newmetodoingreso', '1', '1', 'Academico', '1', '2018-09-22 14:07:01', NULL, '1'),
+-- Agente
 (105, 2, 65, 'Reasignar Agente', 'S', '0', '', '', '', 'admision/agentes/reasignagente', '1', '0', 'Admision', '1', '2018-09-22 14:07:01', NULL, '1'),
 (106, 2, 105, 'Guardar Reasignar Agente', 'A', '0', '', '', '', 'admision/agentes/reasignagente', '1', '0', 'Admision', '1', '2018-09-22 14:07:01', NULL, '1');
-
-
+-- Leads
+(107, 2, 65, 'Reasignar Agente', 'S', '0', '', '', '', 'admision/contactos/cargarleads', '1', '0', 'Admision', '1', '2018-09-22 14:07:01', NULL, '1'),
+(108, 2, 105, 'Cargar Leads Redes Sociales', 'A', '0', '', '', '', 'admision/agentes/reasignagente', '1', '0', 'Admision', '1', '2018-09-22 14:07:01', NULL, '1');
+(109, 2, 105, 'Cargar Leads Call Center', 'A', '0', '', '', '', 'admision/agentes/reasignagente', '1', '0', 'Admision', '1', '2018-09-22 14:07:01', NULL, '1');
 -- --------------------------------------------------------
 --
 -- Volcado de datos para la tabla `OBMO_ACCI`
@@ -164,16 +174,18 @@ INSERT INTO `obmo_acci` (`oacc_id`, `omod_id`, `acc_id`, `oacc_tipo_boton`, `oac
 (32, 72, 2, '1', '', 'update', '1', '1'),
 (33, 76, 1, '1', '', 'newItem', '1', '1'),
 (34, 77, 4, '1', '', 'save', '1', '1'),
-(35, 81, 1, '1', '', 'NewSolicitud', '1', '1'),
-(36, 82, 4, '1', '', 'save', '1', '1'),
-(37, 94, 4, '1', '', 'savemethod', '1', '1'),
-(38, 96, 12, '1', '', 'edit', '1', '1'),
-(39, 98, 4, '1', '', 'update', '1', '1'),
+(35, 84, 1, '1', '', 'NewSolicitud', '1', '1'),
+(36, 87, 4, '1', '', 'save', '1', '1'),
+(37, 104, 4, '1', '', 'savemethod', '1', '1'),
+(38, 79, 12, '1', '', 'edit', '1', '1'),
+(39, 81, 4, '1', '', 'update', '1', '1'),
 (40, 99, 13, '1', '', 'Approve', '1', '1'),
-(41, 101, 4, '1', '', 'SaveDocumentos', '1', '1'),
-(42, 102, 4, '1', '', 'enviardata', '1', '1'),
-(43, 104, 4, '1', '', 'UpdateDocumentos', '1', '1'),
-(44, 106, 4, '1', '', 'guardarAgente', '1', '1');
+(41, 91, 4, '1', '', 'SaveDocumentos', '1', '1'),
+(42, 100, 4, '1', '', 'enviardata', '1', '1'),
+(43, 93, 4, '1', '', 'UpdateDocumentos', '1', '1'),
+(44, 106, 4, '1', '', 'guardarAgente', '1', '1'),
+(43, 108, 4, '1', '', 'loadLeadsSocNet', '1', '1'),
+(44, 109, 4, '1', '', 'loadLeadsCallCen', '1', '1');
 -- --------------------------------------------------------
 --
 -- Volcado de datos para la tabla `grup_obmo`
@@ -284,7 +296,10 @@ INSERT INTO `grup_obmo` (`gmod_id`, `gru_id`, `omod_id`, `gmod_estado`,  `gmod_e
 (103, 1, 103, '1', '1'),
 (104, 1, 104, '1', '1'),
 (105, 1, 105, '1', '1'),
-(106, 1, 106, '1', '1');
+(106, 1, 106, '1', '1'),
+(107, 1, 107, '1', '1'),
+(108, 1, 108, '1', '1'),
+(109, 1, 109, '1', '1');
 
 
 -- --------------------------------------------------------
@@ -397,4 +412,7 @@ INSERT INTO `grup_obmo_grup_rol` (`gogr_id`, `grol_id`, `gmod_id`, `gogr_estado`
 (103, 1, 103, '1', '1'),
 (104, 1, 104, '1', '1'),
 (105, 1, 105, '1', '1'),
-(106, 1, 106, '1', '1');
+(106, 1, 106, '1', '1'),
+(107, 1, 107, '1', '1'),
+(108, 1, 108, '1', '1'),
+(109, 1, 109, '1', '1');

@@ -1716,7 +1716,7 @@ class OrdenPago extends \app\modules\financiero\components\CActiveRecord {
           per.per_pri_apellido as per_pri_apellido,
           per.per_seg_apellido as per_seg_apellido,";
         }
-        $sql = "SELECT  lpad(sins.sins_id,4,'0') as solicitud, 
+        $sql = "SELECT  lpad(sins.sins_id,4,'0') as solicitud,sins.sins_id, 
                         sins.sins_fecha_solicitud,
                         per.per_id,
                         per.per_cedula identificacion,
