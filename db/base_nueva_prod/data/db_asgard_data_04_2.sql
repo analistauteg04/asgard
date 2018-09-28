@@ -130,10 +130,10 @@ INSERT INTO `objeto_modulo` (`omod_id`, `mod_id`, `omod_padre_id`, `omod_nombre`
 (104, 4, 103, 'Guardar Metodo Ingreso', 'A', '0', '', '', '', 'academico/matriculacion/newmetodoingreso', '1', '1', 'Academico', '1', '2018-09-22 14:07:01', NULL, '1'),
 -- Agente
 (105, 2, 65, 'Reasignar Agente', 'S', '0', '', '', '', 'admision/agentes/reasignagente', '1', '0', 'Admision', '1', '2018-09-22 14:07:01', NULL, '1'),
-(106, 2, 105, 'Guardar Reasignar Agente', 'A', '0', '', '', '', 'admision/agentes/reasignagente', '1', '0', 'Admision', '1', '2018-09-22 14:07:01', NULL, '1');
+(106, 2, 105, 'Guardar Reasignar Agente', 'A', '0', '', '', '', 'admision/agentes/reasignagente', '1', '0', 'Admision', '1', '2018-09-22 14:07:01', NULL, '1'),
 -- Leads
 (107, 2, 65, 'Reasignar Agente', 'S', '0', '', '', '', 'admision/contactos/cargarleads', '1', '0', 'Admision', '1', '2018-09-22 14:07:01', NULL, '1'),
-(108, 2, 105, 'Cargar Leads Redes Sociales', 'A', '0', '', '', '', 'admision/agentes/reasignagente', '1', '0', 'Admision', '1', '2018-09-22 14:07:01', NULL, '1');
+(108, 2, 105, 'Cargar Leads Redes Sociales', 'A', '0', '', '', '', 'admision/agentes/reasignagente', '1', '0', 'Admision', '1', '2018-09-22 14:07:01', NULL, '1'),
 (109, 2, 105, 'Cargar Leads Call Center', 'A', '0', '', '', '', 'admision/agentes/reasignagente', '1', '0', 'Admision', '1', '2018-09-22 14:07:01', NULL, '1');
 -- --------------------------------------------------------
 --
