@@ -1154,7 +1154,7 @@ class SolicitudesController extends \app\components\CController {
         $data = Yii::$app->request->get();
         $per_ids = base64_decode($data['ids']);      
         
-        $arrData = SolicitudInscripcion::getSolicitudesXInteresado(217, array(), true);             
+        $arrData = SolicitudInscripcion::getSolicitudesXInteresado($per_ids, array(), true);             
              
         \app\models\Utilities::putMessageLogFile($arrData);
                 
