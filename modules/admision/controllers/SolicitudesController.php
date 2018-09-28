@@ -21,6 +21,7 @@ use yii\base\Exception;
 use yii\helpers\ArrayHelper;
 use Yii;
 use app\modules\admision\models\DocumentoAdjuntar;
+use app\modules\admision\Module as admision;
 use app\modules\academico\Module as academico;
 use app\modules\financiero\Module as financiero;
 academico::registerTranslations();
@@ -1104,7 +1105,7 @@ class SolicitudesController extends \app\components\CController {
         }
     }
        
-    public function actionExpexcelsolicitudes() {
+    public function actionExpexcelsolicitudes() {        
         ini_set('memory_limit', '256M');
         $content_type = Utilities::mimeContentType("xls");
         $nombarch = "Report-" . date("YmdHis") . ".xls";
@@ -1112,7 +1113,7 @@ class SolicitudesController extends \app\components\CController {
         header("Content-Disposition: attachment;filename=" . $nombarch . ".xls");
         header('Cache-Control: max-age=0');
         $colPosition = array("C", "D", "E", "F", "G", "H", "I", "J", "K", "L", "M", "N", "O");
-        
+                
         $arrHeader = array(
             admision::t("Solicitudes", "Request #"),
             admision::t("Solicitudes", "Application date"),
@@ -1123,23 +1124,25 @@ class SolicitudesController extends \app\components\CController {
             academico::t("Academico", "Income Method"),
             academico::t("Academico", "Career/Program"),
             Yii::t("formulario", "Status"),
-            financiero::t("Pagos", "Payment")); 
-        
+            financiero::t("Pagos", "Payment")
+            ); 
+                
         $modSolicitudes = new SolicitudInscripcion();
         $data = Yii::$app->request->get();
+        
         $arrSearch["search"] = $data['search'];
         $arrSearch["f_ini"] = $data['f_ini'];
         $arrSearch["f_fin"] = $data['f_fin'];
         $arrSearch["carrera"] = $data['carrera'];
         $arrSearch["estadoSol"] = $data['estadoSol'];
+                
         $arrData = array();
         if (empty($arrSearch)) {
             $arrData = $modSolicitudes->consultarSolicitudesReporte(array(),true);    
         } else {
             $arrData = $modSolicitudes->consultarSolicitudesReporte($arrSearch, true);                   
-        }
-                                       
-        \app\models\Utilities::putMessageLogFile($arrData);                        
+        }        
+               
         $nameReport = yii::t("formulario", "Application Reports");
         Utilities::generarReporteXLS($nombarch, $nameReport, $arrHeader, $arrData, $colPosition);
         exit;                               

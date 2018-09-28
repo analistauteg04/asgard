@@ -1356,7 +1356,7 @@ class SolicitudInscripcion extends \app\modules\admision\components\CActiveRecor
                      when (select opag_estado_pago
                                from " . $con3->dbname . ".orden_pago op
                                where op.sins_id = sins.sins_id) = 'P' then 'Pendiente' 
-                    else 'Pagado' end as pago                    
+                    else 'Pagado' end as pago                
                 FROM 
                     " . $con->dbname . ".solicitud_inscripcion as sins
                     INNER JOIN " . $con->dbname . ".interesado as inte on sins.int_id = inte.int_id                    
@@ -1381,9 +1381,7 @@ class SolicitudInscripcion extends \app\modules\admision\components\CActiveRecor
                     rsol.rsin_estado_logico = :estado AND        
                     eac.eaca_estado=:estado AND
                     eac.eaca_estado_logico=:estado ";       
-        $sql .= " ORDER BY fecha_solicitud DESC";
-                
-        \app\models\Utilities::putMessageLogFile($sql);    
+        $sql .= " ORDER BY fecha_solicitud DESC"; 
         
         $comando = $con->createCommand($sql);
         $comando->bindParam(":estado", $estado, \PDO::PARAM_STR);
