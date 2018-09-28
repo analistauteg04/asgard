@@ -62,8 +62,7 @@ class AdminLTEAsset extends AssetBundle
 	public function init()
     {
 		parent::init();
-		if(!is_dir(Yii::getAlias('@bower')))
-			Yii::setAlias('@bower', '@vendor/bower-asset');
+		Yii::setAlias('@bower', '@vendor/bower-asset');
 	}
 	
     public $sourcePath = '@themes/adminLTE/assets';
