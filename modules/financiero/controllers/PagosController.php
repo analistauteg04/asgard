@@ -650,6 +650,28 @@ class PagosController extends \app\components\CController {
         }
         
     }
+    public function actionDescargafactura() {
+        $nombreZip = "facturas_" . time();
+        $content_type = Utilities::mimeContentType($nombreZip . ".zip");
+        header("Content-Type: $content_type");
+        header("Content-Disposition: attachment;filename=" . $nombreZip . ".zip");
+        header('Cache-Control: max-age=0');
+        $sins_id = isset($_GET['ids']) ? base64_decode($_GET['ids']) : 1;//NULL
+        $ruta= OrdenPago::consultarRutaFile($model['sins_id']);
+
+        // se deben zippear 2 files el xml y el pdf
+        $arr_files = array(
+            array("ruta" => Yii::$app->basePath . "/uploads/ficha/silueta_default.png",
+                "name" => basename(Yii::$app->basePath . "/uploads/ficha/silueta_default.png")),
+            array("ruta" => Yii::$app->basePath . "/uploads/ficha/Silueta-opc-4.png",
+                "name" => basename(Yii::$app->basePath . "/uploads/ficha/Silueta-opc-4.png")),
+        );
+        $tmpDir = Utilities::zipFiles($nombreZip, $arr_files);
+        $file = file_get_contents($tmpDir);
+        Utilities::removeTemporalFile($tmpDir);
+        echo $file;
+        exit();
+    }
  
 
 
