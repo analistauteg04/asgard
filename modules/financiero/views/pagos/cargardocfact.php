@@ -15,10 +15,9 @@ use yii\web\JsExpression;
 use app\models\Utilities;
 use app\modules\financiero\Module as financiero;
 use app\modules\admision\Module as admision;
-
+//rpfa_imagen
 admision::registerTranslations();
 //$per_id = Yii::$app->session->get("PB_perid");
-Utilities::putMessageLogFile($per_id);
 $leyendarc = '<div class="col-md-12 col-sm-12 col-xs-12 col-lg-12">
           <div class="form-group">
           <div class="col-sm-10 col-md-10 col-xs-10 col-lg-10">
@@ -31,6 +30,7 @@ $leyendarc = '<div class="col-md-12 col-sm-12 col-xs-12 col-lg-12">
     <h3><span id="lbl_Personeria"><?= financiero::t("Pagos", "Carga Factura") ?></span>
 </div>
 <?= Html::hiddenInput('txth_sins_id',$sins_id,['id' =>'txth_sins_id']); ?>
+<?= Html::hiddenInput('txth_opag_total',$opag_total,['id' =>'txth_opag_total']); ?>
 <form class="form-horizontal">      
     <div class="col-md-12 col-sm-12 col-xs-12 col-lg-12">
         <div class="form-group">            
@@ -58,7 +58,7 @@ $leyendarc = '<div class="col-md-12 col-sm-12 col-xs-12 col-lg-12">
     </div>
     <div class="col-md-12 col-sm-12 col-xs-12 col-lg-12">
         <div class="form-group">
-            <label for="txt_rpfa_fecha_documento" class="col-sm-2 col-md-2 col-xs-2 col-lg-2  control-label"><?= admision::t("Solicitudes", "Fecha de Documento") ?></label>
+            <label for="txt_rpfa_fecha_documento" class="col-sm-2 col-md-2 col-xs-2 col-lg-2  control-label"><?= admision::t("Solicitudes", "Fecha de Factura") ?></label>
             <div class="col-sm-10 col-md-10 col-xs-10 col-lg-10 ">
                 <?=
                 DatePicker::widget([

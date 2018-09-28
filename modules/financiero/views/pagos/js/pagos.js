@@ -136,11 +136,34 @@ $(document).ready(function () {
         actualizarGridPagosCargados();
     });
     $('#btn_cargar').click(function () {
-        cargarFactura();
+        //Verificamos que el Documento Ingresado sea Ingual al valor Generado
+        if($('#txth_opag_total').val()==$('#txt_rpfa_valor_documento').val()){
+             cargarFactura();
+        }else{
+             showAlert("NO_OK", "error", {"wtmessage": "Valor de factura es incorrecto", "title": "Observaciones"});
+        }
     });
 
     
 });
+
+function divComentario(data) {
+    //$("#countMensaje").html(data.length);
+    var option_arr = '';
+    option_arr += '<div style="overflow-y: scroll;height:200px;">';
+        option_arr += '<div class="post clearfix">';
+            option_arr += '<div class="user-block">';
+                option_arr += '<span>';
+                    //option_arr += '<a href="#">'+(data[i]["Nombres"]).toUpperCase()+'</a>';
+                    //option_arr += '<a onclick="deleteComentario(\'' + data[i]['Ids'] + '\')" class="pull-right btn-box-tool" href="#"><i class="fa fa-times"></i></a>';
+                option_arr += '</span><br>';
+                //option_arr += '<span>'+(data[i]["fecha"]).toUpperCase()+'</span>';
+            option_arr += '</div>';
+            option_arr += '<p>'+(data).toUpperCase()+'</p>';
+        option_arr += '</div>';
+    option_arr += '</div>';
+    showAlert("OK", "info", {"wtmessage": option_arr, "title": "Observaciones"});
+}
 
 function exportExcel() {
     var search = $('#txt_buscarData').val();
@@ -364,7 +387,7 @@ function cargarFactura() {
     arrParams.rpfa_valor_documento = $('#txt_rpfa_valor_documento').val();    
     arrParams.rpfa_numero_documento = $('#txt_rpfa_numero_documento').val();
     arrParams.rpfa_fecha_documento = $('#txt_rpfa_fecha_documento').val();
-    arrParams.documento = $('#txth_doc_titulo').val();
+    arrParams.documento = "facturas/"+$('#txth_per').val()+"/"+$('#txth_doc_titulo').val();
     //arrParams.archivo = $('#txth_doc_adj_leads2').val() + "." + $('#txth_doc_adj_leads').val().split('.').pop();
 
     if (!validateForm()) {
