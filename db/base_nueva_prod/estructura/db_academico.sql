@@ -291,7 +291,7 @@ create table if not exists `modulo_estudio` (
   `mest_id` bigint(20) not null auto_increment primary key, 
   `uaca_id` bigint(20) not null, 
   `mod_id` bigint(20) not null, -- id modalidad 
-  `mest_codigo` varchar(10) not null, 
+  `mest_codigo` varchar(20) not null, 
   `mest_nombre` varchar(300) not null, 
   `mest_descripcion` varchar(300) not null,
   `mest_usuario_ingreso` bigint(20) not null,

@@ -63,6 +63,7 @@ return [
     "Knowledge channel"=> "Canal conocimiento",
     "Lost Opportunity"=> 'Oportunidad Perdida',            
     "Moda" => 'Modalidad',    
+    "Id Opportunity" =>"Id Oportunidad", 
     "No Opportunity" =>"# Oportunidad",    
     "Number of opportunities" => "Núm. Op.",
     "Opportunity state"=> 'Estado Oportunidad',

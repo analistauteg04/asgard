@@ -235,3 +235,10 @@ function save(){
         }, true);
     }
 }
+
+function exportExcel() {
+    var search = $('#txt_buscarDataAgente').val();
+    var contacto = $('#txt_buscarDataPersona').val(); 
+    var f_estado = $('#cmb_estadop').val();
+    window.location.href = $('#txth_base').val() + "/admision/oportunidades/expexcel?search=" + search + "&contacto=" + contacto + "&f_estado=" + f_estado;
+}

@@ -11,6 +11,8 @@ use app\modules\admision\Module;
     <?=
     PbGridView::widget([
         'id' => 'Pbgestion',
+        'showExport' => true,
+        'fnExportEXCEL' => "exportExcel",
         'dataProvider' => $model,
         'columns' => [
             [

@@ -37,8 +37,8 @@ INSERT INTO `tipo_empresa` (`temp_id`, `temp_nombre`, `temp_descripcion`, `temp_
 --
 INSERT INTO `empresa` (`emp_id`, `temp_id`, `emp_razon_social`, `emp_nombre_comercial`, `emp_alias`, `emp_ruc`, `emp_dominio`, `emp_imap_domain`, `emp_imap_port`, `emp_imap_user`, `emp_imap_pass`, `emp_direccion`, `emp_telefono`, `emp_descripcion`, `emp_estado`, `emp_fecha_creacion`, `emp_fecha_modificacion`, `emp_estado_logico`) VALUES
 (1, 2, 'UTEG', 'UTEG', 'UTEG', '', 'www.uteg.edu.ec', 'www.uteg.edu.ec', '587', '', '', NULL, NULL, NULL, '1', CURRENT_TIMESTAMP, NULL, '1'),
-(2, 2, 'ulink', 'ulink', 'ulink', '', 'www.ccc.com', 'www.ccc.com', '587', '', '', NULL, NULL, NULL, '1', CURRENT_TIMESTAMP, NULL, '1'),
-(3, 2, 'smart', 'smart', 'smart', '', 'www.ccc.com', 'www.ccc.com', '587', '', '', NULL, NULL, NULL, '1', CURRENT_TIMESTAMP, NULL, '1');
+(2, 2, 'ULINK', 'ULINK', 'ULINK', '', 'www.ulink.us', 'www.ulink.us', '587', '', '', NULL, NULL, NULL, '1', CURRENT_TIMESTAMP, NULL, '1'),
+(3, 2, 'SMART', 'SMART', 'SMART', '', 'www.sbc.com.ec', 'www.sbc.com.ec', '587', '', '', NULL, NULL, NULL, '1', CURRENT_TIMESTAMP, NULL, '1');
 
 
 -- --------------------------------------------------------
