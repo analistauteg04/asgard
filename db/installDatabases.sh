@@ -7,6 +7,9 @@ CURRENT_DIR=`pwd`
 echo -n "Escriba el password del Usuario Root de Mysql:"
 read -s ROOT_PASS
 echo ""
+
+
+
 echo -n "Instalar en Produccion (1) o Desarrollo (2):"
 read -s PROD
 echo ""

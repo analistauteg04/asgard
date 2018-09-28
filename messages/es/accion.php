@@ -69,4 +69,7 @@ return [
     "Action Disabled" => "Acción Inactiva",
     "Action Image" => "Imagen",
     "Approve" => "Aprobar",
+    "LoadFile" => "Cargar Archivo",
+    "loadCall" => "Cargar Call Center",
+    "loadLeads" => "Cargar Leads",
 ];
