@@ -604,13 +604,15 @@ function UpdateDocumentos() {
     if (!validateForm()) {
         requestHttpAjax(link, arrParams, function (response) {
             showAlert(response.status, response.label, response.message);
-            setTimeout(function () {
-                if (arrParams.opcion == 1) {
-                    window.location.href = $('#txth_base').val() + "/admision/solicitudes/listarsolicitudxinteresado?id=" + arrParams.interesado_id;
-                } else {
-                    window.location.href = $('#txth_base').val() + "/admision/solicitudes/index";
-                }
-            }, 5000);
+            if (response.status == 'OK'){
+                setTimeout(function () {
+                    if (arrParams.opcion == 1) {
+                        window.location.href = $('#txth_base').val() + "/admision/solicitudes/listarsolicitudxinteresado?id=" + arrParams.interesado_id;
+                    } else {
+                        window.location.href = $('#txth_base').val() + "/admision/solicitudes/index";
+                    }
+                }, 5000);
+            }
         }, true);
     }
 }
@@ -727,11 +729,11 @@ function Approve() {
     if (!validateForm()) {
         requestHttpAjax(link, arrParams, function (response) {
             showAlert(response.status, response.label, response.message);
-
-            setTimeout(function () {
-                parent.window.location.href = $('#txth_base').val() + "/admision/solicitudes/index";
-            }, 2000);
-
+            if(response.status == "OK"){
+                setTimeout(function () {
+                    parent.window.location.href = $('#txth_base').val() + "/admision/solicitudes/index";
+                }, 2000);
+            }
         }, true);
     }
 }

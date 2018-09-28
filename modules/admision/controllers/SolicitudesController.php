@@ -769,65 +769,27 @@ class SolicitudesController extends \app\components\CController {
                     if (!DocumentoAdjuntar::desactivarDocumentosxSolicitud($sins_id))
                         throw new Exception('Error no se reemplazo files.');
                     $mod_solinsxdoc1 = new SolicitudinsDocumento();
-                    //1-Título, 2-DNI,3-Cert votación, 4-Foto, 5-Doc-Beca                       
-                    $mod_solinsxdoc1->sins_id = $sins_id;
-                    $mod_solinsxdoc1->int_id = $interesado_id;
-                    $mod_solinsxdoc1->dadj_id = 1;
-                    $mod_solinsxdoc1->sdoc_archivo = $titulo_archivo;
-                    $mod_solinsxdoc1->sdoc_estado = "1";
-                    $mod_solinsxdoc1->sdoc_estado_logico = "1";
-                    Utilities::putMessageLogFile($beca_archivo);
-                    if ($mod_solinsxdoc1->save()) {
-                        $mod_solinsxdoc2 = new SolicitudinsDocumento();
-                        $mod_solinsxdoc2->sins_id = $sins_id;
-                        $mod_solinsxdoc2->int_id = $interesado_id;
-                        $mod_solinsxdoc2->dadj_id = 2;
-                        $mod_solinsxdoc2->sdoc_archivo = $dni_archivo;
-                        $mod_solinsxdoc2->sdoc_estado = "1";
-                        $mod_solinsxdoc2->sdoc_estado_logico = "1";
-
-                        if ($mod_solinsxdoc2->save()) {
-                            $mod_solinsxdoc3 = new SolicitudinsDocumento();
-                            $mod_solinsxdoc3->sins_id = $sins_id;
-                            $mod_solinsxdoc3->int_id = $interesado_id;
-                            $mod_solinsxdoc3->dadj_id = 4;
-                            $mod_solinsxdoc3->sdoc_archivo = $foto_archivo;
-                            $mod_solinsxdoc3->sdoc_estado = "1";
-                            $mod_solinsxdoc3->sdoc_estado_logico = "1";
-
-                            if ($mod_solinsxdoc3->save()) {
-                                if ($es_extranjero == "1" or ( empty($es_extranjero))) {
-                                    $mod_solinsxdoc4 = new SolicitudinsDocumento();
-                                    $mod_solinsxdoc4->sins_id = $sins_id;
-                                    $mod_solinsxdoc4->int_id = $interesado_id;
-                                    $mod_solinsxdoc4->dadj_id = 3;
-                                    $mod_solinsxdoc4->sdoc_archivo = $certvota_archivo;
-                                    $mod_solinsxdoc4->sdoc_estado = "1";
-                                    $mod_solinsxdoc4->sdoc_estado_logico = "1";
-
-                                    if (!$mod_solinsxdoc4->save()) {
+                    //1-Título, 2-DNI,3-Cert votación, 4-Foto, 5-Doc-Beca  
+                    if($mod_solinsxdoc1->insertNewDocument($sins_id, $interesado_id, 1, $titulo_archivo)){
+                        if($mod_solinsxdoc1->insertNewDocument($sins_id, $interesado_id, 2, $dni_archivo)){
+                            if($mod_solinsxdoc1->insertNewDocument($sins_id, $interesado_id, 4, $foto_archivo)){
+                                if ($es_extranjero == "1" or (empty($es_extranjero))) {
+                                    if (!$mod_solinsxdoc1->insertNewDocument($sins_id, $interesado_id, 3, $certvota_archivo)) {
                                         throw new Exception('Error doc certvot no creado.');
                                     }
-                                }
-                                if ($beca == "1") {
-                                    $mod_solinsxdoc5 = new SolicitudinsDocumento();
-                                    $mod_solinsxdoc5->sins_id = $sins_id;
-                                    $mod_solinsxdoc5->int_id = $interesado_id;
-                                    $mod_solinsxdoc5->dadj_id = 5;
-                                    $mod_solinsxdoc5->sdoc_archivo = $beca_archivo;
-                                    $mod_solinsxdoc5->sdoc_estado = "1";
-                                    $mod_solinsxdoc5->sdoc_estado_logico = "1";
-                                    if (!$mod_solinsxdoc5->save()) {
-                                        throw new Exception('Error doc beca no creado.');
+                                    if ($beca == "1") {
+                                        if(!$mod_solinsxdoc1->insertNewDocument($sins_id, $interesado_id, 5, $beca_archivo)){
+                                            throw new Exception('Error doc beca no creado.');
+                                        }
                                     }
                                 }
-                            } else {
+                            }else{
                                 throw new Exception('Error doc foto no creado.');
                             }
-                        } else {
+                        }else{
                             throw new Exception('Error doc dni no creado.');
                         }
-                    } else {
+                    }else{
                         throw new Exception('Error doc titulo no creado.' . $mensaje);
                     }
                     // se cambia a pendiente la solicitud para revision.

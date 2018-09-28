@@ -91,7 +91,7 @@ class DocumentoAdjuntar extends \yii\db\ActiveRecord
 
         $comando = $con->createCommand($sql);
         $comando->bindParam(":id", $sins_id, \PDO::PARAM_INT);
-        $comando->bindParam(":estado", $estado, \PDO::PARAM_STR);
+        $comando->bindParam(":estado", $estado, \PDO::PARAM_INT);
         $resultData = $comando->execute();
         return $resultData;
     }
