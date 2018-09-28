@@ -5,15 +5,15 @@ namespace app\modules\academico\controllers;
 use Yii;
 use app\modules\academico\models\Admitido;
 use app\modules\academico\models\EstudioAcademico;
-use app\modules\admision\models\Interesado;
+use app\mod\admision\models\Interesado;
 use yii\helpers\ArrayHelper;
 
-
 class AdmitidosController extends \app\components\CController {
+
     public function actionIndex() {
-        $per_id = @Yii::$app->session->get("PB_perid");    
+        $per_id = @Yii::$app->session->get("PB_perid");
         $mod_carrera = new EstudioAcademico();
-      
+
         $data = Yii::$app->request->get();
         if ($data['PBgetFilter']) {
             $arrSearch["f_ini"] = $data['f_ini'];
@@ -24,7 +24,7 @@ class AdmitidosController extends \app\components\CController {
             $mod_aspirante = Admitido::getAdmitidos($arrSearch);
 
             return $this->renderPartial('index-grid', [
-                        "model" => $mod_aspirante,                        
+                        "model" => $mod_aspirante,
             ]);
         } else {
             $mod_aspirante = Admitido::getAdmitidos();
@@ -35,10 +35,45 @@ class AdmitidosController extends \app\components\CController {
                 
             }
         }
-        $arrCarreras = ArrayHelper::map(array_merge([["id" => "0", "value" => Yii::t("formulario", "Grid")]],$mod_carrera->consultarCarrera()),"id", "value");
+        $arrCarreras = ArrayHelper::map(array_merge([["id" => "0", "value" => Yii::t("formulario", "Grid")]], $mod_carrera->consultarCarrera()), "id", "value");
         return $this->render('index', [
                     'model' => $mod_aspirante,
-                    'arrCarreras' => $arrCarreras,                   
+                    'arrCarreras' => $arrCarreras,
         ]);
     }
+
+    public function actionExpexcel() {
+        ini_set('memory_limit', '256M');
+        $content_type = Utilities::mimeContentType("xls");
+        $nombarch = "Report-" . date("YmdHis") . ".xls";
+        header("Content-Type: $content_type");
+        header("Content-Disposition: attachment;filename=" . $nombarch . ".xls");
+        header('Cache-Control: max-age=0');
+        $colPosition = array("C", "D", "E", "F", "G", "H", "I", "J", "K", "L");
+        $arrHeader = array(
+            Yii::t("crm", "Contact"),
+            Yii::t("crm", "Contact Type"),
+            Yii::t("crm", "Contact Status"),
+            Yii::t("formulario", "Open Opportunities"),
+            Yii::t("formulario", "Close Opportunities")
+        );
+        $data = Yii::$app->request->get();
+        $mod_aspirante = Admitido::getAdmitidos($arrSearch);
+        $arrData = array();
+        if (empty($arrSearch)) {
+            $arrSearch["f_ini"] = $data['f_ini'];
+            $arrSearch["f_fin"] = $data['f_fin'];
+            $arrSearch["carrera"] = $data['carrera'];
+            $arrSearch["search"] = $data['search'];
+            $arrSearch["codigocan"] = $data['codigocan'];
+        } else {
+            $mod_aspirante = Admitido::getAdmitidos();
+        }
+        $arrData = $modPersonaGestion->consultarReportContactos(array(), true);
+        \app\models\Utilities::putMessageLogFile($arrData);
+        $nameReport = yii::t("formulario", "Application Reports");
+        Utilities::generarReporteXLS($nombarch, $nameReport, $arrHeader, $arrData, $colPosition);
+        exit;
+    }
+
 }
