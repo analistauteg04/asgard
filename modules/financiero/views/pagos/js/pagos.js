@@ -135,16 +135,6 @@ $(document).ready(function () {
     $('#btn_buscarPagoscargados').click(function () {
         actualizarGridPagosCargados();
     });
-    $('#btn_cargar').click(function () {
-        //Verificamos que el Documento Ingresado sea Ingual al valor Generado
-        if($('#txth_opag_total').val()==$('#txt_rpfa_valor_documento').val()){
-             cargarFactura();
-        }else{
-             showAlert("NO_OK", "error", {"wtmessage": "Valor de factura es incorrecto", "title": "Observaciones"});
-        }
-    });
-
-    
 });
 
 function divComentario(data) {
@@ -164,7 +154,14 @@ function divComentario(data) {
     option_arr += '</div>';
     showAlert("OK", "info", {"wtmessage": option_arr, "title": "Observaciones"});
 }
-
+function saveBills(){
+    //Verificamos que el Documento Ingresado sea Ingual al valor Generado
+    if($('#txth_opag_total').val()==$('#txt_rpfa_valor_documento').val()){
+         cargarFactura();
+    }else{
+         showAlert("NO_OK", "error", {"wtmessage": "Valor de factura es incorrecto", "title": "Observaciones"});
+    }
+}
 function exportExcel() {
     var search = $('#txt_buscarDataPago').val();
     var f_ini = $('#txt_fecha_ini').val();
