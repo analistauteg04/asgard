@@ -9,12 +9,12 @@ USE `db_crm`;
 --
 INSERT INTO `conocimiento_canal` (`ccan_id`, `ccan_nombre`, `ccan_descripcion`, `ccan_conocimiento`, `ccan_canal`, `ccan_estado`, `ccan_estado_logico`) VALUES
 (1, 'Formulario de página web', 'Formulario de página web','', '0', '1', '1'),
-(2, 'Sitio Web', 'Sitio Web','', '0', '1', '1'),
-(3, 'Redes sociales (Facebook)', 'Redes sociales (Facebook)','', '0', '1', '1'),
-(4, 'Visita en sitio', 'Visita en sitio','', '1', '1', '1'),
-(5, 'Llamada', 'Llamada','', '1', '1', '1'),
-(6, 'Chat en línea', 'Chat en línea','', '0', '1', '1'),
-(7, 'Whatsapp', 'Whatsapp','', '1', '1', '1');
+(2, 'Lead', 'Redes sociales (Facebook)','', '0', '1', '1'),
+(3, 'Visita en sitio', 'Visita en sitio','', '1', '1', '1'),
+(4, 'Llamada', 'Llamada','', '1', '1', '1'),
+(5, 'Chat en línea', 'Chat en línea','', '0', '1', '1'),
+(6, 'Whatsapp', 'Whatsapp','', '1', '1', '1'),
+(6, 'Messenger facebook', 'Messenger facebook','', '1', '1', '1');
 
 -- --------------------------------------------------------
 --
