@@ -21,8 +21,8 @@ financiero::registerTranslations();
 PbGridView::widget([
     //'dataProvider' => new yii\data\ArrayDataProvider(array()),
     'id' => 'TbG_PERSONAS',
-    'showExport' => true,
-    'fnExportEXCEL' => "exportExcel",
+    //'showExport' => true,
+    //'fnExportEXCEL' => "exportExcel",
     //'fnExportPDF' => "exportPdf",
     'dataProvider' => $model,
     'columns' =>

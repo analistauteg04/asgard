@@ -60,7 +60,7 @@ return [
     "Contact Name" => "Nombre Contacto",
     "Interest Carreer" => "Carrera Interés",
     "Knowledge Area"=> "Área conocimiento",
-    "Knowledge channel"=> "Canal conocimiento",
+    "Knowledge channel"=> "Canal Conocimiento",
     "Lost Opportunity"=> 'Oportunidad Perdida',            
     "Moda" => 'Modalidad',    
     "Id Opportunity" =>"Id Oportunidad", 

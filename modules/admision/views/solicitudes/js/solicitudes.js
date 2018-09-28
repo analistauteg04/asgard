@@ -427,14 +427,13 @@ function setComboDataselect(arr_data, element_id, texto) {
 }
 
 function exportExcel() {
-    /*var search = $('#txt_buscarData').val();
-    var modalidad = $('#cmb_modalidades option:selected').val();
-    var carrera = $('#cmb_carreras option:selected').val();
+    var search = $('#txt_buscarData').val();
     var f_ini = $('#txt_fecha_ini').val();
-    var f_fin = $('#txt_fecha_fin').val();*/
-    //window.location.href = $('#txth_base').val() + "/admision/solicitudes/expexcel?search=" + search + "&modalidad=" + modalidad + "&carrera=" + carrera + "&f_ini=" + f_ini + "&f_fin=" + f_fin;
-   // window.location.href = $('#txth_base').val() + "/admision/solicitudes/export";
-   window.location.href = $('#txth_base').val() + "/admision/solicitudes/expexcel";
+    var f_fin = $('#txt_fecha_fin').val();
+    var carrera = $('#cmb_carrera option:selected').val();
+    var estado = $('#cmb_estado option:selected').val();       
+    //window.location.href = $('#txth_base').val() + "/admision/solicitudes/expexcel?search=" + search + "&f_ini=" + f_ini + "&f_fin=" + f_fin + "&carrera=" + carrera + "&estadoSol=" + estado;   
+    window.location.href = $('#txth_base').val() + "/admision/solicitudes/expexcelsolicitudes?search=" + search + "&f_ini=" + f_ini + "&f_fin=" + f_fin + "&carrera=" + carrera + "&estadoSol=" + estado;
 }
 
 function actualizarGrid() {

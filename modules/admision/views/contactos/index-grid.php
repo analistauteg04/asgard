@@ -31,6 +31,11 @@ use app\modules\admision\Module;
                 'value' => 'estado_contacto',
             ],
             [
+                'attribute' => 'Canal',
+                'header' => Module::t("crm", "Knowledge channel"),
+                'value' => 'canal',
+            ],
+            [
                 'attribute' => 'NumOportunidadesAbiertas',
                 'header' => Yii::t("formulario", "Open Opportunities"),
                 'value' => 'num_oportunidad_abiertas',

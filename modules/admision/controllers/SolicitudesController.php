@@ -21,6 +21,10 @@ use yii\base\Exception;
 use yii\helpers\ArrayHelper;
 use Yii;
 use app\modules\admision\models\DocumentoAdjuntar;
+use app\modules\academico\Module as academico;
+use app\modules\financiero\Module as financiero;
+academico::registerTranslations();
+financiero::registerTranslations();
 
 class SolicitudesController extends \app\components\CController {
 
@@ -1099,69 +1103,46 @@ class SolicitudesController extends \app\components\CController {
             return;
         }
     }
-    
-    public function actionExport(){
+       
+    public function actionExpexcelsolicitudes() {
         ini_set('memory_limit', '256M');
         $content_type = Utilities::mimeContentType("xls");
         $nombarch = "Report-" . date("YmdHis") . ".xls";
         header("Content-Type: $content_type");
         header("Content-Disposition: attachment;filename=" . $nombarch . ".xls");
         header('Cache-Control: max-age=0');
-        
-        $colPosition = array("C", "D", "E", "F", "G", "H", "I", "J", "K");
-        $arrHeader = array("#","Grado Lead","Online Lead","Posgrado Lead","Base Grado","Base Online","Base Posgrado","Suma","Promedio");
-        $arrDataCols = ["En Contacto", "Calificado", "No Calificado"];
-        //$arrDataCols = ["En curso", "En espera", "Ganada", "Perdida", "Listo para pago", "Total"];
-        //$arrDataCols = ["Precio", "Insatisfacción con malla académica", "No existe carrera", "Calidad de docentes", "Atención recibida", "Ubicación", "Otra Universidad", "Modalidad de Estudios", "Motivo personal", "Viaje imprevisto", "No contesta el teléfono ni correos"];
-        $arrData = array();
-        for($i=0; $i<count($arrDataCols); $i++){
-            $j=0;
-            for($j=0; $j<count($arrHeader); $j++){
-                if($j == 0){
-                    $arrData[$i][$j] = $arrDataCols[$i];
-                }else {
-                    $arrData[$i][$j] = "data $i $j";
-                } 
-            }
-        }
-        $nameReport = yii::t("formulario", "Application Reports");
-        Utilities::generarReporteXLS($nombarch, $nameReport, $arrHeader, $arrData, $colPosition);
-        exit;
-    }
-    
-    public function actionExpexcel() {
-        ini_set('memory_limit', '256M');
-        $content_type = Utilities::mimeContentType("xls");
-        $nombarch = "Report-" . date("YmdHis") . ".xls";
-        header("Content-Type: $content_type");
-        header("Content-Disposition: attachment;filename=" . $nombarch . ".xls");
-        header('Cache-Control: max-age=0');
-        $colPosition = array("C", "D", "E", "F", "G", "H", "I", "J", "K", "L");
+        $colPosition = array("C", "D", "E", "F", "G", "H", "I", "J", "K", "L", "M", "N", "O");
         
         $arrHeader = array(
-            Yii::t("formulario", "Request #"),
-            Yii::t("solicitud_ins", "Application date"),
+            admision::t("Solicitudes", "Request #"),
+            admision::t("Solicitudes", "Application date"),
             Yii::t("formulario", "DNI 1"),
             Yii::t("formulario", "First Names"),
             Yii::t("formulario", "Last Names"),
-            Yii::t("solicitud_ins", "Level Inter"),
-            Yii::t("solicitud_ins", "Income Method"),
-            Yii::t("academico", "Career"),
+            academico::t("Academico", "Academic unit"),
+            academico::t("Academico", "Income Method"),
+            academico::t("Academico", "Career/Program"),
             Yii::t("formulario", "Status"),
-            "Pago");
+            financiero::t("Pagos", "Payment")); 
         
-        $per_id = @Yii::$app->session->get("PB_perid");
+        $modSolicitudes = new SolicitudInscripcion();
         $data = Yii::$app->request->get();
-        $per_ids = base64_decode($data['ids']);      
-        
-        $arrData = SolicitudInscripcion::getSolicitudesXInteresado($per_ids, array(), true);             
-             
-        \app\models\Utilities::putMessageLogFile($arrData);
-                
-        
+        $arrSearch["search"] = $data['search'];
+        $arrSearch["f_ini"] = $data['f_ini'];
+        $arrSearch["f_fin"] = $data['f_fin'];
+        $arrSearch["carrera"] = $data['carrera'];
+        $arrSearch["estadoSol"] = $data['estadoSol'];
+        $arrData = array();
+        if (empty($arrSearch)) {
+            $arrData = $modSolicitudes->consultarSolicitudesReporte(array(),true);    
+        } else {
+            $arrData = $modSolicitudes->consultarSolicitudesReporte($arrSearch, true);                   
+        }
+                                       
+        \app\models\Utilities::putMessageLogFile($arrData);                        
         $nameReport = yii::t("formulario", "Application Reports");
         Utilities::generarReporteXLS($nombarch, $nameReport, $arrHeader, $arrData, $colPosition);
-        exit;              
+        exit;                               
     }
 
 }

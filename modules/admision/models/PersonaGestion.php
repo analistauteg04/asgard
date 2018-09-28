@@ -960,10 +960,13 @@ class PersonaGestion extends \app\modules\admision\components\CActiveRecord {
                         pg.pges_id as pestion_id,
                         pg.econ_id,
                         ec.econ_nombre estado_contacto,
+                        pg.ccan_id,
+                        cc.ccan_nombre as canal,
                         (select count(*) from " . $con->dbname . ".oportunidad o where o.pges_id = pg.pges_id and o.eopo_id in(1,2,3) and o.opo_estado = :estado and o.opo_estado_logico = :estado) as num_oportunidad_abiertas,
                         (select count(*) from " . $con->dbname . ".oportunidad o where o.pges_id = pg.pges_id and o.eopo_id in(4,5) and o.opo_estado = :estado and o.opo_estado_logico = :estado) as num_oportunidad_cerradas
                 FROM " . $con->dbname . ".persona_gestion pg inner join " . $con->dbname . ".estado_contacto ec on ec.econ_id = pg.econ_id
-                INNER JOIN " . $con1->dbname . ".tipo_persona tp on tp.tper_id = pg.tper_id                
+                INNER JOIN " . $con1->dbname . ".tipo_persona tp on tp.tper_id = pg.tper_id  
+                INNER JOIN " . $con->dbname . ".conocimiento_canal cc on cc.ccan_id = pg.ccan_id
                 WHERE   $str_search
                         pg.pges_estado = :estado
                         and pg.pges_estado_logico = :estado
@@ -971,6 +974,8 @@ class PersonaGestion extends \app\modules\admision\components\CActiveRecord {
                         and tp.tper_estado_logico = :estado                        
                         and ec.econ_estado = :estado 
                         and ec.econ_estado_logico = :estado 
+                        and cc.ccan_estado = :estado 
+                        and cc.ccan_estado_logico = :estado 
                 ORDER BY pg.pges_fecha_creacion desc";
 
         $comando = $con->createCommand($sql);

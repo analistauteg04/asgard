@@ -4,7 +4,6 @@ namespace app\modules\admision\controllers;
 
 use Yii;
 use app\modules\admision\models\Interesado;
-use app\modules\admision\models\InteresadoEjecutivo;
 use app\modules\admision\models\PersonaGestion;
 use app\models\EmpresaPersona;
 use app\modules\admision\models\InteresadoEmpresa;
@@ -245,8 +244,7 @@ class InteresadosController extends \app\components\CController
             $arrData = $interesado_model->consultarReportAspirantes($arrSearch, true);                   
         }
                                        
-        \app\models\Utilities::putMessageLogFile($arrData);                
-        
+       // \app\models\Utilities::putMessageLogFile($arrData);                        
         $nameReport = yii::t("formulario", "Application Reports");
         Utilities::generarReporteXLS($nombarch, $nameReport, $arrHeader, $arrData, $colPosition);
         exit;              
