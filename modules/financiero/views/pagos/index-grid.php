@@ -69,7 +69,7 @@ admision::registerTranslations(); // trae las traducciones del modulo
             [
                 'class' => 'yii\grid\ActionColumn',
                 'header' => Yii::t("formulario", "Actions"),
-                'template' => '{view} {upload} {uploadFact}',
+                'template' => '{view} {upload} {uploadFact} {downloadFact}',
                 'buttons' => [
                     'view' => function ($url, $model) {
                         if ($model['estado'] != 'P') {
@@ -85,6 +85,13 @@ admision::registerTranslations(); // trae las traducciones del modulo
                         //if ($model['rol'] == 1) {
                             return Html::a('<span class="glyphicon glyphicon-hdd"></span>', Url::to(['/financiero/pagos/cargardocfact', 'ids' => base64_encode($model['sins_id'])]), ["data-toggle" => "tooltip", "title" => "Subir Factura", "data-pjax" => 0]);
                         //}
+                    },
+                    'downloadFact' => function ($url, $model) {
+                        $ruta= \app\modules\financiero\models\OrdenPago::consultarRutaFile($model['sins_id']);
+                        if ($ruta !== 0) {
+                            //return Html::a('<span class="glyphicon glyphicon-download-alt"></span>', Url::to(['/financiero/pagos/cargardocfact', 'ids' => base64_encode($model['sins_id'])]), ["data-toggle" => "tooltip", "title" => $ruta, "data-pjax" => 0]);
+                            return Html::a('<span class="glyphicon glyphicon-download-alt"></span>', Url::to(['/site/getimage', 'route' => '/uploads/'.$ruta]), ["download" => $ruta, "data-toggle" => "tooltip", "title" => "Descargar Pago", "data-pjax" => 0]);
+                        }
                     },
                     
                 ],
