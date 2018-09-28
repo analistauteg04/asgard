@@ -657,16 +657,21 @@ class PagosController extends \app\components\CController {
         header("Content-Disposition: attachment;filename=" . $nombreZip . ".zip");
         header('Cache-Control: max-age=0');
         $sins_id = isset($_GET['ids']) ? base64_decode($_GET['ids']) : 1;//NULL
-        $ruta= OrdenPago::consultarRutaFile($model['sins_id']);
+        //$ruta = isset($_GET['ruta']) ? base64_decode($_GET['ruta']) : 1;//NULL
+        //Utilities::putMessageLogFile($ruta);
+        $ruta= OrdenPago::consultarRutaFile($sins_id);
+       
+        $Path=Yii::$app->basePath ."/uploads/" .$ruta;
+        Utilities::putMessageLogFile($Path);
 
         // se deben zippear 2 files el xml y el pdf
-        $arr_files = array(
+        /*$arr_files = array(
             array("ruta" => Yii::$app->basePath . "/uploads/ficha/silueta_default.png",
                 "name" => basename(Yii::$app->basePath . "/uploads/ficha/silueta_default.png")),
             array("ruta" => Yii::$app->basePath . "/uploads/ficha/Silueta-opc-4.png",
                 "name" => basename(Yii::$app->basePath . "/uploads/ficha/Silueta-opc-4.png")),
-        );
-        $tmpDir = Utilities::zipFiles($nombreZip, $arr_files);
+        );*/
+        $tmpDir = Utilities::zipFiles($nombreZip, $Path);
         $file = file_get_contents($tmpDir);
         Utilities::removeTemporalFile($tmpDir);
         echo $file;
