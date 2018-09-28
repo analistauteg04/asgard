@@ -185,12 +185,15 @@ INSERT INTO `rol` (`rol_id`, `rol_nombre`, `rol_descripcion`, `rol_estado`, `rol
 (3, 'Admin Administrativo', 'Admin Administrativo', '1', '1'),
 (4, 'Gerente', 'Docente', '1', '1'),
 (5, 'Director', 'Director', '1', '1'),
+
 (6, 'Jefe', 'Jefe', '1', '1'),
 (7, 'Coordinador', 'Coordinador Senior', '1', '1'),
 (8, 'Supervisor', 'Supervisor Senior', '1', '1'),
 (9, 'Analista', 'Analista Senior', '1', '1'),
 (10, 'Asistente', 'Asistente Senior', '1', '1'),
+
 (11, 'Lider', 'Lider', '1', '1'),
+
 (12, 'Agente', 'Ejecutivo Comercial', '1', '1'),
 (13, 'Secretaria', 'Secretaria', '1', '1'),
 (14, 'Interesado', 'Interesado', '1', '1'),

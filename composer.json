@@ -15,10 +15,11 @@
     "minimum-stability": "stable",
     "require": {
         "php": ">=5.4.0",
-        "yiisoft/yii2": "~2.0.5",
+        "yiisoft/yii2": "~2.0.14",
         "yiisoft/yii2-jui": "*",
         "yiisoft/yii2-bootstrap": "~2.0.0",
         "yiisoft/yii2-swiftmailer": "~2.0.0",
+		"fxp/composer-asset-plugin": "~1.4.4",
         "mpdf/mpdf": "*",
         "phpoffice/phpspreadsheet": "*",
         "bower-asset/font-awesome": "*",
@@ -41,13 +42,10 @@
         "codeception/specify": "~0.4.3"
     },
     "config": {
+        "process-timeout": 1800,
         "fxp-asset": {
-            "installer-paths": {
-                "npm-asset-library": "vendor/npm",
-                "bower-asset-library": "vendor/bower"
-            }
-        },
-        "process-timeout": 1800
+            "enabled": false
+        }
     },
     "scripts": {
         "post-create-project-cmd": [
@@ -66,6 +64,17 @@
             "generateCookieValidationKey": [
                 "config/web.php"
             ]
+        },
+		"yii\\composer\\Installer::postInstall": {
+            "generateCookieValidationKey": [
+                "config/web.php"
+            ]
         }
-    }
+    },
+	"repositories": [
+        {
+            "type": "composer",
+            "url": "https://asset-packagist.org"
+        }
+    ]
 }

@@ -50,6 +50,7 @@
 
 namespace app\themes\adminLTE\resources;
 
+use Yii;
 use yii\web\AssetBundle;
 
 /**
@@ -58,6 +59,11 @@ use yii\web\AssetBundle;
  */
 class AdminLTEAsset extends AssetBundle
 {
+	public function init()
+    {
+		parent::init();
+	}
+	
     public $sourcePath = '@themes/adminLTE/assets';
     public $baseUrl = '@web';
     public $css = [

@@ -24,6 +24,8 @@ class CController extends \yii\web\Controller {
     public $id_moduloPadre = 0;
     
     public function init() {
+		if(!is_dir(Yii::getAlias('@bower')))
+			Yii::setAlias('@bower', '@vendor/bower-asset');
         return parent::init();
     }
 
