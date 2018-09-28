@@ -18,8 +18,8 @@ admision::registerTranslations();
     <?=
     PbGridView::widget([
         'id' => 'TbG_Solicitudes',
-        //'showExport' => true,
-        //'fnExportEXCEL' => "exportExcel",
+        'showExport' => true,
+        'fnExportEXCEL' => "exportExcelColec",
         //'fnExportPDF' => "exportPdf",
         'dataProvider' => $model,        
         'columns' =>
