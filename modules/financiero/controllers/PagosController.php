@@ -671,7 +671,11 @@ class PagosController extends \app\components\CController {
             array("ruta" => Yii::$app->basePath . "/uploads/ficha/Silueta-opc-4.png",
                 "name" => basename(Yii::$app->basePath . "/uploads/ficha/Silueta-opc-4.png")),
         );*/
-        $tmpDir = Utilities::zipFiles($nombreZip, $Path);
+        $arr_files = array(
+            array("ruta" => Yii::$app->basePath . "/uploads/" .$ruta,
+                "name" => basename(Yii::$app->basePath . "/uploads/" .$ruta)),            
+        );
+        $tmpDir = Utilities::zipFiles($nombreZip, $arr_files);
         $file = file_get_contents($tmpDir);
         Utilities::removeTemporalFile($tmpDir);
         echo $file;

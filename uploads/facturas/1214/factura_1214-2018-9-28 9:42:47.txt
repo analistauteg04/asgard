@@ -1,0 +1,243 @@
+SISTEMAS
+developer@uteg.edu.ec
+clave: developer1806
+github es developerUteg
+
+USUARIOS SISTEMAS
+User :dlopez@uteg.edu.ec
+Clave: admin123456
+
+Git
+https://github.com/PenBlu/asgard.git
+git clone https://github.com/PenBlu/asgard.git
+git clone https://github.com/utegorganization/asgard_local.git
+
+chown -R apache.apache asgard/
+chown -R apache.apache asgard_local/
+
+mysql -u root -proot00 siga < siga.sql
+
+mysql -u root -proot00  < db_asgard.sql
+
+killall java
+
+861f1b21c90be716737eabd2a6d476525a17f6b1
+
+
+-----
+mysql -u root -proot00  < db_asgard.sql 
+mysql -u root -proot00 db_asgard2 < db_asgard_data_01.sql 
+mysql -u root -proot00 db_asgard2 < db_asgard_data_03.sql 
+mysql -u root -proot00 db_asgard2 < db_asgard_data_mas_paises_02.sql 
+mysql -u root -proot00  < db_academico.sql 
+mysql -u root -proot00  db_academico2 < db_academico_data.sql 
+mysql -u root -proot00  < db_captacion.sql 
+mysql -u root -proot00 db_captacion2 < db_captacion_data.sql 
+mysql -u root -proot00  < db_claustro.sql 
+mysql -u root -proot00  < db_crm.sql 
+mysql -u root -proot00  db_crm2 < db_crm_data.sql 
+mysql -u root -proot00  < db_facturacion.sql 
+mysql -u root -proot00 db_facturacion2 < db_facturacion_data.sql 
+mysql -u root -proot00  < db_general.sql 
+mysql -u root -proot00 db_general2 < db_general_data.sql 
+
+
+
+url = https://github.com/utegorganization/asgard_local.git
+url = https://developerUteg@github.com/utegorganization/asgard_local.git
+
+return [
+    'class' => 'app\components\CConnection',
+    'dsn' => 'mysql:host=localhost;dbname=db_asgard',
+    'username' => 'uteg',
+    'password' => 'Utegadmin2016*',
+    'charset' => 'utf8',
+    'dbname' => 'db_asgard',
+    'dbserver' => 'localhost',
+];
+
+
+https://blog.openalfa.com/como-implementar-en-php-un-servicio-wsdl-con-validacion-de-usuario
+https://campusvirtual.uteg.edu.ec/soap/?wsdl=true
+$this->usuario = 'webservice';
+$this->clave = 'WxrrvTt8';
+
+
+[xdebug]
+zend_extension="/usr/lib64/php/modules/xdebug.so"       (NOta la ruta donde esta el modulo)
+; Remote settings
+xdebug.remote_log="/tmp/xdebug.log"
+xdebug.profiler_enable = 1
+xdebug.remote_enable=on
+xdebug.remote_host=YOURIP!
+xdebug.remote_port=9000
+xdebug.remote_autostart=1
+xdebug.idekey=phpstorm-xdebug
+
+ https://campusvirtual.uteg.edu.ec/logs/soap.log
+https://instructivos.educativa.com/estable/anexo_SOAP.pdf
+
+
+
+
+--------------------------
+/var/www/html/asgard_local/models/ConsumirWsdl.php:54:
+object(SoapClient)[149]
+  public '_login' => string 'webservice' (length=10)
+  public '_password' => string 'WxrrvTt8' (length=8)
+  public 'trace' => int 1
+  public '_encoding' => string 'UTF-8' (length=5)
+  public '_soap_version' => int 2
+  public 'sdl' => resource(3329, Unknown)
+  public '__last_request' => string '<?xml version="1.0" encoding="UTF-8"?>
+<env:Envelope xmlns:env="http://www.w3.org/2003/05/soap-envelope" xmlns:ns1="urn:Educativa/Aula/"><env:Body><ns1:autenticar_usuario/><param1>ea69961f030c7918d239e299510f260a</param1></env:Body></env:Envelope>
+' (length=248)
+  public 'httpsocket' => resource(3330, stream)
+  public '_use_proxy' => int 0
+  public 'httpurl' => resource(3331, Unknown)
+  public '__last_request_headers' => string 'POST /soap/ HTTP/1.1
+
+Host: campusvirtual.uteg.edu.ec
+
+Connection: Keep-Alive
+
+User-Agent: PHP-SOAP/5.6.36
+
+Content-Type: application/soap+xml; charset=utf-8; action="urn:Educativa/Aula#autenticar_usuario"
+
+Content-Length: 248
+
+Authorization: Basic d2Vic2VydmljZTpXeHJydlR0OA==
+
+
+
+' (length=281)
+  public '__last_response_headers' => string 'HTTP/1.1 500 Internal Server Error
+
+Server: nginx/1.8.1
+
+Date: Thu, 26 Jul 2018 21:31:59 GMT
+
+Content-Type: text/plain
+
+Transfer-Encoding: chunked
+
+Connection: keep-alive
+
+Vary: Accept-Encoding
+
+' (length=195)
+  public '__soap_fault' => 
+    object(SoapFault)[146]
+      protected 'message' => string 'Internal Server Error' (length=21)
+      private 'string' (Exception) => string '' (length=0)
+      protected 'code' => int 0
+      protected 'file' => string '/var/www/html/asgard_local/models/ConsumirWsdl.php' (length=50)
+      protected 'line' => int 46
+      private 'trace' (Exception) => 
+        array (size=16)
+          0 => 
+            array (size=4)
+              ...
+          1 => 
+            array (size=6)
+              ...
+          2 => 
+            array (size=6)
+              ...
+          3 => 
+            array (size=6)
+              ...
+          4 => 
+            array (size=4)
+              ...
+          5 => 
+            array (size=6)
+              ...
+          6 => 
+            array (size=6)
+              ...
+          7 => 
+            array (size=6)
+              ...
+          8 => 
+            array (size=4)
+              ...
+          9 => 
+            array (size=4)
+              ...
+          10 => 
+            array (size=6)
+              ...
+          11 => 
+            array (size=6)
+              ...
+          12 => 
+            array (size=6)
+              ...
+          13 => 
+            array (size=6)
+              ...
+          14 => 
+            array (size=6)
+              ...
+          15 => 
+            array (size=6)
+              ...
+      private 'previous' (Exception) => null
+      public 'faultstring' => string 'Internal Server Error' (length=21)
+      public 'faultcode' => string 'HTTP' (length=4)
+      public 'xdebug_message' => string '<tr><th align='left' bgcolor='#f57900' colspan="5"><span style='background-color: #cc0000; color: #fce94f; font-size: x-large;'>( ! )</span> SoapFault: Internal Server Error in /var/www/html/asgard_local/models/ConsumirWsdl.php on line <i>46</i></th></tr>
+<tr><th align='left' bgcolor='#e9b96e' colspan='5'>Call Stack</th></tr>
+<tr><th align='center' bgcolor='#eeeeec'>#</th><th align='left' bgcolor='#eeeeec'>Time</th><th align='left' bgcolor='#eeeeec'>Memory</th><th align='left' bgcolor='#eeeeec'>Function</th'... (length=6330)
+
+
+
+
+public '__last_request' => string '
+<?xml version="1.0" encoding="UTF-8"?>
+	<env:Envelope xmlns:env="http://www.w3.org/2003/05/soap-envelope" xmlns:ns1="urn:Educativa/Aula/">
+		<env:Body>
+			<ns1:autenticar_usuario/>
+			<param1>ea69961f030c7918d239e299510f260a</param1>
+		</env:Body>
+	</env:Envelope>
+
+SIMON SE ENVIA ASI
+<env:Envelope xmlns:env="http://www.w3.org/2003/05/soap-envelope" xmlns:ns1="urn:Educativa/Aula/">
+	<env:Body>
+		<ns1:autenticar_usuario/><param1>ea69961f030c7918d239e299510f260a</param1>
+	</env:Body></env:Envelope>
+
+
+$$$$$$$$$$$$$$$$$$
+
+create table if not exists `registro_pago_factura` (
+  `rpfa_id` bigint(20) not null auto_increment primary key,     
+  `fpag_id` bigint(20) null, 
+  `sins_id` bigint(20) null,  
+  `rpfa_num_solicitud` varchar(10) null, 
+  `rpfa_valor_documento` double not null,
+  `rpfa_fecha_documento` timestamp null default null,
+  `rpfa_numero_documento` varchar(50) not null, 
+  `rpfa_imagen` varchar(100) null,  
+  `rpfa_observacion` text null,
+  `rpfa_revisado` varchar(2) not null,     
+  `rpfa_fecha_transaccion` timestamp null, 
+  `rpfa_usuario_transaccion` bigint(20) not null,
+  `rpfa_codigo_autorizacion` varchar(10) null,
+  `rpfa_estado` varchar(1) not null,   
+  `rpfa_fecha_creacion` timestamp not null default current_timestamp,
+  `rpfa_fecha_modificacion` timestamp null default null,
+  `rpfa_estado_logico` varchar(1) not null,
+  foreign key (fpag_id) references `forma_pago` (fpag_id)
+);
+
+
+
+
+
+
+
+
+
