@@ -88,9 +88,9 @@ INSERT INTO `objeto_modulo` (`omod_id`, `mod_id`, `omod_padre_id`, `omod_nombre`
 (68, 2, 66, 'Nuevo Oportunidad', 'A', '0', '', '', '', 'admision/oportunidades/newoportunidadxcontacto', 1, '1', 'oportunidad', '1', '2018-09-18 01:03:59', NULL, '1'),
 (69, 2, 67, 'Guardar Oportunidad', 'A', '0', '', '', '', 'admision/oportunidades/save', 1, '1', 'oportunidad', '1', '2018-09-18 01:08:29', NULL, '1'),
 (70, 2, 65, 'Ver Oportunidad', 'S', '0', '', '', '', 'admision/oportunidades/view', 1, '0', 'oportunidad', '1', '2018-09-18 01:10:55', NULL, '1'),
-(71, 2, 65, 'Editar Oportunidad', 'S', '0', '', '', '', 'admision/oportunidades/edit', 1, '0', 'oportunidad', '1', '2018-09-18 01:13:20', NULL, '1'),
-(72, 2, 69, 'Editar Oportunidad', 'A', '0', '', '', '', 'admision/oportunidades/edit', 1, '1', 'oportunidad', '1', '2018-09-18 01:15:00', NULL, '1'),
-(73, 2, 70, 'Actualizar Oportunidad', 'A', '0', '', '', '', 'admision/oportunidades/update', 1, '1', 'oportunidad', '1', '2018-09-18 01:16:57', NULL, '1'),
+(71, 2, 70, 'Editar Oportunidad', 'S', '0', '', '', '', 'admision/oportunidades/edit', 1, '0', 'oportunidad', '1', '2018-09-18 01:13:20', NULL, '1'),
+(72, 2, 70, 'Editar Oportunidad', 'A', '0', '', '', '', 'admision/oportunidades/edit', 1, '1', 'oportunidad', '1', '2018-09-18 01:15:00', NULL, '1'),
+(73, 2, 71, 'Actualizar Oportunidad', 'A', '0', '', '', '', 'admision/oportunidades/update', 1, '1', 'oportunidad', '1', '2018-09-18 01:16:57', NULL, '1'),
 -- Actividades
 (74, 2, 66, 'Actividades por Oportunidad', 'S', '0', '', '', '', 'admision/actividades/listaractividadxoportunidad', 1, '0', 'contacto', '1', '2018-09-21 00:00:30', NULL, '1'),
 (75, 2, 74, 'Crear Actividad', 'S', '0', '', '', '', 'admision/actividades/newactividad', 1, '0', 'contacto', '1', '2018-09-21 00:03:04', NULL, '1'),
