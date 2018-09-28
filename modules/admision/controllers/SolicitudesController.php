@@ -726,40 +726,40 @@ class SolicitudesController extends \app\components\CController {
             if (isset($data["arc_doc_titulo"]) && $data["arc_doc_titulo"] != "") {
                 $arrIm = explode(".", basename($data["arc_doc_titulo"]));
                 $typeFile = strtolower($arrIm[count($arrIm) - 1]);
-                $titulo_archivo = Yii::$app->params["documentFolder"] . "solicitudinscripcion/" . $per_id . "/doc_titulo_per_" . $per_id . "." . $typeFile;
-                $titulo_archivo = DocumentoAdjuntar::addLabelTimeDocumentos($sins_id, $titulo_archivo, $timeSt);
+                $titulo_archivoOld = Yii::$app->params["documentFolder"] . "solicitudinscripcion/" . $per_id . "/doc_titulo_per_" . $per_id . "." . $typeFile;
+                $titulo_archivo = DocumentoAdjuntar::addLabelTimeDocumentos($sins_id, $titulo_archivoOld, $timeSt);
                 if ($titulo_archivo === false)
                     throw new Exception('Error doc Titulo no renombrado.');
             }
             if (isset($data["arc_doc_dni"]) && $data["arc_doc_dni"] != "") {
                 $arrIm = explode(".", basename($data["arc_doc_dni"]));
                 $typeFile = strtolower($arrIm[count($arrIm) - 1]);
-                $dni_archivo = Yii::$app->params["documentFolder"] . "solicitudinscripcion/" . $per_id . "/doc_dni_per_" . $per_id . "." . $typeFile;
-                $dni_archivo = DocumentoAdjuntar::addLabelTimeDocumentos($sins_id, $dni_archivo, $timeSt);
+                $dni_archivoOld = Yii::$app->params["documentFolder"] . "solicitudinscripcion/" . $per_id . "/doc_dni_per_" . $per_id . "." . $typeFile;
+                $dni_archivo = DocumentoAdjuntar::addLabelTimeDocumentos($sins_id, $dni_archivoOld, $timeSt);
                 if ($dni_archivo === false)
                     throw new Exception('Error doc Dni no renombrado.');
             }
             if (isset($data["arc_doc_certvota"]) && $data["arc_doc_certvota"] != "") {
                 $arrIm = explode(".", basename($data["arc_doc_certvota"]));
                 $typeFile = strtolower($arrIm[count($arrIm) - 1]);
-                $certvota_archivo = Yii::$app->params["documentFolder"] . "solicitudinscripcion/" . $per_id . "/doc_certvota_per_" . $per_id . "." . $typeFile;
-                $certvota_archivo = DocumentoAdjuntar::addLabelTimeDocumentos($sins_id, $certvota_archivo, $timeSt);
+                $certvota_archivoOld = Yii::$app->params["documentFolder"] . "solicitudinscripcion/" . $per_id . "/doc_certvota_per_" . $per_id . "." . $typeFile;
+                $certvota_archivo = DocumentoAdjuntar::addLabelTimeDocumentos($sins_id, $certvota_archivoOld, $timeSt);
                 if ($certvota_archivo === false)
                     throw new Exception('Error doc certificado vot. no renombrado.');
             }
             if (isset($data["arc_doc_foto"]) && $data["arc_doc_foto"] != "") {
                 $arrIm = explode(".", basename($data["arc_doc_foto"]));
                 $typeFile = strtolower($arrIm[count($arrIm) - 1]);
-                $foto_archivo = Yii::$app->params["documentFolder"] . "solicitudinscripcion/" . $per_id . "/doc_foto_per_" . $per_id . "." . $typeFile;
-                $foto_archivo = DocumentoAdjuntar::addLabelTimeDocumentos($sins_id, $foto_archivo, $timeSt);
+                $foto_archivoOld = Yii::$app->params["documentFolder"] . "solicitudinscripcion/" . $per_id . "/doc_foto_per_" . $per_id . "." . $typeFile;
+                $foto_archivo = DocumentoAdjuntar::addLabelTimeDocumentos($sins_id, $foto_archivoOld, $timeSt);
                 if ($foto_archivo === false)
                     throw new Exception('Error doc Foto no renombrado.');
             }
             if (isset($data["arc_doc_beca"]) && $data["arc_doc_beca"] != "") {
                 $arrIm = explode(".", basename($data["arc_doc_beca"]));
                 $typeFile = strtolower($arrIm[count($arrIm) - 1]);
-                $beca_archivo = Yii::$app->params["documentFolder"] . "solicitudinscripcion/" . $per_id . "/doc_beca_per_" . $per_id . "." . $typeFile;
-                $beca_archivo = DocumentoAdjuntar::addLabelTimeDocumentos($sins_id, $beca_archivo, $timeSt);
+                $beca_archivoOld = Yii::$app->params["documentFolder"] . "solicitudinscripcion/" . $per_id . "/doc_beca_per_" . $per_id . "." . $typeFile;
+                $beca_archivo = DocumentoAdjuntar::addLabelTimeDocumentos($sins_id, $beca_archivoOld, $timeSt);
                 if ($beca_archivo === false)
                     throw new Exception('Error doc Beca no renombrado.');
             }
