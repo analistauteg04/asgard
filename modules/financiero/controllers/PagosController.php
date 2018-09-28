@@ -13,6 +13,11 @@ use app\modules\admision\models\Interesado;
 use yii\helpers\Url;
 use yii\base\Exception;
 use yii\base\Security;
+use app\modules\admision\Module as admision;
+use app\modules\academico\Module as academico;
+
+admision::registerTranslations();
+academico::registerTranslations();
 
 class PagosController extends \app\components\CController {
 
@@ -50,7 +55,7 @@ class PagosController extends \app\components\CController {
 
     public function actionCargardocpagos() {
         //$ccar_id = base64_decode($_GET["ids"]);
-        $ccar_id = isset($_GET['ids']) ? base64_decode($_GET['ids']) : 1;//NULL
+        $ccar_id = isset($_GET['ids']) ? base64_decode($_GET['ids']) : 1; //NULL
         $model_pag = new OrdenPago();
         $arr_forma_pago = $model_pag->formaPago('2');
         $resp_doc = $model_pag->listarDocumento($ccar_id);
@@ -439,6 +444,42 @@ class PagosController extends \app\components\CController {
         ]);
     }
 
+    public function actionExpexcel() {
+        ini_set('memory_limit', '256M');
+        $content_type = Utilities::mimeContentType("xls");
+        $nombarch = "Report-" . date("YmdHis") . ".xls";
+        header("Content-Type: $content_type");
+        header("Content-Disposition: attachment;filename=" . $nombarch . ".xls");
+        header('Cache-Control: max-age=0');
+        $colPosition = array("C", "D", "E", "F", "G", "H", "I", "J");
+        $arrData = array();
+        $arrHeader = array(
+            Yii::t("formulario", "Request #"),
+            admision::t("Solicitudes", "Application date"),
+            Yii::t("formulario", "DNI 1"),
+            Yii::t("formulario", "First Names"),
+            Yii::t("formulario", "Last Names"),
+            Yii::t("formulario", "Academic unit"),
+            Yii::t("solicitud_ins", "Income Method"),
+            Yii::t("formulario", "Status"),
+        );
+        $data = Yii::$app->request->get();
+        $arrSearch["search"] = $data["search"];
+        $arrSearch["f_ini"] = $data["f_ini"];
+        $arrSearch["f_fin"] = $data["f_fin"];
+        $arrSearch["f_estado"] = $data["f_estado"];
+        //$arrData = array();
+        $model_pag = new OrdenPago();
+        if (empty($arrSearch)) {
+            $arrData = $model_pag->listarPagoscargadosexcel(array(), true);
+        } else {
+            $arrData = $model_pag->listarPagoscargadosexcel($arrSearch, true);
+        }
+        $nameReport = yii::t("formulario", "Application Reports");
+        Utilities::generarReporteXLS($nombarch, $nameReport, $arrHeader, $arrData, $colPosition);
+        exit;
+    }
+
     public function actionIndexadm() {
         $per_id = @Yii::$app->session->get("PB_iduser");
         $model_interesado = new Interesado();
@@ -504,40 +545,6 @@ class PagosController extends \app\components\CController {
         ]);
     }
 
-    public function actionExpexcel() {
-        $per_id = @Yii::$app->session->get("PB_perid");
-        $data = Yii::$app->request->get();
-        $per_ids = base64_decode($data['ids']);
-        $arrSearch["search"] = $data["search"];
-        $arrSearch["f_ini"] = $data["f_ini"];
-        $arrSearch["f_fin"] = $data["f_fin"];
-        $arrData = array();
-        $model_pag = new OrdenPago();
-        if (empty($per_ids)) {  //vista para el interesado
-            $rol = 1;
-            $arrData = $model_pag->listarSolicitud($per_id, null, $rol, $arrSearch, true);
-        } else {   //vista para el jefe o agente.
-            $rol = 0;
-            $arrData = $model_pag->listarSolicitud($per_ids, null, $rol, $arrSearch, true);
-        }
-
-        $nombarch = "ControlpagosReport-" . date("YmdHis");
-        $content_type = Utilities::mimeContentType("xls");
-        header("Content-Type: $content_type");
-        header("Content-Disposition: attachment;filename=" . $nombarch . ".xls");
-        header('Cache-Control: max-age=0');
-        $arrHeader = array(
-            Yii::t("formulario", "Request #"),
-            Yii::t("solicitud_ins", "Application date"),
-            Yii::t("solicitud_ins", "Income Method"),
-            Yii::t("formulario", "Status"),
-            "Pago");
-        $nameReport = yii::t("formulario", "Control Payments");
-        $colPosition = array("C", "D", "E", "F", "G", "H", "I", "J", "K", "L");
-        Utilities::generarReporteXLS($nombarch, $nameReport, $arrHeader, $arrData, $colPosition);
-        return;
-    }
-    
     public function actionListarpagosolicitud() {
         $per_id = Yii::$app->session->get("PB_perid");
         //  $per_ids = base64_decode($_GET['ids']);
@@ -549,23 +556,23 @@ class PagosController extends \app\components\CController {
             $arrSearch["f_fin"] = $data['f_fin'];
             $arrSearch["search"] = $data['search'];
             //if (empty($per_ids)) {  //vista para el interesado  
-                $rol = 1;
-                $resp_pago = $model_pag->listarSolicitud($sol_id, null, $rol, $arrSearch);
-           /* } else {
-                $rol = 0;
-                $resp_pago = $model_pag->listarSolicitud($sol_id, null, $rol, $arrSearch);
-            }*/
+            $rol = 1;
+            $resp_pago = $model_pag->listarSolicitud($sol_id, null, $rol, $arrSearch);
+            /* } else {
+              $rol = 0;
+              $resp_pago = $model_pag->listarSolicitud($sol_id, null, $rol, $arrSearch);
+              } */
             return $this->renderPartial('_listarpagosolicitud_grid', [
                         "model" => $resp_pago,
             ]);
         } else {
-           // if (empty($per_ids)) {  //vista para el interesado  
-                $rol = 1;
-                $resp_pago = $model_pag->listarSolicitud($sol_id, null, $rol);
-            /*} else {
-                $rol = 0;
-                $resp_pago = $model_pag->listarSolicitud($sol_id, null, $rol);
-            }*/
+            // if (empty($per_ids)) {  //vista para el interesado  
+            $rol = 1;
+            $resp_pago = $model_pag->listarSolicitud($sol_id, null, $rol);
+            /* } else {
+              $rol = 0;
+              $resp_pago = $model_pag->listarSolicitud($sol_id, null, $rol);
+              } */
         }
         //verificar rol de la persona que esta en sesión
         $resp_rol = $model_pag->encuentraRol($per_id);
@@ -584,27 +591,27 @@ class PagosController extends \app\components\CController {
     public function actionUpdate() {
         
     }
-    
+
     public function actionCargardocfact() {
         $mod_cargapago = new OrdenPago();
-        $sins_id = isset($_GET['ids']) ? base64_decode($_GET['ids']) : 1;//NULL
-        $data = null;        
+        $sins_id = isset($_GET['ids']) ? base64_decode($_GET['ids']) : 1; //NULL
+        $data = null;
         if (Yii::$app->request->isAjax) {
             $data = Yii::$app->request->get();
             if (isset($data["op"]) && $data["op"] == '1') {
                 
             }
         }
-        $rowData=$mod_cargapago->consultarInteresadoPersona($sins_id);
-        return $this->render('cargardocfact', [                    
-            "sins_id" => $sins_id,
-            "per_id" =>  isset($rowData[0]['per_id']) ? $rowData[0]['per_id'] :0,
-            "opag_total" =>  isset($rowData[0]['opag_total']) ? $rowData[0]['opag_total'] :0,
+        $rowData = $mod_cargapago->consultarInteresadoPersona($sins_id);
+        return $this->render('cargardocfact', [
+                    "sins_id" => $sins_id,
+                    "per_id" => isset($rowData[0]['per_id']) ? $rowData[0]['per_id'] : 0,
+                    "opag_total" => isset($rowData[0]['opag_total']) ? $rowData[0]['opag_total'] : 0,
         ]);
     }
-    
-    public function actionSavefactura() {        
-        $modcargapago = new OrdenPago();       
+
+    public function actionSavefactura() {
+        $modcargapago = new OrdenPago();
         $rowData = $modcargapago->consultarInteresadoPersona($sins_id);
         if (Yii::$app->request->isAjax) {
             $data = Yii::$app->request->post();
@@ -617,7 +624,7 @@ class PagosController extends \app\components\CController {
                 $files = $_FILES[key($_FILES)];
                 $arrIm = explode(".", basename($files['name']));
                 $typeFile = strtolower($arrIm[count($arrIm) - 1]);
-                $dirFileEnd = Yii::$app->params["documentFolder"] . "facturas/" . $data["name_perid"]  . "/" . $data["name_file"] . "." . $typeFile;
+                $dirFileEnd = Yii::$app->params["documentFolder"] . "facturas/" . $data["name_perid"] . "/" . $data["name_file"] . "." . $typeFile;
                 $status = Utilities::moveUploadFile($files['tmp_name'], $dirFileEnd);
                 if ($status) {
                     return true;
@@ -625,7 +632,7 @@ class PagosController extends \app\components\CController {
                     echo json_encode(['error' => Yii::t("notificaciones", "Error to process File {file}. Try again.", ['{file}' => basename($files['name'])])]);
                     return;
                 }
-            }            
+            }
             if ($data["procesar_file"]) {
                 $carga_archivo = $modcargapago->insertarDtosFactDoct($data);
                 if ($carga_archivo['status']) {
@@ -645,35 +652,33 @@ class PagosController extends \app\components\CController {
             }
 
             return;
-        }else {
+        } else {
             return $this->render('cargarleads', []);
         }
-        
     }
+
     public function actionDescargafactura() {
         $nombreZip = "facturas_" . time();
         $content_type = Utilities::mimeContentType($nombreZip . ".zip");
         header("Content-Type: $content_type");
         header("Content-Disposition: attachment;filename=" . $nombreZip . ".zip");
         header('Cache-Control: max-age=0');
-        $sins_id = isset($_GET['ids']) ? base64_decode($_GET['ids']) : 1;//NULL
-        //$ruta = isset($_GET['ruta']) ? base64_decode($_GET['ruta']) : 1;//NULL
-        //Utilities::putMessageLogFile($ruta);
-        $ruta= OrdenPago::consultarRutaFile($sins_id);
-       
-        $Path=Yii::$app->basePath ."/uploads/" .$ruta;
+        $sins_id = isset($_GET['ids']) ? base64_decode($_GET['ids']) : 1; //NULL
+        $ruta = OrdenPago::consultarRutaFile($sins_id);
+
+        $Path = Yii::$app->basePath . "/uploads/" . $ruta;
         Utilities::putMessageLogFile($Path);
 
         // se deben zippear 2 files el xml y el pdf
-        /*$arr_files = array(
-            array("ruta" => Yii::$app->basePath . "/uploads/ficha/silueta_default.png",
-                "name" => basename(Yii::$app->basePath . "/uploads/ficha/silueta_default.png")),
-            array("ruta" => Yii::$app->basePath . "/uploads/ficha/Silueta-opc-4.png",
-                "name" => basename(Yii::$app->basePath . "/uploads/ficha/Silueta-opc-4.png")),
-        );*/
+        /* $arr_files = array(
+          array("ruta" => Yii::$app->basePath . "/uploads/ficha/silueta_default.png",
+          "name" => basename(Yii::$app->basePath . "/uploads/ficha/silueta_default.png")),
+          array("ruta" => Yii::$app->basePath . "/uploads/ficha/Silueta-opc-4.png",
+          "name" => basename(Yii::$app->basePath . "/uploads/ficha/Silueta-opc-4.png")),
+          ); */
         $arr_files = array(
-            array("ruta" => Yii::$app->basePath . "/uploads/" .$ruta,
-                "name" => basename(Yii::$app->basePath . "/uploads/" .$ruta)),            
+            array("ruta" => Yii::$app->basePath . "/uploads/" . $ruta,
+                "name" => basename(Yii::$app->basePath . "/uploads/" . $ruta)),
         );
         $tmpDir = Utilities::zipFiles($nombreZip, $arr_files);
         $file = file_get_contents($tmpDir);
@@ -681,7 +686,44 @@ class PagosController extends \app\components\CController {
         echo $file;
         exit();
     }
- 
-
+    
+    
+    
+    public function actionExpexcelpagos() {
+        ini_set('memory_limit', '256M');
+        $content_type = Utilities::mimeContentType("xls");
+        $nombarch = "Report-" . date("YmdHis") . ".xls";
+        header("Content-Type: $content_type");
+        header("Content-Disposition: attachment;filename=" . $nombarch . ".xls");
+        header('Cache-Control: max-age=0');
+        $colPosition = array("C", "D", "E", "F", "G", "H", "I", "J", "K");
+        
+        $arrHeader = array(
+            admision::t("Solicitudes", "Request #"),
+            admision::t("Solicitudes", "Application date"),
+            Yii::t("formulario", "DNI 1"),
+            Yii::t("formulario", "First Names"),
+            Yii::t("formulario", "Last Names"),
+            academico::t("Academico", "Academic unit"),
+            academico::t("Academico", "Income Method"),
+            Yii::t("formulario", "Status"),
+        );
+        $data = Yii::$app->request->get();
+        $arrSearch["search"] = $data["search"];
+        $arrSearch["f_ini"] = $data["f_ini"];
+        $arrSearch["f_fin"] = $data["f_fin"];
+        $arrSearch["f_estado"] = $data["f_estado"];
+        
+        $arrData = array();
+        $model_pag = new OrdenPago();
+        if (empty($arrSearch)) {
+            $arrData = $model_pag->listarPagosolicitudExcel(array(), true);                       
+        } else {
+            $arrData = $model_pag->listarPagosolicitudExcel($arrSearch, true);
+        }
+        $nameReport = yii::t("formulario", "Application Reports");
+        Utilities::generarReporteXLS($nombarch, $nameReport, $arrHeader, $arrData, $colPosition);
+        exit;
+    }
 
 }

@@ -71,14 +71,6 @@ $(document).ready(function () {
     $('#btn_buscarContacto').click(function () {
         actualizarGridContacto();
     });
-
-    $('#btn_cargar').click(function () {
-        cargarLeads('LEADS');
-    });
-    $('#btn_cargarLotes').click(function () {
-        cargarLeads('LOTES');
-    });
-
 });
 
 function actualizarGridContacto() {
@@ -92,7 +84,17 @@ function actualizarGridContacto() {
         setTimeout(hideLoadingPopup, 2000);
     }
 }
+function loadLeads(){
+    window.location.href = $('#txth_base').val() + "/admision/contactos/cargarleads";
+}
 
+function loadFile(){
+    cargarLeads('LEADS');
+}
+
+function loadCall(){
+    cargarLeads('LOTES');
+}
 function edit() {
     var codigo = $('#txth_pcon_id').val();
     var tper_id = $('#txth_tper_id').val();

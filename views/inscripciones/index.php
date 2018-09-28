@@ -76,10 +76,10 @@ $this->title = 'Formulario de Pre-Inscripción';
     <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
         <div class="form-group">
             <label for="txt_celular" class="col-lg-3 col-md-3 col-sm-3 col-xs-3 control-label"><?= Yii::t("formulario", "CellPhone") ?> <span class="text-danger">*</span></label>		
-            <div class="col-lg-3 col-md-3 col-sm-3 col-xs-3"> 
+            <!--<div class="col-lg-3 col-md-3 col-sm-3 col-xs-3"> 
                 <input type="text" class="form-control" id="txt_codigoarea" data-type="number" value ="+593" disabled = "true " data-keydown="true">                
-            </div>
-            <div class="col-lg-6 col-md-6 col-sm-6 col-xs-6">
+            </div>-->
+            <div class="col-lg-9 col-md-9 col-sm-9 col-xs-9">
                 <input type="text" class="form-control PBvalidation" id="txt_celular" data-type="number" data-keydown="true" placeholder="<?= Yii::t("formulario", "CellPhone") ?>">
             </div>
         </div>

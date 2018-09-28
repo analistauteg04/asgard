@@ -135,16 +135,6 @@ $(document).ready(function () {
     $('#btn_buscarPagoscargados').click(function () {
         actualizarGridPagosCargados();
     });
-    $('#btn_cargar').click(function () {
-        //Verificamos que el Documento Ingresado sea Ingual al valor Generado
-        if($('#txth_opag_total').val()==$('#txt_rpfa_valor_documento').val()){
-             cargarFactura();
-        }else{
-             showAlert("NO_OK", "error", {"wtmessage": "Valor de factura es incorrecto", "title": "Observaciones"});
-        }
-    });
-
-    
 });
 
 function divComentario(data) {
@@ -164,13 +154,22 @@ function divComentario(data) {
     option_arr += '</div>';
     showAlert("OK", "info", {"wtmessage": option_arr, "title": "Observaciones"});
 }
-
+function saveBills(){
+    //Verificamos que el Documento Ingresado sea Ingual al valor Generado
+    if($('#txth_opag_total').val()==$('#txt_rpfa_valor_documento').val()){
+         cargarFactura();
+    }else{
+         showAlert("NO_OK", "error", {"wtmessage": "Valor de factura es incorrecto", "title": "Observaciones"});
+    }
+}
 function exportExcel() {
-    var search = $('#txt_buscarData').val();
+    var search = $('#txt_buscarDataPago').val();
     var f_ini = $('#txt_fecha_ini').val();
     var f_fin = $('#txt_fecha_fin').val();
-    window.location.href = $('#txth_base').val() + "/financiero/pagos/expexcel?search=" + search + "&f_ini=" + f_ini + "&f_fin=" + f_fin;
+    var f_estado = $('#cmb_estado').val();
+    window.location.href = $('#txth_base').val() + "/financiero/pagos/expexcel?search=" + search + "&f_ini=" + f_ini + "&f_fin=" + f_fin + "&f_estado=" + f_estado;
 }
+
 function enviardata(){
     var arrParams = new Object();
         var link = $('#txth_base').val() + "/financiero/pagos/savecarga";
@@ -398,4 +397,12 @@ function cargarFactura() {
             }, 3000);
         }, true);
     }
+}
+
+function exportExcelPagos() {
+    var search = $('#txt_buscarDataPago').val();
+    var f_ini = $('#txt_fecha_ini').val();
+    var f_fin = $('#txt_fecha_fin').val();
+    var f_estado = $('#cmb_estado').val();
+    window.location.href = $('#txth_base').val() + "/financiero/pagos/expexcelpagos?search=" + search + "&f_ini=" + f_ini + "&f_fin=" + f_fin + "&f_estado=" + f_estado;
 }

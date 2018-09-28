@@ -1738,5 +1738,80 @@ class Interesado extends \app\modules\admision\components\CActiveRecord {
         $resultData = $comando->queryOne();
         return $resultData;
     }
+    
+    /**
+     * Function consultarReportAspirantes.
+     * @author  Grace Viteri <analistadesarrollo01@uteg.edu.ec>
+     * @param     
+     * @return  
+     */
+    public function consultarReportAspirantes($arrFiltro = array(), $onlyData = false) {
+        $con = \Yii::$app->db_captacion;
+        $con1 = \Yii::$app->db_asgard;
+        $estado = 1;
+        if (isset($arrFiltro) && count($arrFiltro) > 0) {
+            $str_search = "(per.per_pri_nombre like :search OR ";
+            $str_search .= "per.per_seg_nombre like :search OR ";
+            $str_search .= "per.per_pri_apellido like :search OR ";
+            $str_search .= "per.per_pasaporte like :search OR ";
+            $str_search .= "per.per_cedula like :search) AND ";
+            if ($arrFiltro['company'] != "" && $arrFiltro['company'] > 0) {
+                $str_search .= "iemp.emp_id  = :emp_id AND ";
+            }
+        }
+        $sql = "
+                SELECT          
+                    ifnull(per.per_cedula,per.per_pasaporte) as DNI,
+                    concat(ifnull(per.per_pri_nombre,''),' ',ifnull(per.per_seg_nombre,'')) as nombres,
+                    concat(ifnull(per.per_pri_apellido,''),' ',ifnull(per.per_seg_apellido,'')) as apellidos,
+                    emp.emp_nombre_comercial as empresa                  
+                FROM    " . $con->dbname . ".interesado inte
+                        join " . $con1->dbname . ".persona as per on inte.per_id=per.per_id
+                        join " . $con->dbname . ".interesado_empresa as iemp on iemp.int_id=inte.int_id
+                        join " . $con1->dbname . ".empresa as emp on emp.emp_id=iemp.emp_id
+                WHERE $str_search
+                    inte.int_estado_logico=:estado AND
+                    inte.int_estado=:estado AND                    
+                    per.per_estado_logico=:estado AND						
+                    per.per_estado=:estado AND
+                    iemp.iemp_estado_logico=:estado AND						
+                    iemp.iemp_estado=:estado AND
+                    emp.emp_estado_logico=:estado AND						
+                    emp.emp_estado=:estado
+                ORDER BY inte.int_fecha_creacion DESC
+                ";
+        $comando = $con->createCommand($sql);
+        $comando->bindParam(":estado", $estado, \PDO::PARAM_STR);
+        if (isset($arrFiltro) && count($arrFiltro) > 0) {
+            $search_cond = "%" . $arrFiltro["search"] . "%";
+            $empresa = $arrFiltro["company"];
+            $comando->bindParam(":search", $search_cond, \PDO::PARAM_STR);
+            if ($arrFiltro['company'] != "" && $arrFiltro['company'] > 0) {
+                $comando->bindParam(":emp_id", $empresa, \PDO::PARAM_STR);
+            }
+        }
+        $resultData = $comando->queryAll();
+        $dataProvider = new ArrayDataProvider([
+            'key' => 'id',
+            'allModels' => $resultData,
+            'pagination' => [
+                'pageSize' => Yii::$app->params["pageSize"],
+            ],
+            'sort' => [
+                'attributes' => [
+                    'DNI',
+                    'nombres',                    
+                    'apellidos',                    
+                    'empresa',
+                ],
+            ],
+        ]);
+
+        if ($onlyData) {
+            return $resultData;
+        } else {
+            return $dataProvider;
+        }
+    }
 
 }
