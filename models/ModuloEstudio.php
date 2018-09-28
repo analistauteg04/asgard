@@ -143,7 +143,8 @@ class ModuloEstudio extends \yii\db\ActiveRecord {
                     mes.mest_estado_logico= :estado AND
                     mes.mest_estado= :estado AND
                     mee.meem_estado_logico = :estado AND
-                    mee.meem_estado = :estado";
+                    mee.meem_estado = :estado
+                    ORDER BY name asc";
 
         $comando = $con->createCommand($sql);
         $comando->bindParam(":estado", $estado, \PDO::PARAM_STR);

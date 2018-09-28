@@ -763,7 +763,8 @@ class Oportunidad extends \app\modules\admision\components\CActiveRecord {
                         eac.eaca_estado_logico=:estado AND
                         eac.eaca_estado=:estado AND
                         mcn.meun_estado_logico = :estado AND
-                        mcn.meun_estado = :estado";
+                        mcn.meun_estado = :estado
+                        ORDER BY name asc";
 
         $comando = $con->createCommand($sql);
         $comando->bindParam(":estado", $estado, \PDO::PARAM_STR);
