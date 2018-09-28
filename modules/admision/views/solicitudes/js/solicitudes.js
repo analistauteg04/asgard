@@ -427,12 +427,14 @@ function setComboDataselect(arr_data, element_id, texto) {
 }
 
 function exportExcel() {
-    var search = $('#txt_buscarData').val();
+    /*var search = $('#txt_buscarData').val();
     var modalidad = $('#cmb_modalidades option:selected').val();
     var carrera = $('#cmb_carreras option:selected').val();
     var f_ini = $('#txt_fecha_ini').val();
-    var f_fin = $('#txt_fecha_fin').val();
-    window.location.href = $('#txth_base').val() + "/solicitudinscripcion/expexcel?search=" + search + "&modalidad=" + modalidad + "&carrera=" + carrera + "&f_ini=" + f_ini + "&f_fin=" + f_fin;
+    var f_fin = $('#txt_fecha_fin').val();*/
+    //window.location.href = $('#txth_base').val() + "/admision/solicitudes/expexcel?search=" + search + "&modalidad=" + modalidad + "&carrera=" + carrera + "&f_ini=" + f_ini + "&f_fin=" + f_fin;
+   // window.location.href = $('#txth_base').val() + "/admision/solicitudes/export";
+   window.location.href = $('#txth_base').val() + "/admision/solicitudes/expexcel";
 }
 
 function actualizarGrid() {

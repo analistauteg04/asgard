@@ -326,7 +326,7 @@ class SolicitudInscripcion extends \app\modules\admision\components\CActiveRecor
             }
         }
         $sql = " 
-                    SELECT 
+                    SELECT
                         lpad(sins.sins_id,4,'0') as num_solicitud,
                         sins.sins_id,
                         sins.sins_fecha_solicitud as fecha_solicitud,

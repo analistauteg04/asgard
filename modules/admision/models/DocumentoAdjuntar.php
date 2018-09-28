@@ -85,7 +85,7 @@ class DocumentoAdjuntar extends \yii\db\ActiveRecord
         $con = \Yii::$app->db_captacion;
         $estado = 0;
 
-        $sql = "UPDATE solicitudins_documento 
+        $sql = "UPDATE ".\Yii::$app->db_captacion->dbname.".solicitudins_documento 
                 SET sdoc_estado = :estado 
                 WHERE sins_id = :id;";
 
