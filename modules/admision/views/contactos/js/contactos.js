@@ -84,6 +84,12 @@ function actualizarGridContacto() {
         setTimeout(hideLoadingPopup, 2000);
     }
 }
+function exportExcel() {
+    var search = $('#txt_buscarData').val();
+    var estado = $('#cmb_estadocontacto option:selected').val();     
+    window.location.href = $('#txth_base').val() + "/admision/contactos/expexcel?search=" + search + "&estado=" + estado;    
+}
+
 function loadLeads(){
     window.location.href = $('#txth_base').val() + "/admision/contactos/cargarleads";
 }

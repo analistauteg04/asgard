@@ -80,29 +80,26 @@ use Yii;
  * @property ConocimientoCanal $ccan
  * @property PersonaGestionContacto[] $personaGestionContactos
  */
-class PersonaGestion extends \app\modules\admision\components\CActiveRecord
-{
+class PersonaGestion extends \app\modules\admision\components\CActiveRecord {
+
     /**
      * {@inheritdoc}
      */
-    public static function tableName()
-    {
+    public static function tableName() {
         return 'persona_gestion';
     }
 
     /**
      * @return \yii\db\Connection the database connection used by this AR class.
      */
-    public static function getDb()
-    {
+    public static function getDb() {
         return Yii::$app->get('db_crm');
     }
 
     /**
      * {@inheritdoc}
      */
-    public function rules()
-    {
+    public function rules() {
         return [
             [['tper_id', 'econ_id', 'ccan_id', 'pges_estado_contacto', 'pges_usuario_ingreso', 'pges_estado', 'pges_estado_logico'], 'required'],
             [['tper_id', 'cser_id', 'car_id', 'etn_id', 'eciv_id', 'pai_id_nacimiento', 'pro_id_nacimiento', 'can_id_nacimiento', 'tsan_id', 'pai_id_domicilio', 'pro_id_domicilio', 'can_id_domicilio', 'pai_id_trabajo', 'pro_id_trabajo', 'can_id_trabajo', 'econ_id', 'ccan_id', 'pges_usuario_ingreso', 'pges_usuario_modifica'], 'integer'],
@@ -125,8 +122,7 @@ class PersonaGestion extends \app\modules\admision\components\CActiveRecord
     /**
      * {@inheritdoc}
      */
-    public function attributeLabels()
-    {
+    public function attributeLabels() {
         return [
             'pges_id' => 'Pges ID',
             'pges_codigo' => 'Pges Codigo',
@@ -191,43 +187,38 @@ class PersonaGestion extends \app\modules\admision\components\CActiveRecord
     /**
      * @return \yii\db\ActiveQuery
      */
-    public function getOportunidads()
-    {
+    public function getOportunidads() {
         return $this->hasMany(Oportunidad::className(), ['pges_id' => 'pges_id']);
     }
 
     /**
      * @return \yii\db\ActiveQuery
      */
-    public function getCser()
-    {
+    public function getCser() {
         return $this->hasOne(ConocimientoServicio::className(), ['cser_id' => 'cser_id']);
     }
 
     /**
      * @return \yii\db\ActiveQuery
      */
-    public function getEcon()
-    {
+    public function getEcon() {
         return $this->hasOne(EstadoContacto::className(), ['econ_id' => 'econ_id']);
     }
 
     /**
      * @return \yii\db\ActiveQuery
      */
-    public function getCcan()
-    {
+    public function getCcan() {
         return $this->hasOne(ConocimientoCanal::className(), ['ccan_id' => 'ccan_id']);
     }
 
     /**
      * @return \yii\db\ActiveQuery
      */
-    public function getPersonaGestionContactos()
-    {
+    public function getPersonaGestionContactos() {
         return $this->hasMany(PersonaGestionContacto::className(), ['pges_id' => 'pges_id']);
     }
-    
+
     /**
      * Function insertarPersonaGest
      * @author  Kleber Loayza <analistadesarrollo03@uteg.edu.ec>
@@ -302,14 +293,7 @@ class PersonaGestion extends \app\modules\admision\components\CActiveRecord
      * @param
      * @return
      */
-    public function insertarPersonaGestion($pges_codigo, $tper_id, $cser_id, $car_id, $pges_pri_nombre, $pges_seg_nombre, $pges_pri_apellido, 
-            $pges_seg_apellido, $pges_cedula, $pges_ruc, $pges_pasaporte, $etn_id, $eciv_id, $pges_genero, $pges_nacionalidad, 
-            $pai_id_nacimiento, $pro_id_nacimiento, $can_id_nacimiento, $pges_nac_ecuatoriano, $pges_fecha_nacimiento, $pges_celular, 
-            $pges_correo, $pges_foto, $tsan_id, $pges_domicilio_sector, $pges_domicilio_cpri, $pges_domicilio_csec, $pges_domicilio_num, 
-            $pges_domicilio_ref, $pges_domicilio_telefono, $pges_domicilio_celular2, $pai_id_domicilio, $pro_id_domicilio, $can_id_domicilio, 
-            $pges_trabajo_nombre, $pges_trabajo_direccion, $pges_trabajo_telefono, $pges_trabajo_ext, $pges_id_trabajo, $pro_id_trabajo, 
-            $can_id_trabajo, $econ_id, $ccan_id, $pges_razon_social, $pges_contacto_empresa, $pges_num_empleados, $telefono_empresa, 
-            $direccion, $cargo, $pges_usuario_ingreso) {
+    public function insertarPersonaGestion($pges_codigo, $tper_id, $cser_id, $car_id, $pges_pri_nombre, $pges_seg_nombre, $pges_pri_apellido, $pges_seg_apellido, $pges_cedula, $pges_ruc, $pges_pasaporte, $etn_id, $eciv_id, $pges_genero, $pges_nacionalidad, $pai_id_nacimiento, $pro_id_nacimiento, $can_id_nacimiento, $pges_nac_ecuatoriano, $pges_fecha_nacimiento, $pges_celular, $pges_correo, $pges_foto, $tsan_id, $pges_domicilio_sector, $pges_domicilio_cpri, $pges_domicilio_csec, $pges_domicilio_num, $pges_domicilio_ref, $pges_domicilio_telefono, $pges_domicilio_celular2, $pai_id_domicilio, $pro_id_domicilio, $can_id_domicilio, $pges_trabajo_nombre, $pges_trabajo_direccion, $pges_trabajo_telefono, $pges_trabajo_ext, $pges_id_trabajo, $pro_id_trabajo, $can_id_trabajo, $econ_id, $ccan_id, $pges_razon_social, $pges_contacto_empresa, $pges_num_empleados, $telefono_empresa, $direccion, $cargo, $pges_usuario_ingreso) {
         $con = \Yii::$app->db_crm;
 
         $trans = $con->getTransaction(); // se obtiene la transacción actual
@@ -324,14 +308,14 @@ class PersonaGestion extends \app\modules\admision\components\CActiveRecord
 
         $param_sql .= ", pges_estado_logico";
         $bdet_sql .= ", 1";
-        
+
         $param_sql .= ", pges_estado_contacto";
         $bdet_sql .= ", 1";
-        
+
         if (isset($pges_codigo)) {
             $param_sql .= ", pges_codigo";
             $bdet_sql .= ", :pges_codigo";
-        }        
+        }
         if (isset($tper_id)) {
             $param_sql .= ", tper_id";
             $bdet_sql .= ", :tper_id";
@@ -523,15 +507,15 @@ class PersonaGestion extends \app\modules\admision\components\CActiveRecord
         if (isset($cargo)) {
             $param_sql .= ", pges_cargo";
             $bdet_sql .= ", :pges_cargo";
-        } 
+        }
         if (isset($pges_usuario_ingreso)) {
             $param_sql .= ", pges_usuario_ingreso";
             $bdet_sql .= ", :pges_usuario_ingreso";
         }
-        
+
         try {
             $sql = "INSERT INTO " . $con->dbname . ".persona_gestion ($param_sql) VALUES($bdet_sql)";
-            $comando = $con->createCommand($sql);      
+            $comando = $con->createCommand($sql);
             if (isset($pges_codigo)) {
                 $comando->bindParam(':pges_codigo', $pges_codigo, \PDO::PARAM_STR);
             }
@@ -682,7 +666,7 @@ class PersonaGestion extends \app\modules\admision\components\CActiveRecord
             if (!empty((isset($pges_usuario_ingreso)))) {
                 $comando->bindParam(':pges_usuario_ingreso', $pges_usuario_ingreso, \PDO::PARAM_INT);
             }
-            
+
             $result = $comando->execute();
             if ($trans !== null)
                 $trans->commit();
@@ -956,7 +940,6 @@ class PersonaGestion extends \app\modules\admision\components\CActiveRecord
             if ($arrFiltro['estado'] != "" && $arrFiltro['estado'] > 0) {
                 $str_search .= " pg.econ_id = :estcontacto AND ";
             }
-            
         } else {
             $columnsAdd = "                
                 pg.pges_pri_nombre as pges_pri_nombre,
@@ -1000,7 +983,7 @@ class PersonaGestion extends \app\modules\admision\components\CActiveRecord
             if ($arrFiltro['estado'] != "" && $arrFiltro['estado'] > 0) {
                 $estcontacto = $arrFiltro["estado"];
                 $comando->bindParam(":estcontacto", $estcontacto, \PDO::PARAM_INT);
-            }          
+            }
         }
 
         $resultData = $comando->queryAll();
@@ -1158,12 +1141,12 @@ class PersonaGestion extends \app\modules\admision\components\CActiveRecord
      */
     public function consultarPerGesTemp($op) {
         $con = \Yii::$app->db_crm;
-        if($op=="LEADS"){
+        if ($op == "LEADS") {
             $sql = "SELECT * FROM " . $con->dbname . ".persona_gestion_tmp;";
-        }else{
+        } else {
             //PROCESO LOTES LOTES
             $sql = "SELECT * FROM " . $con->dbname . ".temporal_contactos LIMIT 100;";
-        }       
+        }
         $comando = $con->createCommand($sql);
         return $comando->queryAll();
     }
@@ -1174,11 +1157,11 @@ class PersonaGestion extends \app\modules\admision\components\CActiveRecord
      * @property integer car_id      
      * @return  
      */
-    public function insertarDtosPersonaGestion($emp_id,$tipoProceso) { 
-        $contError=0;
-        $Data = $this->consultarPerGesTemp($tipoProceso);   
-        $rawData = '';//array();
-        $mensError='';
+    public function insertarDtosPersonaGestion($emp_id, $tipoProceso) {
+        $contError = 0;
+        $Data = $this->consultarPerGesTemp($tipoProceso);
+        $rawData = ''; //array();
+        $mensError = '';
         $con = \Yii::$app->db_crm;
         $mod_gruprol = new GrupRol();
         $mod_oportunidad = new Oportunidad();
@@ -1191,27 +1174,27 @@ class PersonaGestion extends \app\modules\admision\components\CActiveRecord
         }
         try {
             //Obtener Datos Persona Admision
-            $per_id=@Yii::$app->session->get("PB_perid");
-            $idEmpresa=@Yii::$app->session->get("PB_idempresa");
-            $grol_id=$mod_gruprol->consultarIdUsuGrolEper($per_id, $idEmpresa);
+            $per_id = @Yii::$app->session->get("PB_perid");
+            $idEmpresa = @Yii::$app->session->get("PB_idempresa");
+            $grol_id = $mod_gruprol->consultarIdUsuGrolEper($per_id, $idEmpresa);
             //$padm_id=$mod_pergestion->consultarIdPersonaAdmision($per_id, $grol_id);
             //$padm_id=($padm_id!=0)?$padm_id:1;//Valor por Defecto en el Caso de que no Existe Persona Admision
             //-------------------------------            
-            $opo_codigo=intval($mod_oportunidad->consultarUltimoCodcrm())+1;
-            $pges_codigo=intval($mod_pergestion->consultarUltimoCodPerGest())+1;
+            $opo_codigo = intval($mod_oportunidad->consultarUltimoCodcrm()) + 1;
+            $pges_codigo = intval($mod_pergestion->consultarUltimoCodPerGest()) + 1;
             for ($i = 0; $i < sizeof($Data); $i++) {
                 //Verifico si Existe lOS datos en la tabla
-                $pges_id=PersonaGestion::existePersonaGestLeads($Data[$i]['pgest_correo'], $Data[$i]['pgest_numero']);
-                if ($pges_id==0) {
+                $pges_id = PersonaGestion::existePersonaGestLeads($Data[$i]['pgest_correo'], $Data[$i]['pgest_numero']);
+                if ($pges_id == 0) {
                     //if (!PersonaGestion::existePersonaGestLeads($Data[$i]['correo'], $Data[$i]['telefono'])) {
                     //Si no Existe lo inserta en la Tabla
-                    $nombre=$Data[$i]['pgest_nombre'];
-                    $telefono=$Data[$i]['pgest_numero'];
-                    $correo=$Data[$i]['pgest_correo'];
-                    $contacto=$Data[$i]['pgest_contacto'];
-                    $tper_id=1;//Por defecto Natural
-                    $econ_id=1;//=>En Contacto por defecto
-                    $pges_id = PersonaGestion::insertarPersonaGestionLeads($con,$pges_codigo,$tper_id,$nombre,$telefono,$correo, $contacto,$econ_id);
+                    $nombre = $Data[$i]['pgest_nombre'];
+                    $telefono = $Data[$i]['pgest_numero'];
+                    $correo = $Data[$i]['pgest_correo'];
+                    $contacto = $Data[$i]['pgest_contacto'];
+                    $tper_id = 1; //Por defecto Natural
+                    $econ_id = 1; //=>En Contacto por defecto
+                    $pges_id = PersonaGestion::insertarPersonaGestionLeads($con, $pges_codigo, $tper_id, $nombre, $telefono, $correo, $contacto, $econ_id);
                     $pges_codigo++;
                     if ($pges_id > 0) {
                         //-------------------------------------------
@@ -1232,31 +1215,31 @@ class PersonaGestion extends \app\modules\admision\components\CActiveRecord
                                 $tipoportunidad = 5;
                                 break;
                         }
-                    $padm_id=$agente['agente_id'];
+                        $padm_id = $agente['agente_id'];
                         //-------------------------------------------
                         //$pgco_id = $mod_oportunidad->insertarPersonaGestionContactoLeads($con, $pges_id,$Data[$i]);                        
-                        $opo_id = $mod_oportunidad->insertarOportunidadLeads($con,$opo_codigo,$emp_id,$pges_id,$padm_id,$Data[$i] );
+                        $opo_id = $mod_oportunidad->insertarOportunidadLeads($con, $opo_codigo, $emp_id, $pges_id, $padm_id, $Data[$i]);
                         $opo_codigo++;
                         if ($opo_id > 0) {
-                            $bact_id=$mod_oportunidad->insertarActividadLeads($con, $opo_id,$padm_id);
+                            $bact_id = $mod_oportunidad->insertarActividadLeads($con, $opo_id, $padm_id);
                         }
                     }
-                }else{
+                } else {
                     //Si existen en gestion Persona 
                     //$rawData[] = $Data[$i]['pgest_nombre'].'-'.$Data[$i]['pgest_correo'].'<br/>';                    
-                    $mensError .= 'Nombre: '.$Data[$i]['pgest_nombre'].' - '.$Data[$i]['pgest_correo'].'<br/>';
+                    $mensError .= 'Nombre: ' . $Data[$i]['pgest_nombre'] . ' - ' . $Data[$i]['pgest_correo'] . '<br/>';
                     $contError++;
                 }
             }
-            
-            
+
+
             if ($trans !== null)
                 $trans->commit();
-            
-            if($contError>0){
+
+            if ($contError > 0) {
                 $rawData = '<br/> Resumen de información No ingresada: <br/>';
                 $rawData .= $mensError;
-                $rawData .= 'TOTAL: '.$contError.' <br/>';
+                $rawData .= 'TOTAL: ' . $contError . ' <br/>';
             }
 
             $arroout["status"] = TRUE;
@@ -1276,7 +1259,7 @@ class PersonaGestion extends \app\modules\admision\components\CActiveRecord
             return $arroout;
         }
     }
-    
+
     /**
      * Function consulta el ultimo codigo de gestion generado. 
      * @author Byron Villacreses <developer@uteg.edu.ec>;
@@ -1311,15 +1294,15 @@ class PersonaGestion extends \app\modules\admision\components\CActiveRecord
         //`agente_atencion`,`fecha_atencion`,`tipo_oportunidad`,`estado_contacto`,`estado_oportunidad`,`fecha_siguiente_atencion`,`hora_siguiente_atencion`,
         //`fecha_tentativa_pago`,`observacion`,`motivo_oportunidad_perdida`,`otra_universidad`,`tipo_observacion`)
 
-        try {            
+        try {
             //Obtener Datos Persona Admision
-            $per_id=@Yii::$app->session->get("PB_perid");
-            $idEmpresa=@Yii::$app->session->get("PB_idempresa");
-            $grol_id=$mod_gruprol->consultarIdUsuGrolEper($per_id, $idEmpresa);
+            $per_id = @Yii::$app->session->get("PB_perid");
+            $idEmpresa = @Yii::$app->session->get("PB_idempresa");
+            $grol_id = $mod_gruprol->consultarIdUsuGrolEper($per_id, $idEmpresa);
             //$padm_id=$mod_pergestion->consultarIdPersonaAdmision($per_id, $grol_id);
             //$padm_id=($padm_id!=0)?$padm_id:1;//Valor por Defecto en el Caso de que no Existe Persona Admision
             //-------------------------------
-            
+
             $opo_codigo = intval($mod_oportunidad->consultarUltimoCodcrm()) + 1; //
             $pges_codigo = intval($mod_pergestion->consultarUltimoCodPerGest()) + 1; //
             for ($i = 0; $i < sizeof($Data); $i++) {
@@ -1332,23 +1315,23 @@ class PersonaGestion extends \app\modules\admision\components\CActiveRecord
                 $contacto = PersonaGestionTmp::consultarIdsConocimientoCanal($Data[$i]['medio_contacto_solicitado']);
                 $tper_id = $mod_persona->consultarTipoPersona($Data[$i]['tipo_cliente']);
                 $econ_id = $mod_estaCont->consultarIdsEstadoContacto($Data[$i]['estado_contacto']); //=>En Contacto por defecto 
-                $econ_id=($econ_id!=0)?$econ_id:1;//1 VALOR POR DEFECTO 
+                $econ_id = ($econ_id != 0) ? $econ_id : 1; //1 VALOR POR DEFECTO 
                 //Si No existe se crea y si existe se extrae el ID
                 //$pges_id = ($pges_id == 0) ? PersonaGestion::insertarPersonaGestionLeads($con, $pges_codigo, $tper_id, $nombre, $telefono, $correo, $contacto, $econ_id) : $pges_id;
-                if($pges_id == 0){
+                if ($pges_id == 0) {
                     //si no existe lo crea
-                    $pges_id=PersonaGestion::insertarPersonaGestionLeads($con, $pges_codigo, $tper_id, $nombre, $telefono, $correo, $contacto, $econ_id); 
+                    $pges_id = PersonaGestion::insertarPersonaGestionLeads($con, $pges_codigo, $tper_id, $nombre, $telefono, $correo, $contacto, $econ_id);
                     $pges_codigo++;
-                }                
-                
-                if ($pges_id > 0) {                                     
-                    $tove_id=($Data[$i]['tipo_oportunidad']!="")?$mod_tipOportVent->consultarIdsOporxUnidad($Data[$i]['tipo_oportunidad']):1;//se puede obtener a partir d ela unidad academica
+                }
+
+                if ($pges_id > 0) {
+                    $tove_id = ($Data[$i]['tipo_oportunidad'] != "") ? $mod_tipOportVent->consultarIdsOporxUnidad($Data[$i]['tipo_oportunidad']) : 1; //se puede obtener a partir d ela unidad academica
                     //$pgco_id = $mod_oportunidad->insertarPersonaGestionContactoLeads($con, $pges_id,$Data[$i]);                        
                     $eopo_id = $mod_estaOport->consultarIdsEstadOportunidad($Data[$i]['estado_oportunidad']); //estado oportunidad => En Curso
-                    $eopo_id=($eopo_id!=0)?$eopo_id:1;//1 VALOR POR DEFECTO 
-                    $uaca_id=UnidadAcademica::consultarIdsUnid_Academica($Data[$i]['unidad_academica']);        
-                    $mod_id=Modalidad::consultarIdsModalidad($Data[$i]['ultima_modalidad_interes']);
-                    
+                    $eopo_id = ($eopo_id != 0) ? $eopo_id : 1; //1 VALOR POR DEFECTO 
+                    $uaca_id = UnidadAcademica::consultarIdsUnid_Academica($Data[$i]['unidad_academica']);
+                    $mod_id = Modalidad::consultarIdsModalidad($Data[$i]['ultima_modalidad_interes']);
+
                     //-------------------------------------------
                     //Opciones por defecto segun los indicado por Ing. Geovanni                      
                     switch ($uaca_id) { // esto cambiarlo hacer funcion que consulte el usuario y traer el id
@@ -1365,20 +1348,20 @@ class PersonaGestion extends \app\modules\admision\components\CActiveRecord
                             $tipoportunidad = 5;
                             break;
                     }
-                    $padm_id=$agente['agente_id'];
+                    $padm_id = $agente['agente_id'];
                     //-------------------------------------------
 
-                    $opo_id=$mod_oportunidad->existeOportunidad_Unidad_Modalidad($pges_id,$uaca_id, $mod_id);
-                    if($opo_id == 0){
+                    $opo_id = $mod_oportunidad->existeOportunidad_Unidad_Modalidad($pges_id, $uaca_id, $mod_id);
+                    if ($opo_id == 0) {
                         //Ingresa una nueva oportunidad
-                        $opo_id = $mod_oportunidad->insertarOportunidadLotes($con, $opo_codigo, $emp_id, $pges_id, $padm_id, $eopo_id,$tove_id,$uaca_id,$mod_id, $Data[$i]);
+                        $opo_id = $mod_oportunidad->insertarOportunidadLotes($con, $opo_codigo, $emp_id, $pges_id, $padm_id, $eopo_id, $tove_id, $uaca_id, $mod_id, $Data[$i]);
                         $opo_codigo++;
                     }
-                    
+
                     if ($opo_id > 0) {
                         //Solo si esta perdida se ingresa la Tipo de Obeservacion
                         //caso contrario se ingresa la observacion Normal
-                        $bact_descripcion = ($eopo_id==5)?$Data[$i]['tipo_observacion']:$Data[$i]['observacion'];
+                        $bact_descripcion = ($eopo_id == 5) ? $Data[$i]['tipo_observacion'] : $Data[$i]['observacion'];
                         $bact_id = $mod_oportunidad->insertarActividadLotes($con, $opo_id, $padm_id, $eopo_id, $bact_descripcion);
                     }
                 }
@@ -1434,18 +1417,17 @@ class PersonaGestion extends \app\modules\admision\components\CActiveRecord
 
         $comando = $con->createCommand($sql);
         $comando->bindParam(":estado", $estado, \PDO::PARAM_STR);
-        $resultData = $comando->queryScalar();//$comando->queryOne();
+        $resultData = $comando->queryScalar(); //$comando->queryOne();
         return $resultData;
     }
-    
+
     /** Se debe cambiar esta funcion que regrese el codigo de area ***ojo***
      * Function consultarCodigoArea
      * @author  Byron Villacreses <developer@uteg.edu.ec>
      * @property integer car_id      
      * @return  
      */
-    public function insertarPersonaGestionLeads($con,$pges_codigo,
-                    $tper_id,$nombre,$telefono,$correo, $contacto,$econ_id) {
+    public function insertarPersonaGestionLeads($con, $pges_codigo, $tper_id, $nombre, $telefono, $correo, $contacto, $econ_id) {
         //$econ_id=1;//=>En Contacto por defecto
         $usuingreso = @Yii::$app->session->get("PB_iduser");
         $sql = "INSERT INTO " . $con->dbname . ".persona_gestion
@@ -1507,7 +1489,7 @@ class PersonaGestion extends \app\modules\admision\components\CActiveRecord
         //return $comando->queryAll();
         $rawData = $comando->queryScalar();
         if ($rawData === false)
-            //return false; //Falso si no Existe
+        //return false; //Falso si no Existe
             return 0;
         return $rawData; //Si Existe en la Tabla
     }
@@ -1542,19 +1524,19 @@ class PersonaGestion extends \app\modules\admision\components\CActiveRecord
         if (isset($pgco_primer_nombre)) {
             $param_sql .= ", pgco_primer_nombre";
             $bdet_sql .= ", :pgco_primer_nombre";
-        }    
+        }
         if (isset($pgco_segundo_nombre)) {
             $param_sql .= ", pgco_segundo_nombre";
             $bdet_sql .= ", :pgco_segundo_nombre";
-        }    
+        }
         if (isset($pgco_primer_apellido)) {
             $param_sql .= ", pgco_primer_apellido";
             $bdet_sql .= ", :pgco_primer_apellido";
-        }    
+        }
         if (isset($pgco_segundo_apellido)) {
             $param_sql .= ", pgco_segundo_apellido";
             $bdet_sql .= ", :pgco_segundo_apellido";
-        }  
+        }
         if (isset($pgco_correo)) {
             $param_sql .= ", pgco_correo";
             $bdet_sql .= ", :pgco_correo";
@@ -1607,7 +1589,7 @@ class PersonaGestion extends \app\modules\admision\components\CActiveRecord
             if (!empty((isset($pai_id_contacto)))) {
                 $comando->bindParam(':pai_id_contacto', $pai_id_contacto, \PDO::PARAM_INT);
             }
-    
+
             $result = $comando->execute();
             if ($trans !== null)
                 $trans->commit();
@@ -1618,17 +1600,16 @@ class PersonaGestion extends \app\modules\admision\components\CActiveRecord
             return FALSE;
         }
     }
-           
+
     /**
      * Function modifica persona_gestion_contacto.
      * @author Grace Viteri <analistadesarrollo01@uteg.edu.ec>;
      * @param
      * @return
      */
-    public function modificarPercontXid($pgco_id, $pgco_primer_nombre, $pgco_segundo_nombre, $pgco_primer_apellido, $pgco_segundo_apellido,
-                                        $pgco_correo, $pgco_telefono, $pgco_celular, $pai_id_contacto) {
+    public function modificarPercontXid($pgco_id, $pgco_primer_nombre, $pgco_segundo_nombre, $pgco_primer_apellido, $pgco_segundo_apellido, $pgco_correo, $pgco_telefono, $pgco_celular, $pai_id_contacto) {
         $con = \Yii::$app->db_crm;
-        $estado = 1;        
+        $estado = 1;
         if ($trans !== null) {
             $trans = null; // si existe la transacción entonces no se crea una
         } else {
@@ -1670,8 +1651,8 @@ class PersonaGestion extends \app\modules\admision\components\CActiveRecord
             return FALSE;
         }
     }
-    
-     /**     * **
+
+    /**     * **
      * Function consultarMaxPergest: Obtiene el id máximo para colocarlo en el campo pges_codigo.
      * @author  Grace Viteri <analistadesarrollo01@uteg.edu.ec>
      * @return  
@@ -1684,8 +1665,8 @@ class PersonaGestion extends \app\modules\admision\components\CActiveRecord
                     FROM " . $con->dbname . ".persona_gestion  
                     WHERE pges_estado_logico=:estado AND pges_estado=:estado";
         $comando = $con->createCommand($sql);
-        $comando->bindParam(":estado", $estado, \PDO::PARAM_STR);        
-        
+        $comando->bindParam(":estado", $estado, \PDO::PARAM_STR);
+
         $resultData = $comando->queryOne();
         if (empty($resultData))
             return 0;
@@ -1693,27 +1674,105 @@ class PersonaGestion extends \app\modules\admision\components\CActiveRecord
             return $resultData;
         }
     }
-    
-    /** ***
+
+    /**
+     * Function consultarReportAspirantes.
+     * @author  Kleber Loayza <analistadesarrollo03@uteg.edu.ec>
+     * @param     
+     * @return  
+     */
+    public function consultarReportContactos($arrFiltro = array(), $onlyData = false) {
+        $con = \Yii::$app->db_crm;
+        $con1 = \Yii::$app->db_asgard;
+        $estado = 1;
+        $columnsAdd = "";
+        if (isset($arrFiltro) && count($arrFiltro) > 0) {
+            $str_search .= "(pg.pges_pri_nombre like :search OR ";
+            $str_search .= "pg.pges_seg_nombre like :search OR ";
+            $str_search .= "pg.pges_pri_apellido like :search OR ";
+            $str_search .= "pg.pges_seg_apellido like :search)  AND ";
+            if ($arrFiltro['estado'] != "" && $arrFiltro['estado'] > 0) {
+                $str_search .= " pg.econ_id = :estcontacto AND ";
+            }
+        } else {
+            $columnsAdd = "                
+                pg.pges_pri_nombre as pges_pri_nombre,
+                pg.pges_seg_nombre as pges_seg_nombre,
+                pg.pges_pri_apellido as pges_pri_apellido,
+                pg.pges_seg_apellido as pges_seg_apellido,";
+        }
+        $str_search="";
+        $sql = "
+                SELECT  
+                        concat(ifnull(pges_pri_nombre,''), ' ',ifnull(pges_seg_nombre,' '),ifnull(pges_pri_apellido,''), ' ', ifnull(pges_seg_apellido,' ')) as contacto,                                                
+                        tp.tper_nombre tipo_contacto, 
+                        ec.econ_nombre estado_contacto,
+                        (select count(*) from " . $con->dbname . ".oportunidad o where o.pges_id = pg.pges_id and o.eopo_id in(1,2,3) and o.opo_estado = :estado and o.opo_estado_logico = :estado) as oportunidad_abiertas,
+                        (select count(*) from " . $con->dbname . ".oportunidad o where o.pges_id = pg.pges_id and o.eopo_id in(4,5) and o.opo_estado = :estado and o.opo_estado_logico = :estado) as oportunidad_cerradas
+                FROM " . $con->dbname . ".persona_gestion pg inner join " . $con->dbname . ".estado_contacto ec on ec.econ_id = pg.econ_id
+                INNER JOIN " . $con1->dbname . ".tipo_persona tp on tp.tper_id = pg.tper_id                
+                WHERE   
+                        pg.pges_estado = :estado
+                        and pg.pges_estado_logico = :estado
+                        and tp.tper_estado = :estado
+                        and tp.tper_estado_logico = :estado                        
+                        and ec.econ_estado = :estado 
+                        and ec.econ_estado_logico = :estado 
+                ORDER BY pg.pges_fecha_creacion desc
+                ";
+        $comando = $con->createCommand($sql);
+        $comando->bindParam(":estado", $estado, \PDO::PARAM_STR);
+        if (isset($arrFiltro) && count($arrFiltro) > 0) {
+            $search_cond = "%" . $arrFiltro["search"] . "%";
+            $empresa = $arrFiltro["company"];
+            $comando->bindParam(":search", $search_cond, \PDO::PARAM_STR);
+            if ($arrFiltro['company'] != "" && $arrFiltro['company'] > 0) {
+                $comando->bindParam(":emp_id", $empresa, \PDO::PARAM_STR);
+            }
+        }
+        $resultData = $comando->queryAll();
+        $dataProvider = new ArrayDataProvider([
+            'key' => 'id',
+            'allModels' => $resultData,
+            'pagination' => [
+                'pageSize' => Yii::$app->params["pageSize"],
+            ],
+            'sort' => [
+                'attributes' => [
+                    'DNI',
+                    'nombres',
+                    'apellidos',
+                    'empresa',
+                ],
+            ],
+        ]);
+
+        if ($onlyData) {
+            return $resultData;
+        } else {
+            return $dataProvider;
+        }
+    }
+
+    /**     * **
      * Function Obtiene grol_id a partir de Id Persona y Empresa
      * @author  Byron Villacreses <developer@uteg.edu.ec>
      * @property integer car_id      
      * @return  
      */
-    public function consultarIdPersonaAdmision($per_id,$grol_id) {
-        $con = \Yii::$app->db_crm;        
+    public function consultarIdPersonaAdmision($per_id, $grol_id) {
+        $con = \Yii::$app->db_crm;
         $sql = "SELECT A.padm_id FROM " . $con->dbname . ".personal_admision A 
                     WHERE A.padm_estado=1 AND A.padm_estado_logico=1 
                             AND A.per_id=:per_id AND A.grol_id=:grol_id;";
- 
+
         $comando = $con->createCommand($sql);
         $comando->bindParam(":per_id", $per_id, \PDO::PARAM_INT);
         $comando->bindParam(":grol_id", $grol_id, \PDO::PARAM_INT);
-        $rawData=$comando->queryScalar();
+        $rawData = $comando->queryScalar();
         if ($rawData === false)
             return 0; //Falso si no Existe
-        return $rawData;//Si Existe en la Tabla
-        
+        return $rawData; //Si Existe en la Tabla
     }
-    
+
 }
