@@ -184,8 +184,8 @@ INSERT INTO `obmo_acci` (`oacc_id`, `omod_id`, `acc_id`, `oacc_tipo_boton`, `oac
 (42, 100, 4, '1', '', 'enviardata', '1', '1'),
 (43, 93, 4, '1', '', 'UpdateDocumentos', '1', '1'),
 (44, 106, 4, '1', '', 'guardarAgente', '1', '1'),
-(43, 108, 4, '1', '', 'loadLeadsSocNet', '1', '1'),
-(44, 109, 4, '1', '', 'loadLeadsCallCen', '1', '1');
+(45, 108, 4, '1', '', 'loadLeadsSocNet', '1', '1'),
+(46, 109, 4, '1', '', 'loadLeadsCallCen', '1', '1');
 -- --------------------------------------------------------
 --
 -- Volcado de datos para la tabla `grup_obmo`
