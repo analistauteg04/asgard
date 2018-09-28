@@ -110,9 +110,9 @@ INSERT INTO `objeto_modulo` (`omod_id`, `mod_id`, `omod_padre_id`, `omod_nombre`
 (87, 2, 86, 'Guardar Solicitud Inscripcion', 'A', '0', '', '', '', 'admision/solicitudes/new', '1', '1', 'Solicitudes', '1', '2018-09-22 14:07:01', NULL, '1'),
 (88, 4, 85, 'Ver Solicitud', 'S', '0', '', '', '', 'admision/solicitudes/view', '1', '0', 'Solicitudes', '1', '2018-09-22 14:07:01', NULL, '1'),
 (89, 4, 85, 'Subir Documentos Solicitud', 'S', '0', '', '', '', 'admision/solicitudes/subirDocumentos', '1', '0', 'Admision', '1', '2018-09-22 14:07:01', NULL, '1'),
-(90, 4, 85, 'Enviar Solicitud', 'A', '0', '', '', '', 'admision/solicitudes/view', '1', '0', 'Admision', '1', '2018-09-22 14:07:01', NULL, '1'),
+(90, 4, 88, 'Enviar Solicitud', 'A', '0', '', '', '', 'admision/solicitudes/view', '1', '0', 'Admision', '1', '2018-09-22 14:07:01', NULL, '1'),
 (91, 4, 89, 'Guardar Documentos Solicitud', 'A', '0', '', '', '', 'admision/solicitudes/subirDocumentos', '1', '1', 'Admision', '1', '2018-09-22 14:07:01', NULL, '1'),
-(92, 2, 88, 'Actualizar Documentos', 'S', '0', '', '', '', 'admision/solicitudes/actualizardocumentos', '1', '0', 'Admision', '1', '2018-09-22 14:07:01', NULL, '1'),
+(92, 2, 85, 'Actualizar Documentos', 'S', '0', '', '', '', 'admision/solicitudes/actualizardocumentos', '1', '0', 'Admision', '1', '2018-09-22 14:07:01', NULL, '1'),
 (93, 2, 92, 'Guardar Actualizar Documentos', 'A', '0', '', '', '', 'admision/solicitudes/actualizardocumentos', '1', '0', 'Admision', '1', '2018-09-22 14:07:01', NULL, '1'),
 -- Pagos
 (94, 3, 94, 'Listar Pagos', 'P', '0', '', '', '', 'financiero/pagos/index', '1', '1', 'Pagos', '1', '2018-09-22 14:07:01', NULL, '1'),
