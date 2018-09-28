@@ -5,6 +5,7 @@ namespace app\modules\financiero\models;
 use yii\data\ArrayDataProvider;
 use DateTime;
 use Yii;
+
 /**
  * This is the model class for table "orden_pago".
  *
@@ -30,7 +31,6 @@ use Yii;
  * @property InfoFactura[] $infoFacturas
  * @property SolicitudGeneral $sgen
  */
-
 class OrdenPago extends \app\modules\financiero\components\CActiveRecord {
 
     /**
@@ -145,10 +145,9 @@ class OrdenPago extends \app\modules\financiero\components\CActiveRecord {
           per.per_pri_apellido as per_pri_apellido,
           per.per_seg_apellido as per_seg_apellido,";
         }
-        if(!empty($resp_gruporol))
-            {
-                $rolgrupo = ", ".$resp_gruporol. " as rol";
-            }
+        if (!empty($resp_gruporol)) {
+            $rolgrupo = ", " . $resp_gruporol . " as rol";
+        }
         $sql = "SELECT  lpad(sins.sins_id,4,'0') as solicitud, 
                         sins.sins_fecha_solicitud,
                         per.per_id,
@@ -924,7 +923,7 @@ class OrdenPago extends \app\modules\financiero\components\CActiveRecord {
                          ifnull(icpr.icpr_observacion,'') as icpr_observacion,
                         icpr.icpr_num_transaccion,icpr.icpr_fecha_transaccion
                 FROM " . $con->dbname . ".info_carga_prepago icpr "
-                            . "INNER JOIN " . $con->dbname . ".forma_pago fp ON fp.fpag_id = icpr.fpag_id                                          
+                . "INNER JOIN " . $con->dbname . ".forma_pago fp ON fp.fpag_id = icpr.fpag_id                                          
                 WHERE icpr.opag_id = " . $opag_id . " AND                        
                       icpr.icpr_estado_logico = :estado AND 
                       icpr.icpr_estado = :estado ";
@@ -997,7 +996,7 @@ class OrdenPago extends \app\modules\financiero\components\CActiveRecord {
         $estado = 1;
         $estado_interesado = 0;
         $fecha_modificacion = date(Yii::$app->params["dateTimeByDefault"]);
-        
+
         $comando = $con->createCommand
                 ("UPDATE " . $con->dbname . ".interesado 
                 SET int_fecha_modificacion = :fecha_modificacion,
@@ -1065,7 +1064,7 @@ class OrdenPago extends \app\modules\financiero\components\CActiveRecord {
                           AND ea.eaca_estado = :estado
                           AND inte.int_estado_logico = :estado                          
                           AND per.per_estado_logico = :estado                           
-                          AND ea.eaca_estado_logico = :estado";                   
+                          AND ea.eaca_estado_logico = :estado";
         }
         $comando = $con->createCommand($sql);
         $comando->bindParam(":estado", $estado, \PDO::PARAM_STR);
@@ -1730,7 +1729,7 @@ class OrdenPago extends \app\modules\financiero\components\CActiveRecord {
                         $columnsAdd
                         (case opag.opag_estado_pago when 'P' then 'Pendiente' when 'S' then 'Pagada' end) as estado_desc_pago";
         if ($resp_gruporol != "") {//rpfa_imagen
-        $sql .=  ", $resp_gruporol   as rol";
+            $sql .= ", $resp_gruporol   as rol";
         }
 
         $sql .= " FROM " . $con->dbname . ".solicitud_inscripcion sins 
@@ -1881,8 +1880,8 @@ class OrdenPago extends \app\modules\financiero\components\CActiveRecord {
             return FALSE;
         }
     }
-    
-     /**
+
+    /**
      * Function insertarSolicDscto (Crea la solicitud descuento)
      * @author  Grace Viteri <analistadesarrollo01@uteg.edu.ec>
      * @param   
@@ -1903,7 +1902,7 @@ class OrdenPago extends \app\modules\financiero\components\CActiveRecord {
 
         $param_sql .= ", sdes_estado";
         $bdsoldes_sql .= ", 1";
-                
+
         if (isset($sins_id)) {
             $param_sql .= ", sins_id";
             $bdsoldes_sql .= ", :sins_id";
@@ -1946,7 +1945,7 @@ class OrdenPago extends \app\modules\financiero\components\CActiveRecord {
                 $comando->bindParam(':sdes_porcentaje', $sdes_porcentaje, \PDO::PARAM_INT);
 
             if (isset($sdes_valor))
-                $comando->bindParam(':sdes_valor', $sdes_valor, \PDO::PARAM_INT);            
+                $comando->bindParam(':sdes_valor', $sdes_valor, \PDO::PARAM_INT);
 
             $result = $comando->execute();
             if ($trans !== null)
@@ -1958,7 +1957,7 @@ class OrdenPago extends \app\modules\financiero\components\CActiveRecord {
             return FALSE;
         }
     }
-    
+
     /** Se debe cambiar esta funcion que regrese el codigo de area ***ojo***
      * Function consultarCodigoArea
      * @author  Byron Villacreses <developer@uteg.edu.ec>
@@ -1974,17 +1973,17 @@ class OrdenPago extends \app\modules\financiero\components\CActiveRecord {
             $trans = $con->beginTransaction(); // si no existe la transacción entonces se crea una
         }
         try {
-            $usuingreso=@Yii::$app->session->get("PB_iduser");
-            $rpfa_revisado=1;
-            $rpfa_fecha_documento=($data['rpfa_fecha_documento']!='')? date(Yii::$app->params["dateTimeByDefault"], strtotime($data['rpfa_fecha_documento'])):NULL ;
-            
+            $usuingreso = @Yii::$app->session->get("PB_iduser");
+            $rpfa_revisado = 1;
+            $rpfa_fecha_documento = ($data['rpfa_fecha_documento'] != '') ? date(Yii::$app->params["dateTimeByDefault"], strtotime($data['rpfa_fecha_documento'])) : NULL;
+
             $sql = "INSERT INTO " . $con->dbname . ".registro_pago_factura
                 (sins_id,rpfa_num_solicitud,rpfa_valor_documento,rpfa_fecha_documento,
                 rpfa_numero_documento,rpfa_imagen,rpfa_revisado,rpfa_fecha_transaccion,
                 rpfa_estado,rpfa_estado_logico,rpfa_usuario_transaccion) VALUES
                 (:sins_id,:rpfa_num_solicitud,:rpfa_valor_documento,:rpfa_fecha_documento,
                 :rpfa_numero_documento,:rpfa_imagen,:rpfa_revisado,CURRENT_TIMESTAMP(),1,1,:rpfa_usuario_transaccion)";
-            
+
             $command = $con->createCommand($sql);
             $command->bindParam(":sins_id", $data["sins_id"], \PDO::PARAM_INT);
             $command->bindParam(":rpfa_num_solicitud", $data["rpfa_num_solicitud"], \PDO::PARAM_STR);
@@ -2005,7 +2004,6 @@ class OrdenPago extends \app\modules\financiero\components\CActiveRecord {
             $arroout["message"] = null;
             $arroout["data"] = $rawData;
             return $arroout;
-            
         } catch (Exception $ex) {
             fclose($handle);
             if ($trans !== null)
@@ -2018,16 +2016,16 @@ class OrdenPago extends \app\modules\financiero\components\CActiveRecord {
             return $arroout;
         }
     }
-    
-    /** ***
+
+    /**     * **
      * Function Obtiene grol_id a partir de Id Persona y Empresa
      * @author  Byron Villacreses <developer@uteg.edu.ec>
      * @property integer car_id      
      * @return  
      */
     public function consultarInteresadoPersona($sins_id) {
-        $con = \Yii::$app->db_captacion; 
-        $con2 = \Yii::$app->db_facturacion;  
+        $con = \Yii::$app->db_captacion;
+        $con2 = \Yii::$app->db_facturacion;
         $sql = "SELECT B.per_id,C.opag_total
                     FROM " . $con->dbname . ".solicitud_inscripcion A
                             INNER JOIN " . $con->dbname . ".interesado B ON A.int_id=B.int_id
@@ -2036,25 +2034,121 @@ class OrdenPago extends \app\modules\financiero\components\CActiveRecord {
 
         $comando = $con->createCommand($sql);
         $comando->bindParam(":sins_id", $sins_id, \PDO::PARAM_INT);
-        return $comando->queryAll();        
+        return $comando->queryAll();
     }
-    
-     public static function consultarRutaFile($sins_id) {
-         $con = \Yii::$app->db_facturacion; 
-         $sql = "SELECT rpfa_imagen Ruta "
-                 . " FROM " . $con->dbname . ".registro_pago_factura "
-                 . " WHERE sins_id=:sins_id AND rpfa_estado=1;";
-         
+
+    public static function consultarRutaFile($sins_id) {
+        $con = \Yii::$app->db_facturacion;
+        $sql = "SELECT rpfa_imagen Ruta "
+                . " FROM " . $con->dbname . ".registro_pago_factura "
+                . " WHERE sins_id=:sins_id AND rpfa_estado=1;";
+
         $comando = $con->createCommand($sql);
         $comando->bindParam(":sins_id", $sins_id, \PDO::PARAM_INT);
-        $rawData=$comando->queryScalar();        
+        $rawData = $comando->queryScalar();
         if ($rawData === false)
             return 0; //Falso si no Existe
-        return $rawData;//Si Existe en la Tabla
-         
-     }
-    
+        return $rawData; //Si Existe en la Tabla
+    }
 
+    /**
+     * Function listarPagoscargados
+     * @author  Giovanni Vergara <analistadesarrollo01@uteg.edu.ec>
+     * @param   
+     * @return  $resultData (información de las solicitudes con orden de pago y pagados.)
+     */
+    public function listarPagoscargadosexcel($arrFiltro = array(), $onlyData = false) {
+        $con = \Yii::$app->db_captacion;
+        $con1 = \Yii::$app->db;
+        $con2 = \Yii::$app->db_facturacion;
+        $con3 = \Yii::$app->db_academico;
+        $estado = 1;
+        $columnsAdd = "";
+        if (isset($arrFiltro) && count($arrFiltro) > 0) {
+            $str_search .= "(per.per_pri_nombre like :search OR ";
+            $str_search .= "per.per_pri_apellido like :search OR ";
+            $str_search .= "ming.ming_descripcion like :search) AND ";
+            if ($arrFiltro['f_ini'] != "" && $arrFiltro['f_fin'] != "") {
+                $str_search .= "sins.sins_fecha_solicitud >= :fec_ini AND ";
+                $str_search .= "sins.sins_fecha_solicitud <= :fec_fin AND ";
+            }
+            if ($arrFiltro['f_estado'] != "T") {
+                $str_search .= "opag.opag_estado_pago = :f_estado AND ";
+            }
+        } else {
+            $columnsAdd = "sins.sins_id as solicitud_id,
+            per.per_id as persona,
+            per.per_pri_nombre as per_pri_nombre,
+            per.per_seg_nombre as per_seg_nombre,
+            per.per_pri_apellido as per_pri_apellido,
+            per.per_seg_apellido as per_seg_apellido,";
+        }
+        $sql = "SELECT  lpad(sins.sins_id,4,'0') as solicitud, 
+                        sins.sins_fecha_solicitud,                        
+                        per.per_cedula identificacion,
+                        concat(per.per_pri_apellido) apellidos, 
+                        concat(per.per_pri_nombre) nombres,
+                        uaca_descripcion nivel,
+                        ming_descripcion metodo,   
+                        (case opag.opag_estado_pago when 'P' then 'Pendiente' when 'S' then 'Pagada' end) as estado_desc_pago                       
+                FROM " . $con->dbname . ".solicitud_inscripcion sins INNER JOIN " . $con3->dbname . ".unidad_academica uaca on uaca.uaca_id = sins.uaca_id
+                     INNER JOIN " . $con->dbname . ".metodo_ingreso ming on ming.ming_id = sins.ming_id
+                     INNER JOIN " . $con->dbname . ".interesado inte on sins.int_id = inte.int_id                     
+                     INNER JOIN " . $con1->dbname . ".persona per on inte.per_id = per.per_id
+                     LEFT JOIN " . $con2->dbname . ".orden_pago opag on sins.sins_id = opag.sins_id                       
+                WHERE $str_search
+                      exists (select icpr.opag_id 
+                              from " . $con2->dbname . ".info_carga_prepago icpr
+                              where icpr.opag_id = opag.opag_id
+                                    and icpr.fpag_id in (4,5)
+                                    and icpr.icpr_estado = :estado
+                                    and icpr.icpr_estado_logico = :estado) AND
+                      sins.sins_estado = :estado AND
+                      sins.sins_estado_logico = :estado AND
+                      uaca.uaca_estado = :estado AND
+                      uaca.uaca_estado_logico = :estado AND
+                      ming.ming_estado = :estado AND
+                      ming.ming_estado_logico = :estado AND
+                      inte.int_estado_logico = :estado AND                                            
+                      inte.int_estado = :estado AND                           
+                      per.per_estado = :estado AND
+                      per.per_estado_logico = :estado AND
+                      opag.opag_estado = :estado AND
+                      opag.opag_estado_logico = :estado                       
+                ORDER BY sins.sins_fecha_solicitud desc";
 
+        $comando = $con->createCommand($sql);
+        $comando->bindParam(":estado", $estado, \PDO::PARAM_STR);
+        if (isset($arrFiltro) && count($arrFiltro) > 0) {
+            $search_cond = "%" . $arrFiltro["search"] . "%";
+            $fecha_ini = $arrFiltro["f_ini"];
+            $fecha_fin = $arrFiltro["f_fin"];
+            $f_estado = $arrFiltro["f_estado"];
+            $comando->bindParam(":search", $search_cond, \PDO::PARAM_STR);
+            if ($arrFiltro['f_ini'] != "" && $arrFiltro['f_fin'] != "") {
+                $comando->bindParam(":fec_ini", $fecha_ini, \PDO::PARAM_STR);
+                $comando->bindParam(":fec_fin", $fecha_fin, \PDO::PARAM_STR);
+            }
+            if ($arrFiltro['f_estado'] != "T") {
+                $comando->bindParam(":f_estado", $f_estado, \PDO::PARAM_STR);
+            }
+        }
+        $resultData = $comando->queryall();
+        $dataProvider = new ArrayDataProvider([
+            'key' => 'id',
+            'allModels' => $resultData,
+            'pagination' => [
+                'pageSize' => Yii::$app->params["pageSize"],
+            ],
+            'sort' => [
+                'attributes' => [],
+            ],
+        ]);
+        if ($onlyData) {
+            return $resultData;
+        } else {
+            return $dataProvider;
+        }
+    }
 
 }
