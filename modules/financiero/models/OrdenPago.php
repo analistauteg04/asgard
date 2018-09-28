@@ -2241,5 +2241,112 @@ class OrdenPago extends \app\modules\financiero\components\CActiveRecord {
             return $dataProvider;
         }
     }
+    /**
+     * Function listarSolicitudesadm
+     * @author  Grace Viteri <analistadesarrollo01@uteg.edu.ec>
+     * @param   
+     * @return  $resultData (información de las solicitudes con/sin orden de pago.)
+     */
+    public function listarSolicitudesadmexcel($arrFiltro = array(), $onlyData = false) {
+        $con = \Yii::$app->db_captacion;
+        $con1 = \Yii::$app->db;
+        $con2 = \Yii::$app->db_facturacion;
+        $con3 = \Yii::$app->db_academico;
+        $estado = 1;
+        $estado_pago = 'P';        
+        $columnsAdd = "";
+        if (isset($arrFiltro) && count($arrFiltro) > 0) {
+            $str_search .= "(per.per_pri_nombre like :search OR ";
+            $str_search .= "per.per_pri_apellido like :search OR ";
+            $str_search .= "ming.ming_descripcion like :search) AND ";
+            if ($arrFiltro['f_ini'] != "" && $arrFiltro['f_fin'] != "") {
+                $str_search .= "sins.sins_fecha_solicitud >= :fec_ini AND ";
+                $str_search .= "sins.sins_fecha_solicitud <= :fec_fin AND ";
+            }
+        } else {
+            $columnsAdd = "sins.sins_id as solicitud_id,
+          per.per_id as persona,
+          per.per_pri_nombre as per_pri_nombre,
+          per.per_seg_nombre as per_seg_nombre,
+          per.per_pri_apellido as per_pri_apellido,
+          per.per_seg_apellido as per_seg_apellido,";
+        }  
+        $sql = "SELECT  lpad(sins.sins_id,4,'0') as solicitud, 
+                        sins.sins_fecha_solicitud, 
+                        per.per_cedula identificacion,
+                        concat(per.per_pri_apellido) apellidos, 
+                        concat(per.per_pri_nombre) nombres,
+                        uaca_descripcion nivel,
+                        ming_descripcion metodo,                                           
+                        (case ifnull((select icpr_id 
+                                      from " . $con2->dbname . ".info_carga_prepago icp 
+                                      where icp.opag_id = opag.opag_id 
+                                            and icp.icpr_estado = :estado 
+                                            and icp.icpr_estado_logico = :estado),'P') when 'P' then 'Pendiente' else 'No Aprobada' end) as estado_desc_pago
+                FROM " . $con->dbname . ".solicitud_inscripcion sins INNER JOIN " . $con3->dbname . ".unidad_academica uaca on uaca.uaca_id = sins.uaca_id
+                     INNER JOIN " . $con->dbname . ".metodo_ingreso ming on ming.ming_id = sins.ming_id
+                     INNER JOIN " . $con->dbname . ".interesado inte on sins.int_id = inte.int_id
+                     INNER JOIN " . $con1->dbname . ".persona per on inte.per_id = per.per_id
+                     INNER JOIN " . $con2->dbname . ".orden_pago opag on sins.sins_id = opag.sins_id
+                WHERE 
+                      $str_search
+                      sins.sins_estado = :estado AND
+                      sins.sins_estado_logico = :estado AND
+                      uaca.uaca_estado = :estado AND
+                      uaca.uaca_estado_logico = :estado AND
+                      ming.ming_estado = :estado AND
+                      ming.ming_estado_logico = :estado AND
+                      inte.int_estado_logico = :estado AND
+                      inte.int_estado = :estado AND                      
+                      per.per_estado = :estado AND
+                      per.per_estado_logico = :estado AND
+                      opag.opag_estado = :estado AND
+                      opag.opag_estado_logico = :estado AND
+                      (opag.opag_estado_pago = :estado_pago and
+                      not exists(select icpr_id from " . $con2->dbname . ".info_carga_prepago icp 
+                                           where icp.opag_id = opag.opag_id 
+                                                 and icp.icpr_estado = :estado 
+                                                 and icp.icpr_estado_logico = :estado)) OR
+                      (opag.opag_estado_pago = :estado_pago and exists
+                                        (select icpr_resultado
+                                         from " . $con2->dbname . ".info_carga_prepago 
+                                         where icpr_id = (select max(icpr_id)
+                                                          from " . $con2->dbname . ".info_carga_prepago icp
+                                                          where icp.opag_id = opag.opag_id
+                                                                and icp.icpr_estado = :estado 
+                                                                and icp.icpr_estado_logico = :estado)
+                                            and icpr_resultado = 'RE')) 
+                ORDER BY sins.sins_fecha_solicitud desc";
+
+        $comando = $con->createCommand($sql);
+        $comando->bindParam(":estado", $estado, \PDO::PARAM_STR);
+        $comando->bindParam(":estado_pago", $estado_pago, \PDO::PARAM_STR);
+        if (isset($arrFiltro) && count($arrFiltro) > 0) {
+            $search_cond = "%" . $arrFiltro["search"] . "%";
+            $fecha_ini = $arrFiltro["f_ini"];
+            $fecha_fin = $arrFiltro["f_fin"];
+            $comando->bindParam(":search", $search_cond, \PDO::PARAM_STR);
+            if ($arrFiltro['f_ini'] != "" && $arrFiltro['f_fin'] != "") {
+                $comando->bindParam(":fec_ini", $fecha_ini, \PDO::PARAM_STR);
+                $comando->bindParam(":fec_fin", $fecha_fin, \PDO::PARAM_STR);
+            }
+        }
+        $resultData = $comando->queryall();
+        $dataProvider = new ArrayDataProvider([
+            'key' => 'id',
+            'allModels' => $resultData,
+            'pagination' => [
+                'pageSize' => Yii::$app->params["pageSize"],
+            ],
+            'sort' => [
+                'attributes' => [],
+            ],
+        ]);
+        if ($onlyData) {
+            return $resultData;
+        } else {
+            return $dataProvider;
+        }
+    }
 
 }
