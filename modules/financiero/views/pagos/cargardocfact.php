@@ -15,6 +15,7 @@ use yii\web\JsExpression;
 use app\models\Utilities;
 use app\modules\financiero\Module as financiero;
 use app\modules\admision\Module as admision;
+
 //rpfa_imagen
 admision::registerTranslations();
 //$per_id = Yii::$app->session->get("PB_perid");
@@ -29,8 +30,8 @@ $leyendarc = '<div class="col-md-12 col-sm-12 col-xs-12 col-lg-12">
 <div class="col-md-12">   
     <h3><span id="lbl_Personeria"><?= financiero::t("Pagos", "Carga Factura") ?></span>
 </div>
-<?= Html::hiddenInput('txth_sins_id',$sins_id,['id' =>'txth_sins_id']); ?>
-<?= Html::hiddenInput('txth_opag_total',$opag_total,['id' =>'txth_opag_total']); ?>
+<?= Html::hiddenInput('txth_sins_id', $sins_id, ['id' => 'txth_sins_id']); ?>
+<?= Html::hiddenInput('txth_opag_total', $opag_total, ['id' => 'txth_opag_total']); ?>
 <form class="form-horizontal">      
     <div class="col-md-12 col-sm-12 col-xs-12 col-lg-12">
         <div class="form-group">            
@@ -64,7 +65,7 @@ $leyendarc = '<div class="col-md-12 col-sm-12 col-xs-12 col-lg-12">
                 DatePicker::widget([
                     'name' => 'txt_rpfa_fecha_documento',
                     'value' => '',
-                    'disabled' => $habilita,                    
+                    'disabled' => $habilita,
                     'type' => DatePicker::TYPE_INPUT,
                     'options' => ["class" => "form-control PBvalidation keyupmce", "id" => "txt_rpfa_fecha_documento", "data-type" => "fecha", "data-keydown" => "true", "placeholder" => admision::t("Solicitudes", "Fecha Documento")],
                     'pluginOptions' => [
@@ -146,17 +147,5 @@ $leyendarc = '<div class="col-md-12 col-sm-12 col-xs-12 col-lg-12">
                 ?>
             </div>             
         </div>
-        
     </div>
-    <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
-            <div class="col-md-9">
-            </div>
-            <div class="col-md-3">
-                <a id="btn_cargar" href="javascript:" class="btn btn-primary btn-block"> <?= Yii::t("formulario", "Save") ?></a>
-            </div>
-            
-        </div>
-
-</div>
-
 </form>

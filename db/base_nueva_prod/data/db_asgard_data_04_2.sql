@@ -8,9 +8,9 @@ USE `db_asgard`;
 --
 INSERT INTO `modulo` (`mod_id`, `apl_id`, `mod_nombre`, `mod_tipo`, `mod_dir_imagen`, `mod_url`, `mod_orden`, `mod_lang_file`, `mod_estado_visible`, `mod_estado`, `mod_fecha_creacion`, `mod_fecha_actualizacion`, `mod_estado_logico`) VALUES
 (1, 1, 'Configuraciones', 'Configuraciones', 'glyphicon glyphicon-cog', 'grupo/index', 1, 'menu', '1', '1', '2018-09-16 08:44:54', NULL, '1'),
-(2, 1, 'Admisiones', 'Admisiones', 'glyphicon glyphicon-cog', 'admisiones/listarcontactos', 2, 'menu', '1', '1', '2018-09-16 08:44:54', NULL, '1'),
-(3, 1, 'Financiero', 'Financiero', 'glyphicon glyphicon-cog', 'financiero', 3, 'menu', '1', '1', '2018-09-18 05:06:44', NULL, '1'),
-(4, 1, 'Academico', 'Academico', 'glyphicon glyphicon-cog', 'financiero', 4, 'menu', '1', '1', '2018-09-18 05:06:58', NULL, '1');
+(2, 1, 'Admisiones', 'Admisiones', 'glyphicon glyphicon-cog', 'admision/contactos/index', 2, 'menu', '1', '1', '2018-09-16 08:44:54', NULL, '1'),
+(3, 1, 'Financiero', 'Financiero', 'glyphicon glyphicon-cog', 'financiero/pagos/index', 3, 'menu', '1', '1', '2018-09-18 05:06:44', NULL, '1'),
+(4, 1, 'Academico', 'Academico', 'glyphicon glyphicon-cog', 'academico/admitidos/index', 4, 'menu', '1', '1', '2018-09-18 05:06:58', NULL, '1');
 
 --
 -- Volcado de datos para la tabla `objeto_modulo`
@@ -110,7 +110,7 @@ INSERT INTO `objeto_modulo` (`omod_id`, `mod_id`, `omod_padre_id`, `omod_nombre`
 (87, 2, 86, 'Guardar Solicitud Inscripcion', 'A', '0', '', '', '', 'admision/solicitudes/new', '1', '1', 'Solicitudes', '1', '2018-09-22 14:07:01', NULL, '1'),
 (88, 4, 85, 'Ver Solicitud', 'S', '0', '', '', '', 'admision/solicitudes/view', '1', '0', 'Solicitudes', '1', '2018-09-22 14:07:01', NULL, '1'),
 (89, 4, 85, 'Subir Documentos Solicitud', 'S', '0', '', '', '', 'admision/solicitudes/subirDocumentos', '1', '0', 'Admision', '1', '2018-09-22 14:07:01', NULL, '1'),
-(90, 4, 89, 'Enviar Solicitud', 'A', '0', '', '', '', 'admision/solicitudes/view', '1', '0', 'Admision', '1', '2018-09-22 14:07:01', NULL, '1'),
+(90, 4, 85, 'Enviar Solicitud', 'A', '0', '', '', '', 'admision/solicitudes/view', '1', '0', 'Admision', '1', '2018-09-22 14:07:01', NULL, '1'),
 (91, 4, 89, 'Guardar Documentos Solicitud', 'A', '0', '', '', '', 'admision/solicitudes/subirDocumentos', '1', '1', 'Admision', '1', '2018-09-22 14:07:01', NULL, '1'),
 (92, 2, 88, 'Actualizar Documentos', 'S', '0', '', '', '', 'admision/solicitudes/actualizardocumentos', '1', '0', 'Admision', '1', '2018-09-22 14:07:01', NULL, '1'),
 (93, 2, 92, 'Guardar Actualizar Documentos', 'A', '0', '', '', '', 'admision/solicitudes/actualizardocumentos', '1', '0', 'Admision', '1', '2018-09-22 14:07:01', NULL, '1'),
@@ -134,7 +134,10 @@ INSERT INTO `objeto_modulo` (`omod_id`, `mod_id`, `omod_padre_id`, `omod_nombre`
 (107, 2, 57, 'Cargar Leads', 'S', '0', '', '', '', 'admision/contactos/cargarleads', '1', '0', 'Admision', '1', '2018-09-22 14:07:01', NULL, '1'),
 (108, 2, 57, 'Cargar Leads', 'A', '0', '', '', '', 'admision/contactos/cargarleads', '1', '0', 'Admision', '1', '2018-09-22 14:07:01', NULL, '1'),
 (109, 2, 107, 'Cargar Leads Redes Sociales', 'A', '0', '', '', '', 'admision/contactos/cargarleads', '1', '0', 'Admision', '1', '2018-09-22 14:07:01', NULL, '1'),
-(110, 2, 107, 'Cargar Leads Call Center', 'A', '0', '', '', '', 'admision/contactos/cargarleads', '1', '0', 'Admision', '1', '2018-09-22 14:07:01', NULL, '1');
+(110, 2, 107, 'Cargar Leads Call Center', 'A', '0', '', '', '', 'admision/contactos/cargarleads', '1', '0', 'Admision', '1', '2018-09-22 14:07:01', NULL, '1'),
+-- Pagos Factura
+(111, 3, 94, 'Cargar Factura', 'S', '0', '', '', '', 'financiero/pagos/cargardocfact', '1', '0', 'Pagos', '1', '2018-09-22 14:07:01', NULL, '1'),
+(112, 3, 111, 'Guardar Cargar Factura', 'A', '0', '', '', '', 'financiero/pagos/cargardocfact', '1', '0', 'Pagos', '1', '2018-09-22 14:07:01', NULL, '1');
 -- --------------------------------------------------------
 --
 -- Volcado de datos para la tabla `OBMO_ACCI`
@@ -186,7 +189,9 @@ INSERT INTO `obmo_acci` (`oacc_id`, `omod_id`, `acc_id`, `oacc_tipo_boton`, `oac
 (44, 106, 4, '1', '', 'guardarAgente', '1', '1'),
 (45, 109, 14, '1', '', 'loadFile', '1', '1'),
 (46, 110, 15, '1', '', 'loadCall', '1', '1'),
-(47, 108, 16, '1', '', 'loadLeads', '1', '1');
+(47, 108, 16, '1', '', 'loadLeads', '1', '1'),
+(48, 112, 4, '1', '', 'saveBills', '1', '1'),
+(49, 90, 4, '1', '', 'Approve', '1', '1');
 -- --------------------------------------------------------
 --
 -- Volcado de datos para la tabla `grup_obmo`
@@ -301,7 +306,9 @@ INSERT INTO `grup_obmo` (`gmod_id`, `gru_id`, `omod_id`, `gmod_estado`,  `gmod_e
 (107, 1, 107, '1', '1'),
 (108, 1, 108, '1', '1'),
 (109, 1, 109, '1', '1'),
-(110, 1, 110, '1', '1');
+(110, 1, 110, '1', '1'),
+(111, 1, 111, '1', '1'),
+(112, 1, 112, '1', '1');
 
 
 -- --------------------------------------------------------
@@ -418,4 +425,6 @@ INSERT INTO `grup_obmo_grup_rol` (`gogr_id`, `grol_id`, `gmod_id`, `gogr_estado`
 (107, 1, 107, '1', '1'),
 (108, 1, 108, '1', '1'),
 (109, 1, 109, '1', '1'),
-(110, 1, 110, '1', '1');
+(110, 1, 110, '1', '1'),
+(111, 1, 111, '1', '1'),
+(112, 1, 112, '1', '1');
