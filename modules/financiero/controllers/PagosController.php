@@ -657,8 +657,6 @@ class PagosController extends \app\components\CController {
         header("Content-Disposition: attachment;filename=" . $nombreZip . ".zip");
         header('Cache-Control: max-age=0');
         $sins_id = isset($_GET['ids']) ? base64_decode($_GET['ids']) : 1;//NULL
-        //$ruta = isset($_GET['ruta']) ? base64_decode($_GET['ruta']) : 1;//NULL
-        //Utilities::putMessageLogFile($ruta);
         $ruta= OrdenPago::consultarRutaFile($sins_id);
        
         $Path=Yii::$app->basePath ."/uploads/" .$ruta;
