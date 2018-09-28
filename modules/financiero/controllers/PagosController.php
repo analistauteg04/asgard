@@ -471,7 +471,7 @@ class PagosController extends \app\components\CController {
         if (empty($arrSearch)) {
             $arrData = $model_pag->listarPagoscargadosexcel(array(), true);
         } else {
-             $arrData = $model_pag->listarPagoscargadosexcel($arrSearch, true);
+            $arrData = $model_pag->listarPagoscargadosexcel($arrSearch, true);
         }
         $nameReport = yii::t("formulario", "Application Reports");
         Utilities::generarReporteXLS($nombarch, $nameReport, $arrHeader, $arrData, $colPosition);
@@ -662,8 +662,6 @@ class PagosController extends \app\components\CController {
         header("Content-Disposition: attachment;filename=" . $nombreZip . ".zip");
         header('Cache-Control: max-age=0');
         $sins_id = isset($_GET['ids']) ? base64_decode($_GET['ids']) : 1; //NULL
-        //$ruta = isset($_GET['ruta']) ? base64_decode($_GET['ruta']) : 1;//NULL
-        //Utilities::putMessageLogFile($ruta);
         $ruta = OrdenPago::consultarRutaFile($sins_id);
 
         $Path = Yii::$app->basePath . "/uploads/" . $ruta;
@@ -676,7 +674,11 @@ class PagosController extends \app\components\CController {
           array("ruta" => Yii::$app->basePath . "/uploads/ficha/Silueta-opc-4.png",
           "name" => basename(Yii::$app->basePath . "/uploads/ficha/Silueta-opc-4.png")),
           ); */
-        $tmpDir = Utilities::zipFiles($nombreZip, $Path);
+        $arr_files = array(
+            array("ruta" => Yii::$app->basePath . "/uploads/" . $ruta,
+                "name" => basename(Yii::$app->basePath . "/uploads/" . $ruta)),
+        );
+        $tmpDir = Utilities::zipFiles($nombreZip, $arr_files);
         $file = file_get_contents($tmpDir);
         Utilities::removeTemporalFile($tmpDir);
         echo $file;

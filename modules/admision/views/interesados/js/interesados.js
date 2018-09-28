@@ -13,3 +13,12 @@ function actualizarGridInteresado(){
         setTimeout(hideLoadingPopup, 2000);
     }
 }
+
+
+function exportExcel() {
+    var search = $('#txt_buscarData').val();
+    var empresa = $('#cmb_empresa option:selected').val(); 
+    
+    window.location.href = $('#txth_base').val() + "/admision/interesados/expexcel?search=" + search + "&empresa=" + empresa;
+   
+}

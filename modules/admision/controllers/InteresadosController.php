@@ -219,4 +219,36 @@ class InteresadosController extends \app\components\CController
 
     }
 
+    public function actionExpexcel() {
+        ini_set('memory_limit', '256M');
+        $content_type = Utilities::mimeContentType("xls");
+        $nombarch = "Report-" . date("YmdHis") . ".xls";
+        header("Content-Type: $content_type");
+        header("Content-Disposition: attachment;filename=" . $nombarch . ".xls");
+        header('Cache-Control: max-age=0');
+        $colPosition = array("C", "D", "E", "F", "G", "H", "I", "J", "K", "L");
+        
+        $arrHeader = array(
+            Yii::t("formulario", "DNI"),
+            Yii::t("formulario", "Name"),                        
+            Yii::t("formulario", "Last Names"),
+            Yii::t("formulario", "Company"));            
+        
+        $interesado_model = new Interesado();
+        $data = Yii::$app->request->get();
+        $arrSearch["search"] = $data['search'];
+        $arrSearch["company"] = $data['company'];
+        $arrData = array();
+        if (empty($arrSearch)) {
+            $arrData = $interesado_model->consultarReportAspirantes(array(), true);
+        } else {
+            $arrData = $interesado_model->consultarReportAspirantes($arrSearch, true);                   
+        }
+                                       
+        \app\models\Utilities::putMessageLogFile($arrData);                
+        
+        $nameReport = yii::t("formulario", "Application Reports");
+        Utilities::generarReporteXLS($nombarch, $nameReport, $arrHeader, $arrData, $colPosition);
+        exit;              
+    }
 }

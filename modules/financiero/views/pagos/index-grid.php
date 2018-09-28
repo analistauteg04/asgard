@@ -89,8 +89,6 @@ admision::registerTranslations(); // trae las traducciones del modulo
                     'downloadFact' => function ($url, $model) {
                         $ruta= \app\modules\financiero\models\OrdenPago::consultarRutaFile($model['sins_id']);
                         if ($ruta !== 0) {
-                            //return Html::a('<span class="glyphicon glyphicon-download-alt"></span>', Url::to(['/financiero/pagos/cargardocfact', 'ids' => base64_encode($model['sins_id'])]), ["data-toggle" => "tooltip", "title" => $ruta, "data-pjax" => 0]);
-                            //return Html::a('<span class="glyphicon glyphicon-download-alt"></span>', Url::to(['/site/getimage', 'route' => '/uploads/'.$ruta]), ["download" => $ruta, "data-toggle" => "tooltip", "title" => "Descargar Pago", "data-pjax" => 0]);
                             return Html::a('<span class="glyphicon glyphicon-download-alt"></span>', Url::to(['/financiero/pagos/descargafactura', 'ids' => base64_encode($model['sins_id']) ]), ["data-toggle" => "tooltip", "title" => "Descargar Factura", "data-pjax" => 0]);
                             
                         }
