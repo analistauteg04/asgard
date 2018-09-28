@@ -211,12 +211,13 @@ if (!empty($personalData['pges_cedula'])) {
                 <label for="txt_fecha_proxima" class="col-sm-5 col-md-5 col-xs-5 col-lg-5  control-label"><?= Yii::t("formulario", "Date Next attention") ?></label>
                 <div class="col-sm-4 col-md-4 col-xs-4 col-lg-4 ">
                     <?php
-                    if ($actividad_oportunidad['eopo_id'] == 5 || $actividad_oportunidad['eopo_id'] == 4) {
+                    if ($actividad_oportunidad['eopo_id'] == 5 || $actividad_oportunidad['eopo_id'] == 4 || $actividad_oportunidad['eopo_id'] == 3) {
                         $disable = true;
                         $validation = '';
-                    } else
+                    } else {
                         $disable = false;
-                    $validation = "PBvalidation";
+                        $validation = "PBvalidation";
+                    }
                     ?>
                     <?=
                     DatePicker::widget([
@@ -235,15 +236,15 @@ if (!empty($personalData['pges_cedula'])) {
                 <div class="col-sm-3 col-md-3 col-xs-3 col-lg-3">                    
                     <label hidden for="txt_hora_proxima" class="col-sm-5 col-md-5 col-xs-5 col-lg-5 control-label"><?= Yii::t("formulario", "Next Hour") ?> </label>                                    
                     <?php
-                    if ($actividad_oportunidad['eopo_id'] == 5 || $actividad_oportunidad['eopo_id'] == 4) {
+                    if ($actividad_oportunidad['eopo_id'] == 5 || $actividad_oportunidad['eopo_id'] == 4 || $actividad_oportunidad['eopo_id'] == 3) {
                         ?>
                         <input type="text" class="form-control keyupmce" disabled="true" value="<?php echo $hora_proxima ?>" id="txt_hora_proxima" data-type="tiempo" data-keydown="true" placeholder="<?= Yii::t('formulario', 'HH:MM') ?>">
-                    <?php 
-                } else {
-                    ?>
+                        <?php
+                    } else {
+                        ?>
                         <input type="text" class="form-control PBvalidation keyupmce" value="<?php echo $hora_proxima ?>" id="txt_hora_proxima" data-type="tiempo" data-keydown="true" placeholder="<?= Yii::t('formulario', 'HH:MM') ?>">
-                    <?php 
-                } ?>
+                        <?php }
+                    ?>
                 </div> 
             </div>                    
         </div>                 
@@ -277,7 +278,7 @@ if (!empty($personalData['pges_cedula'])) {
             <div class="form-group">
                 <label for="txt_observacion" class="col-sm-5 col-md-5 col-xs-5 col-lg-5 control-label" id="lbl_descripcion"><?= Yii::t("formulario", "Observation") ?> </label>
                 <div class="col-sm-7 col-md-7 col-xs-7 col-lg-7">
-                    <!-- <textarea  class="form-control keyupmce" id="txt_observacion"><?php //echo $actividad_oportunidad['bact_descripcion']; ?></textarea>-->
+                    <!-- <textarea  class="form-control keyupmce" id="txt_observacion"><?php //echo $actividad_oportunidad['bact_descripcion'];  ?></textarea>-->
                     <?= Html::dropDownList("cmb_observacion", $actividad_oportunidad["oact_id"], $arr_observacion, ["class" => "form-control", "id" => "cmb_observacion"]) ?>    
                 </div>
             </div>
