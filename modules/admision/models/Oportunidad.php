@@ -665,7 +665,7 @@ class Oportunidad extends \app\modules\admision\components\CActiveRecord {
      * @return
      */
     public function consultarSubCarrera($tcar_id) {
-        $ninguno []= Array('id' => '0', 'name' => Yii::t('formulario', 'Any'));
+        $ninguno [] = Array('id' => '0', 'name' => Yii::t('formulario', 'Any'));
         $con = \Yii::$app->db_crm;
         $estado = 1;
         $sql = "SELECT 
@@ -683,7 +683,7 @@ class Oportunidad extends \app\modules\admision\components\CActiveRecord {
         $comando->bindParam(":estado", $estado, \PDO::PARAM_STR);
         $comando->bindParam(":tcar_id", $tcar_id, \PDO::PARAM_INT);
         $resultData = $comando->queryAll();
-        $resultData = array_merge($ninguno,$resultData) ;
+        $resultData = array_merge($ninguno, $resultData);
         return $resultData;
     }
 
@@ -985,7 +985,7 @@ class Oportunidad extends \app\modules\admision\components\CActiveRecord {
         $opo_hora_fin_contacto = $hora_atiende[2]; //date('h:i',strtotime($hora_atiende[2]));
         $opo_usuario = @Yii::$app->session->get("PB_iduser"); // 1 equivale al usuario administrador
         //$fecha_registro = date(Yii::$app->params["dateTimeByDefault"], strtotime($data['fecha_registro']));
-        $fecha_registro=($data['fecha_registro']!='')? date(Yii::$app->params["dateTimeByDefault"], strtotime($data['fecha_registro'])):NULL ;
+        $fecha_registro = ($data['fecha_registro'] != '') ? date(Yii::$app->params["dateTimeByDefault"], strtotime($data['fecha_registro'])) : NULL;
 
         $sql = "INSERT INTO " . $con->dbname . ".oportunidad
             (opo_codigo,emp_id,pges_id,eaca_id,uaca_id,mod_id,tove_id,ccan_id,
@@ -1023,8 +1023,8 @@ class Oportunidad extends \app\modules\admision\components\CActiveRecord {
         //bact_id 
         $usuario = @Yii::$app->session->get("PB_iduser");
         $eopo_id = 1; //???? En curso por defecto  
-        $oact_id=1;//Observacion de Actividades
-        $bact_usuario=$usuario;
+        $oact_id = 1; //Observacion de Actividades
+        $bact_usuario = $usuario;
         $sql = "INSERT INTO " . $con->dbname . ".bitacora_actividades
                 (opo_id,usu_id,padm_id,eopo_id,bact_fecha_registro,bact_fecha_proxima_atencion,oact_id,
                  bact_usuario,bact_estado,bact_estado_logico)VALUES
@@ -1051,8 +1051,8 @@ class Oportunidad extends \app\modules\admision\components\CActiveRecord {
     public function insertarActividadLotes($con, $opo_id, $padm_id, $eopo_id, $bact_descripcion) {
         //bact_id 
         $usuario = @Yii::$app->session->get("PB_iduser");
-        $oact_id=1;//Observacion de Actividades
-        $bact_usuario=$usuario;
+        $oact_id = 1; //Observacion de Actividades
+        $bact_usuario = $usuario;
         $sql = "INSERT INTO " . $con->dbname . ".bitacora_actividades
                 (opo_id,usu_id,padm_id,eopo_id,bact_fecha_registro,bact_descripcion,oact_id,
                  bact_usuario,bact_estado,bact_estado_logico)VALUES
@@ -1115,7 +1115,7 @@ class Oportunidad extends \app\modules\admision\components\CActiveRecord {
         if (isset($usu_id)) {
             $param_sql .= ", bact_usuario";
             $bdet_sql .= ", :usu_id";
-        } 
+        }
         if (isset($oact_id)) {
             $param_sql .= ", oact_id";
             $bdet_sql .= ", :oact_id";
@@ -1173,7 +1173,7 @@ class Oportunidad extends \app\modules\admision\components\CActiveRecord {
      * @param
      * @return
      */
-    public function actualizarActividad($act_id, $usu_id, $padm_id, $fecatiende, $oact_id, $bact_descripcion,$fecproxima) {
+    public function actualizarActividad($act_id, $usu_id, $padm_id, $fecatiende, $oact_id, $bact_descripcion, $fecproxima) {
         $con = \Yii::$app->db_crm;
         $estado = 1;
         $fecha_modificacion = date(Yii::$app->params["dateTimeByDefault"]);
@@ -1199,11 +1199,11 @@ class Oportunidad extends \app\modules\admision\components\CActiveRecord {
                       WHERE bact_id = :bact_id AND                        
                             bact_estado = :estado AND
                             bact_estado_logico = :estado"
-                    );
+            );
             $comando->bindParam(":estado", $estado, \PDO::PARAM_STR);
             $comando->bindParam(":bact_fecha_registro", $fecatiende, \PDO::PARAM_STR);
             $comando->bindParam(":oact_id", $oact_id, \PDO::PARAM_INT);
-            $comando->bindParam(":bact_fecha_proxima_atencion", $fecproxima, \PDO::PARAM_STR);            
+            $comando->bindParam(":bact_fecha_proxima_atencion", $fecproxima, \PDO::PARAM_STR);
             $comando->bindParam(":bact_id", $act_id, \PDO::PARAM_INT);
             $comando->bindParam(":usu_id", $usu_id, \PDO::PARAM_INT);
             $comando->bindParam(":padm_id", $padm_id, \PDO::PARAM_INT);
@@ -1309,7 +1309,6 @@ class Oportunidad extends \app\modules\admision\components\CActiveRecord {
         $resultData = $comando->queryOne();
         return $resultData;
     }
-
 
     /**
      * Function consulta el ultimo codigo de gestion generado. 
@@ -1428,7 +1427,7 @@ class Oportunidad extends \app\modules\admision\components\CActiveRecord {
         $comando->bindParam(":pges_id", $pges_id, \PDO::PARAM_INT);
         $resultData = $comando->queryOne();
         return $resultData;
-    }   
+    }
 
     /**
      * Function modifica los datos de una oportunidad de venta.
@@ -1502,10 +1501,10 @@ class Oportunidad extends \app\modules\admision\components\CActiveRecord {
      * @return
      */
     public function CargarArchivo($fname, $emp_id, $tipoProceso) {
-        $mod_perTemp =new PersonaGestionTmp();
+        $mod_perTemp = new PersonaGestionTmp();
         $mod_pergestion = new PersonaGestion();
         if ($tipoProceso == "LEADS") {
-            $path = Yii::$app->basePath . Yii::$app->params['documentFolder'] . "leads/" . $fname;       
+            $path = Yii::$app->basePath . Yii::$app->params['documentFolder'] . "leads/" . $fname;
             //return $mod_pergestion->insertarDtosPersonaGestion($emp_id, $tipoProceso);
             $carga_archivo = $mod_perTemp->uploadFile($path);
             if ($carga_archivo['status']) {
@@ -1701,7 +1700,7 @@ class Oportunidad extends \app\modules\admision\components\CActiveRecord {
         $comando->bindParam(":uaca_id", $uaca_id, \PDO::PARAM_INT);
         $comando->bindParam(":mod_id", $mod_id, \PDO::PARAM_INT);
         $comando->bindParam(":padm_tipo_asignacion", $padm_tipo_asignacion, \PDO::PARAM_STR);
-        $resultData = $comando->queryOne();       
+        $resultData = $comando->queryOne();
         return $resultData;
     }
 
@@ -1762,7 +1761,7 @@ class Oportunidad extends \app\modules\admision\components\CActiveRecord {
      */
     public function consultarNombreCarrera($tsca_id) {
         $con = \Yii::$app->db_crm;
-        $estado = 1;        
+        $estado = 1;
         $sql = "SELECT                    
                     tca.tcar_nombre                    
                 FROM 
@@ -1774,7 +1773,7 @@ class Oportunidad extends \app\modules\admision\components\CActiveRecord {
                    tca.tcar_estado = :estado AND
                    tca.tcar_estado_logico = :estado AND
                    tsc.tsca_estado = :estado AND
-                   tsc.tsca_estado_logico = :estado";        
+                   tsc.tsca_estado_logico = :estado";
 
         $comando = $con->createCommand($sql);
         $comando->bindParam(":estado", $estado, \PDO::PARAM_STR);
@@ -1782,7 +1781,7 @@ class Oportunidad extends \app\modules\admision\components\CActiveRecord {
         $resultData = $comando->queryOne();
         return $resultData;
     }
-    
+
     /** Se debe cambiar esta funcion que regrese el codigo de area ***ojo***
      * Function consultarCodigoArea
      * @author  Byron Villacreses <developer@uteg.edu.ec>
@@ -1790,7 +1789,7 @@ class Oportunidad extends \app\modules\admision\components\CActiveRecord {
      * @return 
      */
     public function consultarOportUnidadAcademica() {
-        $con = \Yii::$app->db_crm;      
+        $con = \Yii::$app->db_crm;
         $sql = "SELECT A.eopo_id,B.eopo_nombre,A.uaca_id,C.uaca_nombre,COUNT(A.uaca_id) CantUnidad
                         FROM " . $con->dbname . ".oportunidad A
                                 INNER JOIN " . $con->dbname . ".estado_oportunidad B ON B.eopo_id=A.eopo_id
@@ -1799,7 +1798,7 @@ class Oportunidad extends \app\modules\admision\components\CActiveRecord {
         $comando = $con->createCommand($sql);
         return $comando->queryAll();
     }
-    
+
     /** Function consulta las observaciones de la actividad 
      * @author Giovanni Vergara <analistadesarrollo02@uteg.edu.ec>;
      * @param
@@ -1821,5 +1820,111 @@ class Oportunidad extends \app\modules\admision\components\CActiveRecord {
         $comando->bindParam(":estado", $estado, \PDO::PARAM_STR);
         $resultData = $comando->queryAll();
         return $resultData;
-    }    
+    }
+
+    /**
+     * Function consultar las oportunidades de venta. 
+     * @author Giovanni Vergara <analistadesarrollo02@uteg.edu.ec>;
+     * @param 
+     * @return
+     */
+    public function consultarOportunidadexcel($arrFiltro = array(), $onlyData = false) {
+        $con = \Yii::$app->db_crm;
+        $con1 = \Yii::$app->db;
+        $con2 = \Yii::$app->db_academico;
+        $estado = 1;
+
+        if (isset($arrFiltro) && count($arrFiltro) > 0) {
+            if ($arrFiltro['interesado'] != "") {
+                $str_search = " a.contacto like :interesado AND ";
+            }
+            if ($arrFiltro['agente'] != "") {
+                $str_search .= " (padm_codigo like :agente)  AND";
+            }
+            if ($arrFiltro['estado'] != "" && $arrFiltro['estado'] > 0) {
+                $str_search .= "  a.eopo_id = :estado_ate AND ";
+            }
+        }
+        $sql = "SELECT * FROM (
+                    SELECT  o.opo_id, 
+                             lpad(ifnull(o.opo_codigo,0),7,'0') as opo_codigo, 
+                            (case when pg.tper_id = 1 then 
+                                    concat(ifnull(pg.pges_pri_nombre,''), ' ', ifnull(pg.pges_seg_nombre,''), ' ', ifnull(pg.pges_pri_apellido,''), ' ', ifnull(pg.pges_seg_apellido,'')) 
+                                    else pg.pges_razon_social end) as contacto,
+                            ua.uaca_descripcion as des_unidad,
+                            (case when (o.uaca_id < 3) then
+                                            (select ea.eaca_descripcion from " . $con2->dbname . ".estudio_academico ea where ea.eaca_id = o.eaca_id and ea.eaca_estado = '1' and ea.eaca_estado_logico = '1')
+                                            else (select me.mest_descripcion from " . $con2->dbname . ".modulo_estudio me where me.mest_id = o.mest_id and me.mest_estado = '1' and me.mest_estado_logico = '1') 
+                                        end) as des_estudio, 
+                             m.mod_descripcion as des_modalidad,            
+                            eo.eopo_descripcion as des_estado,  
+                            o.opo_fecha_registro as fecha, 
+                            pa.padm_codigo,
+                            o.eopo_id
+                    FROM " . $con->dbname . ".oportunidad o inner join " . $con->dbname . ".persona_gestion pg on pg.pges_id = o.pges_id
+                         inner join " . $con1->dbname . ".empresa e on e.emp_id = o.emp_id
+                         inner join " . $con2->dbname . ".unidad_academica ua on ua.uaca_id = o.uaca_id
+                         inner join " . $con->dbname . ".estado_oportunidad eo on eo.eopo_id = o.eopo_id
+                         inner join " . $con2->dbname . ".modalidad m on m.mod_id = o.mod_id 
+                         inner join " . $con->dbname . ".personal_admision pa on o.padm_id = pa.padm_id
+                         inner join " . $con1->dbname . ".persona p on pa.per_id = p.per_id    
+                     WHERE o.opo_estado = :estado
+                           and o.opo_estado_logico = :estado  
+                           and pg.pges_estado = :estado
+                           and pg.pges_estado_logico = :estado
+                           and e.emp_estado = :estado
+                           and e.emp_estado_logico = :estado
+                           and ua.uaca_estado = :estado
+                           and ua.uaca_estado_logico = :estado
+                           and eo.eopo_estado = :estado
+                           and eo.eopo_estado_logico = :estado
+                           and m.mod_estado = :estado 
+                           and m.mod_estado_logico = :estado
+                           and pa.padm_estado = :estado
+                           and pa.padm_estado_logico = :estado
+                           and p.per_estado = :estado
+                           and p.per_estado_logico = :estado ) a ";
+
+        if (!empty($str_search)) {
+            $sql .= "WHERE $str_search a.opo_codigo = a.opo_codigo     
+                                 ORDER BY a.opo_id desc ";
+        } else {
+            $sql .= "ORDER BY a.opo_codigo desc";
+        }
+
+        $comando = $con->createCommand($sql);
+        $comando->bindParam(":estado", $estado, \PDO::PARAM_STR);
+
+        if (isset($arrFiltro) && count($arrFiltro) > 0) {
+            $search_cond = "%" . $arrFiltro["interesado"] . "%";
+            $agente = "%" . $arrFiltro["agente"] . "%";
+            $estado_ate = $arrFiltro["estado"];
+            if ($arrFiltro['interesado'] != "") {
+                $comando->bindParam(":interesado", $search_cond, \PDO::PARAM_STR);
+            }
+            if ($arrFiltro['agente'] != "") {
+                $comando->bindParam(":agente", $agente, \PDO::PARAM_STR);
+            }     
+            if ($arrFiltro['estado'] != "" && $arrFiltro['estado'] > 0) {
+                $comando->bindParam(":estado_ate", $estado_ate, \PDO::PARAM_INT);
+            }
+        }
+        $resultData = $comando->queryall();
+        $dataProvider = new ArrayDataProvider([
+            'key' => 'id',
+            'allModels' => $resultData,
+            'pagination' => [
+                'pageSize' => Yii::$app->params["pageSize"],
+            ],
+            'sort' => [
+                'attributes' => [],
+            ],
+        ]);
+        if ($onlyData) {
+            return $resultData;
+        } else {
+            return $dataProvider;
+        }
+    }
+
 }

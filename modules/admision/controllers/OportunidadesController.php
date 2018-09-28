@@ -13,10 +13,11 @@ use app\modules\academico\models\UnidadAcademica;
 use app\models\Empresa;
 use app\models\Utilities;
 use yii\helpers\ArrayHelper;
+use app\modules\admision\Module;
 
-class OportunidadesController extends \app\components\CController
-{
-    public function actionIndex(){
+class OportunidadesController extends \app\components\CController {
+
+    public function actionIndex() {
         $per_id = @Yii::$app->session->get("PB_iduser");
         $modoportunidad = new Oportunidad();
         $modEstOport = new EstadoOportunidad();
@@ -37,13 +38,12 @@ class OportunidadesController extends \app\components\CController
             $data = Yii::$app->request->post();
         }
         return $this->render('index', [
-            'model' => $mod_gestion,
-            'arr_estgestion' => ArrayHelper::map(array_merge([["id" => "0", "name" => "Todas"]], $estado_oportunidad), "id", "name"),
+                    'model' => $mod_gestion,
+                    'arr_estgestion' => ArrayHelper::map(array_merge([["id" => "0", "name" => "Todas"]], $estado_oportunidad), "id", "name"),
         ]);
     }
 
-    public function actionView()
-    {
+    public function actionView() {
         //$per_id = @Yii::$app->session->get("PB_perid");
         $pges_id = base64_decode($_GET["pges_id"]);
         $opor_id = base64_decode($_GET["opor_id"]);
@@ -68,25 +68,24 @@ class OportunidadesController extends \app\components\CController
         $empresa = $empresa_mod->getAllEmpresa();
 
         return $this->render('view', [
-            'personalData' => $contactManage,
-            'arr_linea_servicio' => ArrayHelper::map($unidad_acad_data, "id", "name"),
-            'arr_modalidad' => ArrayHelper::map($modalidad_data, "id", "name"),
-            'arr_tipo_oportunidad' => ArrayHelper::map($tipo_oportunidad_data, "id", "name"),
-            'arr_state_oportunidad' => ArrayHelper::map($state_oportunidad_data, "id", "name"),
-            'arr_academic_study' => ArrayHelper::map($academic_study_data, "id", "name"),
-            "arr_knowledge_channel" => ArrayHelper::map($knowledge_channel_data, "id", "name"),
-            "tipo_dni" => array("CED" => Yii::t("formulario", "DNI Document"), "PASS" => Yii::t("formulario", "Passport")),
-            'arr_empresa' => ArrayHelper::map($empresa, "id", "value"),
-            'arr_oportunidad' => $respOportunidad,
-            "arr_modulo_estudio" => ArrayHelper::map($arr_carrerra1, "id", "name"),
-            "opo_id" => $opor_id,
-            "pges_id" => $pges_id,
-            "tipocarrera" => $resptipocarrera,
+                    'personalData' => $contactManage,
+                    'arr_linea_servicio' => ArrayHelper::map($unidad_acad_data, "id", "name"),
+                    'arr_modalidad' => ArrayHelper::map($modalidad_data, "id", "name"),
+                    'arr_tipo_oportunidad' => ArrayHelper::map($tipo_oportunidad_data, "id", "name"),
+                    'arr_state_oportunidad' => ArrayHelper::map($state_oportunidad_data, "id", "name"),
+                    'arr_academic_study' => ArrayHelper::map($academic_study_data, "id", "name"),
+                    "arr_knowledge_channel" => ArrayHelper::map($knowledge_channel_data, "id", "name"),
+                    "tipo_dni" => array("CED" => Yii::t("formulario", "DNI Document"), "PASS" => Yii::t("formulario", "Passport")),
+                    'arr_empresa' => ArrayHelper::map($empresa, "id", "value"),
+                    'arr_oportunidad' => $respOportunidad,
+                    "arr_modulo_estudio" => ArrayHelper::map($arr_carrerra1, "id", "name"),
+                    "opo_id" => $opor_id,
+                    "pges_id" => $pges_id,
+                    "tipocarrera" => $resptipocarrera,
         ]);
     }
 
-    public function actionEdit()
-    {
+    public function actionEdit() {
         $opor_id = base64_decode($_GET["codigo"]);
         $pges_id = base64_decode($_GET["pgesid"]);
         //$per_id = @Yii::$app->session->get("PB_perid");
@@ -117,19 +116,16 @@ class OportunidadesController extends \app\components\CController
                 $modalidad = $modalidad_model->consultarModalidad($data["ninter_id"]);
                 $message = array("modalidad" => $modalidad);
                 return Utilities::ajaxResponse('OK', 'alert', Yii::t('jslang', 'Success'), 'false', $message);
-
             }
             if (isset($data["getoportunidad"])) {
                 $oportunidad = $modTipoOportunidad->consultarOporxUnidad($data["unidada"]);
                 $message = array("oportunidad" => $oportunidad);
                 return Utilities::ajaxResponse('OK', 'alert', Yii::t('jslang', 'Success'), 'false', $message);
-
             }
             if (isset($data["getsubcarrera"])) {
                 $subcarrera = $modoportunidad->consultarSubCarrera($data["car_id"]);
                 $message = array("subcarrera" => $subcarrera);
                 return Utilities::ajaxResponse('OK', 'alert', Yii::t('jslang', 'Success'), 'false', $message);
-
             }
             if (isset($data["getcarrera"])) {
                 if ($data["unidada"] < 3) {
@@ -139,32 +135,30 @@ class OportunidadesController extends \app\components\CController
                 }
                 $message = array("carrera" => $carrera);
                 return Utilities::ajaxResponse('OK', 'alert', Yii::t('jslang', 'Success'), 'false', $message);
-
             }
         }
 
         //if (($respOportunidad["per_id"] == $per_id) || ($respRolPerAutentica["rol"] == 'SUP')) {        
         return $this->render('edit', [
-            'personalData' => $contactManage,
-            'dataOportunidad' => $respOportunidad,
-            'arr_linea_servicio' => ArrayHelper::map($unidad_acad_data, "id", "name"),
-            'arr_modalidad' => ArrayHelper::map($modalidad_data, "id", "name"),
-            'arr_tipo_oportunidad' => ArrayHelper::map($tipo_oportunidad_data, "id", "name"),
-            'arr_state_oportunidad' => ArrayHelper::map($state_oportunidad_data, "id", "name"),
-            'arr_academic_study' => ArrayHelper::map($academic_study_data, "id", "name"),
-            "arr_knowledge_channel" => ArrayHelper::map($knowledge_channel_data, "id", "name"),
-            "tipo_dni" => array("CED" => Yii::t("formulario", "DNI Document"), "PASS" => Yii::t("formulario", "Passport")),
-            "arr_carrerra2" => ArrayHelper::map($arr_carrerra2, "id", "name"),
-            "arr_subcarrerra" => ArrayHelper::map($arr_subcarrera, "id", "name"),
-            'arr_empresa' => ArrayHelper::map($empresa, "id", "value"),
-            'arr_moduloEstudio' => ArrayHelper::map($arr_moduloEstudio, "Ids", "Nombre"),
-            'opo_id' => $opor_id,
-            'pges_id' => $pges_id,
+                    'personalData' => $contactManage,
+                    'dataOportunidad' => $respOportunidad,
+                    'arr_linea_servicio' => ArrayHelper::map($unidad_acad_data, "id", "name"),
+                    'arr_modalidad' => ArrayHelper::map($modalidad_data, "id", "name"),
+                    'arr_tipo_oportunidad' => ArrayHelper::map($tipo_oportunidad_data, "id", "name"),
+                    'arr_state_oportunidad' => ArrayHelper::map($state_oportunidad_data, "id", "name"),
+                    'arr_academic_study' => ArrayHelper::map($academic_study_data, "id", "name"),
+                    "arr_knowledge_channel" => ArrayHelper::map($knowledge_channel_data, "id", "name"),
+                    "tipo_dni" => array("CED" => Yii::t("formulario", "DNI Document"), "PASS" => Yii::t("formulario", "Passport")),
+                    "arr_carrerra2" => ArrayHelper::map($arr_carrerra2, "id", "name"),
+                    "arr_subcarrerra" => ArrayHelper::map($arr_subcarrera, "id", "name"),
+                    'arr_empresa' => ArrayHelper::map($empresa, "id", "value"),
+                    'arr_moduloEstudio' => ArrayHelper::map($arr_moduloEstudio, "Ids", "Nombre"),
+                    'opo_id' => $opor_id,
+                    'pges_id' => $pges_id,
         ]);
     }
 
-    public function actionNewoportunidadxcontacto()
-    {
+    public function actionNewoportunidadxcontacto() {
         $per_id = @Yii::$app->session->get("PB_perid");
         $emp_id = @Yii::$app->session->get("PB_idempresa");
         $pges_id = base64_decode($_GET["pgid"]);
@@ -192,25 +186,21 @@ class OportunidadesController extends \app\components\CController
                 $modalidad = $modalidad_model->consultarModalidad($data["nint_id"]);
                 $message = array("modalidad" => $modalidad);
                 return Utilities::ajaxResponse('OK', 'alert', Yii::t('jslang', 'Success'), 'false', $message);
-
             }
             if (isset($data["getoportunidad"])) {
                 $oportunidad = $modTipoOportunidad->consultarOporxUnidad($data["unidada"]);
                 $message = array("oportunidad" => $oportunidad);
                 return Utilities::ajaxResponse('OK', 'alert', Yii::t('jslang', 'Success'), 'false', $message);
-
             }
             if (isset($data["getsubcarrera"])) {
                 $subcarrera = $modcanal->consultarSubCarrera($data["car_id"]);
                 $message = array("subcarrera" => $subcarrera);
                 return Utilities::ajaxResponse('OK', 'alert', Yii::t('jslang', 'Success'), 'false', $message);
-
             }
             if (isset($data["getmodalidaemp"])) {
                 $modalidaemp = $modestudio->consultarEstudioEmpresa($data["empresa"]);
                 $message = array("modalidaemp" => $modalidaemp);
                 return Utilities::ajaxResponse('OK', 'alert', Yii::t('jslang', 'Success'), 'false', $message);
-
             }
             if (isset($data["getcarrera"])) {
                 $carrera = $modcanal->consultarCarreraModalidad($data["unidada"], $data["moda_id"]);
@@ -221,24 +211,23 @@ class OportunidadesController extends \app\components\CController
         $arr_carrerra2 = $modcanal->consultarTipoCarrera();
         $arr_subcarrera = $modcanal->consultarSubCarrera(1);
         return $this->render('newoportunidadxcontacto', [
-            'personalData' => $contactManage,
-            'arr_linea_servicio' => ArrayHelper::map($unidad_acad_data, "id", "name"),
-            'arr_modalidad' => ArrayHelper::map($modalidad_data, "id", "name"),
-            'arr_tipo_oportunidad' => ArrayHelper::map($tipo_oportunidad_data, "id", "name"),
-            'arr_state_oportunidad' => ArrayHelper::map($state_oportunidad_data, "id", "name"),
-            'arr_academic_study' => ArrayHelper::map($academic_study_data, "id", "name"),
-            "arr_knowledge_channel" => ArrayHelper::map($knowledge_channel_data, "id", "name"),
-            "tipo_dni" => array("CED" => Yii::t("formulario", "DNI Document"), "PASS" => Yii::t("formulario", "Passport")),
-            "arr_carrerra2" => ArrayHelper::map($arr_carrerra2, "id", "name"),
-            "arr_subcarrerra" => ArrayHelper::map($arr_subcarrera, "id", "name"),
-            'arr_empresa' => ArrayHelper::map($empresa, "id", "value"),
-            "emp_id" => $emp_id,
+                    'personalData' => $contactManage,
+                    'arr_linea_servicio' => ArrayHelper::map($unidad_acad_data, "id", "name"),
+                    'arr_modalidad' => ArrayHelper::map($modalidad_data, "id", "name"),
+                    'arr_tipo_oportunidad' => ArrayHelper::map($tipo_oportunidad_data, "id", "name"),
+                    'arr_state_oportunidad' => ArrayHelper::map($state_oportunidad_data, "id", "name"),
+                    'arr_academic_study' => ArrayHelper::map($academic_study_data, "id", "name"),
+                    "arr_knowledge_channel" => ArrayHelper::map($knowledge_channel_data, "id", "name"),
+                    "tipo_dni" => array("CED" => Yii::t("formulario", "DNI Document"), "PASS" => Yii::t("formulario", "Passport")),
+                    "arr_carrerra2" => ArrayHelper::map($arr_carrerra2, "id", "name"),
+                    "arr_subcarrerra" => ArrayHelper::map($arr_subcarrera, "id", "name"),
+                    'arr_empresa' => ArrayHelper::map($empresa, "id", "value"),
+                    "emp_id" => $emp_id,
         ]);
     }
 
-    public function actionSave()
-    {
-       // $per_id = @Yii::$app->session->get("PB_perid"); //ESTO DESCOMENTAR AL FINAL
+    public function actionSave() {
+        // $per_id = @Yii::$app->session->get("PB_perid"); //ESTO DESCOMENTAR AL FINAL
         $per_id = 6;
         $mod_gestion = new Oportunidad();
         //$scli_id = 2;
@@ -279,7 +268,7 @@ class OportunidadesController extends \app\components\CController
                             $bact_fecha_proxima_atencion = $fecha_registro;
 
                             //$bact_descripcion = (!$nombreoportunidad["Ids"]) ? 'Inicio de Operaciones' : '';
-                            $oact_id =1;
+                            $oact_id = 1;
                             $bact_descripcion = "";
                             $res_actividad = $mod_gestion->insertarActividad($opo_id, $usuario, $padm_id, $eopo_id, $bact_fecha_registro, $oact_id, $bact_descripcion, $bact_fecha_proxima_atencion);
                             if ($res_actividad) {
@@ -297,7 +286,6 @@ class OportunidadesController extends \app\components\CController
                                 );
                                 return Utilities::ajaxResponse('NO_OK', 'alert', Yii::t("jslang", "Bad Request"), false, $message);
                             }
-
                         } else {
                             $transaction->rollback();
                             $message = array(
@@ -334,8 +322,7 @@ class OportunidadesController extends \app\components\CController
         }
     }
 
-    public function actionUpdate()
-    {      
+    public function actionUpdate() {
         $mod_oportunidad = new Oportunidad();
         if (Yii::$app->request->isAjax) {
             $data = Yii::$app->request->post();
@@ -364,12 +351,12 @@ class OportunidadesController extends \app\components\CController
 
             $con = \Yii::$app->db_crm;
             $transaction = $con->beginTransaction();
-            try {              
+            try {
                 $nombreoportunidad = $mod_oportunidad->consultarNombreOportunidad($empresa, $mest_id, $eaca_id, $unidad_academica, $modalidad, $estado_oportunidad);
                 //$mensaje = 'opo:' . $opo_id . ' mest_id:' . $mest_id . ' eaca_id:' . $eaca_id . ' unidad:' . $unidad_academica . ' modalidad:' . $modalidad . ' tipoOpor:' . $tipo_oportunidad . ' subCarr:' . $sub_carrera . ' Canal:' . $canal_conocimiento . ' estado:' . $estado_oportunidad . ' usuario:' . $usuario;               
                 if ($nombreoportunidad["eopo_nombre"] == '' || $nombreoportunidad["eopo_nombre"] == 'Ganada' || $nombreoportunidad["eopo_nombre"] == 'Perdida') {
                     $respuesta = $mod_oportunidad->modificarOportunixId($empresa, $opo_id, $mest_id, $eaca_id, $unidad_academica, $modalidad, $tipo_oportunidad, $sub_carrera, $canal_conocimiento, null, null, null, $usuario, null);
-                    if ($respuesta) {                       
+                    if ($respuesta) {
                         $transaction->commit();
                         $message = array(
                             "wtmessage" => Yii::t("notificaciones", "La información ha sido grabada. "),
@@ -396,4 +383,44 @@ class OportunidadesController extends \app\components\CController
             return;
         }
     }
+
+    public function actionExpexcel() {
+        ini_set('memory_limit', '256M');
+        $content_type = Utilities::mimeContentType("xls");
+        $nombarch = "Report-" . date("YmdHis") . ".xls";
+        header("Content-Type: $content_type");
+        header("Content-Disposition: attachment;filename=" . $nombarch . ".xls");
+        header('Cache-Control: max-age=0');
+        $colPosition = array("C", "D", "E", "F", "G", "H", "I", "J", "K", "L");
+
+        $arrHeader = array(
+           
+            Module::t("crm", "Id Opportunity"),
+            Module::t("crm", "No Opportunity"),
+            Module::t("crm", "Contact"),
+            Yii::t("formulario", "Aca. Uni."),
+            Module::t("crm", "Career/Program/Course"),
+            Module::t("crm", "Moda"),
+            Yii::t("formulario", "Status"),
+            Yii::t("formulario", "Date"),
+            Yii::t("formulario", "Agent"),
+            " ",
+        );
+        $data = Yii::$app->request->get();
+        $arrSearch["interesado"] = $data["contacto"];
+        $arrSearch["agente"] = $data["search"];
+        $arrSearch["estado"] = $data["f_estado"];
+
+        $modoportunidad = new Oportunidad();
+        $arrData = array();
+        if (empty($arrSearch)) {
+            $arrData = $modoportunidad->consultarOportunidadexcel(array(), true);
+        } else {
+            $arrData = $modoportunidad->consultarOportunidadexcel($arrSearch, true);
+        }
+        $nameReport = yii::t("formulario", "Application Reports");
+        Utilities::generarReporteXLS($nombarch, $nameReport, $arrHeader, $arrData, $colPosition);
+        exit;
+    }
+
 }
