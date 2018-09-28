@@ -12,7 +12,6 @@ use yii\web\JsExpression;
 use app\modules\admision\Module as admision;
 use app\modules\academico\Module as academico;
 academico::registerTranslations();
-
 admision::registerTranslations(); // trae las traducciones del modulo 
 ?>
 
@@ -20,8 +19,8 @@ admision::registerTranslations(); // trae las traducciones del modulo
     <?=
     PbGridView::widget([
         'id' => 'TbG_Solicitudes',
-        //'showExport' => true,
-        //'fnExportEXCEL' => "exportExcel",
+        'showExport' => true,
+        'fnExportEXCEL' => "exportExcelPagos",
         //'fnExportPDF' => "exportPdf",
         'dataProvider' => $model,
         'columns' =>

@@ -14,8 +14,10 @@ use yii\helpers\Url;
 use yii\base\Exception;
 use yii\base\Security;
 use app\modules\admision\Module as admision;
+use app\modules\academico\Module as academico;
 
 admision::registerTranslations();
+academico::registerTranslations();
 
 class PagosController extends \app\components\CController {
 
@@ -683,6 +685,45 @@ class PagosController extends \app\components\CController {
         Utilities::removeTemporalFile($tmpDir);
         echo $file;
         exit();
+    }
+    
+    
+    
+    public function actionExpexcelpagos() {
+        ini_set('memory_limit', '256M');
+        $content_type = Utilities::mimeContentType("xls");
+        $nombarch = "Report-" . date("YmdHis") . ".xls";
+        header("Content-Type: $content_type");
+        header("Content-Disposition: attachment;filename=" . $nombarch . ".xls");
+        header('Cache-Control: max-age=0');
+        $colPosition = array("C", "D", "E", "F", "G", "H", "I", "J", "K");
+        
+        $arrHeader = array(
+            admision::t("Solicitudes", "Request #"),
+            admision::t("Solicitudes", "Application date"),
+            Yii::t("formulario", "DNI 1"),
+            Yii::t("formulario", "First Names"),
+            Yii::t("formulario", "Last Names"),
+            academico::t("Academico", "Academic unit"),
+            academico::t("Academico", "Income Method"),
+            Yii::t("formulario", "Status"),
+        );
+        $data = Yii::$app->request->get();
+        $arrSearch["search"] = $data["search"];
+        $arrSearch["f_ini"] = $data["f_ini"];
+        $arrSearch["f_fin"] = $data["f_fin"];
+        $arrSearch["f_estado"] = $data["f_estado"];
+        
+        $arrData = array();
+        $model_pag = new OrdenPago();
+        if (empty($arrSearch)) {
+            $arrData = $model_pag->listarPagosolicitudExcel(array(), true);                       
+        } else {
+            $arrData = $model_pag->listarPagosolicitudExcel($arrSearch, true);
+        }
+        $nameReport = yii::t("formulario", "Application Reports");
+        Utilities::generarReporteXLS($nombarch, $nameReport, $arrHeader, $arrData, $colPosition);
+        exit;
     }
 
 }

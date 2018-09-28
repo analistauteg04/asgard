@@ -2150,5 +2150,96 @@ class OrdenPago extends \app\modules\financiero\components\CActiveRecord {
             return $dataProvider;
         }
     }
+    
+    
+     /**
+     * Function listarPagosolicitudExcel
+     * @author  Grace Viteri <analistadesarrollo01@uteg.edu.ec>
+     * @param   
+     * @return  $resultData (información de las órdenes de pago pendientes y pagadas.)
+     */
+    public function listarPagosolicitudExcel($arrFiltro = array(), $onlyData = false) {
+        $con = \Yii::$app->db_captacion;
+        $con1 = \Yii::$app->db;
+        $con2 = \Yii::$app->db_facturacion;
+        $con3 = \Yii::$app->db_academico;
+        $estado = 1;
+       // $columnsAdd = "";
+        if (isset($arrFiltro) && count($arrFiltro) > 0) {
+            $str_search .= "(per.per_pri_nombre like :search OR ";
+            $str_search .= "per.per_pri_apellido like :search OR ";
+            $str_search .= "ming.ming_descripcion like :search) AND ";
+            if ($arrFiltro['f_ini'] != "" && $arrFiltro['f_fin'] != "") {
+                $str_search .= "sins.sins_fecha_solicitud >= :fec_ini AND ";
+                $str_search .= "sins.sins_fecha_solicitud <= :fec_fin AND ";
+            }
+            if ($arrFiltro['f_estado'] != "T") {
+                $str_search .= "opag.opag_estado_pago = :f_estado AND ";
+            }
+        } 
+        $sql = "SELECT  lpad(sins.sins_id,4,'0') as solicitud,
+                        sins.sins_fecha_solicitud,                        
+                        per.per_cedula identificacion,
+                        concat(per.per_pri_apellido) apellidos, 
+                        concat(per.per_pri_nombre) nombres,
+                        uaca_nombre nivel,
+                        ming_descripcion metodo,                                                                                               
+                        (case opag.opag_estado_pago when 'P' then 'Pendiente' when 'S' then 'Pagada' end) as estado_desc_pago
+                FROM " . $con->dbname . ".solicitud_inscripcion sins 
+                     INNER JOIN " . $con3->dbname . ".unidad_academica uaca on uaca.uaca_id = sins.uaca_id
+                     INNER JOIN " . $con->dbname . ".metodo_ingreso ming on ming.ming_id = sins.ming_id
+                     INNER JOIN " . $con->dbname . ".interesado inte on sins.int_id = inte.int_id                      
+                     INNER JOIN " . $con1->dbname . ".persona per on inte.per_id = per.per_id
+                     INNER JOIN " . $con2->dbname . ".orden_pago opag on sins.sins_id = opag.sins_id                     
+                WHERE 
+                      $str_search                         
+                      sins.sins_estado = :estado AND
+                      sins.sins_estado_logico = :estado AND
+                      uaca.uaca_estado = :estado AND
+                      uaca.uaca_estado_logico = :estado AND
+                      ming.ming_estado = :estado AND
+                      ming.ming_estado_logico = :estado AND
+                      inte.int_estado_logico = :estado AND
+                      inte.int_estado = :estado AND                                                                  
+                      per.per_estado = :estado AND
+                      per.per_estado_logico = :estado AND
+                      opag.opag_estado = :estado AND
+                      opag.opag_estado_logico = :estado AND
+                      opag.opag_estado = :estado 
+                ORDER BY sins.sins_fecha_solicitud desc";
+
+        $comando = $con->createCommand($sql);
+        $comando->bindParam(":estado", $estado, \PDO::PARAM_STR);
+        if (isset($arrFiltro) && count($arrFiltro) > 0) {
+            $search_cond = "%" . $arrFiltro["search"] . "%";
+            $fecha_ini = $arrFiltro["f_ini"];
+            $fecha_fin = $arrFiltro["f_fin"];
+            $f_estado = $arrFiltro["f_estado"];
+            $comando->bindParam(":search", $search_cond, \PDO::PARAM_STR);
+            if ($arrFiltro['f_ini'] != "" && $arrFiltro['f_fin'] != "") {
+                $comando->bindParam(":fec_ini", $fecha_ini, \PDO::PARAM_STR);
+                $comando->bindParam(":fec_fin", $fecha_fin, \PDO::PARAM_STR);
+            }
+            if ($arrFiltro['f_estado'] != "T") {
+                $comando->bindParam(":f_estado", $f_estado, \PDO::PARAM_STR);
+            }
+        }
+        $resultData = $comando->queryall();
+        $dataProvider = new ArrayDataProvider([
+            'key' => 'id',
+            'allModels' => $resultData,
+            'pagination' => [
+                'pageSize' => Yii::$app->params["pageSize"],
+            ],
+            'sort' => [
+                'attributes' => [],
+            ],
+        ]);
+        if ($onlyData) {
+            return $resultData;
+        } else {
+            return $dataProvider;
+        }
+    }
 
 }
