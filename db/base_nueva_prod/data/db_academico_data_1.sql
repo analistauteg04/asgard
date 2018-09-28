@@ -160,6 +160,7 @@ INSERT INTO `modulo_estudio` (`mest_id`, `uaca_id`, `mod_id`, `mest_codigo`, `me
 (8, 3, 2, 'DHCR01', 'Desarrollo Habilidades Comerciales para Retail', 'Desarrollo Habilidades Comerciales para Retail', 1, null, '1', '2018-05-08 22:43:48', null, '1'),
 (9, 3, 1, 'CUON01', 'Cursos Online', 'Cursos Online', 1, null, '1', '2018-05-08 22:43:48', null, '1'),
 (10, 4, 2, 'IDIF01', 'Idioma Inglés, Francés', 'Idioma Inglés, Francés', 1, null, '1', '2018-05-08 22:43:48', null, '1'),
+
 (11, 3, 2, 'PTHA01', 'Programa de Talento Humano: Actualidad Laboral', 'Programa de Talento Humano: Actualidad Laboral', 1, null, '1', '2018-09-26 10:15:00', null, '1'),
 (12, 3, 2, 'ESDI01', 'Programa de habilidades Gerenciales: Estrategias directivas', 'Programa de habilidades Gerenciales: Estrategias directivas', 1, null, '1', '2018-09-26 10:15:00', null, '1'),
 (13, 3, 2, 'IFIN01', 'Illustrator y fotoshop: intermedio', 'Illustrator y fotoshop: intermedio', 1, null, '1', '2018-09-26 10:15:00', null, '1'),
