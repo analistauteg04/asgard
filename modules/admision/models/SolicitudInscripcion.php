@@ -43,6 +43,7 @@ use Yii;
  */
 class SolicitudInscripcion extends \yii\db\ActiveRecord
 {
+    public static $arr_DNI = array("1" => "CED", "2" => "RUC", "3" => "PASS");
     /**
      * {@inheritdoc}
      */

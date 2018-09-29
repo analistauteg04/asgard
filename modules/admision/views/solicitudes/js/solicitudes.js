@@ -15,7 +15,7 @@ $(document).ready(function () {
         }
     });
     $('#cmb_ninteres').change(function () {
-        var link = $('#txth_base').val() + "/solicitudinscripcion/create";
+        var link = $('#txth_base').val() + "/admision/solicitudes/new";
         var arrParams = new Object();
         arrParams.nint_id = $(this).val();
         arrParams.getmodalidad = true;
@@ -86,12 +86,14 @@ $(document).ready(function () {
     });
 
     $('#cmb_modalidad').change(function () {
-        var link = $('#txth_base').val() + "/solicitudinscripcion/create";
+        var link = $('#txth_base').val() + "/admision/solicitudes/new";
         var arrParams = new Object();
+        
         arrParams.unidada = $('#cmb_ninteres').val();
         arrParams.moda_id = $(this).val();
         arrParams.getcarrera = true;
         arrParams.nint_id = $('#cmb_ninteres').val();
+    
         requestHttpAjax(link, arrParams, function (response) {
             if (response.status == "OK") {
                 data = response.message;
@@ -388,7 +390,7 @@ $(document).ready(function () {
     });
 
     $('#cmb_metodos').change(function () {
-        var link = $('#txth_base').val() + "/solicitudinscripcion/create";
+        var link = $('#txth_base').val() + "/admision/solicitudes/new";
         var arrParams = new Object();
         if ($('#cmb_metodos').val() == 2) {
             if ($('#cmb_ninteres').val() == 1) {
@@ -431,8 +433,7 @@ function exportExcel() {
     var f_ini = $('#txt_fecha_ini').val();
     var f_fin = $('#txt_fecha_fin').val();
     var carrera = $('#cmb_carrera option:selected').val();
-    var estado = $('#cmb_estado option:selected').val();       
-    //window.location.href = $('#txth_base').val() + "/admision/solicitudes/expexcel?search=" + search + "&f_ini=" + f_ini + "&f_fin=" + f_fin + "&carrera=" + carrera + "&estadoSol=" + estado;   
+    var estado = $('#cmb_estado option:selected').val();           
     window.location.href = $('#txth_base').val() + "/admision/solicitudes/expexcelsolicitudes?search=" + search + "&f_ini=" + f_ini + "&f_fin=" + f_fin + "&carrera=" + carrera + "&estadoSol=" + estado;
 }
 
