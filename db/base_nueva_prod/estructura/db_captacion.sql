@@ -124,7 +124,8 @@ create table if not exists `solicitud_inscripcion` (
  `uaca_id` bigint(20) null, -- guarda la unidad academica de la bd_academico
  `mod_id` bigint(20)  null,
  `ming_id` bigint(20) null,
- `eaca_id` bigint(20) not null, -- guarda el id de carrera y de otros servicios.
+ `eaca_id` bigint(20) null, -- guarda el id de carrera y de otros servicios.
+ `mest_id` bigint(20) null,
  `emp_id` bigint(20) null, 
  `num_solicitud` varchar(10) null, 
  `rsin_id` bigint(20) not null,

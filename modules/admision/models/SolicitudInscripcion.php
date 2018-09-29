@@ -1348,7 +1348,7 @@ class SolicitudInscripcion extends \app\modules\admision\components\CActiveRecor
                                     where sins.ming_id = ming.ming_id AND
                                     ming.ming_estado = :estado AND
                                     ming.ming_estado_logico = :estado),'NA') as ming_nombre,
-                    eac.eaca_nombre as carrera,           
+                    eac.eaca_nombre as carrera,
                     rsol.rsin_nombre as estado,
                     case when ifnull((select opag_estado_pago
                                             from " . $con3->dbname . ".orden_pago op

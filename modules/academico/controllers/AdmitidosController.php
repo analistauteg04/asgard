@@ -52,7 +52,11 @@ class AdmitidosController extends \app\components\CController {
             Yii::t("crm", "Contact Type"),
             Yii::t("crm", "Contact Status"),
             Yii::t("formulario", "Open Opportunities"),
-            Yii::t("formulario", "Close Opportunities")
+            Yii::t("formulario", "Close Opportunities"),
+            Yii::t("formulario", "Metodo Ingreso"),
+            Yii::t("formulario", "Carrera"),
+            Yii::t("formulario", "Beca"),
+            Yii::t("formulario", "Matriculado"),
         );
         $data = Yii::$app->request->get();
         $arrSearch["f_ini"] = $data['fecha_ini'];
@@ -63,7 +67,7 @@ class AdmitidosController extends \app\components\CController {
         if (empty($arrSearch)) {
             $arrData = Admitido::getAdmitidos(array(),true);
         } else {
-            $arrData = Admitido::getAdmitidos(array(),true);
+            $arrData = Admitido::getAdmitidos($arrSearch,true);
         }
         \app\models\Utilities::putMessageLogFile($arrData);
         $nameReport = yii::t("formulario", "Application Reports");
