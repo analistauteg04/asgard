@@ -6,121 +6,122 @@ USE `db_asgard`;
 --
 -- Volcado de datos para la tabla `ACCION`
 --
-INSERT INTO `accion` (`acc_id`, `acc_nombre`, `acc_url_accion`, `acc_tipo`, `acc_descripcion`, `acc_lang_file`, `acc_dir_imagen`, `acc_estado`, `acc_estado_logico`) VALUES
-(1, 'Create', 'Create', 'General', 'Create', 'accion', 'glyphicon glyphicon-file', '1', '1'),
-(2, 'Update', 'Update', 'General', 'Update', 'accion', 'glyphicon glyphicon-floppy-disk', '1', '1'),
-(3, 'Delete', 'Delete', 'General', 'Delete', 'accion', 'glyphicon glyphicon-trash', '1', '1'),
-(4, 'Save', 'Save', 'General', 'Save', 'accion', 'glyphicon glyphicon-floppy-disk', '1', '1'),
-(5, 'Search', 'Search', 'General', 'Search', 'accion', 'glyphicon glyphicon-search', '1', '1'),
-(6, 'Print', 'Print', 'General', 'Print', 'accion', 'glyphicon glyphicon-print', '1', '1'),
-(7, 'Import', 'Import', 'General', 'Import', 'accion', 'glyphicon glyphicon-import', '1', '1'),
-(8, 'Export', 'Export', 'General', 'Export', 'accion', 'glyphicon glyphicon-export', '1', '1'),
-(9, 'Back', 'Back', 'General', 'Back', 'accion', 'glyphicon glyphicon-triangle-right', '1', '1'),
-(10, 'Next', 'Next', 'General', 'Next', 'accion', 'glyphicon glyphicon-triangle-left', '1', '1'),
-(11, 'Clear', 'Clear', 'General', 'Clear', 'accion', 'glyphicon glyphicon-leaf', '1', '1'),
-(12, 'Edit', 'Edit', 'General', 'Edit', 'accion', 'glyphicon glyphicon-pencil', '1', '1'),
-(13, 'Approve', 'Approve', 'General', 'Approve', 'accion', 'glyphicon glyphicon-ok', '1', '1'),
-(14, 'LoadFile', 'LoadFile', 'General', 'LoadFile', 'accion', 'glyphicon glyphicon-ok', '1', '1'),
-(15, 'loadCall', 'loadCall', 'General', 'loadCall', 'accion', 'glyphicon glyphicon-ok', '1', '1'),
-(16, 'loadLeads', 'loadLeads', 'General', 'loadLeads', 'accion', 'glyphicon glyphicon-ok', '1', '1');
+INSERT INTO `accion` (`acc_id`, `acc_nombre`, `acc_url_accion`, `acc_tipo`, `acc_descripcion`, `acc_lang_file`, `acc_dir_imagen`, `acc_estado`, `acc_fecha_creacion`, `acc_fecha_modificacion`, `acc_estado_logico`) VALUES
+(1, 'Create', 'Create', 'General', 'Create', 'accion', 'glyphicon glyphicon-file', '1', '2017-02-01 15:05:26', NULL, '1'),
+(2, 'Update', 'Update', 'General', 'Update', 'accion', 'glyphicon glyphicon-floppy-disk', '1', '2017-02-01 15:05:26', NULL, '1'),
+(3, 'Delete', 'Delete', 'General', 'Delete', 'accion', 'glyphicon glyphicon-trash', '1', '2017-02-01 15:05:26', NULL, '1'),
+(4, 'Save', 'Save', 'General', 'Save', 'accion', 'glyphicon glyphicon-floppy-disk', '1', '2017-02-01 15:05:26', NULL, '1'),
+(5, 'Search', 'Search', 'General', 'Search', 'accion', 'glyphicon glyphicon-search', '1', '2017-02-01 15:05:26', NULL, '1'),
+(6, 'Print', 'Print', 'General', 'Print', 'accion', 'glyphicon glyphicon-print', '1', '2017-02-01 15:05:26', NULL, '1'),
+(7, 'Import', 'Import', 'General', 'Import', 'accion', 'glyphicon glyphicon-import', '1', '2017-02-01 15:05:26', NULL, '1'),
+(8, 'Export', 'Export', 'General', 'Export', 'accion', 'glyphicon glyphicon-export', '1', '2017-02-01 15:05:26', NULL, '1'),
+(9, 'Back', 'Back', 'General', 'Back', 'accion', 'glyphicon glyphicon-triangle-right', '1', '2017-02-01 15:05:26', NULL, '1'),
+(10, 'Next', 'Next', 'General', 'Next', 'accion', 'glyphicon glyphicon-triangle-left', '1', '2017-02-01 15:05:26', NULL, '1'),
+(11, 'Clear', 'Clear', 'General', 'Clear', 'accion', 'glyphicon glyphicon-leaf', '1', '2017-02-01 15:05:26', NULL, '1'),
+(12, 'Edit', 'Edit', 'General', 'Edit', 'accion', 'glyphicon glyphicon-pencil', '1', '2017-02-01 15:05:26', NULL, '1'),
+(13, 'Approve', 'Approve', 'General', 'Approve', 'accion', 'glyphicon glyphicon-ok', '1', '2017-02-01 15:05:26', NULL, '1'),
+(14, 'LoadFile', 'LoadFile', 'General', 'LoadFile', 'accion', 'glyphicon glyphicon-ok', '1', '2017-02-01 15:05:26', NULL, '1'),
+(15, 'loadCall', 'loadCall', 'General', 'loadCall', 'accion', 'glyphicon glyphicon-ok', '1', '2017-02-01 15:05:26', NULL, '1'),
+(16, 'loadLeads', 'loadLeads', 'General', 'loadLeads', 'accion', 'glyphicon glyphicon-ok', '1', '2017-02-01 15:05:26', NULL, '1');
+
 -- --------------------------------------------------------
 --
 -- Volcado de datos para la tabla `tipo_empresa`
 --
-INSERT INTO `tipo_empresa` (`temp_id`, `temp_nombre`, `temp_descripcion`, `temp_estado`, `temp_estado_logico`) VALUES
-(1, 'Empresa Pública', 'Empresa Pública', '1', '1'),
-(2, 'Empresa Privada', 'Empresa Privada', '1', '1');
+INSERT INTO `tipo_empresa` (`temp_id`, `temp_nombre`, `temp_descripcion`, `temp_estado`, `temp_fecha_creacion`, `temp_fecha_modificacion`, `temp_estado_logico`) VALUES
+(1, 'Empresa Pública', 'Empresa Pública', '1', '2017-02-01 15:05:26', NULL, '1'),
+(2, 'Empresa Privada', 'Empresa Privada', '1', '2017-02-01 15:05:26', NULL, '1');
 
 -- --------------------------------------------------------
 --
 -- Volcado de datos para la tabla `EMPRESA`
 --
 INSERT INTO `empresa` (`emp_id`, `temp_id`, `emp_razon_social`, `emp_nombre_comercial`, `emp_alias`, `emp_ruc`, `emp_dominio`, `emp_imap_domain`, `emp_imap_port`, `emp_imap_user`, `emp_imap_pass`, `emp_direccion`, `emp_telefono`, `emp_descripcion`, `emp_estado`, `emp_fecha_creacion`, `emp_fecha_modificacion`, `emp_estado_logico`) VALUES
-(1, 2, 'UTEG', 'UTEG', 'UTEG', '', 'www.uteg.edu.ec', 'www.uteg.edu.ec', '587', '', '', NULL, NULL, NULL, '1', CURRENT_TIMESTAMP, NULL, '1'),
-(2, 2, 'ULINK', 'ULINK', 'ULINK', '', 'www.ulink.us', 'www.ulink.us', '587', '', '', NULL, NULL, NULL, '1', CURRENT_TIMESTAMP, NULL, '1'),
-(3, 2, 'SMART', 'SMART', 'SMART', '', 'www.sbc.com.ec', 'www.sbc.com.ec', '587', '', '', NULL, NULL, NULL, '1', CURRENT_TIMESTAMP, NULL, '1');
-
+(1, 2, 'UTEG', 'UTEG', 'UTEG', '', 'www.uteg.edu.ec', 'www.uteg.edu.ec', '587', '', '', NULL, NULL, NULL, '1', '2017-02-01 15:05:26', NULL, '1'),
+(2, 2, 'ULINK', 'ULINK', 'ULINK', '', 'www.ulink.us', 'www.ulink.us', '587', '', '', NULL, NULL, NULL, '1', '2017-02-01 15:05:26', NULL, '1'),
+(3, 2, 'SMART', 'SMART', 'SMART', '', 'www.sbc.com.ec', 'www.sbc.com.ec', '587', '', '', NULL, NULL, NULL, '1', '2017-02-01 15:05:26', NULL, '1');
 
 -- --------------------------------------------------------
 --
 -- Volcado de datos para la tabla `ETNIA`
 --
-INSERT INTO `etnia` (`etn_id`, `etn_nombre`, `etn_descripcion`, `etn_estado`, `etn_estado_logico`) VALUES
-(1, 'Afroecuatoriano/a', 'Afroecuatoriano/a', '1', '1'),
-(2, 'Blanco/a', 'Blanco/a', '1', '1'),
-(3, 'Indígena', 'Indígena', '1', '1'),
-(4, 'Mestizo/a', 'Mestizo/a', '1', '1'),
-(5, 'Montubio/a', 'Montubio/a', '1', '1'),
-(6, 'Otro', 'Otro', '1', '1'),
-(7, 'Negro/a', 'Negro/a', '1', '1'),
-(8, 'Mulato/a', 'Mulato/a', '1', '1');
+INSERT INTO `etnia` (`etn_id`, `etn_nombre`, `etn_descripcion`, `etn_observacion`, `etn_estado`, `etn_fecha_creacion`, `etn_fecha_actualizacion`, `etn_estado_logico`) VALUES
+(1, 'Afroecuatoriano/a', 'Afroecuatoriano/a', NULL, '1', '2017-02-01 15:05:26', NULL, '1'),
+(2, 'Blanco/a', 'Blanco/a', NULL, '1', '2017-02-01 15:05:26', NULL, '1'),
+(3, 'Indígena', 'Indígena', NULL, '1', '2017-02-01 15:05:26', NULL, '1'),
+(4, 'Mestizo/a', 'Mestizo/a', NULL, '1', '2017-02-01 15:05:26', NULL, '1'),
+(5, 'Montubio/a', 'Montubio/a', NULL, '1', '2017-02-01 15:05:26', NULL, '1'),
+(6, 'Negro/a', 'Negro/a', NULL, '1', '2017-02-01 15:05:26', NULL, '1'),
+(7, 'Mulato/a', 'Mulato/a', NULL, '1', '2017-02-01 15:05:26', NULL, '1'),
+(8, 'Otro', 'Otro', NULL, '1', '2017-02-01 15:05:26', NULL, '1');
 
 -- --------------------------------------------------------
 --
 -- Volcado de datos para la tabla `ESTADO_CIVIL`
 --
-INSERT INTO `estado_civil` (`eciv_id`, `eciv_nombre`, `eciv_descripcion`, `eciv_estado`, `eciv_estado_logico`) VALUES
-(1, 'Soltero', 'Soltero', '1', '1'),
-(2, 'Casado', 'Casado', '1', '1'),
-(3, 'Viudo', 'Viudo', '1', '1'),
-(4, 'Divorciado', 'Divorciado', '1', '1'),
-(5, 'Unión de hecho', 'Unión de hecho', '1', '1');
+INSERT INTO `estado_civil` (`eciv_id`, `eciv_nombre`, `eciv_descripcion`, `eciv_observacion`, `eciv_estado`, `eciv_fecha_creacion`, `eciv_fecha_actualizacion`, `eciv_estado_logico`) VALUES
+(1, 'Soltero', 'Soltero', NULL, '1', '2017-02-01 15:05:27', NULL, '1'),
+(2, 'Casado', 'Casado', NULL, '1', '2017-02-01 15:05:27', NULL, '1'),
+(3, 'Viudo', 'Viudo', NULL, '1', '2017-02-01 15:05:27', NULL, '1'),
+(4, 'Divorciado', 'Divorciado', NULL, '1', '2017-02-01 15:05:27', NULL, '1'),
+(5, 'Unión de hecho', 'Unión de hecho', NULL, '1', '2017-02-01 15:05:27', NULL, '1');
 
 -- --------------------------------------------------------
 --
 -- Volcado de datos para la tabla `TIPO_PARENTESCO`
 --
-INSERT INTO `tipo_parentesco` (`tpar_id`, `tpar_nombre`, `tpar_descripcion`, `tpar_grado`, `tpar_estado`, `tpar_estado_logico`) VALUES
-(1, 'Esposo', 'descripción de parentesco', '1', '1', '1'),
-(2, 'Esposa', 'descripción de parentesco', '1', '1', '1'),
-(3, 'Hijo', 'descripción de parentesco', '1', '1', '1'),
-(4, 'Hija', 'descripción de parentesco', '1', '1', '1'),
-(5, 'Padre', 'descripción de parentesco', '1', '1', '1'),
-(6, 'Madre', 'descripción de parentesco', '1', '1', '1'),
-(7, 'Abuelo', 'descripción de parentesco', '0', '1', '1'),
-(8, 'Abuela', 'descripción de parentesco', '0', '1', '1'),
-(9, 'Hermano', 'descripción de parentesco', '0', '1', '1'),
-(10, 'Hermana', 'descripción de parentesco', '0', '1', '1'),
-(11, 'Tío', 'descripción de parentesco', '0', '1', '1'),
-(12, 'Tía', 'descripción de parentesco', '0', '1', '1');
+INSERT INTO `tipo_parentesco` (`tpar_id`, `tpar_nombre`, `tpar_descripcion`, `tpar_grado`, `tpar_observacion`, `tpar_estado`, `tpar_fecha_creacion`, `tpar_fecha_actualizacion`, `tpar_estado_logico`) VALUES
+(1, 'Esposo', 'descripción de parentesco', '1', NULL, '1', '2017-02-01 15:05:27', NULL, '1'),
+(2, 'Esposa', 'descripción de parentesco', '1', NULL, '1', '2017-02-01 15:05:27', NULL, '1'),
+(3, 'Hijo', 'descripción de parentesco', '1', NULL, '1', '2017-02-01 15:05:27', NULL, '1'),
+(4, 'Hija', 'descripción de parentesco', '1', NULL, '1', '2017-02-01 15:05:27', NULL, '1'),
+(5, 'Padre', 'descripción de parentesco', '1', NULL, '1', '2017-02-01 15:05:27', NULL, '1'),
+(6, 'Madre', 'descripción de parentesco', '1', NULL, '1', '2017-02-01 15:05:27', NULL, '1'),
+(7, 'Abuelo', 'descripción de parentesco', '0', NULL, '1', '2017-02-01 15:05:27', NULL, '1'),
+(8, 'Abuela', 'descripción de parentesco', '0', NULL, '1', '2017-02-01 15:05:27', NULL, '1'),
+(9, 'Hermano', 'descripción de parentesco', '0', NULL, '1', '2017-02-01 15:05:27', NULL, '1'),
+(10, 'Hermana', 'descripción de parentesco', '0', NULL, '1', '2017-02-01 15:05:27', NULL, '1'),
+(11, 'Tío', 'descripción de parentesco', '0', NULL, '1', '2017-02-01 15:05:27', NULL, '1'),
+(12, 'Tía', 'descripción de parentesco', '0', NULL, '1', '2017-02-01 15:05:27', NULL, '1');
 
 -- --------------------------------------------------------
 --
 -- Tabla `tipo_identificacion`
 --
-INSERT INTO `tipo_identificacion` (`tide_id`, `tide_nombre`, `tide_descripcion`, `tide_numero_caracteres`, `tide_estado`, `tide_estado_logico`) VALUES
-(1, 'Cedula', 'Cedula', '10', '1', '1'),
-(2, 'RUC', 'RUC', '13', '1','1'),
-(3, 'Pasaporte','Pasaporte', NULL, '1', '1');
+INSERT INTO `tipo_identificacion` (`tide_id`, `tide_nombre`, `tide_descripcion`, `tide_numero_caracteres`, `tide_estado`, `tide_fecha_creacion`, `tide_fecha_modificacion`, `tide_estado_logico`) VALUES
+(1, 'Cedula', 'Cedula', '10', '1', '2017-02-01 15:05:27', NULL, '1'),
+(2, 'RUC', 'RUC', '13', '1', '2017-02-01 15:05:27', NULL, '1'),
+(3, 'Pasaporte', 'Pasaporte', NULL, '1', '2017-02-01 15:05:27', NULL, '1');
 
 -- --------------------------------------------------------
 --
 -- Volcado de datos para la tabla `TIPO_PASSWORD`
 --
-INSERT INTO `tipo_password` (`tpas_id`, `tpas_descripcion`, `tpas_validacion`, `tpas_observacion`, `tpas_estado`, `tpas_estado_logico`) VALUES
-(1, 'Simples', '/^(?=.*[a-z])(?=.*[A-Z]).{VAR,}$/', 'Las claves simples deben cumplir con lo mínimo: Caracteres alfabéticos (Mayúsculas y minúsculas).', '1', '1'),
-(2, 'Semicomplejas', '/^(?=.*[a-z])(?=.*[A-Z])(?=.*\\d).{VAR,}$/', 'Las claves semicomplejas deben cumplir con lo mínimo: Caracteres alfabéticos (Mayúsculas y minúsculas). ', '1', '1'),
-(3, 'Complejas', '/^(?=.*[a-z])(?=.*[A-Z])(?=.*\\d)(?=.*[@\\,\\;#¿\\?\\}\\{\\]\\[\\-_¡!\\=&\\^:<>\\.\\+\\*\\/\\$\\(\\)]).{VAR,}$/', 'Las claves complejas deben cumplir con lo mínimo: Caracteres alfabéticos (Mayúsculas y minúsculas).\nSímbolos: @ , ; # ¿ ? } { ] [ - _ ¡ ! = & ^ : < > . + * / ( )', '1', '1');
+INSERT INTO `tipo_password` (`tpas_id`, `tpas_descripcion`, `tpas_validacion`, `tpas_observacion`, `tpas_estado`, `tpas_fecha_creacion`, `tpas_fecha_actualizacion`, `tpas_estado_logico`) VALUES
+(1, 'Simples', '/^(?=.*[a-z])(?=.*[A-Z]).{VAR,}$/', 'Las claves simples deben cumplir con lo mínimo: Caracteres alfabéticos (Mayúsculas y minúsculas).', '1', '2017-02-01 15:05:27', NULL, '1'),
+(2, 'Semicomplejas', '/^(?=.*[a-z])(?=.*[A-Z])(?=.*\\d).{VAR,}$/', 'Las claves semicomplejas deben cumplir con lo mínimo: Caracteres alfabéticos (Mayúsculas y minúsculas). ', '1', '2017-02-01 15:05:27', NULL, '1'),
+(3, 'Complejas', '/^(?=.*[a-z])(?=.*[A-Z])(?=.*\\d)(?=.*[@\\,\\;#¿\\?\\}\\{\\]\\[\\-_¡!\\=&\\^:<>\\.\\+\\*\\/\\$\\(\\)]).{VAR,}$/', 'Las claves complejas deben cumplir con lo mínimo: Caracteres alfabéticos (Mayúsculas y minúsculas).\nSímbolos: @ , ; # ¿ ? } { ] [ - _ ¡ ! = & ^ : < > . + * / ( )', '1', '2017-02-01 15:05:27', NULL, '1');
 -- --------------------------------------------------------
 --
 -- Volcado de datos para la tabla `TIPO_PERSONA`
 --
-INSERT INTO `tipo_persona` (`tper_id`, `tper_nombre`, `tper_estado`,`tper_estado_logico`) VALUES
-(1, 'Natural', '1', '1'),
-(2, 'Jurídica', '1', '1');
+INSERT INTO `tipo_persona` (`tper_id`, `tper_nombre`, `tper_estado`, `tper_fecha_creacion`, `tper_fecha_modificacion`, `tper_estado_logico`) VALUES
+(1, 'Natural', '1', '2017-02-01 15:05:27', NULL, '1'),
+(2, 'Jurídica', '1', '2017-02-01 15:05:27', NULL, '1');
+
 -- --------------------------------------------------------
 --
 -- Volcado de datos para la tabla `TIPO_SANGRE`
 --
-INSERT INTO `tipo_sangre` (`tsan_id`, `tsan_nombre`, `tsan_descripcion`, `tsan_estado`, `tsan_estado_logico`) VALUES
-(1, 'AB +', 'descripción de tipo de sangre', '1', '1'),
-(2, 'AB -', 'descripción de tipo de sangre', '1', '1'),
-(3, 'A +', 'descripción de tipo de sangre', '1', '1'),
-(4, 'A -', 'descripción de tipo de sangre', '1', '1'),
-(5, 'B +', 'descripción de tipo de sangre', '1', '1'),
-(6, 'B -', 'descripción de tipo de sangre', '1', '1'),
-(7, 'O+', 'descripción de tipo de sangre', '1', '1'),
-(8, 'O -', 'descripción de tipo de sangre', '1', '1');
+INSERT INTO `tipo_sangre` (`tsan_id`, `tsan_nombre`, `tsan_descripcion`, `tsan_observacion`, `tsan_estado`, `tsan_fecha_creacion`, `tsan_fecha_actualizacion`, `tsan_estado_logico`) VALUES
+(1, 'AB +', 'descripción de tipo de sangre', NULL, '1', '2017-02-01 15:05:27', NULL, '1'),
+(2, 'AB -', 'descripción de tipo de sangre', NULL, '1', '2017-02-01 15:05:27', NULL, '1'),
+(3, 'A +', 'descripción de tipo de sangre', NULL, '1', '2017-02-01 15:05:27', NULL, '1'),
+(4, 'A -', 'descripción de tipo de sangre', NULL, '1', '2017-02-01 15:05:27', NULL, '1'),
+(5, 'B +', 'descripción de tipo de sangre', NULL, '1', '2017-02-01 15:05:27', NULL, '1'),
+(6, 'B -', 'descripción de tipo de sangre', NULL, '1', '2017-02-01 15:05:27', NULL, '1'),
+(7, 'O+', 'descripción de tipo de sangre', NULL, '1', '2017-02-01 15:05:27', NULL, '1'),
+(8, 'O -', 'descripción de tipo de sangre', NULL, '1', '2017-02-01 15:05:27', NULL, '1');
 
 -- --------------------------------------------------------
 --
