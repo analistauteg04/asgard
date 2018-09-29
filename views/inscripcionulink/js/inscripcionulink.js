@@ -17,6 +17,19 @@ $(document).ready(function () {
             }
         }, true);
     });
+    
+    $('#cmb_ninteres').change(function () {
+        var link = $('#txth_base').val() + "/inscripcionulink/index";
+        var arrParams = new Object();
+        arrParams.nint_id = $(this).val();
+        arrParams.getmodalidad = true;
+        requestHttpAjax(link, arrParams, function (response) {
+            if (response.status == "OK") {
+                data = response.message;
+                setComboData(data.modalidad, "cmb_modalidad");             
+            }
+        }, true);
+    });
 
     $('#sendInscripcion').click(function () {
         var link = $('#txth_base').val() + "/inscripcionulink/guardarinscripcion";

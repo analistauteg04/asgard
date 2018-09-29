@@ -168,9 +168,8 @@ class OportunidadesController extends \app\components\CController {
         $modalidad_model = new Modalidad();
         $modestudio = new ModuloEstudio();
         $modTipoOportunidad = new TipoOportunidadVenta();
-        $state_oportunidad_model = new EstadoOportunidad();
-        //$academic_study = new EstudioAcademico();
-        $unidad_acad_data = $uni_aca_model->consultarUnidadAcademicas();
+        $state_oportunidad_model = new EstadoOportunidad();        
+        $unidad_acad_data = $uni_aca_model->consultarUnidadAcademicasEmpresa($emp_id);
         $modalidad_data = $modalidad_model->consultarModalidad(1);
         $modcanal = new Oportunidad();
         $tipo_oportunidad_data = $modTipoOportunidad->consultarOporxUnidad(1);
@@ -182,6 +181,11 @@ class OportunidadesController extends \app\components\CController {
         $empresa = $empresa_mod->getAllEmpresa();
         if (Yii::$app->request->isAjax) {
             $data = Yii::$app->request->post();
+            if (isset($data["getuacademias"])) {
+                $data_u_acad = $uni_aca_model->consultarUnidadAcademicasEmpresa($data["empresa"]);
+                $message = array("unidad_academica" => $data_u_acad);
+                return Utilities::ajaxResponse('OK', 'alert', Yii::t('jslang', 'Success'), 'false', $message);
+            }
             if (isset($data["getmodalidad"])) {
                 $modalidad = $modalidad_model->consultarModalidad($data["nint_id"]);
                 $message = array("modalidad" => $modalidad);

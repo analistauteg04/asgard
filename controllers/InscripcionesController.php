@@ -2,7 +2,6 @@
 
 namespace app\controllers;
 use Yii;
-use app\models\MetodoIngreso;
 use app\models\Utilities;
 use yii\helpers\ArrayHelper;
 use yii\base\Exception;
@@ -28,12 +27,12 @@ use app\models\EstadoContacto;
 class InscripcionesController extends \yii\web\Controller {
 
     public function actionIndex() {
-        $this->layout = '@themes/' . \Yii::$app->getView()->theme->themeName . '/layouts/basic.php';
-        $mod_metodo = new MetodoIngreso();
+        $this->layout = '@themes/' . \Yii::$app->getView()->theme->themeName . '/layouts/basic.php';        
         $per_id = Yii::$app->session->get("PB_perid");
         $mod_persona = Persona::findIdentity($per_id);
         $mod_modalidad = new Modalidad();
         $mod_pergestion = new PersonaGestion();
+        $mod_unidad = new UnidadAcademica();
         $modcanal = new Oportunidad();
         if (Yii::$app->request->isAjax) {
             $data = Yii::$app->request->post();
@@ -77,7 +76,7 @@ class InscripcionesController extends \yii\web\Controller {
         $arr_ciu_dom = Canton::cantonXProvincia($arr_prov_dom[0]["id"]);
         $mod_carrera = new EstudioAcademico();          
         $arr_medio = MedioPublicitario::find()->select("mpub_id AS id, mpub_nombre AS value")->where(["mpub_estado_logico" => "1", "mpub_estado" => "1"])->asArray()->all();
-        $arr_ninteres = UnidadAcademica::find()->select("uaca_id AS id, uaca_nombre AS name")->where(["uaca_estado_logico" => "1", "uaca_estado" => "1", "uaca_inscripcion" => "1"])->asArray()->all();
+        $arr_ninteres = $mod_unidad->consultarUnidadAcademicasEmpresa(1);
         $arr_modalidad = $mod_modalidad->consultarModalidad(1);
         $arr_conuteg = $mod_pergestion->consultarConociouteg();
         $arr_carrerra1 = $modcanal->consultarCarreraModalidad(1, 1);

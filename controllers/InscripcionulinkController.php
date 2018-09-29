@@ -30,6 +30,8 @@ class InscripcionulinkController extends \yii\web\Controller {
         $mod_persona = Persona::findIdentity($per_id);
         $mod_pergestion = new PersonaGestion();
         $modestudio = new ModuloEstudio();
+        $mod_unidad = new UnidadAcademica();
+        $mod_modalidad = new Modalidad();
         if (Yii::$app->request->isAjax) {
             $data = Yii::$app->request->post();
             if (isset($data["getprovincias"])) {
@@ -42,6 +44,12 @@ class InscripcionulinkController extends \yii\web\Controller {
                 $cantones = Canton::find()->select("can_id AS id, can_nombre AS name")->where(["can_estado_logico" => "1", "can_estado" => "1", "pro_id" => $data['prov_id']])->asArray()->all();
                 $message = array("cantones" => $cantones);
                 echo Utilities::ajaxResponse('OK', 'alert', Yii::t('jslang', 'Success'), 'false', $message);
+                return;
+            }
+             if (isset($data["getmodalidad"])) {
+                $modalidad = $mod_modalidad->consultarModalidad($data["nint_id"]);
+                $message = array("modalidad" => $modalidad);
+                return Utilities::ajaxResponse('OK', 'alert', Yii::t('jslang', 'Success'), 'false', $message);
                 return;
             }
             if (isset($data["getarea"])) {
@@ -60,6 +68,8 @@ class InscripcionulinkController extends \yii\web\Controller {
         $arr_medio = MedioPublicitario::find()->select("mpub_id AS id, mpub_nombre AS value")->where(["mpub_estado_logico" => "1", "mpub_estado" => "1"])->asArray()->all();
         $arr_conuteg = $mod_pergestion->consultarConociouteg();
         $arr_carrerra1 = $modestudio->consultarEstudioEmpresa(2);
+        $arr_modalidad = $mod_modalidad->consultarModalidad(3);
+        $arr_ninteres = $mod_unidad->consultarUnidadAcademicasEmpresa(2);
         return $this->render('index', [
                     "tipos_dni" => array("CED" => Yii::t("formulario", "DNI Document"), "PASS" => Yii::t("formulario", "Passport")),
                     "tipos_dni2" => array("CED" => Yii::t("formulario", "DNI Document1"), "PASS" => Yii::t("formulario", "Passport1")),
@@ -70,6 +80,8 @@ class InscripcionulinkController extends \yii\web\Controller {
                     "arr_medio" => ArrayHelper::map($arr_medio, "id", "value"),
                     "arr_conuteg" => ArrayHelper::map($arr_conuteg, "id", "name"),
                     "arr_carrerra1" => ArrayHelper::map($arr_carrerra1, "id", "name"),
+                    "arr_ninteres" => ArrayHelper::map($arr_ninteres, "id", "name"),
+                    "arr_modalidad" => ArrayHelper::map($arr_modalidad, "id", "name"),
         ]);
     }
 
@@ -117,8 +129,8 @@ class InscripcionulinkController extends \yii\web\Controller {
             $celularbeni2 = null;
             $telefonobeni = null;
             $correobeni = strtolower($data["correo"]);
-            $nivelestudio = 3; //  ver bien esto
-            $modalidad = 1;     //  ver bien esto
+            $nivelestudio = $data["unidad"]; 
+            $modalidad = $data["modalidad"]; 
             $tipo_dni = $data["tipo_dni"];
             $cedula = $data["cedula"];
             $pasaporte = $data["pasaporte"];
@@ -130,13 +142,13 @@ class InscripcionulinkController extends \yii\web\Controller {
                 $dnis = "Pasaporte";
                 $numidentificacion = $pasaporte;
             }
-            switch ($nivelestudio) { // esto cambiarlo hacer funcion que consulte el usaurio y traer el id           
-                case "3":
+            //switch ($nivelestudio) { // esto cambiarlo hacer funcion que consulte el usaurio y traer el id           
+                //case "3":
                     $agente = 14;
                     $tipoportunidad = 8;
                     $pagina = "registerulink";
-                    break;
-            }
+                    //break;
+            //}
             $subcarera = 1;
             $canal = 1;
             $estado = 1;
