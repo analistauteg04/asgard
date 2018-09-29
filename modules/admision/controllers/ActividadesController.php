@@ -9,7 +9,7 @@ use app\modules\admision\models\TipoOportunidadVenta;
 use app\modules\admision\models\EstadoOportunidad;
 use app\modules\academico\models\UnidadAcademica;
 use app\modules\academico\models\Modalidad;
-use app\models\ModuloEstudio;
+use app\modules\academico\models\ModuloEstudio;
 use app\models\Empresa;
 use app\models\Utilities;
 use yii\helpers\ArrayHelper;
