@@ -5,7 +5,6 @@ namespace app\modules\academico\controllers;
 use Yii;
 use app\modules\academico\models\Admitido;
 use app\modules\academico\models\EstudioAcademico;
-use app\mod\admision\models\Interesado;
 use yii\helpers\ArrayHelper;
 use app\models\Utilities;
 class AdmitidosController extends \app\components\CController {
@@ -49,22 +48,22 @@ class AdmitidosController extends \app\components\CController {
         header('Cache-Control: max-age=0');
         $colPosition = array("C", "D", "E", "F", "G", "H", "I", "J", "K", "L");
         $arrHeader = array(
-            Yii::t("crm", "Contact"),
+            Yii::t("crm", "solicitud"),
             Yii::t("crm", "Contact Type"),
             Yii::t("crm", "Contact Status"),
             Yii::t("formulario", "Open Opportunities"),
             Yii::t("formulario", "Close Opportunities")
         );
         $data = Yii::$app->request->get();
-        $arrSearch["f_ini"] = $data['f_ini'];
-        $arrSearch["f_fin"] = $data['f_fin'];
+        $arrSearch["f_ini"] = $data['fecha_ini'];
+        $arrSearch["f_fin"] = $data['fecha_fin'];
         $arrSearch["carrera"] = $data['carrera'];
         $arrSearch["search"] = $data['search'];
         $arrData = array();
         if (empty($arrSearch)) {
-            $mod_aspirante = Admitido::getAdmitidos(array(),true);
+            $arrData = Admitido::getAdmitidos(array(),true);
         } else {
-            $mod_aspirante = Admitido::getAdmitidos($arrSearch,true);
+            $arrData = Admitido::getAdmitidos(array(),true);
         }
         \app\models\Utilities::putMessageLogFile($arrData);
         $nameReport = yii::t("formulario", "Application Reports");
