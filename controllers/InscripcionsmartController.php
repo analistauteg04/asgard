@@ -3,7 +3,6 @@
 namespace app\controllers;
 
 use Yii;
-use app\models\MetodoIngreso;
 use app\models\Utilities;
 use yii\helpers\ArrayHelper;
 use yii\base\Exception;
@@ -18,14 +17,13 @@ use yii\helpers\Url;
 use app\modules\admision\models\PersonaGestion;
 use app\modules\admision\models\Oportunidad;
 use app\models\Empresa;
-use app\models\EstadoContacto;
-use app\models\ModuloEstudio;
+use app\modules\admision\models\EstadoContacto;
+use app\modules\academico\models\ModuloEstudio;
 
 class InscripcionsmartController extends \yii\web\Controller {
 
     public function actionIndex() {
         $this->layout = '@themes/' . \Yii::$app->getView()->theme->themeName . '/layouts/basic.php';
-        $mod_metodo = new MetodoIngreso();
         $per_id = Yii::$app->session->get("PB_perid");
         $mod_persona = Persona::findIdentity($per_id);
         $mod_pergestion = new PersonaGestion();
