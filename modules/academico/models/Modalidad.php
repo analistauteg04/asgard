@@ -92,7 +92,7 @@ class Modalidad extends \app\modules\academico\components\CActiveRecord {
     public function consultarModalidad($uaca_id) {
         $con = \Yii::$app->db_academico;
         $estado = 1;
-            $sql = "SELECT moda.mod_id as id,
+            $sql = "SELECT distinct moda.mod_id as id,
                            moda.mod_nombre as name
                     FROM " . $con->dbname . ".modalidad_unidad_academico mua "
                     . "inner join " . $con->dbname . ".modalidad moda ON moda.mod_id = mua.mod_id
