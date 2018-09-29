@@ -40,7 +40,6 @@ class AdmitidosController extends \app\components\CController {
     }
 
     public function actionExpexcel() {
-        \app\models\Utilities::putMessageLogFile($arrData);
         ini_set('memory_limit', '256M');
         $content_type = Utilities::mimeContentType("xls");
         $nombarch = "Report-" . date("YmdHis") . ".xls";
@@ -49,15 +48,15 @@ class AdmitidosController extends \app\components\CController {
         header('Cache-Control: max-age=0');
         $colPosition = array("C", "D", "E", "F", "G", "H", "I", "J", "K", "L");
         $arrHeader = array(
-            Yii::t("crm", "solicitud"),
-            Yii::t("crm", "Contact Type"),
-            Yii::t("crm", "Contact Status"),
-            Yii::t("formulario", "Open Opportunities"),
-            Yii::t("formulario", "Close Opportunities"),
-            Yii::t("formulario", "Metodo Ingreso"),
-            Yii::t("formulario", "Carrera"),
-            Yii::t("formulario", "Beca"),
-            Yii::t("formulario", "Matriculado"),
+            Yii::t("Solicitudes", "Request #"),//ingles
+            Yii::t("Solicitudes", "Application date"),//ingles
+            Yii::t("formulario", "DNI 1"),
+            Yii::t("formulario", "First Names"),
+            Yii::t("formulario", "Last Names"),
+            Yii::t("Solicitudes", "Income Method"),//ingles
+            Yii::t("Academico", "Career/Program"),//ingles
+            Yii::t("Solicitudes", "Scholarship"),//ingles
+            Yii::t("Academico", "Registered"),//ingles
         );
         $data = Yii::$app->request->get();
         $arrSearch["f_ini"] = $data['fecha_ini'];
@@ -65,10 +64,11 @@ class AdmitidosController extends \app\components\CController {
         $arrSearch["carrera"] = $data['carrera'];
         $arrSearch["search"] = $data['search'];
         $arrData = array();
+        $admitido_model=new Admitido();
         if (empty($arrSearch)) {
-            $arrData = Admitido::getAdmitidos(array(),true);
+            $arrData = $admitido_model->consultarReportAdmitidos(array(),true);
         } else {
-            $arrData = Admitido::getAdmitidos($arrSearch,true);
+            $arrData = $admitido_model->consultarReportAdmitidos($arrSearch,true);
         }
         \app\models\Utilities::putMessageLogFile($arrData);
         $nameReport = yii::t("formulario", "Application Reports");
