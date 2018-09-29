@@ -4,7 +4,6 @@ use yii\helpers\Html;
 use yii\helpers\Url;
 use kartik\date\DatePicker;
 use app\modules\admision\Module;
-
 if (!empty($personalData['pges_cedula'])) {
     $tipodoc = "Cédula";
     $dni = $personalData['pges_cedula'];

@@ -31,6 +31,7 @@ class InscripcionsmartController extends \yii\web\Controller {
         $mod_pergestion = new PersonaGestion();
         $modestudio = new ModuloEstudio();
         $mod_modalidad = new Modalidad();
+        $mod_unidad = new UnidadAcademica();
         if (Yii::$app->request->isAjax) {
             $data = Yii::$app->request->post();
             if (isset($data["getprovincias"])) {
@@ -67,8 +68,8 @@ class InscripcionsmartController extends \yii\web\Controller {
         $arr_medio = MedioPublicitario::find()->select("mpub_id AS id, mpub_nombre AS value")->where(["mpub_estado_logico" => "1", "mpub_estado" => "1"])->asArray()->all();
         $arr_conuteg = $mod_pergestion->consultarConociouteg();
         $arr_carrerra1 = $modestudio->consultarEstudioEmpresa(3);
-        $arr_ninteres = UnidadAcademica::find()->select("uaca_id AS id, uaca_nombre AS name")->where(["uaca_id" => "3"])->asArray()->all();
         $arr_modalidad = $mod_modalidad->consultarModalidad(3);
+        $arr_ninteres = $mod_unidad->consultarUnidadAcademicasEmpresa(3);
         return $this->render('index', [
                     "tipos_dni" => array("CED" => Yii::t("formulario", "DNI Document"), "PASS" => Yii::t("formulario", "Passport")),
                     "tipos_dni2" => array("CED" => Yii::t("formulario", "DNI Document1"), "PASS" => Yii::t("formulario", "Passport1")),
