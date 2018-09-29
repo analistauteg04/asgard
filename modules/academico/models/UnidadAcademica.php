@@ -80,6 +80,7 @@ class UnidadAcademica extends \app\modules\academico\components\CActiveRecord {
         return $rawData;
     }
     
+    
     /**
      * Function consulta el nombre de unidad academica
      * @author  Kleber Loayza <analistadesarrollo03@uteg.edu.ec>;
@@ -101,6 +102,33 @@ class UnidadAcademica extends \app\modules\academico\components\CActiveRecord {
                ";
         $comando = $con->createCommand($sql);
         $comando->bindParam(":estado", $estado, \PDO::PARAM_STR);
+        $resultData = $comando->queryAll();
+        return $resultData;
+    }
+    
+    /**
+     * Function consulta el nombre de unidad academica
+     * @author  Kleber Loayza <analistadesarrollo03@uteg.edu.ec>;
+     * @property       
+     * @return  
+     */
+    public function consultarUnidadAcademicasEmpresa($empresa) {
+        $con = \Yii::$app->db_academico;
+        $estado = 1;
+        $sql = "
+                    SELECT 
+                        distinct una.uaca_id as id, una.uaca_nombre as name
+                        FROM db_academico.modalidad_unidad_academico mua
+                        Inner JOIN db_academico.unidad_academica una on una.uaca_id = mua.uaca_id 
+                   where emp_id = :empresa AND
+                        mua.muac_estado = :estado AND
+                        mua.muac_estado_logico = :estado AND
+                        una.uaca_estado = :estado AND
+                        una.uaca_estado_logico = :estado;
+               ";
+        $comando = $con->createCommand($sql);
+        $comando->bindParam(":estado", $estado, \PDO::PARAM_STR);
+        $comando->bindParam(":empresa", $empresa, \PDO::PARAM_INT);
         $resultData = $comando->queryAll();
         return $resultData;
     }
