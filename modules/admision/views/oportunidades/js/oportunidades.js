@@ -116,6 +116,18 @@ $(document).ready(function () {
             }
         }, true);
     });
+    $('#cmb_empresa').change(function () {
+        var link = $('#txth_base').val() + "/admision/oportunidades/newoportunidadxcontacto";
+        var arrParams = new Object();
+        arrParams.empresa = $('#cmb_empresa').val();
+        arrParams.getuacademias = true;
+        requestHttpAjax(link, arrParams, function (response) {
+            if (response.status == "OK") {
+                data = response.message;
+                setComboData(data.unidad_academica, "cmb_nivelestudio");
+            }
+        }, true);
+    });
     $('#cmb_modalidad').change(function () {
         var link = $('#txth_base').val() + "/admision/oportunidades/newoportunidadxcontacto";
         var arrParams = new Object();
