@@ -54,10 +54,10 @@ INSERT INTO `tipo_estudio_academico` (`teac_id`, `teac_nombre`, `teac_descripcio
 INSERT INTO `unidad_academica` (`uaca_id`, `uaca_nombre`, `uaca_descripcion`, `uaca_usuario_ingreso`, `uaca_inscripcion`, `uaca_estado`, `uaca_estado_logico`) VALUES
 (1, 'Grado', 'Grado', 1, '1', '1', '1'),
 (2, 'Posgrado', 'Posgrado', 1, '1', '1', '1'),
-(3, 'Educación Continua', 'Educación Continua', 1, '0', '0', '1'),
-(4, 'Centro de Idiomas', 'Centro de Idiomas', 1, '0', '0', '1'),
+(3, 'Educación Continua', 'Educación Continua', 1, '0', '1', '1'),
+(4, 'Centro de Idiomas', 'Centro de Idiomas', 1, '0', '1', '1'),
 (5, 'Diplomado', 'Diplomado', 1, '0', '0', '1'),
-(6, 'Curso Nivelación', 'Curso Nivelación', 1, '0', '0', '1');
+(6, 'Curso Nivelación', 'Curso Nivelación', 1, '0', '1', '1');
 
 -- --------------------------------------------------------
 --
