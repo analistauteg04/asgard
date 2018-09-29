@@ -142,13 +142,28 @@ class InscripcionulinkController extends \yii\web\Controller {
                 $dnis = "Pasaporte";
                 $numidentificacion = $pasaporte;
             }
-            //switch ($nivelestudio) { // esto cambiarlo hacer funcion que consulte el usaurio y traer el id           
-                //case "3":
+            switch ($nivelestudio) { // esto cambiarlo hacer funcion que consulte el usaurio y traer el id           
+                case "3":
                     $agente = 14;
                     $tipoportunidad = 8;
                     $pagina = "registerulink";
-                    //break;
-            //}
+                    break;
+                case "4":
+                    $agente = 14;
+                    $tipoportunidad = 9;
+                    $pagina = "registerulink";
+                    break;
+                case "5":
+                    $agente = 14;
+                    $tipoportunidad = 10;
+                    $pagina = "registerulink";
+                    break;
+                case "6":
+                    $agente = 14;
+                    $tipoportunidad = 11;
+                    $pagina = "registerulink";
+                    break;
+            }
             $subcarera = 1;
             $canal = 1;
             $estado = 1;
