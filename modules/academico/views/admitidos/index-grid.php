@@ -13,10 +13,9 @@ academico::registerTranslations();
 <div>
     <?=
     PbGridView::widget([
-        // 'dataProvider' => new yii\data\ArrayDataProvider(array()),
         'id' => 'TbG_PERSONAS',
-        //'showExport' => false,
-        //'fnExportEXCEL' => "exportExcel",
+        'showExport' => true,
+        'fnExportEXCEL' => "exportExcel",
         //'fnExportPDF' => "exportPdf",
         'dataProvider' => $model,
         //'pajax' => false,

@@ -361,9 +361,8 @@ class ContactosController extends \app\components\CController {
         if (empty($arrSearch)) {
             $arrData = $modPersonaGestion->consultarReportContactos(array(), true);
         } else {
-            $arrData = $modPersonaGestion->consultarReportContactos(array(), true);
+            $arrData = $modPersonaGestion->consultarReportContactos($arrSearch, true);
         }
-        $arrData = $modPersonaGestion->consultarReportContactos(array(), true);
         \app\models\Utilities::putMessageLogFile($arrData);
         $nameReport = yii::t("formulario", "Application Reports");
         Utilities::generarReporteXLS($nombarch, $nameReport, $arrHeader, $arrData, $colPosition);

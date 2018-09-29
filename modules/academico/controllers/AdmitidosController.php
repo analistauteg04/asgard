@@ -7,9 +7,8 @@ use app\modules\academico\models\Admitido;
 use app\modules\academico\models\EstudioAcademico;
 use app\mod\admision\models\Interesado;
 use yii\helpers\ArrayHelper;
-
+use app\models\Utilities;
 class AdmitidosController extends \app\components\CController {
-
     public function actionIndex() {
         $per_id = @Yii::$app->session->get("PB_perid");
         $mod_carrera = new EstudioAcademico();
@@ -22,7 +21,6 @@ class AdmitidosController extends \app\components\CController {
             $arrSearch["search"] = $data['search'];
             $arrSearch["codigocan"] = $data['codigocan'];
             $mod_aspirante = Admitido::getAdmitidos($arrSearch);
-
             return $this->renderPartial('index-grid', [
                         "model" => $mod_aspirante,
             ]);
@@ -58,18 +56,16 @@ class AdmitidosController extends \app\components\CController {
             Yii::t("formulario", "Close Opportunities")
         );
         $data = Yii::$app->request->get();
-        $mod_aspirante = Admitido::getAdmitidos($arrSearch);
+        $arrSearch["f_ini"] = $data['f_ini'];
+        $arrSearch["f_fin"] = $data['f_fin'];
+        $arrSearch["carrera"] = $data['carrera'];
+        $arrSearch["search"] = $data['search'];
         $arrData = array();
         if (empty($arrSearch)) {
-            $arrSearch["f_ini"] = $data['f_ini'];
-            $arrSearch["f_fin"] = $data['f_fin'];
-            $arrSearch["carrera"] = $data['carrera'];
-            $arrSearch["search"] = $data['search'];
-            $arrSearch["codigocan"] = $data['codigocan'];
+            $mod_aspirante = Admitido::getAdmitidos(array(),true);
         } else {
-            $mod_aspirante = Admitido::getAdmitidos();
+            $mod_aspirante = Admitido::getAdmitidos($arrSearch,true);
         }
-        $arrData = $modPersonaGestion->consultarReportContactos(array(), true);
         \app\models\Utilities::putMessageLogFile($arrData);
         $nameReport = yii::t("formulario", "Application Reports");
         Utilities::generarReporteXLS($nombarch, $nameReport, $arrHeader, $arrData, $colPosition);
