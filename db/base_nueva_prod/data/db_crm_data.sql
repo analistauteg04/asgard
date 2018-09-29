@@ -79,7 +79,10 @@ INSERT INTO `tipo_oportunidad_venta` (`tove_id`, `uaca_id`, `tove_nombre`, `tove
 (5, 2, 'Ingreso al Curso Propedéutico', 'Ingreso al Curso Propedéutico', '1', '1'),
 (6, 2, 'Ingreso al primer módulo de maestría', 'Ingreso al primer módulo de maestría', '1', '1'),
 (7, 2, 'Ingreso por Homologación', 'Ingreso por Homologación', '1', '1'),
-(8, 3, 'Ingreso a curso de Educación Continua', 'Ingreso a curso de Educación Continua', '1', '1');
+(8, 3, 'Ingreso a curso de Educación Continua', 'Ingreso a curso de Educación Continua', '1', '1'),
+(9, 4, 'Ingreso de Centro de Idiomas', 'Ingreso de Centro de Idiomas', '1', '1'),
+(10, 5, 'Ingreso Diplomado', 'Ingreso a Diplomado', '1', '1'),
+(11, 6, 'Ingreso a curso de Nivelación', 'Ingreso a curso de  Nivelación', '1', '1');
 
 -- --------------------------------------------------------
 --

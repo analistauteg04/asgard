@@ -240,19 +240,18 @@ class Oportunidad extends \app\modules\admision\components\CActiveRecord {
                     concat(ifnull(agent.per_pri_nombre,''), ' ', ifnull(agent.per_pri_apellido,'')) as agente, 
                     uac.uaca_nombre as linea_servicio,
                     moda.mod_nombre as modalidad,
-                    -- (select uac.uaca_nombre from " . $con2->dbname . ".unidad_academica uac where uac.uaca_id = op.uaca_id) as linea_servicio,
-                    -- (select moda.mod_nombre from " . $con2->dbname . ".modalidad moda where moda.mod_id = op.mod_id) as modalidad,
                     pges.pges_cedula as identificacion,
                     eo.eopo_id as estado_oportunidad_id,
                     eo.eopo_nombre as estado_oportunidad,
                     tov.tove_nombre as tipo_oportunidad,
-                    -- (select eaca.eaca_nombre from " . $con2->dbname . ".estudio_academico eaca where eaca.eaca_id = op.eaca_id) as curso
-                     case uac.uaca_id
+                    case uac.uaca_id
                      when 1 then (select eaca.eaca_nombre from " . $con2->dbname . ".estudio_academico eaca where eaca.eaca_id = op.eaca_id)
                      when 2 then (select eaca.eaca_nombre from " . $con2->dbname . ".estudio_academico eaca where eaca.eaca_id = op.eaca_id)
-                      when 3 then (select mes.mest_nombre from " . $con2->dbname . ".modulo_estudio mes where mes.mest_id = op.mest_id)
-                      when 4 then (select mes.mest_nombre from " . $con2->dbname . ".modulo_estudio mes where mes.mest_id = op.mest_id)
-                      else null
+                     when 3 then (select mes.mest_nombre from " . $con2->dbname . ".modulo_estudio mes where mes.mest_id = op.mest_id)
+                     when 4 then (select mes.mest_nombre from " . $con2->dbname . ".modulo_estudio mes where mes.mest_id = op.mest_id)
+                     when 5 then (select mes.mest_nombre from " . $con2->dbname . ".modulo_estudio mes where mes.mest_id = op.mest_id)
+                     when 6 then (select mes.mest_nombre from " . $con2->dbname . ".modulo_estudio mes where mes.mest_id = op.mest_id)
+                     else null
                       end as 'curso'
                 FROM  " . $con->dbname . ".oportunidad op                  
                     inner join " . $con->dbname . ".persona_gestion pges on pges.pges_id = op.pges_id
@@ -277,11 +276,7 @@ class Oportunidad extends \app\modules\admision\components\CActiveRecord {
                         and padm.padm_estado = 1
                         and padm.padm_estado_logico = 1
                         and agent.per_estado = 1
-                        and agent.per_estado_logico = 1                                          
-                        -- and moda.mod_estado = 1
-                        -- and moda.mod_estado_logico = 1
-                        -- and uac.uaca_estado = 1
-                        -- and uac.uaca_estado_logico = 1
+                        and agent.per_estado_logico = 1  
                         and tov.tove_estado = 1
                         and tov.tove_estado_logico = 1
                         order by op.opo_id desc
