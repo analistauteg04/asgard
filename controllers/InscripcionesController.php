@@ -48,15 +48,7 @@ class InscripcionesController extends \yii\web\Controller {
                 $message = array("cantones" => $cantones);
                 return Utilities::ajaxResponse('OK', 'alert', Yii::t('jslang', 'Success'), 'false', $message);
                 return;
-            }
-
-            if (isset($data["getmetodo"])) {
-                $metodos = $mod_metodo->consultarMetodoIngNivelInt($data['nint_id']);
-                $message = array("metodos" => $metodos);
-                return Utilities::ajaxResponse('OK', 'alert', Yii::t('jslang', 'Success'), 'false', $message);
-                return;
-            }
-
+            }            
             if (isset($data["getarea"])) {
                 //obtener el codigo de area del pais
                 $mod_areapais = new Pais();
@@ -83,9 +75,7 @@ class InscripcionesController extends \yii\web\Controller {
         $pais_id = 1; //Ecuador
         $arr_prov_dom = Provincia::provinciaXPais($pais_id);
         $arr_ciu_dom = Canton::cantonXProvincia($arr_prov_dom[0]["id"]);
-        $mod_carrera = new EstudioAcademico();
-        $fac_id = 1;
-        $arr_metodos = $mod_metodo->consultarMetodoIngNivelInt(2);
+        $mod_carrera = new EstudioAcademico();          
         $arr_medio = MedioPublicitario::find()->select("mpub_id AS id, mpub_nombre AS value")->where(["mpub_estado_logico" => "1", "mpub_estado" => "1"])->asArray()->all();
         $arr_ninteres = UnidadAcademica::find()->select("uaca_id AS id, uaca_nombre AS name")->where(["uaca_estado_logico" => "1", "uaca_estado" => "1", "uaca_inscripcion" => "1"])->asArray()->all();
         $arr_modalidad = $mod_modalidad->consultarModalidad(1);
@@ -98,8 +88,7 @@ class InscripcionesController extends \yii\web\Controller {
                     "arr_pais_dom" => ArrayHelper::map($arr_pais_dom, "id", "value"),
                     "arr_prov_dom" => ArrayHelper::map($arr_prov_dom, "id", "value"),
                     "arr_ciu_dom" => ArrayHelper::map($arr_ciu_dom, "id", "value"),
-                    "arr_ninteres" => ArrayHelper::map($arr_ninteres, "id", "name"),
-                    "arr_metodos" => ArrayHelper::map($arr_metodos, "id", "name"),
+                    "arr_ninteres" => ArrayHelper::map($arr_ninteres, "id", "name"),                    
                     "arr_medio" => ArrayHelper::map($arr_medio, "id", "value"),
                     "arr_modalidad" => ArrayHelper::map($arr_modalidad, "id", "name"),
                     "arr_conuteg" => ArrayHelper::map($arr_conuteg, "id", "name"),

@@ -14,7 +14,7 @@ INSERT INTO `conocimiento_canal` (`ccan_id`, `ccan_nombre`, `ccan_descripcion`, 
 (4, 'Llamada', 'Llamada','', '1', '1', '1'),
 (5, 'Chat en línea', 'Chat en línea','', '0', '1', '1'),
 (6, 'Whatsapp', 'Whatsapp','', '1', '1', '1'),
-(6, 'Messenger facebook', 'Messenger facebook','', '1', '1', '1');
+(7, 'Messenger facebook', 'Messenger facebook','', '1', '1', '1');
 
 -- --------------------------------------------------------
 --
