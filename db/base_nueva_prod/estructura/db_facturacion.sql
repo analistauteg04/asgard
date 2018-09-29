@@ -529,3 +529,26 @@ create table if not exists `solicitud_descuento` (
   `sdes_estado_logico` varchar(1) not null,   
   foreign key (ddit_id) references `detalle_descuento_item`(ddit_id)
 );
+-- -------------------------------------------------------------
+--
+-- Estructura de tabla para generar secuencia
+-- -------------------------------------------------------------
+create table if not exists `secuencias` (
+ `emp_id` bigint(20) not null,#Empresa
+ `estab_id` bigint(20) not null,#Establecimiento
+ `pemis_id` bigint(20) not null,#Punto de Emision
+ `secu_tipo_doc` varchar(3) not null,#Tipo de Documento
+ `secuencia` varchar(10) not null default '0000000000',#Secuencia del documento
+ `secu_nombre` varchar(200) not null,#Tipo de Documento
+ `edoc_tipo` varchar(2) default null,#Tipo de Documento Electronico segun SRI
+ `edoc_estado` varchar(1) default '0',#Estado para Generar documento Electronico
+ `secu_cant_items` int(2) default null, #Cantidad Lineas por documentos
+ `secu_cuenta_iva` varchar(12) default null ,
+ `secu_grupo_doc` varchar(3) default null ,#GRUPO DOCUMENTO 
+ `secu_estado` varchar(1) not null ,
+ `secu_fecha_creacion` timestamp not null default current_timestamp,
+ `secu_fecha_modificacion` timestamp null default null,
+ `secu_estado_logico` varchar(1) not null,
+ primary key(`emp_id`,`estab_id`,`pemis_id`,`secu_tipo_doc`)
+)ENGINE=InnoDB DEFAULT CHARSET=latin1;
+
