@@ -165,45 +165,43 @@ INSERT INTO `configuracion_seguridad` (`cseg_id`, `tpas_id`, `cseg_long_pass`, `
 --
 -- Volcado de datos para la tabla `GRUPO`
 --
-INSERT INTO `grupo` (`gru_id`, `cseg_id`, `gru_nombre`, `gru_descripcion`, `gru_observacion`, `gru_estado`, `gru_estado_logico`) VALUES
-(1, 3, 'Super Admin',  'Super Admin', NULL, '1', '1'),
-(2, 3, 'Sistemas', 'Sistemas', NULL, '1', '1'),
-(3, 2, 'Admisiones', 'Admisiones', NULL, '1', '1'),
-(4, 2, 'Financiero', 'Financiero', NULL, '1', '1'),
-(5, 2, 'Colecturia', 'Colecturia', NULL, '1', '1'),
-(6, 2, 'Online', 'Online', NULL, '1', '1'),
-(7, 2, 'Grado', 'Grado', NULL, '1', '1'),
-(8, 2, 'Posgrado', 'Grado', NULL, '1', '1'),
-(9, 1, 'Interesado', 'Interesado', NULL, '1', '1'),
-(10, 1, 'Aspirante', 'Aspirante', NULL, '1', '1'),
-(11, 1, 'Estudiante', 'Estudiante', NULL, '1', '1'),
-(12, 2, 'Docente', 'Docente', NULL, '1', '1');
+INSERT INTO `grupo` (`gru_id`, `cseg_id`, `gru_nombre`, `gru_descripcion`, `gru_observacion`, `gru_estado`, `gru_fecha_creacion`, `gru_fecha_actualizacion`, `gru_estado_logico`) VALUES
+(1, 3, 'Super Admin', 'Super Admin', NULL, '1', '2017-02-01 15:05:28', NULL, '1'),
+(2, 3, 'Sistemas', 'Sistemas', NULL, '1', '2017-02-01 15:05:28', NULL, '1'),
+(3, 2, 'Admisiones', 'Admisiones', NULL, '1', '2017-02-01 15:05:28', NULL, '1'),
+(4, 2, 'Financiero', 'Financiero', NULL, '1', '2017-02-01 15:05:28', NULL, '1'),
+(5, 2, 'Colecturia', 'Colecturia', NULL, '1', '2017-02-01 15:05:28', NULL, '1'),
+(6, 2, 'Online', 'Online', NULL, '1', '2017-02-01 15:05:28', NULL, '1'),
+(7, 2, 'Grado', 'Grado', NULL, '1', '2017-02-01 15:05:28', NULL, '1'),
+(8, 2, 'Posgrado', 'Grado', NULL, '1', '2017-02-01 15:05:28', NULL, '1'),
+(9, 1, 'Interesado', 'Interesado', NULL, '1', '2017-02-01 15:05:28', NULL, '1'),
+(10, 1, 'Admitido', 'Aspirante', NULL, '1', '2017-02-01 15:05:28', NULL, '1'),
+(11, 1, 'Estudiante', 'Estudiante', NULL, '1', '2017-02-01 15:05:28', NULL, '1'),
+(12, 2, 'Docente', 'Docente', NULL, '1', '2017-02-01 15:05:28', NULL, '1');
+
 
 -- --------------------------------------------------------
 --
 -- Volcado de datos para la tabla `ROL`
 --
-INSERT INTO `rol` (`rol_id`, `rol_nombre`, `rol_descripcion`, `rol_estado`, `rol_estado_logico`) VALUES
-(1, 'Super Administrador', 'Super Administrador', '1', '1'),
-(2, 'Admin Sistemas', 'Admin Sistemas', '1', '1'),
-(3, 'Admin Administrativo', 'Admin Administrativo', '1', '1'),
-(4, 'Gerente', 'Docente', '1', '1'),
-(5, 'Director', 'Director', '1', '1'),
-
-(6, 'Jefe', 'Jefe', '1', '1'),
-(7, 'Coordinador', 'Coordinador Senior', '1', '1'),
-(8, 'Supervisor', 'Supervisor Senior', '1', '1'),
-(9, 'Analista', 'Analista Senior', '1', '1'),
-(10, 'Asistente', 'Asistente Senior', '1', '1'),
-
-(11, 'Lider', 'Lider', '1', '1'),
-
-(12, 'Agente', 'Ejecutivo Comercial', '1', '1'),
-(13, 'Secretaria', 'Secretaria', '1', '1'),
-(14, 'Interesado', 'Interesado', '1', '1'),
-(15, 'Aspirante', 'Aspirante', '1', '1'),
-(16, 'Estudiante', 'Estudiante', '1', '1'),
-(17, 'Docente', 'Docente', '1', '1');
+INSERT INTO `rol` (`rol_id`, `rol_nombre`, `rol_descripcion`, `rol_estado`, `rol_fecha_creacion`, `rol_fecha_actualizacion`, `rol_estado_logico`) VALUES
+(1, 'Super Administrador', 'Super Administrador', '1', '2017-02-01 15:05:28', NULL, '1'),
+(2, 'Admin Sistemas', 'Admin Sistemas', '1', '2017-02-01 15:05:28', NULL, '1'),
+(3, 'Admin Administrativo', 'Admin Administrativo', '1', '2017-02-01 15:05:28', NULL, '1'),
+(4, 'Gerente', 'Docente', '1', '2017-02-01 15:05:28', NULL, '1'),
+(5, 'Director', 'Director', '1', '2017-02-01 15:05:28', NULL, '1'),
+(6, 'Jefe', 'Jefe', '1', '2017-02-01 15:05:28', NULL, '1'),
+(7, 'Coordinador', 'Coordinador Senior', '1', '2017-02-01 15:05:28', NULL, '1'),
+(8, 'Supervisor', 'Supervisor Senior', '1', '2017-02-01 15:05:28', NULL, '1'),
+(9, 'Analista', 'Analista Senior', '1', '2017-02-01 15:05:28', NULL, '1'),
+(10, 'Asistente', 'Asistente Senior', '1', '2017-02-01 15:05:28', NULL, '1'),
+(11, 'Lider', 'Lider', '1', '2017-02-01 15:05:28', NULL, '1'),
+(12, 'Agente', 'Ejecutivo Comercial', '1', '2017-02-01 15:05:28', NULL, '1'),
+(13, 'Secretaria', 'Secretaria', '1', '2017-02-01 15:05:28', NULL, '1'),
+(14, 'Interesado', 'Interesado', '1', '2017-02-01 15:05:28', NULL, '1'),
+(15, 'Admitido', 'Aspirante', '1', '2017-02-01 15:05:28', NULL, '1'),
+(16, 'Estudiante', 'Estudiante', '1', '2017-02-01 15:05:28', NULL, '1'),
+(17, 'Docente', 'Docente', '1', '2017-02-01 15:05:28', NULL, '1');
 
 -- --------------------------------------------------------
 --
