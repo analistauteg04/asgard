@@ -40,6 +40,7 @@ class AdmitidosController extends \app\components\CController {
     }
 
     public function actionExpexcel() {
+        \app\models\Utilities::putMessageLogFile($arrData);
         ini_set('memory_limit', '256M');
         $content_type = Utilities::mimeContentType("xls");
         $nombarch = "Report-" . date("YmdHis") . ".xls";
