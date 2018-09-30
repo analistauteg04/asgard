@@ -412,3 +412,11 @@ function exportExcelColec() {
     var f_fin = $('#txt_fecha_fin').val();
     window.location.href = $('#txth_base').val() + "/financiero/pagos/expexcelcolec?search=" + search + "&f_ini=" + f_ini + "&f_fin=" + f_fin;
 }
+
+function exportPdf() {
+    var search = $('#txt_buscarDataPago').val();
+    var f_ini = $('#txt_fecha_ini').val();
+    var f_fin = $('#txt_fecha_fin').val();
+    var f_estado = $('#cmb_estado').val();
+    window.location.href = $('#txth_base').val() + "/financiero/pagos/exppdfpagosestud?pdf=1&search=" + search + "&f_ini=" + f_ini + "&f_fin=" + f_fin + "&f_estado=" + f_estado;
+}
