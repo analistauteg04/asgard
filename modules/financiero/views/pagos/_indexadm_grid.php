@@ -1,14 +1,8 @@
 <?php
 
 use yii\helpers\Html;
-use yii\widgets\DetailView;
 use yii\helpers\Url;
 use app\widgets\PbGridView\PbGridView;
-use yii\data\ArrayDataProvider;
-use kartik\date\DatePicker;
-use yii\helpers\ArrayHelper;
-use yii\jui\AutoComplete;
-use yii\web\JsExpression;
 use app\modules\admision\Module as admision;
 
 admision::registerTranslations();
@@ -20,7 +14,7 @@ admision::registerTranslations();
         'id' => 'TbG_Solicitudes',
         'showExport' => true,
         'fnExportEXCEL' => "exportExcelColec",
-        //'fnExportPDF' => "exportPdf",
+        'fnExportPDF' => "exportPdfColec",
         'dataProvider' => $model,        
         'columns' =>
         [      

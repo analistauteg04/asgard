@@ -843,5 +843,42 @@ class PagosController extends \app\components\CController {
         $report->mpdf->Output('Reporte_' . date("Ymdhis") . ".pdf", ExportFile::OUTPUT_TO_DOWNLOAD);
         return;
     }
+    
+    public function actionExppdfcolec() {
+        $report = new ExportFile();
+        $this->view->title = financiero::t("Pagos", "Registration Payments for Collections"); // Titulo del reporte
+
+        $arrHeader = array(
+            admision::t("Solicitudes", "Request #"),
+            admision::t("Solicitudes", "Application date"),
+            Yii::t("formulario", "DNI 1"),
+            Yii::t("formulario", "First Names"),
+            Yii::t("formulario", "Last Names"),
+            academico::t("Academico", "Academic unit"),
+            academico::t("Academico", "Income Method"),
+            Yii::t("formulario", "Status"),
+        );
+        $data = Yii::$app->request->get();
+        $arrSearch["search"] = $data["search"];
+        $arrSearch["f_ini"] = $data["f_ini"];
+        $arrSearch["f_fin"] = $data["f_fin"];
+
+        $arrData = array();
+        $model_pag = new OrdenPago();
+        if (empty($arrSearch)) { //listarSolicitudesadm
+            $arrData = $model_pag->listarSolicitudesadmexcel(array(), true);
+        } else {
+            $arrData = $model_pag->listarSolicitudesadmexcel($arrSearch, true);
+        }
+        $report->orientation = "L"; // tipo de orientacion L => Horizontal, P => Vertical
+        $report->createReportPdf(
+                $this->render('exportpdf', [
+                    'arr_head' => $arrHeader,
+                    'arr_body' => $arrData
+                ])
+        );
+        $report->mpdf->Output('Reporte_' . date("Ymdhis") . ".pdf", ExportFile::OUTPUT_TO_DOWNLOAD);
+        return;
+    }
 
 }
