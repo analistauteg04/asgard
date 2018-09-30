@@ -209,6 +209,7 @@ class SolicitudesController extends \app\components\CController {
         $usu_id = @Yii::$app->session->get("PB_iduser");
         $envi_correo = 0;
         $es_nacional = " ";
+        $num_secuencia="0";
         $valida = " ";
         if (Yii::$app->request->isAjax) {
             $data = Yii::$app->request->post();
@@ -253,9 +254,9 @@ class SolicitudesController extends \app\components\CController {
             if (!isset($id_int)) {
                 throw new Exception('Error id interesado no creado.');
             }
-            $nint_id = $data["ninteres"];
-            $ming_id = $data["metodoing"];
-            $mod_id = $data["modalidad"];
+            $nint_id = 1;//$data["ninteres"];
+            $ming_id = 1;//$data["metodoing"];
+            $mod_id = 1;//$data["modalidad"];
             $car_id = $data["carrera"];
             $emp_id = $data["emp_id"];
             if ($nint_id < '1' and $ming_id < '1' and $mod_id < '1' and $car_id < '1' and $valida = 1) {
@@ -294,7 +295,8 @@ class SolicitudesController extends \app\components\CController {
                 //Validar que no exista el registro en solicitudes.                    
                 $resp_valida = $mod_solins->Validarsolicitud($interesado_id, $nint_id, $ming_id, $car_id);
                 if (empty($resp_valida['existe'])) {
-                    $mod_solins->num_solicitud=Secuencias::nuevaSecuencia($con1, 1, 1, 1, 'SOL');
+                    $num_secuencia=Secuencias::nuevaSecuencia($con1, 1, 1, 1, 'SOL');
+                    $mod_solins->num_solicitud=$num_secuencia;
                     $mod_solins->int_id = $interesado_id;
                     $mod_solins->uaca_id = $nint_id;
                     $mod_solins->mod_id = $mod_id;
@@ -396,11 +398,15 @@ class SolicitudesController extends \app\components\CController {
                 $body = Utilities::getMailMessage("Paidinterested", array("[[nombre]]" => $nombres, "[[metodo]]" => $metodo, "[[precio]]" => $val_total, "[[link]]" => $link, "[[link1]]" => $link1, "[[link_pypal]]" => $link_paypal), Yii::$app->language);
                 $bodyadmision = Utilities::getMailMessage("Paidadmissions", array("[[nombre]]" => $pri_nombre, "[[apellido]]" => $pri_apellido, "[[correo]]" => $correo, "[[identificacion]]" => $identificacion, "[[tipoDNI]]" => $tipoDNI, "[[curso]]" => $curso, "[[telefono]]" => $telefono), Yii::$app->language);
                 $bodycolecturia = Utilities::getMailMessage("Approvedapplicationcollected", array("[[nombres_completos]]" => $nombres, "[[metodo]]" => $metodo, "[[nombre]]" => $respDatoFactura["sdfa_nombres"], "[[apellido]]" => $respDatoFactura["sdfa_apellidos"], "[[identificacion]]" => $respDatoFactura["sdfa_dni"], "[[tipoDNI]]" => $respDatoFactura["sdfa_tipo_dni"], "[[direccion]]" => $respDatoFactura["sdfa_direccion"], "[[telefono]]" => $respDatoFactura["sdfa_telefono"]), Yii::$app->language);
+                /*
                 Utilities::sendEmail($tituloMensaje, Yii::$app->params["adminEmail"], [$correo => $pri_apellido . " " . $pri_nombre], $asunto, $body);
                 Utilities::sendEmail($tituloMensaje, Yii::$app->params["adminEmail"], [Yii::$app->params["admisiones"] => "Jefe"], $asunto, $bodyadmision);
                 Utilities::sendEmail($tituloMensaje, Yii::$app->params["adminEmail"], [Yii::$app->params["soporteEmail"] => "Soporte"], $asunto, $body);
                 Utilities::sendEmail($tituloMensaje, Yii::$app->params["adminEmail"], [Yii::$app->params["soporteEmail"] => "Soporte"], $asunto, $bodyadmision);
                 Utilities::sendEmail($tituloMensaje, Yii::$app->params["adminEmail"], [Yii::$app->params["colecturia"] => "Colecturia"], $asunto, $bodycolecturia);
+                */
+                 //$num_secuencia;secuencia que se debe retornar
+                
                 $message = array(
                     "wtmessage" => Yii::t("notificaciones", "La infomación ha sido grabada. Por favor verifique su correo."),
                     "title" => Yii::t('jslang', 'Success'),
