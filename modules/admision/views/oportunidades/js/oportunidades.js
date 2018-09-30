@@ -2,31 +2,6 @@ $(document).ready(function () {
     $('#btn_buscarGestion').click(function () {
         actualizarGridGestion();
     });
-    $('#cmb_empresa').change(function () {// cambio 1
-        var link = $('#txth_base').val() + "/admision/oportunidades/newoportunidadxcontacto";
-        if ($(this).val() > 1) {
-            $('.subcareers').hide();
-            var arrParams = new Object();
-            arrParams.empresa = $(this).val();
-            arrParams.getmodalidaemp = true;
-            requestHttpAjax(link, arrParams, function (response) {
-                if (response.status == "OK") {
-                    data = response.message;
-                    setComboData(data.modalidaemp, "cmb_modalidad_estudio");
-                    $('.ccmodestudio').removeClass("hide");
-                    $('.ccmodestudio').addClass("show");
-                    $('.ccmodalidad').removeClass("show");
-                    $('.ccmodalidad').addClass("hide");
-                }
-            }, true);
-        } else {
-            $('.subcareers').show();
-            $('.ccmodestudio').removeClass("show");
-            $('.ccmodestudio').addClass("hide");
-            $('.ccmodalidad').removeClass("hide");
-            $('.ccmodalidad').addClass("show");
-        }
-    });
     $('#cmb_carrera2').change(function () {
         var ref = $(this).attr("data-ref");
         if ($(this).val() != 0) {
@@ -75,7 +50,7 @@ $(document).ready(function () {
                             if (response.status == "OK") {
                                 data = response.message;
                                 setComboData(data.carrera, "cmb_carrera1");
-                            }//cmb_modalidad_estudio es el estudio academico
+                            }
                         }, true);
                     }
                 }
@@ -127,6 +102,7 @@ $(document).ready(function () {
                 setComboData(data.unidad_academica, "cmb_nivelestudio");
                 var arrParams = new Object();
                 if (data.unidad_academica.length > 0) {
+                    var arrParams = new Object();
                     arrParams.nint_id = $('#cmb_nivelestudio').val();
                     arrParams.getmodalidad = true;
                     requestHttpAjax(link, arrParams, function (response) {
@@ -135,12 +111,24 @@ $(document).ready(function () {
                             setComboData(data.modalidad, "cmb_modalidad");
                             var arrParams = new Object();
                             if (data.modalidad.length > 0) {
-                                arrParams.unidada = $('#cmb_modalidad').val();
+                                var arrParams = new Object();
+                                arrParams.unidada = $('#cmb_nivelestudio').val();
+                                arrParams.moda_id = $('#cmb_modalidad').val();
+                                arrParams.getcarrera = true;
+                                requestHttpAjax(link, arrParams, function (response) {
+                                        if (response.status == "OK") {
+                                                data = response.message;
+                                                setComboData(data.carrera, "cmb_carrera1");
+                                                setComboData(data.carrera, "cmb_modalidad_estudio");
+                                        }
+                                }, true);
+                                var arrParams = new Object();
+                                arrParams.unidada = $('#cmb_nivelestudio').val();
                                 arrParams.getoportunidad = true;
                                 requestHttpAjax(link, arrParams, function (response) {
                                     if (response.status == "OK") {
                                         data = response.message;
-                                        setComboData(data.oportunidad, "cmb_tipo_oportunidad");                                                                                
+                                        setComboData(data.oportunidad, "cmb_tipo_oportunidad");
                                     }
                                 }, true);
                             }
