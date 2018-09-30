@@ -95,7 +95,7 @@ class ItemMetodoUnidad extends \yii\db\ActiveRecord
         $con = \Yii::$app->db_facturacion;        
         $estado = 1;
         $sql = "SELECT ite_id 
-                FROM  " . $con->dbname . ".item_metodo_nivel
+                FROM  " . $con->dbname . ".item_metodo_unidad
                 WHERE uaca_id = :nint_id
                       and mod_id = :mod_id
                       and ming_id = :ming_id
