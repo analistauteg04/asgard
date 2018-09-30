@@ -520,7 +520,7 @@ function save() {
     arrParams.arc_extranjero = $('#txth_extranjero').val();
     arrParams.arc_nacional = $('#txth_nac').val();
     arrParams.arc_doc_beca = $('#txth_doc_beca').val();
-    arrParams.emp_id = 1;
+    arrParams.emp_id = $('#cmb_empresa').val();
     arrParams.nombres_fac   = $('#txt_nombres_fac').val();
     arrParams.apellidos_fac = $('#txt_apellidos_fac').val();
     arrParams.dir_fac  = $('#txt_dir_fac').val();

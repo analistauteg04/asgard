@@ -26,6 +26,7 @@ use app\modules\admision\Module as admision;
 use app\modules\academico\Module as academico;
 use app\modules\financiero\Module as financiero;
 use app\modules\financiero\models\Secuencias;
+use app\models\Empresa;
 
 academico::registerTranslations();
 financiero::registerTranslations();
@@ -137,6 +138,7 @@ class SolicitudesController extends \app\components\CController {
 
     public function actionNew() {
         $mod_metodo = new MetodoIngreso();
+        $empresa_mod = new Empresa();        
         $per_id = base64_decode($_GET['per_id']);
         Yii::$app->session->set('persona_solicita', base64_encode($_GET['ids']));
         $mod_carrera = new EstudioAcademico();
@@ -151,6 +153,7 @@ class SolicitudesController extends \app\components\CController {
         $dataPersona = $persona_model->consultaPersonaId($per_id);
         $modInteresado = new Interesado();
         $inte_id = $modInteresado->consultarIdinteresado($per_id);
+        $empresa = $empresa_mod->getAllEmpresa();
         if (Yii::$app->request->isAjax) {
             $data = Yii::$app->request->post();
             if (isset($data["getmetodo"])) {
@@ -182,8 +185,7 @@ class SolicitudesController extends \app\components\CController {
                 return Utilities::ajaxResponse('OK', 'alert', Yii::t('jslang', 'Success'), 'false', $message);
                 return;
             }
-        }
-        //$arr_unidadac = $modUnidad->consultarUnidadAcademicas();
+        }    
         $arr_unidadac = $mod_unidad->consultarUnidadAcademicasEmpresa(1);
         $arr_modalidad = $mod_modalidad->consultarModalidad(1);
         $arr_metodos = $mod_metodo->consultarMetodoIngNivelInt($arr_unidadac[0]["id"]);
@@ -200,7 +202,8 @@ class SolicitudesController extends \app\components\CController {
                     "arr_descuento" => ArrayHelper::map($arr_descuento, "id", "name"),
                     "item" => $resp_item["ite_id"],
                     "int_id" => $inte_id,
-                    "per_id" => $per_id
+                    "per_id" => $per_id,
+                    "arr_empresa" => ArrayHelper::map($empresa, "id", "value"),
         ]);
     }
 
@@ -254,11 +257,11 @@ class SolicitudesController extends \app\components\CController {
             if (!isset($id_int)) {
                 throw new Exception('Error id interesado no creado.');
             }
-            $nint_id = 1;//$data["ninteres"];
-            $ming_id = 1;//$data["metodoing"];
-            $mod_id = 1;//$data["modalidad"];
-            $car_id = $data["carrera"];
-            $emp_id = $data["emp_id"];
+            $nint_id = $data["ninteres"];
+            $ming_id = $data["metodoing"];
+            $mod_id =  $data["modalidad"];
+            $car_id =  $data["carrera"];
+            $emp_id =  $data["emp_id"];
             if ($nint_id < '1' and $ming_id < '1' and $mod_id < '1' and $car_id < '1' and $valida = 1) {
                 throw new Exception('Debe seleccionar opciones de las listas.');
             }
@@ -295,7 +298,7 @@ class SolicitudesController extends \app\components\CController {
                 //Validar que no exista el registro en solicitudes.                    
                 $resp_valida = $mod_solins->Validarsolicitud($interesado_id, $nint_id, $ming_id, $car_id);
                 if (empty($resp_valida['existe'])) {
-                    $num_secuencia=Secuencias::nuevaSecuencia($con1, 1, 1, 1, 'SOL');
+                    $num_secuencia=Secuencias::nuevaSecuencia($con1, $emp_id, 1, 1, 'SOL');
                     $mod_solins->num_solicitud=$num_secuencia;
                     $mod_solins->int_id = $interesado_id;
                     $mod_solins->uaca_id = $nint_id;
