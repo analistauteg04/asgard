@@ -21,7 +21,7 @@ admision::registerTranslations(); // trae las traducciones del modulo
         'id' => 'TbG_Solicitudes',
         'showExport' => true,
         'fnExportEXCEL' => "exportExcelPagos",
-        //'fnExportPDF' => "exportPdf",
+        'fnExportPDF' => "exportPdfpagos",
         'dataProvider' => $model,
         'columns' =>
         [

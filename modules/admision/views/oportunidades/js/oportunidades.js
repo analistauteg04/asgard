@@ -2,31 +2,6 @@ $(document).ready(function () {
     $('#btn_buscarGestion').click(function () {
         actualizarGridGestion();
     });
-    $('#cmb_empresa').change(function () {
-        var link = $('#txth_base').val() + "/admision/oportunidades/newoportunidadxcontacto";
-        if ($(this).val() > 1) {
-            $('.subcareers').hide();
-            var arrParams = new Object();
-            arrParams.empresa = $(this).val();
-            arrParams.getmodalidaemp = true;
-            requestHttpAjax(link, arrParams, function (response) {
-                if (response.status == "OK") {
-                    data = response.message;
-                    setComboData(data.modalidaemp, "cmb_modalidad_estudio");
-                    $('.ccmodestudio').removeClass("hide");
-                    $('.ccmodestudio').addClass("show");
-                    $('.ccmodalidad').removeClass("show");
-                    $('.ccmodalidad').addClass("hide");
-                }
-            }, true);
-        } else {
-            $('.subcareers').show();
-            $('.ccmodestudio').removeClass("show");
-            $('.ccmodestudio').addClass("hide");
-            $('.ccmodalidad').removeClass("hide");
-            $('.ccmodalidad').addClass("show");
-        }
-    });
     $('#cmb_carrera2').change(function () {
         var ref = $(this).attr("data-ref");
         if ($(this).val() != 0) {
@@ -70,6 +45,7 @@ $(document).ready(function () {
                     if (data.modalidad.length > 0) {
                         arrParams.unidada = $('#cmb_nivelestudio').val();
                         arrParams.moda_id = data.modalidad[0].id;
+                        arrParams.empresa_id = $('#cmb_empresa').val();
                         arrParams.getcarrera = true;
                         requestHttpAjax(link, arrParams, function (response) {
                             if (response.status == "OK") {
@@ -116,7 +92,7 @@ $(document).ready(function () {
             }
         }, true);
     });
-    $('#cmb_empresa').change(function () {
+    $('#cmb_empresa').change(function () {// cambio 2
         var link = $('#txth_base').val() + "/admision/oportunidades/newoportunidadxcontacto";
         var arrParams = new Object();
         arrParams.empresa = $('#cmb_empresa').val();
@@ -127,15 +103,27 @@ $(document).ready(function () {
                 setComboData(data.unidad_academica, "cmb_nivelestudio");
                 var arrParams = new Object();
                 if (data.unidad_academica.length > 0) {
+                    var arrParams = new Object();
                     arrParams.nint_id = $('#cmb_nivelestudio').val();
                     arrParams.getmodalidad = true;
                     requestHttpAjax(link, arrParams, function (response) {
                         if (response.status == "OK") {
                             data = response.message;
                             setComboData(data.modalidad, "cmb_modalidad");
-                            var arrParams = new Object();
                             if (data.modalidad.length > 0) {
-                                arrParams.unidada = $('#cmb_modalidad').val();
+                                var arrParams = new Object();
+                                arrParams.unidada = $('#cmb_nivelestudio').val();
+                                arrParams.moda_id = $('#cmb_modalidad').val();
+                                arrParams.empresa_id = $('#cmb_empresa').val();
+                                arrParams.getcarrera = true;
+                                requestHttpAjax(link, arrParams, function (response) {
+                                        if (response.status == "OK") {
+                                                data = response.message;
+                                                setComboData(data.carrera, "cmb_carrera1");                                                                                                
+                                        }
+                                }, true);
+                                var arrParams = new Object();
+                                arrParams.unidada = $('#cmb_nivelestudio').val();
                                 arrParams.getoportunidad = true;
                                 requestHttpAjax(link, arrParams, function (response) {
                                     if (response.status == "OK") {
@@ -155,6 +143,7 @@ $(document).ready(function () {
         var arrParams = new Object();
         arrParams.unidada = $('#cmb_nivelestudio').val();
         arrParams.moda_id = $(this).val();
+        arrParams.empresa_id = $('#cmb_empresa').val();
         arrParams.getcarrera = true;
         requestHttpAjax(link, arrParams, function (response) {
             if (response.status == "OK") {

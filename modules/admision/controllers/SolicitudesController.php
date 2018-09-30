@@ -25,6 +25,9 @@ use app\modules\admision\models\DocumentoAdjuntar;
 use app\modules\admision\Module as admision;
 use app\modules\academico\Module as academico;
 use app\modules\financiero\Module as financiero;
+use app\modules\financiero\models\Secuencias;
+use app\models\Empresa;
+
 academico::registerTranslations();
 financiero::registerTranslations();
 
@@ -135,9 +138,11 @@ class SolicitudesController extends \app\components\CController {
 
     public function actionNew() {
         $mod_metodo = new MetodoIngreso();
+        $empresa_mod = new Empresa();        
         $per_id = base64_decode($_GET['per_id']);
         Yii::$app->session->set('persona_solicita', base64_encode($_GET['ids']));
         $mod_carrera = new EstudioAcademico();
+        $mod_unidad = new UnidadAcademica();
         $persona_model = new Persona();
         $mod_modalidad = new Modalidad();
         $modcanal = new Oportunidad();
@@ -148,6 +153,7 @@ class SolicitudesController extends \app\components\CController {
         $dataPersona = $persona_model->consultaPersonaId($per_id);
         $modInteresado = new Interesado();
         $inte_id = $modInteresado->consultarIdinteresado($per_id);
+        $empresa = $empresa_mod->getAllEmpresa();
         if (Yii::$app->request->isAjax) {
             $data = Yii::$app->request->post();
             if (isset($data["getmetodo"])) {
@@ -179,8 +185,8 @@ class SolicitudesController extends \app\components\CController {
                 return Utilities::ajaxResponse('OK', 'alert', Yii::t('jslang', 'Success'), 'false', $message);
                 return;
             }
-        }
-        $arr_unidadac = $modUnidad->consultarUnidadAcademicas();
+        }    
+        $arr_unidadac = $mod_unidad->consultarUnidadAcademicasEmpresa(1);
         $arr_modalidad = $mod_modalidad->consultarModalidad(1);
         $arr_metodos = $mod_metodo->consultarMetodoIngNivelInt($arr_unidadac[0]["id"]);
         $arr_carrera = $modcanal->consultarCarreraModalidad(1, 1);
@@ -196,7 +202,8 @@ class SolicitudesController extends \app\components\CController {
                     "arr_descuento" => ArrayHelper::map($arr_descuento, "id", "name"),
                     "item" => $resp_item["ite_id"],
                     "int_id" => $inte_id,
-                    "per_id" => $per_id
+                    "per_id" => $per_id,
+                    "arr_empresa" => ArrayHelper::map($empresa, "id", "value"),
         ]);
     }
 
@@ -205,6 +212,7 @@ class SolicitudesController extends \app\components\CController {
         $usu_id = @Yii::$app->session->get("PB_iduser");
         $envi_correo = 0;
         $es_nacional = " ";
+        $num_secuencia="0";
         $valida = " ";
         if (Yii::$app->request->isAjax) {
             $data = Yii::$app->request->post();
@@ -251,9 +259,9 @@ class SolicitudesController extends \app\components\CController {
             }
             $nint_id = $data["ninteres"];
             $ming_id = $data["metodoing"];
-            $mod_id = $data["modalidad"];
-            $car_id = $data["carrera"];
-            $emp_id = $data["emp_id"];
+            $mod_id =  $data["modalidad"];
+            $car_id =  $data["carrera"];
+            $emp_id =  $data["emp_id"];
             if ($nint_id < '1' and $ming_id < '1' and $mod_id < '1' and $car_id < '1' and $valida = 1) {
                 throw new Exception('Debe seleccionar opciones de las listas.');
             }
@@ -290,6 +298,8 @@ class SolicitudesController extends \app\components\CController {
                 //Validar que no exista el registro en solicitudes.                    
                 $resp_valida = $mod_solins->Validarsolicitud($interesado_id, $nint_id, $ming_id, $car_id);
                 if (empty($resp_valida['existe'])) {
+                    $num_secuencia=Secuencias::nuevaSecuencia($con1, $emp_id, 1, 1, 'SOL');
+                    $mod_solins->num_solicitud=$num_secuencia;
                     $mod_solins->int_id = $interesado_id;
                     $mod_solins->uaca_id = $nint_id;
                     $mod_solins->mod_id = $mod_id;
@@ -391,11 +401,15 @@ class SolicitudesController extends \app\components\CController {
                 $body = Utilities::getMailMessage("Paidinterested", array("[[nombre]]" => $nombres, "[[metodo]]" => $metodo, "[[precio]]" => $val_total, "[[link]]" => $link, "[[link1]]" => $link1, "[[link_pypal]]" => $link_paypal), Yii::$app->language);
                 $bodyadmision = Utilities::getMailMessage("Paidadmissions", array("[[nombre]]" => $pri_nombre, "[[apellido]]" => $pri_apellido, "[[correo]]" => $correo, "[[identificacion]]" => $identificacion, "[[tipoDNI]]" => $tipoDNI, "[[curso]]" => $curso, "[[telefono]]" => $telefono), Yii::$app->language);
                 $bodycolecturia = Utilities::getMailMessage("Approvedapplicationcollected", array("[[nombres_completos]]" => $nombres, "[[metodo]]" => $metodo, "[[nombre]]" => $respDatoFactura["sdfa_nombres"], "[[apellido]]" => $respDatoFactura["sdfa_apellidos"], "[[identificacion]]" => $respDatoFactura["sdfa_dni"], "[[tipoDNI]]" => $respDatoFactura["sdfa_tipo_dni"], "[[direccion]]" => $respDatoFactura["sdfa_direccion"], "[[telefono]]" => $respDatoFactura["sdfa_telefono"]), Yii::$app->language);
+                /*
                 Utilities::sendEmail($tituloMensaje, Yii::$app->params["adminEmail"], [$correo => $pri_apellido . " " . $pri_nombre], $asunto, $body);
                 Utilities::sendEmail($tituloMensaje, Yii::$app->params["adminEmail"], [Yii::$app->params["admisiones"] => "Jefe"], $asunto, $bodyadmision);
                 Utilities::sendEmail($tituloMensaje, Yii::$app->params["adminEmail"], [Yii::$app->params["soporteEmail"] => "Soporte"], $asunto, $body);
                 Utilities::sendEmail($tituloMensaje, Yii::$app->params["adminEmail"], [Yii::$app->params["soporteEmail"] => "Soporte"], $asunto, $bodyadmision);
                 Utilities::sendEmail($tituloMensaje, Yii::$app->params["adminEmail"], [Yii::$app->params["colecturia"] => "Colecturia"], $asunto, $bodycolecturia);
+                */
+                 //$num_secuencia;secuencia que se debe retornar
+                
                 $message = array(
                     "wtmessage" => Yii::t("notificaciones", "La infomación ha sido grabada. Por favor verifique su correo."),
                     "title" => Yii::t('jslang', 'Success'),

@@ -20,7 +20,7 @@ admision::registerTranslations();
         'id' => 'TbG_Solicitudes',
         'showExport' => true,
         'fnExportEXCEL' => "exportExcel",
-        //'fnExportPDF' => "exportPdf",
+        'fnExportPDF' => "exportPdf",
         'dataProvider' => $model,   
         'columns' =>
         [        
