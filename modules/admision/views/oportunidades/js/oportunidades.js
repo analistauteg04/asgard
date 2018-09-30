@@ -132,7 +132,18 @@ $(document).ready(function () {
                     requestHttpAjax(link, arrParams, function (response) {
                         if (response.status == "OK") {
                             data = response.message;
-                            setComboData(data.modalidad, "cmb_modalidad");                            
+                            setComboData(data.modalidad, "cmb_modalidad");
+                            var arrParams = new Object();
+                            if (data.modalidad.length > 0) {
+                                arrParams.unidada = $('#cmb_modalidad').val();
+                                arrParams.getoportunidad = true;
+                                requestHttpAjax(link, arrParams, function (response) {
+                                    if (response.status == "OK") {
+                                        data = response.message;
+                                        setComboData(data.oportunidad, "cmb_tipo_oportunidad");
+                                    }
+                                }, true);
+                            }
                         }
                     }, true);
                 }
