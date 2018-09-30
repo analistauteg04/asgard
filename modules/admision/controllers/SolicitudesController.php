@@ -2,7 +2,13 @@
 
 namespace app\modules\admision\controllers;
 
+use Yii;
 use app\models\Utilities;
+use app\models\ExportFile;
+use app\models\Persona;
+use yii\helpers\Url;
+use yii\base\Exception;
+use yii\helpers\ArrayHelper;
 use app\modules\admision\models\SolicitudInscripcion;
 use app\modules\admision\models\MetodoIngreso;
 use app\modules\academico\models\EstudioAcademico;
@@ -11,15 +17,10 @@ use app\modules\admision\models\Oportunidad;
 use app\modules\admision\models\ModuloEstudio;
 use app\modules\admision\models\ItemMetodoNivel;
 use app\modules\admision\models\DetalleDescuentoItem;
-use app\models\Persona;
 use app\modules\academico\models\UnidadAcademica;
 use app\modules\admision\models\SolicitudinsDocumento;
 use app\modules\financiero\models\OrdenPago;
 use app\modules\admision\models\Interesado;
-use yii\helpers\Url;
-use yii\base\Exception;
-use yii\helpers\ArrayHelper;
-use Yii;
 use app\modules\admision\models\DocumentoAdjuntar;
 use app\modules\admision\Module as admision;
 use app\modules\academico\Module as academico;
@@ -53,7 +54,7 @@ class SolicitudesController extends \app\components\CController {
         return $this->render('index', [
                     'model' => $respSolicitud,
                     'arrCarreras' => $arrCarreras,
-                    'arrEstados' => $arrEstados
+                    'arrEstados' => $arrEstados,
         ]);
     }
 
@@ -1148,4 +1149,46 @@ class SolicitudesController extends \app\components\CController {
         exit;                               
     }
 
+    public function actionExppdfsolicitudes() {  
+        $report = new ExportFile();
+        $this->view->title = admision::t("Solicitudes", "Request by Interested");
+
+        $arr_head = array(
+            admision::t("Solicitudes", "Request #"),
+            admision::t("Solicitudes", "Application date"),
+            Yii::t("formulario", "DNI 1"),
+            Yii::t("formulario", "First Names"),
+            Yii::t("formulario", "Last Names"),
+            academico::t("Academico", "Academic unit"),
+            academico::t("Academico", "Income Method"),
+            academico::t("Academico", "Career/Program"),
+            Yii::t("formulario", "Status"),
+            financiero::t("Pagos", "Payment")
+            ); 
+                
+        $modSolicitudes = new SolicitudInscripcion();
+        $data = Yii::$app->request->get();
+        
+        $arrSearch["search"] = $data['search'];
+        $arrSearch["f_ini"] = $data['f_ini'];
+        $arrSearch["f_fin"] = $data['f_fin'];
+        $arrSearch["carrera"] = $data['carrera'];
+        $arrSearch["estadoSol"] = $data['estadoSol'];
+                
+        $arr_body = array();
+        if (empty($arrSearch)) {
+            $arr_body = $modSolicitudes->consultarSolicitudesReporte(array(),true);    
+        } else {
+            $arr_body = $modSolicitudes->consultarSolicitudesReporte($arrSearch, true);                   
+        }
+        $report->orientation = "L"; // tipo de orientacion L => Horizontal, P => Vertical
+        $report->createReportPdf(
+            $this->render('exportpdf', [
+                    'arr_head' => $arr_head,
+                    'arr_body' => $arr_body
+            ])
+        );
+        $report->mpdf->Output('Reporte_' . date("Ymdhis") . ".pdf", ExportFile::OUTPUT_TO_DOWNLOAD);
+        return;
+    }
 }

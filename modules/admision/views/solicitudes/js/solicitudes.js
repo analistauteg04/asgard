@@ -431,9 +431,17 @@ function exportExcel() {
     var f_ini = $('#txt_fecha_ini').val();
     var f_fin = $('#txt_fecha_fin').val();
     var carrera = $('#cmb_carrera option:selected').val();
-    var estado = $('#cmb_estado option:selected').val();       
-    //window.location.href = $('#txth_base').val() + "/admision/solicitudes/expexcel?search=" + search + "&f_ini=" + f_ini + "&f_fin=" + f_fin + "&carrera=" + carrera + "&estadoSol=" + estado;   
+    var estado = $('#cmb_estado option:selected').val();
     window.location.href = $('#txth_base').val() + "/admision/solicitudes/expexcelsolicitudes?search=" + search + "&f_ini=" + f_ini + "&f_fin=" + f_fin + "&carrera=" + carrera + "&estadoSol=" + estado;
+}
+
+function exportPdf(){
+    var search = $('#txt_buscarData').val();
+    var f_ini = $('#txt_fecha_ini').val();
+    var f_fin = $('#txt_fecha_fin').val();
+    var carrera = $('#cmb_carrera option:selected').val();
+    var estado = $('#cmb_estado option:selected').val();
+    window.location.href = $('#txth_base').val() + "/admision/solicitudes/exppdfsolicitudes?pdf=1&search=" + search + "&f_ini=" + f_ini + "&f_fin=" + f_fin + "&carrera=" + carrera + "&estadoSol=" + estado;
 }
 
 function actualizarGrid() {
