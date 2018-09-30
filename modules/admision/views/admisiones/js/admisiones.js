@@ -805,6 +805,14 @@ function exportExcel() {
     window.location.href = $('#txth_base').val() + "/admision/admisiones/expexcel?agente=" + agente + "&interesado=" + interesado + "&f_atencion=" + f_atencion + "&estado=" + estado;
 }
 
+function exportPdf() {
+    var agente = $('#txt_buscarDataAgente').val();
+    var interesado = $('#txt_buscarDataPersona').val();
+    var f_atencion = $('#txt_fecha_atencion').val();
+    var estado = $('#cmb_estado option:selected').val();
+    window.location.href = $('#txth_base').val() + "/admision/admisiones/exppdf?pdf=1&search=" + agente + "&interesado=" + interesado + "&f_atencion=" + f_atencion + "&estado=" + estado;
+}
+
 function camposnulos(campo) {
     if ($(campo).val() == "")
     {

@@ -5,6 +5,8 @@ use yii\helpers\Url;
 use \app\models\Persona;
 use app\widgets\PbGridView\PbGridView;
 use app\modules\admision\Module;
+use app\modules\admision\Module as admision;
+admision::registerTranslations();
 ?>
 <?= Html::hiddenInput('txth_ids', '', ['id' => 'txth_ids']); ?>
 <div>        
@@ -13,6 +15,7 @@ use app\modules\admision\Module;
         'id' => 'Pbcontacto',
         'showExport' => true,
         'fnExportEXCEL' => "exportExcel",
+        'fnExportPDF' => "exportPdf",
         'dataProvider' => $model,
         'columns' => [
             [

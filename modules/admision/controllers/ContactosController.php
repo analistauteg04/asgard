@@ -15,6 +15,7 @@ use app\modules\academico\Module as academico;
 use app\modules\financiero\Module as financiero;
 use app\modules\admision\Module as admision;
 use app\models\ExportFile;
+
 academico::registerTranslations();
 admision::registerTranslations();
 financiero::registerTranslations();
@@ -281,7 +282,7 @@ class ContactosController extends \app\components\CController {
             try {
                 if (!Utilities::validateTypeField($correo, "correo") && !Utilities::validateTypeField($celular, "number")) {
                     $message = array(
-                        "wtmessage" => Admision::t("crm", "Please enter at least one valid email or a cell phone."),
+                        "wtmessage" => admision::t("crm", "Please enter at least one valid email or a cell phone."),
                         "title" => Yii::t('jslang', 'Success'),
                     );
                     return Utilities::ajaxResponse('NO_OK', 'alert', Yii::t("jslang", "Error"), true, $message);
@@ -353,12 +354,12 @@ class ContactosController extends \app\components\CController {
         header('Cache-Control: max-age=0');
         $colPosition = array("C", "D", "E", "F", "G", "H", "I", "J", "K", "L");
         $arrHeader = array(
-                Yii::t("crm", "Contact"),
-                Yii::t("crm", "Contact Type"),
-                Yii::t("crm", "Contact Status"),
-                Yii::t("formulario", "Open Opportunities"),
-                Yii::t("formulario", "Close Opportunities")
-            );
+            Yii::t("crm", "Contact"),
+            Yii::t("crm", "Contact Type"),
+            Yii::t("crm", "Contact Status"),
+            Yii::t("formulario", "Open Opportunities"),
+            Yii::t("formulario", "Close Opportunities")
+        );
         $modPersonaGestion = new PersonaGestion();
         $data = Yii::$app->request->get();
         $arrSearch["search"] = $data['search'];
@@ -373,6 +374,36 @@ class ContactosController extends \app\components\CController {
         $nameReport = yii::t("formulario", "Application Reports");
         Utilities::generarReporteXLS($nombarch, $nameReport, $arrHeader, $arrData, $colPosition);
         exit;
+    }
+
+    public function actionExppdf() {
+        $report = new ExportFile();
+        $this->view->title = admision::t("crm", "Contacts"); // Titulo del reporte
+        $arrHeader = array(
+            Yii::t("crm", "Contact"),
+            Yii::t("crm", "Contact Type"),
+            Yii::t("crm", "Contact Status"),
+            Yii::t("formulario", "Open Opportunities"),
+            Yii::t("formulario", "Close Opportunities")
+        );
+        $modPersonaGestion = new PersonaGestion();
+        $data = Yii::$app->request->get();
+        $arrSearch["search"] = $data['search'];
+        $arrSearch["estado"] = $data['estado'];
+        $arrData = array();
+        if (empty($arrSearch)) {
+            $arrData = $modPersonaGestion->consultarReportContactos(array(), true);
+        } else {
+            $arrData = $modPersonaGestion->consultarReportContactos($arrSearch, true);
+        }
+        $report->orientation = "P"; // tipo de orientacion L => Horizontal, P => Vertical                                
+        $report->createReportPdf(
+                $this->render('exportpdf', [
+                    'arr_head' => $arrHeader,
+                    'arr_body' => $arrData
+                ])
+        );
+        $report->mpdf->Output('Reporte_' . date("Ymdhis") . ".pdf", ExportFile::OUTPUT_TO_DOWNLOAD);
     }
 
     public function actionUpdate() {
@@ -605,9 +636,9 @@ class ContactosController extends \app\components\CController {
         $mod_oportunidad = new Oportunidad();
         $Data = $mod_oportunidad->consultarOportUnidadAcademica();
         //$Data = $mod_oportunidad->consultarOportPerdida();
-        
-        $dataIds='eopo_id';
-        $dataName='eopo_nombre';
+
+        $dataIds = 'eopo_id';
+        $dataName = 'eopo_nombre';
         $arrayIdsCols = array();
         for ($i = 0; $i < sizeof($Data); $i++) {
             if (!in_array($Data[$i][$dataIds], $arrayIdsCols)) {
