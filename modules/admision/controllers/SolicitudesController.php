@@ -137,8 +137,9 @@ class SolicitudesController extends \app\components\CController {
     }
 
     public function actionNew() {
+        $emp_id = @Yii::$app->session->get("PB_idempresa");
         $mod_metodo = new MetodoIngreso();
-        $empresa_mod = new Empresa();        
+        $empresa_mod = new Empresa();
         $per_id = base64_decode($_GET['per_id']);
         Yii::$app->session->set('persona_solicita', base64_encode($_GET['ids']));
         $mod_carrera = new EstudioAcademico();
@@ -156,11 +157,10 @@ class SolicitudesController extends \app\components\CController {
         $empresa = $empresa_mod->getAllEmpresa();
         if (Yii::$app->request->isAjax) {
             $data = Yii::$app->request->post();
-            if (isset($data["getmetodo"])) {
-                $metodos = $mod_metodo->consultarMetodoIngNivelInt($data['nint_id']);
-                $message = array("metodos" => $metodos);
+            if (isset($data["getuacademias"])) {
+                $data_u_acad = $mod_unidad->consultarUnidadAcademicasEmpresa($data["empresa_id"]);
+                $message = array("unidad_academica" => $data_u_acad);
                 return Utilities::ajaxResponse('OK', 'alert', Yii::t('jslang', 'Success'), 'false', $message);
-                return;
             }
             if (isset($data["getmodalidad"])) {
                 $modalidad = $mod_modalidad->consultarModalidad($data["nint_id"]);
@@ -168,15 +168,21 @@ class SolicitudesController extends \app\components\CController {
                 return Utilities::ajaxResponse('OK', 'alert', Yii::t('jslang', 'Success'), 'false', $message);
                 return;
             }
-            if (isset($data["getcarrera"])) {
-                if ($data["unidada"] < 3) {
-                    $carrera = $modcanal->consultarCarreraModalidad($data["unidada"], $data["moda_id"]);
-                } else {
-                    $carrera = $modestudio->consultarCursoModalidad($data["unidada"], $data["moda_id"]);
-                }
-                $message = array("carrera" => $carrera);
+            if (isset($data["getmetodo"])) {
+                $metodos = $mod_metodo->consultarMetodoIngNivelInt($data['nint_id']);
+                $message = array("metodos" => $metodos);
                 return Utilities::ajaxResponse('OK', 'alert', Yii::t('jslang', 'Success'), 'false', $message);
                 return;
+            }
+            if (isset($data["getcarrera"])) {
+                if ($data["empresa_id"] == 1) {
+                    $carrera = $modcanal->consultarCarreraModalidad($data["unidada"], $data["moda_id"]);
+                } else {
+                    $carrera = $modestudio->consultarCursoModalidad($data["unidada"], $data["moda_id"]); // tomar id de impresa
+                }
+
+                $message = array("carrera" => $carrera);
+                return Utilities::ajaxResponse('OK', 'alert', Yii::t('jslang', 'Success'), 'false', $message);
             }
             if (isset($data["getdescuento"])) {
                 $resItem = $modItemMetNivel->consultarXitemMetniv($data["unidada"], $data["moda_id"], $data["metodo"]);
@@ -185,8 +191,8 @@ class SolicitudesController extends \app\components\CController {
                 return Utilities::ajaxResponse('OK', 'alert', Yii::t('jslang', 'Success'), 'false', $message);
                 return;
             }
-        }    
-        $arr_unidadac = $mod_unidad->consultarUnidadAcademicasEmpresa(1);
+        }
+        $arr_unidadac = $mod_unidad->consultarUnidadAcademicasEmpresa($emp_id);
         $arr_modalidad = $mod_modalidad->consultarModalidad(1);
         $arr_metodos = $mod_metodo->consultarMetodoIngNivelInt($arr_unidadac[0]["id"]);
         $arr_carrera = $modcanal->consultarCarreraModalidad(1, 1);
@@ -212,7 +218,7 @@ class SolicitudesController extends \app\components\CController {
         $usu_id = @Yii::$app->session->get("PB_iduser");
         $envi_correo = 0;
         $es_nacional = " ";
-        $num_secuencia="0";
+        $num_secuencia = "0";
         $valida = " ";
         if (Yii::$app->request->isAjax) {
             $data = Yii::$app->request->post();
@@ -259,9 +265,9 @@ class SolicitudesController extends \app\components\CController {
             }
             $nint_id = $data["ninteres"];
             $ming_id = $data["metodoing"];
-            $mod_id =  $data["modalidad"];
-            $car_id =  $data["carrera"];
-            $emp_id =  $data["emp_id"];
+            $mod_id = $data["modalidad"];
+            $car_id = $data["carrera"];
+            $emp_id = $data["emp_id"];
             if ($nint_id < '1' and $ming_id < '1' and $mod_id < '1' and $car_id < '1' and $valida = 1) {
                 throw new Exception('Debe seleccionar opciones de las listas.');
             }
@@ -298,8 +304,8 @@ class SolicitudesController extends \app\components\CController {
                 //Validar que no exista el registro en solicitudes.                    
                 $resp_valida = $mod_solins->Validarsolicitud($interesado_id, $nint_id, $ming_id, $car_id);
                 if (empty($resp_valida['existe'])) {
-                    $num_secuencia=Secuencias::nuevaSecuencia($con1, $emp_id, 1, 1, 'SOL');
-                    $mod_solins->num_solicitud=$num_secuencia;
+                    $num_secuencia = Secuencias::nuevaSecuencia($con1, $emp_id, 1, 1, 'SOL');
+                    $mod_solins->num_solicitud = $num_secuencia;
                     $mod_solins->int_id = $interesado_id;
                     $mod_solins->uaca_id = $nint_id;
                     $mod_solins->mod_id = $mod_id;
@@ -402,14 +408,14 @@ class SolicitudesController extends \app\components\CController {
                 $bodyadmision = Utilities::getMailMessage("Paidadmissions", array("[[nombre]]" => $pri_nombre, "[[apellido]]" => $pri_apellido, "[[correo]]" => $correo, "[[identificacion]]" => $identificacion, "[[tipoDNI]]" => $tipoDNI, "[[curso]]" => $curso, "[[telefono]]" => $telefono), Yii::$app->language);
                 $bodycolecturia = Utilities::getMailMessage("Approvedapplicationcollected", array("[[nombres_completos]]" => $nombres, "[[metodo]]" => $metodo, "[[nombre]]" => $respDatoFactura["sdfa_nombres"], "[[apellido]]" => $respDatoFactura["sdfa_apellidos"], "[[identificacion]]" => $respDatoFactura["sdfa_dni"], "[[tipoDNI]]" => $respDatoFactura["sdfa_tipo_dni"], "[[direccion]]" => $respDatoFactura["sdfa_direccion"], "[[telefono]]" => $respDatoFactura["sdfa_telefono"]), Yii::$app->language);
                 /*
-                Utilities::sendEmail($tituloMensaje, Yii::$app->params["adminEmail"], [$correo => $pri_apellido . " " . $pri_nombre], $asunto, $body);
-                Utilities::sendEmail($tituloMensaje, Yii::$app->params["adminEmail"], [Yii::$app->params["admisiones"] => "Jefe"], $asunto, $bodyadmision);
-                Utilities::sendEmail($tituloMensaje, Yii::$app->params["adminEmail"], [Yii::$app->params["soporteEmail"] => "Soporte"], $asunto, $body);
-                Utilities::sendEmail($tituloMensaje, Yii::$app->params["adminEmail"], [Yii::$app->params["soporteEmail"] => "Soporte"], $asunto, $bodyadmision);
-                Utilities::sendEmail($tituloMensaje, Yii::$app->params["adminEmail"], [Yii::$app->params["colecturia"] => "Colecturia"], $asunto, $bodycolecturia);
-                */
-                 //$num_secuencia;secuencia que se debe retornar
-                
+                  Utilities::sendEmail($tituloMensaje, Yii::$app->params["adminEmail"], [$correo => $pri_apellido . " " . $pri_nombre], $asunto, $body);
+                  Utilities::sendEmail($tituloMensaje, Yii::$app->params["adminEmail"], [Yii::$app->params["admisiones"] => "Jefe"], $asunto, $bodyadmision);
+                  Utilities::sendEmail($tituloMensaje, Yii::$app->params["adminEmail"], [Yii::$app->params["soporteEmail"] => "Soporte"], $asunto, $body);
+                  Utilities::sendEmail($tituloMensaje, Yii::$app->params["adminEmail"], [Yii::$app->params["soporteEmail"] => "Soporte"], $asunto, $bodyadmision);
+                  Utilities::sendEmail($tituloMensaje, Yii::$app->params["adminEmail"], [Yii::$app->params["colecturia"] => "Colecturia"], $asunto, $bodycolecturia);
+                 */
+                //$num_secuencia;secuencia que se debe retornar
+
                 $message = array(
                     "wtmessage" => Yii::t("notificaciones", "La infomación ha sido grabada. Por favor verifique su correo."),
                     "title" => Yii::t('jslang', 'Success'),
@@ -790,26 +796,26 @@ class SolicitudesController extends \app\components\CController {
                         throw new Exception('Error no se reemplazo files.');
                     $mod_solinsxdoc1 = new SolicitudinsDocumento();
                     //1-Título, 2-DNI,3-Cert votación, 4-Foto, 5-Doc-Beca  
-                    if($mod_solinsxdoc1->insertNewDocument($sins_id, $interesado_id, 1, $titulo_archivo)){
-                        if($mod_solinsxdoc1->insertNewDocument($sins_id, $interesado_id, 2, $dni_archivo)){
-                            if($mod_solinsxdoc1->insertNewDocument($sins_id, $interesado_id, 4, $foto_archivo)){
-                                if ($es_extranjero == "1" or (empty($es_extranjero))) {
+                    if ($mod_solinsxdoc1->insertNewDocument($sins_id, $interesado_id, 1, $titulo_archivo)) {
+                        if ($mod_solinsxdoc1->insertNewDocument($sins_id, $interesado_id, 2, $dni_archivo)) {
+                            if ($mod_solinsxdoc1->insertNewDocument($sins_id, $interesado_id, 4, $foto_archivo)) {
+                                if ($es_extranjero == "1" or ( empty($es_extranjero))) {
                                     if (!$mod_solinsxdoc1->insertNewDocument($sins_id, $interesado_id, 3, $certvota_archivo)) {
                                         throw new Exception('Error doc certvot no creado.');
                                     }
                                     if ($beca == "1") {
-                                        if(!$mod_solinsxdoc1->insertNewDocument($sins_id, $interesado_id, 5, $beca_archivo)){
+                                        if (!$mod_solinsxdoc1->insertNewDocument($sins_id, $interesado_id, 5, $beca_archivo)) {
                                             throw new Exception('Error doc beca no creado.');
                                         }
                                     }
                                 }
-                            }else{
+                            } else {
                                 throw new Exception('Error doc foto no creado.');
                             }
-                        }else{
+                        } else {
                             throw new Exception('Error doc dni no creado.');
                         }
-                    }else{
+                    } else {
                         throw new Exception('Error doc titulo no creado.' . $mensaje);
                     }
                     // se cambia a pendiente la solicitud para revision.
@@ -1119,8 +1125,8 @@ class SolicitudesController extends \app\components\CController {
             return;
         }
     }
-       
-    public function actionExpexcelsolicitudes() {        
+
+    public function actionExpexcelsolicitudes() {
         ini_set('memory_limit', '256M');
         $content_type = Utilities::mimeContentType("xls");
         $nombarch = "Report-" . date("YmdHis") . ".xls";
@@ -1128,7 +1134,7 @@ class SolicitudesController extends \app\components\CController {
         header("Content-Disposition: attachment;filename=" . $nombarch . ".xls");
         header('Cache-Control: max-age=0');
         $colPosition = array("C", "D", "E", "F", "G", "H", "I", "J", "K", "L", "M", "N", "O");
-                
+
         $arrHeader = array(
             admision::t("Solicitudes", "Request #"),
             admision::t("Solicitudes", "Application date"),
@@ -1140,37 +1146,37 @@ class SolicitudesController extends \app\components\CController {
             academico::t("Academico", "Career/Program"),
             Yii::t("formulario", "Status"),
             financiero::t("Pagos", "Payment")
-            ); 
-                
+        );
+
         $modSolicitudes = new SolicitudInscripcion();
         $data = Yii::$app->request->get();
-        
+
         $arrSearch["search"] = $data['search'];
         $arrSearch["f_ini"] = $data['f_ini'];
         $arrSearch["f_fin"] = $data['f_fin'];
         $arrSearch["carrera"] = $data['carrera'];
         $arrSearch["estadoSol"] = $data['estadoSol'];
-                
+
         $arrData = array();
         if (empty($arrSearch)) {
-            $arrData = $modSolicitudes->consultarSolicitudesReporte(array(),true);    
+            $arrData = $modSolicitudes->consultarSolicitudesReporte(array(), true);
         } else {
-            $arrData = $modSolicitudes->consultarSolicitudesReporte($arrSearch, true);                   
-        }        
-               
+            $arrData = $modSolicitudes->consultarSolicitudesReporte($arrSearch, true);
+        }
+
         $nameReport = yii::t("formulario", "Application Reports");
         Utilities::generarReporteXLS($nombarch, $nameReport, $arrHeader, $arrData, $colPosition);
-        exit;                               
+        exit;
     }
 
-    public function actionExppdfsolicitudes() {  
+    public function actionExppdfsolicitudes() {
         $report = new ExportFile();
         $this->view->title = admision::t("Solicitudes", "Request by Interested"); // Titulo del reporte
 
         $modSolicitudes = new SolicitudInscripcion();
         $data = Yii::$app->request->get();
         $arr_body = array();
-        
+
         $arrSearch["search"] = $data['search'];
         $arrSearch["f_ini"] = $data['f_ini'];
         $arrSearch["f_fin"] = $data['f_fin'];
@@ -1188,22 +1194,23 @@ class SolicitudesController extends \app\components\CController {
             academico::t("Academico", "Career/Program"),
             Yii::t("formulario", "Status"),
             financiero::t("Pagos", "Payment")
-        ); 
-        
+        );
+
         if (empty($arrSearch)) {
-            $arr_body = $modSolicitudes->consultarSolicitudesReporte(array(),true);    
+            $arr_body = $modSolicitudes->consultarSolicitudesReporte(array(), true);
         } else {
-            $arr_body = $modSolicitudes->consultarSolicitudesReporte($arrSearch, true);                   
+            $arr_body = $modSolicitudes->consultarSolicitudesReporte($arrSearch, true);
         }
-        
+
         $report->orientation = "L"; // tipo de orientacion L => Horizontal, P => Vertical
         $report->createReportPdf(
-            $this->render('exportpdf', [
+                $this->render('exportpdf', [
                     'arr_head' => $arr_head,
                     'arr_body' => $arr_body
-            ])
+                ])
         );
         $report->mpdf->Output('Reporte_' . date("Ymdhis") . ".pdf", ExportFile::OUTPUT_TO_DOWNLOAD);
         return;
     }
+
 }

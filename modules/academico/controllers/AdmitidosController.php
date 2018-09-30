@@ -9,7 +9,10 @@ use yii\helpers\ArrayHelper;
 use app\models\Utilities;
 use app\modules\academico\Module as academico;
 use app\modules\financiero\Module as financiero;
+use app\modules\admision\Module as admision;
+use app\models\ExportFile;
 academico::registerTranslations();
+admision::registerTranslations();
 financiero::registerTranslations();
 class AdmitidosController extends \app\components\CController {
 
@@ -53,15 +56,15 @@ class AdmitidosController extends \app\components\CController {
         header('Cache-Control: max-age=0');
         $colPosition = array("C", "D", "E", "F", "G", "H", "I", "J", "K", "L");
         $arrHeader = array(
-            Yii::t("Solicitudes", "Request #"), //ingles
-            Yii::t("Solicitudes", "Application date"), //ingles
+            admision::t("Solicitudes", "Request #"),
+            admision::t("Solicitudes", "Application date"), //ingles
             Yii::t("formulario", "DNI 1"),
             Yii::t("formulario", "First Names"),
             Yii::t("formulario", "Last Names"),
-            Yii::t("Solicitudes", "Income Method"), //ingles
-            Yii::t("Academico", "Career/Program"), //ingles
-            Yii::t("Solicitudes", "Scholarship"), //ingles
-            Yii::t("Academico", "Registered"), //ingles
+            academico::t("Academico", "Income Method"), //ingles
+            academico::t("Academico", "Career/Program"),
+            academico::t("Solicitudes", "Scholarship"),
+            academico::t("Academico", "Registered")
         );
         $data = Yii::$app->request->get();
         $arrSearch = array();
@@ -84,23 +87,19 @@ class AdmitidosController extends \app\components\CController {
         exit;
     }
 
-    public function actionPdf() {
-        ini_set('memory_limit', '256M');
-        $content_type = Utilities::mimeContentType("xls");
-        $nombarch = "Report-" . date("YmdHis") . ".xls";
-        header("Content-Type: $content_type");
-        header("Content-Disposition: attachment;filename=" . $nombarch . ".xls");
-        header('Cache-Control: max-age=0');
+    public function actionExppdf() {
+        $report = new ExportFile();
+        $this->view->title = academico::t("Aspirante", "Aspirants"); // Titulo del reporte
         $arrHeader = array(
-            Yii::t("Solicitudes", "Request #"), //ingles
-            Yii::t("Solicitudes", "Application date"), //ingles
+            admision::t("Solicitudes", "Request #"),
+            admision::t("Solicitudes", "Application date"), //ingles
             Yii::t("formulario", "DNI 1"),
             Yii::t("formulario", "First Names"),
             Yii::t("formulario", "Last Names"),
-            Yii::t("Solicitudes", "Income Method"), //ingles
-            Yii::t("Academico", "Career/Program"), //ingles
-            Yii::t("Solicitudes", "Scholarship"), //ingles
-            Yii::t("Academico", "Registered"), //ingles
+            academico::t("Academico", "Income Method"), //ingles
+            academico::t("Academico", "Career/Program"),
+            academico::t("Solicitudes", "Scholarship"),
+            academico::t("Academico", "Registered")
         );
         $data = Yii::$app->request->get();
         $arrSearch = array();

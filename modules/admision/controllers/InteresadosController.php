@@ -258,7 +258,7 @@ class InteresadosController extends \app\components\CController
     
     public function actionExppdfaspirantes() {
         $report = new ExportFile();
-        $this->view->title = academico::t("Aspirante", "Aspirants"); // Titulo del reporte
+        $this->view->title = academico::t("Academico", "Admitted"); // Titulo del reporte
                       
         $arrHeader = array(
             Yii::t("formulario", "DNI"),
