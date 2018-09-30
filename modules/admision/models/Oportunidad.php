@@ -1828,7 +1828,8 @@ class Oportunidad extends \app\modules\admision\components\CActiveRecord {
                    " . $con->dbname . ".observacion_actividades oact 
                 WHERE 
                    oact.oact_estado = :estado AND 
-                   oact.oact_estado_logico = :estado ";
+                   oact.oact_estado_logico = :estado 
+                ORDER BY name";
 
         $comando = $con->createCommand($sql);
         $comando->bindParam(":estado", $estado, \PDO::PARAM_STR);

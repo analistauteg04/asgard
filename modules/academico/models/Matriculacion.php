@@ -344,7 +344,8 @@ class Matriculacion extends \yii\db\ActiveRecord {
                 FROM " . $con->dbname . ".paralelo
                 WHERE pami_id is not null AND
                       par_estado = :estado AND
-                      par_estado_logico = :estado";
+                      par_estado_logico = :estado
+                ORDER BY value asc";
 
         $comando = $con->createCommand($sql);
         $comando->bindParam(":estado", $estado, \PDO::PARAM_STR);       

@@ -1133,7 +1133,8 @@ class PersonaGestion extends \app\modules\admision\components\CActiveRecord {
                     " . $con->dbname . ".conocimiento_servicio as cser            
                 WHERE  
                     cser.cser_estado_logico=:estado AND 
-                    cser.cser_estado=:estado";
+                    cser.cser_estado=:estado
+                ORDER BY name asc";
         $comando = $con->createCommand($sql);
         $comando->bindParam(":estado", $estado, \PDO::PARAM_STR);
         $resultData = $comando->queryAll();

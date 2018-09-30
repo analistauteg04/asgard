@@ -68,6 +68,7 @@ if ($popup == "content" && $isUser) {
                         margin: 0px;
                         padding: 0px;
                     }
+                    table thead tr { background-color:#ffffff; }
                     table tr:nth-child(odd){ background-color:#dcdce1; }
                     table tr:nth-child(even){ background-color:#ffffff; }
                     table td{
@@ -109,8 +110,8 @@ if ($popup == "content" && $isUser) {
                         font-family: Arial, sans-serif;
                         margin: 30px auto auto 30px;
                         padding: 0;
-                        width: 763px;
-                        height: 1122px;
+                        /*width: 763px;*/
+                        /*height: 1122px;*/
                     }
                     .footer{
                         font-family: Arial, sans-serif;
@@ -179,7 +180,7 @@ if ($popup == "content" && $isUser) {
             <div id="main">
                 <div id="container">
                     <div id="logo">
-                        <img src="<?= Yii::$app->basePath; ?>/themes/<?= Yii::$app->view->theme->themeName; ?>/assets/img/logo.png">
+                        <img src="<?= Yii::$app->basePath; ?>/themes/<?= Yii::$app->view->theme->themeName; ?>/assets/img/logos/logo_<?= $session->get('PB_idempresa');; ?>.png">
                     </div>
                     <div id="infoCuenta">
                         <div id="title">
@@ -191,15 +192,15 @@ if ($popup == "content" && $isUser) {
                                     <div class="tcoll"><?= Yii::t("reporte", "Broadcast document") ?>:</div>
                                     <div class="tcolr posright"><?= date(Yii::$app->params['dateByDefault']) ?></div>
                                 </div>
-                                <?php if (Yii::$app->controller->freportini != "") { ?>
+                                <?php 
+                                if (Yii::$app->controller->freportini != "") { ?>
                                     <div class="troww">
                                         <div class="tcoll"><?= Yii::t("reporte", "From") ?>:</div>
                                         <div class="tcolr posright"><?= Yii::$app->controller->freportini; ?></div>
                                     </div>
                                 <?php
                                 }
-                                if (Yii::$app->controller->freportend != "") {
-                                    ?>
+                                if (Yii::$app->controller->freportend != "") {  ?>
                                     <div class="troww">
                                         <div class="tcoll"><?= Yii::t("reporte", "To") ?>:</div>
                                         <div class="tcolr posright"><?= Yii::$app->controller->freportend; ?></div>

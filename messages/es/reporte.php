@@ -1,14 +1,14 @@
 <?php
 
-/*
- * The Asgard framework is free software. It is released under the terms of
+/* 
+ * The PenBlu framework is free software. It is released under the terms of
  * the following BSD License.
  *
- * Copyright (C) 2015 by Asgard Software 
+ * Copyright (C) 2015 by PenBlu Software (http://www.penblu.com)
  * All rights reserved.
  *
  * Redistribution and use in source and binary forms, with or without
- * modification, are permitted provided that the following conditions
+ * modification, are permitted provided that the following conditions 
  * are met:
  *
  *  - Redistributions of source code must retain the above copyright
@@ -17,7 +17,7 @@
  *    notice, this list of conditions and the following disclaimer in
  *    the documentation and/or other materials provided with the
  *    distribution.
- *  - Neither the name of Asgard Software nor the names of its
+ *  - Neither the name of PenBlu Software nor the names of its
  *    contributors may be used to endorse or promote products derived
  *    from this software without specific prior written permission.
  *
@@ -34,22 +34,25 @@
  * ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE
  * POSSIBILITY OF SUCH DAMAGE.
  *
- * Asgard is based on code by
- * Yii Software LLC (http://www.yiisoft.com) Copyright Â© 2008
+ * PenBlu is based on code by 
+ * Yii Software LLC (http://www.yiisoft.com) Copyright © 2008
  *
  * Authors:
- * 
- * Giovanni Vergara <analistadesarrollo02@uteg.edu.ec>
+ *
+ * Eduardo Cueva <ecueva@penblu.com>
  * 
  */
+
 return [
+    'Broadcast document' => 'Emisión del documento',
     "Date" => "Fecha",
-    "Produced by" => "Usuario",    
+    'Final Date Report' => 'Fecha Fin Reporte',
+    'From' => 'Desde',
+    'Initial Date Report' => 'Fecha Inicio Reporte',
+    'No Reports' => 'No hay reportes',
+    "Name" => "Nombre de Reporte",
+    'Printed by' => 'Impreso por',
+    'Produced by' => 'Elaborado por',
+    'To' => 'Hasta',
+    "Error to export Excel" => "Error al exportar Excel",
 ];
-
-
-
-
-
-
-
