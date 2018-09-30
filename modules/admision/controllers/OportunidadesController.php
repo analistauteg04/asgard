@@ -209,7 +209,12 @@ class OportunidadesController extends \app\components\CController {
                 return Utilities::ajaxResponse('OK', 'alert', Yii::t('jslang', 'Success'), 'false', $message);
             }
             if (isset($data["getcarrera"])) {
-                $carrera = $modcanal->consultarCarreraModalidad($data["unidada"], $data["moda_id"]);
+                if($data["empresa_id"]==1){
+                    $carrera = $modcanal->consultarCarreraModalidad($data["unidada"], $data["moda_id"]);
+                }else{
+                    $carrera = $modestudio->consultarCursoModalidad($data["unidada"], $data["moda_id"]); // tomar id de impresa
+                }
+                
                 $message = array("carrera" => $carrera);
                 return Utilities::ajaxResponse('OK', 'alert', Yii::t('jslang', 'Success'), 'false', $message);
             }
