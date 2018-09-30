@@ -1791,6 +1791,25 @@ class Oportunidad extends \app\modules\admision\components\CActiveRecord {
                                 INNER JOIN db_academico.unidad_academica C ON A.uaca_id=C.uaca_id
                 WHERE A.opo_estado_logico=1 GROUP BY A.uaca_id,A.eopo_id ORDER BY A.eopo_id; ";
         $comando = $con->createCommand($sql);
+        \app\models\Utilities::putMessageLogFile($sql);
+        return $comando->queryAll();
+    }
+    
+    /** Se debe cambiar esta funcion que regrese el codigo de area ***ojo***
+     * Function consultarCodigoArea
+     * @author  Byron Villacreses <developer@uteg.edu.ec>
+     * @property integer car_id     
+     * @return 
+     */
+    public function consultarOportPerdida() {
+        $con = \Yii::$app->db_crm;
+        $sql = "SELECT A.eopo_id,B.eopo_nombre,A.uaca_id,C.uaca_nombre,COUNT(A.uaca_id) CantUnidad
+                        FROM " . $con->dbname . ".oportunidad A
+                                INNER JOIN " . $con->dbname . ".estado_oportunidad B ON B.eopo_id=A.eopo_id
+                                INNER JOIN db_academico.unidad_academica C ON A.uaca_id=C.uaca_id
+                WHERE A.opo_estado_logico=1 GROUP BY A.uaca_id,A.eopo_id ORDER BY A.eopo_id; ";
+        $comando = $con->createCommand($sql);
+        \app\models\Utilities::putMessageLogFile($sql);
         return $comando->queryAll();
     }
 

@@ -597,7 +597,8 @@ class ContactosController extends \app\components\CController {
 
     public function actionExport() {
         $mod_oportunidad = new Oportunidad();
-        $Data = $mod_oportunidad->consultarOportUnidadAcademica();
+        //$Data = $mod_oportunidad->consultarOportUnidadAcademica();
+        $Data = $mod_oportunidad->consultarOportPerdida();
         $arrayIdsCols = array();
         for ($i = 0; $i < sizeof($Data); $i++) {
             if (!in_array($Data[$i]['eopo_id'], $arrayIdsCols)) {

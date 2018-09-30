@@ -11,7 +11,7 @@ use \yii\data\ArrayDataProvider;
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-class Secuencias extends \yii\db\ActiveRecord {
+class Secuencias extends \app\modules\financiero\components\CActiveRecord {
     /**
      * @inheritdoc
      */
@@ -21,9 +21,7 @@ class Secuencias extends \yii\db\ActiveRecord {
     
     public static function nuevaSecuencia($con,$emp_id = NULL,$estab_id = NULL,$pemis_id = NULL,$secu_tipo_doc = NULL){
         $numero=0;
-        //$sql = "SELECT ifnull(MAX(CAST(opo_codigo AS UNSIGNED)),0) AS id   ";          
-        //$sql="SELECT IFNULL(CAST(secuencia AS UNSIGNED),0) secuencia FROM " . $con->dbname . ".secuencias 
-        $sql="SELECT IFNULL(CAST(secuencia AS UNSIGNED),0) secuencia FROM db_facturacion.secuencias 
+        $sql="SELECT IFNULL(CAST(secuencia AS UNSIGNED),0) secuencia FROM " . yii::$app->db_facturacion->dbname . ".secuencias 
                 WHERE secu_estado=1  ";
         if ($emp_id != NULL){$sql.=" AND emp_id=:emp_id ";}
         if ($estab_id != NULL){$sql.=" AND estab_id=:estab_id ";}
@@ -43,7 +41,7 @@ class Secuencias extends \yii\db\ActiveRecord {
             //$numero=str_pad((int)$rawData[0]["secuencia"]+1, 9, "0", STR_PAD_LEFT);
             $numero=str_pad((int)$rawData + 1, 9, "0", STR_PAD_LEFT);
             //$sql=" UPDATE " . $con->dbname . ".secuencias SET secuencia=:numero "
-            $sql=" UPDATE db_facturacion.secuencias SET secuencia=:secuencia "
+            $sql=" UPDATE " . yii::$app->db_facturacion->dbname . ".secuencias SET secuencia=:secuencia "
                     . " WHERE secu_estado=1 AND secu_tipo_doc=:secu_tipo_doc ";            
             if ($emp_id != NULL){$sql.=" AND emp_id=:emp_id ";}
             if ($estab_id != NULL){$sql.=" AND estab_id=:estab_id ";}
