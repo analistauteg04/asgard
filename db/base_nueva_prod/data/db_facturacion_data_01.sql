@@ -97,7 +97,7 @@ insert into `historial_item_precio` (`hipr_id`, `ite_id`, `hipr_precio`, `hipr_p
 --
 -- Volcado de datos para la tabla `item_metodo_nivel` 
 --
-insert into `item_metodo_nivel` (`imni_id`, `ite_id`, `ming_id`, `uaca_id`, `mod_id`, `eaca_id`, `imni_usu_ingreso`, `imni_estado`, `imni_estado_logico`) values
+insert into `item_metodo_unidad` (`imni_id`, `ite_id`, `ming_id`, `uaca_id`, `mod_id`, `mest_id`, `imni_usu_ingreso`, `imni_estado`, `imni_estado_logico`) values
 (1, 1, 1, 1, 1, null, 1, '1', '1'),
 (2, 2, 2, 1, 1, null, 1, '1', '1'),
 (3, 3, 1, 1, 2, null, 1, '1', '1'),
@@ -211,3 +211,12 @@ insert into `historial_descuento_item` (`hdit_id` , `ddit_id`, `dite_id`, `hdit_
 (24, 24, 3, 'Descuento CAN Reserva 25%', 'P', 25, null, '2018/08/01 00:00:00', '2018/12/31 23:59:59', 'A', 1, '1', '1'),
 (25, 25, 4, 'Descuento CAN Reserva 25%', 'P', 25, null, '2018/08/01 00:00:00', '2018/12/31 23:59:59', 'A', 1, '1', '1'),
 (26, 26, 1, 'Descuento CAN Barcelona 40%', 'P', 40, null, '2018/08/01 00:00:00', '2018/12/31 23:59:59', 'A', 1, '1', '1');
+
+-- --------------------------------------------------------
+--
+-- Volcado de datos para la tabla `secuencias` 
+-- --------------------------------------------------------
+insert into `secuencias` (`emp_id`, `estab_id`, `pemis_id`, `secu_tipo_doc`, `secuencia`, `secu_nombre`, `secu_estado`, `secu_estado_logico`) VALUES
+(1, 1, 1, 'SOL', '000000000', 'SOLICITUDES UTEG', '1', '1'),
+(2, 1, 1, 'SOL', '000000000', 'SOLICITUDES', '1', '1'),
+(3, 1, 1, 'SOL', '000000000', 'SOLICITUDES', '1', '1');

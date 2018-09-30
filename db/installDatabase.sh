@@ -26,13 +26,13 @@ mysql -uroot -p${ROOT_PASS} -e "CREATE USER '${USER}'@'localhost' IDENTIFIED BY 
 
 echo -n "Desea Instalar todas las Bases de Datos YES (1) o NO (2):"
 read -s UPDB
-echo ""
+echo $UPDB
 
 # DATABASE ASGARD
 if [ $UPDB -ne 1 ]; then
     echo -n "Desea Instalar la Base de datos Asgard YES (1) o NO (2):"
     read -s ASG
-    echo ""
+    echo $ASG
 fi
 if [ $UPDB -eq 1 ] || [ $ASG -eq 1 ]; then
     echo "SUBIENDO db_asgard......"
@@ -54,7 +54,7 @@ fi
 if [ $UPDB -ne 1 ]; then
     echo -n "Desea Instalar la Base de datos General YES (1) o NO (2):"
     read -s GEN
-    echo ""
+    echo $GEN
 fi
 if [ $UPDB -eq 1 ] || [ $GEN -eq 1 ]; then
     echo "SUBIENDO db_general......"
@@ -67,7 +67,7 @@ fi
 if [ $UPDB -ne 1 ]; then
     echo -n "Desea Instalar la Base de datos CRM YES (1) o NO (2):"
     read -s CRM
-    echo ""
+    echo $CRM
 fi
 if [ $UPDB -eq 1 ] || [ $CRM -eq 1 ]; then
     echo "SUBIENDO db_crm......"
@@ -80,7 +80,7 @@ fi
 if [ $UPDB -ne 1 ]; then
     echo -n "Desea Instalar la Base de datos Captacion YES (1) o NO (2):"
     read -s CAP
-    echo ""
+    echo $CAP
 fi
 if [ $UPDB -eq 1 ] || [ $CAP -eq 1 ]; then
     echo "SUBIENDO db_captacion......"
@@ -94,7 +94,7 @@ fi
 if [ $UPDB -ne 1 ]; then
     echo -n "Desea Instalar la Base de datos Academico YES (1) o NO (2):"
     read -s ACA
-    echo ""
+    echo $ACA
 fi
 if [ $UPDB -eq 1 ] || [ $ACA -eq 1 ]; then
     echo "SUBIENDO db_academico......"
@@ -107,7 +107,7 @@ fi
 if [ $UPDB -ne 1 ]; then
     echo -n "Desea Instalar la Base de datos Facturacion YES (1) o NO (2):"
     read -s FAC
-    echo ""
+    echo $FAC
 fi
 if [ $UPDB -eq 1 ] || [ $FAC -eq 1 ]; then
     echo "SUBIENDO db_facturacion......"

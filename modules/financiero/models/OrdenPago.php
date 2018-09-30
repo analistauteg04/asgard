@@ -282,8 +282,8 @@ class OrdenPago extends \app\modules\financiero\components\CActiveRecord {
                     INNER JOIN " . $con2->dbname . ".interesado inte on inte.per_id = per.per_id
                     INNER JOIN " . $con2->dbname . ".solicitud_inscripcion sins on sins.int_id = inte.int_id
                     INNER JOIN  " . $con->dbname . ".orden_pago orp on sins.sins_id = orp.sins_id
-                    INNER JOIN " . $con->dbname . ".item_metodo_nivel imni on ((sins.ming_id = imni.ming_id and sins.uaca_id = imni.uaca_id and sins.mod_id = imni.mod_id)
-                                or (sins.uaca_id = imni.uaca_id and sins.mod_id = imni.mod_id and sins.uaca_id = imni.eaca_id))
+                    INNER JOIN " . $con->dbname . ".item_metodo_unidad imni on ((sins.ming_id = imni.ming_id and sins.uaca_id = imni.uaca_id and sins.mod_id = imni.mod_id)
+                                or (sins.uaca_id = imni.uaca_id and sins.mod_id = imni.mod_id and sins.uaca_id = imni.mest_id))
                     INNER JOIN " . $con->dbname . ".item_precio itp ON itp.ite_id = imni.ite_id
                     INNER JOIN " . $con->dbname . ".item ite ON ite.ite_id = itp.ite_id                           
                     WHERE $str_search sins.sins_id = " . $sol_id . " AND ";
@@ -1031,11 +1031,11 @@ class OrdenPago extends \app\modules\financiero\components\CActiveRecord {
 
         if ($tiposolicitud == 'SI') {  //Cuando se trata de una SI= solicitud de inscripción, a carrera de UTEG.
             $sql = "SELECT (case when sins.uaca_id=3 then 
-                                (select ite.ite_nombre from " . $con->dbname . ".item ite inner join " . $con->dbname . ".item_metodo_nivel imni on ite.ite_id = imni.ite_id 
-                                 where imni.uaca_id = sins.uaca_id and imni.mod_id = sins.mod_id and imni.eaca_id = sins.eaca_id
+                                (select ite.ite_nombre from " . $con->dbname . ".item ite inner join " . $con->dbname . ".item_metodo_unidad imni on ite.ite_id = imni.ite_id 
+                                 where imni.uaca_id = sins.uaca_id and imni.mod_id = sins.mod_id and imni.mest_id = sins.eaca_id
                                         and imni.imni_estado = :estado and imni.imni_estado_logico = :estado and ite.ite_estado = :estado and ite.ite_estado_logico = :estado) 
                             when sins.uaca_id!=3 then 
-                                (select ite.ite_nombre from " . $con->dbname . ".item ite inner join " . $con->dbname . ".item_metodo_nivel imni on ite.ite_id = imni.ite_id 
+                                (select ite.ite_nombre from " . $con->dbname . ".item ite inner join " . $con->dbname . ".item_metodo_unidad imni on ite.ite_id = imni.ite_id 
                                  where imni.ming_id = sins.ming_id and imni.uaca_id = sins.uaca_id and imni.mod_id = sins.mod_id
                                        and imni.imni_estado = :estado and imni.imni_estado_logico = :estado and ite.ite_estado = :estado and ite.ite_estado_logico = :estado) end) as curso,
                             opag.opag_subtotal, 
@@ -1229,7 +1229,7 @@ class OrdenPago extends \app\modules\financiero\components\CActiveRecord {
                         ite.ite_descripcion as item
                 FROM " . $con1->dbname . ".transaccion_botonpago_BP tbpa INNER JOIN " . $con1->dbname . ".orden_pago opag on opag.opag_id = tbpa.opag_id                                            
                       INNER JOIN " . $con2->dbname . ".solicitud_inscripcion sins on sins.sins_id = opag.sins_id
-                      INNER JOIN " . $con1->dbname . ".item_metodo_nivel imni on (imni.ming_id = sins.ming_id and imni.nint_id = sins.nint_id)
+                      INNER JOIN " . $con1->dbname . ".item_metodo_unidad imni on (imni.ming_id = sins.ming_id and imni.nint_id = sins.nint_id)
                       INNER JOIN " . $con1->dbname . ".item ite on ite.ite_id = imni.ite_id    
                       INNER JOIN " . $con2->dbname . ".interesado inte on inte.int_id = sins.int_id
                       INNER JOIN " . $con2->dbname . ".pre_interesado pint on pint.pint_id = inte.pint_id
