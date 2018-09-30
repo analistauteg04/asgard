@@ -2,7 +2,7 @@ $(document).ready(function () {
     $('#btn_buscarGestion').click(function () {
         actualizarGridGestion();
     });
-    $('#cmb_empresa').change(function () {
+    $('#cmb_empresa').change(function () {// cambio 1
         var link = $('#txth_base').val() + "/admision/oportunidades/newoportunidadxcontacto";
         if ($(this).val() > 1) {
             $('.subcareers').hide();
@@ -75,7 +75,7 @@ $(document).ready(function () {
                             if (response.status == "OK") {
                                 data = response.message;
                                 setComboData(data.carrera, "cmb_carrera1");
-                            }
+                            }//cmb_modalidad_estudio es el estudio academico
                         }, true);
                     }
                 }
@@ -116,7 +116,7 @@ $(document).ready(function () {
             }
         }, true);
     });
-    $('#cmb_empresa').change(function () {
+    $('#cmb_empresa').change(function () {// cambio 2
         var link = $('#txth_base').val() + "/admision/oportunidades/newoportunidadxcontacto";
         var arrParams = new Object();
         arrParams.empresa = $('#cmb_empresa').val();
@@ -140,7 +140,7 @@ $(document).ready(function () {
                                 requestHttpAjax(link, arrParams, function (response) {
                                     if (response.status == "OK") {
                                         data = response.message;
-                                        setComboData(data.oportunidad, "cmb_tipo_oportunidad");
+                                        setComboData(data.oportunidad, "cmb_tipo_oportunidad");                                                                                
                                     }
                                 }, true);
                             }
