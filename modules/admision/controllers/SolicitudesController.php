@@ -1151,7 +1151,17 @@ class SolicitudesController extends \app\components\CController {
 
     public function actionExppdfsolicitudes() {  
         $report = new ExportFile();
-        $this->view->title = admision::t("Solicitudes", "Request by Interested");
+        $this->view->title = admision::t("Solicitudes", "Request by Interested"); // Titulo del reporte
+
+        $modSolicitudes = new SolicitudInscripcion();
+        $data = Yii::$app->request->get();
+        $arr_body = array();
+        
+        $arrSearch["search"] = $data['search'];
+        $arrSearch["f_ini"] = $data['f_ini'];
+        $arrSearch["f_fin"] = $data['f_fin'];
+        $arrSearch["carrera"] = $data['carrera'];
+        $arrSearch["estadoSol"] = $data['estadoSol'];
 
         $arr_head = array(
             admision::t("Solicitudes", "Request #"),
@@ -1164,23 +1174,14 @@ class SolicitudesController extends \app\components\CController {
             academico::t("Academico", "Career/Program"),
             Yii::t("formulario", "Status"),
             financiero::t("Pagos", "Payment")
-            ); 
-                
-        $modSolicitudes = new SolicitudInscripcion();
-        $data = Yii::$app->request->get();
+        ); 
         
-        $arrSearch["search"] = $data['search'];
-        $arrSearch["f_ini"] = $data['f_ini'];
-        $arrSearch["f_fin"] = $data['f_fin'];
-        $arrSearch["carrera"] = $data['carrera'];
-        $arrSearch["estadoSol"] = $data['estadoSol'];
-                
-        $arr_body = array();
         if (empty($arrSearch)) {
             $arr_body = $modSolicitudes->consultarSolicitudesReporte(array(),true);    
         } else {
             $arr_body = $modSolicitudes->consultarSolicitudesReporte($arrSearch, true);                   
         }
+        
         $report->orientation = "L"; // tipo de orientacion L => Horizontal, P => Vertical
         $report->createReportPdf(
             $this->render('exportpdf', [

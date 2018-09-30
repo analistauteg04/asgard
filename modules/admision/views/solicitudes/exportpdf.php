@@ -13,7 +13,7 @@
         <tr>
         <?php
             foreach($arr_head as $key1 => $value1){
-                echo "<th>$value1</th>";
+                echo "<th>" . strtoupper($value1) . "</th>";
             }
         ?>
         </tr>

@@ -68,10 +68,22 @@ if ($popup == "content" && $isUser) {
                         margin: 0px;
                         padding: 0px;
                     }
-                    table thead tr { background-color:#ffffff; }
-                    table tr:nth-child(odd){ background-color:#dcdce1; }
-                    table tr:nth-child(even){ background-color:#ffffff; }
-                    table td{
+                    table thead tr, .thcol{
+                        background-color: #9b9b9c;
+                        height: 20px;
+                    }
+                    table thead tr th {
+                        text-transform: uppercase;
+                        font-weight: bold;
+                        color: #ffffff;
+                        text-align: left;
+                        font-size: 12px;
+                        font-family: Arial;
+                        padding: 7px;
+                    }
+                    table tbody tr:nth-child(odd){ background-color:#dcdce1; }
+                    table tbody tr:nth-child(even){ background-color:#ffffff; }
+                    table tbody tr td{
                         vertical-align: middle;
                         text-align: left;
                         padding: 7px;
@@ -80,29 +92,19 @@ if ($popup == "content" && $isUser) {
                         /*font-weight:normal;*/
                         /*color:#000000;*/
                     }
-                    table tr:last-child td{
+                    table tbody tr:last-child td{
                         border-width: 0px 1px 0px 0px;
                     }
-                    table tr td:last-child{
+                    table tbody tr td:last-child{
                         border-width: 0px 0px 1px 0px;
                     }
-                    table tr:last-child td:last-child{
+                    table tbody tr:last-child td:last-child{
                         border-width: 0px 0px 0px 0px;
                     }
-                    table tr:first-child td, .thcol{
-                        background-color: #9b9b9c;
-                        text-align: left;
-                        font-size: 12px;
-                        font-family: Arial;
-                        font-weight: bold;
-                        color: #ffffff;
-                        height: 20px;
-                        text-transform: uppercase;
-                    }
-                    table tr:first-child td:first-child{
+                    table tbody tr:first-child td:first-child{
                         border-width:0px 0px 1px 0px;
                     }
-                    table tr:first-child td:last-child{
+                    table tbody tr:first-child td:last-child{
                         border-width:0px 0px 1px 1px;
                     }
                     /* ---Css para las tablas--- */

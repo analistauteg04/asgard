@@ -65,17 +65,17 @@ class ExportFile {
     function createReportPdf($content) {
         //error_reporting(E_ERROR); // Se activa esta variable de config para evitar mostrar warnings y solo mostrar mensajes de error.
         $this->mpdf = new Mpdf([
-                "mode" => $this->mode, 
+                "mode"   => $this->mode, 
                 "format" => $this->format, 
                 "default_font_size" => $this->default_font_size, 
                 "default_font" => $this->default_font, 
-                "margin_left" => $this->mgl, 
+                "margin_left"  => $this->mgl, 
                 "margin_right" => $this->mgr, 
-                "margin_top" => $this->mgt, 
+                "margin_top"   => $this->mgt, 
                 "margin_bottom" => $this->mgb, 
                 "margin_header" => $this->mgh, 
                 "margin_footer" => $this->mgf, 
-                "orientation" => $this->orientation]);
+                "orientation"   => $this->orientation]);
         if ($this->footer)
             $this->mpdf->SetHTMLFooter("<div class='footer' style='font-size: 10px;'><div style='float: left; width: 50%;'>Pag: {PAGENO}</div><div style='float: left;width: 50%;text-align: right;'>Hora: " . date("H:i") . "</div></div>");
         $this->mpdf->WriteHTML($content);
