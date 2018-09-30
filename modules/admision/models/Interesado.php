@@ -1018,11 +1018,11 @@ class Interesado extends \app\modules\admision\components\CActiveRecord {
         $comando->bindParam(":estado", $estado, \PDO::PARAM_STR);
         $comando->bindParam(":per_id", $per_id, \PDO::PARAM_INT);
         $resultData = $comando->queryOne();
-        if(count($resultData)>0){
+        //if(count($resultData)>0){
             return $resultData['int_id'];
-        }else{
-            return 0;
-        }
+        //}else{
+            //return $resultData;
+        //}
         
     }
 

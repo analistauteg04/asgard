@@ -1,17 +1,64 @@
 
-$(document).ready(function () {    
+$(document).ready(function () {
 
-    $('input[name=opt_tipo_DNI]:radio').change(function(){
-        if($(this).val() == 1){//ced
-            $('#txt_dni_fac').attr("data-lengthMin","10");
+    $('input[name=opt_tipo_DNI]:radio').change(function () {
+        if ($(this).val() == 1) {//ced
+            $('#txt_dni_fac').attr("data-lengthMin", "10");
             $('#txt_dni_fac').attr("data-lengthMax", "10");
             $('#txt_dni_fac').attr("placeholder", $('#txth_ced_lb').val());
             $('label[for=txt_dni_fac]').text($('#txth_ced_lb').val() + ":");
-        }else{
+        } else {
             $('#txt_dni_fac').attr("data-lengthMin", "13");
             $('#txt_dni_fac').attr("data-lengthMax", "13");
             $('#txt_dni_fac').attr("placeholder", $('#txth_ruc_lb').val());
             $('label[for=txt_dni_fac]').text($('#txth_ruc_lb').val() + ":");
+        }
+    });
+    $('#cmb_empresa').change(function () {// cambio 2
+        var link = $('#txth_base').val() + "/admision/solicitudes/new";
+        var arrParams = new Object();
+        arrParams.empresa_id = $('#cmb_empresa').val();
+        arrParams.getuacademias = true;
+        requestHttpAjax(link, arrParams, function (response) {
+            if (response.status == "OK") {
+                data = response.message;
+                setComboData(data.unidad_academica, "cmb_ninteres");
+                var arrParams = new Object();
+                if (data.unidad_academica.length > 0) {
+                    var arrParams = new Object();
+                    arrParams.nint_id = $('#cmb_ninteres').val();
+                    arrParams.getmodalidad = true;
+                    requestHttpAjax(link, arrParams, function (response) {
+                        if (response.status == "OK") {
+                            data = response.message;
+                            setComboData(data.modalidad, "cmb_modalidad");
+                            if (data.modalidad.length > 0) {
+                                var arrParams = new Object();
+                                arrParams.unidada = $('#cmb_ninteres').val();
+                                arrParams.moda_id = $('#cmb_modalidad').val();
+                                arrParams.empresa_id = $('#cmb_empresa').val();
+                                arrParams.getcarrera = true;
+                                requestHttpAjax(link, arrParams, function (response) {
+                                    if (response.status == "OK") {
+                                        data = response.message;
+                                        setComboData(data.carrera, "cmb_carrera");
+                                    }
+                                }, true);
+                            }
+                        }
+                    }, true);
+                }
+            }
+        }, true);
+        //No mostrar el campo método ingreso cuando sea Unidad:Educación Continua.
+        if (arrParams.empresa_id > 1) {
+            $('#divMetodo').css('display', 'none');
+            $('#divDocumento').css('display', 'none');
+            $('#lbl_carrera').text('Programa');
+        } else {
+            $('#divMetodo').css('display', 'block');
+            $('#divDocumento').css('display', 'block');
+            $('#lbl_carrera').text('Carrera');
         }
     });
     $('#cmb_ninteres').change(function () {
@@ -26,7 +73,8 @@ $(document).ready(function () {
                 var arrParams = new Object();
                 if (data.modalidad.length > 0) {
                     arrParams.unidada = $('#cmb_ninteres').val();
-                    arrParams.moda_id = data.modalidad[0].id;
+                    arrParams.moda_id = $('#cmb_modalidad').val();
+                    arrParams.empresa_id = $('#cmb_empresa').val();
                     arrParams.getcarrera = true;
                     requestHttpAjax(link, arrParams, function (response) {
                         if (response.status == "OK") {
@@ -73,27 +121,18 @@ $(document).ready(function () {
         } else {
             $('#divBeca').css('display', 'none');
         }
-        //No mostrar el campo método ingreso cuando sea Unidad:Educación Continua.
-        if (arrParams.nint_id > 2) {
-            $('#divMetodo').css('display', 'none');
-            $('#divDocumento').css('display', 'none');
-            $('#lbl_carrera').text('Programa');
-        } else {
-            $('#divMetodo').css('display', 'block');
-            $('#divDocumento').css('display', 'block');
-            $('#lbl_carrera').text('Carrera');
-        }
     });
 
     $('#cmb_modalidad').change(function () {
         var link = $('#txth_base').val() + "/admision/solicitudes/new";
         var arrParams = new Object();
-        
+
         arrParams.unidada = $('#cmb_ninteres').val();
         arrParams.moda_id = $(this).val();
+        arrParams.empresa_id = $('#cmb_empresa').val();
         arrParams.getcarrera = true;
         arrParams.nint_id = $('#cmb_ninteres').val();
-    
+
         requestHttpAjax(link, arrParams, function (response) {
             if (response.status == "OK") {
                 data = response.message;
@@ -296,7 +335,7 @@ $(document).ready(function () {
         } else {
             $('#Divconddni').css('visibility', 'hidden');
         }
-    });  
+    });
 
     $('#btn_buscarData').click(function () {
         actualizarGrid();
@@ -413,7 +452,7 @@ $(document).ready(function () {
             }
         }, true);
     });
-  
+
 });
 
 function setComboDataselect(arr_data, element_id, texto) {
@@ -437,7 +476,7 @@ function exportExcel() {
     window.location.href = $('#txth_base').val() + "/admision/solicitudes/expexcelsolicitudes?search=" + search + "&f_ini=" + f_ini + "&f_fin=" + f_fin + "&carrera=" + carrera + "&estadoSol=" + estado;
 }
 
-function exportPdf(){
+function exportPdf() {
     var search = $('#txt_buscarData').val();
     var f_ini = $('#txt_fecha_ini').val();
     var f_fin = $('#txt_fecha_fin').val();
@@ -521,12 +560,12 @@ function save() {
     arrParams.arc_nacional = $('#txth_nac').val();
     arrParams.arc_doc_beca = $('#txth_doc_beca').val();
     arrParams.emp_id = $('#cmb_empresa').val();
-    arrParams.nombres_fac   = $('#txt_nombres_fac').val();
+    arrParams.nombres_fac = $('#txt_nombres_fac').val();
     arrParams.apellidos_fac = $('#txt_apellidos_fac').val();
-    arrParams.dir_fac  = $('#txt_dir_fac').val();
-    arrParams.tel_fac  = $('#txt_tel_fac').val();
+    arrParams.dir_fac = $('#txt_dir_fac').val();
+    arrParams.tel_fac = $('#txt_tel_fac').val();
     arrParams.tipo_DNI = $('input[name=opt_tipo_DNI]:radio').val();
-    arrParams.dni_fac  = $('#txt_dni_fac').val();
+    arrParams.dni_fac = $('#txt_dni_fac').val();
     if ($('input[name=opt_declara_Dctosi]:checked').val() == 1) {
         arrParams.descuento_id = $('#cmb_descuento').val();
         arrParams.marcadescuento = '1';
@@ -572,7 +611,7 @@ function SaveDocumentos() {
     arrParams.arc_doc_foto = $('#txth_doc_foto').val();
     arrParams.arc_doc_beca = $('#txth_doc_beca').val();
     arrParams.opcion = $('#txth_opcion').val();
-    
+
     if ($('input[name=opt_declara_si]:checked').val() == 1) {
         arrParams.beca = 1;
     } else {
@@ -582,11 +621,11 @@ function SaveDocumentos() {
         requestHttpAjax(link, arrParams, function (response) {
             showAlert(response.status, response.label, response.message);
             setTimeout(function () {
-                if (arrParams.opcion==1) {
+                if (arrParams.opcion == 1) {
                     window.location.href = $('#txth_base').val() + "/admision/solicitudes/listarsolicitudxinteresado?id=" + arrParams.interesado_id;
-                }   else {
-                    window.location.href = $('#txth_base').val() + "/admision/solicitudes/index";                    
-                }             
+                } else {
+                    window.location.href = $('#txth_base').val() + "/admision/solicitudes/index";
+                }
             }, 5000);
         }, true);
     }
@@ -613,7 +652,7 @@ function UpdateDocumentos() {
     if (!validateForm()) {
         requestHttpAjax(link, arrParams, function (response) {
             showAlert(response.status, response.label, response.message);
-            if (response.status == 'OK'){
+            if (response.status == 'OK') {
                 setTimeout(function () {
                     if (arrParams.opcion == 1) {
                         window.location.href = $('#txth_base').val() + "/admision/solicitudes/listarsolicitudxinteresado?id=" + arrParams.interesado_id;
@@ -625,90 +664,90 @@ function UpdateDocumentos() {
         }, true);
     }
 }
- var condiciontitulo = new Array();
- var condiciondni = new Array();
- var len = condiciontitulo.length;
- var len1 = condiciondni.length;
- var obstitulo = "";
- var obsdni = "";
+var condiciontitulo = new Array();
+var condiciondni = new Array();
+var len = condiciontitulo.length;
+var len1 = condiciondni.length;
+var obstitulo = "";
+var obsdni = "";
 
- /**
-    * Function arreglo_check, forma arreglo con las condiciones elegidas tanto para los documentos: título y documento de identidad.
-    * @author  Grace Viteri <analistadesarrollo01@uteg.edu.ec>
-    * @param   
-    * @return  
-*/
+/**
+ * Function arreglo_check, forma arreglo con las condiciones elegidas tanto para los documentos: título y documento de identidad.
+ * @author  Grace Viteri <analistadesarrollo01@uteg.edu.ec>
+ * @param   
+ * @return  
+ */
 function arreglo_check() {
-   if ($('#chk_titulo').prop('checked')) {
-       obstitulo = $('#chk_titulo').attr('placeholder');
-       if ($('#chk_contitulo0').prop('checked')) {
-           if (len == 0) {
-               condiciontitulo[0] = $('#txth_cond_titulo0').val();
-           } else {
-               condiciontitulo[len] = $('#txth_cond_titulo0').val();
-           }
-           len = len + 1;
-       }
-       if ($('#chk_contitulo1').prop('checked')) {
-           if (len == 0) {
-               condiciontitulo[0] = $('#txth_cond_titulo1').val();
-           } else {
-               condiciontitulo[len] = $('#txth_cond_titulo1').val();
-           }
-           len = len + 1;
-       }
-       if ($('#chk_contitulo2').prop('checked')) {
-           if (len == 0) {
-               condiciontitulo[0] = $('#txth_cond_titulo2').val();
-           } else {
-               condiciontitulo[len] = $('#txth_cond_titulo2').val();
-           }
-           len = len + 1;
-       }
-       if ($('#chk_contitulo3').prop('checked')) {
-           if (len == 0) {
-               condiciontitulo[0] = $('#txth_cond_titulo3').val();
-           } else {
-               condiciontitulo[len] = $('#txth_cond_titulo3').val();
-           }
-           len = len + 1;
-       }
-   }
+    if ($('#chk_titulo').prop('checked')) {
+        obstitulo = $('#chk_titulo').attr('placeholder');
+        if ($('#chk_contitulo0').prop('checked')) {
+            if (len == 0) {
+                condiciontitulo[0] = $('#txth_cond_titulo0').val();
+            } else {
+                condiciontitulo[len] = $('#txth_cond_titulo0').val();
+            }
+            len = len + 1;
+        }
+        if ($('#chk_contitulo1').prop('checked')) {
+            if (len == 0) {
+                condiciontitulo[0] = $('#txth_cond_titulo1').val();
+            } else {
+                condiciontitulo[len] = $('#txth_cond_titulo1').val();
+            }
+            len = len + 1;
+        }
+        if ($('#chk_contitulo2').prop('checked')) {
+            if (len == 0) {
+                condiciontitulo[0] = $('#txth_cond_titulo2').val();
+            } else {
+                condiciontitulo[len] = $('#txth_cond_titulo2').val();
+            }
+            len = len + 1;
+        }
+        if ($('#chk_contitulo3').prop('checked')) {
+            if (len == 0) {
+                condiciontitulo[0] = $('#txth_cond_titulo3').val();
+            } else {
+                condiciontitulo[len] = $('#txth_cond_titulo3').val();
+            }
+            len = len + 1;
+        }
+    }
 
-   if ($('#chk_documento').prop('checked')) {
-       obsdni = $('#chk_documento').attr('placeholder');
-       if ($('#chk_conddni0').prop('checked')) {
-           if (len1 == 0) {
-               condiciondni[0] = $('#txth_cond_dni0').val();
-           } else {
-               condiciondni[len1] = $('#txth_cond_dni0').val();
-           }
-           len1 = len1 + 1;
-       }
-       if ($('#chk_conddni1').prop('checked')) {
-           if (len1 == 0) {
-               condiciondni[0] = $('#txth_cond_dni1').val();
-           } else {
-               condiciondni[len1] = $('#txth_cond_dni1').val();
-           }
-           len1 = len1 + 1;
-       }
-       if ($('#chk_conddni2').prop('checked')) {
-           if (len1 == 0) {
-               condiciondni[0] = $('#txth_cond_dni2').val();
-           } else {
-               condiciondni[len1] = $('#txth_cond_dni2').val();
-           }
-           len1 = len1 + 1;
-       }
-   }
+    if ($('#chk_documento').prop('checked')) {
+        obsdni = $('#chk_documento').attr('placeholder');
+        if ($('#chk_conddni0').prop('checked')) {
+            if (len1 == 0) {
+                condiciondni[0] = $('#txth_cond_dni0').val();
+            } else {
+                condiciondni[len1] = $('#txth_cond_dni0').val();
+            }
+            len1 = len1 + 1;
+        }
+        if ($('#chk_conddni1').prop('checked')) {
+            if (len1 == 0) {
+                condiciondni[0] = $('#txth_cond_dni1').val();
+            } else {
+                condiciondni[len1] = $('#txth_cond_dni1').val();
+            }
+            len1 = len1 + 1;
+        }
+        if ($('#chk_conddni2').prop('checked')) {
+            if (len1 == 0) {
+                condiciondni[0] = $('#txth_cond_dni2').val();
+            } else {
+                condiciondni[len1] = $('#txth_cond_dni2').val();
+            }
+            len1 = len1 + 1;
+        }
+    }
 }
-    
+
 //Guarda la Revisión final de solicitudes de inscripción.
 function Approve() {
     var arrParams = new Object();
-    var link = $('#txth_base').val() + "/admision/solicitudes/saverevision"; 
-   
+    var link = $('#txth_base').val() + "/admision/solicitudes/saverevision";
+
     arrParams.sins_id = $('#txth_sins_id').val();
     arrParams.int_id = $('#txth_int_id').val();
     arrParams.resultado = $('#cmb_revision').val();
@@ -716,16 +755,16 @@ function Approve() {
     arrParams.per_id = $('#txth_per_id').val();
     arrParams.estado_sol = $('#txth_rsin_id').val();
 
-    if ($('#cmb_revision').val() == "4") {        
-        arreglo_check();             
+    if ($('#cmb_revision').val() == "4") {
+        arreglo_check();
         arrParams.condicionestitulo = condiciontitulo;
-        arrParams.condicionesdni = condiciondni;               
+        arrParams.condicionesdni = condiciondni;
         //Condiciones que indican que se ha seleccionado un(os) checkboxes.
-        if (len > 0) {                
+        if (len > 0) {
             arrParams.titulo = 1;
             arrParams.observacion = obstitulo;
         }
-        if (len1 > 0) {     
+        if (len1 > 0) {
             arrParams.dni = 1;
             if (arrParams.observacion == "") {
                 arrParams.observacion = obsdni;
@@ -733,12 +772,12 @@ function Approve() {
                 arrParams.observacion = arrParams.observacion + "<br/>" + obsdni;
             }
         }
-    }  
-    arrParams.banderapreaprueba = '0';        
+    }
+    arrParams.banderapreaprueba = '0';
     if (!validateForm()) {
         requestHttpAjax(link, arrParams, function (response) {
             showAlert(response.status, response.label, response.message);
-            if(response.status == "OK"){
+            if (response.status == "OK") {
                 setTimeout(function () {
                     parent.window.location.href = $('#txth_base').val() + "/admision/solicitudes/index";
                 }, 2000);

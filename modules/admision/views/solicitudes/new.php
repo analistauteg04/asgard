@@ -118,7 +118,13 @@ $leyenda = '<div class="col-md-12 col-xs-12 col-sm-12 col-lg-12">
                 <div class="col-sm-7 col-md-7 col-xs-7 col-lg-7">
                     <?= Html::dropDownList("cmb_carrera", 0, array_merge([Yii::t("formulario", "Select")], $arr_carrera), ["class" => "form-control", "id" => "cmb_carrera"]) ?>
                 </div>
-            </div> 
+            </div>
+            <div class="form-group ccmodestudio hide">
+                    <label for="cmb_modalidad_estudio" class="col-sm-5 col-md-5 col-xs-5 col-lg-5 control-label keyupmce"><?= admision::t("crm", "Academic Study") ?></label>
+                    <div class="col-sm-7 col-md-7 col-xs-7 col-lg-7">
+                        <?= Html::dropDownList("cmb_modalidad_estudio", 1, array(), ["class" => "form-control", "id" => "cmb_modalidad_estudio"]) ?>
+                    </div>
+                </div>
         </div>
         <div class="col-lg-6 col-md-6 col-sm-6 col-xs-6" id="divMetodo" style="display: block">
             <div class="form-group">
