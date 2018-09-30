@@ -702,8 +702,8 @@ class PagosController extends \app\components\CController {
             admision::t("Solicitudes", "Request #"),
             admision::t("Solicitudes", "Application date"),
             Yii::t("formulario", "DNI 1"),
-            Yii::t("formulario", "First Names"),
             Yii::t("formulario", "Last Names"),
+            Yii::t("formulario", "First Names"),
             academico::t("Academico", "Academic unit"),
             academico::t("Academico", "Income Method"),
             Yii::t("formulario", "Status"),
@@ -790,6 +790,47 @@ class PagosController extends \app\components\CController {
             $arr_body = $model_pag->listarPagoscargadosexcel(array(), true);
         } else {
             $arr_body = $model_pag->listarPagoscargadosexcel($arrSearch, true);
+        }
+
+        $report->orientation = "L"; // tipo de orientacion L => Horizontal, P => Vertical
+        $report->createReportPdf(
+                $this->render('exportpdf', [
+                    'arr_head' => $arr_head,
+                    'arr_body' => $arr_body
+                ])
+        );
+        $report->mpdf->Output('Reporte_' . date("Ymdhis") . ".pdf", ExportFile::OUTPUT_TO_DOWNLOAD);
+        return;
+    }
+    
+    public function actionExppdfpagos() {
+        $report = new ExportFile();
+        $this->view->title = financiero::t("Pagos", "List Payment"); // Titulo del reporte
+
+        $model_pag = new OrdenPago();
+        $data = Yii::$app->request->get();
+        $arr_body = array();
+
+        $arrSearch["search"] = $data["search"];
+        $arrSearch["f_ini"] = $data["f_ini"];
+        $arrSearch["f_fin"] = $data["f_fin"];
+        $arrSearch["f_estado"] = $data["f_estado"];
+
+        $arr_head = array(
+            admision::t("Solicitudes", "Request #"),
+            admision::t("Solicitudes", "Application date"),
+            Yii::t("formulario", "DNI 1"),            
+            Yii::t("formulario", "Last Names"),
+            Yii::t("formulario", "First Names"),
+            academico::t("Academico", "Academic unit"),
+            academico::t("Academico", "Income Method"),
+            Yii::t("formulario", "Status"),
+        );
+
+        if (empty($arrSearch)) {
+            $arr_body = $model_pag->listarPagosolicitudExcel(array(), true);
+        } else {
+            $arr_body = $model_pag->listarPagosolicitudExcel($arrSearch, true);
         }
 
         $report->orientation = "L"; // tipo de orientacion L => Horizontal, P => Vertical
