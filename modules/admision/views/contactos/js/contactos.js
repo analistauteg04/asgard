@@ -89,6 +89,11 @@ function exportExcel() {
     var estado = $('#cmb_estadocontacto option:selected').val();     
     window.location.href = $('#txth_base').val() + "/admision/contactos/expexcel?search=" + search + "&estado=" + estado;    
 }
+function exportPdf() {
+    var search = $('#txt_buscarData').val();
+    var estado = $('#cmb_estadocontacto option:selected').val();     
+    window.location.href = $('#txth_base').val() + "/admision/contactos/exppdf?pdf=1&search=" + search + "&estado=" + estado;    
+}
 
 function loadLeads(){
     window.location.href = $('#txth_base').val() + "/admision/contactos/cargarleads";
