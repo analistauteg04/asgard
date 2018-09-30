@@ -14,6 +14,12 @@ use yii\base\Security;
 use app\models\UsuaGrolEper;
 use app\models\Empresa;
 use yii\helpers\ArrayHelper;
+use app\models\ExportFile;
+use app\modules\admision\Module as admision;
+use app\modules\academico\Module as academico;
+use app\modules\financiero\Module as financiero;
+academico::registerTranslations();
+financiero::registerTranslations();
 
 class InteresadosController extends \app\components\CController
 {
@@ -248,5 +254,37 @@ class InteresadosController extends \app\components\CController
         $nameReport = yii::t("formulario", "Application Reports");
         Utilities::generarReporteXLS($nombarch, $nameReport, $arrHeader, $arrData, $colPosition);
         exit;              
+    }
+    
+    public function actionExppdfaspirantes() {
+        $report = new ExportFile();
+        $this->view->title = academico::t("Aspirante", "Aspirants"); // Titulo del reporte
+                      
+        $arrHeader = array(
+            Yii::t("formulario", "DNI"),
+            Yii::t("formulario", "Name"),                        
+            Yii::t("formulario", "Last Names"),
+            Yii::t("formulario", "Company"));            
+        
+        $interesado_model = new Interesado();
+        $data = Yii::$app->request->get();
+        $arrSearch["search"] = $data['search'];
+        $arrSearch["company"] = $data['company'];
+        $arrData = array();
+        if (empty($arrSearch)) {
+            $arrData = $interesado_model->consultarReportAspirantes(array(), true);
+        } else {
+            $arrData = $interesado_model->consultarReportAspirantes($arrSearch, true);                   
+        }
+        
+        $report->orientation = "P"; // tipo de orientacion L => Horizontal, P => Vertical                                
+       // \app\models\Utilities::putMessageLogFile($arrData);                        
+        $report->createReportPdf(
+            $this->render('exportpdf', [
+                    'arr_head' => $arrHeader,
+                    'arr_body' => $arrData
+            ])
+        );
+        $report->mpdf->Output('Reporte_' . date("Ymdhis") . ".pdf", ExportFile::OUTPUT_TO_DOWNLOAD);           
     }
 }

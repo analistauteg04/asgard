@@ -11,6 +11,7 @@ PbGridView::widget([
     'showExport' => true,
     'fnExportEXCEL' => "exportExcel",
     'dataProvider' => $model,
+    'fnExportPDF' => "exportPdfAspirante",
     'columns' =>
     [
         [
