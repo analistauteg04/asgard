@@ -109,17 +109,16 @@ $(document).ready(function () {
                         if (response.status == "OK") {
                             data = response.message;
                             setComboData(data.modalidad, "cmb_modalidad");
-                            var arrParams = new Object();
                             if (data.modalidad.length > 0) {
                                 var arrParams = new Object();
                                 arrParams.unidada = $('#cmb_nivelestudio').val();
                                 arrParams.moda_id = $('#cmb_modalidad').val();
+                                arrParams.empresa_id = $('#cmb_empresa').val();
                                 arrParams.getcarrera = true;
                                 requestHttpAjax(link, arrParams, function (response) {
                                         if (response.status == "OK") {
                                                 data = response.message;
-                                                setComboData(data.carrera, "cmb_carrera1");
-                                                setComboData(data.carrera, "cmb_modalidad_estudio");
+                                                setComboData(data.carrera, "cmb_carrera1");                                                                                                
                                         }
                                 }, true);
                                 var arrParams = new Object();
