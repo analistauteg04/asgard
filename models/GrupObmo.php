@@ -93,9 +93,9 @@ class GrupObmo extends \yii\db\ActiveRecord
                     INNER JOIN grup_obmo go ON go.gru_id = gr.gru_id
                     INNER JOIN objeto_modulo om ON om.omod_id = go.omod_id
                 WHERE 
-                    -- gr.grol_estado=1 AND 
-                    -- go.gmod_estado=1 AND
-                    -- om.omod_estado=1 AND
+                    gr.grol_estado=1 AND 
+                    go.gmod_estado=1 AND
+                    om.omod_estado=1 AND
                     gr.grol_id = :id AND 
                     gr.grol_estado_logico=1 AND 
                     go.gmod_estado_logico=1 AND
@@ -116,9 +116,9 @@ class GrupObmo extends \yii\db\ActiveRecord
                     INNER JOIN grup_obmo go ON go.gru_id = gr.gru_id
                     INNER JOIN objeto_modulo om ON om.omod_id = go.omod_id
                 WHERE 
-                    -- gr.grol_estado=1 AND 
-                    -- go.gmod_estado=1 AND
-                    -- om.omod_estado=1 AND
+                    gr.grol_estado=1 AND 
+                    go.gmod_estado=1 AND
+                    om.omod_estado=1 AND
                     gr.grol_id = :id AND 
                     gr.grol_estado_logico=1 AND 
                     go.gmod_estado_logico=1 AND
@@ -155,8 +155,8 @@ class GrupObmo extends \yii\db\ActiveRecord
                     $str_search
                     -- g.gru_estado=1 AND
                     -- r.rol_estado=1 AND
-                    gr.grol_estado=1 AND 
                     -- om.omod_estado=1 AND 
+                    gr.grol_estado=1 AND 
                     go.gmod_estado=1 AND
                     g.gru_estado_logico=1 AND 
                     r.rol_estado_logico=1 AND 

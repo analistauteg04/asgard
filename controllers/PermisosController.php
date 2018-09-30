@@ -119,7 +119,7 @@ class PermisosController extends CController {
                     "wtmessage" => Yii::t("notificaciones", "Your information was successfully saved."),
                     "title" => Yii::t('jslang', 'Success'),
                 );
-                if(count($objMods) > 0){
+                if(is_array($objMods) && count($objMods) > 0){
                     foreach ($objMods as $key => $value) {
                         $model_grupObmo = new GrupObmo();
                         $model_grupObmo->gru_id = $gru_id;
@@ -170,7 +170,7 @@ class PermisosController extends CController {
                     "wtmessage" => Yii::t("notificaciones", "Your information was successfully saved."),
                     "title" => Yii::t('jslang', 'Success'),
                 );
-                if(count($objMods) > 0){
+                if(is_array($objMods) && count($objMods) > 0){
                     $grupmod_arr = GrupObmo::findAll(['gru_id' => $gru_id, 'gmod_estado'=>'1', 'gmod_estado_logico'=>'1']);
                     foreach ($grupmod_arr as $key => $value) {
                         $mod_omod = GrupObmo::findOne($value["gmod_id"]);
@@ -188,12 +188,12 @@ class PermisosController extends CController {
                             }
                         }
                     }
-                    foreach ($objMods as $key => $value) {
-                        $mod_gmod = GrupObmo::findOne(["gru_id" => $gru_id, "omod_id" => $value, 'gmod_estado_logico'=>'1']);
+                    foreach ($objMods as $key3 => $value3) {
+                        $mod_gmod = GrupObmo::findOne(["gru_id" => $gru_id, "omod_id" => $value3, 'gmod_estado_logico'=>'1']);
                         if (is_null($mod_gmod)) {
                             $model_grupObmo = new GrupObmo();
                             $model_grupObmo->gru_id = $gru_id;
-                            $model_grupObmo->omod_id = $value;
+                            $model_grupObmo->omod_id = $value3;
                             $model_grupObmo->gmod_estado = $estado;
                             $model_grupObmo->gmod_estado_logico = '1';
                             if (!$model_grupObmo->save()) {
