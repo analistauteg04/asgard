@@ -10,67 +10,112 @@ echo ""
 
 
 
-echo -n "Instalar en Produccion (1) o Desarrollo (2):"
-read -s PROD
-echo ""
+#echo -n "Instalar en Produccion (1) o Desarrollo (2):"
+#read -s PROD
+#echo ""
 
 # CREACION DEL USUARIO MYSQL
 # mysql -uroot -p${ROOT_PASS} -e "DROP USER IF EXISTS '${USER}'@'localhost';"
 mysql -uroot -p${ROOT_PASS} -e "CREATE USER '${USER}'@'localhost' IDENTIFIED BY '${PASS}';"
 
-if [ $PROD -eq 1 ]; then
-    echo "INSTALANDO en Produccion......"
-else
-    echo "INSTALANDO en Desarrollo......"
-fi
+#if [ $PROD -eq 1 ]; then
+#    echo "INSTALANDO en Produccion......"
+#else
+#    echo "INSTALANDO en Desarrollo......"
+#fi
+
+echo -n "Desea Instalar todas las Bases de Datos YES (1) o NO (2):"
+read -s UPDB
+echo ""
 
 # DATABASE ASGARD
-echo "SUBIENDO db_asgard......"
-mysql -u${USER} -p${PASS} < $CURRENT_DIR/base_nueva_prod/estructura/db_asgard.sql
-mysql -u${USER} -p${PASS} < $CURRENT_DIR/base_nueva_prod/data/db_asgard_data_01.sql
-mysql -u${USER} -p${PASS} < $CURRENT_DIR/base_nueva_prod/data/db_asgard_data_02.sql
-mysql -u${USER} -p${PASS} < $CURRENT_DIR/base_nueva_prod/data/db_asgard_data_03.sql
-mysql -u${USER} -p${PASS} < $CURRENT_DIR/base_nueva_prod/data/db_asgard_data_04_1.sql
-mysql -u${USER} -p${PASS} < $CURRENT_DIR/base_nueva_prod/data/db_asgard_data_04_2.sql
-mysql -u${USER} -p${PASS} < $CURRENT_DIR/base_nueva_prod/data/db_asgard_data_04_3.sql
-mysql -u${USER} -p${PASS} < $CURRENT_DIR/base_nueva_prod/data/db_asgard_data_05.sql
-mysql -u${USER} -p${PASS} < $CURRENT_DIR/base_nueva_prod/data/db_asgard_data_06.sql
-mysql -u${USER} -p${PASS} < $CURRENT_DIR/base_nueva_prod/data/db_asgard_data_07.sql
-mysql -u${USER} -p${PASS} < $CURRENT_DIR/base_nueva_prod/data/db_asgard_data_08.sql
-mysql -uroot -p${ROOT_PASS} -e "GRANT ALL PRIVILEGES ON db_asgard.* TO '${USER}'@'localhost';"
+if [ $UPDB -ne 1 ]; then
+    echo -n "Desea Instalar la Base de datos Asgard YES (1) o NO (2):"
+    read -s ASG
+    echo ""
+fi
+if [ $UPDB -eq 1 ] || [ $ASG -eq 1 ]; then
+    echo "SUBIENDO db_asgard......"
+    mysql -u${USER} -p${PASS} < $CURRENT_DIR/base_nueva_prod/estructura/db_asgard.sql
+    mysql -u${USER} -p${PASS} < $CURRENT_DIR/base_nueva_prod/data/db_asgard_data_01.sql
+    mysql -u${USER} -p${PASS} < $CURRENT_DIR/base_nueva_prod/data/db_asgard_data_02.sql
+    mysql -u${USER} -p${PASS} < $CURRENT_DIR/base_nueva_prod/data/db_asgard_data_03.sql
+    mysql -u${USER} -p${PASS} < $CURRENT_DIR/base_nueva_prod/data/db_asgard_data_04_1.sql
+    mysql -u${USER} -p${PASS} < $CURRENT_DIR/base_nueva_prod/data/db_asgard_data_04_2.sql
+    mysql -u${USER} -p${PASS} < $CURRENT_DIR/base_nueva_prod/data/db_asgard_data_04_3.sql
+    mysql -u${USER} -p${PASS} < $CURRENT_DIR/base_nueva_prod/data/db_asgard_data_05.sql
+    mysql -u${USER} -p${PASS} < $CURRENT_DIR/base_nueva_prod/data/db_asgard_data_06.sql
+    mysql -u${USER} -p${PASS} < $CURRENT_DIR/base_nueva_prod/data/db_asgard_data_07.sql
+    mysql -u${USER} -p${PASS} < $CURRENT_DIR/base_nueva_prod/data/db_asgard_data_08.sql
+    mysql -uroot -p${ROOT_PASS} -e "GRANT ALL PRIVILEGES ON db_asgard.* TO '${USER}'@'localhost';"
+fi
 
 # DATABASE GENERAL
-echo "SUBIENDO db_general......"
-mysql -u${USER} -p${PASS} < $CURRENT_DIR/base_nueva_prod/estructura/db_general.sql
-mysql -u${USER} -p${PASS} < $CURRENT_DIR/base_nueva_prod/data/db_general_data.sql
-mysql -uroot -p${ROOT_PASS} -e "GRANT ALL PRIVILEGES ON db_general.* TO '${USER}'@'localhost';"
+if [ $UPDB -ne 1 ]; then
+    echo -n "Desea Instalar la Base de datos General YES (1) o NO (2):"
+    read -s GEN
+    echo ""
+fi
+if [ $UPDB -eq 1 ] || [ $GEN -eq 1 ]; then
+    echo "SUBIENDO db_general......"
+    mysql -u${USER} -p${PASS} < $CURRENT_DIR/base_nueva_prod/estructura/db_general.sql
+    mysql -u${USER} -p${PASS} < $CURRENT_DIR/base_nueva_prod/data/db_general_data.sql
+    mysql -uroot -p${ROOT_PASS} -e "GRANT ALL PRIVILEGES ON db_general.* TO '${USER}'@'localhost';"
+fi
 
 # DATABASE CRM
-echo "SUBIENDO db_crm......"
-mysql -u${USER} -p${PASS} < $CURRENT_DIR/base_nueva_prod/estructura/db_crm.sql
-mysql -u${USER} -p${PASS} < $CURRENT_DIR/base_nueva_prod/data/db_crm_data.sql
-mysql -uroot -p${ROOT_PASS} -e "GRANT ALL PRIVILEGES ON db_crm.* TO '${USER}'@'localhost';"
+if [ $UPDB -ne 1 ]; then
+    echo -n "Desea Instalar la Base de datos CRM YES (1) o NO (2):"
+    read -s CRM
+    echo ""
+fi
+if [ $UPDB -eq 1 ] || [ $CRM -eq 1 ]; then
+    echo "SUBIENDO db_crm......"
+    mysql -u${USER} -p${PASS} < $CURRENT_DIR/base_nueva_prod/estructura/db_crm.sql
+    mysql -u${USER} -p${PASS} < $CURRENT_DIR/base_nueva_prod/data/db_crm_data.sql
+    mysql -uroot -p${ROOT_PASS} -e "GRANT ALL PRIVILEGES ON db_crm.* TO '${USER}'@'localhost';"
+fi
 
 # DATABASE CAPTACION
-echo "SUBIENDO db_captacion......"
-mysql -u${USER} -p${PASS} < $CURRENT_DIR/base_nueva_prod/estructura/db_captacion.sql
-mysql -u${USER} -p${PASS} < $CURRENT_DIR/base_nueva_prod/data/db_captacion_data_01.sql
-mysql -u${USER} -p${PASS} < $CURRENT_DIR/base_nueva_prod/data/db_captacion_data_02.sql
-mysql -uroot -p${ROOT_PASS} -e "GRANT ALL PRIVILEGES ON db_captacion.* TO '${USER}'@'localhost';"
+if [ $UPDB -ne 1 ]; then
+    echo -n "Desea Instalar la Base de datos Captacion YES (1) o NO (2):"
+    read -s CAP
+    echo ""
+fi
+if [ $UPDB -eq 1 ] || [ $CAP -eq 1 ]; then
+    echo "SUBIENDO db_captacion......"
+    mysql -u${USER} -p${PASS} < $CURRENT_DIR/base_nueva_prod/estructura/db_captacion.sql
+    mysql -u${USER} -p${PASS} < $CURRENT_DIR/base_nueva_prod/data/db_captacion_data_01.sql
+    mysql -u${USER} -p${PASS} < $CURRENT_DIR/base_nueva_prod/data/db_captacion_data_02.sql
+    mysql -uroot -p${ROOT_PASS} -e "GRANT ALL PRIVILEGES ON db_captacion.* TO '${USER}'@'localhost';"
+fi
 
 # DATABASE ACADEMICO
-echo "SUBIENDO db_academico......"
-mysql -u${USER} -p${PASS} < $CURRENT_DIR/base_nueva_prod/estructura/db_academico.sql
-mysql -u${USER} -p${PASS} < $CURRENT_DIR/base_nueva_prod/data/db_academico_data_1.sql
-mysql -u${USER} -p${PASS} < $CURRENT_DIR/base_nueva_prod/data/db_academico_data_2.sql
-mysql -uroot -p${ROOT_PASS} -e "GRANT ALL PRIVILEGES ON db_academico.* TO '${USER}'@'localhost';"
-
+if [ $UPDB -ne 1 ]; then
+    echo -n "Desea Instalar la Base de datos Academico YES (1) o NO (2):"
+    read -s ACA
+    echo ""
+fi
+if [ $UPDB -eq 1 ] || [ $ACA -eq 1 ]; then
+    echo "SUBIENDO db_academico......"
+    mysql -u${USER} -p${PASS} < $CURRENT_DIR/base_nueva_prod/estructura/db_academico.sql
+    mysql -u${USER} -p${PASS} < $CURRENT_DIR/base_nueva_prod/data/db_academico_data_1.sql
+    mysql -u${USER} -p${PASS} < $CURRENT_DIR/base_nueva_prod/data/db_academico_data_2.sql
+    mysql -uroot -p${ROOT_PASS} -e "GRANT ALL PRIVILEGES ON db_academico.* TO '${USER}'@'localhost';"
+fi
 # DATABASE FACTURACION
-echo "SUBIENDO db_facturacion......"
-mysql -u${USER} -p${PASS} < $CURRENT_DIR/base_nueva_prod/estructura/db_facturacion.sql
-mysql -u${USER} -p${PASS} < $CURRENT_DIR/base_nueva_prod/data/db_facturacion_data_01.sql
-mysql -u${USER} -p${PASS} < $CURRENT_DIR/base_nueva_prod/data/db_facturacion_data_02.sql
-mysql -uroot -p${ROOT_PASS} -e "GRANT ALL PRIVILEGES ON db_facturacion.* TO '${USER}'@'localhost';"
+if [ $UPDB -ne 1 ]; then
+    echo -n "Desea Instalar la Base de datos Facturacion YES (1) o NO (2):"
+    read -s FAC
+    echo ""
+fi
+if [ $UPDB -eq 1 ] || [ $FAC -eq 1 ]; then
+    echo "SUBIENDO db_facturacion......"
+    mysql -u${USER} -p${PASS} < $CURRENT_DIR/base_nueva_prod/estructura/db_facturacion.sql
+    mysql -u${USER} -p${PASS} < $CURRENT_DIR/base_nueva_prod/data/db_facturacion_data_01.sql
+    mysql -u${USER} -p${PASS} < $CURRENT_DIR/base_nueva_prod/data/db_facturacion_data_02.sql
+    mysql -uroot -p${ROOT_PASS} -e "GRANT ALL PRIVILEGES ON db_facturacion.* TO '${USER}'@'localhost';"
+fi
 
 # FLUSH PRIVILEGES
 echo "Aplicando Permisos......"
