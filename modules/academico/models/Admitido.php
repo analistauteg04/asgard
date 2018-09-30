@@ -229,7 +229,6 @@ class Admitido extends \yii\db\ActiveRecord {
                 $str_search .= "sins.sins_fecha_solicitud <= :fec_fin AND ";
             }
         }
-        $str_search = "";
         $sql = "
                 SELECT  
                         distinct lpad(sins.sins_id,4,'0') as solicitud,

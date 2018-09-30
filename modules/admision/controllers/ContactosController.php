@@ -11,7 +11,13 @@ use app\models\Provincia;
 use app\models\Canton;
 use app\models\Utilities;
 use yii\helpers\ArrayHelper;
-use app\modules\admision\Module as Admision;
+use app\modules\academico\Module as academico;
+use app\modules\financiero\Module as financiero;
+use app\modules\admision\Module as admision;
+use app\models\ExportFile;
+academico::registerTranslations();
+admision::registerTranslations();
+financiero::registerTranslations();
 
 class ContactosController extends \app\components\CController {
 
