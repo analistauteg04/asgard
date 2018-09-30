@@ -108,13 +108,13 @@ create table if not exists `historial_item_precio` (
 --
 -- Estructura de tabla para la tabla `item_metodo_nivel`
 --
-create table if not exists `item_metodo_nivel` (
+create table if not exists `item_metodo_unidad` (
   `imni_id` bigint(20) not null primary key,  
   `ite_id`  bigint(20) not null,  
   `ming_id` bigint(20) null,  
   `uaca_id` bigint(20) null,
   `mod_id` bigint(20) null,
-  `eaca_id` bigint(20) null,
+  `mest_id` bigint(20) null,
   `imni_usu_ingreso` bigint(20) not null,
   `imni_usu_modifica` bigint(20) null,
   `imni_estado` varchar(1) not null,

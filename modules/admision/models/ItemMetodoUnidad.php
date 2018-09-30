@@ -2,19 +2,17 @@
 
 namespace app\modules\admision\models;
 
-use yii\data\ArrayDataProvider;
-use DateTime;
 use Yii;
 
 /**
- * This is the model class for table "item_metodo_nivel".
+ * This is the model class for table "item_metodo_unidad".
  *
  * @property int $imni_id
  * @property int $ite_id
  * @property int $ming_id
  * @property int $uaca_id
  * @property int $mod_id
- * @property int $eaca_id
+ * @property int $mest_id
  * @property int $imni_usu_ingreso
  * @property int $imni_usu_modifica
  * @property string $imni_estado
@@ -24,14 +22,14 @@ use Yii;
  *
  * @property Item $ite
  */
-class ItemMetodoNivel extends \app\modules\admision\components\CActiveRecord
+class ItemMetodoUnidad extends \yii\db\ActiveRecord
 {
     /**
      * {@inheritdoc}
      */
     public static function tableName()
     {
-        return 'item_metodo_nivel';
+        return 'item_metodo_unidad';
     }
 
     /**
@@ -49,7 +47,7 @@ class ItemMetodoNivel extends \app\modules\admision\components\CActiveRecord
     {
         return [
             [['imni_id', 'ite_id', 'imni_usu_ingreso', 'imni_estado', 'imni_estado_logico'], 'required'],
-            [['imni_id', 'ite_id', 'ming_id', 'uaca_id', 'mod_id', 'eaca_id', 'imni_usu_ingreso', 'imni_usu_modifica'], 'integer'],
+            [['imni_id', 'ite_id', 'ming_id', 'uaca_id', 'mod_id', 'mest_id', 'imni_usu_ingreso', 'imni_usu_modifica'], 'integer'],
             [['imni_fecha_creacion', 'imni_fecha_modificacion'], 'safe'],
             [['imni_estado', 'imni_estado_logico'], 'string', 'max' => 1],
             [['imni_id'], 'unique'],
@@ -68,7 +66,7 @@ class ItemMetodoNivel extends \app\modules\admision\components\CActiveRecord
             'ming_id' => 'Ming ID',
             'uaca_id' => 'Uaca ID',
             'mod_id' => 'Mod ID',
-            'eaca_id' => 'Eaca ID',
+            'mest_id' => 'Mest ID',
             'imni_usu_ingreso' => 'Imni Usu Ingreso',
             'imni_usu_modifica' => 'Imni Usu Modifica',
             'imni_estado' => 'Imni Estado',
@@ -86,7 +84,7 @@ class ItemMetodoNivel extends \app\modules\admision\components\CActiveRecord
         return $this->hasOne(Item::className(), ['ite_id' => 'ite_id']);
     }
     
-     /**
+    /**
      * Function consultarXitemMetniv
      * @author  Grace Viteri <analistadesarrollo01@uteg.edu.ec>
      * @param   
@@ -97,7 +95,7 @@ class ItemMetodoNivel extends \app\modules\admision\components\CActiveRecord
         $con = \Yii::$app->db_facturacion;        
         $estado = 1;
         $sql = "SELECT ite_id 
-                FROM  " . $con->dbname . ".item_metodo_nivel
+                FROM  " . $con->dbname . ".item_metodo_unidad
                 WHERE uaca_id = :nint_id
                       and mod_id = :mod_id
                       and ming_id = :ming_id

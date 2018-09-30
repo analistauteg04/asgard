@@ -51,6 +51,7 @@ return [
     "Provisional Contacts" => "Contactos Pendientes", 
     "Career/Program/Course" => "Carre/Progr/Curso",
     "Contact" => "Contacto",
+    "Contacts" => "Contactos",
     "Contact Channel" => "Canal contacto",
     "Create sale opportunity" =>"Crear oportunidad de venta",
     'Create Activity'=>'Crear Actividad',
