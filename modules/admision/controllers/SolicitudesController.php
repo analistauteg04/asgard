@@ -25,6 +25,8 @@ use app\modules\admision\models\DocumentoAdjuntar;
 use app\modules\admision\Module as admision;
 use app\modules\academico\Module as academico;
 use app\modules\financiero\Module as financiero;
+use app\modules\financiero\models\Secuencias;
+
 academico::registerTranslations();
 financiero::registerTranslations();
 
@@ -290,6 +292,7 @@ class SolicitudesController extends \app\components\CController {
                 //Validar que no exista el registro en solicitudes.                    
                 $resp_valida = $mod_solins->Validarsolicitud($interesado_id, $nint_id, $ming_id, $car_id);
                 if (empty($resp_valida['existe'])) {
+                    $mod_solins->num_solicitud=Secuencias::nuevaSecuencia($con1, 1, 1, 1, 'SOL');
                     $mod_solins->int_id = $interesado_id;
                     $mod_solins->uaca_id = $nint_id;
                     $mod_solins->mod_id = $mod_id;

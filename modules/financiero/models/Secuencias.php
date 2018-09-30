@@ -1,6 +1,7 @@
 <?php
 
-namespace app\models;
+//namespace app\models;
+namespace app\modules\financiero\models;
 
 use Yii;
 use \yii\data\ActiveDataProvider;
@@ -18,6 +19,13 @@ class Secuencias extends \app\modules\financiero\components\CActiveRecord {
     public static function tableName() {
         return 'secuencias';
     }
+    
+     /** Se debe cambiar esta funcion que regrese el codigo de area ***ojo***
+     * Function retonra la secuencia segun el tipo de documento 
+     * @author  Byron Villacreses <developer@uteg.edu.ec>
+     * @property conexion de base,empresa,establecimiento,punto de emision, tipo de documento      
+     * @return  
+     */
     
     public static function nuevaSecuencia($con,$emp_id = NULL,$estab_id = NULL,$pemis_id = NULL,$secu_tipo_doc = NULL){
         $numero=0;
