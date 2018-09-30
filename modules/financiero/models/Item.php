@@ -1,6 +1,5 @@
 <?php
-
-namespace app\models;
+namespace app\modules\financiero\models;
 
 use Yii;
 use yii\data\ArrayDataProvider;

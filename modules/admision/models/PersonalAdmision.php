@@ -105,7 +105,8 @@ class PersonalAdmision extends \yii\db\ActiveRecord {
         $sql .= "  WHERE  
                    padm_id <> :padm_id AND
                    padm_estado = :estado AND
-                   padm_estado_logico = :estado";
+                   padm_estado_logico = :estado
+                ORDEr BY name";
 
         $comando = $con->createCommand($sql);
         $comando->bindParam(":estado", $estado, \PDO::PARAM_STR);

@@ -5,24 +5,18 @@ use Yii;
 use app\models\Utilities;
 use yii\helpers\ArrayHelper;
 use yii\base\Exception;
-use yii\base\Security;
-use app\models\NivelInteres;
 use app\models\Persona;
 use app\models\Pais;
 use app\models\Provincia;
 use app\models\Canton;
-use app\models\EstudioAcademico;
 use app\models\MedioPublicitario;
-use app\models\SolicitudCaptacion;
 use app\modules\academico\models\Modalidad;
-use app\models\Usuario;
-use app\models\PreInteresado;
 use app\modules\academico\models\UnidadAcademica;
 use yii\helpers\Url;
 use app\modules\admision\models\PersonaGestion;
 use app\modules\admision\models\Oportunidad;
 use app\models\Empresa;
-use app\models\EstadoContacto;
+use app\modules\admision\models\EstadoContacto;
 
 class InscripcionesController extends \yii\web\Controller {
 
@@ -73,8 +67,7 @@ class InscripcionesController extends \yii\web\Controller {
         $arr_pais_dom = Pais::find()->select("pai_id AS id, pai_nombre AS value")->where(["pai_estado_logico" => "1", "pai_estado" => "1"])->asArray()->all();
         $pais_id = 1; //Ecuador
         $arr_prov_dom = Provincia::provinciaXPais($pais_id);
-        $arr_ciu_dom = Canton::cantonXProvincia($arr_prov_dom[0]["id"]);
-        $mod_carrera = new EstudioAcademico();          
+        $arr_ciu_dom = Canton::cantonXProvincia($arr_prov_dom[0]["id"]);       
         $arr_medio = MedioPublicitario::find()->select("mpub_id AS id, mpub_nombre AS value")->where(["mpub_estado_logico" => "1", "mpub_estado" => "1"])->asArray()->all();
         $arr_ninteres = $mod_unidad->consultarUnidadAcademicasEmpresa(1);
         $arr_modalidad = $mod_modalidad->consultarModalidad(1);

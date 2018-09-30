@@ -2,11 +2,9 @@
 
 namespace app\controllers;
 use Yii;
-use app\models\MetodoIngreso;
 use app\models\Utilities;
 use yii\helpers\ArrayHelper;
 use yii\base\Exception;
-use app\models\NivelInteres;
 use app\models\Persona;
 use app\models\Pais;
 use app\models\Provincia;
@@ -18,14 +16,13 @@ use yii\helpers\Url;
 use app\modules\admision\models\PersonaGestion;
 use app\modules\admision\models\Oportunidad;
 use app\models\Empresa;
-use app\models\EstadoContacto;
-use app\models\ModuloEstudio;
+use app\modules\admision\models\EstadoContacto;
+use app\modules\academico\models\ModuloEstudio;
 
 class InscripcionulinkController extends \yii\web\Controller {
 
     public function actionIndex() {
-        $this->layout = '@themes/' . \Yii::$app->getView()->theme->themeName . '/layouts/basic.php';
-        $mod_metodo = new MetodoIngreso();
+        $this->layout = '@themes/' . \Yii::$app->getView()->theme->themeName . '/layouts/basic.php';    
         $per_id = Yii::$app->session->get("PB_perid");
         $mod_persona = Persona::findIdentity($per_id);
         $mod_pergestion = new PersonaGestion();
@@ -142,13 +139,28 @@ class InscripcionulinkController extends \yii\web\Controller {
                 $dnis = "Pasaporte";
                 $numidentificacion = $pasaporte;
             }
-            //switch ($nivelestudio) { // esto cambiarlo hacer funcion que consulte el usaurio y traer el id           
-                //case "3":
+            switch ($nivelestudio) { // esto cambiarlo hacer funcion que consulte el usaurio y traer el id           
+                case "3":
                     $agente = 14;
                     $tipoportunidad = 8;
                     $pagina = "registerulink";
-                    //break;
-            //}
+                    break;
+                case "4":
+                    $agente = 14;
+                    $tipoportunidad = 9;
+                    $pagina = "registerulink";
+                    break;
+                case "5":
+                    $agente = 14;
+                    $tipoportunidad = 10;
+                    $pagina = "registerulink";
+                    break;
+                case "6":
+                    $agente = 14;
+                    $tipoportunidad = 11;
+                    $pagina = "registerulink";
+                    break;
+            }
             $subcarera = 1;
             $canal = 1;
             $estado = 1;

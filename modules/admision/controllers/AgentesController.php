@@ -10,7 +10,7 @@ use app\modules\admision\models\EstadoOportunidad;
 use app\modules\academico\models\UnidadAcademica;
 use app\modules\academico\models\Modalidad;
 use app\modules\admision\models\PersonalAdmision;
-use app\models\ModuloEstudio;
+use app\modules\academico\models\ModuloEstudio;
 use app\models\Empresa;
 use app\models\Utilities;
 use yii\helpers\ArrayHelper;

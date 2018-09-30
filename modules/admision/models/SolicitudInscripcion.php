@@ -43,6 +43,7 @@ use Yii;
  */
 class SolicitudInscripcion extends \yii\db\ActiveRecord
 {
+    public static $arr_DNI = array("1" => "CED", "2" => "RUC", "3" => "PASS");
     /**
      * {@inheritdoc}
      */
@@ -866,7 +867,7 @@ class SolicitudInscripcion extends \yii\db\ActiveRecord
                 FROM " . $con->dbname . ".res_sol_inscripcion rsin 
                 WHERE rsin.rsin_estado_logico = :estado AND
                       rsin.rsin_estado = :estado
-                ORDER BY rsin.rsin_id";
+                ORDER BY rsin.rsin_nombre";
 
         $comando = $con->createCommand($sql);
         $comando->bindParam(":estado", $estado, \PDO::PARAM_STR);

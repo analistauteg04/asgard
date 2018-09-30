@@ -2,9 +2,9 @@ $(document).ready(function () {
     $('#btn_buscarGestion').click(function () {
         actualizarGridGestion();
     });
-    $('#cmb_empresa').change(function(){
+    $('#cmb_empresa').change(function () {
         var link = $('#txth_base').val() + "/admision/oportunidades/newoportunidadxcontacto";
-        if($(this).val() > 1){
+        if ($(this).val() > 1) {
             $('.subcareers').hide();
             var arrParams = new Object();
             arrParams.empresa = $(this).val();
@@ -19,7 +19,7 @@ $(document).ready(function () {
                     $('.ccmodalidad').addClass("hide");
                 }
             }, true);
-        }else{
+        } else {
             $('.subcareers').show();
             $('.ccmodestudio').removeClass("show");
             $('.ccmodestudio').addClass("hide");
@@ -125,6 +125,17 @@ $(document).ready(function () {
             if (response.status == "OK") {
                 data = response.message;
                 setComboData(data.unidad_academica, "cmb_nivelestudio");
+                var arrParams = new Object();
+                if (data.unidad_academica.length > 0) {
+                    arrParams.nint_id = $('#cmb_nivelestudio').val();
+                    arrParams.getmodalidad = true;
+                    requestHttpAjax(link, arrParams, function (response) {
+                        if (response.status == "OK") {
+                            data = response.message;
+                            setComboData(data.modalidad, "cmb_modalidad");                            
+                        }
+                    }, true);
+                }
             }
         }, true);
     });
@@ -184,18 +195,18 @@ function actualizarGridGestion() {
     if (!$(".blockUI").length) {
         showLoadingPopup();
         // $('#Pbgestion').PbGridView('applyFilterData', {'agente': agente, 'interesado': interesado, 'f_atencion': f_atencion, 'estado': estado});
-        $('#Pbgestion').PbGridView('applyFilterData', { 'agente': agente, 'interesado': interesado, 'estado': estado });
+        $('#Pbgestion').PbGridView('applyFilterData', {'agente': agente, 'interesado': interesado, 'estado': estado});
         setTimeout(hideLoadingPopup, 2000);
     }
 }
 
-function edit(){
+function edit() {
     var codigo = $('#txth_opoid').val();
     var persona = $('#txth_pgid').val();
     window.location.href = $('#txth_base').val() + "/admision/oportunidades/edit?codigo=" + codigo + "&pgesid=" + persona;
 }
 
-function update(){
+function update() {
     var link = $('#txth_base').val() + "/admision/oportunidades/update";
     var arrParams = new Object();
     arrParams.pgid = $('#txth_pgid').val();
@@ -220,7 +231,7 @@ function update(){
     }
 }
 
-function save(){
+function save() {
     var sub_carrera = ($('#cmb_subcarrera').val() != 0 && $('#cmb_subcarrera').val() != '') ? $('#cmb_subcarrera').val() : 0;
     var link = $('#txth_base').val() + "/admision/oportunidades/save";
     var arrParams = new Object();
@@ -250,7 +261,7 @@ function save(){
 
 function exportExcel() {
     var search = $('#txt_buscarDataAgente').val();
-    var contacto = $('#txt_buscarDataPersona').val(); 
+    var contacto = $('#txt_buscarDataPersona').val();
     var f_estado = $('#cmb_estadop').val();
     window.location.href = $('#txth_base').val() + "/admision/oportunidades/expexcel?search=" + search + "&contacto=" + contacto + "&f_estado=" + f_estado;
 }

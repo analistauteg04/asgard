@@ -51,5 +51,4 @@ class TipoDiscapacidad extends \yii\db\ActiveRecord {
             'tdis_estado_logico' => 'Tdis Estado Logico',
         ];
     }
-
 }

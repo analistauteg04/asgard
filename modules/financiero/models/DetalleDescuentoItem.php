@@ -107,12 +107,13 @@ class DetalleDescuentoItem extends \app\modules\financiero\components\CActiveRec
         $sql = "SELECT ddi.ddit_id as id, ddi.ddit_descripcion as name
                 FROM " . $con->dbname . ".detalle_descuento_item ddi inner join " . $con->dbname . ".descuento_item di
                         on di.dite_id = ddi.dite_id
-                where di.ite_id = :ite_id
+                WHERE di.ite_id = :ite_id
                       and ddi.ddit_estado_descuento = 'A'
                       and di.dite_estado = :estado
                       and di.dite_estado_logico = :estado
                       and ddi.ddit_estado = :estado
-                      and ddi.ddit_estado_logico = :estado";
+                      and ddi.ddit_estado_logico = :estado
+                ORDER BY name asc";
         $comando = $con->createCommand($sql);
         $comando->bindParam(":estado", $estado, \PDO::PARAM_STR);
         $comando->bindParam(":ite_id", $ite_id, \PDO::PARAM_INT);
