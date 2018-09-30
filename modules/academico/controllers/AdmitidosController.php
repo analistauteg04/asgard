@@ -69,8 +69,8 @@ class AdmitidosController extends \app\components\CController {
         $data = Yii::$app->request->get();
         $arrSearch = array();
         if (count($data) > 0) {
-            $arrSearch["f_ini"] = $data['f_ini'];
-            $arrSearch["f_fin"] = $data['f_fin'];
+            $arrSearch["f_ini"] = $data['fecha_ini'];
+            $arrSearch["f_fin"] = $data['fecha_fin'];
             $arrSearch["carrera"] = $data['carrera'];
             $arrSearch["search"] = $data['search'];
         }
@@ -104,8 +104,8 @@ class AdmitidosController extends \app\components\CController {
         $data = Yii::$app->request->get();
         $arrSearch = array();
         if (count($data) > 0) {
-            $arrSearch["f_ini"] = $data['f_ini'];
-            $arrSearch["f_fin"] = $data['f_fin'];
+            $arrSearch["f_ini"] = $data['fecha_ini'];
+            $arrSearch["f_fin"] = $data['fecha_fin'];
             $arrSearch["carrera"] = $data['carrera'];
             $arrSearch["search"] = $data['search'];
         }
