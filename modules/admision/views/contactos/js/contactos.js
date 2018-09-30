@@ -85,12 +85,12 @@ function actualizarGridContacto() {
     }
 }
 function exportExcel() {
-    var search = $('#txt_buscarData').val();
+    var search = $('#txt_buscarDataPersona').val();
     var estado = $('#cmb_estadocontacto option:selected').val();     
     window.location.href = $('#txth_base').val() + "/admision/contactos/expexcel?search=" + search + "&estado=" + estado;    
 }
 function exportPdf() {
-    var search = $('#txt_buscarData').val();
+    var search = $('#txt_buscarDataPersona').val();
     var estado = $('#cmb_estadocontacto option:selected').val();     
     window.location.href = $('#txth_base').val() + "/admision/contactos/exppdf?pdf=1&search=" + search + "&estado=" + estado;    
 }

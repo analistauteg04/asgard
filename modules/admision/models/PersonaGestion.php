@@ -1711,7 +1711,6 @@ class PersonaGestion extends \app\modules\admision\components\CActiveRecord {
                 pg.pges_pri_apellido as pges_pri_apellido,
                 pg.pges_seg_apellido as pges_seg_apellido,";
         }
-        $str_search="";
         $sql = "
                 SELECT  
                         concat(ifnull(pges_pri_nombre,''), ' ',ifnull(pges_seg_nombre,' '),ifnull(pges_pri_apellido,''), ' ', ifnull(pges_seg_apellido,' ')) as contacto,                                                
@@ -1722,6 +1721,7 @@ class PersonaGestion extends \app\modules\admision\components\CActiveRecord {
                 FROM " . $con->dbname . ".persona_gestion pg inner join " . $con->dbname . ".estado_contacto ec on ec.econ_id = pg.econ_id
                 INNER JOIN " . $con1->dbname . ".tipo_persona tp on tp.tper_id = pg.tper_id                
                 WHERE   
+                        $str_search
                         pg.pges_estado = :estado
                         and pg.pges_estado_logico = :estado
                         and tp.tper_estado = :estado
@@ -1734,10 +1734,10 @@ class PersonaGestion extends \app\modules\admision\components\CActiveRecord {
         $comando->bindParam(":estado", $estado, \PDO::PARAM_STR);
         if (isset($arrFiltro) && count($arrFiltro) > 0) {
             $search_cond = "%" . $arrFiltro["search"] . "%";
-            $empresa = $arrFiltro["company"];
+            $empresa = $arrFiltro["estado"];
             $comando->bindParam(":search", $search_cond, \PDO::PARAM_STR);
-            if ($arrFiltro['company'] != "" && $arrFiltro['company'] > 0) {
-                $comando->bindParam(":emp_id", $empresa, \PDO::PARAM_STR);
+            if ($arrFiltro['estado'] != "" && $arrFiltro['estado'] > 0) {
+                $comando->bindParam(":estcontacto", $empresa, \PDO::PARAM_STR);
             }
         }
         $resultData = $comando->queryAll();
