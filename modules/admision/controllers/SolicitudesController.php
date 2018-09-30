@@ -268,6 +268,13 @@ class SolicitudesController extends \app\components\CController {
             $mod_id = $data["modalidad"];
             $car_id = $data["carrera"];
             $emp_id = $data["emp_id"];
+            if ($emp_id > 1) {
+                $mest_id = $car_id;
+                $carrera_id = "";
+            } else {
+                $carrera_id = $car_id;
+                $mest_id = "";
+            }
             if ($nint_id < '1' and $ming_id < '1' and $mod_id < '1' and $car_id < '1' and $valida = 1) {
                 throw new Exception('Debe seleccionar opciones de las listas.');
             }
@@ -310,7 +317,8 @@ class SolicitudesController extends \app\components\CController {
                     $mod_solins->uaca_id = $nint_id;
                     $mod_solins->mod_id = $mod_id;
                     $mod_solins->ming_id = $ming_id;
-                    $mod_solins->eaca_id = $car_id;
+                    $mod_solins->eaca_id = $carrera_id;
+                    $mod_solins->mest_id = $mest_id;
                     $mod_solins->rsin_id = $rsin_id;
                     $mod_solins->emp_id = $emp_id;
                     $mod_solins->sins_fecha_solicitud = $sins_fechasol;
