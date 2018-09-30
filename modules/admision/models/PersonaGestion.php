@@ -12,7 +12,6 @@ use app\modules\admision\models\TipoOportunidadVenta;
 use app\modules\academico\models\Modalidad;
 use app\modules\academico\models\UnidadAcademica;
 use yii\data\ArrayDataProvider;
-use app\models\Secuencias;
 use Yii;
 
 /**
