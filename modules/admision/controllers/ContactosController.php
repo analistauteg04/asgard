@@ -17,7 +17,7 @@ class ContactosController extends \app\components\CController {
 
     public function actionIndex() {
         $per_id = @Yii::$app->session->get("PB_iduser");
-        $estado_contacto = EstadoContacto::find()->select("econ_id AS id, econ_nombre AS name")->where(["econ_estado_logico" => "1", "econ_estado" => "1"])->asArray()->all();
+        $estado_contacto = EstadoContacto::find()->select("econ_id AS id, econ_nombre AS name")->where(["econ_estado_logico" => "1", "econ_estado" => "1"])->orderBy("name asc")->asArray()->all();
         $modPersonaGestion = new PersonaGestion();
         $data = Yii::$app->request->get();
         if ($data['PBgetFilter']) {

@@ -115,7 +115,8 @@ class EstudioAcademico extends \app\modules\admision\components\CActiveRecord
                     car.car_estado_logico=:estado AND 
                     mcn.mcni_estado=:estado AND
                     mcn.mcni_estado_logico=:estado AND
-                    mcn.mod_id=:nint_id";
+                    mcn.mod_id=:nint_id
+               ORDER BY value asc";
         $comando = $con->createCommand($sql);
         $comando->bindParam(":estado", $estado, \PDO::PARAM_STR);
         $comando->bindParam(":nint_id", $nint_id, \PDO::PARAM_INT);
@@ -159,7 +160,8 @@ class EstudioAcademico extends \app\modules\admision\components\CActiveRecord
                 FROM "
                 . $con->dbname . ".asignatura 
                 WHERE   asi_estado = :estado AND
-                        asi_estado_logico = :estado";
+                        asi_estado_logico = :estado
+                ORDER BY nombre_materia asc";
 
         $comando = $con->createCommand($sql);
         $comando->bindParam(":estado", $estado, \PDO::PARAM_STR);
@@ -192,7 +194,8 @@ class EstudioAcademico extends \app\modules\admision\components\CActiveRecord
                 FROM "
                 . $con->dbname . ".area_conocimiento 
                 WHERE   acon_estado = :estado AND
-                        acon_estado_logico = :estado";
+                        acon_estado_logico = :estado
+                ORDER BY area_conocimiento asc";
 
         $comando = $con->createCommand($sql);
         $comando->bindParam(":estado", $estado, \PDO::PARAM_STR);
@@ -232,7 +235,8 @@ class EstudioAcademico extends \app\modules\admision\components\CActiveRecord
                 WHERE   
                     fact.nint_id=:nivelinteres AND
                     fact.fac_estado_logico=:estado AND 
-                    fact.fac_estado=:estado";
+                    fact.fac_estado=:estado
+                ORDER BY name asc";
         $comando = $con->createCommand($sql);
         $comando->bindParam(":estado", $estado, \PDO::PARAM_STR);
         $comando->bindParam(":nivelinteres", $nivelinteres, \PDO::PARAM_INT);

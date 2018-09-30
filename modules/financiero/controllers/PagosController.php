@@ -46,7 +46,7 @@ class PagosController extends \app\components\CController {
                 
             }
         }
-        $arrEstados = ArrayHelper::map([["id" => "T", "value" => "Todos"], ["id" => "P", "value" => "Pendiente"], ["id" => "S", "value" => "Pagada"]], "id", "value");
+        $arrEstados = ArrayHelper::map([["id" => "T", "value" => "Todos"], ["id" => "S", "value" => "Pagada"], ["id" => "P", "value" => "Pendiente"]], "id", "value");
         return $this->render('index', [
                     'model' => $resp_pago,
                     'arrEstados' => $arrEstados
@@ -437,7 +437,7 @@ class PagosController extends \app\components\CController {
                 
             }
         }
-        $arrEstados = ArrayHelper::map([["id" => "T", "value" => "Todos"], ["id" => "P", "value" => "Pendiente"], ["id" => "S", "value" => "Pagada"]/* , ["id" => "NA", "value" => "No Disponible"] */], "id", "value");
+        $arrEstados = ArrayHelper::map([["id" => "T", "value" => "Todos"], ["id" => "S", "value" => "Pagada"], ["id" => "P", "value" => "Pendiente"]/* , ["id" => "NA", "value" => "No Disponible"] */], "id", "value");
         return $this->render('listarpagoscargados', [
                     'model' => $resp_pago,
                     'arrEstados' => $arrEstados

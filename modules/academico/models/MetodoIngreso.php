@@ -96,7 +96,8 @@ class MetodoIngreso extends \yii\db\ActiveRecord {
                     nmet.nmet_estado=:estado AND 
                     uaca.uaca_estado=:estado AND 
                     ming.ming_estado=:estado AND
-                    nmet.uaca_id=:id_nint";
+                    nmet.uaca_id=:id_nint
+                ORDER BY name asc";
         $comando = $con->createCommand($sql);
         $comando->bindParam(":estado", $estado, \PDO::PARAM_STR);
         $comando->bindParam(":id_nint", $uaca_id, \PDO::PARAM_INT);

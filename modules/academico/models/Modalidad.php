@@ -100,7 +100,8 @@ class Modalidad extends \app\modules\academico\components\CActiveRecord {
                     and mua.muac_estado_logico = :estado
                     and mua.muac_estado = :estado
                     and moda.mod_estado_logico = :estado
-                    and moda.mod_estado = :estado";        
+                    and moda.mod_estado = :estado
+                    ORDER BY name asc";        
         
         $comando = $con->createCommand($sql);
         $comando->bindParam(":estado", $estado, \PDO::PARAM_STR);
