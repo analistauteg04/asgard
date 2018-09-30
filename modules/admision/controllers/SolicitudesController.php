@@ -140,6 +140,7 @@ class SolicitudesController extends \app\components\CController {
         $per_id = base64_decode($_GET['per_id']);
         Yii::$app->session->set('persona_solicita', base64_encode($_GET['ids']));
         $mod_carrera = new EstudioAcademico();
+        $mod_unidad = new UnidadAcademica();
         $persona_model = new Persona();
         $mod_modalidad = new Modalidad();
         $modcanal = new Oportunidad();
@@ -182,7 +183,8 @@ class SolicitudesController extends \app\components\CController {
                 return;
             }
         }
-        $arr_unidadac = $modUnidad->consultarUnidadAcademicas();
+        //$arr_unidadac = $modUnidad->consultarUnidadAcademicas();
+        $arr_unidadac = $mod_unidad->consultarUnidadAcademicasEmpresa(1);
         $arr_modalidad = $mod_modalidad->consultarModalidad(1);
         $arr_metodos = $mod_metodo->consultarMetodoIngNivelInt($arr_unidadac[0]["id"]);
         $arr_carrera = $modcanal->consultarCarreraModalidad(1, 1);
