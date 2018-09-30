@@ -597,11 +597,18 @@ class ContactosController extends \app\components\CController {
 
     public function actionExport() {
         $mod_oportunidad = new Oportunidad();
-        $Data = $mod_oportunidad->consultarOportUnidadAcademica();
-        //$Data = $mod_oportunidad->consultarOportPerdida();
+        $tipoRep=2;
+        if($tipoRep==1){//oportunidad por unidad
+            $Data = $mod_oportunidad->consultarOportUnidadAcademica();
+            $dataIds='eopo_id';
+            $dataName='eopo_nombre';
+        }else{//oportunidad perdida
+            $Data = $mod_oportunidad->consultarOportPerdida();
+            $dataIds='oper_id';
+            $dataName='oper_nombre';
+        }
+
         
-        $dataIds='eopo_id';
-        $dataName='eopo_nombre';
         $arrayIdsCols = array();
         for ($i = 0; $i < sizeof($Data); $i++) {
             if (!in_array($Data[$i][$dataIds], $arrayIdsCols)) {
@@ -658,25 +665,32 @@ class ContactosController extends \app\components\CController {
         switch ($uaca_id) {
             case '1'://GRADO
                 $arrayData[$fil][1] = $CantUnidad;
+                $col1=1;
                 break;
             case '2'://POSGRADO
                 $arrayData[$fil][2] = $CantUnidad;
+                $col2=1;
                 break;
             case '3'://EDUCACION CONTINUA
                 $arrayData[$fil][3] = $CantUnidad;
+                $col3=1;
                 break;
             case '4'://Base Grado
                 $arrayData[$fil][3] = $CantUnidad;
                 break;
+                $col4=1;
             case '5'://Base Posgrado
                 $arrayData[$fil][3] = $CantUnidad;
+                $col5=1;
                 break;
             case '6'://Base Online
                 $arrayData[$fil][3] = $CantUnidad;
+                $col6=1;
                 break;
         }
+        $numPro=$col1+$col2+$col3+$col4+$col5+$col6;
         $arrayData[$fil][7] = $sumafila; //SUMA
-        $arrayData[$fil][8] = $sumafila / 6; //PROMEDIO
+        $arrayData[$fil][8] = $sumafila / $numPro; //PROMEDIO
     }
 
 }
