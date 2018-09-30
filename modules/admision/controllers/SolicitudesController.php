@@ -15,7 +15,7 @@ use app\modules\academico\models\EstudioAcademico;
 use app\modules\academico\models\Modalidad;
 use app\modules\admision\models\Oportunidad;
 use app\modules\academico\models\ModuloEstudio;
-use app\modules\admision\models\ItemMetodoNivel;
+use app\modules\admision\models\ItemMetodoUnidad;
 use app\modules\financiero\models\DetalleDescuentoItem;
 use app\modules\academico\models\UnidadAcademica;
 use app\modules\admision\models\SolicitudinsDocumento;
@@ -148,7 +148,7 @@ class SolicitudesController extends \app\components\CController {
         $mod_modalidad = new Modalidad();
         $modcanal = new Oportunidad();
         $modestudio = new ModuloEstudio();
-        $modItemMetNivel = new ItemMetodoNivel();
+        $modItemMetNivel = new ItemMetodoUnidad();
         $modDescuento = new DetalleDescuentoItem();
         $modUnidad = new UnidadAcademica();
         $dataPersona = $persona_model->consultaPersonaId($per_id);
