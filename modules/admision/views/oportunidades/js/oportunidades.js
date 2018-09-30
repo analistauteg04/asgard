@@ -45,6 +45,7 @@ $(document).ready(function () {
                     if (data.modalidad.length > 0) {
                         arrParams.unidada = $('#cmb_nivelestudio').val();
                         arrParams.moda_id = data.modalidad[0].id;
+                        arrParams.empresa_id = $('#cmb_empresa').val();
                         arrParams.getcarrera = true;
                         requestHttpAjax(link, arrParams, function (response) {
                             if (response.status == "OK") {
@@ -142,6 +143,7 @@ $(document).ready(function () {
         var arrParams = new Object();
         arrParams.unidada = $('#cmb_nivelestudio').val();
         arrParams.moda_id = $(this).val();
+        arrParams.empresa_id = $('#cmb_empresa').val();
         arrParams.getcarrera = true;
         requestHttpAjax(link, arrParams, function (response) {
             if (response.status == "OK") {
