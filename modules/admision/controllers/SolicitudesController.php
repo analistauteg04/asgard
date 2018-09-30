@@ -281,7 +281,7 @@ class SolicitudesController extends \app\components\CController {
             $sins_fechasol = date(Yii::$app->params["dateTimeByDefault"]);
             if (($nint_id == 3) or empty($nint_id)) {
                 $ming_id = null; //Curso.
-                $rsin_id = 3; //Solicitud pre-aprobada para Educación Continua.  
+                $rsin_id = 2; //Solicitud pre-aprobada para Educación Continua.  
                 $pre_observacion = 'Solicitud Pre-Aprobada por ser de Educación Continua.';
                 $fec_preobservacion = $sins_fechasol;
                 $subirDocumentos = 0;
