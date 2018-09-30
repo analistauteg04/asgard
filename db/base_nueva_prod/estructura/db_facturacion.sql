@@ -544,7 +544,7 @@ create table if not exists `secuencias` (
  `edoc_estado` varchar(1) default '0',#Estado para Generar documento Electronico
  `secu_cant_items` int(2) default null, #Cantidad Lineas por documentos
  `secu_cuenta_iva` varchar(12) default null ,
- `secu_grupo_doc` varchar(3) default null ,#GRUPO DOCUMENTO 
+ `secu_grupo_modulo` varchar(3) default null ,#GRUPO MODULO DOCUEMNTO 
  `secu_estado` varchar(1) not null ,
  `secu_fecha_creacion` timestamp not null default current_timestamp,
  `secu_fecha_modificacion` timestamp null default null,

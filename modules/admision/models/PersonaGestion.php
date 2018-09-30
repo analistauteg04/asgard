@@ -11,6 +11,7 @@ use app\modules\admision\models\EstadoContacto;
 use app\modules\admision\models\TipoOportunidadVenta;
 use app\modules\academico\models\Modalidad;
 use yii\data\ArrayDataProvider;
+use app\models\Secuencias;
 use Yii;
 
 /**
@@ -1185,7 +1186,9 @@ class PersonaGestion extends \app\modules\admision\components\CActiveRecord {
             $grol_id = $mod_gruprol->consultarIdUsuGrolEper($per_id, $idEmpresa);
             //$padm_id=$mod_pergestion->consultarIdPersonaAdmision($per_id, $grol_id);
             //$padm_id=($padm_id!=0)?$padm_id:1;//Valor por Defecto en el Caso de que no Existe Persona Admision
-            //-------------------------------            
+            //-------------------------------  
+            
+            //$opo_codigo = Secuencias::nuevaSecuencia($con, 1, 1, 1, 'SOL') ;//
             $opo_codigo = intval($mod_oportunidad->consultarUltimoCodcrm()) + 1;
             $pges_codigo = intval($mod_pergestion->consultarUltimoCodPerGest()) + 1;
             for ($i = 0; $i < sizeof($Data); $i++) {
