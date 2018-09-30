@@ -72,4 +72,6 @@ return [
     "LoadFile" => "Cargar Archivo",
     "loadCall" => "Cargar Call Center",
     "loadLeads" => "Cargar Leads",
+    "exportStatContact" => "Exp. Est. Opor.",
+    "exportLostContact" => "Exp. Cont. Perdidos",    
 ];

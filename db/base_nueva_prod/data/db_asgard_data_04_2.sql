@@ -137,7 +137,10 @@ INSERT INTO `objeto_modulo` (`omod_id`, `mod_id`, `omod_padre_id`, `omod_nombre`
 (110, 2, 107, 'Cargar Leads Call Center', 'A', '0', '', '', '', 'admision/contactos/cargarleads', '1', '0', 'Admision', '1', '2018-09-22 14:07:01', NULL, '1'),
 -- Pagos Factura
 (111, 3, 94, 'Cargar Factura', 'S', '0', '', '', '', 'financiero/pagos/cargardocfact', '1', '0', 'Pagos', '1', '2018-09-22 14:07:01', NULL, '1'),
-(112, 3, 111, 'Guardar Cargar Factura', 'A', '0', '', '', '', 'financiero/pagos/cargardocfact', '1', '0', 'Pagos', '1', '2018-09-22 14:07:01', NULL, '1');
+(112, 3, 111, 'Guardar Cargar Factura', 'A', '0', '', '', '', 'financiero/pagos/cargardocfact', '1', '0', 'Pagos', '1', '2018-09-22 14:07:01', NULL, '1'),
+-- Exportar Leads
+(113, 2, 107, 'Exportar Contactos por Estado', 'A', '0', '', '', '', 'admision/contactos/cargarleads', '1', '0', 'Admision', '1', '2018-09-22 14:07:01', NULL, '1'),
+(114, 2, 107, 'Exportar Contactos Perdidos', 'A', '0', '', '', '', 'admision/contactos/cargarleads', '1', '0', 'Admision', '1', '2018-09-22 14:07:01', NULL, '1');
 -- --------------------------------------------------------
 --
 -- Volcado de datos para la tabla `OBMO_ACCI`
@@ -191,7 +194,9 @@ INSERT INTO `obmo_acci` (`oacc_id`, `omod_id`, `acc_id`, `oacc_tipo_boton`, `oac
 (46, 110, 15, '1', '', 'loadCall', '1', '1'),
 (47, 108, 16, '1', '', 'loadLeads', '1', '1'),
 (48, 112, 4, '1', '', 'saveBills', '1', '1'),
-(49, 90, 4, '1', '', 'Approve', '1', '1');
+(49, 90, 4, '1', '', 'Approve', '1', '1'),
+(50, 113, 17, '1', '', 'exportStatContact', '1', '1'),
+(51, 114, 18, '1', '', 'exportLostContact', '1', '1');
 -- --------------------------------------------------------
 --
 -- Volcado de datos para la tabla `grup_obmo`
@@ -308,7 +313,9 @@ INSERT INTO `grup_obmo` (`gmod_id`, `gru_id`, `omod_id`, `gmod_estado`,  `gmod_e
 (109, 1, 109, '1', '1'),
 (110, 1, 110, '1', '1'),
 (111, 1, 111, '1', '1'),
-(112, 1, 112, '1', '1');
+(112, 1, 112, '1', '1'),
+(113, 1, 113, '1', '1'),
+(114, 1, 114, '1', '1');
 
 
 -- --------------------------------------------------------
@@ -427,4 +434,6 @@ INSERT INTO `grup_obmo_grup_rol` (`gogr_id`, `grol_id`, `gmod_id`, `gogr_estado`
 (109, 1, 109, '1', '1'),
 (110, 1, 110, '1', '1'),
 (111, 1, 111, '1', '1'),
-(112, 1, 112, '1', '1');
+(112, 1, 112, '1', '1'),
+(113, 1, 113, '1', '1'),
+(114, 1, 114, '1', '1');

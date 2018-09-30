@@ -22,7 +22,9 @@ INSERT INTO `accion` (`acc_id`, `acc_nombre`, `acc_url_accion`, `acc_tipo`, `acc
 (13, 'Approve', 'Approve', 'General', 'Approve', 'accion', 'glyphicon glyphicon-ok', '1', '2017-02-01 15:05:26', NULL, '1'),
 (14, 'LoadFile', 'LoadFile', 'General', 'LoadFile', 'accion', 'glyphicon glyphicon-ok', '1', '2017-02-01 15:05:26', NULL, '1'),
 (15, 'loadCall', 'loadCall', 'General', 'loadCall', 'accion', 'glyphicon glyphicon-ok', '1', '2017-02-01 15:05:26', NULL, '1'),
-(16, 'loadLeads', 'loadLeads', 'General', 'loadLeads', 'accion', 'glyphicon glyphicon-ok', '1', '2017-02-01 15:05:26', NULL, '1');
+(16, 'loadLeads', 'loadLeads', 'General', 'loadLeads', 'accion', 'glyphicon glyphicon-ok', '1', '2017-02-01 15:05:26', NULL, '1'),
+(17, 'exportStatContact', 'exportStatContact', 'General', 'exportStatContact', 'accion', 'glyphicon glyphicon-ok', '1', '2017-02-01 15:05:26', NULL, '1'),
+(18, 'exportLostContact', 'exportLostContact', 'General', 'exportLostContact', 'accion', 'glyphicon glyphicon-ok', '1', '2017-02-01 15:05:26', NULL, '1');
 
 -- --------------------------------------------------------
 --
