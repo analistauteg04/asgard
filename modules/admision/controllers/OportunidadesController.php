@@ -3,6 +3,7 @@
 namespace app\modules\admision\controllers;
 
 use Yii;
+use app\models\ExportFile;
 use app\modules\admision\models\Oportunidad;
 use app\modules\admision\models\EstadoOportunidad;
 use app\modules\admision\models\PersonaGestion;
@@ -14,6 +15,7 @@ use app\models\Empresa;
 use app\models\Utilities;
 use yii\helpers\ArrayHelper;
 use app\modules\admision\Module;
+use app\modules\admision\Module as admision;
 
 class OportunidadesController extends \app\components\CController {
 
@@ -425,6 +427,49 @@ class OportunidadesController extends \app\components\CController {
         $nameReport = yii::t("formulario", "Application Reports");
         Utilities::generarReporteXLS($nombarch, $nameReport, $arrHeader, $arrData, $colPosition);
         exit;
+    }
+    
+    public function actionExppdfoportunidades() {  
+        $report = new ExportFile();
+        $this->view->title = admision::t("crm", "List Oportunity"); // Titulo del reporte
+
+        $modoportunidad = new Oportunidad();
+        $data = Yii::$app->request->get();
+        $arr_body = array();
+        
+        $arrSearch["interesado"] = $data["contacto"];
+        $arrSearch["agente"] = $data["search"];
+        $arrSearch["estado"] = $data["f_estado"];
+
+        $arr_head = array(
+           
+            Module::t("crm", "Id Opportunity"),
+            Module::t("crm", "No Opportunity"),
+            Module::t("crm", "Contact"),
+            Yii::t("formulario", "Aca. Uni."),
+            Module::t("crm", "Career/Program/Course"),
+            Module::t("crm", "Moda"),
+            Yii::t("formulario", "Status"),
+            Yii::t("formulario", "Date"),
+            Yii::t("formulario", "Agent"),
+            " ",
+        );
+        
+        if (empty($arrSearch)) {
+            $arr_body = $modoportunidad->consultarOportunidadexcel(array(), true);
+        } else {
+            $arr_body = $modoportunidad->consultarOportunidadexcel($arrSearch, true);
+        }
+        
+        $report->orientation = "L"; // tipo de orientacion L => Horizontal, P => Vertical
+        $report->createReportPdf(
+            $this->render('exportpdf', [
+                    'arr_head' => $arr_head,
+                    'arr_body' => $arr_body
+            ])
+        );
+        $report->mpdf->Output('Reporte_' . date("Ymdhis") . ".pdf", ExportFile::OUTPUT_TO_DOWNLOAD);
+        return;
     }
 
 }

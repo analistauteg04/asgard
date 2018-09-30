@@ -68,9 +68,22 @@ if ($popup == "content" && $isUser) {
                         margin: 0px;
                         padding: 0px;
                     }
-                    table tr:nth-child(odd){ background-color:#dcdce1; }
-                    table tr:nth-child(even){ background-color:#ffffff; }
-                    table td{
+                    table thead tr, .thcol{
+                        background-color: #9b9b9c;
+                        height: 20px;
+                    }
+                    table thead tr th {
+                        text-transform: uppercase;
+                        font-weight: bold;
+                        color: #ffffff;
+                        text-align: left;
+                        font-size: 12px;
+                        font-family: Arial;
+                        padding: 7px;
+                    }
+                    table tbody tr:nth-child(odd){ background-color:#dcdce1; }
+                    table tbody tr:nth-child(even){ background-color:#ffffff; }
+                    table tbody tr td{
                         vertical-align: middle;
                         text-align: left;
                         padding: 7px;
@@ -79,29 +92,19 @@ if ($popup == "content" && $isUser) {
                         /*font-weight:normal;*/
                         /*color:#000000;*/
                     }
-                    table tr:last-child td{
+                    table tbody tr:last-child td{
                         border-width: 0px 1px 0px 0px;
                     }
-                    table tr td:last-child{
+                    table tbody tr td:last-child{
                         border-width: 0px 0px 1px 0px;
                     }
-                    table tr:last-child td:last-child{
+                    table tbody tr:last-child td:last-child{
                         border-width: 0px 0px 0px 0px;
                     }
-                    table tr:first-child td, .thcol{
-                        background-color: #9b9b9c;
-                        text-align: left;
-                        font-size: 12px;
-                        font-family: Arial;
-                        font-weight: bold;
-                        color: #ffffff;
-                        height: 20px;
-                        text-transform: uppercase;
-                    }
-                    table tr:first-child td:first-child{
+                    table tbody tr:first-child td:first-child{
                         border-width:0px 0px 1px 0px;
                     }
-                    table tr:first-child td:last-child{
+                    table tbody tr:first-child td:last-child{
                         border-width:0px 0px 1px 1px;
                     }
                     /* ---Css para las tablas--- */
@@ -109,8 +112,8 @@ if ($popup == "content" && $isUser) {
                         font-family: Arial, sans-serif;
                         margin: 30px auto auto 30px;
                         padding: 0;
-                        width: 763px;
-                        height: 1122px;
+                        /*width: 763px;*/
+                        /*height: 1122px;*/
                     }
                     .footer{
                         font-family: Arial, sans-serif;
@@ -179,7 +182,7 @@ if ($popup == "content" && $isUser) {
             <div id="main">
                 <div id="container">
                     <div id="logo">
-                        <img src="<?= Yii::$app->basePath; ?>/themes/<?= Yii::$app->view->theme->themeName; ?>/assets/img/logo.png">
+                        <img src="<?= Yii::$app->basePath; ?>/themes/<?= Yii::$app->view->theme->themeName; ?>/assets/img/logos/logo_<?= $session->get('PB_idempresa');; ?>.png">
                     </div>
                     <div id="infoCuenta">
                         <div id="title">
@@ -191,15 +194,15 @@ if ($popup == "content" && $isUser) {
                                     <div class="tcoll"><?= Yii::t("reporte", "Broadcast document") ?>:</div>
                                     <div class="tcolr posright"><?= date(Yii::$app->params['dateByDefault']) ?></div>
                                 </div>
-                                <?php if (Yii::$app->controller->freportini != "") { ?>
+                                <?php 
+                                if (Yii::$app->controller->freportini != "") { ?>
                                     <div class="troww">
                                         <div class="tcoll"><?= Yii::t("reporte", "From") ?>:</div>
                                         <div class="tcolr posright"><?= Yii::$app->controller->freportini; ?></div>
                                     </div>
                                 <?php
                                 }
-                                if (Yii::$app->controller->freportend != "") {
-                                    ?>
+                                if (Yii::$app->controller->freportend != "") {  ?>
                                     <div class="troww">
                                         <div class="tcoll"><?= Yii::t("reporte", "To") ?>:</div>
                                         <div class="tcolr posright"><?= Yii::$app->controller->freportend; ?></div>

@@ -87,7 +87,7 @@ class EstadoContacto extends \app\modules\admision\components\CActiveRecord {
                       -- ec.econ_id = :estado_contacto AND
                       ec.econ_estado = :estado AND
                       ec.econ_estado_logico = :estado
-                ORDER BY 1 asc  ";
+                ORDER BY name asc  ";
 
         $comando = $con->createCommand($sql);
         $comando->bindParam(":estado", $estado, \PDO::PARAM_STR);

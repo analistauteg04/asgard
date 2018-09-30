@@ -83,11 +83,11 @@ $leyenda = '<div class="col-md-12 col-xs-12 col-sm-12 col-lg-12">
         var acciones = [{id: 'reloadpage', class: 'btn btn-primary', value: objLang.Accept, callback: 'reloadPage'}];                           
     }",
                     ],
-                ]);
+                ]);//style="display: none;"
                 ?>
             </div>     
         </div>   
-        <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12" style="display: none;">
+        <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12" >
             <div class="col-md-2">
                 <?= Html::a( Yii::t("formulario", "Exportar"), Url::to(['contactos/export']), ['id' => 'btn_exportar','class' => 'btn btn-primary btn-block']); ?>
             </div>

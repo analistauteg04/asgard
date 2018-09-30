@@ -17,7 +17,7 @@ class ContactosController extends \app\components\CController {
 
     public function actionIndex() {
         $per_id = @Yii::$app->session->get("PB_iduser");
-        $estado_contacto = EstadoContacto::find()->select("econ_id AS id, econ_nombre AS name")->where(["econ_estado_logico" => "1", "econ_estado" => "1"])->asArray()->all();
+        $estado_contacto = EstadoContacto::find()->select("econ_id AS id, econ_nombre AS name")->where(["econ_estado_logico" => "1", "econ_estado" => "1"])->orderBy("name asc")->asArray()->all();
         $modPersonaGestion = new PersonaGestion();
         $data = Yii::$app->request->get();
         if ($data['PBgetFilter']) {
@@ -598,11 +598,15 @@ class ContactosController extends \app\components\CController {
     public function actionExport() {
         $mod_oportunidad = new Oportunidad();
         $Data = $mod_oportunidad->consultarOportUnidadAcademica();
+        //$Data = $mod_oportunidad->consultarOportPerdida();
+        
+        $dataIds='eopo_id';
+        $dataName='eopo_nombre';
         $arrayIdsCols = array();
         for ($i = 0; $i < sizeof($Data); $i++) {
-            if (!in_array($Data[$i]['eopo_id'], $arrayIdsCols)) {
-                $arrayIdsCols[] = $Data[$i]['eopo_id'];
-                $arrDataCols[] = $Data[$i]['eopo_nombre'];
+            if (!in_array($Data[$i][$dataIds], $arrayIdsCols)) {
+                $arrayIdsCols[] = $Data[$i][$dataIds];
+                $arrDataCols[] = $Data[$i][$dataName];
             }
         }
         $aux = "";
@@ -612,12 +616,12 @@ class ContactosController extends \app\components\CController {
         for ($i = 0; $i < sizeof($Data); $i++) {
             $uaca_id = $Data[$i]['uaca_id'];
             $CantUnidad = $Data[$i]['CantUnidad'];
-            if ($Data[$i]['eopo_id'] != $aux) {
+            if ($Data[$i][$dataIds] != $aux) {
                 $fil++;
                 $sumafila = 0;
                 $sumafila += $CantUnidad;
-                $aux = $Data[$i]['eopo_id'];
-                $arrayData[$fil][0] = $Data[$i]['eopo_nombre'];
+                $aux = $Data[$i][$dataIds];
+                $arrayData[$fil][0] = $Data[$i][$dataName];
                 $this->retonaMatrix($arrayData, $uaca_id, $fil, $CantUnidad, $sumafila);
             } else {
                 $sumafila += $CantUnidad;

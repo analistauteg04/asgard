@@ -4,6 +4,7 @@
  * To change this license header, choose License Headers in Project Properties.
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
+ * Documentation MPDF: https://mpdf.github.io/reference/mpdf-functions/construct.html
  */
 
 namespace app\models;
@@ -49,9 +50,9 @@ class ExportFile {
     public $mgb = 10;
     public $mgh = 5;
     public $mgf = 7;
-    public $orientation = 'P';
+    public $orientation = 'P'; // L, P
     public $footer = TRUE;
-    public $typeExport = "";
+    public $typeExport = ""; // OUTPUT_TO_DOWNLOAD, INLINE, DOWNLOAD, FILE, STRING_RETURN
     public $reportName = "";
 
     function __construct() {
@@ -62,18 +63,19 @@ class ExportFile {
     }
 
     function createReportPdf($content) {
+        //error_reporting(E_ERROR); // Se activa esta variable de config para evitar mostrar warnings y solo mostrar mensajes de error.
         $this->mpdf = new Mpdf([
-                $this->mode, 
-                $this->format, 
-                $this->default_font_size, 
-                $this->default_font, 
-                $this->mgl, 
-                $this->mgr, 
-                $this->mgt, 
-                $this->mgb, 
-                $this->mgh, 
-                $this->mgf, 
-                $this->orientation]);
+                "mode"   => $this->mode, 
+                "format" => $this->format, 
+                "default_font_size" => $this->default_font_size, 
+                "default_font" => $this->default_font, 
+                "margin_left"  => $this->mgl, 
+                "margin_right" => $this->mgr, 
+                "margin_top"   => $this->mgt, 
+                "margin_bottom" => $this->mgb, 
+                "margin_header" => $this->mgh, 
+                "margin_footer" => $this->mgf, 
+                "orientation"   => $this->orientation]);
         if ($this->footer)
             $this->mpdf->SetHTMLFooter("<div class='footer' style='font-size: 10px;'><div style='float: left; width: 50%;'>Pag: {PAGENO}</div><div style='float: left;width: 50%;text-align: right;'>Hora: " . date("H:i") . "</div></div>");
         $this->mpdf->WriteHTML($content);

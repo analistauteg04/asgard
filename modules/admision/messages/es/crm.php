@@ -61,6 +61,7 @@ return [
     "Interest Carreer" => "Carrera Interés",
     "Knowledge Area"=> "Área conocimiento",
     "Knowledge channel"=> "Canal Conocimiento",
+    "List Oportunity" => "Lista Oportunidades",
     "Lost Opportunity"=> 'Oportunidad Perdida',            
     "Moda" => 'Modalidad',    
     "Id Opportunity" =>"Id Oportunidad", 

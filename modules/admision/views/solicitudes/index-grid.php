@@ -19,7 +19,7 @@ academico::registerTranslations();
         'id' => 'Tbg_Solicitudes',
         'showExport' => true,
         'fnExportEXCEL' => "exportExcel",
-        //'fnExportPDF' => "exportPdf",
+        'fnExportPDF' => "exportPdf",
         'dataProvider' => $model,
         'columns' =>
         [

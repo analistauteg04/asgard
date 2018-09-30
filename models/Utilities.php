@@ -368,11 +368,11 @@ class Utilities {
             $colPosition = array("A","B","C","D","E","F","G","H","I","J","K","L","M","N","O","P","Q","R","S","T","U");
         }
         if(count($arrData) == 0){
-            echo Yii::t("reportes","No Reports");
+            echo Yii::t("reporte","No Reports");
             return;
         }
         if(count($arrHeader) == 0){
-            echo Yii::t("reportes","No Reports");
+            echo Yii::t("reporte","No Reports");
             return;
         }
         $negrita = array(
@@ -450,9 +450,9 @@ class Utilities {
 
             $objPHPExcel->setActiveSheetIndex(0)
                     ->setCellValue('C4', $nameReport)
-                    ->setCellValue('C6', Yii::t("reportes","Produced by"))
+                    ->setCellValue('C6', Yii::t("reporte","Produced by"))
                     ->setCellValue('E6', Yii::$app->session->get("PB_nombres"))
-                    ->setCellValue('C7', Yii::t("reportes","Date"))
+                    ->setCellValue('C7', Yii::t("reporte","Date"))
                     ->setCellValue('E7', date("Y-m-d H:i:s"));
 
             // seteo de bordes cabecera de reporte
@@ -493,7 +493,7 @@ class Utilities {
             $objWriter = IOFactory::createWriter($objPHPExcel, $typeExp);
             $objWriter->save('php://output');
         }catch(Exception $e){
-            echo Yii::t("reportes","Error to export Excel");
+            echo Yii::t("reporte","Error to export Excel");
         }
 
     }

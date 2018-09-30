@@ -94,7 +94,7 @@ class TipoOportunidadVenta extends \yii\db\ActiveRecord
                 WHERE tov.uaca_id = :uaca_id AND
                       tov.tove_estado = :estado AND
                       tov.tove_estado_logico = :estado
-                ORDER BY 1 asc  ";
+                ORDER BY name asc ";
      
         $comando = $con->createCommand($sql);
         $comando->bindParam(":estado", $estado, \PDO::PARAM_STR);       

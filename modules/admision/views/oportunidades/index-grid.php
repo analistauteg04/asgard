@@ -13,6 +13,7 @@ use app\modules\admision\Module;
         'id' => 'Pbgestion',
         'showExport' => true,
         'fnExportEXCEL' => "exportExcel",
+        'fnExportPDF' => "exportPdf",
         'dataProvider' => $model,
         'columns' => [
             [
