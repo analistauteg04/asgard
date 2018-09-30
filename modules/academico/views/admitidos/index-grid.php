@@ -16,7 +16,7 @@ academico::registerTranslations();
         'id' => 'TbG_PERSONAS',
         'showExport' => true,
         'fnExportEXCEL' => "exportExcel",
-        //'fnExportPDF' => "exportPdf",
+        'fnExportPDF' => "exportPdf",
         'dataProvider' => $model,
         //'pajax' => false,
         'columns' =>

@@ -7,7 +7,10 @@ use app\modules\academico\models\Admitido;
 use app\modules\academico\models\EstudioAcademico;
 use yii\helpers\ArrayHelper;
 use app\models\Utilities;
-
+use app\modules\academico\Module as academico;
+use app\modules\financiero\Module as financiero;
+academico::registerTranslations();
+financiero::registerTranslations();
 class AdmitidosController extends \app\components\CController {
 
     public function actionIndex() {
@@ -61,7 +64,7 @@ class AdmitidosController extends \app\components\CController {
             Yii::t("Academico", "Registered"), //ingles
         );
         $data = Yii::$app->request->get();
-        $arrSearch=array();
+        $arrSearch = array();
         if (count($data) > 0) {
             $arrSearch["f_ini"] = $data['f_ini'];
             $arrSearch["f_fin"] = $data['f_fin'];
@@ -79,6 +82,49 @@ class AdmitidosController extends \app\components\CController {
         $nameReport = yii::t("formulario", "Application Reports");
         Utilities::generarReporteXLS($nombarch, $nameReport, $arrHeader, $arrData, $colPosition);
         exit;
+    }
+
+    public function actionPdf() {
+        ini_set('memory_limit', '256M');
+        $content_type = Utilities::mimeContentType("xls");
+        $nombarch = "Report-" . date("YmdHis") . ".xls";
+        header("Content-Type: $content_type");
+        header("Content-Disposition: attachment;filename=" . $nombarch . ".xls");
+        header('Cache-Control: max-age=0');
+        $arrHeader = array(
+            Yii::t("Solicitudes", "Request #"), //ingles
+            Yii::t("Solicitudes", "Application date"), //ingles
+            Yii::t("formulario", "DNI 1"),
+            Yii::t("formulario", "First Names"),
+            Yii::t("formulario", "Last Names"),
+            Yii::t("Solicitudes", "Income Method"), //ingles
+            Yii::t("Academico", "Career/Program"), //ingles
+            Yii::t("Solicitudes", "Scholarship"), //ingles
+            Yii::t("Academico", "Registered"), //ingles
+        );
+        $data = Yii::$app->request->get();
+        $arrSearch = array();
+        if (count($data) > 0) {
+            $arrSearch["f_ini"] = $data['f_ini'];
+            $arrSearch["f_fin"] = $data['f_fin'];
+            $arrSearch["carrera"] = $data['carrera'];
+            $arrSearch["search"] = $data['search'];
+        }
+        $arrData = array();
+        $admitido_model = new Admitido();
+        if (count($arrSearch) > 0) {
+            $arrData = $admitido_model->consultarReportAdmitidos($arrSearch, true);
+        } else {
+            $arrData = $admitido_model->consultarReportAdmitidos(array(), true);
+        }
+        $report->orientation = "P"; // tipo de orientacion L => Horizontal, P => Vertical                                
+        $report->createReportPdf(
+                $this->render('exportpdf', [
+                    'arr_head' => $arrHeader,
+                    'arr_body' => $arrData
+                ])
+        );
+        $report->mpdf->Output('Reporte_' . date("Ymdhis") . ".pdf", ExportFile::OUTPUT_TO_DOWNLOAD);
     }
 
 }
