@@ -1136,7 +1136,7 @@ class SolicitudesController extends \app\components\CController {
         $content_type = Utilities::mimeContentType("xls");
         $nombarch = "Report-" . date("YmdHis") . ".xls";
         header("Content-Type: $content_type");
-        header("Content-Disposition: attachment;filename=" . $nombarch . ".xls");
+        header("Content-Disposition: attachment;filename=" . $nombarch);
         header('Cache-Control: max-age=0');
         $colPosition = array("C", "D", "E", "F", "G", "H", "I", "J", "K", "L", "M", "N", "O");
 
