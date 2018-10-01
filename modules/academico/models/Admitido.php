@@ -114,7 +114,7 @@ class Admitido extends \yii\db\ActiveRecord {
         }
 
         $sql = "
-                        SELECT  distinct lpad(sins.sins_id,4,'0') as solicitud,
+                        SELECT  distinct ifnull(sins.num_solicitud, lpad(sins.sins_id,4,'0')) as solicitud,
                         sins.sins_id,
                         sins.int_id,
                         SUBSTRING(sins.sins_fecha_solicitud,1,10) as sins_fecha_solicitud, 
@@ -122,27 +122,24 @@ class Admitido extends \yii\db\ActiveRecord {
                         per.per_cedula as per_dni,
                         per.per_pri_nombre as per_nombres,
                         per.per_pri_apellido as per_apellidos,
-                        ming.ming_id, 
-                        (
-                        CASE 
-                        WHEN ming.ming_id = 1 THEN 'CAN'
-                        WHEN ming.ming_id = 2 THEN 'EXA'
-                        WHEN ming.ming_id = 3 THEN 'HOM'
-                        WHEN ming.ming_id = 4 THEN 'PRO'
-                        ELSE 'N/A'
-                        END) AS abr_metodo,
-                        ming.ming_nombre, 
+                        sins.ming_id, 
+                        ifnull((select min.ming_alias from " . $con->dbname . ".metodo_ingreso min where min.ming_id = sins.ming_id),'N/A') as abr_metodo,
+                        ifnull((select min.ming_nombre from " . $con->dbname . ".metodo_ingreso min where min.ming_id = sins.ming_id),'N/A') as ming_nombre,
                         sins.eaca_id,
-                        car.eaca_nombre as carrera,
+                        sins.mest_id,
+                        case when (ifnull(sins.eaca_id,0)=0) then
+                                (select mest_nombre from " . $con3->dbname . ".modulo_estudio me where me.mest_id = sins.mest_id and me.mest_estado = '1' and me.mest_estado_logico = '1')
+                                else
+                            (select eaca_nombre from " . $con3->dbname . ".estudio_academico ea where ea.eaca_id = sins.eaca_id and ea.eaca_estado = '1' and ea.eaca_estado_logico = '1')
+                        end as carrera,
+
                         $columnsAdd                                                             
                         admi.adm_id,                                               
                        (case when sins_beca = 1 then 'ICF' else 'No Aplica' end) as beca,
-                       ifnull((select 'SI' existe from db_academico.matriculacion m where m.adm_id = admi.adm_id and m.sins_id = sins.sins_id and m.mat_estado = :estado and m.mat_estado_logico = :estado),'NO') as matriculado
+                       ifnull((select 'SI' existe from " . $con3->dbname . ".matriculacion m where m.adm_id = admi.adm_id and m.sins_id = sins.sins_id and m.mat_estado = :estado and m.mat_estado_logico = :estado),'NO') as matriculado
                 FROM " . $con->dbname . ".admitido admi INNER JOIN " . $con->dbname . ".interesado inte on inte.int_id = admi.int_id                     
                      INNER JOIN " . $con2->dbname . ".persona per on inte.per_id = per.per_id
-                     INNER JOIN " . $con->dbname . ".solicitud_inscripcion sins on sins.int_id = inte.int_id
-                     INNER JOIN " . $con->dbname . ".metodo_ingreso ming on ming.ming_id = sins.ming_id
-                     INNER JOIN " . $con3->dbname . ".estudio_academico car on car.eaca_id = sins.eaca_id
+                     INNER JOIN " . $con->dbname . ".solicitud_inscripcion sins on sins.int_id = inte.int_id                                          
                      INNER JOIN " . $con1->dbname . ".orden_pago opag on opag.sins_id = sins.sins_id                     
                 WHERE  
                        $str_search 
@@ -154,11 +151,7 @@ class Admitido extends \yii\db\ActiveRecord {
                        per.per_estado_logico = :estado AND
                        per.per_estado = :estado AND
                        sins.sins_estado = :estado AND
-                       sins.sins_estado_logico = :estado AND
-                       ming.ming_estado_logico = :estado AND
-                       ming.ming_estado = :estado AND
-                       car.eaca_estado_logico = :estado AND
-                       car.eaca_estado = :estado                         
+                       sins.sins_estado_logico = :estado                                                    
                 ORDER BY SUBSTRING(sins.sins_fecha_solicitud,1,10) desc";
         $comando = $con->createCommand($sql);
         $comando->bindParam(":estado", $estado, \PDO::PARAM_STR);
