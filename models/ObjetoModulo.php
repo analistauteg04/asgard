@@ -184,7 +184,7 @@ class ObjetoModulo extends \yii\db\ActiveRecord {
                     om.omod_estado_logico=1 AND 
                     om.omod_estado=1 AND 
                     om.omod_estado_visible=1  
-                ORDER BY om.omod_nombre;";
+                ORDER BY om.omod_orden; -- om.omod_nombre;";
         $comando = Yii::$app->db->createCommand($sql);
         $comando->bindParam(":mod_id", $moduloid, \PDO::PARAM_INT);
         $comando->bindParam(":usu_id", $usu_id, \PDO::PARAM_INT);
