@@ -1136,9 +1136,6 @@ class SolicitudInscripcion extends \yii\db\ActiveRecord
                 $str_search .= "sins.sins_fecha_solicitud >= :fec_ini AND ";
                 $str_search .= "sins.sins_fecha_solicitud <= :fec_fin AND ";
             }
-            if ($arrFiltro['carrera'] != "" && $arrFiltro['carrera'] > 0) {
-                $str_search .= "sins.eaca_id = :carrera AND ";
-            }
             if ($arrFiltro['estadoSol'] != "" && $arrFiltro['estadoSol'] > 0) {
                 $str_search .= "sins.rsin_id = :estadosol AND ";
             }
@@ -1230,10 +1227,6 @@ class SolicitudInscripcion extends \yii\db\ActiveRecord
             if ($arrFiltro['f_ini'] != "" && $arrFiltro['f_fin'] != "") {
                 $comando->bindParam(":fec_ini", $fecha_ini, \PDO::PARAM_STR);
                 $comando->bindParam(":fec_fin", $fecha_fin, \PDO::PARAM_STR);
-            }
-            $carrera = $arrFiltro["carrera"];            
-            if ($arrFiltro['carrera'] != "" && $arrFiltro['carrera'] > 0) {
-                $comando->bindParam(":carrera", $carrera, \PDO::PARAM_INT);
             }
             $estadoSol = $arrFiltro["estadoSol"];
             if ($arrFiltro['estadoSol'] != "" && $arrFiltro['estadoSol'] > 0) {
@@ -1352,9 +1345,6 @@ class SolicitudInscripcion extends \yii\db\ActiveRecord
                 $str_search .= "sins.sins_fecha_solicitud >= :fec_ini AND ";
                 $str_search .= "sins.sins_fecha_solicitud <= :fec_fin AND ";
             }
-            if ($arrFiltro['carrera'] != "" && $arrFiltro['carrera'] > 0) {
-                $str_search .= "sins.eaca_id = :carrera AND ";
-            }
             if ($arrFiltro['estadoSol'] != "" && $arrFiltro['estadoSol'] > 0) {
                 $str_search .= "sins.rsin_id = :estadosol AND ";
             }
@@ -1419,10 +1409,6 @@ class SolicitudInscripcion extends \yii\db\ActiveRecord
             if ($arrFiltro['f_ini'] != "" && $arrFiltro['f_fin'] != "") {
                 $comando->bindParam(":fec_ini", $fecha_ini, \PDO::PARAM_STR);
                 $comando->bindParam(":fec_fin", $fecha_fin, \PDO::PARAM_STR);
-            }
-            $carrera = $arrFiltro["carrera"];            
-            if ($arrFiltro['carrera'] != "" && $arrFiltro['carrera'] > 0) {
-                $comando->bindParam(":carrera", $carrera, \PDO::PARAM_INT);
             }
             $estadoSol = $arrFiltro["estadoSol"];
             if ($arrFiltro['estadoSol'] != "" && $arrFiltro['estadoSol'] > 0) {

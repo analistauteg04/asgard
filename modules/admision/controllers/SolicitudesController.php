@@ -43,7 +43,6 @@ class SolicitudesController extends \app\components\CController {
         if ($data['PBgetFilter']) {
             $arrSearch["f_ini"] = $data['f_ini'];
             $arrSearch["f_fin"] = $data['f_fin'];
-            $arrSearch["carrera"] = $data['carrera'];
             $arrSearch["estadoSol"] = $data['estadoSol'];
             $arrSearch["search"] = $data['search'];
 
@@ -51,12 +50,10 @@ class SolicitudesController extends \app\components\CController {
         } else {
             $respSolicitud = $modSolicitud->consultarSolicitudes();
         }
-        $arrCarreras = ArrayHelper::map(array_merge([["id" => "0", "value" => Yii::t("formulario", "Grid")]], $modEstacademico->consultarCarrera()), "id", "value");
         $resp_estados = $modSolicitud->Consultaestadosolicitud();
         $arrEstados = ArrayHelper::map(array_merge([["id" => "0", "value" => Yii::t("formulario", "Grid")]], $resp_estados), "id", "value");
         return $this->render('index', [
                     'model' => $respSolicitud,
-                    'arrCarreras' => $arrCarreras,
                     'arrEstados' => $arrEstados,
         ]);
     }
@@ -1162,7 +1159,6 @@ class SolicitudesController extends \app\components\CController {
         $arrSearch["search"] = $data['search'];
         $arrSearch["f_ini"] = $data['f_ini'];
         $arrSearch["f_fin"] = $data['f_fin'];
-        $arrSearch["carrera"] = $data['carrera'];
         $arrSearch["estadoSol"] = $data['estadoSol'];
 
         $arrData = array();
@@ -1188,7 +1184,6 @@ class SolicitudesController extends \app\components\CController {
         $arrSearch["search"] = $data['search'];
         $arrSearch["f_ini"] = $data['f_ini'];
         $arrSearch["f_fin"] = $data['f_fin'];
-        $arrSearch["carrera"] = $data['carrera'];
         $arrSearch["estadoSol"] = $data['estadoSol'];
 
         $arr_head = array(

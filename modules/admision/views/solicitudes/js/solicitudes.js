@@ -471,24 +471,21 @@ function exportExcel() {
     var search = $('#txt_buscarData').val();
     var f_ini = $('#txt_fecha_ini').val();
     var f_fin = $('#txt_fecha_fin').val();
-    var carrera = $('#cmb_carrera option:selected').val();
     var estado = $('#cmb_estado option:selected').val();
-    window.location.href = $('#txth_base').val() + "/admision/solicitudes/expexcelsolicitudes?search=" + search + "&f_ini=" + f_ini + "&f_fin=" + f_fin + "&carrera=" + carrera + "&estadoSol=" + estado;
+    window.location.href = $('#txth_base').val() + "/admision/solicitudes/expexcelsolicitudes?search=" + search + "&f_ini=" + f_ini + "&f_fin=" + f_fin + "&estadoSol=" + estado;
 }
 
 function exportPdf() {
     var search = $('#txt_buscarData').val();
     var f_ini = $('#txt_fecha_ini').val();
     var f_fin = $('#txt_fecha_fin').val();
-    var carrera = $('#cmb_carrera option:selected').val();
     var estado = $('#cmb_estado option:selected').val();
-    window.location.href = $('#txth_base').val() + "/admision/solicitudes/exppdfsolicitudes?pdf=1&search=" + search + "&f_ini=" + f_ini + "&f_fin=" + f_fin + "&carrera=" + carrera + "&estadoSol=" + estado;
+    window.location.href = $('#txth_base').val() + "/admision/solicitudes/exppdfsolicitudes?pdf=1&search=" + search + "&f_ini=" + f_ini + "&f_fin=" + f_fin + "&estadoSol=" + estado;
 }
 
 function actualizarGrid() {
     var search = $('#txt_buscarData').val();
     var modalidad = $('#cmb_modalidades option:selected').val();
-    var carrera = $('#cmb_carrera option:selected').val();
     var estadoSol = $('#cmb_estado option:selected').val();
     var f_ini = $('#txt_fecha_ini').val();
     var f_fin = $('#txt_fecha_fin').val();
@@ -496,7 +493,7 @@ function actualizarGrid() {
     //Buscar almenos una clase con el nombre para ejecutar
     if (!$(".blockUI").length) {
         showLoadingPopup();
-        $('#Tbg_Solicitudes').PbGridView('applyFilterData', {'f_ini': f_ini, 'f_fin': f_fin, 'modalidad': modalidad, 'carrera': carrera, 'search': search, 'estadoSol': estadoSol});
+        $('#Tbg_Solicitudes').PbGridView('applyFilterData', {'f_ini': f_ini, 'f_fin': f_fin, 'modalidad': modalidad, 'search': search, 'estadoSol': estadoSol});
         setTimeout(hideLoadingPopup, 2000);
     }
 }
