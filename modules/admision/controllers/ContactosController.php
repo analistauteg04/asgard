@@ -676,19 +676,21 @@ class ContactosController extends \app\components\CController {
         $content_type = Utilities::mimeContentType("xls");
         $nombarch = "Report-" . date("YmdHis") . ".xls";
         header("Content-Type: $content_type");
-        header("Content-Disposition: attachment;filename=" . $nombarch . ".xls");
+        header("Content-Disposition: attachment;filename=" . $nombarch);
         header('Cache-Control: max-age=0');
 
         $colPosition = array("C", "D", "E", "F", "G", "H", "I", "J", "K");
         $arrHeader = array("#", "Grado Lead", "Posgrado Lead", "Online Lead", "Base Grado", "Base Posgrado", "Base Online", "Suma", "Promedio");
         $arrData = array();
-        for ($i = 0; $i < count($arrDataCols); $i++) {
-            $j = 0;
-            for ($j = 0; $j < count($arrHeader); $j++) {
-                if ($j == 0) {
-                    $arrData[$i][$j] = $arrDataCols[$i];
-                } else {
-                    $arrData[$i][$j] = $arrayData[$i][$j]; //"data $i $j";
+        if (is_array($arrDataCols) && count($arrDataCols) > 0) {
+            for ($i = 0; $i < count($arrDataCols); $i++) {
+                $j = 0;
+                for ($j = 0; $j < count($arrHeader); $j++) {
+                    if ($j == 0) {
+                        $arrData[$i][$j] = $arrDataCols[$i];
+                    } else {
+                        $arrData[$i][$j] = $arrayData[$i][$j]; //"data $i $j";
+                    }
                 }
             }
         }
