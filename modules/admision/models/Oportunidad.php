@@ -1234,10 +1234,14 @@ class Oportunidad extends \app\modules\admision\components\CActiveRecord {
                         ifnull(bact_fecha_proxima_atencion, '') as proxima_atencion,		
                         ba.padm_id agente_id,                        
                         opo.opo_id,
+                        pges.pges_cedula,
+                        pges.pges_id,
+                        eopo.eopo_id as estado_oportunidad_id,
                         eopo.eopo_nombre as estado_oportunidad,
                         ba.oact_id as id_observacion,
                         ifnull(oac.oact_nombre, '') as observacion
                 FROM " . $con->dbname . ".oportunidad opo 
+                         inner join " . $con->dbname . ".persona_gestion pges on opo.pges_id = pges.pges_id 
                          inner join " . $con->dbname . ".bitacora_actividades ba on opo.opo_id = ba.opo_id
                          inner join " . $con->dbname . ".estado_oportunidad eopo on eopo.eopo_id = ba.eopo_id    
                          inner join " . $con->dbname . ".personal_admision pa on pa.padm_id = ba.padm_id
@@ -1943,3 +1947,4 @@ class Oportunidad extends \app\modules\admision\components\CActiveRecord {
     }
 
 }
+

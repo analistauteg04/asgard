@@ -71,9 +71,7 @@ use app\modules\admision\Module;
                             }                                
                         }else{
                             return "<span class = 'glyphicon glyphicon-user' data-toggle = 'tooltip' title ='En espera de estado en Generar Aspirante'  data-pjax = 0></span>";
-                        }
-                        
-                        
+                        }    
                     },
                 ],
             ],
