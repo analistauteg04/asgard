@@ -6,12 +6,17 @@ $(document).ready(function () {
             $('#txt_dni_fac').attr("data-lengthMin", "10");
             $('#txt_dni_fac').attr("data-lengthMax", "10");
             $('#txt_dni_fac').attr("placeholder", $('#txth_ced_lb').val());
-            $('label[for=txt_dni_fac]').text($('#txth_ced_lb').val() + ":");
-        } else {
+            $('label[for=txt_dni_fac]').text($('#txth_ced_lb').val() + "");
+        } else if ($(this).val() == 2) { // ruc
             $('#txt_dni_fac').attr("data-lengthMin", "13");
             $('#txt_dni_fac').attr("data-lengthMax", "13");
             $('#txt_dni_fac').attr("placeholder", $('#txth_ruc_lb').val());
-            $('label[for=txt_dni_fac]').text($('#txth_ruc_lb').val() + ":");
+            $('label[for=txt_dni_fac]').text($('#txth_ruc_lb').val() + "");
+        } else { // pasaporte
+            $('#txt_dni_fac').attr("data-lengthMin", "13");
+            $('#txt_dni_fac').attr("data-lengthMax", "13");
+            $('#txt_dni_fac').attr("placeholder", $('#txth_ruc_lb').val());
+            $('label[for=txt_dni_fac]').text($('#txth_pas_lb').val() + "");
         }
     });
     $('#cmb_empresa').change(function () {// cambio 2

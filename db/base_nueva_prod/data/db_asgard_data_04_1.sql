@@ -179,7 +179,8 @@ INSERT INTO `grupo` (`gru_id`, `cseg_id`, `gru_nombre`, `gru_descripcion`, `gru_
 (9, 1, 'Interesado', 'Interesado', NULL, '1', '2017-02-01 15:05:28', NULL, '1'),
 (10, 1, 'Admitido', 'Aspirante', NULL, '1', '2017-02-01 15:05:28', NULL, '1'),
 (11, 1, 'Estudiante', 'Estudiante', NULL, '1', '2017-02-01 15:05:28', NULL, '1'),
-(12, 2, 'Docente', 'Docente', NULL, '1', '2017-02-01 15:05:28', NULL, '1');
+(12, 2, 'Docente', 'Docente', NULL, '1', '2017-02-01 15:05:28', NULL, '1'),
+(13, 2, 'Community', 'Community', NULL, '1', '2018-10-01 19:32:51', NULL, '1');
 
 
 -- --------------------------------------------------------
@@ -203,7 +204,8 @@ INSERT INTO `rol` (`rol_id`, `rol_nombre`, `rol_descripcion`, `rol_estado`, `rol
 (14, 'Interesado', 'Interesado', '1', '2017-02-01 15:05:28', NULL, '1'),
 (15, 'Admitido', 'Aspirante', '1', '2017-02-01 15:05:28', NULL, '1'),
 (16, 'Estudiante', 'Estudiante', '1', '2017-02-01 15:05:28', NULL, '1'),
-(17, 'Docente', 'Docente', '1', '2017-02-01 15:05:28', NULL, '1');
+(17, 'Docente', 'Docente', '1', '2017-02-01 15:05:28', NULL, '1'),
+(18, 'Community', 'Community', '1', '2018-10-01 19:32:14', NULL, '1');
 
 -- --------------------------------------------------------
 --
@@ -247,7 +249,9 @@ INSERT INTO `grup_rol` (`grol_id`, `gru_id`, `rol_id`, `grol_estado`, `grol_esta
 (27, 9, 14, '1', '1'),
 (28, 10, 15, '1', '1'),
 (29, 11, 16, '1', '1'),
-(30, 12, 17, '1', '1');
+(30, 12, 17, '1', '1'),
+
+(31, 13, 18, '1', '1');
 
 
 

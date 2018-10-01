@@ -120,11 +120,11 @@ $leyenda = '<div class="col-md-12 col-xs-12 col-sm-12 col-lg-12">
                 </div>
             </div>
             <div class="form-group ccmodestudio hide">
-                    <label for="cmb_modalidad_estudio" class="col-sm-5 col-md-5 col-xs-5 col-lg-5 control-label keyupmce"><?= admision::t("crm", "Academic Study") ?></label>
-                    <div class="col-sm-7 col-md-7 col-xs-7 col-lg-7">
-                        <?= Html::dropDownList("cmb_modalidad_estudio", 1, array(), ["class" => "form-control", "id" => "cmb_modalidad_estudio"]) ?>
-                    </div>
+                <label for="cmb_modalidad_estudio" class="col-sm-5 col-md-5 col-xs-5 col-lg-5 control-label keyupmce"><?= admision::t("crm", "Academic Study") ?></label>
+                <div class="col-sm-7 col-md-7 col-xs-7 col-lg-7">
+                    <?= Html::dropDownList("cmb_modalidad_estudio", 1, array(), ["class" => "form-control", "id" => "cmb_modalidad_estudio"]) ?>
                 </div>
+            </div>
         </div>
         <div class="col-lg-6 col-md-6 col-sm-6 col-xs-6" id="divMetodo" style="display: block">
             <div class="form-group">
@@ -211,14 +211,15 @@ $leyenda = '<div class="col-md-12 col-xs-12 col-sm-12 col-lg-12">
                 <div class="form-group">
                     <label for="opt_tipo_DNI" class="col-sm-5 col-md-5 col-xs-5 col-lg-5 control-label" id="lbl_nombre1"><?= Yii::t("formulario", "Type DNI") ?></label>
                     <div class="col-sm-7">  
-                        <label><input type="radio" name="opt_tipo_DNI"  value="1" checked>&nbsp;&nbsp;<b><?= Yii::t("formulario", "DNI Document") ?></b></label><br/>
-                        <label><input type="radio" name="opt_tipo_DNI"  value="2" ><b>&nbsp;&nbsp;<?= Yii::t("formulario", "RUC") ?></b></label>                                              
+                        <label><input type="radio" name="opt_tipo_DNI"  value="1" checked>&nbsp;&nbsp;<b><?= Yii::t("formulario", "DNI Document") . '/' . Yii::t("formulario", "DNI 1") ?></b></label><br/>
+                        <label><input type="radio" name="opt_tipo_DNI"  value="2" ><b>&nbsp;&nbsp;<?= Yii::t("formulario", "RUC") ?></b></label><br/>                                              
+                        <label><input type="radio" name="opt_tipo_DNI"  value="3" ><b>&nbsp;&nbsp;<?= Yii::t("formulario", "Passport") ?></b></label>                                              
                     </div>  
                 </div>
             </div>
             <div class="col-md-6 col-sm-6 col-xs-6 col-lg-6">
                 <div class="form-group">
-                    <label for="txt_dni_fac" class="col-sm-5 col-md-5 col-xs-5 col-lg-5 control-label" id="lbl_nombre1"><?= Yii::t("formulario", "DNI Document") ?></label>
+                    <label for="txt_dni_fac" class="col-sm-5 col-md-5 col-xs-5 col-lg-5 control-label" id="lbl_nombre1"><?= Yii::t("formulario", "DNI Document") . '/' . Yii::t("formulario", "DNI 1") ?></label>
                     <div class="col-sm-7 col-md-7 col-xs-7 col-lg-7">
                         <input type="text" class="form-control keyupmce" value="<?php echo $arr_persona['per_cedula'] ?>" id="txt_dni_fac" data-type="cedula" data-lengthMax="10" data-lengthMin="10" placeholder="<?= Yii::t("formulario", "DNI Document") ?>">
                     </div>
@@ -227,6 +228,7 @@ $leyenda = '<div class="col-md-12 col-xs-12 col-sm-12 col-lg-12">
         </div> 
     </div> 
     <?= Html::hiddenInput('txth_ruc_lb', Yii::t("formulario", "RUC"), ['id' => 'txth_ruc_lb']); ?>
-    <?= Html::hiddenInput('txth_ced_lb', Yii::t("formulario", "DNI Document"), ['id' => 'txth_ced_lb']); ?>
+    <?= Html::hiddenInput('txth_ced_lb', Yii::t("formulario", "DNI Document"). '/' . Yii::t("formulario", "DNI 1"), ['id' => 'txth_ced_lb']); ?>
+    <?= Html::hiddenInput('txth_pas_lb', Yii::t("formulario", "Passport"), ['id' => 'txth_pas_lb']); ?>
     <?= Html::hiddenInput('txth_extranjero', $txth_extranjero, ['id' => 'txth_extranjero']); ?>
 </form>
