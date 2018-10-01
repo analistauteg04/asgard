@@ -46,12 +46,17 @@ PbGridView::widget([
             'attribute' => 'Metodo Ingreso',
             'header' => admision::t("Solicitudes", "Income Method"),
             'value' => 'metodo_ingreso',
-        ],
+        ],       
         [
-            'attribute' => 'Carrera',
-            'header' => academico::t("Academico", "Career/Program/Course"),
-            'value' => 'carrera',
-        ],
+                'class' => 'yii\grid\ActionColumn',
+                'header' => academico::t("Academico", "Career/Program/Course"),
+                'template' => '{view}',
+                'buttons' => [
+                    'view' => function ($url, $model) {
+                        return Html::a('<span>' . substr($model['carrera'], 0, 20) . '... </span>', Url::to(['#']), ["data-toggle" => "tooltip", "title" => $model['carrera']]);
+                    },
+                ],
+            ],
         [
             'attribute' => 'Estado Solicitud',
             'header' => admision::t("Solicitudes", "State Request"),
