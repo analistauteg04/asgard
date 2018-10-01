@@ -11,6 +11,7 @@ namespace app\modules\academico\messages;
      "Aca. Uni." => "Uni. Aca.",
      "Attach document" => "Adjuntar Documentos",
      "Career/Program" => "Carrera/Programa",
+     "Career/Program/Course" => "Carrera/Programa/Curso",
      "Income Method" => "Mét. Ing",
      "Lecturing Period" => "Período Académico",
      "List Admitted" => "Listar Admitidos",

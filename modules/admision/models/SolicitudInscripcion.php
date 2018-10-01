@@ -345,9 +345,17 @@ class SolicitudInscripcion extends \yii\db\ActiveRecord
                         sins.sins_id,
                         sins.sins_fecha_solicitud as fecha_solicitud,
                         uaca.uaca_nombre as nint_nombre,
-                        -- ming.ming_nombre as metodo_ingreso,
+                        ifnull((select min.ming_nombre from " . $con->dbname . ".metodo_ingreso min where min.ming_id = sins.ming_id),'') as metodo_ingreso,
                         sins.eaca_id,
-                        -- eac.eaca_nombre as carrera,
+                        case uaca.uaca_id
+                        when 1 then (select eaca.eaca_nombre from " . $con1->dbname . ".estudio_academico eaca where eaca.eaca_id = sins.eaca_id)
+                        when 2 then (select eaca.eaca_nombre from " . $con1->dbname . ".estudio_academico eaca where eaca.eaca_id = sins.eaca_id)
+                        when 3 then (select mes.mest_nombre from " . $con1->dbname . ".modulo_estudio mes where mes.mest_id = sins.mest_id)
+                        when 4 then (select mes.mest_nombre from " . $con1->dbname . ".modulo_estudio mes where mes.mest_id = sins.mest_id)
+                        when 5 then (select mes.mest_nombre from " . $con1->dbname . ".modulo_estudio mes where mes.mest_id = sins.mest_id)
+                        when 6 then (select mes.mest_nombre from " . $con1->dbname . ".modulo_estudio mes where mes.mest_id = sins.mest_id)
+                        else null
+                         end as 'carrera',                        
                         rsol.rsin_nombre as estado,
                         (select count(*) numdocumentos from " . $con->dbname . ".solicitudins_documento sid where sid.sins_id = sins.sins_id) as numDocumentos,
                         (case when op.opag_estado_pago = 'S' then 'Pagado' else 'Pendiente' end) as estado_pago
@@ -355,9 +363,7 @@ class SolicitudInscripcion extends \yii\db\ActiveRecord
                         " . $con->dbname . ".interesado as inte
                         JOIN " . $con->dbname . ".solicitud_inscripcion as sins on sins.int_id = inte.int_id                    
                         JOIN " . $con1->dbname . ".unidad_academica as uaca on sins.uaca_id = uaca.uaca_id                     
-                        JOIN " . $con->dbname . ".res_sol_inscripcion as rsol on rsol.rsin_id = sins.rsin_id
-                        -- JOIN " . $con1->dbname . ".estudio_academico as eac on sins.eaca_id = eac.eaca_id
-                        -- JOIN " . $con->dbname . ".metodo_ingreso as ming on sins.ming_id = ming.ming_id
+                        JOIN " . $con->dbname . ".res_sol_inscripcion as rsol on rsol.rsin_id = sins.rsin_id                     
                         JOIN " . $con3->dbname . ".orden_pago as op on op.sins_id = sins.sins_id
                     WHERE  
                         $str_search
@@ -365,13 +371,11 @@ class SolicitudInscripcion extends \yii\db\ActiveRecord
                         sins.sins_estado_logico=:estado AND 
                         inte.int_estado_logico=:estado AND                     
                         rsol.rsin_estado=:estado AND
-                        uaca.uaca_estado = :estado AND
-                        -- eac.eaca_estado_logico =:estado AND 
+                        uaca.uaca_estado = :estado AND                        
                         sins.sins_estado=:estado AND 
                         inte.int_estado=:estado AND                     
                         rsol.rsin_estado_logico=:estado AND
-                        uaca.uaca_estado_logico = :estado AND
-                        -- eac.eaca_estado = :estado AND
+                        uaca.uaca_estado_logico = :estado AND                        
                         op.opag_estado = :estado AND
                         op.opag_estado_logico = :estado
                     ORDER BY fecha_solicitud DESC
