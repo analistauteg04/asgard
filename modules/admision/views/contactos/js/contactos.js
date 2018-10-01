@@ -342,3 +342,12 @@ function cargarLeads(proceso) {
         }, true);
     }
 }
+
+function exportLostContact(){
+    var op=1;
+    window.location.href = $('#txth_base').val() + "/admision/contactos/export?op=" + op;
+}
+function exportStatContact(){
+    var op=2;
+    window.location.href = $('#txth_base').val() + "/admision/contactos/export?op=" + op;
+}
