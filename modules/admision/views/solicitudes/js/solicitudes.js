@@ -25,6 +25,16 @@ $(document).ready(function () {
                 setComboData(data.unidad_academica, "cmb_ninteres");
                 var arrParams = new Object();
                 if (data.unidad_academica.length > 0) {
+                    //Here I am going to change the combo income method
+                    var arrParams = new Object();
+                    arrParams.nint_id = $('#cmb_ninteres').val();
+                    arrParams.getmetodo = true;
+                    requestHttpAjax(link, arrParams, function (response) {
+                        if (response.status == "OK") {
+                            data = response.message;
+                            setComboData(data.metodos, "cmb_metodos");
+                        }
+                    }, true);
                     var arrParams = new Object();
                     arrParams.nint_id = $('#cmb_ninteres').val();
                     arrParams.getmodalidad = true;
