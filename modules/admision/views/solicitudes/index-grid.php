@@ -41,13 +41,12 @@ academico::registerTranslations();
             [
                 'attribute' => 'Nombres',
                 'header' => Yii::t("formulario", "First Names"),
-                //'value' => 'per_nombres',
                 'value' => 'per_pri_nombre',
             ],
             [
                 'attribute' => 'Apellidos',
                 'header' => Yii::t("formulario", "Last Names"),
-                'value' => 'per_apellidos',
+                'value' => 'per_pri_apellido',
                 
             ],
             [
@@ -62,7 +61,7 @@ academico::registerTranslations();
             ],            
             [
                 'class' => 'yii\grid\ActionColumn',
-                'header' => academico::t("Academico", "Career/Program"),
+                'header' => academico::t("Academico", "Career/Program/Course"),
                 'template' => '{view}',
                 'buttons' => [
                     'view' => function ($url, $model) {

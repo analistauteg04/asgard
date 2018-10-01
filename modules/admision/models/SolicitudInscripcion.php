@@ -1157,13 +1157,21 @@ class SolicitudInscripcion extends \yii\db\ActiveRecord
                     sins.uaca_id,
                     uaca.uaca_nombre,
                     sins.eaca_id,
-                    eac.eaca_nombre as carrera,
+                    case uaca.uaca_id
+                        when 1 then (select eaca.eaca_nombre from " . $con1->dbname . ".estudio_academico eaca where eaca.eaca_id = sins.eaca_id)
+                        when 2 then (select eaca.eaca_nombre from " . $con1->dbname . ".estudio_academico eaca where eaca.eaca_id = sins.eaca_id)
+                        when 3 then (select mes.mest_nombre from " . $con1->dbname . ".modulo_estudio mes where mes.mest_id = sins.mest_id)
+                        when 4 then (select mes.mest_nombre from " . $con1->dbname . ".modulo_estudio mes where mes.mest_id = sins.mest_id)
+                        when 5 then (select mes.mest_nombre from " . $con1->dbname . ".modulo_estudio mes where mes.mest_id = sins.mest_id)
+                        when 6 then (select mes.mest_nombre from " . $con1->dbname . ".modulo_estudio mes where mes.mest_id = sins.mest_id)
+                        else null
+                         end as 'carrera', 
                     ifnull((select ming.ming_alias 
                                     from " . $con->dbname . ".metodo_ingreso as ming 
                                     where sins.ming_id = ming.ming_id AND
                                     ming.ming_estado = :estado AND
                                     ming.ming_estado_logico = :estado),'NA') as ming_nombre,
-                    eac.eaca_nombre car_nombre,
+                    
                     concat(per.per_pri_nombre ,' ', ifnull(per.per_seg_nombre,' ')) as per_nombres,
                     concat(per.per_pri_apellido ,' ', ifnull(per.per_seg_apellido,' ')) as per_apellidos,
                     sins.sins_fecha_solicitud as fecha_solicitud,
@@ -1192,7 +1200,7 @@ class SolicitudInscripcion extends \yii\db\ActiveRecord
                     INNER JOIN " . $con1->dbname . ".unidad_academica as uaca on sins.uaca_id = uaca.uaca_id                     
                     INNER JOIN " . $con1->dbname . ".modalidad as m on sins.mod_id = m.mod_id
                     INNER JOIN " . $con->dbname . ".res_sol_inscripcion as rsol on rsol.rsin_id = sins.rsin_id                    
-                    INNER JOIN " . $con1->dbname . ".estudio_academico as eac on eac.eaca_id = sins.eaca_id 
+                    -- INNER JOIN " . $con1->dbname . ".estudio_academico as eac on eac.eaca_id = sins.eaca_id 
                 WHERE 
                     $str_search        
                     sins.sins_estado_logico=:estado AND
@@ -1206,9 +1214,8 @@ class SolicitudInscripcion extends \yii\db\ActiveRecord
                     m.mod_estado = :estado AND 
                     m.mod_estado_logico = :estado AND
                     rsol.rsin_estado = :estado AND
-                    rsol.rsin_estado_logico = :estado AND        
-                    eac.eaca_estado=:estado AND
-                    eac.eaca_estado_logico=:estado ";
+                    rsol.rsin_estado_logico = :estado -- AND        
+                    ";
        
         $sql .= " ORDER BY fecha_solicitud DESC";
         $comando = $con->createCommand($sql);
