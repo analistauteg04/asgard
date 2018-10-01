@@ -20,6 +20,12 @@ use app\modules\admision\models\EstadoContacto;
 
 class InscripcionesController extends \yii\web\Controller {
 
+    public function init() {
+        if(!is_dir(Yii::getAlias('@bower')))
+            Yii::setAlias('@bower', '@vendor/bower-asset');
+        return parent::init();
+    }
+    
     public function actionIndex() {
         $this->layout = '@themes/' . \Yii::$app->getView()->theme->themeName . '/layouts/basic.php';        
         $per_id = Yii::$app->session->get("PB_perid");
