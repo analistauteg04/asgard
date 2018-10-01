@@ -82,7 +82,7 @@ INSERT INTO `objeto_modulo` (`omod_id`, `mod_id`, `omod_padre_id`, `omod_nombre`
 (63, 2, 61, 'Editar Contacto', 'A', '0', '', '', '', 'admision/contactos/edit', 1, '1', 'contacto', '1', '2018-09-18 01:15:00', NULL, '1'),
 (64, 2, 62, 'Actualizar Contacto', 'A', '0', '', '', '', 'admision/contactos/update', 1, '1', 'contacto', '1', '2018-09-18 01:16:57', NULL, '1'),
 -- Oportunidades
-(65, 2, 65, 'Oportunidades', 'P', '0', '', '', '', 'admision/oportunidades/index', 1, '1', 'oportunidad', '1', '2018-09-18 00:29:05', NULL, '1'),
+(65, 2, 65, 'Oportunidades', 'P', '0', '', '', '', 'admision/oportunidades/index', 2, '1', 'oportunidad', '1', '2018-09-18 00:29:05', NULL, '1'),
 (66, 2, 57, 'Listar Oportunidad por Contacto', 'S', '0', '', '', '', 'admision/contactos/listaroportunidad', 1, '0', 'contacto', '1', '2018-09-16 03:48:06', NULL, '1'),
 (67, 2, 66, 'Nuevo Oportunidad', 'S', '0', '', '', '', 'admision/oportunidades/newoportunidadxcontacto', 1, '0', 'oportunidad', '1', '2018-09-18 01:00:12', NULL, '1'),
 (68, 2, 66, 'Nuevo Oportunidad', 'A', '0', '', '', '', 'admision/oportunidades/newoportunidadxcontacto', 1, '1', 'oportunidad', '1', '2018-09-18 01:03:59', NULL, '1'),
@@ -105,7 +105,7 @@ INSERT INTO `objeto_modulo` (`omod_id`, `mod_id`, `omod_padre_id`, `omod_nombre`
 (83, 2, 82, 'Solicitudes por Aspirante', 'S', '0', '', '', '', 'admision/solicitudes/listarsolicitudxinteresado', 1, '0', 'Solicitudes', '1', '2018-09-22 00:35:31', NULL, '1'),
 (84, 2, 83, 'Solicitud por Aspirante', 'A', '0', '', '', '', 'admision/solicitudes/listarsolicitudxinteresado', 1, '1', 'Solicitudes', '1', '2018-09-22 14:07:01', NULL, '1'),
 -- Solicitud
-(85, 2, 85, 'Solicitudes', 'P', '0', '', '', '', 'admision/solicitudes/index', '1', '1', 'Solicitudes', '1', '2018-09-22 14:07:01', NULL, '1'),
+(85, 2, 85, 'Solicitudes', 'P', '0', '', '', '', 'admision/solicitudes/index', '4', '1', 'Solicitudes', '1', '2018-09-22 14:07:01', NULL, '1'),
 (86, 2, 85, 'Crear Solicitud de Inscripcion', 'S', '0', '', '', '', 'admision/solicitudes/new', '1', '0', 'Solicitudes', '1', '2018-09-22 00:47:12', NULL, '1'),
 (87, 2, 86, 'Guardar Solicitud Inscripcion', 'A', '0', '', '', '', 'admision/solicitudes/new', '1', '1', 'Solicitudes', '1', '2018-09-22 14:07:01', NULL, '1'),
 (88, 4, 85, 'Ver Solicitud', 'S', '0', '', '', '', 'admision/solicitudes/view', '1', '0', 'Solicitudes', '1', '2018-09-22 14:07:01', NULL, '1'),
