@@ -1235,7 +1235,6 @@ class Oportunidad extends \app\modules\admision\components\CActiveRecord {
                         ba.padm_id agente_id,                        
                         opo.opo_id,
                         pges.pges_cedula,
-                        pges.pges_id,
                         eopo.eopo_id as estado_oportunidad_id,
                         eopo.eopo_nombre as estado_oportunidad,
                         ba.oact_id as id_observacion,
