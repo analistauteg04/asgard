@@ -18,8 +18,7 @@ financiero::registerTranslations();
 ?>
 <?=
 
-PbGridView::widget([
-    //'dataProvider' => new yii\data\ArrayDataProvider(array()),
+PbGridView::widget([  
     'id' => 'TbG_PERSONAS',
     //'showExport' => true,
     //'fnExportEXCEL' => "exportExcel",
@@ -30,7 +29,7 @@ PbGridView::widget([
         [
             'attribute' => 'Solicitud #',
             'header' => admision::t("Solicitudes", "Request #"),
-            'value' => 'num_solicitud',
+            'value' => 'sol_numero',
         ],
         [
             'attribute' => 'Fecha Solicitud ',
