@@ -6,7 +6,6 @@ use app\widgets\PbGridView\PbGridView;
 use yii\data\ArrayDataProvider;
 use app\modules\financiero\Module as financiero;
 use app\modules\admision\Module as admision;
-
 admision::registerTranslations();
 ?>
 <?= Html::hiddenInput('txth_ids', $opag_id, ['id' => 'txth_ids']); ?>

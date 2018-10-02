@@ -233,6 +233,7 @@ class OrdenPago extends \app\modules\financiero\components\CActiveRecord {
             return $dataProvider;
         }
     }
+    
 
     /**
      * Function  listarSolicitud
@@ -520,7 +521,35 @@ class OrdenPago extends \app\modules\financiero\components\CActiveRecord {
             return FALSE;
         }
     }
+    
+    /**
+     * Function consultarInfoOrdenPagoPorPerId ()
+     * Me permite consultar el id de la cargar de orden de pago, dado el id de la persona.
+     * @author  Kleber Loayza <analistadesarrollo01@uteg.edu.ec>
+     * @param   
+     * @return  
+     */
+    public function consultarInfoOrdenPagoPorPerId($per_id) {
+        $con = \Yii::$app->db_facturacion;
+        $estado = 1;
+        $sql = "
+                Select opag.opag_id as opag_id
+                From db_captacion.interesado as inte
+                    join db_captacion.solicitud_inscripcion as sin on sin.int_id=inte.int_id
+                    join db_facturacion.orden_pago as opag on opag.sins_id=sin.sins_id
+                Where inte.per_id=:per_id
+                    and inte.int_estado=:estado and inte.int_estado_logico=:estado
+                    and sin.sins_estado=:estado and sin.sins_estado_logico=:estado
+                    and opag.opag_estado=:estado and opag.opag_estado_logico=:estado;
+                ";
 
+        $comando = $con->createCommand($sql);
+        $comando->bindParam(":estado", $estado, \PDO::PARAM_STR);
+        $comando->bindParam(":per_id", $per_id, \PDO::PARAM_INT);
+        $resultData = $comando->queryOne();
+        return $resultData['opag_id'];
+    }
+    
     /**
      * Function consultarCargo (Se obtiene información del pago aprobado en tablas temporales)
      * @author  Grace Viteri <analistadesarrollo01@uteg.edu.ec>
