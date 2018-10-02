@@ -20,10 +20,8 @@ use app\modules\academico\Module as academico;
 use app\modules\financiero\Module as financiero;
 academico::registerTranslations();
 financiero::registerTranslations();
-
 class InteresadosController extends \app\components\CController
 {
-
     public function actionIndex()
     {
         $per_id = @Yii::$app->session->get("PB_perid");
@@ -106,7 +104,7 @@ class InteresadosController extends \app\components\CController
                             }
                             if ($usuario_id > 0) {
                                 $mod_us_gr_ep = new UsuaGrolEper();
-                                $grol_id = 10;
+                                $grol_id = 27;
                                 $keys = ['eper_id', 'usu_id', 'grol_id', 'ugep_estado', 'ugep_estado_logico'];
                                 $parametros = [$emp_per_id, $usuario_id, $grol_id, 1, 1];
                                 $us_gr_ep_id = $mod_us_gr_ep->consultarIdUsuaGrolEper($emp_per_id, $usuario_id, $grol_id);
