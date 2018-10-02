@@ -1107,26 +1107,20 @@ class Interesado extends \app\modules\admision\components\CActiveRecord {
         $con = \Yii::$app->db_asgard;
         $estado = 1;
         $sql = "SELECT                   
-                  grur.grol_id as grol_id
+                  usug.grol_id as grol_id
                 FROM " . $con->dbname . ".usuario usu 
                   INNER JOIN " . $con->dbname . ".usua_grol_eper usug ON usug.usu_id = usu.usu_id
-                  INNER JOIN " . $con->dbname . ".grup_rol grur ON grur.grol_id = usug.grol_id
-                  INNER JOIN " . $con->dbname . ".rol rol ON rol.rol_id = grur.grol_id
                 WHERE 
-                  per_id = :per_id AND
+                  usu.per_id = :per_id AND
                   usu.usu_estado_logico = :estado AND
                   usu.usu_estado = :estado AND
-                  grur.grol_estado_logico = :estado AND
-                  grur.grol_estado = :estado AND
                   usug.ugep_estado_logico = :estado AND
-                  usug.ugep_estado = :estado AND
-                  rol.rol_estado_logico = :estado AND
-                  rol.rol_estado = :estado";
+                  usug.ugep_estado = :estado;
+               ";
 
         $comando = $con->createCommand($sql);
         $comando->bindParam(":estado", $estado, \PDO::PARAM_STR);
         $comando->bindParam(":per_id", $per_id, \PDO::PARAM_INT);
-
         $resultData = $comando->queryOne();
         return $resultData;
     }
