@@ -59,7 +59,7 @@ financiero::registerTranslations();
     
         <div class="col-md-6 col-sm-6 col-xs-6 col-lg-6">
             <div class="form-group">
-                <label for="txt_carrera" class="col-sm-4 control-label" id="lbl_carrera"><?= academico::t("Academico", "Career/Program") ?></label> 
+                <label for="txt_carrera" class="col-sm-4 control-label" id="lbl_carrera"><?= academico::t("Academico", "Career/Program/Course") ?></label> 
                 <div class="col-sm-8 ">
                     <input type="text" class="form-control" value="<?= $personaData["carrera"] ?>" id="txt_carrera" disabled="true">                 
                 </div>

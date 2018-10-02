@@ -438,8 +438,16 @@ class SolicitudInscripcion extends \yii\db\ActiveRecord
                     sins.uaca_id,
                     sins.mod_id,
                     sins.eaca_id,
-                    uaca_nombre,
-                    eac.eaca_nombre as carrera,
+                    uaca.uaca_nombre,                    
+                    case sins.uaca_id
+                     when 1 then (select eaca.eaca_nombre from " . $con1->dbname . ".estudio_academico eaca where eaca.eaca_id = sins.eaca_id)
+                     when 2 then (select eaca.eaca_nombre from " . $con1->dbname . ".estudio_academico eaca where eaca.eaca_id = sins.eaca_id)
+                     when 3 then (select mes.mest_nombre from " . $con1->dbname . ".modulo_estudio mes where mes.mest_id = sins.mest_id)
+                     when 4 then (select mes.mest_nombre from " . $con1->dbname . ".modulo_estudio mes where mes.mest_id = sins.mest_id)
+                     when 5 then (select mes.mest_nombre from " . $con1->dbname . ".modulo_estudio mes where mes.mest_id = sins.mest_id)
+                     when 6 then (select mes.mest_nombre from " . $con1->dbname . ".modulo_estudio mes where mes.mest_id = sins.mest_id)
+                    else null
+                      end as 'carrera', 
                     sins.sins_fecha_reprobacion,
                     sins.sins_observacion,
                     sins.rsin_id,
@@ -448,8 +456,7 @@ class SolicitudInscripcion extends \yii\db\ActiveRecord
                     " . $con->dbname . ".solicitud_inscripcion as sins
                     INNER JOIN " . $con->dbname . ".interesado as inte on sins.int_id = inte.int_id
                     INNER JOIN " . $con2->dbname . ".persona as per on inte.per_id = per.per_id 
-                    INNER JOIN " . $con1->dbname . ".unidad_academica as uaca on uaca.uaca_id = sins.uaca_id   
-                    INNER JOIN " . $con1->dbname . ".estudio_academico as eac on sins.eaca_id = eac.eaca_id
+                    INNER JOIN " . $con1->dbname . ".unidad_academica as uaca on uaca.uaca_id = sins.uaca_id 
                     INNER JOIN " . $con1->dbname . ".modalidad as m on m.mod_id = sins.mod_id   
                 WHERE 
                     sins.sins_estado_logico=:estado AND 
