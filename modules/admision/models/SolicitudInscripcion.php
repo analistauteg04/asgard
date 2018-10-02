@@ -345,6 +345,7 @@ class SolicitudInscripcion extends \yii\db\ActiveRecord
                         ifnull(sins.num_solicitud,'000000000') as sol_numero,
                         sins.sins_id,
                         sins.sins_fecha_solicitud as fecha_solicitud,
+                        uaca.uaca_id,
                         uaca.uaca_nombre as nint_nombre,
                         ifnull((select min.ming_nombre from " . $con->dbname . ".metodo_ingreso min where min.ming_id = sins.ming_id),'') as metodo_ingreso,
                         sins.eaca_id,
