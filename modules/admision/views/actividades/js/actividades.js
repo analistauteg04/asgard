@@ -6,11 +6,16 @@ $(document).ready(function () {
             $("#txt_hora_proxima").prop("disabled", true);
             $('#txt_fecha_proxima').removeClass("PBvalidation");
             $('#txt_hora_proxima').removeClass("PBvalidation");
+            $('#txt_fecha_proxima').val('');
+            $('#txt_hora_proxima').val('');
+            
         } else {
             $("#txt_fecha_proxima").prop("disabled", false);
             $("#txt_hora_proxima").prop("disabled", false);
             $('#txt_fecha_proxima').addClass("PBvalidation");
             $('#txt_hora_proxima').addClass("PBvalidation");
+            $('#txt_fecha_proxima').val('');
+            $('#txt_hora_proxima').val('');
         }
         if ($('#cmb_state_opportunity').val() == 5) {
             $('#divoportunidad_perdida').css('display', 'block');

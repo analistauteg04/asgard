@@ -6,6 +6,7 @@ use \app\models\Persona;
 use app\widgets\PbGridView\PbGridView;
 use yii\data\ArrayDataProvider;
 use app\modules\admision\Module;
+
 //echo 'bbb '.base64_decode($_GET['codigo']);
 /*
  * To change this license header, choose License Headers in Project Properties.
@@ -44,6 +45,11 @@ PbGridView::widget([
             'attribute' => 'Estado',
             'header' => Module::t("crm", "Opportunity state"),
             'value' => 'estado_oportunidad',
+        ],
+        [
+            'attribute' => 'Usuario',
+            'header' => Yii::t("formulario", "User login"),
+            'value' => 'usuario_ing',
         ],
         [
             'class' => 'yii\grid\ActionColumn',

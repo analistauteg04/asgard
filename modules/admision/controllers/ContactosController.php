@@ -355,8 +355,10 @@ class ContactosController extends \app\components\CController {
         $colPosition = array("C", "D", "E", "F", "G", "H", "I", "J", "K", "L");
         $arrHeader = array(
             Yii::t("crm", "Contact"),
+            Yii::t("formulario", "Country"),
             Yii::t("crm", "Contact Type"),
             Yii::t("crm", "Contact Status"),
+            Yii::t("formulario", "User login"),
             Yii::t("formulario", "Open Opportunities"),
             Yii::t("formulario", "Close Opportunities")
         );
@@ -381,8 +383,10 @@ class ContactosController extends \app\components\CController {
         $this->view->title = admision::t("crm", "Contacts"); // Titulo del reporte
         $arrHeader = array(
             Yii::t("crm", "Contact"),
+            Yii::t("formulario", "Country"),
             Yii::t("crm", "Contact Type"),
             Yii::t("crm", "Contact Status"),
+            Yii::t("formulario", "User login"),
             Yii::t("formulario", "Open Opportunities"),
             Yii::t("formulario", "Close Opportunities")
         );

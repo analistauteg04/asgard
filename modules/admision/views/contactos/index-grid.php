@@ -24,6 +24,11 @@ admision::registerTranslations();
                 'value' => 'cliente',
             ],
             [
+                'attribute' => 'Pais',
+                'header' => Yii::t("formulario", "Country"),
+                'value' => 'pais',
+            ],
+            [
                 'attribute' => 'Tipo persona',
                 'header' => Module::t("crm", "Contact Type"),
                 'value' => 'des_tipo_persona',
@@ -37,6 +42,11 @@ admision::registerTranslations();
                 'attribute' => 'Canal',
                 'header' => Module::t("crm", "Knowledge channel"),
                 'value' => 'canal',
+            ],
+            [
+                'attribute' => 'Usuario',
+                'header' => Yii::t("formulario", "User login"),
+                'value' => 'usuario_ing',
             ],
             [
                 'attribute' => 'NumOportunidadesAbiertas',
