@@ -98,9 +98,9 @@ PbGridView::widget([
                     }
                 },
                 'descarga' => function ($url, $model) {
-                    if ($model['formapago'] == 'Transferencia' || $model['formapago'] == 'Depósito') {
+                    //if ($model['formapago'] == 'Transferencia' || $model['formapago'] == 'Depósito') {
                         return Html::a('<span class="glyphicon glyphicon-download-alt"></span>', Url::to(['/site/getimage', 'route' => '/uploads/documento/' . $model['per_id'] . '/' . $model['imagen']]), ["download" => $model['imagen'], "data-toggle" => "tooltip", "title" => "Descargar Pago", "data-pjax" => 0]);
-                    }
+                   // }
                 },
             ],
         ],
