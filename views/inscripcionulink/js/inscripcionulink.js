@@ -26,7 +26,38 @@ $(document).ready(function () {
         requestHttpAjax(link, arrParams, function (response) {
             if (response.status == "OK") {
                 data = response.message;
-                setComboData(data.modalidad, "cmb_modalidad");             
+                setComboData(data.modalidad, "cmb_modalidad");
+                var arrParams = new Object();
+                if (data.modalidad.length > 0) {
+                    arrParams.unidada = $('#cmb_ninteres').val();
+                    arrParams.moda_id = $('#cmb_modalidad').val();
+                    arrParams.empresa_id = 2;
+                    arrParams.getcarrera = true;
+                    requestHttpAjax(link, arrParams, function (response) {
+                        if (response.status == "OK") {
+                            data = response.message;
+                            setComboData(data.carrera, "cmb_modulo");
+                        }
+                    }, true);
+                }
+            }
+        }, true);
+    });
+    
+    $('#cmb_modalidad').change(function () {
+        var link = $('#txth_base').val() + "/inscripcionulink/index";
+        var arrParams = new Object();
+
+        arrParams.unidada = $('#cmb_ninteres').val();
+        arrParams.moda_id = $(this).val();
+        arrParams.empresa_id = 2;
+        arrParams.getcarrera = true;
+        arrParams.nint_id = $('#cmb_ninteres').val();
+
+        requestHttpAjax(link, arrParams, function (response) {
+            if (response.status == "OK") {
+                data = response.message;
+                setComboData(data.carrera, "cmb_modulo");         
             }
         }, true);
     });

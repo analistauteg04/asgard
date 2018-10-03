@@ -1,6 +1,7 @@
 <?php
 
 namespace app\controllers;
+
 use Yii;
 use app\models\Utilities;
 use yii\helpers\ArrayHelper;
@@ -22,19 +23,20 @@ use app\modules\academico\models\ModuloEstudio;
 class InscripcionulinkController extends \yii\web\Controller {
 
     public function init() {
-        if(!is_dir(Yii::getAlias('@bower')))
+        if (!is_dir(Yii::getAlias('@bower')))
             Yii::setAlias('@bower', '@vendor/bower-asset');
         return parent::init();
     }
-    
+
     public function actionIndex() {
-        $this->layout = '@themes/' . \Yii::$app->getView()->theme->themeName . '/layouts/basic.php';    
+        $this->layout = '@themes/' . \Yii::$app->getView()->theme->themeName . '/layouts/basic.php';
         $per_id = Yii::$app->session->get("PB_perid");
         $mod_persona = Persona::findIdentity($per_id);
         $mod_pergestion = new PersonaGestion();
         $modestudio = new ModuloEstudio();
         $mod_unidad = new UnidadAcademica();
         $mod_modalidad = new Modalidad();
+       
         if (Yii::$app->request->isAjax) {
             $data = Yii::$app->request->post();
             if (isset($data["getprovincias"])) {
@@ -49,7 +51,7 @@ class InscripcionulinkController extends \yii\web\Controller {
                 echo Utilities::ajaxResponse('OK', 'alert', Yii::t('jslang', 'Success'), 'false', $message);
                 return;
             }
-             if (isset($data["getmodalidad"])) {
+            if (isset($data["getmodalidad"])) {
                 $modalidad = $mod_modalidad->consultarModalidad($data["nint_id"]);
                 $message = array("modalidad" => $modalidad);
                 return Utilities::ajaxResponse('OK', 'alert', Yii::t('jslang', 'Success'), 'false', $message);
@@ -63,6 +65,11 @@ class InscripcionulinkController extends \yii\web\Controller {
                 echo Utilities::ajaxResponse('OK', 'alert', Yii::t('jslang', 'Success'), 'false', $message);
                 return;
             }
+            if (isset($data["getcarrera"])) {
+                $carrera = $modestudio->consultarCursoModalidad($data["unidada"], $data["moda_id"]); 
+                $message = array("carrera" => $carrera);
+                return Utilities::ajaxResponse('OK', 'alert', Yii::t('jslang', 'Success'), 'false', $message);
+            }
         }
         $arr_pais_dom = Pais::find()->select("pai_id AS id, pai_nombre AS value")->where(["pai_estado_logico" => "1", "pai_estado" => "1"])->asArray()->all();
         $pais_id = 1; //Ecuador
@@ -70,8 +77,9 @@ class InscripcionulinkController extends \yii\web\Controller {
         $arr_ciu_dom = Canton::cantonXProvincia($arr_prov_dom[0]["id"]);
         $arr_medio = MedioPublicitario::find()->select("mpub_id AS id, mpub_nombre AS value")->where(["mpub_estado_logico" => "1", "mpub_estado" => "1"])->asArray()->all();
         $arr_conuteg = $mod_pergestion->consultarConociouteg();
-        $arr_carrerra1 = $modestudio->consultarEstudioEmpresa(2);
-        $arr_modalidad = $mod_modalidad->consultarModalidad(3);
+        //$arr_carrerra1 = $modestudio->consultarEstudioEmpresa(2);        
+        $arr_modalidad = $mod_modalidad->consultarModalidad(6);
+        $arr_carrerra1 = $modestudio->consultarCursoModalidad(6, 1);
         $arr_ninteres = $mod_unidad->consultarUnidadAcademicasEmpresa(2);
         return $this->render('index', [
                     "tipos_dni" => array("CED" => Yii::t("formulario", "DNI Document"), "PASS" => Yii::t("formulario", "Passport")),
@@ -102,7 +110,7 @@ class InscripcionulinkController extends \yii\web\Controller {
         $busqueda = 0;
         $pagina = "";
         $conempresa = $mod_empresa->consultarEmpresaId('ulink'); // 2 ulink
-        $emp_id = $conempresa["id"]; 
+        $emp_id = $conempresa["id"];
         $gcrm_codigo["id"] = 0;
         $correo = strtolower($data["correo"]);
         if (Yii::$app->request->isAjax) {
@@ -113,7 +121,7 @@ class InscripcionulinkController extends \yii\web\Controller {
             $apellido2 = null;
             $conestcontacto = $mod_estcontacto->consultarEstadoContacto();
             $econ_id = $conestcontacto[0]["id"];
-            $tipo_persona = $mod_persona->consultarTipoPersona('Natural');     
+            $tipo_persona = $mod_persona->consultarTipoPersona('Natural');
             $empresa = "";
             $telefono_empresa = null;
             $direccion = null;
@@ -132,8 +140,8 @@ class InscripcionulinkController extends \yii\web\Controller {
             $celularbeni2 = null;
             $telefonobeni = null;
             $correobeni = strtolower($data["correo"]);
-            $nivelestudio = $data["unidad"]; 
-            $modalidad = $data["modalidad"]; 
+            $nivelestudio = $data["unidad"];
+            $modalidad = $data["modalidad"];
             $tipo_dni = $data["tipo_dni"];
             $cedula = $data["cedula"];
             $pasaporte = $data["pasaporte"];
@@ -193,7 +201,7 @@ class InscripcionulinkController extends \yii\web\Controller {
                         if ($res_oportunidad) {
                             $oact_id = 1;
                             $descripcion = 'Registro subido desde formulario de inscripción';
-                            $res_actividad = $mod_gestion->insertarActividad($res_oportunidad, $usuario, $agente , $estado, $fecha_registro, $oact_id, $descripcion, $fecha_registro);
+                            $res_actividad = $mod_gestion->insertarActividad($res_oportunidad, $usuario, $agente, $estado, $fecha_registro, $oact_id, $descripcion, $fecha_registro);
                             if ($res_actividad) {
                                 $exito = 1;
                             }
