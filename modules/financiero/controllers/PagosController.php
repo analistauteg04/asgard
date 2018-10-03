@@ -517,11 +517,11 @@ class PagosController extends \app\components\CController {
     public function actionRegistrarpagoadm() {
         $opag_id = $_GET["ido"];
         $per_id = $_GET["per_id"];
-
+        $sol_id = $_GET["sins_id"];
         $mod_opago = new OrdenPago();
         $arr_forma_pago = $mod_opago->formaPago("1");
 
-        $resp_orden = $mod_opago->listarSolicitud($per_id, $opag_id, 0);
+        $resp_orden = $mod_opago->listarSolicitud($sol_id, $opag_id, 0);
         $valor_total = $resp_orden['ipre_precio'];
         $saldo_pendiente = $resp_orden['pendiente'];
         $int_id = $resp_orden['int_id'];
