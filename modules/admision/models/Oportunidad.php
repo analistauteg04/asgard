@@ -357,20 +357,26 @@ class Oportunidad extends \app\modules\admision\components\CActiveRecord {
      */
     public function consultarPersonaGestionPorOporId($id_opor) {
         $con = \Yii::$app->db_crm;
+        $con1 = \Yii::$app->db_asgard;
         $estado = 1;
-        $sql = "SELECT 
-                   oper.oper_id as id,
-                   oper.oper_nombre as name
-                FROM 
-                   " . $con->dbname . ".oportunidad_perdida  oper ";
-        $sql .= "  WHERE                   
-                   oper.oper_estado = :estado AND
-                   oper.oper_estado_logico = :estado
-                ORDER BY name asc";
+        $sql = "
+                SELECT pges.*, pai.pai_nombre as pais,
+                    opor.emp_id
+                FROM  " . $con->dbname . ".oportunidad as opor
+                    JOIN " . $con->dbname . ".persona_gestion pges on pges.pges_id=opor.pges_id
+                    JOIN " . $con1->dbname . ".pais pai on pai.pai_id = pges.pai_id_nacimiento
+                WHERE 
+                    opor.opo_id = :opo_id
+                    AND opor.opo_estado = :estado
+                    AND opor.opo_estado_logico=:estado
+                    AND pges.pges_estado = :estado
+                    AND pges.pges_estado_logico=:estado
+              ";
 
         $comando = $con->createCommand($sql);
         $comando->bindParam(":estado", $estado, \PDO::PARAM_STR);
-        $resultData = $comando->queryAll();
+        $comando->bindParam(":opo_id", $id_opor, \PDO::PARAM_INT);
+        $resultData = $comando->queryOne();
         return $resultData;
     }
     /**

@@ -78,8 +78,8 @@ class InteresadoEmpresa extends \app\modules\admision\components\CActiveRecord {
                     WHERE 
                             int_id = $inte_id
                             and emp_id= $emp_id
-                            and iemp_estado = $emp_id
-                            and iemp_estado_logico=$emp_id
+                            and iemp_estado = $estado
+                            and iemp_estado_logico=$estado
                 ";
         $comando = $con->createCommand($sql);
         $resultData = $comando->queryOne();
