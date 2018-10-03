@@ -27,6 +27,11 @@ use app\modules\admision\Module;
                 'value' => 'contacto',
             ],
             [
+                'attribute' => 'Empresa',
+                'header' => Yii::t("formulario", "Company"),
+                'value' => 'des_empresa',
+            ],
+            [
                 'attribute' => 'Unidad',
                 'header' => Yii::t("formulario", "Aca. Uni."),
                 'value' => 'des_unidad',

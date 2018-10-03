@@ -196,7 +196,7 @@ class Empresa extends \yii\db\ActiveRecord {
      */
     public static function getAllEmpresa() {
         $con = \Yii::$app->db;
-        $sql = "SELECT emp_id as id,emp_razon_social as value 
+        $sql = "SELECT emp_id as id,emp_razon_social as value,emp_razon_social as name 
             FROM " . $con->dbname . ".empresa WHERE emp_estado_logico=1 AND emp_estado=1; ORDER BY value asc";  
         $comando = $con->createCommand($sql);
         return $comando->queryAll();
