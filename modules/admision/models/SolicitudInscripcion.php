@@ -1021,7 +1021,7 @@ class SolicitudInscripcion extends \yii\db\ActiveRecord
         $con1 = \Yii::$app->db_academico;
         $estado = 1;
         $estado_precio = 'A';
-        if (($nint_id!=3) and ($nint_id >0)) { 
+        if (!empty($ming_id)) { 
             $sql = "SELECT  imni.imni_id, 
                             ipre.ipre_precio+(ipre.ipre_precio*ifnull(ipre.ipre_porcentaje_iva,0)) as precio,	   
                             ming.ming_nombre as nombre_metodo_ingreso,
@@ -1042,9 +1042,8 @@ class SolicitudInscripcion extends \yii\db\ActiveRecord
                           ming.ming_estado_logico = :estado AND
                           ua.uaca_estado = :estado AND
                           ua.uaca_estado_logico = :estado";
-        } 
-        
-        if ($nint_id ==3) {
+        }  else {
+                
             $sql = "SELECT  imni.imni_id, 
                             ipre.ipre_precio+(ipre.ipre_precio*ifnull(ipre.ipre_porcentaje_iva,0)) as precio,	   
                             null as nombre_metodo_ingreso,
@@ -1062,22 +1061,7 @@ class SolicitudInscripcion extends \yii\db\ActiveRecord
                           ua.uaca_estado = :estado AND
                           ua.uaca_estado_logico = :estado";
         }
-        
-        if (empty($nint_id)) {
-            $sql = "SELECT  imni.imni_id, 
-                            ipre.ipre_precio+(ipre.ipre_precio*ifnull(ipre.ipre_porcentaje_iva,0)) as precio,	   
-                            null as nombre_metodo_ingreso,
-                            null as nombre_nivel_interes                            
-                    FROM " . $con2->dbname . ".item_metodo_unidad imni INNER JOIN " . $con2->dbname . ".item_precio ipre 
-                        on imni.ite_id = ipre.ite_id                                                                      
-                    WHERE 
-                          ipre.ipre_estado_precio = :estado_precio AND
-                          now() between ipre.ipre_fecha_inicio and ipre.ipre_fecha_fin AND
-                          imni.imni_estado = :estado AND
-                          imni.imni_estado_logico = :estado AND
-                          ipre.ipre_estado = :estado AND
-                          ipre.ipre_estado_logico = :estado";
-        }
+                
         $comando = $con->createCommand($sql);
         $comando->bindParam(":estado", $estado, \PDO::PARAM_STR);
         $comando->bindParam(":ming_id", $ming_id, \PDO::PARAM_INT);
