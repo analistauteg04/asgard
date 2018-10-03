@@ -63,7 +63,7 @@ class AdmitidosController extends \app\components\CController {
             Yii::t("formulario", "Last Names"),
             academico::t("Academico", "Income Method"), //ingles
             academico::t("Academico", "Career/Program"),
-            academico::t("Solicitudes", "Scholarship"),
+            admision::t("Solicitudes", "Scholarship"),
             academico::t("Academico", "Registered")
         );
         $data = Yii::$app->request->get();
@@ -98,7 +98,7 @@ class AdmitidosController extends \app\components\CController {
             Yii::t("formulario", "Last Names"),
             academico::t("Academico", "Income Method"), //ingles
             academico::t("Academico", "Career/Program"),
-            academico::t("Solicitudes", "Scholarship"),
+            admision::t("Solicitudes", "Scholarship"),
             academico::t("Academico", "Registered")
         );
         $data = Yii::$app->request->get();
@@ -116,7 +116,7 @@ class AdmitidosController extends \app\components\CController {
         } else {
             $arrData = $admitido_model->consultarReportAdmitidos(array(), true);
         }
-        $report->orientation = "P"; // tipo de orientacion L => Horizontal, P => Vertical                                
+        $report->orientation = "L"; // tipo de orientacion L => Horizontal, P => Vertical                                
         $report->createReportPdf(
                 $this->render('exportpdf', [
                     'arr_head' => $arrHeader,

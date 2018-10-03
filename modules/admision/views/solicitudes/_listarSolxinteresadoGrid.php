@@ -14,12 +14,10 @@ use app\modules\academico\Module as academico;
 use app\modules\financiero\Module as financiero;
 academico::registerTranslations();
 financiero::registerTranslations();
-
 ?>
 <?=
 
 PbGridView::widget([
-    //'dataProvider' => new yii\data\ArrayDataProvider(array()),
     'id' => 'TbG_PERSONAS',
     //'showExport' => true,
     //'fnExportEXCEL' => "exportExcel",
@@ -30,7 +28,7 @@ PbGridView::widget([
         [
             'attribute' => 'Solicitud #',
             'header' => admision::t("Solicitudes", "Request #"),
-            'value' => 'num_solicitud',
+            'value' => 'sol_numero',
         ],
         [
             'attribute' => 'Fecha Solicitud ',
@@ -46,22 +44,22 @@ PbGridView::widget([
             'attribute' => 'Metodo Ingreso',
             'header' => admision::t("Solicitudes", "Income Method"),
             'value' => 'metodo_ingreso',
-        ],       
+        ],
         [
-                'class' => 'yii\grid\ActionColumn',
-                'header' => academico::t("Academico", "Career/Program/Course"),
-                'template' => '{view}',
-                'buttons' => [
-                    'view' => function ($url, $model) {
-                        return Html::a('<span>' . substr($model['carrera'], 0, 20) . '... </span>', Url::to(['#']), ["data-toggle" => "tooltip", "title" => $model['carrera']]);
-                    },
-                ],
+            'class' => 'yii\grid\ActionColumn',
+            'header' => academico::t("Academico", "Career/Program/Course"),
+            'template' => '{view}',
+            'buttons' => [
+                'view' => function ($url, $model) {
+                    return Html::a('<span>' . substr($model['carrera'], 0, 20) . '... </span>', Url::to(['#']), ["data-toggle" => "tooltip", "title" => $model['carrera']]);
+                },
             ],
+        ],
         [
             'attribute' => 'Estado Solicitud',
             'header' => admision::t("Solicitudes", "State Request"),
             'value' => 'estado',
-        ],  
+        ],
         [
             'attribute' => 'Estado Pago',
             'header' => financiero::t("Pagos", "Payment status"),
@@ -73,11 +71,15 @@ PbGridView::widget([
             'template' => '{payments} {upload}', //
             'buttons' => [
                 'payments' => function ($url, $model) {
-                    return Html::a('<span class="glyphicon glyphicon-usd"></span>', Url::to(['/financiero/pagos/listarpagosolicitud', 'id_sol' => base64_encode($model['sins_id'])/*, 'ids' => $_GET['perid']*/]), ["data-toggle" => "tooltip", "title" => "Pago de Solicitud", "data-pjax" => 0]);
+                    return Html::a('<span class="glyphicon glyphicon-usd"></span>', Url::to(['/financiero/pagos/listarpagosolicitud', 'id_sol' => base64_encode($model['sins_id'])/* , 'ids' => $_GET['perid'] */]), ["data-toggle" => "tooltip", "title" => "Pago de Solicitud", "data-pjax" => 0]);
                 },
                 'upload' => function ($url, $model) {
-                    if ($model['numDocumentos'] == 0)  {  
-                        return Html::a('<span class="glyphicon glyphicon-folder-open"></span>', Url::to(['/admision/solicitudes/subirdocumentos', 'id_sol' => base64_encode($model['sins_id']), 'opcion' => base64_encode(1)]), ["data-toggle" => "tooltip", "title" => "Subir Documentos Inscrito", "data-pjax" => 0]);
+                    if ($model['uaca_id'] < 3) {
+                        if ($model['numDocumentos'] == 0) {
+                            return Html::a('<span class="glyphicon glyphicon-folder-open"></span>', Url::to(['/admision/solicitudes/subirdocumentos', 'id_sol' => base64_encode($model['sins_id']), 'opcion' => base64_encode(1)]), ["data-toggle" => "tooltip", "title" => "Subir Documentos Inscrito", "data-pjax" => 0]);
+                        } else {
+                            return '<span class="glyphicon glyphicon-folder-open"></span>';
+                        }
                     } else {
                         return '<span class="glyphicon glyphicon-folder-open"></span>';
                     }

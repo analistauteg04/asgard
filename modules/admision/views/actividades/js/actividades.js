@@ -6,11 +6,16 @@ $(document).ready(function () {
             $("#txt_hora_proxima").prop("disabled", true);
             $('#txt_fecha_proxima').removeClass("PBvalidation");
             $('#txt_hora_proxima').removeClass("PBvalidation");
+            $('#txt_fecha_proxima').val('');
+            $('#txt_hora_proxima').val('');
+            
         } else {
             $("#txt_fecha_proxima").prop("disabled", false);
             $("#txt_hora_proxima").prop("disabled", false);
             $('#txt_fecha_proxima').addClass("PBvalidation");
             $('#txt_hora_proxima').addClass("PBvalidation");
+            $('#txt_fecha_proxima').val('');
+            $('#txt_hora_proxima').val('');
         }
         if ($('#cmb_state_opportunity').val() == 5) {
             $('#divoportunidad_perdida').css('display', 'block');
@@ -77,6 +82,21 @@ function update() {
                 var opor_id = $('#txth_opo_id').val();
                 var pges_id = $('#txth_pgid').val();
                 window.location.href = $('#txth_base').val() + "/admision/actividades/listaractividadxoportunidad?opor_id=" + opor_id + "&pges_id=" + pges_id;
+            }, 3000);
+        }, true);
+    }
+}
+function grabarInteresado(pgest_id) {
+    var link = $('#txth_base').val() + "/admision/interesados/guardarinteresado";
+    var arrParams = new Object();
+    arrParams.id_pgest = pgest_id;
+    if (!validateForm()) {
+        requestHttpAjax(link, arrParams, function (response) {
+            showAlert(response.status, response.label, response.message);
+            setTimeout(function () {
+                if (response.status == "OK") {
+                    parent.window.location.href = $('#txth_base').val() + "/admision/interesados/index";
+                }
             }, 3000);
         }, true);
     }

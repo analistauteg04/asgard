@@ -6,12 +6,17 @@ $(document).ready(function () {
             $('#txt_dni_fac').attr("data-lengthMin", "10");
             $('#txt_dni_fac').attr("data-lengthMax", "10");
             $('#txt_dni_fac').attr("placeholder", $('#txth_ced_lb').val());
-            $('label[for=txt_dni_fac]').text($('#txth_ced_lb').val() + ":");
-        } else {
+            $('label[for=txt_dni_fac]').text($('#txth_ced_lb').val() + "");
+        } else if ($(this).val() == 2) { // ruc
             $('#txt_dni_fac').attr("data-lengthMin", "13");
             $('#txt_dni_fac').attr("data-lengthMax", "13");
             $('#txt_dni_fac').attr("placeholder", $('#txth_ruc_lb').val());
-            $('label[for=txt_dni_fac]').text($('#txth_ruc_lb').val() + ":");
+            $('label[for=txt_dni_fac]').text($('#txth_ruc_lb').val() + "");
+        } else { // pasaporte
+            $('#txt_dni_fac').attr("data-lengthMin", "13");
+            $('#txt_dni_fac').attr("data-lengthMax", "13");
+            $('#txt_dni_fac').attr("placeholder", $('#txth_ruc_lb').val());
+            $('label[for=txt_dni_fac]').text($('#txth_pas_lb').val() + "");
         }
     });
     $('#cmb_empresa').change(function () {// cambio 2
@@ -25,6 +30,16 @@ $(document).ready(function () {
                 setComboData(data.unidad_academica, "cmb_ninteres");
                 var arrParams = new Object();
                 if (data.unidad_academica.length > 0) {
+                    //Here I am going to change the combo income method
+                    var arrParams = new Object();
+                    arrParams.nint_id = $('#cmb_ninteres').val();
+                    arrParams.getmetodo = true;
+                    requestHttpAjax(link, arrParams, function (response) {
+                        if (response.status == "OK") {
+                            data = response.message;
+                            setComboData(data.metodos, "cmb_metodos");
+                        }
+                    }, true);
                     var arrParams = new Object();
                     arrParams.nint_id = $('#cmb_ninteres').val();
                     arrParams.getmodalidad = true;

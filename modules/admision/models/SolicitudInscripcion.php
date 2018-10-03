@@ -342,8 +342,10 @@ class SolicitudInscripcion extends \yii\db\ActiveRecord
         $sql = " 
                     SELECT
                         lpad(sins.sins_id,4,'0') as num_solicitud,
+                        ifnull(sins.num_solicitud,'000000000') as sol_numero,
                         sins.sins_id,
                         sins.sins_fecha_solicitud as fecha_solicitud,
+                        uaca.uaca_id,
                         uaca.uaca_nombre as nint_nombre,
                         ifnull((select min.ming_nombre from " . $con->dbname . ".metodo_ingreso min where min.ming_id = sins.ming_id),'') as metodo_ingreso,
                         sins.eaca_id,
@@ -436,8 +438,16 @@ class SolicitudInscripcion extends \yii\db\ActiveRecord
                     sins.uaca_id,
                     sins.mod_id,
                     sins.eaca_id,
-                    uaca_nombre,
-                    eac.eaca_nombre as carrera,
+                    uaca.uaca_nombre,                    
+                    case sins.uaca_id
+                     when 1 then (select eaca.eaca_nombre from " . $con1->dbname . ".estudio_academico eaca where eaca.eaca_id = sins.eaca_id)
+                     when 2 then (select eaca.eaca_nombre from " . $con1->dbname . ".estudio_academico eaca where eaca.eaca_id = sins.eaca_id)
+                     when 3 then (select mes.mest_nombre from " . $con1->dbname . ".modulo_estudio mes where mes.mest_id = sins.mest_id)
+                     when 4 then (select mes.mest_nombre from " . $con1->dbname . ".modulo_estudio mes where mes.mest_id = sins.mest_id)
+                     when 5 then (select mes.mest_nombre from " . $con1->dbname . ".modulo_estudio mes where mes.mest_id = sins.mest_id)
+                     when 6 then (select mes.mest_nombre from " . $con1->dbname . ".modulo_estudio mes where mes.mest_id = sins.mest_id)
+                    else null
+                      end as 'carrera', 
                     sins.sins_fecha_reprobacion,
                     sins.sins_observacion,
                     sins.rsin_id,
@@ -446,8 +456,7 @@ class SolicitudInscripcion extends \yii\db\ActiveRecord
                     " . $con->dbname . ".solicitud_inscripcion as sins
                     INNER JOIN " . $con->dbname . ".interesado as inte on sins.int_id = inte.int_id
                     INNER JOIN " . $con2->dbname . ".persona as per on inte.per_id = per.per_id 
-                    INNER JOIN " . $con1->dbname . ".unidad_academica as uaca on uaca.uaca_id = sins.uaca_id   
-                    INNER JOIN " . $con1->dbname . ".estudio_academico as eac on sins.eaca_id = eac.eaca_id
+                    INNER JOIN " . $con1->dbname . ".unidad_academica as uaca on uaca.uaca_id = sins.uaca_id 
                     INNER JOIN " . $con1->dbname . ".modalidad as m on m.mod_id = sins.mod_id   
                 WHERE 
                     sins.sins_estado_logico=:estado AND 
@@ -1021,7 +1030,7 @@ class SolicitudInscripcion extends \yii\db\ActiveRecord
         $con1 = \Yii::$app->db_academico;
         $estado = 1;
         $estado_precio = 'A';
-        if (($nint_id!=3) and ($nint_id >0)) { 
+        if (!empty($ming_id)) { 
             $sql = "SELECT  imni.imni_id, 
                             ipre.ipre_precio+(ipre.ipre_precio*ifnull(ipre.ipre_porcentaje_iva,0)) as precio,	   
                             ming.ming_nombre as nombre_metodo_ingreso,
@@ -1042,9 +1051,8 @@ class SolicitudInscripcion extends \yii\db\ActiveRecord
                           ming.ming_estado_logico = :estado AND
                           ua.uaca_estado = :estado AND
                           ua.uaca_estado_logico = :estado";
-        } 
-        
-        if ($nint_id ==3) {
+        }  else {
+                
             $sql = "SELECT  imni.imni_id, 
                             ipre.ipre_precio+(ipre.ipre_precio*ifnull(ipre.ipre_porcentaje_iva,0)) as precio,	   
                             null as nombre_metodo_ingreso,
@@ -1062,22 +1070,7 @@ class SolicitudInscripcion extends \yii\db\ActiveRecord
                           ua.uaca_estado = :estado AND
                           ua.uaca_estado_logico = :estado";
         }
-        
-        if (empty($nint_id)) {
-            $sql = "SELECT  imni.imni_id, 
-                            ipre.ipre_precio+(ipre.ipre_precio*ifnull(ipre.ipre_porcentaje_iva,0)) as precio,	   
-                            null as nombre_metodo_ingreso,
-                            null as nombre_nivel_interes                            
-                    FROM " . $con2->dbname . ".item_metodo_unidad imni INNER JOIN " . $con2->dbname . ".item_precio ipre 
-                        on imni.ite_id = ipre.ite_id                                                                      
-                    WHERE 
-                          ipre.ipre_estado_precio = :estado_precio AND
-                          now() between ipre.ipre_fecha_inicio and ipre.ipre_fecha_fin AND
-                          imni.imni_estado = :estado AND
-                          imni.imni_estado_logico = :estado AND
-                          ipre.ipre_estado = :estado AND
-                          ipre.ipre_estado_logico = :estado";
-        }
+                
         $comando = $con->createCommand($sql);
         $comando->bindParam(":estado", $estado, \PDO::PARAM_STR);
         $comando->bindParam(":ming_id", $ming_id, \PDO::PARAM_INT);

@@ -4,6 +4,7 @@ namespace app\modules\admision\controllers;
 
 use Yii;
 use app\modules\admision\models\Interesado;
+use \app\modules\admision\models\Oportunidad;
 use app\modules\admision\models\PersonaGestion;
 use app\models\EmpresaPersona;
 use app\modules\admision\models\InteresadoEmpresa;
@@ -20,10 +21,8 @@ use app\modules\academico\Module as academico;
 use app\modules\financiero\Module as financiero;
 academico::registerTranslations();
 financiero::registerTranslations();
-
 class InteresadosController extends \app\components\CController
 {
-
     public function actionIndex()
     {
         $per_id = @Yii::$app->session->get("PB_perid");
@@ -52,12 +51,13 @@ class InteresadosController extends \app\components\CController
         $error = 0;
         if (Yii::$app->request->isAjax) {
             $data = Yii::$app->request->post();
-            $id_pgest = $data["id_pgest"];
-            $pergest = new PersonaGestion();
-            $pgest = $pergest->consultarPersonaGestion($id_pgest);
+            $id_opor = $data["id_pgest"];
+            $opor_model = new Oportunidad();
+            $pgest = $opor_model->consultarPersonaGestionPorOporId($id_opor);
             $con = \Yii::$app->db_asgard;
             $transaction = $con->beginTransaction();
             try {
+                $emp_id = $pgest['emp_id'];
                 $identificacion = '';
                 if (isset($pgest['pges_cedula']) && strlen($pgest['pges_cedula']) > 0) {
                     $identificacion = $pgest['pges_cedula'];
@@ -86,7 +86,6 @@ class InteresadosController extends \app\components\CController
                     if ($id_persona > 0) {
                         $concap = \Yii::$app->db_captacion;
                         $mod_emp_persona = new EmpresaPersona();
-                        $emp_id = 1;
                         $keys = ['emp_id', 'per_id', 'eper_estado', 'eper_estado_logico'];
                         $parametros = [$emp_id, $id_persona, 1, 1];
                         $emp_per_id = $mod_emp_persona->consultarIdEmpresaPersona($id_persona, $emp_id);
@@ -106,7 +105,7 @@ class InteresadosController extends \app\components\CController
                             }
                             if ($usuario_id > 0) {
                                 $mod_us_gr_ep = new UsuaGrolEper();
-                                $grol_id = 10;
+                                $grol_id = 27;
                                 $keys = ['eper_id', 'usu_id', 'grol_id', 'ugep_estado', 'ugep_estado_logico'];
                                 $parametros = [$emp_per_id, $usuario_id, $grol_id, 1, 1];
                                 $us_gr_ep_id = $mod_us_gr_ep->consultarIdUsuaGrolEper($emp_per_id, $usuario_id, $grol_id);

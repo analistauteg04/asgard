@@ -604,6 +604,7 @@ return [
     "Updated" => "Modificado",
     "Upload documents" => "Subir Documentos",
     "Url" => "Url",
+    "User login" => "Usuario Ingreso",
     "UTEG" => "UTEG",
     "UTEG - Online Purchase Result" => "UTEG - Resultado Compra en Línea",
     "Value" => "Valor",

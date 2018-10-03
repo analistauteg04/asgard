@@ -951,21 +951,22 @@ class PersonaGestion extends \app\modules\admision\components\CActiveRecord {
         $sql = "SELECT  tp.tper_id tipo_persona, 
                         tp.tper_nombre des_tipo_persona, 
                         concat(pges_pri_nombre, ' ', ifnull(pges_seg_nombre,' ')) as nombres,
-                        concat(pges_pri_apellido, ' ', ifnull(pges_seg_apellido,' ')) as apellidos,
-                        /*case when tp.tper_id = 1 then ifnull(pges_cedula, pges_pasaporte)
-                            else pges_ruc end as identificacion,	
-                        case when tp.tper_id = 1 then concat(pges_pri_nombre, ' ', ifnull(pges_seg_nombre,' '), ' ', pges_pri_apellido, ' ', ifnull(pges_seg_apellido,' ')) 
-                            else pges_contacto_empresa end as cliente,*/
+                        concat(pges_pri_apellido, ' ', ifnull(pges_seg_apellido,' ')) as apellidos,                 
                         concat(pges_pri_nombre, ' ', ifnull(pges_pri_apellido,' ')) as cliente,
-                        if(pg.pges_razon_social='','N/A',pg.pges_razon_social) as empresa,                        
+                        ifnull((select pai.pai_nombre from " . $con1->dbname . ".pais pai where pai.pai_id = pg.pai_id_nacimiento),'') as pais,                      
                         pg.pges_id as pestion_id,
                         pg.econ_id,
                         ec.econ_nombre estado_contacto,
                         pg.ccan_id,
                         cc.ccan_nombre as canal,
+                        ifnull((select concat(pers.per_pri_nombre, ' ', ifnull(pers.per_pri_apellido,' ')) 
+                                  from " . $con1->dbname . ".usuario usu 
+                                  inner join " . $con1->dbname . ".persona pers on pers.per_id = usu.usu_id
+                                  where usu.usu_id = pg.pges_usuario_ingreso),'') as usuario_ing,                      
                         (select count(*) from " . $con->dbname . ".oportunidad o where o.pges_id = pg.pges_id and o.eopo_id in(1,2,3) and o.opo_estado = :estado and o.opo_estado_logico = :estado) as num_oportunidad_abiertas,
                         (select count(*) from " . $con->dbname . ".oportunidad o where o.pges_id = pg.pges_id and o.eopo_id in(4,5) and o.opo_estado = :estado and o.opo_estado_logico = :estado) as num_oportunidad_cerradas
-                FROM " . $con->dbname . ".persona_gestion pg inner join " . $con->dbname . ".estado_contacto ec on ec.econ_id = pg.econ_id
+                FROM " . $con->dbname . ".persona_gestion pg
+                INNER JOIN " . $con->dbname . ".estado_contacto ec on ec.econ_id = pg.econ_id
                 INNER JOIN " . $con1->dbname . ".tipo_persona tp on tp.tper_id = pg.tper_id  
                 INNER JOIN " . $con->dbname . ".conocimiento_canal cc on cc.ccan_id = pg.ccan_id
                 WHERE   $str_search
@@ -1713,9 +1714,14 @@ class PersonaGestion extends \app\modules\admision\components\CActiveRecord {
         }
         $sql = "
                 SELECT  
-                        concat(ifnull(pges_pri_nombre,''), ' ',ifnull(pges_seg_nombre,' '),ifnull(pges_pri_apellido,''), ' ', ifnull(pges_seg_apellido,' ')) as contacto,                                                
+                        concat(ifnull(pges_pri_nombre,''), ' ',ifnull(pges_seg_nombre,' '),ifnull(pges_pri_apellido,''), ' ', ifnull(pges_seg_apellido,' ')) as contacto,
+                        ifnull((select pai.pai_nombre from " . $con1->dbname . ".pais pai where pai.pai_id = pg.pai_id_nacimiento),'') as pais,
                         tp.tper_nombre tipo_contacto, 
                         ec.econ_nombre estado_contacto,
+                        ifnull((select concat(pers.per_pri_nombre, ' ', ifnull(pers.per_pri_apellido,' ')) 
+                                  from " . $con1->dbname . ".usuario usu 
+                                  inner join " . $con1->dbname . ".persona pers on pers.per_id = usu.usu_id
+                                  where usu.usu_id = pg.pges_usuario_ingreso),'') as usuario_ing, 
                         (select count(*) from " . $con->dbname . ".oportunidad o where o.pges_id = pg.pges_id and o.eopo_id in(1,2,3) and o.opo_estado = :estado and o.opo_estado_logico = :estado) as oportunidad_abiertas,
                         (select count(*) from " . $con->dbname . ".oportunidad o where o.pges_id = pg.pges_id and o.eopo_id in(4,5) and o.opo_estado = :estado and o.opo_estado_logico = :estado) as oportunidad_cerradas
                 FROM " . $con->dbname . ".persona_gestion pg inner join " . $con->dbname . ".estado_contacto ec on ec.econ_id = pg.econ_id

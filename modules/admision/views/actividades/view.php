@@ -149,8 +149,7 @@ if (!empty($personalData['pges_cedula'])) {
                         ?>
                         <?= Html::dropDownList("cmb_carrera1", $oportunidad_contacto["eaca_id"], $arr_academic_study, ["class" => "form-control", "id" => "cmb_carrera_estudio", "disabled" => true]) ?>
                     <?php }
-                    ?>
-                    <!--<? Html::dropDownList("cmb_carrera1", $oportunidad_contacto['eaca_id'], $arr_academic_study, ["class" => "form-control", "id" => "cmb_carrera1", "disabled" => true]) ?>-->
+                    ?>                    
                 </div>
             </div>
         </div>
@@ -258,7 +257,6 @@ if (!empty($personalData['pges_cedula'])) {
             <div class="form-group">
                 <label for="txt_observacion" class="col-sm-5 col-md-5 col-xs-5 col-lg-5 control-label" id="lbl_descripcion"><?= Yii::t("formulario", "Observation") ?> </label>
                 <div class="col-sm-7 col-md-7 col-xs-7 col-lg-7">
-                    <!--<textarea  class="form-control keyupmce" id="txt_observacion" disabled = "true"><?php //echo $actividad_oportunidad['bact_descripcion'];  ?></textarea>-->
                     <?= Html::dropDownList("cmb_observacion", $actividad_oportunidad["oact_id"], $arr_observacion, ["class" => "form-control", "id" => "cmb_observacion", "disabled" => true]) ?>                
                 </div>
             </div>
@@ -267,7 +265,7 @@ if (!empty($personalData['pges_cedula'])) {
             <div class="form-group">
                 <label for="txt_descripcion" class="col-sm-5 col-md-5 col-xs-5 col-lg-5 control-label" id="lbl_descripcion"><?= Yii::t("formulario", "Comments") ?> </label>
                 <div class="col-sm-7 col-md-7 col-xs-7 col-lg-7">
-                    <textarea  class="form-control keyupmce" id="txt_descripcion" disabled = "true"><?= $actividad_oportunidad["bact_descripcion"] ?></textarea>                  
+                    <textarea  class="form-control keyupmce" id="txt_descripcion" rows="5"  disabled = "true"><?= $actividad_oportunidad["bact_descripcion"] ?></textarea>                  
                 </div>
             </div>
         </div>

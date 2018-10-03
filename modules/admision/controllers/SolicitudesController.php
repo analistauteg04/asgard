@@ -65,15 +65,19 @@ class SolicitudesController extends \app\components\CController {
      * @return  Una vista que recibe las solicitudes del usuario logeado.
      */
     public function actionListarsolicitudxinteresado() {
-        $per_id = @Yii::$app->session->get("PB_perid");
+        $per_idsession = @Yii::$app->session->get("PB_perid");
         $per_Ids = base64_decode($_GET['perid']);
-
-        $inte_id = base64_decode($_GET['id']);
+        $inte_id = base64_decode(empty($_GET['id'])?0:$_GET['id']);
         $mod_carrera = new EstudioAcademico();
         $interesado_model = new Interesado();
         $persona_model = new Persona();
         $SolIns_model = new SolicitudInscripcion();
-        $per_id = $interesado_model->getPersonaxIdInteresado($inte_id);
+        if($inte_id>0){
+            $per_id = $interesado_model->getPersonaxIdInteresado($inte_id);
+        }else{
+            $per_id = $per_idsession;
+            $inte_id=$interesado_model->consultaInteresadoByPerId($per_id);
+        }
         $personaData = $persona_model->consultaPersonaId($per_id);
         $model = $SolIns_model->getSolicitudesXInteresado($inte_id);
         return $this->render('listarSolicitudxinteresado', [
@@ -276,10 +280,10 @@ class SolicitudesController extends \app\components\CController {
                 throw new Exception('Debe seleccionar opciones de las listas.');
             }
             $sins_fechasol = date(Yii::$app->params["dateTimeByDefault"]);
-            if (($nint_id == 3) or empty($nint_id)) {
+            if ($emp_id>1) {
                 $ming_id = null; //Curso.
-                $rsin_id = 2; //Solicitud pre-aprobada para Educación Continua.  
-                $pre_observacion = 'Solicitud Pre-Aprobada por ser de Educación Continua.';
+                $rsin_id = 3; //Solicitud pre-aprobada para las otras empresas.  
+                $pre_observacion = 'Solicitud Pre-Aprobada.';
                 $fec_preobservacion = $sins_fechasol;
                 $subirDocumentos = 0;
             } else {

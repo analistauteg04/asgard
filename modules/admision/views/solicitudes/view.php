@@ -7,7 +7,6 @@ use app\modules\academico\Module as academico;
 use app\modules\financiero\Module as financiero;
 academico::registerTranslations();
 financiero::registerTranslations();
-
 ?>
 <?= Html::hiddenInput('txth_sins_id', base64_encode($sins_id), ['id' => 'txth_sins_id']); ?>
 <?= Html::hiddenInput('txth_per_id', base64_encode($per_id), ['id' => 'txth_per_id']); ?>
@@ -59,7 +58,7 @@ financiero::registerTranslations();
     
         <div class="col-md-6 col-sm-6 col-xs-6 col-lg-6">
             <div class="form-group">
-                <label for="txt_carrera" class="col-sm-4 control-label" id="lbl_carrera"><?= academico::t("Academico", "Career/Program") ?></label> 
+                <label for="txt_carrera" class="col-sm-4 control-label" id="lbl_carrera"><?= academico::t("Academico", "Career/Program/Course") ?></label> 
                 <div class="col-sm-8 ">
                     <input type="text" class="form-control" value="<?= $personaData["carrera"] ?>" id="txt_carrera" disabled="true">                 
                 </div>
@@ -69,7 +68,7 @@ financiero::registerTranslations();
     <div class="col-md-12 col-sm-12 col-xs-12 col-lg-12">
         <h4><b><span id="lbl_Personeria"><?= Yii::t("formulario", "Attached Files") ?></span></b></h4>    
     </div>
-    
+ <?php if ($personaData["uaca_id"] < 3) { ?>   
     <div class="col-md-6 doc_titulo cinteres">
         <div class="form-group">
             <label for="txth_doc_titulo" class="col-sm-4 control-label keyupmce"><?= Yii::t("formulario", "Title") ?></label>
@@ -128,6 +127,7 @@ financiero::registerTranslations();
             </div>
         </div>
     <?php } ?>
+  <?php } ?>  
     <div class="col-md-6 col-sm-6 col-xs-6 col-lg-6  doc_foto cinteres">
         <div class="form-group">
             <label for="txth_doc_pago" class="col-sm-4 control-label keyupmce"><?= financiero::t("Pagos", "Payment") ?></label>

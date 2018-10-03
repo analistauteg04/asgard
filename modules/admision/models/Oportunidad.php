@@ -349,7 +349,30 @@ class Oportunidad extends \app\modules\admision\components\CActiveRecord {
         $resultData = $comando->queryAll();
         return $resultData;
     }
+    /**
+     * Function consulta los medios de conocimiento y canal. 
+     * @author Giovanni Vergara <analistadesarrollo02@uteg.edu.ec>;
+     * @param
+     * @return
+     */
+    public function consultarPersonaGestionPorOporId($id_opor) {
+        $con = \Yii::$app->db_crm;
+        $estado = 1;
+        $sql = "SELECT 
+                   oper.oper_id as id,
+                   oper.oper_nombre as name
+                FROM 
+                   " . $con->dbname . ".oportunidad_perdida  oper ";
+        $sql .= "  WHERE                   
+                   oper.oper_estado = :estado AND
+                   oper.oper_estado_logico = :estado
+                ORDER BY name asc";
 
+        $comando = $con->createCommand($sql);
+        $comando->bindParam(":estado", $estado, \PDO::PARAM_STR);
+        $resultData = $comando->queryAll();
+        return $resultData;
+    }
     /**
      * Function consultar las oportunidades de venta. 
      * @author Grace Viteri <analistadesarrollo01@uteg.edu.ec>;
@@ -1234,10 +1257,17 @@ class Oportunidad extends \app\modules\admision\components\CActiveRecord {
                         ifnull(bact_fecha_proxima_atencion, '') as proxima_atencion,		
                         ba.padm_id agente_id,                        
                         opo.opo_id,
+                        pges.pges_cedula,
+                        eopo.eopo_id as estado_oportunidad_id,
                         eopo.eopo_nombre as estado_oportunidad,
                         ba.oact_id as id_observacion,
-                        ifnull(oac.oact_nombre, '') as observacion
+                        ifnull(oac.oact_nombre, '') as observacion,
+                        ifnull((select concat(pers.per_pri_nombre, ' ', ifnull(pers.per_pri_apellido,' ')) 
+                                  from " . $con1->dbname . ".usuario usu 
+                                  inner join " . $con1->dbname . ".persona pers on pers.per_id = usu.usu_id
+                                  where usu.usu_id = ba.usu_id),'') as usuario_ing 
                 FROM " . $con->dbname . ".oportunidad opo 
+                         inner join " . $con->dbname . ".persona_gestion pges on opo.pges_id = pges.pges_id 
                          inner join " . $con->dbname . ".bitacora_actividades ba on opo.opo_id = ba.opo_id
                          inner join " . $con->dbname . ".estado_oportunidad eopo on eopo.eopo_id = ba.eopo_id    
                          inner join " . $con->dbname . ".personal_admision pa on pa.padm_id = ba.padm_id
@@ -1943,3 +1973,4 @@ class Oportunidad extends \app\modules\admision\components\CActiveRecord {
     }
 
 }
+
