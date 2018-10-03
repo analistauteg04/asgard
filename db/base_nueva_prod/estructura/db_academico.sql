@@ -294,6 +294,7 @@ create table if not exists `modulo_estudio` (
   `mest_codigo` varchar(20) not null, 
   `mest_nombre` varchar(300) not null, 
   `mest_descripcion` varchar(300) not null,
+  `mest_alias` varchar(300) not null,
   `mest_usuario_ingreso` bigint(20) not null,
   `mest_usuario_modifica` bigint(20)  null,
   `mest_estado` varchar(1) not null,
