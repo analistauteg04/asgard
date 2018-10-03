@@ -57,5 +57,5 @@ INSERT INTO `persona` (`per_id`, `per_pri_nombre`, `per_seg_nombre`, `per_pri_ap
 (37, 'Sandra', '' , 'García', 'Paredes', '0918745837', NULL, NULL, 1, 1, 'F', NULL, 1, 10, 87, NULL, NULL, NULL, NULL, NULL, 7, NULL, NULL, NULL, NULL, NULL, NULL, NULL, 1, 10, 87, NULL, NULL, NULL, NULL, 1, 10, 87, '1', '2017-05-18 11:50:00', NULL, '1'),
 
 (38, 'Alfredo', 'Javier' , 'Leyton', 'Castillo', '0930128384', NULL, NULL, 1, 1, 'M', NULL, 1, 10, 87, NULL, NULL, NULL, NULL, NULL, 7, NULL, NULL, NULL, NULL, NULL, NULL, NULL, 1, 10, 87, NULL, NULL, NULL, NULL, 1, 10, 87, '1', '2017-05-18 11:50:00', NULL, '1'),
-(39, 'Community', '' , '1', '', '061', NULL, NULL, 1, 1, 'F', NULL, 1, 10, 87, NULL, NULL, NULL, NULL, NULL, 7, NULL, NULL, NULL, NULL, NULL, NULL, NULL, 1, 10, 87, NULL, NULL, NULL, NULL, 1, 10, 87, '1', '2017-05-18 11:50:00', NULL, '1'),
-(40, 'Community', '' , '2', '', '071', NULL, NULL, 1, 1, 'F', NULL, 1, 10, 87, NULL, NULL, NULL, NULL, NULL, 7, NULL, NULL, NULL, NULL, NULL, NULL, NULL, 1, 10, 87, NULL, NULL, NULL, NULL, 1, 10, 87, '1', '2017-05-18 11:50:00', NULL, '1');
+(39, 'Community', '' , '1', '', '0161', NULL, NULL, 1, 1, 'F', NULL, 1, 10, 87, NULL, NULL, NULL, NULL, NULL, 7, NULL, NULL, NULL, NULL, NULL, NULL, NULL, 1, 10, 87, NULL, NULL, NULL, NULL, 1, 10, 87, '1', '2017-05-18 11:50:00', NULL, '1'),
+(40, 'Community', '' , '2', '', '0171', NULL, NULL, 1, 1, 'F', NULL, 1, 10, 87, NULL, NULL, NULL, NULL, NULL, 7, NULL, NULL, NULL, NULL, NULL, NULL, NULL, 1, 10, 87, NULL, NULL, NULL, NULL, 1, 10, 87, '1', '2017-05-18 11:50:00', NULL, '1');
