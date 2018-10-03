@@ -27,8 +27,8 @@ insert into `sub_categoria` (`scat_id`, `cat_id`, `scat_nombre`, `scat_descripci
 --
 -- Volcado de datos para la tabla `item` 
 --
-insert into `item` (`ite_id`, `scat_id`,  `ite_codigo`, `ite_nombre`, `ite_descripcion`, `ite_usu_ingreso`, `ite_estado`, `ite_estado_logico`) values
--- Uteg 
+insert into `item` (`ite_id`, `scat_id`,  `ite_codigo`, `ite_nombre`, `ite_descripcion`, `ite_usu_ingreso`, `ite_estado`, `ite_estado_logico`) values 
+-- Uteg -- 
 (1, 1, '0001', 'Curso de admisión y nivelación Online', 'Curso de admisión y nivelación Online', 1, '1', '1'),
 (2, 1, '0002', 'Examen de admisión Online', 'Examen de admisión Online', 1, '1', '1'),
 (3, 2, '0003', 'Curso de admisión y nivelación Presencial', 'Curso de admisión y nivelación Presencial', 1, '1', '1'),
@@ -39,7 +39,7 @@ insert into `item` (`ite_id`, `scat_id`,  `ite_codigo`, `ite_nombre`, `ite_descr
 (8, 4, '0008', 'Examen de admisión a Distancia', 'Examen de admisión  a Distancia', 1, '1', '1'),
 (9, 5, '0009', 'Homologación Posgrado', 'Homologación Posgrado', 1, '1', '1'),
 (10, 5, '0010', 'Propedéutico Posgrado', 'Propedéutico Posgrado', 1, '1', '1'),
--- Smart 
+-- Smart --
 (11, 6, '0011', 'Emprendimiento y Ventas', 'Emprendimiento y Ventas', 1, '1', '1'),
 (12, 6, '0012', 'Excel Avanzado', 'Excel Avanzado', 1, '1', '1'),
 (13, 6, '0013', 'Fotografía', 'Fotografía', 1, '1', '1'),
@@ -64,7 +64,7 @@ insert into `item` (`ite_id`, `scat_id`,  `ite_codigo`, `ite_nombre`, `ite_descr
 (32, 6, '0032', 'Programa para docentes: Habilidades pedagógicas', 'Programa para docentes: Habilidades pedagógicas', 1, '1', '1'),
 (33, 6, '0033', 'Promoción programa talento humano', 'Promoción programa talento humano', 1, '1', '1'),
 (34, 6, '0034', 'Promoción programa para docentes', 'Promoción programa para docentes', 1, '1', '1'),
--- Ulink 
+-- Ulink --
 (35, 7, '0035', 'Diplomado gestión del talento humano basado en competencias', 'Diplomado gestión del talento humano basado en competencias', 1, '1', '1'),
 (36, 7, '0036', 'Diplomado en Alta Gerencia y Control de Gestión', 'Diplomado en Alta Gerencia y Control de Gestión', 1, '1', '1'),
 (37, 7, '0037', 'Diplomado en Culture Management: nuevas formas de hacer negocio', 'Diplomado en Culture Management: nuevas formas de hacer negocio', 1, '1', '1'),
@@ -81,7 +81,7 @@ insert into `item` (`ite_id`, `scat_id`,  `ite_codigo`, `ite_nombre`, `ite_descr
 (48, 7, '0048', 'Análisis Financiero y Sistemas de Control para las organizaciones', 'Análisis Financiero y Sistemas de Control para las organizaciones', 1, '1', '1'),
 (49, 7, '0049', 'La Valoración en los negocios y su importancia en la toma de decisiones', 'La Valoración en los negocios y su importancia en la toma de decisiones', 1, '1', '1'),
 (50, 7, '0050', 'Emprendimiento global', 'Emprendimiento global', 1, '1', '1'),
-(51, 7, '0051',	'El uso de la Inteligencia de Mercado como factor clave de competitividad', 1, '1', '1'),
+(51, 7, '0051',	'El uso de la Inteligencia de Mercado como factor clave de competitividad', 'El uso de la Inteligencia de Mercado como factor clave de competitividad', 1, '1', '1'),
 (52, 7, '0052', 'La Globalización y la Integración Económica', 'La Globalización y la Integración Económica', 1, '1', '1'),
 (53, 7, '0053', 'La visión multicultural como factor de éxito en los negocios internacionales', 'La visión multicultural como factor de éxito en los negocios internacionales', 1, '1', '1'),
 (54, 7, '0054', 'Estrategias de Marketing para un entorno globalizado', 'Estrategias de Marketing para un entorno globalizado', 1, '1', '1'),
@@ -128,14 +128,14 @@ insert into `item` (`ite_id`, `scat_id`,  `ite_codigo`, `ite_nombre`, `ite_descr
 -- Volcado de datos para la tabla `item_precio` 
 --
 insert into `item_precio` (`ipre_id`, `ite_id`, `ipre_precio`, `ipre_porcentaje_iva`, `ipre_estado_precio`, `ipre_valor_minimo`, `ipre_porcentaje_minimo`, `ipre_fecha_inicio`, `ipre_fecha_fin`, `ipre_usu_ingreso`, `ipre_estado`, `ipre_estado_logico`) values
--- Uteg 
+-- Uteg --
 (1, 1, 150, null, 'A', null, null, '2017/09/25 00:00:00', '2018/12/31 23:59:59', 1, '1', '1'),
 (2, 2, 90, null, 'A', null, null, '2017/09/09 00:00:00', '2018/12/31 23:59:59', 1, '1', '1'),
 (3, 3, 390, null, 'A', null, null, '2018/07/01 00:00:00', '2018/12/31 23:59:59', 1, '1', '1'),
 (4, 5, 390, null, 'A', null, null, '2018/07/01 00:00:00', '2018/12/31 23:59:59', 1, '1', '1'),
 (5, 7, 390, null, 'A', null, null, '2018/07/01 00:00:00', '2018/12/31 23:59:59', 1, '1', '1'),
 (6, 10, 950, null, 'A', null, null, '2018/07/01 00:00:00', '2018/12/31 23:59:59', 1, '1', '1'),
--- Smart 
+-- Smart --
 (7, 11, 80, null, 'A', null, null, '2018/10/01 00:00:00', '2018/12/31 23:59:59', 1, '1', '1'),
 (8, 12, 80, null, 'A', null, null, '2018/10/01 00:00:00', '2018/12/31 23:59:59', 1, '1', '1'),
 (9, 13, 60, null, 'A', null, null, '2018/10/01 00:00:00', '2018/12/31 23:59:59', 1, '1', '1'),
@@ -160,7 +160,7 @@ insert into `item_precio` (`ipre_id`, `ite_id`, `ipre_precio`, `ipre_porcentaje_
 (28, 32, 180, null, 'A', null, null, '2018/10/01 00:00:00', '2018/12/31 23:59:59', 1, '1', '1'),
 (29, 33, 380, null, 'A', null, null, '2018/10/01 00:00:00', '2018/12/31 23:59:59', 1, '1', '1'),
 (30, 34, 300, null, 'A', null, null, '2018/10/01 00:00:00', '2018/12/31 23:59:59', 1, '1', '1'),
--- Ulink
+-- Ulink --
 (31, 35, 1200, null, 'A', null, null, '2018/10/01 00:00:00', '2018/12/31 23:59:59', 1, '1', '1'),
 (32, 36, 1200, null, 'A', null, null, '2018/10/01 00:00:00', '2018/12/31 23:59:59', 1, '1', '1'),
 (33, 37, 1200, null, 'A', null, null, '2018/10/01 00:00:00', '2018/12/31 23:59:59', 1, '1', '1'),
@@ -224,14 +224,14 @@ insert into `item_precio` (`ipre_id`, `ite_id`, `ipre_precio`, `ipre_porcentaje_
 -- Volcado de datos para la tabla `historial_item_precio` 
 --
 insert into `historial_item_precio` (`hipr_id`, `ite_id`, `hipr_precio`, `hipr_porcentaje_iva`, `hipr_fecha_inicio`, `hipr_fecha_fin`, `hipr_valor_minimo`, `hipr_porcentaje_minimo`, `hipr_usu_transaccion`, `hipr_estado`, `hipr_estado_logico`) values
--- Uteg 
+-- Uteg --
 (1, 1, 150, null, '2017/09/25 00:00:00', '2018/12/31 23:59:59', null, null, 1, '1', '1'),
 (2, 2, 90, null, '2017/09/25 00:00:00', '2018/12/31 23:59:59', null, null, 1, '1', '1'),
 (3, 3, 390, null, '2018/07/01 00:00:00', '2018/12/31 23:59:59', null, null, 1, '1', '1'),
 (4, 5, 390, null, '2018/07/01 00:00:00', '2018/12/31 23:59:59', null, null, 1, '1', '1'),
 (5, 7, 390, null, '2018/07/01 00:00:00', '2018/12/31 23:59:59', null, null, 1, '1', '1'),
 (6, 10, 950, null, '2018/07/01 00:00:00', '2018/12/31 23:59:59', null, null, 1, '1', '1'),
--- Smart 
+-- Smart --
 (7, 11, 80, null, '2018/10/01 00:00:00', '2018/12/31 23:59:59', null, null, 1, '1', '1'),
 (8, 12, 80, null, '2018/10/01 00:00:00', '2018/12/31 23:59:59', null, null, 1, '1', '1'),
 (9, 13, 60, null, '2018/10/01 00:00:00', '2018/12/31 23:59:59', null, null, 1, '1', '1'),
@@ -256,7 +256,7 @@ insert into `historial_item_precio` (`hipr_id`, `ite_id`, `hipr_precio`, `hipr_p
 (28, 32, 180, null, '2018/10/01 00:00:00', '2018/12/31 23:59:59', null, null, 1, '1', '1'),
 (29, 33, 380, null, '2018/10/01 00:00:00', '2018/12/31 23:59:59', null, null, 1, '1', '1'),
 (30, 34, 300, null, '2018/10/01 00:00:00', '2018/12/31 23:59:59', null, null, 1, '1', '1'),
--- Ulink 
+-- Ulink --
 (31, 35, 1200, null, '2018/10/01 00:00:00', '2018/12/31 23:59:59', null, null, 1, '1', '1'),
 (32, 36, 1200, null, '2018/10/01 00:00:00', '2018/12/31 23:59:59', null, null, 1, '1', '1'),
 (33, 37, 1200, null, '2018/10/01 00:00:00', '2018/12/31 23:59:59', null, null, 1, '1', '1'),
@@ -320,14 +320,14 @@ insert into `historial_item_precio` (`hipr_id`, `ite_id`, `hipr_precio`, `hipr_p
 -- Volcado de datos para la tabla `item_metodo_nivel` 
 --
 insert into `item_metodo_unidad` (`imni_id`, `ite_id`, `ming_id`, `uaca_id`, `mod_id`, `mest_id`, `imni_usu_ingreso`, `imni_estado`, `imni_estado_logico`) values
--- Uteg 
+-- Uteg --
 (1, 1, 1, 1, 1, null, 1, '1', '1'),
 (2, 2, 2, 1, 1, null, 1, '1', '1'),
 (3, 3, 1, 1, 2, null, 1, '1', '1'),
 (4, 5, 1, 1, 3, null, 1, '1', '1'),
 (5, 7, 1, 1, 4, null, 1, '1', '1'),
 (6, 10, 4, 2, 3, null, 1, '1', '1'),
--- Smart 
+-- Smart --
 (7, 11, null, 3, 2, 1, 1, '1', '1'),
 (8, 12, null, 3, 2, 2, 1, '1', '1'),
 (9, 13, null, 3, 2, 3, 1, '1', '1'),
@@ -352,7 +352,7 @@ insert into `item_metodo_unidad` (`imni_id`, `ite_id`, `ming_id`, `uaca_id`, `mo
 (28, 32, null, 3, 2, 24, 1, '1', '1'),
 (29, 33, null, 3, 2, 25, 1, '1', '1'),
 (30, 34, null, 3, 2, 26, 1, '1', '1'),
--- Ulink
+-- Ulink --
 (31, 35, null, 5, 1, 27, 1, '1', '1'),
 (32, 36, null, 5, 1, 28, 1, '1', '1'),
 (33, 37, null, 5, 1, 29, 1, '1', '1'),
