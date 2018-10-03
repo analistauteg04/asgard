@@ -26,7 +26,7 @@ class OportunidadesController extends \app\components\CController {
         $estado_oportunidad = $modEstOport->consultarEstadOportunidad();
         $empresa_model=new Empresa();
         $data = Yii::$app->request->get();
-        $empresas=$empresa_model->getAllEmpresa();
+        //$empresas=Empresa::getAllEmpresa();
         if ($data['PBgetFilter']) {
             $arrSearch["agente"] = $data['agente'];
             $arrSearch["interesado"] = $data['interesado'];
@@ -42,7 +42,7 @@ class OportunidadesController extends \app\components\CController {
         return $this->render('index', [
                     'model' => $mod_gestion,
                     'arr_estgestion' => ArrayHelper::map(array_merge([["id" => "0", "name" => "Todas"]], $estado_oportunidad), "id", "name"),
-                    'arr_empresa' => ArrayHelper::map(array_merge([["id" => "0", "name" => "Todas"]], $empresas), "id", "name"),
+                    //'arr_empresa' => ArrayHelper::map(array_merge([["id" => "0", "value" => "Todas"]], $empresas), "id", "value"),
         ]);
     }
 
