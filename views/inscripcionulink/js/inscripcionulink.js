@@ -32,8 +32,6 @@ $(document).ready(function () {
                     arrParams.unidada = $('#cmb_ninteres').val();
                     arrParams.moda_id = $('#cmb_modalidad').val();
                     arrParams.empresa_id = 2;
-                    alert(arrParams.unidada);
-                    alert(arrParams.moda_id);
                     arrParams.getcarrera = true;
                     requestHttpAjax(link, arrParams, function (response) {
                         if (response.status == "OK") {
