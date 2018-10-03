@@ -349,7 +349,30 @@ class Oportunidad extends \app\modules\admision\components\CActiveRecord {
         $resultData = $comando->queryAll();
         return $resultData;
     }
+    /**
+     * Function consulta los medios de conocimiento y canal. 
+     * @author Giovanni Vergara <analistadesarrollo02@uteg.edu.ec>;
+     * @param
+     * @return
+     */
+    public function consultarPersonaGestionPorOporId($id_opor) {
+        $con = \Yii::$app->db_crm;
+        $estado = 1;
+        $sql = "SELECT 
+                   oper.oper_id as id,
+                   oper.oper_nombre as name
+                FROM 
+                   " . $con->dbname . ".oportunidad_perdida  oper ";
+        $sql .= "  WHERE                   
+                   oper.oper_estado = :estado AND
+                   oper.oper_estado_logico = :estado
+                ORDER BY name asc";
 
+        $comando = $con->createCommand($sql);
+        $comando->bindParam(":estado", $estado, \PDO::PARAM_STR);
+        $resultData = $comando->queryAll();
+        return $resultData;
+    }
     /**
      * Function consultar las oportunidades de venta. 
      * @author Grace Viteri <analistadesarrollo01@uteg.edu.ec>;
