@@ -10,6 +10,7 @@ use app\models\ExportFile;
 use app\modules\financiero\models\OrdenPago;
 use app\modules\admision\models\SolicitudInscripcion;
 use app\models\Persona;
+use app\models\Usuario;
 use app\modules\admision\models\Interesado;
 use yii\helpers\Url;
 use yii\base\Exception;
@@ -76,15 +77,16 @@ class PagosController extends \app\components\CController {
     }
 
     public function actionValidarpagocarga() {
-        $per_id = @Yii::$app->session->get("PB_iduser");
+        $per_id = @Yii::$app->session->get("PB_perid");
         $model_interesado = new Interesado();
-        $resp_gruporol = $model_interesado->consultagruporol($per_id);
-
-        $opag_id = $_GET["ido"];
-
-        $mod_cliord = new OrdenPago();
-        $resp_cliord = $mod_cliord->consultarOrdenpago($resp_gruporol["grol_id"], $opag_id, 0);
-
+        $opag_id = empty($_GET["ido"])?0:$_GET["ido"];
+        $mod_cliord = new OrdenPago();       
+        if($opag_id>0){
+            $opag_id=$mod_cliord->consultarInfoOrdenPagoPorPerId($per_id);
+        }
+        $resp_gruporol = $model_interesado->consultagruporol($per_id);        
+        $gruporol=empty($resp_gruporol["grol_id"])?27:$resp_gruporol["grol_id"];
+        $resp_cliord = $mod_cliord->consultarOrdenpago($gruporol, $opag_id, 0);        
         if ($resp_cliord) {
             $persona_pago = $resp_cliord["per_id"];
             $sins_id = $resp_cliord["sser_id"];
@@ -94,9 +96,8 @@ class PagosController extends \app\components\CController {
             $valoraplicado = $resp_cliord["valoraplicado"];
             $rol = $resp_cliord["rol"];
         }
-
         $mod_pago = new OrdenPago();
-        $resp_pago = $mod_pago->listarPagosadmxsolicitud($resp_gruporol["grol_id"], $opag_id, $persona_pago);
+        $resp_pago = $mod_pago->listarPagosadmxsolicitud($gruporol, $opag_id, $persona_pago);
         $data = null;
 
         if (Yii::$app->request->isAjax) {

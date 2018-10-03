@@ -140,7 +140,10 @@ INSERT INTO `objeto_modulo` (`omod_id`, `mod_id`, `omod_padre_id`, `omod_nombre`
 (112, 3, 111, 'Guardar Cargar Factura', 'A', '0', '', '', '', 'financiero/pagos/cargardocfact', '1', '0', 'Pagos', '1', '2018-09-22 14:07:01', NULL, '1'),
 -- Exportar Leads
 (113, 2, 107, 'Exportar Contactos por Estado', 'A', '0', '', '', '', 'admision/contactos/cargarleads', '1', '0', 'Admision', '1', '2018-09-22 14:07:01', NULL, '1'),
-(114, 2, 107, 'Exportar Contactos Perdidos', 'A', '0', '', '', '', 'admision/contactos/cargarleads', '1', '0', 'Admision', '1', '2018-09-22 14:07:01', NULL, '1');
+(114, 2, 107, 'Exportar Contactos Perdidos', 'A', '0', '', '', '', 'admision/contactos/cargarleads', '1', '0', 'Admision', '1', '2018-09-22 14:07:01', NULL, '1'),
+-- Objetos Modulos Extras para Interesados
+(115, 2, 115, 'Solicitudes', 'P', '0', '', '', '', 'admision/solicitudes/listarsolicitudxinteresado', '1', '1', 'Solicitudes', '1', '2018-09-22 00:05:23', NULL, '1'),
+(116, 3, 116, 'Pagos Realizados', 'P', '0', '', '', '', 'financiero/pagos/cargardocpago', '1', '1', 'Pagos', '1', '2018-09-22 14:07:01', NULL, '1');
 -- --------------------------------------------------------
 --
 -- Volcado de datos para la tabla `OBMO_ACCI`

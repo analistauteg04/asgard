@@ -6,7 +6,6 @@ use app\widgets\PbGridView\PbGridView;
 use yii\data\ArrayDataProvider;
 use app\modules\financiero\Module as financiero;
 use app\modules\admision\Module as admision;
-
 admision::registerTranslations();
 ?>
 <?= Html::hiddenInput('txth_ids', $opag_id, ['id' => 'txth_ids']); ?>
@@ -98,9 +97,9 @@ PbGridView::widget([
                     }
                 },
                 'descarga' => function ($url, $model) {
-                    if ($model['formapago'] == 'Transferencia' || $model['formapago'] == 'Depósito') {
+                    //if ($model['formapago'] == 'Transferencia' || $model['formapago'] == 'Depósito') {
                         return Html::a('<span class="glyphicon glyphicon-download-alt"></span>', Url::to(['/site/getimage', 'route' => '/uploads/documento/' . $model['per_id'] . '/' . $model['imagen']]), ["download" => $model['imagen'], "data-toggle" => "tooltip", "title" => "Descargar Pago", "data-pjax" => 0]);
-                    }
+                   // }
                 },
             ],
         ],
