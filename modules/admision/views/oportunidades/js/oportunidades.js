@@ -189,13 +189,12 @@ $(document).ready(function () {
 function actualizarGridGestion() {
     var agente = $('#txt_buscarDataAgente').val();
     var interesado = $('#txt_buscarDataPersona').val();
-    // var f_atencion = $('#txt_fecha_atencion').val();
+    var empresa = $('#cmb_empresa option:selected').val();
     var estado = $('#cmb_estadop option:selected').val();
     //Buscar almenos una clase con el nombre para ejecutar
     if (!$(".blockUI").length) {
         showLoadingPopup();
-        // $('#Pbgestion').PbGridView('applyFilterData', {'agente': agente, 'interesado': interesado, 'f_atencion': f_atencion, 'estado': estado});
-        $('#Pbgestion').PbGridView('applyFilterData', {'agente': agente, 'interesado': interesado, 'estado': estado});
+        $('#Pbgestion').PbGridView('applyFilterData', {'agente': agente, 'interesado': interesado, 'empresa': empresa, 'estado': estado});
         setTimeout(hideLoadingPopup, 2000);
     }
 }
@@ -262,13 +261,15 @@ function save() {
 function exportExcel() {
     var search = $('#txt_buscarDataAgente').val();
     var contacto = $('#txt_buscarDataPersona').val();
+    var empresa = $('#cmb_empresa').val();
     var f_estado = $('#cmb_estadop').val();
-    window.location.href = $('#txth_base').val() + "/admision/oportunidades/expexcel?search=" + search + "&contacto=" + contacto + "&f_estado=" + f_estado;
+    window.location.href = $('#txth_base').val() + "/admision/oportunidades/expexcel?search=" + search + "&contacto=" + contacto + "&empresa=" + empresa + "&f_estado=" + f_estado;
 }
 
 function exportPdf() {
     var search = $('#txt_buscarDataAgente').val();
     var contacto = $('#txt_buscarDataPersona').val();
+    var empresa = $('#cmb_empresa').val();
     var f_estado = $('#cmb_estadop').val();
-    window.location.href = $('#txth_base').val() + "/admision/oportunidades/exppdfoportunidades?pdf=1&search=" + search + "&contacto=" + contacto + "&f_estado=" + f_estado;
+    window.location.href = $('#txth_base').val() + "/admision/oportunidades/exppdfoportunidades?pdf=1&search=" + search + "&contacto=" + contacto + "&empresa=" + empresa + "&f_estado=" + f_estado;
 }

@@ -68,10 +68,10 @@ admision::registerTranslations();
                             if ($model['rol'] == 5 || $model['rol'] == 6 || $model['rol'] == 7 || $model['rol'] == 8 || $model['rol'] == 15) {
                                 return '<span class = "glyphicon glyphicon-check">  </span>';
                             } else {
-                                return Html::a('<span class="glyphicon glyphicon-check"></span>', Url::to(['pagos/registrarpagoadm', 'ido' => $model['orden'], 'per_id' => $model['per_id']]), ["data-toggle" => "tooltip", "title" => "Registrar Pagos", "data-pjax" => 0]);
+                                return Html::a('<span class="glyphicon glyphicon-check"></span>', Url::to(['pagos/registrarpagoadm', 'ido' => $model['orden'], 'per_id' => $model['per_id'], 'sins_id' => $model['sins_id']]), ["data-toggle" => "tooltip", "title" => "Registrar Pagos", "data-pjax" => 0]);
                             }
                         } else {
-                            return Html::a('<span class="glyphicon glyphicon-thumbs-up"></span>', Url::to(['pagos/registrarpagoadm', 'ido' => $model['orden'], 'per_id' => $model['per_id']]), ["data-toggle" => "tooltip", "title" => "Registrar Pagos", "data-pjax" => 0]);
+                            return Html::a('<span class="glyphicon glyphicon-thumbs-up"></span>', Url::to(['pagos/registrarpagoadm', 'ido' => $model['orden'], 'per_id' => $model['per_id'], 'sins_id' => $model['sins_id']]), ["data-toggle" => "tooltip", "title" => "Registrar Pagos", "data-pjax" => 0]);
                         }
                     },
                 ],

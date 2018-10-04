@@ -65,7 +65,7 @@ use app\modules\admision\Module;
                         $existe = isset($pre_id['existen']) ? 1 : 0;
                         if($model['estado_oportunidad_id']==3){
                             if ($existe == 0) {
-                                return Html::a('<span class="glyphicon glyphicon-user"></span>', "#", ["onclick" => "grabarInteresado(" . $model['pges_id'] . ");", "data-toggle" => "tooltip", "title" => "Generar Aspirante", "data-pjax" => 0]);
+                                return Html::a('<span class="glyphicon glyphicon-user"></span>', "#", ["onclick" => "grabarInteresado(" . $model['id'] . ");", "data-toggle" => "tooltip", "title" => "Generar Aspirante", "data-pjax" => 0]);
                             } else {
                                 return "<span class = 'glyphicon glyphicon-user' data-toggle = 'tooltip' title ='Usuario Existente'  data-pjax = 0></span>";
                             }                                

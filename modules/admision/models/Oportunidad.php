@@ -351,6 +351,37 @@ class Oportunidad extends \app\modules\admision\components\CActiveRecord {
     }
 
     /**
+     * Function consulta los medios de conocimiento y canal. 
+     * @author Giovanni Vergara <analistadesarrollo02@uteg.edu.ec>;
+     * @param
+     * @return
+     */
+    public function consultarPersonaGestionPorOporId($id_opor) {
+        $con = \Yii::$app->db_crm;
+        $con1 = \Yii::$app->db_asgard;
+        $estado = 1;
+        $sql = "
+                SELECT pges.*, pai.pai_nombre as pais,
+                    opor.emp_id
+                FROM  " . $con->dbname . ".oportunidad as opor
+                    JOIN " . $con->dbname . ".persona_gestion pges on pges.pges_id=opor.pges_id
+                    JOIN " . $con1->dbname . ".pais pai on pai.pai_id = pges.pai_id_nacimiento
+                WHERE 
+                    opor.opo_id = :opo_id
+                    AND opor.opo_estado = :estado
+                    AND opor.opo_estado_logico=:estado
+                    AND pges.pges_estado = :estado
+                    AND pges.pges_estado_logico=:estado
+              ";
+
+        $comando = $con->createCommand($sql);
+        $comando->bindParam(":estado", $estado, \PDO::PARAM_STR);
+        $comando->bindParam(":opo_id", $id_opor, \PDO::PARAM_INT);
+        $resultData = $comando->queryOne();
+        return $resultData;
+    }
+
+    /**
      * Function consultar las oportunidades de venta. 
      * @author Grace Viteri <analistadesarrollo01@uteg.edu.ec>;
      * @param 
@@ -369,9 +400,9 @@ class Oportunidad extends \app\modules\admision\components\CActiveRecord {
             if ($arrFiltro['agente'] != "") {
                 $str_search .= " (a.agente like :agente OR padm_codigo like :agente)  AND";
             }
-            /* if ($arrFiltro['f_atencion'] != "") {
-              $str_search .= " (fecha_atencion >= :fec_atencion_ini and fecha_atencion <= :fec_atencion_fin)  AND";
-              } */
+            if ($arrFiltro['empresa'] > "0") {
+                $str_search .= " a.emp_id = :empresa  AND";
+            }
             if ($arrFiltro['estado'] != "" && $arrFiltro['estado'] > 0) {
                 $str_search .= "  a.eopo_id = :estado_ate AND ";
             }
@@ -443,6 +474,7 @@ class Oportunidad extends \app\modules\admision\components\CActiveRecord {
             $search_cond = "%" . $arrFiltro["interesado"] . "%";
             $agente = "%" . $arrFiltro["agente"] . "%";
             $estado_ate = $arrFiltro["estado"];
+            $empresa = $arrFiltro["empresa"];
 
             if ($arrFiltro['interesado'] != "") {
                 $comando->bindParam(":interesado", $search_cond, \PDO::PARAM_STR);
@@ -450,10 +482,9 @@ class Oportunidad extends \app\modules\admision\components\CActiveRecord {
             if ($arrFiltro['agente'] != "") {
                 $comando->bindParam(":agente", $agente, \PDO::PARAM_STR);
             }
-            /* if ($arrFiltro['f_atencion'] != "") {
-              $comando->bindParam(":fec_atencion_ini", $fecha_atencion_ini, \PDO::PARAM_STR);
-              $comando->bindParam(":fec_atencion_fin", $fecha_atencion_fin, \PDO::PARAM_STR);
-              } */
+            if ($arrFiltro['empresa'] > "0") {
+                $comando->bindParam(":empresa", $empresa, \PDO::PARAM_INT);
+            }
             if ($arrFiltro['estado'] != "" && $arrFiltro['estado'] > 0) {
                 $comando->bindParam(":estado_ate", $estado_ate, \PDO::PARAM_INT);
             }
@@ -1801,7 +1832,7 @@ class Oportunidad extends \app\modules\admision\components\CActiveRecord {
         \app\models\Utilities::putMessageLogFile($sql);
         return $comando->queryAll();
     }
-    
+
     /** Se debe cambiar esta funcion que regrese el codigo de area ***ojo***
      * Function consultarCodigoArea
      * @author  Byron Villacreses <developer@uteg.edu.ec>
@@ -1863,16 +1894,21 @@ class Oportunidad extends \app\modules\admision\components\CActiveRecord {
             if ($arrFiltro['agente'] != "") {
                 $str_search .= " (padm_codigo like :agente)  AND";
             }
+            if ($arrFiltro['empresa'] > "0") {
+                $str_search .= " a.emp_id = :empresa  AND";
+            }
             if ($arrFiltro['estado'] != "" && $arrFiltro['estado'] > 0) {
                 $str_search .= "  a.eopo_id = :estado_ate AND ";
             }
         }
         $sql = "SELECT * FROM (
-                    SELECT  o.opo_id, 
+                    SELECT  o.opo_id,                                                       
                              lpad(ifnull(o.opo_codigo,0),7,'0') as opo_codigo, 
                             (case when pg.tper_id = 1 then 
                                     concat(ifnull(pg.pges_pri_nombre,''), ' ', ifnull(pg.pges_seg_nombre,''), ' ', ifnull(pg.pges_pri_apellido,''), ' ', ifnull(pg.pges_seg_apellido,'')) 
                                     else pg.pges_razon_social end) as contacto,
+                            o.emp_id,             
+                            e.emp_razon_social as des_empresa,        
                             ua.uaca_descripcion as des_unidad,
                             (case when (o.uaca_id < 3) then
                                             (select ea.eaca_descripcion from " . $con2->dbname . ".estudio_academico ea where ea.eaca_id = o.eaca_id and ea.eaca_estado = '1' and ea.eaca_estado_logico = '1')
@@ -1921,12 +1957,17 @@ class Oportunidad extends \app\modules\admision\components\CActiveRecord {
             $search_cond = "%" . $arrFiltro["interesado"] . "%";
             $agente = "%" . $arrFiltro["agente"] . "%";
             $estado_ate = $arrFiltro["estado"];
+            $empresa = $arrFiltro["empresa"];
+            
             if ($arrFiltro['interesado'] != "") {
                 $comando->bindParam(":interesado", $search_cond, \PDO::PARAM_STR);
             }
             if ($arrFiltro['agente'] != "") {
                 $comando->bindParam(":agente", $agente, \PDO::PARAM_STR);
-            }     
+            }
+            if ($arrFiltro['empresa'] > "0") {
+                $comando->bindParam(":empresa", $empresa, \PDO::PARAM_INT);
+            }
             if ($arrFiltro['estado'] != "" && $arrFiltro['estado'] > 0) {
                 $comando->bindParam(":estado_ate", $estado_ate, \PDO::PARAM_INT);
             }
@@ -1950,4 +1991,3 @@ class Oportunidad extends \app\modules\admision\components\CActiveRecord {
     }
 
 }
-

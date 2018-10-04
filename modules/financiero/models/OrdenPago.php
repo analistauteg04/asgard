@@ -131,7 +131,8 @@ class OrdenPago extends \app\modules\financiero\components\CActiveRecord {
         $columnsAdd = "";
         if (isset($arrFiltro) && count($arrFiltro) > 0) {
             $str_search .= "(per.per_pri_nombre like :search OR ";
-            $str_search .= "per.per_pri_apellido like :search ) AND ";
+            $str_search .= "per.per_pri_apellido like :search) AND ";
+            //$str_search .= "per.per_pri_apellido like :search OR ";
             //$str_search .= "ming.ming_descripcion like :search) AND ";
             if ($arrFiltro['f_ini'] != "" && $arrFiltro['f_fin'] != "") {
                 $str_search .= "sins.sins_fecha_solicitud >= :fec_ini AND ";
@@ -149,6 +150,7 @@ class OrdenPago extends \app\modules\financiero\components\CActiveRecord {
             $rolgrupo = ", " . $resp_gruporol . " as rol";
         }
         $sql = "SELECT  lpad(sins.sins_id,4,'0') as solicitud, 
+                        sins.sins_id, 
                         sins.sins_fecha_solicitud,
                         per.per_id,
                         per.per_cedula identificacion,

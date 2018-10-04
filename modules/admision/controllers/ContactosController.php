@@ -545,10 +545,14 @@ class ContactosController extends \app\components\CController {
 
     public function actionListaroportunidad() {
         $per_id = @Yii::$app->session->get("PB_iduser");
-        $pges_id = base64_decode($_GET["pgid"]);
+        $pges_id = base64_decode(empty($_GET["pgid"])?base64_encode(0):$_GET["pgid"]);
         $modGestionCrm = new Oportunidad();
         $data = Yii::$app->request->get();
         $persges_mod = new PersonaGestion();
+        if($pges_id==0){
+            header('Location: '.'index');
+            die();
+        }
         $contactManage = $persges_mod->consultarPersonaGestion($pges_id);
         $ListOportXContact = $modGestionCrm->consultarOportunidadesByContact(array(), $pges_id, 2);
         if (Yii::$app->request->isAjax) {

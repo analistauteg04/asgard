@@ -79,11 +79,11 @@ class PagosController extends \app\components\CController {
     public function actionValidarpagocarga() {
         $per_id = @Yii::$app->session->get("PB_perid");
         $model_interesado = new Interesado();
-        $opag_id = empty($_GET["ido"])?0:$_GET["ido"];
+        $opag_id = $_GET["ido"];//empty($_GET["ido"])?0:$_GET["ido"];
         $mod_cliord = new OrdenPago();       
-        if($opag_id>0){
+        /*if($opag_id>0){
             $opag_id=$mod_cliord->consultarInfoOrdenPagoPorPerId($per_id);
-        }
+        }*/
         $resp_gruporol = $model_interesado->consultagruporol($per_id);        
         $gruporol=empty($resp_gruporol["grol_id"])?27:$resp_gruporol["grol_id"];
         $resp_cliord = $mod_cliord->consultarOrdenpago($gruporol, $opag_id, 0);        
@@ -517,11 +517,11 @@ class PagosController extends \app\components\CController {
     public function actionRegistrarpagoadm() {
         $opag_id = $_GET["ido"];
         $per_id = $_GET["per_id"];
-
+        $sol_id = $_GET["sins_id"];
         $mod_opago = new OrdenPago();
         $arr_forma_pago = $mod_opago->formaPago("1");
 
-        $resp_orden = $mod_opago->listarSolicitud($per_id, $opag_id, 0);
+        $resp_orden = $mod_opago->listarSolicitud($sol_id, $opag_id, 0);
         $valor_total = $resp_orden['ipre_precio'];
         $saldo_pendiente = $resp_orden['pendiente'];
         $int_id = $resp_orden['int_id'];

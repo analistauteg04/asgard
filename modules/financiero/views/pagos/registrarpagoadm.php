@@ -15,7 +15,6 @@ use yii\web\JsExpression;
 use app\models\Utilities;
 use app\modules\financiero\Module as financiero;
 use app\modules\admision\Module as admision;
-
 admision::registerTranslations();
 session_start();
 $_SESSION['personaid'] = $per_id;
