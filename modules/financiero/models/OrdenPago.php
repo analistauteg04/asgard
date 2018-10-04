@@ -149,7 +149,7 @@ class OrdenPago extends \app\modules\financiero\components\CActiveRecord {
         if (!empty($resp_gruporol)) {
             $rolgrupo = ", " . $resp_gruporol . " as rol";
         }
-        $sql = "SELECT  lpad(sins.sins_id,4,'0') as solicitud, 
+        $sql = "SELECT  distinct ifnull(sins.num_solicitud, lpad(sins.sins_id,9,'0')) as solicitud,
                         sins.sins_id, 
                         sins.sins_fecha_solicitud,
                         per.per_id,
@@ -259,7 +259,7 @@ class OrdenPago extends \app\modules\financiero\components\CActiveRecord {
             }
         }
 
-        $sql = "SELECT 
+        $sql = "SELECT
                     orp.opag_id,  
                     inte.int_id,
                     ite.ite_nombre,                     
@@ -287,7 +287,7 @@ class OrdenPago extends \app\modules\financiero\components\CActiveRecord {
                     INNER JOIN " . $con2->dbname . ".solicitud_inscripcion sins on sins.int_id = inte.int_id
                     INNER JOIN  " . $con->dbname . ".orden_pago orp on sins.sins_id = orp.sins_id
                     INNER JOIN " . $con->dbname . ".item_metodo_unidad imni on ((sins.ming_id = imni.ming_id and sins.uaca_id = imni.uaca_id and sins.mod_id = imni.mod_id)
-                                or (sins.uaca_id = imni.uaca_id and sins.mod_id = imni.mod_id and sins.uaca_id = imni.mest_id))
+                                or (sins.uaca_id = imni.uaca_id and sins.mod_id = imni.mod_id and sins.mest_id = imni.mest_id))
                     INNER JOIN " . $con->dbname . ".item_precio itp ON itp.ite_id = imni.ite_id
                     INNER JOIN " . $con->dbname . ".item ite ON ite.ite_id = itp.ite_id                           
                     WHERE $str_search sins.sins_id = " . $sol_id . " AND ";
