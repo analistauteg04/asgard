@@ -1,6 +1,7 @@
 vendor/
 runtime/*
 web/assets/*
+composer.lock
 
 # vim
 .*.sw[a-z]
