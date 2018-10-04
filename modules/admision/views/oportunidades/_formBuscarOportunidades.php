@@ -56,6 +56,14 @@ use app\modules\admision\Module;
                 </div>
             </div>
         </div>  
+<!--        <div class="col-lg-6 col-md-6 col-sm-6 col-xs-6">
+            <div class="form-group">
+                <label for="cmb_empresa" class="col-sm-4 control-label"><?= Yii::t("formulario", "Company") ?>  </label>
+                <div class="col-sm-6 col-md-6 col-xs-6 col-lg-6">
+                    <?php #Html::dropDownList("cmb_empresa", 0, $arr_empresa, ["class" => "form-control", "id" => "cmb_empresa"]) ?>                     
+                </div>
+            </div>
+        </div>  -->
     </div>     
     <div class='col-md-12 col-sm-12 col-xs-12 col-lg-12'>
         <div class="col-md-12 col-sm-12 col-xs-12 col-lg-12">

@@ -948,7 +948,8 @@ class PersonaGestion extends \app\modules\admision\components\CActiveRecord {
                 pg.pges_pri_apellido as pges_pri_apellido,
                 pg.pges_seg_apellido as pges_seg_apellido,";
         }
-        $sql = "SELECT  tp.tper_id tipo_persona, 
+        $sql = "
+                SELECT  tp.tper_id tipo_persona, 
                         tp.tper_nombre des_tipo_persona, 
                         concat(pges_pri_nombre, ' ', ifnull(pges_seg_nombre,' ')) as nombres,
                         concat(pges_pri_apellido, ' ', ifnull(pges_seg_apellido,' ')) as apellidos,                 

@@ -126,10 +126,8 @@ class InteresadosController extends \app\components\CController
                                             $iemp_id = $mod_inte_emp->crearInteresadoEmpresa($interesado_id, $emp_id, $usuario_id);
                                         }
                                         if ($iemp_id > 0) {
-                                            // GENERAR LINK DE CAMBIO DE CLAVE
                                             $usuarioNew = Usuario::findIdentity($usuario_id);
                                             $link = $usuarioNew->generarLinkActivacion();
-
                                             $email_info = array(
                                                 "nombres" => $pgest['pges_pri_nombre'] . " " . $pgest['pges_seg_nombre'],
                                                 "apellidos" => $pgest['pges_pri_apellido'] . " " . $pgest['pges_seg_apellido'],
