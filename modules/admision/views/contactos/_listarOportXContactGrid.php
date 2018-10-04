@@ -29,6 +29,11 @@ use app\modules\admision\Module;
                 'value' => 'modalidad',
             ],
             [
+                'attribute' => 'empresa',
+                'header' => Yii::t("formulario", "Company"),
+                'value' => 'empresa',
+            ],
+            [
                 'attribute' => 'Tipo Oportunidad',
                 'header' => Module::t("crm", "Opportunity type"),
                 'value' => 'tipo_oportunidad',
