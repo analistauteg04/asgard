@@ -24,9 +24,9 @@ class OportunidadesController extends \app\components\CController {
         $modoportunidad = new Oportunidad();
         $modEstOport = new EstadoOportunidad();
         $empresa_mod = new Empresa();
-        $estado_oportunidad = $modEstOport->consultarEstadOportunidad(); 
+        $estado_oportunidad = $modEstOport->consultarEstadOportunidad();
         $empresa = $empresa_mod->getAllEmpresa();
-        $data = Yii::$app->request->get();       
+        $data = Yii::$app->request->get();
         if ($data['PBgetFilter']) {
             $arrSearch["agente"] = $data['agente'];
             $arrSearch["interesado"] = $data['interesado'];
@@ -38,8 +38,8 @@ class OportunidadesController extends \app\components\CController {
         }
         if (Yii::$app->request->isAjax) {
             $data = Yii::$app->request->post();
-        }       
-        
+        }
+
         return $this->render('index', [
                     'model' => $mod_gestion,
                     'arr_estgestion' => ArrayHelper::map(array_merge([["id" => "0", "name" => "Todas"]], $estado_oportunidad), "id", "name"),
@@ -172,7 +172,7 @@ class OportunidadesController extends \app\components\CController {
         $modalidad_model = new Modalidad();
         $modestudio = new ModuloEstudio();
         $modTipoOportunidad = new TipoOportunidadVenta();
-        $state_oportunidad_model = new EstadoOportunidad();        
+        $state_oportunidad_model = new EstadoOportunidad();
         $unidad_acad_data = $uni_aca_model->consultarUnidadAcademicasEmpresa($emp_id);
         $modalidad_data = $modalidad_model->consultarModalidad(1);
         $modcanal = new Oportunidad();
@@ -211,12 +211,12 @@ class OportunidadesController extends \app\components\CController {
                 return Utilities::ajaxResponse('OK', 'alert', Yii::t('jslang', 'Success'), 'false', $message);
             }
             if (isset($data["getcarrera"])) {
-                if($data["empresa_id"]==1){
+                if ($data["empresa_id"] == 1) {
                     $carrera = $modcanal->consultarCarreraModalidad($data["unidada"], $data["moda_id"]);
-                }else{
+                } else {
                     $carrera = $modestudio->consultarCursoModalidad($data["unidada"], $data["moda_id"]); // tomar id de impresa
                 }
-                
+
                 $message = array("carrera" => $carrera);
                 return Utilities::ajaxResponse('OK', 'alert', Yii::t('jslang', 'Success'), 'false', $message);
             }
@@ -248,12 +248,19 @@ class OportunidadesController extends \app\components\CController {
             $data = Yii::$app->request->post();
             $pges_id = base64_decode($data["id_pgest"]);
             $empresa = $data["empresa"];
-            $modulo_estudio = $data["modulo_estudio"];
+            // $modulo_estudio = $data["modulo_estudio"];
             $unidad_academica = $data["id_unidad_academica"];
             $modalidad = $data["id_modalidad"];
             $tipo_oportunidad = $data["id_tipo_oportunidad"];
             $estado_oportunidad = $data["id_estado_oportunidad"];
-            $estudio_academico = $data["id_estudio_academico"];
+            if ($unidad_academica == 1) {
+                $estudio_academico = $data["id_estudio_academico"];
+                $modulo_estudio = '';
+            } else {
+                $estudio_academico = '';
+                $modulo_estudio = $data["id_estudio_academico"];
+            }
+            //$estudio_academico = $data["id_estudio_academico"];
             $canal_conocimiento = $data["canal_conocimiento"];
             $sub_carrera = ($data["sub_carrera"] != 0) ? $data["sub_carrera"] : null;
             $usuario = @Yii::$app->user->identity->usu_id;
@@ -407,7 +414,6 @@ class OportunidadesController extends \app\components\CController {
         $colPosition = array("C", "D", "E", "F", "G", "H", "I", "J", "K", "L", "M", "N");
 
         $arrHeader = array(
-           
             Module::t("crm", "Id Opportunity"),
             Module::t("crm", "No Opportunity"),
             Module::t("crm", "Contact"),
@@ -438,22 +444,21 @@ class OportunidadesController extends \app\components\CController {
         Utilities::generarReporteXLS($nombarch, $nameReport, $arrHeader, $arrData, $colPosition);
         exit;
     }
-    
-    public function actionExppdfoportunidades() {  
+
+    public function actionExppdfoportunidades() {
         $report = new ExportFile();
         $this->view->title = admision::t("crm", "List Oportunity"); // Titulo del reporte
 
         $modoportunidad = new Oportunidad();
         $data = Yii::$app->request->get();
         $arr_body = array();
-        
+
         $arrSearch["interesado"] = $data["contacto"];
         $arrSearch["agente"] = $data["search"];
         $arrSearch["empresa"] = $data['empresa'];
         $arrSearch["estado"] = $data["f_estado"];
 
         $arr_head = array(
-           
             Module::t("crm", "Id Opportunity"),
             Module::t("crm", "No Opportunity"),
             Module::t("crm", "Contact"),
@@ -467,19 +472,19 @@ class OportunidadesController extends \app\components\CController {
             Yii::t("formulario", "Agent"),
             " ",
         );
-        
+
         if (empty($arrSearch)) {
             $arr_body = $modoportunidad->consultarOportunidadexcel(array(), true);
         } else {
             $arr_body = $modoportunidad->consultarOportunidadexcel($arrSearch, true);
         }
-        
+
         $report->orientation = "L"; // tipo de orientacion L => Horizontal, P => Vertical
         $report->createReportPdf(
-            $this->render('exportpdf', [
+                $this->render('exportpdf', [
                     'arr_head' => $arr_head,
                     'arr_body' => $arr_body
-            ])
+                ])
         );
         $report->mpdf->Output('Reporte_' . date("Ymdhis") . ".pdf", ExportFile::OUTPUT_TO_DOWNLOAD);
         return;
