@@ -15,3 +15,12 @@ $leyenda = '<div class="col-md-12 col-xs-12 col-sm-12 col-lg-12">
           </div>';
 ?>
 
+<div>
+    <form class="form-horizontal">
+        <?=
+        $this->render('_form_Buscar', [   
+            //'arrEstados' => $arrEstados
+            ]);
+        ?>
+    </form>
+</div>

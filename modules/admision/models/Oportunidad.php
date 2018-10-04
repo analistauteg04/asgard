@@ -1829,7 +1829,7 @@ class Oportunidad extends \app\modules\admision\components\CActiveRecord {
                                 INNER JOIN db_academico.unidad_academica C ON A.uaca_id=C.uaca_id
                 WHERE A.opo_estado_logico=1 GROUP BY A.uaca_id,A.eopo_id ORDER BY A.eopo_id; ";
         $comando = $con->createCommand($sql);
-        \app\models\Utilities::putMessageLogFile($sql);
+        
         return $comando->queryAll();
     }
 
