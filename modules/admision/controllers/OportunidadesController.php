@@ -20,17 +20,17 @@ use app\modules\admision\Module as admision;
 class OportunidadesController extends \app\components\CController {
 
     public function actionIndex() {
-        $per_id = @Yii::$app->session->get("PB_iduser");
+        //$per_id = @Yii::$app->session->get("PB_iduser");
         $modoportunidad = new Oportunidad();
         $modEstOport = new EstadoOportunidad();
-        $estado_oportunidad = $modEstOport->consultarEstadOportunidad();
-        $empresa_model=new Empresa();
-        $data = Yii::$app->request->get();
-        //$empresas=Empresa::getAllEmpresa();
+        $empresa_mod = new Empresa();
+        $estado_oportunidad = $modEstOport->consultarEstadOportunidad(); 
+        $empresa = $empresa_mod->getAllEmpresa();
+        $data = Yii::$app->request->get();       
         if ($data['PBgetFilter']) {
             $arrSearch["agente"] = $data['agente'];
             $arrSearch["interesado"] = $data['interesado'];
-            // $arrSearch["f_atencion"] = $data['f_atencion'];
+            $arrSearch["empresa"] = $data['empresa'];
             $arrSearch["estado"] = $data['estado'];
             $mod_gestion = $modoportunidad->consultarOportunidad($arrSearch, 2);
         } else {
@@ -38,11 +38,12 @@ class OportunidadesController extends \app\components\CController {
         }
         if (Yii::$app->request->isAjax) {
             $data = Yii::$app->request->post();
-        }
+        }       
+        
         return $this->render('index', [
                     'model' => $mod_gestion,
                     'arr_estgestion' => ArrayHelper::map(array_merge([["id" => "0", "name" => "Todas"]], $estado_oportunidad), "id", "name"),
-                    //'arr_empresa' => ArrayHelper::map(array_merge([["id" => "0", "value" => "Todas"]], $empresas), "id", "value"),
+                    'arr_empresa' => ArrayHelper::map(array_merge([["id" => "0", "value" => "Todas"]], $empresa), "id", "value"),
         ]);
     }
 
@@ -403,13 +404,15 @@ class OportunidadesController extends \app\components\CController {
         header("Content-Type: $content_type");
         header("Content-Disposition: attachment;filename=" . $nombarch);
         header('Cache-Control: max-age=0');
-        $colPosition = array("C", "D", "E", "F", "G", "H", "I", "J", "K", "L");
+        $colPosition = array("C", "D", "E", "F", "G", "H", "I", "J", "K", "L", "M", "N");
 
         $arrHeader = array(
            
             Module::t("crm", "Id Opportunity"),
             Module::t("crm", "No Opportunity"),
             Module::t("crm", "Contact"),
+            "",
+            Yii::t("formulario", "Company"),
             Yii::t("formulario", "Aca. Uni."),
             Module::t("crm", "Career/Program/Course"),
             Module::t("crm", "Moda"),
@@ -421,6 +424,7 @@ class OportunidadesController extends \app\components\CController {
         $data = Yii::$app->request->get();
         $arrSearch["interesado"] = $data["contacto"];
         $arrSearch["agente"] = $data["search"];
+        $arrSearch["empresa"] = $data['empresa'];
         $arrSearch["estado"] = $data["f_estado"];
 
         $modoportunidad = new Oportunidad();
@@ -445,6 +449,7 @@ class OportunidadesController extends \app\components\CController {
         
         $arrSearch["interesado"] = $data["contacto"];
         $arrSearch["agente"] = $data["search"];
+        $arrSearch["empresa"] = $data['empresa'];
         $arrSearch["estado"] = $data["f_estado"];
 
         $arr_head = array(
@@ -452,6 +457,8 @@ class OportunidadesController extends \app\components\CController {
             Module::t("crm", "Id Opportunity"),
             Module::t("crm", "No Opportunity"),
             Module::t("crm", "Contact"),
+            "",
+            Yii::t("formulario", "Company"),
             Yii::t("formulario", "Aca. Uni."),
             Module::t("crm", "Career/Program/Course"),
             Module::t("crm", "Moda"),
