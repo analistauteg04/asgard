@@ -135,7 +135,7 @@ class ModuloEstudio extends \app\modules\academico\components\CActiveRecord {
         $con = \Yii::$app->db_academico;
         $estado = 1;
 
-        $sql = "SELECT 
+        $sql = "XXSELECT 
                     mes.mest_id as id, 
                     mes.mest_nombre as name
                     FROM 

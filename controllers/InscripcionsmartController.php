@@ -23,11 +23,11 @@ use app\modules\academico\models\ModuloEstudio;
 class InscripcionsmartController extends \yii\web\Controller {
 
     public function init() {
-        if(!is_dir(Yii::getAlias('@bower')))
+        if (!is_dir(Yii::getAlias('@bower')))
             Yii::setAlias('@bower', '@vendor/bower-asset');
         return parent::init();
     }
-    
+
     public function actionIndex() {
         $this->layout = '@themes/' . \Yii::$app->getView()->theme->themeName . '/layouts/basic.php';
         $per_id = Yii::$app->session->get("PB_perid");
@@ -64,6 +64,11 @@ class InscripcionsmartController extends \yii\web\Controller {
                 return Utilities::ajaxResponse('OK', 'alert', Yii::t('jslang', 'Success'), 'false', $message);
                 return;
             }
+            if (isset($data["getcarrera"])) {
+                $carrera = $modestudio->consultarCursoModalidad($data["unidada"], $data["moda_id"]);
+                $message = array("carrera" => $carrera);
+                return Utilities::ajaxResponse('OK', 'alert', Yii::t('jslang', 'Success'), 'false', $message);
+            }
         }
         $arr_pais_dom = Pais::find()->select("pai_id AS id, pai_nombre AS value")->where(["pai_estado_logico" => "1", "pai_estado" => "1"])->asArray()->all();
         $pais_id = 1; //Ecuador
@@ -71,7 +76,8 @@ class InscripcionsmartController extends \yii\web\Controller {
         $arr_ciu_dom = Canton::cantonXProvincia($arr_prov_dom[0]["id"]);
         $arr_medio = MedioPublicitario::find()->select("mpub_id AS id, mpub_nombre AS value")->where(["mpub_estado_logico" => "1", "mpub_estado" => "1"])->asArray()->all();
         $arr_conuteg = $mod_pergestion->consultarConociouteg();
-        $arr_carrerra1 = $modestudio->consultarEstudioEmpresa(3);
+        //$arr_carrerra1 = $modestudio->consultarEstudioEmpresa(3);
+        $arr_carrerra1 = $modestudio->consultarCursoModalidad(3, 1);
         $arr_modalidad = $mod_modalidad->consultarModalidad(3);
         $arr_ninteres = $mod_unidad->consultarUnidadAcademicasEmpresa(3);
         return $this->render('index', [
@@ -133,8 +139,8 @@ class InscripcionsmartController extends \yii\web\Controller {
             $celularbeni2 = null;
             $telefonobeni = null;
             $correobeni = strtolower($data["correo"]);
-            $nivelestudio = $data["unidad"]; 
-            $modalidad = $data["modalidad"]; 
+            $nivelestudio = $data["unidad"];
+            $modalidad = $data["modalidad"];
             $tipo_dni = $data["tipo_dni"];
             $cedula = $data["cedula"];
             $pasaporte = $data["pasaporte"];

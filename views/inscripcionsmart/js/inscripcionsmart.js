@@ -30,6 +30,24 @@ $(document).ready(function () {
             }
         }, true);
     });
+    
+    $('#cmb_modalidad').change(function () {
+        var link = $('#txth_base').val() + "/inscripcionsmart/index";
+        var arrParams = new Object();
+
+        arrParams.unidada = $('#cmb_ninteres').val();
+        arrParams.moda_id = $(this).val();
+        arrParams.empresa_id = 3;
+        arrParams.getcarrera = true;
+        arrParams.nint_id = $('#cmb_ninteres').val();
+
+        requestHttpAjax(link, arrParams, function (response) {
+            if (response.status == "OK") {
+                data = response.message;
+                setComboData(data.carrera, "cmb_modulo");         
+            }
+        }, true);
+    });
 
     $('#sendInscripcion').click(function () {
         var link = $('#txth_base').val() + "/inscripcionsmart/guardarinscripcion";
