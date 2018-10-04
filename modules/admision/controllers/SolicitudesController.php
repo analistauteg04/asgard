@@ -282,9 +282,9 @@ class SolicitudesController extends \app\components\CController {
             $sins_fechasol = date(Yii::$app->params["dateTimeByDefault"]);
             if ($emp_id>1) {
                 $ming_id = null; //Curso.
-                $rsin_id = 3; //Solicitud pre-aprobada para las otras empresas.  
-                $pre_observacion = 'Solicitud Pre-Aprobada.';
-                $fec_preobservacion = $sins_fechasol;
+                $rsin_id = 1; //Solicitud pre-aprobada para las otras empresas.  
+                /*$pre_observacion = 'Solicitud Pre-Aprobada.';
+                $fec_preobservacion = $sins_fechasol;*/
                 $subirDocumentos = 0;
             } else {
                 $rsin_id = 1; //Solicitud pendiente        

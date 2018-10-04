@@ -9,6 +9,7 @@ use kartik\date\DatePicker;
 use yii\helpers\ArrayHelper;
 use yii\jui\AutoComplete;
 use yii\web\JsExpression;
+
 ?>
 <?= Html::hiddenInput('txth_ids', '', ['id' => 'txth_ids']); ?>
 <div>
@@ -16,6 +17,7 @@ use yii\web\JsExpression;
         <?=
         $this->render('_formBuscarOportunidades', [
             'arr_estgestion' => $arr_estgestion,
+            'arr_empresa' => $arr_empresa,
         ]);
         ?>
     </form>
