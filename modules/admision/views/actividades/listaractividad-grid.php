@@ -32,7 +32,7 @@ PbGridView::widget([
         ],
         [
             'attribute' => 'descripcion',
-            'header' => Yii::t("formulario", "Description Activity"),
+            'header' => Yii::t("formulario", "Observation"),
             'contentOptions' => ['style' => 'max-width:200px;'],
             'value' => 'observacion',
         ],
@@ -41,11 +41,11 @@ PbGridView::widget([
             'header' => Yii::t("formulario", "Attention Next"),
             'value' => 'proxima_atencion',
         ],
-        [
+        /*[
             'attribute' => 'Estado',
             'header' => Module::t("crm", "Opportunity state"),
             'value' => 'estado_oportunidad',
-        ],
+        ],*/
         [
             'attribute' => 'Usuario',
             'header' => Yii::t("formulario", "User login"),

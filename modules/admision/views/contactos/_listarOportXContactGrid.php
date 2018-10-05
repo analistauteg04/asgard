@@ -29,6 +29,11 @@ use app\modules\admision\Module;
                 'value' => 'modalidad',
             ],
             [
+                'attribute' => 'empresa',
+                'header' => Yii::t("formulario", "Company"),
+                'value' => 'empresa',
+            ],
+            [
                 'attribute' => 'Tipo Oportunidad',
                 'header' => Module::t("crm", "Opportunity type"),
                 'value' => 'tipo_oportunidad',
@@ -43,10 +48,15 @@ use app\modules\admision\Module;
                     },
                 ],
             ],
+            /* [
+              'attribute' => 'Estado Oportunidad',
+              'header' => Module::t("crm", "Opportunity state"),
+              'value' => 'estado_oportunidad',
+              ], */
             [
-                'attribute' => 'Estado Oportunidad',
-                'header' => Module::t("crm", "Opportunity state"),
-                'value' => 'estado_oportunidad',
+                'attribute' => 'Observacion',
+                'header' => Yii::t("formulario", "Observation"),
+                'value' => 'observa',
             ],
             [
                 'class' => 'yii\grid\ActionColumn',
@@ -58,20 +68,20 @@ use app\modules\admision\Module;
                     },
                     'activities' => function ($url, $model) {
                         return Html::a('<span class="glyphicon glyphicon-th-large"></span>', Url::to(['actividades/listaractividadxoportunidad', 'opor_id' => base64_encode($model["id"]), 'pges_id' => base64_encode($model["pges_id"])]), ["data-toggle" => "tooltip", "title" => "Ver Actividades", "data-pjax" => 0]);
-                    },                    
+                    },
                     'interested' => function ($url, $model) {
                         $mod_per = new Persona();
-                        $pre_id = $mod_per->ConsultaRegistroExiste(null,$model['identificacion'], null);
+                        $pre_id = $mod_per->ConsultaRegistroExiste(null, $model['identificacion'], null);
                         $existe = isset($pre_id['existen']) ? 1 : 0;
-                        if($model['estado_oportunidad_id']==3){
+                        if ($model['estado_oportunidad_id'] == 3) {
                             if ($existe == 0) {
                                 return Html::a('<span class="glyphicon glyphicon-user"></span>', "#", ["onclick" => "grabarInteresado(" . $model['id'] . ");", "data-toggle" => "tooltip", "title" => "Generar Aspirante", "data-pjax" => 0]);
                             } else {
                                 return "<span class = 'glyphicon glyphicon-user' data-toggle = 'tooltip' title ='Usuario Existente'  data-pjax = 0></span>";
-                            }                                
-                        }else{
+                            }
+                        } else {
                             return "<span class = 'glyphicon glyphicon-user' data-toggle = 'tooltip' title ='En espera de estado en Generar Aspirante'  data-pjax = 0></span>";
-                        }    
+                        }
                     },
                 ],
             ],

@@ -103,11 +103,11 @@ class OportunidadesController extends \app\components\CController {
         $modestudio = new ModuloEstudio();
         $contactManage = $persges_mod->consultarPersonaGestion($pges_id);
         $respOportunidad = $modoportunidad->consultarOportunidadById($opor_id);
-        $unidad_acad_data = $uni_aca_model->consultarUnidadAcademicas();
+        $unidad_acad_data = $uni_aca_model->consultarUnidadAcademicasEmpresa($respOportunidad["empresa"]);
         $modalidad_data = $modalidad_model->consultarModalidad($respOportunidad["uaca_id"]);
-        $tipo_oportunidad_data = $modTipoOportunidad->consultarOporxUnidad(1);
+        $tipo_oportunidad_data = $modTipoOportunidad->consultarOporxUnidad($respOportunidad["uaca_id"]);
         $state_oportunidad_data = $state_oportunidad_model->consultarEstadOportunidad();
-        $academic_study_data = $modoportunidad->consultarCarreraModalidad(1, 1);
+        $academic_study_data = $modoportunidad->consultarCarreraModalidad($respOportunidad["uaca_id"], $respOportunidad["mod_id"]);
         $knowledge_channel_data = $modoportunidad->consultarConocimientoCanal(1);
         $arr_carrerra2 = $modoportunidad->consultarTipoCarrera();
         $arr_subcarrera = $modoportunidad->consultarSubCarrera($respOportunidad["tcar_id"]);
@@ -156,7 +156,7 @@ class OportunidadesController extends \app\components\CController {
                     "arr_carrerra2" => ArrayHelper::map($arr_carrerra2, "id", "name"),
                     "arr_subcarrerra" => ArrayHelper::map($arr_subcarrera, "id", "name"),
                     'arr_empresa' => ArrayHelper::map($empresa, "id", "value"),
-                    'arr_moduloEstudio' => ArrayHelper::map($arr_moduloEstudio, "Ids", "Nombre"),
+                    'arr_moduloEstudio' => ArrayHelper::map($arr_moduloEstudio, "id", "name"),
                     'opo_id' => $opor_id,
                     'pges_id' => $pges_id,
         ]);
@@ -373,29 +373,35 @@ class OportunidadesController extends \app\components\CController {
             $transaction = $con->beginTransaction();
             try {
                 $nombreoportunidad = $mod_oportunidad->consultarNombreOportunidad($empresa, $mest_id, $eaca_id, $unidad_academica, $modalidad, $estado_oportunidad);
-                //$mensaje = 'opo:' . $opo_id . ' mest_id:' . $mest_id . ' eaca_id:' . $eaca_id . ' unidad:' . $unidad_academica . ' modalidad:' . $modalidad . ' tipoOpor:' . $tipo_oportunidad . ' subCarr:' . $sub_carrera . ' Canal:' . $canal_conocimiento . ' estado:' . $estado_oportunidad . ' usuario:' . $usuario;               
-                if ($nombreoportunidad["eopo_nombre"] == '' || $nombreoportunidad["eopo_nombre"] == 'Ganada' || $nombreoportunidad["eopo_nombre"] == 'Perdida') {
+                 //if ($nombreoportunidad["eopo_nombre"] == '' || $nombreoportunidad["eopo_nombre"] == 'Ganada' || $nombreoportunidad["eopo_nombre"] == 'Perdida') {
                     $respuesta = $mod_oportunidad->modificarOportunixId($empresa, $opo_id, $mest_id, $eaca_id, $unidad_academica, $modalidad, $tipo_oportunidad, $sub_carrera, $canal_conocimiento, null, null, null, $usuario, null);
                     if ($respuesta) {
                         $transaction->commit();
                         $message = array(
-                            "wtmessage" => Yii::t("notificaciones", "La información ha sido grabada. "),
+                            "wtmessage" => Yii::t("notificaciones", "La información ha sido modificada. "),
                             "title" => Yii::t('jslang', 'Success'),
                         );
                         return Utilities::ajaxResponse('OK', 'alert', Yii::t("jslang", "Sucess"), false, $message);
                     } else {
                         $transaction->rollback();
                         $message = array(
-                            "wtmessage" => Yii::t("notificaciones", "Error al grabar." . $mensaje),
+                            "wtmessage" => Yii::t("notificaciones", "Error al modificar." . $mensaje),
                             "title" => Yii::t('jslang', 'Bad Request'),
                         );
                         return Utilities::ajaxResponse('NO_OK', 'alert', Yii::t("jslang", "Bad Request"), false, $message);
                     }
-                }
+                /*} else {
+                    $transaction->rollback();
+                    $message = array(
+                        "wtmessage" => Yii::t("notificaciones", "En el estado que se encuentra no se puede modiifcar" . $mensaje),
+                        "title" => Yii::t('jslang', 'Bad Request'),
+                    );
+                    return Utilities::ajaxResponse('NO_OK', 'alert', Yii::t("jslang", "Bad Request"), false, $message);
+                }*/
             } catch (Exception $ex) {
                 $transaction->rollback();
                 $message = array(
-                    "wtmessage" => Yii::t("notificaciones", "Error al grabar." . $mensaje),
+                    "wtmessage" => Yii::t("notificaciones", "Error al modificar." . $mensaje),
                     "title" => Yii::t('jslang', 'Bad Request'),
                 );
                 return Utilities::ajaxResponse('NO_OK', 'alert', Yii::t("jslang", "Bad Request"), false, $message);
