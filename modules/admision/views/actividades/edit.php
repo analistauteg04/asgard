@@ -254,7 +254,16 @@ if (!empty($personalData['pges_cedula'])) {
             <div class="form-group">
                 <label for="cmb_state_opportunity" class="col-sm-5 col-md-5 col-xs-5 col-lg-5 control-label keyupmce"><?= Module::t("crm", "Opportunity state") ?></label>
                 <div class="col-sm-7 col-md-7 col-xs-7 col-lg-7">
-                    <?= Html::dropDownList("cmb_state_opportunity", $actividad_oportunidad['eopo_id'], $arr_state_oportunidad, ["class" => "form-control", "id" => "cmb_state_opportunity", "disabled" => true]) ?>
+                    <?php 
+                        $eopo=0;
+                        if($actividad_oportunidad['eopo_id'] < 3){
+                            $eopo=1;                         
+                        }else{
+                            $eopo=$actividad_oportunidad['eopo_id'];                         
+                        }
+                        
+                    ?>
+                    <?= Html::dropDownList("cmb_state_opportunity", $eopo, $arr_state_oportunidad, ["class" => "form-control", "id" => "cmb_state_opportunity", "disabled" => true]) ?>
                 </div>
             </div>
         </div>
