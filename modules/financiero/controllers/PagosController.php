@@ -57,9 +57,16 @@ class PagosController extends \app\components\CController {
     }
 
     public function actionCargardocpagos() {
-        //$ccar_id = base64_decode($_GET["ids"]);
-        $ccar_id = isset($_GET['ids']) ? base64_decode($_GET['ids']) : 1; //NULL
+        $per_id = @Yii::$app->session->get("PB_iduser");
+        $ccar_id = isset($_GET['ids']) ? base64_decode($_GET['ids']) : 0; //NULL
         $model_pag = new OrdenPago();
+        if($ccar_id==0){
+           $ccar_id = $model_pag->consultarInfoOrdenPagoPorPerId($per_id);
+           if(!isset($ccar_id) || empty($ccar_id)){
+               header('Location: '.'listarpagoscargados');
+                die(); 
+          }
+        }
         $arr_forma_pago = $model_pag->formaPago('2');
         $resp_doc = $model_pag->listarDocumento($ccar_id);
         $data = null;
