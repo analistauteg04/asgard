@@ -67,16 +67,16 @@ class SolicitudesController extends \app\components\CController {
     public function actionListarsolicitudxinteresado() {
         $per_idsession = @Yii::$app->session->get("PB_perid");
         $per_Ids = base64_decode($_GET['perid']);
-        $inte_id = base64_decode(empty($_GET['id'])?0:$_GET['id']);
+        $inte_id = base64_decode(empty($_GET['id']) ? 0 : $_GET['id']);
         $mod_carrera = new EstudioAcademico();
         $interesado_model = new Interesado();
         $persona_model = new Persona();
         $SolIns_model = new SolicitudInscripcion();
-        if($inte_id>0){
+        if ($inte_id > 0) {
             $per_id = $interesado_model->getPersonaxIdInteresado($inte_id);
-        }else{
+        } else {
             $per_id = $per_idsession;
-            $inte_id=$interesado_model->consultaInteresadoByPerId($per_id);
+            $inte_id = $interesado_model->consultaInteresadoByPerId($per_id);
         }
         $personaData = $persona_model->consultaPersonaId($per_id);
         $model = $SolIns_model->getSolicitudesXInteresado($inte_id);
@@ -280,11 +280,11 @@ class SolicitudesController extends \app\components\CController {
                 throw new Exception('Debe seleccionar opciones de las listas.');
             }
             $sins_fechasol = date(Yii::$app->params["dateTimeByDefault"]);
-            if ($emp_id>1) {
+            if ($emp_id > 1) {
                 $ming_id = null; //Curso.
                 $rsin_id = 1; //Solicitud pre-aprobada para las otras empresas.  
-                /*$pre_observacion = 'Solicitud Pre-Aprobada.';
-                $fec_preobservacion = $sins_fechasol;*/
+                /* $pre_observacion = 'Solicitud Pre-Aprobada.';
+                  $fec_preobservacion = $sins_fechasol; */
                 $subirDocumentos = 0;
             } else {
                 $rsin_id = 1; //Solicitud pendiente        
@@ -680,8 +680,10 @@ class SolicitudesController extends \app\components\CController {
                     );
                     return Utilities::ajaxResponse('OK', 'alert', Yii::t("jslang", "Sucess"), false, $message);
                 } else {
-                    throw new Exception('Tiene que subir todos los documentos.Titulo:' . isset($data["arc_doc_titulo"]) . 'Persona:' . $per_id);
+                    throw new Exception('Tiene que subir todos los documentos.');
                 }
+            } else {
+                throw new Exception('Tiene que subir todos los documentos.');
             }
         } catch (Exception $ex) {
             $transaction->rollback();
