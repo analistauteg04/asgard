@@ -363,7 +363,10 @@ class Utilities {
         }
     }
     
-    public static function generarReporteXLS($nombarch, $nameReport, $arrHeader, $arrData, $colPosition = array(), $typeExp = "Xls"){
+    public static function generarReporteXLS($nombarch, $nameReport, $arrHeader, $arrData, $colPosition = array(), $typeExp = "Xls", $emp_id = null){
+        if (is_null($emp_id)) {
+            $emp_id = Yii::$app->session->get('PB_idempresa');
+        }
         if(count($colPosition) == 0){
             $colPosition = array("A","B","C","D","E","F","G","H","I","J","K","L","M","N","O","P","Q","R","S","T","U");
         }
@@ -465,7 +468,7 @@ class Utilities {
             $objDrawing = new drawing();
             $objDrawing->setName('Logo');
             $objDrawing->setDescription('Logo');
-            $objDrawing->setPath(Yii::$app->basePath . "/themes/" . Yii::$app->view->theme->themeName . "/assets/img/logos/logo.png");
+            $objDrawing->setPath(Yii::$app->basePath . "/themes/" . Yii::$app->view->theme->themeName . "/assets/img/logos/logo_" . $emp_id . ".png");
             //$objDrawing->setHeight(80);
             $objDrawing->setWidth(300);
             $objDrawing->setCoordinates('O4');
