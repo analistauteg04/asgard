@@ -253,7 +253,13 @@ class Oportunidad extends \app\modules\admision\components\CActiveRecord {
                      when 5 then (select mes.mest_nombre from " . $con2->dbname . ".modulo_estudio mes where mes.mest_id = op.mest_id)
                      when 6 then (select mes.mest_nombre from " . $con2->dbname . ".modulo_estudio mes where mes.mest_id = op.mest_id)
                      else null
-                      end as 'curso'
+                      end as 'curso',
+                    ifnull((SELECT oac.oact_nombre
+                    FROM db_crm.bitacora_actividades bac
+                    INNER JOIN db_crm.observacion_actividades as oac on oac.oact_id=bac.oact_id
+                    WHERE opo_id = op.opo_id
+                    order by bact_fecha_creacion desc 
+                    LIMIT 1),'') as observa  
                 FROM  " . $con->dbname . ".oportunidad op                  
                     inner join " . $con1->dbname . ".empresa as emp on emp.emp_id=op.emp_id
                     inner join " . $con->dbname . ".persona_gestion pges on pges.pges_id = op.pges_id
