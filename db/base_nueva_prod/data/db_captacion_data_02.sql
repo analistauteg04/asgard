@@ -222,18 +222,7 @@ INSERT INTO `interesado` (`int_id`, `per_id`, `int_estado_interesado`, `int_usua
 (212, 1212, '0', 1212, NULL, '1', '2018-08-04 00:46:57', '2018-08-08 03:32:13', '1'),
 (213, 1213, '0', 1213, NULL, '1', '2018-08-11 21:43:18', '2018-08-13 20:40:39', '1'),
 (214, 1214, '0', 1214, NULL, '1', '2018-08-10 15:06:48', '2018-08-15 15:27:30', '1'),
-(215, 1215, '0', 1215, NULL, '1', '2018-08-14 18:56:11', '2018-08-16 19:43:24', '1'),
-
-(216, 1216, '0', 1216, NULL, '1', '2018-08-14 18:56:11', '2018-08-16 19:43:24', '1'),
-(217, 1217, '0', 1217, NULL, '1', '2018-08-21 15:55:17', '2018-08-23 13:18:04', '1'),
-(218, 1220, '0', 1220, NULL, '1', '2018-08-24 21:54:59', '2018-08-29 14:18:45', '1'),
-(219, 1219, '0', 1219, NULL, '1', '2018-09-03 15:36:34', '2018-09-06 18:18:07', '1'),
-(220, 1221, '0', 1221, NULL, '1', '2018-09-06 18:39:25', '2018-09-12 21:13:12', '1'),
-(221, 1223, '0', 1223, NULL, '1', '2018-09-07 23:22:56', '2018-09-12 21:13:34', '1'),
-(222, 1224, '0', 1224, NULL, '1', '2018-09-08 04:52:37', '2018-09-12 21:13:50', '1'),
-(223, 1225, '0', 1225, NULL, '1', '2018-09-10 22:31:29', '2018-09-12 21:14:13', '1'),
-(224, 1222, '0', 1222, NULL, '1', '2018-09-11 15:54:59', '2018-09-13 17:53:27', '1'),
-(225, 1218, '0', 1218, NULL, '1', '2018-09-12 20:02:58', '2018-09-12 21:14:27', '1');
+(215, 1215, '0', 1215, NULL, '1', '2018-08-14 18:56:11', '2018-08-16 19:43:24', '1');
 
 
 INSERT INTO `interesado_empresa` (`iemp_id`, `int_id`, `emp_id`, `iemp_estado`, `iemp_usuario_ingreso`, `iemp_usuario_modifica`, `iemp_fecha_creacion`, `iemp_fecha_modificacion`, `iemp_estado_logico`) VALUES
@@ -451,18 +440,7 @@ INSERT INTO `interesado_empresa` (`iemp_id`, `int_id`, `emp_id`, `iemp_estado`, 
 (212, 212, 1, '1', 1212, NULL, '2018-08-04 05:46:57', NULL, '1'),
 (213, 213, 1, '1', 1213, NULL, '2018-08-12 02:43:18', NULL, '1'),
 (214, 214, 1, '1', 1214, NULL, '2018-08-10 20:06:48', NULL, '1'),
-(215, 215, 1, '1', 1215, NULL, '2018-08-14 23:56:11', NULL, '1'),
-
-(216, 216, 1, '1', 1216, NULL, '2018-08-14 18:56:11', NULL, '1'),
-(217, 217, 1, '1', 1217, NULL, '2018-08-21 15:55:17', NULL, '1'),
-(218, 218, 1, '1', 1220, NULL, '2018-08-24 21:54:59', NULL, '1'),
-(219, 219, 1, '1', 1219, NULL, '2018-09-03 15:36:34', NULL, '1'),
-(220, 220, 1, '1', 1221, NULL, '2018-09-06 18:39:25', NULL, '1'),
-(221, 221, 1, '1', 1223, NULL, '2018-09-07 23:22:56', NULL, '1'),
-(222, 222, 1, '1', 1224, NULL, '2018-09-08 04:52:37', NULL, '1'),
-(223, 223, 1, '1', 1225, NULL, '2018-09-10 22:31:29', NULL, '1'),
-(224, 224, 1, '1', 1222, NULL, '2018-09-11 15:54:59', NULL, '1'),
-(225, 225, 1, '1', 1218, NULL, '2018-09-12 20:02:58', NULL, '1');
+(215, 215, 1, '1', 1215, NULL, '2018-08-14 23:56:11', NULL, '1');
 
 --
 -- Volcado de datos para la tabla `admitido`
@@ -682,18 +660,8 @@ INSERT INTO `admitido` (`adm_id`, `int_id`, `adm_estado_admitido`, `adm_estado`,
 (212, 212, NULL, '1', '2007-08-18 22:32:00', NULL, '1'),
 (213, 213, NULL, '1', '2013-08-18 15:40:00', NULL, '1'),
 (214, 214, NULL, '1', '2018-08-15 10:27:30', NULL, '1'),
-(215, 215, NULL, '1', '2018-08-16 14:43:24', NULL, '1'),
+(215, 215, NULL, '1', '2018-08-16 14:43:24', NULL, '1');
 
-(216, 217, NULL, '1', '2018-08-23 13:18:04', NULL, '1'),
-(217, 218, NULL, '1', '2018-08-29 14:18:45', NULL, '1'),
-(218, 216, NULL, '1', '2018-08-30 20:53:11', NULL, '1'),
-(219, 219, NULL, '1', '2018-09-06 18:18:07', NULL, '1'),
-(220, 220, NULL, '1', '2018-09-12 21:13:12', NULL, '1'),
-(221, 221, NULL, '1', '2018-09-12 21:13:34', NULL, '1'),
-(222, 222, NULL, '1', '2018-09-12 21:13:50', NULL, '1'),
-(223, 223, NULL, '1', '2018-09-12 21:14:13', NULL, '1'),
-(224, 225, NULL, '1', '2018-09-12 21:14:27', NULL, '1'),
-(225, 224, NULL, '1', '2018-09-13 17:53:27', NULL, '1');
 
 
 --
@@ -914,17 +882,7 @@ INSERT INTO `solicitud_inscripcion` (`sins_id`, `int_id`, `uaca_id`, `mod_id`, `
 (212, 212, 1, 1, 1, 4, NULL, 1, '212', 2, '2018-08-07 02:56:25', '2018-08-07 02:58:08', '2018-08-08 03:32:13', NULL, NULL, NULL, NULL, NULL, 7, 27, NULL, NULL, '1', '2018-08-07 02:56:25', '2018-08-08 03:32:13', '1'),
 (213, 213, 1, 1, 1, 1, NULL, 1, '213', 2, '2018-08-11 21:45:06', '2018-08-13 20:38:45', '2018-08-13 20:40:39', NULL, NULL, NULL, NULL, NULL, 7, 22, NULL, NULL, '1', '2018-08-11 21:45:06', '2018-08-13 20:40:39', '1'),
 (214, 214, 1, 1, 1, 6, NULL, 1, '214', 2, '2018-08-10 15:07:24', '2018-08-10 15:09:16', '2018-08-15 15:27:30', NULL, NULL, NULL, NULL, NULL, 7, 27, NULL, NULL, '1', '2018-08-10 15:07:24', '2018-08-15 15:27:30', '1'),
-(215, 215, 1, 1, 1, 4, NULL, 1, '215', 2, '2018-08-16 19:12:22', '2018-08-16 19:36:00', '2018-08-16 19:43:24', NULL, NULL, NULL, NULL, NULL, 7, 22, NULL, NULL, '1', '2018-08-16 19:12:22', '2018-08-16 19:43:24', '1'),
-(216, 216, 1, 1, 1, 1, NULL, 1, '216', 2, '2018-08-21 16:26:45', '2018-08-21 16:56:45', '2018-08-23 13:18:04', NULL, NULL, NULL, NULL, NULL, 12, 23, NULL, NULL, '1', '2018-08-21 16:26:45', '2018-08-23 13:18:04', '1'),
-(217, 217, 1, 1, 1, 1, NULL, 1, '217', 2, '2018-08-24 21:55:15', '2018-08-24 22:17:14', '2018-08-29 14:18:45', NULL, NULL, NULL, NULL, NULL, 12, 23, NULL, NULL, '1', '2018-08-24 21:55:15', '2018-08-29 14:18:45', '1'),
-(218, 218, 1, 1, 1, 4, NULL, 1, '218', 2, '2018-08-30 18:53:48', '2018-08-30 18:55:37', '2018-08-30 20:53:11', NULL, NULL, NULL, NULL, NULL, 12, 28, NULL, NULL, '1', '2018-08-30 18:53:48', '2018-08-30 20:53:11', '1'),
-(219, 219, 1, 1, 1, 1, NULL, 1, '219', 2, '2018-09-04 21:00:49', '2018-09-04 21:17:15', '2018-09-06 18:18:07', NULL, NULL, NULL, NULL, NULL, 12, 28, NULL, NULL, '1', '2018-09-04 21:00:49', '2018-09-06 18:18:07', '1'),
-(220, 220, 1, 1, 1, 6, NULL, 1, '220', 2, '2018-09-06 19:09:30', '2018-09-12 21:07:57', '2018-09-12 21:13:12', NULL, NULL, NULL, NULL, NULL, 12, 28, NULL, NULL, '1', '2018-09-06 19:09:30', '2018-09-12 21:13:12', '1'),
-(221, 221, 1, 1, 1, 6, NULL, 1, '221', 2, '2018-09-10 17:04:54', '2018-09-10 17:15:52', '2018-09-12 21:13:50', NULL, NULL, NULL, NULL, NULL, 12, 28, NULL, NULL, '1', '2018-09-10 17:04:54', '2018-09-12 21:13:50', '1'),
-(222, 222, 1, 1, 1, 6, NULL, 1, '222', 2, '2018-09-10 17:07:59', '2018-09-10 17:15:43', '2018-09-12 21:13:34', NULL, NULL, NULL, NULL, NULL, 12, 28, NULL, NULL, '1', '2018-09-10 17:07:59', '2018-09-12 21:13:34', '1'),
-(223, 223, 1, 1, 1, 1, NULL, 1, '223', 2, '2018-09-11 15:38:06', '2018-09-11 16:37:56', '2018-09-12 21:14:13', NULL, NULL, NULL, NULL, NULL, 12, 28, NULL, NULL, '1', '2018-09-11 15:38:06', '2018-09-12 21:14:13', '1'),
-(224, 224, 1, 1, 1, 6, NULL, 1, '224', 2, '2018-09-11 15:58:09', '2018-09-11 16:23:40', '2018-09-13 17:53:27', NULL, NULL, NULL, NULL, NULL, 12, 23, NULL, NULL, '1', '2018-09-11 15:58:09', '2018-09-13 17:53:27', '1'),
-(225, 225, 1, 1, 2, 5, NULL, 1, '225', 2, '2018-09-12 20:04:16', '2018-09-12 20:19:22', '2018-09-12 21:14:27', NULL, NULL, NULL, NULL, NULL, 12, 28, NULL, NULL, '1', '2018-09-12 20:04:16', '2018-09-12 21:14:27', '1');
+(215, 215, 1, 1, 1, 4, NULL, 1, '215', 2, '2018-08-16 19:12:22', '2018-08-16 19:36:00', '2018-08-16 19:43:24', NULL, NULL, NULL, NULL, NULL, 7, 22, NULL, NULL, '1', '2018-08-16 19:12:22', '2018-08-16 19:43:24', '1');
 
 
 --
@@ -1754,44 +1712,5 @@ INSERT INTO `solicitudins_documento` (`sdoc_id`, `sins_id`, `int_id`, `dadj_id`,
 (820, 215, 215, 1, 'uploads/solicitudinscripcion/1215/doc_titulo_per_1215.pdf', NULL, NULL, '1', '2018-08-16 19:31:12', NULL, '1'),
 (821, 215, 215, 2, 'uploads/solicitudinscripcion/1215/doc_dni_per_1215.pdf', NULL, NULL, '1', '2018-08-16 19:31:12', NULL, '1'),
 (822, 215, 215, 4, 'uploads/solicitudinscripcion/1215/doc_foto_per_1215.pdf', NULL, NULL, '1', '2018-08-16 19:31:12', NULL, '1'),
-(823, 215, 215, 3, 'uploads/solicitudinscripcion/1215/doc_certvota_per_1215.pdf', NULL, NULL, '1', '2018-08-16 19:31:12', NULL, '1'),
-(824, 216, 217, 1, 'uploads/solicitudinscripcion/1217/doc_titulo_per_1217.pdf', NULL, NULL, '1', '2018-08-21 16:37:38', NULL, '1'),
-(825, 216, 217, 2, 'uploads/solicitudinscripcion/1217/doc_dni_per_1217.pdf', NULL, NULL, '1', '2018-08-21 16:37:38', NULL, '1'),
-(826, 216, 217, 4, 'uploads/solicitudinscripcion/1217/doc_foto_per_1217.pdf', NULL, NULL, '1', '2018-08-21 16:37:38', NULL, '1'),
-(827, 216, 217, 3, 'uploads/solicitudinscripcion/1217/doc_certvota_per_1217.pdf', NULL, NULL, '1', '2018-08-21 16:37:38', NULL, '1'),
-(828, 217, 218, 1, 'uploads/solicitudinscripcion/1220/doc_titulo_per_1220.pdf', NULL, NULL, '1', '2018-08-24 22:03:46', NULL, '1'),
-(829, 217, 218, 2, 'uploads/solicitudinscripcion/1220/doc_dni_per_1220.pdf', NULL, NULL, '1', '2018-08-24 22:03:46', NULL, '1'),
-(830, 217, 218, 4, 'uploads/solicitudinscripcion/1220/doc_foto_per_1220.pdf', NULL, NULL, '1', '2018-08-24 22:03:46', NULL, '1'),
-(831, 217, 218, 3, 'uploads/solicitudinscripcion/1220/doc_certvota_per_1220.pdf', NULL, NULL, '1', '2018-08-24 22:03:46', NULL, '1'),
-(832, 218, 216, 1, 'uploads/solicitudinscripcion/1216/doc_titulo_per_1216.pdf', NULL, NULL, '1', '2018-08-30 18:54:47', NULL, '1'),
-(833, 218, 216, 2, 'uploads/solicitudinscripcion/1216/doc_dni_per_1216.pdf', NULL, NULL, '1', '2018-08-30 18:54:47', NULL, '1'),
-(834, 218, 216, 4, 'uploads/solicitudinscripcion/1216/doc_foto_per_1216.pdf', NULL, NULL, '1', '2018-08-30 18:54:47', NULL, '1'),
-(835, 218, 216, 3, 'uploads/solicitudinscripcion/1216/doc_certvota_per_1216.pdf', NULL, NULL, '1', '2018-08-30 18:54:47', NULL, '1'),
-(836, 219, 219, 1, 'uploads/solicitudinscripcion/1219/doc_titulo_per_1219.pdf', NULL, NULL, '1', '2018-09-04 21:03:52', NULL, '1'),
-(837, 219, 219, 2, 'uploads/solicitudinscripcion/1219/doc_dni_per_1219.pdf', NULL, NULL, '1', '2018-09-04 21:03:52', NULL, '1'),
-(838, 219, 219, 4, 'uploads/solicitudinscripcion/1219/doc_foto_per_1219.pdf', NULL, NULL, '1', '2018-09-04 21:03:52', NULL, '1'),
-(839, 219, 219, 3, 'uploads/solicitudinscripcion/1219/doc_certvota_per_1219.pdf', NULL, NULL, '1', '2018-09-04 21:03:52', NULL, '1'),
-(840, 220, 220, 1, 'uploads/solicitudinscripcion/1221/doc_titulo_per_1221.pdf', NULL, NULL, '1', '2018-09-06 19:13:06', NULL, '1'),
-(841, 220, 220, 2, 'uploads/solicitudinscripcion/1221/doc_dni_per_1221.pdf', NULL, NULL, '1', '2018-09-06 19:13:06', NULL, '1'),
-(842, 220, 220, 4, 'uploads/solicitudinscripcion/1221/doc_foto_per_1221.pdf', NULL, NULL, '1', '2018-09-06 19:13:06', NULL, '1'),
-(843, 220, 220, 3, 'uploads/solicitudinscripcion/1221/doc_certvota_per_1221.pdf', NULL, NULL, '1', '2018-09-06 19:13:06', NULL, '1'),
-(844, 221, 222, 1, 'uploads/solicitudinscripcion/1224/doc_titulo_per_1224.pdf', NULL, NULL, '1', '2018-09-10 17:07:04', NULL, '1'),
-(845, 221, 222, 2, 'uploads/solicitudinscripcion/1224/doc_dni_per_1224.pdf', NULL, NULL, '1', '2018-09-10 17:07:04', NULL, '1'),
-(846, 221, 222, 4, 'uploads/solicitudinscripcion/1224/doc_foto_per_1224.pdf', NULL, NULL, '1', '2018-09-10 17:07:04', NULL, '1'),
-(847, 221, 222, 3, 'uploads/solicitudinscripcion/1224/doc_certvota_per_1224.pdf', NULL, NULL, '1', '2018-09-10 17:07:04', NULL, '1'),
-(848, 222, 221, 1, 'uploads/solicitudinscripcion/1223/doc_titulo_per_1223.pdf', NULL, NULL, '1', '2018-09-10 17:09:21', NULL, '1'),
-(849, 222, 221, 2, 'uploads/solicitudinscripcion/1223/doc_dni_per_1223.pdf', NULL, NULL, '1', '2018-09-10 17:09:21', NULL, '1'),
-(850, 222, 221, 4, 'uploads/solicitudinscripcion/1223/doc_foto_per_1223.pdf', NULL, NULL, '1', '2018-09-10 17:09:21', NULL, '1'),
-(851, 222, 221, 3, 'uploads/solicitudinscripcion/1223/doc_certvota_per_1223.pdf', NULL, NULL, '1', '2018-09-10 17:09:21', NULL, '1'),
-(852, 223, 223, 1, 'uploads/solicitudinscripcion/1225/doc_titulo_per_1225.pdf', NULL, NULL, '1', '2018-09-11 15:46:22', NULL, '1'),
-(853, 223, 223, 2, 'uploads/solicitudinscripcion/1225/doc_dni_per_1225.pdf', NULL, NULL, '1', '2018-09-11 15:46:22', NULL, '1'),
-(854, 223, 223, 4, 'uploads/solicitudinscripcion/1225/doc_foto_per_1225.pdf', NULL, NULL, '1', '2018-09-11 15:46:22', NULL, '1'),
-(855, 223, 223, 3, 'uploads/solicitudinscripcion/1225/doc_certvota_per_1225.pdf1225.pdf', NULL, NULL, '1', '2018-09-11 15:46:22', NULL, '1'),
-(856, 224, 224, 1, 'uploads/solicitudinscripcion/1222/doc_titulo_per_1222.pdf', NULL, NULL, '1', '2018-09-11 16:23:17', NULL, '1'),
-(857, 224, 224, 2, 'uploads/solicitudinscripcion/1222/doc_dni_per_1222.pdf', NULL, NULL, '1', '2018-09-11 16:23:17', NULL, '1'),
-(858, 224, 224, 4, 'uploads/solicitudinscripcion/1222/doc_foto_per_1222.pdf', NULL, NULL, '1', '2018-09-11 16:23:17', NULL, '1'),
-(859, 224, 224, 3, 'uploads/solicitudinscripcion/1222/doc_certvota_per_1222.pdf', NULL, NULL, '1', '2018-09-11 16:23:17', NULL, '1'),
-(860, 225, 225, 1, 'uploads/solicitudinscripcion/1218/doc_titulo_per_1218.pdf', NULL, NULL, '1', '2018-09-12 20:19:07', NULL, '1'),
-(861, 225, 225, 2, 'uploads/solicitudinscripcion/1218/doc_dni_per_1218.pdf', NULL, NULL, '1', '2018-09-12 20:19:07', NULL, '1'),
-(862, 225, 225, 4, 'uploads/solicitudinscripcion/1218/doc_foto_per_1218.pdf', NULL, NULL, '1', '2018-09-12 20:19:07', NULL, '1'),
-(863, 225, 225, 3, 'uploads/solicitudinscripcion/1218/doc_certvota_per_1218.pdf', NULL, NULL, '1', '2018-09-12 20:19:08', NULL, '1');
+(823, 215, 215, 3, 'uploads/solicitudinscripcion/1215/doc_certvota_per_1215.pdf', NULL, NULL, '1', '2018-08-16 19:31:12', NULL, '1');
+

@@ -473,7 +473,6 @@ create table if not exists `distributivo_academico` (
 );
 
 
-
 -- --------------------------------------------------------
 --  
 -- Estructura de tabla para la tabla `paralelo`
@@ -500,7 +499,7 @@ create table if not exists `paralelo` (
 -- 
 create table if not exists `matriculacion` (
   `mat_id` bigint(20) not null auto_increment primary key, 
-  `paca_id` bigint(20) null, 
+  `peac_id` bigint(20) null, 
   `adm_id` bigint(20) null, 
   `est_id` bigint(20) null,    
   `sins_id` bigint(20) null,
@@ -511,7 +510,7 @@ create table if not exists `matriculacion` (
   `mat_fecha_creacion` timestamp not null default current_timestamp,
   `mat_fecha_modificacion` timestamp null default null,
   `mat_estado_logico` varchar(1) not null,
-  foreign key (paca_id) references `planificacion_estudio_academico`(paca_id),
+  foreign key (peac_id) references `planificacion_estudio_academico`(peac_id),
   foreign key (est_id) references `estudiante`(est_id)
 );
 
