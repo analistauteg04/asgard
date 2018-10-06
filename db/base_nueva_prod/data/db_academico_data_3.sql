@@ -6,7 +6,7 @@ USE `db_academico`;
 --
 -- Volcado de datos para la tabla `matriculacion`
 --
-INSERT INTO `matriculacion` (`mat_id`, `paca_id`, `adm_id`, `est_id`, `sins_id`, `mat_fecha_matriculacion`, `mat_usuario_ingreso`, `mat_usuario_modifica`, `mat_estado`, `mat_fecha_creacion`, `mat_fecha_modificacion`, `mat_estado_logico`) VALUES
+INSERT INTO `matriculacion` (`mat_id`, `peac_id`, `adm_id`, `est_id`, `sins_id`, `mat_fecha_matriculacion`, `mat_usuario_ingreso`, `mat_usuario_modifica`, `mat_estado`, `mat_fecha_creacion`, `mat_fecha_modificacion`, `mat_estado_logico`) VALUES
 (1, NULL, 1, NULL, 1, '2017-10-11 01:22:45', 27, NULL, '1', '2017-10-11 01:22:45', NULL, '1'),
 (2, NULL, 2, NULL, 2, '2017-10-12 01:22:27', 27, NULL, '1', '2017-10-12 01:22:27', NULL, '1'),
 (3, NULL, 4, NULL, 4, '2017-10-13 21:14:02', 27, NULL, '1', '2017-10-13 21:14:02', NULL, '1'),
