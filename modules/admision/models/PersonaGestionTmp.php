@@ -82,7 +82,7 @@ class PersonaGestionTmp extends \app\modules\admision\components\CActiveRecord
         return parent::findByCondition($condition);
     }
     
-    public function uploadFile($file){
+    public function uploadFile($emp_id,$file){
         $filaError=0;
         $chk_ext = explode(".", $file);
         $con = \Yii::$app->db_crm;
@@ -103,7 +103,7 @@ class PersonaGestionTmp extends \app\modules\admision\components\CActiveRecord
                     $filaError++;
                     if($cont != 0){
                         $model = new PersonaGestionTmp();//isset
-                        $model->pgest_carr_nombre = EstudioAcademico::consultarIdsEstudioAca($data[0]);//"$data[0]";
+                        $model->pgest_carr_nombre = ($emp_id=="1")?EstudioAcademico::consultarIdsEstudioAca($data[0]):EstudioAcademico::consultarIdsModEstudio($emp_id, $data[0]);//"$data[0]";
                         $model->pgest_contacto = PersonaGestionTmp::consultarIdsConocimientoCanal($val[1]);//"$data[1]";
                         $model->pgest_horario = "$data[2]";
                         $model->pgest_unidad_academica = UnidadAcademica::consultarIdsUnid_Academica($data[3]);//"$data[3]";
@@ -166,7 +166,7 @@ class PersonaGestionTmp extends \app\modules\admision\components\CActiveRecord
                 foreach($dataArr as $val){
                     $filaError++;
                     $model = new PersonaGestionTmp();
-                    $model->pgest_carr_nombre = EstudioAcademico::consultarIdsEstudioAca($val[1]);
+                    $model->pgest_carr_nombre = ($emp_id=="1")?EstudioAcademico::consultarIdsEstudioAca($data[0]):EstudioAcademico::consultarIdsModEstudio($emp_id, $data[0]);
                     $model->pgest_contacto = PersonaGestionTmp::consultarIdsConocimientoCanal($val[2]);//"$val[2]";
                     $model->pgest_horario = "$val[3]";
                     $model->pgest_unidad_academica = UnidadAcademica::consultarIdsUnid_Academica($val[4]);

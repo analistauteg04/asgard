@@ -285,4 +285,28 @@ class EstudioAcademico extends \app\modules\admision\components\CActiveRecord
             return 0; //en caso de que existe problema o no retorne nada tiene 1 por defecto 
         return $rawData;
     }    
+    
+    /** Se debe cambiar esta funcion que regrese el codigo de area ***ojo***
+     * Function consultarIdsCarrera
+     * @author  Byron Villacreses <developer@uteg.edu.ec>
+     * @property integer car_id      
+     * @return  
+     */
+    public static function consultarIdsModEstudio($CodEmp,$TextAlias) {
+        $con = \Yii::$app->db_academico;                
+        $sql = "SELECT A.mest_id Ids 
+                    FROM " . $con->dbname . ".modulo_estudio A
+                            INNER JOIN 	" . $con->dbname . ".modulo_estudio_empresa B
+                                    ON A.mest_id=B.mest_id
+            WHERE A.mest_estado=1 AND B.emp_id=:emp_id AND A.mest_alias=:mest_alias;";
+        
+        $comando = $con->createCommand($sql);
+        $comando->bindParam(":mest_alias", $TextAlias, \PDO::PARAM_STR);
+        $comando->bindParam(":emp_id", $CodEmp, \PDO::PARAM_INT);
+        //return $comando->queryAll();
+        $rawData=$comando->queryScalar();
+        if ($rawData === false)
+            return 0; //en caso de que existe problema o no retorne nada tiene 1 por defecto 
+        return $rawData;
+    }
 }

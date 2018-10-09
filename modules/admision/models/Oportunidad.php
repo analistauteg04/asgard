@@ -1547,7 +1547,7 @@ class Oportunidad extends \app\modules\admision\components\CActiveRecord {
         if ($tipoProceso == "LEADS") {
             $path = Yii::$app->basePath . Yii::$app->params['documentFolder'] . "leads/" . $fname;
             //return $mod_pergestion->insertarDtosPersonaGestion($emp_id, $tipoProceso);
-            $carga_archivo = $mod_perTemp->uploadFile($path);
+            $carga_archivo = $mod_perTemp->uploadFile($emp_id,$path);
             if ($carga_archivo['status']) {
                 return $mod_pergestion->insertarDtosPersonaGestion($emp_id, $tipoProceso);
             } else {
