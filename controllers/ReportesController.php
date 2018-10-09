@@ -25,7 +25,7 @@ class ReportesController extends CController {
     public function actionExpexcelreport(){
         $objDat= new Reporte();
         //$data["estado"]= $_GET["estado"];
-        $data["op"]= '2';//$_GET["op"];
+        $data["op"]= $_GET["op"];
         $data["f_ini"]= $_GET["f_ini"];
         $data["f_fin"]= $_GET["f_fin"];
         //$data["valor"]= $_GET["valor"];
@@ -34,17 +34,19 @@ class ReportesController extends CController {
             case '1'://GRADO
                 $arrData=$objDat->consultarActividadporOportunidad($data);
                 $arrHeader = array("N° Oport","Fecha","Nombres","Estado","Observacion","Detalle");
+                $nombarch = "ActividadesOportunidad-" . date("YmdHis").".xls";
                 break;
             case '2'://POSGRADO
                 $arrData=$objDat->consultarOportunidadProximaAten($data);
                 $arrHeader = array("N° Oport","F.Prox.At","Nombres","Estado","Observacion","Detalle");
+                $nombarch = "ProximaOportunidad-" . date("YmdHis").".xls";
                 break;
             
         }
 
         ini_set('memory_limit', '256M');
         $content_type = Utilities::mimeContentType("xls");
-        $nombarch = "ActividadesOportunidad-" . date("YmdHis");
+        
         header("Content-Type: $content_type");
         header("Content-Disposition: attachment;filename=" . $nombarch);
         header('Cache-Control: max-age=0');       
