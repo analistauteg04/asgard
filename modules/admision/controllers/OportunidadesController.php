@@ -253,7 +253,7 @@ class OportunidadesController extends \app\components\CController {
             $modalidad = $data["id_modalidad"];
             $tipo_oportunidad = $data["id_tipo_oportunidad"];
             $estado_oportunidad = $data["id_estado_oportunidad"];
-            if ($unidad_academica == 1) {
+            if ($unidad_academica < 3) {
                 $estudio_academico = $data["id_estudio_academico"];
                 $modulo_estudio = '';
             } else {
