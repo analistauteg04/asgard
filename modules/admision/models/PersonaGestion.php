@@ -930,8 +930,8 @@ class PersonaGestion extends \app\modules\admision\components\CActiveRecord {
     public function consultarClienteCont($arrFiltro = array(), $onlyData = false) {
         $con = \Yii::$app->db_crm;
         $con1 = \Yii::$app->db;
+        $con2 = \Yii::$app->db_academico;
         $estado = 1;
-
         $columnsAdd = "";
         if (isset($arrFiltro) && count($arrFiltro) > 0) {
             $str_search .= "(pg.pges_pri_nombre like :search OR ";
@@ -959,12 +959,32 @@ class PersonaGestion extends \app\modules\admision\components\CActiveRecord {
                         pg.econ_id,
                         ec.econ_nombre estado_contacto,
                         pg.ccan_id,
+                        (
+                          select ifnull(emp.emp_nombre_comercial,'sin empresa') as empresa
+                          from " . $con->dbname . ".oportunidad o 
+                            join " . $con1->dbname . ".empresa as emp on emp.emp_id=o.emp_id
+                          where 
+                                    o.pges_id = pg.pges_id 
+                                    and o.opo_estado = :estado 
+                                    and o.opo_estado_logico = :estado
+                                    limit 1
+                        ) as empresa,
+                        (
+                          select ifnull(uaca.uaca_nombre,'sin unidad') as unidad_academica
+                          from " . $con->dbname . ".oportunidad o 
+                            join " . $con2->dbname . ".unidad_academica as uaca on uaca.uaca_id=o.uaca_id
+                          where 
+                                    o.pges_id = pg.pges_id 
+                                    and o.opo_estado = :estado 
+                                    and o.opo_estado_logico = :estado
+                                    limit 1
+                        ) as unidad_academica,
                         cc.ccan_nombre as canal,
                         ifnull((select concat(pers.per_pri_nombre, ' ', ifnull(pers.per_pri_apellido,' ')) 
                                   from " . $con1->dbname . ".usuario usu 
                                   inner join " . $con1->dbname . ".persona pers on pers.per_id = usu.usu_id
                                   where usu.usu_id = pg.pges_usuario_ingreso),'') as usuario_ing,                      
-                        (select count(*) from " . $con->dbname . ".oportunidad o where o.pges_id = pg.pges_id and o.eopo_id in(1,2,3) and o.opo_estado = :estado and o.opo_estado_logico = :estado) as num_oportunidad_abiertas,
+                        (select count(*) from " . $con->dbname . ".oportunidad o where o.pges_id = pg.pges_id and o.eopo_id in(1,2,3) and o.opo_estado = :estado and o.opo_estado_logico = :estado) as num_oportunidad_abiertas,                        
                         (select count(*) from " . $con->dbname . ".oportunidad o where o.pges_id = pg.pges_id and o.eopo_id in(4,5) and o.opo_estado = :estado and o.opo_estado_logico = :estado) as num_oportunidad_cerradas,
                         DATE(pg.pges_fecha_creacion) as fecha_creacion    
                 FROM " . $con->dbname . ".persona_gestion pg

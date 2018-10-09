@@ -28,11 +28,6 @@ admision::registerTranslations();
                 'header' => Yii::t("formulario", "Country"),
                 'value' => 'pais',
             ],
-            /*[
-                'attribute' => 'Tipo persona',
-                'header' => Module::t("crm", "Contact Type"),
-                'value' => 'des_tipo_persona',
-            ],*/
             [
                 'attribute' => 'Fecha',
                 'header' => Yii::t("formulario", "Date"),
@@ -42,6 +37,16 @@ admision::registerTranslations();
                 'attribute' => 'Estado',
                 'header' => Module::t("crm", "Contact Status"),
                 'value' => 'estado_contacto',
+            ],
+            [
+                'attribute' => 'empresa',
+                'header' => Yii::t("formulario", "Company"),
+                'value' => 'empresa',
+            ],
+            [
+                'attribute' => 'unidad_academica',
+                'header' => Yii::t("formulario", "Academic unit"),
+                'value' => 'unidad_academica',
             ],
             [
                 'attribute' => 'Canal',
