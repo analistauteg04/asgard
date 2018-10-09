@@ -34,11 +34,6 @@ admision::registerTranslations();
                 'value' => 'fecha_creacion',
             ],
             [
-                'attribute' => 'Estado',
-                'header' => Module::t("crm", "Contact Status"),
-                'value' => 'estado_contacto',
-            ],
-            [
                 'attribute' => 'empresa',
                 'header' => Yii::t("formulario", "Company"),
                 'value' => 'empresa',

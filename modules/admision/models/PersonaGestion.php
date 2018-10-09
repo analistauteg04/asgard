@@ -957,7 +957,6 @@ class PersonaGestion extends \app\modules\admision\components\CActiveRecord {
                         ifnull((select pai.pai_nombre from " . $con1->dbname . ".pais pai where pai.pai_id = pg.pai_id_nacimiento),'') as pais,                      
                         pg.pges_id as pestion_id,
                         pg.econ_id,
-                        ec.econ_nombre estado_contacto,
                         pg.ccan_id,
                         (
                           select ifnull(emp.emp_nombre_comercial,'sin empresa') as empresa
@@ -972,7 +971,7 @@ class PersonaGestion extends \app\modules\admision\components\CActiveRecord {
                         (
                           select ifnull(uaca.uaca_nombre,'sin unidad') as unidad_academica
                           from " . $con->dbname . ".oportunidad o 
-                            join " . $con2->dbname . ".unidad_academica as uaca on uaca.uaca_id=o.uaca_id
+                          join " . $con2->dbname . ".unidad_academica as uaca on uaca.uaca_id=o.uaca_id
                           where 
                                     o.pges_id = pg.pges_id 
                                     and o.opo_estado = :estado 
