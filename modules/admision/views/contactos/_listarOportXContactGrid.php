@@ -48,11 +48,6 @@ use app\modules\admision\Module;
                     },
                 ],
             ],
-            /* [
-              'attribute' => 'Estado Oportunidad',
-              'header' => Module::t("crm", "Opportunity state"),
-              'value' => 'estado_oportunidad',
-              ], */
             [
                 'attribute' => 'Observacion',
                 'header' => Yii::t("formulario", "Observation"),
