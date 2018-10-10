@@ -201,8 +201,7 @@ INSERT INTO `obmo_acci` (`oacc_id`, `omod_id`, `acc_id`, `oacc_tipo_boton`, `oac
 (48, 112, 4, '1', '', 'saveBills', '1', '1'),
 (49, 90, 4, '1', '', 'Approve', '1', '1'),
 (50, 116, 17, '1', '', 'exportStatContact', '1', '1'),
-(51, 117, 18, '1', '', 'exportLostContact', '1', '1'),
-(52, 118, 19, '1', '', 'exportAgendamiento', '1', '1');
+(51, 117, 18, '1', '', 'exportLostContact', '1', '1');
 -- --------------------------------------------------------
 --
 -- Volcado de datos para la tabla `grup_obmo`
