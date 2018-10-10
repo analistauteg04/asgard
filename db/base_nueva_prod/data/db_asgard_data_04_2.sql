@@ -139,18 +139,13 @@ INSERT INTO `objeto_modulo` (`omod_id`, `mod_id`, `omod_padre_id`, `omod_nombre`
 -- Pagos Factura
 (111, 3, 94, 'Cargar Factura', 'S', '0', '', '', '', 'financiero/pagos/cargardocfact', '1', '0', 'Pagos', '1', '2018-09-22 14:07:01', NULL, '1'),
 (112, 3, 111, 'Guardar Cargar Factura', 'A', '0', '', '', '', 'financiero/pagos/cargardocfact', '1', '0', 'Pagos', '1', '2018-09-22 14:07:01', NULL, '1'),
-
-
-
 -- Objetos Modulos Extras para Interesados
 (113, 2, 113, 'Solicitudes', 'P', '0', '', '', '', 'admision/solicitudes/listarsolicitudxinteresado', '1', '1', 'Solicitudes', '1', '2018-09-22 00:05:23', NULL, '1'),
 (114, 3, 114, 'Pagos Realizados', 'P', '0', '', '', '', 'financiero/pagos/cargardocpagos', '1', '1', 'Pagos', '1', '2018-09-22 14:07:01', NULL, '1'),
 
 (115, 5, 115, 'Reportes', 'P', '0', '', '', '', 'reportes/index', 1, '1', 'contacto', '1', '2018-09-18 00:29:05', NULL, '1'),
 (116, 5, 115, 'Exportar Contactos por Estado', 'A', '0', '', '', '', 'reportes/index', '1', '0', 'Admision', '1', '2018-09-22 14:07:01', NULL, '1'),
-(117, 5, 115, 'Exportar Contactos Perdidos', 'A', '0', '', '', '', 'reportes/index', '1', '0', 'Admision', '1', '2018-09-22 14:07:01', NULL, '1'),
-(118, 5, 115, 'Exportar Agendamiento', 'A', '0', '', '', '', 'reportes/index', '1', '0', 'Admision', '1', '2018-09-22 14:07:01', NULL, '1');
-
+(117, 5, 115, 'Exportar Contactos Perdidos', 'A', '0', '', '', '', 'reportes/index', '1', '0', 'Admision', '1', '2018-09-22 14:07:01', NULL, '1');
 -- --------------------------------------------------------
 --
 -- Volcado de datos para la tabla `OBMO_ACCI`
@@ -207,7 +202,7 @@ INSERT INTO `obmo_acci` (`oacc_id`, `omod_id`, `acc_id`, `oacc_tipo_boton`, `oac
 (49, 90, 4, '1', '', 'Approve', '1', '1'),
 (50, 116, 17, '1', '', 'exportStatContact', '1', '1'),
 (51, 117, 18, '1', '', 'exportLostContact', '1', '1'),
-(52, 118, 18, '1', '', 'exportAgendamiento', '1', '1');
+(52, 118, 19, '1', '', 'exportAgendamiento', '1', '1');
 -- --------------------------------------------------------
 --
 -- Volcado de datos para la tabla `grup_obmo`
@@ -329,8 +324,7 @@ INSERT INTO `grup_obmo` (`gmod_id`, `gru_id`, `omod_id`, `gmod_estado`,  `gmod_e
 (114, 1, 114, '1', '1'),
 (115, 1, 115, '1', '1'),
 (116, 1, 116, '1', '1'),
-(117, 1, 117, '1', '1'),
-(118, 1, 118, '1', '1');
+(117, 1, 117, '1', '1');
 -- --------------------------------------------------------
 --
 -- Volcado de datos para la tabla `GRUP_OBMO_GRUP_ROL`
@@ -452,5 +446,4 @@ INSERT INTO `grup_obmo_grup_rol` (`gogr_id`, `grol_id`, `gmod_id`, `gogr_estado`
 (114, 1, 114, '1', '1'),
 (115, 1, 115, '1', '1'),
 (116, 1, 116, '1', '1'),
-(117, 1, 117, '1', '1'),
-(118, 1, 118, '1', '1');
+(117, 1, 117, '1', '1');
