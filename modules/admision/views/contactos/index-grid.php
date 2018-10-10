@@ -49,6 +49,11 @@ admision::registerTranslations();
                 'value' => 'canal',
             ],
             [
+                'attribute' => 'Usuario',
+                'header' => Yii::t("formulario", "User login"),
+                'value' => 'usuario_ing',               
+            ],
+            [
                 'attribute' => 'NumOportunidadesAbiertas',
                 'header' => Yii::t("formulario", "Open Opportunities"),
                 'value' => 'num_oportunidad_abiertas',
