@@ -11,6 +11,7 @@ use app\modules\admision\models\EstadoContacto;
 use app\modules\admision\models\TipoOportunidadVenta;
 use app\modules\academico\models\Modalidad;
 use app\modules\academico\models\UnidadAcademica;
+use app\modules\financiero\models\Secuencias;
 use yii\data\ArrayDataProvider;
 use Yii;
 

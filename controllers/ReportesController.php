@@ -25,7 +25,7 @@ class ReportesController extends CController {
     public function actionExpexcelreport(){
         $objDat= new Reporte();
         //$data["estado"]= $_GET["estado"];
-        $data["op"]= $_GET["op"];
+        $data["op"]= "2";//$_GET["op"];
         $data["f_ini"]= $_GET["f_ini"];
         $data["f_fin"]= $_GET["f_fin"];
         //$data["valor"]= $_GET["valor"];
@@ -33,12 +33,14 @@ class ReportesController extends CController {
         switch ($data["op"]) {
             case '1'://GRADO
                 $arrData=$objDat->consultarActividadporOportunidad($data);
-                $arrHeader = array("N° Oport","Fecha","Nombres","Estado","Observacion","Detalle");
+                $arrHeader = array("N° Oport","Fecha","Empresa","Nombres","Apellidos","Unidad Academica",
+                                   "Estado","Observacion");
                 $nombarch = "ActividadesOportunidad-" . date("YmdHis").".xls";
                 break;
             case '2'://POSGRADO
                 $arrData=$objDat->consultarOportunidadProximaAten($data);
-                $arrHeader = array("N° Oport","F.Prox.At","Nombres","Estado","Observacion","Detalle");
+                $arrHeader = array("N° Oport","F.Prox.At","Empresa","Nombres","Apellidos","Unidad Academica",
+                                    "Estado","Observacion");
                 $nombarch = "ProximaOportunidad-" . date("YmdHis").".xls";
                 break;
             
