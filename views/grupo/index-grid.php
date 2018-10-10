@@ -53,8 +53,7 @@ use app\models\Grupo;
                 'template' => '{view} {delete}',
                 'buttons' => [
                     'view' => function ($url, $model) {
-                        return Html::a('<span class="'.Utilities::getIcon('view').'"></span>', Url::to(['grupo/view', 'id' => $model['id']]), ["data-toggle" => "tooltip", "title" => Yii::t("accion","View")]);
-                        //return  Html::a('Action', Url::to(['mceformulariotemp/solicitudpdf','ids' => 1],['class' => 'btn btn-default',"target" => "_blank"]));
+                        return Html::a('<span class="'.Utilities::getIcon('view').'"></span>', Url::to(['grupo/view', 'id' => $model['id']]), ["data-toggle" => "tooltip", "title" => Yii::t("accion","View")]);                        
                     },
                     'delete' => function ($url, $model) {
                          return Html::a('<span class="'.Utilities::getIcon('remove').'"></span>', null, ['href' => 'javascript:confirmDelete(\'deleteItem\',[\'' . $model['id'] . '\']);', "data-toggle" => "tooltip", "title" => Yii::t("accion","Delete")]);

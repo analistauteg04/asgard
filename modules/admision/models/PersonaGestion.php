@@ -949,35 +949,18 @@ class PersonaGestion extends \app\modules\admision\components\CActiveRecord {
                 pg.pges_seg_apellido as pges_seg_apellido,";
         }
         $sql = "
-                SELECT  tp.tper_id tipo_persona, 
+                SELECT  
+                        tp.tper_id tipo_persona, 
                         tp.tper_nombre des_tipo_persona, 
                         concat(pges_pri_nombre, ' ', ifnull(pges_seg_nombre,' ')) as nombres,
                         concat(pges_pri_apellido, ' ', ifnull(pges_seg_apellido,' ')) as apellidos,                 
                         concat(pges_pri_nombre, ' ', ifnull(pges_pri_apellido,' ')) as cliente,
                         ifnull((select pai.pai_nombre from " . $con1->dbname . ".pais pai where pai.pai_id = pg.pai_id_nacimiento),'') as pais,                      
                         pg.pges_id as pestion_id,
+                        ifnull(emp.emp_nombre_comercial,'Sin Empresa') as empresa,
                         pg.econ_id,
+                        ifnull(uaca.uaca_nombre,'Sin Unidad') as unidad_academica,
                         pg.ccan_id,
-                        (
-                          select ifnull(emp.emp_nombre_comercial,'sin empresa') as empresa
-                          from " . $con->dbname . ".oportunidad o 
-                            join " . $con1->dbname . ".empresa as emp on emp.emp_id=o.emp_id
-                          where 
-                                    o.pges_id = pg.pges_id 
-                                    and o.opo_estado = :estado 
-                                    and o.opo_estado_logico = :estado
-                                    limit 1
-                        ) as empresa,
-                        (
-                          select ifnull(uaca.uaca_nombre,'sin unidad') as unidad_academica
-                          from " . $con->dbname . ".oportunidad o 
-                          join " . $con2->dbname . ".unidad_academica as uaca on uaca.uaca_id=o.uaca_id
-                          where 
-                                    o.pges_id = pg.pges_id 
-                                    and o.opo_estado = :estado 
-                                    and o.opo_estado_logico = :estado
-                                    limit 1
-                        ) as unidad_academica,
                         cc.ccan_nombre as canal,
                         ifnull((select concat(pers.per_pri_nombre, ' ', ifnull(pers.per_pri_apellido,' ')) 
                                   from " . $con1->dbname . ".usuario usu 
@@ -989,7 +972,15 @@ class PersonaGestion extends \app\modules\admision\components\CActiveRecord {
                 FROM " . $con->dbname . ".persona_gestion pg
                 INNER JOIN " . $con->dbname . ".estado_contacto ec on ec.econ_id = pg.econ_id
                 INNER JOIN " . $con1->dbname . ".tipo_persona tp on tp.tper_id = pg.tper_id  
-                INNER JOIN " . $con->dbname . ".conocimiento_canal cc on cc.ccan_id = pg.ccan_id
+                INNER JOIN " . $con->dbname . ".conocimiento_canal cc on cc.ccan_id = pg.ccan_id                
+                left JOIN (
+                    select max(opo.opo_id) as opo_id,opo.pges_id
+                    from " . $con->dbname . ".oportunidad as opo
+                    group by opo.pges_id
+                ) AS max_opor on max_opor.pges_id=pg.pges_id
+                left JOIN " . $con->dbname . ".oportunidad opo on opo.opo_id = max_opor.opo_id                                
+                left join " . $con1->dbname . ".empresa as emp on emp.emp_id=opo.emp_id
+                left JOIN " . $con2->dbname . ".unidad_academica uaca on uaca.uaca_id = opo.uaca_id
                 WHERE   $str_search
                         pg.pges_estado = :estado
                         and pg.pges_estado_logico = :estado

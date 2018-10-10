@@ -50,6 +50,7 @@ return [
     'Contacts' => 'Contactos',
     "Provisional Contacts" => "Contactos Pendientes", 
     "Career/Program/Course" => "Carre/Progr/Curso",
+    "Channel"=> "Canal",
     "Contact" => "Contacto",
     "Contacts" => "Contactos",
     "Contact Channel" => "Canal contacto",

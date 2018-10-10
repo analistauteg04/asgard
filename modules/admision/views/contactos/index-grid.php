@@ -34,24 +34,19 @@ admision::registerTranslations();
                 'value' => 'fecha_creacion',
             ],
             [
-                'attribute' => 'empresa',
-                'header' => Yii::t("formulario", "Company"),
-                'value' => 'empresa',
-            ],
-            [
                 'attribute' => 'unidad_academica',
                 'header' => Yii::t("formulario", "Academic unit"),
                 'value' => 'unidad_academica',
             ],
             [
-                'attribute' => 'Canal',
-                'header' => Module::t("crm", "Knowledge channel"),
-                'value' => 'canal',
+                'attribute' => 'empresa',
+                'header' => Yii::t("formulario", "Company"),
+                'value' => 'empresa',
             ],
             [
-                'attribute' => 'Usuario',
-                'header' => Yii::t("formulario", "User login"),
-                'value' => 'usuario_ing',
+                'attribute' => 'Canal',
+                'header' => Module::t("crm", "Channel"),
+                'value' => 'canal',
             ],
             [
                 'attribute' => 'NumOportunidadesAbiertas',
