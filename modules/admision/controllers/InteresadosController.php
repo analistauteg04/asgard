@@ -232,22 +232,23 @@ class InteresadosController extends \app\components\CController
         
         $arrHeader = array(
             Yii::t("formulario", "DNI"),
+            Yii::t("formulario", "Date"),
             Yii::t("formulario", "Name"),                        
             Yii::t("formulario", "Last Names"),
-            Yii::t("formulario", "Company"));            
+            Yii::t("formulario", "Company"),
+            Yii::t("formulario", "Academic unit"));            
         
         $interesado_model = new Interesado();
         $data = Yii::$app->request->get();
         $arrSearch["search"] = $data['search'];
-        $arrSearch["company"] = $data['company'];
+        $arrSearch["company"] = $data['empresa'];
         $arrData = array();
         if (empty($arrSearch)) {
             $arrData = $interesado_model->consultarReportAspirantes(array(), true);
         } else {
             $arrData = $interesado_model->consultarReportAspirantes($arrSearch, true);                   
-        }
-                                       
-       // \app\models\Utilities::putMessageLogFile($arrData);                        
+        }                                      
+                         
         $nameReport = yii::t("formulario", "Application Reports");
         Utilities::generarReporteXLS($nombarch, $nameReport, $arrHeader, $arrData, $colPosition);
         exit;              
@@ -259,14 +260,16 @@ class InteresadosController extends \app\components\CController
                       
         $arrHeader = array(
             Yii::t("formulario", "DNI"),
+            Yii::t("formulario", "Date"),
             Yii::t("formulario", "Name"),                        
             Yii::t("formulario", "Last Names"),
-            Yii::t("formulario", "Company"));            
+            Yii::t("formulario", "Company"),
+            Yii::t("formulario", "Academic unit"));            
         
         $interesado_model = new Interesado();
         $data = Yii::$app->request->get();
         $arrSearch["search"] = $data['search'];
-        $arrSearch["company"] = $data['company'];
+        $arrSearch["company"] = $data['empresa'];
         $arrData = array();
         if (empty($arrSearch)) {
             $arrData = $interesado_model->consultarReportAspirantes(array(), true);
@@ -274,8 +277,7 @@ class InteresadosController extends \app\components\CController
             $arrData = $interesado_model->consultarReportAspirantes($arrSearch, true);                   
         }
         
-        $report->orientation = "P"; // tipo de orientacion L => Horizontal, P => Vertical                                
-       // \app\models\Utilities::putMessageLogFile($arrData);                        
+        $report->orientation = "P"; // tipo de orientacion L => Horizontal, P => Vertical    
         $report->createReportPdf(
             $this->render('exportpdf', [
                     'arr_head' => $arrHeader,

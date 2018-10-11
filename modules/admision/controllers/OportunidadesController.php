@@ -62,7 +62,7 @@ class OportunidadesController extends \app\components\CController {
         $modalidad_model = new Modalidad();
         $state_oportunidad_model = new EstadoOportunidad();
         $unidad_acad_data = $uni_aca_model->consultarUnidadAcademicas();
-        $modalidad_data = $modalidad_model->consultarModalidad($respOportunidad["uaca_id"]);
+        $modalidad_data = $modalidad_model->consultarModalidad($respOportunidad["uaca_id"], $respOportunidad["empresa"]);
         $modcanal = new Oportunidad();
         $tipo_oportunidad_data = TipoOportunidadVenta::find()->select("tove_id AS id, tove_nombre AS name")->where(["tove_estado_logico" => "1", "tove_estado" => "1"])->asArray()->all();
         $state_oportunidad_data = $state_oportunidad_model->consultarEstadOportunidad();
@@ -104,7 +104,7 @@ class OportunidadesController extends \app\components\CController {
         $contactManage = $persges_mod->consultarPersonaGestion($pges_id);
         $respOportunidad = $modoportunidad->consultarOportunidadById($opor_id);
         $unidad_acad_data = $uni_aca_model->consultarUnidadAcademicasEmpresa($respOportunidad["empresa"]);
-        $modalidad_data = $modalidad_model->consultarModalidad($respOportunidad["uaca_id"]);
+        $modalidad_data = $modalidad_model->consultarModalidad($respOportunidad["uaca_id"], $respOportunidad["empresa"]);
         $tipo_oportunidad_data = $modTipoOportunidad->consultarOporxUnidad($respOportunidad["uaca_id"]);
         $state_oportunidad_data = $state_oportunidad_model->consultarEstadOportunidad();
         $academic_study_data = $modoportunidad->consultarCarreraModalidad($respOportunidad["uaca_id"], $respOportunidad["mod_id"]);
@@ -117,7 +117,7 @@ class OportunidadesController extends \app\components\CController {
         if (Yii::$app->request->isAjax) {
             $data = Yii::$app->request->post();
             if (isset($data["getmodalidad"])) {
-                $modalidad = $modalidad_model->consultarModalidad($data["ninter_id"]);
+                $modalidad = $modalidad_model->consultarModalidad($data["ninter_id"], $data["empresa_id"]);
                 $message = array("modalidad" => $modalidad);
                 return Utilities::ajaxResponse('OK', 'alert', Yii::t('jslang', 'Success'), 'false', $message);
             }
@@ -133,7 +133,11 @@ class OportunidadesController extends \app\components\CController {
             }
             if (isset($data["getcarrera"])) {
                 if ($data["unidada"] < 3) {
-                    $carrera = $modoportunidad->consultarCarreraModalidad($data["unidada"], $data["moda_id"]);
+                    if ($data["unidada"] == 2 && $data["empresa_id"] == 2) {
+                        $carrera = $modestudio->consultarCursoModalidad($data["unidada"], $data["moda_id"]);
+                    } else {
+                        $carrera = $modoportunidad->consultarCarreraModalidad($data["unidada"], $data["moda_id"]);
+                    }
                 } else {
                     $carrera = $modestudio->consultarCursoModalidad($data["unidada"], $data["moda_id"]);
                 }
@@ -174,7 +178,7 @@ class OportunidadesController extends \app\components\CController {
         $modTipoOportunidad = new TipoOportunidadVenta();
         $state_oportunidad_model = new EstadoOportunidad();
         $unidad_acad_data = $uni_aca_model->consultarUnidadAcademicasEmpresa($emp_id);
-        $modalidad_data = $modalidad_model->consultarModalidad(1);
+        $modalidad_data = $modalidad_model->consultarModalidad(1, 1);
         $modcanal = new Oportunidad();
         $tipo_oportunidad_data = $modTipoOportunidad->consultarOporxUnidad(1);
         $state_oportunidad_data = $state_oportunidad_model->consultarEstadOportunidad();
@@ -186,12 +190,12 @@ class OportunidadesController extends \app\components\CController {
         if (Yii::$app->request->isAjax) {
             $data = Yii::$app->request->post();
             if (isset($data["getuacademias"])) {
-                $data_u_acad = $uni_aca_model->consultarUnidadAcademicasEmpresa($data["empresa"]);
+                $data_u_acad = $uni_aca_model->consultarUnidadAcademicasEmpresa($data["empresa_id"]);
                 $message = array("unidad_academica" => $data_u_acad);
                 return Utilities::ajaxResponse('OK', 'alert', Yii::t('jslang', 'Success'), 'false', $message);
             }
             if (isset($data["getmodalidad"])) {
-                $modalidad = $modalidad_model->consultarModalidad($data["nint_id"]);
+                $modalidad = $modalidad_model->consultarModalidad($data["nint_id"], $data["empresa_id"]);
                 $message = array("modalidad" => $modalidad);
                 return Utilities::ajaxResponse('OK', 'alert', Yii::t('jslang', 'Success'), 'false', $message);
             }
@@ -254,19 +258,22 @@ class OportunidadesController extends \app\components\CController {
             $tipo_oportunidad = $data["id_tipo_oportunidad"];
             $estado_oportunidad = $data["id_estado_oportunidad"];
             if ($unidad_academica < 3) {
-                $estudio_academico = $data["id_estudio_academico"];
-                $modulo_estudio = '';
+                if ($unidad_academica == 2 && $empresa == 2) {
+                    $estudio_academico = '';
+                    $modulo_estudio = $data["id_estudio_academico"];
+                } else {
+                    $estudio_academico = $data["id_estudio_academico"];
+                    $modulo_estudio = '';
+                }
             } else {
                 $estudio_academico = '';
                 $modulo_estudio = $data["id_estudio_academico"];
-            }
-            //$estudio_academico = $data["id_estudio_academico"];
+            }   
             $canal_conocimiento = $data["canal_conocimiento"];
             $sub_carrera = ($data["sub_carrera"] != 0) ? $data["sub_carrera"] : null;
             $usuario = @Yii::$app->user->identity->usu_id;
             $con = \Yii::$app->db_crm;
             $agente = $mod_gestion->consultarAgenteAutenticado($per_id); //QUITAR 1 AGENTE ADMIN
-            //$emp_id, $mest_id, $eaca_id, $uaca_id, $mod_id, $eopo_id 
             //$nombreoportunidad = $mod_gestion->consultarNombreOportunidad($empresa, $modulo_estudio, $estudio_academico, $unidad_academica, $modalidad, $estado_oportunidad);
             $nombreoportunidad = $mod_gestion->consultarNombreOportunidad($empresa, $modulo_estudio, $estudio_academico, $unidad_academica, $modalidad, $estado_oportunidad);
 
@@ -357,11 +364,20 @@ class OportunidadesController extends \app\components\CController {
             $tipo_oportunidad = $data["tipoOport"];
             $estado_oportunidad = $data["estado"];
             $carrera_estudio = $data["carreraestudio"];
-            if ($unidad_academica < 3) {
+            /*if ($unidad_academica < 3) {
                 $eaca_id = $carrera_estudio;
             } else {
                 $mest_id = $carrera_estudio;
-            }
+            }*/
+            if ($unidad_academica < 3) {
+                if ($unidad_academica == 2 && $empresa == 2) {
+                    $mest_id = $carrera_estudio;
+                } else {
+                    $eaca_id = $carrera_estudio;
+                }
+            } else {
+                $mest_id = $carrera_estudio;
+            }  
             $canal_conocimiento = $data["canal"];
             $sub_carrera = $data["subcarrera"];
             if ($sub_carrera == 0) {
@@ -373,31 +389,31 @@ class OportunidadesController extends \app\components\CController {
             $transaction = $con->beginTransaction();
             try {
                 $nombreoportunidad = $mod_oportunidad->consultarNombreOportunidad($empresa, $mest_id, $eaca_id, $unidad_academica, $modalidad, $estado_oportunidad);
-                 //if ($nombreoportunidad["eopo_nombre"] == '' || $nombreoportunidad["eopo_nombre"] == 'Ganada' || $nombreoportunidad["eopo_nombre"] == 'Perdida') {
-                    $respuesta = $mod_oportunidad->modificarOportunixId($empresa, $opo_id, $mest_id, $eaca_id, $unidad_academica, $modalidad, $tipo_oportunidad, $sub_carrera, $canal_conocimiento, null, null, null, $usuario, null);
-                    if ($respuesta) {
-                        $transaction->commit();
-                        $message = array(
-                            "wtmessage" => Yii::t("notificaciones", "La información ha sido modificada. "),
-                            "title" => Yii::t('jslang', 'Success'),
-                        );
-                        return Utilities::ajaxResponse('OK', 'alert', Yii::t("jslang", "Sucess"), false, $message);
-                    } else {
-                        $transaction->rollback();
-                        $message = array(
-                            "wtmessage" => Yii::t("notificaciones", "Error al modificar." . $mensaje),
-                            "title" => Yii::t('jslang', 'Bad Request'),
-                        );
-                        return Utilities::ajaxResponse('NO_OK', 'alert', Yii::t("jslang", "Bad Request"), false, $message);
-                    }
-                /*} else {
+                //if ($nombreoportunidad["eopo_nombre"] == '' || $nombreoportunidad["eopo_nombre"] == 'Ganada' || $nombreoportunidad["eopo_nombre"] == 'Perdida') {
+                $respuesta = $mod_oportunidad->modificarOportunixId($empresa, $opo_id, $mest_id, $eaca_id, $unidad_academica, $modalidad, $tipo_oportunidad, $sub_carrera, $canal_conocimiento, null, null, null, $usuario, null);
+                if ($respuesta) {
+                    $transaction->commit();
+                    $message = array(
+                        "wtmessage" => Yii::t("notificaciones", "La información ha sido modificada. "),
+                        "title" => Yii::t('jslang', 'Success'),
+                    );
+                    return Utilities::ajaxResponse('OK', 'alert', Yii::t("jslang", "Sucess"), false, $message);
+                } else {
                     $transaction->rollback();
                     $message = array(
-                        "wtmessage" => Yii::t("notificaciones", "En el estado que se encuentra no se puede modiifcar" . $mensaje),
+                        "wtmessage" => Yii::t("notificaciones", "Error al modificar." . $mensaje),
                         "title" => Yii::t('jslang', 'Bad Request'),
                     );
                     return Utilities::ajaxResponse('NO_OK', 'alert', Yii::t("jslang", "Bad Request"), false, $message);
-                }*/
+                }
+                /* } else {
+                  $transaction->rollback();
+                  $message = array(
+                  "wtmessage" => Yii::t("notificaciones", "En el estado que se encuentra no se puede modiifcar" . $mensaje),
+                  "title" => Yii::t('jslang', 'Bad Request'),
+                  );
+                  return Utilities::ajaxResponse('NO_OK', 'alert', Yii::t("jslang", "Bad Request"), false, $message);
+                  } */
             } catch (Exception $ex) {
                 $transaction->rollback();
                 $message = array(

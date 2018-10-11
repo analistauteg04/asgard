@@ -51,7 +51,7 @@ class InscripcionsmartController extends \yii\web\Controller {
                 return;
             }
             if (isset($data["getmodalidad"])) {
-                $modalidad = $mod_modalidad->consultarModalidad($data["nint_id"]);
+                $modalidad = $mod_modalidad->consultarModalidad($data["nint_id"],3);
                 $message = array("modalidad" => $modalidad);
                 return Utilities::ajaxResponse('OK', 'alert', Yii::t('jslang', 'Success'), 'false', $message);
                 return;
@@ -78,7 +78,7 @@ class InscripcionsmartController extends \yii\web\Controller {
         $arr_conuteg = $mod_pergestion->consultarConociouteg();
         //$arr_carrerra1 = $modestudio->consultarEstudioEmpresa(3);
         $arr_carrerra1 = $modestudio->consultarCursoModalidad(3, 1);
-        $arr_modalidad = $mod_modalidad->consultarModalidad(3);
+        $arr_modalidad = $mod_modalidad->consultarModalidad(3,3);
         $arr_ninteres = $mod_unidad->consultarUnidadAcademicasEmpresa(3);
         return $this->render('index', [
                     "tipos_dni" => array("CED" => Yii::t("formulario", "DNI Document"), "PASS" => Yii::t("formulario", "Passport")),

@@ -58,7 +58,7 @@ class InscripcionesController extends \yii\web\Controller {
             }
 
             if (isset($data["getmodalidad"])) {
-                $modalidad = $mod_modalidad->consultarModalidad($data["nint_id"]);
+                $modalidad = $mod_modalidad->consultarModalidad($data["nint_id"],1);
                 $message = array("modalidad" => $modalidad);
                 return Utilities::ajaxResponse('OK', 'alert', Yii::t('jslang', 'Success'), 'false', $message);
                 return;
@@ -76,7 +76,7 @@ class InscripcionesController extends \yii\web\Controller {
         $arr_ciu_dom = Canton::cantonXProvincia($arr_prov_dom[0]["id"]);       
         $arr_medio = MedioPublicitario::find()->select("mpub_id AS id, mpub_nombre AS value")->where(["mpub_estado_logico" => "1", "mpub_estado" => "1"])->asArray()->all();
         $arr_ninteres = $mod_unidad->consultarUnidadAcademicasEmpresa(1);
-        $arr_modalidad = $mod_modalidad->consultarModalidad(1);
+        $arr_modalidad = $mod_modalidad->consultarModalidad(1,1);
         $arr_conuteg = $mod_pergestion->consultarConociouteg();
         $arr_carrerra1 = $modcanal->consultarCarreraModalidad(1, 1);
         return $this->render('index', [

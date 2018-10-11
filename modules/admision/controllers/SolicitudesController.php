@@ -164,7 +164,7 @@ class SolicitudesController extends \app\components\CController {
                 return Utilities::ajaxResponse('OK', 'alert', Yii::t('jslang', 'Success'), 'false', $message);
             }
             if (isset($data["getmodalidad"])) {
-                $modalidad = $mod_modalidad->consultarModalidad($data["nint_id"]);
+                $modalidad = $mod_modalidad->consultarModalidad($data["nint_id"], $data["empresa_id"]);
                 $message = array("modalidad" => $modalidad);
                 return Utilities::ajaxResponse('OK', 'alert', Yii::t('jslang', 'Success'), 'false', $message);
                 return;
@@ -194,7 +194,7 @@ class SolicitudesController extends \app\components\CController {
             }
         }
         $arr_unidadac = $mod_unidad->consultarUnidadAcademicasEmpresa($emp_id);
-        $arr_modalidad = $mod_modalidad->consultarModalidad(1);
+        $arr_modalidad = $mod_modalidad->consultarModalidad(1,1);
         $arr_metodos = $mod_metodo->consultarMetodoIngNivelInt($arr_unidadac[0]["id"]);
         $arr_carrera = $modcanal->consultarCarreraModalidad(1, 1);
         //Descuentos.
