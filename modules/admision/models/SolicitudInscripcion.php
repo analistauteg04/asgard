@@ -349,15 +349,16 @@ class SolicitudInscripcion extends \yii\db\ActiveRecord
                         uaca.uaca_nombre as nint_nombre,
                         ifnull((select min.ming_nombre from " . $con->dbname . ".metodo_ingreso min where min.ming_id = sins.ming_id),'') as metodo_ingreso,
                         sins.eaca_id,
-                        case uaca.uaca_id
-                        when 1 then (select eaca.eaca_nombre from " . $con1->dbname . ".estudio_academico eaca where eaca.eaca_id = sins.eaca_id)
-                        when 2 then (select eaca.eaca_nombre from " . $con1->dbname . ".estudio_academico eaca where eaca.eaca_id = sins.eaca_id)
-                        when 3 then (select mes.mest_nombre from " . $con1->dbname . ".modulo_estudio mes where mes.mest_id = sins.mest_id)
-                        when 4 then (select mes.mest_nombre from " . $con1->dbname . ".modulo_estudio mes where mes.mest_id = sins.mest_id)
-                        when 5 then (select mes.mest_nombre from " . $con1->dbname . ".modulo_estudio mes where mes.mest_id = sins.mest_id)
-                        when 6 then (select mes.mest_nombre from " . $con1->dbname . ".modulo_estudio mes where mes.mest_id = sins.mest_id)
-                        else null
-                         end as 'carrera',                        
+                        (case when (sins.emp_id = 1) then
+                                (case when (sins.uaca_id < 3) then
+                                    (select ea.eaca_descripcion from " . $con1->dbname . ".estudio_academico ea where ea.eaca_id = sins.eaca_id and ea.eaca_estado = '1' and ea.eaca_estado_logico = '1')
+                                else 
+                                    (select me.mest_descripcion from " . $con1->dbname . ".modulo_estudio me where me.mest_id = sins.mest_id and me.mest_estado = '1' and me.mest_estado_logico = '1')
+                                end)
+                            else 
+                                (select me.mest_descripcion from " . $con1->dbname . ".modulo_estudio me where me.mest_id = sins.mest_id and me.mest_estado = '1' and me.mest_estado_logico = '1')
+                            end) 
+                            as carrera,
                         rsol.rsin_nombre as estado,
                         (select count(*) numdocumentos from " . $con->dbname . ".solicitudins_documento sid where sid.sins_id = sins.sins_id) as numDocumentos,
                         (case when op.opag_estado_pago = 'S' then 'Pagado' else 'Pendiente' end) as estado_pago
