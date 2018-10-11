@@ -12,6 +12,7 @@ financiero::registerTranslations();
 <?= Html::hiddenInput('txth_per_id', base64_encode($per_id), ['id' => 'txth_per_id']); ?>
 <?= Html::hiddenInput('txth_int_id', base64_encode($int_id), ['id' => 'txth_int_id']); ?>
 <?= Html::hiddenInput('txth_rsin_id', base64_encode($personaData["rsin_id"]), ['id' => 'txth_rsin_id']); ?>
+<?= Html::hiddenInput('txth_emp_id', base64_encode($emp_id), ['id' => 'txth_emp_id']); ?>
 
 <form class="form-horizontal" enctype="multipart/form-data" id="formsolicitud">
     <div class="col-md-12 col-sm-12 col-xs-12 col-lg-12">

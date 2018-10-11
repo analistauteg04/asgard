@@ -90,6 +90,7 @@ class SolicitudesController extends \app\components\CController {
         $sins_id = base64_decode($_GET['ids']);
         $int_id = base64_decode($_GET['int']);
         $per_id = base64_decode($_GET['perid']);
+        $emp_id = base64_decode($_GET['empid']);
 
         $mod_solins = new SolicitudInscripcion();
         $personaData = $mod_solins->consultarInteresadoPorSol_id($sins_id);
@@ -130,6 +131,7 @@ class SolicitudesController extends \app\components\CController {
                     "arr_conddni" => $resp_conddni,
                     "resp_rechazo" => $resp_rechazo,
                     "img_pago" => $img_pago,
+                    "emp_id" => $emp_id,
         ]);
     }
 
@@ -872,6 +874,7 @@ class SolicitudesController extends \app\components\CController {
             $condicionesDni = $data["condicionesdni"];
             $titulo = $data["titulo"];
             $dni = $data["dni"];
+            $emp_id = $data["empresa"];
             $rsin_id = base64_decode($data["estado_sol"]);
 
             $con = \Yii::$app->db_captacion;
@@ -882,20 +885,25 @@ class SolicitudesController extends \app\components\CController {
                 if ($rsin_id != 2) {
                     $mod_solins = new SolicitudInscripcion();
                     $mod_ordenpago = new OrdenPago();
-                    //Verificar que se hayan subido los documentos.
-                    $respNumDoc = $mod_solins->consultarDocumentostosxSol($sins_id);
-                    if ($respNumDoc["numDocumentos"] > 0) {
+                    //Verificar que se hayan subido los documentos en Uteg.        
+                    if ($empresa ==1) {
+                        $respNumDoc = $mod_solins->consultarDocumentostosxSol($sins_id); 
+                        $numDocumentos =  $respNumDoc["numDocumentos"];
+                    } else {
+                        $numDocumentos = 1;
+                    }
+                    if ($numDocumentos > 0)  {                        
                         $respusuario = $mod_solins->consultaDatosusuario($per_sistema);
                         if ($banderapreaprueba == 0) {  //etapa de Aprobación.                    
                             if ($resultado == 2) {
                                 //consultar estado del pago.     
-                                $resp_pago = $mod_ordenpago->consultaOrdenPago($sins_id);
+                                $resp_pago = $mod_ordenpago->consultaOrdenPago($sins_id);                                
                                 if ($resp_pago["opag_estado_pago"] == 'S') {
                                     $respsolins = $mod_solins->apruebaSolicitud($sins_id, $resultado, $observacion, $banderapreaprueba, $respusuario['usu_id']);
-                                    if ($respsolins) {
+                                    if ($respsolins) {                                        
                                         //Se genera id de aspirante y correo de bienvenida.                                
                                         $resp_encuentra = $mod_ordenpago->encuentraAdmitido($int_id);
-                                        if ($resp_encuentra) {
+                                        if ($resp_encuentra) {                                            
                                             $asp = $resp_encuentra['adm_id'];
                                             $continua = 1;
                                         } else {
@@ -909,11 +917,11 @@ class SolicitudesController extends \app\components\CController {
                                     }
                                     if ($continua == 1) {
                                         $resp_inte = $mod_ordenpago->actualizaEstadointeresado($int_id, $respusuario['usu_id']);
-                                        if ($resp_inte) {
+                                        if ($resp_inte) {                                            
                                             //Se obtienen el método de ingreso y el nivel de interés según la solicitud.                                                
-                                            $resp_sol = $mod_solins->Obtenerdatosolicitud($sins_id);
+                                            $resp_sol = $mod_solins->Obtenerdatosolicitud($sins_id);                                            
                                             //Se obtiene el curso para luego registrarlo.
-                                            if ($resp_sol) {
+                                            if ($resp_sol) {                                                
                                                 $mod_persona = new Persona();
                                                 $resp_persona = $mod_persona->consultaPersonaId($per_id);
                                                 $correo = $resp_persona["usu_user"];

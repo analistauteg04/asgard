@@ -768,6 +768,7 @@ function Approve() {
     arrParams.observacion = $('#txt_observacion').val();
     arrParams.per_id = $('#txth_per_id').val();
     arrParams.estado_sol = $('#txth_rsin_id').val();
+    arrParams.empresa = $('#txth_emp_id').val();
 
     if ($('#cmb_revision').val() == "4") {
         arreglo_check();

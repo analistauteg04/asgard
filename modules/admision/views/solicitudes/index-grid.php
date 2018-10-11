@@ -85,7 +85,7 @@ PbGridView::widget([
             'template' => '{view} {documentos}',
             'buttons' => [
                 'view' => function ($url, $model) {
-                    return Html::a('<span class="glyphicon glyphicon-check"></span>', Url::to(['/admision/solicitudes/view', 'ids' => base64_encode($model['sins_id']), 'int' => base64_encode($model['int_id']), 'perid' => base64_encode($model['persona'])]), ["data-toggle" => "tooltip", "title" => "Ver Solicitud", "data-pjax" => 0]);
+                    return Html::a('<span class="glyphicon glyphicon-check"></span>', Url::to(['/admision/solicitudes/view', 'ids' => base64_encode($model['sins_id']), 'int' => base64_encode($model['int_id']), 'perid' => base64_encode($model['persona']), 'empid' => base64_encode($model['emp_id'])]), ["data-toggle" => "tooltip", "title" => "Ver Solicitud", "data-pjax" => 0]);
                 },
                 'documentos' => function ($url, $model) {
                     if ($model['uaca_id'] < 3) {

@@ -632,7 +632,7 @@ class SolicitudInscripcion extends \yii\db\ActiveRecord
                         (select uaca.uaca_nombre from " . $con3->dbname . ".unidad_academica uaca where uaca.uaca_id = sins.uaca_id and uaca.uaca_estado = :estado AND uaca.uaca_estado_logico = :estado) as nombre_nivel_interes,
                         (select m.mod_nombre from " . $con3->dbname . ".modalidad m where  m.mod_id = sins.mod_id and m.mod_estado = :estado AND m.mod_estado_logico = :estado) as nombre_modalidad
                 FROM " . $con->dbname . ".solicitud_inscripcion sins INNER JOIN " . $con2->dbname . ".item_metodo_unidad imni 
-                     on ((sins.ming_id = imni.ming_id and sins.uaca_id = imni.uaca_id and sins.mod_id = imni.mod_id) or (sins.uaca_id = imni.uaca_id and sins.mod_id = imni.mod_id and sins.eaca_id = imni.mest_id))
+                     on ((sins.ming_id = imni.ming_id and sins.uaca_id = imni.uaca_id and sins.mod_id = imni.mod_id) or (sins.uaca_id = imni.uaca_id and sins.mod_id = imni.mod_id and sins.mest_id = imni.mest_id))
                      INNER JOIN " . $con2->dbname . ".item_precio ipre on imni.ite_id = ipre.ite_id	
                 WHERE ipre.ipre_estado_precio =:estado_precio AND
                        sins.sins_id = :sins_id AND
@@ -1182,7 +1182,8 @@ class SolicitudInscripcion extends \yii\db\ActiveRecord
                                where op.sins_id = sins.sins_id) = 'P' then 'Pendiente' 
                     else 'Pagado' end as pago,
                     ifnull((select count(*) from " . $con->dbname . ".solicitudins_documento sd 
-                            where sd.sins_id = sins.sins_id and sd.sdoc_estado = :estado and sd.sdoc_estado_logico = :estado),0) as numDocumentos                               
+                            where sd.sins_id = sins.sins_id and sd.sdoc_estado = :estado and sd.sdoc_estado_logico = :estado),0) as numDocumentos,
+                    sins.emp_id
                 FROM 
                     " . $con->dbname . ".solicitud_inscripcion as sins
                     INNER JOIN " . $con->dbname . ".interesado as inte on sins.int_id = inte.int_id                    
