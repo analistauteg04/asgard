@@ -953,8 +953,18 @@ class Oportunidad extends \app\modules\admision\components\CActiveRecord {
      * @return  
      */
     public function insertarOportunidadLeads($con, $opo_codigo, $emp_id, $pges_id, $padm_id, $data) {
-        //opo_id,oper_id,ins_id,mest_id  
-        $eaca_id = $data['pgest_carr_nombre'];
+        //opo_id,oper_id,ins_id,
+        $mest_id=NULL;
+        $eaca_id=NULL;
+        if($emp_id=="1"){
+            $eaca_id=$data['pgest_carr_nombre'];
+        }elseif($emp_id=="2" ||$emp_id=="3"){
+            $mest_id=$data['pgest_carr_nombre'];
+        } else {
+            
+        }
+                
+        
         $uaca_id = $data['pgest_unidad_academica'];
         $tove_id = 1; //se puede obtener a partir d ela unidad academica
         $mod_id = $data['pgest_modalidad'];
@@ -966,10 +976,11 @@ class Oportunidad extends \app\modules\admision\components\CActiveRecord {
         $opo_usuario = @Yii::$app->session->get("PB_iduser"); // 1 equivale al usuario administrador
         //$fecha_registro = date(Yii::$app->params["dateTimeByDefault"]);
 
+        //$mest_id;
         $sql = "INSERT INTO " . $con->dbname . ".oportunidad
-            (opo_codigo,emp_id,pges_id,eaca_id,uaca_id,mod_id,tove_id,ccan_id,
+            (opo_codigo,emp_id,pges_id,eaca_id,uaca_id,mod_id,tove_id,ccan_id,mest_id,
              padm_id,eopo_id,opo_hora_ini_contacto,opo_hora_fin_contacto,opo_fecha_registro,opo_usuario,opo_estado,opo_estado_logico)VALUES
-            (:opo_codigo,:emp_id,:pges_id,:eaca_id,:uaca_id,:mod_id,:tove_id,:ccan_id,
+            (:opo_codigo,:emp_id,:pges_id,:eaca_id,:uaca_id,:mod_id,:tove_id,:ccan_id,:mest_id,
              :padm_id,:eopo_id,:opo_hora_ini_contacto,:opo_hora_fin_contacto,CURRENT_TIMESTAMP(),:opo_usuario,1,1)";
 
         $command = $con->createCommand($sql);
@@ -982,6 +993,7 @@ class Oportunidad extends \app\modules\admision\components\CActiveRecord {
         $command->bindParam(":tove_id", $tove_id, \PDO::PARAM_INT);
         //$command->bindParam(":tsca_id", $subcarera, \PDO::PARAM_INT);
         $command->bindParam(":ccan_id", $ccan_id, \PDO::PARAM_INT);
+        $command->bindParam(":mest_id", $mest_id, \PDO::PARAM_INT);
         $command->bindParam(":padm_id", $padm_id, \PDO::PARAM_INT);
         $command->bindParam(":eopo_id", $eopo_id, \PDO::PARAM_INT);
         $command->bindParam(":opo_hora_ini_contacto", $opo_hora_ini_contacto, \PDO::PARAM_STR);

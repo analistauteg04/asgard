@@ -25,7 +25,7 @@ class ReportesController extends CController {
     public function actionExpexcelreport(){
         $objDat= new Reporte();
         //$data["estado"]= $_GET["estado"];
-        $data["op"]= "2";//$_GET["op"];
+        $data["op"]= $_GET["op"];
         $data["f_ini"]= $_GET["f_ini"];
         $data["f_fin"]= $_GET["f_fin"];
         //$data["valor"]= $_GET["valor"];

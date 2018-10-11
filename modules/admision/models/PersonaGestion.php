@@ -1453,6 +1453,7 @@ class PersonaGestion extends \app\modules\admision\components\CActiveRecord {
      */
     public function insertarPersonaGestionLeads($con, $pges_codigo, $tper_id, $nombre, $telefono, $correo, $contacto, $econ_id) {
         //$econ_id=1;//=>En Contacto por defecto
+        $pges_codigo=str_pad((int)$pges_codigo, 7, "0", STR_PAD_LEFT);
         $usuingreso = @Yii::$app->session->get("PB_iduser");
         $sql = "INSERT INTO " . $con->dbname . ".persona_gestion
                     (pges_codigo,tper_id,pges_pri_nombre,pai_id_nacimiento,pro_id_nacimiento,can_id_nacimiento,
