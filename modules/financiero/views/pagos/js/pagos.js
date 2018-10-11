@@ -183,6 +183,7 @@ function enviardata(){
         arrParams.numtransaccion = $('#txt_numtransaccion').val();
         arrParams.fechatransaccion = $('#txt_fecha_transaccion').val();
         arrParams.vista = $('#txth_vista').val();
+        arrParams.empresa = $('#txth_empid').val();
 
         if (parseFloat(arrParams.pago) > parseFloat(arrParams.totpago))
         {

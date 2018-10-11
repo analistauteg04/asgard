@@ -165,6 +165,7 @@ class OrdenPago extends \app\modules\financiero\components\CActiveRecord {
                         ifnull(opag.opag_id,'') orden,
                         opag_estado_pago estado, 
                         per.per_correo as correo,
+                        sins.emp_id,
                         $columnsAdd
                         (case ifnull((select icpr_id 
                                       from " . $con2->dbname . ".info_carga_prepago icp 
@@ -1053,7 +1054,7 @@ class OrdenPago extends \app\modules\financiero\components\CActiveRecord {
      * @param   
      * @return  
      */
-    public function datosBotonpago($opag_id, $tiposolicitud) {
+    public function datosBotonpago($opag_id, $emp_id) {
         $con = \Yii::$app->db_facturacion;
         $con1 = \Yii::$app->db_captacion;
         $con2 = \Yii::$app->db_asgard;
@@ -1061,15 +1062,11 @@ class OrdenPago extends \app\modules\financiero\components\CActiveRecord {
         $estado = 1;
         $estado_pago = 'P';
 
-        if ($tiposolicitud == 'SI') {  //Cuando se trata de una SI= solicitud de inscripción, a carrera de UTEG.
-            $sql = "SELECT (case when sins.uaca_id=3 then 
-                                (select ite.ite_nombre from " . $con->dbname . ".item ite inner join " . $con->dbname . ".item_metodo_unidad imni on ite.ite_id = imni.ite_id 
-                                 where imni.uaca_id = sins.uaca_id and imni.mod_id = sins.mod_id and imni.mest_id = sins.eaca_id
-                                        and imni.imni_estado = :estado and imni.imni_estado_logico = :estado and ite.ite_estado = :estado and ite.ite_estado_logico = :estado) 
-                            when sins.uaca_id!=3 then 
-                                (select ite.ite_nombre from " . $con->dbname . ".item ite inner join " . $con->dbname . ".item_metodo_unidad imni on ite.ite_id = imni.ite_id 
-                                 where imni.ming_id = sins.ming_id and imni.uaca_id = sins.uaca_id and imni.mod_id = sins.mod_id
-                                       and imni.imni_estado = :estado and imni.imni_estado_logico = :estado and ite.ite_estado = :estado and ite.ite_estado_logico = :estado) end) as curso,
+        if ($emp_id == 1) {  //Cuando se trata de una SI= solicitud de inscripción, a carrera de UTEG.
+            $sql = "SELECT 
+                            (select ite.ite_nombre from " . $con->dbname . ".item ite inner join " . $con->dbname . ".item_metodo_unidad imni on ite.ite_id = imni.ite_id 
+                             where imni.ming_id = sins.ming_id and imni.uaca_id = sins.uaca_id and imni.mod_id = sins.mod_id
+                                   and imni.imni_estado = :estado and imni.imni_estado_logico = :estado and ite.ite_estado = :estado and ite.ite_estado_logico = :estado) as curso,
                             opag.opag_subtotal, 
                             opag.opag_iva, 
                             opag.opag_total as precio, 
@@ -1097,7 +1094,40 @@ class OrdenPago extends \app\modules\financiero\components\CActiveRecord {
                           AND inte.int_estado_logico = :estado                          
                           AND per.per_estado_logico = :estado                           
                           AND ea.eaca_estado_logico = :estado";
+        }  else {
+            $sql = "SELECT 
+                            (select ite.ite_nombre from db_facturacion.item ite inner join db_facturacion.item_metodo_unidad imni on ite.ite_id = imni.ite_id 
+                                         where imni.uaca_id = sins.uaca_id and imni.mod_id = sins.mod_id and imni.mest_id = sins.mest_id
+                                                        and imni.imni_estado = :estado and imni.imni_estado_logico = :estado and ite.ite_estado = :estado and ite.ite_estado_logico = :estado) as curso,
+                                opag.opag_subtotal, 
+                                opag.opag_iva, 
+                                opag.opag_total as precio, 
+                                (select usu.usu_user from db_asgard.usuario usu where usu.per_id = per.per_id and usu.usu_estado_logico = '1' and ((usu.usu_estado = '0' and usu.usu_link_activo is not null) or (usu.usu_estado = '1' and ifnull(usu.usu_link_activo,'')=''))) as email,
+                                concat(ifnull(per.per_pri_nombre,''), ' ', ifnull(per.per_seg_nombre,'')) as nombres, 
+                                concat(ifnull(per.per_pri_apellido,''),' ', ifnull(per.per_seg_apellido,'')) as apellidos, 
+                                per.per_cedula as identificacion, 
+                                ifnull(per.per_domicilio_telefono, per.per_celular) as telefono, 
+                                concat(per.per_domicilio_cpri, ' ', per.per_domicilio_csec, ' ', per.per_domicilio_num) as domicilio, 
+                                lpad(opag.sins_id,4,'0') as solicitud,
+                                 mest_nombre as carrera                    
+                    FROM " . $con->dbname . ".orden_pago opag INNER JOIN db_captacion.solicitud_inscripcion sins on sins.sins_id = opag.sins_id  
+                              INNER JOIN " . $con1->dbname . ".interesado inte on inte.int_id = sins.int_id 
+                              INNER JOIN " . $con2->dbname . ".persona per on per.per_id = inte.per_id                          
+                              INNER JOIN " . $con3->dbname . ".modulo_estudio me on me.mest_id = sins.mest_id 
+                    WHERE opag.opag_id = :opag_id 
+                              AND opag.opag_estado_pago = :estado_pago
+                              AND opag.opag_estado = :estado
+                              AND sins.sins_estado = :estado
+                              AND sins.sins_estado_logico = :estado
+                              AND opag.opag_estado_logico = :estado
+                              AND inte.int_estado = :estado
+                              AND per.per_estado = :estado
+                              AND me.mest_estado = :estado
+                              AND inte.int_estado_logico = :estado
+                              AND per.per_estado_logico = :estado
+                              AND me.mest_estado_logico = :estado";            
         }
+            
         $comando = $con->createCommand($sql);
         $comando->bindParam(":estado", $estado, \PDO::PARAM_STR);
         $comando->bindParam(":opag_id", $opag_id, \PDO::PARAM_INT);

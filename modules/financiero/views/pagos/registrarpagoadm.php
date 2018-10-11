@@ -35,6 +35,7 @@ $leyendarc = '<div class="col-md-12 col-sm-12 col-xs-12 col-lg-12">
 <?= Html::hiddenInput('txth_int', $int_id, ['id' => 'txth_int']); ?>
 <?= Html::hiddenInput('txth_sins', $sins_id, ['id' => 'txth_sins']); ?>
 <?= Html::hiddenInput('txth_perid', $per_id, ['id' => 'txth_perid']); ?>
+<?= Html::hiddenInput('txth_empid', $emp_id, ['id' => 'txth_empid']); ?>
 <form class="form-horizontal">
     <div class="col-md-12 col-sm-12 col-xs-12 col-lg-12">
         <div class="form-group">

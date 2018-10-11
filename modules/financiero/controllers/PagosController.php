@@ -369,6 +369,8 @@ class PagosController extends \app\components\CController {
             $opag_id = $_GET["txth_ids"];
             $opag_id = $data["idpago"];
             $ccar_total = $data["totpago"];
+            $empresa = $data["empresa"];
+            
             if (empty($ccar_total)) {
                 $ccar_total = $data["pago"];
             }
@@ -386,7 +388,7 @@ class PagosController extends \app\components\CController {
                 $creadetalle = $modcargapago->insertarCargaprepago($opag_id, $fpag_id, $dcar_valor, $imagen, $dcar_revisado, $dcar_resultado, $dcar_observacion, $dcar_num_transaccion, $dcar_fecha_transaccion, $fecha_registro);
                 if ($creadetalle) {
                     //Envío de correo a colecturia.                
-                    $informacion_interesado = $modcargapago->datosBotonpago($opag_id, 'SI');
+                    $informacion_interesado = $modcargapago->datosBotonpago($opag_id, $empresa);
                     $pri_nombre = $informacion_interesado["nombres"];
                     $pri_apellido = $informacion_interesado["apellidos"];
                     $nombres = $pri_nombre . " " . $pri_apellido;
@@ -525,6 +527,8 @@ class PagosController extends \app\components\CController {
         $opag_id = $_GET["ido"];
         $per_id = $_GET["per_id"];
         $sol_id = $_GET["sins_id"];
+        $emp_id = $_GET["emp_id"];
+        
         $mod_opago = new OrdenPago();
         $arr_forma_pago = $mod_opago->formaPago("1");
 
@@ -552,6 +556,7 @@ class PagosController extends \app\components\CController {
                     'int_id' => $int_id,
                     'sins_id' => $sins_id,
                     'per_id' => $per_id,
+                    'emp_id' => $emp_id,
         ]);
     }
 

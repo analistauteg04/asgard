@@ -387,8 +387,9 @@ class SolicitudesController extends \app\components\CController {
                 $transaction->commit();
                 $transaction1->commit();
 
-                //Envío de correo con formas de pago.                                   
-                $informacion_interesado = $mod_ordenpago->datosBotonpago($resp_opago, 'SI');
+                //Envío de correo con formas de pago.                    
+                $informacion_interesado = $mod_ordenpago->datosBotonpago($resp_opago, $emp_id);
+                
                 $link = Url::base(true) . "/formbotonpago/btnpago?ord_pago=" . base64_encode($resp_opago);
                 $link_paypal = Url::base(true) . "/pago/pypal?ord_pago=" . base64_encode($resp_opago);
                 $link1 = Url::base(true);
