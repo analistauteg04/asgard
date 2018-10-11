@@ -430,10 +430,16 @@ class Oportunidad extends \app\modules\admision\components\CActiveRecord {
                             e.emp_razon_social as des_empresa,
                             o.uaca_id,
                             ua.uaca_descripcion as des_unidad,
-                            (case when (o.uaca_id < 3) then
-                                            (select ea.eaca_descripcion from " . $con2->dbname . ".estudio_academico ea where ea.eaca_id = o.eaca_id and ea.eaca_estado = '1' and ea.eaca_estado_logico = '1')
-                                            else (select me.mest_descripcion from " . $con2->dbname . ".modulo_estudio me where me.mest_id = o.mest_id and me.mest_estado = '1' and me.mest_estado_logico = '1') 
-                                        end) as des_estudio,
+                            (case when (o.emp_id = 1) then
+                                (case when (o.uaca_id < 3) then
+                                    (select ea.eaca_descripcion from " . $con2->dbname . ".estudio_academico ea where ea.eaca_id = o.eaca_id and ea.eaca_estado = '1' and ea.eaca_estado_logico = '1')
+                                else 
+                                    (select me.mest_descripcion from " . $con2->dbname . ".modulo_estudio me where me.mest_id = o.mest_id and me.mest_estado = '1' and me.mest_estado_logico = '1')
+                                end)
+                            else 
+                                (select me.mest_descripcion from " . $con2->dbname . ".modulo_estudio me where me.mest_id = o.mest_id and me.mest_estado = '1' and me.mest_estado_logico = '1')
+                            end) 
+                            as des_estudio,
                             o.mest_id,
                             o.eaca_id,        
                             o.eopo_id,
