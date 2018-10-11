@@ -33,9 +33,9 @@ INSERT INTO `estado_contacto` (`econ_id`, `econ_nombre`, `econ_descripcion`, `ec
 --
 INSERT INTO `estado_oportunidad` (`eopo_id`, `eopo_nombre`, `eopo_descripcion`, `eopo_tipo`, `eopo_estado`, `eopo_fecha_creacion`, `eopo_fecha_modificacion`, `eopo_estado_logico`) VALUES
 (1, 'En Curso', 'En Curso', '1', '1', '2018-08-10 01:06:51', NULL, '1'),
-(2, 'En Espera', 'En Espera', '1', '1', '2018-08-10 01:06:51', NULL, '1'),
+(2, 'En Espera', 'En Espera', '1', '0', '2018-08-10 01:06:51', NULL, '1'),
 (3, 'Generar Aspirante', 'Generar Aspirante', '1', '1', '2018-08-10 01:06:51', NULL, '1'),
-(4, 'Ganada', 'Ganada', '1', '1', '2018-08-10 01:10:23', NULL, '1'),
+(4, 'Ganada', 'Ganada', '1', '0', '2018-08-10 01:10:23', NULL, '1'),
 (5, 'Perdida', 'Perdida', '1', '1', '2018-08-10 01:11:22', NULL, '1');
 
 
