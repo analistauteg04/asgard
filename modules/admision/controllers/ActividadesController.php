@@ -53,8 +53,7 @@ class ActividadesController extends \app\components\CController {
         } else {
             $estudio = $arr_carrerra1 = $oport_model->consultarCarreraModalidad(1, 1);
         }
-        $modalidad_data = $modalidad_model->consultarModalidad($oport_contac["uaca_id"]);
-        //$unidad_acad_data = $uni_aca_model->consultarUnidadAcademicas();
+        $modalidad_data = $modalidad_model->consultarModalidad($oport_contac["uaca_id"], $oport_contac["empresa"]);
         $unidad_acad_data = UnidadAcademica::find()->select("uaca_id AS id, uaca_nombre AS name")->where(["uaca_usuario_ingreso" => "1"])->asArray()->all();
         $tipo_oportunidad_data = $modTipoOportunidad->consultarOporxUnidad($oport_contac["uaca_id"]);
         $academic_study_data = $oport_model->consultarCarreraModalidad($oport_contac["uaca_id"], $oport_contac["mod_id"]);
@@ -93,7 +92,7 @@ class ActividadesController extends \app\components\CController {
         $empresa = $empresa_mod->getAllEmpresa();
         $oport_contac = $oport_model->consultarOportunidadById($opor_id);
         $contactManage = $persges_mod->consultarPersonaGestion($pges_id);
-        $modalidad_data = $modalidad_model->consultarModalidad($oport_contac["uaca_id"]);
+        $modalidad_data = $modalidad_model->consultarModalidad($oport_contac["uaca_id"], $oport_contac["empresa"]);
         $actividad_data = $oport_model->consultarActividadById($act_id);
         $oportunidad_perdidad = $oport_model->consultarOportunidadPerdida();
         $unidad_acad_data = $uni_aca_model->consultarUnidadAcademicas();
@@ -132,7 +131,7 @@ class ActividadesController extends \app\components\CController {
         $empresa = $empresa_mod->getAllEmpresa();
         $contactManage = $persges_mod->consultarPersonaGestion($pges_id);
         $oport_contac = $oport_model->consultarOportunidadById($opor_id);
-        $modalidad_data = $modalidad_model->consultarModalidad($oport_contac["mod_id"]);
+        $modalidad_data = $modalidad_model->consultarModalidad($oport_contac["mod_id"], $oport_contac["empresa"]);
         $oportunidad_perdidad = $oport_model->consultarOportunidadPerdida();
         $unidad_acad_data = $uni_aca_model->consultarUnidadAcademicas();
         $tipo_oportunidad_data = $modTipoOportunidad->consultarOporxUnidad(1);

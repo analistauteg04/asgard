@@ -52,7 +52,7 @@ class InscripcionulinkController extends \yii\web\Controller {
                 return;
             }
             if (isset($data["getmodalidad"])) {
-                $modalidad = $mod_modalidad->consultarModalidad($data["nint_id"]);
+                $modalidad = $mod_modalidad->consultarModalidad($data["nint_id"],2);
                 $message = array("modalidad" => $modalidad);
                 return Utilities::ajaxResponse('OK', 'alert', Yii::t('jslang', 'Success'), 'false', $message);
                 return;
@@ -78,7 +78,7 @@ class InscripcionulinkController extends \yii\web\Controller {
         $arr_medio = MedioPublicitario::find()->select("mpub_id AS id, mpub_nombre AS value")->where(["mpub_estado_logico" => "1", "mpub_estado" => "1"])->asArray()->all();
         $arr_conuteg = $mod_pergestion->consultarConociouteg();
         //$arr_carrerra1 = $modestudio->consultarEstudioEmpresa(2);        
-        $arr_modalidad = $mod_modalidad->consultarModalidad(6);
+        $arr_modalidad = $mod_modalidad->consultarModalidad(6,2);
         $arr_carrerra1 = $modestudio->consultarCursoModalidad(6, 1);
         $arr_ninteres = $mod_unidad->consultarUnidadAcademicasEmpresa(2);
         return $this->render('index', [

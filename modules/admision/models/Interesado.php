@@ -1045,9 +1045,17 @@ class Interesado extends \app\modules\admision\components\CActiveRecord {
                 concat(ifnull(per.per_pri_nombre,''),' ',ifnull(per.per_seg_nombre,'')) as nombres,
                 concat(ifnull(per.per_pri_apellido,''),' ',ifnull(per.per_seg_apellido,'')) as apellidos,
                 ifnull(per.per_cedula,per.per_pasaporte) as DNI,
-                emp.emp_nombre_comercial as empresa,
-                inte.int_fecha_creacion as fecha_interes,
-                per.per_id
+                emp.emp_nombre_comercial as empresa,                 
+                DATE(inte.int_fecha_creacion) as fecha_interes,
+                per.per_id,
+                ifnull((SELECT uaca.uaca_nombre
+                    FROM db_captacion.solicitud_inscripcion sins
+                    INNER JOIN db_academico.unidad_academica uaca on uaca.uaca_id = sins.uaca_id
+                    WHERE int_id = inte.int_id
+                    and sins.sins_estado = :estado
+                    and sins.sins_estado_logico = :estado
+                    ORDER BY sins_fecha_solicitud desc
+                    LIMIT 1),'') as unidad
                 from db_captacion.interesado inte
                 join db_asgard.persona as per on inte.per_id=per.per_id
                 join db_captacion.interesado_empresa as iemp on iemp.int_id=inte.int_id
@@ -1756,9 +1764,18 @@ class Interesado extends \app\modules\admision\components\CActiveRecord {
         $sql = "
                 SELECT          
                     ifnull(per.per_cedula,per.per_pasaporte) as DNI,
+                    DATE(inte.int_fecha_creacion) as fecha_interes,
                     concat(ifnull(per.per_pri_nombre,''),' ',ifnull(per.per_seg_nombre,'')) as nombres,
                     concat(ifnull(per.per_pri_apellido,''),' ',ifnull(per.per_seg_apellido,'')) as apellidos,
-                    emp.emp_nombre_comercial as empresa                  
+                    emp.emp_nombre_comercial as empresa,
+                    ifnull((SELECT uaca.uaca_nombre
+                            FROM db_captacion.solicitud_inscripcion sins
+                            INNER JOIN db_academico.unidad_academica uaca on uaca.uaca_id = sins.uaca_id
+                            WHERE int_id = inte.int_id
+                            and sins.sins_estado = :estado
+                            and sins.sins_estado_logico = :estado
+                            ORDER BY sins_fecha_solicitud desc
+                            LIMIT 1),'') as unidad
                 FROM    " . $con->dbname . ".interesado inte
                         join " . $con1->dbname . ".persona as per on inte.per_id=per.per_id
                         join " . $con->dbname . ".interesado_empresa as iemp on iemp.int_id=inte.int_id

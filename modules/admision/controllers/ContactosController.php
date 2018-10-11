@@ -355,8 +355,8 @@ class ContactosController extends \app\components\CController {
         $arrHeader = array(
             Yii::t("crm", "Contact"),
             Yii::t("formulario", "Country"),
-            Yii::t("crm", "Contact Type"),
-            Yii::t("crm", "Contact Status"),
+            Yii::t("formulario", "Date"),
+            admision::t("crm", "Channel"), 
             Yii::t("formulario", "User login"),
             Yii::t("formulario", "Open Opportunities"),
             Yii::t("formulario", "Close Opportunities")
@@ -383,8 +383,10 @@ class ContactosController extends \app\components\CController {
         $arrHeader = array(
             Yii::t("crm", "Contact"),
             Yii::t("formulario", "Country"),
-            Yii::t("crm", "Contact Type"),
-            Yii::t("crm", "Contact Status"),
+            Yii::t("formulario", "Date"),
+            //Yii::t("formulario", "Academic unit"),
+            //Yii::t("formulario", "Company"),
+            admision::t("crm", "Channel"),      
             Yii::t("formulario", "User login"),
             Yii::t("formulario", "Open Opportunities"),
             Yii::t("formulario", "Close Opportunities")

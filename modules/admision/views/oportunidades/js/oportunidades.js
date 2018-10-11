@@ -26,6 +26,7 @@ $(document).ready(function () {
         var arrParams = new Object();
         arrParams.nint_id = $(this).val();
         arrParams.getmodalidad = true;
+        arrParams.empresa_id = $('#cmb_empresa').val();
         requestHttpAjax(link, arrParams, function (response) {
             if (response.status == "OK") {
                 data = response.message;
@@ -34,6 +35,7 @@ $(document).ready(function () {
                 if (data.modalidad.length > 0) {
                     arrParams.unidada = $('#cmb_nivelestudio').val();
                     arrParams.moda_id = data.modalidad[0].id;
+                    arrParams.empresa_id = $('#cmb_empresa').val();
                     arrParams.getoportunidad = true;
                     requestHttpAjax(link, arrParams, function (response) {
                         if (response.status == "OK") {
@@ -62,6 +64,7 @@ $(document).ready(function () {
         var link = $('#txth_base').val() + "/admision/oportunidades/edit";
         var arrParams = new Object();
         arrParams.ninter_id = $(this).val();
+        arrParams.empresa_id = $('#cmb_empresa').val();
         arrParams.getmodalidad = true;
 
         requestHttpAjax(link, arrParams, function (response) {
@@ -70,6 +73,7 @@ $(document).ready(function () {
                 data = response.message;
                 setComboData(data.modalidad, "cmb_modalidad_act");
                 arrParams.unidada = $('#cmb_nivelestudio_act').val();
+                arrParams.empresa_id = $('#cmb_empresa').val();
                 arrParams.getoportunidad = true;
                 requestHttpAjax(link, arrParams, function (response) {
                     if (response.status == "OK") {
@@ -81,6 +85,7 @@ $(document).ready(function () {
                 if (data.modalidad.length > 0) {
                     arrParams.unidada = $('#cmb_nivelestudio_act').val();
                     arrParams.moda_id = data.modalidad[0].id;
+                    arrParams.empresa_id = $('#cmb_empresa').val();
                     arrParams.getcarrera = true;
                     requestHttpAjax(link, arrParams, function (response) {
                         if (response.status == "OK") {
@@ -95,7 +100,7 @@ $(document).ready(function () {
     $('#cmb_empresa').change(function () {// cambio 2
         var link = $('#txth_base').val() + "/admision/oportunidades/newoportunidadxcontacto";
         var arrParams = new Object();
-        arrParams.empresa = $('#cmb_empresa').val();
+        arrParams.empresa_id = $('#cmb_empresa').val();
         arrParams.getuacademias = true;
         requestHttpAjax(link, arrParams, function (response) {
             if (response.status == "OK") {
@@ -105,6 +110,7 @@ $(document).ready(function () {
                 if (data.unidad_academica.length > 0) {
                     var arrParams = new Object();
                     arrParams.nint_id = $('#cmb_nivelestudio').val();
+                    arrParams.empresa_id = $('#cmb_empresa').val();
                     arrParams.getmodalidad = true;
                     requestHttpAjax(link, arrParams, function (response) {
                         if (response.status == "OK") {
@@ -124,6 +130,7 @@ $(document).ready(function () {
                                 }, true);
                                 var arrParams = new Object();
                                 arrParams.unidada = $('#cmb_nivelestudio').val();
+                                arrParams.empresa_id = $('#cmb_empresa').val();
                                 arrParams.getoportunidad = true;
                                 requestHttpAjax(link, arrParams, function (response) {
                                     if (response.status == "OK") {
@@ -156,6 +163,7 @@ $(document).ready(function () {
         var link = $('#txth_base').val() + "/admision/oportunidades/edit";
         var arrParams = new Object();
         arrParams.unidada = $('#cmb_nivelestudio_act').val();
+        arrParams.empresa_id = $('#cmb_empresa').val();
         arrParams.moda_id = $(this).val();
         arrParams.getcarrera = true;
         requestHttpAjax(link, arrParams, function (response) {

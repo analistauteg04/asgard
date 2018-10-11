@@ -43,6 +43,7 @@ $(document).ready(function () {
                     var arrParams = new Object();
                     arrParams.nint_id = $('#cmb_ninteres').val();
                     arrParams.getmodalidad = true;
+                    arrParams.empresa_id = $('#cmb_empresa').val();
                     requestHttpAjax(link, arrParams, function (response) {
                         if (response.status == "OK") {
                             data = response.message;
@@ -80,7 +81,8 @@ $(document).ready(function () {
         var link = $('#txth_base').val() + "/admision/solicitudes/new";
         var arrParams = new Object();
         arrParams.nint_id = $(this).val();
-        arrParams.getmodalidad = true;
+        arrParams.empresa_id = $('#cmb_empresa').val();
+        arrParams.getmodalidad = true;        
         requestHttpAjax(link, arrParams, function (response) {
             if (response.status == "OK") {
                 data = response.message;

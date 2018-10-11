@@ -245,14 +245,18 @@ class Oportunidad extends \app\modules\admision\components\CActiveRecord {
                     eo.eopo_id as estado_oportunidad_id,
                     eo.eopo_nombre as estado_oportunidad,
                     tov.tove_nombre as tipo_oportunidad,
-                    case uac.uaca_id
-                     when 1 then (select eaca.eaca_nombre from " . $con2->dbname . ".estudio_academico eaca where eaca.eaca_id = op.eaca_id)
-                     when 2 then (select eaca.eaca_nombre from " . $con2->dbname . ".estudio_academico eaca where eaca.eaca_id = op.eaca_id)
-                     when 3 then (select mes.mest_nombre from " . $con2->dbname . ".modulo_estudio mes where mes.mest_id = op.mest_id)
-                     when 4 then (select mes.mest_nombre from " . $con2->dbname . ".modulo_estudio mes where mes.mest_id = op.mest_id)
-                     when 5 then (select mes.mest_nombre from " . $con2->dbname . ".modulo_estudio mes where mes.mest_id = op.mest_id)
-                     when 6 then (select mes.mest_nombre from " . $con2->dbname . ".modulo_estudio mes where mes.mest_id = op.mest_id)
-                     else null
+                    -- case uac.uaca_id
+                    -- when 1 then (select eaca.eaca_nombre from " . $con2->dbname . ".estudio_academico eaca where eaca.eaca_id = op.eaca_id)
+                    -- when 2 then (select eaca.eaca_nombre from " . $con2->dbname . ".estudio_academico eaca where eaca.eaca_id = op.eaca_id)
+                    -- when 3 then (select mes.mest_nombre from " . $con2->dbname . ".modulo_estudio mes where mes.mest_id = op.mest_id)
+                    -- when 4 then (select mes.mest_nombre from " . $con2->dbname . ".modulo_estudio mes where mes.mest_id = op.mest_id)
+                    -- when 5 then (select mes.mest_nombre from " . $con2->dbname . ".modulo_estudio mes where mes.mest_id = op.mest_id)
+                    -- when 6 then (select mes.mest_nombre from " . $con2->dbname . ".modulo_estudio mes where mes.mest_id = op.mest_id)
+                    case emp.emp_id
+                    when 1 then (select eaca.eaca_nombre from " . $con2->dbname . ".estudio_academico eaca where eaca.eaca_id = op.eaca_id)
+                    when 2 then (select mes.mest_nombre from " . $con2->dbname . ".modulo_estudio mes where mes.mest_id = op.mest_id)
+                    when 3 then (select mes.mest_nombre from " . $con2->dbname . ".modulo_estudio mes where mes.mest_id = op.mest_id)
+                    else null
                       end as 'curso',
                     ifnull((SELECT oac.oact_nombre
                     FROM db_crm.bitacora_actividades bac

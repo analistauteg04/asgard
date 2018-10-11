@@ -1707,6 +1707,7 @@ class PersonaGestion extends \app\modules\admision\components\CActiveRecord {
     public function consultarReportContactos($arrFiltro = array(), $onlyData = false) {
         $con = \Yii::$app->db_crm;
         $con1 = \Yii::$app->db_asgard;
+        $con2 = \Yii::$app->db_academico;
         $estado = 1;
         $columnsAdd = "";
         if (isset($arrFiltro) && count($arrFiltro) > 0) {
@@ -1728,8 +1729,11 @@ class PersonaGestion extends \app\modules\admision\components\CActiveRecord {
                 SELECT  
                         concat(ifnull(pges_pri_nombre,''), ' ',ifnull(pges_seg_nombre,' '),ifnull(pges_pri_apellido,''), ' ', ifnull(pges_seg_apellido,' ')) as contacto,
                         ifnull((select pai.pai_nombre from " . $con1->dbname . ".pais pai where pai.pai_id = pg.pai_id_nacimiento),'') as pais,
-                        tp.tper_nombre tipo_contacto, 
-                        ec.econ_nombre estado_contacto,
+                        DATE(pg.pges_fecha_creacion) as fecha_creacion,
+                        -- ifnull(uaca.uaca_nombre,'Sin Unidad') as unidad_academica,
+                        -- ifnull(emp.emp_nombre_comercial,'Sin Empresa') as empresa,
+                        cc.ccan_nombre as canal,
+                        -- ec.econ_nombre estado_contacto,
                         ifnull((select concat(pers.per_pri_nombre, ' ', ifnull(pers.per_pri_apellido,' ')) 
                                   from " . $con1->dbname . ".usuario usu 
                                   inner join " . $con1->dbname . ".persona pers on pers.per_id = usu.usu_id
@@ -1737,7 +1741,10 @@ class PersonaGestion extends \app\modules\admision\components\CActiveRecord {
                         (select count(*) from " . $con->dbname . ".oportunidad o where o.pges_id = pg.pges_id and o.eopo_id in(1,2,3) and o.opo_estado = :estado and o.opo_estado_logico = :estado) as oportunidad_abiertas,
                         (select count(*) from " . $con->dbname . ".oportunidad o where o.pges_id = pg.pges_id and o.eopo_id in(4,5) and o.opo_estado = :estado and o.opo_estado_logico = :estado) as oportunidad_cerradas
                 FROM " . $con->dbname . ".persona_gestion pg inner join " . $con->dbname . ".estado_contacto ec on ec.econ_id = pg.econ_id
-                INNER JOIN " . $con1->dbname . ".tipo_persona tp on tp.tper_id = pg.tper_id                
+                INNER JOIN " . $con1->dbname . ".tipo_persona tp on tp.tper_id = pg.tper_id
+                INNER JOIN " . $con->dbname . ".conocimiento_canal cc on cc.ccan_id = pg.ccan_id 
+                -- LEFT JOIN " . $con1->dbname . ".empresa as emp on emp.emp_id=o.emp_id
+                -- LEFT JOIN " . $con2->dbname . ".unidad_academica uaca on uaca.uaca_id = o.uaca_id
                 WHERE   
                         $str_search
                         pg.pges_estado = :estado
@@ -1746,6 +1753,8 @@ class PersonaGestion extends \app\modules\admision\components\CActiveRecord {
                         and tp.tper_estado_logico = :estado                        
                         and ec.econ_estado = :estado 
                         and ec.econ_estado_logico = :estado 
+                        -- and cc.ccan_estado = :estado 
+                        -- and cc.ccan_estado_logico = :estado
                 ORDER BY pg.pges_fecha_creacion desc
                 ";
         $comando = $con->createCommand($sql);
