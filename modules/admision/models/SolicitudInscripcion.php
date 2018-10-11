@@ -1437,4 +1437,27 @@ class SolicitudInscripcion extends \yii\db\ActiveRecord
             return $dataProvider;
         }
     }
+    
+    /**
+     * Function consultarDocumentostosxSol
+     * @author  Grace Viteri <analistadesarrollo01@uteg.edu.ec>
+     * @param   
+     * @return  $resultData (obtener la cantidad de documentos subidos.)
+     */
+    public function consultarDocumentostosxSol($sins_id) {
+        $con = \Yii::$app->db_captacion;
+        $estado = 1;
+
+        $sql = "SELECT count(*) numDocumentos	
+                FROM " . $con->dbname . ".solicitudins_documento sdoc
+                WHERE sdoc.sins_id = :sins_id AND                          
+                      sdoc.sdoc_estado = :estado AND
+                      sdoc.sdoc_estado_logico = :estado";
+
+        $comando = $con->createCommand($sql);
+        $comando->bindParam(":estado", $estado, \PDO::PARAM_STR);
+        $comando->bindParam(":sins_id", $sins_id, \PDO::PARAM_INT);        
+        $resultData = $comando->queryOne();
+        return $resultData;
+    }
 }

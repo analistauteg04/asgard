@@ -145,7 +145,7 @@ class Matriculacion extends \yii\db\ActiveRecord {
         return $this->hasOne(Estudiante::className(), ['est_id' => 'est_id']);
     }
     
-    public function insertarMatriculacion($daca_id, $adm_id, $est_id, $sins_id, $mat_fecha_matriculacion, $mat_usuario_ingreso) {
+    public function insertarMatriculacion($peac_id, $adm_id, $est_id, $sins_id, $mat_fecha_matriculacion, $mat_usuario_ingreso) {
 
         $con = \Yii::$app->db_academico;       
         $trans = $con->getTransaction(); // se obtiene la transacción actual
@@ -160,8 +160,8 @@ class Matriculacion extends \yii\db\ActiveRecord {
         $param_sql .= ", mat_estado";
         $bsol_sql .= ", 1";
         if (isset($daca_id)) {
-            $param_sql .= ", daca_id";
-            $bsol_sql .= ", :daca_id";
+            $param_sql .= ", peac_id";
+            $bsol_sql .= ", :peac_id";
         }
 
         if (isset($adm_id)) {
@@ -193,7 +193,7 @@ class Matriculacion extends \yii\db\ActiveRecord {
             $comando = $con->createCommand($sql);
 
             if (isset($daca_id))
-                $comando->bindParam(':daca_id', $daca_id, \PDO::PARAM_INT);
+                $comando->bindParam(':peac_id', $peac_id, \PDO::PARAM_INT);
 
             if (isset($adm_id))
                 $comando->bindParam(':adm_id', $adm_id, \PDO::PARAM_INT);
@@ -364,7 +364,7 @@ class Matriculacion extends \yii\db\ActiveRecord {
         $estado = 1;
 
         $sql = "SELECT 'S' existe 
-                FROM db_academico.matriculacion m
+                FROM " . $con->dbname . ".matriculacion m
                 WHERE adm_id = :adm_id
                     and sins_id = :sins_id
                     and mat_estado = :estado

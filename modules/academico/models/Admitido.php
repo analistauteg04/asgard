@@ -143,6 +143,7 @@ class Admitido extends \yii\db\ActiveRecord {
                      INNER JOIN " . $con1->dbname . ".orden_pago opag on opag.sins_id = sins.sins_id                     
                 WHERE  
                        $str_search 
+                       sins.rsin_id = 2 AND
                        opag.opag_estado_pago = :estado_opago AND
                        admi.adm_estado_logico = :estado AND
                        admi.adm_estado = :estado AND 
