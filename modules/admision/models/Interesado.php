@@ -1068,7 +1068,6 @@ class Interesado extends \app\modules\admision\components\CActiveRecord {
                 join " . $con1->dbname . ".persona as per on inte.per_id=per.per_id
                 join " . $con->dbname . ".interesado_empresa as iemp on iemp.int_id=inte.int_id
                 join " . $con1->dbname . ".empresa as emp on emp.emp_id=iemp.emp_id
-               
                 where $str_search
                 inte.int_estado_logico=:estado AND
                 inte.int_estado=:estado AND                    

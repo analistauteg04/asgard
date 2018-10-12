@@ -15,7 +15,8 @@ use yii\base\Exception;
 use app\models\Utilities;
 use app\models\Reporte;
 use app\models\ExportFile;
-
+use app\modules\academico\Module as academico;
+academico::registerTranslations();
 class ReportesController extends CController {
 
     public function actionIndex() {        
@@ -29,12 +30,10 @@ class ReportesController extends CController {
         $data["f_ini"]= $_GET["f_ini"];
         $data["f_fin"]= $_GET["f_fin"];
         //$data["valor"]= $_GET["valor"];
-        
         switch ($data["op"]) {
             case '1'://GRADO
                 $arrData=$objDat->consultarActividadporOportunidad($data);
-                $arrHeader = array("N° Oport","Fecha","Empresa","Nombres","Apellidos","Unidad Academica",
-                                   "Estado","Observacion");
+                $arrHeader = array("N° Oport","Fecha","Empresa","Nombres","Apellidos","Unidad Academica","Estado","Observacion");
                 $nombarch = "ActividadesOportunidad-" . date("YmdHis").".xls";
                 break;
             case '2'://POSGRADO
@@ -43,20 +42,28 @@ class ReportesController extends CController {
                                     "Estado","Observacion");
                 $nombarch = "ProximaOportunidad-" . date("YmdHis").".xls";
                 break;
-            
+            case '3'://Aspirantes
+                $arrData=$objDat->consultarAspirantesPendientes($data);
+                $arrHeader = 
+                        array(
+                            Yii::t("formulario", "DNI"),
+                            Yii::t("formulario", "Date"),
+                            Yii::t("formulario", "Name"),                        
+                            Yii::t("formulario", "Last Names"),
+                            Yii::t("formulario", "Company"),
+                            "Num. Solicitudes",
+                        );                
+                $nombarch = "AspirantesPendientes-" . date("YmdHis").".xls";
+                break;
         }
-
         ini_set('memory_limit', '256M');
-        $content_type = Utilities::mimeContentType("xls");
-        
+        $content_type = Utilities::mimeContentType("xls");        
         header("Content-Type: $content_type");
         header("Content-Disposition: attachment;filename=" . $nombarch);
-        header('Cache-Control: max-age=0');       
-        
+        header('Cache-Control: max-age=0');               
         $nameReport = yii::t("formulario", "Application Reports");
         $colPosition = array("C", "D", "E", "F", "G", "H", "I", "J", "K", "L","M", "N", "O", "P", "Q", "R", "S", "T", "U", "V", "W", "X", "Y", "Z");
         Utilities::generarReporteXLS($nombarch, $nameReport, $arrHeader, $arrData, $colPosition);
         exit;
     }
-    
 }

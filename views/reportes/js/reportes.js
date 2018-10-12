@@ -23,3 +23,6 @@ function buscarActividades(op) {
     //Buscar al menos una clase con el nombre para ejecutar
     window.location.href = $('#txth_base').val() + "/reportes/expexcelreport?op="+op+"&f_ini="+f_ini+"&f_fin="+f_fin;
 }
+function pendingApplicants(){
+    buscarActividades("3");//Reporte de Aspirantes pendientes
+}

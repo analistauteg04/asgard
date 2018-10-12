@@ -74,4 +74,6 @@ return [
     "loadLeads" => "Cargar Leads",
     "exportStatContact" => "Exp. Est. Opor.",
     "exportLostContact" => "Exp. Cont. Perdidos",    
+    "pendingApplicants" => "Aspirantes Pendientes",    
+    
 ];
