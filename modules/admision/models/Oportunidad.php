@@ -949,6 +949,27 @@ class Oportunidad extends \app\modules\admision\components\CActiveRecord {
             return FALSE;
         }
     }
+    
+     
+    /** 
+     * Function consultarCodigoArea
+     * @author  Byron Villacreses <developer@uteg.edu.ec>
+     * @property integer car_id      
+     * @return  
+     */
+    public function consultarOportVentas($uaca_id) {
+        $con = \Yii::$app->db_crm;
+        $sql = "SELECT tove_id FROM " . $con->dbname . ".tipo_oportunidad_venta "
+                . " WHERE tove_estado=1 AND uaca_id=:uaca_id LIMIT 1 ;";
+
+        $comando = $con->createCommand($sql);
+        $comando->bindParam(":uaca_id", $uaca_id, \PDO::PARAM_INT);
+        //$comando->bindParam(":emp_id", $emp_id, \PDO::PARAM_INT);
+        $rawData=$comando->queryScalar();        
+        if ($rawData === false)
+            return 0; //Falso si no Existe
+        return $rawData;//Si Existe en la Tabla
+    }
 
     /**     * **
      * Function insertarPersonaContratante grabar a personas contratantes.
@@ -967,10 +988,9 @@ class Oportunidad extends \app\modules\admision\components\CActiveRecord {
         } else {
             
         }
-                
-        
+
         $uaca_id = $data['pgest_unidad_academica'];
-        $tove_id = 1; //se puede obtener a partir d ela unidad academica
+        $tove_id = $this->consultarOportVentas($uaca_id);  ; //se puede obtener a partir d ela unidad academica
         $mod_id = $data['pgest_modalidad'];
         $ccan_id = 3; //Redes sociales (Facebook) o ->$data['pgest_contacto'];       
         $eopo_id = 1; //estado oportunidad => En Curso

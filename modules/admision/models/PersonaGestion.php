@@ -1181,6 +1181,7 @@ class PersonaGestion extends \app\modules\admision\components\CActiveRecord {
     public function insertarDtosPersonaGestion($emp_id, $tipoProceso) {
         $contError = 0;
         $Data = $this->consultarPerGesTemp($tipoProceso);
+        
         $rawData = ''; //array();
         $mensError = '';
         $con = \Yii::$app->db_crm;
@@ -1224,19 +1225,42 @@ class PersonaGestion extends \app\modules\admision\components\CActiveRecord {
                         //Opciones por defecto segun los indicado por Ing. Geovanni
                         $uaca_id = $Data[$i]['pgest_unidad_academica'];
                         $mod_id = $Data[$i]['pgest_modalidad'];
-                        switch ($uaca_id) { // esto cambiarlo hacer funcion que consulte el usuario y traer el id
-                            case "1":
-                                $tipoportunidad = 1;
-                                if ($modalidad == "1") {
-                                    $agente = $mod_oportunidad->consultarAgentebyCod($uaca_id, $mod_id, 1); // 1 uteg//15;
-                                } else {
-                                    $agente = $mod_oportunidad->consultarAgentebyCod($uaca_id, $mod_id, 1); //14;
-                                }
-                                break;
-                            case "2":
-                                $agente = $mod_oportunidad->consultarAgentebyCod($uaca_id, $mod_id, 1); //16;
-                                $tipoportunidad = 5;
-                                break;
+                        
+                        if($emp_id=="1"){
+                            switch ($uaca_id) { // esto cambiarlo hacer funcion que consulte el usuario y traer el id
+                                case "1":
+                                    $tipoportunidad = 1;
+                                    if ($modalidad == "1") {
+                                        $agente = $mod_oportunidad->consultarAgentebyCod($uaca_id, $mod_id, 1); // 1 uteg//15;
+                                    } else {
+                                        $agente = $mod_oportunidad->consultarAgentebyCod($uaca_id, $mod_id, 1); //14;
+                                    }
+                                    break;
+                                case "2":
+                                    $agente = $mod_oportunidad->consultarAgentebyCod($uaca_id, $mod_id, 1); //16;
+                                    $tipoportunidad = 5;
+                                    break;
+                            }
+                        }elseif($emp_id=="2" ||$emp_id=="3"){ //UNLINK Y SMART
+                            /*switch ($uaca_id) { 
+                                case "2":
+                                    $agente = $mod_oportunidad->consultarAgentebyCod($uaca_id, $mod_id, 1);
+                                    //$tipoportunidad = 5;
+                                    break;
+                                case "3": 
+                                    $agente = $mod_oportunidad->consultarAgentebyCod($uaca_id, $mod_id, 1);
+                                    //$tipoportunidad = 5;
+                  
+                                case "5":
+                                    $agente = $mod_oportunidad->consultarAgentebyCod($uaca_id, $mod_id, 1);
+                                    //$tipoportunidad = 5;
+                                case "6":
+                                    $agente = $mod_oportunidad->consultarAgentebyCod($uaca_id, $mod_id, 1);
+                                    //$tipoportunidad = 5;
+                                default:
+                            }*/
+                            $agente = $mod_oportunidad->consultarAgentebyCod($uaca_id, $mod_id, 1);
+                            
                         }
                         $padm_id = $agente['agente_id'];
                         //-------------------------------------------
