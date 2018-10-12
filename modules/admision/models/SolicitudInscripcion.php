@@ -341,8 +341,7 @@ class SolicitudInscripcion extends \yii\db\ActiveRecord
         }
         $sql = " 
                     SELECT
-                        lpad(sins.sins_id,4,'0') as num_solicitud,
-                        ifnull(sins.num_solicitud,'000000000') as sol_numero,
+                        lpad(ifnull(sins.num_solicitud,sins.sins_id),9,'0') as num_solicitud,                        
                         sins.sins_id,
                         sins.sins_fecha_solicitud as fecha_solicitud,
                         uaca.uaca_id,
@@ -434,7 +433,7 @@ class SolicitudInscripcion extends \yii\db\ActiveRecord
                     inte.int_id,
                     sins.sins_beca,
                     sins.sins_fecha_solicitud as fecha_solicitud,
-                    lpad(sins.sins_id,4,'0') as num_solicitud,
+                    lpad(ifnull(sins.num_solicitud, sins.sins_id),9,'0') as num_solicitud,
                     per.per_nac_ecuatoriano,
                     sins.uaca_id,
                     sins.mod_id,

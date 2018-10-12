@@ -32,7 +32,7 @@ $_SESSION['persona_solicita'] = base64_encode($per_id);
         <div class="form-group">
             <label for="txt_solicitud" class="col-sm-4 col-md-4 col-xs-4 col-lg-4 control-label"><?= admision::t("Solicitudes", "Request #") ?></label>
             <div class="col-sm-7 col-md-7 col-xs-7 col-lg-7">
-                <input type="text" class="form-control" value="<?= $solicitud ?>" id="txt_solicitud" disabled="true">
+                <input type="text" class="form-control" value="<?= $num_solicitud ?>" id="txt_solicitud" disabled="true">
             </div>
         </div>
     </div>
