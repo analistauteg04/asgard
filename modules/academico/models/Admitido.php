@@ -114,7 +114,7 @@ class Admitido extends \yii\db\ActiveRecord {
         }
 
         $sql = "
-                   SELECT  distinct ifnull(sins.num_solicitud, lpad(sins.sins_id,9,'0')) as solicitud,
+                SELECT  distinct lpad(ifnull(sins.num_solicitud, sins.sins_id),9,'0') as solicitud,
                         sins.sins_id,
                         sins.int_id,
                         SUBSTRING(sins.sins_fecha_solicitud,1,10) as sins_fecha_solicitud, 

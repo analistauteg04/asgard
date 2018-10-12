@@ -469,6 +469,7 @@ class SolicitudesController extends \app\components\CController {
                     "sins_id" => $datosSolicitud['sins_id'],
                     "int_id" => $datosSolicitud['int_id'],
                     "beca" => $datosSolicitud['sins_beca'],
+                    "num_solicitud" => $datosSolicitud['num_solicitud'],
         ]);
     }
 

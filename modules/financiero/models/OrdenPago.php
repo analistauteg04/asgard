@@ -279,7 +279,7 @@ class OrdenPago extends \app\modules\financiero\components\CActiveRecord {
                                     where icpr.opag_id = orp.opag_id AND
                                           icpr.icpr_estado = :estado  AND
                                           icpr.icpr_estado_logico = :estado) end) as valor_cargado,
-                    lpad(sins.sins_id,'4','0') as solicitud,
+                    lpad(ifnull(sins.num_solicitud,sins.sins_id),'9','0') as solicitud,
                     sins.sins_id,
                     sins.sins_fecha_solicitud,
                     :rol as rol
@@ -830,7 +830,7 @@ class OrdenPago extends \app\modules\financiero\components\CActiveRecord {
         $con2 = \Yii::$app->db_asgard;
         $estado = 1;
 
-        $sql = "SELECT  lpad(opag.sins_id,4,'0') as sser_id,                        
+        $sql = "SELECT  lpad(ifnull(sins.num_solicitud,sins.sins_id),9,'0') as sser_id,                        
                         per.per_id, 
                         inte.int_id,
                         concat(per_pri_nombre, ' ', per_seg_nombre) nombres,
@@ -1442,7 +1442,7 @@ class OrdenPago extends \app\modules\financiero\components\CActiveRecord {
             per.per_pri_apellido as per_pri_apellido,
             per.per_seg_apellido as per_seg_apellido,";
         }
-        $sql = "SELECT  lpad(sins.sins_id,4,'0') as solicitud, 
+        $sql = "SELECT  lpad(ifnull(sins.num_solicitud,sins.sins_id),9,'0') as solicitud, 
                         sins.sins_fecha_solicitud,
                         per.per_id ,
                         per.per_cedula identificacion,
@@ -1761,8 +1761,7 @@ class OrdenPago extends \app\modules\financiero\components\CActiveRecord {
         $columnsAdd = "";
         if (isset($arrFiltro) && count($arrFiltro) > 0) {
             $str_search .= "(per.per_pri_nombre like :search OR ";
-            $str_search .= "per.per_pri_apellido like :search ) AND ";
-            // $str_search .= "ming.ming_descripcion like :search) AND ";
+            $str_search .= "per.per_pri_apellido like :search ) AND ";            
             if ($arrFiltro['f_ini'] != "" && $arrFiltro['f_fin'] != "") {
                 $str_search .= "sins.sins_fecha_solicitud >= :fec_ini AND ";
                 $str_search .= "sins.sins_fecha_solicitud <= :fec_fin AND ";
@@ -1778,7 +1777,7 @@ class OrdenPago extends \app\modules\financiero\components\CActiveRecord {
           per.per_pri_apellido as per_pri_apellido,
           per.per_seg_apellido as per_seg_apellido,";
         }
-        $sql = "SELECT  lpad(sins.sins_id,4,'0') as solicitud,sins.sins_id, 
+        $sql = "SELECT  lpad(ifnull(sins.num_solicitud,sins.sins_id),9,'0') as solicitud, sins.sins_id, 
                         sins.sins_fecha_solicitud,
                         per.per_id,
                         per.per_cedula identificacion,
@@ -1800,8 +1799,7 @@ class OrdenPago extends \app\modules\financiero\components\CActiveRecord {
         }
 
         $sql .= " FROM " . $con->dbname . ".solicitud_inscripcion sins 
-                     INNER JOIN " . $con3->dbname . ".unidad_academica uaca on uaca.uaca_id = sins.uaca_id
-                     -- INNER JOIN " . $con->dbname . ".metodo_ingreso ming on ming.ming_id = sins.ming_id
+                     INNER JOIN " . $con3->dbname . ".unidad_academica uaca on uaca.uaca_id = sins.uaca_id                     
                      INNER JOIN " . $con->dbname . ".interesado inte on sins.int_id = inte.int_id                      
                      INNER JOIN " . $con1->dbname . ".persona per on inte.per_id = per.per_id
                      INNER JOIN " . $con2->dbname . ".orden_pago opag on sins.sins_id = opag.sins_id                     
