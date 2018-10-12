@@ -1171,26 +1171,6 @@ class PersonaGestion extends \app\modules\admision\components\CActiveRecord {
         $comando = $con->createCommand($sql);
         return $comando->queryAll();
     }
-    
-    /** 
-     * Function consultarCodigoArea
-     * @author  Byron Villacreses <developer@uteg.edu.ec>
-     * @property integer car_id      
-     * @return  
-     */
-    public function consultarOportVentas($uaca_id) {
-        $con = \Yii::$app->db_crm;
-        $sql = "SELECT tove_id FROM " . $con->dbname . ".tipo_oportunidad_venta "
-                . " WHERE tove_estado=1 AND uaca_id=:uaca_id ;";
-
-        $comando = $con->createCommand($sql);
-        $comando->bindParam(":uaca_id", $uaca_id, \PDO::PARAM_INT);
-        //$comando->bindParam(":emp_id", $emp_id, \PDO::PARAM_INT);
-        $rawData=$comando->queryScalar();        
-        if ($rawData === false)
-            return 0; //Falso si no Existe
-        return $rawData;//Si Existe en la Tabla
-    }
 
     /** Se debe cambiar esta funcion que regrese el codigo de area ***ojo***
      * Function consultarCodigoArea
@@ -1245,26 +1225,41 @@ class PersonaGestion extends \app\modules\admision\components\CActiveRecord {
                         //Opciones por defecto segun los indicado por Ing. Geovanni
                         $uaca_id = $Data[$i]['pgest_unidad_academica'];
                         $mod_id = $Data[$i]['pgest_modalidad'];
-                        switch ($uaca_id) { // esto cambiarlo hacer funcion que consulte el usuario y traer el id
-                            case "1":
-                                $tipoportunidad = 1;
-                                if ($modalidad == "1") {
-                                    $agente = $mod_oportunidad->consultarAgentebyCod($uaca_id, $mod_id, 1); // 1 uteg//15;
-                                } else {
-                                    $agente = $mod_oportunidad->consultarAgentebyCod($uaca_id, $mod_id, 1); //14;
-                                }
-                                break;
-                            case "2":
-                                $agente = $mod_oportunidad->consultarAgentebyCod($uaca_id, $mod_id, 1); //16;
-                                $tipoportunidad = 5;
-                                break;
-                            case "2":                                
-                                $agente['agente_id']=$this->consultarOportVentas($uaca_id);
-                            case "2":
-                            case "2":
-                            case "2":
-                            default:
-                                
+                        
+                        if($emp_id=="1"){
+                            switch ($uaca_id) { // esto cambiarlo hacer funcion que consulte el usuario y traer el id
+                                case "1":
+                                    $tipoportunidad = 1;
+                                    if ($modalidad == "1") {
+                                        $agente = $mod_oportunidad->consultarAgentebyCod($uaca_id, $mod_id, 1); // 1 uteg//15;
+                                    } else {
+                                        $agente = $mod_oportunidad->consultarAgentebyCod($uaca_id, $mod_id, 1); //14;
+                                    }
+                                    break;
+                                case "2":
+                                    $agente = $mod_oportunidad->consultarAgentebyCod($uaca_id, $mod_id, 1); //16;
+                                    $tipoportunidad = 5;
+                                    break;
+                            }
+                        }elseif($emp_id=="2" ||$emp_id=="3"){ //UNLINK Y SMART
+                            /*switch ($uaca_id) { 
+                                case "2":
+                                    $agente = $mod_oportunidad->consultarAgentebyCod($uaca_id, $mod_id, 1);
+                                    //$tipoportunidad = 5;
+                                    break;
+                                case "3": 
+                                    $agente = $mod_oportunidad->consultarAgentebyCod($uaca_id, $mod_id, 1);
+                                    //$tipoportunidad = 5;
+                  
+                                case "5":
+                                    $agente = $mod_oportunidad->consultarAgentebyCod($uaca_id, $mod_id, 1);
+                                    //$tipoportunidad = 5;
+                                case "6":
+                                    $agente = $mod_oportunidad->consultarAgentebyCod($uaca_id, $mod_id, 1);
+                                    //$tipoportunidad = 5;
+                                default:
+                            }*/
+                            $agente = $mod_oportunidad->consultarAgentebyCod($uaca_id, $mod_id, 1);
                             
                         }
                         $padm_id = $agente['agente_id'];
