@@ -3,6 +3,7 @@
 use yii\helpers\Html;
 use yii\helpers\Url;
 use app\widgets\PbGridView\PbGridView;
+use app\modules\admision\Module;
 ?>
 <?=
 
@@ -28,6 +29,11 @@ PbGridView::widget([
             'attribute' => 'Nombres',
             'header' => Yii::t("formulario", "Name"),
             'value' => 'nombres',
+        ],
+        [
+            'attribute' => 'Course',
+            'header' => Module::t("crm", "Career/Program/Course"),
+            'value' => 'des_estudio',
         ],
         [
             'attribute' => 'Apellidos',

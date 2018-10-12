@@ -245,13 +245,6 @@ class Oportunidad extends \app\modules\admision\components\CActiveRecord {
                     eo.eopo_id as estado_oportunidad_id,
                     eo.eopo_nombre as estado_oportunidad,
                     tov.tove_nombre as tipo_oportunidad,
-                    -- case uac.uaca_id
-                    -- when 1 then (select eaca.eaca_nombre from " . $con2->dbname . ".estudio_academico eaca where eaca.eaca_id = op.eaca_id)
-                    -- when 2 then (select eaca.eaca_nombre from " . $con2->dbname . ".estudio_academico eaca where eaca.eaca_id = op.eaca_id)
-                    -- when 3 then (select mes.mest_nombre from " . $con2->dbname . ".modulo_estudio mes where mes.mest_id = op.mest_id)
-                    -- when 4 then (select mes.mest_nombre from " . $con2->dbname . ".modulo_estudio mes where mes.mest_id = op.mest_id)
-                    -- when 5 then (select mes.mest_nombre from " . $con2->dbname . ".modulo_estudio mes where mes.mest_id = op.mest_id)
-                    -- when 6 then (select mes.mest_nombre from " . $con2->dbname . ".modulo_estudio mes where mes.mest_id = op.mest_id)
                     case emp.emp_id
                     when 1 then (select eaca.eaca_nombre from " . $con2->dbname . ".estudio_academico eaca where eaca.eaca_id = op.eaca_id)
                     when 2 then (select mes.mest_nombre from " . $con2->dbname . ".modulo_estudio mes where mes.mest_id = op.mest_id)
@@ -419,7 +412,8 @@ class Oportunidad extends \app\modules\admision\components\CActiveRecord {
                 $str_search .= "  a.eopo_id = :estado_ate AND ";
             }
         }
-        $sql = "SELECT * FROM (
+        $sql = "
+                SELECT * FROM (
                     SELECT  o.opo_id,
                             lpad(ifnull(o.opo_codigo,0),7,'0') as opo_codigo, 
                             o.pges_id,
@@ -461,7 +455,7 @@ class Oportunidad extends \app\modules\admision\components\CActiveRecord {
                          inner join " . $con2->dbname . ".modalidad m on m.mod_id = o.mod_id 
                          inner join " . $con->dbname . ".personal_admision pa on o.padm_id = pa.padm_id
                          inner join " . $con1->dbname . ".persona p on pa.per_id = p.per_id    
-                     WHERE o.opo_estado = :estado
+                    WHERE o.opo_estado = :estado
                            and o.opo_estado_logico = :estado  
                            and pg.pges_estado = :estado
                            and pg.pges_estado_logico = :estado
