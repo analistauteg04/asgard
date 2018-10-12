@@ -82,14 +82,14 @@ class AdmitidosController extends \app\components\CController {
             $arrData = $admitido_model->consultarReportAdmitidos(array(), true);
         }
         \app\models\Utilities::putMessageLogFile($arrData);
-        $nameReport = yii::t("formulario", "Application Reports");
+        $nameReport = academico::t("Academico", "Admitted");
         Utilities::generarReporteXLS($nombarch, $nameReport, $arrHeader, $arrData, $colPosition);
         exit;
     }
 
     public function actionExppdf() {
         $report = new ExportFile();
-        $this->view->title = academico::t("Aspirante", "Aspirants"); // Titulo del reporte
+        $this->view->title = academico::t("Academico", "Admitted");  // Titulo del reporte
         $arrHeader = array(
             admision::t("Solicitudes", "Request #"),
             admision::t("Solicitudes", "Application date"), //ingles

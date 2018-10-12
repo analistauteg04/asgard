@@ -462,7 +462,7 @@ class OportunidadesController extends \app\components\CController {
         } else {
             $arrData = $modoportunidad->consultarOportunidadexcel($arrSearch, true);
         }
-        $nameReport = yii::t("formulario", "Application Reports");
+        $nameReport = admision::t("crm", "List Oportunity");
         Utilities::generarReporteXLS($nombarch, $nameReport, $arrHeader, $arrData, $colPosition);
         exit;
     }

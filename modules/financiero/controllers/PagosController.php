@@ -487,7 +487,7 @@ class PagosController extends \app\components\CController {
         } else {
             $arrData = $model_pag->listarPagoscargadosexcel($arrSearch, true);
         }
-        $nameReport = yii::t("formulario", "Application Reports");
+        $nameReport = financiero::t("Pagos", "List Payment");
         Utilities::generarReporteXLS($nombarch, $nameReport, $arrHeader, $arrData, $colPosition);
         exit;
     }
@@ -734,7 +734,7 @@ class PagosController extends \app\components\CController {
         } else {
             $arrData = $model_pag->listarPagosolicitudExcel($arrSearch, true);
         }
-        $nameReport = yii::t("formulario", "Application Reports");
+        $nameReport = financiero::t("Pagos", "List Payment");
         Utilities::generarReporteXLS($nombarch, $nameReport, $arrHeader, $arrData, $colPosition);
         exit;
     }
@@ -770,7 +770,7 @@ class PagosController extends \app\components\CController {
         } else {
             $arrData = $model_pag->listarSolicitudesadmexcel($arrSearch, true);
         }
-        $nameReport = yii::t("formulario", "Application Reports");
+        $nameReport = financiero::t("Pagos", "Registration Payments for Collections");
         Utilities::generarReporteXLS($nombarch, $nameReport, $arrHeader, $arrData, $colPosition);
         exit;
     }

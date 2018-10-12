@@ -1197,7 +1197,7 @@ class SolicitudesController extends \app\components\CController {
             $arrData = $modSolicitudes->consultarSolicitudesReporte($arrSearch, true);
         }
 
-        $nameReport = yii::t("formulario", "Application Reports");
+        $nameReport = admision::t("Solicitudes", "Request by Interested");;
         Utilities::generarReporteXLS($nombarch, $nameReport, $arrHeader, $arrData, $colPosition);
         exit;
     }

@@ -372,7 +372,7 @@ class ContactosController extends \app\components\CController {
             $arrData = $modPersonaGestion->consultarReportContactos($arrSearch, true);
         }
         \app\models\Utilities::putMessageLogFile($arrData);
-        $nameReport = yii::t("formulario", "Application Reports");
+        $nameReport = admision::t("crm", "Contacts");
         Utilities::generarReporteXLS($nombarch, $nameReport, $arrHeader, $arrData, $colPosition);
         exit;
     }
@@ -703,7 +703,7 @@ class ContactosController extends \app\components\CController {
                 }
             }
         }
-        $nameReport = yii::t("formulario", "Application Reports");
+        $nameReport = admision::t("crm", "Contacts");
         Utilities::generarReporteXLS($nombarch, $nameReport, $arrHeader, $arrData, $colPosition);
         exit;
     }

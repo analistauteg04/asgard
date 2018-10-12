@@ -236,7 +236,8 @@ class InteresadosController extends \app\components\CController
             Yii::t("formulario", "Name"),                        
             Yii::t("formulario", "Last Names"),
             Yii::t("formulario", "Company"),
-            Yii::t("formulario", "Academic unit"));            
+            Yii::t("formulario", "Academic unit"),
+            academico::t("Academico", "Career/Program/Course"));            
         
         $interesado_model = new Interesado();
         $data = Yii::$app->request->get();
@@ -249,14 +250,14 @@ class InteresadosController extends \app\components\CController
             $arrData = $interesado_model->consultarReportAspirantes($arrSearch, true);                   
         }                                      
                          
-        $nameReport = yii::t("formulario", "Application Reports");
+        $nameReport = academico::t("Aspirante", "Aspirants");
         Utilities::generarReporteXLS($nombarch, $nameReport, $arrHeader, $arrData, $colPosition);
         exit;              
     }
     
     public function actionExppdfaspirantes() {
         $report = new ExportFile();
-        $this->view->title = academico::t("Academico", "Admitted"); // Titulo del reporte
+        $this->view->title = academico::t("Aspirante", "Aspirants"); // Titulo del reporte
                       
         $arrHeader = array(
             Yii::t("formulario", "DNI"),
@@ -264,7 +265,8 @@ class InteresadosController extends \app\components\CController
             Yii::t("formulario", "Name"),                        
             Yii::t("formulario", "Last Names"),
             Yii::t("formulario", "Company"),
-            Yii::t("formulario", "Academic unit"));            
+            Yii::t("formulario", "Academic unit"),
+            academico::t("Academico", "Career/Program/Course"));            
         
         $interesado_model = new Interesado();
         $data = Yii::$app->request->get();

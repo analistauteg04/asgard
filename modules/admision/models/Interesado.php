@@ -1028,6 +1028,8 @@ class Interesado extends \app\modules\admision\components\CActiveRecord {
 
     public function consultarInteresados($arrFiltro = array(), $onlyData = false) {
         $con = \Yii::$app->db_captacion;
+        $con1 = \Yii::$app->db_asgard;
+        $con2 = \Yii::$app->db_academico;
         $estado = 1;
         if (isset($arrFiltro) && count($arrFiltro) > 0) {
             $str_search = "(per.per_pri_nombre like :search OR ";
@@ -1049,17 +1051,24 @@ class Interesado extends \app\modules\admision\components\CActiveRecord {
                 DATE(inte.int_fecha_creacion) as fecha_interes,
                 per.per_id,
                 ifnull((SELECT uaca.uaca_nombre
-                    FROM db_captacion.solicitud_inscripcion sins
-                    INNER JOIN db_academico.unidad_academica uaca on uaca.uaca_id = sins.uaca_id
+                    FROM " . $con->dbname . ".solicitud_inscripcion sins
+                    INNER JOIN " . $con2->dbname . ".unidad_academica uaca on uaca.uaca_id = sins.uaca_id
                     WHERE int_id = inte.int_id
                     and sins.sins_estado = :estado
                     and sins.sins_estado_logico = :estado
                     ORDER BY sins_fecha_solicitud desc
-                    LIMIT 1),'') as unidad
-                from db_captacion.interesado inte
-                join db_asgard.persona as per on inte.per_id=per.per_id
-                join db_captacion.interesado_empresa as iemp on iemp.int_id=inte.int_id
-                join db_asgard.empresa as emp on emp.emp_id=iemp.emp_id
+                    LIMIT 1),'') as unidad,
+                    case emp.emp_id
+                    when 1 then (select eaca.eaca_nombre from db_academico.estudio_academico eaca inner join db_captacion.solicitud_inscripcion sins on sins.eaca_id = eaca.eaca_id  WHERE int_id = inte.int_id ORDER BY sins_fecha_solicitud desc LIMIT 1)
+                    when 2 then (select mes.mest_nombre from db_academico.modulo_estudio mes inner join db_captacion.solicitud_inscripcion sins on sins.mest_id = mes.mest_id WHERE int_id = inte.int_id ORDER BY sins_fecha_solicitud desc LIMIT 1)
+                    when 3 then (select mes.mest_nombre from db_academico.modulo_estudio mes inner join db_captacion.solicitud_inscripcion sins on sins.mest_id = mes.mest_id WHERE int_id = inte.int_id ORDER BY sins_fecha_solicitud desc LIMIT 1)
+                    else null
+                    end as 'carrera'
+                from " . $con->dbname . ".interesado inte
+                join " . $con1->dbname . ".persona as per on inte.per_id=per.per_id
+                join " . $con->dbname . ".interesado_empresa as iemp on iemp.int_id=inte.int_id
+                join " . $con1->dbname . ".empresa as emp on emp.emp_id=iemp.emp_id
+               
                 where $str_search
                 inte.int_estado_logico=:estado AND
                 inte.int_estado=:estado AND                    
@@ -1775,7 +1784,13 @@ class Interesado extends \app\modules\admision\components\CActiveRecord {
                             and sins.sins_estado = :estado
                             and sins.sins_estado_logico = :estado
                             ORDER BY sins_fecha_solicitud desc
-                            LIMIT 1),'') as unidad
+                            LIMIT 1),'') as unidad,
+                    case emp.emp_id
+                    when 1 then (select eaca.eaca_nombre from db_academico.estudio_academico eaca inner join db_captacion.solicitud_inscripcion sins on sins.eaca_id = eaca.eaca_id  WHERE int_id = inte.int_id ORDER BY sins_fecha_solicitud desc LIMIT 1)
+                    when 2 then (select mes.mest_nombre from db_academico.modulo_estudio mes inner join db_captacion.solicitud_inscripcion sins on sins.mest_id = mes.mest_id WHERE int_id = inte.int_id ORDER BY sins_fecha_solicitud desc LIMIT 1)
+                    when 3 then (select mes.mest_nombre from db_academico.modulo_estudio mes inner join db_captacion.solicitud_inscripcion sins on sins.mest_id = mes.mest_id WHERE int_id = inte.int_id ORDER BY sins_fecha_solicitud desc LIMIT 1)
+                    else null
+                    end as 'carrera'
                 FROM    " . $con->dbname . ".interesado inte
                         join " . $con1->dbname . ".persona as per on inte.per_id=per.per_id
                         join " . $con->dbname . ".interesado_empresa as iemp on iemp.int_id=inte.int_id

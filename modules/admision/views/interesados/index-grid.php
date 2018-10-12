@@ -3,6 +3,8 @@
 use yii\helpers\Html;
 use yii\helpers\Url;
 use app\widgets\PbGridView\PbGridView;
+use app\modules\academico\Module as academico;
+academico::registerTranslations();
 ?>
 <?=
 
@@ -43,6 +45,22 @@ PbGridView::widget([
             'attribute' => 'unidad_academica',
             'header' => Yii::t("formulario", "Academic unit"),
             'value' => 'unidad',
+        ],
+        [
+            'class' => 'yii\grid\ActionColumn',
+            'header' => academico::t("Academico", "Career/Program/Course"),
+            'template' => '{view}',
+            'buttons' => [
+                'view' => function ($url, $model) {
+                    if ($model['carrera'] != '') {
+                        $texto = substr($model['carrera'], 0, 20). '...';
+                    }
+                    else{
+                        $texto = '';
+                    }                        
+                    return Html::a('<span>' . $texto . '</span>', Url::to(['#']), ["data-toggle" => "tooltip", "title" => $model['carrera']]);
+                },
+            ],
         ],
         [
             'class' => 'yii\grid\ActionColumn',
