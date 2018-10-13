@@ -52,6 +52,7 @@ class ReportesController extends CController {
                             Yii::t("formulario", "Last Names"),
                             Yii::t("formulario", "Company"),
                             "Num. Solicitudes",
+                            "no_document",
                         );                
                 $nombarch = "AspirantesPendientes-" . date("YmdHis").".xls";
                 break;

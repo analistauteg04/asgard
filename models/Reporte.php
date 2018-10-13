@@ -108,7 +108,23 @@ class Reporte extends \yii\db\ActiveRecord {
                             join db_captacion.solicitud_inscripcion as sins on sins.int_id=inter.int_id
                             where inter.int_id=inte.int_id
                             group by inter.int_id 
-                        ) as num_solicitudes
+                        ) as num_solicitudes,
+                        (
+                            select count(sins.sins_id) as num_solicitudes
+                            from db_captacion.interesado as inter
+                            join db_captacion.solicitud_inscripcion as sins on sins.int_id=inter.int_id
+                            join db_captacion.solicitudins_documento as sdoc on sdoc.sins_id=sins.sins_id
+                            where inter.int_id=inte.int_id
+                            group by inter.int_id 
+                        ) as num_solicitudes,
+                        (
+                            select count(sdoc.sdoc_id) as num_documentos
+                            from db_captacion.interesado as inter
+                            join db_captacion.solicitud_inscripcion as sins on sins.int_id=inter.int_id
+                            join db_captacion.solicitudins_documento as sdoc on sdoc.sins_id=sins.sins_id
+                            where inter.int_id=inte.int_id 
+                            group by inter.int_id 
+                        ) as no_document                        
                     from 
                         " . $con->dbname . ".interesado inte
                         join " . $con1->dbname . ".persona as per on inte.per_id=per.per_id
