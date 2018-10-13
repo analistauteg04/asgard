@@ -105,7 +105,7 @@ class InteresadosController extends \app\components\CController
                             }
                             if ($usuario_id > 0) {
                                 $mod_us_gr_ep = new UsuaGrolEper();
-                                $grol_id = 27;
+                                $grol_id = 30;
                                 $keys = ['eper_id', 'usu_id', 'grol_id', 'ugep_estado', 'ugep_estado_logico'];
                                 $parametros = [$emp_per_id, $usuario_id, $grol_id, 1, 1];
                                 $us_gr_ep_id = $mod_us_gr_ep->consultarIdUsuaGrolEper($emp_per_id, $usuario_id, $grol_id);
