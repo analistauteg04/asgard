@@ -146,4 +146,46 @@ class Reporte extends \yii\db\ActiveRecord {
         $resultData = $comando->queryAll();
         return $resultData;
     }
+    
+    public function consultarAspiranteSolicitudPago($data) {
+        $con = \Yii::$app->db_captacion; 
+        $sql = "SELECT LPAD(C.num_solicitud,9,'0') num_solicitud,DATE(C.sins_fecha_solicitud) fecha_solicitud,E.emp_razon_social,
+                            CONCAT(IFNULL(B.per_pri_nombre,''),' ',IFNULL(B.per_seg_nombre,'')) nombres,
+                                CONCAT(IFNULL(B.per_pri_apellido,''),' ',IFNULL(B.per_seg_apellido,'')) apellidos,
+                                IFNULL(D.uaca_nombre,'') uaca_nombre,
+                            CASE E.emp_id
+                                WHEN 1 THEN (SELECT EA.eaca_nombre FROM " . yii::$app->db_academico->dbname . ".estudio_academico EA WHERE EA.eaca_id=C.eaca_id)
+                                WHEN 2 THEN (SELECT ME.mest_nombre FROM " . yii::$app->db_academico->dbname . ".modulo_estudio ME WHERE ME.mest_id=C.mest_id)
+                                WHEN 3 THEN (SELECT ME.mest_nombre FROM " . yii::$app->db_academico->dbname . ".modulo_estudio ME WHERE ME.mest_id=C.mest_id)
+                                ELSE NULL
+                            END carrera,
+                            CASE 
+                                WHEN ifnull((SELECT opag_estado_pago FROM " . yii::$app->db_facturacion->dbname . ".orden_pago op WHERE op.sins_id = C.sins_id),'N') = 'N' THEN 'No generado'
+                                WHEN (SELECT opag_estado_pago FROM " . yii::$app->db_facturacion->dbname . ".orden_pago op WHERE op.sins_id = C.sins_id) = 'P' THEN 'Pendiente' 
+                                ELSE 'Pagado' 
+                            END pago,
+                            IF(IFNULL(G.adm_estado_admitido,0)=1,'Admitido','No Admitido') estado_admitido
+                        FROM " . $con->dbname . ".interesado A
+                                INNER JOIN " . $con->dbname . ".admitido G ON G.int_id=A.int_id
+                                INNER JOIN " . yii::$app->db_asgard->dbname . ".persona B ON A.per_id=B.per_id
+                                INNER JOIN (" . $con->dbname . ".solicitud_inscripcion C 
+                                                        INNER JOIN " . yii::$app->db_academico->dbname . ".unidad_academica D 
+                                                                ON D.uaca_id=C.uaca_id)
+                                                ON C.int_id=A.int_id
+                                INNER JOIN (" . $con->dbname . ".interesado_empresa F
+                                                        INNER JOIN " . yii::$app->db_asgard->dbname . ".empresa E 
+                                                                ON E.emp_id=F.emp_id)
+                                        ON F.int_id=A.int_id
+                    WHERE A.int_estado_logico=1 AND A.int_estado=1 ";
+        $sql .= ($data['f_ini'] <> '' && $data['f_fin'] <> '' ) ? "AND DATE(C.sins_fecha_solicitud) BETWEEN :f_ini AND :f_fin " : " ";
+        $sql .= " ORDER BY A.sins_fecha_solicitud; ";
+        $comando = $con->createCommand($sql);
+        //Utilities::putMessageLogFile($sql);
+        if ($data['f_ini'] <> '' && $data['f_fin'] <> '') {
+            $comando->bindParam(":f_ini", date("Y-m-d", strtotime($data['f_ini'])), \PDO::PARAM_STR);
+            $comando->bindParam(":f_fin", date("Y-m-d", strtotime($data['f_fin'])), \PDO::PARAM_STR);
+        }
+        return $comando->queryAll();
+    }
+    
 }
