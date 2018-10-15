@@ -76,4 +76,5 @@ return [
     "exportLostContact" => "Contactos Perdidos",    
     "pendingApplicants" => "Documentos Pendientes Aspirantes",    
     "payApplicants" => "Pagos Pendientes Aspirantes",    
+    "To register" => "Registrar",
 ];

@@ -1461,4 +1461,100 @@ class SolicitudInscripcion extends \yii\db\ActiveRecord
         $resultData = $comando->queryOne();
         return $resultData;
     }
+    
+     /**
+     * Function insertarSolicitud
+     * @author  Grace Viteri <analistadesarrollo01@uteg.edu.ec>
+     * @param   
+     * @return  Id del registro insertado.
+     */
+    public function insertarSolicitud($int_id, $uaca_id, $mod_id, $ming_id, $eaca_id, $mest_id, $emp_id, $num_solicitud, $rsin_id, 
+                                      $sins_fecha_solicitud, $sins_usuario_ingreso) {
+        $con = \Yii::$app->db_captacion;
+
+        $trans = $con->getTransaction(); // se obtiene la transacción actual.
+        if ($trans !== null) {
+            $trans = null; // si existe la transacción entonces no se crea una.
+        } else {
+            $trans = $con->beginTransaction(); // si no existe la transacción entonces se crea una.
+        }
+
+        $param_sql = "sins_estado_logico";
+        $bsrec_sql = "1";
+
+        $param_sql .= ", sins_estado";
+        $bsrec_sql .= ", 1";
+        
+        if (isset($int_id)) {
+            $param_sql .= ", int_id";
+            $bsrec_sql .= ", :int_id";
+        }
+        if (isset($uaca_id)) {
+            $param_sql .= ", uaca_id";
+            $bsrec_sql .= ", :uaca_id";
+        }
+        if (isset($mod_id)) {
+            $param_sql .= ", mod_id";
+            $bsrec_sql .= ", :mod_id";
+        }
+        if (isset($ming_id)) {
+            $param_sql .= ", ming_id";
+            $bsrec_sql .= ", :ming_id";
+        }
+        if (isset($eaca_id)) {
+            $param_sql .= ", eaca_id";
+            $bsrec_sql .= ", :eaca_id";
+        }        
+        if (isset($mest_id)) {
+            $param_sql .= ", mest_id";
+            $bsrec_sql .= ", :mest_id";
+        }        
+        if (isset($emp_id)) {
+            $param_sql .= ", emp_id";
+            $bsrec_sql .= ", :emp_id";
+        }
+        if (isset($num_solicitud)) {
+            $param_sql .= ", num_solicitud";
+            $bsrec_sql .= ", :num_solicitud";
+        }
+        if (isset($rsin_id)) {
+            $param_sql .= ", rsin_id";
+            $bsrec_sql .= ", :rsin_id";
+        }
+        if (isset($rsin_id)) {
+            $param_sql .= ", rsin_id";
+            $bsrec_sql .= ", :rsin_id";
+        }
+        try {
+            $sql = "INSERT INTO " . $con->dbname . ".solicitud_rechazada ($param_sql) VALUES($bsrec_sql)";
+            $comando = $con->createCommand($sql);
+
+            if (isset($sins_id))
+                $comando->bindParam(':sins_id', $sins_id, \PDO::PARAM_INT);
+
+            if (isset($dadj_id))
+                $comando->bindParam(':dadj_id', $dadj_id, \PDO::PARAM_INT);
+
+            if (isset($con_id))
+                $comando->bindParam(':snoa_id', $con_id, \PDO::PARAM_INT);
+
+            if (isset($srec_etapa))
+                $comando->bindParam(':srec_etapa', $srec_etapa, \PDO::PARAM_STR);
+
+            if (isset($srec_observacion))
+                $comando->bindParam(':srec_observacion', $srec_observacion, \PDO::PARAM_STR);
+
+            if (isset($usu_id))
+                $comando->bindParam(':usu_id', $usu_id, \PDO::PARAM_INT);
+
+            $result = $comando->execute();
+            if ($trans !== null)
+                $trans->commit();
+            return $con->getLastInsertID($con->dbname . '.solicitud_rechazada');
+        } catch (Exception $ex) {
+            if ($trans !== null)
+                $trans->rollback();
+            return FALSE;
+        }
+    }
 }
