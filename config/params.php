@@ -7,11 +7,13 @@ return [
     'version' => '1.0',
     'adminEmail' => 'web@uteg.edu.ec',
     'soporteEmail' => 'dlopez@uteg.edu.ec',  //'analistadesarrollo01@uteg.edu.ec',
-    'admisiones' => 'analistadesarrollo01@uteg.edu.ec',  //'admisionesonline@uteg.edu.ec',
-    'colecturia' => 'analistadesarrollo01@uteg.edu.ec', //'colecturia@uteg.edu.ec',  
+    'admisiones' => 'admisionesonline@uteg.edu.ec',  //'analistadesarrollo01@uteg.edu.ec',
+    'colecturia' => 'colecturia@uteg.edu.ec',     //'analistadesarrollo01@uteg.edu.ec',
     'jefetalento' => 'directortalento@uteg.edu.ec', //'analistadesarrollo01@uteg.edu.ec', //
     'analistatalento' => 'kmunoz@uteg.edu.ec', //'analistadesarrollo01@uteg.edu.ec', //
     'analistanomina' => 'glamota@uteg.edu.ec', //'analistadesarrollo01@uteg.edu.ec', // 
+    'lidercontact' => 'lidercontactcenter@uteg.edu.ec', //'analistadesarrollo01@uteg.edu.ec', // 
+    'adminlider' => 'abejarano@uteg.edu.ec', //'analistadesarrollo01@uteg.edu.ec', // 
     'contactoEmail' => 'pruebacontacto@uteg.edu.ec',
     'culture' => 'es-ES',
     'dateTimeByDefault' => 'Y-m-d H:i:s',
