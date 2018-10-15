@@ -176,7 +176,7 @@ class Reporte extends \yii\db\ActiveRecord {
                                         ON F.int_id=A.int_id
                     WHERE A.int_estado_logico=1 AND A.int_estado=1 ";
         $sql .= ($data['f_ini'] <> '' && $data['f_fin'] <> '' ) ? "AND DATE(C.sins_fecha_solicitud) BETWEEN :f_ini AND :f_fin " : " ";
-        $sql .= " ORDER BY A.sins_fecha_solicitud; ";
+        $sql .= " ORDER BY C.sins_fecha_solicitud; ";
         $comando = $con->createCommand($sql);
         //Utilities::putMessageLogFile($sql);
         if ($data['f_ini'] <> '' && $data['f_fin'] <> '') {
