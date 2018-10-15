@@ -13,7 +13,7 @@ $this->title = 'Formulario de Pre-Inscripción';
 ?>
 <form class="form-horizontal">
     <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
-        <h3><span id="lbl_Personeria"><?= Yii::t("formulario", "Admission process") ?></span></h3>
+        <h3><span id="lbl_Personeria"><?= Yii::t("formulario", "Application for Admission Process") ?></span></h3>
     </div>
     <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
         <p class="text-danger"> <?= Yii::t("formulario", "Fields with * are required") ?> </p>
@@ -183,8 +183,8 @@ $this->title = 'Formulario de Pre-Inscripción';
     </div>    
     <div class="col-md-12 col-xs-12 col-sm-12 col-lg-12 doc_dni cinteres">
         <div class="form-group">
-            <label for="txth_doc_dni" class="col-sm-4 col-md-4 col-xs-4 col-lg-4 control-label keyupmce"><?= Yii::t("formulario", "Identification document") ?></label>
-            <div class="col-sm-7 col-md-7 col-xs-7 col-lg-7">
+            <label for="txth_doc_dni" class="col-sm-3 col-md-3 col-xs-3 col-lg-3 control-label keyupmce"><?= Yii::t("formulario", "Identification document") ?></label>
+            <div class="col-sm-9 col-md-9 col-xs-9 col-lg-9">
                 <?= Html::hiddenInput('txth_doc_dni', '', ['id' => 'txth_doc_dni']); ?>
                 <?php
                 echo CFileInputAjax::widget([
@@ -241,8 +241,8 @@ $this->title = 'Formulario de Pre-Inscripción';
 
     <div class="col-md-12 col-xs-12 col-sm-12 col-lg-12 doc_certvota cinteres" <?= ($txth_extranjero == "0") ? 'style="display:none;"' : "" ?> >
         <div class="form-group">
-            <label for="txth_doc_certvota" class="col-sm-4 col-md-4 col-xs-4 col-lg-4 control-label keyupmce"><?= Yii::t("formulario", "Voting Certificate") ?></label>
-            <div class="col-sm-7 col-md-7 col-xs-7 col-lg-7">
+            <label for="txth_doc_certvota" class="col-sm-3 col-md-3 col-xs-3 col-lg-3 control-label keyupmce"><?= Yii::t("formulario", "Voting Certificate") ?></label>
+            <div class="col-sm-9 col-md-9 col-xs-9 col-lg-9">
                 <?= Html::hiddenInput('txth_doc_certvota', '', ['id' => 'txth_doc_certvota']); ?>
                 <?php
                 echo CFileInputAjax::widget([
@@ -298,8 +298,8 @@ $this->title = 'Formulario de Pre-Inscripción';
     </div>
     <div class="col-md-12 col-xs-12 col-sm-12 col-lg-12 doc_foto cinteres">
         <div class="form-group">
-            <label for="txth_doc_foto" class="col-sm-4 col-md-4 col-xs-4 col-lg-4 control-label keyupmce"><?= Yii::t("formulario", "Foto") ?></label>
-            <div class="col-sm-7 col-md-7 col-xs-7 col-lg-7">
+            <label for="txth_doc_foto" class="col-sm-3 col-md-3 col-xs-3 col-lg-3 control-label keyupmce"><?= Yii::t("formulario", "Foto") ?></label>
+            <div class="col-sm-9 col-md-9 col-xs-9 col-lg-9">
                 <?= Html::hiddenInput('txth_doc_foto', '', ['id' => 'txth_doc_foto']); ?>
                 <?php
                 echo CFileInputAjax::widget([

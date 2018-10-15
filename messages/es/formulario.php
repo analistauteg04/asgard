@@ -79,6 +79,7 @@ return [
     "Allocation Data" => "Datos Asignación",
     "Another language" => "Otro lenguaje",
     "Applicant Data" => "Datos del Solicitante:",
+    "Application for Admission Process" => "Proceso Solicitud de Admisión",
     "Application Approved" => "Solicitud Aprobada",
     "Application Rejected" => "Solicitud Rechazada",
     "Application Reports" => "Reporte de Solicitud",

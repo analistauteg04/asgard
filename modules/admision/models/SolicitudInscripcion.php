@@ -1520,37 +1520,130 @@ class SolicitudInscripcion extends \yii\db\ActiveRecord
         if (isset($rsin_id)) {
             $param_sql .= ", rsin_id";
             $bsrec_sql .= ", :rsin_id";
+        }        
+        if (isset($sins_fecha_solicitud)) {
+            $param_sql .= ", sins_fecha_solicitud";
+            $bsrec_sql .= ", :sins_fecha_solicitud";
         }
-        if (isset($rsin_id)) {
-            $param_sql .= ", rsin_id";
-            $bsrec_sql .= ", :rsin_id";
+        if (isset($sins_usuario_ingreso)) {
+            $param_sql .= ", sins_usuario_ingreso";
+            $bsrec_sql .= ", :sins_usuario_ingreso";
         }
         try {
-            $sql = "INSERT INTO " . $con->dbname . ".solicitud_rechazada ($param_sql) VALUES($bsrec_sql)";
+            $sql = "INSERT INTO " . $con->dbname . ".solicitud_inscripcion ($param_sql) VALUES($bsrec_sql)";
+            $comando = $con->createCommand($sql);
+
+            if (isset($int_id))
+                $comando->bindParam(':int_id', $int_id, \PDO::PARAM_INT);
+
+            if (isset($uaca_id))
+                $comando->bindParam(':uaca_id', $uaca_id, \PDO::PARAM_INT);
+
+            if (isset($mod_id))
+                $comando->bindParam(':mod_id', $mod_id, \PDO::PARAM_INT);
+
+            if (isset($ming_id))
+                $comando->bindParam(':ming_id', $ming_id, \PDO::PARAM_INT);
+
+            if (isset($eaca_id))
+                $comando->bindParam(':eaca_id', $eaca_id, \PDO::PARAM_INT);
+
+            if (isset($mest_id))
+                $comando->bindParam(':mest_id', $mest_id, \PDO::PARAM_INT);
+            
+            if (isset($emp_id))
+                $comando->bindParam(':emp_id', $emp_id, \PDO::PARAM_INT);
+            
+            if (isset($num_solicitud))
+                $comando->bindParam(':num_solicitud', $num_solicitud, \PDO::PARAM_STR);
+            
+            if (isset($rsin_id))
+                $comando->bindParam(':rsin_id', $rsin_id, \PDO::PARAM_INT);
+            
+            if (isset($sins_fecha_solicitud))
+                $comando->bindParam(':sins_fecha_solicitud', $sins_fecha_solicitud, \PDO::PARAM_STR);
+            
+            if (isset($sins_usuario_ingreso))
+                $comando->bindParam(':sins_usuario_ingreso', $sins_usuario_ingreso, \PDO::PARAM_INT);
+            
+            $result = $comando->execute();
+            if ($trans !== null)
+                $trans->commit();
+            return $con->getLastInsertID($con->dbname . '.solicitud_inscripcion');
+        } catch (Exception $ex) {
+            if ($trans !== null)
+                $trans->rollback();
+            return FALSE;
+        }
+    }
+    
+    
+     /**
+     * Function insertarDocumentosSolic
+     * @author  Grace Viteri <analistadesarrollo01@uteg.edu.ec>
+     * @param   
+     * @return  Id del registro insertado.
+     */
+    public function insertarDocumentosSolic($sins_id, $int_id, $dadj_id, $sdoc_archivo, $sdoc_usuario_ingreso) {
+        $con = \Yii::$app->db_captacion;
+
+        $trans = $con->getTransaction(); // se obtiene la transacción actual.
+        if ($trans !== null) {
+            $trans = null; // si existe la transacción entonces no se crea una.
+        } else {
+            $trans = $con->beginTransaction(); // si no existe la transacción entonces se crea una.
+        }
+
+        $param_sql = "sdoc_estado_logico";
+        $bsrec_sql = "1";
+
+        $param_sql .= ", sdoc_estado";
+        $bsrec_sql .= ", 1";
+        
+        if (isset($sins_id)) {
+            $param_sql .= ", sins_id";
+            $bsrec_sql .= ", :sins_id";
+        }
+        if (isset($int_id)) {
+            $param_sql .= ", int_id";
+            $bsrec_sql .= ", :int_id";
+        }
+        if (isset($dadj_id)) {
+            $param_sql .= ", dadj_id";
+            $bsrec_sql .= ", :dadj_id";
+        }
+        if (isset($sdoc_archivo)) {
+            $param_sql .= ", sdoc_archivo";
+            $bsrec_sql .= ", :sdoc_archivo";
+        }
+        if (isset($sdoc_usuario_ingreso)) {
+            $param_sql .= ", sdoc_usuario_ingreso";
+            $bsrec_sql .= ", :sdoc_usuario_ingreso";
+        }        
+        
+        try {
+            $sql = "INSERT INTO " . $con->dbname . ".solicitudins_documento ($param_sql) VALUES($bsrec_sql)";
             $comando = $con->createCommand($sql);
 
             if (isset($sins_id))
                 $comando->bindParam(':sins_id', $sins_id, \PDO::PARAM_INT);
 
+            if (isset($int_id))
+                $comando->bindParam(':int_id', $int_id, \PDO::PARAM_INT);
+
             if (isset($dadj_id))
                 $comando->bindParam(':dadj_id', $dadj_id, \PDO::PARAM_INT);
 
-            if (isset($con_id))
-                $comando->bindParam(':snoa_id', $con_id, \PDO::PARAM_INT);
+            if (isset($sdoc_archivo))
+                $comando->bindParam(':sdoc_archivo', $sdoc_archivo, \PDO::PARAM_STR);
 
-            if (isset($srec_etapa))
-                $comando->bindParam(':srec_etapa', $srec_etapa, \PDO::PARAM_STR);
-
-            if (isset($srec_observacion))
-                $comando->bindParam(':srec_observacion', $srec_observacion, \PDO::PARAM_STR);
-
-            if (isset($usu_id))
-                $comando->bindParam(':usu_id', $usu_id, \PDO::PARAM_INT);
-
+            if (isset($sdoc_usuario_ingreso))
+                $comando->bindParam(':sdoc_usuario_ingreso', $sdoc_usuario_ingreso, \PDO::PARAM_INT);            
+            
             $result = $comando->execute();
             if ($trans !== null)
                 $trans->commit();
-            return $con->getLastInsertID($con->dbname . '.solicitud_rechazada');
+            return $con->getLastInsertID($con->dbname . '.solicitudins_documento');
         } catch (Exception $ex) {
             if ($trans !== null)
                 $trans->rollback();
