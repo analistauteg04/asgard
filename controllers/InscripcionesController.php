@@ -93,7 +93,78 @@ class InscripcionesController extends \yii\web\Controller {
                     "arr_carrerra1" => ArrayHelper::map($arr_carrerra1, "id", "name"),
         ]);
     }
+    
+    public function actionIndexadmisionn() {
+        $this->layout = '@themes/' . \Yii::$app->getView()->theme->themeName . '/layouts/basic.php';        
+        $per_id = Yii::$app->session->get("PB_perid");
+        $mod_persona = Persona::findIdentity($per_id);
+        $mod_modalidad = new Modalidad();
+        $mod_pergestion = new PersonaGestion();
+        $mod_unidad = new UnidadAcademica();
+        $modcanal = new Oportunidad();
+        if (Yii::$app->request->isAjax) {
+            $data = Yii::$app->request->post();
+            if (isset($data["getprovincias"])) {
+                $provincias = Provincia::find()->select("pro_id AS id, pro_nombre AS name")->where(["pro_estado_logico" => "1", "pro_estado" => "1", "pai_id" => $data['pai_id']])->asArray()->all();
+                $message = array("provincias" => $provincias);
+                return Utilities::ajaxResponse('OK', 'alert', Yii::t('jslang', 'Success'), 'false', $message);
+                return;
+            }
+            if (isset($data["getcantones"])) {
+                $cantones = Canton::find()->select("can_id AS id, can_nombre AS name")->where(["can_estado_logico" => "1", "can_estado" => "1", "pro_id" => $data['prov_id']])->asArray()->all();
+                $message = array("cantones" => $cantones);
+                return Utilities::ajaxResponse('OK', 'alert', Yii::t('jslang', 'Success'), 'false', $message);
+                return;
+            }            
+            if (isset($data["getarea"])) {
+                //obtener el codigo de area del pais
+                $mod_areapais = new Pais();
+                $area = $mod_areapais->consultarCodigoArea($data["codarea"]);
+                $message = array("area" => $area);
+                return Utilities::ajaxResponse('OK', 'alert', Yii::t('jslang', 'Success'), 'false', $message);
+                return;
+            }
 
+            if (isset($data["getmodalidad"])) {
+                $modalidad = $mod_modalidad->consultarModalidad($data["nint_id"],1);
+                $message = array("modalidad" => $modalidad);
+                return Utilities::ajaxResponse('OK', 'alert', Yii::t('jslang', 'Success'), 'false', $message);
+                return;
+            }
+            if (isset($data["getcarrera"])) {
+                $carrera = $modcanal->consultarCarreraModalidad($data["unidada"], $data["moda_id"]);
+                $message = array("carrera" => $carrera);
+                return Utilities::ajaxResponse('OK', 'alert', Yii::t('jslang', 'Success'), 'false', $message);
+                return;
+            }
+        }
+        $arr_pais_dom = Pais::find()->select("pai_id AS id, pai_nombre AS value")->where(["pai_estado_logico" => "1", "pai_estado" => "1"])->asArray()->all();
+        $pais_id = 1; //Ecuador
+        $arr_prov_dom = Provincia::provinciaXPais($pais_id);
+        $arr_ciu_dom = Canton::cantonXProvincia($arr_prov_dom[0]["id"]);       
+        $arr_medio = MedioPublicitario::find()->select("mpub_id AS id, mpub_nombre AS value")->where(["mpub_estado_logico" => "1", "mpub_estado" => "1"])->asArray()->all();
+        $arr_ninteres = $mod_unidad->consultarUnidadAcademicasEmpresa(1);
+        $arr_modalidad = $mod_modalidad->consultarModalidad(1,1);
+        $arr_conuteg = $mod_pergestion->consultarConociouteg();
+        $arr_carrerra1 = $modcanal->consultarCarreraModalidad(1, 1);
+        
+        
+        return $this->render('indexAdmisionN', [
+                    "tipos_dni" => array("CED" => Yii::t("formulario", "DNI Document"), "PASS" => Yii::t("formulario", "Passport")),
+                    "tipos_dni2" => array("CED" => Yii::t("formulario", "DNI Document1"), "PASS" => Yii::t("formulario", "Passport1")),
+                    "txth_extranjero" => $mod_persona->per_nac_ecuatoriano,
+                    "arr_pais_dom" => ArrayHelper::map($arr_pais_dom, "id", "value"),
+                    "arr_prov_dom" => ArrayHelper::map($arr_prov_dom, "id", "value"),
+                    "arr_ciu_dom" => ArrayHelper::map($arr_ciu_dom, "id", "value"),
+                    "arr_ninteres" => ArrayHelper::map($arr_ninteres, "id", "name"),                    
+                    "arr_medio" => ArrayHelper::map($arr_medio, "id", "value"),
+                    "arr_modalidad" => ArrayHelper::map($arr_modalidad, "id", "name"),
+                    "arr_conuteg" => ArrayHelper::map($arr_conuteg, "id", "name"),
+                    "arr_carrerra1" => ArrayHelper::map($arr_carrerra1, "id", "name"),
+        ]);
+        
+    }
+    
     public function actionGuardarinscripcion() {
         $mod_empresa = new Empresa();
         $mod_estcontacto = new EstadoContacto();
@@ -204,7 +275,7 @@ class InscripcionesController extends \yii\web\Controller {
                     $cons_persona = $mod_pergestion->consultarDatosExiste($celular, $correo, $telefono, $celular2, $cedula, $pasaporte);
                     $busqueda = 1;
                 }
-                if ($cons_persona["registro"] == 0 || $busqueda = 0) {
+                if ($cons_persona["registro"] == 0 || $busqueda == 0) {
                     $resp_consulta = $mod_pergestion->consultarMaxPergest();
                     $pges_codigo = $resp_consulta["maximo"];
                     $resp_persona = $mod_pergestion->insertarPersonaGestion($pges_codigo, $tipo_persona, $conoce_uteg, $carrera, $nombre1, $nombre2, $apellido1, $apellido2, $cedula, null, $pasaporte, null, null, null, null, $pais, $provincia, $ciudad, null, null, $celular, $correo, null, null, null, null, null, null, null, $telefono, $celular2, null, null, null, null, null, null, null, null, null, null, $econ_id, $medio, $empresa, $contacto_empresa, $numero_contacto, $telefono_empresa, $direccion, $cargo, $usuario);
@@ -276,6 +347,156 @@ class InscripcionesController extends \yii\web\Controller {
                 );
                 return Utilities::ajaxResponse('NO_OK', 'alert', Yii::t("jslang", "Error"), true, $message);
             }
+        }
+    }
+    
+    public function Guardarinscripcionsolicitud(){
+        $per_id = @Yii::$app->session->get("PB_perid");
+        $error = 0;
+        if (Yii::$app->request->isAjax) {
+            $data = Yii::$app->request->post();
+            $id_opor = $data["id_pgest"];
+            $opor_model = new Oportunidad();
+            $pgest = $opor_model->consultarPersonaGestionPorOporId($id_opor);
+            $con = \Yii::$app->db_asgard;
+            $transaction = $con->beginTransaction();
+            try {
+                $emp_id = $pgest['emp_id'];
+                $identificacion = '';
+                if (isset($pgest['pges_cedula']) && strlen($pgest['pges_cedula']) > 0) {
+                    $identificacion = $pgest['pges_cedula'];
+                } else {
+                    $identificacion = $pgest['pges_pasaporte'];
+                }
+                if (isset($identificacion) && strlen($identificacion) > 0) {
+                    $id_persona = 0;
+                    $mod_persona = new Persona();
+                    $keys_per = [
+                        'per_pri_nombre', 'per_seg_nombre', 'per_pri_apellido', 'per_seg_apellido', 'per_cedula', 'etn_id', 'eciv_id', 'per_genero', 'pai_id_nacimiento', 'pro_id_nacimiento', 'can_id_nacimiento', 'per_fecha_nacimiento', 'per_celular', 'per_correo', 'tsan_id', 'per_domicilio_sector', 'per_domicilio_cpri', 'per_domicilio_csec', 'per_domicilio_num', 'per_domicilio_ref', 'per_domicilio_telefono', 'pai_id_domicilio', 'pro_id_domicilio', 'can_id_domicilio', 'per_nac_ecuatoriano', 'per_nacionalidad', 'per_foto', 'per_estado', 'per_estado_logico'
+                    ];
+                    $parametros_per = [
+                        $pgest['pges_pri_nombre'], null, $pgest['pges_pri_apellido'], null,
+                        $pgest['pges_cedula'], null, null, null, null, null,
+                        null, null, $pgest['pges_celular'], $pgest['pges_correo'],
+                        null, null, null, null,
+                        null, null, null,
+                        null, null, null,
+                        null, null, null, 1, 1
+                    ];
+                    $id_persona = $mod_persona->consultarIdPersona($pgest['pges_cedula'], $pgest['pges_pasaporte']);
+                    if ($id_persona == 0) {
+                        $id_persona = $mod_persona->insertarPersona($con, $parametros_per, $keys_per, 'persona');
+                    }
+                    if ($id_persona > 0) {
+                        $concap = \Yii::$app->db_captacion;
+                        $mod_emp_persona = new EmpresaPersona();
+                        $keys = ['emp_id', 'per_id', 'eper_estado', 'eper_estado_logico'];
+                        $parametros = [$emp_id, $id_persona, 1, 1];
+                        $emp_per_id = $mod_emp_persona->consultarIdEmpresaPersona($id_persona, $emp_id);
+                        if ($emp_per_id == 0) {
+                            $emp_per_id = $mod_emp_persona->insertarEmpresaPersona($con, $parametros, $keys, 'empresa_persona');
+                        }
+                        if ($emp_per_id > 0) {
+                            $usuario = new Usuario();
+                            $usuario_id = $usuario->consultarIdUsuario($id_persona, $pgest['pges_correo']);
+                            if ($usuario_id == 0) {
+                                $security = new Security();
+                                $hash = $security->generateRandomString();
+                                $passencrypt = base64_encode($security->encryptByPassword($hash, 'Uteg2018'));
+                                $keys = ['per_id', 'usu_user', 'usu_sha', 'usu_password', 'usu_estado', 'usu_estado_logico'];
+                                $parametros = [$id_persona, $pgest['pges_correo'], $hash, $passencrypt, 1, 1];
+                                $usuario_id = $usuario->crearUsuarioTemporal($con, $parametros, $keys, 'usuario');
+                            }
+                            if ($usuario_id > 0) {
+                                $mod_us_gr_ep = new UsuaGrolEper();
+                                $grol_id = 30;
+                                $keys = ['eper_id', 'usu_id', 'grol_id', 'ugep_estado', 'ugep_estado_logico'];
+                                $parametros = [$emp_per_id, $usuario_id, $grol_id, 1, 1];
+                                $us_gr_ep_id = $mod_us_gr_ep->consultarIdUsuaGrolEper($emp_per_id, $usuario_id, $grol_id);
+                                if ($us_gr_ep_id == 0)
+                                    $us_gr_ep_id = $mod_us_gr_ep->insertarUsuaGrolEper($con, $parametros, $keys, 'usua_grol_eper');
+                                if ($us_gr_ep_id > 0) {
+                                    $mod_interesado = new Interesado(); // se guarda con estado_interesado 1
+                                    $interesado_id = $mod_interesado->consultaInteresadoById($id_persona);
+                                    $keys = ['per_id', 'int_estado_interesado', 'int_usuario_ingreso', 'int_estado', 'int_estado_logico'];
+                                    $parametros = [$id_persona, 1, $usuario_id, 1, 1];
+                                    if ($interesado_id == 0) {
+                                        $interesado_id = $mod_interesado->insertarInteresado($concap, $parametros, $keys, 'interesado');
+                                    }
+                                    if ($interesado_id > 0) {
+                                        $mod_inte_emp = new InteresadoEmpresa(); // se guarda con estado_interesado 1
+                                        $iemp_id = $mod_inte_emp->consultaInteresadoEmpresaById($interesado_id, $emp_id);
+                                        if ($iemp_id == 0) {
+                                            $iemp_id = $mod_inte_emp->crearInteresadoEmpresa($interesado_id, $emp_id, $usuario_id);
+                                        }
+                                        if ($iemp_id > 0) {
+                                            $usuarioNew = Usuario::findIdentity($usuario_id);
+                                            $link = $usuarioNew->generarLinkActivacion();
+                                            $email_info = array(
+                                                "nombres" => $pgest['pges_pri_nombre'] . " " . $pgest['pges_seg_nombre'],
+                                                "apellidos" => $pgest['pges_pri_apellido'] . " " . $pgest['pges_seg_apellido'],
+                                                "correo" => $pgest['pges_correo'],
+                                                "telefono" => isset($pgest['pges_celular']) ? $pgest['pges_celular'] : $pgest['pges_domicilio_telefono'],
+                                                "identificacion" => isset($pgest['pges_cedula']) ? $pgest['pges_cedula'] : $pgest['pges_pasaporte'],
+                                                "link_asgard" => $link,
+                                            );
+                                            $outemail = $mod_interesado->enviarCorreoBienvenida($email_info);
+                                            /*if ($outemail == 0) {
+                                                $error_message .= Yii::t("formulario", "The email hasn't been sent");
+                                                $error++;
+                                            }*/
+                                        } else {
+                                            $error_message .= Yii::t("formulario", "The enterprise interested hasn't been saved");
+                                            $error++;
+                                        }
+                                    } else {
+                                        $error_message .= Yii::t("formulario", "The interested person hasn't been saved");
+                                        $error++;
+                                    }
+                                } else {
+                                    $error_message .= Yii::t("formulario", "The rol user hasn't been saved");
+                                    $error++;
+                                }
+                            } else {
+                                $error_message .= Yii::t("formulario", "The user hasn't been saved");
+                                $error++;
+                            }
+                        } else {
+                            $error_message .= Yii::t("formulario", "The enterprise person hasn't been saved");
+                            $error++;
+                        }
+                    } else {
+                        $error++;
+                        $error_message .= Yii::t("formulario", "The person has not been saved");
+                    }
+                } else {
+                    $error_message .= Yii::t("formulario", "Update DNI to generate interested");
+                    $error++;
+                }
+
+                if ($error == 0) {
+                    $message = array(
+                        "wtmessage" => Yii::t("formulario", "The information have been saved and the information has been sent to your email"),
+                        "title" => Yii::t('jslang', 'Success'),
+                    );
+                    return Utilities::ajaxResponse('OK', 'alert', Yii::t("jslang", "Sucess"), false, $message);
+                } else {
+                    //$transaction->rollback();
+                    $message = array(
+                        "wtmessage" => Yii::t("formulario", "Mensaje: " . $error_message),
+                        "title" => Yii::t('jslang', 'Bad Request'),
+                    );
+                    return Utilities::ajaxResponse('NO_OK', 'alert', Yii::t("jslang", "Bad Request"), false, $message);
+                }
+            } catch (Exception $ex) {
+                $transaction->rollback();
+                $message = array(
+                    "wtmessage" => Yii::t("formulario", "Mensaje: " . $error_message),
+                    "title" => Yii::t('jslang', 'Bad Request'),
+                );
+                return Utilities::ajaxResponse('NO_OK', 'alert', Yii::t("jslang", "Bad Request"), false, $message);
+            }
+            return;
         }
     }
 
