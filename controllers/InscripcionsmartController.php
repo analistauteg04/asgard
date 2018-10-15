@@ -77,7 +77,7 @@ class InscripcionsmartController extends \yii\web\Controller {
         $arr_medio = MedioPublicitario::find()->select("mpub_id AS id, mpub_nombre AS value")->where(["mpub_estado_logico" => "1", "mpub_estado" => "1"])->asArray()->all();
         $arr_conuteg = $mod_pergestion->consultarConociouteg();
         //$arr_carrerra1 = $modestudio->consultarEstudioEmpresa(3);
-        $arr_carrerra1 = $modestudio->consultarCursoModalidad(3, 1);
+        $arr_carrerra1 = $modestudio->consultarCursoModalidad(3, 2);
         $arr_modalidad = $mod_modalidad->consultarModalidad(3,3);
         $arr_ninteres = $mod_unidad->consultarUnidadAcademicasEmpresa(3);
         return $this->render('index', [
