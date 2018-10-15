@@ -193,8 +193,8 @@ class InscripcionsmartController extends \yii\web\Controller {
                     }
                     if ($exito) {
                         $transaction->commit();
-                        $file1 = Url::base(true) . "/files/inscripcion.pdf";
-                        $rutaFile = array($file1);
+                        //$file1 = Url::base(true) . "/files/inscripcion.pdf";
+                        //$rutaFile = array($file1);
                         $tituloMensaje = Yii::t("register", "User Register");
                         $asunto = Yii::t("register", "User Register") . " " . Yii::$app->params["siteName"];
                         $body = Utilities::getMailMessage($pagina, array(
@@ -204,7 +204,7 @@ class InscripcionsmartController extends \yii\web\Controller {
                                     "[[numero_dni]]" => $numidentificacion,
                                     "[[celular]]" => $celular,
                                     "[[mail]]" => $correo), Yii::$app->language);
-                        Utilities::sendEmail($tituloMensaje, Yii::$app->params["adminEmail"], [$correo => $nombre1 . " " . $nombre2], $asunto, $body, $rutaFile);
+                        Utilities::sendEmail($tituloMensaje, Yii::$app->params["adminEmail"], [$correo => $nombre1 . " " . $nombre2], $asunto, $body/*, $rutaFile*/);
                         Utilities::sendEmail($tituloMensaje, Yii::$app->params["adminEmail"], [Yii::$app->params["soporteEmail"] => "Soporte"], $asunto, $body);
                         $message = array(
                             "wtmessage" => Yii::t("notificaciones", "La infomación ha sido grabada. "),
@@ -220,13 +220,13 @@ class InscripcionsmartController extends \yii\web\Controller {
                         return Utilities::ajaxResponse('NO_OK', 'alert', Yii::t("jslang", "Error"), false, $message);
                     }
                 } else {
-                    $mensaje = 'Ya hay registros en los campos, celular, teléfonos o correo';
+                    $mensaje = 'Sus datos ya se encuentran registrados, nos contactaremos con usted';
                     $transaction->rollback();
                     $message = array(
-                        "wtmessage" => Yii::t("notificaciones", "Error al grabar. " . $mensaje),
-                        "title" => Yii::t('jslang', 'Error'),
+                        "wtmessage" => Yii::t("notificaciones", $mensaje),
+                        "title" => Yii::t('jslang', 'OK'),
                     );
-                    return Utilities::ajaxResponse('NO_OK', 'alert', Yii::t("jslang", "Error"), false, $message);
+                    return Utilities::ajaxResponse('OK', 'alert', Yii::t("jslang", "OK"), false, $message);
                 }
             } catch (Exception $ex) {
                 $transaction->rollback();
