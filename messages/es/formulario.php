@@ -481,6 +481,7 @@ return [
     "Recognitions or achievements obtained" => "Reconocimientos obtenidos.",
     "Reading" => "Lectura ",
     "Reference" => "Referencia",
+    "Register" => "Registro",
     "Registered Records" => "Expedientes Registrados",
     "Registration Date" => "Fecha Registro",
     "Registration Number" => "Número Registro",

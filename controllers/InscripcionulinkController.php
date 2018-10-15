@@ -215,7 +215,7 @@ class InscripcionulinkController extends \yii\web\Controller {
                         $asunto = Yii::t("register", "User Register") . " " . Yii::$app->params["siteName"];
                         $body = Utilities::getMailMessage($pagina, array(
                                     "[[primer_nombre]]" => $nombre1,
-                                    "[[primer_apellido]]" => $nombre2,
+                                    "[[primer_apellido]]" => $apellido1,
                                     "[[dni]]" => $dnis,
                                     "[[numero_dni]]" => $numidentificacion,
                                     "[[celular]]" => $celular,
@@ -237,6 +237,22 @@ class InscripcionulinkController extends \yii\web\Controller {
                     }
                 } else {
                     $mensaje = 'Sus datos ya se encuentran registrados, nos contactaremos con usted';
+                    $mensaje = 'Sus datos ya se encuentran registrados, nos contactaremos con usted';                   
+                    $tituloMensaje = Yii::t("register", "Existing Record");
+                    $asunto = Yii::t("register", "Existing Record") . " " . Yii::$app->params["siteName"];
+                    $body = Utilities::getMailMessage("registeragain", array(
+                                    "[[primer_nombre]]" => $nombre1,
+                                    "[[primer_apellido]]" => $apellido1,
+                                    "[[dni]]" => $dnis,
+                                    "[[numero_dni]]" => $numidentificacion,
+                                    "[[celular]]" => $celular,
+                                    "[[mail]]" => $correo,
+                                    "[[unidad_academica]]" => $nombre_unidad["nombre_unidad"],
+                                    "[[modalidad]]" => $nombre_modalidad["nombre_modalidad"]), Yii::$app->language);
+                    Utilities::sendEmail($tituloMensaje, Yii::$app->params["adminEmail"], [Yii::$app->params["lidercontact"] => $nombre1 . " " . $nombre2], $asunto, $body);
+                    Utilities::sendEmail($tituloMensaje, Yii::$app->params["adminEmail"], [Yii::$app->params["adminlider"] => $nombre1 . " " . $nombre2], $asunto, $body);
+                    Utilities::sendEmail($tituloMensaje, Yii::$app->params["adminEmail"], [Yii::$app->params["soporteEmail"] => "Soporte"], $asunto, $body);
+                   
                     $transaction->rollback();
                     $message = array(
                         "wtmessage" => Yii::t("notificaciones", $mensaje),
