@@ -26,3 +26,6 @@ function buscarActividades(op) {
 function pendingApplicants(){
     buscarActividades("3");//Reporte de Aspirantes pendientes
 }
+function payApplicants(){
+    buscarActividades("4");//Reporte de Oportunidad x Proxima Oportunidad
+}
