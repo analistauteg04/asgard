@@ -72,8 +72,8 @@ return [
     "LoadFile" => "Cargar Archivo",
     "loadCall" => "Cargar Call Center",
     "loadLeads" => "Cargar Leads",
-    "exportStatContact" => "Exp. Est. Opor.",
-    "exportLostContact" => "Exp. Cont. Perdidos",    
+    "exportStatContact" => "Estado Oportunidad",
+    "exportLostContact" => "Contactos Perdidos",    
     "pendingApplicants" => "Documentos Pendientes Aspirantes",    
     "payApplicants" => "Pagos Pendientes Aspirantes",    
 ];
