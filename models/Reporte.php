@@ -113,21 +113,35 @@ class Reporte extends \yii\db\ActiveRecord {
                             when 1 then (select eaca.eaca_nombre from db_academico.estudio_academico eaca inner join db_captacion.solicitud_inscripcion sins on sins.eaca_id = eaca.eaca_id  WHERE int_id = inte.int_id ORDER BY sins_fecha_solicitud desc LIMIT 1)
                             when 2 then (select mes.mest_nombre from db_academico.modulo_estudio mes inner join db_captacion.solicitud_inscripcion sins on sins.mest_id = mes.mest_id WHERE int_id = inte.int_id ORDER BY sins_fecha_solicitud desc LIMIT 1)
                             when 3 then (select mes.mest_nombre from db_academico.modulo_estudio mes inner join db_captacion.solicitud_inscripcion sins on sins.mest_id = mes.mest_id WHERE int_id = inte.int_id ORDER BY sins_fecha_solicitud desc LIMIT 1)
-                        else null
-                        end as 'carrera',
-                        (
-                            select count(sdoc.sdoc_id) as num_documentos
-                            from db_captacion.interesado as inter
-                            join db_captacion.solicitud_inscripcion as sins on sins.int_id=inter.int_id
-                            join db_captacion.solicitudins_documento as sdoc on sdoc.sins_id=sins.sins_id
-                            where inter.int_id=inte.int_id 
-                            group by inter.int_id 
-                        ) as no_documentos
+                             else null
+                        end carrera,
+                        case
+                            when
+                                ifnull((
+                                    select 
+                                        count(sdoc.sdoc_id) as num_documentos
+                                    from 
+                                        db_captacion.interesado as inter
+                                        join db_captacion.solicitud_inscripcion as sins on sins.int_id=inter.int_id
+                                        join db_captacion.solicitudins_documento as sdoc on sdoc.sins_id=sins.sins_id
+                                    where 
+                                        inter.int_id=inte.int_id 
+                                    group by inter.int_id 
+                                ),0)>0 then 'Documentos Subidos'
+                            else
+                                'Pendiente Subir Doc.'
+                        end Estado_Documentos,
+                        case 
+                            WHEN ifnull((SELECT opag_estado_pago FROM db_facturacion.orden_pago op WHERE op.sins_id = sins.sins_id),'N') = 'N' THEN 'No generado'
+                            WHEN (SELECT opag_estado_pago FROM db_facturacion.orden_pago op WHERE op.sins_id = sins.sins_id) = 'P' THEN 'Pendiente' 
+                            ELSE 'Pagado' 
+                        end Estado_Pago
                     from 
-                        " . $con->dbname . ".interesado inte
-                        join " . $con1->dbname . ".persona as per on inte.per_id=per.per_id
-                        join " . $con->dbname . ".interesado_empresa as iemp on iemp.int_id=inte.int_id
-                        join " . $con1->dbname . ".empresa as emp on emp.emp_id=iemp.emp_id
+                        db_captacion.interesado inte
+                        join db_asgard.persona as per on inte.per_id=per.per_id
+                        join db_captacion.interesado_empresa as iemp on iemp.int_id=inte.int_id
+                        join db_captacion.solicitud_inscripcion as sins on sins.int_id=inte.int_id
+                        join db_asgard.empresa as emp on emp.emp_id=iemp.emp_id
                     where
                         inte.int_estado_logico=:estado AND
                         inte.int_estado=:estado AND                    
