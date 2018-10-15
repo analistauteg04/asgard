@@ -46,18 +46,19 @@ class ReportesController extends CController {
                 $arrData=$objDat->consultarAspirantesPendientes($data);
                 $arrHeader = 
                         array(
-                            Yii::t("formulario", "DNI"),
-                            Yii::t("formulario", "Date"),
-                            Yii::t("formulario", "Name"),                        
-                            Yii::t("formulario", "Last Names"),
-                            Yii::t("formulario", "Company"),
-                            "Num. Solicitudes",
+                            "DNI",
+                            "Fecha Solicitud",
+                            "Num. Solicitud",
+                            "Nombres",                        
+                            "Apellidos",
+                            "Empresa",
+                            "Unidad Academica",
                             "Carrera",
+                            "Modalidad",
                             "Estado Documentos",
-                            "Estado Pago",
-                            "Estado Admitido"
+                            "Estado Pago"
                         );                
-                $nombarch = "AspirantesPendientes-" . date("YmdHis").".xls";
+                $nombarch = "Aspirantes-" . date("YmdHis").".xls";
                 break;
         }
         ini_set('memory_limit', '256M');
