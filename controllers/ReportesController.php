@@ -55,14 +55,9 @@ class ReportesController extends CController {
                             "Carrera",
                             "Estado Documentos",
                             "Estado Pago",
+                            "Estado Admitido"
                         );                
                 $nombarch = "AspirantesPendientes-" . date("YmdHis").".xls";
-                break;
-            case '4'://Aspirantes Admitidos con Solicitud Pagada o Pendiente
-                $arrData=$objDat->consultarAspiranteSolicitudPago($data);
-                $arrHeader = array("N°Solicitud","F.Solicitud","Empresa","Nombres","Apellidos","Unidad Academica",
-                                    "Carrera","Est.Pago","Est.Admitido");
-                $nombarch = "AspirantesSolicitudPago-" . date("YmdHis").".xls";
                 break;
         }
         ini_set('memory_limit', '256M');
