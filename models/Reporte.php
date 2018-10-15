@@ -109,14 +109,12 @@ class Reporte extends \yii\db\ActiveRecord {
                             where inter.int_id=inte.int_id
                             group by inter.int_id 
                         ) as num_solicitudes,
-                        (
-                            select count(sins.sins_id) as num_solicitudes
-                            from db_captacion.interesado as inter
-                            join db_captacion.solicitud_inscripcion as sins on sins.int_id=inter.int_id
-                            join db_captacion.solicitudins_documento as sdoc on sdoc.sins_id=sins.sins_id
-                            where inter.int_id=inte.int_id
-                            group by inter.int_id 
-                        ) as num_solicitudes,
+                        case emp.emp_id
+                            when 1 then (select eaca.eaca_nombre from db_academico.estudio_academico eaca inner join db_captacion.solicitud_inscripcion sins on sins.eaca_id = eaca.eaca_id  WHERE int_id = inte.int_id ORDER BY sins_fecha_solicitud desc LIMIT 1)
+                            when 2 then (select mes.mest_nombre from db_academico.modulo_estudio mes inner join db_captacion.solicitud_inscripcion sins on sins.mest_id = mes.mest_id WHERE int_id = inte.int_id ORDER BY sins_fecha_solicitud desc LIMIT 1)
+                            when 3 then (select mes.mest_nombre from db_academico.modulo_estudio mes inner join db_captacion.solicitud_inscripcion sins on sins.mest_id = mes.mest_id WHERE int_id = inte.int_id ORDER BY sins_fecha_solicitud desc LIMIT 1)
+                        else null
+                        end as 'carrera',
                         (
                             select count(sdoc.sdoc_id) as num_documentos
                             from db_captacion.interesado as inter
@@ -124,7 +122,7 @@ class Reporte extends \yii\db\ActiveRecord {
                             join db_captacion.solicitudins_documento as sdoc on sdoc.sins_id=sins.sins_id
                             where inter.int_id=inte.int_id 
                             group by inter.int_id 
-                        ) as no_document                        
+                        ) as no_documentos
                     from 
                         " . $con->dbname . ".interesado inte
                         join " . $con1->dbname . ".persona as per on inte.per_id=per.per_id
