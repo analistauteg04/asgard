@@ -98,23 +98,19 @@ class Reporte extends \yii\db\ActiveRecord {
         $sql = "
                     select 
                         ifnull(per.per_cedula,per.per_pasaporte) as DNI,                    
-                        DATE(inte.int_fecha_creacion) as fecha_interes,
+                        DATE(sins.sins_fecha_solicitud) as fecha_solicitud,
+                        sins.num_solicitud as num_solicitud,
                         concat(ifnull(per.per_pri_nombre,''),' ',ifnull(per.per_seg_nombre,'')) as nombres,                    
                         concat(ifnull(per.per_pri_apellido,''),' ',ifnull(per.per_seg_apellido,'')) as apellidos,                    
-                        emp.emp_nombre_comercial as empresa,                 
-                        (
-                            select count(sins.sins_id) as num_solicitudes
-                            from db_captacion.interesado as inter
-                            join db_captacion.solicitud_inscripcion as sins on sins.int_id=inter.int_id
-                            where inter.int_id=inte.int_id
-                            group by inter.int_id 
-                        ) as num_solicitudes,
+                        emp.emp_nombre_comercial as empresa,                                         
+                        IFNULL(uaca.uaca_nombre,'') uaca_nombre,
                         case emp.emp_id
                             when 1 then (select eaca.eaca_nombre from db_academico.estudio_academico eaca inner join db_captacion.solicitud_inscripcion sins on sins.eaca_id = eaca.eaca_id  WHERE int_id = inte.int_id ORDER BY sins_fecha_solicitud desc LIMIT 1)
                             when 2 then (select mes.mest_nombre from db_academico.modulo_estudio mes inner join db_captacion.solicitud_inscripcion sins on sins.mest_id = mes.mest_id WHERE int_id = inte.int_id ORDER BY sins_fecha_solicitud desc LIMIT 1)
                             when 3 then (select mes.mest_nombre from db_academico.modulo_estudio mes inner join db_captacion.solicitud_inscripcion sins on sins.mest_id = mes.mest_id WHERE int_id = inte.int_id ORDER BY sins_fecha_solicitud desc LIMIT 1)
                              else null
                         end carrera,
+                        IFNULL(moda.mod_nombre,'') mod_nombre,
                         case
                             when
                                 ifnull((
@@ -135,14 +131,16 @@ class Reporte extends \yii\db\ActiveRecord {
                             WHEN ifnull((SELECT opag_estado_pago FROM db_facturacion.orden_pago op WHERE op.sins_id = sins.sins_id),'N') = 'N' THEN 'No generado'
                             WHEN (SELECT opag_estado_pago FROM db_facturacion.orden_pago op WHERE op.sins_id = sins.sins_id) = 'P' THEN 'Pendiente' 
                             ELSE 'Pagado' 
-                        end Estado_Pago,
-                        IF(IFNULL(G.adm_estado_admitido,0)=1,'Admitido','No Admitido') estado_admitido
+                        end Estado_Pago
                     from 
                         db_captacion.interesado inte
                         join db_asgard.persona as per on inte.per_id=per.per_id
                         join db_captacion.interesado_empresa as iemp on iemp.int_id=inte.int_id
                         join db_captacion.solicitud_inscripcion as sins on sins.int_id=inte.int_id
+                        join db_academico.unidad_academica as uaca on uaca.uaca_id=sins.uaca_id
+                        join db_academico.modalidad as moda on moda.mod_id=sins.mod_id
                         join db_asgard.empresa as emp on emp.emp_id=iemp.emp_id
+                        join db_captacion.admitido admit on admit.int_id=inte.int_id        
                     where
                         inte.int_estado_logico=:estado AND
                         inte.int_estado=:estado AND                    
