@@ -624,7 +624,6 @@ class InscripcionesController extends \yii\web\Controller {
                                                         Utilities::sendEmail($tituloMensaje, Yii::$app->params["admisiones"], // a quien se envia el correo
                                                                 [$email_info['correo'] => $email_info['nombres'] . " " . $email_info['apellidos']], // quien envia el correo
                                                                 $asunto, $file1);
-                                                        // Fin de funcionalidad de enviar correo                                            
                                                         \app\models\Utilities::putMessageLogFile('mensaje final:' . $exito);
                                                     }
                                                 }
@@ -659,19 +658,12 @@ class InscripcionesController extends \yii\web\Controller {
                 }
 
                 if ($exito == 1) {
-                    //$transaction->commit();                    
-                    //$transaction1->commit();
-                    //$transaction2->commit();
-
                     $message = array(
                         "wtmessage" => Yii::t("formulario", "The information have been saved and the information has been sent to your email"),
                         "title" => Yii::t('jslang', 'Success'),
                     );
                     return Utilities::ajaxResponse('OK', 'alert', Yii::t("jslang", "Sucess"), false, $message);
                 } else {
-                    //$transaction->rollback();
-                    //$transaction1->rollback();
-                    //$transaction2->rollback();
                     $message = array(
                         "wtmessage" => Yii::t("formulario", "Mensaje1: " . $mensaje), //$error_message
                         "title" => Yii::t('jslang', 'Bad Request'),

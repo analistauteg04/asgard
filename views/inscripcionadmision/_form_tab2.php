@@ -1,4 +1,3 @@
-<<<<<<< HEAD:views/inscripcionadmision/_form_tab2.php
 <?php
 /* @var $this yii\web\View */
 
@@ -471,5 +470,4 @@ $this->title = 'Formulario de Pre-Inscripción';
             <a id="sendInscripcionsolicitud" href="javascript:" class="btn btn-primary btn-block"> <?= Yii::t("accion", "To register") ?> </a>
         </div>
     </div>
->>>>>>> 2d757b1b8776e75e543968a6f4dc177766c23b5e:views/inscripciones/indexAdmisionN.php
 </form>
