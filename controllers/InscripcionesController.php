@@ -304,7 +304,7 @@ class InscripcionesController extends \yii\web\Controller {
                         //$usu$file1ario = ucwords(strtolower($nombre1)) . " " . ucwords(strtolower($nombre2));
                         //$file1 = Url::base(true) . "/files/inscripcion.pdf";
                         //$rutaFile = array($file1);
-                        $tituloMensaje = Yii::t("register", "User Register");
+                        /*$tituloMensaje = Yii::t("register", "User Register");
                         $asunto = Yii::t("register", "User Register") . " " . Yii::$app->params["siteName"];
                         $body = Utilities::getMailMessage($pagina, array(
                                     "[[primer_nombre]]" => $nombre1,
@@ -315,8 +315,8 @@ class InscripcionesController extends \yii\web\Controller {
                                     "[[mail]]" => $correo,
                                     "[[unidad_academica]]" => $nombre_unidad["nombre_unidad"],
                                     "[[modalidad]]" => $nombre_modalidad["nombre_modalidad"]), Yii::$app->language);
-                        Utilities::sendEmail($tituloMensaje, Yii::$app->params["adminEmail"], [$correo => $nombre1 . " " . $nombre2], $asunto, $body/*, $rutaFile*/);
-                        Utilities::sendEmail($tituloMensaje, Yii::$app->params["adminEmail"], [Yii::$app->params["soporteEmail"] => "Soporte"], $asunto, $body);
+                        Utilities::sendEmail($tituloMensaje, Yii::$app->params["adminEmail"], [$correo => $nombre1 . " " . $nombre2], $asunto, $body);
+                        Utilities::sendEmail($tituloMensaje, Yii::$app->params["adminEmail"], [Yii::$app->params["soporteEmail"] => "Soporte"], $asunto, $body);*/
                         $message = array(
                             "wtmessage" => Yii::t("notificaciones", "La infomación ha sido grabada. "),
                             "title" => Yii::t('jslang', 'Success'),

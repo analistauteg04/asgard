@@ -195,7 +195,7 @@ class InscripcionsmartController extends \yii\web\Controller {
                         $transaction->commit();
                         //$file1 = Url::base(true) . "/files/inscripcion.pdf";
                         //$rutaFile = array($file1);
-                        $tituloMensaje = Yii::t("register", "User Register");
+                        /*$tituloMensaje = Yii::t("register", "User Register");
                         $asunto = Yii::t("register", "User Register") . " " . Yii::$app->params["siteName"];
                         $body = Utilities::getMailMessage($pagina, array(
                                     "[[primer_nombre]]" => $nombre1,
@@ -204,8 +204,8 @@ class InscripcionsmartController extends \yii\web\Controller {
                                     "[[numero_dni]]" => $numidentificacion,
                                     "[[celular]]" => $celular,
                                     "[[mail]]" => $correo), Yii::$app->language);
-                        Utilities::sendEmail($tituloMensaje, Yii::$app->params["adminEmail"], [$correo => $nombre1 . " " . $nombre2], $asunto, $body/*, $rutaFile*/);
-                        Utilities::sendEmail($tituloMensaje, Yii::$app->params["adminEmail"], [Yii::$app->params["soporteEmail"] => "Soporte"], $asunto, $body);
+                        Utilities::sendEmail($tituloMensaje, Yii::$app->params["adminEmail"], [$correo => $nombre1 . " " . $nombre2], $asunto, $body);
+                        Utilities::sendEmail($tituloMensaje, Yii::$app->params["adminEmail"], [Yii::$app->params["soporteEmail"] => "Soporte"], $asunto, $body);*/
                         $message = array(
                             "wtmessage" => Yii::t("notificaciones", "La infomación ha sido grabada. "),
                             "title" => Yii::t('jslang', 'Success'),

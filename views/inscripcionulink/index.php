@@ -8,11 +8,11 @@ use kartik\date\DatePicker;
 use yii\helpers\Url;
 use yii\widgets\ActiveForm;
 
-$this->title = 'Formulario de Pre-Inscripción';
+$this->title = 'Formulario de Contacto';
 ?>
 <form class="form-horizontal">
     <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
-        <h3><span id="lbl_Personeria"><?= Yii::t("formulario", "Formulario de Pre-Inscripción") ?></span></h3>
+        <h3><span id="lbl_Personeria"><?= Yii::t("formulario", "Formulario de Contacto") ?></span></h3>
     </div>
     <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
         <p class="text-danger"> <?= Yii::t("formulario", "Fields with * are required") ?> </p>

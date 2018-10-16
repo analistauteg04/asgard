@@ -211,7 +211,7 @@ class InscripcionulinkController extends \yii\web\Controller {
                         $transaction->commit();
                         //$file1 = Url::base(true) . "/files/inscripcion.pdf";
                         //$rutaFile = array($file1);
-                        $tituloMensaje = Yii::t("register", "User Register");
+                        /*$tituloMensaje = Yii::t("register", "User Register");
                         $asunto = Yii::t("register", "User Register") . " " . Yii::$app->params["siteName"];
                         $body = Utilities::getMailMessage($pagina, array(
                                     "[[primer_nombre]]" => $nombre1,
@@ -220,8 +220,8 @@ class InscripcionulinkController extends \yii\web\Controller {
                                     "[[numero_dni]]" => $numidentificacion,
                                     "[[celular]]" => $celular,
                                     "[[mail]]" => $correo), Yii::$app->language);
-                        Utilities::sendEmail($tituloMensaje, Yii::$app->params["adminEmail"], [$correo => $nombre1 . " " . $nombre2], $asunto, $body/*, $rutaFile*/);
-                        Utilities::sendEmail($tituloMensaje, Yii::$app->params["adminEmail"], [Yii::$app->params["soporteEmail"] => "Soporte"], $asunto, $body);
+                        Utilities::sendEmail($tituloMensaje, Yii::$app->params["adminEmail"], [$correo => $nombre1 . " " . $nombre2], $asunto, $body);
+                        Utilities::sendEmail($tituloMensaje, Yii::$app->params["adminEmail"], [Yii::$app->params["soporteEmail"] => "Soporte"], $asunto, $body);*/
                         $message = array(
                             "wtmessage" => Yii::t("notificaciones", "La infomación ha sido grabada. "),
                             "title" => Yii::t('jslang', 'Success'),
@@ -236,8 +236,7 @@ class InscripcionulinkController extends \yii\web\Controller {
                         echo Utilities::ajaxResponse('NO_OK', 'alert', Yii::t("jslang", "Error"), false, $message);
                     }
                 } else {
-                    $mensaje = 'Sus datos ya se encuentran registrados, nos contactaremos con usted';
-                    $mensaje = 'Sus datos ya se encuentran registrados, nos contactaremos con usted';                   
+                    $mensaje = 'Sus datos ya se encuentran registrados, nos contactaremos con usted';                       
                     $tituloMensaje = Yii::t("register", "Existing Record");
                     $asunto = Yii::t("register", "Existing Record") . " " . Yii::$app->params["siteName"];
                     $body = Utilities::getMailMessage("registeragain", array(
