@@ -26,6 +26,7 @@ use app\models\Empresa;
 use app\modules\admision\models\TipoOportunidadVenta;
 use app\modules\admision\models\EstadoContacto;
 use app\modules\admision\models\MetodoIngreso;
+use app\modules\financiero\models\Secuencias;
 
 class InscripcionesController extends \yii\web\Controller {
 
@@ -474,11 +475,29 @@ class InscripcionesController extends \yii\web\Controller {
                                             $iemp_id = $mod_inte_emp->crearInteresadoEmpresa($interesado_id, $emp_id, $usuario_id);
                                         }
                                         if ($iemp_id > 0) {
-                                            
-                                            //$solins_model->insertarSolicitud();
+                                            $eaca_id=NULL;
+                                            $mest_id=NULL;
+                                            if ($emp_id==1){//Uteg 
+                                                $eaca_id=$pgest['carrera'];
+                                            }elseif ($emp_id==2 || $emp_id==3 ){
+                                                $mest_id=$pgest['carrera'];
+                                            }
+                                            $num_secuencia = Secuencias::nuevaSecuencia($con, $emp_id, 1, 1, 'SOL');
+                                            $sins_fechasol = date(Yii::$app->params["dateTimeByDefault"]);
+                                            $rsin_id = 1; //Solicitud pendiente     
+                                            $sins_id=$solins_model->insertarSolicitud($interesado_id,$pgest['unidad_academica'],
+                                                    $pgest['modalidad'],$pgest['ming_id'],$eaca_id,$mest_id,$emp_id,$num_secuencia,$rsin_id,
+                                                    $sins_fechasol,$usuario_id);
                                             //fin de solicitud inscripcion
                                             //grabar los documentos
-                                            //$solins_model->insertarDocumentosSolic();
+                                             if ($sins_id > 0) {
+                                                if($pgest['txt_doc_titulo']!=''){$solins_model->insertarDocumentosSolic($sins_id,$interesado_id,1,$pgest['txt_doc_titulo'],$usuario_id);}
+                                                if($pgest['txt_doc_dni']!=''){$solins_model->insertarDocumentosSolic($sins_id,$interesado_id,2,$pgest['txt_doc_dni'],$usuario_id);}
+                                                if($pgest['txt_doc_certvota']!=''){$solins_model->insertarDocumentosSolic($sins_id,$interesado_id,3,$pgest['txt_doc_certvota'],$usuario_id);}
+                                                if($pgest['txt_doc_foto']!=''){$solins_model->insertarDocumentosSolic($sins_id,$interesado_id,4,$pgest['txt_doc_foto'],$usuario_id);}
+                                                if($pgest['txt_doc_certificado']!=''){$solins_model->insertarDocumentosSolic($sins_id,$interesado_id,6,$pgest['txt_doc_certificado'],$usuario_id);}
+                                             }
+                                            
                                             //fin de grabar los documentos
                                             
                                             \app\models\Utilities::putMessageLogFile('listo para enviar correo');
