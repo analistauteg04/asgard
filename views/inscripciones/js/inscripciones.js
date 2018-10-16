@@ -51,22 +51,36 @@ $(document).ready(function () {
         }
 
     });
+    
     $('#sendInscripcionsolicitud').click(function () {
         alert('llego aqui');
         var link = $('#txth_base').val() + "/inscripciones/guardarinscripcionsolicitud";
         var arrParams = new Object();
         arrParams.pges_pri_nombre = $('#txt_primer_nombre').val();
         arrParams.pges_pri_apellido = $('#txt_primer_apellido').val();
-        arrParams.tipo_dni = $('#cmb_tipo_dni').val();
+        arrParams.tipo_dni = $('#cmb_tipo_dni option:selected').val();
         arrParams.pges_cedula = $('#txt_cedula').val();
         arrParams.pges_correo = $('#txt_correo').val();
-        arrParams.pais = $('#cmb_pais_dom').val();
+        arrParams.pais = $('#cmb_pais_dom option:selected').val();
         arrParams.pges_celular = $('#txt_celular').val();
         arrParams.pges_pasaporte = $('#txt_pasaporte').val();
-        arrParams.unidad = $('#cmb_ninteres').val();
-        arrParams.modalidad = $('#cmb_modalidad').val();
-        arrParams.conoce = $('#cmb_conuteg').val();
-        arrParams.carrera = $('#cmb_carrera1').val();
+        arrParams.unidad_academica = $('#cmb_unidad_solicitud option:selected').val();
+        arrParams.modalidad = $('#cmb_modalidad_solicitud option:selected').val();
+        arrParams.ming_id = $('#cmb_metodo_solicitud option:selected').val();
+        arrParams.conoce = $('#cmb_conuteg option:selected').val();
+        arrParams.carrera = $('#cmb_carrera_solicitud option:selected').val();
+        /*arrParams.txt_doc_titulo = $('#txth_doc_titulo').val() + "." + $('#txth_doc_titulo').val().split('.').pop();
+        arrParams.txt_doc_dni = $('#txth_doc_dni').val() + "." + $('#txth_doc_dni').val().split('.').pop();
+        arrParams.txt_doc_certvota = $('#txth_doc_certvota').val() + "." + $('#txth_doc_certvota').val().split('.').pop();
+        arrParams.txt_doc_foto = $('#txth_doc_foto').val() + "." + $('#txth_doc_foto').val().split('.').pop();
+        arrParams.txt_doc_certificado = $('#txth_doc_certificado').val() + "." + $('#txth_doc_certificado').val().split('.').pop();*/
+        arrParams.arc_extranjero = $('#txth_extranjero').val();
+        arrParams.arc_doc_titulo = $('#txth_doc_titulo').val();
+        arrParams.arc_doc_dni = $('#txth_doc_dni').val();
+        arrParams.arc_doc_certvota = $('#txth_doc_certvota').val();
+        arrParams.arc_doc_foto = $('#txth_doc_foto').val();
+        arrParams.arc_doc_certificado = $('#txth_doc_certificado').val();
+        arrParams.arc_doc_beca = $('#txth_doc_beca').val();
         if (!validateForm()) {
             requestHttpAjax(link, arrParams, function (response) {
                 showAlert(response.status, response.label, response.message);
@@ -151,7 +165,7 @@ $(document).ready(function () {
         requestHttpAjax(link, arrParams, function (response) {
             if (response.status == "OK") {
                 data = response.message;
-                setComboData(data.modalidad, "cmb_unidad_solicitud");
+                setComboData(data.modalidad, "cmb_modalidad_solicitud");
                 var arrParams = new Object();
                 if (data.modalidad.length > 0) {
                     arrParams.unidada = $('#cmb_unidad_solicitud').val();
@@ -161,6 +175,7 @@ $(document).ready(function () {
                         if (response.status == "OK") {
                             data = response.message;
                             setComboData(data.carrera, "cmb_carrera_solicitud");
+                            
                         }
                     }, true);
                 }
@@ -168,15 +183,17 @@ $(document).ready(function () {
         }, true);
         
         //métodos.
-        var arrParams = new Object();        
-        arrParams.metodo = $('#cmb_metodos').val();
+        var arrParams = new Object();  
+        arrParams.nint_id = $(this).val();
+        arrParams.metodo = $('#cmb_metodo_solicitud').val();
         arrParams.getmetodo = true;
         requestHttpAjax(link, arrParams, function (response) {
             if (response.status == "OK") {
                 data = response.message;
-                setComboData(data.metodos, "cmb_metodos");       
+                setComboData(data.metodos, "cmb_metodo_solicitud");   
+                 AparecerDocumento();
             }
-        }, true);
+        }, true);       
     });
 
     $('#cmb_modalidad_solicitud').change(function () {
@@ -192,5 +209,21 @@ $(document).ready(function () {
             }
         }, true);
     });
+    
+        
+    $('#cmb_metodo_solicitud').change(function () {        
+        AparecerDocumento();
+       
+    });
+    
+    function AparecerDocumento() {
+         if ($('#cmb_metodo_solicitud').val() == 3) {           
+            $('#divCertificado').css('display', 'block');
+            
+        } else {
+            $('#divCertificado').css('display', 'none');
+            
+        }
+    }
 });
 
