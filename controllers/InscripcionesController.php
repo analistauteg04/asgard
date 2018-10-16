@@ -396,7 +396,8 @@ class InscripcionesController extends \yii\web\Controller {
     public function actionGuardarinscripcionsolicitud(){
         $error = 0;
         if (Yii::$app->request->isAjax) {
-            $pgest = Yii::$app->request->post();
+            $pgest = Yii::$app->request->post();            
+            $data = Yii::$app->request->post();
             $con = \Yii::$app->db_asgard;
             $transaction = $con->beginTransaction();
             try {
@@ -485,21 +486,128 @@ class InscripcionesController extends \yii\web\Controller {
                                             $num_secuencia = Secuencias::nuevaSecuencia($con, $emp_id, 1, 1, 'SOL');
                                             $sins_fechasol = date(Yii::$app->params["dateTimeByDefault"]);
                                             $rsin_id = 1; //Solicitud pendiente     
+                                            $solins_model = new SolicitudInscripcion();
                                             $sins_id=$solins_model->insertarSolicitud($interesado_id,$pgest['unidad_academica'],
                                                     $pgest['modalidad'],$pgest['ming_id'],$eaca_id,$mest_id,$emp_id,$num_secuencia,$rsin_id,
                                                     $sins_fechasol,$usuario_id);
                                             //fin de solicitud inscripcion
                                             //grabar los documentos
-                                             if ($sins_id > 0) {
-                                                if($pgest['txt_doc_titulo']!=''){$solins_model->insertarDocumentosSolic($sins_id,$interesado_id,1,$pgest['txt_doc_titulo'],$usuario_id);}
-                                                if($pgest['txt_doc_dni']!=''){$solins_model->insertarDocumentosSolic($sins_id,$interesado_id,2,$pgest['txt_doc_dni'],$usuario_id);}
-                                                if($pgest['txt_doc_certvota']!=''){$solins_model->insertarDocumentosSolic($sins_id,$interesado_id,3,$pgest['txt_doc_certvota'],$usuario_id);}
-                                                if($pgest['txt_doc_foto']!=''){$solins_model->insertarDocumentosSolic($sins_id,$interesado_id,4,$pgest['txt_doc_foto'],$usuario_id);}
-                                                if($pgest['txt_doc_certificado']!=''){$solins_model->insertarDocumentosSolic($sins_id,$interesado_id,6,$pgest['txt_doc_certificado'],$usuario_id);}
-                                             }
-                                            
-                                            //fin de grabar los documentos
-                                            
+                                            if ($sins_id > 0) {
+                                                /*
+                                                 * Subida de imágenes.                                                 
+                                                 */
+                                                if ($data["upload_file"]) {
+                                                    if (empty($_FILES)) {
+                                                        return json_encode(['error' => Yii::t("notificaciones", "Error to process File {file}. Try again.", ['{file}' => basename($files['name'])])]);
+                                                    }
+                                                    //Recibe Parámetros.
+                                                    $files = $_FILES[key($_FILES)];
+                                                    $arrIm = explode(".", basename($files['name']));
+                                                    $typeFile = strtolower($arrIm[count($arrIm) - 1]);
+                                                    $dirFileEnd = Yii::$app->params["documentFolder"] . "solicitudinscripcion/" . $id_persona . "/" . $data["name_file"] . "_per_" . $id_persona . "." . $typeFile;
+                                                    $status = Utilities::moveUploadFile($files['tmp_name'], $dirFileEnd);
+                                                    if ($status) {
+                                                        return true;
+                                                    } else {
+                                                        return json_encode(['error' => Yii::t("notificaciones", "Error to process File {file}. Try again.", ['{file}' => basename($files['name'])])]);
+                                                    }
+                                                    $titulo_archivo = "";
+                                                    if (isset($data["arc_doc_titulo"]) && $data["arc_doc_titulo"] != "") {
+                                                        $arrIm = explode(".", basename($data["arc_doc_titulo"]));
+                                                        $typeFile = strtolower($arrIm[count($arrIm) - 1]);
+                                                        $titulo_archivo = Yii::$app->params["documentFolder"] . "solicitudinscripcion/" . $id_persona . "/doc_titulo_per_" . $id_persona . "." . $typeFile;
+                                                    }
+                                                    $dni_archivo = "";
+                                                    if (isset($data["arc_doc_dni"]) && $data["arc_doc_dni"] != "") {
+                                                        $arrIm = explode(".", basename($data["arc_doc_dni"]));
+                                                        $typeFile = strtolower($arrIm[count($arrIm) - 1]);
+                                                        $dni_archivo = Yii::$app->params["documentFolder"] . "solicitudinscripcion/" . $id_persona . "/doc_dni_per_" . $id_persona . "." . $typeFile;
+                                                    }
+                                                    $certvota_archivo = "";
+                                                    if (isset($data["arc_doc_certvota"]) && $data["arc_doc_certvota"] != "") {
+                                                        $arrIm = explode(".", basename($data["arc_doc_certvota"]));
+                                                        $typeFile = strtolower($arrIm[count($arrIm) - 1]);
+                                                        $certvota_archivo = Yii::$app->params["documentFolder"] . "solicitudinscripcion/" . $id_persona . "/doc_certvota_per_" . $id_persona . "." . $typeFile;
+                                                    }
+                                                    $foto_archivo = "";
+                                                    if (isset($data["arc_doc_foto"]) && $data["arc_doc_foto"] != "") {
+                                                        $arrIm = explode(".", basename($data["arc_doc_foto"]));
+                                                        $typeFile = strtolower($arrIm[count($arrIm) - 1]);
+                                                        $foto_archivo = Yii::$app->params["documentFolder"] . "solicitudinscripcion/" . $id_persona . "/doc_foto_per_" . $id_persona . "." . $typeFile;
+                                                    }
+                                                    $beca_archivo = "";
+                                                    if (isset($data["arc_doc_beca"]) && $data["arc_doc_beca"] != "") {
+                                                        $arrIm = explode(".", basename($data["arc_doc_beca"]));
+                                                        $typeFile = strtolower($arrIm[count($arrIm) - 1]);
+                                                        $beca_archivo = Yii::$app->params["documentFolder"] . "solicitudinscripcion/" . $id_persona . "/doc_beca_per_" . $id_persona . "." . $typeFile;
+                                                    }
+                                                    $certificado_archivo = "";
+                                                    if (isset($data["arc_doc_certificado"]) && $data["arc_doc_certificado"] != "") {
+                                                        $arrIm = explode(".", basename($data["arc_doc_certificado"]));
+                                                        $typeFile = strtolower($arrIm[count($arrIm) - 1]);
+                                                        $certificado_archivo = Yii::$app->params["documentFolder"] . "solicitudinscripcion/" . $id_persona . "/doc_certificado_per" . $id_persona . "." . $typeFile;
+                                                    }
+                                                    
+                                                }
+                                                if($pgest['txt_doc_titulo']!=''){$solins_model->insertarDocumentosSolic($sins_id,$interesado_id,1,$titulo_archivo,$usuario_id);}
+                                                if($pgest['txt_doc_dni']!=''){$solins_model->insertarDocumentosSolic($sins_id,$interesado_id,2,$dni_archivo,$usuario_id);}
+                                                if($pgest['txt_doc_certvota']!=''){$solins_model->insertarDocumentosSolic($sins_id,$interesado_id,3,$certvota_archivo,$usuario_id);}
+                                                if($pgest['txt_doc_foto']!=''){$solins_model->insertarDocumentosSolic($sins_id,$interesado_id,4,$foto_archivo,$usuario_id);}
+                                                if ($pgest['ming_id']==3) {
+                                                    if($pgest['txt_doc_certificado']!=''){$solins_model->insertarDocumentosSolic($sins_id,$interesado_id,6,$certificado_archivo,$usuario_id);}
+                                                }
+                                             }                                            
+                                            //fin de grabar los documentos                                                     
+                                            //Obtener el precio de la solicitud.
+                                            if ($beca == "1") {
+                                                $precio = 0;
+                                            } else {  
+                                                $resp_precio = $solins_model->ObtenerPrecio($pgest['ming_id'], $pgest['unidad_academica'], $pgest['modalidad'], $eaca_id);
+                                                if ($resp_precio) {
+                                                    $precio = $resp_precio['precio'];
+                                                } else {
+                                                    $mensaje = 'No existe registrado ningún precio para la unidad, modalidad y método de ingreso seleccionada.';
+                                                    $errorprecio = 0;
+                                                }
+                                            }
+                                            $mod_ordenpago = new OrdenPago();
+                                            //Se verifica si seleccionó descuento.
+                                            $val_descuento = 0;
+                                            if (!empty($descuento)) {
+                                                $modDescuento = new DetalleDescuentoItem();
+                                                $respDescuento = $modDescuento->consultarValdctoItem($descuento);
+                                                if ($respDescuento) {
+                                                    if ($precio == 0) {
+                                                        $val_descuento = 0;
+                                                    } else {
+                                                        if ($respDescuento["ddit_tipo_beneficio"] == 'P') {
+                                                            $val_descuento = ($precio * ($respDescuento["ddit_porcentaje"])) / 100;
+                                                        } else {
+                                                            $val_descuento = $respDescuento["ddit_valor"];
+                                                        }
+                                                        //Insertar solicitud descuento
+                                                        if ($val_descuento > 0) {
+                                                            $resp_SolicDcto = $mod_ordenpago->insertarSolicDscto($sins_id, $descuento, $precio, $respDescuento["ddit_porcentaje"], $respDescuento["ddit_valor"]);
+                                                        }
+                                                    }
+                                                }
+                                            }
+                                            //Generar la orden de pago con valor correspondiente. Buscar precio para orden de pago.                                                                     
+                                            if ($precio == 0) {
+                                                $estadopago = 'S';
+                                            } else {
+                                                $estadopago = 'P';
+                                            }
+                                            $val_total = $precio - $val_descuento;
+                                            $resp_opago = $mod_ordenpago->insertarOrdenpago($sins_id, null, $val_total, 0, $val_total, $estadopago, $usuario_id);
+                                            if ($resp_opago) {
+                                                //insertar desglose del pago                                    
+                                                $fecha_ini = date(Yii::$app->params["dateByDefault"]);
+                                                $resp_dpago = $mod_ordenpago->insertarDesglosepago($resp_opago, $val_total, 0, $val_total, $fecha_ini, null, $estadopago, $usuario_id);
+                                                if ($resp_dpago) {
+                                                    $exito = 1;
+                                                }
+                                            }
                                             \app\models\Utilities::putMessageLogFile('listo para enviar correo');
                                             $usuarioNew = Usuario::findIdentity($usuario_id);
                                             $link = $usuarioNew->generarLinkActivacion();
