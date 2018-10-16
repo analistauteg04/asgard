@@ -362,7 +362,7 @@ $this->title = 'Formulario de Pre-Inscripción';
         </div>
     </div>
     
-    <div class="col-md-12 col-xs-12 col-sm-12 col-lg-12" id="divCertificado">
+    <div class="col-md-12 col-xs-12 col-sm-12 col-lg-12" id="divCertificado" style="display: none">   
         <div class="col-md-12 col-xs-12 col-sm-12 col-lg-12 doc_certificado cinteres">
             <div class="form-group">
                 <label for="txth_doc_certificado" class="col-sm-3 col-md-3 col-xs-3 col-lg-3 control-label keyupmce"><?= Yii::t("formulario", "Certificado Materias") ?></label>

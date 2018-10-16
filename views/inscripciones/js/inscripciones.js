@@ -151,7 +151,7 @@ $(document).ready(function () {
         requestHttpAjax(link, arrParams, function (response) {
             if (response.status == "OK") {
                 data = response.message;
-                setComboData(data.modalidad, "cmb_unidad_solicitud");
+                setComboData(data.modalidad, "cmb_modalidad_solicitud");
                 var arrParams = new Object();
                 if (data.modalidad.length > 0) {
                     arrParams.unidada = $('#cmb_unidad_solicitud').val();
@@ -161,6 +161,7 @@ $(document).ready(function () {
                         if (response.status == "OK") {
                             data = response.message;
                             setComboData(data.carrera, "cmb_carrera_solicitud");
+                            
                         }
                     }, true);
                 }
@@ -168,15 +169,17 @@ $(document).ready(function () {
         }, true);
         
         //métodos.
-        var arrParams = new Object();        
-        arrParams.metodo = $('#cmb_metodos').val();
+        var arrParams = new Object();  
+        arrParams.nint_id = $(this).val();
+        arrParams.metodo = $('#cmb_metodo_solicitud').val();
         arrParams.getmetodo = true;
         requestHttpAjax(link, arrParams, function (response) {
             if (response.status == "OK") {
                 data = response.message;
-                setComboData(data.metodos, "cmb_metodos");       
+                setComboData(data.metodos, "cmb_metodo_solicitud");   
+                 AparecerDocumento();
             }
-        }, true);
+        }, true);       
     });
 
     $('#cmb_modalidad_solicitud').change(function () {
@@ -192,5 +195,21 @@ $(document).ready(function () {
             }
         }, true);
     });
+    
+        
+    $('#cmb_metodo_solicitud').change(function () {        
+        AparecerDocumento();
+       
+    });
+    
+    function AparecerDocumento() {
+         if ($('#cmb_metodo_solicitud').val() == 3) {           
+            $('#divCertificado').css('display', 'block');
+            
+        } else {
+            $('#divCertificado').css('display', 'none');
+            
+        }
+    }
 });
 
