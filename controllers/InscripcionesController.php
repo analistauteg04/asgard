@@ -1,6 +1,7 @@
 <?php
 
 namespace app\controllers;
+
 use Yii;
 use app\models\Utilities;
 use yii\helpers\ArrayHelper;
@@ -15,6 +16,8 @@ use app\models\Usuario;
 use yii\base\Security;
 use app\models\UsuaGrolEper;
 use app\models\Provincia;
+use app\modules\financiero\models\OrdenPago;
+use app\modules\financiero\models\DetalleDescuentoItem;
 use app\models\Canton;
 use app\models\MedioPublicitario;
 use app\modules\academico\models\Modalidad;
@@ -31,13 +34,13 @@ use app\modules\financiero\models\Secuencias;
 class InscripcionesController extends \yii\web\Controller {
 
     public function init() {
-        if(!is_dir(Yii::getAlias('@bower')))
+        if (!is_dir(Yii::getAlias('@bower')))
             Yii::setAlias('@bower', '@vendor/bower-asset');
         return parent::init();
     }
-    
+
     public function actionIndex() {
-        $this->layout = '@themes/' . \Yii::$app->getView()->theme->themeName . '/layouts/basic.php';        
+        $this->layout = '@themes/' . \Yii::$app->getView()->theme->themeName . '/layouts/basic.php';
         $per_id = Yii::$app->session->get("PB_perid");
         $mod_persona = Persona::findIdentity($per_id);
         $mod_modalidad = new Modalidad();
@@ -58,7 +61,7 @@ class InscripcionesController extends \yii\web\Controller {
                 $message = array("cantones" => $cantones);
                 return Utilities::ajaxResponse('OK', 'alert', Yii::t('jslang', 'Success'), 'false', $message);
                 return;
-            }            
+            }
             if (isset($data["getarea"])) {
                 //obtener el codigo de area del pais
                 $mod_areapais = new Pais();
@@ -69,7 +72,7 @@ class InscripcionesController extends \yii\web\Controller {
             }
 
             if (isset($data["getmodalidad"])) {
-                $modalidad = $mod_modalidad->consultarModalidad($data["nint_id"],1);
+                $modalidad = $mod_modalidad->consultarModalidad($data["nint_id"], 1);
                 $message = array("modalidad" => $modalidad);
                 return Utilities::ajaxResponse('OK', 'alert', Yii::t('jslang', 'Success'), 'false', $message);
                 return;
@@ -89,10 +92,10 @@ class InscripcionesController extends \yii\web\Controller {
         $arr_pais_dom = Pais::find()->select("pai_id AS id, pai_nombre AS value")->where(["pai_estado_logico" => "1", "pai_estado" => "1"])->asArray()->all();
         $pais_id = 1; //Ecuador
         $arr_prov_dom = Provincia::provinciaXPais($pais_id);
-        $arr_ciu_dom = Canton::cantonXProvincia($arr_prov_dom[0]["id"]);       
+        $arr_ciu_dom = Canton::cantonXProvincia($arr_prov_dom[0]["id"]);
         $arr_medio = MedioPublicitario::find()->select("mpub_id AS id, mpub_nombre AS value")->where(["mpub_estado_logico" => "1", "mpub_estado" => "1"])->asArray()->all();
         $arr_ninteres = $mod_unidad->consultarUnidadAcademicasEmpresa(1);
-        $arr_modalidad = $mod_modalidad->consultarModalidad(1,1);
+        $arr_modalidad = $mod_modalidad->consultarModalidad(1, 1);
         $arr_conuteg = $mod_pergestion->consultarConociouteg();
         $arr_carrerra1 = $modcanal->consultarCarreraModalidad(1, 1);
         $tipo_oportunidad_data = $modTipoOportunidad->consultarOporxUnidad(1);
@@ -103,7 +106,7 @@ class InscripcionesController extends \yii\web\Controller {
                     "arr_pais_dom" => ArrayHelper::map($arr_pais_dom, "id", "value"),
                     "arr_prov_dom" => ArrayHelper::map($arr_prov_dom, "id", "value"),
                     "arr_ciu_dom" => ArrayHelper::map($arr_ciu_dom, "id", "value"),
-                    "arr_ninteres" => ArrayHelper::map($arr_ninteres, "id", "name"),                    
+                    "arr_ninteres" => ArrayHelper::map($arr_ninteres, "id", "name"),
                     "arr_medio" => ArrayHelper::map($arr_medio, "id", "value"),
                     "arr_modalidad" => ArrayHelper::map($arr_modalidad, "id", "name"),
                     "arr_conuteg" => ArrayHelper::map($arr_conuteg, "id", "name"),
@@ -111,9 +114,9 @@ class InscripcionesController extends \yii\web\Controller {
                     "arr_tipo_oportunidad" => ArrayHelper::map($tipo_oportunidad_data, "id", "name"),
         ]);
     }
-    
+
     public function actionIndexadmisionn() {
-        $this->layout = '@themes/' . \Yii::$app->getView()->theme->themeName . '/layouts/basic.php';        
+        $this->layout = '@themes/' . \Yii::$app->getView()->theme->themeName . '/layouts/basic.php';
         $per_id = Yii::$app->session->get("PB_perid");
         $mod_persona = Persona::findIdentity($per_id);
         $mod_modalidad = new Modalidad();
@@ -134,7 +137,7 @@ class InscripcionesController extends \yii\web\Controller {
                 $message = array("cantones" => $cantones);
                 return Utilities::ajaxResponse('OK', 'alert', Yii::t('jslang', 'Success'), 'false', $message);
                 return;
-            }            
+            }
             if (isset($data["getarea"])) {
                 //obtener el codigo de area del pais
                 $mod_areapais = new Pais();
@@ -145,7 +148,7 @@ class InscripcionesController extends \yii\web\Controller {
             }
 
             if (isset($data["getmodalidad"])) {
-                $modalidad = $mod_modalidad->consultarModalidad($data["nint_id"],1);
+                $modalidad = $mod_modalidad->consultarModalidad($data["nint_id"], 1);
                 $message = array("modalidad" => $modalidad);
                 return Utilities::ajaxResponse('OK', 'alert', Yii::t('jslang', 'Success'), 'false', $message);
                 return;
@@ -166,14 +169,14 @@ class InscripcionesController extends \yii\web\Controller {
         $arr_pais_dom = Pais::find()->select("pai_id AS id, pai_nombre AS value")->where(["pai_estado_logico" => "1", "pai_estado" => "1"])->asArray()->all();
         $pais_id = 1; //Ecuador
         $arr_prov_dom = Provincia::provinciaXPais($pais_id);
-        $arr_ciu_dom = Canton::cantonXProvincia($arr_prov_dom[0]["id"]);       
+        $arr_ciu_dom = Canton::cantonXProvincia($arr_prov_dom[0]["id"]);
         $arr_medio = MedioPublicitario::find()->select("mpub_id AS id, mpub_nombre AS value")->where(["mpub_estado_logico" => "1", "mpub_estado" => "1"])->asArray()->all();
         $arr_ninteres = $mod_unidad->consultarUnidadAcademicasEmpresa(1);
-        $arr_modalidad = $mod_modalidad->consultarModalidad(1,1);
+        $arr_modalidad = $mod_modalidad->consultarModalidad(1, 1);
         $arr_conuteg = $mod_pergestion->consultarConociouteg();
-        $arr_carrerra1 = $modcanal->consultarCarreraModalidad(1, 1);               
+        $arr_carrerra1 = $modcanal->consultarCarreraModalidad(1, 1);
         $arr_metodos = $mod_metodo->consultarMetodoIngNivelInt($arr_ninteres[0]["id"]);
-        
+
         return $this->render('indexAdmisionN', [
                     "tipos_dni" => array("CED" => Yii::t("formulario", "DNI Document"), "PASS" => Yii::t("formulario", "Passport")),
                     "tipos_dni2" => array("CED" => Yii::t("formulario", "DNI Document1"), "PASS" => Yii::t("formulario", "Passport1")),
@@ -181,16 +184,15 @@ class InscripcionesController extends \yii\web\Controller {
                     "arr_pais_dom" => ArrayHelper::map($arr_pais_dom, "id", "value"),
                     "arr_prov_dom" => ArrayHelper::map($arr_prov_dom, "id", "value"),
                     "arr_ciu_dom" => ArrayHelper::map($arr_ciu_dom, "id", "value"),
-                    "arr_ninteres" => ArrayHelper::map($arr_ninteres, "id", "name"),                    
+                    "arr_ninteres" => ArrayHelper::map($arr_ninteres, "id", "name"),
                     "arr_medio" => ArrayHelper::map($arr_medio, "id", "value"),
                     "arr_modalidad" => ArrayHelper::map($arr_modalidad, "id", "name"),
                     "arr_conuteg" => ArrayHelper::map($arr_conuteg, "id", "name"),
                     "arr_carrerra1" => ArrayHelper::map($arr_carrerra1, "id", "name"),
                     "arr_metodos" => ArrayHelper::map($arr_metodos, "id", "name"),
         ]);
-        
     }
-    
+
     public function actionGuardarinscripcion() {
         $mod_empresa = new Empresa();
         $mod_estcontacto = new EstadoContacto();
@@ -206,10 +208,10 @@ class InscripcionesController extends \yii\web\Controller {
         $busqueda = 0;
         $pagina = "";
         $conempresa = $mod_empresa->consultarEmpresaId('uteg'); // 1 uteg
-        $emp_id = $conempresa["id"]; 
+        $emp_id = $conempresa["id"];
         $gcrm_codigo["id"] = 0;
         $mod_modalidad = new Modalidad();
-        $mod_unidad = new UnidadAcademica();    
+        $mod_unidad = new UnidadAcademica();
         $correo = strtolower($data["correo"]);
         if (Yii::$app->request->isAjax) {
             $data = Yii::$app->request->post();
@@ -218,7 +220,7 @@ class InscripcionesController extends \yii\web\Controller {
             $apellido1 = ucwords(strtolower($data["pri_apellido"]));
             $apellido2 = null;
             $nombres = $nombre1 . ' ' . $apellido1;
-            $conestcontacto =  $mod_estcontacto->consultarEstadoContacto(); 
+            $conestcontacto = $mod_estcontacto->consultarEstadoContacto();
             $econ_id = $conestcontacto[0]["id"];
             $tipo_persona = $mod_persona->consultarTipoPersona('Natural');
             //$tipo_persona = 1; // 1 persona natural // hacer funcion que traIGa id 
@@ -264,7 +266,7 @@ class InscripcionesController extends \yii\web\Controller {
                         $agente = $mod_oportunidad->consultarAgentebyCod($nivelestudio, $modalidad, 1); // 1 uteg//15;
                         $pagina = "register_go";
                     } else {
-                        $agente = $mod_oportunidad->consultarAgentebyCod($nivelestudio, $modalidad, 1);//14;
+                        $agente = $mod_oportunidad->consultarAgentebyCod($nivelestudio, $modalidad, 1); //14;
                         switch ($modalidad) {
                             case "2":
                                 $pagina = "register_gp";
@@ -279,14 +281,14 @@ class InscripcionesController extends \yii\web\Controller {
                     }
                     break;
                 case "2":
-                    $agente = $mod_oportunidad->consultarAgentebyCod($nivelestudio, $modalidad, 1);//16;
+                    $agente = $mod_oportunidad->consultarAgentebyCod($nivelestudio, $modalidad, 1); //16;
                     $tipoportunidad = $data["metodo"];
                     $pagina = "register_ps";
                     break;
-                /*case "3":
-                    $agente = 17;
-                    $tipoportunidad = 8;
-                    break;*/
+                /* case "3":
+                  $agente = 17;
+                  $tipoportunidad = 8;
+                  break; */
             }
             $subcarera = 1;
             $canal = 1;
@@ -314,11 +316,11 @@ class InscripcionesController extends \yii\web\Controller {
                         //$codigocrm = $gcrm_codigo["id"] + 1;
                         $codigocrm = 1 + $gcrm_codigo;
                         // emp_id es el nombre de la ver como capturar esta OJO no olvidar hacerlo
-                        $res_oportunidad = $mod_gestion->insertarOportunidad($codigocrm, $emp_id, $resp_persona, null, $carrera, $nivelestudio, $modalidad, $tipoportunidad, $subcarera, $canal, $estado, $hora_inicio, $hora_fin, $fecha_registro, $agente["agente_id"] , $usuario);
+                        $res_oportunidad = $mod_gestion->insertarOportunidad($codigocrm, $emp_id, $resp_persona, null, $carrera, $nivelestudio, $modalidad, $tipoportunidad, $subcarera, $canal, $estado, $hora_inicio, $hora_fin, $fecha_registro, $agente["agente_id"], $usuario);
                         if ($res_oportunidad) {
                             $oact_id = 1;
                             $descripcion = 'Registro subido desde formulario de inscripción';
-                            $res_actividad = $mod_gestion->insertarActividad($res_oportunidad, $usuario, $agente["agente_id"] , $estado, $fecha_registro, $oact_id, $descripcion, $fecha_registro);
+                            $res_actividad = $mod_gestion->insertarActividad($res_oportunidad, $usuario, $agente["agente_id"], $estado, $fecha_registro, $oact_id, $descripcion, $fecha_registro);
                             //$mod_estado = $mod_pergestion->modificarSestaclixId($resp_persona, $ecli_id);
                             if ($res_actividad) {
                                 $exito = 1;
@@ -348,18 +350,18 @@ class InscripcionesController extends \yii\web\Controller {
                     $tituloMensaje = Yii::t("register", "Existing Record");
                     $asunto = Yii::t("register", "Existing Record") . " " . Yii::$app->params["siteName"];
                     $body = Utilities::getMailMessage("registeragain", array(
-                                    "[[primer_nombre]]" => $nombre1,
-                                    "[[primer_apellido]]" => $apellido1,
-                                    "[[dni]]" => $dnis,
-                                    "[[numero_dni]]" => $numidentificacion,
-                                    "[[celular]]" => $celular,
-                                    "[[mail]]" => $correo,
-                                    "[[unidad_academica]]" => $nombre_unidad["nombre_unidad"],
-                                    "[[modalidad]]" => $nombre_modalidad["nombre_modalidad"]), Yii::$app->language);
+                                "[[primer_nombre]]" => $nombre1,
+                                "[[primer_apellido]]" => $apellido1,
+                                "[[dni]]" => $dnis,
+                                "[[numero_dni]]" => $numidentificacion,
+                                "[[celular]]" => $celular,
+                                "[[mail]]" => $correo,
+                                "[[unidad_academica]]" => $nombre_unidad["nombre_unidad"],
+                                "[[modalidad]]" => $nombre_modalidad["nombre_modalidad"]), Yii::$app->language);
                     Utilities::sendEmail($tituloMensaje, Yii::$app->params["adminEmail"], [Yii::$app->params["lidercontact"] => $nombre1 . " " . $nombre2], $asunto, $body);
                     Utilities::sendEmail($tituloMensaje, Yii::$app->params["adminEmail"], [Yii::$app->params["adminlider"] => $nombre1 . " " . $nombre2], $asunto, $body);
                     Utilities::sendEmail($tituloMensaje, Yii::$app->params["adminEmail"], [Yii::$app->params["soporteEmail"] => "Soporte"], $asunto, $body);
-                        
+
                     $transaction->rollback();
                     $message = array(
                         "wtmessage" => Yii::t("notificaciones", $mensaje),
@@ -377,15 +379,71 @@ class InscripcionesController extends \yii\web\Controller {
             }
         }
     }
-    
-    public function actionGuardarinscripcionsolicitud(){
+
+    public function actionGuardarinscripcionsolicitud() {
         $error = 0;
         if (Yii::$app->request->isAjax) {
-            $pgest = Yii::$app->request->post();            
+            $pgest = Yii::$app->request->post();
             $data = Yii::$app->request->post();
             $con = \Yii::$app->db_asgard;
             $transaction = $con->beginTransaction();
             try {
+                // He colocado al inicio la informacion para que cargue al principio
+                $id_persona=1;
+                $typeFile=1;
+                if ($data["upload_file"]) {
+                    if (empty($_FILES)) {
+                        return json_encode(['error' => Yii::t("notificaciones", "Error to process File {file}. Try again.", ['{file}' => basename($files['name'])])]);
+                    }
+                    //Recibe Parámetros.
+                    \app\models\Utilities::putMessageLogFile('Subiendo archivos');
+                    $files = $_FILES[key($_FILES)];
+                    $arrIm = explode(".", basename($files['name']));
+                    $typeFile = strtolower($arrIm[count($arrIm) - 1]);
+                    $dirFileEnd = Yii::$app->params["documentFolder"] . "solicitudinscripcion/" . $id_persona . "/" . $data["name_file"] . "_per_" . $id_persona . "." . $typeFile;
+                    $status = Utilities::moveUploadFile($files['tmp_name'], $dirFileEnd);
+                    if ($status) {
+                        return true;
+                    } else {
+                        return json_encode(['error' => Yii::t("notificaciones", "Error to process File {file}. Try again.", ['{file}' => basename($files['name'])])]);
+                    }
+                    $titulo_archivo = "";
+                    if (isset($data["arc_doc_titulo"]) && $data["arc_doc_titulo"] != "") {
+                        $arrIm = explode(".", basename($data["arc_doc_titulo"]));
+                        $typeFile = strtolower($arrIm[count($arrIm) - 1]);
+                        $titulo_archivo = Yii::$app->params["documentFolder"] . "solicitudinscripcion/" . $id_persona . "/doc_titulo_per_" . $id_persona . "." . $typeFile;
+                    }
+                    $dni_archivo = "";
+                    if (isset($data["arc_doc_dni"]) && $data["arc_doc_dni"] != "") {
+                        $arrIm = explode(".", basename($data["arc_doc_dni"]));
+                        $typeFile = strtolower($arrIm[count($arrIm) - 1]);
+                        $dni_archivo = Yii::$app->params["documentFolder"] . "solicitudinscripcion/" . $id_persona . "/doc_dni_per_" . $id_persona . "." . $typeFile;
+                    }
+                    $certvota_archivo = "";
+                    if (isset($data["arc_doc_certvota"]) && $data["arc_doc_certvota"] != "") {
+                        $arrIm = explode(".", basename($data["arc_doc_certvota"]));
+                        $typeFile = strtolower($arrIm[count($arrIm) - 1]);
+                        $certvota_archivo = Yii::$app->params["documentFolder"] . "solicitudinscripcion/" . $id_persona . "/doc_certvota_per_" . $id_persona . "." . $typeFile;
+                    }
+                    $foto_archivo = "";
+                    if (isset($data["arc_doc_foto"]) && $data["arc_doc_foto"] != "") {
+                        $arrIm = explode(".", basename($data["arc_doc_foto"]));
+                        $typeFile = strtolower($arrIm[count($arrIm) - 1]);
+                        $foto_archivo = Yii::$app->params["documentFolder"] . "solicitudinscripcion/" . $id_persona . "/doc_foto_per_" . $id_persona . "." . $typeFile;
+                    }
+                    $beca_archivo = "";
+                    if (isset($data["arc_doc_beca"]) && $data["arc_doc_beca"] != "") {
+                        $arrIm = explode(".", basename($data["arc_doc_beca"]));
+                        $typeFile = strtolower($arrIm[count($arrIm) - 1]);
+                        $beca_archivo = Yii::$app->params["documentFolder"] . "solicitudinscripcion/" . $id_persona . "/doc_beca_per_" . $id_persona . "." . $typeFile;
+                    }
+                    $certificado_archivo = "";
+                    if (isset($data["arc_doc_certificado"]) && $data["arc_doc_certificado"] != "") {
+                        $arrIm = explode(".", basename($data["arc_doc_certificado"]));
+                        $typeFile = strtolower($arrIm[count($arrIm) - 1]);
+                        $certificado_archivo = Yii::$app->params["documentFolder"] . "solicitudinscripcion/" . $id_persona . "/doc_certificado_per" . $id_persona . "." . $typeFile;
+                    }
+                }
                 $emp_id = 1;
                 $identificacion = '';
                 if (isset($pgest['pges_cedula']) && strlen($pgest['pges_cedula']) > 0) {
@@ -461,92 +519,56 @@ class InscripcionesController extends \yii\web\Controller {
                                             $iemp_id = $mod_inte_emp->crearInteresadoEmpresa($interesado_id, $emp_id, $usuario_id);
                                         }
                                         if ($iemp_id > 0) {
-                                            $eaca_id=NULL;
-                                            $mest_id=NULL;
-                                            if ($emp_id==1){//Uteg 
-                                                $eaca_id=$pgest['carrera'];
-                                            }elseif ($emp_id==2 || $emp_id==3 ){
-                                                $mest_id=$pgest['carrera'];
+                                            $eaca_id = NULL;
+                                            $mest_id = NULL;
+                                            if ($emp_id == 1) {//Uteg 
+                                                $eaca_id = $pgest['carrera'];
+                                            } elseif ($emp_id == 2 || $emp_id == 3) {
+                                                $mest_id = $pgest['carrera'];
                                             }
                                             $num_secuencia = Secuencias::nuevaSecuencia($con, $emp_id, 1, 1, 'SOL');
                                             $sins_fechasol = date(Yii::$app->params["dateTimeByDefault"]);
                                             $rsin_id = 1; //Solicitud pendiente     
                                             $solins_model = new SolicitudInscripcion();
-                                            $sins_id=$solins_model->insertarSolicitud($interesado_id,$pgest['unidad_academica'],
-                                                    $pgest['modalidad'],$pgest['ming_id'],$eaca_id,$mest_id,$emp_id,$num_secuencia,$rsin_id,
-                                                    $sins_fechasol,$usuario_id);
+                                            $sins_id = $solins_model->insertarSolicitud($interesado_id, $pgest['unidad_academica'], $pgest['modalidad'], $pgest['ming_id'], $eaca_id, $mest_id, $emp_id, $num_secuencia, $rsin_id, $sins_fechasol, $usuario_id);
                                             //fin de solicitud inscripcion
                                             //grabar los documentos
+                                            \app\models\Utilities::putMessageLogFile('subir los documentos');
                                             if ($sins_id > 0) {
+                                                \app\models\Utilities::putMessageLogFile('ingreso la solicitud');
                                                 /*
                                                  * Subida de imágenes.                                                 
                                                  */
-                                                if ($data["upload_file"]) {
-                                                    if (empty($_FILES)) {
-                                                        return json_encode(['error' => Yii::t("notificaciones", "Error to process File {file}. Try again.", ['{file}' => basename($files['name'])])]);
-                                                    }
-                                                    //Recibe Parámetros.
-                                                    $files = $_FILES[key($_FILES)];
-                                                    $arrIm = explode(".", basename($files['name']));
-                                                    $typeFile = strtolower($arrIm[count($arrIm) - 1]);
-                                                    $dirFileEnd = Yii::$app->params["documentFolder"] . "solicitudinscripcion/" . $id_persona . "/" . $data["name_file"] . "_per_" . $id_persona . "." . $typeFile;
-                                                    $status = Utilities::moveUploadFile($files['tmp_name'], $dirFileEnd);
-                                                    if ($status) {
-                                                        return true;
-                                                    } else {
-                                                        return json_encode(['error' => Yii::t("notificaciones", "Error to process File {file}. Try again.", ['{file}' => basename($files['name'])])]);
-                                                    }
-                                                    $titulo_archivo = "";
-                                                    if (isset($data["arc_doc_titulo"]) && $data["arc_doc_titulo"] != "") {
-                                                        $arrIm = explode(".", basename($data["arc_doc_titulo"]));
-                                                        $typeFile = strtolower($arrIm[count($arrIm) - 1]);
-                                                        $titulo_archivo = Yii::$app->params["documentFolder"] . "solicitudinscripcion/" . $id_persona . "/doc_titulo_per_" . $id_persona . "." . $typeFile;
-                                                    }
-                                                    $dni_archivo = "";
-                                                    if (isset($data["arc_doc_dni"]) && $data["arc_doc_dni"] != "") {
-                                                        $arrIm = explode(".", basename($data["arc_doc_dni"]));
-                                                        $typeFile = strtolower($arrIm[count($arrIm) - 1]);
-                                                        $dni_archivo = Yii::$app->params["documentFolder"] . "solicitudinscripcion/" . $id_persona . "/doc_dni_per_" . $id_persona . "." . $typeFile;
-                                                    }
-                                                    $certvota_archivo = "";
-                                                    if (isset($data["arc_doc_certvota"]) && $data["arc_doc_certvota"] != "") {
-                                                        $arrIm = explode(".", basename($data["arc_doc_certvota"]));
-                                                        $typeFile = strtolower($arrIm[count($arrIm) - 1]);
-                                                        $certvota_archivo = Yii::$app->params["documentFolder"] . "solicitudinscripcion/" . $id_persona . "/doc_certvota_per_" . $id_persona . "." . $typeFile;
-                                                    }
-                                                    $foto_archivo = "";
-                                                    if (isset($data["arc_doc_foto"]) && $data["arc_doc_foto"] != "") {
-                                                        $arrIm = explode(".", basename($data["arc_doc_foto"]));
-                                                        $typeFile = strtolower($arrIm[count($arrIm) - 1]);
-                                                        $foto_archivo = Yii::$app->params["documentFolder"] . "solicitudinscripcion/" . $id_persona . "/doc_foto_per_" . $id_persona . "." . $typeFile;
-                                                    }
-                                                    $beca_archivo = "";
-                                                    if (isset($data["arc_doc_beca"]) && $data["arc_doc_beca"] != "") {
-                                                        $arrIm = explode(".", basename($data["arc_doc_beca"]));
-                                                        $typeFile = strtolower($arrIm[count($arrIm) - 1]);
-                                                        $beca_archivo = Yii::$app->params["documentFolder"] . "solicitudinscripcion/" . $id_persona . "/doc_beca_per_" . $id_persona . "." . $typeFile;
-                                                    }
-                                                    $certificado_archivo = "";
-                                                    if (isset($data["arc_doc_certificado"]) && $data["arc_doc_certificado"] != "") {
-                                                        $arrIm = explode(".", basename($data["arc_doc_certificado"]));
-                                                        $typeFile = strtolower($arrIm[count($arrIm) - 1]);
-                                                        $certificado_archivo = Yii::$app->params["documentFolder"] . "solicitudinscripcion/" . $id_persona . "/doc_certificado_per" . $id_persona . "." . $typeFile;
-                                                    }
-                                                    
+
+
+                                                if ($pgest['txt_doc_titulo'] != '') {
+                                                    $solins_model->insertarDocumentosSolic($sins_id, $interesado_id, 1, $titulo_archivo, $usuario_id);
                                                 }
-                                                if($pgest['txt_doc_titulo']!=''){$solins_model->insertarDocumentosSolic($sins_id,$interesado_id,1,$titulo_archivo,$usuario_id);}
-                                                if($pgest['txt_doc_dni']!=''){$solins_model->insertarDocumentosSolic($sins_id,$interesado_id,2,$dni_archivo,$usuario_id);}
-                                                if($pgest['txt_doc_certvota']!=''){$solins_model->insertarDocumentosSolic($sins_id,$interesado_id,3,$certvota_archivo,$usuario_id);}
-                                                if($pgest['txt_doc_foto']!=''){$solins_model->insertarDocumentosSolic($sins_id,$interesado_id,4,$foto_archivo,$usuario_id);}
-                                                if ($pgest['ming_id']==3) {
-                                                    if($pgest['txt_doc_certificado']!=''){$solins_model->insertarDocumentosSolic($sins_id,$interesado_id,6,$certificado_archivo,$usuario_id);}
+                                                \app\models\Utilities::putMessageLogFile('Insertar titulo');
+                                                if ($pgest['txt_doc_dni'] != '') {
+                                                    $solins_model->insertarDocumentosSolic($sins_id, $interesado_id, 2, $dni_archivo, $usuario_id);
                                                 }
-                                             }                                            
+                                                \app\models\Utilities::putMessageLogFile('Insertar cedula');
+                                                if ($pgest['txt_doc_certvota'] != '') {
+                                                    $solins_model->insertarDocumentosSolic($sins_id, $interesado_id, 3, $certvota_archivo, $usuario_id);
+                                                }
+                                                \app\models\Utilities::putMessageLogFile('Insertar Documentos Solicitud');
+                                                if ($pgest['txt_doc_foto'] != '') {
+                                                    $solins_model->insertarDocumentosSolic($sins_id, $interesado_id, 4, $foto_archivo, $usuario_id);
+                                                }
+                                                \app\models\Utilities::putMessageLogFile('Insertar Documento Foto');
+                                                if ($pgest['ming_id'] == 3) {
+                                                    if ($pgest['txt_doc_certificado'] != '') {
+                                                        $solins_model->insertarDocumentosSolic($sins_id, $interesado_id, 6, $certificado_archivo, $usuario_id);
+                                                        \app\models\Utilities::putMessageLogFile('Insertar Documento');
+                                                    }
+                                                }
+                                            }
                                             //fin de grabar los documentos                                                     
                                             //Obtener el precio de la solicitud.
                                             if ($beca == "1") {
                                                 $precio = 0;
-                                            } else {  
+                                            } else {
                                                 $resp_precio = $solins_model->ObtenerPrecio($pgest['ming_id'], $pgest['unidad_academica'], $pgest['modalidad'], $eaca_id);
                                                 if ($resp_precio) {
                                                     $precio = $resp_precio['precio'];
@@ -607,29 +629,24 @@ class InscripcionesController extends \yii\web\Controller {
                                             \app\models\Utilities::putMessageLogFile('ingreso el email');
                                             //$solins_model=new SolicitudInscripcion();
                                             //crear una solicitud de inscripcion
-                                            
                                             // Inicio de funcionalidad de enviar correo                                            
                                             $tituloMensaje = Yii::t("interesado", "UTEG - Registration");
                                             $asunto = Yii::t("interesado", "UTEG - Registration Online");
-                                            $body = Utilities::getMailMessage("PaidApplyment",
-                                                array(
-                                                    "[[nombreapellido]]" => $email_info['nombres'] . " " . $email_info['apellidos'],
-                                                    "[[correo]]" => $email_info['correo'],
-                                                    "[[metodo]]" => "ingresar el metodo",
-                                                    "[[precio]]" => "ingresar el precio",
-                                                    "[[link1]]" => "Enlace que va a enviar tito",                                                    
-                                                    "[[telefono]]" => $email_info['telefono'],
-                                                    "[[webmail]]" => Yii::$app->params["adminEmail"],
-                                                    "[[identificacion]]" => $email_info['identificacion'],
-                                                    "[[link_asgard]]" => $email_info["link_asgard"],
-                                                ), 
-                                                Yii::$app->language);
-                                                Utilities::sendEmail($tituloMensaje,
-                                                Yii::$app->params["admisiones"], // a quien se envia el correo
-                                                [$email_info['correo'] => $email_info['nombres'] . " " . $email_info['apellidos']], // quien envia el correo
-                                                $asunto, $body);
+                                            $body = Utilities::getMailMessage("PaidApplyment", array(
+                                                        "[[nombreapellido]]" => $email_info['nombres'] . " " . $email_info['apellidos'],
+                                                        "[[correo]]" => $email_info['correo'],
+                                                        "[[metodo]]" => "ingresar el metodo",
+                                                        "[[precio]]" => "ingresar el precio",
+                                                        "[[link1]]" => "Enlace que va a enviar tito",
+                                                        "[[telefono]]" => $email_info['telefono'],
+                                                        "[[webmail]]" => Yii::$app->params["adminEmail"],
+                                                        "[[identificacion]]" => $email_info['identificacion'],
+                                                        "[[link_asgard]]" => $email_info["link_asgard"],
+                                                            ), Yii::$app->language);
+                                            Utilities::sendEmail($tituloMensaje, Yii::$app->params["admisiones"], // a quien se envia el correo
+                                                    [$email_info['correo'] => $email_info['nombres'] . " " . $email_info['apellidos']], // quien envia el correo
+                                                    $asunto, $body);
                                             // Fin de funcionalidad de enviar correo
-                                            
                                         } else {
                                             $error_message .= Yii::t("formulario", "The enterprise interested hasn't been saved");
                                             $error++;
