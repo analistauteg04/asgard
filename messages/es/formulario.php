@@ -553,6 +553,7 @@ return [
     "Subject" => "Asignatura",
     "Study day" => "Jornada Estudio",
     "Study mode" => "Modalidad Estudio",
+    "Summary" => "Resumen",
     "Sunday" => "Domingo",
     "Survey A:" => "ENCUESTA A:",
     "Survey B:" => "ENCUESTA B:",
