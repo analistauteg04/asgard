@@ -17,6 +17,7 @@ use app\modules\admision\models\PersonaGestion;
 use app\modules\admision\models\Oportunidad;
 use app\models\Empresa;
 use app\modules\admision\models\EstadoContacto;
+use app\modules\admision\models\MetodoIngreso;
 
 class InscripcionesController extends \yii\web\Controller {
 
@@ -102,6 +103,7 @@ class InscripcionesController extends \yii\web\Controller {
         $mod_pergestion = new PersonaGestion();
         $mod_unidad = new UnidadAcademica();
         $modcanal = new Oportunidad();
+        $mod_metodo = new MetodoIngreso();
         if (Yii::$app->request->isAjax) {
             $data = Yii::$app->request->post();
             if (isset($data["getprovincias"])) {
@@ -146,8 +148,8 @@ class InscripcionesController extends \yii\web\Controller {
         $arr_ninteres = $mod_unidad->consultarUnidadAcademicasEmpresa(1);
         $arr_modalidad = $mod_modalidad->consultarModalidad(1,1);
         $arr_conuteg = $mod_pergestion->consultarConociouteg();
-        $arr_carrerra1 = $modcanal->consultarCarreraModalidad(1, 1);
-        
+        $arr_carrerra1 = $modcanal->consultarCarreraModalidad(1, 1);               
+        $arr_metodos = $mod_metodo->consultarMetodoIngNivelInt($arr_ninteres[0]["id"]);
         
         return $this->render('indexAdmisionN', [
                     "tipos_dni" => array("CED" => Yii::t("formulario", "DNI Document"), "PASS" => Yii::t("formulario", "Passport")),
@@ -161,6 +163,7 @@ class InscripcionesController extends \yii\web\Controller {
                     "arr_modalidad" => ArrayHelper::map($arr_modalidad, "id", "name"),
                     "arr_conuteg" => ArrayHelper::map($arr_conuteg, "id", "name"),
                     "arr_carrerra1" => ArrayHelper::map($arr_carrerra1, "id", "name"),
+                    "arr_metodos" => ArrayHelper::map($arr_metodos, "id", "name"),
         ]);
         
     }

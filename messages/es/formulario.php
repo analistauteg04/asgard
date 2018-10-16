@@ -301,6 +301,7 @@ return [
     "I accept the responsibility that the information is true" => "Veracidad de la información.",
     "Identification document" => "Documento Identidad",
     "IN DEVELOPMENT" => "En Elaboración",
+    "Income Method" => "Método Ingreso", 
     "Indigenous" => "Indígena",
     "Indexed Magazine" => "Revista Indexada",
     "Information" => "Información",
