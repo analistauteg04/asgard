@@ -468,7 +468,14 @@ class InscripcionesController extends \yii\web\Controller {
                                             $iemp_id = $mod_inte_emp->crearInteresadoEmpresa($interesado_id, $emp_id, $usuario_id);
                                         }
                                         if ($iemp_id > 0) {
-                                            \app\models\Utilities::putMessageLogFile('ingreso el interesado empresa');
+                                            
+                                            //$solins_model->insertarSolicitud();
+                                            //fin de solicitud inscripcion
+                                            //grabar los documentos
+                                            //$solins_model->insertarDocumentosSolic();
+                                            //fin de grabar los documentos
+                                            
+                                            \app\models\Utilities::putMessageLogFile('listo para enviar correo');
                                             $usuarioNew = Usuario::findIdentity($usuario_id);
                                             $link = $usuarioNew->generarLinkActivacion();
                                             $email_info = array(
@@ -480,14 +487,31 @@ class InscripcionesController extends \yii\web\Controller {
                                                 "link_asgard" => $link,
                                             );
                                             \app\models\Utilities::putMessageLogFile('ingreso el email');
-                                            $solins_model=new SolicitudInscripcion();
+                                            //$solins_model=new SolicitudInscripcion();
                                             //crear una solicitud de inscripcion
-                                            $solins_model->insertarSolicitud();
-                                            //fin de solicitud inscripcion
-                                            //grabar los documentos
-                                            $solins_model->insertarDocumentosSolic();
-                                            //fin de grabar los documentos
-                                            $outemail = $mod_interesado->enviarCorreoBienvenida($email_info);
+                                            
+                                            // Inicio de funcionalidad de enviar correo                                            
+                                            $tituloMensaje = Yii::t("interesado", "UTEG - Registration");
+                                            $asunto = Yii::t("interesado", "UTEG - Registration Online");
+                                            $body = Utilities::getMailMessage("PaidApplyment",
+                                                array(
+                                                    "[[nombreapellido]]" => $email_info['nombres'] . " " . $email_info['apellidos'],
+                                                    "[[correo]]" => $email_info['correo'],
+                                                    "[[metodo]]" => "ingresar el metodo",
+                                                    "[[precio]]" => "ingresar el precio",
+                                                    "[[link1]]" => "Enlace que va a enviar tito",                                                    
+                                                    "[[telefono]]" => $email_info['telefono'],
+                                                    "[[webmail]]" => Yii::$app->params["adminEmail"],
+                                                    "[[identificacion]]" => $email_info['identificacion'],
+                                                    "[[link_asgard]]" => $email_info["link_asgard"],
+                                                ), 
+                                                Yii::$app->language);
+                                                Utilities::sendEmail($tituloMensaje,
+                                                Yii::$app->params["admisiones"], // a quien se envia el correo
+                                                [$email_info['correo'] => $email_info['nombres'] . " " . $email_info['apellidos']], // quien envia el correo
+                                                $asunto, $body);
+                                            // Fin de funcionalidad de enviar correo
+                                            
                                         } else {
                                             $error_message .= Yii::t("formulario", "The enterprise interested hasn't been saved");
                                             $error++;
