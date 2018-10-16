@@ -357,7 +357,7 @@ $this->title = 'Formulario de Pre-Inscripción';
         <div class="col-lg-9 col-md-9 col-sm-9 col-xs-9"></div>
 
         <div class="col-lg-3 col-md-3 col-sm-3 col-xs-3">
-            <a id="sendInscripcion" href="javascript:" class="btn btn-primary btn-block"> <?= Yii::t("accion", "To register") ?> </a>
+            <a id="sendInscripcionsolicitud" href="javascript:" class="btn btn-primary btn-block"> <?= Yii::t("accion", "To register") ?> </a>
         </div>
     </div>
 </form>
