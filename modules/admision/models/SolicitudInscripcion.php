@@ -1531,6 +1531,7 @@ class SolicitudInscripcion extends \yii\db\ActiveRecord
         }
         try {
             $sql = "INSERT INTO " . $con->dbname . ".solicitud_inscripcion ($param_sql) VALUES($bsrec_sql)";
+            \app\models\Utilities::putMessageLogFile('sql sol inscr: '. $sql);
             $comando = $con->createCommand($sql);
 
             if (isset($int_id))
@@ -1567,13 +1568,15 @@ class SolicitudInscripcion extends \yii\db\ActiveRecord
                 $comando->bindParam(':sins_usuario_ingreso', $sins_usuario_ingreso, \PDO::PARAM_INT);
             
             $result = $comando->execute();
+            $idtable = $con->getLastInsertID($con->dbname . '.solicitud_inscripcion');
             if ($trans !== null)
                 $trans->commit();
-            return $con->getLastInsertID($con->dbname . '.solicitud_inscripcion');
+            return $idtable;
         } catch (Exception $ex) {
-            if ($trans !== null)
+            if ($trans !== null) {
                 $trans->rollback();
-            return FALSE;
+            }
+            return 0;
         }
     }
     

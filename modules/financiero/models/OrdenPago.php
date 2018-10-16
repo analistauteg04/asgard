@@ -2011,13 +2011,15 @@ class OrdenPago extends \app\modules\financiero\components\CActiveRecord {
                 $comando->bindParam(':sdes_valor', $sdes_valor, \PDO::PARAM_INT);
 
             $result = $comando->execute();
+            $idtable = $con->getLastInsertID($con->dbname . '.solicitud_descuento');
             if ($trans !== null)
                 $trans->commit();
-            return $con->getLastInsertID($con->dbname . '.solicitud_descuento');
+            return $idtable;
         } catch (Exception $ex) {
-            if ($trans !== null)
+            if ($trans !== null) {
                 $trans->rollback();
-            return FALSE;
+            }
+            return 0;
         }
     }
 

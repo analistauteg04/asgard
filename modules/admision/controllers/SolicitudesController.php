@@ -427,7 +427,6 @@ class SolicitudesController extends \app\components\CController {
                 Utilities::sendEmail($tituloMensaje, Yii::$app->params["adminEmail"], [Yii::$app->params["colecturia"] => "Colecturia"], $asunto, $bodycolecturia);
 
                 //$num_secuencia;secuencia que se debe retornar
-
                 $message = array(
                     "wtmessage" => Yii::t("notificaciones", "La infomación ha sido grabada. Por favor verifique su correo."),
                     "title" => Yii::t('jslang', 'Success'),

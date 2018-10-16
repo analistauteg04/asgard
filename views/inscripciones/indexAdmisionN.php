@@ -267,7 +267,7 @@ $this->title = 'Formulario de Pre-Inscripción';
                         'browseClass' => 'btn btn-primary btn-block',
                         'browseIcon' => '<i class="fa fa-folder-open"></i> ',
                         'browseLabel' => "Subir Archivo",
-                        'uploadUrl' => Url::to(['/inscripciones/guardarinscripcionsolicitud']),
+                        'uploadUrl' => Url::to(['/inscripciones/grdrsolsubdoc']),
                         'maxFileSize' => Yii::$app->params["MaxFileSize"], // en Kbytes
                         'uploadExtraData' => 'javascript:function (previewId,index) {
             return {"upload_file": true, "name_file": "doc_certvota"};
