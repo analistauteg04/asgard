@@ -111,6 +111,14 @@ $this->title = 'Formulario de Pre-Inscripción';
     </div>
     <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
         <div class="form-group">            
+            <label for="cmb_metodos" class="col-sm-3 col-md-3 col-xs-3 col-lg-3 control-label keyupmce"><?= Yii::t("formulario", "Income Method") ?></label>
+            <div class="col-sm-9 col-md-9 col-xs-9 col-lg-9">
+                <?= Html::dropDownList("cmb_metodos", 0, array_merge([Yii::t("formulario", "Select")], $arr_metodos), ["class" => "form-control", "id" => "cmb_metodos"]) ?>
+            </div>
+        </div>
+    </div>        
+    <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
+        <div class="form-group">            
             <label for="cmb_conuteg" class="col-lg-3 col-md-3 col-sm-3 col-xs-3 control-label"><?= Yii::t("formulario", "Knowledge how about UTEG") ?> <span class="text-danger">*</span></label>
             <div class="col-lg-9 col-md-9 col-sm-9 col-xs-9">
                 <?= Html::dropDownList("cmb_conuteg", 0, $arr_conuteg, ["class" => "form-control", "id" => "cmb_conuteg"]) ?>
@@ -357,7 +365,7 @@ $this->title = 'Formulario de Pre-Inscripción';
         <div class="col-lg-9 col-md-9 col-sm-9 col-xs-9"></div>
 
         <div class="col-lg-3 col-md-3 col-sm-3 col-xs-3">
-            <a id="sendInscripcion" href="javascript:" class="btn btn-primary btn-block"> <?= Yii::t("accion", "To register") ?> </a>
+            <a id="sendInscripcionsolicitud" href="javascript:" class="btn btn-primary btn-block"> <?= Yii::t("accion", "To register") ?> </a>
         </div>
     </div>
 </form>
