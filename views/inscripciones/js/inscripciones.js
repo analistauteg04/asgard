@@ -51,8 +51,7 @@ $(document).ready(function () {
 
     });
     
-    $('#sendInscripcionsolicitud').click(function () {
-        alert('llego aqui');
+    $('#sendInscripcionsolicitud').click(function () {        
         var link = $('#txth_base').val() + "/inscripciones/guardarinscripcionsolicitud";
         var arrParams = new Object();
         arrParams.pges_pri_nombre = $('#txt_primer_nombre').val();

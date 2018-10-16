@@ -379,9 +379,10 @@ class InscripcionesController extends \yii\web\Controller {
             }
         }
     }
+
     public function actionGrdrsolsubdoc() {
-        $id_persona=1;
-        $typeFile=1;
+        $id_persona = 1;
+        $typeFile = 1;
         if ($data["upload_file"]) {
             if (empty($_FILES)) {
                 return json_encode(['error' => Yii::t("notificaciones", "Error to process File {file}. Try again.", ['{file}' => basename($files['name'])])]);
@@ -436,6 +437,7 @@ class InscripcionesController extends \yii\web\Controller {
             }
         }
     }
+
     public function actionGuardarinscripcionsolicitud() {
         $error = 0;
         if (Yii::$app->request->isAjax) {
@@ -535,123 +537,124 @@ class InscripcionesController extends \yii\web\Controller {
                                             $sins_fechasol = date(Yii::$app->params["dateTimeByDefault"]);
                                             $rsin_id = 1; //Solicitud pendiente     
                                             $solins_model = new SolicitudInscripcion();
-                                            $mensaje = 'intId: '.$interesado_id.'/uaca: '.$pgest['unidad_academica'].'/modalidad: '. $pgest['modalidad']. '/ming: '.$pgest['ming_id'].'/eaca: '.$eaca_id. '/mest: '.$mest_id.'/empresa: '. $emp_id. '/secuencia: '.$num_secuencia. '/rsin_id: '.$rsin_id. '/sins_fechasol: '.$sins_fechasol. '/usuario_id: '.$usuario_id;
+                                            $mensaje = 'intId: ' . $interesado_id . '/uaca: ' . $pgest['unidad_academica'] . '/modalidad: ' . $pgest['modalidad'] . '/ming: ' . $pgest['ming_id'] . '/eaca: ' . $eaca_id . '/mest: ' . $mest_id . '/empresa: ' . $emp_id . '/secuencia: ' . $num_secuencia . '/rsin_id: ' . $rsin_id . '/sins_fechasol: ' . $sins_fechasol . '/usuario_id: ' . $usuario_id;
                                             $sins_id = $solins_model->insertarSolicitud($interesado_id, $pgest['unidad_academica'], $pgest['modalidad'], $pgest['ming_id'], $eaca_id, null, $emp_id, $num_secuencia, $rsin_id, $sins_fechasol, $usuario_id);
                                             //fin de solicitud inscripcion$mest_id
                                             //grabar los documentos
-                                            \app\models\Utilities::putMessageLogFile('solicitud: '. $mensaje);
+                                            \app\models\Utilities::putMessageLogFile('solicitud: ' . $mensaje);
                                             if ($sins_id) {
-                                                \app\models\Utilities::putMessageLogFile('ingreso la solicitud: '.$sins_id);
+                                                \app\models\Utilities::putMessageLogFile('ingreso la solicitud: ' . $sins_id);
                                                 /*
                                                  * Subida de imágenes.                                                 
                                                  */
-                                                /*if ($pgest['txt_doc_titulo'] != '') {
-                                                    $solins_model->insertarDocumentosSolic($sins_id, $interesado_id, 1, $titulo_archivo, $usuario_id);
-                                                }
-                                                \app\models\Utilities::putMessageLogFile('Insertar titulo');
-                                                if ($pgest['txt_doc_dni'] != '') {
-                                                    $solins_model->insertarDocumentosSolic($sins_id, $interesado_id, 2, $dni_archivo, $usuario_id);
-                                                }
-                                                \app\models\Utilities::putMessageLogFile('Insertar cedula');
-                                                if ($pgest['txt_doc_certvota'] != '') {
-                                                    $solins_model->insertarDocumentosSolic($sins_id, $interesado_id, 3, $certvota_archivo, $usuario_id);
-                                                }
-                                                \app\models\Utilities::putMessageLogFile('Insertar Documentos Solicitud');
-                                                if ($pgest['txt_doc_foto'] != '') {
-                                                    $solins_model->insertarDocumentosSolic($sins_id, $interesado_id, 4, $foto_archivo, $usuario_id);
-                                                }
-                                                \app\models\Utilities::putMessageLogFile('Insertar Documento Foto');
-                                                if ($pgest['ming_id'] == 3) {
-                                                    if ($pgest['txt_doc_certificado'] != '') {
-                                                        $solins_model->insertarDocumentosSolic($sins_id, $interesado_id, 6, $certificado_archivo, $usuario_id);
-                                                        \app\models\Utilities::putMessageLogFile('Insertar Documento');
-                                                    }
-                                                }*/                                            
-                                            //fin de grabar los documentos                                                     
-                                            //Obtener el precio de la solicitud.
-                                            if ($beca == "1") {
-                                                $precio = 0;
-                                            } else {
-                                                $resp_precio = $solins_model->ObtenerPrecio($pgest['ming_id'], $pgest['unidad_academica'], $pgest['modalidad'], $eaca_id);
-                                                if ($resp_precio) {   
-                                                    $precio = $resp_precio['precio'];
+                                                /* if ($pgest['txt_doc_titulo'] != '') {
+                                                  $solins_model->insertarDocumentosSolic($sins_id, $interesado_id, 1, $titulo_archivo, $usuario_id);
+                                                  }
+                                                  \app\models\Utilities::putMessageLogFile('Insertar titulo');
+                                                  if ($pgest['txt_doc_dni'] != '') {
+                                                  $solins_model->insertarDocumentosSolic($sins_id, $interesado_id, 2, $dni_archivo, $usuario_id);
+                                                  }
+                                                  \app\models\Utilities::putMessageLogFile('Insertar cedula');
+                                                  if ($pgest['txt_doc_certvota'] != '') {
+                                                  $solins_model->insertarDocumentosSolic($sins_id, $interesado_id, 3, $certvota_archivo, $usuario_id);
+                                                  }
+                                                  \app\models\Utilities::putMessageLogFile('Insertar Documentos Solicitud');
+                                                  if ($pgest['txt_doc_foto'] != '') {
+                                                  $solins_model->insertarDocumentosSolic($sins_id, $interesado_id, 4, $foto_archivo, $usuario_id);
+                                                  }
+                                                  \app\models\Utilities::putMessageLogFile('Insertar Documento Foto');
+                                                  if ($pgest['ming_id'] == 3) {
+                                                  if ($pgest['txt_doc_certificado'] != '') {
+                                                  $solins_model->insertarDocumentosSolic($sins_id, $interesado_id, 6, $certificado_archivo, $usuario_id);
+                                                  \app\models\Utilities::putMessageLogFile('Insertar Documento');
+                                                  }
+                                                  } */
+                                                //fin de grabar los documentos                                                     
+                                                //Obtener el precio de la solicitud.
+                                                if ($beca == "1") {
+                                                    $precio = 0;
                                                 } else {
-                                                    $mensaje = 'No existe registrado ningún precio para la unidad, modalidad y método de ingreso seleccionada.';
-                                                    $errorprecio = 0;
-                                                }
-                                            }
-                                            $mod_ordenpago = new OrdenPago();
-                                            //Se verifica si seleccionó descuento.
-                                            $val_descuento = 0;
-                                            if (!empty($descuento)) {
-                                                $modDescuento = new DetalleDescuentoItem();
-                                                $respDescuento = $modDescuento->consultarValdctoItem($descuento);
-                                                if ($respDescuento) {
-                                                    if ($precio == 0) {
-                                                        $val_descuento = 0;
+                                                    $resp_precio = $solins_model->ObtenerPrecio($pgest['ming_id'], $pgest['unidad_academica'], $pgest['modalidad'], $eaca_id);
+                                                    if ($resp_precio) {
+                                                        $precio = $resp_precio['precio'];
                                                     } else {
-                                                        if ($respDescuento["ddit_tipo_beneficio"] == 'P') {
-                                                            $val_descuento = ($precio * ($respDescuento["ddit_porcentaje"])) / 100;
+                                                        $mensaje = 'No existe registrado ningún precio para la unidad, modalidad y método de ingreso seleccionada.';
+                                                        $errorprecio = 0;
+                                                    }
+                                                }
+                                                $mod_ordenpago = new OrdenPago();
+                                                //Se verifica si seleccionó descuento.
+                                                $val_descuento = 0;
+                                                if (!empty($descuento)) {
+                                                    $modDescuento = new DetalleDescuentoItem();
+                                                    $respDescuento = $modDescuento->consultarValdctoItem($descuento);
+                                                    if ($respDescuento) {
+                                                        if ($precio == 0) {
+                                                            $val_descuento = 0;
                                                         } else {
-                                                            $val_descuento = $respDescuento["ddit_valor"];
-                                                        }
-                                                        //Insertar solicitud descuento
-                                                        if ($val_descuento > 0) {
-                                                            $resp_SolicDcto = $mod_ordenpago->insertarSolicDscto($sins_id, $descuento, $precio, $respDescuento["ddit_porcentaje"], $respDescuento["ddit_valor"]);
+                                                            if ($respDescuento["ddit_tipo_beneficio"] == 'P') {
+                                                                $val_descuento = ($precio * ($respDescuento["ddit_porcentaje"])) / 100;
+                                                            } else {
+                                                                $val_descuento = $respDescuento["ddit_valor"];
+                                                            }
+                                                            //Insertar solicitud descuento
+                                                            if ($val_descuento > 0) {
+                                                                $resp_SolicDcto = $mod_ordenpago->insertarSolicDscto($sins_id, $descuento, $precio, $respDescuento["ddit_porcentaje"], $respDescuento["ddit_valor"]);
+                                                            }
                                                         }
                                                     }
                                                 }
-                                            }
-                                            //Generar la orden de pago con valor correspondiente. Buscar precio para orden de pago.                                                                     
-                                            if ($precio == 0) {
-                                                $estadopago = 'S';
-                                            } else {
-                                                $estadopago = 'P';
-                                            }
-                                            $val_total = $precio - $val_descuento;
-                                            $resp_opago = $mod_ordenpago->insertarOrdenpago($sins_id, null, $val_total, 0, $val_total, $estadopago, $usuario_id);
-                                            if ($resp_opago) {    
-                                                //insertar desglose del pago                                    
-                                                $fecha_ini = date(Yii::$app->params["dateByDefault"]);
-                                                $resp_dpago = $mod_ordenpago->insertarDesglosepago($resp_opago, $val_total, 0, $val_total, $fecha_ini, null, $estadopago, $usuario_id);
-                                                if ($resp_dpago) {   
-                                                    $exito = 1;
-                                                }
-                                            }
-                                            \app\models\Utilities::putMessageLogFile('listo para enviar correo');
-                                            $usuarioNew = Usuario::findIdentity($usuario_id);
-                                            $link = $usuarioNew->generarLinkActivacion();
-                                            $email_info = array(
-                                                "nombres" => $pgest['pges_pri_nombre'] . " " . $pgest['pges_seg_nombre'],
-                                                "apellidos" => $pgest['pges_pri_apellido'] . " " . $pgest['pges_seg_apellido'],
-                                                "correo" => $pgest['pges_correo'],
-                                                "telefono" => isset($pgest['pges_celular']) ? $pgest['pges_celular'] : $pgest['pges_domicilio_telefono'],
-                                                "identificacion" => isset($pgest['pges_cedula']) ? $pgest['pges_cedula'] : $pgest['pges_pasaporte'],
-                                                "link_asgard" => $link,
-                                            );
-                                            \app\models\Utilities::putMessageLogFile('ingreso el email');                                                                                       
-                                            if ($pgest['unidad_academica']==1 and ($pgest['modalidad']==1)) {
-                                                $file1 = Url::base(true) . "/files/Mailing-UTEG-Online.jpg";
-                                                $rutaFile = array($file1);
-                                            } else {
-                                                if ($pgest['unidad_academica']==1 and ($pgest['modalidad']!=1)) {
-                                                    $file1 = Url::base(true) . "/files/Mailing-UTEG-Grado.jpg";
-                                                    $rutaFile = array($file1);
+                                                //Generar la orden de pago con valor correspondiente. Buscar precio para orden de pago.                                                                     
+                                                if ($precio == 0) {
+                                                    $estadopago = 'S';
                                                 } else {
-                                                    if ($pgest['unidad_academica']==2) {
-                                                        $file1 = Url::base(true) . "/files/Mailing-UTEG-Posgrado.jpg";
-                                                        $rutaFile = array($file1);
+                                                    $estadopago = 'P';
+                                                }
+                                                $val_total = $precio - $val_descuento;
+                                                $resp_opago = $mod_ordenpago->insertarOrdenpago($sins_id, null, $val_total, 0, $val_total, $estadopago, $usuario_id);
+                                                if ($resp_opago) {
+                                                    //insertar desglose del pago                                    
+                                                    $fecha_ini = date(Yii::$app->params["dateByDefault"]);
+                                                    \app\models\Utilities::putMessageLogFile('orden pago: '.$resp_opago);
+                                                    $resp_dpago = $mod_ordenpago->insertarDesglosepago($resp_opago, $val_total, 0, $val_total, $fecha_ini, null, $estadopago, $usuario_id);
+                                                    if ($resp_dpago) {
+                                                        $exito = 1;
+                                                        \app\models\Utilities::putMessageLogFile('desgloce pago: '.$resp_dpago);
+                                                        $usuarioNew = Usuario::findIdentity($usuario_id);
+                                                        $link = $usuarioNew->generarLinkActivacion();
+                                                        $email_info = array(
+                                                            "nombres" => $pgest['pges_pri_nombre'] . " " . $pgest['pges_seg_nombre'],
+                                                            "apellidos" => $pgest['pges_pri_apellido'] . " " . $pgest['pges_seg_apellido'],
+                                                            "correo" => $pgest['pges_correo'],
+                                                            "telefono" => isset($pgest['pges_celular']) ? $pgest['pges_celular'] : $pgest['pges_domicilio_telefono'],
+                                                            "identificacion" => isset($pgest['pges_cedula']) ? $pgest['pges_cedula'] : $pgest['pges_pasaporte'],
+                                                            "link_asgard" => $link,
+                                                        );
+                                                        \app\models\Utilities::putMessageLogFile('ingreso el email');
+                                                        if ($pgest['unidad_academica'] == 1 and ( $pgest['modalidad'] == 1)) {
+                                                            $file1 = Url::base(true) . "/files/Mailing-UTEG-Online.jpg";
+                                                            $rutaFile = array($file1);
+                                                        } else {
+                                                            if ($pgest['unidad_academica'] == 1 and ( $pgest['modalidad'] != 1)) {
+                                                                $file1 = Url::base(true) . "/files/Mailing-UTEG-Grado.jpg";
+                                                                $rutaFile = array($file1);
+                                                            } else {
+                                                                if ($pgest['unidad_academica'] == 2) {
+                                                                    $file1 = Url::base(true) . "/files/Mailing-UTEG-Posgrado.jpg";
+                                                                    $rutaFile = array($file1);
+                                                                }
+                                                            }
+                                                        }
+                                                        $tituloMensaje = Yii::t("interesado", "UTEG - Registration");
+                                                        $asunto = Yii::t("interesado", "UTEG - Registration Online");
+                                                        $body = Utilities::getMailMessage("PaidApplyment", array(), Yii::$app->language);
+                                                        Utilities::sendEmail($tituloMensaje, Yii::$app->params["admisiones"], // a quien se envia el correo
+                                                                [$email_info['correo'] => $email_info['nombres'] . " " . $email_info['apellidos']], // quien envia el correo
+                                                                $asunto, $file1);
+                                                        // Fin de funcionalidad de enviar correo                                            
+                                                        \app\models\Utilities::putMessageLogFile('mensaje final:' . $exito);
                                                     }
                                                 }
-                                            }                                           
-                                            $tituloMensaje = Yii::t("interesado", "UTEG - Registration");
-                                            $asunto = Yii::t("interesado", "UTEG - Registration Online");
-                                            $body = Utilities::getMailMessage("PaidApplyment", array(), Yii::$app->language);
-                                            Utilities::sendEmail($tituloMensaje, Yii::$app->params["admisiones"], // a quien se envia el correo
-                                                    [$email_info['correo'] => $email_info['nombres'] . " " . $email_info['apellidos']], // quien envia el correo
-                                                    $asunto, $body, $rutaFile);
-                                            // Fin de funcionalidad de enviar correo                                            
-                                            \app\models\Utilities::putMessageLogFile('mensaje final:'.$exito);
                                             }
                                         } else {
                                             $error_message .= Yii::t("formulario", "The enterprise interested hasn't been saved");
@@ -682,20 +685,20 @@ class InscripcionesController extends \yii\web\Controller {
                     $error++;
                 }
 
-                if ($exito==1) {                                        
+                if ($exito == 1) {
                     //$transaction->commit();                    
-                    $transaction1->commit();                    
-                    $transaction2->commit();                    
-                     
+                    $transaction1->commit();
+                    $transaction2->commit();
+
                     $message = array(
                         "wtmessage" => Yii::t("formulario", "The information have been saved and the information has been sent to your email"),
                         "title" => Yii::t('jslang', 'Success'),
                     );
                     return Utilities::ajaxResponse('OK', 'alert', Yii::t("jslang", "Sucess"), false, $message);
                 } else {
-                    $transaction->rollback();
-                    $transaction1->rollback();
-                    $transaction2->rollback();
+                    //$transaction->rollback();
+                    //$transaction1->rollback();
+                    //$transaction2->rollback();
                     $message = array(
                         "wtmessage" => Yii::t("formulario", "Mensaje1: " . $mensaje), //$error_message
                         "title" => Yii::t('jslang', 'Bad Request'),
@@ -703,9 +706,9 @@ class InscripcionesController extends \yii\web\Controller {
                     return Utilities::ajaxResponse('NO_OK', 'alert', Yii::t("jslang", "Bad Request"), false, $message);
                 }
             } catch (Exception $ex) {
-                $transaction->rollback();
-                $transaction1->rollback();
-                $transaction2->rollback();
+                //$transaction->rollback();
+                //$transaction1->rollback();
+                //$transaction2->rollback();
                 $message = array(
                     "wtmessage" => Yii::t("formulario", "Mensaje2: " . $mensaje), //$error_message
                     "title" => Yii::t('jslang', 'Bad Request'),
