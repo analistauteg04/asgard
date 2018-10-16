@@ -33,6 +33,9 @@ $(document).ready(function () {
         arrParams.modalidad = $('#cmb_modalidad').val();
         arrParams.conoce = $('#cmb_conuteg').val();
         arrParams.carrera = $('#cmb_carrera1').val();
+        arrParams.metodo = $('#cmb_tipo_oportunidad').val();
+        arrParams.horaini = $('#txt_hora_atencionini').val();
+        arrParams.horafin = $('#txt_hora_atencionfin').val();
         if (!validateForm()) {
             requestHttpAjax(link, arrParams, function (response) {
                 showAlert(response.status, response.label, response.message);
@@ -81,6 +84,13 @@ $(document).ready(function () {
                         if (response.status == "OK") {
                             data = response.message;
                             setComboData(data.carrera, "cmb_carrera1");
+                            arrParams.getoportunidad = true;
+                            requestHttpAjax(link, arrParams, function (response) {
+                                if (response.status == "OK") {
+                                    data = response.message;
+                                    setComboData(data.oportunidad, "cmb_tipo_oportunidad");
+                                }
+                            }, true);
                         }
                     }, true);
                 }

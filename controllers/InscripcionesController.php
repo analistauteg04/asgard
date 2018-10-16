@@ -16,6 +16,7 @@ use yii\helpers\Url;
 use app\modules\admision\models\PersonaGestion;
 use app\modules\admision\models\Oportunidad;
 use app\models\Empresa;
+use app\modules\admision\models\TipoOportunidadVenta;
 use app\modules\admision\models\EstadoContacto;
 
 class InscripcionesController extends \yii\web\Controller {
@@ -34,6 +35,7 @@ class InscripcionesController extends \yii\web\Controller {
         $mod_pergestion = new PersonaGestion();
         $mod_unidad = new UnidadAcademica();
         $modcanal = new Oportunidad();
+        $modTipoOportunidad = new TipoOportunidadVenta();
         if (Yii::$app->request->isAjax) {
             $data = Yii::$app->request->post();
             if (isset($data["getprovincias"])) {
@@ -63,6 +65,11 @@ class InscripcionesController extends \yii\web\Controller {
                 return Utilities::ajaxResponse('OK', 'alert', Yii::t('jslang', 'Success'), 'false', $message);
                 return;
             }
+            if (isset($data["getoportunidad"])) {
+                $oportunidad = $modTipoOportunidad->consultarOporxUnidad($data["unidada"]);
+                $message = array("oportunidad" => $oportunidad);
+                return Utilities::ajaxResponse('OK', 'alert', Yii::t('jslang', 'Success'), 'false', $message);
+            }
             if (isset($data["getcarrera"])) {
                 $carrera = $modcanal->consultarCarreraModalidad($data["unidada"], $data["moda_id"]);
                 $message = array("carrera" => $carrera);
@@ -79,6 +86,7 @@ class InscripcionesController extends \yii\web\Controller {
         $arr_modalidad = $mod_modalidad->consultarModalidad(1,1);
         $arr_conuteg = $mod_pergestion->consultarConociouteg();
         $arr_carrerra1 = $modcanal->consultarCarreraModalidad(1, 1);
+        $tipo_oportunidad_data = $modTipoOportunidad->consultarOporxUnidad(1);
         return $this->render('index', [
                     "tipos_dni" => array("CED" => Yii::t("formulario", "DNI Document"), "PASS" => Yii::t("formulario", "Passport")),
                     "tipos_dni2" => array("CED" => Yii::t("formulario", "DNI Document1"), "PASS" => Yii::t("formulario", "Passport1")),
@@ -91,6 +99,7 @@ class InscripcionesController extends \yii\web\Controller {
                     "arr_modalidad" => ArrayHelper::map($arr_modalidad, "id", "name"),
                     "arr_conuteg" => ArrayHelper::map($arr_conuteg, "id", "name"),
                     "arr_carrerra1" => ArrayHelper::map($arr_carrerra1, "id", "name"),
+                    "arr_tipo_oportunidad" => ArrayHelper::map($tipo_oportunidad_data, "id", "name"),
         ]);
     }
     
@@ -222,6 +231,8 @@ class InscripcionesController extends \yii\web\Controller {
             $cedula = $data["cedula"];
             $pasaporte = $data["pasaporte"];
             $conoce_uteg = $data["conoce"];
+            $hora_inicio = $data["horaini"];
+            $hora_fin = $data["horafin"];
             if ($tipo_dni == "CED") {
                 $dnis = "Cédula";
                 $numidentificacion = $cedula;
@@ -231,7 +242,7 @@ class InscripcionesController extends \yii\web\Controller {
             }
             switch ($nivelestudio) { // esto cambiarlo hacer funcion que consulte el usuario y traer el id
                 case "1":
-                    $tipoportunidad = 1;
+                    $tipoportunidad = $data["metodo"];
                     if ($modalidad == "1") {
                         $agente = $mod_oportunidad->consultarAgentebyCod($nivelestudio, $modalidad, 1); // 1 uteg//15;
                         $pagina = "register_go";
@@ -252,7 +263,7 @@ class InscripcionesController extends \yii\web\Controller {
                     break;
                 case "2":
                     $agente = $mod_oportunidad->consultarAgentebyCod($nivelestudio, $modalidad, 1);//16;
-                    $tipoportunidad = 5;
+                    $tipoportunidad = $data["metodo"];
                     $pagina = "register_ps";
                     break;
                 /*case "3":
@@ -286,7 +297,7 @@ class InscripcionesController extends \yii\web\Controller {
                         //$codigocrm = $gcrm_codigo["id"] + 1;
                         $codigocrm = 1 + $gcrm_codigo;
                         // emp_id es el nombre de la ver como capturar esta OJO no olvidar hacerlo
-                        $res_oportunidad = $mod_gestion->insertarOportunidad($codigocrm, $emp_id, $resp_persona, null, $carrera, $nivelestudio, $modalidad, $tipoportunidad, $subcarera, $canal, $estado, $fecha_registro, $agente["agente_id"] , $usuario);
+                        $res_oportunidad = $mod_gestion->insertarOportunidad($codigocrm, $emp_id, $resp_persona, null, $carrera, $nivelestudio, $modalidad, $tipoportunidad, $subcarera, $canal, $estado, $hora_inicio, $hora_fin, $fecha_registro, $agente["agente_id"] , $usuario);
                         if ($res_oportunidad) {
                             $oact_id = 1;
                             $descripcion = 'Registro subido desde formulario de inscripción';
@@ -318,7 +329,7 @@ class InscripcionesController extends \yii\web\Controller {
                         Utilities::sendEmail($tituloMensaje, Yii::$app->params["adminEmail"], [$correo => $nombre1 . " " . $nombre2], $asunto, $body);
                         Utilities::sendEmail($tituloMensaje, Yii::$app->params["adminEmail"], [Yii::$app->params["soporteEmail"] => "Soporte"], $asunto, $body);*/
                         $message = array(
-                            "wtmessage" => Yii::t("notificaciones", "La infomación ha sido grabada. "),
+                            "wtmessage" => Yii::t("notificaciones", "Gracias por tu interés en UTEG. Un asesor lo contactará en las proximas 24 horas. "),
                             "title" => Yii::t('jslang', 'Success'),
                         );
                         return Utilities::ajaxResponse('OK', 'alert', Yii::t("jslang", "Sucess"), false, $message);

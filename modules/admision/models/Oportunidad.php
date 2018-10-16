@@ -820,7 +820,7 @@ class Oportunidad extends \app\modules\admision\components\CActiveRecord {
      * @param
      * @return
      */
-    public function insertarOportunidad($opo_codigo, $emp_id, $pges_id, $mest_id, $eaca_id, $uaca_id, $mod_id, $tove_id, $tsca_id, $ccan_id, $eopo_id, $opo_fecha_registro, $padm_id, $opo_usuario) {
+    public function insertarOportunidad($opo_codigo, $emp_id, $pges_id, $mest_id, $eaca_id, $uaca_id, $mod_id, $tove_id, $tsca_id, $ccan_id, $eopo_id, $opo_hora_ini_contacto, $opo_hora_fin_contacto, $opo_fecha_registro, $padm_id, $opo_usuario) {
         $con = \Yii::$app->db_crm;
         $trans = $con->getTransaction(); // se obtiene la transacción actual
         if ($trans !== null) {
@@ -879,6 +879,15 @@ class Oportunidad extends \app\modules\admision\components\CActiveRecord {
             $param_sql .= ", eopo_id";
             $bdet_sql .= ", :eopo_id";
         }
+        if (isset($opo_hora_ini_contacto)) {
+            $param_sql .= ", opo_hora_ini_contacto";
+            $bdet_sql .= ", :opo_hora_ini_contacto";
+        }
+        if (isset($opo_hora_fin_contacto)) {
+            $param_sql .= ", opo_hora_fin_contacto";
+            $bdet_sql .= ", :opo_hora_fin_contacto";
+        }
+        
         if (isset($opo_fecha_registro)) {
             $param_sql .= ", opo_fecha_registro";
             $bdet_sql .= ", :opo_fecha_registro";
@@ -929,6 +938,12 @@ class Oportunidad extends \app\modules\admision\components\CActiveRecord {
             if (!empty((isset($eopo_id)))) {
                 $comando->bindParam(':eopo_id', $eopo_id, \PDO::PARAM_INT);
             }
+             if (!empty((isset($opo_hora_ini_contacto)))) {
+                $comando->bindParam(':opo_hora_ini_contacto', $opo_hora_ini_contacto, \PDO::PARAM_STR);
+            }
+            if (!empty((isset($opo_hora_fin_contacto)))) {
+                $comando->bindParam(':opo_hora_fin_contacto', $opo_hora_fin_contacto, \PDO::PARAM_STR);
+            }           
             if (!empty((isset($opo_fecha_registro)))) {
                 $comando->bindParam(':opo_fecha_registro', $opo_fecha_registro, \PDO::PARAM_STR);
             }
