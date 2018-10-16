@@ -108,6 +108,8 @@ class InscripcionsmartController extends \yii\web\Controller {
         $mod_empresa = new Empresa();
         $mod_estcontacto = new EstadoContacto();
         $mod_persona = new Persona();
+        $mod_modalidad = new Modalidad();
+        $mod_unidad = new UnidadAcademica();
         $celular = null;
         $celular2 = null;
         $telefono = null;
@@ -150,6 +152,8 @@ class InscripcionsmartController extends \yii\web\Controller {
             $correobeni = strtolower($data["correo"]);
             $nivelestudio = $data["unidad"];
             $modalidad = $data["modalidad"];
+            $nombre_unidad = $mod_unidad->consultarNombreunidad($nivelestudio);
+            $nombre_modalidad = $mod_modalidad->consultarNombremoda($modalidad);
             $tipo_dni = $data["tipo_dni"];
             $cedula = $data["cedula"];
             $pasaporte = $data["pasaporte"];
