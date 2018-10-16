@@ -208,7 +208,7 @@ class InscripcionulinkController extends \yii\web\Controller {
                     if ($resp_persona) {
                         $gcrm_codigo = $mod_gestion->consultarUltimoCodcrm();
                         $codigocrm = 1 + $gcrm_codigo;
-                        $res_oportunidad = $mod_gestion->insertarOportunidad($codigocrm, $emp_id, $resp_persona, $carrera, null, $nivelestudio, $modalidad, $tipoportunidad, $subcarera, $canal, $estado, null, null, $fecha_registro, $agente, $usuario);
+                        $res_oportunidad = $mod_gestion->insertarOportunidad($codigocrm, $emp_id, $resp_persona, $carrera, null, $nivelestudio, $modalidad, $tipoportunidad, $subcarera, $canal, $estado, $hora_inicio, $hora_fin, $fecha_registro, $agente, $usuario);
                         if ($res_oportunidad) {
                             $oact_id = 1;
                             $descripcion = 'Registro subido desde formulario de inscripción';

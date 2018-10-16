@@ -17,7 +17,7 @@ $(document).ready(function () {
             }
         }, true);
     });
-    
+
     $('#cmb_ninteres').change(function () {
         var link = $('#txth_base').val() + "/inscripcionsmart/index";
         var arrParams = new Object();
@@ -26,11 +26,18 @@ $(document).ready(function () {
         requestHttpAjax(link, arrParams, function (response) {
             if (response.status == "OK") {
                 data = response.message;
-                setComboData(data.modalidad, "cmb_modalidad");             
+                setComboData(data.modalidad, "cmb_modalidad");
+                arrParams.getoportunidad = true;
+                requestHttpAjax(link, arrParams, function (response) {
+                    if (response.status == "OK") {
+                        data = response.message;
+                        setComboData(data.oportunidad, "cmb_tipo_oportunidad");
+                    }
+                }, true);
             }
         }, true);
     });
-    
+
     $('#cmb_modalidad').change(function () {
         var link = $('#txth_base').val() + "/inscripcionsmart/index";
         var arrParams = new Object();
@@ -44,7 +51,7 @@ $(document).ready(function () {
         requestHttpAjax(link, arrParams, function (response) {
             if (response.status == "OK") {
                 data = response.message;
-                setComboData(data.carrera, "cmb_modulo");         
+                setComboData(data.carrera, "cmb_modulo");
             }
         }, true);
     });
@@ -64,6 +71,9 @@ $(document).ready(function () {
         arrParams.modalidad = $('#cmb_modalidad').val();
         arrParams.conoce = $('#cmb_conuteg').val();
         arrParams.carrera = $('#cmb_modulo').val();
+        arrParams.metodo = $('#cmb_tipo_oportunidad').val();
+        arrParams.horaini = $('#txt_hora_atencionini').val();
+        arrParams.horafin = $('#txt_hora_atencionfin').val();
         if (!validateForm()) {
             requestHttpAjax(link, arrParams, function (response) {
                 showAlert(response.status, response.label, response.message);
