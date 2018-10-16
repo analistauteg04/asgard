@@ -139,6 +139,12 @@ class InscripcionesController extends \yii\web\Controller {
                 return Utilities::ajaxResponse('OK', 'alert', Yii::t('jslang', 'Success'), 'false', $message);
                 return;
             }
+            if (isset($data["getmetodo"])) {
+                $metodos = $mod_metodo->consultarMetodoIngNivelInt($data['nint_id']);
+                $message = array("metodos" => $metodos);
+                return Utilities::ajaxResponse('OK', 'alert', Yii::t('jslang', 'Success'), 'false', $message);
+                return;
+            }
         }
         $arr_pais_dom = Pais::find()->select("pai_id AS id, pai_nombre AS value")->where(["pai_estado_logico" => "1", "pai_estado" => "1"])->asArray()->all();
         $pais_id = 1; //Ecuador

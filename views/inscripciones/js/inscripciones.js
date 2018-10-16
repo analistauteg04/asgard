@@ -102,5 +102,54 @@ $(document).ready(function () {
         }, true);
     });
 
+    $('#cmb_unidad_solicitud').change(function () {
+        var link = $('#txth_base').val() + "/inscripciones/indexadmisionn";
+        var arrParams = new Object();
+        arrParams.nint_id = $(this).val();
+        arrParams.getmodalidad = true;
+        requestHttpAjax(link, arrParams, function (response) {
+            if (response.status == "OK") {
+                data = response.message;
+                setComboData(data.modalidad, "cmb_unidad_solicitud");
+                var arrParams = new Object();
+                if (data.modalidad.length > 0) {
+                    arrParams.unidada = $('#cmb_unidad_solicitud').val();
+                    arrParams.moda_id = data.modalidad[0].id;
+                    arrParams.getcarrera = true;
+                    requestHttpAjax(link, arrParams, function (response) {
+                        if (response.status == "OK") {
+                            data = response.message;
+                            setComboData(data.carrera, "cmb_carrera_solicitud");
+                        }
+                    }, true);
+                }
+            }
+        }, true);
+        
+        //métodos.
+        var arrParams = new Object();        
+        arrParams.metodo = $('#cmb_metodos').val();
+        arrParams.getmetodo = true;
+        requestHttpAjax(link, arrParams, function (response) {
+            if (response.status == "OK") {
+                data = response.message;
+                setComboData(data.metodos, "cmb_metodos");       
+            }
+        }, true);
+    });
+
+    $('#cmb_modalidad_solicitud').change(function () {
+        var link = $('#txth_base').val() + "/inscripciones/indexadmisionn";
+        var arrParams = new Object();
+        arrParams.unidada = $('#cmb_unidad_solicitud').val();
+        arrParams.moda_id = $(this).val();
+        arrParams.getcarrera = true;
+        requestHttpAjax(link, arrParams, function (response) {
+            if (response.status == "OK") {
+                data = response.message;
+                setComboData(data.carrera, "cmb_carrera_solicitud");
+            }
+        }, true);
+    });
 });
 
