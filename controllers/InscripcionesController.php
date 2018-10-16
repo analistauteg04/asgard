@@ -452,6 +452,7 @@ class InscripcionesController extends \yii\web\Controller {
             try {
                 // He colocado al inicio la informacion para que cargue al principio
                 $emp_id = 1;
+                $exito=0;
                 $identificacion = '';
                 if (isset($pgest['pges_cedula']) && strlen($pgest['pges_cedula']) > 0) {
                     $identificacion = $pgest['pges_cedula'];
@@ -544,33 +545,6 @@ class InscripcionesController extends \yii\web\Controller {
                                             \app\models\Utilities::putMessageLogFile('solicitud: ' . $mensaje);
                                             if ($sins_id) {
                                                 \app\models\Utilities::putMessageLogFile('ingreso la solicitud: ' . $sins_id);
-                                                /*
-                                                 * Subida de imágenes.                                                 
-                                                 */
-                                                /* if ($pgest['txt_doc_titulo'] != '') {
-                                                  $solins_model->insertarDocumentosSolic($sins_id, $interesado_id, 1, $titulo_archivo, $usuario_id);
-                                                  }
-                                                  \app\models\Utilities::putMessageLogFile('Insertar titulo');
-                                                  if ($pgest['txt_doc_dni'] != '') {
-                                                  $solins_model->insertarDocumentosSolic($sins_id, $interesado_id, 2, $dni_archivo, $usuario_id);
-                                                  }
-                                                  \app\models\Utilities::putMessageLogFile('Insertar cedula');
-                                                  if ($pgest['txt_doc_certvota'] != '') {
-                                                  $solins_model->insertarDocumentosSolic($sins_id, $interesado_id, 3, $certvota_archivo, $usuario_id);
-                                                  }
-                                                  \app\models\Utilities::putMessageLogFile('Insertar Documentos Solicitud');
-                                                  if ($pgest['txt_doc_foto'] != '') {
-                                                  $solins_model->insertarDocumentosSolic($sins_id, $interesado_id, 4, $foto_archivo, $usuario_id);
-                                                  }
-                                                  \app\models\Utilities::putMessageLogFile('Insertar Documento Foto');
-                                                  if ($pgest['ming_id'] == 3) {
-                                                  if ($pgest['txt_doc_certificado'] != '') {
-                                                  $solins_model->insertarDocumentosSolic($sins_id, $interesado_id, 6, $certificado_archivo, $usuario_id);
-                                                  \app\models\Utilities::putMessageLogFile('Insertar Documento');
-                                                  }
-                                                  } */
-                                                //fin de grabar los documentos                                                     
-                                                //Obtener el precio de la solicitud.
                                                 if ($beca == "1") {
                                                     $precio = 0;
                                                 } else {
@@ -613,7 +587,6 @@ class InscripcionesController extends \yii\web\Controller {
                                                 $val_total = $precio - $val_descuento;
                                                 $resp_opago = $mod_ordenpago->insertarOrdenpago($sins_id, null, $val_total, 0, $val_total, $estadopago, $usuario_id);
                                                 if ($resp_opago) {
-                                                    //insertar desglose del pago                                    
                                                     $fecha_ini = date(Yii::$app->params["dateByDefault"]);
                                                     \app\models\Utilities::putMessageLogFile('orden pago: '.$resp_opago);
                                                     $resp_dpago = $mod_ordenpago->insertarDesglosepago($resp_opago, $val_total, 0, $val_total, $fecha_ini, null, $estadopago, $usuario_id);
@@ -687,8 +660,8 @@ class InscripcionesController extends \yii\web\Controller {
 
                 if ($exito == 1) {
                     //$transaction->commit();                    
-                    $transaction1->commit();
-                    $transaction2->commit();
+                    //$transaction1->commit();
+                    //$transaction2->commit();
 
                     $message = array(
                         "wtmessage" => Yii::t("formulario", "The information have been saved and the information has been sent to your email"),
