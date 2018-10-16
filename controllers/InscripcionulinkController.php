@@ -19,6 +19,7 @@ use app\modules\admision\models\Oportunidad;
 use app\models\Empresa;
 use app\modules\admision\models\EstadoContacto;
 use app\modules\academico\models\ModuloEstudio;
+use app\modules\admision\models\TipoOportunidadVenta;
 
 class InscripcionulinkController extends \yii\web\Controller {
 
@@ -36,6 +37,7 @@ class InscripcionulinkController extends \yii\web\Controller {
         $modestudio = new ModuloEstudio();
         $mod_unidad = new UnidadAcademica();
         $mod_modalidad = new Modalidad();
+        $modTipoOportunidad = new TipoOportunidadVenta();
        
         if (Yii::$app->request->isAjax) {
             $data = Yii::$app->request->post();
@@ -65,6 +67,11 @@ class InscripcionulinkController extends \yii\web\Controller {
                 echo Utilities::ajaxResponse('OK', 'alert', Yii::t('jslang', 'Success'), 'false', $message);
                 return;
             }
+            if (isset($data["getoportunidad"])) {
+                $oportunidad = $modTipoOportunidad->consultarOporxUnidad($data["unidada"]);
+                $message = array("oportunidad" => $oportunidad);
+                return Utilities::ajaxResponse('OK', 'alert', Yii::t('jslang', 'Success'), 'false', $message);
+            }
             if (isset($data["getcarrera"])) {
                 $carrera = $modestudio->consultarCursoModalidad($data["unidada"], $data["moda_id"]); 
                 $message = array("carrera" => $carrera);
@@ -81,6 +88,7 @@ class InscripcionulinkController extends \yii\web\Controller {
         $arr_modalidad = $mod_modalidad->consultarModalidad(6,2);
         $arr_carrerra1 = $modestudio->consultarCursoModalidad(6, 1);
         $arr_ninteres = $mod_unidad->consultarUnidadAcademicasEmpresa(2);
+        $tipo_oportunidad_data = $modTipoOportunidad->consultarOporxUnidad(6);
         return $this->render('index', [
                     "tipos_dni" => array("CED" => Yii::t("formulario", "DNI Document"), "PASS" => Yii::t("formulario", "Passport")),
                     "tipos_dni2" => array("CED" => Yii::t("formulario", "DNI Document1"), "PASS" => Yii::t("formulario", "Passport1")),
@@ -93,6 +101,7 @@ class InscripcionulinkController extends \yii\web\Controller {
                     "arr_carrerra1" => ArrayHelper::map($arr_carrerra1, "id", "name"),
                     "arr_ninteres" => ArrayHelper::map($arr_ninteres, "id", "name"),
                     "arr_modalidad" => ArrayHelper::map($arr_modalidad, "id", "name"),
+                    "arr_tipo_oportunidad" => ArrayHelper::map($tipo_oportunidad_data, "id", "name"),
         ]);
     }
 
@@ -146,6 +155,8 @@ class InscripcionulinkController extends \yii\web\Controller {
             $cedula = $data["cedula"];
             $pasaporte = $data["pasaporte"];
             $conoce_uteg = $data["conoce"];
+            $hora_inicio = $data["horaini"];
+            $hora_fin = $data["horafin"];
             if ($tipo_dni == "CED") {
                 $dnis = "Cédula";
                 $numidentificacion = $cedula;
@@ -156,22 +167,22 @@ class InscripcionulinkController extends \yii\web\Controller {
             switch ($nivelestudio) { // esto cambiarlo hacer funcion que consulte el usaurio y traer el id           
                 case "3":
                     $agente = 14;
-                    $tipoportunidad = 8;
+                    $tipoportunidad = $data["metodo"];
                     $pagina = "registerulink";
                     break;
                 case "4":
                     $agente = 14;
-                    $tipoportunidad = 9;
+                    $tipoportunidad = $data["metodo"];
                     $pagina = "registerulink";
                     break;
                 case "5":
                     $agente = 14;
-                    $tipoportunidad = 10;
+                    $tipoportunidad = $data["metodo"];
                     $pagina = "registerulink";
                     break;
                 case "6":
                     $agente = 14;
-                    $tipoportunidad = 11;
+                    $tipoportunidad = $data["metodo"];
                     $pagina = "registerulink";
                     break;
             }

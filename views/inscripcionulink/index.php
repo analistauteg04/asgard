@@ -108,6 +108,28 @@ $this->title = 'Formulario de Contacto';
             </div>
         </div>
     </div>
+    <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">            
+        <div class="form-group">
+            <label for="cmb_tipo_oportunidad" class="col-lg-3 col-md-3 col-sm-3 col-xs-3 control-label keyupmce"><?= Yii::t("formulario", "Método Ingreso") ?><span class="text-danger">*</span></label>
+            <div class="col-lg-9 col-md-9 col-sm-9 col-xs-9">
+                <?= Html::dropDownList("cmb_tipo_oportunidad", 1, $arr_tipo_oportunidad, ["class" => "form-control", "id" => "cmb_tipo_oportunidad"]) ?>
+            </div>
+        </div>            
+    </div>
+    <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
+        <div class="form-group">
+            <label for="txt_hora_atencion" class="col-lg-3 col-md-3 col-sm-3 col-xs-3 control-label"><?= Yii::t("formulario", "Schedule Contact") ?> <span class="text-danger">*</span></label>
+            <label hidden for="txt_hora_atencionini" class="col-sm-4 col-md-4 col-xs-4 col-lg-4  control-label"><?= Yii::t("formulario", "Hora contacto inicio") ?> </label>            
+           
+            <div class="col-sm-4 col-md-4 col-xs-4 col-lg-4">
+                <input type="text" class="form-control PBvalidation" value="" id="txt_hora_atencionini" data-type="tiempo" data-keydown="true" placeholder="<?= Yii::t('formulario', 'HH:MM') ?>">
+            </div>
+            <label hidden for="txt_hora_atencionfin" class="col-sm-4 col-md-4 col-xs-4 col-lg-4  control-label"><?= Yii::t("formulario", "Hora contacto fin") ?> </label>            
+            <div class="col-sm-5 col-md-5 col-xs-5 col-lg-5">
+                <input type="text" class="form-control PBvalidation" value="" id="txt_hora_atencionfin" data-type="tiempo" data-keydown="true" placeholder="<?= Yii::t('formulario', 'HH:MM') ?>">
+            </div>
+        </div>
+    </div> 
     <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
         <div class="form-group">            
             <label for="cmb_conuteg" class="col-lg-3 col-md-3 col-sm-3 col-xs-3 control-label"><?= Yii::t("formulario", "Knowledge how about UTEG") ?> <span class="text-danger">*</span></label>

@@ -121,11 +121,11 @@ $this->title = 'Formulario de Contacto';
             <label for="txt_hora_atencion" class="col-lg-3 col-md-3 col-sm-3 col-xs-3 control-label"><?= Yii::t("formulario", "Schedule Contact") ?> <span class="text-danger">*</span></label>
             <label hidden for="txt_hora_atencionini" class="col-sm-4 col-md-4 col-xs-4 col-lg-4  control-label"><?= Yii::t("formulario", "Hora contacto inicio") ?> </label>            
            
-            <div class="col-lg-1 col-md-1 col-sm-1 col-xs-1">
+            <div class="col-sm-4 col-md-4 col-xs-4 col-lg-4">
                 <input type="text" class="form-control PBvalidation" value="" id="txt_hora_atencionini" data-type="tiempo" data-keydown="true" placeholder="<?= Yii::t('formulario', 'HH:MM') ?>">
             </div>
             <label hidden for="txt_hora_atencionfin" class="col-sm-4 col-md-4 col-xs-4 col-lg-4  control-label"><?= Yii::t("formulario", "Hora contacto fin") ?> </label>            
-            <div class="col-lg-1 col-md-1 col-sm-1 col-xs-1">
+            <div class="col-sm-5 col-md-5 col-xs-5 col-lg-5">
                 <input type="text" class="form-control PBvalidation" value="" id="txt_hora_atencionfin" data-type="tiempo" data-keydown="true" placeholder="<?= Yii::t('formulario', 'HH:MM') ?>">
             </div>
         </div>
