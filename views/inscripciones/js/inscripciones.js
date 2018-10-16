@@ -19,17 +19,16 @@ $(document).ready(function () {
     });
 
     $('#sendInscripcion').click(function () {
-        alert('llego aqui');
         var link = $('#txth_base').val() + "/inscripciones/guardarinscripcion";
         var arrParams = new Object();
-        arrParams.pges_pri_nombre = $('#txt_primer_nombre').val();
-        arrParams.pges_pri_apellido = $('#txt_primer_apellido').val();
+        arrParams.pri_nombre = $('#txt_primer_nombre').val();
+        arrParams.pri_apellido = $('#txt_primer_apellido').val();
         arrParams.tipo_dni = $('#cmb_tipo_dni').val();
-        arrParams.pges_cedula = $('#txt_cedula').val();
-        arrParams.pges_correo = $('#txt_correo').val();
+        arrParams.cedula = $('#txt_cedula').val();
+        arrParams.correo = $('#txt_correo').val();
         arrParams.pais = $('#cmb_pais_dom').val();
-        arrParams.pges_celular = $('#txt_celular').val();
-        arrParams.pges_pasaporte = $('#txt_pasaporte').val();
+        arrParams.celular = $('#txt_celular').val();
+        arrParams.pasaporte = $('#txt_pasaporte').val();
         arrParams.unidad = $('#cmb_ninteres').val();
         arrParams.modalidad = $('#cmb_modalidad').val();
         arrParams.conoce = $('#cmb_conuteg').val();
