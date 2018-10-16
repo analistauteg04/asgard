@@ -1534,8 +1534,8 @@ class OrdenPago extends \app\modules\financiero\components\CActiveRecord {
      */
     public function insertarOrdenpago($sins_id, $sgen_id, $opag_subtotal, $opag_iva, $opag_total, $opag_estado_pago, $usuario_ingreso) {
         $con = \Yii::$app->db_facturacion;
-
-        $trans = $con->getTransaction(); // se obtiene la transacción actual
+        $trans = $con->beginTransaction();
+        //$trans = $con->getTransaction(); // se obtiene la transacción actual
         if ($trans !== null) {
             $trans = null; // si existe la transacción entonces no se crea una
         } else {
@@ -1644,13 +1644,15 @@ class OrdenPago extends \app\modules\financiero\components\CActiveRecord {
                 $comando->bindParam(':opag_usu_ingreso', $usuario_ingreso, \PDO::PARAM_INT);
                 */
             $result = $comando->execute();
+            $idtable = $con->getLastInsertID($con->dbname . '.orden_pago');
             if ($trans !== null)
                 $trans->commit();
-            return $con->getLastInsertID($con->dbname . '.orden_pago');
+            return $idtable;
         } catch (Exception $ex) {
-            if ($trans !== null)
+            if ($trans !== null) {
                 $trans->rollback();
-            return FALSE;
+            }
+            return 0;
         }
     }
 
@@ -1747,13 +1749,12 @@ class OrdenPago extends \app\modules\financiero\components\CActiveRecord {
                 $comando->bindParam(':dpag_usu_ingreso', $usuario_ingreso, \PDO::PARAM_INT);
 
             $result = $comando->execute();
+            $idtable = $con->getLastInsertID($con->dbname . '.desglose_pago');
             if ($trans !== null)
                 $trans->commit();
-            return $con->getLastInsertID($con->dbname . '.desglose_pago');
+            return $idtable;
         } catch (Exception $ex) {
-            if ($trans !== null)
-                $trans->rollback();
-            return FALSE;
+            return 0;
         }
     }
 
@@ -2027,9 +2028,6 @@ class OrdenPago extends \app\modules\financiero\components\CActiveRecord {
                 $trans->commit();
             return $idtable;
         } catch (Exception $ex) {
-            if ($trans !== null) {
-                $trans->rollback();
-            }
             return 0;
         }
     }
