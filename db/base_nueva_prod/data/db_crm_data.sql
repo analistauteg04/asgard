@@ -75,7 +75,7 @@ INSERT INTO `tipo_oportunidad_venta` (`tove_id`, `uaca_id`, `tove_nombre`, `tove
 (1, 1, 'Ingreso al CAN', 'Ingreso al CAN', '1', '1'),
 (2, 1, 'Ingreso por Homologación', 'Ingreso por Homologación', '1', '1'),
 (3, 1, 'Ingreso por Examen de Admisión', 'Ingreso por Examen de Admisión', '1', '1'),
-(4, 1, 'Ingreso al primer semestre', 'Ingreso al primer semestre', '1', '1'),
+(4, 1, 'Ingreso al primer semestre', 'Ingreso al primer semestre', '0', '1'),
 (5, 2, 'Ingreso al Curso Propedéutico', 'Ingreso al Curso Propedéutico', '1', '1'),
 (6, 2, 'Ingreso al primer módulo de maestría', 'Ingreso al primer módulo de maestría', '1', '1'),
 (7, 2, 'Ingreso por Homologación', 'Ingreso por Homologación', '1', '1'),
