@@ -6,7 +6,14 @@ use app\models\Utilities;
 use yii\helpers\ArrayHelper;
 use yii\base\Exception;
 use app\models\Persona;
+use app\models\EmpresaPersona;
+use \app\modules\admision\models\SolicitudInscripcion;
 use app\models\Pais;
+use app\modules\admision\models\Interesado;
+use app\modules\admision\models\InteresadoEmpresa;
+use app\models\Usuario;
+use yii\base\Security;
+use app\models\UsuaGrolEper;
 use app\models\Provincia;
 use app\models\Canton;
 use app\models\MedioPublicitario;
@@ -16,6 +23,7 @@ use yii\helpers\Url;
 use app\modules\admision\models\PersonaGestion;
 use app\modules\admision\models\Oportunidad;
 use app\models\Empresa;
+use app\modules\admision\models\TipoOportunidadVenta;
 use app\modules\admision\models\EstadoContacto;
 use app\modules\admision\models\MetodoIngreso;
 
@@ -35,6 +43,7 @@ class InscripcionesController extends \yii\web\Controller {
         $mod_pergestion = new PersonaGestion();
         $mod_unidad = new UnidadAcademica();
         $modcanal = new Oportunidad();
+        $modTipoOportunidad = new TipoOportunidadVenta();
         if (Yii::$app->request->isAjax) {
             $data = Yii::$app->request->post();
             if (isset($data["getprovincias"])) {
@@ -64,6 +73,11 @@ class InscripcionesController extends \yii\web\Controller {
                 return Utilities::ajaxResponse('OK', 'alert', Yii::t('jslang', 'Success'), 'false', $message);
                 return;
             }
+            if (isset($data["getoportunidad"])) {
+                $oportunidad = $modTipoOportunidad->consultarOporxUnidad($data["unidada"]);
+                $message = array("oportunidad" => $oportunidad);
+                return Utilities::ajaxResponse('OK', 'alert', Yii::t('jslang', 'Success'), 'false', $message);
+            }
             if (isset($data["getcarrera"])) {
                 $carrera = $modcanal->consultarCarreraModalidad($data["unidada"], $data["moda_id"]);
                 $message = array("carrera" => $carrera);
@@ -80,6 +94,7 @@ class InscripcionesController extends \yii\web\Controller {
         $arr_modalidad = $mod_modalidad->consultarModalidad(1,1);
         $arr_conuteg = $mod_pergestion->consultarConociouteg();
         $arr_carrerra1 = $modcanal->consultarCarreraModalidad(1, 1);
+        $tipo_oportunidad_data = $modTipoOportunidad->consultarOporxUnidad(1);
         return $this->render('index', [
                     "tipos_dni" => array("CED" => Yii::t("formulario", "DNI Document"), "PASS" => Yii::t("formulario", "Passport")),
                     "tipos_dni2" => array("CED" => Yii::t("formulario", "DNI Document1"), "PASS" => Yii::t("formulario", "Passport1")),
@@ -92,6 +107,7 @@ class InscripcionesController extends \yii\web\Controller {
                     "arr_modalidad" => ArrayHelper::map($arr_modalidad, "id", "name"),
                     "arr_conuteg" => ArrayHelper::map($arr_conuteg, "id", "name"),
                     "arr_carrerra1" => ArrayHelper::map($arr_carrerra1, "id", "name"),
+                    "arr_tipo_oportunidad" => ArrayHelper::map($tipo_oportunidad_data, "id", "name"),
         ]);
     }
     
@@ -231,6 +247,8 @@ class InscripcionesController extends \yii\web\Controller {
             $cedula = $data["cedula"];
             $pasaporte = $data["pasaporte"];
             $conoce_uteg = $data["conoce"];
+            $hora_inicio = $data["horaini"];
+            $hora_fin = $data["horafin"];
             if ($tipo_dni == "CED") {
                 $dnis = "Cédula";
                 $numidentificacion = $cedula;
@@ -240,7 +258,7 @@ class InscripcionesController extends \yii\web\Controller {
             }
             switch ($nivelestudio) { // esto cambiarlo hacer funcion que consulte el usuario y traer el id
                 case "1":
-                    $tipoportunidad = 1;
+                    $tipoportunidad = $data["metodo"];
                     if ($modalidad == "1") {
                         $agente = $mod_oportunidad->consultarAgentebyCod($nivelestudio, $modalidad, 1); // 1 uteg//15;
                         $pagina = "register_go";
@@ -261,7 +279,7 @@ class InscripcionesController extends \yii\web\Controller {
                     break;
                 case "2":
                     $agente = $mod_oportunidad->consultarAgentebyCod($nivelestudio, $modalidad, 1);//16;
-                    $tipoportunidad = 5;
+                    $tipoportunidad = $data["metodo"];
                     $pagina = "register_ps";
                     break;
                 /*case "3":
@@ -295,7 +313,7 @@ class InscripcionesController extends \yii\web\Controller {
                         //$codigocrm = $gcrm_codigo["id"] + 1;
                         $codigocrm = 1 + $gcrm_codigo;
                         // emp_id es el nombre de la ver como capturar esta OJO no olvidar hacerlo
-                        $res_oportunidad = $mod_gestion->insertarOportunidad($codigocrm, $emp_id, $resp_persona, null, $carrera, $nivelestudio, $modalidad, $tipoportunidad, $subcarera, $canal, $estado, $fecha_registro, $agente["agente_id"] , $usuario);
+                        $res_oportunidad = $mod_gestion->insertarOportunidad($codigocrm, $emp_id, $resp_persona, null, $carrera, $nivelestudio, $modalidad, $tipoportunidad, $subcarera, $canal, $estado, $hora_inicio, $hora_fin, $fecha_registro, $agente["agente_id"] , $usuario);
                         if ($res_oportunidad) {
                             $oact_id = 1;
                             $descripcion = 'Registro subido desde formulario de inscripción';
@@ -327,7 +345,7 @@ class InscripcionesController extends \yii\web\Controller {
                         Utilities::sendEmail($tituloMensaje, Yii::$app->params["adminEmail"], [$correo => $nombre1 . " " . $nombre2], $asunto, $body);
                         Utilities::sendEmail($tituloMensaje, Yii::$app->params["adminEmail"], [Yii::$app->params["soporteEmail"] => "Soporte"], $asunto, $body);*/
                         $message = array(
-                            "wtmessage" => Yii::t("notificaciones", "La infomación ha sido grabada. "),
+                            "wtmessage" => Yii::t("notificaciones", "Gracias por tu interés en UTEG. Un asesor lo contactará en las proximas 24 horas. "),
                             "title" => Yii::t('jslang', 'Success'),
                         );
                         return Utilities::ajaxResponse('OK', 'alert', Yii::t("jslang", "Sucess"), false, $message);
@@ -374,18 +392,14 @@ class InscripcionesController extends \yii\web\Controller {
         }
     }
     
-    public function Guardarinscripcionsolicitud(){
-        $per_id = @Yii::$app->session->get("PB_perid");
+    public function actionGuardarinscripcionsolicitud(){
         $error = 0;
         if (Yii::$app->request->isAjax) {
-            $data = Yii::$app->request->post();
-            $id_opor = $data["id_pgest"];
-            $opor_model = new Oportunidad();
-            $pgest = $opor_model->consultarPersonaGestionPorOporId($id_opor);
+            $pgest = Yii::$app->request->post();
             $con = \Yii::$app->db_asgard;
             $transaction = $con->beginTransaction();
             try {
-                $emp_id = $pgest['emp_id'];
+                $emp_id = 1;
                 $identificacion = '';
                 if (isset($pgest['pges_cedula']) && strlen($pgest['pges_cedula']) > 0) {
                     $identificacion = $pgest['pges_cedula'];
@@ -407,11 +421,13 @@ class InscripcionesController extends \yii\web\Controller {
                         null, null, null,
                         null, null, null, 1, 1
                     ];
+                    \app\models\Utilities::putMessageLogFile('va a proceder a ingresar la informacion');
                     $id_persona = $mod_persona->consultarIdPersona($pgest['pges_cedula'], $pgest['pges_pasaporte']);
                     if ($id_persona == 0) {
                         $id_persona = $mod_persona->insertarPersona($con, $parametros_per, $keys_per, 'persona');
                     }
                     if ($id_persona > 0) {
+                        \app\models\Utilities::putMessageLogFile('ingreso la Persona');
                         $concap = \Yii::$app->db_captacion;
                         $mod_emp_persona = new EmpresaPersona();
                         $keys = ['emp_id', 'per_id', 'eper_estado', 'eper_estado_logico'];
@@ -421,6 +437,7 @@ class InscripcionesController extends \yii\web\Controller {
                             $emp_per_id = $mod_emp_persona->insertarEmpresaPersona($con, $parametros, $keys, 'empresa_persona');
                         }
                         if ($emp_per_id > 0) {
+                            \app\models\Utilities::putMessageLogFile('ingreso la empresa Persona');
                             $usuario = new Usuario();
                             $usuario_id = $usuario->consultarIdUsuario($id_persona, $pgest['pges_correo']);
                             if ($usuario_id == 0) {
@@ -432,6 +449,7 @@ class InscripcionesController extends \yii\web\Controller {
                                 $usuario_id = $usuario->crearUsuarioTemporal($con, $parametros, $keys, 'usuario');
                             }
                             if ($usuario_id > 0) {
+                                \app\models\Utilities::putMessageLogFile('ingreso el usuario');
                                 $mod_us_gr_ep = new UsuaGrolEper();
                                 $grol_id = 30;
                                 $keys = ['eper_id', 'usu_id', 'grol_id', 'ugep_estado', 'ugep_estado_logico'];
@@ -440,6 +458,7 @@ class InscripcionesController extends \yii\web\Controller {
                                 if ($us_gr_ep_id == 0)
                                     $us_gr_ep_id = $mod_us_gr_ep->insertarUsuaGrolEper($con, $parametros, $keys, 'usua_grol_eper');
                                 if ($us_gr_ep_id > 0) {
+                                    \app\models\Utilities::putMessageLogFile('ingreso el usuario grol');
                                     $mod_interesado = new Interesado(); // se guarda con estado_interesado 1
                                     $interesado_id = $mod_interesado->consultaInteresadoById($id_persona);
                                     $keys = ['per_id', 'int_estado_interesado', 'int_usuario_ingreso', 'int_estado', 'int_estado_logico'];
@@ -448,12 +467,14 @@ class InscripcionesController extends \yii\web\Controller {
                                         $interesado_id = $mod_interesado->insertarInteresado($concap, $parametros, $keys, 'interesado');
                                     }
                                     if ($interesado_id > 0) {
+                                        \app\models\Utilities::putMessageLogFile('ingreso el interesado');
                                         $mod_inte_emp = new InteresadoEmpresa(); // se guarda con estado_interesado 1
                                         $iemp_id = $mod_inte_emp->consultaInteresadoEmpresaById($interesado_id, $emp_id);
                                         if ($iemp_id == 0) {
                                             $iemp_id = $mod_inte_emp->crearInteresadoEmpresa($interesado_id, $emp_id, $usuario_id);
                                         }
                                         if ($iemp_id > 0) {
+                                            \app\models\Utilities::putMessageLogFile('ingreso el interesado empresa');
                                             $usuarioNew = Usuario::findIdentity($usuario_id);
                                             $link = $usuarioNew->generarLinkActivacion();
                                             $email_info = array(
@@ -464,11 +485,15 @@ class InscripcionesController extends \yii\web\Controller {
                                                 "identificacion" => isset($pgest['pges_cedula']) ? $pgest['pges_cedula'] : $pgest['pges_pasaporte'],
                                                 "link_asgard" => $link,
                                             );
+                                            \app\models\Utilities::putMessageLogFile('ingreso el email');
+                                            $solins_model=new SolicitudInscripcion();
+                                            //crear una solicitud de inscripcion
+                                            $solins_model->insertarSolicitud();
+                                            //fin de solicitud inscripcion
+                                            //grabar los documentos
+                                            $solins_model->insertarDocumentosSolic();
+                                            //fin de grabar los documentos
                                             $outemail = $mod_interesado->enviarCorreoBienvenida($email_info);
-                                            /*if ($outemail == 0) {
-                                                $error_message .= Yii::t("formulario", "The email hasn't been sent");
-                                                $error++;
-                                            }*/
                                         } else {
                                             $error_message .= Yii::t("formulario", "The enterprise interested hasn't been saved");
                                             $error++;

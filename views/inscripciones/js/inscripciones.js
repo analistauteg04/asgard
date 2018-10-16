@@ -19,16 +19,50 @@ $(document).ready(function () {
     });
 
     $('#sendInscripcion').click(function () {
+        alert('llego aqui');
         var link = $('#txth_base').val() + "/inscripciones/guardarinscripcion";
         var arrParams = new Object();
-        arrParams.pri_nombre = $('#txt_primer_nombre').val();
-        arrParams.pri_apellido = $('#txt_primer_apellido').val();
+        arrParams.pges_pri_nombre = $('#txt_primer_nombre').val();
+        arrParams.pges_pri_apellido = $('#txt_primer_apellido').val();
         arrParams.tipo_dni = $('#cmb_tipo_dni').val();
-        arrParams.cedula = $('#txt_cedula').val();
-        arrParams.correo = $('#txt_correo').val();
+        arrParams.pges_cedula = $('#txt_cedula').val();
+        arrParams.pges_correo = $('#txt_correo').val();
         arrParams.pais = $('#cmb_pais_dom').val();
-        arrParams.celular = $('#txt_celular').val();
-        arrParams.pasaporte = $('#txt_pasaporte').val();
+        arrParams.pges_celular = $('#txt_celular').val();
+        arrParams.pges_pasaporte = $('#txt_pasaporte').val();
+        arrParams.unidad = $('#cmb_ninteres').val();
+        arrParams.modalidad = $('#cmb_modalidad').val();
+        arrParams.conoce = $('#cmb_conuteg').val();
+        arrParams.carrera = $('#cmb_carrera1').val();
+        arrParams.metodo = $('#cmb_tipo_oportunidad').val();
+        arrParams.horaini = $('#txt_hora_atencionini').val();
+        arrParams.horafin = $('#txt_hora_atencionfin').val();
+        if (!validateForm()) {
+            requestHttpAjax(link, arrParams, function (response) {
+                showAlert(response.status, response.label, response.message);
+                if (!response.error) {
+                    setTimeout(function () {
+                        window.location.href = $('#txth_base').val() + "/inscripciones/index";
+                    }, 5000);
+                }
+
+
+            }, true);
+        }
+
+    });
+    $('#sendInscripcionsolicitud').click(function () {
+        alert('llego aqui');
+        var link = $('#txth_base').val() + "/inscripciones/guardarinscripcionsolicitud";
+        var arrParams = new Object();
+        arrParams.pges_pri_nombre = $('#txt_primer_nombre').val();
+        arrParams.pges_pri_apellido = $('#txt_primer_apellido').val();
+        arrParams.tipo_dni = $('#cmb_tipo_dni').val();
+        arrParams.pges_cedula = $('#txt_cedula').val();
+        arrParams.pges_correo = $('#txt_correo').val();
+        arrParams.pais = $('#cmb_pais_dom').val();
+        arrParams.pges_celular = $('#txt_celular').val();
+        arrParams.pges_pasaporte = $('#txt_pasaporte').val();
         arrParams.unidad = $('#cmb_ninteres').val();
         arrParams.modalidad = $('#cmb_modalidad').val();
         arrParams.conoce = $('#cmb_conuteg').val();
@@ -38,7 +72,7 @@ $(document).ready(function () {
                 showAlert(response.status, response.label, response.message);
                 if (!response.error) {
                     setTimeout(function () {
-                        window.location.href = $('#txth_base').val() + "/inscripciones/index";
+                        window.location.href = $('#txth_base').val() + "/inscripciones/indexadmisionn";
                     }, 5000);
                 }
 
@@ -81,6 +115,13 @@ $(document).ready(function () {
                         if (response.status == "OK") {
                             data = response.message;
                             setComboData(data.carrera, "cmb_carrera1");
+                            arrParams.getoportunidad = true;
+                            requestHttpAjax(link, arrParams, function (response) {
+                                if (response.status == "OK") {
+                                    data = response.message;
+                                    setComboData(data.oportunidad, "cmb_tipo_oportunidad");
+                                }
+                            }, true);
                         }
                     }, true);
                 }

@@ -181,7 +181,7 @@ class InscripcionsmartController extends \yii\web\Controller {
                     if ($resp_persona) {
                         $gcrm_codigo = $mod_gestion->consultarUltimoCodcrm();
                         $codigocrm = 1 + $gcrm_codigo;
-                        $res_oportunidad = $mod_gestion->insertarOportunidad($codigocrm, $emp_id, $resp_persona, $carrera, null, $nivelestudio, $modalidad, $tipoportunidad, $subcarera, $canal, $estado, $fecha_registro, $agente, $usuario);
+                        $res_oportunidad = $mod_gestion->insertarOportunidad($codigocrm, $emp_id, $resp_persona, $carrera, null, $nivelestudio, $modalidad, $tipoportunidad, $subcarera, $canal, $estado, null, null, $fecha_registro, $agente, $usuario);
                         if ($res_oportunidad) {
                             $oact_id = 1;
                             $descripcion = 'Registro subido desde formulario de inscripción';
@@ -207,7 +207,7 @@ class InscripcionsmartController extends \yii\web\Controller {
                         Utilities::sendEmail($tituloMensaje, Yii::$app->params["adminEmail"], [$correo => $nombre1 . " " . $nombre2], $asunto, $body);
                         Utilities::sendEmail($tituloMensaje, Yii::$app->params["adminEmail"], [Yii::$app->params["soporteEmail"] => "Soporte"], $asunto, $body);*/
                         $message = array(
-                            "wtmessage" => Yii::t("notificaciones", "La infomación ha sido grabada. "),
+                            "wtmessage" => Yii::t("notificaciones", "Gracias por tu interés en Smart. Un asesor lo contactará en las proximas 24 horas.. "),
                             "title" => Yii::t('jslang', 'Success'),
                         );
                         return Utilities::ajaxResponse('OK', 'alert', Yii::t("jslang", "Sucess"), false, $message);
