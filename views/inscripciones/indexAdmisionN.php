@@ -421,6 +421,27 @@ $this->title = 'Formulario de Pre-Inscripción';
             </div>
         </div>
     </div>
+    <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
+        <div class="form-group">                        
+            <div class="col-lg-3 col-md-3 col-sm-3 col-xs-3">
+                <input type="checkbox" class="col-lg-12 col-md-12 col-sm-12 col-xs-12" id="chk_mensaje1" data-type="alfa" data-keydown="true" placeholder="" >                
+            </div>
+            <div class="col-lg-9 col-md-9 col-sm-9 col-xs-9">                
+                <label for="chk_mensaje1" class="col-lg-9 col-md-9 col-sm-9 col-xs-9"><?= Yii::t("formulario", "Expreso que la información declarada y documentos cargados son válidos y legales.") ?> </label>
+            </div>
+            
+        </div>
+    </div>
+    <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
+        <div class="form-group">                        
+            <div class="col-lg-3 col-md-3 col-sm-3 col-xs-3">
+                <input type="checkbox" class="col-lg-12 col-md-12 col-sm-12 col-xs-12" id="chk_mensaje2" data-type="alfa" data-keydown="true" placeholder="" >                
+            </div>
+            <div class="col-lg-9 col-md-9 col-sm-9 col-xs-9">          
+                <label for="chk_mensaje2" class="col-lg-12 col-md-12 col-sm-12 col-xs-12"><?= Yii::t("formulario", "Acepto y me comprometo a respetar y cumplir lo estipulado en los reglamentos internos de la universidad con respecto a la admisión y procesos estudiantiles.") ?> </label>
+            </div>
+        </div>
+    </div>
     <div class="row"> 
         <div class="col-lg-10 col-md-10 col-sm-10 col-xs-10"></div>
 

@@ -69,11 +69,18 @@ $(document).ready(function () {
         arrParams.ming_id = $('#cmb_metodo_solicitud option:selected').val();
         arrParams.conoce = $('#cmb_conuteg option:selected').val();
         arrParams.carrera = $('#cmb_carrera_solicitud option:selected').val();
-        arrParams.txt_doc_titulo = $('#txth_doc_titulo').val() + "." + $('#txth_doc_titulo').val().split('.').pop();
+        /*arrParams.txt_doc_titulo = $('#txth_doc_titulo').val() + "." + $('#txth_doc_titulo').val().split('.').pop();
         arrParams.txt_doc_dni = $('#txth_doc_dni').val() + "." + $('#txth_doc_dni').val().split('.').pop();
         arrParams.txt_doc_certvota = $('#txth_doc_certvota').val() + "." + $('#txth_doc_certvota').val().split('.').pop();
         arrParams.txt_doc_foto = $('#txth_doc_foto').val() + "." + $('#txth_doc_foto').val().split('.').pop();
-        arrParams.txt_doc_certificado = $('#txth_doc_certificado').val() + "." + $('#txth_doc_certificado').val().split('.').pop();
+        arrParams.txt_doc_certificado = $('#txth_doc_certificado').val() + "." + $('#txth_doc_certificado').val().split('.').pop();*/
+        arrParams.arc_extranjero = $('#txth_extranjero').val();
+        arrParams.arc_doc_titulo = $('#txth_doc_titulo').val();
+        arrParams.arc_doc_dni = $('#txth_doc_dni').val();
+        arrParams.arc_doc_certvota = $('#txth_doc_certvota').val();
+        arrParams.arc_doc_foto = $('#txth_doc_foto').val();
+        arrParams.arc_doc_certificado = $('#txth_doc_certificado').val();
+        arrParams.arc_doc_beca = $('#txth_doc_beca').val();
         if (!validateForm()) {
             requestHttpAjax(link, arrParams, function (response) {
                 showAlert(response.status, response.label, response.message);
