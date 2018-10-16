@@ -329,22 +329,7 @@ class InscripcionesController extends \yii\web\Controller {
                     }
                     if ($exito) {
                         $transaction->commit();
-                        //$usu$file1ario = ucwords(strtolower($nombre1)) . " " . ucwords(strtolower($nombre2));
-                        //$file1 = Url::base(true) . "/files/inscripcion.pdf";
-                        //$rutaFile = array($file1);
-                        /*$tituloMensaje = Yii::t("register", "User Register");
-                        $asunto = Yii::t("register", "User Register") . " " . Yii::$app->params["siteName"];
-                        $body = Utilities::getMailMessage($pagina, array(
-                                    "[[primer_nombre]]" => $nombre1,
-                                    "[[primer_apellido]]" => $apellido1,
-                                    "[[dni]]" => $dnis,
-                                    "[[numero_dni]]" => $numidentificacion,
-                                    "[[celular]]" => $celular,
-                                    "[[mail]]" => $correo,
-                                    "[[unidad_academica]]" => $nombre_unidad["nombre_unidad"],
-                                    "[[modalidad]]" => $nombre_modalidad["nombre_modalidad"]), Yii::$app->language);
-                        Utilities::sendEmail($tituloMensaje, Yii::$app->params["adminEmail"], [$correo => $nombre1 . " " . $nombre2], $asunto, $body);
-                        Utilities::sendEmail($tituloMensaje, Yii::$app->params["adminEmail"], [Yii::$app->params["soporteEmail"] => "Soporte"], $asunto, $body);*/
+                        //Aqui antes enviaba correo
                         $message = array(
                             "wtmessage" => Yii::t("notificaciones", "Gracias por tu interés en UTEG. Un asesor lo contactará en las proximas 24 horas. "),
                             "title" => Yii::t('jslang', 'Success'),
