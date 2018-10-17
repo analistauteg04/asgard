@@ -22,6 +22,7 @@ admision::registerTranslations();
 financiero::registerTranslations();
 
 class ContactosController extends \app\components\CController {
+
     public function actionIndex() {
         $per_id = @Yii::$app->session->get("PB_iduser");
         $modcanal = new Oportunidad();
@@ -52,8 +53,8 @@ class ContactosController extends \app\components\CController {
         return $this->render('index', [
                     'model' => $mod_gestion,
                     'arr_contacto' => ArrayHelper::map(array_merge([["id" => "0", "name" => "Todas"]], $estado_contacto), "id", "name"),
-                    'arr_canalconta' => ArrayHelper::map(array_merge([["id" => "0", "name" => "Todas"]],$canalconta), "id", "name"),
-                    'arra_agente' => ArrayHelper::map(array_merge([["id" => "0", "name" => "Todas"],["id" => "1", "name" => "Admin UTEG"]],$arra_agente), "id", "name"),
+                    'arr_canalconta' => ArrayHelper::map(array_merge([["id" => "0", "name" => "Todas"]], $canalconta), "id", "name"),
+                    'arra_agente' => ArrayHelper::map(array_merge([["id" => "0", "name" => "Todas"], ["id" => "1", "name" => "Admin UTEG"]], $arra_agente), "id", "name"),
         ]);
     }
 
@@ -367,22 +368,25 @@ class ContactosController extends \app\components\CController {
             Yii::t("crm", "Contact"),
             Yii::t("formulario", "Country"),
             Yii::t("formulario", "Date"),
-            admision::t("crm", "Channel"), 
+            admision::t("crm", "Channel"),
             Yii::t("formulario", "User login"),
             Yii::t("formulario", "Open Opportunities"),
             Yii::t("formulario", "Close Opportunities")
         );
         $modPersonaGestion = new PersonaGestion();
         $data = Yii::$app->request->get();
-        $arrSearch["search"] = $data['search'];
-        $arrSearch["estado"] = $data['estado'];
+        $arrSearch["search"] = $data['search'];        
+        $arrSearch["f_ini"] =  $data['f_ini'];
+        $arrSearch["f_fin"] =  $data['f_fin'];
+        $arrSearch["medio"] =  $data['medio'];
+        $arrSearch["agente"] = $data['agente'];
         $arrData = array();
         if (empty($arrSearch)) {
             $arrData = $modPersonaGestion->consultarReportContactos(array(), true);
         } else {
             $arrData = $modPersonaGestion->consultarReportContactos($arrSearch, true);
         }
-        \app\models\Utilities::putMessageLogFile($arrData);
+        \app\models\Utilities::putMessageLogFile($arrSearch);
         $nameReport = admision::t("crm", "Contacts");
         Utilities::generarReporteXLS($nombarch, $nameReport, $arrHeader, $arrData, $colPosition);
         exit;
@@ -397,15 +401,18 @@ class ContactosController extends \app\components\CController {
             Yii::t("formulario", "Date"),
             //Yii::t("formulario", "Academic unit"),
             //Yii::t("formulario", "Company"),
-            admision::t("crm", "Channel"),      
+            admision::t("crm", "Channel"),
             Yii::t("formulario", "User login"),
             Yii::t("formulario", "Open Opportunities"),
             Yii::t("formulario", "Close Opportunities")
         );
         $modPersonaGestion = new PersonaGestion();
         $data = Yii::$app->request->get();
-        $arrSearch["search"] = $data['search'];
-        $arrSearch["estado"] = $data['estado'];
+        $arrSearch["search"] = $data['search'];       
+        $arrSearch["medio"] = $data['medio'];
+        $arrSearch["f_ini"] = $data['f_ini'];
+        $arrSearch["f_fin"] = $data['f_fin'];
+        $arrSearch["agente"] = $data['agente'];
         $arrData = array();
         if (empty($arrSearch)) {
             $arrData = $modPersonaGestion->consultarReportContactos(array(), true);
@@ -557,12 +564,12 @@ class ContactosController extends \app\components\CController {
 
     public function actionListaroportunidad() {
         $per_id = @Yii::$app->session->get("PB_iduser");
-        $pges_id = base64_decode(empty($_GET["pgid"])?base64_encode(0):$_GET["pgid"]);
+        $pges_id = base64_decode(empty($_GET["pgid"]) ? base64_encode(0) : $_GET["pgid"]);
         $modGestionCrm = new Oportunidad();
         $data = Yii::$app->request->get();
         $persges_mod = new PersonaGestion();
-        if($pges_id==0){
-            header('Location: '.'index');
+        if ($pges_id == 0) {
+            header('Location: ' . 'index');
             die();
         }
         $contactManage = $persges_mod->consultarPersonaGestion($pges_id);
@@ -655,15 +662,15 @@ class ContactosController extends \app\components\CController {
     public function actionExport() {
         $mod_oportunidad = new Oportunidad();
         //$op= base64_decode($_GET["op"]);       
-        $tipoRep=$_GET["op"];
-        if($tipoRep==1){//oportunidad por unidad
+        $tipoRep = $_GET["op"];
+        if ($tipoRep == 1) {//oportunidad por unidad
             $Data = $mod_oportunidad->consultarOportUnidadAcademica();
-            $dataIds='eopo_id';
-            $dataName='eopo_nombre';
-        }else{//oportunidad perdida
+            $dataIds = 'eopo_id';
+            $dataName = 'eopo_nombre';
+        } else {//oportunidad perdida
             $Data = $mod_oportunidad->consultarOportPerdida();
-            $dataIds='oper_id';
-            $dataName='oper_nombre';
+            $dataIds = 'oper_id';
+            $dataName = 'oper_nombre';
         }
         $arrayIdsCols = array();
         for ($i = 0; $i < sizeof($Data); $i++) {
@@ -723,30 +730,30 @@ class ContactosController extends \app\components\CController {
         switch ($uaca_id) {
             case '1'://GRADO
                 $arrayData[$fil][1] = $CantUnidad;
-                $col1=1;
+                $col1 = 1;
                 break;
             case '2'://POSGRADO
                 $arrayData[$fil][2] = $CantUnidad;
-                $col2=1;
+                $col2 = 1;
                 break;
             case '3'://EDUCACION CONTINUA
                 $arrayData[$fil][3] = $CantUnidad;
-                $col3=1;
+                $col3 = 1;
                 break;
             case '4'://Base Grado
                 $arrayData[$fil][3] = $CantUnidad;
                 break;
-                $col4=1;
+                $col4 = 1;
             case '5'://Base Posgrado
                 $arrayData[$fil][3] = $CantUnidad;
-                $col5=1;
+                $col5 = 1;
                 break;
             case '6'://Base Online
                 $arrayData[$fil][3] = $CantUnidad;
-                $col6=1;
+                $col6 = 1;
                 break;
         }
-        $numPro=$col1+$col2+$col3+$col4+$col5+$col6;
+        $numPro = $col1 + $col2 + $col3 + $col4 + $col5 + $col6;
         $arrayData[$fil][7] = $sumafila; //SUMA
         $arrayData[$fil][8] = $sumafila / $numPro; //PROMEDIO
     }

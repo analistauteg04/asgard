@@ -451,12 +451,12 @@ class Utilities {
             $objPHPExcel->getActiveSheet()->getStyle("C7")->getFont()->setBold(True);
             $objPHPExcel->getActiveSheet()->getStyle("E7")->getFont()->setSize(16);
 
-            /*$objPHPExcel->setActiveSheetIndex(0)
+            $objPHPExcel->setActiveSheetIndex(0)
                     ->setCellValue('C4', $nameReport)
                     ->setCellValue('C6', Yii::t("reporte","Produced by"))
                     ->setCellValue('E6', Yii::$app->session->get("PB_nombres"))
                     ->setCellValue('C7', Yii::t("reporte","Date"))
-                    ->setCellValue('E7', date("Y-m-d H:i:s"));*/
+                    ->setCellValue('E7', date("Y-m-d H:i:s"));
 
             // seteo de bordes cabecera de reporte
             $objPHPExcel->getActiveSheet()->getStyle("B2:S2")->applyFromArray($border["top"]);
@@ -465,7 +465,7 @@ class Utilities {
             $objPHPExcel->getActiveSheet()->getStyle("S2:S10")->applyFromArray($border["right"]);
             $objPHPExcel->getActiveSheet()->getStyle("B$i:D$i")->applyFromArray($border);
             
-            /*$objDrawing = new drawing();
+            $objDrawing = new drawing();
             $objDrawing->setName('Logo');
             $objDrawing->setDescription('Logo');
             $objDrawing->setPath(Yii::$app->basePath . "/themes/" . Yii::$app->view->theme->themeName . "/assets/img/logos/logo_" . $emp_id . ".png");
@@ -474,18 +474,18 @@ class Utilities {
             $objDrawing->setCoordinates('O4');
             //$objDrawing->setOffsetX(1);
             //$objDrawing->setOffsetY(5);
-            $objDrawing->setWorksheet($objPHPExcel->getActiveSheet());*/
+            $objDrawing->setWorksheet($objPHPExcel->getActiveSheet());
 
-            //$i='12';
-            $i = '1';
+            $i='12';
+            //$i = '1';
 
             for($i=0; $i<count($arrHeader); $i++){
                 $j = 12;
                 $objPHPExcel->getActiveSheet()->getStyle($colPosition[$i] . $j)->getFont()->setBold(True);
                 $objPHPExcel->setActiveSheetIndex(0)->setCellValue($colPosition[$i] . $j, $arrHeader[$i]);
             }
-            //$i = 12;
-            $i = 1;
+            $i = 12;
+            //$i = 1;
             foreach($arrData as $key => $value){
                 $k = 0;
                 $j = $i + 1;
