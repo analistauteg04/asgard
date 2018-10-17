@@ -78,5 +78,24 @@ class InscripcionAdmision extends \yii\db\ActiveRecord {
         return $con->getLastInsertID();
     }
 
-    
+    /**
+     * Function addLabelTimeDocumentos renombra el documento agregando una varible de tiempo 
+     * @author  Developer Uteg <developer@uteg.edu.ec>
+     * @param   int     $sins_id        Id de la solicitud
+     * @param   string  $file           Uri del Archivo a modificar
+     * @param   int     $timeSt         Parametro a agregar al nombre del archivo
+     * @return  $newFile | FALSE (Retorna el nombre del nuevo archivo o false si fue error).
+     */
+    public static function addLabelTimeDocumentos($sins_id, $file, $timeSt){
+        $arrIm = explode(".", basename($file));
+        $typeFile = strtolower($arrIm[count($arrIm) - 1]);
+        $baseFile = Yii::$app->basePath;
+        $search  = ".$typeFile";
+        $replace = "_$timeSt" . ".$typeFile";
+        $newFile = str_replace($search, $replace, $file);
+        if(rename($baseFile . $file, $baseFile . $newFile)){
+            return $newFile;
+        }
+        return FALSE;
+    }
 }

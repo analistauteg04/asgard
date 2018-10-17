@@ -424,31 +424,77 @@ class InscripcionadmisionController extends \yii\web\Controller {
                 if (isset($data["arc_doc_foto"]) && $data["arc_doc_foto"] != "") {
                     $arrIm = explode(".", basename($data["arc_doc_foto"]));
                     $typeFile = strtolower($arrIm[count($arrIm) - 1]);
-                    $foto_archivo = Yii::$app->params["documentFolder"] . "solicitudinscripcion/" . $inscripcion_id . "/doc_foto_per_" . $inscripcion_id . "." . $typeFile;
+                    $foto_archivo = Yii::$app->params["documentFolder"] . "solicitudadmision/" . $inscripcion_id . "/doc_foto_per_" . $inscripcion_id . "." . $typeFile;
                 }
             }
 
-            if ($accion == "Create") {
-                //Nuevo Registro
-                $resul = $model->insertarInscripcion($data);
-            }else if($accion == "Update"){
-                //Modificar Registro
-                //$resul = $model->actualizarSolicitud($data);                
-            }
-            if ($resul['status']) {
-                if($accion == "Create"){
-                    $source = $_SERVER['DOCUMENT_ROOT'].Url::base().Yii::$app->params["documentFolder"].$resul['cedula'];
-                    $target = $_SERVER['DOCUMENT_ROOT'].Url::base().Yii::$app->params["documentFolder"].$resul['cedula'].'_'.$resul['ids'];
-                    rename($source, $target);//Renombrar el Directorio                    
+            $timeSt = time();
+
+            try {
+                if (isset($data["arc_doc_titulo"]) && $data["arc_doc_titulo"] != "") {
+                    $arrIm = explode(".", basename($data["arc_doc_titulo"]));
+                    $typeFile = strtolower($arrIm[count($arrIm) - 1]);
+                    $titulo_archivoOld = Yii::$app->params["documentFolder"] . "solicitudadmision/" . $inscripcion_id . "/doc_titulo_per_" . $inscripcion_id . "." . $typeFile;
+                    $titulo_archivo = InscripcionAdmision::addLabelTimeDocumentos($inscripcion_id, $titulo_archivoOld, $timeSt);
+                    if ($titulo_archivo === false)
+                        throw new Exception('Error doc Titulo no renombrado.');
+                }
+                if (isset($data["arc_doc_dni"]) && $data["arc_doc_dni"] != "") {
+                    $arrIm = explode(".", basename($data["arc_doc_dni"]));
+                    $typeFile = strtolower($arrIm[count($arrIm) - 1]);
+                    $dni_archivoOld = Yii::$app->params["documentFolder"] . "solicitudadmision/" . $inscripcion_id . "/doc_dni_per_" . $inscripcion_id . "." . $typeFile;
+                    $dni_archivo = InscripcionAdmision::addLabelTimeDocumentos($inscripcion_id, $dni_archivoOld, $timeSt);
+                    if ($dni_archivo === false)
+                        throw new Exception('Error doc Dni no renombrado.');
+                }
+                if (isset($data["arc_doc_certvota"]) && $data["arc_doc_certvota"] != "") {
+                    $arrIm = explode(".", basename($data["arc_doc_certvota"]));
+                    $typeFile = strtolower($arrIm[count($arrIm) - 1]);
+                    $certvota_archivoOld = Yii::$app->params["documentFolder"] . "solicitudadmision/" . $inscripcion_idper_id . "/doc_certvota_per_" . $inscripcion_id . "." . $typeFile;
+                    $certvota_archivo = InscripcionAdmision::addLabelTimeDocumentos($inscripcion_id, $certvota_archivoOld, $timeSt);
+                    if ($certvota_archivo === false)
+                        throw new Exception('Error doc certificado vot. no renombrado.');
+                }
+                if (isset($data["arc_doc_foto"]) && $data["arc_doc_foto"] != "") {
+                    $arrIm = explode(".", basename($data["arc_doc_foto"]));
+                    $typeFile = strtolower($arrIm[count($arrIm) - 1]);
+                    $foto_archivoOld = Yii::$app->params["documentFolder"] . "solicitudadmision/" . $inscripcion_id . "/doc_foto_per_" . $inscripcion_id . "." . $typeFile;
+                    $foto_archivo = InscripcionAdmision::addLabelTimeDocumentos($inscripcion_id, $foto_archivoOld, $timeSt);
+                    if ($foto_archivo === false)
+                        throw new Exception('Error doc Foto no renombrado.');
                 }
                 
-                $message = ["info" => Yii::t('exception', '<strong>Well done!</strong> your information was successfully saved.')];
-                echo Utilities::ajaxResponse('OK', 'alert', Yii::t('jslang', 'Success'), 'false', $message,$resul);
-            }else{
-                $message = ["info" => Yii::t('exception', 'The above error occurred while the Web server was processing your request.')];
-                echo Utilities::ajaxResponse('NO_OK', 'alert', Yii::t('jslang', 'Error'), 'false', $message);
+
+                if ($accion == "Create") {
+                    //Nuevo Registro
+                    $resul = $model->insertarInscripcion($data);
+                }else if($accion == "Update"){
+                    //Modificar Registro
+                    //$resul = $model->actualizarSolicitud($data);                
+                }
+                if ($resul['status']) {
+                    if($accion == "Create"){
+                        $source = $_SERVER['DOCUMENT_ROOT'].Url::base().Yii::$app->params["documentFolder"].$resul['cedula'];
+                        $target = $_SERVER['DOCUMENT_ROOT'].Url::base().Yii::$app->params["documentFolder"].$resul['cedula'].'_'.$resul['ids'];
+                        rename($source, $target);//Renombrar el Directorio                    
+                    }
+                    
+                    $message = ["info" => Yii::t('exception', '<strong>Well done!</strong> your information was successfully saved.')];
+                    return Utilities::ajaxResponse('OK', 'alert', Yii::t('jslang', 'Success'), 'false', $message,$resul);
+                }else{
+                    $message = ["info" => Yii::t('exception', 'The above error occurred while the Web server was processing your request.')];
+                    return  Utilities::ajaxResponse('NO_OK', 'alert', Yii::t('jslang', 'Error'), 'false', $message);
+                }
+                return;
+
+            }catch (Exception $ex) {
+                $transaction->rollback();
+                $message = array(
+                    "wtmessage" => $ex->getMessage(),
+                    "title" => Yii::t('jslang', 'Error'),
+                );
+                return Utilities::ajaxResponse('NO_OK', 'alert', Yii::t("jslang", "Error"), false, $message);
             }
-            return;
         }   
     }
 
