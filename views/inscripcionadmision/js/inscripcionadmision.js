@@ -130,6 +130,7 @@ $(document).ready(function () {
     
     // tabs del index
     $('#paso1next').click(function () {
+        
         $("a[data-href='#paso1']").attr('data-toggle', 'none');
         $("a[data-href='#paso1']").parent().attr('class', 'disabled');
         $("a[data-href='#paso1']").attr('data-href', $("a[href='#paso1']").attr('href'));
