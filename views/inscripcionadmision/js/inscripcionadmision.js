@@ -19,8 +19,9 @@ $(document).ready(function () {
     });
    
     
-    $('#sendInformacionAspirante').click(function () {        
-        var link = $('#txth_base').val() + "/inscripciones/guardarinscripcionsolicitud";
+    $('#sendInformacionAspirante').click(function () {   
+        guardarInscripcion('create');
+        /*var link = $('#txth_base').val() + "/inscripciones/guardarinscripcionsolicitud";
         var arrParams = new Object();
         arrParams.pges_pri_nombre = $('#txt_primer_nombre').val();
         arrParams.pges_pri_apellido = $('#txt_primer_apellido').val();
@@ -38,9 +39,7 @@ $(document).ready(function () {
         arrParams.arc_extranjero = $('#txth_extranjero').val();
         arrParams.arc_doc_beca = $('#txth_doc_beca').val();
         
-        /*$('#paso2').attr('class','active');//disable
-        $('#paso1').attr('class','');
-        $('.nav-tabs a[href="#paso2"]').tab('show');*/
+
         
         $("a[data-href='#paso1']").attr('data-toggle', 'none');
         $("a[data-href='#paso1']").parent().attr('class', 'disabled');
@@ -48,7 +47,7 @@ $(document).ready(function () {
         $("a[data-href='#paso1']").removeAttr('href');
         $("a[data-href='#paso2']").attr('data-toggle', 'tab');
         $("a[data-href='#paso2']").attr('href', $("a[data-href='#paso2']").attr('data-href'));
-        $("a[data-href='#paso2']").trigger("click");
+        $("a[data-href='#paso2']").trigger("click");*/
             
         
         /*if (!validateForm()) {
@@ -195,8 +194,10 @@ $(document).ready(function () {
 
 
 //INSERTAR DATOS
-function guardarSolicitud(accion) {
-    if ($("#chk_mensaje2").prop("checked")) {
+function guardarInscripcion(accion) {
+    alert('ingresa');
+    //if ($("#chk_mensaje2").prop("checked")) {
+    if (true) {
         var ID = (accion == "Update") ? $('#txth_twin_id').val() : 0;
         var link = $('#txth_base').val() + "/inscripciones/saveinscripciontemp";
         var arrParams = new Object();
@@ -238,14 +239,14 @@ function dataInscripPart1(ID) {
     objDat.pges_correo = $('#txt_correo').val();
     objDat.pais = $('#cmb_pais_dom option:selected').val();
     objDat.pges_celular = $('#txt_celular').val();
-    objDat.pges_pasaporte = $('#txt_pasaporte').val();
+    //objDat.pges_pasaporte = $('#txt_pasaporte').val();
     objDat.unidad_academica = $('#cmb_unidad_solicitud option:selected').val();
     objDat.modalidad = $('#cmb_modalidad_solicitud option:selected').val();
     objDat.ming_id = $('#cmb_metodo_solicitud option:selected').val();
     objDat.conoce = $('#cmb_conuteg option:selected').val();
     objDat.carrera = $('#cmb_carrera_solicitud option:selected').val();
-    objDat.arc_extranjero = $('#txth_extranjero').val();
-    objDat.arc_doc_beca = $('#txth_doc_beca').val();
+    //objDat.arc_extranjero = $('#txth_extranjero').val();
+    //objDat.arc_doc_beca = $('#txth_doc_beca').val();
     datArray[0] = objDat;
     sessionStorage.dataInscrip_1 = JSON.stringify(datArray);
     //return JSON.stringify(datArray);
