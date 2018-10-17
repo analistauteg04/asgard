@@ -385,7 +385,7 @@ class InscripcionadmisionController extends \yii\web\Controller {
             $model = new InscripcionAdmision();
             $data = Yii::$app->request->post();
             $accion = isset($data['ACCION']) ? $data['ACCION'] : "";
-
+            \app\models\Utilities::putMessageLogFile('ha llegado a este controlador');
             if ($data["upload_file"]) {
                 if (empty($_FILES)) {
                     return json_encode(['error' => Yii::t("notificaciones", "Error to process File {file}. Try again.", ['{file}' => basename($files['name'])])]);
@@ -429,7 +429,6 @@ class InscripcionadmisionController extends \yii\web\Controller {
             }
 
             $timeSt = time();
-
             try {
                 if (isset($data["arc_doc_titulo"]) && $data["arc_doc_titulo"] != "") {
                     $arrIm = explode(".", basename($data["arc_doc_titulo"]));
@@ -463,17 +462,15 @@ class InscripcionadmisionController extends \yii\web\Controller {
                     if ($foto_archivo === false)
                         throw new Exception('Error doc Foto no renombrado.');
                 }
-                
-
-                if ($accion == "Create") {
+                if ($accion == "create" || $accion == "Create") {
                     //Nuevo Registro
-                    $resul = $model->insertarInscripcion($data);
+                    $resul = $model->insertarInscripcion($data['DATA_1']);
                 }else if($accion == "Update"){
                     //Modificar Registro
                     //$resul = $model->actualizarSolicitud($data);                
                 }
                 if ($resul['status']) {
-                    if($accion == "Create"){
+                    if($accion == "create"){
                         $source = $_SERVER['DOCUMENT_ROOT'].Url::base().Yii::$app->params["documentFolder"].$resul['cedula'];
                         $target = $_SERVER['DOCUMENT_ROOT'].Url::base().Yii::$app->params["documentFolder"].$resul['cedula'].'_'.$resul['ids'];
                         rename($source, $target);//Renombrar el Directorio                    

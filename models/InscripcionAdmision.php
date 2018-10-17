@@ -7,6 +7,9 @@
  */
 
 namespace app\models;
+
+use \yii\data\ActiveDataProvider;
+use \yii\data\ArrayDataProvider;
 use Yii;
 
 /**
@@ -15,67 +18,74 @@ use Yii;
  * @author root
  */
 class InscripcionAdmision extends \yii\db\ActiveRecord {
+
     //put your code here
     public function insertarInscripcion($data) {
         $arroout = array();
         $con = \Yii::$app->db_captacion;
         $trans = $con->beginTransaction();
         try {
-            $data_1 = isset($data['DATA_1']) ? $data['DATA_1'] : array();
-            //$data_2 = isset($data['DATA_2']) ? $data['DATA_2'] : array();
-            //$data_3 = isset($data['DATA_3']) ? $data['DATA_3'] : array(); 
-            $twin_id=$this->insertarDataInscripcion($con,$data_1,$data_2,$data_3);
+            \app\models\Utilities::putMessageLogFile('Entro al modelo para ingresar la informacion');
+            $keys = [
+                        'twin_nombre', 'twin_apellido', 'twin_dni','twin_numero', 
+                        'twin_correo', 'twin_pais', 'twin_celular','uaca_id', 
+                        'mod_id', 'car_id', 'twin_metodo_ingreso','conuteg_id', 
+                        'ruta_doc_titulo', 'ruta_doc_dni', 'ruta_doc_certvota','ruta_doc_foto', 
+                        'ruta_doc_certificado', 'twin_mensaje1', 'twin_mensaje2','twin_estado', 
+                        'twin_fecha_creacion', 'twin_estado_logico' 
+                    ];
+            $parametros =   [
+                                $data[0]['pges_pri_nombre'], $data[0]['pges_pri_apellido'], $data[0]['tipo_dni'],$data[0]['pges_cedula'],
+                                $data[0]['pges_correo'], $data[0]['pais'], $data[0]['pges_celular'],$data[0]['unidad_academica'],
+                                $data[0]['modalidad'], $data[0]['carrera'], $data[0]['ming_id'],$data[0]['conoce'],
+                                null,null,null,null,
+                                null, null, null,1,
+                                date("YmdHis"), 1
+                            ];
+            $twin_id = $this->insertarDataInscripcion($con, $keys,$parametros,"temporal_wizard_inscripcion");
             $trans->commit();
             $con->close();
-             //RETORNA DATOS 
-            $arroout["ids"]= $twin_id;
-            $arroout["status"]= true;            
-            $arroout["accion"]= 'Update';
+            //RETORNA DATOS 
+            $arroout["ids"] = $twin_id;
+            $arroout["status"] = true;
+            $arroout["accion"] = 'Update';
             return $arroout;
             //return true;
         } catch (\Exception $e) {
             $trans->rollBack();
             $con->close();
             //throw $e;
-            $arroout["status"]= false;
+            $arroout["status"] = false;
             return $arroout;
             //return false;
         }
     }
-    private function insertarDataInscripcion($con,$data_1,$data_2,$data_3) {
-        //`twin_id`,
-        $sql = "INSERT INTO " . $con->dbname . ".temporal_wizard_inscripcion
-            (twin_nombre,twin_apellido,twin_dni,twin_numero,twin_correo,twin_pais,twin_celular,
-             uaca_id,mod_id,car_id,twin_metodo_ingreso,conuteg_id,ruta_doc_titulo,ruta_doc_dni,
-             ruta_doc_certvota,ruta_doc_foto,ruta_doc_certificado,twin_mensaje1,twin_mensaje2,
-             twin_estado,twin_fecha_creacion,twin_estado_logico)VALUES
-            (:twin_nombre,:twin_apellido,:twin_dni,:twin_numero,:twin_correo,:twin_pais,:twin_celular,
-             :uaca_id,:mod_id,:car_id,:twin_metodo_ingreso,:conuteg_id,:ruta_doc_titulo,:ruta_doc_dni,
-             :ruta_doc_certvota,:ruta_doc_foto,:ruta_doc_certificado,:twin_mensaje1,:twin_mensaje2,
-             1,CURRENT_TIMESTAMP(),1)";
 
-        $command = $con->createCommand($sql);
-        $command->bindParam(":twin_nombre",$doc_numero, PDO::PARAM_STR);
-        $command->bindParam(":twin_apellido",$doc_numero, PDO::PARAM_STR);
-        $command->bindParam(":twin_dni",$doc_numero, PDO::PARAM_STR);
-        $command->bindParam(":twin_numero",$doc_numero, PDO::PARAM_STR);
-        $command->bindParam(":twin_correo",$doc_numero, PDO::PARAM_STR);
-        $command->bindParam(":twin_pais",$doc_numero, PDO::PARAM_STR);
-        $command->bindParam(":twin_celular",$doc_numero, PDO::PARAM_STR);
-        $command->bindParam(":uaca_id",$doc_numero, PDO::PARAM_STR);
-        $command->bindParam(":mod_id",$doc_numero, PDO::PARAM_STR);
-        $command->bindParam(":car_id",$doc_numero, PDO::PARAM_STR);
-        $command->bindParam(":twin_metodo_ingreso",$doc_numero, PDO::PARAM_STR);
-        $command->bindParam(":conuteg_id",$doc_numero, PDO::PARAM_STR);
-        $command->bindParam(":ruta_doc_titulo",$doc_numero, PDO::PARAM_STR);
-        $command->bindParam(":ruta_doc_dni",$doc_numero, PDO::PARAM_STR);
-        $command->bindParam(":ruta_doc_certvota",$doc_numero, PDO::PARAM_STR);
-        $command->bindParam(":ruta_doc_foto",$doc_numero, PDO::PARAM_STR);
-        $command->bindParam(":ruta_doc_certificado",$doc_numero, PDO::PARAM_STR);
-        $command->bindParam(":twin_mensaje1",$doc_numero, PDO::PARAM_STR);
-        $command->bindParam(":twin_mensaje2",$doc_numero, PDO::PARAM_STR);
-        $command->execute();
-        return $con->getLastInsertID();
+    private function insertarDataInscripcion($con, $keys,$parameters,$name_table) {
+        $trans = $con->getTransaction();
+        $param_sql .= "" . $keys[0];
+        $bdet_sql .= "'" . $parameters[0] . "'";
+        for ($i = 1; $i < count($parameters); $i++) {
+            if (isset($parameters[$i])) {
+                $param_sql .= ", " . $keys[$i];
+                $bdet_sql .= ", '" . $parameters[$i] . "'";
+            }
+        }
+        try {
+            $sql = "INSERT INTO " . $con->dbname . '.' . $name_table . " ($param_sql) VALUES($bdet_sql);";
+            \app\models\Utilities::putMessageLogFile('sql: '.$sql);
+            $comando = $con->createCommand($sql);
+            $result = $comando->execute();
+            $idtable = $con->getLastInsertID($con->dbname . '.' . $name_table);
+            if ($trans !== null)
+                $trans->commit();
+            return $idtable;
+        } catch (Exception $ex) {
+            if ($trans !== null) {
+                $trans->rollback();
+            }
+            return 0;
+        }
     }
 
     /**
@@ -86,16 +96,17 @@ class InscripcionAdmision extends \yii\db\ActiveRecord {
      * @param   int     $timeSt         Parametro a agregar al nombre del archivo
      * @return  $newFile | FALSE (Retorna el nombre del nuevo archivo o false si fue error).
      */
-    public static function addLabelTimeDocumentos($sins_id, $file, $timeSt){
+    public static function addLabelTimeDocumentos($sins_id, $file, $timeSt) {
         $arrIm = explode(".", basename($file));
         $typeFile = strtolower($arrIm[count($arrIm) - 1]);
         $baseFile = Yii::$app->basePath;
-        $search  = ".$typeFile";
+        $search = ".$typeFile";
         $replace = "_$timeSt" . ".$typeFile";
         $newFile = str_replace($search, $replace, $file);
-        if(rename($baseFile . $file, $baseFile . $newFile)){
+        if (rename($baseFile . $file, $baseFile . $newFile)) {
             return $newFile;
         }
         return FALSE;
     }
+
 }
