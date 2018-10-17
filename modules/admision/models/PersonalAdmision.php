@@ -155,5 +155,33 @@ class PersonalAdmision extends \yii\db\ActiveRecord {
             return FALSE;
         }
     }
+    
+    /**
+     * Function consulta agente para el filtro de contacto . 
+     * @author Giovanni Vergara <analistadesarrollo02@uteg.edu.ec>;
+     * @param
+     * @return
+     */
+    public function consultarAgenteconta() {
+        $con = \Yii::$app->db_crm;
+        $con1 = \Yii::$app->db_asgard;
+        $estado = 1;
+        $sql = "SELECT 
+                per.per_id as id, 
+                concat(per.per_pri_nombre, ' ', ifnull(per.per_pri_apellido,' '))  as name                   
+                FROM 
+                   " . $con->dbname . ".personal_admision pad
+                INNER JOIN " . $con1->dbname . ".persona per on per.per_id = pad.per_id";
+        $sql .= "  WHERE  
+                   per.per_id > 8 and per.per_id < 20 AND
+                   padm_estado = :estado AND
+                   padm_estado_logico = :estado
+                ORDEr BY name";
+
+        $comando = $con->createCommand($sql);
+        $comando->bindParam(":estado", $estado, \PDO::PARAM_STR);        
+        $resultData = $comando->queryAll();
+        return $resultData;
+    }
 
 }

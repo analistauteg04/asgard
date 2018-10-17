@@ -9,6 +9,8 @@ use yii\helpers\Html;
         <?=
         $this->render('_formBuscarContactos', [
             'arr_contacto' => $arr_contacto,
+            'arr_canalconta' =>$arr_canalconta,
+            'arra_agente' =>$arra_agente
         ]);
         ?>
     </form>

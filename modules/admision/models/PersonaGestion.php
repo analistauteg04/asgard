@@ -942,7 +942,17 @@ class PersonaGestion extends \app\modules\admision\components\CActiveRecord {
             if ($arrFiltro['estado'] != "" && $arrFiltro['estado'] > 0) {
                 $str_search .= " pg.econ_id = :estcontacto AND ";
             }
-        } else {
+            if ($arrFiltro['medio'] != "" && $arrFiltro['medio'] > 0) {
+                $str_search .= " pg.ccan_id = :medio AND ";
+            }
+            if ($arrFiltro['f_ini'] != "" && $arrFiltro['f_fin'] != "") {
+                $str_search .= "pg.pges_fecha_creacion >= :fec_ini AND ";
+                $str_search .= "pg.pges_fecha_creacion <= :fec_fin AND ";
+            }
+            if ($arrFiltro['agente'] != "" && $arrFiltro['agente'] > 0) {
+                $str_search .= " pg.pges_usuario_ingreso = :agente AND ";
+            }
+        } else { 
             $columnsAdd = "                
                 pg.pges_pri_nombre as pges_pri_nombre,
                 pg.pges_seg_nombre as pges_seg_nombre,
@@ -1003,6 +1013,22 @@ class PersonaGestion extends \app\modules\admision\components\CActiveRecord {
             if ($arrFiltro['estado'] != "" && $arrFiltro['estado'] > 0) {
                 $estcontacto = $arrFiltro["estado"];
                 $comando->bindParam(":estcontacto", $estcontacto, \PDO::PARAM_INT);
+            }
+            
+            if ($arrFiltro['medio'] != "" && $arrFiltro['medio'] > 0) {
+                $medio = $arrFiltro["medio"];
+                $comando->bindParam(":medio", $medio, \PDO::PARAM_INT);
+            }
+            $fecha_ini = $arrFiltro["f_ini"]." 00:00:00";
+            $fecha_fin = $arrFiltro["f_fin"]." 23:59:59";
+                       
+            if ($arrFiltro['f_ini'] != "" && $arrFiltro['f_fin'] != "") {
+                $comando->bindParam(":fec_ini", $fecha_ini, \PDO::PARAM_STR);
+                $comando->bindParam(":fec_fin", $fecha_fin, \PDO::PARAM_STR);
+            }
+            if ($arrFiltro['agente'] != "" && $arrFiltro['agente'] > 0) {
+                $agente = $arrFiltro["agente"];
+                $comando->bindParam(":agente", $agente, \PDO::PARAM_INT);
             }
         }
 
