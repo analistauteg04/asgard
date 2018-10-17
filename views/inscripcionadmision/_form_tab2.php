@@ -35,10 +35,10 @@ use yii\helpers\Url;
                         'browseClass' => 'btn btn-primary btn-block',
                         'browseIcon' => '<i class="fa fa-folder-open"></i> ',
                         'browseLabel' => "Subir Archivo",
-                        'uploadUrl' => Url::to(['/inscripcionadmision/guardardocumentos']),
+                        'uploadUrl' => Url::to(['/inscripcionadmision/index']),
                         'maxFileSize' => Yii::$app->params["MaxFileSize"], // en Kbytes
                         'uploadExtraData' => 'javascript:function (previewId,index) {
-            return {"upload_file": true, "name_file": "doc_titulo"};
+            return {"upload_file": true, "name_file": "doc_titulo", "inscripcion_id": $("#txth_twin_id").val()};
         }',
                     ],
                     'pluginEvents' => [
@@ -95,7 +95,7 @@ use yii\helpers\Url;
                         'uploadUrl' => Url::to(['/inscripcionadmision/guardardocumentos']),
                         'maxFileSize' => Yii::$app->params["MaxFileSize"], // en Kbytes
                         'uploadExtraData' => 'javascript:function (previewId,index) {
-            return {"upload_file": true, "name_file": "doc_dni"};
+            return {"upload_file": true, "name_file": "doc_dni", "inscripcion_id": $("#txth_twin_id").val()};
         }',
                     ],
                     'pluginEvents' => [
@@ -153,7 +153,7 @@ use yii\helpers\Url;
                         'uploadUrl' => Url::to(['/inscripcionadmision/guardardocumentos']),
                         'maxFileSize' => Yii::$app->params["MaxFileSize"], // en Kbytes
                         'uploadExtraData' => 'javascript:function (previewId,index) {
-            return {"upload_file": true, "name_file": "doc_certvota"};
+            return {"upload_file": true, "name_file": "doc_certvota", "inscripcion_id": $("#txth_twin_id").val()};
         }',
                     ],
                     'pluginEvents' => [
@@ -210,7 +210,7 @@ use yii\helpers\Url;
                         'uploadUrl' => Url::to(['/inscripcionadmision/guardardocumentos']),
                         'maxFileSize' => Yii::$app->params["MaxFileSize"], // en Kbytes
                         'uploadExtraData' => 'javascript:function (previewId,index) {
-            return {"upload_file": true, "name_file": "doc_foto"};
+            return {"upload_file": true, "name_file": "doc_foto", "inscripcion_id": $("#txth_twin_id").val()};
         }',
                     ],
                     'pluginEvents' => [
@@ -269,7 +269,7 @@ use yii\helpers\Url;
                             'uploadUrl' => Url::to(['/inscripcionadmision/guardardocumentos']),
                             'maxFileSize' => Yii::$app->params["MaxFileSize"], // en Kbytes
                             'uploadExtraData' => 'javascript:function (previewId,index) {
-                return {"upload_file": true, "name_file": "doc_certificado"};
+                return {"upload_file": true, "name_file": "doc_certificado", "inscripcion_id": $("#txth_twin_id").val()};
             }',
                         ],
                         'pluginEvents' => [
