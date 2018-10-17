@@ -111,7 +111,8 @@ class OportunidadesController extends \app\components\CController {
         $knowledge_channel_data = $modoportunidad->consultarConocimientoCanal(1);
         $arr_carrerra2 = $modoportunidad->consultarTipoCarrera();
         $arr_subcarrera = $modoportunidad->consultarSubCarrera($respOportunidad["tcar_id"]);
-        $arr_moduloEstudio = $modestudio->consultarEstudioEmpresa($respOportunidad["empresa"]); // tomar id de impresa
+        //$arr_moduloEstudio = $modestudio->consultarEstudioEmpresa($respOportunidad["empresa"]); // tomar id de impresa
+        $arr_moduloEstudio = $modestudio->consultarCursoModalidad($respOportunidad["uaca_id"], $respOportunidad["mod_id"]); 
         $respRolPerAutentica = $modoportunidad->consultarAgenteAutenticado($per_id);
         $empresa = $empresa_mod->getAllEmpresa();
         if (Yii::$app->request->isAjax) {
@@ -133,7 +134,7 @@ class OportunidadesController extends \app\components\CController {
             }
             if (isset($data["getcarrera"])) {
                 if ($data["unidada"] < 3) {
-                    if ($data["unidada"] == 2 && $data["empresa_id"] == 2) {
+                    if (($data["unidada"] == 1 || $data["unidada"] == 2 ) && $data["empresa_id"] == 2) {
                         $carrera = $modestudio->consultarCursoModalidad($data["unidada"], $data["moda_id"]);
                     } else {
                         $carrera = $modoportunidad->consultarCarreraModalidad($data["unidada"], $data["moda_id"]);
@@ -258,7 +259,7 @@ class OportunidadesController extends \app\components\CController {
             $tipo_oportunidad = $data["id_tipo_oportunidad"];
             $estado_oportunidad = $data["id_estado_oportunidad"];
             if ($unidad_academica < 3) {
-                if ($unidad_academica == 2 && $empresa == 2) {
+                if (($unidad_academica == 1 || $unidad_academica == 2 ) && $empresa == 2) {
                     $estudio_academico = '';
                     $modulo_estudio = $data["id_estudio_academico"];
                 } else {
@@ -370,7 +371,7 @@ class OportunidadesController extends \app\components\CController {
                 $mest_id = $carrera_estudio;
             }*/
             if ($unidad_academica < 3) {
-                if ($unidad_academica == 2 && $empresa == 2) {
+                if (($unidad_academica == 1 || $unidad_academica == 2 ) && $empresa == 2) {
                     $mest_id = $carrera_estudio;
                 } else {
                     $eaca_id = $carrera_estudio;
