@@ -195,18 +195,13 @@ $(document).ready(function () {
 
 //INSERTAR DATOS
 function guardarInscripcion(accion) {
-    alert('ingresa');
     //if ($("#chk_mensaje2").prop("checked")) {
     if (true) {
         var ID = (accion == "Update") ? $('#txth_twin_id').val() : 0;
         var link = $('#txth_base').val() + "/inscripciones/saveinscripciontemp";
         var arrParams = new Object();
         arrParams.DATA_1 = dataInscripPart1(ID);
-        //arrParams.DATA_2 = dataInscripPart2();
-        //arrParams.DATA_3 = dataInscripPart3();
         arrParams.ACCION = accion;
-        //Subir Imagenes
-
         if (!validateForm()) {
             requestHttpAjax(link, arrParams, function (response) {
                 var message = response.message;
