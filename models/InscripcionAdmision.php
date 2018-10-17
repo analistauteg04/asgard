@@ -24,18 +24,12 @@ class InscripcionAdmision extends \yii\db\ActiveRecord {
             $data_1 = isset($data['DATA_1']) ? $data['DATA_1'] : array();
             //$data_2 = isset($data['DATA_2']) ? $data['DATA_2'] : array();
             //$data_3 = isset($data['DATA_3']) ? $data['DATA_3'] : array(); 
-
             $twin_id=$this->insertarDataInscripcion($con,$data_1,$data_2,$data_3);
-
-           
-            
             $trans->commit();
             $con->close();
              //RETORNA DATOS 
-            $arroout["ids"]= $ftem_id;
-            $arroout["status"]= true;
-            $arroout["secuencial"]= $doc_numero;
-            $arroout["cedula"]= $data_1[0]['ftem_cedula'];
+            $arroout["ids"]= $twin_id;
+            $arroout["status"]= true;            
             $arroout["accion"]= 'Update';
             return $arroout;
             //return true;
@@ -49,9 +43,8 @@ class InscripcionAdmision extends \yii\db\ActiveRecord {
         }
     }
     private function insertarDataInscripcion($con,$data_1,$data_2,$data_3) {
-        $sql = "INSERT INTO " . $con->dbname . ".temporal_wizard_inscripcion ";
         //`twin_id`,
-        $sql = "INSERT INTO `db_captacion`.`temporal_wizard_inscripcion`
+        $sql = "INSERT INTO " . $con->dbname . ".temporal_wizard_inscripcion
             (twin_nombre,twin_apellido,twin_dni,twin_numero,twin_correo,twin_pais,twin_celular,
              uaca_id,mod_id,car_id,twin_metodo_ingreso,conuteg_id,ruta_doc_titulo,ruta_doc_dni,
              ruta_doc_certvota,ruta_doc_foto,ruta_doc_certificado,twin_mensaje1,twin_mensaje2,
@@ -59,10 +52,28 @@ class InscripcionAdmision extends \yii\db\ActiveRecord {
             (:twin_nombre,:twin_apellido,:twin_dni,:twin_numero,:twin_correo,:twin_pais,:twin_celular,
              :uaca_id,:mod_id,:car_id,:twin_metodo_ingreso,:conuteg_id,:ruta_doc_titulo,:ruta_doc_dni,
              :ruta_doc_certvota,:ruta_doc_foto,:ruta_doc_certificado,:twin_mensaje1,:twin_mensaje2,
-             1,twin_fecha_creacion,1)";
+             1,CURRENT_TIMESTAMP(),1)";
 
         $command = $con->createCommand($sql);
-        $command->bindParam(":doc_numero",$doc_numero, PDO::PARAM_STR);
+        $command->bindParam(":twin_nombre",$doc_numero, PDO::PARAM_STR);
+        $command->bindParam(":twin_apellido",$doc_numero, PDO::PARAM_STR);
+        $command->bindParam(":twin_dni",$doc_numero, PDO::PARAM_STR);
+        $command->bindParam(":twin_numero",$doc_numero, PDO::PARAM_STR);
+        $command->bindParam(":twin_correo",$doc_numero, PDO::PARAM_STR);
+        $command->bindParam(":twin_pais",$doc_numero, PDO::PARAM_STR);
+        $command->bindParam(":twin_celular",$doc_numero, PDO::PARAM_STR);
+        $command->bindParam(":uaca_id",$doc_numero, PDO::PARAM_STR);
+        $command->bindParam(":mod_id",$doc_numero, PDO::PARAM_STR);
+        $command->bindParam(":car_id",$doc_numero, PDO::PARAM_STR);
+        $command->bindParam(":twin_metodo_ingreso",$doc_numero, PDO::PARAM_STR);
+        $command->bindParam(":conuteg_id",$doc_numero, PDO::PARAM_STR);
+        $command->bindParam(":ruta_doc_titulo",$doc_numero, PDO::PARAM_STR);
+        $command->bindParam(":ruta_doc_dni",$doc_numero, PDO::PARAM_STR);
+        $command->bindParam(":ruta_doc_certvota",$doc_numero, PDO::PARAM_STR);
+        $command->bindParam(":ruta_doc_foto",$doc_numero, PDO::PARAM_STR);
+        $command->bindParam(":ruta_doc_certificado",$doc_numero, PDO::PARAM_STR);
+        $command->bindParam(":twin_mensaje1",$doc_numero, PDO::PARAM_STR);
+        $command->bindParam(":twin_mensaje2",$doc_numero, PDO::PARAM_STR);
         $command->execute();
         return $con->getLastInsertID();
     }

@@ -30,6 +30,7 @@ use app\modules\admision\models\TipoOportunidadVenta;
 use app\modules\admision\models\EstadoContacto;
 use app\modules\admision\models\MetodoIngreso;
 use app\modules\financiero\models\Secuencias;
+use app\models\InscripcionAdmision;
 
 class InscripcionadmisionController extends \yii\web\Controller {
 
@@ -378,5 +379,34 @@ class InscripcionadmisionController extends \yii\web\Controller {
      public function actionGuardardocumentos() {
          
      }
+     
+     public function actionSaveinscripciontemp() {
+        if (Yii::$app->request->isAjax) {
+            $model = new MceFormularioTemp;
+            $data = Yii::$app->request->post();
+            $accion = isset($data['ACCION']) ? $data['ACCION'] : "";
+            if ($accion == "Create") {
+                //Nuevo Registro
+                $resul = $model->insertarInscripcion($data);
+            }else if($accion == "Update"){
+                //Modificar Registro
+                //$resul = $model->actualizarSolicitud($data);                
+            }
+            if ($resul['status']) {
+                if($accion == "Create"){
+                    $source = $_SERVER['DOCUMENT_ROOT'].Url::base().Yii::$app->params["documentFolder"].$resul['cedula'];
+                    $target = $_SERVER['DOCUMENT_ROOT'].Url::base().Yii::$app->params["documentFolder"].$resul['cedula'].'_'.$resul['ids'];
+                    rename($source, $target);//Renombrar el Directorio                    
+                }
+                
+                $message = ["info" => Yii::t('exception', '<strong>Well done!</strong> your information was successfully saved.')];
+                echo Utilities::ajaxResponse('OK', 'alert', Yii::t('jslang', 'Success'), 'false', $message,$resul);
+            }else{
+                $message = ["info" => Yii::t('exception', 'The above error occurred while the Web server was processing your request.')];
+                echo Utilities::ajaxResponse('NO_OK', 'alert', Yii::t('jslang', 'Error'), 'false', $message);
+            }
+            return;
+        }   
+    }
 
 }

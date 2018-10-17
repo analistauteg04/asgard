@@ -193,3 +193,42 @@ $(document).ready(function () {
     }
 });
 
+
+//INSERTAR DATOS
+function guardarSolicitud(accion) {
+    if ($("#chk_mensaje2").prop("checked")) {
+        var ID = (accion == "Update") ? $('#txth_twin_id').val() : 0;
+        var link = $('#txth_base').val() + "/inscripciones/saveinscripciontemp";
+        var arrParams = new Object();
+        arrParams.DATA_1 = dataSolicitudPart1(ID);
+        arrParams.DATA_2 = dataSolicitudPart2();
+        arrParams.DATA_3 = dataSolicitudPart3();
+        arrParams.ACCION = accion;
+        //Subir Imagenes
+
+        var validation = validateForm();
+        if (!validation) {
+            //subirDocumentos(1, true);
+            //subirDocumentos(2, true);
+            requestHttpAjax(link, arrParams, function (response) {
+                var message = response.message;
+                if (response.status == "OK") {
+                    //var data =response.data;
+                    //$('#txth_ftem_id').val(data.ids); 
+                    //AccionTipo=data.accion;
+                    menssajeModal(response.status, response.type, message.info, response.label, "", "", "1");
+                    limpiarDatos();
+                    var renderurl = $('#txth_base').val() + "/inscripciones/index";
+                    window.location = renderurl;
+                }else{
+                    menssajeModal(response.status, response.type, message.info, response.label, "", "", "1");
+                }             
+            }, true);
+        }
+    } else {
+        //alert('Debe Aceptar los términos de la Declaración Jurada');
+        showAlert('NO_OK', 'error', {"wtmessage": 'Debe Aceptar los términos de la Declaración Jurada', "title":'Información'});
+    }
+}
+
+
