@@ -52,7 +52,7 @@ $(document).ready(function () {
                 showAlert(response.status, response.label, response.message);
                 if (!response.error) {
                     setTimeout(function () {
-                        window.location.href = $('#txth_base').val() + "/inscripciones/indexadmisionn";
+                        window.location.href = $('#txth_base').val() + "/inscripcionadmision/index";
                     }, 5000);
                 }
             }, true);
@@ -109,7 +109,7 @@ $(document).ready(function () {
             if (response.status == "OK") {
                 data = response.message;
                 setComboData(data.metodos, "cmb_metodo_solicitud");   
-                 AparecerDocumento();
+                AparecerDocumento();
             }
         }, true);       
     });
@@ -128,9 +128,14 @@ $(document).ready(function () {
         }, true);
     });
             
-    $('#cmb_metodo_solicitud').change(function () {        
-        AparecerDocumento();
-       
+    $('#cmb_metodo_solicitud').change(function () {
+        if ($('#cmb_metodo_solicitud').val() != 0) {      
+            $('#divRequisitos').css('display', 'block');            
+        } else {
+            $('#divRequisitos').css('display', 'none');    
+        }
+        
+        AparecerDocumento();       
     });    
     
     // tabs del index
@@ -173,9 +178,8 @@ $(document).ready(function () {
         
     
     function AparecerDocumento() {
-         if ($('#cmb_metodo_solicitud').val() == 3) {           
-            $('#divCertificado').css('display', 'block');
-            
+        if ($('#cmb_metodo_solicitud').val() == 3) {           
+            $('#divCertificado').css('display', 'block');                        
         } else {
             $('#divCertificado').css('display', 'none');
             

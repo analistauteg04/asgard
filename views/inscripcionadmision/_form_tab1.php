@@ -9,7 +9,19 @@ use yii\helpers\Url;
 use yii\widgets\ActiveForm;
 use app\components\CFileInputAjax;
 
-$this->title = 'Formulario de Pre-Inscripción';
+$requisitos = ' <div class="col-md-12 col-sm-12 col-xs-12 col-lg-12">
+                    <div class="form-group">
+                        <div class="col-sm-12 col-md-12 col-xs-12 col-lg-12">
+                            <div style = "width: 1300px;" class="alert alert-info"><span style="font-weight: bold"> Nota: </span> Fecha curso de nivelación del 22 de octubre al 7 de diciembre deberás cargar en el siguiente paso estos documentos: <br>
+                                Cédula de identidad o pasaporte. <br>
+                                Certificado de votación. <br>
+                                Título de bachiller notarizado. <br>
+                                Foto Actual. <br>
+                            </div>
+                        </div>
+                    </div>
+                </div>'; 
+
 ?>
 <form class="form-horizontal">
     <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
@@ -111,12 +123,15 @@ $this->title = 'Formulario de Pre-Inscripción';
     </div>
     <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
         <div class="form-group">            
-            <label for="cmb_metodo_solicitud" class="col-sm-3 col-md-3 col-xs-3 col-lg-3 control-label keyupmce"><?= Yii::t("formulario", "Income Method") ?></label>
+            <label for="cmb_metodo_solicitud" class="col-sm-3 col-md-3 col-xs-3 col-lg-3 control-label keyupmce"><?= Yii::t("formulario", "Income Method") ?><span class="text-danger">*</span></label>
             <div class="col-sm-9 col-md-9 col-xs-9 col-lg-9">
                 <?= Html::dropDownList("cmb_metodo_solicitud", 0, array_merge([Yii::t("formulario", "Select")], $arr_metodos), ["class" => "form-control", "id" => "cmb_metodo_solicitud"]) ?>
             </div>
         </div>
-    </div>        
+    </div> 
+    <div class="col-md-12 col-xs-12 col-sm-12 col-lg-12" id="divRequisitos" style="display: none">   
+        <?php echo $requisitos ?>
+    </div>
     <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
         <div class="form-group">            
             <label for="cmb_conuteg" class="col-lg-3 col-md-3 col-sm-3 col-xs-3 control-label"><?= Yii::t("formulario", "Knowledge how about UTEG") ?> <span class="text-danger">*</span></label>
@@ -125,28 +140,7 @@ $this->title = 'Formulario de Pre-Inscripción';
             </div>
         </div>
     </div>
-    
-    <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
-        <div class="form-group">                        
-            <div class="col-lg-3 col-md-3 col-sm-3 col-xs-3">
-                <input type="checkbox" class="col-lg-12 col-md-12 col-sm-12 col-xs-12" id="chk_mensaje1" data-type="alfa" data-keydown="true" placeholder="" >                
-            </div>
-            <div class="col-lg-9 col-md-9 col-sm-9 col-xs-9">                
-                <label for="chk_mensaje1" class="col-lg-9 col-md-9 col-sm-9 col-xs-9"><?= Yii::t("formulario", "Expreso que la información declarada y documentos cargados son válidos y legales.") ?> </label>
-            </div>
-            
-        </div>
-    </div>
-    <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
-        <div class="form-group">                        
-            <div class="col-lg-3 col-md-3 col-sm-3 col-xs-3">
-                <input type="checkbox" class="col-lg-12 col-md-12 col-sm-12 col-xs-12" id="chk_mensaje2" data-type="alfa" data-keydown="true" placeholder="" >                
-            </div>
-            <div class="col-lg-9 col-md-9 col-sm-9 col-xs-9">          
-                <label for="chk_mensaje2" class="col-lg-12 col-md-12 col-sm-12 col-xs-12"><?= Yii::t("formulario", "Acepto y me comprometo a respetar y cumplir lo estipulado en los reglamentos internos de la universidad con respecto a la admisión y procesos estudiantiles.") ?> </label>
-            </div>
-        </div>
-    </div>
+        
     <div class="row"> 
         <div class="col-lg-10 col-md-10 col-sm-10 col-xs-10"></div>
 
