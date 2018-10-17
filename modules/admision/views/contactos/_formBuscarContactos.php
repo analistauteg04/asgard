@@ -52,10 +52,10 @@ use yii\helpers\Html;
             <div class="col-sm-3 col-md-3 col-xs-3 col-lg-3">
                 <?= Html::dropDownList("cmb_medio", 0, $arr_canalconta, ["class" => "form-control pro_combo", "id" => "cmb_medio"]) ?>
             </div>
-            <!--<label for="lbl_usurin" class="col-sm-2 col-md-2 col-xs-2 col-lg-2 control-label"><?= Yii::t("formulario", "User login") ?></label>
+            <label for="lbl_usurin" class="col-sm-2 col-md-2 col-xs-2 col-lg-2 control-label"><?= Yii::t("formulario", "User login") ?></label>
             <div class="col-sm-3 col-md-3 col-xs-3 col-lg-3">
-                <? Html::dropDownList("cmb_medio", 0, $arr_canalconta, ["class" => "form-control pro_combo", "id" => "cmb_medio"]) ?>
-            </div>-->
+                <?= Html::dropDownList("cmb_agente", 0, $arra_agente, ["class" => "form-control pro_combo", "id" => "cmb_agente"]) ?>
+            </div>
         </div>
     </div>
     <!--<div class='col-md-12 col-sm-12 col-xs-12 col-lg-12'>                   

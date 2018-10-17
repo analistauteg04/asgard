@@ -949,7 +949,10 @@ class PersonaGestion extends \app\modules\admision\components\CActiveRecord {
                 $str_search .= "pg.pges_fecha_creacion >= :fec_ini AND ";
                 $str_search .= "pg.pges_fecha_creacion <= :fec_fin AND ";
             }
-        } else {
+            if ($arrFiltro['agente'] != "" && $arrFiltro['agente'] > 0) {
+                $str_search .= " pg.pges_usuario_ingreso = :agente AND ";
+            }
+        } else { 
             $columnsAdd = "                
                 pg.pges_pri_nombre as pges_pri_nombre,
                 pg.pges_seg_nombre as pges_seg_nombre,
@@ -1022,6 +1025,10 @@ class PersonaGestion extends \app\modules\admision\components\CActiveRecord {
             if ($arrFiltro['f_ini'] != "" && $arrFiltro['f_fin'] != "") {
                 $comando->bindParam(":fec_ini", $fecha_ini, \PDO::PARAM_STR);
                 $comando->bindParam(":fec_fin", $fecha_fin, \PDO::PARAM_STR);
+            }
+            if ($arrFiltro['agente'] != "" && $arrFiltro['agente'] > 0) {
+                $agente = $arrFiltro["agente"];
+                $comando->bindParam(":agente", $agente, \PDO::PARAM_INT);
             }
         }
 
