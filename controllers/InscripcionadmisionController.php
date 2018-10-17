@@ -385,6 +385,49 @@ class InscripcionadmisionController extends \yii\web\Controller {
             $model = new InscripcionAdmision();
             $data = Yii::$app->request->post();
             $accion = isset($data['ACCION']) ? $data['ACCION'] : "";
+
+            if ($data["upload_file"]) {
+                if (empty($_FILES)) {
+                    return json_encode(['error' => Yii::t("notificaciones", "Error to process File {file}. Try again.", ['{file}' => basename($files['name'])])]);
+                }
+                //Recibe Parámetros.
+                $inscripcion_id = $data["inscripcion_id"];
+                $files = $_FILES[key($_FILES)];
+                $arrIm = explode(".", basename($files['name']));
+                $typeFile = strtolower($arrIm[count($arrIm) - 1]);
+                $dirFileEnd = Yii::$app->params["documentFolder"] . "solicitudadmision/" . $inscripcion_id . "/" . $data["name_file"] . "_per_" . $per_id . "." . $typeFile;
+                $status = Utilities::moveUploadFile($files['tmp_name'], $dirFileEnd);
+                if ($status) {
+                    return true;
+                } else {
+                    return json_encode(['error' => Yii::t("notificaciones", "Error to process File {file}. Try again.", ['{file}' => basename($files['name'])])]);
+                }
+                $titulo_archivo = "";
+                if (isset($data["arc_doc_titulo"]) && $data["arc_doc_titulo"] != "") {
+                    $arrIm = explode(".", basename($data["arc_doc_titulo"]));
+                    $typeFile = strtolower($arrIm[count($arrIm) - 1]);
+                    $titulo_archivo = Yii::$app->params["documentFolder"] . "solicitudadmision/" . $inscripcion_id . "/doc_titulo_per_" . $inscripcion_id . "." . $typeFile;
+                }
+                $dni_archivo = "";
+                if (isset($data["arc_doc_dni"]) && $data["arc_doc_dni"] != "") {
+                    $arrIm = explode(".", basename($data["arc_doc_dni"]));
+                    $typeFile = strtolower($arrIm[count($arrIm) - 1]);
+                    $dni_archivo = Yii::$app->params["documentFolder"] . "solicitudadmision/" . $inscripcion_id . "/doc_dni_per_" . $inscripcion_id . "." . $typeFile;
+                }
+                $certvota_archivo = "";
+                if (isset($data["arc_doc_certvota"]) && $data["arc_doc_certvota"] != "") {
+                    $arrIm = explode(".", basename($data["arc_doc_certvota"]));
+                    $typeFile = strtolower($arrIm[count($arrIm) - 1]);
+                    $certvota_archivo = Yii::$app->params["documentFolder"] . "solicitudadmision/" . $inscripcion_id . "/doc_certvota_per_" . $inscripcion_id . "." . $typeFile;
+                }
+                $foto_archivo = "";
+                if (isset($data["arc_doc_foto"]) && $data["arc_doc_foto"] != "") {
+                    $arrIm = explode(".", basename($data["arc_doc_foto"]));
+                    $typeFile = strtolower($arrIm[count($arrIm) - 1]);
+                    $foto_archivo = Yii::$app->params["documentFolder"] . "solicitudinscripcion/" . $inscripcion_id . "/doc_foto_per_" . $inscripcion_id . "." . $typeFile;
+                }
+            }
+
             if ($accion == "Create") {
                 //Nuevo Registro
                 $resul = $model->insertarInscripcion($data);
