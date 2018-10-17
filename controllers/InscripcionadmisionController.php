@@ -382,7 +382,7 @@ class InscripcionadmisionController extends \yii\web\Controller {
      
      public function actionSaveinscripciontemp() {
         if (Yii::$app->request->isAjax) {
-            $model = new MceFormularioTemp;
+            $model = new InscripcionAdmision();
             $data = Yii::$app->request->post();
             $accion = isset($data['ACCION']) ? $data['ACCION'] : "";
             if ($accion == "Create") {

@@ -200,21 +200,17 @@ function guardarSolicitud(accion) {
         var ID = (accion == "Update") ? $('#txth_twin_id').val() : 0;
         var link = $('#txth_base').val() + "/inscripciones/saveinscripciontemp";
         var arrParams = new Object();
-        arrParams.DATA_1 = dataSolicitudPart1(ID);
-        arrParams.DATA_2 = dataSolicitudPart2();
-        arrParams.DATA_3 = dataSolicitudPart3();
+        arrParams.DATA_1 = dataInscripPart1(ID);
+        //arrParams.DATA_2 = dataInscripPart2();
+        //arrParams.DATA_3 = dataInscripPart3();
         arrParams.ACCION = accion;
         //Subir Imagenes
 
-        var validation = validateForm();
-        if (!validation) {
-            //subirDocumentos(1, true);
-            //subirDocumentos(2, true);
+        if (!validateForm()) {
             requestHttpAjax(link, arrParams, function (response) {
                 var message = response.message;
                 if (response.status == "OK") {
                     //var data =response.data;
-                    //$('#txth_ftem_id').val(data.ids); 
                     //AccionTipo=data.accion;
                     menssajeModal(response.status, response.type, message.info, response.label, "", "", "1");
                     limpiarDatos();
@@ -227,8 +223,33 @@ function guardarSolicitud(accion) {
         }
     } else {
         //alert('Debe Aceptar los términos de la Declaración Jurada');
-        showAlert('NO_OK', 'error', {"wtmessage": 'Debe Aceptar los términos de la Declaración Jurada', "title":'Información'});
+        showAlert('NO_OK', 'error', {"wtmessage": 'Debe Aceptar los términos ', "title":'Información'});
     }
+}
+
+function dataInscripPart1(ID) {
+    var datArray = new Array();
+    var objDat = new Object();
+    objDat.twin_id = ID;//Genero Automatico
+    objDat.pges_pri_nombre = $('#txt_primer_nombre').val();
+    objDat.pges_pri_apellido = $('#txt_primer_apellido').val();
+    objDat.tipo_dni = $('#cmb_tipo_dni option:selected').val();
+    objDat.pges_cedula = $('#txt_cedula').val();
+    objDat.pges_correo = $('#txt_correo').val();
+    objDat.pais = $('#cmb_pais_dom option:selected').val();
+    objDat.pges_celular = $('#txt_celular').val();
+    objDat.pges_pasaporte = $('#txt_pasaporte').val();
+    objDat.unidad_academica = $('#cmb_unidad_solicitud option:selected').val();
+    objDat.modalidad = $('#cmb_modalidad_solicitud option:selected').val();
+    objDat.ming_id = $('#cmb_metodo_solicitud option:selected').val();
+    objDat.conoce = $('#cmb_conuteg option:selected').val();
+    objDat.carrera = $('#cmb_carrera_solicitud option:selected').val();
+    objDat.arc_extranjero = $('#txth_extranjero').val();
+    objDat.arc_doc_beca = $('#txth_doc_beca').val();
+    datArray[0] = objDat;
+    sessionStorage.dataInscrip_1 = JSON.stringify(datArray);
+    //return JSON.stringify(datArray);
+    return datArray;
 }
 
 
