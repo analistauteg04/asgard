@@ -9,10 +9,14 @@ use yii\helpers\Url;
 use yii\widgets\ActiveForm;
 use app\components\CFileInputAjax;
 
-$requisitos = ' <div class="col-md-12 col-sm-12 col-xs-12 col-lg-12">
+
+// CAN: GRADO
+$requisitosCANP = ' <div class="col-md-12 col-sm-12 col-xs-12 col-lg-12">
                     <div class="form-group">
-                        <div class="col-sm-12 col-md-12 col-xs-12 col-lg-12">
-                            <div style = "width: 1300px;" class="alert alert-info"><span style="font-weight: bold"> Nota: </span> Fecha curso de nivelación del 22 de octubre al 7 de diciembre deberás cargar en el siguiente paso estos documentos: <br>
+                        <div class="col-sm-3 col-md-3 col-xs-3 col-lg-3">
+                        </div>
+                        <div class="col-sm-9 col-md-9 col-xs-9 col-lg-9">
+                            <div style = "width: 1200px;" class="alert alert-info"><span style="font-weight: bold"> Nota: </span> Fecha curso de nivelación del 22 de octubre al 7 de diciembre deberás cargar en el siguiente paso estos documentos: <br>
                                 Cédula de identidad o pasaporte. <br>
                                 Certificado de votación. <br>
                                 Título de bachiller notarizado. <br>
@@ -22,6 +26,144 @@ $requisitos = ' <div class="col-md-12 col-sm-12 col-xs-12 col-lg-12">
                     </div>
                 </div>'; 
 
+$requisitosCANSP = ' <div class="col-md-12 col-sm-12 col-xs-12 col-lg-12">
+                    <div class="form-group">
+                        <div class="col-sm-3 col-md-3 col-xs-3 col-lg-3">
+                        </div>
+                        <div class="col-sm-9 col-md-9 col-xs-9 col-lg-9">
+                            <div style = "width: 1200px;" class="alert alert-info"><span style="font-weight: bold"> Nota: </span> Fecha curso de nivelación del 22 de octubre al 7 de diciembre deberás cargar en el siguiente paso estos documentos: <br>
+                                Cédula de identidad o pasaporte. <br>
+                                Certificado de votación. <br>
+                                Título de bachiller notarizado. <br>
+                                Foto Actual. <br>
+                            </div>
+                        </div>
+                    </div>
+                </div>'; 
+
+$requisitosCANAD = ' <div class="col-md-12 col-sm-12 col-xs-12 col-lg-12">
+                    <div class="form-group">
+                        <div class="col-sm-3 col-md-3 col-xs-3 col-lg-3">
+                        </div>
+                        <div class="col-sm-9 col-md-9 col-xs-9 col-lg-9">
+                            <div style = "width: 1200px;" class="alert alert-info"><span style="font-weight: bold"> Nota: </span> Fecha curso de nivelación del 22 de octubre al 7 de diciembre deberás cargar en el siguiente paso estos documentos: <br>
+                                Cédula de identidad o pasaporte. <br>
+                                Certificado de votación. <br>
+                                Título de bachiller notarizado. <br>
+                                Foto Actual. <br>
+                            </div>
+                        </div>
+                    </div>
+                </div>'; 
+
+$requisitosCANO = ' <div class="col-md-12 col-sm-12 col-xs-12 col-lg-12">
+                    <div class="form-group">
+                        <div class="col-sm-3 col-md-3 col-xs-3 col-lg-3">
+                        </div>
+                        <div class="col-sm-9 col-md-9 col-xs-9 col-lg-9">
+                            <div style = "width: 1200px;" class="alert alert-info"><span style="font-weight: bold">Fecha curso de nivelación del 22 de octubre al 14 de diciembre deberás cargar en el siguiente paso estos documentos: <br> </span>
+                                Cédula de identidad o pasaporte. <br>
+                                Certificado de votación. <br>
+                                Título de bachiller notarizado. <br>
+                                Foto Actual. <br>
+                            </div>
+                        </div>
+                    </div>
+                </div>'; 
+
+// EXAMEN: GRADO
+$requisitosEXP = ' <div class="col-md-12 col-sm-12 col-xs-12 col-lg-12">
+                    <div class="form-group">
+                        <div class="col-sm-3 col-md-3 col-xs-3 col-lg-3">
+                        </div>
+                        <div class="col-sm-9 col-md-9 col-xs-9 col-lg-9">
+                            <div style = "width: 1200px;" class="alert alert-info"><span style="font-weight: bold"> Nota: </span> Fecha curso de nivelación del 22 de octubre al 7 de diciembre deberás cargar en el siguiente paso estos documentos: <br>
+                                Cédula de identidad o pasaporte. <br>
+                                Certificado de votación. <br>
+                                Título de bachiller notarizado. <br>
+                                Foto Actual. <br>
+                            </div>
+                        </div>
+                    </div>
+                </div>'; 
+
+$requisitosEXSP = ' <div class="col-md-12 col-sm-12 col-xs-12 col-lg-12">
+                    <div class="form-group">
+                        <div class="col-sm-3 col-md-3 col-xs-3 col-lg-3">
+                        </div>
+                        <div class="col-sm-9 col-md-9 col-xs-9 col-lg-9">
+                            <div style = "width: 1200px;" class="alert alert-info"><span style="font-weight: bold"> Nota: </span> Fecha curso de nivelación del 22 de octubre al 7 de diciembre deberás cargar en el siguiente paso estos documentos: <br>
+                                Cédula de identidad o pasaporte. <br>
+                                Certificado de votación. <br>
+                                Título de bachiller notarizado. <br>
+                                Foto Actual. <br>
+                            </div>
+                        </div>
+                    </div>
+                </div>'; 
+
+$requisitosEXAD = ' <div class="col-md-12 col-sm-12 col-xs-12 col-lg-12">
+                    <div class="form-group">
+                        <div class="col-sm-3 col-md-3 col-xs-3 col-lg-3">
+                        </div>
+                        <div class="col-sm-9 col-md-9 col-xs-9 col-lg-9">
+                            <div style = "width: 1200px;" class="alert alert-info"><span style="font-weight: bold"> Nota: </span> Fecha curso de nivelación del 22 de octubre al 7 de diciembre deberás cargar en el siguiente paso estos documentos: <br>
+                                Cédula de identidad o pasaporte. <br>
+                                Certificado de votación. <br>
+                                Título de bachiller notarizado. <br>
+                                Foto Actual. <br>
+                            </div>
+                        </div>
+                    </div>
+                </div>'; 
+
+$requisitosEXO = ' <div class="col-md-12 col-sm-12 col-xs-12 col-lg-12">
+                    <div class="form-group">
+                        <div class="col-sm-3 col-md-3 col-xs-3 col-lg-3">
+                        </div>
+                        <div class="col-sm-9 col-md-9 col-xs-9 col-lg-9">
+                            <div style = "width: 1200px;" class="alert alert-info"><span style="font-weight: bold"> Al inscribirte al examen de admisión, tendrás acceso al Campus Virtual UTEG para prepararte. A partir de la fecha de registro tendrás un mes para rendir el examen de manera online. <br>
+                                Deberás cargar en el siguiente paso estos documentos: <br></span>                                 
+                                Cédula de identidad o pasaporte. <br>
+                                Certificado de votación. <br>
+                                Título de bachiller notarizado. <br>
+                                Foto Actual. <br>
+                            </div>
+                        </div>
+                    </div>
+                </div>'; 
+//Posgrado
+$requisitosPRP = '<div class="col-md-12 col-sm-12 col-xs-12 col-lg-12">
+                    <div class="form-group">
+                        <div class="col-sm-3 col-md-3 col-xs-3 col-lg-3">
+                        </div>
+                        <div class="col-sm-9 col-md-9 col-xs-9 col-lg-9">
+                            <div style = "width: 1200px;" class="alert alert-info"><span style="font-weight: bold"> Deberás cargar en el siguiente paso estos documentos: </span><br>
+                                    Cédula de identidad o pasaporte <br>
+                                    Certificado de votación <br>
+                                    Título de tercer nivel notarizado <br>
+                                    Certificado de calificaciones de estudios de tercer nivel  <br>
+                                    Hoja de vida   <br>
+                                    Foto actual    <br>
+                            </div>
+                        </div>
+                    </div>
+                  </div>'; 
+
+$requisitosHOMO = ' <div class="col-md-12 col-sm-12 col-xs-12 col-lg-12">
+                    <div class="form-group">
+                        <div class="col-sm-3 col-md-3 col-xs-3 col-lg-3">
+                        </div>
+                        <div class="col-sm-9 col-md-9 col-xs-9 col-lg-9">
+                            <div style = "width: 1200px;" class="alert alert-info"><span style="font-weight: bold"> Nota: </span> Fecha curso de nivelación del 22 de octubre al 7 de diciembre deberás cargar en el siguiente paso estos documentos: <br>
+                                Cédula de identidad o pasaporte. <br>
+                                Certificado de votación. <br>
+                                Título de bachiller notarizado. <br>
+                                Foto Actual. <br>
+                            </div>
+                        </div>
+                    </div>
+                </div>'; 
 ?>
 <form class="form-horizontal">
     <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
@@ -129,8 +271,38 @@ $requisitos = ' <div class="col-md-12 col-sm-12 col-xs-12 col-lg-12">
             </div>
         </div>
     </div> 
-    <div class="col-md-12 col-xs-12 col-sm-12 col-lg-12" id="divRequisitos" style="display: none">   
-        <?php echo $requisitos ?>
+    <div class="col-md-12 col-xs-12 col-sm-12 col-lg-12" id="divRequisitosCANP" style="display: none">   
+        <?php echo $requisitosCANP ?>
+    </div>
+    <div class="col-md-12 col-xs-12 col-sm-12 col-lg-12" id="divRequisitosCANSP" style="display: none">   
+        <?php echo $requisitosCANSP ?>
+    </div>
+    <div class="col-md-12 col-xs-12 col-sm-12 col-lg-12" id="divRequisitosCANAD" style="display: none">   
+        <?php echo $requisitosCANAD ?>
+    </div>
+    <div class="col-md-12 col-xs-12 col-sm-12 col-lg-12" id="divRequisitosCANO" style="display: none">   
+        <?php echo $requisitosCANO ?>
+    </div>
+    <div class="col-md-12 col-xs-12 col-sm-12 col-lg-12" id="divRequisitosEXP" style="display: none">   
+        <?php echo $requisitosEXP ?>
+    </div>
+    <div class="col-md-12 col-xs-12 col-sm-12 col-lg-12" id="divRequisitosEXSP" style="display: none">   
+        <?php echo $requisitosEXSP ?>
+    </div>
+    <div class="col-md-12 col-xs-12 col-sm-12 col-lg-12" id="divRequisitosEXAD" style="display: none">   
+        <?php echo $requisitosEXAD ?>
+    </div>
+    <div class="col-md-12 col-xs-12 col-sm-12 col-lg-12" id="divRequisitosEXO" style="display: none">   
+        <?php echo $requisitosEXO ?>
+    </div>
+    <div class="col-md-12 col-xs-12 col-sm-12 col-lg-12" id="divRequisitosEXO" style="display: none">   
+        <?php echo $requisitosEXO ?>
+    </div>
+    <div class="col-md-12 col-xs-12 col-sm-12 col-lg-12" id="divRequisitosPRP" style="display: none">   
+        <?php echo $requisitosPRP ?>
+    </div>
+    <div class="col-md-12 col-xs-12 col-sm-12 col-lg-12" id="divRequisitosHOMO" style="display: none">   
+        <?php echo $requisitosHOMO ?>
     </div>
     <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
         <div class="form-group">            
