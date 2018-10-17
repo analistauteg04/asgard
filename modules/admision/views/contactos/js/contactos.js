@@ -77,10 +77,14 @@ function actualizarGridContacto() {
     var search = $('#txt_buscarDataPersona').val();
     var estado = $('#cmb_estadocontacto option:selected').val();
     var fase = $('#cmb_fasecontacto option:selected').val();
+    var f_ini = $('#txt_fecha_ini').val();
+    var f_fin = $('#txt_fecha_fin').val();
+    var medio = $('#cmb_medio option:selected').val();
+    var agente = $('#cmb_agente option:selected').val();
     //Buscar almenos una clase con el nombre para ejecutar
     if (!$(".blockUI").length) {
         showLoadingPopup();
-        $('#Pbcontacto').PbGridView('applyFilterData', {'search': search, 'estado': estado, 'fase': fase});
+        $('#Pbcontacto').PbGridView('applyFilterData', {'search': search, 'estado': estado, 'fase': fase, 'f_ini': f_ini, 'f_fin': f_fin, 'medio': medio, 'agente': agente});
         setTimeout(hideLoadingPopup, 2000);
     }
 }

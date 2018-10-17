@@ -6,6 +6,7 @@ use Yii;
 use app\modules\admision\models\EstadoContacto;
 use app\modules\admision\models\PersonaGestion;
 use app\modules\admision\models\Oportunidad;
+use app\modules\admision\models\PersonalAdmision;
 use app\models\Pais;
 use app\models\Provincia;
 use app\models\Canton;
@@ -23,13 +24,19 @@ financiero::registerTranslations();
 class ContactosController extends \app\components\CController {
     public function actionIndex() {
         $per_id = @Yii::$app->session->get("PB_iduser");
+        $modcanal = new Oportunidad();
         $estado_contacto = EstadoContacto::find()->select("econ_id AS id, econ_nombre AS name")->where(["econ_estado_logico" => "1", "econ_estado" => "1"])->orderBy("name asc")->asArray()->all();
         $modPersonaGestion = new PersonaGestion();
+        $modagente = new PersonalAdmision();
         $data = Yii::$app->request->get();
         if ($data['PBgetFilter']) {
             $arrSearch["search"] = $data['search'];
             $arrSearch["estado"] = $data['estado'];
             $arrSearch["fase"] = $data['fase'];
+            $arrSearch["medio"] = $data['medio'];
+            $arrSearch["f_ini"] = $data['f_ini'];
+            $arrSearch["f_fin"] = $data['f_fin'];
+            $arrSearch["agente"] = $data['agente'];
             $mod_gestion = $modPersonaGestion->consultarClienteCont($arrSearch);
             return $this->render('index-grid', [
                         "model" => $mod_gestion,
@@ -40,9 +47,13 @@ class ContactosController extends \app\components\CController {
         if (Yii::$app->request->isAjax) {
             $data = Yii::$app->request->post();
         }
+        $arra_agente = $modagente->consultarAgenteconta();
+        $canalconta = $modcanal->consultarConocimientoCanal('1');
         return $this->render('index', [
                     'model' => $mod_gestion,
                     'arr_contacto' => ArrayHelper::map(array_merge([["id" => "0", "name" => "Todas"]], $estado_contacto), "id", "name"),
+                    'arr_canalconta' => ArrayHelper::map(array_merge([["id" => "0", "name" => "Todas"]],$canalconta), "id", "name"),
+                    'arra_agente' => ArrayHelper::map(array_merge([["id" => "0", "name" => "Todas"],["id" => "1", "name" => "Admin UTEG"]],$arra_agente), "id", "name"),
         ]);
     }
 
