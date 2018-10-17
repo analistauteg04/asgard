@@ -37,16 +37,31 @@ $(document).ready(function () {
         arrParams.carrera = $('#cmb_carrera_solicitud option:selected').val();
         arrParams.arc_extranjero = $('#txth_extranjero').val();
         arrParams.arc_doc_beca = $('#txth_doc_beca').val();
-        if (!validateForm()) {
+        
+        /*$('#paso2').attr('class','active');//disable
+        $('#paso1').attr('class','');
+        $('.nav-tabs a[href="#paso2"]').tab('show');*/
+        
+        $("a[data-href='#paso1']").attr('data-toggle', 'none');
+        $("a[data-href='#paso1']").parent().attr('class', 'disabled');
+        $("a[data-href='#paso1']").attr('data-href', $("a[href='#paso1']").attr('href'));
+        $("a[data-href='#paso1']").removeAttr('href');
+        $("a[data-href='#paso2']").attr('data-toggle', 'tab');
+        $("a[data-href='#paso2']").attr('href', $("a[data-href='#paso2']").attr('data-href'));
+        $("a[data-href='#paso2']").trigger("click");
+            
+        
+        /*if (!validateForm()) {
             requestHttpAjax(link, arrParams, function (response) {
                 showAlert(response.status, response.label, response.message);
                 if (!response.error) {
-                    setTimeout(function () {
-                        window.location.href = $('#txth_base').val() + "/inscripcionadmision/index";
-                    }, 5000);
+                    
+                    //setTimeout(function () {
+                    //    window.location.href = $('#txth_base').val() + "/inscripcionadmision/index";
+                    //}, 5000);
                 }
             }, true);
-        }
+        }*/
 
     });
 

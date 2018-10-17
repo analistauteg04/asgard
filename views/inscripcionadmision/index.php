@@ -3,6 +3,7 @@ use yii\helpers\Url;
 use yii\helpers\Html;
 
 ?>
+<?= Html::hiddenInput('txth_twin_id', 0, ['id' => 'txth_twin_id']); ?>
 <?= Html::hiddenInput('txth_ftem_id', 0, ['id' => 'txth_ftem_id']); ?>
 <?= Html::hiddenInput('txth_errorFile', Yii::t("formulario", "The file extension is not valid or exceeds the maximum size in MB recommending him try again"), ['id' => 'txth_errorFile']); ?>
 
