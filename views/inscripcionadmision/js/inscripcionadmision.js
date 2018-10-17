@@ -20,7 +20,7 @@ $(document).ready(function () {
    
     
     $('#sendInformacionAspirante').click(function () {   
-        guardarInscripcion('create');
+        guardarInscripcion('Create');
         /*var link = $('#txth_base').val() + "/inscripciones/guardarinscripcionsolicitud";
         var arrParams = new Object();
         arrParams.pges_pri_nombre = $('#txt_primer_nombre').val();
@@ -192,13 +192,12 @@ $(document).ready(function () {
     }
 });
 
-
 //INSERTAR DATOS
 function guardarInscripcion(accion) {
     //if ($("#chk_mensaje2").prop("checked")) {
     if (true) {
         var ID = (accion == "Update") ? $('#txth_twin_id').val() : 0;
-        var link = $('#txth_base').val() + "/inscripciones/saveinscripciontemp";
+        var link = $('#txth_base').val() + "/inscripcionadmision/saveinscripciontemp";
         var arrParams = new Object();
         arrParams.DATA_1 = dataInscripPart1(ID);
         arrParams.ACCION = accion;
