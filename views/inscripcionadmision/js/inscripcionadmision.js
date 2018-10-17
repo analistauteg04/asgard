@@ -113,10 +113,11 @@ $(document).ready(function () {
             if (response.status == "OK") {
                 data = response.message;
                 setComboData(data.metodos, "cmb_metodo_solicitud");   
-                AparecerDocumento();                 
+                AparecerDocumento();     
+                Requisitos();   
             }
         }, true);     
-        Requisitos();    
+         
     });
 
     $('#cmb_modalidad_solicitud').change(function () {
