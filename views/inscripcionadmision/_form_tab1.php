@@ -16,7 +16,7 @@ $requisitosCANP = ' <div class="col-md-12 col-sm-12 col-xs-12 col-lg-12">
                         <div class="col-sm-3 col-md-3 col-xs-3 col-lg-3">
                         </div>
                         <div class="col-sm-9 col-md-9 col-xs-9 col-lg-9">
-                            <div style = "width: 1200px;" class="alert alert-info"><span style="font-weight: bold">Fecha curso de nivelación del 22 de octubre al 30 de noviembre del 2018 deberás cargar en el siguiente paso estos documentos: <br></span>
+                            <div style = "width: 900px;" class="well"><span style="font-weight: bold">Fecha curso de nivelación del 22 de octubre al 30 de noviembre del 2018 deberás cargar en el siguiente paso estos documentos: <br></span>
                                 Cédula de identidad o pasaporte. <br>
                                 Certificado de votación. <br>
                                 Título de bachiller notarizado. <br>
@@ -31,7 +31,7 @@ $requisitosCANSP = ' <div class="col-md-12 col-sm-12 col-xs-12 col-lg-12">
                         <div class="col-sm-3 col-md-3 col-xs-3 col-lg-3">
                         </div>
                         <div class="col-sm-9 col-md-9 col-xs-9 col-lg-9">
-                            <div style = "width: 1200px;" class="alert alert-info"><span style="font-weight: bold">Fecha curso de nivelación del 22 de octubre al 30 de noviembre del 2018 deberás cargar en el siguiente paso estos documentos: <br></span>
+                            <div style = "width: 900px;" class="well"><span style="font-weight: bold">Fecha curso de nivelación del 22 de octubre al 30 de noviembre del 2018 deberás cargar en el siguiente paso estos documentos: <br></span>
                                 Cédula de identidad o pasaporte. <br>
                                 Certificado de votación. <br>
                                 Título de bachiller notarizado. <br>
@@ -46,7 +46,7 @@ $requisitosCANAD = ' <div class="col-md-12 col-sm-12 col-xs-12 col-lg-12">
                         <div class="col-sm-3 col-md-3 col-xs-3 col-lg-3">
                         </div>
                         <div class="col-sm-9 col-md-9 col-xs-9 col-lg-9">
-                            <div style = "width: 1200px;" class="alert alert-info"><span style="font-weight: bold">Fecha curso de nivelación del 20 de octubre al 8 de diciembre del 2018 deberás cargar en el siguiente paso estos documentos: <br></span>
+                            <div style = "width: 900px;" class="well"><span style="font-weight: bold">Fecha curso de nivelación del 20 de octubre al 8 de diciembre del 2018 deberás cargar en el siguiente paso estos documentos: <br></span>
                                 Cédula de identidad o pasaporte. <br>
                                 Certificado de votación. <br>
                                 Título de bachiller notarizado. <br>
@@ -61,7 +61,7 @@ $requisitosCANO = ' <div class="col-md-12 col-sm-12 col-xs-12 col-lg-12">
                         <div class="col-sm-3 col-md-3 col-xs-3 col-lg-3">
                         </div>
                         <div class="col-sm-9 col-md-9 col-xs-9 col-lg-9">
-                            <div style = "width: 1200px;" class="alert alert-info"><span style="font-weight: bold">Fecha curso de nivelación del 22 de octubre al 14 de diciembre del 2018 deberás cargar en el siguiente paso estos documentos: <br> </span>
+                            <div style = "width: 900px;" class="well"><span style="font-weight: bold">Fecha curso de nivelación del 22 de octubre al 14 de diciembre del 2018 deberás cargar en el siguiente paso estos documentos: <br> </span>
                                 Cédula de identidad o pasaporte. <br>
                                 Certificado de votación. <br>
                                 Título de bachiller notarizado. <br>
@@ -77,7 +77,7 @@ $requisitosEXP = ' <div class="col-md-12 col-sm-12 col-xs-12 col-lg-12">
                         <div class="col-sm-3 col-md-3 col-xs-3 col-lg-3">
                         </div>
                         <div class="col-sm-9 col-md-9 col-xs-9 col-lg-9">
-                            <div style = "width: 1200px;" class="alert alert-info"><span style="font-weight: bold">Al inscribirte al examen de admisión, tendrás acceso al Campus Virtual UTEG para prepararte. A partir de la fecha de registro tendrás un mes para rendir el examen de manera online: <br></span>
+                            <div style = "width: 900px;" class="well"><span style="font-weight: bold">Al inscribirte al examen de admisión, tendrás acceso al Campus Virtual UTEG para prepararte. A partir de la fecha de registro tendrás un mes para rendir el examen de manera online: <br></span>
                                 Cédula de identidad o pasaporte. <br>
                                 Certificado de votación. <br>
                                 Título de bachiller notarizado. <br>
@@ -92,7 +92,7 @@ $requisitosEXSP = ' <div class="col-md-12 col-sm-12 col-xs-12 col-lg-12">
                         <div class="col-sm-3 col-md-3 col-xs-3 col-lg-3">
                         </div>
                         <div class="col-sm-9 col-md-9 col-xs-9 col-lg-9">
-                            <div style = "width: 1200px;" class="alert alert-info"><span style="font-weight: bold">Al inscribirte al examen de admisión, tendrás acceso al Campus Virtual UTEG para prepararte. A partir de la fecha de registro tendrás un mes para rendir el examen de manera online.<br></span>
+                            <div style = "width: 900px;" class="well"><span style="font-weight: bold">Al inscribirte al examen de admisión, tendrás acceso al Campus Virtual UTEG para prepararte. A partir de la fecha de registro tendrás un mes para rendir el examen de manera online.<br></span>
                                 Cédula de identidad o pasaporte. <br>
                                 Certificado de votación. <br>
                                 Título de bachiller notarizado. <br>
@@ -107,7 +107,7 @@ $requisitosEXAD = ' <div class="col-md-12 col-sm-12 col-xs-12 col-lg-12">
                         <div class="col-sm-3 col-md-3 col-xs-3 col-lg-3">
                         </div>
                         <div class="col-sm-9 col-md-9 col-xs-9 col-lg-9">
-                            <div style = "width: 1200px;" class="alert alert-info"><span style="font-weight: bold">Al inscribirte al examen de admisión, tendrás acceso al Campus Virtual UTEG para prepararte. A partir de la fecha de registro tendrás un mes para rendir el examen de manera online.<br></span>
+                            <div style = "width: 900px;" class="well"><span style="font-weight: bold">Al inscribirte al examen de admisión, tendrás acceso al Campus Virtual UTEG para prepararte. A partir de la fecha de registro tendrás un mes para rendir el examen de manera online.<br></span>
                                 Cédula de identidad o pasaporte. <br>
                                 Certificado de votación. <br>
                                 Título de bachiller notarizado. <br>
@@ -122,7 +122,7 @@ $requisitosEXO = ' <div class="col-md-12 col-sm-12 col-xs-12 col-lg-12">
                         <div class="col-sm-3 col-md-3 col-xs-3 col-lg-3">
                         </div>
                         <div class="col-sm-9 col-md-9 col-xs-9 col-lg-9">
-                            <div style = "width: 1200px;" class="alert alert-info"><span style="font-weight: bold">Al inscribirte al examen de admisión, tendrás acceso al Campus Virtual UTEG para prepararte. A partir de la fecha de registro tendrás un mes para rendir el examen de manera online. <br>
+                            <div style = "width: 900px;" class="well"><span style="font-weight: bold">Al inscribirte al examen de admisión, tendrás acceso al Campus Virtual UTEG para prepararte. A partir de la fecha de registro tendrás un mes para rendir el examen de manera online. <br>
                                 Deberás cargar en el siguiente paso estos documentos: <br></span>                                 
                                 Cédula de identidad o pasaporte. <br>
                                 Certificado de votación. <br>
@@ -138,7 +138,7 @@ $requisitosPRP = '<div class="col-md-12 col-sm-12 col-xs-12 col-lg-12">
                         <div class="col-sm-3 col-md-3 col-xs-3 col-lg-3">
                         </div>
                         <div class="col-sm-9 col-md-9 col-xs-9 col-lg-9">
-                            <div style = "width: 1200px;" class="alert alert-info"><span style="font-weight: bold">Fecha del taller introductorio: 13 y 14 de octubre del 2018. <br> 
+                            <div style = "width: 900px;" class="well"><span style="font-weight: bold">Fecha del taller introductorio: 13 y 14 de octubre del 2018. <br> 
                                     Deberás cargar en el siguiente paso estos documentos:<br></span>
                                     Cédula de identidad o pasaporte <br>
                                     Certificado de votación <br>
@@ -156,7 +156,7 @@ $requisitosHOMO = ' <div class="col-md-12 col-sm-12 col-xs-12 col-lg-12">
                         <div class="col-sm-3 col-md-3 col-xs-3 col-lg-3">
                         </div>
                         <div class="col-sm-9 col-md-9 col-xs-9 col-lg-9">
-                            <div style = "width: 1200px;" class="alert alert-info"><span style="font-weight: bold">Deberás cargar en el siguiente paso estos documentos:<br></span>
+                            <div style = "width: 900px;" class="well"><span style="font-weight: bold">Deberás cargar en el siguiente paso estos documentos:<br></span>
                                 Cédula de identidad o pasaporte. <br>
                                 Certificado de votación. <br>
                                 Título de bachiller notarizado. <br>

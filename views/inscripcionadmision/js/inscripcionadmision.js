@@ -6,7 +6,7 @@
 $(document).ready(function () {
     // para mostrar codigo de area
     $('#cmb_pais_dom').change(function () {
-        var link = $('#txth_base').val() + "/inscripciones/index";
+        var link = $('#txth_base').val() + "/inscripcionadmision/index";
         var arrParams = new Object();
         arrParams.codarea = $(this).val();
         arrParams.getarea = true;
@@ -20,47 +20,7 @@ $(document).ready(function () {
    
     
     $('#sendInformacionAspirante').click(function () {   
-        guardarInscripcion('Create');
-        /*var link = $('#txth_base').val() + "/inscripciones/guardarinscripcionsolicitud";
-        var arrParams = new Object();
-        arrParams.pges_pri_nombre = $('#txt_primer_nombre').val();
-        arrParams.pges_pri_apellido = $('#txt_primer_apellido').val();
-        arrParams.tipo_dni = $('#cmb_tipo_dni option:selected').val();
-        arrParams.pges_cedula = $('#txt_cedula').val();
-        arrParams.pges_correo = $('#txt_correo').val();
-        arrParams.pais = $('#cmb_pais_dom option:selected').val();
-        arrParams.pges_celular = $('#txt_celular').val();
-        arrParams.pges_pasaporte = $('#txt_pasaporte').val();
-        arrParams.unidad_academica = $('#cmb_unidad_solicitud option:selected').val();
-        arrParams.modalidad = $('#cmb_modalidad_solicitud option:selected').val();
-        arrParams.ming_id = $('#cmb_metodo_solicitud option:selected').val();
-        arrParams.conoce = $('#cmb_conuteg option:selected').val();
-        arrParams.carrera = $('#cmb_carrera_solicitud option:selected').val();
-        arrParams.arc_extranjero = $('#txth_extranjero').val();
-        arrParams.arc_doc_beca = $('#txth_doc_beca').val();
-        
-
-        
-        $("a[data-href='#paso1']").attr('data-toggle', 'none');
-        $("a[data-href='#paso1']").parent().attr('class', 'disabled');
-        $("a[data-href='#paso1']").attr('data-href', $("a[href='#paso1']").attr('href'));
-        $("a[data-href='#paso1']").removeAttr('href');
-        $("a[data-href='#paso2']").attr('data-toggle', 'tab');
-        $("a[data-href='#paso2']").attr('href', $("a[data-href='#paso2']").attr('data-href'));
-        $("a[data-href='#paso2']").trigger("click");*/
-            
-        
-        /*if (!validateForm()) {
-            requestHttpAjax(link, arrParams, function (response) {
-                showAlert(response.status, response.label, response.message);
-                if (!response.error) {
-                    
-                    //setTimeout(function () {
-                    //    window.location.href = $('#txth_base').val() + "/inscripcionadmision/index";
-                    //}, 5000);
-                }
-            }, true);
-        }*/
+        guardarInscripcion('Create');        
 
     });
 
@@ -80,7 +40,7 @@ $(document).ready(function () {
     });  
 
     $('#cmb_unidad_solicitud').change(function () {
-        var link = $('#txth_base').val() + "/inscripciones/indexadmisionn";
+        var link = $('#txth_base').val() + "/inscripcionadmision/index";
         var arrParams = new Object();
         arrParams.nint_id = $(this).val();
         arrParams.getmodalidad = true;
@@ -121,7 +81,7 @@ $(document).ready(function () {
     });
 
     $('#cmb_modalidad_solicitud').change(function () {
-        var link = $('#txth_base').val() + "/inscripciones/indexadmisionn";
+        var link = $('#txth_base').val() + "/inscripcionadmision/index";
         var arrParams = new Object();
         arrParams.unidada = $('#cmb_unidad_solicitud').val();
         arrParams.moda_id = $(this).val();

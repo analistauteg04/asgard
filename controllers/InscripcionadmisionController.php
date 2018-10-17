@@ -85,7 +85,7 @@ class InscripcionadmisionController extends \yii\web\Controller {
                 return;
             }
             if (isset($data["getmetodo"])) {
-                $metodos = $mod_metodo->consultarMetodoIngNivelInt($data['nint_id']);
+                $metodos = $mod_metodo->consultarMetodoUnidadAca_2($data['nint_id']);
                 $message = array("metodos" => $metodos);
                 return Utilities::ajaxResponse('OK', 'alert', Yii::t('jslang', 'Success'), 'false', $message);
                 return;
@@ -100,7 +100,7 @@ class InscripcionadmisionController extends \yii\web\Controller {
         $arr_modalidad = $mod_modalidad->consultarModalidad(1, 1);
         $arr_conuteg = $mod_pergestion->consultarConociouteg();
         $arr_carrerra1 = $modcanal->consultarCarreraModalidad(1, 1);
-        $arr_metodos = $mod_metodo->consultarMetodoIngNivelInt($arr_ninteres[0]["id"]);
+        $arr_metodos = $mod_metodo->consultarMetodoUnidadAca_2($arr_ninteres[0]["id"]);
 
         return $this->render('index', [
                     "tipos_dni" => array("CED" => Yii::t("formulario", "DNI Document"), "PASS" => Yii::t("formulario", "Passport")),
