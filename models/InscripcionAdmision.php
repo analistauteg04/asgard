@@ -25,12 +25,7 @@ class InscripcionAdmision extends \yii\db\ActiveRecord {
         $con = \Yii::$app->db_captacion;
         $trans = $con->beginTransaction();
         try {
-            
-            //$data
-            //twin_nombre,twin_apellido,twin_dni,twin_numero,twin_correo,twin_pais,twin_celular,
-            //uaca_id,mod_id,car_id,twin_metodo_ingreso,conuteg_id,ruta_doc_titulo,ruta_doc_dni,
-            //ruta_doc_certvota,ruta_doc_foto,ruta_doc_certificado,twin_mensaje1,twin_mensaje2,
-            //twin_estado,twin_fecha_creacion,twin_estado_logico)VALUES
+            \app\models\Utilities::putMessageLogFile('Entro al modelo para ingresar la informacion');
             $keys = [
                         'twin_nombre', 'twin_apellido', 'twin_dni','twin_numero', 
                         'twin_correo', 'twin_pais', 'twin_celular','uaca_id', 
@@ -78,6 +73,7 @@ class InscripcionAdmision extends \yii\db\ActiveRecord {
         }
         try {
             $sql = "INSERT INTO " . $con->dbname . '.' . $name_table . " ($param_sql) VALUES($bdet_sql);";
+            \app\models\Utilities::putMessageLogFile('sql: '.$sql);
             $comando = $con->createCommand($sql);
             $result = $comando->execute();
             $idtable = $con->getLastInsertID($con->dbname . '.' . $name_table);

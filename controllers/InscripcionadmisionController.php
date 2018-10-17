@@ -470,7 +470,7 @@ class InscripcionadmisionController extends \yii\web\Controller {
                     //$resul = $model->actualizarSolicitud($data);                
                 }
                 if ($resul['status']) {
-                    if($accion == "Create"){
+                    if($accion == "create"){
                         $source = $_SERVER['DOCUMENT_ROOT'].Url::base().Yii::$app->params["documentFolder"].$resul['cedula'];
                         $target = $_SERVER['DOCUMENT_ROOT'].Url::base().Yii::$app->params["documentFolder"].$resul['cedula'].'_'.$resul['ids'];
                         rename($source, $target);//Renombrar el Directorio                    
