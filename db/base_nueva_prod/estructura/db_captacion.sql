@@ -401,32 +401,29 @@ create table if not exists `solicitud_datos_factura` (
     La data de esta tabla debe eliminarse a traves de un proceso cron, que se debe ejecutar 
     de manera periodica.
 */
-
-
-
-CREATE TABLE `temporal_wizard_inscripcion` (
-  `twin_id` bigint(20) NOT NULL,
-  `twin_nombre` varchar(1000) NOT NULL,
-  `twin_apellido` varchar(1000) NOT NULL,
-  `twin_dni` varchar(1000) NOT NULL,
-  `twin_numero` varchar(1000) NOT NULL,
-  `twin_correo` varchar(1000) NOT NULL,
-  `twin_pais` bigint(20) DEFAULT NULL,
-  `twin_celular` bigint(20) NOT NULL,
-  `uaca_id` bigint(20) NOT NULL,
-  `mod_id` bigint(20) NOT NULL,
-  `car_id` bigint(20) NOT NULL,
-  `twin_metodo_ingreso` bigint(20) NOT NULL,
-  `conuteg_id` bigint(20) NOT NULL,
-  `ruta_doc_titulo` varchar(200) DEFAULT NULL,
-  `ruta_doc_dni` varchar(200) DEFAULT NULL,
-  `ruta_doc_certvota` varchar(200) DEFAULT NULL,
-  `ruta_doc_foto` varchar(200) DEFAULT NULL,
-  `ruta_doc_certificado` varchar(200) DEFAULT NULL,
-  `twin_mensaje1` varchar(1) DEFAULT NULL,
-  `twin_mensaje2` varchar(1) DEFAULT NULL,
-  `twin_estado` varchar(1) NOT NULL,
-  `twin_fecha_creacion` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,
-  `twin_fecha_modificacion` timestamp NULL DEFAULT NULL,
-  `twin_estado_logico` varchar(1) NOT NULL
+create table if not exists `temporal_wizard_inscripcion` (
+ `twin_id` bigint(20) not null auto_increment primary key,
+ `twin_nombre` varchar(1000) not null,
+ `twin_apellido` varchar(1000) not null,
+ `twin_dni` varchar(1000) not  null,
+ `twin_numero` varchar(1000) not  null,
+ `twin_correo` varchar(1000) not  null,
+ `twin_pais` bigint(20) not null,
+ `twin_celular` bigint(20) not null,
+ `uaca_id` bigint(20) not null, 
+ `mod_id` bigint(20) not null, 
+ `car_id` bigint(20) not null,
+ `twin_metodo_ingreso` bigint(20) null,
+ `conuteg_id` bigint(20) null,
+ `ruta_doc_titulo` varchar(200) null,
+ `ruta_doc_dni` varchar(200) null, 
+ `ruta_doc_certvota` varchar(200) null, 
+ `ruta_doc_foto` varchar(200) null, 
+ `ruta_doc_certificado` varchar(200) null, 
+ `twin_mensaje1` varchar(1) null,
+ `twin_mensaje2` varchar(1) null,
+ `twin_estado` varchar(1) not null,
+ `twin_fecha_creacion` timestamp not null default current_timestamp,
+ `twin_fecha_modificacion` timestamp null default null,
+ `twin_estado_logico` varchar(1) not null
 );
