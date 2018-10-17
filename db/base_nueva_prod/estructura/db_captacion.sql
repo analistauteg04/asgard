@@ -392,3 +392,31 @@ create table if not exists `solicitud_datos_factura` (
  `sdfa_estado_logico` varchar(1) not null,
  foreign key (sins_id) references `solicitud_inscripcion`(sins_id)
 );
+
+
+/*
+    Esta tabla se esta creando para almacenar la informacion guardada en el wizard, debido a que no7
+    hay como guardar en las tablas principales, informacion no completa, con la finanlidad de 
+    evitar incosistencia en la data.
+    La data de esta tabla debe eliminarse a traves de un proceso cron, que se debe ejecutar 
+    de manera periodica.
+*/
+create table if not exists `temporal_wizard_inscripcion` (
+ `twin_id` bigint(20) not null auto_increment primary key,
+ `twin_nombre` varchar(1000) not null,
+ `twin_apellido` varchar(1000) not null,
+ `twin_dni` varchar(1000) not  null,
+ `twin_numero` varchar(1000) not  null,
+ `twin_correo` varchar(1000) not  null,
+ `twin_pais` bigint(20) not  null,
+ `twin_celular` bigint(20) not  null,
+ `uaca_id` bigint(20) not  null, 
+ `mod_id` bigint(20) not  null, 
+ `car_id` bigint(20) not  null,
+ `twin_metodo_ingreso` bigint(20) not  null,
+ `uaca_id` bigint(20) not  null,
+ `twin_estado` varchar(1) not null,
+ `twin_fecha_creacion` timestamp not null default current_timestamp,
+ `twin_fecha_modificacion` timestamp null default null,
+ `twin_estado_logico` varchar(1) not null
+);
