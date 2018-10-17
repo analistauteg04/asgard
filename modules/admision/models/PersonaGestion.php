@@ -809,13 +809,13 @@ class PersonaGestion extends \app\modules\admision\components\CActiveRecord {
             $filtro .= " pges_correo = :pges_correo ";
         }
         if (!empty($pges_domicilio_telefono)) {
-            if (!empty($pges_correo)) {
+            if (!empty($pges_correo) || !empty($pges_celular)) {
                 $filtro .= " OR ";
             }
             $filtro .= " pges_domicilio_telefono = :pges_domicilio_telefono ";
         }
         if (!empty($pges_domicilio_celular2)) {
-            if (!empty($pges_domicilio_telefono)) {
+            if (!empty($pges_domicilio_telefono)  || !empty($pges_celular)) {
                 $filtro .= " OR ";
             }
             $filtro .= " pges_domicilio_celular2 = :pges_domicilio_celular2";
@@ -952,7 +952,7 @@ class PersonaGestion extends \app\modules\admision\components\CActiveRecord {
             if ($arrFiltro['agente'] != "" && $arrFiltro['agente'] > 0) {
                 $str_search .= " pg.pges_usuario_ingreso = :agente AND ";
             }
-        } else { 
+        } else {
             $columnsAdd = "                
                 pg.pges_pri_nombre as pges_pri_nombre,
                 pg.pges_seg_nombre as pges_seg_nombre,
@@ -1014,14 +1014,14 @@ class PersonaGestion extends \app\modules\admision\components\CActiveRecord {
                 $estcontacto = $arrFiltro["estado"];
                 $comando->bindParam(":estcontacto", $estcontacto, \PDO::PARAM_INT);
             }
-            
+
             if ($arrFiltro['medio'] != "" && $arrFiltro['medio'] > 0) {
                 $medio = $arrFiltro["medio"];
                 $comando->bindParam(":medio", $medio, \PDO::PARAM_INT);
             }
-            $fecha_ini = $arrFiltro["f_ini"]." 00:00:00";
-            $fecha_fin = $arrFiltro["f_fin"]." 23:59:59";
-                       
+            $fecha_ini = $arrFiltro["f_ini"] . " 00:00:00";
+            $fecha_fin = $arrFiltro["f_fin"] . " 23:59:59";
+
             if ($arrFiltro['f_ini'] != "" && $arrFiltro['f_fin'] != "") {
                 $comando->bindParam(":fec_ini", $fecha_ini, \PDO::PARAM_STR);
                 $comando->bindParam(":fec_fin", $fecha_fin, \PDO::PARAM_STR);
@@ -1207,7 +1207,7 @@ class PersonaGestion extends \app\modules\admision\components\CActiveRecord {
     public function insertarDtosPersonaGestion($emp_id, $tipoProceso) {
         $contError = 0;
         $Data = $this->consultarPerGesTemp($tipoProceso);
-        
+
         $rawData = ''; //array();
         $mensError = '';
         $con = \Yii::$app->db_crm;
@@ -1228,7 +1228,6 @@ class PersonaGestion extends \app\modules\admision\components\CActiveRecord {
             //$padm_id=$mod_pergestion->consultarIdPersonaAdmision($per_id, $grol_id);
             //$padm_id=($padm_id!=0)?$padm_id:1;//Valor por Defecto en el Caso de que no Existe Persona Admision
             //-------------------------------  
-            
             //$opo_codigo = Secuencias::nuevaSecuencia($con, 1, 1, 1, 'SOL') ;//
             $opo_codigo = intval($mod_oportunidad->consultarUltimoCodcrm()) + 1;
             $pges_codigo = intval($mod_pergestion->consultarUltimoCodPerGest()) + 1;
@@ -1251,8 +1250,8 @@ class PersonaGestion extends \app\modules\admision\components\CActiveRecord {
                         //Opciones por defecto segun los indicado por Ing. Geovanni
                         $uaca_id = $Data[$i]['pgest_unidad_academica'];
                         $mod_id = $Data[$i]['pgest_modalidad'];
-                        
-                        if($emp_id=="1"){
+
+                        if ($emp_id == "1") {
                             switch ($uaca_id) { // esto cambiarlo hacer funcion que consulte el usuario y traer el id
                                 case "1":
                                     $tipoportunidad = 1;
@@ -1267,26 +1266,25 @@ class PersonaGestion extends \app\modules\admision\components\CActiveRecord {
                                     $tipoportunidad = 5;
                                     break;
                             }
-                        }elseif($emp_id=="2" ||$emp_id=="3"){ //UNLINK Y SMART
-                            /*switch ($uaca_id) { 
-                                case "2":
-                                    $agente = $mod_oportunidad->consultarAgentebyCod($uaca_id, $mod_id, 1);
-                                    //$tipoportunidad = 5;
-                                    break;
-                                case "3": 
-                                    $agente = $mod_oportunidad->consultarAgentebyCod($uaca_id, $mod_id, 1);
-                                    //$tipoportunidad = 5;
-                  
-                                case "5":
-                                    $agente = $mod_oportunidad->consultarAgentebyCod($uaca_id, $mod_id, 1);
-                                    //$tipoportunidad = 5;
-                                case "6":
-                                    $agente = $mod_oportunidad->consultarAgentebyCod($uaca_id, $mod_id, 1);
-                                    //$tipoportunidad = 5;
-                                default:
-                            }*/
+                        } elseif ($emp_id == "2" || $emp_id == "3") { //UNLINK Y SMART
+                            /* switch ($uaca_id) { 
+                              case "2":
+                              $agente = $mod_oportunidad->consultarAgentebyCod($uaca_id, $mod_id, 1);
+                              //$tipoportunidad = 5;
+                              break;
+                              case "3":
+                              $agente = $mod_oportunidad->consultarAgentebyCod($uaca_id, $mod_id, 1);
+                              //$tipoportunidad = 5;
+
+                              case "5":
+                              $agente = $mod_oportunidad->consultarAgentebyCod($uaca_id, $mod_id, 1);
+                              //$tipoportunidad = 5;
+                              case "6":
+                              $agente = $mod_oportunidad->consultarAgentebyCod($uaca_id, $mod_id, 1);
+                              //$tipoportunidad = 5;
+                              default:
+                              } */
                             $agente = $mod_oportunidad->consultarAgentebyCod($uaca_id, $mod_id, 1);
-                            
                         }
                         $padm_id = $agente['agente_id'];
                         //-------------------------------------------
@@ -1378,7 +1376,7 @@ class PersonaGestion extends \app\modules\admision\components\CActiveRecord {
             $opo_codigo = intval($mod_oportunidad->consultarUltimoCodcrm()) + 1; //
             $pges_codigo = intval($mod_pergestion->consultarUltimoCodPerGest()) + 1; //
             for ($i = 0; $i < sizeof($Data); $i++) {
-               
+
                 //Verifico si Existe lOS datos en la tabla
                 $pges_id = PersonaGestion::existePersonaGestLeads($Data[$i]['correo'], $Data[$i]['telefono']);
                 //if ($pges_id>0) {                    
@@ -1503,7 +1501,7 @@ class PersonaGestion extends \app\modules\admision\components\CActiveRecord {
      */
     public function insertarPersonaGestionLeads($con, $pges_codigo, $tper_id, $nombre, $telefono, $correo, $contacto, $econ_id) {
         //$econ_id=1;//=>En Contacto por defecto
-        $pges_codigo=str_pad((int)$pges_codigo, 7, "0", STR_PAD_LEFT);
+        $pges_codigo = str_pad((int) $pges_codigo, 7, "0", STR_PAD_LEFT);
         $usuingreso = @Yii::$app->session->get("PB_iduser");
         $sql = "INSERT INTO " . $con->dbname . ".persona_gestion
                     (pges_codigo,tper_id,pges_pri_nombre,pai_id_nacimiento,pro_id_nacimiento,can_id_nacimiento,
@@ -1766,9 +1764,16 @@ class PersonaGestion extends \app\modules\admision\components\CActiveRecord {
             $str_search .= "(pg.pges_pri_nombre like :search OR ";
             $str_search .= "pg.pges_seg_nombre like :search OR ";
             $str_search .= "pg.pges_pri_apellido like :search OR ";
-            $str_search .= "pg.pges_seg_apellido like :search)  AND ";
-            if ($arrFiltro['estado'] != "" && $arrFiltro['estado'] > 0) {
-                $str_search .= " pg.econ_id = :estcontacto AND ";
+            $str_search .= "pg.pges_seg_apellido like :search)  AND ";            
+            if ($arrFiltro['f_ini'] != "" && $arrFiltro['f_fin'] != "") {
+                $str_search .= "pg.pges_fecha_creacion >= :fec_ini AND ";
+                $str_search .= "pg.pges_fecha_creacion <= :fec_fin AND ";
+            }
+            if ($arrFiltro['medio'] != "" && $arrFiltro['medio'] > 0) {
+                $str_search .= " pg.ccan_id = :medio AND ";
+            }            
+            if ($arrFiltro['agente'] != "" && $arrFiltro['agente'] > 0) {
+                $str_search .= " pg.pges_usuario_ingreso = :agente AND ";
             }
         } else {
             $columnsAdd = "                
@@ -1812,11 +1817,22 @@ class PersonaGestion extends \app\modules\admision\components\CActiveRecord {
         $comando = $con->createCommand($sql);
         $comando->bindParam(":estado", $estado, \PDO::PARAM_STR);
         if (isset($arrFiltro) && count($arrFiltro) > 0) {
-            $search_cond = "%" . $arrFiltro["search"] . "%";
-            $empresa = $arrFiltro["estado"];
-            $comando->bindParam(":search", $search_cond, \PDO::PARAM_STR);
-            if ($arrFiltro['estado'] != "" && $arrFiltro['estado'] > 0) {
-                $comando->bindParam(":estcontacto", $empresa, \PDO::PARAM_STR);
+            $search_cond = "%" . $arrFiltro["search"] . "%";          
+            $comando->bindParam(":search", $search_cond, \PDO::PARAM_STR);            
+            $fecha_ini = $arrFiltro["f_ini"] . " 00:00:00";
+            $fecha_fin = $arrFiltro["f_fin"] . " 23:59:59";
+
+            if ($arrFiltro['f_ini'] != "" && $arrFiltro['f_fin'] != "") {
+                $comando->bindParam(":fec_ini", $fecha_ini, \PDO::PARAM_STR);
+                $comando->bindParam(":fec_fin", $fecha_fin, \PDO::PARAM_STR);
+            }
+            if ($arrFiltro['medio'] != "" && $arrFiltro['medio'] > 0) {
+                $medio = $arrFiltro["medio"];
+                $comando->bindParam(":medio", $medio, \PDO::PARAM_INT);
+            }            
+            if ($arrFiltro['agente'] != "" && $arrFiltro['agente'] > 0) {
+                $agente = $arrFiltro["agente"];
+                $comando->bindParam(":agente", $agente, \PDO::PARAM_INT);
             }
         }
         $resultData = $comando->queryAll();

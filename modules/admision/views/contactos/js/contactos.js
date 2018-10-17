@@ -89,14 +89,20 @@ function actualizarGridContacto() {
     }
 }
 function exportExcel() {
-    var search = $('#txt_buscarDataPersona').val();
-    var estado = $('#cmb_estadocontacto option:selected').val();     
-    window.location.href = $('#txth_base').val() + "/admision/contactos/expexcel?search=" + search + "&estado=" + estado;    
+    var search = $('#txt_buscarDataPersona').val();   
+    var f_ini = $('#txt_fecha_ini').val();
+    var f_fin = $('#txt_fecha_fin').val();
+    var medio = $('#cmb_medio option:selected').val();
+    var agente = $('#cmb_agente option:selected').val();
+    window.location.href = $('#txth_base').val() + "/admision/contactos/expexcel?search=" + search + "&f_ini=" + f_ini + "&f_fin=" + f_fin + "&medio=" + medio + "&agente=" + agente;    
 }
 function exportPdf() {
     var search = $('#txt_buscarDataPersona').val();
-    var estado = $('#cmb_estadocontacto option:selected').val();     
-    window.location.href = $('#txth_base').val() + "/admision/contactos/exppdf?pdf=1&search=" + search + "&estado=" + estado;    
+    var f_ini = $('#txt_fecha_ini').val();
+    var f_fin = $('#txt_fecha_fin').val();
+    var medio = $('#cmb_medio option:selected').val();
+    var agente = $('#cmb_agente option:selected').val();    
+    window.location.href = $('#txth_base').val() + "/admision/contactos/exppdf?pdf=1&search=" + search  + "&f_ini=" + f_ini + "&f_fin=" + f_fin + "&medio=" + medio + "&agente=" + agente;    
 }
 
 function loadLeads(){
