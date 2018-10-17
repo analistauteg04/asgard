@@ -108,14 +108,14 @@ $this->title = 'Formulario de Contacto';
             </div>
         </div>
     </div>
-     <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">            
+     <!--<div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">            
         <div class="form-group">
-            <label for="cmb_tipo_oportunidad" class="col-lg-3 col-md-3 col-sm-3 col-xs-3 control-label keyupmce"><?= Yii::t("formulario", "Método Ingreso") ?><span class="text-danger">*</span></label>
+            <label for="cmb_tipo_oportunidad" class="col-lg-3 col-md-3 col-sm-3 col-xs-3 control-label keyupmce"><? Yii::t("formulario", "Método Ingreso") ?><span class="text-danger">*</span></label>
             <div class="col-lg-9 col-md-9 col-sm-9 col-xs-9">
-                <?= Html::dropDownList("cmb_tipo_oportunidad", 1, $arr_tipo_oportunidad, ["class" => "form-control", "id" => "cmb_tipo_oportunidad"]) ?>
+                <? Html::dropDownList("cmb_tipo_oportunidad", 1, $arr_tipo_oportunidad, ["class" => "form-control", "id" => "cmb_tipo_oportunidad"]) ?>
             </div>
         </div>            
-    </div>
+    </div>-->
     <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
         <div class="form-group">
             <label for="txt_hora_atencion" class="col-lg-3 col-md-3 col-sm-3 col-xs-3 control-label"><?= Yii::t("formulario", "Schedule Contact") ?> <span class="text-danger">*</span></label>

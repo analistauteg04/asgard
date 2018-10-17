@@ -170,7 +170,7 @@ class InscripcionsmartController extends \yii\web\Controller {
             switch ($nivelestudio) { // esto cambiarlo hacer funcion que consulte el usaurio y traer el id           
                 case "3":
                     $agente = 15;
-                    $tipoportunidad = $data["metodo"];
+                    $tipoportunidad = 8;//$data["metodo"];
                     $pagina = "registersmart";
                     break;
             }

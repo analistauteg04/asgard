@@ -364,8 +364,8 @@ INSERT INTO `personal_admision` (`padm_id`, `per_id`, `grol_id`, `padm_codigo`, 
 (16, 18, 8, 'CONTACT03', '1','1', '1'), /****COLOMBIA****/
 (17, 19, 8, 'CONTACT04', '1','1', '1'), /****COLOMBIA****/
 (18, 20, 8, 'SUPEXT', '0','1', '1'),/****COLOMBIA****/
-(19, 39, 28, 'SUPEXT', '0','1', '1'),/****COMUNICACIONES****/
-(20, 40, 29, 'SUPEXT', '0','1', '1');  /****COMUNICACIONES****/ 
+(19, 39, 28, 'COMUNITY1', '0','1', '1'),/****COMUNICACIONES****/
+(20, 40, 29, 'COMUNITY2', '0','1', '1');  /****COMUNICACIONES****/ 
 
 -- --------------------------------------------------------
 --

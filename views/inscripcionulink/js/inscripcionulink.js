@@ -19,6 +19,13 @@ $(document).ready(function () {
     });
     
     $('#cmb_ninteres').change(function () {
+        if ($('#cmb_ninteres').val() < 3) {
+            $('#divmetodo').css('display', 'block');
+        }
+        else{
+             $('#divmetodo').css('display', 'none');
+        }
+            
         var link = $('#txth_base').val() + "/inscripcionulink/index";
         var arrParams = new Object();
         arrParams.nint_id = $(this).val();
