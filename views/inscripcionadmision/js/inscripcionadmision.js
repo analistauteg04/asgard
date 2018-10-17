@@ -19,7 +19,7 @@ $(document).ready(function () {
     });
    
     
-    $('#sendInscripcionsolicitud').click(function () {        
+    $('#sendInformacionAspirante').click(function () {        
         var link = $('#txth_base').val() + "/inscripciones/guardarinscripcionsolicitud";
         var arrParams = new Object();
         arrParams.pges_pri_nombre = $('#txt_primer_nombre').val();
@@ -42,7 +42,7 @@ $(document).ready(function () {
                 showAlert(response.status, response.label, response.message);
                 if (!response.error) {
                     setTimeout(function () {
-                        window.location.href = $('#txth_base').val() + "/inscripciones/indexadmisionn";
+                        //aqui hay que colocar la funcion javascript para enviar al otro tab.
                     }, 5000);
                 }
             }, true);

@@ -437,251 +437,256 @@ class InscripcionesController extends \yii\web\Controller {
             }
         }
     }
-
     public function actionGuardarinscripcionsolicitud() {
-        $error = 0;
+        
         if (Yii::$app->request->isAjax) {
-            $pgest = Yii::$app->request->post();
-            $data = Yii::$app->request->post();
-            $con = \Yii::$app->db_asgard;
-            $con1 = \Yii::$app->db_captacion;
-            $con2 = \Yii::$app->db_facturacion;
-            $transaction = $con->beginTransaction();
-            $transaction1 = $con1->beginTransaction();
-            $transaction2 = $con2->beginTransaction();
-            try {
-                // He colocado al inicio la informacion para que cargue al principio
-                $emp_id = 1;
-                $exito=0;
-                $identificacion = '';
-                if (isset($pgest['pges_cedula']) && strlen($pgest['pges_cedula']) > 0) {
-                    $identificacion = $pgest['pges_cedula'];
-                } else {
-                    $identificacion = $pgest['pges_pasaporte'];
-                }
-                if (isset($identificacion) && strlen($identificacion) > 0) {
-                    $id_persona = 0;
-                    $mod_persona = new Persona();
-                    $keys_per = [
-                        'per_pri_nombre', 'per_seg_nombre', 'per_pri_apellido', 'per_seg_apellido', 'per_cedula', 'etn_id', 'eciv_id', 'per_genero', 'pai_id_nacimiento', 'pro_id_nacimiento', 'can_id_nacimiento', 'per_fecha_nacimiento', 'per_celular', 'per_correo', 'tsan_id', 'per_domicilio_sector', 'per_domicilio_cpri', 'per_domicilio_csec', 'per_domicilio_num', 'per_domicilio_ref', 'per_domicilio_telefono', 'pai_id_domicilio', 'pro_id_domicilio', 'can_id_domicilio', 'per_nac_ecuatoriano', 'per_nacionalidad', 'per_foto', 'per_estado', 'per_estado_logico'
-                    ];
-                    $parametros_per = [
-                        $pgest['pges_pri_nombre'], null, $pgest['pges_pri_apellido'], null,
-                        $pgest['pges_cedula'], null, null, null, null, null,
-                        null, null, $pgest['pges_celular'], $pgest['pges_correo'],
-                        null, null, null, null,
-                        null, null, null,
-                        null, null, null,
-                        null, null, null, 1, 1
-                    ];
-                    \app\models\Utilities::putMessageLogFile('va a proceder a ingresar la informacion');
-                    $id_persona = $mod_persona->consultarIdPersona($pgest['pges_cedula'], $pgest['pges_pasaporte']);
-                    if ($id_persona == 0) {
-                        $id_persona = $mod_persona->insertarPersona($con, $parametros_per, $keys_per, 'persona');
-                    }
-                    if ($id_persona > 0) {
-                        \app\models\Utilities::putMessageLogFile('ingreso la Persona');
-                        $concap = \Yii::$app->db_captacion;
-                        $mod_emp_persona = new EmpresaPersona();
-                        $keys = ['emp_id', 'per_id', 'eper_estado', 'eper_estado_logico'];
-                        $parametros = [$emp_id, $id_persona, 1, 1];
-                        $emp_per_id = $mod_emp_persona->consultarIdEmpresaPersona($id_persona, $emp_id);
-                        if ($emp_per_id == 0) {
-                            $emp_per_id = $mod_emp_persona->insertarEmpresaPersona($con, $parametros, $keys, 'empresa_persona');
-                        }
-                        if ($emp_per_id > 0) {
-                            \app\models\Utilities::putMessageLogFile('ingreso la empresa Persona');
-                            $usuario = new Usuario();
-                            $usuario_id = $usuario->consultarIdUsuario($id_persona, $pgest['pges_correo']);
-                            if ($usuario_id == 0) {
-                                $security = new Security();
-                                $hash = $security->generateRandomString();
-                                $passencrypt = base64_encode($security->encryptByPassword($hash, 'Uteg2018'));
-                                $keys = ['per_id', 'usu_user', 'usu_sha', 'usu_password', 'usu_estado', 'usu_estado_logico'];
-                                $parametros = [$id_persona, $pgest['pges_correo'], $hash, $passencrypt, 1, 1];
-                                $usuario_id = $usuario->crearUsuarioTemporal($con, $parametros, $keys, 'usuario');
-                            }
-                            if ($usuario_id > 0) {
-                                \app\models\Utilities::putMessageLogFile('ingreso el usuario');
-                                $mod_us_gr_ep = new UsuaGrolEper();
-                                $grol_id = 30;
-                                $keys = ['eper_id', 'usu_id', 'grol_id', 'ugep_estado', 'ugep_estado_logico'];
-                                $parametros = [$emp_per_id, $usuario_id, $grol_id, 1, 1];
-                                $us_gr_ep_id = $mod_us_gr_ep->consultarIdUsuaGrolEper($emp_per_id, $usuario_id, $grol_id);
-                                if ($us_gr_ep_id == 0)
-                                    $us_gr_ep_id = $mod_us_gr_ep->insertarUsuaGrolEper($con, $parametros, $keys, 'usua_grol_eper');
-                                if ($us_gr_ep_id > 0) {
-                                    \app\models\Utilities::putMessageLogFile('ingreso el usuario grol');
-                                    $mod_interesado = new Interesado(); // se guarda con estado_interesado 1
-                                    $interesado_id = $mod_interesado->consultaInteresadoById($id_persona);
-                                    $keys = ['per_id', 'int_estado_interesado', 'int_usuario_ingreso', 'int_estado', 'int_estado_logico'];
-                                    $parametros = [$id_persona, 1, $usuario_id, 1, 1];
-                                    if ($interesado_id == 0) {
-                                        $interesado_id = $mod_interesado->insertarInteresado($concap, $parametros, $keys, 'interesado');
-                                    }
-                                    if ($interesado_id > 0) {
-                                        \app\models\Utilities::putMessageLogFile('ingreso el interesado');
-                                        $mod_inte_emp = new InteresadoEmpresa(); // se guarda con estado_interesado 1
-                                        $iemp_id = $mod_inte_emp->consultaInteresadoEmpresaById($interesado_id, $emp_id);
-                                        if ($iemp_id == 0) {
-                                            $iemp_id = $mod_inte_emp->crearInteresadoEmpresa($interesado_id, $emp_id, $usuario_id);
-                                        }
-                                        if ($iemp_id > 0) {
-                                            $eaca_id = NULL;
-                                            $mest_id = NULL;
-                                            if ($emp_id == 1) {//Uteg 
-                                                $eaca_id = $pgest['carrera'];
-                                            } elseif ($emp_id == 2 || $emp_id == 3) {
-                                                $mest_id = $pgest['carrera'];
-                                            }
-                                            $num_secuencia = Secuencias::nuevaSecuencia($con, $emp_id, 1, 1, 'SOL');
-                                            $sins_fechasol = date(Yii::$app->params["dateTimeByDefault"]);
-                                            $rsin_id = 1; //Solicitud pendiente     
-                                            $solins_model = new SolicitudInscripcion();
-                                            $mensaje = 'intId: ' . $interesado_id . '/uaca: ' . $pgest['unidad_academica'] . '/modalidad: ' . $pgest['modalidad'] . '/ming: ' . $pgest['ming_id'] . '/eaca: ' . $eaca_id . '/mest: ' . $mest_id . '/empresa: ' . $emp_id . '/secuencia: ' . $num_secuencia . '/rsin_id: ' . $rsin_id . '/sins_fechasol: ' . $sins_fechasol . '/usuario_id: ' . $usuario_id;
-                                            $sins_id = $solins_model->insertarSolicitud($interesado_id, $pgest['unidad_academica'], $pgest['modalidad'], $pgest['ming_id'], $eaca_id, null, $emp_id, $num_secuencia, $rsin_id, $sins_fechasol, $usuario_id);
-                                            //fin de solicitud inscripcion$mest_id
-                                            //grabar los documentos
-                                            \app\models\Utilities::putMessageLogFile('solicitud: ' . $mensaje);
-                                            if ($sins_id) {
-                                                \app\models\Utilities::putMessageLogFile('ingreso la solicitud: ' . $sins_id);
-                                                if ($beca == "1") {
-                                                    $precio = 0;
-                                                } else {
-                                                    $resp_precio = $solins_model->ObtenerPrecio($pgest['ming_id'], $pgest['unidad_academica'], $pgest['modalidad'], $eaca_id);
-                                                    if ($resp_precio) {
-                                                        $precio = $resp_precio['precio'];
-                                                    } else {
-                                                        $mensaje = 'No existe registrado ningún precio para la unidad, modalidad y método de ingreso seleccionada.';
-                                                        $errorprecio = 0;
-                                                    }
-                                                }
-                                                $mod_ordenpago = new OrdenPago();
-                                                //Se verifica si seleccionó descuento.
-                                                $val_descuento = 0;
-                                                if (!empty($descuento)) {
-                                                    $modDescuento = new DetalleDescuentoItem();
-                                                    $respDescuento = $modDescuento->consultarValdctoItem($descuento);
-                                                    if ($respDescuento) {
-                                                        if ($precio == 0) {
-                                                            $val_descuento = 0;
-                                                        } else {
-                                                            if ($respDescuento["ddit_tipo_beneficio"] == 'P') {
-                                                                $val_descuento = ($precio * ($respDescuento["ddit_porcentaje"])) / 100;
-                                                            } else {
-                                                                $val_descuento = $respDescuento["ddit_valor"];
-                                                            }
-                                                            //Insertar solicitud descuento
-                                                            if ($val_descuento > 0) {
-                                                                $resp_SolicDcto = $mod_ordenpago->insertarSolicDscto($sins_id, $descuento, $precio, $respDescuento["ddit_porcentaje"], $respDescuento["ddit_valor"]);
-                                                            }
-                                                        }
-                                                    }
-                                                }
-                                                //Generar la orden de pago con valor correspondiente. Buscar precio para orden de pago.                                                                     
-                                                if ($precio == 0) {
-                                                    $estadopago = 'S';
-                                                } else {
-                                                    $estadopago = 'P';
-                                                }
-                                                $val_total = $precio - $val_descuento;
-                                                $resp_opago = $mod_ordenpago->insertarOrdenpago($sins_id, null, $val_total, 0, $val_total, $estadopago, $usuario_id);
-                                                if ($resp_opago) {
-                                                    $fecha_ini = date(Yii::$app->params["dateByDefault"]);
-                                                    \app\models\Utilities::putMessageLogFile('orden pago: '.$resp_opago);
-                                                    $resp_dpago = $mod_ordenpago->insertarDesglosepago($resp_opago, $val_total, 0, $val_total, $fecha_ini, null, $estadopago, $usuario_id);
-                                                    if ($resp_dpago) {
-                                                        $exito = 1;
-                                                        \app\models\Utilities::putMessageLogFile('desgloce pago: '.$resp_dpago);
-                                                        $usuarioNew = Usuario::findIdentity($usuario_id);
-                                                        $link = $usuarioNew->generarLinkActivacion();
-                                                        $email_info = array(
-                                                            "nombres" => $pgest['pges_pri_nombre'] . " " . $pgest['pges_seg_nombre'],
-                                                            "apellidos" => $pgest['pges_pri_apellido'] . " " . $pgest['pges_seg_apellido'],
-                                                            "correo" => $pgest['pges_correo'],
-                                                            "telefono" => isset($pgest['pges_celular']) ? $pgest['pges_celular'] : $pgest['pges_domicilio_telefono'],
-                                                            "identificacion" => isset($pgest['pges_cedula']) ? $pgest['pges_cedula'] : $pgest['pges_pasaporte'],
-                                                            "link_asgard" => $link,
-                                                        );
-                                                        \app\models\Utilities::putMessageLogFile('ingreso el email');
-                                                        if ($pgest['unidad_academica'] == 1 and ( $pgest['modalidad'] == 1)) {
-                                                            $file1 = Url::base(true) . "/files/Mailing-UTEG-Online.jpg";
-                                                            $rutaFile = array($file1);
-                                                        } else {
-                                                            if ($pgest['unidad_academica'] == 1 and ( $pgest['modalidad'] != 1)) {
-                                                                $file1 = Url::base(true) . "/files/Mailing-UTEG-Grado.jpg";
-                                                                $rutaFile = array($file1);
-                                                            } else {
-                                                                if ($pgest['unidad_academica'] == 2) {
-                                                                    $file1 = Url::base(true) . "/files/Mailing-UTEG-Posgrado.jpg";
-                                                                    $rutaFile = array($file1);
-                                                                }
-                                                            }
-                                                        }
-                                                        $tituloMensaje = Yii::t("interesado", "UTEG - Registration");
-                                                        $asunto = Yii::t("interesado", "UTEG - Registration Online");
-                                                        $body = Utilities::getMailMessage("PaidApplyment", array(), Yii::$app->language);
-                                                        Utilities::sendEmail($tituloMensaje, Yii::$app->params["admisiones"], // a quien se envia el correo
-                                                                [$email_info['correo'] => $email_info['nombres'] . " " . $email_info['apellidos']], // quien envia el correo
-                                                                $asunto, $file1);
-                                                        \app\models\Utilities::putMessageLogFile('mensaje final:' . $exito);
-                                                    }
-                                                }
-                                            }
-                                        } else {
-                                            $error_message .= Yii::t("formulario", "The enterprise interested hasn't been saved");
-                                            $error++;
-                                        }
-                                    } else {
-                                        $error_message .= Yii::t("formulario", "The interested person hasn't been saved");
-                                        $error++;
-                                    }
-                                } else {
-                                    $error_message .= Yii::t("formulario", "The rol user hasn't been saved");
-                                    $error++;
-                                }
-                            } else {
-                                $error_message .= Yii::t("formulario", "The user hasn't been saved");
-                                $error++;
-                            }
-                        } else {
-                            $error_message .= Yii::t("formulario", "The enterprise person hasn't been saved");
-                            $error++;
-                        }
-                    } else {
-                        $error++;
-                        $error_message .= Yii::t("formulario", "The person has not been saved");
-                    }
-                } else {
-                    $error_message .= Yii::t("formulario", "Update DNI to generate interested");
-                    $error++;
-                }
-
-                if ($exito == 1) {
-                    $message = array(
-                        "wtmessage" => Yii::t("formulario", "The information have been saved and the information has been sent to your email"),
-                        "title" => Yii::t('jslang', 'Success'),
-                    );
-                    return Utilities::ajaxResponse('OK', 'alert', Yii::t("jslang", "Sucess"), false, $message);
-                } else {
-                    $message = array(
-                        "wtmessage" => Yii::t("formulario", "Mensaje1: " . $mensaje), //$error_message
-                        "title" => Yii::t('jslang', 'Bad Request'),
-                    );
-                    return Utilities::ajaxResponse('NO_OK', 'alert', Yii::t("jslang", "Bad Request"), false, $message);
-                }
-            } catch (Exception $ex) {
-                //$transaction->rollback();
-                //$transaction1->rollback();
-                //$transaction2->rollback();
-                $message = array(
-                    "wtmessage" => Yii::t("formulario", "Mensaje2: " . $mensaje), //$error_message
-                    "title" => Yii::t('jslang', 'Bad Request'),
-                );
-                return Utilities::ajaxResponse('NO_OK', 'alert', Yii::t("jslang", "Bad Request"), false, $message);
-            }
-            return;
+            //Aqui debes guardar la informacion en la tabla temporal
         }
     }
+//    public function actionGuardarinscripcionsolicitud() {
+//        $error = 0;
+//        if (Yii::$app->request->isAjax) {
+//            $pgest = Yii::$app->request->post();
+//            $data = Yii::$app->request->post();
+//            $con = \Yii::$app->db_asgard;
+//            $con1 = \Yii::$app->db_captacion;
+//            $con2 = \Yii::$app->db_facturacion;
+//            $transaction = $con->beginTransaction();
+//            $transaction1 = $con1->beginTransaction();
+//            $transaction2 = $con2->beginTransaction();
+//            try {
+//                // He colocado al inicio la informacion para que cargue al principio
+//                $emp_id = 1;
+//                $exito=0;
+//                $identificacion = '';
+//                if (isset($pgest['pges_cedula']) && strlen($pgest['pges_cedula']) > 0) {
+//                    $identificacion = $pgest['pges_cedula'];
+//                } else {
+//                    $identificacion = $pgest['pges_pasaporte'];
+//                }
+//                if (isset($identificacion) && strlen($identificacion) > 0) {
+//                    $id_persona = 0;
+//                    $mod_persona = new Persona();
+//                    $keys_per = [
+//                        'per_pri_nombre', 'per_seg_nombre', 'per_pri_apellido', 'per_seg_apellido', 'per_cedula', 'etn_id', 'eciv_id', 'per_genero', 'pai_id_nacimiento', 'pro_id_nacimiento', 'can_id_nacimiento', 'per_fecha_nacimiento', 'per_celular', 'per_correo', 'tsan_id', 'per_domicilio_sector', 'per_domicilio_cpri', 'per_domicilio_csec', 'per_domicilio_num', 'per_domicilio_ref', 'per_domicilio_telefono', 'pai_id_domicilio', 'pro_id_domicilio', 'can_id_domicilio', 'per_nac_ecuatoriano', 'per_nacionalidad', 'per_foto', 'per_estado', 'per_estado_logico'
+//                    ];
+//                    $parametros_per = [
+//                        $pgest['pges_pri_nombre'], null, $pgest['pges_pri_apellido'], null,
+//                        $pgest['pges_cedula'], null, null, null, null, null,
+//                        null, null, $pgest['pges_celular'], $pgest['pges_correo'],
+//                        null, null, null, null,
+//                        null, null, null,
+//                        null, null, null,
+//                        null, null, null, 1, 1
+//                    ];
+//                    \app\models\Utilities::putMessageLogFile('va a proceder a ingresar la informacion');
+//                    $id_persona = $mod_persona->consultarIdPersona($pgest['pges_cedula'], $pgest['pges_pasaporte']);
+//                    if ($id_persona == 0) {
+//                        $id_persona = $mod_persona->insertarPersona($con, $parametros_per, $keys_per, 'persona');
+//                    }
+//                    if ($id_persona > 0) {
+//                        \app\models\Utilities::putMessageLogFile('ingreso la Persona');
+//                        $concap = \Yii::$app->db_captacion;
+//                        $mod_emp_persona = new EmpresaPersona();
+//                        $keys = ['emp_id', 'per_id', 'eper_estado', 'eper_estado_logico'];
+//                        $parametros = [$emp_id, $id_persona, 1, 1];
+//                        $emp_per_id = $mod_emp_persona->consultarIdEmpresaPersona($id_persona, $emp_id);
+//                        if ($emp_per_id == 0) {
+//                            $emp_per_id = $mod_emp_persona->insertarEmpresaPersona($con, $parametros, $keys, 'empresa_persona');
+//                        }
+//                        if ($emp_per_id > 0) {
+//                            \app\models\Utilities::putMessageLogFile('ingreso la empresa Persona');
+//                            $usuario = new Usuario();
+//                            $usuario_id = $usuario->consultarIdUsuario($id_persona, $pgest['pges_correo']);
+//                            if ($usuario_id == 0) {
+//                                $security = new Security();
+//                                $hash = $security->generateRandomString();
+//                                $passencrypt = base64_encode($security->encryptByPassword($hash, 'Uteg2018'));
+//                                $keys = ['per_id', 'usu_user', 'usu_sha', 'usu_password', 'usu_estado', 'usu_estado_logico'];
+//                                $parametros = [$id_persona, $pgest['pges_correo'], $hash, $passencrypt, 1, 1];
+//                                $usuario_id = $usuario->crearUsuarioTemporal($con, $parametros, $keys, 'usuario');
+//                            }
+//                            if ($usuario_id > 0) {
+//                                \app\models\Utilities::putMessageLogFile('ingreso el usuario');
+//                                $mod_us_gr_ep = new UsuaGrolEper();
+//                                $grol_id = 30;
+//                                $keys = ['eper_id', 'usu_id', 'grol_id', 'ugep_estado', 'ugep_estado_logico'];
+//                                $parametros = [$emp_per_id, $usuario_id, $grol_id, 1, 1];
+//                                $us_gr_ep_id = $mod_us_gr_ep->consultarIdUsuaGrolEper($emp_per_id, $usuario_id, $grol_id);
+//                                if ($us_gr_ep_id == 0)
+//                                    $us_gr_ep_id = $mod_us_gr_ep->insertarUsuaGrolEper($con, $parametros, $keys, 'usua_grol_eper');
+//                                if ($us_gr_ep_id > 0) {
+//                                    \app\models\Utilities::putMessageLogFile('ingreso el usuario grol');
+//                                    $mod_interesado = new Interesado(); // se guarda con estado_interesado 1
+//                                    $interesado_id = $mod_interesado->consultaInteresadoById($id_persona);
+//                                    $keys = ['per_id', 'int_estado_interesado', 'int_usuario_ingreso', 'int_estado', 'int_estado_logico'];
+//                                    $parametros = [$id_persona, 1, $usuario_id, 1, 1];
+//                                    if ($interesado_id == 0) {
+//                                        $interesado_id = $mod_interesado->insertarInteresado($concap, $parametros, $keys, 'interesado');
+//                                    }
+//                                    if ($interesado_id > 0) {
+//                                        \app\models\Utilities::putMessageLogFile('ingreso el interesado');
+//                                        $mod_inte_emp = new InteresadoEmpresa(); // se guarda con estado_interesado 1
+//                                        $iemp_id = $mod_inte_emp->consultaInteresadoEmpresaById($interesado_id, $emp_id);
+//                                        if ($iemp_id == 0) {
+//                                            $iemp_id = $mod_inte_emp->crearInteresadoEmpresa($interesado_id, $emp_id, $usuario_id);
+//                                        }
+//                                        if ($iemp_id > 0) {
+//                                            $eaca_id = NULL;
+//                                            $mest_id = NULL;
+//                                            if ($emp_id == 1) {//Uteg 
+//                                                $eaca_id = $pgest['carrera'];
+//                                            } elseif ($emp_id == 2 || $emp_id == 3) {
+//                                                $mest_id = $pgest['carrera'];
+//                                            }
+//                                            $num_secuencia = Secuencias::nuevaSecuencia($con, $emp_id, 1, 1, 'SOL');
+//                                            $sins_fechasol = date(Yii::$app->params["dateTimeByDefault"]);
+//                                            $rsin_id = 1; //Solicitud pendiente     
+//                                            $solins_model = new SolicitudInscripcion();
+//                                            $mensaje = 'intId: ' . $interesado_id . '/uaca: ' . $pgest['unidad_academica'] . '/modalidad: ' . $pgest['modalidad'] . '/ming: ' . $pgest['ming_id'] . '/eaca: ' . $eaca_id . '/mest: ' . $mest_id . '/empresa: ' . $emp_id . '/secuencia: ' . $num_secuencia . '/rsin_id: ' . $rsin_id . '/sins_fechasol: ' . $sins_fechasol . '/usuario_id: ' . $usuario_id;
+//                                            $sins_id = $solins_model->insertarSolicitud($interesado_id, $pgest['unidad_academica'], $pgest['modalidad'], $pgest['ming_id'], $eaca_id, null, $emp_id, $num_secuencia, $rsin_id, $sins_fechasol, $usuario_id);
+//                                            //fin de solicitud inscripcion$mest_id
+//                                            //grabar los documentos
+//                                            \app\models\Utilities::putMessageLogFile('solicitud: ' . $mensaje);
+//                                            if ($sins_id) {
+//                                                \app\models\Utilities::putMessageLogFile('ingreso la solicitud: ' . $sins_id);
+//                                                if ($beca == "1") {
+//                                                    $precio = 0;
+//                                                } else {
+//                                                    $resp_precio = $solins_model->ObtenerPrecio($pgest['ming_id'], $pgest['unidad_academica'], $pgest['modalidad'], $eaca_id);
+//                                                    if ($resp_precio) {
+//                                                        $precio = $resp_precio['precio'];
+//                                                    } else {
+//                                                        $mensaje = 'No existe registrado ningún precio para la unidad, modalidad y método de ingreso seleccionada.';
+//                                                        $errorprecio = 0;
+//                                                    }
+//                                                }
+//                                                $mod_ordenpago = new OrdenPago();
+//                                                //Se verifica si seleccionó descuento.
+//                                                $val_descuento = 0;
+//                                                if (!empty($descuento)) {
+//                                                    $modDescuento = new DetalleDescuentoItem();
+//                                                    $respDescuento = $modDescuento->consultarValdctoItem($descuento);
+//                                                    if ($respDescuento) {
+//                                                        if ($precio == 0) {
+//                                                            $val_descuento = 0;
+//                                                        } else {
+//                                                            if ($respDescuento["ddit_tipo_beneficio"] == 'P') {
+//                                                                $val_descuento = ($precio * ($respDescuento["ddit_porcentaje"])) / 100;
+//                                                            } else {
+//                                                                $val_descuento = $respDescuento["ddit_valor"];
+//                                                            }
+//                                                            //Insertar solicitud descuento
+//                                                            if ($val_descuento > 0) {
+//                                                                $resp_SolicDcto = $mod_ordenpago->insertarSolicDscto($sins_id, $descuento, $precio, $respDescuento["ddit_porcentaje"], $respDescuento["ddit_valor"]);
+//                                                            }
+//                                                        }
+//                                                    }
+//                                                }
+//                                                //Generar la orden de pago con valor correspondiente. Buscar precio para orden de pago.                                                                     
+//                                                if ($precio == 0) {
+//                                                    $estadopago = 'S';
+//                                                } else {
+//                                                    $estadopago = 'P';
+//                                                }
+//                                                $val_total = $precio - $val_descuento;
+//                                                $resp_opago = $mod_ordenpago->insertarOrdenpago($sins_id, null, $val_total, 0, $val_total, $estadopago, $usuario_id);
+//                                                if ($resp_opago) {
+//                                                    $fecha_ini = date(Yii::$app->params["dateByDefault"]);
+//                                                    \app\models\Utilities::putMessageLogFile('orden pago: '.$resp_opago);
+//                                                    $resp_dpago = $mod_ordenpago->insertarDesglosepago($resp_opago, $val_total, 0, $val_total, $fecha_ini, null, $estadopago, $usuario_id);
+//                                                    if ($resp_dpago) {
+//                                                        $exito = 1;
+//                                                        \app\models\Utilities::putMessageLogFile('desgloce pago: '.$resp_dpago);
+//                                                        $usuarioNew = Usuario::findIdentity($usuario_id);
+//                                                        $link = $usuarioNew->generarLinkActivacion();
+//                                                        $email_info = array(
+//                                                            "nombres" => $pgest['pges_pri_nombre'] . " " . $pgest['pges_seg_nombre'],
+//                                                            "apellidos" => $pgest['pges_pri_apellido'] . " " . $pgest['pges_seg_apellido'],
+//                                                            "correo" => $pgest['pges_correo'],
+//                                                            "telefono" => isset($pgest['pges_celular']) ? $pgest['pges_celular'] : $pgest['pges_domicilio_telefono'],
+//                                                            "identificacion" => isset($pgest['pges_cedula']) ? $pgest['pges_cedula'] : $pgest['pges_pasaporte'],
+//                                                            "link_asgard" => $link,
+//                                                        );
+//                                                        \app\models\Utilities::putMessageLogFile('ingreso el email');
+//                                                        if ($pgest['unidad_academica'] == 1 and ( $pgest['modalidad'] == 1)) {
+//                                                            $file1 = Url::base(true) . "/files/Mailing-UTEG-Online.jpg";
+//                                                            $rutaFile = array($file1);
+//                                                        } else {
+//                                                            if ($pgest['unidad_academica'] == 1 and ( $pgest['modalidad'] != 1)) {
+//                                                                $file1 = Url::base(true) . "/files/Mailing-UTEG-Grado.jpg";
+//                                                                $rutaFile = array($file1);
+//                                                            } else {
+//                                                                if ($pgest['unidad_academica'] == 2) {
+//                                                                    $file1 = Url::base(true) . "/files/Mailing-UTEG-Posgrado.jpg";
+//                                                                    $rutaFile = array($file1);
+//                                                                }
+//                                                            }
+//                                                        }
+//                                                        $tituloMensaje = Yii::t("interesado", "UTEG - Registration");
+//                                                        $asunto = Yii::t("interesado", "UTEG - Registration Online");
+//                                                        $body = Utilities::getMailMessage("PaidApplyment", array(), Yii::$app->language);
+//                                                        Utilities::sendEmail($tituloMensaje, Yii::$app->params["admisiones"], // a quien se envia el correo
+//                                                                [$email_info['correo'] => $email_info['nombres'] . " " . $email_info['apellidos']], // quien envia el correo
+//                                                                $asunto, $file1);
+//                                                        \app\models\Utilities::putMessageLogFile('mensaje final:' . $exito);
+//                                                    }
+//                                                }
+//                                            }
+//                                        } else {
+//                                            $error_message .= Yii::t("formulario", "The enterprise interested hasn't been saved");
+//                                            $error++;
+//                                        }
+//                                    } else {
+//                                        $error_message .= Yii::t("formulario", "The interested person hasn't been saved");
+//                                        $error++;
+//                                    }
+//                                } else {
+//                                    $error_message .= Yii::t("formulario", "The rol user hasn't been saved");
+//                                    $error++;
+//                                }
+//                            } else {
+//                                $error_message .= Yii::t("formulario", "The user hasn't been saved");
+//                                $error++;
+//                            }
+//                        } else {
+//                            $error_message .= Yii::t("formulario", "The enterprise person hasn't been saved");
+//                            $error++;
+//                        }
+//                    } else {
+//                        $error++;
+//                        $error_message .= Yii::t("formulario", "The person has not been saved");
+//                    }
+//                } else {
+//                    $error_message .= Yii::t("formulario", "Update DNI to generate interested");
+//                    $error++;
+//                }
+//
+//                if ($exito == 1) {
+//                    $message = array(
+//                        "wtmessage" => Yii::t("formulario", "The information have been saved and the information has been sent to your email"),
+//                        "title" => Yii::t('jslang', 'Success'),
+//                    );
+//                    return Utilities::ajaxResponse('OK', 'alert', Yii::t("jslang", "Sucess"), false, $message);
+//                } else {
+//                    $message = array(
+//                        "wtmessage" => Yii::t("formulario", "Mensaje1: " . $mensaje), //$error_message
+//                        "title" => Yii::t('jslang', 'Bad Request'),
+//                    );
+//                    return Utilities::ajaxResponse('NO_OK', 'alert', Yii::t("jslang", "Bad Request"), false, $message);
+//                }
+//            } catch (Exception $ex) {
+//                //$transaction->rollback();
+//                //$transaction1->rollback();
+//                //$transaction2->rollback();
+//                $message = array(
+//                    "wtmessage" => Yii::t("formulario", "Mensaje2: " . $mensaje), //$error_message
+//                    "title" => Yii::t('jslang', 'Bad Request'),
+//                );
+//                return Utilities::ajaxResponse('NO_OK', 'alert', Yii::t("jslang", "Bad Request"), false, $message);
+//            }
+//            return;
+//        }
+//    }
 
 }
