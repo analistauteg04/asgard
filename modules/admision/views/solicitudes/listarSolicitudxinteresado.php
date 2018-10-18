@@ -56,7 +56,8 @@ if (!empty($personalData['per_cedula'])) {
     <?=
     $this->render('_listarSolxinteresadoGrid', [
         'model' => $model,
-        'url' => $url]);
+        'url' => $url,      
+        ]);
     ?>
 </div>
 

@@ -10,7 +10,9 @@ use yii\helpers\ArrayHelper;
 use yii\jui\AutoComplete;
 use yii\web\JsExpression;
 use app\modules\financiero\Module as financiero;
+
 ?>
+
 <?= Html::hiddenInput('txth_ids', '', ['id' => 'txth_ids']); ?>
 <div class="col-md-12">
     <h3><span id="lbl_Personeria"><?= financiero::t("Pagos", "Control Payments") ?></span></h3>    

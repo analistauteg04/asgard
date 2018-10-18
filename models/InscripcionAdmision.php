@@ -171,7 +171,7 @@ class InscripcionAdmision extends \yii\db\ActiveRecord {
      * @param   
      * @return  $resultData (Obtiene los datos de inscripción y el precio de la solicitud.)
      */
-    public function consultarDatosInscripcion($twin_identificacion, $twin_correo) {
+    public function consultarDatosInscripcion($twin_id) {
         $con = \Yii::$app->db_captacion;
         $con2 = \Yii::$app->db_facturacion;
         $con1 = \Yii::$app->db_academico;
@@ -182,15 +182,30 @@ class InscripcionAdmision extends \yii\db\ActiveRecord {
                         m.mod_nombre modalidad,
                         ea.eaca_nombre carrera,
                         mi.ming_nombre metodo,
-                        ip.ipre_precio as precio
+                        ip.ipre_precio as precio,
+                        twin_nombre,
+                        twin_apellido,
+                        twin_numero,
+                        twin_correo,
+                        twin_pais,
+                        twin_celular,
+                        twi.uaca_id,
+                        twi.mod_id,
+                        twi.car_id,
+                        twin_metodo_ingreso,
+                        conuteg_id,
+                        ruta_doc_titulo,
+                        ruta_doc_dni,
+                        ruta_doc_certvota,
+                        ruta_doc_foto,
+                        ruta_doc_certificado
                 FROM " . $con->dbname . ".temporal_wizard_inscripcion twi inner join db_academico.unidad_academica ua on ua.uaca_id = twi.uaca_id
                      inner join " . $con1->dbname . ".modalidad m on m.mod_id = twi.mod_id
                      inner join " . $con1->dbname . ".estudio_academico ea on ea.eaca_id = twi.car_id
                      inner join " . $con->dbname . ".metodo_ingreso mi on mi.ming_id = twi.twin_metodo_ingreso
                      inner join " . $con2->dbname . ".item_metodo_unidad imi on (imi.ming_id =  twi.twin_metodo_ingreso and imi.uaca_id = twi.uaca_id and imi.mod_id = twi.mod_id)
                      inner join " . $con2->dbname . ".item_precio ip on ip.ite_id = imi.ite_id
-                WHERE twi.twin_numero = :twin_identificacion AND
-                     twi.twin_correo = :twin_correo AND
+                WHERE twi.twin_numero = :twin_id AND                     
                      ip.ipre_estado_precio = :estado_precio AND
                      ua.uaca_estado = :estado AND
                      ua.uaca_estado_logico = :estado AND
@@ -208,8 +223,7 @@ class InscripcionAdmision extends \yii\db\ActiveRecord {
                 
         $comando = $con->createCommand($sql);
         $comando->bindParam(":estado", $estado, \PDO::PARAM_STR);
-        $comando->bindParam(":twin_identificacion", $twin_identificacion, \PDO::PARAM_STR);
-        $comando->bindParam(":twin_correo", $twin_correo, \PDO::PARAM_STR);        
+        $comando->bindParam(":twin_id", $twin_id, \PDO::PARAM_INT);        
         $comando->bindParam(":estado_precio", $estado_precio, \PDO::PARAM_STR);
         $resultData = $comando->queryOne();
         return $resultData;
