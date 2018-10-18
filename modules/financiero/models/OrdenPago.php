@@ -1534,8 +1534,8 @@ class OrdenPago extends \app\modules\financiero\components\CActiveRecord {
      */
     public function insertarOrdenpago($sins_id, $sgen_id, $opag_subtotal, $opag_iva, $opag_total, $opag_estado_pago, $usuario_ingreso) {
         $con = \Yii::$app->db_facturacion;
-        $trans = $con->beginTransaction();
-        //$trans = $con->getTransaction(); // se obtiene la transacción actual
+
+        $trans = $con->getTransaction(); // se obtiene la transacción actual
         if ($trans !== null) {
             $trans = null; // si existe la transacción entonces no se crea una
         } else {
@@ -1554,65 +1554,54 @@ class OrdenPago extends \app\modules\financiero\components\CActiveRecord {
 
         if (isset($sins_id)) {
             $param_sql .= ", sins_id";
-            //$bopago_sql .= ", :sins_id";
-            $bopago_sql .= ", $sins_id";
-            
+            $bopago_sql .= ", :sins_id";
         }
 
         if (isset($sgen_id)) {
             $param_sql .= ", sgen_id";
-            //$bopago_sql .= ", :sgen_id";
-            $bopago_sql .= ", $sgen_id";
+            $bopago_sql .= ", :sgen_id";
         }
 
         if (isset($fecha_generacion)) {
             $param_sql .= ", opag_fecha_generacion";
-            //$bopago_sql .= ", :opag_fecha_generacion";
-            $bopago_sql .= ", '$fecha_generacion'";
+            $bopago_sql .= ", :opag_fecha_generacion";
         }
 
         if (isset($opag_subtotal)) {
             $param_sql .= ", opag_subtotal";
-            //$bopago_sql .= ", :opag_subtotal";
-            $bopago_sql .= ", $opag_subtotal";
+            $bopago_sql .= ", :opag_subtotal";
         }
 
         if (isset($opag_iva)) {
             $param_sql .= ", opag_iva";
-            //$bopago_sql .= ", :opag_iva";
-            $bopago_sql .= ", $opag_iva";
+            $bopago_sql .= ", :opag_iva";
         }
 
         if (isset($opag_total)) {
             $param_sql .= ", opag_total";
-            //$bopago_sql .= ", :opag_total";
-            $bopago_sql .= ", $opag_total";
+            $bopago_sql .= ", :opag_total";
         }
 
         if (isset($valor_pagado)) {
             $param_sql .= ", opag_valor_pagado";
-            //$bopago_sql .= ", :opag_valor_pagado";
-            $bopago_sql .= ", $valor_pagado";
+            $bopago_sql .= ", :opag_valor_pagado";
         }
 
         if (isset($opag_estado_pago)) {
             $param_sql .= ", opag_estado_pago";
-            //$bopago_sql .= ", :opag_estado_pago";
-            $bopago_sql .= ", '$opag_estado_pago'";
+            $bopago_sql .= ", :opag_estado_pago";
         }
 
         if (isset($usuario_ingreso)) {
             $param_sql .= ", opag_usu_ingreso";
-            //$bopago_sql .= ", :opag_usu_ingreso";
-            $bopago_sql .= ", $usuario_ingreso";
+            $bopago_sql .= ", :opag_usu_ingreso";
         }
 
         try {
             $sql = "INSERT INTO " . $con->dbname . ".orden_pago ($param_sql) VALUES($bopago_sql)";
-            \app\models\Utilities::putMessageLogFile('sql:'.$sql);
             $comando = $con->createCommand($sql);
 
-            /*if (!empty($sins_id)) {
+            if (!empty($sins_id)) {
                 if (isset($sins_id))
                     $comando->bindParam(':sins_id', $sins_id, \PDO::PARAM_INT);
             }
@@ -1642,17 +1631,15 @@ class OrdenPago extends \app\modules\financiero\components\CActiveRecord {
 
             if (isset($usuario_ingreso))
                 $comando->bindParam(':opag_usu_ingreso', $usuario_ingreso, \PDO::PARAM_INT);
-                */
+
             $result = $comando->execute();
-            $idtable = $con->getLastInsertID($con->dbname . '.orden_pago');
             if ($trans !== null)
                 $trans->commit();
-            return $idtable;
+            return $con->getLastInsertID($con->dbname . '.orden_pago');
         } catch (Exception $ex) {
-            if ($trans !== null) {
+            if ($trans !== null)
                 $trans->rollback();
-            }
-            return 0;
+            return FALSE;
         }
     }
 
