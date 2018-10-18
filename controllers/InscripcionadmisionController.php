@@ -85,9 +85,6 @@ class InscripcionadmisionController extends \yii\web\Controller {
                 $message = array("metodos" => $metodos);
                 return Utilities::ajaxResponse('OK', 'alert', Yii::t('jslang', 'Success'), 'false', $message);
             }
-            if (isset($data["getdata"])) {
-                $resp_datos = $mod_inscripcion->consultarDatosInscripcion($data["twin_identificacion"], $data["twin_correo"]);                
-            }
         }
         $arr_pais_dom = Pais::find()->select("pai_id AS id, pai_nombre AS value")->where(["pai_estado_logico" => "1", "pai_estado" => "1"])->asArray()->all();
         $pais_id = 1; //Ecuador
@@ -346,8 +343,6 @@ class InscripcionadmisionController extends \yii\web\Controller {
             return;
         }
     }
-            
-     
      public function actionSaveinscripciontemp() {
         if (Yii::$app->request->isAjax) {
             $model = new InscripcionAdmision();
@@ -437,6 +432,7 @@ class InscripcionadmisionController extends \yii\web\Controller {
                 }else if($accion == "Update"){
                     //Modificar Registro
                     $resul = $model->actualizarInscripcion($data);                
+                    
                 }
                 if ($resul['status']) {
                     $message = array(

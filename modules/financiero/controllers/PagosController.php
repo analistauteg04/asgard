@@ -60,12 +60,12 @@ class PagosController extends \app\components\CController {
         $per_id = @Yii::$app->session->get("PB_iduser");
         $ccar_id = isset($_GET['ids']) ? base64_decode($_GET['ids']) : 0; //NULL
         $model_pag = new OrdenPago();
-        if($ccar_id==0){
-           $ccar_id = $model_pag->consultarInfoOrdenPagoPorPerId($per_id);
-           if(!isset($ccar_id) || empty($ccar_id)){
-               header('Location: '.'listarpagoscargados');
-                die(); 
-          }
+        if ($ccar_id == 0) {
+            $ccar_id = $model_pag->consultarInfoOrdenPagoPorPerId($per_id);
+            if (!isset($ccar_id) || empty($ccar_id)) {
+                header('Location: ' . 'listarpagoscargados');
+                die();
+            }
         }
         $arr_forma_pago = $model_pag->formaPago('2');
         $resp_doc = $model_pag->listarDocumento($ccar_id);
@@ -86,14 +86,14 @@ class PagosController extends \app\components\CController {
     public function actionValidarpagocarga() {
         $per_id = @Yii::$app->session->get("PB_perid");
         $model_interesado = new Interesado();
-        $opag_id = $_GET["ido"];//empty($_GET["ido"])?0:$_GET["ido"];
-        $mod_cliord = new OrdenPago();       
-        /*if($opag_id>0){
-            $opag_id=$mod_cliord->consultarInfoOrdenPagoPorPerId($per_id);
-        }*/
-        $resp_gruporol = $model_interesado->consultagruporol($per_id);        
-        $gruporol=empty($resp_gruporol["grol_id"])?27:$resp_gruporol["grol_id"];
-        $resp_cliord = $mod_cliord->consultarOrdenpago($gruporol, $opag_id, 0);        
+        $opag_id = $_GET["ido"]; //empty($_GET["ido"])?0:$_GET["ido"];
+        $mod_cliord = new OrdenPago();
+        /* if($opag_id>0){
+          $opag_id=$mod_cliord->consultarInfoOrdenPagoPorPerId($per_id);
+          } */
+        $resp_gruporol = $model_interesado->consultagruporol($per_id);
+        $gruporol = empty($resp_gruporol["grol_id"]) ? 27 : $resp_gruporol["grol_id"];
+        $resp_cliord = $mod_cliord->consultarOrdenpago($gruporol, $opag_id, 0);
         if ($resp_cliord) {
             $persona_pago = $resp_cliord["per_id"];
             $sins_id = $resp_cliord["sser_id"];
@@ -177,7 +177,7 @@ class PagosController extends \app\components\CController {
         //online que sube doc capturar asi el id de la persona 
         if (Yii::$app->request->isAjax) {
             $data = Yii::$app->request->post();
-            $per_id = $_SESSION['personaid'];
+            $per_id = $_SESSION['persona_solicita'];
             if ($data["upload_file"]) {
                 if (empty($_FILES)) {
                     echo json_encode(['error' => Yii::t("notificaciones", "Error to process File {file}. Try again.", ['{file}' => basename($files['name'])])]);
@@ -341,9 +341,15 @@ class PagosController extends \app\components\CController {
     }
 
     public function actionSavecarga() {
-        $per_id = Yii::$app->session->get("PB_perid");
+        //$per_id = Yii::$app->session->get("PB_perid");
         $modcargapago = new OrdenPago();
         if (Yii::$app->request->isAjax) {
+            if ($_SESSION['persona_solicita'] != '') {// tomar el de parametro)
+                $per_id = base64_decode($_SESSION['persona_solicita']);
+            } else {
+                unset($_SESSION['persona_solicita']);
+                $per_id = Yii::$app->session->get("PB_perid");
+            }
             $data = Yii::$app->request->post();
             if ($data["upload_file"]) {
                 if (empty($_FILES)) {
@@ -370,7 +376,7 @@ class PagosController extends \app\components\CController {
             $opag_id = $data["idpago"];
             $ccar_total = $data["totpago"];
             $empresa = $data["empresa"];
-            
+
             if (empty($ccar_total)) {
                 $ccar_total = $data["pago"];
             }
@@ -528,7 +534,7 @@ class PagosController extends \app\components\CController {
         $per_id = $_GET["per_id"];
         $sol_id = $_GET["sins_id"];
         $emp_id = $_GET["emp_id"];
-        
+
         $mod_opago = new OrdenPago();
         $arr_forma_pago = $mod_opago->formaPago("1");
 
@@ -815,7 +821,7 @@ class PagosController extends \app\components\CController {
         $report->mpdf->Output('Reporte_' . date("Ymdhis") . ".pdf", ExportFile::OUTPUT_TO_DOWNLOAD);
         return;
     }
-    
+
     public function actionExppdfpagos() {
         $report = new ExportFile();
         $this->view->title = financiero::t("Pagos", "List Payment"); // Titulo del reporte
@@ -832,7 +838,7 @@ class PagosController extends \app\components\CController {
         $arr_head = array(
             admision::t("Solicitudes", "Request #"),
             admision::t("Solicitudes", "Application date"),
-            Yii::t("formulario", "DNI 1"),            
+            Yii::t("formulario", "DNI 1"),
             Yii::t("formulario", "Last Names"),
             Yii::t("formulario", "First Names"),
             academico::t("Academico", "Academic unit"),
@@ -856,7 +862,7 @@ class PagosController extends \app\components\CController {
         $report->mpdf->Output('Reporte_' . date("Ymdhis") . ".pdf", ExportFile::OUTPUT_TO_DOWNLOAD);
         return;
     }
-    
+
     public function actionExppdfcolec() {
         $report = new ExportFile();
         $this->view->title = financiero::t("Pagos", "Registration Payments for Collections"); // Titulo del reporte

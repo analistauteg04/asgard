@@ -266,14 +266,18 @@ function guardarInscripcion(accion) {
                 console.log(response);
                 if (response.status == "OK") { 
                     if(accion == "Create"){
-                        $('#txth_twin_id').val(response.data.ids)
+                        $('#txth_twin_id').val(response.ids)
                         paso1next();
                     }else{                        
                         paso2next();
-                        $('#txth_twin_id').val(0)//SE AGREGA AL FINAL
-                        
+                        //Inicio ingreso informacion del tab 3\
+                        $('#lbl_uaca_tx').val(response.data.unidad)
+                        $('#lbl_moda_tx').val(response.data.modalidad)
+                        $('#lbl_carrera_tx').val(response.data.carrera)
+                        $('#lbl_ming_tx').val(response.data.metodo)
+                        //fin ingreso informacion del tab 3
+                        $('#txth_twin_id').val(ids)//SE AGREGA AL FINAL                            
                     }
-
                     //var data =response.data;
                     //AccionTipo=data.accion;
                     //limpiarDatos();
@@ -325,7 +329,6 @@ function dataInscripPart1(ID) {
     objDat.ming_id = $('#cmb_metodo_solicitud option:selected').val();
     objDat.conoce = $('#cmb_conuteg option:selected').val();
     objDat.carrera = $('#cmb_carrera_solicitud option:selected').val();
-
     //TABA 2
     objDat.ruta_doc_titulo = ($('#txth_doc_titulo').val()!='')?$('#txth_doc_titulo').val():'';
     objDat.ruta_doc_dni = ($('#txth_doc_dni').val()!='')?$('#txth_doc_dni').val():'';
@@ -336,7 +339,6 @@ function dataInscripPart1(ID) {
     objDat.twin_mensaje2 = ($("#chk_mensaje2").prop("checked")) ? '1' : '0';
     datArray[0] = objDat;
     sessionStorage.dataInscrip_1 = JSON.stringify(datArray);
-
     return datArray;
 }
 
