@@ -461,26 +461,24 @@ class InscripcionadmisionController extends \yii\web\Controller {
                 
                 if ($accion == "create" || $accion == "Create") {
                     //Nuevo Registro
-                    $resul = $model->insertarInscripcion($data['DATA_1']);
+                    $resul = $model->insertarInscripcion($data);
                 }else if($accion == "Update"){
                     //Modificar Registro
-                    //$resul = $model->actualizarSolicitud($data);                
+                    $resul = $model->actualizarInscripcion($data);                
                 }
                 if ($resul['status']) {
- 
-                  
                     $message = array(
-                        "wtmessage" => Yii::t("formulario", "The information have been saved"),
+                        "wtmessage" => Yii::t("formulario", "The information have been saved."),
                         "title" => Yii::t('jslang', 'Success'),
                     );
-                    return Utilities::ajaxResponse('OK', 'alert', Yii::t('jslang', 'Success'), 'false', $message);
+                    return Utilities::ajaxResponse('OK', 'alert', Yii::t('jslang', 'Success'), 'false', $message,$resul);
 
                 }else{
                     $message = array(
-                        "wtmessage" => Yii::t("formulario", "The information have been saved"),
+                        "wtmessage" => Yii::t("formulario", "The information have not been saved."),
                         "title" => Yii::t('jslang', 'Success'),
                     );
-                    return  Utilities::ajaxResponse('NO_OK', 'alert', Yii::t('jslang', 'Error'), 'false', $message);
+                    return  Utilities::ajaxResponse('NO_OK', 'alert', Yii::t('jslang', 'Error'), 'false', $message,$resul);
                 }
                 return;
 
