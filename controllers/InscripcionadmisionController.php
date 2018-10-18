@@ -243,8 +243,10 @@ class InscripcionadmisionController extends \yii\web\Controller {
                                                 }
                                                 $mod_ordenpago = new OrdenPago();
                                                 //Se verifica si seleccionó descuento.
-                                                $val_descuento = 0;
-                                                if (!empty($descuento)) {
+                                                //descuento para grado online y posgrado no tiene descuento, caso contrario es 96 dol
+                                                $val_descuento = 96;
+                                                
+                                                /*if (!empty($descuento)) {
                                                     $modDescuento = new DetalleDescuentoItem();
                                                     $respDescuento = $modDescuento->consultarValdctoItem($descuento);
                                                     if ($respDescuento) {
@@ -262,7 +264,7 @@ class InscripcionadmisionController extends \yii\web\Controller {
                                                             }
                                                         }
                                                     }
-                                                }
+                                                }*/
                                                 //Generar la orden de pago con valor correspondiente. Buscar precio para orden de pago.                                                                     
                                                 if ($precio == 0) {
                                                     $estadopago = 'S';
