@@ -65,8 +65,7 @@ class InscripcionAdmision extends \yii\db\ActiveRecord {
             $arroout["message"] = $e->getMessage();
             $arroout["data"] = null;//$rawData;
             return $arroout;
-        }
-        
+        }        
     }
 
     private function insertarDataInscripcion($con,$data) {
