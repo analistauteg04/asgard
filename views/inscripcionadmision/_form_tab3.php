@@ -47,7 +47,18 @@ use yii\helpers\Html;
 <form class="form-horizontal">
     
     <div class="col-md-12 col-xs-12 col-sm-12 col-lg-12">
-        <h4><span id="lbl_Personeria"><?= Yii::t("formulario", "Summary") ?></span></h4>    
+        <h3><b><span id="lbl_titulo"><?= Yii::t("formulario", "Check the detail of your request") ?></span></b></h3><br> 
+    </div>
+    
+    <div class="col-md-12 col-xs-12 col-sm-12 col-lg-12">
+        <h4><span id="lbl_detalle1"><?= Yii::t("formulario", "Estás a un paso de formalizar tu inscripción, comienza hoy mismo a vivir la experiencia de una auténtica enseñanza empresarial.") ?></span></h4>    
+        <h4><span id="lbl_detalle2"><?= Yii::t("formulario", "A continuación te presentamos un resumen de lo que has elegido:") ?></span></h4>    
+    </div>         
+    
+    <div class="col-md-12 col-xs-12 col-sm-12 col-lg-12">
+        <h4><b><span id="lbl_detalle2"><?= Yii::t("formulario", "Pago:") ?></span></b></h4>
+        <h4><span id="lbl_detalle2"><?= Yii::t("formulario", "Pago en línea PayPal: ") ?></span></h4>
+        <h4><span id="lbl_detalle2"><?= Yii::t("formulario", "Pago de tarjetas de crédito: ") ?></span></h4>
     </div>
     
     <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">   

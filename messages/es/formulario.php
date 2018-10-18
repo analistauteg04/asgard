@@ -134,6 +134,7 @@ return [
     "Charges Play" => "Cargo Desempeña",
     "Chair taught" => "Cátedra Impartida",
     "Channel" => "Canal",
+    "Check the detail of your request" => "Revisa el detalle de tu solicitud",
     "City of birth" => "Ciudad Nacimiento",
     "City" => "Ciudad",
     "Code" => "Código",

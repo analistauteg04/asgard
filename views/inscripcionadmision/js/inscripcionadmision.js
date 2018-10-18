@@ -17,8 +17,7 @@ $(document).ready(function () {
             }
         }, true);
     });
-   
-    
+       
     $('#sendInformacionAspirante').click(function () { 
         if ($('#txth_twin_id').val()==0){
             guardarInscripcion('Create'); 
@@ -34,8 +33,7 @@ $(document).ready(function () {
             } 
         }else{
             alert('Debe Aceptar los términos de la Información');
-        }
-             
+        }             
     });
 
     $('#cmb_tipo_dni').change(function () {
