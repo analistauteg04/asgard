@@ -1240,7 +1240,7 @@ class PersonaGestion extends \app\modules\admision\components\CActiveRecord {
                     $nombre = $Data[$i]['pgest_nombre'];
                     $telefono = $Data[$i]['pgest_numero'];
                     $correo = $Data[$i]['pgest_correo'];
-                    $contacto = $Data[$i]['pgest_contacto'];
+                    $contacto = 2;//$Data[$i]['pgest_contacto'];
                     $tper_id = 1; //Por defecto Natural
                     $econ_id = 1; //=>En Contacto por defecto
                     $pges_id = PersonaGestion::insertarPersonaGestionLeads($con, $pges_codigo, $tper_id, $nombre, $telefono, $correo, $contacto, $econ_id);
