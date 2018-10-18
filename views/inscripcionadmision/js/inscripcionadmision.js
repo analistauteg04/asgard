@@ -238,18 +238,16 @@ function guardarInscripcion(accion) {
                 if (response.status == "OK") {
                     //var data =response.data;
                     //AccionTipo=data.accion;
-                    menssajeModal(response.status, response.type, message.info, response.label, "", "", "1");
                     limpiarDatos();
                     var renderurl = $('#txth_base').val() + "/inscripciones/index";
                     window.location = renderurl;
-                }else{
-                    menssajeModal(response.status, response.type, message.info, response.label, "", "", "1");
-                }             
+                }     
+                showAlert(response.status, response.label, response.message.info);       
             }, true);
         }
     } else {
         //alert('Debe Aceptar los términos de la Declaración Jurada');
-        showAlert('NO_OK', 'error', {"wtmessage": 'Debe Aceptar los términos ', "title":'Información'});
+        showAlert('NO_OK', 'error', {"wtmessage": objLang.Your_information_has_not_been_saved__Please_try_again_, "title":objLang.Error});
     }
 }
 
