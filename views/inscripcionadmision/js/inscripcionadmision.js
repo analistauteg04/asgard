@@ -240,10 +240,10 @@ $(document).ready(function () {
 //INSERTAR DATOS
 function guardarInscripcion(accion) {
     //if ($("#chk_mensaje2").prop("checked")) {
-    alert('INGRESO');
+    //alert('INGRESO');
     if (true) {
         var ID = (accion == "Update") ? $('#txth_twin_id').val() : 0;
-        alert(ID);
+        //alert(ID);
         var link = $('#txth_base').val() + "/inscripcionadmision/saveinscripciontemp";
         var arrParams = new Object();
         arrParams.DATA_1 = dataInscripPart1(ID);

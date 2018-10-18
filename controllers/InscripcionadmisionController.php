@@ -329,7 +329,7 @@ class InscripcionadmisionController extends \yii\web\Controller {
                         }
                     } else {
                         $error++;
-                        $error_message .= Yii::t("formulario", "The person has not been saved");
+                        $error_message .= Yii::t("formulario", "The person have not been saved");
                     }
                 } else {
                     $error_message .= Yii::t("formulario", "Update DNI to generate interested");
@@ -468,14 +468,14 @@ class InscripcionadmisionController extends \yii\web\Controller {
                 }
                 if ($resul['status']) {
                     $message = array(
-                        "wtmessage" => Yii::t("formulario", "The information have been saved."),
+                        "wtmessage" => Yii::t("formulario", "The information have been saved"),
                         "title" => Yii::t('jslang', 'Success'),
                     );
                     return Utilities::ajaxResponse('OK', 'alert', Yii::t('jslang', 'Success'), 'false', $message,$resul);
 
                 }else{
                     $message = array(
-                        "wtmessage" => Yii::t("formulario", "The information have not been saved."),
+                        "wtmessage" => Yii::t("formulario", "The information have not been saved"),
                         "title" => Yii::t('jslang', 'Success'),
                     );
                     return  Utilities::ajaxResponse('NO_OK', 'alert', Yii::t('jslang', 'Error'), 'false', $message,$resul);

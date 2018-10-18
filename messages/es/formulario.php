@@ -574,6 +574,7 @@ return [
     "The enterprise interested hasn't been saved" => "El interesado que pertence a la empresa en cuestion no ha sido guardado",
     "The information have been saved" => "La informacion ha sido guardada",
     "The information have been saved and the information has been sent to your email" => "La informacion ha sido guardada, y se ha enviado la informacion a su correo.",
+    "The information have not been saved" => "La informacion no ha sido guardada",
     "Thursday" => "Jueves",
     "Title" => "Título",
     "Title Obtained" => "Título Obtenido",
