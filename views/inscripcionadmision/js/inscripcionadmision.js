@@ -203,18 +203,19 @@ function guardarInscripcion(accion) {
         arrParams.DATA_1 = dataInscripPart1(ID);
         arrParams.ACCION = accion;
         if (!validateForm()) {
+            alert("llego hasta aqui");
             requestHttpAjax(link, arrParams, function (response) {
-                var message = response.message;
-                if (response.status == "OK") {
-                    //var data =response.data;
-                    //AccionTipo=data.accion;
-                    menssajeModal(response.status, response.type, message.info, response.label, "", "", "1");
-                    limpiarDatos();
-                    var renderurl = $('#txth_base').val() + "/inscripciones/index";
-                    window.location = renderurl;
-                }else{
-                    menssajeModal(response.status, response.type, message.info, response.label, "", "", "1");
-                }             
+            var message = response.message;
+            if (response.status == "OK") {
+                //var data =response.data;
+                //AccionTipo=data.accion;
+                menssajeModal(response.status, response.type, message.info, response.label, "", "", "1");
+                limpiarDatos();
+                var renderurl = $('#txth_base').val() + "/inscripciones/index";
+                window.location = renderurl;
+            }else{
+                menssajeModal(response.status, response.type, message.info, response.label, "", "", "1");
+            }             
             }, true);
         }
     } else {
