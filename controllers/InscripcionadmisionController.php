@@ -85,9 +85,6 @@ class InscripcionadmisionController extends \yii\web\Controller {
                 $message = array("metodos" => $metodos);
                 return Utilities::ajaxResponse('OK', 'alert', Yii::t('jslang', 'Success'), 'false', $message);
             }
-            if (isset($data["getdata"])) {
-                $info_tab_3 = $mod_inscripcion->consultarDatosInscripcion($data["twin_identificacion"], $data["twin_correo"]);                
-            }
         }
         $arr_pais_dom = Pais::find()->select("pai_id AS id, pai_nombre AS value")->where(["pai_estado_logico" => "1", "pai_estado" => "1"])->asArray()->all();
         $pais_id = 1; //Ecuador

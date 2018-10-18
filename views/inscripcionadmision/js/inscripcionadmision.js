@@ -266,17 +266,17 @@ function guardarInscripcion(accion) {
                 console.log(response);
                 if (response.status == "OK") { 
                     if(accion == "Create"){
-                        $('#txth_twin_id').val(response.data.ids)
+                        $('#txth_twin_id').val(response.ids)
                         paso1next();
                     }else{                        
                         paso2next();
                         //Inicio ingreso informacion del tab 3\
-                        $('#lbl_uaca_tx').val(response.data)
-                        $('#lbl_moda_tx').val(0)
-                        $('#lbl_carrera_tx').val(0)
-                        $('#lbl_ming_tx').val(0)
+                        $('#lbl_uaca_tx').val(response.data.unidad)
+                        $('#lbl_moda_tx').val(response.data.modalidad)
+                        $('#lbl_carrera_tx').val(response.data.carrera)
+                        $('#lbl_ming_tx').val(response.data.metodo)
                         //fin ingreso informacion del tab 3
-                        $('#txth_twin_id').val(0)//SE AGREGA AL FINAL                            
+                        $('#txth_twin_id').val(ids)//SE AGREGA AL FINAL                            
                     }
                     //var data =response.data;
                     //AccionTipo=data.accion;

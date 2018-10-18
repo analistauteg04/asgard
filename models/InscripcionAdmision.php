@@ -50,13 +50,12 @@ class InscripcionAdmision extends \yii\db\ActiveRecord {
         $trans = $con->beginTransaction();
         try {
             $twin_id=$this->updateDataInscripcion($con,$data["DATA_1"]);
-            $trans->commit();
-            //RETORNA DATOS 
+            $data = $this->consultarDatosInscripcion($twin_id);                
             $arroout["status"] = TRUE;
             $arroout["error"] = null;
             $arroout["message"] = null;
             $arroout["ids"] = $twin_id;
-            $arroout["data"] = null;//$rawData;
+            $arroout["data"] = $data;//$rawData;
             return $arroout;
         } catch (\Exception $e) {
             $trans->rollback();
