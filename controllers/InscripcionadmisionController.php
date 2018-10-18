@@ -374,11 +374,7 @@ class InscripcionadmisionController extends \yii\web\Controller {
             return;
         }
     }
-    
-    
-     public function actionGuardardocumentos() {
-         
-     }
+            
      
      public function actionSaveinscripciontemp() {
         if (Yii::$app->request->isAjax) {

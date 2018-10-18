@@ -20,7 +20,7 @@ $(document).ready(function () {
    
     
     $('#sendInformacionAspirante').click(function () {   
-        guardarInscripcion('Create');        
+        //guardarInscripcion('Create');        
 
     });
 
@@ -227,6 +227,7 @@ $(document).ready(function () {
 function guardarInscripcion(accion) {
     //if ($("#chk_mensaje2").prop("checked")) {
     if (true) {
+        alert('ingresó.');
         var ID = (accion == "Update") ? $('#txth_twin_id').val() : 0;
         var link = $('#txth_base').val() + "/inscripcionadmision/saveinscripciontemp";
         var arrParams = new Object();
@@ -240,7 +241,7 @@ function guardarInscripcion(accion) {
                     //AccionTipo=data.accion;
                     menssajeModal(response.status, response.type, message.info, response.label, "", "", "1");
                     limpiarDatos();
-                    var renderurl = $('#txth_base').val() + "/inscripciones/index";
+                    var renderurl = $('#txth_base').val() + "/inscripcionadmision/index";
                     window.location = renderurl;
                 }else{
                     menssajeModal(response.status, response.type, message.info, response.label, "", "", "1");
