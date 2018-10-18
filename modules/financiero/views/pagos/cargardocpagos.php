@@ -26,10 +26,15 @@ $leyendarc = '<div class="col-md-12 col-sm-12 col-xs-12 col-lg-12">
           </div>
           </div>
           </div>'; 
+session_start();
+$_SESSION['persona_solicita'] = $_GET['peid'];  
+
 ?>
+
 <div class="col-md-12">    
     <h3><span id="lbl_Personeria"><?= financiero::t("Pagos", "Upload Payments") ?></span>
 </div>
+<?= Html::hiddenInput('txth_idp', $_GET['peid'], ['id' => 'txth_idp']); ?>
 <?= Html::hiddenInput('txth_idsol', ($_GET['sins_id']), ['id' => 'txth_idsol']); ?>
 <?= Html::hiddenInput('txth_ids', base64_decode($_GET['ids']), ['id' => 'txth_ids']); ?>
 <?= Html::hiddenInput('txth_tot', base64_decode($_GET['tot']), ['id' => 'txth_tot']); ?>
@@ -118,7 +123,7 @@ $per_id = Yii::$app->session->get("PB_perid");
         <div class="form-group">
             <label for="txth_doc_titulo" class="col-sm-2 col-md-2 col-xs-2 col-lg-2  control-label keyupmce" id="txth_doc_titulo" name="txth_doc_titulo"><?= Yii::t("formulario", "Attach document") ?></label>
             <div class="col-sm-7 col-md-7 col-xs-7 col-lg-7 ">
-                <?= Html::hiddenInput('txth_per', $per_id, ['id' => 'txth_per']); ?>
+                <?= Html::hiddenInput('txth_per', base64_decode($_GET['peid']), ['id' => 'txth_per']); ?>
                 <?= Html::hiddenInput('txth_doc_titulo', '', ['id' => 'txth_doc_titulo']); ?>
                 <?php
                 echo CFileInputAjax::widget([

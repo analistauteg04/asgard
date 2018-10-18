@@ -152,4 +152,35 @@ class MetodoIngreso extends \app\modules\admision\components\CActiveRecord {
         return $resultData;
     }
 
+    /**
+     * Function consultarMetodoUnidadAca_2
+     * @author  Grace Viteri <analistadesarrollo01@uteg.edu.ec>
+     * @property       
+     * @return  
+     */
+    public function consultarMetodoUnidadAca_2($uaca_id) {
+        $con = \Yii::$app->db_captacion;
+        $con1 = \Yii::$app->db_academico;
+        $estado = 1;
+        $sql = "SELECT
+                    ming.ming_id as id,
+                    ming.ming_nombre as name
+                FROM 
+                    " . $con->dbname . ".nivelint_metodo as nmet                
+                INNER JOIN " . $con1->dbname . ".unidad_academica as uaca on nmet.uaca_id = uaca.uaca_id
+                INNER JOIN " . $con->dbname . ".metodo_ingreso as ming on nmet.ming_id = ming.ming_id                    
+                WHERE ming.ming_id <> 3 AND
+                    nmet.nmet_estado_logico=:estado AND 
+                    uaca.uaca_estado_logico=:estado AND 
+                    ming.ming_estado_logico=:estado AND 
+                    nmet.nmet_estado=:estado AND 
+                    uaca.uaca_estado=:estado AND 
+                    ming.ming_estado=:estado AND
+                    nmet.uaca_id=:id_nint";
+        $comando = $con->createCommand($sql);
+        $comando->bindParam(":estado", $estado, \PDO::PARAM_STR);
+        $comando->bindParam(":id_nint", $uaca_id, \PDO::PARAM_INT);
+        $resultData = $comando->queryAll();
+        return $resultData;
+    }
 }

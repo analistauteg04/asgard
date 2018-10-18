@@ -126,7 +126,7 @@ class UnidadAcademica extends \app\modules\academico\components\CActiveRecord {
                         mua.muac_estado_logico = :estado AND
                         una.uaca_estado = :estado AND
                         una.uaca_estado_logico = :estado
-                    ORDER BY name asc ;
+                    ORDER BY id asc ;
                ";
         $comando = $con->createCommand($sql);
         $comando->bindParam(":estado", $estado, \PDO::PARAM_STR);

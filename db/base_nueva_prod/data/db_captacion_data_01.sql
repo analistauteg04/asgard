@@ -15,7 +15,7 @@ INSERT INTO `metodo_ingreso` (`ming_id`, `ming_nombre`, `ming_descripcion`, `min
 (1, 'Curso de admisión y nivelación', 'Curso de admisión y nivelación', 'CAN', '1', '1'),
 (2, 'Examen de admisión', 'Examen de admisión', 'Examen', '1', '1'),
 (3, 'Homologación', 'Homologación', 'Homologación', '1', '1'),
-(4, 'Propedéutico', 'Propedéutico', 'Propedéutico', '1', '1');
+(4, 'Taller introductorio', 'Taller introductorio', 'Taller introductorio', '1', '1');
 
 -- --------------------------------------------------------
 --

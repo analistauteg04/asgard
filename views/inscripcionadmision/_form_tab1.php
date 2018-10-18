@@ -9,10 +9,14 @@ use yii\helpers\Url;
 use yii\widgets\ActiveForm;
 use app\components\CFileInputAjax;
 
-$requisitos = ' <div class="col-md-12 col-sm-12 col-xs-12 col-lg-12">
+
+// CAN: GRADO
+$requisitosCANP = ' <div class="col-md-12 col-sm-12 col-xs-12 col-lg-12">
                     <div class="form-group">
-                        <div class="col-sm-12 col-md-12 col-xs-12 col-lg-12">
-                            <div style = "width: 1300px;" class="alert alert-info"><span style="font-weight: bold"> Nota: </span> Fecha curso de nivelación del 22 de octubre al 7 de diciembre deberás cargar en el siguiente paso estos documentos: <br>
+                        <div class="col-sm-3 col-md-3 col-xs-3 col-lg-3">
+                        </div>
+                        <div class="col-sm-9 col-md-9 col-xs-9 col-lg-9">
+                            <div style = "width: 900px;" class="well"><span style="font-weight: bold">Fecha curso de nivelación del 22 de octubre al 30 de noviembre del 2018. Deberás cargar en el siguiente paso estos documentos: <br></span>
                                 Cédula de identidad o pasaporte. <br>
                                 Certificado de votación. <br>
                                 Título de bachiller notarizado. <br>
@@ -22,13 +26,91 @@ $requisitos = ' <div class="col-md-12 col-sm-12 col-xs-12 col-lg-12">
                     </div>
                 </div>'; 
 
+$requisitosCANSP = ' <div class="col-md-12 col-sm-12 col-xs-12 col-lg-12">
+                    <div class="form-group">
+                        <div class="col-sm-3 col-md-3 col-xs-3 col-lg-3">
+                        </div>
+                        <div class="col-sm-9 col-md-9 col-xs-9 col-lg-9">
+                            <div style = "width: 900px;" class="well"><span style="font-weight: bold">Fecha curso de nivelación del 22 de octubre al 30 de noviembre del 2018. Deberás cargar en el siguiente paso estos documentos: <br></span>
+                                Cédula de identidad o pasaporte. <br>
+                                Certificado de votación. <br>
+                                Título de bachiller notarizado. <br>
+                                Foto Actual. <br>
+                            </div>
+                        </div>
+                    </div>
+                </div>'; 
+
+$requisitosCANAD = ' <div class="col-md-12 col-sm-12 col-xs-12 col-lg-12">
+                    <div class="form-group">
+                        <div class="col-sm-3 col-md-3 col-xs-3 col-lg-3">
+                        </div>
+                        <div class="col-sm-9 col-md-9 col-xs-9 col-lg-9">
+                            <div style = "width: 900px;" class="well"><span style="font-weight: bold">Fecha curso de nivelación del 20 de octubre al 8 de diciembre del 2018. Deberás cargar en el siguiente paso estos documentos: <br></span>
+                                Cédula de identidad o pasaporte. <br>
+                                Certificado de votación. <br>
+                                Título de bachiller notarizado. <br>
+                                Foto Actual. <br>
+                            </div>
+                        </div>
+                    </div>
+                </div>'; 
+
+$requisitosCANO = ' <div class="col-md-12 col-sm-12 col-xs-12 col-lg-12">
+                    <div class="form-group">
+                        <div class="col-sm-3 col-md-3 col-xs-3 col-lg-3">
+                        </div>
+                        <div class="col-sm-9 col-md-9 col-xs-9 col-lg-9">
+                            <div style = "width: 900px;" class="well"><span style="font-weight: bold">Fecha curso de nivelación del 22 de octubre al 14 de diciembre del 2018. Deberás cargar en el siguiente paso estos documentos: <br> </span>
+                                Cédula de identidad o pasaporte. <br>
+                                Certificado de votación. <br>
+                                Título de bachiller notarizado. <br>
+                                Foto Actual. <br>
+                            </div>
+                        </div>
+                    </div>
+                </div>'; 
+
+// EXAMEN: GRADO
+$requisitosEXA = ' <div class="col-md-12 col-sm-12 col-xs-12 col-lg-12">
+                    <div class="form-group">
+                        <div class="col-sm-3 col-md-3 col-xs-3 col-lg-3">
+                        </div>
+                        <div class="col-sm-9 col-md-9 col-xs-9 col-lg-9">
+                            <div style = "width: 900px;" class="well"><span style="font-weight: bold">Al inscribirte al examen de admisión, tendrás acceso al Campus Virtual UTEG para prepararte. A partir de la fecha de registro tendrás quince (15) días para rendir las pruebas de manera online. Deberás cargar en el siguiente paso estos documentos: <br></span>                                                              
+                                Cédula de identidad o pasaporte. <br>
+                                Certificado de votación. <br>
+                                Título de Bachiller notarizado. <br>
+                                Foto actual. <br>
+                            </div>
+                        </div>
+                    </div>
+                </div>'; 
+//Posgrado
+$requisitosPRP = '<div class="col-md-12 col-sm-12 col-xs-12 col-lg-12">
+                    <div class="form-group">
+                        <div class="col-sm-3 col-md-3 col-xs-3 col-lg-3">
+                        </div>
+                        <div class="col-sm-9 col-md-9 col-xs-9 col-lg-9">
+                            <div style = "width: 900px;" class="well"><span style="font-weight: bold">Fecha del taller introductorio: 13 y 14 de octubre del 2018. Deberás cargar en el siguiente paso estos documentos:<br></span>
+                                    Cédula de identidad o pasaporte <br>
+                                    Certificado de votación <br>
+                                    Título de tercer nivel notarizado <br>
+                                    Certificado de calificaciones de estudios de tercer nivel  <br>
+                                    Hoja de vida   <br>
+                                    Foto actual    <br>
+                            </div>
+                        </div>
+                    </div>
+                  </div>'; 
+
 ?>
 <form class="form-horizontal">
     <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
         <h3><span id="lbl_Personeria"><?= Yii::t("formulario", "Application for Admission Process") ?></span></h3>
     </div>
     <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
-        <p class="text-danger"> <?= Yii::t("formulario", "Fields with * are required") ?> </p>
+        <p class="text-danger"> <?= Yii::t("formulario", "Fields with * are required") ?> </p>        
     </div>
     <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
         <div class="form-group">
@@ -129,9 +211,24 @@ $requisitos = ' <div class="col-md-12 col-sm-12 col-xs-12 col-lg-12">
             </div>
         </div>
     </div> 
-    <div class="col-md-12 col-xs-12 col-sm-12 col-lg-12" id="divRequisitos" style="display: none">   
-        <?php echo $requisitos ?>
+    <div class="col-md-12 col-xs-12 col-sm-12 col-lg-12" id="divRequisitosCANP" style="display: none">   
+        <?php echo $requisitosCANP ?>
     </div>
+    <div class="col-md-12 col-xs-12 col-sm-12 col-lg-12" id="divRequisitosCANSP" style="display: none">   
+        <?php echo $requisitosCANSP ?>
+    </div>
+    <div class="col-md-12 col-xs-12 col-sm-12 col-lg-12" id="divRequisitosCANAD" style="display: none">   
+        <?php echo $requisitosCANAD ?>
+    </div>
+    <div class="col-md-12 col-xs-12 col-sm-12 col-lg-12" id="divRequisitosCANO" style="display: none">   
+        <?php echo $requisitosCANO ?>
+    </div>    
+    <div class="col-md-12 col-xs-12 col-sm-12 col-lg-12" id="divRequisitosEXA" style="display: none">   
+        <?php echo $requisitosEXA ?>
+    </div>    
+    <div class="col-md-12 col-xs-12 col-sm-12 col-lg-12" id="divRequisitosPRP" style="display: none">   
+        <?php echo $requisitosPRP ?>
+    </div>    
     <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
         <div class="form-group">            
             <label for="cmb_conuteg" class="col-lg-3 col-md-3 col-sm-3 col-xs-3 control-label"><?= Yii::t("formulario", "Knowledge how about UTEG") ?> <span class="text-danger">*</span></label>

@@ -232,12 +232,12 @@ INSERT INTO `modulo_estudio` (`mest_id`, `uaca_id`, `mod_id`, `mest_codigo`, `me
 (74, 3, 1, 'UL48', 'Motívate - Auto Motivación', 'Motívate - Auto Motivación', 'motívate_-_auto_motivación', 1, NULL, '1', '2017-02-01 15:15:00', NULL, '1'),
 (75, 3, 1, 'UL49', 'Realización de videos con tu Smartphone', 'Realización de videos con tu Smartphone', 'realización_de_videos_con_tu_smartphone', 1, NULL, '1', '2017-02-01 15:15:00', NULL, '1'),
 (76, 3, 1, 'UL50', 'Correcta aplicación de las herramientas de control para la toma de decisiones', 'Correcta aplicación de las herramientas de control para la toma de decisiones', 'correcta_aplicación_de_las_herramientas_de_control_para_la_toma_de_decisiones', 1, NULL, '1', '2017-02-01 15:15:00', NULL, '1'),
-(77, 6, 1, 'UL51', 'Licenciatura en Comercio Exterior (UTEG Online)', 'Licenciatura en Comercio Exterior (UTEG Online)', 'licenciatura_en_comercio_exterior_(uteg_online)', 1, NULL, '1', '2017-02-01 15:15:00', NULL, '1'),
-(78, 6, 1, 'UL52', 'Licenciatura en Mercadotecnia (UTEG Online)', 'Licenciatura en Mercadotecnia (UTEG Online)', 'licenciatura_en_mercadotecnia_(uteg_online)', 1, NULL, '1', '2017-02-01 15:15:00', NULL, '1'),
-(79, 6, 1, 'UL53', 'Licenciatura en Finanzas (UTEG Online)', 'Licenciatura en Finanzas (UTEG Online)', 'licenciatura_en_finanzas_(uteg_online)', 1, NULL, '1', '2017-02-01 15:15:00', NULL, '1'),
-(80, 6, 1, 'UL54', 'Licenciatura en Administración de Empresas (UTEG Online) ', 'Licenciatura en Administración de Empresas (UTEG Online) ', 'licenciatura_en_administración_de_empresas_(uteg_Online) ',1, NULL, '1', '2017-02-01 15:15:00', NULL, '1'),
-(81, 6, 1, 'UL55', 'Licenciatura en Turismo', 'Licenciatura en Turismo', 'licenciatura_en_turismo', 1, NULL, '1', '2017-02-01 15:15:00', NULL, '1'),
-(82, 6, 1, 'UL56', 'Economía', 'Economía', 'economía', 1, NULL, '1', '2017-02-01 15:15:00', NULL, '1'),
+(77, 1, 1, 'UL51', 'Licenciatura en Comercio Exterior (UTEG Online)', 'Licenciatura en Comercio Exterior (UTEG Online)', 'licenciatura_en_comercio_exterior_(uteg_online)', 1, NULL, '1', '2017-02-01 15:15:00', NULL, '1'),
+(78, 1, 1, 'UL52', 'Licenciatura en Mercadotecnia (UTEG Online)', 'Licenciatura en Mercadotecnia (UTEG Online)', 'licenciatura_en_mercadotecnia_(uteg_online)', 1, NULL, '1', '2017-02-01 15:15:00', NULL, '1'),
+(79, 1, 1, 'UL53', 'Licenciatura en Finanzas (UTEG Online)', 'Licenciatura en Finanzas (UTEG Online)', 'licenciatura_en_finanzas_(uteg_online)', 1, NULL, '1', '2017-02-01 15:15:00', NULL, '1'),
+(80, 1, 1, 'UL54', 'Licenciatura en Administración de Empresas (UTEG Online) ', 'Licenciatura en Administración de Empresas (UTEG Online) ', 'licenciatura_en_administración_de_empresas_(uteg_Online) ',1, NULL, '1', '2017-02-01 15:15:00', NULL, '1'),
+(81, 1, 1, 'UL55', 'Licenciatura en Turismo', 'Licenciatura en Turismo', 'licenciatura_en_turismo', 1, NULL, '1', '2017-02-01 15:15:00', NULL, '1'),
+(82, 1, 1, 'UL56', 'Economía', 'Economía', 'economía', 1, NULL, '1', '2017-02-01 15:15:00', NULL, '1'),
 (83, 2, 1, 'UL57', 'MBA Bordeaux', 'MBA Bordeaux', 'mba_bordeaux', 1, NULL, '1', '2017-02-01 15:15:00', NULL, '1');
 
 
@@ -419,5 +419,5 @@ INSERT INTO `modalidad_unidad_academico` (`muac_id`,`uaca_id`,`mod_id`, `emp_id`
 (9,3,2,3,1,'1','2018-09-29 14:35:00','1'),
 (10,3,1,2,1,'1','2017-02-01 14:35:00','1'),
 (11,5,1,2,1,'1','2017-02-01 14:35:00','1'),
-(12,6,1,2,1,'1','2017-02-01 14:35:00','1'),
+(12,1,1,2,1,'1','2017-02-01 14:35:00','1'),
 (13,2,1,2,1,'1','2018-10-01 14:35:00','1');

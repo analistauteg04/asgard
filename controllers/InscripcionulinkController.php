@@ -83,12 +83,11 @@ class InscripcionulinkController extends \yii\web\Controller {
         $arr_prov_dom = Provincia::provinciaXPais($pais_id);
         $arr_ciu_dom = Canton::cantonXProvincia($arr_prov_dom[0]["id"]);
         $arr_medio = MedioPublicitario::find()->select("mpub_id AS id, mpub_nombre AS value")->where(["mpub_estado_logico" => "1", "mpub_estado" => "1"])->asArray()->all();
-        $arr_conuteg = $mod_pergestion->consultarConociouteg();
-        //$arr_carrerra1 = $modestudio->consultarEstudioEmpresa(2);        
-        $arr_modalidad = $mod_modalidad->consultarModalidad(6,2);
-        $arr_carrerra1 = $modestudio->consultarCursoModalidad(6, 1);
+        $arr_conuteg = $mod_pergestion->consultarConociouteg();   
+        $arr_modalidad = $mod_modalidad->consultarModalidad(1,2);
+        $arr_carrerra1 = $modestudio->consultarCursoModalidad(1, 1);
         $arr_ninteres = $mod_unidad->consultarUnidadAcademicasEmpresa(2);
-        $tipo_oportunidad_data = $modTipoOportunidad->consultarOporxUnidad(6);
+        $tipo_oportunidad_data = $modTipoOportunidad->consultarOporxUnidad(1);
         return $this->render('index', [
                     "tipos_dni" => array("CED" => Yii::t("formulario", "DNI Document"), "PASS" => Yii::t("formulario", "Passport")),
                     "tipos_dni2" => array("CED" => Yii::t("formulario", "DNI Document1"), "PASS" => Yii::t("formulario", "Passport1")),
@@ -169,24 +168,24 @@ class InscripcionulinkController extends \yii\web\Controller {
                 $numidentificacion = $pasaporte;
             }
             switch ($nivelestudio) { // esto cambiarlo hacer funcion que consulte el usaurio y traer el id           
-                case "3":
+                case "1":
                     $agente = 14;
                     $tipoportunidad = $data["metodo"];
                     $pagina = "registerulink";
                     break;
-                case "4":
+                case "2":
                     $agente = 14;
                     $tipoportunidad = $data["metodo"];
+                    $pagina = "registerulink";
+                    break;
+                case "3":
+                    $agente = 14;
+                    $tipoportunidad = 8;
                     $pagina = "registerulink";
                     break;
                 case "5":
                     $agente = 14;
-                    $tipoportunidad = $data["metodo"];
-                    $pagina = "registerulink";
-                    break;
-                case "6":
-                    $agente = 14;
-                    $tipoportunidad = $data["metodo"];
+                    $tipoportunidad = 10;
                     $pagina = "registerulink";
                     break;
             }
