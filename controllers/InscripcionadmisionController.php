@@ -316,15 +316,15 @@ class InscripcionadmisionController extends \yii\web\Controller {
                                         $error++;
                                     }
                                 } else {
-                                    $error_message .= Yii::t("formulario", "The rol user hasn't been saved");
+                                    $error_message .= Yii::t("formulario", "The rol user have not been saved");
                                     $error++;
                                 }
                             } else {
-                                $error_message .= Yii::t("formulario", "The user hasn't been saved");
+                                $error_message .= Yii::t("formulario", "The user have not been saved");
                                 $error++;
                             }
                         } else {
-                            $error_message .= Yii::t("formulario", "The enterprise person hasn't been saved");
+                            $error_message .= Yii::t("formulario", "The enterprise interested hasn't been saved");
                             $error++;
                         }
                     } else {

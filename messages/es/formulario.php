@@ -569,6 +569,7 @@ return [
     "The user have not been saved" => "El usuario no ha sido guardado",
     "The rol user have not been saved" => "El rol usuario no ha sido guardado",
     "The person belong to enterprise have not been saved" => "La persona de la empresa no ha sido guardada",
+    "The interested person hasn't been saved" => "La persona interesada no ha sido guardada",
     "The person have not been saved" => "La persona no ha sido guardada",
     "The pre-interested person have not been saved" => "La pre interesado no ha sido guardado",
     "The enterprise interested hasn't been saved" => "El interesado que pertence a la empresa en cuestion no ha sido guardado",
