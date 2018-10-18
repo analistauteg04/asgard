@@ -31,6 +31,7 @@ use app\modules\admision\models\EstadoContacto;
 use app\modules\admision\models\MetodoIngreso;
 use app\modules\financiero\models\Secuencias;
 use app\models\InscripcionAdmision;
+use app\models\InscripcionAdmision;
 
 class InscripcionadmisionController extends \yii\web\Controller {
 
@@ -49,6 +50,8 @@ class InscripcionadmisionController extends \yii\web\Controller {
         $mod_unidad = new UnidadAcademica();
         $modcanal = new Oportunidad();
         $mod_metodo = new MetodoIngreso();
+        $mod_inscripcion = new InscripcionAdmision();
+                
         if (Yii::$app->request->isAjax) {
             $data = Yii::$app->request->post();
             if (isset($data["getprovincias"])) {
@@ -68,7 +71,6 @@ class InscripcionadmisionController extends \yii\web\Controller {
                 $message = array("area" => $area);
                 return Utilities::ajaxResponse('OK', 'alert', Yii::t('jslang', 'Success'), 'false', $message);
             }
-
             if (isset($data["getmodalidad"])) {
                 $modalidad = $mod_modalidad->consultarModalidad($data["nint_id"], 1);
                 $message = array("modalidad" => $modalidad);
@@ -84,6 +86,9 @@ class InscripcionadmisionController extends \yii\web\Controller {
                 $message = array("metodos" => $metodos);
                 return Utilities::ajaxResponse('OK', 'alert', Yii::t('jslang', 'Success'), 'false', $message);
             }
+            if (isset($data["getdata"])) {
+                $resp_datos = $mod_inscripcion->consultarDatosInscripcion($data["twin_identificacion"], $data["twin_correo"]);                
+            }
         }
         $arr_pais_dom = Pais::find()->select("pai_id AS id, pai_nombre AS value")->where(["pai_estado_logico" => "1", "pai_estado" => "1"])->asArray()->all();
         $pais_id = 1; //Ecuador
@@ -96,7 +101,7 @@ class InscripcionadmisionController extends \yii\web\Controller {
         $arr_carrerra1 = $modcanal->consultarCarreraModalidad(1, 1);
         $arr_metodos = $mod_metodo->consultarMetodoUnidadAca_2($arr_ninteres[0]["id"]);
         $_SESSION['JSLANG']['Your information has not been saved. Please try again.'] = Yii::t('notificaciones', 'Your information has not been saved. Please try again.');
-
+                
         return $this->render('index', [
                     "tipos_dni" => array("CED" => Yii::t("formulario", "DNI Document"), "PASS" => Yii::t("formulario", "Passport")),
                     "tipos_dni2" => array("CED" => Yii::t("formulario", "DNI Document1"), "PASS" => Yii::t("formulario", "Passport1")),
@@ -110,6 +115,7 @@ class InscripcionadmisionController extends \yii\web\Controller {
                     "arr_conuteg" => ArrayHelper::map($arr_conuteg, "id", "name"),
                     "arr_carrerra1" => ArrayHelper::map($arr_carrerra1, "id", "name"),
                     "arr_metodos" => ArrayHelper::map($arr_metodos, "id", "name"),
+                    "resp_datos" => $resp_datos,
         ]);                        
     }
 

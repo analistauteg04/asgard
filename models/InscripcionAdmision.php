@@ -183,12 +183,12 @@ class InscripcionAdmision extends \yii\db\ActiveRecord {
                         ea.eaca_nombre carrera,
                         mi.ming_nombre metodo,
                         ip.ipre_precio as precio
-                FROM db_captacion.temporal_wizard_inscripcion twi inner join db_academico.unidad_academica ua on ua.uaca_id = twi.uaca_id
-                     inner join db_academico.modalidad m on m.mod_id = twi.mod_id
-                     inner join db_academico.estudio_academico ea on ea.eaca_id = twi.car_id
-                     inner join db_captacion.metodo_ingreso mi on mi.ming_id = twi.twin_metodo_ingreso
-                     inner join db_facturacion.item_metodo_unidad imi on (imi.ming_id =  twi.twin_metodo_ingreso and imi.uaca_id = twi.uaca_id and imi.mod_id = twi.mod_id)
-                     inner join db_facturacion.item_precio ip on ip.ite_id = imi.ite_id
+                FROM " . $con->dbname . ".temporal_wizard_inscripcion twi inner join db_academico.unidad_academica ua on ua.uaca_id = twi.uaca_id
+                     inner join " . $con1->dbname . ".modalidad m on m.mod_id = twi.mod_id
+                     inner join " . $con1->dbname . ".estudio_academico ea on ea.eaca_id = twi.car_id
+                     inner join " . $con->dbname . ".metodo_ingreso mi on mi.ming_id = twi.twin_metodo_ingreso
+                     inner join " . $con2->dbname . ".item_metodo_unidad imi on (imi.ming_id =  twi.twin_metodo_ingreso and imi.uaca_id = twi.uaca_id and imi.mod_id = twi.mod_id)
+                     inner join " . $con2->dbname . ".item_precio ip on ip.ite_id = imi.ite_id
                 WHERE twi.twin_numero = :twin_identificacion AND
                      twi.twin_correo = :twin_correo AND
                      ip.ipre_estado_precio = :estado_precio AND
@@ -205,7 +205,6 @@ class InscripcionAdmision extends \yii\db\ActiveRecord {
                      ip.ipre_estado = :estado AND
                      ip.ipre_estado_logico = :estado
              limit 1";
-
                 
         $comando = $con->createCommand($sql);
         $comando->bindParam(":estado", $estado, \PDO::PARAM_STR);
