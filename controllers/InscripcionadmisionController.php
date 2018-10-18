@@ -31,7 +31,6 @@ use app\modules\admision\models\EstadoContacto;
 use app\modules\admision\models\MetodoIngreso;
 use app\modules\financiero\models\Secuencias;
 use app\models\InscripcionAdmision;
-use app\models\InscripcionAdmision;
 
 class InscripcionadmisionController extends \yii\web\Controller {
 
@@ -125,20 +124,24 @@ class InscripcionadmisionController extends \yii\web\Controller {
         if (Yii::$app->request->isAjax) {
             $pgest = Yii::$app->request->post();
             $data = Yii::$app->request->post();
+            $codigo = $data['codigo'];
             $con = \Yii::$app->db_asgard;
             $con1 = \Yii::$app->db_captacion;
             $con2 = \Yii::$app->db_facturacion;
             $transaction = $con->beginTransaction();
             $transaction1 = $con1->beginTransaction();
             $transaction2 = $con2->beginTransaction();
-            try {
+            try {                
+                //Se consulta la información grabada en la tabla temporal.
+                $mod_inscripcion = new InscripcionAdmision();
+                $resp_datos = $mod_inscripcion->consultarDatosInscripcion($data["codigo"]);                
                 // He colocado al inicio la informacion para que cargue al principio
                 $emp_id = 1;
                 $identificacion = '';
-                if (isset($pgest['pges_cedula']) && strlen($pgest['pges_cedula']) > 0) {
-                    $identificacion = $pgest['pges_cedula'];
+                if (isset($resp_datos['twin_numero']) && strlen($resp_datos['twin_numero']) > 0) {
+                    $identificacion = $resp_datos['twin_numero'];
                 } else {
-                    $identificacion = $pgest['pges_pasaporte'];
+                    $identificacion = $resp_datos['twin_numero'];
                 }
                 if (isset($identificacion) && strlen($identificacion) > 0) {
                     $id_persona = 0;
@@ -147,16 +150,16 @@ class InscripcionadmisionController extends \yii\web\Controller {
                         'per_pri_nombre', 'per_seg_nombre', 'per_pri_apellido', 'per_seg_apellido', 'per_cedula', 'etn_id', 'eciv_id', 'per_genero', 'pai_id_nacimiento', 'pro_id_nacimiento', 'can_id_nacimiento', 'per_fecha_nacimiento', 'per_celular', 'per_correo', 'tsan_id', 'per_domicilio_sector', 'per_domicilio_cpri', 'per_domicilio_csec', 'per_domicilio_num', 'per_domicilio_ref', 'per_domicilio_telefono', 'pai_id_domicilio', 'pro_id_domicilio', 'can_id_domicilio', 'per_nac_ecuatoriano', 'per_nacionalidad', 'per_foto', 'per_estado', 'per_estado_logico'
                     ];
                     $parametros_per = [
-                        $pgest['pges_pri_nombre'], null, $pgest['pges_pri_apellido'], null,
-                        $pgest['pges_cedula'], null, null, null, null, null,
-                        null, null, $pgest['pges_celular'], $pgest['pges_correo'],
+                        $resp_datos['twin_nombre'], null, $resp_datos['twin_apellido'], null,
+                        $resp_datos['twin_numero'], null, null, null, null, null,
+                        null, null, $resp_datos['twin_celular'], $resp_datos['twin_correo'],
                         null, null, null, null,
                         null, null, null,
                         null, null, null,
                         null, null, null, 1, 1
                     ];
                     \app\models\Utilities::putMessageLogFile('va a proceder a ingresar la informacion');
-                    $id_persona = $mod_persona->consultarIdPersona($pgest['pges_cedula'], $pgest['pges_pasaporte']);
+                    $id_persona = $mod_persona->consultarIdPersona($resp_datos['twin_numero'], $resp_datos['twin_numero']);
                     if ($id_persona == 0) {
                         $id_persona = $mod_persona->insertarPersona($con, $parametros_per, $keys_per, 'persona');
                     }
@@ -173,13 +176,13 @@ class InscripcionadmisionController extends \yii\web\Controller {
                         if ($emp_per_id > 0) {
                             \app\models\Utilities::putMessageLogFile('ingreso la empresa Persona');
                             $usuario = new Usuario();
-                            $usuario_id = $usuario->consultarIdUsuario($id_persona, $pgest['pges_correo']);
+                            $usuario_id = $usuario->consultarIdUsuario($id_persona, $resp_datos['twin_correo']);
                             if ($usuario_id == 0) {
                                 $security = new Security();
                                 $hash = $security->generateRandomString();
                                 $passencrypt = base64_encode($security->encryptByPassword($hash, 'Uteg2018'));
                                 $keys = ['per_id', 'usu_user', 'usu_sha', 'usu_password', 'usu_estado', 'usu_estado_logico'];
-                                $parametros = [$id_persona, $pgest['pges_correo'], $hash, $passencrypt, 1, 1];
+                                $parametros = [$id_persona, $resp_datos['twin_correo'], $hash, $passencrypt, 1, 1];
                                 $usuario_id = $usuario->crearUsuarioTemporal($con, $parametros, $keys, 'usuario');
                             }
                             if ($usuario_id > 0) {
@@ -211,27 +214,26 @@ class InscripcionadmisionController extends \yii\web\Controller {
                                             $eaca_id = NULL;
                                             $mest_id = NULL;
                                             if ($emp_id == 1) {//Uteg 
-                                                $eaca_id = $pgest['carrera'];
+                                                $eaca_id = $resp_datos['car_id'];
                                             } elseif ($emp_id == 2 || $emp_id == 3) {
-                                                $mest_id = $pgest['carrera'];
+                                                $mest_id = $resp_datos['car_id'];
                                             }
                                             $num_secuencia = Secuencias::nuevaSecuencia($con, $emp_id, 1, 1, 'SOL');
                                             $sins_fechasol = date(Yii::$app->params["dateTimeByDefault"]);
                                             $rsin_id = 1; //Solicitud pendiente     
                                             $solins_model = new SolicitudInscripcion();
-                                            $mensaje = 'intId: ' . $interesado_id . '/uaca: ' . $pgest['unidad_academica'] . '/modalidad: ' . $pgest['modalidad'] . '/ming: ' . $pgest['ming_id'] . '/eaca: ' . $eaca_id . '/mest: ' . $mest_id . '/empresa: ' . $emp_id . '/secuencia: ' . $num_secuencia . '/rsin_id: ' . $rsin_id . '/sins_fechasol: ' . $sins_fechasol . '/usuario_id: ' . $usuario_id;
-                                            $sins_id = $solins_model->insertarSolicitud($interesado_id, $pgest['unidad_academica'], $pgest['modalidad'], $pgest['ming_id'], $eaca_id, null, $emp_id, $num_secuencia, $rsin_id, $sins_fechasol, $usuario_id);
+                                            //$mensaje = 'intId: ' . $interesado_id . '/uaca: ' . $pgest['unidad_academica'] . '/modalidad: ' . $pgest['modalidad'] . '/ming: ' . $pgest['ming_id'] . '/eaca: ' . $eaca_id . '/mest: ' . $mest_id . '/empresa: ' . $emp_id . '/secuencia: ' . $num_secuencia . '/rsin_id: ' . $rsin_id . '/sins_fechasol: ' . $sins_fechasol . '/usuario_id: ' . $usuario_id;
+                                            $sins_id = $solins_model->insertarSolicitud($interesado_id, $resp_datos['uaca_id'], $resp_datos['mod_id'], $resp_datos['ming_id'], $eaca_id, null, $emp_id, $num_secuencia, $rsin_id, $sins_fechasol, $usuario_id);
                                             //fin de solicitud inscripcion$mest_id
                                             //grabar los documentos
                                             \app\models\Utilities::putMessageLogFile('solicitud: ' . $mensaje);
                                             if ($sins_id) {
-                                                \app\models\Utilities::putMessageLogFile('ingreso la solicitud: ' . $sins_id);
-                                                                                            
+                                                \app\models\Utilities::putMessageLogFile('ingreso la solicitud: ' . $sins_id);                                                                                            
                                                 //Obtener el precio de la solicitud.
                                                 if ($beca == "1") {
                                                     $precio = 0;
                                                 } else {
-                                                    $resp_precio = $solins_model->ObtenerPrecio($pgest['ming_id'], $pgest['unidad_academica'], $pgest['modalidad'], $eaca_id);
+                                                    $resp_precio = $solins_model->ObtenerPrecio($resp_datos['ming_id'], $resp_datos['uaca_id'], $resp_datos['mod_id'], $eaca_id);
                                                     if ($resp_precio) {
                                                         $precio = $resp_precio['precio'];
                                                     } else {
@@ -275,40 +277,7 @@ class InscripcionadmisionController extends \yii\web\Controller {
                                                     \app\models\Utilities::putMessageLogFile('orden pago: '.$resp_opago);
                                                     $resp_dpago = $mod_ordenpago->insertarDesglosepago($resp_opago, $val_total, 0, $val_total, $fecha_ini, null, $estadopago, $usuario_id);
                                                     if ($resp_dpago) {
-                                                        $exito = 1;
-                                                        \app\models\Utilities::putMessageLogFile('desgloce pago: '.$resp_dpago);
-                                                        $usuarioNew = Usuario::findIdentity($usuario_id);
-                                                        $link = $usuarioNew->generarLinkActivacion();
-                                                        $email_info = array(
-                                                            "nombres" => $pgest['pges_pri_nombre'] . " " . $pgest['pges_seg_nombre'],
-                                                            "apellidos" => $pgest['pges_pri_apellido'] . " " . $pgest['pges_seg_apellido'],
-                                                            "correo" => $pgest['pges_correo'],
-                                                            "telefono" => isset($pgest['pges_celular']) ? $pgest['pges_celular'] : $pgest['pges_domicilio_telefono'],
-                                                            "identificacion" => isset($pgest['pges_cedula']) ? $pgest['pges_cedula'] : $pgest['pges_pasaporte'],
-                                                            "link_asgard" => $link,
-                                                        );
-                                                        \app\models\Utilities::putMessageLogFile('ingreso el email');
-                                                        if ($pgest['unidad_academica'] == 1 and ( $pgest['modalidad'] == 1)) {
-                                                            $file1 = Url::base(true) . "/files/Mailing-UTEG-Online.jpg";
-                                                            $rutaFile = array($file1);
-                                                        } else {
-                                                            if ($pgest['unidad_academica'] == 1 and ( $pgest['modalidad'] != 1)) {
-                                                                $file1 = Url::base(true) . "/files/Mailing-UTEG-Grado.jpg";
-                                                                $rutaFile = array($file1);
-                                                            } else {
-                                                                if ($pgest['unidad_academica'] == 2) {
-                                                                    $file1 = Url::base(true) . "/files/Mailing-UTEG-Posgrado.jpg";
-                                                                    $rutaFile = array($file1);
-                                                                }
-                                                            }
-                                                        }
-                                                        $tituloMensaje = Yii::t("interesado", "UTEG - Registration");
-                                                        $asunto = Yii::t("interesado", "UTEG - Registration Online");
-                                                        $body = Utilities::getMailMessage("PaidApplyment", array(), Yii::$app->language);
-                                                        Utilities::sendEmail($tituloMensaje, Yii::$app->params["admisiones"], // a quien se envia el correo
-                                                                [$email_info['correo'] => $email_info['nombres'] . " " . $email_info['apellidos']], // quien envia el correo
-                                                                $asunto, $file1);
-                                                        // Fin de funcionalidad de enviar correo                                            
+                                                        $exito = 1;                                                                                              
                                                         \app\models\Utilities::putMessageLogFile('mensaje final:' . $exito);
                                                     }
                                                 }

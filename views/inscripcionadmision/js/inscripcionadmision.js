@@ -35,7 +35,22 @@ $(document).ready(function () {
             alert('Debe Aceptar los términos de la Información');
         }             
     });
-
+    $('#sendInscripcionsolicitud').click(function () {
+        var link = $('#txth_base').val() + "/inscripcionadmision/guardarinscripcion";
+        var arrParams = new Object();
+        arrParams.codigo = $('#txth_twin_id').val();        
+        if (!validateForm()) {
+            requestHttpAjax(link, arrParams, function (response) {
+                showAlert(response.status, response.label, response.message);
+                if (!response.error) {
+                    setTimeout(function () {
+                        window.location.href = $('#txth_base').val() + "/inscripcionadmision/index";
+                    }, 5000);
+                }
+            }, true);
+        }
+    });
+    
     $('#cmb_tipo_dni').change(function () {
         if ($('#cmb_tipo_dni').val() == 'PASS') {
             $('#txt_cedula').removeClass("PBvalidation");
@@ -68,8 +83,7 @@ $(document).ready(function () {
                     requestHttpAjax(link, arrParams, function (response) {
                         if (response.status == "OK") {
                             data = response.message;
-                            setComboData(data.carrera, "cmb_carrera_solicitud");
-                            
+                            setComboData(data.carrera, "cmb_carrera_solicitud");                            
                         }
                     }, true);
                 }
