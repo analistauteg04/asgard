@@ -453,8 +453,7 @@ class InscripcionadmisionController extends \yii\web\Controller {
                     if ($foto_archivo === false)
                         throw new Exception('Error doc Foto no renombrado.');
                 }
-                
-                
+                                
                 if ($accion == "create" || $accion == "Create") {
                     //Nuevo Registro
                     $resul = $model->insertarInscripcion($data);

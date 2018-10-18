@@ -165,5 +165,56 @@ class InscripcionAdmision extends \yii\db\ActiveRecord {
         }
         return FALSE;
     }
+    
+    /**
+     * Function consultarDatosInscripcion
+     * @author  Grace Viteri <analistadesarrollo01@uteg.edu.ec>
+     * @param   
+     * @return  $resultData (Obtiene los datos de inscripción y el precio de la solicitud.)
+     */
+    public function consultarDatosInscripcion($twin_identificacion, $twin_correo) {
+        $con = \Yii::$app->db_captacion;
+        $con2 = \Yii::$app->db_facturacion;
+        $con1 = \Yii::$app->db_academico;
+        $estado = 1;
+        $estado_precio = 'A';
+        
+        $sql = "SELECT  ua.uaca_nombre unidad, 
+                        m.mod_nombre modalidad,
+                        ea.eaca_nombre carrera,
+                        mi.ming_nombre metodo,
+                        ip.ipre_precio as precio
+                FROM db_captacion.temporal_wizard_inscripcion twi inner join db_academico.unidad_academica ua on ua.uaca_id = twi.uaca_id
+                     inner join db_academico.modalidad m on m.mod_id = twi.mod_id
+                     inner join db_academico.estudio_academico ea on ea.eaca_id = twi.car_id
+                     inner join db_captacion.metodo_ingreso mi on mi.ming_id = twi.twin_metodo_ingreso
+                     inner join db_facturacion.item_metodo_unidad imi on (imi.ming_id =  twi.twin_metodo_ingreso and imi.uaca_id = twi.uaca_id and imi.mod_id = twi.mod_id)
+                     inner join db_facturacion.item_precio ip on ip.ite_id = imi.ite_id
+                WHERE twi.twin_numero = :twin_identificacion AND
+                     twi.twin_correo = :twin_correo AND
+                     ip.ipre_estado_precio = :estado_precio AND
+                     ua.uaca_estado = :estado AND
+                     ua.uaca_estado_logico = :estado AND
+                     m.mod_estado = :estado AND
+                     m.mod_estado_logico = :estado AND
+                     ea.eaca_estado = :estado AND
+                     ea.eaca_estado_logico = :estado AND
+                     mi.ming_estado = :estado AND
+                     mi.ming_estado_logico = :estado AND
+                     imi.imni_estado = :estado AND
+                     imi.imni_estado_logico = :estado AND
+                     ip.ipre_estado = :estado AND
+                     ip.ipre_estado_logico = :estado
+             limit 1";
+
+                
+        $comando = $con->createCommand($sql);
+        $comando->bindParam(":estado", $estado, \PDO::PARAM_STR);
+        $comando->bindParam(":twin_identificacion", $twin_identificacion, \PDO::PARAM_STR);
+        $comando->bindParam(":twin_correo", $twin_correo, \PDO::PARAM_STR);        
+        $comando->bindParam(":estado_precio", $estado_precio, \PDO::PARAM_STR);
+        $resultData = $comando->queryOne();
+        return $resultData;
+    }
 
 }
