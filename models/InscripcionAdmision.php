@@ -24,9 +24,44 @@ class InscripcionAdmision extends \yii\db\ActiveRecord {
         $arroout = array();
         $con = \Yii::$app->db_captacion;
         $trans = $con->beginTransaction();
+         if ($trans !== null) {
+            $trans = null; // si existe la transacción entonces no se crea una
+        } else {
+            $trans = $con->beginTransaction(); // si no existe la transacción entonces se crea una
+        }
         try {
-            \app\models\Utilities::putMessageLogFile('Entro al modelo para ingresar la informacion');
-            $keys = [
+            //\app\models\Utilities::putMessageLogFile('Entro al modelo para ingresar la informacion');
+            $twin_id = $this->insertarDataInscripcion($con,$data);
+            
+            if ($trans !== null)
+                $trans->commit();
+       
+            //$con->close();
+            //RETORNA DATOS 
+            $arroout["status"] = TRUE;
+            $arroout["error"] = null;
+            $arroout["message"] = null;
+            $arroout["ids"] = $twin_id;
+            $arroout["data"] = null;//$rawData;
+            return $arroout;
+            
+            //return true;
+        } catch (\Exception $e) {
+            fclose($handle);
+            if ($trans !== null)
+                $trans->rollback();
+
+            $arroout["status"] = FALSE;
+            $arroout["error"] = $ex->getCode();
+            $arroout["message"] = $ex->getMessage();
+            $arroout["data"] = $rawData;
+            return $arroout;
+        }
+    }
+
+    private function insertarDataInscripcion($con,$data) {
+
+        /*$keys = [
                         'twin_nombre', 'twin_apellido', 'twin_dni','twin_numero', 
                         'twin_correo', 'twin_pais', 'twin_celular','uaca_id', 
                         'mod_id', 'car_id', 'twin_metodo_ingreso','conuteg_id', 
@@ -42,27 +77,7 @@ class InscripcionAdmision extends \yii\db\ActiveRecord {
                                 null, null, null,1,
                                 date("YmdHis"), 1
                             ];
-            $twin_id = $this->insertarDataInscripcion($con, $keys,$parametros,"temporal_wizard_inscripcion");
-            $trans->commit();
-            $con->close();
-            //RETORNA DATOS 
-            $arroout["ids"] = $twin_id;
-            $arroout["status"] = true;
-            $arroout["accion"] = 'Update';
-            return $arroout;
-            //return true;
-        } catch (\Exception $e) {
-            $trans->rollBack();
-            $con->close();
-            //throw $e;
-            $arroout["status"] = false;
-            return $arroout;
-            //return false;
-        }
-    }
-
-    private function insertarDataInscripcion($con, $keys,$parameters,$name_table) {
-        $trans = $con->getTransaction();
+        
         $param_sql .= "" . $keys[0];
         $bdet_sql .= "'" . $parameters[0] . "'";
         for ($i = 1; $i < count($parameters); $i++) {
@@ -85,7 +100,39 @@ class InscripcionAdmision extends \yii\db\ActiveRecord {
                 $trans->rollback();
             }
             return 0;
-        }
+        }*/
+        
+        $sql = "INSERT INTO " . $con->dbname . ".temporal_wizard_inscripcion
+            (twin_nombre,twin_apellido,twin_dni,twin_numero,twin_correo,twin_pais,twin_celular,uaca_id, 
+             mod_id,car_id,twin_metodo_ingreso,conuteg_id,ruta_doc_titulo, ruta_doc_dni, ruta_doc_certvota,
+             ruta_doc_foto,ruta_doc_certificado, twin_mensaje1,twin_mensaje2,twin_estado,twin_fecha_creacion,twin_estado_logico)VALUES
+            (:twin_nombre,:twin_apellido,:twin_dni,:twin_numero,:twin_correo,:twin_pais,:twin_celular,:uaca_id, 
+             :mod_id,:car_id,:twin_metodo_ingreso,:conuteg_id,:ruta_doc_titulo,:ruta_doc_dni,:ruta_doc_certvota,
+             :ruta_doc_foto,:ruta_doc_certificado,:twin_mensaje1,:twin_mensaje2,1,CURRENT_TIMESTAMP(),1)";
+                
+        $command = $con->createCommand($sql);
+        $command->bindParam(":twin_nombre", $data[0]['pges_pri_nombre'], \PDO::PARAM_STR);
+        $command->bindParam(":twin_apellido", $data[0]['pges_pri_apellido'], \PDO::PARAM_STR);
+        $command->bindParam(":twin_dni", $data[0]['tipo_dni'], \PDO::PARAM_STR);
+        $command->bindParam(":twin_numero", $data[0]['pges_cedula'], \PDO::PARAM_STR);
+        $command->bindParam(":twin_correo", $data[0]['pges_correo'], \PDO::PARAM_STR);
+        $command->bindParam(":twin_pais", $data[0]['pais'], \PDO::PARAM_STR);
+        $command->bindParam(":twin_celular", $data[0]['pges_celular'], \PDO::PARAM_STR);
+        $command->bindParam(":uaca_id", $data[0]['unidad_academica'], \PDO::PARAM_STR);
+        $command->bindParam(":mod_id", $data[0]['modalidad'], \PDO::PARAM_STR);
+        $command->bindParam(":car_id", $data[0]['carrera'], \PDO::PARAM_STR);
+        $command->bindParam(":twin_metodo_ingreso", $data[0]['ming_id'], \PDO::PARAM_STR);
+        $command->bindParam(":conuteg_id", $data[0]['conoce'], \PDO::PARAM_STR);
+        //$command->bindParam(":ruta_doc_titulo", $data[0]['ruta_doc_titulo'], \PDO::PARAM_STR);
+        //$command->bindParam(":ruta_doc_dni", $data[0]['ruta_doc_dni'], \PDO::PARAM_STR);
+        //$command->bindParam(":ruta_doc_certvota", $data[0]['ruta_doc_certvota'], \PDO::PARAM_STR);
+        //$command->bindParam(":ruta_doc_foto", $data[0]['ruta_doc_foto'], \PDO::PARAM_STR);
+        //$command->bindParam(":ruta_doc_certificado", $data[0]['ruta_doc_certificado'], \PDO::PARAM_STR);
+        //$command->bindParam(":twin_mensaje1", $data[0]['twin_mensaje1'], \PDO::PARAM_STR);
+        //$command->bindParam(":twin_mensaje2", $data[0]['twin_mensaje2'], \PDO::PARAM_STR);
+        $command->execute();
+        return $con->getLastInsertID();
+
     }
 
     /**

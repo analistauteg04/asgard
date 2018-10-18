@@ -462,6 +462,8 @@ class InscripcionadmisionController extends \yii\web\Controller {
                     if ($foto_archivo === false)
                         throw new Exception('Error doc Foto no renombrado.');
                 }
+                
+                
                 if ($accion == "create" || $accion == "Create") {
                     //Nuevo Registro
                     $resul = $model->insertarInscripcion($data['DATA_1']);
@@ -470,11 +472,11 @@ class InscripcionadmisionController extends \yii\web\Controller {
                     //$resul = $model->actualizarSolicitud($data);                
                 }
                 if ($resul['status']) {
-                    if($accion == "create"){
+                    /*if($accion == "create"){
                         $source = $_SERVER['DOCUMENT_ROOT'].Url::base().Yii::$app->params["documentFolder"].$resul['cedula'];
                         $target = $_SERVER['DOCUMENT_ROOT'].Url::base().Yii::$app->params["documentFolder"].$resul['cedula'].'_'.$resul['ids'];
                         rename($source, $target);//Renombrar el Directorio                    
-                    }
+                    }*/
                     
                     $message = ["info" => Yii::t('exception', '<strong>Well done!</strong> your information was successfully saved.')];
                     return Utilities::ajaxResponse('OK', 'alert', Yii::t('jslang', 'Success'), 'false', $message,$resul);

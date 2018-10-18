@@ -21,7 +21,6 @@ $(document).ready(function () {
     
     $('#sendInformacionAspirante').click(function () {   
         guardarInscripcion('Create');        
-
     });
 
     $('#cmb_tipo_dni').change(function () {
@@ -226,6 +225,7 @@ $(document).ready(function () {
 //INSERTAR DATOS
 function guardarInscripcion(accion) {
     //if ($("#chk_mensaje2").prop("checked")) {
+    alert('INGRESO');
     if (true) {
         var ID = (accion == "Update") ? $('#txth_twin_id').val() : 0;
         var link = $('#txth_base').val() + "/inscripcionadmision/saveinscripciontemp";
