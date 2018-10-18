@@ -6,8 +6,7 @@ use app\components\CFileInputAjax;
 use yii\helpers\Url;
 
 ?>
-<form class="form-horizontal">
-    
+<form class="form-horizontal">  
     <div class="col-md-12 col-xs-12 col-sm-12 col-lg-12">
         <h4><span id="lbl_Personeria"><?= Yii::t("formulario", "Attach document") ?></span></h4>    
     </div>

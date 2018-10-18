@@ -54,7 +54,45 @@ use yii\helpers\Html;
         <h4><span id="lbl_detalle1"><?= Yii::t("formulario", "Estás a un paso de formalizar tu inscripción, comienza hoy mismo a vivir la experiencia de una auténtica enseñanza empresarial.") ?></span></h4>    
         <h4><span id="lbl_detalle2"><?= Yii::t("formulario", "A continuación te presentamos un resumen de lo que has elegido:") ?></span></h4>    
     </div>         
-    
+    <!-- Aqui he colocado la informacion -->    
+    <div class="col-md-12 col-xs-12 col-sm-12 col-lg-12">
+        <h4>
+            <span id="lbl_uaca_lb"><?= Yii::t("formulario", "Unidad Academica: ") ?></span>
+            <span id="lbl_uaca_tx"><?= "Grado" ?></span>
+        </h4>            
+        
+    </div>         
+    <div class="col-md-12 col-xs-12 col-sm-12 col-lg-12">
+        <h4>
+            <span id="lbl_moda_lb"><?= Yii::t("formulario", "Modalidad: ") ?></span>
+            <span id="lbl_moda_tx"><?= "Online" ?></span>
+        </h4>            
+    </div>         
+    <div class="col-md-12 col-xs-12 col-sm-12 col-lg-12">
+        <h4>
+            <span id="lbl_carrera_lb"><?= Yii::t("formulario", "Carrera/Programa: ") ?></span>
+            <span id="lbl_carrera_tx"><?= "Online" ?></span>
+        </h4>            
+    </div>         
+    <div class="col-md-12 col-xs-12 col-sm-12 col-lg-12">
+        <h4>
+            <span id="lbl_ming_lb"><?= Yii::t("formulario", "Metodo ingreso: ") ?></span>
+            <span id="lbl_ming_tx"><?= "Curso Nivelacion" ?></span>
+        </h4>            
+    </div>         
+    <div class="col-md-12 col-xs-12 col-sm-12 col-lg-12">
+        <h4>
+            <span id="lbl_mcur_lb"><?= Yii::t("formulario", "Materias a Cursar: ") ?></span>
+            <span id="lbl_mcur_tx"><?= "Matematicas I, Tecnicas de comunicacion Oral y Escrita, Contabilidad" ?></span>
+        </h4>            
+    </div>         
+    <div class="col-md-12 col-xs-12 col-sm-12 col-lg-12">
+        <h4>
+            <span id="lbl_fcur_lb"><?= Yii::t("formulario", "Fecha del Curso: ") ?></span>
+            <span id="lbl_fcur_tx"><?= "22 octubre al 14 diciembre" ?></span>
+        </h4>            
+    </div>         
+    <!-- fin de ingreso de informacion -->    
     <div class="col-md-12 col-xs-12 col-sm-12 col-lg-12">
         <h4><b><span id="lbl_detalle2"><?= Yii::t("formulario", "Pago:") ?></span></b></h4>
         <h4><span id="lbl_detalle2"><?= Yii::t("formulario", "Pago en línea PayPal: ") ?></span></h4>

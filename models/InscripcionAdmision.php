@@ -49,7 +49,7 @@ class InscripcionAdmision extends \yii\db\ActiveRecord {
         $con = \Yii::$app->db_captacion;
         $trans = $con->beginTransaction();
         try {
-            $this->updateDataInscripcion($con,$data["DATA_1"]);
+            $twin_id=$this->updateDataInscripcion($con,$data["DATA_1"]);
             $trans->commit();
             //RETORNA DATOS 
             $arroout["status"] = TRUE;
@@ -141,7 +141,7 @@ class InscripcionAdmision extends \yii\db\ActiveRecord {
         $command->bindParam(":twin_mensaje1", $data[0]['twin_mensaje1'], \PDO::PARAM_STR);
         $command->bindParam(":twin_mensaje2", $data[0]['twin_mensaje2'], \PDO::PARAM_STR);
         $command->execute();
-        //return $con->getLastInsertID();
+        return $data[0]['twin_id'];
     }
 
     /**
