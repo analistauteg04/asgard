@@ -254,9 +254,10 @@ function guardarInscripcion(accion) {
                     if(accion == "Create"){
                         $('#txth_twin_id').val(response.data.ids)
                         paso1next();
-                    }else{
+                    }else{                        
                         paso2next();
                         $('#txth_twin_id').val(0)//SE AGREGA AL FINAL
+                        
                     }
 
                     //var data =response.data;
