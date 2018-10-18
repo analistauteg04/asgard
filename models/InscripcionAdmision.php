@@ -35,8 +35,8 @@ class InscripcionAdmision extends \yii\db\ActiveRecord {
                         'twin_fecha_creacion', 'twin_estado_logico' 
                     ];
             $parametros =   [
-                                $data[0]['pges_pri_nombre'], $data[0]['pges_pri_apellido'], $data[0]['tipo_dni'],$data[0]['pges_cedula'],
-                                $data[0]['pges_correo'], $data[0]['pais'], $data[0]['pges_celular'],$data[0]['unidad_academica'],
+                                ucwords(strtolower($data[0]['pges_pri_nombre'])), ucwords(strtolower($data[0]['pges_pri_apellido'])), ucwords(strtolower($data[0]['tipo_dni'])),ucwords(strtolower($data[0]['pges_cedula'])),
+                                ucwords(strtolower($data[0]['pges_correo'])), ucwords(strtolower($data[0]['pais'])), ucwords(strtolower($data[0]['pges_celular'])),ucwords(strtolower($data[0]['unidad_academica'])),
                                 $data[0]['modalidad'], $data[0]['carrera'], $data[0]['ming_id'],$data[0]['conoce'],
                                 null,null,null,null,
                                 null, null, null,1,
