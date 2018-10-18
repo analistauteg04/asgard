@@ -168,24 +168,24 @@ class InscripcionulinkController extends \yii\web\Controller {
                 $numidentificacion = $pasaporte;
             }
             switch ($nivelestudio) { // esto cambiarlo hacer funcion que consulte el usaurio y traer el id           
-                case "3":
+                case "1":
                     $agente = 14;
                     $tipoportunidad = $data["metodo"];
                     $pagina = "registerulink";
                     break;
-                case "4":
+                case "2":
                     $agente = 14;
                     $tipoportunidad = $data["metodo"];
+                    $pagina = "registerulink";
+                    break;
+                case "3":
+                    $agente = 14;
+                    $tipoportunidad = 8;
                     $pagina = "registerulink";
                     break;
                 case "5":
                     $agente = 14;
-                    $tipoportunidad = $data["metodo"];
-                    $pagina = "registerulink";
-                    break;
-                case "6":
-                    $agente = 14;
-                    $tipoportunidad = $data["metodo"];
+                    $tipoportunidad = 10;
                     $pagina = "registerulink";
                     break;
             }

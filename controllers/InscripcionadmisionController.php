@@ -55,13 +55,11 @@ class InscripcionadmisionController extends \yii\web\Controller {
                 $provincias = Provincia::find()->select("pro_id AS id, pro_nombre AS name")->where(["pro_estado_logico" => "1", "pro_estado" => "1", "pai_id" => $data['pai_id']])->asArray()->all();
                 $message = array("provincias" => $provincias);
                 return Utilities::ajaxResponse('OK', 'alert', Yii::t('jslang', 'Success'), 'false', $message);
-                return;
             }
             if (isset($data["getcantones"])) {
                 $cantones = Canton::find()->select("can_id AS id, can_nombre AS name")->where(["can_estado_logico" => "1", "can_estado" => "1", "pro_id" => $data['prov_id']])->asArray()->all();
                 $message = array("cantones" => $cantones);
                 return Utilities::ajaxResponse('OK', 'alert', Yii::t('jslang', 'Success'), 'false', $message);
-                return;
             }
             if (isset($data["getarea"])) {
                 //obtener el codigo de area del pais
@@ -69,26 +67,22 @@ class InscripcionadmisionController extends \yii\web\Controller {
                 $area = $mod_areapais->consultarCodigoArea($data["codarea"]);
                 $message = array("area" => $area);
                 return Utilities::ajaxResponse('OK', 'alert', Yii::t('jslang', 'Success'), 'false', $message);
-                return;
             }
 
             if (isset($data["getmodalidad"])) {
                 $modalidad = $mod_modalidad->consultarModalidad($data["nint_id"], 1);
                 $message = array("modalidad" => $modalidad);
                 return Utilities::ajaxResponse('OK', 'alert', Yii::t('jslang', 'Success'), 'false', $message);
-                return;
             }
             if (isset($data["getcarrera"])) {
                 $carrera = $modcanal->consultarCarreraModalidad($data["unidada"], $data["moda_id"]);
                 $message = array("carrera" => $carrera);
                 return Utilities::ajaxResponse('OK', 'alert', Yii::t('jslang', 'Success'), 'false', $message);
-                return;
             }
             if (isset($data["getmetodo"])) {
                 $metodos = $mod_metodo->consultarMetodoUnidadAca_2($data['nint_id']);
                 $message = array("metodos" => $metodos);
                 return Utilities::ajaxResponse('OK', 'alert', Yii::t('jslang', 'Success'), 'false', $message);
-                return;
             }
         }
         $arr_pais_dom = Pais::find()->select("pai_id AS id, pai_nombre AS value")->where(["pai_estado_logico" => "1", "pai_estado" => "1"])->asArray()->all();
@@ -101,6 +95,7 @@ class InscripcionadmisionController extends \yii\web\Controller {
         $arr_conuteg = $mod_pergestion->consultarConociouteg();
         $arr_carrerra1 = $modcanal->consultarCarreraModalidad(1, 1);
         $arr_metodos = $mod_metodo->consultarMetodoUnidadAca_2($arr_ninteres[0]["id"]);
+        $_SESSION['JSLANG']['Your information has not been saved. Please try again.'] = Yii::t('notificaciones', 'Your information has not been saved. Please try again.');
 
         return $this->render('index', [
                     "tipos_dni" => array("CED" => Yii::t("formulario", "DNI Document"), "PASS" => Yii::t("formulario", "Passport")),
@@ -462,25 +457,28 @@ class InscripcionadmisionController extends \yii\web\Controller {
                     if ($foto_archivo === false)
                         throw new Exception('Error doc Foto no renombrado.');
                 }
+                
+                
                 if ($accion == "create" || $accion == "Create") {
                     //Nuevo Registro
-                    $resul = $model->insertarInscripcion($data['DATA_1']);
+                    $resul = $model->insertarInscripcion($data);
                 }else if($accion == "Update"){
                     //Modificar Registro
-                    //$resul = $model->actualizarSolicitud($data);                
+                    $resul = $model->actualizarInscripcion($data);                
                 }
                 if ($resul['status']) {
-                    if($accion == "create"){
-                        $source = $_SERVER['DOCUMENT_ROOT'].Url::base().Yii::$app->params["documentFolder"].$resul['cedula'];
-                        $target = $_SERVER['DOCUMENT_ROOT'].Url::base().Yii::$app->params["documentFolder"].$resul['cedula'].'_'.$resul['ids'];
-                        rename($source, $target);//Renombrar el Directorio                    
-                    }
-                    
-                    $message = ["info" => Yii::t('exception', '<strong>Well done!</strong> your information was successfully saved.')];
+                    $message = array(
+                        "wtmessage" => Yii::t("formulario", "The information have been saved."),
+                        "title" => Yii::t('jslang', 'Success'),
+                    );
                     return Utilities::ajaxResponse('OK', 'alert', Yii::t('jslang', 'Success'), 'false', $message,$resul);
+
                 }else{
-                    $message = ["info" => Yii::t('exception', 'The above error occurred while the Web server was processing your request.')];
-                    return  Utilities::ajaxResponse('NO_OK', 'alert', Yii::t('jslang', 'Error'), 'false', $message);
+                    $message = array(
+                        "wtmessage" => Yii::t("formulario", "The information have not been saved."),
+                        "title" => Yii::t('jslang', 'Success'),
+                    );
+                    return  Utilities::ajaxResponse('NO_OK', 'alert', Yii::t('jslang', 'Error'), 'false', $message,$resul);
                 }
                 return;
 

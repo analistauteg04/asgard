@@ -19,9 +19,23 @@ $(document).ready(function () {
     });
    
     
-    $('#sendInformacionAspirante').click(function () {   
-        guardarInscripcion('Create');        
-
+    $('#sendInformacionAspirante').click(function () { 
+        if ($('#txth_twin_id').val()==0){
+            guardarInscripcion('Create'); 
+        }else{
+            guardarInscripcion('Update'); 
+        }
+               
+    });
+    $('#sendInformacionAspirante2').click(function () { 
+        if ($("#chk_mensaje1").prop("checked") && $("#chk_mensaje2").prop("checked")) {
+            if ($('#txth_twin_id').val()!=0){
+                guardarInscripcion('Update'); 
+            } 
+        }else{
+            alert('Debe Aceptar los términos de la Información');
+        }
+             
     });
 
     $('#cmb_tipo_dni').change(function () {
@@ -161,11 +175,7 @@ $(document).ready(function () {
                         $('#divRequisitosCANP').css('display', 'none'); 
                         $('#divRequisitosCANSP').css('display', 'none'); 
                         $('#divRequisitosCANAD').css('display', 'none'); 
-                        $('#divRequisitosEXO').css('display', 'none'); 
-                        $('#divRequisitosEXP').css('display', 'none'); 
-                        $('#divRequisitosEXSP').css('display', 'none'); 
-                        $('#divRequisitosEXAD').css('display', 'none'); 
-                        $('#divRequisitosHOMO').css('display', 'none'); 
+                        $('#divRequisitosEXA').css('display', 'none');                         
                         $('#divRequisitosPRP').css('display', 'none'); 
                     } else {  //Presencial
                         if ($('#cmb_modalidad_solicitud').val() == 2) {
@@ -173,11 +183,7 @@ $(document).ready(function () {
                             $('#divRequisitosCANO').css('display', 'none');                             
                             $('#divRequisitosCANSP').css('display', 'none'); 
                             $('#divRequisitosCANAD').css('display', 'none'); 
-                            $('#divRequisitosEXO').css('display', 'none'); 
-                            $('#divRequisitosEXP').css('display', 'none'); 
-                            $('#divRequisitosEXSP').css('display', 'none'); 
-                            $('#divRequisitosEXAD').css('display', 'none'); 
-                            $('#divRequisitosHOMO').css('display', 'none'); 
+                            $('#divRequisitosEXA').css('display', 'none');                             
                             $('#divRequisitosPRP').css('display', 'none'); 
                         } else {   //Semipresencial
                             if ($('#cmb_modalidad_solicitud').val() == 3) {
@@ -185,103 +191,38 @@ $(document).ready(function () {
                                 $('#divRequisitosCANO').css('display', 'none'); 
                                 $('#divRequisitosCANP').css('display', 'none');                                 
                                 $('#divRequisitosCANAD').css('display', 'none'); 
-                                $('#divRequisitosEXO').css('display', 'none'); 
-                                $('#divRequisitosEXP').css('display', 'none'); 
-                                $('#divRequisitosEXSP').css('display', 'none'); 
-                                $('#divRequisitosEXAD').css('display', 'none'); 
-                                $('#divRequisitosHOMO').css('display', 'none'); 
+                                $('#divRequisitosEXA').css('display', 'none');                                 
                                 $('#divRequisitosPRP').css('display', 'none');
                             } else {  // distancia
                                 $('#divRequisitosCANAD').css('display', 'block');  
                                 $('#divRequisitosCANO').css('display', 'none'); 
                                 $('#divRequisitosCANP').css('display', 'none'); 
                                 $('#divRequisitosCANSP').css('display', 'none');                                 
-                                $('#divRequisitosEXO').css('display', 'none'); 
-                                $('#divRequisitosEXP').css('display', 'none'); 
-                                $('#divRequisitosEXSP').css('display', 'none'); 
-                                $('#divRequisitosEXAD').css('display', 'none'); 
-                                $('#divRequisitosHOMO').css('display', 'none'); 
+                                $('#divRequisitosEXA').css('display', 'none');                                 
                                 $('#divRequisitosPRP').css('display', 'none'); 
                             }
                         }
                     }
                 } else {  //examen
-                    //Online
-                    if ($('#cmb_modalidad_solicitud').val() == 1) {
-                        $('#divRequisitosEXO').css('display', 'block');  
-                        $('#divRequisitosCANO').css('display', 'none'); 
-                        $('#divRequisitosCANP').css('display', 'none'); 
-                        $('#divRequisitosCANSP').css('display', 'none'); 
-                        $('#divRequisitosCANAD').css('display', 'none');                         
-                        $('#divRequisitosEXP').css('display', 'none'); 
-                        $('#divRequisitosEXSP').css('display', 'none'); 
-                        $('#divRequisitosEXAD').css('display', 'none'); 
-                        $('#divRequisitosHOMO').css('display', 'none'); 
-                        $('#divRequisitosPRP').css('display', 'none'); 
-                    } else {  //Presencial
-                        if ($('#cmb_modalidad_solicitud').val() == 2) {
-                            $('#divRequisitosEXP').css('display', 'block');  
-                            $('#divRequisitosCANO').css('display', 'none'); 
-                            $('#divRequisitosCANP').css('display', 'none'); 
-                            $('#divRequisitosCANSP').css('display', 'none'); 
-                            $('#divRequisitosCANAD').css('display', 'none'); 
-                            $('#divRequisitosEXO').css('display', 'none');                             
-                            $('#divRequisitosEXSP').css('display', 'none'); 
-                            $('#divRequisitosEXAD').css('display', 'none'); 
-                            $('#divRequisitosHOMO').css('display', 'none'); 
-                            $('#divRequisitosPRP').css('display', 'none'); 
-                        } else {   //Semipresencial
-                            if ($('#cmb_modalidad_solicitud').val() == 3) {
-                                $('#divRequisitosEXSP').css('display', 'block');  
-                                $('#divRequisitosCANO').css('display', 'none'); 
-                                $('#divRequisitosCANP').css('display', 'none'); 
-                                $('#divRequisitosCANSP').css('display', 'none'); 
-                                $('#divRequisitosCANAD').css('display', 'none'); 
-                                $('#divRequisitosEXO').css('display', 'none'); 
-                                $('#divRequisitosEXP').css('display', 'none');                                 
-                                $('#divRequisitosEXAD').css('display', 'none'); 
-                                $('#divRequisitosHOMO').css('display', 'none'); 
-                                $('#divRequisitosPRP').css('display', 'none'); 
-                            } else {  // distancia
-                                $('#divRequisitosEXAD').css('display', 'block');   
-                                $('#divRequisitosCANO').css('display', 'none'); 
-                                $('#divRequisitosCANP').css('display', 'none'); 
-                                $('#divRequisitosCANSP').css('display', 'none'); 
-                                $('#divRequisitosCANAD').css('display', 'none'); 
-                                $('#divRequisitosEXO').css('display', 'none'); 
-                                $('#divRequisitosEXP').css('display', 'none'); 
-                                $('#divRequisitosEXSP').css('display', 'none');                                 
-                                $('#divRequisitosHOMO').css('display', 'none'); 
-                                $('#divRequisitosPRP').css('display', 'none'); 
-                            }
-                        }
-                    }
+                    //Online                    
+                    $('#divRequisitosEXA').css('display', 'block');  
+                    $('#divRequisitosCANO').css('display', 'none'); 
+                    $('#divRequisitosCANP').css('display', 'none'); 
+                    $('#divRequisitosCANSP').css('display', 'none'); 
+                    $('#divRequisitosCANAD').css('display', 'none');                                                 
+                    $('#divRequisitosPRP').css('display', 'none');                                         
                 }
             }  else {  //Posgrado  Semipresencial
                 if ($('#cmb_modalidad_solicitud').val() == 3) {
                     //Homologación            
-                    if ($('#cmb_metodo_solicitud').val() == 3) {     
-                        $('#divRequisitosHOMO').css('display', 'block');  
-                        $('#divRequisitosEXAD').css('display', 'none');   
+                    if ($('#cmb_metodo_solicitud').val() == 4) {     
+                       //Taller introductorio
+                        $('#divRequisitosPRP').css('display', 'block');                              
                         $('#divRequisitosCANO').css('display', 'none'); 
                         $('#divRequisitosCANP').css('display', 'none'); 
                         $('#divRequisitosCANSP').css('display', 'none'); 
                         $('#divRequisitosCANAD').css('display', 'none'); 
-                        $('#divRequisitosEXO').css('display', 'none'); 
-                        $('#divRequisitosEXP').css('display', 'none'); 
-                        $('#divRequisitosEXSP').css('display', 'none');                                                         
-                        $('#divRequisitosPRP').css('display', 'none'); 
-                    } else {  //Propedéutico
-                        $('#divRequisitosPRP').css('display', 'block');   
-                        $('#divRequisitosEXAD').css('display', 'none');   
-                        $('#divRequisitosCANO').css('display', 'none'); 
-                        $('#divRequisitosCANP').css('display', 'none'); 
-                        $('#divRequisitosCANSP').css('display', 'none'); 
-                        $('#divRequisitosCANAD').css('display', 'none'); 
-                        $('#divRequisitosEXO').css('display', 'none'); 
-                        $('#divRequisitosEXP').css('display', 'none'); 
-                        $('#divRequisitosEXSP').css('display', 'none');                                 
-                        $('#divRequisitosHOMO').css('display', 'none');                         
+                        $('#divRequisitosEXA').css('display', 'none');                         
                     } 
                 }
             }
@@ -290,11 +231,7 @@ $(document).ready(function () {
             $('#divRequisitosCANP').css('display', 'none'); 
             $('#divRequisitosCANSP').css('display', 'none'); 
             $('#divRequisitosCANAD').css('display', 'none'); 
-            $('#divRequisitosEXO').css('display', 'none'); 
-            $('#divRequisitosEXP').css('display', 'none'); 
-            $('#divRequisitosEXSP').css('display', 'none'); 
-            $('#divRequisitosEXAD').css('display', 'none'); 
-            $('#divRequisitosHOMO').css('display', 'none'); 
+            $('#divRequisitosEXA').css('display', 'none');             
             $('#divRequisitosPRP').css('display', 'none'); 
         }
     }
@@ -303,8 +240,10 @@ $(document).ready(function () {
 //INSERTAR DATOS
 function guardarInscripcion(accion) {
     //if ($("#chk_mensaje2").prop("checked")) {
+    alert('INGRESO');
     if (true) {
         var ID = (accion == "Update") ? $('#txth_twin_id').val() : 0;
+        alert(ID);
         var link = $('#txth_base').val() + "/inscripcionadmision/saveinscripciontemp";
         var arrParams = new Object();
         arrParams.DATA_1 = dataInscripPart1(ID);
@@ -312,22 +251,49 @@ function guardarInscripcion(accion) {
         if (!validateForm()) {
             requestHttpAjax(link, arrParams, function (response) {
                 var message = response.message;
-                if (response.status == "OK") {
+                console.log(response);
+                if (response.status == "OK") { 
+                    if(accion == "Create"){
+                        $('#txth_twin_id').val(response.data.ids)
+                        paso1next();
+                    }else{
+                        paso2next();
+                        $('#txth_twin_id').val(0)//SE AGREGA AL FINAL
+                    }
+
                     //var data =response.data;
                     //AccionTipo=data.accion;
-                    menssajeModal(response.status, response.type, message.info, response.label, "", "", "1");
-                    limpiarDatos();
-                    var renderurl = $('#txth_base').val() + "/inscripciones/index";
-                    window.location = renderurl;
-                }else{
-                    menssajeModal(response.status, response.type, message.info, response.label, "", "", "1");
-                }             
+                    //limpiarDatos();
+                    //var renderurl = $('#txth_base').val() + "/inscripciones/index";
+                    //window.location = renderurl;
+                }     
+                showAlert(response.status, response.label, response.message);       
             }, true);
         }
     } else {
         //alert('Debe Aceptar los términos de la Declaración Jurada');
-        showAlert('NO_OK', 'error', {"wtmessage": 'Debe Aceptar los términos ', "title":'Información'});
+        showAlert('NO_OK', 'error', {"wtmessage": objLang.Your_information_has_not_been_saved__Please_try_again_, "title":objLang.Error});
     }
+}
+
+function paso1next() {
+    $("a[data-href='#paso1']").attr('data-toggle', 'none');
+    $("a[data-href='#paso1']").parent().attr('class', 'disabled');
+    $("a[data-href='#paso1']").attr('data-href', $("a[href='#paso1']").attr('href'));
+    $("a[data-href='#paso1']").removeAttr('href');
+    $("a[data-href='#paso2']").attr('data-toggle', 'tab');
+    $("a[data-href='#paso2']").attr('href', $("a[data-href='#paso2']").attr('data-href'));
+    $("a[data-href='#paso2']").trigger("click");
+}
+
+function paso2next() {
+    $("a[data-href='#paso2']").attr('data-toggle', 'none');
+    $("a[data-href='#paso2']").parent().attr('class', 'disabled');
+    $("a[data-href='#paso2']").attr('data-href', $("a[href='#paso2']").attr('href'));
+    $("a[data-href='#paso2']").removeAttr('href');
+    $("a[data-href='#paso3']").attr('data-toggle', 'tab');
+    $("a[data-href='#paso3']").attr('href', $("a[data-href='#paso3']").attr('data-href'));
+    $("a[data-href='#paso3']").trigger("click");
 }
 
 function dataInscripPart1(ID) {
@@ -341,17 +307,23 @@ function dataInscripPart1(ID) {
     objDat.pges_correo = $('#txt_correo').val();
     objDat.pais = $('#cmb_pais_dom option:selected').val();
     objDat.pges_celular = $('#txt_celular').val();
-    //objDat.pges_pasaporte = $('#txt_pasaporte').val();
     objDat.unidad_academica = $('#cmb_unidad_solicitud option:selected').val();
     objDat.modalidad = $('#cmb_modalidad_solicitud option:selected').val();
     objDat.ming_id = $('#cmb_metodo_solicitud option:selected').val();
     objDat.conoce = $('#cmb_conuteg option:selected').val();
     objDat.carrera = $('#cmb_carrera_solicitud option:selected').val();
-    //objDat.arc_extranjero = $('#txth_extranjero').val();
-    //objDat.arc_doc_beca = $('#txth_doc_beca').val();
+
+    //TABA 2
+    objDat.ruta_doc_titulo = ($('#txth_doc_titulo').val()!='')?$('#txth_doc_titulo').val():'';
+    objDat.ruta_doc_dni = ($('#txth_doc_dni').val()!='')?$('#txth_doc_dni').val():'';
+    objDat.ruta_doc_certvota = ($('#txth_doc_certvota').val()!='')?$('#txth_doc_certvota').val():'';
+    objDat.ruta_doc_foto = ($('#txth_doc_foto').val()!='')?$('#txth_doc_foto').val():'';
+    objDat.ruta_doc_certificado = ($('#txth_doc_certificado').val()!='')?$('#txth_doc_certificado').val():'';
+    objDat.twin_mensaje1 = ($("#chk_mensaje1").prop("checked")) ? '1' : '0';
+    objDat.twin_mensaje2 = ($("#chk_mensaje2").prop("checked")) ? '1' : '0';
     datArray[0] = objDat;
     sessionStorage.dataInscrip_1 = JSON.stringify(datArray);
-    //return JSON.stringify(datArray);
+
     return datArray;
 }
 
