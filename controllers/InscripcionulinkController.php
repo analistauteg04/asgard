@@ -84,10 +84,10 @@ class InscripcionulinkController extends \yii\web\Controller {
         $arr_ciu_dom = Canton::cantonXProvincia($arr_prov_dom[0]["id"]);
         $arr_medio = MedioPublicitario::find()->select("mpub_id AS id, mpub_nombre AS value")->where(["mpub_estado_logico" => "1", "mpub_estado" => "1"])->asArray()->all();
         $arr_conuteg = $mod_pergestion->consultarConociouteg();   
-        $arr_modalidad = $mod_modalidad->consultarModalidad(1,2);
-        $arr_carrerra1 = $modestudio->consultarCursoModalidad(1, 1);
         $arr_ninteres = $mod_unidad->consultarUnidadAcademicasEmpresa(2);
-        $tipo_oportunidad_data = $modTipoOportunidad->consultarOporxUnidad(1);
+        $arr_modalidad = $mod_modalidad->consultarModalidad($arr_ninteres[0]["id"],2);
+        $arr_carrerra1 = $modestudio->consultarCursoModalidad($arr_ninteres[0]["id"], $arr_modalidad[0]["id"]);        
+        $tipo_oportunidad_data = $modTipoOportunidad->consultarOporxUnidad($arr_ninteres[0]["id"]);
         return $this->render('index', [
                     "tipos_dni" => array("CED" => Yii::t("formulario", "DNI Document"), "PASS" => Yii::t("formulario", "Passport")),
                     "tipos_dni2" => array("CED" => Yii::t("formulario", "DNI Document1"), "PASS" => Yii::t("formulario", "Passport1")),
