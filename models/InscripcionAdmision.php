@@ -210,7 +210,8 @@ class InscripcionAdmision extends \yii\db\ActiveRecord {
                         ruta_doc_certvota,
                         ruta_doc_foto,
                         ruta_doc_certificado,
-                        ruta_doc_titulo
+                        ruta_doc_titulo,
+                        ruta_doc_hojavida
                 FROM " . $con->dbname . ".temporal_wizard_inscripcion twi inner join db_academico.unidad_academica ua on ua.uaca_id = twi.uaca_id
                      inner join " . $con1->dbname . ".modalidad m on m.mod_id = twi.mod_id
                      inner join " . $con1->dbname . ".estudio_academico ea on ea.eaca_id = twi.car_id
@@ -358,8 +359,8 @@ class InscripcionAdmision extends \yii\db\ActiveRecord {
                                                 $resulDoc3 = $solins_model->insertarDocumentosSolic($sins_id, $interesado_id, 3, $resp_datos['ruta_doc_certvota'], $usuario_id); 
                                                 $resulDoc4 = $solins_model->insertarDocumentosSolic($sins_id, $interesado_id, 4, $resp_datos['ruta_doc_foto'], $usuario_id); 
                                                 if ($resp_datos['twin_metodo_ingreso']==4) {
-                                                    $resulDoc5 = $solins_model->insertarDocumentosSolic($sins_id, $interesado_id, 5, $resp_datos['ruta_doc_certificado'], $usuario_id); 
-                                                    $resulDoc6 = $solins_model->insertarDocumentosSolic($sins_id, $interesado_id, 6, $resp_datos['ruta_doc_hojavida'], $usuario_id); 
+                                                    $resulDoc5 = $solins_model->insertarDocumentosSolic($sins_id, $interesado_id, 6, $resp_datos['ruta_doc_certificado'], $usuario_id); 
+                                                   // $resulDoc6 = $solins_model->insertarDocumentosSolic($sins_id, $interesado_id, 7, $resp_datos['ruta_doc_hojavida'], $usuario_id); 
                                                 }
                                                 \app\models\Utilities::putMessageLogFile('solicitud: ' . $mensaje);
                                                 if ($sins_id) {
