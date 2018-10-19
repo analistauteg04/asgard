@@ -48,6 +48,7 @@ $(document).ready(function () {
                     var uaca_id=parseInt(response.data.data.uaca_id);
                     var mod_id=parseInt(response.data.data.mod_id);
                     var ming=parseInt(response.data.data.twin_metodo_ingreso);
+                    alert(uaca_id+11);
                     switch (uaca_id) {
                         case 1:
                             switch (mod_id) {
