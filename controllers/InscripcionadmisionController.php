@@ -230,8 +230,8 @@ class InscripcionadmisionController extends \yii\web\Controller {
                         throw new Exception('Error doc Hoja de Vida no renombrado.');
                 }                
                 if ($accion == "create" || $accion == "Create") {
-                    //Nuevo Registro
-                    $resul = $model->insertarInscripcion($data);
+                    //Nuevo Registro                    
+                    $resul = $model->insertarInscripcion($data);                   
                 }else if($accion == "Update"){
                     //Modificar Registro
                     $resul = $model->actualizarInscripcion($data);
@@ -249,7 +249,7 @@ class InscripcionadmisionController extends \yii\web\Controller {
 
                 }else{
                     $message = array(
-                        "wtmessage" => Yii::t("formulario", "The information have not been saved"),
+                        "wtmessage" => Yii::t("formulario", "The information have not been saved."),
                         "title" => Yii::t('jslang', 'Success'),
                     );
                     return  Utilities::ajaxResponse('NO_OK', 'alert', Yii::t('jslang', 'Error'), 'false', $message,$resul);
