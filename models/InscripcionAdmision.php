@@ -484,14 +484,13 @@ class InscripcionAdmision extends \yii\db\ActiveRecord {
             return;
     }
 
-    public function movePersonFiles($temp_id, $per_id){
+    public static function movePersonFiles($temp_id, $per_id){
         $folder = Yii::$app->basePath . "/" . Yii::$app->params["documentFolder"] . "solicitudadmision/$temp_id/";
         $destinations = Yii::$app->basePath . "/" . Yii::$app->params["documentFolder"] . "solicitudinscripcion/$per_id/";
         if(Utilities::verificarDirectorio($destinations)){
             $files = scandir($folder);
-            natcasesort($files);
             foreach ($files as $file) {
-                if($file != "." || $file != ".."){
+                if(trim($file) != "." && trim($file) != ".."){
                     $arrExt = explode(".", $file);
                     $type = $arrExt[count($arrExt) - 1];
                     $newFile = str_replace("_".$temp_id.".".$type, "_".$per_id.".".$type, $file);
@@ -500,6 +499,7 @@ class InscripcionAdmision extends \yii\db\ActiveRecord {
                     }
                 }
             }
+            rmdir($folder);
         }else
             return false;
         return true;
