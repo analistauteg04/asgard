@@ -288,6 +288,9 @@ class InscripcionAdmision extends \yii\db\ActiveRecord {
                             $id_persona = $mod_persona->insertarPersona($con, $parametros_per, $keys_per, 'persona');
                         }
                         if ($id_persona > 0) {
+                            //Modifificaion para Mover Imagenes de temp a Persona
+                            //$this->movePersonFiles($twinIds,$id_persona);
+                            //
                             \app\models\Utilities::putMessageLogFile('ingreso la Persona');
                             $concap = \Yii::$app->db_captacion;
                             $mod_emp_persona = new EmpresaPersona();
@@ -484,7 +487,7 @@ class InscripcionAdmision extends \yii\db\ActiveRecord {
     public function movePersonFiles($temp_id, $per_id){
         $folder = Yii::$app->basePath . "/" . Yii::$app->params["documentFolder"] . "solicitudadmision/$temp_id/";
         $destinations = Yii::$app->basePath . "/" . Yii::$app->params["documentFolder"] . "solicitudinscripcion/$per_id/";
-        if(verificarDirectorio($destinations)){
+        if(Utilities::verificarDirectorio($destinations)){
             $files = scandir($folder);
             natcasesort($files);
             foreach ($files as $file) {
