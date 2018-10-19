@@ -264,6 +264,7 @@ class InscripcionAdmision extends \yii\db\ActiveRecord {
             if ($resp_datos) {
                 $emp_id = 1;
                 $identificacion = '';
+                
                 if (isset($resp_datos['twin_numero']) && strlen($resp_datos['twin_numero']) > 0) {
                     $identificacion = $resp_datos['twin_numero'];
                 } else {
