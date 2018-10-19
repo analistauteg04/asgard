@@ -32,7 +32,8 @@ $(document).ready(function () {
                 guardarInscripcion('Update');
             }
         } else {
-            alert('Debe Aceptar los términos de la Información');
+            var mensaje={wtmessage: "Debe Aceptar los términos de la Información", title: "Exito"};
+            showAlert("OK", "success", mensaje);
         }
     });
     $('#sendInscripcionsolicitud').click(function () {
