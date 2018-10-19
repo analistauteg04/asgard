@@ -36,19 +36,28 @@ $(document).ready(function () {
         }
     });
     $('#sendInscripcionsolicitud').click(function () {
-        var link = $('#txth_base').val() + "/inscripcionadmision/guardarinscripcion";
+        var link = $('#txth_base').val() + "/inscripcionadmision/saveinscripciontemp";
         var arrParams = new Object();
         arrParams.codigo = $('#txth_twin_id').val();
-        if (!validateForm()) {
-            requestHttpAjax(link, arrParams, function (response) {
-                showAlert(response.status, response.label, response.message);
-                if (!response.error) {
-                    setTimeout(function () {
-                        window.location.href = $('#txth_base').val() + "/inscripcionadmision/index";
-                    }, 5000);
-                }
-            }, true);
-        }
+        arrParams.ACCION = 'Fin';
+        requestHttpAjax(link, arrParams, function (response) {
+            var message = response.message;
+            //console.log(response);
+            if (response.status == "OK") {
+                setTimeout(function () {
+                    window.location.href = $('#txth_base').val() + "/inscripcionadmision/index";
+                }, 5000);
+            }
+            showAlert(response.status, response.label, response.message);
+
+            /*showAlert(response.status, response.label, response.message);
+             if (!response.error) {
+             setTimeout(function () {
+             window.location.href = $('#txth_base').val() + "/inscripcionadmision/index";
+             }, 5000);
+             }*/
+        }, true);
+
     });
 
     $('#cmb_tipo_dni').change(function () {
@@ -251,87 +260,87 @@ $(document).ready(function () {
 
 //INSERTAR DATOS
 function guardarInscripcion(accion) {
-    if (true) {
-        var ID = (accion == "Update") ? $('#txth_twin_id').val() : 0;
-        var link = $('#txth_base').val() + "/inscripcionadmision/saveinscripciontemp";
-        var arrParams = new Object();
-        arrParams.DATA_1 = dataInscripPart1(ID);
-        arrParams.ACCION = accion;
-        if (!validateForm()) {
-            requestHttpAjax(link, arrParams, function (response) {
-                var message = response.message;
-                if (response.status == "OK") {
-                    if (accion == "Create") {
-                        $('#txth_twin_id').val(response.data.ids)
-                        paso1next();
-                    } else {
-                        //Inicio ingreso informacion del tab 3\
-                        $('#lbl_uaca_tx').text(response.data.data.unidad);
-                        $('#lbl_moda_tx').text(response.data.data.modalidad);
-                        $('#lbl_carrera_tx').text(response.data.data.carrera);
-                        $('#lbl_ming_tx').text(response.data.data.metodo);
-                        $('#id_item_1').css('display', 'none');;
-                        $('#id_item_2').css('display', 'none');;
-                        var leyenda = '';
-                        var ming = response.data.data.twin_metodo_ingreso;
-                        var mod_id = response.data.data.mod_id;
-                        var uaca_id = response.data.data.uaca_id;
-                        
-                        if (uaca_id==2) {
-                            leyenda = 'El valor de la maestría: $11,300.00<br/>';
-                            leyenda+='El valor a cancelar por concepto de inscripción es: ';
-                            $('#lbl_item_1').text("Valor Inscripción: ");
-                            $('#val_item_1').text(response.data.data.precio);
-                            $('#lbl_valor_pagar_tx').text(response.data.data.precio);
-                        } else if (uaca_id==1){
-                            leyenda = 'El valor a cancelar por concepto de ' + response.data.data.metodo + ' en la modalidad ' + response.data.data.modalidad + ' es:';
-                            if (mod_id == 1) {//online
-                                if (ming == 1) {// curso
-                                    $('#lbl_valor_pagar_tx').text(response.data.data.precio);
-                                } else if (ming == 2) { // examen
-                                    $('#lbl_valor_pagar_tx').text(response.data.data.precio);
-                                }
-                            } else if (mod_id == 2 || mod_id == 3 || mod_id == 4) {//presencial y semi presencial
-                                if (ming == 1) {// curso
-                                    $('#lbl_item_1').text("Curso de nivelación: ");
-                                    $('#val_item_1').text(response.data.data.precio);
-                                    $('#lbl_item_2').text("Descuento especial: ");
-                                    $('#val_item_2').text(response.data.data.ddit_valor);
-                                    var totalvalor = parseInt(response.data.data.precio) - parseInt(response.data.data.ddit_valor);
-                                    $('#lbl_valor_pagar_tx').text(totalvalor);
-                                    $('#id_item_1').css('display', 'block');
-                                    $('#id_item_2').css('display', 'block');
-                                } else if (ming == 2) { // examen
-                                    $('#lbl_item_1').text("Exámen de Admisión: ");
-                                    $('#val_item_1').text(response.data.data.precio);
-                                    $('#lbl_item_2').text("Descuento especial: ");
-                                    $('#val_item_2').text(response.data.data.ddit_valor);
-                                    var totalvalor = parseInt(response.data.data.precio) - parseInt(response.data.data.ddit_valor);
-                                    $('#lbl_valor_pagar_tx').text(totalvalor);
-                                    $('#id_item_1').css('display', 'block');
-                                    $('#id_item_2').css('display', 'block');
-                                }
+
+    var ID = (accion == "Update") ? $('#txth_twin_id').val() : 0;
+    var link = $('#txth_base').val() + "/inscripcionadmision/saveinscripciontemp";
+    var arrParams = new Object();
+    arrParams.DATA_1 = dataInscripPart1(ID);
+    arrParams.ACCION = accion;
+    if (!validateForm()) {
+        requestHttpAjax(link, arrParams, function (response) {
+            var message = response.message;
+            //console.log(response);
+            if (response.status == "OK") {
+                if (accion == "Create") {
+                    $('#txth_twin_id').val(response.data.ids)
+                    paso1next();
+                } else {
+                    //Inicio ingreso informacion del tab 3\
+                    $('#lbl_uaca_tx').text(response.data.data.unidad);
+                    $('#lbl_moda_tx').text(response.data.data.modalidad);
+                    $('#lbl_carrera_tx').text(response.data.data.carrera);
+                    $('#lbl_ming_tx').text(response.data.data.metodo);
+                    $('#id_item_1').css('display', 'none');
+                    ;
+                    $('#id_item_2').css('display', 'none');
+                    ;
+                    var leyenda = '';
+                    var ming = response.data.data.twin_metodo_ingreso;
+                    var mod_id = response.data.data.mod_id;
+                    var uaca_id = response.data.data.uaca_id;
+
+                    if (uaca_id == 2) {
+                        leyenda = 'El valor de la maestría: $11,300.00<br/>';
+                        leyenda += 'El valor a cancelar por concepto de inscripción es: ';
+                        $('#lbl_item_1').text("Valor Inscripción: ");
+                        $('#val_item_1').text(response.data.data.precio);
+                        $('#lbl_valor_pagar_tx').text(response.data.data.precio);
+                    } else if (uaca_id == 1) {
+                        leyenda = 'El valor a cancelar por concepto de ' + response.data.data.metodo + ' en la modalidad ' + response.data.data.modalidad + ' es:';
+                        if (mod_id == 1) {//online
+                            if (ming == 1) {// curso
+                                $('#lbl_valor_pagar_tx').text(response.data.data.precio);
+                            } else if (ming == 2) { // examen
+                                $('#lbl_valor_pagar_tx').text(response.data.data.precio);
+                            }
+                        } else if (mod_id == 2 || mod_id == 3 || mod_id == 4) {//presencial y semi presencial
+                            if (ming == 1) {// curso
+                                $('#lbl_item_1').text("Curso de nivelación: ");
+                                $('#val_item_1').text(response.data.data.precio);
+                                $('#lbl_item_2').text("Descuento especial: ");
+                                $('#val_item_2').text(response.data.data.ddit_valor);
+                                var totalvalor = parseInt(response.data.data.precio) - parseInt(response.data.data.ddit_valor);
+                                $('#lbl_valor_pagar_tx').text(totalvalor);
+                                $('#id_item_1').css('display', 'block');
+                                $('#id_item_2').css('display', 'block');
+                            } else if (ming == 2) { // examen
+                                $('#lbl_item_1').text("Exámen de Admisión: ");
+                                $('#val_item_1').text(response.data.data.precio);
+                                $('#lbl_item_2').text("Descuento especial: ");
+                                $('#val_item_2').text(response.data.data.ddit_valor);
+                                var totalvalor = parseInt(response.data.data.precio) - parseInt(response.data.data.ddit_valor);
+                                $('#lbl_valor_pagar_tx').text(totalvalor);
+                                $('#id_item_1').css('display', 'block');
+                                $('#id_item_2').css('display', 'block');
                             }
                         }
-
-                        $('#lbl_leyenda_pago_tx').text(leyenda);
-                        //fin ingreso informacion del tab 3
-                        $('#txth_twin_id').val(response.data.ids);//SE AGREGA AL FINAL                            
-                        paso2next();
                     }
-                    //var data =response.data;
-                    //AccionTipo=data.accion;
-                    //limpiarDatos();
-                    //var renderurl = $('#txth_base').val() + "/inscripciones/index";
-                    //window.location = renderurl;
+
+                    $('#lbl_leyenda_pago_tx').text(leyenda);
+                    //fin ingreso informacion del tab 3
+                    $('#txth_twin_id').val(response.data.ids);//SE AGREGA AL FINAL                            
+                    paso2next();
                 }
-                showAlert(response.status, response.label, response.message);
-            }, true);
-        }
-    } else {
-        //alert('Debe Aceptar los términos de la Declaración Jurada');
-        showAlert('NO_OK', 'error', {"wtmessage": objLang.Your_information_has_not_been_saved__Please_try_again_, "title": objLang.Error});
+                //var data =response.data;
+                //AccionTipo=data.accion;
+                //limpiarDatos();
+                //var renderurl = $('#txth_base').val() + "/inscripciones/index";
+                //window.location = renderurl;
+            }
+            showAlert(response.status, response.label, response.message);
+        }, true);
     }
+
 }
 
 function paso1next() {
@@ -382,4 +391,3 @@ function dataInscripPart1(ID) {
     sessionStorage.dataInscrip_1 = JSON.stringify(datArray);
     return datArray;
 }
-
