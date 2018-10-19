@@ -402,7 +402,7 @@ function guardarInscripcion(accion) {
                                 $('#id_item_2').css('display', 'block');
                             }
                         }
-                    }
+                    }git 
 
                     $('#lbl_leyenda_pago_tx').text(leyenda);
                     //fin ingreso informacion del tab 3
