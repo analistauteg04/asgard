@@ -41,12 +41,21 @@ $(document).ready(function () {
         arrParams.codigo = $('#txth_twin_id').val();
         arrParams.ACCION = 'Fin';
         requestHttpAjax(link, arrParams, function (response) {
-            showAlert(response.status, response.label, response.message);
+            var message = response.message;
+                //console.log(response);
+                if (response.status == "OK") { 
+                    setTimeout(function () {
+                        window.location.href = $('#txth_base').val() + "/inscripcionadmision/index";
+                    }, 5000);
+                }     
+                showAlert(response.status, response.label, response.message); 
+            
+            /*showAlert(response.status, response.label, response.message);
             if (!response.error) {
                 setTimeout(function () {
                     window.location.href = $('#txth_base').val() + "/inscripcionadmision/index";
                 }, 5000);
-            }
+            }*/
         }, true);
         
     });
@@ -251,11 +260,8 @@ $(document).ready(function () {
 
 //INSERTAR DATOS
 function guardarInscripcion(accion) {
-    //if ($("#chk_mensaje2").prop("checked")) {
-    //alert('INGRESO');
-    if (true) {
+
         var ID = (accion == "Update") ? $('#txth_twin_id').val() : 0;
-        //alert(ID);
         var link = $('#txth_base').val() + "/inscripcionadmision/saveinscripciontemp";
         var arrParams = new Object();
         arrParams.DATA_1 = dataInscripPart1(ID);
@@ -263,7 +269,7 @@ function guardarInscripcion(accion) {
         if (!validateForm()) {
             requestHttpAjax(link, arrParams, function (response) {                
                 var message = response.message;
-                console.log(response);
+                //console.log(response);
                 if (response.status == "OK") { 
                     if(accion == "Create"){
                         alert(response.data.ids);
@@ -290,10 +296,7 @@ function guardarInscripcion(accion) {
                 showAlert(response.status, response.label, response.message);       
             }, true);
         }
-    } else {
-        //alert('Debe Aceptar los términos de la Declaración Jurada');
-        showAlert('NO_OK', 'error', {"wtmessage": objLang.Your_information_has_not_been_saved__Please_try_again_, "title":objLang.Error});
-    }
+
 }
 
 function paso1next() {

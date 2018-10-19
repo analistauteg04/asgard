@@ -364,7 +364,11 @@ class InscripcionAdmision extends \yii\db\ActiveRecord {
                                                     $mod_ordenpago = new OrdenPago();
                                                     //Se verifica si seleccionó descuento.
                                                     //descuento para grado online y posgrado no tiene descuento, caso contrario es 96 dol
-                                                    $val_descuento = 96;
+                                                    if ($resp_datos['uaca_id']==1) {
+                                                        if (($resp_datos['mod_id'] ==2) or ($resp_datos['mod_id'] ==3) or ($resp_datos['mod_id'] ==4)) {
+                                                            $val_descuento = 96;
+                                                        }
+                                                    }
 
                                                     /*if (!empty($descuento)) {
                                                         $modDescuento = new DetalleDescuentoItem();
