@@ -349,6 +349,13 @@ class InscripcionAdmision extends \yii\db\ActiveRecord {
                                                 $sins_id = $solins_model->insertarSolicitud($interesado_id, $resp_datos['uaca_id'], $resp_datos['mod_id'], $resp_datos['twin_metodo_ingreso'], $eaca_id, null, $emp_id, $num_secuencia, $rsin_id, $sins_fechasol, $usuario_id);
                                                 //fin de solicitud inscripcion$mest_id
                                                 //grabar los documentos
+                                                $resulDoc1 = $solins_model->insertarDocumentosSolic($sins_id, $interesado_id, 1, $rutaTitulo, $usuario_id); 
+                                                $resulDoc2 = $solins_model->insertarDocumentosSolic($sins_id, $interesado_id, 2, $rutaDNI, $usuario_id); 
+                                                $resulDoc3 = $solins_model->insertarDocumentosSolic($sins_id, $interesado_id, 3, $rutaCertVotacion, $usuario_id); 
+                                                $resulDoc4 = $solins_model->insertarDocumentosSolic($sins_id, $interesado_id, 4, $rutaFoto, $usuario_id); 
+                                                if ($resp_datos['twin_metodo_ingreso']==4) {
+                                                    $resulDoc5 = $solins_model->insertarDocumentosSolic($sins_id, $interesado_id, 5, $rutaCertMateria, $usuario_id); 
+                                                }
                                                 \app\models\Utilities::putMessageLogFile('solicitud: ' . $mensaje);
                                                 if ($sins_id) {
                                                     \app\models\Utilities::putMessageLogFile('ingreso la solicitud: ' . $sins_id);                                                                                            
@@ -372,26 +379,7 @@ class InscripcionAdmision extends \yii\db\ActiveRecord {
                                                             $val_descuento = 96;
                                                         }
                                                     }
-
-                                                    /*if (!empty($descuento)) {
-                                                        $modDescuento = new DetalleDescuentoItem();
-                                                        $respDescuento = $modDescuento->consultarValdctoItem($descuento);
-                                                        if ($respDescuento) {
-                                                            if ($precio == 0) {
-                                                                $val_descuento = 0;
-                                                            } else {
-                                                                if ($respDescuento["ddit_tipo_beneficio"] == 'P') {
-                                                                    $val_descuento = ($precio * ($respDescuento["ddit_porcentaje"])) / 100;
-                                                                } else {
-                                                                    $val_descuento = $respDescuento["ddit_valor"];
-                                                                }
-                                                                //Insertar solicitud descuento
-                                                                if ($val_descuento > 0) {
-                                                                    $resp_SolicDcto = $mod_ordenpago->insertarSolicDscto($sins_id, $descuento, $precio, $respDescuento["ddit_porcentaje"], $respDescuento["ddit_valor"]);
-                                                                }
-                                                            }
-                                                        }
-                                                    }*/
+                                                    
                                                     //Generar la orden de pago con valor correspondiente. Buscar precio para orden de pago.                                                                     
                                                     if ($precio == 0) {
                                                         $estadopago = 'S';
