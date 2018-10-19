@@ -80,6 +80,10 @@ return [
     "Another language" => "Otro lenguaje",
     "Applicant Data" => "Datos del Solicitante:",
     "Application for Admission Process" => "Proceso Solicitud de Admisión",
+    
+    "Record your data" => "Registra tus datos",
+    
+    
     "Application Approved" => "Solicitud Aprobada",
     "Application Rejected" => "Solicitud Rechazada",
     "Application Reports" => "Reporte de Solicitud",

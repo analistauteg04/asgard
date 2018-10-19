@@ -452,20 +452,8 @@ class InscripcionAdmision extends \yii\db\ActiveRecord {
             }
             if ($exito == 1) {
                 $transaction->commit();
-                $transaction1->commit();
-                $transaction2->commit();
-                //envío de correo.
-                $usuarioNew = Usuario::findIdentity($usuario_id);
-                $link = $usuarioNew->generarLinkActivacion();
-                $email_info = array(
-                    "nombres" => $resp_datos['twin_nombre'],
-                    "apellidos" => $resp_datos['twin_apellido'],
-                    "correo" => $resp_datos['twin_correo'],
-                    "telefono" => $resp_datos['twin_celular'],
-                    "identificacion" => $resp_datos['twin_numero'],
-                    "link_asgard" => $link,
-                );
-                $outemail = $mod_interesado->enviarCorreoBienvenida($email_info);
+                $transaction1->commit(); 
+                $transaction2->commit();                
 
                 $message = array(
                     "wtmessage" => Yii::t("formulario", "The information have been saved and the information has been sent to your email"),

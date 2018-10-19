@@ -384,6 +384,10 @@ use yii\helpers\Url;
             </div>
         </div>
     </div>
+    <div class="col-md-12 col-xs-12 col-sm-12 col-lg-12">         
+        </br>
+        </br>
+    </div>
     <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">   
         <div class="col-md-2">
             <a id="paso2back" href="javascript:" class="btn btn-primary btn-block"><span class="glyphicon glyphicon-menu-left"></span><?= Yii::t("formulario", "Back") ?> </a>
