@@ -37,53 +37,91 @@ $(document).ready(function () {
     });
     $('#sendInscripcionsolicitud').click(function () {
         /*var link = $('#txth_base').val() + "/inscripcionadmision/saveinscripciontemp";
-        var arrParams = new Object();
-        arrParams.codigo = $('#txth_twin_id').val();
-        arrParams.ACCION = 'Fin';
-        requestHttpAjax(link, arrParams, function (response) {
-            var message = response.message;
-            //console.log(response);
-            if (response.status == "OK") {
-                setTimeout(function () {
-                    //var uaca_id=response.data.data.uaca_id;
-                    //var mod_id=response.data.data.mod_id;*/
-                    var uaca_id=1;
-                    var mod_id=1;
-                    switch (uaca_id) {
-                        case 1:
-                            switch (mod_id) {
-                                case 1:
-                                    alert('unidad 1, modalidad 1');
-                                    break;
-                                case 2:
-                                    alert('unidad 1, modalidad 2');
-                                    break;
-                            }
-                            break;
-                        case 2:
-                            switch (mod_id) {
-                                case 1:
-                                    alert('unidad 2, modalidad 1');
-                                    break;
-                                case 2:
-                                    alert('unidad 2, modalidad 2');
-                                    break;
-                            }
-                            break;
-                    }
-                    /*window.location.href = "https://www.uteg.edu.ec/pago-online-nivelacion/";
-                }, 5000);
-            }
-            showAlert(response.status, response.label, response.message);
-
-            /*showAlert(response.status, response.label, response.message);
-             if (!response.error) {
-             setTimeout(function () {
-             window.location.href = $('#txth_base').val() + "/inscripcionadmision/index";
-             }, 5000);
-             }
-        }, true);
-*/
+         var arrParams = new Object();
+         arrParams.codigo = $('#txth_twin_id').val();
+         arrParams.ACCION = 'Fin';
+         requestHttpAjax(link, arrParams, function (response) {
+         var message = response.message;
+         //console.log(response);
+         if (response.status == "OK") {
+         setTimeout(function () {
+         //var uaca_id=response.data.data.uaca_id;
+         //var mod_id=response.data.data.mod_id;*/
+        //var ming=response.data.data.ming;*/
+        var uaca_id = 1;
+        var mod_id = 1;
+        var ming = 1;
+        switch (uaca_id) {
+            case 1:
+                switch (mod_id) {
+                    case 1:
+                        switch (ming) {
+                            case 1:
+                                //alert('grado online curso');
+                                window.location.href = "https://www.uteg.edu.ec/pago-online-nivelacion/";
+                                break;
+                            case 2:
+                                //alert('grado online examen');
+                                window.location.href = "https://www.uteg.edu.ec/pago-examen-online/";
+                                break;
+                        }
+                        break;
+                    case 2:
+                        switch (ming) {
+                            case 1:
+                                //alert('grado presencial curso');
+                                window.location.href = "https://www.uteg.edu.ec/pago-grado-presencial/ ";
+                                break;
+                            case 2:
+                                //alert('grado presencial examen');
+                                window.location.href = "https://www.uteg.edu.ec/pago-examen-presencial/  ";
+                                break;
+                        }
+                        break;
+                    case 3:
+                        switch (ming) {
+                            case 1:
+                                //alert('grado semipresencial curso');
+                                //Todavia no hay enlace para grado semipresencial curso
+                                break;
+                            case 2:
+                                //alert('grado semipresencial examen');
+                                //Todavia no hay enlace para grado semipresencial Examen
+                                break;
+                        }
+                        break;
+                    case 4:
+                        switch (ming) {
+                            case 1:
+                                //alert('grado distancia curso');
+                                window.location.href = "https://www.uteg.edu.ec/pago-grado-distancia/";
+                                break;
+                            case 2:
+                                //alert('grado distancia examen');
+                                window.location.href = "https://www.uteg.edu.ec/pago-examen-distancia/";
+                                break;
+                        }
+                        break;
+                }
+                break;
+            case 2:
+                //alert('postgrado');
+                window.location.href = "https://www.uteg.edu.ec/pago-posgrado/";
+                break;
+        }
+        /*window.location.href = "https://www.uteg.edu.ec/pago-online-nivelacion/";
+         }, 5000);
+         }
+         showAlert(response.status, response.label, response.message);
+         
+         /*showAlert(response.status, response.label, response.message);
+         if (!response.error) {
+         setTimeout(function () {
+         window.location.href = $('#txth_base').val() + "/inscripcionadmision/index";
+         }, 5000);
+         }
+         }, true);
+         */
     });
 
     $('#cmb_tipo_dni').change(function () {
