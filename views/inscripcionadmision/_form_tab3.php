@@ -58,20 +58,19 @@ use yii\helpers\Html;
     <div class="col-md-12 col-xs-12 col-sm-12 col-lg-12">
         <h4>
             <span id="lbl_uaca_lb"><?= Yii::t("formulario", "Unidad Academica: ") ?></span>
-            <span id="lbl_uaca_tx"><?= "Grado" ?></span>
+            <span id="lbl_uaca_tx"><?= "" ?></span>
         </h4>            
-        
     </div>         
     <div class="col-md-12 col-xs-12 col-sm-12 col-lg-12">
         <h4>
             <span id="lbl_moda_lb"><?= Yii::t("formulario", "Modalidad: ") ?></span>
-            <span id="lbl_moda_tx"><?= "Online" ?></span>
+            <span id="lbl_moda_tx"><?= "" ?></span>
         </h4>            
     </div>         
     <div class="col-md-12 col-xs-12 col-sm-12 col-lg-12">
         <h4>
             <span id="lbl_carrera_lb"><?= Yii::t("formulario", "Carrera/Programa: ") ?></span>
-            <span id="lbl_carrera_tx"><?= "Online" ?></span>
+            <span id="lbl_carrera_tx"><?= "" ?></span>
         </h4>            
     </div>         
     <div class="col-md-12 col-xs-12 col-sm-12 col-lg-12">
