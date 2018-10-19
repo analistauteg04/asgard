@@ -45,37 +45,73 @@ $(document).ready(function () {
             //console.log(response);
             if (response.status == "OK") {
                 setTimeout(function () {
-//                    switch (response.data.data.uaca_id) {
-//                        case 1:
-//                            switch (response.data.data.mod_id) {
-//                                case 1:
-//                                    break;
-//                                case 1:
-//                                    break;
-//                            }
-//                            break;
-//                        case 2:
-//                            switch (response.data.data.mod_id) {
-//                                case 1:
-//                                    break;
-//                                case 1:
-//                                    break;
-//                            }
-//                            break;
-//                    }
-                    window.location.href = "https://www.uteg.edu.ec/pago-online-nivelacion/";                    
+                    //var uaca_id=response.data.data.uaca_id;
+                    //var mod_id=response.data.data.mod_id;*/
+                    //var ming=response.data.data.twin_metodo_ingreso;
+                    var uaca_id = 1;
+                    var mod_id = 1;
+                    var ming = 1;
+                    switch (uaca_id) {
+                        case 1:
+                            switch (mod_id) {
+                                case 1:
+                                    switch (ming) {
+                                        case 1:
+                                            //alert('grado online curso');
+                                            window.location.href = "https://www.uteg.edu.ec/pago-online-nivelacion/";
+                                            break;
+                                        case 2:
+                                            //alert('grado online examen');
+                                            window.location.href = "https://www.uteg.edu.ec/pago-examen-online/";
+                                            break;
+                                    }
+                                    break;
+                                case 2:
+                                    switch (ming) {
+                                        case 1:
+                                            //alert('grado presencial curso');
+                                            window.location.href = "https://www.uteg.edu.ec/pago-grado-presencial/ ";
+                                            break;
+                                        case 2:
+                                            //alert('grado presencial examen');
+                                            window.location.href = "https://www.uteg.edu.ec/pago-examen-presencial/  ";
+                                            break;
+                                    }
+                                    break;
+                                case 3:
+                                    switch (ming) {
+                                        case 1:
+                                            //alert('grado semipresencial curso');
+                                            //Todavia no hay enlace para grado semipresencial curso
+                                            break;
+                                        case 2:
+                                            //alert('grado semipresencial examen');
+                                            //Todavia no hay enlace para grado semipresencial Examen
+                                            break;
+                                    }
+                                    break;
+                                case 4:
+                                    switch (ming) {
+                                        case 1:
+                                            //alert('grado distancia curso');
+                                            window.location.href = "https://www.uteg.edu.ec/pago-grado-distancia/";
+                                            break;
+                                        case 2:
+                                            //alert('grado distancia examen');
+                                            window.location.href = "https://www.uteg.edu.ec/pago-examen-distancia/";
+                                            break;
+                                    }
+                                    break;
+                            }
+                            break;
+                        case 2:
+                            //alert('postgrado');
+                            window.location.href = "https://www.uteg.edu.ec/pago-posgrado/";
+                            break;
+                    }
                 }, 5000);
             }
-            showAlert(response.status, response.label, response.message);
-
-            /*showAlert(response.status, response.label, response.message);
-             if (!response.error) {
-             setTimeout(function () {
-             window.location.href = $('#txth_base').val() + "/inscripcionadmision/index";
-             }, 5000);
-             }*/
-        }, true);
-
+        });
     });
 
     $('#cmb_tipo_dni').change(function () {
@@ -307,7 +343,6 @@ function guardarInscripcion(accion) {
                         $('#id_item_2').css('display', 'none');
                         $('#id_mat_cur').css('display', 'none');
                     }
-
                     $('#id_item_1').css('display', 'none');
                     $('#id_item_2').css('display', 'none');
                     var leyenda = '';
