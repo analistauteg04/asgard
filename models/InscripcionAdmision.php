@@ -61,9 +61,7 @@ class InscripcionAdmision extends \yii\db\ActiveRecord {
         try {
             $twin_id=$this->updateDataInscripcion($con,$data["DATA_1"]);
             $data = $this->consultarDatosInscripcion($twin_id);
-            
-            
-            Utilities::putMessageLogFile($data);
+
             $arroout["status"] = TRUE;
             $arroout["error"] = null;
             $arroout["message"] = null;
@@ -355,7 +353,7 @@ class InscripcionAdmision extends \yii\db\ActiveRecord {
                                                     if ($beca == "1") {
                                                         $precio = 0;
                                                     } else {
-                                                        $resp_precio = $solins_model->ObtenerPrecio($resp_datos['ming_id'], $resp_datos['uaca_id'], $resp_datos['mod_id'], $eaca_id);
+                                                        $resp_precio = $solins_model->ObtenerPrecio($resp_datos['twin_metodo_ingreso'], $resp_datos['uaca_id'], $resp_datos['mod_id'], $eaca_id);
                                                         if ($resp_precio) {
                                                             $precio = $resp_precio['precio'];
                                                         } else {
@@ -447,7 +445,12 @@ class InscripcionAdmision extends \yii\db\ActiveRecord {
                         "wtmessage" => Yii::t("formulario", "The information have been saved and the information has been sent to your email"),
                         "title" => Yii::t('jslang', 'Success'),
                     );
-                    return Utilities::ajaxResponse('OK', 'alert', Yii::t("jslang", "Sucess"), false, $message);
+                    //return Utilities::ajaxResponse('OK', 'alert', Yii::t("jslang", "Sucess"), false, $message);
+                    $arroout["status"] = TRUE;
+                    $arroout["error"] = null;
+                    $arroout["message"] = $message;
+                    $arroout["data"] = null;//$rawData;
+                    return $arroout;
                 } else {
                     //$transaction->rollback();
                     //$transaction1->rollback();
@@ -456,7 +459,12 @@ class InscripcionAdmision extends \yii\db\ActiveRecord {
                         "wtmessage" => Yii::t("formulario", "Mensaje1: " . $mensaje), //$error_message
                         "title" => Yii::t('jslang', 'Bad Request'),
                     );
-                    return Utilities::ajaxResponse('NO_OK', 'alert', Yii::t("jslang", "Bad Request"), false, $message);
+                    $arroout["status"] = FALSE;
+                    $arroout["error"] =null;
+                    $arroout["message"] = $message;
+                    $arroout["data"] = null;
+                    return $arroout;
+                    //return Utilities::ajaxResponse('NO_OK', 'alert', Yii::t("jslang", "Bad Request"), false, $message);
                 }
             } catch (Exception $ex) {
                 //$transaction->rollback();

@@ -36,19 +36,19 @@ $(document).ready(function () {
         }             
     });
     $('#sendInscripcionsolicitud').click(function () {
-        var link = $('#txth_base').val() + "/inscripcionadmision/guardarinscripcion";
+        var link = $('#txth_base').val() + "/inscripcionadmision/saveinscripciontemp";
         var arrParams = new Object();
-        arrParams.codigo = $('#txth_twin_id').val();        
-        if (!validateForm()) {
-            requestHttpAjax(link, arrParams, function (response) {
-                showAlert(response.status, response.label, response.message);
-                if (!response.error) {
-                    setTimeout(function () {
-                        window.location.href = $('#txth_base').val() + "/inscripcionadmision/index";
-                    }, 5000);
-                }
-            }, true);
-        }
+        arrParams.codigo = $('#txth_twin_id').val();
+        arrParams.ACCION = 'Fin';
+        requestHttpAjax(link, arrParams, function (response) {
+            showAlert(response.status, response.label, response.message);
+            if (!response.error) {
+                setTimeout(function () {
+                    window.location.href = $('#txth_base').val() + "/inscripcionadmision/index";
+                }, 5000);
+            }
+        }, true);
+        
     });
     
     $('#cmb_tipo_dni').change(function () {
