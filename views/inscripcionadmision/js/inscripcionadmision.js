@@ -36,7 +36,7 @@ $(document).ready(function () {
         }
     });
     $('#sendInscripcionsolicitud').click(function () {
-        var link = $('#txth_base').val() + "/inscripcionadmision/saveinscripciontemp";
+        /*var link = $('#txth_base').val() + "/inscripcionadmision/saveinscripciontemp";
         var arrParams = new Object();
         arrParams.codigo = $('#txth_twin_id').val();
         arrParams.ACCION = 'Fin';
@@ -45,25 +45,33 @@ $(document).ready(function () {
             //console.log(response);
             if (response.status == "OK") {
                 setTimeout(function () {
-//                    switch (response.data.data.uaca_id) {
-//                        case 1:
-//                            switch (response.data.data.mod_id) {
-//                                case 1:
-//                                    break;
-//                                case 1:
-//                                    break;
-//                            }
-//                            break;
-//                        case 2:
-//                            switch (response.data.data.mod_id) {
-//                                case 1:
-//                                    break;
-//                                case 1:
-//                                    break;
-//                            }
-//                            break;
-//                    }
-                    window.location.href = "https://www.uteg.edu.ec/pago-online-nivelacion/";
+                    //var uaca_id=response.data.data.uaca_id;
+                    //var mod_id=response.data.data.mod_id;*/
+                    var uaca_id=1;
+                    var mod_id=1;
+                    switch (uaca_id) {
+                        case 1:
+                            switch (mod_id) {
+                                case 1:
+                                    alert('unidad 1, modalidad 1');
+                                    break;
+                                case 2:
+                                    alert('unidad 1, modalidad 2');
+                                    break;
+                            }
+                            break;
+                        case 2:
+                            switch (mod_id) {
+                                case 1:
+                                    alert('unidad 2, modalidad 1');
+                                    break;
+                                case 2:
+                                    alert('unidad 2, modalidad 2');
+                                    break;
+                            }
+                            break;
+                    }
+                    /*window.location.href = "https://www.uteg.edu.ec/pago-online-nivelacion/";
                 }, 5000);
             }
             showAlert(response.status, response.label, response.message);
@@ -73,9 +81,9 @@ $(document).ready(function () {
              setTimeout(function () {
              window.location.href = $('#txth_base').val() + "/inscripcionadmision/index";
              }, 5000);
-             }*/
+             }
         }, true);
-
+*/
     });
 
     $('#cmb_tipo_dni').change(function () {
