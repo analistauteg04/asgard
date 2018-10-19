@@ -272,13 +272,13 @@ function guardarInscripcion(accion) {
                 //console.log(response);
                 if (response.status == "OK") { 
                     if(accion == "Create"){
-                        alert(response.data.ids);
+                        //alert(response.data.ids);
                         $('#txth_twin_id').val(response.data.ids)
                         paso1next();
                     }else{                        
                         
                         //Inicio ingreso informacion del tab 3\
-                        alert(response.data.data.unidad);
+                       // alert(response.data.data.unidad);
                         $('#lbl_uaca_tx').val(response.data.data.unidad)
                         $('#lbl_moda_tx').val(response.data.data.modalidad)
                         $('#lbl_carrera_tx').val(response.data.data.carrera)

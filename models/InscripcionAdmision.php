@@ -61,7 +61,7 @@ class InscripcionAdmision extends \yii\db\ActiveRecord {
         try {
             $twin_id=$this->updateDataInscripcion($con,$data["DATA_1"]);
             $data = $this->consultarDatosInscripcion($twin_id);
-
+            $trans->commit();
             $arroout["status"] = TRUE;
             $arroout["error"] = null;
             $arroout["message"] = null;
@@ -343,7 +343,7 @@ class InscripcionAdmision extends \yii\db\ActiveRecord {
                                                 $rsin_id = 1; //Solicitud pendiente     
                                                 $solins_model = new SolicitudInscripcion();
                                                 //$mensaje = 'intId: ' . $interesado_id . '/uaca: ' . $pgest['unidad_academica'] . '/modalidad: ' . $pgest['modalidad'] . '/ming: ' . $pgest['ming_id'] . '/eaca: ' . $eaca_id . '/mest: ' . $mest_id . '/empresa: ' . $emp_id . '/secuencia: ' . $num_secuencia . '/rsin_id: ' . $rsin_id . '/sins_fechasol: ' . $sins_fechasol . '/usuario_id: ' . $usuario_id;
-                                                $sins_id = $solins_model->insertarSolicitud($interesado_id, $resp_datos['uaca_id'], $resp_datos['mod_id'], $resp_datos['ming_id'], $eaca_id, null, $emp_id, $num_secuencia, $rsin_id, $sins_fechasol, $usuario_id);
+                                                $sins_id = $solins_model->insertarSolicitud($interesado_id, $resp_datos['uaca_id'], $resp_datos['mod_id'], $resp_datos['twin_metodo_ingreso'], $eaca_id, null, $emp_id, $num_secuencia, $rsin_id, $sins_fechasol, $usuario_id);
                                                 //fin de solicitud inscripcion$mest_id
                                                 //grabar los documentos
                                                 \app\models\Utilities::putMessageLogFile('solicitud: ' . $mensaje);
@@ -441,9 +441,9 @@ class InscripcionAdmision extends \yii\db\ActiveRecord {
                     $error++;
                 }
                 if ($exito == 1) {
-                    //$transaction->commit();                    
+                   /* $transaction->commit();                    
                     $transaction1->commit();
-                    $transaction2->commit();
+                    $transaction2->commit();*/
 
                     $message = array(
                         "wtmessage" => Yii::t("formulario", "The information have been saved and the information has been sent to your email"),
@@ -456,9 +456,9 @@ class InscripcionAdmision extends \yii\db\ActiveRecord {
                     $arroout["data"] = null;//$rawData;
                     return $arroout;
                 } else {
-                    //$transaction->rollback();
-                    //$transaction1->rollback();
-                    //$transaction2->rollback();
+                    /*$transaction->rollback();
+                    $transaction1->rollback();
+                    $transaction2->rollback();*/
                     $message = array(
                         "wtmessage" => Yii::t("formulario", "Mensaje1: " . $mensaje), //$error_message
                         "title" => Yii::t('jslang', 'Bad Request'),
@@ -471,14 +471,19 @@ class InscripcionAdmision extends \yii\db\ActiveRecord {
                     //return Utilities::ajaxResponse('NO_OK', 'alert', Yii::t("jslang", "Bad Request"), false, $message);
                 }
             } catch (Exception $ex) {
-                //$transaction->rollback();
-                //$transaction1->rollback();
-                //$transaction2->rollback();
+                /*$transaction->rollback();
+                $transaction1->rollback();
+                $transaction2->rollback();*/
                 $message = array(
                     "wtmessage" => Yii::t("formulario", "Mensaje2: " . $mensaje), //$error_message
                     "title" => Yii::t('jslang', 'Bad Request'),
                 );
-                return Utilities::ajaxResponse('NO_OK', 'alert', Yii::t("jslang", "Bad Request"), false, $message);
+                $arroout["status"] = FALSE;
+                $arroout["error"] = $ex->getCode();
+                $arroout["message"] = $ex->getMessage();
+                $arroout["data"] = null;
+                return $arroout;
+                //return Utilities::ajaxResponse('NO_OK', 'alert', Yii::t("jslang", "Bad Request"), false, $message);
             }
             return;
     }
