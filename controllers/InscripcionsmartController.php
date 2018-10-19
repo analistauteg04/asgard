@@ -85,7 +85,7 @@ class InscripcionsmartController extends \yii\web\Controller {
         $arr_conuteg = $mod_pergestion->consultarConociouteg();
         //$arr_carrerra1 = $modestudio->consultarEstudioEmpresa(3);
         $arr_ninteres = $mod_unidad->consultarUnidadAcademicasEmpresa(3);
-        $arr_modalidad = $mod_modalidad->consultarModalidad(3,3);
+        $arr_modalidad = $mod_modalidad->consultarModalidad($arr_ninteres[0]["id"],3);
         $arr_carrerra1 = $modestudio->consultarCursoModalidad($arr_ninteres[0]["id"], $arr_modalidad[0]["id"]);                
         $tipo_oportunidad_data = $modTipoOportunidad->consultarOporxUnidad(3);
         return $this->render('index', [
