@@ -45,12 +45,9 @@ $(document).ready(function () {
             //console.log(response);
             if (response.status == "OK") {
                 setTimeout(function () {
-                    //var uaca_id=response.data.data.uaca_id;
-                    //var mod_id=response.data.data.mod_id;*/
-                    //var ming=response.data.data.twin_metodo_ingreso;
-                    var uaca_id = 1;
-                    var mod_id = 1;
-                    var ming = 1;
+                    var uaca_id=parseInt(response.data.data.uaca_id);
+                    var mod_id=parseInt(response.data.data.mod_id);
+                    var ming=parseInt(response.data.data.twin_metodo_ingreso);
                     switch (uaca_id) {
                         case 1:
                             switch (mod_id) {
@@ -93,7 +90,7 @@ $(document).ready(function () {
                                 case 4:
                                     switch (ming) {
                                         case 1:
-                                            //alert('grado distancia curso');
+                                            alert('grado distancia curso');
                                             window.location.href = "https://www.uteg.edu.ec/pago-grado-distancia/";
                                             break;
                                         case 2:
