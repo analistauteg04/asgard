@@ -128,7 +128,7 @@ use yii\helpers\Html;
         </div>
         <div class="col-lg-8 col-md-8 col-sm-8 col-xs-8"> &nbsp;</div>
         <div class="col-md-2">
-            <a id="sendInscripcionsolicitud" href="javascript:" class="btn btn-primary btn-block"> <?php echo "Registrar"; ?> ?> </a>
+            <a id="sendInscripcionsolicitud" href="javascript:" class="btn btn-primary btn-block"> <?php echo "Registrar"; ?> </a>
         </div>
     </div>
 </form>

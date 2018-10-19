@@ -45,7 +45,25 @@ $(document).ready(function () {
             //console.log(response);
             if (response.status == "OK") {
                 setTimeout(function () {
-                    window.location.href = $('#txth_base').val() + "/inscripcionadmision/index";
+                    switch (response.data.data.uaca_id) {
+                        case 1:
+                            switch (response.data.data.mod_id) {
+                                case 1:
+                                    break;
+                                case 1:
+                                    break;
+                            }
+                            break;
+                        case 2:
+                            switch (response.data.data.mod_id) {
+                                case 1:
+                                    break;
+                                case 1:
+                                    break;
+                            }
+                            break;
+                    }
+                    window.location.href = "https://www.uteg.edu.ec/pago-online-nivelacion/";
                 }, 5000);
             }
             showAlert(response.status, response.label, response.message);
@@ -280,24 +298,24 @@ function guardarInscripcion(accion) {
                     $('#lbl_moda_tx').text(response.data.data.modalidad);
                     $('#lbl_carrera_tx').text(response.data.data.carrera);
                     $('#lbl_ming_tx').text(response.data.data.metodo);
-                    
-                    if(uaca_id==1){
+
+                    if (uaca_id == 1) {
                         $('#id_item_1').css('display', 'block');
                         $('#id_item_2').css('display', 'block');
-                    }else if(uaca_id==2){
+                    } else if (uaca_id == 2) {
                         $('#id_item_1').css('display', 'none');
                         $('#id_item_2').css('display', 'none');
                         $('#id_mat_cur').css('display', 'none');
                     }
-                    
+
                     $('#id_item_1').css('display', 'none');
                     $('#id_item_2').css('display', 'none');
                     var leyenda = '';
                     var ming = response.data.data.twin_metodo_ingreso;
                     var mod_id = response.data.data.mod_id;
-                    var materias_online="Matematicas I, Tecnicas de comunicacion Oral y Escrita, Contabilidad";
-                    var materias_otros="Matematicas I, Tecnicas de comunicacion Oral y Escrita, Contabilidad, Desarrollo del Pensamiento, Emprendimiento";
-                    
+                    var materias_online = "Matematicas I, Tecnicas de comunicacion Oral y Escrita, Contabilidad";
+                    var materias_otros = "Matematicas I, Tecnicas de comunicacion Oral y Escrita, Contabilidad, Desarrollo del Pensamiento, Emprendimiento";
+
                     $('#lbl_fcur_lb').text("Fecha del curso:");
                     if (uaca_id == 2) {
                         leyenda = 'El valor de la maestría: $11,300.00 ';
@@ -322,9 +340,9 @@ function guardarInscripcion(accion) {
                         } else if (mod_id == 2 || mod_id == 3 || mod_id == 4) {//presencial y semi presencial
                             $('#lbl_mcur_tx').text(materias_otros);
                             if (ming == 1) {// curso
-                                if (mod_id == 2 || mod_id == 3){
+                                if (mod_id == 2 || mod_id == 3) {
                                     $('#lbl_fcur_tx').text("22 de octubre al 30 de noviembre");
-                                }else if (mod_id == 4){
+                                } else if (mod_id == 4) {
                                     $('#lbl_fcur_tx').text("20 de octubre al 8 de diciembre");
                                 }
                                 $('#lbl_item_1').text("Curso de nivelación: ");
