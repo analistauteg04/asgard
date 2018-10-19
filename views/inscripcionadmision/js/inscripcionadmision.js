@@ -341,8 +341,8 @@ function guardarInscripcion(accion) {
                     var mod_id = response.data.data.mod_id;
                     var id_carrera = response.data.data.id_carrera;
                     
-                    var materias_online = "Matematicas I, Tecnicas de comunicacion Oral y Escrita, Contabilidad";
-                    var materias_otros = "Matematicas I, Tecnicas de comunicacion Oral y Escrita, Contabilidad, Desarrollo del Pensamiento, Emprendimiento";
+                    var materias_online = "Matemáticas I, Técnicas de Comunicación Oral y Escrita, Contabilidad";
+                    var materias_otros = "Matemáticas I, Técnicas de Comunicación Oral y Escrita, Contabilidad, Desarrollo del Pensamiento, Emprendimiento";
 
                     $('#lbl_fcur_lb').text("Fecha del curso:");
                     if (uaca_id == 2) {

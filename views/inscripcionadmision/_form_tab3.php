@@ -120,9 +120,13 @@ use yii\helpers\Html;
             <span><b><?= Yii::t("formulario", "**Valores están en ($) USD ") ?></b></span>
         </h5>            
     </div>      
-    <div class="col-md-12 col-xs-12 col-sm-12 col-lg-12">
-        <h4><b><span id="lbl_detalle2"><?= Yii::t("formulario", "Pago:") ?></span></b></h4>
-        <h4><span id="lbl_detalle2"><?= Yii::t("formulario", "Pago en línea PayPal: ") ?></span><a href="http://www.uteg.edu.ec/pagos-online/">http://www.uteg.edu.ec/pagos-online/</a></h4>        
+    <!--    <div class="col-md-12 col-xs-12 col-sm-12 col-lg-12">
+            <h4><b><span id="lbl_detalle2"><?= Yii::t("formulario", "Pago:") ?></span></b></h4>
+            <h4><span id="lbl_detalle2"><?= Yii::t("formulario", "Pago en línea PayPal: ") ?></span><a href="http://www.uteg.edu.ec/pagos-online/">http://www.uteg.edu.ec/pagos-online/</a></h4>        
+        </div>-->
+    <div class="col-md-12 col-xs-12 col-sm-12 col-lg-12">         
+        </br>
+        </br>
     </div>
     <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">   
         <div class="col-md-2">
@@ -130,7 +134,7 @@ use yii\helpers\Html;
         </div>
         <div class="col-lg-8 col-md-8 col-sm-8 col-xs-8"> &nbsp;</div>
         <div class="col-md-2">
-            <a id="sendInscripcionsolicitud" href="javascript:" class="btn btn-primary btn-block"> <?php echo "Registrar"; ?> </a>
+            <a id="sendInscripcionsolicitud" href="javascript:" class="btn btn-primary btn-block"> <?php echo "Pagar"; ?> </a>
         </div>
     </div>
 </form>
