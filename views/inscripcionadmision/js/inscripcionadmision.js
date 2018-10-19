@@ -32,7 +32,8 @@ $(document).ready(function () {
                 guardarInscripcion('Update');
             }
         } else {
-            alert('Debe Aceptar los términos de la Información');
+            var mensaje={wtmessage: "Debe Aceptar los términos de la Información", title: "Exito"};
+            showAlert("OK", "success", mensaje);
         }
     });
     $('#sendInscripcionsolicitud').click(function () {
@@ -278,8 +279,8 @@ $(document).ready(function () {
                     $('#divRequisitosPRP').css('display', 'none');
                 }
             } else {  //Posgrado  Semipresencial
-                if ($('#cmb_modalidad_solicitud').val() == 3) {
-                    //Homologación            
+                if (($('#cmb_modalidad_solicitud').val() == 3) || ($('#cmb_modalidad_solicitud').val() == 2)) {
+                    //Taller introductorio            
                     if ($('#cmb_metodo_solicitud').val() == 4) {
                         //Taller introductorio
                         $('#divRequisitosPRP').css('display', 'block');
