@@ -74,22 +74,22 @@ use yii\helpers\Html;
             <span id="lbl_carrera_tx"><?= "" ?></span>
         </h4>            
     </div>         
-    <div class="col-md-12 col-xs-12 col-sm-12 col-lg-12">
+    <div id="id_met_ing" class="col-md-12 col-xs-12 col-sm-12 col-lg-12">
         <h4>
             <span id="lbl_ming_lb"><?= Yii::t("formulario", "Metodo ingreso: ") ?></span>
             <span id="lbl_ming_tx"><?= "Curso Nivelacion" ?></span>
         </h4>            
     </div>         
-    <div class="col-md-12 col-xs-12 col-sm-12 col-lg-12">
+    <div id="id_mat_cur" class="col-md-12 col-xs-12 col-sm-12 col-lg-12">
         <h4>
             <span id="lbl_mcur_lb"><?= Yii::t("formulario", "Materias a Cursar: ") ?></span>
-            <span id="lbl_mcur_tx"><?= "Matematicas I, Tecnicas de comunicacion Oral y Escrita, Contabilidad" ?></span>
+            <span id="lbl_mcur_tx"></span>
         </h4>            
     </div>         
     <div class="col-md-12 col-xs-12 col-sm-12 col-lg-12">
         <h4>
-            <span id="lbl_fcur_lb"><?= Yii::t("formulario", "Fecha del Curso: ") ?></span>
-            <span id="lbl_fcur_tx"><?= "22 octubre al 14 diciembre" ?></span>
+            <span id="lbl_fcur_lb"></span>
+            <span id="lbl_fcur_tx"></span>
         </h4>            
     </div>         
     <!-- fin de ingreso de informacion -->    
@@ -101,34 +101,27 @@ use yii\helpers\Html;
     <div id="id_item_1"  class="col-md-12 col-xs-12 col-sm-12 col-lg-12" style="display:none">
         <h4>
             <span id="lbl_item_1"></span>
-            ($)<span id="val_item_1"></span><br/><br/><br/>
-            <span><?= Yii::t("formulario", "**Valores están en ($) USD ") ?></span>
+            ($) <span id="val_item_1"></span><br/>            
         </h4>            
     </div>         
     <!-- item 2 -->
     <div id="id_item_2" class="col-md-12 col-xs-12 col-sm-12 col-lg-12" style="display:none">
         <h4>
             <span id="lbl_item_2"></span>
-            ($)<span id="val_item_2"></span><br/><br/><br/>
-            <span><?= Yii::t("formulario", "**Valores están en ($) USD ") ?></span>
+            ($) <span id="val_item_2"></span><br/>            
         </h4>            
-    </div>         
-    
-    
+    </div>      
     <div class="col-md-12 col-xs-12 col-sm-12 col-lg-12">
         <h4>
             <span><?= Yii::t("formulario", "Valor total a pagar: ") ?></span>
-            ($)<span id="lbl_valor_pagar_tx"></span><br/><br/><br/>
+            ($) <span id="lbl_valor_pagar_tx"></span><br/><br/>
             <span><?= Yii::t("formulario", "**Valores están en ($) USD ") ?></span>
         </h4>            
-    </div>         
-
+    </div>      
     <div class="col-md-12 col-xs-12 col-sm-12 col-lg-12">
         <h4><b><span id="lbl_detalle2"><?= Yii::t("formulario", "Pago:") ?></span></b></h4>
-        <h4><span id="lbl_detalle2"><?= Yii::t("formulario", "Pago en línea PayPal: ") ?></span><a href="http://www.uteg.edu.ec/pagos-online/">http://www.uteg.edu.ec/pagos-online/</a></h4>
-        <h4><span id="lbl_detalle2"><?= Yii::t("formulario", "Pago de tarjetas de crédito: ") ?></span></h4>
+        <h4><span id="lbl_detalle2"><?= Yii::t("formulario", "Pago en línea PayPal: ") ?></span><a href="http://www.uteg.edu.ec/pagos-online/">http://www.uteg.edu.ec/pagos-online/</a></h4>        
     </div>
-
     <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">   
         <div class="col-md-2">
             <a id="paso3back" href="javascript:" class="btn btn-primary btn-block"><span class="glyphicon glyphicon-menu-left"></span><?= Yii::t("formulario", "Back") ?> </a>
