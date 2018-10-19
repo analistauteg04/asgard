@@ -97,7 +97,7 @@ class InscripcionesController extends \yii\web\Controller {
         $arr_ninteres = $mod_unidad->consultarUnidadAcademicasEmpresa(1);
         $arr_modalidad = $mod_modalidad->consultarModalidad(1, 1);
         $arr_conuteg = $mod_pergestion->consultarConociouteg();
-        $arr_carrerra1 = $modcanal->consultarCarreraModalidad(1, 1);
+        $arr_carrerra1 = $modcanal->consultarCarreraModalidad(1, $arr_modalidad[0]["id"]);
         $tipo_oportunidad_data = $modTipoOportunidad->consultarOporxUnidad(1);
         return $this->render('index', [
                     "tipos_dni" => array("CED" => Yii::t("formulario", "DNI Document"), "PASS" => Yii::t("formulario", "Passport")),

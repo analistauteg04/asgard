@@ -292,7 +292,7 @@ class InscripcionAdmision extends \yii\db\ActiveRecord {
                     }
                     if ($id_persona > 0) {
                         //Modifificaion para Mover Imagenes de temp a Persona
-                        //self::movePersonFiles($twinIds,$id_persona);
+                        self::movePersonFiles($twinIds,$id_persona);
                         \app\models\Utilities::putMessageLogFile('ingreso la Persona');
                         $concap = \Yii::$app->db_captacion;
                         $mod_emp_persona = new EmpresaPersona();
@@ -355,7 +355,6 @@ class InscripcionAdmision extends \yii\db\ActiveRecord {
                                             $sins_id = $solins_model->insertarSolicitud($interesado_id, $resp_datos['uaca_id'], $resp_datos['mod_id'], $resp_datos['twin_metodo_ingreso'], $eaca_id, null, $emp_id, $num_secuencia, $rsin_id, $sins_fechasol, $usuario_id);
                                             //fin de solicitud inscripcion$mest_id
                                             //grabar los documentos
-
                                             $resulDoc1 = $solins_model->insertarDocumentosSolic($sins_id, $interesado_id, 1, $resp_datos['ruta_doc_titulo'], $usuario_id);
                                             $resulDoc2 = $solins_model->insertarDocumentosSolic($sins_id, $interesado_id, 2, $resp_datos['ruta_doc_dni'], $usuario_id);
                                             $resulDoc3 = $solins_model->insertarDocumentosSolic($sins_id, $interesado_id, 3, $resp_datos['ruta_doc_certvota'], $usuario_id);
@@ -441,20 +440,8 @@ class InscripcionAdmision extends \yii\db\ActiveRecord {
             }
             if ($exito == 1) {
                 $transaction->commit();
-                $transaction1->commit();
-                $transaction2->commit();
-                //envío de correo.
-                $usuarioNew = Usuario::findIdentity($usuario_id);
-                $link = $usuarioNew->generarLinkActivacion();
-                $email_info = array(
-                    "nombres" => $resp_datos['twin_nombre'],
-                    "apellidos" => $resp_datos['twin_apellido'],
-                    "correo" => $resp_datos['twin_correo'],
-                    "telefono" => $resp_datos['twin_celular'],
-                    "identificacion" => $resp_datos['twin_numero'],
-                    "link_asgard" => $link,
-                );
-                $outemail = $mod_interesado->enviarCorreoBienvenida($email_info);
+                $transaction1->commit(); 
+                $transaction2->commit();                
 
                 $message = array(
                     "wtmessage" => Yii::t("formulario", "The information have been saved and the information has been sent to your email"),
