@@ -55,9 +55,13 @@ $(document).ready(function () {
                                 case 1:
                                     switch (ming) {
                                         case 1:
+                                            $('#tx_paypal').attr("href", "https://www.uteg.edu.ec/pago-online-nivelacion/")
+                                            $('#tx_paypal').val("https://www.uteg.edu.ec/pago-online-nivelacion/");
                                             window.location.href = "https://www.uteg.edu.ec/pago-online-nivelacion/";
                                             break;
                                         case 2:
+                                            $('#tx_paypal').attr("href", "https://www.uteg.edu.ec/pago-examen-online/")
+                                            $('#tx_paypal').val("https://www.uteg.edu.ec/pago-examen-online/");
                                             window.location.href = "https://www.uteg.edu.ec/pago-examen-online/";
                                             break;
                                     }
@@ -65,10 +69,14 @@ $(document).ready(function () {
                                 case 2:
                                     switch (ming) {
                                         case 1:
-                                            window.location.href = "https://www.uteg.edu.ec/pago-grado-presencial/ ";
+                                            $('#tx_paypal').attr("href", "https://www.uteg.edu.ec/pago-grado-presencial/")
+                                            $('#tx_paypal').val("https://www.uteg.edu.ec/pago-grado-presencial/");
+                                            window.location.href = "https://www.uteg.edu.ec/pago-grado-presencial/";
                                             break;
                                         case 2:
-                                            window.location.href = "https://www.uteg.edu.ec/pago-examen-presencial/  ";
+                                            $('#tx_paypal').attr("href", "https://www.uteg.edu.ec/pago-examen-presencial/")
+                                            $('#tx_paypal').val("https://www.uteg.edu.ec/pago-examen-presencial/");
+                                            window.location.href = "https://www.uteg.edu.ec/pago-examen-presencial/";
                                             break;
                                     }
                                     break;
@@ -87,9 +95,13 @@ $(document).ready(function () {
                                 case 4:
                                     switch (ming) {
                                         case 1:
+                                            $('#tx_paypal').attr("href", "https://www.uteg.edu.ec/pago-grado-distancia/")
+                                            $('#tx_paypal').val("https://www.uteg.edu.ec/pago-grado-distancia/");
                                             window.location.href = "https://www.uteg.edu.ec/pago-grado-distancia/";
                                             break;
                                         case 2:
+                                            $('#tx_paypal').attr("href", "https://www.uteg.edu.ec/pago-examen-distancia/")
+                                            $('#tx_paypal').val("https://www.uteg.edu.ec/pago-examen-distancia/");
                                             window.location.href = "https://www.uteg.edu.ec/pago-examen-distancia/";
                                             break;
                                     }
@@ -97,6 +109,8 @@ $(document).ready(function () {
                             }
                             break;
                         case 2:
+                            $('#tx_paypal').attr("href", "https://www.uteg.edu.ec/pago-posgrado/")
+                            $('#tx_paypal').val("https://www.uteg.edu.ec/pago-posgrado/");
                             window.location.href = "https://www.uteg.edu.ec/pago-posgrado/";
                             break;
                     }

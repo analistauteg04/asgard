@@ -122,7 +122,7 @@ use yii\helpers\Html;
     </div>      
     <div class="col-md-12 col-xs-12 col-sm-12 col-lg-12">
         <h4><b><span id="lbl_detalle2"><?= Yii::t("formulario", "Pago:") ?></span></b></h4>
-        <h4><span id="lbl_detalle2"><?= Yii::t("formulario", "Pago en línea PayPal: ") ?></span><a href="http://www.uteg.edu.ec/pagos-online/">http://www.uteg.edu.ec/pagos-online/</a></h4>        
+        <h4><span id="lbl_detalle2"><?= Yii::t("formulario", "Pago en línea PayPal: ") ?></span><a id="tx_paypal" href="#"></a></h4>        
     </div>
     <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">   
         <div class="col-md-2">
