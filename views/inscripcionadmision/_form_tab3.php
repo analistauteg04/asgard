@@ -58,65 +58,67 @@ use yii\helpers\Html;
     <!-- Aqui he colocado la informacion -->    
     <div class="col-md-12 col-xs-12 col-sm-12 col-lg-12">
         <h4>
-            <span id="lbl_uaca_lb"><?= Yii::t("formulario", "Unidad Academica: ") ?></span>
+            <span id="lbl_uaca_lb"><b><?= Yii::t("formulario", "Unidad Academica: ") ?></b></span>
             <span id="lbl_uaca_tx"><?= "" ?></span>
         </h4>            
     </div>         
     <div class="col-md-12 col-xs-12 col-sm-12 col-lg-12">
         <h4>
-            <span id="lbl_moda_lb"><?= Yii::t("formulario", "Modalidad: ") ?></span>
+            <span id="lbl_moda_lb"><b><?= Yii::t("formulario", "Modalidad: ") ?></b></span>
             <span id="lbl_moda_tx"><?= "" ?></span>
         </h4>            
     </div>         
     <div class="col-md-12 col-xs-12 col-sm-12 col-lg-12">
         <h4>
-            <span id="lbl_carrera_lb"><?= Yii::t("formulario", "Carrera/Programa: ") ?></span>
+            <span id="lbl_carrera_lb"><b><?= Yii::t("formulario", "Carrera/Programa: ") ?></b></span>
             <span id="lbl_carrera_tx"><?= "" ?></span>
         </h4>            
     </div>         
     <div id="id_met_ing" class="col-md-12 col-xs-12 col-sm-12 col-lg-12">
         <h4>
-            <span id="lbl_ming_lb"><?= Yii::t("formulario", "Metodo ingreso: ") ?></span>
+            <span id="lbl_ming_lb"><b><?= Yii::t("formulario", "Metodo ingreso: ") ?></b></span>
             <span id="lbl_ming_tx"><?= "Curso Nivelacion" ?></span>
         </h4>            
     </div>         
     <div id="id_mat_cur" class="col-md-12 col-xs-12 col-sm-12 col-lg-12">
         <h4>
-            <span id="lbl_mcur_lb"><?= Yii::t("formulario", "Materias a Cursar: ") ?></span>
+            <span id="lbl_mcur_lb"><b><?= Yii::t("formulario", "Materias a Cursar: ") ?></b></span>
             <span id="lbl_mcur_tx"></span>
         </h4>            
     </div>         
     <div class="col-md-12 col-xs-12 col-sm-12 col-lg-12">
         <h4>
-            <span id="lbl_fcur_lb"></span>
+            <b><span id="lbl_fcur_lb"></span></b>
             <span id="lbl_fcur_tx"></span>
         </h4>            
     </div>         
-    <!-- fin de ingreso de informacion -->    
-
+    <!-- fin de ingreso de informacion -->
     <div class="col-md-12 col-xs-12 col-sm-12 col-lg-12">
         <h4><span id="lbl_leyenda_pago_tx" ></span></h4>        
     </div>
     <!-- item 1 -->
     <div id="id_item_1"  class="col-md-12 col-xs-12 col-sm-12 col-lg-12" style="display:none">
         <h4>
-            <span id="lbl_item_1"></span>
-            ($) <span id="val_item_1"></span><br/>            
+            <b><span id="lbl_item_1"></span></b>
+            $ <span id="val_item_1"></span><br/>            
         </h4>            
     </div>         
     <!-- item 2 -->
     <div id="id_item_2" class="col-md-12 col-xs-12 col-sm-12 col-lg-12" style="display:none">
         <h4>
-            <span id="lbl_item_2"></span>
-            ($) <span id="val_item_2"></span><br/>            
+            <b><span id="lbl_item_2"></span></b>
+            $ <span id="val_item_2"></span><br/>            
         </h4>            
     </div>      
     <div class="col-md-12 col-xs-12 col-sm-12 col-lg-12">
         <h4>
-            <span><?= Yii::t("formulario", "Valor total a pagar: ") ?></span>
-            ($) <span id="lbl_valor_pagar_tx"></span><br/><br/>
-            <span><?= Yii::t("formulario", "**Valores están en ($) USD ") ?></span>
-        </h4>            
+            <span><b><?= Yii::t("formulario", "Valor total a pagar: ") ?></b></span>
+            $ <span id="lbl_valor_pagar_tx"></span><br/><br/>
+        </h4> 
+
+        <h5> 
+            <span><b><?= Yii::t("formulario", "**Valores están en ($) USD ") ?></b></span>
+        </h5>            
     </div>      
     <div class="col-md-12 col-xs-12 col-sm-12 col-lg-12">
         <h4><b><span id="lbl_detalle2"><?= Yii::t("formulario", "Pago:") ?></span></b></h4>
