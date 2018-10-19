@@ -61,7 +61,7 @@ class InscripcionAdmision extends \yii\db\ActiveRecord {
         try {
             $twin_id=$this->updateDataInscripcion($con,$data["DATA_1"]);
             $data = $this->consultarDatosInscripcion($twin_id);
-
+            $trans->commit();
             $arroout["status"] = TRUE;
             $arroout["error"] = null;
             $arroout["message"] = null;
@@ -209,7 +209,8 @@ class InscripcionAdmision extends \yii\db\ActiveRecord {
                         96 as ddit_valor,-- ddit.ddit_valor,
                         ruta_doc_certvota,
                         ruta_doc_foto,
-                        ruta_doc_certificado
+                        ruta_doc_certificado,
+                        ruta_doc_titulo
                 FROM " . $con->dbname . ".temporal_wizard_inscripcion twi inner join db_academico.unidad_academica ua on ua.uaca_id = twi.uaca_id
                      inner join " . $con1->dbname . ".modalidad m on m.mod_id = twi.mod_id
                      inner join " . $con1->dbname . ".estudio_academico ea on ea.eaca_id = twi.car_id
@@ -346,9 +347,17 @@ class InscripcionAdmision extends \yii\db\ActiveRecord {
                                                 $rsin_id = 1; //Solicitud pendiente     
                                                 $solins_model = new SolicitudInscripcion();
                                                 //$mensaje = 'intId: ' . $interesado_id . '/uaca: ' . $pgest['unidad_academica'] . '/modalidad: ' . $pgest['modalidad'] . '/ming: ' . $pgest['ming_id'] . '/eaca: ' . $eaca_id . '/mest: ' . $mest_id . '/empresa: ' . $emp_id . '/secuencia: ' . $num_secuencia . '/rsin_id: ' . $rsin_id . '/sins_fechasol: ' . $sins_fechasol . '/usuario_id: ' . $usuario_id;
-                                                $sins_id = $solins_model->insertarSolicitud($interesado_id, $resp_datos['uaca_id'], $resp_datos['mod_id'], $resp_datos['ming_id'], $eaca_id, null, $emp_id, $num_secuencia, $rsin_id, $sins_fechasol, $usuario_id);
+                                                $sins_id = $solins_model->insertarSolicitud($interesado_id, $resp_datos['uaca_id'], $resp_datos['mod_id'], $resp_datos['twin_metodo_ingreso'], $eaca_id, null, $emp_id, $num_secuencia, $rsin_id, $sins_fechasol, $usuario_id);
                                                 //fin de solicitud inscripcion$mest_id
                                                 //grabar los documentos
+                              
+                                                $resulDoc1 = $solins_model->insertarDocumentosSolic($sins_id, $interesado_id, 1, $resp_datos['ruta_doc_titulo'], $usuario_id); 
+                                                $resulDoc2 = $solins_model->insertarDocumentosSolic($sins_id, $interesado_id, 2, $resp_datos['ruta_doc_dni'], $usuario_id); 
+                                                $resulDoc3 = $solins_model->insertarDocumentosSolic($sins_id, $interesado_id, 3, $resp_datos['ruta_doc_certvota'], $usuario_id); 
+                                                $resulDoc4 = $solins_model->insertarDocumentosSolic($sins_id, $interesado_id, 4, $resp_datos['ruta_doc_foto'], $usuario_id); 
+                                                if ($resp_datos['twin_metodo_ingreso']==4) {
+                                                    $resulDoc5 = $solins_model->insertarDocumentosSolic($sins_id, $interesado_id, 5, $resp_datos['ruta_doc_certificado'], $usuario_id); 
+                                                }
                                                 \app\models\Utilities::putMessageLogFile('solicitud: ' . $mensaje);
                                                 if ($sins_id) {
                                                     \app\models\Utilities::putMessageLogFile('ingreso la solicitud: ' . $sins_id);                                                                                            
@@ -372,26 +381,7 @@ class InscripcionAdmision extends \yii\db\ActiveRecord {
                                                             $val_descuento = 96;
                                                         }
                                                     }
-
-                                                    /*if (!empty($descuento)) {
-                                                        $modDescuento = new DetalleDescuentoItem();
-                                                        $respDescuento = $modDescuento->consultarValdctoItem($descuento);
-                                                        if ($respDescuento) {
-                                                            if ($precio == 0) {
-                                                                $val_descuento = 0;
-                                                            } else {
-                                                                if ($respDescuento["ddit_tipo_beneficio"] == 'P') {
-                                                                    $val_descuento = ($precio * ($respDescuento["ddit_porcentaje"])) / 100;
-                                                                } else {
-                                                                    $val_descuento = $respDescuento["ddit_valor"];
-                                                                }
-                                                                //Insertar solicitud descuento
-                                                                if ($val_descuento > 0) {
-                                                                    $resp_SolicDcto = $mod_ordenpago->insertarSolicDscto($sins_id, $descuento, $precio, $respDescuento["ddit_porcentaje"], $respDescuento["ddit_valor"]);
-                                                                }
-                                                            }
-                                                        }
-                                                    }*/
+                                                    
                                                     //Generar la orden de pago con valor correspondiente. Buscar precio para orden de pago.                                                                     
                                                     if ($precio == 0) {
                                                         $estadopago = 'S';
@@ -444,9 +434,9 @@ class InscripcionAdmision extends \yii\db\ActiveRecord {
                     $error++;
                 }
                 if ($exito == 1) {
-                    //$transaction->commit();                    
+                   /* $transaction->commit();                    
                     $transaction1->commit();
-                    $transaction2->commit();
+                    $transaction2->commit();*/
 
                     $message = array(
                         "wtmessage" => Yii::t("formulario", "The information have been saved and the information has been sent to your email"),
@@ -459,9 +449,9 @@ class InscripcionAdmision extends \yii\db\ActiveRecord {
                     $arroout["data"] = null;//$rawData;
                     return $arroout;
                 } else {
-                    //$transaction->rollback();
-                    //$transaction1->rollback();
-                    //$transaction2->rollback();
+                    /*$transaction->rollback();
+                    $transaction1->rollback();
+                    $transaction2->rollback();*/
                     $message = array(
                         "wtmessage" => Yii::t("formulario", "Mensaje1: " . $mensaje), //$error_message
                         "title" => Yii::t('jslang', 'Bad Request'),
@@ -474,16 +464,42 @@ class InscripcionAdmision extends \yii\db\ActiveRecord {
                     //return Utilities::ajaxResponse('NO_OK', 'alert', Yii::t("jslang", "Bad Request"), false, $message);
                 }
             } catch (Exception $ex) {
-                //$transaction->rollback();
-                //$transaction1->rollback();
-                //$transaction2->rollback();
+                /*$transaction->rollback();
+                $transaction1->rollback();
+                $transaction2->rollback();*/
                 $message = array(
                     "wtmessage" => Yii::t("formulario", "Mensaje2: " . $mensaje), //$error_message
                     "title" => Yii::t('jslang', 'Bad Request'),
                 );
-                return Utilities::ajaxResponse('NO_OK', 'alert', Yii::t("jslang", "Bad Request"), false, $message);
+                $arroout["status"] = FALSE;
+                $arroout["error"] = $ex->getCode();
+                $arroout["message"] = $ex->getMessage();
+                $arroout["data"] = null;
+                return $arroout;
+                //return Utilities::ajaxResponse('NO_OK', 'alert', Yii::t("jslang", "Bad Request"), false, $message);
             }
             return;
+    }
+
+    public function movePersonFiles($temp_id, $per_id){
+        $folder = Yii::$app->basePath . "/" . Yii::$app->params["documentFolder"] . "solicitudadmision/$temp_id/";
+        $destinations = Yii::$app->basePath . "/" . Yii::$app->params["documentFolder"] . "solicitudinscripcion/$per_id/";
+        if(verificarDirectorio($destinations)){
+            $files = scandir($folder);
+            natcasesort($files);
+            foreach ($files as $file) {
+                if($file != "." || $file != ".."){
+                    $arrExt = explode(".", $file);
+                    $type = $arrExt[count($arrExt) - 1];
+                    $newFile = str_replace("_".$temp_id.".".$type, "_".$per_id.".".$type, $file);
+                    if(!rename($folder . $file , $destinations . $newFile)){
+                        return false;
+                    }
+                }
+            }
+        }else
+            return false;
+        return true;
     }
 
 }

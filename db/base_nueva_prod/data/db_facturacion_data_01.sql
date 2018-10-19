@@ -129,8 +129,8 @@ insert into `item` (`ite_id`, `scat_id`,  `ite_codigo`, `ite_nombre`, `ite_descr
 --
 insert into `item_precio` (`ipre_id`, `ite_id`, `ipre_precio`, `ipre_porcentaje_iva`, `ipre_estado_precio`, `ipre_valor_minimo`, `ipre_porcentaje_minimo`, `ipre_fecha_inicio`, `ipre_fecha_fin`, `ipre_usu_ingreso`, `ipre_estado`, `ipre_estado_logico`) values
 -- Uteg --
-(1, 1, 150, null, 'A', null, null, '2017/09/25 00:00:00', '2018/12/31 23:59:59', 1, '1', '1'),
-(2, 2, 90, null, 'A', null, null, '2017/09/09 00:00:00', '2018/12/31 23:59:59', 1, '1', '1'),
+(1, 1, 100, null, 'A', null, null, '2017/09/25 00:00:00', '2018/12/31 23:59:59', 1, '1', '1'),
+(2, 2, 50, null, 'A', null, null, '2017/09/09 00:00:00', '2018/12/31 23:59:59', 1, '1', '1'),
 (3, 3, 390, null, 'A', null, null, '2018/07/01 00:00:00', '2018/12/31 23:59:59', 1, '1', '1'),
 (4, 5, 390, null, 'A', null, null, '2018/07/01 00:00:00', '2018/12/31 23:59:59', 1, '1', '1'),
 (5, 7, 390, null, 'A', null, null, '2018/07/01 00:00:00', '2018/12/31 23:59:59', 1, '1', '1'),

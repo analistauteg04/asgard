@@ -260,7 +260,6 @@ $(document).ready(function () {
 
 //INSERTAR DATOS
 function guardarInscripcion(accion) {
-
     var ID = (accion == "Update") ? $('#txth_twin_id').val() : 0;
     var link = $('#txth_base').val() + "/inscripcionadmision/saveinscripciontemp";
     var arrParams = new Object();
