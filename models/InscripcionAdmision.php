@@ -229,4 +229,25 @@ class InscripcionAdmision extends \yii\db\ActiveRecord {
         return $resultData;
     }
 
+    public function movePersonFiles($temp_id, $per_id){
+        $folder = Yii::$app->basePath . "/" . Yii::$app->params["documentFolder"] . "solicitudadmision/$temp_id/";
+        $destinations = Yii::$app->basePath . "/" . Yii::$app->params["documentFolder"] . "solicitudinscripcion/$per_id/";
+        if(verificarDirectorio($destinations)){
+            $files = scandir($folder);
+            natcasesort($files);
+            foreach ($files as $file) {
+                if($file != "." || $file != ".."){
+                    $arrExt = explode(".", $file);
+                    $type = $arrExt[count($arrExt) - 1];
+                    $newFile = str_replace("_".$temp_id.".".$type, "_".$per_id.".".$type, $file);
+                    if(!rename($folder . $file , $destinations . $newFile)){
+                        return false;
+                    }
+                }
+            }
+        }else
+            return false;
+        return true;
+    }
+
 }
