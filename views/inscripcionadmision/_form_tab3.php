@@ -41,15 +41,16 @@
  * Diana Lopez <dlopez@uteg.edu.ec>
  * 
  */
+
 use yii\helpers\Html;
 ?>
 
 <form class="form-horizontal">
-    
+
     <div class="col-md-12 col-xs-12 col-sm-12 col-lg-12">
         <h3><b><span id="lbl_titulo"><?= Yii::t("formulario", "Check the detail of your request") ?></span></b></h3><br> 
     </div>
-    
+
     <div class="col-md-12 col-xs-12 col-sm-12 col-lg-12">
         <h4><span id="lbl_detalle1"><?= Yii::t("formulario", "Estás a un paso de formalizar tu inscripción, comienza hoy mismo a vivir la experiencia de una auténtica enseñanza empresarial.") ?></span></h4>    
         <h4><span id="lbl_detalle2"><?= Yii::t("formulario", "A continuación te presentamos un resumen de lo que has elegido:") ?></span></h4>
@@ -92,12 +93,42 @@ use yii\helpers\Html;
         </h4>            
     </div>         
     <!-- fin de ingreso de informacion -->    
+
+    <div class="col-md-12 col-xs-12 col-sm-12 col-lg-12">
+        <h4><span id="lbl_leyenda_pago_tx" ></span></h4>        
+    </div>
+    <!-- item 1 -->
+    <div id="id_item_1"  class="col-md-12 col-xs-12 col-sm-12 col-lg-12" style="display:none">
+        <h4>
+            <span id="lbl_item_1"></span>
+            ($)<span id="val_item_1"></span><br/><br/><br/>
+            <span><?= Yii::t("formulario", "**Valores están en ($) USD ") ?></span>
+        </h4>            
+    </div>         
+    <!-- item 2 -->
+    <div id="id_item_2" class="col-md-12 col-xs-12 col-sm-12 col-lg-12" style="display:none">
+        <h4>
+            <span id="lbl_item_2"></span>
+            ($)<span id="val_item_2"></span><br/><br/><br/>
+            <span><?= Yii::t("formulario", "**Valores están en ($) USD ") ?></span>
+        </h4>            
+    </div>         
+    
+    
+    <div class="col-md-12 col-xs-12 col-sm-12 col-lg-12">
+        <h4>
+            <span><?= Yii::t("formulario", "Valor total a pagar: ") ?></span>
+            ($)<span id="lbl_valor_pagar_tx"></span><br/><br/><br/>
+            <span><?= Yii::t("formulario", "**Valores están en ($) USD ") ?></span>
+        </h4>            
+    </div>         
+
     <div class="col-md-12 col-xs-12 col-sm-12 col-lg-12">
         <h4><b><span id="lbl_detalle2"><?= Yii::t("formulario", "Pago:") ?></span></b></h4>
         <h4><span id="lbl_detalle2"><?= Yii::t("formulario", "Pago en línea PayPal: ") ?></span><a href="http://www.uteg.edu.ec/pagos-online/">http://www.uteg.edu.ec/pagos-online/</a></h4>
         <h4><span id="lbl_detalle2"><?= Yii::t("formulario", "Pago de tarjetas de crédito: ") ?></span></h4>
     </div>
-    
+
     <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">   
         <div class="col-md-2">
             <a id="paso3back" href="javascript:" class="btn btn-primary btn-block"><span class="glyphicon glyphicon-menu-left"></span><?= Yii::t("formulario", "Back") ?> </a>
