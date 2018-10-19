@@ -338,16 +338,24 @@ function guardarInscripcion(accion) {
                     var leyenda = '';
                     var ming = response.data.data.twin_metodo_ingreso;
                     var mod_id = response.data.data.mod_id;
+                    var id_carrera = response.data.data.id_carrera;
+                    
                     var materias_online = "Matematicas I, Tecnicas de comunicacion Oral y Escrita, Contabilidad";
                     var materias_otros = "Matematicas I, Tecnicas de comunicacion Oral y Escrita, Contabilidad, Desarrollo del Pensamiento, Emprendimiento";
 
                     $('#lbl_fcur_lb').text("Fecha del curso:");
                     if (uaca_id == 2) {
-                        leyenda = 'El valor de la maestría: $11,300.00 ';
-                        leyenda += 'El valor a cancelar por concepto de inscripción es: ';
+                        if(id_carrera==22){
+                            leyenda = 'El valor de la maestría: $15,500.00';
+                        }else{
+                            leyenda = 'El valor de la maestría: $11,300.00';
+                        }
+                        leyenda += '<br/><br/>El valor a cancelar por concepto de inscripción es: ';
                         $('#lbl_item_1').text("Valor Inscripción: ");
                         $('#val_item_1').text(response.data.data.precio);
+                        
                         $('#lbl_valor_pagar_tx').text(response.data.data.precio);
+                        
                         $('#lbl_fcur_tx').text("17 de noviembre del 2018");
                     } else if (uaca_id == 1) {
                         leyenda = 'El valor a cancelar por concepto de ' + response.data.data.metodo + ' en la modalidad ' + response.data.data.modalidad + ' es:';
@@ -394,7 +402,7 @@ function guardarInscripcion(accion) {
                         }
                     }
 
-                    $('#lbl_leyenda_pago_tx').text(leyenda);
+                    $('#lbl_leyenda_pago_tx').html(leyenda);
                     //fin ingreso informacion del tab 3
                     $('#txth_twin_id').val(response.data.ids);//SE AGREGA AL FINAL                            
                     paso2next();

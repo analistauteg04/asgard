@@ -188,8 +188,7 @@ class InscripcionAdmision extends \yii\db\ActiveRecord {
         $estado = 1;
         $estado_precio = 'A';
 
-        $sql = "
-                SELECT  ua.uaca_nombre unidad, 
+        $sql = "SELECT  ua.uaca_nombre unidad, 
                         m.mod_nombre modalidad,
                         ea.eaca_nombre carrera,
                         ea.eaca_id as id_carrera,
@@ -235,8 +234,7 @@ class InscripcionAdmision extends \yii\db\ActiveRecord {
                      imi.imni_estado = :estado AND
                      imi.imni_estado_logico = :estado AND
                      ip.ipre_estado = :estado AND
-                     ip.ipre_estado_logico = :estado
-                ";
+                     ip.ipre_estado_logico = :estado";
 
         $comando = $con->createCommand($sql);
         $comando->bindParam(":estado", $estado, \PDO::PARAM_STR);
@@ -339,6 +337,19 @@ class InscripcionAdmision extends \yii\db\ActiveRecord {
                                             $iemp_id = $mod_inte_emp->crearInteresadoEmpresa($interesado_id, $emp_id, $usuario_id);
                                         }
                                         if ($iemp_id > 0) {
+
+                                            $usuarioNew = Usuario::findIdentity($usuario_id);
+                                            $link = $usuarioNew->generarLinkActivacion();
+                                            $email_info = array(
+                                                "nombres" => $resp_datos['twin_nombre'],
+                                                "apellidos" => $resp_datos['twin_apellido'],
+                                                "correo" => $resp_datos['twin_correo'],
+                                                "telefono" => $resp_datos['twin_celular'],
+                                                "identificacion" => $resp_datos['twin_numero'],
+                                                "link_asgard" => $link,
+                                            );
+                                            $outemail = $mod_interesado->enviarCorreoBienvenida($email_info);
+
                                             $eaca_id = NULL;
                                             $mest_id = NULL;
                                             if ($emp_id == 1) {//Uteg 
@@ -442,18 +453,6 @@ class InscripcionAdmision extends \yii\db\ActiveRecord {
                 $transaction->commit();
                 $transaction1->commit();
                 $transaction2->commit();
-                //envío de correo.
-                $usuarioNew = Usuario::findIdentity($usuario_id);
-                $link = $usuarioNew->generarLinkActivacion();
-                $email_info = array(
-                    "nombres" => $resp_datos['twin_nombre'],
-                    "apellidos" => $resp_datos['twin_apellido'],
-                    "correo" => $resp_datos['twin_correo'],
-                    "telefono" => $resp_datos['twin_celular'],
-                    "identificacion" => $resp_datos['twin_numero'],
-                    "link_asgard" => $link,
-                );
-                $outemail = $mod_interesado->enviarCorreoBienvenida($email_info);
 
                 $message = array(
                     "wtmessage" => Yii::t("formulario", "The information have been saved and the information has been sent to your email"),
