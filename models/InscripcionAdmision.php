@@ -355,14 +355,25 @@ class InscripcionAdmision extends \yii\db\ActiveRecord {
                                             $sins_id = $solins_model->insertarSolicitud($interesado_id, $resp_datos['uaca_id'], $resp_datos['mod_id'], $resp_datos['twin_metodo_ingreso'], $eaca_id, null, $emp_id, $num_secuencia, $rsin_id, $sins_fechasol, $usuario_id);
                                             //fin de solicitud inscripcion$mest_id
                                             //grabar los documentos
-
-                                            $resulDoc1 = $solins_model->insertarDocumentosSolic($sins_id, $interesado_id, 1, $resp_datos['ruta_doc_titulo'], $usuario_id);
-                                            $resulDoc2 = $solins_model->insertarDocumentosSolic($sins_id, $interesado_id, 2, $resp_datos['ruta_doc_dni'], $usuario_id);
-                                            $resulDoc3 = $solins_model->insertarDocumentosSolic($sins_id, $interesado_id, 3, $resp_datos['ruta_doc_certvota'], $usuario_id);
-                                            $resulDoc4 = $solins_model->insertarDocumentosSolic($sins_id, $interesado_id, 4, $resp_datos['ruta_doc_foto'], $usuario_id);
+                                            if ($resp_datos['ruta_doc_titulo']!="") {
+                                                $resulDoc1 = $solins_model->insertarDocumentosSolic($sins_id, $interesado_id, 1, $resp_datos['ruta_doc_titulo'], $usuario_id);
+                                            }
+                                            if ($resp_datos['ruta_doc_dni']!="") {
+                                                $resulDoc2 = $solins_model->insertarDocumentosSolic($sins_id, $interesado_id, 2, $resp_datos['ruta_doc_dni'], $usuario_id);
+                                            }
+                                            if ($resp_datos['ruta_doc_certvota']!="") {    
+                                                $resulDoc3 = $solins_model->insertarDocumentosSolic($sins_id, $interesado_id, 3, $resp_datos['ruta_doc_certvota'], $usuario_id);
+                                            }
+                                            if ($resp_datos['ruta_doc_foto']!="") {     
+                                                $resulDoc4 = $solins_model->insertarDocumentosSolic($sins_id, $interesado_id, 4, $resp_datos['ruta_doc_foto'], $usuario_id);
+                                            }                                            
                                             if ($resp_datos['twin_metodo_ingreso'] == 4) {
-                                                $resulDoc5 = $solins_model->insertarDocumentosSolic($sins_id, $interesado_id, 6, $resp_datos['ruta_doc_certificado'], $usuario_id);
-                                                // $resulDoc6 = $solins_model->insertarDocumentosSolic($sins_id, $interesado_id, 7, $resp_datos['ruta_doc_hojavida'], $usuario_id); 
+                                                if ($resp_datos['ruta_doc_certificado']!="") {     
+                                                    $resulDoc5 = $solins_model->insertarDocumentosSolic($sins_id, $interesado_id, 6, $resp_datos['ruta_doc_certificado'], $usuario_id);
+                                                }
+                                                if ($resp_datos['ruta_doc_hojavida']!="") { 
+                                                    $resulDoc6 = $solins_model->insertarDocumentosSolic($sins_id, $interesado_id, 7, $resp_datos['ruta_doc_hojavida'], $usuario_id); 
+                                                }
                                             }
                                             \app\models\Utilities::putMessageLogFile('solicitud: ' . $mensaje);
                                             if ($sins_id) {
