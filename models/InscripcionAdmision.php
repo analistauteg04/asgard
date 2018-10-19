@@ -204,7 +204,7 @@ class InscripcionAdmision extends \yii\db\ActiveRecord {
                      inner join " . $con->dbname . ".metodo_ingreso mi on mi.ming_id = twi.twin_metodo_ingreso
                      inner join " . $con2->dbname . ".item_metodo_unidad imi on (imi.ming_id =  twi.twin_metodo_ingreso and imi.uaca_id = twi.uaca_id and imi.mod_id = twi.mod_id)
                      inner join " . $con2->dbname . ".item_precio ip on ip.ite_id = imi.ite_id
-                WHERE twi.twin_numero = :twin_id AND                     
+                WHERE twi.twin_id = :twin_id AND                     
                      ip.ipre_estado_precio = :estado_precio AND
                      ua.uaca_estado = :estado AND
                      ua.uaca_estado_logico = :estado AND
@@ -217,8 +217,7 @@ class InscripcionAdmision extends \yii\db\ActiveRecord {
                      imi.imni_estado = :estado AND
                      imi.imni_estado_logico = :estado AND
                      ip.ipre_estado = :estado AND
-                     ip.ipre_estado_logico = :estado
-             limit 1";
+                     ip.ipre_estado_logico = :estado";
                 
         $comando = $con->createCommand($sql);
         $comando->bindParam(":estado", $estado, \PDO::PARAM_STR);
