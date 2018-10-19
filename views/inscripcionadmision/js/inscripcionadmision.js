@@ -45,24 +45,24 @@ $(document).ready(function () {
             //console.log(response);
             if (response.status == "OK") {
                 setTimeout(function () {
-                    switch (response.data.data.uaca_id) {
-                        case 1:
-                            switch (response.data.data.mod_id) {
-                                case 1:
-                                    break;
-                                case 1:
-                                    break;
-                            }
-                            break;
-                        case 2:
-                            switch (response.data.data.mod_id) {
-                                case 1:
-                                    break;
-                                case 1:
-                                    break;
-                            }
-                            break;
-                    }
+//                    switch (response.data.data.uaca_id) {
+//                        case 1:
+//                            switch (response.data.data.mod_id) {
+//                                case 1:
+//                                    break;
+//                                case 1:
+//                                    break;
+//                            }
+//                            break;
+//                        case 2:
+//                            switch (response.data.data.mod_id) {
+//                                case 1:
+//                                    break;
+//                                case 1:
+//                                    break;
+//                            }
+//                            break;
+//                    }
                     window.location.href = "https://www.uteg.edu.ec/pago-online-nivelacion/";
                 }, 5000);
             }
