@@ -359,6 +359,7 @@ class InscripcionAdmision extends \yii\db\ActiveRecord {
                                                 $resulDoc4 = $solins_model->insertarDocumentosSolic($sins_id, $interesado_id, 4, $resp_datos['ruta_doc_foto'], $usuario_id); 
                                                 if ($resp_datos['twin_metodo_ingreso']==4) {
                                                     $resulDoc5 = $solins_model->insertarDocumentosSolic($sins_id, $interesado_id, 5, $resp_datos['ruta_doc_certificado'], $usuario_id); 
+                                                    $resulDoc6 = $solins_model->insertarDocumentosSolic($sins_id, $interesado_id, 6, $resp_datos['ruta_doc_hojavida'], $usuario_id); 
                                                 }
                                                 \app\models\Utilities::putMessageLogFile('solicitud: ' . $mensaje);
                                                 if ($sins_id) {

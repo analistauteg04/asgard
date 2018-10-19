@@ -4,7 +4,6 @@
 use yii\helpers\Html;
 use app\components\CFileInputAjax;
 use yii\helpers\Url;
-
 ?>
 <form class="form-horizontal">  
     <div class="col-md-12 col-xs-12 col-sm-12 col-lg-12">
@@ -13,7 +12,7 @@ use yii\helpers\Url;
     <div class="col-md-12 col-xs-12 col-sm-12 col-lg-12">
         <?php echo $leyenda; ?>
     </div>
-    
+
     <div class="col-md-12 col-xs-12 col-sm-12 col-lg-12 doc_titulo cinteres">
         <div class="form-group">
             <label for="txth_doc_titulo" class="col-sm-3 col-md-3 col-xs-3 col-lg-3 control-label keyupmce"><?= Yii::t("formulario", "Title") ?></label>
@@ -243,8 +242,7 @@ use yii\helpers\Url;
             </div>
         </div>
     </div>
-    
-    <div class="col-md-12 col-xs-12 col-sm-12 col-lg-12" id="divCertificado" style="display: none">   
+    <div  id="divCertificado" style="display: none">   
         <div class="col-md-12 col-xs-12 col-sm-12 col-lg-12 doc_certificado cinteres">
             <div class="form-group">
                 <label for="txth_doc_certificado" class="col-sm-3 col-md-3 col-xs-3 col-lg-3 control-label keyupmce"><?= Yii::t("formulario", "Certificado Materias") ?></label>
@@ -273,12 +271,12 @@ use yii\helpers\Url;
                         ],
                         'pluginEvents' => [
                             "filebatchselected" => "function (event) {
-            $('#txth_doc_foto').val($('#txt_doc_foto').val());
-            $('#txt_doc_foto').fileinput('upload');
+            $('#txth_doc_certificado').val($('#txt_doc_certificado').val());
+            $('#txt_doc_certificado').fileinput('upload');
         }",
                             "fileuploaderror" => "function (event, data, msg) {
             $(this).parent().parent().children().first().addClass('hide');
-            $('#txth_doc_adj_disi').val('');
+            $('#txth_doc_certificado').val('');
             //showAlert('NO_OK', 'error', {'wtmessage': objLang.Error_to_process_File__Try_again_, 'title': objLang.Error});   
         }",
                             "filebatchuploadcomplete" => "function (event, files, extra) { 
@@ -302,6 +300,68 @@ use yii\helpers\Url;
                 </div>
             </div>
         </div>
+
+
+        <?php //Aqui voy a colocar la informacion de de la hoja de vida  ?>
+        <div class="col-md-12 col-xs-12 col-sm-12 col-lg-12 doc_hoja_vida">
+            <div class="form-group">
+                <label for="txth_doc_hojavida" class="col-sm-3 col-md-3 col-xs-3 col-lg-3 control-label keyupmce"><?= Yii::t("formulario", "Hoja de Vida") ?></label>
+                <div class="col-sm-9 col-md-9 col-xs-9 col-lg-9">
+                    <?= Html::hiddenInput('txth_doc_hojavida', '', ['id' => 'txth_doc_hojavida']); ?>
+                    <?php
+                    echo CFileInputAjax::widget([
+                        'id' => 'txt_doc_hoja_vida',
+                        'name' => 'txt_doc_hoja_vida',
+                        'pluginLoading' => false,
+                        'showMessage' => false,
+                        'pluginOptions' => [
+                            'showPreview' => false,
+                            'showCaption' => true,
+                            'showRemove' => true,
+                            'showUpload' => false,
+                            'showCancel' => false,
+                            'browseClass' => 'btn btn-primary btn-block',
+                            'browseIcon' => '<i class="fa fa-folder-open"></i> ',
+                            'browseLabel' => "Subir Archivo",
+                            'uploadUrl' => Url::to(['/inscripcionadmision/saveinscripciontemp']),
+                            'maxFileSize' => Yii::$app->params["MaxFileSize"], // en Kbytes
+                            'uploadExtraData' => 'javascript:function (previewId,index) {
+                return {"upload_file": true, "name_file": "doc_hoja_vida", "inscripcion_id": $("#txth_twin_id").val()};
+            }',
+                        ],
+                        'pluginEvents' => [
+                            "filebatchselected" => "function (event) {
+            $('#txth_doc_hojavida').val($('#txt_doc_hoja_vida').val());
+            $('#txt_doc_hoja_vida').fileinput('upload');
+        }",
+                            "fileuploaderror" => "function (event, data, msg) {
+            $(this).parent().parent().children().first().addClass('hide');
+            $('#txth_doc_hojavida').val('');
+            //showAlert('NO_OK', 'error', {'wtmessage': objLang.Error_to_process_File__Try_again_, 'title': objLang.Error});   
+        }",
+                            "filebatchuploadcomplete" => "function (event, files, extra) { 
+            $(this).parent().parent().children().first().addClass('hide');
+        }",
+                            "filebatchuploadsuccess" => "function (event, data, previewId, index) {
+            var form = data.form, files = data.files, extra = data.extra,
+            response = data.response, reader = data.reader;
+            $(this).parent().parent().children().first().addClass('hide');
+            var acciones = [{id: 'reloadpage', class: 'btn btn-primary', value: objLang.Accept, callback: 'reloadPage'}];
+            //showAlert('OK', 'Success', {'wtmessage': objLang.File_uploaded_successfully__Do_you_refresh_the_web_page_, 'title': objLang.Success, 'acciones': acciones});  
+        }",
+                            "fileuploaded" => "function (event, data, previewId, index) {
+            $(this).parent().parent().children().first().addClass('hide');
+            var acciones = [{id: 'reloadpage', class: 'btn btn-primary', value: objLang.Accept, callback: 'reloadPage'}];
+            //showAlert('OK', 'Success', {'wtmessage': objLang.File_uploaded_successfully__Do_you_refresh_the_web_page_, 'title': objLang.Success, 'acciones': acciones});                              
+        }",
+                        ],
+                    ]);
+                    ?>
+                </div>
+            </div>
+        </div>
+        <?php //Fin de la hoja de vida  ?>
+
     </div>
     <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
         <div class="form-group">                        
@@ -311,7 +371,7 @@ use yii\helpers\Url;
             <div class="col-lg-9 col-md-9 col-sm-9 col-xs-9">                
                 <label for="chk_mensaje1" class="col-lg-9 col-md-9 col-sm-9 col-xs-9"><?= Yii::t("formulario", "Expreso que la información declarada y documentos cargados son válidos y legales.") ?> </label>
             </div>
-            
+
         </div>
     </div>
     <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">

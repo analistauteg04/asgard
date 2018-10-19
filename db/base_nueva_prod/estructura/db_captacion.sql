@@ -420,6 +420,7 @@ create table if not exists `temporal_wizard_inscripcion` (
  `ruta_doc_certvota` varchar(200) null, 
  `ruta_doc_foto` varchar(200) null, 
  `ruta_doc_certificado` varchar(200) null, 
+ `ruta_doc_hojavida` varchar(200) null, 
  `twin_mensaje1` varchar(1) null,
  `twin_mensaje2` varchar(1) null, 
  `twin_estado` varchar(1) not null,
