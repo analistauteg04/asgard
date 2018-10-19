@@ -292,7 +292,7 @@ class InscripcionAdmision extends \yii\db\ActiveRecord {
                     }
                     if ($id_persona > 0) {
                         //Modifificaion para Mover Imagenes de temp a Persona
-                        self::movePersonFiles($twinIds,$id_persona);
+                        //self::movePersonFiles($twinIds,$id_persona);
                         \app\models\Utilities::putMessageLogFile('ingreso la Persona');
                         $concap = \Yii::$app->db_captacion;
                         $mod_emp_persona = new EmpresaPersona();
