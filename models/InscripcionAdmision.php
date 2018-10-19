@@ -449,7 +449,7 @@ class InscripcionAdmision extends \yii\db\ActiveRecord {
                     $arroout["status"] = TRUE;
                     $arroout["error"] = null;
                     $arroout["message"] = $message;
-                    $arroout["data"] = null;//$rawData;
+                    $arroout["data"] = $resp_datos;//$rawData;
                     return $arroout;
                 } else {
                     /*$transaction->rollback();
