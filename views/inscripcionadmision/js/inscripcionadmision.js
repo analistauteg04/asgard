@@ -261,21 +261,7 @@ function guardarInscripcion(accion) {
         arrParams.DATA_1 = dataInscripPart1(ID);
         arrParams.ACCION = accion;
         if (!validateForm()) {
-            alert("llego hasta aqui");
             requestHttpAjax(link, arrParams, function (response) {
-<<<<<<< HEAD
-            var message = response.message;
-            if (response.status == "OK") {
-                //var data =response.data;
-                //AccionTipo=data.accion;
-                menssajeModal(response.status, response.type, message.info, response.label, "", "", "1");
-                limpiarDatos();
-                var renderurl = $('#txth_base').val() + "/inscripciones/index";
-                window.location = renderurl;
-            }else{
-                menssajeModal(response.status, response.type, message.info, response.label, "", "", "1");
-            }             
-=======
                 var message = response.message;
                 console.log(response);
                 if (response.status == "OK") { 
@@ -299,7 +285,6 @@ function guardarInscripcion(accion) {
                     //window.location = renderurl;
                 }     
                 showAlert(response.status, response.label, response.message);       
->>>>>>> 79654795057925adb6f9dfd088e2ff6d404e9868
             }, true);
         }
     } else {
@@ -356,5 +341,4 @@ function dataInscripPart1(ID) {
     sessionStorage.dataInscrip_1 = JSON.stringify(datArray);
     return datArray;
 }
-
 
