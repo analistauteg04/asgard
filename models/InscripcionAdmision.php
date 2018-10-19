@@ -126,7 +126,8 @@ class InscripcionAdmision extends \yii\db\ActiveRecord {
                 SET twin_nombre=:twin_nombre,twin_apellido=:twin_apellido,twin_dni=:twin_dni,twin_numero=:twin_numero,
                     twin_correo=:twin_correo,twin_pais=:twin_pais,twin_celular=:twin_celular,uaca_id=:uaca_id, 
                     mod_id=:mod_id,car_id=:car_id,twin_metodo_ingreso=:twin_metodo_ingreso,conuteg_id=:conuteg_id,ruta_doc_titulo=:ruta_doc_titulo, 
-                    ruta_doc_dni=:ruta_doc_dni, ruta_doc_certvota=:ruta_doc_certvota,ruta_doc_foto=:ruta_doc_foto,ruta_doc_certificado=:ruta_doc_certificado, 
+                    ruta_doc_dni=:ruta_doc_dni, ruta_doc_certvota=:ruta_doc_certvota,ruta_doc_foto=:ruta_doc_foto,
+                    ruta_doc_hojavida=:ruta_doc_hojavida,ruta_doc_certificado=:ruta_doc_certificado, 
                     twin_mensaje1=:twin_mensaje1,twin_mensaje2=:twin_mensaje2,twin_fecha_modificacion=CURRENT_TIMESTAMP() 
                  WHERE twin_id =:twin_id ";
         $command = $con->createCommand($sql);
@@ -148,6 +149,7 @@ class InscripcionAdmision extends \yii\db\ActiveRecord {
         $command->bindParam(":ruta_doc_certvota",basename($data[0]['ruta_doc_certvota']), \PDO::PARAM_STR);
         $command->bindParam(":ruta_doc_foto", basename($data[0]['ruta_doc_foto']), \PDO::PARAM_STR);
         $command->bindParam(":ruta_doc_certificado", basename($data[0]['ruta_doc_certificado']), \PDO::PARAM_STR);
+        $command->bindParam(":ruta_doc_hojavida", basename($data[0]['ruta_doc_hojavida']), \PDO::PARAM_STR);
         $command->bindParam(":twin_mensaje1", $data[0]['twin_mensaje1'], \PDO::PARAM_STR);
         $command->bindParam(":twin_mensaje2", $data[0]['twin_mensaje2'], \PDO::PARAM_STR);
         $command->execute();
