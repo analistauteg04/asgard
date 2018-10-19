@@ -17,23 +17,23 @@ $(document).ready(function () {
             }
         }, true);
     });
-       
-    $('#sendInformacionAspirante').click(function () { 
-        if ($('#txth_twin_id').val()==0){
-            guardarInscripcion('Create'); 
-        }else{
-            guardarInscripcion('Update'); 
+
+    $('#sendInformacionAspirante').click(function () {
+        if ($('#txth_twin_id').val() == 0) {
+            guardarInscripcion('Create');
+        } else {
+            guardarInscripcion('Update');
         }
-               
+
     });
-    $('#sendInformacionAspirante2').click(function () { 
+    $('#sendInformacionAspirante2').click(function () {
         if ($("#chk_mensaje1").prop("checked") && $("#chk_mensaje2").prop("checked")) {
-            if ($('#txth_twin_id').val()!=0){
-                guardarInscripcion('Update'); 
-            } 
-        }else{
+            if ($('#txth_twin_id').val() != 0) {
+                guardarInscripcion('Update');
+            }
+        } else {
             alert('Debe Aceptar los términos de la Información');
-        }             
+        }
     });
     $('#sendInscripcionsolicitud').click(function () {
         var link = $('#txth_base').val() + "/inscripcionadmision/saveinscripciontemp";
@@ -42,24 +42,24 @@ $(document).ready(function () {
         arrParams.ACCION = 'Fin';
         requestHttpAjax(link, arrParams, function (response) {
             var message = response.message;
-                //console.log(response);
-                if (response.status == "OK") { 
-                    setTimeout(function () {
-                        window.location.href = $('#txth_base').val() + "/inscripcionadmision/index";
-                    }, 5000);
-                }     
-                showAlert(response.status, response.label, response.message); 
-            
-            /*showAlert(response.status, response.label, response.message);
-            if (!response.error) {
+            //console.log(response);
+            if (response.status == "OK") {
                 setTimeout(function () {
                     window.location.href = $('#txth_base').val() + "/inscripcionadmision/index";
                 }, 5000);
-            }*/
+            }
+            showAlert(response.status, response.label, response.message);
+
+            /*showAlert(response.status, response.label, response.message);
+             if (!response.error) {
+             setTimeout(function () {
+             window.location.href = $('#txth_base').val() + "/inscripcionadmision/index";
+             }, 5000);
+             }*/
         }, true);
-        
+
     });
-    
+
     $('#cmb_tipo_dni').change(function () {
         if ($('#cmb_tipo_dni').val() == 'PASS') {
             $('#txt_cedula').removeClass("PBvalidation");
@@ -73,7 +73,7 @@ $(document).ready(function () {
             $('#Divpasaporte').hide();
             $('#Divcedula').show();
         }
-    });  
+    });
 
     $('#cmb_unidad_solicitud').change(function () {
         var link = $('#txth_base').val() + "/inscripcionadmision/index";
@@ -92,27 +92,27 @@ $(document).ready(function () {
                     requestHttpAjax(link, arrParams, function (response) {
                         if (response.status == "OK") {
                             data = response.message;
-                            setComboData(data.carrera, "cmb_carrera_solicitud");                            
+                            setComboData(data.carrera, "cmb_carrera_solicitud");
                         }
                     }, true);
                 }
             }
         }, true);
-        
+
         //métodos.
-        var arrParams = new Object();  
+        var arrParams = new Object();
         arrParams.nint_id = $(this).val();
         arrParams.metodo = $('#cmb_metodo_solicitud').val();
         arrParams.getmetodo = true;
         requestHttpAjax(link, arrParams, function (response) {
             if (response.status == "OK") {
                 data = response.message;
-                setComboData(data.metodos, "cmb_metodo_solicitud");   
-                AparecerDocumento();     
-                Requisitos();   
+                setComboData(data.metodos, "cmb_metodo_solicitud");
+                AparecerDocumento();
+                Requisitos();
             }
-        }, true);     
-         
+        }, true);
+
     });
 
     $('#cmb_modalidad_solicitud').change(function () {
@@ -127,17 +127,17 @@ $(document).ready(function () {
                 setComboData(data.carrera, "cmb_carrera_solicitud");
             }
         }, true);
-        Requisitos();     
+        Requisitos();
     });
-            
+
     $('#cmb_metodo_solicitud').change(function () {
-        Requisitos();       
-        AparecerDocumento();                              
-    });    
-    
+        Requisitos();
+        AparecerDocumento();
+    });
+
     // tabs del index
     $('#paso1next').click(function () {
-        
+
         $("a[data-href='#paso1']").attr('data-toggle', 'none');
         $("a[data-href='#paso1']").parent().attr('class', 'disabled');
         $("a[data-href='#paso1']").attr('data-href', $("a[href='#paso1']").attr('href'));
@@ -172,130 +172,173 @@ $(document).ready(function () {
         $("a[data-href='#paso2']").attr('data-toggle', 'tab');
         $("a[data-href='#paso2']").attr('href', $("a[data-href='#paso2']").attr('data-href'));
         $("a[data-href='#paso2']").trigger("click");
-    });    
-        
-    
+    });
+
+
     function AparecerDocumento() {
-        if ($('#cmb_metodo_solicitud').val() == 3) {           
-            $('#divCertificado').css('display', 'block');                        
+        if ($('#cmb_metodo_solicitud').val() == 3) {
+            $('#divCertificado').css('display', 'block');
         } else {
             $('#divCertificado').css('display', 'none');
-            
+
         }
     }
-    
+
     function Requisitos() {
-        if ($('#cmb_metodo_solicitud').val() != 0) {            
+        if ($('#cmb_metodo_solicitud').val() != 0) {
             //Grado
-            if  ($('#cmb_unidad_solicitud').val() == 1) {
+            if ($('#cmb_unidad_solicitud').val() == 1) {
                 //Método: CAN
                 if ($('#cmb_metodo_solicitud').val() == 1) {
                     //Online
                     if ($('#cmb_modalidad_solicitud').val() == 1) {
-                        $('#divRequisitosCANO').css('display', 'block');                         
-                        $('#divRequisitosCANP').css('display', 'none'); 
-                        $('#divRequisitosCANSP').css('display', 'none'); 
-                        $('#divRequisitosCANAD').css('display', 'none'); 
-                        $('#divRequisitosEXA').css('display', 'none');                         
-                        $('#divRequisitosPRP').css('display', 'none'); 
+                        $('#divRequisitosCANO').css('display', 'block');
+                        $('#divRequisitosCANP').css('display', 'none');
+                        $('#divRequisitosCANSP').css('display', 'none');
+                        $('#divRequisitosCANAD').css('display', 'none');
+                        $('#divRequisitosEXA').css('display', 'none');
+                        $('#divRequisitosPRP').css('display', 'none');
                     } else {  //Presencial
                         if ($('#cmb_modalidad_solicitud').val() == 2) {
-                            $('#divRequisitosCANP').css('display', 'block');  
-                            $('#divRequisitosCANO').css('display', 'none');                             
-                            $('#divRequisitosCANSP').css('display', 'none'); 
-                            $('#divRequisitosCANAD').css('display', 'none'); 
-                            $('#divRequisitosEXA').css('display', 'none');                             
-                            $('#divRequisitosPRP').css('display', 'none'); 
+                            $('#divRequisitosCANP').css('display', 'block');
+                            $('#divRequisitosCANO').css('display', 'none');
+                            $('#divRequisitosCANSP').css('display', 'none');
+                            $('#divRequisitosCANAD').css('display', 'none');
+                            $('#divRequisitosEXA').css('display', 'none');
+                            $('#divRequisitosPRP').css('display', 'none');
                         } else {   //Semipresencial
                             if ($('#cmb_modalidad_solicitud').val() == 3) {
-                                $('#divRequisitosCANSP').css('display', 'block');  
-                                $('#divRequisitosCANO').css('display', 'none'); 
-                                $('#divRequisitosCANP').css('display', 'none');                                 
-                                $('#divRequisitosCANAD').css('display', 'none'); 
-                                $('#divRequisitosEXA').css('display', 'none');                                 
+                                $('#divRequisitosCANSP').css('display', 'block');
+                                $('#divRequisitosCANO').css('display', 'none');
+                                $('#divRequisitosCANP').css('display', 'none');
+                                $('#divRequisitosCANAD').css('display', 'none');
+                                $('#divRequisitosEXA').css('display', 'none');
                                 $('#divRequisitosPRP').css('display', 'none');
                             } else {  // distancia
-                                $('#divRequisitosCANAD').css('display', 'block');  
-                                $('#divRequisitosCANO').css('display', 'none'); 
-                                $('#divRequisitosCANP').css('display', 'none'); 
-                                $('#divRequisitosCANSP').css('display', 'none');                                 
-                                $('#divRequisitosEXA').css('display', 'none');                                 
-                                $('#divRequisitosPRP').css('display', 'none'); 
+                                $('#divRequisitosCANAD').css('display', 'block');
+                                $('#divRequisitosCANO').css('display', 'none');
+                                $('#divRequisitosCANP').css('display', 'none');
+                                $('#divRequisitosCANSP').css('display', 'none');
+                                $('#divRequisitosEXA').css('display', 'none');
+                                $('#divRequisitosPRP').css('display', 'none');
                             }
                         }
                     }
                 } else {  //examen
                     //Online                    
-                    $('#divRequisitosEXA').css('display', 'block');  
-                    $('#divRequisitosCANO').css('display', 'none'); 
-                    $('#divRequisitosCANP').css('display', 'none'); 
-                    $('#divRequisitosCANSP').css('display', 'none'); 
-                    $('#divRequisitosCANAD').css('display', 'none');                                                 
-                    $('#divRequisitosPRP').css('display', 'none');                                         
+                    $('#divRequisitosEXA').css('display', 'block');
+                    $('#divRequisitosCANO').css('display', 'none');
+                    $('#divRequisitosCANP').css('display', 'none');
+                    $('#divRequisitosCANSP').css('display', 'none');
+                    $('#divRequisitosCANAD').css('display', 'none');
+                    $('#divRequisitosPRP').css('display', 'none');
                 }
-            }  else {  //Posgrado  Semipresencial
+            } else {  //Posgrado  Semipresencial
                 if ($('#cmb_modalidad_solicitud').val() == 3) {
                     //Homologación            
-                    if ($('#cmb_metodo_solicitud').val() == 4) {     
-                       //Taller introductorio
-                        $('#divRequisitosPRP').css('display', 'block');                              
-                        $('#divRequisitosCANO').css('display', 'none'); 
-                        $('#divRequisitosCANP').css('display', 'none'); 
-                        $('#divRequisitosCANSP').css('display', 'none'); 
-                        $('#divRequisitosCANAD').css('display', 'none'); 
-                        $('#divRequisitosEXA').css('display', 'none');                         
-                    } 
+                    if ($('#cmb_metodo_solicitud').val() == 4) {
+                        //Taller introductorio
+                        $('#divRequisitosPRP').css('display', 'block');
+                        $('#divRequisitosCANO').css('display', 'none');
+                        $('#divRequisitosCANP').css('display', 'none');
+                        $('#divRequisitosCANSP').css('display', 'none');
+                        $('#divRequisitosCANAD').css('display', 'none');
+                        $('#divRequisitosEXA').css('display', 'none');
+                    }
                 }
             }
         } else {
-            $('#divRequisitosCANO').css('display', 'none'); 
-            $('#divRequisitosCANP').css('display', 'none'); 
-            $('#divRequisitosCANSP').css('display', 'none'); 
-            $('#divRequisitosCANAD').css('display', 'none'); 
-            $('#divRequisitosEXA').css('display', 'none');             
-            $('#divRequisitosPRP').css('display', 'none'); 
+            $('#divRequisitosCANO').css('display', 'none');
+            $('#divRequisitosCANP').css('display', 'none');
+            $('#divRequisitosCANSP').css('display', 'none');
+            $('#divRequisitosCANAD').css('display', 'none');
+            $('#divRequisitosEXA').css('display', 'none');
+            $('#divRequisitosPRP').css('display', 'none');
         }
     }
 });
 
 //INSERTAR DATOS
 function guardarInscripcion(accion) {
+    var ID = (accion == "Update") ? $('#txth_twin_id').val() : 0;
+    var link = $('#txth_base').val() + "/inscripcionadmision/saveinscripciontemp";
+    var arrParams = new Object();
+    arrParams.DATA_1 = dataInscripPart1(ID);
+    arrParams.ACCION = accion;
+    if (!validateForm()) {
+        requestHttpAjax(link, arrParams, function (response) {
+            var message = response.message;
+            //console.log(response);
+            if (response.status == "OK") {
+                if (accion == "Create") {
+                    $('#txth_twin_id').val(response.data.ids)
+                    paso1next();
+                } else {
+                    //Inicio ingreso informacion del tab 3\
+                    $('#lbl_uaca_tx').text(response.data.data.unidad);
+                    $('#lbl_moda_tx').text(response.data.data.modalidad);
+                    $('#lbl_carrera_tx').text(response.data.data.carrera);
+                    $('#lbl_ming_tx').text(response.data.data.metodo);
+                    $('#id_item_1').css('display', 'none');
+                    ;
+                    $('#id_item_2').css('display', 'none');
+                    
+                    var leyenda = '';
+                    var ming = response.data.data.twin_metodo_ingreso;
+                    var mod_id = response.data.data.mod_id;
+                    var uaca_id = response.data.data.uaca_id;
 
-        var ID = (accion == "Update") ? $('#txth_twin_id').val() : 0;
-        var link = $('#txth_base').val() + "/inscripcionadmision/saveinscripciontemp";
-        var arrParams = new Object();
-        arrParams.DATA_1 = dataInscripPart1(ID);
-        arrParams.ACCION = accion;
-        if (!validateForm()) {
-            requestHttpAjax(link, arrParams, function (response) {                
-                var message = response.message;
-                //console.log(response);
-                if (response.status == "OK") { 
-                    if(accion == "Create"){
-                        //alert(response.data.ids);
-                        $('#txth_twin_id').val(response.data.ids)
-                        paso1next();
-                    }else{                        
-                        
-                        //Inicio ingreso informacion del tab 3\
-                       // alert(response.data.data.unidad);
-                        $('#lbl_uaca_tx').val(response.data.data.unidad)
-                        $('#lbl_moda_tx').val(response.data.data.modalidad)
-                        $('#lbl_carrera_tx').val(response.data.data.carrera)
-                        $('#lbl_ming_tx').val(response.data.data.metodo)
-                        //fin ingreso informacion del tab 3
-                        $('#txth_twin_id').val(response.data.ids)//SE AGREGA AL FINAL                            
-                        paso2next();
+                    if (uaca_id == 2) {
+                        leyenda = 'El valor de la maestría: $11,300.00<br/>';
+                        leyenda += 'El valor a cancelar por concepto de inscripción es: ';
+                        $('#lbl_item_1').text("Valor Inscripción: ");
+                        $('#val_item_1').text(response.data.data.precio);
+                        $('#lbl_valor_pagar_tx').text(response.data.data.precio);
+                    } else if (uaca_id == 1) {
+                        leyenda = 'El valor a cancelar por concepto de ' + response.data.data.metodo + ' en la modalidad ' + response.data.data.modalidad + ' es:';
+                        if (mod_id == 1) {//online
+                            if (ming == 1) {// curso
+                                $('#lbl_valor_pagar_tx').text(response.data.data.precio);
+                            } else if (ming == 2) { // examen
+                                $('#lbl_valor_pagar_tx').text(response.data.data.precio);
+                            }
+                        } else if (mod_id == 2 || mod_id == 3 || mod_id == 4) {//presencial y semi presencial
+                            if (ming == 1) {// curso
+                                $('#lbl_item_1').text("Curso de nivelación: ");
+                                $('#val_item_1').text(response.data.data.precio);
+                                $('#lbl_item_2').text("Descuento especial: ");
+                                $('#val_item_2').text(response.data.data.ddit_valor);
+                                var totalvalor = parseInt(response.data.data.precio) - parseInt(response.data.data.ddit_valor);
+                                $('#lbl_valor_pagar_tx').text(totalvalor);
+                                $('#id_item_1').css('display', 'block');
+                                $('#id_item_2').css('display', 'block');
+                            } else if (ming == 2) { // examen
+                                $('#lbl_item_1').text("Exámen de Admisión: ");
+                                $('#val_item_1').text(response.data.data.precio);
+                                $('#lbl_item_2').text("Descuento especial: ");
+                                $('#val_item_2').text(response.data.data.ddit_valor);
+                                var totalvalor = parseInt(response.data.data.precio) - parseInt(response.data.data.ddit_valor);
+                                $('#lbl_valor_pagar_tx').text(totalvalor);
+                                $('#id_item_1').css('display', 'block');
+                                $('#id_item_2').css('display', 'block');
+                            }
+                        }
                     }
-                    //var data =response.data;
-                    //AccionTipo=data.accion;
-                    //limpiarDatos();
-                    //var renderurl = $('#txth_base').val() + "/inscripciones/index";
-                    //window.location = renderurl;
-                }     
-                showAlert(response.status, response.label, response.message);       
-            }, true);
-        }
+
+                    $('#lbl_leyenda_pago_tx').text(leyenda);
+                    //fin ingreso informacion del tab 3
+                    $('#txth_twin_id').val(response.data.ids);//SE AGREGA AL FINAL                            
+                    paso2next();
+                }
+                //var data =response.data;
+                //AccionTipo=data.accion;
+                //limpiarDatos();
+                //var renderurl = $('#txth_base').val() + "/inscripciones/index";
+                //window.location = renderurl;
+            }
+            showAlert(response.status, response.label, response.message);
+        }, true);
+    }
 
 }
 
@@ -336,15 +379,14 @@ function dataInscripPart1(ID) {
     objDat.conoce = $('#cmb_conuteg option:selected').val();
     objDat.carrera = $('#cmb_carrera_solicitud option:selected').val();
     //TABA 2
-    objDat.ruta_doc_titulo = ($('#txth_doc_titulo').val()!='')?$('#txth_doc_titulo').val():'';
-    objDat.ruta_doc_dni = ($('#txth_doc_dni').val()!='')?$('#txth_doc_dni').val():'';
-    objDat.ruta_doc_certvota = ($('#txth_doc_certvota').val()!='')?$('#txth_doc_certvota').val():'';
-    objDat.ruta_doc_foto = ($('#txth_doc_foto').val()!='')?$('#txth_doc_foto').val():'';
-    objDat.ruta_doc_certificado = ($('#txth_doc_certificado').val()!='')?$('#txth_doc_certificado').val():'';
+    objDat.ruta_doc_titulo = ($('#txth_doc_titulo').val() != '') ? $('#txth_doc_titulo').val() : '';
+    objDat.ruta_doc_dni = ($('#txth_doc_dni').val() != '') ? $('#txth_doc_dni').val() : '';
+    objDat.ruta_doc_certvota = ($('#txth_doc_certvota').val() != '') ? $('#txth_doc_certvota').val() : '';
+    objDat.ruta_doc_foto = ($('#txth_doc_foto').val() != '') ? $('#txth_doc_foto').val() : '';
+    objDat.ruta_doc_certificado = ($('#txth_doc_certificado').val() != '') ? $('#txth_doc_certificado').val() : '';
     objDat.twin_mensaje1 = ($("#chk_mensaje1").prop("checked")) ? '1' : '0';
     objDat.twin_mensaje2 = ($("#chk_mensaje2").prop("checked")) ? '1' : '0';
     datArray[0] = objDat;
     sessionStorage.dataInscrip_1 = JSON.stringify(datArray);
     return datArray;
 }
-

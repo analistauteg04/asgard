@@ -206,6 +206,7 @@ class InscripcionAdmision extends \yii\db\ActiveRecord {
                         conuteg_id,
                         ruta_doc_titulo,
                         ruta_doc_dni,
+                        96 as ddit_valor,-- ddit.ddit_valor,
                         ruta_doc_certvota,
                         ruta_doc_foto,
                         ruta_doc_certificado
@@ -215,6 +216,8 @@ class InscripcionAdmision extends \yii\db\ActiveRecord {
                      inner join " . $con->dbname . ".metodo_ingreso mi on mi.ming_id = twi.twin_metodo_ingreso
                      inner join " . $con2->dbname . ".item_metodo_unidad imi on (imi.ming_id =  twi.twin_metodo_ingreso and imi.uaca_id = twi.uaca_id and imi.mod_id = twi.mod_id)
                      inner join " . $con2->dbname . ".item_precio ip on ip.ite_id = imi.ite_id
+                    inner join " . $con2->dbname . ".descuento_item as ditem on ditem.ite_id=imi.ite_id
+                    inner join " . $con2->dbname . ".detalle_descuento_item as ddit on ddit.dite_id=ditem.dite_id
                 WHERE twi.twin_id = :twin_id AND                     
                      ip.ipre_estado_precio = :estado_precio AND
                      ua.uaca_estado = :estado AND
@@ -486,6 +489,27 @@ class InscripcionAdmision extends \yii\db\ActiveRecord {
                 //return Utilities::ajaxResponse('NO_OK', 'alert', Yii::t("jslang", "Bad Request"), false, $message);
             }
             return;
+    }
+
+    public function movePersonFiles($temp_id, $per_id){
+        $folder = Yii::$app->basePath . "/" . Yii::$app->params["documentFolder"] . "solicitudadmision/$temp_id/";
+        $destinations = Yii::$app->basePath . "/" . Yii::$app->params["documentFolder"] . "solicitudinscripcion/$per_id/";
+        if(verificarDirectorio($destinations)){
+            $files = scandir($folder);
+            natcasesort($files);
+            foreach ($files as $file) {
+                if($file != "." || $file != ".."){
+                    $arrExt = explode(".", $file);
+                    $type = $arrExt[count($arrExt) - 1];
+                    $newFile = str_replace("_".$temp_id.".".$type, "_".$per_id.".".$type, $file);
+                    if(!rename($folder . $file , $destinations . $newFile)){
+                        return false;
+                    }
+                }
+            }
+        }else
+            return false;
+        return true;
     }
 
 }
