@@ -278,8 +278,8 @@ $(document).ready(function () {
                     $('#divRequisitosPRP').css('display', 'none');
                 }
             } else {  //Posgrado  Semipresencial
-                if ($('#cmb_modalidad_solicitud').val() == 3) {
-                    //Homologación            
+                if (($('#cmb_modalidad_solicitud').val() == 3) || ($('#cmb_modalidad_solicitud').val() == 2)) {
+                    //Taller introductorio            
                     if ($('#cmb_metodo_solicitud').val() == 4) {
                         //Taller introductorio
                         $('#divRequisitosPRP').css('display', 'block');
