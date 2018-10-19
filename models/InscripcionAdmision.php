@@ -335,20 +335,7 @@ class InscripcionAdmision extends \yii\db\ActiveRecord {
                                         if ($iemp_id == 0) {
                                             $iemp_id = $mod_inte_emp->crearInteresadoEmpresa($interesado_id, $emp_id, $usuario_id);
                                         }
-                                        if ($iemp_id > 0) {
-
-                                            $usuarioNew = Usuario::findIdentity($usuario_id);
-                                            $link = $usuarioNew->generarLinkActivacion();
-                                            $email_info = array(
-                                                "nombres" => $resp_datos['twin_nombre'],
-                                                "apellidos" => $resp_datos['twin_apellido'],
-                                                "correo" => $resp_datos['twin_correo'],
-                                                "telefono" => $resp_datos['twin_celular'],
-                                                "identificacion" => $resp_datos['twin_numero'],
-                                                "link_asgard" => $link,
-                                            );
-                                            $outemail = $mod_interesado->enviarCorreoBienvenida($email_info);
-
+                                        if ($iemp_id > 0) {                                                                                                                                        
                                             $eaca_id = NULL;
                                             $mest_id = NULL;
                                             if ($emp_id == 1) {//Uteg 
@@ -452,7 +439,19 @@ class InscripcionAdmision extends \yii\db\ActiveRecord {
                 $transaction->commit();
                 $transaction1->commit();
                 $transaction2->commit();
-
+                //envío de correo.
+                $usuarioNew = Usuario::findIdentity($usuario_id);
+                $link = $usuarioNew->generarLinkActivacion();
+                $email_info = array(
+                    "nombres" => $resp_datos['twin_nombre'],
+                    "apellidos" => $resp_datos['twin_apellido'],
+                    "correo" => $resp_datos['twin_correo'],
+                    "telefono" => $resp_datos['twin_celular'],
+                    "identificacion" => $resp_datos['twin_numero'],
+                    "link_asgard" => $link,
+                );
+                $outemail = $mod_interesado->enviarCorreoBienvenida($email_info);
+                                            
                 $message = array(
                     "wtmessage" => Yii::t("formulario", "The information have been saved and the information has been sent to your email"),
                     "title" => Yii::t('jslang', 'Success'),
