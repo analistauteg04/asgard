@@ -63,7 +63,7 @@ $(document).ready(function () {
 //                            }
 //                            break;
 //                    }
-                    window.location.href = "https://www.uteg.edu.ec/pago-online-nivelacion/";
+                    window.location.href = "https://www.uteg.edu.ec/pago-online-nivelacion/";                    
                 }, 5000);
             }
             showAlert(response.status, response.label, response.message);

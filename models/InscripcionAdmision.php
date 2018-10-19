@@ -437,9 +437,9 @@ class InscripcionAdmision extends \yii\db\ActiveRecord {
                     $error++;
                 }
                 if ($exito == 1) {
-                   /* $transaction->commit();                    
+                    $transaction->commit();                    
                     $transaction1->commit();
-                    $transaction2->commit();*/
+                    $transaction2->commit();
 
                     $message = array(
                         "wtmessage" => Yii::t("formulario", "The information have been saved and the information has been sent to your email"),
