@@ -51,6 +51,7 @@ class InscripcionAdmision extends \yii\db\ActiveRecord {
         try {
             $twin_id=$this->updateDataInscripcion($con,$data["DATA_1"]);
             $data = $this->consultarDatosInscripcion($twin_id);                
+            Utilities::putMessageLogFile($data);
             $arroout["status"] = TRUE;
             $arroout["error"] = null;
             $arroout["message"] = null;

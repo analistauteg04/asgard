@@ -432,7 +432,6 @@ class InscripcionadmisionController extends \yii\web\Controller {
                 }else if($accion == "Update"){
                     //Modificar Registro
                     $resul = $model->actualizarInscripcion($data);                
-                    
                 }
                 if ($resul['status']) {
                     $message = array(

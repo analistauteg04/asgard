@@ -261,22 +261,25 @@ function guardarInscripcion(accion) {
         arrParams.DATA_1 = dataInscripPart1(ID);
         arrParams.ACCION = accion;
         if (!validateForm()) {
-            requestHttpAjax(link, arrParams, function (response) {
+            requestHttpAjax(link, arrParams, function (response) {                
                 var message = response.message;
                 console.log(response);
                 if (response.status == "OK") { 
                     if(accion == "Create"){
-                        $('#txth_twin_id').val(response.ids)
+                        alert(response.data.ids);
+                        $('#txth_twin_id').val(response.data.ids)
                         paso1next();
                     }else{                        
-                        paso2next();
+                        
                         //Inicio ingreso informacion del tab 3\
-                        $('#lbl_uaca_tx').val(response.data.unidad)
-                        $('#lbl_moda_tx').val(response.data.modalidad)
-                        $('#lbl_carrera_tx').val(response.data.carrera)
-                        $('#lbl_ming_tx').val(response.data.metodo)
+                        alert(response.data.data.unidad);
+                        $('#lbl_uaca_tx').val(response.data.data.unidad)
+                        $('#lbl_moda_tx').val(response.data.data.modalidad)
+                        $('#lbl_carrera_tx').val(response.data.data.carrera)
+                        $('#lbl_ming_tx').val(response.data.data.metodo)
                         //fin ingreso informacion del tab 3
-                        $('#txth_twin_id').val(ids)//SE AGREGA AL FINAL                            
+                        $('#txth_twin_id').val(response.data.ids)//SE AGREGA AL FINAL                            
+                        paso2next();
                     }
                     //var data =response.data;
                     //AccionTipo=data.accion;
@@ -341,5 +344,4 @@ function dataInscripPart1(ID) {
     sessionStorage.dataInscrip_1 = JSON.stringify(datArray);
     return datArray;
 }
-
 
