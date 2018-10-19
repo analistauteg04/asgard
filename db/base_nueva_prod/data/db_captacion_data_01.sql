@@ -37,7 +37,8 @@ INSERT INTO `documento_adjuntar` (`dadj_id`, `dadj_nombre`, `dadj_descripcion`, 
 (3, 'Certificado de votación', 'Certificado de votación', '1', '1'),
 (4, 'Foto', 'Foto', '1', '1'),
 (5, 'Documento Beca', 'Documento Beca', '1', '1'),
-(6, 'Certificado Materias Aprobadas', 'Certificado Materias Aprobadas', '1', '1');
+(6, 'Certificado Materias Aprobadas', 'Certificado Materias Aprobadas', '1', '1'),
+(7, 'Hoja de Vida', 'Hoja de Vida', '1', '1');
 
 -- --------------------------------------------------------
 --
@@ -63,7 +64,9 @@ INSERT INTO `doc_nint_tciudadano` (`dntc_id`, `tciu_id`, `uaca_id`, `dadj_id`, `
 (17, 2, 1, 5, '1', '1'),
 (18, 2, 2, 5, '1', '1'),
 (19, 1, 2, 6, '1', '1'),
-(20, 2, 2, 6, '1', '1');
+(20, 2, 2, 6, '1', '1'),
+(21, 1, 2, 7, '1', '1'),
+(22, 2, 2, 7, '1', '1');
 
 -- --------------------------------------------------------
 --

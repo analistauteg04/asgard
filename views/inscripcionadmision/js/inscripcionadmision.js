@@ -220,7 +220,7 @@ $(document).ready(function () {
 
 
     function AparecerDocumento() {
-        if ($('#cmb_metodo_solicitud').val() == 3) {
+        if ($('#cmb_metodo_solicitud').val() == 4) {
             $('#divCertificado').css('display', 'block');
         } else {
             $('#divCertificado').css('display', 'none');
