@@ -196,6 +196,7 @@ class InscripcionAdmision extends \yii\db\ActiveRecord {
                         conuteg_id,
                         ruta_doc_titulo,
                         ruta_doc_dni,
+                        96 as ddit_valor,-- ddit.ddit_valor,
                         ruta_doc_certvota,
                         ruta_doc_foto,
                         ruta_doc_certificado
@@ -205,6 +206,8 @@ class InscripcionAdmision extends \yii\db\ActiveRecord {
                      inner join " . $con->dbname . ".metodo_ingreso mi on mi.ming_id = twi.twin_metodo_ingreso
                      inner join " . $con2->dbname . ".item_metodo_unidad imi on (imi.ming_id =  twi.twin_metodo_ingreso and imi.uaca_id = twi.uaca_id and imi.mod_id = twi.mod_id)
                      inner join " . $con2->dbname . ".item_precio ip on ip.ite_id = imi.ite_id
+                    inner join " . $con2->dbname . ".descuento_item as ditem on ditem.ite_id=imi.ite_id
+                    inner join " . $con2->dbname . ".detalle_descuento_item as ddit on ddit.dite_id=ditem.dite_id
                 WHERE twi.twin_id = :twin_id AND                     
                      ip.ipre_estado_precio = :estado_precio AND
                      ua.uaca_estado = :estado AND
