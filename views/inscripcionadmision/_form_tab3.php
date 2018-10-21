@@ -50,77 +50,96 @@ use yii\helpers\Html;
     <div class="col-md-12 col-xs-12 col-sm-12 col-lg-12">
         <h3><b><span id="lbl_titulo"><?= Yii::t("formulario", "Check the detail of your request") ?></span></b></h3><br> 
     </div>
-
-    <div class="col-md-12 col-xs-12 col-sm-12 col-lg-12">
-        <h4><span id="lbl_detalle1"><?= Yii::t("formulario", "Estás a un paso de formalizar tu inscripción, comienza hoy mismo a vivir la experiencia de una auténtica enseñanza empresarial.") ?></span></h4>    
-        <h4><span id="lbl_detalle2"><?= Yii::t("formulario", "A continuación te presentamos un resumen de lo que has elegido:") ?></span></h4>
-    </div>         
-    <!-- Aqui he colocado la informacion -->    
-    <div class="col-md-12 col-xs-12 col-sm-12 col-lg-12">
-        <h4>
-            <span id="lbl_uaca_lb"><b><?= Yii::t("formulario", "Unidad Academica: ") ?></b></span>
-            <span id="lbl_uaca_tx"><?= "" ?></span>
-        </h4>            
-    </div>         
-    <div class="col-md-12 col-xs-12 col-sm-12 col-lg-12">
-        <h4>
-            <span id="lbl_moda_lb"><b><?= Yii::t("formulario", "Modalidad: ") ?></b></span>
-            <span id="lbl_moda_tx"><?= "" ?></span>
-        </h4>            
-    </div>         
-    <div class="col-md-12 col-xs-12 col-sm-12 col-lg-12">
-        <h4>
-            <span id="lbl_carrera_lb"><b><?= Yii::t("formulario", "Carrera/Programa: ") ?></b></span>
-            <span id="lbl_carrera_tx"><?= "" ?></span>
-        </h4>            
-    </div>         
-    <div id="id_met_ing" class="col-md-12 col-xs-12 col-sm-12 col-lg-12">
-        <h4>
-            <span id="lbl_ming_lb"><b><?= Yii::t("formulario", "Metodo ingreso: ") ?></b></span>
-            <span id="lbl_ming_tx"><?= "Curso Nivelacion" ?></span>
-        </h4>            
-    </div>         
-    <div id="id_mat_cur" class="col-md-12 col-xs-12 col-sm-12 col-lg-12">
-        <h4>
-            <span id="lbl_mcur_lb"><b><?= Yii::t("formulario", "Materias a Cursar: ") ?></b></span>
-            <span id="lbl_mcur_tx"></span>
-        </h4>            
-    </div>         
-    <div class="col-md-12 col-xs-12 col-sm-12 col-lg-12">
-        <h4>
-            <b><span id="lbl_fcur_lb"></span></b>
-            <span id="lbl_fcur_tx"></span>
-        </h4>            
-    </div>         
-    <!-- fin de ingreso de informacion -->
-    <div class="col-md-12 col-xs-12 col-sm-12 col-lg-12">
-        <h4><span id="lbl_leyenda_pago_tx" ></span></h4>        
+    <div class="col-md-6 col-xs-6 col-sm-6col-lg-6">
+        <div class="col-md-12 col-xs-12 col-sm-12 col-lg-12">
+            <span id="lbl_detalle1"><?= Yii::t("formulario", "Estás a un paso de formalizar tu inscripción, comienza hoy mismo a vivir la experiencia de una auténtica enseñanza empresarial.") ?></span>
+            <span id="lbl_detalle2"><?= Yii::t("formulario", "A continuación te presentamos un resumen de lo que has elegido:") ?></span>
+            <br/><br/>
+        </div>
+        <!-- Aqui he colocado la informacion -->
+        <div class="col-md-12 col-xs-12 col-sm-12 col-lg-12">
+            <div class="col-md-4 col-xs-4 col-sm-4 col-lg-4">
+                <span id="lbl_uaca_lb"><b><?= Yii::t("formulario", "Unidad Academica: ") ?></b></span>
+            </div>
+            <div class="col-md-8 col-xs-8 col-sm-8 col-lg-8">
+                <span id="lbl_uaca_tx"><?= "" ?></span>
+            </div>
+        </div>         
+        <div class="col-md-12 col-xs-12 col-sm-12 col-lg-12">
+            <div class="col-md-4 col-xs-4 col-sm-4 col-lg-4">
+                <span id="lbl_moda_lb"><b><?= Yii::t("formulario", "Modalidad: ") ?></b></span>
+            </div>
+            <div class="col-md-8 col-xs-8 col-sm-8 col-lg-8">
+                <span id="lbl_moda_tx"><?= "" ?></span>
+            </div>
+        </div>
+        <div class="col-md-12 col-xs-12 col-sm-12 col-lg-12">
+            <div class="col-md-4 col-xs-4 col-sm-4 col-lg-4">
+                <span id="lbl_carrera_lb"><b><?= Yii::t("formulario", "Carrera/Programa: ") ?></b></span>
+            </div>
+            <div class="col-md-8 col-xs-8 col-sm-8 col-lg-8">
+                <span id="lbl_carrera_tx"><?= "" ?></span>
+            </div>
+        </div>         
+        <div id="id_met_ing" class="col-md-12 col-xs-12 col-sm-12 col-lg-12">
+            <div class="col-md-4 col-xs-4 col-sm-4 col-lg-4">
+                <span id="lbl_ming_lb"><b><?= Yii::t("formulario", "Metodo ingreso: ") ?></b></span>
+            </div>
+            <div class="col-md-8 col-xs-8 col-sm-8 col-lg-8">
+                <span id="lbl_ming_tx"><?= "Curso Nivelacion" ?></span>
+            </div>
+        </div>         
+        <div id="id_mat_cur" class="col-md-12 col-xs-12 col-sm-12 col-lg-12">
+            <div class="col-md-4 col-xs-4 col-sm-4 col-lg-4">
+                <span id="lbl_mcur_lb"><b><?= Yii::t("formulario", "Materias a Cursar: ") ?></b></span>
+            </div>
+            <div class="col-md-8 col-xs-8 col-sm-8 col-lg-8">
+                <span id="lbl_mcur_tx"></span>
+            </div>
+        </div>         
+        <div class="col-md-12 col-xs-12 col-sm-12 col-lg-12">
+            <div class="col-md-4 col-xs-4 col-sm-4 col-lg-4">
+                <b><span id="lbl_fcur_lb"></span></b>
+            </div>
+            <div class="col-md-8 col-xs-8 col-sm-8 col-lg-8">
+                <span id="lbl_fcur_tx"></span>
+            </div>
+        </div>
     </div>
-    <!-- item 1 -->
-    <div id="id_item_1"  class="col-md-12 col-xs-12 col-sm-12 col-lg-12" style="display:none">
-        <h4>
-            <b><span id="lbl_item_1"></span></b>
-            $ <span id="val_item_1"></span><br/>            
-        </h4>            
-    </div>         
-    <!-- item 2 -->
-    <div id="id_item_2" class="col-md-12 col-xs-12 col-sm-12 col-lg-12" style="display:none">
-        <h4>
-            <b><span id="lbl_item_2"></span></b>
-            $ <span id="val_item_2"></span><br/>            
-        </h4>            
-    </div>      
-    <div class="col-md-12 col-xs-12 col-sm-12 col-lg-12">
-        <h4>
-            <span><b><?= Yii::t("formulario", "Valor total a pagar: ") ?></b></span>
-            $ <span id="lbl_valor_pagar_tx"></span><br/><br/>
-        </h4> 
-
-        <h5> 
-            <span><b><?= Yii::t("formulario", "**Valores están en ($) USD ") ?></b></span>
-        </h5>            
-    </div>      
-
+    <div class="col-md-6 col-xs-6 col-sm-6col-lg-6">
+        <!-- fin de ingreso de informacion -->
+        <div class="col-md-12 col-xs-12 col-sm-12 col-lg-12">
+            <span id="lbl_leyenda_pago_tx" ></span>
+            <br/><br/>
+        </div>
+        <!-- item 1 -->
+        <div id="id_item_1"  class="col-md-12 col-xs-12 col-sm-12 col-lg-12" style="display:none">
+            <div class="col-md-4 col-xs-4 col-sm-4 col-lg-4">
+                <b><span id="lbl_item_1"></span></b>
+            </div>
+            <div class="col-md-8 col-xs-8 col-sm-8 col-lg-8">
+                $ <span id="val_item_1"></span>
+            </div>
+        </div>         
+        <!-- item 2 -->
+        <div id="id_item_2" class="col-md-12 col-xs-12 col-sm-12 col-lg-12" style="display:none">
+            <div class="col-md-4 col-xs-4 col-sm-4 col-lg-4">
+                <b><span id="lbl_item_2"></span></b>
+            </div>
+            <div class="col-md-8 col-xs-8 col-sm-8 col-lg-8">
+                $ <span id="val_item_2"></span>
+            </div>
+        </div>      
+        <div class="col-md-12 col-xs-12 col-sm-12 col-lg-12">
+            <div class="col-md-4 col-xs-4 col-sm-4 col-lg-4">
+                <span><b><?= Yii::t("formulario", "Valor total a pagar: ") ?></b></span>
+            </div>
+            <div class="col-md-8 col-xs-8 col-sm-8 col-lg-8">
+                $ <span id="lbl_valor_pagar_tx"></span><br/><br/>
+                <small><b><?= Yii::t("formulario", "**Valores están en ($) USD ") ?></b></small>
+            </div>         
+        </div>      
+    </div>
     <!--    <div class="col-md-12 col-xs-12 col-sm-12 col-lg-12">
             <h4><b><span id="lbl_detalle2"><?= Yii::t("formulario", "Pago:") ?></span></b></h4>
             <h4><span id="lbl_detalle2"><?= Yii::t("formulario", "Pago en línea PayPal: ") ?></span><a href="http://www.uteg.edu.ec/pagos-online/">http://www.uteg.edu.ec/pagos-online/</a></h4>        

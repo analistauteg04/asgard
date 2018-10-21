@@ -45,6 +45,7 @@ $(document).ready(function () {
             var message = response.message;
             //console.log(response);
             if (response.status == "OK") {
+                showLoadingPopup();
                 setTimeout(function () {
                     var uaca_id=parseInt(response.data.data.uaca_id);
                     var mod_id=parseInt(response.data.data.mod_id);
@@ -428,7 +429,7 @@ function guardarInscripcion(accion) {
                 //var renderurl = $('#txth_base').val() + "/inscripciones/index";
                 //window.location = renderurl;
             }
-            showAlert(response.status, response.label, response.message);
+            //showAlert(response.status, response.label, response.message);
         }, true);
     }
 
