@@ -133,7 +133,7 @@ class InscripcionadmisionController extends \yii\web\Controller {
                 $files = $_FILES[key($_FILES)];
                 $arrIm = explode(".", basename($files['name']));
                 $typeFile = strtolower($arrIm[count($arrIm) - 1]);
-                $dirFileEnd = Yii::$app->params["documentFolder"] . "solicitudadmision/" . $inscripcion_id . "/" . $data["name_file"] . $inscripcion_id . "." . $typeFile;
+                $dirFileEnd = Yii::$app->params["documentFolder"] . "solicitudadmision/" . $inscripcion_id . "/" . $data["name_file"] ."_per_". $inscripcion_id . "." . $typeFile;
                 $status = Utilities::moveUploadFile($files['tmp_name'], $dirFileEnd);
                 if ($status) {
                     return true;

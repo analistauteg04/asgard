@@ -428,7 +428,7 @@ function guardarInscripcion(accion) {
                 //var renderurl = $('#txth_base').val() + "/inscripciones/index";
                 //window.location = renderurl;
             }
-            showAlert(response.status, response.label, response.message);
+            //showAlert(response.status, response.label, response.message);
         }, true);
     }
 

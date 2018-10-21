@@ -412,8 +412,7 @@ class InscripcionAdmision extends \yii\db\ActiveRecord {
                                                                 throw new Exception('Error doc Hoja de Vida no creado.');
                                                             }*/                                                                                                                  
                                                     }
-                                                }
-                                                \app\models\Utilities::putMessageLogFile('solicitud: ' . $mensaje);                                            
+                                                }                                                                                     
                                                 \app\models\Utilities::putMessageLogFile('ingreso la solicitud: ' . $sins_id);
                                                 //Obtener el precio de la solicitud.
                                                 if ($beca == "1") {
@@ -486,14 +485,15 @@ class InscripcionAdmision extends \yii\db\ActiveRecord {
                 $error++;
             }
             if ($exito == 1) {
-                $transaction->commit();
-                $transaction1->commit(); 
-                $transaction2->commit();   
-
+                //$transaction->commit();
+                //$transaction1->commit(); 
+                $transaction2->commit();                   
                 $message = array(
                     "wtmessage" => Yii::t("formulario", "The information have been saved and the information has been sent to your email"),
                     "title" => Yii::t('jslang', 'Success'),
                 );
+                //Modifificaion para Mover Imagenes de temp a Persona
+                self::movePersonFiles($twinIds,$id_persona);
                 //return Utilities::ajaxResponse('OK', 'alert', Yii::t("jslang", "Sucess"), false, $message);
                 $arroout["status"] = TRUE;
                 $arroout["error"] = null;
@@ -501,8 +501,8 @@ class InscripcionAdmision extends \yii\db\ActiveRecord {
                 $arroout["data"] = $resp_datos; //$rawData;
                 return $arroout;
             } else {
-                  $transaction->rollback();
-                  $transaction1->rollback();
+                  //$transaction->rollback();
+                  //$transaction1->rollback();
                   $transaction2->rollback(); 
                 $message = array(
                     "wtmessage" => Yii::t("formulario", "Mensaje1: " . $mensaje), //$error_message
@@ -516,8 +516,8 @@ class InscripcionAdmision extends \yii\db\ActiveRecord {
                 //return Utilities::ajaxResponse('NO_OK', 'alert', Yii::t("jslang", "Bad Request"), false, $message);
             }
         } catch (Exception $ex) {
-              $transaction->rollback();
-              $transaction1->rollback();
+              //$transaction->rollback();
+              //$transaction1->rollback();
               $transaction2->rollback(); 
             $message = array(
                 "wtmessage" => Yii::t("formulario", "Mensaje2: " . $mensaje), //$error_message
