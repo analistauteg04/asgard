@@ -326,7 +326,7 @@ use yii\helpers\Url;
                             'uploadUrl' => Url::to(['/inscripcionadmision/saveinscripciontemp']),
                             'maxFileSize' => Yii::$app->params["MaxFileSize"], // en Kbytes
                             'uploadExtraData' => 'javascript:function (previewId,index) {
-                return {"upload_file": true, "name_file": "doc_hoja_vida", "inscripcion_id": $("#txth_twin_id").val()};
+                return {"upload_file": true, "name_file": "doc_hojavida", "inscripcion_id": $("#txth_twin_id").val()};
             }',
                         ],
                         'pluginEvents' => [
