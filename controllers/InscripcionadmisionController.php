@@ -133,7 +133,7 @@ class InscripcionadmisionController extends \yii\web\Controller {
                 $files = $_FILES[key($_FILES)];
                 $arrIm = explode(".", basename($files['name']));
                 $typeFile = strtolower($arrIm[count($arrIm) - 1]);
-                $dirFileEnd = Yii::$app->params["documentFolder"] . "solicitudadmision/" . $inscripcion_id . "/" . $data["name_file"] . "_inscr_" . $inscripcion_id . "." . $typeFile;
+                $dirFileEnd = Yii::$app->params["documentFolder"] . "solicitudadmision/" . $inscripcion_id . "/" . $data["name_file"] ."_per_". $inscripcion_id . "." . $typeFile;
                 $status = Utilities::moveUploadFile($files['tmp_name'], $dirFileEnd);
                 if ($status) {
                     return true;
@@ -175,7 +175,7 @@ class InscripcionadmisionController extends \yii\web\Controller {
                 if (isset($data["ruta_doc_hojavida"]) && $data["ruta_doc_hojavida"] != "") {
                     $arrIm = explode(".", basename($data["ruta_doc_hojavida"]));
                     $typeFile = strtolower($arrIm[count($arrIm) - 1]);                                  
-                    $doc_hojaVida = Yii::$app->params["documentFolder"] . "solicitudadmision/" . $inscripcion_id . "/doc_hoja_vida_per_" . $inscripcion_id . "." . $typeFile;
+                    $doc_hojaVida = Yii::$app->params["documentFolder"] . "solicitudadmision/" . $inscripcion_id . "/doc_hojavida_per_" . $inscripcion_id . "." . $typeFile;
                 }
             }
 
@@ -202,7 +202,7 @@ class InscripcionadmisionController extends \yii\web\Controller {
                 if (isset($data["arc_doc_certvota"]) && $data["arc_doc_certvota"] != "") {
                     $arrIm = explode(".", basename($data["arc_doc_certvota"]));
                     $typeFile = strtolower($arrIm[count($arrIm) - 1]);
-                    $certvota_archivoOld = Yii::$app->params["documentFolder"] . "solicitudadmision/" . $inscripcion_idper_id . "/doc_certvota_per_" . $inscripcion_id . "." . $typeFile;
+                    $certvota_archivoOld = Yii::$app->params["documentFolder"] . "solicitudadmision/" . $inscripcion_id . "/doc_certvota_per_" . $inscripcion_id . "." . $typeFile;
                     $certvota_archivo = InscripcionAdmision::addLabelTimeDocumentos($inscripcion_id, $certvota_archivoOld, $timeSt);
                     $data["arc_doc_certvota"] = $certvota_archivoOld;
                     if ($certvota_archivo === false)
@@ -229,7 +229,7 @@ class InscripcionadmisionController extends \yii\web\Controller {
                 if (isset($data["ruta_doc_hojavida"]) && $data["ruta_doc_hojavida"] != "") {
                     $arrIm = explode(".", basename($data["ruta_doc_hojavida"]));
                     $typeFile = strtolower($arrIm[count($arrIm) - 1]);
-                    $doc_hojaVidaOld = Yii::$app->params["documentFolder"] . "solicitudadmision/" . $inscripcion_id . "/doc_hoja_vida_per_" . $inscripcion_id . "." . $typeFile;
+                    $doc_hojaVidaOld = Yii::$app->params["documentFolder"] . "solicitudadmision/" . $inscripcion_id . "/doc_hojavida_per_" . $inscripcion_id . "." . $typeFile;
                     $doc_hojaVida = InscripcionAdmision::addLabelTimeDocumentos($inscripcion_id, $doc_hojaVidaOld, $timeSt);
                     $data["ruta_doc_hojavida"] = $doc_hojaVidaOld;
                     if ($doc_hojaVida === false)
