@@ -346,16 +346,20 @@ class InscripcionAdmision extends \yii\db\ActiveRecord {
                                             //$mensaje = 'intId: ' . $interesado_id . '/uaca: ' . $pgest['unidad_academica'] . '/modalidad: ' . $pgest['modalidad'] . '/ming: ' . $pgest['ming_id'] . '/eaca: ' . $eaca_id . '/mest: ' . $mest_id . '/empresa: ' . $emp_id . '/secuencia: ' . $num_secuencia . '/rsin_id: ' . $rsin_id . '/sins_fechasol: ' . $sins_fechasol . '/usuario_id: ' . $usuario_id;
                                             $sins_id = $solins_model->insertarSolicitud($interesado_id, $resp_datos['uaca_id'], $resp_datos['mod_id'], $resp_datos['twin_metodo_ingreso'], $eaca_id, null, $emp_id, $num_secuencia, $rsin_id, $sins_fechasol, $usuario_id);                                            
                                             //grabar los documentos
-                                            if ($sins_id) {     
-                                                //$timeSt = time();
+                                            if ($sins_id) { 
+                                                if (($resp_datos['ruta_doc_titulo']!="") || ($resp_datos['ruta_doc_dni']!="") || ($resp_datos['ruta_doc_certvota']!="") || ($resp_datos['ruta_doc_foto']!="") || ($resp_datos['ruta_doc_certificado']!="") || ($resp_datos['ruta_doc_hojavida']!="")) {
+                                                    $subidaDocumentos = 1;
+                                                } else {
+                                                    $subidaDocumentos = 0;
+                                                }
                                                 if ($resp_datos['ruta_doc_titulo']!="") {                                                                                                
                                                     $arrIm = explode(".", basename($resp_datos['ruta_doc_titulo']));
                                                     $arrTime = explode("_", basename($resp_datos['ruta_doc_titulo']));
                                                     $timeSt = $arrTime[4];                                                    
                                                     $typeFile = strtolower($arrIm[count($arrIm) - 1]);
                                                     $rutaTitulo = Yii::$app->params["documentFolder"] ."solicitudinscripcion/".$id_persona."/doc_titulo_per_".$id_persona."_".$timeSt;      
-                                                    $resulDoc1 = $solins_model->insertarDocumentosSolic($sins_id, $interesado_id, 1, $rutaTitulo, $usuario_id);
-                                                        /*if (!($resulDoc1)) {
+                                                    $resulDoc1 = $solins_model->insertarDocumentosSolic($sins_id, $interesado_id, 1, $rutaTitulo, $usuario_id);                                                    
+                                                    /*if (!($resulDoc1)) {
                                                             throw new Exception('Error doc Titulo no creado.');
                                                         }*/                                                    
                                                 }
@@ -493,7 +497,9 @@ class InscripcionAdmision extends \yii\db\ActiveRecord {
                     "title" => Yii::t('jslang', 'Success'),
                 );
                 //Modifificaion para Mover Imagenes de temp a Persona
-                self::movePersonFiles($twinIds,$id_persona);
+                if ($subidaDocumentos==1) {
+                    self::movePersonFiles($twinIds,$id_persona);
+                }
                 //return Utilities::ajaxResponse('OK', 'alert', Yii::t("jslang", "Sucess"), false, $message);
                 $arroout["status"] = TRUE;
                 $arroout["error"] = null;
