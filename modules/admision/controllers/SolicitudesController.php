@@ -101,6 +101,8 @@ class SolicitudesController extends \app\components\CController {
         $resp_arch3 = $mod_solins->Obtenerdocumentosxsolicitud($sins_id, 3);
         $resp_arch4 = $mod_solins->Obtenerdocumentosxsolicitud($sins_id, 4);
         $resp_arch5 = $mod_solins->Obtenerdocumentosxsolicitud($sins_id, 5);
+        $resp_arch6 = $mod_solins->Obtenerdocumentosxsolicitud($sins_id, 6);
+        $resp_arch7 = $mod_solins->Obtenerdocumentosxsolicitud($sins_id, 7);
 
         $mod_ordenpago = new OrdenPago();
         $resp_ordenpago = $mod_ordenpago->consultarImagenpago($sins_id);
@@ -123,6 +125,8 @@ class SolicitudesController extends \app\components\CController {
                     "arch3" => $resp_arch3['sdoc_archivo'],
                     "arch4" => $resp_arch4['sdoc_archivo'],
                     "arch5" => $resp_arch5['sdoc_archivo'],
+                    "arch6" => $resp_arch6['sdoc_archivo'],
+                    "arch7" => $resp_arch7['sdoc_archivo'],
                     "txth_extranjero" => $nacionalidad,
                     "sins_id" => $sins_id,
                     "int_id" => $int_id,

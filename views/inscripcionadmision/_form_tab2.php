@@ -252,7 +252,7 @@ $leyenda = '<div class="col-md-12 col-xs-12 col-sm-12 col-lg-12">
     <div  id="divCertificado" style="display: none">   
         <div class="col-md-12 col-xs-12 col-sm-12 col-lg-12 doc_certificado cinteres">
             <div class="form-group">
-                <label for="txth_doc_certificado" class="col-sm-3 col-md-3 col-xs-3 col-lg-3 control-label keyupmce"><?= Yii::t("formulario", "Certificado Materias") ?></label>
+                <label for="txth_doc_certificado" class="col-sm-3 col-md-3 col-xs-3 col-lg-3 control-label keyupmce"><?= Yii::t("formulario", "Materials Certificate") ?></label>
                 <div class="col-sm-9 col-md-9 col-xs-9 col-lg-9">
                     <?= Html::hiddenInput('txth_doc_certificado', '', ['id' => 'txth_doc_certificado']); ?>
                     <?php
@@ -312,7 +312,7 @@ $leyenda = '<div class="col-md-12 col-xs-12 col-sm-12 col-lg-12">
         <?php //Aqui voy a colocar la informacion de de la hoja de vida  ?>
         <div class="col-md-12 col-xs-12 col-sm-12 col-lg-12 doc_hoja_vida">
             <div class="form-group">
-                <label for="txth_doc_hojavida" class="col-sm-3 col-md-3 col-xs-3 col-lg-3 control-label keyupmce"><?= Yii::t("formulario", "Hoja de Vida") ?></label>
+                <label for="txth_doc_hojavida" class="col-sm-3 col-md-3 col-xs-3 col-lg-3 control-label keyupmce"><?= Yii::t("formulario", "Curriculum") ?></label>
                 <div class="col-sm-9 col-md-9 col-xs-9 col-lg-9">
                     <?= Html::hiddenInput('txth_doc_hojavida', '', ['id' => 'txth_doc_hojavida']); ?>
                     <?php
