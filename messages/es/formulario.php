@@ -79,11 +79,8 @@ return [
     "Allocation Data" => "Datos Asignación",
     "Another language" => "Otro lenguaje",
     "Applicant Data" => "Datos del Solicitante:",
-    "Application for Admission Process" => "Proceso Solicitud de Admisión",
-    
-    "Record your data" => "Registra tus datos",
-    
-    
+    "Application for Admission Process" => "Proceso Solicitud de Admisión",    
+    "Record your data" => "Registra tus datos",  
     "Application Approved" => "Solicitud Aprobada",
     "Application Rejected" => "Solicitud Rechazada",
     "Application Reports" => "Reporte de Solicitud",
@@ -170,6 +167,7 @@ return [
     "Create Management" => "Crear Gestión",
     "Created" => "Creado",
     "Current" => "Actual",
+    "Curriculum" => "Curriculum",
     "Current Executive" => "Agente Actual",
     "Data Academic" => "Datos Académicos",
     "Data Activities" => "Datos Actividad",
@@ -378,6 +376,7 @@ return [
     "Middle Name" => "Segundo Nombre",
     "Mode" => "Modalidad",
     "Module" => "Módulo",
+    "Materials Certificate" => "Certificado Materias",
     "Management number" => "Número Gestión",
     "Monday" => "Lunes",
     "Montubio" => "Montubio",
