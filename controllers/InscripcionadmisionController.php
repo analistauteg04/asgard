@@ -150,7 +150,7 @@ class InscripcionadmisionController extends \yii\web\Controller {
                     $typeFile = strtolower($arrIm[count($arrIm) - 1]);
                     $titulo_archivoOld = Yii::$app->params["documentFolder"] . "solicitudadmision/" . $inscripcion_id . "/doc_titulo_per_" . $inscripcion_id . "." . $typeFile;
                     $titulo_archivo = InscripcionAdmision::addLabelTimeDocumentos($inscripcion_id, $titulo_archivoOld, $timeSt);
-                    $data["DATA_1"][0]["ruta_doc_titulo"] = $titulo_archivoOld;
+                    $data["DATA_1"][0]["ruta_doc_titulo"] = $titulo_archivo;
                     if ($titulo_archivo === false)
                         throw new Exception('Error doc Titulo no renombrado.');
                 }
@@ -159,7 +159,7 @@ class InscripcionadmisionController extends \yii\web\Controller {
                     $typeFile = strtolower($arrIm[count($arrIm) - 1]);
                     $dni_archivoOld = Yii::$app->params["documentFolder"] . "solicitudadmision/" . $inscripcion_id . "/doc_dni_per_" . $inscripcion_id . "." . $typeFile;
                     $dni_archivo = InscripcionAdmision::addLabelTimeDocumentos($inscripcion_id, $dni_archivoOld, $timeSt);
-                    $data["DATA_1"][0]["ruta_doc_dni"] = $dni_archivoOld;
+                    $data["DATA_1"][0]["ruta_doc_dni"] = $dni_archivo;
                     if ($dni_archivo === false)
                         throw new Exception('Error doc Dni no renombrado.');
                 }
@@ -168,7 +168,7 @@ class InscripcionadmisionController extends \yii\web\Controller {
                     $typeFile = strtolower($arrIm[count($arrIm) - 1]);
                     $certvota_archivoOld = Yii::$app->params["documentFolder"] . "solicitudadmision/" . $inscripcion_id . "/doc_certvota_per_" . $inscripcion_id . "." . $typeFile;
                     $certvota_archivo = InscripcionAdmision::addLabelTimeDocumentos($inscripcion_id, $certvota_archivoOld, $timeSt);
-                    $data["DATA_1"][0]["ruta_doc_certvota"] = $certvota_archivoOld;
+                    $data["DATA_1"][0]["ruta_doc_certvota"] = $certvota_archivo;
                     if ($certvota_archivo === false)
                         throw new Exception('Error doc certificado vot. no renombrado.');
                 }
@@ -177,7 +177,7 @@ class InscripcionadmisionController extends \yii\web\Controller {
                     $typeFile = strtolower($arrIm[count($arrIm) - 1]);
                     $foto_archivoOld = Yii::$app->params["documentFolder"] . "solicitudadmision/" . $inscripcion_id . "/doc_foto_per_" . $inscripcion_id . "." . $typeFile;
                     $foto_archivo = InscripcionAdmision::addLabelTimeDocumentos($inscripcion_id, $foto_archivoOld, $timeSt);
-                    $data["DATA_1"][0]["ruta_doc_foto"] = $foto_archivoOld;
+                    $data["DATA_1"][0]["ruta_doc_foto"] = $foto_archivo;
                     if ($foto_archivo === false)
                         throw new Exception('Error doc Foto no renombrado.');
                 }
@@ -186,7 +186,7 @@ class InscripcionadmisionController extends \yii\web\Controller {
                     $typeFile = strtolower($arrIm[count($arrIm) - 1]);
                     $doc_certificadoOld = Yii::$app->params["documentFolder"] . "solicitudadmision/" . $inscripcion_id . "/doc_certificado_per_" . $inscripcion_id . "." . $typeFile;
                     $doc_certificado = InscripcionAdmision::addLabelTimeDocumentos($inscripcion_id, $doc_certificadoOld, $timeSt);
-                    $data["DATA_1"][0]["ruta_doc_certificado"] = $doc_certificadoOld;
+                    $data["DATA_1"][0]["ruta_doc_certificado"] = $doc_certificado;
                     if ($doc_certificado === false)
                         throw new Exception('Error doc Certificado no renombrado.');
                 }
@@ -195,19 +195,11 @@ class InscripcionadmisionController extends \yii\web\Controller {
                     $typeFile = strtolower($arrIm[count($arrIm) - 1]);
                     $doc_hojaVidaOld = Yii::$app->params["documentFolder"] . "solicitudadmision/" . $inscripcion_id . "/doc_hojavida_per_" . $inscripcion_id . "." . $typeFile;
                     $doc_hojaVida = InscripcionAdmision::addLabelTimeDocumentos($inscripcion_id, $doc_hojaVidaOld, $timeSt);
-                    $data["DATA_1"][0]["ruta_doc_hojavida"] = $doc_hojaVidaOld;
+                    $data["DATA_1"][0]["ruta_doc_hojavida"] = $doc_hojaVida;
                     if ($doc_hojaVida === false)
                         throw new Exception('Error doc Hoja de Vida no renombrado.');
                 }
-                if (isset($data["DATA_1"][0]["ruta_doc_certificado"]) && $data["DATA_1"][0]["ruta_doc_certificado"] != "") {
-                    $arrIm = explode(".", basename($data["DATA_1"][0]["ruta_doc_certificado"]));
-                    $typeFile = strtolower($arrIm[count($arrIm) - 1]);
-                    $doc_hojaVidaOld = Yii::$app->params["documentFolder"] . "solicitudadmision/" . $inscripcion_id . "/doc_certificado_per_" . $inscripcion_id . "." . $typeFile;
-                    $doc_hojaVida = InscripcionAdmision::addLabelTimeDocumentos($inscripcion_id, $doc_hojaVidaOld, $timeSt);
-                    $data["DATA_1"][0]["ruta_doc_certificado"] = $doc_hojaVidaOld;
-                    if ($doc_hojaVida === false)
-                        throw new Exception('Error doc Doc. Certificado no renombrado.');
-                }            
+                
                 if ($accion == "create" || $accion == "Create") {
                     //Nuevo Registro                    
                     $resul = $model->insertarInscripcion($data);                   

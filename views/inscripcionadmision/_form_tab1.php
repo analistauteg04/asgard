@@ -92,7 +92,7 @@ $requisitosPRP = '<div class="col-md-12 col-sm-12 col-xs-12 col-lg-12">
                         <div class="col-sm-3 col-md-3 col-xs-3 col-lg-3">
                         </div>
                         <div class="col-sm-9 col-md-9 col-xs-9 col-lg-9">
-                            <div style = "width: 900px;" class="well"><span style="font-weight: bold">Fecha del taller introductorio: 13 y 14 de octubre del 2018. Deberás cargar en el siguiente paso estos documentos:<br></span>
+                            <div style = "width: 900px;" class="well"><span style="font-weight: bold">Fecha del taller introductorio: 17 y 18 de noviembre del 2018. Deberás cargar en el siguiente paso estos documentos:<br></span>
                                     Cédula de identidad o pasaporte <br>
                                     Certificado de votación <br>
                                     Título de tercer nivel notarizado <br>
