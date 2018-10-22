@@ -214,7 +214,8 @@ class InscripcionAdmision extends \yii\db\ActiveRecord {
                         ruta_doc_certvota,
                         ruta_doc_foto,
                         ruta_doc_certificado,                        
-                        ruta_doc_hojavida
+                        ruta_doc_hojavida,
+                        twin_dni
                 FROM " . $con->dbname . ".temporal_wizard_inscripcion twi inner join db_academico.unidad_academica ua on ua.uaca_id = twi.uaca_id
                      inner join " . $con1->dbname . ".modalidad m on m.mod_id = twi.mod_id
                      inner join " . $con1->dbname . ".estudio_academico ea on ea.eaca_id = twi.car_id
@@ -374,16 +375,18 @@ class InscripcionAdmision extends \yii\db\ActiveRecord {
                                                         throw new Exception('Error doc Titulo no creado.');
                                                     }*/
                                                 }
-                                                if ($resp_datos['ruta_doc_certvota']!="") {   
-                                                    $arrIm = explode(".", basename($resp_datos['ruta_doc_certvota']));
-                                                    $arrTime = explode("_", basename($resp_datos['ruta_doc_certvota']));
-                                                    $timeSt = $arrTime[4];
-                                                    $typeFile = strtolower($arrIm[count($arrIm) - 1]);
-                                                    $rutaCertvota = Yii::$app->params["documentFolder"] ."solicitudinscripcion/".$id_persona."/doc_certvota_per_".$id_persona."_".$timeSt;
-                                                    $resulDoc3 = $solins_model->insertarDocumentosSolic($sins_id, $interesado_id, 3, $rutaCertvota, $usuario_id);                                                                                                      
-                                                        /*if (!($resulDoc3)) {
-                                                            throw new Exception('Error doc Cert.Votación no creado.');
-                                                        }*/                                                                                                               
+                                                if ($resp_datos['twin_dni']=='CED') {
+                                                    if ($resp_datos['ruta_doc_certvota']!="") {   
+                                                        $arrIm = explode(".", basename($resp_datos['ruta_doc_certvota']));
+                                                        $arrTime = explode("_", basename($resp_datos['ruta_doc_certvota']));
+                                                        $timeSt = $arrTime[4];
+                                                        $typeFile = strtolower($arrIm[count($arrIm) - 1]);
+                                                        $rutaCertvota = Yii::$app->params["documentFolder"] ."solicitudinscripcion/".$id_persona."/doc_certvota_per_".$id_persona."_".$timeSt;
+                                                        $resulDoc3 = $solins_model->insertarDocumentosSolic($sins_id, $interesado_id, 3, $rutaCertvota, $usuario_id);                                                                                                      
+                                                            /*if (!($resulDoc3)) {
+                                                                throw new Exception('Error doc Cert.Votación no creado.');
+                                                            }*/                                                                                                               
+                                                    }
                                                 }
                                                 if ($resp_datos['ruta_doc_foto']!="") {    
                                                     $arrIm = explode(".", basename($resp_datos['ruta_doc_foto']));
