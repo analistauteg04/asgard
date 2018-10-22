@@ -4,6 +4,13 @@
 use yii\helpers\Html;
 use app\components\CFileInputAjax;
 use yii\helpers\Url;
+$leyenda = '<div class="col-md-12 col-xs-12 col-sm-12 col-lg-12">
+          <div class="form-group">
+          <div class="col-sm-10 col-md-10 col-xs-10 col-lg-10">
+          <div style = "width: 450px;" class="alert alert-info"><span style="font-weight: bold"> Nota: </span> Al subir archivo debe ser 800 KB máximo y tipo jpg, png o pdf.</div>
+          </div>
+          </div>
+          </div>';
 ?>
 <form class="form-horizontal">  
     <div class="col-md-12 col-xs-12 col-sm-12 col-lg-12">
@@ -128,7 +135,7 @@ use yii\helpers\Url;
         </div>
     </div>
 
-    <div class="col-md-12 col-xs-12 col-sm-12 col-lg-12 doc_certvota cinteres" <?= ($txth_extranjero == "0") ? 'style="display:none;"' : "" ?> >
+    <div class="col-md-12 col-xs-12 col-sm-12 col-lg-12" id="divCertificado"  style="display: block">
         <div class="form-group">
             <label for="txth_doc_certvota" class="col-sm-3 col-md-3 col-xs-3 col-lg-3 control-label keyupmce"><?= Yii::t("formulario", "Voting Certificate") ?></label>
             <div class="col-sm-9 col-md-9 col-xs-9 col-lg-9">

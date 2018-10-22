@@ -34,7 +34,37 @@ $(document).ready(function () {
             var mensaje = {wtmessage: "Debe Aceptar los términos de la Información.", title: "Exito"};
             showAlert("OK", "success", mensaje);
         }
+                        
+        if ($('#txth_doc_foto').val() == "") {
+            var mensaje={wtmessage: "Debe adjuntar foto.", title: "Información"};
+            showAlert("OK", "success", mensaje);
+        }
+        if ($('#cmb_tipo_dni').val() == "CED") {
+            if ($('#txth_doc_certvota').val() == "") {
+                var mensaje={wtmessage: "Debe adjuntar certificado de votación.", title: "Información"};
+                showAlert("OK", "success", mensaje);
+            }
+        } 
+        if ($('#txth_doc_dni').val() == "") {
+            var mensaje={wtmessage: "Debe adjuntar documento de identidad.", title: "Información"};
+            showAlert("OK", "success", mensaje);
+        }
+        if ($('#txth_doc_titulo').val() == "") {
+            var mensaje={wtmessage: "Debe adjuntar título.", title: "Información"};
+            showAlert("OK", "success", mensaje);
+        }
+        if ($('#cmb_unidad_solicitud').val() == 2) {
+            if ($('#txth_doc_certificado').val() == "") {
+                var mensaje={wtmessage: "Debe adjuntar certificado de materias.", title: "Información"};
+                showAlert("OK", "success", mensaje);
+            }
+            if ($('#txth_doc_hojavida').val() == "") {
+                var mensaje={wtmessage: "Debe adjuntar hoja de vida.", title: "Información"};
+                showAlert("OK", "success", mensaje);
+            }
+        }
     });
+    
     $('#sendInscripcionsolicitud').click(function () {
         var link = $('#txth_base').val() + "/inscripcionadmision/saveinscripciontemp";
         var arrParams = new Object();
@@ -125,12 +155,14 @@ $(document).ready(function () {
             $('#txt_pasaporte').addClass("PBvalidation");
             $('#Divpasaporte').show();
             $('#Divcedula').hide();
+            $('#divCertificado').css('display', 'none');
         } else if ($('#cmb_tipo_dni').val() == 'CED')
         {
             $('#txt_pasaporte').removeClass("PBvalidation");
             $('#txt_cedula').addClass("PBvalidation");
             $('#Divpasaporte').hide();
             $('#Divcedula').show();
+            $('#divCertificado').css('display', 'block');
         }
     });
 
