@@ -17,7 +17,6 @@ $(document).ready(function () {
             }
         }, true);
     });
-
     $('#sendInformacionAspirante').click(function () {
         if ($('#txth_twin_id').val() == 0) {
             guardarInscripcion('Create','1');
@@ -362,10 +361,8 @@ function guardarInscripcion(accion,paso) {
                         var ming = response.data.data.twin_metodo_ingreso;
                         var mod_id = response.data.data.mod_id;
                         var id_carrera = response.data.data.id_carrera;
-
-                        var materias_online = "Matemáticas I, Técnicas de Comunicación Oral y Escrita, Contabilidad";
-                        var materias_otros = "Matemáticas I, Técnicas de Comunicación Oral y Escrita, Contabilidad, Desarrollo del Pensamiento, Emprendimiento";
-
+                        var materias_online = "Matemáticas, Técnicas de Comunicación Oral y Escrita, Contabilidad";
+                        var materias_otros = "Matemáticas, Técnicas de Comunicación Oral y Escrita, Contabilidad, Desarrollo del Pensamiento, Emprendimiento";
                         $('#lbl_fcur_lb').text("Fecha del curso:");
                         if (uaca_id == 2) {
                             if (id_carrera == 22) {
@@ -376,7 +373,6 @@ function guardarInscripcion(accion,paso) {
                             leyenda += '<br/><br/>El valor a cancelar por concepto de inscripción es: ';
                             $('#lbl_item_1').text("Valor Inscripción: ");
                             $('#val_item_1').text(response.data.data.precio);
-
                             $('#lbl_valor_pagar_tx').text(response.data.data.precio);
 
                             $('#lbl_fcur_tx').text("17 de noviembre del 2018");
@@ -386,9 +382,11 @@ function guardarInscripcion(accion,paso) {
                                 $('#lbl_mcur_tx').text(materias_online);
                                 if (ming == 1) {// curso
                                     $('#lbl_valor_pagar_tx').text(response.data.data.precio);
+                                    $('#lbl_mcur_lb').text("Materias a cursar");
                                     $('#lbl_fcur_lb').text("Fecha del curso:");
                                     $('#lbl_fcur_tx').text("22 de octubre al 14 de diciembre");
                                 } else if (ming == 2) { // examen
+                                    $('#lbl_mcur_lb').text("Examenes a rendir");
                                     $('#lbl_fcur_lb').text("Fecha de las pruebas:");
                                     $('#lbl_valor_pagar_tx').text(response.data.data.precio);
                                     $('#lbl_fcur_tx').text("En quince (15) días a partir del registro (un coordinador te contactará para brindarte mayor información)");
@@ -401,6 +399,7 @@ function guardarInscripcion(accion,paso) {
                                     } else if (mod_id == 4) {
                                         $('#lbl_fcur_tx').text("20 de octubre al 8 de diciembre");
                                     }
+                                    $('#lbl_mcur_lb').text("Materias a cursar");
                                     $('#lbl_item_1').text("Curso de nivelación: ");
                                     $('#val_item_1').text(response.data.data.precio);
                                     $('#lbl_item_2').text("Descuento especial: ");
@@ -415,6 +414,7 @@ function guardarInscripcion(accion,paso) {
                                     $('#lbl_item_1').text("Exámen de Admisión: ");
                                     $('#val_item_1').text(response.data.data.precio);
                                     $('#lbl_item_2').text("Descuento especial: ");
+                                    $('#lbl_mcur_lb').text("Examenes a rendir");
                                     $('#val_item_2').text(response.data.data.ddit_valor);
                                     var totalvalor = parseInt(response.data.data.precio) - parseInt(response.data.data.ddit_valor);
                                     $('#lbl_valor_pagar_tx').text(totalvalor);

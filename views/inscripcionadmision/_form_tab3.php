@@ -91,7 +91,7 @@ use yii\helpers\Html;
         </div>         
         <div id="id_mat_cur" class="col-md-12 col-xs-12 col-sm-12 col-lg-12">
             <div class="col-md-4 col-xs-4 col-sm-4 col-lg-4">
-                <span id="lbl_mcur_lb"><b><?= Yii::t("formulario", "Materias a Cursar: ") ?></b></span>
+                <b><span id="lbl_mcur_lb"></span></b>
             </div>
             <div class="col-md-8 col-xs-8 col-sm-8 col-lg-8">
                 <span id="lbl_mcur_tx"></span>
