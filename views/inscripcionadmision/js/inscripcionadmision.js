@@ -31,7 +31,7 @@ $(document).ready(function () {
                 guardarInscripcion('Update','2');
             }
         } else {
-            var mensaje = {wtmessage: "Debe Aceptar los términos de la Información", title: "Exito"};
+            var mensaje = {wtmessage: "Debe Aceptar los términos de la Información.", title: "Exito"};
             showAlert("OK", "success", mensaje);
         }
     });
