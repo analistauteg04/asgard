@@ -3,6 +3,21 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
+/*
+ * 
+ * @returns {voids}
+ * Created: Kleber Loayza(kloayza@uteg.edu.ec)
+ * date: Oct/23/18
+ */
+function habilitarSecciones() {
+    var pais = $('#cmb_pais_dom').val();
+    if (pais == 1) {
+        $('#divCertvota').css('display', 'block');
+    } else {
+        $('#divCertvota').css('display', 'none');
+    }
+}
+
 $(document).ready(function () {
     // para mostrar codigo de area
     $('#cmb_pais_dom').change(function () {
@@ -18,65 +33,73 @@ $(document).ready(function () {
         }, true);
     });
     $('#sendInformacionAspirante').click(function () {
+        habilitarSecciones();
         if ($('#txth_twin_id').val() == 0) {
-            guardarInscripcion('Create','1');
+            guardarInscripcion('Create', '1');
         } else {
-            guardarInscripcion('Update','1');
+            guardarInscripcion('Update', '1');
         }
 
     });
     $('#sendInformacionAspirante2').click(function () {
-        var error=0;
+        var error = 0;
+        var pais = $('#cmb_pais_dom').val();
         if ($("#chk_mensaje1").prop("checked") && $("#chk_mensaje2").prop("checked")) {
-            /*if ($('#txth_twin_id').val() != 0) {*/
-                error=0;
-           /* }*/
+            error = 0;
         } else {
             var mensaje = {wtmessage: "Debe Aceptar los términos de la Información.", title: "Exito"};
-            error=1;
+            error++;
             showAlert("NO_OK", "success", mensaje);
         }
-                        
-        /*if ($('#txth_doc_foto').val() == "") {
-            error=0;
-            var mensaje={wtmessage: "Debe adjuntar foto.", title: "Información"};
-            showAlert("NO_OK", "error", mensaje);
-        }
-        if ($('#cmb_tipo_dni').val() == "CED") {
-            if ($('#txth_doc_certvota').val() == "") {
-                error=0;
-                var mensaje={wtmessage: "Debe adjuntar certificado de votación.", title: "Información"};
-                showAlert("NO_OK", "error", mensaje);
-            }
-        } 
-        if ($('#txth_doc_dni').val() == "") {
-            error=0;
-            var mensaje={wtmessage: "Debe adjuntar documento de identidad.", title: "Información"};
-            showAlert("NO_OK", "error", mensaje);
-        }
         if ($('#txth_doc_titulo').val() == "") {
-            error=0;
-            var mensaje={wtmessage: "Debe adjuntar título.", title: "Información"};
+            error++;
+            var mensaje = {wtmessage: "Debe adjuntar título.", title: "Información"};
             showAlert("NO_OK", "error", mensaje);
+        } else {
+            if ($('#txth_doc_dni').val() == "") {
+                error++;
+                var mensaje = {wtmessage: "Debe adjuntar documento de identidad.", title: "Información"};
+                showAlert("NO_OK", "error", mensaje);
+            } else {
+                if ($('#cmb_tipo_dni').val() == "CED") {
+                    if (pais == 1) {
+                        if ($('#txth_doc_certvota').val() == "") {
+                            error++;
+                            var mensaje = {wtmessage: "Debe adjuntar certificado de votación.", title: "Información"};
+                            showAlert("NO_OK", "error", mensaje);
+                        }
+                    } else {
+                        if ($('#txth_doc_foto').val() == "") {
+                            error++;
+                            var mensaje = {wtmessage: "Debe adjuntar foto.", title: "Información"};
+                            showAlert("NO_OK", "error", mensaje);
+                        }
+                    }
+                } else {
+                    if ($('#txth_doc_hojavida').val() == "") {
+                        error++;
+                        var mensaje = {wtmessage: "Debe adjuntar hoja de vida.", title: "Información"};
+                        showAlert("NO_OK", "error", mensaje);
+                    }
+                }
+            }
         }
         if ($('#cmb_unidad_solicitud').val() == 2) {
             if ($('#txth_doc_certificado').val() == "") {
-                error=0;
-                var mensaje={wtmessage: "Debe adjuntar certificado de materias.", title: "Información"};
+                error++;
+                var mensaje = {wtmessage: "Debe adjuntar certificado de materias.", title: "Información"};
                 showAlert("NO_OK", "error", mensaje);
             }
-            if ($('#txth_doc_hojavida').val() == "") {
-                error=0;
-                var mensaje={wtmessage: "Debe adjuntar hoja de vida.", title: "Información"};
-                showAlert("NO_OK", "error", mensaje);
-            }
-        }*/     
-        if(error==0){
-            guardarInscripcion('Update','2');
+            alert($('#cmb_tipo_dni').val());
+
         }
-            
+        alert(error);
+        if (error == 0) {
+            guardarInscripcion('Update', '2');
+        }
+
     });
-    
+
     $('#sendInscripcionsolicitud').click(function () {
         var link = $('#txth_base').val() + "/inscripcionadmision/saveinscripciontemp";
         var arrParams = new Object();
@@ -166,7 +189,7 @@ $(document).ready(function () {
             $('#txt_cedula').removeClass("PBvalidation");
             $('#txt_pasaporte').addClass("PBvalidation");
             $('#Divpasaporte').show();
-            $('#Divcedula').hide();            
+            $('#Divcedula').hide();
         } else if ($('#cmb_tipo_dni').val() == 'CED')
         {
             $('#txt_pasaporte').removeClass("PBvalidation");
@@ -235,7 +258,7 @@ $(document).ready(function () {
         Requisitos();
         AparecerDocumento();
     });
-``
+    ``
     // tabs del index
     $('#paso1next').click(function () {
         $("a[data-href='#paso1']").attr('data-toggle', 'none');
@@ -245,10 +268,7 @@ $(document).ready(function () {
         $("a[data-href='#paso2']").attr('data-toggle', 'tab');
         $("a[data-href='#paso2']").attr('href', $("a[data-href='#paso2']").attr('data-href'));
         $("a[data-href='#paso2']").trigger("click");
-        $("#txt_doc_titulo").attr('class', 'PBvalidation');
-        $("#txt_doc_dni").attr('class', 'PBvalidation');
-        $("#txt_doc_foto").attr('class', 'PBvalidation');
-        
+
     });
     $('#paso2back').click(function () {
         $("a[data-href='#paso2']").attr('data-toggle', 'none');
@@ -258,9 +278,6 @@ $(document).ready(function () {
         $("a[data-href='#paso1']").attr('data-toggle', 'tab');
         $("a[data-href='#paso1']").attr('href', $("a[data-href='#paso1']").attr('data-href'));
         $("a[data-href='#paso1']").trigger("click");
-        $("#txt_doc_titulo").removeAttr('class');
-        $("#txt_doc_dni").removeAttr('class');
-        $("#txt_doc_foto").removeAttr('class');
     });
     $('#paso2next').click(function () {
         $("a[data-href='#paso2']").attr('data-toggle', 'none');
@@ -270,9 +287,6 @@ $(document).ready(function () {
         $("a[data-href='#paso3']").attr('data-toggle', 'tab');
         $("a[data-href='#paso3']").attr('href', $("a[data-href='#paso3']").attr('data-href'));
         $("a[data-href='#paso3']").trigger("click");
-        $("#txt_doc_titulo").removeAttr('class');
-        $("#txt_doc_dni").removeAttr('class');
-        $("#txt_doc_foto").removeAttr('class');
     });
     $('#paso3back').click(function () {
         $("a[data-href='#paso3']").attr('data-toggle', 'none');
@@ -282,9 +296,6 @@ $(document).ready(function () {
         $("a[data-href='#paso2']").attr('data-toggle', 'tab');
         $("a[data-href='#paso2']").attr('href', $("a[data-href='#paso2']").attr('data-href'));
         $("a[data-href='#paso2']").trigger("click");
-        $("#txt_doc_titulo").attr('class', 'PBvalidation');
-        $("#txt_doc_dni").attr('class', 'PBvalidation');
-        $("#txt_doc_foto").attr('class', 'PBvalidation');
     });
 
     function AparecerDocumento() {
@@ -292,7 +303,6 @@ $(document).ready(function () {
             $('#divCertificado').css('display', 'block');
         } else {
             $('#divCertificado').css('display', 'none');
-
         }
     }
 
@@ -371,7 +381,7 @@ $(document).ready(function () {
 });
 
 //INSERTAR DATOS
-function guardarInscripcion(accion,paso) {
+function guardarInscripcion(accion, paso) {
     var ID = (accion == "Update") ? $('#txth_twin_id').val() : 0;
     var link = $('#txth_base').val() + "/inscripcionadmision/saveinscripciontemp";
     var arrParams = new Object();
@@ -387,11 +397,10 @@ function guardarInscripcion(accion,paso) {
                         $('#txth_twin_id').val(response.data.ids)
                         paso1next();
                     } else {
-                        if(paso == "1") {
-                          paso1next();  
-                        }
-                        else{
-                            paso2next();  
+                        if (paso == "1") {
+                            paso1next();
+                        } else {
+                            paso2next();
                         }
                         var uaca_id = response.data.data.uaca_id;
                         //Inicio ingreso informacion del tab 3\
