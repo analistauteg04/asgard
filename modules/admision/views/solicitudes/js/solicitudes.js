@@ -624,8 +624,10 @@ function SaveDocumentos() {
     arrParams.arc_doc_certvota = $('#txth_doc_certvota').val();
     arrParams.arc_doc_foto = $('#txth_doc_foto').val();
     arrParams.arc_doc_beca = $('#txth_doc_beca').val();
+    arrParams.arc_doc_certmat = $('#txth_doc_certificado').val();
+    arrParams.arc_doc_curri = $('#txth_doc_hojavida').val();    
     arrParams.opcion = $('#txth_opcion').val();
-
+    arrParams.uaca_id = $('#txth_uaca').val();
     if ($('input[name=opt_declara_si]:checked').val() == 1) {
         arrParams.beca = 1;
     } else {

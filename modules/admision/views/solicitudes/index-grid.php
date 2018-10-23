@@ -90,10 +90,10 @@ PbGridView::widget([
                 'documentos' => function ($url, $model) {
                     if ($model['uaca_id'] < 3) {
                         if ($model['numDocumentos'] == 0) {
-                            return Html::a('<span class="glyphicon glyphicon-folder-open"></span>', Url::to(['/admision/solicitudes/subirdocumentos', 'id_sol' => base64_encode($model['sins_id']), 'int' => base64_encode($model['int_id']), 'perid' => base64_encode($model['persona']), 'opcion' => base64_encode(2)]), ["data-toggle" => "tooltip", "title" => "Subir Documentos", "data-pjax" => 0]);
+                            return Html::a('<span class="glyphicon glyphicon-folder-open"></span>', Url::to(['/admision/solicitudes/subirdocumentos', 'id_sol' => base64_encode($model['sins_id']), 'int' => base64_encode($model['int_id']), 'perid' => base64_encode($model['persona']), 'opcion' => base64_encode(2), 'uaca' => base64_encode($model['uaca_id'])]), ["data-toggle" => "tooltip", "title" => "Subir Documentos", "data-pjax" => 0]);
                         } else {
                             if ($model['rsin_id'] == 4)
-                                return Html::a('<span class="glyphicon glyphicon-folder-open"></span>', Url::to(['/admision/solicitudes/actualizardocumentos', 'id_sol' => base64_encode($model['sins_id']), 'int' => base64_encode($model['int_id']), 'perid' => base64_encode($model['persona']), 'opcion' => base64_encode(2)]), ["data-toggle" => "tooltip", "title" => "Actualizar Documentos", "data-pjax" => 0]);
+                                return Html::a('<span class="glyphicon glyphicon-folder-open"></span>', Url::to(['/admision/solicitudes/actualizardocumentos', 'id_sol' => base64_encode($model['sins_id']), 'int' => base64_encode($model['int_id']), 'perid' => base64_encode($model['persona']), 'opcion' => base64_encode(2), 'uaca' => base64_encode($model['uaca_id'])]), ["data-toggle" => "tooltip", "title" => "Actualizar Documentos", "data-pjax" => 0]);
                             else
                                 return '<span class="glyphicon glyphicon-folder-open"></span>';
                         }
