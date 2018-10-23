@@ -72,7 +72,7 @@ INSERT INTO `conocimiento_servicio` (`cser_id`, `cser_nombre`, `cser_descripcion
 -- Volcado de datos para la tabla `tipo_oportunidad_venta`
 --
 INSERT INTO `tipo_oportunidad_venta` (`tove_id`, `uaca_id`, `tove_nombre`, `tove_descripcion`, `tove_estado`, `tove_estado_logico`) VALUES
-(1, 1, 'Ingreso al CAN', 'Ingreso al CAN', '1', '1'),
+(1, 1, 'Ingreso al Curso de admisión y nivelación', 'Ingreso al Curso de admisión y nivelación', '1', '1'),
 (2, 1, 'Ingreso por Homologación', 'Ingreso por Homologación', '1', '1'),
 (3, 1, 'Ingreso por Examen de Admisión', 'Ingreso por Examen de Admisión', '1', '1'),
 (4, 1, 'Ingreso al primer semestre', 'Ingreso al primer semestre', '0', '1'),

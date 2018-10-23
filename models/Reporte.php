@@ -111,6 +111,12 @@ class Reporte extends \yii\db\ActiveRecord {
                              else null
                         end carrera,
                         IFNULL(moda.mod_nombre,'') mod_nombre,
+                        case sins.rsin_id
+                            when 1 then 'Pendiente'
+                            when 2 then 'Aprobado'
+                            when 3 then 'Pre-Aprobado'
+                            else 'Sin Estado'
+                        end estado_solicitud,
                         case
                             when
                                 ifnull((
