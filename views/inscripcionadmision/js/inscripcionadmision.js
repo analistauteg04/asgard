@@ -287,7 +287,6 @@ $(document).ready(function () {
         $("#txt_doc_foto").attr('class', 'PBvalidation');
     });
 
-
     function AparecerDocumento() {
         if ($('#cmb_metodo_solicitud').val() == 4) {
             $('#divCertificado').css('display', 'block');

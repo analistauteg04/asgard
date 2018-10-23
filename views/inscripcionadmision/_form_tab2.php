@@ -135,7 +135,7 @@ $leyenda = '<div class="col-md-12 col-xs-12 col-sm-12 col-lg-12">
         </div>
     </div>
 
-    <div class="col-md-12 col-xs-12 col-sm-12 col-lg-12" id="divCertificado"  style="display: block">
+    <div class="col-md-12 col-xs-12 col-sm-12 col-lg-12" id="divCertificado">
         <div class="form-group">
             <label for="txth_doc_certvota" class="col-sm-3 col-md-3 col-xs-3 col-lg-3 control-label keyupmce"><?= Yii::t("formulario", "Voting Certificate") ?></label>
             <div class="col-sm-9 col-md-9 col-xs-9 col-lg-9">
