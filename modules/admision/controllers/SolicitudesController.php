@@ -200,7 +200,7 @@ class SolicitudesController extends \app\components\CController {
             }
         }
         $arr_unidadac = $mod_unidad->consultarUnidadAcademicasEmpresa($emp_id);
-        $arr_modalidad = $mod_modalidad->consultarModalidad(1,1);
+        $arr_modalidad = $mod_modalidad->consultarModalidad(1, 1);
         $arr_metodos = $mod_metodo->consultarMetodoIngNivelInt($arr_unidadac[0]["id"]);
         $arr_carrera = $modcanal->consultarCarreraModalidad(1, 1);
         //Descuentos.
@@ -395,7 +395,7 @@ class SolicitudesController extends \app\components\CController {
 
                 //Envío de correo con formas de pago.                    
                 $informacion_interesado = $mod_ordenpago->datosBotonpago($resp_opago, $emp_id);
-                
+
                 $link = Url::base(true) . "/formbotonpago/btnpago?ord_pago=" . base64_encode($resp_opago);
                 $link_paypal = Url::base(true) . "/pago/pypal?ord_pago=" . base64_encode($resp_opago);
                 $link1 = Url::base(true);
@@ -526,6 +526,7 @@ class SolicitudesController extends \app\components\CController {
             $interesado_id = base64_decode($data["interesado_id"]);
             $es_extranjero = base64_decode($data["arc_extranjero"]);
             $beca = base64_decode($data["beca"]);
+            $uaca_id = $data["uaca_id"];
             if ($data["upload_file"]) {
                 if (empty($_FILES)) {
                     return json_encode(['error' => Yii::t("notificaciones", "Error to process File {file}. Try again.", ['{file}' => basename($files['name'])])]);
@@ -570,6 +571,18 @@ class SolicitudesController extends \app\components\CController {
                     $arrIm = explode(".", basename($data["arc_doc_beca"]));
                     $typeFile = strtolower($arrIm[count($arrIm) - 1]);
                     $beca_archivo = Yii::$app->params["documentFolder"] . "solicitudinscripcion/" . $per_id . "/doc_beca_per_" . $per_id . "." . $typeFile;
+                }
+                $certmate_archivo = "";
+                if (isset($data["arc_doc_certmat"]) && $data["arc_doc_certmat"] != "") {
+                    $arrIm = explode(".", basename($data["arc_doc_certmat"]));
+                    $typeFile = strtolower($arrIm[count($arrIm) - 1]);
+                    $certmate_archivo = Yii::$app->params["documentFolder"] . "solicitudinscripcion/" . $per_id . "/doc_certificado_per_" . $per_id . "." . $typeFile;
+                }
+                $curriculum_archivo = "";
+                if (isset($data["arc_doc_curri"]) && $data["arc_doc_curri"] != "") {
+                    $arrIm = explode(".", basename($data["arc_doc_curri"]));
+                    $typeFile = strtolower($arrIm[count($arrIm) - 1]);
+                    $curriculum_archivo = Yii::$app->params["documentFolder"] . "solicitudinscripcion/" . $per_id . "/doc_hojavida_per_" . $per_id . "." . $typeFile;
                 }
             }
         }
@@ -616,6 +629,22 @@ class SolicitudesController extends \app\components\CController {
                 $beca_archivo = DocumentoAdjuntar::addLabelTimeDocumentos($sins_id, $beca_archivo, $timeSt);
                 if ($beca_archivo === FALSE)
                     throw new Exception('Error doc Beca no renombrado.');
+            }
+            if (isset($data["arc_doc_certmat"]) && $data["arc_doc_certmat"] != "") {
+                $arrIm = explode(".", basename($data["arc_doc_certmat"]));
+                $typeFile = strtolower($arrIm[count($arrIm) - 1]);
+                $certmate_archivo = Yii::$app->params["documentFolder"] . "solicitudinscripcion/" . $per_id . "/doc_certificado_per_" . $per_id . "." . $typeFile;
+                $certmate_archivo = DocumentoAdjuntar::addLabelTimeDocumentos($sins_id, $certmate_archivo, $timeSt);
+                if ($certmate_archivo === FALSE)
+                    throw new Exception('Error doc certificado materia no renombrado.');
+            }
+            if (isset($data["arc_doc_curri"]) && $data["arc_doc_curri"] != "") {
+                $arrIm = explode(".", basename($data["arc_doc_curri"]));
+                $typeFile = strtolower($arrIm[count($arrIm) - 1]);
+                $curriculum_archivo = Yii::$app->params["documentFolder"] . "solicitudinscripcion/" . $per_id . "/doc_hojavida_per_" . $per_id . "." . $typeFile;
+                $curriculum_archivo = DocumentoAdjuntar::addLabelTimeDocumentos($sins_id, $curriculum_archivo, $timeSt);
+                if ($curriculum_archivo === FALSE)
+                    throw new Exception('Error doc curriculum no renombrado.');
             }
             if (!empty($titulo_archivo) && !empty($dni_archivo) && !empty($foto_archivo)) {
                 if (!empty($titulo_archivo)) {
@@ -669,6 +698,34 @@ class SolicitudesController extends \app\components\CController {
                                     $mod_solinsxdoc5->sdoc_estado_logico = "1";
                                     if (!$mod_solinsxdoc5->save()) {
                                         throw new Exception('Error doc beca no creado.');
+                                    }
+                                }
+                                if ($uaca_id == "2") {
+                                    \app\models\Utilities::putMessageLogFile('sins_id ' . $sins_id);
+                                    \app\models\Utilities::putMessageLogFile('interesado_id ' . $interesado_id);
+                                    \app\models\Utilities::putMessageLogFile('curriculum_archivo ' . $curriculum_archivo);                                    
+                                    $mod_solinsxdoc6 = new SolicitudinsDocumento();
+                                    $mod_solinsxdoc6->sins_id = $sins_id;
+                                    $mod_solinsxdoc6->int_id = $interesado_id;
+                                    $mod_solinsxdoc6->dadj_id = 6;
+                                    $mod_solinsxdoc6->sdoc_archivo = $certmate_archivo;
+                                    $mod_solinsxdoc6->sdoc_estado = "1";
+                                    $mod_solinsxdoc6->sdoc_estado_logico = "1";
+                                    if (!$mod_solinsxdoc6->save()) {
+                                        throw new Exception('Error doc certificado materia no creado.');
+                                    }
+
+                                    if ($mod_solinsxdoc6->save()) {
+                                        $mod_solinsxdoc7 = new SolicitudinsDocumento();
+                                        $mod_solinsxdoc7->sins_id = $sins_id;
+                                        $mod_solinsxdoc7->int_id = $interesado_id;
+                                        $mod_solinsxdoc7->dadj_id = 7;
+                                        $mod_solinsxdoc7->sdoc_archivo = $curriculum_archivo;
+                                        $mod_solinsxdoc7->sdoc_estado = "1";
+                                        $mod_solinsxdoc7->sdoc_estado_logico = "1";
+                                        if (!$mod_solinsxdoc7->save()) {
+                                            throw new Exception('Error doc curriculum no creado.');
+                                        }
                                     }
                                 }
                             } else {
@@ -890,24 +947,24 @@ class SolicitudesController extends \app\components\CController {
                     $mod_solins = new SolicitudInscripcion();
                     $mod_ordenpago = new OrdenPago();
                     //Verificar que se hayan subido los documentos en Uteg.        
-                    if ($empresa ==1) {
-                        $respNumDoc = $mod_solins->consultarDocumentostosxSol($sins_id); 
-                        $numDocumentos =  $respNumDoc["numDocumentos"];
+                    if ($empresa == 1) {
+                        $respNumDoc = $mod_solins->consultarDocumentostosxSol($sins_id);
+                        $numDocumentos = $respNumDoc["numDocumentos"];
                     } else {
                         $numDocumentos = 1;
                     }
-                    if ($numDocumentos > 0)  {                        
+                    if ($numDocumentos > 0) {
                         $respusuario = $mod_solins->consultaDatosusuario($per_sistema);
                         if ($banderapreaprueba == 0) {  //etapa de Aprobación.                    
                             if ($resultado == 2) {
                                 //consultar estado del pago.     
-                                $resp_pago = $mod_ordenpago->consultaOrdenPago($sins_id);                                
+                                $resp_pago = $mod_ordenpago->consultaOrdenPago($sins_id);
                                 if ($resp_pago["opag_estado_pago"] == 'S') {
                                     $respsolins = $mod_solins->apruebaSolicitud($sins_id, $resultado, $observacion, $banderapreaprueba, $respusuario['usu_id']);
-                                    if ($respsolins) {                                        
+                                    if ($respsolins) {
                                         //Se genera id de aspirante y correo de bienvenida.                                
                                         $resp_encuentra = $mod_ordenpago->encuentraAdmitido($int_id);
-                                        if ($resp_encuentra) {                                            
+                                        if ($resp_encuentra) {
                                             $asp = $resp_encuentra['adm_id'];
                                             $continua = 1;
                                         } else {
@@ -921,11 +978,11 @@ class SolicitudesController extends \app\components\CController {
                                     }
                                     if ($continua == 1) {
                                         $resp_inte = $mod_ordenpago->actualizaEstadointeresado($int_id, $respusuario['usu_id']);
-                                        if ($resp_inte) {                                            
+                                        if ($resp_inte) {
                                             //Se obtienen el método de ingreso y el nivel de interés según la solicitud.                                                
-                                            $resp_sol = $mod_solins->Obtenerdatosolicitud($sins_id);                                            
+                                            $resp_sol = $mod_solins->Obtenerdatosolicitud($sins_id);
                                             //Se obtiene el curso para luego registrarlo.
-                                            if ($resp_sol) {                                                
+                                            if ($resp_sol) {
                                                 $mod_persona = new Persona();
                                                 $resp_persona = $mod_persona->consultaPersonaId($per_id);
                                                 $correo = $resp_persona["usu_user"];
@@ -1140,7 +1197,6 @@ class SolicitudesController extends \app\components\CController {
                         );
                         return \app\models\Utilities::ajaxResponse('NO_OK', 'alert', Yii::t("jslang", "Sucess"), false, $message);
                     }
-                    
                 } else {
                     $transaction->rollback();
                     $transaction2->rollback();
@@ -1201,7 +1257,8 @@ class SolicitudesController extends \app\components\CController {
             $arrData = $modSolicitudes->consultarSolicitudesReporte($arrSearch, true);
         }
 
-        $nameReport = admision::t("Solicitudes", "Request by Interested");;
+        $nameReport = admision::t("Solicitudes", "Request by Interested");
+        ;
         Utilities::generarReporteXLS($nombarch, $nameReport, $arrHeader, $arrData, $colPosition);
         exit;
     }

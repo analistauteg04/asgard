@@ -76,7 +76,7 @@ PbGridView::widget([
                 'upload' => function ($url, $model) {
                     if ($model['uaca_id'] < 3) {
                         if ($model['numDocumentos'] == 0) {
-                            return Html::a('<span class="glyphicon glyphicon-folder-open"></span>', Url::to(['/admision/solicitudes/subirdocumentos', 'id_sol' => base64_encode($model['sins_id']), 'opcion' => base64_encode(1)]), ["data-toggle" => "tooltip", "title" => "Subir Documentos Inscrito", "data-pjax" => 0]);
+                            return Html::a('<span class="glyphicon glyphicon-folder-open"></span>', Url::to(['/admision/solicitudes/subirdocumentos', 'id_sol' => base64_encode($model['sins_id']), 'opcion' => base64_encode(1), 'uaca' => base64_encode($model['uaca_id'])]), ["data-toggle" => "tooltip", "title" => "Subir Documentos Inscrito", "data-pjax" => 0]);
                         } else {
                             return '<span class="glyphicon glyphicon-folder-open"></span>';
                         }
