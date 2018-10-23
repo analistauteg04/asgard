@@ -236,6 +236,10 @@ $(document).ready(function () {
         $("a[data-href='#paso2']").attr('data-toggle', 'tab');
         $("a[data-href='#paso2']").attr('href', $("a[data-href='#paso2']").attr('data-href'));
         $("a[data-href='#paso2']").trigger("click");
+        $("#txt_doc_titulo").attr('class', 'PBvalidation');
+        $("#txt_doc_dni").attr('class', 'PBvalidation');
+        $("#txt_doc_foto").attr('class', 'PBvalidation');
+        
     });
     $('#paso2back').click(function () {
         $("a[data-href='#paso2']").attr('data-toggle', 'none');
@@ -245,6 +249,9 @@ $(document).ready(function () {
         $("a[data-href='#paso1']").attr('data-toggle', 'tab');
         $("a[data-href='#paso1']").attr('href', $("a[data-href='#paso1']").attr('data-href'));
         $("a[data-href='#paso1']").trigger("click");
+        $("#txt_doc_titulo").removeAttr('class');
+        $("#txt_doc_dni").removeAttr('class');
+        $("#txt_doc_foto").removeAttr('class');
     });
     $('#paso2next').click(function () {
         $("a[data-href='#paso2']").attr('data-toggle', 'none');
@@ -254,6 +261,9 @@ $(document).ready(function () {
         $("a[data-href='#paso3']").attr('data-toggle', 'tab');
         $("a[data-href='#paso3']").attr('href', $("a[data-href='#paso3']").attr('data-href'));
         $("a[data-href='#paso3']").trigger("click");
+        $("#txt_doc_titulo").removeAttr('class');
+        $("#txt_doc_dni").removeAttr('class');
+        $("#txt_doc_foto").removeAttr('class');
     });
     $('#paso3back').click(function () {
         $("a[data-href='#paso3']").attr('data-toggle', 'none');
@@ -263,6 +273,9 @@ $(document).ready(function () {
         $("a[data-href='#paso2']").attr('data-toggle', 'tab');
         $("a[data-href='#paso2']").attr('href', $("a[data-href='#paso2']").attr('data-href'));
         $("a[data-href='#paso2']").trigger("click");
+        $("#txt_doc_titulo").attr('class', 'PBvalidation');
+        $("#txt_doc_dni").attr('class', 'PBvalidation');
+        $("#txt_doc_foto").attr('class', 'PBvalidation');
     });
 
 
