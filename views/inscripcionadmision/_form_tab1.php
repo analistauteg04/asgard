@@ -16,7 +16,7 @@ $requisitosCANP = ' <div class="col-md-12 col-sm-12 col-xs-12 col-lg-12">
                         <div class="col-sm-3 col-md-3 col-xs-3 col-lg-3">
                         </div>
                         <div class="col-sm-9 col-md-9 col-xs-9 col-lg-9">
-                            <div style = "width: 900px;" class="well"><span style="font-weight: bold">Fecha curso de nivelación del 14 de enero al 01 de marzo del 2019. Deberás cargar en el siguiente paso estos documentos: <br></span>
+                            <div style = "width: 410px;" class="well"><span style="font-weight: bold">Fecha curso de nivelación del 14 de enero al 01 de marzo del 2019. Deberás cargar en el siguiente paso estos documentos: <br></span>
                                 Cédula de identidad o pasaporte. <br>
                                 Certificado de votación (ecuatorianos). <br>
                                 Título de bachiller notarizado. <br>
@@ -31,7 +31,7 @@ $requisitosCANSP = ' <div class="col-md-12 col-sm-12 col-xs-12 col-lg-12">
                         <div class="col-sm-3 col-md-3 col-xs-3 col-lg-3">
                         </div>
                         <div class="col-sm-9 col-md-9 col-xs-9 col-lg-9">
-                            <div style = "width: 900px;" class="well"><span style="font-weight: bold">Fecha curso de nivelación del 22 de octubre al 30 de noviembre del 2018. Deberás cargar en el siguiente paso estos documentos: <br></span>
+                            <div style = "width: 410px;" class="well"><span style="font-weight: bold">Fecha curso de nivelación del 14 de enero al 01 de marzo del 2019. Deberás cargar en el siguiente paso estos documentos: <br></span>
                                 Cédula de identidad o pasaporte. <br>
                                 Certificado de votación (ecuatorianos). <br>
                                 Título de bachiller notarizado. <br>
@@ -46,7 +46,7 @@ $requisitosCANAD = ' <div class="col-md-12 col-sm-12 col-xs-12 col-lg-12">
                         <div class="col-sm-3 col-md-3 col-xs-3 col-lg-3">
                         </div>
                         <div class="col-sm-9 col-md-9 col-xs-9 col-lg-9">
-                            <div style = "width: 900px;" class="well"><span style="font-weight: bold">Fecha curso de nivelación del 15 de noviembre al 8 de diciembre del 2018. Deberás cargar en el siguiente paso estos documentos: <br></span>
+                            <div style = "width: 410px;" class="well"><span style="font-weight: bold">Fecha curso de nivelación del 15 de noviembre al 8 de diciembre del 2018. Deberás cargar en el siguiente paso estos documentos: <br></span>
                                 Cédula de identidad o pasaporte. <br>
                                 Certificado de votación (ecuatorianos). <br>
                                 Título de bachiller notarizado. <br>
@@ -61,7 +61,7 @@ $requisitosCANO = ' <div class="col-md-12 col-sm-12 col-xs-12 col-lg-12">
                         <div class="col-sm-3 col-md-3 col-xs-3 col-lg-3">
                         </div>
                         <div class="col-sm-9 col-md-9 col-xs-9 col-lg-9">
-                            <div style = "width: 900px;" class="well"><span style="font-weight: bold">Fecha curso de nivelación del 29 de octubre al 14 de diciembre del 2018. Deberás cargar en el siguiente paso estos documentos: <br> </span>
+                            <div style = "width: 410px;" class="well"><span style="font-weight: bold">Fecha curso de nivelación del 29 de octubre al 14 de diciembre del 2018. Deberás cargar en el siguiente paso estos documentos: <br> </span>
                                 Cédula de identidad o pasaporte. <br>
                                 Certificado de votación (ecuatorianos). <br>
                                 Título de bachiller notarizado. <br>
@@ -77,7 +77,7 @@ $requisitosEXA = ' <div class="col-md-12 col-sm-12 col-xs-12 col-lg-12">
                         <div class="col-sm-3 col-md-3 col-xs-3 col-lg-3">
                         </div>
                         <div class="col-sm-9 col-md-9 col-xs-9 col-lg-9">
-                            <div style = "width: 900px;" class="well"><span style="font-weight: bold">Al inscribirte al examen de admisión, tendrás acceso al Campus Virtual UTEG para prepararte. A partir de la fecha de registro tendrás quince (15) días para rendir las pruebas de manera online. Deberás cargar en el siguiente paso estos documentos: <br></span>                                                              
+                            <div style = "width: 410px;" class="well"><span style="font-weight: bold">Al inscribirte al examen de admisión, tendrás acceso al Campus Virtual UTEG para prepararte. A partir de la fecha de registro tendrás quince (15) días para rendir las pruebas de manera online. Deberás cargar en el siguiente paso estos documentos: <br></span>                                                              
                                 Cédula de identidad o pasaporte. <br>
                                 Certificado de votación (ecuatorianos). <br>
                                 Título de Bachiller notarizado. <br>
@@ -92,7 +92,7 @@ $requisitosPRP = '<div class="col-md-12 col-sm-12 col-xs-12 col-lg-12">
                         <div class="col-sm-3 col-md-3 col-xs-3 col-lg-3">
                         </div>
                         <div class="col-sm-9 col-md-9 col-xs-9 col-lg-9">
-                            <div style = "width: 900px;" class="well"><span style="font-weight: bold">Fecha del taller introductorio: 17 y 18 de noviembre del 2018. Deberás cargar en el siguiente paso estos documentos:<br></span>
+                            <div style = "width: 410px;" class="well"><span style="font-weight: bold">Fecha del taller introductorio: 17 y 18 de noviembre del 2018. Deberás cargar en el siguiente paso estos documentos:<br></span>
                                     Cédula de identidad o pasaporte <br>
                                     Certificado de votación (ecuatorianos). <br>
                                     Título de tercer nivel notarizado. <br>
