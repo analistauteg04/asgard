@@ -26,43 +26,55 @@ $(document).ready(function () {
 
     });
     $('#sendInformacionAspirante2').click(function () {
+        var error=0;
         if ($("#chk_mensaje1").prop("checked") && $("#chk_mensaje2").prop("checked")) {
             if ($('#txth_twin_id').val() != 0) {
-                guardarInscripcion('Update','2');
+                error=0;
             }
         } else {
             var mensaje = {wtmessage: "Debe Aceptar los términos de la Información.", title: "Exito"};
-            showAlert("OK", "success", mensaje);
+            error=0;
+            showAlert("NO_OK", "success", mensaje);
         }
                         
         if ($('#txth_doc_foto').val() == "") {
+            error=0;
             var mensaje={wtmessage: "Debe adjuntar foto.", title: "Información"};
-            showAlert("OK", "success", mensaje);
+            showAlert("NO_OK", "error", mensaje);
         }
         if ($('#cmb_tipo_dni').val() == "CED") {
             if ($('#txth_doc_certvota').val() == "") {
+                error=0;
                 var mensaje={wtmessage: "Debe adjuntar certificado de votación.", title: "Información"};
-                showAlert("OK", "success", mensaje);
+                showAlert("NO_OK", "error", mensaje);
             }
         } 
         if ($('#txth_doc_dni').val() == "") {
+            error=0;
             var mensaje={wtmessage: "Debe adjuntar documento de identidad.", title: "Información"};
-            showAlert("OK", "success", mensaje);
+            showAlert("NO_OK", "error", mensaje);
         }
         if ($('#txth_doc_titulo').val() == "") {
+            error=0;
             var mensaje={wtmessage: "Debe adjuntar título.", title: "Información"};
-            showAlert("OK", "success", mensaje);
+            showAlert("NO_OK", "error", mensaje);
         }
         if ($('#cmb_unidad_solicitud').val() == 2) {
             if ($('#txth_doc_certificado').val() == "") {
+                error=0;
                 var mensaje={wtmessage: "Debe adjuntar certificado de materias.", title: "Información"};
-                showAlert("OK", "success", mensaje);
+                showAlert("NO_OK", "error", mensaje);
             }
             if ($('#txth_doc_hojavida').val() == "") {
+                error=0;
                 var mensaje={wtmessage: "Debe adjuntar hoja de vida.", title: "Información"};
-                showAlert("OK", "success", mensaje);
+                showAlert("NO_OK", "error", mensaje);
             }
         }
+        if(error==0){
+            guardarInscripcion('Update','2');
+        }
+            
     });
     
     $('#sendInscripcionsolicitud').click(function () {
@@ -154,15 +166,13 @@ $(document).ready(function () {
             $('#txt_cedula').removeClass("PBvalidation");
             $('#txt_pasaporte').addClass("PBvalidation");
             $('#Divpasaporte').show();
-            $('#Divcedula').hide();
-            $('#divCertificado').css('display', 'none');
+            $('#Divcedula').hide();            
         } else if ($('#cmb_tipo_dni').val() == 'CED')
         {
             $('#txt_pasaporte').removeClass("PBvalidation");
             $('#txt_cedula').addClass("PBvalidation");
             $('#Divpasaporte').hide();
             $('#Divcedula').show();
-            $('#divCertificado').css('display', 'block');
         }
     });
 
@@ -225,10 +235,9 @@ $(document).ready(function () {
         Requisitos();
         AparecerDocumento();
     });
-
+``
     // tabs del index
     $('#paso1next').click(function () {
-
         $("a[data-href='#paso1']").attr('data-toggle', 'none');
         $("a[data-href='#paso1']").parent().attr('class', 'disabled');
         $("a[data-href='#paso1']").attr('data-href', $("a[href='#paso1']").attr('href'));
@@ -277,7 +286,6 @@ $(document).ready(function () {
         $("#txt_doc_dni").attr('class', 'PBvalidation');
         $("#txt_doc_foto").attr('class', 'PBvalidation');
     });
-
 
     function AparecerDocumento() {
         if ($('#cmb_metodo_solicitud').val() == 4) {
