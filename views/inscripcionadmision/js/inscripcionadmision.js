@@ -28,16 +28,16 @@ $(document).ready(function () {
     $('#sendInformacionAspirante2').click(function () {
         var error=0;
         if ($("#chk_mensaje1").prop("checked") && $("#chk_mensaje2").prop("checked")) {
-            if ($('#txth_twin_id').val() != 0) {
+            /*if ($('#txth_twin_id').val() != 0) {*/
                 error=0;
-            }
+           /* }*/
         } else {
             var mensaje = {wtmessage: "Debe Aceptar los términos de la Información.", title: "Exito"};
-            error=0;
+            error=1;
             showAlert("NO_OK", "success", mensaje);
         }
                         
-        if ($('#txth_doc_foto').val() == "") {
+        /*if ($('#txth_doc_foto').val() == "") {
             error=0;
             var mensaje={wtmessage: "Debe adjuntar foto.", title: "Información"};
             showAlert("NO_OK", "error", mensaje);
@@ -70,7 +70,7 @@ $(document).ready(function () {
                 var mensaje={wtmessage: "Debe adjuntar hoja de vida.", title: "Información"};
                 showAlert("NO_OK", "error", mensaje);
             }
-        }
+        }*/     
         if(error==0){
             guardarInscripcion('Update','2');
         }
