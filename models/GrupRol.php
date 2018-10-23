@@ -122,7 +122,7 @@ class GrupRol extends \yii\db\ActiveRecord
                 FROM 
                     grupo as g 
                     INNER JOIN grup_rol as gr ON g.gru_id = gr.gru_id
-                    INNER JOIN rol as r ON r.rol_id = gr.gru_id
+                    INNER JOIN rol as r ON r.rol_id = gr.rol_id
                 WHERE 
                     g.gru_id = :id AND
                     g.gru_estado=1 AND

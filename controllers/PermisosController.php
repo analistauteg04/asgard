@@ -89,6 +89,8 @@ class PermisosController extends CController {
     public function actionNew() {
         $arr_grupos = Grupo::findAll(["gru_estado" => 1, "gru_estado_logico" => 1]);
         $arr_roles  = Rol::findAll(["rol_estado" => 1, "rol_estado_logico" => 1]);
+        //list($firstItem) = $arr_roles;
+        //exit($firstItem['rol_id']);
         $arr_objMod = ObjetoModulo::find()->select(['omod_id', 'concat(omod_nombre, " (",omod_tipo,")") as omod_nombre'])->where(["omod_estado" => 1, "omod_estado_logico" => 1])->all();
         if (Yii::$app->request->isAjax) {
             $data = Yii::$app->request->post();
