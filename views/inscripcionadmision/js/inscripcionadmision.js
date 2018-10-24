@@ -90,10 +90,10 @@ $(document).ready(function () {
                 var mensaje = {wtmessage: "Debe adjuntar certificado de materias.", title: "Información"};
                 showAlert("NO_OK", "error", mensaje);
             }
-            alert($('#cmb_tipo_dni').val());
+            //alert($('#cmb_tipo_dni').val());
 
         }
-        alert(error);
+        //alert(error);
         if (error == 0) {
             guardarInscripcion('Update', '2');
         }
