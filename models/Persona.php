@@ -788,16 +788,21 @@ class Persona extends \yii\db\ActiveRecord {
      * @property      
      * @return  
      */
-    public function consultarIdPersona($cedula=null,$pasaporte=null) {
+    public function consultarIdPersona($cedula=null,$pasaporte=null,$correo=null,$celular=null) {
         $con = \Yii::$app->db_asgard;
         $estado = 1;
         $sql = "
                 SELECT  ifnull(per_id,0) as per_id
                 FROM    persona as per           
                  WHERE 
-                    (per.per_cedula = '$cedula' or per.per_pasaporte='$pasaporte')
-                    AND per.per_estado = $estado AND
-                    per.per_estado_logico=$estado
+                    (
+                        (per_cedula='$cedula' and per_correo='$correo') or
+                        (per_cedula='$cedula' and per_celular='$celular') or
+                        (per_pasaporte='$pasaporte' and per_correo='$correo') or
+                        (per_pasaporte='$pasaporte' and per_celular='$celular')
+                    )
+                        AND per.per_estado = $estado AND
+                            per.per_estado_logico=$estado
                     ";
         $comando = $con->createCommand($sql);
         $resultData = $comando->queryOne();

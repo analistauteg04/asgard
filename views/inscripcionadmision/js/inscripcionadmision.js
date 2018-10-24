@@ -97,9 +97,7 @@ $(document).ready(function () {
         if (error == 0) {
             guardarInscripcion('Update', '2');
         }
-
     });
-
     $('#sendInscripcionsolicitud').click(function () {
         var link = $('#txth_base').val() + "/inscripcionadmision/saveinscripciontemp";
         var arrParams = new Object();
