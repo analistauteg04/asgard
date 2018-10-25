@@ -393,6 +393,20 @@ create table if not exists `solicitud_datos_factura` (
  foreign key (sins_id) references `solicitud_inscripcion`(sins_id)
 );
 
+-- --------------------------------------------------------
+--
+-- Estructura de tabla para la tabla `admitido` 
+--
+create table if not exists `reprobado` (
+ `repr_id` bigint(20) not null auto_increment primary key,
+ `per_id` bigint(20) not null,
+ `ming_id` bigint(20) null,
+ `repr_estado` varchar(1) not null,
+ `repr_fecha_creacion` timestamp not null default current_timestamp,
+ `repr_fecha_modificacion` timestamp null default null,
+ `repr_estado_logico` varchar(1) not null
+);
+
 
 /*
     Esta tabla se esta creando para almacenar la informacion guardada en el wizard, debido a que no7

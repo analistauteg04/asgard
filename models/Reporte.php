@@ -64,24 +64,29 @@ class Reporte extends \yii\db\ActiveRecord {
           ON F.eopo_id=A.eopo_id
           WHERE A.bact_estado=1  "; */
 
-        $sql = "SELECT LPAD(B.opo_id,9,'0') opo_id,DATE(A.bact_fecha_proxima_atencion) F_Prox_At,G.emp_razon_social,
-            CONCAT(C.pges_pri_nombre, ' ', ifnull(C.pges_seg_nombre,' ')) Nombres,
-            CONCAT(C.pges_pri_apellido, ' ', ifnull(C.pges_seg_apellido,' ')) Apellidos, 
-            H.uaca_nombre,F.eopo_nombre,E.oact_nombre,A.bact_descripcion 
-                        FROM " . $con->dbname . ".bitacora_actividades A
-                                INNER JOIN (" . $con->dbname . ".oportunidad B
-                                                INNER JOIN " . $con->dbname . ".persona_gestion C
-                                                        ON B.pges_id=C.pges_id
-                                                INNER JOIN " . yii::$app->db_asgard->dbname . ".empresa G
-							ON G.emp_id=B.emp_id
-                                                INNER JOIN " . yii::$app->db_academico->dbname . ".unidad_academica H
-                                                        ON H.uaca_id=B.uaca_id)
-                                        ON A.opo_id=B.opo_id
-                                INNER JOIN " . $con->dbname . ".observacion_actividades E						
-                                                        ON E.oact_id=A.oact_id
-                                INNER JOIN " . $con->dbname . ".estado_oportunidad F
-                                                        ON F.eopo_id=A.eopo_id
-                WHERE A.bact_estado=1  ";
+        $sql = 
+            "
+                SELECT LPAD(B.opo_id,9,'0') opo_id,
+                DATE(A.bact_fecha_proxima_atencion) F_Prox_At,
+                G.emp_razon_social,
+                CONCAT(C.pges_pri_nombre, ' ', ifnull(C.pges_seg_nombre,' ')) Nombres,
+                CONCAT(C.pges_pri_apellido, ' ', ifnull(C.pges_seg_apellido,' ')) Apellidos, 
+                H.uaca_nombre,
+                F.eopo_nombre,
+                E.oact_nombre,
+                CONCAT(K.per_pri_nombre, ' ', ifnull(K.per_pri_apellido,' ')) Agente
+                    FROM " . $con->dbname . ".bitacora_actividades A
+                            INNER JOIN (" . $con->dbname . ".oportunidad B
+                                            INNER JOIN " . $con->dbname . ".persona_gestion C ON B.pges_id=C.pges_id
+                                            INNER JOIN db_crm.personal_admision J on J.padm_id = B.padm_id
+                                            INNER JOIN db_asgard.persona K on K.per_id = J.per_id
+                                            INNER JOIN " . yii::$app->db_asgard->dbname . ".empresa G ON G.emp_id=B.emp_id
+                                            INNER JOIN " . yii::$app->db_academico->dbname . ".unidad_academica H ON H.uaca_id=B.uaca_id
+                                       ) ON A.opo_id=B.opo_id
+                            INNER JOIN " . $con->dbname . ".observacion_actividades E ON E.oact_id=A.oact_id
+                            INNER JOIN " . $con->dbname . ".estado_oportunidad F ON F.eopo_id=A.eopo_id
+                    WHERE A.bact_estado=1
+             ";
 
         $sql .= " AND DATE(A.bact_fecha_proxima_atencion) >= CURDATE() ";
         $sql .= " ORDER BY A.bact_fecha_proxima_atencion; ";

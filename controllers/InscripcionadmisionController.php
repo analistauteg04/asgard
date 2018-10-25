@@ -209,7 +209,9 @@ class InscripcionadmisionController extends \yii\web\Controller {
                     //$model->insertaOriginal($resul["ids"]);
                 }else if($accion == "Fin"){
                     $Ids = isset($data['codigo']) ? $data['codigo'] : 0;
+                    
                     $resul=$model->insertaOriginal($Ids);
+                    
                 }
                 if ($resul['status']) {
                     $message = array(
