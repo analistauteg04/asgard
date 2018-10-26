@@ -18,7 +18,14 @@ class MatriculadosreprobadosController extends \app\components\CController {
 
     public function actionIndex() {
         $mod_admitido = new MatriculadosReprobado();
-        $arradmitido = $mod_admitido->getMatriculados($arrSearch);
+        $dato = Yii::$app->request->get();
+        if (isset($dato["search"])) {
+            $arradmitido = $mod_admitido->getMatriculados($dato["search"]);
+            return $this->renderPartial('index-grid', [
+                        "model" => $arradmitido,
+            ]);
+        }
+            $arradmitido = $mod_admitido->getMatriculados('*');
         return $this->render('index', [
             'admitido' => $arradmitido,
         ]);
