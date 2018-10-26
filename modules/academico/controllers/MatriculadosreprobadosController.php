@@ -4,7 +4,7 @@ namespace app\modules\academico\controllers;
 
 use Yii;
 use app\modules\academico\models\Admitido;
-use app\modules\academico\models\EstudioAcademico;
+use app\modules\academico\models\MatriculadosReprobado;
 use yii\helpers\ArrayHelper;
 use app\models\Utilities;
 use app\modules\academico\Module as academico;
@@ -17,7 +17,10 @@ admision::registerTranslations();
 class MatriculadosreprobadosController extends \app\components\CController {
 
     public function actionIndex() {
+        $mod_admitido = new MatriculadosReprobado();
+        $arradmitido = $mod_admitido->getMatriculados($arrSearch);
         return $this->render('index', [
+            'admitido' => $arradmitido,
         ]);
     }
 
