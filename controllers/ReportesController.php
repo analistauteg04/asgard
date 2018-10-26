@@ -29,6 +29,7 @@ class ReportesController extends CController {
         $data["op"]= $_GET["op"];
         $data["f_ini"]= $_GET["f_ini"];
         $data["f_fin"]= $_GET["f_fin"];
+        $data["search_dni"]= $_GET["searchdni"];
         //$data["valor"]= $_GET["valor"];
         switch ($data["op"]) {
             case '1'://GRADO
@@ -38,7 +39,7 @@ class ReportesController extends CController {
                 break;
             case '2'://POSGRADO
                 $arrData=$objDat->consultarOportunidadProximaAten($data);
-                $arrHeader = array("N° Oport","F.Prox.At","Empresa","Nombres","Apellidos","Unidad Academica",
+                $arrHeader = array("N° Oport","Fecha Atencion","F.Prox.At","Empresa","Cedula","Nombres","Apellidos","Unidad Academica",
                                     "Estado","Observacion","Agente");
                 $nombarch = "EstadoOportunidad-" . date("YmdHis").".xls";
                 break;

@@ -50,25 +50,22 @@ class Reporte extends \yii\db\ActiveRecord {
         return $comando->queryAll();
     }
 
-    public function consultarOportunidadProximaAten($data) {
+    public function consultarOportunidadProximaAten($arrFiltro = array()) {
         $con = \Yii::$app->db_crm;
-        /* $sql = "SELECT LPAD(B.opo_id,9,'0') opo_id,DATE(A.bact_fecha_proxima_atencion) F_Prox_At,CONCAT(C.pges_pri_nombre) Nombres,F.eopo_nombre,E.oact_nombre,A.bact_descripcion 
-          FROM " . $con->dbname . ".bitacora_actividades A
-          INNER JOIN (" . $con->dbname . ".oportunidad B
-          INNER JOIN " . $con->dbname . ".persona_gestion C
-          ON B.pges_id=C.pges_id)
-          ON A.opo_id=B.opo_id
-          INNER JOIN " . $con->dbname . ".observacion_actividades E
-          ON E.oact_id=A.oact_id
-          INNER JOIN " . $con->dbname . ".estado_oportunidad F
-          ON F.eopo_id=A.eopo_id
-          WHERE A.bact_estado=1  "; */
-
-        $sql = 
-            "
+        $str_search="";
+        if (isset($arrFiltro) && count($arrFiltro) > 0) {
+            $str_search .= "(C.pges_cedula like :search) and ";
+            if ($arrFiltro['f_ini'] != "" && $arrFiltro['f_fin'] != "") {
+                $str_search .= "A.bact_fecha_registro >= :fec_ini AND ";
+                $str_search .= "A.bact_fecha_registro <= :fec_fin AND ";
+            }
+        }
+        $sql = "
                 SELECT LPAD(B.opo_id,9,'0') opo_id,
+                DATE(A.bact_fecha_registro) F_Atencion,
                 DATE(A.bact_fecha_proxima_atencion) F_Prox_At,
                 G.emp_razon_social,
+                C.pges_cedula,
                 CONCAT(C.pges_pri_nombre, ' ', ifnull(C.pges_seg_nombre,' ')) Nombres,
                 CONCAT(C.pges_pri_apellido, ' ', ifnull(C.pges_seg_apellido,' ')) Apellidos, 
                 H.uaca_nombre,
@@ -85,12 +82,22 @@ class Reporte extends \yii\db\ActiveRecord {
                                        ) ON A.opo_id=B.opo_id
                             INNER JOIN " . $con->dbname . ".observacion_actividades E ON E.oact_id=A.oact_id
                             INNER JOIN " . $con->dbname . ".estado_oportunidad F ON F.eopo_id=A.eopo_id
-                    WHERE A.bact_estado=1
+                    WHERE $str_search A.bact_estado=1 
              ";
-
         $sql .= " AND DATE(A.bact_fecha_proxima_atencion) >= CURDATE() ";
         $sql .= " ORDER BY A.bact_fecha_proxima_atencion; ";
         $comando = $con->createCommand($sql);
+        if (isset($arrFiltro) && count($arrFiltro) > 0) {
+            $search_cond = "%" . $arrFiltro["search_dni"] . "%";
+            $comando->bindParam(":search", $search_cond, \PDO::PARAM_STR);
+            $fecha_ini = $arrFiltro["f_ini"] . " 00:00:00";
+            $fecha_fin = $arrFiltro["f_fin"] . " 23:59:59";
+            if ($arrFiltro['f_ini'] != "" && $arrFiltro['f_fin'] != "") {
+                $comando->bindParam(":fec_ini", $fecha_ini, \PDO::PARAM_STR);
+                $comando->bindParam(":fec_fin", $fecha_fin, \PDO::PARAM_STR);
+            }
+        }
+
 
         return $comando->queryAll();
     }
@@ -168,4 +175,5 @@ class Reporte extends \yii\db\ActiveRecord {
         $resultData = $comando->queryAll();
         return $resultData;
     }
+
 }
