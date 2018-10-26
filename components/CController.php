@@ -7,6 +7,10 @@ use yii\base\InlineAction;
 use yii\helpers\Url;
 use app\models\Error;
 use app\models\Utilities;
+use app\models\Accion;
+use app\models\Usuario;
+use app\models\ObjetoModulo;
+use app\models\Modulo;
 
 /**
  * Description of CController
@@ -29,6 +33,15 @@ class CController extends \yii\web\Controller {
         return parent::init();
     }
 
+    /***** FUNCION QUE REALIZA EL PROCESO DE VERIFICACION DE PERMISOS
+    public function behaviors()
+    {
+        $route = $this->route;
+        $arr_behaviors = Accion::generateBehaviorByActions($route);
+        return $arr_behaviors;
+    }
+    */
+
     /**
      * Function ajaxResponse
      * @author  Eduardo Cueva <ecueva@penblu.com>
@@ -39,7 +52,7 @@ class CController extends \yii\web\Controller {
         $session = Yii::$app->session;
         $isUser = $session->get('PB_isuser', FALSE);
         $route = $this->getRoute() . "/login";
-        $usu = new \app\models\Usuario;
+        $usu = new Usuario;
         
         //$usu->regenerateSession();
         if ($isUser == FALSE && $route != 'site/login' ) {
@@ -89,9 +102,9 @@ class CController extends \yii\web\Controller {
         $mod = Yii::$app->controller->module->id;
         $route = $this->route;
         $session = Yii::$app->session;
-        $objModule = \app\models\ObjetoModulo::findIdentityByEntity(trim($route));
-        $objModPadre = \app\models\ObjetoModulo::findIdentity($objModule->omod_padre_id);
-        $module = \app\models\Modulo::findIdentity($objModule->mod_id);
+        $objModule = ObjetoModulo::findIdentityByEntity(trim($route));
+        $objModPadre = ObjetoModulo::findIdentity($objModule->omod_padre_id);
+        $module = Modulo::findIdentity($objModule->mod_id);
         $session->set('PB_module_id', $objModule->mod_id);
         $session->set('PB_objmodule_id', $objModule->omod_id);
         
