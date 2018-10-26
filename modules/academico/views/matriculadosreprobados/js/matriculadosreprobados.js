@@ -3,10 +3,10 @@ $(document).ready(function () {
         habilitarSecciones();
         //if ($('#txth_twin_id').val() == 0) 
         //{
-            guardarInscripcion('Create', '1');
+        guardarInscripcion('Create', '1');
         //} else {
         //    guardarInscripcion('Update', '1');
-       //}
+        //}
     });
     $('#paso2back').click(function () {
         $("a[data-href='#paso2']").attr('data-toggle', 'none');
@@ -27,38 +27,38 @@ $(document).ready(function () {
             error++;
             showAlert("NO_OK", "success", mensaje);
         }
-        if ($('#txth_doc_titulo').val() == "") 
+        if ($('#txth_doc_titulo').val() == "")
         {
             error++;
-            var mensaje = 
+            var mensaje =
                     {wtmessage: "Debe adjuntar título.", title: "Información"};
             showAlert("NO_OK", "error", mensaje);
         } else {
-            if ($('#txth_doc_dni').val() == "") 
+            if ($('#txth_doc_dni').val() == "")
             {
                 error++;
-                var mensaje = 
+                var mensaje =
                         {wtmessage: "Debe adjuntar documento de identidad.", title: "Información"};
                 showAlert("NO_OK", "error", mensaje);
             } else {
-                if ($('#cmb_tipo_dni').val() == "CED") 
+                if ($('#cmb_tipo_dni').val() == "CED")
                 {
-                    if (pais == 1) 
+                    if (pais == 1)
                     {
-                        if ($('#txth_doc_certvota').val() == "") 
+                        if ($('#txth_doc_certvota').val() == "")
                         {
                             error++;
-                            var mensaje = 
+                            var mensaje =
                                     {wtmessage: "Debe adjuntar certificado de votación.", title: "Información"};
                             showAlert("NO_OK", "error", mensaje);
                         }
-                    } else 
-                    
+                    } else
+
                     {
-                        if ($('#txth_doc_foto').val() == "") 
+                        if ($('#txth_doc_foto').val() == "")
                         {
                             error++;
-                            var mensaje = 
+                            var mensaje =
                                     {wtmessage: "Debe adjuntar foto.", title: "Información"};
                             showAlert("NO_OK", "error", mensaje);
                         }
@@ -113,4 +113,10 @@ function paso1next() {
     $("a[data-href='#paso2']").attr('data-toggle', 'tab');
     $("a[data-href='#paso2']").attr('href', $("a[data-href='#paso2']").attr('data-href'));
     $("a[data-href='#paso2']").trigger("click");
+}
+function searchAdmitido(idbox, idgrid) {
+    var arrParams = new Object();
+    arrParams.PBgetFilter = true;
+    arrParams.search = $("#" + idbox).val();
+    $("#" + idgrid).PbGridView("applyFilterData", arrParams);
 }

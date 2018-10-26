@@ -81,7 +81,7 @@ class MatriculadosReprobado extends \yii\db\ActiveRecord
      * @param   
      * @return  $resultData (información del admitido)
      */
-    public static function getMatriculados($arrFiltro = array(), $onlyData = false) {
+    public static function getMatriculados($search = NULL) {
         $con = \Yii::$app->db_captacion;
         $con2 = \Yii::$app->db;
         $con3 = \Yii::$app->db_academico;
@@ -89,27 +89,11 @@ class MatriculadosReprobado extends \yii\db\ActiveRecord
         $estado = 1;
         $columnsAdd = "";
         $estado_opago = "S";
+        $search_cond =  $search ;    
+        $str_search = "";
 
-        if (isset($arrFiltro) && count($arrFiltro) > 0) {
-            $str_search = "(per.per_pri_nombre like :search OR ";
-            $str_search .= "per.per_seg_nombre like :search OR ";
-            $str_search .= "per.per_pri_apellido like :search OR ";
-            $str_search .= "per.per_cedula like :search) AND ";
-            // YA NO EXISTE TABLA CARRERA MODICAR 
-            if ($arrFiltro['carrera'] != "" && $arrFiltro['carrera'] > 0) {
-                $str_search .= "sins.eaca_id = :carrera AND ";
-            }
-            if ($arrFiltro['f_ini'] != "" && $arrFiltro['f_fin'] != "") {
-                $str_search .= "sins.sins_fecha_solicitud >= :fec_ini AND ";
-                $str_search .= "sins.sins_fecha_solicitud <= :fec_fin AND ";
-            }
-        } else {
-            $columnsAdd = "sins.sins_id as solicitud_id,
-                    per.per_id as persona, 
-                    per.per_pri_nombre as per_pri_nombre, 
-                    per.per_seg_nombre as per_seg_nombre,
-                    per.per_pri_apellido as per_pri_apellido,
-                    per.per_seg_apellido as per_seg_apellido,";
+        if (isset($search)) {   
+            $str_search .= "per.per_cedula = :search AND ";
         }
 
         $sql = " SELECT  distinct lpad(ifnull(sins.num_solicitud, sins.sins_id),9,'0') as solicitud,
@@ -136,9 +120,7 @@ class MatriculadosReprobado extends \yii\db\ActiveRecord
                                 (select mest_nombre from " . $con3->dbname . ".modulo_estudio me where me.mest_id = sins.mest_id and me.mest_estado = '1' and me.mest_estado_logico = '1')
                                 else
                             (select eaca_nombre from " . $con3->dbname . ".estudio_academico ea where ea.eaca_id = sins.eaca_id and ea.eaca_estado = '1' and ea.eaca_estado_logico = '1')
-                        end as carrera,
-                        $columnsAdd                                                             
-                                                                     
+                        end as carrera,                             
                        (case when sins_beca = 1 then 'ICF' else 'No Aplica' end) as beca,
                        ifnull((select 'SI' existe from " . $con3->dbname . ".matriculacion m where m.adm_id = admi.adm_id and m.sins_id = sins.sins_id and m.mat_estado = :estado and m.mat_estado_logico = :estado),'NO') as matriculado
                 FROM " . $con->dbname . ".admitido admi INNER JOIN " . $con->dbname . ".interesado inte on inte.int_id = admi.int_id                     
@@ -161,20 +143,8 @@ class MatriculadosReprobado extends \yii\db\ActiveRecord
         $comando = $con->createCommand($sql);
         $comando->bindParam(":estado", $estado, \PDO::PARAM_STR);
         $comando->bindParam(":estado_opago", $estado_opago, \PDO::PARAM_STR);
-        if (isset($arrFiltro) && count($arrFiltro) > 0) {
-            $search_cond = "%" . $arrFiltro["search"] . "%";
-            $fecha_ini = $arrFiltro["f_ini"] . " 00:00:00";
-            $fecha_fin = $arrFiltro["f_fin"] . " 23:59:59";
-            $carrera = $arrFiltro["carrera"];            
+        if (isset($search)) {
             $comando->bindParam(":search", $search_cond, \PDO::PARAM_STR);
-            if ($arrFiltro['carrera'] != "" && $arrFiltro['carrera'] > 0) {
-                $comando->bindParam(":carrera", $carrera, \PDO::PARAM_INT);
-            }
-            if ($arrFiltro['f_ini'] != "" && $arrFiltro['f_fin'] != "") {
-                $comando->bindParam(":fec_ini", $fecha_ini, \PDO::PARAM_STR);
-                $comando->bindParam(":fec_fin", $fecha_fin, \PDO::PARAM_STR);
-            }
-            // $comando->bindParam(":codigocan", $codigocan, \PDO::PARAM_STR);
         }
         $resultData = $comando->queryAll();
         $dataProvider = new ArrayDataProvider([
@@ -184,17 +154,9 @@ class MatriculadosReprobado extends \yii\db\ActiveRecord
                 'pageSize' => Yii::$app->params["pageSize"],
             ],
             'sort' => [
-                'attributes' => [
-                    'per_dni',
-                    'per_nombres',
-                    'per_apellidos',
-                ],
+                'attributes' => [],
             ],
         ]);
-        if ($onlyData) {
-            return $resultData;
-        } else {
-            return $dataProvider;
-        }
+        return $dataProvider;
     }
 }
