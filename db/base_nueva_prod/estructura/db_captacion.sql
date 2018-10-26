@@ -397,7 +397,7 @@ create table if not exists `solicitud_datos_factura` (
 --
 -- Estructura de tabla para la tabla `admitido` 
 --
-create table if not exists `reprobado` (
+create table if not exists `matriculados_reprobado` (
  `repr_id` bigint(20) not null auto_increment primary key,
  `adm_id` bigint(20) not null,
  `repr_estado` varchar(1) not null,
