@@ -107,7 +107,7 @@ $requisitosPRP = '<div class="col-md-12 col-sm-12 col-xs-12 col-lg-12">
 ?>
 <form class="form-horizontal">
     <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
-        <h3><span id="lbl_Personeria"><?= Yii::t("formulario", "Formulario de Inscripción") ?></span></h3>
+        <h3><span id="lbl_Personeria"><?= Yii::t("formulario", "Formulario - Admitidos Pendientes") ?></span></h3>
     </div>
     <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
         <p class="text-danger"> <?= Yii::t("formulario", "Fields with * are required") ?> </p>        
@@ -229,14 +229,6 @@ $requisitosPRP = '<div class="col-md-12 col-sm-12 col-xs-12 col-lg-12">
     <div class="col-md-12 col-xs-12 col-sm-12 col-lg-12" id="divRequisitosPRP" style="display: none">   
         <?php echo $requisitosPRP ?>
     </div>    
-    <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
-        <div class="form-group">            
-            <label for="cmb_conuteg" class="col-lg-3 col-md-3 col-sm-3 col-xs-3 control-label"><?= Yii::t("formulario", "Knowledge how about UTEG") ?> <span class="text-danger">*</span></label>
-            <div class="col-lg-9 col-md-9 col-sm-9 col-xs-9">
-                <?= Html::dropDownList("cmb_conuteg", 0, $arr_conuteg, ["class" => "form-control", "id" => "cmb_conuteg"]) ?>
-            </div>
-        </div>
-    </div>
       <div class="col-md-12 col-xs-12 col-sm-12 col-lg-12">         
         </br>
         </br>
@@ -246,7 +238,7 @@ $requisitosPRP = '<div class="col-md-12 col-sm-12 col-xs-12 col-lg-12">
         <div class="col-lg-10 col-md-10 col-sm-10 col-xs-10"></div>
 
         <div class="col-lg-2 col-md-2 col-sm-2 col-xs-2">
-            <a id="sendInformacionAspirante" href="javascript:" class="btn btn-primary btn-block"> <?php echo "Siguiente"; ?> </a>
+            <a id="sendInformacionAdmitidoPend" href="javascript:" class="btn btn-primary btn-block"> <?php echo "Siguiente"; ?> </a>
         </div>
     </div>
 </form>
