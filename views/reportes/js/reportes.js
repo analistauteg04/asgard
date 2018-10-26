@@ -16,12 +16,12 @@ function exportLostContact(){
     buscarActividades("2");//Reporte de Oportunidad x Proxima Oportunidad
 }
 function buscarActividades(op) {
-    //var search = '';//$('#txt_buscarDataPago').val();
+    var searchdni = $('#txt_buscarDataPersona').val();
     var f_ini = $('#txt_fecha_ini').val();
     var f_fin = $('#txt_fecha_fin').val();
     //var f_estado = '';//$('#cmb_estado').val();
     //Buscar al menos una clase con el nombre para ejecutar
-    window.location.href = $('#txth_base').val() + "/reportes/expexcelreport?op="+op+"&f_ini="+f_ini+"&f_fin="+f_fin;
+    window.location.href = $('#txth_base').val() + "/reportes/expexcelreport?op="+op+"&f_ini="+f_ini+"&f_fin="+f_fin+"&searchdni="+searchdni;
 }
 function pendingApplicants(){
     buscarActividades("3");//Reporte de Aspirantes pendientes
