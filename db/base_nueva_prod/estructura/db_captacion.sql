@@ -399,8 +399,7 @@ create table if not exists `solicitud_datos_factura` (
 --
 create table if not exists `reprobado` (
  `repr_id` bigint(20) not null auto_increment primary key,
- `per_id` bigint(20) not null,
- `ming_id` bigint(20) null,
+ `adm_id` bigint(20) not null,
  `repr_estado` varchar(1) not null,
  `repr_fecha_creacion` timestamp not null default current_timestamp,
  `repr_fecha_modificacion` timestamp null default null,
