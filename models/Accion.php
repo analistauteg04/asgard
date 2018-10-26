@@ -175,27 +175,29 @@ class Accion extends \yii\db\ActiveRecord {
         $sql = "SELECT 
                     om.omod_entidad AS route
                 FROM 
-                    objeto_modulo AS om 
-                    INNER JOIN grup_obmo AS go ON om.omod_id = go.omod_id 
-                    INNER JOIN grup_obmo_grup_rol AS gg ON go.gmod_id = gg.gmod_id
-                    INNER JOIN grup_rol AS gr ON gg.grol_id = gr.grol_id
-                    INNER JOIN usua_grol_eper AS ug ON gr.grol_id = ug.grol_id
-                    INNER JOIN usuario AS us ON ug.usu_id = us.usu_id
+                usuario AS us
+                    INNER JOIN usua_grol_eper AS ug ON us.usu_id = ug.usu_id
                     INNER JOIN empresa_persona AS ep ON ug.eper_id = ep.eper_id
-                    INNER JOIN empresa AS em ON ep.emp_id = em.emp_id
-                    INNER JOIN obmo_acci AS oa ON om.omod_id = oa.omod_id 
-                    INNER JOIN accion AS ac ON oa.acc_id = ac.acc_id 
+                    INNER JOIN empresa AS em ON em.emp_id = ep.emp_id
+                    INNER JOIN grup_rol AS gr ON ug.grol_id = gr.grol_id
+                    INNER JOIN grupo AS g ON gr.gru_id = g.gru_id
+                    INNER JOIN grup_obmo AS go ON g.gru_id = go.gru_id
+                    INNER JOIN grup_obmo_grup_rol AS gg ON go.gmod_id = gg.gmod_id
+                    INNER JOIN objeto_modulo AS om ON om.omod_id = go.omod_id
                 WHERE 
-                    om.omod_padre_id=:omod_id AND 
-                    om.omod_tipo='A' AND 
-                    us.usu_id=:usu_id AND 
-                    em.emp_id=:emp_id AND
+                    -- om.omod_padre_id=:omod_id AND 
+	
+                    om.omod_tipo <> 'A' AND 
+                    us.usu_id=1 AND 
+                    em.emp_id=1 AND
                     go.gmod_estado_logico=1 AND 
                     go.gmod_estado=1 AND 
                     gg.gogr_estado_logico=1 AND 
                     gg.gogr_estado=1 AND 
                     gr.grol_estado_logico=1 AND 
                     gr.grol_estado=1 AND
+                    g.gru_estado_logico=1 AND 
+                    g.gru_estado=1 AND
                     ug.ugep_estado_logico=1 AND 
                     ug.ugep_estado=1 AND
                     us.usu_estado_logico=1 AND 
@@ -205,12 +207,7 @@ class Accion extends \yii\db\ActiveRecord {
                     em.emp_estado_logico=1 AND 
                     em.emp_estado=1 AND
                     om.omod_estado=1 AND 
-                    om.omod_estado_logico=1 AND 
-                    om.omod_estado_visible=1 AND
-                    oa.oacc_estado_logico=1 AND 
-                    oa.oacc_estado=1 AND 
-                    ac.acc_estado=1 AND
-                    ac.acc_estado_logico=1 
+                    om.omod_estado_logico=1
                 UNION
                 SELECT 
                     om.omod_entidad AS route
