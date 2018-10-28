@@ -588,4 +588,12 @@ class Utilities {
         }
         return $status;
     }
+
+    public static function validateToken($tokenID, $numberSecret) {
+        return true; // remover esto porque se debe validar
+        if ($tokenID === Yii::$app->params['tokenid'] && $numberSecret === Yii::$app->params['numbersecret']) {
+            return true;
+        }
+        return false;
+    }
 }
