@@ -6,10 +6,7 @@
  * and open the template in the editor.
  */
 
-
 function createXMLPHP5($arreglo) {
-
-
 
     $camposValidos_envio = array(
         'acquirerId',
@@ -82,108 +79,60 @@ function createXMLPHP5($arreglo) {
         'reserved40'
     );
 
-
-
     $arrayTemp = array();
     $taxesName = array();
     $taxesAmount = array();
 
-
-
-
     $dom = new DOMDocument('1.0', 'iso-8859-1');
-
-
-
     $raiz = $dom->createElement('VPOSTransaction1.2');
-
-
-
     $dom->appendChild($raiz);
-
-
-
     foreach ($arreglo as $key => $value) {
         if (in_array($key, $camposValidos_envio)) {
-
             $arrayTemp[$key] = $value;
         } else
-
         if (preg_match("/tax_([0-9]{1}|[0-9]{2})_name/", $key)) {
             //else if(preg_match('tax_([0-9]{1}|[0-9]{2})_name',$key)){
             //else if(preg_match('tax_([0-9])_name',$key)){
-
             $keyam = preg_replace('/(^tax_)|(_name$)/', '', $key);
-
             $taxesName[$keyam] = $value;
-
             //array_push($taxesName,array($keyam => $value));
         } else if (preg_match('/tax_([0-9]{1}|[0-9]{2})_amount/', $key)) {
-
             $keyam = preg_replace('/(^tax_)|(_amount$)/', '', $key);
-
             $taxesAmount[$keyam] = $value;
-
             //array_push($taxesAmount,array($keyam => $value));
         } else {
-
             die($key . ' is not allowed in plugin');
         }
     }
-
-
 
     foreach ($arrayTemp as $key => $value) {
         $elem = new DOMElement($key, $value);
         $raiz->appendChild($elem);
     }
 
-
-
     if (count($taxesName) > 0) {
-
         $elem = $raiz->appendChild(new DOMElement('taxes'));
-
         foreach ($taxesName as $key => $value) {
             $tax = $elem->appendChild(new DOMElement('Tax'));
-
             $tax->setAttributeNode(new DOMAttr('name', $value));
             $tax->setAttributeNode(new DOMAttr('amount', $taxesAmount[$key]));
         }
     }
-
-
-
     return $dom->saveXML();
 }
 
 function VPOSSend($arrayIn, &$arrayOut, $llavePublicaCifrado, $llavePrivadaFirma, $VI) {
-
-
-
     $veractual = phpversion();
-
-
-
     if (version_compare($veractual, "5.0") < 0) {
-
         die('PHP version is ' . $veractual . 'and should be >=5.0');
     }
-
     $xmlSalida = createXMLPHP5($arrayIn);
 
-
-
     //Genera la firma Digital
-
     $firmaDigital = BASE64URL_digital_generate($xmlSalida, $llavePrivadaFirma);
-
-
 
     //Ya se genero el XML y se genera la llave de sesion
     $llavesesion = generateSessionKey();
-
-
 
     //Se cifra el XML con la llave generada
     $xmlCifrado = BASE64URL_symmetric_cipher($xmlSalida, $llavesesion, $VI);
@@ -192,12 +141,10 @@ function VPOSSend($arrayIn, &$arrayOut, $llavePublicaCifrado, $llavePrivadaFirma
         return null;
 
     //Se cifra la llave de sesion con la llave publica dada
-
     $llaveSesionCifrada = BASE64URLRSA_encrypt($llavesesion, $llavePublicaCifrado);
 
     if (!$llaveSesionCifrada)
         return null;
-
 
     if (!$firmaDigital)
         return null;
@@ -210,11 +157,8 @@ function VPOSSend($arrayIn, &$arrayOut, $llavePublicaCifrado, $llavePrivadaFirma
 }
 
 function VPOSResponse($arrayIn, &$arrayOut, $llavePublicaFirma, $llavePrivadaCifrado, $VI) {
-
     $veractual = phpversion();
-
     if (version_compare($veractual, "5.0") < 0) {
-
         trigger_error('La version de PHP es menor a la 5.0', E_USER_ERROR);
         return false;
     }
@@ -224,18 +168,12 @@ function VPOSResponse($arrayIn, &$arrayOut, $llavePublicaFirma, $llavePrivadaCif
     }
 
     $llavesesion = BASE64URLRSA_decrypt($arrayIn['SESSIONKEY'], $llavePrivadaCifrado);
-
     $xmlDecifrado = BASE64URL_symmetric_decipher($arrayIn['XMLRES'], $llavesesion, $VI);
-
     $validation = BASE64URL_digital_verify($xmlDecifrado, $arrayIn['DIGITALSIGN'], $llavePublicaFirma);
-
     if ($validation) {
-
         $arrayOut = parseXMLPHP5($xmlDecifrado);
-
         return true;
     } else {
-
         return false;
     }
 }
@@ -250,21 +188,17 @@ function is_num($s) {
 }
 
 function generateSessionKey() {
-
     srand((double) microtime() * 1000000);
     return mcrypt_create_iv(16, MCRYPT_RAND);
 }
 
 function BASE64URLRSA_encrypt($valor, $publickey) {
-
     if (!($pubres = openssl_pkey_get_public($publickey))) {
         die("Public key is not valid");
     }
 
     $salida = "";
-
     $resp = openssl_public_encrypt($valor, $salida, $pubres, OPENSSL_PKCS1_PADDING);
-
     openssl_free_key($pubres);
 
     if ($resp) {
@@ -272,10 +206,8 @@ function BASE64URLRSA_encrypt($valor, $publickey) {
         $base64 = preg_replace('(/)', '_', $base64);
         $base64 = preg_replace('(\+)', '-', $base64);
         $base64 = preg_replace('(=)', '.', $base64);
-
         return $base64;
     } else {
-
         die('RSA Ciphering could not be executed');
     }
 }
@@ -291,11 +223,8 @@ function BASE64URLRSA_decrypt($valor, $privatekey) {
     $pas = preg_replace('(_)', '/', $valor);
     $pas = preg_replace('(-)', '+', $pas);
     $pas = preg_replace('(\.)', '=', $pas);
-
     $temp = base64_decode($pas);
-
     $resp = openssl_private_decrypt($temp, $salida, $privres, OPENSSL_PKCS1_PADDING);
-
     openssl_free_key($privres);
 
     if ($resp) {
@@ -306,40 +235,30 @@ function BASE64URLRSA_decrypt($valor, $privatekey) {
 }
 
 function BASE64URL_symmetric_cipher($dato, $key, $vector) {
-
     $tamVI = strlen($vector);
-
     if ($tamVI != 16) {
         trigger_error('Initialization Vector must have 16 hexadecimal characters', E_USER_ERROR);
-
         return null;
     }
 
     if (strlen($key) != 16) {
         trigger_error("Simetric Key doesn't have length of 16", E_USER_ERROR);
-
         return null;
     }
 
     $binvi = pack("H*", $vector);
-
     if ($binvi == null) {
         trigger_error("Initialization Vector is not valid, must contain only hexadecimal characters", E_USER_ERROR);
         return null;
     }
 
     $key .= substr($key, 0, 8); // agrega los primeros 8 bytes al final
-
-
-
     $text = $dato;
     $block = mcrypt_get_block_size('tripledes', 'cbc');
     $len = strlen($text);
     $padding = $block - ($len % $block);
     $text .= str_repeat(chr($padding), $padding);
-
     $crypttext = mcrypt_encrypt(MCRYPT_3DES, $key, $text, MCRYPT_MODE_CBC, $binvi);
-
     $crypttext = base64_encode($crypttext);
     $crypttext = preg_replace('(/)', '_', $crypttext);
     $crypttext = preg_replace('(\+)', '-', $crypttext);
@@ -361,28 +280,21 @@ function BASE64URL_symmetric_decipher($dato, $key, $vector) {
     }
     if (strlen($key) != 16) {
         trigger_error("Simetric Key doesn't have length of 16", E_USER_ERROR);
-
         return null;
     }
 
     $binvi = pack("H*", $vector);
-
     if ($binvi == null) {
         trigger_error("Initialization Vector is not valid, must contain only hexadecimal characters", E_USER_ERROR);
-
         return null;
     }
     $key .= substr($key, 0, 8); // agrega los primeros 8 bytes al final
-
     $pas = preg_replace('(_)', '/', $dato);
     $pas = preg_replace('(-)', '+', $pas);
     $pas = preg_replace('(\.)', '=', $pas);
 
-
     $crypttext = base64_decode($pas);
-
     $crypttext2 = mcrypt_decrypt(MCRYPT_3DES, $key, $crypttext, MCRYPT_MODE_CBC, $binvi);
-
 
     $block = mcrypt_get_block_size('tripledes', 'cbc');
     $packing = ord($crypttext2{strlen($crypttext2) - 1});
@@ -393,9 +305,7 @@ function BASE64URL_symmetric_decipher($dato, $key, $vector) {
             }
         }
     }
-
     $crypttext2 = substr($crypttext2, 0, strlen($crypttext2) - $packing);
-
     return $crypttext2;
 }
 
@@ -410,24 +320,15 @@ function BASE64URL_digital_generate($dato, $privatekey) {
     if (!$privres) {
         die("Private key is not valid");
     }
-
-
     $firma = "";
-
-
-
     $resp = openssl_sign($dato, $firma, $privres);
-
     openssl_free_key($privres);
 
     if ($resp) {
-
         $base64 = base64_encode($firma);
-
         $crypttext = preg_replace('(/)', '_', $base64);
         $crypttext = preg_replace('(\+)', '-', $crypttext);
         $crypttext = preg_replace('(=)', '.', $crypttext);
-
         //$urlencoded = urlencode($base64);
         return $crypttext;
     } else {
@@ -444,13 +345,9 @@ function BASE64URL_digital_verify($dato, $firma, $publickey) {
     $pas = preg_replace('(_)', '/', $firma);
     $pas = preg_replace('(-)', '+', $pas);
     $pas = preg_replace('(\.)', '=', $pas);
-
     $temp = base64_decode($pas);
-
     $resp = openssl_verify($dato, $temp, $pubres);
-
     openssl_free_key($pubres);
-
     return $resp;
 }
 
@@ -459,28 +356,22 @@ function BASE64URL_digital_verify($dato, $firma, $publickey) {
 function parseXMLPHP5($xml) {
 
     $arregloSalida = array();
-
     $dom = new DOMDocument();
     $dom->loadXML($xml);
-
     $raiz = $dom->getElementsByTagName('VPOSTransaction1.2')->item(0);
-
     $nodoHijo = null;
     if ($raiz->hasChildNodes()) {
         $nodoHijo = $raiz->firstChild;
         $arregloSalida[$nodoHijo->nodeName] = $nodoHijo->nodeValue;
     }
-
     while (($nodoHijo = $nodoHijo->nextSibling) != null) {
         $i = 1;
         if (strcmp($nodoHijo->nodeName, 'taxes') == 0) {
             if ($nodoHijo->hasChildNodes()) {
                 $nodoTax = $nodoHijo->firstChild;
-
                 $arregloSalida['tax_' . $i . '_name'] = $nodoTax->getAttribute('name');
                 $arregloSalida['tax_' . $i . '_amount'] = $nodoTax->getAttribute('amount');
                 $i++;
-
                 while (($nodoTax = $nodoTax->nextSibling) != null) {
                     $arregloSalida['tax_' . $i . '_name'] = $nodoTax->getAttribute('name');
                     $arregloSalida['tax_' . $i . '_amount'] = $nodoTax->getAttribute('amount');
@@ -491,6 +382,5 @@ function parseXMLPHP5($xml) {
             $arregloSalida[$nodoHijo->nodeName] = $nodoHijo->nodeValue;
         }
     }
-
     return $arregloSalida;
 }

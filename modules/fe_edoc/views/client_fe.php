@@ -8,7 +8,7 @@ $clave    = "sql";
 $dns      = "sybase:host=$servidor;dbname=$database";
 $logFile  = "/var/log/$service.log";
 
-echo "Salida: " . json_endode(test());
+echo "Salida: " . json_encode(test());
 
 function test() {
     GLOBAL $dns, $usuario, $clave;
