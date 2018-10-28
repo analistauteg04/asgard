@@ -24,6 +24,7 @@ namespace app\modules\academico\messages;
      "Parallel" => "Paralelo",
      "Registered" => "Matriculado",
      "Registration by Homologation" => "Matriculación por Homologación",
+     "Search DNI" => "Buscar DNI",
  ];
 
  

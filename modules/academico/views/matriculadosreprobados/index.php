@@ -14,10 +14,10 @@ use app\widgets\PbSearchBox\PbSearchBox;
 use app\modules\academico\Module as academico;
 ?>
 <form class="form-horizontal" enctype="multipart/form-data" id="formsolicitud">
-<div class="col-md-12">
-    <h3><span id="lbl_index"><?= academico::t("Academico", "Failed Registrations") ?></span></h3>
-</div>
-<div class="col-xs-12 col-sm-12 col-md-12">
+    <div class="col-md-12">
+        <h3><span id="lbl_index"><?= academico::t("Academico", "Failed Registrations") ?></span></h3>
+    </div>
+    <div class="col-xs-12 col-sm-12 col-md-12">
         <!-- Espacio de relleno -->
         </br>
     </div>
@@ -27,13 +27,13 @@ use app\modules\academico\Module as academico;
                 <div class="form-group">
                     <h4><span id="lbl_resulevalua"><?= academico::t("Academico", "Admitted Data") ?></span></h4>                                  
                 </div>
-               <div class="row">
+                <div class="row">
                     <div class="col-md-6">
                         <?=
                         PbSearchBox::widget([
                             'boxId' => 'boxgrid',
                             'type' => 'searchBox',
-                            'placeHolder' => Yii::t("accion", "Search"),
+                            'placeHolder' => academico::t("Academico", "Search DNI"),
                             'controller' => '',
                             'callbackListSource' => 'searchAdmitido',
                             'callbackListSourceParams' => ["'boxgrid'", "'TbG_Admitido'"],
@@ -42,10 +42,72 @@ use app\modules\academico\Module as academico;
                     </div>
                 </div>
                 <br />              
-                 <?=
+                <?=
                 $this->render('index-grid', ['model' => $admitido]);
                 ?> 
             </div> 
+        </div>
+    </div>
+    <div class="table table-bordered">
+        <div class="panel-body">  
+            <div class='col-md-12 col-sm-12 col-xs-12 col-lg-12'>        
+                <div class="col-md-6 col-sm-6 col-xs-6 col-lg-6">
+                    <div class="form-group">
+                        <label for="cmb_ninteres" class="col-sm-4 col-md-4 col-xs-4 col-lg-4 control-label"><?= Yii::t("formulario", "Academic unit") ?></label>
+                        <div class="col-sm-7 col-md-7 col-xs-7 col-lg-7">
+                            <?= Html::dropDownList("cmb_ninteres", 0, $arr_ninteres, ["class" => "form-control PBvalidation", "id" => "cmb_ninteres"]) ?>
+                        </div>
+                    </div>
+                </div>   
+                <div class="col-md-6 col-sm-6 col-xs-6 col-lg-6">
+                    <div class="form-group">
+                        <label for="cmb_modalidad" class="col-sm-4 col-md-4 col-xs-4 col-lg-4 control-label"><?= Yii::t("formulario", "Mode") ?></label>
+                        <div class="col-sm-7 col-md-7 col-xs-7 col-lg-7">
+                            <?= Html::dropDownList("cmb_modalidad", 0, $arr_modalidad, ["class" => "form-control PBvalidation", "id" => "cmb_modalidad"]) ?> 
+                        </div>
+                    </div>
+                </div> 
+            </div>  
+            <div class='col-md-12 col-sm-12 col-xs-12 col-lg-12'>  
+                <div class="col-md-6 col-sm-6 col-xs-6 col-lg-6">
+                    <div class="form-group">            
+                        <label for="cmb_carrera1" class="col-sm-4 col-md-4 col-xs-4 col-lg-4 control-label"><?= Yii::t("academico", "Career") . ' /Programa' ?></label>
+                        <div class="col-sm-7 col-md-7 col-xs-7 col-lg-7">
+                            <?= Html::dropDownList("cmb_carrera1", 0, $arr_carrerra1, ["class" => "form-control", "id" => "cmb_carrera1"]) ?>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-6 col-sm-6 col-xs-6 col-lg-6">
+                    <div class="form-group">                
+                        <label for="cmb_periodo" class="col-sm-4 col-md-4 col-xs-4 col-lg-4 control-label"><?= Yii::t("formulario", "Period"); ?> <span class="text-danger"></span></label>
+                        <div class="col-sm-7 col-md-7 col-xs-7 col-lg-7">
+                            <?= Html::dropDownList("cmb_periodo", 0, $arr_periodo, ["class" => "form-control", "id" => "cmb_periodo"]) ?>                        
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class='col-md-12 col-sm-12 col-xs-12 col-lg-12' id="buscamateria" style="display: block;">
+                <div class='col-md-12 col-sm-12 col-xs-12 col-lg-12'> 
+                    <div class="col-md-6 col-sm-6 col-xs-6 col-lg-6">
+                        <div class='col-md-4 col-xs-4 col-lg-4 col-sm-4'>         
+                            <p> <a id="btn_BuscarMateria" href="javascript:" class="btn btn-primary btn-block"> <?= Yii::t("formulario", "Search") . ' ' . Yii::t("formulario", "Matter") ?></a></p>
+                        </div>
+                    </div>        
+                </div>
+                <div id="gridmateria" style="display: none;">
+                <!--    <?
+                    $this->render('_listaMateriaGrid.php', [
+                        'model' => $arr_materia,
+                    ]);
+                    ?>  --> 
+                </div>
+            </div>
+            <div class="row"> 
+                <div class="col-md-7"></div>             
+                <div class="col-md-2 col-xs-4 col-lg-2 col-sm-2">
+                    <a id="sendReprobado" href="javascript:" class="btn btn-primary btn-block"> <?= Yii::t("accion", "Save") ?> </a>
+                </div>
+            </div>
         </div>
     </div>
 </form>

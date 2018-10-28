@@ -400,6 +400,7 @@ create table if not exists `solicitud_datos_factura` (
 create table if not exists `matriculados_reprobado` (
  `mre_id` bigint(20) not null auto_increment primary key,
  `adm_id` bigint(20) not null,
+ `pami_id` bigint(20) not null,
  `mre_usuario_ingreso` bigint(20) not null,
  `mreusuario_modifica` bigint(20)  null, 
  `mre_estado` varchar(1) not null, 

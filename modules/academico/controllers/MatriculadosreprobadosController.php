@@ -3,35 +3,19 @@
 namespace app\modules\academico\controllers;
 
 use Yii;
-use app\modules\academico\models\Admitido;
+use app\modules\academico\models\PeriodoMetodoIngreso;
 use app\modules\academico\models\MatriculadosReprobado;
-use app\models\Utilities;
 use yii\helpers\ArrayHelper;
-use yii\base\Exception;
+use app\models\Utilities;
 use app\models\Persona;
-use app\models\EmpresaPersona;
-use \app\modules\admision\models\SolicitudInscripcion;
-use app\models\Pais;
-use app\modules\admision\models\Interesado;
-use app\modules\admision\models\InteresadoEmpresa;
-use app\models\Usuario;
-use yii\base\Security;
-use app\models\UsuaGrolEper;
 use app\models\Provincia;
-use app\modules\financiero\models\OrdenPago;
-use app\modules\financiero\models\DetalleDescuentoItem;
 use app\models\Canton;
 use app\models\MedioPublicitario;
 use app\modules\academico\models\Modalidad;
 use app\modules\academico\models\UnidadAcademica;
-use yii\helpers\Url;
 use app\modules\admision\models\PersonaGestion;
 use app\modules\admision\models\Oportunidad;
-use app\models\Empresa;
-use app\modules\admision\models\TipoOportunidadVenta;
-use app\modules\admision\models\EstadoContacto;
 use app\modules\admision\models\MetodoIngreso;
-use app\modules\financiero\models\Secuencias;
 use app\models\InscripcionAdmision;
 use app\modules\academico\Module as academico;
 use app\modules\admision\Module as admision;
@@ -44,6 +28,10 @@ class MatriculadosreprobadosController extends \app\components\CController {
 
     public function actionIndex() {
         $mod_admitido = new MatriculadosReprobado();
+        $mod_unidad = new UnidadAcademica();
+        $mod_modalidad = new Modalidad();
+        $modcanal = new Oportunidad();
+        $mod_periodo = new PeriodoMetodoIngreso();
         $dato = Yii::$app->request->get();
         if (isset($dato["search"])) {
             $arradmitido = $mod_admitido->getMatriculados($dato["search"]);
@@ -51,9 +39,32 @@ class MatriculadosreprobadosController extends \app\components\CController {
                         "model" => $arradmitido,
             ]);
         }
-            $arradmitido = $mod_admitido->getMatriculados('*');
+        if (Yii::$app->request->isAjax) {
+            $data = Yii::$app->request->post();
+            if (isset($data["getmodalidad"])) {
+                $modalidad = $mod_modalidad->consultarModalidad($data["nint_id"], 1);
+                $message = array("modalidad" => $modalidad);
+                return Utilities::ajaxResponse('OK', 'alert', Yii::t('jslang', 'Success'), 'false', $message);
+                return;
+            }
+            if (isset($data["getcarrera"])) {
+                $carrera = $modcanal->consultarCarreraModalidad($data["unidada"], $data["moda_id"]);
+                $message = array("carrera" => $carrera);
+                return Utilities::ajaxResponse('OK', 'alert', Yii::t('jslang', 'Success'), 'false', $message);
+                return;
+            }
+        }
+        $arrperiodo = $mod_periodo->consultarPeriodo();
+        $arradmitido = $mod_admitido->getMatriculados(0);
+        $arr_ninteres = $mod_unidad->consultarUnidadAcademicasEmpresa(1);
+        $arr_modalidad = $mod_modalidad->consultarModalidad($arr_ninteres[0]["id"], 1);
+        $arr_carrerra1 = $modcanal->consultarCarreraModalidad($arr_ninteres[0]["id"], $arr_modalidad[0]["id"]);
         return $this->render('index', [
-            'admitido' => $arradmitido,
+                    'admitido' => $arradmitido,
+                    'arr_carrerra1' => ArrayHelper::map(array_merge([["id" => "0", "name" => Yii::t("formulario", "Select")]],$arr_carrerra1), "id", "name"),
+                    'arr_modalidad' => ArrayHelper::map(array_merge([["id" => "0", "name" => Yii::t("formulario", "Select")]],$arr_modalidad), "id", "name"),
+                    'arr_ninteres' => ArrayHelper::map(array_merge([["id" => "0", "name" => Yii::t("formulario", "Select")]],$arr_ninteres), "id", "name"),
+                    'arr_periodo' => ArrayHelper::map(array_merge([["id" => "0", "name" => Yii::t("formulario", "Select")]],$arrperiodo), "id", "name"),
         ]);
     }
 
@@ -61,11 +72,12 @@ class MatriculadosreprobadosController extends \app\components\CController {
         return $this->render('view', [
         ]);
     }
+
     public function actionEdit() {
         return $this->render('edit', [
         ]);
     }
-    
+
     public function actionNew() {
         $per_id = Yii::$app->session->get("PB_perid");
         $mod_persona = Persona::findIdentity($per_id);
@@ -75,7 +87,7 @@ class MatriculadosreprobadosController extends \app\components\CController {
         $modcanal = new Oportunidad();
         $mod_metodo = new MetodoIngreso();
         $mod_inscripcion = new InscripcionAdmision();
-                
+
         if (Yii::$app->request->isAjax) {
             $data = Yii::$app->request->post();
             if (isset($data["getprovincias"])) {
@@ -122,7 +134,7 @@ class MatriculadosreprobadosController extends \app\components\CController {
         $arr_carrerra1 = $modcanal->consultarCarreraModalidad(1, $arr_modalidad[0]["id"]);
         $arr_metodos = $mod_metodo->consultarMetodoUnidadAca_2($arr_ninteres[0]["id"]);
         $_SESSION['JSLANG']['Your information has not been saved. Please try again.'] = Yii::t('notificaciones', 'Your information has not been saved. Please try again.');
-                
+
         return $this->render('new', [
                     "tipos_dni" => array("CED" => Yii::t("formulario", "DNI Document"), "PASS" => Yii::t("formulario", "Passport")),
                     "tipos_dni2" => array("CED" => Yii::t("formulario", "DNI Document1"), "PASS" => Yii::t("formulario", "Passport1")),
@@ -137,7 +149,7 @@ class MatriculadosreprobadosController extends \app\components\CController {
                     "arr_carrerra1" => ArrayHelper::map($arr_carrerra1, "id", "name"),
                     "arr_metodos" => ArrayHelper::map($arr_metodos, "id", "name"),
                     "resp_datos" => $resp_datos,
-        ]);                        
+        ]);
     }
 
     public function actionSave() {
