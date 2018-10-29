@@ -27,6 +27,10 @@ admision::registerTranslations();
 class MatriculadosreprobadosController extends \app\components\CController {
 
     public function actionIndex() {
+        
+    }
+    
+    public function actionNewreprobado() {
         $mod_admitido = new MatriculadosReprobado();
         $mod_unidad = new UnidadAcademica();
         $mod_modalidad = new Modalidad();
@@ -35,7 +39,7 @@ class MatriculadosreprobadosController extends \app\components\CController {
         $dato = Yii::$app->request->get();
         if (isset($dato["search"])) {
             $arradmitido = $mod_admitido->getMatriculados($dato["search"]);
-            return $this->renderPartial('index-grid', [
+            return $this->renderPartial('newreprobado-grid', [
                         "model" => $arradmitido,
             ]);
         }
@@ -59,7 +63,7 @@ class MatriculadosreprobadosController extends \app\components\CController {
         $arr_ninteres = $mod_unidad->consultarUnidadAcademicasEmpresa(1);
         $arr_modalidad = $mod_modalidad->consultarModalidad($arr_ninteres[0]["id"], 1);
         $arr_carrerra1 = $modcanal->consultarCarreraModalidad($arr_ninteres[0]["id"], $arr_modalidad[0]["id"]);
-        return $this->render('index', [
+        return $this->render('newreprobado', [
                     'admitido' => $arradmitido,
                     'arr_carrerra1' => ArrayHelper::map(array_merge([["id" => "0", "name" => Yii::t("formulario", "Select")]],$arr_carrerra1), "id", "name"),
                     'arr_modalidad' => ArrayHelper::map(array_merge([["id" => "0", "name" => Yii::t("formulario", "Select")]],$arr_modalidad), "id", "name"),
@@ -80,7 +84,7 @@ class MatriculadosreprobadosController extends \app\components\CController {
 
     public function actionNew() {
         $per_id = Yii::$app->session->get("PB_perid");
-        $mod_persona = Persona::findIdentity($per_id);
+        $mod_persona = Persona::findIdentity($per_id);  
         $mod_modalidad = new Modalidad();
         $mod_pergestion = new PersonaGestion();
         $mod_unidad = new UnidadAcademica();

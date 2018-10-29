@@ -43,7 +43,7 @@ use app\modules\academico\Module as academico;
                 </div>
                 <br />              
                 <?=
-                $this->render('index-grid', ['model' => $admitido]);
+                $this->render('newreprobado-grid', ['model' => $admitido]);
                 ?> 
             </div> 
         </div>

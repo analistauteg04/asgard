@@ -93,7 +93,7 @@ $(document).ready(function () {
         $("a[data-href='#paso2']").trigger("click");
     });
     $('#cmb_ninteres').change(function () {
-        var link = $('#txth_base').val() + "/academico/matriculadosreprobados/index";
+        var link = $('#txth_base').val() + "/academico/matriculadosreprobados/newreprobado";
         var arrParams = new Object();
         arrParams.nint_id = $(this).val();
         arrParams.getmodalidad = true;
@@ -117,7 +117,7 @@ $(document).ready(function () {
         }, true);
     });
     $('#cmb_modalidad').change(function () {
-        var link = $('#txth_base').val() + "/academico/matriculadosreprobados/index";
+        var link = $('#txth_base').val() + "/academico/matriculadosreprobados/newreprobado";
         var arrParams = new Object();
         arrParams.unidada = $('#cmb_ninteres').val();
         arrParams.moda_id = $(this).val();
@@ -134,7 +134,7 @@ $(document).ready(function () {
     });
     //ESTO LUEGO BORRAR CUANDO ESTE EL BOTON DESDE EL MENU
     $('#sendReprobado').click(function () {
-        var link = $('#txth_base').val() + "/academico/matriculadosreprobados/save";
+        var link = $('#txth_base').val() + "/academico/matriculadosreprobados/save"; //VER BIEN EL NOMBRE
         var arrParams = new Object();
         var selected = '';
         arrParams.uniacademica = $('#cmb_ninteres').val();
