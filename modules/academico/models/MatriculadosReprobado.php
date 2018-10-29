@@ -316,7 +316,11 @@ class MatriculadosReprobado extends \yii\db\ActiveRecord {
                 SELECT                  
                     per.per_cedula, 
                     per.per_pri_nombre, 
-                    per.per_pri_apellido,                  
+                    per.per_seg_nombre,
+                    per.per_pri_apellido, 
+                    per.per_seg_apellido,
+                    per.per_correo,
+                    per.per_celular,
                     ifnull((select uaca.uaca_nombre from " . $con3->dbname . ".unidad_academica uaca where uaca.uaca_id = sins.uaca_id),'N/A') as uaca_nombre,
                     ifnull((select moda.mod_nombre from " . $con3->dbname . ".modalidad moda where moda.mod_id = sins.mod_id),'N/A') as mod_nombre, 
                     case mes_id_academico 

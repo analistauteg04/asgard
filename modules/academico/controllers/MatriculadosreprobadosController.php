@@ -199,11 +199,15 @@ class MatriculadosreprobadosController extends \app\components\CController {
         header("Content-Type: $content_type");
         header("Content-Disposition: attachment;filename=" . $nombarch);
         header('Cache-Control: max-age=0');
-        $colPosition = array("C", "D", "E", "F", "G", "H", "I", "J", "K", "L");
+        $colPosition = array("C", "D", "E", "F", "G", "H", "I", "J", "K", "L", "M", "N", "O", "P");
         $arrHeader = array(
             Yii::t("formulario", "DNI 1"),
             Yii::t("formulario", "First Names"),
+            ' ',
             Yii::t("formulario", "Last Names"),
+            ' ',
+            Yii::t("formulario", "Email"),
+            Yii::t("formulario","CellPhone"),
             Yii::t("formulario", "Academic unit"),
             Yii::t("formulario", "Mode"),
             academico::t("Academico", "Month Process"),            
@@ -238,7 +242,11 @@ class MatriculadosreprobadosController extends \app\components\CController {
         $arrHeader = array(
             Yii::t("formulario", "DNI 1"),
             Yii::t("formulario", "First Names"),
+            ' ',
             Yii::t("formulario", "Last Names"),
+            ' ',
+            Yii::t("formulario", "Email"),
+            Yii::t("formulario","CellPhone"),
             Yii::t("formulario", "Academic unit"),
             Yii::t("formulario", "Mode"),
             academico::t("Academico", "Month Process"),            
