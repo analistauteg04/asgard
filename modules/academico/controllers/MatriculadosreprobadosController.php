@@ -35,8 +35,8 @@ class MatriculadosreprobadosController extends \app\components\CController {
         $data = Yii::$app->request->get();
         if ($data['PBgetFilter']) {
             $arrSearch["f_ini"] = $data['f_ini'];
-            $arrSearch["f_fin"] = $data['f_fin'];           
-            $arrSearch["search"] = $data['search'];         
+            $arrSearch["f_fin"] = $data['f_fin'];
+            $arrSearch["search"] = $data['search'];
             $mod_matreprueba = MatriculadosReprobado::getMatriculadosreprobados($arrSearch);
             return $this->renderPartial('index-grid', [
                         "model" => $mod_matreprueba,
@@ -193,11 +193,82 @@ class MatriculadosreprobadosController extends \app\components\CController {
     }
 
     public function actionExpexcel() {
-        
+        ini_set('memory_limit', '256M');
+        $content_type = Utilities::mimeContentType("xls");
+        $nombarch = "Report-" . date("YmdHis") . ".xls";
+        header("Content-Type: $content_type");
+        header("Content-Disposition: attachment;filename=" . $nombarch);
+        header('Cache-Control: max-age=0');
+        $colPosition = array("C", "D", "E", "F", "G", "H", "I", "J", "K", "L");
+        $arrHeader = array(
+            Yii::t("formulario", "DNI 1"),
+            Yii::t("formulario", "First Names"),
+            Yii::t("formulario", "Last Names"),
+            Yii::t("formulario", "Academic unit"),
+            Yii::t("formulario", "Mode"),
+            academico::t("Academico", "Month Process"),            
+            academico::t("Academico", "Career/Program"),            
+            admision::t("Solicitudes", "Income Method"),
+            academico::t("Academico", "Approved"),
+            academico::t("Academico", "Failed")
+        );
+        $data = Yii::$app->request->get();
+        $arrSearch = array();
+        if (count($data) > 0) {
+            $arrSearch["f_ini"] = $data['fecha_ini'];
+            $arrSearch["f_fin"] = $data['fecha_fin'];            
+            $arrSearch["search"] = $data['search'];
+        }
+        $arrData = array();
+        $mod_matreprueba = new MatriculadosReprobado();
+        if (count($arrSearch) > 0) {
+            $arrData = $mod_matreprueba->consultarMatriculareprueba($arrSearch, true);
+            
+        } else {
+            $arrData = $mod_matreprueba->consultarMatriculareprueba(array(), true);
+        }
+        $nameReport = academico::t("Academico", "List Failed Enrollments");
+        Utilities::generarReporteXLS($nombarch, $nameReport, $arrHeader, $arrData, $colPosition);
+        exit;
     }
 
     public function actionExppdf() {
-        
+        /*$report = new ExportFile();
+        $this->view->title = academico::t("Academico", "Admitted");  // Titulo del reporte
+        $arrHeader = array(
+            admision::t("Solicitudes", "Request #"),
+            admision::t("Solicitudes", "Application date"), //ingles
+            Yii::t("formulario", "DNI 1"),
+            Yii::t("formulario", "First Names"),
+            Yii::t("formulario", "Last Names"),
+            academico::t("Academico", "Income Method"), //ingles
+            academico::t("Academico", "Career/Program"),
+            admision::t("Solicitudes", "Scholarship"),
+            academico::t("Academico", "Registered")
+        );
+        $data = Yii::$app->request->get();
+        $arrSearch = array();
+        if (count($data) > 0) {
+            $arrSearch["f_ini"] = $data['fecha_ini'];
+            $arrSearch["f_fin"] = $data['fecha_fin'];
+            $arrSearch["carrera"] = $data['carrera'];
+            $arrSearch["search"] = $data['search'];
+        }
+        $arrData = array();
+        $admitido_model = new Admitido();
+        if (count($arrSearch) > 0) {
+            $arrData = $admitido_model->consultarReportAdmitidos($arrSearch, true);
+        } else {
+            $arrData = $admitido_model->consultarReportAdmitidos(array(), true);
+        }
+        $report->orientation = "L"; // tipo de orientacion L => Horizontal, P => Vertical                                
+        $report->createReportPdf(
+                $this->render('exportpdf', [
+                    'arr_head' => $arrHeader,
+                    'arr_body' => $arrData
+                ])
+        );
+        $report->mpdf->Output('Reporte_' . date("Ymdhis") . ".pdf", ExportFile::OUTPUT_TO_DOWNLOAD);*/
     }
 
 }

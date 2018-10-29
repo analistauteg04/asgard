@@ -158,9 +158,9 @@ class MatriculadosReprobado extends \yii\db\ActiveRecord {
 
     /**
      * Function getMatriculadosreprobados
-     * @author  Giovanni Vergara <analistadesarrollo01@uteg.edu.ec>
+     * @author  Giovanni Vergara <analistadesarrollo02@uteg.edu.ec>
      * @param   
-     * @return  $resultData (información del aspirante)
+     * @return  $resultData (información del matriculado no aprobado)
      */
     public static function getMatriculadosreprobados($arrFiltro = array(), $onlyData = false) {
         $con = \Yii::$app->db_captacion;
@@ -248,6 +248,119 @@ class MatriculadosReprobado extends \yii\db\ActiveRecord {
         $comando->bindParam(":estado", $estado, \PDO::PARAM_STR);
         $comando->bindParam(":estado_opago", $estado_opago, \PDO::PARAM_STR);
         //$comando->bindParam(":esp",$esp, \PDO::PARAM_STR); 
+        if (isset($arrFiltro) && count($arrFiltro) > 0) {
+            $search_cond = "%" . $arrFiltro["search"] . "%";
+            $fecha_ini = $arrFiltro["f_ini"] . " 00:00:00";
+            $fecha_fin = $arrFiltro["f_fin"] . " 23:59:59";
+            $comando->bindParam(":search", $search_cond, \PDO::PARAM_STR);
+            if ($arrFiltro['f_ini'] != "" && $arrFiltro['f_fin'] != "") {
+                $comando->bindParam(":fec_ini", $fecha_ini, \PDO::PARAM_STR);
+                $comando->bindParam(":fec_fin", $fecha_fin, \PDO::PARAM_STR);
+            }
+        }
+        $resultData = $comando->queryAll();
+        $dataProvider = new ArrayDataProvider([
+            'key' => 'id',
+            'allModels' => $resultData,
+            'pagination' => [
+                'pageSize' => Yii::$app->params["pageSize"],
+            ],
+            'sort' => [
+                'attributes' => [
+                ],
+            ],
+        ]);
+        if ($onlyData) {
+            return $resultData;
+        } else {
+            return $dataProvider;
+        }
+    }
+
+    /**
+     * Function consultarMatriculareprueba
+     * @author  Giovanni Vergara <analistadesarrollo02@uteg.edu.ec>
+     * @param   
+     * @return  $resultData (información del matriculado no aprobado)
+     */
+    public static function consultarMatriculareprueba($arrFiltro = array(), $onlyData = false) {
+        $con = \Yii::$app->db_captacion;
+        $con2 = \Yii::$app->db;
+        $con3 = \Yii::$app->db_academico;
+        $con1 = \Yii::$app->db_facturacion;
+        $estado = 1;
+        $columnsAdd = "";
+        $estado_opago = "S";
+        
+        if (isset($arrFiltro) && count($arrFiltro) > 0) {
+            $str_search = "(per.per_pri_nombre like :search OR ";
+            $str_search .= "per.per_seg_nombre like :search OR ";
+            $str_search .= "per.per_pri_apellido like :search OR ";
+            $str_search .= "per.per_cedula like :search) AND ";
+
+            if ($arrFiltro['f_ini'] != "" && $arrFiltro['f_fin'] != "") {
+                $str_search .= "mre.mre_fecha_creacion >= :fec_ini AND ";
+                $str_search .= "mre.mre_fecha_creacion <= :fec_fin AND ";
+            }
+        } else {
+            $columnsAdd = "-- sins.sins_id as solicitud_id,
+                    per.per_id as persona, 
+                    per.per_pri_nombre as per_pri_nombre, 
+                    per.per_seg_nombre as per_seg_nombre,
+                    per.per_pri_apellido as per_pri_apellido,
+                    per.per_seg_apellido as per_seg_apellido,";
+        }
+
+        $sql = " 
+                
+                SELECT                  
+                    per.per_cedula, 
+                    per.per_pri_nombre, 
+                    per.per_pri_apellido,                  
+                    ifnull((select uaca.uaca_nombre from " . $con3->dbname . ".unidad_academica uaca where uaca.uaca_id = sins.uaca_id),'N/A') as uaca_nombre,
+                    ifnull((select moda.mod_nombre from " . $con3->dbname . ".modalidad moda where moda.mod_id = sins.mod_id),'N/A') as mod_nombre, 
+                    case mes_id_academico 
+                        when 1 then 'Enero' 
+                        when 2 then 'Febrero'
+                        when 3 then 'Marzo'
+                        when 4 then 'Abril' 
+                        when 5 then 'Mayo'
+                        when 6 then 'Junio'
+                        when 7 then 'Julio' 
+                        when 8 then 'Agosto'
+                        when 9 then 'Septiembre'
+                        when 10 then 'Octubre' 
+                        when 11 then 'Noviembre'
+                        when 12 then 'Diciembre'
+                    end as mes_id_academico, 
+                    case when (ifnull(sins.eaca_id,0)=0) then
+                               (select mest_nombre from " . $con3->dbname . ".modulo_estudio me where me.mest_id = sins.mest_id and me.mest_estado = '1' and me.mest_estado_logico = '1')
+                                else
+                           (select eaca_nombre from " . $con3->dbname . ".estudio_academico ea where ea.eaca_id = sins.eaca_id and ea.eaca_estado = '1' and ea.eaca_estado_logico = '1')
+                    end as carrera,
+                    ifnull((select min.ming_nombre from " . $con->dbname . ".metodo_ingreso min where min.ming_id = sins.ming_id),'N/A') as ming_nombre,
+                    0 as aprobada,
+                    0 as reprobada
+                FROM " . $con->dbname . ".matriculados_reprobado mre 
+                     INNER JOIN " . $con->dbname . ".admitido adm ON adm.adm_id = mre.adm_id
+                     INNER JOIN " . $con->dbname . ".interesado inte on inte.int_id = adm.int_id                     
+                     INNER JOIN " . $con2->dbname . ".persona per on inte.per_id = per.per_id 
+                     INNER JOIN " . $con->dbname . ".solicitud_inscripcion sins on sins.int_id = inte.int_id 
+                     INNER JOIN " . $con3->dbname . ".periodo_academico_met_ingreso ami on ami.pami_id = mre.pami_id
+                WHERE  
+                       $str_search   
+                       adm.adm_estado_logico = :estado AND
+                       adm.adm_estado = :estado AND 
+                       inte.int_estado_logico = :estado AND
+                       inte.int_estado = :estado AND     
+                       per.per_estado_logico = :estado AND
+                       per.per_estado = :estado AND
+                       ami.pami_estado = :estado AND
+                       ami.pami_estado_logico = :estado                                                   
+                ORDER BY SUBSTRING(mre.mre_fecha_creacion,1,10) desc";
+        $comando = $con->createCommand($sql);
+        $comando->bindParam(":estado", $estado, \PDO::PARAM_STR);
+        $comando->bindParam(":estado_opago", $estado_opago, \PDO::PARAM_STR);        
         if (isset($arrFiltro) && count($arrFiltro) > 0) {
             $search_cond = "%" . $arrFiltro["search"] . "%";
             $fecha_ini = $arrFiltro["f_ini"] . " 00:00:00";

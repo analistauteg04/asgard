@@ -47,12 +47,12 @@ academico::registerTranslations();
             ],
             [
                 'attribute' => 'modalidad',
-                'header' => Yii::t("formulario", "Moda"),
+                'header' => Yii::t("formulario", "Mode"),
                 'value' => 'mod_nombre',
             ],
             [
                 'attribute' => 'mes',
-                'header' => academico::t("Academico", "Month Process"),
+                'header' => Yii::t("formulario", "Month"),
                 'value' => 'mes_id_academico',
             ],
             [
@@ -82,12 +82,12 @@ academico::registerTranslations();
             ],
             [
                 'attribute' => 'aprobadas',
-                'header' => academico::t("Academico", "# Approved"),
+                'header' => academico::t("Academico", "Approved"),
                 'value' => 'aprobada',
             ],
             [
                 'attribute' => 'reprobadas',
-                'header' => academico::t("Academico", "# Failed"),
+                'header' => academico::t("Academico", "Failed"),
                 'value' => 'reprobada',
             ],
             [

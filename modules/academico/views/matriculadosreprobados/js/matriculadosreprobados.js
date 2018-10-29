@@ -285,3 +285,17 @@ function actualizarGrid() {
         setTimeout(hideLoadingPopup, 2000);
     }
 }
+
+function exportExcel() {
+    var search = $('#txt_buscarData').val();
+    var f_ini = $('#txt_fecha_ini').val();
+    var f_fin = $('#txt_fecha_fin').val();    
+    window.location.href = $('#txth_base').val() + "/academico/matriculadosreprobados/expexcel?search=" + search + "&fecha_ini=" + f_ini+ "&fecha_fin=" + f_fin;        
+}
+
+function exportPdf() {
+    var search = $('#txt_buscarData').val();
+    var f_ini = $('#txt_fecha_ini').val();
+    var f_fin = $('#txt_fecha_fin').val();       
+    window.location.href = $('#txth_base').val() + "/academico/matriculadosreprobados/exppdf?pdf=1&search=" + search + "&fecha_ini=" + f_ini+ "&fecha_fin=" + f_fin;            
+}
