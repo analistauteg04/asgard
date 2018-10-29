@@ -6,6 +6,9 @@ namespace app\modules\academico\messages;
  * and open the template in the editor.
  */
  return [
+     "# Approved" => "# Aprobadas",
+     "# Failed" => "# Reprobadas",
+     "# Solicitude" => "# Solicitud", 
      "Academic unit" => "Unidad Académica",
      "Aca. Uni." => "Uni. Aca.",
      "Admitted" => "Admitidos",
@@ -15,12 +18,13 @@ namespace app\modules\academico\messages;
      "Career" => "Carrera",
      "Career/Program" => "Carrera/Programa",
      "Career/Program/Course" => "Carrera/Programa/Curso",
-     "Failed Registrations" => "Matriculados Reprobados",
+     "Failed Registrations" => "Matriculados Reprobados",     
      "Income Method" => "Mét. Ing",
      "Lecturing Period" => "Período Académico",
      "List Admitted" => "Listar Admitidos",
-     "# Solicitude" => "# Solicitud",  
+     "List Failed Enrollments" => "Listar Matriculados Reprobados",
      "Modality" => "Modalidad",
+     "Month Process" => "Mes Proceso",
      "Parallel" => "Paralelo",
      "Registered" => "Matriculado",
      "Registration by Homologation" => "Matriculación por Homologación",

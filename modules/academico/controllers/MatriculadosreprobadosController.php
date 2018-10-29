@@ -5,6 +5,8 @@ namespace app\modules\academico\controllers;
 use Yii;
 use app\modules\academico\models\PeriodoMetodoIngreso;
 use app\modules\academico\models\MatriculadosReprobado;
+use app\modules\academico\models\EstudioAcademico;
+use app\modules\academico\models\Admitido;
 use yii\helpers\ArrayHelper;
 use app\models\Utilities;
 use app\models\Persona;
@@ -27,9 +29,36 @@ admision::registerTranslations();
 class MatriculadosreprobadosController extends \app\components\CController {
 
     public function actionIndex() {
-        
+        $per_id = @Yii::$app->session->get("PB_perid");
+        $mod_carrera = new EstudioAcademico();
+
+        $data = Yii::$app->request->get();
+        if ($data['PBgetFilter']) {
+            $arrSearch["f_ini"] = $data['f_ini'];
+            $arrSearch["f_fin"] = $data['f_fin'];
+            //$arrSearch["carrera"] = $data['carrera'];
+            $arrSearch["search"] = $data['search'];
+            //$arrSearch["codigocan"] = $data['codigocan'];
+            $mod_matreprueba = MatriculadosReprobado::getMatriculadosreprobados($arrSearch);
+            return $this->renderPartial('index-grid', [
+                        "model" => $mod_matreprueba,
+            ]);
+        } else {
+            $mod_aspirante = MatriculadosReprobado::getMatriculadosreprobados();
+        }
+        if (Yii::$app->request->isAjax) {//
+            $data = Yii::$app->request->get();
+            if (isset($data["op"]) && $data["op"] == '1') {
+                
+            }
+        }
+        $arrCarreras = ArrayHelper::map(array_merge([["id" => "0", "value" => Yii::t("formulario", "Grid")]], $mod_carrera->consultarCarrera()), "id", "value");
+        return $this->render('index', [
+                    'model' => $mod_aspirante,
+                    'arrCarreras' => $arrCarreras,
+        ]);
     }
-    
+
     public function actionNewreprobado() {
         $mod_admitido = new MatriculadosReprobado();
         $mod_unidad = new UnidadAcademica();
@@ -65,10 +94,10 @@ class MatriculadosreprobadosController extends \app\components\CController {
         $arr_carrerra1 = $modcanal->consultarCarreraModalidad($arr_ninteres[0]["id"], $arr_modalidad[0]["id"]);
         return $this->render('newreprobado', [
                     'admitido' => $arradmitido,
-                    'arr_carrerra1' => ArrayHelper::map(array_merge([["id" => "0", "name" => Yii::t("formulario", "Select")]],$arr_carrerra1), "id", "name"),
-                    'arr_modalidad' => ArrayHelper::map(array_merge([["id" => "0", "name" => Yii::t("formulario", "Select")]],$arr_modalidad), "id", "name"),
-                    'arr_ninteres' => ArrayHelper::map(array_merge([["id" => "0", "name" => Yii::t("formulario", "Select")]],$arr_ninteres), "id", "name"),
-                    'arr_periodo' => ArrayHelper::map(array_merge([["id" => "0", "name" => Yii::t("formulario", "Select")]],$arrperiodo), "id", "name"),
+                    'arr_carrerra1' => ArrayHelper::map(array_merge([["id" => "0", "name" => Yii::t("formulario", "Select")]], $arr_carrerra1), "id", "name"),
+                    'arr_modalidad' => ArrayHelper::map(array_merge([["id" => "0", "name" => Yii::t("formulario", "Select")]], $arr_modalidad), "id", "name"),
+                    'arr_ninteres' => ArrayHelper::map(array_merge([["id" => "0", "name" => Yii::t("formulario", "Select")]], $arr_ninteres), "id", "name"),
+                    'arr_periodo' => ArrayHelper::map(array_merge([["id" => "0", "name" => Yii::t("formulario", "Select")]], $arrperiodo), "id", "name"),
         ]);
     }
 
@@ -84,7 +113,7 @@ class MatriculadosreprobadosController extends \app\components\CController {
 
     public function actionNew() {
         $per_id = Yii::$app->session->get("PB_perid");
-        $mod_persona = Persona::findIdentity($per_id);  
+        $mod_persona = Persona::findIdentity($per_id);
         $mod_modalidad = new Modalidad();
         $mod_pergestion = new PersonaGestion();
         $mod_unidad = new UnidadAcademica();
