@@ -57,7 +57,7 @@ class PagosController extends \app\components\CController {
     }
 
     public function actionCargardocpagos() {
-        $per_id = @Yii::$app->session->get("PB_iduser");
+        $per_id = @Yii::$app->session->get("PB_perid");
         $ccar_id = isset($_GET['ids']) ? base64_decode($_GET['ids']) : 0; //NULL
         $model_pag = new OrdenPago();
         if ($ccar_id == 0) {
@@ -124,6 +124,7 @@ class PagosController extends \app\components\CController {
                     'valoraplicado' => $valoraplicado,
                     'opag_id' => $opag_id,
                     'rol' => $rol,
+                    'respCliente' => $resp_cliord,
         ]);
     }
 
@@ -538,7 +539,7 @@ class PagosController extends \app\components\CController {
         $mod_opago = new OrdenPago();
         $arr_forma_pago = $mod_opago->formaPago("1");
 
-        $resp_orden = $mod_opago->listarSolicitud($sol_id, $opag_id, 0);
+        $resp_orden = $mod_opago->listarSolicitud($sol_id, null, $opag_id, 0);
         $valor_total = $resp_orden['ipre_precio'];
         $saldo_pendiente = $resp_orden['pendiente'];
         $int_id = $resp_orden['int_id'];
@@ -578,22 +579,16 @@ class PagosController extends \app\components\CController {
             $arrSearch["search"] = $data['search'];
             //if (empty($per_ids)) {  //vista para el interesado  
             $rol = 1;
-            $resp_pago = $model_pag->listarSolicitud($sol_id, null, $rol, $arrSearch);
-            /* } else {
-              $rol = 0;
-              $resp_pago = $model_pag->listarSolicitud($sol_id, null, $rol, $arrSearch);
-              } */
+            $resp_pago = $model_pag->listarSolicitud($sol_id, $per_id, null, $rol, $arrSearch);
+            
             return $this->renderPartial('_listarpagosolicitud_grid', [
                         "model" => $resp_pago,
             ]);
         } else {
             // if (empty($per_ids)) {  //vista para el interesado  
             $rol = 1;
-            $resp_pago = $model_pag->listarSolicitud($sol_id, null, $rol);
-            /* } else {
-              $rol = 0;
-              $resp_pago = $model_pag->listarSolicitud($sol_id, null, $rol);
-              } */
+            $resp_pago = $model_pag->listarSolicitud($sol_id, $per_id, null, $rol);
+          
         }
         //verificar rol de la persona que esta en sesión
         $resp_rol = $model_pag->encuentraRol($per_id);

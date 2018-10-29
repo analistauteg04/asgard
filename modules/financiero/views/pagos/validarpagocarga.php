@@ -27,7 +27,7 @@ admision::registerTranslations();
     <div class="form-group">
         <label for="txt_nombres" class="col-sm-4  control-label" id="lbl_nombres"><?= Yii::t("formulario", "Names") ?></label> 
         <div class="col-sm-8 ">
-            <?= $nombres . "  " . $apellidos ?>
+            <?= $nombres . "  " . $apellidos . " (".$respCliente["per_cedula"].")"?>
         </div>
     </div>
 </div>    

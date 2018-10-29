@@ -245,7 +245,7 @@ class OrdenPago extends \app\modules\financiero\components\CActiveRecord {
      * @param   
      * @return   $resultData (información de las solicitudes pendientes .)
      */
-    public function listarSolicitud($sol_id, $opag_id, $rol, $arrFiltro = array(), $onlyData = false) {
+    public function listarSolicitud($sol_id, $per_id, $opag_id, $rol, $arrFiltro = array(), $onlyData = false) {
         $con = \Yii::$app->db_facturacion;
         $con1 = \Yii::$app->db_asgard;
         $con2 = \Yii::$app->db_captacion;
@@ -290,9 +290,12 @@ class OrdenPago extends \app\modules\financiero\components\CActiveRecord {
                     INNER JOIN " . $con->dbname . ".item_metodo_unidad imni on ((sins.ming_id = imni.ming_id and sins.uaca_id = imni.uaca_id and sins.mod_id = imni.mod_id)
                                 or (sins.uaca_id = imni.uaca_id and sins.mod_id = imni.mod_id and sins.mest_id = imni.mest_id))
                     INNER JOIN " . $con->dbname . ".item_precio itp ON itp.ite_id = imni.ite_id
-                    INNER JOIN " . $con->dbname . ".item ite ON ite.ite_id = itp.ite_id                           
-                    WHERE $str_search sins.sins_id = " . $sol_id . " AND ";
-
+                    INNER JOIN " . $con->dbname . ".item ite ON ite.ite_id = itp.ite_id ";
+        if (!empty($sol_id)) {
+            $sql .=  "WHERE $str_search sins.sins_id = " . $sol_id . " AND ";
+        } else {
+             $sql .=  "WHERE inte.per_id = :per_id AND sins.int_id = inte.int_id AND ";
+        }
         if (!empty($opag_id)) {
             $sql .= "orp.opag_id = ifnull(" . $opag_id . ",orp.opag_id) AND ";
         }
@@ -315,6 +318,8 @@ class OrdenPago extends \app\modules\financiero\components\CActiveRecord {
         $comando->bindParam(":estado", $estado, \PDO::PARAM_STR);
         $comando->bindParam(":rol", $rol, \PDO::PARAM_STR);
         $comando->bindParam(":estado_precio", $estado_precio, \PDO::PARAM_STR);
+        $comando->bindParam(":per_id", $per_id, \PDO::PARAM_INT);
+        
 
         if (isset($arrFiltro) && count($arrFiltro) > 0) {
             $search_cond = "%" . $arrFiltro["search"] . "%";
@@ -833,8 +838,8 @@ class OrdenPago extends \app\modules\financiero\components\CActiveRecord {
         $sql = "SELECT  lpad(ifnull(sins.num_solicitud,sins.sins_id),9,'0') as sser_id,                        
                         per.per_id, 
                         inte.int_id,
-                        concat(per_pri_nombre, ' ', per_seg_nombre) nombres,
-                        concat(per_pri_apellido, ' ',per_seg_apellido) apellidos, 
+                        concat(per_pri_nombre, ' ', ifnull(per_seg_nombre,'')) nombres,
+                        concat(per_pri_apellido, ' ',ifnull(per_seg_apellido,'')) apellidos, 
                         per_cedula, 
                         format(opag.opag_total,2) valortotal,
                         format(ifnull(opag_valor_pagado,0),2) valoraplicado,
