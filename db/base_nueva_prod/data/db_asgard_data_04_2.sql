@@ -141,7 +141,7 @@ INSERT INTO `objeto_modulo` (`omod_id`, `mod_id`, `omod_padre_id`, `omod_nombre`
 (112, 3, 111, 'Guardar Cargar Factura', 'A', '0', '', '', '', 'financiero/pagos/cargardocfact', 1, '0', 'Pagos', '1', '2018-09-22 19:07:01', NULL, '1'),
 -- Objetos Modulos Extras para Interesados
 (113, 2, 113, 'Solicitudes', 'P', '0', '', '', '', 'admision/solicitudes/listarsolicitudxinteresado', 1, '1', 'Solicitudes', '1', '2018-09-22 05:05:23', NULL, '1'),
-(114, 3, 114, 'Pagos Realizados', 'P', '0', '', '', '', 'financiero/pagos/cargardocpagos', 1, '1', 'Pagos', '1', '2018-09-22 19:07:01', NULL, '1'),
+(114, 3, 114, 'Pagos Realizados', 'P', '0', '', '', '', 'financiero/pagos/listarpagosolicitud', 1, '1', 'Pagos', '1', '2018-09-22 19:07:01', NULL, '1'),
 -- Acciones en los reportes
 (115, 5, 115, 'Reportes', 'P', '0', '', '', '', 'reportes/index', 1, '1', 'contacto', '1', '2018-09-18 05:29:05', NULL, '1'),
 (116, 5, 115, 'Exportar Contactos por Estado', 'A', '0', '', '', '', 'reportes/index', 1, '0', 'Admision', '1', '2018-09-22 19:07:01', NULL, '1'),
