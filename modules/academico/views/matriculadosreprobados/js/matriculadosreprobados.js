@@ -132,6 +132,9 @@ $(document).ready(function () {
     $('#btn_BuscarMateria').click(function () {
         actualizarMateriaGrid();
     });
+    $('#btn_buscarData').click(function () {
+        actualizarGrid();
+    });
     //ESTO LUEGO BORRAR CUANDO ESTE EL BOTON DESDE EL MENU
     $('#sendReprobado').click(function () {
         var link = $('#txth_base').val() + "/academico/matriculadosreprobados/save"; //VER BIEN EL NOMBRE
@@ -269,5 +272,16 @@ function actualizarMateriaGrid() {
     } else {
         var mensaje = {wtmessage: "Unidad Académica: El campo no debe estar vacío.", title: "Error"};
         showAlert("NO_OK", "Error", mensaje);
+    }
+}
+function actualizarGrid() {
+    var search = $('#txt_buscarData').val();
+    var f_ini = $('#txt_fecha_ini').val();
+    var f_fin = $('#txt_fecha_fin').val();  
+    //Buscar almenos una clase con el nombre para ejecutar
+    if (!$(".blockUI").length) {
+        showLoadingPopup();
+        $('#TbG_REPMATRICULA').PbGridView('applyFilterData', {'f_ini': f_ini, 'f_fin': f_fin, 'search': search});
+        setTimeout(hideLoadingPopup, 2000);
     }
 }

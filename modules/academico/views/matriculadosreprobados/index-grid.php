@@ -13,12 +13,11 @@ academico::registerTranslations();
 <div>
     <?=
     PbGridView::widget([
-        'id' => 'TbG_PERSONAS',
+        'id' => 'TbG_REPMATRICULA',
         'showExport' => true,
         'fnExportEXCEL' => "exportExcel",
         'fnExportPDF' => "exportPdf",
         'dataProvider' => $model,
-        //'pajax' => false,
         'columns' =>
         [
             [

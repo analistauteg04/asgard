@@ -35,10 +35,8 @@ class MatriculadosreprobadosController extends \app\components\CController {
         $data = Yii::$app->request->get();
         if ($data['PBgetFilter']) {
             $arrSearch["f_ini"] = $data['f_ini'];
-            $arrSearch["f_fin"] = $data['f_fin'];
-            //$arrSearch["carrera"] = $data['carrera'];
-            $arrSearch["search"] = $data['search'];
-            //$arrSearch["codigocan"] = $data['codigocan'];
+            $arrSearch["f_fin"] = $data['f_fin'];           
+            $arrSearch["search"] = $data['search'];         
             $mod_matreprueba = MatriculadosReprobado::getMatriculadosreprobados($arrSearch);
             return $this->renderPartial('index-grid', [
                         "model" => $mod_matreprueba,

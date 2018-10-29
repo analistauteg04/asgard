@@ -19,29 +19,26 @@ use yii\data\ArrayDataProvider;
  *
  * @property Admitido $adm
  */
-class MatriculadosReprobado extends \yii\db\ActiveRecord
-{
+class MatriculadosReprobado extends \yii\db\ActiveRecord {
+
     /**
      * {@inheritdoc}
      */
-    public static function tableName()
-    {
+    public static function tableName() {
         return 'matriculados_reprobado';
     }
 
     /**
      * @return \yii\db\Connection the database connection used by this AR class.
      */
-    public static function getDb()
-    {
+    public static function getDb() {
         return Yii::$app->get('db_captacion');
     }
 
     /**
      * {@inheritdoc}
      */
-    public function rules()
-    {
+    public function rules() {
         return [
             [['adm_id', 'mre_usuario_ingreso', 'mre_estado', 'mre_estado_logico'], 'required'],
             [['adm_id', 'mre_usuario_ingreso', 'mreusuario_modifica'], 'integer'],
@@ -54,8 +51,7 @@ class MatriculadosReprobado extends \yii\db\ActiveRecord
     /**
      * {@inheritdoc}
      */
-    public function attributeLabels()
-    {
+    public function attributeLabels() {
         return [
             'mre_id' => 'Mre ID',
             'adm_id' => 'Adm ID',
@@ -71,10 +67,10 @@ class MatriculadosReprobado extends \yii\db\ActiveRecord
     /**
      * @return \yii\db\ActiveQuery
      */
-    public function getAdm()
-    {
+    public function getAdm() {
         return $this->hasOne(Admitido::className(), ['adm_id' => 'adm_id']);
     }
+
     /**
      * Function getMatriculados
      * @author  Giovanni Vergara <analistadesarrollo02@uteg.edu.ec>
@@ -89,10 +85,10 @@ class MatriculadosReprobado extends \yii\db\ActiveRecord
         $estado = 1;
         $columnsAdd = "";
         $estado_opago = "S";
-        $search_cond =  $search ;    
+        $search_cond = $search;
         $str_search = "";
 
-        if (isset($search)) {   
+        if (isset($search)) {
             $str_search .= "per.per_cedula = :search AND ";
         }
 
@@ -159,6 +155,7 @@ class MatriculadosReprobado extends \yii\db\ActiveRecord
         ]);
         return $dataProvider;
     }
+
     /**
      * Function getMatriculadosreprobados
      * @author  Giovanni Vergara <analistadesarrollo01@uteg.edu.ec>
@@ -180,13 +177,10 @@ class MatriculadosReprobado extends \yii\db\ActiveRecord
             $str_search .= "per.per_seg_nombre like :search OR ";
             $str_search .= "per.per_pri_apellido like :search OR ";
             $str_search .= "per.per_cedula like :search) AND ";
-            // YA NO EXISTE TABLA CARRERA MODICAR 
-            if ($arrFiltro['carrera'] != "" && $arrFiltro['carrera'] > 0) {
-                $str_search .= "sins.eaca_id = :carrera AND ";
-            }
+
             if ($arrFiltro['f_ini'] != "" && $arrFiltro['f_fin'] != "") {
-                $str_search .= "sins.sins_fecha_solicitud >= :fec_ini AND ";
-                $str_search .= "sins.sins_fecha_solicitud <= :fec_fin AND ";
+                $str_search .= "mre.mre_fecha_creacion >= :fec_ini AND ";
+                $str_search .= "mre.mre_fecha_creacion <= :fec_fin AND ";
             }
         } else {
             $columnsAdd = "-- sins.sins_id as solicitud_id,
@@ -258,17 +252,11 @@ class MatriculadosReprobado extends \yii\db\ActiveRecord
             $search_cond = "%" . $arrFiltro["search"] . "%";
             $fecha_ini = $arrFiltro["f_ini"] . " 00:00:00";
             $fecha_fin = $arrFiltro["f_fin"] . " 23:59:59";
-            $carrera = $arrFiltro["carrera"];
-            $codigocan = "%" . $arrFiltro["codigocan"] . "%";
             $comando->bindParam(":search", $search_cond, \PDO::PARAM_STR);
-            if ($arrFiltro['carrera'] != "" && $arrFiltro['carrera'] > 0) {
-                $comando->bindParam(":carrera", $carrera, \PDO::PARAM_INT);
-            }
             if ($arrFiltro['f_ini'] != "" && $arrFiltro['f_fin'] != "") {
                 $comando->bindParam(":fec_ini", $fecha_ini, \PDO::PARAM_STR);
                 $comando->bindParam(":fec_fin", $fecha_fin, \PDO::PARAM_STR);
             }
-            // $comando->bindParam(":codigocan", $codigocan, \PDO::PARAM_STR);
         }
         $resultData = $comando->queryAll();
         $dataProvider = new ArrayDataProvider([
@@ -279,9 +267,6 @@ class MatriculadosReprobado extends \yii\db\ActiveRecord
             ],
             'sort' => [
                 'attributes' => [
-                    'per_dni',
-                    'per_nombres',
-                    'per_apellidos',
                 ],
             ],
         ]);
@@ -291,4 +276,5 @@ class MatriculadosReprobado extends \yii\db\ActiveRecord
             return $dataProvider;
         }
     }
+
 }
