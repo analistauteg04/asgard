@@ -232,34 +232,34 @@ class MatriculadosreprobadosController extends \app\components\CController {
         exit;
     }
 
-    public function actionExppdf() {
-        /*$report = new ExportFile();
-        $this->view->title = academico::t("Academico", "Admitted");  // Titulo del reporte
+    public function actionExportpdf() {
+        $report = new ExportFile();
+        $this->view->title = academico::t("Academico", "List Failed Enrollments");  // Titulo del reporte
         $arrHeader = array(
-            admision::t("Solicitudes", "Request #"),
-            admision::t("Solicitudes", "Application date"), //ingles
             Yii::t("formulario", "DNI 1"),
             Yii::t("formulario", "First Names"),
             Yii::t("formulario", "Last Names"),
-            academico::t("Academico", "Income Method"), //ingles
-            academico::t("Academico", "Career/Program"),
-            admision::t("Solicitudes", "Scholarship"),
-            academico::t("Academico", "Registered")
+            Yii::t("formulario", "Academic unit"),
+            Yii::t("formulario", "Mode"),
+            academico::t("Academico", "Month Process"),            
+            academico::t("Academico", "Career/Program"),            
+            admision::t("Solicitudes", "Income Method"),
+            academico::t("Academico", "Approved"),
+            academico::t("Academico", "Failed")
         );
         $data = Yii::$app->request->get();
         $arrSearch = array();
         if (count($data) > 0) {
             $arrSearch["f_ini"] = $data['fecha_ini'];
-            $arrSearch["f_fin"] = $data['fecha_fin'];
-            $arrSearch["carrera"] = $data['carrera'];
+            $arrSearch["f_fin"] = $data['fecha_fin'];     
             $arrSearch["search"] = $data['search'];
         }
         $arrData = array();
-        $admitido_model = new Admitido();
+        $mod_matreprueba = new MatriculadosReprobado();
         if (count($arrSearch) > 0) {
-            $arrData = $admitido_model->consultarReportAdmitidos($arrSearch, true);
+            $arrData = $mod_matreprueba->consultarMatriculareprueba($arrSearch, true);
         } else {
-            $arrData = $admitido_model->consultarReportAdmitidos(array(), true);
+            $arrData = $mod_matreprueba->consultarMatriculareprueba(array(), true);
         }
         $report->orientation = "L"; // tipo de orientacion L => Horizontal, P => Vertical                                
         $report->createReportPdf(
@@ -268,7 +268,7 @@ class MatriculadosreprobadosController extends \app\components\CController {
                     'arr_body' => $arrData
                 ])
         );
-        $report->mpdf->Output('Reporte_' . date("Ymdhis") . ".pdf", ExportFile::OUTPUT_TO_DOWNLOAD);*/
+        $report->mpdf->Output('Reporte_' . date("Ymdhis") . ".pdf", ExportFile::OUTPUT_TO_DOWNLOAD);
     }
 
 }

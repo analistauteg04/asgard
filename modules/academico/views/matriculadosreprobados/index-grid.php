@@ -90,13 +90,13 @@ academico::registerTranslations();
                 'header' => academico::t("Academico", "Failed"),
                 'value' => 'reprobada',
             ],
-            [
+            /*[
                 'class' => 'yii\grid\ActionColumn',
                 'header' => Yii::t("formulario", "Actions"),
                 'template' => '{view}',
                 'buttons' => [
                 ],
-            ],
+            ],*/
         ],
     ])
     ?>
