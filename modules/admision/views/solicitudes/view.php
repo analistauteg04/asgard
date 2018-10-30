@@ -91,17 +91,17 @@ financiero::registerTranslations();
     <div class="col-md-12 col-sm-12 col-xs-12 col-lg-12">
         <div class="col-md-6 col-sm-6 col-xs-6 col-lg-6">
             <div class="form-group">
-                <label for="txt_correo" class="col-sm-4 control-label" id="lbl_nombres"><?= financiero::t("Pagos", "Payment Upload") ?></label> 
+                <label for="txt_fecha_subio" class="col-sm-4 control-label" id="lbl_nombres"><?= financiero::t("Pagos", "Payment Upload") ?></label> 
                 <div class="col-sm-8 ">
-                    <input type="text" class="form-control" value="<?= $arr_fecha["fecha_subio"] ?>" id="txt_nombres" disabled="true">                 
+                    <input type="text" class="form-control" value="<?= $arr_fecha["fecha_subio"] ?>" id="txt_fecha_subio" disabled="true">                 
                 </div>
             </div>
         </div> 
         <div class="col-md-6 col-sm-6 col-xs-6 col-lg-6">
             <div class="form-group">
-                <label for="txt_celular" class="col-sm-4 control-label" id="lbl_apellidos"><?= financiero::t("Pagos", "Payment approved") ?></label> 
+                <label for="txt_fecha_aprobado" class="col-sm-4 control-label" id="lbl_apellidos"><?= financiero::t("Pagos", "Payment approved") ?></label> 
                 <div class="col-sm-8 ">
-                    <input type="text" class="form-control" value="<?= $arr_fecha["XXX"] ?>" id="txt_apellidos" disabled="true">                 
+                    <input type="text" class="form-control" value="<?= $arr_fecha["fecha_aprobacion_pago"] ?>" id="txt_fecha_aprobado" disabled="true">                 
                 </div>
             </div>
         </div> 
@@ -109,9 +109,9 @@ financiero::registerTranslations();
     <div class="col-md-12 col-sm-12 col-xs-12 col-lg-12">
         <div class="col-md-6 col-sm-6 col-xs-6 col-lg-6">
             <div class="form-group">
-                <label for="txt_correo" class="col-sm-4 control-label" id="lbl_nombres"><?= academico::t("Academico", "Admitted") ?></label> 
+                <label for="txt_fecha_admitido" class="col-sm-4 control-label" id="lbl_nombres"><?= academico::t("Academico", "Admitted") ?></label> 
                 <div class="col-sm-8 ">
-                    <input type="text" class="form-control" value="<?= $arr_fecha["fecha_admitido"] ?>" id="txt_nombres" disabled="true">                 
+                    <input type="text" class="form-control" value="<?= $arr_fecha["fecha_admitido"] ?>" id="txt_fecha_admitido" disabled="true">                 
                 </div>
             </div>
         </div>   
