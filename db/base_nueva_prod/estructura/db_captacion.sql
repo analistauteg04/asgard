@@ -413,6 +413,24 @@ create table if not exists `matriculados_reprobado` (
 );
 
 
+-- --------------------------------------------------------
+--
+-- Estructura de tabla para la tabla `matriculados_reprobado` 
+--
+create table if not exists `materias_matriculados_reprobado` (
+ `mmr_id` bigint(20) not null auto_increment primary key,
+ `mre_id` bigint(20) not null,
+ `asi_id` bigint(20) not null,
+ `mmr_usuario_ingreso` bigint(20) not null,
+ `mmr_usuario_modifica` bigint(20)  null, 
+ `mmr_estado` varchar(1) not null, 
+ `mmr_fecha_creacion` timestamp not null default current_timestamp,
+ `mmr_fecha_modificacion` timestamp null default null,
+ `mmr_estado_logico` varchar(1) not null,
+  foreign key (mre_id) references `matriculados_reprobado`(mre_id)
+);
+
+
 /*
     Esta tabla se esta creando para almacenar la informacion guardada en el wizard, debido a que no7
     hay como guardar en las tablas principales, informacion no completa, con la finanlidad de 
