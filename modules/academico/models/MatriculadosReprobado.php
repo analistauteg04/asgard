@@ -279,6 +279,62 @@ class MatriculadosReprobado extends \yii\db\ActiveRecord {
 
     /**
      * Function consultarMatriculareprueba
+     * @author  Kleber Loayza <analistadesarrollo03@uteg.edu.ec>
+     * @param   
+     * @return  $resultData (información del matriculado no aprobado)
+     */
+    public function consultarMateriasPorUnidadModalidadCarrera($uaca_id,$moda_id,$car_id) {
+        $con = \Yii::$app->db_captacion;
+        $con2 = \Yii::$app->db;
+        $con3 = \Yii::$app->db_academico;
+        $con1 = \Yii::$app->db_facturacion;
+        $estado = 1;
+        //$esp = "SET lc_time_names = 'es_ES';";
+        $sql = " 
+                select 
+                    asig.asi_id as id,
+                    asig.asi_descripcion
+                from 
+                    db_academico.malla_academica as maca
+                    join db_academico.malla_academica_detalle as made on made.maca_id=maca.maca_id
+                    join db_academico.asignatura as asig on asig.asi_id=made.asi_id
+                where 
+                    maca.uaca_id=:uaca_id and
+                    maca.eaca_id=:car_id and
+                    maca.mod_id=:moda_id and 
+                    maca.maca_estado =1 and 
+                    maca.maca_estado_logico =1 and
+                    made.made_estado =1 and 
+                    made.made_estado_logico =1
+                    -- asig.asi_estado =1 and 
+                    -- asig.asi_estado_logico =1
+                ";
+        $comando = $con->createCommand($sql);
+        $comando->bindParam(":estado", $estado, \PDO::PARAM_STR);
+        $comando->bindParam(":uaca_id", $uaca_id, \PDO::PARAM_INT);
+        $comando->bindParam(":moda_id", $moda_id, \PDO::PARAM_INT);
+        $comando->bindParam(":car_id", $car_id, \PDO::PARAM_INT);
+        $resultData = $comando->queryAll();
+        $dataProvider = new ArrayDataProvider([
+            'key' => 'id',
+            'allModels' => $resultData,
+            'pagination' => [
+                'pageSize' => Yii::$app->params["pageSize"],
+            ],
+            'sort' => [
+                'attributes' => [
+                ],
+            ],
+        ]);
+        if ($onlyData) {
+            return $resultData;
+        } else {
+            return $dataProvider;
+        }
+    }
+
+    /**
+     * Function consultarMatriculareprueba
      * @author  Giovanni Vergara <analistadesarrollo02@uteg.edu.ec>
      * @param   
      * @return  $resultData (información del matriculado no aprobado)

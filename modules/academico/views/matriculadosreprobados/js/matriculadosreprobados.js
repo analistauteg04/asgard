@@ -236,15 +236,12 @@ function setComboDataselect(arr_data, element_id, texto) {
     }
     $("#" + element_id).html(option_arr);
 }
-
 function actualizarMateriaGrid() {
-
     if ($('#cmb_ninteres option:selected').val() > '0') {
         if ($('#cmb_modalidad option:selected').val() > '0') {
             if ($('#cmb_carrera1 option:selected').val() > '0') {
                 if ($('#cmb_periodo option:selected').val() > '0') {
                     $('#gridmateria').css('display', 'none');
-                    alert('Aqui se presentan las materias de esa carrera');
                 } else {
                     var mensaje = {wtmessage: "Período: El campo no debe estar vacío.", title: "Error"};
                     showAlert("NO_OK", "Error", mensaje);
