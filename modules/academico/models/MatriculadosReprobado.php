@@ -291,7 +291,7 @@ class MatriculadosReprobado extends \yii\db\ActiveRecord {
         $estado = 1;
         $columnsAdd = "";
         $estado_opago = "S";
-        
+
         if (isset($arrFiltro) && count($arrFiltro) > 0) {
             $str_search = "(per.per_pri_nombre like :search OR ";
             $str_search .= "per.per_seg_nombre like :search OR ";
@@ -312,7 +312,6 @@ class MatriculadosReprobado extends \yii\db\ActiveRecord {
         }
 
         $sql = " 
-                
                 SELECT                  
                     per.per_cedula, 
                     per.per_pri_nombre, 
@@ -364,7 +363,7 @@ class MatriculadosReprobado extends \yii\db\ActiveRecord {
                 ORDER BY SUBSTRING(mre.mre_fecha_creacion,1,10) desc";
         $comando = $con->createCommand($sql);
         $comando->bindParam(":estado", $estado, \PDO::PARAM_STR);
-        $comando->bindParam(":estado_opago", $estado_opago, \PDO::PARAM_STR);        
+        $comando->bindParam(":estado_opago", $estado_opago, \PDO::PARAM_STR);
         if (isset($arrFiltro) && count($arrFiltro) > 0) {
             $search_cond = "%" . $arrFiltro["search"] . "%";
             $fecha_ini = $arrFiltro["f_ini"] . " 00:00:00";
@@ -391,6 +390,72 @@ class MatriculadosReprobado extends \yii\db\ActiveRecord {
             return $resultData;
         } else {
             return $dataProvider;
+        }
+    }
+
+    /**
+     * Function insertarReprobado crea reprobado matriculado.
+     * @author  Giovanni Vergara <analistadesarrollo02@uteg.edu.ec>;
+     * @param
+     * @return
+     */
+    public function insertarMatricureprobado($adm_id, $pami_id, $mre_usuario_ingreso, $mre_fecha_creacion) {
+        $con = \Yii::$app->db_captacion;
+        $trans = $con->getTransaction(); // se obtiene la transacción actual
+        if ($trans !== null) {
+            $trans = null; // si existe la transacción entonces no se crea una
+        } else {
+            $trans = $con->beginTransaction(); // si no existe la transacción entonces se crea una
+        }
+
+        $param_sql = "mre_estado";
+        $bdet_sql = "1";
+
+        $param_sql .= ", mre_estado_logico";
+        $bdet_sql .= ", 1";
+
+        if (isset($adm_id)) {
+            $param_sql .= ", adm_id";
+            $bdet_sql .= ", :adm_id";
+        }
+        if (isset($pami_id)) {
+            $param_sql .= ", pami_id";
+            $bdet_sql .= ", :pami_id";
+        }
+        if (isset($mre_usuario_ingreso)) {
+            $param_sql .= ", mre_usuario_ingreso";
+            $bdet_sql .= ", :mre_usuario_ingreso";
+        }
+        if (isset($mre_fecha_creacion)) {
+            $param_sql .= ", mre_fecha_creacion";
+            $bsol_sql .= ", :mre_fecha_creacion";
+        }
+
+        try {
+            $sql = "INSERT INTO " . $con->dbname . ".matriculados_reprobado ($param_sql) VALUES($bdet_sql)";
+            $comando = $con->createCommand($sql);
+
+            if (isset($adm_id)) {
+                $comando->bindParam(':adm_id', $adm_id, \PDO::PARAM_INT);
+            }
+            if (isset($pami_id)) {
+                $comando->bindParam(':pami_id', $pami_id, \PDO::PARAM_INT);
+            }
+            if (!empty((isset($mre_usuario_ingreso)))) {
+                $comando->bindParam(':mre_usuario_ingreso', $mre_usuario_ingreso, \PDO::PARAM_INT);
+            }
+            if (!empty((isset($mre_fecha_creacion)))) {
+                $comando->bindParam(':mre_fecha_creacion', $mre_fecha_creacion, \PDO::PARAM_STR);
+            }
+
+            $result = $comando->execute();
+            if ($trans !== null)
+                $trans->commit();
+            return $con->getLastInsertID($con->dbname . '.matriculados_reprobado');
+        } catch (Exception $ex) {
+            if ($trans !== null)
+                $trans->rollback();
+            return FALSE;
         }
     }
 
