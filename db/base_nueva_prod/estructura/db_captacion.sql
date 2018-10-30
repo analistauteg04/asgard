@@ -178,12 +178,14 @@ create table if not exists `solicitudins_documento` (
 create table if not exists `admitido` (
  `adm_id` bigint(20) not null auto_increment primary key,
  `int_id` bigint(20) not null,
+ `sins_id` bigint(20) null,
  `adm_estado_admitido` varchar(1) null,
  `adm_estado` varchar(1) not null,
  `adm_fecha_creacion` timestamp not null default current_timestamp,
  `adm_fecha_modificacion` timestamp null default null,
  `adm_estado_logico` varchar(1) not null, 
- foreign key (int_id) references `interesado`(int_id) 
+ foreign key (int_id) references `interesado`(int_id), 
+ foreign key (sins_id) references `solicitud_inscripcion`(sins_id)
 );
 
 -- --------------------------------------------------------

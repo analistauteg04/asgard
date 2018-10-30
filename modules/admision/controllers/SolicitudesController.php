@@ -965,13 +965,13 @@ class SolicitudesController extends \app\components\CController {
                                     $respsolins = $mod_solins->apruebaSolicitud($sins_id, $resultado, $observacion, $banderapreaprueba, $respusuario['usu_id']);
                                     if ($respsolins) {
                                         //Se genera id de aspirante y correo de bienvenida.                                
-                                        $resp_encuentra = $mod_ordenpago->encuentraAdmitido($int_id);
+                                        $resp_encuentra = $mod_ordenpago->encuentraAdmitido($int_id, $sins_id);
                                         if ($resp_encuentra) {
                                             $asp = $resp_encuentra['adm_id'];
                                             $continua = 1;
                                         } else {
                                             //Se asigna al interesado como aspirante                                    
-                                            $resp_asp = $mod_ordenpago->insertarAdmitido($int_id);
+                                            $resp_asp = $mod_ordenpago->insertarAdmitido($int_id, $sins_id);
                                             if ($resp_asp) {
                                                 $asp = $resp_asp;
                                                 $continua = 1;

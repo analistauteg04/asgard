@@ -987,7 +987,7 @@ class OrdenPago extends \app\modules\financiero\components\CActiveRecord {
      * @param   
      * @return  
      */
-    public function insertarAdmitido($int_id) {
+    public function insertarAdmitido($int_id, $sins_id) {
         $con = \Yii::$app->db_captacion;
         $trans = $con->getTransaction(); // se obtiene la transacción actual
         if ($trans !== null) {
@@ -1005,13 +1005,19 @@ class OrdenPago extends \app\modules\financiero\components\CActiveRecord {
             $param_sql .= ", int_id";
             $basp_sql .= ", :int_id";
         }
+        if (isset($sins_id)) {
+            $param_sql .= ", sins_id";
+            $basp_sql .= ", :sins_id";
+        }
         try {
             $sql = "INSERT INTO " . $con->dbname . ".admitido ($param_sql) VALUES($basp_sql)";
             $comando = $con->createCommand($sql);
 
             if (isset($int_id))
                 $comando->bindParam(':int_id', $int_id, \PDO::PARAM_INT);
-
+            if (isset($sins_id))
+                $comando->bindParam(':sins_id', $sins_id, \PDO::PARAM_INT);
+            
             $result = $comando->execute();
             if ($trans !== null)
                 $trans->commit();
@@ -1221,18 +1227,20 @@ class OrdenPago extends \app\modules\financiero\components\CActiveRecord {
      * @param   
      * @return  
      */
-    public function encuentraAdmitido($int_id) {
+    public function encuentraAdmitido($int_id, $sins_id) {
         $con = \Yii::$app->db_captacion;
         $estado = 1;
 
         $sql = "SELECT asp.adm_id
                 FROM " . $con->dbname . ".admitido asp
                 WHERE asp.int_id = :int_id AND
+                      asp.sins_id = :sins_id AND
                       asp.adm_estado = :estado AND
                       asp.adm_estado_logico = :estado";
         $comando = $con->createCommand($sql);
         $comando->bindParam(":estado", $estado, \PDO::PARAM_STR);
         $comando->bindParam(":int_id", $int_id, \PDO::PARAM_INT);
+        $comando->bindParam(":sins_id", $sins_id, \PDO::PARAM_INT);
         $resultData = $comando->queryOne();
         return $resultData;
     }

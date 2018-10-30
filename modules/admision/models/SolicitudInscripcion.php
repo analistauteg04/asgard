@@ -1669,7 +1669,7 @@ class SolicitudInscripcion extends \yii\db\ActiveRecord
         $estado = 1;
         $sql = "SELECT
                         ifnull((select max(icp.icpr_fecha_registro) FROM " . $con1->dbname . ".info_carga_prepago icp where icp.opag_id = opa.opag_id and icpr_estado = :estado and icpr_estado_logico = :estado limit 1),'') as fecha_subio,
-                        ifnull((select adm.adm_fecha_creacion from " . $con->dbname . ".admitido adm where si.int_id = adm.int_id and adm.adm_estado = :estado and adm_estado_logico = :estado),'') as fecha_admitido,
+                        ifnull((select adm.adm_fecha_creacion from " . $con->dbname . ".admitido adm where si.int_id = adm.int_id and si.sins_id = adm.sins_id and adm.adm_estado = :estado and adm_estado_logico = :estado),'') as fecha_admitido,
                         ifnull(opa.opag_fecha_pago_total,'') as fecha_aprobacion_pago
                 FROM " . $con1->dbname . ".orden_pago opa inner join " . $con->dbname . ".solicitud_inscripcion si on si.sins_id = opa.sins_id
                 WHERE opa.sins_id = :sins_id AND
