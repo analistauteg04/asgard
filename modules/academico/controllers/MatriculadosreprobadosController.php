@@ -184,7 +184,61 @@ class MatriculadosreprobadosController extends \app\components\CController {
     }
 
     public function actionSave() {
-        
+        $periodo = 0;        
+        //$per_id = @Yii::$app->session->get("PB_perid");
+        if (Yii::$app->request->isAjax) {
+            $data = Yii::$app->request->post();
+            $admitido = $data["admitido"];
+            //$uniacademica = $data["uniacademica"];            
+            //$modalidad = $data["modalidad"];          
+            //$carrera = $data['carreprog'];
+            //$materia = $data['materia'];
+            $usuario = @Yii::$app->user->identity->usu_id;  
+            $periodo = $data['periodo'];
+            $con = \Yii::$app->db_captacion;
+            $transaction = $con->beginTransaction();
+            try {
+                $mod_reprobado = new MatriculadosReprobado();
+                $resp_ingreso = $mod_reprobado->insertarReprobado($admitido, $periodo, $usuario);
+                $mre_id = Yii::$app->db_captacion->getLastInsertID('db_captacion.matriculados_reprobado');
+                /*if ($resp_ingreso) {
+                    if (!empty($materia)) {
+                        for ($i = 0; $i < count($materia); $i++) {
+                            //Guardado Datos horario.
+                            $asigantura = $materia[$i]["materia"];                                                
+                            $res_materia = $mod_reprobado->insertarMateriareprueba($mre_id, $asigantura, $usuario);
+                            if ($res_horario) {
+                                $exito = 1;
+                            }
+                        }
+                    }
+                }*/
+                $exito = 1;
+                if ($exito) {
+                    $transaction->commit();
+                    $message = array(
+                        "wtmessage" => Yii::t("notificaciones", "La infomación ha sido grabada. "),
+                        "title" => Yii::t('jslang', 'Success'),
+                    );
+                    echo Utilities::ajaxResponse('OK', 'alert', Yii::t("jslang", "Sucess"), false, $message);
+                } else {
+                    $transaction->rollback();
+                    $message = array(
+                        "wtmessage" => Yii::t("notificaciones", "Error al grabar." . $mensaje),
+                        "title" => Yii::t('jslang', 'Success'),
+                    );
+                    echo Utilities::ajaxResponse('NO_OK', 'alert', Yii::t("jslang", "Sucess"), false, $message);
+                }
+            } catch (Exception $ex) {
+                $transaction->rollback();
+                $message = array(
+                    "wtmessage" => Yii::t("notificaciones", "Error al grabar." . $mensaje),
+                    "title" => Yii::t('jslang', 'Success'),
+                );
+                echo Utilities::ajaxResponse('NO_OK', 'alert', Yii::t("jslang", "Sucess"), false, $message);
+            }
+            return;
+        }
     }
 
     public function actionUpdate() {
@@ -207,11 +261,11 @@ class MatriculadosreprobadosController extends \app\components\CController {
             Yii::t("formulario", "Last Names"),
             ' ',
             Yii::t("formulario", "Email"),
-            Yii::t("formulario","CellPhone"),
+            Yii::t("formulario", "CellPhone"),
             Yii::t("formulario", "Academic unit"),
             Yii::t("formulario", "Mode"),
-            academico::t("Academico", "Month Process"),            
-            academico::t("Academico", "Career/Program"),            
+            academico::t("Academico", "Month Process"),
+            academico::t("Academico", "Career/Program"),
             admision::t("Solicitudes", "Income Method"),
             academico::t("Academico", "Approved"),
             academico::t("Academico", "Failed")
@@ -220,14 +274,13 @@ class MatriculadosreprobadosController extends \app\components\CController {
         $arrSearch = array();
         if (count($data) > 0) {
             $arrSearch["f_ini"] = $data['fecha_ini'];
-            $arrSearch["f_fin"] = $data['fecha_fin'];            
+            $arrSearch["f_fin"] = $data['fecha_fin'];
             $arrSearch["search"] = $data['search'];
         }
         $arrData = array();
         $mod_matreprueba = new MatriculadosReprobado();
         if (count($arrSearch) > 0) {
             $arrData = $mod_matreprueba->consultarMatriculareprueba($arrSearch, true);
-            
         } else {
             $arrData = $mod_matreprueba->consultarMatriculareprueba(array(), true);
         }
@@ -246,11 +299,11 @@ class MatriculadosreprobadosController extends \app\components\CController {
             Yii::t("formulario", "Last Names"),
             ' ',
             Yii::t("formulario", "Email"),
-            Yii::t("formulario","CellPhone"),
+            Yii::t("formulario", "CellPhone"),
             Yii::t("formulario", "Academic unit"),
             Yii::t("formulario", "Mode"),
-            academico::t("Academico", "Month Process"),            
-            academico::t("Academico", "Career/Program"),            
+            academico::t("Academico", "Month Process"),
+            academico::t("Academico", "Career/Program"),
             admision::t("Solicitudes", "Income Method"),
             academico::t("Academico", "Approved"),
             academico::t("Academico", "Failed")
@@ -259,7 +312,7 @@ class MatriculadosreprobadosController extends \app\components\CController {
         $arrSearch = array();
         if (count($data) > 0) {
             $arrSearch["f_ini"] = $data['fecha_ini'];
-            $arrSearch["f_fin"] = $data['fecha_fin'];     
+            $arrSearch["f_fin"] = $data['fecha_fin'];
             $arrSearch["search"] = $data['search'];
         }
         $arrData = array();

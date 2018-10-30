@@ -15,7 +15,7 @@ use app\modules\admision\Module as admision;
 use app\modules\academico\Module as academico;
 
 admision::registerTranslations();
-academico::registerTranslations()
+academico::registerTranslations();
 ?>
 <?=
 
@@ -29,8 +29,8 @@ PbGridView::widget([
             'class' => 'yii\grid\RadioButtonColumn',
             'radioOptions' => function ($model) {
                 return [
-                    'value' => $model['id'],
-                    'checked' => $model['id'] == $model['id']
+                    'value' => $model['adm_id'],
+                    'checked' => $model['adm_id'] == $model['adm_id']
                 ];
             }
         ],
@@ -48,7 +48,7 @@ PbGridView::widget([
             'attribute' => 'dni',
             'header' => Yii::t("formulario", "DNI 1"),
             'value' => 'per_cedula',
-        ],        
+        ],
         [
             'class' => 'yii\grid\ActionColumn',
             'header' => Yii::t("formulario", "Email"),

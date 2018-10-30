@@ -61,7 +61,7 @@ $requisitosCANO = ' <div class="col-md-12 col-sm-12 col-xs-12 col-lg-12">
                         <div class="col-sm-3 col-md-3 col-xs-3 col-lg-3">
                         </div>
                         <div class="col-sm-9 col-md-9 col-xs-9 col-lg-9">
-                            <div style = "width: 410px;" class="well"><span style="font-weight: bold">Fecha curso de nivelación del 29 de octubre al 14 de diciembre del 2018. Deberás cargar en el siguiente paso estos documentos: <br> </span>
+                            <div style = "width: 410px;" class="well"><span style="font-weight: bold">Fecha curso de nivelación del 19 de noviembre al 14 de diciembre del 2018. Deberás cargar en el siguiente paso estos documentos: <br> </span>
                                 Cédula de identidad o pasaporte. <br>
                                 Certificado de votación (ecuatorianos). <br>
                                 Título de bachiller notarizado. <br>

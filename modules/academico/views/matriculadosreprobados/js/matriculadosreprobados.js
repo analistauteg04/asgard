@@ -139,33 +139,30 @@ $(document).ready(function () {
     $('#sendReprobado').click(function () {
         var link = $('#txth_base').val() + "/academico/matriculadosreprobados/save"; //VER BIEN EL NOMBRE
         var arrParams = new Object();
-        var selected = '';
+        //var selected = '';
         arrParams.uniacademica = $('#cmb_ninteres').val();
         arrParams.modalidad = $('#cmb_modalidad').val();
         arrParams.carreprog = $('#cmb_carrera1').val();
         arrParams.periodo = $('#cmb_periodo').val();
         arrParams.admitido = $('#TbG_Admitido input[name=rb_admitido]:checked').val();
         arrParams.paralelo = $('#txt_paralelo').val();
-        //arrParams.carrera = $('#TbG_MATERIAS input[name=rb_materia]:checked').val();
-        arrParams.grupo = $('#cmb_grupo').val();
-        arrParams.mes = $('#cmb_mes').val();
-        arrParams.modulo = $('#cmb_modulo').val();
+        //arrParams.carrera = $('#TbG_MATERIAS input[name=rb_materia]:checked').val();        
         /*$('#TbG_MATERIAS input[type=checkbox]').each(function () {
-         if (this.checked) {
-         selected += $(this).val() + ',';
-         }
-         });
-         if (selected != '')
-         {
-         arrParams.materia = selected;
-         } else
-         {
-         var mensaje = {wtmessage: "Materias no debe estar vacío.", title: "Error"};
-         showAlert("NO_OK", "Error", mensaje);
-         }*/
+            if (this.checked) {
+                selected += $(this).val() + ',';
+            }
+        });
+        if (selected != '')
+        {
+            arrParams.materia = selected;
+        } else
+        {
+            var mensaje = {wtmessage: "Materias no debe estar vacío.", title: "Error"};
+            showAlert("NO_OK", "Error", mensaje);
+        }*/
         if (arrParams.admitido === undefined)
         {
-            var mensaje = {wtmessage: "Admitido no debe estar vacío.", title: "Error"};
+            var mensaje = {wtmessage: "Seleccionar datos del admitido desde buscar DNI.", title: "Error"};
             showAlert("NO_OK", "Error", mensaje);
         } else {
             if ($('#cmb_ninteres option:selected').val() > '0') {
@@ -173,16 +170,16 @@ $(document).ready(function () {
                     if ($('#cmb_carrera1 option:selected').val() > '0') {
                         if ($('#cmb_periodo option:selected').val() > '0') {
                             $('#gridmateria').css('display', 'none');
-                            alert ('Aqui guardar, luego pasar a funcion del boton'); 
-                            /*if (!validateForm()) {
+                            alert('Aqui guardar, luego pasar a funcion del boton');
+                            if (!validateForm()) {
                                 requestHttpAjax(link, arrParams, function (response) {
-                                showAlert(response.status, response.label, response.message);
-                                setTimeout(function () {
-                                sessionStorage.clear();
-                                window.location.href = $('#txth_base').val() + "/academico/matriculadosreprobados/save";
-                                }, 3000);
+                                    showAlert(response.status, response.label, response.message);
+                                    setTimeout(function () {
+                                        sessionStorage.clear();
+                                        window.location.href = $('#txth_base').val() + "/academico/matriculadosreprobados/save";
+                                    }, 3000);
                                 }, true);
-                                }*/
+                            }
                         } else {
                             var mensaje = {wtmessage: "Período: El campo no debe estar vacío.", title: "Error"};
                             showAlert("NO_OK", "Error", mensaje);
@@ -198,7 +195,7 @@ $(document).ready(function () {
             } else {
                 var mensaje = {wtmessage: "Unidad Académica: El campo no debe estar vacío.", title: "Error"};
                 showAlert("NO_OK", "Error", mensaje);
-            }            
+            }
         }
     });
 });
@@ -248,15 +245,6 @@ function actualizarMateriaGrid() {
                 if ($('#cmb_periodo option:selected').val() > '0') {
                     $('#gridmateria').css('display', 'none');
                     alert('Aqui se presentan las materias de esa carrera');
-                    /*var unidadacade = $('#cmb_ninteres option:selected').val();
-                     var modalidad = $('#cmb_modalidad option:selected').val();
-                     var carrerapro = $('#cmb_carrera1 option:selected').val();
-                     //Buscar almenos una clase con el nombre para ejecutar
-                     if (!$(".blockUI").length) {
-                     showLoadingPopup();
-                     $('#TbG_MATERIAS').PbGridView('applyFilterData', {'unidadacade': unidadacade, 'modalidad': modalidad, 'carrerapro': carrerapro});
-                     setTimeout(hideLoadingPopup, 2000);
-                     }*/
                 } else {
                     var mensaje = {wtmessage: "Período: El campo no debe estar vacío.", title: "Error"};
                     showAlert("NO_OK", "Error", mensaje);
@@ -277,7 +265,7 @@ function actualizarMateriaGrid() {
 function actualizarGrid() {
     var search = $('#txt_buscarData').val();
     var f_ini = $('#txt_fecha_ini').val();
-    var f_fin = $('#txt_fecha_fin').val();  
+    var f_fin = $('#txt_fecha_fin').val();
     //Buscar almenos una clase con el nombre para ejecutar
     if (!$(".blockUI").length) {
         showLoadingPopup();
@@ -289,13 +277,13 @@ function actualizarGrid() {
 function exportExcel() {
     var search = $('#txt_buscarData').val();
     var f_ini = $('#txt_fecha_ini').val();
-    var f_fin = $('#txt_fecha_fin').val();    
-    window.location.href = $('#txth_base').val() + "/academico/matriculadosreprobados/expexcel?search=" + search + "&fecha_ini=" + f_ini+ "&fecha_fin=" + f_fin;        
+    var f_fin = $('#txt_fecha_fin').val();
+    window.location.href = $('#txth_base').val() + "/academico/matriculadosreprobados/expexcel?search=" + search + "&fecha_ini=" + f_ini + "&fecha_fin=" + f_fin;
 }
 
 function exportPdf() {
     var search = $('#txt_buscarData').val();
     var f_ini = $('#txt_fecha_ini').val();
-    var f_fin = $('#txt_fecha_fin').val();       
-    window.location.href = $('#txth_base').val() + "/academico/matriculadosreprobados/exportpdf?pdf=1&search=" + search + "&fecha_ini=" + f_ini+ "&fecha_fin=" + f_fin;            
+    var f_fin = $('#txt_fecha_fin').val();
+    window.location.href = $('#txth_base').val() + "/academico/matriculadosreprobados/exportpdf?pdf=1&search=" + search + "&fecha_ini=" + f_ini + "&fecha_fin=" + f_fin;
 }
