@@ -1,5 +1,4 @@
 <?php
-
 use yii\helpers\Html;
 use yii\helpers\Url;
 use app\modules\admision\Module as admision;
@@ -51,6 +50,25 @@ financiero::registerTranslations();
     <div class="col-md-12 col-sm-12 col-xs-12 col-lg-12">
         <div class="col-md-6 col-sm-6 col-xs-6 col-lg-6">
             <div class="form-group">
+                <label for="txt_correo" class="col-sm-4 control-label" id="lbl_nombres"><?= Yii::t("formulario", "Email") ?></label> 
+                <div class="col-sm-8 ">
+                    <input type="text" class="form-control" value="<?= $personaData["per_correo"] ?>" id="txt_nombres" disabled="true">                 
+                </div>
+            </div>
+        </div>   
+
+        <div class="col-md-6 col-sm-6 col-xs-6 col-lg-6">
+            <div class="form-group">
+                <label for="txt_celular" class="col-sm-4 control-label" id="lbl_apellidos"><?= Yii::t("formulario", "CellPhone") ?></label> 
+                <div class="col-sm-8 ">
+                    <input type="text" class="form-control" value="<?= $personaData["per_celular"] ?>" id="txt_apellidos" disabled="true">                 
+                </div>
+            </div>
+        </div> 
+    </div>
+    <div class="col-md-12 col-sm-12 col-xs-12 col-lg-12">
+        <div class="col-md-6 col-sm-6 col-xs-6 col-lg-6">
+            <div class="form-group">
                 <label for="txt_nivelint" class="col-sm-4 control-label" id="lbl_unidad"><?= academico::t("Academico", "Academic unit") ?></label> 
                 <div class="col-sm-8 ">
                     <input type="text" class="form-control" value="<?= $personaData["uaca_nombre"] ?>" id="txt_nivelint" disabled="true">                 
@@ -67,6 +85,37 @@ financiero::registerTranslations();
             </div>
         </div>    
     </div> 
+    <div class="col-md-12 col-sm-12 col-xs-12 col-lg-12">
+        <h4><b><span id="lbl_solicitud"><?= Yii::t("formulario", "Date") ?>:</span></b></h4>
+    </div>
+    <div class="col-md-12 col-sm-12 col-xs-12 col-lg-12">
+        <div class="col-md-6 col-sm-6 col-xs-6 col-lg-6">
+            <div class="form-group">
+                <label for="txt_fecha_subio" class="col-sm-4 control-label" id="lbl_nombres"><?= financiero::t("Pagos", "Payment Upload") ?></label> 
+                <div class="col-sm-8 ">
+                    <input type="text" class="form-control" value="<?= $arr_fecha["fecha_subio"] ?>" id="txt_fecha_subio" disabled="true">                 
+                </div>
+            </div>
+        </div> 
+        <div class="col-md-6 col-sm-6 col-xs-6 col-lg-6">
+            <div class="form-group">
+                <label for="txt_fecha_aprobado" class="col-sm-4 control-label" id="lbl_apellidos"><?= financiero::t("Pagos", "Payment approved") ?></label> 
+                <div class="col-sm-8 ">
+                    <input type="text" class="form-control" value="<?= $arr_fecha["fecha_aprobacion_pago"] ?>" id="txt_fecha_aprobado" disabled="true">                 
+                </div>
+            </div>
+        </div> 
+    </div>
+    <div class="col-md-12 col-sm-12 col-xs-12 col-lg-12">
+        <div class="col-md-6 col-sm-6 col-xs-6 col-lg-6">
+            <div class="form-group">
+                <label for="txt_fecha_admitido" class="col-sm-4 control-label" id="lbl_nombres"><?= academico::t("Academico", "Admitted") ?></label> 
+                <div class="col-sm-8 ">
+                    <input type="text" class="form-control" value="<?= $arr_fecha["fecha_admitido"] ?>" id="txt_fecha_admitido" disabled="true">                 
+                </div>
+            </div>
+        </div>   
+    </div>
     <div class="col-md-12 col-sm-12 col-xs-12 col-lg-12">
         <h4><b><span id="lbl_Personeria"><?= Yii::t("formulario", "Attached Files") ?></span></b></h4>    
     </div>
@@ -210,10 +259,10 @@ financiero::registerTranslations();
                         ?>  
                         <p for="<?= $chk_contitulo ?>" class="col-sm-10 col-md-10 col-xs-10 col-lg-10 control-label"><?php echo $arr_condtitulo[$i]['name'] ?></p>
                         <div class="col-sm-1 ">    
-        <?= Html::hiddenInput('txth_cond_titulo' . $i, $arr_condtitulo[$i]['id'], ['id' => 'txth_cond_titulo' . $i]); ?>
+                            <?= Html::hiddenInput('txth_cond_titulo' . $i, $arr_condtitulo[$i]['id'], ['id' => 'txth_cond_titulo' . $i]); ?>
                             <input type="checkbox" class="" id="<?= $chk_contitulo ?>" data-type="alfa" data-keydown="true" placeholder="<?= $arr_condtitulo[$i]['name'] ?>">  
                         </div>
-    <?php } ?>   
+                    <?php } ?>   
                 </div>
             </div>
 
@@ -225,14 +274,15 @@ financiero::registerTranslations();
                         ?>  
                         <p for="<?= $chk_conddni ?>" class="col-sm-10  col-md-10 col-xs-10 col-lg-10 control-label"><?php echo $arr_conddni[$j]['name'] ?></p>
                         <div class="col-sm-1 ">    
-                        <?= Html::hiddenInput('txth_cond_dni' . $j, $arr_conddni[$j]['id'], ['id' => 'txth_cond_dni' . $j]); ?>
+                            <?= Html::hiddenInput('txth_cond_dni' . $j, $arr_conddni[$j]['id'], ['id' => 'txth_cond_dni' . $j]); ?>
                             <input type="checkbox" class="" id="<?= $chk_conddni ?>" data-type="alfa" data-keydown="true" placeholder="<?= $arr_conddni[$j]['name'] ?>">  
                         </div>
-    <?php } ?>      
+                    <?php } ?>      
                 </div>
             </div>            
         </div>        
-    <?php } else {
+    <?php
+    } else {
         $obs_condicion = "";
         ?>        
         <?php

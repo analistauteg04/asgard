@@ -79,10 +79,10 @@ class SolicitudesController extends \app\components\CController {
             $inte_id = $interesado_model->consultaInteresadoByPerId($per_id);
         }
         $personaData = $persona_model->consultaPersonaId($per_id);
-        $model = $SolIns_model->getSolicitudesXInteresado($inte_id);
+        $model = $SolIns_model->getSolicitudesXInteresado($inte_id);        
         return $this->render('listarSolicitudxinteresado', [
                     'model' => $model,
-                    'personalData' => $personaData,
+                    'personalData' => $personaData,                    
         ]);
     }
 
@@ -95,7 +95,8 @@ class SolicitudesController extends \app\components\CController {
         $mod_solins = new SolicitudInscripcion();
         $personaData = $mod_solins->consultarInteresadoPorSol_id($sins_id);
         $nacionalidad = $personaData["per_nac_ecuatoriano"];
-
+        $fechas = $mod_solins->consultarFechadmitido($int_id, $sins_id);
+        
         $resp_arch1 = $mod_solins->Obtenerdocumentosxsolicitud($sins_id, 1);
         $resp_arch2 = $mod_solins->Obtenerdocumentosxsolicitud($sins_id, 2);
         $resp_arch3 = $mod_solins->Obtenerdocumentosxsolicitud($sins_id, 3);
@@ -136,6 +137,7 @@ class SolicitudesController extends \app\components\CController {
                     "resp_rechazo" => $resp_rechazo,
                     "img_pago" => $img_pago,
                     "emp_id" => $emp_id,
+                    "arr_fecha" => $fechas,
         ]);
     }
 

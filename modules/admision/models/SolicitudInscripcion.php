@@ -451,7 +451,9 @@ class SolicitudInscripcion extends \yii\db\ActiveRecord
                     sins.sins_fecha_reprobacion,
                     sins.sins_observacion,
                     sins.rsin_id,
-                    m.mod_nombre
+                    m.mod_nombre,
+                    per.per_correo,
+                    per.per_celular
                 FROM 
                     " . $con->dbname . ".solicitud_inscripcion as sins
                     INNER JOIN " . $con->dbname . ".interesado as inte on sins.int_id = inte.int_id
@@ -1652,5 +1654,35 @@ class SolicitudInscripcion extends \yii\db\ActiveRecord
                 $trans->rollback();
             return FALSE;
         }
+    }
+    
+    /**
+     * Function consultarFechadmitido
+     * @author  Giovanni Vergara <analistadesarrollo02@uteg.edu.ec>
+     *          Grace Viteri  <analistadesarrollo01@uteg.edu.ec>
+     * @param   
+     * @return  
+     */
+    public function consultarFechadmitido($int_id, $sins_id) {
+        $con = \Yii::$app->db_captacion;
+        $con1 = \Yii::$app->db_facturacion;
+        $estado = 1;
+        $sql = "SELECT
+                        ifnull((select max(icp.icpr_fecha_registro) FROM " . $con1->dbname . ".info_carga_prepago icp where icp.opag_id = opa.opag_id and icpr_estado = :estado and icpr_estado_logico = :estado limit 1),'') as fecha_subio,
+                        ifnull((select adm.adm_fecha_creacion from " . $con->dbname . ".admitido adm where si.int_id = adm.int_id and adm.adm_estado = :estado and adm_estado_logico = :estado),'') as fecha_admitido,
+                        ifnull(opa.opag_fecha_pago_total,'') as fecha_aprobacion_pago
+                FROM " . $con1->dbname . ".orden_pago opa inner join " . $con->dbname . ".solicitud_inscripcion si on si.sins_id = opa.sins_id
+                WHERE opa.sins_id = :sins_id AND
+                      opa.opag_estado_logico = :estado AND 
+                      opa.opag_estado = :estado AND 
+                      si.sins_estado_logico = :estado AND 
+                      si.sins_estado = :estado";
+           
+        $comando = $con->createCommand($sql);
+        $comando->bindParam(":estado", $estado, \PDO::PARAM_STR);
+        $comando->bindParam(":int_id", $int_id, \PDO::PARAM_INT);
+        $comando->bindParam(":sins_id", $sins_id, \PDO::PARAM_INT);
+        $resultData = $comando->queryOne();
+        return $resultData;
     }
 }
