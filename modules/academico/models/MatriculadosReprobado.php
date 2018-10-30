@@ -289,12 +289,11 @@ class MatriculadosReprobado extends \yii\db\ActiveRecord {
         $con3 = \Yii::$app->db_academico;
         $con1 = \Yii::$app->db_facturacion;
         $estado = 1;
-        //$esp = "SET lc_time_names = 'es_ES';";
         $sql = " 
                 select 
                     asig.asi_id as id,
                     asig.asi_descripcion
-                from 
+                xfrom 
                     db_academico.malla_academica as maca
                     join db_academico.malla_academica_detalle as made on made.maca_id=maca.maca_id
                     join db_academico.asignatura as asig on asig.asi_id=made.asi_id
@@ -302,12 +301,12 @@ class MatriculadosReprobado extends \yii\db\ActiveRecord {
                     maca.uaca_id=:uaca_id and
                     maca.eaca_id=:car_id and
                     maca.mod_id=:moda_id and 
-                    maca.maca_estado =1 and 
-                    maca.maca_estado_logico =1 and
-                    made.made_estado =1 and 
-                    made.made_estado_logico =1
-                    -- asig.asi_estado =1 and 
-                    -- asig.asi_estado_logico =1
+                    maca.maca_estado =:estado and 
+                    maca.maca_estado_logico =:estado and
+                    made.made_estado =:estado and 
+                    made.made_estado_logico =:estado
+                    -- asig.asi_estado =:estado and 
+                    -- asig.asi_estado_logico =:estado
                 ";
         $comando = $con->createCommand($sql);
         $comando->bindParam(":estado", $estado, \PDO::PARAM_STR);
