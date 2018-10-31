@@ -423,6 +423,7 @@ create table if not exists `materias_matriculados_reprobado` (
  `mmr_id` bigint(20) not null auto_increment primary key,
  `mre_id` bigint(20) not null,
  `asi_id` bigint(20) not null, 
+ `mmr_estado_materia` varchar(1) not null, 
  `mmr_usuario_ingreso` bigint(20) not null,
  `mmr_usuario_modifica` bigint(20)  null, 
  `mmr_estado` varchar(1) not null, 

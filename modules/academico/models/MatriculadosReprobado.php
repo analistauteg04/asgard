@@ -225,8 +225,8 @@ class MatriculadosReprobado extends \yii\db\ActiveRecord {
                         when 11 then 'Noviembre'
                         when 12 then 'Diciembre'
                  end as mes_id_academico,
-                    0 as aprobada,
-                    0 as reprobada
+                    ifnull((select count(*) from " . $con->dbname . ".materias_matriculados_reprobado mmr where mmr.mre_id = mre.mre_id and mmr.mmr_estado_materia = 1),' ') as aprobada,
+                    ifnull((select count(*) from " . $con->dbname . ".materias_matriculados_reprobado mmr where mmr.mre_id = mre.mre_id and mmr.mmr_estado_materia = 2),' ') as reprobada
                 FROM " . $con->dbname . ".matriculados_reprobado mre 
                      INNER JOIN " . $con->dbname . ".admitido adm ON adm.adm_id = mre.adm_id
                      INNER JOIN " . $con->dbname . ".interesado inte on inte.int_id = adm.int_id                     
@@ -285,7 +285,7 @@ class MatriculadosReprobado extends \yii\db\ActiveRecord {
      * @param   
      * @return  $resultData (información del matriculado no aprobado)
      */
-    public function consultarMateriasPorUnidadModalidadCarrera($uaca_id,$moda_id,$car_id) {
+    public function consultarMateriasPorUnidadModalidadCarrera($uaca_id, $moda_id, $car_id) {
         $con = \Yii::$app->db_captacion;
         $con2 = \Yii::$app->db;
         $con3 = \Yii::$app->db_academico;
@@ -522,6 +522,7 @@ class MatriculadosReprobado extends \yii\db\ActiveRecord {
             return FALSE;
         }
     }
+
     /**
      * Function consultarReprobado
      * @author  Giovanni Vergara <analistadesarrollo02@uteg.edu.ec>
@@ -540,9 +541,82 @@ class MatriculadosReprobado extends \yii\db\ActiveRecord {
 
         $comando = $con->createCommand($sql);
         $comando->bindParam(":estado", $estado, \PDO::PARAM_STR);
-        $comando->bindParam(":sins_id", $sins_id, \PDO::PARAM_INT);        
+        $comando->bindParam(":sins_id", $sins_id, \PDO::PARAM_INT);
         $resultData = $comando->queryOne();
         return $resultData;
+    }
+
+    /**
+     * Function insertarMateriareprueba crea materias reprobado matriculado.
+     * @author  Giovanni Vergara <analistadesarrollo02@uteg.edu.ec>;
+     * @param
+     * @return
+     */
+    public function insertarMateriareprueba($mre_id, $asi_id, $mmr_estado_materia, $mmr_usuario_ingreso, $mmr_fecha_creacion) {
+        $con = \Yii::$app->db_captacion;
+        $trans = $con->getTransaction(); // se obtiene la transacción actual
+        if ($trans !== null) {
+            $trans = null; // si existe la transacción entonces no se crea una
+        } else {
+            $trans = $con->beginTransaction(); // si no existe la transacción entonces se crea una
+        }
+
+        $param_sql = "mmr_estado";
+        $bdet_sql = "1";
+
+        $param_sql .= ", mmr_estado_logico";
+        $bdet_sql .= ", 1";
+
+        if (isset($mre_id)) {
+            $param_sql .= ", mre_id";
+            $bdet_sql .= ", :mre_id";
+        }
+        if (isset($asi_id)) {
+            $param_sql .= ", asi_id";
+            $bdet_sql .= ", :asi_id";
+        }  
+        if (isset($mmr_estado_materia)) {
+            $param_sql .= ", mmr_estado_materia";
+            $bdet_sql .= ", :mmr_estado_materia";
+        } 
+        if (isset($mmr_usuario_ingreso)) {
+            $param_sql .= ", mmr_usuario_ingreso";
+            $bdet_sql .= ", :mmr_usuario_ingreso";
+        }
+        if (isset($mmr_fecha_creacion)) {
+            $param_sql .= ", mmr_fecha_creacion";
+            $bdet_sql .= ", :mmr_fecha_creacion";
+        }
+
+        try {
+            $sql = "INSERT INTO " . $con->dbname . ".materias_matriculados_reprobado ($param_sql) VALUES($bdet_sql)";
+            $comando = $con->createCommand($sql);
+
+            if (isset($mre_id)) {
+                $comando->bindParam(':mre_id', $mre_id, \PDO::PARAM_INT);
+            }
+            if (isset($asi_id)) {
+                $comando->bindParam(':asi_id', $asi_id, \PDO::PARAM_INT);
+            }
+            if (isset($mmr_estado_materia)) {
+                $comando->bindParam(':mmr_estado_materia', $mmr_estado_materia, \PDO::PARAM_STR);
+            }                       
+            if (!empty((isset($mmr_usuario_ingreso)))) {
+                $comando->bindParam(':mmr_usuario_ingreso', $mmr_usuario_ingreso, \PDO::PARAM_INT);
+            }
+            if (!empty((isset($mmr_fecha_creacion)))) {
+                $comando->bindParam(':mmr_fecha_creacion', $mmr_fecha_creacion, \PDO::PARAM_STR);
+            }
+
+            $result = $comando->execute();
+            if ($trans !== null)
+                $trans->commit();
+            return $con->getLastInsertID($con->dbname . '.materias_matriculados_reprobado');
+        } catch (Exception $ex) {
+            if ($trans !== null)
+                $trans->rollback();
+            return FALSE;
+        }
     }
 
 }

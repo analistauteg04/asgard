@@ -222,12 +222,19 @@ class MatriculadosreprobadosController extends \app\components\CController {
                 if ($resp_matreprobado["encontrado"] == 0) {
                     $resp_ingreso = $mod_reprobado->insertarMatricureprobado($admitido, $periodo, $sins_id, $usuario, $fecha_creacion);
                     $mre_id = Yii::$app->db_captacion->getLastInsertID('db_captacion.matriculados_reprobado');
+                    /*Obtener el arregli asi de javascript de lo del grid de materias*/
+                    /*$materia = [
+                        ["id" => 1, "estado" => 1],
+                        ["id" => 2, "estado" => 2],
+                        ["id" => 3, "estado" => 2]
+                    ];*/
                     /*if ($resp_ingreso) {
                         if (!empty($materia)) {
                             for ($i = 0; $i < count($materia); $i++) {
                                 //Guardado Datos horario.
-                                $asigantura = $materia[$i]["materia"];
-                                $res_materia = $mod_reprobado->insertarMateriareprueba($mre_id, $asigantura, $usuario);
+                                $asigantura = $materia[$i]["id"];
+                                $estado_materia = $materia[$i]["estado"];
+                                $res_materia = $mod_reprobado->insertarMateriareprueba($mre_id, $asigantura, $estado_materia, $usuario, $fecha_creacion);
                                 if ($res_horario) {
                                     $exito = 1;
                                 }
