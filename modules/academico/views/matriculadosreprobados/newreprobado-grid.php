@@ -29,7 +29,7 @@ PbGridView::widget([
             'class' => 'yii\grid\RadioButtonColumn',
             'radioOptions' => function ($model) {
                 return [
-                    'value' => $model['adm_id']/*.'_'.$model['sins_id']*/,
+                    'value' => $model['adm_id'].'_'.$model['sins_id'],
                     'checked' => $model['adm_id'] == $model['adm_id']
                 ];
             }

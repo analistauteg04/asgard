@@ -150,8 +150,7 @@ $(document).ready(function () {
         arrParams.modalidad = $('#cmb_modalidad').val();
         arrParams.carreprog = $('#cmb_carrera1').val();
         arrParams.periodo = $('#cmb_periodo').val();
-        arrParams.admitido = $('#TbG_Admitido input[name=rb_admitido]:checked').val();
-        arrParams.paralelo = $('#txt_paralelo').val();
+        arrParams.ids = $('#TbG_Admitido input[name=rb_admitido]:checked').val();        
         //arrParams.materia = $('#TbG_MATERIAS input[name=cmb_aprueba]:checked').val(); //FALTA VALIDAR QUE NO ESTE VACIO LAS MATERIAS
         /* $('#TbG_MATERIAS input[type=checkbox]').each(function () {
          if (this.checked) {
@@ -166,7 +165,7 @@ $(document).ready(function () {
          var mensaje = {wtmessage: "Materias no debe estar vacío.", title: "Error"};
          showAlert("NO_OK", "Error", mensaje);
          }*/
-        if (arrParams.admitido === undefined)
+        if (arrParams.ids === undefined)
         {
             var mensaje = {wtmessage: "Seleccionar datos del admitido desde buscar DNI.", title: "Error"};
             showAlert("NO_OK", "Error", mensaje);

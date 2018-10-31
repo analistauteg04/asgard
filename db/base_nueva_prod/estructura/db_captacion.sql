@@ -403,15 +403,15 @@ create table if not exists `matriculados_reprobado` (
  `mre_id` bigint(20) not null auto_increment primary key,
  `adm_id` bigint(20) not null,
  `pami_id` bigint(20) not null,
- -- `sins_id` bigint(20) not null,
+ `sins_id` bigint(20) not null,
  `mre_usuario_ingreso` bigint(20) not null,
  `mreusuario_modifica` bigint(20)  null, 
  `mre_estado` varchar(1) not null, 
  `mre_fecha_creacion` timestamp not null default current_timestamp,
  `mre_fecha_modificacion` timestamp null default null,
  `mre_estado_logico` varchar(1) not null,
- foreign key (adm_id) references `admitido`(adm_id) --,
- -- foreign key (sins_id) references `solicitud_inscripcion`(sins_id)
+ foreign key (adm_id) references `admitido`(adm_id) ,
+ foreign key (sins_id) references `solicitud_inscripcion`(sins_id)
 );
 
 

@@ -242,7 +242,9 @@ class MatriculadosReprobado extends \yii\db\ActiveRecord {
                        per.per_estado_logico = :estado AND
                        per.per_estado = :estado AND
                        ami.pami_estado = :estado AND
-                       ami.pami_estado_logico = :estado                                                   
+                       ami.pami_estado_logico = :estado AND
+                       mre.mre_estado = :estado AND
+                       mre.mre_estado_logico = :estado
                 ORDER BY SUBSTRING(mre.mre_fecha_creacion,1,10) desc";
         $comando = $con->createCommand($sql);
         $comando->bindParam(":estado", $estado, \PDO::PARAM_STR);
@@ -454,7 +456,7 @@ class MatriculadosReprobado extends \yii\db\ActiveRecord {
      * @param
      * @return
      */
-    public function insertarMatricureprobado($adm_id, $pami_id, $mre_usuario_ingreso, $mre_fecha_creacion) {
+    public function insertarMatricureprobado($adm_id, $pami_id, $sins_id, $mre_usuario_ingreso, $mre_fecha_creacion) {
         $con = \Yii::$app->db_captacion;
         $trans = $con->getTransaction(); // se obtiene la transacción actual
         if ($trans !== null) {
@@ -477,6 +479,10 @@ class MatriculadosReprobado extends \yii\db\ActiveRecord {
             $param_sql .= ", pami_id";
             $bdet_sql .= ", :pami_id";
         }
+        if (isset($sins_id)) {
+            $param_sql .= ", sins_id";
+            $bdet_sql .= ", :sins_id";
+        }
         if (isset($mre_usuario_ingreso)) {
             $param_sql .= ", mre_usuario_ingreso";
             $bdet_sql .= ", :mre_usuario_ingreso";
@@ -496,6 +502,9 @@ class MatriculadosReprobado extends \yii\db\ActiveRecord {
             if (isset($pami_id)) {
                 $comando->bindParam(':pami_id', $pami_id, \PDO::PARAM_INT);
             }
+            if (isset($sins_id)) {
+                $comando->bindParam(':sins_id', $sins_id, \PDO::PARAM_INT);
+            }
             if (!empty((isset($mre_usuario_ingreso)))) {
                 $comando->bindParam(':mre_usuario_ingreso', $mre_usuario_ingreso, \PDO::PARAM_INT);
             }
@@ -512,6 +521,28 @@ class MatriculadosReprobado extends \yii\db\ActiveRecord {
                 $trans->rollback();
             return FALSE;
         }
+    }
+    /**
+     * Function consultarReprobado
+     * @author  Giovanni Vergara <analistadesarrollo02@uteg.edu.ec>
+     * @param   
+     * @return  $resultData (consultar si esta repetido la solicitud del admitido.)
+     */
+    public function consultarReprobado($sins_id) {
+        $con = \Yii::$app->db_captacion;
+        $estado = 1;
+
+        $sql = "SELECT count(*) encontrado	
+                FROM " . $con->dbname . ".matriculados_reprobado mre
+                WHERE mre.sins_id = :sins_id AND                          
+                      mre.mre_estado = :estado AND
+                      mre.mre_estado_logico = :estado";
+
+        $comando = $con->createCommand($sql);
+        $comando->bindParam(":estado", $estado, \PDO::PARAM_STR);
+        $comando->bindParam(":sins_id", $sins_id, \PDO::PARAM_INT);        
+        $resultData = $comando->queryOne();
+        return $resultData;
     }
 
 }
