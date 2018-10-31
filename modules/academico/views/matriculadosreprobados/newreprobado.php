@@ -95,11 +95,11 @@ use app\modules\academico\Module as academico;
                     </div>        
                 </div>
                 <div id="gridmateria" style="display: none;">
-                <!--    <?
-                    $this->render('_listaMateriaGrid.php', [
+                    <?=
+                    $this->render('materia-grid.php', [
                         'model' => $arr_materia,
                     ]);
-                    ?>  --> 
+                    ?> 
                 </div>
             </div>
             <div class="row"> 

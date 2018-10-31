@@ -72,6 +72,18 @@ class MatriculadosreprobadosController extends \app\components\CController {
         }
         if (Yii::$app->request->isAjax) {
             $data = Yii::$app->request->post();
+            $datas = Yii::$app->request->get();
+            if ($datas['PBgetFilter']) {
+                $uaca_id = $datas['unidad'];
+                $moda_id = $datas['modalidad'];
+                $car_id = $datas['carrera'];
+                $arr_materia = $mod_admitido->consultarMateriasPorUnidadModalidadCarrera($uaca_id,$moda_id,$car_id);
+                return $this->renderPartial('materia-grid', [
+                            'model' => $arr_materia,
+                ]);
+            } else {
+                $arr_materia = $mod_admitido->consultarMateriasPorUnidadModalidadCarrera(0,0,0);
+            }
             if (isset($data["getmodalidad"])) {
                 $modalidad = $mod_modalidad->consultarModalidad($data["nint_id"], 1);
                 $message = array("modalidad" => $modalidad);
@@ -84,18 +96,22 @@ class MatriculadosreprobadosController extends \app\components\CController {
                 return Utilities::ajaxResponse('OK', 'alert', Yii::t('jslang', 'Success'), 'false', $message);
                 return;
             }
+            
         }
         $arrperiodo = $mod_periodo->consultarPeriodo();
         $arradmitido = $mod_admitido->getMatriculados(0);
         $arr_ninteres = $mod_unidad->consultarUnidadAcademicasEmpresa(1);
         $arr_modalidad = $mod_modalidad->consultarModalidad($arr_ninteres[0]["id"], 1);
         $arr_carrerra1 = $modcanal->consultarCarreraModalidad($arr_ninteres[0]["id"], $arr_modalidad[0]["id"]);
+        $arr_materia = $mod_admitido->consultarMateriasPorUnidadModalidadCarrera(0,0,0);
         return $this->render('newreprobado', [
                     'admitido' => $arradmitido,
                     'arr_carrerra1' => ArrayHelper::map(array_merge([["id" => "0", "name" => Yii::t("formulario", "Select")]], $arr_carrerra1), "id", "name"),
                     'arr_modalidad' => ArrayHelper::map(array_merge([["id" => "0", "name" => Yii::t("formulario", "Select")]], $arr_modalidad), "id", "name"),
                     'arr_ninteres' => ArrayHelper::map(array_merge([["id" => "0", "name" => Yii::t("formulario", "Select")]], $arr_ninteres), "id", "name"),
                     'arr_periodo' => ArrayHelper::map(array_merge([["id" => "0", "name" => Yii::t("formulario", "Select")]], $arrperiodo), "id", "name"),
+                    'arr_estado_aprobacion' => ArrayHelper::map([["id" => "0", "name" => "Aprobado"]], "id", "name"),
+                    'arr_materia' => $arr_materia,
         ]);
     }
 

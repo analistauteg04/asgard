@@ -293,7 +293,7 @@ class MatriculadosReprobado extends \yii\db\ActiveRecord {
                 select 
                     asig.asi_id as id,
                     asig.asi_descripcion
-                xfrom 
+                from 
                     db_academico.malla_academica as maca
                     join db_academico.malla_academica_detalle as made on made.maca_id=maca.maca_id
                     join db_academico.asignatura as asig on asig.asi_id=made.asi_id
@@ -483,7 +483,7 @@ class MatriculadosReprobado extends \yii\db\ActiveRecord {
         }
         if (isset($mre_fecha_creacion)) {
             $param_sql .= ", mre_fecha_creacion";
-            $bsol_sql .= ", :mre_fecha_creacion";
+            $bdet_sql .= ", :mre_fecha_creacion";
         }
 
         try {
