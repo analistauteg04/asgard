@@ -57,6 +57,7 @@ return [
     "Academic Awards" => "Reconocimientos Académicos",
     "Academic baccalaureate information" => "Información académica bachillerato.",
     "Academic unit" => "Unidad Académica",
+    "Academic formation" => "Formación Académica",
     "Aca. Uni." => "Uni. Aca.",
     "Action" => "Acción",
     "Actions" => "Acciones",
