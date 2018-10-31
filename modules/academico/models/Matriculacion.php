@@ -159,7 +159,7 @@ class Matriculacion extends \yii\db\ActiveRecord {
 
         $param_sql .= ", mat_estado";
         $bsol_sql .= ", 1";
-        if (isset($daca_id)) {
+        if (isset($peac_id)) {
             $param_sql .= ", peac_id";
             $bsol_sql .= ", :peac_id";
         }
@@ -192,7 +192,7 @@ class Matriculacion extends \yii\db\ActiveRecord {
             $sql = "INSERT INTO " . $con->dbname . ".matriculacion ($param_sql) VALUES($bsol_sql)";
             $comando = $con->createCommand($sql);
 
-            if (isset($daca_id))
+            if (isset($peac_id))
                 $comando->bindParam(':peac_id', $peac_id, \PDO::PARAM_INT);
 
             if (isset($adm_id))
@@ -304,7 +304,7 @@ class Matriculacion extends \yii\db\ActiveRecord {
      * @param   
      * @return  $resultData (Retornar los períodos académicos de los métodos de ingreso).
      */
-    public function consultaPeriodoAcademico($uaca_id, $mod_id, $eaca_id) {
+    public function consultarPeriodoAcademico($uaca_id, $mod_id, $eaca_id) {
         $con = \Yii::$app->db_academico;
         $estado = 1;
 
@@ -336,19 +336,20 @@ class Matriculacion extends \yii\db\ActiveRecord {
      * @param   
      * @return  $resultData (Retornar los períodos académicos).
      */
-    public function consultaParalelo() {
+    public function consultarParalelo($pami_id) {
         $con = \Yii::$app->db_academico;
         $estado = 1;
 
-        $sql = "SELECT par_id id, par_nombre value
+        $sql = "SELECT par_id id, par_nombre name
                 FROM " . $con->dbname . ".paralelo
-                WHERE pami_id is not null AND
+                WHERE pami_id = :pami_id AND
                       par_estado = :estado AND
                       par_estado_logico = :estado
-                ORDER BY value asc";
+                ORDER BY 2 asc";
 
         $comando = $con->createCommand($sql);
         $comando->bindParam(":estado", $estado, \PDO::PARAM_STR);       
+        $comando->bindParam(":pami_id", $pami_id, \PDO::PARAM_INT);       
         $resultData = $comando->queryAll();
         return $resultData;
     }
@@ -359,7 +360,7 @@ class Matriculacion extends \yii\db\ActiveRecord {
      * @param   
      * @return  $resultData (Retornar los períodos académicos de los métodos de ingreso).
      */
-    public function consultaMatriculaxId($adm_id, $sins_id) {
+    public function consultarMatriculaxId($adm_id, $sins_id) {
         $con = \Yii::$app->db_academico;
         $estado = 1;
 
@@ -373,6 +374,38 @@ class Matriculacion extends \yii\db\ActiveRecord {
         $comando = $con->createCommand($sql);
         $comando->bindParam(":estado", $estado, \PDO::PARAM_STR);
         $comando->bindParam(":adm_id", $adm_id, \PDO::PARAM_INT);
+        $comando->bindParam(":sins_id", $sins_id, \PDO::PARAM_INT);        
+        $resultData = $comando->queryOne();
+        return $resultData;
+    }
+    
+    /**
+     * Function consultaPeriodoAcademico
+     * @author  Grace Viteri <analistadesarrollo01@uteg.edu.ec>
+     * @param   
+     * @return  $resultData (Retornar los períodos académicos de los métodos de ingreso).
+     */
+    public function consultarPlanificacion($sins_id, $periodo_id) {
+        $con = \Yii::$app->db_academico;
+        $con1 = \Yii::$app->db_captacion;
+        $estado = 1;
+
+        $sql = "SELECT pea.peac_id 
+                FROM " . $con1->dbname . ".solicitud_inscripcion si inner join " . $con->dbname . ".malla_academica ma 
+                           on (si.uaca_id = ma.uaca_id and si.mod_id = ma.mod_id and si.eaca_id = ma.eaca_id)
+                       inner join " . $con->dbname . ".planificacion_estudio_academico pea 
+                           on (pea.maca_id = ma.maca_id and pea.pami_id = :periodo_id)
+                where si.sins_id = :sins_id
+                and si.sins_estado = :estado
+                and si.sins_estado_logico = :estado
+                and ma.maca_estado = :estado
+                and ma.maca_estado_logico = :estado
+                and pea.peac_estado = :estado
+                and pea.peac_estado_logico = :estado";
+
+        $comando = $con->createCommand($sql);
+        $comando->bindParam(":estado", $estado, \PDO::PARAM_STR);
+        $comando->bindParam(":periodo_id", $periodo_id, \PDO::PARAM_INT);
         $comando->bindParam(":sins_id", $sins_id, \PDO::PARAM_INT);        
         $resultData = $comando->queryOne();
         return $resultData;

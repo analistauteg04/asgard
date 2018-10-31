@@ -19,6 +19,22 @@ $(document).ready(function () {
             }, true);
         }
     });
+    
+    $('#cmb_periodo').change(function () {
+        var link = $('#txth_base').val() + "/academico/matriculacion/newmetodoingreso";
+        var arrParams = new Object();
+        arrParams.pmin_id = $(this).val();
+        arrParams.getparalelos = true;        
+          alert('Saludos');
+        requestHttpAjax(link, arrParams, function (response) {             
+            if (response.status == "OK") {                
+                alert('Saludos');
+                data = response.message;
+                setComboData(data.paralelos, "cmb_paralelo");
+                
+            }
+        }, true);
+    });
 });
 
 
