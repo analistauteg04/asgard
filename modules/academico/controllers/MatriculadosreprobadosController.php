@@ -248,15 +248,15 @@ class MatriculadosreprobadosController extends \app\components\CController {
                             "wtmessage" => Yii::t("notificaciones", "Error al grabar." . $mensaje),
                             "title" => Yii::t('jslang', 'Success'),
                         );
-                        echo Utilities::ajaxResponse('NO_OK', 'Error', Yii::t("jslang", "Sucess"), false, $message);
+                        echo Utilities::ajaxResponse('NO_OK', 'Error', Yii::t("jslang", "Error"), false, $message);
                     }
                 } else {
                     $transaction->rollback();
                     $message = array(
-                        "wtmessage" => Yii::t("notificaciones", "Ya se encuentra ingresada esta persona." . $mensaje),
-                        "title" => Yii::t('jslang', 'Success'),
+                        "wtmessage" => Yii::t("Error", "Ya se encuentra ingresada esta persona." . $mensaje),
+                        "title" => Yii::t('jslang', 'Error'),
                     );
-                    echo Utilities::ajaxResponse('NO_OK', 'Error', Yii::t("jslang", "Sucess"), false, $message);
+                    echo Utilities::ajaxResponse('NO_OK', 'Error', Yii::t("jslang", "Error"), false, $message);
                 }
             } catch (Exception $ex) {
                 $transaction->rollback();
@@ -264,7 +264,7 @@ class MatriculadosreprobadosController extends \app\components\CController {
                     "wtmessage" => Yii::t("notificaciones", "Error al grabar." . $mensaje),
                     "title" => Yii::t('jslang', 'Success'),
                 );
-                echo Utilities::ajaxResponse('NO_OK', 'Error', Yii::t("jslang", "Sucess"), false, $message);
+                echo Utilities::ajaxResponse('NO_OK', 'Error', Yii::t("jslang", "Error"), false, $message);
             }
             return;
         }
