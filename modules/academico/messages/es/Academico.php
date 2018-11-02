@@ -19,6 +19,8 @@ return [
     "Career" => "Carrera",
     "Career/Program" => "Carrera/Programa",
     "Career/Program/Course" => "Carrera/Programa/Curso",
+    "Code" => "Código",
+    "Create period income method" => "Crear período método ingreso",
     "Failed" => "Reprobadas",
     "Failed Registrations" => "Matriculados Reprobados",
     "Income Method" => "Mét. Ing",
@@ -26,10 +28,13 @@ return [
     "List Admitted" => "Listar Admitidos",
     "List Failed Enrollments" => "Listar Matriculados Reprobados",
     "Modality" => "Modalidad",
+    "Month" => "Mes",
     "Month Process" => "Mes Proceso",
     "Parallel" => "Paralelo",
+    "Parallels" => "Paralelos",
     "Registered" => "Matriculado",
     "Registration by Homologation" => "Matriculación por Homologación",
     "Search DNI" => "Buscar DNI",
+    "Year" => "Año",
 ];
 

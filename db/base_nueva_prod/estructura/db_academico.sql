@@ -157,9 +157,6 @@ create table if not exists `asignatura` (
 );
 
 
-
-
-
 -- --------------------------------------------------------
 --
 -- Estructura de tabla para la tabla `modalidad_estudio_unidad`
@@ -180,9 +177,6 @@ create table if not exists `modalidad_estudio_unidad` (
  foreign key (mod_id) references `modalidad`(mod_id),
  foreign key (eaca_id) references `estudio_academico`(eaca_id)
 );
-
-
-
 
 -- --------------------------------------------------------
 -- 
@@ -365,7 +359,11 @@ create table if not exists `periodo_academico` (
 -- 
 create table if not exists `periodo_academico_met_ingreso` (
   `pami_id` bigint(20) not null auto_increment primary key,
-  `mes_id_academico` bigint(20) not null,
+  `pami_anio` bigint(20) null,
+  `pami_mes` bigint(20) null,
+  `uaca_id` bigint(20) not null,
+  `mod_id` bigint(20) not null,
+  `ming_id` bigint(20) not null,
   `pami_fecha_inicio` timestamp null,
   `pami_fecha_fin` timestamp null,
   `pami_codigo` varchar(10) not null,
@@ -376,8 +374,6 @@ create table if not exists `periodo_academico_met_ingreso` (
   `pami_fecha_modificacion` timestamp null default null,
   `pami_estado_logico` varchar(1) not null
 );
-
-
 
 -- --------------------------------------------------------
 -- Estructura de tabla para la tabla `estudiante`

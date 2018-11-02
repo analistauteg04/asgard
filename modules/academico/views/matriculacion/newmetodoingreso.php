@@ -89,7 +89,7 @@ $tipodoc = 'Cédula';
             <div class="form-group">
                 <label for="txt_periodo" class="col-sm-5 col-md-5 col-xs-5 col-lg-5 control-label" id="lbl_apellidos"><?= academico::t("Academico", "Lecturing Period") ?>: </label>
                 <div class="col-sm-7 col-md-7 col-xs-7 col-lg-7">
-                    <?= Html::dropDownList("cmb_periodo", null, array_merge([Yii::t("formulario", "Select")], $arr_periodo), ["class" => "form-control", "id" => "cmb_periodo"]) ?>
+                    <?= Html::dropDownList("cmb_periodo", 0, array_merge([Yii::t("formulario", "Select")], $arr_periodo), ["class" => "form-control", "id" => "cmb_periodo"]) ?>
                 </div>
             </div>
         </div>
@@ -100,7 +100,7 @@ $tipodoc = 'Cédula';
             <div class="form-group">
                 <label for="txt_paralelo" class="col-sm-5 control-label" id="lbl_periodo"><?= academico::t("Academico", "Parallel") ?>:</label>
                 <div class="col-sm-7">
-                    <?= Html::dropDownList("cmb_paralelo", null, array_merge([Yii::t("formulario", "Select")], $arr_paralelo), ["class" => "form-control", "id" => "cmb_paralelo"]) ?>
+                    <?= Html::dropDownList("cmb_paralelo", 0, array_merge([Yii::t("formulario", "Select")], $arr_paralelo), ["class" => "form-control", "id" => "cmb_paralelo"]) ?>
                 </div>
             </div>
         </div>

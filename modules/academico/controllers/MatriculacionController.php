@@ -6,6 +6,8 @@ use Yii;
 use app\modules\admision\models\SolicitudInscripcion;
 use app\modules\academico\models\Matriculacion;
 use yii\helpers\ArrayHelper;
+use app\models\Utilities;
+
 
 class MatriculacionController extends \app\components\CController {
 
@@ -36,11 +38,11 @@ class MatriculacionController extends \app\components\CController {
             }           
         }                
         $personaData = $mod_solins->consultarInteresadoPorSol_id($sins_id);
-        $resp_Periodos = $mod_matriculacion->consultarPeriodoAcademico($personaData["uaca_id"], $personaData["mod_id"], $personaData["eaca_id"]);
+        $resp_Periodos = $mod_matriculacion->consultarPeriodoAcadMing($personaData["uaca_id"], $personaData["mod_id"], $personaData["ming_id"]);
         $arr_Paralelos = $mod_matriculacion->consultarParalelo($pmin_id);
         return $this->render('newmetodoingreso', [
                     'personalData' => $personaData,
-                    'arr_periodo' => ArrayHelper::map($resp_Periodos, "id", "value"),
+                    'arr_periodo' => ArrayHelper::map($resp_Periodos, "id", "name"),
                     'arr_paralelo' => ArrayHelper::map($arr_Paralelos, "id", "name"),
         ]);
     }
@@ -76,7 +78,7 @@ class MatriculacionController extends \app\components\CController {
                         //Buscar el código de planificación académica según el periodo, unidad, modalidad y carrera.
                         $resp_planificacion = $mod_Matriculacion->consultarPlanificacion($sins_id, $periodo_id);
                         if ($resp_planificacion) { //Si existe código de planificación
-                            $resp_matriculacion = $mod_Matriculacion->insertarMatriculacion($resp_planificacion, $adm_id, null, $sins_id, $fecha, $usu_id);
+                            $resp_matriculacion = $mod_Matriculacion->insertarMatriculacion($resp_planificacion["peac_id"], $adm_id, null, $sins_id, $fecha, $usu_id);
                             if ($resp_matriculacion) {
                                 $resp_Asigna = $mod_Matriculacion->insertarAsignacionxMeting($par_id, $resp_matriculacion, null, $descripcion, $fecha, $usu_id);
                                 if ($resp_Asigna) {

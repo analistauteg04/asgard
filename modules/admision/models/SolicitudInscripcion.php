@@ -453,7 +453,9 @@ class SolicitudInscripcion extends \yii\db\ActiveRecord
                     sins.rsin_id,
                     m.mod_nombre,
                     per.per_correo,
-                    per.per_celular
+                    per.per_celular, 
+                    sins.ming_id, 
+                    sins.emp_id
                 FROM 
                     " . $con->dbname . ".solicitud_inscripcion as sins
                     INNER JOIN " . $con->dbname . ".interesado as inte on sins.int_id = inte.int_id

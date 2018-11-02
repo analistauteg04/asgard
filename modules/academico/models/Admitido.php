@@ -136,7 +136,15 @@ class Admitido extends \yii\db\ActiveRecord {
                         $columnsAdd                                                             
                         admi.adm_id,                                               
                        (case when sins_beca = 1 then 'ICF' else 'No Aplica' end) as beca,
-                       ifnull((select 'SI' existe from " . $con3->dbname . ".matriculacion m where m.adm_id = admi.adm_id and m.sins_id = sins.sins_id and m.mat_estado = :estado and m.mat_estado_logico = :estado),'NO') as matriculado
+                       ifnull((select pami_codigo
+                               from " . $con3->dbname . ".matriculacion m inner join " . $con3->dbname . ".asignacion_paralelo ap on ap.mat_id = m.mat_id
+                                    inner join " . $con3->dbname . ".paralelo p on p.par_id = ap.par_id
+                                    inner join " . $con3->dbname . ".periodo_academico_met_ingreso pa on pa.pami_id = p.pami_id
+                               where m.adm_id = admi.adm_id and m.sins_id = sins.sins_id and m.mat_estado = :estado and m.mat_estado_logico = :estado
+                                and p.par_estado = :estado and p.par_estado_logico = :estado
+                                and ap.apar_estado = :estado and ap.apar_estado_logico = :estado
+                                and pa.pami_estado = :estado and pa.pami_estado_logico = :estado),'N/A') as matriculado,
+                        sins.emp_id
                 FROM " . $con->dbname . ".admitido admi INNER JOIN " . $con->dbname . ".interesado inte on inte.int_id = admi.int_id                     
                      INNER JOIN " . $con2->dbname . ".persona per on inte.per_id = per.per_id
                      INNER JOIN " . $con->dbname . ".solicitud_inscripcion sins on sins.int_id = inte.int_id                                          

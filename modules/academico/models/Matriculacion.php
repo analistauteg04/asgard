@@ -66,63 +66,7 @@ class Matriculacion extends \yii\db\ActiveRecord {
             'mat_fecha_modificacion' => 'Mat Fecha Modificacion',
             'mat_estado_logico' => 'Mat Estado Logico',
         ];
-    }
-
-    /**
-     * @return \yii\db\ActiveQuery
-     */
-    public function consultarMetodosIngreso($arrFiltro = array(), $onlyData = false) {
-        $con_aca = \Yii::$app->db_academico;
-        $con_cap = \Yii::$app->db_captacion;
-        $estado = 1;
-
-        $columnsAdd = "";
-        if (isset($arrFiltro) && count($arrFiltro) > 0) {
-            $str_search .= "pg.pges_seg_apellido like :search)  AND ";
-            if ($arrFiltro['estado'] != "" && $arrFiltro['estado'] > 0) {
-                $str_search .= " pg.econ_id = :estcontacto AND ";
-            }
-        } else {
-            $columnsAdd = "                
-                pg.pges_pri_nombre as pges_pri_nombre,
-                pg.pges_seg_nombre as pges_seg_nombre,
-                pg.pges_pri_apellido as pges_pri_apellido,
-                pg.pges_seg_apellido as pges_seg_apellido,";
-        }
-        $sql = "
-                ";
-
-        $comando = $con->createCommand($sql);
-        $comando->bindParam(":estado", $estado, \PDO::PARAM_STR);
-
-        if (isset($arrFiltro) && count($arrFiltro) > 0) {
-            $search_cond = "%" . $arrFiltro["search"] . "%";
-            $comando->bindParam(":search", $search_cond, \PDO::PARAM_STR);
-
-            if ($arrFiltro['estado'] != "" && $arrFiltro['estado'] > 0) {
-                $estcontacto = $arrFiltro["estado"];
-                $comando->bindParam(":estcontacto", $estcontacto, \PDO::PARAM_INT);
-            }
-        }
-
-        $resultData = $comando->queryAll();
-        $dataProvider = new ArrayDataProvider([
-            'key' => 'id',
-            'allModels' => $resultData,
-            'pagination' => [
-                'pageSize' => Yii::$app->params["pageSize"],
-            ],
-            'sort' => [
-                'attributes' => [],
-            ],
-        ]);
-
-        if ($onlyData) {
-            return $resultData;
-        } else {
-            return $dataProvider;
-        }
-    }
+    } 
 
     /**
      * @return \yii\db\ActiveQuery
@@ -299,31 +243,26 @@ class Matriculacion extends \yii\db\ActiveRecord {
     }
     
      /**
-     * Function consultaPeriodoAcademico
+     * Function consultarPeriodoAcadMing
      * @author  Grace Viteri <analistadesarrollo01@uteg.edu.ec>
      * @param   
      * @return  $resultData (Retornar los períodos académicos de los métodos de ingreso).
      */
-    public function consultarPeriodoAcademico($uaca_id, $mod_id, $eaca_id) {
+    public function consultarPeriodoAcadMing($uaca_id, $mod_id, $ming_id) {
         $con = \Yii::$app->db_academico;
         $estado = 1;
 
-        $sql = "SELECT pmi.pami_id id, pmi.pami_codigo value
-                FROM " . $con->dbname . ".periodo_academico_met_ingreso pmi inner join " . $con->dbname . ".planificacion_estudio_academico pea
-                        on pea.pami_id = pmi.pami_id 
-                    INNER JOIN " . $con->dbname . ".malla_academica ma on ma.maca_id = pea.maca_id
-                WHERE pea.uaca_id = :uaca_id AND
-                      pea.mod_id = :mod_id AND
-                      ma.eaca_id = :eaca_id AND
+        $sql = "SELECT pmi.pami_id id, pmi.pami_codigo name
+                FROM " . $con->dbname . ".periodo_academico_met_ingreso pmi                     
+                WHERE pmi.uaca_id = :uaca_id AND
+                      pmi.mod_id = :mod_id AND
+                      pmi.ming_id = :ming_id AND
                       pmi.pami_estado_logico = :estado AND
-                      pmi.pami_estado = :estado AND
-                      pea.peac_estado = :estado AND
-                      pea.peac_estado_logico = :estado
-                ORDER BY pmi.pami_id";
-
+                      pmi.pami_estado = :estado                    
+                ";
         $comando = $con->createCommand($sql);
         $comando->bindParam(":estado", $estado, \PDO::PARAM_STR);
-        $comando->bindParam(":eaca_id", $eaca_id, \PDO::PARAM_INT);
+        $comando->bindParam(":ming_id", $ming_id, \PDO::PARAM_INT);
         $comando->bindParam(":mod_id", $mod_id, \PDO::PARAM_INT);
         $comando->bindParam(":uaca_id", $uaca_id, \PDO::PARAM_INT);
         $resultData = $comando->queryAll();
@@ -380,10 +319,10 @@ class Matriculacion extends \yii\db\ActiveRecord {
     }
     
     /**
-     * Function consultaPeriodoAcademico
+     * Function consultarPlanificacion
      * @author  Grace Viteri <analistadesarrollo01@uteg.edu.ec>
      * @param   
-     * @return  $resultData (Retornar los períodos académicos de los métodos de ingreso).
+     * @return  $resultData (Retornar el código de planificación académica.).
      */
     public function consultarPlanificacion($sins_id, $periodo_id) {
         $con = \Yii::$app->db_academico;
