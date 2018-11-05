@@ -144,7 +144,6 @@ $(document).ready(function () {
     $('#btn_buscarData').click(function () {
         actualizarGrid();
     });
-    //ESTO LUEGO BORRAR CUANDO ESTE EL BOTON DESDE EL MENU
     $('#sendReprobado').click(function () {
         var link = $('#txth_base').val() + "/academico/matriculadosreprobados/save"; //VER BIEN EL NOMBRE
         var arrParams = new Object();
@@ -154,22 +153,6 @@ $(document).ready(function () {
         arrParams.carreprog = $('#cmb_carrera1').val();
         arrParams.periodo = $('#cmb_periodo').val();
         arrParams.ids = $('#TbG_Admitido input[name=rb_admitido]:checked').val();
-<<<<<<< HEAD
-        //arrParams.materia = $('#TbG_MATERIAS input[name=cmb_aprueba]:checked').val(); //FALTA VALIDAR QUE NO ESTE VACIO LAS MATERIAS
-        /* $('#TbG_MATERIAS input[type=checkbox]').each(function () {
-         if (this.checked) {
-         selected += $(this).val() + ',';
-         }
-         });
-         if (selected != '')
-         {
-         arrParams.materia = selected;
-         } else
-         {
-         var mensaje = {wtmessage: "Materias no debe estar vacío.", title: "Error"};
-         showAlert("NO_OK", "Error", mensaje);
-         }*/
-=======
         $('#TbG_MATERIAS input[type=checkbox]').each(function () {
             if (this.checked) {
                 selected += $(this).val() + ' ';
@@ -183,31 +166,11 @@ $(document).ready(function () {
             var mensaje = {wtmessage: "Materias no debe estar vacío.", title: "Error"};
             showAlert("NO_OK", "Error", mensaje);
         }
->>>>>>> 4ef6cf973e297e4920faebebc7e7c59e570d53c5
         if (arrParams.ids === undefined)
         {
             var mensaje = {wtmessage: "Seleccionar datos del admitido desde buscar DNI.", title: "Error"};
             showAlert("NO_OK", "Error", mensaje);
         } else {
-<<<<<<< HEAD
-            /* if (arrParams.materia === undefined)
-             {
-             var mensaje = {wtmessage: "Seleccionar datos de materias.", title: "Error"};
-             showAlert("NO_OK", "Error", mensaje);
-             alert('sss'+ arrParams.materia);
-             } else {*/
-            if ($('#cmb_ninteres option:selected').val() > '0') {
-                if ($('#cmb_modalidad option:selected').val() > '0') {
-                    if ($('#cmb_carrera1 option:selected').val() > '0') {
-                        if ($('#cmb_periodo option:selected').val() > '0') {
-                            if (!validateForm()) {
-                                requestHttpAjax(link, arrParams, function (response) {
-                                    showAlert(response.status, response.label, response.message);
-                                    setTimeout(function () {
-                                        window.location.href = $('#txth_base').val() + "/academico/matriculadosreprobados/index";
-                                    }, 3000);
-                                }, true);
-=======
             if (arrParams.materia === undefined)
             {
                 var mensaje = {wtmessage: "Materias no debe estar vacío.", title: "Error"};
@@ -228,29 +191,20 @@ $(document).ready(function () {
                             } else {
                                 var mensaje = {wtmessage: "Período: El campo no debe estar vacío.", title: "Error"};
                                 showAlert("NO_OK", "Error", mensaje);
->>>>>>> 4ef6cf973e297e4920faebebc7e7c59e570d53c5
                             }
                         } else {
-                            var mensaje = {wtmessage: "Período: El campo no debe estar vacío.", title: "Error"};
+                            var mensaje = {wtmessage: "Carrera /Programa: El campo no debe estar vacío.", title: "Error"};
                             showAlert("NO_OK", "Error", mensaje);
                         }
                     } else {
-                        var mensaje = {wtmessage: "Carrera /Programa: El campo no debe estar vacío.", title: "Error"};
+                        var mensaje = {wtmessage: "Modalidad: El campo no debe estar vacío.", title: "Error"};
                         showAlert("NO_OK", "Error", mensaje);
                     }
                 } else {
-                    var mensaje = {wtmessage: "Modalidad: El campo no debe estar vacío.", title: "Error"};
+                    var mensaje = {wtmessage: "Unidad Académica: El campo no debe estar vacío.", title: "Error"};
                     showAlert("NO_OK", "Error", mensaje);
                 }
-<<<<<<< HEAD
-            } else {
-                var mensaje = {wtmessage: "Unidad Académica: El campo no debe estar vacío.", title: "Error"};
-                showAlert("NO_OK", "Error", mensaje);
             }
-            //}
-=======
-            }
->>>>>>> 4ef6cf973e297e4920faebebc7e7c59e570d53c5
         }
     });
 });
@@ -358,7 +312,7 @@ function exportPdf() {
 function actualizarMateriaGrid() {
     if ($('#cmb_ninteres option:selected').val() > '0') {
         if ($('#cmb_modalidad option:selected').val() > '0') {
-            if ($('#cmb_carrera1 option:selected').val() > '0') {                
+            if ($('#cmb_carrera1 option:selected').val() > '0') {
                 //Buscar almenos una clase con el nombre para ejecutar
                 if ($('#cmb_periodo option:selected').val() > '0') {
                     $('#gridmateria').css('display', 'block');

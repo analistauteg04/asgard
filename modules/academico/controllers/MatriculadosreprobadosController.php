@@ -61,7 +61,7 @@ class MatriculadosreprobadosController extends \app\components\CController {
     public function actionSavereprobadostemp() {
         $accion = isset($data['ACCION']) ? $data['ACCION'] : "";
         if (Yii::$app->request->isAjax) {
-            $model=new MatriculadosReprobado();
+            $model = new MatriculadosReprobado();
             try {
                 $inscripcion_id = $data["DATA_1"][0]["twin_id"];
 
@@ -316,28 +316,6 @@ class MatriculadosreprobadosController extends \app\components\CController {
                 if ($resp_matreprobado["encontrado"] == 0) {
                     $resp_ingreso = $mod_reprobado->insertarMatricureprobado($admitido, $periodo, $sins_id, $usuario, $fecha_creacion);
                     $mre_id = Yii::$app->db_captacion->getLastInsertID('db_captacion.matriculados_reprobado');
-<<<<<<< HEAD
-                    /* Obtener el arregli asi de javascript de lo del grid de materias */
-                    /* $materia = [
-                      ["id" => 1, "estado" => 1],
-                      ["id" => 2, "estado" => 2],
-                      ["id" => 3, "estado" => 2]
-                      ]; */
-                    /* if ($resp_ingreso) {
-                      if (!empty($materia)) {
-                      for ($i = 0; $i < count($materia); $i++) {
-                      //Guardado Datos horario.
-                      $asigantura = $materia[$i]["id"];
-                      $estado_materia = $materia[$i]["estado"];
-                      $res_materia = $mod_reprobado->insertarMateriareprueba($mre_id, $asigantura, $estado_materia, $usuario, $fecha_creacion);
-                      if ($res_horario) {
-                      $exito = 1;
-                      }
-                      }
-                      }
-                      } */
-                    $exito = 1;
-=======
                     if ($resp_ingreso) {
                         if (!empty($asigna)) {
                             for ($i = 0; $i < strlen($asigna); $i++) {
@@ -355,21 +333,20 @@ class MatriculadosreprobadosController extends \app\components\CController {
                                 }
                             }
                             //Guardado Datos Materias aprobadas.                         
-                            /*$estado_materiare = 1;
-                            $arr_materia = $mod_admitido->consultarMateriarep($uniacademica, $modalidad, $carrera, $reprobar);
-                            $arr_materias = ArrayHelper::map($arr_materia, "id", "value");                           
-                            for ($j = 0; $j < count($arr_materias); $j++) {
-                                if ($res_materia) {
-                                    \app\models\Utilities::putMessageLogFile('xxx..  ' . $arr_materias["value"][$j]);
-                                    $res_reprobam = $mod_reprobado->insertarMateriareprueba($mre_id, $arr_materias[$j], $estado_materiare, $usuario, $fecha_creacion);
-                                    if ($res_reprobam) {
-                                        $exito = 1;
-                                    }
-                                }
-                            }*/
+                            /* $estado_materiare = 1;
+                              $arr_materia = $mod_admitido->consultarMateriarep($uniacademica, $modalidad, $carrera, $reprobar);
+                              $arr_materias = ArrayHelper::map($arr_materia, "id", "value");
+                              for ($j = 0; $j < count($arr_materias); $j++) {
+                              if ($res_materia) {
+                              \app\models\Utilities::putMessageLogFile('xxx..  ' . $arr_materias["value"][$j]);
+                              $res_reprobam = $mod_reprobado->insertarMateriareprueba($mre_id, $arr_materias[$j], $estado_materiare, $usuario, $fecha_creacion);
+                              if ($res_reprobam) {
+                              $exito = 1;
+                              }
+                              }
+                              } */
                         }
                     }
->>>>>>> 4ef6cf973e297e4920faebebc7e7c59e570d53c5
                     if ($exito) {
                         $transaction->commit();
                         $message = array(
