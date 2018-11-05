@@ -145,37 +145,35 @@ $(document).ready(function () {
     $('#sendReprobado').click(function () {
         var link = $('#txth_base').val() + "/academico/matriculadosreprobados/save"; //VER BIEN EL NOMBRE
         var arrParams = new Object();
-        //var selected = '';
+        var selected = '';
         arrParams.uniacademica = $('#cmb_ninteres').val();
         arrParams.modalidad = $('#cmb_modalidad').val();
         arrParams.carreprog = $('#cmb_carrera1').val();
         arrParams.periodo = $('#cmb_periodo').val();
-        arrParams.ids = $('#TbG_Admitido input[name=rb_admitido]:checked').val();        
-        //arrParams.materia = $('#TbG_MATERIAS input[name=cmb_aprueba]:checked').val(); //FALTA VALIDAR QUE NO ESTE VACIO LAS MATERIAS
-        /* $('#TbG_MATERIAS input[type=checkbox]').each(function () {
-         if (this.checked) {
-         selected += $(this).val() + ',';
-         }
-         });
-         if (selected != '')
-         {
-         arrParams.materia = selected;
-         } else
-         {
-         var mensaje = {wtmessage: "Materias no debe estar vacío.", title: "Error"};
-         showAlert("NO_OK", "Error", mensaje);
-         }*/
+        arrParams.ids = $('#TbG_Admitido input[name=rb_admitido]:checked').val();
+        $('#TbG_MATERIAS input[type=checkbox]').each(function () {
+            if (this.checked) {
+                selected += $(this).val() + ' ';
+            }
+        });
+        if (selected != '')
+        {
+            arrParams.materia = selected;
+        } else
+        {
+            var mensaje = {wtmessage: "Materias no debe estar vacío.", title: "Error"};
+            showAlert("NO_OK", "Error", mensaje);
+        }
         if (arrParams.ids === undefined)
         {
             var mensaje = {wtmessage: "Seleccionar datos del admitido desde buscar DNI.", title: "Error"};
             showAlert("NO_OK", "Error", mensaje);
         } else {
-           /* if (arrParams.materia === undefined)
+            if (arrParams.materia === undefined)
             {
-                var mensaje = {wtmessage: "Seleccionar datos de materias.", title: "Error"};
+                var mensaje = {wtmessage: "Materias no debe estar vacío.", title: "Error"};
                 showAlert("NO_OK", "Error", mensaje);
-                alert('sss'+ arrParams.materia);
-            } else {*/
+            } else {
                 if ($('#cmb_ninteres option:selected').val() > '0') {
                     if ($('#cmb_modalidad option:selected').val() > '0') {
                         if ($('#cmb_carrera1 option:selected').val() > '0') {
@@ -204,7 +202,7 @@ $(document).ready(function () {
                     var mensaje = {wtmessage: "Unidad Académica: El campo no debe estar vacío.", title: "Error"};
                     showAlert("NO_OK", "Error", mensaje);
                 }
-            //}
+            }
         }
     });
 });
@@ -273,16 +271,21 @@ function exportPdf() {
 function actualizarMateriaGrid() {
     if ($('#cmb_ninteres option:selected').val() > '0') {
         if ($('#cmb_modalidad option:selected').val() > '0') {
-            if ($('#cmb_carrera1 option:selected').val() > '0') {
-                $('#gridmateria').css('display', 'block');
-                var unidad = $('#cmb_ninteres option:selected').val();
-                var modalidad = $('#cmb_modalidad option:selected').val();
-                var carrera = $('#cmb_carrera1 option:selected').val();
+            if ($('#cmb_carrera1 option:selected').val() > '0') {                
                 //Buscar almenos una clase con el nombre para ejecutar
-                if (!$(".blockUI").length) {
-                    showLoadingPopup();
-                    $('#TbG_MATERIAS').PbGridView('applyFilterData', {'unidad': unidad, 'modalidad': modalidad, 'carrera': carrera});
-                    setTimeout(hideLoadingPopup, 2000);
+                if ($('#cmb_periodo option:selected').val() > '0') {
+                    $('#gridmateria').css('display', 'block');
+                    var unidad = $('#cmb_ninteres option:selected').val();
+                    var modalidad = $('#cmb_modalidad option:selected').val();
+                    var carrera = $('#cmb_carrera1 option:selected').val();
+                    if (!$(".blockUI").length) {
+                        showLoadingPopup();
+                        $('#TbG_MATERIAS').PbGridView('applyFilterData', {'unidad': unidad, 'modalidad': modalidad, 'carrera': carrera});
+                        setTimeout(hideLoadingPopup, 2000);
+                    }
+                } else {
+                    var mensaje = {wtmessage: "Período: El campo no debe estar vacío.", title: "Error"};
+                    showAlert("NO_OK", "Error", mensaje);
                 }
             } else {
                 var mensaje = {wtmessage: "Carrera /Programa: El campo no debe estar vacío.", title: "Error"};

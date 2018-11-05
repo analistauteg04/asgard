@@ -34,13 +34,16 @@ PbGridView::widget([
             'header' => academico::t("Academico", "Career/Program"),
             'value' => 'asi_descripcion',
         ],
-        [
+        /*[
             'attribute' => 'estados',
             'format' => 'raw',
             'header' => "Estado Aprobacion",
             'value' => function () {
                 return Html::dropDownList("cmb_aprueba[]", 0, ["0" => "Seleccionar", "1" => "Aprobado", "2" => "Reprobado"], ["class" => "form-control", "id" => "cmb_aprueba"]);
             },
+        ],*/
+        [
+            'class' => 'app\widgets\PbGridView\PbCheckboxColumn',
         ],        
     ],
 ])
