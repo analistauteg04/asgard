@@ -94,6 +94,7 @@ $(document).ready(function () {
     });
     $('#cmb_ninteres').change(function () {
         $('#gridmateria').css('display', 'none');
+        document.getElementById("cmb_periodo").options.item(0).selected = 'selected';
         var link = $('#txth_base').val() + "/academico/matriculadosreprobados/newreprobado";
         var arrParams = new Object();
         arrParams.nint_id = $(this).val();
@@ -119,6 +120,7 @@ $(document).ready(function () {
     });
     $('#cmb_modalidad').change(function () {
         $('#gridmateria').css('display', 'none');
+        document.getElementById("cmb_periodo").options.item(0).selected = 'selected';
         var link = $('#txth_base').val() + "/academico/matriculadosreprobados/newreprobado";
         var arrParams = new Object();
         arrParams.unidada = $('#cmb_ninteres').val();
@@ -133,6 +135,7 @@ $(document).ready(function () {
     });
     $('#cmb_carrera1').change(function () {
         $('#gridmateria').css('display', 'none');
+        document.getElementById("cmb_periodo").options.item(0).selected = 'selected';
     });
 
     $('#btn_BuscarMateria').click(function () {
