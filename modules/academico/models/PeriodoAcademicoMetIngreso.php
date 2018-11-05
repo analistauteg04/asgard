@@ -1,6 +1,7 @@
 <?php
 
 namespace app\modules\academico\models;
+
 use Yii;
 use yii\data\ArrayDataProvider;
 
@@ -24,29 +25,26 @@ use yii\data\ArrayDataProvider;
  * @property Paralelo[] $paralelos
  * @property PlanificacionEstudioAcademico[] $planificacionEstudioAcademicos
  */
-class PeriodoAcademicoMetIngreso extends \yii\db\ActiveRecord
-{
+class PeriodoAcademicoMetIngreso extends \yii\db\ActiveRecord {
+
     /**
      * {@inheritdoc}
      */
-    public static function tableName()
-    {
+    public static function tableName() {
         return 'periodo_academico_met_ingreso';
     }
 
     /**
      * @return \yii\db\Connection the database connection used by this AR class.
      */
-    public static function getDb()
-    {
+    public static function getDb() {
         return Yii::$app->get('db_academico');
     }
 
     /**
      * {@inheritdoc}
      */
-    public function rules()
-    {
+    public function rules() {
         return [
             [['pami_anio', 'pami_mes', 'ming_id', 'pami_usuario_ingreso', 'pami_usuario_modifica'], 'integer'],
             [['ming_id', 'pami_codigo', 'pami_usuario_ingreso', 'pami_estado', 'pami_estado_logico'], 'required'],
@@ -59,8 +57,7 @@ class PeriodoAcademicoMetIngreso extends \yii\db\ActiveRecord
     /**
      * {@inheritdoc}
      */
-    public function attributeLabels()
-    {
+    public function attributeLabels() {
         return [
             'pami_id' => 'Pami ID',
             'pami_anio' => 'Pami Anio',
@@ -81,20 +78,17 @@ class PeriodoAcademicoMetIngreso extends \yii\db\ActiveRecord
     /**
      * @return \yii\db\ActiveQuery
      */
-    public function getParalelos()
-    {
+    public function getParalelos() {
         return $this->hasMany(Paralelo::className(), ['pami_id' => 'pami_id']);
     }
 
     /**
      * @return \yii\db\ActiveQuery
      */
-    public function getPlanificacionEstudioAcademicos()
-    {
+    public function getPlanificacionEstudioAcademicos() {
         return $this->hasMany(PlanificacionEstudioAcademico::className(), ['pami_id' => 'pami_id']);
     }
-    
-    
+
     /**
      * Function listarPeriodos
      * @author  Grace Viteri <analistadesarrollo01@uteg.edu.ec>
@@ -168,15 +162,15 @@ class PeriodoAcademicoMetIngreso extends \yii\db\ActiveRecord
             return $dataProvider;
         }
     }
-    
-     /**
+
+    /**
      * Function insertarPeriodo (Registro de los períodos por método de ingreso)
      * @author  Grace Viteri <analistadesarrollo01@uteg.edu.ec>
      * @param   
      * @return  
      */
     public function insertarPeriodo($anio, $mes, $uaca_id, $mod_id, $ming, $codigo, $fec_inicial, $fec_final, $usu_ingreso) {
-        $con = \Yii::$app->db_academico;     
+        $con = \Yii::$app->db_academico;
 
         $param_sql = "pami_estado_logico";
         $bper_sql = "1";
@@ -250,7 +244,7 @@ class PeriodoAcademicoMetIngreso extends \yii\db\ActiveRecord
 
             if (isset($codigo))
                 $comando->bindParam(':pami_codigo', $codigo, \PDO::PARAM_STR);
-            
+
             if (isset($fec_inicial))
                 $comando->bindParam(':pami_fecha_inicio', $fec_inicial, \PDO::PARAM_STR);
 
@@ -260,13 +254,13 @@ class PeriodoAcademicoMetIngreso extends \yii\db\ActiveRecord
             if (isset($usu_ingreso))
                 $comando->bindParam(':pami_usuario_ingreso', $usu_ingreso, \PDO::PARAM_INT);
 
-            $result = $comando->execute();           
+            $result = $comando->execute();
             return $con->getLastInsertID($con->dbname . '.periodo_academico_met_ingreso');
-        } catch (Exception $ex) {         
+        } catch (Exception $ex) {
             return FALSE;
         }
     }
-    
+
     /**
      * Function VerificarPeriodo
      * @author  Grace Viteri <analistadesarrollo01@uteg.edu.ec>
@@ -298,7 +292,7 @@ class PeriodoAcademicoMetIngreso extends \yii\db\ActiveRecord
         $resultData = $comando->queryOne();
         return $resultData;
     }
-    
+
     /**
      * Function listarParalelos
      * @author  Grace Viteri <analistadesarrollo01@uteg.edu.ec>
@@ -396,4 +390,29 @@ class PeriodoAcademicoMetIngreso extends \yii\db\ActiveRecord
             return FALSE;
         }
     }  
+
+
+    /**
+     * Function consulta los periodos. 
+     * @author Giovanni Vergara <analistadesarrollo02@uteg.edu.ec>;
+     * @param
+     * @return
+     */
+    public function consultarPeriodo() {
+        $con = \Yii::$app->db_academico;
+        $estado = 1;
+        $sql = "SELECT 
+                   pera.pami_id as id,
+                   pera.pami_codigo as name
+                FROM 
+                   " . $con->dbname . ".periodo_academico_met_ingreso  pera WHERE ";
+        $sql .= "  pera.pami_estado = :estado AND
+                   pera.pami_estado_logico = :estado";
+
+        $comando = $con->createCommand($sql);
+        $comando->bindParam(":estado", $estado, \PDO::PARAM_STR);
+        $resultData = $comando->queryAll();
+        return $resultData;
+    }
+
 }

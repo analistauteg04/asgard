@@ -225,7 +225,7 @@ class MatriculadosReprobado extends \yii\db\ActiveRecord {
                         when 11 then 'Noviembre'
                         when 12 then 'Diciembre'
                  end as mes_id_academico,
-                    ifnull((select count(*) from " . $con->dbname . ".materias_matriculados_reprobado mmr where mmr.mre_id = mre.mre_id and mmr.mmr_estado_materia = 1),' ') as aprobada,
+                    -- ifnull((select count(*) from " . $con->dbname . ".materias_matriculados_reprobado mmr where mmr.mre_id = mre.mre_id and mmr.mmr_estado_materia = 1),' ') as aprobada,
                     ifnull((select count(*) from " . $con->dbname . ".materias_matriculados_reprobado mmr where mmr.mre_id = mre.mre_id and mmr.mmr_estado_materia = 2),' ') as reprobada
                 FROM " . $con->dbname . ".matriculados_reprobado mre 
                      INNER JOIN " . $con->dbname . ".admitido adm ON adm.adm_id = mre.adm_id
@@ -245,7 +245,7 @@ class MatriculadosReprobado extends \yii\db\ActiveRecord {
                        ami.pami_estado_logico = :estado AND
                        mre.mre_estado = :estado AND
                        mre.mre_estado_logico = :estado
-                ORDER BY SUBSTRING(mre.mre_fecha_creacion,1,10) desc";
+                ORDER BY mre.mre_fecha_creacion desc";
         $comando = $con->createCommand($sql);
         $comando->bindParam(":estado", $estado, \PDO::PARAM_STR);
         $comando->bindParam(":estado_opago", $estado_opago, \PDO::PARAM_STR);
@@ -296,9 +296,9 @@ class MatriculadosReprobado extends \yii\db\ActiveRecord {
                     asig.asi_id as id,
                     asig.asi_descripcion
                 from 
-                    db_academico.malla_academica as maca
-                    join db_academico.malla_academica_detalle as made on made.maca_id=maca.maca_id
-                    join db_academico.asignatura as asig on asig.asi_id=made.asi_id
+                    " . $con3->dbname . ".malla_academica as maca
+                    join " . $con3->dbname . ".malla_academica_detalle as made on made.maca_id=maca.maca_id
+                    join " . $con3->dbname . ".asignatura as asig on asig.asi_id=made.asi_id
                 where 
                     maca.uaca_id=:uaca_id and
                     maca.eaca_id=:car_id and
@@ -421,7 +421,7 @@ class MatriculadosReprobado extends \yii\db\ActiveRecord {
                        ami.pami_estado_logico = :estado AND
                        mre.mre_estado = :estado AND
                        mre.mre_estado_logico = :estado
-                ORDER BY SUBSTRING(mre.mre_fecha_creacion,1,10) desc";
+                ORDER BY mre.mre_fecha_creacion desc";
         $comando = $con->createCommand($sql);
         $comando->bindParam(":estado", $estado, \PDO::PARAM_STR);
         $comando->bindParam(":estado_opago", $estado_opago, \PDO::PARAM_STR);
@@ -528,6 +528,53 @@ class MatriculadosReprobado extends \yii\db\ActiveRecord {
     }
 
     /**
+     * Function insertarReprobado crea reprobado matriculado.
+     * @author  Kleber Loayza <analistadesarrollo02@uteg.edu.ec>;
+     * @param
+     * @return
+     */
+    public function insertarReprobadoTemp($con,$data) {
+        $ruta_doc_titulo = '';
+        $ruta_doc_dni = '';
+        $ruta_doc_certvota = '';
+        $ruta_doc_foto = '';
+        $ruta_doc_certificado = '';
+        $twin_mensaje1 = 0;
+        $twin_mensaje2 = 0;
+
+        $sql = "INSERT INTO " . $con->dbname . ".temporal_wizard_inscripcion
+            (twin_nombre,twin_apellido,twin_dni,twin_numero,twin_correo,twin_pais,twin_celular,uaca_id, 
+             mod_id,car_id,twin_metodo_ingreso,conuteg_id,ruta_doc_titulo, ruta_doc_dni, ruta_doc_certvota,
+             ruta_doc_foto,ruta_doc_certificado, twin_mensaje1,twin_mensaje2,twin_estado,twin_fecha_creacion,twin_estado_logico)VALUES
+            (:twin_nombre,:twin_apellido,:twin_dni,:twin_numero,:twin_correo,:twin_pais,:twin_celular,:uaca_id, 
+             :mod_id,:car_id,:twin_metodo_ingreso,:conuteg_id,:ruta_doc_titulo,:ruta_doc_dni,:ruta_doc_certvota,
+             :ruta_doc_foto,:ruta_doc_certificado,:twin_mensaje1,:twin_mensaje2,1,CURRENT_TIMESTAMP(),1)";
+
+        $command = $con->createCommand($sql);
+        $command->bindParam(":twin_nombre", $data[0]['pges_pri_nombre'], \PDO::PARAM_STR);
+        $command->bindParam(":twin_apellido", $data[0]['pges_pri_apellido'], \PDO::PARAM_STR);
+        $command->bindParam(":twin_dni", $data[0]['tipo_dni'], \PDO::PARAM_STR);
+        $command->bindParam(":twin_numero", $data[0]['pges_cedula'], \PDO::PARAM_STR);
+        $command->bindParam(":twin_correo", $data[0]['pges_correo'], \PDO::PARAM_STR);
+        $command->bindParam(":twin_pais", $data[0]['pais'], \PDO::PARAM_STR);
+        $command->bindParam(":twin_celular", $data[0]['pges_celular'], \PDO::PARAM_STR);
+        $command->bindParam(":uaca_id", $data[0]['unidad_academica'], \PDO::PARAM_STR);
+        $command->bindParam(":mod_id", $data[0]['modalidad'], \PDO::PARAM_STR);
+        $command->bindParam(":car_id", $data[0]['carrera'], \PDO::PARAM_STR);
+        $command->bindParam(":twin_metodo_ingreso", $data[0]['ming_id'], \PDO::PARAM_STR);
+        $command->bindParam(":conuteg_id", $data[0]['conoce'], \PDO::PARAM_STR);
+        $command->bindParam(":ruta_doc_titulo", $ruta_doc_titulo, \PDO::PARAM_STR);
+        $command->bindParam(":ruta_doc_dni", $ruta_doc_dni, \PDO::PARAM_STR);
+        $command->bindParam(":ruta_doc_certvota", $ruta_doc_certvota, \PDO::PARAM_STR);
+        $command->bindParam(":ruta_doc_foto", $ruta_doc_foto, \PDO::PARAM_STR);
+        $command->bindParam(":ruta_doc_certificado", $ruta_doc_certificado, \PDO::PARAM_STR);
+        $command->bindParam(":twin_mensaje1", $twin_mensaje1, \PDO::PARAM_STR);
+        $command->bindParam(":twin_mensaje2", $twin_mensaje2, \PDO::PARAM_STR);
+        $command->execute();
+        return $con->getLastInsertID();
+    }
+
+    /**
      * Function consultarReprobado
      * @author  Giovanni Vergara <analistadesarrollo02@uteg.edu.ec>
      * @param   
@@ -578,11 +625,11 @@ class MatriculadosReprobado extends \yii\db\ActiveRecord {
         if (isset($asi_id)) {
             $param_sql .= ", asi_id";
             $bdet_sql .= ", :asi_id";
-        }  
+        }
         if (isset($mmr_estado_materia)) {
             $param_sql .= ", mmr_estado_materia";
             $bdet_sql .= ", :mmr_estado_materia";
-        } 
+        }
         if (isset($mmr_usuario_ingreso)) {
             $param_sql .= ", mmr_usuario_ingreso";
             $bdet_sql .= ", :mmr_usuario_ingreso";
@@ -604,7 +651,7 @@ class MatriculadosReprobado extends \yii\db\ActiveRecord {
             }
             if (isset($mmr_estado_materia)) {
                 $comando->bindParam(':mmr_estado_materia', $mmr_estado_materia, \PDO::PARAM_STR);
-            }                       
+            }
             if (!empty((isset($mmr_usuario_ingreso)))) {
                 $comando->bindParam(':mmr_usuario_ingreso', $mmr_usuario_ingreso, \PDO::PARAM_INT);
             }

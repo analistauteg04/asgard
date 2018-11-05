@@ -163,80 +163,6 @@ class PeriodoMetodoIngreso extends \yii\db\ActiveRecord {
         }
     }
 
-   
-
-    
-
-    
-
-    /**
-     * Function insertarParalelo (Registro de los paralelos)
-     * @author  Grace Viteri <analistadesarrollo01@uteg.edu.ec>
-     * @param   
-     * @return  
-     */
-    public function insertarParalelo($pmin_id, $descripcion, $cupo, $usu_id) {
-        $con = \Yii::$app->db_academico;
-        $trans = $con->getTransaction(); // se obtiene la transacción actual
-        if ($trans !== null) {
-            $trans = null; // si existe la transacción entonces no se crea una
-        } else {
-            $trans = $con->beginTransaction(); // si no existe la transacción entonces se crea una
-        }
-
-        $param_sql = "cur_estado_logico";
-        $bcur_sql = "1";
-
-        $param_sql .= ", cur_estado";
-        $bcur_sql .= ", 1";
-
-        if (isset($pmin_id)) {
-            $param_sql .= ", pmin_id";
-            $bcur_sql .= ", :pmin_id";
-        }
-
-        if (isset($descripcion)) {
-            $param_sql .= ", cur_descripcion";
-            $bcur_sql .= ", :cur_descripcion";
-        }
-
-        if (isset($cupo)) {
-            $param_sql .= ", cur_num_cupo";
-            $bcur_sql .= ", :cur_num_cupo";
-        }
-
-        if (isset($usu_id)) {
-            $param_sql .= ", cur_usuario_ingreso";
-            $bcur_sql .= ", :cur_usuario_ingreso";
-        }
-
-        try {
-            $sql = "INSERT INTO " . $con->dbname . ".curso ($param_sql) VALUES($bcur_sql)";
-            $comando = $con->createCommand($sql);
-
-            if (isset($pmin_id))
-                $comando->bindParam(':pmin_id', $pmin_id, \PDO::PARAM_INT);
-
-            if (isset($descripcion))
-                $comando->bindParam(':cur_descripcion', $descripcion, \PDO::PARAM_STR);
-
-            if (isset($cupo))
-                $comando->bindParam(':cur_num_cupo', $cupo, \PDO::PARAM_INT);
-
-            if (isset($usu_id))
-                $comando->bindParam(':cur_usuario_ingreso', $usu_id, \PDO::PARAM_INT);
-
-            $result = $comando->execute();
-            if ($trans !== null)
-                $trans->commit();
-            return $con->getLastInsertID($con->dbname . '.curso');
-        } catch (Exception $ex) {
-            if ($trans !== null)
-                $trans->rollback();
-            return FALSE;
-        }
-    }  
-
     /**
      * Function consultaPeriodoId
      * @author  Giovanni Vergara <analistadesarrollo02@uteg.edu.ec>
@@ -401,29 +327,6 @@ class PeriodoMetodoIngreso extends \yii\db\ActiveRecord {
                 $trans->rollback();
             return FALSE;
         }
-    }
-
-    /**
-     * Function consulta los periodos. 
-     * @author Giovanni Vergara <analistadesarrollo02@uteg.edu.ec>;
-     * @param
-     * @return
-     */
-    public function consultarPeriodo() {
-        $con = \Yii::$app->db_academico;       
-        $estado = 1;
-        $sql = "SELECT 
-                   pera.pami_id as id,
-                   pera.pami_codigo as name
-                FROM 
-                   " . $con->dbname . ".periodo_academico_met_ingreso  pera WHERE ";        
-        $sql .= "  pera.pami_estado = :estado AND
-                   pera.pami_estado_logico = :estado";
-
-        $comando = $con->createCommand($sql);
-        $comando->bindParam(":estado", $estado, \PDO::PARAM_STR);        
-        $resultData = $comando->queryAll();
-        return $resultData;
     }
 
 }
