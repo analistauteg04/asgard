@@ -303,8 +303,7 @@ class MatriculadosreprobadosController extends \app\components\CController {
             academico::t("Academico", "Month Process"),
             academico::t("Academico", "Career/Program"),
             admision::t("Solicitudes", "Income Method"),
-            academico::t("Academico", "Approved"),
-            academico::t("Academico", "Failed")
+            Yii::t("formulario", "Subject")            
         );
         $data = Yii::$app->request->get();
         $arrSearch = array();
@@ -341,8 +340,8 @@ class MatriculadosreprobadosController extends \app\components\CController {
             academico::t("Academico", "Month Process"),
             academico::t("Academico", "Career/Program"),
             admision::t("Solicitudes", "Income Method"),
-            academico::t("Academico", "Approved"),
-            academico::t("Academico", "Failed")
+            Yii::t("formulario", "Subject") 
+           
         );
         $data = Yii::$app->request->get();
         $arrSearch = array();
