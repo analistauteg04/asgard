@@ -11,6 +11,7 @@ use yii\helpers\ArrayHelper;
 use app\models\Utilities;
 use app\models\Persona;
 use app\models\Provincia;
+use app\models\Pais;
 use app\models\Canton;
 use app\models\MedioPublicitario;
 use app\modules\academico\models\Modalidad;
@@ -55,6 +56,99 @@ class MatriculadosreprobadosController extends \app\components\CController {
                     'model' => $mod_aspirante,
                     'arrCarreras' => $arrCarreras,
         ]);
+    }
+
+    public function actionSavereprobadostemp() {
+        $accion = isset($data['ACCION']) ? $data['ACCION'] : "";
+        if (Yii::$app->request->isAjax) {
+            $model=new MatriculadosReprobado();
+            try {
+                $inscripcion_id = $data["DATA_1"][0]["twin_id"];
+
+                if ($accion == "create" || $accion == "Create") {
+                    //Nuevo Registro                    
+                    $resul = $model->insertarReprobadoTemp($data);
+                } else if ($accion == "Update") {
+                    //Modificar Registro
+                    //$resul = $model->actualizarInscripcion($data);
+                    //$model->insertaOriginal($resul["ids"]);
+                }
+                if ($resul['status']) {
+                    $message = array(
+                        "wtmessage" => Yii::t("formulario", "The information have been saved"),
+                        "title" => Yii::t('jslang', 'Success'),
+                    );
+                    return Utilities::ajaxResponse('OK', 'alert', Yii::t('jslang', 'Success'), 'false', $message, $resul);
+                } else {
+                    $message = array(
+                        "wtmessage" => Yii::t("formulario", "The information have not been saved."),
+                        "title" => Yii::t('jslang', 'Success'),
+                    );
+                    return Utilities::ajaxResponse('NO_OK', 'alert', Yii::t('jslang', 'Error'), 'false', $message, $resul);
+                }
+                return;
+//                if (isset($data["DATA_1"][0]["ruta_doc_titulo"]) && $data["DATA_1"][0]["ruta_doc_titulo"] != "") {
+//                    $arrIm = explode(".", basename($data["DATA_1"][0]["ruta_doc_titulo"]));
+//                    $typeFile = strtolower($arrIm[count($arrIm) - 1]);
+//                    $titulo_archivoOld = Yii::$app->params["documentFolder"] . "solicitudadmision/" . $inscripcion_id . "/doc_titulo_per_" . $inscripcion_id . "." . $typeFile;
+//                    $titulo_archivo = InscripcionAdmision::addLabelTimeDocumentos($inscripcion_id, $titulo_archivoOld, $timeSt);
+//                    $data["DATA_1"][0]["ruta_doc_titulo"] = $titulo_archivo;
+//                    if ($titulo_archivo === false)
+//                        throw new Exception('Error doc Titulo no renombrado.');
+//                }
+//                if (isset($data["DATA_1"][0]["ruta_doc_dni"]) && $data["DATA_1"][0]["ruta_doc_dni"] != "") {
+//                    $arrIm = explode(".", basename($data["DATA_1"][0]["ruta_doc_dni"]));
+//                    $typeFile = strtolower($arrIm[count($arrIm) - 1]);
+//                    $dni_archivoOld = Yii::$app->params["documentFolder"] . "solicitudadmision/" . $inscripcion_id . "/doc_dni_per_" . $inscripcion_id . "." . $typeFile;
+//                    $dni_archivo = InscripcionAdmision::addLabelTimeDocumentos($inscripcion_id, $dni_archivoOld, $timeSt);
+//                    $data["DATA_1"][0]["ruta_doc_dni"] = $dni_archivo;
+//                    if ($dni_archivo === false)
+//                        throw new Exception('Error doc Dni no renombrado.');
+//                }
+//                if (isset($data["DATA_1"][0]["ruta_doc_certvota"]) && $data["DATA_1"][0]["ruta_doc_certvota"] != "") {
+//                    $arrIm = explode(".", basename($data["DATA_1"][0]["ruta_doc_certvota"]));
+//                    $typeFile = strtolower($arrIm[count($arrIm) - 1]);
+//                    $certvota_archivoOld = Yii::$app->params["documentFolder"] . "solicitudadmision/" . $inscripcion_id . "/doc_certvota_per_" . $inscripcion_id . "." . $typeFile;
+//                    $certvota_archivo = InscripcionAdmision::addLabelTimeDocumentos($inscripcion_id, $certvota_archivoOld, $timeSt);
+//                    $data["DATA_1"][0]["ruta_doc_certvota"] = $certvota_archivo;
+//                    if ($certvota_archivo === false)
+//                        throw new Exception('Error doc certificado vot. no renombrado.');
+//                }
+//                if (isset($data["DATA_1"][0]["ruta_doc_foto"]) && $data["DATA_1"][0]["ruta_doc_foto"] != "") {
+//                    $arrIm = explode(".", basename($data["DATA_1"][0]["ruta_doc_foto"]));
+//                    $typeFile = strtolower($arrIm[count($arrIm) - 1]);
+//                    $foto_archivoOld = Yii::$app->params["documentFolder"] . "solicitudadmision/" . $inscripcion_id . "/doc_foto_per_" . $inscripcion_id . "." . $typeFile;
+//                    $foto_archivo = InscripcionAdmision::addLabelTimeDocumentos($inscripcion_id, $foto_archivoOld, $timeSt);
+//                    $data["DATA_1"][0]["ruta_doc_foto"] = $foto_archivo;
+//                    if ($foto_archivo === false)
+//                        throw new Exception('Error doc Foto no renombrado.');
+//                }
+//                if (isset($data["DATA_1"][0]["ruta_doc_certificado"]) && $data["DATA_1"][0]["ruta_doc_certificado"] != "") {
+//                    $arrIm = explode(".", basename($data["DATA_1"][0]["ruta_doc_certificado"]));
+//                    $typeFile = strtolower($arrIm[count($arrIm) - 1]);
+//                    $doc_certificadoOld = Yii::$app->params["documentFolder"] . "solicitudadmision/" . $inscripcion_id . "/doc_certificado_per_" . $inscripcion_id . "." . $typeFile;
+//                    $doc_certificado = InscripcionAdmision::addLabelTimeDocumentos($inscripcion_id, $doc_certificadoOld, $timeSt);
+//                    $data["DATA_1"][0]["ruta_doc_certificado"] = $doc_certificado;
+//                    if ($doc_certificado === false)
+//                        throw new Exception('Error doc Certificado no renombrado.');
+//                }
+//                if (isset($data["DATA_1"][0]["ruta_doc_hojavida"]) && $data["DATA_1"][0]["ruta_doc_hojavida"] != "") {
+//                    $arrIm = explode(".", basename($data["DATA_1"][0]["ruta_doc_hojavida"]));
+//                    $typeFile = strtolower($arrIm[count($arrIm) - 1]);
+//                    $doc_hojaVidaOld = Yii::$app->params["documentFolder"] . "solicitudadmision/" . $inscripcion_id . "/doc_hojavida_per_" . $inscripcion_id . "." . $typeFile;
+//                    $doc_hojaVida = InscripcionAdmision::addLabelTimeDocumentos($inscripcion_id, $doc_hojaVidaOld, $timeSt);
+//                    $data["DATA_1"][0]["ruta_doc_hojavida"] = $doc_hojaVida;
+//                    if ($doc_hojaVida === false)
+//                        throw new Exception('Error doc Hoja de Vida no renombrado.');
+//                }
+            } catch (Exception $ex) {
+                $message = array(
+                    "wtmessage" => $ex->getMessage(),
+                    "title" => Yii::t('jslang', 'Error'),
+                );
+                return Utilities::ajaxResponse('NO_OK', 'alert', Yii::t("jslang", "Error"), false, $message);
+            }
+        }
     }
 
     public function actionNewreprobado() {
@@ -222,25 +316,25 @@ class MatriculadosreprobadosController extends \app\components\CController {
                 if ($resp_matreprobado["encontrado"] == 0) {
                     $resp_ingreso = $mod_reprobado->insertarMatricureprobado($admitido, $periodo, $sins_id, $usuario, $fecha_creacion);
                     $mre_id = Yii::$app->db_captacion->getLastInsertID('db_captacion.matriculados_reprobado');
-                    /*Obtener el arregli asi de javascript de lo del grid de materias*/
-                    /*$materia = [
-                        ["id" => 1, "estado" => 1],
-                        ["id" => 2, "estado" => 2],
-                        ["id" => 3, "estado" => 2]
-                    ];*/
-                    /*if ($resp_ingreso) {
-                        if (!empty($materia)) {
-                            for ($i = 0; $i < count($materia); $i++) {
-                                //Guardado Datos horario.
-                                $asigantura = $materia[$i]["id"];
-                                $estado_materia = $materia[$i]["estado"];
-                                $res_materia = $mod_reprobado->insertarMateriareprueba($mre_id, $asigantura, $estado_materia, $usuario, $fecha_creacion);
-                                if ($res_horario) {
-                                    $exito = 1;
-                                }
-                            }
-                        }
-                    }*/
+                    /* Obtener el arregli asi de javascript de lo del grid de materias */
+                    /* $materia = [
+                      ["id" => 1, "estado" => 1],
+                      ["id" => 2, "estado" => 2],
+                      ["id" => 3, "estado" => 2]
+                      ]; */
+                    /* if ($resp_ingreso) {
+                      if (!empty($materia)) {
+                      for ($i = 0; $i < count($materia); $i++) {
+                      //Guardado Datos horario.
+                      $asigantura = $materia[$i]["id"];
+                      $estado_materia = $materia[$i]["estado"];
+                      $res_materia = $mod_reprobado->insertarMateriareprueba($mre_id, $asigantura, $estado_materia, $usuario, $fecha_creacion);
+                      if ($res_horario) {
+                      $exito = 1;
+                      }
+                      }
+                      }
+                      } */
                     $exito = 1;
                     if ($exito) {
                         $transaction->commit();

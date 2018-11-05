@@ -468,3 +468,40 @@ create table if not exists `temporal_wizard_inscripcion` (
  `twin_fecha_modificacion` timestamp null default null,
  `twin_estado_logico` varchar(1) not null
 );
+
+/*
+    Esta tabla se esta creando para almacenar la informacion guardada en el wizard, debido a que no7
+    hay como guardar en las tablas principales, informacion no completa, con la finanlidad de 
+    evitar incosistencia en la data.
+    La data de esta tabla debe eliminarse a traves de un proceso cron, que se debe ejecutar 
+    de manera periodica.
+*/
+
+create table if not exists `temporal_wizard_reprobados` (
+ `twre_id` bigint(20) not null auto_increment primary key,
+ `twre_nombre` varchar(1000) not null,
+ `twre_apellido` varchar(1000) not null,
+ `twre_dni` varchar(1000) not  null,
+ `twre_numero` varchar(1000) not  null,
+ `twre_correo` varchar(1000) not  null,
+ `twre_pais` bigint(20) not null,
+ `twre_celular` bigint(20) not null,
+ `uaca_id` bigint(20) not null, 
+ `mod_id` bigint(20) not null, 
+ `car_id` bigint(20) not null,
+ `twre_metodo_ingreso` bigint(20) null,
+ `conuteg_id` bigint(20) null,
+ `ruta_doc_titulo` varchar(200) null,
+ `ruta_doc_dni` varchar(200) null, 
+ `ruta_doc_certvota` varchar(200) null, 
+ `ruta_doc_foto` varchar(200) null, 
+ `ruta_doc_certificado` varchar(200) null, 
+ `ruta_doc_hojavida` varchar(200) null, 
+ `twre_mensaje1` varchar(1) null,
+ `twre_mensaje2` varchar(1) null, 
+ `twre_estado` varchar(1) not null,
+ `twre_fecha_creacion` timestamp not null default current_timestamp,
+ `twre_fecha_modificacion` timestamp null default null,
+ `twre_estado_logico` varchar(1) not null
+);
+

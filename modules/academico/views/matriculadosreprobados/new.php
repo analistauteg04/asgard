@@ -1,5 +1,4 @@
 <?php
-
 use yii\helpers\Url;
 use yii\helpers\Html;
 ?>
@@ -36,7 +35,7 @@ use yii\helpers\Html;
             <div class="tab-pane" id="paso2">
                 <form class="form-horizontal">
                     <?=
-                    $this->render('_form_tab2', ['per_id' => $per_id]);
+                        $this->render('_form_tab2', ['per_id' => $per_id]);
                     ?>                  
                 </form>
             </div><!-- /.tab-pane -->

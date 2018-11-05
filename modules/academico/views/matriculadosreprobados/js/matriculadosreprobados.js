@@ -1,11 +1,11 @@
 $(document).ready(function () {
-    $('#sendInformacionAdmitidoPend').click(function () {
-        habilitarSecciones();
+    $('#sendInformacionAdmitidoRepro').click(function () {
+        //habilitarSecciones();
         //if ($('#txth_twin_id').val() == 0) 
         //{
-        guardarInscripcion('Create', '1');
+        guardarAdmireprobado('Create', '1');
         //} else {
-        //    guardarInscripcion('Update', '1');
+        //    guardarAdmireprobado('Update', '1');
         //}
     });
     $('#paso2back').click(function () {
@@ -150,7 +150,7 @@ $(document).ready(function () {
         arrParams.modalidad = $('#cmb_modalidad').val();
         arrParams.carreprog = $('#cmb_carrera1').val();
         arrParams.periodo = $('#cmb_periodo').val();
-        arrParams.ids = $('#TbG_Admitido input[name=rb_admitido]:checked').val();        
+        arrParams.ids = $('#TbG_Admitido input[name=rb_admitido]:checked').val();
         //arrParams.materia = $('#TbG_MATERIAS input[name=cmb_aprueba]:checked').val(); //FALTA VALIDAR QUE NO ESTE VACIO LAS MATERIAS
         /* $('#TbG_MATERIAS input[type=checkbox]').each(function () {
          if (this.checked) {
@@ -170,46 +170,85 @@ $(document).ready(function () {
             var mensaje = {wtmessage: "Seleccionar datos del admitido desde buscar DNI.", title: "Error"};
             showAlert("NO_OK", "Error", mensaje);
         } else {
-           /* if (arrParams.materia === undefined)
-            {
-                var mensaje = {wtmessage: "Seleccionar datos de materias.", title: "Error"};
-                showAlert("NO_OK", "Error", mensaje);
-                alert('sss'+ arrParams.materia);
-            } else {*/
-                if ($('#cmb_ninteres option:selected').val() > '0') {
-                    if ($('#cmb_modalidad option:selected').val() > '0') {
-                        if ($('#cmb_carrera1 option:selected').val() > '0') {
-                            if ($('#cmb_periodo option:selected').val() > '0') {
-                                if (!validateForm()) {
-                                    requestHttpAjax(link, arrParams, function (response) {
-                                        showAlert(response.status, response.label, response.message);
-                                        setTimeout(function () {
-                                            window.location.href = $('#txth_base').val() + "/academico/matriculadosreprobados/index";
-                                        }, 3000);
-                                    }, true);
-                                }
-                            } else {
-                                var mensaje = {wtmessage: "Período: El campo no debe estar vacío.", title: "Error"};
-                                showAlert("NO_OK", "Error", mensaje);
+            /* if (arrParams.materia === undefined)
+             {
+             var mensaje = {wtmessage: "Seleccionar datos de materias.", title: "Error"};
+             showAlert("NO_OK", "Error", mensaje);
+             alert('sss'+ arrParams.materia);
+             } else {*/
+            if ($('#cmb_ninteres option:selected').val() > '0') {
+                if ($('#cmb_modalidad option:selected').val() > '0') {
+                    if ($('#cmb_carrera1 option:selected').val() > '0') {
+                        if ($('#cmb_periodo option:selected').val() > '0') {
+                            if (!validateForm()) {
+                                requestHttpAjax(link, arrParams, function (response) {
+                                    showAlert(response.status, response.label, response.message);
+                                    setTimeout(function () {
+                                        window.location.href = $('#txth_base').val() + "/academico/matriculadosreprobados/index";
+                                    }, 3000);
+                                }, true);
                             }
                         } else {
-                            var mensaje = {wtmessage: "Carrera /Programa: El campo no debe estar vacío.", title: "Error"};
+                            var mensaje = {wtmessage: "Período: El campo no debe estar vacío.", title: "Error"};
                             showAlert("NO_OK", "Error", mensaje);
                         }
                     } else {
-                        var mensaje = {wtmessage: "Modalidad: El campo no debe estar vacío.", title: "Error"};
+                        var mensaje = {wtmessage: "Carrera /Programa: El campo no debe estar vacío.", title: "Error"};
                         showAlert("NO_OK", "Error", mensaje);
                     }
                 } else {
-                    var mensaje = {wtmessage: "Unidad Académica: El campo no debe estar vacío.", title: "Error"};
+                    var mensaje = {wtmessage: "Modalidad: El campo no debe estar vacío.", title: "Error"};
                     showAlert("NO_OK", "Error", mensaje);
                 }
+            } else {
+                var mensaje = {wtmessage: "Unidad Académica: El campo no debe estar vacío.", title: "Error"};
+                showAlert("NO_OK", "Error", mensaje);
+            }
             //}
         }
     });
 });
-function guardarInscripcion(accion, paso) {
-    paso1next();
+function guardarAdmireprobado(accion, paso) {
+    var ID = (accion == "Update") ? $('#txth_twin_id').val() : 0;
+    var link = $('#txth_base').val() + "/academico/matriculadosreprobados/savereprobadostemp";
+    var arrParams = new Object();
+    arrParams.DATA_1 = dataInscripPart1(ID);
+    arrParams.ACCION = accion;
+    requestHttpAjax(link, arrParams, function (response) {
+        var message = response.message;
+        if (response.status == "OK") {
+            paso1next();
+        }
+    }, true);
+}
+function dataInscripPart1(ID) {
+    var datArray = new Array();
+    var objDat = new Object();
+    objDat.twin_id = ID;//Genero Automatico
+    objDat.pges_pri_nombre = $('#txt_primer_nombre').val();
+    objDat.pges_pri_apellido = $('#txt_primer_apellido').val();
+    objDat.tipo_dni = $('#cmb_tipo_dni option:selected').val();
+    objDat.pges_cedula = $('#txt_cedula').val();
+    objDat.pges_correo = $('#txt_correo').val();
+    objDat.pais = $('#cmb_pais_dom option:selected').val();
+    objDat.pges_celular = $('#txt_celular').val();
+    objDat.unidad_academica = $('#cmb_unidad_solicitud option:selected').val();
+    objDat.modalidad = $('#cmb_modalidad_solicitud option:selected').val();
+    objDat.ming_id = $('#cmb_metodo_solicitud option:selected').val();
+    objDat.conoce = $('#cmb_conuteg option:selected').val();
+    objDat.carrera = $('#cmb_carrera_solicitud option:selected').val();
+    //TABA 2
+//    objDat.ruta_doc_titulo = ($('#txth_doc_titulo').val() != '') ? $('#txth_doc_titulo').val() : '';
+//    objDat.ruta_doc_dni = ($('#txth_doc_dni').val() != '') ? $('#txth_doc_dni').val() : '';
+//    objDat.ruta_doc_certvota = ($('#txth_doc_certvota').val() != '') ? $('#txth_doc_certvota').val() : '';
+//    objDat.ruta_doc_foto = ($('#txth_doc_foto').val() != '') ? $('#txth_doc_foto').val() : '';
+//    objDat.ruta_doc_hojavida = ($('#txth_doc_hojavida').val() != '') ? $('#txth_doc_hojavida').val() : '';
+//    objDat.ruta_doc_certificado = ($('#txth_doc_certificado').val() != '') ? $('#txth_doc_certificado').val() : '';
+//    objDat.twin_mensaje1 = ($("#chk_mensaje1").prop("checked")) ? '1' : '0';
+//    objDat.twin_mensaje2 = ($("#chk_mensaje2").prop("checked")) ? '1' : '0';
+    datArray[0] = objDat;
+    sessionStorage.dataInscrip_1 = JSON.stringify(datArray);
+    return datArray;
 }
 function habilitarSecciones() {
     var pais = $('#cmb_pais_dom').val();

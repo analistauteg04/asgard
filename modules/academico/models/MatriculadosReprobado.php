@@ -522,6 +522,78 @@ class MatriculadosReprobado extends \yii\db\ActiveRecord {
             return FALSE;
         }
     }
+    
+    /**
+     * Function insertarReprobado crea reprobado matriculado.
+     * @author  Kleber Loayza <analistadesarrollo02@uteg.edu.ec>;
+     * @param
+     * @return
+     */
+    public function insertarReprobadoTemp() {
+        $con = \Yii::$app->db_captacion;
+        $trans = $con->getTransaction(); // se obtiene la transacción actual
+        if ($trans !== null) {
+            $trans = null; // si existe la transacción entonces no se crea una
+        } else {
+            $trans = $con->beginTransaction(); // si no existe la transacción entonces se crea una
+        }
+        $param_sql = "mre_estado";
+        $bdet_sql = "1";
+        $param_sql .= ", mre_estado_logico";
+        $bdet_sql .= ", 1";
+
+        if (isset($adm_id)) {
+            $param_sql .= ", adm_id";
+            $bdet_sql .= ", :adm_id";
+        }
+        if (isset($pami_id)) {
+            $param_sql .= ", pami_id";
+            $bdet_sql .= ", :pami_id";
+        }
+        if (isset($sins_id)) {
+            $param_sql .= ", sins_id";
+            $bdet_sql .= ", :sins_id";
+        }
+        if (isset($mre_usuario_ingreso)) {
+            $param_sql .= ", mre_usuario_ingreso";
+            $bdet_sql .= ", :mre_usuario_ingreso";
+        }
+        if (isset($mre_fecha_creacion)) {
+            $param_sql .= ", mre_fecha_creacion";
+            $bdet_sql .= ", :mre_fecha_creacion";
+        }
+
+        try {
+            $sql = "INSERT INTO " . $con->dbname . ".matriculados_reprobado ($param_sql) VALUES($bdet_sql)";
+            $comando = $con->createCommand($sql);
+
+            if (isset($adm_id)) {
+                $comando->bindParam(':adm_id', $adm_id, \PDO::PARAM_INT);
+            }
+            if (isset($pami_id)) {
+                $comando->bindParam(':pami_id', $pami_id, \PDO::PARAM_INT);
+            }
+            if (isset($sins_id)) {
+                $comando->bindParam(':sins_id', $sins_id, \PDO::PARAM_INT);
+            }
+            if (!empty((isset($mre_usuario_ingreso)))) {
+                $comando->bindParam(':mre_usuario_ingreso', $mre_usuario_ingreso, \PDO::PARAM_INT);
+            }
+            if (!empty((isset($mre_fecha_creacion)))) {
+                $comando->bindParam(':mre_fecha_creacion', $mre_fecha_creacion, \PDO::PARAM_STR);
+            }
+
+            $result = $comando->execute();
+            if ($trans !== null)
+                $trans->commit();
+            return $con->getLastInsertID($con->dbname . '.matriculados_reprobado');
+        } catch (Exception $ex) {
+            if ($trans !== null)
+                $trans->rollback();
+            return FALSE;
+        }
+    }
+    
 
     /**
      * Function consultarReprobado
