@@ -298,4 +298,102 @@ class PeriodoAcademicoMetIngreso extends \yii\db\ActiveRecord
         $resultData = $comando->queryOne();
         return $resultData;
     }
+    
+    /**
+     * Function listarParalelos
+     * @author  Grace Viteri <analistadesarrollo01@uteg.edu.ec>
+     * @param   
+     * @return  $resultData (información de los paralelos por período.)
+     */
+    public function listarParalelos($pmin_id) {
+        $con = \Yii::$app->db_academico;
+        $estado = 1;
+        // OJO AQUI SE REGISTRABAN CUPOS Y NUMEROS INSCRITOS ESTO DEBE IR NUEVAMENTE EN LA TABLA?
+        $sql = "SELECT 	par.par_descripcion descripcion, 
+                        par.par_num_cupo cupo                      
+                FROM " . $con->dbname . ".paralelo par
+                WHERE par.pami_id = :pmin_id
+                      and par.par_estado = :estado
+                      and par.par_estado_logico = :estado";
+
+        $comando = $con->createCommand($sql);
+        $comando->bindParam(":estado", $estado, \PDO::PARAM_STR);
+        $comando->bindParam(":pmin_id", $pmin_id, \PDO::PARAM_INT);
+
+        $resultData = $comando->queryall();
+        $dataProvider = new ArrayDataProvider([
+            'key' => 'id',
+            'allModels' => $resultData,
+            'pagination' => [
+                'pageSize' => Yii::$app->params["pageSize"],
+            ],
+            'sort' => [
+                'attributes' => [],
+            ],
+        ]);
+        return $dataProvider;
+    }
+    
+    
+    /**
+     * Function insertarParalelo (Registro de los paralelos)
+     * @author  Grace Viteri <analistadesarrollo01@uteg.edu.ec>
+     * @param   
+     * @return  
+     */
+    public function insertarParalelo($pmin_id, $nombre, $descripcion, $cupo, $usu_id) {
+        $con = \Yii::$app->db_academico;        
+
+        $param_sql = "par_estado_logico";
+        $bcur_sql = "1";
+
+        $param_sql .= ", par_estado";
+        $bcur_sql .= ", 1";
+
+        if (isset($pmin_id)) {
+            $param_sql .= ", pmin_id";
+            $bcur_sql .= ", :pmin_id";
+        }
+        if (isset($nombre)) {
+            $param_sql .= ", par_nombre";
+            $bcur_sql .= ", :par_nombre";
+        }
+        if (isset($descripcion)) {
+            $param_sql .= ", par_descripcion";
+            $bcur_sql .= ", :par_descripcion";
+        }
+        if (isset($cupo)) {
+            $param_sql .= ", par_num_cupo";
+            $bcur_sql .= ", :par_num_cupo";
+        }
+        if (isset($usu_id)) {
+            $param_sql .= ", par_usuario_ingreso";
+            $bcur_sql .= ", :par_usuario_ingreso";
+        }
+
+        try {
+            $sql = "INSERT INTO " . $con->dbname . ".paralelo ($param_sql) VALUES($bcur_sql)";
+            $comando = $con->createCommand($sql);
+
+            if (isset($pmin_id))
+                $comando->bindParam(':pmin_id', $pmin_id, \PDO::PARAM_INT);
+            
+            if (isset($nombre))
+                $comando->bindParam(':par_nombre', $nombre, \PDO::PARAM_STR);
+
+            if (isset($descripcion))
+                $comando->bindParam(':par_descripcion', $descripcion, \PDO::PARAM_STR);
+
+            if (isset($cupo))
+                $comando->bindParam(':par_num_cupo', $cupo, \PDO::PARAM_INT);
+
+            if (isset($usu_id))
+                $comando->bindParam(':par_usuario_ingreso', $usu_id, \PDO::PARAM_INT);
+
+            $result = $comando->execute();                       
+            return $con->getLastInsertID($con->dbname . '.paralelo');
+        } catch (Exception $ex) {            
+            return FALSE;
+        }
+    }  
 }

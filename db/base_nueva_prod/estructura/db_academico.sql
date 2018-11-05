@@ -479,6 +479,7 @@ create table if not exists `paralelo` (
   `pami_id` bigint(20)  null,
   `par_nombre` varchar(300) not null,
   `par_descripcion` varchar(500) not null,
+  `par_num_cupo` int not null,
   `par_usuario_ingreso` bigint(20) not null,
   `par_usuario_modifica` bigint(20)  null,   
   `par_estado` varchar(1) not null,

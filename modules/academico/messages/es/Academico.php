@@ -32,6 +32,7 @@ return [
     "Month Process" => "Mes Proceso",
     "Parallel" => "Paralelo",
     "Parallels" => "Paralelos",
+    "Quota" => "Cupo",
     "Registered" => "Matriculado",
     "Registration by Homologation" => "Matriculación por Homologación",
     "Search DNI" => "Buscar DNI",

@@ -187,7 +187,7 @@ class SolicitudesController extends \app\components\CController {
                 if ($data["empresa_id"] == 1) {
                     $carrera = $modcanal->consultarCarreraModalidad($data["unidada"], $data["moda_id"]);
                 } else {
-                    $carrera = $modestudio->consultarCursoModalidad($data["unidada"], $data["moda_id"]); // tomar id de impresa
+                    $carrera = $modestudio->consultarCursoModalidad($data["unidada"], $data["moda_id"], $data["empresa_id"]); // tomar id de impresa
                 }
 
                 $message = array("carrera" => $carrera);

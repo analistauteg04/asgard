@@ -72,7 +72,7 @@ class InscripcionsmartController extends \yii\web\Controller {
                 return Utilities::ajaxResponse('OK', 'alert', Yii::t('jslang', 'Success'), 'false', $message);
             }
             if (isset($data["getcarrera"])) {
-                $carrera = $modestudio->consultarCursoModalidad($data["unidada"], $data["moda_id"]);
+                $carrera = $modestudio->consultarCursoModalidad($data["unidada"], $data["moda_id"], 3);
                 $message = array("carrera" => $carrera);
                 return Utilities::ajaxResponse('OK', 'alert', Yii::t('jslang', 'Success'), 'false', $message);
             }
@@ -86,7 +86,7 @@ class InscripcionsmartController extends \yii\web\Controller {
         //$arr_carrerra1 = $modestudio->consultarEstudioEmpresa(3);
         $arr_ninteres = $mod_unidad->consultarUnidadAcademicasEmpresa(3);
         $arr_modalidad = $mod_modalidad->consultarModalidad($arr_ninteres[0]["id"],3);
-        $arr_carrerra1 = $modestudio->consultarCursoModalidad($arr_ninteres[0]["id"], $arr_modalidad[0]["id"]);                
+        $arr_carrerra1 = $modestudio->consultarCursoModalidad($arr_ninteres[0]["id"], $arr_modalidad[0]["id"],3);                
         $tipo_oportunidad_data = $modTipoOportunidad->consultarOporxUnidad(3);
         return $this->render('index', [
                     "tipos_dni" => array("CED" => Yii::t("formulario", "DNI Document"), "PASS" => Yii::t("formulario", "Passport")),

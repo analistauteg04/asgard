@@ -72,6 +72,7 @@ $(document).ready(function () {
     $('#btn_grabar_paralelo').click(function () {
         var arrParams = new Object();
         var link = $('#txth_base').val() + "/academico/adminmetodoingreso/grabarparalelo";
+        arrParams.nombre = $('#txt_nombre').val();
         arrParams.descripcion = $('#txt_descripcion').val();
         arrParams.cupo = $('#txt_cupo').val();
         arrParams.pmin_id = $('#txth_id').val();

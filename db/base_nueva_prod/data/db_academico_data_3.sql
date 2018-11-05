@@ -29,27 +29,27 @@ INSERT INTO `periodo_academico_met_ingreso` (`pami_id`, `pami_anio`, `pami_mes`,
 --
 -- Volcado de datos para la tabla `paralelo`
 --
-INSERT INTO `paralelo` (`par_id`, `paca_id`, `pami_id`, `par_nombre`, `par_descripcion`, `par_usuario_ingreso`, `par_usuario_modifica`, `par_estado`, `par_fecha_creacion`, `par_fecha_modificacion`, `par_estado_logico`) VALUES
-(1, NULL, 1, 'PARALELO 1', 'PARALELO 1', 1, NULL, '1', '2018-01-22 23:59:53', NULL, '1'),
-(2, NULL, 2, 'PARALELO 1', 'PARALELO 1', 1, NULL, '1', '2018-01-22 23:59:53', NULL, '1'),
-(3, NULL, 3, 'PARALELO 1', 'PARALELO 1', 1, NULL, '1', '2018-01-22 23:59:53', NULL, '1'),
-(4, NULL, 4, 'PARALELO 1', 'PARALELO 1', 27, NULL, '1', '2018-01-23 15:31:56', NULL, '1'),
-(5, NULL, 5, 'PARALELO 1', 'PARALELO 1', 27, NULL, '1', '2018-01-30 21:53:42', NULL, '1'),
-(6, NULL, 6, 'PARALELO 1', 'PARALELO 1', 27, NULL, '1', '2018-02-26 21:53:05', NULL, '1'),
-(7, NULL, 6, 'PARALELO 2', 'PARALELO 2', 27, NULL, '1', '2018-02-26 22:06:08', NULL, '1'),
-(8, NULL, 7, 'PARALELO 1', 'PARALELO 1', 27, NULL, '1', '2018-02-28 14:02:46', NULL, '1'),
-(9, NULL, 7, 'PARALELO 2', 'PARALELO 2', 27, NULL, '1', '2018-03-14 21:10:12', NULL, '1'),
-(10, NULL, 8, 'PARALELO 1', 'PARALELO 1', 27, NULL, '1', '2018-04-06 22:36:25', NULL, '1'),
-(11, NULL, 9, 'PARALELO 1', 'PARALELO 1', 27, NULL, '1', '2018-04-09 20:10:47', NULL, '1'),
-(12, NULL, 10, 'PARALELO 1', 'PARALELO 1', 27, NULL, '1', '2018-05-10 16:35:56', NULL, '1'),
-(13, NULL, 11, 'PARALELO 1', 'PARALELO 1', 27, NULL, '1', '2018-05-30 22:19:37', NULL, '1'),
-(14, NULL, 12, 'PARALELO 1', 'PARALELO 1', 27, NULL, '1', '2018-06-27 17:00:02', NULL, '1'),
-(15, NULL, 13, 'PARALELO 1', 'PARALELO 1', 27, NULL, '1', '2018-07-17 15:36:10', NULL, '1'),
-(16, NULL, 14, 'PARALELO 1', 'PARALELO 1', 27, NULL, '1', '2018-07-30 16:12:54', NULL, '1'),
-(17, NULL, 15, 'PARALELO 1', 'PARALELO 1', 27, NULL, '1', '2018-07-31 18:27:30', NULL, '1'),
-(18, NULL, 16, 'PARALELO 1', 'PARALELO 1', 27, NULL, '1', '2018-08-29 14:43:14', NULL, '1'),
-(19, NULL, 17, 'PARALELO 1', 'PARALELO 1', 27, NULL, '1', '2018-09-13 17:19:45', NULL, '1'),
-(20, NULL, 18, 'PARALELO 1', 'PARALELO 1', 27, NULL, '1', '2018-10-01 20:02:23', NULL, '1');
+INSERT INTO `paralelo` (`par_id`, `paca_id`, `pami_id`, `par_nombre`, `par_descripcion`, `par_num_cupo`, `par_usuario_ingreso`, `par_usuario_modifica`, `par_estado`, `par_fecha_creacion`, `par_fecha_modificacion`, `par_estado_logico`) VALUES
+(1, NULL, 1, 'PARALELO 1', 'PARALELO 1', 25, 1, NULL, '1', '2018-01-22 23:59:53', NULL, '1'),
+(2, NULL, 2, 'PARALELO 1', 'PARALELO 1', 25, 1, NULL, '1', '2018-01-22 23:59:53', NULL, '1'),
+(3, NULL, 3, 'PARALELO 1', 'PARALELO 1', 25, 1, NULL, '1', '2018-01-22 23:59:53', NULL, '1'),
+(4, NULL, 4, 'PARALELO 1', 'PARALELO 1', 20, 27, NULL, '1', '2018-01-23 15:31:56', NULL, '1'),
+(5, NULL, 5, 'PARALELO 1', 'PARALELO 1', 20, 27, NULL, '1', '2018-01-30 21:53:42', NULL, '1'),
+(6, NULL, 6, 'PARALELO 1', 'PARALELO 1', 5, 27, NULL, '1', '2018-02-26 21:53:05', NULL, '1'),
+(7, NULL, 6, 'PARALELO 2', 'PARALELO 2', 5, 27, NULL, '1', '2018-02-26 22:06:08', NULL, '1'),
+(8, NULL, 7, 'PARALELO 1', 'PARALELO 1', 10, 27, NULL, '1', '2018-02-28 14:02:46', NULL, '1'),
+(9, NULL, 7, 'PARALELO 2', 'PARALELO 2', 10, 27, NULL, '1', '2018-03-14 21:10:12', NULL, '1'),
+(10, NULL, 8, 'PARALELO 1', 'PARALELO 1', 10, 27, NULL, '1', '2018-04-06 22:36:25', NULL, '1'),
+(11, NULL, 9, 'PARALELO 1', 'PARALELO 1', 20, 27, NULL, '1', '2018-04-09 20:10:47', NULL, '1'),
+(12, NULL, 10, 'PARALELO 1', 'PARALELO 1', 50, 27, NULL, '1', '2018-05-10 16:35:56', NULL, '1'),
+(13, NULL, 11, 'PARALELO 1', 'PARALELO 1', 30, 27, NULL, '1', '2018-05-30 22:19:37', NULL, '1'),
+(14, NULL, 12, 'PARALELO 1', 'PARALELO 1', 40, 27, NULL, '1', '2018-06-27 17:00:02', NULL, '1'),
+(15, NULL, 13, 'PARALELO 1', 'PARALELO 1', 10, 27, NULL, '1', '2018-07-17 15:36:10', NULL, '1'),
+(16, NULL, 14, 'PARALELO 1', 'PARALELO 1', 30, 27, NULL, '1', '2018-07-30 16:12:54', NULL, '1'),
+(17, NULL, 15, 'PARALELO 1', 'PARALELO 1', 10, 27, NULL, '1', '2018-07-31 18:27:30', NULL, '1'),
+(18, NULL, 16, 'PARALELO 1', 'PARALELO 1', 50, 27, NULL, '1', '2018-08-29 14:43:14', NULL, '1'),
+(19, NULL, 17, 'PARALELO 1', 'PARALELO 1', 40, 27, NULL, '1', '2018-09-13 17:19:45', NULL, '1'),
+(20, NULL, 18, 'PARALELO 1', 'PARALELO 1', 30, 27, NULL, '1', '2018-10-01 20:02:23', NULL, '1');
 
 --
 -- Volcado de datos para la tabla `planificacion_estudio_academico`

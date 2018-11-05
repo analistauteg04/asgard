@@ -131,10 +131,10 @@ class AdminmetodoingresoController extends \app\components\CController {
     }
 
     public function actionNewparalelo() {
-        $pmin_id = $_GET["pmin_id"];
-        $codigo = $_GET["codigo"];
+        $pmin_id = base64_decode($_GET["pmin_id"]);
+        $codigo = base64_decode($_GET["codigo"]);
 
-        $mod_paralelo = new PeriodoMetodoIngreso;
+        $mod_paralelo = new PeriodoAcademicoMetIngreso();
         $resp_paralelo = $mod_paralelo->listarParalelos($pmin_id);
         $periodo = "Período " . $codigo;
 
@@ -148,7 +148,7 @@ class AdminmetodoingresoController extends \app\components\CController {
     public function actionGrabarparalelo() {
         if (Yii::$app->request->isAjax) {
             $data = Yii::$app->request->post();
-
+            $nombre = ucwords(strtolower($data["nombre"])); 
             $descripcion = ucwords(strtolower($data["descripcion"])); 
             $cupo = $data["cupo"];
             $pmin_id = $data["pmin_id"];
@@ -157,8 +157,8 @@ class AdminmetodoingresoController extends \app\components\CController {
             $con = \Yii::$app->db_academico;
             $transaction = $con->beginTransaction();
             try {
-                $mod_paralelo = new PeriodoMetodoIngreso();
-                $resp_ingreso = $mod_paralelo->insertarParalelo($pmin_id, $descripcion, $cupo, $usuario);
+                $mod_paralelo = new PeriodoAcademicoMetIngreso();
+                $resp_ingreso = $mod_paralelo->insertarParalelo($pmin_id, $nombre, $descripcion, $cupo, $usuario);
                 if ($resp_ingreso) {
                     $exito = 1;
                 }

@@ -167,41 +167,7 @@ class PeriodoMetodoIngreso extends \yii\db\ActiveRecord {
 
     
 
-    /**
-     * Function listarParalelos
-     * @author  Grace Viteri <analistadesarrollo01@uteg.edu.ec>
-     * @param   
-     * @return  $resultData (información de los paralelos por período (para Online))
-     */
-    public function listarParalelos($pmin_id) {
-        $con = \Yii::$app->db_academico;
-        $estado = 1;
-        // OJO AQUI SE REGISTRABAN CUPOS Y NUMEROS INSCRITOS ESTO DEBE IR NUEVAMENTE EN LA TABLA?
-        $sql = "SELECT 	par.par_descripcion descripcion -- , 
-                        -- par.par_num_cupo cupo, 
-                        -- ifnull(par_num_inscritos,0) inscritos
-                FROM " . $con->dbname . ".paralelo par
-                WHERE par.pmin_id = :pmin_id
-                      and par.par_estado = :estado
-                      and par.par_estado_logico = :estado";
-
-        $comando = $con->createCommand($sql);
-        $comando->bindParam(":estado", $estado, \PDO::PARAM_STR);
-        $comando->bindParam(":pmin_id", $pmin_id, \PDO::PARAM_INT);
-
-        $resultData = $comando->queryall();
-        $dataProvider = new ArrayDataProvider([
-            'key' => 'id',
-            'allModels' => $resultData,
-            'pagination' => [
-                'pageSize' => Yii::$app->params["pageSize"],
-            ],
-            'sort' => [
-                'attributes' => [],
-            ],
-        ]);
-        return $dataProvider;
-    }
+    
 
     /**
      * Function insertarParalelo (Registro de los paralelos)

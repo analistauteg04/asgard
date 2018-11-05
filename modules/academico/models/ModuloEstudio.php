@@ -102,15 +102,16 @@ class ModuloEstudio extends \app\modules\academico\components\CActiveRecord {
      * @property       
      * @return  
      */
-    public function consultarCursoModalidad($unidad, $modalidad) {
+    public function consultarCursoModalidad($unidad, $modalidad, $emp_id) {
         $con = \Yii::$app->db_academico;
         $estado = 1;
 
         $sql = "SELECT me.mest_id as id, mest_nombre as name
-                    FROM " . $con->dbname . ".modulo_estudio me inner join " . $con->dbname . ".modalidad m
-                             on m.mod_id = me.mod_id
-                    WHERE me.uaca_id = :unidad
+                FROM " . $con->dbname . ".modulo_estudio me inner join " . $con->dbname . ".modalidad m on m.mod_id = me.mod_id
+                     inner join " . $con->dbname . ".modulo_estudio_empresa mee on mee.mest_id = me.mest_id
+                WHERE me.uaca_id = :unidad
                     and me.mod_id = :modalidad
+                    and mee.emp_id = :emp_id
                     and me.mest_estado = :estado
                     and me.mest_estado_logico = :estado
                     and m.mod_estado = :estado
@@ -121,6 +122,7 @@ class ModuloEstudio extends \app\modules\academico\components\CActiveRecord {
         $comando->bindParam(":estado", $estado, \PDO::PARAM_STR);
         $comando->bindParam(":unidad", $unidad, \PDO::PARAM_INT);
         $comando->bindParam(":modalidad", $modalidad, \PDO::PARAM_INT);
+        $comando->bindParam(":emp_id", $emp_id, \PDO::PARAM_INT);
         $resultData = $comando->queryAll();
         return $resultData;
     }

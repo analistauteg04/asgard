@@ -112,7 +112,7 @@ class OportunidadesController extends \app\components\CController {
         $arr_carrerra2 = $modoportunidad->consultarTipoCarrera();
         $arr_subcarrera = $modoportunidad->consultarSubCarrera($respOportunidad["tcar_id"]);
         //$arr_moduloEstudio = $modestudio->consultarEstudioEmpresa($respOportunidad["empresa"]); // tomar id de impresa
-        $arr_moduloEstudio = $modestudio->consultarCursoModalidad($respOportunidad["uaca_id"], $respOportunidad["mod_id"]); 
+        $arr_moduloEstudio = $modestudio->consultarCursoModalidad($respOportunidad["uaca_id"], $respOportunidad["mod_id"], $respOportunidad["empresa"]); 
         $respRolPerAutentica = $modoportunidad->consultarAgenteAutenticado($per_id);
         $empresa = $empresa_mod->getAllEmpresa();
         if (Yii::$app->request->isAjax) {
@@ -135,12 +135,12 @@ class OportunidadesController extends \app\components\CController {
             if (isset($data["getcarrera"])) {
                 if ($data["unidada"] < 3) {
                     if (($data["unidada"] == 1 || $data["unidada"] == 2 ) && $data["empresa_id"] == 2) {
-                        $carrera = $modestudio->consultarCursoModalidad($data["unidada"], $data["moda_id"]);
+                        $carrera = $modestudio->consultarCursoModalidad($data["unidada"], $data["moda_id"], $data["empresa_id"]);
                     } else {
                         $carrera = $modoportunidad->consultarCarreraModalidad($data["unidada"], $data["moda_id"]);
                     }
                 } else {
-                    $carrera = $modestudio->consultarCursoModalidad($data["unidada"], $data["moda_id"]);
+                    $carrera = $modestudio->consultarCursoModalidad($data["unidada"], $data["moda_id"], $data["empresa_id"]);
                 }
                 $message = array("carrera" => $carrera);
                 return Utilities::ajaxResponse('OK', 'alert', Yii::t('jslang', 'Success'), 'false', $message);
@@ -219,7 +219,7 @@ class OportunidadesController extends \app\components\CController {
                 if ($data["empresa_id"] == 1) {
                     $carrera = $modcanal->consultarCarreraModalidad($data["unidada"], $data["moda_id"]);
                 } else {
-                    $carrera = $modestudio->consultarCursoModalidad($data["unidada"], $data["moda_id"]); // tomar id de impresa
+                    $carrera = $modestudio->consultarCursoModalidad($data["unidada"], $data["moda_id"], $data["empresa_id"] ); // tomar id de impresa
                 }
 
                 $message = array("carrera" => $carrera);

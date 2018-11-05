@@ -56,8 +56,10 @@ INSERT INTO `unidad_academica` (`uaca_id`, `uaca_nombre`, `uaca_descripcion`, `u
 (2, 'Posgrado', 'Posgrado', 1, '1', '1', '1'),
 (3, 'Educación Continua', 'Educación Continua', 1, '0', '1', '1'),
 (4, 'Centro de Idiomas', 'Centro de Idiomas', 1, '0', '1', '1'),
-(5, 'Diplomado', 'Diplomado', 1, '0', '1', '1'),
-(6, 'Curso Nivelación', 'Curso Nivelación', 1, '0', '1', '1');
+(5, 'MicroMasters', 'MicroMasters', 1, '0', '1', '1'),
+(6, 'Curso Nivelación', 'Curso Nivelación', 1, '0', '1', '1'),
+(7, 'Licenciaturas', 'Licenciaturas', 1, '0', '1', '1'),
+(8, 'Masters', 'Masters', 1, '0', '1', '1');
 
 -- --------------------------------------------------------
 --
@@ -181,11 +183,11 @@ INSERT INTO `modulo_estudio` (`mest_id`, `uaca_id`, `mod_id`, `mest_codigo`, `me
 (23, 3, 2, 'SM23-TLMC01', 'Taller de liderazgo y manejo de conflictos', 'Taller de liderazgo y manejo de conflictos', 'taller_de_liderazgo_y_manejo_de_conflictos', 1, NULL, '1', '2017-02-01 15:15:00', NULL, '1'),
 (24, 3, 2, 'SM24-HAPE01', 'Programa para docentes: Habilidades pedagógicas', 'Programa para docentes: Habilidades pedagógicas', 'programa_para_docentes:_habilidades _pedagógicas', 1, NULL, '1', '2017-02-01 15:15:00', NULL, '1'),
 (25, 3, 2, 'SM25-PPTH01', 'Promoción programa talento humano', 'Promoción programa talento humano', 'promoción_programa_talento_humano', 1, NULL, '1', '2017-02-01 15:15:00', NULL, '1'),
-(26, 3, 2, 'SM26-PPPD01', 'Promoción programa para docentes', 'Promoción programa para docentes', 'oromoción_programa para_docentes', 1, NULL, '1', '2017-02-01 15:15:00', NULL, '1'),
-(27, 5, 1, 'UL1', 'Diplomado gestión del talento humano basado en competencias', 'Diplomado gestión del talento humano basado en competencias', 'diplomado_gestión_del_talento_humano_basado_en_competencias', 1, NULL, '1', '2017-02-01 03:43:48', NULL, '1'),
-(28, 5, 1, 'UL2', 'Diplomado en Alta Gerencia y Control de Gestión', 'Diplomado en Alta Gerencia y Control de Gestión', 'diplomado_en_alta_gerencia_y_control_de_gestión', 1, NULL, '1', '2017-02-01 03:43:48', NULL, '1'),
-(29, 5, 1, 'UL3', 'Diplomado en Culture Management: nuevas formas de hacer negocio', 'Diplomado en Culture Management: nuevas formas de hacer negocio', 'diplomado_en_culture_management:_nuevas_formas_de_hacer_negocio', 1, NULL, '1', '2017-02-01 03:43:48', NULL, '1'),
-(30, 5, 1, 'UL4', 'Diplomado en turismo inteligente y competitividad internacional', 'Diplomado en turismo inteligente y competitividad internacional', 'diplomado_en_turismo_inteligente_y_competitividad_internacional', 1, NULL, '1', '2017-02-01 03:43:48', NULL, '1'),
+(26, 3, 2, 'SM26-PPPD01', 'Promoción programa para docentes', 'Promoción programa para docentes', 'promoción_programa para_docentes', 1, NULL, '1', '2017-02-01 15:15:00', NULL, '1'),
+(27, 5, 1, 'UL1', 'Micromaster gestión del talento humano basado en competencias', 'Micromaster gestión del talento humano basado en competencias', 'diplomado_gestión_del_talento_humano_basado_en_competencias', 1, NULL, '1', '2017-02-01 03:43:48', NULL, '1'),
+(28, 5, 1, 'UL2', 'Micromaster en Alta Gerencia y Control de Gestión', 'Micromaster en Alta Gerencia y Control de Gestión', 'diplomado_en_alta_gerencia_y_control_de_gestión', 1, NULL, '1', '2017-02-01 03:43:48', NULL, '1'),
+(29, 5, 1, 'UL3', 'Micromaster en Culture Management: nuevas formas de hacer negocio', 'Micromaster en Culture Management: nuevas formas de hacer negocio', 'diplomado_en_culture_management:_nuevas_formas_de_hacer_negocio', 1, NULL, '1', '2017-02-01 03:43:48', NULL, '1'),
+(30, 5, 1, 'UL4', 'Micromaster en turismo inteligente y competitividad internacional', 'Micromaster en turismo inteligente y competitividad internacional', 'diplomado_en_turismo_inteligente_y_competitividad_internacional', 1, NULL, '1', '2017-02-01 03:43:48', NULL, '1'),
 (31, 3, 1, 'UL5', 'Habilidades de comunicación para emprendedores', 'Habilidades de comunicación para emprendedores', 'habilidades_de_comunicación_para_emprendedores', 1, NULL, '1', '2017-02-01 03:43:48', NULL, '1'),
 (32, 3, 1, 'UL6', 'La Política de Personal: factor clave en la competitividad de las organizaciones', 'La Política de Personal: factor clave en la competitividad de las organizaciones', 'la_política_de_personal:_factor_clave_en_la_competitividad_de_las_organizaciones', 1, NULL, '1', '2017-02-01 03:43:48', NULL, '1'),
 (33, 3, 1, 'UL7', 'Los modelos de Competencia para la gestión efectiva del Talento Humano', 'Los modelos de Competencia para la gestión efectiva del Talento Humano', 'los_modelos_de_competencia_para_la_gestión_efectiva_del_talento_humano', 1, NULL, '1', '2017-02-01 03:43:48', NULL, '1'),
@@ -232,14 +234,20 @@ INSERT INTO `modulo_estudio` (`mest_id`, `uaca_id`, `mod_id`, `mest_codigo`, `me
 (74, 3, 1, 'UL48', 'Motívate - Auto Motivación', 'Motívate - Auto Motivación', 'motívate_-_auto_motivación', 1, NULL, '1', '2017-02-01 15:15:00', NULL, '1'),
 (75, 3, 1, 'UL49', 'Realización de videos con tu Smartphone', 'Realización de videos con tu Smartphone', 'realización_de_videos_con_tu_smartphone', 1, NULL, '1', '2017-02-01 15:15:00', NULL, '1'),
 (76, 3, 1, 'UL50', 'Correcta aplicación de las herramientas de control para la toma de decisiones', 'Correcta aplicación de las herramientas de control para la toma de decisiones', 'correcta_aplicación_de_las_herramientas_de_control_para_la_toma_de_decisiones', 1, NULL, '1', '2017-02-01 15:15:00', NULL, '1'),
-(77, 1, 1, 'UL51', 'Licenciatura en Comercio Exterior (UTEG Online)', 'Licenciatura en Comercio Exterior (UTEG Online)', 'licenciatura_en_comercio_exterior_(uteg_online)', 1, NULL, '1', '2017-02-01 15:15:00', NULL, '1'),
-(78, 1, 1, 'UL52', 'Licenciatura en Mercadotecnia (UTEG Online)', 'Licenciatura en Mercadotecnia (UTEG Online)', 'licenciatura_en_mercadotecnia_(uteg_online)', 1, NULL, '1', '2017-02-01 15:15:00', NULL, '1'),
-(79, 1, 1, 'UL53', 'Licenciatura en Finanzas (UTEG Online)', 'Licenciatura en Finanzas (UTEG Online)', 'licenciatura_en_finanzas_(uteg_online)', 1, NULL, '1', '2017-02-01 15:15:00', NULL, '1'),
-(80, 1, 1, 'UL54', 'Licenciatura en Administración de Empresas (UTEG Online) ', 'Licenciatura en Administración de Empresas (UTEG Online) ', 'licenciatura_en_administración_de_empresas_(uteg_Online) ',1, NULL, '1', '2017-02-01 15:15:00', NULL, '1'),
-(81, 1, 1, 'UL55', 'Licenciatura en Turismo', 'Licenciatura en Turismo', 'licenciatura_en_turismo', 1, NULL, '1', '2017-02-01 15:15:00', NULL, '1'),
-(82, 1, 1, 'UL56', 'Economía', 'Economía', 'economía', 1, NULL, '1', '2017-02-01 15:15:00', NULL, '1'),
-(83, 2, 1, 'UL57', 'MBA Bordeaux', 'MBA Bordeaux', 'mba_bordeaux', 1, NULL, '1', '2017-02-01 15:15:00', NULL, '1');
+(77, 7, 1, 'UL51', 'Licenciatura en Comercio Exterior (UTEG Online)', 'Licenciatura en Comercio Exterior (UTEG Online)', 'licenciatura_en_comercio_exterior_(uteg_online)', 1, NULL, '1', '2017-02-01 15:15:00', NULL, '1'),
+(78, 7, 1, 'UL52', 'Licenciatura en Mercadotecnia (UTEG Online)', 'Licenciatura en Mercadotecnia (UTEG Online)', 'licenciatura_en_mercadotecnia_(uteg_online)', 1, NULL, '1', '2017-02-01 15:15:00', NULL, '1'),
+(79, 7, 1, 'UL53', 'Licenciatura en Finanzas (UTEG Online)', 'Licenciatura en Finanzas (UTEG Online)', 'licenciatura_en_finanzas_(uteg_online)', 1, NULL, '1', '2017-02-01 15:15:00', NULL, '1'),
+(80, 7, 1, 'UL54', 'Licenciatura en Administración de Empresas (UTEG Online) ', 'Licenciatura en Administración de Empresas (UTEG Online) ', 'licenciatura_en_administración_de_empresas_(uteg_Online) ',1, NULL, '1', '2017-02-01 15:15:00', NULL, '1'),
+(81, 7, 1, 'UL55', 'Licenciatura en Turismo', 'Licenciatura en Turismo', 'licenciatura_en_turismo', 1, NULL, '1', '2017-02-01 15:15:00', NULL, '1'),
+(82, 7, 1, 'UL56', 'Economía', 'Economía', 'economía', 1, NULL, '1', '2017-02-01 15:15:00', NULL, '1'),
+(83, 8, 1, 'UL57', 'MBA Bordeaux', 'MBA Bordeaux', 'mba_bordeaux', 1, NULL, '1', '2017-02-01 15:15:00', NULL, '1'),
 
+(84, 3, 2, 'UL58', 'Entorno internacional de los negocios', 'Entorno internacional de los negocios. Taller práctico.', 'entorno_internacional_negocios. Taller práctico.', 1, NULL, '1', '2017-02-01 15:15:00', NULL, '1'),
+(85, 3, 2, 'UL59', 'Planificación de cursos en línea', 'Planificación de cursos en línea', 'planificacion_cursos_online', 1, NULL, '1', '2017-02-01 15:15:00', NULL, '1'),
+(86, 3, 2, 'UL60', 'Workshop sobre inteligencia emocional en el trabajo', 'Workshop sobre inteligencia emocional en el trabajo', 'Workshop_inteligencia_emocional_trabajo', 1, NULL, '1', '2017-02-01 15:15:00', NULL, '1'),
+(87, 3, 2, 'UL61', 'Análisis de peligros y puntos críticos de Control (HACCP)', 'Análisis de peligros y puntos críticos de Control (HACCP)', 'análisis_peligros_puntos_críticos_HACCP', 1, NULL, '1', '2017-02-01 15:15:00', NULL, '1')
+
+;
 
 
 -- --------------------------------------------------------
@@ -342,7 +350,13 @@ INSERT INTO `modulo_estudio_empresa` (`meem_id`, `mest_id`, `emp_id`, `meem_fech
 (80, 80, 2, '2018-09-01 05:00:00', '2018-12-31 05:00:00', 1, NULL, '1', '1', '2018-09-01 23:30:00', NULL, '1'),
 (81, 81, 2, '2018-09-01 05:00:00', '2018-12-31 05:00:00', 1, NULL, '1', '1', '2018-09-01 23:30:00', NULL, '1'),
 (82, 82, 2, '2018-09-01 05:00:00', '2018-12-31 05:00:00', 1, NULL, '1', '1', '2018-09-01 23:30:00', NULL, '1'),
-(83, 83, 2, '2018-09-01 05:00:00', '2018-12-31 05:00:00', 1, NULL, '1', '1', '2018-09-01 23:30:00', NULL, '1');
+(83, 83, 2, '2018-09-01 05:00:00', '2018-12-31 05:00:00', 1, NULL, '1', '1', '2018-09-01 23:30:00', NULL, '1'),
+
+(84, 84, 2, '2018-11-05 05:00:00', '2018-11-05 05:00:00', 1, NULL, '1', '1', '2018-09-01 23:30:00', NULL, '1'),
+(85, 85, 2, '2018-11-05 05:00:00', '2018-11-05 05:00:00', 1, NULL, '1', '1', '2018-09-01 23:30:00', NULL, '1'),
+(86, 86, 2, '2018-11-05 05:00:00', '2018-11-05 05:00:00', 1, NULL, '1', '1', '2018-09-01 23:30:00', NULL, '1'),
+(87, 87, 2, '2018-11-05 05:00:00', '2018-11-05 05:00:00', 1, NULL, '1', '1', '2018-09-01 23:30:00', NULL, '1')
+;
 
 
 -- --------------------------------------------------------
@@ -419,6 +433,8 @@ INSERT INTO `modalidad_unidad_academico` (`muac_id`,`uaca_id`,`mod_id`, `emp_id`
 (9,3,2,3,1,'1','2018-09-29 14:35:00','1'),
 (10,3,1,2,1,'1','2017-02-01 14:35:00','1'),
 (11,5,1,2,1,'1','2017-02-01 14:35:00','1'),
-(12,1,1,2,1,'1','2017-02-01 14:35:00','1'),
-(13,2,1,2,1,'1','2018-10-01 14:35:00','1'),
-(14,2,2,1,1,'1','2018-10-19 16:30:00','1');
+(12,7,1,2,1,'1','2017-02-01 14:35:00','1'),
+(13,8,1,2,1,'1','2018-10-01 14:35:00','1'),
+(14,2,2,1,1,'1','2018-10-19 16:30:00','1'),
+
+(15,3,2,2,1,'1','2018-10-19 16:30:00','1');
