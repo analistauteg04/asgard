@@ -418,7 +418,9 @@ class MatriculadosReprobado extends \yii\db\ActiveRecord {
                        per.per_estado_logico = :estado AND
                        per.per_estado = :estado AND
                        ami.pami_estado = :estado AND
-                       ami.pami_estado_logico = :estado                                                   
+                       ami.pami_estado_logico = :estado AND
+                       mre.mre_estado = :estado AND
+                       mre.mre_estado_logico = :estado
                 ORDER BY SUBSTRING(mre.mre_fecha_creacion,1,10) desc";
         $comando = $con->createCommand($sql);
         $comando->bindParam(":estado", $estado, \PDO::PARAM_STR);
