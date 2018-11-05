@@ -31,7 +31,7 @@ PbGridView::widget([
         ],
         [
             'attribute' => 'materia',
-            'header' => academico::t("Academico", "Career/Program"),
+            'header' => Yii::t("formulario", "Matter"),
             'value' => 'asi_descripcion',
         ],
         /*[
@@ -42,7 +42,8 @@ PbGridView::widget([
                 return Html::dropDownList("cmb_aprueba[]", 0, ["0" => "Seleccionar", "1" => "Aprobado", "2" => "Reprobado"], ["class" => "form-control", "id" => "cmb_aprueba"]);
             },
         ],*/
-        [
+        [           
+            'header' => academico::t("Academico", "Failed"),
             'class' => 'app\widgets\PbGridView\PbCheckboxColumn',
         ],        
     ],

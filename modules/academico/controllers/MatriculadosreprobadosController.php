@@ -199,7 +199,8 @@ class MatriculadosreprobadosController extends \app\components\CController {
     }
 
     public function actionSave() {
-        $periodo = 0;        
+        $periodo = 0;
+        $mod_admitido = new MatriculadosReprobado();
         if (Yii::$app->request->isAjax) {
             $data = Yii::$app->request->post();
             $ides = $data["ids"];
@@ -220,25 +221,38 @@ class MatriculadosreprobadosController extends \app\components\CController {
                 $resp_matreprobado = $mod_reprobado->consultarReprobado($sins_id);
                 if ($resp_matreprobado["encontrado"] == 0) {
                     $resp_ingreso = $mod_reprobado->insertarMatricureprobado($admitido, $periodo, $sins_id, $usuario, $fecha_creacion);
-                    $mre_id = Yii::$app->db_captacion->getLastInsertID('db_captacion.matriculados_reprobado');               
+                    $mre_id = Yii::$app->db_captacion->getLastInsertID('db_captacion.matriculados_reprobado');
                     if ($resp_ingreso) {
                         if (!empty($asigna)) {
                             for ($i = 0; $i < strlen($asigna); $i++) {
-                                //Guardado Datos Materias.                        
+                                //Guardado Datos Materias reprobadas.                        
                                 $asigantura = $asigna[$i];
-                                $estado_materia = 1;
+                                $estado_materia = 2;
                                 if ($asigantura != ' ') {
                                     $res_materia = $mod_reprobado->insertarMateriareprueba($mre_id, $asigantura, $estado_materia, $usuario, $fecha_creacion);
                                     if ($res_materia) {
                                         $exito = 1;
-                                    }
-                                    else{
+                                    } else {
                                         $exito = 0;
                                     }
+                                    //$reprobar = $reprobar . ' ' . 'asig.asi_id != ' . $asigna[$i] . ' and ';
                                 }
                             }
+                            //Guardado Datos Materias aprobadas.                         
+                            /*$estado_materiare = 1;
+                            $arr_materia = $mod_admitido->consultarMateriarep($uniacademica, $modalidad, $carrera, $reprobar);
+                            $arr_materias = ArrayHelper::map($arr_materia, "id", "value");                           
+                            for ($j = 0; $j < count($arr_materias); $j++) {
+                                if ($res_materia) {
+                                    \app\models\Utilities::putMessageLogFile('xxx..  ' . $arr_materias["value"][$j]);
+                                    $res_reprobam = $mod_reprobado->insertarMateriareprueba($mre_id, $arr_materias[$j], $estado_materiare, $usuario, $fecha_creacion);
+                                    if ($res_reprobam) {
+                                        $exito = 1;
+                                    }
+                                }
+                            }*/
                         }
-                    }                    
+                    }
                     if ($exito) {
                         $transaction->commit();
                         $message = array(
@@ -249,7 +263,7 @@ class MatriculadosreprobadosController extends \app\components\CController {
                     } else {
                         $transaction->rollback();
                         $message = array(
-                            "wtmessage" => Yii::t("notificaciones", "Error al grabar1." . $mensaje),
+                            "wtmessage" => Yii::t("notificaciones", "Error al grabar." . $mensaje),
                             "title" => Yii::t('jslang', 'Success'),
                         );
                         echo Utilities::ajaxResponse('NO_OK', 'Error', Yii::t("jslang", "Error"), false, $message);
@@ -265,7 +279,7 @@ class MatriculadosreprobadosController extends \app\components\CController {
             } catch (Exception $ex) {
                 $transaction->rollback();
                 $message = array(
-                    "wtmessage" => Yii::t("notificaciones", "Error al grabar2." . $mensaje),
+                    "wtmessage" => Yii::t("notificaciones", "Error al grabar." . $mensaje),
                     "title" => Yii::t('jslang', 'Success'),
                 );
                 echo Utilities::ajaxResponse('NO_OK', 'Error', Yii::t("jslang", "Error"), false, $message);
