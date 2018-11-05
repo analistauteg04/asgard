@@ -80,11 +80,11 @@ academico::registerTranslations();
                     },
                 ],
             ],
-            [
+            /*[
                 'attribute' => 'aprobadas',
                 'header' => academico::t("Academico", "Approved"),
                 'value' => 'aprobada',
-            ],
+            ],*/
             [
                 'attribute' => 'reprobadas',
                 'header' => academico::t("Academico", "Failed"),

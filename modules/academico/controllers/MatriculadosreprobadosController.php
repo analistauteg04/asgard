@@ -3,7 +3,7 @@
 namespace app\modules\academico\controllers;
 
 use Yii;
-use app\modules\academico\models\PeriodoMetodoIngreso;
+use app\modules\academico\models\PeriodoAcademicoMetIngreso;
 use app\modules\academico\models\MatriculadosReprobado;
 use app\modules\academico\models\EstudioAcademico;
 use app\modules\academico\models\Admitido;
@@ -156,7 +156,7 @@ class MatriculadosreprobadosController extends \app\components\CController {
         $mod_unidad = new UnidadAcademica();
         $mod_modalidad = new Modalidad();
         $modcanal = new Oportunidad();
-        $mod_periodo = new PeriodoMetodoIngreso();
+        $mod_periodo = new PeriodoAcademicoMetIngreso();
         $dato = Yii::$app->request->get();
         if (isset($dato["search"])) {
             $arradmitido = $mod_admitido->getMatriculados($dato["search"]);
@@ -294,17 +294,17 @@ class MatriculadosreprobadosController extends \app\components\CController {
 
     public function actionSave() {
         $periodo = 0;
-        //$per_id = @Yii::$app->session->get("PB_perid");
+        $mod_admitido = new MatriculadosReprobado();
         if (Yii::$app->request->isAjax) {
             $data = Yii::$app->request->post();
             $ides = $data["ids"];
             $valores = explode("_", $ides);
             $admitido = $valores[0];
             $sins_id = $valores[1];
-            //$uniacademica = $data["uniacademica"];            
-            //$modalidad = $data["modalidad"];          
-            //$carrera = $data['carreprog'];
-            //$materia = $data['materia'];
+            $uniacademica = $data["uniacademica"];
+            $modalidad = $data["modalidad"];
+            $carrera = $data['carreprog'];
+            $asigna = $data['materia'];
             $usuario = @Yii::$app->user->identity->usu_id;
             $periodo = $data['periodo'];
             $con = \Yii::$app->db_captacion;
@@ -316,6 +316,7 @@ class MatriculadosreprobadosController extends \app\components\CController {
                 if ($resp_matreprobado["encontrado"] == 0) {
                     $resp_ingreso = $mod_reprobado->insertarMatricureprobado($admitido, $periodo, $sins_id, $usuario, $fecha_creacion);
                     $mre_id = Yii::$app->db_captacion->getLastInsertID('db_captacion.matriculados_reprobado');
+<<<<<<< HEAD
                     /* Obtener el arregli asi de javascript de lo del grid de materias */
                     /* $materia = [
                       ["id" => 1, "estado" => 1],
@@ -336,6 +337,39 @@ class MatriculadosreprobadosController extends \app\components\CController {
                       }
                       } */
                     $exito = 1;
+=======
+                    if ($resp_ingreso) {
+                        if (!empty($asigna)) {
+                            for ($i = 0; $i < strlen($asigna); $i++) {
+                                //Guardado Datos Materias reprobadas.                        
+                                $asigantura = $asigna[$i];
+                                $estado_materia = 2;
+                                if ($asigantura != ' ') {
+                                    $res_materia = $mod_reprobado->insertarMateriareprueba($mre_id, $asigantura, $estado_materia, $usuario, $fecha_creacion);
+                                    if ($res_materia) {
+                                        $exito = 1;
+                                    } else {
+                                        $exito = 0;
+                                    }
+                                    //$reprobar = $reprobar . ' ' . 'asig.asi_id != ' . $asigna[$i] . ' and ';
+                                }
+                            }
+                            //Guardado Datos Materias aprobadas.                         
+                            /*$estado_materiare = 1;
+                            $arr_materia = $mod_admitido->consultarMateriarep($uniacademica, $modalidad, $carrera, $reprobar);
+                            $arr_materias = ArrayHelper::map($arr_materia, "id", "value");                           
+                            for ($j = 0; $j < count($arr_materias); $j++) {
+                                if ($res_materia) {
+                                    \app\models\Utilities::putMessageLogFile('xxx..  ' . $arr_materias["value"][$j]);
+                                    $res_reprobam = $mod_reprobado->insertarMateriareprueba($mre_id, $arr_materias[$j], $estado_materiare, $usuario, $fecha_creacion);
+                                    if ($res_reprobam) {
+                                        $exito = 1;
+                                    }
+                                }
+                            }*/
+                        }
+                    }
+>>>>>>> 4ef6cf973e297e4920faebebc7e7c59e570d53c5
                     if ($exito) {
                         $transaction->commit();
                         $message = array(
@@ -397,8 +431,7 @@ class MatriculadosreprobadosController extends \app\components\CController {
             academico::t("Academico", "Month Process"),
             academico::t("Academico", "Career/Program"),
             admision::t("Solicitudes", "Income Method"),
-            academico::t("Academico", "Approved"),
-            academico::t("Academico", "Failed")
+            Yii::t("formulario", "Subject")
         );
         $data = Yii::$app->request->get();
         $arrSearch = array();
@@ -435,8 +468,7 @@ class MatriculadosreprobadosController extends \app\components\CController {
             academico::t("Academico", "Month Process"),
             academico::t("Academico", "Career/Program"),
             admision::t("Solicitudes", "Income Method"),
-            academico::t("Academico", "Approved"),
-            academico::t("Academico", "Failed")
+            Yii::t("formulario", "Subject")
         );
         $data = Yii::$app->request->get();
         $arrSearch = array();

@@ -225,7 +225,7 @@ class MatriculadosReprobado extends \yii\db\ActiveRecord {
                         when 11 then 'Noviembre'
                         when 12 then 'Diciembre'
                  end as mes_id_academico,
-                    ifnull((select count(*) from " . $con->dbname . ".materias_matriculados_reprobado mmr where mmr.mre_id = mre.mre_id and mmr.mmr_estado_materia = 1),' ') as aprobada,
+                    -- ifnull((select count(*) from " . $con->dbname . ".materias_matriculados_reprobado mmr where mmr.mre_id = mre.mre_id and mmr.mmr_estado_materia = 1),' ') as aprobada,
                     ifnull((select count(*) from " . $con->dbname . ".materias_matriculados_reprobado mmr where mmr.mre_id = mre.mre_id and mmr.mmr_estado_materia = 2),' ') as reprobada
                 FROM " . $con->dbname . ".matriculados_reprobado mre 
                      INNER JOIN " . $con->dbname . ".admitido adm ON adm.adm_id = mre.adm_id
@@ -245,7 +245,7 @@ class MatriculadosReprobado extends \yii\db\ActiveRecord {
                        ami.pami_estado_logico = :estado AND
                        mre.mre_estado = :estado AND
                        mre.mre_estado_logico = :estado
-                ORDER BY SUBSTRING(mre.mre_fecha_creacion,1,10) desc";
+                ORDER BY mre.mre_fecha_creacion desc";
         $comando = $con->createCommand($sql);
         $comando->bindParam(":estado", $estado, \PDO::PARAM_STR);
         $comando->bindParam(":estado_opago", $estado_opago, \PDO::PARAM_STR);
@@ -296,9 +296,9 @@ class MatriculadosReprobado extends \yii\db\ActiveRecord {
                     asig.asi_id as id,
                     asig.asi_descripcion
                 from 
-                    db_academico.malla_academica as maca
-                    join db_academico.malla_academica_detalle as made on made.maca_id=maca.maca_id
-                    join db_academico.asignatura as asig on asig.asi_id=made.asi_id
+                    " . $con3->dbname . ".malla_academica as maca
+                    join " . $con3->dbname . ".malla_academica_detalle as made on made.maca_id=maca.maca_id
+                    join " . $con3->dbname . ".asignatura as asig on asig.asi_id=made.asi_id
                 where 
                     maca.uaca_id=:uaca_id and
                     maca.eaca_id=:car_id and
@@ -399,8 +399,10 @@ class MatriculadosReprobado extends \yii\db\ActiveRecord {
                            (select eaca_nombre from " . $con3->dbname . ".estudio_academico ea where ea.eaca_id = sins.eaca_id and ea.eaca_estado = '1' and ea.eaca_estado_logico = '1')
                     end as carrera,
                     ifnull((select min.ming_nombre from " . $con->dbname . ".metodo_ingreso min where min.ming_id = sins.ming_id),'N/A') as ming_nombre,
-                    0 as aprobada,
-                    0 as reprobada
+                    ifnull((SELECT GROUP_CONCAT(CONCAT(asi.asi_nombre, '(', IF(mmr.mmr_estado_materia =1,'Aprobado','Reprobado'), ')')  SEPARATOR ', ') as asignaturas 
+                            FROM " . $con->dbname . ".materias_matriculados_reprobado mmr
+                            INNER JOIN  " . $con3->dbname . ".asignatura asi ON asi.asi_id = mmr.asi_id
+                            where mmr.mre_id = mre.mre_id),'') as asignaturas
                 FROM " . $con->dbname . ".matriculados_reprobado mre 
                      INNER JOIN " . $con->dbname . ".admitido adm ON adm.adm_id = mre.adm_id
                      INNER JOIN " . $con->dbname . ".interesado inte on inte.int_id = adm.int_id                     
@@ -416,8 +418,10 @@ class MatriculadosReprobado extends \yii\db\ActiveRecord {
                        per.per_estado_logico = :estado AND
                        per.per_estado = :estado AND
                        ami.pami_estado = :estado AND
-                       ami.pami_estado_logico = :estado                                                   
-                ORDER BY SUBSTRING(mre.mre_fecha_creacion,1,10) desc";
+                       ami.pami_estado_logico = :estado AND
+                       mre.mre_estado = :estado AND
+                       mre.mre_estado_logico = :estado
+                ORDER BY mre.mre_fecha_creacion desc";
         $comando = $con->createCommand($sql);
         $comando->bindParam(":estado", $estado, \PDO::PARAM_STR);
         $comando->bindParam(":estado_opago", $estado_opago, \PDO::PARAM_STR);
@@ -646,11 +650,11 @@ class MatriculadosReprobado extends \yii\db\ActiveRecord {
         if (isset($asi_id)) {
             $param_sql .= ", asi_id";
             $bdet_sql .= ", :asi_id";
-        }  
+        }
         if (isset($mmr_estado_materia)) {
             $param_sql .= ", mmr_estado_materia";
             $bdet_sql .= ", :mmr_estado_materia";
-        } 
+        }
         if (isset($mmr_usuario_ingreso)) {
             $param_sql .= ", mmr_usuario_ingreso";
             $bdet_sql .= ", :mmr_usuario_ingreso";
@@ -672,7 +676,7 @@ class MatriculadosReprobado extends \yii\db\ActiveRecord {
             }
             if (isset($mmr_estado_materia)) {
                 $comando->bindParam(':mmr_estado_materia', $mmr_estado_materia, \PDO::PARAM_STR);
-            }                       
+            }
             if (!empty((isset($mmr_usuario_ingreso)))) {
                 $comando->bindParam(':mmr_usuario_ingreso', $mmr_usuario_ingreso, \PDO::PARAM_INT);
             }
@@ -689,6 +693,6 @@ class MatriculadosReprobado extends \yii\db\ActiveRecord {
                 $trans->rollback();
             return FALSE;
         }
-    }
+    }    
 
 }

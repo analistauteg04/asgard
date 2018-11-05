@@ -163,10 +163,6 @@ class PeriodoMetodoIngreso extends \yii\db\ActiveRecord {
         }
     }
 
-   
-
-    
-
     /**
      * Function listarParalelos
      * @author  Grace Viteri <analistadesarrollo01@uteg.edu.ec>
@@ -269,7 +265,7 @@ class PeriodoMetodoIngreso extends \yii\db\ActiveRecord {
                 $trans->rollback();
             return FALSE;
         }
-    }  
+    }
 
     /**
      * Function consultaPeriodoId
@@ -435,29 +431,6 @@ class PeriodoMetodoIngreso extends \yii\db\ActiveRecord {
                 $trans->rollback();
             return FALSE;
         }
-    }
-
-    /**
-     * Function consulta los periodos. 
-     * @author Giovanni Vergara <analistadesarrollo02@uteg.edu.ec>;
-     * @param
-     * @return
-     */
-    public function consultarPeriodo() {
-        $con = \Yii::$app->db_academico;       
-        $estado = 1;
-        $sql = "SELECT 
-                   pera.pami_id as id,
-                   pera.pami_codigo as name
-                FROM 
-                   " . $con->dbname . ".periodo_academico_met_ingreso  pera WHERE ";        
-        $sql .= "  pera.pami_estado = :estado AND
-                   pera.pami_estado_logico = :estado";
-
-        $comando = $con->createCommand($sql);
-        $comando->bindParam(":estado", $estado, \PDO::PARAM_STR);        
-        $resultData = $comando->queryAll();
-        return $resultData;
     }
 
 }
