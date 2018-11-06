@@ -414,5 +414,31 @@ class PeriodoAcademicoMetIngreso extends \yii\db\ActiveRecord {
         $resultData = $comando->queryAll();
         return $resultData;
     }
+    
+    /**
+     * Function consulta los periodos. 
+     * @author Giovanni Vergara <analistadesarrollo02@uteg.edu.ec>;
+     * @param
+     * @return
+     */
+    public function consultarPeriodoanterior($periodo) {
+        $con = \Yii::$app->db_academico;
+        $estado = 1;        
+        $sql = "SELECT 
+                   pera.pami_mes as mes,
+                   pera.pami_anio as anio
+                FROM 
+                   " . $con->dbname . ".periodo_academico_met_ingreso  pera 
+                WHERE
+                   pera.pami_id =:periodo AND  
+                   pera.pami_estado = :estado AND
+                   pera.pami_estado_logico = :estado";
+
+        $comando = $con->createCommand($sql);
+        $comando->bindParam(":estado", $estado, \PDO::PARAM_STR);
+        $comando->bindParam(":periodo", $periodo, \PDO::PARAM_STR);
+        $resultData = $comando->queryAll();
+        return $resultData;
+    }
 
 }

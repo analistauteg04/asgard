@@ -319,9 +319,10 @@ function actualizarMateriaGrid() {
                     var unidad = $('#cmb_ninteres option:selected').val();
                     var modalidad = $('#cmb_modalidad option:selected').val();
                     var carrera = $('#cmb_carrera1 option:selected').val();
+                    var periodo = $('#cmb_periodo option:selected').val();
                     if (!$(".blockUI").length) {
                         showLoadingPopup();
-                        $('#TbG_MATERIAS').PbGridView('applyFilterData', {'unidad': unidad, 'modalidad': modalidad, 'carrera': carrera});
+                        $('#TbG_MATERIAS').PbGridView('applyFilterData', {'unidad': unidad, 'modalidad': modalidad, 'carrera': carrera, 'periodo': periodo});
                         setTimeout(hideLoadingPopup, 2000);
                     }
                 } else {
