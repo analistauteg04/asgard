@@ -338,6 +338,7 @@ class SolicitudesController extends \app\components\CController {
                     $mod_solins->sins_observacion = "";
                     $mod_solins->sins_estado = "1";
                     $mod_solins->sins_estado_logico = "1";
+                    $mod_solins->sins_usuario_ingreso = $usu_id;
                     if ($beca == "1") {
                         $mod_solins->sins_beca = "1";
                     }
@@ -364,6 +365,7 @@ class SolicitudesController extends \app\components\CController {
                         } else {
                             if ($respDescuento["ddit_tipo_beneficio"] == 'P') {
                                 $val_descuento = ($precio * ($respDescuento["ddit_porcentaje"])) / 100;
+                                \app\models\Utilities::putMessageLogFile('valDescuento:'.$val_descuento);
                             } else {
                                 $val_descuento = $respDescuento["ddit_valor"];
                             }
@@ -381,6 +383,8 @@ class SolicitudesController extends \app\components\CController {
                     $estadopago = 'P';
                 }
                 $val_total = $precio - $val_descuento;
+                \app\models\Utilities::putMessageLogFile('valTotal:'.$val_total);
+                \app\models\Utilities::putMessageLogFile('precio:'.$precio);
                 $resp_opago = $mod_ordenpago->insertarOrdenpago($id_sins, null, $val_total, 0, $val_total, $estadopago, $usu_id);
                 if ($resp_opago) {
                     //insertar desglose del pago                                    

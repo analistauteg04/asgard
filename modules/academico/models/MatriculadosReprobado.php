@@ -285,12 +285,15 @@ class MatriculadosReprobado extends \yii\db\ActiveRecord {
      * @param   
      * @return  $resultData (información del matriculado no aprobado)
      */
-    public function consultarMateriasPorUnidadModalidadCarrera($uaca_id, $moda_id, $car_id) {
+    public function consultarMateriasPorUnidadModalidadCarrera($uaca_id, $moda_id, $car_id, $mes, $anio) {
         $con = \Yii::$app->db_captacion;
         $con2 = \Yii::$app->db;
         $con3 = \Yii::$app->db_academico;
         $con1 = \Yii::$app->db_facturacion;
-        $estado = 1;
+        $estado = 1;        
+        if ($uaca_id == 1 &&  $moda_id == 1 && $mes > 1 && $anio > 2017) {
+           $str_filtro = 'asig.asi_id < 4 and '; 
+        }
         $sql = " 
                 select 
                     asig.asi_id as id,
@@ -300,21 +303,21 @@ class MatriculadosReprobado extends \yii\db\ActiveRecord {
                     join " . $con3->dbname . ".malla_academica_detalle as made on made.maca_id=maca.maca_id
                     join " . $con3->dbname . ".asignatura as asig on asig.asi_id=made.asi_id
                 where 
+                    $str_filtro
                     maca.uaca_id=:uaca_id and
                     maca.eaca_id=:car_id and
                     maca.mod_id=:moda_id and 
                     maca.maca_estado =:estado and 
                     maca.maca_estado_logico =:estado and
                     made.made_estado =:estado and 
-                    made.made_estado_logico =:estado
-                    -- asig.asi_estado =:estado and 
-                    -- asig.asi_estado_logico =:estado
+                    made.made_estado_logico =:estado                    
                 ";
         $comando = $con->createCommand($sql);
         $comando->bindParam(":estado", $estado, \PDO::PARAM_STR);
         $comando->bindParam(":uaca_id", $uaca_id, \PDO::PARAM_INT);
         $comando->bindParam(":moda_id", $moda_id, \PDO::PARAM_INT);
         $comando->bindParam(":car_id", $car_id, \PDO::PARAM_INT);
+        $comando->bindParam(":peri", $peri, \PDO::PARAM_INT);
         $resultData = $comando->queryAll();
         $dataProvider = new ArrayDataProvider([
             'key' => 'id',
