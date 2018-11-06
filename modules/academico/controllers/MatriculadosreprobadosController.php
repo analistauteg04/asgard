@@ -334,18 +334,18 @@ class MatriculadosreprobadosController extends \app\components\CController {
                                 }
                             }
                             //Guardado Datos Materias aprobadas.                         
-                            /* $estado_materiare = 1;
-                              $arr_materia = $mod_admitido->consultarMateriarep($uniacademica, $modalidad, $carrera, $reprobar);
-                              $arr_materias = ArrayHelper::map($arr_materia, "id", "value");
-                              for ($j = 0; $j < count($arr_materias); $j++) {
-                              if ($res_materia) {
-                              \app\models\Utilities::putMessageLogFile('xxx..  ' . $arr_materias["value"][$j]);
-                              $res_reprobam = $mod_reprobado->insertarMateriareprueba($mre_id, $arr_materias[$j], $estado_materiare, $usuario, $fecha_creacion);
-                              if ($res_reprobam) {
-                              $exito = 1;
-                              }
-                              }
-                              } */
+                            $estado_materiare = 1;
+                            /*$arr_materia = $mod_admitido->consultarMateriarep($uniacademica, $modalidad, $carrera, $reprobar);
+                            $arr_materias = ArrayHelper::map($arr_materia, "id", "value");
+                            for ($j = 0; $j < count($arr_materias); $j++) {
+                                if ($res_materia) {
+                                    \app\models\Utilities::putMessageLogFile('xxx..  ' . $arr_materias["value"][$j]);
+                                    $res_reprobam = $mod_reprobado->insertarMateriareprueba($mre_id, $arr_materias[$j], $estado_materiare, $usuario, $fecha_creacion);
+                                    if ($res_reprobam) {
+                                        $exito = 1;
+                                    }
+                                }
+                            }*/
                         }
                     }
                     if ($exito) {

@@ -211,7 +211,7 @@ class MatriculadosReprobado extends \yii\db\ActiveRecord {
                            (select eaca_nombre from " . $con3->dbname . ".estudio_academico ea where ea.eaca_id = sins.eaca_id and ea.eaca_estado = '1' and ea.eaca_estado_logico = '1')
                     end as carrera,
                     -- MONTHNAME(CONCAT('00','-',ami.mes_id_academico,'-','0000')) as mes_id_academico               
-                    case mes_id_academico 
+                    case pami_mes 
                         when 1 then 'Enero' 
                         when 2 then 'Febrero'
                         when 3 then 'Marzo'
@@ -379,7 +379,7 @@ class MatriculadosReprobado extends \yii\db\ActiveRecord {
                     per.per_celular,
                     ifnull((select uaca.uaca_nombre from " . $con3->dbname . ".unidad_academica uaca where uaca.uaca_id = sins.uaca_id),'N/A') as uaca_nombre,
                     ifnull((select moda.mod_nombre from " . $con3->dbname . ".modalidad moda where moda.mod_id = sins.mod_id),'N/A') as mod_nombre, 
-                    case mes_id_academico 
+                    case pami_mes 
                         when 1 then 'Enero' 
                         when 2 then 'Febrero'
                         when 3 then 'Marzo'
