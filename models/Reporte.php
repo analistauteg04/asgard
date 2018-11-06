@@ -97,16 +97,23 @@ class Reporte extends \yii\db\ActiveRecord {
                 $comando->bindParam(":fec_fin", $fecha_fin, \PDO::PARAM_STR);
             }
         }
-
-
         return $comando->queryAll();
     }
 
-    public function consultarAspirantesPendientes($data) {
+    public function consultarAspirantesPendientes($arrFiltro = array()) {
         $con = \Yii::$app->db_captacion;
         $con1 = \Yii::$app->db_asgard;
         $con2 = \Yii::$app->db_academico;
         $estado = 1;
+        $str_search="";
+        if (isset($arrFiltro) && count($arrFiltro) > 0) {
+            $str_search .= "(per.per_cedula like :search) and ";
+            if ($arrFiltro['f_ini'] != "" && $arrFiltro['f_fin'] != "") {
+                $str_search .= "sins.sins_fecha_solicitud >= :fec_ini AND ";
+                $str_search .= "sins.sins_fecha_solicitud <= :fec_fin AND ";
+            }
+        }
+        
         $sql = "
                     select 
                         ifnull(per.per_cedula,per.per_pasaporte) as DNI,                    
@@ -162,6 +169,7 @@ class Reporte extends \yii\db\ActiveRecord {
                         join db_asgard.empresa as emp on emp.emp_id=iemp.emp_id
                         join db_captacion.admitido admit on admit.int_id=inte.int_id        
                     where
+                        $str_search
                         inte.int_estado_logico=:estado AND
                         inte.int_estado=:estado AND                    
                         per.per_estado_logico=:estado AND						
@@ -173,6 +181,16 @@ class Reporte extends \yii\db\ActiveRecord {
                         order by inte.int_fecha_creacion desc
                 ";
         $comando = $con->createCommand($sql);
+        if (isset($arrFiltro) && count($arrFiltro) > 0) {
+            $search_cond = "%" . $arrFiltro["search_dni"] . "%";
+            $comando->bindParam(":search", $search_cond, \PDO::PARAM_STR);
+            $fecha_ini = $arrFiltro["f_ini"] . " 00:00:00";
+            $fecha_fin = $arrFiltro["f_fin"] . " 23:59:59";
+            if ($arrFiltro['f_ini'] != "" && $arrFiltro['f_fin'] != "") {
+                $comando->bindParam(":fec_ini", $fecha_ini, \PDO::PARAM_STR);
+                $comando->bindParam(":fec_fin", $fecha_fin, \PDO::PARAM_STR);
+            }
+        }
         $comando->bindParam(":estado", $estado, \PDO::PARAM_STR);
         $resultData = $comando->queryAll();
         return $resultData;
