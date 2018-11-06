@@ -493,7 +493,7 @@ class OrdenPago extends \app\modules\financiero\components\CActiveRecord {
                 $comando->bindParam(':fpag_id', $fpag_id, \PDO::PARAM_STR);
 
             if (isset($rpag_valor))
-                $comando->bindParam(':rpag_valor', $rpag_valor, \PDO::PARAM_INT);
+                $comando->bindParam(':rpag_valor', $rpag_valor, \PDO::PARAM_STR);
 
             if (isset($rpag_fecha_pago))
                 $comando->bindParam(':rpag_fecha_pago', $rpag_fecha_pago, \PDO::PARAM_STR);
@@ -786,7 +786,7 @@ class OrdenPago extends \app\modules\financiero\components\CActiveRecord {
                 $comando->bindParam(':opag_id', $opag_id, \PDO::PARAM_INT);
 
             if (isset($icpr_valor))
-                $comando->bindParam(':icpr_valor', $icpr_valor, \PDO::PARAM_INT);
+                $comando->bindParam(':icpr_valor', $icpr_valor, \PDO::PARAM_STR);
 
             if (isset($fecha_registro))
                 $comando->bindParam(':icpr_fecha_registro', $fecha_registro, \PDO::PARAM_STR);
@@ -916,7 +916,7 @@ class OrdenPago extends \app\modules\financiero\components\CActiveRecord {
         $comando->bindParam(":opag_id", $opag_id, \PDO::PARAM_INT);
         $comando->bindParam(":opag_estado_pagado", $opag_estado_pagado, \PDO::PARAM_STR);
         $comando->bindParam(":opag_fecha_modificacion", $opag_fecha_modificacion, \PDO::PARAM_STR);
-        $comando->bindParam(":opag_valor_pagado", $opag_valor_pagado, \PDO::PARAM_INT);
+        $comando->bindParam(":opag_valor_pagado", $opag_valor_pagado, \PDO::PARAM_STR);
         $comando->bindParam(":opag_fecha_pago_total", $opag_fecha_pago_total, \PDO::PARAM_STR);
         $comando->bindParam(":usuario", $usuario, \PDO::PARAM_STR);
         $response = $comando->execute();
@@ -1628,16 +1628,16 @@ class OrdenPago extends \app\modules\financiero\components\CActiveRecord {
                 $comando->bindParam(':opag_fecha_generacion', $fecha_generacion, \PDO::PARAM_STR);
 
             if (isset($opag_subtotal))
-                $comando->bindParam(':opag_subtotal', $opag_subtotal, \PDO::PARAM_INT);
+                $comando->bindParam(':opag_subtotal', $opag_subtotal, \PDO::PARAM_STR);
 
             if (isset($opag_iva))
-                $comando->bindParam(':opag_iva', $opag_iva, \PDO::PARAM_INT);
+                $comando->bindParam(':opag_iva', $opag_iva, \PDO::PARAM_STR);
 
             if (isset($opag_total))
-                $comando->bindParam(':opag_total', $opag_total, \PDO::PARAM_INT);
+                $comando->bindParam(':opag_total', $opag_total, \PDO::PARAM_STR);
 
             if (isset($valor_pagado))
-                $comando->bindParam(':opag_valor_pagado', $valor_pagado, \PDO::PARAM_INT);
+                $comando->bindParam(':opag_valor_pagado', $valor_pagado, \PDO::PARAM_STR);
 
             if (isset($opag_estado_pago))
                 $comando->bindParam(':opag_estado_pago', $opag_estado_pago, \PDO::PARAM_STR);
@@ -1726,13 +1726,13 @@ class OrdenPago extends \app\modules\financiero\components\CActiveRecord {
                 $comando->bindParam(':opag_id', $opag_id, \PDO::PARAM_INT);
 
             if (isset($dpag_subtotal))
-                $comando->bindParam(':dpag_subtotal', $dpag_subtotal, \PDO::PARAM_INT);
+                $comando->bindParam(':dpag_subtotal', $dpag_subtotal, \PDO::PARAM_STR);
 
             if (isset($dpag_iva))
-                $comando->bindParam(':dpag_iva', $dpag_iva, \PDO::PARAM_INT);
+                $comando->bindParam(':dpag_iva', $dpag_iva, \PDO::PARAM_STR);
 
             if (isset($dpag_total))
-                $comando->bindParam(':dpag_total', $dpag_total, \PDO::PARAM_INT);
+                $comando->bindParam(':dpag_total', $dpag_total, \PDO::PARAM_STR);
 
             if (isset($dpag_fecha_inicio))
                 $comando->bindParam(':dpag_fecha_ini_vigencia', $dpag_fecha_inicio, \PDO::PARAM_STR);
