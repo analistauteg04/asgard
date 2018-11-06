@@ -143,71 +143,71 @@ $(document).ready(function () {
     });
     $('#btn_buscarData').click(function () {
         actualizarGrid();
+    });    
+});
+function guardarAdmiMateriarep() {
+    var link = $('#txth_base').val() + "/academico/matriculadosreprobados/save"; //VER BIEN EL NOMBRE
+    var arrParams = new Object();
+    var selected = '';
+    arrParams.uniacademica = $('#cmb_ninteres').val();
+    arrParams.modalidad = $('#cmb_modalidad').val();
+    arrParams.carreprog = $('#cmb_carrera1').val();
+    arrParams.periodo = $('#cmb_periodo').val();
+    arrParams.ids = $('#TbG_Admitido input[name=rb_admitido]:checked').val();
+    $('#TbG_MATERIAS input[type=checkbox]').each(function () {
+        if (this.checked) {
+            selected += $(this).val() + ' ';
+        }
     });
-    $('#sendReprobado').click(function () {
-        var link = $('#txth_base').val() + "/academico/matriculadosreprobados/save"; //VER BIEN EL NOMBRE
-        var arrParams = new Object();
-        var selected = '';
-        arrParams.uniacademica = $('#cmb_ninteres').val();
-        arrParams.modalidad = $('#cmb_modalidad').val();
-        arrParams.carreprog = $('#cmb_carrera1').val();
-        arrParams.periodo = $('#cmb_periodo').val();
-        arrParams.ids = $('#TbG_Admitido input[name=rb_admitido]:checked').val();
-        $('#TbG_MATERIAS input[type=checkbox]').each(function () {
-            if (this.checked) {
-                selected += $(this).val() + ' ';
-            }
-        });
-        if (selected != '')
-        {
-            arrParams.materia = selected;
-        } else
+    if (selected != '')
+    {
+        arrParams.materia = selected;
+    } else
+    {
+        var mensaje = {wtmessage: "Materias no debe estar vacío.", title: "Error"};
+        showAlert("NO_OK", "Error", mensaje);
+    }
+    if (arrParams.ids === undefined)
+    {
+        var mensaje = {wtmessage: "Seleccionar datos del admitido desde buscar DNI.", title: "Error"};
+        showAlert("NO_OK", "Error", mensaje);
+    } else {
+        if (arrParams.materia === undefined)
         {
             var mensaje = {wtmessage: "Materias no debe estar vacío.", title: "Error"};
             showAlert("NO_OK", "Error", mensaje);
-        }
-        if (arrParams.ids === undefined)
-        {
-            var mensaje = {wtmessage: "Seleccionar datos del admitido desde buscar DNI.", title: "Error"};
-            showAlert("NO_OK", "Error", mensaje);
         } else {
-            if (arrParams.materia === undefined)
-            {
-                var mensaje = {wtmessage: "Materias no debe estar vacío.", title: "Error"};
-                showAlert("NO_OK", "Error", mensaje);
-            } else {
-                if ($('#cmb_ninteres option:selected').val() > '0') {
-                    if ($('#cmb_modalidad option:selected').val() > '0') {
-                        if ($('#cmb_carrera1 option:selected').val() > '0') {
-                            if ($('#cmb_periodo option:selected').val() > '0') {
-                                if (!validateForm()) {
-                                    requestHttpAjax(link, arrParams, function (response) {
-                                        showAlert(response.status, response.label, response.message);
-                                        setTimeout(function () {
-                                            window.location.href = $('#txth_base').val() + "/academico/matriculadosreprobados/index";
-                                        }, 3000);
-                                    }, true);
-                                }
-                            } else {
-                                var mensaje = {wtmessage: "Período: El campo no debe estar vacío.", title: "Error"};
-                                showAlert("NO_OK", "Error", mensaje);
+            if ($('#cmb_ninteres option:selected').val() > '0') {
+                if ($('#cmb_modalidad option:selected').val() > '0') {
+                    if ($('#cmb_carrera1 option:selected').val() > '0') {
+                        if ($('#cmb_periodo option:selected').val() > '0') {
+                            if (!validateForm()) {
+                                requestHttpAjax(link, arrParams, function (response) {
+                                    showAlert(response.status, response.label, response.message);
+                                    setTimeout(function () {
+                                        window.location.href = $('#txth_base').val() + "/academico/matriculadosreprobados/index";
+                                    }, 3000);
+                                }, true);
                             }
                         } else {
-                            var mensaje = {wtmessage: "Carrera /Programa: El campo no debe estar vacío.", title: "Error"};
+                            var mensaje = {wtmessage: "Período: El campo no debe estar vacío.", title: "Error"};
                             showAlert("NO_OK", "Error", mensaje);
                         }
                     } else {
-                        var mensaje = {wtmessage: "Modalidad: El campo no debe estar vacío.", title: "Error"};
+                        var mensaje = {wtmessage: "Carrera /Programa: El campo no debe estar vacío.", title: "Error"};
                         showAlert("NO_OK", "Error", mensaje);
                     }
                 } else {
-                    var mensaje = {wtmessage: "Unidad Académica: El campo no debe estar vacío.", title: "Error"};
+                    var mensaje = {wtmessage: "Modalidad: El campo no debe estar vacío.", title: "Error"};
                     showAlert("NO_OK", "Error", mensaje);
                 }
+            } else {
+                var mensaje = {wtmessage: "Unidad Académica: El campo no debe estar vacío.", title: "Error"};
+                showAlert("NO_OK", "Error", mensaje);
             }
         }
-    });
-});
+    }
+}
 function guardarAdmireprobado(accion, paso) {
     var ID = (accion == "Update") ? $('#txth_twin_id').val() : 0;
     var link = $('#txth_base').val() + "/academico/matriculadosreprobados/savereprobadostemp";
