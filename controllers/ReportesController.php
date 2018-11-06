@@ -56,6 +56,7 @@ class ReportesController extends CController {
                             "Unidad Academica",
                             "Carrera",
                             "Modalidad",
+                            "Agente",
                             "Estado Solicitud",
                             "Estado Documentos",
                             "Estado Pago"

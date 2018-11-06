@@ -122,7 +122,8 @@ class Reporte extends \yii\db\ActiveRecord {
                             when 3 then (select mes.mest_nombre from db_academico.modulo_estudio mes inner join db_captacion.solicitud_inscripcion sins on sins.mest_id = mes.mest_id WHERE int_id = inte.int_id ORDER BY sins_fecha_solicitud desc LIMIT 1)
                              else null
                         end carrera,
-                        IFNULL(moda.mod_nombre,'') mod_nombre,
+                        ifnull(moda.mod_nombre,'') mod_nombre,
+                        CONCAT(ifnull(pag.per_pri_nombre,' '), ' ', ifnull(pag.per_pri_apellido,' ')) Agente,
                         case sins.rsin_id
                             when 1 then 'Pendiente'
                             when 2 then 'Aprobado'
@@ -151,10 +152,11 @@ class Reporte extends \yii\db\ActiveRecord {
                             ELSE 'Pagado' 
                         end Estado_Pago
                     from 
-                        db_captacion.interesado inte
+                        db_captacion.interesado inte                        
                         join db_asgard.persona as per on inte.per_id=per.per_id
                         join db_captacion.interesado_empresa as iemp on iemp.int_id=inte.int_id
                         join db_captacion.solicitud_inscripcion as sins on sins.int_id=inte.int_id
+                        join db_asgard.persona pag on pag.per_id = sins.sins_usuario_ingreso
                         join db_academico.unidad_academica as uaca on uaca.uaca_id=sins.uaca_id
                         join db_academico.modalidad as moda on moda.mod_id=sins.mod_id
                         join db_asgard.empresa as emp on emp.emp_id=iemp.emp_id
