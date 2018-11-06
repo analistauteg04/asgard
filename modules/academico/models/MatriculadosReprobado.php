@@ -541,35 +541,36 @@ class MatriculadosReprobado extends \yii\db\ActiveRecord {
         $ruta_doc_certificado = '';
         $twin_mensaje1 = 0;
         $twin_mensaje2 = 0;
-
-        $sql = "INSERT INTO " . $con->dbname . ".temporal_wizard_inscripcion
-            (twin_nombre,twin_apellido,twin_dni,twin_numero,twin_correo,twin_pais,twin_celular,uaca_id, 
-             mod_id,car_id,twin_metodo_ingreso,conuteg_id,ruta_doc_titulo, ruta_doc_dni, ruta_doc_certvota,
-             ruta_doc_foto,ruta_doc_certificado, twin_mensaje1,twin_mensaje2,twin_estado,twin_fecha_creacion,twin_estado_logico)VALUES
-            (:twin_nombre,:twin_apellido,:twin_dni,:twin_numero,:twin_correo,:twin_pais,:twin_celular,:uaca_id, 
-             :mod_id,:car_id,:twin_metodo_ingreso,:conuteg_id,:ruta_doc_titulo,:ruta_doc_dni,:ruta_doc_certvota,
-             :ruta_doc_foto,:ruta_doc_certificado,:twin_mensaje1,:twin_mensaje2,1,CURRENT_TIMESTAMP(),1)";
+        $sql = "INSERT INTO " . $con->dbname . ".temporal_wizard_reprobados
+            (twre_nombre,twre_apellido,twre_dni,twre_numero,twre_correo,twre_pais,twre_celular,
+            uaca_id, mod_id,car_id,twre_metodo_ingreso,conuteg_id,ruta_doc_titulo, 
+            ruta_doc_dni, ruta_doc_certvota, ruta_doc_foto,ruta_doc_certificado, 
+            twre_mensaje1,twre_mensaje2,twre_estado,twre_fecha_creacion,twre_estado_logico)
+            VALUES
+            (:twre_nombre,:twre_apellido,:twre_dni,:twre_numero,:twre_correo,:twre_pais,
+             :twre_celular,:uaca_id, :mod_id,:car_id,:twre_metodo_ingreso,:conuteg_id,
+             :ruta_doc_titulo,:ruta_doc_dni,:ruta_doc_certvota, :ruta_doc_foto,
+             :ruta_doc_certificado,:twre_mensaje1,:twre_mensaje2,1,CURRENT_TIMESTAMP(),1)";
 
         $command = $con->createCommand($sql);
-        $command->bindParam(":twin_nombre", $data[0]['pges_pri_nombre'], \PDO::PARAM_STR);
-        $command->bindParam(":twin_apellido", $data[0]['pges_pri_apellido'], \PDO::PARAM_STR);
-        $command->bindParam(":twin_dni", $data[0]['tipo_dni'], \PDO::PARAM_STR);
-        $command->bindParam(":twin_numero", $data[0]['pges_cedula'], \PDO::PARAM_STR);
-        $command->bindParam(":twin_correo", $data[0]['pges_correo'], \PDO::PARAM_STR);
-        $command->bindParam(":twin_pais", $data[0]['pais'], \PDO::PARAM_STR);
-        $command->bindParam(":twin_celular", $data[0]['pges_celular'], \PDO::PARAM_STR);
+        $command->bindParam(":twre_nombre", $data[0]['pges_pri_nombre'], \PDO::PARAM_STR);
+        $command->bindParam(":twre_apellido", $data[0]['pges_pri_apellido'], \PDO::PARAM_STR);
+        $command->bindParam(":twre_dni", $data[0]['tipo_dni'], \PDO::PARAM_STR);
+        $command->bindParam(":twre_numero", $data[0]['pges_cedula'], \PDO::PARAM_STR);
+        $command->bindParam(":twre_correo", $data[0]['pges_correo'], \PDO::PARAM_STR);
+        $command->bindParam(":twre_pais", $data[0]['pais'], \PDO::PARAM_STR);
+        $command->bindParam(":twre_celular", $data[0]['pges_celular'], \PDO::PARAM_STR);
         $command->bindParam(":uaca_id", $data[0]['unidad_academica'], \PDO::PARAM_STR);
         $command->bindParam(":mod_id", $data[0]['modalidad'], \PDO::PARAM_STR);
         $command->bindParam(":car_id", $data[0]['carrera'], \PDO::PARAM_STR);
         $command->bindParam(":twin_metodo_ingreso", $data[0]['ming_id'], \PDO::PARAM_STR);
-        $command->bindParam(":conuteg_id", $data[0]['conoce'], \PDO::PARAM_STR);
         $command->bindParam(":ruta_doc_titulo", $ruta_doc_titulo, \PDO::PARAM_STR);
         $command->bindParam(":ruta_doc_dni", $ruta_doc_dni, \PDO::PARAM_STR);
         $command->bindParam(":ruta_doc_certvota", $ruta_doc_certvota, \PDO::PARAM_STR);
         $command->bindParam(":ruta_doc_foto", $ruta_doc_foto, \PDO::PARAM_STR);
         $command->bindParam(":ruta_doc_certificado", $ruta_doc_certificado, \PDO::PARAM_STR);
-        $command->bindParam(":twin_mensaje1", $twin_mensaje1, \PDO::PARAM_STR);
-        $command->bindParam(":twin_mensaje2", $twin_mensaje2, \PDO::PARAM_STR);
+        $command->bindParam(":twre_mensaje1", $twin_mensaje1, \PDO::PARAM_STR);
+        $command->bindParam(":twre_mensaje2", $twin_mensaje2, \PDO::PARAM_STR);
         $command->execute();
         return $con->getLastInsertID();
     }

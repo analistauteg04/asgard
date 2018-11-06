@@ -65,9 +65,9 @@ class MatriculadosreprobadosController extends \app\components\CController {
             $data = Yii::$app->request->post();
             try {
                 $repro_temp_id = $data["DATA_1"][0]["twin_id"];
-
                 if ($accion == "create" || $accion == "Create") {
                     //Nuevo Registro      
+                    #\app\models\Utilities::putMessageLogFile("va a insertar en la tabla");
                     $resul = $model->insertarReprobadoTemp($data["DATA_1"]);
                 } else if ($accion == "Update") {
                     //Modificar Registro

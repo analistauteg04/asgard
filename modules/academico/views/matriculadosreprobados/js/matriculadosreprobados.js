@@ -235,7 +235,6 @@ function dataInscripPart1(ID) {
     objDat.unidad_academica = $('#cmb_unidad_solicitud option:selected').val();
     objDat.modalidad = $('#cmb_modalidad_solicitud option:selected').val();
     objDat.ming_id = $('#cmb_metodo_solicitud option:selected').val();
-    objDat.conoce = $('#cmb_conuteg option:selected').val();
     objDat.carrera = $('#cmb_carrera_solicitud option:selected').val();
     //TABA 2
 //    objDat.ruta_doc_titulo = ($('#txth_doc_titulo').val() != '') ? $('#txth_doc_titulo').val() : '';
@@ -247,7 +246,7 @@ function dataInscripPart1(ID) {
 //    objDat.twin_mensaje1 = ($("#chk_mensaje1").prop("checked")) ? '1' : '0';
 //    objDat.twin_mensaje2 = ($("#chk_mensaje2").prop("checked")) ? '1' : '0';
     datArray[0] = objDat;
-    sessionStorage.dataInscrip_1 = JSON.stringify(datArray);
+    sessionStorage.dataReprobado_1 = JSON.stringify(datArray);
     return datArray;
 }
 function habilitarSecciones() {
