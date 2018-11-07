@@ -20,7 +20,7 @@ return [
     "Career/Program" => "Carrera/Programa",
     "Career/Program/Course" => "Carrera/Programa/Curso",
     "Code" => "Código",
-    "Create period income method" => "Crear período método ingreso",
+    "Create period income method" => "Crear Período Método Ingreso",
     "Failed" => "Reprobadas",
     "Failed Registrations" => "Matriculados Reprobados",
     "Income Method" => "Mét. Ing",
@@ -37,6 +37,7 @@ return [
     "Registered" => "Matriculado",
     "Registration by Homologation" => "Matriculación por Homologación",
     "Search DNI" => "Buscar DNI",
+    "Update period income method" => "Actualizar Período Método Ingreso",
     "Year" => "Año",
 ];
 

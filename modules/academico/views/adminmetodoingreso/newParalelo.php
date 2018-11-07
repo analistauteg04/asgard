@@ -2,7 +2,6 @@
 
 use yii\helpers\Html;
 use app\widgets\PbGridView\PbGridView;
-use yii\data\ArrayDataProvider;
 use app\modules\admision\Module as admision;
 use app\modules\academico\Module as academico;
 use app\modules\financiero\Module as financiero;
@@ -23,7 +22,7 @@ aspirante::registerTranslations();
     <h4><span id="lbl_titulo1"><?= $periodo ?></span></h4><br/>    
 </div>
 
-<form class="form-horizontal" enctype="multipart/form-data" >   
+<form class="form-horizontal" enctype="multipart/form-data" >
     <div class="col-md-12 col-sm-12 col-xs-12 col-lg-12">
         <div class="form-group">
             <label for="txt_nombre" class="col-sm-4 control-label" id="lbl_descripcion"><?= Yii::t("formulario", "Name") ?></label>
@@ -61,9 +60,11 @@ aspirante::registerTranslations();
                 <br/>
             </div>  
         </div>    
-    </div>  
-    
-    <div>        
+    </div>      
+   
+</form>
+<!--
+ <div>        
         <?=
         PbGridView::widget([
             //'dataProvider' => new yii\data\ArrayDataProvider(array()),
@@ -92,4 +93,4 @@ aspirante::registerTranslations();
         ])
         ?>
     </div>   
-</form>
+--!>

@@ -364,8 +364,7 @@ class SolicitudesController extends \app\components\CController {
                             $val_descuento = 0;
                         } else {
                             if ($respDescuento["ddit_tipo_beneficio"] == 'P') {
-                                $val_descuento = ($precio * ($respDescuento["ddit_porcentaje"])) / 100;
-                                \app\models\Utilities::putMessageLogFile('valDescuento:'.$val_descuento);
+                                $val_descuento = ($precio * ($respDescuento["ddit_porcentaje"])) / 100;                                
                             } else {
                                 $val_descuento = $respDescuento["ddit_valor"];
                             }
@@ -383,8 +382,7 @@ class SolicitudesController extends \app\components\CController {
                     $estadopago = 'P';
                 }
                 $val_total = $precio - $val_descuento;
-                \app\models\Utilities::putMessageLogFile('valTotal:'.$val_total);
-                \app\models\Utilities::putMessageLogFile('precio:'.$precio);
+                \app\models\Utilities::putMessageLogFile('valTotal:'.$val_total);              
                 $resp_opago = $mod_ordenpago->insertarOrdenpago($id_sins, null, $val_total, 0, $val_total, $estadopago, $usu_id);
                 if ($resp_opago) {
                     //insertar desglose del pago                                    

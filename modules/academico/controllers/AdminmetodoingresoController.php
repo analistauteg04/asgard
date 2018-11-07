@@ -72,9 +72,7 @@ class AdminmetodoingresoController extends \app\components\CController {
                         "10" => Yii::t("academico", "October"), "11" => Yii::t("academico", "November"), "12" => Yii::t("academico", "December")),                       
         ]);
     }
-
    
-
     public function actionGrabarperiodoxmetodoing() {
         if (Yii::$app->request->isAjax) {
             $data = Yii::$app->request->post();
@@ -131,7 +129,7 @@ class AdminmetodoingresoController extends \app\components\CController {
     }
 
     public function actionNewparalelo() {
-        $pmin_id = base64_decode($_GET["pmin_id"]);
+        $pmin_id = base64_decode($_GET["pami_id"]);
         $codigo = base64_decode($_GET["codigo"]);
 
         $mod_paralelo = new PeriodoAcademicoMetIngreso();
@@ -191,22 +189,43 @@ class AdminmetodoingresoController extends \app\components\CController {
     }    
 
     public function actionUpdate() {
-        $pmin_id = base64_decode($_GET["pmin_id"]);
+        $emp_id = @Yii::$app->session->get("PB_idempresa");
+        $pmin_id = base64_decode($_GET["pami_id"]);
+        $pami_codigo = base64_decode($_GET["codigo"]);
         //Búsqueda de los datos del período
-        $modperiodo = new PeriodoMetodoIngreso();
-        $respPeriodo = $modperiodo->consultarPeriodoId($pmin_id);
+        $mod_periodo = new PeriodoAcademicoMetIngreso();
         $mod_metodo = new MetodoIngreso();
-        $arr_ninteres = NivelInteres::find()->select("nint_id AS id, nint_nombre AS name")->where(["nint_estado_logico" => "1", "nint_estado" => "1"])->asArray()->all();
-        $arr_metodos = $mod_metodo->consultarMetodoIngNivelInt($arr_ninteres[0]["id"]);
-
+        $mod_unidad = new UnidadAcademica();        
+        $mod_modalidad = new Modalidad();
+        
+        if (Yii::$app->request->isAjax) {
+            $data = Yii::$app->request->post();            
+            if (isset($data["getmodalidad"])) {
+                $modalidad = $mod_modalidad->consultarModalidad($data["uaca_id"], $emp_id);
+                $message = array("modalidad" => $modalidad);
+                return Utilities::ajaxResponse('OK', 'alert', Yii::t('jslang', 'Success'), 'false', $message);                
+            }
+            if (isset($data["getmetodo"])) {
+                $metodos = $mod_metodo->consultarMetodoIngNivelInt($data['uaca_id']);
+                $message = array("metodos" => $metodos);
+                return Utilities::ajaxResponse('OK', 'alert', Yii::t('jslang', 'Success'), 'false', $message);              
+            }           
+        }
+        $respPeriodo = $mod_periodo->consultarPeriodoId($pmin_id);                
+        $arr_unidadac = $mod_unidad->consultarUnidadAcademicasEmpresa($emp_id);
+        $arr_modalidad = $mod_modalidad->consultarModalidad(1, 1);
+        $arr_metodos = $mod_metodo->consultarMetodoIngNivelInt($arr_unidadac[0]["id"]);
+              
         return $this->render('update', [
-                    "arr_ninteres" => ArrayHelper::map($arr_ninteres, "id", "name"),
+                    "arr_ninteres" => ArrayHelper::map($arr_unidadac, "id", "name"),
                     "arr_metodos" => ArrayHelper::map($arr_metodos, "id", "name"),
+                    "arr_modalidad" => ArrayHelper::map($arr_modalidad, "id", "name"),
                     "mes" => array("1" => Yii::t("academico", "January"), "2" => Yii::t("academico", "Febrary"), "3" => Yii::t("academico", "March"),
                         "4" => Yii::t("academico", "April"), "5" => Yii::t("academico", "May"), "6" => Yii::t("academico", "June"),
                         "7" => Yii::t("academico", "July"), "8" => Yii::t("academico", "August"), "9" => Yii::t("academico", "September"),
                         "10" => Yii::t("academico", "October"), "11" => Yii::t("academico", "November"), "12" => Yii::t("academico", "December")),
                     "mod_periodo" => $respPeriodo,
+                    "codigo" => $pami_codigo,
         ]);
     }
 
@@ -216,19 +235,10 @@ class AdminmetodoingresoController extends \app\components\CController {
             $pmin_id = base64_decode($data["pmin_id"]);
             $anio = $data["anio"];
             $mes = $data["mes"];
-            $nint = $data["nint"];
+            $uaca = $data["nint"];
             $ming = $data["ming"];
-            if (strlen($mes) == 1) {
-                $mesint = "0" . $mes;
-            } else {
-                $mesint = $mes;
-            }
-            if ($ming == '1') {
-                $codigo = "CAN" . $mesint . substr($anio, 2, 2);
-            } else {
-                $codigo = "EXA" . $mesint . substr($anio, 2, 2);
-            }
-            $descripcion = $data["descripcion"];
+            $mod = $data["mod"];
+            $codigo = $data["codigo"];                
             $fec_desde = $data["fecdesde"];
             $fec_hasta = $data["fechasta"];
             $usuario_modifica = @Yii::$app->user->identity->usu_id;
@@ -236,14 +246,17 @@ class AdminmetodoingresoController extends \app\components\CController {
             $con = \Yii::$app->db_academico;
             $transaction = $con->beginTransaction();
             try {
-                // ojo antes de modificar se necesita verificar que no existan datos iguales, Grace va a realizar una
-                // funcion se debe utilizar esa, y tambien preferible poner esos campos unicos en la tabla
-                $mod_periodo = new PeriodoMetodoIngreso();
-                $resp_modifica = $mod_periodo->modificarPeriodo($pmin_id, $anio, $mes, $nint, $ming, $codigo, $descripcion, $fec_desde, $fec_hasta, $usuario_modifica);
-                if ($resp_modifica) {
-                    $exito = 1;
-                }
-
+                //Verificar que no existan los mismos datos.
+                $mod_periodo = new PeriodoAcademicoMetIngreso();
+                $resp_verifica = $mod_periodo->VerificarPeriodo($anio, $mes, $uaca, $mod, $ming);
+                if ($resp_verifica["pami_id"]== $pmin_id) {
+                    $resp_modifica = $mod_periodo->modificarPeriodo($pmin_id, $anio, $mes, $uaca, $ming, $mod, $codigo, $fec_desde, $fec_hasta, $usuario_modifica);
+                    if ($resp_modifica) {
+                        $exito = 1;
+                    }
+                }  else {
+                    $mensaje= "Ya existe un período académico registrado con los mismos datos.";
+                }              
                 if ($exito) {
                     $transaction->commit();
                     $message = array(

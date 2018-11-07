@@ -271,7 +271,7 @@ class PeriodoAcademicoMetIngreso extends \yii\db\ActiveRecord {
         $con = \Yii::$app->db_academico;
         $estado = 1;
 
-        $sql = "SELECT 'S' existe
+        $sql = "SELECT pami_id
                 FROM " . $con->dbname . ".periodo_academico_met_ingreso pmin
                 WHERE pmin.pami_anio = :anio
                 and pmin.pami_mes = :mes
@@ -345,8 +345,8 @@ class PeriodoAcademicoMetIngreso extends \yii\db\ActiveRecord {
         $bcur_sql .= ", 1";
 
         if (isset($pmin_id)) {
-            $param_sql .= ", pmin_id";
-            $bcur_sql .= ", :pmin_id";
+            $param_sql .= ", pami_id";
+            $bcur_sql .= ", :pami_id";
         }
         if (isset($nombre)) {
             $param_sql .= ", par_nombre";
@@ -370,7 +370,7 @@ class PeriodoAcademicoMetIngreso extends \yii\db\ActiveRecord {
             $comando = $con->createCommand($sql);
 
             if (isset($pmin_id))
-                $comando->bindParam(':pmin_id', $pmin_id, \PDO::PARAM_INT);
+                $comando->bindParam(':pami_id', $pmin_id, \PDO::PARAM_INT);
             
             if (isset($nombre))
                 $comando->bindParam(':par_nombre', $nombre, \PDO::PARAM_STR);
@@ -440,5 +440,151 @@ class PeriodoAcademicoMetIngreso extends \yii\db\ActiveRecord {
         $resultData = $comando->queryAll();
         return $resultData;
     }
+    
+    
+    /**
+     * Function consultarPeriodoId
+     * @author  Giovanni Vergara <analistadesarrollo02@uteg.edu.ec>
+     * @property integer $perid       
+     * @return  
+     */
+    public function consultarPeriodoId($pmin_id) {
+        $con = \Yii::$app->db_academico;
+        $estado = 1;
 
+        $sql = "SELECT pami_anio, 
+                    pami_mes, 
+                    uaca_id, 
+                    mod_id,
+                    ming_id,
+                    pami_codigo, 
+                    DATE(pami_fecha_inicio) as fecha_desde, 
+                    DATE(pami_fecha_fin) as fecha_hasta 
+                FROM " . $con->dbname . ".periodo_academico_met_ingreso 
+                WHERE   pami_id = :pmin_id AND
+                        pami_estado = :estado AND
+                        pami_estado_logico = :estado ";
+
+        $comando = $con->createCommand($sql);
+        $comando->bindParam(":estado", $estado, \PDO::PARAM_STR);
+        $comando->bindParam(":pmin_id", $pmin_id, \PDO::PARAM_INT);
+
+        $resultData = $comando->queryOne();
+        return $resultData;
+    }
+
+     /**
+     * Function modificarPeriodo
+     * @author  Giovanni Vergara <analistadesarrollo02@uteg.edu.ec>
+     *          Grace Viteri <analistadesarrollo01@uteg.edu.ec>
+     * @property integer $userid       
+     * @return  
+     */
+    public function modificarPeriodo($pmin_id, $anio, $mes, $uaca_id, $mod, $ming, $codigo, $fec_desde, $fec_hasta, $usuario_modifica) {
+        $con = \Yii::$app->db_academico;
+        $estado = 1;
+        $pmin_fecha_modificacion = date("Y-m-d H:i:s");
+        
+        try {
+            $comando = $con->createCommand
+                    ("UPDATE " . $con->dbname . ".periodo_academico_met_ingreso
+                      SET 
+                        pami_anio = :anio,
+                        pami_mes = :mes,
+                        uaca_id = :uaca_id,
+                        mod_id = :mod,
+                        ming_id = :ming,
+                        pami_codigo = :codigo,                         
+                        pami_fecha_inicio = :fec_desde,
+                        pami_fecha_fin = :fec_hasta,
+                        pami_usuario_modifica = :usuario_modifica,
+                        pami_fecha_modificacion = :pmin_fecha_modificacion
+                      WHERE 
+                        pami_id = :pmin_id AND 
+                        pami_estado = :estado AND
+                        pami_estado_logico = :estado");
+
+            $comando->bindParam(":estado", $estado, \PDO::PARAM_STR);
+            $comando->bindParam(":anio", $anio, \PDO::PARAM_INT);
+            $comando->bindParam(":mes", $mes, \PDO::PARAM_INT);
+            $comando->bindParam(":uaca_id", $uaca_id, \PDO::PARAM_INT);
+            $comando->bindParam(":mod", $mod, \PDO::PARAM_INT);
+            $comando->bindParam(":ming", $ming, \PDO::PARAM_INT);
+            $comando->bindParam(":codigo", $codigo, \PDO::PARAM_STR);            
+            $comando->bindParam(":fec_desde", $fec_desde, \PDO::PARAM_STR);
+            $comando->bindParam(":fec_hasta", $fec_hasta, \PDO::PARAM_STR);
+            $comando->bindParam(":usuario_modifica", $usuario_modifica, \PDO::PARAM_INT);
+            $comando->bindParam(":pmin_fecha_modificacion", $pmin_fecha_modificacion, \PDO::PARAM_STR);
+            $comando->bindParam(":pmin_id", $pmin_id, \PDO::PARAM_INT);
+            $response = $comando->execute();
+            
+            return $response;
+        } catch (Exception $ex) {            
+            return FALSE;
+        }
+    }
+    
+    /**
+     * Function insertarPlanificacionMeting (Registro de la planificación académica por método de ingreso.)
+     * @author  Grace Viteri <analistadesarrollo01@uteg.edu.ec>
+     * @param   
+     * @return  
+     */
+    public function insertarPlanificacionMeting($uaca_id, $mod_id, $paca_id, $pami_id, $maca_id, $usu_id) {
+        $con = \Yii::$app->db_academico;        
+
+        $param_sql = "peac_estado_logico";
+        $bcur_sql = "1";
+
+        $param_sql .= ", peac_estado";
+        $bcur_sql .= ", 1";
+
+        if (isset($uaca_id)) {
+            $param_sql .= ", uaca_id";
+            $bcur_sql .= ", :uaca_id";
+        }
+        if (isset($mod_id)) {
+            $param_sql .= ", mod_id";
+            $bcur_sql .= ", :mod_id";
+        }
+        if (isset($paca_id)) {
+            $param_sql .= ", paca_id";
+            $bcur_sql .= ", :paca_id";
+        }
+        if (isset($pami_id)) {
+            $param_sql .= ", pami_id";
+            $bcur_sql .= ", :pami_id";
+        }
+        if (isset($maca_id)) {
+            $param_sql .= ", maca_id";
+            $bcur_sql .= ", :maca_id";
+        }     
+        if (isset($usu_id)) {
+            $param_sql .= ", peac_usuario_ingreso";
+            $bcur_sql .= ", :peac_usuario_ingreso";
+        }
+
+        try {
+            $sql = "INSERT INTO " . $con->dbname . ".planificacion_estudio_academico ($param_sql) VALUES($bcur_sql)";
+            $comando = $con->createCommand($sql);
+
+            if (isset($uaca_id))
+                $comando->bindParam(':uaca_id', $uaca_id, \PDO::PARAM_INT);            
+            if (isset($mod_id))
+                $comando->bindParam(':mod_id', $mod_id, \PDO::PARAM_INT);
+            if (isset($paca_id))
+                $comando->bindParam(':paca_id', $paca_id, \PDO::PARAM_INT);
+            if (isset($pami_id))
+                $comando->bindParam(':pami_id', $pami_id, \PDO::PARAM_INT);
+            if (isset($maca_id))
+                $comando->bindParam(':maca_id', $maca_id, \PDO::PARAM_INT);
+            if (isset($usu_id))
+                $comando->bindParam(':peac_usuario_ingreso', $usu_id, \PDO::PARAM_INT);
+
+            $result = $comando->execute();                       
+            return $con->getLastInsertID($con->dbname . '.planificacion_estudio_academico');
+        } catch (Exception $ex) {            
+            return FALSE;
+        }
+    }  
 }
