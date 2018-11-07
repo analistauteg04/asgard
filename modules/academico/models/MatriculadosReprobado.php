@@ -574,7 +574,8 @@ class MatriculadosReprobado extends \yii\db\ActiveRecord {
             $command->bindParam(":uaca_id", $data[0]['unidad_academica'], \PDO::PARAM_STR);
             $command->bindParam(":mod_id", $data[0]['modalidad'], \PDO::PARAM_STR);
             $command->bindParam(":car_id", $data[0]['carrera'], \PDO::PARAM_STR);
-            $command->bindParam(":twin_metodo_ingreso", $data[0]['ming_id'], \PDO::PARAM_STR);
+            $command->bindParam(":twre_metodo_ingreso", $data[0]['ming_id'], \PDO::PARAM_STR);
+            $command->bindParam(":conuteg_id", $data[0]['carrera'], \PDO::PARAM_INT); // COLOCAR EL VALOR CORRECTO
             $command->bindParam(":ruta_doc_titulo", $ruta_doc_titulo, \PDO::PARAM_STR);
             $command->bindParam(":ruta_doc_dni", $ruta_doc_dni, \PDO::PARAM_STR);
             $command->bindParam(":ruta_doc_certvota", $ruta_doc_certvota, \PDO::PARAM_STR);
