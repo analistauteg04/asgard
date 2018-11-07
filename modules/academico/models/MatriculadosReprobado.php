@@ -575,7 +575,11 @@ class MatriculadosReprobado extends \yii\db\ActiveRecord {
         $command->bindParam(":twre_mensaje1", $twin_mensaje1, \PDO::PARAM_STR);
         $command->bindParam(":twre_mensaje2", $twin_mensaje2, \PDO::PARAM_STR);
         $command->execute();
-        return $con->getLastInsertID();
+        $id = $con->getLastInsertID();
+        if($id)
+            return ["status" => true, "twin_id" => $id];
+        else
+            return ["status" => true, "twin_id"  => $id];
     }
 
     /**
