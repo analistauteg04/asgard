@@ -589,11 +589,11 @@ class MatriculadosReprobado extends \yii\db\ActiveRecord {
             if($id)
                 return ["status" => true, "twin_id" => $id];
             else
-                return ["status" => true, "twin_id"  => $id];
+                return ["status" => false, "twin_id"  => 0];
         } catch (Exception $ex) {
             if ($trans !== null)
                 $trans->rollback();
-            return false;
+            return ["status" => false, "twin_id" => 0];;
         }
     }
 
