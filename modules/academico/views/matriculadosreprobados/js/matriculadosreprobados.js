@@ -217,6 +217,7 @@ function guardarAdmireprobado(accion, paso) {
     requestHttpAjax(link, arrParams, function (response) {
         var message = response.message;
         if (response.status == "OK") {
+            $('#txth_twin_id').val(response.data.twin_id);
             paso1next();
         }
     }, true);

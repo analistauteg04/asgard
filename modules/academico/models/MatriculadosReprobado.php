@@ -536,7 +536,14 @@ class MatriculadosReprobado extends \yii\db\ActiveRecord {
      * @param
      * @return
      */
-    public function insertarReprobadoTemp($con,$data) {
+    public function insertarReprobadoTemp($data) {
+        $con = \Yii::$app->db_captacion;
+        $trans = $con->getTransaction(); // se obtiene la transacción actual
+        if ($trans !== null) {
+            $trans = null; // si existe la transacción entonces no se crea una
+        } else {
+            $trans = $con->beginTransaction(); // si no existe la transacción entonces se crea una
+        }
         $ruta_doc_titulo = '';
         $ruta_doc_dni = '';
         $ruta_doc_certvota = '';
@@ -544,38 +551,51 @@ class MatriculadosReprobado extends \yii\db\ActiveRecord {
         $ruta_doc_certificado = '';
         $twin_mensaje1 = 0;
         $twin_mensaje2 = 0;
-        $sql = "INSERT INTO " . $con->dbname . ".temporal_wizard_reprobados
-            (twre_nombre,twre_apellido,twre_dni,twre_numero,twre_correo,twre_pais,twre_celular,
-            uaca_id, mod_id,car_id,twre_metodo_ingreso,conuteg_id,ruta_doc_titulo, 
-            ruta_doc_dni, ruta_doc_certvota, ruta_doc_foto,ruta_doc_certificado, 
-            twre_mensaje1,twre_mensaje2,twre_estado,twre_fecha_creacion,twre_estado_logico)
-            VALUES
-            (:twre_nombre,:twre_apellido,:twre_dni,:twre_numero,:twre_correo,:twre_pais,
-             :twre_celular,:uaca_id, :mod_id,:car_id,:twre_metodo_ingreso,:conuteg_id,
-             :ruta_doc_titulo,:ruta_doc_dni,:ruta_doc_certvota, :ruta_doc_foto,
-             :ruta_doc_certificado,:twre_mensaje1,:twre_mensaje2,1,CURRENT_TIMESTAMP(),1)";
+        try {
+            $sql = "INSERT INTO " . $con->dbname . ".temporal_wizard_reprobados
+                (twre_nombre,twre_apellido,twre_dni,twre_numero,twre_correo,twre_pais,twre_celular,
+                uaca_id, mod_id,car_id,twre_metodo_ingreso,conuteg_id,ruta_doc_titulo, 
+                ruta_doc_dni, ruta_doc_certvota, ruta_doc_foto,ruta_doc_certificado, 
+                twre_mensaje1,twre_mensaje2,twre_estado,twre_fecha_creacion,twre_estado_logico)
+                VALUES
+                (:twre_nombre,:twre_apellido,:twre_dni,:twre_numero,:twre_correo,:twre_pais,
+                :twre_celular,:uaca_id, :mod_id,:car_id,:twre_metodo_ingreso,:conuteg_id,
+                :ruta_doc_titulo,:ruta_doc_dni,:ruta_doc_certvota, :ruta_doc_foto,
+                :ruta_doc_certificado,:twre_mensaje1,:twre_mensaje2,1,CURRENT_TIMESTAMP(),1)";
 
-        $command = $con->createCommand($sql);
-        $command->bindParam(":twre_nombre", $data[0]['pges_pri_nombre'], \PDO::PARAM_STR);
-        $command->bindParam(":twre_apellido", $data[0]['pges_pri_apellido'], \PDO::PARAM_STR);
-        $command->bindParam(":twre_dni", $data[0]['tipo_dni'], \PDO::PARAM_STR);
-        $command->bindParam(":twre_numero", $data[0]['pges_cedula'], \PDO::PARAM_STR);
-        $command->bindParam(":twre_correo", $data[0]['pges_correo'], \PDO::PARAM_STR);
-        $command->bindParam(":twre_pais", $data[0]['pais'], \PDO::PARAM_STR);
-        $command->bindParam(":twre_celular", $data[0]['pges_celular'], \PDO::PARAM_STR);
-        $command->bindParam(":uaca_id", $data[0]['unidad_academica'], \PDO::PARAM_STR);
-        $command->bindParam(":mod_id", $data[0]['modalidad'], \PDO::PARAM_STR);
-        $command->bindParam(":car_id", $data[0]['carrera'], \PDO::PARAM_STR);
-        $command->bindParam(":twin_metodo_ingreso", $data[0]['ming_id'], \PDO::PARAM_STR);
-        $command->bindParam(":ruta_doc_titulo", $ruta_doc_titulo, \PDO::PARAM_STR);
-        $command->bindParam(":ruta_doc_dni", $ruta_doc_dni, \PDO::PARAM_STR);
-        $command->bindParam(":ruta_doc_certvota", $ruta_doc_certvota, \PDO::PARAM_STR);
-        $command->bindParam(":ruta_doc_foto", $ruta_doc_foto, \PDO::PARAM_STR);
-        $command->bindParam(":ruta_doc_certificado", $ruta_doc_certificado, \PDO::PARAM_STR);
-        $command->bindParam(":twre_mensaje1", $twin_mensaje1, \PDO::PARAM_STR);
-        $command->bindParam(":twre_mensaje2", $twin_mensaje2, \PDO::PARAM_STR);
-        $command->execute();
-        return $con->getLastInsertID();
+            $command = $con->createCommand($sql);
+            $command->bindParam(":twre_nombre", $data[0]['pges_pri_nombre'], \PDO::PARAM_STR);
+            $command->bindParam(":twre_apellido", $data[0]['pges_pri_apellido'], \PDO::PARAM_STR);
+            $command->bindParam(":twre_dni", $data[0]['tipo_dni'], \PDO::PARAM_STR);
+            $command->bindParam(":twre_numero", $data[0]['pges_cedula'], \PDO::PARAM_STR);
+            $command->bindParam(":twre_correo", $data[0]['pges_correo'], \PDO::PARAM_STR);
+            $command->bindParam(":twre_pais", $data[0]['pais'], \PDO::PARAM_STR);
+            $command->bindParam(":twre_celular", $data[0]['pges_celular'], \PDO::PARAM_STR);
+            $command->bindParam(":uaca_id", $data[0]['unidad_academica'], \PDO::PARAM_STR);
+            $command->bindParam(":mod_id", $data[0]['modalidad'], \PDO::PARAM_STR);
+            $command->bindParam(":car_id", $data[0]['carrera'], \PDO::PARAM_STR);
+            $command->bindParam(":twre_metodo_ingreso", $data[0]['ming_id'], \PDO::PARAM_STR);
+            $command->bindParam(":conuteg_id", $data[0]['carrera'], \PDO::PARAM_INT); // COLOCAR EL VALOR CORRECTO
+            $command->bindParam(":ruta_doc_titulo", $ruta_doc_titulo, \PDO::PARAM_STR);
+            $command->bindParam(":ruta_doc_dni", $ruta_doc_dni, \PDO::PARAM_STR);
+            $command->bindParam(":ruta_doc_certvota", $ruta_doc_certvota, \PDO::PARAM_STR);
+            $command->bindParam(":ruta_doc_foto", $ruta_doc_foto, \PDO::PARAM_STR);
+            $command->bindParam(":ruta_doc_certificado", $ruta_doc_certificado, \PDO::PARAM_STR);
+            $command->bindParam(":twre_mensaje1", $twin_mensaje1, \PDO::PARAM_STR);
+            $command->bindParam(":twre_mensaje2", $twin_mensaje2, \PDO::PARAM_STR);
+            $command->execute();
+            $id = $con->getLastInsertID($con->dbname . '.temporal_wizard_reprobados');
+            if ($trans !== null)
+                $trans->commit();
+            if($id)
+                return ["status" => true, "twin_id" => $id];
+            else
+                return ["status" => false, "twin_id"  => 0];
+        } catch (Exception $ex) {
+            if ($trans !== null)
+                $trans->rollback();
+            return ["status" => false, "twin_id" => 0];;
+        }
     }
 
     /**

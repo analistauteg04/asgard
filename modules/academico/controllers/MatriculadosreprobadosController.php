@@ -58,16 +58,18 @@ class MatriculadosreprobadosController extends \app\components\CController {
         ]);
     }
 
-    public function actionSavereprobadostemp() {        
+    public function actionSavereprobadostemp() {
         if (Yii::$app->request->isAjax) {
             $model = new MatriculadosReprobado();
             $data = Yii::$app->request->post();
             try {
                 $accion = isset($data['ACCION']) ? $data['ACCION'] : "";
                 $repro_temp_id = $data["DATA_1"][0]["twin_id"];
+                $accion = isset($data['ACCION']) ? $data['ACCION'] : "";
                 if ($accion == "create" || $accion == "Create") {
                     //Nuevo Registro      
                     $resul = $model->insertarReprobadoTemp($data["DATA_1"]);
+                    
                 } else if ($accion == "Update") {
                     //Modificar Registro
                     //$resul = $model->actualizarInscripcion($data);
