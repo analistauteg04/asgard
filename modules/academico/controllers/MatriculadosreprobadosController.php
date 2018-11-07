@@ -67,9 +67,7 @@ class MatriculadosreprobadosController extends \app\components\CController {
                 $repro_temp_id = $data["DATA_1"][0]["twin_id"];
                 $accion = isset($data['ACCION']) ? $data['ACCION'] : "";
                 if ($accion == "create" || $accion == "Create") {
-                    //Nuevo Registro      
                     $resul = $model->insertarReprobadoTemp($data["DATA_1"]);
-                    
                 } else if ($accion == "Update") {
                     //Modificar Registro
                     //$resul = $model->actualizarInscripcion($data);

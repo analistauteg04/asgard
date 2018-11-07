@@ -107,7 +107,7 @@ $requisitosPRP = '<div class="col-md-12 col-sm-12 col-xs-12 col-lg-12">
 ?>
 <form class="form-horizontal">
     <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
-        <h3><span id="lbl_Personeria"><?= Yii::t("formulario", "Formulario - Admitidos Pendientes") ?></span></h3>
+        <h3><span id="lbl_Personeria"><?= Yii::t("formulario", "Registrar - Inscritos Pendientes") ?></span></h3>
     </div>
     <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
         <p class="text-danger"> <?= Yii::t("formulario", "Fields with * are required") ?> </p>        

@@ -127,6 +127,8 @@ class Admitido extends \yii\db\ActiveRecord {
                         ifnull((select min.ming_nombre from " . $con->dbname . ".metodo_ingreso min where min.ming_id = sins.ming_id),'N/A') as ming_nombre,
                         sins.eaca_id,
                         sins.mest_id,
+                        moda.mod_nombre,
+                        uaca.uaca_nombre,
                         case when (ifnull(sins.eaca_id,0)=0) then
                                 (select mest_nombre from " . $con3->dbname . ".modulo_estudio me where me.mest_id = sins.mest_id and me.mest_estado = '1' and me.mest_estado_logico = '1')
                                 else
@@ -148,6 +150,8 @@ class Admitido extends \yii\db\ActiveRecord {
                 FROM " . $con->dbname . ".admitido admi INNER JOIN " . $con->dbname . ".interesado inte on inte.int_id = admi.int_id                     
                      INNER JOIN " . $con2->dbname . ".persona per on inte.per_id = per.per_id
                      INNER JOIN " . $con->dbname . ".solicitud_inscripcion sins on sins.int_id = inte.int_id                                          
+                     INNER JOIN " . $con3->dbname . ".modalidad moda on moda.mod_id=sins.mod_id
+                     INNER JOIN " . $con3->dbname . ".unidad_academica uaca on uaca.uaca_id=sins.uaca_id
                      INNER JOIN " . $con1->dbname . ".orden_pago opag on opag.sins_id = sins.sins_id                     
                 WHERE  
                        $str_search 

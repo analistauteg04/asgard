@@ -145,6 +145,13 @@ $(document).ready(function () {
         actualizarGrid();
     });    
 });
+
+function newReprobadoPend(){
+    window.location.href = $('#txth_base').val() + "/academico/matriculadosreprobados/new";
+}
+function newReprobado(){
+    window.location.href = $('#txth_base').val() + "/academico/matriculadosreprobados/newreprobado";
+}
 function guardarAdmiMateriarep() {
     var link = $('#txth_base').val() + "/academico/matriculadosreprobados/save"; //VER BIEN EL NOMBRE
     var arrParams = new Object();
