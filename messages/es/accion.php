@@ -77,6 +77,6 @@ return [
     "pendingApplicants" => "Documentos Pendientes Aspirantes",    
     "payApplicants" => "Pagos Pendientes Aspirantes",    
     "To register" => "Registrar",
-    "registered" => "Matriculado",
+    "Register" => "Matricular",
     "Inscribed pending" => "Inscritos Pendientes",
 ];

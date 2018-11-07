@@ -2,7 +2,7 @@
 use yii\helpers\Url;
 use yii\helpers\Html;
 ?>
-<?= Html::hiddenInput('txth_twin_id', 0, ['id' => 'txth_twin_id']); ?>
+<?= Html::hiddenInput('txth_twer_id', 0, ['id' => 'txth_twer_id']); ?>
 <?= Html::hiddenInput('txth_ftem_id', 0, ['id' => 'txth_ftem_id']); ?>
 <?= Html::hiddenInput('txth_errorFile', Yii::t("formulario", "The file extension is not valid or exceeds the maximum size in MB recommending him try again"), ['id' => 'txth_errorFile']); ?>
 <div class="col-md-12  col-xs-12 col-sm-12 col-lg-12">
@@ -15,20 +15,20 @@ use yii\helpers\Html;
             <div class="tab-pane active" id="paso1">
                 <form class="form-horizontal">
                     <?=
-                    $this->render('_form_tab1', [
-                        "tipos_dni" => $tipos_dni,
-                        "tipos_dni2" => $tipos_dni2,
-                        "txth_extranjero" => $txth_extranjero,
-                        "arr_pais_dom" => $arr_pais_dom,
-                        "arr_prov_dom" => $arr_prov_dom,
-                        "arr_ciu_dom" => $arr_ciu_dom,
-                        "arr_ninteres" => $arr_ninteres,
-                        "arr_medio" => $arr_medio,
-                        "arr_modalidad" => $arr_modalidad,
-                        "arr_conuteg" => $arr_conuteg,
-                        "arr_carrerra1" => $arr_carrerra1,
-                        "arr_metodos" => $arr_metodos,
-                    ]);
+                        $this->render('_form_tab1', [
+                            "tipos_dni" => $tipos_dni,
+                            "tipos_dni2" => $tipos_dni2,
+                            "txth_extranjero" => $txth_extranjero,
+                            "arr_pais_dom" => $arr_pais_dom,
+                            "arr_prov_dom" => $arr_prov_dom,
+                            "arr_ciu_dom" => $arr_ciu_dom,
+                            "arr_ninteres" => $arr_ninteres,
+                            "arr_medio" => $arr_medio,
+                            "arr_modalidad" => $arr_modalidad,
+                            "arr_conuteg" => $arr_conuteg,
+                            "arr_carrerra1" => $arr_carrerra1,
+                            "arr_metodos" => $arr_metodos,
+                        ]);
                     ?>
                 </form>
             </div><!-- /.tab-pane -->

@@ -290,9 +290,9 @@ class MatriculadosReprobado extends \yii\db\ActiveRecord {
         $con2 = \Yii::$app->db;
         $con3 = \Yii::$app->db_academico;
         $con1 = \Yii::$app->db_facturacion;
-        $estado = 1;        
-        if ($uaca_id == 1 &&  $moda_id == 1 && $mes > 1 && $anio > 2017) {
-           $str_filtro = 'asig.asi_id < 4 and '; 
+        $estado = 1;
+        if ($uaca_id == 1 && $moda_id == 1 && $mes > 1 && $anio > 2017) {
+            $str_filtro = 'asig.asi_id < 4 and ';
         }
         $sql = " 
                 select 
@@ -536,8 +536,7 @@ class MatriculadosReprobado extends \yii\db\ActiveRecord {
      * @param
      * @return
      */
-    public function insertarReprobadoTemp($data) {
-        $con = \Yii::$app->db_captacion;
+    public function insertarReprobadoTemp($con,$data) {
         $trans = $con->getTransaction(); // se obtiene la transacción actual
         if ($trans !== null) {
             $trans = null; // si existe la transacción entonces no se crea una
@@ -587,15 +586,53 @@ class MatriculadosReprobado extends \yii\db\ActiveRecord {
             $id = $con->getLastInsertID($con->dbname . '.temporal_wizard_reprobados');
             if ($trans !== null)
                 $trans->commit();
-            if($id)
+            if ($id)
                 return ["status" => true, "twin_id" => $id];
             else
-                return ["status" => false, "twin_id"  => 0];
+                return ["status" => false, "twin_id" => 0];
         } catch (Exception $ex) {
             if ($trans !== null)
                 $trans->rollback();
-            return ["status" => false, "twin_id" => 0];;
+            return ["status" => false, "twin_id" => 0];
+            ;
         }
+    }
+    public function actualizarReprobadoTemp($con, $data) {
+        $sql = "UPDATE " . $con->dbname . ".temporal_wizard_reprobados 
+                SET twre_nombre=:twre_nombre,twre_apellido=:twre_apellido,twre_dni=:twre_dni,
+                    twre_numero=:twre_numero,twre_correo=:twre_correo,twre_pais=:twre_pais,
+                    twre_celular=:twre_celular,uaca_id=:uaca_id, mod_id=:mod_id,car_id=:car_id,
+                    twre_metodo_ingreso=:twre_metodo_ingreso,
+                    ruta_doc_titulo=:ruta_doc_titulo, ruta_doc_dni=:ruta_doc_dni, 
+                    ruta_doc_certvota=:ruta_doc_certvota,ruta_doc_foto=:ruta_doc_foto,
+                    ruta_doc_hojavida=:ruta_doc_hojavida,
+                    ruta_doc_certificado=:ruta_doc_certificado, 
+                    twre_mensaje1=:twin_mensaje1,twre_mensaje2=:twre_mensaje2,
+                    twre_fecha_modificacion=CURRENT_TIMESTAMP() 
+                 WHERE twre_id =:twre_id ";
+        $command = $con->createCommand($sql);
+        $command->bindParam(":twre_id", $data[0]['twre_id'], \PDO::PARAM_STR);
+        $command->bindParam(":twre_nombre", $data[0]['pges_pri_nombre'], \PDO::PARAM_STR);
+        $command->bindParam(":twre_apellido", $data[0]['pges_pri_apellido'], \PDO::PARAM_STR);
+        $command->bindParam(":twre_dni", $data[0]['tipo_dni'], \PDO::PARAM_STR);
+        $command->bindParam(":twre_numero", $data[0]['pges_cedula'], \PDO::PARAM_STR);
+        $command->bindParam(":twre_correo", $data[0]['pges_correo'], \PDO::PARAM_STR);
+        $command->bindParam(":twre_pais", $data[0]['pais'], \PDO::PARAM_STR);
+        $command->bindParam(":twre_celular", $data[0]['pges_celular'], \PDO::PARAM_STR);
+        $command->bindParam(":uaca_id", $data[0]['unidad_academica'], \PDO::PARAM_STR);
+        $command->bindParam(":mod_id", $data[0]['modalidad'], \PDO::PARAM_STR);
+        $command->bindParam(":car_id", $data[0]['carrera'], \PDO::PARAM_STR);
+        $command->bindParam(":twre_metodo_ingreso", $data[0]['ming_id'], \PDO::PARAM_STR);
+        $command->bindParam(":ruta_doc_titulo", basename($data[0]['ruta_doc_titulo']), \PDO::PARAM_STR);
+        $command->bindParam(":ruta_doc_dni", basename($data[0]['ruta_doc_dni']), \PDO::PARAM_STR);
+        $command->bindParam(":ruta_doc_certvota", basename($data[0]['ruta_doc_certvota']), \PDO::PARAM_STR);
+        $command->bindParam(":ruta_doc_foto", basename($data[0]['ruta_doc_foto']), \PDO::PARAM_STR);
+        $command->bindParam(":ruta_doc_certificado", basename($data[0]['ruta_doc_certificado']), \PDO::PARAM_STR);
+        $command->bindParam(":ruta_doc_hojavida", basename($data[0]['ruta_doc_hojavida']), \PDO::PARAM_STR);
+        $command->bindParam(":twre_mensaje1", $data[0]['twre_mensaje1'], \PDO::PARAM_STR);
+        $command->bindParam(":twre_mensaje2", $data[0]['twre_mensaje2'], \PDO::PARAM_STR);
+        $command->execute();
+        return $data[0]['twre_id'];
     }
 
     /**

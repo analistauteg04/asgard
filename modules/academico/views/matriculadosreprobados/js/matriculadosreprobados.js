@@ -1,14 +1,15 @@
 $(document).ready(function () {
     $('#sendInformacionAdmitidoRepro').click(function () {
-        //habilitarSecciones();
-        //if ($('#txth_twin_id').val() == 0) 
-        //{
-        guardarAdmireprobado('Create', '1');
-        //} else {
-        //    guardarAdmireprobado('Update', '1');
-        //}
+        habilitarSecciones();
+        if ($('#txth_twer_id').val() == 0)
+        {
+            guardarAdmireprobado('Create', '1');
+        } else {
+            guardarAdmireprobado('Update', '1');
+        }
     });
     $('#paso2back').click(function () {
+        alert("entro aqui");
         $("a[data-href='#paso2']").attr('data-toggle', 'none');
         $("a[data-href='#paso2']").parent().attr('class', 'disabled');
         $("a[data-href='#paso2']").attr('data-href', $("a[href='#paso2']").attr('href'));
@@ -143,13 +144,13 @@ $(document).ready(function () {
     });
     $('#btn_buscarData').click(function () {
         actualizarGrid();
-    });    
+    });
 });
 
-function newReprobadoPend(){
+function newReprobadoPend() {
     window.location.href = $('#txth_base').val() + "/academico/matriculadosreprobados/new";
 }
-function newReprobado(){
+function newReprobado() {
     window.location.href = $('#txth_base').val() + "/academico/matriculadosreprobados/newreprobado";
 }
 function guardarAdmiMateriarep() {
@@ -215,8 +216,9 @@ function guardarAdmiMateriarep() {
         }
     }
 }
-function guardarAdmireprobado(accion, paso) {
-    var ID = (accion == "Update") ? $('#txth_twin_id').val() : 0;
+function guardarAdmireprobado(accion, paso) {    
+    var ID = (accion == "Update") ? $('#txth_twer_id').val() : 0;
+    alert("twer id: "+ID);
     var link = $('#txth_base').val() + "/academico/matriculadosreprobados/savereprobadostemp";
     var arrParams = new Object();
     arrParams.DATA_1 = dataInscripPart1(ID);
@@ -224,7 +226,7 @@ function guardarAdmireprobado(accion, paso) {
     requestHttpAjax(link, arrParams, function (response) {
         var message = response.message;
         if (response.status == "OK") {
-            $('#txth_twin_id').val(response.data.twin_id);
+            $('#txth_twer_id').val(response.data.twin_id);
             paso1next();
         }
     }, true);
@@ -232,7 +234,7 @@ function guardarAdmireprobado(accion, paso) {
 function dataInscripPart1(ID) {
     var datArray = new Array();
     var objDat = new Object();
-    objDat.twin_id = ID;//Genero Automatico
+    objDat.twre_id = ID;//Genero Automatico
     objDat.pges_pri_nombre = $('#txt_primer_nombre').val();
     objDat.pges_pri_apellido = $('#txt_primer_apellido').val();
     objDat.tipo_dni = $('#cmb_tipo_dni option:selected').val();
