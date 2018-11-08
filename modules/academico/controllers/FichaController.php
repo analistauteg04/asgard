@@ -1,7 +1,5 @@
 <?php
-
-namespace app\modules\admision\controllers;
-
+namespace app\modules\academico\controllers;
 use Yii;
 use app\models\Etnia;
 use app\models\Pais;
@@ -9,14 +7,12 @@ use app\models\Provincia;
 use app\models\Canton;
 use app\models\Utilities;
 use app\models\TipoSangre;
-
 use app\models\Persona;
 use app\models\Interesado;
 use app\models\TipoParentesco;
 use app\models\PersonaContacto;
 use yii\helpers\ArrayHelper;
 use app\models\EstadoCivil;
-
 /**
  * 
  *
@@ -24,7 +20,7 @@ use app\models\EstadoCivil;
  */
 class FichaController extends \app\components\CController {  
     public function actionUpdate() {
-        $mod_pais = new Pais();
+          $mod_pais = new Pais();
         if (Yii::$app->request->isAjax) {
             $data = Yii::$app->request->post();
             if (isset($data["getprovincias"])) {
@@ -40,26 +36,19 @@ class FichaController extends \app\components\CController {
                 return;
             }
         }
-        $per_id = Yii::$app->session->get("PB_perid");
+        $data = Yii::$app->request->get();
+        $per_id = base64_decode($data['perid']);
         $arr_etnia = Etnia::find()->select("etn_id AS id, etn_nombre AS value")->where(["etn_estado_logico" => "1", "etn_estado" => "1"])->asArray()->all();
-        $tipos_sangre = TipoSangre::find()->select("tsan_id AS id, tsan_nombre AS value")->where(["tsan_estado_logico" => "1", "tsan_estado" => "1"])->asArray()->all();
-        
+        $tipos_sangre = TipoSangre::find()->select("tsan_id AS id, tsan_nombre AS value")->where(["tsan_estado_logico" => "1", "tsan_estado" => "1"])->asArray()->all();        
         //Búsqueda de los datos de persona logueada
         $modperinteresado = new Persona();
         $respPerinteresado = $modperinteresado->consultaPersonaId($per_id);
-        $pais_id = 1; //Ecuador 
-                
         $arr_pais_nac = Pais::find()->select("pai_id AS id, pai_nombre AS value")->where(["pai_estado_logico" => "1", "pai_estado" => "1"])->asArray()->all();
         $arr_prov_nac = Provincia::provinciaXPais($respPerinteresado['pai_id_nacimiento']);
         $arr_ciu_nac = Canton::cantonXProvincia($respPerinteresado['pro_id_nacimiento']);
-
         $arr_pais_dom = Pais::find()->select("pai_id AS id, pai_nombre AS value")->where(["pai_estado_logico" => "1", "pai_estado" => "1"])->asArray()->all();
         $arr_prov_dom = Provincia::provinciaXPais($respPerinteresado['pai_id_domicilio']);
         $arr_ciu_dom = Canton::cantonXProvincia($respPerinteresado['pro_id_domicilio']);
-        
-        // Consulta datos de contacto
-        $modpersonacontacto = new PersonaContacto();
-        $respcontacto = $modpersonacontacto->consultaPersonaContacto($per_id);       
         // Consultar otra etnia
         $respotraetnia = $modperinteresado->consultarOtraetnia($per_id);
         $area = $mod_pais->consultarCodigoArea($respPerinteresado['pai_id_nacimiento']);
@@ -72,16 +61,13 @@ class FichaController extends \app\components\CController {
                     //"tipo_dni" => array("CED" => Yii::t("formulario", "DNI Document"), "PASS" => Yii::t("formulario", "Passport")),
                     "genero" => array("M" => Yii::t("formulario", "Male"), "F" => Yii::t("formulario", "Female")),
                     "tipos_sangre" => ArrayHelper::map($tipos_sangre, "id", "value"),
-                    /*                     * */
                     "arr_pais_nac" => ArrayHelper::map($arr_pais_nac, "id", "value"),
                     "arr_prov_nac" => ArrayHelper::map($arr_prov_nac, "id", "value"),
                     "arr_ciu_nac" => ArrayHelper::map($arr_ciu_nac, "id", "value"),
-                    /*                     * */
                     "arr_pais_dom" => ArrayHelper::map($arr_pais_dom, "id", "value"),
                     "arr_prov_dom" => ArrayHelper::map($arr_prov_dom, "id", "value"),
                     "arr_ciu_dom" => ArrayHelper::map($arr_ciu_dom, "id", "value"),                    
-                    "respPerinteresado" => $respPerinteresado,
-                    "respcontacto" => $respcontacto,                    
+                    "respPerinteresado" => $respPerinteresado,           
                     "respotraetnia" => $respotraetnia,
                     "area" => $area,
                     "area_dom" => $area_dom,

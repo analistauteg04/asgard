@@ -54,37 +54,33 @@ if (!empty($per_pasaporte)) {
     $tipodoc = "CED";
 }
 ?>
-
 <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
-    <h3><span id="lbl_Personeria"><?= Yii::t("formulario", "Data Personal") ?></span></h3>
+    <h3><span id="lbl_Personeria"><?= Yii::t("formulario", "Datos Personales - Aspirante") ?></span></h3>
 </div>
-
 <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
-   <div class="col-md-6 col-lg-6 col-sm-6 col-xs-6">
+    <div class="col-md-6 col-lg-6 col-sm-6 col-xs-6">
         <div class="form-group">
             <label for="txt_primer_nombre" class="col-sm-5 control-label"><?= Yii::t("formulario", "First Name") ?><span class="text-danger">*</span></label>
             <div class="col-sm-7">
-                <input type="text" class="form-control PBvalidation keyupmce" value="<?= $per_pri_nombre ?>" id="txt_primer_nombre"  data-type="alfa" data-keydown="true" placeholder="<?= Yii::t("formulario", "First Name") ?>">
+                <input type="text" class="form-control PBvalidation keyupmce" value="<?= $respPerinteresado['per_pri_nombre'] ?>" id="txt_primer_nombre"  data-type="alfa" data-keydown="true" placeholder="<?= Yii::t("formulario", "First Name") ?>">
             </div>
         </div>
     </div>
-
     <div class="col-md-6 col-lg-6 col-sm-6 col-xs-6">
         <div class="form-group">
             <label for="txt_segundo_nombre" class="col-sm-5 control-label"><?= Yii::t("formulario", "Middle Name") ?></label>
             <div class="col-sm-7">
-                <input type="text" class="form-control PBvalidation keyupmce" value="<?= $per_seg_nombre ?>" id="txt_segundo_nombre" data-type="alfa" data-keydown="true" placeholder="<?= Yii::t("formulario", "Middle Name") ?>">
+                <input type="text" class="form-control PBvalidation keyupmce" value="<?= $respPerinteresado['per_seg_nombre'] ?>" id="txt_segundo_nombre" data-type="alfa" data-keydown="true" placeholder="<?= Yii::t("formulario", "Middle Name") ?>">
             </div>
         </div>
     </div>
 </div>
-
 <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
     <div class="col-md-6 col-lg-6 col-sm-6 col-xs-6">
         <div class="form-group">
             <label for="txt_primer_apellido" class="col-sm-5 control-label"><?= Yii::t("formulario", "Last Name") ?><span class="text-danger">*</span></label>
             <div class="col-sm-7">
-                <input type="text" class="form-control PBvalidation keyupmce" value="<?= $per_pri_apellido ?>" id="txt_primer_apellido" data-type="alfa" data-keydown="true" placeholder="<?= Yii::t("formulario", "Last Name") ?>">
+                <input type="text" class="form-control PBvalidation keyupmce" value="<?= $respPerinteresado['per_pri_apellido'] ?>" id="txt_primer_apellido" data-type="alfa" data-keydown="true" placeholder="<?= Yii::t("formulario", "Last Name") ?>">
             </div>
         </div>
     </div>
@@ -92,18 +88,21 @@ if (!empty($per_pasaporte)) {
         <div class="form-group">
             <label for="txt_segundo_apellido" class="col-sm-5 control-label"><?= Yii::t("formulario", "Last Second Name") ?></label>
             <div class="col-sm-7">
-                <input type="text" class="form-control PBvalidation keyupmce" value="<?= $per_seg_apellido ?>" id="txt_segundo_apellido" data-type="alfa" data-keydown="true" placeholder="<?= Yii::t("formulario", "Last Second Name") ?>">
+                <input type="text" class="form-control PBvalidation keyupmce" value="<?= $respPerinteresado['per_seg_apellido'] ?>" id="txt_segundo_apellido" data-type="alfa" data-keydown="true" placeholder="<?= Yii::t("formulario", "Last Second Name") ?>">
             </div>
         </div>
     </div>
 </div>
-
 <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
     <div class="col-md-6 col-lg-6 col-sm-6 col-xs-6">
         <div class="form-group">
             <label for="cmb_tipo_dni" class="col-sm-5 control-label keyupmce"><?= Yii::t("formulario", "Type DNI") ?><span class="text-danger">*</span></label>
             <div class="col-sm-7">
+<<<<<<< HEAD:modules/admision/views/ficha/update.php
                 <?= Html::dropDownList("cmb_tipo_dni", $tipodoc, $tipos_dni, ["class" => "form-control", "id" => "cmb_tipo_dni", 'disabled' => "true"]) ?>
+=======
+                <?= Html::dropDownList("cmb_tipo_dni", $tipodoc,$tipo_dni, ["class" => "form-control", "id" => "cmb_tipo_dni", 'disabled' => "true"]) ?>
+>>>>>>> 88e3d4a8f6a93bc14ed50b1874664d94b771c408:modules/academico/views/ficha/update.php
             </div>
         </div>
     </div>
@@ -111,18 +110,17 @@ if (!empty($per_pasaporte)) {
         <div class="form-group">
             <label for="txt_cedula" class="col-sm-5 control-label"><?= Yii::t("formulario", "DNI") ?><span class="text-danger">*</span></label>
             <div class="col-sm-7">
-                <input type="text" class="form-control PBvalidation keyupmce" value="<?= $per_cedula ?>" id="txt_cedula" disabled = "true" data-type="alfanumerico" data-keydown="true" placeholder="<?= Yii::t("formulario", "National identity document") ?>">
+                <input type="text" class="form-control PBvalidation keyupmce" value="<?= $respPerinteresado['per_cedula'] ?>" id="txt_cedula" disabled = "true" data-type="alfanumerico" data-keydown="true" placeholder="<?= Yii::t("formulario", "National identity document") ?>">
             </div>
         </div>
     </div>
 </div>
-
 <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">    
     <div class="col-md-6 col-lg-6 col-sm-6 col-xs-6">
         <div class="form-group">
             <label for="cmb_genero" class="col-sm-5 control-label"><?= Yii::t("formulario", "Gender") ?><span class="text-danger">*</span></label>
             <div class="col-sm-7">
-    <?= Html::dropDownList("cmb_genero", $per_genero, $genero, ["class" => "form-control", "id" => "cmb_genero"]) ?>
+                <?= Html::dropDownList("cmb_genero", $respPerinteresado['per_genero'], $genero, ["class" => "form-control", "id" => "cmb_genero"]) ?>
             </div>
         </div>
     </div>
@@ -130,18 +128,17 @@ if (!empty($per_pasaporte)) {
         <div class="form-group">
             <label for="cmb_raza_etnica" class="col-sm-5 control-label"><?= Yii::t("formulario", "Ethnic") ?><span class="text-danger">*</span></label>
             <div class="col-sm-7">
-    <?= Html::dropDownList("cmb_raza_etnica", $etn_id, $etnica, ["class" => "form-control", "id" => "cmb_raza_etnica"]) ?>
+                <?= Html::dropDownList("cmb_raza_etnica", $respPerinteresado['etn_id'], $arr_etnia, ["class" => "form-control", "id" => "cmb_raza_etnica"]) ?>
             </div>
         </div>
     </div>
 </div>
-
 <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">    
     <div class="col-md-6 col-lg-6 col-sm-6 col-xs-6">
         <div class="form-group">
             <label for="txt_otra_etnia" class="col-sm-5 control-label"><?= Yii::t("formulario", "Ethnic Others") ?> </label>
             <div class="col-sm-7">
-                <input type="text" class="form-control keyupmce" value="<?= $oetn_nombre ?>" id="txt_otra_etnia" data-type="alfanumerico" data-keydown="true" placeholder="<?= Yii::t("formulario", "Ethnic Others") ?>">
+                <input type="text" class="form-control keyupmce" value="<?= $respotraetnia ?>" id="txt_otra_etnia" data-type="alfanumerico" data-keydown="true" placeholder="<?= Yii::t("formulario", "Ethnic Others") ?>">
             </div>
         </div>
     </div>
@@ -152,7 +149,7 @@ if (!empty($per_pasaporte)) {
                 <?=
                 DatePicker::widget([
                     'name' => 'txt_fecha_nacimiento',
-                    'value' => $per_fecha_nacimiento,                
+                    'value' => $respPerinteresado['per_fecha_nacimiento'],                
                     'type' => DatePicker::TYPE_INPUT,
                     'options' => ["class" => "form-control PBvalidation keyupmce", "id" => "txt_fecha_nacimiento", "data-type" => "fecha", "data-keydown" => "true", "placeholder" => Yii::t("formulario", "Birth Date")],
                     'pluginOptions' => [
@@ -165,13 +162,12 @@ if (!empty($per_pasaporte)) {
         </div>
     </div>
 </div>
-
 <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">    
     <div class="col-md-6 col-lg-6 col-sm-6 col-xs-6">
         <div class="form-group">
             <label for="txt_nacionalidad" class="col-sm-5 control-label"><?= Yii::t("formulario", "Nationality") ?><span class="text-danger">*</span></label>
             <div class="col-sm-7">
-                <input type="text" class="form-control PBvalidation keyupmce" value="<?= $per_nacionalidad ?>" id="txt_nacionalidad" data-type="alfanumerico" data-keydown="true" placeholder="<?= Yii::t("formulario", "Nationality") ?>">
+                <input type="text" class="form-control PBvalidation keyupmce" value="<?= $respPerinteresado['per_nacionalidad'] ?>" id="txt_nacionalidad" data-type="alfanumerico" data-keydown="true" placeholder="<?= Yii::t("formulario", "Nationality") ?>">
             </div>
         </div>
     </div>
@@ -179,18 +175,17 @@ if (!empty($per_pasaporte)) {
         <div class="form-group">
             <label for="cmb_pais_nac" class="col-sm-5 control-label"><?= Yii::t("formulario", "Country of birth") ?><span class="text-danger">*</span></label>
             <div class="col-sm-7">
-    <?= Html::dropDownList("cmb_pais_nac", $pai_id_nacimiento, $paises_nac, ["class" => "form-control pai_combo", "id" => "cmb_pais_nac"]) ?>
+                <?= Html::dropDownList("cmb_pais_nac", $respPerinteresado['pai_id_nacimiento'], $arr_pais_nac, ["class" => "form-control pai_combo", "id" => "cmb_pais_nac"]) ?>
             </div>
         </div>
     </div>
 </div>
-
 <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">    
     <div class="col-md-6 col-lg-6 col-sm-6 col-xs-6">
         <div class="form-group">
             <label for="cmb_prov_nac" class="col-sm-5 control-label"><?= Yii::t("formulario", "State of birth") ?><span class="text-danger">*</span></label>
             <div class="col-sm-7">
-    <?= Html::dropDownList("cmb_prov_nac", $pro_id_nacimiento, $provincias_nac, ["class" => "form-control pro_combo", "id" => "cmb_prov_nac"]) ?>
+                <?= Html::dropDownList("cmb_prov_nac", $respPerinteresado['pro_id_nacimiento'], $arr_prov_nac, ["class" => "form-control pro_combo", "id" => "cmb_prov_nac"]) ?>
             </div>
         </div>
     </div>
@@ -198,18 +193,17 @@ if (!empty($per_pasaporte)) {
         <div class="form-group">
             <label for="cmb_ciu_nac" class="col-sm-5 control-label"><?= Yii::t("formulario", "City of birth") ?><span class="text-danger">*</span></label>
             <div class="col-sm-7">
-    <?= Html::dropDownList("cmb_ciu_nac", $can_id_nacimiento, $cantones_nac, ["class" => "form-control can_combo", "id" => "cmb_ciu_nac"]) ?>
+                <?= Html::dropDownList("cmb_ciu_nac", $respPerinteresado['can_id_nacimiento'], $arr_ciu_nac, ["class" => "form-control can_combo", "id" => "cmb_ciu_nac"]) ?>
             </div>
         </div>
     </div>
 </div>
-
 <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">   
     <div class="col-md-6 col-lg-6 col-sm-6 col-xs-6">
         <div class="form-group">
             <label for="txt_estado_civil" class="col-sm-5 control-label"><?= Yii::t("formulario", "Marital Status") ?><span class="text-danger">*</span></label>
             <div class="col-sm-7">
-    <?= Html::dropDownList("txt_estado_civil", $eciv_id, $estado_civil, ["class" => "form-control", "id" => "txt_estado_civil"]) ?>
+    <?= Html::dropDownList("txt_estado_civil", $respPerinteresado['eciv_id'], $arr_civil, ["class" => "form-control", "id" => "txt_estado_civil"]) ?>
             </div>
         </div>
     </div>
@@ -217,20 +211,18 @@ if (!empty($per_pasaporte)) {
         <div class="form-group">
             <label for="txt_ftem_correo" class="col-sm-5 control-label"><?= Yii::t("formulario", "Email") ?><span class="text-danger">*</span></label>
             <div class="col-sm-7">
-                <input type="text" class="form-control PBvalidation" value="<?= $per_correo ?>" id="txt_ftem_correo" disabled = "true" data-type="email" data-keydown="true" placeholder="<?= Yii::t("formulario", "Email") ?>">
+                <input type="text" class="form-control PBvalidation" value="<?= $respPerinteresado['per_correo'] ?>" id="txt_ftem_correo" disabled = "true" data-type="email" data-keydown="true" placeholder="<?= Yii::t("formulario", "Email") ?>">
             </div>
         </div>
     </div>
 </div>
-
 <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">   
     <div class="col-md-6 col-lg-6 col-sm-6 col-xs-6">
         <div class="form-group">
             <label for="txt_celular" class="col-sm-5 control-label"><?= Yii::t("formulario", "CellPhone") ?><span class="text-danger">*</span></label>
             <div class="col-sm-7">
                 <div class="input-group">
-                    <span id="lbl_codeCountry" class="input-group-addon"><?= $area ?></span>
-                    <input type="text" class="form-control PBvalidation" value="<?= $per_celular ?>" id="txt_celular" data-type="celular_sin" data-keydown="true" placeholder="<?= Yii::t("formulario", "Phone") ?>">
+                    <input type="text" class="form-control PBvalidation" value="<?= $respPerinteresado['per_celular'] ?>" id="txt_celular" data-type="celular_sin" data-keydown="true" placeholder="<?= Yii::t("formulario", "Phone") ?>">
                 </div>
             </div>
         </div>
@@ -244,7 +236,6 @@ if (!empty($per_pasaporte)) {
         </div>
     </div>
 </div>
-
 <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">   
     <div class="col-md-6 col-lg-6 col-sm-6 col-xs-6">
         <div class="form-group">
@@ -252,95 +243,19 @@ if (!empty($per_pasaporte)) {
             <div class="col-sm-7">
                 <label>
                     <input type="radio" name="signup-ecu" value="1" <?php
-                    if ($per_nac_ecuatoriano == 1) {
+                    if ($respPerinteresado['per_nac_ecuatoriano'] == 1) {
                         echo 'checked';
                     }
                     ?>> Si<br>
                 </label>
                 <label>
                     <input type="radio" name="signup-ecu" value="0" <?php
-                    if ($per_nac_ecuatoriano == 0) {
+                    if ($respPerinteresado['per_nac_ecuatoriano'] == 0) {
                         echo 'checked';
                     }
                     ?>> No<br>
                 </label>            
             </div>
         </div>
-    </div>
-</div>
-
-<div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">   
-    <div class="col-md-12 col-lg-6 col-sm-6 col-xs-6">
-        <h3><span id="lbl_Personeria"><?= Yii::t("formulario", "Contact Information") ?></span></h3>
-    </div>
-</div>
-
-<div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">   
-    <div class="col-md-6 col-lg-6 col-sm-6 col-xs-6">
-        <div class="form-group">
-            <label for="txt_nombres_contacto" class="col-sm-5 control-label"><?= Yii::t("formulario", "First Names") ?></label>
-            <div class="col-sm-7">
-                <input type="text" class="form-control PBvalidation keyupmce" data-required="false" value="<?= $con_nombre ?>" id="txt_nombres_contacto" data-type="alfa" data-keydown="true" placeholder="<?= Yii::t("formulario", "First Names") ?>">
-            </div>
-        </div>
-    </div>
-    <div class="col-md-6 col-lg-6 col-sm-6 col-xs-6">
-        <div class="form-group">
-            <label for="txt_apellidos_contacto" class="col-sm-5 control-label"><?= Yii::t("formulario", "Last Names") ?></label>
-            <div class="col-sm-7">
-                <input type="text" class="form-control PBvalidation keyupmce" data-required="false" value="<?= $con_nombre ?>" id="txt_apellidos_contacto" data-type="alfa" data-keydown="true" placeholder="<?= Yii::t("formulario", "Last Names") ?>">
-            </div>
-        </div>
-    </div>
-</div>
-
-<div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">   
-    <div class="col-md-6 col-lg-6 col-sm-6 col-xs-6">
-        <div class="form-group">
-            <label for="txt_telefono_con" class="col-sm-5 control-label"><?= Yii::t("formulario", "Phone") ?></label>
-            <div class="col-sm-7">
-                <div class="input-group">
-                    <span id="lbl_codeCountrycon" class="input-group-addon"><?= $area ?></span>
-                    <input type="text" class="form-control PBvalidation" data-required="false" value="<?= $con_telefono ?>" id="txt_telefono_con" data-type="telefono_sin"  data-keydown="true" placeholder="<?= Yii::t("formulario", "Phone") ?>">
-                </div>
-            </div>
-        </div>
-    </div>
-    <div class="col-md-6 col-lg-6 col-sm-6 col-xs-6">
-        <div class="form-group">
-            <label for="txt_celular_con" class="col-sm-5 control-label"><?= Yii::t("formulario", "CellPhone") ?></label>
-            <div class="col-sm-7">
-                <div class="input-group">
-                    <span id="lbl_codeCountrycell" class="input-group-addon"><?= $area ?></span>
-                    <input type="text" class="form-control PBvalidation" data-required="false" value="<?= $con_celular ?>" id="txt_celular_con" data-type="celular_sin" data-keydown="true" placeholder="<?= Yii::t("formulario", "CellPhone") ?>">
-                </div>
-            </div>
-        </div>
-    </div>
-</div>
-
-<div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">   
-    <div class="col-md-6 col-lg-6 col-sm-6 col-xs-6">
-        <div class="form-group">
-            <label for="txt_address_con" class="col-sm-5 control-label"><?= Yii::t("formulario", "Address") ?></label>
-            <div class="col-sm-7">
-                <input type="text" class="form-control PBvalidation keyupmce" data-required="false" value="<?= $con_direccion ?>" id="txt_address_con" data-type="alfanumerico"  data-keydown="true" placeholder="<?= Yii::t("formulario", "Address") ?>">
-            </div>
-        </div>
-    </div>
-    <div class="col-md-6 col-lg-6 col-sm-6 col-xs-6">
-        <div class="form-group">
-            <label for="cmb_parentesco_con" class="col-sm-5 control-label"><?= Yii::t("formulario", "Kinship") ?></label>
-            <div class="col-sm-7">
-    <?= Html::dropDownList("cmb_parentesco_con", $con_parentesco, $tipparent_dis, ["class" => "form-control", "id" => "cmb_parentesco_con"]) ?>
-            </div>
-        </div>
-    </div>
-</div>
-
-<div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">       
-    <div class="col-md-10"></div>
-    <div class="col-md-2">
-        <a id="paso1nextUpdate" href="javascript:" class="btn btn-primary btn-block"> <?= Yii::t("formulario", "Next") ?> <span class="glyphicon glyphicon-menu-right"></span></a>
     </div>
 </div>
