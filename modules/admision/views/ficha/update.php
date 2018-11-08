@@ -103,7 +103,7 @@ if (!empty($per_pasaporte)) {
         <div class="form-group">
             <label for="cmb_tipo_dni" class="col-sm-5 control-label keyupmce"><?= Yii::t("formulario", "Type DNI") ?><span class="text-danger">*</span></label>
             <div class="col-sm-7">
-    <?= Html::dropDownList("cmb_tipo_dni", $tipodoc, $tipos_dni, ["class" => "form-control", "id" => "cmb_tipo_dni", 'disabled' => "true"]) ?>
+                <?= Html::dropDownList("cmb_tipo_dni", $tipodoc, $tipos_dni, ["class" => "form-control", "id" => "cmb_tipo_dni", 'disabled' => "true"]) ?>
             </div>
         </div>
     </div>

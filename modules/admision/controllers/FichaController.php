@@ -69,7 +69,7 @@ class FichaController extends \app\components\CController {
         return $this->render('update', [
                     "arr_etnia" => ArrayHelper::map($arr_etnia, "id", "value"),
                     "arr_civil" => ArrayHelper::map($arr_civil, "id", "value"),
-                    "tipo_dni" => array("CED" => Yii::t("formulario", "DNI Document"), "PASS" => Yii::t("formulario", "Passport")),
+                    //"tipo_dni" => array("CED" => Yii::t("formulario", "DNI Document"), "PASS" => Yii::t("formulario", "Passport")),
                     "genero" => array("M" => Yii::t("formulario", "Male"), "F" => Yii::t("formulario", "Female")),
                     "tipos_sangre" => ArrayHelper::map($tipos_sangre, "id", "value"),
                     /*                     * */

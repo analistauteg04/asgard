@@ -94,13 +94,28 @@ class AdminmetodoingresoController extends \app\components\CController {
                 $resp_verifica = $mod_periodo->VerificarPeriodo($anio, $mes, $uaca, $mod, $ming);
                 if (!($resp_verifica)) {                     
                     $resp_ingreso = $mod_periodo->insertarPeriodo($anio, $mes, $uaca, $mod, $ming, $codigo, $fec_desde, $fec_hasta, $usuario);
-                    if ($resp_ingreso) { 
-                        $exito = 1;
+                    if ($resp_ingreso) {                         
+                        //Obtener id de mallas académicas.
+                        $resp_malla = $mod_periodo->consultarMallas($uaca, $mod);
+                        if ($resp_malla) {                                                     
+                            foreach ($resp_malla AS $key=>$value) {                                         
+                                //\app\models\Utilities::putMessageLogFile('valor:'.$resp_malla[$key]["maca_id"]);     
+                                $maca_id = $resp_malla[$key]["maca_id"];                                                                                                          
+                                $resp_planificacion = $mod_periodo->insertarPlanificacionMeting($uaca, $mod, null, $resp_ingreso, $maca_id, $usuario);                                
+                                if ($resp_planificacion) {  
+                                    $exito = 1;
+                                } else {
+                                    $exito = 0;
+                                    $mensaje = "No se ha podido grabar en planificación académica método de ingreso.";
+                                }
+                            }                                                                        
+                        }  else {
+                            $mensaje = "No existe malla académica de los datos proporcionados.";
+                        }                        
                     }
                 } else {
                     $mensaje = "Ya existe un período registrado con los mismos datos de año, mes, unidad, modalidad y método de ingreso.";
                 }
-
                 if ($exito) {
                     $transaction->commit();
                     $message = array(

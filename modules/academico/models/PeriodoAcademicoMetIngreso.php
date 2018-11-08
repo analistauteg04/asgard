@@ -587,4 +587,28 @@ class PeriodoAcademicoMetIngreso extends \yii\db\ActiveRecord {
             return FALSE;
         }
     }  
+    
+    /**
+     * Function consulta las mallas. 
+     * @author Grace Viteri <analistadesarrollo01@uteg.edu.ec>;
+     * @param
+     * @return
+     */
+    public function consultarMallas($uaca_id, $mod_id) {
+        $con = \Yii::$app->db_academico;
+        $estado = 1;
+        $sql = "SELECT maca_id 
+                FROM ". $con->dbname. ".malla_academica 
+                WHERE uaca_id = :uaca_id and mod_id = :mod_id
+                      and maca_tipo = '1'
+                      and maca_estado = :estado
+                      and maca_estado_logico = :estado";
+
+        $comando = $con->createCommand($sql);
+        $comando->bindParam(":estado", $estado, \PDO::PARAM_STR);
+        $comando->bindParam(":uaca_id", $uaca_id, \PDO::PARAM_INT);
+        $comando->bindParam(":mod_id", $mod_id, \PDO::PARAM_INT);
+        $resultData = $comando->queryAll();
+        return $resultData;
+    }
 }

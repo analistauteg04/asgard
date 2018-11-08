@@ -237,6 +237,7 @@ create table if not exists `malla_academica` (
   `eaca_id` bigint(20) not null,
   `uaca_id` bigint(20) not null, 
   `mod_id` bigint(20) not null,
+  `maca_tipo` varchar(1) null,  -- 1= método de ingreso, 2 = carrera. 
   `maca_nombre` varchar(300) not null,
   `maca_fecha_vigencia_inicio` timestamp null default null,
   `maca_fecha_vigencia_fin` timestamp null default null,  
