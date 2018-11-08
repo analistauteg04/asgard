@@ -2,11 +2,10 @@
 
 return [
     'class' => 'app\components\CConnection',
-    'dsn' => 'mysql:host=localhost;dbname=db_fe_edoc',
+    'dsn' => 'mysql:host=localhost;dbname=db_edoc',
     'username' => 'uteg',
     'password' => 'Utegadmin2016*',
     'charset' => 'utf8',
-    'dbname' => 'db_fe_edoc',
+    'dbname' => 'db_edoc',
     'dbserver' => 'localhost',
 ];
-
