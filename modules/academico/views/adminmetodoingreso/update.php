@@ -113,19 +113,5 @@ $pmin_id = $_GET["pami_id"];
             </div>
         </div>   
         
-    </div> 
-    <div class='col-md-12 col-sm-12 col-xs-12 col-lg-12'>
-        <div class="col-md-6 col-sm-6 col-xs-6 col-lg-6"> 
-            <div class="form-group">
-                <div class="col-sm-4">                                                  
-                </div>  
-                <div class="col-sm-4">                      
-                    <a id="btn_modificar_periodo" href="javascript:" class="btn btn-primary btn-block"> <?= Yii::t("formulario", "Update") ?></a>                                   
-                </div> 
-                <div class="col-sm-4">      
-                    <br/>
-                </div>  
-            </div>    
-        </div> 
-    </div> 
+    </div>     
 </form>

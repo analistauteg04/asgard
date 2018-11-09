@@ -25,7 +25,7 @@ use yii\data\ArrayDataProvider;
  * @property Paralelo[] $paralelos
  * @property PlanificacionEstudioAcademico[] $planificacionEstudioAcademicos
  */
-class PeriodoAcademicoMetIngreso extends \yii\db\ActiveRecord {
+class PeriodoAcademicoMetIngreso extends  \app\modules\academico\components\CActiveRecord  {
 
     /**
      * {@inheritdoc}
@@ -301,10 +301,10 @@ class PeriodoAcademicoMetIngreso extends \yii\db\ActiveRecord {
      */
     public function listarParalelos($pmin_id) {
         $con = \Yii::$app->db_academico;
-        $estado = 1;
-        // OJO AQUI SE REGISTRABAN CUPOS Y NUMEROS INSCRITOS ESTO DEBE IR NUEVAMENTE EN LA TABLA?
-        $sql = "SELECT 	par.par_descripcion descripcion, 
-                        par.par_num_cupo cupo                      
+        $estado = 1;        
+        $sql = "SELECT 	par.par_nombre nombre,
+                        par.par_descripcion descripcion, 
+                        par.par_num_cupo cupo                 
                 FROM " . $con->dbname . ".paralelo par
                 WHERE par.pami_id = :pmin_id
                       and par.par_estado = :estado
@@ -315,6 +315,7 @@ class PeriodoAcademicoMetIngreso extends \yii\db\ActiveRecord {
         $comando->bindParam(":pmin_id", $pmin_id, \PDO::PARAM_INT);
 
         $resultData = $comando->queryall();
+        \app\models\Utilities::putMessageLogFile($resultData);     
         $dataProvider = new ArrayDataProvider([
             'key' => 'id',
             'allModels' => $resultData,
@@ -325,7 +326,7 @@ class PeriodoAcademicoMetIngreso extends \yii\db\ActiveRecord {
                 'attributes' => [],
             ],
         ]);
-        return $dataProvider;
+        return $dataProvider;               
     }
     
     

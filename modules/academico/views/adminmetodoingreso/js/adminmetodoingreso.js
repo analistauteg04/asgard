@@ -47,7 +47,38 @@ $(document).ready(function () {
         }, true);
     });
     
-    $('#btn_grabar_periodo').click(function () {
+   
+    
+    $('#btn_buscarDataPeriodo').click(function () {
+        actualizarperiodcanGrid();
+    });
+});
+
+function actualizarperiodcanGrid() {
+    var search = $('#txt_buscarDatapc').val();
+    var f_ini = $('#txt_fecha_inipc').val();
+    var f_fin = $('#txt_fecha_finpc').val();
+    var mes = $('#cmb_mes option:selected').val();
+    //Buscar almenos una clase con el nombre para ejecutar
+    if (!$(".blockUI").length) {
+        showLoadingPopup();
+        $('#Pbgperiodo').PbGridView('applyFilterData', {'f_ini': f_ini, 'f_fin': f_fin, 'mes': mes, 'search': search});
+        setTimeout(hideLoadingPopup, 2000);
+    }
+}
+
+function exportPdf(){
+    var ObjData = new Object();
+    ObjData.search = $('#txt_buscarDatapc').val();
+    ObjData.f_ini = $('#txt_fecha_inipc').val();
+    ObjData.f_fin = $('#txt_fecha_finpc').val();
+    ObjData.mes = $('#cmb_mes option:selected').val();
+    var rptData = base64_encode(JSON.stringify(ObjData));
+    window.location.href = $('#txth_base').val() + "/academico/adminmetodoingreso/exportpdf?pdf=true&rptData="+rptData;
+}
+
+
+function grabarPeriodo() {
         var arrParams = new Object();
         var link = $('#txth_base').val() + "/academico/adminmetodoingreso/grabarperiodoxmetodoing";
         arrParams.anio = $('#txt_anio').val();
@@ -86,13 +117,13 @@ $(document).ready(function () {
             requestHttpAjax(link, arrParams, function (response) {
                 showAlert(response.status, response.label, response.message);
                 setTimeout(function () {
-                    parent.window.location.href = $('#txth_base').val() + "/academico/adminmetodoingreso/newperiodo";
+                    parent.window.location.href = $('#txth_base').val() + "/academico/adminmetodoingreso/index";
                 }, 2000);
             }, true);
         }
-    });
+    };
 
-    $('#btn_grabar_paralelo').click(function () {
+    function grabarParalelo() {
         var arrParams = new Object();
         var link = $('#txth_base').val() + "/academico/adminmetodoingreso/grabarparalelo";
         arrParams.nombre = $('#txt_nombre').val();
@@ -108,9 +139,9 @@ $(document).ready(function () {
                 }, 2000);
             }, true);
         }
-    }); 
+    }; 
 
-    $('#btn_modificar_periodo').click(function () {
+    function modificarPeriodo() {
         var arrParams = new Object();
         var link = $('#txth_base').val() + "/academico/adminmetodoingreso/updateperiodoxmetodoing";
         arrParams.pmin_id = $('#txth_pmin_id').val();
@@ -153,35 +184,6 @@ $(document).ready(function () {
                 }, 2000);
             }, true);
         }
-    });
-
-    $('#btn_buscarDataPeriodo').click(function () {
-        actualizarperiodcanGrid();
-    });
-});
-
-function actualizarperiodcanGrid() {
-    var search = $('#txt_buscarDatapc').val();
-    var f_ini = $('#txt_fecha_inipc').val();
-    var f_fin = $('#txt_fecha_finpc').val();
-    var mes = $('#cmb_mes option:selected').val();
-    //Buscar almenos una clase con el nombre para ejecutar
-    if (!$(".blockUI").length) {
-        showLoadingPopup();
-        $('#Pbgperiodo').PbGridView('applyFilterData', {'f_ini': f_ini, 'f_fin': f_fin, 'mes': mes, 'search': search});
-        setTimeout(hideLoadingPopup, 2000);
-    }
-}
-
-function exportPdf(){
-    var ObjData = new Object();
-    ObjData.search = $('#txt_buscarDatapc').val();
-    ObjData.f_ini = $('#txt_fecha_inipc').val();
-    ObjData.f_fin = $('#txt_fecha_finpc').val();
-    ObjData.mes = $('#cmb_mes option:selected').val();
-    var rptData = base64_encode(JSON.stringify(ObjData));
-    window.location.href = $('#txth_base').val() + "/academico/adminmetodoingreso/exportpdf?pdf=true&rptData="+rptData;
-}
-
+    };
 
 
