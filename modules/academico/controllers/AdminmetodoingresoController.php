@@ -339,5 +339,20 @@ class AdminmetodoingresoController extends \app\components\CController {
             echo $e;
         }
     }
+    
+    public function actionListarparalelo() {
+        $pmin_id = base64_decode($_GET["pami_id"]);
+        $codigo = base64_decode($_GET["codigo"]);
+
+        $mod_paralelo = new PeriodoAcademicoMetIngreso();
+        $resp_paralelo = $mod_paralelo->listarParalelos($pmin_id);
+        $periodo = "Período " . $codigo;
+
+        return $this->render('listarParalelo', [
+                    "mod_paralelo" => $resp_paralelo,
+                    "pmin_id" => $pmin_id,
+                    "periodo" => $periodo,
+        ]);
+    }
 
 }

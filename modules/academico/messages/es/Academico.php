@@ -26,6 +26,7 @@ return [
     "Income Method" => "Mét. Ing",
     "Lecturing Period" => "Período Académico",
     "List Admitted" => "Listar Admitidos",
+    "List parallels" => "Listar Paralelos",
     "List Subscribers" => "Listar Inscritos",
     "List Failed Enrollments" => "Listar Matriculados Reprobados",
     "Modality" => "Modalidad",

@@ -65,13 +65,16 @@ aspirante::registerTranslations();
             [
                 'class' => 'yii\grid\ActionColumn',
                 'header' => Yii::t("formulario", "Actions"),
-                'template' => '{view} {update}', //
+                'template' => '{view} {update} {listar}', //
                 'buttons' => [
                     'view' => function ($url, $model) {
-                        return Html::a('<span class="glyphicon glyphicon-check"></span>', Url::to(['adminmetodoingreso/newparalelo', 'pami_id' => base64_encode($model['pami_id']), 'codigo' => base64_encode($model['codigo'])]), ["data-toggle" => "tooltip", "title" => "Registrar Paralelos", "data-pjax" => 0]);
+                        return Html::a('<span class="glyphicon glyphicon-check"></span>', Url::to(['adminmetodoingreso/newparalelo', 'pami_id' => base64_encode($model['pami_id']), 'codigo' => base64_encode($model['codigo'])]), ["data-toggle" => "tooltip", "title" => "Registrar Paralelos", "data-pjax" => 0]);                        
                     },
                     'update' => function ($url, $model) {
-                        return Html::a('<span class="glyphicon glyphicon-list"></span>', Url::to(['adminmetodoingreso/update', 'pami_id' => base64_encode($model['pami_id']), 'codigo' => base64_encode($model['codigo'])]), ["data-toggle" => "tooltip", "title" => "Modificar Período", "data-pjax" => 0]);
+                        return Html::a('<span class="glyphicon glyphicon-edit"></span>', Url::to(['adminmetodoingreso/update', 'pami_id' => base64_encode($model['pami_id']), 'codigo' => base64_encode($model['codigo'])]), ["data-toggle" => "tooltip", "title" => "Modificar Período", "data-pjax" => 0]);
+                    },
+                    'listar' => function ($url, $model) {
+                        return Html::a('<span class="glyphicon glyphicon-list"></span>', Url::to(['adminmetodoingreso/listarparalelo', 'pami_id' => base64_encode($model['pami_id']), 'codigo' => base64_encode($model['codigo'])]), ["data-toggle" => "tooltip", "title" => "Listar Paralelos", "data-pjax" => 0]);     
                     },
                 ],
             ],
