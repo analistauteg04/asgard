@@ -89,7 +89,7 @@ $(document).ready(function () {
                 setComboData(data.cantones, "cmb_ciu_dom");
             }
         }, true);
-    });  
+    });
 
     $('#cmb_raza_etnica').change(function () {
         var valor = $('#cmb_raza_etnica').val();
@@ -127,7 +127,7 @@ $(document).ready(function () {
             arrParams.nacecuador = 1;
         } else {
             arrParams.nacecuador = 0;
-        }        
+        }
         //FORM 1 Informacion de Contacto
         arrParams.nombre_contacto = $('#txt_nombres_contacto').val();
         arrParams.apellido_contacto = $('#txt_apellidos_contacto').val();
@@ -146,15 +146,65 @@ $(document).ready(function () {
         arrParams.calls_domicilio = $('#txt_csecundaria_dom').val();
         arrParams.numero_domicilio = $('#txt_numeracion_dom').val();
         arrParams.referencia_domicilio = $('#txt_referencia_dom').val();
-        
+
         if (!validateForm()) {
             requestHttpAjax(link, arrParams, function (response) {
                 showAlert(response.status, response.label, response.message);
-                setTimeout(function () {                    
-                    window.location.href = $('#txth_base').val() + "/admision/interesados/index";                    
+                setTimeout(function () {
+                    window.location.href = $('#txth_base').val() + "/admision/interesados/index";
                 }, 3000);
             }, true);
         }
-    });  
+    });
 
 });
+
+function guardarFichaAspirante() {
+    var arrParams = new Object();
+    var link = $('#txth_base').val() + "/academico/ficha/guardarficha";
+    arrParams.persona_id = $('#txth_ids').val();
+    arrParams.pnombre_persona = $('#txt_primer_nombre').val();
+    arrParams.snombre_persona = $('#txt_segundo_nombre').val();
+    arrParams.papellido_persona = $('#txt_primer_apellido').val();
+    arrParams.sapellido_persona = $('#txt_segundo_apellido').val();
+    arrParams.genero_persona = $('#cmb_genero').val();
+    arrParams.etnia_persona = $('#cmb_raza_etnica').val();
+    arrParams.etnia_otra = $('#txt_otra_etnia').val();
+    arrParams.ecivil_persona = $('#txt_estado_civil').val();
+    arrParams.fnacimiento_persona = $('#txt_fecha_nacimiento').val();
+    arrParams.pnacionalidad = $('#txt_nacionalidad').val();
+    arrParams.pais_persona = $('#cmb_pais_nac').val();
+    arrParams.provincia_persona = $('#cmb_prov_nac').val();
+    arrParams.canton_persona = $('#cmb_ciu_nac').val();
+    arrParams.correo_persona = $('#txt_ftem_correo').val();
+    arrParams.celular_persona = $('#txt_celular').val();
+    arrParams.tsangre_persona = $('#cmb_tipo_sangre').val();
+    if ($('input[name=signup-ecu]:checked').val() == 1) {
+        arrParams.nacecuador = 1;
+    } else {
+        arrParams.nacecuador = 0;
+    }
+    arrParams.nombre_contacto = $('#txt_nombres_contacto').val();
+    arrParams.apellido_contacto = $('#txt_apellidos_contacto').val();
+    arrParams.telefono_contacto = $('#txt_telefono_con').val();
+    arrParams.celular_contacto = $('#txt_celular_con').val();
+    arrParams.direccion_contacto = $('#txt_address_con').val();
+    arrParams.parentesco_contacto = $('#cmb_parentesco_con').val();
+    arrParams.paisd_domicilio = $('#cmb_pais_dom').val();
+    arrParams.provinciad_domicilio = $('#cmb_prov_dom').val();
+    arrParams.cantond_domicilio = $('#cmb_ciu_dom').val();
+    arrParams.telefono_domicilio = $('#txt_telefono_dom').val();
+    arrParams.sector_domicilio = $('#txt_sector_dom').val();
+    arrParams.callep_domicilio = $('#txt_cprincipal_dom').val();
+    arrParams.calls_domicilio = $('#txt_csecundaria_dom').val();
+    arrParams.numero_domicilio = $('#txt_numeracion_dom').val();
+    arrParams.referencia_domicilio = $('#txt_referencia_dom').val();
+    if (!validateForm()) {
+        requestHttpAjax(link, arrParams, function (response) {
+            showAlert(response.status, response.label, response.message);
+            setTimeout(function () {
+              window.location.href = $('#txth_base').val() + "/admision/interesados/index";
+            }, 3000);
+        }, true);
+    }
+}

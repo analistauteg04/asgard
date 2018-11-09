@@ -114,12 +114,40 @@ class UsuaGrolEper extends \yii\db\ActiveRecord {
     }
 
     /**
-     * Function consultarIdPersona 
+     * Function consultarIdUsuaGrolEper 
      * @author  Kleber Loayza
      * @property      
      * @return  
      */
     public function consultarIdUsuaGrolEper($eper_id = null, $usu_id = null, $grol_id = null) {
+        $con = \Yii::$app->db_asgard;
+        $estado = 1;
+        $sql = "
+                SELECT ifnull(ugep_id,0) as ugep_id
+                FROM usua_grol_eper
+                where
+                eper_id=$eper_id
+                and usu_id = $usu_id 
+                and grol_id = $grol_id
+                and ugep_estado=$estado
+                and ugep_estado_logico=$estado
+              ";
+        $comando = $con->createCommand($sql);
+        $resultData = $comando->queryOne();
+        if (empty($resultData['ugep_id']))
+            return 0;
+        else {
+            return $resultData['ugep_id'];
+        }
+    }
+    
+    /**
+     * Function consultarIdUsuaGrolEper 
+     * @author  Kleber Loayza
+     * @property      
+     * @return  
+     */
+    public function consultarIdGrolByUsId($usu_id = null) {
         $con = \Yii::$app->db_asgard;
         $estado = 1;
         $sql = "

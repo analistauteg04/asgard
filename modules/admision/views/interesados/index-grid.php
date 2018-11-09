@@ -71,6 +71,8 @@ PbGridView::widget([
                     return Html::a('<span class="glyphicon glyphicon-th-large"></span>', Url::to(['/admision/solicitudes/listarsolicitudxinteresado', 'id' => base64_encode($model['id']), 'perid' => base64_encode($model['per_id'])]), ["data-toggle" => "tooltip", "title" => "Mostrar Solicitudes", "data-pjax" => 0]);
                 },
                 'ficha' => function ($url, $model) {
+                    $usuario_ingreso = @Yii::$app->session->get("PB_iduser");
+                    
                     return Html::a('<span class="glyphicon glyphicon-user"></span>', Url::to(['/academico/ficha/update', 'perid' => base64_encode($model['per_id'])]), ["data-toggle" => "tooltip", "title" => "Ficha Aspirante", "data-pjax" => 0]);
                 },
             ],
