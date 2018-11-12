@@ -22,7 +22,7 @@ aspirante::registerTranslations();
     PbGridView::widget([
         //'dataProvider' => new yii\data\ArrayDataProvider(array()),
         'id' => 'Pbgperiodo',
-        'showExport' => true,
+        //'showExport' => true,
         'fnExportEXCEL' => "exportExcel",
         'fnExportPDF' => "exportPdf",
         'dataProvider' => $mod_periodo,

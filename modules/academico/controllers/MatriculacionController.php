@@ -30,20 +30,19 @@ class MatriculacionController extends \app\components\CController {
         if (Yii::$app->request->isAjax) {
             $data = Yii::$app->request->post();
             if (isset($data["getparalelos"])) {                                
-                \app\models\Utilities::putMessageLogFile('pmin_id ajax: ' . $data["pmin_id"]);
+               // \app\models\Utilities::putMessageLogFile('pmin_id ajax: ' . $data["pmin_id"]);
                 $resp_Paralelos = $mod_matriculacion->consultarParalelo($data["pmin_id"]);
-                $message = array("paralelos" => $resp_Paralelos);
-                \app\models\Utilities::putMessageLogFile('retorna ajax: ' . $resp_Paralelos["id"]);
+                $message = array("paralelos" => $resp_Paralelos);               
                 return Utilities::ajaxResponse('OK', 'alert', Yii::t('jslang', 'Success'), 'false', $message);               
             }           
-        }                
+        }               
         $personaData = $mod_solins->consultarInteresadoPorSol_id($sins_id);
         $resp_Periodos = $mod_matriculacion->consultarPeriodoAcadMing($personaData["uaca_id"], $personaData["mod_id"], $personaData["ming_id"]);
         $arr_Paralelos = $mod_matriculacion->consultarParalelo($pmin_id);
         return $this->render('newmetodoingreso', [
-                    'personalData' => $personaData,
-                    'arr_periodo' => ArrayHelper::map($resp_Periodos, "id", "name"),
-                    'arr_paralelo' => ArrayHelper::map($arr_Paralelos, "id", "name"),
+                    'personalData' => $personaData,            
+                    'arr_periodo' => ArrayHelper::map(array_merge([["id" => "0", "name" => "Seleccionar"]],$resp_Periodos),"id","name"), //ArrayHelper::map($resp_Periodos, "id", "name"),
+                    'arr_paralelo' => ArrayHelper::map(array_merge(["id" => "0", "name" => "Seleccionar"],$arr_Paralelos),"id","name"), //ArrayHelper::map($arr_Paralelos, "id", "name"),
         ]);
     }
 
@@ -75,6 +74,8 @@ class MatriculacionController extends \app\components\CController {
                     if (!$resp_consMatricula) {
                         $fecha = date(Yii::$app->params["dateTimeByDefault"]);
                         $descripcion = "Asignación por Matrícula Método Ingreso.";
+                        \app\models\Utilities::putMessageLogFile('periodo:'.$periodo_id);     
+                        \app\models\Utilities::putMessageLogFile('solic:'.$sins_id);     
                         //Buscar el código de planificación académica según el periodo, unidad, modalidad y carrera.
                         $resp_planificacion = $mod_Matriculacion->consultarPlanificacion($sins_id, $periodo_id);
                         if ($resp_planificacion) { //Si existe código de planificación
