@@ -536,7 +536,7 @@ class MatriculadosReprobado extends \yii\db\ActiveRecord {
      * @param
      * @return
      */
-    public function insertarReprobadoTemp($con,$data) {
+    public function insertarReprobadoTemp($con, $data) {
         $trans = $con->getTransaction(); // se obtiene la transacción actual
         if ($trans !== null) {
             $trans = null; // si existe la transacción entonces no se crea una
@@ -597,8 +597,14 @@ class MatriculadosReprobado extends \yii\db\ActiveRecord {
             ;
         }
     }
+
     public function actualizarReprobadoTemp($con, $id, $parameters, $keys, $name_table) {
-        $trans = $con->getTransaction();
+        $trans = $con->getTransaction(); // se obtiene la transacción actual
+        if ($trans !== null) {
+            $trans = null; // si existe la transacción entonces no se crea una
+        } else {
+            $trans = $con->beginTransaction(); // si no existe la transacción entonces se crea una
+        }
         $params_sql = "";
         for ($i = 0; $i < (count($parameters) - 1); $i++) {
             if (isset($parameters[$i])) {
@@ -610,21 +616,16 @@ class MatriculadosReprobado extends \yii\db\ActiveRecord {
             $sql = "UPDATE " . $con->dbname . '.' . $name_table .
                     " SET $params_sql" .
                     " WHERE twre_id=$id";
-            \app\models\Utilities::putMessageLogFile('sql: ' . $sql);
+            //\app\models\Utilities::putMessageLogFile('sql: ' . $sql);
             $comando = $con->createCommand($sql);
             $result = $comando->execute();
-            if ($trans !== null) {
-                $trans->commit();
-                return true;
-            } else {
-                $trans->commit();
-                return true;
-            }
+            $trans->commit();
+            return ["status" => true, "twre_id" => $id];
         } catch (Exception $ex) {
             if ($trans !== null) {
                 $trans->rollback();
             }
-            return 0;
+            return ["status" => false, "twre_id" => $id];
         }
     }
 

@@ -28,61 +28,6 @@ $(document).ready(function () {
             error++;
             showAlert("NO_OK", "success", mensaje);
         }
-        if ($('#txth_doc_titulo').val() == "")
-        {
-            error++;
-            var mensaje =
-                    {wtmessage: "Debe adjuntar título.", title: "Información"};
-            showAlert("NO_OK", "error", mensaje);
-        } else {
-            if ($('#txth_doc_dni').val() == "")
-            {
-                error++;
-                var mensaje =
-                        {wtmessage: "Debe adjuntar documento de identidad.", title: "Información"};
-                showAlert("NO_OK", "error", mensaje);
-            } else {
-                if ($('#cmb_tipo_dni').val() == "CED")
-                {
-                    if (pais == 1)
-                    {
-                        if ($('#txth_doc_certvota').val() == "")
-                        {
-                            error++;
-                            var mensaje =
-                                    {wtmessage: "Debe adjuntar certificado de votación.", title: "Información"};
-                            showAlert("NO_OK", "error", mensaje);
-                        }
-                    } else
-
-                    {
-                        if ($('#txth_doc_foto').val() == "")
-                        {
-                            error++;
-                            var mensaje =
-                                    {wtmessage: "Debe adjuntar foto.", title: "Información"};
-                            showAlert("NO_OK", "error", mensaje);
-                        }
-                    }
-                } else {
-                    if ($('#txth_doc_hojavida').val() == "") {
-                        error++;
-                        var mensaje = {wtmessage: "Debe adjuntar hoja de vida.", title: "Información"};
-                        showAlert("NO_OK", "error", mensaje);
-                    }
-                }
-            }
-        }
-        if ($('#cmb_unidad_solicitud').val() == 2) {
-            if ($('#txth_doc_certificado').val() == "") {
-                error++;
-                var mensaje = {wtmessage: "Debe adjuntar certificado de materias.", title: "Información"};
-                showAlert("NO_OK", "error", mensaje);
-            }
-        }
-        if (error == 0) {
-            guardarInscripcion('Update', '2');
-        }
     });
     $('#paso1next').click(function () {
         $("a[data-href='#paso1']").attr('data-toggle', 'none');
@@ -216,9 +161,9 @@ function guardarAdmiMateriarep() {
         }
     }
 }
-function guardarAdmireprobado(accion, paso) {    
+function guardarAdmireprobado(accion, paso) {
     var ID = (accion == "Update") ? $('#txth_twer_id').val() : 0;
-    alert("twer id: "+ID);
+    alert("twer id: " + ID);
     var link = $('#txth_base').val() + "/academico/matriculadosreprobados/savereprobadostemp";
     var arrParams = new Object();
     arrParams.DATA_1 = dataInscripPart1(ID);
