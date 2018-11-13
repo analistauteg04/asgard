@@ -650,8 +650,7 @@ class SolicitudesController extends \app\components\CController {
                 if ($curriculum_archivo === FALSE)
                     throw new Exception('Error doc curriculum no renombrado.');
             }
-            if (!empty($titulo_archivo) && !empty($dni_archivo) && !empty($foto_archivo)) {
-                if (!empty($titulo_archivo)) {
+            if ((($uaca_id == 1) && !empty($titulo_archivo) && !empty($dni_archivo) && !empty($foto_archivo)) or (!empty($curriculum_archivo) && !empty($titulo_archivo) && !empty($dni_archivo) && !empty($foto_archivo) && ($uaca_id == "2"))) {                
                     $mod_solinsxdoc1 = new SolicitudinsDocumento();
                     //1-Título, 2-DNI,3-Cert votación, 4-Foto, 5-Doc-Beca                       
                     $mod_solinsxdoc1->sins_id = $sins_id;
@@ -687,7 +686,6 @@ class SolicitudesController extends \app\components\CController {
                                     $mod_solinsxdoc4->sdoc_archivo = $certvota_archivo;
                                     $mod_solinsxdoc4->sdoc_estado = "1";
                                     $mod_solinsxdoc4->sdoc_estado_logico = "1";
-
                                     if (!$mod_solinsxdoc4->save()) {
                                         throw new Exception('Error doc certvot no creado.');
                                     }
@@ -705,21 +703,20 @@ class SolicitudesController extends \app\components\CController {
                                     }
                                 }
                                 if ($uaca_id == "2") {
-                                    \app\models\Utilities::putMessageLogFile('sins_id ' . $sins_id);
-                                    \app\models\Utilities::putMessageLogFile('interesado_id ' . $interesado_id);
-                                    \app\models\Utilities::putMessageLogFile('curriculum_archivo ' . $curriculum_archivo);                                    
-                                    $mod_solinsxdoc6 = new SolicitudinsDocumento();
-                                    $mod_solinsxdoc6->sins_id = $sins_id;
-                                    $mod_solinsxdoc6->int_id = $interesado_id;
-                                    $mod_solinsxdoc6->dadj_id = 6;
-                                    $mod_solinsxdoc6->sdoc_archivo = $certmate_archivo;
-                                    $mod_solinsxdoc6->sdoc_estado = "1";
-                                    $mod_solinsxdoc6->sdoc_estado_logico = "1";
-                                    if (!$mod_solinsxdoc6->save()) {
-                                        throw new Exception('Error doc certificado materia no creado.');
-                                    }
-
-                                    if ($mod_solinsxdoc6->save()) {
+                                    //\app\models\Utilities::putMessageLogFile('sins_id ' . $sins_id);
+                                    if (!empty($certmate_archivo)) {
+                                        $mod_solinsxdoc6 = new SolicitudinsDocumento();
+                                        $mod_solinsxdoc6->sins_id = $sins_id;
+                                        $mod_solinsxdoc6->int_id = $interesado_id;
+                                        $mod_solinsxdoc6->dadj_id = 6;
+                                        $mod_solinsxdoc6->sdoc_archivo = $certmate_archivo;
+                                        $mod_solinsxdoc6->sdoc_estado = "1";
+                                        $mod_solinsxdoc6->sdoc_estado_logico = "1";
+                                        if (!$mod_solinsxdoc6->save()) {
+                                            throw new Exception('Error doc certificado materia no creado.');
+                                        }
+                                    }                                     
+                                    if (!empty($curriculum_archivo)) {
                                         $mod_solinsxdoc7 = new SolicitudinsDocumento();
                                         $mod_solinsxdoc7->sins_id = $sins_id;
                                         $mod_solinsxdoc7->int_id = $interesado_id;
@@ -730,7 +727,12 @@ class SolicitudesController extends \app\components\CController {
                                         if (!$mod_solinsxdoc7->save()) {
                                             throw new Exception('Error doc curriculum no creado.');
                                         }
+                                        $exito = 1;
+                                    } else {
+                                        throw new Exception('Tiene que subir curriculum.');
                                     }
+                                } else {
+                                   $exito = 1; 
                                 }
                             } else {
                                 throw new Exception('Error doc foto no creado.');
@@ -739,19 +741,18 @@ class SolicitudesController extends \app\components\CController {
                             throw new Exception('Error doc dni no creado.');
                         }
                     } else {
-                        throw new Exception('Error doc titulo no creado.' . $mensaje);
-                    }
-                    $transaction->commit();
-                    $message = array(
-                        "wtmessage" => Yii::t("notificaciones", "La infomación ha sido grabada."),
-                        "title" => Yii::t('jslang', 'Success'),
-                    );
-                    return Utilities::ajaxResponse('OK', 'alert', Yii::t("jslang", "Sucess"), false, $message);
-                } else {
-                    throw new Exception('Tiene que subir todos los documentos.');
-                }
+                        throw new Exception('Error doc titulo no creado.');
+                    }                                
             } else {
                 throw new Exception('Tiene que subir todos los documentos.');
+            }
+            if ($exito) {
+                $transaction->commit();
+                $message = array(
+                    "wtmessage" => Yii::t("notificaciones", "La infomación ha sido grabada."),
+                    "title" => Yii::t('jslang', 'Success'),
+                );
+                return Utilities::ajaxResponse('OK', 'alert', Yii::t("jslang", "Sucess"), false, $message);
             }
         } catch (Exception $ex) {
             $transaction->rollback();
