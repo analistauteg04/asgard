@@ -68,10 +68,25 @@ class MatriculadosreprobadosController extends \app\components\CController {
                 $repro_temp_id = $data["DATA_1"][0]["twin_id"];
                 $accion = isset($data['ACCION']) ? $data['ACCION'] : "";
                 if ($accion == "create" || $accion == "Create") {
-                    $resul = $model->insertarReprobadoTemp($con,$data["DATA_1"]);
+                    $resul = $model->insertarReprobadoTemp($con, $data["DATA_1"]);
                 } else if ($accion == "Update") {
-                    //Modificar Registro
-                    $resul = $model->actualizarReprobadoTemp($con,$data["DATA_1"]);
+                    $keys_act = [
+                        'twre_nombre', 'twre_apellido', 'twre_dni', 'twre_numero'
+                        , 'twre_correo', 'twre_pais', 'twre_celular'
+                        , 'uaca_id', 'mod_id', 'car_id'
+                        , 'twre_metodo_ingreso', 'ruta_doc_titulo', 'ruta_doc_dni'
+                        , 'ruta_doc_certvota', 'ruta_doc_foto', 'ruta_doc_certificado'
+                        , 'ruta_doc_hojavida', 'twre_mensaje1', 'twre_mensaje2'
+                    ];
+                    $values_act = [
+                        $data["DATA_1"][0]['pges_pri_nombre'], $data["DATA_1"][0]['pges_pri_apellido'], $data["DATA_1"][0]['tipo_dni'],$data["DATA_1"][0]['pges_cedula'],
+                        $data["DATA_1"][0]['pges_correo'], $data["DATA_1"][0]['pais'], $data["DATA_1"][0]['pges_celular'],
+                        $data["DATA_1"][0]['unidad_academica'], $data["DATA_1"][0]['modalidad'], $data["DATA_1"][0]['carrera'],
+                        $data["DATA_1"][0]['ming_id'], $data["DATA_1"][0]['ruta_doc_titulo'], $data["DATA_1"][0]['ruta_doc_dni'],
+                        $data["DATA_1"][0]['ruta_doc_certvota'], $data["DATA_1"][0]['ruta_doc_foto'], $data["DATA_1"][0]['ruta_doc_certificado'],
+                        $data["DATA_1"][0]['ruta_doc_hojavida'], $data["twre_mensaje1"][0]['ruta_doc_titulo'], $data["DATA_1"][0]['twre_mensaje2']
+                    ];
+                    $resul = $model->actualizarReprobadoTemp($con, $data["DATA_1"][0]['twre_id'], $values_act, $keys_act, 'temporal_wizard_reprobados');
                     //$model->insertaOriginal($resul["ids"]);
                 }
                 if ($resul['status']) {
@@ -337,17 +352,17 @@ class MatriculadosreprobadosController extends \app\components\CController {
                             }
                             //Guardado Datos Materias aprobadas.                         
                             $estado_materiare = 1;
-                            /*$arr_materia = $mod_admitido->consultarMateriarep($uniacademica, $modalidad, $carrera, $reprobar);
-                            $arr_materias = ArrayHelper::map($arr_materia, "id", "value");
-                            for ($j = 0; $j < count($arr_materias); $j++) {
-                                if ($res_materia) {
-                                    \app\models\Utilities::putMessageLogFile('xxx..  ' . $arr_materias["value"][$j]);
-                                    $res_reprobam = $mod_reprobado->insertarMateriareprueba($mre_id, $arr_materias[$j], $estado_materiare, $usuario, $fecha_creacion);
-                                    if ($res_reprobam) {
-                                        $exito = 1;
-                                    }
-                                }
-                            }*/
+                            /* $arr_materia = $mod_admitido->consultarMateriarep($uniacademica, $modalidad, $carrera, $reprobar);
+                              $arr_materias = ArrayHelper::map($arr_materia, "id", "value");
+                              for ($j = 0; $j < count($arr_materias); $j++) {
+                              if ($res_materia) {
+                              \app\models\Utilities::putMessageLogFile('xxx..  ' . $arr_materias["value"][$j]);
+                              $res_reprobam = $mod_reprobado->insertarMateriareprueba($mre_id, $arr_materias[$j], $estado_materiare, $usuario, $fecha_creacion);
+                              if ($res_reprobam) {
+                              $exito = 1;
+                              }
+                              }
+                              } */
                         }
                     }
                     if ($exito) {

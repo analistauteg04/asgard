@@ -22,7 +22,9 @@ aspirante::registerTranslations();
     <?=
         $this->render('index-grid', [
             'model' => $model,
-            'url' => $url]);
+            'url' => $url
+          ]
+        );
     ?>
 </div>
 
