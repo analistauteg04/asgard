@@ -569,7 +569,7 @@ class PagosController extends \app\components\CController {
 
     public function actionListarpagosolicitud() {
         $per_id = Yii::$app->session->get("PB_perid");
-        //  $per_ids = base64_decode($_GET['ids']);
+        $per_ids = base64_decode($_GET['perid']);
         $sol_id = base64_decode($_GET['id_sol']);
         $model_pag = new OrdenPago();
         $data = Yii::$app->request->get();
@@ -591,8 +591,8 @@ class PagosController extends \app\components\CController {
           
         }
         //verificar rol de la persona que esta en sesión
-        $resp_rol = $model_pag->encuentraRol($per_id);
-        $data = null;
+        //$resp_rol = $model_pag->encuentraRol($per_id);
+        //$data = null;
         if (Yii::$app->request->isAjax) {
             $data = Yii::$app->request->get();
             if (isset($data["op"]) && $data["op"] == '1') {

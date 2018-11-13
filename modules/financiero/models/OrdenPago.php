@@ -282,7 +282,7 @@ class OrdenPago extends \app\modules\financiero\components\CActiveRecord {
                     lpad(ifnull(sins.num_solicitud,sins.sins_id),'9','0') as solicitud,
                     sins.sins_id,
                     sins.sins_fecha_solicitud,
-                    :rol as rol
+                    :rol as rol, per.per_id
                 FROM " . $con1->dbname . ".persona per 
                     INNER JOIN " . $con2->dbname . ".interesado inte on inte.per_id = per.per_id
                     INNER JOIN " . $con2->dbname . ".solicitud_inscripcion sins on sins.int_id = inte.int_id
