@@ -24,9 +24,43 @@ $(document).ready(function () {
         if ($("#chk_mensaje1").prop("checked") && $("#chk_mensaje2").prop("checked")) {
             error = 0;
         } else {
-            var mensaje = {wtmessage: "Debe Aceptar los términos de la Información.", title: "Exito"};
+            var mensaje = {
+                wtmessage: "Debe Aceptar los términos de la Información.", title: "Exito"
+            };
             error++;
             showAlert("NO_OK", "success", mensaje);
+        }
+        if ($('#txth_doc_titulo').val() == ""){
+            error++;
+            var mensaje = {wtmessage: "Debe adjuntar título.", title: "Información"};
+            showAlert("NO_OK", "error", mensaje);
+        } else {
+            if ($('#txth_doc_dni').val() == ""){
+                error++;
+                var mensaje =
+                        {wtmessage: "Debe adjuntar documento de identidad.", title: "Información"};
+                showAlert("NO_OK", "error", mensaje);
+            } else {
+                if ($('#cmb_tipo_dni').val() == "CED")
+                {
+                    if (pais == 1)
+                    {
+                        if ($('#txth_doc_certvota').val() == "")
+                        {
+                            error++;
+                            var mensaje =
+                                    {wtmessage: "Debe adjuntar certificado de votación.", title: "Información"};
+                            showAlert("NO_OK", "error", mensaje);
+                        }
+                    }
+                } else {
+                    if ($('#txth_doc_hojavida').val() == "") {
+                        error++;
+                        var mensaje = {wtmessage: "Debe adjuntar hoja de vida.", title: "Información"};
+                        showAlert("NO_OK", "error", mensaje);
+                    }
+                }
+            }
         }
     });
     $('#paso1next').click(function () {

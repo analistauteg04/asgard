@@ -67,6 +67,25 @@ class MatriculadosreprobadosController extends \app\components\CController {
                 $accion = isset($data['ACCION']) ? $data['ACCION'] : "";
                 $repro_temp_id = $data["DATA_1"][0]["twin_id"];
                 $accion = isset($data['ACCION']) ? $data['ACCION'] : "";
+                $timeSt = time();
+                if ($data["upload_file"]) {
+                    if (empty($_FILES)) {
+                        return json_encode(['error' => Yii::t("notificaciones", "Error to process File {file}. Try again.", ['{file}' => basename($files['name'])])]);
+                    }
+                    //Recibe Parámetros.
+                    $inscripcion_id = $data["matr_repro_id"];
+                    $files = $_FILES[key($_FILES)];
+                    $arrIm = explode(".", basename($files['name']));
+                    $typeFile = strtolower($arrIm[count($arrIm) - 1]);
+                    $dirFileEnd = Yii::$app->params["documentFolder"] . "solicitudadmision/" . $inscripcion_id . "/" . $data["name_file"] . "_per_" . $inscripcion_id . "." . $typeFile;
+                    $status = Utilities::moveUploadFile($files['tmp_name'], $dirFileEnd);
+                    if ($status) {
+                        return true;
+                    } else {
+                        return json_encode(['error' => Yii::t("notificaciones", "Error to process File {file}. Try again.", ['{file}' => basename($files['name'])])]);
+                    }
+                }
+
                 if ($accion == "create" || $accion == "Create") {
                     $resul = $model->insertarReprobadoTemp($con, $data["DATA_1"]);
                 } else if ($accion == "Update") {
@@ -79,7 +98,7 @@ class MatriculadosreprobadosController extends \app\components\CController {
                         , 'ruta_doc_hojavida', 'twre_mensaje1', 'twre_mensaje2'
                     ];
                     $values_act = [
-                        $data["DATA_1"][0]['pges_pri_nombre'], $data["DATA_1"][0]['pges_pri_apellido'], $data["DATA_1"][0]['tipo_dni'],$data["DATA_1"][0]['pges_cedula'],
+                        $data["DATA_1"][0]['pges_pri_nombre'], $data["DATA_1"][0]['pges_pri_apellido'], $data["DATA_1"][0]['tipo_dni'], $data["DATA_1"][0]['pges_cedula'],
                         $data["DATA_1"][0]['pges_correo'], $data["DATA_1"][0]['pais'], $data["DATA_1"][0]['pges_celular'],
                         $data["DATA_1"][0]['unidad_academica'], $data["DATA_1"][0]['modalidad'], $data["DATA_1"][0]['carrera'],
                         $data["DATA_1"][0]['ming_id'], $data["DATA_1"][0]['ruta_doc_titulo'], $data["DATA_1"][0]['ruta_doc_dni'],
@@ -102,16 +121,7 @@ class MatriculadosreprobadosController extends \app\components\CController {
                     );
                     return Utilities::ajaxResponse('NO_OK', 'alert', Yii::t('jslang', 'Error'), 'false', $message, $resul);
                 }
-                return;
-//                if (isset($data["DATA_1"][0]["ruta_doc_titulo"]) && $data["DATA_1"][0]["ruta_doc_titulo"] != "") {
-//                    $arrIm = explode(".", basename($data["DATA_1"][0]["ruta_doc_titulo"]));
-//                    $typeFile = strtolower($arrIm[count($arrIm) - 1]);
-//                    $titulo_archivoOld = Yii::$app->params["documentFolder"] . "solicitudadmision/" . $inscripcion_id . "/doc_titulo_per_" . $inscripcion_id . "." . $typeFile;
-//                    $titulo_archivo = InscripcionAdmision::addLabelTimeDocumentos($inscripcion_id, $titulo_archivoOld, $timeSt);
-//                    $data["DATA_1"][0]["ruta_doc_titulo"] = $titulo_archivo;
-//                    if ($titulo_archivo === false)
-//                        throw new Exception('Error doc Titulo no renombrado.');
-//                }
+
 //                if (isset($data["DATA_1"][0]["ruta_doc_dni"]) && $data["DATA_1"][0]["ruta_doc_dni"] != "") {
 //                    $arrIm = explode(".", basename($data["DATA_1"][0]["ruta_doc_dni"]));
 //                    $typeFile = strtolower($arrIm[count($arrIm) - 1]);

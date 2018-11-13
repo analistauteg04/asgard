@@ -628,7 +628,26 @@ class MatriculadosReprobado extends \yii\db\ActiveRecord {
             return ["status" => false, "twre_id" => $id];
         }
     }
-
+    /**
+     * Function addLabelTimeDocumentos renombra el documento agregando una varible de tiempo 
+     * @author  Kleber Loayza Analista Desarrollo 3 <analistadesarrollo03@uteg.edu.ec>
+     * @param   int     $matre_id        Id del matriculado
+     * @param   string  $file           Uri del Archivo a modificar
+     * @param   int     $timeSt         Parametro a agregar al nombre del archivo
+     * @return  $newFile | FALSE (Retorna el nombre del nuevo archivo o false si fue error).
+    */
+    public static function addLabelTimeDocumentos($matre_id, $file, $timeSt) {
+        $arrIm = explode(".", basename($file));
+        $typeFile = strtolower($arrIm[count($arrIm) - 1]);
+        $baseFile = Yii::$app->basePath;
+        $search = ".$typeFile";
+        $replace = "_$timeSt" . ".$typeFile";
+        $newFile = str_replace($search, $replace, $file);
+        if (rename($baseFile . $file, $baseFile . $newFile)) {
+            return $newFile;
+        }
+        return FALSE;
+    }
     /**
      * Function consultarReprobado
      * @author  Giovanni Vergara <analistadesarrollo02@uteg.edu.ec>

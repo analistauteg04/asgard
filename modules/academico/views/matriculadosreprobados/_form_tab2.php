@@ -40,10 +40,10 @@ $leyenda = '<div class="col-md-12 col-xs-12 col-sm-12 col-lg-12">
                         'browseClass' => 'btn btn-primary btn-block',
                         'browseIcon' => '<i class="fa fa-folder-open"></i> ',
                         'browseLabel' => "Subir Archivo",
-                        'uploadUrl' => Url::to(['/inscripcionadmision/saveinscripciontemp']),
+                        'uploadUrl' => Url::to(['/academico/matriculadosreprobados/savereprobadostemp']),
                         'maxFileSize' => Yii::$app->params["MaxFileSize"], // en Kbytes
                         'uploadExtraData' => 'javascript:function (previewId,index) {
-            return {"upload_file": true, "name_file": "doc_titulo", "inscripcion_id": $("#txth_twin_id").val()};
+            return {"upload_file": true, "name_file": "doc_titulo", "matr_repro_id": $("#txth_twer_id").val()};
         }',
                     ],
                     'pluginEvents' => [
@@ -100,7 +100,7 @@ $leyenda = '<div class="col-md-12 col-xs-12 col-sm-12 col-lg-12">
                         'uploadUrl' => Url::to(['/inscripcionadmision/saveinscripciontemp']),
                         'maxFileSize' => Yii::$app->params["MaxFileSize"], // en Kbytes
                         'uploadExtraData' => 'javascript:function (previewId,index) {
-            return {"upload_file": true, "name_file": "doc_dni", "inscripcion_id": $("#txth_twin_id").val()};
+            return {"upload_file": true, "name_file": "doc_dni", "inscripcion_id": $("#txth_twer_id").val()};
         }',
                     ],
                     'pluginEvents' => [
