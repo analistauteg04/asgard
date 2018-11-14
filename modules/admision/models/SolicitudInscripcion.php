@@ -1056,7 +1056,8 @@ class SolicitudInscripcion extends \yii\db\ActiveRecord {
                     FROM " . $con2->dbname . ".item_metodo_unidad imni INNER JOIN " . $con2->dbname . ".item_precio ipre on imni.ite_id = ipre.ite_id                         
                          INNER JOIN " . $con1->dbname . ".unidad_academica ua on ua.uaca_id = imni.uaca_id                         
                     WHERE imni.uaca_id = :nint_id AND
-                          imni.mod_id = :mod_id AND                          
+                          imni.mod_id = :mod_id AND    
+                          imni.mest_id = :car_id AND
                           ipre.ipre_estado_precio = :estado_precio AND
                           now() between ipre.ipre_fecha_inicio and ipre.ipre_fecha_fin AND
                           imni.imni_estado = :estado AND
@@ -1149,7 +1150,7 @@ class SolicitudInscripcion extends \yii\db\ActiveRecord {
                     per.per_pri_apellido as per_pri_apellido,
                     per.per_seg_apellido as per_seg_apellido,
                     sins.uaca_id,
-                    uaca.uaca_nombre,
+                    uaca.uaca_nombre,  
                     sins.eaca_id,
                     case uaca.uaca_id
                         when 1 then (select eaca.eaca_nombre from " . $con1->dbname . ".estudio_academico eaca where eaca.eaca_id = sins.eaca_id)

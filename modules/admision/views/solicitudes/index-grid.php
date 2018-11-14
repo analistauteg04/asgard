@@ -58,7 +58,8 @@ PbGridView::widget([
             'attribute' => 'Metodo Ingreso',
             'header' => academico::t("Academico", "Income Method"),
             'value' => 'ming_nombre',
-        ],
+        ], 
+       
         [
             'class' => 'yii\grid\ActionColumn',
             'header' => academico::t("Academico", "Career/Program/Course"),
