@@ -1,6 +1,7 @@
 <?php
 
 namespace app\modules\admision\models;
+
 use yii\data\ArrayDataProvider;
 use Yii;
 
@@ -41,30 +42,28 @@ use Yii;
  * @property SolicitudRechazada[] $solicitudRechazadas
  * @property SolicitudinsDocumento[] $solicitudinsDocumentos
  */
-class SolicitudInscripcion extends \yii\db\ActiveRecord
-{
+class SolicitudInscripcion extends \yii\db\ActiveRecord {
+
     public static $arr_DNI = array("1" => "CED", "2" => "RUC", "3" => "PASS");
+
     /**
      * {@inheritdoc}
      */
-    public static function tableName()
-    {
+    public static function tableName() {
         return 'solicitud_inscripcion';
     }
 
     /**
      * @return \yii\db\Connection the database connection used by this AR class.
      */
-    public static function getDb()
-    {
+    public static function getDb() {
         return Yii::$app->get('db_captacion');
     }
 
     /**
      * {@inheritdoc}
      */
-    public function rules()
-    {
+    public function rules() {
         return [
             [['int_id', 'rsin_id', 'sins_estado', 'sins_estado_logico'], 'required'],
             [['int_id', 'uaca_id', 'mod_id', 'ming_id', 'eaca_id', 'mest_id', 'emp_id', 'rsin_id', 'sins_usuario_preaprueba', 'sins_usuario_aprueba', 'sins_usuario_ingreso', 'sins_usuario_modifica'], 'integer'],
@@ -81,8 +80,7 @@ class SolicitudInscripcion extends \yii\db\ActiveRecord
     /**
      * {@inheritdoc}
      */
-    public function attributeLabels()
-    {
+    public function attributeLabels() {
         return [
             'sins_id' => 'Sins ID',
             'int_id' => 'Int ID',
@@ -116,58 +114,52 @@ class SolicitudInscripcion extends \yii\db\ActiveRecord
     /**
      * @return \yii\db\ActiveQuery
      */
-    public function getSolicitudDatosFacturas()
-    {
+    public function getSolicitudDatosFacturas() {
         return $this->hasMany(SolicitudDatosFactura::className(), ['sins_id' => 'sins_id']);
     }
 
     /**
      * @return \yii\db\ActiveQuery
      */
-    public function getInt()
-    {
+    public function getInt() {
         return $this->hasOne(Interesado::className(), ['int_id' => 'int_id']);
     }
 
     /**
      * @return \yii\db\ActiveQuery
      */
-    public function getMing()
-    {
+    public function getMing() {
         return $this->hasOne(MetodoIngreso::className(), ['ming_id' => 'ming_id']);
     }
 
     /**
      * @return \yii\db\ActiveQuery
      */
-    public function getRsin()
-    {
+    public function getRsin() {
         return $this->hasOne(ResSolInscripcion::className(), ['rsin_id' => 'rsin_id']);
     }
 
     /**
      * @return \yii\db\ActiveQuery
      */
-    public function getSolicitudRechazadas()
-    {
+    public function getSolicitudRechazadas() {
         return $this->hasMany(SolicitudRechazada::className(), ['sins_id' => 'sins_id']);
     }
 
     /**
      * @return \yii\db\ActiveQuery
      */
-    public function getSolicitudinsDocumentos()
-    {
+    public function getSolicitudinsDocumentos() {
         return $this->hasMany(SolicitudinsDocumento::className(), ['sins_id' => 'sins_id']);
     }
-    
+
     public static function getSolicitudes($estado_inscripcion1, $estado_inscripcion2, $per_id, $resp_gruporol, $arrFiltro = array(), $onlyData = false) {
         $con = \Yii::$app->db_captacion;
         $con1 = \Yii::$app->db_academico;
         $con2 = \Yii::$app->db;
         $con3 = \Yii::$app->db_facturacion;
         $estado = 1;
-        $columnsAdd = "";    
+        $columnsAdd = "";
 
         if (isset($arrFiltro) && count($arrFiltro) > 0) {
             $str_search = "(per.per_pri_nombre like :search OR ";
@@ -190,7 +182,7 @@ class SolicitudInscripcion extends \yii\db\ActiveRecord
                     per.per_seg_apellido as per_seg_apellido,";
         }
 
-        $sql =  "SELECT
+        $sql = "SELECT
                     lpad(sins_id,4,'0') as num_solicitud,
                     sins_fecha_solicitud as fecha_solicitud,
                     per.per_id as persona,
@@ -331,7 +323,7 @@ class SolicitudInscripcion extends \yii\db\ActiveRecord
         $con1 = \Yii::$app->db_academico;
         $con2 = \Yii::$app->db;
         $con3 = \Yii::$app->db_facturacion;
-        $estado = 1;        
+        $estado = 1;
 
         if (isset($arrFiltro) && count($arrFiltro) > 0) {
             if ($arrFiltro['f_ini'] != "" && $arrFiltro['f_fin'] != "") {
@@ -382,14 +374,14 @@ class SolicitudInscripcion extends \yii\db\ActiveRecord
                         op.opag_estado_logico = :estado
                     ORDER BY fecha_solicitud DESC
                "
-                ;
-        
+        ;
+
         $comando = $con->createCommand($sql);
         $comando->bindParam(":estado", $estado, \PDO::PARAM_STR);
         $comando->bindParam(":int_id", $int_id, \PDO::PARAM_INT);
         if (isset($arrFiltro) && count($arrFiltro) > 0) {
             $fecha_ini = $arrFiltro["f_ini"];
-            $fecha_fin = $arrFiltro["f_fin"];            
+            $fecha_fin = $arrFiltro["f_fin"];
             if ($arrFiltro['f_ini'] != "" && $arrFiltro['f_fin'] != "") {
                 $comando->bindParam(":fec_ini", $fecha_ini, \PDO::PARAM_STR);
                 $comando->bindParam(":fec_fin", $fecha_fin, \PDO::PARAM_STR);
@@ -407,7 +399,7 @@ class SolicitudInscripcion extends \yii\db\ActiveRecord
                     'num_solicitud',
                     'fecha_solicitud',
                     'nint_nombre',
-                    'metodo_ingreso',                    
+                    'metodo_ingreso',
                 ],
             ],
         ]);
@@ -417,7 +409,7 @@ class SolicitudInscripcion extends \yii\db\ActiveRecord
             return $dataProvider;
         }
     }
-    
+
     public static function consultarInteresadoPorSol_id($sins_id) {
         $con = \Yii::$app->db_captacion;
         $con2 = \Yii::$app->db;
@@ -478,7 +470,7 @@ class SolicitudInscripcion extends \yii\db\ActiveRecord
         $resultData = $comando->queryOne();
         return $resultData;
     }
-    
+
     public static function obtenerSolicitudXInteresado($int_id) {
         $con = \Yii::$app->db_captacion;
         $con2 = \Yii::$app->db;
@@ -645,7 +637,7 @@ class SolicitudInscripcion extends \yii\db\ActiveRecord
                        imni.imni_estado =:estado AND
                        imni.imni_estado_logico = :estado AND
                        ipre.ipre_estado = :estado AND
-                       ipre.ipre_estado_logico = :estado";                                               
+                       ipre.ipre_estado_logico = :estado";
 
         $comando = $con->createCommand($sql);
         $comando->bindParam(":estado", $estado, \PDO::PARAM_STR);
@@ -665,8 +657,8 @@ class SolicitudInscripcion extends \yii\db\ActiveRecord
     public function Validarsolicitud($int_id, $nint_id, $ming_id, $car_id) {
         $con = \Yii::$app->db_captacion;
         $estado = 1;
-        
-        if ($nint_id!=3) { 
+
+        if ($nint_id != 3) {
             $sql = "SELECT 'S' existe
                     FROM " . $con->dbname . ".solicitud_inscripcion sins
                     WHERE sins.int_id = :int_id AND
@@ -677,7 +669,7 @@ class SolicitudInscripcion extends \yii\db\ActiveRecord
                           sins.sins_estado = :estado AND
                           sins.sins_estado_logico = :estado";
         } else {
-            if ($nint_id==3) { 
+            if ($nint_id == 3) {
                 $sql = "SELECT 'S' existe
                         FROM " . $con->dbname . ".solicitud_inscripcion sins
                         WHERE sins.int_id = :int_id AND
@@ -1034,7 +1026,7 @@ class SolicitudInscripcion extends \yii\db\ActiveRecord
         $con1 = \Yii::$app->db_academico;
         $estado = 1;
         $estado_precio = 'A';
-        if (!empty($ming_id)) { 
+        if (!empty($ming_id)) {
             $sql = "SELECT  imni.imni_id, 
                             ipre.ipre_precio+(ipre.ipre_precio*ifnull(ipre.ipre_porcentaje_iva,0)) as precio,	   
                             ming.ming_nombre as nombre_metodo_ingreso,
@@ -1055,8 +1047,8 @@ class SolicitudInscripcion extends \yii\db\ActiveRecord
                           ming.ming_estado_logico = :estado AND
                           ua.uaca_estado = :estado AND
                           ua.uaca_estado_logico = :estado";
-        }  else {
-                
+        } else {
+
             $sql = "SELECT  imni.imni_id, 
                             ipre.ipre_precio+(ipre.ipre_precio*ifnull(ipre.ipre_porcentaje_iva,0)) as precio,	   
                             null as nombre_metodo_ingreso,
@@ -1074,18 +1066,18 @@ class SolicitudInscripcion extends \yii\db\ActiveRecord
                           ua.uaca_estado = :estado AND
                           ua.uaca_estado_logico = :estado";
         }
-                
+
         $comando = $con->createCommand($sql);
         $comando->bindParam(":estado", $estado, \PDO::PARAM_STR);
         $comando->bindParam(":ming_id", $ming_id, \PDO::PARAM_INT);
         $comando->bindParam(":nint_id", $nint_id, \PDO::PARAM_INT);
-        $comando->bindParam(":mod_id", $mod_id, \PDO::PARAM_INT);        
-        $comando->bindParam(":car_id", $car_id, \PDO::PARAM_INT);        
+        $comando->bindParam(":mod_id", $mod_id, \PDO::PARAM_INT);
+        $comando->bindParam(":car_id", $car_id, \PDO::PARAM_INT);
         $comando->bindParam(":estado_precio", $estado_precio, \PDO::PARAM_STR);
         $resultData = $comando->queryOne();
         return $resultData;
     }
-    
+
     /**
      * Function consultarDocumxSolic
      * @author  Grace Viteri <analistadesarrollo01@uteg.edu.ec>
@@ -1109,9 +1101,8 @@ class SolicitudInscripcion extends \yii\db\ActiveRecord
         $resultData = $comando->queryOne();
         return $resultData;
     }
-    
-    
-     /**
+
+    /**
      * Function consultarSolicitudes. Muestra todas las solicitudes.
      * @author  Grace Viteri <analistadesarrollo01@uteg.edu.ec>
      * @param   
@@ -1122,13 +1113,13 @@ class SolicitudInscripcion extends \yii\db\ActiveRecord
         $con1 = \Yii::$app->db_academico;
         $con2 = \Yii::$app->db;
         $con3 = \Yii::$app->db_facturacion;
-        $estado = 1;         
+        $estado = 1;
 
         if (isset($arrFiltro) && count($arrFiltro) > 0) {
             $str_search = "(per.per_pri_nombre like :search OR ";
             $str_search .= "per.per_seg_nombre like :search OR ";
             $str_search .= "per.per_pri_apellido like :search OR ";
-            $str_search .= "per.per_cedula like :search) AND ";            
+            $str_search .= "per.per_cedula like :search) AND ";
             if ($arrFiltro['f_ini'] != "" && $arrFiltro['f_fin'] != "") {
                 $str_search .= "sins.sins_fecha_solicitud >= :fec_ini AND ";
                 $str_search .= "sins.sins_fecha_solicitud <= :fec_fin AND ";
@@ -1136,9 +1127,18 @@ class SolicitudInscripcion extends \yii\db\ActiveRecord
             if ($arrFiltro['estadoSol'] != "" && $arrFiltro['estadoSol'] > 0) {
                 $str_search .= "sins.rsin_id = :estadosol AND ";
             }
-        } 
+            if ($arrFiltro['unidad'] != "" && $arrFiltro['unidad'] > 0) {
+                $str_search .= "sins.uaca_id = :unidad AND ";
+            }
+            if ($arrFiltro['modalidad'] != "" && $arrFiltro['modalidad'] > 0) {
+                $str_search .= "sins.mod_id = :modalidad AND ";
+            }
+            if ($arrFiltro['carrera'] != "" && $arrFiltro['carrera'] > 0) {
+                $str_search .= "sins.eaca_id = :carrera AND ";
+            }
+        }
 
-        $sql =  "SELECT
+        $sql = "SELECT
                     distinct ifnull(sins.num_solicitud, lpad(sins.sins_id,9,'0')) as num_solicitud,                    
                     sins_fecha_solicitud as fecha_solicitud,
                     per.per_id as persona,
@@ -1211,17 +1211,17 @@ class SolicitudInscripcion extends \yii\db\ActiveRecord
                     rsol.rsin_estado = :estado AND
                     rsol.rsin_estado_logico = :estado -- AND        
                     ";
-       
+
         $sql .= " ORDER BY fecha_solicitud DESC";
         $comando = $con->createCommand($sql);
         $comando->bindParam(":estado", $estado, \PDO::PARAM_STR);
-       
+
         if (isset($arrFiltro) && count($arrFiltro) > 0) {
             $search_cond = "%" . $arrFiltro["search"] . "%";
             $comando->bindParam(":search", $search_cond, \PDO::PARAM_STR);
-            $fecha_ini = $arrFiltro["f_ini"]." 00:00:00";
-            $fecha_fin = $arrFiltro["f_fin"]." 23:59:59";
-                       
+            $fecha_ini = $arrFiltro["f_ini"] . " 00:00:00";
+            $fecha_fin = $arrFiltro["f_fin"] . " 23:59:59";
+
             if ($arrFiltro['f_ini'] != "" && $arrFiltro['f_fin'] != "") {
                 $comando->bindParam(":fec_ini", $fecha_ini, \PDO::PARAM_STR);
                 $comando->bindParam(":fec_fin", $fecha_fin, \PDO::PARAM_STR);
@@ -1229,6 +1229,18 @@ class SolicitudInscripcion extends \yii\db\ActiveRecord
             $estadoSol = $arrFiltro["estadoSol"];
             if ($arrFiltro['estadoSol'] != "" && $arrFiltro['estadoSol'] > 0) {
                 $comando->bindParam(":estadosol", $estadoSol, \PDO::PARAM_INT);
+            }
+            $unidad = $arrFiltro["unidad"];
+            if ($arrFiltro['unidad'] != "" && $arrFiltro['unidad'] > 0) {
+                $comando->bindParam(":unidad", $unidad, \PDO::PARAM_INT);
+            }
+            $modalidad = $arrFiltro["modalidad"];
+            if ($arrFiltro['modalidad'] != "" && $arrFiltro['modalidad'] > 0) {
+                $comando->bindParam(":modalidad", $modalidad, \PDO::PARAM_INT);
+            }
+            $carrera = $arrFiltro["carrera"];
+            if ($arrFiltro['carrera'] != "" && $arrFiltro['carrera'] > 0) {
+                $comando->bindParam(":carrera", $carrera, \PDO::PARAM_INT);
             }
         }
         $resultData = $comando->queryAll();
@@ -1273,12 +1285,11 @@ class SolicitudInscripcion extends \yii\db\ActiveRecord
      * @param   string  $dataTelefono   Telefono de la persona a Facturar
      * @return  $resultData (Retorna true si se realizo la operacion o false si fue error).
      */
-    public function crearDatosFacturaSolicitud($sins_id, $dataNombres, $dataApellidos, $dataTipDNI, $dataDNI, $dataDireccion, $dataTelefono)
-    {
+    public function crearDatosFacturaSolicitud($sins_id, $dataNombres, $dataApellidos, $dataTipDNI, $dataDNI, $dataDireccion, $dataTelefono) {
         $con = \Yii::$app->db_captacion;
         $estado = 1;
         $tipo = ((self::$arr_DNI[$dataTipDNI]) ? self::$arr_DNI[$dataTipDNI] : self::$arr_DNI["3"]);
-        
+
         $sql = "INSERT INTO solicitud_datos_factura 
                 (sins_id, sdfa_nombres, sdfa_apellidos, sdfa_tipo_dni, sdfa_dni, sdfa_direccion, sdfa_telefono, sdfa_estado, sdfa_estado_logico) VALUES
                 (:id, :nombres, :apellidos, :tipo_dni, :dni, :direccion, :telefono, :estado, :estado);";
@@ -1295,30 +1306,30 @@ class SolicitudInscripcion extends \yii\db\ActiveRecord
         $resultData = $comando->execute();
         return $resultData;
     }
-    
-     /**
+
+    /**
      * Function consultarDatosfacturaxIdsol. Muestra todas las solicitudes.
      * @author  Grace Viteri <analistadesarrollo01@uteg.edu.ec>
      * @param   
      * @return  
      */
-     public function consultarDatosfacturaxIdsol($sins_id) {        
+    public function consultarDatosfacturaxIdsol($sins_id) {
         $con2 = \Yii::$app->db_captacion;
         $estado = 1;
         $sql = "SELECT sdfa_nombres, sdfa_apellidos, sdfa_direccion, sdfa_dni, sdfa_tipo_dni, sdfa_telefono 
                 FROM " . $con2->dbname . ".solicitud_datos_factura 
                 WHERE sins_id = :sins_id
                 and sdfa_estado = :estado
-                and sdfa_estado_logico = :estado";                  
+                and sdfa_estado_logico = :estado";
         $comando = $con2->createCommand($sql);
         $comando->bindParam(":estado", $estado, \PDO::PARAM_STR);
         $comando->bindParam(":sins_id", $sins_id, \PDO::PARAM_INT);
         $resultData = $comando->queryOne();
-        
-        return $resultData;                
+
+        return $resultData;
     }
-    
-     /**
+
+    /**
      * Function consultarSolicitudesReporte. Muestra todas las solicitudes.
      * @author  Grace Viteri <analistadesarrollo01@uteg.edu.ec>
      * @param   
@@ -1329,16 +1340,16 @@ class SolicitudInscripcion extends \yii\db\ActiveRecord
         $con1 = \Yii::$app->db_academico;
         $con2 = \Yii::$app->db;
         $con3 = \Yii::$app->db_facturacion;
-        $estado = 1;          
+        $estado = 1;
 
         if (isset($arrFiltro) && count($arrFiltro) > 0) {
             if ($arrFiltro['search'] != "") {
                 $str_search = "(per.per_pri_nombre like :search OR ";
                 $str_search .= "per.per_seg_nombre like :search OR ";
                 $str_search .= "per.per_pri_apellido like :search OR ";
-                $str_search .= "per.per_cedula like :search) AND ";    
+                $str_search .= "per.per_cedula like :search) AND ";
             }
-                    
+
             if ($arrFiltro['f_ini'] != "" && $arrFiltro['f_fin'] != "") {
                 $str_search .= "sins.sins_fecha_solicitud >= :fec_ini AND ";
                 $str_search .= "sins.sins_fecha_solicitud <= :fec_fin AND ";
@@ -1346,9 +1357,18 @@ class SolicitudInscripcion extends \yii\db\ActiveRecord
             if ($arrFiltro['estadoSol'] != "" && $arrFiltro['estadoSol'] > 0) {
                 $str_search .= "sins.rsin_id = :estadosol AND ";
             }
-        }     
-        
-        $sql =  "SELECT
+            if ($arrFiltro['unidad'] != "" && $arrFiltro['unidad'] > 0) {
+                $str_search .= "sins.uaca_id = :unidad AND ";
+            }
+            if ($arrFiltro['modalidad'] != "" && $arrFiltro['modalidad'] > 0) {
+                $str_search .= "sins.mod_id = :modalidad AND ";
+            }
+            if ($arrFiltro['carrera'] != "" && $arrFiltro['carrera'] > 0) {
+                $str_search .= "sins.eaca_id = :carrera AND ";
+            }
+        }
+
+        $sql = "SELECT
                     lpad(sins_id,4,'0') as num_solicitud,
                     sins_fecha_solicitud as fecha_solicitud,                    
                     per.per_cedula as per_dni,
@@ -1392,18 +1412,18 @@ class SolicitudInscripcion extends \yii\db\ActiveRecord
                     rsol.rsin_estado = :estado AND
                     rsol.rsin_estado_logico = :estado AND        
                     eac.eaca_estado=:estado AND
-                    eac.eaca_estado_logico=:estado ";       
-        $sql .= " ORDER BY fecha_solicitud DESC"; 
-        
+                    eac.eaca_estado_logico=:estado ";
+        $sql .= " ORDER BY fecha_solicitud DESC";
+
         $comando = $con->createCommand($sql);
         $comando->bindParam(":estado", $estado, \PDO::PARAM_STR);
-       
+
         if (isset($arrFiltro) && count($arrFiltro) > 0) {
             $search_cond = "%" . $arrFiltro["search"] . "%";
             $comando->bindParam(":search", $search_cond, \PDO::PARAM_STR);
-            $fecha_ini = $arrFiltro["f_ini"]." 00:00:00";
-            $fecha_fin = $arrFiltro["f_fin"]." 23:59:59";
-                       
+            $fecha_ini = $arrFiltro["f_ini"] . " 00:00:00";
+            $fecha_fin = $arrFiltro["f_fin"] . " 23:59:59";
+
             if ($arrFiltro['f_ini'] != "" && $arrFiltro['f_fin'] != "") {
                 $comando->bindParam(":fec_ini", $fecha_ini, \PDO::PARAM_STR);
                 $comando->bindParam(":fec_fin", $fecha_fin, \PDO::PARAM_STR);
@@ -1411,6 +1431,18 @@ class SolicitudInscripcion extends \yii\db\ActiveRecord
             $estadoSol = $arrFiltro["estadoSol"];
             if ($arrFiltro['estadoSol'] != "" && $arrFiltro['estadoSol'] > 0) {
                 $comando->bindParam(":estadosol", $estadoSol, \PDO::PARAM_INT);
+            }
+            $unidad = $arrFiltro["unidad"];
+            if ($arrFiltro['unidad'] != "" && $arrFiltro['unidad'] > 0) {
+                $comando->bindParam(":unidad", $unidad, \PDO::PARAM_INT);
+            }
+            $modalidad = $arrFiltro["modalidad"];
+            if ($arrFiltro['modalidad'] != "" && $arrFiltro['modalidad'] > 0) {
+                $comando->bindParam(":modalidad", $modalidad, \PDO::PARAM_INT);
+            }
+            $carrera = $arrFiltro["carrera"];
+            if ($arrFiltro['carrera'] != "" && $arrFiltro['carrera'] > 0) {
+                $comando->bindParam(":carrera", $carrera, \PDO::PARAM_INT);
             }
         }
         $resultData = $comando->queryAll();
@@ -1442,7 +1474,7 @@ class SolicitudInscripcion extends \yii\db\ActiveRecord
             return $dataProvider;
         }
     }
-    
+
     /**
      * Function consultarDocumentostosxSol
      * @author  Grace Viteri <analistadesarrollo01@uteg.edu.ec>
@@ -1461,19 +1493,18 @@ class SolicitudInscripcion extends \yii\db\ActiveRecord
 
         $comando = $con->createCommand($sql);
         $comando->bindParam(":estado", $estado, \PDO::PARAM_STR);
-        $comando->bindParam(":sins_id", $sins_id, \PDO::PARAM_INT);        
+        $comando->bindParam(":sins_id", $sins_id, \PDO::PARAM_INT);
         $resultData = $comando->queryOne();
         return $resultData;
     }
-    
-     /**
+
+    /**
      * Function insertarSolicitud
      * @author  Grace Viteri <analistadesarrollo01@uteg.edu.ec>
      * @param   
      * @return  Id del registro insertado.
      */
-    public function insertarSolicitud($int_id, $uaca_id, $mod_id, $ming_id, $eaca_id, $mest_id, $emp_id, $num_solicitud, $rsin_id, 
-                                      $sins_fecha_solicitud, $sins_usuario_ingreso) {
+    public function insertarSolicitud($int_id, $uaca_id, $mod_id, $ming_id, $eaca_id, $mest_id, $emp_id, $num_solicitud, $rsin_id, $sins_fecha_solicitud, $sins_usuario_ingreso) {
         $con = \Yii::$app->db_captacion;
 
         $trans = $con->getTransaction(); // se obtiene la transacción actual.
@@ -1488,7 +1519,7 @@ class SolicitudInscripcion extends \yii\db\ActiveRecord
 
         $param_sql .= ", sins_estado";
         $bsrec_sql .= ", 1";
-        
+
         if (isset($int_id)) {
             $param_sql .= ", int_id";
             $bsrec_sql .= ", :int_id";
@@ -1508,11 +1539,11 @@ class SolicitudInscripcion extends \yii\db\ActiveRecord
         if (isset($eaca_id)) {
             $param_sql .= ", eaca_id";
             $bsrec_sql .= ", :eaca_id";
-        }        
+        }
         if (isset($mest_id)) {
             $param_sql .= ", mest_id";
             $bsrec_sql .= ", :mest_id";
-        }        
+        }
         if (isset($emp_id)) {
             $param_sql .= ", emp_id";
             $bsrec_sql .= ", :emp_id";
@@ -1524,7 +1555,7 @@ class SolicitudInscripcion extends \yii\db\ActiveRecord
         if (isset($rsin_id)) {
             $param_sql .= ", rsin_id";
             $bsrec_sql .= ", :rsin_id";
-        }        
+        }
         if (isset($sins_fecha_solicitud)) {
             $param_sql .= ", sins_fecha_solicitud";
             $bsrec_sql .= ", :sins_fecha_solicitud";
@@ -1535,7 +1566,7 @@ class SolicitudInscripcion extends \yii\db\ActiveRecord
         }
         try {
             $sql = "INSERT INTO " . $con->dbname . ".solicitud_inscripcion ($param_sql) VALUES($bsrec_sql)";
-            \app\models\Utilities::putMessageLogFile('sql sol inscr: '. $sql);
+            \app\models\Utilities::putMessageLogFile('sql sol inscr: ' . $sql);
             $comando = $con->createCommand($sql);
 
             if (isset($int_id))
@@ -1555,22 +1586,22 @@ class SolicitudInscripcion extends \yii\db\ActiveRecord
 
             if (isset($mest_id))
                 $comando->bindParam(':mest_id', $mest_id, \PDO::PARAM_INT);
-            
+
             if (isset($emp_id))
                 $comando->bindParam(':emp_id', $emp_id, \PDO::PARAM_INT);
-            
+
             if (isset($num_solicitud))
                 $comando->bindParam(':num_solicitud', $num_solicitud, \PDO::PARAM_STR);
-            
+
             if (isset($rsin_id))
                 $comando->bindParam(':rsin_id', $rsin_id, \PDO::PARAM_INT);
-            
+
             if (isset($sins_fecha_solicitud))
                 $comando->bindParam(':sins_fecha_solicitud', $sins_fecha_solicitud, \PDO::PARAM_STR);
-            
+
             if (isset($sins_usuario_ingreso))
                 $comando->bindParam(':sins_usuario_ingreso', $sins_usuario_ingreso, \PDO::PARAM_INT);
-            
+
             $result = $comando->execute();
             $idtable = $con->getLastInsertID($con->dbname . '.solicitud_inscripcion');
             if ($trans !== null)
@@ -1583,9 +1614,8 @@ class SolicitudInscripcion extends \yii\db\ActiveRecord
             return 0;
         }
     }
-    
-    
-     /**
+
+    /**
      * Function insertarDocumentosSolic
      * @author  Grace Viteri <analistadesarrollo01@uteg.edu.ec>
      * @param   
@@ -1606,7 +1636,7 @@ class SolicitudInscripcion extends \yii\db\ActiveRecord
 
         $param_sql .= ", sdoc_estado";
         $bsrec_sql .= ", 1";
-        
+
         if (isset($sins_id)) {
             $param_sql .= ", sins_id";
             $bsrec_sql .= ", :sins_id";
@@ -1626,8 +1656,8 @@ class SolicitudInscripcion extends \yii\db\ActiveRecord
         if (isset($sdoc_usuario_ingreso)) {
             $param_sql .= ", sdoc_usuario_ingreso";
             $bsrec_sql .= ", :sdoc_usuario_ingreso";
-        }        
-        
+        }
+
         try {
             $sql = "INSERT INTO " . $con->dbname . ".solicitudins_documento ($param_sql) VALUES($bsrec_sql)";
             $comando = $con->createCommand($sql);
@@ -1645,8 +1675,8 @@ class SolicitudInscripcion extends \yii\db\ActiveRecord
                 $comando->bindParam(':sdoc_archivo', $sdoc_archivo, \PDO::PARAM_STR);
 
             if (isset($sdoc_usuario_ingreso))
-                $comando->bindParam(':sdoc_usuario_ingreso', $sdoc_usuario_ingreso, \PDO::PARAM_INT);            
-            
+                $comando->bindParam(':sdoc_usuario_ingreso', $sdoc_usuario_ingreso, \PDO::PARAM_INT);
+
             $result = $comando->execute();
             if ($trans !== null)
                 $trans->commit();
@@ -1657,7 +1687,7 @@ class SolicitudInscripcion extends \yii\db\ActiveRecord
             return FALSE;
         }
     }
-    
+
     /**
      * Function consultarFechadmitido
      * @author  Giovanni Vergara <analistadesarrollo02@uteg.edu.ec>
@@ -1679,7 +1709,7 @@ class SolicitudInscripcion extends \yii\db\ActiveRecord
                       opa.opag_estado = :estado AND 
                       si.sins_estado_logico = :estado AND 
                       si.sins_estado = :estado";
-           
+
         $comando = $con->createCommand($sql);
         $comando->bindParam(":estado", $estado, \PDO::PARAM_STR);
         $comando->bindParam(":int_id", $int_id, \PDO::PARAM_INT);
@@ -1687,4 +1717,5 @@ class SolicitudInscripcion extends \yii\db\ActiveRecord
         $resultData = $comando->queryOne();
         return $resultData;
     }
+
 }
