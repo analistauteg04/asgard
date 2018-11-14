@@ -69,11 +69,12 @@ class MatriculadosreprobadosController extends \app\components\CController {
                         return json_encode(['error' => Yii::t("notificaciones", "Error to process File {file}. Try again.", ['{file}' => basename($files['name'])])]);
                     }
                     //Recibe Parámetros.
-                    $inscripcion_id = $data["matr_repro_id"];
+                    $matr_repro_id = $data["matr_repro_id"];
+                    \app\models\Utilities::putMessageLogFile('id: '.$matr_repro_id);
                     $files = $_FILES[key($_FILES)];
                     $arrIm = explode(".", basename($files['name']));
                     $typeFile = strtolower($arrIm[count($arrIm) - 1]);
-                    $dirFileEnd = Yii::$app->params["documentFolder"] . "solicitudadmision/" . $inscripcion_id . "/" . $data["name_file"] . "_per_" . $inscripcion_id . "." . $typeFile;
+                    $dirFileEnd = Yii::$app->params["documentFolder"] . "academico/" . $matr_repro_id . "/" . $data["name_file"] . "_per_" . $matr_repro_id . "." . $typeFile;
                     $status = Utilities::moveUploadFile($files['tmp_name'], $dirFileEnd);
                     if ($status) {
                         return true;
@@ -81,7 +82,6 @@ class MatriculadosreprobadosController extends \app\components\CController {
                         return json_encode(['error' => Yii::t("notificaciones", "Error to process File {file}. Try again.", ['{file}' => basename($files['name'])])]);
                     }
                 }
-
                 if ($accion == "create" || $accion == "Create") {
                     $resul = $model->insertarReprobadoTemp($con, $data["DATA_1"]);
                 } else if ($accion == "Update") {
