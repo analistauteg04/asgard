@@ -1270,10 +1270,7 @@ class SolicitudesController extends \app\components\CController {
             academico::t("Academico", "Income Method"),
             academico::t("Academico", "Career/Program"),
             Yii::t("formulario", "Status"),
-            financiero::t("Pagos", "Payment"),
-            'xxxx',
-            'dsdsd',
-            'srefg'
+            financiero::t("Pagos", "Payment")            
         );
 
         $modSolicitudes = new SolicitudInscripcion();
