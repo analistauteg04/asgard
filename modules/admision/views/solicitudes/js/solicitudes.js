@@ -270,6 +270,7 @@ $(document).ready(function () {
     /***********************************************/
     $('#cmb_unidadbus').change(function () {
         var link = $('#txth_base').val() + "/admision/solicitudes/index";
+        document.getElementById("cmb_carrerabus").options.item(0).selected = 'selected';
         var arrParams = new Object();
         arrParams.nint_id = $(this).val();
         arrParams.getmodalidad = true;
