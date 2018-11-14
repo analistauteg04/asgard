@@ -9,7 +9,6 @@ $(document).ready(function () {
         }
     });
     $('#paso2back').click(function () {
-        alert("entro aqui");
         $("a[data-href='#paso2']").attr('data-toggle', 'none');
         $("a[data-href='#paso2']").parent().attr('class', 'disabled');
         $("a[data-href='#paso2']").attr('data-href', $("a[href='#paso2']").attr('href'));
@@ -53,16 +52,15 @@ $(document).ready(function () {
                             showAlert("NO_OK", "error", mensaje);
                         }
                     }
-                } else {
-                    if ($('#txth_doc_hojavida').val() == "") {
-                        error++;
-                        var mensaje = {wtmessage: "Debe adjuntar hoja de vida.", title: "Información"};
-                        showAlert("NO_OK", "error", mensaje);
-                    }
                 }
             }
         }
+        if(error==0){
+            guardarAdmireprobado('Update', '1');
+        }
     });
+    
+    
     $('#paso1next').click(function () {
         $("a[data-href='#paso1']").attr('data-toggle', 'none');
         $("a[data-href='#paso1']").parent().attr('class', 'disabled');
@@ -125,7 +123,6 @@ $(document).ready(function () {
         actualizarGrid();
     });
 });
-
 function newReprobadoPend() {
     window.location.href = $('#txth_base').val() + "/academico/matriculadosreprobados/new";
 }
@@ -197,7 +194,6 @@ function guardarAdmiMateriarep() {
 }
 function guardarAdmireprobado(accion, paso) {
     var ID = (accion == "Update") ? $('#txth_twer_id').val() : 0;
-    alert("twer id: " + ID);
     var link = $('#txth_base').val() + "/academico/matriculadosreprobados/savereprobadostemp";
     var arrParams = new Object();
     arrParams.DATA_1 = dataInscripPart1(ID);
@@ -229,8 +225,8 @@ function dataInscripPart1(ID) {
     objDat.ruta_doc_titulo = ($('#txth_doc_titulo').val() != '') ? $('#txth_doc_titulo').val() : '';
     objDat.ruta_doc_dni = ($('#txth_doc_dni').val() != '') ? $('#txth_doc_dni').val() : '';
     objDat.ruta_doc_certvota = ($('#txth_doc_certvota').val() != '') ? $('#txth_doc_certvota').val() : '';
-    objDat.ruta_doc_foto = ($('#txth_doc_foto').val() != '') ? $('#txth_doc_foto').val() : '';
-    objDat.ruta_doc_hojavida = ($('#txth_doc_hojavida').val() != '') ? $('#txth_doc_hojavida').val() : '';
+    objDat.ruta_doc_foto = '';
+    objDat.ruta_doc_hojavida = '';
     objDat.ruta_doc_certificado = ($('#txth_doc_certificado').val() != '') ? $('#txth_doc_certificado').val() : '';
     objDat.twin_mensaje1 = ($("#chk_mensaje1").prop("checked")) ? '1' : '0';
     objDat.twin_mensaje2 = ($("#chk_mensaje2").prop("checked")) ? '1' : '0';
