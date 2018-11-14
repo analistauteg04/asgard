@@ -23,16 +23,12 @@ use app\models\InscripcionAdmision;
 use app\modules\academico\Module as academico;
 use app\modules\admision\Module as admision;
 use app\models\ExportFile;
-
 academico::registerTranslations();
 admision::registerTranslations();
-
 class MatriculadosreprobadosController extends \app\components\CController {
-
     public function actionIndex() {
         $per_id = @Yii::$app->session->get("PB_perid");
         $mod_carrera = new EstudioAcademico();
-
         $data = Yii::$app->request->get();
         if ($data['PBgetFilter']) {
             $arrSearch["f_ini"] = $data['f_ini'];
