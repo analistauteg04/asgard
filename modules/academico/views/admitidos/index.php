@@ -10,8 +10,10 @@ use app\modules\academico\Module as academico;
 <div>
     <form class="form-horizontal">
         <?=
-        $this->render('index-search', [
-            'arrCarreras' => $arrCarreras]);
+        $this->render('index-search', [         
+            'arr_ninteres' => $arr_ninteres,
+            'arr_modalidad' => $arr_modalidad,
+            'arr_carrerra1' => $arr_carrerra1]);
         ?>
     </form>
 </div>

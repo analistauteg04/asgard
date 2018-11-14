@@ -104,6 +104,19 @@ class Admitido extends \yii\db\ActiveRecord {
                 $str_search .= "sins.sins_fecha_solicitud >= :fec_ini AND ";
                 $str_search .= "sins.sins_fecha_solicitud <= :fec_fin AND ";
             }
+            if ($arrFiltro['f_ini'] != "" && $arrFiltro['f_fin'] != "") {
+                $str_search .= "sins.sins_fecha_solicitud >= :fec_ini AND ";
+                $str_search .= "sins.sins_fecha_solicitud <= :fec_fin AND ";
+            }
+            if ($arrFiltro['unidad'] != "" && $arrFiltro['unidad'] > 0) {
+                $str_search .= "sins.uaca_id = :unidad AND ";
+            }
+            if ($arrFiltro['modalidad'] != "" && $arrFiltro['modalidad'] > 0) {
+                $str_search .= "sins.mod_id = :modalidad AND ";
+            }
+            if ($arrFiltro['carrera'] != "" && $arrFiltro['carrera'] > 0) {
+                $str_search .= "sins.eaca_id = :carrera AND ";
+            }
         } else {
             $columnsAdd = "sins.sins_id as solicitud_id,
                     per.per_id as persona, 
@@ -183,6 +196,18 @@ class Admitido extends \yii\db\ActiveRecord {
                 $comando->bindParam(":fec_ini", $fecha_ini, \PDO::PARAM_STR);
                 $comando->bindParam(":fec_fin", $fecha_fin, \PDO::PARAM_STR);
             }
+            $unidad = $arrFiltro["unidad"];
+            if ($arrFiltro['unidad'] != "" && $arrFiltro['unidad'] > 0) {
+                $comando->bindParam(":unidad", $unidad, \PDO::PARAM_INT);
+            }
+            $modalidad = $arrFiltro["modalidad"];
+            if ($arrFiltro['modalidad'] != "" && $arrFiltro['modalidad'] > 0) {
+                $comando->bindParam(":modalidad", $modalidad, \PDO::PARAM_INT);
+            }
+            $carrera = $arrFiltro["carrera"];
+            if ($arrFiltro['carrera'] != "" && $arrFiltro['carrera'] > 0) {
+                $comando->bindParam(":carrera", $carrera, \PDO::PARAM_INT);
+            }
             // $comando->bindParam(":codigocan", $codigocan, \PDO::PARAM_STR);
         }
         $resultData = $comando->queryAll();
@@ -234,6 +259,15 @@ class Admitido extends \yii\db\ActiveRecord {
                 $str_search .= "sins.sins_fecha_solicitud >= :fec_ini AND ";
                 $str_search .= "sins.sins_fecha_solicitud <= :fec_fin AND ";
             }
+            if ($arrFiltro['unidad'] != "" && $arrFiltro['unidad'] > 0) {
+                $str_search .= "sins.uaca_id = :unidad AND ";
+            }
+            if ($arrFiltro['modalidad'] != "" && $arrFiltro['modalidad'] > 0) {
+                $str_search .= "sins.mod_id = :modalidad AND ";
+            }
+            if ($arrFiltro['carrera'] != "" && $arrFiltro['carrera'] > 0) {
+                $str_search .= "sins.eaca_id = :carrera AND ";
+            }
         }
         $sql = "SELECT  distinct ifnull(sins.num_solicitud, lpad(sins.sins_id,4,'0')) as solicitud,                        
                         SUBSTRING(sins.sins_fecha_solicitud,1,10) as sins_fecha_solicitud,                       
@@ -264,7 +298,7 @@ class Admitido extends \yii\db\ActiveRecord {
                        sins.sins_estado = :estado AND
                        sins.sins_estado_logico = :estado                                                    
                 ORDER BY SUBSTRING(sins.sins_fecha_solicitud,1,10) desc";
-              
+
         $comando = $con->createCommand($sql);
         $comando->bindParam(":estado", $estado, \PDO::PARAM_STR);
         $comando->bindParam(":estado_opago", $estado_opago, \PDO::PARAM_STR);
@@ -281,6 +315,18 @@ class Admitido extends \yii\db\ActiveRecord {
             if ($arrFiltro['f_ini'] != "" && $arrFiltro['f_fin'] != "") {
                 $comando->bindParam(":fec_ini", $fecha_ini, \PDO::PARAM_STR);
                 $comando->bindParam(":fec_fin", $fecha_fin, \PDO::PARAM_STR);
+            }
+            $unidad = $arrFiltro["unidad"];
+            if ($arrFiltro['unidad'] != "" && $arrFiltro['unidad'] > 0) {
+                $comando->bindParam(":unidad", $unidad, \PDO::PARAM_INT);
+            }
+            $modalidad = $arrFiltro["modalidad"];
+            if ($arrFiltro['modalidad'] != "" && $arrFiltro['modalidad'] > 0) {
+                $comando->bindParam(":modalidad", $modalidad, \PDO::PARAM_INT);
+            }
+            $carrera = $arrFiltro["carrera"];
+            if ($arrFiltro['carrera'] != "" && $arrFiltro['carrera'] > 0) {
+                $comando->bindParam(":carrera", $carrera, \PDO::PARAM_INT);
             }
             // $comando->bindParam(":codigocan", $codigocan, \PDO::PARAM_STR);
         }
