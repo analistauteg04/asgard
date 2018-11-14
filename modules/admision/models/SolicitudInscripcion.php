@@ -1149,7 +1149,7 @@ class SolicitudInscripcion extends \yii\db\ActiveRecord
                     per.per_pri_apellido as per_pri_apellido,
                     per.per_seg_apellido as per_seg_apellido,
                     sins.uaca_id,
-                    uaca.uaca_nombre,
+                    uaca.uaca_nombre,  
                     sins.eaca_id,
                     case uaca.uaca_id
                         when 1 then (select eaca.eaca_nombre from " . $con1->dbname . ".estudio_academico eaca where eaca.eaca_id = sins.eaca_id)
