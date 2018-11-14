@@ -264,8 +264,49 @@ $(document).ready(function () {
                 break;
         }
     });
-
-
+    
+    /***********************************************/
+    /* Filtro para busqueda en listado solicitudes */
+    /***********************************************/
+    $('#cmb_unidadbus').change(function () {
+        var link = $('#txth_base').val() + "/admision/solicitudes/index";
+        var arrParams = new Object();
+        arrParams.nint_id = $(this).val();
+        arrParams.getmodalidad = true;
+        requestHttpAjax(link, arrParams, function (response) {
+            if (response.status == "OK") {
+                data = response.message;               
+                setComboDataselect(data.modalidad, "cmb_modalidadbus", "Todos");
+                var arrParams = new Object();
+                if (data.modalidad.length > 0) {
+                    arrParams.unidada = $('#cmb_unidadbus').val();
+                    arrParams.moda_id = data.modalidad[0].id;
+                    arrParams.getcarrera = true;
+                    requestHttpAjax(link, arrParams, function (response) {
+                        if (response.status == "OK") {
+                            data = response.message;
+                            setComboDataselect(data.carrera, "cmb_carrerabus", "Todos");                         
+                        }
+                    }, true);
+                }
+            }
+        }, true);
+    });
+    $('#cmb_modalidadbus').change(function () {
+        var link = $('#txth_base').val() + "/admision/solicitudes/index";
+        //document.getElementById("cmb_unidadbus").options.item(0).selected = 'selected';
+        var arrParams = new Object();
+        arrParams.unidada = $('#cmb_unidadbus').val();
+        arrParams.moda_id = $(this).val();
+        arrParams.getcarrera = true;
+        requestHttpAjax(link, arrParams, function (response) {
+            if (response.status == "OK") {
+                data = response.message;                
+                setComboDataselect(data.carrera, "cmb_carrerabus", "Todos");
+            }
+        }, true);
+    });
+    
     /**
      * Function evento click en botón de PreAprobación
      * @author  Grace Viteri <analistadesarrollo01@uteg.edu.ec>
@@ -489,7 +530,10 @@ function exportExcel() {
     var f_ini = $('#txt_fecha_ini').val();
     var f_fin = $('#txt_fecha_fin').val();
     var estado = $('#cmb_estado option:selected').val();
-    window.location.href = $('#txth_base').val() + "/admision/solicitudes/expexcelsolicitudes?search=" + search + "&f_ini=" + f_ini + "&f_fin=" + f_fin + "&estadoSol=" + estado;
+    var unidad = $('#cmb_unidadbus option:selected').val();
+    var modalidad = $('#cmb_modalidadbus option:selected').val();
+    var carrera = $('#cmb_carrerabus option:selected').val();
+    window.location.href = $('#txth_base').val() + "/admision/solicitudes/expexcelsolicitudes?search=" + search + "&f_ini=" + f_ini + "&f_fin=" + f_fin + "&estadoSol=" + estado + "&unidad=" + unidad + "&modalidad=" + modalidad + "&carrera=" + carrera;
 }
 
 function exportPdf() {
@@ -497,20 +541,25 @@ function exportPdf() {
     var f_ini = $('#txt_fecha_ini').val();
     var f_fin = $('#txt_fecha_fin').val();
     var estado = $('#cmb_estado option:selected').val();
-    window.location.href = $('#txth_base').val() + "/admision/solicitudes/exppdfsolicitudes?pdf=1&search=" + search + "&f_ini=" + f_ini + "&f_fin=" + f_fin + "&estadoSol=" + estado;
+    var unidad = $('#cmb_unidadbus option:selected').val();
+    var modalidad = $('#cmb_modalidadbus option:selected').val();
+    var carrera = $('#cmb_carrerabus option:selected').val();
+    window.location.href = $('#txth_base').val() + "/admision/solicitudes/exppdfsolicitudes?pdf=1&search=" + search + "&f_ini=" + f_ini + "&f_fin=" + f_fin + "&estadoSol=" + estado + "&unidad=" + unidad + "&modalidad=" + modalidad + "&carrera=" + carrera;
 }
 
 function actualizarGrid() {
-    var search = $('#txt_buscarData').val();
-    var modalidad = $('#cmb_modalidades option:selected').val();
+    var search = $('#txt_buscarData').val();    
     var estadoSol = $('#cmb_estado option:selected').val();
     var f_ini = $('#txt_fecha_ini').val();
     var f_fin = $('#txt_fecha_fin').val();
+    var unidad = $('#cmb_unidadbus option:selected').val();
+    var modalidad = $('#cmb_modalidadbus option:selected').val();
+    var carrera = $('#cmb_carrerabus option:selected').val();
 
     //Buscar almenos una clase con el nombre para ejecutar
     if (!$(".blockUI").length) {
         showLoadingPopup();
-        $('#Tbg_Solicitudes').PbGridView('applyFilterData', {'f_ini': f_ini, 'f_fin': f_fin, 'modalidad': modalidad, 'search': search, 'estadoSol': estadoSol});
+        $('#Tbg_Solicitudes').PbGridView('applyFilterData', {'f_ini': f_ini, 'f_fin': f_fin, 'search': search, 'estadoSol': estadoSol, 'unidad': unidad, 'modalidad': modalidad, 'carrera': carrera});
         setTimeout(hideLoadingPopup, 2000);
     }
 }
