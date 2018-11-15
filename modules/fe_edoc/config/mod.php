@@ -1,7 +1,7 @@
 <?php
-return ['fe_edoc' => [
+return ['db_fe_edoc' => [
             'class' => 'app\modules\fe_edoc\Module',
-            'db_fe_edoc' => [
+            'db_edoc' => [
                 'class' => 'app\components\CConnection',
                 'dsn' => 'mysql:host=localhost;dbname=db_edoc',
                 'username' => 'uteg',
