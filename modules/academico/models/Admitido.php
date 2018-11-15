@@ -92,30 +92,29 @@ class Admitido extends \yii\db\ActiveRecord {
         $estado_opago = "S";
 
         if (isset($arrFiltro) && count($arrFiltro) > 0) {
-            $str_search = "(per.per_pri_nombre like :search OR ";
-            $str_search .= "per.per_seg_nombre like :search OR ";
-            $str_search .= "per.per_pri_apellido like :search OR ";
-            $str_search .= "per.per_cedula like :search) AND ";
-            // YA NO EXISTE TABLA CARRERA MODICAR 
-            if ($arrFiltro['carrera'] != "" && $arrFiltro['carrera'] > 0) {
-                $str_search .= "sins.eaca_id = :carrera AND ";
+            $str_search = "(a.per_pri_nombre like :search OR ";
+            $str_search .= "a.per_seg_nombre like :search OR ";
+            $str_search .= "a.per_pri_apellido like :search OR ";
+            $str_search .= "a.per_cedula like :search) AND ";            
+            if ($arrFiltro['f_ini'] != "" && $arrFiltro['f_fin'] != "") {
+                $str_search .= "a.sins_fecha_solicitud >= :fec_ini AND ";
+                $str_search .= "a.sins_fecha_solicitud <= :fec_fin AND ";
             }
             if ($arrFiltro['f_ini'] != "" && $arrFiltro['f_fin'] != "") {
-                $str_search .= "sins.sins_fecha_solicitud >= :fec_ini AND ";
-                $str_search .= "sins.sins_fecha_solicitud <= :fec_fin AND ";
-            }
-            if ($arrFiltro['f_ini'] != "" && $arrFiltro['f_fin'] != "") {
-                $str_search .= "sins.sins_fecha_solicitud >= :fec_ini AND ";
-                $str_search .= "sins.sins_fecha_solicitud <= :fec_fin AND ";
+                $str_search .= "a.sins_fecha_solicitud >= :fec_ini AND ";
+                $str_search .= "a.sins_fecha_solicitud <= :fec_fin AND ";
             }
             if ($arrFiltro['unidad'] != "" && $arrFiltro['unidad'] > 0) {
-                $str_search .= "sins.uaca_id = :unidad AND ";
+                $str_search .= "a.uaca_id = :unidad AND ";
             }
             if ($arrFiltro['modalidad'] != "" && $arrFiltro['modalidad'] > 0) {
-                $str_search .= "sins.mod_id = :modalidad AND ";
+                $str_search .= "a.mod_id = :modalidad AND ";
             }
             if ($arrFiltro['carrera'] != "" && $arrFiltro['carrera'] > 0) {
-                $str_search .= "sins.eaca_id = :carrera AND ";
+                $str_search .= "a.eaca_id = :carrera AND ";
+            }
+            if ($arrFiltro['periodo'] != "" && $arrFiltro['periodo'] > 0) {
+                $str_search .= "a.pami_codigo = :periodo AND ";
             }
         } else {
             $columnsAdd = "sins.sins_id as solicitud_id,
@@ -125,8 +124,7 @@ class Admitido extends \yii\db\ActiveRecord {
                     per.per_pri_apellido as per_pri_apellido,
                     per.per_seg_apellido as per_seg_apellido,";
         }
-
-        $sql = "
+        $sql = "SELECT * FROM (
                 SELECT  distinct lpad(ifnull(sins.num_solicitud, sins.sins_id),9,'0') as solicitud,
                         sins.sins_id,
                         sins.int_id,
@@ -140,34 +138,38 @@ class Admitido extends \yii\db\ActiveRecord {
                         ifnull((select min.ming_nombre from " . $con->dbname . ".metodo_ingreso min where min.ming_id = sins.ming_id),'N/A') as ming_nombre,
                         sins.eaca_id,
                         sins.mest_id,
+                        sins.mod_id,
                         moda.mod_nombre,
                         uaca.uaca_nombre,
+                        sins.uaca_id,
                         case when (ifnull(sins.eaca_id,0)=0) then
                                 (select mest_nombre from " . $con3->dbname . ".modulo_estudio me where me.mest_id = sins.mest_id and me.mest_estado = '1' and me.mest_estado_logico = '1')
                                 else
                             (select eaca_nombre from " . $con3->dbname . ".estudio_academico ea where ea.eaca_id = sins.eaca_id and ea.eaca_estado = '1' and ea.eaca_estado_logico = '1')
                         end as carrera,
-
-                        $columnsAdd                                                             
+                        per.per_pri_nombre as per_pri_nombre, 
+                        per.per_seg_nombre as per_seg_nombre,
+                        per.per_pri_apellido as per_pri_apellido,
+                        per.per_seg_apellido as per_seg_apellido,   
+                        per.per_cedula,
                         admi.adm_id,                                               
                        (case when sins_beca = 1 then 'ICF' else 'No Aplica' end) as beca,
-                       ifnull((select pami_codigo
+                       ifnull((select pa.pami_codigo
                                from " . $con3->dbname . ".matriculacion m inner join " . $con3->dbname . ".asignacion_paralelo ap on ap.mat_id = m.mat_id
                                     inner join " . $con3->dbname . ".paralelo p on p.par_id = ap.par_id
                                     inner join " . $con3->dbname . ".periodo_academico_met_ingreso pa on pa.pami_id = p.pami_id
                                where m.adm_id = admi.adm_id and m.sins_id = sins.sins_id and m.mat_estado = :estado and m.mat_estado_logico = :estado
                                 and p.par_estado = :estado and p.par_estado_logico = :estado
                                 and ap.apar_estado = :estado and ap.apar_estado_logico = :estado
-                                and pa.pami_estado = :estado and pa.pami_estado_logico = :estado),'N/A') as matriculado,
+                                and pa.pami_estado = :estado and pa.pami_estado_logico = :estado),'N/A') as pami_codigo,
                         sins.emp_id
-                FROM " . $con->dbname . ".admitido admi INNER JOIN " . $con->dbname . ".interesado inte on inte.int_id = admi.int_id                     
-                     INNER JOIN " . $con2->dbname . ".persona per on inte.per_id = per.per_id
-                     INNER JOIN " . $con->dbname . ".solicitud_inscripcion sins on sins.int_id = inte.int_id                                          
+                FROM " . $con->dbname . ".admitido admi INNER JOIN " . $con->dbname . ".solicitud_inscripcion sins on sins.sins_id = admi.sins_id                 
+                     INNER JOIN " . $con->dbname . ".interesado inte on sins.int_id = inte.int_id 
+                     INNER JOIN " . $con2->dbname . ".persona per on inte.per_id = per.per_id                     
                      INNER JOIN " . $con3->dbname . ".modalidad moda on moda.mod_id=sins.mod_id
                      INNER JOIN " . $con3->dbname . ".unidad_academica uaca on uaca.uaca_id=sins.uaca_id
-                     INNER JOIN " . $con1->dbname . ".orden_pago opag on opag.sins_id = sins.sins_id                     
-                WHERE  
-                       $str_search 
+                     INNER JOIN " . $con1->dbname . ".orden_pago opag on opag.sins_id = sins.sins_id    
+                WHERE                          
                        sins.rsin_id = 2 AND
                        opag.opag_estado_pago = :estado_opago AND
                        admi.adm_estado_logico = :estado AND
@@ -177,21 +179,20 @@ class Admitido extends \yii\db\ActiveRecord {
                        per.per_estado_logico = :estado AND
                        per.per_estado = :estado AND
                        sins.sins_estado = :estado AND
-                       sins.sins_estado_logico = :estado                                                    
-                ORDER BY SUBSTRING(sins.sins_fecha_solicitud,1,10) desc";
+                       sins.sins_estado_logico = :estado  AND
+                       opag.opag_estado = :estado AND
+                       opag.opag_estado_logico = :estado                  
+                ORDER BY SUBSTRING(sins.sins_fecha_solicitud,1,10) desc) a
+                WHERE $str_search  
+                      a.sins_id = a.sins_id";
         $comando = $con->createCommand($sql);
         $comando->bindParam(":estado", $estado, \PDO::PARAM_STR);
         $comando->bindParam(":estado_opago", $estado_opago, \PDO::PARAM_STR);
         if (isset($arrFiltro) && count($arrFiltro) > 0) {
             $search_cond = "%" . $arrFiltro["search"] . "%";
             $fecha_ini = $arrFiltro["f_ini"] . " 00:00:00";
-            $fecha_fin = $arrFiltro["f_fin"] . " 23:59:59";
-            $carrera = $arrFiltro["carrera"];
-            $codigocan = "%" . $arrFiltro["codigocan"] . "%";
-            $comando->bindParam(":search", $search_cond, \PDO::PARAM_STR);
-            if ($arrFiltro['carrera'] != "" && $arrFiltro['carrera'] > 0) {
-                $comando->bindParam(":carrera", $carrera, \PDO::PARAM_INT);
-            }
+            $fecha_fin = $arrFiltro["f_fin"] . " 23:59:59";                        
+            $comando->bindParam(":search", $search_cond, \PDO::PARAM_STR);            
             if ($arrFiltro['f_ini'] != "" && $arrFiltro['f_fin'] != "") {
                 $comando->bindParam(":fec_ini", $fecha_ini, \PDO::PARAM_STR);
                 $comando->bindParam(":fec_fin", $fecha_fin, \PDO::PARAM_STR);
@@ -208,7 +209,10 @@ class Admitido extends \yii\db\ActiveRecord {
             if ($arrFiltro['carrera'] != "" && $arrFiltro['carrera'] > 0) {
                 $comando->bindParam(":carrera", $carrera, \PDO::PARAM_INT);
             }
-            // $comando->bindParam(":codigocan", $codigocan, \PDO::PARAM_STR);
+            $codigoperiodo = "%" . $arrFiltro["periodo"] . "%";
+            //if ($arrFiltro['periodo'] != "" && $arrFiltro['periodo'] > 0) {
+                $comando->bindParam(":periodo", $codigoperiodo, \PDO::PARAM_STR);
+            //}             
         }
         $resultData = $comando->queryAll();
         $dataProvider = new ArrayDataProvider([

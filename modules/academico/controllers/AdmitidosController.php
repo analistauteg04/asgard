@@ -36,6 +36,7 @@ class AdmitidosController extends \app\components\CController {
             $arrSearch["unidad"] = $data['unidad'];
             $arrSearch["modalidad"] = $data['modalidad'];
             $arrSearch["carrera"] = $data['carrera'];
+            $arrSearch["periodo"] = $data['periodo'];
             $mod_aspirante = Admitido::getAdmitidos($arrSearch);
             return $this->renderPartial('index-grid', [
                         "model" => $mod_aspirante,

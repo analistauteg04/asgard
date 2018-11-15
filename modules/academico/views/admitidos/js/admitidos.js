@@ -87,10 +87,11 @@ function actualizarGrid() {
     var unidad = $('#cmb_unidadbus option:selected').val();
     var modalidad = $('#cmb_modalidadbus option:selected').val();
     var carrera = $('#cmb_carrerabus option:selected').val();
+    var periodo = $('#txt_periodo').val();
     //Buscar almenos una clase con el nombre para ejecutar
     if (!$(".blockUI").length) {
         showLoadingPopup();
-        $('#TbG_PERSONAS').PbGridView('applyFilterData', {'f_ini': f_ini, 'f_fin': f_fin, 'search': search, 'codigocan': codigocan, 'unidad': unidad, 'modalidad': modalidad, 'carrera': carrera});
+        $('#TbG_PERSONAS').PbGridView('applyFilterData', {'f_ini': f_ini, 'f_fin': f_fin, 'search': search, 'codigocan': codigocan, 'unidad': unidad, 'modalidad': modalidad, 'carrera': carrera, 'periodo': periodo});
         setTimeout(hideLoadingPopup, 2000);
     }
 }

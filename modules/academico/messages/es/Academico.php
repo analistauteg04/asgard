@@ -34,6 +34,7 @@ return [
     "Month Process" => "Mes Proceso",
     "Parallel" => "Paralelo",
     "Parallels" => "Paralelos",
+    "Period" => "Período",
     "Quota" => "Cupo",
     "Registered" => "Matriculado",
     "Registration by Homologation" => "Matriculación por Homologación",

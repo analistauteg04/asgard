@@ -25,12 +25,7 @@ academico::registerTranslations();
                 'attribute' => 'solicitud',
                 'header' => admision::t("Solicitudes", "Request #"),
                 'value' => 'solicitud',
-            ],
-            [
-                'attribute' => 'fecha',
-                'header' => admision::t("Solicitudes", "Application date"),
-                'value' => 'sins_fecha_solicitud',
-            ],
+            ],         
             [
                 'attribute' => 'DNI',
                 'header' => Yii::t("formulario", "DNI 1"),
@@ -74,19 +69,18 @@ academico::registerTranslations();
                     'view' => function ($url, $model) {
                         return Html::a('<span>' . substr($model['carrera'], 0,10)  . '..</span>', Url::to(['#']), ["data-toggle" => "tooltip", "title" => $model['carrera']]);
                     },
-                ],
-                //'value' => 'carrera',
+                ],               
             ],
             [
                 'attribute' => 'beca',
                 'header' => admision::t("Solicitudes", "Scholarship"),
                 'value' => 'beca',
             ],
-//            [
-//                'attribute' => 'matriculado',
-//                'header' => academico::t("Academico", "Registered"),
-//                'value' => 'matriculado',
-//            ],
+            [
+                'attribute' => 'periodo',
+                'header' => academico::t("Academico", "Period"),
+                'value' => 'pami_codigo',
+            ],
             [
                 'class' => 'yii\grid\ActionColumn',
                 'header' => Yii::t("formulario", "Actions"),

@@ -70,6 +70,11 @@ use app\modules\academico\Module as academico;
             <label for="cmb_carrerabus" class="col-sm-2 col-sm-2 col-lg-2 col-md-2 col-xs-2 control-label"><?= Yii::t("academico", "Career") . ' /Programa' ?></label>
             <div class="col-sm-3 col-xs-3 col-md-3 col-lg-3">
                 <?= Html::dropDownList("cmb_carrerabus", 0, $arr_carrerra1, ["class" => "form-control", "id" => "cmb_carrerabus"]) ?>
+            </div>        
+           
+            <label for="txt_periodo" class="col-sm-2 col-sm-2 col-lg-2 col-md-2 col-xs-2 control-label"><?= academico::t("Academico", "Period") ?></label>
+            <div class="col-sm-3 col-xs-3 col-md-3 col-lg-3">
+                <input type="text" class="form-control" value="" id="txt_periodo" placeholder="<?= academico::t("Academico", "Period") ?>">
             </div>
         </div>
     </div>
