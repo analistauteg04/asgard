@@ -79,17 +79,7 @@ academico::registerTranslations();
                         return Html::a('<span>' . $model['abr_metodo'] . '</span>', Url::to(['#']), ["data-toggle" => "tooltip", "title" => $model['ming_nombre']]);
                     },
                 ],
-            ],
-            /*[
-                'attribute' => 'aprobadas',
-                'header' => academico::t("Academico", "Approved"),
-                'value' => 'aprobada',
-            ],
-            [
-                'attribute' => 'reprobadas',
-                'header' => academico::t("Academico", "Failed"),
-                'value' => 'reprobada',
-            ],*/
+            ],            
             [
                 'class' => 'yii\grid\ActionColumn',
                 'header' => academico::t("Academico", "Approved"),
