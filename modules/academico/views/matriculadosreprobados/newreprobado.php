@@ -16,7 +16,7 @@ use app\modules\academico\Module as academico;
 $leyenda = '<div class="col-md-12 col-xs-12 col-sm-12 col-lg-12">
           <div class="form-group">
           <div class="col-sm-10 col-md-10 col-xs-10 col-lg-10">
-          <div style = "width: 333px;" class="alert alert-info"><span style="font-weight: bold"> Nota: </span> Marcar solamente las materias reprobadas.</div>
+          <div style = "width: 600px;" class="alert alert-info"><span style="font-weight: bold"> Nota: </span> Marcar solamente las materias reprobadas. Las otras se entiende que estan aprobadas</div>
           </div>
           </div>
           </div>';
