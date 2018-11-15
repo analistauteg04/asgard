@@ -226,7 +226,15 @@ class MatriculadosReprobado extends \yii\db\ActiveRecord {
                         when 12 then 'Diciembre'
                  end as mes_id_academico,
                     ifnull((select count(*) from " . $con->dbname . ".materias_matriculados_reprobado mmr where mmr.mre_id = mre.mre_id and mmr.mmr_estado_materia = 1),' ') as aprobada,
-                    ifnull((select count(*) from " . $con->dbname . ".materias_matriculados_reprobado mmr where mmr.mre_id = mre.mre_id and mmr.mmr_estado_materia = 2),' ') as reprobada
+                    ifnull((SELECT GROUP_CONCAT(CONCAT(asi.asi_nombre, IF(mmr.mmr_estado_materia =1,'',''))  SEPARATOR ', ') as asignatura_apro 
+                            FROM db_captacion.materias_matriculados_reprobado mmr
+                            INNER JOIN  db_academico.asignatura asi ON asi.asi_id = mmr.asi_id
+                            where mmr.mre_id = mre.mre_id and mmr.mmr_estado_materia =1),'') as asignatura_apro,
+                    ifnull((select count(*) from " . $con->dbname . ".materias_matriculados_reprobado mmr where mmr.mre_id = mre.mre_id and mmr.mmr_estado_materia = 2),' ') as reprobada,
+                    ifnull((SELECT GROUP_CONCAT(CONCAT(asi.asi_nombre, IF(mmr.mmr_estado_materia =2,'',''))  SEPARATOR ', ') as asignatura_repro 
+                            FROM db_captacion.materias_matriculados_reprobado mmr
+                            INNER JOIN  db_academico.asignatura asi ON asi.asi_id = mmr.asi_id
+                            where mmr.mre_id = mre.mre_id and mmr.mmr_estado_materia =2),'') as asignatura_repro    
                 FROM " . $con->dbname . ".matriculados_reprobado mre 
                      INNER JOIN " . $con->dbname . ".admitido adm ON adm.adm_id = mre.adm_id
                      INNER JOIN " . $con->dbname . ".interesado inte on inte.int_id = adm.int_id                     
