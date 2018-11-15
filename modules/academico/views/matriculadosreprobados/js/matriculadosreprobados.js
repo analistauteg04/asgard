@@ -146,21 +146,21 @@ function guardarAdmiMateriarep() {
     if (selected != '')
     {
         arrParams.materia = selected;
-    } else
+    } /*else
     {
         var mensaje = {wtmessage: "Materias no debe estar vacío.", title: "Error"};
         showAlert("NO_OK", "Error", mensaje);
-    }
+    }*/
     if (arrParams.ids === undefined)
     {
         var mensaje = {wtmessage: "Seleccionar datos del admitido desde buscar DNI.", title: "Error"};
         showAlert("NO_OK", "Error", mensaje);
     } else {
-        if (arrParams.materia === undefined)
+        /*if (arrParams.materia === undefined)
         {
             var mensaje = {wtmessage: "Materias no debe estar vacío.", title: "Error"};
             showAlert("NO_OK", "Error", mensaje);
-        } else {
+        } else {*/
             if ($('#cmb_ninteres option:selected').val() > '0') {
                 if ($('#cmb_modalidad option:selected').val() > '0') {
                     if ($('#cmb_carrera1 option:selected').val() > '0') {
@@ -189,7 +189,7 @@ function guardarAdmiMateriarep() {
                 var mensaje = {wtmessage: "Unidad Académica: El campo no debe estar vacío.", title: "Error"};
                 showAlert("NO_OK", "Error", mensaje);
             }
-        }
+        /*}*/
     }
 }
 function guardarAdmireprobado(accion, paso) {
