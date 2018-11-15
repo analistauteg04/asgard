@@ -79,17 +79,37 @@ academico::registerTranslations();
                         return Html::a('<span>' . $model['abr_metodo'] . '</span>', Url::to(['#']), ["data-toggle" => "tooltip", "title" => $model['ming_nombre']]);
                     },
                 ],
-            ],
+            ],            
             [
-                'attribute' => 'aprobadas',
+                'class' => 'yii\grid\ActionColumn',
                 'header' => academico::t("Academico", "Approved"),
-                'value' => 'aprobada',
-            ],
+                'template' => '{view}',
+                'buttons' => [
+                    'view' => function ($url, $model) {
+                        if ($model['aprobada'] > 0 ) {
+                            $texto = $model['aprobada'];
+                        } else {
+                            $texto = '0';
+                        }
+                        return Html::a('<span>' . $texto . '</span>', Url::to(['#']), ["data-toggle" => "tooltip", "title" => $model['asignatura_apro']]);
+                    },
+                ],
+            ],    
             [
-                'attribute' => 'reprobadas',
+                'class' => 'yii\grid\ActionColumn',
                 'header' => academico::t("Academico", "Failed"),
-                'value' => 'reprobada',
-            ],
+                'template' => '{view}',
+                'buttons' => [
+                    'view' => function ($url, $model) {
+                        if ($model['reprobada'] > 0 ) {
+                            $texto = $model['reprobada'];
+                        } else {
+                            $texto = '0';
+                        }
+                        return Html::a('<span>' . $texto . '</span>', Url::to(['#']), ["data-toggle" => "tooltip", "title" => $model['asignatura_repro']]);
+                    },
+                ],
+            ], 
             /*[
                 'class' => 'yii\grid\ActionColumn',
                 'header' => Yii::t("formulario", "Actions"),
