@@ -43,34 +43,34 @@ $leyenda = '<div class="col-md-12 col-xs-12 col-sm-12 col-lg-12">
                         'uploadUrl' => Url::to(['/academico/matriculadosreprobados/savereprobadostemp']),
                         'maxFileSize' => Yii::$app->params["MaxFileSize"], // en Kbytes
                         'uploadExtraData' => 'javascript:function (previewId,index) {
-            return {"upload_file": true, "name_file": "doc_titulo", "matr_repro_id": $("#txth_twer_id").val()};
-        }',
+                            return {"upload_file": true, "name_file": "txt_doc_titulo", "matr_repro_id": $("#txth_twer_id").val()};
+                        }',
                     ],
                     'pluginEvents' => [
                         "filebatchselected" => "function (event) {
-        $('#txth_doc_titulo').val($('#txt_doc_titulo').val());
-        $('#txt_doc_titulo').fileinput('upload');
-    }",
+                            $('#txth_doc_titulo').val($('#txt_doc_titulo').val());
+                            $('#txt_doc_titulo').fileinput('upload');
+                    }",
                         "fileuploaderror" => "function (event, data, msg) {
-        $(this).parent().parent().children().first().addClass('hide');
-        $('#txth_doc_titulo').val('');
-        //showAlert('NO_OK', 'error', {'wtmessage': objLang.Error_to_process_File__Try_again_, 'title': objLang.Error});   
-    }",
+                            $(this).parent().parent().children().first().addClass('hide');
+                            $('#txth_doc_titulo').val('');
+                            //showAlert('NO_OK', 'error', {'wtmessage': objLang.Error_to_process_File__Try_again_, 'title': objLang.Error});   
+                    }",
                         "filebatchuploadcomplete" => "function (event, files, extra) { 
-        $(this).parent().parent().children().first().addClass('hide');
-    }",
+                            $(this).parent().parent().children().first().addClass('hide');
+                        }",
                         "filebatchuploadsuccess" => "function (event, data, previewId, index) {
-        var form = data.form, files = data.files, extra = data.extra,
-        response = data.response, reader = data.reader;
-        $(this).parent().parent().children().first().addClass('hide');
-        var acciones = [{id: 'reloadpage', class: 'btn btn-primary', value: objLang.Accept, callback: 'reloadPage'}];
-        //showAlert('OK', 'Success', {'wtmessage': objLang.File_uploaded_successfully__Do_you_refresh_the_web_page_, 'title': objLang.Success, 'acciones': acciones});  
-    }",
+                        var form = data.form, files = data.files, extra = data.extra,
+                        response = data.response, reader = data.reader;
+                        $(this).parent().parent().children().first().addClass('hide');
+                        var acciones = [{id: 'reloadpage', class: 'btn btn-primary', value: objLang.Accept, callback: 'reloadPage'}];
+                        //showAlert('OK', 'Success', {'wtmessage': objLang.File_uploaded_successfully__Do_you_refresh_the_web_page_, 'title': objLang.Success, 'acciones': acciones});  
+                     }",
                         "fileuploaded" => "function (event, data, previewId, index) {
-        $(this).parent().parent().children().first().addClass('hide');
-        var acciones = [{id: 'reloadpage', class: 'btn btn-primary', value: objLang.Accept, callback: 'reloadPage'}];
-        //showAlert('OK', 'Success', {'wtmessage': objLang.File_uploaded_successfully__Do_you_refresh_the_web_page_, 'title': objLang.Success, 'acciones': acciones});                              
-    }",
+                        $(this).parent().parent().children().first().addClass('hide');
+                        var acciones = [{id: 'reloadpage', class: 'btn btn-primary', value: objLang.Accept, callback: 'reloadPage'}];
+                        //showAlert('OK', 'Success', {'wtmessage': objLang.File_uploaded_successfully__Do_you_refresh_the_web_page_, 'title': objLang.Success, 'acciones': acciones});                              
+                    }",
                     ],
                 ]);
                 ?>
@@ -100,34 +100,34 @@ $leyenda = '<div class="col-md-12 col-xs-12 col-sm-12 col-lg-12">
                         'uploadUrl' => Url::to(['/academico/matriculadosreprobados/savereprobadostemp']),
                         'maxFileSize' => Yii::$app->params["MaxFileSize"], // en Kbytes
                         'uploadExtraData' => 'javascript:function (previewId,index) {
-                    return {"upload_file": true, "name_file": "doc_dni", "matr_repro_id": $("#txth_twer_id").val()};
-        }',
+                            return {"upload_file": true, "name_file": "doc_dni", "matr_repro_id": $("#txth_twer_id").val()};
+                        }',
                     ],
                     'pluginEvents' => [
                         "filebatchselected" => "function (event) {
-        $('#txth_doc_dni').val($('#txt_doc_dni').val());
-        $('#txt_doc_dni').fileinput('upload');
-    }",
+                            $('#txth_doc_dni').val($('#txt_doc_dni').val());
+                            $('#txt_doc_dni').fileinput('upload');
+                    }",
                         "fileuploaderror" => "function (event, data, msg) {
-        $(this).parent().parent().children().first().addClass('hide');
-        $('#txth_doc_dni').val('');
-        //showAlert('NO_OK', 'error', {'wtmessage': objLang.Error_to_process_File__Try_again_, 'title': objLang.Error});   
-    }",
+                            $(this).parent().parent().children().first().addClass('hide');
+                            $('#txth_doc_dni').val('');
+                            //showAlert('NO_OK', 'error', {'wtmessage': objLang.Error_to_process_File__Try_again_, 'title': objLang.Error});   
+                    }",
                         "filebatchuploadcomplete" => "function (event, files, extra) { 
-        $(this).parent().parent().children().first().addClass('hide');
-    }",
+                            $(this).parent().parent().children().first().addClass('hide');
+                        }",
                         "filebatchuploadsuccess" => "function (event, data, previewId, index) {
-        var form = data.form, files = data.files, extra = data.extra,
-        response = data.response, reader = data.reader;
-        $(this).parent().parent().children().first().addClass('hide');
-        var acciones = [{id: 'reloadpage', class: 'btn btn-primary', value: objLang.Accept, callback: 'reloadPage'}];
-        //showAlert('OK', 'Success', {'wtmessage': objLang.File_uploaded_successfully__Do_you_refresh_the_web_page_, 'title': objLang.Success, 'acciones': acciones});  
-    }",
+                        var form = data.form, files = data.files, extra = data.extra,
+                        response = data.response, reader = data.reader;
+                        $(this).parent().parent().children().first().addClass('hide');
+                        var acciones = [{id: 'reloadpage', class: 'btn btn-primary', value: objLang.Accept, callback: 'reloadPage'}];
+                        //showAlert('OK', 'Success', {'wtmessage': objLang.File_uploaded_successfully__Do_you_refresh_the_web_page_, 'title': objLang.Success, 'acciones': acciones});  
+                     }",
                         "fileuploaded" => "function (event, data, previewId, index) {
-        $(this).parent().parent().children().first().addClass('hide');
-        var acciones = [{id: 'reloadpage', class: 'btn btn-primary', value: objLang.Accept, callback: 'reloadPage'}];
-        //showAlert('OK', 'Success', {'wtmessage': objLang.File_uploaded_successfully__Do_you_refresh_the_web_page_, 'title': objLang.Success, 'acciones': acciones});                              
-    }",
+                        $(this).parent().parent().children().first().addClass('hide');
+                        var acciones = [{id: 'reloadpage', class: 'btn btn-primary', value: objLang.Accept, callback: 'reloadPage'}];
+                        //showAlert('OK', 'Success', {'wtmessage': objLang.File_uploaded_successfully__Do_you_refresh_the_web_page_, 'title': objLang.Success, 'acciones': acciones});                              
+                    }",
                     ],
                 ]);
                 ?>

@@ -193,7 +193,11 @@ function guardarAdmiMateriarep() {
     }
 }
 function guardarAdmireprobado(accion, paso) {
-    var ID = (accion == "Update") ? $('#txth_twer_id').val() : 0;
+    var ids=0;
+    if($('#txth_twer_id').val()==null  || $('#txth_twer_id').val()=='')
+        ids=$('#txth_twer_id').val();
+        
+    var ID = (accion == "Update") ? ids : 0;
     var link = $('#txth_base').val() + "/academico/matriculadosreprobados/savereprobadostemp";
     var arrParams = new Object();
     arrParams.DATA_1 = dataInscripPart1(ID);
@@ -223,7 +227,6 @@ function dataInscripPart1(ID) {
     objDat.carrera = $('#cmb_carrera_solicitud option:selected').val();
     //TABA 2
     objDat.ruta_doc_titulo = ($('#txth_doc_titulo').val() != '') ? $('#txth_doc_titulo').val() : '';
-    alert(objDat.ruta_doc_titulo);
     objDat.ruta_doc_dni = ($('#txth_doc_dni').val() != '') ? $('#txth_doc_dni').val() : '';
     objDat.ruta_doc_certvota = ($('#txth_doc_certvota').val() != '') ? $('#txth_doc_certvota').val() : '';
     objDat.ruta_doc_foto = '';
