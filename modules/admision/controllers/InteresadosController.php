@@ -48,6 +48,7 @@ class InteresadosController extends \app\components\CController
     public function actionGuardarinteresado()
     {
         $per_id = @Yii::$app->session->get("PB_perid");
+        $usuario_ingreso = @Yii::$app->session->get("PB_iduser");
         $error = 0;
         if (Yii::$app->request->isAjax) {
             $data = Yii::$app->request->post();
@@ -68,7 +69,7 @@ class InteresadosController extends \app\components\CController
                     $id_persona = 0;
                     $mod_persona = new Persona();
                     $keys_per = [
-                        'per_pri_nombre', 'per_seg_nombre', 'per_pri_apellido', 'per_seg_apellido', 'per_cedula', 'etn_id', 'eciv_id', 'per_genero', 'pai_id_nacimiento', 'pro_id_nacimiento', 'can_id_nacimiento', 'per_fecha_nacimiento', 'per_celular', 'per_correo', 'tsan_id', 'per_domicilio_sector', 'per_domicilio_cpri', 'per_domicilio_csec', 'per_domicilio_num', 'per_domicilio_ref', 'per_domicilio_telefono', 'pai_id_domicilio', 'pro_id_domicilio', 'can_id_domicilio', 'per_nac_ecuatoriano', 'per_nacionalidad', 'per_foto', 'per_estado', 'per_estado_logico'
+                        'per_pri_nombre', 'per_seg_nombre', 'per_pri_apellido', 'per_seg_apellido', 'per_cedula', 'etn_id', 'eciv_id', 'per_genero', 'pai_id_nacimiento', 'pro_id_nacimiento', 'can_id_nacimiento', 'per_fecha_nacimiento', 'per_celular', 'per_correo', 'tsan_id', 'per_domicilio_sector', 'per_domicilio_cpri', 'per_domicilio_csec', 'per_domicilio_num', 'per_domicilio_ref', 'per_domicilio_telefono', 'pai_id_domicilio', 'pro_id_domicilio', 'can_id_domicilio', 'per_nac_ecuatoriano', 'per_nacionalidad', 'per_foto', 'per_usuario_ingresa', 'per_estado', 'per_estado_logico'
                     ];
                     $parametros_per = [
                         $pgest['pges_pri_nombre'], null, $pgest['pges_pri_apellido'], null,
@@ -77,7 +78,7 @@ class InteresadosController extends \app\components\CController
                         null, null, null, null,
                         null, null, null,
                         null, null, null,
-                        null, null, null, 1, 1
+                        null, null, null,$usuario_ingreso, 1, 1
                     ];
                     $id_persona = $mod_persona->consultarIdPersona($pgest['pges_cedula'], $pgest['pges_pasaporte']);
                     if ($id_persona == 0) {

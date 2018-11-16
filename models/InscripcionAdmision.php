@@ -252,6 +252,7 @@ class InscripcionAdmision extends \yii\db\ActiveRecord {
         $con = \Yii::$app->db_asgard;
         $con1 = \Yii::$app->db_captacion;
         $con2 = \Yii::$app->db_facturacion;
+        $usuario_ingreso = @Yii::$app->session->get("PB_iduser");
         $transaction = $con->beginTransaction();
         $transaction1 = $con1->beginTransaction();
         $transaction2 = $con2->beginTransaction();
@@ -280,7 +281,7 @@ class InscripcionAdmision extends \yii\db\ActiveRecord {
                         'per_domicilio_cpri', 'per_domicilio_csec', 'per_domicilio_num', 
                         'per_domicilio_ref', 'per_domicilio_telefono', 'pai_id_domicilio', 
                         'pro_id_domicilio', 'can_id_domicilio', 'per_nac_ecuatoriano', 
-                        'per_nacionalidad', 'per_foto', 'per_estado', 'per_estado_logico'
+                        'per_nacionalidad', 'per_foto', 'per_usuario_ingresa', 'per_estado', 'per_estado_logico'
                     ];
                     $parametros_per = [
                         ucwords(strtolower($resp_datos['twin_nombre'])), null, 
@@ -290,7 +291,7 @@ class InscripcionAdmision extends \yii\db\ActiveRecord {
                         null, null, null, null,
                         null, null, null,
                         null, null, null,
-                        null, null, null, 1, 1
+                        null, null, null, $usuario_ingreso, 1, 1
                     ];
                     $id_persona = $mod_persona->consultarIdPersona($resp_datos['twin_numero'], $resp_datos['twin_numero'],$resp_datos['twin_correo'],$resp_datos['twin_celular']);
                     if ($id_persona == 0) {
