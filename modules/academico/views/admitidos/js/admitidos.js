@@ -66,7 +66,8 @@ function exportExcel() {
     var unidad = $('#cmb_unidadbus option:selected').val();
     var modalidad = $('#cmb_modalidadbus option:selected').val();
     var carrera = $('#cmb_carrerabus option:selected').val();
-    window.location.href = $('#txth_base').val() + "/academico/admitidos/expexcel?search=" + search + "&fecha_ini=" + f_ini + "&fecha_fin=" + f_fin+ "&unidad=" + unidad + "&modalidad=" + modalidad + "&carrera=" + carrera;
+    var periodo = $('#txt_periodo').val();
+    window.location.href = $('#txth_base').val() + "/academico/admitidos/expexcel?search=" + search + "&fecha_ini=" + f_ini + "&fecha_fin=" + f_fin+ "&unidad=" + unidad + "&modalidad=" + modalidad + "&carrera=" + carrera + "&periodo=" + periodo;
 }
 
 function exportPdf() {
@@ -76,7 +77,8 @@ function exportPdf() {
     var unidad = $('#cmb_unidadbus option:selected').val();
     var modalidad = $('#cmb_modalidadbus option:selected').val();
     var carrera = $('#cmb_carrerabus option:selected').val();
-    window.location.href = $('#txth_base').val() + "/academico/admitidos/exppdf?pdf=1&search=" + search + "&fecha_ini=" + f_ini + "&fecha_fin=" + f_fin + "&unidad=" + unidad + "&modalidad=" + modalidad + "&carrera=" + carrera;
+    var periodo = $('#txt_periodo').val();
+    window.location.href = $('#txth_base').val() + "/academico/admitidos/exppdf?pdf=1&search=" + search + "&fecha_ini=" + f_ini + "&fecha_fin=" + f_fin + "&unidad=" + unidad + "&modalidad=" + modalidad + "&carrera=" + carrera + "&periodo=" + periodo;
 }
 
 function actualizarGrid() {

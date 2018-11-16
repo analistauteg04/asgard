@@ -19,7 +19,7 @@ use app\modules\academico\Module as academico;
             </div>
         </div>
     </div>
-    <div class="col-md-12 col-sm-12 col-xs-12 col-lg-12">
+    <!--<div class="col-md-12 col-sm-12 col-xs-12 col-lg-12">
         <div class="form-group">
             <label for="lbl_inicio" class="col-sm-2 col-md-2 col-xs-2 col-lg-2 control-label"><?= Yii::t("formulario", "Start date") ?></label>
             <div class="col-sm-3 col-md-3 col-xs-3 col-lg-3 ">
@@ -52,7 +52,7 @@ use app\modules\academico\Module as academico;
                 ?>
             </div>
         </div>
-    </div>
+    </div>-->
     <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
         <div class="form-group">            
             <label for="cmb_unidadbus" class="col-sm-2 col-sm-2 col-lg-2 col-md-2 col-xs-2 control-label"><?= Yii::t("formulario", "Academic unit") ?></label>
