@@ -16,14 +16,14 @@ use app\modules\academico\Module as academico;
 $leyenda = '<div class="col-md-12 col-xs-12 col-sm-12 col-lg-12">
           <div class="form-group">
           <div class="col-sm-10 col-md-10 col-xs-10 col-lg-10">
-          <div style = "width: 333px;" class="alert alert-info"><span style="font-weight: bold"> Nota: </span> Marcar solamente las materias reprobadas.</div>
+          <div style = "width: 600px;" class="alert alert-info"><span style="font-weight: bold"> Nota: </span> Marcar solamente las materias reprobadas. Las otras se entiende que estan aprobadas</div>
           </div>
           </div>
           </div>';
 ?>
 <form class="form-horizontal" enctype="multipart/form-data" id="formsolicitud">
     <div class="col-md-12">
-        <h3><span id="lbl_index"><?= academico::t("Academico", "Failed Registrations") ?></span></h3>
+        <h3><span id="lbl_index"><?= academico::t("Academico", "Enrolled Income Method") ?></span></h3>
     </div>
     <div class="col-xs-12 col-sm-12 col-md-12">
         <!-- Espacio de relleno -->
@@ -63,7 +63,7 @@ $leyenda = '<div class="col-md-12 col-xs-12 col-sm-12 col-lg-12">
                     <div class="form-group">
                         <label for="cmb_ninteres" class="col-sm-4 col-md-4 col-xs-4 col-lg-4 control-label"><?= Yii::t("formulario", "Academic unit") ?></label>
                         <div class="col-sm-7 col-md-7 col-xs-7 col-lg-7">
-<?= Html::dropDownList("cmb_ninteres", 0, $arr_ninteres, ["class" => "form-control PBvalidation", "id" => "cmb_ninteres"]) ?>
+                            <?= Html::dropDownList("cmb_ninteres", 0, $arr_ninteres, ["class" => "form-control PBvalidation", "id" => "cmb_ninteres"]) ?>
                         </div>
                     </div>
                 </div>   
@@ -71,7 +71,7 @@ $leyenda = '<div class="col-md-12 col-xs-12 col-sm-12 col-lg-12">
                     <div class="form-group">
                         <label for="cmb_modalidad" class="col-sm-4 col-md-4 col-xs-4 col-lg-4 control-label"><?= Yii::t("formulario", "Mode") ?></label>
                         <div class="col-sm-7 col-md-7 col-xs-7 col-lg-7">
-<?= Html::dropDownList("cmb_modalidad", 0, $arr_modalidad, ["class" => "form-control PBvalidation", "id" => "cmb_modalidad"]) ?> 
+                            <?= Html::dropDownList("cmb_modalidad", 0, $arr_modalidad, ["class" => "form-control PBvalidation", "id" => "cmb_modalidad"]) ?> 
                         </div>
                     </div>
                 </div> 
@@ -81,7 +81,7 @@ $leyenda = '<div class="col-md-12 col-xs-12 col-sm-12 col-lg-12">
                     <div class="form-group">            
                         <label for="cmb_carrera1" class="col-sm-4 col-md-4 col-xs-4 col-lg-4 control-label"><?= Yii::t("academico", "Career") . ' /Programa' ?></label>
                         <div class="col-sm-7 col-md-7 col-xs-7 col-lg-7">
-<?= Html::dropDownList("cmb_carrera1", 0, $arr_carrerra1, ["class" => "form-control", "id" => "cmb_carrera1"]) ?>
+                            <?= Html::dropDownList("cmb_carrera1", 0, $arr_carrerra1, ["class" => "form-control", "id" => "cmb_carrera1"]) ?>
                         </div>
                     </div>
                 </div>
@@ -89,7 +89,7 @@ $leyenda = '<div class="col-md-12 col-xs-12 col-sm-12 col-lg-12">
                     <div class="form-group">                
                         <label for="cmb_periodo" class="col-sm-4 col-md-4 col-xs-4 col-lg-4 control-label"><?= Yii::t("formulario", "Period"); ?> <span class="text-danger"></span></label>
                         <div class="col-sm-7 col-md-7 col-xs-7 col-lg-7">
-<?= Html::dropDownList("cmb_periodo", 0, $arr_periodo, ["class" => "form-control", "id" => "cmb_periodo"]) ?>                        
+                            <?= Html::dropDownList("cmb_periodo", 0, $arr_periodo, ["class" => "form-control", "id" => "cmb_periodo"]) ?>                        
                         </div>
                     </div>
                 </div>

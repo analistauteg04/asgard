@@ -7,7 +7,7 @@ use Yii;
 /**
  * This is the model class for table "persona".
  *
- * @property integer $per_id
+ * @property int $per_id
  * @property string $per_pri_nombre
  * @property string $per_seg_nombre
  * @property string $per_pri_apellido
@@ -15,19 +15,19 @@ use Yii;
  * @property string $per_cedula
  * @property string $per_ruc
  * @property string $per_pasaporte
- * @property integer $etn_id
- * @property integer $eciv_id
+ * @property int $etn_id
+ * @property int $eciv_id
  * @property string $per_genero
  * @property string $per_nacionalidad
- * @property integer $pai_id_nacimiento
- * @property integer $pro_id_nacimiento
- * @property integer $can_id_nacimiento
+ * @property int $pai_id_nacimiento
+ * @property int $pro_id_nacimiento
+ * @property int $can_id_nacimiento
  * @property string $per_nac_ecuatoriano
  * @property string $per_fecha_nacimiento
  * @property string $per_celular
  * @property string $per_correo
  * @property string $per_foto
- * @property integer $tsan_id
+ * @property int $tsan_id
  * @property string $per_domicilio_sector
  * @property string $per_domicilio_cpri
  * @property string $per_domicilio_csec
@@ -35,16 +35,18 @@ use Yii;
  * @property string $per_domicilio_ref
  * @property string $per_domicilio_telefono
  * @property string $per_domicilio_celular2
- * @property integer $pai_id_domicilio
- * @property integer $pro_id_domicilio
- * @property integer $can_id_domicilio
+ * @property int $pai_id_domicilio
+ * @property int $pro_id_domicilio
+ * @property int $can_id_domicilio
  * @property string $per_trabajo_nombre
  * @property string $per_trabajo_direccion
  * @property string $per_trabajo_telefono
  * @property string $per_trabajo_ext
- * @property integer $pai_id_trabajo
- * @property integer $pro_id_trabajo
- * @property integer $can_id_trabajo
+ * @property int $pai_id_trabajo
+ * @property int $pro_id_trabajo
+ * @property int $can_id_trabajo
+ * @property int $per_usuario_ingresa
+ * @property int $per_usuario_modifica
  * @property string $per_estado
  * @property string $per_fecha_creacion
  * @property string $per_fecha_modificacion
@@ -66,7 +68,7 @@ use Yii;
 class Persona extends \yii\db\ActiveRecord {
 
     /**
-     * @inheritdoc
+     * {@inheritdoc}
      */
     public static function tableName() {
         return 'persona';
@@ -80,12 +82,12 @@ class Persona extends \yii\db\ActiveRecord {
     }
 
     /**
-     * @inheritdoc
+     * {@inheritdoc}
      */
     public function rules() {
         return [
             [['per_cedula', 'per_estado', 'per_estado_logico'], 'required'],
-            [['etn_id', 'eciv_id', 'pai_id_nacimiento', 'pro_id_nacimiento', 'can_id_nacimiento', 'tsan_id', 'pai_id_domicilio', 'pro_id_domicilio', 'can_id_domicilio', 'pai_id_trabajo', 'pro_id_trabajo', 'can_id_trabajo'], 'integer'],
+            [['etn_id', 'eciv_id', 'pai_id_nacimiento', 'pro_id_nacimiento', 'can_id_nacimiento', 'tsan_id', 'pai_id_domicilio', 'pro_id_domicilio', 'can_id_domicilio', 'pai_id_trabajo', 'pro_id_trabajo', 'can_id_trabajo', 'per_usuario_ingresa', 'per_usuario_modifica'], 'integer'],
             [['per_fecha_nacimiento', 'per_fecha_creacion', 'per_fecha_modificacion'], 'safe'],
             [['per_pri_nombre', 'per_seg_nombre', 'per_pri_apellido', 'per_seg_apellido', 'per_nacionalidad', 'per_correo', 'per_domicilio_sector', 'per_trabajo_nombre'], 'string', 'max' => 250],
             [['per_cedula', 'per_ruc'], 'string', 'max' => 15],
@@ -108,7 +110,7 @@ class Persona extends \yii\db\ActiveRecord {
     }
 
     /**
-     * @inheritdoc
+     * {@inheritdoc}
      */
     public function attributeLabels() {
         return [
@@ -150,6 +152,8 @@ class Persona extends \yii\db\ActiveRecord {
             'pai_id_trabajo' => 'Pai Id Trabajo',
             'pro_id_trabajo' => 'Pro Id Trabajo',
             'can_id_trabajo' => 'Can Id Trabajo',
+            'per_usuario_ingresa' => 'Per Usuario Ingresa',
+            'per_usuario_modifica' => 'Per Usuario Modifica',
             'per_estado' => 'Per Estado',
             'per_fecha_creacion' => 'Per Fecha Creacion',
             'per_fecha_modificacion' => 'Per Fecha Modificacion',
@@ -464,37 +468,39 @@ class Persona extends \yii\db\ActiveRecord {
         $resultData = $comando->queryOne();
         return $resultData;
     }
+
     /**
-     * Function modificaPersona
+     * Function insertarPersona
      * @author  Kleber Loayza <analistadesarrollo03@uteg.edu.ec>
      * @property integer $userid
      * @return  
      */
-    public function insertarPersona($con,$parameters,$keys,$name_table) {
-        $trans = $con->getTransaction(); 
+    public function insertarPersona($con, $parameters, $keys, $name_table) {
+        $trans = $con->getTransaction();
         $param_sql .= "" . $keys[0];
-        $bdet_sql .= "'" . $parameters[0]."'";
+        $bdet_sql .= "'" . $parameters[0] . "'";
         for ($i = 1; $i < count($parameters); $i++) {
             if (isset($parameters[$i])) {
                 $param_sql .= ", " . $keys[$i];
-                $bdet_sql .= ", '" . $parameters[$i]."'";
+                $bdet_sql .= ", '" . $parameters[$i] . "'";
             }
         }
         try {
-            $sql = "INSERT INTO " . $con->dbname.'.'.$name_table . " ($param_sql) VALUES($bdet_sql);";
+            $sql = "INSERT INTO " . $con->dbname . '.' . $name_table . " ($param_sql) VALUES($bdet_sql);";
             $comando = $con->createCommand($sql);
             $result = $comando->execute();
-            $idtable=$con->getLastInsertID($con->dbname . '.' . $name_table);
+            $idtable = $con->getLastInsertID($con->dbname . '.' . $name_table);
             if ($trans !== null)
                 $trans->commit();
             return $idtable;
         } catch (Exception $ex) {
-            if ($trans !== null){
-                $trans->rollback();            
+            if ($trans !== null) {
+                $trans->rollback();
             }
             return 0;
         }
     }
+
     /**
      * Function modificaPersona
      * @author  Giovanni Vergara <analistadesarrollo02@uteg.edu.ec>
@@ -503,6 +509,7 @@ class Persona extends \yii\db\ActiveRecord {
      */
     public function modificaPersona($per_id, $per_pri_nombre, $per_seg_nombre, $per_pri_apellido, $per_seg_apellido, $etn_id, $eciv_id, $per_genero, $pai_id_nacimiento, $pro_id_nacimiento, $can_id_nacimiento, $per_fecha_nacimiento, $per_celular, $per_correo, $tsan_id, $per_domicilio_sector, $per_domicilio_cpri, $per_domicilio_csec, $per_domicilio_num, $per_domicilio_ref, $per_domicilio_telefono, $pai_id_domicilio, $pro_id_domicilio, $can_id_domicilio, $per_nac_ecuatoriano, $per_nacionalidad, $per_foto) {
         $con = \Yii::$app->db_asgard;
+        $usuario_modifica = @Yii::$app->session->get("PB_iduser");
         $trans = $con->getTransaction(); // se obtiene la transacción actual
         $estado = 1;
         $per_fecha_modificacion = date("Y-m-d H:i:s");
@@ -513,7 +520,7 @@ class Persona extends \yii\db\ActiveRecord {
         }
         try {
             $comando = $con->createCommand
-                    ("UPDATE " . $con->dbname . ".persona 		       
+                    ("UPDATE " . $con->dbname . ".persona            
                       SET 
                         per_pri_nombre = :per_pri_nombre,
                         per_seg_nombre = :per_seg_nombre,
@@ -541,7 +548,8 @@ class Persona extends \yii\db\ActiveRecord {
                         per_nac_ecuatoriano = :per_nac_ecuatoriano,
                         per_nacionalidad = :per_nacionalidad,
                         per_fecha_modificacion = :per_fecha_modificacion,
-                        per_foto = :per_foto
+                        per_foto = :per_foto,
+                        per_usuario_modifica = :usuario_modifica
                       WHERE 
                         per_id = :per_id AND 
                         per_estado = :estado AND
@@ -576,6 +584,7 @@ class Persona extends \yii\db\ActiveRecord {
             $comando->bindParam(":per_fecha_modificacion", $per_fecha_modificacion, \PDO::PARAM_STR);
             $comando->bindParam(":per_id", $per_id, \PDO::PARAM_INT);
             $comando->bindParam(":per_foto", $per_foto, \PDO::PARAM_STR);
+            $comando->bindParam(":usuario_modifica", $usuario_modifica, \PDO::PARAM_INT);
             $response = $comando->execute();
 
             if ($trans !== null)
@@ -690,6 +699,7 @@ class Persona extends \yii\db\ActiveRecord {
         $resultData = $comando->queryOne();
         return $resultData;
     }
+
     /**
      * Function ConsultaRegistroExiste
      * @author  Giovanni Vergara <analistadesarrollo02@uteg.edu.ec>
@@ -735,7 +745,7 @@ class Persona extends \yii\db\ActiveRecord {
 
         try {
             $comando = $con->createCommand
-                    ("UPDATE " . $con->dbname . ".otra_etnia 		       
+                    ("UPDATE " . $con->dbname . ".otra_etnia           
                       SET 
                         oetn_nombre = :oetn_nombre,                        
                         oetn_fecha_modificacion = :oetn_fecha_modificacion,
@@ -782,13 +792,14 @@ class Persona extends \yii\db\ActiveRecord {
         $resultData = $comando->queryOne();
         return $resultData;
     }
+
     /**
      * Function consultarIdPersona 
      * @author  Kleber Loayza
      * @property      
      * @return  
      */
-    public function consultarIdPersona($cedula=null,$pasaporte=null,$correo=null,$celular=null) {
+    public function consultarIdPersona($cedula = null, $pasaporte = null, $correo = null, $celular = null) {
         $con = \Yii::$app->db_asgard;
         $estado = 1;
         $sql = "
@@ -806,21 +817,20 @@ class Persona extends \yii\db\ActiveRecord {
                     ";
         $comando = $con->createCommand($sql);
         $resultData = $comando->queryOne();
-        if(empty($resultData['per_id']))
+        if (empty($resultData['per_id']))
             return 0;
         else {
-            return $resultData['per_id'];    
-        }        
+            return $resultData['per_id'];
+        }
     }
-    
+
     /**
      * Function listadoUsuariosP
      * @author  Byron Villacreses <developer@uteg.edu.ec>
      * @param      
      * @return  
      */
-    
-    public function insertarDataPersona($con,$data) {
+    public function insertarDataPersona($con, $data) {
         //per_id
         //$per_cedula='99999999999';
         $sql = "INSERT INTO " . $con->dbname . ".persona
@@ -828,54 +838,54 @@ class Persona extends \yii\db\ActiveRecord {
              per_fecha_creacion,per_estado,per_estado_logico)VALUES
             (:per_pri_nombre,:per_pri_apellido,:per_fecha_nacimiento,:per_celular,:per_cedula,:per_genero,:per_correo,
              CURRENT_TIMESTAMP(),1,1) ";
-        
+
         $command = $con->createCommand($sql);
-        $command->bindParam(":per_pri_nombre",$data[0]['per_pri_nombre'], \PDO::PARAM_STR);
-        $command->bindParam(":per_pri_apellido",$data[0]['per_pri_apellido'], \PDO::PARAM_STR);
-        $command->bindParam(":per_fecha_nacimiento",$data[0]['per_fecha_nacimiento'], \PDO::PARAM_STR);  
-        $command->bindParam(":per_celular",$data[0]['per_celular'], \PDO::PARAM_STR);   
-        $command->bindParam(":per_cedula",$data[0]['per_cedula'], \PDO::PARAM_STR);//VALOR UNIQUE en la  base de Datos  
-        $command->bindParam(":per_genero",$data[0]['per_genero'], \PDO::PARAM_STR);
-        $command->bindParam(":per_correo",$data[0]['per_correo'], \PDO::PARAM_STR);
+        $command->bindParam(":per_pri_nombre", $data[0]['per_pri_nombre'], \PDO::PARAM_STR);
+        $command->bindParam(":per_pri_apellido", $data[0]['per_pri_apellido'], \PDO::PARAM_STR);
+        $command->bindParam(":per_fecha_nacimiento", $data[0]['per_fecha_nacimiento'], \PDO::PARAM_STR);
+        $command->bindParam(":per_celular", $data[0]['per_celular'], \PDO::PARAM_STR);
+        $command->bindParam(":per_cedula", $data[0]['per_cedula'], \PDO::PARAM_STR); //VALOR UNIQUE en la  base de Datos  
+        $command->bindParam(":per_genero", $data[0]['per_genero'], \PDO::PARAM_STR);
+        $command->bindParam(":per_correo", $data[0]['per_correo'], \PDO::PARAM_STR);
         $command->execute();
         return $con->getLastInsertID();
     }
-    
+
     /**
      * Function listadoUsuariosP
      * @author  Byron Villacreses <developer@uteg.edu.ec>
      * @param      
      * @return  
      */
-    public function insertarDataCorreo($con,$data) {
+    public function insertarDataCorreo($con, $data) {
         //ucor_id
         $sql = "INSERT INTO " . $con->dbname . ".usuario_correo
             (usu_id,ucor_user,ucor_fecha_creacion,ucor_estado_logico)VALUES
             (:usu_id,:ucor_user,CURRENT_TIMESTAMP(),1) ";
         $command = $con->createCommand($sql);
-        $command->bindParam(":usu_id",$data[0]['usu_id'], \PDO::PARAM_INT);
-        $command->bindParam(":ucor_user",$data[0]['per_correo'], \PDO::PARAM_STR);    
+        $command->bindParam(":usu_id", $data[0]['usu_id'], \PDO::PARAM_INT);
+        $command->bindParam(":ucor_user", $data[0]['per_correo'], \PDO::PARAM_STR);
         $command->execute();
     }
-    
+
     /**
      * Function 
      * @author  Byron Villacreses <developer@uteg.edu.ec>
      * @property integer car_id      
      * @return  
      */
-    public function consultarTipoPersona($TextAlias) {  
-        $con = \Yii::$app->db_asgard;        
+    public function consultarTipoPersona($TextAlias) {
+        $con = \Yii::$app->db_asgard;
         $sql = "SELECT tper_id Ids 
                     FROM " . $con->dbname . ".tipo_persona  
-                WHERE tper_nombre=:tper_nombre AND tper_estado_logico=1 ";                
+                WHERE tper_nombre=:tper_nombre AND tper_estado_logico=1 ";
         $comando = $con->createCommand($sql);
         $comando->bindParam(":tper_nombre", $TextAlias, \PDO::PARAM_STR);
         //return $comando->queryAll();
-        $rawData=$comando->queryScalar();
+        $rawData = $comando->queryScalar();
         if ($rawData === false)
             return 0; //en caso de que existe problema o no retorne nada tiene 1 por defecto 
         return $rawData;
-    }    
+    }
 
 }

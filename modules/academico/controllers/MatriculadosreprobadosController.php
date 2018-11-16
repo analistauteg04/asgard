@@ -23,12 +23,18 @@ use app\models\InscripcionAdmision;
 use app\modules\academico\Module as academico;
 use app\modules\admision\Module as admision;
 use app\models\ExportFile;
+
 academico::registerTranslations();
 admision::registerTranslations();
 
+<<<<<<< HEAD
 
 class MatriculadosreprobadosController extends \app\components\CController {
     
+=======
+class MatriculadosreprobadosController extends \app\components\CController {
+
+>>>>>>> 1c733d5eca1ac4b260d4844592d15fbebe095174
     public function actionIndex() {
         $per_id = @Yii::$app->session->get("PB_perid");
         $mod_carrera = new EstudioAcademico();
@@ -73,7 +79,7 @@ class MatriculadosreprobadosController extends \app\components\CController {
                     }
                     //Recibe Parámetros.
                     $matr_repro_id = $data["matr_repro_id"];
-                    \app\models\Utilities::putMessageLogFile('id: '.$matr_repro_id);
+                    \app\models\Utilities::putMessageLogFile('id: ' . $matr_repro_id);
                     $files = $_FILES[key($_FILES)];
                     $arrIm = explode(".", basename($files['name']));
                     $typeFile = strtolower($arrIm[count($arrIm) - 1]);
@@ -355,6 +361,7 @@ class MatriculadosreprobadosController extends \app\components\CController {
     public function actionSave() {
         $periodo = 0;
         $mod_admitido = new MatriculadosReprobado();
+        $mod_periodo = new PeriodoAcademicoMetIngreso();
         if (Yii::$app->request->isAjax) {
             $data = Yii::$app->request->post();
             $ides = $data["ids"];
@@ -369,6 +376,7 @@ class MatriculadosreprobadosController extends \app\components\CController {
             $periodo = $data['periodo'];
             $con = \Yii::$app->db_captacion;
             $transaction = $con->beginTransaction();
+            $reprobar = '';
             try {
                 $mod_reprobado = new MatriculadosReprobado();
                 $fecha_creacion = date(Yii::$app->params["dateTimeByDefault"]);
@@ -389,23 +397,20 @@ class MatriculadosreprobadosController extends \app\components\CController {
                                     } else {
                                         $exito = 0;
                                     }
-                                    //$reprobar = $reprobar . ' ' . 'asig.asi_id != ' . $asigna[$i] . ' and ';
+                                    $reprobar = $reprobar . ' ' . 'asig.asi_id != ' . $asigna[$i] . ' and ';
                                 }
-                            }
-                            //Guardado Datos Materias aprobadas.                         
-                            $estado_materiare = 1;
-                            /* $arr_materia = $mod_admitido->consultarMateriarep($uniacademica, $modalidad, $carrera, $reprobar);
-                              $arr_materias = ArrayHelper::map($arr_materia, "id", "value");
-                              for ($j = 0; $j < count($arr_materias); $j++) {
-                              if ($res_materia) {
-                              \app\models\Utilities::putMessageLogFile('xxx..  ' . $arr_materias["value"][$j]);
-                              $res_reprobam = $mod_reprobado->insertarMateriareprueba($mre_id, $arr_materias[$j], $estado_materiare, $usuario, $fecha_creacion);
-                              if ($res_reprobam) {
-                              $exito = 1;
-                              }
-                              }
-                              } */
+                            }                             
                         }
+                        //Guardado Datos Materias aprobadas.                         
+                            $estado_materiare = 1;                            
+                            $arrperio = $mod_periodo->consultarPeriodoanterior($periodo);
+                            $arr_materia = $mod_admitido->consultarMateriarep($uniacademica, $modalidad, $carrera, $reprobar, $arrperio[0]["mes"], $arrperio[0]["anio"]);
+                            for ($j = 0; $j < count($arr_materia); $j++) {                                                                
+                                    $res_reprobam = $mod_reprobado->insertarMateriareprueba($mre_id, $arr_materia[$j]["id"], $estado_materiare, $usuario, $fecha_creacion);
+                                    if ($res_reprobam) {
+                                        $exito = 1;
+                                    }                               
+                            }
                     }
                     if ($exito) {
                         $transaction->commit();

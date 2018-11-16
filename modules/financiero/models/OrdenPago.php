@@ -263,7 +263,8 @@ class OrdenPago extends \app\modules\financiero\components\CActiveRecord {
         $sql = "SELECT
                     orp.opag_id,  
                     inte.int_id,
-                    ite.ite_nombre,                     
+                    ite.ite_nombre,  
+                    orp.opag_total as pag_total,
                     format(orp.opag_total,2) as ipre_precio,   
                     format((round(orp.opag_total,2) - ifnull(orp.opag_valor_pagado,0)),2) as pendiente,   
                     (case orp.opag_estado_pago when 'P' then 'Pendiente' when 'R' then 'Revisando' when 'S' then 'Pagado' end) as estado,

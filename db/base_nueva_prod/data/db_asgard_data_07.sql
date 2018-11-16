@@ -50,7 +50,12 @@ INSERT INTO `usuario` (`usu_id`, `per_id`, `usu_user`, `usu_sha`, `usu_password`
 
 (38, 38, 'aleyton@uteg.edu.ec', '60sU04pqQwiP0I5NLm0pbLFhU8x_eUJw', 'PMLFqAeA3TjsRNVHHkSrEzMwZDI4OTVlNjU1YzBjMTgxNzQ2NWM3YTQ3NTk1MjcwZWMzZjYxYThlMGFlZjgyZGQ3YzA5MjM1ZWFjMTY3MWXB0IJRlKOw/a2OCww0lEq+NsDMShqFj8ufvXsVXRlIqUwkv6yvkFcw0Y9+adGlvMMfTI/GXubd9+VqnfYSfdjl', NULL, NULL, NULL, NULL, '1', '2017-09-01 02:53:00', NULL, '1'),
 (39, 39, 'malvarado@cranea.com.ec', '60sU04pqQwiP0I5NLm0pbLFhU8x_eUJw', 'PMLFqAeA3TjsRNVHHkSrEzMwZDI4OTVlNjU1YzBjMTgxNzQ2NWM3YTQ3NTk1MjcwZWMzZjYxYThlMGFlZjgyZGQ3YzA5MjM1ZWFjMTY3MWXB0IJRlKOw/a2OCww0lEq+NsDMShqFj8ufvXsVXRlIqUwkv6yvkFcw0Y9+adGlvMMfTI/GXubd9+VqnfYSfdjl', NULL, NULL, NULL, NULL, '1', '2017-09-01 02:53:00', NULL, '1'),
-(40, 40, 'community@cranea.com.ec', '60sU04pqQwiP0I5NLm0pbLFhU8x_eUJw', 'PMLFqAeA3TjsRNVHHkSrEzMwZDI4OTVlNjU1YzBjMTgxNzQ2NWM3YTQ3NTk1MjcwZWMzZjYxYThlMGFlZjgyZGQ3YzA5MjM1ZWFjMTY3MWXB0IJRlKOw/a2OCww0lEq+NsDMShqFj8ufvXsVXRlIqUwkv6yvkFcw0Y9+adGlvMMfTI/GXubd9+VqnfYSfdjl', NULL, NULL, NULL, NULL, '1', '2017-09-01 02:53:00', NULL, '1');
+(40, 40, 'community@cranea.com.ec', '60sU04pqQwiP0I5NLm0pbLFhU8x_eUJw', 'PMLFqAeA3TjsRNVHHkSrEzMwZDI4OTVlNjU1YzBjMTgxNzQ2NWM3YTQ3NTk1MjcwZWMzZjYxYThlMGFlZjgyZGQ3YzA5MjM1ZWFjMTY3MWXB0IJRlKOw/a2OCww0lEq+NsDMShqFj8ufvXsVXRlIqUwkv6yvkFcw0Y9+adGlvMMfTI/GXubd9+VqnfYSfdjl', NULL, NULL, NULL, NULL, '1', '2017-09-01 02:53:00', NULL, '1'),
+(41, 41, 'coordinadministrativa@uteg.edu.ec', '60sU04pqQwiP0I5NLm0pbLFhU8x_eUJw', 'PMLFqAeA3TjsRNVHHkSrEzMwZDI4OTVlNjU1YzBjMTgxNzQ2NWM3YTQ3NTk1MjcwZWMzZjYxYThlMGFlZjgyZGQ3YzA5MjM1ZWFjMTY3MWXB0IJRlKOw/a2OCww0lEq+NsDMShqFj8ufvXsVXRlIqUwkv6yvkFcw0Y9+adGlvMMfTI/GXubd9+VqnfYSfdjl', NULL, NULL, NULL, NULL, '1', '2018-11-14 18:00:00', NULL, '1'),
+(42, 42, 'msubia@cranea.com.ec', '60sU04pqQwiP0I5NLm0pbLFhU8x_eUJw', 'PMLFqAeA3TjsRNVHHkSrEzMwZDI4OTVlNjU1YzBjMTgxNzQ2NWM3YTQ3NTk1MjcwZWMzZjYxYThlMGFlZjgyZGQ3YzA5MjM1ZWFjMTY3MWXB0IJRlKOw/a2OCww0lEq+NsDMShqFj8ufvXsVXRlIqUwkv6yvkFcw0Y9+adGlvMMfTI/GXubd9+VqnfYSfdjl', NULL, NULL, NULL, NULL, '1', '2018-11-14 18:45:00', NULL, '1');
+
+-- (43, 43, 'msubia@cranea.com.ec', '60sU04pqQwiP0I5NLm0pbLFhU8x_eUJw', 'PMLFqAeA3TjsRNVHHkSrEzMwZDI4OTVlNjU1YzBjMTgxNzQ2NWM3YTQ3NTk1MjcwZWMzZjYxYThlMGFlZjgyZGQ3YzA5MjM1ZWFjMTY3MWXB0IJRlKOw/a2OCww0lEq+NsDMShqFj8ufvXsVXRlIqUwkv6yvkFcw0Y9+adGlvMMfTI/GXubd9+VqnfYSfdjl', NULL, NULL, NULL, NULL, '1', '2018-11-15 15:00:00', NULL, '1'),
+-- (44, 44, 'msubia@cranea.com.ec', '60sU04pqQwiP0I5NLm0pbLFhU8x_eUJw', 'PMLFqAeA3TjsRNVHHkSrEzMwZDI4OTVlNjU1YzBjMTgxNzQ2NWM3YTQ3NTk1MjcwZWMzZjYxYThlMGFlZjgyZGQ3YzA5MjM1ZWFjMTY3MWXB0IJRlKOw/a2OCww0lEq+NsDMShqFj8ufvXsVXRlIqUwkv6yvkFcw0Y9+adGlvMMfTI/GXubd9+VqnfYSfdjl', NULL, NULL, NULL, NULL, '1', '2018-11-15 15:00:00', NULL, '1');
 
 --
 -- Volcado de datos para la tabla `empresa_persona`
@@ -97,7 +102,12 @@ INSERT INTO `empresa_persona` (`eper_id`, `emp_id`, `per_id`, `eper_estado`, `ep
 
 (38, 1, 38, '1', '2017-09-01 02:53:00', NULL, '1'),
 (39, 1, 39, '1', '2017-09-01 02:53:00', NULL, '1'),
-(40, 1, 40, '1', '2017-09-01 02:53:00', NULL, '1');
+(40, 1, 40, '1', '2017-09-01 02:53:00', NULL, '1'),
+(41, 1, 41, '1', '2018-11-14 18:00:00', NULL, '1'),
+(42, 1, 42, '1', '2018-11-14 18:45:00', NULL, '1');
+
+-- (43, 1, 43, '1', '2018-11-15 15:00:00', NULL, '1'),
+-- (44, 1, 44, '1', '2018-11-15 15:00:00', NULL, '1');
 
 --
 -- Volcado de datos para la tabla `usua_grol_eper`
@@ -147,7 +157,13 @@ INSERT INTO `usua_grol_eper` (`ugep_id`, `eper_id`, `usu_id`, `grol_id`, `ugep_e
 
 (38, 38, 38, 27, '1', '2017-09-01 02:53:00', NULL, '1'),
 (39, 39, 39, 28, '1', '2017-09-01 22:46:00', NULL, '1'),
-(40, 40, 40, 28, '1', '2017-09-01 02:53:00', NULL, '1');
+(40, 40, 40, 28, '1', '2017-09-01 02:53:00', NULL, '1'),
+(41, 41, 41, 24, '1', '2018-11-14 18:00:00', NULL, '1'),
+(42, 42, 42, 27, '1', '2018-11-14 18:45:00', NULL, '1');
+
+-- (43, 43, 43, 12, '1', '2018-11-15 18:45:00', NULL, '1'),
+-- (44, 44, 44, 12, '1', '2018-11-15 18:45:00', NULL, '1');
+
 
 
 

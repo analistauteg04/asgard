@@ -36,6 +36,7 @@ class AdmitidosController extends \app\components\CController {
             $arrSearch["unidad"] = $data['unidad'];
             $arrSearch["modalidad"] = $data['modalidad'];
             $arrSearch["carrera"] = $data['carrera'];
+            $arrSearch["periodo"] = $data['periodo'];
             $mod_aspirante = Admitido::getAdmitidos($arrSearch);
             return $this->renderPartial('index-grid', [
                         "model" => $mod_aspirante,
@@ -89,7 +90,7 @@ class AdmitidosController extends \app\components\CController {
             academico::t("Academico", "Income Method"), //ingles
             academico::t("Academico", "Career/Program"),
             admision::t("Solicitudes", "Scholarship"),
-            academico::t("Academico", "Registered")
+            academico::t("Academico", "Period")
         );
         $data = Yii::$app->request->get();
         $arrSearch = array();
@@ -100,6 +101,7 @@ class AdmitidosController extends \app\components\CController {
             $arrSearch["unidad"] = $data['unidad'];
             $arrSearch["modalidad"] = $data['modalidad'];
             $arrSearch["carrera"] = $data['carrera'];
+            $arrSearch["periodo"] = $data['periodo'];
         }
         $arrData = array();
         $admitido_model = new Admitido();
@@ -126,7 +128,7 @@ class AdmitidosController extends \app\components\CController {
             academico::t("Academico", "Income Method"), //ingles
             academico::t("Academico", "Career/Program"),
             admision::t("Solicitudes", "Scholarship"),
-            academico::t("Academico", "Registered")
+            academico::t("Academico", "Period")
         );
         $data = Yii::$app->request->get();
         $arrSearch = array();
@@ -138,6 +140,7 @@ class AdmitidosController extends \app\components\CController {
             $arrSearch["unidad"] = $data['unidad'];
             $arrSearch["modalidad"] = $data['modalidad'];
             $arrSearch["carrera"] = $data['carrera'];
+            $arrSearch["periodo"] = $data['periodo'];
         }
         $arrData = array();
         $admitido_model = new Admitido();

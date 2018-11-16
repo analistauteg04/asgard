@@ -5,7 +5,7 @@ namespace app\modules\fe_edoc\models;
 use Yii;
 use app\models\Utilities;
 
-class Edoc_ApiRest {
+class Edoc_ApiRest extends \app\modules\fe_edoc\components\CActiveRecord {
     public $tipoEdoc = "";
     public $cabEdoc = array();
     public $detEdoc = array();
@@ -14,16 +14,16 @@ class Edoc_ApiRest {
 
     function __construct($arr_params = array()) {
         foreach ($arr_params as $key => $value) {
-            if ($key == "tipoEdoc")
+            if ($key == "tipoedoc")
                 $this->tipoEdoc = $value;
-            if ($key == "cabEdoc")
-                $this->cabEdoc = $value;
-            if ($key == "detEdoc")
-                $this->detEdoc = $value;
-            if ($key == "dadcEdoc")
-                $this->dadcEdoc = $value;
-            if ($key == "fpagEdoc")
-                $this->fpagEdoc = $value;
+            if ($key == "cabedoc")
+                $this->cabEdoc = json_decode($value);
+            if ($key == "detedoc")
+                $this->detEdoc = json_decode($value);
+            if ($key == "dadcedoc")
+                $this->dadcEdoc = json_decode($value);
+            if ($key == "fpagedoc")
+                $this->fpagEdoc = json_decode($value);
         }
     }
     
@@ -82,8 +82,11 @@ class Edoc_ApiRest {
     
     
     public function sendEdoc() {
+        //return array("status"=>"OK", "tipoEdoc"=>$this->tipoEdoc, "croo_id"=>'1');
         switch ($this->tipoEdoc){
             case "01"://FACTURAS
+                
+                //return ["test" => "OK", "Params" => ["test1" => $this->test1, "test2" => $this->test2]];
                 return $this->insertarFacturas();
                 break;
             case "04"://NOTA DE CREDITO
@@ -105,7 +108,7 @@ class Edoc_ApiRest {
     
   
     private function insertarFacturas() {
-        $con = Yii::$app->db_edoc;
+        $con = Yii::$app->db_fe_edoc;
         $trans = $con->getTransaction();
         if ($trans !== null) {
             $trans = null; // si existe la transacción entonces no se crea una
@@ -120,11 +123,13 @@ class Edoc_ApiRest {
             if ($trans !== null){
                 $trans->commit();
             }
-            return array("status"=>"OK");
+            //return array("status"=>"OK");
+            return array("status"=>"OK", "chat_id"=>$idCab, "croo_id"=>'1');
         } catch (\Exception $e) {
             $trans->rollBack();
             //throw $e;
-            return array("status" => "NO_OK");
+            //return array("status" => "NO_OK");
+            return array("status"=>"NO_OK","error"=>$e);
         }
         
     }

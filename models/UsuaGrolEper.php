@@ -82,7 +82,7 @@ class UsuaGrolEper extends \yii\db\ActiveRecord {
     }
 
     /**
-     * Function modificaPersona
+     * Function insertarUsuaGrolEper
      * @author  Kleber Loayza <analistadesarrollo03@uteg.edu.ec>
      * @property integer $userid
      * @return  

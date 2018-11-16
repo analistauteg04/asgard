@@ -66,7 +66,8 @@ function exportExcel() {
     var unidad = $('#cmb_unidadbus option:selected').val();
     var modalidad = $('#cmb_modalidadbus option:selected').val();
     var carrera = $('#cmb_carrerabus option:selected').val();
-    window.location.href = $('#txth_base').val() + "/academico/admitidos/expexcel?search=" + search + "&fecha_ini=" + f_ini + "&fecha_fin=" + f_fin+ "&unidad=" + unidad + "&modalidad=" + modalidad + "&carrera=" + carrera;
+    var periodo = $('#txt_periodo').val();
+    window.location.href = $('#txth_base').val() + "/academico/admitidos/expexcel?search=" + search + "&fecha_ini=" + f_ini + "&fecha_fin=" + f_fin+ "&unidad=" + unidad + "&modalidad=" + modalidad + "&carrera=" + carrera + "&periodo=" + periodo;
 }
 
 function exportPdf() {
@@ -76,7 +77,8 @@ function exportPdf() {
     var unidad = $('#cmb_unidadbus option:selected').val();
     var modalidad = $('#cmb_modalidadbus option:selected').val();
     var carrera = $('#cmb_carrerabus option:selected').val();
-    window.location.href = $('#txth_base').val() + "/academico/admitidos/exppdf?pdf=1&search=" + search + "&fecha_ini=" + f_ini + "&fecha_fin=" + f_fin + "&unidad=" + unidad + "&modalidad=" + modalidad + "&carrera=" + carrera;
+    var periodo = $('#txt_periodo').val();
+    window.location.href = $('#txth_base').val() + "/academico/admitidos/exppdf?pdf=1&search=" + search + "&fecha_ini=" + f_ini + "&fecha_fin=" + f_fin + "&unidad=" + unidad + "&modalidad=" + modalidad + "&carrera=" + carrera + "&periodo=" + periodo;
 }
 
 function actualizarGrid() {
@@ -87,10 +89,11 @@ function actualizarGrid() {
     var unidad = $('#cmb_unidadbus option:selected').val();
     var modalidad = $('#cmb_modalidadbus option:selected').val();
     var carrera = $('#cmb_carrerabus option:selected').val();
+    var periodo = $('#txt_periodo').val();
     //Buscar almenos una clase con el nombre para ejecutar
     if (!$(".blockUI").length) {
         showLoadingPopup();
-        $('#TbG_PERSONAS').PbGridView('applyFilterData', {'f_ini': f_ini, 'f_fin': f_fin, 'search': search, 'codigocan': codigocan, 'unidad': unidad, 'modalidad': modalidad, 'carrera': carrera});
+        $('#TbG_PERSONAS').PbGridView('applyFilterData', {'f_ini': f_ini, 'f_fin': f_fin, 'search': search, 'codigocan': codigocan, 'unidad': unidad, 'modalidad': modalidad, 'carrera': carrera, 'periodo': periodo});
         setTimeout(hideLoadingPopup, 2000);
     }
 }

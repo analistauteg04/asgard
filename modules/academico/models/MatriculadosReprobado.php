@@ -225,8 +225,16 @@ class MatriculadosReprobado extends \yii\db\ActiveRecord {
                         when 11 then 'Noviembre'
                         when 12 then 'Diciembre'
                  end as mes_id_academico,
-                    -- ifnull((select count(*) from " . $con->dbname . ".materias_matriculados_reprobado mmr where mmr.mre_id = mre.mre_id and mmr.mmr_estado_materia = 1),' ') as aprobada,
-                    ifnull((select count(*) from " . $con->dbname . ".materias_matriculados_reprobado mmr where mmr.mre_id = mre.mre_id and mmr.mmr_estado_materia = 2),' ') as reprobada
+                    ifnull((select count(*) from " . $con->dbname . ".materias_matriculados_reprobado mmr where mmr.mre_id = mre.mre_id and mmr.mmr_estado_materia = 1),' ') as aprobada,
+                    ifnull((SELECT GROUP_CONCAT(CONCAT(asi.asi_nombre, IF(mmr.mmr_estado_materia =1,'',''))  SEPARATOR ', ') as asignatura_apro 
+                            FROM db_captacion.materias_matriculados_reprobado mmr
+                            INNER JOIN  db_academico.asignatura asi ON asi.asi_id = mmr.asi_id
+                            where mmr.mre_id = mre.mre_id and mmr.mmr_estado_materia =1),'') as asignatura_apro,
+                    ifnull((select count(*) from " . $con->dbname . ".materias_matriculados_reprobado mmr where mmr.mre_id = mre.mre_id and mmr.mmr_estado_materia = 2),' ') as reprobada,
+                    ifnull((SELECT GROUP_CONCAT(CONCAT(asi.asi_nombre, IF(mmr.mmr_estado_materia =2,'',''))  SEPARATOR ', ') as asignatura_repro 
+                            FROM db_captacion.materias_matriculados_reprobado mmr
+                            INNER JOIN  db_academico.asignatura asi ON asi.asi_id = mmr.asi_id
+                            where mmr.mre_id = mre.mre_id and mmr.mmr_estado_materia =2),'') as asignatura_repro    
                 FROM " . $con->dbname . ".matriculados_reprobado mre 
                      INNER JOIN " . $con->dbname . ".admitido adm ON adm.adm_id = mre.adm_id
                      INNER JOIN " . $con->dbname . ".interesado inte on inte.int_id = adm.int_id                     
@@ -628,6 +636,7 @@ class MatriculadosReprobado extends \yii\db\ActiveRecord {
             return ["status" => false, "twre_id" => $id];
         }
     }
+
     /**
      * Function addLabelTimeDocumentos renombra el documento agregando una varible de tiempo 
      * @author  Kleber Loayza Analista Desarrollo 3 <analistadesarrollo03@uteg.edu.ec>
@@ -635,7 +644,7 @@ class MatriculadosReprobado extends \yii\db\ActiveRecord {
      * @param   string  $file           Uri del Archivo a modificar
      * @param   int     $timeSt         Parametro a agregar al nombre del archivo
      * @return  $newFile | FALSE (Retorna el nombre del nuevo archivo o false si fue error).
-    */
+     */
     public static function addLabelTimeDocumentos($matre_id, $file, $timeSt) {
         $arrIm = explode(".", basename($file));
         $typeFile = strtolower($arrIm[count($arrIm) - 1]);
@@ -648,6 +657,7 @@ class MatriculadosReprobado extends \yii\db\ActiveRecord {
         }
         return FALSE;
     }
+
     /**
      * Function consultarReprobado
      * @author  Giovanni Vergara <analistadesarrollo02@uteg.edu.ec>
@@ -742,6 +752,47 @@ class MatriculadosReprobado extends \yii\db\ActiveRecord {
                 $trans->rollback();
             return FALSE;
         }
+    }
+
+    /**
+     * Function consultarMateriarep
+     * @author  Giovanni Vergara <analistadesarrollo01@uteg.edu.ec>
+     * @param   
+     * @return  $resultData (información de materias)
+     */
+    public function consultarMateriarep($uaca_id, $moda_id, $car_id, $reprobar, $mes, $anio) {
+        $con = \Yii::$app->db_academico;
+        $estado = 1;
+        if ($uaca_id == 1 && $moda_id == 1 && $mes > 1 && $anio > 2017) {
+            $str_filtro = 'asig.asi_id < 4 and ';
+        }
+        $sql = " 
+                select 
+                    asig.asi_id as id 
+                from 
+                    " . $con->dbname . ".malla_academica as maca
+                    join " . $con->dbname . ".malla_academica_detalle as made on made.maca_id=maca.maca_id
+                    join " . $con->dbname . ".asignatura as asig on asig.asi_id=made.asi_id
+                where
+                    $reprobar
+                    $str_filtro
+                    maca.uaca_id=:uaca_id and
+                    maca.eaca_id=:car_id and
+                    maca.mod_id=:moda_id and 
+                    maca.maca_estado =:estado and 
+                    maca.maca_estado_logico =:estado and
+                    made.made_estado =:estado and 
+                    made.made_estado_logico =:estado
+                    
+                ";
+        $comando = $con->createCommand($sql);
+        $comando->bindParam(":estado", $estado, \PDO::PARAM_STR);
+        $comando->bindParam(":uaca_id", $uaca_id, \PDO::PARAM_INT);
+        $comando->bindParam(":moda_id", $moda_id, \PDO::PARAM_INT);
+        $comando->bindParam(":car_id", $car_id, \PDO::PARAM_INT);
+        $resultData = $comando->queryAll();
+        
+        return $resultData;
     }
 
 }

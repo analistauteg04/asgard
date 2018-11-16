@@ -5,7 +5,7 @@ use app\modules\academico\Module as academico;
 ?>
 <?= Html::hiddenInput('txth_ids', '', ['id' => 'txth_ids']); ?>
 <div class="col-md-12">
-    <h3><span id="lbl_Personeria"><?= academico::t("Academico", "List Failed Enrollments") ?></span></h3>
+    <h3><span id="lbl_Personeria"><?= academico::t("Academico", "List Enrollment Method Income") ?></span></h3>
 </div>
 <div>
     <form class="form-horizontal">
