@@ -652,6 +652,7 @@ class MatriculadosReprobado extends \yii\db\ActiveRecord {
         $search = ".$typeFile";
         $replace = "_$timeSt" . ".$typeFile";
         $newFile = str_replace($search, $replace, $file);
+        \app\models\Utilities::putMessageLogFile("direccion archivo: ".$baseFile . $file.$matre_id);        
         if (rename($baseFile . $file, $baseFile . $newFile)) {
             return $newFile;
         }
@@ -825,7 +826,7 @@ class MatriculadosReprobado extends \yii\db\ActiveRecord {
                         twi.uaca_id,
                         twi.mod_id,
                         twi.car_id,
-                        twin_metodo_ingreso,
+                        twre_metodo_ingreso,
                         conuteg_id,
                         ruta_doc_titulo,
                         ruta_doc_dni,
@@ -836,11 +837,11 @@ class MatriculadosReprobado extends \yii\db\ActiveRecord {
                         ruta_doc_hojavida,
                         twre_dni
                 FROM " . $con->dbname . ".temporal_wizard_reprobados twi 
-                     inner join " . $con1->dbname . "t.unidad_academica ua on ua.uaca_id = twi.uaca_id
+                     inner join " . $con1->dbname . ".unidad_academica ua on ua.uaca_id = twi.uaca_id
                      inner join " . $con1->dbname . ".modalidad m on m.mod_id = twi.mod_id
                      inner join " . $con1->dbname . ".estudio_academico ea on ea.eaca_id = twi.car_id
-                     inner join " . $con->dbname . ".metodo_ingreso mi on mi.ming_id = twi.twin_metodo_ingreso
-                     inner join " . $con2->dbname . ".item_metodo_unidad imi on (imi.ming_id =  twi.twin_metodo_ingreso and imi.uaca_id = twi.uaca_id and imi.mod_id = twi.mod_id)
+                     inner join " . $con->dbname . ".metodo_ingreso mi on mi.ming_id = twi.twre_metodo_ingreso
+                     inner join " . $con2->dbname . ".item_metodo_unidad imi on (imi.ming_id =  twi.twre_metodo_ingreso and imi.uaca_id = twi.uaca_id and imi.mod_id = twi.mod_id)
                      left join " . $con2->dbname . ".item_precio ip on ip.ite_id = imi.ite_id
                      left join " . $con2->dbname . ".descuento_item as ditem on ditem.ite_id=imi.ite_id
                      left join " . $con2->dbname . ".detalle_descuento_item as ddit on ddit.dite_id=ditem.dite_id
@@ -1179,6 +1180,7 @@ class MatriculadosReprobado extends \yii\db\ActiveRecord {
                     $arrExt = explode(".", $file);
                     $type = $arrExt[count($arrExt) - 1];
                     $newFile = str_replace("_" . $temp_id . "_", "_" . $per_id . "_", $file);
+                    \app\models\Utilities::putMessageLogFile('Se va a renombrar los nombres de carpetas');
                     if (!rename($folder . $file, $destinations . $newFile)) {
                         return false;
                     }
