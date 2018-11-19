@@ -791,8 +791,403 @@ class MatriculadosReprobado extends \yii\db\ActiveRecord {
         $comando->bindParam(":moda_id", $moda_id, \PDO::PARAM_INT);
         $comando->bindParam(":car_id", $car_id, \PDO::PARAM_INT);
         $resultData = $comando->queryAll();
-        
+
         return $resultData;
+    }
+
+    /**
+     * Function consultarDatosInscripcion
+     * @author  Kleber Loayza <analistadesarrollo03@uteg.edu.ec>
+     * @param   
+     * @return  $resultData (Obtiene los datos de inscripción y el precio de la solicitud.)
+     */
+    public function consultarDatosInscripcion($twre_id) {
+        $con = \Yii::$app->db_captacion;
+        $con2 = \Yii::$app->db_facturacion;
+        $con1 = \Yii::$app->db_academico;
+        $estado = 1;
+        $estado_precio = 'A';
+
+        $sql = "
+                SELECT  
+                        ua.uaca_nombre unidad, 
+                        m.mod_nombre modalidad,
+                        ea.eaca_nombre carrera,
+                        ea.eaca_id as id_carrera,
+                        mi.ming_nombre metodo,
+                        ip.ipre_precio as precio,
+                        twre_nombre,
+                        twre_apellido,
+                        twre_numero,
+                        twre_correo,
+                        twre_pais,
+                        twre_celular,
+                        twi.uaca_id,
+                        twi.mod_id,
+                        twi.car_id,
+                        twin_metodo_ingreso,
+                        conuteg_id,
+                        ruta_doc_titulo,
+                        ruta_doc_dni,
+                        96 as ddit_valor,
+                        ruta_doc_certvota,
+                        ruta_doc_foto,
+                        ruta_doc_certificado,                        
+                        ruta_doc_hojavida,
+                        twre_dni
+                FROM " . $con->dbname . ".temporal_wizard_reprobados twi 
+                     inner join " . $con1->dbname . "t.unidad_academica ua on ua.uaca_id = twi.uaca_id
+                     inner join " . $con1->dbname . ".modalidad m on m.mod_id = twi.mod_id
+                     inner join " . $con1->dbname . ".estudio_academico ea on ea.eaca_id = twi.car_id
+                     inner join " . $con->dbname . ".metodo_ingreso mi on mi.ming_id = twi.twin_metodo_ingreso
+                     inner join " . $con2->dbname . ".item_metodo_unidad imi on (imi.ming_id =  twi.twin_metodo_ingreso and imi.uaca_id = twi.uaca_id and imi.mod_id = twi.mod_id)
+                     left join " . $con2->dbname . ".item_precio ip on ip.ite_id = imi.ite_id
+                     left join " . $con2->dbname . ".descuento_item as ditem on ditem.ite_id=imi.ite_id
+                     left join " . $con2->dbname . ".detalle_descuento_item as ddit on ddit.dite_id=ditem.dite_id
+                WHERE twi.twre_id = :twre_id AND                     
+                     ip.ipre_estado_precio = :estado_precio AND
+                     ua.uaca_estado = :estado AND
+                     ua.uaca_estado_logico = :estado AND
+                     m.mod_estado = :estado AND
+                     m.mod_estado_logico = :estado AND
+                     ea.eaca_estado = :estado AND
+                     ea.eaca_estado_logico = :estado AND
+                     mi.ming_estado = :estado AND
+                     mi.ming_estado_logico = :estado AND
+                     imi.imni_estado = :estado AND
+                     imi.imni_estado_logico = :estado AND
+                     ip.ipre_estado = :estado AND
+                     ip.ipre_estado_logico = :estado
+                ";
+
+        $comando = $con->createCommand($sql);
+        $comando->bindParam(":estado", $estado, \PDO::PARAM_STR);
+        $comando->bindParam(":twre_id", $twre_id, \PDO::PARAM_INT);
+        $comando->bindParam(":estado_precio", $estado_precio, \PDO::PARAM_STR);
+        $resultData = $comando->queryOne();
+        return $resultData;
+    }
+
+    public function insertaOriginal($twreIds) {
+        $con = \Yii::$app->db_asgard;
+        $con1 = \Yii::$app->db_captacion;
+        $con2 = \Yii::$app->db_facturacion;
+        $usuario_ingreso = @Yii::$app->session->get("PB_iduser");
+        $transaction = $con->beginTransaction();
+        $transaction1 = $con1->beginTransaction();
+        $transaction2 = $con2->beginTransaction();
+        try {
+            //Se consulta la información grabada en la tabla temporal.
+            $resp_datos = $this->consultarDatosInscripcion($twreIds);
+            // He colocado al inicio la informacion para que cargue al principio
+            if ($resp_datos) {
+                $emp_id = 1;
+                $identificacion = '';
+
+                if (isset($resp_datos['twin_numero']) && strlen($resp_datos['twin_numero']) > 0) {
+                    $identificacion = $resp_datos['twin_numero'];
+                } else {
+                    $identificacion = $resp_datos['twin_numero'];
+                }
+                if (isset($identificacion) && strlen($identificacion) > 0) {
+                    $id_persona = 0;
+                    $mod_persona = new Persona();
+                    $keys_per = [
+                        'per_pri_nombre', 'per_seg_nombre', 'per_pri_apellido', 'per_seg_apellido',
+                        'per_cedula', 'etn_id', 'eciv_id', 'per_genero', 'pai_id_nacimiento',
+                        'pro_id_nacimiento', 'can_id_nacimiento', 'per_fecha_nacimiento',
+                        'per_celular', 'per_correo', 'tsan_id', 'per_domicilio_sector',
+                        'per_domicilio_cpri', 'per_domicilio_csec', 'per_domicilio_num',
+                        'per_domicilio_ref', 'per_domicilio_telefono', 'pai_id_domicilio',
+                        'pro_id_domicilio', 'can_id_domicilio', 'per_nac_ecuatoriano',
+                        'per_nacionalidad', 'per_foto', 'per_usuario_ingresa', 'per_estado', 'per_estado_logico'
+                    ];
+                    $parametros_per = [
+                        ucwords(strtolower($resp_datos['twre_nombre'])), null,
+                        ucwords(strtolower($resp_datos['twre_apellido'])), null,
+                        $resp_datos['twre_numero'], null, null, null, null, null,
+                        null, null, $resp_datos['twre_celular'], $resp_datos['twre_correo'],
+                        null, null, null, null,
+                        null, null, null,
+                        null, null, null,
+                        null, null, null, $usuario_ingreso, 1, 1
+                    ];
+                    $id_persona = $mod_persona->consultarIdPersona($resp_datos['twre_numero'], $resp_datos['twre_numero'], $resp_datos['twre_correo'], $resp_datos['twre_celular']);
+                    if ($id_persona == 0) {
+                        $id_persona = $mod_persona->insertarPersona($con, $parametros_per, $keys_per, 'persona');
+                    }
+                    if ($id_persona > 0) {
+                        //Modifificaion para Mover Imagenes de temp a Persona
+                        //self::movePersonFiles($twinIds,$id_persona);
+                        $concap = \Yii::$app->db_captacion;
+                        $mod_emp_persona = new EmpresaPersona();
+                        $keys = ['emp_id', 'per_id', 'eper_estado', 'eper_estado_logico'];
+                        $parametros = [$emp_id, $id_persona, 1, 1];
+                        $emp_per_id = $mod_emp_persona->consultarIdEmpresaPersona($id_persona, $emp_id);
+                        if ($emp_per_id == 0) {
+                            $emp_per_id = $mod_emp_persona->insertarEmpresaPersona($con, $parametros, $keys, 'empresa_persona');
+                        }
+                        if ($emp_per_id > 0) {
+                            $usuario = new Usuario();
+                            $usuario_id = $usuario->consultarIdUsuario($id_persona, $resp_datos['twre_correo']);
+                            if ($usuario_id == 0) {
+                                $security = new Security();
+                                $hash = $security->generateRandomString();
+                                $passencrypt = base64_encode($security->encryptByPassword($hash, 'Uteg2018'));
+                                $keys = ['per_id', 'usu_user', 'usu_sha', 'usu_password', 'usu_estado', 'usu_estado_logico'];
+                                $parametros = [$id_persona, $resp_datos['twre_correo'], $hash, $passencrypt, 1, 1];
+                                $usuario_id = $usuario->crearUsuarioTemporal($con, $parametros, $keys, 'usuario');
+                            }
+                            if ($usuario_id > 0) {
+                                $mod_us_gr_ep = new UsuaGrolEper();
+                                $grol_id = 30;
+                                $keys = ['eper_id', 'usu_id', 'grol_id', 'ugep_estado', 'ugep_estado_logico'];
+                                $parametros = [$emp_per_id, $usuario_id, $grol_id, 1, 1];
+                                $us_gr_ep_id = $mod_us_gr_ep->consultarIdUsuaGrolEper($emp_per_id, $usuario_id, $grol_id);
+                                if ($us_gr_ep_id == 0)
+                                    $us_gr_ep_id = $mod_us_gr_ep->insertarUsuaGrolEper($con, $parametros, $keys, 'usua_grol_eper');
+                                if ($us_gr_ep_id > 0) {
+                                    $mod_interesado = new Interesado(); // se guarda con estado_interesado 1
+                                    $interesado_id = $mod_interesado->consultaInteresadoById($id_persona);
+                                    $keys = ['per_id', 'int_estado_interesado', 'int_usuario_ingreso', 'int_estado', 'int_estado_logico'];
+                                    $parametros = [$id_persona, 1, $usuario_id, 1, 1];
+                                    if ($interesado_id == 0) {
+                                        $interesado_id = $mod_interesado->insertarInteresado($concap, $parametros, $keys, 'interesado');
+                                    }
+                                    if ($interesado_id > 0) {
+                                        $mod_inte_emp = new InteresadoEmpresa(); // se guarda con estado_interesado 1
+                                        $iemp_id = $mod_inte_emp->consultaInteresadoEmpresaById($interesado_id, $emp_id);
+                                        if ($iemp_id == 0) {
+                                            $iemp_id = $mod_inte_emp->crearInteresadoEmpresa($interesado_id, $emp_id, $usuario_id);
+                                        }
+                                        if ($iemp_id > 0) {
+                                            $eaca_id = NULL;
+                                            $mest_id = NULL;
+                                            if ($emp_id == 1) {//Uteg 
+                                                $eaca_id = $resp_datos['car_id'];
+                                            } elseif ($emp_id == 2 || $emp_id == 3) {
+                                                $mest_id = $resp_datos['car_id'];
+                                            }
+                                            $num_secuencia = Secuencias::nuevaSecuencia($con, $emp_id, 1, 1, 'SOL');
+                                            $sins_fechasol = date(Yii::$app->params["dateTimeByDefault"]);
+                                            $rsin_id = 1; //Solicitud pendiente     
+                                            $solins_model = new SolicitudInscripcion();
+                                            //$mensaje = 'intId: ' . $interesado_id . '/uaca: ' . $pgest['unidad_academica'] . '/modalidad: ' . $pgest['modalidad'] . '/ming: ' . $pgest['ming_id'] . '/eaca: ' . $eaca_id . '/mest: ' . $mest_id . '/empresa: ' . $emp_id . '/secuencia: ' . $num_secuencia . '/rsin_id: ' . $rsin_id . '/sins_fechasol: ' . $sins_fechasol . '/usuario_id: ' . $usuario_id;
+                                            $sins_id = $solins_model->insertarSolicitud($interesado_id, $resp_datos['uaca_id'], $resp_datos['mod_id'], $resp_datos['twre_metodo_ingreso'], $eaca_id, null, $emp_id, $num_secuencia, $rsin_id, $sins_fechasol, $usuario_id);
+                                            //grabar los documentos
+                                            if ($sins_id) {
+                                                if (($resp_datos['ruta_doc_titulo'] != "") || ($resp_datos['ruta_doc_dni'] != "") || ($resp_datos['ruta_doc_certvota'] != "") || ($resp_datos['ruta_doc_foto'] != "") || ($resp_datos['ruta_doc_certificado'] != "") || ($resp_datos['ruta_doc_hojavida'] != "")) {
+                                                    $subidaDocumentos = 1;
+                                                } else {
+                                                    $subidaDocumentos = 0;
+                                                }
+                                                if ($resp_datos['ruta_doc_titulo'] != "") {
+                                                    $arrIm = explode(".", basename($resp_datos['ruta_doc_titulo']));
+                                                    $arrTime = explode("_", basename($resp_datos['ruta_doc_titulo']));
+                                                    $timeSt = $arrTime[4];
+                                                    $typeFile = strtolower($arrIm[count($arrIm) - 1]);
+                                                    $rutaTitulo = Yii::$app->params["documentFolder"] . "solicitudinscripcion/" . $id_persona . "/doc_titulo_per_" . $id_persona . "_" . $timeSt;
+                                                    $resulDoc1 = $solins_model->insertarDocumentosSolic($sins_id, $interesado_id, 1, $rutaTitulo, $usuario_id);
+                                                    /* if (!($resulDoc1)) {
+                                                      throw new Exception('Error doc Titulo no creado.');
+                                                      } */
+                                                }
+                                                if ($resp_datos['ruta_doc_dni'] != "") {
+                                                    $arrIm = explode(".", basename($resp_datos['ruta_doc_dni']));
+                                                    $arrTime = explode("_", basename($resp_datos['ruta_doc_dni']));
+                                                    $timeSt = $arrTime[4];
+                                                    $typeFile = strtolower($arrIm[count($arrIm) - 1]);
+                                                    $rutaDni = Yii::$app->params["documentFolder"] . "solicitudinscripcion/" . $id_persona . "/doc_dni_per_" . $id_persona . "_" . $timeSt;
+                                                    $resulDoc2 = $solins_model->insertarDocumentosSolic($sins_id, $interesado_id, 2, $rutaDni, $usuario_id);
+                                                    /* if (!($resulDoc2)) {
+                                                      throw new Exception('Error doc Titulo no creado.');
+                                                      } */
+                                                }
+                                                if ($resp_datos['ruta_doc_certvota'] != "") {
+                                                    $arrIm = explode(".", basename($resp_datos['ruta_doc_certvota']));
+                                                    $arrTime = explode("_", basename($resp_datos['ruta_doc_certvota']));
+                                                    $timeSt = $arrTime[4];
+                                                    $typeFile = strtolower($arrIm[count($arrIm) - 1]);
+                                                    $rutaCertvota = Yii::$app->params["documentFolder"] . "solicitudinscripcion/" . $id_persona . "/doc_certvota_per_" . $id_persona . "_" . $timeSt;
+                                                    $resulDoc3 = $solins_model->insertarDocumentosSolic($sins_id, $interesado_id, 3, $rutaCertvota, $usuario_id);
+                                                    /* if (!($resulDoc3)) {
+                                                      throw new Exception('Error doc Cert.Votación no creado.');
+                                                      } */
+                                                }
+                                                if ($resp_datos['ruta_doc_foto'] != "") {
+                                                    $arrIm = explode(".", basename($resp_datos['ruta_doc_foto']));
+                                                    $arrTime = explode("_", basename($resp_datos['ruta_doc_foto']));
+                                                    $timeSt = $arrTime[4];
+                                                    $typeFile = strtolower($arrIm[count($arrIm) - 1]);
+                                                    $rutaFoto = Yii::$app->params["documentFolder"] . "solicitudinscripcion/" . $id_persona . "/doc_foto_per_" . $id_persona . "_" . $timeSt;
+                                                    $resulDoc4 = $solins_model->insertarDocumentosSolic($sins_id, $interesado_id, 4, $rutaFoto, $usuario_id);
+                                                    /* if (!($resulDoc4)) {
+                                                      throw new Exception('Error doc Foto no creado.');
+                                                      } */
+                                                }
+                                                if ($resp_datos['twin_metodo_ingreso'] == 4) {
+                                                    if ($resp_datos['ruta_doc_certificado'] != "") {
+                                                        $arrIm = explode(".", basename($resp_datos['ruta_doc_certificado']));
+                                                        $arrTime = explode("_", basename($resp_datos['ruta_doc_certificado']));
+                                                        $timeSt = $arrTime[4];
+                                                        $typeFile = strtolower($arrIm[count($arrIm) - 1]);
+                                                        $rutaCertificado = Yii::$app->params["documentFolder"] . "solicitudinscripcion/" . $id_persona . "/doc_certificado_per_" . $id_persona . "_" . $timeSt;
+                                                        $resulDoc5 = $solins_model->insertarDocumentosSolic($sins_id, $interesado_id, 6, $rutaCertificado, $usuario_id);
+                                                        /* if (!($resulDoc5)) {
+                                                          throw new Exception('Error doc Certificado no creado.');
+                                                          } */
+                                                    }
+                                                    if ($resp_datos['ruta_doc_hojavida'] != "") {
+                                                        $arrIm = explode(".", basename($resp_datos['ruta_doc_hojavida']));
+                                                        $arrTime = explode("_", basename($resp_datos['ruta_doc_hojavida']));
+                                                        $timeSt = $arrTime[4];
+                                                        $typeFile = strtolower($arrIm[count($arrIm) - 1]);
+                                                        $rutaHojaVida = Yii::$app->params["documentFolder"] . "solicitudinscripcion/" . $id_persona . "/doc_hojavida_per_" . $id_persona . "_" . $timeSt;
+                                                        $resulDoc6 = $solins_model->insertarDocumentosSolic($sins_id, $interesado_id, 7, $rutaHojaVida, $usuario_id);
+                                                        /* if (!($resulDoc6)) {
+                                                          throw new Exception('Error doc Hoja de Vida no creado.');
+                                                          } */
+                                                    }
+                                                }
+                                                //Obtener el precio de la solicitud.
+                                                if ($beca == "1") {
+                                                    $precio = 0;
+                                                } else {
+                                                    $resp_precio = $solins_model->ObtenerPrecio($resp_datos['twin_metodo_ingreso'], $resp_datos['uaca_id'], $resp_datos['mod_id'], $eaca_id);
+                                                    if ($resp_precio) {
+                                                        $precio = $resp_precio['precio'];
+                                                    } else {
+                                                        $mensaje = 'No existe registrado ningún precio para la unidad, modalidad y método de ingreso seleccionada.';
+                                                    }
+                                                }
+                                                $mod_ordenpago = new OrdenPago();
+                                                //Se verifica si seleccionó descuento.
+                                                //descuento para grado online y posgrado no tiene descuento, caso contrario es 96 dol
+                                                if ($resp_datos['uaca_id'] == 1) {
+                                                    if (($resp_datos['mod_id'] == 2) or ( $resp_datos['mod_id'] == 3) or ( $resp_datos['mod_id'] == 4)) {
+                                                        $val_descuento = 96;
+                                                    }
+                                                }
+                                                //Generar la orden de pago con valor correspondiente. Buscar precio para orden de pago.                                                                     
+                                                if ($precio == 0) {
+                                                    $estadopago = 'S';
+                                                } else {
+                                                    $estadopago = 'P';
+                                                }
+                                                $val_total = $precio - $val_descuento;
+                                                $resp_opago = $mod_ordenpago->insertarOrdenpago($sins_id, null, $val_total, 0, $val_total, $estadopago, $usuario_id);
+                                                if ($resp_opago) {
+                                                    //insertar desglose del pago                                    
+                                                    $fecha_ini = date(Yii::$app->params["dateByDefault"]);
+                                                    $resp_dpago = $mod_ordenpago->insertarDesglosepago($resp_opago, $val_total, 0, $val_total, $fecha_ini, null, $estadopago, $usuario_id);
+                                                    if ($resp_dpago) {
+                                                        $exito = 1;
+                                                    }
+                                                }
+                                            }
+                                        } else {
+                                            $error_message .= Yii::t("formulario", "The enterprise interested hasn't been saved");
+                                            $error++;
+                                        }
+                                    } else {
+                                        $error_message .= Yii::t("formulario", "The interested person hasn't been saved");
+                                        $error++;
+                                    }
+                                } else {
+                                    $error_message .= Yii::t("formulario", "The rol user have not been saved");
+                                    $error++;
+                                }
+                            } else {
+                                $error_message .= Yii::t("formulario", "The user have not been saved");
+                                $error++;
+                            }
+                        } else {
+                            $error_message .= Yii::t("formulario", "The enterprise interested hasn't been saved");
+                            $error++;
+                        }
+                    } else {
+                        $error++;
+                        $error_message .= Yii::t("formulario", "The person have not been saved");
+                    }
+                } else {
+                    $error_message .= Yii::t("formulario", "Update DNI to generate interested");
+                    $error++;
+                }
+            } else {
+                $error_message .= Yii::t("formulario", "No existen datos para registrar.");
+                $error++;
+            }
+            if ($exito == 1) {
+                //$transaction->commit();
+                //$transaction1->commit(); 
+                $transaction2->commit();
+                $message = array(
+                    "wtmessage" => Yii::t("formulario", "The information have been saved and the information has been sent to your email"),
+                    "title" => Yii::t('jslang', 'Success'),
+                );
+                //Modifificaion para Mover Imagenes de temp a Persona
+                if ($subidaDocumentos == 1) {
+                    \app\models\Utilities::putMessageLogFile('Se esta moviendo los archivos a la nueva ubicacion');
+                    self::movePersonFiles($twreIds, $id_persona);
+                }
+                //return Utilities::ajaxResponse('OK', 'alert', Yii::t("jslang", "Sucess"), false, $message);
+                $arroout["status"] = TRUE;
+                $arroout["error"] = null;
+                $arroout["message"] = $message;
+                $arroout["data"] = $resp_datos; //$rawData;
+                return $arroout;
+            } else {
+                //$transaction->rollback();
+                //$transaction1->rollback();
+                $transaction2->rollback();
+                $message = array(
+                    "wtmessage" => Yii::t("formulario", "Mensaje1: " . $mensaje), //$error_message
+                    "title" => Yii::t('jslang', 'Bad Request'),
+                );
+                $arroout["status"] = FALSE;
+                $arroout["error"] = null;
+                $arroout["message"] = $message;
+                $arroout["data"] = null;
+                return $arroout;
+                //return Utilities::ajaxResponse('NO_OK', 'alert', Yii::t("jslang", "Bad Request"), false, $message);
+            }
+        } catch (Exception $ex) {
+            //$transaction->rollback();
+            //$transaction1->rollback();
+            $transaction2->rollback();
+            $message = array(
+                "wtmessage" => Yii::t("formulario", "Mensaje2: " . $mensaje), //$error_message
+                "title" => Yii::t('jslang', 'Bad Request'),
+            );
+            $arroout["status"] = FALSE;
+            $arroout["error"] = $ex->getCode();
+            $arroout["message"] = $ex->getMessage();
+            $arroout["data"] = null;
+            return $arroout;
+            //return Utilities::ajaxResponse('NO_OK', 'alert', Yii::t("jslang", "Bad Request"), false, $message);
+        }
+        return;
+    }
+
+    public static function movePersonFiles($temp_id, $per_id) {
+        $folder = Yii::$app->basePath . "/" . Yii::$app->params["documentFolder"] . "academico/$temp_id/";
+        $destinations = Yii::$app->basePath . "/" . Yii::$app->params["documentFolder"] . "solicitudinscripcion/$per_id/";
+        if (Utilities::verificarDirectorio($destinations)) {
+            $files = scandir($folder);
+            foreach ($files as $file) {
+                if (trim($file) != "." && trim($file) != "..") {
+                    $arrExt = explode(".", $file);
+                    $type = $arrExt[count($arrExt) - 1];
+                    $newFile = str_replace("_" . $temp_id . "_", "_" . $per_id . "_", $file);
+                    if (!rename($folder . $file, $destinations . $newFile)) {
+                        return false;
+                    }
+                }
+            }
+            rmdir($folder);
+        } else
+            return false;
+        return true;
     }
 
 }
