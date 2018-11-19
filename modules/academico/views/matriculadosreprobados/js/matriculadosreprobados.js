@@ -201,9 +201,12 @@ function guardarAdmireprobado(accion, paso) {
     requestHttpAjax(link, arrParams, function (response) {
         var message = response.message;
         if (response.status == "OK") {
-            $('#txth_twer_id').val(response.data.twre_id);
-            alert($('#txth_twer_id').val());
-            paso1next();
+            if(accion == "Create"){
+                $('#txth_twer_id').val(response.data.twre_id);
+                paso1next();
+            }else if(accion == "Update"){
+                window.location.href = $('#txth_base').val() + "/academico/admitidos/index";
+            }
         }
     }, true);
 }
