@@ -56,7 +56,7 @@ $(document).ready(function () {
             }
         }
         if(error==0){
-            guardarAdmireprobado('Update', '1');
+            guardarAdmireprobado('Update', '2');
         }
     });
     
@@ -198,6 +198,7 @@ function guardarAdmireprobado(accion, paso) {
     var arrParams = new Object();
     arrParams.DATA_1 = dataInscripPart1(ID);
     arrParams.ACCION = accion;
+    arrParams.PASO = paso;
     requestHttpAjax(link, arrParams, function (response) {
         var message = response.message;
         if (response.status == "OK") {
@@ -205,7 +206,8 @@ function guardarAdmireprobado(accion, paso) {
                 $('#txth_twer_id').val(response.data.twre_id);
                 paso1next();
             }else if(accion == "Update"){
-                window.location.href = $('#txth_base').val() + "/academico/admitidos/index";
+                showAlert(response.status, response.label, response.message);
+                window.location.href = $('#txth_base').val() + "/admision/interesados/index";
             }
         }
     }, true);
@@ -232,8 +234,8 @@ function dataInscripPart1(ID) {
     objDat.ruta_doc_foto = '';
     objDat.ruta_doc_hojavida = '';
     objDat.ruta_doc_certificado = ($('#txth_doc_certificado').val() != '') ? $('#txth_doc_certificado').val() : '';
-    objDat.twin_mensaje1 = ($("#chk_mensaje1").prop("checked")) ? '1' : '0';
-    objDat.twin_mensaje2 = ($("#chk_mensaje2").prop("checked")) ? '1' : '0';
+    objDat.twre_mensaje1 = ($("#chk_mensaje1").prop("checked")) ? '1' : '0';
+    objDat.twre_mensaje2 = ($("#chk_mensaje2").prop("checked")) ? '1' : '0';
     datArray[0] = objDat;
     sessionStorage.dataReprobado_1 = JSON.stringify(datArray);
     return datArray;

@@ -179,7 +179,7 @@ class InscripcionAdmision extends \yii\db\ActiveRecord {
 
     /**
      * Function consultarDatosInscripcion
-     * @author  Grace Viteri <analistadesarrollo01@uteg.edu.ec>
+     * @author  Kleber Loayza <analistadesarrollo03@uteg.edu.ec>
      * @param   
      * @return  $resultData (Obtiene los datos de inscripción y el precio de la solicitud.)
      */

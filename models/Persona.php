@@ -708,20 +708,43 @@ class Persona extends \yii\db\ActiveRecord {
      */
     public function ConsultaRegistroExiste($correo, $cedula, $pasaporte) {
         $con = \Yii::$app->db_asgard;
+        $filtro = '';
         $estado = 1;
+        if (!empty($correo)) {
+            $filtro = "per.per_correo = :correo ";
+        }
+        if (!empty($cedula)) {
+            if (!empty($correo)) {
+                $filtro .= "OR ";
+            }
+            $filtro .= "per.per_cedula = :cedula ";
+        }
+        if (!empty($pasaporte)) {
+            if (!empty($correo) || !empty($cedula)) {
+                $filtro .= "OR ";
+            }
+            $filtro .= "per.per_cedula =:pasaporte ";
+        }
         $sql = "SELECT                     
-                count(*) as existen,
-                per.per_correo, per.per_cedula
+               count(*) as existen 
                FROM " . $con->dbname . ".persona per                    
-               WHERE (per.per_correo = :correo OR per.per_cedula = :cedula or per.per_pasaporte =:pasaporte) AND
-                    per.per_estado = :estado AND
-                    per.per_estado_logico=:estado
-               GROUP BY per.per_correo, per.per_cedula";
+               WHERE";
+        if (!empty($correo) || !empty($cedula) || !empty($pasaporte)) {
+            $sql .= "($filtro) AND";
+        }
+        $sql .= " per.per_estado = :estado AND
+                    per.per_estado_logico=:estado";        
         $comando = $con->createCommand($sql);
         $comando->bindParam(":estado", $estado, \PDO::PARAM_STR);
-        $comando->bindParam(":correo", $correo, \PDO::PARAM_STR);
-        $comando->bindParam(":cedula", $cedula, \PDO::PARAM_STR);
-        $comando->bindParam(":pasaporte", $pasaporte, \PDO::PARAM_STR);
+        if (!empty($correo)) {
+            $comando->bindParam(":correo", $correo, \PDO::PARAM_STR);
+        }
+        if (!empty($cedula)) {
+            $comando->bindParam(":cedula", $cedula, \PDO::PARAM_STR);
+        }
+        if (!empty($pasaporte)) {
+            $comando->bindParam(":pasaporte", $pasaporte, \PDO::PARAM_STR);
+        }
         $resultData = $comando->queryOne();
         return $resultData;
     }
