@@ -193,11 +193,7 @@ function guardarAdmiMateriarep() {
     }
 }
 function guardarAdmireprobado(accion, paso) {
-    var ids=0;
-    if($('#txth_twer_id').val()==null  || $('#txth_twer_id').val()=='')
-        ids=$('#txth_twer_id').val();
-        
-    var ID = (accion == "Update") ? ids : 0;
+    var ID = (accion == "Update") ? $('#txth_twer_id').val() : 0;
     var link = $('#txth_base').val() + "/academico/matriculadosreprobados/savereprobadostemp";
     var arrParams = new Object();
     arrParams.DATA_1 = dataInscripPart1(ID);
@@ -205,8 +201,12 @@ function guardarAdmireprobado(accion, paso) {
     requestHttpAjax(link, arrParams, function (response) {
         var message = response.message;
         if (response.status == "OK") {
-            $('#txth_twer_id').val(response.data.twin_id);
-            paso1next();
+            if(accion == "Create"){
+                $('#txth_twer_id').val(response.data.twre_id);
+                paso1next();
+            }else if(accion == "Update"){
+                window.location.href = $('#txth_base').val() + "/academico/admitidos/index";
+            }
         }
     }, true);
 }
