@@ -6,7 +6,7 @@ use \app\models\Persona;
 use app\widgets\PbGridView\PbGridView;
 use yii\data\ArrayDataProvider;
 use app\modules\admision\Module;
-
+print_r($model);
 //echo 'bbb '.base64_decode($_GET['codigo']);
 /*
  * To change this license header, choose License Headers in Project Properties.
@@ -61,10 +61,10 @@ PbGridView::widget([
                 },
                 'interested' => function ($url, $model) {
                     $mod_per = new Persona();
-                    $pre_id = $mod_per->ConsultaRegistroExiste(null, $model['pges_cedula'], null);
-                    $existe = isset($pre_id['existen']) ? 1 : 0;
+                    $pre_id = $mod_per->ConsultaRegistroExiste(null, $model['pges_cedula'], $model['pges_pasaporte']);
+                    //$existe = isset($pre_id['existen']) ? 1 : 0;
                     if ($model['estado_oportunidad_id'] == 3) {
-                        if ($existe == 0) {
+                        if ($pre_id['existen'] == 0) {
                             return Html::a('<span class="glyphicon glyphicon-user"></span>', "#", ["onclick" => "grabarInteresado(" . $model['opo_id'] . ");", "data-toggle" => "tooltip", "title" => "Generar Aspirante", "data-pjax" => 0]);
                         } else {
                             return "<span class = 'glyphicon glyphicon-user' data-toggle = 'tooltip' title ='Usuario Existente'  data-pjax = 0></span>";

@@ -73,7 +73,7 @@ class InteresadosController extends \app\components\CController
                     ];
                     $parametros_per = [
                         $pgest['pges_pri_nombre'], null, $pgest['pges_pri_apellido'], null,
-                        $pgest['pges_cedula'], null, null, null, null, null,
+                        $identificacion, null, null, null, null, null,
                         null, null, $pgest['pges_celular'], $pgest['pges_correo'],
                         null, null, null, null,
                         null, null, null,
