@@ -11,7 +11,9 @@ $leyenda = '<div class="col-md-12 col-xs-12 col-sm-12 col-lg-12">
           </div>
           </div>
           </div>';
+
 ?>
+<?= Html::hiddenInput('txth_twer_id', 0, ['id' => 'txth_twer_id']); ?>
 <form class="form-horizontal">  
     <div class="col-md-12 col-xs-12 col-sm-12 col-lg-12">
         <h4><span id="lbl_Personeria"><?= Yii::t("formulario", "Attach document") ?></span></h4>    
@@ -43,7 +45,7 @@ $leyenda = '<div class="col-md-12 col-xs-12 col-sm-12 col-lg-12">
                         'uploadUrl' => Url::to(['/academico/matriculadosreprobados/savereprobadostemp']),
                         'maxFileSize' => Yii::$app->params["MaxFileSize"], // en Kbytes
                         'uploadExtraData' => 'javascript:function (previewId,index) {
-                            return {"upload_file": true, "name_file": "txt_doc_titulo", "matr_repro_id": $("#txth_twer_id").val()};
+                            return {"upload_file": true, "name_file": "doc_titulo", "matr_repro_id": $("#txth_twer_id").val()};
                         }',
                     ],
                     'pluginEvents' => [
