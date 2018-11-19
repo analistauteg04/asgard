@@ -201,8 +201,12 @@ function guardarAdmireprobado(accion, paso) {
     requestHttpAjax(link, arrParams, function (response) {
         var message = response.message;
         if (response.status == "OK") {
-            $('#txth_twer_id').val(response.data.twin_id);
-            paso1next();
+            if(accion == "Create"){
+                $('#txth_twer_id').val(response.data.twre_id);
+                paso1next();
+            }else if(accion == "Update"){
+                window.location.href = $('#txth_base').val() + "/academico/admitidos/index";
+            }
         }
     }, true);
 }
@@ -223,7 +227,6 @@ function dataInscripPart1(ID) {
     objDat.carrera = $('#cmb_carrera_solicitud option:selected').val();
     //TABA 2
     objDat.ruta_doc_titulo = ($('#txth_doc_titulo').val() != '') ? $('#txth_doc_titulo').val() : '';
-    alert(objDat.ruta_doc_titulo);
     objDat.ruta_doc_dni = ($('#txth_doc_dni').val() != '') ? $('#txth_doc_dni').val() : '';
     objDat.ruta_doc_certvota = ($('#txth_doc_certvota').val() != '') ? $('#txth_doc_certvota').val() : '';
     objDat.ruta_doc_foto = '';
