@@ -26,10 +26,34 @@ class Edoc_ApiRest extends \app\modules\fe_edoc\components\CActiveRecord {
                 $this->fpagEdoc = json_decode($value);
         }
     }
+
+    public function sendEdoc()
+    {
+        switch ($this->tipoEdoc) {
+            case "01"://FACTURAS
+                //return array("status" => "OK", "tipoEdoc" => $this->tipoEdoc, "croo_id" => $arr_data);
+                return $this->insertarFacturas();
+                break;
+            case "04"://NOTA DE CREDITO
+
+                break;
+            case "05"://NOTA DE DEBITO
+
+                break;
+            case "06"://GUIA DE REMISION
+
+                break;
+            case "07"://RETENCIONES
+
+                break;
+
+        }
+
+    }
     
     private function insertCabFact($con) {
         $cabFact= $this->cabEdoc;
-        $sql = "INSERT INTO " . $con->db_edoc . ".NubeFactura
+        $sql = "INSERT INTO " . $con->dbname . ".NubeFactura
                (Ambiente,TipoEmision,Secuencial)VALUES(:Ambiente,:TipoEmision,:Secuencial);";
         
         /*$sql = "INSERT INTO " . $con->db_edoc . ".NubeFactura
@@ -79,36 +103,9 @@ class Edoc_ApiRest extends \app\modules\fe_edoc\components\CActiveRecord {
         return $con->getLastInsertID("NubeFactura");
         
     }
-    
-    
-    public function sendEdoc() {
-        //return array("status"=>"OK", "tipoEdoc"=>$this->tipoEdoc, "croo_id"=>'1');
-        switch ($this->tipoEdoc){
-            case "01"://FACTURAS
-                
-                //return ["test" => "OK", "Params" => ["test1" => $this->test1, "test2" => $this->test2]];
-                return $this->insertarFacturas();
-                break;
-            case "04"://NOTA DE CREDITO
-                
-                break;
-            case "05"://NOTA DE DEBITO
-                
-                break;
-            case "06"://GUIA DE REMISION
-                
-                break;
-            case "07"://RETENCIONES
-                
-                break;
-                
-        }
-        
-    }
-    
   
     private function insertarFacturas() {
-        $con = Yii::$app->db_fe_edoc;
+        $con = Yii::$app->db_edoc;
         $trans = $con->getTransaction();
         if ($trans !== null) {
             $trans = null; // si existe la transacción entonces no se crea una

@@ -1,5 +1,5 @@
 <?php
-return ['db_fe_edoc' => [
+return ['fe_edoc' => [
             'class' => 'app\modules\fe_edoc\Module',
             'db_edoc' => [
                 'class' => 'app\components\CConnection',
