@@ -4,7 +4,19 @@ namespace app\modules\academico\models;
 
 use Yii;
 use yii\data\ArrayDataProvider;
-
+use app\modules\financiero\models\OrdenPago;
+use app\models\Persona;
+use app\models\Utilities;
+use app\models\EmpresaPersona;
+use \app\modules\admision\models\SolicitudInscripcion;
+use app\modules\admision\models\Interesado;
+use app\modules\admision\models\InteresadoEmpresa;
+use app\models\Usuario;
+use app\models\UsuaGrolEper;
+use yii\base\Security;
+use app\modules\financiero\models\Secuencias;
+use app\modules\admision\models\DocumentoAdjuntar;
+use yii\base\Exception;
 /**
  * This is the model class for table "matriculados_reprobado".
  *
@@ -879,16 +891,17 @@ class MatriculadosReprobado extends \yii\db\ActiveRecord {
         $transaction2 = $con2->beginTransaction();
         try {
             //Se consulta la información grabada en la tabla temporal.
+            \app\models\Utilities::putMessageLogFile('Va actualizar la temporal');
             $resp_datos = $this->consultarDatosInscripcion($twreIds);
             // He colocado al inicio la informacion para que cargue al principio
             if ($resp_datos) {
                 $emp_id = 1;
                 $identificacion = '';
 
-                if (isset($resp_datos['twin_numero']) && strlen($resp_datos['twin_numero']) > 0) {
-                    $identificacion = $resp_datos['twin_numero'];
+                if (isset($resp_datos['twre_numero']) && strlen($resp_datos['twre_numero']) > 0) {
+                    $identificacion = $resp_datos['twre_numero'];
                 } else {
-                    $identificacion = $resp_datos['twin_numero'];
+                    $identificacion = $resp_datos['twre_numero'];
                 }
                 if (isset($identificacion) && strlen($identificacion) > 0) {
                     $id_persona = 0;
@@ -901,7 +914,7 @@ class MatriculadosReprobado extends \yii\db\ActiveRecord {
                         'per_domicilio_cpri', 'per_domicilio_csec', 'per_domicilio_num',
                         'per_domicilio_ref', 'per_domicilio_telefono', 'pai_id_domicilio',
                         'pro_id_domicilio', 'can_id_domicilio', 'per_nac_ecuatoriano',
-                        'per_nacionalidad', 'per_foto', 'per_usuario_ingresa', 'per_estado', 'per_estado_logico'
+                        'per_nacionalidad', 'per_foto', 'per_usuario_ingresa','per_usuario_modifica', 'per_estado', 'per_estado_logico'
                     ];
                     $parametros_per = [
                         ucwords(strtolower($resp_datos['twre_nombre'])), null,
@@ -911,7 +924,7 @@ class MatriculadosReprobado extends \yii\db\ActiveRecord {
                         null, null, null, null,
                         null, null, null,
                         null, null, null,
-                        null, null, null, $usuario_ingreso, 1, 1
+                        null, null, null, $usuario_ingreso, 0,1, 1
                     ];
                     $id_persona = $mod_persona->consultarIdPersona($resp_datos['twre_numero'], $resp_datos['twre_numero'], $resp_datos['twre_correo'], $resp_datos['twre_celular']);
                     if ($id_persona == 0) {
@@ -1026,7 +1039,7 @@ class MatriculadosReprobado extends \yii\db\ActiveRecord {
                                                       throw new Exception('Error doc Foto no creado.');
                                                       } */
                                                 }
-                                                if ($resp_datos['twin_metodo_ingreso'] == 4) {
+                                                if ($resp_datos['twre_metodo_ingreso'] == 4) {
                                                     if ($resp_datos['ruta_doc_certificado'] != "") {
                                                         $arrIm = explode(".", basename($resp_datos['ruta_doc_certificado']));
                                                         $arrTime = explode("_", basename($resp_datos['ruta_doc_certificado']));
@@ -1054,7 +1067,7 @@ class MatriculadosReprobado extends \yii\db\ActiveRecord {
                                                 if ($beca == "1") {
                                                     $precio = 0;
                                                 } else {
-                                                    $resp_precio = $solins_model->ObtenerPrecio($resp_datos['twin_metodo_ingreso'], $resp_datos['uaca_id'], $resp_datos['mod_id'], $eaca_id);
+                                                    $resp_precio = $solins_model->ObtenerPrecio($resp_datos['twre_metodo_ingreso'], $resp_datos['uaca_id'], $resp_datos['mod_id'], $eaca_id);
                                                     if ($resp_precio) {
                                                         $precio = $resp_precio['precio'];
                                                     } else {
