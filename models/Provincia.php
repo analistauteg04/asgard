@@ -106,19 +106,21 @@ class Provincia extends \yii\db\ActiveRecord {
     public static function provinciaXPais($id_pais) {
         $con = \Yii::$app->db_asgard;
         $estado = 1;
-        $sql = "SELECT 
-                    pro.pro_id AS id,
-                    pro.pro_nombre AS value
-                FROM 
-                     " . $con->dbname . ".provincia as pro
-                    INNER JOIN " . $con->dbname . ".pais as pai on pai.pai_id=pro.pai_id
-                WHERE 
-                    pro.pai_id=:id_pais AND
-                    pro.pro_estado=:estado AND
-                    pro.pro_estado_logico=:estado AND
-                    pai.pai_estado=:estado AND
-                    pai.pai_estado_logico=:estado 
-                ORDER BY pro_nombre ASC";
+        $sql = "
+                    SELECT 
+                        pro.pro_id AS id,
+                        pro.pro_nombre AS value
+                    FROM 
+                         " . $con->dbname . ".provincia as pro
+                        INNER JOIN " . $con->dbname . ".pais as pai on pai.pai_id=pro.pai_id
+                    WHERE 
+                        pro.pai_id=:id_pais AND
+                        pro.pro_estado=:estado AND
+                        pro.pro_estado_logico=:estado AND
+                        pai.pai_estado=:estado AND
+                        pai.pai_estado_logico=:estado 
+                    ORDER BY pro_nombre ASC
+                ";
         $comando = $con->createCommand($sql);
         $comando->bindParam(":estado", $estado, \PDO::PARAM_STR);
         $comando->bindParam(":id_pais", $id_pais, \PDO::PARAM_INT);

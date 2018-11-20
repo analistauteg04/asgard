@@ -184,7 +184,7 @@ if (!empty($per_pasaporte)) {
             <div class="form-group">
                 <label for="cmb_prov_nac" class="col-sm-5 control-label"><?= Yii::t("formulario", "State of birth") ?><span class="text-danger">*</span></label>
                 <div class="col-sm-7">
-<?= Html::dropDownList("cmb_prov_nac", $respPerinteresado['pro_id_nacimiento'], $arr_prov_nac, ["class" => "form-control pro_combo", "id" => "cmb_prov_nac"]) ?>
+                    <?= Html::dropDownList("cmb_prov_nac", $respPerinteresado['pro_id_nacimiento'], $arr_prov_nac, ["class" => "form-control pro_combo", "id" => "cmb_prov_nac"]) ?>
                 </div>
             </div>
         </div>
