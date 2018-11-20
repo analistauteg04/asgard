@@ -1,7 +1,7 @@
 /*
  * It is released under the terms of the following BSD License.
  * Authors:
- * Diana Lopez <dlopez@uteg.edu.ec>
+ * Diana Lopez <kloayza@uteg.edu.ec>
  */
 
 $(document).ready(function () {

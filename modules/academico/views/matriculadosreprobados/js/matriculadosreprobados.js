@@ -148,7 +148,6 @@ $(document).ready(function () {
             }
         }, true);
 
-        //métodos.
         var arrParams = new Object();
         arrParams.nint_id = $(this).val();
         arrParams.metodo = $('#cmb_metodo_solicitud').val();
@@ -186,7 +185,7 @@ function newReprobado() {
     window.location.href = $('#txth_base').val() + "/academico/matriculadosreprobados/newreprobado";
 }
 function guardarAdmiMateriarep() {
-    var link = $('#txth_base').val() + "/academico/matriculadosreprobados/save"; //VER BIEN EL NOMBRE
+    var link = $('#txth_base').val() + "/academico/matriculadosreprobados/save"; 
     var arrParams = new Object();
     var selected = '';
     arrParams.uniacademica = $('#cmb_ninteres').val();
@@ -202,21 +201,12 @@ function guardarAdmiMateriarep() {
     if (selected != '')
     {
         arrParams.materia = selected;
-    } /*else
-    {
-        var mensaje = {wtmessage: "Materias no debe estar vacío.", title: "Error"};
-        showAlert("NO_OK", "Error", mensaje);
-    }*/
+    }
     if (arrParams.ids === undefined)
     {
         var mensaje = {wtmessage: "Seleccionar datos del admitido desde buscar DNI.", title: "Error"};
         showAlert("NO_OK", "Error", mensaje);
     } else {
-        /*if (arrParams.materia === undefined)
-        {
-            var mensaje = {wtmessage: "Materias no debe estar vacío.", title: "Error"};
-            showAlert("NO_OK", "Error", mensaje);
-        } else {*/
             if ($('#cmb_ninteres option:selected').val() > '0') {
                 if ($('#cmb_modalidad option:selected').val() > '0') {
                     if ($('#cmb_carrera1 option:selected').val() > '0') {
@@ -245,7 +235,6 @@ function guardarAdmiMateriarep() {
                 var mensaje = {wtmessage: "Unidad Académica: El campo no debe estar vacío.", title: "Error"};
                 showAlert("NO_OK", "Error", mensaje);
             }
-        /*}*/
     }
 }
 function guardarAdmireprobado(accion, paso) {
@@ -271,7 +260,7 @@ function guardarAdmireprobado(accion, paso) {
 function dataInscripPart1(ID) {
     var datArray = new Array();
     var objDat = new Object();
-    objDat.twre_id = ID;//Genero Automatico
+    objDat.twre_id = ID;
     objDat.pges_pri_nombre = $('#txt_primer_nombre').val();
     objDat.pges_pri_apellido = $('#txt_primer_apellido').val();
     objDat.tipo_dni = $('#cmb_tipo_dni option:selected').val();
@@ -283,7 +272,6 @@ function dataInscripPart1(ID) {
     objDat.modalidad = $('#cmb_modalidad_solicitud option:selected').val();
     objDat.ming_id = $('#cmb_metodo_solicitud option:selected').val();
     objDat.carrera = $('#cmb_carrera_solicitud option:selected').val();
-    //TABA 2
     objDat.ruta_doc_titulo = ($('#txth_doc_titulo').val() != '') ? $('#txth_doc_titulo').val() : '';
     objDat.ruta_doc_dni = ($('#txth_doc_dni').val() != '') ? $('#txth_doc_dni').val() : '';
     objDat.ruta_doc_certvota = ($('#txth_doc_certvota').val() != '') ? $('#txth_doc_certvota').val() : '';
@@ -334,7 +322,6 @@ function actualizarGrid() {
     var search = $('#txt_buscarData').val();
     var f_ini = $('#txt_fecha_ini').val();
     var f_fin = $('#txt_fecha_fin').val();
-    //Buscar almenos una clase con el nombre para ejecutar
     if (!$(".blockUI").length) {
         showLoadingPopup();
         $('#TbG_REPMATRICULA').PbGridView('applyFilterData', {'f_ini': f_ini, 'f_fin': f_fin, 'search': search});
@@ -359,7 +346,6 @@ function actualizarMateriaGrid() {
     if ($('#cmb_ninteres option:selected').val() > '0') {
         if ($('#cmb_modalidad option:selected').val() > '0') {
             if ($('#cmb_carrera1 option:selected').val() > '0') {
-                //Buscar almenos una clase con el nombre para ejecutar
                 if ($('#cmb_periodo option:selected').val() > '0') {
                     $('#gridmateria').css('display', 'block');
                     var unidad = $('#cmb_ninteres option:selected').val();
