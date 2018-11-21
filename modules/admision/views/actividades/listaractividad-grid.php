@@ -6,8 +6,6 @@ use \app\models\Persona;
 use app\widgets\PbGridView\PbGridView;
 use yii\data\ArrayDataProvider;
 use app\modules\admision\Module;
-print_r($model);
-//echo 'bbb '.base64_decode($_GET['codigo']);
 /*
  * To change this license header, choose License Headers in Project Properties.
  * To change this template file, choose Tools | Templates

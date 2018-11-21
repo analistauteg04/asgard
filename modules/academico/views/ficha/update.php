@@ -101,7 +101,7 @@ if (!empty($per_pasaporte)) {
             <div class="form-group">
                 <label for="cmb_tipo_dni" class="col-sm-5 control-label keyupmce"><?= Yii::t("formulario", "Type DNI") ?><span class="text-danger">*</span></label>
                 <div class="col-sm-7">
-<?= Html::dropDownList("cmb_tipo_dni", $tipodoc, $tipo_dni, ["class" => "form-control", "id" => "cmb_tipo_dni", 'disabled' => "true"]) ?>
+                    <?= Html::dropDownList("cmb_tipo_dni", $tipodoc, $tipo_dni, ["class" => "form-control", "id" => "cmb_tipo_dni", 'disabled' => "true"]) ?>
                 </div>
             </div>
         </div>
@@ -119,7 +119,7 @@ if (!empty($per_pasaporte)) {
             <div class="form-group">
                 <label for="cmb_genero" class="col-sm-5 control-label"><?= Yii::t("formulario", "Gender") ?><span class="text-danger">*</span></label>
                 <div class="col-sm-7">
-<?= Html::dropDownList("cmb_genero", $respPerinteresado['per_genero'], $genero, ["class" => "form-control", "id" => "cmb_genero"]) ?>
+                    <?= Html::dropDownList("cmb_genero", $respPerinteresado['per_genero'], $genero, ["class" => "form-control", "id" => "cmb_genero"]) ?>
                 </div>
             </div>
         </div>
@@ -127,7 +127,7 @@ if (!empty($per_pasaporte)) {
             <div class="form-group">
                 <label for="cmb_raza_etnica" class="col-sm-5 control-label"><?= Yii::t("formulario", "Ethnic") ?><span class="text-danger">*</span></label>
                 <div class="col-sm-7">
-<?= Html::dropDownList("cmb_raza_etnica", $respPerinteresado['etn_id'], $arr_etnia, ["class" => "form-control", "id" => "cmb_raza_etnica"]) ?>
+                    <?= Html::dropDownList("cmb_raza_etnica", $respPerinteresado['etn_id'], $arr_etnia, ["class" => "form-control", "id" => "cmb_raza_etnica"]) ?>
                 </div>
             </div>
         </div>
@@ -174,7 +174,7 @@ if (!empty($per_pasaporte)) {
             <div class="form-group">
                 <label for="cmb_pais_nac" class="col-sm-5 control-label"><?= Yii::t("formulario", "Country of birth") ?><span class="text-danger">*</span></label>
                 <div class="col-sm-7">
-<?= Html::dropDownList("cmb_pais_nac", $respPerinteresado['pai_id_nacimiento'], $arr_pais_nac, ["class" => "form-control pai_combo", "id" => "cmb_pais_nac"]) ?>
+                    <?= Html::dropDownList("cmb_pais_nac", $respPerinteresado['pai_id_nacimiento'], $arr_pais_nac, ["class" => "form-control pai_combo", "id" => "cmb_pais_nac"]) ?>
                 </div>
             </div>
         </div>
@@ -184,7 +184,7 @@ if (!empty($per_pasaporte)) {
             <div class="form-group">
                 <label for="cmb_prov_nac" class="col-sm-5 control-label"><?= Yii::t("formulario", "State of birth") ?><span class="text-danger">*</span></label>
                 <div class="col-sm-7">
-<?= Html::dropDownList("cmb_prov_nac", $respPerinteresado['pro_id_nacimiento'], $arr_prov_nac, ["class" => "form-control pro_combo", "id" => "cmb_prov_nac"]) ?>
+                    <?= Html::dropDownList("cmb_prov_nac", $respPerinteresado['pro_id_nacimiento'], $arr_prov_nac, ["class" => "form-control pro_combo", "id" => "cmb_prov_nac"]) ?>
                 </div>
             </div>
         </div>
@@ -192,7 +192,7 @@ if (!empty($per_pasaporte)) {
             <div class="form-group">
                 <label for="cmb_ciu_nac" class="col-sm-5 control-label"><?= Yii::t("formulario", "City of birth") ?><span class="text-danger">*</span></label>
                 <div class="col-sm-7">
-<?= Html::dropDownList("cmb_ciu_nac", $respPerinteresado['can_id_nacimiento'], $arr_ciu_nac, ["class" => "form-control can_combo", "id" => "cmb_ciu_nac"]) ?>
+                    <?= Html::dropDownList("cmb_ciu_nac", $respPerinteresado['can_id_nacimiento'], $arr_ciu_nac, ["class" => "form-control can_combo", "id" => "cmb_ciu_nac"]) ?>
                 </div>
             </div>
         </div>
@@ -202,7 +202,7 @@ if (!empty($per_pasaporte)) {
             <div class="form-group">
                 <label for="txt_estado_civil" class="col-sm-5 control-label"><?= Yii::t("formulario", "Marital Status") ?><span class="text-danger">*</span></label>
                 <div class="col-sm-7">
-<?= Html::dropDownList("txt_estado_civil", $respPerinteresado['eciv_id'], $arr_civil, ["class" => "form-control", "id" => "txt_estado_civil"]) ?>
+                    <?= Html::dropDownList("txt_estado_civil", $respPerinteresado['eciv_id'], $arr_civil, ["class" => "form-control", "id" => "txt_estado_civil"]) ?>
                 </div>
             </div>
         </div>
@@ -230,7 +230,7 @@ if (!empty($per_pasaporte)) {
             <div class="form-group">
                 <label for="cmb_tipo_sangre" class="col-sm-5 control-label"><?= Yii::t("formulario", "Blood Type") ?><span class="text-danger">*</span></label>
                 <div class="col-sm-7">
-<?= Html::dropDownList("cmb_tipo_sangre", $tsan_id, $tipos_sangre, ["class" => "form-control", "id" => "cmb_tipo_sangre"]) ?>
+                    <?= Html::dropDownList("cmb_tipo_sangre", $tsan_id, $tipos_sangre, ["class" => "form-control", "id" => "cmb_tipo_sangre"]) ?>
                 </div>
             </div>
         </div>

@@ -1,7 +1,7 @@
 /*
  * It is released under the terms of the following BSD License.
  * Authors:
- * Diana Lopez <dlopez@uteg.edu.ec>
+ * Kleber Loayza <kloayza@uteg.edu.ec>
  */
 
 $(document).ready(function () {
@@ -32,7 +32,6 @@ $(document).ready(function () {
 
             }
         }, true);
-        // actualizar codigo pais
         $("#lbl_codeCountry").text($("#cmb_pais_nac option:selected").attr("data-code"));
         $("#lbl_codeCountrycon").text($("#cmb_pais_nac option:selected").attr("data-code"));
         $("#lbl_codeCountrycell").text($("#cmb_pais_nac option:selected").attr("data-code"));
@@ -74,7 +73,6 @@ $(document).ready(function () {
                 }
             }
         }, true);
-        // actualizar codigo pais   
         $("#lbl_codeCountrydom").text($("#cmb_pais_dom option:selected").attr("data-code"));
     });
 
@@ -106,7 +104,6 @@ $(document).ready(function () {
         var arrParams = new Object();
         var link = $('#txth_base').val() + "/admision/ficha/guardarficha";
         arrParams.persona_id = $('#txth_ids').val();
-        //FORM 1 datos personal
         arrParams.pnombre_persona = $('#txt_primer_nombre').val();
         arrParams.snombre_persona = $('#txt_segundo_nombre').val();
         arrParams.papellido_persona = $('#txt_primer_apellido').val();
@@ -128,7 +125,6 @@ $(document).ready(function () {
         } else {
             arrParams.nacecuador = 0;
         }
-        //FORM 1 Informacion de Contacto
         arrParams.nombre_contacto = $('#txt_nombres_contacto').val();
         arrParams.apellido_contacto = $('#txt_apellidos_contacto').val();
         arrParams.telefono_contacto = $('#txt_telefono_con').val();
@@ -136,7 +132,6 @@ $(document).ready(function () {
         arrParams.direccion_contacto = $('#txt_address_con').val();
         arrParams.parentesco_contacto = $('#cmb_parentesco_con').val();
 
-        //FORM 2 Datos Domicilio
         arrParams.paisd_domicilio = $('#cmb_pais_dom').val();
         arrParams.provinciad_domicilio = $('#cmb_prov_dom').val();
         arrParams.cantond_domicilio = $('#cmb_ciu_dom').val();

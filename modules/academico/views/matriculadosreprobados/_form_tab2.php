@@ -56,7 +56,6 @@ $leyenda = '<div class="col-md-12 col-xs-12 col-sm-12 col-lg-12">
                         "fileuploaderror" => "function (event, data, msg) {
                             $(this).parent().parent().children().first().addClass('hide');
                             $('#txth_doc_titulo').val('');
-                            //showAlert('NO_OK', 'error', {'wtmessage': objLang.Error_to_process_File__Try_again_, 'title': objLang.Error});   
                     }",
                         "filebatchuploadcomplete" => "function (event, files, extra) { 
                             $(this).parent().parent().children().first().addClass('hide');
@@ -66,12 +65,10 @@ $leyenda = '<div class="col-md-12 col-xs-12 col-sm-12 col-lg-12">
                         response = data.response, reader = data.reader;
                         $(this).parent().parent().children().first().addClass('hide');
                         var acciones = [{id: 'reloadpage', class: 'btn btn-primary', value: objLang.Accept, callback: 'reloadPage'}];
-                        //showAlert('OK', 'Success', {'wtmessage': objLang.File_uploaded_successfully__Do_you_refresh_the_web_page_, 'title': objLang.Success, 'acciones': acciones});  
                      }",
                         "fileuploaded" => "function (event, data, previewId, index) {
                         $(this).parent().parent().children().first().addClass('hide');
                         var acciones = [{id: 'reloadpage', class: 'btn btn-primary', value: objLang.Accept, callback: 'reloadPage'}];
-                        //showAlert('OK', 'Success', {'wtmessage': objLang.File_uploaded_successfully__Do_you_refresh_the_web_page_, 'title': objLang.Success, 'acciones': acciones});                              
                     }",
                     ],
                 ]);
@@ -113,7 +110,6 @@ $leyenda = '<div class="col-md-12 col-xs-12 col-sm-12 col-lg-12">
                         "fileuploaderror" => "function (event, data, msg) {
                             $(this).parent().parent().children().first().addClass('hide');
                             $('#txth_doc_dni').val('');
-                            //showAlert('NO_OK', 'error', {'wtmessage': objLang.Error_to_process_File__Try_again_, 'title': objLang.Error});   
                     }",
                         "filebatchuploadcomplete" => "function (event, files, extra) { 
                             $(this).parent().parent().children().first().addClass('hide');
@@ -123,12 +119,10 @@ $leyenda = '<div class="col-md-12 col-xs-12 col-sm-12 col-lg-12">
                         response = data.response, reader = data.reader;
                         $(this).parent().parent().children().first().addClass('hide');
                         var acciones = [{id: 'reloadpage', class: 'btn btn-primary', value: objLang.Accept, callback: 'reloadPage'}];
-                        //showAlert('OK', 'Success', {'wtmessage': objLang.File_uploaded_successfully__Do_you_refresh_the_web_page_, 'title': objLang.Success, 'acciones': acciones});  
                      }",
                         "fileuploaded" => "function (event, data, previewId, index) {
                         $(this).parent().parent().children().first().addClass('hide');
                         var acciones = [{id: 'reloadpage', class: 'btn btn-primary', value: objLang.Accept, callback: 'reloadPage'}];
-                        //showAlert('OK', 'Success', {'wtmessage': objLang.File_uploaded_successfully__Do_you_refresh_the_web_page_, 'title': objLang.Success, 'acciones': acciones});                              
                     }",
                     ],
                 ]);
@@ -171,7 +165,7 @@ $leyenda = '<div class="col-md-12 col-xs-12 col-sm-12 col-lg-12">
                         "fileuploaderror" => "function (event, data, msg) {
         $(this).parent().parent().children().first().addClass('hide');
         $('#txth_doc_certvota').val('');
-        //showAlert('NO_OK', 'error', {'wtmessage': objLang.Error_to_process_File__Try_again_, 'title': objLang.Error});   
+        
     }",
                         "filebatchuploadcomplete" => "function (event, files, extra) { 
         $(this).parent().parent().children().first().addClass('hide');
@@ -181,12 +175,12 @@ $leyenda = '<div class="col-md-12 col-xs-12 col-sm-12 col-lg-12">
         response = data.response, reader = data.reader;
         $(this).parent().parent().children().first().addClass('hide');
         var acciones = [{id: 'reloadpage', class: 'btn btn-primary', value: objLang.Accept, callback: 'reloadPage'}];
-        //showAlert('OK', 'Success', {'wtmessage': objLang.File_uploaded_successfully__Do_you_refresh_the_web_page_, 'title': objLang.Success, 'acciones': acciones});  
+     
     }",
                         "fileuploaded" => "function (event, data, previewId, index) {
         $(this).parent().parent().children().first().addClass('hide');
         var acciones = [{id: 'reloadpage', class: 'btn btn-primary', value: objLang.Accept, callback: 'reloadPage'}];
-        //showAlert('OK', 'Success', {'wtmessage': objLang.File_uploaded_successfully__Do_you_refresh_the_web_page_, 'title': objLang.Success, 'acciones': acciones});                              
+
     }",
                     ],
                 ]);
@@ -229,7 +223,7 @@ $leyenda = '<div class="col-md-12 col-xs-12 col-sm-12 col-lg-12">
                             "fileuploaderror" => "function (event, data, msg) {
             $(this).parent().parent().children().first().addClass('hide');
             $('#txth_doc_certificado').val('');
-            //showAlert('NO_OK', 'error', {'wtmessage': objLang.Error_to_process_File__Try_again_, 'title': objLang.Error});   
+            
         }",
                             "filebatchuploadcomplete" => "function (event, files, extra) { 
             $(this).parent().parent().children().first().addClass('hide');
@@ -239,12 +233,12 @@ $leyenda = '<div class="col-md-12 col-xs-12 col-sm-12 col-lg-12">
             response = data.response, reader = data.reader;
             $(this).parent().parent().children().first().addClass('hide');
             var acciones = [{id: 'reloadpage', class: 'btn btn-primary', value: objLang.Accept, callback: 'reloadPage'}];
-            //showAlert('OK', 'Success', {'wtmessage': objLang.File_uploaded_successfully__Do_you_refresh_the_web_page_, 'title': objLang.Success, 'acciones': acciones});  
+            
         }",
                             "fileuploaded" => "function (event, data, previewId, index) {
             $(this).parent().parent().children().first().addClass('hide');
             var acciones = [{id: 'reloadpage', class: 'btn btn-primary', value: objLang.Accept, callback: 'reloadPage'}];
-            //showAlert('OK', 'Success', {'wtmessage': objLang.File_uploaded_successfully__Do_you_refresh_the_web_page_, 'title': objLang.Success, 'acciones': acciones});                              
+            
         }",
                         ],
                     ]);
