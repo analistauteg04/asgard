@@ -7,26 +7,27 @@ USE `db_asgard`;
 -- Volcado de datos para la tabla `ACCION`
 --
 INSERT INTO `accion` (`acc_id`, `acc_nombre`, `acc_url_accion`, `acc_tipo`, `acc_descripcion`, `acc_lang_file`, `acc_dir_imagen`, `acc_estado`, `acc_fecha_creacion`, `acc_fecha_modificacion`, `acc_estado_logico`) VALUES
-(1, 'Create', 'Create', 'General', 'Create', 'accion', 'glyphicon glyphicon-file', '1', '2017-02-01 15:05:26', NULL, '1'),
-(2, 'Update', 'Update', 'General', 'Update', 'accion', 'glyphicon glyphicon-floppy-disk', '1', '2017-02-01 15:05:26', NULL, '1'),
-(3, 'Delete', 'Delete', 'General', 'Delete', 'accion', 'glyphicon glyphicon-trash', '1', '2017-02-01 15:05:26', NULL, '1'),
-(4, 'Save', 'Save', 'General', 'Save', 'accion', 'glyphicon glyphicon-floppy-disk', '1', '2017-02-01 15:05:26', NULL, '1'),
-(5, 'Search', 'Search', 'General', 'Search', 'accion', 'glyphicon glyphicon-search', '1', '2017-02-01 15:05:26', NULL, '1'),
-(6, 'Print', 'Print', 'General', 'Print', 'accion', 'glyphicon glyphicon-print', '1', '2017-02-01 15:05:26', NULL, '1'),
-(7, 'Import', 'Import', 'General', 'Import', 'accion', 'glyphicon glyphicon-import', '1', '2017-02-01 15:05:26', NULL, '1'),
-(8, 'Export', 'Export', 'General', 'Export', 'accion', 'glyphicon glyphicon-export', '1', '2017-02-01 15:05:26', NULL, '1'),
-(9, 'Back', 'Back', 'General', 'Back', 'accion', 'glyphicon glyphicon-triangle-right', '1', '2017-02-01 15:05:26', NULL, '1'),
-(10, 'Next', 'Next', 'General', 'Next', 'accion', 'glyphicon glyphicon-triangle-left', '1', '2017-02-01 15:05:26', NULL, '1'),
-(11, 'Clear', 'Clear', 'General', 'Clear', 'accion', 'glyphicon glyphicon-leaf', '1', '2017-02-01 15:05:26', NULL, '1'),
-(12, 'Edit', 'Edit', 'General', 'Edit', 'accion', 'glyphicon glyphicon-pencil', '1', '2017-02-01 15:05:26', NULL, '1'),
-(13, 'Approve', 'Approve', 'General', 'Approve', 'accion', 'glyphicon glyphicon-ok', '1', '2017-02-01 15:05:26', NULL, '1'),
-(14, 'LoadFile', 'LoadFile', 'General', 'LoadFile', 'accion', 'glyphicon glyphicon-ok', '1', '2017-02-01 15:05:26', NULL, '1'),
-(15, 'loadCall', 'loadCall', 'General', 'loadCall', 'accion', 'glyphicon glyphicon-ok', '1', '2017-02-01 15:05:26', NULL, '1'),
-(16, 'loadLeads', 'loadLeads', 'General', 'loadLeads', 'accion', 'glyphicon glyphicon-ok', '1', '2017-02-01 15:05:26', NULL, '1'),
-(17, 'exportStatContact', 'exportStatContact', 'General', 'exportStatContact', 'accion', 'glyphicon glyphicon-ok', '1', '2017-02-01 15:05:26', NULL, '1'),
-(18, 'exportLostContact', 'exportLostContact', 'General', 'exportLostContact', 'accion', 'glyphicon glyphicon-ok', '1', '2017-02-01 15:05:26', NULL, '1'),
-(19, 'pendingApplicants', 'pendingApplicants', 'General', 'pendingApplicants', 'accion', 'glyphicon glyphicon-ok', '1', '2017-02-01 15:05:26', NULL, '1'),
-(20, 'payApplicants', 'payApplicants', 'General', 'payApplicants', 'accion', 'glyphicon glyphicon-ok', '1', '2017-02-01 15:05:26', NULL, '1');
+(1,'Create','Create','General','Create','accion','glyphicon glyphicon-file','1','2017-02-01 20:05:26',NULL,'1'),
+(2,'Update','Update','General','Update','accion','glyphicon glyphicon-floppy-disk','1','2017-02-01 20:05:26',NULL,'1'),
+(3,'Delete','Delete','General','Delete','accion','glyphicon glyphicon-trash','1','2017-02-01 20:05:26',NULL,'1'),
+(4,'Save','Save','General','Save','accion','glyphicon glyphicon-floppy-disk','1','2017-02-01 20:05:26',NULL,'1'),
+(5,'Search','Search','General','Search','accion','glyphicon glyphicon-search','1','2017-02-01 20:05:26',NULL,'1'),
+(6,'Print','Print','General','Print','accion','glyphicon glyphicon-print','1','2017-02-01 20:05:26',NULL,'1'),
+(7,'Import','Import','General','Import','accion','glyphicon glyphicon-import','1','2017-02-01 20:05:26',NULL,'1'),
+(8,'Export','Export','General','Export','accion','glyphicon glyphicon-export','1','2017-02-01 20:05:26',NULL,'1'),
+(9,'Back','Back','General','Back','accion','glyphicon glyphicon-triangle-right','1','2017-02-01 20:05:26',NULL,'1'),
+(10,'Next','Next','General','Next','accion','glyphicon glyphicon-triangle-left','1','2017-02-01 20:05:26',NULL,'1'),
+(11,'Clear','Clear','General','Clear','accion','glyphicon glyphicon-leaf','1','2017-02-01 20:05:26',NULL,'1'),
+(12,'Edit','Edit','General','Edit','accion','glyphicon glyphicon-pencil','1','2017-02-01 20:05:26',NULL,'1'),
+(13,'Approve','Approve','General','Approve','accion','glyphicon glyphicon-ok','1','2017-02-01 20:05:26',NULL,'1'),
+(14,'LoadFile','LoadFile','General','LoadFile','accion','glyphicon glyphicon-ok','1','2017-02-01 20:05:26',NULL,'1'),
+(15,'loadCall','loadCall','General','loadCall','accion','glyphicon glyphicon-ok','1','2017-02-01 20:05:26',NULL,'1'),
+(16,'loadLeads','loadLeads','General','loadLeads','accion','glyphicon glyphicon-ok','1','2017-02-01 20:05:26',NULL,'1'),
+(17,'exportStatContact','exportStatContact','General','exportStatContact','accion','glyphicon glyphicon-ok','1','2017-02-01 20:05:26',NULL,'1'),
+(18,'exportLostContact','exportLostContact','General','exportLostContact','accion','glyphicon glyphicon-ok','1','2017-02-01 20:05:26',NULL,'1'),
+(19,'pendingApplicants','pendingApplicants','General','pendingApplicants','accion','glyphicon glyphicon-ok','1','2017-02-01 20:05:26',NULL,'1'),
+(20,'Register','Register','General','Register','accion','glyphicon glyphicon-check','1','2018-11-07 17:53:22',NULL,'1'),
+(21,'Inscribed pending','Inscribed pending','General','Inscribed pending','accion','glyphicon glyphicon-info-sign','1','2018-11-07 19:04:25',NULL,'1');
 
 -- --------------------------------------------------------
 --
