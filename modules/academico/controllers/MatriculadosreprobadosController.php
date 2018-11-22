@@ -468,14 +468,14 @@ class MatriculadosreprobadosController extends \app\components\CController {
         } else {
             $arrData = $mod_matreprueba->consultarMatriculareprueba(array(), true);
         }
-        $nameReport = academico::t("Academico", "List Failed Enrollments");
+        $nameReport = academico::t("Academico", "List Enrollment Method Income");
         Utilities::generarReporteXLS($nombarch, $nameReport, $arrHeader, $arrData, $colPosition);
         exit;
     }
 
     public function actionExportpdf() {
         $report = new ExportFile();
-        $this->view->title = academico::t("Academico", "List Failed Enrollments");  // Titulo del reporte
+        $this->view->title = academico::t("Academico", "List Enrollment Method Income");  // Titulo del reporte
         $arrHeader = array(
             Yii::t("formulario", "DNI 1"),
             Yii::t("formulario", "First Names"),
