@@ -907,10 +907,12 @@ class MatriculadosReprobado extends \yii\db\ActiveRecord {
                     $id_persona = 0;
                     $mod_persona = new Persona();
                     $keys_per = [
-                        'per_pri_nombre', 'per_seg_nombre', 'per_pri_apellido', 'per_seg_apellido',
+                        'per_pri_nombre', 'per_seg_nombre', 
+                        'per_pri_apellido', 'per_seg_apellido',
                         'per_cedula', 'etn_id', 'eciv_id', 'per_genero', 'pai_id_nacimiento',
                         'pro_id_nacimiento', 'can_id_nacimiento', 'per_fecha_nacimiento',
-                        'per_celular', 'per_correo', 'tsan_id', 'per_domicilio_sector',
+                        'per_celular', 'per_correo', 
+                        'tsan_id', 'per_domicilio_sector',
                         'per_domicilio_cpri', 'per_domicilio_csec', 'per_domicilio_num',
                         'per_domicilio_ref', 'per_domicilio_telefono', 'pai_id_domicilio',
                         'pro_id_domicilio', 'can_id_domicilio', 'per_nac_ecuatoriano',
@@ -919,8 +921,8 @@ class MatriculadosReprobado extends \yii\db\ActiveRecord {
                     $parametros_per = [
                         ucwords(strtolower($resp_datos['twre_nombre'])), null,
                         ucwords(strtolower($resp_datos['twre_apellido'])), null,
-                        $resp_datos['twre_numero'], null, null, null, null, null,
-                        null, null, $resp_datos['twre_celular'], $resp_datos['twre_correo'],
+                        $resp_datos['twre_numero'], null, null, null, $resp_datos['twre_pais'], 
+                        null,null, null, $resp_datos['twre_celular'], $resp_datos['twre_correo'],
                         null, null, null, null,
                         null, null, null,
                         null, null, null,
