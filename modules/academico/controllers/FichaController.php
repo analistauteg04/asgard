@@ -48,7 +48,13 @@ class FichaController extends \app\components\CController {
         $modperinteresado = new Persona();
         $respPerinteresado = $modperinteresado->consultaPersonaId($per_id);
         $arr_pais_nac = Pais::find()->select("pai_id AS id, pai_nombre AS value")->where(["pai_estado_logico" => "1", "pai_estado" => "1"])->asArray()->all();
+        if(empty($respPerinteresado['pai_id_nacimiento'])){
+           $respPerinteresado['pai_id_nacimiento'] = 1; 
+        }
         $arr_prov_nac = Provincia::provinciaXPais($respPerinteresado['pai_id_nacimiento']);
+        if(empty($respPerinteresado['pro_id_nacimiento'])){
+           $respPerinteresado['pro_id_nacimiento'] = 1; 
+        }
         $arr_ciu_nac = Canton::cantonXProvincia($respPerinteresado['pro_id_nacimiento']);
         $arr_pais_dom = Pais::find()->select("pai_id AS id, pai_nombre AS value")->where(["pai_estado_logico" => "1", "pai_estado" => "1"])->asArray()->all();
         $arr_prov_dom = Provincia::provinciaXPais($respPerinteresado['pai_id_domicilio']);

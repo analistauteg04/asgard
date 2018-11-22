@@ -56,6 +56,7 @@ class ExportFile {
     public $reportName = "";
 
     function __construct() {
+        ini_set("pcre.backtrack_limit", "5000000"); //aumento de memoria para generacion de reportes
         if ($this->reportName == "")
             $this->reportName = 'Reporte_' . date("Ymdhis");
         if ($this->typeExport = "")

@@ -87,8 +87,10 @@ class MatriculadosreprobadosController extends \app\components\CController {
                     }
                 }
                 if ($accion == "create" || $accion == "Create") {
+                    \app\models\Utilities::putMessageLogFile('Va insertar en la temporal');
                     $resul = $model->insertarReprobadoTemp($con, $data["DATA_1"]);
                 } else if ($accion == "Update") {
+                    $matr_repro_id=$data["DATA_1"][0]['twre_id'];
                     $keys_act = [
                         'twre_nombre', 'twre_apellido', 'twre_dni', 'twre_numero'
                         , 'twre_correo', 'twre_pais', 'twre_celular'
@@ -129,6 +131,7 @@ class MatriculadosreprobadosController extends \app\components\CController {
                         $arrIm = explode(".", basename($path_title_true));
                         $typeFile = strtolower($arrIm[count($arrIm) - 1]);
                         $titulo_archivoOld = Yii::$app->params["documentFolder"] . "academico/" . $matr_repro_id . "/doc_titulo_per_" . $matr_repro_id . "." . $typeFile;
+                        \app\models\Utilities::putMessageLogFile('address'. $titulo_archivoOld);                        
                         $titulo_archivo = MatriculadosReprobado::addLabelTimeDocumentos($matr_repro_id, $titulo_archivoOld, $timeSt);
                         $data["DATA_1"][0]["ruta_doc_titulo"] = $titulo_archivo;
                         if ($titulo_archivo === false)
@@ -465,14 +468,14 @@ class MatriculadosreprobadosController extends \app\components\CController {
         } else {
             $arrData = $mod_matreprueba->consultarMatriculareprueba(array(), true);
         }
-        $nameReport = academico::t("Academico", "List Failed Enrollments");
+        $nameReport = academico::t("Academico", "List Enrollment Method Income");
         Utilities::generarReporteXLS($nombarch, $nameReport, $arrHeader, $arrData, $colPosition);
         exit;
     }
 
     public function actionExportpdf() {
         $report = new ExportFile();
-        $this->view->title = academico::t("Academico", "List Failed Enrollments");  // Titulo del reporte
+        $this->view->title = academico::t("Academico", "List Enrollment Method Income");  // Titulo del reporte
         $arrHeader = array(
             Yii::t("formulario", "DNI 1"),
             Yii::t("formulario", "First Names"),
