@@ -326,6 +326,7 @@ $(document).ready(function () {
             arreglo_check();
             arrParams.condicionestitulo = condiciontitulo;
             arrParams.condicionesdni = condiciondni;
+            arrParams.condicioncerti = condicioncerti;
             //Condiciones que indican que se ha seleccionado un(os) checkboxes.
             if (len > 0) {
                 arrParams.titulo = 1;
@@ -339,6 +340,14 @@ $(document).ready(function () {
                     arrParams.observacion = arrParams.observacion + "<br/>" + obsdni;
                 }
             }
+            if (len2 > 0) {
+            arrParams.certi = 1;
+            if (arrParams.observacion == "") {
+                arrParams.observacion = obscerti;
+            } else {
+                arrParams.observacion = arrParams.observacion + "<br/>" + obscerti;
+            }
+        }
         }
         arrParams.banderapreaprueba = '1';
         if (!validateForm()) {
@@ -740,10 +749,13 @@ function UpdateDocumentos() {
 }
 var condiciontitulo = new Array();
 var condiciondni = new Array();
+var condicioncerti = new Array();
 var len = condiciontitulo.length;
 var len1 = condiciondni.length;
+var len2 = condicioncerti.length;
 var obstitulo = "";
 var obsdni = "";
+var obscerti = "";
 
 /**
  * Function arreglo_check, forma arreglo con las condiciones elegidas tanto para los documentos: título y documento de identidad.
@@ -815,6 +827,34 @@ function arreglo_check() {
             len1 = len1 + 1;
         }
     }
+    //AQUI PARA CERTIFICADO VOTACION
+    if ($('#chk_certificado').prop('checked')) {
+        obscerti = $('#chk_certificado').attr('placeholder');
+        if ($('#chk_concerti0').prop('checked')) {
+            if (len2 == 0) {
+                condicioncerti[0] = $('#txth_cond_certi0').val();
+            } else {
+                condicioncerti[len2] = $('#txth_cond_certi0').val();
+            }
+            len2 = len2 + 1;
+        }
+        if ($('#chk_concerti1').prop('checked')) {
+            if (len2 == 0) {
+                condicioncerti[0] = $('#txth_cond_certi1').val();
+            } else {
+                condicioncerti[len2] = $('#txth_cond_certi1').val();
+            }
+            len2 = len2 + 1;
+        }
+        if ($('#chk_concerti2').prop('checked')) {
+            if (len2 == 0) {
+                condicioncerti[0] = $('#txth_cond_certi2').val();
+            } else {
+                condicioncerti[len2] = $('#txth_cond_certi2').val();
+            }
+            len2 = len2 + 1;
+        }
+    }
 }
 
 //Guarda la Revisión final de solicitudes de inscripción.
@@ -834,6 +874,7 @@ function Approve() {
         arreglo_check();
         arrParams.condicionestitulo = condiciontitulo;
         arrParams.condicionesdni = condiciondni;
+        arrParams.condicioncerti = condicioncerti;
         //Condiciones que indican que se ha seleccionado un(os) checkboxes.
         if (len > 0) {
             arrParams.titulo = 1;
@@ -847,6 +888,15 @@ function Approve() {
                 arrParams.observacion = arrParams.observacion + "<br/>" + obsdni;
             }
         }
+        if (len2 > 0) {
+            arrParams.certi = 1;
+            if (arrParams.observacion == "") {
+                arrParams.observacion = obscerti;
+            } else {
+                arrParams.observacion = arrParams.observacion + "<br/>" + obscerti;
+            }
+        }
+        
     }
     arrParams.banderapreaprueba = '0';
     if (!validateForm()) {
