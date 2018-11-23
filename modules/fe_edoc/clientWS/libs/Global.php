@@ -6,17 +6,15 @@
  * and open the template in the editor.
  */
 /* Web Server */
-$WS_HOST = "localhost";
-$WS_PORT = "8888";
+$WS_HOST = "192.168.1.100";
+$WS_PORT = "80";
 $WS_USER = "test";
 $WS_PASS = "test";
-$WS_URI_FAC = "asgard/api/request/fe_edoc/Client/getTest/json";
-$WS_URI_NC = "asgard/api/request/fe_edoc/Client/getTest/json";
-$WS_URI_RET = "asgard/api/request/fe_edoc/Client/getTest/json";
+$WS_URI = "asgard/api/request/fe_edoc/Edoc/sendEdoc/json";
 
 $service = "uteg-fe";
-$logFile = "../logs/$service.log";
-$limit = 1;
+$logFile = "logs/$service.log";
+$limit = 2;
 
 function putMessageLogFile($message) {
     GLOBAL $logFile;

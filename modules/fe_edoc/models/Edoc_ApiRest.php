@@ -13,17 +13,18 @@ class Edoc_ApiRest extends \app\modules\fe_edoc\components\CActiveRecord {
     public $fpagEdoc = array();//forma de pago
 
     function __construct($arr_params = array()) {
+        Utilities::putMessageLogFile($arr_params);
         foreach ($arr_params as $key => $value) {
             if ($key == "tipoedoc")
                 $this->tipoEdoc = $value;
             if ($key == "cabedoc")
-                $this->cabEdoc = json_decode($value);
+                $this->cabEdoc = json_decode($value,TRUE);
             if ($key == "detedoc")
-                $this->detEdoc = json_decode($value);
+                $this->detEdoc = json_decode($value,TRUE);
             if ($key == "dadcedoc")
-                $this->dadcEdoc = json_decode($value);
+                $this->dadcEdoc = json_decode($value,TRUE);
             if ($key == "fpagedoc")
-                $this->fpagEdoc = json_decode($value);
+                $this->fpagEdoc = json_decode($value,TRUE);
         }
     }
 
@@ -53,6 +54,7 @@ class Edoc_ApiRest extends \app\modules\fe_edoc\components\CActiveRecord {
     
     private function insertCabFact($con) {
         $cabFact= $this->cabEdoc;
+        Utilities::putMessageLogFile($cabFact);
         $sql = "INSERT INTO " . $con->dbname . ".NubeFactura
                (Ambiente,TipoEmision,Secuencial)VALUES(:Ambiente,:TipoEmision,:Secuencial);";
         
@@ -69,9 +71,9 @@ class Edoc_ApiRest extends \app\modules\fe_edoc\components\CActiveRecord {
         
 
         //$comando->bindParam(":id", $id_docElectronico, PDO::PARAM_INT);
-        $comando->bindParam(":Ambiente", $cabFact['TIPOAMBIENTE'], PDO::PARAM_STR);
-        $comando->bindParam(":TipoEmision", $cabFact['TIPOEMISION'], PDO::PARAM_STR);
-        $comando->bindParam(":Secuencial", $cabFact['SECUENCIAL'], PDO::PARAM_STR);
+        $comando->bindParam(":Ambiente", $cabFact['TIPOAMBIENTE'], \PDO::PARAM_STR);
+        $comando->bindParam(":TipoEmision", $cabFact['TIPOEMISION'], \PDO::PARAM_STR);
+        $comando->bindParam(":Secuencial", $cabFact['SECUENCIAL'], \PDO::PARAM_STR);
         
         /*$comando->bindParam(":RazonSocial", $cabFact['SYS_FACTURANC_ID'], PDO::PARAM_STR);
         $comando->bindParam(":NombreComercial", $cabFact['SYS_FACTURANC_ID'], PDO::PARAM_STR);
@@ -100,13 +102,14 @@ class Edoc_ApiRest extends \app\modules\fe_edoc\components\CActiveRecord {
         $comando->bindParam(":UsuarioCreador", $cabFact['SYS_FACTURANC_ID'], PDO::PARAM_STR);*/
 
         $comando->execute();
-        return $con->getLastInsertID("NubeFactura");
+        return $con->getLastInsertID();
         
     }
   
     private function insertarFacturas() {
         $con = Yii::$app->db_edoc;
-        $trans = $con->getTransaction();
+                
+
         if ($trans !== null) {
             $trans = null; // si existe la transacción entonces no se crea una
         } else {
@@ -114,7 +117,8 @@ class Edoc_ApiRest extends \app\modules\fe_edoc\components\CActiveRecord {
         }
         try {
             $idCab= $this->insertCabFact($con);
-            $this->insertDetFact($idCab);
+            Utilities::putMessageLogFile($idCab);
+            //$this->insertDetFact($idCab); 
             
            
             if ($trans !== null){
