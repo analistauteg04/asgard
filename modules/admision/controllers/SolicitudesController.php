@@ -141,6 +141,7 @@ class SolicitudesController extends \app\components\CController {
         $resp_condtitulo = $mod_solins->consultarSolnoaprobada(1, $tiponacext);
         $resp_conddni = $mod_solins->consultarSolnoaprobada(2, $tiponacext);
         $resp_rechazo = $mod_solins->consultaSolicitudRechazada($sins_id, 'A');
+        $resp_condcertv = $mod_solins->consultarSolnoaprobada(3, $tiponacext);
 
         return $this->render('view', [
                     "revision" => array("2" => Yii::t("formulario", "APPROVED"), "4" => Yii::t("formulario", "Not approved")),
@@ -162,6 +163,7 @@ class SolicitudesController extends \app\components\CController {
                     "img_pago" => $img_pago,
                     "emp_id" => $emp_id,
                     "arr_fecha" => $fechas,
+                    "arr_certv" => $resp_condcertv,
         ]);
     }
 
