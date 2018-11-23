@@ -284,7 +284,7 @@ financiero::registerTranslations();
             <div class="col-md-12 col-sm-12 col-xs-12 col-lg-12">
                 <div class="col-md-6 col-sm-6 col-xs-6 col-lg-6">
                     <div class="form-group">
-                        <label for="chk_certificado" class="col-sm-10 col-md-10 col-xs-10 col-lg-10 control-label"><?= admision::t("Solicitudes", "Does not meet acceptance conditions in title") ?></label>
+                        <label for="chk_certificado" class="col-sm-10 col-md-10 col-xs-10 col-lg-10 control-label"><?= admision::t("Solicitudes", "Does not meet acceptance conditions in voting certificate") ?></label>
                         <div class="col-sm-1 ">                     
                             <input type="checkbox" class="" id="chk_certificado"  data-type="alfa" data-keydown="true" placeholder="<?= Yii::t("solicitud_ins", "Does not meet acceptance conditions in title") ?>">                      
                         </div>
