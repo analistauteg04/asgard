@@ -52,80 +52,50 @@ class Edoc_ApiRest extends \app\modules\fe_edoc\components\CActiveRecord {
 
     }
     
-    private function insertCabFact($con) {
-        $cabFact= $this->cabEdoc;
-        Utilities::putMessageLogFile($cabFact);
-        $sql = "INSERT INTO " . $con->dbname . ".NubeFactura
-               (Ambiente,TipoEmision,Secuencial)VALUES(:Ambiente,:TipoEmision,:Secuencial);";
-        
-        /*$sql = "INSERT INTO " . $con->db_edoc . ".NubeFactura
-               (Ambiente,TipoEmision, RazonSocial, NombreComercial, Ruc,ClaveAcceso,CodigoDocumento, Establecimiento,
-                PuntoEmision, Secuencial, DireccionMatriz, FechaEmision, DireccionEstablecimiento, ContribuyenteEspecial,
-                ObligadoContabilidad, TipoIdentificacionComprador, GuiaRemision, RazonSocialComprador, IdentificacionComprador,
-                TotalSinImpuesto, TotalDescuento, Propina, ImporteTotal, Moneda, SecuencialERP, CodigoTransaccionERP,UsuarioCreador,Estado,FechaCarga) VALUES 
-               (:Ambiente,:TipoEmision, :RazonSocial, :NombreComercial, :Ruc,:ClaveAcceso,:CodigoDocumento, :Establecimiento,
-                :PuntoEmision, :Secuencial, :DireccionMatriz, :FechaEmision, :DireccionEstablecimiento, :ContribuyenteEspecial,
-                :ObligadoContabilidad, :TipoIdentificacionComprador, :GuiaRemision, :RazonSocialComprador, :IdentificacionComprador,
-                :TotalSinImpuesto, :TotalDescuento, :Propina, :ImporteTotal, :Moneda, :SecuencialERP, :CodigoTransaccionERP,:UsuarioCreador,1,CURRENT_TIMESTAMP())";*/
-        $comando = $con->createCommand($sql);
-        
-
-        //$comando->bindParam(":id", $id_docElectronico, PDO::PARAM_INT);
-        $comando->bindParam(":Ambiente", $cabFact['TIPOAMBIENTE'], \PDO::PARAM_STR);
-        $comando->bindParam(":TipoEmision", $cabFact['TIPOEMISION'], \PDO::PARAM_STR);
-        $comando->bindParam(":Secuencial", $cabFact['SECUENCIAL'], \PDO::PARAM_STR);
-        
-        /*$comando->bindParam(":RazonSocial", $cabFact['SYS_FACTURANC_ID'], PDO::PARAM_STR);
-        $comando->bindParam(":NombreComercial", $cabFact['SYS_FACTURANC_ID'], PDO::PARAM_STR);
-        $comando->bindParam(":Ruc", $cabFact['RUC_SUJETO'], PDO::PARAM_STR);
-        $comando->bindParam(":ClaveAcceso", $cabFact['CLAVEACCESO'], PDO::PARAM_STR);
-        $comando->bindParam(":CodigoDocumento", $cabFact['CIA_CODIGO'], PDO::PARAM_STR);
-        $comando->bindParam(":Establecimiento", $cabFact['COD_ESTAB'], PDO::PARAM_STR);
-        $comando->bindParam(":PuntoEmision", $cabFact['PTOEMI'], PDO::PARAM_STR);
-        $comando->bindParam(":Secuencial", $cabFact['SECUENCIAL'], PDO::PARAM_STR);
-        $comando->bindParam(":DireccionMatriz", $cabFact['SYS_FACTURANC_ID'], PDO::PARAM_STR);
-        $comando->bindParam(":FechaEmision", $cabFact['FECHAEMISION'], PDO::PARAM_STR);
-        $comando->bindParam(":DireccionEstablecimiento", $cabFact['SYS_FACTURANC_ID'], PDO::PARAM_STR);
-        $comando->bindParam(":ContribuyenteEspecial", $cabFact['CONTRIB_ESPECIAL'], PDO::PARAM_STR);
-        $comando->bindParam(":ObligadoContabilidad", $cabFact['OBLIGADOCONTAB'], PDO::PARAM_STR);
-        $comando->bindParam(":TipoIdentificacionComprador", $cabFact['TIPOID_SUJETO'], PDO::PARAM_STR);
-        $comando->bindParam(":GuiaRemision", $cabFact['NUMGUIA'], PDO::PARAM_STR);
-        $comando->bindParam(":RazonSocialComprador", $cabFact['SYS_FACTURANC_ID'], PDO::PARAM_STR);
-        $comando->bindParam(":IdentificacionComprador", $cabFact['SYS_FACTURANC_ID'], PDO::PARAM_STR);
-        $comando->bindParam(":TotalSinImpuesto", $cabFact['SYS_FACTURANC_ID'], PDO::PARAM_STR);
-        $comando->bindParam(":TotalDescuento", $cabFact['TOTALDESC'], PDO::PARAM_STR);
-        $comando->bindParam(":Propina", $cabFact['PROPINA'], PDO::PARAM_STR);
-        $comando->bindParam(":ImporteTotal", $cabFact['TOTALBRUTO'], PDO::PARAM_STR);
-        $comando->bindParam(":Moneda", $cabFact['MONEDA'], PDO::PARAM_STR);
-        $comando->bindParam(":SecuencialERP", $cabFact['SECUENCIAL'], PDO::PARAM_STR);
-        $comando->bindParam(":CodigoTransaccionERP", $CodigoTransaccionERP, PDO::PARAM_STR);
-        $comando->bindParam(":UsuarioCreador", $cabFact['SYS_FACTURANC_ID'], PDO::PARAM_STR);*/
-
-        $comando->execute();
-        return $con->getLastInsertID();
-        
-    }
-  
+    private function retornaTarifaDelIva($tarifa) {
+         //TABLA 18 FICHA TECNICA SEGUN SRI
+        $codigo=0;
+        switch (floatval($tarifa)) {
+            Case 0:
+                $codigo=0;
+                break;
+            Case 12:
+                $codigo=2;
+                break;
+            Case 14:
+                $codigo=3;
+                break;
+            Case 6:
+                $codigo=6;//NO OBJETO DE IVA
+                break;
+            default:
+                $codigo=7;//EXEPTO DE IVA
+        }
+        return $codigo;
+     }
+    
+    /*
+     * INICIO DE PROCESO DE FACTURAS
+     */
+    
     private function insertarFacturas() {
         $con = Yii::$app->db_edoc;
-                
-
         if ($trans !== null) {
             $trans = null; // si existe la transacción entonces no se crea una
         } else {
             $trans = $con->beginTransaction();
         }
         try {
-            $idCab= $this->insertCabFact($con);
-            Utilities::putMessageLogFile($idCab);
-            //$this->insertDetFact($idCab); 
-            
-           
+            $idCab= $this->insertarCabFactura($con);
+            //Utilities::putMessageLogFile($idCab);
+            $this->InsertarDetFactura($con,$idCab);
+            $this->InsertarFacturaFormaPago($con,$idCab);
+            $this->InsertarFacturaDatoAdicional($con,$idCab);
             if ($trans !== null){
                 $trans->commit();
             }
             //return array("status"=>"OK");
-            return array("status"=>"OK", "chat_id"=>$idCab, "croo_id"=>'1');
+            return array("status"=>"OK", "Ids_Doc"=>$idCab);
         } catch (\Exception $e) {
             $trans->rollBack();
             //throw $e;
@@ -134,8 +104,293 @@ class Edoc_ApiRest extends \app\modules\fe_edoc\components\CActiveRecord {
         }
         
     }
+    
+    private function insertarCabFactura($con) {
+        $cabFact= $this->cabEdoc;
+        //Utilities::putMessageLogFile($cabFact);
+        //$sql = "INSERT INTO " . $con->dbname . ".NubeFactura
+        //       (Ambiente,TipoEmision,Secuencial)VALUES(:Ambiente,:TipoEmision,:Secuencial);";
+        
+        $sql = "INSERT INTO " . $con->db_edoc . ".NubeFactura
+               (Ambiente,TipoEmision, RazonSocial, NombreComercial, Ruc,ClaveAcceso,CodigoDocumento, Establecimiento,
+                PuntoEmision, Secuencial, DireccionMatriz, FechaEmision, DireccionEstablecimiento, ContribuyenteEspecial,
+                ObligadoContabilidad, TipoIdentificacionComprador, GuiaRemision, RazonSocialComprador, IdentificacionComprador,
+                TotalSinImpuesto, TotalDescuento, Propina, ImporteTotal, Moneda, SecuencialERP, CodigoTransaccionERP,UsuarioCreador,Estado,FechaCarga) VALUES 
+               (:Ambiente,:TipoEmision, :RazonSocial, :NombreComercial, :Ruc,:ClaveAcceso,:CodigoDocumento, :Establecimiento,
+                :PuntoEmision, :Secuencial, :DireccionMatriz, :FechaEmision, :DireccionEstablecimiento, :ContribuyenteEspecial,
+                :ObligadoContabilidad, :TipoIdentificacionComprador, :GuiaRemision, :RazonSocialComprador, :IdentificacionComprador,
+                :TotalSinImpuesto, :TotalDescuento, :Propina, :ImporteTotal, :Moneda, :SecuencialERP, :CodigoTransaccionERP,:UsuarioCreador,1,CURRENT_TIMESTAMP())";
+        $comando = $con->createCommand($sql);
 
+        //$comando->bindParam(":id", $id_docElectronico, PDO::PARAM_INT);
+        $comando->bindParam(":Ambiente", $cabFact['TIPOAMBIENTE'], \PDO::PARAM_STR);
+        $comando->bindParam(":TipoEmision", $cabFact['TIPOEMISION'], \PDO::PARAM_STR);
+        $comando->bindParam(":Secuencial", $cabFact['SECUENCIAL'], \PDO::PARAM_STR);        
+        $comando->bindParam(":RazonSocial", $cabFact['SYS_FACTURANC_ID'], \PDO::PARAM_STR);
+        $comando->bindParam(":NombreComercial", $cabFact['SYS_FACTURANC_ID'], \PDO::PARAM_STR);
+        $comando->bindParam(":Ruc", $cabFact['RUC_SUJETO'], \PDO::PARAM_STR);
+        $comando->bindParam(":ClaveAcceso", $cabFact['CLAVEACCESO'], \PDO::PARAM_STR);
+        $comando->bindParam(":CodigoDocumento", $cabFact['CIA_CODIGO'], \PDO::PARAM_STR);
+        $comando->bindParam(":Establecimiento", $cabFact['COD_ESTAB'], \PDO::PARAM_STR);
+        $comando->bindParam(":PuntoEmision", $cabFact['PTOEMI'], \PDO::PARAM_STR);
+        $comando->bindParam(":DireccionMatriz", $cabFact['SYS_FACTURANC_ID'], \PDO::PARAM_STR);
+        $comando->bindParam(":FechaEmision", $cabFact['FECHAEMISION'], \PDO::PARAM_STR);
+        $comando->bindParam(":DireccionEstablecimiento", $cabFact['SYS_FACTURANC_ID'], \PDO::PARAM_STR);
+        $comando->bindParam(":ContribuyenteEspecial", $cabFact['CONTRIB_ESPECIAL'], \PDO::PARAM_STR);
+        $comando->bindParam(":ObligadoContabilidad", $cabFact['OBLIGADOCONTAB'], \PDO::PARAM_STR);
+        $comando->bindParam(":TipoIdentificacionComprador", $cabFact['TIPOID_SUJETO'], \PDO::PARAM_STR);
+        $comando->bindParam(":GuiaRemision", $cabFact['NUMGUIA'], \PDO::PARAM_STR);
+        $comando->bindParam(":RazonSocialComprador", $cabFact['SYS_FACTURANC_ID'], \PDO::PARAM_STR);
+        $comando->bindParam(":IdentificacionComprador", $cabFact['SYS_FACTURANC_ID'], \PDO::PARAM_STR);
+        $comando->bindParam(":TotalSinImpuesto", $cabFact['SYS_FACTURANC_ID'], \PDO::PARAM_STR);
+        $comando->bindParam(":TotalDescuento", $cabFact['TOTALDESC'], \PDO::PARAM_STR);
+        $comando->bindParam(":Propina", $cabFact['PROPINA'], \PDO::PARAM_STR);
+        $comando->bindParam(":ImporteTotal", $cabFact['TOTALBRUTO'], \PDO::PARAM_STR);
+        $comando->bindParam(":Moneda", $cabFact['MONEDA'], \PDO::PARAM_STR);
+        $comando->bindParam(":SecuencialERP", $cabFact['SECUENCIAL'], \PDO::PARAM_STR);
+        $comando->bindParam(":CodigoTransaccionERP", $CodigoTransaccionERP, \PDO::PARAM_STR);
+        $comando->bindParam(":UsuarioCreador", $cabFact['SYS_FACTURANC_ID'], \PDO::PARAM_STR);
 
+        $comando->execute();
+        return $con->getLastInsertID();
+        
+    }
+    
+    /*Private Sub InsertarDetFactura(ByVal dtsData As DataSet, ByVal IdFact As Integer)
+        Dim idDet As Integer = 0
+        Dim valSinImp As Decimal = 0
+        Dim val_iva12 As Decimal = 0
+        Dim vet_iva12 As Decimal = 0
+        Dim val_iva0 As Decimal = 0 'Valor de Iva
+        Dim vet_iva0 As Decimal = 0 'Venta total con Iva
+        Dim por_iva As Decimal = CDbl(dtsData.Tables("VC010101").Rows(0).Item("POR_IVA")) / 100
+
+        For fil As Integer = 0 To dtsData.Tables("VD010101").Rows.Count - 1
+
+            With dtsData.Tables("VD010101").Rows(fil)
+                'valSinImp = floatval($detFact[$i]['T_VENTA']) - floatval($detFact[$i]['VAL_DES']);
+                valSinImp = CDbl(.Item("T_VENTA")) - CDbl(.Item("VAL_DES"))
+                If .Item("I_M_IVA") = "1" Then
+                    'MOdificacion por que iva no cuadra con los totales
+                    'val_iva12 = val_iva12 + (CDbl(.Item("CAN_DES")) * CDbl(.Item("P_VENTA")) * por_iva)
+                    val_iva12 = val_iva12 + ((CDbl(.Item("CAN_DES")) * CDbl(.Item("P_VENTA")) - CDbl(.Item("VAL_DES"))) * por_iva)
+                    vet_iva12 = vet_iva12 + valSinImp
+                Else
+                    val_iva0 = 0
+                    vet_iva0 = vet_iva0 + valSinImp
+                End If
+            End With
+
+            If cmSql IsNot Nothing Then cmSql.Dispose()
+            cmSql = New MySqlCommand
+            With cmSql
+                .Connection = cn
+                .CommandType = CommandType.Text
+
+                .CommandText = "INSERT INTO NubeDetalleFactura " & _
+                "(CodigoPrincipal,CodigoAuxiliar,Descripcion,Cantidad,PrecioUnitario,Descuento,PrecioTotalSinImpuesto,IdFactura) VALUES " & _
+                "(?CodigoPrincipal,?CodigoAuxiliar,?Descripcion,?Cantidad,?PrecioUnitario,?Descuento,?PrecioTotalSinImpuesto,?IdFactura); SELECT LAST_INSERT_ID() "
+
+                .Parameters.Add(New MySqlParameter("?CodigoPrincipal", MySqlDbType.VarChar)).Value = dtsData.Tables("VD010101").Rows(fil).Item("COD_ART")
+                .Parameters.Add(New MySqlParameter("?CodigoAuxiliar", MySqlDbType.VarChar)).Value = "1"
+                .Parameters.Add(New MySqlParameter("?Descripcion", MySqlDbType.VarChar)).Value = dtsData.Tables("VD010101").Rows(fil).Item("NOM_ART")
+                .Parameters.Add(New MySqlParameter("?Cantidad", MySqlDbType.Double)).Value = dtsData.Tables("VD010101").Rows(fil).Item("CAN_DES")
+                .Parameters.Add(New MySqlParameter("?PrecioUnitario", MySqlDbType.Double)).Value = dtsData.Tables("VD010101").Rows(fil).Item("P_VENTA")
+                .Parameters.Add(New MySqlParameter("?Descuento", MySqlDbType.Double)).Value = dtsData.Tables("VD010101").Rows(fil).Item("VAL_DES")
+                .Parameters.Add(New MySqlParameter("?PrecioTotalSinImpuesto", MySqlDbType.Double)).Value = valSinImp
+                .Parameters.Add(New MySqlParameter("?IdFactura", MySqlDbType.Int32)).Value = IdFact
+                .Transaction = trSql
+                idDet = .ExecuteScalar
+                .Dispose()
+            End With
+            'Inserta el IVA de cada Item 
+            If dtsData.Tables("VD010101").Rows(fil).Item("I_M_IVA") = "1" Then
+                'Segun Datos Sri 14%
+                Call InsertarDetImpFactura(idDet, "2", (por_iva * 100), valSinImp, dtsData.Tables("VD010101").Rows(fil).Item("VAL_IVA"))
+            Else
+                'Caso Contrario no Genera Impuesto 0%
+                Call InsertarDetImpFactura(idDet, "2", 0, valSinImp, dtsData.Tables("VD010101").Rows(fil).Item("VAL_IVA"))
+            End If
+        Next
+        'Inserta el Total del Iva Acumulado en el detalle
+        'Insertar Datos de Iva 0%
+        If vet_iva0 > 0 Then
+            Call InsertarFacturaImpuesto(IdFact, "2", 0, vet_iva0, val_iva0)
+        End If
+        'Inserta Datos de Iva 12
+        If vet_iva12 > 0 Then
+            Call InsertarFacturaImpuesto(IdFact, "2", (por_iva * 100), vet_iva12, val_iva12)
+        End If
+    End Sub*/
+    
+    private function InsertarDetFactura($con,$idCab) {
+        $detFact= $this->detEdoc;
+        //Dim por_iva As Decimal = CDbl(dtsData.Tables("VC010101").Rows(0).Item("POR_IVA")) / 100
+                
+        $idDet=0;
+        $valSinImp = 0;
+        $val_iva12 = 0;
+        $vet_iva12 = 0;
+        $val_iva0 = 0;//Valor de Iva
+        $vet_iva0 = 0;//Venta total con Iva
+
+        for ($i = 0; $i < sizeof($detFact); $i++) {
+            $valSinImp = floatval($detFact[$i]['T_VENTA']) - floatval($detFact[$i]['VAL_DES']);
+            if ($detFact[$i]['I_M_IVA'] == '1') {
+                $val_iva12 = $val_iva12 + ((floatval($detFact[$i]['CAN_DES'])*floatval($detFact[$i]['P_VENTA'])-floatval($detFact[$i]['VAL_DES']))* (floatval($por_iva)/100));
+                $vet_iva12 = $vet_iva12 + $valSinImp;
+            } else {
+                $val_iva0 = 0;
+                $vet_iva0 = $vet_iva0 + $valSinImp;
+            }
+            $CodigoAuxiliar=1;
+            $sql = "INSERT INTO " . $con->db_edoc . ".NubeDetalleFactura
+                        (CodigoPrincipal,CodigoAuxiliar,Descripcion,Cantidad,PrecioUnitario,Descuento,PrecioTotalSinImpuesto,IdFactura) VALUES 
+                        (:CodigoPrincipal,:CodigoAuxiliar,:Descripcion,:Cantidad,:PrecioUnitario,:Descuento,:PrecioTotalSinImpuesto,:IdFactura);";
+            
+            $comando = $con->createCommand($sql);
+            $comando->bindParam(":CodigoPrincipal", $detFact[$i]['NOM_ART'], \PDO::PARAM_STR);
+            $comando->bindParam(":CodigoAuxiliar", $CodigoAuxiliar, \PDO::PARAM_STR);
+            $comando->bindParam(":Descripcion", $detFact[$i]['NOM_ART'], \PDO::PARAM_STR);
+            $comando->bindParam(":Cantidad", $detFact[$i]['NOM_ART'], \PDO::PARAM_STR);
+            $comando->bindParam(":PrecioUnitario", $detFact[$i]['NOM_ART'], \PDO::PARAM_STR);
+            $comando->bindParam(":Descuento", $detFact[$i]['NOM_ART'], \PDO::PARAM_STR);
+            $comando->bindParam(":PrecioTotalSinImpuesto", $valSinImp, \PDO::PARAM_STR);
+            $comando->bindParam(":IdFactura", $idCab, \PDO::PARAM_INT);
+            $comando->execute();
+            $idDet = $con->getLastInsertID();
+            
+            //Inserta el IVA de cada Item 
+            if ($detFact[$i]['I_M_IVA'] == '1') {//Verifico si el ITEM tiene Impuesto
+                //Segun Datos Sri
+                $this->InsertarDetImpFactura($con,$obj_con, $idDet, '2',$por_iva, $valSinImp, $detFact[$i]['VAL_IVA']); //12%
+            } else {//Caso Contrario no Genera Impuesto
+                $this->InsertarDetImpFactura($con,$obj_con, $idDet, '2','0', $valSinImp, $detFact[$i]['VAL_IVA']); //0%
+            }
+        }
+        //Inserta el Total del Iva Acumulado en el detalle
+        //Insertar Datos de Iva 0%
+        If ($vet_iva0 > 0) {
+            $this->InsertarFacturaImpuesto($con, $idCab, '2','0', $vet_iva0, $val_iva0);
+        }
+        //Inserta Datos de Iva 12
+        If ($vet_iva12 > 0) {
+            $this->InsertarFacturaImpuesto($con,$obj_con, $idCab, '2', $por_iva, $vet_iva12, $val_iva12);
+        }
+    }
+
+    private function InsertarDetImpFactura($con, $idDet, $codigo, $Tarifa, $t_venta, $val_iva) {
+        $CodigoPor= $this->retornaTarifaDelIva($Tarifa);
+        $sql = "INSERT INTO " . $con->db_edoc . ".NubeDetalleFacturaImpuesto
+                    (Codigo,CodigoPorcentaje,BaseImponible,Tarifa,Valor,IdDetalleFactura)VALUES
+                    (:Codigo,:CodigoPorcentaje,:BaseImponible,:Tarifa,:Valor,:IdDetalleFactura);";
+        $comando = $con->createCommand($sql);
+        $comando->bindParam(":Codigo", $codigo, \PDO::PARAM_STR);
+        $comando->bindParam(":CodigoPorcentaje", $CodigoPor, \PDO::PARAM_STR);
+        $comando->bindParam(":BaseImponible", $t_venta, \PDO::PARAM_STR);
+        $comando->bindParam(":Tarifa", $Tarifa, \PDO::PARAM_STR);
+        $comando->bindParam(":Valor", $val_iva, \PDO::PARAM_STR);
+        $comando->bindParam(":IdDetalleFactura", $idDet, \PDO::PARAM_INT);
+        $comando->execute();        
+    }
+    
+    private function InsertarFacturaImpuesto($con, $idCab, $codigo, $Tarifa, $t_venta, $val_iva) {
+        $CodigoPor= $this->retornaTarifaDelIva($Tarifa);
+        $sql = "INSERT INTO " . $con->db_edoc . ".NubeFacturaImpuesto
+                    (Codigo,CodigoPorcentaje,BaseImponible,Tarifa,Valor,IdFactura)VALUES
+                    (:Codigo,:CodigoPorcentaje,:BaseImponible,:Tarifa,:Valor,:IdFactura);";
+        $comando = $con->createCommand($sql);
+        $comando->bindParam(":Codigo", $codigo, \PDO::PARAM_STR);
+        $comando->bindParam(":CodigoPorcentaje", $CodigoPor, \PDO::PARAM_STR);
+        $comando->bindParam(":BaseImponible", $t_venta, \PDO::PARAM_STR);
+        $comando->bindParam(":Tarifa", $Tarifa, \PDO::PARAM_STR);
+        $comando->bindParam(":Valor", $val_iva, \PDO::PARAM_STR);
+        $comando->bindParam(":IdFactura", $idCab, \PDO::PARAM_INT);
+        $comando->execute();        
+    }
+
+    /*Private Sub InsertarFacturaFormaPago(ByVal dtsData As DataSet, ByVal IdFact As Integer)
+        'Implementado 8/08/2016
+        'FOR_PAG_SRI,PAG_PLZ,PAG_TMP,VAL_NET
+        'Nota la Tabla Forma de Pago debe ser aigual que la SEA Y WEBSEA los IDS deben conincidir.
+        'Si no tiene codigo usa el codigo 1 (SIN UTILIZACION DEL SISTEMA FINANCIERO o Efectivo)
+        Dim IdsForma As Int32 = 0
+        Dim Total As Double = 0
+        Dim Plazo As Int32 = 0
+        Dim UnidadTiempo As String = ""
+        With dtsData.Tables("VC010101").Rows(0)
+            IdsForma = IIf(.Item("FOR_PAG_SRI") <> "", CInt(.Item("FOR_PAG_SRI")), 1) '($cabFact[$i]['FOR_PAG_SRI']!='')?$cabFact[$i]['FOR_PAG_SRI']:'1';
+            Total = IIf(CDbl(.Item("VAL_NET")) > 0, CDbl(.Item("VAL_NET")), 0) '($cabFact[$i]['VAL_NET']!='')?$cabFact[$i]['VAL_NET']:0;
+            Plazo = IIf(CInt(.Item("PAG_PLZ")) > 0, .Item("PAG_PLZ"), 30) '($cabFact[$i]['PAG_PLZ']>0)?$cabFact[$i]['PAG_PLZ']:'30';
+            UnidadTiempo = IIf(.Item("PAG_TMP") <> "", .Item("PAG_TMP"), "DIAS") '($cabFact[$i]['PAG_TMP']!='')?$cabFact[$i]['PAG_TMP']:'DIAS';
+        End With
+        If cmSql IsNot Nothing Then cmSql.Dispose()
+        cmSql = New MySqlCommand
+        With cmSql
+            .Connection = cn
+            .CommandType = CommandType.Text
+
+            .CommandText = "INSERT INTO NubeFacturaFormaPago " & _
+                    "(IdForma,IdFactura,FormaPago,Total,Plazo,UnidadTiempo) VALUES " & _
+                    "(?IdForma,?IdFactura,?FormaPago,?Total,?Plazo,?UnidadTiempo) "
+
+            .Parameters.Add(New MySqlParameter("?IdForma", MySqlDbType.Int32)).Value = IdsForma
+            .Parameters.Add(New MySqlParameter("?IdFactura", MySqlDbType.Int32)).Value = IdFact
+            .Parameters.Add(New MySqlParameter("?FormaPago", MySqlDbType.VarChar)).Value = IdsForma.ToString("00")
+            .Parameters.Add(New MySqlParameter("?Total", MySqlDbType.Double)).Value = Total
+            .Parameters.Add(New MySqlParameter("?Plazo", MySqlDbType.Int32)).Value = Plazo
+            .Parameters.Add(New MySqlParameter("?UnidadTiempo", MySqlDbType.VarChar)).Value = UnidadTiempo
+            .Transaction = trSql
+            'idDet = .ExecuteScalar
+            .ExecuteNonQuery()
+            .Dispose()
+        End With
+
+    End Sub*/       
+    
+    private function InsertarFacturaFormaPago($con, $idCab) {
+        $cabFact= $this->cabEdoc;
+        //Implementado 8/08/2016
+        //FOR_PAG_SRI,PAG_PLZ,PAG_TMP,VAL_NET
+        //Nota la Tabla Forma de Pago debe ser aigual que la SEA Y WEBSEA los IDS deben conincidir.
+        //Si no tiene codigo usa el codigo 1 (SIN UTILIZACION DEL SISTEMA FINANCIERO o Efectivo)
+        $IdsForma = ($cabFact[$i]['FOR_PAG_SRI']!='')?$cabFact[$i]['FOR_PAG_SRI']:'1';
+        $Total=($cabFact[$i]['VAL_NET']!='')?$cabFact[$i]['VAL_NET']:0;
+        $Plazo=($cabFact[$i]['PAG_PLZ']>0)?$cabFact[$i]['PAG_PLZ']:'30';
+        $UnidadTiempo=($cabFact[$i]['PAG_TMP']!='')?$cabFact[$i]['PAG_TMP']:'DIAS';
+        
+        $sql = "INSERT INTO " . $con->db_edoc . ".NubeFacturaFormaPago
+                (IdForma,IdFactura,FormaPago,Total,Plazo,UnidadTiempo)VALUES
+                (:IdForma,:IdFactura,:FormaPago,:Total,:Plazo,:UnidadTiempo);";
+        
+        $comando = $con->createCommand($sql);
+        $comando->bindParam(":IdForma", $IdsForma, \PDO::PARAM_STR);
+        $comando->bindParam(":IdFactura", $idCab, \PDO::PARAM_INT);
+        $comando->bindParam(":FormaPago", $IdsForma, \PDO::PARAM_STR);
+        $comando->bindParam(":Total", $Total, \PDO::PARAM_STR);
+        $comando->bindParam(":Plazo", $Plazo, \PDO::PARAM_STR);
+        $comando->bindParam(":UnidadTiempo", $UnidadTiempo, \PDO::PARAM_STR);
+        $comando->execute();       
+    }
+    
+    
+
+    private function InsertarFacturaDatoAdicional($con,$idCab) {
+        $cabFact= $this->cabEdoc;
+        $direccion = $cabFact['DIR_CLI'];
+        $destino = $cabFact['LUG_DES'];
+        $contacto = $cabFact['NOM_CTO'];
+        $sql = "INSERT INTO " . $con->db_edoc . ".NubeDatoAdicionalFactura 
+                 (Nombre,Descripcion,IdFactura) VALUES
+                 ('Direccion','$direccion','$idCab'),('Destino','$destino','$idCab'),('Contacto','$contacto','$idCab')";
+        $comando = $con->createCommand($sql);
+        $comando->execute();      
+    }
+    
+    /*
+     * FIN DE PROCESO DE FACTURAS
+     */
+    
 
     public function sendMessagesToChat() {
         $usu_id      = $this->usu_id;
