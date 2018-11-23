@@ -233,7 +233,7 @@ financiero::registerTranslations();
     </div>
 
     <?php if (empty($personaData["sins_fecha_reprobacion"])) { ?> 
-        <div class="col-md-12 col-sm-12 col-xs-12 col-lg-12" id="Divnoaprobado" style="display: block;"> <!-- OJO ESTE DBE ESTAR EN NONE-->
+        <div class="col-md-12 col-sm-12 col-xs-12 col-lg-12" id="Divnoaprobado" style="display: none;"> 
             <div class="col-md-6 col-sm-6 col-xs-6 col-lg-6">
                 <div class="form-group">
                     <label for="chk_titulo" class="col-sm-10 col-md-10 col-xs-10 col-lg-10 control-label"><?= admision::t("Solicitudes", "Does not meet acceptance conditions in title") ?></label>
@@ -286,10 +286,10 @@ financiero::registerTranslations();
                     <div class="form-group">
                         <label for="chk_certificado" class="col-sm-10 col-md-10 col-xs-10 col-lg-10 control-label"><?= admision::t("Solicitudes", "Does not meet acceptance conditions in title") ?></label>
                         <div class="col-sm-1 ">                     
-                            <input type="checkbox" class="" id="chk_titulo"  data-type="alfa" data-keydown="true" placeholder="<?= Yii::t("solicitud_ins", "Does not meet acceptance conditions in title") ?>">                      
+                            <input type="checkbox" class="" id="chk_certificado"  data-type="alfa" data-keydown="true" placeholder="<?= Yii::t("solicitud_ins", "Does not meet acceptance conditions in title") ?>">                      
                         </div>
                     </div>
-                    <div class="col-md-13 col-sm-13 col-xs-13 col-lg-13" id="Divcondtitulo" style="visibility: block;" >
+                    <div class="col-md-13 col-sm-13 col-xs-13 col-lg-13" id="Divcondcerti" style="visibility: hidden;" >
                         <div class="form-group">               
                             <?php
                             for ($i = 0; $i < count($arr_certv); $i++) {

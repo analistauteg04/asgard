@@ -395,6 +395,14 @@ $(document).ready(function () {
             $('#Divconddni').css('visibility', 'hidden');
         }
     });
+    
+    $('#chk_certificado').change(function () {
+        if ($('#chk_certificado').prop('checked')) {
+            $('#Divcondcerti').css('visibility', 'visible');
+        } else {
+            $('#Divcondcerti').css('visibility', 'hidden');
+        }
+    });
 
     $('#btn_buscarData').click(function () {
         actualizarGrid();
