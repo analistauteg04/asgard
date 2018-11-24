@@ -13,7 +13,8 @@ class Edoc_ApiRest extends \app\modules\fe_edoc\components\CActiveRecord {
     public $fpagEdoc = array();//forma de pago
 
     function __construct($arr_params = array()) {
-        Utilities::putMessageLogFile($arr_params);
+        //Utilities::putMessageLogFile($arr_params);
+        //Las clave son tranformadas en minusculas
         foreach ($arr_params as $key => $value) {
             if ($key == "tipoedoc")
                 $this->tipoEdoc = $value;
@@ -32,7 +33,8 @@ class Edoc_ApiRest extends \app\modules\fe_edoc\components\CActiveRecord {
     {
         switch ($this->tipoEdoc) {
             case "01"://FACTURAS
-                //return array("status" => "OK", "tipoEdoc" => $this->tipoEdoc, "croo_id" => $arr_data);
+                //Utilities::putMessageLogFile($this->dadcEdoc);
+                //return array("status" => "OK", "tipoEdoc" => $this->tipoEdoc,"data" => $this->dadcEdoc);
                 return $this->insertarFacturas();
                 break;
             case "04"://NOTA DE CREDITO
@@ -86,8 +88,7 @@ class Edoc_ApiRest extends \app\modules\fe_edoc\components\CActiveRecord {
             $trans = $con->beginTransaction();
         }
         try {
-            $idCab= $this->insertarCabFactura($con);
-            //Utilities::putMessageLogFile($idCab);
+            $idCab= $this->insertarCabFactura($con);            
             $this->InsertarDetFactura($con,$idCab);
             $this->InsertarFacturaFormaPago($con,$idCab);
             $this->InsertarFacturaDatoAdicional($con,$idCab);
@@ -107,7 +108,7 @@ class Edoc_ApiRest extends \app\modules\fe_edoc\components\CActiveRecord {
     
     private function insertarCabFactura($con) {
         $cabFact= $this->cabEdoc;
-        //Utilities::putMessageLogFile($cabFact);
+        Utilities::putMessageLogFile($cabFact);
         //$sql = "INSERT INTO " . $con->dbname . ".NubeFactura
         //       (Ambiente,TipoEmision,Secuencial)VALUES(:Ambiente,:TipoEmision,:Secuencial);";
         $TipoEmision=1;//Valor por Defecto
@@ -122,7 +123,7 @@ class Edoc_ApiRest extends \app\modules\fe_edoc\components\CActiveRecord {
         $UsuarioCreador="1";//idde la Persona que genera la factura
         
         
-        $sql = "INSERT INTO " . $con->db_edoc . ".NubeFactura
+        $sql = "INSERT INTO " . $con->dbname . ".NubeFactura
                (Ambiente,TipoEmision, RazonSocial, NombreComercial, Ruc,ClaveAcceso,CodigoDocumento, Establecimiento,
                 PuntoEmision, Secuencial, DireccionMatriz, FechaEmision, DireccionEstablecimiento, ContribuyenteEspecial,
                 ObligadoContabilidad, TipoIdentificacionComprador, GuiaRemision, RazonSocialComprador, IdentificacionComprador,
@@ -167,73 +168,6 @@ class Edoc_ApiRest extends \app\modules\fe_edoc\components\CActiveRecord {
         
     }
     
-    /*Private Sub InsertarDetFactura(ByVal dtsData As DataSet, ByVal IdFact As Integer)
-        Dim idDet As Integer = 0
-        Dim valSinImp As Decimal = 0
-        Dim val_iva12 As Decimal = 0
-        Dim vet_iva12 As Decimal = 0
-        Dim val_iva0 As Decimal = 0 'Valor de Iva
-        Dim vet_iva0 As Decimal = 0 'Venta total con Iva
-        Dim por_iva As Decimal = CDbl(dtsData.Tables("VC010101").Rows(0).Item("POR_IVA")) / 100
-
-        For fil As Integer = 0 To dtsData.Tables("VD010101").Rows.Count - 1
-
-            With dtsData.Tables("VD010101").Rows(fil)
-                'valSinImp = floatval($detFact[$i]['T_VENTA']) - floatval($detFact[$i]['VAL_DES']);
-                valSinImp = CDbl(.Item("T_VENTA")) - CDbl(.Item("VAL_DES"))
-                If .Item("I_M_IVA") = "1" Then
-                    'MOdificacion por que iva no cuadra con los totales
-                    'val_iva12 = val_iva12 + (CDbl(.Item("CAN_DES")) * CDbl(.Item("P_VENTA")) * por_iva)
-                    val_iva12 = val_iva12 + ((CDbl(.Item("CAN_DES")) * CDbl(.Item("P_VENTA")) - CDbl(.Item("VAL_DES"))) * por_iva)
-                    vet_iva12 = vet_iva12 + valSinImp
-                Else
-                    val_iva0 = 0
-                    vet_iva0 = vet_iva0 + valSinImp
-                End If
-            End With
-
-            If cmSql IsNot Nothing Then cmSql.Dispose()
-            cmSql = New MySqlCommand
-            With cmSql
-                .Connection = cn
-                .CommandType = CommandType.Text
-
-                .CommandText = "INSERT INTO NubeDetalleFactura " & _
-                "(CodigoPrincipal,CodigoAuxiliar,Descripcion,Cantidad,PrecioUnitario,Descuento,PrecioTotalSinImpuesto,IdFactura) VALUES " & _
-                "(?CodigoPrincipal,?CodigoAuxiliar,?Descripcion,?Cantidad,?PrecioUnitario,?Descuento,?PrecioTotalSinImpuesto,?IdFactura); SELECT LAST_INSERT_ID() "
-
-                .Parameters.Add(New MySqlParameter("?CodigoPrincipal", MySqlDbType.VarChar)).Value = dtsData.Tables("VD010101").Rows(fil).Item("COD_ART")
-                .Parameters.Add(New MySqlParameter("?CodigoAuxiliar", MySqlDbType.VarChar)).Value = "1"
-                .Parameters.Add(New MySqlParameter("?Descripcion", MySqlDbType.VarChar)).Value = dtsData.Tables("VD010101").Rows(fil).Item("NOM_ART")
-                .Parameters.Add(New MySqlParameter("?Cantidad", MySqlDbType.Double)).Value = dtsData.Tables("VD010101").Rows(fil).Item("CAN_DES")
-                .Parameters.Add(New MySqlParameter("?PrecioUnitario", MySqlDbType.Double)).Value = dtsData.Tables("VD010101").Rows(fil).Item("P_VENTA")
-                .Parameters.Add(New MySqlParameter("?Descuento", MySqlDbType.Double)).Value = dtsData.Tables("VD010101").Rows(fil).Item("VAL_DES")
-                .Parameters.Add(New MySqlParameter("?PrecioTotalSinImpuesto", MySqlDbType.Double)).Value = valSinImp
-                .Parameters.Add(New MySqlParameter("?IdFactura", MySqlDbType.Int32)).Value = IdFact
-                .Transaction = trSql
-                idDet = .ExecuteScalar
-                .Dispose()
-            End With
-            'Inserta el IVA de cada Item 
-            If dtsData.Tables("VD010101").Rows(fil).Item("I_M_IVA") = "1" Then
-                'Segun Datos Sri 14%
-                Call InsertarDetImpFactura(idDet, "2", (por_iva * 100), valSinImp, dtsData.Tables("VD010101").Rows(fil).Item("VAL_IVA"))
-            Else
-                'Caso Contrario no Genera Impuesto 0%
-                Call InsertarDetImpFactura(idDet, "2", 0, valSinImp, dtsData.Tables("VD010101").Rows(fil).Item("VAL_IVA"))
-            End If
-        Next
-        'Inserta el Total del Iva Acumulado en el detalle
-        'Insertar Datos de Iva 0%
-        If vet_iva0 > 0 Then
-            Call InsertarFacturaImpuesto(IdFact, "2", 0, vet_iva0, val_iva0)
-        End If
-        'Inserta Datos de Iva 12
-        If vet_iva12 > 0 Then
-            Call InsertarFacturaImpuesto(IdFact, "2", (por_iva * 100), vet_iva12, val_iva12)
-        End If
-    End Sub*/
-    
     private function InsertarDetFactura($con,$idCab) {
         $cabFact= $this->cabEdoc;
         $detFact= $this->detEdoc;
@@ -245,7 +179,6 @@ class Edoc_ApiRest extends \app\modules\fe_edoc\components\CActiveRecord {
         $vet_iva12 = 0;
         $val_iva0 = 0;//Valor de Iva
         $vet_iva0 = 0;//Venta total con Iva
-
         for ($i = 0; $i < sizeof($detFact); $i++) {
             $valSinImp = $detFact[$i]['TOTALSINIMPUESTOS'];//floatval($detFact[$i]['T_VENTA']) - floatval($detFact[$i]['VAL_DES']);
             //%codigo iva segun tabla #17
@@ -258,7 +191,7 @@ class Edoc_ApiRest extends \app\modules\fe_edoc\components\CActiveRecord {
                 $vet_iva0 = $vet_iva0 + $valSinImp;
             }
             $CodigoAuxiliar=($detFact[$i]['CODIGOPRINCIPAL']!='')?$detFact[$i]['CODIGOPRINCIPAL']:1;
-            $sql = "INSERT INTO " . $con->db_edoc . ".NubeDetalleFactura
+            $sql = "INSERT INTO " . $con->dbname . ".NubeDetalleFactura
                         (CodigoPrincipal,CodigoAuxiliar,Descripcion,Cantidad,PrecioUnitario,Descuento,PrecioTotalSinImpuesto,IdFactura) VALUES 
                         (:CodigoPrincipal,:CodigoAuxiliar,:Descripcion,:Cantidad,:PrecioUnitario,:Descuento,:PrecioTotalSinImpuesto,:IdFactura);";
             
@@ -296,7 +229,7 @@ class Edoc_ApiRest extends \app\modules\fe_edoc\components\CActiveRecord {
 
     private function InsertarDetImpFactura($con, $idDet, $codigo, $Tarifa, $t_venta, $val_iva) {
         $CodigoPor= $this->retornaTarifaDelIva($Tarifa);
-        $sql = "INSERT INTO " . $con->db_edoc . ".NubeDetalleFacturaImpuesto
+        $sql = "INSERT INTO " . $con->dbname . ".NubeDetalleFacturaImpuesto
                     (Codigo,CodigoPorcentaje,BaseImponible,Tarifa,Valor,IdDetalleFactura)VALUES
                     (:Codigo,:CodigoPorcentaje,:BaseImponible,:Tarifa,:Valor,:IdDetalleFactura);";
         $comando = $con->createCommand($sql);
@@ -311,7 +244,7 @@ class Edoc_ApiRest extends \app\modules\fe_edoc\components\CActiveRecord {
     
     private function InsertarFacturaImpuesto($con, $idCab, $codigo, $Tarifa, $t_venta, $val_iva) {
         $CodigoPor= $this->retornaTarifaDelIva($Tarifa);
-        $sql = "INSERT INTO " . $con->db_edoc . ".NubeFacturaImpuesto
+        $sql = "INSERT INTO " . $con->dbname . ".NubeFacturaImpuesto
                     (Codigo,CodigoPorcentaje,BaseImponible,Tarifa,Valor,IdFactura)VALUES
                     (:Codigo,:CodigoPorcentaje,:BaseImponible,:Tarifa,:Valor,:IdFactura);";
         $comando = $con->createCommand($sql);
@@ -324,57 +257,19 @@ class Edoc_ApiRest extends \app\modules\fe_edoc\components\CActiveRecord {
         $comando->execute();        
     }
 
-    /*Private Sub InsertarFacturaFormaPago(ByVal dtsData As DataSet, ByVal IdFact As Integer)
-        'Implementado 8/08/2016
-        'FOR_PAG_SRI,PAG_PLZ,PAG_TMP,VAL_NET
-        'Nota la Tabla Forma de Pago debe ser aigual que la SEA Y WEBSEA los IDS deben conincidir.
-        'Si no tiene codigo usa el codigo 1 (SIN UTILIZACION DEL SISTEMA FINANCIERO o Efectivo)
-        Dim IdsForma As Int32 = 0
-        Dim Total As Double = 0
-        Dim Plazo As Int32 = 0
-        Dim UnidadTiempo As String = ""
-        With dtsData.Tables("VC010101").Rows(0)
-            IdsForma = IIf(.Item("FOR_PAG_SRI") <> "", CInt(.Item("FOR_PAG_SRI")), 1) '($cabFact[$i]['FOR_PAG_SRI']!='')?$cabFact[$i]['FOR_PAG_SRI']:'1';
-            Total = IIf(CDbl(.Item("VAL_NET")) > 0, CDbl(.Item("VAL_NET")), 0) '($cabFact[$i]['VAL_NET']!='')?$cabFact[$i]['VAL_NET']:0;
-            Plazo = IIf(CInt(.Item("PAG_PLZ")) > 0, .Item("PAG_PLZ"), 30) '($cabFact[$i]['PAG_PLZ']>0)?$cabFact[$i]['PAG_PLZ']:'30';
-            UnidadTiempo = IIf(.Item("PAG_TMP") <> "", .Item("PAG_TMP"), "DIAS") '($cabFact[$i]['PAG_TMP']!='')?$cabFact[$i]['PAG_TMP']:'DIAS';
-        End With
-        If cmSql IsNot Nothing Then cmSql.Dispose()
-        cmSql = New MySqlCommand
-        With cmSql
-            .Connection = cn
-            .CommandType = CommandType.Text
-
-            .CommandText = "INSERT INTO NubeFacturaFormaPago " & _
-                    "(IdForma,IdFactura,FormaPago,Total,Plazo,UnidadTiempo) VALUES " & _
-                    "(?IdForma,?IdFactura,?FormaPago,?Total,?Plazo,?UnidadTiempo) "
-
-            .Parameters.Add(New MySqlParameter("?IdForma", MySqlDbType.Int32)).Value = IdsForma
-            .Parameters.Add(New MySqlParameter("?IdFactura", MySqlDbType.Int32)).Value = IdFact
-            .Parameters.Add(New MySqlParameter("?FormaPago", MySqlDbType.VarChar)).Value = IdsForma.ToString("00")
-            .Parameters.Add(New MySqlParameter("?Total", MySqlDbType.Double)).Value = Total
-            .Parameters.Add(New MySqlParameter("?Plazo", MySqlDbType.Int32)).Value = Plazo
-            .Parameters.Add(New MySqlParameter("?UnidadTiempo", MySqlDbType.VarChar)).Value = UnidadTiempo
-            .Transaction = trSql
-            'idDet = .ExecuteScalar
-            .ExecuteNonQuery()
-            .Dispose()
-        End With
-
-    End Sub*/       
-    
     private function InsertarFacturaFormaPago($con, $idCab) {
+        Utilities::putMessageLogFile("LLEGO A FORMA PAGO");
         $fpagEdoc= $this->fpagEdoc;
         //Implementado 8/08/2016
         //FOR_PAG_SRI,PAG_PLZ,PAG_TMP,VAL_NET =>$cabFact[$i]['VAL_NET']
         //Nota la Tabla Forma de Pago debe ser aigual que la SEA Y WEBSEA los IDS deben conincidir.
         //Si no tiene codigo usa el codigo 1 (SIN UTILIZACION DEL SISTEMA FINANCIERO o Efectivo)
-        $IdsForma = $fpagEdoc['COD_FORMAPAG']; //($fpagEdoc['COD_FORMAPAG']!='')?$fpagEdoc['FOR_PAG_SRI']:'1';
-        $Total=$fpagEdoc['VALOR'];//($fpagEdoc['VALOR']!='')?$fpagEdoc['VAL_NET']:0;
-        $Plazo=$fpagEdoc['PLAZO'];//($fpagEdoc['PLAZO']>0)?$fpagEdoc['PLAZO']:'30';
-        $UnidadTiempo=$fpagEdoc['UNIDAD_TIEMPO'];//($fpagEdoc['UNIDAD_TIEMPO']!='')?$fpagEdoc['UNIDAD_TIEMPO']:'DIAS';
+        $IdsForma = $fpagEdoc[0]['COD_FORMAPAG']; //($fpagEdoc['COD_FORMAPAG']!='')?$fpagEdoc['FOR_PAG_SRI']:'1';
+        $Total=$fpagEdoc[0]['VALOR'];//($fpagEdoc['VALOR']!='')?$fpagEdoc['VAL_NET']:0;
+        $Plazo=$fpagEdoc[0]['PLAZO'];//($fpagEdoc['PLAZO']>0)?$fpagEdoc['PLAZO']:'30';
+        $UnidadTiempo=$fpagEdoc[0]['UNIDAD_TIEMPO'];//($fpagEdoc['UNIDAD_TIEMPO']!='')?$fpagEdoc['UNIDAD_TIEMPO']:'DIAS';
         
-        $sql = "INSERT INTO " . $con->db_edoc . ".NubeFacturaFormaPago
+        $sql = "INSERT INTO " . $con->dbname . ".NubeFacturaFormaPago
                 (IdForma,IdFactura,FormaPago,Total,Plazo,UnidadTiempo)VALUES
                 (:IdForma,:IdFactura,:FormaPago,:Total,:Plazo,:UnidadTiempo);";
         
@@ -393,7 +288,7 @@ class Edoc_ApiRest extends \app\modules\fe_edoc\components\CActiveRecord {
     private function InsertarFacturaDatoAdicional($con, $idCab) {
         $dadcEdoc = $this->dadcEdoc;
         for ($i = 0; $i < sizeof($dadcEdoc); $i++) {
-            $sql = "INSERT INTO " . $con->db_edoc . ".NubeDatoAdicionalFactura 
+            $sql = "INSERT INTO " . $con->dbname . ".NubeDatoAdicionalFactura 
                  (Nombre,Descripcion,IdFactura) VALUES (:Nombre,:Descripcion,:IdFactura);";
             //('Direccion','$direccion','$idCab'),('Destino','$destino','$idCab'),('Contacto','$contacto','$idCab')";
 
@@ -409,66 +304,5 @@ class Edoc_ApiRest extends \app\modules\fe_edoc\components\CActiveRecord {
      * FIN DE PROCESO DE FACTURAS
      */
     
-
-    public function sendMessagesToChat() {
-        $usu_id      = $this->usu_id;
-        $mensaje     = $this->cmes_mensaje;
-        $croo_id     = $this->croo_id;
-        $fecha_envio = $this->cmes_fecha_envio;
-        $fecha_creacion = date("Y-m-d H:i:s");
-        $chat_id = 0;
-        $con = Yii::$app->db;
-        $trans = $con->getTransaction();
-        if ($trans !== null) {
-            $trans = null; // si existe la transacción entonces no se crea una
-        } else {
-            $trans = $con->beginTransaction();
-        }
-        if($croo_id == 0){// se debe crear el chat para ambos
-            $croo_id = $this->croo_id = $this->createChatRoom();
-        }
-        if(!$this->verifyUserChat()){
-            return array("status" => "NO_OK","chat_id"=> 0);
-        }
-        $sql = "INSERT INTO chat_message(
-                        croo_id,
-                        usu_id,
-                        cmes_mensaje,
-                        cmes_fecha_envio,
-                        cmes_estado_recibido,
-                        cmes_estado_activo,
-                        cmes_fecha_creacion,
-                        cmes_estado_logico) 
-                    VALUES (
-                        :croo_id,
-                        :usu_id,
-                        :mensaje,
-                        :fecha_envio,
-                        '0',
-                        '1',
-                        :fecha_creacion,
-                        '1'
-                    )";
-        try {
-            $comando = $con->createCommand($sql);
-            $comando->bindParam(":usu_id", $usu_id, \PDO::PARAM_INT);
-            $comando->bindParam(":croo_id", $croo_id, \PDO::PARAM_INT);
-            $comando->bindParam(":mensaje", $mensaje, \PDO::PARAM_STR);
-            $comando->bindParam(":fecha_envio", $fecha_envio, \PDO::PARAM_STR);
-            $comando->bindParam(":fecha_creacion", $fecha_creacion, \PDO::PARAM_STR);
-            $status = $comando->execute();
-            if($status){
-                $chat_id = $con->getLastInsertID("chat_message");
-            }
-            if ($trans !== null){
-                $trans->commit();
-            }
-            return array("status"=>"OK", "chat_id"=>$chat_id, "croo_id"=>$croo_id);
-        } catch (\Exception $e) {
-            $trans->rollBack();
-            //throw $e;
-            return array("status" => "NO_OK", "chat_id"=> 0);
-        }
-    }
 
 }
