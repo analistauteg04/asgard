@@ -6,6 +6,7 @@ use Yii;
 use app\models\Utilities;
 
 class Edoc_ApiRest extends \app\modules\fe_edoc\components\CActiveRecord {
+    private $tipoEmision=1;//Valor por defecto
     public $tipoEdoc = "";
     public $cabEdoc = array();
     public $detEdoc = array();
@@ -47,7 +48,10 @@ class Edoc_ApiRest extends \app\modules\fe_edoc\components\CActiveRecord {
 
                 break;
             case "07"://RETENCIONES
-
+                //Utilities::putMessageLogFile($this->cabEdoc);
+                //Utilities::putMessageLogFile($this->detEdoc);
+                //return array("status" => "OK", "tipoEdoc" => $this->tipoEdoc,"data" => $this->cabEdoc);
+                return $this->insertarRetenciones();
                 break;
 
         }
@@ -100,7 +104,6 @@ class Edoc_ApiRest extends \app\modules\fe_edoc\components\CActiveRecord {
         } catch (\Exception $e) {
             $trans->rollBack();
             //throw $e;
-            //return array("status" => "NO_OK");
             return array("status"=>"NO_OK","error"=>$e);
         }
         
@@ -108,9 +111,6 @@ class Edoc_ApiRest extends \app\modules\fe_edoc\components\CActiveRecord {
     
     private function insertarCabFactura($con) {
         $cabFact= $this->cabEdoc;
-        Utilities::putMessageLogFile($cabFact);
-        //$sql = "INSERT INTO " . $con->dbname . ".NubeFactura
-        //       (Ambiente,TipoEmision,Secuencial)VALUES(:Ambiente,:TipoEmision,:Secuencial);";
         $TipoEmision=1;//Valor por Defecto
         $RazonSocial="UTEG S.A.";
         $NombreComercial="UTEG S.A.";
@@ -302,6 +302,102 @@ class Edoc_ApiRest extends \app\modules\fe_edoc\components\CActiveRecord {
 
     /*
      * FIN DE PROCESO DE FACTURAS
+     */
+    
+    /*
+     * INICIO DE PROCESO DE RETENCIONES
+     */
+    
+    private function insertarRetenciones() {
+        $con = Yii::$app->db_edoc;
+        if ($trans !== null) {
+            $trans = null; // si existe la transacción entonces no se crea una
+        } else {
+            $trans = $con->beginTransaction();
+        }
+        try {
+            $idCDoc= $this->InsertarCabRetencion($con);            
+            //$this->InsertarDetFactura($con,$idCDoc);
+            //$this->InsertarFacturaFormaPago($con,$idCDoc);
+            //$this->InsertarFacturaDatoAdicional($con,$idCDoc);
+            if ($trans !== null){
+                $trans->commit();
+            }
+            //return array("status"=>"OK");
+            return array("status"=>"OK", "Ids_Doc"=>$idCDoc);
+        } catch (\Exception $e) {
+            $trans->rollBack();
+            //throw $e;
+            return array("status"=>"NO_OK","error"=>$e);
+        }
+        
+    }
+    
+    
+    private function InsertarCabRetencion($con) {
+        $cabFact= $this->cabEdoc;
+        $TipoEmision=$this->tipoEmision;//Valor por Defecto
+        $RazonSocial="UTEG S.A.";
+        $NombreComercial="UTEG S.A.";
+        $Ruc="1310328404001";//Ruc de la EMpesa
+        $DireccionMatriz="Direccion de la Matriz empresa";
+        $DireccionEstablecimiento="Direccion de Establecimiento Empresa ";
+        $ContribuyenteEspecial=($cabFact['CONTRIB_ESPECIAL']!=0)?'SI':'';//Estreare de tabla Empresa
+        $ObligadoContabilidad=($cabFact['OBLIGADOCONTAB']!=0)?'SI':'';//Estreare de tabla Empresa
+        $CodigoTransaccionERP='XX';//
+        $UsuarioCreador="1";//idde la Persona que genera la factura
+        
+        $TotalRetencion=0;//Este valor es actualiado despues de insertar el detalle
+        $DocSustentoERP=$cabFact['SECUENCIAL_DOCSUST'];
+        
+        $sql = "INSERT INTO " . $con->dbname . ".NubeRetencion 
+                (Ambiente,TipoEmision,RazonSocial,NombreComercial,Ruc,ClaveAcceso,CodigoDocumento,PuntoEmision,Establecimiento, 
+                 Secuencial,DireccionMatriz,FechaEmision,DireccionEstablecimiento,ContribuyenteEspecial,ObligadoContabilidad, 
+                 TipoIdentificacionSujetoRetenido,IdentificacionSujetoRetenido,RazonSocialSujetoRetenido,PeriodoFiscal, 
+                 TotalRetencion,UsuarioCreador,SecuencialERP,CodigoTransaccionERP,DocSustentoERP,Estado,USU_ID,FechaCarga)VALUES 
+                (:Ambiente,:TipoEmision,:RazonSocial,:NombreComercial,:Ruc,:ClaveAcceso,:CodigoDocumento,:PuntoEmision,:Establecimiento, 
+                 :Secuencial,:DireccionMatriz,:FechaEmision,:DireccionEstablecimiento,:ContribuyenteEspecial,:ObligadoContabilidad, 
+                 :TipoIdentificacionSujetoRetenido,:IdentificacionSujetoRetenido,:RazonSocialSujetoRetenido,:PeriodoFiscal, 
+                 :TotalRetencion,:UsuarioCreador,:SecuencialERP,:CodigoTransaccionERP,:DocSustentoERP,1,:UsuarioCreador,CURRENT_TIMESTAMP() );";
+        
+        $comando = $con->createCommand($sql);
+
+        //$comando->bindParam(":id", $id_docElectronico, PDO::PARAM_INT);
+        $comando->bindParam(":Ambiente", $cabFact['TIPOAMBIENTE'], \PDO::PARAM_STR);
+        $comando->bindParam(":TipoEmision", $TipoEmision, \PDO::PARAM_STR);
+        $comando->bindParam(":Secuencial", $cabFact['SECUENCIAL'], \PDO::PARAM_STR);        
+        $comando->bindParam(":RazonSocial", $RazonSocial, \PDO::PARAM_STR);
+        $comando->bindParam(":NombreComercial", $NombreComercial, \PDO::PARAM_STR);
+        $comando->bindParam(":Ruc", $Ruc, \PDO::PARAM_STR);
+        $comando->bindParam(":ClaveAcceso", $cabFact['CLAVEACCESO'], \PDO::PARAM_STR);        
+        $comando->bindParam(":CodigoDocumento", $cabFact['CODDOC'], \PDO::PARAM_STR);
+        $comando->bindParam(":Establecimiento", $cabFact['COD_ESTAB'], \PDO::PARAM_STR);
+        $comando->bindParam(":PuntoEmision", $cabFact['PTOEMI'], \PDO::PARAM_STR);        
+        $comando->bindParam(":DireccionMatriz", $DireccionMatriz, \PDO::PARAM_STR);
+        $comando->bindParam(":FechaEmision", $cabFact['FECHAEMISION'], \PDO::PARAM_STR);
+        $comando->bindParam(":DireccionEstablecimiento", $DireccionEstablecimiento, \PDO::PARAM_STR);        
+        $comando->bindParam(":ContribuyenteEspecial", $ContribuyenteEspecial, \PDO::PARAM_STR);        
+        $comando->bindParam(":ObligadoContabilidad", $ObligadoContabilidad, \PDO::PARAM_STR);        
+        $comando->bindParam(":TipoIdentificacionSujetoRetenido", $cabFact['TIPOID_SUJETO'], \PDO::PARAM_STR);        
+        $comando->bindParam(":RazonSocialSujetoRetenido", $cabFact['RAZONSOCIAL_SUJETO'], \PDO::PARAM_STR);
+        $comando->bindParam(":IdentificacionSujetoRetenido", $cabFact['RUC_SUJETO'], \PDO::PARAM_STR);
+        $comando->bindParam(":PeriodoFiscal", $cabFact['PERIODOFISCAL'], \PDO::PARAM_STR);
+        $comando->bindParam(":TotalRetencion", $TotalRetencion, \PDO::PARAM_STR);
+        $comando->bindParam(":SecuencialERP", $cabFact['SECUENCIAL'], \PDO::PARAM_STR);
+        $comando->bindParam(":CodigoTransaccionERP", $CodigoTransaccionERP, \PDO::PARAM_STR);
+        $comando->bindParam(":DocSustentoERP", $DocSustentoERP, \PDO::PARAM_STR);        
+        $comando->bindParam(":UsuarioCreador", $UsuarioCreador, \PDO::PARAM_STR);
+
+        $comando->execute();
+        return $con->getLastInsertID();
+        
+    }
+
+
+    
+    
+     /*
+     * FIN DE PROCESO DE RETENCIONES
      */
     
 
