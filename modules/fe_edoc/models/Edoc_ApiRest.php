@@ -110,6 +110,17 @@ class Edoc_ApiRest extends \app\modules\fe_edoc\components\CActiveRecord {
         //Utilities::putMessageLogFile($cabFact);
         //$sql = "INSERT INTO " . $con->dbname . ".NubeFactura
         //       (Ambiente,TipoEmision,Secuencial)VALUES(:Ambiente,:TipoEmision,:Secuencial);";
+        $TipoEmision=1;//Valor por Defecto
+        $RazonSocial="UTEG S.A.";
+        $NombreComercial="UTEG S.A.";
+        $Ruc="1310328404001";//Ruc de la EMpesa
+        $DireccionMatriz="Direccion de la Matriz empresa";
+        $DireccionEstablecimiento="Direccion de Establecimiento Empresa ";
+        $ContribuyenteEspecial=($cabFact['CONTRIB_ESPECIAL']!=0)?'SI':'';
+        $ObligadoContabilidad=$cabFact['OBLIGADOCONTAB'];//($cabFact['OBLIGADOCONTAB']!=0)?'SI':'';
+        $CodigoTransaccionERP='XX';//
+        $UsuarioCreador="1";//idde la Persona que genera la factura
+        
         
         $sql = "INSERT INTO " . $con->db_edoc . ".NubeFactura
                (Ambiente,TipoEmision, RazonSocial, NombreComercial, Ruc,ClaveAcceso,CodigoDocumento, Establecimiento,
@@ -124,32 +135,32 @@ class Edoc_ApiRest extends \app\modules\fe_edoc\components\CActiveRecord {
 
         //$comando->bindParam(":id", $id_docElectronico, PDO::PARAM_INT);
         $comando->bindParam(":Ambiente", $cabFact['TIPOAMBIENTE'], \PDO::PARAM_STR);
-        $comando->bindParam(":TipoEmision", $cabFact['TIPOEMISION'], \PDO::PARAM_STR);
+        $comando->bindParam(":TipoEmision", $TipoEmision, \PDO::PARAM_STR);
         $comando->bindParam(":Secuencial", $cabFact['SECUENCIAL'], \PDO::PARAM_STR);        
-        $comando->bindParam(":RazonSocial", $cabFact['SYS_FACTURANC_ID'], \PDO::PARAM_STR);
-        $comando->bindParam(":NombreComercial", $cabFact['SYS_FACTURANC_ID'], \PDO::PARAM_STR);
-        $comando->bindParam(":Ruc", $cabFact['RUC_SUJETO'], \PDO::PARAM_STR);
+        $comando->bindParam(":RazonSocial", $RazonSocial, \PDO::PARAM_STR);
+        $comando->bindParam(":NombreComercial", $NombreComercial, \PDO::PARAM_STR);
+        $comando->bindParam(":Ruc", $Ruc, \PDO::PARAM_STR);
         $comando->bindParam(":ClaveAcceso", $cabFact['CLAVEACCESO'], \PDO::PARAM_STR);
-        $comando->bindParam(":CodigoDocumento", $cabFact['CIA_CODIGO'], \PDO::PARAM_STR);
+        $comando->bindParam(":CodigoDocumento", $cabFact['TIPOCOMPROBANTE'], \PDO::PARAM_STR);
         $comando->bindParam(":Establecimiento", $cabFact['COD_ESTAB'], \PDO::PARAM_STR);
         $comando->bindParam(":PuntoEmision", $cabFact['PTOEMI'], \PDO::PARAM_STR);
-        $comando->bindParam(":DireccionMatriz", $cabFact['SYS_FACTURANC_ID'], \PDO::PARAM_STR);
+        $comando->bindParam(":DireccionMatriz", $DireccionMatriz, \PDO::PARAM_STR);
         $comando->bindParam(":FechaEmision", $cabFact['FECHAEMISION'], \PDO::PARAM_STR);
-        $comando->bindParam(":DireccionEstablecimiento", $cabFact['SYS_FACTURANC_ID'], \PDO::PARAM_STR);
-        $comando->bindParam(":ContribuyenteEspecial", $cabFact['CONTRIB_ESPECIAL'], \PDO::PARAM_STR);
-        $comando->bindParam(":ObligadoContabilidad", $cabFact['OBLIGADOCONTAB'], \PDO::PARAM_STR);
+        $comando->bindParam(":DireccionEstablecimiento", $DireccionEstablecimiento, \PDO::PARAM_STR);
+        $comando->bindParam(":ContribuyenteEspecial", $ContribuyenteEspecial, \PDO::PARAM_STR);
+        $comando->bindParam(":ObligadoContabilidad", $ObligadoContabilidad, \PDO::PARAM_STR);
         $comando->bindParam(":TipoIdentificacionComprador", $cabFact['TIPOID_SUJETO'], \PDO::PARAM_STR);
         $comando->bindParam(":GuiaRemision", $cabFact['NUMGUIA'], \PDO::PARAM_STR);
-        $comando->bindParam(":RazonSocialComprador", $cabFact['SYS_FACTURANC_ID'], \PDO::PARAM_STR);
-        $comando->bindParam(":IdentificacionComprador", $cabFact['SYS_FACTURANC_ID'], \PDO::PARAM_STR);
-        $comando->bindParam(":TotalSinImpuesto", $cabFact['SYS_FACTURANC_ID'], \PDO::PARAM_STR);
+        $comando->bindParam(":RazonSocialComprador", $cabFact['RAZONSOCIAL_SUJETO'], \PDO::PARAM_STR);
+        $comando->bindParam(":IdentificacionComprador", $cabFact['RUC_SUJETO'], \PDO::PARAM_STR);
+        $comando->bindParam(":TotalSinImpuesto", $cabFact['TOTALBRUTO'], \PDO::PARAM_STR);
         $comando->bindParam(":TotalDescuento", $cabFact['TOTALDESC'], \PDO::PARAM_STR);
         $comando->bindParam(":Propina", $cabFact['PROPINA'], \PDO::PARAM_STR);
-        $comando->bindParam(":ImporteTotal", $cabFact['TOTALBRUTO'], \PDO::PARAM_STR);
+        $comando->bindParam(":ImporteTotal", $cabFact['TOTALDOC'], \PDO::PARAM_STR);
         $comando->bindParam(":Moneda", $cabFact['MONEDA'], \PDO::PARAM_STR);
         $comando->bindParam(":SecuencialERP", $cabFact['SECUENCIAL'], \PDO::PARAM_STR);
         $comando->bindParam(":CodigoTransaccionERP", $CodigoTransaccionERP, \PDO::PARAM_STR);
-        $comando->bindParam(":UsuarioCreador", $cabFact['SYS_FACTURANC_ID'], \PDO::PARAM_STR);
+        $comando->bindParam(":UsuarioCreador", $UsuarioCreador, \PDO::PARAM_STR);
 
         $comando->execute();
         return $con->getLastInsertID();
