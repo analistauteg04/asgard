@@ -235,9 +235,10 @@ class Edoc_ApiRest extends \app\modules\fe_edoc\components\CActiveRecord {
     End Sub*/
     
     private function InsertarDetFactura($con,$idCab) {
+        $cabFact= $this->cabEdoc;
         $detFact= $this->detEdoc;
         //Dim por_iva As Decimal = CDbl(dtsData.Tables("VC010101").Rows(0).Item("POR_IVA")) / 100
-                
+        $por_iva=intval($cabFact['IVA_PORCENTAJE']);//12;//Recuperar el impuesto de alguna tabla    o recuperar de la Cabecera    
         $idDet=0;
         $valSinImp = 0;
         $val_iva12 = 0;
@@ -246,37 +247,40 @@ class Edoc_ApiRest extends \app\modules\fe_edoc\components\CActiveRecord {
         $vet_iva0 = 0;//Venta total con Iva
 
         for ($i = 0; $i < sizeof($detFact); $i++) {
-            $valSinImp = floatval($detFact[$i]['T_VENTA']) - floatval($detFact[$i]['VAL_DES']);
-            if ($detFact[$i]['I_M_IVA'] == '1') {
-                $val_iva12 = $val_iva12 + ((floatval($detFact[$i]['CAN_DES'])*floatval($detFact[$i]['P_VENTA'])-floatval($detFact[$i]['VAL_DES']))* (floatval($por_iva)/100));
+            $valSinImp = $detFact[$i]['TOTALSINIMPUESTOS'];//floatval($detFact[$i]['T_VENTA']) - floatval($detFact[$i]['VAL_DES']);
+            //%codigo iva segun tabla #17
+            $codigoImp=$detFact[$i]['IMP_CODIGO'];
+            if ($codigoImp == '2') {
+                $val_iva12 = $val_iva12 + ((floatval($detFact[$i]['CANTIDAD'])*floatval($detFact[$i]['PRECIOUNITARIO'])-floatval($detFact[$i]['DESC']))* (floatval($por_iva)/100));
                 $vet_iva12 = $vet_iva12 + $valSinImp;
             } else {
                 $val_iva0 = 0;
                 $vet_iva0 = $vet_iva0 + $valSinImp;
             }
-            $CodigoAuxiliar=1;
+            $CodigoAuxiliar=($detFact[$i]['CODIGOPRINCIPAL']!='')?$detFact[$i]['CODIGOPRINCIPAL']:1;
             $sql = "INSERT INTO " . $con->db_edoc . ".NubeDetalleFactura
                         (CodigoPrincipal,CodigoAuxiliar,Descripcion,Cantidad,PrecioUnitario,Descuento,PrecioTotalSinImpuesto,IdFactura) VALUES 
                         (:CodigoPrincipal,:CodigoAuxiliar,:Descripcion,:Cantidad,:PrecioUnitario,:Descuento,:PrecioTotalSinImpuesto,:IdFactura);";
             
             $comando = $con->createCommand($sql);
-            $comando->bindParam(":CodigoPrincipal", $detFact[$i]['NOM_ART'], \PDO::PARAM_STR);
+            $comando->bindParam(":CodigoPrincipal", $detFact[$i]['CODIGOPRINCIPAL'], \PDO::PARAM_STR);
             $comando->bindParam(":CodigoAuxiliar", $CodigoAuxiliar, \PDO::PARAM_STR);
-            $comando->bindParam(":Descripcion", $detFact[$i]['NOM_ART'], \PDO::PARAM_STR);
-            $comando->bindParam(":Cantidad", $detFact[$i]['NOM_ART'], \PDO::PARAM_STR);
-            $comando->bindParam(":PrecioUnitario", $detFact[$i]['NOM_ART'], \PDO::PARAM_STR);
-            $comando->bindParam(":Descuento", $detFact[$i]['NOM_ART'], \PDO::PARAM_STR);
+            $comando->bindParam(":Descripcion", $detFact[$i]['DESCRIPCION'], \PDO::PARAM_STR);
+            $comando->bindParam(":Cantidad", $detFact[$i]['CANTIDAD'], \PDO::PARAM_STR);
+            $comando->bindParam(":PrecioUnitario", $detFact[$i]['PRECIOUNITARIO'], \PDO::PARAM_STR);
+            $comando->bindParam(":Descuento", $detFact[$i]['DESC'], \PDO::PARAM_STR);
             $comando->bindParam(":PrecioTotalSinImpuesto", $valSinImp, \PDO::PARAM_STR);
             $comando->bindParam(":IdFactura", $idCab, \PDO::PARAM_INT);
             $comando->execute();
             $idDet = $con->getLastInsertID();
             
-            //Inserta el IVA de cada Item 
-            if ($detFact[$i]['I_M_IVA'] == '1') {//Verifico si el ITEM tiene Impuesto
+            //Inserta el IVA de cada Item             
+            if ($codigoImp == '2') {//Verifico si el ITEM tiene Impuesto 12%
                 //Segun Datos Sri
-                $this->InsertarDetImpFactura($con,$obj_con, $idDet, '2',$por_iva, $valSinImp, $detFact[$i]['VAL_IVA']); //12%
-            } else {//Caso Contrario no Genera Impuesto
-                $this->InsertarDetImpFactura($con,$obj_con, $idDet, '2','0', $valSinImp, $detFact[$i]['VAL_IVA']); //0%
+                $valIvaImp=(floatval($valSinImp)*floatval($por_iva))/100;//Calculo del Valor del Impuesto Generado por Detalle
+                $this->InsertarDetImpFactura($con, $idDet, '2',$por_iva, $valSinImp, $valIvaImp); //12%
+            } else {//Caso Contrario no Genera Impuesto 0%
+                $this->InsertarDetImpFactura($con, $idDet, '2','0', $valSinImp, '0'); //0%
             }
         }
         //Inserta el Total del Iva Acumulado en el detalle
@@ -286,7 +290,7 @@ class Edoc_ApiRest extends \app\modules\fe_edoc\components\CActiveRecord {
         }
         //Inserta Datos de Iva 12
         If ($vet_iva12 > 0) {
-            $this->InsertarFacturaImpuesto($con,$obj_con, $idCab, '2', $por_iva, $vet_iva12, $val_iva12);
+            $this->InsertarFacturaImpuesto($con, $idCab, '2', $por_iva, $vet_iva12, $val_iva12);
         }
     }
 
@@ -360,15 +364,15 @@ class Edoc_ApiRest extends \app\modules\fe_edoc\components\CActiveRecord {
     End Sub*/       
     
     private function InsertarFacturaFormaPago($con, $idCab) {
-        $cabFact= $this->cabEdoc;
+        $fpagEdoc= $this->fpagEdoc;
         //Implementado 8/08/2016
-        //FOR_PAG_SRI,PAG_PLZ,PAG_TMP,VAL_NET
+        //FOR_PAG_SRI,PAG_PLZ,PAG_TMP,VAL_NET =>$cabFact[$i]['VAL_NET']
         //Nota la Tabla Forma de Pago debe ser aigual que la SEA Y WEBSEA los IDS deben conincidir.
         //Si no tiene codigo usa el codigo 1 (SIN UTILIZACION DEL SISTEMA FINANCIERO o Efectivo)
-        $IdsForma = ($cabFact[$i]['FOR_PAG_SRI']!='')?$cabFact[$i]['FOR_PAG_SRI']:'1';
-        $Total=($cabFact[$i]['VAL_NET']!='')?$cabFact[$i]['VAL_NET']:0;
-        $Plazo=($cabFact[$i]['PAG_PLZ']>0)?$cabFact[$i]['PAG_PLZ']:'30';
-        $UnidadTiempo=($cabFact[$i]['PAG_TMP']!='')?$cabFact[$i]['PAG_TMP']:'DIAS';
+        $IdsForma = $fpagEdoc['COD_FORMAPAG']; //($fpagEdoc['COD_FORMAPAG']!='')?$fpagEdoc['FOR_PAG_SRI']:'1';
+        $Total=$fpagEdoc['VALOR'];//($fpagEdoc['VALOR']!='')?$fpagEdoc['VAL_NET']:0;
+        $Plazo=$fpagEdoc['PLAZO'];//($fpagEdoc['PLAZO']>0)?$fpagEdoc['PLAZO']:'30';
+        $UnidadTiempo=$fpagEdoc['UNIDAD_TIEMPO'];//($fpagEdoc['UNIDAD_TIEMPO']!='')?$fpagEdoc['UNIDAD_TIEMPO']:'DIAS';
         
         $sql = "INSERT INTO " . $con->db_edoc . ".NubeFacturaFormaPago
                 (IdForma,IdFactura,FormaPago,Total,Plazo,UnidadTiempo)VALUES
@@ -386,18 +390,21 @@ class Edoc_ApiRest extends \app\modules\fe_edoc\components\CActiveRecord {
     
     
 
-    private function InsertarFacturaDatoAdicional($con,$idCab) {
-        $cabFact= $this->cabEdoc;
-        $direccion = $cabFact['DIR_CLI'];
-        $destino = $cabFact['LUG_DES'];
-        $contacto = $cabFact['NOM_CTO'];
-        $sql = "INSERT INTO " . $con->db_edoc . ".NubeDatoAdicionalFactura 
-                 (Nombre,Descripcion,IdFactura) VALUES
-                 ('Direccion','$direccion','$idCab'),('Destino','$destino','$idCab'),('Contacto','$contacto','$idCab')";
-        $comando = $con->createCommand($sql);
-        $comando->execute();      
+    private function InsertarFacturaDatoAdicional($con, $idCab) {
+        $dadcEdoc = $this->dadcEdoc;
+        for ($i = 0; $i < sizeof($dadcEdoc); $i++) {
+            $sql = "INSERT INTO " . $con->db_edoc . ".NubeDatoAdicionalFactura 
+                 (Nombre,Descripcion,IdFactura) VALUES (:Nombre,:Descripcion,:IdFactura);";
+            //('Direccion','$direccion','$idCab'),('Destino','$destino','$idCab'),('Contacto','$contacto','$idCab')";
+
+            $comando = $con->createCommand($sql);
+            $comando->bindParam(":Nombre", $dadcEdoc[$i]['NOMBRECAMPO'], \PDO::PARAM_STR);
+            $comando->bindParam(":Descripcion", $dadcEdoc[$i]['VALORCAMPO'], \PDO::PARAM_STR);
+            $comando->bindParam(":IdFactura", $idCab, \PDO::PARAM_INT);
+            $comando->execute();
+        }
     }
-    
+
     /*
      * FIN DE PROCESO DE FACTURAS
      */
