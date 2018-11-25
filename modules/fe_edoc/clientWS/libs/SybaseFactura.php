@@ -32,7 +32,7 @@ class SybaseFactura {
             $rows = $comando->fetchAll(PDO::FETCH_ASSOC);
             if (count($rows) > 0) {
                 for ($i = 0; $i < sizeof($rows); $i++) {
-                    putMessageLogFile($rows[$i]['SYS_FACTURANC_ID']);
+                    //putMessageLogFile($rows[$i]['SYS_FACTURANC_ID']);
                     $tipEdoc = $this->tipoDoc;//"01";
                     $cabFact = $rows[$i];//Cabecera de Factura
                     $detFact = $this->consultarSybDetFacturas($pdo, $cabFact['SYS_FACTURANC_ID']);

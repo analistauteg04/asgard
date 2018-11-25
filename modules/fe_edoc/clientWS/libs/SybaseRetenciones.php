@@ -19,7 +19,7 @@ class SybaseRetenciones {
 
     //put your code here
 
-    public function consultarSybCabFacturas() {//OK
+    public function consultarSybCabRetenciones() {//OK
         GLOBAL $limit, $WS_URI, $WS_PORT, $WS_HOST,$timeWait;
         $obj_con = new cls_BaseSybase();
         $pdo = $obj_con->conexionSybase();
@@ -33,8 +33,8 @@ class SybaseRetenciones {
                     //putMessageLogFile($rows[$i]['SYS_RETENCION_ID']);
                     $tipEdoc = $this->tipoDoc;//"07";
                     $cabDoc = $rows[$i];//Cabecera de Factura
-                    $detDoc = $this->consultarSybDetFacturas($pdo, $cabDoc['SYS_RETENCION_ID']);
-                    $dadcDoc = $this->consultarSybDatAdiFacturas($pdo, $cabDoc['SYS_RETENCION_ID']);
+                    $detDoc = $this->consultarSybDetRetencion($pdo, $cabDoc['SYS_RETENCION_ID']);
+                    $dadcDoc = $this->consultarSybDatAdiRetencion($pdo, $cabDoc['SYS_RETENCION_ID']);
                     $fpagFact=0;
                     //$fpagFact = $this->consultarSybForPagFacturas($pdo, $cabFact['SYS_RETENCION_ID']);
 
@@ -70,7 +70,7 @@ class SybaseRetenciones {
         }
     }
 
-    private function consultarSybDetFacturas($pdo, $Ids) {//OK
+    private function consultarSybDetRetencion($pdo, $Ids) {//OK
         $rawData = array();
         $sql = "SELECT * FROM DBA.TCIDE_RETENCION_DET WHERE SYS_RETENCION_ID=:id  ";
         $comando = $pdo->prepare($sql);
@@ -86,7 +86,7 @@ class SybaseRetenciones {
         return $rawData;
     }
 
-    private function consultarSybDatAdiFacturas($pdo, $Ids) {//OK
+    private function consultarSybDatAdiRetencion($pdo, $Ids) {//OK
         $rawData = array();
         $sql = "SELECT * FROM DBA.TCIDE_RETENCION_DATADD WHERE SYS_RETENCION_ID=:id ORDER BY SECUENCIA ";
         $comando = $pdo->prepare($sql);
@@ -101,20 +101,7 @@ class SybaseRetenciones {
         return $rawData;
     }
     
-    /*private function consultarSybForPagFacturas($pdo, $Ids) {//OK
-        $rawData = array();
-        $sql = "SELECT * FROM DBA.TCIDE_RETENCION_FPAG WHERE SYS_FACTURANC_ID=:id ORDER BY SECUENCIA ";
-        $comando = $pdo->prepare($sql);
-        $comando->bindParam(":id", $Ids, PDO::PARAM_INT);
-        $comando->execute();
-        $rows = $comando->fetchAll(PDO::FETCH_ASSOC);
-        if (count($rows) > 0) {
-            foreach ($rows as $row) {
-                $rawData[] = $row;
-            }
-        } 
-        return $rawData;
-    }*/
+ 
     
     private function actualizarEstadoDoc($id_docElectronico) { //OK
         $obj_con = new cls_BaseSybase();
