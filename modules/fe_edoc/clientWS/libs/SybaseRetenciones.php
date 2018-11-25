@@ -20,7 +20,7 @@ class SybaseRetenciones {
     //put your code here
 
     public function consultarSybCabFacturas() {//OK
-        GLOBAL $limit, $WS_URI, $WS_PORT, $WS_HOST;
+        GLOBAL $limit, $WS_URI, $WS_PORT, $WS_HOST,$timeWait;
         $obj_con = new cls_BaseSybase();
         $pdo = $obj_con->conexionSybase();
         try {
@@ -32,15 +32,15 @@ class SybaseRetenciones {
                 for ($i = 0; $i < sizeof($rows); $i++) {
                     //putMessageLogFile($rows[$i]['SYS_RETENCION_ID']);
                     $tipEdoc = $this->tipoDoc;//"07";
-                    $cabFact = $rows[$i];//Cabecera de Factura
-                    $detFact = $this->consultarSybDetFacturas($pdo, $cabFact['SYS_RETENCION_ID']);
-                    $dadcFact = $this->consultarSybDatAdiFacturas($pdo, $cabFact['SYS_RETENCION_ID']);
+                    $cabDoc = $rows[$i];//Cabecera de Factura
+                    $detDoc = $this->consultarSybDetFacturas($pdo, $cabDoc['SYS_RETENCION_ID']);
+                    $dadcDoc = $this->consultarSybDatAdiFacturas($pdo, $cabDoc['SYS_RETENCION_ID']);
                     $fpagFact=0;
                     //$fpagFact = $this->consultarSybForPagFacturas($pdo, $cabFact['SYS_RETENCION_ID']);
 
                     $response = Http::connect($WS_HOST, $WS_PORT)->doPost($WS_URI, 
-                            array('tipoEdoc' => $tipEdoc, 'cabEdoc' => json_encode($cabFact), 'detEdoc' => json_encode($detFact), 
-                                  'dadcEdoc' => json_encode($dadcFact), 'fpagEdoc' => json_encode($fpagFact)));
+                            array('tipoEdoc' => $tipEdoc, 'cabEdoc' => json_encode($cabDoc), 'detEdoc' => json_encode($detFact), 
+                                  'dadcEdoc' => json_encode($dadcDoc), 'fpagEdoc' => json_encode($fpagFact)));
                     //putMessageLogFile($response);
                     $arr_response = json_decode($response, true);
                     if ($arr_response["state"] == 200 && $arr_response["error"] == 'false') {
@@ -52,6 +52,7 @@ class SybaseRetenciones {
                         $rows[$i]['ESTADO']='NO_OK';
                         // no actualizar registro en sysbase y enviar mail de error a sysadmin
                     }
+                    sleep($timeWait);
                 }
                 //putMessageLogFile($rows);
                 for ($i = 0; $i < sizeof($rows); $i++) {

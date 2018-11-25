@@ -22,7 +22,7 @@ class SybaseFactura {
     //put your code here
 
     public function consultarSybCabFacturas() {//OK
-        GLOBAL $limit, $WS_URI, $WS_PORT, $WS_HOST;
+        GLOBAL $limit, $WS_URI, $WS_PORT, $WS_HOST,$timeWait;;
         $obj_con = new cls_BaseSybase();
         $pdo = $obj_con->conexionSybase();
         try {
@@ -53,6 +53,7 @@ class SybaseFactura {
                         $rows[$i]['ESTADO']='NO_OK';
                         // no actualizar registro en sysbase y enviar mail de error a sysadmin
                     }
+                    sleep($timeWait);
                 }
                 //putMessageLogFile($rows);
                 for ($i = 0; $i < sizeof($rows); $i++) {

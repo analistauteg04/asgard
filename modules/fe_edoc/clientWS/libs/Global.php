@@ -14,7 +14,8 @@ $WS_URI = "asgard/api/request/fe_edoc/Edoc/sendEdoc/json";
 
 $service = "uteg-fe";
 $logFile = "logs/$service.log";
-$limit = 2;
+$limit = 20;
+$timeWait=1000;//1 Segundo
 
 function putMessageLogFile($message) {
     GLOBAL $logFile;
