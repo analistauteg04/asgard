@@ -282,8 +282,6 @@ class Edoc_ApiRest extends \app\modules\fe_edoc\components\CActiveRecord {
         $comando->bindParam(":UnidadTiempo", $UnidadTiempo, \PDO::PARAM_STR);
         $comando->execute();       
     }
-    
-    
 
     private function InsertarFacturaDatoAdicional($con, $idCab) {
         $dadcEdoc = $this->dadcEdoc;
@@ -317,9 +315,8 @@ class Edoc_ApiRest extends \app\modules\fe_edoc\components\CActiveRecord {
         }
         try {
             $idCDoc= $this->InsertarCabRetencion($con);            
-            //$this->InsertarDetFactura($con,$idCDoc);
-            //$this->InsertarFacturaFormaPago($con,$idCDoc);
-            //$this->InsertarFacturaDatoAdicional($con,$idCDoc);
+            $this->InsertarDetRetencion($con,$idCDoc);
+            $this->InsertarRetencionDatoAdicional($con,$idCDoc);
             if ($trans !== null){
                 $trans->commit();
             }
@@ -392,6 +389,81 @@ class Edoc_ApiRest extends \app\modules\fe_edoc\components\CActiveRecord {
         return $con->getLastInsertID();
         
     }
+
+    private function InsertarDetRetencion($con,$idCab) {
+        $cabFact= $this->cabEdoc;
+        $detDoc= $this->detEdoc;
+        
+        //INSERTA PROVICIONES DE PASIVOS O GASTOS
+        $codigo= 0;//codigo impuesto a retener
+        $cod_retencion = ""; //Codigo de Porcentaje de Retencion
+        $bas_imponible = 0;//Base imponible para impuesto
+        $por_retener= 0 ;//Porcentaje de Retencion  
+        $val_retenido  = 0 ;//Valor Retenido
+        $codDocRet= "01";
+        $n_s_pro  = "";
+        $numDocRet = "";
+        $fecDocRet = "";
+        $TotalRetencion = 0;
+        //$sqlRet As New StringBuilder '$sqlRet="";
+        
+        //Recorre el detalle y identifica el tipo de Retencion
+       
+        for ($i = 0; $i < sizeof($detDoc); $i++) {//
+            $codigo=$detDoc[$i]['TIPO_RETENCION'];
+            $cod_retencion=$detDoc[$i]['CODIGO_RETENCION'];
+            $bas_imponible=$detDoc[$i]['BASE_IMPONIBLE'];
+            $por_retener=$detDoc[$i]['PORCENTAJE_RET'];
+            $val_retenido=$detDoc[$i]['VALOR_RET'];
+            $codDocRet=$detDoc[$i]['CODDOC_SUST'];
+            $numDocRet=$detDoc[$i]['SERIE_DOCSUST'].$detDoc[$i]['PNTEMI_DOCSUST'].$detDoc[$i]['SECUENCIAL_DOCSUST'];
+            $FechaEmiDocRetener=date(Yii::$app->params["dateByDefault"] , strtotime($detDoc[$i]['FECHAEMI_DOCSUST']));
+            $TotalRetencion = $TotalRetencion + $val_retenido;//valor que actualiza la cabecera Datos 
+            
+             $sql = "INSERT INTO " . $con->dbname . ".NubeDetalleRetencion 
+                    (Codigo,CodigoRetencion,BaseImponible,PorcentajeRetener,ValorRetenido,CodDocRetener,
+                     NumDocRetener,FechaEmisionDocRetener,IdRetencion )VALUES 
+                    (:Codigo,:CodigoRetencion,:BaseImponible,:PorcentajeRetener,:ValorRetenido,:CodDocRetener,
+                     :NumDocRetener,:FechaEmisionDocRetener,:IdRetencion);";
+           
+            $comando = $con->createCommand($sql);
+            $comando->bindParam(":IdRetencion", $idCab, \PDO::PARAM_INT);
+            $comando->bindParam(":Codigo", $codigo, \PDO::PARAM_STR);
+            $comando->bindParam(":CodigoRetencion", $cod_retencion, \PDO::PARAM_STR);
+            $comando->bindParam(":BaseImponible", $bas_imponible, \PDO::PARAM_STR);
+            $comando->bindParam(":PorcentajeRetener", $por_retener, \PDO::PARAM_STR);
+            $comando->bindParam(":ValorRetenido", $val_retenido, \PDO::PARAM_STR);
+            $comando->bindParam(":CodDocRetener", $codDocRet, \PDO::PARAM_STR);
+            $comando->bindParam(":NumDocRetener", $numDocRet, \PDO::PARAM_STR);
+            $comando->bindParam(":FechaEmisionDocRetener", $FechaEmiDocRetener, \PDO::PARAM_STR);
+            $comando->execute();
+            // Segun tabl 19 de retenciones
+            if($codigo=='1'){//Retencion IMP RENTA=1
+                
+            }elseif($codigo=='2'){//Retencion de IVA
+                
+            }elseif($codigo=='6') {//ISD
+                
+            }
+        }
+
+    }
+    
+    private function InsertarRetencionDatoAdicional($con, $idCab) {
+        $dadcEdoc = $this->dadcEdoc;
+        for ($i = 0; $i < sizeof($dadcEdoc); $i++) {
+            $sql = "INSERT INTO " . $con->dbname . ".NubeDatoAdicionalRetencion 
+                 (Nombre,Descripcion,IdRetencion) VALUES (:Nombre,:Descripcion,:IdRetencion);";
+            //('Direccion','$direccion','$idCab'),('Destino','$destino','$idCab'),('Contacto','$contacto','$idCab')";
+
+            $comando = $con->createCommand($sql);
+            $comando->bindParam(":Nombre", $dadcEdoc[$i]['NOMBRECAMPO'], \PDO::PARAM_STR);
+            $comando->bindParam(":Descripcion", $dadcEdoc[$i]['VALORCAMPO'], \PDO::PARAM_STR);
+            $comando->bindParam(":IdRetencion", $idCab, \PDO::PARAM_INT);
+            $comando->execute();
+        }
+    }
+
 
 
     
