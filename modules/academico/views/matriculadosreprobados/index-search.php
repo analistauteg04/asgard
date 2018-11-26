@@ -1,5 +1,6 @@
 <?php
 use kartik\date\DatePicker;
+use yii\helpers\Html;
 
 /* 
  * To change this license header, choose License Headers in Project Properties.
@@ -49,7 +50,16 @@ use kartik\date\DatePicker;
                 ?>
             </div>
         </div>
-    </div>    
+    </div>   
+    <div class="col-md-12 col-xs-12 col-lg-12 col-sm-12">
+        <div class="form-group">
+            <label for="cmb_estado" class="col-sm-2 col-md-2 col-xs-2 col-lg-2 control-label"><?= Yii::t("formulario", "Status") ?></label>
+            <div class="col-sm-3 col-md-3 col-xs-3 col-lg-3">
+                <?= Html::dropDownList("cmb_estado", 0, ["0" => "Todos", "1" => "Contacto", "2" => "Cursando"], ["class" => "form-control", "id" => "cmb_estado"]) ?>
+            </div>
+            <div class="col-sm-5">&nbsp;</div>
+        </div>
+    </div>
     <div class="col-md-12 col-sm-12 col-xs-12 col-lg-12">
         <div class="col-sm-8"></div>
         <div class="col-sm-2 col-md-2 col-xs-4 col-lg-2">                

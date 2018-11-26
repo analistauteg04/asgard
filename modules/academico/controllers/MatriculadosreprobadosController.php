@@ -37,6 +37,7 @@ class MatriculadosreprobadosController extends \app\components\CController {
             $arrSearch["f_ini"] = $data['f_ini'];
             $arrSearch["f_fin"] = $data['f_fin'];
             $arrSearch["search"] = $data['search'];
+            $arrSearch["estadomat"] = $data['estadomat'];
             $mod_matreprueba = MatriculadosReprobado::getMatriculadosreprobados($arrSearch);
             return $this->renderPartial('index-grid', [
                         "model" => $mod_matreprueba,
@@ -452,7 +453,8 @@ class MatriculadosreprobadosController extends \app\components\CController {
             academico::t("Academico", "Month Process"),
             academico::t("Academico", "Career/Program"),
             admision::t("Solicitudes", "Income Method"),
-            Yii::t("formulario", "Subject")
+            Yii::t("formulario", "Subject"),
+            Yii::t("formulario", "Status")
         );
         $data = Yii::$app->request->get();
         $arrSearch = array();
@@ -460,6 +462,7 @@ class MatriculadosreprobadosController extends \app\components\CController {
             $arrSearch["f_ini"] = $data['fecha_ini'];
             $arrSearch["f_fin"] = $data['fecha_fin'];
             $arrSearch["search"] = $data['search'];
+            $arrSearch["estadomat"] = $data['estadomat'];
         }
         $arrData = array();
         $mod_matreprueba = new MatriculadosReprobado();
@@ -489,7 +492,8 @@ class MatriculadosreprobadosController extends \app\components\CController {
             academico::t("Academico", "Month Process"),
             academico::t("Academico", "Career/Program"),
             admision::t("Solicitudes", "Income Method"),
-            Yii::t("formulario", "Subject")
+            Yii::t("formulario", "Subject"),
+            Yii::t("formulario", "Status")
         );
         $data = Yii::$app->request->get();
         $arrSearch = array();
@@ -497,6 +501,7 @@ class MatriculadosreprobadosController extends \app\components\CController {
             $arrSearch["f_ini"] = $data['fecha_ini'];
             $arrSearch["f_fin"] = $data['fecha_fin'];
             $arrSearch["search"] = $data['search'];
+            $arrSearch["estadomat"] = $data['estadomat'];
         }
         $arrData = array();
         $mod_matreprueba = new MatriculadosReprobado();

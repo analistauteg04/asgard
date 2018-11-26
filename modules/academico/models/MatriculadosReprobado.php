@@ -203,6 +203,9 @@ class MatriculadosReprobado extends \yii\db\ActiveRecord {
                 $str_search .= "mre.mre_fecha_creacion >= :fec_ini AND ";
                 $str_search .= "mre.mre_fecha_creacion <= :fec_fin AND ";
             }
+            if ($arrFiltro['estadomat'] != "" && $arrFiltro['estadomat'] > 0) {
+                $str_search .= "mre.mre_estado_matriculado = :estadomat AND ";                
+            }
         } else {
             $columnsAdd = "-- sins.sins_id as solicitud_id,
                     per.per_id as persona, 
@@ -255,7 +258,11 @@ class MatriculadosReprobado extends \yii\db\ActiveRecord {
                     ifnull((SELECT GROUP_CONCAT(CONCAT(asi.asi_nombre, IF(mmr.mmr_estado_materia =2,'',''))  SEPARATOR ', ') as asignatura_repro 
                             FROM db_captacion.materias_matriculados_reprobado mmr
                             INNER JOIN  db_academico.asignatura asi ON asi.asi_id = mmr.asi_id
-                            where mmr.mre_id = mre.mre_id and mmr.mmr_estado_materia =2),'') as asignatura_repro    
+                            where mmr.mre_id = mre.mre_id and mmr.mmr_estado_materia =2),'') as asignatura_repro,
+                    case mre.mre_estado_matriculado
+                         when 1 then 'Contacto'
+                         when 2 then 'Cursando'
+                    end as estado_matriculado        
                 FROM " . $con->dbname . ".matriculados_reprobado mre 
                      INNER JOIN " . $con->dbname . ".admitido adm ON adm.adm_id = mre.adm_id
                      INNER JOIN " . $con->dbname . ".interesado inte on inte.int_id = adm.int_id                     
@@ -283,10 +290,15 @@ class MatriculadosReprobado extends \yii\db\ActiveRecord {
             $search_cond = "%" . $arrFiltro["search"] . "%";
             $fecha_ini = $arrFiltro["f_ini"] . " 00:00:00";
             $fecha_fin = $arrFiltro["f_fin"] . " 23:59:59";
+            $estadomat = $arrFiltro["estadomat"];
             $comando->bindParam(":search", $search_cond, \PDO::PARAM_STR);
             if ($arrFiltro['f_ini'] != "" && $arrFiltro['f_fin'] != "") {
                 $comando->bindParam(":fec_ini", $fecha_ini, \PDO::PARAM_STR);
                 $comando->bindParam(":fec_fin", $fecha_fin, \PDO::PARAM_STR);
+            }
+            if ($arrFiltro['estadomat'] != "" && $arrFiltro['estadomat'] > 0) {
+                $comando->bindParam(":estadomat", $estadomat, \PDO::PARAM_INT);
+                
             }
         }
         $resultData = $comando->queryAll();
@@ -391,6 +403,9 @@ class MatriculadosReprobado extends \yii\db\ActiveRecord {
                 $str_search .= "mre.mre_fecha_creacion >= :fec_ini AND ";
                 $str_search .= "mre.mre_fecha_creacion <= :fec_fin AND ";
             }
+            if ($arrFiltro['estadomat'] != "" && $arrFiltro['estadomat'] > 0) {
+                $str_search .= "mre.mre_estado_matriculado = :estadomat AND ";                
+            }
         } else {
             $columnsAdd = "-- sins.sins_id as solicitud_id,
                     per.per_id as persona, 
@@ -434,7 +449,11 @@ class MatriculadosReprobado extends \yii\db\ActiveRecord {
                     ifnull((SELECT GROUP_CONCAT(CONCAT(asi.asi_nombre, '(', IF(mmr.mmr_estado_materia =1,'Aprobado','Reprobado'), ')')  SEPARATOR ', ') as asignaturas 
                             FROM " . $con->dbname . ".materias_matriculados_reprobado mmr
                             INNER JOIN  " . $con3->dbname . ".asignatura asi ON asi.asi_id = mmr.asi_id
-                            where mmr.mre_id = mre.mre_id),'') as asignaturas
+                            where mmr.mre_id = mre.mre_id),'') as asignaturas,
+                    case mre.mre_estado_matriculado
+                         when 1 then 'Contacto'
+                         when 2 then 'Cursando'
+                    end as estado_matriculado  
                 FROM " . $con->dbname . ".matriculados_reprobado mre 
                      INNER JOIN " . $con->dbname . ".admitido adm ON adm.adm_id = mre.adm_id
                      INNER JOIN " . $con->dbname . ".interesado inte on inte.int_id = adm.int_id                     
@@ -461,10 +480,15 @@ class MatriculadosReprobado extends \yii\db\ActiveRecord {
             $search_cond = "%" . $arrFiltro["search"] . "%";
             $fecha_ini = $arrFiltro["f_ini"] . " 00:00:00";
             $fecha_fin = $arrFiltro["f_fin"] . " 23:59:59";
+            $estadomat = $arrFiltro["estadomat"];
             $comando->bindParam(":search", $search_cond, \PDO::PARAM_STR);
             if ($arrFiltro['f_ini'] != "" && $arrFiltro['f_fin'] != "") {
                 $comando->bindParam(":fec_ini", $fecha_ini, \PDO::PARAM_STR);
                 $comando->bindParam(":fec_fin", $fecha_fin, \PDO::PARAM_STR);
+            }
+            if ($arrFiltro['estadomat'] != "" && $arrFiltro['estadomat'] > 0) {
+                $comando->bindParam(":estadomat", $estadomat, \PDO::PARAM_INT);
+                
             }
         }
         $resultData = $comando->queryAll();
