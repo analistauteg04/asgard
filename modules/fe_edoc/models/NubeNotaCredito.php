@@ -51,7 +51,12 @@
  * @property NubeDetalleNotaCredito[] $nubeDetalleNotaCreditos
  * @property NubeNotaCreditoImpuesto[] $nubeNotaCreditoImpuestos
  */
-class NubeNotaCredito extends VsSeaIntermedia {
+
+namespace app\modules\fe_edoc\models;
+
+use Yii;
+
+class NubeNotaCredito extends \app\modules\fe_edoc\components\CActiveRecord {
 
     private $tipoDoc = '04';
 
@@ -236,12 +241,12 @@ class NubeNotaCredito extends VsSeaIntermedia {
         $rawData = array();
         $limitrowsql = $page->paginado($control);
 
-        $tipoUser = Yii::app()->getSession()->get('RolId', FALSE);
-        $usuarioErp = $this->concatenarUserERP(Yii::app()->getSession()->get('UsuarioErp', FALSE));
+        $tipoUser = Yii::$app->getSession()->get('RolId', FALSE);
+        $usuarioErp = $this->concatenarUserERP(Yii::$app->getSession()->get('UsuarioErp', FALSE));
         //echo $usuarioErp;
-        //$fecInifact=Yii::app()->params['dateStartFact'];//Fecha Inicial de Facturacion Electronica
-        $fecInifact = date(Yii::app()->params['datebydefault']);
-        $con = Yii::app()->dbvsseaint;
+        //$fecInifact=Yii::$app->params['dateStartFact'];//Fecha Inicial de Facturacion Electronica
+        $fecInifact = date(Yii::$app->params['datebydefault']);
+        $con = Yii::$app->dbvsseaint;
         $sql = "SELECT A.IdNotaCredito IdDoc,A.Estado,A.CodigoTransaccionERP,A.SecuencialERP,A.UsuarioCreador,
                         A.FechaAutorizacion,A.AutorizacionSRI,
                         CONCAT(A.Establecimiento,'-',A.PuntoEmision,'-',A.Secuencial) NumDocumento,
@@ -280,7 +285,7 @@ class NubeNotaCredito extends VsSeaIntermedia {
             ),
             'totalItemCount' => count($rawData),
             'pagination' => array(
-                'pageSize' => Yii::app()->params['pageSize'],
+                'pageSize' => Yii::$app->params['pageSize'],
             //'itemCount'=>count($rawData),
             ),
         ));
@@ -303,7 +308,7 @@ class NubeNotaCredito extends VsSeaIntermedia {
      * @return Retorna Los Datos de las Retenciones GENERADAS
      */
     public function retornarPersona($valor, $op) {
-        $con = Yii::app()->dbvsseaint;
+        $con = Yii::$app->dbvsseaint;
         $rawData = array();
         //Patron de Busqueda
         /* http://www.mclibre.org/consultar/php/lecciones/php_expresiones_regulares.html */
@@ -334,7 +339,7 @@ class NubeNotaCredito extends VsSeaIntermedia {
                 break;
             default:
         }
-        $sql .= " LIMIT " . Yii::app()->params['limitRow'];
+        $sql .= " LIMIT " . Yii::$app->params['limitRow'];
         //$sql .= " LIMIT 10";
         //echo $sql;
         $rawData = $con->createCommand($sql)->queryAll();
@@ -344,7 +349,7 @@ class NubeNotaCredito extends VsSeaIntermedia {
 
     public function mostrarCabNc($id) {
         $rawData = array();
-        $con = Yii::app()->dbvsseaint;
+        $con = Yii::$app->dbvsseaint;
         
          /* SELECT IdNotaCredito,AutorizacionSRI,FechaAutorizacion,Ambiente,TipoEmision,RazonSocial,NombreComercial,Ruc,ClaveAcceso,
           CodigoDocumento,Establecimiento,PuntoEmision,Secuencial,DireccionMatriz,FechaEmision,DireccionEstablecimiento,
@@ -373,7 +378,7 @@ class NubeNotaCredito extends VsSeaIntermedia {
 
     public function mostrarDetNc($id) {
         $rawData = array();
-        $con = Yii::app()->dbvsseaint;
+        $con = Yii::$app->dbvsseaint;
         $sql = "SELECT * FROM " . $con->dbname . ".NubeDetalleNotaCredito WHERE IdNotaCredito=$id";
         //echo $sql;
         $rawData = $con->createCommand($sql)->queryAll(); //Recupera Solo 1
@@ -386,7 +391,7 @@ class NubeNotaCredito extends VsSeaIntermedia {
 
     private function mostrarDetNcImp($id) {
         $rawData = array();
-        $con = Yii::app()->dbvsseaint;
+        $con = Yii::$app->dbvsseaint;
         $sql = "SELECT * FROM " . $con->dbname . ".NubeDetalleNotaCreditoImpuesto WHERE IdDetalleNotaCredito=$id";
         $rawData = $con->createCommand($sql)->queryAll(); //Recupera Solo 1
         $con->active = false;
@@ -395,7 +400,7 @@ class NubeNotaCredito extends VsSeaIntermedia {
 
     public function mostrarNcImp($id) {
         $rawData = array();
-        $con = Yii::app()->dbvsseaint;
+        $con = Yii::$app->dbvsseaint;
         $sql = "SELECT * FROM " . $con->dbname . ".NubeNotaCreditoImpuesto WHERE IdNotaCredito=$id";
         $rawData = $con->createCommand($sql)->queryAll(); //Recupera Solo 1
         $con->active = false;
@@ -404,7 +409,7 @@ class NubeNotaCredito extends VsSeaIntermedia {
 
     public function mostrarNcDataAdicional($id) {
         $rawData = array();
-        $con = Yii::app()->dbvsseaint;
+        $con = Yii::$app->dbvsseaint;
         $sql = "SELECT * FROM " . $con->dbname . ".NubeDatoAdicionalNotaCredito WHERE IdNotaCredito=$id";
         $rawData = $con->createCommand($sql)->queryAll(); //Recupera Solo 1
         $con->active = false;
@@ -413,7 +418,7 @@ class NubeNotaCredito extends VsSeaIntermedia {
     
     public function mostrarRutaXMLAutorizado($id) {
         $rawData = array();
-        $con = Yii::app()->dbvsseaint;
+        $con = Yii::$app->dbvsseaint;
         $sql = "SELECT EstadoDocumento,DirectorioDocumento,NombreDocumento FROM " . $con->dbname . ".NubeNotaCredito WHERE "
                 . "IdNotaCredito=$id AND EstadoDocumento='AUTORIZADO'";
         $rawData = $con->createCommand($sql)->queryRow(); //Recupera Solo 1
@@ -433,8 +438,8 @@ class NubeNotaCredito extends VsSeaIntermedia {
                 if ($ids[$i] !== "") {
                     $result = $this->generarFileXML($ids[$i]);
                     //Rutas Documentos
-                    $DirDocAutorizado=Yii::app()->params['seaDocAutNc']; 
-                    $DirDocFirmado=Yii::app()->params['seaDocNc'];
+                    $DirDocAutorizado=Yii::$app->params['seaDocAutNc']; 
+                    $DirDocFirmado=Yii::$app->params['seaDocNc'];
                     if ($result['status'] == 'OK') {//Retorna True o False 
                         //echo $result['nomDoc'];
                         //Para Validaciones Masivas Hay que verificar lo que retorna la funcion
@@ -513,7 +518,7 @@ class NubeNotaCredito extends VsSeaIntermedia {
             
                 $xmldata .= $xmlGen->infoTributaria($cabFact);
                 $xmldata .='<infoNotaCredito>';
-                    $xmldata .='<fechaEmision>' . date(Yii::app()->params["dateXML"], strtotime($cabFact["FechaEmision"])) . '</fechaEmision>';
+                    $xmldata .='<fechaEmision>' . date(Yii::$app->params["dateXML"], strtotime($cabFact["FechaEmision"])) . '</fechaEmision>';
                     $xmldata .='<dirEstablecimiento>' . utf8_encode(trim($cabFact["DireccionEstablecimiento"])) . '</dirEstablecimiento>';
                     $xmldata .='<tipoIdentificacionComprador>' . utf8_encode(trim($cabFact["TipoIdentificacionComprador"])) . '</tipoIdentificacionComprador>';
                     //$xmldata .='<razonSocialComprador>' . utf8_encode($valida->limpioCaracteresXML(trim($cabFact["RazonSocialComprador"]))) . '</razonSocialComprador>';
@@ -531,12 +536,12 @@ class NubeNotaCredito extends VsSeaIntermedia {
                     //Rise,CodDocModificado,NumDocModificado,FechaEmisionDocModificado,TotalSinImpuesto,ValorModificacion,MotivoModificacion,
                     $xmldata .='<codDocModificado>' . utf8_encode(trim($cabFact["CodDocModificado"])) . '</codDocModificado>';
                     $xmldata .='<numDocModificado>' . utf8_encode(trim($cabFact["NumDocModificado"])) . '</numDocModificado>';
-                    $xmldata .='<fechaEmisionDocSustento>' . date(Yii::app()->params["dateXML"], strtotime($cabFact["FechaEmisionDocModificado"])) . '</fechaEmisionDocSustento>';
-                    $xmldata .='<totalSinImpuestos>' . Yii::app()->format->formatNumber($cabFact["TotalSinImpuesto"]) . '</totalSinImpuestos>';
-                    $xmldata .='<valorModificacion>' . Yii::app()->format->formatNumber($cabFact["ValorModificacion"]) . '</valorModificacion>';
+                    $xmldata .='<fechaEmisionDocSustento>' . date(Yii::$app->params["dateXML"], strtotime($cabFact["FechaEmisionDocModificado"])) . '</fechaEmisionDocSustento>';
+                    $xmldata .='<totalSinImpuestos>' . Yii::$app->format->formatNumber($cabFact["TotalSinImpuesto"]) . '</totalSinImpuestos>';
+                    $xmldata .='<valorModificacion>' . Yii::$app->format->formatNumber($cabFact["ValorModificacion"]) . '</valorModificacion>';
                     $xmldata .='<moneda>' . utf8_encode(trim($cabFact["Moneda"])) . '</moneda>';
                     
-                    //$xmldata .='<totalDescuento>' . Yii::app()->format->formatNumber($cabFact["TotalDescuento"]) . '</totalDescuento>';
+                    //$xmldata .='<totalDescuento>' . Yii::$app->format->formatNumber($cabFact["TotalDescuento"]) . '</totalDescuento>';
                     $xmldata .='<totalConImpuestos>';
                     $IRBPNR = 0; //NOta validar si existe casos para estos
                     $ICE = 0;
@@ -548,9 +553,9 @@ class NubeNotaCredito extends VsSeaIntermedia {
                                     $xmldata .='<totalImpuesto>';
                                             $xmldata .='<codigo>' . $impFact[$i]["Codigo"] . '</codigo>';
                                             $xmldata .='<codigoPorcentaje>' . $impFact[$i]["CodigoPorcentaje"] . '</codigoPorcentaje>';
-                                            $xmldata .='<baseImponible>' . Yii::app()->format->formatNumber($impFact[$i]["BaseImponible"]) . '</baseImponible>';
-                                            //$xmldata .='<tarifa>' . Yii::app()->format->formatNumber($impFact[$i]["Tarifa"]) . '</tarifa>';
-                                            $xmldata .='<valor>' . Yii::app()->format->formatNumber($impFact[$i]["Valor"]) . '</valor>';
+                                            $xmldata .='<baseImponible>' . Yii::$app->format->formatNumber($impFact[$i]["BaseImponible"]) . '</baseImponible>';
+                                            //$xmldata .='<tarifa>' . Yii::$app->format->formatNumber($impFact[$i]["Tarifa"]) . '</tarifa>';
+                                            $xmldata .='<valor>' . Yii::$app->format->formatNumber($impFact[$i]["Valor"]) . '</valor>';
                                     $xmldata .='</totalImpuesto>';
                                     break;
                                 case 2:
@@ -559,9 +564,9 @@ class NubeNotaCredito extends VsSeaIntermedia {
                                     $xmldata .='<totalImpuesto>';
                                             $xmldata .='<codigo>' . $impFact[$i]["Codigo"] . '</codigo>';
                                             $xmldata .='<codigoPorcentaje>' . $impFact[$i]["CodigoPorcentaje"] . '</codigoPorcentaje>';
-                                            $xmldata .='<baseImponible>' . Yii::app()->format->formatNumber($impFact[$i]["BaseImponible"]) . '</baseImponible>';
-                                            //$xmldata .='<tarifa>' . Yii::app()->format->formatNumber($impFact[$i]["Tarifa"]) . '</tarifa>';
-                                            $xmldata .='<valor>' . Yii::app()->format->formatNumber($impFact[$i]["Valor"]) . '</valor>';
+                                            $xmldata .='<baseImponible>' . Yii::$app->format->formatNumber($impFact[$i]["BaseImponible"]) . '</baseImponible>';
+                                            //$xmldata .='<tarifa>' . Yii::$app->format->formatNumber($impFact[$i]["Tarifa"]) . '</tarifa>';
+                                            $xmldata .='<valor>' . Yii::$app->format->formatNumber($impFact[$i]["Valor"]) . '</valor>';
                                     $xmldata .='</totalImpuesto>';
                                     break;
                                 case 3:
@@ -570,9 +575,9 @@ class NubeNotaCredito extends VsSeaIntermedia {
                                     $xmldata .='<totalImpuesto>';
                                             $xmldata .='<codigo>' . $impFact[$i]["Codigo"] . '</codigo>';
                                             $xmldata .='<codigoPorcentaje>' . $impFact[$i]["CodigoPorcentaje"] . '</codigoPorcentaje>';
-                                            $xmldata .='<baseImponible>' . Yii::app()->format->formatNumber($impFact[$i]["BaseImponible"]) . '</baseImponible>';
-                                            //$xmldata .='<tarifa>' . Yii::app()->format->formatNumber($impFact[$i]["Tarifa"]) . '</tarifa>';
-                                            $xmldata .='<valor>' . Yii::app()->format->formatNumber($impFact[$i]["Valor"]) . '</valor>';
+                                            $xmldata .='<baseImponible>' . Yii::$app->format->formatNumber($impFact[$i]["BaseImponible"]) . '</baseImponible>';
+                                            //$xmldata .='<tarifa>' . Yii::$app->format->formatNumber($impFact[$i]["Tarifa"]) . '</tarifa>';
+                                            $xmldata .='<valor>' . Yii::$app->format->formatNumber($impFact[$i]["Valor"]) . '</valor>';
                                     $xmldata .='</totalImpuesto>';
                                     break;
                                 case 6://No objeto Iva
@@ -589,8 +594,8 @@ class NubeNotaCredito extends VsSeaIntermedia {
                     $xmldata .='</totalConImpuestos>';
                     $xmldata .='<motivo>' . utf8_encode(trim($cabFact["MotivoModificacion"])) . '</motivo>';
                     
-                //$xmldata .='<propina>' . Yii::app()->format->formatNumber($cabFact["Propina"]) . '</propina>';
-                //$xmldata .='<importeTotal>' . Yii::app()->format->formatNumber($cabFact["ImporteTotal"]) . '</importeTotal>';
+                //$xmldata .='<propina>' . Yii::$app->format->formatNumber($cabFact["Propina"]) . '</propina>';
+                //$xmldata .='<importeTotal>' . Yii::$app->format->formatNumber($cabFact["ImporteTotal"]) . '</importeTotal>';
                
             $xmldata .='</infoNotaCredito>';
         $xmldata .='<detalles>';
@@ -599,20 +604,20 @@ class NubeNotaCredito extends VsSeaIntermedia {
             $xmldata .='<codigoInterno>' . utf8_encode(trim($detFact[$i]['CodigoPrincipal'])) . '</codigoInterno>';
             //$xmldata .='<codigoAdicional>' . utf8_encode(trim($detFact[$i]['CodigoAuxiliar'])) . '</codigoAdicional>';
             $xmldata .='<descripcion>' . utf8_encode($valida->limpioCaracteresXML(trim($detFact[$i]['Descripcion']))) . '</descripcion>';
-            $xmldata .='<cantidad>' . Yii::app()->format->formatNumber($detFact[$i]['Cantidad']) . '</cantidad>';
-            //$xmldata .='<precioUnitario>' . Yii::app()->format->formatNumber($detFact[$i]['PrecioUnitario']) . '</precioUnitario>'; //Problemas de Redondeo Usar Roud(valor,deci)
+            $xmldata .='<cantidad>' . Yii::$app->format->formatNumber($detFact[$i]['Cantidad']) . '</cantidad>';
+            //$xmldata .='<precioUnitario>' . Yii::$app->format->formatNumber($detFact[$i]['PrecioUnitario']) . '</precioUnitario>'; //Problemas de Redondeo Usar Roud(valor,deci)
             $xmldata .='<precioUnitario>' . (string)$detFact[$i]['PrecioUnitario'] . '</precioUnitario>';
-            $xmldata .='<descuento>' . Yii::app()->format->formatNumber($detFact[$i]['Descuento']) . '</descuento>';
-            $xmldata .='<precioTotalSinImpuesto>' . Yii::app()->format->formatNumber($detFact[$i]['PrecioTotalSinImpuesto']) . '</precioTotalSinImpuesto>';
+            $xmldata .='<descuento>' . Yii::$app->format->formatNumber($detFact[$i]['Descuento']) . '</descuento>';
+            $xmldata .='<precioTotalSinImpuesto>' . Yii::$app->format->formatNumber($detFact[$i]['PrecioTotalSinImpuesto']) . '</precioTotalSinImpuesto>';
             $xmldata .='<impuestos>';
             $impuesto = $detFact[$i]['impuestos'];
             for ($j = 0; $j < sizeof($impuesto); $j++) {//DETALLE IMPUESTO DE FACTURA
                 $xmldata .='<impuesto>';
                         $xmldata .='<codigo>' . $impuesto[$j]['Codigo'] . '</codigo>';
                         $xmldata .='<codigoPorcentaje>' . $impuesto[$j]['CodigoPorcentaje'] . '</codigoPorcentaje>';
-                        $xmldata .='<tarifa>' . Yii::app()->format->formatNumber($impuesto[$j]['Tarifa']) . '</tarifa>';
-                        $xmldata .='<baseImponible>' . Yii::app()->format->formatNumber($impuesto[$j]['BaseImponible']) . '</baseImponible>';
-                        $xmldata .='<valor>' . Yii::app()->format->formatNumber($impuesto[$j]['Valor']) . '</valor>';
+                        $xmldata .='<tarifa>' . Yii::$app->format->formatNumber($impuesto[$j]['Tarifa']) . '</tarifa>';
+                        $xmldata .='<baseImponible>' . Yii::$app->format->formatNumber($impuesto[$j]['BaseImponible']) . '</baseImponible>';
+                        $xmldata .='<valor>' . Yii::$app->format->formatNumber($impuesto[$j]['Valor']) . '</valor>';
                 $xmldata .='</impuesto>';
             }
             $xmldata .='</impuestos>';
@@ -625,7 +630,7 @@ class NubeNotaCredito extends VsSeaIntermedia {
         $xmldata .='</notaCredito>';
         //echo htmlentities($xmldata);
         $nomDocfile = $cabFact['NombreDocumento'] . '-' . $cabFact['NumDocumento'] . '.xml';
-        file_put_contents(Yii::app()->params['seaDocXml'] . $nomDocfile, $xmldata); //Escribo el Archivo Xml
+        file_put_contents(Yii::$app->params['seaDocXml'] . $nomDocfile, $xmldata); //Escribo el Archivo Xml
         return $msgAuto->messageFileXML('OK', $nomDocfile, $cabFact["ClaveAcceso"], 2, null, null);
     }
 

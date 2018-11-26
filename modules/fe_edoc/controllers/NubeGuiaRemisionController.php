@@ -1,6 +1,9 @@
 <?php
+namespace app\modules\fe_edoc\controllers;
 
-class NubeGuiaRemisionController extends Controller {
+use Yii;
+
+class NubeguiaremisionController extends \app\components\CController  {
 
     /**
      * @var string the default layout for the views. Defaults to '//layouts/column2', meaning
@@ -118,7 +121,7 @@ class NubeGuiaRemisionController extends Controller {
         $aproba = new VSacceso();
         $tipDoc = new VSDirectorio();
         $contBuscar = array();
-        if (Yii::app()->request->isAjaxRequest) {
+        if (Yii::$app->request->isAjax) {
             //$contBuscar = isset($_POST['CONT_BUSCAR']) ? CJavaScript::jsonDecode($_POST['CONT_BUSCAR']) : array();
             //echo CJSON::encode($modelo->mostrarDocumentos($contBuscar));
             $arrayData = array();
@@ -173,12 +176,12 @@ class NubeGuiaRemisionController extends Controller {
     protected function performAjaxValidation($model) {
         if (isset($_POST['ajax']) && $_POST['ajax'] === 'nube-guia-remision-form') {
             echo CActiveForm::validate($model);
-            Yii::app()->end();
+            Yii::$app->end();
         }
     }
     
     public function actionBuscarPersonas() {
-        if (Yii::app()->request->isAjaxRequest) {
+        if (Yii::$app->request->isAjax) {
             $valor = isset($_POST['valor']) ? $_POST['valor'] : "";
             $op = isset($_POST['op']) ? $_POST['op'] : "";
             $arrayData = array();
@@ -198,7 +201,7 @@ class NubeGuiaRemisionController extends Controller {
             $destDoc = $modelo->mostrarDestinoGuia($ids);
             $adiDoc = $modelo->mostrarCabGuiaDataAdicional($ids);
             $mPDF1=$rep->crearBaseReport();
-            $Titulo=Yii::app()->getSession()->get('RazonSocial', FALSE) . " - " . $cabDoc['NombreDocumento'];
+            $Titulo=Yii::$app->getSession()->get('RazonSocial', FALSE) . " - " . $cabDoc['NombreDocumento'];
             $nameFile=$cabDoc['NombreDocumento'] . '-' . $cabDoc['NumDocumento'];
             $Contenido=$this->renderPartial('guiaremiPDF', array(
                         'cabDoc' => $cabDoc,
@@ -225,7 +228,7 @@ class NubeGuiaRemisionController extends Controller {
     }
     
     public function actionEnviarDocumento() {
-        if (Yii::app()->request->isAjaxRequest) {
+        if (Yii::$app->request->isAjax) {
             $ids = isset($_POST['ids']) ? base64_decode($_POST['ids']) : NULL;
             $res = new NubeGuiaRemision;
             $arroout=$res->enviarDocumentos($ids);
@@ -236,7 +239,7 @@ class NubeGuiaRemisionController extends Controller {
     }
     
     public function actionEnviarCorreccion() {
-        if (Yii::app()->request->isAjaxRequest) {
+        if (Yii::$app->request->isAjax) {
             $modelo = new NubeRetencion(); //Ejmpleo code 3
             $errAuto= new VSexception();
             $ids = isset($_POST['ids']) ? base64_decode($_POST['ids']) : NULL;
@@ -255,7 +258,7 @@ class NubeGuiaRemisionController extends Controller {
     }
     
     public function actionEnviarAnular() {
-        if (Yii::app()->request->isAjaxRequest) {
+        if (Yii::$app->request->isAjax) {
             $dataMail = new mailSystem;
             $ids = isset($_POST['ids']) ? base64_decode($_POST['ids']) : NULL;
             $arroout=VSDocumentos::anularDodSri($ids, 'GR',8);//Anula Documentos Autorizados del Websea
@@ -275,7 +278,7 @@ class NubeGuiaRemisionController extends Controller {
         }
     }
     public function actionEnviarCorreo() {
-        if (Yii::app()->request->isAjaxRequest) {
+        if (Yii::$app->request->isAjax) {
             $ids = isset($_POST['ids']) ? base64_decode($_POST['ids']) : NULL;
             $arroout=VSDocumentos::reenviarDodSri($ids, 'GR',2);//Anula Documentos Autorizados del Websea
             header('Content-type: application/json');
@@ -293,7 +296,7 @@ class NubeGuiaRemisionController extends Controller {
     }
     public function actionSavemail() {
         $model = new USUARIO;
-        if (Yii::app()->request->isAjaxRequest) {
+        if (Yii::$app->request->isAjax) {
             $ids = isset($_POST['ID']) ? $_POST['ID'] : 0;
             $correo = isset($_POST['DATA']) ? trim($_POST['DATA']) : '';
             $arrayData = $model->cambiarMailDoc($ids,$correo);

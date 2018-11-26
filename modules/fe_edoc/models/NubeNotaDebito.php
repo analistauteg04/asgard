@@ -48,7 +48,12 @@
  * @property NubeNotaDebitoImpuesto[] $nubeNotaDebitoImpuestos
  * @property NubeNotaDebitoMotivos[] $nubeNotaDebitoMotivoses
  */
-class NubeNotaDebito extends VsSeaIntermedia {
+
+namespace app\modules\fe_edoc\models;
+
+use Yii;
+
+class NubeNotaDebito extends \app\modules\fe_edoc\components\CActiveRecord {
 
     /**
      * @return string the associated database table name

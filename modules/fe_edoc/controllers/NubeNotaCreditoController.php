@@ -1,6 +1,9 @@
 <?php
+namespace app\modules\fe_edoc\controllers;
 
-class NubeNotaCreditoController extends Controller {
+use Yii;
+
+class NubenotacreditoController extends \app\components\CController  {
 
     /**
      * @var string the default layout for the views. Defaults to '//layouts/column2', meaning
@@ -118,7 +121,7 @@ class NubeNotaCreditoController extends Controller {
         $tipDoc = new VSDirectorio();
         $aproba = new VSacceso();
         $contBuscar = array();
-        if (Yii::app()->request->isAjaxRequest) {
+        if (Yii::$app->request->isAjax) {
             //$contBuscar = isset($_POST['CONT_BUSCAR']) ? CJavaScript::jsonDecode($_POST['CONT_BUSCAR']) : array();
             //echo CJSON::encode($modelo->mostrarDocumentos($contBuscar));
             $arrayData = array();
@@ -174,12 +177,12 @@ class NubeNotaCreditoController extends Controller {
     protected function performAjaxValidation($model) {
         if (isset($_POST['ajax']) && $_POST['ajax'] === 'nube-nota-credito-form') {
             echo CActiveForm::validate($model);
-            Yii::app()->end();
+            Yii::$app->end();
         }
     }
 
     public function actionBuscarPersonas() {
-        if (Yii::app()->request->isAjaxRequest) {
+        if (Yii::$app->request->isAjax) {
             $valor = isset($_POST['valor']) ? $_POST['valor'] : "";
             $op = isset($_POST['op']) ? $_POST['op'] : "";
             $arrayData = array();
@@ -200,7 +203,7 @@ class NubeNotaCreditoController extends Controller {
             $impFact = $modelo->mostrarNcImp($ids);
             $adiFact = $modelo->mostrarNcDataAdicional($ids);
             $mPDF1=$rep->crearBaseReport();
-            $Titulo=Yii::app()->getSession()->get('RazonSocial', FALSE) . " - " . $cabFact['NombreDocumento'];
+            $Titulo=Yii::$app->getSession()->get('RazonSocial', FALSE) . " - " . $cabFact['NombreDocumento'];
             $nameFile=$cabFact['NombreDocumento'] . '-' . $cabFact['NumDocumento'];
             $Contenido=$this->renderPartial('facturaPDF', array(
                         'cabFact' => $cabFact,
@@ -228,7 +231,7 @@ class NubeNotaCreditoController extends Controller {
     }
     
     public function actionEnviarDocumento() {
-        if (Yii::app()->request->isAjaxRequest) {
+        if (Yii::$app->request->isAjax) {
             $ids = isset($_POST['ids']) ? base64_decode($_POST['ids']) : NULL;
             $res = new NubeNotaCredito;
             $arroout=$res->enviarDocumentos($ids);
@@ -239,7 +242,7 @@ class NubeNotaCreditoController extends Controller {
     }
     
     public function actionEnviarCorreccion() {
-        if (Yii::app()->request->isAjaxRequest) {
+        if (Yii::$app->request->isAjax) {
             $modelo = new NubeRetencion(); //Ejmpleo code 3
             $errAuto= new VSexception();
             $ids = isset($_POST['ids']) ? base64_decode($_POST['ids']) : NULL;
@@ -258,7 +261,7 @@ class NubeNotaCreditoController extends Controller {
     }
     
     public function actionEnviarAnular() {
-        if (Yii::app()->request->isAjaxRequest) {
+        if (Yii::$app->request->isAjax) {
             $dataMail = new mailSystem;
             $ids = isset($_POST['ids']) ? base64_decode($_POST['ids']) : NULL;
             $arroout=VSDocumentos::anularDodSri($ids, 'NC',8);//Anula Documentos Autorizados del Websea
@@ -278,7 +281,7 @@ class NubeNotaCreditoController extends Controller {
         }
     }
     public function actionEnviarCorreo() {
-        if (Yii::app()->request->isAjaxRequest) {
+        if (Yii::$app->request->isAjax) {
             $ids = isset($_POST['ids']) ? base64_decode($_POST['ids']) : NULL;
             $arroout=VSDocumentos::reenviarDodSri($ids, 'NC',2);//Anula Documentos Autorizados del Websea
             header('Content-type: application/json');
@@ -296,7 +299,7 @@ class NubeNotaCreditoController extends Controller {
     }
     public function actionSavemail() {
         $model = new USUARIO;
-        if (Yii::app()->request->isAjaxRequest) {
+        if (Yii::$app->request->isAjax) {
             $ids = isset($_POST['ID']) ? $_POST['ID'] : 0;
             $correo = isset($_POST['DATA']) ? trim($_POST['DATA']) : '';
             $arrayData = $model->cambiarMailDoc($ids,$correo);

@@ -1,6 +1,13 @@
 <?php
 
-class NubeFacturaController extends \app\components\CController {
+namespace app\modules\fe_edoc\controllers;
+
+use Yii;
+use app\modules\fe_edoc\models\NubeFactura;
+use app\modules\fe_edoc\models\VSDirectorio;
+use app\modules\fe_edoc\models\VSacceso;
+
+class NubefacturaController extends \app\components\CController {
 
     
 //    public function accessRules() {
@@ -32,7 +39,7 @@ class NubeFacturaController extends \app\components\CController {
         $tipDoc= new VSDirectorio();
         $aproba= new VSacceso();
         $contBuscar = array();
-        if (Yii::app()->request->isAjaxRequest) {
+        if (Yii::$app->request->isAjax) {
             //$contBuscar = isset($_POST['CONT_BUSCAR']) ? CJavaScript::jsonDecode($_POST['CONT_BUSCAR']) : array();
             //echo CJSON::encode($modelo->mostrarDocumentos($contBuscar));
             $arrayData = array();
@@ -65,7 +72,7 @@ class NubeFacturaController extends \app\components\CController {
             $adiFact = $modelo->mostrarFacturaDataAdicional($ids);
             $venFact= VSDocumentos::buscarDatoVendedor($cabFact['USU_ID']);//DATOS DEL VENDEDOR QUE AUTORIZO
             $mPDF1=$rep->crearBaseReport();
-            $Titulo=Yii::app()->getSession()->get('RazonSocial', FALSE) . " - " . $cabFact['NombreDocumento'];
+            $Titulo=Yii::$app->getSession()->get('RazonSocial', FALSE) . " - " . $cabFact['NombreDocumento'];
             $nameFile=$cabFact['NombreDocumento'] . '-' . $cabFact['NumDocumento'];
             $Contenido=$this->renderPartial('facturaPDF', array(
                         'cabFact' => $cabFact,
@@ -85,7 +92,7 @@ class NubeFacturaController extends \app\components\CController {
     }
 
     public function actionBuscarPersonas() {
-        if (Yii::app()->request->isAjaxRequest) {
+        if (Yii::$app->request->isAjax) {
             $valor = isset($_POST['valor']) ? $_POST['valor'] : "";
             $op = isset($_POST['op']) ? $_POST['op'] : "";
             $arrayData = array();
@@ -97,7 +104,7 @@ class NubeFacturaController extends \app\components\CController {
     }
 
     public function actionBuscaDataIndex() {
-        if (Yii::app()->request->isAjaxRequest) {
+        if (Yii::$app->request->isAjax) {
             $arrayData = array();
             $obj = new NubeFactura();
             $contBuscar = isset($_POST['CONT_BUSCAR']) ? CJavaScript::jsonDecode($_POST['CONT_BUSCAR']) : array();
@@ -138,7 +145,7 @@ class NubeFacturaController extends \app\components\CController {
     }
 
     public function actionEnviarDocumento() {
-        if (Yii::app()->request->isAjaxRequest) {
+        if (Yii::$app->request->isAjax) {
             $ids = isset($_POST['ids']) ? base64_decode($_POST['ids']) : NULL;
             $res = new NubeFactura;
             $arroout=$res->enviarDocumentos($ids);
@@ -149,7 +156,7 @@ class NubeFacturaController extends \app\components\CController {
     }
     
     public function actionEnviarCorreccion() {
-        if (Yii::app()->request->isAjaxRequest) {
+        if (Yii::$app->request->isAjax) {
             $modelo = new NubeRetencion(); //Ejmpleo code 3
             $errAuto= new VSexception();
             $ids = isset($_POST['ids']) ? base64_decode($_POST['ids']) : NULL;
@@ -168,7 +175,7 @@ class NubeFacturaController extends \app\components\CController {
     }
     
     public function actionEnviarAnular() {
-        if (Yii::app()->request->isAjaxRequest) {
+        if (Yii::$app->request->isAjax) {
             $dataMail = new mailSystem;
             $ids = isset($_POST['ids']) ? base64_decode($_POST['ids']) : NULL;
             $arroout=VSDocumentos::anularDodSri($ids, 'FA',8);//Anula Documentos Autorizados del Websea
@@ -189,7 +196,7 @@ class NubeFacturaController extends \app\components\CController {
     }
     
     public function actionEnviarCorreo() {
-        if (Yii::app()->request->isAjaxRequest) {
+        if (Yii::$app->request->isAjax) {
             $ids = isset($_POST['ids']) ? base64_decode($_POST['ids']) : NULL;
             $arroout=VSDocumentos::reenviarDodSri($ids, 'FA',2);//Anula Documentos Autorizados del Websea
             header('Content-type: application/json');
@@ -207,7 +214,7 @@ class NubeFacturaController extends \app\components\CController {
     }
     public function actionSavemail() {
         $model = new USUARIO;
-        if (Yii::app()->request->isAjaxRequest) {
+        if (Yii::$app->request->isAjax) {
             $ids = isset($_POST['ID']) ? $_POST['ID'] : 0;
             $correo = isset($_POST['DATA']) ? trim($_POST['DATA']) : '';
             $arrayData = $model->cambiarMailDoc($ids,$correo);

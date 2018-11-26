@@ -66,14 +66,11 @@ class NubeFactura extends \app\modules\fe_edoc\components\CActiveRecord {
     
     private $tipoDoc='01';
 
-
-    
-
     private function buscarFacturas($opcion) {
-        $conCont = yii::app()->dbcont;
+        $conCont = Yii::$app->dbcont;
         $rawData = array();
-        $fechaIni = Yii::app()->params['dateStartFact'];
-        $limitEnv = Yii::app()->params['limitEnv'];
+        $fechaIni = Yii::$app->params['dateStartFact'];
+        $limitEnv = Yii::$app->params['limitEnv'];
         //$sql = "SELECT TIP_NOF,CONCAT(REPEAT('0',9-LENGTH(RIGHT(NUM_NOF,9))),RIGHT(NUM_NOF,9)) NUM_NOF,
         switch ($opcion['OP']) {
             case '1':
@@ -104,7 +101,7 @@ class NubeFactura extends \app\modules\fe_edoc\components\CActiveRecord {
     }
 
     private function buscarDetFacturas($tipDoc, $numDoc) {
-        $conCont = yii::app()->dbcont;
+        $conCont = Yii::$app->dbcont;
         $rawData = array();
         $sql = "SELECT TIP_NOF,NUM_NOF,FEC_VTA,COD_ART,NOM_ART,CAN_DES,P_VENTA,
                         T_VENTA,VAL_DES,I_M_IVA,VAL_IVA
@@ -116,22 +113,17 @@ class NubeFactura extends \app\modules\fe_edoc\components\CActiveRecord {
         return $rawData;
     }
 
-    
-   
-
-
-
     public function mostrarDocumentos($control) {
         $page= new VSValidador;
         $rawData = array();
         $limitrowsql=$page->paginado($control);
 
-        $tipoUser=Yii::app()->getSession()->get('RolId', FALSE);
-        $usuarioErp=$page->concatenarUserERP(Yii::app()->getSession()->get('UsuarioErp', FALSE));
+        $tipoUser=Yii::$app->getSession()->get('RolId', FALSE);
+        $usuarioErp=$page->concatenarUserERP(Yii::$app->getSession()->get('UsuarioErp', FALSE));
         //echo $usuarioErp;
-        //$fecInifact=Yii::app()->params['dateStartFact'];//Fecha Inicial de Facturacion Electronica
-        $fecInifact= date(Yii::app()->params['datebydefault']);
-        $con = Yii::app()->dbvsseaint;
+        //$fecInifact=Yii::$app->params['dateStartFact'];//Fecha Inicial de Facturacion Electronica
+        $fecInifact= date(Yii::$app->params['datebydefault']);
+        $con = Yii::$app->dbvsseaint;
         $sql = "SELECT A.IdFactura IdDoc,A.Estado,A.CodigoTransaccionERP,A.SecuencialERP,A.UsuarioCreador,
                         A.FechaAutorizacion,A.AutorizacionSRI,
                         CONCAT(A.Establecimiento,'-',A.PuntoEmision,'-',A.Secuencial) NumDocumento,
@@ -172,14 +164,14 @@ class NubeFactura extends \app\modules\fe_edoc\components\CActiveRecord {
             ),
             'totalItemCount' => count($rawData),
             'pagination' => array(
-                'pageSize' => Yii::app()->params['pageSize'],
+                'pageSize' => Yii::$app->params['pageSize'],
                 //'itemCount'=>count($rawData),
             ),
         ));
     }
 
     public function recuperarTipoDocumentos() {
-        $con = yii::app()->dbvssea;
+        $con = Yii::$app->dbvssea;
         $sql = "SELECT idDirectorio,TipoDocumento,Descripcion,Ruta 
                 FROM " . $con->dbname . ".VSDirectorio WHERE Estado=1;";
         $rawData = $con->createCommand($sql)->queryAll();
@@ -189,7 +181,7 @@ class NubeFactura extends \app\modules\fe_edoc\components\CActiveRecord {
 
     public function mostrarCabFactura($id) {
         $rawData = array();
-        $con = Yii::app()->dbvsseaint;
+        $con = Yii::$app->dbvsseaint;
         $sql = "SELECT A.IdFactura IdDoc,A.Estado,A.CodigoTransaccionERP,A.SecuencialERP,A.UsuarioCreador,
                         A.FechaAutorizacion,A.AutorizacionSRI,A.DireccionMatriz,A.DireccionEstablecimiento,
                         CONCAT(A.Establecimiento,'-',A.PuntoEmision,'-',A.Secuencial) NumDocumento,
@@ -210,7 +202,7 @@ class NubeFactura extends \app\modules\fe_edoc\components\CActiveRecord {
 
     public function mostrarDetFacturaImp($id) {
         $rawData = array();
-        $con = Yii::app()->dbvsseaint;
+        $con = Yii::$app->dbvsseaint;
         $sql = "SELECT * FROM " . $con->dbname . ".NubeDetalleFactura WHERE IdFactura=$id";
         //echo $sql;
         $rawData = $con->createCommand($sql)->queryAll(); //Recupera Solo 1
@@ -223,7 +215,7 @@ class NubeFactura extends \app\modules\fe_edoc\components\CActiveRecord {
 
     private function mostrarDetalleImp($id) {
         $rawData = array();
-        $con = Yii::app()->dbvsseaint;
+        $con = Yii::$app->dbvsseaint;
         $sql = "SELECT * FROM " . $con->dbname . ".NubeDetalleFacturaImpuesto WHERE IdDetalleFactura=$id";
         $rawData = $con->createCommand($sql)->queryAll(); //Recupera Solo 1
         $con->active = false;
@@ -232,7 +224,7 @@ class NubeFactura extends \app\modules\fe_edoc\components\CActiveRecord {
 
     public function mostrarFacturaImp($id) {
         $rawData = array();
-        $con = Yii::app()->dbvsseaint;
+        $con = Yii::$app->dbvsseaint;
         $sql = "SELECT * FROM " . $con->dbname . ".NubeFacturaImpuesto WHERE IdFactura=$id";
         $rawData = $con->createCommand($sql)->queryAll(); //Recupera Solo 1
         $con->active = false;
@@ -241,7 +233,7 @@ class NubeFactura extends \app\modules\fe_edoc\components\CActiveRecord {
     
     public function mostrarFormaPago($id) {
         $rawData = array();
-        $con = Yii::app()->dbvsseaint;
+        $con = Yii::$app->dbvsseaint;
         //$sql = "SELECT * FROM " . $con->dbname . ".NubeFacturaFormaPago WHERE IdFactura=$id";
         $sql = "SELECT B.FormaPago,A.Total,A.Plazo,A.UnidadTiempo,A.FormaPago Codigo  
                 FROM " . $con->dbname . ".NubeFacturaFormaPago A
@@ -255,7 +247,7 @@ class NubeFactura extends \app\modules\fe_edoc\components\CActiveRecord {
 
     public function mostrarFacturaDataAdicional($id) {
         $rawData = array();
-        $con = Yii::app()->dbvsseaint;
+        $con = Yii::$app->dbvsseaint;
         $sql = "SELECT * FROM " . $con->dbname . ".NubeDatoAdicionalFactura WHERE IdFactura=$id";
         $rawData = $con->createCommand($sql)->queryAll(); //Recupera Solo 1
         $con->active = false;
@@ -270,7 +262,7 @@ class NubeFactura extends \app\modules\fe_edoc\components\CActiveRecord {
      * @return Retorna Los Datos de las Facturas GENERADAS
      */
     public function retornarPersona($valor, $op) {
-        $con = Yii::app()->dbvsseaint;
+        $con = Yii::$app->dbvsseaint;
         $rawData = array();
         //Patron de Busqueda
         /* http://www.mclibre.org/consultar/php/lecciones/php_expresiones_regulares.html */
@@ -301,7 +293,7 @@ class NubeFactura extends \app\modules\fe_edoc\components\CActiveRecord {
                 break;
             default:
         }
-        $sql .= " LIMIT " . Yii::app()->params['limitRow'];
+        $sql .= " LIMIT " . Yii::$app->params['limitRow'];
         //$sql .= " LIMIT 10";
         //echo $sql;
         $rawData = $con->createCommand($sql)->queryAll();
@@ -318,8 +310,8 @@ class NubeFactura extends \app\modules\fe_edoc\components\CActiveRecord {
                 if ($ids[$i] !== "") {
                     $result = $this->generarFileXML($ids[$i]);
                     //VSValidador::putMessageLogFile($result);
-                    $DirDocAutorizado=Yii::app()->params['seaDocAutFact']; 
-                    $DirDocFirmado=Yii::app()->params['seaDocFact'];
+                    $DirDocAutorizado=Yii::$app->params['seaDocAutFact']; 
+                    $DirDocFirmado=Yii::$app->params['seaDocFact'];
                     if ($result['status'] == 'OK') {//Retorna True o False 
                         //echo $result['nomDoc'];
                         return $autDoc->AutorizaDocumento($result,$ids,$i,$DirDocAutorizado,$DirDocFirmado,'NubeFactura','FACTURA','IdFactura');
@@ -400,7 +392,7 @@ class NubeFactura extends \app\modules\fe_edoc\components\CActiveRecord {
             
                 $xmldata .= $xmlGen->infoTributaria($cabFact);
                 $xmldata .='<infoFactura>';
-                    $xmldata .='<fechaEmision>' . date(Yii::app()->params["dateXML"], strtotime($cabFact["FechaEmision"])) . '</fechaEmision>';
+                    $xmldata .='<fechaEmision>' . date(Yii::$app->params["dateXML"], strtotime($cabFact["FechaEmision"])) . '</fechaEmision>';
                     $xmldata .='<dirEstablecimiento>' . utf8_encode(trim($cabFact["DireccionEstablecimiento"])) . '</dirEstablecimiento>';
                     if(strlen(trim($cabFact['ContribuyenteEspecial']))>0){
                         $xmldata .='<contribuyenteEspecial>' . utf8_encode(trim($cabFact["ContribuyenteEspecial"])) . '</contribuyenteEspecial>';
@@ -412,8 +404,8 @@ class NubeFactura extends \app\modules\fe_edoc\components\CActiveRecord {
                     //SValidador::putMessageLogFile($valida->limpioCaracteresXML(trim($cabFact["RazonSocialComprador"])));
                     //VSValidador::putMessageLogFile(trim($cabFact["RazonSocialComprador"]));
                     $xmldata .='<identificacionComprador>' . utf8_encode(trim($cabFact["IdentificacionComprador"])) . '</identificacionComprador>';
-                    $xmldata .='<totalSinImpuestos>' . Yii::app()->format->formatNumber($cabFact["TotalSinImpuesto"]) . '</totalSinImpuestos>';
-                    $xmldata .='<totalDescuento>' . Yii::app()->format->formatNumber($cabFact["TotalDescuento"]) . '</totalDescuento>';
+                    $xmldata .='<totalSinImpuestos>' . Yii::$app->format->formatNumber($cabFact["TotalSinImpuesto"]) . '</totalSinImpuestos>';
+                    $xmldata .='<totalDescuento>' . Yii::$app->format->formatNumber($cabFact["TotalDescuento"]) . '</totalDescuento>';
                         $xmldata .='<totalConImpuestos>';
                         $IRBPNR = 0; //NOta validar si existe casos para estos
                         $ICE = 0;
@@ -425,9 +417,9 @@ class NubeFactura extends \app\modules\fe_edoc\components\CActiveRecord {
                                         $xmldata .='<totalImpuesto>';
                                                 $xmldata .='<codigo>' . $impFact[$i]["Codigo"] . '</codigo>';
                                                 $xmldata .='<codigoPorcentaje>' . $impFact[$i]["CodigoPorcentaje"] . '</codigoPorcentaje>';
-                                                $xmldata .='<baseImponible>' . Yii::app()->format->formatNumber($impFact[$i]["BaseImponible"]) . '</baseImponible>';
-                                                //$xmldata .='<tarifa>' . Yii::app()->format->formatNumber($impFact[$i]["Tarifa"]) . '</tarifa>';
-                                                $xmldata .='<valor>' . Yii::app()->format->formatNumber($impFact[$i]["Valor"]) . '</valor>';
+                                                $xmldata .='<baseImponible>' . Yii::$app->format->formatNumber($impFact[$i]["BaseImponible"]) . '</baseImponible>';
+                                                //$xmldata .='<tarifa>' . Yii::$app->format->formatNumber($impFact[$i]["Tarifa"]) . '</tarifa>';
+                                                $xmldata .='<valor>' . Yii::$app->format->formatNumber($impFact[$i]["Valor"]) . '</valor>';
                                         $xmldata .='</totalImpuesto>';
                                         break;
                                     case 2://IVA 12%
@@ -436,9 +428,9 @@ class NubeFactura extends \app\modules\fe_edoc\components\CActiveRecord {
                                         $xmldata .='<totalImpuesto>';
                                                 $xmldata .='<codigo>' . $impFact[$i]["Codigo"] . '</codigo>';
                                                 $xmldata .='<codigoPorcentaje>' . $impFact[$i]["CodigoPorcentaje"] . '</codigoPorcentaje>';
-                                                $xmldata .='<baseImponible>' . Yii::app()->format->formatNumber($impFact[$i]["BaseImponible"]) . '</baseImponible>';
-                                                //$xmldata .='<tarifa>' . Yii::app()->format->formatNumber($impFact[$i]["Tarifa"]) . '</tarifa>';
-                                                $xmldata .='<valor>' . Yii::app()->format->formatNumber($impFact[$i]["Valor"]) . '</valor>';
+                                                $xmldata .='<baseImponible>' . Yii::$app->format->formatNumber($impFact[$i]["BaseImponible"]) . '</baseImponible>';
+                                                //$xmldata .='<tarifa>' . Yii::$app->format->formatNumber($impFact[$i]["Tarifa"]) . '</tarifa>';
+                                                $xmldata .='<valor>' . Yii::$app->format->formatNumber($impFact[$i]["Valor"]) . '</valor>';
                                         $xmldata .='</totalImpuesto>';
                                         break;
                                     case 3://IVA 14%
@@ -447,9 +439,9 @@ class NubeFactura extends \app\modules\fe_edoc\components\CActiveRecord {
                                         $xmldata .='<totalImpuesto>';
                                                 $xmldata .='<codigo>' . $impFact[$i]["Codigo"] . '</codigo>';
                                                 $xmldata .='<codigoPorcentaje>' . $impFact[$i]["CodigoPorcentaje"] . '</codigoPorcentaje>';
-                                                $xmldata .='<baseImponible>' . Yii::app()->format->formatNumber($impFact[$i]["BaseImponible"]) . '</baseImponible>';
-                                                //$xmldata .='<tarifa>' . Yii::app()->format->formatNumber($impFact[$i]["Tarifa"]) . '</tarifa>';
-                                                $xmldata .='<valor>' . Yii::app()->format->formatNumber($impFact[$i]["Valor"]) . '</valor>';
+                                                $xmldata .='<baseImponible>' . Yii::$app->format->formatNumber($impFact[$i]["BaseImponible"]) . '</baseImponible>';
+                                                //$xmldata .='<tarifa>' . Yii::$app->format->formatNumber($impFact[$i]["Tarifa"]) . '</tarifa>';
+                                                $xmldata .='<valor>' . Yii::$app->format->formatNumber($impFact[$i]["Valor"]) . '</valor>';
                                         $xmldata .='</totalImpuesto>';
                                         break;
                                     case 6://No objeto Iva
@@ -464,8 +456,8 @@ class NubeFactura extends \app\modules\fe_edoc\components\CActiveRecord {
                             //NOta Verificar cuando el COdigo sea igual a 3 o 5 Para los demas impuestos
                         }
                         $xmldata .='</totalConImpuestos>';
-                $xmldata .='<propina>' . Yii::app()->format->formatNumber($cabFact["Propina"]) . '</propina>';
-                $xmldata .='<importeTotal>' . Yii::app()->format->formatNumber($cabFact["ImporteTotal"]) . '</importeTotal>';
+                $xmldata .='<propina>' . Yii::$app->format->formatNumber($cabFact["Propina"]) . '</propina>';
+                $xmldata .='<importeTotal>' . Yii::$app->format->formatNumber($cabFact["ImporteTotal"]) . '</importeTotal>';
                 $xmldata .='<moneda>' . utf8_encode(trim($cabFact["Moneda"])) . '</moneda>';
                 
                 //DATOS DE FORMA DE PAGO APLICADO 8 SEP 2016                
@@ -473,8 +465,8 @@ class NubeFactura extends \app\modules\fe_edoc\components\CActiveRecord {
                 for ($xi = 0; $xi < sizeof($pagFact); $xi++) {
                     $xmldata .='<pago>';
                         $xmldata .='<formaPago>' . $valida->ajusteNumDoc(trim($pagFact[$xi]['Codigo']),2) . '</formaPago>';//Completa los 01 de al formato XSD <xsd:pattern value="[0][1-9]"/>
-                        $xmldata .='<total>' . Yii::app()->format->formatNumber($pagFact[$xi]['Total']) . '</total>';
-                        $xmldata .='<plazo>' . Yii::app()->format->formatNumber($pagFact[$xi]['Plazo']) . '</plazo>';
+                        $xmldata .='<total>' . Yii::$app->format->formatNumber($pagFact[$xi]['Total']) . '</total>';
+                        $xmldata .='<plazo>' . Yii::$app->format->formatNumber($pagFact[$xi]['Plazo']) . '</plazo>';
                         $xmldata .='<unidadTiempo>' . utf8_encode(trim($pagFact[$xi]['UnidadTiempo'])) . '</unidadTiempo>';
                     $xmldata .='</pago>';                    
                 }
@@ -489,20 +481,20 @@ class NubeFactura extends \app\modules\fe_edoc\components\CActiveRecord {
             $xmldata .='<codigoAuxiliar>' . utf8_encode(trim($detFact[$i]['CodigoAuxiliar'])) . '</codigoAuxiliar>';
             $xmldata .='<descripcion>' . $valida->limpioCaracteresXML(trim($detFact[$i]['Descripcion'])) . '</descripcion>';
             //VSValidador::putMessageLogFile($valida->limpioCaracteresXML(trim($detFact[$i]['Descripcion'])));
-            $xmldata .='<cantidad>' . Yii::app()->format->formatNumber($detFact[$i]['Cantidad']) . '</cantidad>';
-            //$xmldata .='<precioUnitario>' . Yii::app()->format->formatNumber($detFact[$i]['PrecioUnitario']) . '</precioUnitario>'; //Problemas de Redondeo Usar Roud(valor,deci)
+            $xmldata .='<cantidad>' . Yii::$app->format->formatNumber($detFact[$i]['Cantidad']) . '</cantidad>';
+            //$xmldata .='<precioUnitario>' . Yii::$app->format->formatNumber($detFact[$i]['PrecioUnitario']) . '</precioUnitario>'; //Problemas de Redondeo Usar Roud(valor,deci)
             $xmldata .='<precioUnitario>' . (string)$detFact[$i]['PrecioUnitario'] . '</precioUnitario>';
-            $xmldata .='<descuento>' . Yii::app()->format->formatNumber($detFact[$i]['Descuento']) . '</descuento>';
-            $xmldata .='<precioTotalSinImpuesto>' . Yii::app()->format->formatNumber($detFact[$i]['PrecioTotalSinImpuesto']) . '</precioTotalSinImpuesto>';
+            $xmldata .='<descuento>' . Yii::$app->format->formatNumber($detFact[$i]['Descuento']) . '</descuento>';
+            $xmldata .='<precioTotalSinImpuesto>' . Yii::$app->format->formatNumber($detFact[$i]['PrecioTotalSinImpuesto']) . '</precioTotalSinImpuesto>';
             $xmldata .='<impuestos>';
             $impuesto = $detFact[$i]['impuestos'];
             for ($j = 0; $j < sizeof($impuesto); $j++) {//DETALLE IMPUESTO DE FACTURA
                 $xmldata .='<impuesto>';
                         $xmldata .='<codigo>' . $impuesto[$j]['Codigo'] . '</codigo>';
                         $xmldata .='<codigoPorcentaje>' . $impuesto[$j]['CodigoPorcentaje'] . '</codigoPorcentaje>';
-                        $xmldata .='<tarifa>' . Yii::app()->format->formatNumber($impuesto[$j]['Tarifa']) . '</tarifa>';
-                        $xmldata .='<baseImponible>' . Yii::app()->format->formatNumber($impuesto[$j]['BaseImponible']) . '</baseImponible>';
-                        $xmldata .='<valor>' . Yii::app()->format->formatNumber($impuesto[$j]['Valor']) . '</valor>';
+                        $xmldata .='<tarifa>' . Yii::$app->format->formatNumber($impuesto[$j]['Tarifa']) . '</tarifa>';
+                        $xmldata .='<baseImponible>' . Yii::$app->format->formatNumber($impuesto[$j]['BaseImponible']) . '</baseImponible>';
+                        $xmldata .='<valor>' . Yii::$app->format->formatNumber($impuesto[$j]['Valor']) . '</valor>';
                     $xmldata .='</impuesto>';
             }
             $xmldata .='</impuestos>';
@@ -542,13 +534,13 @@ class NubeFactura extends \app\modules\fe_edoc\components\CActiveRecord {
         $xmldata .='</factura>';
         //echo htmlentities($xmldata);
         $nomDocfile = $cabFact['NombreDocumento'] . '-' . $cabFact['NumDocumento'] . '.xml';
-        file_put_contents(Yii::app()->params['seaDocXml'] . $nomDocfile, $xmldata); //Escribo el Archivo Xml
+        file_put_contents(Yii::$app->params['seaDocXml'] . $nomDocfile, $xmldata); //Escribo el Archivo Xml
         return $msgAuto->messageFileXML('OK', $nomDocfile, $cabFact["ClaveAcceso"], 2, null, null);
     }
     
     public function mostrarRutaXMLAutorizado($id) {
         $rawData = array();
-        $con = Yii::app()->dbvsseaint;
+        $con = Yii::$app->dbvsseaint;
         $sql = "SELECT EstadoDocumento,DirectorioDocumento,NombreDocumento FROM " . $con->dbname . ".NubeFactura WHERE "
                 . "IdFactura=$id AND EstadoDocumento='AUTORIZADO'";
         $rawData = $con->createCommand($sql)->queryRow(); //Recupera Solo 1
@@ -558,7 +550,7 @@ class NubeFactura extends \app\modules\fe_edoc\components\CActiveRecord {
     
     
     public function actualizaClaveAccesoFactura($ids,$clave) {
-        $con = Yii::app()->dbvsseaint;
+        $con = Yii::$app->dbvsseaint;
         $trans = $con->beginTransaction();
         try {
             $sql = "UPDATE " . $con->dbname . ".NubeFactura SET ClaveAcceso='$clave' WHERE IdFactura='$ids'";
@@ -581,11 +573,11 @@ class NubeFactura extends \app\modules\fe_edoc\components\CActiveRecord {
         $page= new VSValidador;
         $rawData = array();       
 
-        //$tipoUser=Yii::app()->getSession()->get('RolId', FALSE);
-        //$usuarioErp=$page->concatenarUserERP(Yii::app()->getSession()->get('UsuarioErp', FALSE));
+        //$tipoUser=Yii::$app->getSession()->get('RolId', FALSE);
+        //$usuarioErp=$page->concatenarUserERP(Yii::$app->getSession()->get('UsuarioErp', FALSE));
      
-        //$fecInifact= date(Yii::app()->params['datebydefault']);
-        $con = Yii::app()->dbvsseaint;
+        //$fecInifact= date(Yii::$app->params['datebydefault']);
+        $con = Yii::$app->dbvsseaint;
         $sql = "SELECT A.IdFactura IdDoc,A.Estado,A.CodigoTransaccionERP,A.SecuencialERP,A.UsuarioCreador,
                         A.FechaAutorizacion,A.AutorizacionSRI,
                         CONCAT(A.Establecimiento,'-',A.PuntoEmision,'-',A.Secuencial) NumDocumento,

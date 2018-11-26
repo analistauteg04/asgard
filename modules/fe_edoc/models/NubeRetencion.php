@@ -45,7 +45,12 @@
  * @property NubeDatoAdicionalRetencion[] $nubeDatoAdicionalRetencions
  * @property NubeDetalleRetencion[] $nubeDetalleRetencions
  */
-class NubeRetencion extends VsSeaIntermedia {
+
+namespace app\modules\fe_edoc\models;
+
+use Yii;
+
+class NubeRetencion extends \app\modules\fe_edoc\components\CActiveRecord {
     private $tipoDoc='07';
     /**
      * @return string the associated database table name
@@ -215,12 +220,12 @@ class NubeRetencion extends VsSeaIntermedia {
         $page= new VSValidador;
         $rawData = array();
         $limitrowsql=$page->paginado($control);
-        $tipoUser=Yii::app()->getSession()->get('RolId', FALSE);
-        $usuarioErp=$page->concatenarUserERP(Yii::app()->getSession()->get('UsuarioErp', FALSE));
+        $tipoUser=Yii::$app->getSession()->get('RolId', FALSE);
+        $usuarioErp=$page->concatenarUserERP(Yii::$app->getSession()->get('UsuarioErp', FALSE));
         //echo $usuarioErp;
-        //$fecInifact=Yii::app()->params['dateStartFact'];//Fecha Inicial de Facturacion Electronica
-        $fecInifact= date(Yii::app()->params['datebydefault']);
-        $con = Yii::app()->dbvsseaint;
+        //$fecInifact=Yii::$app->params['dateStartFact'];//Fecha Inicial de Facturacion Electronica
+        $fecInifact= date(Yii::$app->params['datebydefault']);
+        $con = Yii::$app->dbvsseaint;
         
         $sql = "SELECT A.IdRetencion IdDoc,A.Estado,A.CodigoTransaccionERP,A.SecuencialERP,A.UsuarioCreador,
                     A.FechaAutorizacion,A.AutorizacionSRI,
@@ -261,7 +266,7 @@ class NubeRetencion extends VsSeaIntermedia {
             ),
             'totalItemCount' => count($rawData),
             'pagination' => array(
-                'pageSize' => Yii::app()->params['pageSize'],
+                'pageSize' => Yii::$app->params['pageSize'],
             //'itemCount'=>count($rawData),
             ),
         ));
@@ -275,7 +280,7 @@ class NubeRetencion extends VsSeaIntermedia {
      * @return Retorna Los Datos de las Retenciones GENERADAS
      */
     public function retornarPersona($valor, $op) {
-        $con = Yii::app()->dbvsseaint;
+        $con = Yii::$app->dbvsseaint;
         $rawData = array();
         //Patron de Busqueda
         /* http://www.mclibre.org/consultar/php/lecciones/php_expresiones_regulares.html */
@@ -306,7 +311,7 @@ class NubeRetencion extends VsSeaIntermedia {
                 break;
             default:
         }
-        $sql .= " LIMIT " . Yii::app()->params['limitRow'];
+        $sql .= " LIMIT " . Yii::$app->params['limitRow'];
         //$sql .= " LIMIT 10";
         //echo $sql;
         $rawData = $con->createCommand($sql)->queryAll();
@@ -316,7 +321,7 @@ class NubeRetencion extends VsSeaIntermedia {
     
     public function mostrarCabRetencion($id) {
         $rawData = array();
-        $con = Yii::app()->dbvsseaint;
+        $con = Yii::$app->dbvsseaint;
         $sql = "SELECT A.IdRetencion IdDoc,A.Estado,A.CodigoTransaccionERP,A.SecuencialERP,A.UsuarioCreador,
                     A.FechaAutorizacion,A.AutorizacionSRI,A.DireccionMatriz,A.DireccionEstablecimiento,
                     CONCAT(A.Establecimiento,'-',A.PuntoEmision,'-',A.Secuencial) NumDocumento,
@@ -335,7 +340,7 @@ class NubeRetencion extends VsSeaIntermedia {
 
     public function mostrarDetRetencion($id) {
         $rawData = array();
-        $con = Yii::app()->dbvsseaint;
+        $con = Yii::$app->dbvsseaint;
         $sql = "SELECT * FROM " . $con->dbname . ".NubeDetalleRetencion WHERE IdRetencion=$id";
         //echo $sql;
         $rawData = $con->createCommand($sql)->queryAll(); //Recupera Solo 1
@@ -349,7 +354,7 @@ class NubeRetencion extends VsSeaIntermedia {
 
     public function mostrarRetencionDataAdicional($id) {
         $rawData = array();
-        $con = Yii::app()->dbvsseaint;
+        $con = Yii::$app->dbvsseaint;
         $sql = "SELECT * FROM " . $con->dbname . ".NubeDatoAdicionalRetencion WHERE IdRetencion=$id";
         $rawData = $con->createCommand($sql)->queryAll(); //Recupera Solo 1
         $con->active = false;
@@ -358,7 +363,7 @@ class NubeRetencion extends VsSeaIntermedia {
     
     public function mostrarRutaXMLAutorizado($id) {
         $rawData = array();
-        $con = Yii::app()->dbvsseaint;
+        $con = Yii::$app->dbvsseaint;
         $sql = "SELECT EstadoDocumento,DirectorioDocumento,NombreDocumento FROM " . $con->dbname . ".NubeRetencion WHERE "
                 . "IdRetencion=$id AND EstadoDocumento='AUTORIZADO'";
         $rawData = $con->createCommand($sql)->queryRow(); //Recupera Solo 1
@@ -378,8 +383,8 @@ class NubeRetencion extends VsSeaIntermedia {
                 if ($ids[$i] !== "") {
                     $result = $this->generarFileXML($ids[$i]);
                     //Rutas de Documentos
-                    $DirDocAutorizado=Yii::app()->params['seaDocAutRete']; 
-                    $DirDocFirmado=Yii::app()->params['seaDocRete'];
+                    $DirDocAutorizado=Yii::$app->params['seaDocAutRete']; 
+                    $DirDocFirmado=Yii::$app->params['seaDocRete'];
                     if ($result['status'] == 'OK') {//Retorna True o False 
                         //echo $result['nomDoc'];
                         //Para Validaciones Masivas Hay que verificar lo que retorna la funcion
@@ -455,7 +460,7 @@ class NubeRetencion extends VsSeaIntermedia {
             //$xmldata .='<comprobanteRetencion id="comprobante" version="1.1.0">';//Version para 4 Decimales en Precio Unitario
                 $xmldata .= $xmlGen->infoTributaria($cabFact);  
                 $xmldata .='<infoCompRetencion>';
-                        $xmldata .='<fechaEmision>' . date(Yii::app()->params["dateXML"], strtotime($cabFact["FechaEmision"])) . '</fechaEmision>';
+                        $xmldata .='<fechaEmision>' . date(Yii::$app->params["dateXML"], strtotime($cabFact["FechaEmision"])) . '</fechaEmision>';
                         $xmldata .='<dirEstablecimiento>' . utf8_encode(trim($cabFact["DireccionEstablecimiento"])) . '</dirEstablecimiento>';
                         if(strlen(trim($cabFact['ContribuyenteEspecial']))>0){
                             $xmldata .='<contribuyenteEspecial>' . utf8_encode(trim($cabFact["ContribuyenteEspecial"])) . '</contribuyenteEspecial>';
@@ -473,9 +478,9 @@ class NubeRetencion extends VsSeaIntermedia {
                         $xmldata .='<impuesto>';
                             $xmldata .='<codigo>' . $detDoc[$i]['Codigo'] . '</codigo>';
                             $xmldata .='<codigoRetencion>' . $detDoc[$i]['CodigoRetencion'] . '</codigoRetencion>';
-                            $xmldata .='<baseImponible>' . Yii::app()->format->formatNumber($detDoc[$i]["BaseImponible"]) . '</baseImponible>';
+                            $xmldata .='<baseImponible>' . Yii::$app->format->formatNumber($detDoc[$i]["BaseImponible"]) . '</baseImponible>';
                             $xmldata .='<porcentajeRetener>' . (int)$detDoc[$i]['PorcentajeRetener'] . '</porcentajeRetener>';
-                            $xmldata .='<valorRetenido>' . Yii::app()->format->formatNumber($detDoc[$i]["ValorRetenido"]) . '</valorRetenido>';
+                            $xmldata .='<valorRetenido>' . Yii::$app->format->formatNumber($detDoc[$i]["ValorRetenido"]) . '</valorRetenido>';
                             $xmldata .='<codDocSustento>' . $detDoc[$i]['CodDocRetener'] . '</codDocSustento>';
                             if(strlen(trim($detDoc[$i]['NumDocRetener']))>0){
                                 //OPCIONAL CUANDO EXISTA
@@ -483,7 +488,7 @@ class NubeRetencion extends VsSeaIntermedia {
                             }
                             if(strlen(trim($detDoc[$i]['FechaEmisionDocRetener']))>0){
                                 //Obligatorio cuando corresponda 
-                                $xmldata .='<fechaEmisionDocSustento>' . date(Yii::app()->params["dateXML"], strtotime($detDoc[$i]["FechaEmisionDocRetener"])) . '</fechaEmisionDocSustento>';
+                                $xmldata .='<fechaEmisionDocSustento>' . date(Yii::$app->params["dateXML"], strtotime($detDoc[$i]["FechaEmisionDocRetener"])) . '</fechaEmisionDocSustento>';
                             }
                         $xmldata .='</impuesto>';
                     }    
@@ -493,7 +498,7 @@ class NubeRetencion extends VsSeaIntermedia {
         $xmldata .='</comprobanteRetencion>';
         //echo htmlentities($xmldata);
         $nomDocfile = $cabFact['NombreDocumento'] . '-' . $cabFact['NumDocumento'] . '.xml';
-        file_put_contents(Yii::app()->params['seaDocXml'] . $nomDocfile, $xmldata); //Escribo el Archivo Xml
+        file_put_contents(Yii::$app->params['seaDocXml'] . $nomDocfile, $xmldata); //Escribo el Archivo Xml
         return $msgAuto->messageFileXML('OK', $nomDocfile, $cabFact["ClaveAcceso"], 2, null, null);
     }
 

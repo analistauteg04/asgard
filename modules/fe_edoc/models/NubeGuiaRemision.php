@@ -45,7 +45,12 @@
  * @property NubeDatoAdicionalGuiaRemision[] $nubeDatoAdicionalGuiaRemisions
  * @property NubeGuiaRemisionDestinatario[] $nubeGuiaRemisionDestinatarios
  */
-class NubeGuiaRemision extends VsSeaIntermedia {
+
+namespace app\modules\fe_edoc\models;
+
+use Yii;
+
+class NubeGuiaRemision extends \app\modules\fe_edoc\components\CActiveRecord {
     private $tipoDoc='06';
     /**
      * @return string the associated database table name
@@ -214,12 +219,12 @@ class NubeGuiaRemision extends VsSeaIntermedia {
         $page= new VSValidador;
         $rawData = array();
         $limitrowsql=$page->paginado($control);
-        $tipoUser=Yii::app()->getSession()->get('RolId', FALSE);
-        $usuarioErp=$this->concatenarUserERP(Yii::app()->getSession()->get('UsuarioErp', FALSE));
+        $tipoUser=Yii::$app->getSession()->get('RolId', FALSE);
+        $usuarioErp=$this->concatenarUserERP(Yii::$app->getSession()->get('UsuarioErp', FALSE));
         //echo $usuarioErp;
-        //$fecInifact=Yii::app()->params['dateStartFact'];//Fecha Inicial de Facturacion Electronica
-        $fecInifact= date(Yii::app()->params['datebydefault']);
-        $con = Yii::app()->dbvsseaint;
+        //$fecInifact=Yii::$app->params['dateStartFact'];//Fecha Inicial de Facturacion Electronica
+        $fecInifact= date(Yii::$app->params['datebydefault']);
+        $con = Yii::$app->dbvsseaint;
 
         $sql = "SELECT A.IdGuiaRemision IdDoc,A.Estado,A.SecuencialERP,A.UsuarioCreador,
                     A.FechaAutorizacion,A.AutorizacionSRI,A.ClaveAcceso,
@@ -259,7 +264,7 @@ class NubeGuiaRemision extends VsSeaIntermedia {
             ),
             'totalItemCount' => count($rawData),
             'pagination' => array(
-                'pageSize' => Yii::app()->params['pageSize'],
+                'pageSize' => Yii::$app->params['pageSize'],
             //'itemCount'=>count($rawData),
             ),
         ));
@@ -283,7 +288,7 @@ class NubeGuiaRemision extends VsSeaIntermedia {
      * @return Retorna Los Datos de las Retenciones GENERADAS
      */
     public function retornarPersona($valor, $op) {
-        $con = Yii::app()->dbvsseaint;
+        $con = Yii::$app->dbvsseaint;
         $rawData = array();
         //Patron de Busqueda
         /* http://www.mclibre.org/consultar/php/lecciones/php_expresiones_regulares.html */
@@ -316,7 +321,7 @@ class NubeGuiaRemision extends VsSeaIntermedia {
                 break;
             default:
         }
-        $sql .= " LIMIT " . Yii::app()->params['limitRow'];
+        $sql .= " LIMIT " . Yii::$app->params['limitRow'];
         //$sql .= " LIMIT 10";
         //echo $sql;
         $rawData = $con->createCommand($sql)->queryAll();
@@ -326,7 +331,7 @@ class NubeGuiaRemision extends VsSeaIntermedia {
     
     public function mostrarCabGuia($id) {
         $rawData = array();
-        $con = Yii::app()->dbvsseaint;
+        $con = Yii::$app->dbvsseaint;
         
         $sql = "SELECT A.IdGuiaRemision IdDoc,A.Estado,A.SecuencialERP,A.UsuarioCreador,
                     A.FechaAutorizacion,A.AutorizacionSRI,A.ClaveAcceso,A.Ambiente,A.TipoEmision,
@@ -346,7 +351,7 @@ class NubeGuiaRemision extends VsSeaIntermedia {
     
     public function mostrarDestinoGuia($id) {
         $rawData = array();
-        $con = Yii::app()->dbvsseaint;
+        $con = Yii::$app->dbvsseaint;
         $sql = "SELECT * FROM " . $con->dbname . ".NubeGuiaRemisionDestinatario WHERE IdGuiaRemision=$id";
         //echo $sql;
         $rawData = $con->createCommand($sql)->queryAll(); 
@@ -359,7 +364,7 @@ class NubeGuiaRemision extends VsSeaIntermedia {
     
     private function mostrarDetGuia($id) {
         $rawData = array();
-        $con = Yii::app()->dbvsseaint;
+        $con = Yii::$app->dbvsseaint;
         $sql = "SELECT * FROM " . $con->dbname . ".NubeGuiaRemisionDetalle WHERE IdGuiaRemisionDestinatario=$id";
         $rawData = $con->createCommand($sql)->queryAll(); 
         $con->active = false;
@@ -371,7 +376,7 @@ class NubeGuiaRemision extends VsSeaIntermedia {
     
     private function mostrarDetGuiaDatoAdi($id) {
         $rawData = array();
-        $con = Yii::app()->dbvsseaint;
+        $con = Yii::$app->dbvsseaint;
         $sql = "SELECT * FROM " . $con->dbname . ".NubeDatoAdicionalGuiaRemisionDetalle WHERE IdGuiaRemisionDetalle=$id";
         $rawData = $con->createCommand($sql)->queryAll(); 
         $con->active = false;
@@ -380,7 +385,7 @@ class NubeGuiaRemision extends VsSeaIntermedia {
     
     public function mostrarCabGuiaDataAdicional($id) {
         $rawData = array();
-        $con = Yii::app()->dbvsseaint;
+        $con = Yii::$app->dbvsseaint;
         $sql = "SELECT * FROM " . $con->dbname . ".NubeDatoAdicionalGuiaRemision WHERE IdGuiaRemision=$id";
         $rawData = $con->createCommand($sql)->queryAll(); //Recupera Solo 1
         $con->active = false;
@@ -389,7 +394,7 @@ class NubeGuiaRemision extends VsSeaIntermedia {
     
     public function mostrarRutaXMLAutorizado($id) {
         $rawData = array();
-        $con = Yii::app()->dbvsseaint;
+        $con = Yii::$app->dbvsseaint;
         $sql = "SELECT EstadoDocumento,DirectorioDocumento,NombreDocumento FROM " . $con->dbname . ".NubeGuiaRemision WHERE "
                 . "IdGuiaRemision=$id AND EstadoDocumento='AUTORIZADO'";
         $rawData = $con->createCommand($sql)->queryRow(); //Recupera Solo 1
@@ -408,8 +413,8 @@ class NubeGuiaRemision extends VsSeaIntermedia {
             for ($i = 0; $i < count($ids); $i++) {
                 if ($ids[$i] !== "") {
                     $result = $this->generarFileXML($ids[$i]);
-                    $DirDocAutorizado=Yii::app()->params['seaDocAutGuia']; 
-                    $DirDocFirmado=Yii::app()->params['seaDocGuia'];
+                    $DirDocAutorizado=Yii::$app->params['seaDocAutGuia']; 
+                    $DirDocFirmado=Yii::$app->params['seaDocGuia'];
                     if ($result['status'] == 'OK') {//Retorna True o False 
                         //echo $result['nomDoc'];
                         //Para Validaciones Masivas Hay que verificar lo que retorna la funcion
@@ -500,8 +505,8 @@ class NubeGuiaRemision extends VsSeaIntermedia {
                         if(strlen(trim($cabFact['ContribuyenteEspecial']))>0){
                             $xmldata .='<contribuyenteEspecial>' . utf8_encode(trim($cabFact["ContribuyenteEspecial"])) . '</contribuyenteEspecial>';//Obligado cuando Corresponda
                         }                      
-                        $xmldata .='<fechaIniTransporte>' . date(Yii::app()->params["dateXML"], strtotime($cabFact["FechaInicioTransporte"])) . '</fechaIniTransporte>';
-                        $xmldata .='<fechaFinTransporte>' . date(Yii::app()->params["dateXML"], strtotime($cabFact["FechaFinTransporte"])) . '</fechaFinTransporte>';
+                        $xmldata .='<fechaIniTransporte>' . date(Yii::$app->params["dateXML"], strtotime($cabFact["FechaInicioTransporte"])) . '</fechaIniTransporte>';
+                        $xmldata .='<fechaFinTransporte>' . date(Yii::$app->params["dateXML"], strtotime($cabFact["FechaFinTransporte"])) . '</fechaFinTransporte>';
                         $xmldata .='<placa>' . trim($cabFact["Placa"]) . '</placa>';
                 $xmldata .='</infoGuiaRemision>';
                 $xmldata .='<destinatarios>';
@@ -532,7 +537,7 @@ class NubeGuiaRemision extends VsSeaIntermedia {
                                     $xmldata .='<numAutDocSustento>' . utf8_encode(trim($destDoc[$i]['NumAutDocSustento'])) . '</numAutDocSustento>';//Obligado cuando Corresponda
                                 }
                                 if(trim($destDoc[$i]['FechaEmisionDocSustento'])<>'0000-00-00'){//Formato de Fecha Mysql
-                                    $xmldata .='<fechaEmisionDocSustento>' . date(Yii::app()->params["dateXML"], strtotime($destDoc[$i]["FechaEmisionDocSustento"])) . '</fechaEmisionDocSustento>';//Obligado cuando Corresponda
+                                    $xmldata .='<fechaEmisionDocSustento>' . date(Yii::$app->params["dateXML"], strtotime($destDoc[$i]["FechaEmisionDocSustento"])) . '</fechaEmisionDocSustento>';//Obligado cuando Corresponda
                                 }
 
                                 $xmldata .='<detalles>';
@@ -544,7 +549,7 @@ class NubeGuiaRemision extends VsSeaIntermedia {
                                                     $xmldata .='<codigoAdicional>' . utf8_encode(trim($detDoc[$j]['CodigoAdicional'])) . '</codigoAdicional>';//Obligado cuando Corresponda
                                                 }                                                
                                                 $xmldata .='<descripcion>' . utf8_encode($valida->limpioCaracteresXML(trim($detDoc[$j]["Descripcion"]))) . '</descripcion>';
-                                                $xmldata .='<cantidad>' . Yii::app()->format->formatNumber($detDoc[$j]['Cantidad']) . '</cantidad>';
+                                                $xmldata .='<cantidad>' . Yii::$app->format->formatNumber($detDoc[$j]['Cantidad']) . '</cantidad>';
                                                 $detAdi=$detDoc[$j]['GuiaDetAdi'];//Recupera Datos Adicionales del Detalle de la GUia
                                                 if(sizeof($detAdi)>0){
                                                     $xmldata .= $xmlGen->guiadetallesAdicionales($detAdi);
@@ -560,7 +565,7 @@ class NubeGuiaRemision extends VsSeaIntermedia {
         $xmldata .='</guiaRemision>';
         //echo htmlentities($xmldata);
         $nomDocfile = $cabFact['NombreDocumento'] . '-' . $cabFact['NumDocumento'] . '.xml';
-        file_put_contents(Yii::app()->params['seaDocXml'] . $nomDocfile, $xmldata); //Escribo el Archivo Xml
+        file_put_contents(Yii::$app->params['seaDocXml'] . $nomDocfile, $xmldata); //Escribo el Archivo Xml
         return $msgAuto->messageFileXML('OK', $nomDocfile, $cabFact["ClaveAcceso"], 2, null, null);
     }
 

@@ -1,6 +1,9 @@
 <?php
+namespace app\modules\fe_edoc\controllers;
 
-class NubeNotaDebitoController extends Controller
+use Yii;
+
+class NubenotadebitoController extends \app\components\CController 
 {
 	/**
 	 * @var string the default layout for the views. Defaults to '//layouts/column2', meaning
@@ -167,7 +170,7 @@ class NubeNotaDebitoController extends Controller
 		if(isset($_POST['ajax']) && $_POST['ajax']==='nube-nota-debito-form')
 		{
 			echo CActiveForm::validate($model);
-			Yii::app()->end();
+			Yii::$app->end();
 		}
 	}
 }
