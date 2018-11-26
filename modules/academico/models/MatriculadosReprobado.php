@@ -516,7 +516,7 @@ class MatriculadosReprobado extends \yii\db\ActiveRecord {
      * @param
      * @return
      */
-    public function insertarMatricureprobado($adm_id, $pami_id, $sins_id, $mre_usuario_ingreso, $mre_fecha_creacion) {
+    public function insertarMatricureprobado($adm_id, $pami_id, $sins_id, $mre_usuario_ingreso, $mre_estado_matriculado, $mre_fecha_creacion) {
         $con = \Yii::$app->db_captacion;
         $trans = $con->getTransaction(); // se obtiene la transacción actual
         if ($trans !== null) {
@@ -547,6 +547,10 @@ class MatriculadosReprobado extends \yii\db\ActiveRecord {
             $param_sql .= ", mre_usuario_ingreso";
             $bdet_sql .= ", :mre_usuario_ingreso";
         }
+        if (isset($mre_estado_matriculado)) {
+            $param_sql .= ", mre_estado_matriculado";
+            $bdet_sql .= ", :mre_estado_matriculado";
+        }
         if (isset($mre_fecha_creacion)) {
             $param_sql .= ", mre_fecha_creacion";
             $bdet_sql .= ", :mre_fecha_creacion";
@@ -567,6 +571,9 @@ class MatriculadosReprobado extends \yii\db\ActiveRecord {
             }
             if (!empty((isset($mre_usuario_ingreso)))) {
                 $comando->bindParam(':mre_usuario_ingreso', $mre_usuario_ingreso, \PDO::PARAM_INT);
+            }
+            if (!empty((isset($mre_estado_matriculado)))) {
+                $comando->bindParam(':mre_estado_matriculado', $mre_estado_matriculado, \PDO::PARAM_INT);
             }
             if (!empty((isset($mre_fecha_creacion)))) {
                 $comando->bindParam(':mre_fecha_creacion', $mre_fecha_creacion, \PDO::PARAM_STR);

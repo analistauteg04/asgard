@@ -29,12 +29,12 @@ $(document).ready(function () {
             error++;
             showAlert("NO_OK", "success", mensaje);
         }
-        if ($('#txth_doc_titulo').val() == ""){
+        if ($('#txth_doc_titulo').val() == "") {
             error++;
             var mensaje = {wtmessage: "Debe adjuntar título.", title: "Información"};
             showAlert("NO_OK", "error", mensaje);
         } else {
-            if ($('#txth_doc_dni').val() == ""){
+            if ($('#txth_doc_dni').val() == "") {
                 error++;
                 var mensaje =
                         {wtmessage: "Debe adjuntar documento de identidad.", title: "Información"};
@@ -42,7 +42,7 @@ $(document).ready(function () {
             } else {
                 if ($('#cmb_tipo_dni').val() == "CED")
                 {
-                    if (pais == 1){
+                    if (pais == 1) {
                         if ($('#txth_doc_certvota').val() == "")
                         {
                             error++;
@@ -54,12 +54,12 @@ $(document).ready(function () {
                 }
             }
         }
-        if(error==0){
+        if (error == 0) {
             guardarAdmireprobado('Update', '2');
         }
     });
-    
-    
+
+
     $('#paso1next').click(function () {
         $("a[data-href='#paso1']").attr('data-toggle', 'none');
         $("a[data-href='#paso1']").parent().attr('class', 'disabled');
@@ -121,8 +121,8 @@ $(document).ready(function () {
     $('#btn_buscarData').click(function () {
         actualizarGrid();
     });
-    
-    
+
+
     $('#cmb_unidad_solicitud').change(function () {
         var link = $('#txth_base').val() + "/inscripcionadmision/index";
         var arrParams = new Object();
@@ -184,13 +184,14 @@ function newReprobado() {
     window.location.href = $('#txth_base').val() + "/academico/matriculadosreprobados/newreprobado";
 }
 function guardarAdmiMateriarep() {
-    var link = $('#txth_base').val() + "/academico/matriculadosreprobados/save"; 
+    var link = $('#txth_base').val() + "/academico/matriculadosreprobados/save";
     var arrParams = new Object();
     var selected = '';
     arrParams.uniacademica = $('#cmb_ninteres').val();
     arrParams.modalidad = $('#cmb_modalidad').val();
     arrParams.carreprog = $('#cmb_carrera1').val();
     arrParams.periodo = $('#cmb_periodo').val();
+    arrParams.estadomat = $('#cmb_estado').val();
     arrParams.ids = $('#TbG_Admitido input[name=rb_admitido]:checked').val();
     $('#TbG_MATERIAS input[type=checkbox]').each(function () {
         if (this.checked) {
@@ -206,10 +207,11 @@ function guardarAdmiMateriarep() {
         var mensaje = {wtmessage: "Seleccionar datos del admitido desde buscar DNI.", title: "Error"};
         showAlert("NO_OK", "Error", mensaje);
     } else {
-            if ($('#cmb_ninteres option:selected').val() > '0') {
-                if ($('#cmb_modalidad option:selected').val() > '0') {
-                    if ($('#cmb_carrera1 option:selected').val() > '0') {
-                        if ($('#cmb_periodo option:selected').val() > '0') {
+        if ($('#cmb_ninteres option:selected').val() > '0') {
+            if ($('#cmb_modalidad option:selected').val() > '0') {
+                if ($('#cmb_carrera1 option:selected').val() > '0') {
+                    if ($('#cmb_periodo option:selected').val() > '0') {
+                        if ($('#cmb_estado option:selected').val() > '0') {
                             if (!validateForm()) {
                                 requestHttpAjax(link, arrParams, function (response) {
                                     showAlert(response.status, response.label, response.message);
@@ -219,21 +221,25 @@ function guardarAdmiMateriarep() {
                                 }, true);
                             }
                         } else {
-                            var mensaje = {wtmessage: "Período: El campo no debe estar vacío.", title: "Error"};
+                            var mensaje = {wtmessage: "Estado: El campo no debe estar vacío.", title: "Error"};
                             showAlert("NO_OK", "Error", mensaje);
                         }
                     } else {
-                        var mensaje = {wtmessage: "Carrera /Programa: El campo no debe estar vacío.", title: "Error"};
+                        var mensaje = {wtmessage: "Período: El campo no debe estar vacío.", title: "Error"};
                         showAlert("NO_OK", "Error", mensaje);
                     }
                 } else {
-                    var mensaje = {wtmessage: "Modalidad: El campo no debe estar vacío.", title: "Error"};
+                    var mensaje = {wtmessage: "Carrera /Programa: El campo no debe estar vacío.", title: "Error"};
                     showAlert("NO_OK", "Error", mensaje);
                 }
             } else {
-                var mensaje = {wtmessage: "Unidad Académica: El campo no debe estar vacío.", title: "Error"};
+                var mensaje = {wtmessage: "Modalidad: El campo no debe estar vacío.", title: "Error"};
                 showAlert("NO_OK", "Error", mensaje);
             }
+        } else {
+            var mensaje = {wtmessage: "Unidad Académica: El campo no debe estar vacío.", title: "Error"};
+            showAlert("NO_OK", "Error", mensaje);
+        }
     }
 }
 function guardarAdmireprobado(accion, paso) {
@@ -246,10 +252,10 @@ function guardarAdmireprobado(accion, paso) {
     requestHttpAjax(link, arrParams, function (response) {
         var message = response.message;
         if (response.status == "OK") {
-            if(accion == "Create"){
+            if (accion == "Create") {
                 $('#txth_twer_id').val(response.data.twre_id);
                 paso1next();
-            }else if(accion == "Update"){
+            } else if (accion == "Update") {
                 showAlert(response.status, response.label, response.message);
                 window.location.href = $('#txth_base').val() + "/admision/interesados/index";
             }
