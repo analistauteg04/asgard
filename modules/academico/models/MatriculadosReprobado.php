@@ -101,10 +101,11 @@ class MatriculadosReprobado extends \yii\db\ActiveRecord {
         $str_search = "";
 
         if (isset($search)) {
-            $str_search .= "per.per_cedula = :search AND ";
+            //$str_search .= "per.per_cedula = :search AND ";
+            $str_search = "(per.per_pri_nombre like :search OR per.per_seg_nombre like :search  OR per.per_pri_apellido like :search OR per.per_seg_apellido like :search OR per.per_cedula = :search) AND ";
         }
 
-        $sql = " SELECT  distinct lpad(ifnull(sins.num_solicitud, sins.sins_id),9,'0') as solicitud,
+        $sql = " SELECT distinct lpad(ifnull(sins.num_solicitud, sins.sins_id),9,'0') as solicitud,
                         sins.sins_id,
                         sins.int_id,
                         SUBSTRING(sins.sins_fecha_solicitud,1,10) as sins_fecha_solicitud, 
@@ -130,7 +131,15 @@ class MatriculadosReprobado extends \yii\db\ActiveRecord {
                             (select eaca_nombre from " . $con3->dbname . ".estudio_academico ea where ea.eaca_id = sins.eaca_id and ea.eaca_estado = '1' and ea.eaca_estado_logico = '1')
                         end as carrera,                             
                        (case when sins_beca = 1 then 'ICF' else 'No Aplica' end) as beca,
-                       ifnull((select 'SI' existe from " . $con3->dbname . ".matriculacion m where m.adm_id = admi.adm_id and m.sins_id = sins.sins_id and m.mat_estado = :estado and m.mat_estado_logico = :estado),'NO') as matriculado
+                       ifnull((select 'SI' existe from " . $con3->dbname . ".matriculacion m where m.adm_id = admi.adm_id and m.sins_id = sins.sins_id and m.mat_estado = :estado and m.mat_estado_logico = :estado),'NO') as matriculado,
+                       ifnull((select pa.pami_codigo
+                               from " . $con3->dbname . ".matriculacion m inner join " . $con3->dbname . ".asignacion_paralelo ap on ap.mat_id = m.mat_id
+                                    inner join " . $con3->dbname . ".paralelo p on p.par_id = ap.par_id
+                                    inner join " . $con3->dbname . ".periodo_academico_met_ingreso pa on pa.pami_id = p.pami_id
+                               where m.adm_id = admi.adm_id and m.sins_id = sins.sins_id and m.mat_estado = :estado and m.mat_estado_logico = :estado
+                                and p.par_estado = :estado and p.par_estado_logico = :estado
+                                and ap.apar_estado = :estado and ap.apar_estado_logico = :estado
+                                and pa.pami_estado = :estado and pa.pami_estado_logico = :estado),'N/A') as pami_codigo  
                 FROM " . $con->dbname . ".admitido admi INNER JOIN " . $con->dbname . ".interesado inte on inte.int_id = admi.int_id                     
                      INNER JOIN " . $con2->dbname . ".persona per on inte.per_id = per.per_id
                      INNER JOIN " . $con->dbname . ".solicitud_inscripcion sins on sins.int_id = inte.int_id                                          
