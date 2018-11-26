@@ -5,7 +5,7 @@ use Yii;
 
 class Module extends \yii\base\Module
 {
-    public $db_fe_edoc;    // se debe colocar el identificador de la base que se define en el archivo de modulos: mod.php
+    public $db_edoc;    // se debe colocar el identificador de la base que se define en el archivo de modulos: mod.php
     public $class;  // se debe colocar el la clase de la conexion de la base que se define en el archivo de modulos: mod.php
     public $controllerNamespace = 'app\modules\fe_edoc\controllers';
     private static $module_name = 'fe_edoc';

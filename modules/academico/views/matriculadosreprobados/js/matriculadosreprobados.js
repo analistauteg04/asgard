@@ -321,9 +321,10 @@ function actualizarGrid() {
     var search = $('#txt_buscarData').val();
     var f_ini = $('#txt_fecha_ini').val();
     var f_fin = $('#txt_fecha_fin').val();
+    var estadomat = $('#cmb_estado').val();
     if (!$(".blockUI").length) {
         showLoadingPopup();
-        $('#TbG_REPMATRICULA').PbGridView('applyFilterData', {'f_ini': f_ini, 'f_fin': f_fin, 'search': search});
+        $('#TbG_REPMATRICULA').PbGridView('applyFilterData', {'f_ini': f_ini, 'f_fin': f_fin, 'search': search, 'estadomat': estadomat});
         setTimeout(hideLoadingPopup, 2000);
     }
 }
@@ -332,14 +333,16 @@ function exportExcel() {
     var search = $('#txt_buscarData').val();
     var f_ini = $('#txt_fecha_ini').val();
     var f_fin = $('#txt_fecha_fin').val();
-    window.location.href = $('#txth_base').val() + "/academico/matriculadosreprobados/expexcel?search=" + search + "&fecha_ini=" + f_ini + "&fecha_fin=" + f_fin;
+    var estadomat = $('#cmb_estado').val();
+    window.location.href = $('#txth_base').val() + "/academico/matriculadosreprobados/expexcel?search=" + search + "&fecha_ini=" + f_ini + "&fecha_fin=" + f_fin + "&estadomat=" + estadomat;
 }
 
 function exportPdf() {
     var search = $('#txt_buscarData').val();
     var f_ini = $('#txt_fecha_ini').val();
     var f_fin = $('#txt_fecha_fin').val();
-    window.location.href = $('#txth_base').val() + "/academico/matriculadosreprobados/exportpdf?pdf=1&search=" + search + "&fecha_ini=" + f_ini + "&fecha_fin=" + f_fin;
+    var estadomat = $('#cmb_estado').val();
+    window.location.href = $('#txth_base').val() + "/academico/matriculadosreprobados/exportpdf?pdf=1&search=" + search + "&fecha_ini=" + f_ini + "&fecha_fin=" + f_fin + "&estadomat=" + estadomat;
 }
 function actualizarMateriaGrid() {
     if ($('#cmb_ninteres option:selected').val() > '0') {

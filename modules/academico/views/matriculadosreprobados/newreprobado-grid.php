@@ -50,6 +50,11 @@ PbGridView::widget([
             'value' => 'per_cedula',
         ],
         [
+            'attribute' => 'periodo',
+            'header' => academico::t("Academico", "Period"),
+            'value' => 'pami_codigo',
+        ],
+        /*[
             'class' => 'yii\grid\ActionColumn',
             'header' => Yii::t("formulario", "Email"),
             'template' => '{view}',
@@ -58,7 +63,7 @@ PbGridView::widget([
                     return Html::a('<span>' . substr($model['per_correo'], 0, 15) . '... </span>', Url::to("#"), ["data-toggle" => "tooltip", "title" => $model['per_correo']]);
                 },
             ],
-        ],
+        ],*/
         [
             'attribute' => 'celular',
             'header' => Yii::t("formulario", "Phone"),

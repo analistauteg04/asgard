@@ -60,12 +60,12 @@ class SolicitudesController extends \app\components\CController {
             if (isset($data["getmodalidad"])) {
                 $modalidad = $mod_modalidad->consultarModalidad($data["nint_id"], 1);
                 $message = array("modalidad" => $modalidad);
-                return Utilities::ajaxResponse('OK', 'alert', Yii::t('jslang', 'Success'), 'false', $message);             
+                return Utilities::ajaxResponse('OK', 'alert', Yii::t('jslang', 'Success'), 'false', $message);
             }
             if (isset($data["getcarrera"])) {
                 $carrera = $modcanal->consultarCarreraModalidad($data["unidada"], $data["moda_id"]);
                 $message = array("carrera" => $carrera);
-                return Utilities::ajaxResponse('OK', 'alert', Yii::t('jslang', 'Success'), 'false', $message);              
+                return Utilities::ajaxResponse('OK', 'alert', Yii::t('jslang', 'Success'), 'false', $message);
             }
         }
         $resp_estados = $modSolicitud->Consultaestadosolicitud();
@@ -141,6 +141,7 @@ class SolicitudesController extends \app\components\CController {
         $resp_condtitulo = $mod_solins->consultarSolnoaprobada(1, $tiponacext);
         $resp_conddni = $mod_solins->consultarSolnoaprobada(2, $tiponacext);
         $resp_rechazo = $mod_solins->consultaSolicitudRechazada($sins_id, 'A');
+        $resp_condcertv = $mod_solins->consultarSolnoaprobada(3, $tiponacext);
 
         return $this->render('view', [
                     "revision" => array("2" => Yii::t("formulario", "APPROVED"), "4" => Yii::t("formulario", "Not approved")),
@@ -162,6 +163,7 @@ class SolicitudesController extends \app\components\CController {
                     "img_pago" => $img_pago,
                     "emp_id" => $emp_id,
                     "arr_fecha" => $fechas,
+                    "arr_certv" => $resp_condcertv,
         ]);
     }
 
@@ -962,8 +964,10 @@ class SolicitudesController extends \app\components\CController {
             $per_id = base64_decode($data["per_id"]);
             $condicionesTitulo = $data["condicionestitulo"];
             $condicionesDni = $data["condicionesdni"];
+            $condicionesCerti = $data["condicioncerti"];
             $titulo = $data["titulo"];
             $dni = $data["dni"];
+            $certivot = $data["certi"];
             $emp_id = $data["empresa"];
             $rsin_id = base64_decode($data["estado_sol"]);
 
@@ -1096,6 +1100,17 @@ class SolicitudesController extends \app\components\CController {
                                             }
                                         }
                                     }
+                                    if ($certivot == 1) {
+                                        $obs_rechazo = "No cumple condiciones de aceptación en certificado de votación.";
+                                        for ($b = 0; $b < count($condicionesCerti); $b++) {
+                                            $resp_rechcer = $mod_solins->Insertarsolicitudrechazada($sins_id, 3, $condicionesCerti[$b], $srec_etapa, $obs_rechazo, $respusuario['usu_id']);
+                                            if ($resp_rechcer) {
+                                                $ok = "1";
+                                            } else {
+                                                $ok = "0";
+                                            }
+                                        }
+                                    }
                                     if ($ok == "1") {
                                         //Se envía correo.
                                         $mod_persona = new Persona();
@@ -1169,6 +1184,17 @@ class SolicitudesController extends \app\components\CController {
                                             for ($a = 0; $a < count($condicionesDni); $a++) {
                                                 $resp_rechdni = $mod_solins->Insertarsolicitudrechazada($sins_id, 2, $condicionesDni[$a], $srec_etapa, $obs_rechazo, $respusuario['usu_id']);
                                                 if ($resp_rechdni) {
+                                                    $ok = "1";
+                                                } else {
+                                                    $ok = "0";
+                                                }
+                                            }
+                                        }
+                                        if ($certivot == 1) {
+                                            $obs_rechazo = "No cumple condiciones de aceptación en certificado de votación.";
+                                            for ($b = 0; $b < count($condicionesCerti); $b++) {
+                                                $resp_rechcer = $mod_solins->Insertarsolicitudrechazada($sins_id, 3, $condicionesCerti[$b], $srec_etapa, $obs_rechazo, $respusuario['usu_id']);
+                                                if ($resp_rechcer) {
                                                     $ok = "1";
                                                 } else {
                                                     $ok = "0";
@@ -1268,7 +1294,7 @@ class SolicitudesController extends \app\components\CController {
             academico::t("Academico", "Income Method"),
             academico::t("Academico", "Career/Program"),
             Yii::t("formulario", "Status"),
-            financiero::t("Pagos", "Payment")            
+            financiero::t("Pagos", "Payment")
         );
 
         $modSolicitudes = new SolicitudInscripcion();
