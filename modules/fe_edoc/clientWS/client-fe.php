@@ -1,9 +1,10 @@
 <?php
 
 include_once('libs/SybaseFactura.php');//para HTTP
+include_once('libs/SybaseRetenciones.php');//para HTTP
 
-$obj = new SybaseFactura();
-//$res=$obj->consultarSybCabFacturas();
-$res = $obj->insertarFacturas();
-
+$objFac = new SybaseFactura();
+$res=$objFac->consultarSybCabFacturas();
+$objRet = new SybaseRetenciones();
+$res=$objRet->consultarSybCabRetenciones();
 ?>

@@ -19,7 +19,7 @@ use app\models\EstadoCivil;
 /**
  * 
  *
- * @author Diana Lopez
+ * @author Kleber Loayza
  */
 class FichaController extends \app\components\CController {
 
@@ -44,7 +44,6 @@ class FichaController extends \app\components\CController {
         $per_id = base64_decode($data['perid']);
         $arr_etnia = Etnia::find()->select("etn_id AS id, etn_nombre AS value")->where(["etn_estado_logico" => "1", "etn_estado" => "1"])->asArray()->all();
         $tipos_sangre = TipoSangre::find()->select("tsan_id AS id, tsan_nombre AS value")->where(["tsan_estado_logico" => "1", "tsan_estado" => "1"])->asArray()->all();
-        //Búsqueda de los datos de persona logueada
         $modperinteresado = new Persona();
         $respPerinteresado = $modperinteresado->consultaPersonaId($per_id);
         $arr_pais_nac = Pais::find()->select("pai_id AS id, pai_nombre AS value")->where(["pai_estado_logico" => "1", "pai_estado" => "1"])->asArray()->all();
@@ -59,7 +58,6 @@ class FichaController extends \app\components\CController {
         $arr_pais_dom = Pais::find()->select("pai_id AS id, pai_nombre AS value")->where(["pai_estado_logico" => "1", "pai_estado" => "1"])->asArray()->all();
         $arr_prov_dom = Provincia::provinciaXPais($respPerinteresado['pai_id_domicilio']);
         $arr_ciu_dom = Canton::cantonXProvincia($respPerinteresado['pro_id_domicilio']);
-        // Consultar otra etnia
         $respotraetnia = $modperinteresado->consultarOtraetnia($per_id);
         $area = $mod_pais->consultarCodigoArea($respPerinteresado['pai_id_nacimiento']);
         $area_dom = $mod_pais->consultarCodigoArea($respPerinteresado['pai_id_domicilio']);

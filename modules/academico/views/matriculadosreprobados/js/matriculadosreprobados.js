@@ -42,8 +42,7 @@ $(document).ready(function () {
             } else {
                 if ($('#cmb_tipo_dni').val() == "CED")
                 {
-                    if (pais == 1)
-                    {
+                    if (pais == 1){
                         if ($('#txth_doc_certvota').val() == "")
                         {
                             error++;

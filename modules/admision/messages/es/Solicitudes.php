@@ -16,6 +16,7 @@ namespace app\modules\admision\messages;
      "Document" => "Documento",
      "Does not meet acceptance conditions in title" => "No cumple condiciones de aceptación en título:",
      "Does not meet acceptance conditions on identity document" => "No cumple condiciones de aceptación en documento de identidad:",
+     "Does not meet acceptance conditions in voting certificate" => "No cumple condiciones de aceptación certifcado de votación:",
      "General Information Registered" => "Datos Generales Inscrito",
      "Income Method" => "Método Ingreso",        
      "List Requests" => "Listar Solicitudes",
