@@ -12,6 +12,7 @@ namespace app\modules\financiero\messages;
      "Billing Data" => "Datos de Facturación",
      "Control Payments" => "Control de Pagos",
      "Discount" => "Descuento",
+     "Item" => "Item",
      "List Payment" => "Listar pagos",
      "Outstanding balance" => "Saldo Pendiente",
      "Paid form" => "Forma Pago",
