@@ -1206,5 +1206,5 @@ class MatriculadosReprobado extends \yii\db\ActiveRecord {
             return false;
         return true;
     }
-
 }
+
