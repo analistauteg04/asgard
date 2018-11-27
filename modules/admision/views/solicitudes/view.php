@@ -232,82 +232,84 @@ financiero::registerTranslations();
         </div>
     </div>
 
-    <?php if (empty($personaData["sins_fecha_reprobacion"])) { ?> 
-        <div class="col-md-12 col-sm-12 col-xs-12 col-lg-12" id="Divnoaprobado" style="display: none;"> 
+    <?php //if (empty($personaData["sins_fecha_reprobacion"])) { ?> 
+    <div class="col-md-12 col-sm-12 col-xs-12 col-lg-12" id="Divnoaprobado" style="display: none;"> 
+        <div class="col-md-6 col-sm-6 col-xs-6 col-lg-6">
+            <div class="form-group">
+                <label for="chk_titulo" class="col-sm-10 col-md-10 col-xs-10 col-lg-10 control-label"><?= admision::t("Solicitudes", "Does not meet acceptance conditions in title") ?></label>
+                <div class="col-sm-1 ">                     
+                    <input type="checkbox" class="" id="chk_titulo"  data-type="alfa" data-keydown="true" placeholder="<?= Yii::t("solicitud_ins", "Does not meet acceptance conditions in title") ?>">                      
+                </div>
+            </div>
+        </div>
+
+        <div class="col-md-6 col-sm-6 col-xs-6 col-lg-6">
+            <div class="form-group">
+                <label for="chk_documento" class="col-sm-10 col-md-10 col-xs-10 col-lg-10 control-label"><?= admision::t("Solicitudes", "Does not meet acceptance conditions on identity document") ?></label>
+                <div class="col-sm-1 ">                     
+                    <input type="checkbox" class="" id="chk_documento" data-type="alfa" data-keydown="true" placeholder="<?= admision::t("Solicitudes", "Does not meet acceptance conditions on identity document") ?>">  
+                </div>
+            </div>
+        </div>
+
+        <div class="col-md-6 col-sm-6 col-xs-6 col-lg-6" id="Divcondtitulo" style="visibility: hidden;" >
+            <div class="form-group">               
+                <?php
+                for ($i = 0; $i < count($arr_condtitulo); $i++) {
+                    $chk_contitulo = "chk_contitulo" . $i;
+                    ?>  
+                    <p for="<?= $chk_contitulo ?>" class="col-sm-10 col-md-10 col-xs-10 col-lg-10 control-label"><?php echo $arr_condtitulo[$i]['name'] ?></p>
+                    <div class="col-sm-1 ">    
+                        <?= Html::hiddenInput('txth_cond_titulo' . $i, $arr_condtitulo[$i]['id'], ['id' => 'txth_cond_titulo' . $i]); ?>
+                        <input type="checkbox" class="" id="<?= $chk_contitulo ?>" data-type="alfa" data-keydown="true" placeholder="<?= $arr_condtitulo[$i]['name'] ?>">  
+                    </div>
+                <?php } ?>   
+            </div>
+        </div>
+
+        <div class="col-md-6 col-sm-6 col-xs-6 col-lg-6" id="Divconddni"  style="visibility: hidden;" >
+            <div class="form-group">            
+                <?php
+                for ($j = 0; $j < count($arr_conddni); $j++) {
+                    $chk_conddni = "chk_conddni" . $j;
+                    ?>  
+                    <p for="<?= $chk_conddni ?>" class="col-sm-10  col-md-10 col-xs-10 col-lg-10 control-label"><?php echo $arr_conddni[$j]['name'] ?></p>
+                    <div class="col-sm-1 ">    
+                        <?= Html::hiddenInput('txth_cond_dni' . $j, $arr_conddni[$j]['id'], ['id' => 'txth_cond_dni' . $j]); ?>
+                        <input type="checkbox" class="" id="<?= $chk_conddni ?>" data-type="alfa" data-keydown="true" placeholder="<?= $arr_conddni[$j]['name'] ?>">  
+                    </div>
+                <?php } ?>      
+            </div>
+        </div>            
+        <div class="col-md-12 col-sm-12 col-xs-12 col-lg-12">
             <div class="col-md-6 col-sm-6 col-xs-6 col-lg-6">
                 <div class="form-group">
-                    <label for="chk_titulo" class="col-sm-10 col-md-10 col-xs-10 col-lg-10 control-label"><?= admision::t("Solicitudes", "Does not meet acceptance conditions in title") ?></label>
+                    <label for="chk_certificado" class="col-sm-10 col-md-10 col-xs-10 col-lg-10 control-label"><?= admision::t("Solicitudes", "Does not meet acceptance conditions in voting certificate") ?></label>
                     <div class="col-sm-1 ">                     
-                        <input type="checkbox" class="" id="chk_titulo"  data-type="alfa" data-keydown="true" placeholder="<?= Yii::t("solicitud_ins", "Does not meet acceptance conditions in title") ?>">                      
+                        <input type="checkbox" class="" id="chk_certificado"  data-type="alfa" data-keydown="true" placeholder="<?= Yii::t("solicitud_ins", "Does not meet acceptance conditions in title") ?>">                      
                     </div>
                 </div>
-            </div>
-
-            <div class="col-md-6 col-sm-6 col-xs-6 col-lg-6">
-                <div class="form-group">
-                    <label for="chk_documento" class="col-sm-10 col-md-10 col-xs-10 col-lg-10 control-label"><?= admision::t("Solicitudes", "Does not meet acceptance conditions on identity document") ?></label>
-                    <div class="col-sm-1 ">                     
-                        <input type="checkbox" class="" id="chk_documento" data-type="alfa" data-keydown="true" placeholder="<?= admision::t("Solicitudes", "Does not meet acceptance conditions on identity document") ?>">  
+                <div class="col-md-13 col-sm-13 col-xs-13 col-lg-13" id="Divcondcerti" style="visibility: hidden;" >
+                    <div class="form-group">               
+                        <?php
+                        for ($i = 0; $i < count($arr_certv); $i++) {
+                            $chk_concerti = "chk_concerti" . $i;
+                            ?>  
+                            <p for="<?= $chk_concerti ?>" class="col-sm-10 col-md-10 col-xs-10 col-lg-10 control-label"><?php echo $arr_certv[$i]['name'] ?></p>
+                            <div class="col-sm-1 ">    
+                                <?= Html::hiddenInput('txth_cond_certi' . $i, $arr_certv[$i]['id'], ['id' => 'txth_cond_certi' . $i]); ?>
+                                <input type="checkbox" class="" id="<?= $chk_concerti ?>" data-type="alfa" data-keydown="true" placeholder="<?= $arr_certv[$i]['name'] ?>">  
+                            </div>
+                        <?php } ?>   
                     </div>
-                </div>
+                </div>     
             </div>
-
-            <div class="col-md-6 col-sm-6 col-xs-6 col-lg-6" id="Divcondtitulo" style="visibility: hidden;" >
-                <div class="form-group">               
-                    <?php
-                    for ($i = 0; $i < count($arr_condtitulo); $i++) {
-                        $chk_contitulo = "chk_contitulo" . $i;
-                        ?>  
-                        <p for="<?= $chk_contitulo ?>" class="col-sm-10 col-md-10 col-xs-10 col-lg-10 control-label"><?php echo $arr_condtitulo[$i]['name'] ?></p>
-                        <div class="col-sm-1 ">    
-                            <?= Html::hiddenInput('txth_cond_titulo' . $i, $arr_condtitulo[$i]['id'], ['id' => 'txth_cond_titulo' . $i]); ?>
-                            <input type="checkbox" class="" id="<?= $chk_contitulo ?>" data-type="alfa" data-keydown="true" placeholder="<?= $arr_condtitulo[$i]['name'] ?>">  
-                        </div>
-                    <?php } ?>   
-                </div>
-            </div>
-
-            <div class="col-md-6 col-sm-6 col-xs-6 col-lg-6" id="Divconddni"  style="visibility: hidden;" >
-                <div class="form-group">            
-                    <?php
-                    for ($j = 0; $j < count($arr_conddni); $j++) {
-                        $chk_conddni = "chk_conddni" . $j;
-                        ?>  
-                        <p for="<?= $chk_conddni ?>" class="col-sm-10  col-md-10 col-xs-10 col-lg-10 control-label"><?php echo $arr_conddni[$j]['name'] ?></p>
-                        <div class="col-sm-1 ">    
-                            <?= Html::hiddenInput('txth_cond_dni' . $j, $arr_conddni[$j]['id'], ['id' => 'txth_cond_dni' . $j]); ?>
-                            <input type="checkbox" class="" id="<?= $chk_conddni ?>" data-type="alfa" data-keydown="true" placeholder="<?= $arr_conddni[$j]['name'] ?>">  
-                        </div>
-                    <?php } ?>      
-                </div>
-            </div>            
-            <div class="col-md-12 col-sm-12 col-xs-12 col-lg-12">
-                <div class="col-md-6 col-sm-6 col-xs-6 col-lg-6">
-                    <div class="form-group">
-                        <label for="chk_certificado" class="col-sm-10 col-md-10 col-xs-10 col-lg-10 control-label"><?= admision::t("Solicitudes", "Does not meet acceptance conditions in voting certificate") ?></label>
-                        <div class="col-sm-1 ">                     
-                            <input type="checkbox" class="" id="chk_certificado"  data-type="alfa" data-keydown="true" placeholder="<?= Yii::t("solicitud_ins", "Does not meet acceptance conditions in title") ?>">                      
-                        </div>
-                    </div>
-                    <div class="col-md-13 col-sm-13 col-xs-13 col-lg-13" id="Divcondcerti" style="visibility: hidden;" >
-                        <div class="form-group">               
-                            <?php
-                            for ($i = 0; $i < count($arr_certv); $i++) {
-                                $chk_concerti = "chk_concerti" . $i;
-                                ?>  
-                                <p for="<?= $chk_concerti ?>" class="col-sm-10 col-md-10 col-xs-10 col-lg-10 control-label"><?php echo $arr_certv[$i]['name'] ?></p>
-                                <div class="col-sm-1 ">    
-                                    <?= Html::hiddenInput('txth_cond_certi' . $i, $arr_certv[$i]['id'], ['id' => 'txth_cond_certi' . $i]); ?>
-                                    <input type="checkbox" class="" id="<?= $chk_concerti ?>" data-type="alfa" data-keydown="true" placeholder="<?= $arr_certv[$i]['name'] ?>">  
-                                </div>
-                            <?php } ?>   
-                        </div>
-                    </div>     
-                </div>
-            </div>  
         </div>  
-        <?php
-    } else {
+    </div>  
+
+    <?php
+    //} else {
+    if (!empty($resp_rechazo) && $personaData["rsin_id"] != 2) {
         $obs_condicion = "";
         ?>        
         <?php
@@ -315,27 +317,31 @@ financiero::registerTranslations();
             if ($obs_condicion <> $resp_rechazo[$r]['observacion']) {
                 $obs_condicion = $resp_rechazo[$r]['observacion'];
                 if ($r == 0) {
-                    $obs_correo = $obs_correo . "<b>&nbsp;&nbsp;&nbsp;" . $obs_condicion . ":</b><br/>" . "&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; No " . $resp_rechazo[$r]['condicion'] . "&nbsp;&nbsp;&nbsp;";
+                    $obs_correo = $obs_correo . "<b>&nbsp;&nbsp;&nbsp;" . $obs_condicion . "</b><br/>" . "&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; No " . $resp_rechazo[$r]['condicion'] . "&nbsp;&nbsp;&nbsp;";
                 } else {
-                    $obs_correo = $obs_correo . "</br><b>&nbsp;&nbsp;&nbsp;" . $obs_condicion . ":</b><br/>" . "&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; No " . $resp_rechazo[$r]['condicion'] . "&nbsp;&nbsp;&nbsp;";
+                    $obs_correo = $obs_correo . "</br><b>&nbsp;&nbsp;&nbsp;" . $obs_condicion . "</b><br/>" . "&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; No " . $resp_rechazo[$r]['condicion'] . "&nbsp;&nbsp;&nbsp;";
                 }
             } else {
                 $obs_correo = $obs_correo . "<br/>" . "&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; No " . $resp_rechazo[$r]['condicion'] . "&nbsp;&nbsp;&nbsp;";
             }
         }
-        ?> 
-        <div class="col-md-6 col-sm-6 col-xs-6 col-lg-6">
-            <label for="" class="col-sm-4 col-md-4 col-xs-4 col-lg-4 control-label keyupmce"><?= admision::t("Solicitudes", "Observations:") ?></label>            
-        </div>      
-        <?php
-        $leyenda = '<div class="col-md-6 col-sm-6 col-xs-6 col-lg-6 ">     
-          <div style = "width: 530px;" class="alert alert-info"><span style="font-weight:"> </span> '
-                . $obs_correo .
-                '</div>
-          </div>';
-        echo $leyenda;
-        ?>                   
-    <?php } ?>    
+        ?>
 
+        <div class="col-md-12 col-sm-12 col-xs-12 col-lg-12">
+            <div class="col-md-6 col-sm-6 col-xs-6 col-lg-6">
+                <label for="" class="col-sm-4 col-md-4 col-xs-4 col-lg-4 control-label keyupmce"><?= Yii::t("formulario", "Observations") ?></label>            
+            </div> 
+            <div style="height:30px">
+                
+            </div>
+            <?php
+            $leyenda = '      
+          <div style = "width: 530px;" class="alert alert-info"><span style="font-weight"> </span> '
+                    . $obs_correo .
+                    '</div>';
+            echo $leyenda;
+            ?>                   
+        <?php } ?>    
+    </div> 
 
 </form>

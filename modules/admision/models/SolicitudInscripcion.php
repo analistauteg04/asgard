@@ -845,9 +845,14 @@ class SolicitudInscripcion extends \yii\db\ActiveRecord {
         $con = \Yii::$app->db_captacion;
         $estado = 1;
 
-        $sql = "SELECT srec_observacion observacion, snoa.snoa_nombre condicion
-                FROM " . $con->dbname . ".solicitud_rechazada srec INNER JOIN " . $con->dbname . ".solicitud_noaprobada snoa on snoa.snoa_id = srec.snoa_id
+        $sql = "SELECT srec_observacion observacion, 
+                       snoa.snoa_nombre condicion,
+                       srec_fecha_creacion
+                FROM " . $con->dbname . ".solicitud_rechazada srec "
+                . "INNER JOIN " . $con->dbname . ".solicitud_noaprobada snoa on snoa.snoa_id = srec.snoa_id
                 WHERE   srec.sins_id = :sins_id AND
+                        srec_fecha_creacion = (SELECT max(srec_fecha_creacion) 
+                        FROM db_captacion.solicitud_rechazada where sins_id = :sins_id) AND
                         srec.srec_etapa = :etapa AND
                         srec.srec_estado = :estado AND
                         snoa.snoa_estado = :estado AND
