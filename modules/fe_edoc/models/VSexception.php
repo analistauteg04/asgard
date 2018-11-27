@@ -11,6 +11,10 @@
  *
  * @author root
  */
+namespace app\modules\fe_edoc\models;
+
+use Yii;
+
 class VSexception {
     //NOTA: no poner estas funciones como static
 

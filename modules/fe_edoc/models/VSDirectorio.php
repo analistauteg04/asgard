@@ -18,6 +18,10 @@
  * The followings are the available model relations:
  * @property VSCompania $idCompania
  */
+namespace app\modules\fe_edoc\models;
+
+use Yii;
+
 class VSDirectorio extends CActiveRecord {
 
     /**
@@ -79,52 +83,9 @@ class VSDirectorio extends CActiveRecord {
         );
     }
 
-    /**
-     * Retrieves a list of models based on the current search/filter conditions.
-     *
-     * Typical usecase:
-     * - Initialize the model fields with values from filter form.
-     * - Execute this method to get CActiveDataProvider instance which will filter
-     * models according to data in model fields.
-     * - Pass data provider to CGridView, CListView or any similar widget.
-     *
-     * @return CActiveDataProvider the data provider that can return the models
-     * based on the search/filter conditions.
-     */
-    public function search() {
-        // @todo Please modify the following code to remove attributes that should not be searched.
-
-        $criteria = new CDbCriteria;
-
-        $criteria->compare('IdDirectorio', $this->IdDirectorio);
-        $criteria->compare('IdCompania', $this->IdCompania, true);
-        $criteria->compare('TipoDocumento', $this->TipoDocumento, true);
-        $criteria->compare('Descripcion', $this->Descripcion, true);
-        $criteria->compare('Ruta', $this->Ruta, true);
-        $criteria->compare('UsuarioCreacion', $this->UsuarioCreacion, true);
-        $criteria->compare('FechaCreacion', $this->FechaCreacion, true);
-        $criteria->compare('UsuarioEliminacion', $this->UsuarioEliminacion, true);
-        $criteria->compare('FechaEliminacion', $this->FechaEliminacion, true);
-        $criteria->compare('Estado', $this->Estado);
-
-        return new CActiveDataProvider($this, array(
-            'criteria' => $criteria,
-        ));
-    }
-
-    /**
-     * Returns the static model of the specified AR class.
-     * Please note that you should have this exact method in all your CActiveRecord descendants!
-     * @param string $className active record class name.
-     * @return VSDirectorio the static model class
-     */
-    public static function model($className = __CLASS__) {
-        return parent::model($className);
-    }
-
     public function recuperarTipoDocumentos() {
-        //$con = yii::app()->dbvssea;
-        $con = yii::app()->db;
+        $con = Yii::$app->db_edoc;
+        //$con = Yii::$app->db;
         $sql = "SELECT idDirectorio,TipoDocumento,Descripcion,Ruta 
                 FROM " . $con->dbname . ".VSDirectorio WHERE Estado=1;";
         $rawData = $con->createCommand($sql)->queryAll();

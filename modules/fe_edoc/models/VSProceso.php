@@ -41,15 +41,12 @@
  * @property VSComprobante[] $vSComprobantes
  * @property VSCompania $idCompania
  */
-class VSProceso extends CActiveRecord
+namespace app\modules\fe_edoc\models;
+
+use Yii;
+
+class VSProceso extends \app\modules\fe_edoc\components\CActiveRecord
 {
-	/**
-	 * @return string the associated database table name
-	 */
-	public function tableName()
-	{
-		return 'VSProceso';
-	}
 
 	/**
 	 * @return array validation rules for model attributes.
@@ -131,69 +128,4 @@ class VSProceso extends CActiveRecord
 		);
 	}
 
-	/**
-	 * Retrieves a list of models based on the current search/filter conditions.
-	 *
-	 * Typical usecase:
-	 * - Initialize the model fields with values from filter form.
-	 * - Execute this method to get CActiveDataProvider instance which will filter
-	 * models according to data in model fields.
-	 * - Pass data provider to CGridView, CListView or any similar widget.
-	 *
-	 * @return CActiveDataProvider the data provider that can return the models
-	 * based on the search/filter conditions.
-	 */
-	public function search()
-	{
-		// @todo Please modify the following code to remove attributes that should not be searched.
-
-		$criteria=new CDbCriteria;
-
-		$criteria->compare('Id',$this->Id,true);
-		$criteria->compare('IdCompania',$this->IdCompania,true);
-		$criteria->compare('ClaveAcceso',$this->ClaveAcceso,true);
-		$criteria->compare('Ambiente',$this->Ambiente);
-		$criteria->compare('NumeroComprobantes',$this->NumeroComprobantes,true);
-		$criteria->compare('Estado',$this->Estado,true);
-		$criteria->compare('RUC',$this->RUC,true);
-		$criteria->compare('RazonSocial',$this->RazonSocial,true);
-		$criteria->compare('Email',$this->Email,true);
-		$criteria->compare('TipoIdentificacionReceptor',$this->TipoIdentificacionReceptor,true);
-		$criteria->compare('TotalFactura',$this->TotalFactura,true);
-		$criteria->compare('AutorizacionSRI',$this->AutorizacionSRI,true);
-		$criteria->compare('FechaAutorizacion',$this->FechaAutorizacion,true);
-		$criteria->compare('Ruta',$this->Ruta,true);
-		$criteria->compare('FechaEmision',$this->FechaEmision,true);
-		$criteria->compare('TipoDocumento',$this->TipoDocumento);
-		$criteria->compare('NumDocumento',$this->NumDocumento,true);
-		$criteria->compare('FechaIngreso',$this->FechaIngreso,true);
-		$criteria->compare('EstadoEDOC',$this->EstadoEDOC);
-		$criteria->compare('EstadoNotificacion',$this->EstadoNotificacion);
-		$criteria->compare('Error',$this->Error,true);
-		$criteria->compare('ErrorCodigo',$this->ErrorCodigo,true);
-		$criteria->compare('FechaSincCliente',$this->FechaSincCliente,true);
-		$criteria->compare('EstadoSincCliente',$this->EstadoSincCliente);
-		$criteria->compare('ErrorSincCliente',$this->ErrorSincCliente,true);
-		$criteria->compare('IVA',$this->IVA,true);
-		$criteria->compare('SubTotalSinImpuesto',$this->SubTotalSinImpuesto,true);
-		$criteria->compare('UsuarioProceso',$this->UsuarioProceso,true);
-		$criteria->compare('UsuarioTransaccionERP',$this->UsuarioTransaccionERP,true);
-		$criteria->compare('CodigoTransaccionERP',$this->CodigoTransaccionERP,true);
-		$criteria->compare('SecuencialERP',$this->SecuencialERP,true);
-
-		return new CActiveDataProvider($this, array(
-			'criteria'=>$criteria,
-		));
-	}
-
-	/**
-	 * Returns the static model of the specified AR class.
-	 * Please note that you should have this exact method in all your CActiveRecord descendants!
-	 * @param string $className active record class name.
-	 * @return VSProceso the static model class
-	 */
-	public static function model($className=__CLASS__)
-	{
-		return parent::model($className);
-	}
 }

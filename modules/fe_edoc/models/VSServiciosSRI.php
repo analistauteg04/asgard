@@ -23,17 +23,11 @@
  * The followings are the available model relations:
  * @property VSCompania $idCompania
  */
-class VSServiciosSRI extends CActiveRecord {
+namespace app\modules\fe_edoc\models;
 
-    /**
-     * @return string the associated database table name
-     */
-    public function tableName() {
-        $dbname = parent::$dbname;
-        if ($dbname != "")
-            $dbname.=".";
-        return $dbname . 'VSServiciosSRI'; //Empresas es la Utilizada.
-    }
+use Yii;
+
+class VSServiciosSRI extends \app\modules\fe_edoc\components\CActiveRecord {
 
     /**
      * @return array validation rules for model attributes.
@@ -86,61 +80,13 @@ class VSServiciosSRI extends CActiveRecord {
         );
     }
 
-    /**
-     * Retrieves a list of models based on the current search/filter conditions.
-     *
-     * Typical usecase:
-     * - Initialize the model fields with values from filter form.
-     * - Execute this method to get CActiveDataProvider instance which will filter
-     * models according to data in model fields.
-     * - Pass data provider to CGridView, CListView or any similar widget.
-     *
-     * @return CActiveDataProvider the data provider that can return the models
-     * based on the search/filter conditions.
-     */
-    public function search() {
-        // @todo Please modify the following code to remove attributes that should not be searched.
-
-        $criteria = new CDbCriteria;
-
-        $criteria->compare('Id', $this->Id);
-        $criteria->compare('Recepcion', $this->Recepcion, true);
-        $criteria->compare('Autorizacion', $this->Autorizacion, true);
-        $criteria->compare('RecepcionLote', $this->RecepcionLote, true);
-        $criteria->compare('TiempoRespuesta', $this->TiempoRespuesta);
-        $criteria->compare('TiempoSincronizacion', $this->TiempoSincronizacion);
-        $criteria->compare('IdCompania', $this->IdCompania, true);
-        $criteria->compare('UsuarioCreacion', $this->UsuarioCreacion);
-        $criteria->compare('FechaCreacion', $this->FechaCreacion, true);
-        $criteria->compare('UsuarioModificacion', $this->UsuarioModificacion);
-        $criteria->compare('FechaModificacion', $this->FechaModificacion, true);
-        $criteria->compare('UsuarioEliminacion', $this->UsuarioEliminacion);
-        $criteria->compare('FechaEliminacion', $this->FechaEliminacion, true);
-        $criteria->compare('Ambiente', $this->Ambiente);
-        $criteria->compare('Estado', $this->Estado);
-
-        return new CActiveDataProvider($this, array(
-            'criteria' => $criteria,
-        ));
-    }
-
-    /**
-     * Returns the static model of the specified AR class.
-     * Please note that you should have this exact method in all your CActiveRecord descendants!
-     * @param string $className active record class name.
-     * @return VSServiciosSRI the static model class
-     */
-    public static function model($className = __CLASS__) {
-        return parent::model($className);
-    }
-
     //INSERT INTO VSSEA.VSServiciosSRI
     //(Id,Recepcion,Autorizacion,RecepcionLote,TiempoRespuesta,TiempoSincronizacion,IdCompania,
     // UsuarioCreacion,FechaCreacion,UsuarioModificacion,FechaModificacion,UsuarioEliminacion,FechaEliminacion,
     // Ambiente,Estado)
     
     public function actualizarServiciosSRI($objEnt) {
-        $con = yii::app()->dbvssea;
+        $con = Yii::$app->db_edoc;
         $trans = $con->beginTransaction();
         try {
             $this->actualizarDatoServiciosSRI($con, $objEnt); //Actiañoza datos de la Empresa
@@ -164,7 +110,7 @@ class VSServiciosSRI extends CActiveRecord {
                     TiempoSincronizacion = '" . $objEnt[0]['TiempoSincronizacion'] . "',
                     IdCompania = '" . $objEnt[0]['IdCompania'] . "',
                     Ambiente = '" . $objEnt[0]['Ambiente'] . "',
-                    UsuarioModificacion = '" . Yii::app()->getSession()->get('user_id', FALSE) . "',
+                    UsuarioModificacion = '" . Yii::$app->session->get('user_id', FALSE) . "',
                     FechaModificacion = CURRENT_TIMESTAMP()
                 WHERE Id=" . $objEnt[0]['Id'] . " ";
         //echo $sql;
@@ -173,7 +119,7 @@ class VSServiciosSRI extends CActiveRecord {
     }
     
     public function recuperarServiciosSRI($id) {
-        $con = yii::app()->dbvssea;
+        $con = Yii::$app->db_edoc;
         $sql = "SELECT * FROM " . $con->dbname . ".VSServiciosSRI where Id='$id' AND Estado='1' ";
         //echo $sql;
         return $con->createCommand($sql)->query();

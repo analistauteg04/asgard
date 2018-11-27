@@ -5,6 +5,9 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
+namespace app\modules\fe_edoc\models;
+
+use Yii;
 
 class VSValidador {
     
@@ -17,7 +20,7 @@ class VSValidador {
                 $valor='06';//VENTA CON PASAPORTE
             }
         }ELSE{
-            IF($cedula==Yii::app()->params['consumidorfinal']){//Esta vericacion depende de la empresa
+            IF($cedula==Yii::$app->params['consumidorfinal']){//Esta vericacion depende de la empresa
                 $valor='07';//VENTA A CONSUMIDOR FINAL*  SON 13 DIGITOS
             }ELSE{
                 $valor='05';//VENTA CON CEDULA
@@ -65,7 +68,7 @@ class VSValidador {
     public function paginado($control){
         //Manipulando el Paginado del Select
         $page = isset($control[0]['PAGE']) ? $control[0]['PAGE'] : 0;
-        $pageSize = Yii::app()->params['limitRowSQL'];
+        $pageSize = Yii::$app->params['limitRowSQL'];
         $inicio = $page;//($page != 0) ? ($page - 1) * $pageSize : 0;
         $max = $pageSize;//$pageSize * $page;
         $limitrowsql = ($page != 0) ? " LIMIT $inicio,$max " : " LIMIT $pageSize";
@@ -75,15 +78,15 @@ class VSValidador {
     
     public static function putMessageLogFile($message) {
         if (is_array($message))
-            $message = CJavaScript::jsonEncode($message);
+            $message = json_encode($message);
         $message = date("Y-m-d H:i:s") . " " . $message . "\n";
-        if (!is_dir(dirname(Yii::app()->params["logfile"]))) {
-            mkdir(dirname(Yii::app()->params["logfile"]), 0777, true);
-            chmod(dirname(Yii::app()->params["logfile"]), 0777);
-            touch(Yii::app()->params["logfile"]);
+        if (!is_dir(dirname(Yii::$app->params["logfile"]))) {
+            mkdir(dirname(Yii::$app->params["logfile"]), 0777, true);
+            chmod(dirname(Yii::$app->params["logfile"]), 0777);
+            touch(Yii::$app->params["logfile"]);
         }
         //se escribe en el fichero
-        file_put_contents(Yii::app()->params["logfile"], $message, FILE_APPEND | LOCK_EX);
+        file_put_contents(Yii::$app->params["logfile"], $message, FILE_APPEND | LOCK_EX);
     }
     
     public function concatenarUserERP($str) {

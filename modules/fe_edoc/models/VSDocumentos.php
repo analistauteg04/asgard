@@ -5,13 +5,16 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
+namespace app\modules\fe_edoc\models;
 
-class VSDocumentos {
+use Yii;
+
+class VSDocumentos extends \app\modules\fe_edoc\components\CActiveRecord{
     
     public static function corregirDocSEA($Ids, $tipDoc) {
         //NOTA: VERIFICAR QUE CUANDO SE ELIMINE EN EN LAS TABLAS INTERMEDIAS TAMBIEN SE REALIQUE EN LA APP de Escritorio
         $errAuto= new VSexception();
-        $con = Yii::app()->dbcont;
+        $con = Yii::$app->db_edoc;
         $trans = $con->beginTransaction();
         try {
             switch ($tipDoc) {
@@ -61,7 +64,7 @@ class VSDocumentos {
         //5 = ELIMINADO DEL SISTEMA
         //8 = DOCUMENTO ANULADO AUTORIZADO EN SRI Y WEBSEA
         $errAuto= new VSexception();
-        $con = Yii::app()->dbvsseaint;
+        $con = Yii::$app->db_edoc;
         $trans = $con->beginTransaction();
         try {
             switch ($tipDoc) {
@@ -106,7 +109,7 @@ class VSDocumentos {
     public static function reenviarDodSri($Ids,$tipDoc,$Estado) {
         //2 = ESTE ESTADO PERMITE QUE SE REENVIE EL CORREO
         $errAuto= new VSexception();
-        $con = Yii::app()->dbvsseaint;
+        $con = Yii::$app->db_edoc;
         $trans = $con->beginTransaction();
         try {
             switch ($tipDoc) {
@@ -152,7 +155,7 @@ class VSDocumentos {
         //ALTER TABLE `APPWEB`.`EMPRESA` CHANGE COLUMN `EMP_EMAIL_DIGITAL` `EMP_EMAIL_DIGITAL` VARCHAR(60) NULL DEFAULT NULL  , ADD COLUMN `EMP_EMAIL_CONTA` VARCHAR(60) NULL  AFTER `EMP_EMAIL_DIGITAL` ;
         //UPDATE `APPWEB`.`EMPRESA` SET `EMP_EMAIL_CONTA`='lmizhquero@utimpor.com' WHERE `EMP_ID`='1';
         $rawData = array();
-        $con = Yii::app()->dbvsseaint;
+        $con = Yii::$app->db_edoc;
             switch ($tipDoc) {
                     Case "FA"://FACTURAS
                         $sql = "SELECT A.ClaveAcceso,A.AutorizacionSRI,A.FechaAutorizacion,A.IdentificacionComprador Identificacion,
@@ -188,16 +191,16 @@ class VSDocumentos {
                 }
                 //$cabFact["Estado"];
             //$rawData = $con->createCommand($sql)->queryAll();
-            $rawData = $con->createCommand($sql)->queryRow(); //Recupera Solo 1
+            $rawData = $con->createCommand($sql)->queryOne(); //Recupera Solo 1
             $con->active = false;
             return $rawData;
     }
     
     public static function buscarDatoVendedor($vend_id) {
         $rawData = array();
-        $conApp = yii::app()->db;
+        $conApp = Yii::$app->db;
         $sql = "SELECT USU_NOMBRE NombreUser,USU_ALIAS Alias,USU_CORREO CorreoUser FROM " . $conApp->dbname . ".USUARIO WHERE USU_ID='$vend_id';";
-        $rawData = $conApp->createCommand($sql)->queryRow();  //Un solo Registro => $rawData['RazonSocial']
+        $rawData = $conApp->createCommand($sql)->queryOne();  //Un solo Registro => $rawData['RazonSocial']
         $conApp->active = false;
         return $rawData;
     }

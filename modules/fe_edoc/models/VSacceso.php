@@ -11,13 +11,17 @@
  *
  * @author root
  */
+namespace app\modules\fe_edoc\models;
+
+use Yii;
+
 class VSacceso {
 
     //put your code here
     public function menuModulosFrm() {
-        $id = Yii::app()->getSession()->get('RolId', FALSE); //Rol del Usuario.
-        $frmActivo = strtolower(Yii::app()->controller->route);
-        $conApp = yii::app()->db;
+        $id = Yii::$app->session->get('RolId', FALSE); //Rol del Usuario.
+        $frmActivo = strtolower(Yii::$app->controller->route);
+        $conApp = Yii::$app->db;
         $rawData = array();
         $sql = "SELECT B.OMOD_ID,B.OMOD_PADRE_ID,B.OMOD_NOMBRE,B.MOD_ID,C.MOD_NOMBRE,B.OMOD_TIPO, "
                 . " B.OMOD_TIPO_BOTON,B.OMOD_ACCION,B.OMOD_FUNCTION,B.OMOD_ENTIDAD,B.OMOD_ORDEN "

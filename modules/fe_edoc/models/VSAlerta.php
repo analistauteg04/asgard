@@ -21,16 +21,12 @@
  * @property VSCompania $idCompania
  * @property VSTipoAlerta $idTipoAlerta
  */
-class VSAlerta extends CActiveRecord
-{
-	/**
-	 * @return string the associated database table name
-	 */
-	public function tableName()
-	{
-		return 'VSAlerta';
-	}
+namespace app\modules\fe_edoc\models;
 
+use Yii;
+
+class VSAlerta extends \app\modules\fe_edoc\components\CActiveRecord
+{
 	/**
 	 * @return array validation rules for model attributes.
 	 */
@@ -83,50 +79,4 @@ class VSAlerta extends CActiveRecord
 		);
 	}
 
-	/**
-	 * Retrieves a list of models based on the current search/filter conditions.
-	 *
-	 * Typical usecase:
-	 * - Initialize the model fields with values from filter form.
-	 * - Execute this method to get CActiveDataProvider instance which will filter
-	 * models according to data in model fields.
-	 * - Pass data provider to CGridView, CListView or any similar widget.
-	 *
-	 * @return CActiveDataProvider the data provider that can return the models
-	 * based on the search/filter conditions.
-	 */
-	public function search()
-	{
-		// @todo Please modify the following code to remove attributes that should not be searched.
-
-		$criteria=new CDbCriteria;
-
-		$criteria->compare('Id',$this->Id);
-		$criteria->compare('IdCompania',$this->IdCompania,true);
-		$criteria->compare('Valor',$this->Valor);
-		$criteria->compare('Mail',$this->Mail,true);
-		$criteria->compare('EsCustomizado',$this->EsCustomizado);
-		$criteria->compare('IdTipoAlerta',$this->IdTipoAlerta);
-		$criteria->compare('UsuarioCreacion',$this->UsuarioCreacion);
-		$criteria->compare('FechaCreacion',$this->FechaCreacion,true);
-		$criteria->compare('UsuarioModificacion',$this->UsuarioModificacion);
-		$criteria->compare('FechaModificacion',$this->FechaModificacion,true);
-		$criteria->compare('UsuarioEliminacion',$this->UsuarioEliminacion);
-		$criteria->compare('FechaEliminacion',$this->FechaEliminacion,true);
-
-		return new CActiveDataProvider($this, array(
-			'criteria'=>$criteria,
-		));
-	}
-
-	/**
-	 * Returns the static model of the specified AR class.
-	 * Please note that you should have this exact method in all your CActiveRecord descendants!
-	 * @param string $className active record class name.
-	 * @return VSAlerta the static model class
-	 */
-	public static function model($className=__CLASS__)
-	{
-		return parent::model($className);
-	}
 }

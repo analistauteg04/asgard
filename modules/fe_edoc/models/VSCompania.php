@@ -30,17 +30,13 @@
  * @property VSServidorCorreo[] $vSServidorCorreos
  * @property VSUsuario[] $vSUsuarios
  */
-class VSCompania extends CActiveRecord {
+namespace app\modules\fe_edoc\models;
 
-    /**
-     * Returns the static model of the specified AR class.
-     * Please note that you should have this exact method in all your CActiveRecord descendants!
-     * @param string $className active record class name.
-     * @return VSCompania the static model class
-     *
-    public static function model($className = __CLASS__) {
-        return parent::model($className);
-    }*/
+use Yii;
+use \yii\data\ActiveDataProvider;
+use \yii\data\ArrayDataProvider;
+
+class VSCompania extends \app\modules\fe_edoc\components\CActiveRecord {
 
     /**
      * @return string the associated database table name
@@ -117,43 +113,6 @@ class VSCompania extends CActiveRecord {
     }
 
     /**
-     * Retrieves a list of models based on the current search/filter conditions.
-     *
-     * Typical usecase:
-     * - Initialize the model fields with values from filter form.
-     * - Execute this method to get CActiveDataProvider instance which will filter
-     * models according to data in model fields.
-     * - Pass data provider to CGridView, CListView or any similar widget.
-     *
-     * @return CActiveDataProvider the data provider that can return the models
-     * based on the search/filter conditions.
-     */
-    public function search() {
-        // @todo Please modify the following code to remove attributes that should not be searched.
-
-        $criteria = new CDbCriteria;
-
-        $criteria->compare('IdCompania', $this->IdCompania, true);
-        $criteria->compare('Ruc', $this->Ruc, true);
-        $criteria->compare('RazonSocial', $this->RazonSocial, true);
-        $criteria->compare('NombreComercial', $this->NombreComercial, true);
-        $criteria->compare('Mail', $this->Mail, true);
-        $criteria->compare('EsContribuyente', $this->EsContribuyente);
-        $criteria->compare('Direccion', $this->Direccion, true);
-        $criteria->compare('UsuarioCreacion', $this->UsuarioCreacion, true);
-        $criteria->compare('FechaCreacion', $this->FechaCreacion, true);
-        $criteria->compare('UsuarioModificacion', $this->UsuarioModificacion, true);
-        $criteria->compare('FechaModificacion', $this->FechaModificacion, true);
-        $criteria->compare('UsuarioEliminacion', $this->UsuarioEliminacion, true);
-        $criteria->compare('FechaEliminacion', $this->FechaEliminacion, true);
-        $criteria->compare('Estado', $this->Estado, true);
-
-        return new CActiveDataProvider($this, array(
-            'criteria' => $criteria,
-        ));
-    }
-
-    /**
      * Función que muestra los Usuario de Ficha Medica con Busquedas.
      *
      * @author Byron Villacreses
@@ -162,7 +121,7 @@ class VSCompania extends CActiveRecord {
      */
     public function mostrarCompanias() {
         $rawData = array();
-        $con = Yii::app()->db;
+        $con = Yii::$app->db;
         
         $sql = "SELECT A.EMP_ID IdCompania,A.EMP_RUC Ruc,A.EMP_RAZONSOCIAL RazonSocial,A.EMP_NOM_COMERCIAL NombreComercial,A.EMP_DIRECCION_MATRIZ DireccionMatriz 
                     FROM " . $con->dbname . ".EMPRESA A WHERE A.EMP_EST_LOG='1'";
@@ -170,8 +129,9 @@ class VSCompania extends CActiveRecord {
         $rawData = $con->createCommand($sql)->queryAll();
         $con->active = false;
         
-        return new CArrayDataProvider($rawData, array(
-                    'keyField' => 'IdCompania',
+        return new ArrayDataProvider(array(
+                    'key' => 'IdCompania',
+                    'allModels' => $rawData,
                     'sort' => array(
                         'attributes' => array(
                             'IdCompania', 'Ruc', 'RazonSocial', 'NombreComercial', 'DireccionMatriz',
@@ -179,7 +139,7 @@ class VSCompania extends CActiveRecord {
                     ),
                     'totalItemCount' => count($rawData),
                     'pagination' => array(
-                        'pageSize' => Yii::app()->params['pageSize'],
+                        'pageSize' => Yii::$app->params['pageSize'],
                     //'itemCount'=>count($rawData),
                     ),
                 ));
@@ -188,10 +148,10 @@ class VSCompania extends CActiveRecord {
     
     
     public function insertarEmpresa($objEmp) {
-        $con = Yii::app()->db;
+        $con = Yii::$app->db;
         $trans = $con->beginTransaction();
         try {
-            //$objEmp[0]['UsuarioCreacion']= Yii::app()->getSession()->get('user_name', FALSE);//Define el usuario Session
+            //$objEmp[0]['UsuarioCreacion']= Yii::$app->session->get('user_name', FALSE);//Define el usuario Session
             $this->insertarDatosEmpresa($con, $objEmp);
             $idEmp = $con->getLastInsertID($con->dbname.'.EMPRESA');
             $this->datoFirmaDigital($con, $objEmp, $idEmp);
@@ -225,7 +185,7 @@ class VSCompania extends CActiveRecord {
                  '" . $objEmp[0]['CorreoContador'] . "',
                  '" . $objEmp[0]['Moneda'] . "',
                  '" . $objEmp[0]['Website'] . "',               
-                 '" . Yii::app()->getSession()->get('user_name', FALSE) . "',
+                 '" . Yii::$app->session->get('user_name', FALSE) . "',
                  '1')";
 
         
@@ -243,7 +203,7 @@ class VSCompania extends CActiveRecord {
                 '" . $objEmp[0]['RutaFirma'] . "',
                 '" . $objEmp[0]['FechaCaducidad'] . "',
                 '" . $objEmp[0]['EmpresaCertificadora'] . "',
-                '" . Yii::app()->getSession()->get('user_id', FALSE) . "',
+                '" . Yii::$app->session->get('user_id', FALSE) . "',
                 CURRENT_TIMESTAMP(),
                  '" . $objEmp[0]['Estado'] . "')";
 
@@ -254,7 +214,7 @@ class VSCompania extends CActiveRecord {
     }
     
     public function removerEmpresa($ids) {
-        $con = Yii::app()->db;
+        $con = Yii::$app->db;
         $trans = $con->beginTransaction();
         try {
             $sql = "UPDATE " . $con->dbname . ".EMPRESA SET EMP_EST_LOG='0' WHERE EMP_ID IN($ids)";
@@ -272,8 +232,8 @@ class VSCompania extends CActiveRecord {
     }
     
     public function recuperarEmpresa($id) {
-        //$con = yii::app()->dbvssea;
-        $con = yii::app()->db;
+        //$con = Yii::$app->db_edoc;
+        $con = Yii::$app->db;
         $sql = "SELECT A.EMP_ID IdCompania,A.EMP_RUC Ruc,A.EMP_RAZONSOCIAL RazonSocial,A.EMP_NOM_COMERCIAL NombreComercial,
             A.EMP_AMBIENTE Ambiente,A.EMP_TIPO_EMISION TipoEmision,A.EMP_DIRECCION_MATRIZ DireccionMatriz,A.EMP_OBLIGA_CONTABILIDAD ObligadoContabilidad,
             A.EMP_MONEDA Moneda,A.EMP_TELEFONO Telefono,A.EMP_EMAIL Correo,A.EMP_EMAIL_DIGITAL CorreoDigital,A.EMP_EMAIL_CONTA CorreoContador,A.EMP_WEBSITE Website,
@@ -288,10 +248,10 @@ class VSCompania extends CActiveRecord {
     }
     
     public function actualizarEmpresa($objEmp) {
-        $con = yii::app()->db;
+        $con = Yii::$app->db;
         $trans = $con->beginTransaction();
         try {
-            //$objEmp[0]['UsuarioModificacion']= Yii::app()->getSession()->get('user_name', FALSE);//Define el usuario Session
+            //$objEmp[0]['UsuarioModificacion']= Yii::$app->session->get('user_name', FALSE);//Define el usuario Session
             $this->actualizaEmpresa($con, $objEmp); //Actiañoza datos de la Empresa
             $this->actualizaFirmaDigital($con, $objEmp); //Actiañoza datos de la Firma Digital
             
@@ -335,7 +295,7 @@ class VSCompania extends CActiveRecord {
                     RutaFile = '" . base64_encode($objEmp[0]['RutaFirma']) . "',
                     FechaCaducidad = '" . $objEmp[0]['FechaCaducidad'] . "',
                     EmpresaCertificadora = '" . $objEmp[0]['EmpresaCertificadora'] . "',
-                    UsuarioModificacion = '" . Yii::app()->getSession()->get('user_id', FALSE) . "',
+                    UsuarioModificacion = '" . Yii::$app->session->get('user_id', FALSE) . "',
                     FechaModificacion = CURRENT_TIMESTAMP()
                 WHERE IdCompania=" . $objEmp[0]['IdCompania'] . " ";
         //echo $sql;

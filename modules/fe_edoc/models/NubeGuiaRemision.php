@@ -49,19 +49,11 @@
 namespace app\modules\fe_edoc\models;
 
 use Yii;
+use \yii\data\ActiveDataProvider;
+use \yii\data\ArrayDataProvider;
 
 class NubeGuiaRemision extends \app\modules\fe_edoc\components\CActiveRecord {
     private $tipoDoc='06';
-    /**
-     * @return string the associated database table name
-     */
-    public function tableName() {
-        //return 'NubeGuiaRemision';
-        $dbname = parent::$dbname;
-        if ($dbname != "")
-            $dbname.=".";
-        return $dbname . 'NubeGuiaRemision'; //Empresas es la Utilizada.
-    }
 
     /**
      * @return array validation rules for model attributes.
@@ -145,86 +137,17 @@ class NubeGuiaRemision extends \app\modules\fe_edoc\components\CActiveRecord {
             'IdLote' => 'Id Lote',
         );
     }
-
-    /**
-     * Retrieves a list of models based on the current search/filter conditions.
-     *
-     * Typical usecase:
-     * - Initialize the model fields with values from filter form.
-     * - Execute this method to get CActiveDataProvider instance which will filter
-     * models according to data in model fields.
-     * - Pass data provider to CGridView, CListView or any similar widget.
-     *
-     * @return CActiveDataProvider the data provider that can return the models
-     * based on the search/filter conditions.
-     */
-    public function search() {
-        // @todo Please modify the following code to remove attributes that should not be searched.
-
-        $criteria = new CDbCriteria;
-
-        $criteria->compare('IdGuiaRemision', $this->IdGuiaRemision, true);
-        $criteria->compare('AutorizacionSRI', $this->AutorizacionSRI, true);
-        $criteria->compare('FechaAutorizacion', $this->FechaAutorizacion, true);
-        $criteria->compare('Ambiente', $this->Ambiente);
-        $criteria->compare('TipoEmision', $this->TipoEmision);
-        $criteria->compare('RazonSocial', $this->RazonSocial, true);
-        $criteria->compare('NombreComercial', $this->NombreComercial, true);
-        $criteria->compare('Ruc', $this->Ruc, true);
-        $criteria->compare('ClaveAcceso', $this->ClaveAcceso, true);
-        $criteria->compare('CodigoDocumento', $this->CodigoDocumento, true);
-        $criteria->compare('Establecimiento', $this->Establecimiento, true);
-        $criteria->compare('PuntoEmision', $this->PuntoEmision, true);
-        $criteria->compare('Secuencial', $this->Secuencial, true);
-        $criteria->compare('DireccionMatriz', $this->DireccionMatriz, true);
-        $criteria->compare('DireccionEstablecimiento', $this->DireccionEstablecimiento, true);
-        $criteria->compare('DireccionPartida', $this->DireccionPartida, true);
-        $criteria->compare('RazonSocialTransportista', $this->RazonSocialTransportista, true);
-        $criteria->compare('TipoIdentificacionTransportista', $this->TipoIdentificacionTransportista, true);
-        $criteria->compare('IdentificacionTransportista', $this->IdentificacionTransportista, true);
-        $criteria->compare('Rise', $this->Rise, true);
-        $criteria->compare('ObligadoContabilidad', $this->ObligadoContabilidad, true);
-        $criteria->compare('ContribuyenteEspecial', $this->ContribuyenteEspecial);
-        $criteria->compare('FechaInicioTransporte', $this->FechaInicioTransporte, true);
-        $criteria->compare('FechaFinTransporte', $this->FechaFinTransporte, true);
-        $criteria->compare('Placa', $this->Placa, true);
-        $criteria->compare('UsuarioCreador', $this->UsuarioCreador, true);
-        $criteria->compare('EmailResponsable', $this->EmailResponsable, true);
-        $criteria->compare('EstadoDocumento', $this->EstadoDocumento, true);
-        $criteria->compare('DescripcionError', $this->DescripcionError, true);
-        $criteria->compare('CodigoError', $this->CodigoError, true);
-        $criteria->compare('DirectorioDocumento', $this->DirectorioDocumento, true);
-        $criteria->compare('NombreDocumento', $this->NombreDocumento, true);
-        $criteria->compare('GeneradoXls', $this->GeneradoXls);
-        $criteria->compare('SecuencialERP', $this->SecuencialERP, true);
-        $criteria->compare('Estado', $this->Estado);
-        $criteria->compare('IdLote', $this->IdLote, true);
-
-        return new CActiveDataProvider($this, array(
-            'criteria' => $criteria,
-        ));
-    }
-
-    /**
-     * Returns the static model of the specified AR class.
-     * Please note that you should have this exact method in all your CActiveRecord descendants!
-     * @param string $className active record class name.
-     * @return NubeGuiaRemision the static model class
-     */
-    public static function model($className = __CLASS__) {
-        return parent::model($className);
-    }
     
     public function mostrarDocumentos($control) {
         $page= new VSValidador;
         $rawData = array();
         $limitrowsql=$page->paginado($control);
-        $tipoUser=Yii::$app->getSession()->get('RolId', FALSE);
-        $usuarioErp=$this->concatenarUserERP(Yii::$app->getSession()->get('UsuarioErp', FALSE));
+        $tipoUser=Yii::$app->session->get('RolId', FALSE);
+        $usuarioErp=$this->concatenarUserERP(Yii::$app->session->get('UsuarioErp', FALSE));
         //echo $usuarioErp;
         //$fecInifact=Yii::$app->params['dateStartFact'];//Fecha Inicial de Facturacion Electronica
         $fecInifact= date(Yii::$app->params['datebydefault']);
-        $con = Yii::$app->dbvsseaint;
+        $con = Yii::$app->db_edoc;
 
         $sql = "SELECT A.IdGuiaRemision IdDoc,A.Estado,A.SecuencialERP,A.UsuarioCreador,
                     A.FechaAutorizacion,A.AutorizacionSRI,A.ClaveAcceso,
@@ -253,8 +176,9 @@ class NubeGuiaRemision extends \app\modules\fe_edoc\components\CActiveRecord {
         $rawData = $con->createCommand($sql)->queryAll();
         $con->active = false;
 
-        return new CArrayDataProvider($rawData, array(
-            'keyField' => 'IdDoc',
+        return new ArrayDataProvider(array(
+            'key' => 'IdDoc',
+            'allModels' => $rawData, 
             'sort' => array(
                 'attributes' => array(
                     'IdDoc', 'Estado', 'SecuencialERP', 'UsuarioCreador',
@@ -288,7 +212,7 @@ class NubeGuiaRemision extends \app\modules\fe_edoc\components\CActiveRecord {
      * @return Retorna Los Datos de las Retenciones GENERADAS
      */
     public function retornarPersona($valor, $op) {
-        $con = Yii::$app->dbvsseaint;
+        $con = Yii::$app->db_edoc;
         $rawData = array();
         //Patron de Busqueda
         /* http://www.mclibre.org/consultar/php/lecciones/php_expresiones_regulares.html */
@@ -331,7 +255,7 @@ class NubeGuiaRemision extends \app\modules\fe_edoc\components\CActiveRecord {
     
     public function mostrarCabGuia($id) {
         $rawData = array();
-        $con = Yii::$app->dbvsseaint;
+        $con = Yii::$app->db_edoc;
         
         $sql = "SELECT A.IdGuiaRemision IdDoc,A.Estado,A.SecuencialERP,A.UsuarioCreador,
                     A.FechaAutorizacion,A.AutorizacionSRI,A.ClaveAcceso,A.Ambiente,A.TipoEmision,
@@ -344,14 +268,14 @@ class NubeGuiaRemision extends \app\modules\fe_edoc\components\CActiveRecord {
             WHERE A.CodigoDocumento='$this->tipoDoc' AND A.IdGuiaRemision =$id ";
         
         //echo $sql;
-        $rawData = $con->createCommand($sql)->queryRow(); //Recupera Solo 1
+        $rawData = $con->createCommand($sql)->queryOne(); //Recupera Solo 1
         $con->active = false;
         return $rawData;
     }
     
     public function mostrarDestinoGuia($id) {
         $rawData = array();
-        $con = Yii::$app->dbvsseaint;
+        $con = Yii::$app->db_edoc;
         $sql = "SELECT * FROM " . $con->dbname . ".NubeGuiaRemisionDestinatario WHERE IdGuiaRemision=$id";
         //echo $sql;
         $rawData = $con->createCommand($sql)->queryAll(); 
@@ -364,7 +288,7 @@ class NubeGuiaRemision extends \app\modules\fe_edoc\components\CActiveRecord {
     
     private function mostrarDetGuia($id) {
         $rawData = array();
-        $con = Yii::$app->dbvsseaint;
+        $con = Yii::$app->db_edoc;
         $sql = "SELECT * FROM " . $con->dbname . ".NubeGuiaRemisionDetalle WHERE IdGuiaRemisionDestinatario=$id";
         $rawData = $con->createCommand($sql)->queryAll(); 
         $con->active = false;
@@ -376,7 +300,7 @@ class NubeGuiaRemision extends \app\modules\fe_edoc\components\CActiveRecord {
     
     private function mostrarDetGuiaDatoAdi($id) {
         $rawData = array();
-        $con = Yii::$app->dbvsseaint;
+        $con = Yii::$app->db_edoc;
         $sql = "SELECT * FROM " . $con->dbname . ".NubeDatoAdicionalGuiaRemisionDetalle WHERE IdGuiaRemisionDetalle=$id";
         $rawData = $con->createCommand($sql)->queryAll(); 
         $con->active = false;
@@ -385,7 +309,7 @@ class NubeGuiaRemision extends \app\modules\fe_edoc\components\CActiveRecord {
     
     public function mostrarCabGuiaDataAdicional($id) {
         $rawData = array();
-        $con = Yii::$app->dbvsseaint;
+        $con = Yii::$app->db_edoc;
         $sql = "SELECT * FROM " . $con->dbname . ".NubeDatoAdicionalGuiaRemision WHERE IdGuiaRemision=$id";
         $rawData = $con->createCommand($sql)->queryAll(); //Recupera Solo 1
         $con->active = false;
@@ -394,10 +318,10 @@ class NubeGuiaRemision extends \app\modules\fe_edoc\components\CActiveRecord {
     
     public function mostrarRutaXMLAutorizado($id) {
         $rawData = array();
-        $con = Yii::$app->dbvsseaint;
+        $con = Yii::$app->db_edoc;
         $sql = "SELECT EstadoDocumento,DirectorioDocumento,NombreDocumento FROM " . $con->dbname . ".NubeGuiaRemision WHERE "
                 . "IdGuiaRemision=$id AND EstadoDocumento='AUTORIZADO'";
-        $rawData = $con->createCommand($sql)->queryRow(); //Recupera Solo 1
+        $rawData = $con->createCommand($sql)->queryOne(); //Recupera Solo 1
         $con->active = false;
         return $rawData;
     }
