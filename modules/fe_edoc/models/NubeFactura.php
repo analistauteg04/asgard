@@ -61,13 +61,15 @@ namespace app\modules\fe_edoc\models;
 
 use Yii;
 use app\models\Utilities;
+use \yii\data\ActiveDataProvider;
+use \yii\data\ArrayDataProvider;
 
 class NubeFactura extends \app\modules\fe_edoc\components\CActiveRecord {
     
     private $tipoDoc='01';
 
     private function buscarFacturas($opcion) {
-        $conCont = Yii::$app->dbcont;
+        $conCont = Yii::$app->db_edoc;
         $rawData = array();
         $fechaIni = Yii::$app->params['dateStartFact'];
         $limitEnv = Yii::$app->params['limitEnv'];
@@ -101,7 +103,7 @@ class NubeFactura extends \app\modules\fe_edoc\components\CActiveRecord {
     }
 
     private function buscarDetFacturas($tipDoc, $numDoc) {
-        $conCont = Yii::$app->dbcont;
+        $conCont = Yii::$app->db_edoc;
         $rawData = array();
         $sql = "SELECT TIP_NOF,NUM_NOF,FEC_VTA,COD_ART,NOM_ART,CAN_DES,P_VENTA,
                         T_VENTA,VAL_DES,I_M_IVA,VAL_IVA
@@ -118,12 +120,12 @@ class NubeFactura extends \app\modules\fe_edoc\components\CActiveRecord {
         $rawData = array();
         $limitrowsql=$page->paginado($control);
 
-        $tipoUser=Yii::$app->getSession()->get('RolId', FALSE);
-        $usuarioErp=$page->concatenarUserERP(Yii::$app->getSession()->get('UsuarioErp', FALSE));
+        $tipoUser=Yii::$app->session->get('RolId', FALSE);
+        $usuarioErp=$page->concatenarUserERP(Yii::$app->session->get('UsuarioErp', FALSE));
         //echo $usuarioErp;
         //$fecInifact=Yii::$app->params['dateStartFact'];//Fecha Inicial de Facturacion Electronica
         $fecInifact= date(Yii::$app->params['datebydefault']);
-        $con = Yii::$app->dbvsseaint;
+        $con = Yii::$app->db_edoc;
         $sql = "SELECT A.IdFactura IdDoc,A.Estado,A.CodigoTransaccionERP,A.SecuencialERP,A.UsuarioCreador,
                         A.FechaAutorizacion,A.AutorizacionSRI,
                         CONCAT(A.Establecimiento,'-',A.PuntoEmision,'-',A.Secuencial) NumDocumento,
@@ -153,8 +155,9 @@ class NubeFactura extends \app\modules\fe_edoc\components\CActiveRecord {
         $rawData = $con->createCommand($sql)->queryAll();
         $con->active = false;
 
-        return new CArrayDataProvider($rawData, array(
-            'keyField' => 'IdDoc',
+        return new ArrayDataProvider(array(
+            'key' => 'IdDoc',
+            'allModels' => $rawData,
             'sort' => array(
                 'attributes' => array(
                     'IdDoc', 'Estado', 'CodigoTransaccionERP', 'SecuencialERP', 'UsuarioCreador',
@@ -171,7 +174,7 @@ class NubeFactura extends \app\modules\fe_edoc\components\CActiveRecord {
     }
 
     public function recuperarTipoDocumentos() {
-        $con = Yii::$app->dbvssea;
+        $con = Yii::$app->db_edoc;
         $sql = "SELECT idDirectorio,TipoDocumento,Descripcion,Ruta 
                 FROM " . $con->dbname . ".VSDirectorio WHERE Estado=1;";
         $rawData = $con->createCommand($sql)->queryAll();
@@ -181,7 +184,7 @@ class NubeFactura extends \app\modules\fe_edoc\components\CActiveRecord {
 
     public function mostrarCabFactura($id) {
         $rawData = array();
-        $con = Yii::$app->dbvsseaint;
+        $con = Yii::$app->db_edoc;
         $sql = "SELECT A.IdFactura IdDoc,A.Estado,A.CodigoTransaccionERP,A.SecuencialERP,A.UsuarioCreador,
                         A.FechaAutorizacion,A.AutorizacionSRI,A.DireccionMatriz,A.DireccionEstablecimiento,
                         CONCAT(A.Establecimiento,'-',A.PuntoEmision,'-',A.Secuencial) NumDocumento,
@@ -194,7 +197,7 @@ class NubeFactura extends \app\modules\fe_edoc\components\CActiveRecord {
                         FROM " . $con->dbname . ".NubeFactura A
                 WHERE A.CodigoDocumento='$this->tipoDoc' AND A.IdFactura =$id ";
         //echo $sql;        
-        $rawData = $con->createCommand($sql)->queryRow(); //Recupera Solo 1
+        $rawData = $con->createCommand($sql)->queryOne(); //Recupera Solo 1
         //VSValidador::putMessageLogFile($rawData);
         $con->active = false;
         return $rawData;
@@ -202,7 +205,7 @@ class NubeFactura extends \app\modules\fe_edoc\components\CActiveRecord {
 
     public function mostrarDetFacturaImp($id) {
         $rawData = array();
-        $con = Yii::$app->dbvsseaint;
+        $con = Yii::$app->db_edoc;
         $sql = "SELECT * FROM " . $con->dbname . ".NubeDetalleFactura WHERE IdFactura=$id";
         //echo $sql;
         $rawData = $con->createCommand($sql)->queryAll(); //Recupera Solo 1
@@ -215,7 +218,7 @@ class NubeFactura extends \app\modules\fe_edoc\components\CActiveRecord {
 
     private function mostrarDetalleImp($id) {
         $rawData = array();
-        $con = Yii::$app->dbvsseaint;
+        $con = Yii::$app->db_edoc;
         $sql = "SELECT * FROM " . $con->dbname . ".NubeDetalleFacturaImpuesto WHERE IdDetalleFactura=$id";
         $rawData = $con->createCommand($sql)->queryAll(); //Recupera Solo 1
         $con->active = false;
@@ -224,7 +227,7 @@ class NubeFactura extends \app\modules\fe_edoc\components\CActiveRecord {
 
     public function mostrarFacturaImp($id) {
         $rawData = array();
-        $con = Yii::$app->dbvsseaint;
+        $con = Yii::$app->db_edoc;
         $sql = "SELECT * FROM " . $con->dbname . ".NubeFacturaImpuesto WHERE IdFactura=$id";
         $rawData = $con->createCommand($sql)->queryAll(); //Recupera Solo 1
         $con->active = false;
@@ -233,7 +236,7 @@ class NubeFactura extends \app\modules\fe_edoc\components\CActiveRecord {
     
     public function mostrarFormaPago($id) {
         $rawData = array();
-        $con = Yii::$app->dbvsseaint;
+        $con = Yii::$app->db_edoc;
         //$sql = "SELECT * FROM " . $con->dbname . ".NubeFacturaFormaPago WHERE IdFactura=$id";
         $sql = "SELECT B.FormaPago,A.Total,A.Plazo,A.UnidadTiempo,A.FormaPago Codigo  
                 FROM " . $con->dbname . ".NubeFacturaFormaPago A
@@ -247,7 +250,7 @@ class NubeFactura extends \app\modules\fe_edoc\components\CActiveRecord {
 
     public function mostrarFacturaDataAdicional($id) {
         $rawData = array();
-        $con = Yii::$app->dbvsseaint;
+        $con = Yii::$app->db_edoc;
         $sql = "SELECT * FROM " . $con->dbname . ".NubeDatoAdicionalFactura WHERE IdFactura=$id";
         $rawData = $con->createCommand($sql)->queryAll(); //Recupera Solo 1
         $con->active = false;
@@ -262,7 +265,7 @@ class NubeFactura extends \app\modules\fe_edoc\components\CActiveRecord {
      * @return Retorna Los Datos de las Facturas GENERADAS
      */
     public function retornarPersona($valor, $op) {
-        $con = Yii::$app->dbvsseaint;
+        $con = Yii::$app->db_edoc;
         $rawData = array();
         //Patron de Busqueda
         /* http://www.mclibre.org/consultar/php/lecciones/php_expresiones_regulares.html */
@@ -540,17 +543,17 @@ class NubeFactura extends \app\modules\fe_edoc\components\CActiveRecord {
     
     public function mostrarRutaXMLAutorizado($id) {
         $rawData = array();
-        $con = Yii::$app->dbvsseaint;
+        $con = Yii::$app->db_edoc;
         $sql = "SELECT EstadoDocumento,DirectorioDocumento,NombreDocumento FROM " . $con->dbname . ".NubeFactura WHERE "
                 . "IdFactura=$id AND EstadoDocumento='AUTORIZADO'";
-        $rawData = $con->createCommand($sql)->queryRow(); //Recupera Solo 1
+        $rawData = $con->createCommand($sql)->queryOne(); //Recupera Solo 1
         $con->active = false;
         return $rawData;
     }
     
     
     public function actualizaClaveAccesoFactura($ids,$clave) {
-        $con = Yii::$app->dbvsseaint;
+        $con = Yii::$app->db_edoc;
         $trans = $con->beginTransaction();
         try {
             $sql = "UPDATE " . $con->dbname . ".NubeFactura SET ClaveAcceso='$clave' WHERE IdFactura='$ids'";
@@ -573,11 +576,11 @@ class NubeFactura extends \app\modules\fe_edoc\components\CActiveRecord {
         $page= new VSValidador;
         $rawData = array();       
 
-        //$tipoUser=Yii::$app->getSession()->get('RolId', FALSE);
-        //$usuarioErp=$page->concatenarUserERP(Yii::$app->getSession()->get('UsuarioErp', FALSE));
+        //$tipoUser=Yii::$app->session->get('RolId', FALSE);
+        //$usuarioErp=$page->concatenarUserERP(Yii::$app->session->get('UsuarioErp', FALSE));
      
         //$fecInifact= date(Yii::$app->params['datebydefault']);
-        $con = Yii::$app->dbvsseaint;
+        $con = Yii::$app->db_edoc;
         $sql = "SELECT A.IdFactura IdDoc,A.Estado,A.CodigoTransaccionERP,A.SecuencialERP,A.UsuarioCreador,
                         A.FechaAutorizacion,A.AutorizacionSRI,
                         CONCAT(A.Establecimiento,'-',A.PuntoEmision,'-',A.Secuencial) NumDocumento,

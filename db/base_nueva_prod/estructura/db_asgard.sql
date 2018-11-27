@@ -240,6 +240,8 @@ create table if not exists `persona` (
  `pro_id_trabajo` bigint(20) default null,
  `can_id_trabajo` bigint(20) default null,
 
+ `per_usuario_ingresa` bigint(20) default null,
+ `per_usuario_modifica` bigint(20) default null,
  `per_estado` varchar(1) not null,
  `per_fecha_creacion` timestamp not null default current_timestamp,
  `per_fecha_modificacion` timestamp null default null,

@@ -406,6 +406,7 @@ create table if not exists `matriculados_reprobado` (
  `sins_id` bigint(20) not null,
  `mre_usuario_ingreso` bigint(20) not null,
  `mreusuario_modifica` bigint(20)  null, 
+ `mre_estado_matriculado` bigint(20) null,
  `mre_estado` varchar(1) not null, 
  `mre_fecha_creacion` timestamp not null default current_timestamp,
  `mre_fecha_modificacion` timestamp null default null,

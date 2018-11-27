@@ -5,7 +5,15 @@ namespace app\modules\fe_edoc\controllers;
 use Yii;
 use app\modules\fe_edoc\models\NubeFactura;
 use app\modules\fe_edoc\models\VSDirectorio;
+use app\modules\fe_edoc\models\VSDocumentos;
+use app\modules\fe_edoc\models\VSFirmaDigital;
+use app\modules\fe_edoc\models\VSexception;
 use app\modules\fe_edoc\models\VSacceso;
+use app\modules\fe_edoc\models\mailSystem;
+use app\modules\fe_edoc\models\REPORTES;
+use app\modules\fe_edoc\models\USUARIO;
+use yii\helpers\ArrayHelper;
+use yii\base\Exception;
 
 class NubefacturaController extends \app\components\CController {
 
@@ -31,19 +39,16 @@ class NubefacturaController extends \app\components\CController {
 //        );
 //    }
 
-   
-
-
     public function actionIndex() {
         $modelo = new NubeFactura();
         $tipDoc= new VSDirectorio();
         $aproba= new VSacceso();
         $contBuscar = array();
         if (Yii::$app->request->isAjax) {
-            //$contBuscar = isset($_POST['CONT_BUSCAR']) ? CJavaScript::jsonDecode($_POST['CONT_BUSCAR']) : array();
+            //$contBuscar = isset($_POST['CONT_BUSCAR']) ? json_encode($_POST['CONT_BUSCAR']) : array();
             //echo CJSON::encode($modelo->mostrarDocumentos($contBuscar));
             $arrayData = array();
-            $contBuscar = isset($_POST['CONT_BUSCAR']) ? CJavaScript::jsonDecode($_POST['CONT_BUSCAR']) : array();
+            $contBuscar = isset($_POST['CONT_BUSCAR']) ? json_encode($_POST['CONT_BUSCAR']) : array();
             $contBuscar[0]['PAGE'] = isset($_GET['page']) ? $_GET['page'] : 0;
             $arrayData = $modelo->mostrarDocumentos($contBuscar);
             $this->renderPartial('_indexGrid', array(
@@ -99,7 +104,7 @@ class NubefacturaController extends \app\components\CController {
             $data = new NubeFactura();
             $arrayData = $data->retornarPersona($valor, $op);
             header('Content-type: application/json');
-            echo CJavaScript::jsonEncode($arrayData);
+            echo json_encode($arrayData);
         }
     }
 
@@ -107,7 +112,7 @@ class NubefacturaController extends \app\components\CController {
         if (Yii::$app->request->isAjax) {
             $arrayData = array();
             $obj = new NubeFactura();
-            $contBuscar = isset($_POST['CONT_BUSCAR']) ? CJavaScript::jsonDecode($_POST['CONT_BUSCAR']) : array();
+            $contBuscar = isset($_POST['CONT_BUSCAR']) ? json_encode($_POST['CONT_BUSCAR']) : array();
             $arrayData = $obj->mostrarDocumentos($contBuscar);
             $this->renderPartial('_indexGrid', array(
                 'model' => $arrayData,
@@ -150,7 +155,7 @@ class NubefacturaController extends \app\components\CController {
             $res = new NubeFactura;
             $arroout=$res->enviarDocumentos($ids);
             header('Content-type: application/json');
-            echo CJavaScript::jsonEncode($arroout);
+            echo json_encode($arroout);
             return;
         }
     }
@@ -169,7 +174,7 @@ class NubefacturaController extends \app\components\CController {
                 }
             }
             header('Content-type: application/json');
-            echo CJavaScript::jsonEncode($arroout);
+            echo json_encode($arroout);
             return;
         }
     }
@@ -190,7 +195,7 @@ class NubefacturaController extends \app\components\CController {
                 $dataMail->enviarMailInforma($htmlMail,$CabPed,$DatVen,$Subject,1);//Notificacion a Usuarios
             }
             header('Content-type: application/json');
-            echo CJavaScript::jsonEncode($arroout);
+            echo json_encode($arroout);
             return;
         }
     }
@@ -200,7 +205,7 @@ class NubefacturaController extends \app\components\CController {
             $ids = isset($_POST['ids']) ? base64_decode($_POST['ids']) : NULL;
             $arroout=VSDocumentos::reenviarDodSri($ids, 'FA',2);//Anula Documentos Autorizados del Websea
             header('Content-type: application/json');
-            echo CJavaScript::jsonEncode($arroout);
+            echo json_encode($arroout);
             return;
         }
     }
@@ -219,7 +224,7 @@ class NubefacturaController extends \app\components\CController {
             $correo = isset($_POST['DATA']) ? trim($_POST['DATA']) : '';
             $arrayData = $model->cambiarMailDoc($ids,$correo);
             header('Content-type: application/json');
-            echo CJavaScript::jsonEncode($arrayData);
+            echo json_encode($arrayData);
             return;
         }
     }

@@ -94,6 +94,17 @@ $leyenda = '<div class="col-md-12 col-xs-12 col-sm-12 col-lg-12">
                     </div>
                 </div>
             </div>
+            <div class="col-md-12 col-xs-12 col-lg-12 col-sm-12">
+                <div class="col-md-6 col-sm-6 col-xs-6 col-lg-6">
+                    <div class="form-group">
+                        <label for="cmb_estado" class="col-sm-4 col-md-4 col-xs-4 col-lg-4 control-label"><?= Yii::t("formulario", "Status") ?></label>
+                        <div class="col-sm-7 col-md-7 col-xs-7 col-lg-7">
+                            <?= Html::dropDownList("cmb_estado", 0, ["0" => "Todos", "1" => "Contacto", "2" => "Cursando"], ["class" => "form-control", "id" => "cmb_estado"]) ?>
+                        </div>
+                        <div class="col-sm-5">&nbsp;</div>
+                    </div>
+                </div>
+            </div>
             <div class='col-md-12 col-sm-12 col-xs-12 col-lg-12' id="buscamateria" style="display: block;">
                 <div class='col-md-12 col-sm-12 col-xs-12 col-lg-12'> 
                     <div class="col-md-6 col-sm-6 col-xs-6 col-lg-6">

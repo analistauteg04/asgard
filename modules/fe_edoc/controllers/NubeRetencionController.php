@@ -3,6 +3,16 @@
 namespace app\modules\fe_edoc\controllers;
 
 use Yii;
+use yii\helpers\ArrayHelper;
+use yii\base\Exception;
+use app\modules\fe_edoc\models\VSacceso;
+use app\modules\fe_edoc\models\VSDirectorio;
+use app\modules\fe_edoc\models\VSDocumentos;
+use app\modules\fe_edoc\models\VSexception;
+use app\modules\fe_edoc\models\mailSystem;
+use app\modules\fe_edoc\models\REPORTES;
+use app\modules\fe_edoc\models\USUARIO;
+use app\modules\fe_edoc\models\NubeRetencion;
 
 class NuberetencionController extends \app\components\CController  {
 
@@ -123,10 +133,10 @@ class NuberetencionController extends \app\components\CController  {
         $tipDoc= new VSDirectorio();
         $contBuscar = array();
         if (Yii::$app->request->isAjax) {
-            //$contBuscar = isset($_POST['CONT_BUSCAR']) ? CJavaScript::jsonDecode($_POST['CONT_BUSCAR']) : array();
+            //$contBuscar = isset($_POST['CONT_BUSCAR']) ? json_encode($_POST['CONT_BUSCAR']) : array();
             //echo CJSON::encode($modelo->mostrarDocumentos($contBuscar));
             $arrayData = array();
-            $contBuscar = isset($_POST['CONT_BUSCAR']) ? CJavaScript::jsonDecode($_POST['CONT_BUSCAR']) : array();
+            $contBuscar = isset($_POST['CONT_BUSCAR']) ? json_encode($_POST['CONT_BUSCAR']) : array();
             $contBuscar[0]['PAGE'] = isset($_GET['page']) ? $_GET['page'] : 0;
             $arrayData = $modelo->mostrarDocumentos($contBuscar);
             $this->renderPartial('_indexGrid', array(
@@ -189,7 +199,7 @@ class NuberetencionController extends \app\components\CController  {
             $data = new NubeRetencion();
             $arrayData = $data->retornarPersona($valor, $op);
             header('Content-type: application/json');
-            echo CJavaScript::jsonEncode($arrayData);
+            echo json_encode($arrayData);
         }
     }
     
@@ -234,7 +244,7 @@ class NuberetencionController extends \app\components\CController  {
             $res = new NubeRetencion;
             $arroout=$res->enviarDocumentos($ids);
             header('Content-type: application/json');
-            echo CJavaScript::jsonEncode($arroout);
+            echo json_encode($arroout);
             return;
         }
     }
@@ -255,7 +265,7 @@ class NuberetencionController extends \app\components\CController  {
                 }
             }
             header('Content-type: application/json');
-            echo CJavaScript::jsonEncode($arroout);
+            echo json_encode($arroout);
             return;
         }
     }
@@ -276,7 +286,7 @@ class NuberetencionController extends \app\components\CController  {
                 $dataMail->enviarMailInforma($htmlMail,$CabPed,$DatVen,$Subject,1);//Notificacion a Usuarios
             }
             header('Content-type: application/json');
-            echo CJavaScript::jsonEncode($arroout);
+            echo json_encode($arroout);
             return;
         }
     }
@@ -285,7 +295,7 @@ class NuberetencionController extends \app\components\CController  {
             $ids = isset($_POST['ids']) ? base64_decode($_POST['ids']) : NULL;
             $arroout=VSDocumentos::reenviarDodSri($ids, 'RT',2);//Anula Documentos Autorizados del Websea
             header('Content-type: application/json');
-            echo CJavaScript::jsonEncode($arroout);
+            echo json_encode($arroout);
             return;
         }
     }
@@ -304,7 +314,7 @@ class NuberetencionController extends \app\components\CController  {
             $correo = isset($_POST['DATA']) ? trim($_POST['DATA']) : '';
             $arrayData = $model->cambiarMailDoc($ids,$correo);
             header('Content-type: application/json');
-            echo CJavaScript::jsonEncode($arrayData);
+            echo json_encode($arrayData);
             return;
         }
 

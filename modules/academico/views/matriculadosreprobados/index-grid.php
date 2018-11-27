@@ -109,7 +109,12 @@ academico::registerTranslations();
                         return Html::a('<span>' . $texto . '</span>', Url::to(['#']), ["data-toggle" => "tooltip", "title" => $model['asignatura_repro']]);
                     },
                 ],
-            ], 
+            ],
+            [
+                'attribute' => 'estado',
+                'header' => Yii::t("formulario", "Status"),
+                'value' => 'estado_matriculado',
+            ],                
             /*[
                 'class' => 'yii\grid\ActionColumn',
                 'header' => Yii::t("formulario", "Actions"),

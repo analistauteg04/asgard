@@ -37,6 +37,7 @@ class MatriculadosreprobadosController extends \app\components\CController {
             $arrSearch["f_ini"] = $data['f_ini'];
             $arrSearch["f_fin"] = $data['f_fin'];
             $arrSearch["search"] = $data['search'];
+            $arrSearch["estadomat"] = $data['estadomat'];
             $mod_matreprueba = MatriculadosReprobado::getMatriculadosreprobados($arrSearch);
             return $this->renderPartial('index-grid', [
                         "model" => $mod_matreprueba,
@@ -353,6 +354,7 @@ class MatriculadosreprobadosController extends \app\components\CController {
             $asigna = $data['materia'];
             $usuario = @Yii::$app->user->identity->usu_id;
             $periodo = $data['periodo'];
+            $estadomat = $data['estadomat'];
             $con = \Yii::$app->db_captacion;
             $transaction = $con->beginTransaction();
             $reprobar = '';
@@ -361,7 +363,7 @@ class MatriculadosreprobadosController extends \app\components\CController {
                 $fecha_creacion = date(Yii::$app->params["dateTimeByDefault"]);
                 $resp_matreprobado = $mod_reprobado->consultarReprobado($sins_id);
                 if ($resp_matreprobado["encontrado"] == 0) {
-                    $resp_ingreso = $mod_reprobado->insertarMatricureprobado($admitido, $periodo, $sins_id, $usuario, $fecha_creacion);
+                    $resp_ingreso = $mod_reprobado->insertarMatricureprobado($admitido, $periodo, $sins_id, $usuario, $estadomat, $fecha_creacion);
                     $mre_id = Yii::$app->db_captacion->getLastInsertID('db_captacion.matriculados_reprobado');
                     if ($resp_ingreso) {
                         if (!empty($asigna)) {
@@ -452,7 +454,8 @@ class MatriculadosreprobadosController extends \app\components\CController {
             academico::t("Academico", "Month Process"),
             academico::t("Academico", "Career/Program"),
             admision::t("Solicitudes", "Income Method"),
-            Yii::t("formulario", "Subject")
+            Yii::t("formulario", "Subject"),
+            Yii::t("formulario", "Status")
         );
         $data = Yii::$app->request->get();
         $arrSearch = array();
@@ -460,6 +463,7 @@ class MatriculadosreprobadosController extends \app\components\CController {
             $arrSearch["f_ini"] = $data['fecha_ini'];
             $arrSearch["f_fin"] = $data['fecha_fin'];
             $arrSearch["search"] = $data['search'];
+            $arrSearch["estadomat"] = $data['estadomat'];
         }
         $arrData = array();
         $mod_matreprueba = new MatriculadosReprobado();
@@ -489,7 +493,8 @@ class MatriculadosreprobadosController extends \app\components\CController {
             academico::t("Academico", "Month Process"),
             academico::t("Academico", "Career/Program"),
             admision::t("Solicitudes", "Income Method"),
-            Yii::t("formulario", "Subject")
+            Yii::t("formulario", "Subject"),
+            Yii::t("formulario", "Status")
         );
         $data = Yii::$app->request->get();
         $arrSearch = array();
@@ -497,6 +502,7 @@ class MatriculadosreprobadosController extends \app\components\CController {
             $arrSearch["f_ini"] = $data['fecha_ini'];
             $arrSearch["f_fin"] = $data['fecha_fin'];
             $arrSearch["search"] = $data['search'];
+            $arrSearch["estadomat"] = $data['estadomat'];
         }
         $arrData = array();
         $mod_matreprueba = new MatriculadosReprobado();

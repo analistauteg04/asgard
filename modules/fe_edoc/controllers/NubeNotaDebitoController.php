@@ -2,6 +2,9 @@
 namespace app\modules\fe_edoc\controllers;
 
 use Yii;
+use yii\helpers\ArrayHelper;
+use yii\base\Exception;
+use app\modules\fe_edoc\models\NubeNotaDebito;
 
 class NubenotadebitoController extends \app\components\CController 
 {
