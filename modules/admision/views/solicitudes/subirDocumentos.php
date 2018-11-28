@@ -4,6 +4,7 @@ use yii\helpers\Html;
 use yii\helpers\Url;
 use app\components\CFileInputAjax;
 use app\modules\admision\Module as admision;
+
 $leyenda = '<div class="col-md-12 col-xs-12 col-sm-12 col-lg-12">
           <div class="form-group">
           <div class="col-sm-10 col-md-10 col-xs-10 col-lg-10">
@@ -13,12 +14,11 @@ $leyenda = '<div class="col-md-12 col-xs-12 col-sm-12 col-lg-12">
           </div>';
 
 session_start();
-$_SESSION['persona_solicita'] = base64_encode($per_id);  
+$_SESSION['persona_solicita'] = base64_encode($per_id);
 
-if(base64_decode($_GET['uaca']) == 2){
+if (base64_decode($_GET['uaca']) == 2) {
     $docpos = 'block';
-}
-else{
+} else {
     $docpos = 'none';
 }
 ?>
@@ -34,7 +34,7 @@ else{
     <div class="col-md-12 col-xs-12 col-sm-12 col-lg-12">
         <h3><span id="lbl_solicitud"><?= Yii::t("formulario", "Upload documents") ?></span></h3>
     </div>
-    
+
     <div class="col-md-12 col-xs-12 col-sm-12 col-lg-12">
         <div class="form-group">
             <label for="txt_solicitud" class="col-sm-4 col-md-4 col-xs-4 col-lg-4 control-label"><?= admision::t("Solicitudes", "Request #") ?></label>
@@ -43,7 +43,7 @@ else{
             </div>
         </div>
     </div>
-    
+
     <div class="col-md-12 col-xs-12 col-sm-12 col-lg-12">
         <div class="form-group">
             <label for="txt_nombres_completos" class="col-sm-4 col-md-4 col-xs-4 col-lg-4 control-label"><?= Yii::t("formulario", "Complete Names") ?></label>
@@ -52,14 +52,14 @@ else{
             </div>
         </div>
     </div>
-    
+
     <div class="col-md-12 col-xs-12 col-sm-12 col-lg-12">
         <h4><span id="lbl_Personeria"><?= Yii::t("formulario", "Attach document") ?></span></h4>    
     </div>
     <div class="col-md-12 col-xs-12 col-sm-12 col-lg-12">
         <?php echo $leyenda; ?>
     </div>
-    
+
     <div class="col-md-12 col-xs-12 col-sm-12 col-lg-12 doc_titulo cinteres">
         <div class="form-group">
             <label for="txth_doc_titulo" class="col-sm-4 col-md-4 col-xs-4 col-lg-4 control-label keyupmce"><?= admision::t("Solicitudes", "Title") ?></label>
@@ -289,7 +289,7 @@ else{
             </div>
         </div>
     </div>
-    <div  id="divCertificado" style="display: <?php echo $docpos;?>">   
+    <div  id="divCertificado" style="display: <?php echo $docpos; ?>">   
         <div class="col-md-12 col-xs-12 col-sm-12 col-lg-12 doc_certificado cinteres">
             <div class="form-group">
                 <label for="txth_doc_certificado" class="col-sm-4 col-md-4 col-xs-4 col-lg-4 control-label keyupmce"><?= Yii::t("formulario", "Materials Certificate") ?></label>
@@ -406,14 +406,21 @@ else{
                 </div>
             </div>
         </div>
-        <?php //Fin de la hoja de vida  ?>
-
+        <?php //Fin de la hoja de vida  ?>        
+    </div>
+    <div class="col-md-12 col-xs-12 col-sm-12 col-lg-12">       
+            <div class="form-group">
+                <label for="txt_observa" class="col-sm-4 col-md-4 col-xs-4 col-lg-4 control-label keyupmce"><?= Yii::t("formulario", "Observation") ?></label>
+                <div class="col-sm-7 col-md-7 col-xs-7 col-lg-7">                
+                    <textarea  class="form-control keyupmce" id="txt_observa" rows="3"></textarea>                  
+                </div>
+            </div>      
     </div>
     <div class="col-md-12 col-xs-12 col-sm-12 col-lg-12">        
         <div class="form-group">
             <label for="txt_declararbeca" class="col-sm-5 control-label"><?= admision::t("Solicitudes", "Apply Cala Foundation scholarship") ?></label>
             <div class="col-sm-7">  
-                <?php if (base64_decode($beca) ==1) { ?>
+                <?php if (base64_decode($beca) == 1) { ?>
                     <label><input type="radio" name="opt_declara_si"  id="opt_declara_si" value="1" checked disabled="true"><b>Si</b></label>
                     <label><input type="radio" name="opt_declara_no"  id="opt_declara_no" value="2" disabled="true"><b>No</b></label>                                              
                 <?php } else { ?>
@@ -423,8 +430,8 @@ else{
             </div>            
         </div>        
     </div> 
-    
-    <?php if (base64_decode($beca) ==1) { ?>
+
+    <?php if (base64_decode($beca) == 1) { ?>
         <div class="col-md-12 col-xs-12 col-sm-12 col-lg-12" id="divDeclarabeca">
             <div class="form-group">
                 <label for="txth_doc_beca" class="col-sm-4 col-md-4 col-xs-4 col-lg-4 control-label keyupmce"><?= admision::t("Solicitudes", "Scholarship document") ?></label>
@@ -484,5 +491,4 @@ else{
             </div>
         </div>
     <?php } ?>    
- </form>
-    
+</form>

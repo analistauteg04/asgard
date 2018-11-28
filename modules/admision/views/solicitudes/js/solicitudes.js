@@ -695,6 +695,7 @@ function SaveDocumentos() {
     arrParams.arc_doc_curri = $('#txth_doc_hojavida').val();    
     arrParams.opcion = $('#txth_opcion').val();
     arrParams.uaca_id = $('#txth_uaca').val();
+    arrParams.oserva = $('#txt_observa').val();
     if ($('input[name=opt_declara_si]:checked').val() == 1) {
         arrParams.beca = 1;
     } else {
