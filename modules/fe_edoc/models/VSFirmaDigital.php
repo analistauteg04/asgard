@@ -20,21 +20,15 @@
  * The followings are the available model relations:
  * @property VSCompania $idCompania
  */
+namespace app\modules\fe_edoc\models;
+
+use Yii;
+use yii\base\Exception;
+
 Yii::import('system.vendors.nusoap.lib.*');
 require_once('nusoap.php');
 
 class VSFirmaDigital extends CActiveRecord {
-
-    /**
-     * @return string the associated database table name
-     */
-    public function tableName() {
-        $dbname = parent::$dbname;
-        if ($dbname != "")
-            $dbname.=".";
-        return $dbname . 'VSFirmaDigital'; //Empresas es la Utilizada.
-        //return 'VSFirmaDigital';
-    }
 
     /**
      * @return array validation rules for model attributes.
@@ -85,58 +79,13 @@ class VSFirmaDigital extends CActiveRecord {
         );
     }
 
-    /**
-     * Retrieves a list of models based on the current search/filter conditions.
-     *
-     * Typical usecase:
-     * - Initialize the model fields with values from filter form.
-     * - Execute this method to get CActiveDataProvider instance which will filter
-     * models according to data in model fields.
-     * - Pass data provider to CGridView, CListView or any similar widget.
-     *
-     * @return CActiveDataProvider the data provider that can return the models
-     * based on the search/filter conditions.
-     */
-    public function search() {
-        // @todo Please modify the following code to remove attributes that should not be searched.
-
-        $criteria = new CDbCriteria;
-
-        $criteria->compare('Id', $this->Id);
-        $criteria->compare('IdCompania', $this->IdCompania, true);
-        $criteria->compare('Clave', $this->Clave, true);
-        $criteria->compare('FechaCaducidad', $this->FechaCaducidad, true);
-        $criteria->compare('EmpresaCertificadora', $this->EmpresaCertificadora, true);
-        $criteria->compare('Estado', $this->Estado);
-        $criteria->compare('UsuarioCreacion', $this->UsuarioCreacion);
-        $criteria->compare('FechaCreacion', $this->FechaCreacion, true);
-        $criteria->compare('UsuarioModificacion', $this->UsuarioModificacion);
-        $criteria->compare('FechaModificacion', $this->FechaModificacion, true);
-        $criteria->compare('UsuarioEliminacion', $this->UsuarioEliminacion);
-        $criteria->compare('FechaEliminacion', $this->FechaEliminacion, true);
-
-        return new CActiveDataProvider($this, array(
-            'criteria' => $criteria,
-        ));
-    }
-
-    /**
-     * Returns the static model of the specified AR class.
-     * Please note that you should have this exact method in all your CActiveRecord descendants!
-     * @param string $className active record class name.
-     * @return VSFirmaDigital the static model class
-     */
-    public static function model($className = __CLASS__) {
-        return parent::model($className);
-    }
-
     public function recuperarFirmaDigital($id) {
-        //$con = yii::app()->dbvssea;
-        $con = yii::app()->db;
+        //$con = yii::$app->dbvssea;
+        $con = yii::$app->db_edoc;
         $rawData = array();
         //$sql = "SELECT Clave,RutaFile FROM " . $con->dbname . ".VSFirmaDigital WHERE idCompania=$id AND Estado=1";
         $sql = "SELECT Clave,RutaFile,SeaDocXml,Wdsl_local FROM " . $con->dbname . ".VSFirmaDigital WHERE EMP_ID=$id AND Estado=1";
-        $rawData = $con->createCommand($sql)->queryRow();
+        $rawData = $con->createCommand($sql)->queryOne();
         $con->active = false;
         return $rawData;
     }
@@ -154,9 +103,9 @@ class VSFirmaDigital extends CActiveRecord {
         $XmlDsigRSASHA1Url = "http://www.w3.org/2000/09/xmldsig#rsa-sha1";
 
         $Dataf = $this->recuperarFirmaDigital('1');
-        $x509 = Yii::app()->phpseclib->createX509(); //Crear el ObjetoX509
+        $x509 = yii::$app->phpseclib->createX509(); //Crear el ObjetoX509
         $RutaFile = explode(".", base64_decode($Dataf['RutaFile'])); //Obtiene el Nombre del Certificado x Default = .p12
-        $file = Yii::app()->params['seaFirma'] . $RutaFile[0] . '.crt'; //Se crea el Archivo .crt para que lo pueda leer
+        $file = yii::$app->params['seaFirma'] . $RutaFile[0] . '.crt'; //Se crea el Archivo .crt para que lo pueda leer
         //Leer el archivo certificado
         $fd = fopen($file, 'r');
         $p12buf = fread($fd, filesize($file));
@@ -234,10 +183,10 @@ class VSFirmaDigital extends CActiveRecord {
     public function firmaXAdES_BES($Documento,$DirDocFirmado) {
         $obj = new VSFirmaDigital;
         //$Dataf = $obj->recuperarFirmaDigital('1');  ,
-        $Dataf = $obj->recuperarFirmaDigital(Yii::app()->params['EmpID']);
-        $fileCertificado = Yii::app()->params['seaFirma'] . base64_decode($Dataf['RutaFile']);
+        $Dataf = $obj->recuperarFirmaDigital(yii::$app->params['EmpID']);
+        $fileCertificado = yii::$app->params['seaFirma'] . base64_decode($Dataf['RutaFile']);
         $pass = base64_decode($Dataf['Clave']);
-        $filexml = $Dataf['SeaDocXml'] . $Documento;//Yii::app()->params['seaDocXml'] . $Documento;
+        $filexml = $Dataf['SeaDocXml'] . $Documento;//yii::$app->params['seaDocXml'] . $Documento;
         $wdsl = $Dataf['Wdsl_local'];//'http://127.0.0.1:8080/FIRMARSRI/FirmaElectronicaSRI?wsdl';
         $param = array(
             'pathOrigen' => $filexml,
@@ -310,7 +259,7 @@ class VSFirmaDigital extends CActiveRecord {
     }
     
     public function autorizacionComprobanteWS($ClaveAcceso) {
-        $wdsl = Yii::app()->getSession()->get('Autorizacion', FALSE);//wsdl dependiendo del ambiente Configurado
+        $wdsl = Yii::$app->session->get('Autorizacion', FALSE);//wsdl dependiendo del ambiente Configurado
         //$wdsl = 'https://celcer.sri.gob.ec/comprobantes-electronicos-ws/AutorizacionComprobantes?wsdl'; //Ruta del Web service SRI AutorizacionComprobantes
         $param = array(
             'claveAccesoComprobante' => $ClaveAcceso
@@ -323,7 +272,7 @@ class VSFirmaDigital extends CActiveRecord {
         $filexml = $DirDocFirmado . $Documento;
         $filebyte = $this->StrToByteArray(file_get_contents($filexml));
         $file64base = base64_encode(file_get_contents($filexml));
-        $wdsl = Yii::app()->getSession()->get('Recepcion', FALSE);//wsdl dependiendo del ambiente Configurado
+        $wdsl = Yii::$app->session->get('Recepcion', FALSE);//wsdl dependiendo del ambiente Configurado
         //$wdsl = 'https://celcer.sri.gob.ec/comprobantes-electronicos-ws/RecepcionComprobantes?wsdl'; //Ruta del Web service SRI RecepcionComprobantes
         $param = array(
             'xml' => $file64base
@@ -347,7 +296,7 @@ class VSFirmaDigital extends CActiveRecord {
             return $arroout;
         }
         //Agregar Certificado SRI en la Peticion
-        //$certificado = Yii::app()->params['seaFirma']. "celcer.sri.gob.ec.cer";
+        //$certificado = yii::$app->params['seaFirma']. "celcer.sri.gob.ec.cer";
         //$certRequest = array('cainfofile' => $certificado);  
         //$autentico = $client->setCredentials('','','certificate',$certRequest); 
 

@@ -11,6 +11,7 @@ $arr_conf = [
     ],
     'params' => [
         // list of parameters
+        'seaFirma' => ''
     ],
 ];
 $dir_data = __DIR__ . '/../data/';

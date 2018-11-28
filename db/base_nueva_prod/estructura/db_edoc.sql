@@ -317,6 +317,32 @@ CREATE TABLE `NubeRetencion`
   `USU_ID` bigint(20) DEFAULT NULL
 );
 
+DROP TABLE IF EXISTS `empresa`;
+CREATE TABLE `empresa` (
+  `emp_id` bigint(20) NOT NULL AUTO_INCREMENT PRIMARY KEY,
+  `emp_ruc` varchar(15) DEFAULT NULL,
+  `emp_razonsocial` varchar(300) DEFAULT NULL,
+  `emp_nom_comercial` varchar(300) DEFAULT NULL,
+  `emp_ambiente` varchar(1) DEFAULT NULL,
+  `emp_tipo_emision` varchar(1) DEFAULT NULL,
+  `emp_direccion_matriz` varchar(300) DEFAULT NULL,
+  `emp_obliga_contabilidad` varchar(2) DEFAULT NULL,
+  `emp_contri_especial` varchar(5) DEFAULT NULL,
+  `emp_telefono` varchar(20) DEFAULT NULL,
+  `emp_fax` varchar(20) DEFAULT NULL,
+  `emp_email` varchar(45) DEFAULT NULL,
+  `emp_email_digital` varchar(60) DEFAULT NULL,
+  `emp_email_conta` varchar(60) DEFAULT NULL,
+  `emp_moneda` varchar(10) DEFAULT NULL,
+  `emp_website` varchar(45) DEFAULT NULL,
+  `emp_logo` varchar(100) DEFAULT NULL,
+  `usuario` varchar(60) DEFAULT NULL,
+  `emp_est_log` varchar(1) DEFAULT NULL,
+  `emp_fec_cre` timestamp NULL DEFAULT CURRENT_TIMESTAMP,
+  `emp_fec_mod` timestamp NULL DEFAULT NULL
+);
+
+
 -- --------------------------------------------------------
 
 --
@@ -817,3 +843,128 @@ CREATE TABLE `VSValidacion_Mensajes`
   `Estado` varchar(1) DEFAULT NULL,
   FOREIGN KEY (`Idvalidacion`) REFERENCES `VSValidacion` (`Idvalidacion`)
 );
+
+
+--
+-- Table structure for table `VSDirectorio`
+--
+
+DROP TABLE IF EXISTS `VSDirectorio`;
+CREATE TABLE `VSDirectorio` (
+  `IdDirectorio` int(10) NOT NULL AUTO_INCREMENT PRIMARY KEY,
+  `emp_id` bigint(20) NOT NULL,
+  `TipoDocumento` varchar(3) DEFAULT NULL,
+  `Descripcion` varchar(100) DEFAULT NULL,
+  `Ruta` varchar(100) DEFAULT NULL,
+  `UsuarioCreacion` int(10) DEFAULT NULL,
+  `FechaCreacion` timestamp NULL DEFAULT CURRENT_TIMESTAMP,
+  `Estado` varchar(1) DEFAULT NULL,
+  FOREIGN KEY (`emp_id`) REFERENCES `empresa` (`emp_id`)
+);
+
+--
+-- Table structure for table `VSFirmaDigital`
+--
+
+DROP TABLE IF EXISTS `VSFirmaDigital`;
+CREATE TABLE `VSFirmaDigital` (
+  `Id` int(20) NOT NULL AUTO_INCREMENT PRIMARY KEY,
+  `emp_id` bigint(20) NOT NULL,
+  `Clave` varchar(100) DEFAULT NULL,
+  `RutaFile` varchar(100) DEFAULT NULL,
+  `RutaFileCrt` varchar(100) DEFAULT NULL,
+  `FechaCaducidad` date DEFAULT NULL,
+  `EmpresaCertificadora` varchar(100) DEFAULT NULL,
+  `SeaDocXml` varchar(100) DEFAULT NULL,
+  `Wdsl_local` varchar(100) DEFAULT NULL,
+  `Estado` varchar(1) DEFAULT NULL,
+  `UsuarioCreacion` int(10) DEFAULT NULL,
+  `FechaCreacion` timestamp NULL DEFAULT CURRENT_TIMESTAMP,
+  `FechaModificacion` timestamp NULL DEFAULT NULL,
+  FOREIGN KEY (`emp_id`)  REFERENCES `empresa` (`emp_id`)
+);
+
+--
+-- Table structure for table `VSServiciosSRI`
+--
+
+DROP TABLE IF EXISTS `VSServiciosSRI`;
+CREATE TABLE `VSServiciosSRI` (
+  `Id` int(10) NOT NULL AUTO_INCREMENT PRIMARY KEY,
+  `emp_id` bigint(20) NOT NULL,
+  `Ambiente` varchar(1) DEFAULT NULL,
+  `Recepcion` varchar(200) DEFAULT NULL,
+  `Autorizacion` varchar(200) DEFAULT NULL,
+  `RecepcionLote` varchar(100) DEFAULT NULL,
+  `TiempoRespuesta` int(10) DEFAULT '0',
+  `TiempoSincronizacion` int(10) DEFAULT '0',
+  `UsuarioCreacion` varchar(45) DEFAULT NULL,
+  `FechaCreacion` timestamp NULL DEFAULT CURRENT_TIMESTAMP,
+  `FechaModificacion` timestamp NULL DEFAULT NULL,
+  `Estado` varchar(1) DEFAULT NULL,
+  FOREIGN KEY (`emp_id`)  REFERENCES `empresa` (`emp_id`)
+);
+
+--
+-- Table structure for table `VSServidorCorreo`
+--
+
+DROP TABLE IF EXISTS `VSServidorCorreo`;
+CREATE TABLE `VSServidorCorreo` (
+  `Id` int(10) NOT NULL AUTO_INCREMENT PRIMARY KEY,
+  `emp_id` bigint(20) NOT NULL,
+  `Mail` varchar(100) DEFAULT NULL,
+  `NombreMostrar` varchar(200) DEFAULT NULL,
+  `Asunto` text,
+  `Cuerpo` text,
+  `EsHtml` varchar(1) DEFAULT NULL,
+  `Clave` varchar(25) DEFAULT NULL,
+  `Usuario` varchar(100) DEFAULT NULL,
+  `SMTPServidor` varchar(100) DEFAULT NULL,
+  `SMTPPuerto` int(10) DEFAULT NULL,
+  `TiempoRespuesta` int(10) DEFAULT NULL,
+  `TiempoEspera` int(10) DEFAULT NULL,
+  `ServidorAcuse` text,
+  `ActivarAcuse` int(1) DEFAULT NULL,
+  `CCO` varchar(100) DEFAULT NULL,
+  `UsuarioCreacion` int(10) DEFAULT NULL,
+  `FechaCreacion` timestamp NULL DEFAULT CURRENT_TIMESTAMP,
+  `FechaModificacion` timestamp NULL DEFAULT NULL,
+  `Estado` varchar(1) DEFAULT NULL,
+  FOREIGN KEY (`emp_id`) REFERENCES `empresa` (`emp_id`)
+);
+
+--
+-- Table structure for table `establecimiento`
+--
+
+DROP TABLE IF EXISTS `establecimiento`;
+CREATE TABLE `establecimiento` (
+  `est_id` bigint(20) NOT NULL AUTO_INCREMENT PRIMARY KEY,
+  `emp_id` bigint(20) NOT NULL,
+  `est_numero` varchar(3) DEFAULT NULL,
+  `est_nombre` varchar(300) DEFAULT NULL,
+  `est_direccion` varchar(300) DEFAULT NULL,
+  `est_telefono` varchar(45) DEFAULT NULL,
+  `est_log` varchar(1) DEFAULT NULL,
+  `fec_cre` timestamp NULL DEFAULT NULL,
+  `fec_mod` timestamp NULL DEFAULT NULL,
+  FOREIGN KEY (`emp_id`) REFERENCES `empresa` (`emp_id`)
+);
+
+--
+-- Table structure for table `punto_emision`
+--
+
+DROP TABLE IF EXISTS `punto_emision`;
+CREATE TABLE `punto_emision` (
+  `pemi_id` bigint(20) NOT NULL AUTO_INCREMENT PRIMARY KEY,
+  `est_id` bigint(20) NOT NULL,
+  `pemi_numero` varchar(3) DEFAULT NULL,
+  `pemi_nombre` varchar(300) DEFAULT NULL,
+  `est_log` varchar(1) DEFAULT NULL,
+  `fec_cre` timestamp NULL DEFAULT NULL,
+  `fec_mod` timestamp NULL DEFAULT NULL,
+  FOREIGN KEY (`est_id`) REFERENCES `establecimiento` (`est_id`)
+) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+/*!40101 SET character_set_client = @saved_cs_client */;

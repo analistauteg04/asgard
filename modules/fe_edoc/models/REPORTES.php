@@ -11,10 +11,14 @@
  *
  * @author root
  */
+namespace app\modules\fe_edoc\models;
+
+use Yii;
+
 class REPORTES {
 
     public function crearBaseReport() {
-        $mPDF1 = Yii::app()->ePdf->mpdf('utf-8', 'A4', '', '', 15, 15, 16, 16, 9, 9, 'P'); //Esto lo pueden configurar como quieren, para eso deben de entrar en la web de MPDF para ver todo lo que permite.
+        $mPDF1 = yii::$app->ePdf->mpdf('utf-8', 'A4', '', '', 15, 15, 16, 16, 9, 9, 'P'); //Esto lo pueden configurar como quieren, para eso deben de entrar en la web de MPDF para ver todo lo que permite.
         $mPDF1->useOnlyCoreFonts = true;
         
         $mPDF1->SetAuthor("Utimpor");
@@ -33,7 +37,7 @@ class REPORTES {
         //$mPDF1 ->showWatermarkImage = true;
         
         //Load a stylesheet
-        //$stylesheet = file_get_contents(Yii::app()->theme->baseUrl.'/css/print.css');
+        //$stylesheet = file_get_contents(yii::$app->theme->baseUrl.'/css/print.css');
         //$mPDF1->WriteHTML($stylesheet, 1);
         return $mPDF1;
     }

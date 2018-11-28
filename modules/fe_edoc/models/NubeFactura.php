@@ -63,6 +63,7 @@ use Yii;
 use app\models\Utilities;
 use \yii\data\ActiveDataProvider;
 use \yii\data\ArrayDataProvider;
+use yii\base\Exception;
 
 class NubeFactura extends \app\modules\fe_edoc\components\CActiveRecord {
     

@@ -5,15 +5,18 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
+namespace app\modules\fe_edoc\models;
+
+use Yii;
 
 Yii::import('system.vendors.PHPMailer.*'); //Usar de Forma nativa.
 require_once('PHPMailerAutoload.php');
 
 class mailSystem {
-    private $domEmpresa='Utimpor.com';
-    private $mailSMTP='mail.utimpor.com';
-    private $noResponder='no-responder@utimpor.com';
-    private $noResponderPass='F0E4CwUyWy?h';
+    private $domEmpresa='uteg.edu.ed';
+    private $mailSMTP='mail.uteg.edu.ed';
+    private $noResponder='no-responder@uteg.edu.ec';
+    private $noResponderPass='xxxxxxx';
     private $port=465;
     private $charSet='UTF-8';
 
@@ -53,11 +56,9 @@ class mailSystem {
         //$mail->AddAddress("byronvillacreses@gmail.com", "Byron Villa");
         
         /******** COPIA OCULTA PARA VENTAS  ***************/
-        $mail->addBCC('ventas@utimpor.com', 'Ventas Utimpor'); //Para copia Oculta
-        //$mail->addBCC('ventas2@utimpor.com', 'Ventas Utimpor'); //Para copia Oculta
-        $mail->addBCC('yalava@utimpor.com', 'Ventas Utimpor'); //Para copia Oculta
+        $mail->addBCC('ventas@uteg.edu.ec', 'Ventas Uteg'); //Para copia Oculta
         
-        $mail->addBCC('byronvillacreses@gmail.com', 'Byron Villa'); //Para con copia
+        $mail->addBCC('admin@uteg.edu.ec', 'Admin'); //Para con copia
         //$mail->addCC('byronvillacreses@gmail.com', 'ByronV'); //Para con copia
         //$mail->addReplyTo('byronvillacreses@gmail.com', 'First Last');
         //
@@ -91,14 +92,14 @@ class mailSystem {
         switch ($op) {
             Case 1://NOTIFICA A USUARIOS DEL SISTEMA WEBSEA PARA ANULACION
                 $mail->AddAddress($DatVen["CorreoUser"], $DatVen["NombreUser"]);//Usuario Genera Pedido        
-                $mail->AddAddress(Yii::app()->getSession()->get('CorreoConta', FALSE), "Contabiliad");
+                $mail->AddAddress(Yii::$app->session->get('CorreoConta', FALSE), "Contabiliad");
                 break;
             Case 2://NOTIFICA A CLIENTES
                 //$mail->AddAddress($CabPed[0]["CorreoUser"], $CabPed[0]["NombreUser"]);//Usuario Autoriza Pedido
                 break;
             default:
                 //NOTIFICA ADMINISTRADOR
-                $mail->AddAddress("byron_villacresesf@hotmail.com", "Byron Villa");
+                $mail->AddAddress("admin@uteg.edu.ec", "Admin");
         }
         // si el SMTP necesita autenticación
         $mail->SMTPAuth = true;

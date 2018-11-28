@@ -35,19 +35,9 @@ namespace app\modules\fe_edoc\models;
 use Yii;
 use \yii\data\ActiveDataProvider;
 use \yii\data\ArrayDataProvider;
+use yii\base\Exception;
 
 class VSCompania extends \app\modules\fe_edoc\components\CActiveRecord {
-
-    /**
-     * @return string the associated database table name
-     */
-    public function tableName() {
-        $dbname = parent::$dbname;
-        if ($dbname != "")
-            $dbname.=".";
-        return $dbname . 'VSCompania'; //Empresas es la Utilizada.
-        //return 'VSCompania';
-    }
 
     /**
      * @return array validation rules for model attributes.
@@ -121,7 +111,7 @@ class VSCompania extends \app\modules\fe_edoc\components\CActiveRecord {
      */
     public function mostrarCompanias() {
         $rawData = array();
-        $con = Yii::$app->db;
+        $con = Yii::$app->db_edoc;
         
         $sql = "SELECT A.EMP_ID IdCompania,A.EMP_RUC Ruc,A.EMP_RAZONSOCIAL RazonSocial,A.EMP_NOM_COMERCIAL NombreComercial,A.EMP_DIRECCION_MATRIZ DireccionMatriz 
                     FROM " . $con->dbname . ".EMPRESA A WHERE A.EMP_EST_LOG='1'";
@@ -148,7 +138,7 @@ class VSCompania extends \app\modules\fe_edoc\components\CActiveRecord {
     
     
     public function insertarEmpresa($objEmp) {
-        $con = Yii::$app->db;
+        $con = Yii::$app->db_edoc;
         $trans = $con->beginTransaction();
         try {
             //$objEmp[0]['UsuarioCreacion']= Yii::$app->session->get('user_name', FALSE);//Define el usuario Session
@@ -214,7 +204,7 @@ class VSCompania extends \app\modules\fe_edoc\components\CActiveRecord {
     }
     
     public function removerEmpresa($ids) {
-        $con = Yii::$app->db;
+        $con = Yii::$app->db_edoc;
         $trans = $con->beginTransaction();
         try {
             $sql = "UPDATE " . $con->dbname . ".EMPRESA SET EMP_EST_LOG='0' WHERE EMP_ID IN($ids)";
@@ -233,7 +223,7 @@ class VSCompania extends \app\modules\fe_edoc\components\CActiveRecord {
     
     public function recuperarEmpresa($id) {
         //$con = Yii::$app->db_edoc;
-        $con = Yii::$app->db;
+        $con = Yii::$app->db_edoc;
         $sql = "SELECT A.EMP_ID IdCompania,A.EMP_RUC Ruc,A.EMP_RAZONSOCIAL RazonSocial,A.EMP_NOM_COMERCIAL NombreComercial,
             A.EMP_AMBIENTE Ambiente,A.EMP_TIPO_EMISION TipoEmision,A.EMP_DIRECCION_MATRIZ DireccionMatriz,A.EMP_OBLIGA_CONTABILIDAD ObligadoContabilidad,
             A.EMP_MONEDA Moneda,A.EMP_TELEFONO Telefono,A.EMP_EMAIL Correo,A.EMP_EMAIL_DIGITAL CorreoDigital,A.EMP_EMAIL_CONTA CorreoContador,A.EMP_WEBSITE Website,

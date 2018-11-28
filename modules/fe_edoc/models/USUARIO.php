@@ -15,14 +15,11 @@
  * The followings are the available model relations:
  * @property PERSONA $pER
  */
-class USUARIO extends CActiveRecord {
+namespace app\modules\fe_edoc\models;
 
-    /**
-     * @return string the associated database table name
-     */
-    public function tableName() {
-        return 'USUARIO';
-    }
+use Yii;
+
+class USUARIO extends \app\modules\fe_edoc\components\CActiveRecord {
 
     /**
      * @return array validation rules for model attributes.
@@ -69,50 +66,11 @@ class USUARIO extends CActiveRecord {
         );
     }
 
-    /**
-     * Retrieves a list of models based on the current search/filter conditions.
-     *
-     * Typical usecase:
-     * - Initialize the model fields with values from filter form.
-     * - Execute this method to get CActiveDataProvider instance which will filter
-     * models according to data in model fields.
-     * - Pass data provider to CGridView, CListView or any similar widget.
-     *
-     * @return CActiveDataProvider the data provider that can return the models
-     * based on the search/filter conditions.
-     */
-    public function search() {
-        // @todo Please modify the following code to remove attributes that should not be searched.
-
-        $criteria = new CDbCriteria;
-
-        $criteria->compare('USU_ID', $this->USU_ID, true);
-        $criteria->compare('PER_ID', $this->PER_ID, true);
-        $criteria->compare('USU_NOMBRE', $this->USU_NOMBRE, true);
-        $criteria->compare('USU_PASSWORD', $this->USU_PASSWORD, true);
-        $criteria->compare('USU_EST_LOG', $this->USU_EST_LOG, true);
-        $criteria->compare('USU_FEC_CRE', $this->USU_FEC_CRE, true);
-        $criteria->compare('USU_FEC_MOD', $this->USU_FEC_MOD, true);
-
-        return new CActiveDataProvider($this, array(
-            'criteria' => $criteria,
-        ));
-    }
-
-    /**
-     * Returns the static model of the specified AR class.
-     * Please note that you should have this exact method in all your CActiveRecord descendants!
-     * @param string $className active record class name.
-     * @return USUARIO the static model class
-     */
-    public static function model($className = __CLASS__) {
-        return parent::model($className);
-    }
 
     public function cambiarPassword($pass) {
-        $ids = Yii::app()->getSession()->get('user_id', FALSE);
+        $ids = Yii::$app->session->get('user_id', FALSE);
         $msg = new VSexception();
-        $con = Yii::app()->db;
+        $con = yii::$app->db_edoc;
         $trans = $con->beginTransaction();
         try {
             $sql = "UPDATE " . $con->dbname . ".USUARIO SET USU_PASSWORD=MD5('$pass') WHERE USU_ID=$ids ";
@@ -132,7 +90,7 @@ class USUARIO extends CActiveRecord {
     
     public function cambiarMailDoc($ids,$correo) {
         $msg = new VSexception();
-        $con = Yii::app()->db;
+        $con = yii::$app->db_edoc;
         $trans = $con->beginTransaction();
         if($ids==0){return $msg->messageSystem('NO_OK', $e->getMessage(), 11, null, null);}
         try {
@@ -152,7 +110,7 @@ class USUARIO extends CActiveRecord {
     }
     
     public function getMailUserDoc($id,$tipDoc) {
-        $con = yii::app()->db;
+        $con = yii::$app->db_edoc;
                 switch ($tipDoc) {
                     Case "FA"://FACTURAS
                         $sql = "SELECT A.IdentificacionComprador CedRuc,C.USU_ID UsuId,B.PER_NOMBRE Nombres,C.USU_CORREO Correo
