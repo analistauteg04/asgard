@@ -30,5 +30,4 @@ EOF;
         );
         $view->registerJs($script, \yii\web\View::POS_END,"start_place_to_play");
     }
-
 }
