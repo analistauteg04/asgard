@@ -409,12 +409,12 @@ if (base64_decode($_GET['uaca']) == 2) {
         <?php //Fin de la hoja de vida  ?>        
     </div>
     <div class="col-md-12 col-xs-12 col-sm-12 col-lg-12">       
-            <div class="form-group">
-                <label for="txt_observa" class="col-sm-4 col-md-4 col-xs-4 col-lg-4 control-label keyupmce"><?= Yii::t("formulario", "Observation") ?></label>
-                <div class="col-sm-7 col-md-7 col-xs-7 col-lg-7">                
-                    <textarea  class="form-control keyupmce" id="txt_observa" rows="3"></textarea>                  
-                </div>
-            </div>      
+        <div class="form-group">
+            <label for="txt_observa" class="col-sm-4 col-md-4 col-xs-4 col-lg-4 control-label keyupmce"><?= Yii::t("formulario", "Observation") ?></label>
+            <div class="col-sm-7 col-md-7 col-xs-7 col-lg-7">                
+                <textarea  class="form-control keyupmce" id="txt_observa" rows="3"><?= $datos['observa'] ?></textarea>                  
+            </div>
+        </div>      
     </div>
     <div class="col-md-12 col-xs-12 col-sm-12 col-lg-12">        
         <div class="form-group">
