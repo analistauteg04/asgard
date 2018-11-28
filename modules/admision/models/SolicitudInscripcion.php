@@ -447,7 +447,10 @@ class SolicitudInscripcion extends \yii\db\ActiveRecord {
                     per.per_correo,
                     per.per_celular, 
                     sins.ming_id, 
-                    sins.emp_id
+                    sins.emp_id,
+                    ifnull((select sdo.sdoc_observacion
+                               from " . $con->dbname . ".solicitudins_documento sdo
+                               where sdo.sins_id = sins.sins_id order by sdoc_fecha_creacion desc limit 1  ),' ') as observa
                 FROM 
                     " . $con->dbname . ".solicitud_inscripcion as sins
                     INNER JOIN " . $con->dbname . ".interesado as inte on sins.int_id = inte.int_id
