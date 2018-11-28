@@ -109,4 +109,34 @@ class ItemMetodoUnidad extends \yii\db\ActiveRecord
         $resultData = $comando->queryOne();
         return $resultData;                
     }
+           
+    /**
+     * Function consultarXitemPrecio
+     * @author  Grace Viteri <analistadesarrollo01@uteg.edu.ec>
+     * @param   
+     * @return  $resultData (Para obtener el id del item, filtrando por nivel de interés,
+     *                       modalidad, método de ingreso y carrera.)
+     */
+    public function consultarXitemPrecio($nint_id, $mod_id, $ming_id, $eaca_id) {        
+        $con = \Yii::$app->db_facturacion;        
+        $estado = 1;
+        $sql = "SELECT i.ite_id id, ite_nombre name
+                FROM  " . $con->dbname . ".item_metodo_unidad imu inner join db_facturacion.item i
+                        on imu.ite_id = i.ite_id
+                WHERE imu.uaca_id = :nint_id
+                      and mod_id = :mod_id
+                      and ming_id = :ming_id
+                      and eaca_id = :eaca_id
+                      and imni_estado = :estado
+                      and imni_estado_logico = :estado";                
+        $comando = $con->createCommand($sql);
+        $comando->bindParam(":estado", $estado, \PDO::PARAM_STR);
+        $comando->bindParam(":nint_id", $nint_id, \PDO::PARAM_INT);
+        $comando->bindParam(":ming_id", $ming_id, \PDO::PARAM_INT);
+        $comando->bindParam(":mod_id", $mod_id, \PDO::PARAM_INT);
+        $comando->bindParam(":eaca_id", $eaca_id, \PDO::PARAM_INT);
+        
+        $resultData = $comando->queryAll();
+        return $resultData;                
+    }
 }

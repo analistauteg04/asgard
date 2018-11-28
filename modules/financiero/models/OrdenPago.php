@@ -288,7 +288,7 @@ class OrdenPago extends \app\modules\financiero\components\CActiveRecord {
                     INNER JOIN " . $con2->dbname . ".interesado inte on inte.per_id = per.per_id
                     INNER JOIN " . $con2->dbname . ".solicitud_inscripcion sins on sins.int_id = inte.int_id
                     INNER JOIN  " . $con->dbname . ".orden_pago orp on sins.sins_id = orp.sins_id
-                    INNER JOIN " . $con->dbname . ".item_metodo_unidad imni on ((sins.ming_id = imni.ming_id and sins.uaca_id = imni.uaca_id and sins.mod_id = imni.mod_id)
+                    INNER JOIN " . $con->dbname . ".item_metodo_unidad imni on ((sins.ming_id = imni.ming_id and sins.uaca_id = imni.uaca_id and sins.mod_id = imni.mod_id and sins.eaca_id = imni.eaca_id)
                                 or (sins.uaca_id = imni.uaca_id and sins.mod_id = imni.mod_id and sins.mest_id = imni.mest_id))
                     INNER JOIN " . $con->dbname . ".item_precio itp ON itp.ite_id = imni.ite_id
                     INNER JOIN " . $con->dbname . ".item ite ON ite.ite_id = itp.ite_id ";
@@ -1077,7 +1077,7 @@ class OrdenPago extends \app\modules\financiero\components\CActiveRecord {
         if ($emp_id == 1) {  //Cuando se trata de una SI= solicitud de inscripción, a carrera de UTEG.
             $sql = "SELECT 
                             (select ite.ite_nombre from " . $con->dbname . ".item ite inner join " . $con->dbname . ".item_metodo_unidad imni on ite.ite_id = imni.ite_id 
-                             where imni.ming_id = sins.ming_id and imni.uaca_id = sins.uaca_id and imni.mod_id = sins.mod_id
+                             where imni.ming_id = sins.ming_id and imni.uaca_id = sins.uaca_id and imni.mod_id = sins.mod_id and imni.eaca_id = sins.eaca_id
                                    and imni.imni_estado = :estado and imni.imni_estado_logico = :estado and ite.ite_estado = :estado and ite.ite_estado_logico = :estado) as curso,
                             opag.opag_subtotal, 
                             opag.opag_iva, 

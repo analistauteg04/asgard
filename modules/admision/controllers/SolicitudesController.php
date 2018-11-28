@@ -204,7 +204,7 @@ class SolicitudesController extends \app\components\CController {
                 return;
             }
             if (isset($data["getmetodo"])) {
-                $metodos = $mod_metodo->consultarMetodoIngNivelInt($data['nint_id']);
+                $metodos = $mod_metodo->consultarMetodoIngNivelInt($data['unidada']);
                 $message = array("metodos" => $metodos);
                 return Utilities::ajaxResponse('OK', 'alert', Yii::t('jslang', 'Success'), 'false', $message);
                 return;
@@ -215,7 +215,6 @@ class SolicitudesController extends \app\components\CController {
                 } else {
                     $carrera = $modestudio->consultarCursoModalidad($data["unidada"], $data["moda_id"], $data["empresa_id"]); // tomar id de impresa
                 }
-
                 $message = array("carrera" => $carrera);
                 return Utilities::ajaxResponse('OK', 'alert', Yii::t('jslang', 'Success'), 'false', $message);
             }
@@ -226,10 +225,13 @@ class SolicitudesController extends \app\components\CController {
                 return Utilities::ajaxResponse('OK', 'alert', Yii::t('jslang', 'Success'), 'false', $message);
                 return;
             }
-            if (isset($data["getitem"])) {
-                $resItem = $modItemMetNivel->consultarXitemMetniv($data["unidada"], $data["moda_id"], $data["metodo"]);
-                $descuentos = $modDescuento->consultarDesctoxitem($resItem["ite_id"]);
-                $message = array("descuento" => $descuentos);
+            if (isset($data["getitem"])) {        
+                \app\models\Utilities::putMessageLogFile('unidad:' . $data["unidada"]);
+                \app\models\Utilities::putMessageLogFile('modalidad:' . $data["moda_id"]);
+                \app\models\Utilities::putMessageLogFile('metodo:' . $data["metodo"]);
+                \app\models\Utilities::putMessageLogFile('carrera:' . $data["carrera_id"]);
+                $resItem = $modItemMetNivel->consultarXitemPrecio($data["unidada"], $data["moda_id"], $data["metodo"], $data["carrera_id"]);                
+                $message = array("items" => $resItem);
                 return Utilities::ajaxResponse('OK', 'alert', Yii::t('jslang', 'Success'), 'false', $message);
                 return;
             }
@@ -237,9 +239,9 @@ class SolicitudesController extends \app\components\CController {
         $arr_unidadac = $mod_unidad->consultarUnidadAcademicasEmpresa($emp_id);
         $arr_modalidad = $mod_modalidad->consultarModalidad(1, 1);
         $arr_metodos = $mod_metodo->consultarMetodoIngNivelInt($arr_unidadac[0]["id"]);
-        $arr_carrera = $modcanal->consultarCarreraModalidad(1, 1);
-        //Descuentos.
-        $resp_item = $modItemMetNivel->consultarXitemMetniv(1, 1, 1);
+        $arr_carrera = $modcanal->consultarCarreraModalidad(1, 1);        
+        //Descuentos y precios.
+        $resp_item = $modItemMetNivel->consultarXitemPrecio(1, 1, 1, 2);        
         $arr_descuento = $modDescuento->consultarDesctoxitem($resp_item["ite_id"]);
         return $this->render('new', [
                     "arr_unidad" => ArrayHelper::map($arr_unidadac, "id", "name"),
@@ -248,7 +250,7 @@ class SolicitudesController extends \app\components\CController {
                     "arr_carrera" => ArrayHelper::map($arr_carrera, "id", "name"),
                     "arr_modalidad" => ArrayHelper::map($arr_modalidad, "id", "name"),
                     "arr_descuento" => ArrayHelper::map($arr_descuento, "id", "name"),
-                    "item" => $resp_item["ite_id"],
+                    "arr_item" => ArrayHelper::map(array_merge(["id" => "0", "name" => "Seleccionar"], $resp_item), "id", "name"), //ArrayHelper::map($resp_item, "id", "name"),
                     "int_id" => $inte_id,
                     "per_id" => $per_id,
                     "arr_empresa" => ArrayHelper::map($empresa, "id", "value"),
@@ -349,6 +351,7 @@ class SolicitudesController extends \app\components\CController {
                     $errorprecio = 0;
                 }
             }
+            $observacion = $data["observacion"];
             if ($errorprecio != 0) {
                 //Validar que no exista el registro en solicitudes.                    
                 $resp_valida = $mod_solins->Validarsolicitud($interesado_id, $nint_id, $ming_id, $car_id);
@@ -372,6 +375,7 @@ class SolicitudesController extends \app\components\CController {
                     $mod_solins->sins_estado = "1";
                     $mod_solins->sins_estado_logico = "1";
                     $mod_solins->sins_usuario_ingreso = $usu_id;
+                    $mod_solins->sins_observacion_creasolicitud = $observacion;
                     if ($beca == "1") {
                         $mod_solins->sins_beca = "1";
                     }

@@ -82,6 +82,7 @@ $(document).ready(function () {
         var arrParams = new Object();
         arrParams.nint_id = $(this).val();
         arrParams.empresa_id = $('#cmb_empresa').val();
+        arrParams.carrera_id = $('#cmb_carrera').val();
         arrParams.getmodalidad = true;        
         requestHttpAjax(link, arrParams, function (response) {
             if (response.status == "OK") {
@@ -104,7 +105,7 @@ $(document).ready(function () {
         }, true);
         //métodos.
         var arrParams = new Object();
-        arrParams.nint_id = $('#cmb_ninteres').val();
+        arrParams.unidada = $('#cmb_ninteres').val();
         arrParams.metodo = $('#cmb_metodos').val();
         arrParams.getmetodo = true;
         requestHttpAjax(link, arrParams, function (response) {
@@ -113,8 +114,7 @@ $(document).ready(function () {
                 setComboData(data.metodos, "cmb_metodos");
                 //Descuentos.
                 var arrParams = new Object();
-                arrParams.nint_id = $('#cmb_ninteres').val();
-                arrParams.unidada = $('#cmb_ninteres').val();
+                arrParams.unidada = $('#cmb_ninteres').val();                
                 arrParams.moda_id = $('#cmb_modalidad').val();
                 arrParams.metodo = $('#cmb_metodos').val();
                 arrParams.getdescuento = true;
@@ -125,9 +125,7 @@ $(document).ready(function () {
                     }
                 }, true);
             }
-        }, true);
-
-
+        }, true);        
         //Sólo mostrar el bloque de beca Fundación Cala cuando sea Unidad:Grado y Método:examen.                  
         if (arrParams.nint_id == 1) {
             if ($('#cmb_metodos') == 2) {
@@ -138,6 +136,19 @@ $(document).ready(function () {
         } else {
             $('#divBeca').css('display', 'none');
         }
+        //Carrera.-
+        var arrParams = new Object();
+        arrParams.unidada = $('#cmb_ninteres').val();
+        arrParams.metodo = $('#cmb_metodos').val();        
+        arrParams.moda_id = $('#cmb_modalidad').val();
+        arrParams.carrera_id = $('#cmb_carrera').val();
+        arrParams.getitem = true;
+        requestHttpAjax(link, arrParams, function (response) {
+            if (response.status == "OK") {
+                data = response.message;
+                setComboData(data.items, "cmb_item");
+            } 
+        }, true);        
     });
 
     $('#cmb_modalidad').change(function () {
@@ -146,6 +157,7 @@ $(document).ready(function () {
 
         arrParams.unidada = $('#cmb_ninteres').val();
         arrParams.moda_id = $(this).val();
+        arrParams.metodo = $('#cmb_metodos').val();
         arrParams.empresa_id = $('#cmb_empresa').val();
         arrParams.getcarrera = true;
         arrParams.nint_id = $('#cmb_ninteres').val();
@@ -164,8 +176,7 @@ $(document).ready(function () {
             }
         }, true);
         //Descuentos.
-        var arrParams = new Object();
-        arrParams.nint_id = $('#cmb_ninteres').val();
+        var arrParams = new Object();        
         arrParams.unidada = $('#cmb_ninteres').val();
         arrParams.moda_id = $('#cmb_modalidad').val();
         arrParams.metodo = $('#cmb_metodos').val();
@@ -176,6 +187,20 @@ $(document).ready(function () {
                 setComboData(data.descuento, "cmb_descuento");
             }
         }, true);
+        
+        //Carrera.-
+        var arrParams = new Object();
+        arrParams.unidada = $('#cmb_ninteres').val();
+        arrParams.metodo = $('#cmb_metodos').val();        
+        arrParams.moda_id = $('#cmb_modalidad').val();
+        arrParams.carrera_id = $('#cmb_carrera').val();
+        arrParams.getitem = true;
+        requestHttpAjax(link, arrParams, function (response) {
+            if (response.status == "OK") {
+                data = response.message;
+                setComboData(data.items, "cmb_item");               
+            } 
+        }, true);        
     });
 
     $('#cmb_unidad').change(function () {
@@ -527,6 +552,37 @@ $(document).ready(function () {
                 setComboData(data.descuento, "cmb_descuento");
             }
         }, true);
+        
+        //Carrera.-
+        var arrParams = new Object();
+        arrParams.unidada = $('#cmb_ninteres').val();
+        arrParams.metodo = $('#cmb_metodos').val();        
+        arrParams.moda_id = $('#cmb_modalidad').val();
+        arrParams.carrera_id = $('#cmb_carrera').val();
+        arrParams.getitem = true;
+        requestHttpAjax(link, arrParams, function (response) {
+            if (response.status == "OK") {
+                data = response.message;
+                setComboData(data.items, "cmb_item");               
+            } 
+        }, true);        
+    });
+    
+     $('#cmb_carrera').change(function () {
+        var link = $('#txth_base').val() + "/admision/solicitudes/new";                
+        //Carrera.-
+        var arrParams = new Object();
+        arrParams.unidada = $('#cmb_ninteres').val();
+        arrParams.metodo = $('#cmb_metodos').val();        
+        arrParams.moda_id = $('#cmb_modalidad').val();
+        arrParams.carrera_id = $('#cmb_carrera').val();
+        arrParams.getitem = true;
+        requestHttpAjax(link, arrParams, function (response) {
+            if (response.status == "OK") {
+                data = response.message;
+                setComboData(data.items, "cmb_item");               
+            } 
+        }, true);  
     });
 
 });
@@ -647,6 +703,7 @@ function save() {
     arrParams.tel_fac = $('#txt_tel_fac').val();
     arrParams.tipo_DNI = $('input[name=opt_tipo_DNI]:radio').val();
     arrParams.dni_fac = $('#txt_dni_fac').val();
+    arrParams.observacion = $('#txt_observacion').val();
     if ($('input[name=opt_declara_Dctosi]:checked').val() == 1) {
         arrParams.descuento_id = $('#cmb_descuento').val();
         arrParams.marcadescuento = '1';
