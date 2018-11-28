@@ -143,7 +143,7 @@ class NubeguiaremisionController extends \app\components\CController  {
                     ), false, true);
             return;
         }
-        $this->titleWindows = Yii::t('DOCUMENTOS', 'Reference guide');
+        $this->view->title = Yii::t('DOCUMENTOS', 'Reference guide');
         $this->render('index', array(
             'model' => $modelo->mostrarDocumentos($contBuscar),
             'tipoDoc' => $tipDoc->recuperarTipoDocumentos(),

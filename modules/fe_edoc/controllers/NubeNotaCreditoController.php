@@ -144,7 +144,7 @@ class NubenotacreditoController extends \app\components\CController  {
                     ), false, true);
             return;
         }
-        $this->titleWindows = Yii::t('DOCUMENTOS', 'Credit Note');
+        $this->view->title = Yii::t('DOCUMENTOS', 'Credit Note');
         $this->render('index', array(
             //'dataProvider' => $dataProvider,
             'model' => $modelo->mostrarDocumentos($contBuscar),

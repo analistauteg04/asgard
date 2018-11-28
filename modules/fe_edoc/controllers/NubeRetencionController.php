@@ -144,7 +144,7 @@ class NuberetencionController extends \app\components\CController  {
                     ), false, true);
             return;
         }
-        $this->titleWindows = Yii::t('DOCUMENTOS', 'Proof of retention');
+        $this->view->title = Yii::t('DOCUMENTOS', 'Proof of retention');
         $this->render('index', array(
             'model' => $modelo->mostrarDocumentos($contBuscar),
             'tipoDoc' => $tipDoc->recuperarTipoDocumentos(),

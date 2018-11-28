@@ -966,5 +966,4 @@ CREATE TABLE `punto_emision` (
   `fec_cre` timestamp NULL DEFAULT NULL,
   `fec_mod` timestamp NULL DEFAULT NULL,
   FOREIGN KEY (`est_id`) REFERENCES `establecimiento` (`est_id`)
-) ENGINE=InnoDB DEFAULT CHARSET=latin1;
-/*!40101 SET character_set_client = @saved_cs_client */;
+);

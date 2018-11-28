@@ -22,17 +22,7 @@ namespace app\modules\fe_edoc\models;
 
 use Yii;
 
-class VSDirectorio extends CActiveRecord {
-
-    /**
-     * @return string the associated database table name
-     */
-    public function tableName() {
-        $dbname = parent::$dbname;
-        if ($dbname != "")
-            $dbname.=".";
-        return $dbname . 'VSDirectorio'; //Empresas es la Utilizada.
-    }
+class VSDirectorio extends \app\modules\fe_edoc\components\CActiveRecord {
 
     /**
      * @return array validation rules for model attributes.

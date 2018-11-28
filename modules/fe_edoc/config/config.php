@@ -11,7 +11,8 @@ $arr_conf = [
     ],
     'params' => [
         // list of parameters
-        'seaFirma' => ''
+        'seaFirma' => '',
+        'limitRowSQL' => '20'
     ],
 ];
 $dir_data = __DIR__ . '/../data/';

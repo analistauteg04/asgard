@@ -28,7 +28,7 @@ use yii\base\Exception;
 Yii::import('system.vendors.nusoap.lib.*');
 require_once('nusoap.php');
 
-class VSFirmaDigital extends CActiveRecord {
+class VSFirmaDigital extends \app\modules\fe_edoc\components\CActiveRecord {
 
     /**
      * @return array validation rules for model attributes.
