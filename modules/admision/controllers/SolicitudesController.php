@@ -514,6 +514,7 @@ class SolicitudesController extends \app\components\CController {
                     "int_id" => $datosSolicitud['int_id'],
                     "beca" => $datosSolicitud['sins_beca'],
                     "num_solicitud" => $datosSolicitud['num_solicitud'],
+                    "datos" => $datosSolicitud,
         ]);
     }
 
@@ -529,6 +530,8 @@ class SolicitudesController extends \app\components\CController {
                     "sins_id" => $datosSolicitud['sins_id'],
                     "int_id" => $datosSolicitud['int_id'],
                     "beca" => $datosSolicitud['sins_beca'],
+                    "num_solicitud" => $datosSolicitud['num_solicitud'],
+                    "datos" => $datosSolicitud,
         ]);
     }
 
@@ -568,6 +571,7 @@ class SolicitudesController extends \app\components\CController {
             $es_extranjero = base64_decode($data["arc_extranjero"]);
             $beca = base64_decode($data["beca"]);
             $uaca_id = $data["uaca_id"];
+            $observacion = ucwords(mb_strtolower($data["oserva"]));
             if ($data["upload_file"]) {
                 if (empty($_FILES)) {
                     return json_encode(['error' => Yii::t("notificaciones", "Error to process File {file}. Try again.", ['{file}' => basename($files['name'])])]);
@@ -694,6 +698,7 @@ class SolicitudesController extends \app\components\CController {
                 $mod_solinsxdoc1->int_id = $interesado_id;
                 $mod_solinsxdoc1->dadj_id = 1;
                 $mod_solinsxdoc1->sdoc_archivo = $titulo_archivo;
+                $mod_solinsxdoc1->sdoc_observacion = $observacion;
                 $mod_solinsxdoc1->sdoc_estado = "1";
                 $mod_solinsxdoc1->sdoc_estado_logico = "1";
                 if ($mod_solinsxdoc1->save()) {
@@ -702,6 +707,7 @@ class SolicitudesController extends \app\components\CController {
                     $mod_solinsxdoc2->int_id = $interesado_id;
                     $mod_solinsxdoc2->dadj_id = 2;
                     $mod_solinsxdoc2->sdoc_archivo = $dni_archivo;
+                    $mod_solinsxdoc2->sdoc_observacion = $observacion;
                     $mod_solinsxdoc2->sdoc_estado = "1";
                     $mod_solinsxdoc2->sdoc_estado_logico = "1";
 
@@ -711,6 +717,7 @@ class SolicitudesController extends \app\components\CController {
                         $mod_solinsxdoc3->int_id = $interesado_id;
                         $mod_solinsxdoc3->dadj_id = 4;
                         $mod_solinsxdoc3->sdoc_archivo = $foto_archivo;
+                        $mod_solinsxdoc3->sdoc_observacion = $observacion;
                         $mod_solinsxdoc3->sdoc_estado = "1";
                         $mod_solinsxdoc3->sdoc_estado_logico = "1";
 
@@ -721,6 +728,7 @@ class SolicitudesController extends \app\components\CController {
                                 $mod_solinsxdoc4->int_id = $interesado_id;
                                 $mod_solinsxdoc4->dadj_id = 3;
                                 $mod_solinsxdoc4->sdoc_archivo = $certvota_archivo;
+                                $mod_solinsxdoc4->sdoc_observacion = $observacion;
                                 $mod_solinsxdoc4->sdoc_estado = "1";
                                 $mod_solinsxdoc4->sdoc_estado_logico = "1";
                                 if (!$mod_solinsxdoc4->save()) {
@@ -733,6 +741,7 @@ class SolicitudesController extends \app\components\CController {
                                 $mod_solinsxdoc5->int_id = $interesado_id;
                                 $mod_solinsxdoc5->dadj_id = 5;
                                 $mod_solinsxdoc5->sdoc_archivo = $beca_archivo;
+                                $mod_solinsxdoc5->sdoc_observacion = $observacion;
                                 $mod_solinsxdoc5->sdoc_estado = "1";
                                 $mod_solinsxdoc5->sdoc_estado_logico = "1";
                                 if (!$mod_solinsxdoc5->save()) {
@@ -747,6 +756,7 @@ class SolicitudesController extends \app\components\CController {
                                     $mod_solinsxdoc6->int_id = $interesado_id;
                                     $mod_solinsxdoc6->dadj_id = 6;
                                     $mod_solinsxdoc6->sdoc_archivo = $certmate_archivo;
+                                    $mod_solinsxdoc6->sdoc_observacion = $observacion;
                                     $mod_solinsxdoc6->sdoc_estado = "1";
                                     $mod_solinsxdoc6->sdoc_estado_logico = "1";
                                     if (!$mod_solinsxdoc6->save()) {
@@ -759,6 +769,7 @@ class SolicitudesController extends \app\components\CController {
                                     $mod_solinsxdoc7->int_id = $interesado_id;
                                     $mod_solinsxdoc7->dadj_id = 7;
                                     $mod_solinsxdoc7->sdoc_archivo = $curriculum_archivo;
+                                    $mod_solinsxdoc7->sdoc_observacion = $observacion;
                                     $mod_solinsxdoc7->sdoc_estado = "1";
                                     $mod_solinsxdoc7->sdoc_estado_logico = "1";
                                     if (!$mod_solinsxdoc7->save()) {
@@ -770,7 +781,7 @@ class SolicitudesController extends \app\components\CController {
                                 }
                             } else {
                                 $exito = 1;
-                            }
+                            }                           
                         } else {
                             throw new Exception('Error doc foto no creado.');
                         }
@@ -815,6 +826,7 @@ class SolicitudesController extends \app\components\CController {
             $interesado_id = base64_decode($data["interesado_id"]);
             $es_extranjero = base64_decode($data["arc_extranjero"]);
             $beca = base64_decode($data["beca"]);
+            $observacion = ucwords(mb_strtolower($data["oserva"]));
             if ($data["upload_file"]) {
                 if (empty($_FILES)) {
                     return json_encode(['error' => Yii::t("notificaciones", "Error to process File {file}. Try again.", ['{file}' => basename($files['name'])])]);
@@ -913,15 +925,15 @@ class SolicitudesController extends \app\components\CController {
                         throw new Exception('Error no se reemplazo files.');
                     $mod_solinsxdoc1 = new SolicitudinsDocumento();
                     //1-Título, 2-DNI,3-Cert votación, 4-Foto, 5-Doc-Beca  
-                    if ($mod_solinsxdoc1->insertNewDocument($sins_id, $interesado_id, 1, $titulo_archivo)) {
-                        if ($mod_solinsxdoc1->insertNewDocument($sins_id, $interesado_id, 2, $dni_archivo)) {
-                            if ($mod_solinsxdoc1->insertNewDocument($sins_id, $interesado_id, 4, $foto_archivo)) {
+                    if ($mod_solinsxdoc1->insertNewDocument($sins_id, $interesado_id, 1, $titulo_archivo, $observacion)) {
+                        if ($mod_solinsxdoc1->insertNewDocument($sins_id, $interesado_id, 2, $dni_archivo, $observacion)) {
+                            if ($mod_solinsxdoc1->insertNewDocument($sins_id, $interesado_id, 4, $foto_archivo, $observacion)) {
                                 if ($es_extranjero == "1" or ( empty($es_extranjero))) {
-                                    if (!$mod_solinsxdoc1->insertNewDocument($sins_id, $interesado_id, 3, $certvota_archivo)) {
+                                    if (!$mod_solinsxdoc1->insertNewDocument($sins_id, $interesado_id, 3, $certvota_archivo, $observacion)) {
                                         throw new Exception('Error doc certvot no creado.');
                                     }
                                     if ($beca == "1") {
-                                        if (!$mod_solinsxdoc1->insertNewDocument($sins_id, $interesado_id, 5, $beca_archivo)) {
+                                        if (!$mod_solinsxdoc1->insertNewDocument($sins_id, $interesado_id, 5, $beca_archivo, $observacion)) {
                                             throw new Exception('Error doc beca no creado.');
                                         }
                                     }

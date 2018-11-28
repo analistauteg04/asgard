@@ -160,6 +160,7 @@ create table if not exists `solicitudins_documento` (
  `int_id` bigint(20) not null,
  `dadj_id` bigint(20) not null, 
  `sdoc_archivo` varchar(500) not null, 
+ `sdoc_observacion` varchar(500) null, 
  `sdoc_usuario_ingreso` bigint(20) null,
  `sdoc_usuario_modifica` bigint(20) null,
  `sdoc_estado` varchar(1) not null, 

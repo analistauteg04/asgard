@@ -59,4 +59,8 @@ class Module extends \yii\base\Module
     {
         return Yii::t('modules/'. self::$module_name .'/' . $category, $message, $params, $language);
     }
+
+    public static function params($alias){
+        return Yii::$app->controller->module->params[$alias];
+    }
 }

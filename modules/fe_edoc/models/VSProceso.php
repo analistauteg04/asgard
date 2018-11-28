@@ -44,6 +44,7 @@
 namespace app\modules\fe_edoc\models;
 
 use Yii;
+use yii\base\Exception;
 
 class VSProceso extends \app\modules\fe_edoc\components\CActiveRecord
 {

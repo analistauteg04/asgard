@@ -8,6 +8,7 @@
 namespace app\modules\fe_edoc\models;
 
 use Yii;
+use app\modules\fe_edoc\Module as fe_edoc;
 
 class VSValidador {
     
@@ -68,7 +69,7 @@ class VSValidador {
     public function paginado($control){
         //Manipulando el Paginado del Select
         $page = isset($control[0]['PAGE']) ? $control[0]['PAGE'] : 0;
-        $pageSize = Yii::$app->params['limitRowSQL'];
+        $pageSize = fe_edoc::params('limitRowSQL');//Yii::$app->params['limitRowSQL'];
         $inicio = $page;//($page != 0) ? ($page - 1) * $pageSize : 0;
         $max = $pageSize;//$pageSize * $page;
         $limitrowsql = ($page != 0) ? " LIMIT $inicio,$max " : " LIMIT $pageSize";

@@ -63,6 +63,8 @@ use Yii;
 use app\models\Utilities;
 use \yii\data\ActiveDataProvider;
 use \yii\data\ArrayDataProvider;
+use yii\base\Exception;
+use app\modules\fe_edoc\Module as fe_edoc;
 
 class NubeFactura extends \app\modules\fe_edoc\components\CActiveRecord {
     
@@ -72,7 +74,7 @@ class NubeFactura extends \app\modules\fe_edoc\components\CActiveRecord {
         $conCont = Yii::$app->db_edoc;
         $rawData = array();
         $fechaIni = Yii::$app->params['dateStartFact'];
-        $limitEnv = Yii::$app->params['limitEnv'];
+        $limitEnv = fe_edoc::params('limitEnv');//Yii::$app->params['limitEnv'];
         //$sql = "SELECT TIP_NOF,CONCAT(REPEAT('0',9-LENGTH(RIGHT(NUM_NOF,9))),RIGHT(NUM_NOF,9)) NUM_NOF,
         switch ($opcion['OP']) {
             case '1':
