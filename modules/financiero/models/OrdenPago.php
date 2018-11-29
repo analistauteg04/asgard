@@ -1663,7 +1663,7 @@ class OrdenPago extends \app\modules\financiero\components\CActiveRecord {
      * @param   
      * @return  
      */
-    public function insertarDesglosepago($opag_id, $dpag_subtotal, $dpag_iva, $dpag_total, $dpag_fecha_inicio, $dpag_fecha_final, $dpag_estado_pago, $usuario_ingreso) {
+    public function insertarDesglosepago($opag_id, $ite_id, $dpag_subtotal, $dpag_iva, $dpag_total, $dpag_fecha_inicio, $dpag_fecha_final, $dpag_estado_pago, $usuario_ingreso) {
         $con = \Yii::$app->db_facturacion;
 
         $trans = $con->getTransaction(); // se obtiene la transacción actual
@@ -1718,6 +1718,11 @@ class OrdenPago extends \app\modules\financiero\components\CActiveRecord {
             $param_sql .= ", dpag_usu_ingreso";
             $bdpago_sql .= ", :dpag_usu_ingreso";
         }
+        
+        if (isset($ite_id)) {
+            $param_sql .= ", ite_id";
+            $bdpago_sql .= ", :ite_id";
+        }
         try {
             $sql = "INSERT INTO " . $con->dbname . ".desglose_pago ($param_sql) VALUES($bdpago_sql)";
             $comando = $con->createCommand($sql);
@@ -1743,12 +1748,17 @@ class OrdenPago extends \app\modules\financiero\components\CActiveRecord {
                     $comando->bindParam(':dpag_fecha_fin_vigencia', $dpag_fecha_final, \PDO::PARAM_STR);
             }
 
-            if (isset($dpag_estado_pago))
+            if (isset($dpag_estado_pago)){
                 $comando->bindParam(':dpag_estado_pago', $dpag_estado_pago, \PDO::PARAM_STR);
-
-            if (isset($usuario_ingreso))
+            }
+            
+            if (isset($usuario_ingreso)) {
                 $comando->bindParam(':dpag_usu_ingreso', $usuario_ingreso, \PDO::PARAM_INT);
-
+            }
+            
+            if (isset($ite_id)) {
+                $comando->bindParam(':ite_id', $ite_id, \PDO::PARAM_INT);
+            }
             $result = $comando->execute();
             $idtable = $con->getLastInsertID($con->dbname . '.desglose_pago');
             if ($trans !== null)

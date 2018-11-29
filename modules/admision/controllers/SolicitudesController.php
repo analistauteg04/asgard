@@ -207,7 +207,7 @@ class SolicitudesController extends \app\components\CController {
                 return;
             }
             if (isset($data["getmetodo"])) {
-                $metodos = $mod_metodo->consultarMetodoIngNivelInt($data['unidada']);
+                $metodos = $mod_metodo->consultarMetodoIngNivelInt($data['nint_id']);
                 $message = array("metodos" => $metodos);
                 return Utilities::ajaxResponse('OK', 'alert', Yii::t('jslang', 'Success'), 'false', $message);
                 return;
@@ -229,10 +229,10 @@ class SolicitudesController extends \app\components\CController {
                 return;
             }
             if (isset($data["getitem"])) {        
-                \app\models\Utilities::putMessageLogFile('unidad:' . $data["unidada"]);
+               /* \app\models\Utilities::putMessageLogFile('unidad:' . $data["unidada"]);
                 \app\models\Utilities::putMessageLogFile('modalidad:' . $data["moda_id"]);
                 \app\models\Utilities::putMessageLogFile('metodo:' . $data["metodo"]);
-                \app\models\Utilities::putMessageLogFile('carrera:' . $data["carrera_id"]);
+                \app\models\Utilities::putMessageLogFile('carrera:' . $data["carrera_id"]);*/
                 $resItem = $modItemMetNivel->consultarXitemPrecio($data["unidada"], $data["moda_id"], $data["metodo"], $data["carrera_id"]);                
                 $message = array("items" => $resItem);
                 return Utilities::ajaxResponse('OK', 'alert', Yii::t('jslang', 'Success'), 'false', $message);
@@ -355,6 +355,8 @@ class SolicitudesController extends \app\components\CController {
                 }
             }
             $observacion = $data["observacion"];
+            $ite_id = $data["ite_id"];
+            \app\models\Utilities::putMessageLogFile('item1:' . $data["ite_id"]);
             if ($errorprecio != 0) {
                 //Validar que no exista el registro en solicitudes.                    
                 $resp_valida = $mod_solins->Validarsolicitud($interesado_id, $nint_id, $ming_id, $car_id);
@@ -427,7 +429,8 @@ class SolicitudesController extends \app\components\CController {
                 if ($resp_opago) {
                     //insertar desglose del pago                                    
                     $fecha_ini = date(Yii::$app->params["dateByDefault"]);
-                    $resp_dpago = $mod_ordenpago->insertarDesglosepago($resp_opago, $val_total, 0, $val_total, $fecha_ini, null, $estadopago, $usu_id);
+                    \app\models\Utilities::putMessageLogFile('item:' . $data["ite_id"]);
+                    $resp_dpago = $mod_ordenpago->insertarDesglosepago($resp_opago, $ite_id, $val_total, 0, $val_total, $fecha_ini, null, $estadopago, $usu_id);
                     if ($resp_dpago) {
                         $exito = 1;
                     }
@@ -439,7 +442,6 @@ class SolicitudesController extends \app\components\CController {
 
                 //Envío de correo con formas de pago.                    
                 $informacion_interesado = $mod_ordenpago->datosBotonpago($resp_opago, $emp_id);
-
                 $link = Url::base(true) . "/formbotonpago/btnpago?ord_pago=" . base64_encode($resp_opago);
                 $link_paypal = Url::base(true) . "/pago/pypal?ord_pago=" . base64_encode($resp_opago);
                 $link1 = Url::base(true);
@@ -458,7 +460,6 @@ class SolicitudesController extends \app\components\CController {
                 }
                 $carrera = $informacion_interesado["carrera"];
                 $tipoDNI = ((SolicitudInscripcion::$arr_DNI[$dataTipDNI]) ? SolicitudInscripcion::$arr_DNI[$dataTipDNI] : SolicitudInscripcion::$arr_DNI["3"]);
-
                 /* Obtención de datos de la factura */
                 $respDatoFactura = $mod_solins->consultarDatosfacturaxIdsol($id_sins);
 
