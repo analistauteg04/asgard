@@ -15,6 +15,7 @@ use yii\web\JsExpression;
 use app\models\Utilities;
 use app\modules\financiero\Module as financiero;
 use app\modules\admision\Module as admision;
+
 admision::registerTranslations();
 session_start();
 $_SESSION['personaid'] = $per_id;
@@ -44,6 +45,7 @@ $leyendarc = '<div class="col-md-12 col-sm-12 col-xs-12 col-lg-12">
                 <?php
                 $habilita = '';
                 if ($saldo_pendiente <= '0') {
+                    $habilita = 'disabled';
                     ?>
                     <?= Html::dropDownList("cmb_forma_pago", 0, $arr_forma_pago, ["class" => "form-control", "id" => "cmb_forma_pago", "disabled" => "disabled"]) ?>
                     <?php
@@ -132,6 +134,22 @@ $leyendarc = '<div class="col-md-12 col-sm-12 col-xs-12 col-lg-12">
                 ?>
             </div>
         </div>
+    </div>
+    <div class="col-md-12 col-xs-12 col-sm-12 col-lg-12">       
+        <div class="form-group">
+            <label for="txt_observa" class="col-sm-2 col-md-2 col-xs-2 col-lg-2 control-label keyupmce"><?= Yii::t("formulario", "Observation") ?></label>
+            <div class="col-sm-10 col-md-10 col-xs-10 col-lg-10">    
+                <?php
+                if ($saldo_pendiente <= '0') {
+                    ?>
+                    <textarea  class="form-control keyupmce" id="txt_observa" readonly = "readonly" rows="3"></textarea><?php
+                } else {
+                    ?>
+                    <textarea  class="form-control keyupmce" id="txt_observa" rows="3"></textarea><?php
+                }
+                ?>
+            </div>
+        </div>      
     </div>
     <div class="col-md-12 col-sm-12 col-xs-12 col-lg-12 doc_titulo cinteres">
         <div class="form-group">
@@ -230,12 +248,12 @@ $leyendarc = '<div class="col-md-12 col-sm-12 col-xs-12 col-lg-12">
 <div>
     <?=
     PbGridView::widget([
-            'id' => 'TbgPago',
+        'id' => 'TbgPago',
         //'showExport' => true,
         'fnExportEXCEL' => "exportExcel",
         'fnExportPDF' => "exportPdf",
         'dataProvider' => $model,
-        'columns' => [          
+        'columns' => [
             [
                 'attribute' => 'Forma',
                 'header' => financiero::t("Pagos", "Paid form"),
@@ -258,7 +276,7 @@ $leyendarc = '<div class="col-md-12 col-sm-12 col-xs-12 col-lg-12">
             ],
             [
                 'attribute' => 'Revisado',
-                'header' => admision::t("Solicitudes",'Reviewed'),
+                'header' => admision::t("Solicitudes", 'Reviewed'),
                 'value' => 'dcar_revisado',
             ],
             [

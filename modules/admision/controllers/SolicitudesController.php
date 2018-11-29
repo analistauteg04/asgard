@@ -128,7 +128,7 @@ class SolicitudesController extends \app\components\CController {
         $resp_arch5 = $mod_solins->Obtenerdocumentosxsolicitud($sins_id, 5);
         $resp_arch6 = $mod_solins->Obtenerdocumentosxsolicitud($sins_id, 6);
         $resp_arch7 = $mod_solins->Obtenerdocumentosxsolicitud($sins_id, 7);
-        
+
         $observa = $mod_solins->Obtenerobservadocumentos($sins_id);
 
         $mod_ordenpago = new OrdenPago();
@@ -166,7 +166,7 @@ class SolicitudesController extends \app\components\CController {
                     "emp_id" => $emp_id,
                     "arr_fecha" => $fechas,
                     "arr_certv" => $resp_condcertv,
-                    "arr_observa" => $observa,
+                    "arr_observa" => $observa,                    
         ]);
     }
 
@@ -228,12 +228,12 @@ class SolicitudesController extends \app\components\CController {
                 return Utilities::ajaxResponse('OK', 'alert', Yii::t('jslang', 'Success'), 'false', $message);
                 return;
             }
-            if (isset($data["getitem"])) {        
-               /* \app\models\Utilities::putMessageLogFile('unidad:' . $data["unidada"]);
+            if (isset($data["getitem"])) {
+                \app\models\Utilities::putMessageLogFile('unidad:' . $data["unidada"]);
                 \app\models\Utilities::putMessageLogFile('modalidad:' . $data["moda_id"]);
                 \app\models\Utilities::putMessageLogFile('metodo:' . $data["metodo"]);
-                \app\models\Utilities::putMessageLogFile('carrera:' . $data["carrera_id"]);*/
-                $resItem = $modItemMetNivel->consultarXitemPrecio($data["unidada"], $data["moda_id"], $data["metodo"], $data["carrera_id"]);                
+                \app\models\Utilities::putMessageLogFile('carrera:' . $data["carrera_id"]);
+                $resItem = $modItemMetNivel->consultarXitemPrecio($data["unidada"], $data["moda_id"], $data["metodo"], $data["carrera_id"]);
                 $message = array("items" => $resItem);
                 return Utilities::ajaxResponse('OK', 'alert', Yii::t('jslang', 'Success'), 'false', $message);
                 return;
@@ -242,9 +242,9 @@ class SolicitudesController extends \app\components\CController {
         $arr_unidadac = $mod_unidad->consultarUnidadAcademicasEmpresa($emp_id);
         $arr_modalidad = $mod_modalidad->consultarModalidad(1, 1);
         $arr_metodos = $mod_metodo->consultarMetodoIngNivelInt($arr_unidadac[0]["id"]);
-        $arr_carrera = $modcanal->consultarCarreraModalidad(1, 1);        
+        $arr_carrera = $modcanal->consultarCarreraModalidad(1, 1);
         //Descuentos y precios.
-        $resp_item = $modItemMetNivel->consultarXitemPrecio(1, 1, 1, 2);        
+        $resp_item = $modItemMetNivel->consultarXitemPrecio(1, 1, 1, 2);
         $arr_descuento = $modDescuento->consultarDesctoxitem($resp_item["ite_id"]);
         return $this->render('new', [
                     "arr_unidad" => ArrayHelper::map($arr_unidadac, "id", "name"),
@@ -767,7 +767,7 @@ class SolicitudesController extends \app\components\CController {
                                         throw new Exception('Error doc certificado materia no creado.');
                                     }
                                 }
-                                if (!empty($curriculum_archivo)) {
+                                if (!empty($curriculum_archivo)) {                            
                                     $mod_solinsxdoc7 = new SolicitudinsDocumento();
                                     $mod_solinsxdoc7->sins_id = $sins_id;
                                     $mod_solinsxdoc7->int_id = $interesado_id;
@@ -785,7 +785,7 @@ class SolicitudesController extends \app\components\CController {
                                 }
                             } else {
                                 $exito = 1;
-                            }                           
+                            }
                         } else {
                             throw new Exception('Error doc foto no creado.');
                         }
@@ -831,6 +831,7 @@ class SolicitudesController extends \app\components\CController {
             $es_extranjero = base64_decode($data["arc_extranjero"]);
             $beca = base64_decode($data["beca"]);
             $observacion = ucwords(mb_strtolower($data["oserva"]));
+            $uaca_id = $data["uaca_id"];
             if ($data["upload_file"]) {
                 if (empty($_FILES)) {
                     return json_encode(['error' => Yii::t("notificaciones", "Error to process File {file}. Try again.", ['{file}' => basename($files['name'])])]);
@@ -875,6 +876,18 @@ class SolicitudesController extends \app\components\CController {
                     $arrIm = explode(".", basename($data["arc_doc_beca"]));
                     $typeFile = strtolower($arrIm[count($arrIm) - 1]);
                     $beca_archivo = Yii::$app->params["documentFolder"] . "solicitudinscripcion/" . $per_id . "/doc_beca_per_" . $per_id . "." . $typeFile;
+                }
+                $certmate_archivo = "";
+                if (isset($data["arc_doc_certmat"]) && $data["arc_doc_certmat"] != "") {
+                    $arrIm = explode(".", basename($data["arc_doc_certmat"]));
+                    $typeFile = strtolower($arrIm[count($arrIm) - 1]);
+                    $certmate_archivo = Yii::$app->params["documentFolder"] . "solicitudinscripcion/" . $per_id . "/doc_certificado_per_" . $per_id . "." . $typeFile;
+                }
+                $curriculum_archivo = "";
+                if (isset($data["arc_doc_curri"]) && $data["arc_doc_curri"] != "") {
+                    $arrIm = explode(".", basename($data["arc_doc_curri"]));
+                    $typeFile = strtolower($arrIm[count($arrIm) - 1]);
+                    $curriculum_archivo = Yii::$app->params["documentFolder"] . "solicitudinscripcion/" . $per_id . "/doc_hojavida_per_" . $per_id . "." . $typeFile;
                 }
             }
         }
@@ -922,6 +935,22 @@ class SolicitudesController extends \app\components\CController {
                 if ($beca_archivo === false)
                     throw new Exception('Error doc Beca no renombrado.');
             }
+            if (isset($data["arc_doc_certmat"]) && $data["arc_doc_certmat"] != "") {
+                $arrIm = explode(".", basename($data["arc_doc_certmat"]));
+                $typeFile = strtolower($arrIm[count($arrIm) - 1]);
+                $certmate_archivo = Yii::$app->params["documentFolder"] . "solicitudinscripcion/" . $per_id . "/doc_certificado_per_" . $per_id . "." . $typeFile;
+                $certmate_archivo = DocumentoAdjuntar::addLabelTimeDocumentos($sins_id, $certmate_archivo, $timeSt);
+                if ($certmate_archivo === FALSE)
+                    throw new Exception('Error doc certificado materia no renombrado.');
+            }
+            if (isset($data["arc_doc_curri"]) && $data["arc_doc_curri"] != "") {
+                $arrIm = explode(".", basename($data["arc_doc_curri"]));
+                $typeFile = strtolower($arrIm[count($arrIm) - 1]);
+                $curriculum_archivo = Yii::$app->params["documentFolder"] . "solicitudinscripcion/" . $per_id . "/doc_hojavida_per_" . $per_id . "." . $typeFile;
+                $curriculum_archivo = DocumentoAdjuntar::addLabelTimeDocumentos($sins_id, $curriculum_archivo, $timeSt);
+                if ($curriculum_archivo === FALSE)
+                    throw new Exception('Error doc curriculum no renombrado.');
+            }
             if (!empty($titulo_archivo) && !empty($dni_archivo) && !empty($foto_archivo)) {
                 if (!empty($titulo_archivo)) {
                     // Se inactiva los documentos anteriores
@@ -939,6 +968,15 @@ class SolicitudesController extends \app\components\CController {
                                     if ($beca == "1") {
                                         if (!$mod_solinsxdoc1->insertNewDocument($sins_id, $interesado_id, 5, $beca_archivo, $observacion)) {
                                             throw new Exception('Error doc beca no creado.');
+                                        }
+                                    }
+                                    if ($uaca_id == "2") {
+                                        if ($mod_solinsxdoc1->insertNewDocument($sins_id, $interesado_id, 6, $certmate_archivo, $observacion)) {
+                                            if (!$mod_solinsxdoc1->insertNewDocument($sins_id, $interesado_id, 7, $curriculum_archivo, $observacion)) {
+                                                throw new Exception('Error doc curriculum no creado.');
+                                            }
+                                        } else {
+                                            throw new Exception('Error doc certificado materia no creado.');
                                         }
                                     }
                                 }

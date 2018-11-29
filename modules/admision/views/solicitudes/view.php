@@ -115,7 +115,15 @@ financiero::registerTranslations();
                     <input type="text" class="form-control" value="<?= $arr_fecha["fecha_admitido"] ?>" id="txt_fecha_admitido" disabled="true">                 
                 </div>
             </div>
+        </div>
+        <div class="col-md-6 col-sm-6 col-xs-6 col-lg-6">
+        <div class="form-group">
+            <label for="txt_observa" class="col-sm-4 col-md-4 col-xs-4 col-lg-4 control-label keyupmce"><?= Yii::t("formulario", "Observation") ?></label>
+            <div class="col-sm-8 col-md-8 col-xs-8 col-lg-8">                
+                <textarea  class="form-control keyupmce" id="txt_observa" disabled = "true" rows="3"><?= $arr_fecha["icpr_observacion"] ?></textarea>                  
+            </div>
         </div>   
+    </div> 
     </div>
     <div class="col-md-12 col-sm-12 col-xs-12 col-lg-12">
         <h4><b><span id="lbl_Personeria"><?= Yii::t("formulario", "Attached Files") ?></span></b></h4>    

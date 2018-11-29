@@ -18,11 +18,12 @@ use app\modules\financiero\Module as financiero;
     <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
         <p class="text-danger"> <?= Yii::t("formulario", "Fields with * are required") ?> </p>        
     </div>
+    
     <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
         <div class="form-group">            
             <label for="cmb_unidad_solicitud" class="col-lg-3 col-md-3 col-sm-3 col-xs-3 control-label"><?= Yii::t("formulario", "Academic unit") ?> <span class="text-danger">*</span></label>
             <div class="col-lg-9 col-md-9 col-sm-9 col-xs-9">
-                <?= Html::dropDownList("cmb_unidad_solicitud", 0, array(), ["class" => "form-control", "id" => "cmb_unidad_solicitud"]) ?>
+                <?= Html::dropDownList("cmb_unidad_solicitud", 0, $arr_ninteres, ["class" => "form-control", "id" => "cmb_unidad_solicitud"]) ?>
             </div>
         </div>
     </div>
@@ -30,7 +31,7 @@ use app\modules\financiero\Module as financiero;
         <div class="form-group">            
             <label for="cmb_modalidad_solicitud" class="col-lg-3 col-md-3 col-sm-3 col-xs-3 control-label"><?= Yii::t("formulario", "Mode") ?> <span class="text-danger">*</span></label>
             <div class="col-lg-9 col-md-9 col-sm-9 col-xs-9">
-                <?= Html::dropDownList("cmb_modalidad_solicitud", 0, array(), ["class" => "form-control", "id" => "cmb_modalidad_solicitud"]) ?>
+                <?= Html::dropDownList("cmb_modalidad_solicitud", 0, $arr_modalidad, ["class" => "form-control", "id" => "cmb_modalidad_solicitud"]) ?>
             </div>
         </div>
     </div>
@@ -38,7 +39,7 @@ use app\modules\financiero\Module as financiero;
         <div class="form-group">            
             <label for="cmb_carrera_solicitud" class="col-lg-3 col-md-3 col-sm-3 col-xs-3 control-label"><?= Yii::t("academico", "Career") . ' /Programa' ?> <span class="text-danger">*</span></label>
             <div class="col-lg-9 col-md-9 col-sm-9 col-xs-9">
-                <?= Html::dropDownList("cmb_carrera_solicitud", 0, array(), ["class" => "form-control", "id" => "cmb_carrera_solicitud"]) ?>
+                <?= Html::dropDownList("cmb_carrera_solicitud", 0, $arr_carrerra1, ["class" => "form-control", "id" => "cmb_carrera_solicitud"]) ?>
             </div>
         </div>
     </div>
@@ -46,7 +47,7 @@ use app\modules\financiero\Module as financiero;
         <div class="form-group">            
             <label for="cmb_metodo_solicitud" class="col-sm-3 col-md-3 col-xs-3 col-lg-3 control-label keyupmce"><?= Yii::t("formulario", "Income Method") ?><span class="text-danger">*</span></label>
             <div class="col-sm-9 col-md-9 col-xs-9 col-lg-9">
-                <?= Html::dropDownList("cmb_metodo_solicitud", 0, array_merge([Yii::t("formulario", "Select")], array()), ["class" => "form-control", "id" => "cmb_metodo_solicitud"]) ?>
+                <?= Html::dropDownList("cmb_metodo_solicitud", 0, array_merge([Yii::t("formulario", "Select")], $arr_metodos), ["class" => "form-control", "id" => "cmb_metodo_solicitud"]) ?>
             </div>
         </div>
     </div>   
@@ -76,7 +77,7 @@ use app\modules\financiero\Module as financiero;
     <div class="row"> 
         <div class="col-lg-10 col-md-10 col-sm-10 col-xs-10"></div>
         <div class="col-lg-2 col-md-2 col-sm-2 col-xs-2">
-            <a id="sendInformacionAdmitidoRepro" href="javascript:" class="btn btn-primary btn-block"> <?php Yii::t("formulario", "Registrar"); ?> </a>
+            <a id="sendInformacionAdmitidoFinal" href="javascript:" class="btn btn-primary btn-block"> <?php Yii::t("formulario", "Registrar"); ?> </a>
         </div>
     </div>
 </form>
