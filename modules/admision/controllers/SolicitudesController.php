@@ -766,11 +766,7 @@ class SolicitudesController extends \app\components\CController {
                                         throw new Exception('Error doc certificado materia no creado.');
                                     }
                                 }
-                                if (!empty($curriculum_archivo)) {
-                                    \app\models\Utilities::putMessageLogFile('sins_id ' . $sins_id);
-                                    \app\models\Utilities::putMessageLogFile('interesado_id ' . $interesado_id);
-                                    \app\models\Utilities::putMessageLogFile('curriculum_archivo ' . $curriculum_archivo);
-                                    \app\models\Utilities::putMessageLogFile('observacion ' . $observacion);
+                                if (!empty($curriculum_archivo)) {                            
                                     $mod_solinsxdoc7 = new SolicitudinsDocumento();
                                     $mod_solinsxdoc7->sins_id = $sins_id;
                                     $mod_solinsxdoc7->int_id = $interesado_id;
