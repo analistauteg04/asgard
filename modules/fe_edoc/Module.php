@@ -61,6 +61,8 @@ class Module extends \yii\base\Module
     }
 
     public static function params($alias){
-        return Yii::$app->controller->module->params[$alias];
+        //return Yii::$app->controller->module->params[$alias];
+        $module = \Yii::$app->getModule(self::$module_name);
+        return $module->params[$alias];
     }
 }
