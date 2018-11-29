@@ -22,13 +22,10 @@ use yii\helpers\Html;
                             "txth_extranjero" => $txth_extranjero,
                             "arr_pais_dom" => $arr_pais_dom,
                             "arr_prov_dom" => $arr_prov_dom,
-                            "arr_ciu_dom" => $arr_ciu_dom,
-                            "arr_ninteres" => $arr_ninteres,
+                            "arr_ciu_dom" => $arr_ciu_dom,                            
                             "arr_medio" => $arr_medio,
-                            "arr_modalidad" => $arr_modalidad,
                             "arr_conuteg" => $arr_conuteg,
-                            "arr_carrerra1" => $arr_carrerra1,
-                            "arr_metodos" => $arr_metodos,
+                            
                         ]);
                     ?>
                 </form>
@@ -43,7 +40,13 @@ use yii\helpers\Html;
             <div class="tab-pane" id="paso3">
                 <form class="form-horizontal">
                     <?=
-                        $this->render('_form_tab3', ['per_id' => $per_id]);
+                        $this->render('_form_tab3', [
+                            'per_id' => $per_id,
+                            "arr_ninteres" => $arr_ninteres,
+                            "arr_modalidad" => $arr_modalidad,
+                            "arr_carrerra1" => $arr_carrerra1,
+                            "arr_metodos" => $arr_metodos,
+                        ]);
                     ?>                  
                 </form>
             </div><!-- /.tab-pane -->

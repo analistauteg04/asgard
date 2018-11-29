@@ -57,7 +57,6 @@ class MatriculadosreprobadosController extends \app\components\CController {
                     'arrCarreras' => $arrCarreras,
         ]);
     }
-
     public function actionSavereprobadostemp() {
         if (Yii::$app->request->isAjax) {
             $model = new MatriculadosReprobado();
