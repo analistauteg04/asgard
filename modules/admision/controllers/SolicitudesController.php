@@ -166,7 +166,7 @@ class SolicitudesController extends \app\components\CController {
                     "emp_id" => $emp_id,
                     "arr_fecha" => $fechas,
                     "arr_certv" => $resp_condcertv,
-                    "arr_observa" => $observa,
+                    "arr_observa" => $observa,                    
         ]);
     }
 
