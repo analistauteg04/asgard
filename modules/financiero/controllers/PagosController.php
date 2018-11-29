@@ -377,7 +377,8 @@ class PagosController extends \app\components\CController {
             $opag_id = $data["idpago"];
             $ccar_total = $data["totpago"];
             $empresa = $data["empresa"];
-
+            $dcar_observacion = ucwords(mb_strtolower($data["observacion"]));
+            
             if (empty($ccar_total)) {
                 $ccar_total = $data["pago"];
             }
@@ -389,8 +390,7 @@ class PagosController extends \app\components\CController {
             $transaction = $con->beginTransaction();
             try {
                 $dcar_revisado = 'PE';
-                $dcar_resultado = '';
-                $dcar_observacion = '';
+                $dcar_resultado = '';                
                 $fecha_registro = date(Yii::$app->params["dateTimeByDefault"]);
                 $creadetalle = $modcargapago->insertarCargaprepago($opag_id, $fpag_id, $dcar_valor, $imagen, $dcar_revisado, $dcar_resultado, $dcar_observacion, $dcar_num_transaccion, $dcar_fecha_transaccion, $fecha_registro);
                 if ($creadetalle) {

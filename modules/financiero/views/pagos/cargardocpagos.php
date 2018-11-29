@@ -51,10 +51,10 @@ if (empty($_GET['peid'])) {
         <div class="form-group">
             <label for="cmb_parentesco_con" class="col-sm-2 col-md-2 col-xs-2 col-lg-2 control-label"><?= financiero::t("Pagos", "Paid form") ?></label>
             <div class="col-sm-10 col-md-10 col-xs-10 col-lg-10">
-<?php
-if (base64_decode($_GET['estado']) != 'Pendiente') {
-    $habilita = 'true';
-    ?>
+                <?php
+                if (base64_decode($_GET['estado']) != 'Pendiente') {
+                    $habilita = 'true';
+                    ?>
                     <?= Html::dropDownList("cmb_forma_pago", 0, $arr_forma_pago, ["class" => "form-control", "id" => "cmb_forma_pago", "disabled" => "disabled"]) ?>
                     <?php
                 } else {
@@ -70,9 +70,9 @@ if (base64_decode($_GET['estado']) != 'Pendiente') {
         <div class="form-group">            
             <label for="txt_pago" class="col-sm-2 col-md-2 col-xs-2 col-lg-2  control-label"><?= financiero::t("Pagos", "Pay Total") ?></label>
             <div class="col-sm-10 col-md-10 col-xs-10 col-lg-10 ">
-<?php
-if (base64_decode($_GET['estado']) != 'Pendiente') {
-    ?>
+                <?php
+                if (base64_decode($_GET['estado']) != 'Pendiente') {
+                    ?>
                     <input type="text" class="form-control PBvalidation keyupmce" id="txt_pago" data-type="dinero" readonly = "readonly" data-keydown="true" placeholder="<?= financiero::t("Pagos", "Pay Total") ?>">
                     <?php
                 } else {
@@ -88,9 +88,9 @@ if (base64_decode($_GET['estado']) != 'Pendiente') {
         <div class="form-group">            
             <label for="txt_numtransaccion" class="col-sm-2 col-md-2 col-xs-2 col-lg-2  control-label"><?= admision::t("Solicitudes", "Transaction number") ?></label>
             <div class="col-sm-10 col-md-10 col-xs-10 col-lg-10 ">
-<?php
-if (base64_decode($_GET['estado']) != 'Pendiente') {
-    ?>
+                <?php
+                if (base64_decode($_GET['estado']) != 'Pendiente') {
+                    ?>
                     <input type="text" class="form-control PBvalidation keyupmce" id="txt_numtransaccion" data-type="number" readonly = "readonly" data-keydown="true" placeholder="<?= admision::t("Solicitudes", "Transaction number") ?>">
                     <?php
                 } else {
@@ -106,28 +106,36 @@ if (base64_decode($_GET['estado']) != 'Pendiente') {
         <div class="form-group">
             <label for="txt_fecha_transaccion" class="col-sm-2 col-md-2 col-xs-2 col-lg-2  control-label"><?= admision::t("Solicitudes", "Transaction date") ?></label>
             <div class="col-sm-10 col-md-10 col-xs-10 col-lg-10 ">
-<?=
-DatePicker::widget([
-    'name' => 'txt_fecha_transaccion',
-    'value' => '',
-    'disabled' => $habilita,
-    'type' => DatePicker::TYPE_INPUT,
-    'options' => ["class" => "form-control PBvalidation keyupmce", "id" => "txt_fecha_transaccion", "data-type" => "fecha", "data-keydown" => "true", "placeholder" => admision::t("Solicitudes", "Transaction date")],
-    'pluginOptions' => [
-        'autoclose' => true,
-        'format' => Yii::$app->params["dateByDatePicker"],
-    ]]
-);
-?>
+                <?=
+                DatePicker::widget([
+                    'name' => 'txt_fecha_transaccion',
+                    'value' => '',
+                    'disabled' => $habilita,
+                    'type' => DatePicker::TYPE_INPUT,
+                    'options' => ["class" => "form-control PBvalidation keyupmce", "id" => "txt_fecha_transaccion", "data-type" => "fecha", "data-keydown" => "true", "placeholder" => admision::t("Solicitudes", "Transaction date")],
+                    'pluginOptions' => [
+                        'autoclose' => true,
+                        'format' => Yii::$app->params["dateByDatePicker"],
+                    ]]
+                );
+                ?>
             </div>
         </div>
+    </div>
+    <div class="col-md-12 col-xs-12 col-sm-12 col-lg-12">       
+        <div class="form-group">
+            <label for="txt_observa" class="col-sm-2 col-md-2 col-xs-2 col-lg-2 control-label keyupmce"><?= Yii::t("formulario", "Observation") ?></label>
+            <div class="col-sm-10 col-md-10 col-xs-10 col-lg-10">                
+                <textarea  class="form-control keyupmce" id="txt_observa" rows="3"></textarea>                  
+            </div>
+        </div>      
     </div>
     <div class="col-md-12 col-sm-12 col-xs-12 col-lg-12 doc_titulo cinteres">
         <div class="form-group">
             <label for="txth_doc_titulo" class="col-sm-2 col-md-2 col-xs-2 col-lg-2  control-label keyupmce" id="txth_doc_titulo" name="txth_doc_titulo"><?= Yii::t("formulario", "Attach document") ?></label>
             <div class="col-sm-7 col-md-7 col-xs-7 col-lg-7 ">
-<?= Html::hiddenInput('txth_per', $per_id, ['id' => 'txth_per']); ?>
-<?= Html::hiddenInput('txth_doc_titulo', '', ['id' => 'txth_doc_titulo']); ?>
+                <?= Html::hiddenInput('txth_per', $per_id, ['id' => 'txth_per']); ?>
+                <?= Html::hiddenInput('txth_doc_titulo', '', ['id' => 'txth_doc_titulo']); ?>
                 <?php
                 echo CFileInputAjax::widget([
                     'id' => 'txt_doc_titulo',
@@ -191,11 +199,12 @@ DatePicker::widget([
                 ?>
             </div>             
         </div>
-                <?php if (base64_decode($_GET['estado']) == 'Pendiente') {
-                    echo $leyendarc;
-                } ?>
-    </div>    
-
+        <?php
+        if (base64_decode($_GET['estado']) == 'Pendiente') {
+            echo $leyendarc;
+        }
+        ?>
+    </div>   
     <?php if (base64_decode($_GET['estado']) == 'Pendiente') { ?>
         <div></div>                
         <?php
