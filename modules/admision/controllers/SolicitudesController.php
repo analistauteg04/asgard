@@ -128,6 +128,8 @@ class SolicitudesController extends \app\components\CController {
         $resp_arch5 = $mod_solins->Obtenerdocumentosxsolicitud($sins_id, 5);
         $resp_arch6 = $mod_solins->Obtenerdocumentosxsolicitud($sins_id, 6);
         $resp_arch7 = $mod_solins->Obtenerdocumentosxsolicitud($sins_id, 7);
+        
+        $observa = $mod_solins->Obtenerobservadocumentos($sins_id);
 
         $mod_ordenpago = new OrdenPago();
         $resp_ordenpago = $mod_ordenpago->consultarImagenpago($sins_id);
@@ -164,6 +166,7 @@ class SolicitudesController extends \app\components\CController {
                     "emp_id" => $emp_id,
                     "arr_fecha" => $fechas,
                     "arr_certv" => $resp_condcertv,
+                    "arr_observa" => $observa,
         ]);
     }
 

@@ -1754,4 +1754,27 @@ class SolicitudInscripcion extends \yii\db\ActiveRecord
         $resultData = $comando->queryOne();
         return $resultData;
     }
+    
+    /**
+     * Function Obtenerobservadocumentos
+     * @author  Giovanni Vergara <analistadesarrollo02@uteg.edu.ec>
+     * @param   
+     * @return  $resultData (ultima observacion al subir docuemntos de la solicitud)
+     */
+    public function Obtenerobservadocumentos($sins_id) {
+        $con = \Yii::$app->db_captacion;
+        $estado = 1;
+
+        $sql = "SELECT sdo.sdoc_observacion	
+                FROM " . $con->dbname . ".solicitudins_documento sdo
+                WHERE sdo.sins_id = :sins_id AND 
+                      sdo.sdoc_estado = :estado AND
+                      sdo.sdoc_estado_logico = :estado";
+
+        $comando = $con->createCommand($sql);
+        $comando->bindParam(":estado", $estado, \PDO::PARAM_STR);
+        $comando->bindParam(":sins_id", $sins_id, \PDO::PARAM_INT);     
+        $resultData = $comando->queryOne();
+        return $resultData;
+    }
 }
