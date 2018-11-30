@@ -14,15 +14,13 @@
  * http://xaviesteve.com/354/acentos-y-enes-aparecen-mal-a%C2%B1-en-php-con-mysql-utf-8-iso-8859-1/
  */
 class cls_Base {
-    var $BdAppweb="APPWEB"; 
-    var $BdIntermedio="VSSEAINTERMEDIA";
+    var $BdAppweb="db_no_existe"; 
+    var $BdIntermedio="db_edoc";
    
     //SERVIDOR REMOTO WEBAPP
     public function conexionIntermedio() {
         //Configuracion Local
         $bd_host = "localhost";
-        //$bd_usuario = "root";
-        //$bd_password = "root00";
         $bd_usuario = 'uteg';
         $bd_password ='Utegadmin2016*';
         $bd_base = $this->BdIntermedio;
@@ -40,8 +38,8 @@ class cls_Base {
     public function conexionAppWeb() {
         //Configuracion Local
         $bd_host = "localhost";
-        $bd_usuario = "root";
-        $bd_password = "root00";
+        $bd_usuario = "uteg";
+        $bd_password = "Utegadmin2016*";
         $bd_base = $this->BdAppweb;
         $con = new mysqli($bd_host,$bd_usuario,$bd_password,$bd_base);
         $con->set_charset('utf8');//Convierte todo lo que esté codificado de latin1 a UTF-8 Errore de Ñ o Caractes especiales 

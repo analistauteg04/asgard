@@ -600,8 +600,8 @@ class NubeFactura {
         $rep = new REPORTES();
         //$con = $obj_con->conexionVsRAd();
         $objEmp=$objEmpData->buscarDataEmpresa(cls_Global::$emp_id,cls_Global::$est_id,cls_Global::$pemi_id);//recuperar info deL Contribuyente
+        //cls_Global::putMessageLogFile($objEmp);
         $con = $obj_con->conexionIntermedio();
-     
         $dataMail->file_to_attachXML=$obj_var->rutaXML.'FACTURAS/';//Rutas FACTURAS
         $dataMail->file_to_attachPDF=$obj_var->rutaPDF;//Ructa de Documentos PDF
         try {
@@ -943,8 +943,7 @@ class NubeFactura {
         //$strings_xml = $xml->saveXML();
 	//echo $strings_xml;
         $nomDocfile = $cabFact[0]['NombreDocumento'] . '-' . $cabFact[0]['NumDocumento'] . '.xml';   
-        $xml->save(cls_Global::$seaDocXml.$nomDocfile);
-        
+        $xml->save(cls_Global::$seaDocXml.$nomDocfile);        
         return VSexception::messageFileXML('OK', $nomDocfile, $cabFact[0]["ClaveAcceso"], 2, null, null);
     }
 

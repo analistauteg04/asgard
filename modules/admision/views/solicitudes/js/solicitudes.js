@@ -60,6 +60,18 @@ $(document).ready(function () {
                                         setComboData(data.carrera, "cmb_carrera");
                                     }
                                 }, true);
+                                var arrParams = new Object();
+                                arrParams.unidada = $('#cmb_ninteres').val();
+                                arrParams.metodo = $('#cmb_metodos').val();        
+                                arrParams.moda_id = $('#cmb_modalidad').val();
+                                arrParams.carrera_id = $('#cmb_carrera').val();
+                                arrParams.getitem = true;
+                                requestHttpAjax(link, arrParams, function (response) {
+                                    if (response.status == "OK") {
+                                        data = response.message;
+                                        setComboData(data.items, "cmb_item");
+                                    } 
+                                }, true);        
                             }
                         }
                     }, true);
@@ -77,6 +89,7 @@ $(document).ready(function () {
             $('#lbl_carrera').text('Carrera');
         }
     });
+    
     $('#cmb_ninteres').change(function () {
         var link = $('#txth_base').val() + "/admision/solicitudes/new";
         var arrParams = new Object();
@@ -100,12 +113,14 @@ $(document).ready(function () {
                             setComboData(data.carrera, "cmb_carrera");
                         }
                     }, true);
+                    
                 }
             }
         }, true);
         //métodos.
         var arrParams = new Object();
         arrParams.unidada = $('#cmb_ninteres').val();
+        arrParams.nint_id = $('#cmb_ninteres').val();
         arrParams.metodo = $('#cmb_metodos').val();
         arrParams.getmetodo = true;
         requestHttpAjax(link, arrParams, function (response) {
@@ -136,7 +151,7 @@ $(document).ready(function () {
         } else {
             $('#divBeca').css('display', 'none');
         }
-        //Carrera.-
+        //Item.-
         var arrParams = new Object();
         arrParams.unidada = $('#cmb_ninteres').val();
         arrParams.metodo = $('#cmb_metodos').val();        
@@ -157,11 +172,9 @@ $(document).ready(function () {
 
         arrParams.unidada = $('#cmb_ninteres').val();
         arrParams.moda_id = $(this).val();
-        arrParams.metodo = $('#cmb_metodos').val();
         arrParams.empresa_id = $('#cmb_empresa').val();
         arrParams.getcarrera = true;
         arrParams.nint_id = $('#cmb_ninteres').val();
-
         requestHttpAjax(link, arrParams, function (response) {
             if (response.status == "OK") {
                 data = response.message;
@@ -173,6 +186,19 @@ $(document).ready(function () {
                         setComboData(data.metodos, "cmb_metodos");
                     }
                 }, true);
+                //Item.-
+                var arrParams = new Object();
+                arrParams.unidada = $('#cmb_ninteres').val();
+                arrParams.metodo = $('#cmb_metodos').val();        
+                arrParams.moda_id = $('#cmb_modalidad').val();
+                arrParams.carrera_id = $('#cmb_carrera').val();
+                arrParams.getitem = true;
+                requestHttpAjax(link, arrParams, function (response) {
+                    if (response.status == "OK") {
+                        data = response.message;
+                        setComboData(data.items, "cmb_item");               
+                    } 
+                }, true);      
             }
         }, true);
         //Descuentos.
@@ -187,8 +213,8 @@ $(document).ready(function () {
                 setComboData(data.descuento, "cmb_descuento");
             }
         }, true);
-        
-        //Carrera.-
+        /*
+        //Item.-
         var arrParams = new Object();
         arrParams.unidada = $('#cmb_ninteres').val();
         arrParams.metodo = $('#cmb_metodos').val();        
@@ -200,7 +226,7 @@ $(document).ready(function () {
                 data = response.message;
                 setComboData(data.items, "cmb_item");               
             } 
-        }, true);        
+        }, true);        */
     });
 
     $('#cmb_unidad').change(function () {
@@ -704,6 +730,7 @@ function save() {
     arrParams.tipo_DNI = $('input[name=opt_tipo_DNI]:radio').val();
     arrParams.dni_fac = $('#txt_dni_fac').val();
     arrParams.observacion = $('#txt_observacion').val();
+    arrParams.ite_id = $('#cmb_item').val();    
     if ($('input[name=opt_declara_Dctosi]:checked').val() == 1) {
         arrParams.descuento_id = $('#cmb_descuento').val();
         arrParams.marcadescuento = '1';

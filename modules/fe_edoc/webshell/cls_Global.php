@@ -17,10 +17,10 @@ class cls_Global {
     public static $emp_id='1';//Empresa
     public static $est_id='1';//Establecimiento
     public static $pemi_id='1';//Punto Emision
-    public static $ambt_id='2';//Ambiente de Pruebas por Defecto =1 =>2 Produccion (cambiar en caso de Pruebas)
+    public static $ambt_id='1';//Ambiente de Pruebas por Defecto =1 =>2 Produccion (cambiar en caso de Pruebas)
     //public static $IdsUsu='1';//Valor por defecto(Alimenta al Autorizar el Documento)
     var $consumidorfinal='9999999999';
-    var $dateStartFact='2018-11-20';
+    var $dateStartFact='2018-06-29';
     var $datebydefault='d-m-Y';
     public static $dateXML = "d/m/Y";
     public $decimalPDF=2;
@@ -30,8 +30,8 @@ class cls_Global {
     public static $limitEnvAUT=2;
     var $IVAdefault=12;//Valor de Iva por Defecto en Textos
     var $Author="UTEG";
-    var $rutaPDF="/opt/SEADOC/DOCPDF/";
-    var $rutaXML="/opt/SEADOC/AUTORIZADO/";
+    var $rutaPDF="/home/EDOC/DOCPDF/";
+    var $rutaXML="/home/EDOC/AUTORIZADO/";
     var $rutaLink='http://edoc.uteg.com';
     var $tipoFacLocal='F4';
     var $tipoGuiLocal='GR';
@@ -40,17 +40,17 @@ class cls_Global {
     var $tipoNdLocal='ND';
     //FACTURA ELECTRONICA
     
-    public static $seaDocXml = '/opt/SEADOC/GENERADO/';
-    public static $seaDocFact = '/opt/SEADOC/FIRMADO/FACTURAS/';
-    public static $seaDocRete = '/opt/SEADOC/FIRMADO/RETENCIONES/';
-    public static $seaDocNc = '/opt/SEADOC/FIRMADO/NC/';
-    public static $seaDocNd = '/opt/SEADOC/FIRMADO/ND/';
-    public static $seaDocGuia = '/opt/SEADOC/FIRMADO/GUIAS/';
-    public static $seaDocAutFact = '/opt/SEADOC/AUTORIZADO/FACTURAS/';
-    public static $seaDocAutRete = '/opt/SEADOC/AUTORIZADO/RETENCIONES/';
-    public static $seaDocAutNc = '/opt/SEADOC/AUTORIZADO/NC/';
-    public static $seaDocAutNd = '/opt/SEADOC/AUTORIZADO/ND/';
-    public static $seaDocAutGuia = '/opt/SEADOC/AUTORIZADO/GUIAS/';
+    public static $seaDocXml = '/home/EDOC/GENERADO/';
+    public static $seaDocFact = '/home/EDOC/FIRMADO/FACTURAS/';
+    public static $seaDocRete = '/home/EDOC/FIRMADO/RETENCIONES/';
+    public static $seaDocNc = '/home/EDOC/FIRMADO/NC/';
+    public static $seaDocNd = '/home/EDOC/FIRMADO/ND/';
+    public static $seaDocGuia = '/home/EDOC/FIRMADO/GUIAS/';
+    public static $seaDocAutFact = '/home/EDOC/AUTORIZADO/FACTURAS/';
+    public static $seaDocAutRete = '/home/EDOC/AUTORIZADO/RETENCIONES/';
+    public static $seaDocAutNc = '/home/EDOC/AUTORIZADO/NC/';
+    public static $seaDocAutNd = '/home/EDOC/AUTORIZADO/ND/';
+    public static $seaDocAutGuia = '/home/EDOC/AUTORIZADO/GUIAS/';
 
 
     //function __construct() {  }
@@ -66,14 +66,14 @@ class cls_Global {
     public function buscarCedRuc($cedRuc) {
         try {
             $obj_con = new cls_Base();
-            $conCont = $obj_con->conexionAppWeb();
+            $conCont = $obj_con->conexionIntermedio();
             $rawData = array();
             $cedRuc=trim($cedRuc);            
-            $sql = "SELECT A.PER_ID Ids,A.PER_NOMBRE RazonSocial,IFNULL(B.USU_CORREO,'') CorreoPer
-                        FROM " . $obj_con->BdAppweb . ".PERSONA A
-                                INNER JOIN " . $obj_con->BdAppweb . ".USUARIO B
-                                        ON A.PER_ID=B.PER_ID AND B.USU_EST_LOG=1
-                WHERE A.PER_CED_RUC='$cedRuc' AND A.PER_EST_LOG=1 ";
+            $sql = "SELECT A.per_id Ids,A.per_nombre RazonSocial,IFNULL(B.usu_correo,'') CorreoPer
+                        FROM " . $obj_con->BdIntermedio . ".persona A
+                                INNER JOIN " . $obj_con->BdIntermedio . ".usuario B
+                                        ON A.per_id=B.per_id AND B.usu_est_log=1
+                WHERE A.per_ced_ruc='$cedRuc' AND A.per_est_log=1 ";
             //echo $sql;
             $sentencia = $conCont->query($sql);
             if ($sentencia->num_rows > 0) {
@@ -93,7 +93,7 @@ class cls_Global {
     
     public function insertarUsuarioPersona($obj_con,$cabDoc,$DBTable,$i) {  
         //$obj_con = new cls_Base();
-        $conUse = $obj_con->conexionAppWeb();
+        $conUse = $obj_con->conexionIntermedio();
         try {
             $this->InsertarPersona($conUse,$cabDoc,$obj_con,$i);
             $IdPer = $conUse->insert_id;
@@ -109,8 +109,8 @@ class cls_Global {
         }   
     }
     private function InsertarPersona($con, $objEnt,$obj_con,$i) {
-        $sql = "INSERT INTO " . $obj_con->BdAppweb . ".PERSONA
-                (PER_CED_RUC,PER_NOMBRE,PER_GENERO,PER_EST_LOG,PER_FEC_CRE)VALUES
+        $sql = "INSERT INTO " . $obj_con->BdIntermedio . ".persona
+                (per_ced_ruc,per_nombre,per_genero,per_est_log,per_fec_cre)VALUES
                 ('" . $objEnt[$i]['CedRuc'] . "','" . $objEnt[$i]['RazonSoc'] . "','M','1',CURRENT_TIMESTAMP()) ";
         $command = $con->prepare($sql);
         $command->execute();
@@ -123,20 +123,22 @@ class cls_Global {
         $correo = ($objEnt[$i]['CorreoPer']<>'')?$objEnt[$i]['CorreoPer']:$this->buscarCorreoERP($obj_con,$usuNombre,$DBTable);//Consulta Tabla Clientes
         $pass =$this->generarCodigoKey(8);// $objEnt[$i]['CedRuc'];
         //Inserta Datos Tabla USUARIO
-        $sql = "INSERT INTO " . $obj_con->BdAppweb . ".USUARIO
-                (PER_ID,USU_NOMBRE,USU_ALIAS,USU_CORREO,USU_PASSWORD,USU_EST_LOG,USU_FEC_CRE)VALUES
+        $sql = "INSERT INTO " . $obj_con->BdIntermedio . ".usuario
+                (per_id,usu_nombre,usu_alias,usu_correo,usu_password,usu_est_log,usu_fec_cre)VALUES
                 ($IdPer,'$usuNombre','$RazonSoc','$correo',MD5('$pass'),'1',CURRENT_TIMESTAMP()) ";
         $command = $con->prepare($sql);
         $command->execute();
         
         //Inserta Datas en la tabla USUARIO_EMPRESA con Su Rol
         $UsuId = $con->insert_id;
-        $RolId = $this->retornaRolUser($DBTable);//Retorna el Rol segunta tabla Roles
-        $sql = "INSERT INTO " . $obj_con->BdAppweb . ".USUARIO_EMPRESA
-                (EMP_ID,USU_ID,ROL_ID,EST_LOG)VALUES
+        //$RolId = $this->retornaRolUser($DBTable);//Retorna el Rol segunta tabla Roles
+        /*
+         * OPCIONAL SI SE NECESITA CONFIGURAR USUAIRO EMPRESA PARA EL ACCESO
+        $sql = "INSERT INTO " . $obj_con->BdIntermedio . ".usuario_empresa
+                (emp_id,usu_id,rol_id,est_log)VALUES
                 ($emp_id,$UsuId,$RolId,1) ";
         $command = $con->prepare($sql);
-        $command->execute();
+        $command->execute();*/
         
         //Retorna el Pass y el Correo Guardado
         $arroout["Clave"] = $pass;
@@ -171,9 +173,10 @@ class cls_Global {
     //Consulta en la Tablas del ERP si existe un correo
     private function buscarCorreoERP($obj_con,$CedRuc, $DBTable) {
         //$obj_con = new cls_Base();
-        $conCont = $obj_con->conexionServidor();
+        //Nota debe extraer los Correos del SIstema ERP
+        $conCont = $obj_con->conexionIntermedio();
         $rawData='';
-        $sql = "SELECT IFNULL(CORRE_E,'') CorreoPer  FROM " . $obj_con->BdServidor . ".$DBTable "
+        $sql = "SELECT IFNULL(CORRE_E,'') CorreoPer  FROM " . $obj_con->BdIntermedio . ".$DBTable "
                 . "WHERE CED_RUC='$CedRuc' AND CORRE_E<>'' ";
         //echo $sql;
         $sentencia = $conCont->query($sql);
@@ -274,25 +277,6 @@ class cls_Global {
         
         return $String;
         
- 
-
-        /*
-        //Esta parte se encarga de eliminar cualquier caracter extraño
-        $string = str_replace(
-            array("¨", "º", "-", "~",
-                 "#", "@", "|", "!", 
-                 "·", "$", "%", "&", "/",
-                 "(", ")", "?", "'", "¡",
-                 "¿", "[", "^", "<code>", "]",
-                 "+", "}", "{", "¨", "´",
-                 ">", "< ", ";", ",", ":",
-                 ".", " "),
-            '',
-            $string
-        );
-
-        return $string;*/
-        
     }
     
     public function limpioCaracteresSQL($cadena) {
@@ -328,7 +312,6 @@ class cls_Global {
         try {
             $obj_con = new cls_Base();
             $obj_var = new cls_Global();
-            //$conCont = $obj_con->conexionServidor();
             $conCont = $obj_con->conexionIntermedio();
             $rawData = array();
             $fechaIni=$obj_var->dateStartFact;
@@ -338,8 +321,6 @@ class cls_Global {
                         $sql = "SELECT IdFactura Ids,ClaveAcceso,AutorizacionSri 
                                         FROM " . $obj_con->BdIntermedio . ".NubeFactura 
                                 WHERE Estado=2 AND DATE(FechaCarga)>='$fechaIni' LIMIT $limitEnv ";                        
-                        //$sql = "SELECT TIP_NOF TIPO,NUM_NOF NUMERO,ENV_DOC ID_DOC FROM " .  $obj_con->BdServidor . ".VC010101 
-                        //        WHERE ClaveAcceso IS NULL AND AutorizacionSri IS NULL AND IND_UPD='L' AND FEC_VTA>'$fechaIni' LIMIT $limitEnv ";
                         break;
                     Case "GR"://GUIAS DE REMISION
                         $sql = "UPDATE " . $obj_con->BdIntermedio . ".NubeGuiaRemision SET EstadoEnv='$Estado' WHERE IdGuiaRemision='$Ids';";
