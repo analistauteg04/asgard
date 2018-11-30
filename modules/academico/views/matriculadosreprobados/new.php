@@ -46,6 +46,7 @@ use yii\helpers\Html;
                             "arr_modalidad" => $arr_modalidad,
                             "arr_carrerra1" => $arr_carrerra1,
                             "arr_metodos" => $arr_metodos,
+                            "arr_descuento" => $arr_descuento,
                         ]);
                     ?>                  
                 </form>

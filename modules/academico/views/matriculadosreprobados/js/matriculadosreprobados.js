@@ -280,6 +280,13 @@ function dataInscripPart1(ID) {
     objDat.ruta_doc_titulo = ($('#txth_doc_titulo').val() != '') ? $('#txth_doc_titulo').val() : '';
     objDat.ruta_doc_dni = ($('#txth_doc_dni').val() != '') ? $('#txth_doc_dni').val() : '';
     objDat.ruta_doc_certvota = ($('#txth_doc_certvota').val() != '') ? $('#txth_doc_certvota').val() : '';
+    if ($('input[name=opt_declara_Dctosi]:checked').val() == 1) {
+        objDat.descuento_id = $('#cmb_descuento').val();
+        objDat.marcadescuento = '1';
+    }else{
+        objDat.descuento_id = 0;
+        objDat.marcadescuento = '0';
+    }
     objDat.ruta_doc_foto = '';
     objDat.ruta_doc_hojavida = '';
     objDat.ruta_doc_certificado = ($('#txth_doc_certificado').val() != '') ? $('#txth_doc_certificado').val() : '';

@@ -65,7 +65,7 @@ use app\modules\financiero\Module as financiero;
             <div class="form-group">
                 <label for="cmb_descuento" class="col-sm-5 col-md-5 col-xs-5 col-lg-5 control-label keyupmce"><?= financiero::t("Pagos", "Discount") ?></label>
                 <div class="col-sm-7 col-md-7 col-xs-7 col-lg-7">
-                    <?= Html::dropDownList("cmb_descuento", 0, array_merge([Yii::t("formulario", "Select")], array()), ["class" => "form-control", "id" => "cmb_descuento"]) ?>
+                    <?= Html::dropDownList("cmb_descuento", 0, array_merge([Yii::t("formulario", "Select")], $arr_descuento), ["class" => "form-control", "id" => "cmb_descuento"]) ?>
                 </div>
             </div>    
         </div>  

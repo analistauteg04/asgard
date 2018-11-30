@@ -17,6 +17,7 @@ use yii\base\Security;
 use app\modules\financiero\models\Secuencias;
 use app\modules\admision\models\DocumentoAdjuntar;
 use yii\base\Exception;
+
 /**
  * This is the model class for table "matriculados_reprobado".
  *
@@ -630,6 +631,9 @@ class MatriculadosReprobado extends \yii\db\ActiveRecord {
             $command->bindParam(":twre_correo", $data[0]['pges_correo'], \PDO::PARAM_STR);
             $command->bindParam(":twre_pais", $data[0]['pais'], \PDO::PARAM_STR);
             $command->bindParam(":twre_celular", $data[0]['pges_celular'], \PDO::PARAM_STR);
+            
+            $command->bindParam(":twre_celular", $data[0]['pges_celular'], \PDO::PARAM_STR);
+            
             $command->bindParam(":uaca_id", $data[0]['unidad_academica'], \PDO::PARAM_STR);
             $command->bindParam(":mod_id", $data[0]['modalidad'], \PDO::PARAM_STR);
             $command->bindParam(":car_id", $data[0]['carrera'], \PDO::PARAM_STR);

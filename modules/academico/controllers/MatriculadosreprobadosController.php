@@ -7,6 +7,7 @@ use app\modules\academico\models\PeriodoAcademicoMetIngreso;
 use app\modules\academico\models\MatriculadosReprobado;
 use app\modules\academico\models\EstudioAcademico;
 use app\modules\academico\models\Admitido;
+use app\modules\financiero\models\DetalleDescuentoItem;
 use yii\helpers\ArrayHelper;
 use app\models\Utilities;
 use app\models\Persona;
@@ -71,7 +72,6 @@ class MatriculadosreprobadosController extends \app\components\CController {
                     if (empty($_FILES)) {
                         return json_encode(['error' => Yii::t("notificaciones", "Error to process File {file}. Try again.", ['{file}' => basename($files['name'])])]);
                     }
-                    //Recibe Parámetros.
                     $matr_repro_id = $data["matr_repro_id"];
                     \app\models\Utilities::putMessageLogFile('id: ' . $matr_repro_id);
                     $files = $_FILES[key($_FILES)];
@@ -272,7 +272,7 @@ class MatriculadosreprobadosController extends \app\components\CController {
         $modcanal = new Oportunidad();
         $mod_metodo = new MetodoIngreso();
         $mod_inscripcion = new InscripcionAdmision();
-
+        $modDescuento = new DetalleDescuentoItem();
         if (Yii::$app->request->isAjax) {
             $data = Yii::$app->request->post();
             if (isset($data["getprovincias"])) {
@@ -308,6 +308,7 @@ class MatriculadosreprobadosController extends \app\components\CController {
                 return Utilities::ajaxResponse('OK', 'alert', Yii::t('jslang', 'Success'), 'false', $message);
             }
         }
+        $arr_descuento = $modDescuento->consultarDesctoxitem($resp_item["ite_id"]);
         $arr_pais_dom = Pais::find()->select("pai_id AS id, pai_nombre AS value")->where(["pai_estado_logico" => "1", "pai_estado" => "1"])->asArray()->all();
         $pais_id = 1; //Ecuador
         $arr_prov_dom = Provincia::provinciaXPais($pais_id);
@@ -328,6 +329,7 @@ class MatriculadosreprobadosController extends \app\components\CController {
                     "arr_prov_dom" => ArrayHelper::map($arr_prov_dom, "id", "value"),
                     "arr_ciu_dom" => ArrayHelper::map($arr_ciu_dom, "id", "value"),
                     "arr_ninteres" => ArrayHelper::map($arr_ninteres, "id", "name"),
+                    "arr_descuento" => ArrayHelper::map($arr_descuento, "id", "name"),
                     "arr_medio" => ArrayHelper::map($arr_medio, "id", "value"),
                     "arr_modalidad" => ArrayHelper::map($arr_modalidad, "id", "name"),
                     "arr_conuteg" => ArrayHelper::map($arr_conuteg, "id", "name"),
