@@ -12,7 +12,7 @@ class VSAutoDocumento {
         $firma = $firmaDig->firmaXAdES_BES($result['nomDoc'],$DirDocFirmado);
         //Verifica Errores del Firmado
         if ($firma['status'] == 'OK') {
-            //Validad COmprobante
+            //Validad Comprobante
             $valComp = $firmaDig->validarComprobanteWS($result['nomDoc'],$DirDocFirmado); //Envio NOmbre Documento
             if ($valComp['status'] == 'OK') {//Retorna Datos del Comprobacion
                 //Verifica si el Doc Fue Recibido Correctamente...
@@ -21,8 +21,7 @@ class VSAutoDocumento {
                 if ($estadoRac == 'RECIBIDA') {
                     //Continua con el Proceso
                     //Autorizacion de Comprobantes                     
-                    //CAMBIO METODO OFFLINE 29-11-2016
-                    //return $this->autorizaComprobante($result, $ids, $DirDocAutorizado, $DirDocFirmado, $DBTabDoc, $DocErr, $CampoID);
+                    //CAMBIO METODO OFFLINE 29-11-2016                    
                     return $this->actualizaDocRecibidoSri($Rac, $ids, $result['nomDoc'], $DirDocAutorizado, $DirDocFirmado, $DBTabDoc, $DocErr, $CampoID);
                 } else {
                     //Verifica si la Clave esta en Proceso de Validacion

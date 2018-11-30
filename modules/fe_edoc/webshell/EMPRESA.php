@@ -4,19 +4,7 @@ class EMPRESA {
     //put your code here
     public function buscarDataEmpresa($emp_id,$est_id,$pemi_id) {
         $obj_con = new cls_Base();
-        $conApp = $obj_con->conexionAppWeb();
-        /*$sql = "SELECT A.EMP_ID,A.EMP_RUC Ruc,A.EMP_RAZONSOCIAL RazonSocial,A.EMP_NOM_COMERCIAL NombreComercial,
-                    A.EMP_AMBIENTE Ambiente,A.EMP_TIPO_EMISION TipoEmision,EMP_DIRECCION_MATRIZ DireccionMatriz,EST_DIRECCION DireccionSucursal,
-                    A.EMP_OBLIGA_CONTABILIDAD ObligadoContabilidad,EMP_CONTRI_ESPECIAL ContribuyenteEspecial,EMP_EMAIL_DIGITAL,
-                    B.EST_NUMERO Establecimiento,C.PEMI_NUMERO PuntoEmision,A.EMP_MONEDA Moneda
-                    FROM " . $obj_con->BdAppweb . ".EMPRESA A
-                            INNER JOIN (" . $obj_con->BdAppweb . ".ESTABLECIMIENTO B
-                                            INNER JOIN " . $obj_con->BdAppweb . ".PUNTO_EMISION C
-                                                    ON B.EST_ID=C.EST_ID AND C.EST_LOG='1')
-                                    ON A.EMP_ID=B.EMP_ID AND B.EST_LOG='1'
-            WHERE A.EMP_ID='$emp_id' AND A.EMP_EST_LOG='1' 
-                     AND B.EST_ID='$est_id' AND C.PEMI_ID='$pemi_id'";*/
-        
+        $conApp = $obj_con->conexionIntermedio();
         $sql = "SELECT A.emp_id,A.emp_ruc Ruc,A.emp_razonsocial RazonSocial,A.emp_nom_comercial NombreComercial,
                     A.emp_ambiente Ambiente,A.emp_tipo_emision TipoEmision,A.emp_direccion_matriz DireccionMatriz,
                     A.emp_obliga_contabilidad ObligadoContabilidad,A.emp_contri_especial ContribuyenteEspecial,
@@ -49,6 +37,7 @@ class EMPRESA {
     public static function buscarAmbienteEmp($IdCompania,$Ambiente) {
         $obj_con = new cls_Base();
         $conApp = $obj_con->conexionIntermedio();
+        //Se puede Extraer el Ambiente directamente de la Base de Datos
         $sql = "SELECT Recepcion,Autorizacion,RecepcionLote,TiempoRespuesta,TiempoSincronizacion "
                 . "FROM " . $obj_con->BdIntermedio . ".VSServiciosSRI WHERE emp_id=$IdCompania AND Ambiente=$Ambiente AND Estado=1 ";
         $sentencia = $conApp->query($sql);
