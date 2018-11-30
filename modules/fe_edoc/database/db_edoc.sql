@@ -17,6 +17,41 @@ USE `db_edoc`;
 /*!40101 SET @OLD_SQL_MODE=@@SQL_MODE, SQL_MODE='NO_AUTO_VALUE_ON_ZERO' */;
 /*!40111 SET @OLD_SQL_NOTES=@@SQL_NOTES, SQL_NOTES=0 */;
 
+
+--
+-- Table structure for table `persona`
+--
+create table `persona` (
+  `per_id` bigint(20) not null auto_increment,
+  `per_tip_cruc` bigint(3) default null,
+  `per_ced_ruc` varchar(15) default null,
+  `per_nombre` varchar(100) default null,
+  `per_apellido` varchar(100) default null,
+  `per_genero` varchar(1) default null,
+  `per_fec_nacimiento` date default null,
+  `per_est_log` varchar(1) default null,
+  `per_fec_cre` timestamp null default null,
+  `per_fec_mod` timestamp null default null,
+  primary key (`per_id`)
+) engine=innodb auto_increment=0 default charset=latin1;
+--
+-- Table structure for table `usuario`
+--
+create table `usuario` (
+  `usu_id` bigint(20) not null auto_increment,
+  `per_id` bigint(20) not null,
+  `usu_nombre` varchar(100) default null,
+  `usu_password` varchar(50) default null,
+  `usu_alias` varchar(60) default null,
+  `usu_correo` varchar(100) default null,
+  `usu_est_log` varchar(1) default null,
+  `usu_fec_cre` timestamp null default current_timestamp,
+  `usu_fec_mod` timestamp null default null,
+  primary key (`usu_id`),
+  key `fk_usuario_persona` (`per_id`),
+  constraint `fk_usuario_persona` foreign key (`per_id`) references `persona` (`per_id`) on delete no action on update no action
+) engine=innodb auto_increment=0 default charset=latin1;
+
 --
 -- Table structure for table `NubeDatoAdicionalDetalleFactura`
 --
