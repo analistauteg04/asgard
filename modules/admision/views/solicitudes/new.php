@@ -179,7 +179,8 @@ $leyenda = '<div class="col-md-12 col-xs-12 col-sm-12 col-lg-12">
             <div class="form-group">
                 <label for="txt_observacion" class="col-sm-5 col-md-5 col-xs-5 col-lg-5 control-label" id="lbl_observacion"><?= Yii::t("formulario", "Observations") ?></label>
                 <div class="col-sm-7 col-md-7 col-xs-7 col-lg-7">
-                    <input type="text" class="form-control keyupmce" id="txt_observacion" data-type="alfa" placeholder="<?= Yii::t("formulario", "Observations") ?>">
+                    <!--<input type="text" class="form-control keyupmce" id="txt_observacion" data-type="alfa" placeholder="<? Yii::t("formulario", "Observations") ?>">-->
+                    <textarea  class="form-control keyupmce" id="txt_observacion" rows="3"></textarea>
                 </div>
             </div>
         </div> 
