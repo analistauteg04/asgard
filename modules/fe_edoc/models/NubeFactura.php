@@ -100,7 +100,6 @@ class NubeFactura extends \app\modules\fe_edoc\components\CActiveRecord {
         }
         //echo $sql;
         $rawData = $conCont->createCommand($sql)->queryAll();
-        $conCont->active = false;
         return $rawData;
     }
 
@@ -113,7 +112,6 @@ class NubeFactura extends \app\modules\fe_edoc\components\CActiveRecord {
                 WHERE TIP_NOF='$tipDoc' AND NUM_NOF='$numDoc' AND IND_EST='L'";
         //echo $sql;
         $rawData = $conCont->createCommand($sql)->queryAll();
-        $conCont->active = false;
         return $rawData;
     }
 
@@ -155,7 +153,6 @@ class NubeFactura extends \app\modules\fe_edoc\components\CActiveRecord {
         
 
         $rawData = $con->createCommand($sql)->queryAll();
-        $con->active = false;
 
         return new ArrayDataProvider(array(
             'key' => 'IdDoc',
@@ -167,7 +164,7 @@ class NubeFactura extends \app\modules\fe_edoc\components\CActiveRecord {
                     'RazonSocialComprador', 'ImporteTotal', 'NombreDocumento',
                 ),
             ),
-            'totalItemCount' => count($rawData),
+            //'totalItemCount' => count($rawData),
             'pagination' => array(
                 'pageSize' => Yii::$app->params['pageSize'],
                 //'itemCount'=>count($rawData),
@@ -180,7 +177,6 @@ class NubeFactura extends \app\modules\fe_edoc\components\CActiveRecord {
         $sql = "SELECT idDirectorio,TipoDocumento,Descripcion,Ruta 
                 FROM " . $con->dbname . ".VSDirectorio WHERE Estado=1;";
         $rawData = $con->createCommand($sql)->queryAll();
-        $con->active = false;
         return $rawData;
     }
 
@@ -201,7 +197,6 @@ class NubeFactura extends \app\modules\fe_edoc\components\CActiveRecord {
         //echo $sql;        
         $rawData = $con->createCommand($sql)->queryOne(); //Recupera Solo 1
         //VSValidador::putMessageLogFile($rawData);
-        $con->active = false;
         return $rawData;
     }
 
@@ -211,7 +206,6 @@ class NubeFactura extends \app\modules\fe_edoc\components\CActiveRecord {
         $sql = "SELECT * FROM " . $con->dbname . ".NubeDetalleFactura WHERE IdFactura=$id";
         //echo $sql;
         $rawData = $con->createCommand($sql)->queryAll(); //Recupera Solo 1
-        $con->active = false;
         for ($i = 0; $i < sizeof($rawData); $i++) {
             $rawData[$i]['impuestos'] = $this->mostrarDetalleImp($rawData[$i]['IdDetalleFactura']); //Retorna el Detalle del Impuesto
         }
@@ -223,7 +217,6 @@ class NubeFactura extends \app\modules\fe_edoc\components\CActiveRecord {
         $con = Yii::$app->db_edoc;
         $sql = "SELECT * FROM " . $con->dbname . ".NubeDetalleFacturaImpuesto WHERE IdDetalleFactura=$id";
         $rawData = $con->createCommand($sql)->queryAll(); //Recupera Solo 1
-        $con->active = false;
         return $rawData;
     }
 
@@ -232,7 +225,6 @@ class NubeFactura extends \app\modules\fe_edoc\components\CActiveRecord {
         $con = Yii::$app->db_edoc;
         $sql = "SELECT * FROM " . $con->dbname . ".NubeFacturaImpuesto WHERE IdFactura=$id";
         $rawData = $con->createCommand($sql)->queryAll(); //Recupera Solo 1
-        $con->active = false;
         return $rawData;
     }
     
@@ -246,7 +238,6 @@ class NubeFactura extends \app\modules\fe_edoc\components\CActiveRecord {
                                 ON A.IdForma=B.IdForma
                     WHERE A.IdFactura=$id ";
         $rawData = $con->createCommand($sql)->queryAll(); //Recupera Solo 1
-        $con->active = false;
         return $rawData;
     }
 
@@ -255,7 +246,6 @@ class NubeFactura extends \app\modules\fe_edoc\components\CActiveRecord {
         $con = Yii::$app->db_edoc;
         $sql = "SELECT * FROM " . $con->dbname . ".NubeDatoAdicionalFactura WHERE IdFactura=$id";
         $rawData = $con->createCommand($sql)->queryAll(); //Recupera Solo 1
-        $con->active = false;
         return $rawData;
     }
 
@@ -302,7 +292,6 @@ class NubeFactura extends \app\modules\fe_edoc\components\CActiveRecord {
         //$sql .= " LIMIT 10";
         //echo $sql;
         $rawData = $con->createCommand($sql)->queryAll();
-        $con->active = false;
         return $rawData;
     }
 
@@ -549,7 +538,6 @@ class NubeFactura extends \app\modules\fe_edoc\components\CActiveRecord {
         $sql = "SELECT EstadoDocumento,DirectorioDocumento,NombreDocumento FROM " . $con->dbname . ".NubeFactura WHERE "
                 . "IdFactura=$id AND EstadoDocumento='AUTORIZADO'";
         $rawData = $con->createCommand($sql)->queryOne(); //Recupera Solo 1
-        $con->active = false;
         return $rawData;
     }
     
@@ -563,11 +551,9 @@ class NubeFactura extends \app\modules\fe_edoc\components\CActiveRecord {
             $command = $con->createCommand($sql);
             $command->execute();
             $trans->commit();
-            $con->active = false;
             return true;
         } catch (Exception $e) {
             $trans->rollback();
-            $con->active = false;
             throw $e;
             return false;
         }
@@ -608,7 +594,6 @@ class NubeFactura extends \app\modules\fe_edoc\components\CActiveRecord {
         //VSValidador::putMessageLogFile($sql);
 
         $rawData = $con->createCommand($sql)->queryAll();
-        $con->active = false;
         return $rawData;       
 
         

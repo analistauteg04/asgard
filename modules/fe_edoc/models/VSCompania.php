@@ -117,7 +117,6 @@ class VSCompania extends \app\modules\fe_edoc\components\CActiveRecord {
                     FROM " . $con->dbname . ".EMPRESA A WHERE A.EMP_EST_LOG='1'";
         
         $rawData = $con->createCommand($sql)->queryAll();
-        $con->active = false;
         
         return new ArrayDataProvider(array(
                     'key' => 'IdCompania',
@@ -127,7 +126,7 @@ class VSCompania extends \app\modules\fe_edoc\components\CActiveRecord {
                             'IdCompania', 'Ruc', 'RazonSocial', 'NombreComercial', 'DireccionMatriz',
                         ),
                     ),
-                    'totalItemCount' => count($rawData),
+                    //'totalItemCount' => count($rawData),
                     'pagination' => array(
                         'pageSize' => Yii::$app->params['pageSize'],
                     //'itemCount'=>count($rawData),
@@ -135,7 +134,6 @@ class VSCompania extends \app\modules\fe_edoc\components\CActiveRecord {
                 ));
         
     }
-    
     
     public function insertarEmpresa($objEmp) {
         $con = Yii::$app->db_edoc;
@@ -146,11 +144,9 @@ class VSCompania extends \app\modules\fe_edoc\components\CActiveRecord {
             $idEmp = $con->getLastInsertID($con->dbname.'.EMPRESA');
             $this->datoFirmaDigital($con, $objEmp, $idEmp);
             $trans->commit();
-            $con->active = false;
             return true;
         } catch (Exception $e) {
             $trans->rollback();
-            $con->active = false;
             throw $e;
             return false;
         }
@@ -211,12 +207,10 @@ class VSCompania extends \app\modules\fe_edoc\components\CActiveRecord {
             $comando = $con->createCommand($sql);
             $comando->execute();
             $trans->commit();
-            $con->active = false;
             return true;
         } catch (Exception $e) { // se arroja una excepción si una consulta falla
             $trans->rollBack();
             throw $e;
-            $con->active = false;
             return false;
         }
     }
@@ -246,11 +240,9 @@ class VSCompania extends \app\modules\fe_edoc\components\CActiveRecord {
             $this->actualizaFirmaDigital($con, $objEmp); //Actiañoza datos de la Firma Digital
             
             $trans->commit();
-            $con->active = false;
             return true;
         } catch (Exception $e) {
             $trans->rollback();
-            $con->active = false;
             throw $e;
             return false;
         }

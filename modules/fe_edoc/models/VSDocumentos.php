@@ -42,18 +42,15 @@ class VSDocumentos extends \app\modules\fe_edoc\components\CActiveRecord{
                 $comando = $con->createCommand($sql);
                 $comando->execute();
                 $trans->commit();
-                $con->active = false;
                 //return true;
                 return $errAuto->messageSystem('OK', null,12,null, null);
             } else {
-                $con->active = false;
                 //return true;
                 return $errAuto->messageSystem('NO_OK',null, 1, null, null);
             }
         } catch (Exception $e) { // se arroja una excepción si una consulta falla
             $trans->rollBack();
             throw $e;
-            $con->active = false;
             //return false;
             return $errAuto->messageSystem('NO_OK',null, 1, null, null);
         }
@@ -89,18 +86,15 @@ class VSDocumentos extends \app\modules\fe_edoc\components\CActiveRecord{
                 $comando = $con->createCommand($sql);
                 $comando->execute();
                 $trans->commit();
-                $con->active = false;
                 //return true;
                 return $errAuto->messageSystem('OK', null,13,null, null);
             } else {
-                $con->active = false;
                 //return false;
                 return $errAuto->messageSystem('NO_OK',null, 1, null, null);
             }
         } catch (Exception $e) { // se arroja una excepción si una consulta falla
             $trans->rollBack();
             throw $e;
-            $con->active = false;
             //return false;
             return $errAuto->messageSystem('NO_OK',null, 1, null, null);
         }
@@ -134,18 +128,15 @@ class VSDocumentos extends \app\modules\fe_edoc\components\CActiveRecord{
                 $comando = $con->createCommand($sql);
                 $comando->execute();
                 $trans->commit();
-                $con->active = false;
                 //return true;
                 return $errAuto->messageSystem('OK', null,44,null, null);
             } else {
-                $con->active = false;
                 //return false;
                 return $errAuto->messageSystem('NO_OK',null, 1, null, null);
             }
         } catch (Exception $e) { // se arroja una excepción si una consulta falla
             $trans->rollBack();
             throw $e;
-            $con->active = false;
             //return false;
             return $errAuto->messageSystem('NO_OK',null, 1, null, null);
         }
@@ -192,7 +183,6 @@ class VSDocumentos extends \app\modules\fe_edoc\components\CActiveRecord{
                 //$cabFact["Estado"];
             //$rawData = $con->createCommand($sql)->queryAll();
             $rawData = $con->createCommand($sql)->queryOne(); //Recupera Solo 1
-            $con->active = false;
             return $rawData;
     }
     
@@ -201,7 +191,6 @@ class VSDocumentos extends \app\modules\fe_edoc\components\CActiveRecord{
         $conApp = Yii::$app->db;
         $sql = "SELECT USU_NOMBRE NombreUser,USU_ALIAS Alias,USU_CORREO CorreoUser FROM " . $conApp->dbname . ".USUARIO WHERE USU_ID='$vend_id';";
         $rawData = $conApp->createCommand($sql)->queryOne();  //Un solo Registro => $rawData['RazonSocial']
-        $conApp->active = false;
         return $rawData;
     }
 

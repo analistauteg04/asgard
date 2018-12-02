@@ -189,7 +189,6 @@ class NubeNotaCredito extends \app\modules\fe_edoc\components\CActiveRecord {
         //echo $sql;
 
         $rawData = $con->createCommand($sql)->queryAll();
-        $con->active = false;
 
         return new ArrayDataProvider(array(
             'key' => 'IdDoc',
@@ -201,7 +200,7 @@ class NubeNotaCredito extends \app\modules\fe_edoc\components\CActiveRecord {
                     'RazonSocialComprador', 'ValorModificacion', 'NombreDocumento',
                 ),
             ),
-            'totalItemCount' => count($rawData),
+            //'totalItemCount' => count($rawData),
             'pagination' => array(
                 'pageSize' => Yii::$app->params['pageSize'],
             //'itemCount'=>count($rawData),
@@ -261,7 +260,6 @@ class NubeNotaCredito extends \app\modules\fe_edoc\components\CActiveRecord {
         //$sql .= " LIMIT 10";
         //echo $sql;
         $rawData = $con->createCommand($sql)->queryAll();
-        $con->active = false;
         return $rawData;
     }
 
@@ -290,7 +288,6 @@ class NubeNotaCredito extends \app\modules\fe_edoc\components\CActiveRecord {
                 WHERE A.CodigoDocumento='$this->tipoDoc' AND A.IdNotaCredito =$id ";
         //echo $sql;
         $rawData = $con->createCommand($sql)->queryOne(); //Recupera Solo 1
-        $con->active = false;
         return $rawData;
     }
 
@@ -300,7 +297,6 @@ class NubeNotaCredito extends \app\modules\fe_edoc\components\CActiveRecord {
         $sql = "SELECT * FROM " . $con->dbname . ".NubeDetalleNotaCredito WHERE IdNotaCredito=$id";
         //echo $sql;
         $rawData = $con->createCommand($sql)->queryAll(); //Recupera Solo 1
-        $con->active = false;
         for ($i = 0; $i < sizeof($rawData); $i++) {
             $rawData[$i]['impuestos'] = $this->mostrarDetNcImp($rawData[$i]['IdDetalleNotaCredito']); //Retorna el Detalle del Impuesto
         }
@@ -312,7 +308,6 @@ class NubeNotaCredito extends \app\modules\fe_edoc\components\CActiveRecord {
         $con = Yii::$app->db_edoc;
         $sql = "SELECT * FROM " . $con->dbname . ".NubeDetalleNotaCreditoImpuesto WHERE IdDetalleNotaCredito=$id";
         $rawData = $con->createCommand($sql)->queryAll(); //Recupera Solo 1
-        $con->active = false;
         return $rawData;
     }
 
@@ -321,7 +316,6 @@ class NubeNotaCredito extends \app\modules\fe_edoc\components\CActiveRecord {
         $con = Yii::$app->db_edoc;
         $sql = "SELECT * FROM " . $con->dbname . ".NubeNotaCreditoImpuesto WHERE IdNotaCredito=$id";
         $rawData = $con->createCommand($sql)->queryAll(); //Recupera Solo 1
-        $con->active = false;
         return $rawData;
     }
 
@@ -330,7 +324,6 @@ class NubeNotaCredito extends \app\modules\fe_edoc\components\CActiveRecord {
         $con = Yii::$app->db_edoc;
         $sql = "SELECT * FROM " . $con->dbname . ".NubeDatoAdicionalNotaCredito WHERE IdNotaCredito=$id";
         $rawData = $con->createCommand($sql)->queryAll(); //Recupera Solo 1
-        $con->active = false;
         return $rawData;
     }
     
@@ -340,7 +333,6 @@ class NubeNotaCredito extends \app\modules\fe_edoc\components\CActiveRecord {
         $sql = "SELECT EstadoDocumento,DirectorioDocumento,NombreDocumento FROM " . $con->dbname . ".NubeNotaCredito WHERE "
                 . "IdNotaCredito=$id AND EstadoDocumento='AUTORIZADO'";
         $rawData = $con->createCommand($sql)->queryOne(); //Recupera Solo 1
-        $con->active = false;
         return $rawData;
     }
     

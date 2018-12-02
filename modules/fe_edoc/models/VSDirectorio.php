@@ -79,7 +79,6 @@ class VSDirectorio extends \app\modules\fe_edoc\components\CActiveRecord {
         $sql = "SELECT idDirectorio,TipoDocumento,Descripcion,Ruta 
                 FROM " . $con->dbname . ".VSDirectorio WHERE Estado=1;";
         $rawData = $con->createCommand($sql)->queryAll();
-        $con->active = false;
         return $rawData;
     }
     
