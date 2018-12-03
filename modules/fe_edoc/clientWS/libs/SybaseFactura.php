@@ -26,7 +26,8 @@ class SybaseFactura {
         $obj_con = new cls_BaseSybase();
         $pdo = $obj_con->conexionSybase();
         try {
-            $sql = "SELECT TOP $limit * FROM DBA.TCIDE_FACTURANC_TEMP WHERE estado_proceso=0 ";
+            $sql = "SELECT TOP $limit * FROM DBA.TCIDE_FACTURANC_TEMP WHERE estado_proceso=0 "
+                    . " AND TIPOCOMPROBANTE='01'";
             $comando = $pdo->prepare($sql);
             $comando->execute();
             $rows = $comando->fetchAll(PDO::FETCH_ASSOC);
