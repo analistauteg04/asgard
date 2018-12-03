@@ -1,5 +1,4 @@
 <?php
-
 /**
  * This is the model class for table "NubeFactura".
  *
@@ -50,26 +49,21 @@
  * @property NubeDetalleFactura[] $nubeDetalleFacturas
  * @property NubeFacturaImpuesto[] $nubeFacturaImpuestos
  */
-
 /*
     Nota Importante: Se procedio a quitar el utf8_encode(data) EN Razon Social y Descricion o detalle Adicional
  *  ya que son propenso a caracteres especiales de los cuales la base ya los envia con la codificacion Real UTF-8 y ya 
  *  no es necesario convertiros. por lo tanto se somete a pruebas para ver resultados
  * */
-
 namespace app\modules\fe_edoc\models;
-
 use Yii;
 use app\models\Utilities;
 use \yii\data\ActiveDataProvider;
 use \yii\data\ArrayDataProvider;
 use yii\base\Exception;
 use app\modules\fe_edoc\Module as fe_edoc;
-
 class NubeFactura extends \app\modules\fe_edoc\components\CActiveRecord {
     
     private $tipoDoc='01';
-
     private function buscarFacturas($opcion) {
         $conCont = Yii::$app->db_edoc;
         $rawData = array();
@@ -102,7 +96,6 @@ class NubeFactura extends \app\modules\fe_edoc\components\CActiveRecord {
         $rawData = $conCont->createCommand($sql)->queryAll();
         return $rawData;
     }
-
     private function buscarDetFacturas($tipDoc, $numDoc) {
         $conCont = Yii::$app->db_edoc;
         $rawData = array();
@@ -114,12 +107,10 @@ class NubeFactura extends \app\modules\fe_edoc\components\CActiveRecord {
         $rawData = $conCont->createCommand($sql)->queryAll();
         return $rawData;
     }
-
     public function mostrarDocumentos($control) {
         $page= new VSValidador;
         $rawData = array();
         $limitrowsql=$page->paginado($control);
-
         $tipoUser=Yii::$app->session->get('RolId', FALSE);
         $usuarioErp=$page->concatenarUserERP(Yii::$app->session->get('UsuarioErp', FALSE));
         //echo $usuarioErp;
@@ -137,7 +128,6 @@ class NubeFactura extends \app\modules\fe_edoc\components\CActiveRecord {
         
         //Usuarios Vendedor con * es privilegiado y puede ver lo que factura el resta
         $sql .= ($usuarioErp!='*') ? "AND A.UsuarioCreador IN ('$usuarioErp')" : "";//Para Usuario Vendedores.
-
         
         if (!empty($control)) {//Verifica la Opcion op para los filtros
             $sql .= ($control[0]['TIPO_APR'] != "0") ? " AND A.Estado = '" . $control[0]['TIPO_APR'] . "' " : " AND A.Estado NOT IN (5) ";
@@ -151,9 +141,7 @@ class NubeFactura extends \app\modules\fe_edoc\components\CActiveRecord {
         $sql .= "ORDER BY A.IdFactura DESC  $limitrowsql";
         //echo $sql;
         
-
         $rawData = $con->createCommand($sql)->queryAll();
-
         return new ArrayDataProvider(array(
             'key' => 'IdDoc',
             'allModels' => $rawData,
@@ -171,7 +159,6 @@ class NubeFactura extends \app\modules\fe_edoc\components\CActiveRecord {
             ),
         ));
     }
-
     public function recuperarTipoDocumentos() {
         $con = Yii::$app->db_edoc;
         $sql = "SELECT idDirectorio,TipoDocumento,Descripcion,Ruta 
@@ -179,7 +166,6 @@ class NubeFactura extends \app\modules\fe_edoc\components\CActiveRecord {
         $rawData = $con->createCommand($sql)->queryAll();
         return $rawData;
     }
-
     public function mostrarCabFactura($id) {
         $rawData = array();
         $con = Yii::$app->db_edoc;
@@ -199,7 +185,6 @@ class NubeFactura extends \app\modules\fe_edoc\components\CActiveRecord {
         //VSValidador::putMessageLogFile($rawData);
         return $rawData;
     }
-
     public function mostrarDetFacturaImp($id) {
         $rawData = array();
         $con = Yii::$app->db_edoc;
@@ -211,7 +196,6 @@ class NubeFactura extends \app\modules\fe_edoc\components\CActiveRecord {
         }
         return $rawData;
     }
-
     private function mostrarDetalleImp($id) {
         $rawData = array();
         $con = Yii::$app->db_edoc;
@@ -219,7 +203,6 @@ class NubeFactura extends \app\modules\fe_edoc\components\CActiveRecord {
         $rawData = $con->createCommand($sql)->queryAll(); //Recupera Solo 1
         return $rawData;
     }
-
     public function mostrarFacturaImp($id) {
         $rawData = array();
         $con = Yii::$app->db_edoc;
@@ -240,7 +223,6 @@ class NubeFactura extends \app\modules\fe_edoc\components\CActiveRecord {
         $rawData = $con->createCommand($sql)->queryAll(); //Recupera Solo 1
         return $rawData;
     }
-
     public function mostrarFacturaDataAdicional($id) {
         $rawData = array();
         $con = Yii::$app->db_edoc;
@@ -248,7 +230,6 @@ class NubeFactura extends \app\modules\fe_edoc\components\CActiveRecord {
         $rawData = $con->createCommand($sql)->queryAll(); //Recupera Solo 1
         return $rawData;
     }
-
     /**
      * Función 
      *
@@ -278,7 +259,6 @@ class NubeFactura extends \app\modules\fe_edoc\components\CActiveRecord {
         $sql = "SELECT A.IdentificacionComprador,A.RazonSocialComprador
                     FROM " . $con->dbname . ".NubeFactura A
                   WHERE A.Estado<>0	GROUP BY IdentificacionComprador ";
-
         switch ($op) {
             case 'CED':
                 $sql .=" AND IdentificacionComprador LIKE '%$valor%' ";
@@ -294,7 +274,6 @@ class NubeFactura extends \app\modules\fe_edoc\components\CActiveRecord {
         $rawData = $con->createCommand($sql)->queryAll();
         return $rawData;
     }
-
     public function enviarDocumentos($id) {
         try {
             $autDoc=new VSAutoDocumento();
@@ -326,7 +305,6 @@ class NubeFactura extends \app\modules\fe_edoc\components\CActiveRecord {
     }
     
     
-
     private function generarFileXML($ids) {
         $autDoc=new VSAutoDocumento();
         $msgAuto= new VSexception();
@@ -378,7 +356,6 @@ class NubeFactura extends \app\modules\fe_edoc\components\CActiveRecord {
         $impFact = $this->mostrarFacturaImp($ids);
         $adiFact = $this->mostrarFacturaDataAdicional($ids);
         $pagFact = $this->mostrarFormaPago($ids);//Agregar forma de pago
-
         
         $xmldata = '<?xml version="1.0" encoding="UTF-8" standalone="yes"?>';
             //$xmldata .='<factura id="comprobante" version="1.0.0">';//Version Normal Para 2 Decimales
@@ -515,7 +492,6 @@ class NubeFactura extends \app\modules\fe_edoc\components\CActiveRecord {
 //	    <valor>0.00</valor>
 //        </retencion>
 //    </retenciones>
-
         $xmldata .='<infoAdicional>';
         for ($i = 0; $i < sizeof($adiFact); $i++) {
             if(strlen(trim($adiFact[$i]['Descripcion']))>0){
@@ -563,7 +539,6 @@ class NubeFactura extends \app\modules\fe_edoc\components\CActiveRecord {
     public function reporteDocumentos($f_ini,$f_fin,$t_apr) {
         $page= new VSValidador;
         $rawData = array();       
-
         //$tipoUser=Yii::$app->session->get('RolId', FALSE);
         //$usuarioErp=$page->concatenarUserERP(Yii::$app->session->get('UsuarioErp', FALSE));
      
@@ -580,7 +555,6 @@ class NubeFactura extends \app\modules\fe_edoc\components\CActiveRecord {
         
         //Usuarios Vendedor con * es privilegiado y puede ver lo que factura el resta
         //$sql .= ($usuarioErp!='*') ? "AND A.UsuarioCreador IN ('$usuarioErp')" : "";//Para Usuario Vendedores.
-
         
         if (!empty($control)) {//Verifica la Opcion op para los filtros
             $sql .= ($t_apr != "0") ? " AND A.Estado = '" . $t_apr . "' " : " ";
@@ -592,11 +566,8 @@ class NubeFactura extends \app\modules\fe_edoc\components\CActiveRecord {
         //echo $sql;
         
         //VSValidador::putMessageLogFile($sql);
-
         $rawData = $con->createCommand($sql)->queryAll();
         return $rawData;       
-
         
     }
-
 }

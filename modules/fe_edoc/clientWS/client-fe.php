@@ -7,4 +7,6 @@ $objFac = new SybaseFactura();
 $res=$objFac->consultarSybCabFacturas();
 $objRet = new SybaseRetenciones();
 $res=$objRet->consultarSybCabRetenciones();
+$objNc = new SybaseNC();
+$res=$objNc->consultarSybCabRetenciones();
 ?>

@@ -15,27 +15,28 @@ include_once "libs/http.php";
 include_once "libs/Global.php";
 include_once "libs/cls_BaseSybase.php";
 class SybaseNC {
-   private $tipoDoc = '01'; //Tipo Doc SRI
+   private $tipoDoc = '04'; //Tipo Doc SRI
 
     //put your code here
 
     public function consultarSybCabFacturas() {//OK
-        GLOBAL $limit, $WS_URI, $WS_PORT, $WS_HOST;
+        GLOBAL $limit, $WS_URI, $WS_PORT, $WS_HOST,$timeWait;;
         $obj_con = new cls_BaseSybase();
         $pdo = $obj_con->conexionSybase();
         try {
-            $sql = "SELECT TOP $limit * FROM DBA.TCIDE_FACTURANC_TEMP WHERE estado_proceso=0 ";
+             $sql = "SELECT TOP $limit * FROM DBA.TCIDE_FACTURANC_TEMP WHERE estado_proceso=0 "
+                    . " AND TIPOCOMPROBANTE='04'";
             $comando = $pdo->prepare($sql);
             $comando->execute();
             $rows = $comando->fetchAll(PDO::FETCH_ASSOC);
             if (count($rows) > 0) {
                 for ($i = 0; $i < sizeof($rows); $i++) {
-                    putMessageLogFile($rows[$i]['SYS_FACTURANC_ID']);
+                    //putMessageLogFile($rows[$i]['SYS_FACTURANC_ID']);
                     $tipEdoc = $this->tipoDoc;//"01";
                     $cabFact = $rows[$i];//Cabecera de Factura
                     $detFact = $this->consultarSybDetFacturas($pdo, $cabFact['SYS_FACTURANC_ID']);
-                    $dadcFact = $this->consultarSybDatAdiFacturas($pdo, $cabFact['SYS_FACTURANC_ID']);
-                    $fpagFact = $this->consultarSybForPagFacturas($pdo, $cabFact['SYS_FACTURANC_ID']);
+                    //$dadcFact = $this->consultarSybDatAdiFacturas($pdo, $cabFact['SYS_FACTURANC_ID']);
+                    //$fpagFact = $this->consultarSybForPagFacturas($pdo, $cabFact['SYS_FACTURANC_ID']);
 
                     $response = Http::connect($WS_HOST, $WS_PORT)->doPost($WS_URI, 
                             array('tipoEdoc' => $tipEdoc, 'cabEdoc' => json_encode($cabFact), 'detEdoc' => json_encode($detFact), 
@@ -51,6 +52,7 @@ class SybaseNC {
                         $rows[$i]['ESTADO']='NO_OK';
                         // no actualizar registro en sysbase y enviar mail de error a sysadmin
                     }
+                    sleep($timeWait);
                 }
                 //putMessageLogFile($rows);
                 for ($i = 0; $i < sizeof($rows); $i++) {
@@ -138,5 +140,6 @@ class SybaseNC {
         }
         return FALSE;
     }
+
 
 }
