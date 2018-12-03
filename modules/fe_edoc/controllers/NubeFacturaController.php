@@ -56,8 +56,8 @@ class NubefacturaController extends \app\components\CController {
                     ), false, true);
             return;
         }
-        $this->view->title = Yii::t('DOCUMENTOS', 'Bills');
-        $this->render('index', array(
+        //$this->view->title = Yii::t('DOCUMENTOS', 'Bills');
+        return $this->render('index', array(
             //'dataProvider' => $dataProvider,
             'model' => $modelo->mostrarDocumentos($contBuscar),
             'tipoDoc' => $tipDoc->recuperarTipoDocumentos(),

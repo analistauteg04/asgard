@@ -31,7 +31,8 @@
         "odaialali/yii2-toastr": "1.0b",
         "kartik-v/yii2-widget-fileinput": "*",
         "kartik-v/yii2-widget-datepicker": "*",
-        "himiklab/yii2-recaptcha-widget": "*"        
+        "himiklab/yii2-recaptcha-widget": "*",
+        "barcode/yii2-barcode": "@dev"
     },
     "require-dev": {
         "yiisoft/yii2-debug": "~2.0.0",

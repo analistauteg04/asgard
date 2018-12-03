@@ -92,11 +92,9 @@ class VSServiciosSRI extends \app\modules\fe_edoc\components\CActiveRecord {
         try {
             $this->actualizarDatoServiciosSRI($con, $objEnt); //Actiañoza datos de la Empresa
             $trans->commit();
-            $con->active = false;
             return true;
         } catch (Exception $e) {
             $trans->rollback();
-            $con->active = false;
             throw $e;
             return false;
         }

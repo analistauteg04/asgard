@@ -175,7 +175,6 @@ class NubeRetencion extends \app\modules\fe_edoc\components\CActiveRecord {
         //echo $sql;
         //VSValidador::putMessageLogFile($sql);
         $rawData = $con->createCommand($sql)->queryAll();
-        $con->active = false;
 
         return new ArrayDataProvider(array(
             'key' => 'IdDoc',
@@ -187,7 +186,7 @@ class NubeRetencion extends \app\modules\fe_edoc\components\CActiveRecord {
                     'RazonSocialSujetoRetenido', 'TotalRetencion', 'NombreDocumento',
                 ),
             ),
-            'totalItemCount' => count($rawData),
+            //'totalItemCount' => count($rawData),
             'pagination' => array(
                 'pageSize' => Yii::$app->params['pageSize'],
             //'itemCount'=>count($rawData),
@@ -238,7 +237,6 @@ class NubeRetencion extends \app\modules\fe_edoc\components\CActiveRecord {
         //$sql .= " LIMIT 10";
         //echo $sql;
         $rawData = $con->createCommand($sql)->queryAll();
-        $con->active = false;
         return $rawData;
     }
     
@@ -257,7 +255,6 @@ class NubeRetencion extends \app\modules\fe_edoc\components\CActiveRecord {
                 WHERE A.CodigoDocumento='$this->tipoDoc' AND A.IdRetencion =$id ";
         //echo $sql;
         $rawData = $con->createCommand($sql)->queryOne(); //Recupera Solo 1
-        $con->active = false;
         return $rawData;
     }
 
@@ -267,7 +264,6 @@ class NubeRetencion extends \app\modules\fe_edoc\components\CActiveRecord {
         $sql = "SELECT * FROM " . $con->dbname . ".NubeDetalleRetencion WHERE IdRetencion=$id";
         //echo $sql;
         $rawData = $con->createCommand($sql)->queryAll(); //Recupera Solo 1
-        $con->active = false;
         /*for ($i = 0; $i < sizeof($rawData); $i++) {
             $rawData[$i]['impuestos'] = $this->mostrarDetalleImp($rawData[$i]['IdDetalleFactura']); //Retorna el Detalle del Impuesto
         }*/
@@ -280,7 +276,6 @@ class NubeRetencion extends \app\modules\fe_edoc\components\CActiveRecord {
         $con = Yii::$app->db_edoc;
         $sql = "SELECT * FROM " . $con->dbname . ".NubeDatoAdicionalRetencion WHERE IdRetencion=$id";
         $rawData = $con->createCommand($sql)->queryAll(); //Recupera Solo 1
-        $con->active = false;
         return $rawData;
     }
     
@@ -290,7 +285,6 @@ class NubeRetencion extends \app\modules\fe_edoc\components\CActiveRecord {
         $sql = "SELECT EstadoDocumento,DirectorioDocumento,NombreDocumento FROM " . $con->dbname . ".NubeRetencion WHERE "
                 . "IdRetencion=$id AND EstadoDocumento='AUTORIZADO'";
         $rawData = $con->createCommand($sql)->queryOne(); //Recupera Solo 1
-        $con->active = false;
         return $rawData;
     }
     

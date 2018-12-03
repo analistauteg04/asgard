@@ -86,7 +86,6 @@ class VSFirmaDigital extends \app\modules\fe_edoc\components\CActiveRecord {
         //$sql = "SELECT Clave,RutaFile FROM " . $con->dbname . ".VSFirmaDigital WHERE idCompania=$id AND Estado=1";
         $sql = "SELECT Clave,RutaFile,SeaDocXml,Wdsl_local FROM " . $con->dbname . ".VSFirmaDigital WHERE EMP_ID=$id AND Estado=1";
         $rawData = $con->createCommand($sql)->queryOne();
-        $con->active = false;
         return $rawData;
     }
 

@@ -1,13 +1,12 @@
 <?php
 /* SOLUCION VALIDA */
+
+use Yii;
+use \barcode\barcode\GeneratedCodebar;
 $ruta = Yii::app()->basePath;
-require_once($ruta . '/extensions/barcodegen/class/BCGFontFile.php');
-require_once($ruta . '/extensions/barcodegen/class/BCGColor.php');
-require_once($ruta . '/extensions/barcodegen/class/BCGDrawing.php');
-require_once($ruta . '/extensions/barcodegen/class/BCGcode128.barcode.php');
 
 // Loading Font
-$font = new BCGFontFile($ruta . '/extensions/barcodegen/font/Arial.ttf', 8);
+$font = new BCGFontFile($ruta . '/vendor/barcode/yii2-barcode/font/Arial.ttf', 8);
 
 // The arguments are R, G, B for color.
 $color_black = new BCGColor(0, 0, 0);

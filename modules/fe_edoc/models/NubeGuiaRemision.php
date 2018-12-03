@@ -174,7 +174,6 @@ class NubeGuiaRemision extends \app\modules\fe_edoc\components\CActiveRecord {
         //echo $sql;
 
         $rawData = $con->createCommand($sql)->queryAll();
-        $con->active = false;
 
         return new ArrayDataProvider(array(
             'key' => 'IdDoc',
@@ -186,7 +185,7 @@ class NubeGuiaRemision extends \app\modules\fe_edoc\components\CActiveRecord {
                     'RazonSocialDestinatario', 'NombreDocumento','FechaEmisionErp',
                 ),
             ),
-            'totalItemCount' => count($rawData),
+            //'totalItemCount' => count($rawData),
             'pagination' => array(
                 'pageSize' => Yii::$app->params['pageSize'],
             //'itemCount'=>count($rawData),
@@ -249,7 +248,6 @@ class NubeGuiaRemision extends \app\modules\fe_edoc\components\CActiveRecord {
         //$sql .= " LIMIT 10";
         //echo $sql;
         $rawData = $con->createCommand($sql)->queryAll();
-        $con->active = false;
         return $rawData;
     }
     
@@ -269,7 +267,6 @@ class NubeGuiaRemision extends \app\modules\fe_edoc\components\CActiveRecord {
         
         //echo $sql;
         $rawData = $con->createCommand($sql)->queryOne(); //Recupera Solo 1
-        $con->active = false;
         return $rawData;
     }
     
@@ -279,7 +276,6 @@ class NubeGuiaRemision extends \app\modules\fe_edoc\components\CActiveRecord {
         $sql = "SELECT * FROM " . $con->dbname . ".NubeGuiaRemisionDestinatario WHERE IdGuiaRemision=$id";
         //echo $sql;
         $rawData = $con->createCommand($sql)->queryAll(); 
-        $con->active = false;
         for ($i = 0; $i < sizeof($rawData); $i++) {
             $rawData[$i]['GuiaDet'] = $this->mostrarDetGuia($rawData[$i]['IdGuiaRemisionDestinatario']); //Retorna el Detalle del Impuesto
         }
@@ -291,7 +287,6 @@ class NubeGuiaRemision extends \app\modules\fe_edoc\components\CActiveRecord {
         $con = Yii::$app->db_edoc;
         $sql = "SELECT * FROM " . $con->dbname . ".NubeGuiaRemisionDetalle WHERE IdGuiaRemisionDestinatario=$id";
         $rawData = $con->createCommand($sql)->queryAll(); 
-        $con->active = false;
         for ($i = 0; $i < sizeof($rawData); $i++) {
             $rawData[$i]['GuiaDetAdi'] = $this->mostrarDetGuiaDatoAdi($rawData[$i]['IdGuiaRemisionDetalle']); //Retorna el Detalle del Impuesto
         }
@@ -303,7 +298,6 @@ class NubeGuiaRemision extends \app\modules\fe_edoc\components\CActiveRecord {
         $con = Yii::$app->db_edoc;
         $sql = "SELECT * FROM " . $con->dbname . ".NubeDatoAdicionalGuiaRemisionDetalle WHERE IdGuiaRemisionDetalle=$id";
         $rawData = $con->createCommand($sql)->queryAll(); 
-        $con->active = false;
         return $rawData;
     }
     
@@ -312,7 +306,6 @@ class NubeGuiaRemision extends \app\modules\fe_edoc\components\CActiveRecord {
         $con = Yii::$app->db_edoc;
         $sql = "SELECT * FROM " . $con->dbname . ".NubeDatoAdicionalGuiaRemision WHERE IdGuiaRemision=$id";
         $rawData = $con->createCommand($sql)->queryAll(); //Recupera Solo 1
-        $con->active = false;
         return $rawData;
     }
     
@@ -322,7 +315,6 @@ class NubeGuiaRemision extends \app\modules\fe_edoc\components\CActiveRecord {
         $sql = "SELECT EstadoDocumento,DirectorioDocumento,NombreDocumento FROM " . $con->dbname . ".NubeGuiaRemision WHERE "
                 . "IdGuiaRemision=$id AND EstadoDocumento='AUTORIZADO'";
         $rawData = $con->createCommand($sql)->queryOne(); //Recupera Solo 1
-        $con->active = false;
         return $rawData;
     }
     

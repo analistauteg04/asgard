@@ -78,12 +78,10 @@ class USUARIO extends \app\modules\fe_edoc\components\CActiveRecord {
             $comando->execute();
             //echo $sql;
             $trans->commit();
-            $con->active = false;
             return $msg->messageSystem('OK', null, 20, null, null);
         } catch (Exception $e) { // se arroja una excepción si una consulta falla
             $trans->rollBack();
             //throw $e;
-            $con->active = false;
             return $msg->messageSystem('NO_OK', $e->getMessage(), 11, null, null);
         }
     }
@@ -99,12 +97,10 @@ class USUARIO extends \app\modules\fe_edoc\components\CActiveRecord {
             $comando->execute();
             //echo $sql;
             $trans->commit();
-            $con->active = false;
             return $msg->messageSystem('OK', null, 20, null, null);
         } catch (Exception $e) { // se arroja una excepción si una consulta falla
             $trans->rollBack();
             //throw $e;
-            $con->active = false;
             return $msg->messageSystem('NO_OK', $e->getMessage(), 11, null, null);
         }
     }
@@ -159,7 +155,6 @@ class USUARIO extends \app\modules\fe_edoc\components\CActiveRecord {
                 }
 
         $rawData = $con->createCommand($sql)->queryAll();
-        $con->active = false;
         return $rawData;
     }
 

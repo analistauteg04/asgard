@@ -33,7 +33,6 @@ class VSacceso {
                 . " WHERE A.ROL_ID=$id AND A.OMROL_ESTADO_LOGICO=1 ORDER BY MOD_ID,OMOD_ORDEN ";
         //VSValidador::putMessageLogFile($sql);
         $rawData = $conApp->createCommand($sql)->queryAll(); //Varios registros =>  $rawData[0]['RazonSocial']
-        $conApp->active = false;
         $auxInicio = 0;
         $auxCierre = 0;
         $auxInicio3 = 0;
