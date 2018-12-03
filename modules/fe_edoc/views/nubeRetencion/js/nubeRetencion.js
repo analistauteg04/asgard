@@ -21,15 +21,11 @@ function retornarIndLista(array,property,value,ids){
 
 function buscarDataIndex(control,op){ 
     control=(control=='')?'txt_PER_CEDULA':control;
-    var link=$('#txth_controlador').val()+"/Index";
-    //var link=$('#txth_controlador').val()+"/BuscaDataIndex";
-    $.fn.yiiGridView.update('TbG_DOCUMENTO', {
-        type: 'POST',
-        url:link,
-        data:{
-            "CONT_BUSCAR": controlBuscarIndex(control,op)
-        }
-    }); 
+    if (!$(".blockUI").length) {
+        showLoadingPopup();
+        $('#TbG_DOCUMENTO').PbGridView('applyFilterData', { "CONT_BUSCAR": controlBuscarIndex(control, op) });
+        setTimeout(hideLoadingPopup, 2000);
+    }
 }
 
 function controlBuscarIndex(control,op){
@@ -48,42 +44,40 @@ function controlBuscarIndex(control,op){
     buscarIndex.F_INI=$('#dtp_fec_ini').val();
     buscarIndex.F_FIN=$('#dtp_fec_fin').val();
     buscarArray[0] = buscarIndex;
-    return JSON.stringify(buscarArray);
+    return buscarArray[0];
+    //return JSON.stringify(buscarArray);
 }
 
 function autocompletarBuscarPersona(request, response,control,op){
-    var link=$('#txth_controlador').val()+"/BuscarPersonas";
-    $.ajax({
-        type: 'POST',
-        dataType: 'json',
-        url:link,
-        data:{
-            valor: $('#'+control).val(),
-            op: op
-        },
-        success:function(data){
-            var arrayList =new Array;
-            var count=data.length;
-            for(var i=0;i<count;i++){
-                row=new Object();
-                row.IdentificacionSujetoRetenido=data[i]['IdentificacionSujetoRetenido'];
-                row.RazonSocialSujetoRetenido=data[i]['RazonSocialSujetoRetenido'];
+    var link = $('#txth_base').val() +"/fe_edoc/nuberetencion/BuscarPersonas";
+    var arrParams = new Object();
+    arrParams.valor = $('#' + control).val();
+    arrParams.op = op;
+    requestHttpAjax(link, arrParams, function (response) {
+        showAlert(response.status, response.label, response.message);
+        //if (response.status == 'OK') {
+        var arrayList = new Array;
+        var count = data.length;
+        for (var i = 0; i < count; i++) {
+            row = new Object();
+            row.IdentificacionSujetoRetenido = data[i]['IdentificacionSujetoRetenido'];
+            row.RazonSocialSujetoRetenido = data[i]['RazonSocialSujetoRetenido'];
 
-                // Campos Importandes relacionados con el  CJuiAutoComplete
-                row.id=data[i]['IdentificacionSujetoRetenido'];
-                row.label=data[i]['RazonSocialSujetoRetenido']+' - '+data[i]['IdentificacionSujetoRetenido'];//+' - '+data[i]['SEGURO_SOCIAL'];//Lo sugerido
-                //row.value=data[i]['IdentificacionSujetoRetenido'];//lo que se almacena en en la caja de texto
-                row.value=data[i]['RazonSocialSujetoRetenido'];//lo que se almacena en en la caja de texto
-                arrayList[i] = row;
-            }
-            sessionStorage.src_buscIndex = JSON.stringify(arrayList);//dss=>DataSessionStore
-            response(arrayList);  
+            // Campos Importandes relacionados con el  CJuiAutoComplete
+            row.id = data[i]['IdentificacionSujetoRetenido'];
+            row.label = data[i]['RazonSocialSujetoRetenido'] + ' - ' + data[i]['IdentificacionSujetoRetenido'];//+' - '+data[i]['SEGURO_SOCIAL'];//Lo sugerido
+            //row.value=data[i]['IdentificacionSujetoRetenido'];//lo que se almacena en en la caja de texto
+            row.value = data[i]['RazonSocialSujetoRetenido'];//lo que se almacena en en la caja de texto
+            arrayList[i] = row;
         }
-    })            
+        sessionStorage.src_buscIndex = JSON.stringify(arrayList);//dss=>DataSessionStore
+        response(arrayList); 
+        //}
+    }, true);         
 }
 
 function verificaAcciones(){
-    var ids = String($.fn.yiiGridView.getSelection('TbG_DOCUMENTO'));
+    var ids = String($('#TbG_DOCUMENTO').PbGridView('getSelectedRows'));
     var count=ids.split(",");
     if(count.length>0 && ids!=""){
         $("#btn_enviar").removeClass("disabled");
@@ -108,33 +102,28 @@ function verificaAutorizado(TbGtable) {
 
 
 function fun_EnviarDocumento(){
-    var ids = String($.fn.yiiGridView.getSelection('TbG_DOCUMENTO'));
+    var ids = String($('#TbG_DOCUMENTO').PbGridView('getSelectedRows'));
     var count=ids.split(",");
     if(count.length>0 && ids!=""){
         if(!confirm(mgEnvDocum)) return false;
-        var link=$('#txth_controlador').val()+"/EnviarDocumento";
+        var link = $('#txth_base').val() +"/fe_edoc/nuberetencion/EnviarDocumento";
         var encodedIds = base64_encode(ids);  //Verificar cofificacion Base
         $("#TbG_DOCUMENTO").addClass("loading");
-        $.ajax({
-            type: 'POST',
-            url: link,
-            data:{
-                "ids": encodedIds
-            } ,
-            success: function(data){
-                if (data.status=="OK"){ 
-                    $("#messageInfo").html(data.message+buttonAlert); 
-                    alerMessage();
-                    //actualizarTbG_DOCUMENTO();
-                    buscarDataIndex('','');
-                }else{
-                    $("#messageInfo").html(data.message+buttonAlert); 
-                    alerMessage();
-                }
-            },
-            dataType: "json"
-        });
-        $("#TbG_DOCUMENTO").removeClass("loading");
+        var arrParams = new Object();
+        arrParams.ids = encodedIds;
+        requestHttpAjax(link, arrParams, function (response) {
+            showAlert(response.status, response.label, response.message);
+            if (response.status == 'OK') {
+                $("#messageInfo").html(response.message + buttonAlert);
+                alerMessage();
+                //actualizarTbG_DOCUMENTO();
+                buscarDataIndex('', '');
+            } else {
+                $("#messageInfo").html(response.message + buttonAlert);
+                alerMessage();
+            }
+            $("#TbG_DOCUMENTO").removeClass("loading");
+        }, true);
     }else{
         $("#messageInfo").html(selecDoc+buttonAlert); 
         alerMessage();
@@ -144,7 +133,7 @@ function fun_EnviarDocumento(){
 }
 
 function actualizarTbG_DOCUMENTO(){
-    $.fn.yiiGridView.update('TbG_DOCUMENTO');
+    $('#TbG_DOCUMENTO').PbGridView('getSelectedRows');
     /*var link=$('#txth_controlador').val()+"/Index";
     $.fn.yiiGridView.update('TbG_COMPANIA', {
         type: 'POST',
@@ -160,32 +149,26 @@ function actualizarTbG_DOCUMENTO(){
  */
 
 function fun_EnviarCorreccion(){
-    var ids = String($.fn.yiiGridView.getSelection('TbG_DOCUMENTO'));
+    var ids = String($('#TbG_DOCUMENTO').PbGridView('getSelectedRows'));
     var count=ids.split(",");
     if(count.length>0 && ids!=""){
         if(!confirm(mgEnvDocumAnu)) return false;
-        var link=$('#txth_controlador').val()+"/EnviarCorreccion";
+        var link = $('#txth_base').val() +"/fe_edoc/nuberetencion/EnviarCorreccion";
         var encodedIds = base64_encode(ids);  //Verificar cofificacion Base
         $("#TbG_DOCUMENTO").addClass("loading");
-        $.ajax({
-            type: 'POST',
-            url: link,
-            data:{
-                "ids": encodedIds
-            } ,
-            success: function(data){
-                if (data.status=="OK"){ 
-                    $("#messageInfo").html(data.message+buttonAlert); 
-                    alerMessage();
-                    //actualizarTbG_DOCUMENTO();
-                    buscarDataIndex('','');
-                }else{
-                    $("#messageInfo").html(data.message+buttonAlert); 
-                    alerMessage();
-                }
-            },
-            dataType: "json"
-        });
+        var arrParams = new Object();
+        arrParams.ids = encodedIds;
+        requestHttpAjax(link, arrParams, function (response) {
+            if (response.status == "OK") {
+                $("#messageInfo").html(response.message + buttonAlert);
+                alerMessage();
+                //actualizarTbG_DOCUMENTO();
+                buscarDataIndex('', '');
+            } else {
+                $("#messageInfo").html(response.message + buttonAlert);
+                alerMessage();
+            }
+        }, true);
         $("#TbG_DOCUMENTO").removeClass("loading");
     }else{
         $("#messageInfo").html(selecDocAnu+buttonAlert); 
@@ -194,35 +177,27 @@ function fun_EnviarCorreccion(){
     return true;
 }
 
-
-
 function fun_EnviarAnular(){
-    var ids = String($.fn.yiiGridView.getSelection('TbG_DOCUMENTO'));
+    var ids = String($('#TbG_DOCUMENTO').PbGridView('getSelectedRows'));
     var count=ids.split(",");
     if(count.length>0 && ids!=""){
         if(!confirm(mgEnvDocumAnu)) return false;
-        var link=$('#txth_controlador').val()+"/EnviarAnular";
+        var link = $('#txth_base').val() +"/fe_edoc/nuberetencion/EnviarAnular";
         var encodedIds = base64_encode(ids);  //Verificar cofificacion Base
         $("#TbG_DOCUMENTO").addClass("loading");
-        $.ajax({
-            type: 'POST',
-            url: link,
-            data:{
-                "ids": encodedIds
-            } ,
-            success: function(data){
-                if (data.status=="OK"){ 
-                    $("#messageInfo").html(data.message+buttonAlert); 
-                    alerMessage();
-                    //actualizarTbG_DOCUMENTO();
-                    buscarDataIndex('','');
-                }else{
-                    $("#messageInfo").html(data.message+buttonAlert); 
-                    alerMessage();
-                }
-            },
-            dataType: "json"
-        });
+        var arrParams = new Object();
+        arrParams.ids = encodedIds;
+        requestHttpAjax(link, arrParams, function (response) {
+            if (response.status == "OK") {
+                $("#messageInfo").html(response.message + buttonAlert);
+                alerMessage();
+                //actualizarTbG_DOCUMENTO();
+                buscarDataIndex('', '');
+            } else {
+                $("#messageInfo").html(response.message + buttonAlert);
+                alerMessage();
+            }
+        }, true);
         $("#TbG_DOCUMENTO").removeClass("loading");
     }else{
         $("#messageInfo").html(selecDocAnu+buttonAlert); 
@@ -233,32 +208,26 @@ function fun_EnviarAnular(){
 
 
 function fun_EnviarCorreo(){
-    var ids = String($.fn.yiiGridView.getSelection('TbG_DOCUMENTO'));
+    var ids = String($('#TbG_DOCUMENTO').PbGridView('getSelectedRows'));
     var count=ids.split(",");
     if(count.length>0 && ids!=""){
         if(!confirm(mgEnvDocum)) return false;
         var link=$('#txth_controlador').val()+"/EnviarCorreo";
         var encodedIds = base64_encode(ids);  //Verificar cofificacion Base
         $("#TbG_DOCUMENTO").addClass("loading");
-        $.ajax({
-            type: 'POST',
-            url: link,
-            data:{
-                "ids": encodedIds
-            } ,
-            success: function(data){
-                if (data.status=="OK"){ 
-                    $("#messageInfo").html(data.message+buttonAlert); 
-                    alerMessage();
-                    //actualizarTbG_DOCUMENTO();
-                    buscarDataIndex('','');
-                }else{
-                    $("#messageInfo").html(data.message+buttonAlert); 
-                    alerMessage();
-                }
-            },
-            dataType: "json"
-        });
+        var arrParams = new Object();
+        arrParams.ids = encodedIds;
+        requestHttpAjax(link, arrParams, function (response) {
+            if (response.status == "OK") {
+                $("#messageInfo").html(response.message + buttonAlert);
+                alerMessage();
+                //actualizarTbG_DOCUMENTO();
+                buscarDataIndex('', '');
+            } else {
+                $("#messageInfo").html(response.message + buttonAlert);
+                alerMessage();
+            }
+        }, true);
         $("#TbG_DOCUMENTO").removeClass("loading");
     }else{
         $("#messageInfo").html(selecDocMail+buttonAlert); 
@@ -272,11 +241,11 @@ function fun_EnviarCorreo(){
  */
 function fun_UpdateMail(){
     var link="";
-    var id = String($.fn.yiiGridView.getSelection('TbG_DOCUMENTO'));
+    var id = String($('#TbG_DOCUMENTO').PbGridView('getSelectedRows'));
     var count=id.split(",");
     if(count.length==1 && id!=""){
         //id = base64_encode(ids);
-        link=$('#txth_controlador').val()+"/updatemail?";
+        link = $('#txth_base').val() +"/fe_edoc/nuberetencion/updatemail?";
         $('#btn_Update').attr("href", link+"id="+id); 
     }
 }
@@ -286,27 +255,20 @@ function fun_CambiaMail() {
     var correo = $('#txt_correo').val();
     if ($('#txt_correo').val()!='' && ids!=0) {
         //pass = base64_encode(pass);
-        var link = $('#txth_controlador').val() + "/Savemail";
-        $.ajax({
-            type: 'POST',
-            dataType: 'json',
-            url: link,
-            data: {
-                "DATA": correo,
-                "ID": ids,
-            },
-            success: function (data) {
-                if (data.status == "OK") {
-                    $("#messageInfo").html(data.message + buttonAlert);
-                    alerMessage();
-                } else {
-                    $("#messageInfo").html(data.message + buttonAlert);
-                    alerMessage();
-                }
-            },
-        });
+        var link = $('#txth_base').val() +"/fe_edoc/nuberetencion/Savemail";
+        var arrParams = new Object();
+        arrParams.DATA = correo;
+        arrParams.ID = ids;
+        requestHttpAjax(link, arrParams, function (response) {
+            if (response.status == "OK") {
+                $("#messageInfo").html(response.message + buttonAlert);
+                alerMessage();
+            } else {
+                $("#messageInfo").html(response.message + buttonAlert);
+                alerMessage();
+            }
+        }, true);
     }else{
         alert('Los Datos de correo no son correctos.');
     }
-
 }
