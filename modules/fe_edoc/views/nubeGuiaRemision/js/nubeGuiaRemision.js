@@ -21,15 +21,11 @@ function retornarIndLista(array,property,value,ids){
 
 function buscarDataIndex(control,op){ 
     control=(control=='')?'txt_PER_CEDULA':control;
-    var link=$('#txth_controlador').val()+"/Index";
-    //var link=$('#txth_controlador').val()+"/BuscaDataIndex";
-    $.fn.yiiGridView.update('TbG_DOCUMENTO', {
-        type: 'POST',
-        url:link,
-        data:{
-            "CONT_BUSCAR": controlBuscarIndex(control,op)
-        }
-    }); 
+    if (!$(".blockUI").length) {
+        showLoadingPopup();
+        $('#TbG_DOCUMENTO').PbGridView('applyFilterData', { "CONT_BUSCAR": controlBuscarIndex(control, op)});
+        setTimeout(hideLoadingPopup, 2000);
+    }
 }
 
 function controlBuscarIndex(control,op){

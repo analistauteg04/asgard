@@ -24,7 +24,7 @@ function buscarDataIndex(control,op){
     control=(control=='')?'txt_PER_CEDULA':control;
     if (!$(".blockUI").length) {
         showLoadingPopup();
-        $('#TbG_DOCUMENTO').PbGridView('applyFilterData', controlBuscarIndex(control, op));
+        $('#TbG_DOCUMENTO').PbGridView('applyFilterData', { "CONT_BUSCAR": controlBuscarIndex(control, op) });
         setTimeout(hideLoadingPopup, 2000);
     }
 }
