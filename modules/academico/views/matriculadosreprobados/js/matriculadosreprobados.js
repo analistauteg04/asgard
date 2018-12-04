@@ -257,7 +257,9 @@ function guardarAdmireprobado(accion, paso) {
                 paso1next();
             } else if (accion == "Update") {
                 showAlert(response.status, response.label, response.message);
-                window.location.href = $('#txth_base').val() + "/admision/interesados/index";
+                paso2next();
+                //window.location.href = $('#txth_base').val() + "/admision/interesados/index";
+                
             }
         }
     }, true);
