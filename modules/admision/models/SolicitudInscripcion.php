@@ -478,7 +478,8 @@ class SolicitudInscripcion extends \yii\db\ActiveRecord
                     per.per_celular, 
                     sins.ming_id, 
                     sins.emp_id,
-                    sins.sins_observacion_creasolicitud
+                    sins.sins_observacion_creasolicitud,
+                    sins.sins_observacion_revisa
                 FROM 
                     " . $con->dbname . ".solicitud_inscripcion as sins
                     INNER JOIN " . $con->dbname . ".interesado as inte on sins.int_id = inte.int_id
@@ -573,7 +574,7 @@ class SolicitudInscripcion extends \yii\db\ActiveRecord
      * @param   
      * @return  
      */
-    public function apruebaSolicitud($sins_id, $rsin_id, $observacion, $banderapreaprueba, $usuario) {
+    public function apruebaSolicitud($sins_id, $rsin_id, $observacion, $observarevisa, $banderapreaprueba, $usuario) {
         $con = \Yii::$app->db_captacion;
         $estado = 1;
         $fecha_modificacion = date(Yii::$app->params["dateTimeByDefault"]); //date("Y-m-d H:i:s");//$hoy = date("Y-m-d H:i:s"); 
@@ -610,6 +611,7 @@ class SolicitudInscripcion extends \yii\db\ActiveRecord
                     sins_fecha_reprobacion = ifnull(:fecha_reprobacion,sins_fecha_reprobacion),
                     sins_fecha_prenoprobacion = ifnull(:fecha_prenoprobacion,sins_fecha_prenoprobacion),
                     sins_observacion = ifnull(:observacion,sins_observacion),
+                    sins_observacion_revisa = :observarevisa,
                     sins_preobservacion = ifnull(:preobservacion,sins_preobservacion),
                     sins_usuario_preaprueba = ifnull(:usu_preaprueba,sins_usuario_preaprueba),
                     sins_usuario_aprueba = ifnull(:usu_aprueba,sins_usuario_aprueba),
@@ -631,6 +633,7 @@ class SolicitudInscripcion extends \yii\db\ActiveRecord
         $comando->bindParam(":fecha_modificacion", $fecha_modificacion, \PDO::PARAM_STR);
         $comando->bindParam(":usu_preaprueba", $usu_preaprueba, \PDO::PARAM_INT);
         $comando->bindParam(":usu_aprueba", $usu_aprueba, \PDO::PARAM_INT);
+        $comando->bindParam(":observarevisa", $observarevisa, \PDO::PARAM_STR);
 
         $response = $comando->execute();
         return $response;

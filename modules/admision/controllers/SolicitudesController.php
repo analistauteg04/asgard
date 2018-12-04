@@ -1035,7 +1035,8 @@ class SolicitudesController extends \app\components\CController {
             $certivot = $data["certi"];
             $emp_id = $data["empresa"];
             $rsin_id = base64_decode($data["estado_sol"]);
-
+            $observarevisa = ucwords(strtolower($data["observarevisa"]));
+            
             $con = \Yii::$app->db_captacion;
             $transaction = $con->beginTransaction();
             $con2 = \Yii::$app->db_facturacion;
@@ -1058,7 +1059,7 @@ class SolicitudesController extends \app\components\CController {
                                 //consultar estado del pago.     
                                 $resp_pago = $mod_ordenpago->consultaOrdenPago($sins_id);
                                 if ($resp_pago["opag_estado_pago"] == 'S') {
-                                    $respsolins = $mod_solins->apruebaSolicitud($sins_id, $resultado, $observacion, $banderapreaprueba, $respusuario['usu_id']);
+                                    $respsolins = $mod_solins->apruebaSolicitud($sins_id, $resultado, $observacion, $observarevisa, $banderapreaprueba, $respusuario['usu_id']);
                                     if ($respsolins) {
                                         //Se genera id de aspirante y correo de bienvenida.                                
                                         $resp_encuentra = $mod_ordenpago->encuentraAdmitido($int_id, $sins_id);
@@ -1139,7 +1140,7 @@ class SolicitudesController extends \app\components\CController {
                                     $mensaje = 'La solicitud se encuentra pendiente de pago.';
                                 }
                             } else { //No aprueban la solicitud  
-                                $respsolins = $mod_solins->apruebaSolicitud($sins_id, $resultado, $observacion, $banderapreaprueba, $respusuario['usu_id']);
+                                $respsolins = $mod_solins->apruebaSolicitud($sins_id, $resultado, $observacion, $observarevisa, $banderapreaprueba, $respusuario['usu_id']);
                                 if ($respsolins) {
                                     $srec_etapa = "A";  //Aprobación                            
                                     //Grabar en tabla de solicitudes rechazadas.
@@ -1220,7 +1221,7 @@ class SolicitudesController extends \app\components\CController {
                                 //Verificar que se hayan subido los documentos.
                                 $respConsulta = $mod_solins->consultarDocumxSolic($sins_id);
                                 if ($respConsulta['numDocumentos'] > 0) {
-                                    $respsolins = $mod_solins->apruebaSolicitud($sins_id, $resultado, $observacion, $banderapreaprueba, $respusuario['usu_id']);
+                                    $respsolins = $mod_solins->apruebaSolicitud($sins_id, $resultado, $observacion, $observarevisa, $banderapreaprueba, $respusuario['usu_id']);
                                     if ($respsolins) {
                                         $exito = 1;
                                     }
@@ -1229,7 +1230,7 @@ class SolicitudesController extends \app\components\CController {
                                 }
                             } else {
                                 if ($resultado == 4) {
-                                    $respsolins = $mod_solins->apruebaSolicitud($sins_id, $resultado, $observacion, $banderapreaprueba, $respusuario['usu_id']);
+                                    $respsolins = $mod_solins->apruebaSolicitud($sins_id, $resultado, $observacion, $observarevisa, $banderapreaprueba, $respusuario['usu_id']);
                                     if ($respsolins) {
                                         $srec_etapa = "P";  //Preaprobación                       
                                         //Grabar en tabla de solicitudes rechazadas.

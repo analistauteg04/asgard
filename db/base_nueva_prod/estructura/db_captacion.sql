@@ -136,6 +136,8 @@ create table if not exists `solicitud_inscripcion` (
  `sins_fecha_prenoprobacion` timestamp null default null,
  `sins_preobservacion` varchar(1000) null,
  `sins_observacion` varchar(1000) null,
+ `sins_observacion_creasolicitud` varchar(1000) null,
+ `sins_observacion_revisa` varchar(1000) null,
  `sins_beca` varchar(1) null,
  `sins_usuario_preaprueba` bigint(20) null, 
  `sins_usuario_aprueba` bigint(20) null, 

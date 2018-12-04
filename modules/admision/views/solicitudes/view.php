@@ -230,32 +230,40 @@ financiero::registerTranslations();
         </div>
     </div> 
     <div class="col-md-6 col-sm-6 col-xs-6 col-lg-6">
-        <div class="form-group">
-            <label for="txt_observa" class="col-sm-4 col-md-4 col-xs-4 col-lg-4 control-label keyupmce"><?= Yii::t("formulario", "Observation") ?></label>
-            <div class="col-sm-8 col-md-8 col-xs-8 col-lg-8">                
-                <textarea  class="form-control keyupmce" id="txt_observa" disabled = "true" rows="3"><?= $arr_observa['sdoc_observacion'] ?></textarea>                  
-            </div>
-        </div>   
+        <label for="txt_observa" class="col-sm-4 col-md-4 col-xs-4 col-lg-4 control-label keyupmce"><?= Yii::t("formulario", "Observation") ?></label>
+        <div class="col-sm-8 col-md-8 col-xs-8 col-lg-8">                
+            <textarea  class="form-control keyupmce" id="txt_observa" disabled = "true" rows="3"><?= $arr_observa['sdoc_observacion'] ?></textarea>                  
+        </div>
     </div> 
     <div class="col-md-12 col-sm-12 col-xs-12 col-lg-12">
         <h4><b><span id="lbl_solicitud"><?= admision::t("Solicitudes", "Result Review") ?></span></b></h4>
     </div> 
 
-    <div class="col-md-6 col-sm-6 col-xs-6 col-lg-6">
-        <div class="form-group">
-            <label for="cmb_revision" class="col-sm-4 col-md-4 col-xs-4 col-lg-4 control-label keyupmce"><?= Yii::t("formulario", "Result") ?></label>
-            <div class="col-sm-4 col-md-4 col-xs-4 col-lg-4">
+        <div class="col-md-6 col-sm-6 col-xs-6 col-lg-6">
+            <div class="form-group">
+                <label for="cmb_revision" class="col-sm-4 col-md-4 col-xs-4 col-lg-4 control-label keyupmce"><?= Yii::t("formulario", "Result") ?></label>
+                <div class="col-sm-4 col-md-4 col-xs-4 col-lg-4">
 
-                <?php if ($personaData["rsin_id"] != 2) { ?> 
-                    <?= Html::dropDownList("cmb_revision", 0, $revision, ["class" => "form-control PBvalidation", "id" => "cmb_revision"]) ?> 
-                <?php } else { ?>                
-                    <?= Html::dropDownList("cmb_revision", $personaData["rsin_id"], $revision, ["class" => "form-control PBvalidation", "id" => "cmb_revision", "disabled" => "true"]) ?> 
-                <?php } ?>      
+                    <?php if ($personaData["rsin_id"] != 2) { ?> 
+                        <?= Html::dropDownList("cmb_revision", 0, $revision, ["class" => "form-control PBvalidation", "id" => "cmb_revision"]) ?> 
+                    <?php } else { ?>                
+                        <?= Html::dropDownList("cmb_revision", $personaData["rsin_id"], $revision, ["class" => "form-control PBvalidation", "id" => "cmb_revision", "disabled" => "true"]) ?> 
+                    <?php } ?>      
 
+                </div>
             </div>
         </div>
-    </div>
-
+        <div class="col-md-6 col-sm-6 col-xs-6 col-lg-6">
+            <label for="txt_observarevi" class="col-sm-4 col-md-4 col-xs-4 col-lg-4 control-label keyupmce"><?= Yii::t("formulario", "Observation") ?></label>
+            <div class="col-sm-8 col-md-8 col-xs-8 col-lg-8">                
+                <?php if ($personaData["rsin_id"] != 2) { ?> 
+                    <textarea  class="form-control keyupmce" id="txt_observarevi" rows="3"><?= $personaData["sins_observacion_revisa"] ?></textarea>                  
+                <?php } else { ?>  
+                    <textarea  class="form-control keyupmce" id="txt_observarevi" disabled = "true" rows="3"><?= $personaData["sins_observacion_revisa"] ?></textarea>                  
+                <?php } ?>   
+            </div>
+        </div>
+  
     <?php //if (empty($personaData["sins_fecha_reprobacion"])) { ?> 
     <div class="col-md-12 col-sm-12 col-xs-12 col-lg-12" id="Divnoaprobado" style="display: none;"> 
         <div class="col-md-6 col-sm-6 col-xs-6 col-lg-6">
