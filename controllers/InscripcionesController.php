@@ -332,6 +332,19 @@ class InscripcionesController extends \yii\web\Controller {
                     if ($exito) {
                         $transaction->commit();
                         //Aqui antes enviaba correo
+                        $tituloMensaje = Yii::t("register", "User Register");
+                        $asunto = Yii::t("register", "User Register") . " " . Yii::$app->params["siteName"];
+                        $body = Utilities::getMailMessage("registernew", array(
+                                    "[[primer_nombre]]" => $nombre1,
+                                    "[[primer_apellido]]" => $apellido1,
+                                    "[[dni]]" => $dnis,
+                                    "[[numero_dni]]" => $numidentificacion,
+                                    "[[celular]]" => $celular,
+                                    "[[mail]]" => $correo,
+                                    "[[unidad_academica]]" => $nombre_unidad["nombre_unidad"],
+                                    "[[modalidad]]" => $nombre_modalidad["nombre_modalidad"]), Yii::$app->language);
+                        Utilities::sendEmail($tituloMensaje, Yii::$app->params["adminEmail"], [Yii::$app->params["lidercontact"] => "Lider", Yii::$app->params["contact1"] => "contact1", Yii::$app->params["contact2"] => "contact2", Yii::$app->params["contact3"] => "contact3", Yii::$app->params["contact4"] => "contact4"], $asunto, $body);
+
                         $message = array(
                             "wtmessage" => Yii::t("notificaciones", "Gracias por tu interés en UTEG. Un asesor lo contactará en las proximas 24 horas. "),
                             "title" => Yii::t('jslang', 'Success'),
@@ -358,9 +371,7 @@ class InscripcionesController extends \yii\web\Controller {
                                 "[[mail]]" => $correo,
                                 "[[unidad_academica]]" => $nombre_unidad["nombre_unidad"],
                                 "[[modalidad]]" => $nombre_modalidad["nombre_modalidad"]), Yii::$app->language);
-                    Utilities::sendEmail($tituloMensaje, Yii::$app->params["adminEmail"], [Yii::$app->params["lidercontact"] => $nombre1 . " " . $nombre2], $asunto, $body);
-                    Utilities::sendEmail($tituloMensaje, Yii::$app->params["adminEmail"], [Yii::$app->params["adminlider"] => $nombre1 . " " . $nombre2], $asunto, $body);
-                    Utilities::sendEmail($tituloMensaje, Yii::$app->params["adminEmail"], [Yii::$app->params["soporteEmail"] => "Soporte"], $asunto, $body);
+                    Utilities::sendEmail($tituloMensaje, Yii::$app->params["adminEmail"], [Yii::$app->params["soporteEmail"] => "Soporte", Yii::$app->params["lidercontact"] => "lider", Yii::$app->params["adminlider"] => "adminlider"], $asunto, $body);
 
                     $transaction->rollback();
                     $message = array(
@@ -437,12 +448,14 @@ class InscripcionesController extends \yii\web\Controller {
             }
         }
     }
+
     public function actionGuardarinscripcionsolicitud() {
-        
+
         if (Yii::$app->request->isAjax) {
             //Aqui debes guardar la informacion en la tabla temporal
         }
     }
+
 //    public function actionGuardarinscripcionsolicitud() {
 //        $error = 0;
 //        if (Yii::$app->request->isAjax) {
@@ -688,5 +701,4 @@ class InscripcionesController extends \yii\web\Controller {
 //            return;
 //        }
 //    }
-
 }
