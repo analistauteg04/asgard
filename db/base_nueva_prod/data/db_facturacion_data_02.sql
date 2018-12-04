@@ -2,7 +2,7 @@
 -- Base de datos: `db_facturacion`
 --
 use `db_facturacion`;
-
+-- u
 --
 -- Volcado de datos para la tabla `orden_pago`
 --
