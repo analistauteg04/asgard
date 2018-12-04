@@ -224,6 +224,19 @@ class InscripcionulinkController extends \yii\web\Controller {
                     if ($exito) {
                         $transaction->commit();
                         //Aqui antes enviaba correo
+                        $tituloMensaje = Yii::t("register", "User Register");
+                        $asunto = Yii::t("register", "User Register") . " " . Yii::$app->params["siteName"];
+                        $body = Utilities::getMailMessage("registernew", array(
+                                    "[[primer_nombre]]" => $nombre1,
+                                    "[[primer_apellido]]" => $apellido1,
+                                    "[[dni]]" => $dnis,
+                                    "[[numero_dni]]" => $numidentificacion,
+                                    "[[celular]]" => $celular,
+                                    "[[mail]]" => $correo,
+                                    "[[unidad_academica]]" => $nombre_unidad["nombre_unidad"],
+                                    "[[modalidad]]" => $nombre_modalidad["nombre_modalidad"]), Yii::$app->language);
+                        Utilities::sendEmail($tituloMensaje, Yii::$app->params["adminEmail"], [Yii::$app->params["lidercontact"] => "Lider", Yii::$app->params["contact1"] => $nombre1 . " " . $nombre2, Yii::$app->params["contact2"] => $nombre1 . " " . $nombre2, Yii::$app->params["contact3"] => $nombre1 . " " . $nombre2, Yii::$app->params["contact4"] => $nombre1 . " " . $nombre2], $asunto, $body);
+
                         $message = array(
                             "wtmessage" => Yii::t("notificaciones", "Gracias por tu interés en Ulink. Un asesor lo contactará en las proximas 24 horas."),
                             "title" => Yii::t('jslang', 'Success'),
@@ -250,9 +263,7 @@ class InscripcionulinkController extends \yii\web\Controller {
                                     "[[mail]]" => $correo,
                                     "[[unidad_academica]]" => $nombre_unidad["nombre_unidad"],
                                     "[[modalidad]]" => $nombre_modalidad["nombre_modalidad"]), Yii::$app->language);
-                    Utilities::sendEmail($tituloMensaje, Yii::$app->params["adminEmail"], [Yii::$app->params["lidercontact"] => $nombre1 . " " . $nombre2], $asunto, $body);
-                    Utilities::sendEmail($tituloMensaje, Yii::$app->params["adminEmail"], [Yii::$app->params["adminlider"] => $nombre1 . " " . $nombre2], $asunto, $body);
-                    Utilities::sendEmail($tituloMensaje, Yii::$app->params["adminEmail"], [Yii::$app->params["soporteEmail"] => "Soporte"], $asunto, $body);
+                    Utilities::sendEmail($tituloMensaje, Yii::$app->params["adminEmail"], [Yii::$app->params["lidercontact"] => "Lider", Yii::$app->params["contact1"] => $nombre1 . " " . $nombre2, Yii::$app->params["contact2"] => $nombre1 . " " . $nombre2, Yii::$app->params["contact3"] => $nombre1 . " " . $nombre2, Yii::$app->params["contact4"] => $nombre1 . " " . $nombre2], $asunto, $body);
                    
                     $transaction->rollback();
                     $message = array(
