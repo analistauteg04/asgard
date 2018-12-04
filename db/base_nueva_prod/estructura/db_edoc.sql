@@ -10,6 +10,44 @@ USE `db_edoc` ;
 -- --------------------------------------------------------
 
 --
+-- Table structure for table `persona`
+--
+DROP TABLE IF EXISTS `persona`;
+CREATE TABLE  `persona` (
+  `per_id` bigint(20) not null auto_increment,
+  `per_tip_cruc` bigint(3) default null,
+  `per_ced_ruc` varchar(15) default null,
+  `per_nombre` varchar(100) default null,
+  `per_apellido` varchar(100) default null,
+  `per_genero` varchar(1) default null,
+  `per_fec_nacimiento` date default null,
+  `per_est_log` varchar(1) default null,
+  `per_fec_cre` timestamp null default null,
+  `per_fec_mod` timestamp null default null,
+  primary key (`per_id`)
+) engine=innodb auto_increment=0 default charset=latin1;
+--
+-- Table structure for table `usuario`
+--
+DROP TABLE IF EXISTS `usuario`;
+CREATE TABLE  `usuario` (
+  `usu_id` bigint(20) not null auto_increment,
+  `per_id` bigint(20) not null,
+  `usu_nombre` varchar(100) default null,
+  `usu_password` varchar(50) default null,
+  `usu_alias` varchar(60) default null,
+  `usu_correo` varchar(100) default null,
+  `usu_est_log` varchar(1) default null,
+  `usu_fec_cre` timestamp null default current_timestamp,
+  `usu_fec_mod` timestamp null default null,
+  primary key (`usu_id`),
+  key `fk_usuario_persona` (`per_id`),
+  constraint `fk_usuario_persona` foreign key (`per_id`) references `persona` (`per_id`) on delete no action on update no action
+) engine=innodb auto_increment=0 default charset=latin1;
+
+
+
+--
 -- Estructura de tabla para la tabla `NubeLote`
 --
 
@@ -33,12 +71,12 @@ CREATE TABLE `NubeLote`
 DROP TABLE IF EXISTS `NubeMensajeError`;
 CREATE TABLE `NubeMensajeError`
 (
-  `Id` bigint(19) NOT NULL AUTO_INCREMENT PRIMARY KEY,
-  `IdFactura` bigint(19) DEFAULT NULL,
-  `IdRetencion` bigint(19) DEFAULT NULL,
-  `IdNotaCredito` bigint(19) DEFAULT NULL,
-  `IdNotaDebito` bigint(19) DEFAULT NULL,
-  `IdGuiaRemision` bigint(19) DEFAULT NULL,
+  `Id` bigint(20) NOT NULL AUTO_INCREMENT PRIMARY KEY,
+  `IdFactura` bigint(20) DEFAULT NULL,
+  `IdRetencion` bigint(20) DEFAULT NULL,
+  `IdNotaCredito` bigint(20) DEFAULT NULL,
+  `IdNotaDebito` bigint(20) DEFAULT NULL,
+  `IdGuiaRemision` bigint(20) DEFAULT NULL,
   `Identificador` varchar(10) CHARACTER SET utf8 DEFAULT NULL,
   `TipoMensaje` varchar(50) CHARACTER SET utf8 DEFAULT NULL,
   `Mensaje` varchar(100) CHARACTER SET utf8 DEFAULT NULL,
@@ -55,7 +93,7 @@ CREATE TABLE `NubeMensajeError`
 DROP TABLE IF EXISTS `NubeFactura`;
 CREATE TABLE `NubeFactura`
 (
-  `IdFactura` bigint(19) NOT NULL AUTO_INCREMENT PRIMARY KEY,
+  `IdFactura` bigint(20) NOT NULL AUTO_INCREMENT PRIMARY KEY,
   `AutorizacionSRI` varchar(50) DEFAULT NULL,
   `FechaAutorizacion` datetime DEFAULT NULL,
   `Ambiente` int(1) DEFAULT NULL,
@@ -110,7 +148,7 @@ CREATE TABLE `NubeFactura`
 DROP TABLE IF EXISTS `NubeGuiaRemision`;
 CREATE TABLE `NubeGuiaRemision`
 (
-  `IdGuiaRemision` bigint(19) NOT NULL AUTO_INCREMENT PRIMARY KEY,
+  `IdGuiaRemision` bigint(20) NOT NULL AUTO_INCREMENT PRIMARY KEY,
   `AutorizacionSRI` varchar(50) DEFAULT NULL,
   `FechaAutorizacion` datetime DEFAULT NULL,
   `Ambiente` int(1) DEFAULT NULL,
@@ -165,7 +203,7 @@ CREATE TABLE `NubeGuiaRemision`
 DROP TABLE IF EXISTS `NubeNotaCredito`;
 CREATE TABLE `NubeNotaCredito`
 (
-  `IdNotaCredito` bigint(19) NOT NULL AUTO_INCREMENT PRIMARY KEY,
+  `IdNotaCredito` bigint(20) NOT NULL AUTO_INCREMENT PRIMARY KEY,
   `AutorizacionSRI` varchar(50) DEFAULT NULL,
   `FechaAutorizacion` datetime DEFAULT NULL,
   `Ambiente` int(10) DEFAULT NULL,
@@ -221,7 +259,7 @@ CREATE TABLE `NubeNotaCredito`
 DROP TABLE IF EXISTS `NubeNotaDebito`;
 CREATE TABLE `NubeNotaDebito`
 (
-  `IdNotaDebito` bigint(19) NOT NULL AUTO_INCREMENT PRIMARY KEY,
+  `IdNotaDebito` bigint(20) NOT NULL AUTO_INCREMENT PRIMARY KEY,
   `AutorizacionSRI` varchar(50) DEFAULT NULL,
   `FechaAutorizacion` datetime DEFAULT NULL,
   `Ambiente` int(10) DEFAULT NULL,
@@ -274,7 +312,7 @@ CREATE TABLE `NubeNotaDebito`
 DROP TABLE IF EXISTS `NubeRetencion`;
 CREATE TABLE `NubeRetencion`
 (
-  `IdRetencion` bigint(19) NOT NULL AUTO_INCREMENT PRIMARY KEY,
+  `IdRetencion` bigint(20) NOT NULL AUTO_INCREMENT PRIMARY KEY,
   `AutorizacionSRI` varchar(50) DEFAULT NULL,
   `FechaAutorizacion` datetime DEFAULT NULL,
   `Ambiente` int(10) DEFAULT NULL,
@@ -416,7 +454,7 @@ CREATE TABLE `VSValidacion`
 DROP TABLE IF EXISTS `NubeDetalleNotaCredito`;
 CREATE TABLE `NubeDetalleNotaCredito`
 (
-  `IdDetalleNotaCredito` bigint(19) NOT NULL AUTO_INCREMENT PRIMARY KEY,
+  `IdDetalleNotaCredito` bigint(20) NOT NULL AUTO_INCREMENT PRIMARY KEY,
   `CodigoPrincipal` varchar(25) DEFAULT NULL,
   `CodigoAuxiliar` varchar(25) DEFAULT NULL,
   `Descripcion` varchar(300) DEFAULT NULL,
@@ -424,7 +462,7 @@ CREATE TABLE `NubeDetalleNotaCredito`
   `PrecioUnitario` decimal(19,4) DEFAULT NULL,
   `Descuento` decimal(19,4) DEFAULT NULL,
   `PrecioTotalSinImpuesto` decimal(19,4) DEFAULT NULL,
-  `IdNotaCredito` bigint(19) DEFAULT NULL,
+  `IdNotaCredito` bigint(20) DEFAULT NULL,
   FOREIGN KEY (`IdNotaCredito`) REFERENCES `NubeNotaCredito`(`IdNotaCredito`)
 );
 
@@ -437,7 +475,7 @@ CREATE TABLE `NubeDetalleNotaCredito`
 DROP TABLE IF EXISTS `NubeDetalleFactura`;
 CREATE TABLE `NubeDetalleFactura`
 (
-  `IdDetalleFactura` bigint(19) NOT NULL AUTO_INCREMENT PRIMARY KEY,
+  `IdDetalleFactura` bigint(20) NOT NULL AUTO_INCREMENT PRIMARY KEY,
   `CodigoPrincipal` varchar(25) DEFAULT NULL,
   `CodigoAuxiliar` varchar(25) DEFAULT NULL,
   `Descripcion` varchar(300) DEFAULT NULL,
@@ -445,7 +483,7 @@ CREATE TABLE `NubeDetalleFactura`
   `PrecioUnitario` decimal(19,4) DEFAULT NULL,
   `Descuento` decimal(19,4) DEFAULT NULL,
   `PrecioTotalSinImpuesto` decimal(19,4) DEFAULT NULL,
-  `IdFactura` bigint(19) DEFAULT NULL,
+  `IdFactura` bigint(20) DEFAULT NULL,
   FOREIGN KEY (`IdFactura`) REFERENCES `NubeFactura`(`IdFactura`)
 );
 
@@ -459,7 +497,7 @@ CREATE TABLE `NubeDetalleFactura`
 DROP TABLE IF EXISTS `NubeGuiaRemisionDestinatario`;
 CREATE TABLE `NubeGuiaRemisionDestinatario`
 (
-  `IdGuiaRemisionDestinatario` bigint(19) NOT NULL AUTO_INCREMENT PRIMARY KEY,
+  `IdGuiaRemisionDestinatario` bigint(20) NOT NULL AUTO_INCREMENT PRIMARY KEY,
   `IdentificacionDestinatario` varchar(13) DEFAULT NULL,
   `RazonSocialDestinatario` varchar(300) DEFAULT NULL,
   `DirDestinatario` varchar(300) DEFAULT NULL,
@@ -471,7 +509,7 @@ CREATE TABLE `NubeGuiaRemisionDestinatario`
   `NumDocSustento` varchar(20) DEFAULT NULL,
   `NumAutDocSustento` varchar(50) DEFAULT NULL,
   `FechaEmisionDocSustento` date DEFAULT NULL,
-  `IdGuiaRemision` bigint(19) DEFAULT NULL,
+  `IdGuiaRemision` bigint(20) DEFAULT NULL,
   FOREIGN KEY (`IdGuiaRemision`) REFERENCES `NubeGuiaRemision`(`IdGuiaRemision`)
 );
 
@@ -485,12 +523,12 @@ CREATE TABLE `NubeGuiaRemisionDestinatario`
 DROP TABLE IF EXISTS `NubeGuiaRemisionDetalle`;
 CREATE TABLE `NubeGuiaRemisionDetalle`
 (
-  `IdGuiaRemisionDetalle` bigint(19) NOT NULL AUTO_INCREMENT PRIMARY KEY,
+  `IdGuiaRemisionDetalle` bigint(20) NOT NULL AUTO_INCREMENT PRIMARY KEY,
   `CodigoInterno` varchar(25) DEFAULT NULL,
   `CodigoAdicional` varchar(25) DEFAULT NULL,
   `Descripcion` varchar(300) DEFAULT NULL,
   `Cantidad` decimal(19,4) DEFAULT NULL,
-  `IdGuiaRemisionDestinatario` bigint(19) DEFAULT NULL,
+  `IdGuiaRemisionDestinatario` bigint(20) DEFAULT NULL,
   FOREIGN KEY (`IdGuiaRemisionDestinatario`) REFERENCES `NubeGuiaRemisionDestinatario`(`IdGuiaRemisionDestinatario`)
 );
 
@@ -501,10 +539,10 @@ CREATE TABLE `NubeGuiaRemisionDetalle`
 
 DROP TABLE IF EXISTS `NubeDatoAdicionalDetalleFactura`;
 CREATE TABLE `NubeDatoAdicionalDetalleFactura` (
-  `IdDatoAdicionalDetalleFactura` bigint(19) NOT NULL AUTO_INCREMENT PRIMARY KEY,
+  `IdDatoAdicionalDetalleFactura` bigint(20) NOT NULL AUTO_INCREMENT PRIMARY KEY,
   `Nombre` varchar(300) DEFAULT NULL,
   `Descripcion` varchar(300) DEFAULT NULL,
-  `IdDetalleFactura` bigint(19) DEFAULT NULL,
+  `IdDetalleFactura` bigint(20) DEFAULT NULL,
   FOREIGN KEY (`IdDetalleFactura`) REFERENCES `NubeDetalleFactura` (`IdDetalleFactura`)
 );
 
@@ -515,10 +553,10 @@ CREATE TABLE `NubeDatoAdicionalDetalleFactura` (
 DROP TABLE IF EXISTS `NubeDatoAdicionalDetalleNotaCredito`;
 CREATE TABLE `NubeDatoAdicionalDetalleNotaCredito`
 (
-  `IdDatoAdicionalDetalleNotaCredito` bigint(19) NOT NULL AUTO_INCREMENT PRIMARY KEY,
+  `IdDatoAdicionalDetalleNotaCredito` bigint(20) NOT NULL AUTO_INCREMENT PRIMARY KEY,
   `Nombre` varchar(300) DEFAULT NULL,
   `Descripcion` varchar(300) DEFAULT NULL,
-  `IdDetalleNotaCredito` bigint(19) DEFAULT NULL,
+  `IdDetalleNotaCredito` bigint(20) DEFAULT NULL,
   FOREIGN KEY(`IdDetalleNotaCredito`) REFERENCES `NubeDetalleNotaCredito`(`IdDetalleNotaCredito`)
 );
 
@@ -529,10 +567,10 @@ CREATE TABLE `NubeDatoAdicionalDetalleNotaCredito`
 DROP TABLE IF EXISTS `NubeDatoAdicionalFactura`;
 CREATE TABLE `NubeDatoAdicionalFactura`
 (
-  `IdDatoAdicionalFactura` bigint(19) NOT NULL AUTO_INCREMENT PRIMARY KEY,
+  `IdDatoAdicionalFactura` bigint(20) NOT NULL AUTO_INCREMENT PRIMARY KEY,
   `Nombre` varchar(300) DEFAULT NULL,
   `Descripcion` varchar(300) DEFAULT NULL,
-  `IdFactura` bigint(19) DEFAULT NULL,
+  `IdFactura` bigint(20) DEFAULT NULL,
   FOREIGN KEY(`IdFactura`) REFERENCES `NubeFactura`(`IdFactura`) 
 );
 
@@ -543,10 +581,10 @@ CREATE TABLE `NubeDatoAdicionalFactura`
 DROP TABLE IF EXISTS `NubeDatoAdicionalGuiaRemision`;
 CREATE TABLE `NubeDatoAdicionalGuiaRemision`
 (
-  `IdDatoAdicionalGuiaRemision` bigint(19) NOT NULL AUTO_INCREMENT PRIMARY KEY,
+  `IdDatoAdicionalGuiaRemision` bigint(20) NOT NULL AUTO_INCREMENT PRIMARY KEY,
   `Nombre` varchar(300) DEFAULT NULL,
   `Descripcion` varchar(300) DEFAULT NULL,
-  `IdGuiaRemision` bigint(19) DEFAULT NULL,
+  `IdGuiaRemision` bigint(20) DEFAULT NULL,
   FOREIGN KEY(`IdGuiaRemision`) REFERENCES `NubeGuiaRemision`(`IdGuiaRemision`) 
 );
 
@@ -559,10 +597,10 @@ CREATE TABLE `NubeDatoAdicionalGuiaRemision`
 DROP TABLE IF EXISTS `NubeDatoAdicionalGuiaRemisionDetalle`;
 CREATE TABLE `NubeDatoAdicionalGuiaRemisionDetalle`
 (
-  `IdDatoAdicionalGuiaRemisionDetalle` bigint(19) NOT NULL AUTO_INCREMENT PRIMARY KEY,
+  `IdDatoAdicionalGuiaRemisionDetalle` bigint(20) NOT NULL AUTO_INCREMENT PRIMARY KEY,
   `Nombre` varchar(300) DEFAULT NULL,
   `Descripcion` varchar(300) DEFAULT NULL,
-  `IdGuiaRemisionDetalle` bigint(19) DEFAULT NULL,
+  `IdGuiaRemisionDetalle` bigint(20) DEFAULT NULL,
   FOREIGN KEY (`IdGuiaRemisionDetalle`) REFERENCES `NubeGuiaRemisionDetalle`(`IdGuiaRemisionDetalle`)
 );
 
@@ -575,10 +613,10 @@ CREATE TABLE `NubeDatoAdicionalGuiaRemisionDetalle`
 DROP TABLE IF EXISTS `NubeDatoAdicionalNotaCredito`;
 CREATE TABLE `NubeDatoAdicionalNotaCredito`
 (
-  `IdDatoAdicionalNotaCredito` bigint(19) NOT NULL AUTO_INCREMENT PRIMARY KEY,
+  `IdDatoAdicionalNotaCredito` bigint(20) NOT NULL AUTO_INCREMENT PRIMARY KEY,
   `Nombre` varchar(300) DEFAULT NULL,
   `Descripcion` varchar(300) DEFAULT NULL,
-  `IdNotaCredito` bigint(19) DEFAULT NULL,
+  `IdNotaCredito` bigint(20) DEFAULT NULL,
   FOREIGN KEY (`IdNotaCredito`) REFERENCES `NubeNotaCredito`(`IdNotaCredito`)
 );
 
@@ -591,10 +629,10 @@ CREATE TABLE `NubeDatoAdicionalNotaCredito`
 DROP TABLE IF EXISTS `NubeDatoAdicionalNotaDebito`;
 CREATE TABLE `NubeDatoAdicionalNotaDebito`
 (
-  `IdDatoAdicionalNotaDebito` bigint(19) NOT NULL AUTO_INCREMENT PRIMARY KEY,
+  `IdDatoAdicionalNotaDebito` bigint(20) NOT NULL AUTO_INCREMENT PRIMARY KEY,
   `Nombre` varchar(300) DEFAULT NULL,
   `Descripcion` varchar(300) DEFAULT NULL,
-  `IdNotaDebito` bigint(19) DEFAULT NULL,
+  `IdNotaDebito` bigint(20) DEFAULT NULL,
   FOREIGN KEY (`IdNotaDebito`) REFERENCES `NubeNotaDebito`(`IdNotaDebito`)
 );
 
@@ -607,10 +645,10 @@ CREATE TABLE `NubeDatoAdicionalNotaDebito`
 DROP TABLE IF EXISTS `NubeDatoAdicionalRetencion`;
 CREATE TABLE `NubeDatoAdicionalRetencion`
 (
-  `IdDatoAdicionalRetencion` bigint(19) NOT NULL AUTO_INCREMENT PRIMARY KEY, 
+  `IdDatoAdicionalRetencion` bigint(20) NOT NULL AUTO_INCREMENT PRIMARY KEY, 
   `Nombre` varchar(300) DEFAULT NULL,
   `Descripcion` varchar(300) DEFAULT NULL,
-  `IdRetencion` bigint(19) DEFAULT NULL,
+  `IdRetencion` bigint(20) DEFAULT NULL,
   FOREIGN KEY (`IdRetencion`) REFERENCES `NubeRetencion`(`IdRetencion`)
 );
 
@@ -623,13 +661,13 @@ CREATE TABLE `NubeDatoAdicionalRetencion`
 DROP TABLE IF EXISTS `NubeDetalleFacturaImpuesto`;
 CREATE TABLE `NubeDetalleFacturaImpuesto`
 (
-  `IdDetalleFacturaImpuesto` bigint(19) NOT NULL AUTO_INCREMENT PRIMARY KEY,
+  `IdDetalleFacturaImpuesto` bigint(20) NOT NULL AUTO_INCREMENT PRIMARY KEY,
   `Codigo` int(10) DEFAULT NULL,
   `CodigoPorcentaje` int(10) DEFAULT NULL,
   `BaseImponible` decimal(19,4) DEFAULT NULL,
   `Tarifa` decimal(19,4) DEFAULT NULL,
   `Valor` decimal(19,4) DEFAULT NULL,
-  `IdDetalleFactura` bigint(19) DEFAULT NULL,
+  `IdDetalleFactura` bigint(20) DEFAULT NULL,
   FOREIGN KEY (`IdDetalleFactura`) REFERENCES `NubeDetalleFactura`(`IdDetalleFactura`)
 );
 
@@ -643,13 +681,13 @@ CREATE TABLE `NubeDetalleFacturaImpuesto`
 DROP TABLE IF EXISTS `NubeDetalleNotaCreditoImpuesto`;
 CREATE TABLE `NubeDetalleNotaCreditoImpuesto`
 (
-  `IdDetalleNotaCreditoImpuesto` bigint(19) NOT NULL AUTO_INCREMENT PRIMARY KEY,
+  `IdDetalleNotaCreditoImpuesto` bigint(20) NOT NULL AUTO_INCREMENT PRIMARY KEY,
   `Codigo` int(10) DEFAULT NULL,
   `CodigoPorcentaje` int(10) DEFAULT NULL,
   `BaseImponible` decimal(19,4) DEFAULT NULL,
   `Tarifa` decimal(19,4) DEFAULT NULL,
   `Valor` decimal(19,4) DEFAULT NULL,
-  `IdDetalleNotaCredito` bigint(19) DEFAULT NULL,
+  `IdDetalleNotaCredito` bigint(20) DEFAULT NULL,
   FOREIGN KEY (`IdDetalleNotaCredito`) REFERENCES `NubeDetalleNotaCredito`(`IdDetalleNotaCredito`)
 );
 
@@ -662,7 +700,7 @@ CREATE TABLE `NubeDetalleNotaCreditoImpuesto`
 DROP TABLE IF EXISTS `NubeDetalleRetencion`;
 CREATE TABLE `NubeDetalleRetencion`
 (
-  `IdDetalleRetencion` bigint(19) NOT NULL AUTO_INCREMENT PRIMARY KEY,
+  `IdDetalleRetencion` bigint(20) NOT NULL AUTO_INCREMENT PRIMARY KEY,
   `Codigo` int(10) DEFAULT NULL,
   `CodigoRetencion` varchar(5) DEFAULT NULL,
   `BaseImponible` decimal(19,4) DEFAULT NULL,
@@ -671,7 +709,7 @@ CREATE TABLE `NubeDetalleRetencion`
   `CodDocRetener` varchar(2) DEFAULT NULL,
   `NumDocRetener` varchar(20) DEFAULT NULL,
   `FechaEmisionDocRetener` datetime DEFAULT NULL,
-  `IdRetencion` bigint(19) DEFAULT NULL,
+  `IdRetencion` bigint(20) DEFAULT NULL,
   FOREIGN KEY (`IdRetencion`) REFERENCES `NubeRetencion`(`IdRetencion`)
 );
 
@@ -687,7 +725,7 @@ CREATE TABLE `NubeFacturaFormaPago`
 (
   `IdFormaPagoFact` bigint(20) NOT NULL AUTO_INCREMENT PRIMARY KEY,
   `IdForma` bigint(20) NOT NULL,
-  `IdFactura` bigint(19) NOT NULL,
+  `IdFactura` bigint(20) NOT NULL,
   `FormaPago` varchar(2) DEFAULT NULL,
   `Total` decimal(14,4) DEFAULT NULL,
   `Plazo` int(5) DEFAULT NULL,
@@ -705,13 +743,13 @@ CREATE TABLE `NubeFacturaFormaPago`
 DROP TABLE IF EXISTS `NubeFacturaImpuesto`;
 CREATE TABLE `NubeFacturaImpuesto`
 (
-  `IdFacturaImpuesto` bigint(19) NOT NULL AUTO_INCREMENT PRIMARY KEY,
+  `IdFacturaImpuesto` bigint(20) NOT NULL AUTO_INCREMENT PRIMARY KEY,
   `Codigo` int(10) DEFAULT NULL,
   `CodigoPorcentaje` int(10) DEFAULT NULL,
   `BaseImponible` decimal(19,4) DEFAULT NULL,
   `Tarifa` decimal(19,4) DEFAULT NULL,
   `Valor` decimal(19,4) DEFAULT NULL,
-  `IdFactura` bigint(19) DEFAULT NULL,
+  `IdFactura` bigint(20) DEFAULT NULL,
   FOREIGN KEY (`IdFactura`) REFERENCES `NubeFactura`(`IdFactura`)
 );
 
@@ -725,13 +763,13 @@ CREATE TABLE `NubeFacturaImpuesto`
 DROP TABLE IF EXISTS `NubeNotaCreditoImpuesto`;
 CREATE TABLE `NubeNotaCreditoImpuesto`
 (
-  `IdNotaCreditoImpuesto` bigint(19) NOT NULL AUTO_INCREMENT PRIMARY KEY,
+  `IdNotaCreditoImpuesto` bigint(20) NOT NULL AUTO_INCREMENT PRIMARY KEY,
   `Codigo` int(10) DEFAULT NULL,
   `CodigoPorcentaje` int(10) DEFAULT NULL,
   `BaseImponible` decimal(19,4) DEFAULT NULL,
   `Tarifa` decimal(19,4) DEFAULT NULL,
   `Valor` decimal(19,4) DEFAULT NULL,
-  `IdNotaCredito` bigint(19) DEFAULT NULL,
+  `IdNotaCredito` bigint(20) DEFAULT NULL,
   FOREIGN KEY (`IdNotaCredito`) REFERENCES `NubeNotaCredito`(`IdNotaCredito`)
 );
 
@@ -744,13 +782,13 @@ CREATE TABLE `NubeNotaCreditoImpuesto`
 DROP TABLE IF EXISTS `NubeNotaDebitoImpuesto`;
 CREATE TABLE `NubeNotaDebitoImpuesto`
 (
-  `IdNotaDebitoImpuesto` bigint(19) NOT NULL AUTO_INCREMENT PRIMARY KEY,
+  `IdNotaDebitoImpuesto` bigint(20) NOT NULL AUTO_INCREMENT PRIMARY KEY,
   `Codigo` int(10) DEFAULT NULL,
   `CodigoPorcentaje` int(10) DEFAULT NULL,
   `BaseImponible` decimal(19,4) DEFAULT NULL,
   `Tarifa` decimal(19,4) DEFAULT NULL,
   `Valor` decimal(19,4) DEFAULT NULL,
-  `IdNotaDebito` bigint(19) DEFAULT NULL,
+  `IdNotaDebito` bigint(20) DEFAULT NULL,
   FOREIGN KEY (`IdNotaDebito`) REFERENCES `NubeNotaDebito`(`IdNotaDebito`)
 );
 
@@ -763,10 +801,10 @@ CREATE TABLE `NubeNotaDebitoImpuesto`
 DROP TABLE IF EXISTS `NubeNotaDebitoMotivos`;
 CREATE TABLE `NubeNotaDebitoMotivos`
 (
-  `IdNotaDebitoMotivo` bigint(19) NOT NULL AUTO_INCREMENT PRIMARY KEY,
+  `IdNotaDebitoMotivo` bigint(20) NOT NULL AUTO_INCREMENT PRIMARY KEY,
   `Razon` varchar(300) CHARACTER SET utf8 DEFAULT NULL,
   `Valor` decimal(19,4) DEFAULT NULL,
-  `IdNotaDebito` bigint(19) DEFAULT NULL,
+  `IdNotaDebito` bigint(20) DEFAULT NULL,
   FOREIGN KEY (`IdNotaDebito`) REFERENCES `NubeNotaDebito`(`IdNotaDebito`)
 );
 
