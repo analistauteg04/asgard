@@ -91,8 +91,10 @@ class Reporte extends \yii\db\ActiveRecord {
         $sql .= " ORDER BY A.bact_fecha_proxima_atencion; ";
         $comando = $con->createCommand($sql);
         if (isset($arrFiltro) && count($arrFiltro) > 0) {
-            $search_cond = "%" . $arrFiltro["search_dni"] . "%";
-            $comando->bindParam(":search", $search_cond, \PDO::PARAM_STR);
+            if ($arrFiltro['search_dni'] != "") {
+                $search_cond = "%" . $arrFiltro["search_dni"] . "%";
+                $comando->bindParam(":search", $search_cond, \PDO::PARAM_STR);
+            }
             $fecha_ini = $arrFiltro["f_ini"] . " 00:00:00";
             $fecha_fin = $arrFiltro["f_fin"] . " 23:59:59";
             if ($arrFiltro['f_ini'] != "" && $arrFiltro['f_fin'] != "") {
