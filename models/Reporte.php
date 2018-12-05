@@ -52,9 +52,12 @@ class Reporte extends \yii\db\ActiveRecord {
 
     public function consultarOportunidadProximaAten($arrFiltro = array()) {
         $con = \Yii::$app->db_crm;
-        $str_search="";
+        $str_search = "";
         if (isset($arrFiltro) && count($arrFiltro) > 0) {
-            $str_search .= "(C.pges_cedula like :search) and ";
+
+            if ($arrFiltro['search_dni'] != "") {
+                $str_search .= "(C.pges_cedula like :search) and ";
+            }
             if ($arrFiltro['f_ini'] != "" && $arrFiltro['f_fin'] != "") {
                 $str_search .= "A.bact_fecha_registro >= :fec_ini AND ";
                 $str_search .= "A.bact_fecha_registro <= :fec_fin AND ";
@@ -84,7 +87,7 @@ class Reporte extends \yii\db\ActiveRecord {
                             INNER JOIN " . $con->dbname . ".estado_oportunidad F ON F.eopo_id=A.eopo_id
                     WHERE $str_search A.bact_estado=1 
              ";
-        $sql .= " AND DATE(A.bact_fecha_proxima_atencion) >= CURDATE() ";
+        //$sql .= " AND DATE(A.bact_fecha_proxima_atencion) >= CURDATE() ";
         $sql .= " ORDER BY A.bact_fecha_proxima_atencion; ";
         $comando = $con->createCommand($sql);
         if (isset($arrFiltro) && count($arrFiltro) > 0) {
@@ -105,7 +108,7 @@ class Reporte extends \yii\db\ActiveRecord {
         $con1 = \Yii::$app->db_asgard;
         $con2 = \Yii::$app->db_academico;
         $estado = 1;
-        $str_search="";
+        $str_search = "";
         if (isset($arrFiltro) && count($arrFiltro) > 0) {
             $str_search .= "(per.per_cedula like :search) and ";
             if ($arrFiltro['f_ini'] != "" && $arrFiltro['f_fin'] != "") {
@@ -113,7 +116,7 @@ class Reporte extends \yii\db\ActiveRecord {
                 $str_search .= "sins.sins_fecha_solicitud <= :fec_fin AND ";
             }
         }
-        
+
         $sql = "
                     select 
                         ifnull(per.per_cedula,per.per_pasaporte) as DNI,                    
