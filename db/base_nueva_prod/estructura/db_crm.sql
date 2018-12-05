@@ -163,7 +163,7 @@ create table if not exists `conocimiento_servicio` (
 
 -- --------------------------------------------------------
 -- 
--- Estructura de tabla `persona_gestion`
+-- Estructura de tabla `persona_gestion_tmp`
 -- 
 create table if not exists `persona_gestion_tmp`(
  `pgest_id` bigint(20) not null auto_increment primary key,

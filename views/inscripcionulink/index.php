@@ -33,7 +33,7 @@ $this->title = 'Formulario de Contacto';
             </div>
         </div>
     </div>
-    <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
+    <!--<div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
         <div class="form-group">
             <label for="cmb_tipo_dni" class="col-lg-3 col-md-3 col-sm-3 col-xs-3 control-label keyupmce"><?= Yii::t("formulario", "DNI 1") ?> <span class="text-danger">*</span></label>
             <div class="col-lg-9 col-md-9 col-sm-9 col-xs-9">
@@ -56,7 +56,7 @@ $this->title = 'Formulario de Contacto';
                 <input type="text" maxlength="15" class="form-control keyupmce" id="txt_pasaporte" data-type="alfanumerico" data-keydown="true" placeholder="<?= Yii::t("formulario", "Passport") ?>">
             </div>
         </div>
-    </div>
+    </div>-->
     <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
         <div class="form-group">
             <label for="txt_correo" class="col-lg-3 col-md-3 col-sm-3 col-xs-3 control-label"><?= Yii::t("formulario", "Email") ?> <span class="text-danger">*</span></label>
@@ -84,11 +84,11 @@ $this->title = 'Formulario de Contacto';
             </div>
         </div>
     </div>  
-    <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
+    <!-- <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
         <div class="form-group">            
             <label for="cmb_ninteres" class="col-lg-3 col-md-3 col-sm-3 col-xs-3 control-label"><?= Yii::t("formulario", "Academic formation") ?> <span class="text-danger">*</span></label>
             <div class="col-lg-9 col-md-9 col-sm-9 col-xs-9">
-                <?= Html::dropDownList("cmb_ninteres", 0, $arr_ninteres, ["class" => "form-control", "id" => "cmb_ninteres"]) ?>
+                <? Html::dropDownList("cmb_ninteres", 0, $arr_ninteres, ["class" => "form-control", "id" => "cmb_ninteres"]) ?>
             </div>
         </div>
     </div>
@@ -96,7 +96,7 @@ $this->title = 'Formulario de Contacto';
         <div class="form-group">            
             <label for="cmb_modalidad" class="col-lg-3 col-md-3 col-sm-3 col-xs-3 control-label"><?= Yii::t("formulario", "Mode") ?> <span class="text-danger">*</span></label>
             <div class="col-lg-9 col-md-9 col-sm-9 col-xs-9">
-                <?= Html::dropDownList("cmb_modalidad", 0, $arr_modalidad, ["class" => "form-control", "id" => "cmb_modalidad"]) ?>
+                <? Html::dropDownList("cmb_modalidad", 0, $arr_modalidad, ["class" => "form-control", "id" => "cmb_modalidad"]) ?>
             </div>
         </div>
     </div>
@@ -104,7 +104,7 @@ $this->title = 'Formulario de Contacto';
         <div class="form-group">            
             <label for="cmb_modulo" class="col-lg-3 col-md-3 col-sm-3 col-xs-3 control-label"><?= Yii::t("formulario", "Module") ?> <span class="text-danger">*</span></label>
             <div class="col-lg-9 col-md-9 col-sm-9 col-xs-9">
-                <?= Html::dropDownList("cmb_modulo", 0, $arr_carrerra1, ["class" => "form-control", "id" => "cmb_modulo"]) ?>
+                <? Html::dropDownList("cmb_modulo", 0, $arr_carrerra1, ["class" => "form-control", "id" => "cmb_modulo"]) ?>
             </div>
         </div>
     </div>
@@ -112,7 +112,7 @@ $this->title = 'Formulario de Contacto';
         <div class="form-group">
             <label for="cmb_tipo_oportunidad" class="col-lg-3 col-md-3 col-sm-3 col-xs-3 control-label keyupmce"><?= Yii::t("formulario", "Método Ingreso") ?><span class="text-danger">*</span></label>
             <div class="col-lg-9 col-md-9 col-sm-9 col-xs-9">
-                <?= Html::dropDownList("cmb_tipo_oportunidad", 1, $arr_tipo_oportunidad, ["class" => "form-control", "id" => "cmb_tipo_oportunidad"]) ?>
+                <? Html::dropDownList("cmb_tipo_oportunidad", 1, $arr_tipo_oportunidad, ["class" => "form-control", "id" => "cmb_tipo_oportunidad"]) ?>
             </div>
         </div>            
     </div>
@@ -129,12 +129,12 @@ $this->title = 'Formulario de Contacto';
                 <input type="text" class="form-control PBvalidation" value="" id="txt_hora_atencionfin" data-type="tiempo" data-keydown="true" placeholder="<?= Yii::t('formulario', 'HH:MM') ?>">
             </div>
         </div>
-    </div> 
+    </div> -->
     <!--<div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
         <div class="form-group">            
             <label for="cmb_conuteg" class="col-lg-3 col-md-3 col-sm-3 col-xs-3 control-label"><?= Yii::t("formulario", "Knowledge how about UTEG") ?> <span class="text-danger">*</span></label>
             <div class="col-lg-9 col-md-9 col-sm-9 col-xs-9">
-                <?= Html::dropDownList("cmb_conuteg", 0, $arr_conuteg, ["class" => "form-control", "id" => "cmb_conuteg"]) ?>
+                <? Html::dropDownList("cmb_conuteg", 0, $arr_conuteg, ["class" => "form-control", "id" => "cmb_conuteg"]) ?>
             </div>
         </div>
     </div>-->

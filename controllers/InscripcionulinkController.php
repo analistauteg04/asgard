@@ -108,8 +108,8 @@ class InscripcionulinkController extends \yii\web\Controller {
         $mod_empresa = new Empresa();
         $mod_estcontacto = new EstadoContacto();
         $mod_persona = new Persona();
-        $mod_modalidad = new Modalidad();
-        $mod_unidad = new UnidadAcademica();
+        //$mod_modalidad = new Modalidad();
+        //$mod_unidad = new UnidadAcademica();
         $celular = null;
         $celular2 = null;
         $telefono = null;
@@ -121,7 +121,7 @@ class InscripcionulinkController extends \yii\web\Controller {
         $pagina = "";
         $conempresa = $mod_empresa->consultarEmpresaId('ulink'); // 2 ulink
         $emp_id = $conempresa["id"];
-        $gcrm_codigo["id"] = 0;
+        //$gcrm_codigo["id"] = 0;
         $correo = strtolower($data["correo"]);
         if (Yii::$app->request->isAjax) {
             $data = Yii::$app->request->post();
@@ -150,23 +150,26 @@ class InscripcionulinkController extends \yii\web\Controller {
             $celularbeni2 = null;
             $telefonobeni = null;
             $correobeni = strtolower($data["correo"]);
-            $nivelestudio = $data["unidad"];
-            $modalidad = $data["modalidad"];
-            $nombre_unidad = $mod_unidad->consultarNombreunidad($nivelestudio);
-            $nombre_modalidad = $mod_modalidad->consultarNombremoda($modalidad);
-            $tipo_dni = $data["tipo_dni"];
-            $cedula = $data["cedula"];
+            //$nivelestudio = $data["unidad"];
+            //$modalidad = $data["modalidad"];
+            //$nombre_unidad = $mod_unidad->consultarNombreunidad($nivelestudio);
+            //$nombre_modalidad = $mod_modalidad->consultarNombremoda($modalidad);
+            //$tipo_dni = $data["tipo_dni"];
+            //$cedula = $data["cedula"];
+            $tipo_dni = null;
+            $cedula = null;
             $pasaporte = $data["pasaporte"];
-            $conoce_uteg = $data["conoce"];
-            $hora_inicio = $data["horaini"];
-            $hora_fin = $data["horafin"];
-            if ($tipo_dni == "CED") {
+            //$conoce_uteg = $data["conoce"];
+            $conoce_uteg = null;
+            /*$hora_inicio = $data["horaini"];
+            $hora_fin = $data["horafin"];*/
+            /*if ($tipo_dni == "CED") {
                 $dnis = "Cédula";
                 $numidentificacion = $cedula;
             } elseif ($tipo_dni == "PASS") {
                 $dnis = "Pasaporte";
                 $numidentificacion = $pasaporte;
-            }
+            }*/
             switch ($nivelestudio) { // esto cambiarlo hacer funcion que consulte el usaurio y traer el id           
                 case "1":
                     $agente = 14;
@@ -189,18 +192,19 @@ class InscripcionulinkController extends \yii\web\Controller {
                     $pagina = "registerulink";
                     break;
             }
-            $subcarera = 1;
-            $canal = 1;
-            $estado = 1;
+            //$subcarera = 1;
+            //$canal = 1;
+            //$estado = 1;
             $usuario = 1; // 1 equivale al usuario administrador
-            $carrera = $data["carrera"]; // este va ser el modulo de estudio
+            //$carrera = $data["carrera"]; // este va ser el modulo de estudio
+            $carrera = null; 
             $fecha_registro = date(Yii::$app->params["dateTimeByDefault"]);
             $con = \Yii::$app->db_crm;
             $transaction = $con->beginTransaction();
             try {
                 $mod_pergestion = new PersonaGestion();
                 $mod_gestion = new Oportunidad();
-                if (!empty($celular) || !empty($correo) || !empty($telefono) || !empty($cedula) || !empty($pasaporte)) {
+                if (!empty($celular) || !empty($correo) || !empty($telefono) /*|| !empty($cedula) || !empty($pasaporte)*/) {
                     $cons_persona = $mod_pergestion->consultarDatosExiste($celular, $correo, $telefono, $celular2, $cedula, $pasaporte);
                     $busqueda = 1;
                 }
@@ -209,32 +213,32 @@ class InscripcionulinkController extends \yii\web\Controller {
                     $pges_codigo = $resp_consulta["maximo"];
                     $resp_persona = $mod_pergestion->insertarPersonaGestion($pges_codigo, $tipo_persona, $conoce_uteg, $carrera, $nombre1, $nombre2, $apellido1, $apellido2, $cedula, null, $pasaporte, null, null, null, null, $pais, $provincia, $ciudad, null, null, $celular, $correo, null, null, null, null, null, null, null, $telefono, $celular2, null, null, null, null, null, null, null, null, null, null, $econ_id, $medio, $empresa, $contacto_empresa, $numero_contacto, $telefono_empresa, $direccion, $cargo, $usuario);
                     if ($resp_persona) {
-                        $gcrm_codigo = $mod_gestion->consultarUltimoCodcrm();
+                        /*$gcrm_codigo = $mod_gestion->consultarUltimoCodcrm();
                         $codigocrm = 1 + $gcrm_codigo;
                         $res_oportunidad = $mod_gestion->insertarOportunidad($codigocrm, $emp_id, $resp_persona, $carrera, null, $nivelestudio, $modalidad, $tipoportunidad, $subcarera, $canal, $estado, $hora_inicio, $hora_fin, $fecha_registro, $agente, $usuario);
                         if ($res_oportunidad) {
                             $oact_id = 1;
                             $descripcion = 'Registro subido desde formulario de inscripción';
                             $res_actividad = $mod_gestion->insertarActividad($res_oportunidad, $usuario, $agente, $estado, $fecha_registro, $oact_id, $descripcion, $fecha_registro);
-                            if ($res_actividad) {
+                            if ($res_actividad) {*/
                                 $exito = 1;
-                            }
-                        }
+                          /*  }
+                        }*/
                     }
                     if ($exito) {
                         $transaction->commit();
                         //Aqui antes enviaba correo
                         $tituloMensaje = Yii::t("register", "User Register");
                         $asunto = Yii::t("register", "User Register") . " " . Yii::$app->params["siteName"];
-                        $body = Utilities::getMailMessage("registernew", array(
+                        $body = Utilities::getMailMessage("registernew_ulink", array(
                                     "[[primer_nombre]]" => $nombre1,
                                     "[[primer_apellido]]" => $apellido1,
-                                    "[[dni]]" => $dnis,
-                                    "[[numero_dni]]" => $numidentificacion,
+                                    //"[[dni]]" => $dnis,
+                                    //"[[numero_dni]]" => $numidentificacion,
                                     "[[celular]]" => $celular,
                                     "[[mail]]" => $correo,
-                                    "[[unidad_academica]]" => $nombre_unidad["nombre_unidad"],
-                                    "[[modalidad]]" => $nombre_modalidad["nombre_modalidad"]), Yii::$app->language);
+                                    /*"[[unidad_academica]]" => $nombre_unidad["nombre_unidad"],
+                                    "[[modalidad]]" => $nombre_modalidad["nombre_modalidad"]*/), Yii::$app->language);
                         Utilities::sendEmail($tituloMensaje, Yii::$app->params["adminEmail"], [Yii::$app->params["lidercontact"] => "Lider", Yii::$app->params["contact1"] => "contact1", Yii::$app->params["contact2"] => "contact2", Yii::$app->params["contact3"] => "contact3", Yii::$app->params["contact4"] => "contact4"], $asunto, $body);
 
                         $message = array(
@@ -254,15 +258,15 @@ class InscripcionulinkController extends \yii\web\Controller {
                     $mensaje = 'Sus datos ya se encuentran registrados, nos contactaremos con usted';                       
                     $tituloMensaje = Yii::t("register", "Existing Record");
                     $asunto = Yii::t("register", "Existing Record") . " " . Yii::$app->params["siteName"];
-                    $body = Utilities::getMailMessage("registeragain", array(
+                    $body = Utilities::getMailMessage("registeragain_ulink", array(
                                     "[[primer_nombre]]" => $nombre1,
                                     "[[primer_apellido]]" => $apellido1,
-                                    "[[dni]]" => $dnis,
-                                    "[[numero_dni]]" => $numidentificacion,
+                                    //"[[dni]]" => $dnis,
+                                    //"[[numero_dni]]" => $numidentificacion,
                                     "[[celular]]" => $celular,
                                     "[[mail]]" => $correo,
-                                    "[[unidad_academica]]" => $nombre_unidad["nombre_unidad"],
-                                    "[[modalidad]]" => $nombre_modalidad["nombre_modalidad"]), Yii::$app->language);
+                                    /*"[[unidad_academica]]" => $nombre_unidad["nombre_unidad"],
+                                    "[[modalidad]]" => $nombre_modalidad["nombre_modalidad"]*/), Yii::$app->language);
                     Utilities::sendEmail($tituloMensaje, Yii::$app->params["adminEmail"], [Yii::$app->params["soporteEmail"] => "Soporte", Yii::$app->params["lidercontact"] => "lider", Yii::$app->params["adminlider"] => "adminlider"], $asunto, $body);
                     $transaction->rollback();
                     $message = array(
