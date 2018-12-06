@@ -815,7 +815,7 @@ class PersonaGestion extends \app\modules\admision\components\CActiveRecord {
             $filtro .= " pges_domicilio_telefono = :pges_domicilio_telefono ";
         }
         if (!empty($pges_domicilio_celular2)) {
-            if (!empty($pges_domicilio_telefono)  || !empty($pges_celular)) {
+            if (!empty($pges_domicilio_telefono) || !empty($pges_celular)) {
                 $filtro .= " OR ";
             }
             $filtro .= " pges_domicilio_celular2 = :pges_domicilio_celular2";
@@ -954,13 +954,13 @@ class PersonaGestion extends \app\modules\admision\components\CActiveRecord {
                 $str_search .= " pg.pges_usuario_ingreso = :agente AND ";
             }
             if ($arrFiltro['correo'] != "") {
-                $str_search .= " pg.pges_correo = :correo AND ";
+                $str_search .= " pg.pges_correo like :correo AND ";
             }
             if ($arrFiltro['telefono'] != "") {
-                $str_search .= "(pg.pges_celular = :telefono OR ";
-                $str_search .= "pg.pges_domicilio_telefono = :telefono OR ";
-                $str_search .= "pg.pges_domicilio_celular2 = :telefono OR ";               
-                $str_search .= "pg.pges_trabajo_telefono = :telefono )  AND ";
+                $str_search .= "(pg.pges_celular like :telefono OR ";
+                $str_search .= "pg.pges_domicilio_telefono like :telefono OR ";
+                $str_search .= "pg.pges_domicilio_celular2 like :telefono OR ";
+                $str_search .= "pg.pges_trabajo_telefono like :telefono )  AND ";
             }
         } else {
             $columnsAdd = "                
@@ -1043,12 +1043,12 @@ class PersonaGestion extends \app\modules\admision\components\CActiveRecord {
                 $comando->bindParam(":agente", $agente, \PDO::PARAM_INT);
             }
             if ($arrFiltro['correo'] != "") {
-                $correo = $arrFiltro["correo"];
-                $comando->bindParam(":correo", $correo, \PDO::PARAM_STR);
+                $search_cro = "%" . $arrFiltro["correo"] . "%";
+                $comando->bindParam(":correo", $search_cro, \PDO::PARAM_STR);
             }
             if ($arrFiltro['telefono'] != "") {
-                $telefono = $arrFiltro["telefono"];
-                $comando->bindParam(":telefono", $telefono, \PDO::PARAM_STR);
+                $search_tfn = "%" . $arrFiltro["telefono"] . "%";
+                $comando->bindParam(":telefono", $search_tfn, \PDO::PARAM_STR);
             }
         }
 
@@ -1260,7 +1260,7 @@ class PersonaGestion extends \app\modules\admision\components\CActiveRecord {
                     $nombre = $Data[$i]['pgest_nombre'];
                     $telefono = $Data[$i]['pgest_numero'];
                     $correo = $Data[$i]['pgest_correo'];
-                    $contacto = 2;//$Data[$i]['pgest_contacto'];
+                    $contacto = 2; //$Data[$i]['pgest_contacto'];
                     $tper_id = 1; //Por defecto Natural
                     $econ_id = 1; //=>En Contacto por defecto
                     $pges_id = PersonaGestion::insertarPersonaGestionLeads($con, $pges_codigo, $tper_id, $nombre, $telefono, $correo, $contacto, $econ_id);
@@ -1784,16 +1784,23 @@ class PersonaGestion extends \app\modules\admision\components\CActiveRecord {
             $str_search .= "(pg.pges_pri_nombre like :search OR ";
             $str_search .= "pg.pges_seg_nombre like :search OR ";
             $str_search .= "pg.pges_pri_apellido like :search OR ";
-            $str_search .= "pg.pges_seg_apellido like :search)  AND ";            
+            $str_search .= "pg.pges_seg_apellido like :search)  AND ";
             if ($arrFiltro['f_ini'] != "" && $arrFiltro['f_fin'] != "") {
                 $str_search .= "pg.pges_fecha_creacion >= :fec_ini AND ";
                 $str_search .= "pg.pges_fecha_creacion <= :fec_fin AND ";
             }
             if ($arrFiltro['medio'] != "" && $arrFiltro['medio'] > 0) {
                 $str_search .= " pg.ccan_id = :medio AND ";
-            }            
+            }
             if ($arrFiltro['agente'] != "" && $arrFiltro['agente'] > 0) {
                 $str_search .= " pg.pges_usuario_ingreso = :agente AND ";
+            }
+            if ($arrFiltro['correo'] != "") {
+                $str_search .= " pg.pges_correo like :correo AND ";
+            }
+            if ($arrFiltro['telefono'] != "") {
+                $str_search .= "(pg.pges_celular like :telefono OR ";
+                $str_search .= "pg.pges_domicilio_telefono like :telefono )  AND ";
             }
         } else {
             $columnsAdd = "                
@@ -1805,6 +1812,9 @@ class PersonaGestion extends \app\modules\admision\components\CActiveRecord {
         $sql = "
                 SELECT  
                         concat(ifnull(pges_pri_nombre,''), ' ',ifnull(pges_seg_nombre,' '),ifnull(pges_pri_apellido,''), ' ', ifnull(pges_seg_apellido,' ')) as contacto,
+                        pg.pges_correo,
+                        pg.pges_celular,
+                        pg.pges_domicilio_telefono,
                         ifnull((select pai.pai_nombre from " . $con1->dbname . ".pais pai where pai.pai_id = pg.pai_id_nacimiento),'') as pais,
                         DATE(pg.pges_fecha_creacion) as fecha_creacion,
                         -- ifnull(uaca.uaca_nombre,'Sin Unidad') as unidad_academica,
@@ -1837,8 +1847,8 @@ class PersonaGestion extends \app\modules\admision\components\CActiveRecord {
         $comando = $con->createCommand($sql);
         $comando->bindParam(":estado", $estado, \PDO::PARAM_STR);
         if (isset($arrFiltro) && count($arrFiltro) > 0) {
-            $search_cond = "%" . $arrFiltro["search"] . "%";          
-            $comando->bindParam(":search", $search_cond, \PDO::PARAM_STR);            
+            $search_cond = "%" . $arrFiltro["search"] . "%";
+            $comando->bindParam(":search", $search_cond, \PDO::PARAM_STR);
             $fecha_ini = $arrFiltro["f_ini"] . " 00:00:00";
             $fecha_fin = $arrFiltro["f_fin"] . " 23:59:59";
 
@@ -1849,10 +1859,18 @@ class PersonaGestion extends \app\modules\admision\components\CActiveRecord {
             if ($arrFiltro['medio'] != "" && $arrFiltro['medio'] > 0) {
                 $medio = $arrFiltro["medio"];
                 $comando->bindParam(":medio", $medio, \PDO::PARAM_INT);
-            }            
+            }
             if ($arrFiltro['agente'] != "" && $arrFiltro['agente'] > 0) {
                 $agente = $arrFiltro["agente"];
                 $comando->bindParam(":agente", $agente, \PDO::PARAM_INT);
+            }
+            if ($arrFiltro['correo'] != "") {
+                $search_cro = "%" . $arrFiltro["correo"] . "%";
+                $comando->bindParam(":correo", $search_cro, \PDO::PARAM_STR);
+            }
+            if ($arrFiltro['telefono'] != "") {
+                $search_tfn = "%" . $arrFiltro["telefono"] . "%";
+                $comando->bindParam(":telefono", $search_tfn, \PDO::PARAM_STR);
             }
         }
         $resultData = $comando->queryAll();

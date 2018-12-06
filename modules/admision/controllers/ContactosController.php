@@ -369,6 +369,9 @@ class ContactosController extends \app\components\CController {
         $arrHeader = array(
             Yii::t("crm", "Contact"),
             Yii::t("formulario", "Country"),
+            Yii::t("formulario", "Email"),
+            Yii::t("formulario", "CellPhone"),
+            Yii::t("formulario", "Phone"),
             Yii::t("formulario", "Date"),
             admision::t("crm", "Channel"),
             Yii::t("formulario", "User login"),
@@ -382,6 +385,8 @@ class ContactosController extends \app\components\CController {
         $arrSearch["f_fin"] =  $data['f_fin'];
         $arrSearch["medio"] =  $data['medio'];
         $arrSearch["agente"] = $data['agente'];
+        $arrSearch["correo"] = $data['correo'];
+        $arrSearch["telefono"] = $data['telefono'];
         $arrData = array();
         if (empty($arrSearch)) {
             $arrData = $modPersonaGestion->consultarReportContactos(array(), true);
@@ -400,9 +405,8 @@ class ContactosController extends \app\components\CController {
         $arrHeader = array(
             Yii::t("crm", "Contact"),
             Yii::t("formulario", "Country"),
-            Yii::t("formulario", "Date"),
-            //Yii::t("formulario", "Academic unit"),
-            //Yii::t("formulario", "Company"),
+            Yii::t("formulario", "Email"),
+            Yii::t("formulario", "Date"),        
             admision::t("crm", "Channel"),
             Yii::t("formulario", "User login"),
             Yii::t("formulario", "Open Opportunities"),
@@ -415,6 +419,8 @@ class ContactosController extends \app\components\CController {
         $arrSearch["f_ini"] = $data['f_ini'];
         $arrSearch["f_fin"] = $data['f_fin'];
         $arrSearch["agente"] = $data['agente'];
+        $arrSearch["correo"] = $data['correo'];
+        $arrSearch["telefono"] = $data['telefono'];
         $arrData = array();
         if (empty($arrSearch)) {
             $arrData = $modPersonaGestion->consultarReportContactos(array(), true);

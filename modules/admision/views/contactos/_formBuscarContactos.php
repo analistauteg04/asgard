@@ -62,7 +62,7 @@ use yii\helpers\Html;
         <div class="form-group">
             <label for="txt_correo" class="col-sm-2 col-lg-2 col-md-2 col-xs-2 control-label"><?= Yii::t("formulario", "Email") ?></label>
             <div class="col-sm-3 col-xs-3 col-md-3 col-lg-3">
-                <input type="text" class="form-control PBvalidation" id="txt_correo" data-type="email" data-keydown="true" placeholder="<?= Yii::t("formulario", "Search by Email") ?>">
+                <input type="text" class="form-control" id="txt_correo" data-type="email" data-keydown="true" placeholder="<?= Yii::t("formulario", "Search by Email") ?>">
             </div>        
             <label for="txt_telefono" class="col-sm-2 col-lg-2 col-md-2 col-xs-2 control-label"><?= Yii::t("formulario", "Phone or CellPhone") ?></label>
             <div class="col-sm-3 col-xs-3 col-md-3 col-lg-3">
