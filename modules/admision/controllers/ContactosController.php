@@ -38,6 +38,8 @@ class ContactosController extends \app\components\CController {
             $arrSearch["f_ini"] = $data['f_ini'];
             $arrSearch["f_fin"] = $data['f_fin'];
             $arrSearch["agente"] = $data['agente'];
+            $arrSearch["correo"] = $data['correo'];
+            $arrSearch["telefono"] = $data['telefono'];
             $mod_gestion = $modPersonaGestion->consultarClienteCont($arrSearch);
             return $this->render('index-grid', [
                         "model" => $mod_gestion,

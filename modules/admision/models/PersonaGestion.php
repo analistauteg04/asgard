@@ -938,7 +938,8 @@ class PersonaGestion extends \app\modules\admision\components\CActiveRecord {
             $str_search .= "(pg.pges_pri_nombre like :search OR ";
             $str_search .= "pg.pges_seg_nombre like :search OR ";
             $str_search .= "pg.pges_pri_apellido like :search OR ";
-            $str_search .= "pg.pges_seg_apellido like :search)  AND ";
+            $str_search .= "pg.pges_seg_apellido like :search OR ";
+            $str_search .= "pg.pges_codigo like :search )  AND ";
             if ($arrFiltro['estado'] != "" && $arrFiltro['estado'] > 0) {
                 $str_search .= " pg.econ_id = :estcontacto AND ";
             }
@@ -951,6 +952,15 @@ class PersonaGestion extends \app\modules\admision\components\CActiveRecord {
             }
             if ($arrFiltro['agente'] != "" && $arrFiltro['agente'] > 0) {
                 $str_search .= " pg.pges_usuario_ingreso = :agente AND ";
+            }
+            if ($arrFiltro['correo'] != "") {
+                $str_search .= " pg.pges_correo = :correo AND ";
+            }
+            if ($arrFiltro['telefono'] != "") {
+                $str_search .= "(pg.pges_celular = :telefono OR ";
+                $str_search .= "pg.pges_domicilio_telefono = :telefono OR ";
+                $str_search .= "pg.pges_domicilio_celular2 = :telefono OR ";               
+                $str_search .= "pg.pges_trabajo_telefono = :telefono )  AND ";
             }
         } else {
             $columnsAdd = "                
@@ -973,6 +983,8 @@ class PersonaGestion extends \app\modules\admision\components\CActiveRecord {
                         ifnull(uaca.uaca_nombre,'Sin Unidad') as unidad_academica,
                         pg.ccan_id,
                         cc.ccan_nombre as canal,
+                        pg.pges_codigo,
+                        pg.pges_correo,
                         ifnull((select concat(pers.per_pri_nombre, ' ', ifnull(pers.per_pri_apellido,' ')) 
                                   from " . $con1->dbname . ".usuario usu 
                                   inner join " . $con1->dbname . ".persona pers on pers.per_id = usu.usu_id
@@ -1029,6 +1041,14 @@ class PersonaGestion extends \app\modules\admision\components\CActiveRecord {
             if ($arrFiltro['agente'] != "" && $arrFiltro['agente'] > 0) {
                 $agente = $arrFiltro["agente"];
                 $comando->bindParam(":agente", $agente, \PDO::PARAM_INT);
+            }
+            if ($arrFiltro['correo'] != "") {
+                $correo = $arrFiltro["correo"];
+                $comando->bindParam(":correo", $correo, \PDO::PARAM_STR);
+            }
+            if ($arrFiltro['telefono'] != "") {
+                $telefono = $arrFiltro["telefono"];
+                $comando->bindParam(":telefono", $telefono, \PDO::PARAM_STR);
             }
         }
 
