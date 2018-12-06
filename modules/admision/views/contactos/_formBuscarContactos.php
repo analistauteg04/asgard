@@ -8,7 +8,7 @@ use yii\helpers\Html;
         <div class="form-group">
             <label for="txt_buscarDataPersona" class="col-sm-2 col-lg-2 col-md-2 col-xs-2 control-label"><?= Yii::t("formulario", "Search") ?></label>
             <div class="col-sm-8 col-xs-8 col-md-8 col-lg-8">
-                <input type="text" class="form-control" value="" id="txt_buscarDataPersona" placeholder="<?= Yii::t("formulario", "Search by Names") ?>">
+                <input type="text" class="form-control" value="" id="txt_buscarDataPersona" placeholder="<?= Yii::t("formulario", "Search by Names") . " o " . Yii::t("formulario", "Code") ?>">
             </div>
         </div>
     </div>
@@ -46,7 +46,7 @@ use yii\helpers\Html;
             </div>
         </div>
     </div>
-    <div class="col-md-12">
+    <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
         <div class="form-group">
             <label for="lbl_medio" class="col-sm-2 col-lg-2 col-md-2 col-xs-2 control-label"><?= Yii::t("formulario", "Channel") ?></label>
             <div class="col-sm-3 col-md-3 col-xs-3 col-lg-3">
@@ -55,6 +55,18 @@ use yii\helpers\Html;
             <label for="lbl_usurin" class="col-sm-2 col-md-2 col-xs-2 col-lg-2 control-label"><?= Yii::t("formulario", "User login") ?></label>
             <div class="col-sm-3 col-md-3 col-xs-3 col-lg-3">
                 <?= Html::dropDownList("cmb_agente", 0, $arra_agente, ["class" => "form-control pro_combo", "id" => "cmb_agente"]) ?>
+            </div>
+        </div>
+    </div>
+    <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
+        <div class="form-group">
+            <label for="txt_correo" class="col-sm-2 col-lg-2 col-md-2 col-xs-2 control-label"><?= Yii::t("formulario", "Email") ?></label>
+            <div class="col-sm-3 col-xs-3 col-md-3 col-lg-3">
+                <input type="text" class="form-control PBvalidation" id="txt_correo" data-type="email" data-keydown="true" placeholder="<?= Yii::t("formulario", "Search by Email") ?>">
+            </div>        
+            <label for="txt_telefono" class="col-sm-2 col-lg-2 col-md-2 col-xs-2 control-label"><?= Yii::t("formulario", "Phone or CellPhone") ?></label>
+            <div class="col-sm-3 col-xs-3 col-md-3 col-lg-3">
+                <input type="text" class="form-control PBvalidation" id="txt_telefono" placeholder="<?= Yii::t("formulario", "Search by Phone or CellPhone") ?>">
             </div>
         </div>
     </div>

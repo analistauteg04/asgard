@@ -486,4 +486,5 @@ INSERT INTO `observacion_actividades` (`oact_id`, `oact_nombre`, `oact_descripci
 (18, 'Preinscripción en llamada', 'Preinscripción en llamada', '1', 1, NULL, '2018-11-09 10:00:00', NULL, '1'),
 (19, 'Número errado', 'Número errado', '1', 1, NULL, '2018-11-09 10:00:00', NULL, '1'),
 (20, 'Pendiente documentación', 'Pendiente documentación', '1', 1, NULL, '2018-11-09 10:00:00', NULL, '1'),
-(21, 'Pendiente plataforma examen', 'Pendiente plataforma examen', '1', 1, NULL, '2018-11-09 10:00:00', NULL, '1');
+(21, 'Pendiente plataforma examen', 'Pendiente plataforma examen', '1', 1, NULL, '2018-11-09 10:00:00', NULL, '1'),
+(22, 'Contactado por whatsapp', 'Contactado por whatsapp', '1', 1, NULL, '2018-12-06 11:35:00', NULL, '1');

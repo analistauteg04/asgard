@@ -6,6 +6,7 @@ use \app\models\Persona;
 use app\widgets\PbGridView\PbGridView;
 use app\modules\admision\Module;
 use app\modules\admision\Module as admision;
+
 admision::registerTranslations();
 ?>
 <?= Html::hiddenInput('txth_ids', '', ['id' => 'txth_ids']); ?>
@@ -22,6 +23,11 @@ admision::registerTranslations();
                 'attribute' => 'Contacto',
                 'header' => Module::t("crm", "Contact"),
                 'value' => 'cliente',
+            ],
+            [
+                'attribute' => 'codigo',
+                'header' => Yii::t("formulario", "Code"),
+                'value' => 'pges_codigo',
             ],
             [
                 'attribute' => 'Pais',
@@ -44,14 +50,34 @@ admision::registerTranslations();
                 'value' => 'empresa',
             ],
             [
-                'attribute' => 'Canal',
+                'class' => 'yii\grid\ActionColumn',
                 'header' => Module::t("crm", "Channel"),
-                'value' => 'canal',
-            ],
+                'template' => '{view}',
+                'buttons' => [
+                    'view' => function ($url, $model) {
+                        if ($model['canal'] != '') {
+                            $texto = substr($model['canal'], 0, 7) . '...';
+                        } else {
+                            $texto = '';
+                        }
+                        return Html::a('<span>' . $texto . '</span>', Url::to(['#']), ["data-toggle" => "tooltip", "title" => $model['canal']]);
+                    },
+                ],
+            ],           
             [
-                'attribute' => 'Usuario',
+                'class' => 'yii\grid\ActionColumn',
                 'header' => Yii::t("formulario", "User login"),
-                'value' => 'usuario_ing',               
+                'template' => '{view}',
+                'buttons' => [
+                    'view' => function ($url, $model) {
+                        if ($model['usuario_ing'] != '') {
+                            $texto = substr($model['usuario_ing'], 0, 10) . '...';
+                        } else {
+                            $texto = '';
+                        }
+                        return Html::a('<span>' . $texto . '</span>', Url::to(['#']), ["data-toggle" => "tooltip", "title" => $model['usuario_ing']]);
+                    },
+                ],
             ],
             [
                 'attribute' => 'NumOportunidadesAbiertas',
@@ -63,10 +89,9 @@ admision::registerTranslations();
                 'header' => Yii::t("formulario", "Close Opportunities"),
                 'value' => 'num_oportunidad_cerradas',
             ],
-
             [
                 'class' => 'yii\grid\ActionColumn',
-                'header' => Yii::t("formulario", "Actions"),//{update} 
+                'header' => Yii::t("formulario", "Actions"), //{update} 
                 'template' => '{view} {opportunities}', //    
                 'buttons' => [
                     'view' => function ($url, $model) {
