@@ -109,7 +109,7 @@ class DetalleDescuentoItem extends \app\modules\financiero\components\CActiveRec
                         on di.dite_id = ddi.dite_id
                 WHERE di.ite_id = :ite_id
                       and ddi.ddit_estado_descuento = 'A'
-                      and now() between ddi.ddit_finicio and ddi.ddit_ffin  
+                      and now() between ddi.ddit_finicio and ifnull(ddi.ddit_ffin, now())  
                       and di.dite_estado = :estado
                       and di.dite_estado_logico = :estado
                       and ddi.ddit_estado = :estado

@@ -221,19 +221,20 @@ class SolicitudesController extends \app\components\CController {
                 $message = array("carrera" => $carrera);
                 return Utilities::ajaxResponse('OK', 'alert', Yii::t('jslang', 'Success'), 'false', $message);
             }
-            if (isset($data["getdescuento"])) {
-                $resItem = $modItemMetNivel->consultarXitemMetniv($data["unidada"], $data["moda_id"], $data["metodo"]);
-                $descuentos = $modDescuento->consultarDesctoxitem($resItem["ite_id"]);
+            if (isset($data["getdescuento"])) {                
+                $resItems = $modItemMetNivel->consultarXitemMetniv($data["unidada"], $data["moda_id"], $data["metodo"], $data["empresa_id"], $data["carrera_id"]);                            
+                $descuentos = $modDescuento->consultarDesctoxitem($resItems["ite_id"]);
                 $message = array("descuento" => $descuentos);
-                return Utilities::ajaxResponse('OK', 'alert', Yii::t('jslang', 'Success'), 'false', $message);
-                return;
+                return Utilities::ajaxResponse('OK', 'alert', Yii::t('jslang', 'Success'), 'false', $message);                
             }
-            if (isset($data["getitem"])) {
+            if (isset($data["getitem"])) {    
                 \app\models\Utilities::putMessageLogFile('unidad:' . $data["unidada"]);
                 \app\models\Utilities::putMessageLogFile('modalidad:' . $data["moda_id"]);
                 \app\models\Utilities::putMessageLogFile('metodo:' . $data["metodo"]);
-                \app\models\Utilities::putMessageLogFile('carrera:' . $data["carrera_id"]);
-                $resItem = $modItemMetNivel->consultarXitemPrecio($data["unidada"], $data["moda_id"], $data["metodo"], $data["carrera_id"]);
+                \app\models\Utilities::putMessageLogFile('carrera:' . $data["carrera_id"]);    
+                \app\models\Utilities::putMessageLogFile('empresa:' . $data["empresa_id"]);
+                $resItem = $modItemMetNivel->consultarXitemPrecio($data["unidada"], $data["moda_id"], $data["metodo"], $data["carrera_id"], $data["empresa_id"]);
+                \app\models\Utilities::putMessageLogFile('ITEM:');
                 $message = array("items" => $resItem);
                 return Utilities::ajaxResponse('OK', 'alert', Yii::t('jslang', 'Success'), 'false', $message);
                 return;
@@ -244,7 +245,7 @@ class SolicitudesController extends \app\components\CController {
         $arr_metodos = $mod_metodo->consultarMetodoIngNivelInt($arr_unidadac[0]["id"]);
         $arr_carrera = $modcanal->consultarCarreraModalidad(1, 1);
         //Descuentos y precios.
-        $resp_item = $modItemMetNivel->consultarXitemPrecio(1, 1, 1, 2);
+        $resp_item = $modItemMetNivel->consultarXitemPrecio(1, 1, 1, 2, 1);
         $arr_descuento = $modDescuento->consultarDesctoxitem($resp_item["ite_id"]);
         return $this->render('new', [
                     "arr_unidad" => ArrayHelper::map($arr_unidadac, "id", "name"),
@@ -328,9 +329,7 @@ class SolicitudesController extends \app\components\CController {
             $sins_fechasol = date(Yii::$app->params["dateTimeByDefault"]);
             if ($emp_id > 1) {
                 $ming_id = null; //Curso.
-                $rsin_id = 1; //Solicitud pre-aprobada para las otras empresas.  
-                /* $pre_observacion = 'Solicitud Pre-Aprobada.';
-                  $fec_preobservacion = $sins_fechasol; */
+                $rsin_id = 1; 
                 $subirDocumentos = 0;
             } else {
                 $rsin_id = 1; //Solicitud pendiente        

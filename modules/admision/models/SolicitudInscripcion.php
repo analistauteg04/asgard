@@ -1075,8 +1075,7 @@ class SolicitudInscripcion extends \yii\db\ActiveRecord
                          INNER JOIN " . $con1->dbname . ".unidad_academica ua on ua.uaca_id = imni.uaca_id                                             
                     WHERE imni.ming_id = :ming_id AND 
                           imni.uaca_id = :nint_id AND
-                          imni.mod_id = :mod_id AND
-                          imni.eaca_id = :car_id AND
+                          imni.mod_id = :mod_id AND                         
                           ipre.ipre_estado_precio = :estado_precio AND
                           now() between ipre.ipre_fecha_inicio and ipre.ipre_fecha_fin AND
                           imni.imni_estado = :estado AND
