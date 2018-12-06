@@ -98,6 +98,7 @@ class MatriculadosreprobadosController extends \app\components\CController {
                         , 'twre_metodo_ingreso', 'ruta_doc_titulo', 'ruta_doc_dni'
                         , 'ruta_doc_certvota', 'ruta_doc_foto', 'ruta_doc_certificado'
                         , 'ruta_doc_hojavida', 'twre_mensaje1', 'twre_mensaje2'
+                        , 'twre_fecha_solicitud', 
                     ];
                     //ruta_doc_titulo
                     $path_title = $data["DATA_1"][0]['ruta_doc_titulo'];
@@ -161,11 +162,12 @@ class MatriculadosreprobadosController extends \app\components\CController {
                         $data["DATA_1"][0]['unidad_academica'], $data["DATA_1"][0]['modalidad'], $data["DATA_1"][0]['carrera'],
                         $data["DATA_1"][0]['ming_id'], $data["DATA_1"][0]["ruta_doc_titulo"], $data["DATA_1"][0]["ruta_doc_dni"],
                         $data["DATA_1"][0]["ruta_doc_certvota"], $data["DATA_1"][0]['ruta_doc_foto'], $data["DATA_1"][0]["ruta_doc_certvota"],
-                        $data["DATA_1"][0]['ruta_doc_hojavida'], $data["DATA_1"][0]['twre_mensaje1'], $data["DATA_1"][0]['twre_mensaje2']
+                        $data["DATA_1"][0]['ruta_doc_hojavida'], $data["DATA_1"][0]['twre_mensaje1'], $data["DATA_1"][0]['twre_mensaje2'],
+                        $data["DATA_1"][0]['fecha_solicitud']
                     ];
                     \app\models\Utilities::putMessageLogFile('Va actualizar la temporal');
                     $resul = $model->actualizarReprobadoTemp($con, $data["DATA_1"][0]['twre_id'], $values_act, $keys_act, 'temporal_wizard_reprobados');
-                    if($data["PASO"]==2){
+                    if($data["PASO"]==3){
                         \app\models\Utilities::putMessageLogFile('Se va actualizar la tabla de asgard');
                         $resul=$model->insertaOriginal($resul["twre_id"]);
                     }
