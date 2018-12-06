@@ -39,8 +39,11 @@ class ReportesController extends CController {
                 break;
             case '2'://POSGRADO
                 $arrData=$objDat->consultarOportunidadProximaAten($data);
-                $arrHeader = array("N° Oport","Fecha Atencion","F.Prox.At","Empresa","Cedula","Nombres","Apellidos","Unidad Academica",
-                                    "Estado","Observacion","Agente");
+                $arrHeader = array(
+                            "N° Oport","Fecha Atencion","F.Prox.At","Empresa","Cedula",
+                            "Nombres","Apellidos","Unidad Academica","Canal Contacto",
+                            "Estado Oport.", "Observacion", "Agente"
+                );
                 $nombarch = "EstadoOportunidad-" . date("YmdHis").".xls";
                 break;
             case '3'://Aspirantes
