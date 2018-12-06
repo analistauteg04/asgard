@@ -205,7 +205,7 @@ $(document).ready(function () {
                     }
                 }, true);
                 //Item.-
-                var arrParams = new Object();
+                var arrParams = new Object();               
                 arrParams.unidada = $('#cmb_ninteres').val();
                 arrParams.metodo = $('#cmb_metodos').val();        
                 arrParams.moda_id = $('#cmb_modalidad').val();

@@ -288,9 +288,8 @@ class OrdenPago extends \app\modules\financiero\components\CActiveRecord {
                     INNER JOIN " . $con2->dbname . ".interesado inte on inte.per_id = per.per_id
                     INNER JOIN " . $con2->dbname . ".solicitud_inscripcion sins on sins.int_id = inte.int_id
                     INNER JOIN  " . $con->dbname . ".orden_pago orp on sins.sins_id = orp.sins_id
-                    INNER JOIN " . $con->dbname . ".item_metodo_unidad imni on ((sins.ming_id = imni.ming_id and sins.uaca_id = imni.uaca_id and sins.mod_id = imni.mod_id)
-                                or (sins.uaca_id = imni.uaca_id and sins.mod_id = imni.mod_id and sins.mest_id = imni.mest_id))
-                    INNER JOIN " . $con->dbname . ".item_precio itp ON itp.ite_id = imni.ite_id
+                    INNER JOIN " . $con->dbname . ".desglose_pago dp on dp.opag_id = orp.opag_id
+                    INNER JOIN " . $con->dbname . ".item_precio itp ON itp.ite_id = dp.ite_id
                     INNER JOIN " . $con->dbname . ".item ite ON ite.ite_id = itp.ite_id ";
         if (!empty($sol_id)) {
             $sql .=  "WHERE $str_search sins.sins_id = " . $sol_id . " AND ";
@@ -303,16 +302,16 @@ class OrdenPago extends \app\modules\financiero\components\CActiveRecord {
         $sql .= "itp.ipre_estado_precio = :estado_precio AND
                 orp.opag_estado_logico = :estado AND                
                 itp.ipre_estado_logico = :estado AND
-                ite.ite_estado_logico = :estado AND    
-                imni.imni_estado_logico = :estado AND                
+                ite.ite_estado_logico = :estado AND                               
                 inte.int_estado_logico = :estado AND
                 sins.sins_estado_logico = :estado AND
                 orp.opag_estado = :estado AND                
                 itp.ipre_estado = :estado AND
-                ite.ite_estado = :estado AND
-                imni.imni_estado = :estado AND
+                ite.ite_estado = :estado AND                
                 inte.int_estado = :estado AND                
-                sins.sins_estado = :estado
+                sins.sins_estado = :estado AND
+                dp.dpag_estado = :estado AND
+                dp.dpag_estado_logico = :estado
            ORDER BY sins.sins_fecha_solicitud desc";
 
         $comando = $con->createCommand($sql);

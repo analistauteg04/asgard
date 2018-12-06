@@ -18,7 +18,26 @@ use app\modules\financiero\Module as financiero;
     <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
         <p class="text-danger"> <?= Yii::t("formulario", "Fields with * are required") ?> </p>        
     </div>
-    
+    <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
+        <div class="form-group">            
+            <label for="txt_fecha_solicitud" class="col-sm-5 col-md-5 col-xs-5 col-lg-5  control-label"><?= Yii::t("formulario", "Fecha Solicitud") ?></label>
+                <div class="col-sm-4 col-md-4 col-xs-4 col-lg-4 ">
+                    <?=
+                    DatePicker::widget([
+                        'name' => 'txt_fecha_solicitud',
+                        'value' => '',
+                        //'disabled' => $habilita,
+                        'type' => DatePicker::TYPE_INPUT,
+                        'options' => ["class" => "form-control PBvalidation keyupmce", "id" => "txt_fecha_solicitud", "data-type" => "fecha_pro", "data-keydown" => "true", "placeholder" => Yii::t("formulario", "Date")],
+                        'pluginOptions' => [
+                            'autoclose' => true,
+                            'format' => Yii::$app->params["dateByDatePicker"],
+                        ]
+                    ]);
+                    ?>
+                </div>
+        </div>
+    </div>
     <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
         <div class="form-group">            
             <label for="cmb_unidad_solicitud" class="col-lg-3 col-md-3 col-sm-3 col-xs-3 control-label"><?= Yii::t("formulario", "Academic unit") ?> <span class="text-danger">*</span></label>
