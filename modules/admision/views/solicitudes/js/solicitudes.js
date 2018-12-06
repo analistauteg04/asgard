@@ -65,13 +65,28 @@ $(document).ready(function () {
                                 arrParams.metodo = $('#cmb_metodos').val();        
                                 arrParams.moda_id = $('#cmb_modalidad').val();
                                 arrParams.carrera_id = $('#cmb_carrera').val();
+                                arrParams.empresa_id = $('#cmb_empresa').val();
                                 arrParams.getitem = true;
                                 requestHttpAjax(link, arrParams, function (response) {
                                     if (response.status == "OK") {
                                         data = response.message;
                                         setComboData(data.items, "cmb_item");
                                     } 
-                                }, true);        
+                                }, true);  
+                                 //Descuentos.
+                                var arrParams = new Object();
+                                arrParams.unidada = $('#cmb_ninteres').val();
+                                arrParams.moda_id = $('#cmb_modalidad').val();
+                                arrParams.metodo = $('#cmb_metodos').val();
+                                arrParams.empresa_id = $('#cmb_empresa').val();
+                                arrParams.carrera_id = $('#cmb_carrera').val();
+                                arrParams.getdescuento = true;
+                                requestHttpAjax(link, arrParams, function (response) {
+                                    if (response.status == "OK") {
+                                        data = response.message;
+                                        setComboData(data.descuento, "cmb_descuento");
+                                    }
+                                }, true);
                             }
                         }
                     }, true);
@@ -121,7 +136,7 @@ $(document).ready(function () {
         var arrParams = new Object();
         arrParams.unidada = $('#cmb_ninteres').val();
         arrParams.nint_id = $('#cmb_ninteres').val();
-        arrParams.metodo = $('#cmb_metodos').val();
+        arrParams.metodo = $('#cmb_metodos').val();        
         arrParams.getmetodo = true;
         requestHttpAjax(link, arrParams, function (response) {
             if (response.status == "OK") {
@@ -132,6 +147,8 @@ $(document).ready(function () {
                 arrParams.unidada = $('#cmb_ninteres').val();                
                 arrParams.moda_id = $('#cmb_modalidad').val();
                 arrParams.metodo = $('#cmb_metodos').val();
+                arrParams.empresa_id = $('#cmb_empresa').val();
+                arrParams.carrera_id = $('#cmb_carrera').val();
                 arrParams.getdescuento = true;
                 requestHttpAjax(link, arrParams, function (response) {
                     if (response.status == "OK") {
@@ -156,7 +173,8 @@ $(document).ready(function () {
         arrParams.unidada = $('#cmb_ninteres').val();
         arrParams.metodo = $('#cmb_metodos').val();        
         arrParams.moda_id = $('#cmb_modalidad').val();
-        arrParams.carrera_id = $('#cmb_carrera').val();
+        arrParams.carrera_id = $('#cmb_carrera').val();     
+        arrParams.empresa_id = $('#cmb_empresa').val();
         arrParams.getitem = true;
         requestHttpAjax(link, arrParams, function (response) {
             if (response.status == "OK") {
@@ -192,6 +210,7 @@ $(document).ready(function () {
                 arrParams.metodo = $('#cmb_metodos').val();        
                 arrParams.moda_id = $('#cmb_modalidad').val();
                 arrParams.carrera_id = $('#cmb_carrera').val();
+                arrParams.empresa_id = $('#cmb_empresa').val();
                 arrParams.getitem = true;
                 requestHttpAjax(link, arrParams, function (response) {
                     if (response.status == "OK") {
@@ -206,27 +225,15 @@ $(document).ready(function () {
         arrParams.unidada = $('#cmb_ninteres').val();
         arrParams.moda_id = $('#cmb_modalidad').val();
         arrParams.metodo = $('#cmb_metodos').val();
+        arrParams.empresa_id = $('#cmb_empresa').val();
+        arrParams.carrera_id = $('#cmb_carrera').val();
         arrParams.getdescuento = true;
         requestHttpAjax(link, arrParams, function (response) {
             if (response.status == "OK") {
                 data = response.message;
                 setComboData(data.descuento, "cmb_descuento");
             }
-        }, true);
-        /*
-        //Item.-
-        var arrParams = new Object();
-        arrParams.unidada = $('#cmb_ninteres').val();
-        arrParams.metodo = $('#cmb_metodos').val();        
-        arrParams.moda_id = $('#cmb_modalidad').val();
-        arrParams.carrera_id = $('#cmb_carrera').val();
-        arrParams.getitem = true;
-        requestHttpAjax(link, arrParams, function (response) {
-            if (response.status == "OK") {
-                data = response.message;
-                setComboData(data.items, "cmb_item");               
-            } 
-        }, true);        */
+        }, true);    
     });
 
     $('#cmb_unidad').change(function () {
@@ -571,6 +578,8 @@ $(document).ready(function () {
         arrParams.unidada = $('#cmb_ninteres').val();
         arrParams.moda_id = $('#cmb_modalidad').val();
         arrParams.metodo = $('#cmb_metodos').val();
+        arrParams.empresa_id = $('#cmb_empresa').val();
+        arrParams.carrera_id = $('#cmb_carrera').val();
         arrParams.getdescuento = true;
         requestHttpAjax(link, arrParams, function (response) {
             if (response.status == "OK") {
@@ -584,7 +593,8 @@ $(document).ready(function () {
         arrParams.unidada = $('#cmb_ninteres').val();
         arrParams.metodo = $('#cmb_metodos').val();        
         arrParams.moda_id = $('#cmb_modalidad').val();
-        arrParams.carrera_id = $('#cmb_carrera').val();
+      //  arrParams.carrera_id = $('#cmb_carrera').val();
+        arrParams.empresa_id = $('#cmb_empresa').val();
         arrParams.getitem = true;
         requestHttpAjax(link, arrParams, function (response) {
             if (response.status == "OK") {
@@ -602,6 +612,7 @@ $(document).ready(function () {
         arrParams.metodo = $('#cmb_metodos').val();        
         arrParams.moda_id = $('#cmb_modalidad').val();
         arrParams.carrera_id = $('#cmb_carrera').val();
+        arrParams.empresa_id = $('#cmb_empresa').val();
         arrParams.getitem = true;
         requestHttpAjax(link, arrParams, function (response) {
             if (response.status == "OK") {
@@ -609,6 +620,21 @@ $(document).ready(function () {
                 setComboData(data.items, "cmb_item");               
             } 
         }, true);  
+        
+        //Descuentos.
+        var arrParams = new Object();
+        arrParams.unidada = $('#cmb_ninteres').val();
+        arrParams.moda_id = $('#cmb_modalidad').val();
+        arrParams.metodo = $('#cmb_metodos').val();
+        arrParams.empresa_id = $('#cmb_empresa').val();
+        arrParams.carrera_id = $('#cmb_carrera').val();
+        arrParams.getdescuento = true;
+        requestHttpAjax(link, arrParams, function (response) {
+            if (response.status == "OK") {
+                data = response.message;
+                setComboData(data.descuento, "cmb_descuento");
+            }
+        }, true);
     });
 
 });

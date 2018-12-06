@@ -6,6 +6,7 @@ return [
     'web' => 'http://www.uteg.edu.ec',
     'version' => '1.0',
     'adminEmail' => 'web@uteg.edu.ec',
+
     'soporteEmail' => /*'dlopez@uteg.edu.ec', */ 'analistadesarrollo02@uteg.edu.ec',
     'admisiones' => /*'admisionesonline@uteg.edu.ec',*/  'analistadesarrollo02@uteg.edu.ec',
     'colecturia' => /*'colecturia@uteg.edu.ec',*/     'analistadesarrollo02@uteg.edu.ec',
