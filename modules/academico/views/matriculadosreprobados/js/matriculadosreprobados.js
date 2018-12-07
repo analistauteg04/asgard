@@ -122,7 +122,6 @@ $(document).ready(function () {
         actualizarGrid();
     });
 
-
     $('#cmb_unidad_solicitud').change(function () {
         var link = $('#txth_base').val() + "/inscripcionadmision/index";
         var arrParams = new Object();
@@ -283,10 +282,11 @@ function dataInscripPart1(ID) {
     objDat.ruta_doc_dni = ($('#txth_doc_dni').val() != '') ? $('#txth_doc_dni').val() : '';
     objDat.ruta_doc_certvota = ($('#txth_doc_certvota').val() != '') ? $('#txth_doc_certvota').val() : '';
     if ($('input[name=opt_declara_Dctosi]:checked').val() == 1) {
-        objDat.descuento_id = $('#cmb_descuento').val();
+        objDat.sdes_id = $('#cmb_descuento').val();
         objDat.marcadescuento = '1';
     }else{
-        objDat.descuento_id = 0;
+        objDat.sdes_id
+                = 0;
         objDat.marcadescuento = '0';
     }
     objDat.ruta_doc_foto = '';
