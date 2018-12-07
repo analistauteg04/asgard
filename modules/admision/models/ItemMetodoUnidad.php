@@ -13,6 +13,7 @@ use Yii;
  * @property int $uaca_id
  * @property int $mod_id
  * @property int $mest_id
+ * @property int $eaca_id
  * @property int $imni_usu_ingreso
  * @property int $imni_usu_modifica
  * @property string $imni_estado
@@ -47,7 +48,7 @@ class ItemMetodoUnidad extends \yii\db\ActiveRecord
     {
         return [
             [['imni_id', 'ite_id', 'imni_usu_ingreso', 'imni_estado', 'imni_estado_logico'], 'required'],
-            [['imni_id', 'ite_id', 'ming_id', 'uaca_id', 'mod_id', 'mest_id', 'imni_usu_ingreso', 'imni_usu_modifica'], 'integer'],
+            [['imni_id', 'ite_id', 'ming_id', 'uaca_id', 'mod_id', 'mest_id', 'eaca_id', 'imni_usu_ingreso', 'imni_usu_modifica'], 'integer'],
             [['imni_fecha_creacion', 'imni_fecha_modificacion'], 'safe'],
             [['imni_estado', 'imni_estado_logico'], 'string', 'max' => 1],
             [['imni_id'], 'unique'],
@@ -67,6 +68,7 @@ class ItemMetodoUnidad extends \yii\db\ActiveRecord
             'uaca_id' => 'Uaca ID',
             'mod_id' => 'Mod ID',
             'mest_id' => 'Mest ID',
+            'eaca_id' => 'Eaca ID',
             'imni_usu_ingreso' => 'Imni Usu Ingreso',
             'imni_usu_modifica' => 'Imni Usu Modifica',
             'imni_estado' => 'Imni Estado',
@@ -91,21 +93,35 @@ class ItemMetodoUnidad extends \yii\db\ActiveRecord
      * @return  $resultData (Para obtener el id del item, filtrando por nivel de interés,
      *                       modalidad y método de ingreso.)
      */
-    public function consultarXitemMetniv($nint_id, $mod_id, $ming_id) {        
+    public function consultarXitemMetniv($nint_id, $mod_id, $ming_id, $empresa_id, $carrera_id) {        
         $con = \Yii::$app->db_facturacion;        
         $estado = 1;
-        $sql = "SELECT ite_id 
-                FROM  " . $con->dbname . ".item_metodo_unidad
-                WHERE uaca_id = :nint_id
-                      and mod_id = :mod_id
-                      and ming_id = :ming_id
-                      and imni_estado = :estado
-                      and imni_estado_logico = :estado";        
+        if ($empresa_id == 1) {
+            $sql = "SELECT ite_id 
+                    FROM  " . $con->dbname . ".item_metodo_unidad
+                    WHERE uaca_id = :nint_id
+                          and mod_id = :mod_id
+                          and ming_id = :ming_id
+                          and imni_estado = :estado
+                          and imni_estado_logico = :estado"; 
+        } else {
+            $sql = "SELECT ite_id 
+                    FROM  " . $con->dbname . ".item_metodo_unidad
+                    WHERE uaca_id = :nint_id
+                          and mod_id = :mod_id    
+                          and mest_id = :carrera_id
+                          and imni_estado = :estado
+                          and imni_estado_logico = :estado"; 
+        }
+       
         $comando = $con->createCommand($sql);
         $comando->bindParam(":estado", $estado, \PDO::PARAM_STR);
         $comando->bindParam(":nint_id", $nint_id, \PDO::PARAM_INT);
-        $comando->bindParam(":ming_id", $ming_id, \PDO::PARAM_INT);
-        $comando->bindParam(":mod_id", $mod_id, \PDO::PARAM_INT);
+        if (!empty($ming_id)) {
+            $comando->bindParam(":ming_id", $ming_id, \PDO::PARAM_INT);
+        }
+        $comando->bindParam(":mod_id", $mod_id, \PDO::PARAM_INT);        
+        $comando->bindParam(":carrera_id", $carrera_id, \PDO::PARAM_INT);
         $resultData = $comando->queryOne();
         return $resultData;                
     }
@@ -117,25 +133,38 @@ class ItemMetodoUnidad extends \yii\db\ActiveRecord
      * @return  $resultData (Para obtener el id del item, filtrando por nivel de interés,
      *                       modalidad, método de ingreso y carrera.)
      */
-    public function consultarXitemPrecio($nint_id, $mod_id, $ming_id, $eaca_id) {        
+    public function consultarXitemPrecio($nint_id, $mod_id, $ming_id, $eaca_id, $empresa_id) {        
         $con = \Yii::$app->db_facturacion;        
         $estado = 1;
-        $sql = "SELECT i.ite_id id, ite_nombre name
-                FROM  " . $con->dbname . ".item_metodo_unidad imu inner join db_facturacion.item i
-                        on imu.ite_id = i.ite_id
-                WHERE imu.uaca_id = :nint_id
-                      and mod_id = :mod_id
-                      and ming_id = :ming_id
-                      and eaca_id = :eaca_id
-                      and imni_estado = :estado
-                      and imni_estado_logico = :estado";                
+        if ($empresa_id == 1) {
+            $sql = "SELECT i.ite_id id, ite_nombre name
+                    FROM  " . $con->dbname . ".item_metodo_unidad imu inner join " . $con->dbname . ".item i
+                            on imu.ite_id = i.ite_id
+                    WHERE imu.uaca_id = :nint_id
+                          and mod_id = :mod_id
+                          and ming_id = :ming_id                         
+                          and imni_estado = :estado
+                          and imni_estado_logico = :estado";
+        } else {
+            $sql = "SELECT i.ite_id id, ite_nombre name
+                    FROM  " . $con->dbname . ".item_metodo_unidad imu inner join " . $con->dbname . ".item i
+                            on imu.ite_id = i.ite_id
+                    WHERE imu.uaca_id = :nint_id
+                          and mod_id = :mod_id                          
+                          and mest_id = :eaca_id
+                          and imni_estado = :estado
+                          and imni_estado_logico = :estado";
+        }
+                
+        \app\models\Utilities::putMessageLogFile('$sql:' . $sql);    
         $comando = $con->createCommand($sql);
         $comando->bindParam(":estado", $estado, \PDO::PARAM_STR);
         $comando->bindParam(":nint_id", $nint_id, \PDO::PARAM_INT);
-        $comando->bindParam(":ming_id", $ming_id, \PDO::PARAM_INT);
+        if (!empty($ming_id)) {
+            $comando->bindParam(":ming_id", $ming_id, \PDO::PARAM_INT);
+        }
         $comando->bindParam(":mod_id", $mod_id, \PDO::PARAM_INT);
         $comando->bindParam(":eaca_id", $eaca_id, \PDO::PARAM_INT);
-        
         $resultData = $comando->queryAll();
         return $resultData;                
     }

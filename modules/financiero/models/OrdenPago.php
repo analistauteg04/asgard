@@ -288,9 +288,8 @@ class OrdenPago extends \app\modules\financiero\components\CActiveRecord {
                     INNER JOIN " . $con2->dbname . ".interesado inte on inte.per_id = per.per_id
                     INNER JOIN " . $con2->dbname . ".solicitud_inscripcion sins on sins.int_id = inte.int_id
                     INNER JOIN  " . $con->dbname . ".orden_pago orp on sins.sins_id = orp.sins_id
-                    INNER JOIN " . $con->dbname . ".item_metodo_unidad imni on ((sins.ming_id = imni.ming_id and sins.uaca_id = imni.uaca_id and sins.mod_id = imni.mod_id and sins.eaca_id = imni.eaca_id)
-                                or (sins.uaca_id = imni.uaca_id and sins.mod_id = imni.mod_id and sins.mest_id = imni.mest_id))
-                    INNER JOIN " . $con->dbname . ".item_precio itp ON itp.ite_id = imni.ite_id
+                    INNER JOIN " . $con->dbname . ".desglose_pago dp on dp.opag_id = orp.opag_id
+                    INNER JOIN " . $con->dbname . ".item_precio itp ON itp.ite_id = dp.ite_id
                     INNER JOIN " . $con->dbname . ".item ite ON ite.ite_id = itp.ite_id ";
         if (!empty($sol_id)) {
             $sql .=  "WHERE $str_search sins.sins_id = " . $sol_id . " AND ";
@@ -303,16 +302,16 @@ class OrdenPago extends \app\modules\financiero\components\CActiveRecord {
         $sql .= "itp.ipre_estado_precio = :estado_precio AND
                 orp.opag_estado_logico = :estado AND                
                 itp.ipre_estado_logico = :estado AND
-                ite.ite_estado_logico = :estado AND    
-                imni.imni_estado_logico = :estado AND                
+                ite.ite_estado_logico = :estado AND                               
                 inte.int_estado_logico = :estado AND
                 sins.sins_estado_logico = :estado AND
                 orp.opag_estado = :estado AND                
                 itp.ipre_estado = :estado AND
-                ite.ite_estado = :estado AND
-                imni.imni_estado = :estado AND
+                ite.ite_estado = :estado AND                
                 inte.int_estado = :estado AND                
-                sins.sins_estado = :estado
+                sins.sins_estado = :estado AND
+                dp.dpag_estado = :estado AND
+                dp.dpag_estado_logico = :estado
            ORDER BY sins.sins_fecha_solicitud desc";
 
         $comando = $con->createCommand($sql);
@@ -1076,9 +1075,7 @@ class OrdenPago extends \app\modules\financiero\components\CActiveRecord {
 
         if ($emp_id == 1) {  //Cuando se trata de una SI= solicitud de inscripción, a carrera de UTEG.
             $sql = "SELECT 
-                            (select ite.ite_nombre from " . $con->dbname . ".item ite inner join " . $con->dbname . ".item_metodo_unidad imni on ite.ite_id = imni.ite_id 
-                             where imni.ming_id = sins.ming_id and imni.uaca_id = sins.uaca_id and imni.mod_id = sins.mod_id and imni.eaca_id = sins.eaca_id
-                                   and imni.imni_estado = :estado and imni.imni_estado_logico = :estado and ite.ite_estado = :estado and ite.ite_estado_logico = :estado) as curso,
+                            i.ite_nombre as curso,
                             opag.opag_subtotal, 
                             opag.opag_iva, 
                             opag.opag_total as precio, 
@@ -1091,6 +1088,8 @@ class OrdenPago extends \app\modules\financiero\components\CActiveRecord {
                             lpad(opag.sins_id,4,'0') as solicitud, 
                             eaca_nombre as carrera                            
                     FROM " . $con->dbname . ".orden_pago opag INNER JOIN " . $con1->dbname . ".solicitud_inscripcion sins on sins.sins_id = opag.sins_id  
+                          INNER JOIN " . $con->dbname . ".desglose_pago dp on dp.opag_id = opag.opag_id
+                          INNER JOIN " . $con->dbname . ".item i on i.ite_id = dp.ite_id
                           INNER JOIN " . $con1->dbname . ".interesado inte on inte.int_id = sins.int_id 
                           INNER JOIN " . $con2->dbname . ".persona per on per.per_id = inte.per_id                          
                           INNER JOIN " . $con3->dbname . ".estudio_academico ea on ea.eaca_id = sins.eaca_id 
@@ -1105,7 +1104,11 @@ class OrdenPago extends \app\modules\financiero\components\CActiveRecord {
                           AND ea.eaca_estado = :estado
                           AND inte.int_estado_logico = :estado                          
                           AND per.per_estado_logico = :estado                           
-                          AND ea.eaca_estado_logico = :estado";
+                          AND ea.eaca_estado_logico = :estado
+                          AND dp.dpag_estado = :estado 
+                          AND dp.dpag_estado_logico = :estado
+                          AND i.ite_estado = :estado 
+                          AND i.ite_estado_logico = :estado";
         }  else {
             $sql = "SELECT 
                             (select ite.ite_nombre from db_facturacion.item ite inner join db_facturacion.item_metodo_unidad imni on ite.ite_id = imni.ite_id 

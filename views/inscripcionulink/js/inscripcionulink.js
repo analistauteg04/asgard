@@ -81,19 +81,19 @@ $(document).ready(function () {
         var arrParams = new Object();
         arrParams.pri_nombre = $('#txt_primer_nombre').val();
         arrParams.pri_apellido = $('#txt_primer_apellido').val();
-        arrParams.tipo_dni = $('#cmb_tipo_dni').val();
-        arrParams.cedula = $('#txt_cedula').val();
+        //arrParams.tipo_dni = $('#cmb_tipo_dni').val();
+        //arrParams.cedula = $('#txt_cedula').val();
         arrParams.correo = $('#txt_correo').val();
         arrParams.pais = $('#cmb_pais_dom').val();
         arrParams.celular = $('#txt_celular').val();
         arrParams.pasaporte = $('#txt_pasaporte').val();
-        arrParams.unidad = $('#cmb_ninteres').val();
-        arrParams.modalidad = $('#cmb_modalidad').val();
-        arrParams.conoce = $('#cmb_conuteg').val();
-        arrParams.carrera = $('#cmb_modulo').val();
-        arrParams.metodo = $('#cmb_tipo_oportunidad').val();
-        arrParams.horaini = $('#txt_hora_atencionini').val();
-        arrParams.horafin = $('#txt_hora_atencionfin').val();
+        //arrParams.unidad = $('#cmb_ninteres').val();
+        //arrParams.modalidad = $('#cmb_modalidad').val();
+        //arrParams.conoce = $('#cmb_conuteg').val();
+        //arrParams.carrera = $('#cmb_modulo').val();
+        //arrParams.metodo = $('#cmb_tipo_oportunidad').val();
+        //arrParams.horaini = $('#txt_hora_atencionini').val();
+        //arrParams.horafin = $('#txt_hora_atencionfin').val();
         if (!validateForm()) {
             requestHttpAjax(link, arrParams, function (response) {
                 showAlert(response.status, response.label, response.message);

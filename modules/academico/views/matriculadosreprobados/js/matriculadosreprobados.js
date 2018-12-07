@@ -281,6 +281,7 @@ function dataInscripPart1(ID) {
     objDat.ruta_doc_titulo = ($('#txth_doc_titulo').val() != '') ? $('#txth_doc_titulo').val() : '';
     objDat.ruta_doc_dni = ($('#txth_doc_dni').val() != '') ? $('#txth_doc_dni').val() : '';
     objDat.ruta_doc_certvota = ($('#txth_doc_certvota').val() != '') ? $('#txth_doc_certvota').val() : '';
+    objDat.fecha_solicitud = $('#txt_fecha_solicitud').val();
     if ($('input[name=opt_declara_Dctosi]:checked').val() == 1) {
         objDat.sdes_id = $('#cmb_descuento').val();
         objDat.marcadescuento = '1';

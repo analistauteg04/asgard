@@ -53,6 +53,7 @@ class Reporte extends \yii\db\ActiveRecord {
     public function consultarOportunidadProximaAten($arrFiltro = array()) {
         $con = \Yii::$app->db_crm;
         $str_search = "";
+        $estado =1 ;
         if (isset($arrFiltro) && count($arrFiltro) > 0) {
 
             if ($arrFiltro['search_dni'] != "") {
@@ -64,30 +65,35 @@ class Reporte extends \yii\db\ActiveRecord {
             }
         }
         $sql = "
-                SELECT LPAD(B.opo_id,9,'0') opo_id,
-                DATE(A.bact_fecha_registro) F_Atencion,
-                DATE(A.bact_fecha_proxima_atencion) F_Prox_At,
-                G.emp_razon_social,
-                C.pges_cedula,
-                CONCAT(C.pges_pri_nombre, ' ', ifnull(C.pges_seg_nombre,' ')) Nombres,
-                CONCAT(C.pges_pri_apellido, ' ', ifnull(C.pges_seg_apellido,' ')) Apellidos, 
-                H.uaca_nombre,
-                F.eopo_nombre,
-                E.oact_nombre,
-                CONCAT(K.per_pri_nombre, ' ', ifnull(K.per_pri_apellido,' ')) Agente
-                    FROM " . $con->dbname . ".bitacora_actividades A
-                            INNER JOIN (" . $con->dbname . ".oportunidad B
-                                            INNER JOIN " . $con->dbname . ".persona_gestion C ON B.pges_id=C.pges_id
-                                            INNER JOIN db_crm.personal_admision J on J.padm_id = B.padm_id
-                                            INNER JOIN db_asgard.persona K on K.per_id = J.per_id
-                                            INNER JOIN " . yii::$app->db_asgard->dbname . ".empresa G ON G.emp_id=B.emp_id
-                                            INNER JOIN " . yii::$app->db_academico->dbname . ".unidad_academica H ON H.uaca_id=B.uaca_id
-                                       ) ON A.opo_id=B.opo_id
-                            INNER JOIN " . $con->dbname . ".observacion_actividades E ON E.oact_id=A.oact_id
-                            INNER JOIN " . $con->dbname . ".estado_oportunidad F ON F.eopo_id=A.eopo_id
-                    WHERE $str_search A.bact_estado=1 
+                SELECT LPAD(op.opo_id,9,'0') opo_id,
+                DATE(bact.bact_fecha_registro) F_Atencion,
+                DATE(bact.bact_fecha_proxima_atencion) F_Prox_At,
+                emp.emp_razon_social,                
+                pg.pges_cedula,
+                CONCAT(pg.pges_pri_nombre, ' ', ifnull(pg.pges_seg_nombre,' ')) Nombres,
+                CONCAT(pg.pges_pri_apellido, ' ', ifnull(pg.pges_seg_apellido,' ')) Apellidos,
+                uac.uaca_nombre,
+                ccan.ccan_nombre canal_contacto,
+                eop.eopo_nombre,
+                oact.oact_nombre,
+                CONCAT(per.per_pri_nombre, ' ', ifnull(per.per_pri_apellido,' ')) Agente
+                FROM db_crm.oportunidad op
+                INNER JOIN db_crm.persona_gestion pg ON pg.pges_id=op.pges_id
+                inner join db_crm.conocimiento_canal ccan on ccan.ccan_id=op.ccan_id
+                INNER JOIN db_crm.personal_admision pad on pad.padm_id = op.padm_id
+                INNER JOIN db_asgard.persona per on per.per_id = pad.per_id
+                INNER JOIN db_asgard.empresa emp ON emp.emp_id=op.emp_id
+                INNER JOIN db_academico.unidad_academica uac ON uac.uaca_id=op.uaca_id
+                INNER JOIN db_crm.estado_oportunidad eop ON eop.eopo_id=op.eopo_id
+                left JOIN (
+                select max(bact.bact_id) as bact_id,bact.opo_id
+                from db_crm.bitacora_actividades as bact
+                group by bact.opo_id
+                ) AS max_bact on max_bact.opo_id=op.opo_id
+                INNER JOIN db_crm.bitacora_actividades bact ON bact.bact_id=max_bact.bact_id
+                INNER JOIN db_crm.observacion_actividades as oact on oact.oact_id=bact.oact_id
+                WHERE $str_search op.opo_estado=1;
              ";
-        //$sql .= " AND DATE(A.bact_fecha_proxima_atencion) >= CURDATE() ";
         $sql .= " ORDER BY A.bact_fecha_proxima_atencion; ";
         $comando = $con->createCommand($sql);
         if (isset($arrFiltro) && count($arrFiltro) > 0) {

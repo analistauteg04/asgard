@@ -37,8 +37,8 @@ insert into `item` (`ite_id`, `scat_id`,  `ite_codigo`, `ite_nombre`, `ite_descr
 (6, 3, '0006', 'Examen de admisión Semipresencial', 'Examen de admisión Semipresencial', 1, '1', '1'),
 (7, 4, '0007', 'Curso de admisión y nivelación a Distancia', 'Curso de admisión y nivelación a Distancia', 1, '1', '1'),
 (8, 4, '0008', 'Examen de admisión a Distancia', 'Examen de admisión  a Distancia', 1, '1', '1'),
-(9, 5, '0009', 'Homologación Posgrado', 'Homologación Posgrado', 1, '1', '1'),
-(10, 5, '0010', 'Propedéutico Posgrado', 'Propedéutico Posgrado', 1, '1', '1'),
+(9, 5, '0009', 'Pago total Matrícula+Derecho Posgrado', 'Pago total Matrícula+Derecho Posgrado', 1, '1', '1'),
+(10, 5, '0010', 'Inscripción Posgrado', 'Inscripción Posgrado', 1, '1', '1'),
 -- Smart --
 (11, 6, '0011', 'Emprendimiento y Ventas', 'Emprendimiento y Ventas', 1, '1', '1'),
 (12, 6, '0012', 'Excel Avanzado', 'Excel Avanzado', 1, '1', '1'),
@@ -121,7 +121,10 @@ insert into `item` (`ite_id`, `scat_id`,  `ite_codigo`, `ite_nombre`, `ite_descr
 (88, 7, '0088', 'Licenciatura en Administración de Empresas (UTEG Online)', 'Licenciatura en Administración de Empresas (UTEG Online)', 1, '1', '1'),
 (89, 7, '0089', 'Licenciatura en Turismo', 'Licenciatura en Turismo', 1, '1', '1'),
 (90, 7, '0090', 'Economía', 'Economía', 1, '1', '1'),
-(91, 7, '0091', 'MBA BORDEAUX', 'MBA BORDEAUX', 1, '1', '1');
+(91, 7, '0091', 'MBA BORDEAUX', 'MBA BORDEAUX', 1, '1', '1'),
+
+(92, 5, '0092', 'Matrícula Posgrado', 'Matrícula Posgrado', 1, '1', '1'),
+(93, 5, '0093', 'Derechos Posgrado', 'Derechos Posgrado', 1, '1', '1');
 
 -- --------------------------------------------------------
 --
@@ -220,7 +223,12 @@ insert into `item_precio` (`ipre_id`, `ite_id`, `ipre_precio`, `ipre_porcentaje_
 (87, 91, 6000, null, 'A', null, null, '2018/10/01 00:00:00', '2018/12/31 23:59:59', 1, '1', '1'),
 (88, 4, 390, null, 'A', null, null, '2018/10/01 00:00:00', '2018/12/31 23:59:59', 1, '1', '1'),
 (89, 6, 390, null, 'A', null, null, '2018/10/01 00:00:00', '2018/12/31 23:59:59', 1, '1', '1'),
-(90, 8, 390, null, 'A', null, null, '2018/10/01 00:00:00', '2018/12/31 23:59:59', 1, '1', '1');
+(90, 8, 390, null, 'A', null, null, '2018/10/01 00:00:00', '2018/12/31 23:59:59', 1, '1', '1'),
+
+(91, 9, 1800, null, 'A', null, null, '2018/10/01 00:00:00', '2018/12/31 23:59:59', 1, '1', '1'),
+(92, 92, 950, null, 'A', null, null, '2018/10/01 00:00:00', '2018/12/31 23:59:59', 1, '1', '1'),
+(93, 93, 850, null, 'A', null, null, '2018/10/01 00:00:00', '2018/12/31 23:59:59', 1, '1', '1');
+
 
 -- --------------------------------------------------------
 --
@@ -316,7 +324,11 @@ insert into `historial_item_precio` (`hipr_id`, `ite_id`, `hipr_precio`, `hipr_p
 (84, 88, 100, null, '2018/10/01 00:00:00', '2018/12/31 23:59:59', null, null, 1, '1', '1'),
 (85, 89, 100, null, '2018/10/01 00:00:00', '2018/12/31 23:59:59', null, null, 1, '1', '1'),
 (86, 90, 100, null, '2018/10/01 00:00:00', '2018/12/31 23:59:59', null, null, 1, '1', '1'),
-(87, 91, 6000, null,'2018/10/01 00:00:00', '2018/12/31 23:59:59', null, null, 1, '1', '1');
+(87, 91, 6000, null,'2018/10/01 00:00:00', '2018/12/31 23:59:59', null, null, 1, '1', '1'),
+
+(88, 9, 1800, null,'2018/10/01 00:00:00', '2018/12/31 23:59:59', null, null, 1, '1', '1'),
+(89, 92, 950, null,'2018/10/01 00:00:00', '2018/12/31 23:59:59', null, null, 1, '1', '1'),
+(90, 93, 850, null,'2018/10/01 00:00:00', '2018/12/31 23:59:59', null, null, 1, '1', '1');
 
 -- --------------------------------------------------------
 --
@@ -416,7 +428,14 @@ insert into `item_metodo_unidad` (`imni_id`, `ite_id`, `ming_id`, `uaca_id`, `mo
 (88, 4, 2, 1, 2, null, 1, '1', '1'),
 (89, 6, 2, 1, 3, null, 1, '1', '1'),
 (90, 8, 2, 1, 4, null, 1, '1', '1'),
-(91, 10, 4, 2, 2, null, 1, '1', '1');
+(91, 10, 4, 2, 2, null, 1, '1', '1'),
+
+(92, 9, 4, 2, 3, null, 1, '1', '1'),
+(93, 9, 4, 2, 2, null,  1, '1', '1'),
+(94, 92, 4, 2, 3, null,  1, '1', '1'),
+(95, 92, 4, 2, 2, null,  1, '1', '1'),
+(96, 93, 4, 2, 3, null,  1, '1', '1'),
+(97, 93, 4, 2, 2, null,  1, '1', '1');
 
 -- --------------------------------------------------------
 --
@@ -453,7 +472,32 @@ insert into `descuento_item` (`dite_id`, `ite_id`, `dite_usu_creacion`, `dite_es
 (4, 7, 1, '1', '1'), -- A distancia
 (5, 4, 1, '1', '1'), -- examen presencial
 (6, 6, 1, '1', '1'), -- examen semipresencial
-(7, 8, 1, '1', '1'); -- examen a distancia
+(7, 8, 1, '1', '1'), -- examen a distancia
+
+(8, 11, 1, '1', '1'), -- Emprendimiento y Ventas
+(9, 12, 1, '1', '1'), -- Excel Avanzado
+(10, 13, 1, '1', '1'), -- Fotografía
+(11, 14, 1, '1', '1'), -- Event Planner
+(12, 15, 1, '1', '1'), -- Programa Gerencia Estratégica del TH (4 módulos)
+(13, 16, 1, '1', '1'), -- Pedagogía
+(14, 17, 1, '1', '1'), -- Programa para docentes:  Redacción Científica
+(15, 18, 1, '1', '1'), -- Desarrollo Habilidades Comerciales para Retail
+(16, 19, 1, '1', '1'), -- Cursos Online
+(17, 20, 1, '1', '1'), -- Programa de Talento Humano: Actualidad Laboral
+(18, 21, 1, '1', '1'), -- Programa de habilidades Gerenciales: Estrategias directivas
+(19, 22, 1, '1', '1'), -- Illustrator y fotoshop: intermedio
+(20, 23, 1, '1', '1'), -- Técnicas de negociación y cierre de ventas
+(21, 24, 1, '1', '1'), -- Neuromarketing
+(22, 25, 1, '1', '1'), -- Programa de Talento Humano: Descripción de cargos y selección por competencias (módulo 2)
+(23, 26, 1, '1', '1'), -- Técnicas de ventas:  Manejo de clientes difíciles
+(24, 27, 1, '1', '1'), -- Programa de habilidades Gerenciales: Negociación efectiva
+(25, 28, 1, '1', '1'), -- Dirección en Finanzas: Presupuesto y diferenciación de ingresos
+(26, 29, 1, '1', '1'), -- Valoración aduanera para empresarios
+(27, 30, 1, '1', '1'), -- Programa de Talento Humano:  Plan estratégico del Talento Humano (módulo 3)
+(28, 31, 1, '1', '1'), -- Taller de liderazgo y manejo de conflictos
+(29, 32, 1, '1', '1'), -- Programa para docentes: Habilidades pedagógicas
+(30, 33, 1, '1', '1'), -- Promoción programa talento humano
+(31, 34, 1, '1', '1'); -- Promoción programa para docentes
 
 -- --------------------------------------------------------
 --
@@ -491,7 +535,57 @@ insert into `detalle_descuento_item` (`ddit_id` , `dite_id`, `ddit_descripcion`,
 (29, 4, 'Descuento CAN Inscripción por Valor', 'V', null, 96, '2018/10/18 00:00:00', '2018/12/31 23:59:59', 'A', 1, '1', '1'),
 (30, 5, 'Descuento CAN Inscripción por Valor', 'V', null, 96, '2018/10/18 00:00:00', '2018/12/31 23:59:59', 'A', 1, '1', '1'),
 (31, 6, 'Descuento CAN Inscripción por Valor', 'V', null, 96, '2018/10/18 00:00:00', '2018/12/31 23:59:59', 'A', 1, '1', '1'),
-(32, 7, 'Descuento CAN Inscripción por Valor', 'V', null, 96, '2018/10/18 00:00:00', '2018/12/31 23:59:59', 'A', 1, '1', '1');
+(32, 7, 'Descuento CAN Inscripción por Valor', 'V', null, 96, '2018/10/18 00:00:00', '2018/12/31 23:59:59', 'A', 1, '1', '1'),
+
+(33, 8, 'Descuento 20%', 'P', 20, null, '2018/12/06 00:00:00', null, 'A', 1, '1', '1'),
+(34, 9, 'Descuento 20%', 'P', 20, null, '2018/12/06 00:00:00', null, 'A', 1, '1', '1'),
+(35, 10, 'Descuento 20%', 'P', 20, null, '2018/12/06 00:00:00', null, 'A', 1, '1', '1'),
+(36, 11, 'Descuento 20%', 'P', 20, null, '2018/12/06 00:00:00', null, 'A', 1, '1', '1'),
+(37, 12, 'Descuento 20%', 'P', 20, null, '2018/12/06 00:00:00', null, 'A', 1, '1', '1'),
+(38, 13, 'Descuento 20%', 'P', 20, null, '2018/12/06 00:00:00', null, 'A', 1, '1', '1'),
+(39, 14, 'Descuento 20%', 'P', 20, null, '2018/12/06 00:00:00', null, 'A', 1, '1', '1'),
+(40, 15, 'Descuento 20%', 'P', 20, null, '2018/12/06 00:00:00', null, 'A', 1, '1', '1'),
+(41, 16, 'Descuento 20%', 'P', 20, null, '2018/12/06 00:00:00', null, 'A', 1, '1', '1'),
+(42, 17, 'Descuento 20%', 'P', 20, null, '2018/12/06 00:00:00', null, 'A', 1, '1', '1'),
+(43, 18, 'Descuento 20%', 'P', 20, null, '2018/12/06 00:00:00', null, 'A', 1, '1', '1'),
+(44, 19, 'Descuento 20%', 'P', 20, null, '2018/12/06 00:00:00', null, 'A', 1, '1', '1'),
+(45, 20, 'Descuento 20%', 'P', 20, null, '2018/12/06 00:00:00', null, 'A', 1, '1', '1'),
+(46, 21, 'Descuento 20%', 'P', 20, null, '2018/12/06 00:00:00', null, 'A', 1, '1', '1'),
+(47, 22, 'Descuento 20%', 'P', 20, null, '2018/12/06 00:00:00', null, 'A', 1, '1', '1'),
+(48, 23, 'Descuento 20%', 'P', 20, null, '2018/12/06 00:00:00', null, 'A', 1, '1', '1'),
+(49, 24, 'Descuento 20%', 'P', 20, null, '2018/12/06 00:00:00', null, 'A', 1, '1', '1'),
+(50, 25, 'Descuento 20%', 'P', 20, null, '2018/12/06 00:00:00', null, 'A', 1, '1', '1'),
+(51, 26, 'Descuento 20%', 'P', 20, null, '2018/12/06 00:00:00', null, 'A', 1, '1', '1'),
+(52, 27, 'Descuento 20%', 'P', 20, null, '2018/12/06 00:00:00', null, 'A', 1, '1', '1'),
+(53, 28, 'Descuento 20%', 'P', 20, null, '2018/12/06 00:00:00', null, 'A', 1, '1', '1'),
+(54, 29, 'Descuento 20%', 'P', 20, null, '2018/12/06 00:00:00', null, 'A', 1, '1', '1'),
+(55, 30, 'Descuento 20%', 'P', 20, null, '2018/12/06 00:00:00', null, 'A', 1, '1', '1'),
+(56, 31, 'Descuento 20%', 'P', 20, null, '2018/12/06 00:00:00', null, 'A', 1, '1', '1'),
+
+(57, 8, 'Descuento 30%', 'P', 30, null, '2018/12/06 00:00:00', null, 'A', 1, '1', '1'),
+(58, 9, 'Descuento 30%', 'P', 30, null, '2018/12/06 00:00:00', null, 'A', 1, '1', '1'),
+(59, 10, 'Descuento 30%', 'P', 30, null, '2018/12/06 00:00:00', null, 'A', 1, '1', '1'),
+(60, 11, 'Descuento 30%', 'P', 30, null, '2018/12/06 00:00:00', null, 'A', 1, '1', '1'),
+(61, 12, 'Descuento 30%', 'P', 30, null, '2018/12/06 00:00:00', null, 'A', 1, '1', '1'),
+(62, 13, 'Descuento 30%', 'P', 30, null, '2018/12/06 00:00:00', null, 'A', 1, '1', '1'),
+(63, 14, 'Descuento 30%', 'P', 30, null, '2018/12/06 00:00:00', null, 'A', 1, '1', '1'),
+(64, 15, 'Descuento 30%', 'P', 30, null, '2018/12/06 00:00:00', null, 'A', 1, '1', '1'),
+(65, 16, 'Descuento 30%', 'P', 30, null, '2018/12/06 00:00:00', null, 'A', 1, '1', '1'),
+(66, 17, 'Descuento 30%', 'P', 30, null, '2018/12/06 00:00:00', null, 'A', 1, '1', '1'),
+(67, 18, 'Descuento 30%', 'P', 30, null, '2018/12/06 00:00:00', null, 'A', 1, '1', '1'),
+(68, 19, 'Descuento 30%', 'P', 30, null, '2018/12/06 00:00:00', null, 'A', 1, '1', '1'),
+(69, 20, 'Descuento 30%', 'P', 30, null, '2018/12/06 00:00:00', null, 'A', 1, '1', '1'),
+(70, 21, 'Descuento 30%', 'P', 30, null, '2018/12/06 00:00:00', null, 'A', 1, '1', '1'),
+(71, 22, 'Descuento 30%', 'P', 30, null, '2018/12/06 00:00:00', null, 'A', 1, '1', '1'),
+(72, 23, 'Descuento 30%', 'P', 30, null, '2018/12/06 00:00:00', null, 'A', 1, '1', '1'),
+(73, 24, 'Descuento 30%', 'P', 30, null, '2018/12/06 00:00:00', null, 'A', 1, '1', '1'),
+(74, 25, 'Descuento 30%', 'P', 30, null, '2018/12/06 00:00:00', null, 'A', 1, '1', '1'),
+(75, 26, 'Descuento 30%', 'P', 30, null, '2018/12/06 00:00:00', null, 'A', 1, '1', '1'),
+(76, 27, 'Descuento 30%', 'P', 30, null, '2018/12/06 00:00:00', null, 'A', 1, '1', '1'),
+(77, 28, 'Descuento 30%', 'P', 30, null, '2018/12/06 00:00:00', null, 'A', 1, '1', '1'),
+(78, 29, 'Descuento 30%', 'P', 30, null, '2018/12/06 00:00:00', null, 'A', 1, '1', '1'),
+(79, 30, 'Descuento 30%', 'P', 30, null, '2018/12/06 00:00:00', null, 'A', 1, '1', '1'),
+(80, 31, 'Descuento 30%', 'P', 30, null, '2018/12/06 00:00:00', null, 'A', 1, '1', '1');
 
 -- --------------------------------------------------------
 --
@@ -529,7 +623,57 @@ insert into `historial_descuento_item` (`hdit_id` , `ddit_id`, `dite_id`, `hdit_
 (29, 29, 1, 'Descuento CAN Inscripción', 'V', null, 96, '2018/10/18 00:00:00', '2018/12/31 23:59:59', 'A', 1, '1', '1'),
 (30, 30, 1, 'Descuento CAN Inscripción', 'V', null, 96, '2018/10/18 00:00:00', '2018/12/31 23:59:59', 'A', 1, '1', '1'),
 (31, 31, 1, 'Descuento CAN Inscripción', 'V', null, 96, '2018/10/18 00:00:00', '2018/12/31 23:59:59', 'A', 1, '1', '1'),
-(32, 32, 1, 'Descuento CAN Inscripción', 'V', null, 96, '2018/10/18 00:00:00', '2018/12/31 23:59:59', 'A', 1, '1', '1');
+(32, 32, 1, 'Descuento CAN Inscripción', 'V', null, 96, '2018/10/18 00:00:00', '2018/12/31 23:59:59', 'A', 1, '1', '1'),
+
+(33, 33, 8, 'Descuento 20%', 'P', 20, null, '2018/12/06 00:00:00', null, 'A', 1, '1', '1'),
+(34, 34, 9, 'Descuento 20%', 'P', 20, null, '2018/12/06 00:00:00', null, 'A', 1, '1', '1'),
+(35, 35, 10, 'Descuento 20%', 'P', 20, null, '2018/12/06 00:00:00', null, 'A', 1, '1', '1'),
+(36, 36, 11, 'Descuento 20%', 'P', 20, null, '2018/12/06 00:00:00', null, 'A', 1, '1', '1'),
+(37, 37, 12, 'Descuento 20%', 'P', 20, null, '2018/12/06 00:00:00', null, 'A', 1, '1', '1'),
+(38, 38, 13, 'Descuento 20%', 'P', 20, null, '2018/12/06 00:00:00', null, 'A', 1, '1', '1'),
+(39, 39, 14, 'Descuento 20%', 'P', 20, null, '2018/12/06 00:00:00', null, 'A', 1, '1', '1'),
+(40, 40, 15, 'Descuento 20%', 'P', 20, null, '2018/12/06 00:00:00', null, 'A', 1, '1', '1'),
+(41, 41, 16, 'Descuento 20%', 'P', 20, null, '2018/12/06 00:00:00', null, 'A', 1, '1', '1'),
+(42, 42, 17, 'Descuento 20%', 'P', 20, null, '2018/12/06 00:00:00', null, 'A', 1, '1', '1'),
+(43, 43, 18, 'Descuento 20%', 'P', 20, null, '2018/12/06 00:00:00', null, 'A', 1, '1', '1'),
+(44, 44, 19, 'Descuento 20%', 'P', 20, null, '2018/12/06 00:00:00', null, 'A', 1, '1', '1'),
+(45, 45, 20, 'Descuento 20%', 'P', 20, null, '2018/12/06 00:00:00', null, 'A', 1, '1', '1'),
+(46, 46, 21, 'Descuento 20%', 'P', 20, null, '2018/12/06 00:00:00', null, 'A', 1, '1', '1'),
+(47, 47, 22, 'Descuento 20%', 'P', 20, null, '2018/12/06 00:00:00', null, 'A', 1, '1', '1'),
+(48, 48, 23, 'Descuento 20%', 'P', 20, null, '2018/12/06 00:00:00', null, 'A', 1, '1', '1'),
+(49, 49, 24, 'Descuento 20%', 'P', 20, null, '2018/12/06 00:00:00', null, 'A', 1, '1', '1'),
+(50, 50, 25, 'Descuento 20%', 'P', 20, null, '2018/12/06 00:00:00', null, 'A', 1, '1', '1'),
+(51, 51, 26, 'Descuento 20%', 'P', 20, null, '2018/12/06 00:00:00', null, 'A', 1, '1', '1'),
+(52, 52, 27, 'Descuento 20%', 'P', 20, null, '2018/12/06 00:00:00', null, 'A', 1, '1', '1'),
+(53, 53, 28, 'Descuento 20%', 'P', 20, null, '2018/12/06 00:00:00', null, 'A', 1, '1', '1'),
+(54, 54, 29, 'Descuento 20%', 'P', 20, null, '2018/12/06 00:00:00', null, 'A', 1, '1', '1'),
+(55, 55, 30, 'Descuento 20%', 'P', 20, null, '2018/12/06 00:00:00', null, 'A', 1, '1', '1'),
+(56, 56, 31, 'Descuento 20%', 'P', 20, null, '2018/12/06 00:00:00', null, 'A', 1, '1', '1'),
+
+(57, 57, 8, 'Descuento 30%', 'P', 30, null, '2018/12/06 00:00:00', null, 'A', 1, '1', '1'),
+(58, 58, 9, 'Descuento 30%', 'P', 30, null, '2018/12/06 00:00:00', null, 'A', 1, '1', '1'),
+(59, 59, 10, 'Descuento 30%', 'P', 30, null, '2018/12/06 00:00:00', null, 'A', 1, '1', '1'),
+(60, 60, 11, 'Descuento 30%', 'P', 30, null, '2018/12/06 00:00:00', null, 'A', 1, '1', '1'),
+(61, 61, 12, 'Descuento 30%', 'P', 30, null, '2018/12/06 00:00:00', null, 'A', 1, '1', '1'),
+(62, 62, 13, 'Descuento 30%', 'P', 30, null, '2018/12/06 00:00:00', null, 'A', 1, '1', '1'),
+(63, 63, 14, 'Descuento 30%', 'P', 30, null, '2018/12/06 00:00:00', null, 'A', 1, '1', '1'),
+(64, 64, 15, 'Descuento 30%', 'P', 30, null, '2018/12/06 00:00:00', null, 'A', 1, '1', '1'),
+(65, 65, 16, 'Descuento 30%', 'P', 30, null, '2018/12/06 00:00:00', null, 'A', 1, '1', '1'),
+(66, 66, 17, 'Descuento 30%', 'P', 30, null, '2018/12/06 00:00:00', null, 'A', 1, '1', '1'),
+(67, 67, 18, 'Descuento 30%', 'P', 30, null, '2018/12/06 00:00:00', null, 'A', 1, '1', '1'),
+(68, 68, 19, 'Descuento 30%', 'P', 30, null, '2018/12/06 00:00:00', null, 'A', 1, '1', '1'),
+(69, 69, 20, 'Descuento 30%', 'P', 30, null, '2018/12/06 00:00:00', null, 'A', 1, '1', '1'),
+(70, 70, 21, 'Descuento 30%', 'P', 30, null, '2018/12/06 00:00:00', null, 'A', 1, '1', '1'),
+(71, 71, 22, 'Descuento 30%', 'P', 30, null, '2018/12/06 00:00:00', null, 'A', 1, '1', '1'),
+(72, 72, 23, 'Descuento 30%', 'P', 30, null, '2018/12/06 00:00:00', null, 'A', 1, '1', '1'),
+(73, 73, 24, 'Descuento 30%', 'P', 30, null, '2018/12/06 00:00:00', null, 'A', 1, '1', '1'),
+(74, 74, 25, 'Descuento 30%', 'P', 30, null, '2018/12/06 00:00:00', null, 'A', 1, '1', '1'),
+(75, 75, 26, 'Descuento 30%', 'P', 30, null, '2018/12/06 00:00:00', null, 'A', 1, '1', '1'),
+(76, 76, 27, 'Descuento 30%', 'P', 30, null, '2018/12/06 00:00:00', null, 'A', 1, '1', '1'),
+(77, 77, 28, 'Descuento 30%', 'P', 30, null, '2018/12/06 00:00:00', null, 'A', 1, '1', '1'),
+(78, 78, 29, 'Descuento 30%', 'P', 30, null, '2018/12/06 00:00:00', null, 'A', 1, '1', '1'),
+(79, 79, 30, 'Descuento 30%', 'P', 30, null, '2018/12/06 00:00:00', null, 'A', 1, '1', '1'),
+(80, 80, 31, 'Descuento 30%', 'P', 30, null, '2018/12/06 00:00:00', null, 'A', 1, '1', '1');
 
 -- --------------------------------------------------------
 --
