@@ -286,8 +286,7 @@ function dataInscripPart1(ID) {
         objDat.sdes_id = $('#cmb_descuento').val();
         objDat.marcadescuento = '1';
     }else{
-        objDat.sdes_id
-                = 0;
+        objDat.sdes_id= 0;
         objDat.marcadescuento = '0';
     }
     objDat.ruta_doc_foto = '';
