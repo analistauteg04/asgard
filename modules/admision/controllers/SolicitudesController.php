@@ -193,6 +193,7 @@ class SolicitudesController extends \app\components\CController {
         $modInteresado = new Interesado();
         $inte_id = $modInteresado->consultarIdinteresado($per_id);
         $empresa = $empresa_mod->getAllEmpresa();
+        $mod_solins = new SolicitudInscripcion();
         if (Yii::$app->request->isAjax) {
             $data = Yii::$app->request->post();
             if (isset($data["getuacademias"])) {
@@ -227,18 +228,23 @@ class SolicitudesController extends \app\components\CController {
                 $message = array("descuento" => $descuentos);
                 return Utilities::ajaxResponse('OK', 'alert', Yii::t('jslang', 'Success'), 'false', $message);                
             }
-            if (isset($data["getitem"])) {    
-                \app\models\Utilities::putMessageLogFile('unidad:' . $data["unidada"]);
-                \app\models\Utilities::putMessageLogFile('modalidad:' . $data["moda_id"]);
-                \app\models\Utilities::putMessageLogFile('metodo:' . $data["metodo"]);
-                \app\models\Utilities::putMessageLogFile('carrera:' . $data["carrera_id"]);    
-                \app\models\Utilities::putMessageLogFile('empresa:' . $data["empresa_id"]);
-                $resItem = $modItemMetNivel->consultarXitemPrecio($data["unidada"], $data["moda_id"], $data["metodo"], $data["carrera_id"], $data["empresa_id"]);
-                \app\models\Utilities::putMessageLogFile('ITEM:');
+            if (isset($data["getitem"])) {                   
+                $resItem = $modItemMetNivel->consultarXitemPrecio($data["unidada"], $data["moda_id"], $data["metodo"], $data["carrera_id"], $data["empresa_id"]);              
                 $message = array("items" => $resItem);
-                return Utilities::ajaxResponse('OK', 'alert', Yii::t('jslang', 'Success'), 'false', $message);
-                return;
+                return Utilities::ajaxResponse('OK', 'alert', Yii::t('jslang', 'Success'), 'false', $message);                
             }
+            if (isset($data["getprecio"])) {                                
+                $resp_precio = $mod_solins->ObtenerPrecioXitem($data["ite_id"]);                  
+                $message = array("precio" => $resp_precio["precio"]);
+                return Utilities::ajaxResponse('OK', 'alert', Yii::t('jslang', 'Success'), 'false', $message);                
+            }
+            if (isset($data["getpreciodescuento"])) {                 
+                $modDescuento = new DetalleDescuentoItem();
+                $respDescuento = $modDescuento->consultarValdctoItem($data["descuento_id"]);
+                \app\models\Utilities::putMessageLogFile('paso:'.$respDescuento["ddit_tipo_beneficio"]);
+                $message = array("preciodescuento" => $respDescuento);
+                return Utilities::ajaxResponse('OK', 'alert', Yii::t('jslang', 'Success'), 'false', $message);                
+            }           
         }
         $arr_unidadac = $mod_unidad->consultarUnidadAcademicasEmpresa($emp_id);
         $arr_modalidad = $mod_modalidad->consultarModalidad(1, 1);

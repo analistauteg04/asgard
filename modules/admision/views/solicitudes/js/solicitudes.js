@@ -59,7 +59,7 @@ $(document).ready(function () {
                                         data = response.message;
                                         setComboData(data.carrera, "cmb_carrera");
                                     }
-                                }, true);
+                                }, true);                                
                                 var arrParams = new Object();
                                 arrParams.unidada = $('#cmb_ninteres').val();
                                 arrParams.metodo = $('#cmb_metodos').val();        
@@ -72,7 +72,17 @@ $(document).ready(function () {
                                         data = response.message;
                                         setComboData(data.items, "cmb_item");
                                     } 
-                                }, true);  
+                                }, true); 
+                                //Precio.
+                                var arrParams = new Object();
+                                arrParams.ite_id = $('#cmb_item').val();
+                                arrParams.getprecio = true;        
+                                requestHttpAjax(link, arrParams, function (response) {
+                                    if (response.status == "OK") {
+                                        data = response.message;                                 
+                                        $('#txt_precio_item').val(data.precio);
+                                    }
+                                }, true);
                                  //Descuentos.
                                 var arrParams = new Object();
                                 arrParams.unidada = $('#cmb_ninteres').val();
@@ -127,14 +137,12 @@ $(document).ready(function () {
                             data = response.message;
                             setComboData(data.carrera, "cmb_carrera");
                         }
-                    }, true);
-                    
+                    }, true);                       
                 }
             }
         }, true);
         //métodos.
-        var arrParams = new Object();
-        arrParams.unidada = $('#cmb_ninteres').val();
+        var arrParams = new Object();       
         arrParams.nint_id = $('#cmb_ninteres').val();
         arrParams.metodo = $('#cmb_metodos').val();        
         arrParams.getmetodo = true;
@@ -157,20 +165,10 @@ $(document).ready(function () {
                     }
                 }, true);
             }
-        }, true);        
-        //Sólo mostrar el bloque de beca Fundación Cala cuando sea Unidad:Grado y Método:examen.                  
-        if (arrParams.nint_id == 1) {
-            if ($('#cmb_metodos') == 2) {
-                $('#divBeca').css('display', 'block');
-            } else {
-                $('#divBeca').css('display', 'none');
-            }
-        } else {
-            $('#divBeca').css('display', 'none');
-        }
+        }, true);    
         //Item.-
         var arrParams = new Object();
-        arrParams.unidada = $('#cmb_ninteres').val();
+        arrParams.unidada = $('#cmb_ninteres').val();                                        
         arrParams.metodo = $('#cmb_metodos').val();        
         arrParams.moda_id = $('#cmb_modalidad').val();
         arrParams.carrera_id = $('#cmb_carrera').val();     
@@ -181,7 +179,29 @@ $(document).ready(function () {
                 data = response.message;
                 setComboData(data.items, "cmb_item");
             } 
-        }, true);        
+        }, true); 
+        //Precio.
+        var arrParams = new Object();
+        arrParams.ite_id = $('#cmb_item').val();
+        arrParams.getprecio = true;        
+        requestHttpAjax(link, arrParams, function (response) {
+            if (response.status == "OK") {
+                data = response.message;                                 
+                $('#txt_precio_item').val(data.precio);
+            }
+        }, true);
+            
+        //Sólo mostrar el bloque de beca Fundación Cala cuando sea Unidad:Grado y Método:examen.                  
+        if (arrParams.nint_id == 1) {
+            if ($('#cmb_metodos') == 2) {
+                $('#divBeca').css('display', 'block');
+            } else {
+                $('#divBeca').css('display', 'none');
+            }
+        } else {
+            $('#divBeca').css('display', 'none');
+        }
+        
     });
 
     $('#cmb_modalidad').change(function () {
@@ -197,27 +217,39 @@ $(document).ready(function () {
             if (response.status == "OK") {
                 data = response.message;
                 setComboData(data.carrera, "cmb_carrera");
+                var arrParams = new Object();
+                arrParams.nint_id = $('#cmb_ninteres').val();             
                 arrParams.getmetodo = true;
                 requestHttpAjax(link, arrParams, function (response) {
                     if (response.status == "OK") {
                         data = response.message;
                         setComboData(data.metodos, "cmb_metodos");
                     }
-                }, true);
-                //Item.-
-                var arrParams = new Object();               
-                arrParams.unidada = $('#cmb_ninteres').val();
-                arrParams.metodo = $('#cmb_metodos').val();        
-                arrParams.moda_id = $('#cmb_modalidad').val();
-                arrParams.carrera_id = $('#cmb_carrera').val();
-                arrParams.empresa_id = $('#cmb_empresa').val();
-                arrParams.getitem = true;
-                requestHttpAjax(link, arrParams, function (response) {
-                    if (response.status == "OK") {
-                        data = response.message;
-                        setComboData(data.items, "cmb_item");               
-                    } 
-                }, true);      
+                }, true);                  
+            }            
+        }, true);
+        //Item.-
+        var arrParams = new Object();               
+        arrParams.unidada = $('#cmb_ninteres').val();
+        arrParams.metodo = $('#cmb_metodos').val();        
+        arrParams.moda_id = $('#cmb_modalidad').val();
+        arrParams.carrera_id = $('#cmb_carrera').val();
+        arrParams.empresa_id = $('#cmb_empresa').val();
+        arrParams.getitem = true;
+        requestHttpAjax(link, arrParams, function (response) {
+            if (response.status == "OK") {
+                data = response.message;
+                setComboData(data.items, "cmb_item");               
+            } 
+        }, true);   
+        //Precio.        
+        var arrParams = new Object();
+        arrParams.ite_id = $('#cmb_item').val();
+        arrParams.getprecio = true;        
+        requestHttpAjax(link, arrParams, function (response) {
+            if (response.status == "OK") {
+                data = response.message;                                 
+                $('#txt_precio_item').val(data.precio);
             }
         }, true);
         //Descuentos.
@@ -588,12 +620,11 @@ $(document).ready(function () {
             }
         }, true);
         
-        //Carrera.-
+        //item.-
         var arrParams = new Object();
         arrParams.unidada = $('#cmb_ninteres').val();
         arrParams.metodo = $('#cmb_metodos').val();        
-        arrParams.moda_id = $('#cmb_modalidad').val();
-      //  arrParams.carrera_id = $('#cmb_carrera').val();
+        arrParams.moda_id = $('#cmb_modalidad').val();      
         arrParams.empresa_id = $('#cmb_empresa').val();
         arrParams.getitem = true;
         requestHttpAjax(link, arrParams, function (response) {
@@ -601,10 +632,20 @@ $(document).ready(function () {
                 data = response.message;
                 setComboData(data.items, "cmb_item");               
             } 
-        }, true);        
+        }, true); 
+        //Precio.
+        var arrParams = new Object();
+        arrParams.ite_id = $('#cmb_item').val();
+        arrParams.getprecio = true;        
+        requestHttpAjax(link, arrParams, function (response) {
+            if (response.status == "OK") {
+                data = response.message;                                 
+                $('#txt_precio_item').val(data.precio);
+            }
+        }, true);
     });
     
-     $('#cmb_carrera').change(function () {
+    $('#cmb_carrera').change(function () {
         var link = $('#txth_base').val() + "/admision/solicitudes/new";                
         //Carrera.-
         var arrParams = new Object();
@@ -620,6 +661,16 @@ $(document).ready(function () {
                 setComboData(data.items, "cmb_item");               
             } 
         }, true);  
+        //Precio.
+        var arrParams = new Object();
+        arrParams.ite_id = $('#cmb_item').val();
+        arrParams.getprecio = true;        
+        requestHttpAjax(link, arrParams, function (response) {
+            if (response.status == "OK") {
+                data = response.message;                                 
+                $('#txt_precio_item').val(data.precio);
+            }
+        }, true);
         
         //Descuentos.
         var arrParams = new Object();
@@ -637,6 +688,50 @@ $(document).ready(function () {
         }, true);
     });
 
+    $('#cmb_item').change(function () {
+        var link = $('#txth_base').val() + "/admision/solicitudes/new";                        
+        //Precio.
+        var arrParams = new Object();       
+        arrParams.ite_id = $('#cmb_item').val();
+        arrParams.getprecio = true;        
+        requestHttpAjax(link, arrParams, function (response) {
+            if (response.status == "OK") {
+                data = response.message;                                 
+                $('#txt_precio_item').val(data.precio);
+            }
+        }, true);              
+    });
+    
+    $('#cmb_descuento').change(function () {
+        var link = $('#txth_base').val() + "/admision/solicitudes/new";                        
+        //Precio.
+        var arrParams = new Object();       
+        arrParams.descuento_id = $('#cmb_descuento').val();
+        var precio = $('#txt_precio_item').val();
+        var descuento = 0;
+        arrParams.getpreciodescuento = true;        
+        requestHttpAjax(link, arrParams, function (response) {
+            if (response.status == "OK") {
+                data = response.message;  
+            /*    alert('precio'+precio);
+                if (precio == 0) {
+                    descuento = 0;
+                } else {
+                    alert('precio > 0'+precio);
+                    alert('campo1:'+data.preciodescuento[0].ddit_tipo_beneficio);
+                    if (data.preciodescuento[0].ddit_tipo_beneficio == 'P') {
+                        descuento = (precio * (data.preciodescuento[0].ddit_porcentaje)) / 100;
+                    } else {
+                        descuento = data.preciodescuento[0].ddit_valor;
+                    }                   
+                }
+               /* var total = precio-descuento;                                
+                $('#txt_precio_item2').val(total);*/
+                $('#txt_precio_item2').val(250);
+            }
+        }, true);              
+    });
+    
 });
 
 function setComboDataselect(arr_data, element_id, texto) {

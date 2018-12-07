@@ -1087,7 +1087,6 @@ class SolicitudInscripcion extends \yii\db\ActiveRecord
                           ua.uaca_estado = :estado AND
                           ua.uaca_estado_logico = :estado";
         } else {
-
             $sql = "SELECT  imni.imni_id, 
                             ipre.ipre_precio+(ipre.ipre_precio*ifnull(ipre.ipre_porcentaje_iva,0)) as precio,	   
                             null as nombre_metodo_ingreso,
@@ -1105,8 +1104,7 @@ class SolicitudInscripcion extends \yii\db\ActiveRecord
                           ipre.ipre_estado_logico = :estado AND                          
                           ua.uaca_estado = :estado AND
                           ua.uaca_estado_logico = :estado";
-        }
-
+        }        
         $comando = $con->createCommand($sql);
         $comando->bindParam(":estado", $estado, \PDO::PARAM_STR);
         $comando->bindParam(":ming_id", $ming_id, \PDO::PARAM_INT);
@@ -1780,6 +1778,31 @@ class SolicitudInscripcion extends \yii\db\ActiveRecord
         $comando = $con->createCommand($sql);
         $comando->bindParam(":estado", $estado, \PDO::PARAM_STR);
         $comando->bindParam(":sins_id", $sins_id, \PDO::PARAM_INT);     
+        $resultData = $comando->queryOne();
+        return $resultData;
+    }
+    
+    /**
+     * Function ObtenerPrecioXitem
+     * @author  Grace Viteri <analistadesarrollo01@uteg.edu.ec>
+     * @param   
+     * @return  $resultData (Precio del item)
+     */
+    public function ObtenerPrecioXitem($ite_id) {
+        $con = \Yii::$app->db_facturacion;
+        $estado = 1;
+
+        $sql = "SELECT ipre_precio precio 
+                FROM " . $con->dbname . ".item_precio 
+                WHERE ite_id = :ite_id
+                    and ipre_estado_precio = 'A'
+                    and (now() between ipre_fecha_inicio and ipre_fecha_fin)
+                    and ipre_estado = :estado
+                    and ipre_estado_logico = :estado";
+
+        $comando = $con->createCommand($sql);
+        $comando->bindParam(":estado", $estado, \PDO::PARAM_STR);
+        $comando->bindParam(":ite_id", $ite_id, \PDO::PARAM_INT);     
         $resultData = $comando->queryOne();
         return $resultData;
     }
