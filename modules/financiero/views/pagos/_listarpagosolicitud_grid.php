@@ -30,8 +30,8 @@ admision::registerTranslations();
                 'value' => 'sins_fecha_solicitud',
             ],           
             [
-                'attribute' => 'Metodo',
-                'header' => admision::t("Solicitudes", "Income Method"),
+                'attribute' => 'Item',
+                'header' => financiero::t("Pagos", "Item"),
                 'value' => 'ite_nombre',
             ],
             [
