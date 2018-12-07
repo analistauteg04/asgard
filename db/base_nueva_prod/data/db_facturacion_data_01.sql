@@ -37,8 +37,8 @@ insert into `item` (`ite_id`, `scat_id`,  `ite_codigo`, `ite_nombre`, `ite_descr
 (6, 3, '0006', 'Examen de admisión Semipresencial', 'Examen de admisión Semipresencial', 1, '1', '1'),
 (7, 4, '0007', 'Curso de admisión y nivelación a Distancia', 'Curso de admisión y nivelación a Distancia', 1, '1', '1'),
 (8, 4, '0008', 'Examen de admisión a Distancia', 'Examen de admisión  a Distancia', 1, '1', '1'),
-(9, 5, '0009', 'Homologación Posgrado', 'Homologación Posgrado', 1, '1', '1'),
-(10, 5, '0010', 'Propedéutico Posgrado', 'Propedéutico Posgrado', 1, '1', '1'),
+(9, 5, '0009', 'Pago total Matrícula+Derecho Posgrado', 'Pago total Matrícula+Derecho Posgrado', 1, '1', '1'),
+(10, 5, '0010', 'Inscripción Posgrado', 'Inscripción Posgrado', 1, '1', '1'),
 -- Smart --
 (11, 6, '0011', 'Emprendimiento y Ventas', 'Emprendimiento y Ventas', 1, '1', '1'),
 (12, 6, '0012', 'Excel Avanzado', 'Excel Avanzado', 1, '1', '1'),
@@ -121,7 +121,10 @@ insert into `item` (`ite_id`, `scat_id`,  `ite_codigo`, `ite_nombre`, `ite_descr
 (88, 7, '0088', 'Licenciatura en Administración de Empresas (UTEG Online)', 'Licenciatura en Administración de Empresas (UTEG Online)', 1, '1', '1'),
 (89, 7, '0089', 'Licenciatura en Turismo', 'Licenciatura en Turismo', 1, '1', '1'),
 (90, 7, '0090', 'Economía', 'Economía', 1, '1', '1'),
-(91, 7, '0091', 'MBA BORDEAUX', 'MBA BORDEAUX', 1, '1', '1');
+(91, 7, '0091', 'MBA BORDEAUX', 'MBA BORDEAUX', 1, '1', '1'),
+
+(92, 5, '0092', 'Matrícula Posgrado', 'Matrícula Posgrado', 1, '1', '1'),
+(93, 5, '0093', 'Derechos Posgrado', 'Derechos Posgrado', 1, '1', '1');
 
 -- --------------------------------------------------------
 --
@@ -220,7 +223,12 @@ insert into `item_precio` (`ipre_id`, `ite_id`, `ipre_precio`, `ipre_porcentaje_
 (87, 91, 6000, null, 'A', null, null, '2018/10/01 00:00:00', '2018/12/31 23:59:59', 1, '1', '1'),
 (88, 4, 390, null, 'A', null, null, '2018/10/01 00:00:00', '2018/12/31 23:59:59', 1, '1', '1'),
 (89, 6, 390, null, 'A', null, null, '2018/10/01 00:00:00', '2018/12/31 23:59:59', 1, '1', '1'),
-(90, 8, 390, null, 'A', null, null, '2018/10/01 00:00:00', '2018/12/31 23:59:59', 1, '1', '1');
+(90, 8, 390, null, 'A', null, null, '2018/10/01 00:00:00', '2018/12/31 23:59:59', 1, '1', '1'),
+
+(91, 9, 1800, null, 'A', null, null, '2018/10/01 00:00:00', '2018/12/31 23:59:59', 1, '1', '1'),
+(92, 92, 950, null, 'A', null, null, '2018/10/01 00:00:00', '2018/12/31 23:59:59', 1, '1', '1'),
+(93, 93, 850, null, 'A', null, null, '2018/10/01 00:00:00', '2018/12/31 23:59:59', 1, '1', '1');
+
 
 -- --------------------------------------------------------
 --
@@ -316,7 +324,11 @@ insert into `historial_item_precio` (`hipr_id`, `ite_id`, `hipr_precio`, `hipr_p
 (84, 88, 100, null, '2018/10/01 00:00:00', '2018/12/31 23:59:59', null, null, 1, '1', '1'),
 (85, 89, 100, null, '2018/10/01 00:00:00', '2018/12/31 23:59:59', null, null, 1, '1', '1'),
 (86, 90, 100, null, '2018/10/01 00:00:00', '2018/12/31 23:59:59', null, null, 1, '1', '1'),
-(87, 91, 6000, null,'2018/10/01 00:00:00', '2018/12/31 23:59:59', null, null, 1, '1', '1');
+(87, 91, 6000, null,'2018/10/01 00:00:00', '2018/12/31 23:59:59', null, null, 1, '1', '1'),
+
+(88, 9, 1800, null,'2018/10/01 00:00:00', '2018/12/31 23:59:59', null, null, 1, '1', '1'),
+(89, 92, 950, null,'2018/10/01 00:00:00', '2018/12/31 23:59:59', null, null, 1, '1', '1'),
+(90, 93, 850, null,'2018/10/01 00:00:00', '2018/12/31 23:59:59', null, null, 1, '1', '1');
 
 -- --------------------------------------------------------
 --
@@ -416,7 +428,14 @@ insert into `item_metodo_unidad` (`imni_id`, `ite_id`, `ming_id`, `uaca_id`, `mo
 (88, 4, 2, 1, 2, null, 1, '1', '1'),
 (89, 6, 2, 1, 3, null, 1, '1', '1'),
 (90, 8, 2, 1, 4, null, 1, '1', '1'),
-(91, 10, 4, 2, 2, null, 1, '1', '1');
+(91, 10, 4, 2, 2, null, 1, '1', '1'),
+
+(92, 9, 4, 2, 3, null, 1, '1', '1'),
+(93, 9, 4, 2, 2, null,  1, '1', '1'),
+(94, 92, 4, 2, 3, null,  1, '1', '1'),
+(95, 92, 4, 2, 2, null,  1, '1', '1'),
+(96, 93, 4, 2, 3, null,  1, '1', '1'),
+(97, 93, 4, 2, 2, null,  1, '1', '1');
 
 -- --------------------------------------------------------
 --

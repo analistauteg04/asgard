@@ -353,9 +353,8 @@ class SolicitudesController extends \app\components\CController {
                     $errorprecio = 0;
                 }
             }
-            $observacion = $data["observacion"];
-            $ite_id = $data["ite_id"];
-            \app\models\Utilities::putMessageLogFile('item1:' . $data["ite_id"]);
+            $observacion = ucwords(mb_strtolower($data["observacion"])); 
+            $ite_id = $data["ite_id"];       
             if ($errorprecio != 0) {
                 //Validar que no exista el registro en solicitudes.                    
                 $resp_valida = $mod_solins->Validarsolicitud($interesado_id, $nint_id, $ming_id, $car_id);
@@ -427,8 +426,7 @@ class SolicitudesController extends \app\components\CController {
                 $resp_opago = $mod_ordenpago->insertarOrdenpago($id_sins, null, $val_total, 0, $val_total, $estadopago, $usu_id);
                 if ($resp_opago) {
                     //insertar desglose del pago                                    
-                    $fecha_ini = date(Yii::$app->params["dateByDefault"]);
-                    \app\models\Utilities::putMessageLogFile('item:' . $data["ite_id"]);
+                    $fecha_ini = date(Yii::$app->params["dateByDefault"]);                   
                     $resp_dpago = $mod_ordenpago->insertarDesglosepago($resp_opago, $ite_id, $val_total, 0, $val_total, $fecha_ini, null, $estadopago, $usu_id);
                     if ($resp_dpago) {
                         $exito = 1;
