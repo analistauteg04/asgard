@@ -33,12 +33,12 @@
             <tr>
                 <td class="marcoCel campoDetalle titleDetalle"><?php echo ($detDoc[$i]['CodDocRetener']=='01')?'FACTURA':''; ?></td>
                 <td class="marcoCel titleDetalle"><?php echo $detDoc[$i]['NumDocRetener'] ?></td>
-                <td class="marcoCel titleDetalle"><?php echo date(Yii::app()->params["datebydefault"],strtotime($detDoc[$i]['FechaEmisionDocRetener'])) ?></td>
+                <td class="marcoCel titleDetalle"><?php echo date(Yii::$app->params["dateByDefault"],strtotime($detDoc[$i]['FechaEmisionDocRetener'])) ?></td>
                 <td class="marcoCel titleDetalle"><?php echo $cabDoc['PeriodoFiscal'] ?></td>    
-                <td class="marcoCel dataNumber"><?php echo Yii::app()->format->formatNumber($detDoc[$i]['BaseImponible']) ?></td>
+                <td class="marcoCel dataNumber"><?php echo Yii::$app->format->formatNumber($detDoc[$i]['BaseImponible']) ?></td>
                 <td class="marcoCel campoDetalle"><?php echo ($detDoc[$i]['Codigo']=='1')?'RENTA':(($detDoc[$i]['Codigo']=='2')?'IVA':'ISD'); ?></td>
-                <td class="marcoCel dataNumber"><?php echo Yii::app()->format->formatNumber($detDoc[$i]['PorcentajeRetener'])  ?></td>
-                <td class="marcoCel dataNumber"><?php echo Yii::app()->format->formatNumber($detDoc[$i]['ValorRetenido'])  ?></td>
+                <td class="marcoCel dataNumber"><?php echo Yii::$app->format->formatNumber($detDoc[$i]['PorcentajeRetener'])  ?></td>
+                <td class="marcoCel dataNumber"><?php echo Yii::$app->format->formatNumber($detDoc[$i]['ValorRetenido'])  ?></td>
             </tr>
         <?php } ?>
     </tbody>

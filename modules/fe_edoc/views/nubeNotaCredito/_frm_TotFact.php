@@ -31,10 +31,10 @@ for ($i = 0; $i < sizeof($impFact); $i++) {
     <tbody>
         <tr>
             <td class="marcoCel">
-                <span><?php echo Yii::t('DOCUMENTOS', 'SUBTOTAL ').Yii::app()->params['IVAdefault'].'%' ?></span>
+                <span><?php echo Yii::t('DOCUMENTOS', 'SUBTOTAL ').Yii::$app->params['IVAdefault'].'%' ?></span>
             </td>
             <td class="marcoCel dataNumber">
-                <span><?php echo Yii::app()->format->formatNumber($BASEIVA12)  ?></span>
+                <span><?php echo Yii::$app->format->formatNumber($BASEIVA12)  ?></span>
             </td>
         </tr>
         <tr>
@@ -42,7 +42,7 @@ for ($i = 0; $i < sizeof($impFact); $i++) {
                 <span><?php echo Yii::t('DOCUMENTOS', 'SUBTOTAL 0%') ?></span>
             </td>
             <td class="marcoCel dataNumber">
-                <span><?php echo Yii::app()->format->formatNumber($BASEIVA0)   ?></span>
+                <span><?php echo Yii::$app->format->formatNumber($BASEIVA0)   ?></span>
             </td>
         </tr>
         <tr>
@@ -50,7 +50,7 @@ for ($i = 0; $i < sizeof($impFact); $i++) {
                 <span><?php echo Yii::t('DOCUMENTOS', 'SUBTOTAL IVA no object') ?></span>
             </td>
             <td class="marcoCel dataNumber">
-                <span><?php echo Yii::app()->format->formatNumber($NOOBJIVA)  ?></span>
+                <span><?php echo Yii::$app->format->formatNumber($NOOBJIVA)  ?></span>
             </td>
         </tr>
         <!--<tr>
@@ -66,7 +66,7 @@ for ($i = 0; $i < sizeof($impFact); $i++) {
                 <span><?php echo Yii::t('DOCUMENTOS', 'SUBTOTAL IVA EXEMPT') ?></span>
             </td>
             <td class="marcoCel dataNumber">
-                <span><?php echo Yii::app()->format->formatNumber($EXENTOIVA)  ?></span>
+                <span><?php echo Yii::$app->format->formatNumber($EXENTOIVA)  ?></span>
             </td>
         </tr>
         <tr>
@@ -74,7 +74,7 @@ for ($i = 0; $i < sizeof($impFact); $i++) {
                 <span><?php echo strtoupper(Yii::t('DOCUMENTOS', 'Discount')) ?></span>
             </td>
             <td class="marcoCel dataNumber">
-                <span><?php echo Yii::app()->format->formatNumber($cabFact['TotalDescuento'])  ?></span>
+                <span><?php echo Yii::$app->format->formatNumber($cabFact['TotalDescuento'])  ?></span>
             </td>
         </tr>
         <tr>
@@ -82,15 +82,15 @@ for ($i = 0; $i < sizeof($impFact); $i++) {
                 <span><?php echo Yii::t('DOCUMENTOS', 'ICE') ?></span>
             </td>
             <td class="marcoCel dataNumber">
-                <span><?php echo Yii::app()->format->formatNumber($ICE)  ?></span>
+                <span><?php echo Yii::$app->format->formatNumber($ICE)  ?></span>
             </td>
         </tr>
         <tr>
             <td class="marcoCel">
-                <span><?php echo Yii::t('DOCUMENTOS', 'IVA ').Yii::app()->params['IVAdefault'].'%' ?></span>
+                <span><?php echo Yii::t('DOCUMENTOS', 'IVA ').Yii::$app->params['IVAdefault'].'%' ?></span>
             </td>
             <td class="marcoCel dataNumber">
-                <span><?php echo Yii::app()->format->formatNumber($VALORIVA12)  ?></span>
+                <span><?php echo Yii::$app->format->formatNumber($VALORIVA12)  ?></span>
             </td>
         </tr>
         <tr>
@@ -98,7 +98,7 @@ for ($i = 0; $i < sizeof($impFact); $i++) {
                 <span><?php echo Yii::t('DOCUMENTOS', 'IRBPNR') ?></span>
             </td>
             <td class="marcoCel dataNumber">
-                <span><?php echo Yii::app()->format->formatNumber($IRBPNR)  ?></span>
+                <span><?php echo Yii::$app->format->formatNumber($IRBPNR)  ?></span>
             </td>
         </tr>
         <tr>
@@ -106,7 +106,7 @@ for ($i = 0; $i < sizeof($impFact); $i++) {
                 <span><?php echo Yii::t('DOCUMENTOS', 'GRATUITIES') ?></span>
             </td>
             <td class="marcoCel dataNumber">
-                <span><?php echo Yii::app()->format->formatNumber($cabFact['Propina']) ?></span>
+                <span><?php echo Yii::$app->format->formatNumber($cabFact['Propina']) ?></span>
             </td>
         </tr>
         <tr>
@@ -114,7 +114,7 @@ for ($i = 0; $i < sizeof($impFact); $i++) {
                 <span><?php echo Yii::t('DOCUMENTOS', 'TOTAL VALUE') ?></span>
             </td>
             <td class="marcoCel dataNumber">
-                <span><?php echo Yii::app()->format->formatNumber($cabFact['ValorModificacion'])  ?></span>
+                <span><?php echo Yii::$app->format->formatNumber($cabFact['ValorModificacion'])  ?></span>
             </td>
         </tr>
 

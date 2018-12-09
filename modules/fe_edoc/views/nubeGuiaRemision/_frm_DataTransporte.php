@@ -8,7 +8,7 @@
                 </td>
                 <td>
                     <span class="titleLabel"><?php echo Yii::t('DOCUMENTOS', 'Start date') ?></span>
-                    <span><?php echo date(Yii::app()->params["datebydefault"],strtotime($cabDoc['FechaInicioTransporte'])) ?></span>
+                    <span><?php echo date(Yii::$app->params["dateByDefault"],strtotime($cabDoc['FechaInicioTransporte'])) ?></span>
                 </td>
                 
             </tr>
@@ -19,7 +19,7 @@
                 </td>
                 <td>
                     <span class="titleLabel"><?php echo Yii::t('DOCUMENTOS', 'End date') ?></span>
-                    <span><?php echo date(Yii::app()->params["datebydefault"],strtotime($cabDoc['FechaFinTransporte'])) ?></span>
+                    <span><?php echo date(Yii::$app->params["dateByDefault"],strtotime($cabDoc['FechaFinTransporte'])) ?></span>
                 </td>
                 
             </tr>

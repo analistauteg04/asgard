@@ -14,7 +14,7 @@
                     <span class="titleLabel"><?php echo Yii::t('DOCUMENTOS', 'Issued (Proof to change)') ?></span>
                 </td>
                 <td>
-                    <span><?php echo date(Yii::app()->params["datebydefault"],strtotime($cabFact['FechaEmisionDocModificado'])) ?></span>
+                    <span><?php echo date(Yii::$app->params["dateByDefault"],strtotime($cabFact['FechaEmisionDocModificado'])) ?></span>
                 </td>
             </tr>
             <tr>

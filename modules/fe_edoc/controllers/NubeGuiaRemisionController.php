@@ -19,24 +19,24 @@ class NubeguiaremisionController extends \app\components\CController  {
      * @var string the default layout for the views. Defaults to '//layouts/column2', meaning
      * using two-column layout. See 'protected/views/layouts/column2.php'.
      */
-    public $layout = '//layouts/column2';
+    //public $layout = '//layouts/column2';
 
     /**
      * @return array action filters
      */
-    public function filters() {
+    /*public function filters() {
         return array(
             'accessControl', // perform access control for CRUD operations
             'postOnly + delete', // we only allow deletion via POST request
         );
-    }
+    }*/
 
     /**
      * Specifies the access control rules.
      * This method is used by the 'accessControl' filter.
      * @return array access control rules
      */
-    public function accessRules() {
+    /*public function accessRules() {
         return array(
             array('allow', // allow all users to perform 'index' and 'view' actions
                 'actions' => array('index', 'view'),
@@ -55,14 +55,14 @@ class NubeguiaremisionController extends \app\components\CController  {
                 'users' => array('*'),
             ),
         );
-    }
+    }*/
 
     /**
      * Displays a particular model.
      * @param integer $id the ID of the model to be displayed
      */
     public function actionView($id) {
-        $this->render('view', array(
+        return $this->render('view', array(
             'model' => $this->loadModel($id),
         ));
     }
@@ -83,7 +83,7 @@ class NubeguiaremisionController extends \app\components\CController  {
                 $this->redirect(array('view', 'id' => $model->IdGuiaRemision));
         }
 
-        $this->render('create', array(
+        return $this->render('create', array(
             'model' => $model,
         ));
     }
@@ -105,7 +105,7 @@ class NubeguiaremisionController extends \app\components\CController  {
                 $this->redirect(array('view', 'id' => $model->IdGuiaRemision));
         }
 
-        $this->render('update', array(
+        return $this->render('update', array(
             'model' => $model,
         ));
     }
@@ -138,13 +138,12 @@ class NubeguiaremisionController extends \app\components\CController  {
             $contBuscar = isset($_POST['CONT_BUSCAR']) ? json_encode($_POST['CONT_BUSCAR']) : array();
             $contBuscar[0]['PAGE'] = isset($_GET['page']) ? $_GET['page'] : 0;
             $arrayData = $modelo->mostrarDocumentos($contBuscar);
-            $this->renderPartial('_indexGrid', array(
+            return $this->render('_indexGrid', array(
                 'model' => $arrayData,
-                    ), false, true);
-            return;
+                    ));
         }
-        $this->view->title = Yii::t('DOCUMENTOS', 'Reference guide');
-        $this->render('index', array(
+        //$this->view->title = Yii::t('DOCUMENTOS', 'Reference guide');
+        return $this->render('index', array(
             'model' => $modelo->mostrarDocumentos($contBuscar),
             'tipoDoc' => $tipDoc->recuperarTipoDocumentos(),
             'tipoApr' => $aproba->tipoAprobacion(),
@@ -160,7 +159,7 @@ class NubeguiaremisionController extends \app\components\CController  {
         if (isset($_GET['NubeGuiaRemision']))
             $model->attributes = $_GET['NubeGuiaRemision'];
 
-        $this->render('admin', array(
+        return $this->render('admin', array(
             'model' => $model,
         ));
     }
@@ -213,11 +212,11 @@ class NubeguiaremisionController extends \app\components\CController  {
             $mPDF1=$rep->crearBaseReport();
             $Titulo=Yii::$app->getSession()->get('RazonSocial', FALSE) . " - " . $cabDoc['NombreDocumento'];
             $nameFile=$cabDoc['NombreDocumento'] . '-' . $cabDoc['NumDocumento'];
-            $Contenido=$this->renderPartial('guiaremiPDF', array(
+            $Contenido=$this->render('guiaremiPDF', array(
                         'cabDoc' => $cabDoc,
                         'destDoc' => $destDoc,
                         'adiDoc' => $adiDoc,
-                                ), true);
+                                ));
              $mPDF1->SetTitle($Titulo);
              $mPDF1->WriteHTML($Contenido); //hacemos un render partial a una vista preparada, en este caso es la vista docPDF
              $mPDF1->Output($nameFile, 'I');
@@ -232,7 +231,7 @@ class NubeguiaremisionController extends \app\components\CController  {
         $modelo = new NubeGuiaRemision();
         $nomDocfile= array();
         $nomDocfile=$modelo->mostrarRutaXMLAutorizado($ids);
-        $this->renderPartial('guiaAutXML', array(
+        return $this->render('guiaAutXML', array(
             'nomDocfile' => $nomDocfile,
         ));
     }
@@ -275,10 +274,10 @@ class NubeguiaremisionController extends \app\components\CController  {
             if($arroout['status'] == 'OK'){//Si es Verdadero actualizo datos de base intermedia
                 $CabPed=VSDocumentos::enviarInfoDodSri($ids,'GR');
                 $DatVen=VSDocumentos::buscarDatoVendedor($CabPed["UsuId"]);//Datos del Vendedor que AUTORIZO
-                $htmlMail = $this->renderPartial('mensaje', array(
+                $htmlMail = $this->render('mensaje', array(
                 'CabPed' => $CabPed,
                 'DatVen' => $DatVen,
-                    ), true);
+                    ));
                 $Subject = "Ha Recibido un(a) Orden de Anulación!!!";
                 $dataMail->enviarMailInforma($htmlMail,$CabPed,$DatVen,$Subject,1);//Notificacion a Usuarios
             }
@@ -300,7 +299,7 @@ class NubeguiaremisionController extends \app\components\CController  {
     public function actionUpdatemail($id) {
         $model = new USUARIO;
         $model = $model->getMailUserDoc($id,'GR');
-        $this->render('updatemail', array(
+        return $this->render('updatemail', array(
             'model' => $model,
         ));
     }

@@ -1,6 +1,6 @@
 <?php
 /* SOLUCION VALIDA */
-$ruta = Yii::app()->basePath;
+$ruta = Yii::$app->basePath;
 require_once($ruta . '/extensions/barcodegen/class/BCGFontFile.php');
 require_once($ruta . '/extensions/barcodegen/class/BCGColor.php');
 require_once($ruta . '/extensions/barcodegen/class/BCGDrawing.php');
@@ -27,11 +27,11 @@ $code->clearLabels();//Elmina el TItulo de la LIbreria
 
 
 // Drawing Part
-//$drawing = new BCGDrawing(Yii::app()->theme->baseUrl.'/images/plantilla/filename.png', $color_white);
+//$drawing = new BCGDrawing(Yii::$app->theme->baseUrl.'/images/plantilla/filename.png', $color_white);
 $drawing = new BCGDrawing('', $color_white);
 $drawing->setBarcode($code);
 $drawing->draw();
-$drawing->setFilename(Yii::app()->params['seaBarra'].$Identificacion.'.png');
+$drawing->setFilename(Yii::$app->params['seaBarra'].$Identificacion.'.png');
 
 header('Content-Type: image/png');
 //header('Content-Type: text/html; charset=utf-8');

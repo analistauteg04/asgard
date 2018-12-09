@@ -51,10 +51,9 @@ class NubefacturaController extends \app\components\CController {
             $contBuscar = isset($_POST['CONT_BUSCAR']) ? json_encode($_POST['CONT_BUSCAR']) : array();
             $contBuscar[0]['PAGE'] = isset($_GET['page']) ? $_GET['page'] : 0;
             $arrayData = $modelo->mostrarDocumentos($contBuscar);
-            $this->renderPartial('_indexGrid', array(
+            return $this->render('_indexGrid', array(
                 'model' => $arrayData,
-                    ), false, true);
-            return;
+                    ));
         }
         //$this->view->title = Yii::t('DOCUMENTOS', 'Bills');
         return $this->render('index', array(
@@ -79,14 +78,14 @@ class NubefacturaController extends \app\components\CController {
             $mPDF1=$rep->crearBaseReport();
             $Titulo=Yii::$app->getSession()->get('RazonSocial', FALSE) . " - " . $cabFact['NombreDocumento'];
             $nameFile=$cabFact['NombreDocumento'] . '-' . $cabFact['NumDocumento'];
-            $Contenido=$this->renderPartial('facturaPDF', array(
+            $Contenido=$this->render('facturaPDF', array(
                         'cabFact' => $cabFact,
                         'detFact' => $detFact,
                         'impFact' => $impFact,
                         'pagFact' => $pagFact,
                         'adiFact' => $adiFact,
                         'venFact' => $venFact,
-                                ), true);
+                                ));
              $mPDF1->SetTitle($Titulo);
              $mPDF1->WriteHTML($Contenido); //hacemos un render partial a una vista preparada, en este caso es la vista docPDF
              $mPDF1->Output($nameFile, 'I');
@@ -114,10 +113,8 @@ class NubefacturaController extends \app\components\CController {
             $obj = new NubeFactura();
             $contBuscar = isset($_POST['CONT_BUSCAR']) ? json_encode($_POST['CONT_BUSCAR']) : array();
             $arrayData = $obj->mostrarDocumentos($contBuscar);
-            $this->renderPartial('_indexGrid', array(
-                'model' => $arrayData,
-                    ), false, true);
-            return;
+            return $this->render('_indexGrid', array(
+                'model' => $arrayData,));
         }
     }
 
@@ -130,7 +127,7 @@ class NubefacturaController extends \app\components\CController {
         $detFact = $modelo->mostrarDetFacturaImp($ids);
         $impFact = $modelo->mostrarFacturaImp($ids);
         $adiFact = $modelo->mostrarFacturaDataAdicional($ids); //
-        $this->renderPartial('facturaXML', array(
+        return $this->render('facturaXML', array(
             'cabFact' => $cabFact,
             'detFact' => $detFact,
             'impFact' => $impFact,
@@ -144,7 +141,7 @@ class NubefacturaController extends \app\components\CController {
         $modelo = new NubeFactura();
         $nomDocfile= array();
         $nomDocfile=$modelo->mostrarRutaXMLAutorizado($ids);
-        $this->renderPartial('facturaAutXML', array(
+        return $this->render('facturaAutXML', array(
             'nomDocfile' => $nomDocfile,
         ));
     }
@@ -187,10 +184,10 @@ class NubefacturaController extends \app\components\CController {
             if($arroout['status'] == 'OK'){//Si es Verdadero actualizo datos de base intermedia
                 $CabPed=VSDocumentos::enviarInfoDodSri($ids,'FA');
                 $DatVen=VSDocumentos::buscarDatoVendedor($CabPed["UsuId"]);//Datos del Vendedor que AUTORIZO
-                $htmlMail = $this->renderPartial('mensaje', array(
+                $htmlMail = $this->render('mensaje', array(
                 'CabPed' => $CabPed,
                 'DatVen' => $DatVen,
-                    ), true);
+                    ));
                 $Subject = "Ha Recibido un(a) Orden de Anulación!!!";
                 $dataMail->enviarMailInforma($htmlMail,$CabPed,$DatVen,$Subject,1);//Notificacion a Usuarios
             }
@@ -213,7 +210,7 @@ class NubefacturaController extends \app\components\CController {
     public function actionUpdatemail($id) {
         $model = new USUARIO;
         $model = $model->getMailUserDoc($id,'FA');
-        $this->render('updatemail', array(
+        return $this->render('updatemail', array(
             'model' => $model,
         ));
     }

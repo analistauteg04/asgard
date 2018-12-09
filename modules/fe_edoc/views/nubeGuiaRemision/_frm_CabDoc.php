@@ -33,7 +33,7 @@
             <tr>
                 <td>
                     <span class="titleLabel"><?php echo Yii::t('DOCUMENTOS', 'DATE AND TIME AUTHORIZATION') ?></span>
-                    <span><?php echo ($cabDoc['FechaAutorizacion']<>'')?date(Yii::app()->params["datebytime"],strtotime($cabDoc['FechaAutorizacion'])):'';  ?></span>
+                    <span><?php echo ($cabDoc['FechaAutorizacion']<>'')?date(Yii::$app->params["datebytime"],strtotime($cabDoc['FechaAutorizacion'])):'';  ?></span>
                 </td>
                 
             </tr>
@@ -59,7 +59,7 @@
             <tr>
                 <td>
                 
-                    <?php echo CHtml::image(Yii::app()->params['seaBarra'] .$cabDoc['IdentificacionSujetoRetenido']. '.png', 'Utimpor', array('width' => '280px', 'height' => '20px')); ?>
+                    <?php echo CHtml::image(Yii::$app->params['seaBarra'] .$cabDoc['IdentificacionSujetoRetenido']. '.png', 'Utimpor', array('width' => '280px', 'height' => '20px')); ?>
                 </td>
             </tr>
             <tr>

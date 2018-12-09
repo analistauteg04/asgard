@@ -68,8 +68,8 @@
                 <tbody>
                     <tr>
                         <td style="width:50%;vertical-align: central">
-                            <?php //echo CHtml::image(Yii::app()->theme->baseUrl . '/images/plantilla/logo.png', 'Utimpor', array('width' => '300px', 'height' => '50px')); ?>
-                            <?php echo CHtml::image(Yii::app()->theme->baseUrl . '/images/plantilla/logoPDF.png', 'Utimpor', array('width' => '340px', 'height' => '110px')); ?>
+                            <?php //echo CHtml::image(Yii::$app->theme->baseUrl . '/images/plantilla/logo.png', 'Utimpor', array('width' => '300px', 'height' => '50px')); ?>
+                            <?php echo CHtml::image(Yii::$app->theme->baseUrl . '/images/plantilla/logoPDF.png', 'Utimpor', array('width' => '340px', 'height' => '110px')); ?>
                         </td>
                         <td rowspan="2" style="width:50%">
                             <?php echo $this->renderPartial('_frm_CabDoc', array('cabDoc' => $cabDoc)); ?>

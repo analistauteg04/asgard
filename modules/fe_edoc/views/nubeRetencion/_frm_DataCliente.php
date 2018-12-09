@@ -14,7 +14,7 @@
             <tr>
                 <td>
                     <span class="titleLabel"><?php echo Yii::t('DOCUMENTOS', 'Date of issue') ?></span>
-                    <span><?php echo date(Yii::app()->params["datebydefault"],strtotime($cabDoc['FechaEmision'])) ?></span>
+                    <span><?php echo date(Yii::$app->params["dateByDefault"],strtotime($cabDoc['FechaEmision'])) ?></span>
                 </td>
                 <td>
 <!--                    <span class="titleLabel"><?php //echo Yii::t('DOCUMENTOS', 'Remission guide') ?></span>

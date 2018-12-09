@@ -69,7 +69,7 @@ PbGridView::widget([
         [
             'attribute' => 'FechaEmision',
             'header' => Yii::t('COMPANIA', 'Issuance date'),
-            'value' => 'date(Yii::app()->params["datebydefault"],strtotime($data["FechaEmision"]))',
+            'value' => 'date(Yii::$app->params["dateByDefault"],strtotime($data["FechaEmision"]))',
         ],
         [
             'attribute' => 'UsuarioCreador',
@@ -80,7 +80,7 @@ PbGridView::widget([
         [
             'attribute' => 'FechaAutorizacion',
             'header' => Yii::t('COMPANIA', 'Authorization date'),
-            'value' => '($data["FechaAutorizacion"]<>"")?date(Yii::app()->params["datebydefault"],strtotime($data["FechaAutorizacion"])):"";',
+            'value' => '($data["FechaAutorizacion"]<>"")?date(Yii::$app->params["dateByDefault"],strtotime($data["FechaAutorizacion"])):"";',
         ],
         [
             'attribute' => 'IdentificacionComprador',
@@ -97,7 +97,7 @@ PbGridView::widget([
             'attribute' => 'ImporteTotal',
             'header' => Yii::t('COMPANIA', 'Total amount'),
             //'value' => '$data["ImporteTotal"]',
-            'value' => 'Yii::app()->format->formatNumber($data["ImporteTotal"])',
+            'value' => 'Yii::$app->format->formatNumber($data["ImporteTotal"])',
             'options' => array('style' => 'text-align:right', 'width' => '8px'),
         ],
     ],

@@ -8,7 +8,7 @@
                 </td>
                 <td>
                     <span class="titleLabel"><?php echo Yii::t('DOCUMENTOS', 'Date of issue') ?></span>
-                    <span><?php echo ($destDoc[0]['FechaEmisionDocSustento']<>'0000-00-00')?date(Yii::app()->params["datebydefault"],strtotime($destDoc[0]['FechaEmisionDocSustento'])):'';  ?></span>
+                    <span><?php echo ($destDoc[0]['FechaEmisionDocSustento']<>'0000-00-00')?date(Yii::$app->params["dateByDefault"],strtotime($destDoc[0]['FechaEmisionDocSustento'])):'';  ?></span>
                 </td>                
             </tr>
             <tr>

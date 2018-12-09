@@ -49,7 +49,7 @@
                        <?php echo $pagFact[$i]['FormaPago'] ?>
                     </td>
                     <td class="marcoCel dataNumber">
-                        <?php echo Yii::app()->format->formatNumber($pagFact[$i]['Total'])  ?>
+                        <?php echo Yii::$app->format->formatNumber($pagFact[$i]['Total'])  ?>
                     </td>
                     <td class="marcoCel dataNumber">
                         <?php echo $pagFact[$i]['Plazo'] ?>

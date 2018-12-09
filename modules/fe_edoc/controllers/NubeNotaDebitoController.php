@@ -12,25 +12,25 @@ class NubenotadebitoController extends \app\components\CController
 	 * @var string the default layout for the views. Defaults to '//layouts/column2', meaning
 	 * using two-column layout. See 'protected/views/layouts/column2.php'.
 	 */
-	public $layout='//layouts/column2';
+	//public $layout='//layouts/column2';
 
 	/**
 	 * @return array action filters
 	 */
-	public function filters()
+	/*public function filters()
 	{
 		return array(
 			'accessControl', // perform access control for CRUD operations
 			'postOnly + delete', // we only allow deletion via POST request
 		);
-	}
+	}*/
 
 	/**
 	 * Specifies the access control rules.
 	 * This method is used by the 'accessControl' filter.
 	 * @return array access control rules
 	 */
-	public function accessRules()
+	/*public function accessRules()
 	{
 		return array(
 			array('allow',  // allow all users to perform 'index' and 'view' actions
@@ -49,7 +49,7 @@ class NubenotadebitoController extends \app\components\CController
 				'users'=>array('*'),
 			),
 		);
-	}
+	}*/
 
 	/**
 	 * Displays a particular model.
@@ -57,7 +57,7 @@ class NubenotadebitoController extends \app\components\CController
 	 */
 	public function actionView($id)
 	{
-		$this->render('view',array(
+		return $this->render('view',array(
 			'model'=>$this->loadModel($id),
 		));
 	}
@@ -80,7 +80,7 @@ class NubenotadebitoController extends \app\components\CController
 				$this->redirect(array('view','id'=>$model->IdNotaDebito));
 		}
 
-		$this->render('create',array(
+		return $this->render('create',array(
 			'model'=>$model,
 		));
 	}
@@ -104,7 +104,7 @@ class NubenotadebitoController extends \app\components\CController
 				$this->redirect(array('view','id'=>$model->IdNotaDebito));
 		}
 
-		$this->render('update',array(
+		return $this->render('update',array(
 			'model'=>$model,
 		));
 	}
@@ -128,9 +128,8 @@ class NubenotadebitoController extends \app\components\CController
 	 */
 	public function actionIndex()
 	{
-		$dataProvider=new CActiveDataProvider('NubeNotaDebito');
-		$this->render('index',array(
-			'dataProvider'=>$dataProvider,
+		return $this->render('index',array(
+			
 		));
 	}
 
@@ -144,7 +143,7 @@ class NubenotadebitoController extends \app\components\CController
 		if(isset($_GET['NubeNotaDebito']))
 			$model->attributes=$_GET['NubeNotaDebito'];
 
-		$this->render('admin',array(
+		return $this->render('admin',array(
 			'model'=>$model,
 		));
 	}
