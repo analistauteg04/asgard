@@ -5,9 +5,9 @@ $xmldata = '<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
     <infoTributaria>
         <ambiente>' . $cabFact["Ambiente"] . '</ambiente>
         <tipoEmision>' . $cabFact["TipoEmision"] . '</tipoEmision>
-        <razonSocial>' . Yii::app()->getSession()->get('RazonSocial', FALSE) . '</razonSocial>
-        <nombreComercial>' . Yii::app()->getSession()->get('NombreComercial', FALSE) . '</nombreComercial>
-        <ruc>' . Yii::app()->getSession()->get('Ruc', FALSE) . '</ruc>
+        <razonSocial>' . Yii::$app->session->get('RazonSocial', FALSE) . '</razonSocial>
+        <nombreComercial>' . Yii::$app->session->get('NombreComercial', FALSE) . '</nombreComercial>
+        <ruc>' . Yii::$app->session->get('Ruc', FALSE) . '</ruc>
         <claveAcceso>' . $cabFact["ClaveAcceso"] . '</claveAcceso>
         <codDoc>' . $cabFact["CodigoDocumento"] . '</codDoc>
         <estab>' . $cabFact["Establecimiento"] . '</estab>

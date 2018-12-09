@@ -5,6 +5,7 @@ use yii\helpers\Html;
 use yii\helpers\Url;
 use kartik\date\DatePicker;
 use yii\helpers\ArrayHelper;
+use app\models\Rol;
 ?>
 <div class="col-lg-4 form-group">
     <?=
@@ -72,7 +73,10 @@ use yii\helpers\ArrayHelper;
 </div>
 <div class="col-lg-12 form-group">
     <?php
-    if (Yii::$app->session->get('RolNombre', FALSE) == 'ADMIN') { //CONTROLA POR ROL ADMIN
+    //Yii::$app->session->get('user_name', FALSE); CONTROLA POR USUARIO
+    $model_rol = new Rol();
+    $rol = $model_rol->getMainRol(Yii::$app->session->get('PB_username', false));
+    if ($rol['id'] == 1 || $rol['id'] == 2 || $rol['id'] == 3) { //CONTROLA POR ROL ADMIN
         echo Html::button(Yii::t('CONTROL_ACCIONES', 'To correct'), array('id' => 'btn_corregir', 'name' => 'btn_corregir', 'class' => 'btn btn-danger', 'onclick' => 'fun_EnviarCorreccion()'));
         echo Html::button(Yii::t('CONTROL_ACCIONES', 'Cancel'), array('id' => 'btn_cancel', 'name' => 'btn_cancel', 'class' => 'btn btn-danger', 'onclick' => 'fun_EnviarAnular()'));
     }

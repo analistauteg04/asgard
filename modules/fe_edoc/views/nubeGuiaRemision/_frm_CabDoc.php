@@ -4,7 +4,7 @@
             <tr>
                 <td>
                     <span class="titleLabel"><?php echo Yii::t('DOCUMENTOS', 'DNI') ?></span>
-                    <span class="titleNum_Ruc"><?php echo Yii::app()->getSession()->get('Ruc', FALSE) ?></span>
+                    <span class="titleNum_Ruc"><?php echo Yii::$app->session->get('Ruc', FALSE) ?></span>
                 </td>
                 
             </tr>
