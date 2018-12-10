@@ -278,7 +278,7 @@ INSERT INTO `modulo_estudio` (`mest_id`, `uaca_id`, `mod_id`, `mest_codigo`, `me
 (116, 9, 1, 'UL90-GPPB01', 'Gestión de proyectos usando MS Project básico', 'Gestión de proyectos usando MS Project básico', 'gestión_de_proyectos_usando_ms_project_básico', 1, NULL, '1', '2018-12-10 12:15:48', NULL, '1'),
 (117, 9, 1, 'UL91-CFAC01', 'Curso de Formación de Assessment Center', 'Curso de Formación de Assessment Center', 'curso_de_formación_de_assessment_center', 1, NULL, '1', '2018-12-10 12:15:48', NULL, '1'),
 (118, 9, 1, 'UL92-FRPS01', 'Factores de riesgo psicosociales', 'Factores de riesgo psicosociales', 'factores_de_riesgo_psicosociales', 1, NULL, '1', '2018-12-10 12:15:48', NULL, '1'),
-(119, 9, 1, 'UL93-DCRR1', 'Diseño y dearrollo de base de datos en SQL server','Diseño y dearrollo de base de datos en SQL server', 'diseño_y_dearrollo_de_base_de_datos_en_sql_server', 1, NULL, '1', '2018-12-10 12:15:48', NULL, '1'),
+(119, 9, 1, 'UL93-DCRR01', 'Diseño y desarrollo de base de datos en SQL server','Diseño y desarrollo de base de datos en SQL server', 'diseño_y_desarrollo_de_base_de_datos_en_sql_server', 1, NULL, '1', '2018-12-10 12:15:48', NULL, '1'),
 (120, 9, 1, 'UL100-CUEC01', 'Cómo utilizar efectivamente la información contable en la toma de decisiones', 'Cómo utilizar efectivamente la información contable en la toma de decisiones', 'como_utilizar_efectivamente_la_información_contable_en_la_toma_de_decisiones', 1, NULL, '1', '2018-12-10 12:15:48', NULL, '1'),
 (121, 9, 1, 'UL101-CICD01', 'La correcta interpretación de los costos para tomar decisiones gerenciales', 'La correcta interpretación de los costos para tomar decisiones gerenciales', 'la_correcta_interpretación_de_los_costos_para_tomar_decisiones_gerenciales', 1, NULL, '1', '2018-12-10 12:15:48', NULL, '1'),
 (122, 9, 1, 'UL102-IMCU01', 'Importancia del Modelo Costo - Volumen - Utilidad en el diseño de estrategias', 'Importancia del Modelo Costo - Volumen - Utilidad en el diseño de estrategias', 'importancia_del_modelo_osto_volumen_utilidad en_el_diseño_de_estrategias', 1, NULL, '1', '2018-12-10 12:15:48', NULL, '1'),
@@ -299,12 +299,27 @@ INSERT INTO `modulo_estudio` (`mest_id`, `uaca_id`, `mod_id`, `mest_codigo`, `me
 (137, 9, 1, 'UL117-ICEM01', 'Inteligencia Competitiva y estrategias de mercado', 'Inteligencia Competitiva y estrategias de mercado', 'inteligencia_competitiva_y_estrategias_de_mercado', 1, NULL, '1', '2018-12-10 12:15:48', NULL, '1'),
 (138, 9, 1, 'UL118-BIBA01', 'Business Intelligence (BI) básico', 'Business Intelligence (BI) básico', 'business_intelligence_(bi)_básico', 1, NULL, '1', '2018-12-10 12:15:48', NULL, '1'),
 (139, 9, 1, 'UL119-CRIM01', 'Cómo realizar una Investigación de Mercado', 'Cómo realizar una Investigación de Mercado', 'cómo_realizar_una_investigación_de_mercado', 1, NULL, '1', '2018-12-10 12:15:48', NULL, '1'),
-(140, 9, 1, 'UL120-DAPE01', 'Desarrollando las Actitudes para Emprender', 'Desarrollando las Actitudes para Emprender', 'desarrollando_las_actitudes_para_emprender', 1, NULL, '1', '2018-12-10 12:15:48', NULL, '1');
-
-
-
-
-
+(140, 9, 1, 'UL120-DAPE01', 'Desarrollando las Actitudes para Emprender', 'Desarrollando las Actitudes para Emprender', 'desarrollando_las_actitudes_para_emprender', 1, NULL, '1', '2018-12-10 12:15:48', NULL, '1'),
+(141, 9, 1, 'UL121-COCI01', 'Capturar las Oportunidades para Crear e Innovar', 'Capturar las Oportunidades para Crear e Innovar', 'capturar_las_oportunidades_para_crear_e_innovar', 1, NULL, '1', '2018-12-10 12:15:48', NULL, '1'),
+(142, 9, 1, 'UL122-CDSD01', 'Como desarrollar la Sinergia del Desarrollo Socioeconómico mediante el trabajo en redes', 'Como desarrollar la Sinergia del Desarrollo Socioeconómico mediante el trabajo en redes', 'como_desarrollar_la_sinergia_del_desarrollo_socioeconómico_mediante_el_trabajo_en_redes', 1, NULL, '1', '2018-12-10 12:15:48', NULL, '1'),
+(143, 9, 1, 'UL123-PCTE01', 'Planificando la Creación de tu Empresa', 'Planificando la Creación de tu Empresa', 'planificando_la_creación_de_tu_empresa', 1, NULL, '1', '2018-12-10 12:15:48', NULL, '1'),
+(144, 9, 1, 'UL124-ICDT01', 'Importancia y clasificación del turismo', 'Importancia y clasificación del turismo', 'importancia_y_clasificación_del_turismo', 1, NULL, '1', '2018-12-10 12:15:48', NULL, '1'),
+(145, 9, 1, 'UL125-CTST01', 'Calidad en el turismo: Servucción Turística', 'Calidad en el turismo: Servucción Turística', 'calidad_en_el_turismo_servucción_turística', 1, NULL, '1', '2018-12-10 12:15:48', NULL, '1'),
+(146, 9, 1, 'UL126-TICB01', 'Turismo Inteligente: conceptos básicos', 'Turismo Inteligente: conceptos básicos', 'turismo_inteligente_conceptos_básicos', 1, NULL, '1', '2018-12-10 12:15:48', NULL, '1'),
+(147, 9, 1, 'UL127-TSGA01', 'Turismo Sostenible y gestión ambiental', 'Turismo Sostenible y gestión ambiental', 'turismo_sostenible_y_gestión_ambiental', 1, NULL, '1', '2018-12-10 12:15:48', NULL, '1'),
+(148, 9, 1, 'UL128-CAVT01', 'Como aprovechar la vocación turística de un territorio', 'Como aprovechar la vocación turística de un territorio', 'como_aprovechar_la_vocación_turística_de_un_territorio', 1, NULL, '1', '2018-12-10 12:15:48', NULL, '1'),
+(149, 9, 1, 'UL129-PTDI01', 'Planificación turística de destinos inteligentes', 'Planificación turística de destinos inteligentes', 'planificación_turística_de_destinos_inteligentes', 1, NULL, '1', '2018-12-10 12:15:48', NULL, '1'),
+(150, 9, 1, 'UL130-EPDT01', 'Elaboración de un plan de desarrollo turístico en base a las potencialidades del destino' , 'Elaboración de un plan de desarrollo turístico en base a las potencialidades del destino' , 'elaboración_de_un_plan_de_desarrollo_turístico_en_base_a_las_potencialidades_del_destino', 1, NULL, '1', '2018-12-10 12:15:48', NULL, '1'),
+(151, 9, 1, 'UL131-GPDT01', 'La Gobernanza y Planificación de Destinos Turísticos Inteligentes', 'La Gobernanza y Planificación de Destinos Turísticos Inteligentes', 'la_gobernanza_y_planificación_de_destinos_turísticos_inteligentes', 1, NULL, '1', '2018-12-10 12:15:48', NULL, '1'),
+(152, 9, 1, 'UL132-PCCT01', 'Planificación y control de la calidad en turismo', 'Planificación y control de la calidad en turismo', 'planificación_y_control_de_la_calidad_en_turismo', 1, NULL, '1', '2018-12-10 12:15:48', NULL, '1'),
+(153, 9, 1, 'UL133-CSVA01', 'Calidad, sostenibilidad y valor agregado en empresas turísticas', 'Calidad, sostenibilidad y valor agregado en empresas turísticas', 'calidad_sostenibilidad_y_valor_agregado_en_empresas_turísticas', 1, NULL, '1', '2018-12-10 12:15:48', NULL, '1'),
+(154, 9, 1, 'UL134-HDMC01', 'Herramientas para el diagnóstico y la mejora de la calidad de empresas de turismo', 'Herramientas para el diagnóstico y la mejora de la calidad de empresas de turismo', 'herramientas_para_el_diagnóstico_y_la_mejora_de_la_calidad_de_empresas_de_turismo', 1, NULL, '1', '2018-12-10 12:15:48', NULL, '1'),
+(155, 9, 1, 'UL135-ICST01', 'Introducción a la calidad en el sector turístico', 'Introducción a la calidad en el sector turístico', 'introducción_a_la_calidad_en_el_sector_turístico', 1, NULL, '1', '2018-12-10 12:15:48', NULL, '1'),
+(156, 9, 1, 'UL136-MCIT01', 'Marketing  comunicacional inteligente para turismo sostenible', 'Marketing  comunicacional inteligente para turismo sostenible', 'marketing_comunicacional_inteligente_para_turismo_sostenible', 1, NULL, '1', '2018-12-10 12:15:48', NULL, '1'),
+(157, 9, 1, 'UL137-EPDP01', 'Estrategias para promover destinos y productos turísticos con principios sostenibles', 'Estrategias para promover destinos y productos turísticos con principios sostenibles', 'estrategias_para_promover_destinos_y_productos_turísticos_con_principios_sostenibles', 1, NULL, '1', '2018-12-10 12:15:48', NULL, '1'),
+(158, 9, 1, 'UL138-01IMDT', 'El inbound marketing de los destinos turísticos', 'El inbound marketing de los destinos turísticos', 'el_inbound_marketing_de_los_destinos_turísticos', 1, NULL, '1', '2018-12-10 12:15:48', NULL, '1'),
+(159, 9, 1, 'UL139-01GSCM', 'Gestión sostenible, control y monitorización de un destino', 'Gestión sostenible, control y monitorización de un destino', 'gestión_sostenible_control_y_monitorización_de_un_destino', 1, NULL, '1', '2018-12-10 12:15:48', NULL, '1'),
+(160, 9, 1, 'UL140-01IDMC', 'Introducción al Data Mining –conceptos básicos', 'Introducción al Data Mining –conceptos básicos', 'introducción_al_data_mining_conceptos_básicos', 1, NULL, '1', '2018-12-10 12:15:48', NULL, '1');
 
 -- --------------------------------------------------------
 --
@@ -466,13 +481,27 @@ INSERT INTO `modulo_estudio_empresa` (`meem_id`, `mest_id`, `emp_id`, `meem_fech
 (137, 137, 2, '2018-09-01 05:00:00', '2018-12-31 05:00:00', 1, NULL, '1', '1', '2018-12-10 13:30:00', NULL, '1'),
 (138, 138, 2, '2018-09-01 05:00:00', '2018-12-31 05:00:00', 1, NULL, '1', '1', '2018-12-10 13:30:00', NULL, '1'),
 (139, 139, 2, '2018-09-01 05:00:00', '2018-12-31 05:00:00', 1, NULL, '1', '1', '2018-12-10 13:30:00', NULL, '1'),
-(140, 140, 2, '2018-09-01 05:00:00', '2018-12-31 05:00:00', 1, NULL, '1', '1', '2018-12-10 13:30:00', NULL, '1');
-
-
-
-
-
-
+(140, 140, 2, '2018-09-01 05:00:00', '2018-12-31 05:00:00', 1, NULL, '1', '1', '2018-12-10 13:30:00', NULL, '1'),
+(141, 141, 2, '2018-09-01 05:00:00', '2018-12-31 05:00:00', 1, NULL, '1', '1', '2018-12-10 13:30:00', NULL, '1'),
+(142, 142, 2, '2018-09-01 05:00:00', '2018-12-31 05:00:00', 1, NULL, '1', '1', '2018-12-10 13:30:00', NULL, '1'),
+(143, 143, 2, '2018-09-01 05:00:00', '2018-12-31 05:00:00', 1, NULL, '1', '1', '2018-12-10 13:30:00', NULL, '1'),
+(144, 144, 2, '2018-09-01 05:00:00', '2018-12-31 05:00:00', 1, NULL, '1', '1', '2018-12-10 13:30:00', NULL, '1'),
+(145, 145, 2, '2018-09-01 05:00:00', '2018-12-31 05:00:00', 1, NULL, '1', '1', '2018-12-10 13:30:00', NULL, '1'),
+(146, 146, 2, '2018-09-01 05:00:00', '2018-12-31 05:00:00', 1, NULL, '1', '1', '2018-12-10 13:30:00', NULL, '1'),
+(147, 147, 2, '2018-09-01 05:00:00', '2018-12-31 05:00:00', 1, NULL, '1', '1', '2018-12-10 13:30:00', NULL, '1'),
+(148, 148, 2, '2018-09-01 05:00:00', '2018-12-31 05:00:00', 1, NULL, '1', '1', '2018-12-10 13:30:00', NULL, '1'),
+(149, 149, 2, '2018-09-01 05:00:00', '2018-12-31 05:00:00', 1, NULL, '1', '1', '2018-12-10 13:30:00', NULL, '1'),
+(150, 150, 2, '2018-09-01 05:00:00', '2018-12-31 05:00:00', 1, NULL, '1', '1', '2018-12-10 13:30:00', NULL, '1'),
+(151, 151, 2, '2018-09-01 05:00:00', '2018-12-31 05:00:00', 1, NULL, '1', '1', '2018-12-10 13:30:00', NULL, '1'),
+(152, 152, 2, '2018-09-01 05:00:00', '2018-12-31 05:00:00', 1, NULL, '1', '1', '2018-12-10 13:30:00', NULL, '1'),
+(153, 153, 2, '2018-09-01 05:00:00', '2018-12-31 05:00:00', 1, NULL, '1', '1', '2018-12-10 13:30:00', NULL, '1'),
+(154, 154, 2, '2018-09-01 05:00:00', '2018-12-31 05:00:00', 1, NULL, '1', '1', '2018-12-10 13:30:00', NULL, '1'),
+(155, 155, 2, '2018-09-01 05:00:00', '2018-12-31 05:00:00', 1, NULL, '1', '1', '2018-12-10 13:30:00', NULL, '1'),
+(156, 156, 2, '2018-09-01 05:00:00', '2018-12-31 05:00:00', 1, NULL, '1', '1', '2018-12-10 13:30:00', NULL, '1'),
+(157, 157, 2, '2018-09-01 05:00:00', '2018-12-31 05:00:00', 1, NULL, '1', '1', '2018-12-10 13:30:00', NULL, '1'),
+(158, 158, 2, '2018-09-01 05:00:00', '2018-12-31 05:00:00', 1, NULL, '1', '1', '2018-12-10 13:30:00', NULL, '1'),
+(159, 159, 2, '2018-09-01 05:00:00', '2018-12-31 05:00:00', 1, NULL, '1', '1', '2018-12-10 13:30:00', NULL, '1'),
+(160, 160, 2, '2018-09-01 05:00:00', '2018-12-31 05:00:00', 1, NULL, '1', '1', '2018-12-10 13:30:00', NULL, '1');
 
 -- --------------------------------------------------------
 --
