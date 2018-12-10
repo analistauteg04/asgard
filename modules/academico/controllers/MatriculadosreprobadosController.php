@@ -148,8 +148,8 @@ class MatriculadosreprobadosController extends \app\components\CController {
                         if ($dni_archivo === false)
                             throw new Exception('Error doc Dni no renombrado.');
                     }
-                    if (isset($path_certificado_true) && $path_certificado_true != "") {
-                        $arrIm = explode(".", basename($path_certificado_true));
+                    if (isset($path_certvota_true) && $path_certvota_true != "") {
+                        $arrIm = explode(".", basename($path_certvota_true));
                         $typeFile = strtolower($arrIm[count($arrIm) - 1]);
                         $certvota_archivoOld = Yii::$app->params["documentFolder"] . "academico/" . $matr_repro_id . "/doc_certvota_per_" . $matr_repro_id . "." . $typeFile;
                         $certvota_archivo = MatriculadosReprobado::addLabelTimeDocumentos($matr_repro_id, $certvota_archivoOld, $timeSt);
@@ -157,6 +157,16 @@ class MatriculadosreprobadosController extends \app\components\CController {
                         if ($certvota_archivo === false)
                             throw new Exception('Error doc certificado vot. no renombrado.');
                     }
+                    if (isset($path_certificado_true) && $path_certificado_true != "") {
+                        $arrIm = explode(".", basename($path_certificado_true));
+                        $typeFile = strtolower($arrIm[count($arrIm) - 1]);
+                        $certificado_archivoOld = Yii::$app->params["documentFolder"] . "academico/" . $matr_repro_id . "/doc_certvota_per_" . $matr_repro_id . "." . $typeFile;
+                        $certificado_archivo = MatriculadosReprobado::addLabelTimeDocumentos($matr_repro_id, $certificado_archivoOld, $timeSt);
+                        $data["DATA_1"][0]["ruta_doc_certificado"] = $certificado_archivo;
+                        if ($certvota_archivo === false)
+                            throw new Exception('Error doc certificado vot. no renombrado.');
+                    }
+                    
                     $values_act = [
                         $data["DATA_1"][0]['pges_pri_nombre'], $data["DATA_1"][0]['pges_pri_apellido'], $data["DATA_1"][0]['tipo_dni'], $data["DATA_1"][0]['pges_cedula'],
                         $data["DATA_1"][0]['pges_correo'], $data["DATA_1"][0]['pais'], $data["DATA_1"][0]['pges_celular'],
