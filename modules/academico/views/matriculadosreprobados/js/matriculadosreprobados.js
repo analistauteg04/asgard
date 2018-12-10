@@ -8,6 +8,16 @@ $(document).ready(function () {
             guardarAdmireprobado('Update', '1');
         }
     });
+    $('#paso1next').click(function () {
+        $("a[data-href='#paso1']").attr('data-toggle', 'none');
+        $("a[data-href='#paso1']").parent().attr('class', 'disabled');
+        $("a[data-href='#paso1']").attr('data-href', $("a[href='#paso1']").attr('href'));
+        $("a[data-href='#paso1']").removeAttr('href');
+        $("a[data-href='#paso2']").attr('data-toggle', 'tab');
+        $("a[data-href='#paso2']").attr('href', $("a[data-href='#paso2']").attr('data-href'));
+        $("a[data-href='#paso2']").trigger("click");
+
+    });
     $('#paso2back').click(function () {
         $("a[data-href='#paso2']").attr('data-toggle', 'none');
         $("a[data-href='#paso2']").parent().attr('class', 'disabled');
@@ -17,6 +27,26 @@ $(document).ready(function () {
         $("a[data-href='#paso1']").attr('href', $("a[data-href='#paso1']").attr('data-href'));
         $("a[data-href='#paso1']").trigger("click");
     });
+    $('#paso2next').click(function () {
+        $("a[data-href='#paso2']").attr('data-toggle', 'none');
+        $("a[data-href='#paso2']").parent().attr('class', 'disabled');
+        $("a[data-href='#paso2']").attr('data-href', $("a[href='#paso2']").attr('href'));
+        $("a[data-href='#paso2']").removeAttr('href');
+        $("a[data-href='#paso3']").attr('data-toggle', 'tab');
+        $("a[data-href='#paso3']").attr('href', $("a[data-href='#paso3']").attr('data-href'));
+        $("a[data-href='#paso3']").trigger("click");
+    });
+    
+    $('#paso3back').click(function () {
+        $("a[data-href='#paso3']").attr('data-toggle', 'none');
+        $("a[data-href='#paso3']").parent().attr('class', 'disabled');
+        $("a[data-href='#paso3']").attr('data-href', $("a[href='#paso3']").attr('href'));
+        $("a[data-href='#paso3']").removeAttr('href');
+        $("a[data-href='#paso2']").attr('data-toggle', 'tab');
+        $("a[data-href='#paso2']").attr('href', $("a[data-href='#paso2']").attr('data-href'));
+        $("a[data-href='#paso2']").trigger("click");
+    });
+    
     $('#sendInformacionAdmitidoPendDos').click(function () {
         var error = 0;
         var pais = $('#cmb_pais_dom').val();
@@ -256,6 +286,7 @@ function guardarAdmireprobado(accion, paso){
                 paso1next();
             } else if (accion == "Update") {
                 showAlert(response.status, response.label, response.message);
+                alert("va hacia el paso 3");
                 paso2next();
                 //window.location.href = $('#txth_base').val() + "/admision/interesados/index";
                 
@@ -319,6 +350,7 @@ function habilitarSecciones() {
         $('#divCertvota').css('display', 'none');
     }
 }
+
 function paso1next() {
     $("a[data-href='#paso1']").attr('data-toggle', 'none');
     $("a[data-href='#paso1']").parent().attr('class', 'disabled');
@@ -327,6 +359,17 @@ function paso1next() {
     $("a[data-href='#paso2']").attr('data-toggle', 'tab');
     $("a[data-href='#paso2']").attr('href', $("a[data-href='#paso2']").attr('data-href'));
     $("a[data-href='#paso2']").trigger("click");
+}
+function paso2next() {
+    alert("entro a paso 2 next");
+    $("a[data-href='#paso2']").attr('data-toggle', 'none');
+    $("a[data-href='#paso2']").parent().attr('class', 'disabled');
+    $("a[data-href='#paso2']").attr('data-href', $("a[href='#paso2']").attr('href'));
+    $("a[data-href='#paso2']").removeAttr('href');
+    $("a[data-href='#paso3']").attr('data-toggle', 'tab');
+    $("a[data-href='#paso3']").attr('href', $("a[data-href='#paso3']").attr('data-href'));
+    $("a[data-href='#paso3']").trigger("click");
+    alert("debio haber cambiado a paso 3 next");
 }
 function searchAdmitido(idbox, idgrid) {
     var arrParams = new Object();
