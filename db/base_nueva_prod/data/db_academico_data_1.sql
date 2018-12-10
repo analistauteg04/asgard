@@ -264,7 +264,43 @@ INSERT INTO `modulo_estudio` (`mest_id`, `uaca_id`, `mod_id`, `mest_codigo`, `me
 (102, 9, 1, 'UL76-DHPC01', 'Desarrollo de habilidades del pensamiento cognitivo', 'Desarrollo de habilidades del pensamiento cognitivo', 'desarrollo_de_habilidades_del_pensamiento_cognitivo', 1, NULL, '1', '2018-12-10 12:15:48', NULL, '1'),
 (103, 9, 1, 'UL77-NAIR01', 'Normas APA para la investigación y redacción de artículos', 'Normas APA para la investigación y redacción de artículos', 'normas_apa_para_la_investigacion_y_redaccion_de_articulos', 1, NULL, '1', '2018-12-10 12:15:48', NULL, '1'),
 (104, 9, 1, 'UL78-CSPD01', 'Construcción de saberes pedagógicos en la formación de docentes', 'Construcción de saberes pedagógicos en la formación de docentes', 'construccion_de_saberes_pedagogicos en la formación de docentes', 1, NULL, '1', '2018-12-10 12:15:48', NULL, '1'),
-(105, 9, 1, 'UL79-01', '¿Cómo citar con normas APA?', '¿Cómo citar con normas APA?', 'como_citar_con_normas_apa?', 1, NULL, '1', '2018-12-10 12:15:48', NULL, '1');
+(105, 9, 1, 'UL79-01', '¿Cómo citar con normas APA?', '¿Cómo citar con normas APA?', 'como_citar_con_normas_apa?', 1, NULL, '1', '2018-12-10 12:15:48', NULL, '1'),
+(106, 9, 1, 'UL80-MASE01', 'Marketing de servicios', 'Marketing de servicios', 'marketing_de_servicios', 1, NULL, '1', '2018-12-10 12:15:48', NULL, '1'),
+(107, 9, 1, 'UL81-CIAM01', 'Comunicaciones integradas al marketing', 'Comunicaciones integradas al marketing', 'comunicaciones_integradas_al_marketing', 1, NULL, '1', '2018-12-10 12:15:48', NULL, '1'),
+(108, 9, 1, 'UL82-MAWA01', 'Marketing Way', 'Marketing Way', 'marketing_way ', 1, NULL, '1', '2018-12-10 12:15:48', NULL, '1'),
+(109, 9, 1, 'UL83-COMA01', 'Community Manager - Aprenda desde cero a experto', 'Community Manager - Aprenda desde cero a experto', 'community_manager_aprenda_desde_cero_a_experto', 1, NULL, '1', '2018-12-10 12:15:48', NULL, '1'),
+(110, 9, 1, 'UL84-GAPE01', 'Google ads para emprendedores', 'Google ads para emprendedores', 'google_ads_para_emprendedores', 1, NULL, '1', '2018-12-10 12:15:48', NULL, '1'),
+(111, 9, 1, 'UL85-FPME01', 'Fotografia para marcas emprendedoras', 'Fotografia para marcas emprendedoras', 'fotografia_para_marcas_emprendedoras', 1, NULL, '1', '2018-12-10 12:15:48', NULL, '1'),
+(112, 9, 1, 'UL86-ELPN01', 'Elaboración de un plan de negocios', 'Elaboración de un plan de negocios', 'elaboracion_de_un_plan_de_negocios', 1, NULL, '1', '2018-12-10 12:15:48', NULL, '1'),
+(113, 9, 1, 'UL87-GMPI01', 'Guía práctica para la redacción del marco teórico de un proyecto de investigación', ' .', 'guia_practica_para_la_redaccion_del_marco_teorico_de_un_proyecto_de_investigacion', 1, NULL, '1', '2018-12-10 12:15:48', NULL, '1'),
+(114, 9, 1, 'UL88-AERP01', 'Aprende a establecer y redactar el esquema de un proyecto', 'Aprende a establecer y redactar el esquema de un proyecto', 'aprende_a_establecer_y_redactar_el_esquema_de_un_proyecto', 1, NULL, '1', '2018-12-10 12:15:48', NULL, '1'),
+(115, 9, 1, 'UL89-CEPN01', '¿Como evaluar un proyecto de inversión y crear un negocio?', '¿Como evaluar un proyecto de inversión y crear un negocio?', 'como_evaluar_un_proyecto_de_inversión_y_crear_un_negocio', 1, NULL, '1', '2018-12-10 12:15:48', NULL, '1'),
+(116, 9, 1, 'UL90-GPPB01', 'Gestión de proyectos usando MS Project básico', 'Gestión de proyectos usando MS Project básico', 'gestión_de_proyectos_usando_ms_project_básico', 1, NULL, '1', '2018-12-10 12:15:48', NULL, '1'),
+(117, 9, 1, 'UL91-CFAC01', 'Curso de Formación de Assessment Center', 'Curso de Formación de Assessment Center', 'curso_de_formación_de_assessment_center', 1, NULL, '1', '2018-12-10 12:15:48', NULL, '1'),
+(118, 9, 1, 'UL92-FRPS01', 'Factores de riesgo psicosociales', 'Factores de riesgo psicosociales', 'factores_de_riesgo_psicosociales', 1, NULL, '1', '2018-12-10 12:15:48', NULL, '1'),
+(119, 9, 1, 'UL93-DCRR1', 'Diseño y dearrollo de base de datos en SQL server','Diseño y dearrollo de base de datos en SQL server', 'diseño_y_dearrollo_de_base_de_datos_en_sql_server', 1, NULL, '1', '2018-12-10 12:15:48', NULL, '1'),
+(120, 9, 1, 'UL100-CUEC01', 'Cómo utilizar efectivamente la información contable en la toma de decisiones', 'Cómo utilizar efectivamente la información contable en la toma de decisiones', 'como_utilizar_efectivamente_la_información_contable_en_la_toma_de_decisiones', 1, NULL, '1', '2018-12-10 12:15:48', NULL, '1'),
+(121, 9, 1, 'UL101-CICD01', 'La correcta interpretación de los costos para tomar decisiones gerenciales', 'La correcta interpretación de los costos para tomar decisiones gerenciales', 'la_correcta_interpretación_de_los_costos_para_tomar_decisiones_gerenciales', 1, NULL, '1', '2018-12-10 12:15:48', NULL, '1'),
+(122, 9, 1, 'UL102-IMCU01', 'Importancia del Modelo Costo - Volumen - Utilidad en el diseño de estrategias', 'Importancia del Modelo Costo - Volumen - Utilidad en el diseño de estrategias', 'importancia_del_modelo_osto_volumen_utilidad en_el_diseño_de_estrategias', 1, NULL, '1', '2018-12-10 12:15:48', NULL, '1'),
+(123, 9, 1, 'UL103-EPIC01', 'El Presupuesto y su importancia para el control de gestión', 'El Presupuesto y su importancia para el control de gestión', 'el_presupuesto_y_su_importancia_para_el_control_de_gestión', 1, NULL, '1', '2018-12-10 12:15:48', NULL, '1'),
+(124, 9, 1, 'UL104-CCGC01', 'Cómo contribuye el Gobierno Corporativo a consolidar organizaciones saludables', 'Cómo contribuye el Gobierno Corporativo a consolidar organizaciones saludables', 'como_contribuye_el_gobierno_corporativo_a_consolidar_organizaciones_saludables', 1, NULL, '1', '2018-12-10 12:15:48', NULL, '1'),
+(125, 9, 1, 'UL105-IETO01', 'La importancia de la Ética en la transparecia de las organizaciones', 'La importancia de la Ética en la transparecia de las organizaciones', 'la_importancia_de_la_etica_en_la_transparecia_de_las_organizaciones', 1, NULL, '1', '2018-12-10 12:15:48', NULL, '1'),
+(126, 9, 1, 'UL106-RSEC01', 'Responsabilidad Social Empresarial y Conciencia Ecológica, herramientas para la imagen empresarial', 'Responsabilidad Social Empresarial y Conciencia Ecológica, herramientas para la imagen empresarial', 'responsabilidad_social_empresarial_y_conciencia_ecológica_herramientas_para_la_imagen_empresarial', 1, NULL, '1', '2018-12-10 12:15:48', NULL, '1'),
+(127, 9, 1, 'UL107-CPOR01', 'Controles y políticas en la organización, claves para el éxito empresarial', 'Controles y políticas en la organización, claves para el éxito empresarial', 'controles_y_políticas_en_la_organización_claves_para_el_éxito_empresarial', 1, NULL, '1', '2018-12-10 12:15:48', NULL, '1'),
+(128, 9, 1, 'UL108-AIER01', 'Análisis e interpretación de estados y ratios financieros', 'Análisis e interpretación de estados y ratios financieros', 'análisis_e_interpretación_de_estados_y_ratios_financieros', 1, NULL, '1', '2018-12-10 12:15:48', NULL, '1'),
+(129, 9, 1, 'UL109-CARI01', 'Cálculo y análisis de la rentabilidad sobre la inversión', 'Cálculo y análisis de la rentabilidad sobre la inversión', 'cálculo_y_análisis_de_la_rentabilidad_sobre_la_inversión', 1, NULL, '1', '2018-12-10 12:15:48', NULL, '1'),
+(130, 9, 1, 'UL110-01ACSC', 'Administración de costos y sistemas de costeo', 'Administración de costos y sistemas de costeo', 'administración_de_costos_y_sistemas_de_costeo', 1, NULL, '1', '2018-12-10 12:15:48', NULL, '1'),
+(131, 9, 1, 'UL111-SCIE01', 'Sistemas de control e indicadores para el éxito de la empresa', 'Sistemas de control e indicadores para el éxito de la empresa', 'sistemas_de_control_e_indicadores_para_el_éxito_de_la_empresa', 1, NULL, '1', '2018-12-10 12:15:48', NULL, '1'),
+(132, 9, 1, 'UL112-QVEM01', '¿Qué es la valoración de empresas? ¿Para qué sirve? ¿Cómo se hace?', '¿Qué es la valoración de empresas? ¿Para qué sirve? ¿Cómo se hace?', 'qué_es_la_valoración_de_empresas_para_qué_sirve_cómo_se_hace?', 1, NULL, '1', '2018-12-10 12:15:48', NULL, '1'),
+(133, 9, 1, 'UL113-PEFV01', 'Proyección de Estados Financieros y Valoración por Metodologías de Flujos de Caja Descontados', 'Proyección de Estados Financieros y Valoración por Metodologías de Flujos de Caja Descontados', 'proyección_de_estados_financieros_y_valoración_por_metodologías_de_flujos_de_caja_descontados', 1, NULL, '1', '2018-12-10 12:15:48', NULL, '1'),
+(134, 9, 1, 'UL114-MVAF01', 'Metodologías de Valoración Alternativas a la de flujo de caja descontados', 'Metodologías de Valoración Alternativas a la de flujo de caja descontados', 'metodologías_de_valoración_alternativas_a_la_de_flujo_de_caja_descontados', 1, NULL, '1', '2018-12-10 12:15:48', NULL, '1'),
+(135, 9, 1, 'UL115-ASTD01', 'Análisis de Sensibilización y toma de decisiones financieras', 'Análisis de Sensibilización y toma de decisiones financieras', 'análisis_de_sensibilización_y_toma_de_decisiones_financieras', 1, NULL, '1', '2018-12-10 12:15:48', NULL, '1'),
+(136, 9, 1, 'UL116-IMGH01', 'Inteligencia de mercados globales y herramientas básicas para recolectar información', 'Inteligencia de mercados globales y herramientas básicas para recolectar información', 'inteligencia_de_mercados_globales_y_herramientas_básicas_para_recolectar_información', 1, NULL, '1', '2018-12-10 12:15:48', NULL, '1'),
+(137, 9, 1, 'UL117-ICEM01', 'Inteligencia Competitiva y estrategias de mercado', 'Inteligencia Competitiva y estrategias de mercado', 'inteligencia_competitiva_y_estrategias_de_mercado', 1, NULL, '1', '2018-12-10 12:15:48', NULL, '1'),
+(138, 9, 1, 'UL118-BIBA01', 'Business Intelligence (BI) básico', 'Business Intelligence (BI) básico', 'business_intelligence_(bi)_básico', 1, NULL, '1', '2018-12-10 12:15:48', NULL, '1'),
+(139, 9, 1, 'UL119-CRIM01', 'Cómo realizar una Investigación de Mercado', 'Cómo realizar una Investigación de Mercado', 'cómo_realizar_una_investigación_de_mercado', 1, NULL, '1', '2018-12-10 12:15:48', NULL, '1'),
+(140, 9, 1, 'UL120-DAPE01', 'Desarrollando las Actitudes para Emprender', 'Desarrollando las Actitudes para Emprender', 'desarrollando_las_actitudes_para_emprender', 1, NULL, '1', '2018-12-10 12:15:48', NULL, '1');
+
 
 
 
@@ -395,7 +431,47 @@ INSERT INTO `modulo_estudio_empresa` (`meem_id`, `mest_id`, `emp_id`, `meem_fech
 (102, 102, 2, '2018-09-01 05:00:00', '2018-12-31 05:00:00', 1, NULL, '1', '1', '2018-12-10 13:30:00', NULL, '1'),
 (103, 103, 2, '2018-09-01 05:00:00', '2018-12-31 05:00:00', 1, NULL, '1', '1', '2018-12-10 13:30:00', NULL, '1'),
 (104, 104, 2, '2018-09-01 05:00:00', '2018-12-31 05:00:00', 1, NULL, '1', '1', '2018-12-10 13:30:00', NULL, '1'),
-(105, 105, 2, '2018-09-01 05:00:00', '2018-12-31 05:00:00', 1, NULL, '1', '1', '2018-12-10 13:30:00', NULL, '1');
+(105, 105, 2, '2018-09-01 05:00:00', '2018-12-31 05:00:00', 1, NULL, '1', '1', '2018-12-10 13:30:00', NULL, '1'),
+(106, 106, 2, '2018-09-01 05:00:00', '2018-12-31 05:00:00', 1, NULL, '1', '1', '2018-12-10 13:30:00', NULL, '1'),
+(107, 107, 2, '2018-09-01 05:00:00', '2018-12-31 05:00:00', 1, NULL, '1', '1', '2018-12-10 13:30:00', NULL, '1'),
+(108, 108, 2, '2018-09-01 05:00:00', '2018-12-31 05:00:00', 1, NULL, '1', '1', '2018-12-10 13:30:00', NULL, '1'),
+(109, 109, 2, '2018-09-01 05:00:00', '2018-12-31 05:00:00', 1, NULL, '1', '1', '2018-12-10 13:30:00', NULL, '1'),
+(110, 110, 2, '2018-09-01 05:00:00', '2018-12-31 05:00:00', 1, NULL, '1', '1', '2018-12-10 13:30:00', NULL, '1'),
+(111, 111, 2, '2018-09-01 05:00:00', '2018-12-31 05:00:00', 1, NULL, '1', '1', '2018-12-10 13:30:00', NULL, '1'),
+(112, 112, 2, '2018-09-01 05:00:00', '2018-12-31 05:00:00', 1, NULL, '1', '1', '2018-12-10 13:30:00', NULL, '1'),
+(113, 113, 2, '2018-09-01 05:00:00', '2018-12-31 05:00:00', 1, NULL, '1', '1', '2018-12-10 13:30:00', NULL, '1'),
+(114, 114, 2, '2018-09-01 05:00:00', '2018-12-31 05:00:00', 1, NULL, '1', '1', '2018-12-10 13:30:00', NULL, '1'),
+(115, 115, 2, '2018-09-01 05:00:00', '2018-12-31 05:00:00', 1, NULL, '1', '1', '2018-12-10 13:30:00', NULL, '1'),
+(116, 116, 2, '2018-09-01 05:00:00', '2018-12-31 05:00:00', 1, NULL, '1', '1', '2018-12-10 13:30:00', NULL, '1'),
+(117, 117, 2, '2018-09-01 05:00:00', '2018-12-31 05:00:00', 1, NULL, '1', '1', '2018-12-10 13:30:00', NULL, '1'),
+(118, 118, 2, '2018-09-01 05:00:00', '2018-12-31 05:00:00', 1, NULL, '1', '1', '2018-12-10 13:30:00', NULL, '1'),
+(119, 119, 2, '2018-09-01 05:00:00', '2018-12-31 05:00:00', 1, NULL, '1', '1', '2018-12-10 13:30:00', NULL, '1'),
+(120, 120, 2, '2018-09-01 05:00:00', '2018-12-31 05:00:00', 1, NULL, '1', '1', '2018-12-10 13:30:00', NULL, '1'),
+(121, 121, 2, '2018-09-01 05:00:00', '2018-12-31 05:00:00', 1, NULL, '1', '1', '2018-12-10 13:30:00', NULL, '1'),
+(122, 122, 2, '2018-09-01 05:00:00', '2018-12-31 05:00:00', 1, NULL, '1', '1', '2018-12-10 13:30:00', NULL, '1'),
+(123, 123, 2, '2018-09-01 05:00:00', '2018-12-31 05:00:00', 1, NULL, '1', '1', '2018-12-10 13:30:00', NULL, '1'),
+(124, 124, 2, '2018-09-01 05:00:00', '2018-12-31 05:00:00', 1, NULL, '1', '1', '2018-12-10 13:30:00', NULL, '1'),
+(125, 125, 2, '2018-09-01 05:00:00', '2018-12-31 05:00:00', 1, NULL, '1', '1', '2018-12-10 13:30:00', NULL, '1'),
+(126, 126, 2, '2018-09-01 05:00:00', '2018-12-31 05:00:00', 1, NULL, '1', '1', '2018-12-10 13:30:00', NULL, '1'),
+(127, 127, 2, '2018-09-01 05:00:00', '2018-12-31 05:00:00', 1, NULL, '1', '1', '2018-12-10 13:30:00', NULL, '1'),
+(128, 128, 2, '2018-09-01 05:00:00', '2018-12-31 05:00:00', 1, NULL, '1', '1', '2018-12-10 13:30:00', NULL, '1'),
+(129, 129, 2, '2018-09-01 05:00:00', '2018-12-31 05:00:00', 1, NULL, '1', '1', '2018-12-10 13:30:00', NULL, '1'),
+(130, 130, 2, '2018-09-01 05:00:00', '2018-12-31 05:00:00', 1, NULL, '1', '1', '2018-12-10 13:30:00', NULL, '1'),
+(131, 131, 2, '2018-09-01 05:00:00', '2018-12-31 05:00:00', 1, NULL, '1', '1', '2018-12-10 13:30:00', NULL, '1'),
+(132, 132, 2, '2018-09-01 05:00:00', '2018-12-31 05:00:00', 1, NULL, '1', '1', '2018-12-10 13:30:00', NULL, '1'),
+(133, 133, 2, '2018-09-01 05:00:00', '2018-12-31 05:00:00', 1, NULL, '1', '1', '2018-12-10 13:30:00', NULL, '1'),
+(134, 134, 2, '2018-09-01 05:00:00', '2018-12-31 05:00:00', 1, NULL, '1', '1', '2018-12-10 13:30:00', NULL, '1'),
+(135, 135, 2, '2018-09-01 05:00:00', '2018-12-31 05:00:00', 1, NULL, '1', '1', '2018-12-10 13:30:00', NULL, '1'),
+(136, 136, 2, '2018-09-01 05:00:00', '2018-12-31 05:00:00', 1, NULL, '1', '1', '2018-12-10 13:30:00', NULL, '1'),
+(137, 137, 2, '2018-09-01 05:00:00', '2018-12-31 05:00:00', 1, NULL, '1', '1', '2018-12-10 13:30:00', NULL, '1'),
+(138, 138, 2, '2018-09-01 05:00:00', '2018-12-31 05:00:00', 1, NULL, '1', '1', '2018-12-10 13:30:00', NULL, '1'),
+(139, 139, 2, '2018-09-01 05:00:00', '2018-12-31 05:00:00', 1, NULL, '1', '1', '2018-12-10 13:30:00', NULL, '1'),
+(140, 140, 2, '2018-09-01 05:00:00', '2018-12-31 05:00:00', 1, NULL, '1', '1', '2018-12-10 13:30:00', NULL, '1');
+
+
+
+
+
 
 
 -- --------------------------------------------------------
