@@ -179,11 +179,11 @@ class OportunidadesController extends \app\components\CController {
         $modTipoOportunidad = new TipoOportunidadVenta();
         $state_oportunidad_model = new EstadoOportunidad();
         $unidad_acad_data = $uni_aca_model->consultarUnidadAcademicasEmpresa($emp_id);
-        $modalidad_data = $modalidad_model->consultarModalidad(1, 1);
+        $modalidad_data = $modalidad_model->consultarModalidad($unidad_acad_data[0]["id"], $emp_id);
         $modcanal = new Oportunidad();
-        $tipo_oportunidad_data = $modTipoOportunidad->consultarOporxUnidad(1);
+        $tipo_oportunidad_data = $modTipoOportunidad->consultarOporxUnidad($unidad_acad_data[0]["id"]);
         $state_oportunidad_data = $state_oportunidad_model->consultarEstadOportunidad();
-        $academic_study_data = $modcanal->consultarCarreraModalidad(1, 1);
+        $academic_study_data = $modcanal->consultarCarreraModalidad($unidad_acad_data[0]["id"], $modalidad_data[0]["id"]);
         $knowledge_channel_data = $modcanal->consultarConocimientoCanal(1);
         $arr_moduloEstudio = $modestudio->consultarEstudioEmpresa($respOportunidad["empresa"]); // tomar id de impresa
         $empresa_mod = new Empresa();
