@@ -201,19 +201,19 @@ class SolicitudesController extends \app\components\CController {
                 $message = array("unidad_academica" => $data_u_acad);
                 return Utilities::ajaxResponse('OK', 'alert', Yii::t('jslang', 'Success'), 'false', $message);
             }
-            if (isset($data["getmodalidad"])) {
+            if (isset($data["getmodalidad"])) {                
                 $modalidad = $mod_modalidad->consultarModalidad($data["nint_id"], $data["empresa_id"]);
                 $message = array("modalidad" => $modalidad);
                 return Utilities::ajaxResponse('OK', 'alert', Yii::t('jslang', 'Success'), 'false', $message);
                 return;
             }
-            if (isset($data["getmetodo"])) {
+            if (isset($data["getmetodo"])) {                                                                   
                 $metodos = $mod_metodo->consultarMetodoIngNivelInt($data['nint_id']);
                 $message = array("metodos" => $metodos);
                 return Utilities::ajaxResponse('OK', 'alert', Yii::t('jslang', 'Success'), 'false', $message);
                 return;
             }
-            if (isset($data["getcarrera"])) {
+            if (isset($data["getcarrera"])) {                            
                 if ($data["empresa_id"] == 1) {
                     $carrera = $modcanal->consultarCarreraModalidad($data["unidada"], $data["moda_id"]);
                 } else {
@@ -228,8 +228,13 @@ class SolicitudesController extends \app\components\CController {
                 $message = array("descuento" => $descuentos);
                 return Utilities::ajaxResponse('OK', 'alert', Yii::t('jslang', 'Success'), 'false', $message);                
             }
-            if (isset($data["getitem"])) {                   
-                $resItem = $modItemMetNivel->consultarXitemPrecio($data["unidada"], $data["moda_id"], $data["metodo"], $data["carrera_id"], $data["empresa_id"]);              
+            if (isset($data["getitem"])) {                 
+                if ($data["empresa_id"] != 1) {
+                    $metodo = 0;
+                } else {
+                    $metodo = $data["metodo"];
+                }
+                $resItem = $modItemMetNivel->consultarXitemPrecio($data["unidada"], $data["moda_id"], $metodo, $data["carrera_id"], $data["empresa_id"]);              
                 $message = array("items" => $resItem);
                 return Utilities::ajaxResponse('OK', 'alert', Yii::t('jslang', 'Success'), 'false', $message);                
             }
@@ -238,11 +243,27 @@ class SolicitudesController extends \app\components\CController {
                 $message = array("precio" => $resp_precio["precio"]);
                 return Utilities::ajaxResponse('OK', 'alert', Yii::t('jslang', 'Success'), 'false', $message);                
             }
-            if (isset($data["getpreciodescuento"])) {                 
-                $modDescuento = new DetalleDescuentoItem();
-                $respDescuento = $modDescuento->consultarValdctoItem($data["descuento_id"]);
-                \app\models\Utilities::putMessageLogFile('paso:'.$respDescuento["ddit_tipo_beneficio"]);
-                $message = array("preciodescuento" => $respDescuento);
+            if (isset($data["getpreciodescuento"])) {                                 
+                $resp_precio = $mod_solins->ObtenerPrecioXitem($data["ite_id"]);                  
+                \app\models\Utilities::putMessageLogFile('descuento:'.$data["descuento_id"]);                
+                \app\models\Utilities::putMessageLogFile('precio:'.$resp_precio["precio"]);                
+                if ($data["descuento_id"] > 0) {                        
+                    $respDescuento = $modDescuento->consultarValdctoItem($data["descuento_id"]); 
+                    if ($resp_precio["precio"] == 0) {                                    
+                        $precioDescuento = 0;   
+                    } else {                                     
+                        if ($respDescuento["ddit_tipo_beneficio"] == 'P') {
+                            $descuento = ($resp_precio["precio"] * $respDescuento["ddit_porcentaje"])/100;
+                        } else {
+                            $descuento = $respDescuento["ddit_valor"];
+                        }                   
+                        $precioDescuento = $resp_precio["precio"]-$descuento; 
+                    }   
+                } else {
+                    $precioDescuento = 0;  
+                }         
+                \app\models\Utilities::putMessageLogFile('precio descuento:'.$precioDescuento);                
+                $message = array("preciodescuento" => $precioDescuento);
                 return Utilities::ajaxResponse('OK', 'alert', Yii::t('jslang', 'Success'), 'false', $message);                
             }           
         }
@@ -322,6 +343,7 @@ class SolicitudesController extends \app\components\CController {
             $mod_id = $data["modalidad"];
             $car_id = $data["carrera"];
             $emp_id = $data["emp_id"];
+            $ite_id = $data["ite_id"];   
             if ($emp_id > 1) {
                 $mest_id = $car_id;
                 $carrera_id = "";
@@ -342,7 +364,6 @@ class SolicitudesController extends \app\components\CController {
                 $pre_observacion = null;
                 $fec_preobservacion = null;
             }
-
             $interesado_id = $id_int;
             $subirDocumentos = $data["subirDocumentos"];
             $mod_solins = new SolicitudInscripcion();
@@ -351,7 +372,8 @@ class SolicitudesController extends \app\components\CController {
             if ($beca == "1") {
                 $precio = 0;
             } else {
-                $resp_precio = $mod_solins->ObtenerPrecio($ming_id, $nint_id, $mod_id, $car_id);
+                //$resp_precio = $mod_solins->ObtenerPrecio($ming_id, $nint_id, $mod_id, $car_id);  //hasta el 9 de diciembre/2018.
+                $resp_precio = $mod_solins->ObtenerPrecioXitem($ite_id);                  
                 if ($resp_precio) {
                     $precio = $resp_precio['precio'];
                 } else {
@@ -359,8 +381,7 @@ class SolicitudesController extends \app\components\CController {
                     $errorprecio = 0;
                 }
             }
-            $observacion = ucwords(mb_strtolower($data["observacion"])); 
-            $ite_id = $data["ite_id"];       
+            $observacion = ucwords(mb_strtolower($data["observacion"]));                 
             if ($errorprecio != 0) {
                 //Validar que no exista el registro en solicitudes.                    
                 $resp_valida = $mod_solins->Validarsolicitud($interesado_id, $nint_id, $ming_id, $car_id);

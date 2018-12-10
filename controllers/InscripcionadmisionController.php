@@ -208,10 +208,8 @@ class InscripcionadmisionController extends \yii\web\Controller {
                     $resul = $model->actualizarInscripcion($data);
                     //$model->insertaOriginal($resul["ids"]);
                 }else if($accion == "Fin"){
-                    $Ids = isset($data['codigo']) ? $data['codigo'] : 0;
-                    
-                    $resul=$model->insertaOriginal($Ids);
-                    
+                    $Ids = isset($data['codigo']) ? $data['codigo'] : 0;                    
+                    $resul=$model->insertaOriginal($Ids);                    
                 }
                 if ($resul['status']) {
                     $message = array(
