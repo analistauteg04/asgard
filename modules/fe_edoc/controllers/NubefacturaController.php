@@ -12,6 +12,7 @@ use app\modules\fe_edoc\models\VSacceso;
 use app\modules\fe_edoc\models\mailSystem;
 use app\modules\fe_edoc\models\REPORTES;
 use app\modules\fe_edoc\models\USUARIO;
+use app\models\ExportFile;
 use yii\helpers\ArrayHelper;
 use yii\base\Exception;
 
@@ -49,12 +50,22 @@ class NubefacturaController extends \app\components\CController {
             //$contBuscar = isset($_POST['CONT_BUSCAR']) ? json_encode($_POST['CONT_BUSCAR']) : array();
             //echo CJSON::encode($modelo->mostrarDocumentos($contBuscar));
             $arrayData = array();
-            $contBuscar = isset($data['CONT_BUSCAR']) ? json_encode($data['CONT_BUSCAR']) : array();
-            $contBuscar[0]['PAGE'] = isset($data['page']) ? $data['page'] : 0;
+            $contBuscar = isset($data['CONT_BUSCAR']) ? json_decode($data['CONT_BUSCAR'],true) : array();
+            //$contBuscar[0]['PAGE'] = isset($data['page']) ? $data['page'] : 0;
             $arrayData = $modelo->mostrarDocumentos($contBuscar);
             return $this->render('_indexGrid', array(
                 'model' => $arrayData,
                     ));
+        }
+        if (Yii::$app->request->isAjax) {
+            $valor = isset($_POST['valor']) ? $_POST['valor'] : "";
+            $op = isset($_POST['op']) ? $_POST['op'] : "";
+            $arrayData = array();
+            $data = new NubeFactura();
+            $arrayData = $data->retornarPersona($valor, $op);
+            header('Content-type: application/json');
+            echo json_encode($arrayData);
+            return;
         }
         //$this->view->title = Yii::t('DOCUMENTOS', 'Bills');
         return $this->render('index', array(
@@ -65,10 +76,11 @@ class NubefacturaController extends \app\components\CController {
         ));
     }
 
-    public function actionGenerarPdf($ids) {
+    public function actionGenerarpdf($ids) {
         try {
             $ids = isset($_GET['ids']) ? base64_decode($_GET['ids']) : NULL;
-            $rep=new REPORTES;
+            $rep= $report = new ExportFile();
+            $this->view->title = "Invoices";
             $modelo = new NubeFactura(); //Ejmpleo code 3
             $cabFact = $modelo->mostrarCabFactura($ids);
             $detFact = $modelo->mostrarDetFacturaImp($ids);
@@ -76,35 +88,22 @@ class NubefacturaController extends \app\components\CController {
             $pagFact = $modelo->mostrarFormaPago($ids);
             $adiFact = $modelo->mostrarFacturaDataAdicional($ids);
             $venFact= VSDocumentos::buscarDatoVendedor($cabFact['USU_ID']);//DATOS DEL VENDEDOR QUE AUTORIZO
-            $mPDF1=$rep->crearBaseReport();
-            $Titulo=Yii::$app->getSession()->get('RazonSocial', FALSE) . " - " . $cabFact['NombreDocumento'];
-            $nameFile=$cabFact['NombreDocumento'] . '-' . $cabFact['NumDocumento'];
-            $Contenido=$this->render('facturaPDF', array(
-                        'cabFact' => $cabFact,
-                        'detFact' => $detFact,
-                        'impFact' => $impFact,
-                        'pagFact' => $pagFact,
-                        'adiFact' => $adiFact,
-                        'venFact' => $venFact,
-                                ));
-             $mPDF1->SetTitle($Titulo);
-             $mPDF1->WriteHTML($Contenido); //hacemos un render partial a una vista preparada, en este caso es la vista docPDF
-             $mPDF1->Output($nameFile, 'I');
+
+            $rep->orientation = "P"; // tipo de orientacion L => Horizontal, P => Vertical    
+            $rep->createReportPdf(
+                $this->render('facturaPDF', [
+                    'cabFact' => $cabFact,
+                    'detFact' => $detFact,
+                    'impFact' => $impFact,
+                    'pagFact' => $pagFact,
+                    'adiFact' => $adiFact,
+                    'venFact' => $venFact,
+                ])
+            );
+            $rep->mpdf->Output('Reporte_' . date("Ymdhis") . ".pdf", ExportFile::OUTPUT_TO_DOWNLOAD); 
             //exit;
         } catch (Exception $e) {
-            $this->errorControl($e);
-        }
-    }
-
-    public function actionBuscarPersonas() {
-        if (Yii::$app->request->isAjax) {
-            $valor = isset($_POST['valor']) ? $_POST['valor'] : "";
-            $op = isset($_POST['op']) ? $_POST['op'] : "";
-            $arrayData = array();
-            $data = new NubeFactura();
-            $arrayData = $data->retornarPersona($valor, $op);
-            header('Content-type: application/json');
-            echo json_encode($arrayData);
+            echo $e->getMessage();
         }
     }
 
@@ -119,7 +118,7 @@ class NubefacturaController extends \app\components\CController {
         }
     }
 
-    public function actionGenerarXml($ids) {
+    public function actionGenerarxml($ids) {
         $ids = isset($_GET['ids']) ? base64_decode($_GET['ids']) : NULL;
         $modelo = new NubeFactura();
         $firmaDig = new VSFirmaDigital();
@@ -137,14 +136,22 @@ class NubefacturaController extends \app\components\CController {
         ));
     }
     
-    public function actionXmlAutorizado($ids) {
+    public function actionXmlautorizado($ids) {
         $ids = isset($_GET['ids']) ? base64_decode($_GET['ids']) : NULL;
         $modelo = new NubeFactura();
         $nomDocfile= array();
         $nomDocfile=$modelo->mostrarRutaXMLAutorizado($ids);
-        return $this->render('facturaAutXML', array(
-            'nomDocfile' => $nomDocfile,
-        ));
+        if ($nomDocfile["EstadoDocumento"] == "AUTORIZADO") { // Si retorna un Valor en el Array
+            $nombreDocumento = $nomDocfile["NombreDocumento"];
+            //echo "file created";exit;
+            header('Content-type: text/xml');   // i am getting error on this line
+            //Cannot modify header information - headers already sent by (output started at D:\xampp\htdocs\yii\framework\web\CController.php:793)
+            header('Content-Disposition: Attachment; filename="' . $nombreDocumento . '"');
+            // File to download
+            readfile($nomDocfile["DirectorioDocumento"] . $nombreDocumento);        // i am not able to download the same file
+        } else {
+            echo "Documento No autorizado";
+        }
     }
 
     public function actionEnviarDocumento() {

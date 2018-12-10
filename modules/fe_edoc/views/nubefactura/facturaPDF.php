@@ -56,7 +56,7 @@
         $contador = count($cabFact);
         if ($cabFact !== null) {
             ?>
-            <?php echo $this->renderPartial('_barcode', array('cabFact' => $cabFact)); ?>
+            <?= $this->render('_barcode', array('cabFact' => $cabFact)); ?>
             <table style="width:100%;">
                 <tbody>
                     <tr>
@@ -67,12 +67,12 @@
                             <?php echo CHtml::image(Yii::$app->theme->baseUrl . '/images/plantilla/logoPDF.png', 'Utimpor', array('width' => '250px', 'height' => '110px')); ?>
                         </td>
                         <td rowspan="2" style="width:50%">
-                            <?php echo $this->renderPartial('_frm_CabFact', array('cabFact' => $cabFact)); ?>
+                            <?php echo $this->render('_frm_CabFact', array('cabFact' => $cabFact)); ?>
                         </td>
                     </tr>
                     <tr>
                         <td style="width:50%;vertical-align: bottom">
-                            <?php echo $this->renderPartial('_frm_DataEmpresa'); ?>
+                            <?php echo $this->render('_frm_DataEmpresa'); ?>
                         </td>
                     </tr>
                 </tbody>
@@ -81,7 +81,7 @@
                 <tbody>
                     <tr>
                         <td>
-                            <?php echo $this->renderPartial('_frm_DataCliente', array('cabFact' => $cabFact)); ?>
+                            <?php echo $this->render('_frm_DataCliente', array('cabFact' => $cabFact)); ?>
                         </td>
                     </tr>
                 </tbody>
@@ -92,7 +92,7 @@
                     <tr>
 
                         <td style="width:50%">
-                            <?php echo $this->renderPartial('_frm_DetFact', array('detFact' => $detFact)); ?>
+                            <?php echo $this->render('_frm_DetFact', array('detFact' => $detFact)); ?>
                         </td>
                     </tr>
                 </tbody>
@@ -101,11 +101,11 @@
                 <tbody>
                     <tr>
                         <td style="width:70%;vertical-align: top">
-                            <?php echo $this->renderPartial('_frm_DataAuxFact', array('adiFact' => $adiFact,'pagFact' => $pagFact)); ?>
+                            <?php echo $this->render('_frm_DataAuxFact', array('adiFact' => $adiFact,'pagFact' => $pagFact)); ?>
                         </td>
                         <td style="width:30%">
                             <div>
-                                <?php echo $this->renderPartial('_frm_TotFact', array('impFact' => $impFact, 'cabFact' => $cabFact)); ?>
+                                <?php echo $this->render('_frm_TotFact', array('impFact' => $impFact, 'cabFact' => $cabFact)); ?>
                             </div>
                         </td>
                     </tr>

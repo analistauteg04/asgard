@@ -136,8 +136,8 @@ class NuberetencionController extends \app\components\CController  {
             //$contBuscar = isset($_POST['CONT_BUSCAR']) ? json_encode($_POST['CONT_BUSCAR']) : array();
             //echo CJSON::encode($modelo->mostrarDocumentos($contBuscar));
             $arrayData = array();
-            $contBuscar = isset($_POST['CONT_BUSCAR']) ? json_encode($_POST['CONT_BUSCAR']) : array();
-            $contBuscar[0]['PAGE'] = isset($_GET['page']) ? $_GET['page'] : 0;
+            $contBuscar = isset($_POST['CONT_BUSCAR']) ? json_decode($_POST['CONT_BUSCAR'], true) : array();
+            //$contBuscar[0]['PAGE'] = isset($_GET['page']) ? $_GET['page'] : 0;
             $arrayData = $modelo->mostrarDocumentos($contBuscar);
             return $this->render('_indexGrid', array(
                 'model' => $arrayData,

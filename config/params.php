@@ -44,6 +44,7 @@ return [
     'MaxFileSize' => 1024, //Tamaño 1 MB
     'timeRecursive' => '2', // segundos
     'numRecursive' => '3',
+    'currency' => '$',
     'keywordEncription' => 'PBdoHUHYU909854874HNGFGKO',
     'tokenid' => 'HU787390kdnhyyejkKJHWFRDERD3573LOSNQ2JKTDCA67253',
     'numbersecret' => '29839813213464',

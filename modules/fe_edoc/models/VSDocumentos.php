@@ -189,7 +189,7 @@ class VSDocumentos extends \app\modules\fe_edoc\components\CActiveRecord{
     public static function buscarDatoVendedor($vend_id) {
         $rawData = array();
         $conApp = Yii::$app->db;
-        $sql = "SELECT USU_NOMBRE NombreUser,USU_ALIAS Alias,USU_CORREO CorreoUser FROM " . $conApp->dbname . ".USUARIO WHERE USU_ID='$vend_id';";
+        $sql = "SELECT u.usu_user NombreUser, u.usu_user Alias, p.per_correo CorreoUser FROM " . $conApp->dbname . ".usuario u inner join " . $conApp->dbname . ".persona p on p.per_id=u.per_id WHERE usu_id='$vend_id';";
         $rawData = $conApp->createCommand($sql)->queryOne();  //Un solo Registro => $rawData['RazonSocial']
         return $rawData;
     }

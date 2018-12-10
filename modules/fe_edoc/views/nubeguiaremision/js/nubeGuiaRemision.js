@@ -54,7 +54,7 @@ function autocompletarBuscarPersona(requestq, responseq, control, op) {
     arrParams.valor = $('#' + control).val();
     arrParams.op = op;
     requestHttpAjax(link, arrParams, function (response) {
-        showAlert(response.status, response.label, response.message);
+        //showAlert(response.status, response.label, response.message);
         //if (response.status == 'OK') {
         var arrayList = new Array;
         var count = data.length;
@@ -71,7 +71,7 @@ function autocompletarBuscarPersona(requestq, responseq, control, op) {
             arrayList[i] = row;
         }
         sessionStorage.src_buscIndex = JSON.stringify(arrayList);//dss=>DataSessionStore
-        response(arrayList);
+        responseq(arrayList);
         //}
     }, true);
 }

@@ -48,13 +48,13 @@ function controlBuscarIndex(control,op){
     //return JSON.stringify(buscarArray);
 }
 
-function autocompletarBuscarPersona(request, response,control,op){
+function autocompletarBuscarPersona(requestq, responseq,control,op){
     var link = $('#txth_base').val() +"/fe_edoc/nuberetencion/BuscarPersonas";
     var arrParams = new Object();
     arrParams.valor = $('#' + control).val();
     arrParams.op = op;
     requestHttpAjax(link, arrParams, function (response) {
-        showAlert(response.status, response.label, response.message);
+        //showAlert(response.status, response.label, response.message);
         //if (response.status == 'OK') {
         var arrayList = new Array;
         var count = data.length;
@@ -71,7 +71,7 @@ function autocompletarBuscarPersona(request, response,control,op){
             arrayList[i] = row;
         }
         sessionStorage.src_buscIndex = JSON.stringify(arrayList);//dss=>DataSessionStore
-        response(arrayList); 
+        responseq(arrayList); 
         //}
     }, true);         
 }
