@@ -24,8 +24,7 @@ use yii\helpers\Html;
                             "arr_prov_dom" => $arr_prov_dom,
                             "arr_ciu_dom" => $arr_ciu_dom,                            
                             "arr_medio" => $arr_medio,
-                            "arr_conuteg" => $arr_conuteg,
-                            
+                            "arr_conuteg" => $arr_conuteg,                            
                         ]);
                     ?>
                 </form>
@@ -47,6 +46,7 @@ use yii\helpers\Html;
                             "arr_carrerra1" => $arr_carrerra1,
                             "arr_metodos" => $arr_metodos,
                             "arr_descuento" => $arr_descuento,
+                            "arr_item" => $arr_item,
                         ]);
                     ?>                  
                 </form>

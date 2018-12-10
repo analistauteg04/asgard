@@ -7,6 +7,7 @@ use app\modules\academico\models\PeriodoAcademicoMetIngreso;
 use app\modules\academico\models\MatriculadosReprobado;
 use app\modules\academico\models\EstudioAcademico;
 use app\modules\academico\models\Admitido;
+use app\modules\admision\models\ItemMetodoUnidad;
 use app\modules\financiero\models\DetalleDescuentoItem;
 use yii\helpers\ArrayHelper;
 use app\models\Utilities;
@@ -275,6 +276,7 @@ class MatriculadosreprobadosController extends \app\components\CController {
         $modcanal = new Oportunidad();
         $mod_metodo = new MetodoIngreso();
         $mod_inscripcion = new InscripcionAdmision();
+        $modItemMetNivel = new ItemMetodoUnidad();
         $modDescuento = new DetalleDescuentoItem();
         if (Yii::$app->request->isAjax) {
             $data = Yii::$app->request->post();
@@ -310,8 +312,51 @@ class MatriculadosreprobadosController extends \app\components\CController {
                 $message = array("metodos" => $metodos);
                 return Utilities::ajaxResponse('OK', 'alert', Yii::t('jslang', 'Success'), 'false', $message);
             }
+            if (isset($data["getdescuento"])) {                
+                $resItems = $modItemMetNivel->consultarXitemMetniv($data["unidada"], $data["moda_id"], $data["metodo"], $data["empresa_id"], $data["carrera_id"]);                            
+                $descuentos = $modDescuento->consultarDesctoxitem($resItems["ite_id"]);
+                $message = array("descuento" => $descuentos);
+                return Utilities::ajaxResponse('OK', 'alert', Yii::t('jslang', 'Success'), 'false', $message);                
+            }
+            if (isset($data["getitem"])) {                 
+                if ($data["empresa_id"] != 1) {
+                    $metodo = 0;
+                } else {
+                    $metodo = $data["metodo"];
+                }
+                $resItem = $modItemMetNivel->consultarXitemPrecio($data["unidada"], $data["moda_id"], $metodo, $data["carrera_id"], $data["empresa_id"]);              
+                $message = array("items" => $resItem);
+                return Utilities::ajaxResponse('OK', 'alert', Yii::t('jslang', 'Success'), 'false', $message);                
+            }
+            if (isset($data["getprecio"])) {                                
+                $resp_precio = $mod_solins->ObtenerPrecioXitem($data["ite_id"]);                  
+                $message = array("precio" => $resp_precio["precio"]);
+                return Utilities::ajaxResponse('OK', 'alert', Yii::t('jslang', 'Success'), 'false', $message);                
+            }
+            if (isset($data["getpreciodescuento"])) {                                 
+                $resp_precio = $mod_solins->ObtenerPrecioXitem($data["ite_id"]);                  
+                \app\models\Utilities::putMessageLogFile('descuento:'.$data["descuento_id"]);                
+                \app\models\Utilities::putMessageLogFile('precio:'.$resp_precio["precio"]);                
+                if ($data["descuento_id"] > 0) {                        
+                    $respDescuento = $modDescuento->consultarValdctoItem($data["descuento_id"]); 
+                    if ($resp_precio["precio"] == 0) {                                    
+                        $precioDescuento = 0;   
+                    } else {                                     
+                        if ($respDescuento["ddit_tipo_beneficio"] == 'P') {
+                            $descuento = ($resp_precio["precio"] * $respDescuento["ddit_porcentaje"])/100;
+                        } else {
+                            $descuento = $respDescuento["ddit_valor"];
+                        }                   
+                        $precioDescuento = $resp_precio["precio"]-$descuento; 
+                    }   
+                } else {
+                    $precioDescuento = 0;  
+                }         
+                \app\models\Utilities::putMessageLogFile('precio descuento:'.$precioDescuento);                
+                $message = array("preciodescuento" => $precioDescuento);
+                return Utilities::ajaxResponse('OK', 'alert', Yii::t('jslang', 'Success'), 'false', $message);                
+            }
         }
-        $arr_descuento = $modDescuento->consultarDesctoxitem($resp_item["ite_id"]);
         $arr_pais_dom = Pais::find()->select("pai_id AS id, pai_nombre AS value")->where(["pai_estado_logico" => "1", "pai_estado" => "1"])->asArray()->all();
         $pais_id = 1; //Ecuador
         $arr_prov_dom = Provincia::provinciaXPais($pais_id);
@@ -323,7 +368,9 @@ class MatriculadosreprobadosController extends \app\components\CController {
         $arr_carrerra1 = $modcanal->consultarCarreraModalidad(1, $arr_modalidad[0]["id"]);
         $arr_metodos = $mod_metodo->consultarMetodoUnidadAca_2($arr_ninteres[0]["id"]);
         $_SESSION['JSLANG']['Your information has not been saved. Please try again.'] = Yii::t('notificaciones', 'Your information has not been saved. Please try again.');
-
+        //Descuentos y precios.
+        $resp_item = $modItemMetNivel->consultarXitemPrecio(1, 1, 1, 2, 1);
+        $arr_descuento = $modDescuento->consultarDesctoxitem($resp_item["ite_id"]);
         return $this->render('new', [
                     "tipos_dni" => array("CED" => Yii::t("formulario", "DNI Document"), "PASS" => Yii::t("formulario", "Passport")),
                     "tipos_dni2" => array("CED" => Yii::t("formulario", "DNI Document1"), "PASS" => Yii::t("formulario", "Passport1")),
@@ -338,6 +385,7 @@ class MatriculadosreprobadosController extends \app\components\CController {
                     "arr_conuteg" => ArrayHelper::map($arr_conuteg, "id", "name"),
                     "arr_carrerra1" => ArrayHelper::map($arr_carrerra1, "id", "name"),
                     "arr_metodos" => ArrayHelper::map($arr_metodos, "id", "name"),
+                    "arr_item" => ArrayHelper::map(array_merge(["id" => "0", "name" => "Seleccionar"], $resp_item), "id", "name"), 
                     "resp_datos" => $resp_datos,
         ]);
     }
