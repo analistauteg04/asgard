@@ -24,7 +24,7 @@ class SybaseNC {
         $obj_con = new cls_BaseSybase();
         $pdo = $obj_con->conexionSybase();
         try {
-             $sql = "SELECT TOP $limit * FROM DBA.TCIDE_FACTURANC_TEMP WHERE estado_proceso=0 "
+            $sql = "SELECT TOP $limit * FROM DBA.TCIDE_FACTURANC_TEMP WHERE estado_proceso=0 "
                     . " AND TIPOCOMPROBANTE='04'";
             $comando = $pdo->prepare($sql);
             $comando->execute();
@@ -33,14 +33,14 @@ class SybaseNC {
                 for ($i = 0; $i < sizeof($rows); $i++) {
                     //putMessageLogFile($rows[$i]['SYS_FACTURANC_ID']);
                     $tipEdoc = $this->tipoDoc;//"01";
-                    $cabFact = $rows[$i];//Cabecera de Factura
-                    $detFact = $this->consultarSybDetFacturas($pdo, $cabFact['SYS_FACTURANC_ID']);
-                    //$dadcFact = $this->consultarSybDatAdiFacturas($pdo, $cabFact['SYS_FACTURANC_ID']);
-                    //$fpagFact = $this->consultarSybForPagFacturas($pdo, $cabFact['SYS_FACTURANC_ID']);
+                    $cabEdoc = $rows[$i];//Cabecera de Factura
+                    $detEdoc = $this->consultarSybDetFacturas($pdo, $cabEdoc['SYS_FACTURANC_ID']);
+                    $dadcEdoc = null;//$this->consultarSybDatAdiFacturas($pdo, $cabEdoc['SYS_FACTURANC_ID']);
+                    $fpagEdoc = null;//$this->consultarSybForPagFacturas($pdo, $cabEdoc['SYS_FACTURANC_ID']);
 
                     $response = Http::connect($WS_HOST, $WS_PORT)->doPost($WS_URI, 
-                            array('tipoEdoc' => $tipEdoc, 'cabEdoc' => json_encode($cabFact), 'detEdoc' => json_encode($detFact), 
-                                  'dadcEdoc' => json_encode($dadcFact), 'fpagEdoc' => json_encode($fpagFact)));
+                            array('tipoEdoc' => $tipEdoc, 'cabEdoc' => json_encode($cabEdoc), 'detEdoc' => json_encode($detFact), 
+                                  'dadcEdoc' => json_encode($dadcEdoc), 'fpagEdoc' => json_encode($fpagEdoc)));
                     //putMessageLogFile($response);
                     $arr_response = json_decode($response, true);
                     if ($arr_response["state"] == 200 && $arr_response["error"] == 'false') {

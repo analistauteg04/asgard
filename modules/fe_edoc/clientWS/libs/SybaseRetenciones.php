@@ -39,7 +39,7 @@ class SybaseRetenciones {
                     //$fpagFact = $this->consultarSybForPagFacturas($pdo, $cabFact['SYS_RETENCION_ID']);
 
                     $response = Http::connect($WS_HOST, $WS_PORT)->doPost($WS_URI, 
-                            array('tipoEdoc' => $tipEdoc, 'cabEdoc' => json_encode($cabDoc), 'detEdoc' => json_encode($detFact), 
+                            array('tipoEdoc' => $tipEdoc, 'cabEdoc' => json_encode($cabDoc), 'detEdoc' => json_encode($detDoc), 
                                   'dadcEdoc' => json_encode($dadcDoc), 'fpagEdoc' => json_encode($fpagFact)));
                     //putMessageLogFile($response);
                     $arr_response = json_decode($response, true);

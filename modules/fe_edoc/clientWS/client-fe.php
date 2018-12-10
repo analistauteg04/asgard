@@ -2,6 +2,7 @@
 
 include_once('libs/SybaseFactura.php');//para HTTP
 include_once('libs/SybaseRetenciones.php');//para HTTP
+include_once('libs/SybaseNC.php');//para HTTP 
 
 $objFac = new SybaseFactura();
 $res=$objFac->consultarSybCabFacturas();
