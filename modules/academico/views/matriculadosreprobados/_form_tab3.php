@@ -49,6 +49,8 @@ use yii\helpers\Url;
 use yii\widgets\ActiveForm;
 use app\components\CFileInputAjax;
 use app\modules\financiero\Module as financiero;
+
+financiero::registerTranslations();
 ?>
 
 <form class="form-horizontal">
@@ -78,6 +80,14 @@ use app\modules\financiero\Module as financiero;
             </div>
         </div>
     </div>
+    <div class='col-md-12 col-sm-12 col-xs-12 col-lg-12'>
+            <div class="form-group">
+                <label for="cmb_empresa" class="col-lg-3 col-md-3 col-sm-3 col-xs-3 control-label keyupmce"><?= Yii::t("formulario", "Company") ?></label>
+                <div class="col-lg-9 col-md-9 col-sm-9 col-xs-9">
+                    <?= Html::dropDownList("cmb_empresa", 1, $arr_empresa, ["class" => "form-control", "id" => "cmb_empresa",]) ?>
+                </div>
+            </div>
+    </div>
     <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
         <div class="form-group">            
             <label for="cmb_unidad_solicitud" class="col-lg-3 col-md-3 col-sm-3 col-xs-3 control-label"><?= Yii::t("formulario", "Academic unit") ?> <span class="text-danger">*</span></label>
@@ -90,7 +100,7 @@ use app\modules\financiero\Module as financiero;
         <div class="form-group">            
             <label for="cmb_modalidad_solicitud" class="col-lg-3 col-md-3 col-sm-3 col-xs-3 control-label"><?= Yii::t("formulario", "Mode") ?> <span class="text-danger">*</span></label>
             <div class="col-lg-9 col-md-9 col-sm-9 col-xs-9">
-                <?= Html::dropDownList("cmb_modalidad_solicitud", 0, $arr_modalidad, ["class" => "form-control", "id" => "cmb_modalidad_solicitud"]) ?>
+                <?= Html::dropDownList("cmb_modalidad_solicitud", 0, $arr_modalidad, ["class" => "form-control", "id" => "cmb_modalidad_solicitud"]) ?> 
             </div>
         </div>
     </div>

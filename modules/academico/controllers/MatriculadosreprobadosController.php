@@ -12,6 +12,7 @@ use app\modules\financiero\models\DetalleDescuentoItem;
 use yii\helpers\ArrayHelper;
 use app\models\Utilities;
 use app\models\Persona;
+use app\models\Empresa;
 use app\models\Provincia;
 use app\models\Pais;
 use app\models\Canton;
@@ -281,6 +282,7 @@ class MatriculadosreprobadosController extends \app\components\CController {
         $per_id = Yii::$app->session->get("PB_perid");
         $mod_persona = Persona::findIdentity($per_id);
         $mod_modalidad = new Modalidad();
+        $empresa_mod = new Empresa();
         $mod_pergestion = new PersonaGestion();
         $mod_unidad = new UnidadAcademica();
         $modcanal = new Oportunidad();
@@ -369,6 +371,7 @@ class MatriculadosreprobadosController extends \app\components\CController {
         }
         $arr_pais_dom = Pais::find()->select("pai_id AS id, pai_nombre AS value")->where(["pai_estado_logico" => "1", "pai_estado" => "1"])->asArray()->all();
         $pais_id = 1; //Ecuador
+        $empresa = $empresa_mod->getAllEmpresa();
         $arr_prov_dom = Provincia::provinciaXPais($pais_id);
         $arr_ciu_dom = Canton::cantonXProvincia($arr_prov_dom[0]["id"]);
         $arr_medio = MedioPublicitario::find()->select("mpub_id AS id, mpub_nombre AS value")->where(["mpub_estado_logico" => "1", "mpub_estado" => "1"])->asArray()->all();
@@ -396,6 +399,7 @@ class MatriculadosreprobadosController extends \app\components\CController {
                     "arr_carrerra1" => ArrayHelper::map($arr_carrerra1, "id", "name"),
                     "arr_metodos" => ArrayHelper::map($arr_metodos, "id", "name"),
                     "arr_item" => ArrayHelper::map(array_merge(["id" => "0", "name" => "Seleccionar"], $resp_item), "id", "name"), 
+                    "arr_empresa" => ArrayHelper::map($empresa, "id", "value"),
                     "resp_datos" => $resp_datos,
         ]);
     }
