@@ -680,7 +680,7 @@ class MatriculadosReprobado extends \yii\db\ActiveRecord {
             $sql = "UPDATE " . $con->dbname . '.' . $name_table .
                     " SET $params_sql" .
                     " WHERE twre_id=$id";
-            //\app\models\Utilities::putMessageLogFile('sql: ' . $sql);
+            \app\models\Utilities::putMessageLogFile('sql: ' . $sql);
             $comando = $con->createCommand($sql);
             $result = $comando->execute();
             $trans->commit();
@@ -708,7 +708,6 @@ class MatriculadosReprobado extends \yii\db\ActiveRecord {
         $search = ".$typeFile";
         $replace = "_$timeSt" . ".$typeFile";
         $newFile = str_replace($search, $replace, $file);
-        \app\models\Utilities::putMessageLogFile("direccion archivo: ".$baseFile . $file.$matre_id);        
         if (rename($baseFile . $file, $baseFile . $newFile)) {
             return $newFile;
         }

@@ -98,7 +98,7 @@ class MatriculadosreprobadosController extends \app\components\CController {
                         , 'twre_metodo_ingreso', 'ruta_doc_titulo', 'ruta_doc_dni'
                         , 'ruta_doc_certvota', 'ruta_doc_foto', 'ruta_doc_certificado'
                         , 'ruta_doc_hojavida', 'twre_mensaje1', 'twre_mensaje2'
-                        , 'twre_fecha_solicitud', 'sdes_id'
+                        , 'twre_fecha_solicitud', 'sdes_id', 'ite_id'
                     ];
                     //ruta_doc_titulo
                     $path_title = $data["DATA_1"][0]['ruta_doc_titulo'];
@@ -132,7 +132,7 @@ class MatriculadosreprobadosController extends \app\components\CController {
                         $arrIm = explode(".", basename($path_title_true));
                         $typeFile = strtolower($arrIm[count($arrIm) - 1]);
                         $titulo_archivoOld = Yii::$app->params["documentFolder"] . "academico/" . $matr_repro_id . "/doc_titulo_per_" . $matr_repro_id . "." . $typeFile;
-                        \app\models\Utilities::putMessageLogFile('address'. $titulo_archivoOld);                        
+                        \app\models\Utilities::putMessageLogFile('address: '. $titulo_archivoOld);                        
                         $titulo_archivo = MatriculadosReprobado::addLabelTimeDocumentos($matr_repro_id, $titulo_archivoOld, $timeSt);
                         $data["DATA_1"][0]["ruta_doc_titulo"] = $titulo_archivo;
                         if ($titulo_archivo === false)
@@ -163,9 +163,10 @@ class MatriculadosreprobadosController extends \app\components\CController {
                         $data["DATA_1"][0]['ming_id'], $data["DATA_1"][0]["ruta_doc_titulo"], $data["DATA_1"][0]["ruta_doc_dni"],
                         $data["DATA_1"][0]["ruta_doc_certvota"], $data["DATA_1"][0]['ruta_doc_foto'], $data["DATA_1"][0]["ruta_doc_certvota"],
                         $data["DATA_1"][0]['ruta_doc_hojavida'], $data["DATA_1"][0]['twre_mensaje1'], $data["DATA_1"][0]['twre_mensaje2'],
-                        $data["DATA_1"][0]['fecha_solicitud'],$data["DATA_1"][0]['sdes_id']
+                        $data["DATA_1"][0]['fecha_solicitud'],$data["DATA_1"][0]['sdes_id'],$data["DATA_1"][0]['ite_id']
                     ];
-                    \app\models\Utilities::putMessageLogFile('Va actualizar la temporal');
+                    \app\models\Utilities::putMessageLogFile('Tabla Temporal');                    
+                    $cadena_presentar="";
                     $resul = $model->actualizarReprobadoTemp($con, $data["DATA_1"][0]['twre_id'], $values_act, $keys_act, 'temporal_wizard_reprobados');
                     if($data["PASO"]==3){
                         \app\models\Utilities::putMessageLogFile('Se va actualizar la tabla de asgard');
