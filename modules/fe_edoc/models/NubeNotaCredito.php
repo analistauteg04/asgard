@@ -159,10 +159,10 @@ class NubeNotaCredito extends \app\modules\fe_edoc\components\CActiveRecord {
         $limitrowsql = $page->paginado($control);
 
         $tipoUser = Yii::$app->session->get('RolId', FALSE);
-        $usuarioErp = $this->concatenarUserERP(Yii::$app->session->get('UsuarioErp', FALSE));
+        $usuarioErp = $this->concatenarUserERP(Yii::$app->session->get('PB_iduser', false));
         //echo $usuarioErp;
         //$fecInifact=Yii::$app->params['dateStartFact'];//Fecha Inicial de Facturacion Electronica
-        $fecInifact = date(Yii::$app->params['datebydefault']);
+        $fecInifact = date(Yii::$app->params['dateByDefault']);
         $con = Yii::$app->db_edoc;
         $sql = "SELECT A.IdNotaCredito IdDoc,A.Estado,A.CodigoTransaccionERP,A.SecuencialERP,A.UsuarioCreador,
                         A.FechaAutorizacion,A.AutorizacionSRI,
@@ -173,7 +173,7 @@ class NubeNotaCredito extends \app\modules\fe_edoc\components\CActiveRecord {
                         FROM " . $con->dbname . ".NubeNotaCredito A
                 WHERE A.CodigoDocumento='$this->tipoDoc' AND A.Estado NOT IN (5) ";
         //Usuarios Vendedor con * es privilegiado y puede ver lo que factura el resta
-        $sql .= ($usuarioErp != '*') ? "AND A.UsuarioCreador IN ('$usuarioErp')" : ""; //Para Usuario Vendedores.
+        $sql .= ($usuarioErp != '1') ? "AND A.UsuarioCreador IN ('$usuarioErp')" : ""; //Para Usuario Vendedores.
 
 
         if (!empty($control)) {//Verifica la Opcion op para los filtros
@@ -185,7 +185,7 @@ class NubeNotaCredito extends \app\modules\fe_edoc\components\CActiveRecord {
                 $sql .= "AND DATE(A.FechaEmision) BETWEEN '" . date("Y-m-d", strtotime($control[0]['F_INI'])) . "' AND '" . date("Y-m-d", strtotime($control[0]['F_FIN'])) . "'  ";
             }
         }
-        $sql .= "ORDER BY A.IdNotaCredito DESC  $limitrowsql";
+        //$sql .= "ORDER BY A.IdNotaCredito DESC  $limitrowsql";
         //echo $sql;
 
         $rawData = $con->createCommand($sql)->queryAll();

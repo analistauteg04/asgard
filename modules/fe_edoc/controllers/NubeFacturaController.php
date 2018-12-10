@@ -44,12 +44,13 @@ class NubefacturaController extends \app\components\CController {
         $tipDoc= new VSDirectorio();
         $aproba= new VSacceso();
         $contBuscar = array();
-        if (Yii::$app->request->isAjax) {
+        $data = Yii::$app->request->get();
+        if ($data['PBgetFilter']) {
             //$contBuscar = isset($_POST['CONT_BUSCAR']) ? json_encode($_POST['CONT_BUSCAR']) : array();
             //echo CJSON::encode($modelo->mostrarDocumentos($contBuscar));
             $arrayData = array();
-            $contBuscar = isset($_POST['CONT_BUSCAR']) ? json_encode($_POST['CONT_BUSCAR']) : array();
-            $contBuscar[0]['PAGE'] = isset($_GET['page']) ? $_GET['page'] : 0;
+            $contBuscar = isset($data['CONT_BUSCAR']) ? json_encode($data['CONT_BUSCAR']) : array();
+            $contBuscar[0]['PAGE'] = isset($data['page']) ? $data['page'] : 0;
             $arrayData = $modelo->mostrarDocumentos($contBuscar);
             return $this->render('_indexGrid', array(
                 'model' => $arrayData,
