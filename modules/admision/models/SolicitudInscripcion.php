@@ -1069,7 +1069,8 @@ class SolicitudInscripcion extends \yii\db\ActiveRecord
             $sql = "SELECT  imni.imni_id, 
                             ipre.ipre_precio+(ipre.ipre_precio*ifnull(ipre.ipre_porcentaje_iva,0)) as precio,	   
                             ming.ming_nombre as nombre_metodo_ingreso,
-                            ua.uaca_nombre as nombre_nivel_interes
+                            ua.uaca_nombre as nombre_nivel_interes,
+                            imni.ite_id    
                     FROM " . $con2->dbname . ".item_metodo_unidad imni INNER JOIN " . $con2->dbname . ".item_precio ipre on imni.ite_id = ipre.ite_id
                          INNER JOIN " . $con->dbname . ".metodo_ingreso ming on ming.ming_id = imni.ming_id
                          INNER JOIN " . $con1->dbname . ".unidad_academica ua on ua.uaca_id = imni.uaca_id                                             
@@ -1090,7 +1091,8 @@ class SolicitudInscripcion extends \yii\db\ActiveRecord
             $sql = "SELECT  imni.imni_id, 
                             ipre.ipre_precio+(ipre.ipre_precio*ifnull(ipre.ipre_porcentaje_iva,0)) as precio,	   
                             null as nombre_metodo_ingreso,
-                            ua.uaca_nombre as nombre_nivel_interes                            
+                            ua.uaca_nombre as nombre_nivel_interes,
+                            imni.ite_id                            
                     FROM " . $con2->dbname . ".item_metodo_unidad imni INNER JOIN " . $con2->dbname . ".item_precio ipre on imni.ite_id = ipre.ite_id                         
                          INNER JOIN " . $con1->dbname . ".unidad_academica ua on ua.uaca_id = imni.uaca_id                         
                     WHERE imni.uaca_id = :nint_id AND

@@ -131,14 +131,14 @@ class DetalleDescuentoItem extends \app\modules\financiero\components\CActiveRec
     public function consultarValdctoItem($dite_id) {
         $con = \Yii::$app->db_facturacion;
         $estado = 1;
-        $sql = "SELECT ddit_tipo_beneficio, ddit_porcentaje, ddit_valor 
+        $sql = "SELECT ddit_tipo_beneficio, ddit_porcentaje, ddit_valor
                 FROM " . $con->dbname . ".detalle_descuento_item ddi
                 WHERE ddi.ddit_id = :dite_id
                     and ddi.ddit_estado = :estado
                     and ddi.ddit_estado_logico = :estado";
         $comando = $con->createCommand($sql);
         $comando->bindParam(":estado", $estado, \PDO::PARAM_STR);
-        $comando->bindParam(":dite_id", $dite_id, \PDO::PARAM_INT);
+        $comando->bindParam(":dite_id", $dite_id, \PDO::PARAM_INT);        
         $resultData = $comando->queryOne();
         return $resultData;
     }
