@@ -40,7 +40,6 @@ $leyenda = '<div class="col-md-12 col-xs-12 col-sm-12 col-lg-12">
     <div class="col-md-12 col-xs-12 col-sm-12 col-lg-12">
         <h3><span id="lbl_solicitud"><?= admision::t("Solicitudes", "Create Application for Registration") ?></span></h3>
     </div>
-
     <div class="col-md-12 col-sm-12 col-xs-12 col-lg-12">
         <div class="col-md-7 col-sm-7 col-xs-7 col-lg-7">
             <div class="form-group">

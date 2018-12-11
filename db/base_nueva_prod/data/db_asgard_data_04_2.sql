@@ -11,7 +11,8 @@ INSERT INTO `modulo` (`mod_id`, `apl_id`, `mod_nombre`, `mod_tipo`, `mod_dir_ima
 (2, 1, 'Admisiones', 'Admisiones', 'glyphicon glyphicon-cog', 'admision/contactos/index', 2, 'menu', '1', '1', '2018-09-16 08:44:54', NULL, '1'),
 (3, 1, 'Financiero', 'Financiero', 'glyphicon glyphicon-cog', 'financiero/pagos/index', 3, 'menu', '1', '1', '2018-09-18 05:06:44', NULL, '1'),
 (4, 1, 'Academico', 'Academico', 'glyphicon glyphicon-cog', 'academico/admitidos/index', 4, 'menu', '1', '1', '2018-09-18 05:06:58', NULL, '1'),
-(5, 1, 'Reportes', 'Academico', 'glyphicon glyphicon-cog', 'academico/admitidos/index', 5, 'menu', '1', '1', '2018-09-18 05:06:58', NULL, '1');
+(5, 1, 'Reportes', 'Academico', 'glyphicon glyphicon-cog', 'academico/admitidos/index', 5, 'menu', '1', '1', '2018-09-18 05:06:58', NULL, '1'),
+(6, 1, 'Marketing', 'Marketing', 'glyphicon glyphicon-envelope', 'academico/admitidos/index', 6, 'menu', '1', '1', '2018-09-18 05:06:58', NULL, '1');
 
 --
 -- Volcado de datos para la tabla `objeto_modulo`
@@ -148,7 +149,9 @@ INSERT INTO `objeto_modulo` (`omod_id`, `mod_id`, `omod_padre_id`, `omod_nombre`
 (129, 4, 124, 'Modificar período método de ingreso', 'S', '0', '', '', '', 'academico/adminmetodoingreso/update', 1, '0', 'academico', '1', '2018-11-12 22:58:22', NULL, '1'),
 (130, 4, 129, 'Actualiza período método ingreso', 'A', '0', '', '', '', 'academico/adminmetodoingreso/update', 1, '1', 'academico', '1', '2018-11-12 23:00:23', NULL, '1'),
 (131, 4, 124, 'Listar Paralelos', 'S', '0', '', '', '', 'academico/adminmetodoingreso/listarparalelo', 1, '0', 'academico', '1', '2018-11-12 23:02:19', NULL, '1'),
-(132, 4, 120, 'Guardar Nuevo Matriculado', 'A', '0', '', '', '', 'academico/matriculadosreprobados/newreprobado', 1, '1', 'Academico', '1', '2018-11-15 15:26:23', NULL, '1');
+(132, 4, 120, 'Guardar Nuevo Matriculado', 'A', '0', '', '', '', 'academico/matriculadosreprobados/newreprobado', 1, '1', 'Academico', '1', '2018-11-15 15:26:23', NULL, '1'),
+(133, 6, 133, 'Email Marketing', 'P', '0', '', '', '', 'marketing/email/index', 1, '1', 'Marketing', '1', '2018-11-15 15:26:23', NULL, '1'),
+(134, 6, 134, 'Whatsapp Marketing', 'P', '0', '', '', '', 'marketing/whatsapp/index', 2, '1', 'Marketing', '1', '2018-11-15 15:26:23', NULL, '1');
 
 -- --------------------------------------------------------
 --
@@ -340,7 +343,9 @@ INSERT INTO `grup_obmo` (`gmod_id`, `gru_id`, `omod_id`, `gmod_estado`,  `gmod_e
 (115, 1, 115, '1', '1'),
 (116, 1, 116, '1', '1'),
 (117, 1, 117, '1', '1'),
-(118, 1, 118, '1', '1');
+(118, 1, 118, '1', '1'),
+(133, 1, 133, '1', '1'),
+(134, 1, 134, '1', '1');
 -- --------------------------------------------------------
 --
 -- Volcado de datos para la tabla `GRUP_OBMO_GRUP_ROL`
@@ -463,4 +468,6 @@ INSERT INTO `grup_obmo_grup_rol` (`gogr_id`, `grol_id`, `gmod_id`, `gogr_estado`
 (115, 1, 115, '1', '1'),
 (116, 1, 116, '1', '1'),
 (117, 1, 117, '1', '1'),
-(118, 1, 118, '1', '1');
+(118, 1, 118, '1', '1'),
+(133, 1, 133, '1', '1'),
+(134, 1, 134, '1', '1');
