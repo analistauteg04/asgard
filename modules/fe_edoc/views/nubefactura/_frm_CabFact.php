@@ -58,8 +58,11 @@
             </tr>
             <tr>
                 <td>
-                
-                    <?php echo CHtml::image(Yii::$app->params['seaBarra'] .$cabFact['IdentificacionComprador']. '.png', 'Utimpor', array('width' => '280px', 'height' => '20px')); ?>
+                    <?= \barcode\barcode\GeneratedCodebar::widget([
+                        "message" => $cabFact['ClaveAcceso'],
+                        //"font_size" => 8
+                    ]); ?>
+                    <?php //echo yii\helpers\Html::img(Yii::$app->params['seaBarra'] .$cabFact['IdentificacionComprador']. '.png', array('width' => '280px', 'height' => '20px', "alt" => Yii::$app->params["copyright"])); ?>
                 </td>
             </tr>
             <tr>

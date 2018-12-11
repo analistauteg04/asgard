@@ -56,7 +56,7 @@
         $contador = count($cabFact);
         if ($cabFact !== null) {
             ?>
-            <?= $this->render('_barcode', array('cabFact' => $cabFact)); ?>
+            <?php //$this->render('_barcode', array('cabFact' => $cabFact)); ?>
             <table style="width:100%;">
                 <tbody>
                     <tr>
@@ -64,7 +64,7 @@
                         <td style="width:50%;vertical-align: central" align="center">
                             <?php //echo CHtml::image(Yii::$app->theme->baseUrl . '/images/plantilla/logo.png', 'Utimpor', array('width' => '300px', 'height' => '50px')); ?>
                             <?php //echo CHtml::image(Yii::$app->theme->baseUrl . '/images/plantilla/logoPDF.png', 'Utimpor', array('width' => '340px', 'height' => '110px')); ?>
-                            <?php echo CHtml::image(Yii::$app->theme->baseUrl . '/images/plantilla/logoPDF.png', 'Utimpor', array('width' => '250px', 'height' => '110px')); ?>
+                            <?php echo yii\helpers\Html::img(Yii::$app->basePath."/themes/".Yii::$app->view->theme->themeName."/assets/img/logos/logo_".Yii::$app->session->get('PB_idempresa').".png", array('width' => '250px', 'height' => '110px', "alt" => Yii::$app->params["copyright"])); ?>
                         </td>
                         <td rowspan="2" style="width:50%">
                             <?php echo $this->render('_frm_CabFact', array('cabFact' => $cabFact)); ?>
@@ -92,7 +92,7 @@
                     <tr>
 
                         <td style="width:50%">
-                            <?php echo $this->render('_frm_DetFact', array('detFact' => $detFact)); ?>
+                            <?php //echo $this->render('_frm_DetFact', array('detFact' => $detFact)); ?>
                         </td>
                     </tr>
                 </tbody>
@@ -101,11 +101,11 @@
                 <tbody>
                     <tr>
                         <td style="width:70%;vertical-align: top">
-                            <?php echo $this->render('_frm_DataAuxFact', array('adiFact' => $adiFact,'pagFact' => $pagFact)); ?>
+                            <?php //echo $this->render('_frm_DataAuxFact', array('adiFact' => $adiFact,'pagFact' => $pagFact)); ?>
                         </td>
                         <td style="width:30%">
                             <div>
-                                <?php echo $this->render('_frm_TotFact', array('impFact' => $impFact, 'cabFact' => $cabFact)); ?>
+                                <?php //echo $this->render('_frm_TotFact', array('impFact' => $impFact, 'cabFact' => $cabFact)); ?>
                             </div>
                         </td>
                     </tr>

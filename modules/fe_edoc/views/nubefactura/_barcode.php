@@ -1,7 +1,6 @@
 <?php
 /* SOLUCION VALIDA */
 
-use Yii;
 use \barcode\barcode\GeneratedCodebar;
 $ruta = Yii::$app->basePath;
 
@@ -32,7 +31,7 @@ $drawing->setBarcode($code);
 $drawing->draw();
 $drawing->setFilename(Yii::$app->params['seaBarra'].$cabFact['IdentificacionComprador'].'.png');
 
-header('Content-Type: image/png');
+//header('Content-Type: image/png');
 //header('Content-Type: text/html; charset=utf-8');
 $drawing->finish(BCGDrawing::IMG_FORMAT_PNG);
 ?>
