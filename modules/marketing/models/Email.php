@@ -1,6 +1,6 @@
 <?php
 
-namespace app\modules\admision\models;
+namespace app\modules\marketing\models;
 
 use yii\data\ArrayDataProvider;
 use DateTime;
@@ -33,7 +33,7 @@ class Email extends \yii\db\ActiveRecord
      */
     public static function tableName()
     {
-        return 'solicitudins_documento';
+        return 'Email';
     }
 
     /**
@@ -80,77 +80,5 @@ class Email extends \yii\db\ActiveRecord
             'sdoc_fecha_modificacion' => 'Sdoc Fecha Modificacion',
             'sdoc_estado_logico' => 'Sdoc Estado Logico',
         ];
-    }
-
-    /**
-     * @return \yii\db\ActiveQuery
-     */
-    public function getSins()
-    {
-        return $this->hasOne(SolicitudInscripcion::className(), ['sins_id' => 'sins_id']);
-    }
-
-    /**
-     * @return \yii\db\ActiveQuery
-     */
-    public function getInt()
-    {
-        return $this->hasOne(Interesado::className(), ['int_id' => 'int_id']);
-    }
-
-    /**
-     * @return \yii\db\ActiveQuery
-     */
-    public function getDadj()
-    {
-        return $this->hasOne(DocumentoAdjuntar::className(), ['dadj_id' => 'dadj_id']);
-    }
-    /**
-     * Function consulta solicitud id del x interesado
-     * @author  Giovanni Vergara <analistadesarrollo02@uteg.edu.ec>
-     * @param   $usuario_id (id del interesado).  
-     * @return  $resultData (id de la ultima solicitud).
-     */
-
-    /**
-     * Function consultaDatosinteresado
-     * @author  Grace Viteri <analistadesarrollo01@uteg.edu.ec>
-     * @param   $usuario_id (id del usuario).  
-     * @return  $resultData (id del interesado).
-     */
-    public function getSolicitudxInteresado($int_id) {
-        $con = \Yii::$app->db_captacion;        
-        $estado = 1;
-        $sql = "SELECT sins_id             
-                FROM  " . $con->dbname . ".solicitudins_documento 
-                WHERE 
-                    int_id = :int_id AND
-                    sdoc_estado_logico=:estado AND
-                    sdoc_estado=:estado
-                order by sdoc_fecha_creacion desc limit 1";
-        $comando = $con->createCommand($sql);
-        $comando->bindParam(":estado", $estado, \PDO::PARAM_STR);
-        $comando->bindParam(":int_id", $int_id, \PDO::PARAM_INT);
-        $resultData = $comando->queryOne();
-        return $resultData;
-    }
-
-    public function insertNewDocument($sins_id, $int_id, $dadj_id, $sdoc_archivo, $sdoc_observacion){
-        $con = \Yii::$app->db_captacion;
-        $estado = 1;
-
-        $sql = "INSERT INTO " . \Yii::$app->db_captacion->dbname . ".solicitudins_documento 
-                (sins_id, int_id, dadj_id, sdoc_archivo, sdoc_observacion, sdoc_estado, sdoc_estado_logico)
-                VALUES(:sins_id, :int_id, :dadj_id, :sdoc_archivo, :sdoc_observacion, :estado, :estado)";
-
-        $comando = $con->createCommand($sql);
-        $comando->bindParam(":sins_id", $sins_id, \PDO::PARAM_INT);
-        $comando->bindParam(":int_id", $int_id, \PDO::PARAM_INT);
-        $comando->bindParam(":dadj_id", $dadj_id, \PDO::PARAM_INT);
-        $comando->bindParam(":sdoc_archivo", $sdoc_archivo, \PDO::PARAM_STR);
-        $comando->bindParam(":sdoc_observacion", $sdoc_observacion, \PDO::PARAM_STR);
-        $comando->bindParam(":estado", $estado, \PDO::PARAM_INT);
-        $resultData = $comando->execute();
-        return $resultData;
     }
 }

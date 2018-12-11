@@ -1,6 +1,6 @@
 <?php
 
-namespace app\modules\admision\controllers;
+namespace app\modules\marketing\controllers;
 
 use Yii;
 use app\models\Utilities;
