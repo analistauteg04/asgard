@@ -35,7 +35,7 @@ class SybaseNC {
                     $tipEdoc = $this->tipoDoc;//"01";
                     $cabEdoc = $rows[$i];//Cabecera de Factura
                     $detEdoc = $this->consultarSybDetFacturas($pdo, $cabEdoc['SYS_FACTURANC_ID']);
-                    $dadcEdoc = null;//$this->consultarSybDatAdiFacturas($pdo, $cabEdoc['SYS_FACTURANC_ID']);
+                    $dadcEdoc = $this->consultarSybDatAdiFacturas($pdo, $cabEdoc['SYS_FACTURANC_ID']);
                     $fpagEdoc = null;//$this->consultarSybForPagFacturas($pdo, $cabEdoc['SYS_FACTURANC_ID']);
 
                     $response = Http::connect($WS_HOST, $WS_PORT)->doPost($WS_URI, 
