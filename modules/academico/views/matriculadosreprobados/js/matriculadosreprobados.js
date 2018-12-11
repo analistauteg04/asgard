@@ -260,53 +260,53 @@ $(document).ready(function () {
         requestHttpAjax(link, arrParams, function (response) {
             if (response.status == "OK") {
                 data = response.message;
-                setComboData(data.unidad_academica, "cmb_ninteres");
+                setComboData(data.unidad_academica, "cmb_unidad_solicitud");
                 var arrParams = new Object();
                 if (data.unidad_academica.length > 0) {
                     //Here I am going to change the combo income method
                     var arrParams = new Object();
-                    arrParams.nint_id = $('#cmb_ninteres').val();
+                    arrParams.nint_id = $('#cmb_unidad_solicitud').val();
                     arrParams.getmetodo = true;
                     requestHttpAjax(link, arrParams, function (response) {
                         if (response.status == "OK") {
                             data = response.message;
-                            setComboData(data.metodos, "cmb_metodos");
+                            setComboData(data.metodos, "cmb_metodo_solicitud");
                         }
                     }, true);
                     var arrParams = new Object();
-                    arrParams.nint_id = $('#cmb_ninteres').val();
+                    arrParams.nint_id = $('#cmb_unidad_solicitud').val();
                     arrParams.getmodalidad = true;
                     arrParams.empresa_id = $('#cmb_empresa').val();
                     requestHttpAjax(link, arrParams, function (response) {
                         if (response.status == "OK") {
                             data = response.message;
-                            setComboData(data.modalidad, "cmb_modalidad");
+                            setComboData(data.modalidad, "cmb_modalidad_solicitud");
                             if (data.modalidad.length > 0) {
                                 var arrParams = new Object();
-                                arrParams.unidada = $('#cmb_ninteres').val();
-                                arrParams.moda_id = $('#cmb_modalidad').val();
+                                arrParams.unidada = $('#cmb_unidad_solicitud').val();
+                                arrParams.moda_id = $('#cmb_modalidad_solicitud').val();
                                 arrParams.empresa_id = $('#cmb_empresa').val();
                                 arrParams.getcarrera = true;
                                 requestHttpAjax(link, arrParams, function (response) {
                                     if (response.status == "OK") {
                                         data = response.message;
-                                        setComboData(data.carrera, "cmb_carrera");
+                                        setComboData(data.carrera, "cmb_carrera_solicitud");
                                     }
                                     var arrParams = new Object();
-                                    arrParams.unidada = $('#cmb_ninteres').val();
-                                    arrParams.metodo = $('#cmb_metodos').val();
-                                    arrParams.moda_id = $('#cmb_modalidad').val();
-                                    arrParams.carrera_id = $('#cmb_carrera').val();
+                                    arrParams.unidada = $('#cmb_unidad_solicitud').val();
+                                    arrParams.metodo = $('#cmb_metodo_solicitud').val();
+                                    arrParams.moda_id = $('#cmb_modalidad_solicitud').val();
+                                    arrParams.carrera_id = $('#cmb_carrera_solicitud').val();
                                     arrParams.empresa_id = $('#cmb_empresa').val();
                                     arrParams.getitem = true;
                                     requestHttpAjax(link, arrParams, function (response) {
                                         if (response.status == "OK") {
                                             data = response.message;
-                                            setComboData(data.items, "cmb_item");
+                                            setComboData(data.items, "cmb_item_solicitud");
                                         }
                                         //Precio.
                                         var arrParams = new Object();
-                                        arrParams.ite_id = $('#cmb_item').val();
+                                        arrParams.ite_id = $('#cmb_item_solicitud').val();
                                         arrParams.getprecio = true;
                                         requestHttpAjax(link, arrParams, function (response) {
                                             if (response.status == "OK") {
@@ -317,21 +317,21 @@ $(document).ready(function () {
                                     }, true);
                                     //Descuentos.
                                     var arrParams = new Object();
-                                    arrParams.unidada = $('#cmb_ninteres').val();
-                                    arrParams.moda_id = $('#cmb_modalidad').val();
-                                    arrParams.metodo = $('#cmb_metodos').val();
+                                    arrParams.unidada = $('#cmb_unidad_solicitud').val();
+                                    arrParams.moda_id = $('#cmb_modalidad_solicitud').val();
+                                    arrParams.metodo = $('#cmb_metodo_solicitud').val();
                                     arrParams.empresa_id = $('#cmb_empresa').val();
                                     arrParams.carrera_id = $('#cmb_carrera').val();
                                     arrParams.getdescuento = true;
                                     requestHttpAjax(link, arrParams, function (response) {
                                         if (response.status == "OK") {
                                             data = response.message;
-                                            setComboData(data.descuento, "cmb_descuento");
+                                            setComboData(data.descuento, "cmb_descuento_solicitud");
                                         }
                                         //Precio con descuento.
                                         var arrParams = new Object();
-                                        arrParams.descuento_id = $('#cmb_descuento').val();
-                                        arrParams.ite_id = $('#cmb_item').val();
+                                        arrParams.descuento_id = $('#cmb_descuento_solicitud').val();
+                                        arrParams.ite_id = $('#cmb_item_solicitud').val();
                                         arrParams.getpreciodescuento = true;
                                         requestHttpAjax(link, arrParams, function (response) {
                                             if (response.status == "OK") {

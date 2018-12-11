@@ -48,9 +48,13 @@ use kartik\date\DatePicker;
 use yii\helpers\Url;
 use yii\widgets\ActiveForm;
 use app\components\CFileInputAjax;
+use app\modules\admision\Module as admision;
+use app\modules\academico\Module as academico;
 use app\modules\financiero\Module as financiero;
 
 financiero::registerTranslations();
+academico::registerTranslations();
+
 ?>
 
 <form class="form-horizontal">
@@ -58,7 +62,7 @@ financiero::registerTranslations();
         <h3><span id="lbl_Personeria"><?= Yii::t("formulario", "Request Data") ?></span></h3>
     </div>
     <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
-        <p class="text-danger"> <?= Yii::t("formulario", "Fields with * are required") ?> </p>        
+        <p class="text-danger"><?= Yii::t("formulario", "Fields with * are required") ?> </p>        
     </div>
     <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
         <div class="form-group">                        
@@ -81,12 +85,12 @@ financiero::registerTranslations();
         </div>
     </div>
     <div class='col-md-12 col-sm-12 col-xs-12 col-lg-12'>
-            <div class="form-group">
-                <label for="cmb_empresa" class="col-lg-3 col-md-3 col-sm-3 col-xs-3 control-label keyupmce"><?= Yii::t("formulario", "Company") ?></label>
-                <div class="col-lg-9 col-md-9 col-sm-9 col-xs-9">
-                    <?= Html::dropDownList("cmb_empresa", 1, $arr_empresa, ["class" => "form-control", "id" => "cmb_empresa",]) ?>
-                </div>
+        <div class="form-group">
+            <label for="cmb_empresa" class="col-lg-3 col-md-3 col-sm-3 col-xs-3 control-label keyupmce"><?= Yii::t("formulario", "Company") ?></label>
+            <div class="col-lg-9 col-md-9 col-sm-9 col-xs-9">
+                <?= Html::dropDownList("cmb_empresa", 1, $arr_empresa, ["class" => "form-control", "id" => "cmb_empresa",]) ?>
             </div>
+        </div>
     </div>
     <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
         <div class="form-group">            
@@ -120,25 +124,6 @@ financiero::registerTranslations();
             </div>
         </div>
     </div>   
-    <div class="col-md-12 col-xs-12 col-sm-12 col-lg-12" id="divAplicaDescuento" style="display: block">               
-        <div class="form-group">
-            <label for="txt_declararDescuento" class="col-sm-5 control-label"><?= financiero::t("Pagos", "Apply Discount") ?></label>
-            <div class="col-sm-7">  
-                <label><input type="radio" name="opt_declara_Dctosi"  id="opt_declara_Dctosi" value="1"><b>Si</b></label>
-                <label><input type="radio" name="opt_declara_Dctono"  id="opt_declara_Dctono" value="2" checked><b>No</b></label>                                              
-            </div>            
-        </div>               
-    </div> 
-    <div class="col-md-12 col-xs-12 col-sm-12 col-lg-12" id="divDescuento" style="display: none">    
-        <div class="col-lg-6 col-md-6 col-sm-6 col-xs-6">
-            <div class="form-group">
-                <label for="cmb_descuento_solicitud" class="col-sm-5 col-md-5 col-xs-5 col-lg-5 control-label keyupmce"><?= financiero::t("Pagos", "Discount") ?></label>
-                <div class="col-sm-7 col-md-7 col-xs-7 col-lg-7">
-                    <?= Html::dropDownList("cmb_descuento", 0, array_merge([Yii::t("formulario", "Select")], $arr_descuento), ["class" => "form-control", "id" => "cmb_descuento"]) ?>
-                </div>
-            </div>    
-        </div>  
-    </div>    
     <div class="col-md-12 col-xs-12 col-sm-12 col-lg-12" id="divItem" style="display: block">        
         <div class="col-lg-6 col-md-6 col-sm-6 col-xs-6">
             <div class="form-group">
@@ -157,6 +142,53 @@ financiero::registerTranslations();
             </div>
         </div>
     </div>
+    <div class="col-md-12 col-xs-12 col-sm-12 col-lg-12" id="divBeca" style="display: none">        
+        <div class="form-group">
+            <label for="txt_declararbeca" class="col-sm-5 control-label"><?= admision::t("Solicitudes", "Apply Cala Foundation scholarship") ?></label>
+            <div class="col-sm-7">  
+                <label><input type="radio" name="opt_declara_si"  id="opt_declara_si" value="1"><b>Si</b></label>
+                <label><input type="radio" name="opt_declara_no"  id="opt_declara_no" value="2" checked><b>No</b></label>                                              
+            </div>            
+        </div>        
+    </div>
+    <div class="col-md-12 col-xs-12 col-sm-12 col-lg-12" id="divAplicaDescuento" style="display: block">               
+        <div class="form-group">
+            <label for="txt_declararDescuento" class="col-sm-5 control-label"><?= financiero::t("Pagos", "Apply Discount") ?></label>
+            <div class="col-sm-7">  
+                <label><input type="radio" name="opt_declara_Dctosi"  id="opt_declara_Dctosi" value="1"><b>Si</b></label>
+                <label><input type="radio" name="opt_declara_Dctono"  id="opt_declara_Dctono" value="2" checked><b>No</b></label>                                              
+            </div>            
+        </div>               
+    </div> 
+    <div class="col-md-12 col-xs-12 col-sm-12 col-lg-12" id="divDescuento" style="display: none">    
+        <div class="col-lg-6 col-md-6 col-sm-6 col-xs-6">
+            <div class="form-group">
+                <label for="cmb_descuento_solicitud" class="col-sm-5 col-md-5 col-xs-5 col-lg-5 control-label keyupmce"><?= financiero::t("Pagos", "Discount") ?></label>
+                <div class="col-sm-7 col-md-7 col-xs-7 col-lg-7">
+                    <?= Html::dropDownList("cmb_descuento", 0, array_merge([Yii::t("formulario", "Select")], $arr_descuento), ["class" => "form-control", "id" => "cmb_descuento"]) ?>
+                </div>
+            </div>    
+        </div>
+        <div class="col-lg-6 col-md-6 col-sm-6 col-xs-6">
+            <div class="form-group">
+                <label for="txt_precio_item2" class="col-sm-5 col-md-5 col-xs-5 col-lg-5 control-label" id="lbl_nombre1"><?= financiero::t("Pagos", "Price") ?></label>
+                <div class="col-sm-7 col-md-7 col-xs-7 col-lg-7">
+                    <input type="text" class="form-control keyupmce" value="0" id="txt_precio_item2" disabled data-type="alfa" align="rigth" placeholder="<?= financiero::t("Pagos", "Price") ?>">
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class='col-md-12 col-sm-12 col-xs-12 col-lg-12'>
+        <div class="col-md-6 col-sm-6 col-xs-6 col-lg-6">
+            <div class="form-group">
+                <label for="txt_observacion" class="col-sm-5 col-md-5 col-xs-5 col-lg-5 control-label" id="lbl_observacion"><?= Yii::t("formulario", "Observations") ?></label>
+                <div class="col-sm-7 col-md-7 col-xs-7 col-lg-7">
+                    <!--<input type="text" class="form-control keyupmce" id="txt_observacion" data-type="alfa" placeholder="<? Yii::t("formulario", "Observations") ?>">-->
+                    <textarea  class="form-control keyupmce" id="txt_observacion" rows="3"></textarea>
+                </div>
+            </div>
+        </div> 
+    </div>        
     <div class="col-md-12 col-xs-12 col-sm-12 col-lg-12">         
     </div>
     <div class="row"> 

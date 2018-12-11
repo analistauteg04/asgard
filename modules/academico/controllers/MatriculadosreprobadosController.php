@@ -9,6 +9,7 @@ use app\modules\academico\models\EstudioAcademico;
 use app\modules\academico\models\Admitido;
 use app\modules\admision\models\ItemMetodoUnidad;
 use app\modules\financiero\models\DetalleDescuentoItem;
+use app\modules\academico\models\ModuloEstudio;
 use yii\helpers\ArrayHelper;
 use app\models\Utilities;
 use app\models\Persona;
@@ -286,6 +287,7 @@ class MatriculadosreprobadosController extends \app\components\CController {
         $mod_pergestion = new PersonaGestion();
         $mod_unidad = new UnidadAcademica();
         $modcanal = new Oportunidad();
+        $modestudio = new ModuloEstudio();
         $mod_metodo = new MetodoIngreso();
         $mod_inscripcion = new InscripcionAdmision();
         $modItemMetNivel = new ItemMetodoUnidad();
@@ -295,6 +297,11 @@ class MatriculadosreprobadosController extends \app\components\CController {
             if (isset($data["getprovincias"])) {
                 $provincias = Provincia::find()->select("pro_id AS id, pro_nombre AS name")->where(["pro_estado_logico" => "1", "pro_estado" => "1", "pai_id" => $data['pai_id']])->asArray()->all();
                 $message = array("provincias" => $provincias);
+                return Utilities::ajaxResponse('OK', 'alert', Yii::t('jslang', 'Success'), 'false', $message);
+            }
+            if (isset($data["getuacademias"])) {
+                $data_u_acad = $mod_unidad->consultarUnidadAcademicasEmpresa($data["empresa_id"]);
+                $message = array("unidad_academica" => $data_u_acad);
                 return Utilities::ajaxResponse('OK', 'alert', Yii::t('jslang', 'Success'), 'false', $message);
             }
             if (isset($data["getcantones"])) {
@@ -314,8 +321,12 @@ class MatriculadosreprobadosController extends \app\components\CController {
                 $message = array("modalidad" => $modalidad);
                 return Utilities::ajaxResponse('OK', 'alert', Yii::t('jslang', 'Success'), 'false', $message);
             }
-            if (isset($data["getcarrera"])) {
-                $carrera = $modcanal->consultarCarreraModalidad($data["unidada"], $data["moda_id"]);
+            if (isset($data["getcarrera"])) {                            
+                if ($data["empresa_id"] == 1) {
+                    $carrera = $modcanal->consultarCarreraModalidad($data["unidada"], $data["moda_id"]);
+                } else {
+                    $carrera = $modestudio->consultarCursoModalidad($data["unidada"], $data["moda_id"], $data["empresa_id"]); // tomar id de impresa
+                }
                 $message = array("carrera" => $carrera);
                 return Utilities::ajaxResponse('OK', 'alert', Yii::t('jslang', 'Success'), 'false', $message);
             }
