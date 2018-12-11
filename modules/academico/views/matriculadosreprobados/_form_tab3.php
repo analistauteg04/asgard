@@ -135,7 +135,7 @@ academico::registerTranslations();
             <div class="form-group">
                 <label for="cmb_item_solicitud" class="col-sm-3 col-md-3 col-xs-3 col-lg-3 control-label keyupmce"><?= financiero::t("Pagos", "Item") ?></label>
                 <div class="col-sm-9 col-md-9 col-xs-9 col-lg-9">
-                    <?= Html::dropDownList("cmb_item_solicitud", 0, array_merge([Yii::t("formulario", "Select")], $arr_item), ["class" => "form-control", "id" => "cmb_item"]) ?>
+                    <?= Html::dropDownList("cmb_item_solicitud", 0, array_merge([Yii::t("formulario", "Select")], $arr_item), ["class" => "form-control", "id" => "cmb_item_solicitud"]) ?>
                 </div>
             </div>
         </div>
@@ -171,7 +171,7 @@ academico::registerTranslations();
             <div class="form-group">
                 <label for="cmb_descuento_solicitud" class="col-sm-3 col-md-3 col-xs-3 col-lg-3 control-label keyupmce"><?= financiero::t("Pagos", "Discount") ?></label>
                 <div class="col-sm-9 col-md-9 col-xs-9 col-lg-9">
-                    <?= Html::dropDownList("cmb_descuento_solicitud", 0, array_merge([Yii::t("formulario", "Select")], $arr_descuento), ["class" => "form-control", "id" => "cmb_descuento"]) ?>
+                    <?= Html::dropDownList("cmb_descuento_solicitud", 0, array_merge([Yii::t("formulario", "Select")], $arr_descuento), ["class" => "form-control", "id" => "cmb_descuento_solicitud"]) ?>
                 </div>
             </div>    
         </div>
