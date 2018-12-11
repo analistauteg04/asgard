@@ -244,8 +244,7 @@ class SolicitudesController extends \app\components\CController {
                 return Utilities::ajaxResponse('OK', 'alert', Yii::t('jslang', 'Success'), 'false', $message);                
             }
             if (isset($data["getpreciodescuento"])) {                                 
-                $resp_precio = $mod_solins->ObtenerPrecioXitem($data["ite_id"]);                  
-                \app\models\Utilities::putMessageLogFile('descuento:'.$data["descuento_id"]);                
+                $resp_precio = $mod_solins->ObtenerPrecioXitem($data["ite_id"]);                                  
                 \app\models\Utilities::putMessageLogFile('precio:'.$resp_precio["precio"]);                
                 if ($data["descuento_id"] > 0) {                        
                     $respDescuento = $modDescuento->consultarValdctoItem($data["descuento_id"]); 
@@ -261,8 +260,7 @@ class SolicitudesController extends \app\components\CController {
                     }   
                 } else {
                     $precioDescuento = 0;  
-                }         
-                \app\models\Utilities::putMessageLogFile('precio descuento:'.$precioDescuento);                
+                }                                     
                 $message = array("preciodescuento" => $precioDescuento);
                 return Utilities::ajaxResponse('OK', 'alert', Yii::t('jslang', 'Success'), 'false', $message);                
             }           

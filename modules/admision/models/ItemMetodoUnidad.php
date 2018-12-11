@@ -154,9 +154,7 @@ class ItemMetodoUnidad extends \yii\db\ActiveRecord
                           and mest_id = :eaca_id
                           and imni_estado = :estado
                           and imni_estado_logico = :estado";
-        }
-                
-        \app\models\Utilities::putMessageLogFile('$sql:' . $sql);    
+        }                         
         $comando = $con->createCommand($sql);
         $comando->bindParam(":estado", $estado, \PDO::PARAM_STR);
         $comando->bindParam(":nint_id", $nint_id, \PDO::PARAM_INT);         

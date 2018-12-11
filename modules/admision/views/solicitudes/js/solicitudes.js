@@ -211,7 +211,7 @@ $(document).ready(function () {
                     }, true);                   
                 }, true);
             }
-        }, true);           
+        }, true);      
             
         //Sólo mostrar el bloque de beca Fundación Cala cuando sea Unidad:Grado y Método:examen.                  
         if (arrParams.nint_id == 1) {
