@@ -297,8 +297,14 @@ INSERT INTO `modulo_estudio` (`mest_id`, `uaca_id`, `mod_id`, `mest_codigo`, `me
 (135, 9, 1, 'UL172-MACO01', 'Métodos para el análisis del comportamiento organizacional', 'Métodos para el análisis del comportamiento organizacional', 'métodos_para_el_análisis_del_comportamiento_organizacional', 1, NULL, '1', '2018-12-10 12:15:48', NULL, '1'),
 (136, 9, 1, 'UL173LLEG-01', 'Legislación laboral Ecuatoriana y gobierno corporativo', 'Legislación laboral Ecuatoriana y gobierno corporativo', 'legislación_laboral_ecuatoriana_y_gobierno_corporativo', 1, NULL, '1', '2018-12-10 12:15:48', NULL, '1'),
 (137, 9, 1, 'UL174IFPE-01', 'El impacto de la filosofía y política empresarial en la organización', 'El impacto de la filosofía y política empresarial en la organización', 'el_impacto_de_la_filosofía_y_política_empresarial_en_la_organización', 1, NULL, '1', '2018-12-10 12:15:48', NULL, '1'),
-(138, 9, 1, 'UL175DPPG-01', 'Diseño de políticas de personal en la gestión estratégica del talento humano basado en competencias', 'Diseño de políticas de personal en la gestión estratégica del talento humano basado en competencias', 'diseño_de_políticas_de_personal_en_la_gestión_estratégica_del_talento_humano_basado_en_competencias', 1, NULL, '1', '2018-12-10 12:15:48', NULL, '1');
+(138, 9, 1, 'UL175DPPG-01', 'Diseño de políticas de personal en la gestión estratégica del talento humano basado en competencias', 'Diseño de políticas de personal en la gestión estratégica del talento humano basado en competencias', 'diseño_de_políticas_de_personal_en_la_gestión_estratégica_del_talento_humano_basado_en_competencias', 1, NULL, '1', '2018-12-10 12:15:48', NULL, '1'),
 
+(139, 9, 1, 'UL176DCRR-01', 'Diseño y configuración de redes en router', 'Diseño y configuración de redes en router', 'diseño_y_configuración_de_redes_en_router', 1, NULL, '1', '2018-12-10 12:15:48', NULL, '1'),
+(140, 9, 1, 'UL177UAMA-01', 'Uso y aplicaciones de mathcad', 'Uso y aplicaciones de mathcad', 'uso_y_aplicaciones_de_mathcad', 1, NULL, '1', '2018-12-10 12:15:48', NULL, '1'),
+(141, 9, 1, 'UL178CSAL-01', 'Configuración e implementación de un servidor apache basado en distribuciones Linux', 'Configuración e implementación de un servidor apache basado en distribuciones Linux', 'configuración_e_implementación_de_un_servidor_apache_basado_en_distribuciones_linux', 1, NULL, '1', '2018-12-10 12:15:48', NULL, '1'),
+(142, 9, 1, 'UL179ARIA-01', 'Análisis Riesgo Crediticio con Inteligencia Artificial', 'Análisis Riesgo Crediticio con Inteligencia Artificial', 'análisis_riesgo_crediticio_con_inteligencia_artificial', 1, NULL, '1', '2018-12-10 12:15:48', NULL, '1'),
+(143, 9, 1, 'UL180DPCB-01', 'Desarrollo de procesos con BIZAGI', 'Desarrollo de procesos con BIZAGI', 'desarrollo_de_procesos_con_bizagi', 1, NULL, '1', '2018-12-10 12:15:48', NULL, '1'),
+(144, 9, 1, 'UL181BPPR-01', 'Bootstrap para principiantes', 'Bootstrap para principiantes', 'bootstrap_para_principiantes', 1, NULL, '1', '2018-12-10 12:15:48', NULL, '1');
 -- --------------------------------------------------------
 --
 -- Volcado de datos para la tabla `formacion_malla_academica`
@@ -456,7 +462,14 @@ INSERT INTO `modulo_estudio_empresa` (`meem_id`, `mest_id`, `emp_id`, `meem_fech
 (135, 135, 2, '2018-09-01 05:00:00', '2018-12-31 05:00:00', 1, NULL, '1', '1', '2018-12-10 13:30:00', NULL, '1'),
 (136, 136, 2, '2018-09-01 05:00:00', '2018-12-31 05:00:00', 1, NULL, '1', '1', '2018-12-10 13:30:00', NULL, '1'),
 (137, 137, 2, '2018-09-01 05:00:00', '2018-12-31 05:00:00', 1, NULL, '1', '1', '2018-12-10 13:30:00', NULL, '1'),
-(138, 138, 2, '2018-09-01 05:00:00', '2018-12-31 05:00:00', 1, NULL, '1', '1', '2018-12-10 13:30:00', NULL, '1');
+(138, 138, 2, '2018-09-01 05:00:00', '2018-12-31 05:00:00', 1, NULL, '1', '1', '2018-12-10 13:30:00', NULL, '1'),
+
+(139, 139, 2, '2018-09-01 05:00:00', '2018-12-31 05:00:00', 1, NULL, '1', '1', '2018-12-10 13:30:00', NULL, '1'),
+(140, 140, 2, '2018-09-01 05:00:00', '2018-12-31 05:00:00', 1, NULL, '1', '1', '2018-12-10 13:30:00', NULL, '1'),
+(141, 141, 2, '2018-09-01 05:00:00', '2018-12-31 05:00:00', 1, NULL, '1', '1', '2018-12-10 13:30:00', NULL, '1'),
+(142, 142, 2, '2018-09-01 05:00:00', '2018-12-31 05:00:00', 1, NULL, '1', '1', '2018-12-10 13:30:00', NULL, '1'),
+(143, 143, 2, '2018-09-01 05:00:00', '2018-12-31 05:00:00', 1, NULL, '1', '1', '2018-12-10 13:30:00', NULL, '1'),
+(144, 144, 2, '2018-09-01 05:00:00', '2018-12-31 05:00:00', 1, NULL, '1', '1', '2018-12-10 13:30:00', NULL, '1');
 
 -- --------------------------------------------------------
 --
