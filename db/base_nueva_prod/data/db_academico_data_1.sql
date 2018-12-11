@@ -319,7 +319,7 @@ INSERT INTO `modulo_estudio` (`mest_id`, `uaca_id`, `mod_id`, `mest_codigo`, `me
 (157, 9, 1, 'UL137-EPDP01', 'Estrategias para promover destinos y productos turísticos con principios sostenibles', 'Estrategias para promover destinos y productos turísticos con principios sostenibles', 'estrategias_para_promover_destinos_y_productos_turísticos_con_principios_sostenibles', 1, NULL, '1', '2018-12-10 12:15:48', NULL, '1'),
 (158, 9, 1, 'UL138-01IMDT', 'El inbound marketing de los destinos turísticos', 'El inbound marketing de los destinos turísticos', 'el_inbound_marketing_de_los_destinos_turísticos', 1, NULL, '1', '2018-12-10 12:15:48', NULL, '1'),
 (159, 9, 1, 'UL139-01GSCM', 'Gestión sostenible, control y monitorización de un destino', 'Gestión sostenible, control y monitorización de un destino', 'gestión_sostenible_control_y_monitorización_de_un_destino', 1, NULL, '1', '2018-12-10 12:15:48', NULL, '1'),
-(160, 9, 1, 'UL140-01IDMC', 'Introducción al Data Mining –conceptos básicos', 'Introducción al Data Mining –conceptos básicos', 'introducción_al_data_mining_conceptos_básicos', 1, NULL, '1', '2018-12-10 12:15:48', NULL, '1');
+(160, 9, 1, 'UL140-01IDMC', 'Introducción al Data Mining –conceptos básicos', 'Introducción al Data Mining –conceptos básicos', 'introducción_al_data_mining_conceptos_básicos', 1, NULL, '1', '2018-12-10 12:15:48', NULL, '1'),
 (161, 9, 1, 'UL141-01MHDM', 'Métodos y herramientas del Data Mining', 'Métodos y herramientas del Data Mining', 'métodos_y_herramientas_del_data_mining', 1, NULL, '1', '2018-12-10 12:15:48', NULL, '1'),
 (162, 9, 1, 'UL142-01ADMC', 'Aplicación del  Data Mining en el campo turístico', 'Aplicación del  Data Mining en el campo turístico', 'aplicación_del_data_mining_en_el_campo_turístico', 1, NULL, '1', '2018-12-10 12:15:48', NULL, '1'),
 (163, 9, 1, 'UL143-01TISM', 'Turismo inteligente 4.0 y data mining', 'Turismo inteligente 4.0 y data mining', 'turismo_inteligente_4.0_y_data_mining', 1, NULL, '1', '2018-12-10 12:15:48', NULL, '1'),
@@ -536,7 +536,7 @@ INSERT INTO `modulo_estudio_empresa` (`meem_id`, `mest_id`, `emp_id`, `meem_fech
 (157, 157, 2, '2018-09-01 05:00:00', '2018-12-31 05:00:00', 1, NULL, '1', '1', '2018-12-10 13:30:00', NULL, '1'),
 (158, 158, 2, '2018-09-01 05:00:00', '2018-12-31 05:00:00', 1, NULL, '1', '1', '2018-12-10 13:30:00', NULL, '1'),
 (159, 159, 2, '2018-09-01 05:00:00', '2018-12-31 05:00:00', 1, NULL, '1', '1', '2018-12-10 13:30:00', NULL, '1'),
-(160, 160, 2, '2018-09-01 05:00:00', '2018-12-31 05:00:00', 1, NULL, '1', '1', '2018-12-10 13:30:00', NULL, '1');
+(160, 160, 2, '2018-09-01 05:00:00', '2018-12-31 05:00:00', 1, NULL, '1', '1', '2018-12-10 13:30:00', NULL, '1'),
 (161, 161, 2, '2018-09-01 05:00:00', '2018-12-31 05:00:00', 1, NULL, '1', '1', '2018-12-10 13:30:00', NULL, '1'),
 (162, 162, 2, '2018-09-01 05:00:00', '2018-12-31 05:00:00', 1, NULL, '1', '1', '2018-12-10 13:30:00', NULL, '1'),
 (163, 163, 2, '2018-09-01 05:00:00', '2018-12-31 05:00:00', 1, NULL, '1', '1', '2018-12-10 13:30:00', NULL, '1'),
