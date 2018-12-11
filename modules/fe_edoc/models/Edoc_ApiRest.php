@@ -40,7 +40,8 @@ class Edoc_ApiRest extends \app\modules\fe_edoc\components\CActiveRecord {
                 return $this->insertarFacturas();
                 break;
             case "04"://NOTA DE CREDITO
-                Utilities::putMessageLogFile($this->cabEdoc);
+                Utilities::putMessageLogFile($this->detEdoc);
+                return array("status" => "OK", "tipoEdoc" => $this->tipoEdoc,"data" => $this->detEdoc);
                 return $this->insertarEdocNc();
                 break;
             case "05"://NOTA DE DEBITO
@@ -519,12 +520,12 @@ class Edoc_ApiRest extends \app\modules\fe_edoc\components\CActiveRecord {
                 PuntoEmision, Secuencial, DireccionMatriz, FechaEmision, DireccionEstablecimiento, ContribuyenteEspecial,
                 ObligadoContabilidad, TipoIdentificacionComprador, RazonSocialComprador, IdentificacionComprador,
                 Rise,CodDocModificado,NumDocModificado,FechaEmisionDocModificado,TotalSinImpuesto,ValorModificacion,MotivoModificacion,
-                TotalSinImpuesto,ValorModificacion,MotivoModificacion,Moneda, SecuencialERP, CodigoTransaccionERP,UsuarioCreador,Estado,FechaCarga) VALUES 
+                Moneda, SecuencialERP, CodigoTransaccionERP,UsuarioCreador,Estado,FechaCarga) VALUES 
                (:Ambiente,:TipoEmision, :RazonSocial, :NombreComercial, :Ruc,:ClaveAcceso,:CodigoDocumento, :Establecimiento,
                 :PuntoEmision, :Secuencial, :DireccionMatriz, :FechaEmision, :DireccionEstablecimiento, :ContribuyenteEspecial,
-                :ObligadoContabilidad, :TipoIdentificacionComprador, :GuiaRemision, :RazonSocialComprador, :IdentificacionComprador,
+                :ObligadoContabilidad, :TipoIdentificacionComprador, :RazonSocialComprador, :IdentificacionComprador,
                 :Rise,:CodDocModificado,:NumDocModificado,:FechaEmisionDocModificado,:TotalSinImpuesto,:ValorModificacion,:MotivoModificacion,
-                :TotalSinImpuesto, :ValorModificacion, :MotivoModificacion, :Moneda, :SecuencialERP, :CodigoTransaccionERP,:UsuarioCreador,1,CURRENT_TIMESTAMP())";
+                :Moneda, :SecuencialERP, :CodigoTransaccionERP,:UsuarioCreador,1,CURRENT_TIMESTAMP())";
         $comando = $con->createCommand($sql);
 
         //$comando->bindParam(":id", $id_docElectronico, PDO::PARAM_INT);
