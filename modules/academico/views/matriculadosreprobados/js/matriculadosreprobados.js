@@ -488,11 +488,11 @@ $(document).ready(function () {
                     requestHttpAjax(link, arrParams, function (response) {
                         if (response.status == "OK") {
                             data = response.message;
-                            setComboData(data.items, "cmb_item");
+                            setComboData(data.items, "cmb_item_solicitud");
                         }
                         //Precio.        
                         var arrParams = new Object();
-                        arrParams.ite_id = $('#cmb_item').val();
+                        arrParams.ite_id = $('#cmb_item_solicitud').val();
                         arrParams.getprecio = true;
                         requestHttpAjax(link, arrParams, function (response) {
                             if (response.status == "OK") {
