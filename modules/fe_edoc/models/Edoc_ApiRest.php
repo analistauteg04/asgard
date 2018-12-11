@@ -5,6 +5,7 @@ namespace app\modules\fe_edoc\models;
 use Yii;
 use app\models\Utilities;
 
+
 class Edoc_ApiRest extends \app\modules\fe_edoc\components\CActiveRecord {
     private $tipoEmision=1;//Valor por defecto
     public $tipoEdoc = "";
@@ -39,7 +40,8 @@ class Edoc_ApiRest extends \app\modules\fe_edoc\components\CActiveRecord {
                 return $this->insertarFacturas();
                 break;
             case "04"://NOTA DE CREDITO
-
+                Utilities::putMessageLogFile($this->cabEdoc);
+                return $this->insertarEdocNc();
                 break;
             case "05"://NOTA DE DEBITO
 
@@ -48,7 +50,6 @@ class Edoc_ApiRest extends \app\modules\fe_edoc\components\CActiveRecord {
 
                 break;
             case "07"://RETENCIONES
-                //Utilities::putMessageLogFile($this->cabEdoc);
                 //Utilities::putMessageLogFile($this->detEdoc);
                 //return array("status" => "OK", "tipoEdoc" => $this->tipoEdoc,"data" => $this->cabEdoc);
                 return $this->insertarRetenciones();
@@ -471,6 +472,207 @@ class Edoc_ApiRest extends \app\modules\fe_edoc\components\CActiveRecord {
      /*
      * FIN DE PROCESO DE RETENCIONES
      */
+    
+     /*
+     * INICIO DE PROCESO DE NC
+     */
+    private function insertarEdocNc() {
+        $con = Yii::$app->db_edoc;
+        if ($trans !== null) {
+            $trans = null; // si existe la transacción entonces no se crea una
+        } else {
+            $trans = $con->beginTransaction();
+        }
+        try {
+            $idCab= $this->InsertarCabNC($con);            
+            $this->InsertarDetNC($con,$idCab);
+            //$this->InsertarFacturaFormaPago($con,$idCab);
+            $this->InsertarNcDatoAdicional($con,$idCab);
+            if ($trans !== null){
+                $trans->commit();
+            }
+            //return array("status"=>"OK");
+            return array("status"=>"OK", "Ids_Doc"=>$idCab);
+        } catch (\Exception $e) {
+            $trans->rollBack();
+            //throw $e;
+            return array("status"=>"NO_OK","error"=>$e);
+        }
+        
+    }
+    
+    private function InsertarCabNC($con) {
+        $cabFact= $this->cabEdoc;
+        $TipoEmision=1;//Valor por Defecto
+        $RazonSocial="UTEG S.A.";
+        $NombreComercial="UTEG S.A.";
+        $Ruc="1310328404001";//Ruc de la EMpesa
+        $DireccionMatriz="Direccion de la Matriz empresa";
+        $DireccionEstablecimiento="Direccion de Establecimiento Empresa ";
+        $ContribuyenteEspecial=($cabFact['CONTRIB_ESPECIAL']!=0)?'SI':'';
+        $ObligadoContabilidad=$cabFact['OBLIGADOCONTAB'];//($cabFact['OBLIGADOCONTAB']!=0)?'SI':'';
+        $CodigoTransaccionERP='XX';//
+        $UsuarioCreador="1";//idde la Persona que genera la factura
+
+        $sql = "INSERT INTO " . $con->dbname . ".NubeNotaCredito
+               (Ambiente,TipoEmision, RazonSocial, NombreComercial, Ruc,ClaveAcceso,CodigoDocumento, Establecimiento,
+                PuntoEmision, Secuencial, DireccionMatriz, FechaEmision, DireccionEstablecimiento, ContribuyenteEspecial,
+                ObligadoContabilidad, TipoIdentificacionComprador, RazonSocialComprador, IdentificacionComprador,
+                Rise,CodDocModificado,NumDocModificado,FechaEmisionDocModificado,TotalSinImpuesto,ValorModificacion,MotivoModificacion,
+                TotalSinImpuesto,ValorModificacion,MotivoModificacion,Moneda, SecuencialERP, CodigoTransaccionERP,UsuarioCreador,Estado,FechaCarga) VALUES 
+               (:Ambiente,:TipoEmision, :RazonSocial, :NombreComercial, :Ruc,:ClaveAcceso,:CodigoDocumento, :Establecimiento,
+                :PuntoEmision, :Secuencial, :DireccionMatriz, :FechaEmision, :DireccionEstablecimiento, :ContribuyenteEspecial,
+                :ObligadoContabilidad, :TipoIdentificacionComprador, :GuiaRemision, :RazonSocialComprador, :IdentificacionComprador,
+                :Rise,:CodDocModificado,:NumDocModificado,:FechaEmisionDocModificado,:TotalSinImpuesto,:ValorModificacion,:MotivoModificacion,
+                :TotalSinImpuesto, :ValorModificacion, :MotivoModificacion, :Moneda, :SecuencialERP, :CodigoTransaccionERP,:UsuarioCreador,1,CURRENT_TIMESTAMP())";
+        $comando = $con->createCommand($sql);
+
+        //$comando->bindParam(":id", $id_docElectronico, PDO::PARAM_INT);
+        $comando->bindParam(":Ambiente", $cabFact['TIPOAMBIENTE'], \PDO::PARAM_STR);
+        $comando->bindParam(":TipoEmision", $TipoEmision, \PDO::PARAM_STR);
+        $comando->bindParam(":Secuencial", $cabFact['SECUENCIAL'], \PDO::PARAM_STR);        
+        $comando->bindParam(":RazonSocial", $RazonSocial, \PDO::PARAM_STR);
+        $comando->bindParam(":NombreComercial", $NombreComercial, \PDO::PARAM_STR);
+        $comando->bindParam(":Ruc", $Ruc, \PDO::PARAM_STR);
+        $comando->bindParam(":ClaveAcceso", $cabFact['CLAVEACCESO'], \PDO::PARAM_STR);
+        $comando->bindParam(":CodigoDocumento", $cabFact['TIPOCOMPROBANTE'], \PDO::PARAM_STR);
+        $comando->bindParam(":Establecimiento", $cabFact['COD_ESTAB'], \PDO::PARAM_STR);
+        $comando->bindParam(":PuntoEmision", $cabFact['PTOEMI'], \PDO::PARAM_STR);
+        $comando->bindParam(":DireccionMatriz", $DireccionMatriz, \PDO::PARAM_STR);
+        $comando->bindParam(":FechaEmision", $cabFact['FECHAEMISION'], \PDO::PARAM_STR);
+        $comando->bindParam(":DireccionEstablecimiento", $DireccionEstablecimiento, \PDO::PARAM_STR);
+        $comando->bindParam(":ContribuyenteEspecial", $ContribuyenteEspecial, \PDO::PARAM_STR);
+        $comando->bindParam(":ObligadoContabilidad", $ObligadoContabilidad, \PDO::PARAM_STR);
+        $comando->bindParam(":TipoIdentificacionComprador", $cabFact['TIPOID_SUJETO'], \PDO::PARAM_STR);
+        $comando->bindParam(":RazonSocialComprador", $cabFact['RAZONSOCIAL_SUJETO'], \PDO::PARAM_STR);
+        $comando->bindParam(":IdentificacionComprador", $cabFact['RUC_SUJETO'], \PDO::PARAM_STR);
+              
+        $comando->bindParam(":Rise", $cabFact['RISE'], \PDO::PARAM_STR);
+        $comando->bindParam(":CodDocModificado", $cabFact['TIPCOMP_MODIFICA'], \PDO::PARAM_STR);
+        $comando->bindParam(":NumDocModificado", $cabFact['NUMCOMP_MODIFICA'], \PDO::PARAM_STR);
+        $comando->bindParam(":FechaEmisionDocModificado", $cabFact['FECHAEMISION_SUSTENTO'], \PDO::PARAM_STR);                
+        $comando->bindParam(":TotalSinImpuesto", $cabFact['TOTALBRUTO'], \PDO::PARAM_STR);
+        $comando->bindParam(":ValorModificacion", $cabFact['VALORDOC_MODIFICA'], \PDO::PARAM_STR);
+        $comando->bindParam(":MotivoModificacion", $cabFact['MOTIVO_DEVOLUCION'], \PDO::PARAM_STR);
+        
+        $comando->bindParam(":Moneda", $cabFact['MONEDA'], \PDO::PARAM_STR);
+        $comando->bindParam(":SecuencialERP", $cabFact['SECUENCIAL'], \PDO::PARAM_STR);
+        $comando->bindParam(":CodigoTransaccionERP", $CodigoTransaccionERP, \PDO::PARAM_STR);
+        $comando->bindParam(":UsuarioCreador", $UsuarioCreador, \PDO::PARAM_STR);
+
+        $comando->execute();
+        return $con->getLastInsertID();
+        
+    }
+    
+    private function InsertarDetNC($con,$idCab) {
+        $cabFact= $this->cabEdoc;
+        $detFact= $this->detEdoc;
+        //Dim por_iva As Decimal = CDbl(dtsData.Tables("VC010101").Rows(0).Item("POR_IVA")) / 100
+        $por_iva=intval($cabFact['IVA_PORCENTAJE']);//12;//Recuperar el impuesto de alguna tabla    o recuperar de la Cabecera    
+        $idDet=0;
+        $valSinImp = 0;
+        $val_iva12 = 0;
+        $vet_iva12 = 0;
+        $val_iva0 = 0;//Valor de Iva
+        $vet_iva0 = 0;//Venta total con Iva
+        for ($i = 0; $i < sizeof($detFact); $i++) {
+            $valSinImp = $detFact[$i]['TOTALSINIMPUESTOS'];//floatval($detFact[$i]['T_VENTA']) - floatval($detFact[$i]['VAL_DES']);
+            //%codigo iva segun tabla #17
+            $codigoImp=$detFact[$i]['IMP_CODIGO'];
+            if ($codigoImp == '2') {
+                $val_iva12 = $val_iva12 + ((floatval($detFact[$i]['CANTIDAD'])*floatval($detFact[$i]['PRECIOUNITARIO'])-floatval($detFact[$i]['DESC']))* (floatval($por_iva)/100));
+                $vet_iva12 = $vet_iva12 + $valSinImp;
+            } else {
+                $val_iva0 = 0;
+                $vet_iva0 = $vet_iva0 + $valSinImp;
+            }
+            $CodigoAuxiliar=($detFact[$i]['CODIGOPRINCIPAL']!='')?$detFact[$i]['CODIGOPRINCIPAL']:1;
+            $sql = "INSERT INTO " . $con->dbname . ".NubeDetalleNotaCredito
+                        (CodigoPrincipal,CodigoAuxiliar,Descripcion,Cantidad,PrecioUnitario,Descuento,PrecioTotalSinImpuesto,IdNotaCredito) VALUES 
+                        (:CodigoPrincipal,:CodigoAuxiliar,:Descripcion,:Cantidad,:PrecioUnitario,:Descuento,:PrecioTotalSinImpuesto,:IdNotaCredito);";
+                      
+            $comando = $con->createCommand($sql);
+            $comando->bindParam(":CodigoPrincipal", $detFact[$i]['CODIGOPRINCIPAL'], \PDO::PARAM_STR);
+            $comando->bindParam(":CodigoAuxiliar", $CodigoAuxiliar, \PDO::PARAM_STR);
+            $comando->bindParam(":Descripcion", $detFact[$i]['DESCRIPCION'], \PDO::PARAM_STR);
+            $comando->bindParam(":Cantidad", $detFact[$i]['CANTIDAD'], \PDO::PARAM_STR);
+            $comando->bindParam(":PrecioUnitario", $detFact[$i]['PRECIOUNITARIO'], \PDO::PARAM_STR);
+            $comando->bindParam(":Descuento", $detFact[$i]['DESC'], \PDO::PARAM_STR);
+            $comando->bindParam(":PrecioTotalSinImpuesto", $valSinImp, \PDO::PARAM_STR);
+            $comando->bindParam(":IdNotaCredito", $idCab, \PDO::PARAM_INT);
+            $comando->execute();
+            $idDet = $con->getLastInsertID();
+            
+            //Inserta el IVA de cada Item             
+            if ($codigoImp == '2') {//Verifico si el ITEM tiene Impuesto 12%
+                //Segun Datos Sri
+                $valIvaImp=(floatval($valSinImp)*floatval($por_iva))/100;//Calculo del Valor del Impuesto Generado por Detalle
+                $this->InsertarDetImpNC($con, $idDet, '2',$por_iva, $valSinImp, $valIvaImp); //12%
+            } else {//Caso Contrario no Genera Impuesto 0%
+                $this->InsertarDetImpNC($con, $idDet, '2','0', $valSinImp, '0'); //0%
+            }
+        }
+        //Inserta el Total del Iva Acumulado en el detalle
+        //Insertar Datos de Iva 0%
+        If ($vet_iva0 > 0) {
+            $this->InsertarNcImpuesto($con, $idCab, '2','0', $vet_iva0, $val_iva0);
+        }
+        //Inserta Datos de Iva 12
+        If ($vet_iva12 > 0) {
+            $this->InsertarNcImpuesto($con, $idCab, '2', $por_iva, $vet_iva12, $val_iva12);
+        }
+    }
+
+    private function InsertarDetImpNC($con, $idDet, $codigo, $Tarifa, $t_venta, $val_iva) {
+        $CodigoPor= $this->retornaTarifaDelIva($Tarifa);
+        $sql = "INSERT INTO " . $con->dbname . ".NubeDetalleNotaCreditoImpuesto
+                    (Codigo,CodigoPorcentaje,BaseImponible,Tarifa,Valor,IdDetalleNotaCredito)VALUES
+                    (:Codigo,:CodigoPorcentaje,:BaseImponible,:Tarifa,:Valor,:IdDetalleNotaCredito);";
+        $comando = $con->createCommand($sql);
+        $comando->bindParam(":Codigo", $codigo, \PDO::PARAM_STR);
+        $comando->bindParam(":CodigoPorcentaje", $CodigoPor, \PDO::PARAM_STR);
+        $comando->bindParam(":BaseImponible", $t_venta, \PDO::PARAM_STR);
+        $comando->bindParam(":Tarifa", $Tarifa, \PDO::PARAM_STR);
+        $comando->bindParam(":Valor", $val_iva, \PDO::PARAM_STR);
+        $comando->bindParam(":IdDetalleNotaCredito", $idDet, \PDO::PARAM_INT);
+        $comando->execute();        
+    }
+    
+    private function InsertarNcImpuesto($con, $idCab, $codigo, $Tarifa, $t_venta, $val_iva) {
+        $CodigoPor= $this->retornaTarifaDelIva($Tarifa);
+        $sql = "INSERT INTO " . $con->dbname . ".NubeNotaCreditoImpuesto
+                    (Codigo,CodigoPorcentaje,BaseImponible,Tarifa,Valor,IdNotaCredito)VALUES
+                    (:Codigo,:CodigoPorcentaje,:BaseImponible,:Tarifa,:Valor,:IdNotaCredito);";
+        $comando = $con->createCommand($sql);
+        $comando->bindParam(":Codigo", $codigo, \PDO::PARAM_STR);
+        $comando->bindParam(":CodigoPorcentaje", $CodigoPor, \PDO::PARAM_STR);
+        $comando->bindParam(":BaseImponible", $t_venta, \PDO::PARAM_STR);
+        $comando->bindParam(":Tarifa", $Tarifa, \PDO::PARAM_STR);
+        $comando->bindParam(":Valor", $val_iva, \PDO::PARAM_STR);
+        $comando->bindParam(":IdNotaCredito", $idCab, \PDO::PARAM_INT);
+        $comando->execute();        
+    }
+    
+    private function InsertarNcDatoAdicional($con, $idCab) {
+        $dadcEdoc = $this->dadcEdoc;
+        for ($i = 0; $i < sizeof($dadcEdoc); $i++) {
+            $sql = "INSERT INTO " . $con->dbname . ".NubeDatoAdicionalNotaCredito 
+                 (Nombre,Descripcion,IdFactura) VALUES (:Nombre,:Descripcion,:IdNotaCredito);";
+
+            $comando = $con->createCommand($sql);
+            $comando->bindParam(":Nombre", $dadcEdoc[$i]['NOMBRECAMPO'], \PDO::PARAM_STR);
+            $comando->bindParam(":Descripcion", $dadcEdoc[$i]['VALORCAMPO'], \PDO::PARAM_STR);
+            $comando->bindParam(":IdNotaCredito", $idCab, \PDO::PARAM_INT);
+            $comando->execute();
+        }
+    }
+
+    
+     /*
+     * FIN DE PROCESO DE RETENCIONES
+     */
+    
     
 
 }
