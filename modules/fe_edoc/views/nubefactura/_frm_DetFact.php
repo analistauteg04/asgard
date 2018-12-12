@@ -40,10 +40,10 @@
                 <td class="marcoCel"><?php echo $detFact[$i]['Descripcion'] ?></td>
 <!--                <td class="marcoCel"><?php //echo $detFact[$i]['CodigoPrincipal'] ?></td>
                 <td class="marcoCel"><?php //echo $detFact[$i]['CodigoPrincipal'] ?></td>-->
-                <!--<td class="marcoCel dataNumber"><?php //echo Yii::$app->format->formatNumber($detFact[$i]['PrecioUnitario']) ?></td>Problmas de Redondeo-->
+                <!--<td class="marcoCel dataNumber"><?php //echo Yii::$app->formatter->format($detFact[$i]['PrecioUnitario']) ?></td>Problmas de Redondeo-->
                 <td class="marcoCel dataNumber"><?php echo $detFact[$i]['PrecioUnitario'] ?></td>
-                <td class="marcoCel dataNumber"><?php echo Yii::$app->format->formatNumber($detFact[$i]['Descuento']) ?></td>
-                <td class="marcoCel dataNumber"><?php echo Yii::$app->format->formatNumber($detFact[$i]['PrecioTotalSinImpuesto'])  ?></td>
+                <td class="marcoCel dataNumber"><?php echo Yii::$app->formatter->format($detFact[$i]['Descuento'], ["decimal", 2]) ?></td>
+                <td class="marcoCel dataNumber"><?php echo Yii::$app->formatter->format($detFact[$i]['PrecioTotalSinImpuesto'], ["decimal", 2])  ?></td>
             </tr>
         <?php } ?>
     </tbody>

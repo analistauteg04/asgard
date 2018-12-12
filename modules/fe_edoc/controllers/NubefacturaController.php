@@ -80,7 +80,7 @@ class NubefacturaController extends \app\components\CController {
         try {
             $ids = isset($_GET['ids']) ? base64_decode($_GET['ids']) : NULL;
             $rep= $report = new ExportFile();
-            $this->view->title = "Invoices";
+            //$this->view->title = "Invoices";
             $modelo = new NubeFactura(); //Ejmpleo code 3
             $cabFact = $modelo->mostrarCabFactura($ids);
             $detFact = $modelo->mostrarDetFacturaImp($ids);

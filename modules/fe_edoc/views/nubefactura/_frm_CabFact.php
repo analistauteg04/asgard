@@ -60,6 +60,7 @@
                 <td>
                     <?= \barcode\barcode\GeneratedCodebar::widget([
                         "message" => $cabFact['ClaveAcceso'],
+                        "base64" => true,
                         //"font_size" => 8
                     ]); ?>
                     <?php //echo yii\helpers\Html::img(Yii::$app->params['seaBarra'] .$cabFact['IdentificacionComprador']. '.png', array('width' => '280px', 'height' => '20px', "alt" => Yii::$app->params["copyright"])); ?>

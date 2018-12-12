@@ -25,6 +25,8 @@ use yii\helpers\Html;
                             "arr_descuento" => $arr_descuento,
                             "arr_item" => $arr_item,
                             "arr_empresa" => $arr_empresa,
+                            "precio" => $precio,
+                            "preciodescuento" => $preciodescuento
                         ]);
                     ?>                  
                 </form>
