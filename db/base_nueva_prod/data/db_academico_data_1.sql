@@ -302,7 +302,7 @@ INSERT INTO `modulo_estudio` (`mest_id`, `uaca_id`, `mod_id`, `mest_codigo`, `me
 (139, 9, 1, 'UL176DCRR-01', 'Diseño y configuración de redes en router', 'Diseño y configuración de redes en router', 'diseño_y_configuración_de_redes_en_router', 1, NULL, '1', '2018-12-10 12:15:48', NULL, '1'),
 (140, 9, 1, 'UL177UAMA-01', 'Uso y aplicaciones de mathcad', 'Uso y aplicaciones de mathcad', 'uso_y_aplicaciones_de_mathcad', 1, NULL, '1', '2018-12-10 12:15:48', NULL, '1'),
 (141, 9, 1, 'UL178CSAL-01', 'Configuración e implementación de un servidor apache basado en distribuciones Linux', 'Configuración e implementación de un servidor apache basado en distribuciones Linux', 'configuración_e_implementación_de_un_servidor_apache_basado_en_distribuciones_linux', 1, NULL, '1', '2018-12-10 12:15:48', NULL, '1'),
-(142, 9, 1, 'UL179ARIA-01', 'Análisis Riesgo Crediticio con Inteligencia Artificial', 'Análisis Riesgo Crediticio con Inteligencia Artificial', 'análisis_riesgo_crediticio_con_inteligencia_artificial', 1, NULL, '1', '2018-12-10 12:15:48', NULL, '1'),
+(142, 9, 1, 'UL179DAWP-01', 'Desarrollo de Aplicaciones Web con Python', 'Desarrollo de Aplicaciones Web con Python', 'desarrollo_de_aplicaciones_web_con_python', 1, NULL, '1', '2018-12-10 12:15:48', NULL, '1'),
 (143, 9, 1, 'UL180DPCB-01', 'Desarrollo de procesos con BIZAGI', 'Desarrollo de procesos con BIZAGI', 'desarrollo_de_procesos_con_bizagi', 1, NULL, '1', '2018-12-10 12:15:48', NULL, '1'),
 (144, 9, 1, 'UL181BPPR-01', 'Bootstrap para principiantes', 'Bootstrap para principiantes', 'bootstrap_para_principiantes', 1, NULL, '1', '2018-12-10 12:15:48', NULL, '1');
 -- --------------------------------------------------------

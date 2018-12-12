@@ -106,7 +106,7 @@ insert into `item` (`ite_id`, `scat_id`,  `ite_codigo`, `ite_nombre`, `ite_descr
 (71, 7, '0071', 'Curso Uwork', 'Uso y aplicaciones de mathcad', 1, '1', '1'),
 
 (72, 7, '0072', 'Curso Uwork', 'Configuración e implementación de un servidor apache basado en distribuciones Linux', 1, '1', '1'),
-(73, 7, '0073', 'Curso Uwork', 'Análisis Riesgo Crediticio con Inteligencia Artificial', 1, '1', '1'),
+(73, 7, '0073', 'Curso Uwork', 'Desarrollo de Aplicaciones Web con Python', 1, '1', '1'),
 (74, 7, '0074', 'Curso Uwork', 'Desarrollo de procesos con BIZAGI', 1, '1', '1'),
 (75, 7, '0075', 'Curso Uwork', 'Bootstrap para principiantes', 1, '1', '1'),
 (76, 7, '0076', 'Curso Uwork', 'Diseño y desarrollo de base de datos en SQL server', 1, '1', '1'),
