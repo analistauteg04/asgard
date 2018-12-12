@@ -7,6 +7,7 @@ use app\modules\academico\models\PeriodoAcademicoMetIngreso;
 use app\modules\academico\models\MatriculadosReprobado;
 use app\modules\academico\models\EstudioAcademico;
 use app\modules\academico\models\Admitido;
+use app\modules\admision\models\SolicitudInscripcion;
 use app\modules\admision\models\ItemMetodoUnidad;
 use app\modules\financiero\models\DetalleDescuentoItem;
 use app\modules\academico\models\ModuloEstudio;
@@ -17,6 +18,7 @@ use app\models\Empresa;
 use app\models\Provincia;
 use app\models\Pais;
 use app\models\Canton;
+
 use app\models\MedioPublicitario;
 use app\modules\academico\models\Modalidad;
 use app\modules\academico\models\UnidadAcademica;
@@ -283,6 +285,7 @@ class MatriculadosreprobadosController extends \app\components\CController {
         $per_id = Yii::$app->session->get("PB_perid");
         $mod_persona = Persona::findIdentity($per_id);
         $mod_modalidad = new Modalidad();
+        $mod_solins = new SolicitudInscripcion();
         $empresa_mod = new Empresa();
         $mod_pergestion = new PersonaGestion();
         $mod_unidad = new UnidadAcademica();
@@ -393,8 +396,18 @@ class MatriculadosreprobadosController extends \app\components\CController {
         $arr_metodos = $mod_metodo->consultarMetodoUnidadAca_2($arr_ninteres[0]["id"]);
         $_SESSION['JSLANG']['Your information has not been saved. Please try again.'] = Yii::t('notificaciones', 'Your information has not been saved. Please try again.');
         //Descuentos y precios.
-        $resp_item = $modItemMetNivel->consultarXitemPrecio(1, 1, 1, 2, 1);
-        $arr_descuento = $modDescuento->consultarDesctoxitem($resp_item["ite_id"]);
+        $resp_item = $modItemMetNivel->consultarXitemPrecio($arr_ninteres[0]["id"],$arr_modalidad[0]["id"],$arr_metodos[0]["id"],$arr_carrerra1[0]["id"],$empresa[0]["id"]);        
+        $resp_precio = $mod_solins->ObtenerPrecioXitem($resp_item[0]["id"]);                 
+        $arr_descuento = $modDescuento->consultarDesctoxitem($resp_item[0]["id"]);
+        $respDescuento = $modDescuento->consultarValdctoItem($arr_descuento[0]["id"]);
+        
+        if ($respDescuento["ddit_tipo_beneficio"] == 'P') {
+            $descuento = ($resp_precio["precio"] * $respDescuento["ddit_porcentaje"])/100;
+        } else {
+            $descuento = $respDescuento["ddit_valor"];
+        }                   
+        $precioDescuento = $resp_precio["precio"]-$descuento; 
+        
         return $this->render('new', [
                     "tipos_dni" => array("CED" => Yii::t("formulario", "DNI Document"), "PASS" => Yii::t("formulario", "Passport")),
                     "tipos_dni2" => array("CED" => Yii::t("formulario", "DNI Document1"), "PASS" => Yii::t("formulario", "Passport1")),
@@ -409,9 +422,10 @@ class MatriculadosreprobadosController extends \app\components\CController {
                     "arr_conuteg" => ArrayHelper::map($arr_conuteg, "id", "name"),
                     "arr_carrerra1" => ArrayHelper::map($arr_carrerra1, "id", "name"),
                     "arr_metodos" => ArrayHelper::map($arr_metodos, "id", "name"),
-                    "arr_item" => ArrayHelper::map(array_merge(["id" => "0", "name" => "Seleccionar"], $resp_item), "id", "name"), 
+                    "arr_item" => ArrayHelper::map($resp_item, "id", "name"), 
                     "arr_empresa" => ArrayHelper::map($empresa, "id", "value"),
-                    "resp_datos" => $resp_datos,
+                    "precio" => $resp_precio['precio'],
+                    "preciodescuento" => $precioDescuento
         ]);
     }
 

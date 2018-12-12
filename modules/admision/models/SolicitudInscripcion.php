@@ -1793,7 +1793,6 @@ class SolicitudInscripcion extends \yii\db\ActiveRecord
     public function ObtenerPrecioXitem($ite_id) {
         $con = \Yii::$app->db_facturacion;
         $estado = 1;
-
         $sql = "SELECT ipre_precio precio 
                 FROM " . $con->dbname . ".item_precio 
                 WHERE ite_id = :ite_id
