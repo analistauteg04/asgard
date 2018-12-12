@@ -99,8 +99,7 @@ $(document).ready(function () {
         $("a[data-href='#paso2']").attr('href', $("a[data-href='#paso2']").attr('data-href'));
         $("a[data-href='#paso2']").trigger("click");
     });
-    $('#cmb_unidad_solicitud').change(function () {
-        alert("llego aqui");
+    $('#cmb_ninteres').change(function () {
         $('#gridmateria').css('display', 'none');
         document.getElementById("cmb_periodo").options.item(0).selected = 'selected';
         var link = $('#txth_base').val() + "/academico/matriculadosreprobados/newreprobado";
@@ -110,10 +109,10 @@ $(document).ready(function () {
         requestHttpAjax(link, arrParams, function (response) {
             if (response.status == "OK") {
                 data = response.message;
-                setComboDataselect(data.modalidad, "cmb_modalidad_solicitud", "Seleccionar");
+                setComboDataselect(data.modalidad, "cmb_modalidad", "Seleccionar");
                 var arrParams = new Object();
                 if (data.modalidad.length > 0) {
-                    arrParams.unidada = $('#cmb_unidad_solicitud').val();
+                    arrParams.unidada = $('#cmb_ninteres').val();
                     arrParams.moda_id = data.modalidad[0].id;
                     arrParams.getcarrera = true;
                     requestHttpAjax(link, arrParams, function (response) {
@@ -126,12 +125,12 @@ $(document).ready(function () {
             }
         }, true);
     });
-    $('#cmb_modalidad_solicitud').change(function () {
+    $('#cmb_modalidad').change(function () {
         $('#gridmateria').css('display', 'none');
         document.getElementById("cmb_periodo").options.item(0).selected = 'selected';
         var link = $('#txth_base').val() + "/academico/matriculadosreprobados/newreprobado";
         var arrParams = new Object();
-        arrParams.unidada = $('#cmb_unidad_solicitud').val();
+        arrParams.unidada = $('#cmb_ninteres').val();
         arrParams.moda_id = $(this).val();
         arrParams.getcarrera = true;
         requestHttpAjax(link, arrParams, function (response) {
@@ -608,8 +607,8 @@ function guardarAdmiMateriarep() {
     var link = $('#txth_base').val() + "/academico/matriculadosreprobados/save";
     var arrParams = new Object();
     var selected = '';
-    arrParams.uniacademica = $('#cmb_unidad_solicitud').val();
-    arrParams.modalidad = $('#cmb_modalidad_solicitud').val();
+    arrParams.uniacademica = $('#cmb_ninteres').val();
+    arrParams.modalidad = $('#cmb_modalidad').val();
     arrParams.carreprog = $('#cmb_carrera1').val();
     arrParams.periodo = $('#cmb_periodo').val();
     arrParams.estadomat = $('#cmb_estado').val();
@@ -628,8 +627,8 @@ function guardarAdmiMateriarep() {
         var mensaje = {wtmessage: "Seleccionar datos del admitido desde buscar DNI.", title: "Error"};
         showAlert("NO_OK", "Error", mensaje);
     } else {
-        if ($('#cmb_unidad_solicitud option:selected').val() > '0') {
-            if ($('#cmb_modalidad_solicitud option:selected').val() > '0') {
+        if ($('#cmb_ninteres option:selected').val() > '0') {
+            if ($('#cmb_modalidad option:selected').val() > '0') {
                 if ($('#cmb_carrera1 option:selected').val() > '0') {
                     if ($('#cmb_periodo option:selected').val() > '0') {
                         if ($('#cmb_estado option:selected').val() > '0') {
@@ -808,13 +807,13 @@ function exportPdf() {
     window.location.href = $('#txth_base').val() + "/academico/matriculadosreprobados/exportpdf?pdf=1&search=" + search + "&fecha_ini=" + f_ini + "&fecha_fin=" + f_fin + "&estadomat=" + estadomat;
 }
 function actualizarMateriaGrid() {
-    if ($('#cmb_unidad_solicitud option:selected').val() > '0') {
-        if ($('#cmb_modalidad_solicitud option:selected').val() > '0') {
+    if ($('#cmb_ninteres option:selected').val() > '0') {
+        if ($('#cmb_modalidad option:selected').val() > '0') {
             if ($('#cmb_carrera1 option:selected').val() > '0') {
                 if ($('#cmb_periodo option:selected').val() > '0') {
                     $('#gridmateria').css('display', 'block');
-                    var unidad = $('#cmb_unidad_solicitud option:selected').val();
-                    var modalidad = $('#cmb_modalidad_solicitud option:selected').val();
+                    var unidad = $('#cmb_ninteres option:selected').val();
+                    var modalidad = $('#cmb_modalidad option:selected').val();
                     var carrera = $('#cmb_carrera1 option:selected').val();
                     var periodo = $('#cmb_periodo option:selected').val();
                     if (!$(".blockUI").length) {
