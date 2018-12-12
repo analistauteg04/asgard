@@ -616,12 +616,18 @@ class MatriculadosReprobado extends \yii\db\ActiveRecord {
                 (twre_nombre,twre_apellido,twre_dni,twre_numero,twre_correo,twre_pais,twre_celular,
                 uaca_id, mod_id,car_id,twre_metodo_ingreso,conuteg_id,ruta_doc_titulo, 
                 ruta_doc_dni, ruta_doc_certvota, ruta_doc_foto,ruta_doc_certificado, 
-                twre_mensaje1,twre_mensaje2,twre_estado,twre_fecha_creacion,twre_estado_logico)
+                twre_mensaje1,twre_mensaje2, 
+                twre_fecha_solicitud, sdes_id, ite_id, 
+                twre_precio_item, twre_precio_descuento, twre_observacion_sol,
+                twre_estado,twre_fecha_creacion,twre_estado_logico)
                 VALUES
                 (:twre_nombre,:twre_apellido,:twre_dni,:twre_numero,:twre_correo,:twre_pais,
                 :twre_celular,:uaca_id, :mod_id,:car_id,:twre_metodo_ingreso,:conuteg_id,
                 :ruta_doc_titulo,:ruta_doc_dni,:ruta_doc_certvota, :ruta_doc_foto,
-                :ruta_doc_certificado,:twre_mensaje1,:twre_mensaje2,1,CURRENT_TIMESTAMP(),1)";
+                :ruta_doc_certificado,:twre_mensaje1,:twre_mensaje2,
+                :twre_fecha_solicitud, :sdes_id, :ite_id,
+                :twre_precio_item, :twre_precio_descuento, :twre_observacion_sol,
+                1,CURRENT_TIMESTAMP(),1)";
 
             $command = $con->createCommand($sql);
             $command->bindParam(":twre_nombre", $data[0]['pges_pri_nombre'], \PDO::PARAM_STR);
@@ -631,9 +637,6 @@ class MatriculadosReprobado extends \yii\db\ActiveRecord {
             $command->bindParam(":twre_correo", $data[0]['pges_correo'], \PDO::PARAM_STR);
             $command->bindParam(":twre_pais", $data[0]['pais'], \PDO::PARAM_STR);
             $command->bindParam(":twre_celular", $data[0]['pges_celular'], \PDO::PARAM_STR);
-            
-            $command->bindParam(":twre_celular", $data[0]['pges_celular'], \PDO::PARAM_STR);
-            
             $command->bindParam(":uaca_id", $data[0]['unidad_academica'], \PDO::PARAM_STR);
             $command->bindParam(":mod_id", $data[0]['modalidad'], \PDO::PARAM_STR);
             $command->bindParam(":car_id", $data[0]['carrera'], \PDO::PARAM_STR);
@@ -644,6 +647,12 @@ class MatriculadosReprobado extends \yii\db\ActiveRecord {
             $command->bindParam(":ruta_doc_certvota", $ruta_doc_certvota, \PDO::PARAM_STR);
             $command->bindParam(":ruta_doc_foto", $ruta_doc_foto, \PDO::PARAM_STR);
             $command->bindParam(":ruta_doc_certificado", $ruta_doc_certificado, \PDO::PARAM_STR);
+            $command->bindParam(":twre_fecha_solicitud", $data[0]['fecha_solicitud'], \PDO::PARAM_STR);
+            $command->bindParam(":sdes_id", $data[0]['sdes_id'], \PDO::PARAM_INT);
+            $command->bindParam(":ite_id", $data[0]['ite_id'], \PDO::PARAM_INT);
+            $command->bindParam(":twre_precio_item", $data[0]['precio_item'], \PDO::PARAM_STR);
+            $command->bindParam(":twre_precio_descuento", $data[0]['precio_item_desc'], \PDO::PARAM_STR);
+            $command->bindParam(":twre_observacion_sol", $data[0]['observacionw'], \PDO::PARAM_STR);
             $command->bindParam(":twre_mensaje1", $twin_mensaje1, \PDO::PARAM_STR);
             $command->bindParam(":twre_mensaje2", $twin_mensaje2, \PDO::PARAM_STR);
             $command->execute();
@@ -655,6 +664,7 @@ class MatriculadosReprobado extends \yii\db\ActiveRecord {
             else
                 return ["status" => false, "twre_id" => 0];
         } catch (Exception $ex) {
+            \app\models\Utilities::putMessageLogFile($ex->getMessage());            
             if ($trans !== null)
                 $trans->rollback();
             return ["status" => false, "twre_id" => 0];

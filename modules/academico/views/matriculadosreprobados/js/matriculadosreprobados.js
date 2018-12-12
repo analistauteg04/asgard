@@ -689,6 +689,7 @@ function dataInscripPart1(ID) {
     var datArray = new Array();
     var objDat = new Object();
     objDat.twre_id = ID;
+    objDat.ming_id = $('#cmb_empresa option:selected').val();
     objDat.pges_pri_nombre = $('#txt_primer_nombre').val();
     objDat.pges_pri_apellido = $('#txt_primer_apellido').val();
     objDat.tipo_dni = $('#cmb_tipo_dni option:selected').val();
@@ -696,16 +697,16 @@ function dataInscripPart1(ID) {
     objDat.pges_correo = $('#txt_correo').val();
     objDat.pais = $('#cmb_pais_dom option:selected').val();
     objDat.pges_celular = $('#txt_celular').val();
-    objDat.unidad_academica = $('#cmb_unidad_solicitud option:selected').val();
-    objDat.modalidad = $('#cmb_modalidad_solicitud_solicitud option:selected').val();
-    objDat.ming_id = $('#cmb_metodo_solicitud option:selected').val();
-    objDat.carrera = $('#cmb_carrera_solicitud option:selected').val();
+    objDat.unidad_academica = $('#cmb_unidad_solicitudw option:selected').val();
+    objDat.modalidad = $('#cmb_modalidad_solicitudw option:selected').val();
+    objDat.ming_id = ($('#cmb_metodo_solicitudw option:selected').val()) ? $('#cmb_metodo_solicitudw').val() : 0;
+    objDat.carrera = $('#cmb_carrera_solicitudw option:selected').val() ? $('#cmb_carrera_solicitudw').val() : 0;
     objDat.ruta_doc_titulo = ($('#txth_doc_titulo').val() != '') ? $('#txth_doc_titulo').val() : '';
     objDat.ruta_doc_dni = ($('#txth_doc_dni').val() != '') ? $('#txth_doc_dni').val() : '';
     objDat.ruta_doc_certvota = ($('#txth_doc_certvota').val() != '') ? $('#txth_doc_certvota').val() : '';
     var today = new Date();
     var dd = today.getDate();
-    var mm = today.getMonth() + 1; //January is 0!
+    var mm = today.getMonth() + 1; 
     var yyyy = today.getFullYear();
     if (dd < 10) {
         dd = '0' + dd
@@ -716,14 +717,17 @@ function dataInscripPart1(ID) {
     }
     var fecha_actual = yyyy + '/' + mm + '/' + dd;
     objDat.fecha_solicitud = ($('#txt_fecha_solicitud').val() != '') ? $('#txt_fecha_solicitud').val() : fecha_actual;
-    objDat.ite_id = $('#cmb_item option:selected').val();
+    objDat.ite_id = $('#cmb_item_solicitudw option:selected').val();
+    objDat.precio_item = $('#txt_precio_itemw').val();
     if ($('input[name=opt_declara_Dctosi]:checked').val() == 1) {
-        objDat.sdes_id = $('#cmb_descuento').val();
+        objDat.sdes_id = $('#cmb_descuento_solicitudw').val();
         objDat.marcadescuento = '1';
     } else {
         objDat.sdes_id = 0;
         objDat.marcadescuento = '0';
     }
+    objDat.precio_item_desc = $('#txt_precio_item2w').val();
+    objDat.observacionw = $('#txt_observacionw').val();
     objDat.ruta_doc_foto = '';
     objDat.ruta_doc_hojavida = '';
     objDat.ruta_doc_certificado = ($('#txth_doc_certificado').val() != '') ? $('#txth_doc_certificado').val() : '';
@@ -731,7 +735,7 @@ function dataInscripPart1(ID) {
     objDat.twre_mensaje2 = ($("#chk_mensaje2").prop("checked")) ? '1' : '0';
     datArray[0] = objDat;
     sessionStorage.dataReprobado_1 = JSON.stringify(datArray);
-    return datArray;
+    return datArray;    
 }
 function habilitarSecciones() {
     var pais = $('#cmb_pais_dom').val();

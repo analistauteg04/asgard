@@ -92,7 +92,6 @@ class MatriculadosreprobadosController extends \app\components\CController {
                     }
                 }
                 if ($accion == "create" || $accion == "Create") {
-                    \app\models\Utilities::putMessageLogFile('Va insertar en la temporal');
                     $resul = $model->insertarReprobadoTemp($con, $data["DATA_1"]);
                 } else if ($accion == "Update") {
                     $matr_repro_id=$data["DATA_1"][0]['twre_id'];
@@ -103,7 +102,8 @@ class MatriculadosreprobadosController extends \app\components\CController {
                         , 'twre_metodo_ingreso', 'ruta_doc_titulo', 'ruta_doc_dni'
                         , 'ruta_doc_certvota', 'ruta_doc_foto', 'ruta_doc_certificado'
                         , 'ruta_doc_hojavida', 'twre_mensaje1', 'twre_mensaje2'
-                        , 'twre_fecha_solicitud', 'sdes_id', 'ite_id'
+                        , 'twre_fecha_solicitud', 'sdes_id', 'ite_id', 'twre_precio_item'
+                        , 'twre_precio_descuento', 'twre_observacion_sol'
                     ];
                     //ruta_doc_titulo
                     $path_title = $data["DATA_1"][0]['ruta_doc_titulo'];
@@ -170,7 +170,6 @@ class MatriculadosreprobadosController extends \app\components\CController {
                         if ($certvota_archivo === false)
                             throw new Exception('Error doc certificado vot. no renombrado.');
                     }
-                    
                     $values_act = [
                         $data["DATA_1"][0]['pges_pri_nombre'], $data["DATA_1"][0]['pges_pri_apellido'], $data["DATA_1"][0]['tipo_dni'], $data["DATA_1"][0]['pges_cedula'],
                         $data["DATA_1"][0]['pges_correo'], $data["DATA_1"][0]['pais'], $data["DATA_1"][0]['pges_celular'],
@@ -178,13 +177,11 @@ class MatriculadosreprobadosController extends \app\components\CController {
                         $data["DATA_1"][0]['ming_id'], $data["DATA_1"][0]["ruta_doc_titulo"], $data["DATA_1"][0]["ruta_doc_dni"],
                         $data["DATA_1"][0]["ruta_doc_certvota"], $data["DATA_1"][0]['ruta_doc_foto'], $data["DATA_1"][0]["ruta_doc_certvota"],
                         $data["DATA_1"][0]['ruta_doc_hojavida'], $data["DATA_1"][0]['twre_mensaje1'], $data["DATA_1"][0]['twre_mensaje2'],
-                        $data["DATA_1"][0]['fecha_solicitud'],$data["DATA_1"][0]['sdes_id'],$data["DATA_1"][0]['ite_id']
+                        $data["DATA_1"][0]['fecha_solicitud'],$data["DATA_1"][0]['sdes_id'],$data["DATA_1"][0]['ite_id'],
+                        $data["DATA_1"][0]['twre_precio_item'],$data["DATA_1"][0]['twre_precio_descuento'],$data["DATA_1"][0]['twre_observacion_sol'],
                     ];
-                    \app\models\Utilities::putMessageLogFile('Tabla Temporal');                    
-                    $cadena_presentar="";
                     $resul = $model->actualizarReprobadoTemp($con, $data["DATA_1"][0]['twre_id'], $values_act, $keys_act, 'temporal_wizard_reprobados');
                     if($data["PASO"]==3){
-                        \app\models\Utilities::putMessageLogFile('Se va actualizar la tabla de asgard');
                         $resul=$model->insertaOriginal($resul["twre_id"]);
                     }
                 }
