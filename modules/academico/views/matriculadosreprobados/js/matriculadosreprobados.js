@@ -207,12 +207,31 @@ $(document).ready(function () {
             $('#divDescuento').css('display', 'block');
         }
     });
-    
+    $('#opt_declara_si').change(function () {
+        if ($('#opt_declara_si').val() == 1) {
+            $('#divDeclarabeca').css('display', 'block');
+            //$('#votacion').css('display', 'none'); no se entiende este elemento
+            $("#opt_declara_no").prop("checked", "");
+        } else {
+            $('#divDeclarabeca').css('display', 'none');
+            //$('#votacion').css('display', 'block'); no se entiende este elemento
+        }
+    });
+    $('#opt_declara_no').change(function () {
+        if ($('#opt_declara_no').val() == 2) {
+            $('#divDeclarabeca').css('display', 'none');
+            $('#votacion').css('display', 'block');
+            $("#opt_declara_si").prop("checked", "");
+        } else {
+            $('#divDeclarabeca').css('display', 'block');
+            $('#votacion').css('display', 'none');
+        }
+    });
     $('#cmb_metodo_solicitudw').change(function () {
         var link = $('#txth_base').val() + "/academico/matriculadosreprobados/new";        
         var arrParams = new Object();
         if ($('#cmb_metodo_solicitudw').val() == 2) {
-            if ($('#cmb_ninteres').val() == 1) {
+            if ($('#cmb_unidad_solicitudw').val() == 1) {
                 $('#divBeca').css('display', 'block');
             } else {
                 $('#divBeca').css('display', 'none');
@@ -859,10 +878,15 @@ function dataInscripPart1(ID) {
     objDat.precio_item = $('#txt_precio_itemw').val();
     if ($('input[name=opt_declara_Dctosi]:checked').val() == 1) {
         objDat.sdes_id = $('#cmb_descuento_solicitudw').val();
-        objDat.marcadescuento = '1';
+        objDat.marcadescuento = 1;
     } else {
         objDat.sdes_id = 0;
-        objDat.marcadescuento = '0';
+        objDat.marcadescuento = 0;
+    }
+    if ($('input[name=opt_declara_si]:checked').val() == 1) {
+        objDat.beca = 1;
+    } else {
+        objDat.beca = 0;
     }
     objDat.precio_item_desc = $('#txt_precio_item2w').val();
     objDat.observacionw = $('#txt_observacionw').val();

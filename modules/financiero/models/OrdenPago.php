@@ -2020,7 +2020,6 @@ class OrdenPago extends \app\modules\financiero\components\CActiveRecord {
         try {
             $sql = "INSERT INTO " . $con->dbname . ".solicitud_descuento ($param_sql) VALUES($bdsoldes_sql)";
             $comando = $con->createCommand($sql);
-
             if (isset($sins_id))
                 $comando->bindParam(':sins_id', $sins_id, \PDO::PARAM_INT);
 

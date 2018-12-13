@@ -5,6 +5,7 @@ namespace app\modules\academico\models;
 use Yii;
 use yii\data\ArrayDataProvider;
 use app\modules\financiero\models\OrdenPago;
+use \app\modules\financiero\models\DetalleDescuentoItem;
 use app\models\Persona;
 use app\models\Utilities;
 use app\models\EmpresaPersona;
@@ -690,7 +691,6 @@ class MatriculadosReprobado extends \yii\db\ActiveRecord {
             $sql = "UPDATE " . $con->dbname . '.' . $name_table .
                     " SET $params_sql" .
                     " WHERE twre_id=$id";
-            \app\models\Utilities::putMessageLogFile('sql: ' . $sql);
             $comando = $con->createCommand($sql);
             $result = $comando->execute();
             $trans->commit();
@@ -944,7 +944,6 @@ class MatriculadosReprobado extends \yii\db\ActiveRecord {
         $transaction2 = $con2->beginTransaction();
         try {
             //Se consulta la información grabada en la tabla temporal.
-            \app\models\Utilities::putMessageLogFile('Va actualizar la temporal');
             $resp_datos = $this->consultarDatosInscripcion($twreIds);
             // He colocado al inicio la informacion para que cargue al principio
             if ($resp_datos) {
@@ -1119,15 +1118,11 @@ class MatriculadosReprobado extends \yii\db\ActiveRecord {
                                                     }
                                                 }
                                                 //Obtener el precio de la solicitud.
+                                                $beca=$resp_datos['beca'];
                                                 if ($beca == "1") {
                                                     $precio = 0;
                                                 } else {
-                                                    $resp_precio = $solins_model->ObtenerPrecio($resp_datos['twre_metodo_ingreso'], $resp_datos['uaca_id'], $resp_datos['mod_id'], $eaca_id);
-                                                    if ($resp_precio) {
-                                                        $precio = $resp_precio['precio'];
-                                                    } else {
-                                                        $mensaje = 'No existe registrado ningún precio para la unidad, modalidad y método de ingreso seleccionada.';
-                                                    }
+                                                    $precio = $resp_datos['twre_precio_item'];
                                                 }
                                                 $mod_ordenpago = new OrdenPago();
                                                 //Se verifica si seleccionó descuento.
@@ -1143,13 +1138,19 @@ class MatriculadosReprobado extends \yii\db\ActiveRecord {
                                                 } else {
                                                     $estadopago = 'P';
                                                 }
-                                                $val_total = $precio - $val_descuento;
+                                                $val_total = $resp_datos['twre_precio_descuento'];
                                                 $resp_opago = $mod_ordenpago->insertarOrdenpago($sins_id, null, $val_total, 0, $val_total, $estadopago, $usuario_id);
                                                 if ($resp_opago) {
                                                     //insertar desglose del pago                                    
                                                     $fecha_ini = date(Yii::$app->params["dateByDefault"]);
-                                                    $resp_dpago = $mod_ordenpago->insertarDesglosepago($resp_opago, $val_total, 0, $val_total, $fecha_ini, null, $estadopago, $usuario_id);
+                                                    $resp_dpago = $mod_ordenpago->insertarDesglosepago($resp_opago,$resp_datos['ite_id'], $val_total, 0, $val_total, $fecha_ini, null, $estadopago, $usuario_id);
                                                     if ($resp_dpago) {
+                                                        if ($resp_datos['marcadescuento'] > 0) {
+                                                            \app\models\Utilities::putMessageLogFile('insertar en descuento');
+                                                            $detDescitem=new DetalleDescuentoItem();
+                                                            $respDescuento=$detDescitem->consultarValdctoItem($resp_datos['sdes_id']);
+                                                            $resp_SolicDcto = $mod_ordenpago->insertarSolicDscto($sins_id, $resp_datos['sdes_id'], $resp_datos['twre_precio_item'], $respDescuento["ddit_porcentaje"], $respDescuento["ddit_valor"]);
+                                                        }
                                                         $exito = 1;
                                                     }
                                                 }
