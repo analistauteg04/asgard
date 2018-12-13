@@ -169,4 +169,26 @@ class DetalleDescuentoItem extends \app\modules\financiero\components\CActiveRec
         $resultData = $comando->queryAll();
         return $resultData;
     }
+    /**
+     * Function consultarHistoricodctoXitem
+     * @author  Grace Viteri <analistadesarrollo01@uteg.edu.ec>
+     * @param   
+     * @return  $resultData (Para obtener el valor histórico del descuento del item.)
+     */
+    public function consultarHistoricodctoXitem($dite_id, $fecha) {
+        $con = \Yii::$app->db_facturacion;
+        $estado = 1;
+        $sql = "SELECT hdit_tipo_beneficio, hdit_porcentaje, hdit_valor
+                FROM " . $con->dbname . ".historial_descuento_item hdi
+                WHERE hdi.ddit_id = :dite_id
+                    and :fecha between hdi.hdit_fecha_inicio and ifnull(hdi.hdit_fecha_fin, now())  
+                    and hdi.hdit_estado = :estado
+                    and hdi.hdit_estado_logico = :estado";  
+        $comando = $con->createCommand($sql);
+        $comando->bindParam(":estado", $estado, \PDO::PARAM_STR);
+        $comando->bindParam(":dite_id", $dite_id, \PDO::PARAM_INT);
+        $comando->bindParam(":fecha", $fecha, \PDO::PARAM_STR);        
+        $resultData = $comando->queryOne();
+        return $resultData;
+    }
 }
