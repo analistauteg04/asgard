@@ -1,5 +1,5 @@
 <div>
-    <table style="width:200mm;" class="marcoDiv">
+    <table style="width:100%;" class="marcoDiv">
         <tbody>
             <tr>
                 <td>

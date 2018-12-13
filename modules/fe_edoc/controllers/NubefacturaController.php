@@ -46,7 +46,7 @@ class NubefacturaController extends \app\components\CController {
         $aproba= new VSacceso();
         $contBuscar = array();
         $data = Yii::$app->request->get();
-        if ($data['PBgetFilter']) {
+        if ($data['PBgetFilter'] || $data['page']) {
             //$contBuscar = isset($_POST['CONT_BUSCAR']) ? json_encode($_POST['CONT_BUSCAR']) : array();
             //echo CJSON::encode($modelo->mostrarDocumentos($contBuscar));
             $arrayData = array();

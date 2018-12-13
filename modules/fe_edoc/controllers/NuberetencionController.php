@@ -3,8 +3,6 @@
 namespace app\modules\fe_edoc\controllers;
 
 use Yii;
-use yii\helpers\ArrayHelper;
-use yii\base\Exception;
 use app\modules\fe_edoc\models\VSacceso;
 use app\modules\fe_edoc\models\VSDirectorio;
 use app\modules\fe_edoc\models\VSDocumentos;
@@ -13,6 +11,9 @@ use app\modules\fe_edoc\models\mailSystem;
 use app\modules\fe_edoc\models\REPORTES;
 use app\modules\fe_edoc\models\USUARIO;
 use app\modules\fe_edoc\models\NubeRetencion;
+use app\models\ExportFile;
+use yii\helpers\ArrayHelper;
+use yii\base\Exception;
 
 class NuberetencionController extends \app\components\CController  {
 
@@ -132,16 +133,27 @@ class NuberetencionController extends \app\components\CController  {
         $aproba= new VSacceso();
         $tipDoc= new VSDirectorio();
         $contBuscar = array();
-        if (Yii::$app->request->isAjax) {
+        $data = Yii::$app->request->get();
+        if ($data['PBgetFilter'] || $data['page']) {
             //$contBuscar = isset($_POST['CONT_BUSCAR']) ? json_encode($_POST['CONT_BUSCAR']) : array();
             //echo CJSON::encode($modelo->mostrarDocumentos($contBuscar));
             $arrayData = array();
-            $contBuscar = isset($_POST['CONT_BUSCAR']) ? json_decode($_POST['CONT_BUSCAR'], true) : array();
-            //$contBuscar[0]['PAGE'] = isset($_GET['page']) ? $_GET['page'] : 0;
+            $contBuscar = isset($data['CONT_BUSCAR']) ? json_decode($data['CONT_BUSCAR'],true) : array();
+            //$contBuscar[0]['PAGE'] = isset($data['page']) ? $data['page'] : 0;
             $arrayData = $modelo->mostrarDocumentos($contBuscar);
             return $this->render('_indexGrid', array(
                 'model' => $arrayData,
                     ));
+        }
+        if (Yii::$app->request->isAjax) {
+            $valor = isset($_POST['valor']) ? $_POST['valor'] : "";
+            $op = isset($_POST['op']) ? $_POST['op'] : "";
+            $arrayData = array();
+            $data = new NubeFactura();
+            $arrayData = $data->retornarPersona($valor, $op);
+            header('Content-type: application/json');
+            echo json_encode($arrayData);
+            return;
         }
         //$this->view->title = Yii::t('DOCUMENTOS', 'Proof of retention');
         return $this->render('index', array(
@@ -202,25 +214,25 @@ class NuberetencionController extends \app\components\CController  {
         }
     }
     
-    public function actionGenerarPdf($ids) {
+    public function actionGenerarpdf($ids) {
         try {
             $ids = isset($_GET['ids']) ? base64_decode($_GET['ids']) : NULL;
-            $rep=new REPORTES;
+            $rep = new ExportFile();
             $modelo = new NubeRetencion(); //Ejmpleo code 3
             $cabDoc = $modelo->mostrarCabRetencion($ids);
             $detDoc = $modelo->mostrarDetRetencion($ids);
             $adiDoc = $modelo->mostrarRetencionDataAdicional($ids);
-            $mPDF1=$rep->crearBaseReport();
+            
             $Titulo=Yii::$app->getSession()->get('RazonSocial', FALSE) . " - " . $cabDoc['NombreDocumento'];
             $nameFile=$cabDoc['NombreDocumento'] . '-' . $cabDoc['NumDocumento'];
-            $Contenido=$this->render('retencionPDF', array(
+            $rep->createReportPdf(
+                    $this->render('retencionPDF', array(
                         'cabDoc' => $cabDoc,
                         'detDoc' => $detDoc,
                         'adiDoc' => $adiDoc,
-                                ));
-             $mPDF1->SetTitle($Titulo);
-             $mPDF1->WriteHTML($Contenido); //hacemos un render partial a una vista preparada, en este caso es la vista docPDF
-             $mPDF1->Output($nameFile, 'I');
+                                ))
+                    );
+             $rep->mpdf->Output($nameFile . '_' . date("Ymdhis") . ".pdf", ExportFile::OUTPUT_TO_DOWNLOAD);
             //exit;
         } catch (Exception $e) {
             $this->errorControl($e);

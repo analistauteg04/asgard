@@ -75,6 +75,7 @@
                     </tr>
                 </tbody>
             </table>
+            <br />
             <table style="width:100%;">
                 <tbody>
                     <tr>
@@ -84,15 +85,17 @@
                     </tr>
                 </tbody>
             </table>
+            <br />
             <table style="width:100%;">
                 <tbody>
                     <tr>
-                        <td style="width:50%">
+                        <td style="/*width:50%*/">
                             <?php echo $this->render('_frm_DetFact', array('detFact' => $detFact)); ?>
                         </td>
                     </tr>
                 </tbody>
             </table>
+            <br />
             <table style="width:100%;">
                 <tbody>
                     <tr>
@@ -102,16 +105,6 @@
                         <td style="width:30%">
                             <div>
                                 <?php echo $this->render('_frm_TotFact', array('impFact' => $impFact, 'cabFact' => $cabFact)); ?>
-                            </div>
-                        </td>
-                    </tr>
-                    <tr>
-                        <td>
-                            <div>
-                                <p>
-                                    "<b style="color:red">NOTA:</b> <?= Yii::$app->params["copyright"] ?> Solicita a usted enviar el comprobante de retención a <b>retenciones@utimpor.com</b>  en un máximo en los (5) días hábiles posteriores a la emisión de la facturas de acuerdo con el Art. 95 del RALRTI.
-                                    Agradecemos confirmar la recepción de éste documento en: <b style="color:green"><?php echo $venFact['CorreoUser'] ?></b>"
-                                </p>
                             </div>
                         </td>
                     </tr>
