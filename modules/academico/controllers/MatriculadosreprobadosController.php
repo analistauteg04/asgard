@@ -364,9 +364,9 @@ class MatriculadosreprobadosController extends \app\components\CController {
                 $message = array("metodos" => $metodos);
                 return Utilities::ajaxResponse('OK', 'alert', Yii::t('jslang', 'Success'), 'false', $message);
             }
-            if (isset($data["getdescuento"])) {
-                $resItems = $modItemMetNivel->consultarXitemMetniv($data["unidada"], $data["moda_id"], $data["metodo"], $data["empresa_id"], $data["carrera_id"]);
-                $descuentos = $modDescuento->consultarDesctoxitem($resItems["ite_id"]);
+            if (isset($data["getdescuento"])) {                
+                $resItems = $modItemMetNivel->consultarXitemMetniv($data["unidada"], $data["moda_id"], $data["metodo"], $data["empresa_id"], $data["carrera_id"]);                            
+                $descuentos = $modDescuento->consultarDesctohistoriaxitem($resItems["ite_id"], $data["fecha"]);
                 $message = array("descuento" => $descuentos);
                 return Utilities::ajaxResponse('OK', 'alert', Yii::t('jslang', 'Success'), 'false', $message);
             }
@@ -380,20 +380,20 @@ class MatriculadosreprobadosController extends \app\components\CController {
                 $message = array("items" => $resItem);
                 return Utilities::ajaxResponse('OK', 'alert', Yii::t('jslang', 'Success'), 'false', $message);
             }
-            if (isset($data["getprecio"])) {
-                $resp_precio = $mod_solins->ObtenerPreciohistoricoXitem($data["ite_id"], $data["fecha"]);
+            if (isset($data["getprecio"])) {      
+                \app\models\Utilities::putMessageLogFile('item:'.$data["ite_id"]);      
+                \app\models\Utilities::putMessageLogFile('fecha:'.$data["fecha"]);      
+                $resp_precio = $mod_solins->ObtenerPreciohistoricoXitem($data["ite_id"], $data["fecha"]);                  
                 $message = array("precio" => $resp_precio["precio"]);
                 return Utilities::ajaxResponse('OK', 'alert', Yii::t('jslang', 'Success'), 'false', $message);
             }
-            if (isset($data["getpreciodescuento"])) {
-                $resp_precio = $mod_solins->ObtenerPreciohistoricoXitem($data["ite_id"], $data["fecha"]);
-                \app\models\Utilities::putMessageLogFile('descuento:' . $data["descuento_id"]);
-                \app\models\Utilities::putMessageLogFile('precio:' . $resp_precio["precio"]);
-                if ($data["descuento_id"] > 0) {
-                    $respDescuento = $modDescuento->consultarValdctoItem($data["descuento_id"]);
-                    if ($resp_precio["precio"] == 0) {
-                        $precioDescuento = 0;
-                    } else {
+            if (isset($data["getpreciodescuento"])) {                                 
+                $resp_precio = $mod_solins->ObtenerPreciohistoricoXitem($data["ite_id"], $data["fecha"]);                                  
+                if ($data["descuento_id"] > 0) {                        
+                    $respDescuento = $modDescuento->consultarValdctoItem($data["descuento_id"]); 
+                    if ($resp_precio["precio"] == 0) {                                    
+                        $precioDescuento = 0;   
+                    } else {                                     
                         if ($respDescuento["ddit_tipo_beneficio"] == 'P') {
                             $descuento = ($resp_precio["precio"] * $respDescuento["ddit_porcentaje"]) / 100;
                         } else {
@@ -446,9 +446,7 @@ class MatriculadosreprobadosController extends \app\components\CController {
                     "arr_carrerra1" => ArrayHelper::map($arr_carrerra1, "id", "name"),
                     "arr_metodos" => ArrayHelper::map($arr_metodos, "id", "name"),
                     "arr_item" => ArrayHelper::map($resp_item, "id", "name"),
-                    "arr_empresa" => ArrayHelper::map($empresa, "id", "value"),
-                        // "precio" => $resp_precio['precio'],
-                        // "preciodescuento" => $precioDescuento
+                    "arr_empresa" => ArrayHelper::map($empresa, "id", "value"),                   
         ]);
     }
 

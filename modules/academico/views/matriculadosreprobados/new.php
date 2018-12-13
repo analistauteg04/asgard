@@ -29,7 +29,7 @@ use yii\helpers\Html;
                     ]);
                     ?>
                 </form>
-            </div><!-- /.tab-pane -->
+            </div>
             <div class="tab-pane" id="paso2">
                 <form class="form-horizontal">
                     <?=
