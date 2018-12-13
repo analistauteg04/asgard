@@ -66,11 +66,11 @@
                     <?php //echo yii\helpers\Html::img(Yii::$app->params['seaBarra'] .$cabFact['IdentificacionComprador']. '.png', array('width' => '280px', 'height' => '20px', "alt" => Yii::$app->params["copyright"])); ?>
                 </td>
             </tr>
-            <tr>
+            <!--<tr>
                 <td>
                     <span><?php echo $cabFact['ClaveAcceso'] ?></span>
                 </td>
-            </tr>
+            </tr>-->
         </tbody>
         
     </table>
