@@ -503,6 +503,7 @@ create table if not exists `temporal_wizard_reprobados` (
  `ruta_doc_hojavida` varchar(200) null, 
  `twre_mensaje1` varchar(1) null,
  `twre_mensaje2` varchar(1) null,
+ `twre_beca` varchar(1) null,
  `twre_fecha_solicitud` timestamp null,
  `sdes_id` bigint(20) null,
  `ite_id` bigint(20) null,

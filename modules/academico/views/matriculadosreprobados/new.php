@@ -17,7 +17,19 @@ use yii\helpers\Html;
             <div class="tab-pane active" id="paso1">
                 <form class="form-horizontal">
                     <?=
-                    $this->render('_form_tab1', [
+                    $this->render('_form_tab3', [
+                        'per_id' => $per_id,
+                        "arr_ninteres" => $arr_ninteres,
+                        "arr_modalidad" => $arr_modalidad,
+                        "arr_carrerra1" => $arr_carrerra1,
+                        "arr_metodos" => $arr_metodos,
+                        "arr_descuento" => $arr_descuento,
+                        "arr_item" => $arr_item,
+                        "arr_empresa" => $arr_empresa,
+                        "precio" => $precio,
+                        "preciodescuento" => $preciodescuento
+                    ]);
+                    /*$this->render('_form_tab1', [
                         "tipos_dni" => $tipos_dni,
                         "tipos_dni2" => $tipos_dni2,
                         "txth_extranjero" => $txth_extranjero,
@@ -26,7 +38,7 @@ use yii\helpers\Html;
                         "arr_ciu_dom" => $arr_ciu_dom,
                         "arr_medio" => $arr_medio,
                         "arr_conuteg" => $arr_conuteg,
-                    ]);
+                    ]);*/
                     ?>
                 </form>
             </div><!-- /.tab-pane -->
