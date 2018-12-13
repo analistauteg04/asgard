@@ -181,9 +181,9 @@ class MatriculadosreprobadosController extends \app\components\CController {
                         $data["DATA_1"][0]['twre_precio_item'],$data["DATA_1"][0]['twre_precio_descuento'],$data["DATA_1"][0]['twre_observacion_sol'],
                     ];
                     $resul = $model->actualizarReprobadoTemp($con, $data["DATA_1"][0]['twre_id'], $values_act, $keys_act, 'temporal_wizard_reprobados');
-                    if($data["PASO"]==3){
-                        $resul=$model->insertaOriginal($resul["twre_id"]);
-                    }
+//                    if($data["PASO"]==3){
+//                        $resul=$model->insertaOriginal($resul["twre_id"]);
+//                    }
                 }
                 if ($resul['status']) {
                     $message = array(
@@ -392,19 +392,16 @@ class MatriculadosreprobadosController extends \app\components\CController {
         $arr_carrerra1 = $modcanal->consultarCarreraModalidad(1, $arr_modalidad[0]["id"]);
         $arr_metodos = $mod_metodo->consultarMetodoUnidadAca_2($arr_ninteres[0]["id"]);
         $_SESSION['JSLANG']['Your information has not been saved. Please try again.'] = Yii::t('notificaciones', 'Your information has not been saved. Please try again.');
-        //Descuentos y precios.
         $resp_item = $modItemMetNivel->consultarXitemPrecio($arr_ninteres[0]["id"],$arr_modalidad[0]["id"],$arr_metodos[0]["id"],$arr_carrerra1[0]["id"],$empresa[0]["id"]);        
         $resp_precio = $mod_solins->ObtenerPrecioXitem($resp_item[0]["id"]);                 
         $arr_descuento = $modDescuento->consultarDesctoxitem($resp_item[0]["id"]);
-        $respDescuento = $modDescuento->consultarValdctoItem($arr_descuento[0]["id"]);
-        
+        $respDescuento = $modDescuento->consultarValdctoItem($arr_descuento[0]["id"]);        
         if ($respDescuento["ddit_tipo_beneficio"] == 'P') {
             $descuento = ($resp_precio["precio"] * $respDescuento["ddit_porcentaje"])/100;
         } else {
             $descuento = $respDescuento["ddit_valor"];
         }                   
         $precioDescuento = $resp_precio["precio"]-$descuento; 
-        
         return $this->render('new', [
                     "tipos_dni" => array("CED" => Yii::t("formulario", "DNI Document"), "PASS" => Yii::t("formulario", "Passport")),
                     "tipos_dni2" => array("CED" => Yii::t("formulario", "DNI Document1"), "PASS" => Yii::t("formulario", "Passport1")),

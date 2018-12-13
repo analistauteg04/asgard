@@ -46,7 +46,46 @@ $(document).ready(function () {
         $("a[data-href='#paso2']").attr('href', $("a[data-href='#paso2']").attr('data-href'));
         $("a[data-href='#paso2']").trigger("click");
     });
-
+    $('#sendInformacionAdmitidoFinal').click(function () {
+        var error=0;
+        var mensaje="";
+        if ($('#cmb_empresa').val() <= 0) {
+            error++;
+            mensaje+="Debe escoger la empresa\n";
+        }
+        if ($('#txt_fecha_solicitud').val() == '') {
+           error++;
+           mensaje+="Debe ingresar una fecha de solicitud\n";
+        }
+        if ($('#cmb_unidad_solicitudw').val() <= 0) {
+           error++; 
+           mensaje+="Debe escoger una unidad academica\n";
+        }
+        if ($('#cmb_modalidad_solicitudw').val() <= 0) {
+           error++; 
+           mensaje+="Debe escoger una modalidad\n";
+        }
+        if ($('#cmb_carrera_solicitudw').val() <= 0) {
+           error++; 
+           mensaje+="Debe escoger carrera\n";
+        }
+        if ($('#cmb_metodo_solicitudw').val() <= 0) {
+           error++; 
+           mensaje+="Debe escoger un metodo de ingreso\n";
+        }
+        if ($('#cmb_item_solicitudw').val() <= 0) {
+           error++; 
+           mensaje+="Debe escoger un item\n";
+        }
+        if(error>0){
+            var mesage = {
+                wtmessage: mensaje, title: "Error"
+            };                
+            showAlert("NO_OK", "success", mesage);
+        }else{
+            guardarAdmireprobado('Update', '3');
+        }
+    });
     $('#sendInformacionAdmitidoPendDos').click(function () {
         var error = 0;
         var pais = $('#cmb_pais_dom').val();
@@ -740,10 +779,14 @@ function guardarAdmireprobado(accion, paso) {
                 paso1next();
             } else if (accion == "Update") {
                 showAlert(response.status, response.label, response.message);
-                alert("va hacia el paso 3");
-                paso2next();
-                //window.location.href = $('#txth_base').val() + "/admision/interesados/index";
-
+                if(paso==2){
+                    showAlert(response.status, response.label, response.message);
+                    paso2next();
+                }
+                else if (paso==3){
+                    showAlert(response.status, response.label, response.message);
+                    window.location.href = $('#txth_base').val() + "/admision/interesados/index";
+                }                
             }
         }
     }, true);
@@ -819,7 +862,6 @@ function paso1next() {
     $("a[data-href='#paso2']").trigger("click");
 }
 function paso2next() {
-    alert("entro a paso 2 next");
     $("a[data-href='#paso2']").attr('data-toggle', 'none');
     $("a[data-href='#paso2']").parent().attr('class', 'disabled');
     $("a[data-href='#paso2']").attr('data-href', $("a[href='#paso2']").attr('href'));
@@ -827,7 +869,6 @@ function paso2next() {
     $("a[data-href='#paso3']").attr('data-toggle', 'tab');
     $("a[data-href='#paso3']").attr('href', $("a[data-href='#paso3']").attr('data-href'));
     $("a[data-href='#paso3']").trigger("click");
-    alert("debio haber cambiado a paso 3 next");
 }
 function searchAdmitido(idbox, idgrid) {
     var arrParams = new Object();
