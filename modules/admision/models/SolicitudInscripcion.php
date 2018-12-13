@@ -1793,7 +1793,6 @@ class SolicitudInscripcion extends \yii\db\ActiveRecord
     public function ObtenerPrecioXitem($ite_id) {
         $con = \Yii::$app->db_facturacion;
         $estado = 1;
-
         $sql = "SELECT ipre_precio precio 
                 FROM " . $con->dbname . ".item_precio 
                 WHERE ite_id = :ite_id
@@ -1805,6 +1804,30 @@ class SolicitudInscripcion extends \yii\db\ActiveRecord
         $comando = $con->createCommand($sql);
         $comando->bindParam(":estado", $estado, \PDO::PARAM_STR);
         $comando->bindParam(":ite_id", $ite_id, \PDO::PARAM_INT);     
+        $resultData = $comando->queryOne();
+        return $resultData;
+    }
+    
+    /**
+     * Function ObtenerPreciohistoricoXitem
+     * @author  Grace Viteri <analistadesarrollo01@uteg.edu.ec>
+     * @param   
+     * @return  $resultData (Precio del item)
+     */
+    public function ObtenerPreciohistoricoXitem($ite_id, $fecha) {
+        $con = \Yii::$app->db_facturacion;
+        $estado = 1;
+        $sql = "SELECT hipr_precio precio 
+                FROM db_facturacion.historial_item_precio  
+                WHERE ite_id = :ite_id                    
+                    and (:fecha between hipr_fecha_inicio and hipr_fecha_fin)
+                    and hipr_estado = :estado
+                    and hipr_estado_logico = :estado";
+ 
+        $comando = $con->createCommand($sql);
+        $comando->bindParam(":estado", $estado, \PDO::PARAM_STR);
+        $comando->bindParam(":ite_id", $ite_id, \PDO::PARAM_INT);     
+        $comando->bindParam(":fecha", $fecha, \PDO::PARAM_STR);     
         $resultData = $comando->queryOne();
         return $resultData;
     }

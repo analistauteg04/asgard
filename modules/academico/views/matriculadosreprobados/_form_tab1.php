@@ -5,12 +5,10 @@ use yii\helpers\Html;
 use yii\helpers\ArrayHelper;
 use kartik\file\FileInput;
 use kartik\date\DatePicker;
-use yii\helpers\Url; 
+use yii\helpers\Url;
 use yii\widgets\ActiveForm;
 use app\components\CFileInputAjax;
-
 ?>
-
 <form class="form-horizontal">
     <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
         <h3><span id="lbl_Personeria"><?= Yii::t("formulario", "Registrar - Inscritos Pendientes") ?></span></h3>
@@ -82,7 +80,7 @@ use app\components\CFileInputAjax;
             </div>
         </div>
     </div>        
-      <div class="col-md-12 col-xs-12 col-sm-12 col-lg-12">         
+    <div class="col-md-12 col-xs-12 col-sm-12 col-lg-12">         
         </br>
         </br>
     </div>

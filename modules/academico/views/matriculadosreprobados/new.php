@@ -1,4 +1,5 @@
 <?php
+
 use yii\helpers\Url;
 use yii\helpers\Html;
 ?>
@@ -16,56 +17,44 @@ use yii\helpers\Html;
             <div class="tab-pane active" id="paso1">
                 <form class="form-horizontal">
                     <?=
-                        $this->render('_form_tab3', [
-                            'per_id' => $per_id,
-                            "arr_ninteres" => $arr_ninteres,
-                            "arr_modalidad" => $arr_modalidad,
-                            "arr_carrerra1" => $arr_carrerra1,
-                            "arr_metodos" => $arr_metodos,
-                            "arr_descuento" => $arr_descuento,
-                            "arr_item" => $arr_item,
-                            "arr_empresa" => $arr_empresa,
-                        ]);
-                    ?>                  
-                </form>
-<!--                <form class="form-horizontal">
-                    <?php
-                        /*$this->render('_form_tab1', [
-                            "tipos_dni" => $tipos_dni,
-                            "tipos_dni2" => $tipos_dni2,
-                            "txth_extranjero" => $txth_extranjero,
-                            "arr_pais_dom" => $arr_pais_dom,
-                            "arr_prov_dom" => $arr_prov_dom,
-                            "arr_ciu_dom" => $arr_ciu_dom,                            
-                            "arr_medio" => $arr_medio,
-                            "arr_conuteg" => $arr_conuteg,                            
-                        ]);*/
+                    $this->render('_form_tab1', [
+                        "tipos_dni" => $tipos_dni,
+                        "tipos_dni2" => $tipos_dni2,
+                        "txth_extranjero" => $txth_extranjero,
+                        "arr_pais_dom" => $arr_pais_dom,
+                        "arr_prov_dom" => $arr_prov_dom,
+                        "arr_ciu_dom" => $arr_ciu_dom,
+                        "arr_medio" => $arr_medio,
+                        "arr_conuteg" => $arr_conuteg,
+                    ]);
                     ?>
-                </form>-->
+                </form>
             </div><!-- /.tab-pane -->
             <div class="tab-pane" id="paso2">
                 <form class="form-horizontal">
                     <?=
-                        $this->render('_form_tab2', ['per_id' => $per_id]);
+                    $this->render('_form_tab2', ['per_id' => $per_id]);
                     ?>                  
                 </form>
-            </div><!-- /.tab-pane -->
+            </div>
             <div class="tab-pane" id="paso3">
                 <form class="form-horizontal">
-                    <?php
-//                        $this->render('_form_tab3', [
-//                            'per_id' => $per_id,
-//                            "arr_ninteres" => $arr_ninteres,
-//                            "arr_modalidad" => $arr_modalidad,
-//                            "arr_carrerra1" => $arr_carrerra1,
-//                            "arr_metodos" => $arr_metodos,
-//                            "arr_descuento" => $arr_descuento,
-//                            "arr_item" => $arr_item,
-//                            "arr_empresa" => $arr_empresa,
-//                        ]);
+                    <?=
+                    $this->render('_form_tab3', [
+                        'per_id' => $per_id,
+                        "arr_ninteres" => $arr_ninteres,
+                        "arr_modalidad" => $arr_modalidad,
+                        "arr_carrerra1" => $arr_carrerra1,
+                        "arr_metodos" => $arr_metodos,
+                        "arr_descuento" => $arr_descuento,
+                        "arr_item" => $arr_item,
+                        "arr_empresa" => $arr_empresa,
+                        "precio" => $precio,
+                        "preciodescuento" => $preciodescuento
+                    ]);
                     ?>                  
                 </form>
-            </div><!-- /.tab-pane -->
+            </div>
         </div><!-- /.tab-content -->
     </div><!-- /.nav-tabs-custom -->
 </div><!-- /.col -->

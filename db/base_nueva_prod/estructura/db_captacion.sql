@@ -507,6 +507,8 @@ create table if not exists `temporal_wizard_reprobados` (
  `sdes_id` bigint(20) null,
  `ite_id` bigint(20) null,
  `twre_observacion_sol` varchar(200) null,
+ `twre_precio_item` varchar(200) null,
+ `twre_precio_descuento` varchar(200) null,
  `twre_estado` varchar(1) not null,
  `twre_fecha_creacion` timestamp not null default current_timestamp,
  `twre_fecha_modificacion` timestamp null default null,
