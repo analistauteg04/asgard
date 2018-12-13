@@ -211,9 +211,7 @@ class MatriculadosreprobadosController extends \app\components\CController {
                     }
                     $resul = $model->actualizarReprobadoTemp($con, $data["DATA_1"][0]['twre_id'], $values_act, $keys_act, 'temporal_wizard_reprobados');
                     if($data["PASO"]==3){
-                        \app\models\Utilities::putMessageLogFile('insertar en original');
-                        $resul=$model->insertaOriginal($resul["twre_id"]);
-                        \app\models\Utilities::putMessageLogFile('fin de original');
+                        $resul=$model->insertaOriginal($resul["twre_id"]);                        
                     }
                 }
                 if ($resul['status']) {

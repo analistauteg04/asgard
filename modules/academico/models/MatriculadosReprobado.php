@@ -956,7 +956,7 @@ class MatriculadosReprobado extends \yii\db\ActiveRecord {
                     $identificacion = $resp_datos['twre_numero'];
                 }
                 if (isset($identificacion) && strlen($identificacion) > 0) {
-                    $id_persona = 0;
+                    $id_persona = 0;                    
                     $mod_persona = new Persona();
                     $keys_per = [
                         'per_pri_nombre', 'per_seg_nombre', 
@@ -985,6 +985,7 @@ class MatriculadosReprobado extends \yii\db\ActiveRecord {
                         $id_persona = $mod_persona->insertarPersona($con, $parametros_per, $keys_per, 'persona');
                     }
                     if ($id_persona > 0) {
+                        \app\models\Utilities::putMessageLogFile('Ingreso persona');
                         //Modifificaion para Mover Imagenes de temp a Persona
                         //self::movePersonFiles($twinIds,$id_persona);
                         $concap = \Yii::$app->db_captacion;
@@ -996,6 +997,7 @@ class MatriculadosReprobado extends \yii\db\ActiveRecord {
                             $emp_per_id = $mod_emp_persona->insertarEmpresaPersona($con, $parametros, $keys, 'empresa_persona');
                         }
                         if ($emp_per_id > 0) {
+                            \app\models\Utilities::putMessageLogFile('Ingreso empresa');
                             $usuario = new Usuario();
                             $usuario_id = $usuario->consultarIdUsuario($id_persona, $resp_datos['twre_correo']);
                             if ($usuario_id == 0) {
@@ -1007,6 +1009,7 @@ class MatriculadosReprobado extends \yii\db\ActiveRecord {
                                 $usuario_id = $usuario->crearUsuarioTemporal($con, $parametros, $keys, 'usuario');
                             }
                             if ($usuario_id > 0) {
+                                \app\models\Utilities::putMessageLogFile('Ingreso usuario');
                                 $mod_us_gr_ep = new UsuaGrolEper();
                                 $grol_id = 30;
                                 $keys = ['eper_id', 'usu_id', 'grol_id', 'ugep_estado', 'ugep_estado_logico'];
@@ -1023,6 +1026,7 @@ class MatriculadosReprobado extends \yii\db\ActiveRecord {
                                         $interesado_id = $mod_interesado->insertarInteresado($concap, $parametros, $keys, 'interesado');
                                     }
                                     if ($interesado_id > 0) {
+                                        \app\models\Utilities::putMessageLogFile('Ingreso interesado');
                                         $mod_inte_emp = new InteresadoEmpresa(); // se guarda con estado_interesado 1
                                         $iemp_id = $mod_inte_emp->consultaInteresadoEmpresaById($interesado_id, $emp_id);
                                         if ($iemp_id == 0) {
@@ -1120,6 +1124,7 @@ class MatriculadosReprobado extends \yii\db\ActiveRecord {
                                                 //Obtener el precio de la solicitud.
                                                 $beca=$resp_datos['beca'];
                                                 if ($beca == "1") {
+                                                    \app\models\Utilities::putMessageLogFile('Tiene Beca');
                                                     $precio = 0;
                                                 } else {
                                                     $precio = $resp_datos['twre_precio_item'];
@@ -1147,8 +1152,8 @@ class MatriculadosReprobado extends \yii\db\ActiveRecord {
                                                     if ($resp_dpago) {
                                                         if ($resp_datos['marcadescuento'] > 0) {
                                                             \app\models\Utilities::putMessageLogFile('insertar en descuento');
-                                                            $detDescitem=new DetalleDescuentoItem();
-                                                            $respDescuento=$detDescitem->consultarValdctoItem($resp_datos['sdes_id']);
+                                                            $detDescitem=new DetalleDescuentoItem();                                                            
+                                                            $respDescuento=$detDescitem->consultarHistoricodctoXitem($resp_datos['sdes_id']);
                                                             $resp_SolicDcto = $mod_ordenpago->insertarSolicDscto($sins_id, $resp_datos['sdes_id'], $resp_datos['twre_precio_item'], $respDescuento["ddit_porcentaje"], $respDescuento["ddit_valor"]);
                                                         }
                                                         $exito = 1;

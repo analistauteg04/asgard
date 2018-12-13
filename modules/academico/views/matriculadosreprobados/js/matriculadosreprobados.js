@@ -208,6 +208,7 @@ $(document).ready(function () {
         }
     });
     $('#opt_declara_si').change(function () {
+        $('#txt_precio_itemw').val(0);
         if ($('#opt_declara_si').val() == 1) {
             $('#divDeclarabeca').css('display', 'block');
             //$('#votacion').css('display', 'none'); no se entiende este elemento
@@ -218,6 +219,7 @@ $(document).ready(function () {
         }
     });
     $('#opt_declara_no').change(function () {
+        asignarPrecio();
         if ($('#opt_declara_no').val() == 2) {
             $('#divDeclarabeca').css('display', 'none');
             $('#votacion').css('display', 'block');
@@ -290,29 +292,7 @@ $(document).ready(function () {
     });
     
     $('#cmb_item_solicitudw').change(function () {
-        var link = $('#txth_base').val() + "/academico/matriculadosreprobados/new";        
-        //Precio.
-        var arrParams = new Object();       
-        arrParams.ite_id = $('#cmb_item_solicitudw').val();
-        arrParams.fecha = $('#txt_fecha_solicitud').val();            
-        arrParams.getprecio = true;        
-        requestHttpAjax(link, arrParams, function (response) {
-            if (response.status == "OK") {
-                data = response.message;                                 
-                $('#txt_precio_itemw').val(data.precio);
-            }
-        }, true);
-        //Precio con descuento.
-        var arrParams = new Object();       
-        arrParams.descuento_id = $('#cmb_descuento_solicitudw').val();                 
-        arrParams.ite_id = $('#cmb_item_solicitudw').val();
-        arrParams.getpreciodescuento = true;     
-        requestHttpAjax(link, arrParams, function (response) {
-            if (response.status == "OK") {
-                data = response.message;
-                $('#txt_precio_item2w').val(data.preciodescuento);
-            }
-        }, true);            
+        asignarPrecio();
     });
     
     $('#cmb_empresa').change(function () {
@@ -718,6 +698,31 @@ $(document).ready(function () {
     });
     
 });
+function asignarPrecio(){
+        var link = $('#txth_base').val() + "/academico/matriculadosreprobados/new";        
+        //Precio.
+        var arrParams = new Object();       
+        arrParams.ite_id = $('#cmb_item_solicitudw').val();
+        arrParams.fecha = $('#txt_fecha_solicitud').val();            
+        arrParams.getprecio = true;        
+        requestHttpAjax(link, arrParams, function (response) {
+            if (response.status == "OK") {
+                data = response.message;                                 
+                $('#txt_precio_itemw').val(data.precio);
+            }
+        }, true);
+        //Precio con descuento.
+        var arrParams = new Object();       
+        arrParams.descuento_id = $('#cmb_descuento_solicitudw').val();                 
+        arrParams.ite_id = $('#cmb_item_solicitudw').val();
+        arrParams.getpreciodescuento = true;     
+        requestHttpAjax(link, arrParams, function (response) {
+            if (response.status == "OK") {
+                data = response.message;
+                $('#txt_precio_item2w').val(data.preciodescuento);
+            }
+        }, true);            
+}
 function newReprobadoPend() {
     window.location.href = $('#txth_base').val() + "/academico/matriculadosreprobados/new";
 }
@@ -796,10 +801,8 @@ function guardarAdmireprobado(accion, paso) {
             if (accion == "Create") {
                 $('#txth_twer_id').val(response.data.twre_id);
                 paso1next();
-            } else if (accion == "Update") {
-                showAlert(response.status, response.label, response.message);
+            } else if (accion == "Update") {                
                 if(paso==2){
-                    showAlert(response.status, response.label, response.message);
                     paso2next();
                 }
                 else if (paso==3){
@@ -852,7 +855,7 @@ function dataInscripPart1(ID) {
         objDat.marcadescuento = 0;
     }
     if ($('input[name=opt_declara_si]:checked').val() == 1) {
-        objDat.beca = 1;
+        objDat.beca = 1;        
     } else {
         objDat.beca = 0;
     }
