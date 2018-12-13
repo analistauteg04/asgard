@@ -250,6 +250,7 @@ $(document).ready(function () {
         arrParams.metodo = $('#cmb_metodo_solicitudw').val();
         arrParams.empresa_id = $('#cmb_empresa').val();
         arrParams.carrera_id = $('#cmb_carrera_solicitudw').val();
+        arrParams.fecha = $('#txt_fecha_solicitud').val();
         arrParams.getdescuento = true;
         requestHttpAjax(link, arrParams, function (response) {
             if (response.status == "OK") {
@@ -260,6 +261,7 @@ $(document).ready(function () {
             var arrParams = new Object();       
             arrParams.descuento_id = $('#cmb_descuento_solicitudw').val();                 
             arrParams.ite_id = $('#cmb_item_solicitudw').val();
+            arrParams.fecha = $('#txt_fecha_solicitud').val();            
             arrParams.getpreciodescuento = true;     
             requestHttpAjax(link, arrParams, function (response) {
                 if (response.status == "OK") {
@@ -287,6 +289,7 @@ $(document).ready(function () {
         var arrParams = new Object();       
         arrParams.descuento_id = $('#cmb_descuento_solicitudw').val();                 
         arrParams.ite_id = $('#cmb_item_solicitudw').val();
+        arrParams.fecha = $('#txt_fecha_solicitud').val();            
         arrParams.getpreciodescuento = true;     
         requestHttpAjax(link, arrParams, function (response) {
             if (response.status == "OK") {
@@ -367,6 +370,7 @@ $(document).ready(function () {
                                     arrParams.metodo = $('#cmb_metodo_solicitudw').val();
                                     arrParams.empresa_id = $('#cmb_empresa').val();
                                     arrParams.carrera_id = $('#cmb_carrera_solicitudw').val();
+                                    arrParams.fecha = $('#txt_fecha_solicitud').val();
                                     arrParams.getdescuento = true;
                                     requestHttpAjax(link, arrParams, function (response) {
                                         if (response.status == "OK") {
@@ -377,6 +381,7 @@ $(document).ready(function () {
                                         var arrParams = new Object();       
                                         arrParams.descuento_id = $('#cmb_descuento_solicitudw').val();                 
                                         arrParams.ite_id = $('#cmb_item_solicitudw').val();
+                                        arrParams.fecha = $('#txt_fecha_solicitud').val();            
                                         arrParams.getpreciodescuento = true;     
                                         requestHttpAjax(link, arrParams, function (response) {
                                             if (response.status == "OK") {
@@ -458,6 +463,7 @@ $(document).ready(function () {
                         arrParams.metodo = $('#cmb_metodo_solicitudw').val();
                         arrParams.empresa_id = $('#cmb_empresa').val();
                         arrParams.carrera_id = $('#cmb_carrera_solicitudw').val();
+                        arrParams.fecha = $('#txt_fecha_solicitud').val();
                         arrParams.getdescuento = true;
                         requestHttpAjax(link, arrParams, function (response) {
                             if (response.status == "OK") {
@@ -468,6 +474,7 @@ $(document).ready(function () {
                             var arrParams = new Object();       
                             arrParams.descuento_id = $('#cmb_descuento_solicitudw').val();                 
                             arrParams.ite_id = $('#cmb_item_solicitudw').val();
+                            arrParams.fecha = $('#txt_fecha_solicitud').val();            
                             arrParams.getpreciodescuento = true;     
                             requestHttpAjax(link, arrParams, function (response) {
                                 if (response.status == "OK") {
@@ -522,6 +529,7 @@ $(document).ready(function () {
                 arrParams.metodo = $('#cmb_metodo_solicitudw').val();
                 arrParams.empresa_id = $('#cmb_empresa').val();
                 arrParams.carrera_id = $('#cmb_carrera_solicitudw').val();
+                arrParams.fecha = $('#txt_fecha_solicitud').val();
                 arrParams.getdescuento = true;
                 requestHttpAjax(link, arrParams, function (response) {
                     if (response.status == "OK") {
@@ -532,6 +540,7 @@ $(document).ready(function () {
                     var arrParams = new Object();       
                     arrParams.descuento_id = $('#cmb_descuento_solicitudw').val();                 
                     arrParams.ite_id = $('#cmb_item_solicitudw').val();
+                    arrParams.fecha = $('#txt_fecha_solicitud').val();            
                     arrParams.getpreciodescuento = true;     
                     requestHttpAjax(link, arrParams, function (response) {
                         if (response.status == "OK") {
@@ -606,6 +615,7 @@ $(document).ready(function () {
                     arrParams.metodo = $('#cmb_metodo_solicitudw').val();
                     arrParams.empresa_id = $('#cmb_empresa').val();
                     arrParams.carrera_id = $('#cmb_carrera_solicitudw').val();
+                    arrParams.fecha = $('#txt_fecha_solicitud').val();
                     arrParams.getdescuento = true;
                     requestHttpAjax(link, arrParams, function (response) {
                         if (response.status == "OK") {
@@ -616,6 +626,7 @@ $(document).ready(function () {
                         var arrParams = new Object();       
                         arrParams.descuento_id = $('#cmb_descuento_solicitudw').val();                 
                         arrParams.ite_id = $('#cmb_item_solicitudw').val();
+                        arrParams.fecha = $('#txt_fecha_solicitud').val();            
                         arrParams.getpreciodescuento = true;     
                         requestHttpAjax(link, arrParams, function (response) {
                             if (response.status == "OK") {
@@ -635,6 +646,7 @@ $(document).ready(function () {
         var arrParams = new Object();
         arrParams.descuento_id = $('#cmb_descuento_solicitudw').val();
         arrParams.ite_id = $('#cmb_item_solicitudw').val();
+        arrParams.fecha = $('#txt_fecha_solicitud').val();            
         arrParams.getpreciodescuento = true;
         requestHttpAjax(link, arrParams, function (response) {
             if (response.status == "OK") {
@@ -678,6 +690,7 @@ $(document).ready(function () {
         arrParams.metodo = $('#cmb_metodo_solicitudw').val();
         arrParams.empresa_id = $('#cmb_empresa').val();
         arrParams.carrera_id = $('#cmb_carrera_solicitudw').val();
+        arrParams.fecha = $('#txt_fecha_solicitud').val();
         arrParams.getdescuento = true;
         requestHttpAjax(link, arrParams, function (response) {
             if (response.status == "OK") {
@@ -688,6 +701,7 @@ $(document).ready(function () {
             var arrParams = new Object();       
             arrParams.descuento_id = $('#cmb_descuento_solicitudw').val();                 
             arrParams.ite_id = $('#cmb_item_solicitudw').val();
+            arrParams.fecha = $('#txt_fecha_solicitud').val();            
             arrParams.getpreciodescuento = true;     
             requestHttpAjax(link, arrParams, function (response) {
                 if (response.status == "OK") {
@@ -698,6 +712,24 @@ $(document).ready(function () {
         }, true);    
     });
     
+    $('#txt_fecha_solicitud').on('keypress', function (e) {  
+        var link = $('#txth_base').val() + "/academico/matriculadosreprobados/new";
+        if(e.which === 13){
+             //Precio.
+             alert ('tecla enter');
+            var arrParams = new Object();
+            arrParams.ite_id = $('#cmb_item_solicitudw').val();
+            arrParams.fecha = $('#txt_fecha_solicitud').val();            
+            arrParams.getprecio = true;        
+            requestHttpAjax(link, arrParams, function (response) {
+                if (response.status == "OK") {
+                    data = response.message;                                 
+                    $('#txt_precio_itemw').val(data.precio);
+                }
+            }, true);
+         }
+   });
+   
 });
 function newReprobadoPend() {
     window.location.href = $('#txth_base').val() + "/academico/matriculadosreprobados/new";

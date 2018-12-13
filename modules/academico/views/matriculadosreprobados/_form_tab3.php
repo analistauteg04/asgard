@@ -82,7 +82,7 @@ academico::registerTranslations();
                         'value' => '',
                         //'disabled' => $habilita,
                         'type' => DatePicker::TYPE_INPUT,
-                        'options' => ["class" => "form-control PBvalidation keyupmce", "id" => "txt_fecha_solicitud", "data-type" => "fecha_pro", "data-keydown" => "true", "placeholder" => Yii::t("formulario", "Date")],
+                        'options' => ["class" => "form-control PBvalidation", "id" => "txt_fecha_solicitud", "data-type" => "fecha_pro", "data-keydown" => "true", "placeholder" => Yii::t("formulario", "Date")],
                         'pluginOptions' => [
                             'autoclose' => true,
                             'format' => Yii::$app->params["dateByDatePicker"],

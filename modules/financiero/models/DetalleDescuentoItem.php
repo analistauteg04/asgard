@@ -142,5 +142,31 @@ class DetalleDescuentoItem extends \app\modules\financiero\components\CActiveRec
         $resultData = $comando->queryOne();
         return $resultData;
     }
-
+    /**
+     * Function consultarDesctohistoriaxitem
+     * @author  Grace Viteri <analistadesarrollo01@uteg.edu.ec>
+     * @param   
+     * @return  $resultData (Para obtener el id del item, filtrando por nivel de interés,
+     *                       modalidad y método de ingreso.)
+     */
+    public function consultarDesctohistoriaxitem($ite_id, $fecha) {
+        $con = \Yii::$app->db_facturacion;
+        $estado = 1;
+        $sql = "SELECT hdi.ddit_id as id, hdi.hdit_descripcion as name
+                FROM db_facturacion.historial_descuento_item hdi inner join db_facturacion.descuento_item di on di.dite_id = hdi.dite_id
+                WHERE di.ite_id = :ite_id
+                          and hdi.hdit_estado_descuento = 'A'
+                          and :fecha between hdi.hdit_fecha_inicio and ifnull(hdi.hdit_fecha_fin, now())  
+                          and di.dite_estado = :estado
+                          and di.dite_estado_logico = :estado
+                          and hdi.hdit_estado = :estado
+                          and hdi.hdit_estado_logico = :estado
+                ORDER BY name asc";
+        $comando = $con->createCommand($sql);
+        $comando->bindParam(":estado", $estado, \PDO::PARAM_STR);
+        $comando->bindParam(":ite_id", $ite_id, \PDO::PARAM_INT);
+        $comando->bindParam(":fecha", $fecha, \PDO::PARAM_STR);
+        $resultData = $comando->queryAll();
+        return $resultData;
+    }
 }

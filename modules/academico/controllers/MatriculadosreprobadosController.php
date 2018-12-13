@@ -337,7 +337,7 @@ class MatriculadosreprobadosController extends \app\components\CController {
             }
             if (isset($data["getdescuento"])) {                
                 $resItems = $modItemMetNivel->consultarXitemMetniv($data["unidada"], $data["moda_id"], $data["metodo"], $data["empresa_id"], $data["carrera_id"]);                            
-                $descuentos = $modDescuento->consultarDesctoxitem($resItems["ite_id"]);
+                $descuentos = $modDescuento->consultarDesctohistoriaxitem($resItems["ite_id"], $data["fecha"]);
                 $message = array("descuento" => $descuentos);
                 return Utilities::ajaxResponse('OK', 'alert', Yii::t('jslang', 'Success'), 'false', $message);                
             }
@@ -351,15 +351,15 @@ class MatriculadosreprobadosController extends \app\components\CController {
                 $message = array("items" => $resItem);
                 return Utilities::ajaxResponse('OK', 'alert', Yii::t('jslang', 'Success'), 'false', $message);                
             }
-            if (isset($data["getprecio"])) {                                
+            if (isset($data["getprecio"])) {      
+                \app\models\Utilities::putMessageLogFile('item:'.$data["ite_id"]);      
+                \app\models\Utilities::putMessageLogFile('fecha:'.$data["fecha"]);      
                 $resp_precio = $mod_solins->ObtenerPreciohistoricoXitem($data["ite_id"], $data["fecha"]);                  
                 $message = array("precio" => $resp_precio["precio"]);
                 return Utilities::ajaxResponse('OK', 'alert', Yii::t('jslang', 'Success'), 'false', $message);                
             }
             if (isset($data["getpreciodescuento"])) {                                 
-                $resp_precio = $mod_solins->ObtenerPreciohistoricoXitem($data["ite_id"], $data["fecha"]);                  
-                \app\models\Utilities::putMessageLogFile('descuento:'.$data["descuento_id"]);                
-                \app\models\Utilities::putMessageLogFile('precio:'.$resp_precio["precio"]);                
+                $resp_precio = $mod_solins->ObtenerPreciohistoricoXitem($data["ite_id"], $data["fecha"]);                                  
                 if ($data["descuento_id"] > 0) {                        
                     $respDescuento = $modDescuento->consultarValdctoItem($data["descuento_id"]); 
                     if ($resp_precio["precio"] == 0) {                                    
