@@ -1045,9 +1045,11 @@ class MatriculadosReprobado extends \yii\db\ActiveRecord {
                                             $rsin_id = 1; //Solicitud pendiente     
                                             $solins_model = new SolicitudInscripcion();
                                             //$mensaje = 'intId: ' . $interesado_id . '/uaca: ' . $pgest['unidad_academica'] . '/modalidad: ' . $pgest['modalidad'] . '/ming: ' . $pgest['ming_id'] . '/eaca: ' . $eaca_id . '/mest: ' . $mest_id . '/empresa: ' . $emp_id . '/secuencia: ' . $num_secuencia . '/rsin_id: ' . $rsin_id . '/sins_fechasol: ' . $sins_fechasol . '/usuario_id: ' . $usuario_id;
+                                            \app\models\Utilities::putMessageLogFile('insertar solicitud');
                                             $sins_id = $solins_model->insertarSolicitud($interesado_id, $resp_datos['uaca_id'], $resp_datos['mod_id'], $resp_datos['twre_metodo_ingreso'], $eaca_id, null, $emp_id, $num_secuencia, $rsin_id, $resp_datos['twre_fecha_solicitud'], $usuario_id);
                                             //grabar los documentos
                                             if ($sins_id) {
+                                                \app\models\Utilities::putMessageLogFile('solicitud ingresada');
                                                 if (($resp_datos['ruta_doc_titulo'] != "") || ($resp_datos['ruta_doc_dni'] != "") || ($resp_datos['ruta_doc_certvota'] != "") || ($resp_datos['ruta_doc_foto'] != "") || ($resp_datos['ruta_doc_certificado'] != "") || ($resp_datos['ruta_doc_hojavida'] != "")) {
                                                     $subidaDocumentos = 1;
                                                 } else {
