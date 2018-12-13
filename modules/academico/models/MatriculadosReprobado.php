@@ -886,6 +886,12 @@ class MatriculadosReprobado extends \yii\db\ActiveRecord {
                         twre_apellido,
                         twre_numero,
                         twre_correo,
+                        twre_precio_item,
+                        twi.sdes_id,
+                        twi.ite_id,
+                        twre_precio_descuento,
+                        twre_beca,
+                        twre_observacion_sol,
                         twre_pais,
                         twre_celular,
                         twi.uaca_id,
@@ -1123,8 +1129,10 @@ class MatriculadosReprobado extends \yii\db\ActiveRecord {
                                                           } */
                                                     }
                                                 }
+                                                \app\models\Utilities::putMessageLogFile('va a preguntar si tiene beca');
                                                 //Obtener el precio de la solicitud.
                                                 $beca=$resp_datos['beca'];
+                                                \app\models\Utilities::putMessageLogFile('beca: ' . $beca);
                                                 if ($beca == "1") {
                                                     \app\models\Utilities::putMessageLogFile('Tiene Beca');
                                                     $precio = 0;
@@ -1145,14 +1153,21 @@ class MatriculadosReprobado extends \yii\db\ActiveRecord {
                                                 } else {
                                                     $estadopago = 'P';
                                                 }
-                                                $val_total = $resp_datos['twre_precio_descuento'];
+                                                \app\models\Utilities::putMessageLogFile('va a insertar la orden de pago');
+                                                if($resp_datos['sdes_id']==0){
+                                                    $val_total = $resp_datos['twre_precio_item'];
+                                                }else{
+                                                    $val_total = $resp_datos['twre_precio_descuento'];
+                                                }
+                                                \app\models\Utilities::putMessageLogFile('valor orden: '.$val_total);
+                                                \app\models\Utilities::putMessageLogFile(array($sins_id, $val_total, 0, $val_total, $estadopago, $usuario_id));
                                                 $resp_opago = $mod_ordenpago->insertarOrdenpago($sins_id, null, $val_total, 0, $val_total, $estadopago, $usuario_id);
                                                 if ($resp_opago) {
+                                                    \app\models\Utilities::putMessageLogFile('va a insertar la desglose pago');
                                                     //insertar desglose del pago                                    
-                                                    $fecha_ini = date(Yii::$app->params["dateByDefault"]);
-                                                    $resp_dpago = $mod_ordenpago->insertarDesglosepago($resp_opago,$resp_datos['ite_id'], $val_total, 0, $val_total, $fecha_ini, null, $estadopago, $usuario_id);
+                                                    $resp_dpago = $mod_ordenpago->insertarDesglosepago($resp_opago,$resp_datos['ite_id'], $val_total, 0, $val_total, $resp_datos['twre_fecha_solicitud'], null, $estadopago, $usuario_id);
                                                     if ($resp_dpago) {
-                                                        if ($resp_datos['marcadescuento'] > 0) {
+                                                        if ($resp_datos['sdes_id'] > 0) {
                                                             \app\models\Utilities::putMessageLogFile('insertar en descuento');
                                                             $detDescitem=new DetalleDescuentoItem();                                                            
                                                             $respDescuento=$detDescitem->consultarHistoricodctoXitem($resp_datos['sdes_id'],$resp_datos['twre_fecha_solicitud']);

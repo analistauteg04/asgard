@@ -185,9 +185,7 @@ class MatriculadosreprobadosController extends \app\components\CController {
                             $data["DATA_1"][0]['unidad_academica'], $data["DATA_1"][0]['modalidad'], $data["DATA_1"][0]['carrera'],
                             $data["DATA_1"][0]['ming_id'], $data["DATA_1"][0]["ruta_doc_titulo"], $data["DATA_1"][0]["ruta_doc_dni"],
                             $data["DATA_1"][0]["ruta_doc_certvota"], $data["DATA_1"][0]['ruta_doc_foto'], $data["DATA_1"][0]["ruta_doc_certvota"],
-                            $data["DATA_1"][0]['ruta_doc_hojavida'], $data["DATA_1"][0]['twre_mensaje1'], $data["DATA_1"][0]['twre_mensaje2'],
-                            $data["DATA_1"][0]['fecha_solicitud'], $data["DATA_1"][0]['sdes_id'], $data["DATA_1"][0]['ite_id'],
-                            $data["DATA_1"][0]['twre_precio_item'], $data["DATA_1"][0]['twre_precio_descuento'], $data["DATA_1"][0]['twre_observacion_sol'],
+                            $data["DATA_1"][0]['ruta_doc_hojavida'], $data["DATA_1"][0]['twre_mensaje1'], $data["DATA_1"][0]['twre_mensaje2']                            
                         ];
                     } #end step 1 and step 2
                     else if($data["PASO"] == 3){
@@ -206,7 +204,7 @@ class MatriculadosreprobadosController extends \app\components\CController {
                                 $data["DATA_1"][0]['ming_id'],$data["DATA_1"][0]['twre_mensaje1'], 
                                 $data["DATA_1"][0]['twre_mensaje2'], $data["DATA_1"][0]['beca'],
                                 $data["DATA_1"][0]['fecha_solicitud'], $data["DATA_1"][0]['sdes_id'], $data["DATA_1"][0]['ite_id'],
-                                $data["DATA_1"][0]['twre_precio_item'], $data["DATA_1"][0]['twre_precio_descuento'], $data["DATA_1"][0]['twre_observacion_sol'],
+                                $data["DATA_1"][0]['precio_item'], $data["DATA_1"][0]['precio_item_desc'], $data["DATA_1"][0]['observacionw'],
                             ];
                     }
                     $resul = $model->actualizarReprobadoTemp($con, $data["DATA_1"][0]['twre_id'], $values_act, $keys_act, 'temporal_wizard_reprobados');
