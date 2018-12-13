@@ -2,8 +2,6 @@
 namespace app\modules\fe_edoc\controllers;
 
 use Yii;
-use yii\helpers\ArrayHelper;
-use yii\base\Exception;
 use app\modules\fe_edoc\models\VSacceso;
 use app\modules\fe_edoc\models\VSDirectorio;
 use app\modules\fe_edoc\models\VSDocumentos;
@@ -13,6 +11,9 @@ use app\modules\fe_edoc\models\REPORTES;
 use app\modules\fe_edoc\models\USUARIO;
 use app\modules\fe_edoc\models\NubeNotaCredito;
 use app\modules\fe_edoc\models\NubeRetencion;
+use app\models\ExportFile;
+use yii\helpers\ArrayHelper;
+use yii\base\Exception;
 
 class NubenotacreditoController extends \app\components\CController  {
 
@@ -131,19 +132,29 @@ class NubenotacreditoController extends \app\components\CController  {
         $modelo = new NubeNotaCredito();
         $tipDoc = new VSDirectorio();
         $aproba = new VSacceso();
-        $contBuscar = array();
-        if (Yii::$app->request->isAjax) {
+        $data = Yii::$app->request->get();
+        if ($data['PBgetFilter'] || $data['page']) {
             //$contBuscar = isset($_POST['CONT_BUSCAR']) ? json_encode($_POST['CONT_BUSCAR']) : array();
             //echo CJSON::encode($modelo->mostrarDocumentos($contBuscar));
             $arrayData = array();
-            $contBuscar = isset($_POST['CONT_BUSCAR']) ? json_decode($_POST['CONT_BUSCAR'], true) : array();
-            //$contBuscar[0]['PAGE'] = isset($_GET['page']) ? $_GET['page'] : 0;
+            $contBuscar = isset($data['CONT_BUSCAR']) ? json_decode($data['CONT_BUSCAR'],true) : array();
+            //$contBuscar[0]['PAGE'] = isset($data['page']) ? $data['page'] : 0;
             $arrayData = $modelo->mostrarDocumentos($contBuscar);
             return $this->render('_indexGrid', array(
                 'model' => $arrayData,
                     ));
         }
-        $this->view->title = Yii::t('DOCUMENTOS', 'Credit Note');
+        if (Yii::$app->request->isAjax) {
+            $valor = isset($_POST['valor']) ? $_POST['valor'] : "";
+            $op = isset($_POST['op']) ? $_POST['op'] : "";
+            $arrayData = array();
+            $data = new NubeFactura();
+            $arrayData = $data->retornarPersona($valor, $op);
+            header('Content-type: application/json');
+            echo json_encode($arrayData);
+            return;
+        }
+        //$this->view->title = Yii::t('DOCUMENTOS', 'Credit Note');
         return $this->render('index', array(
             //'dataProvider' => $dataProvider,
             'model' => $modelo->mostrarDocumentos($contBuscar),
@@ -203,27 +214,28 @@ class NubenotacreditoController extends \app\components\CController  {
         }
     }
     
-    public function actionGenerarPdf($ids) {
+    public function actionGenerarpdf($ids) {
         try {
             $ids = isset($_GET['ids']) ? base64_decode($_GET['ids']) : NULL;
-            $rep=new REPORTES;
+            $rep = new ExportFile();
             $modelo = new NubeNotaCredito(); //Ejmpleo code 3
             $cabFact = $modelo->mostrarCabNc($ids);
             $detFact = $modelo->mostrarDetNc($ids);
             $impFact = $modelo->mostrarNcImp($ids);
             $adiFact = $modelo->mostrarNcDataAdicional($ids);
-            $mPDF1=$rep->crearBaseReport();
+            
             $Titulo=Yii::$app->getSession()->get('RazonSocial', FALSE) . " - " . $cabFact['NombreDocumento'];
             $nameFile=$cabFact['NombreDocumento'] . '-' . $cabFact['NumDocumento'];
-            $Contenido=$this->render('facturaPDF', array(
+
+            $rep->createReportPdf(
+                    $this->render('facturaPDF', array(
                         'cabFact' => $cabFact,
                         'detFact' => $detFact,
                         'impFact' => $impFact,
                         'adiFact' => $adiFact,
-                                ));
-             $mPDF1->SetTitle($Titulo);
-             $mPDF1->WriteHTML($Contenido); //hacemos un render partial a una vista preparada, en este caso es la vista docPDF
-             $mPDF1->Output($nameFile, 'I');
+                                ))
+                );
+            $rep->mpdf->Output($nameFile . '_' . date("Ymdhis") . ".pdf", ExportFile::OUTPUT_TO_DOWNLOAD);
             //exit;
         } catch (Exception $e) {
             $this->errorControl($e);
