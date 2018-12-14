@@ -33,6 +33,7 @@ class ReportesController extends CController {
         $data["f_ini"]= $_GET["f_ini"];
         $data["f_fin"]= $_GET["f_fin"];
         $data["search_dni"]= $_GET["searchdni"];
+        $data["empresa_id"]= $_GET["empresa_id"];
         //$data["valor"]= $_GET["valor"];
         switch ($data["op"]) {
             case '1'://GRADO

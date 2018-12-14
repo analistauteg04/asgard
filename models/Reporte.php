@@ -63,6 +63,9 @@ class Reporte extends \yii\db\ActiveRecord {
                 $str_search .= "bact.bact_fecha_registro >= :fec_ini AND ";
                 $str_search .= "bact.bact_fecha_registro <= :fec_fin AND ";
             }
+            if ($arrFiltro['empresa'] > "0") {
+                $str_search .= " op.emp_id = :empresa  AND";
+            }
         }
         $sql = "
                 SELECT LPAD(op.opo_id,9,'0') opo_id,
@@ -101,6 +104,9 @@ class Reporte extends \yii\db\ActiveRecord {
             if ($arrFiltro['f_ini'] != "" && $arrFiltro['f_fin'] != "") {
                 $comando->bindParam(":fec_ini", $fecha_ini, \PDO::PARAM_STR);
                 $comando->bindParam(":fec_fin", $fecha_fin, \PDO::PARAM_STR);
+            }
+            if ($arrFiltro['empresa'] > "0") {
+                $comando->bindParam(":empresa", $empresa, \PDO::PARAM_INT);
             }
         }
         return $comando->queryAll();

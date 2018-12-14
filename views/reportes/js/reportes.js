@@ -19,9 +19,10 @@ function buscarActividades(op) {
     var searchdni = $('#txt_buscarDataPersona').val();
     var f_ini = $('#txt_fecha_ini').val();
     var f_fin = $('#txt_fecha_fin').val();
+    var empresa_id = $('#cmb_empresa').val();
     //var f_estado = '';//$('#cmb_estado').val();
     //Buscar al menos una clase con el nombre para ejecutar
-    window.location.href = $('#txth_base').val() + "/reportes/expexcelreport?op="+op+"&f_ini="+f_ini+"&f_fin="+f_fin+"&searchdni="+searchdni;
+    window.location.href = $('#txth_base').val() + "/reportes/expexcelreport?op="+op+"&f_ini="+f_ini+"&f_fin="+f_fin+"&searchdni="+searchdni+"&empresa_id="+empresa_id;
 }
 function pendingApplicants(){
     buscarActividades("3");//Reporte de Aspirantes pendientes
