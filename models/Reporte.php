@@ -85,12 +85,7 @@ class Reporte extends \yii\db\ActiveRecord {
                 INNER JOIN db_asgard.empresa emp ON emp.emp_id=op.emp_id
                 INNER JOIN db_academico.unidad_academica uac ON uac.uaca_id=op.uaca_id
                 INNER JOIN db_crm.estado_oportunidad eop ON eop.eopo_id=op.eopo_id
-                left JOIN (
-                select max(bact.bact_id) as bact_id,bact.opo_id
-                from db_crm.bitacora_actividades as bact
-                group by bact.opo_id
-                ) AS max_bact on max_bact.opo_id=op.opo_id
-                INNER JOIN db_crm.bitacora_actividades bact ON bact.bact_id=max_bact.bact_id
+                INNER JOIN db_crm.bitacora_actividades bact ON bact.opo_id=op.opo_id
                 INNER JOIN db_crm.observacion_actividades as oact on oact.oact_id=bact.oact_id
                 WHERE $str_search op.opo_estado=1;
              ";

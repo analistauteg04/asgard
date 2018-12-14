@@ -56,6 +56,14 @@ admision::registerTranslations();
                 );
                 ?>
             </div>
+            <div class="col-lg-6 col-md-6 col-sm-6 col-xs-6">
+            <div class="form-group">
+                <label for="cmb_empresa" class="col-sm-4 control-label"><?= Yii::t("formulario", "Company") ?>  </label>
+                <div class="col-sm-6 col-md-6 col-xs-6 col-lg-6">
+                    <?= Html::dropDownList("cmb_empresa", 0, $arr_empresa, ["class" => "form-control", "id" => "cmb_empresa"])  ?>                     
+                </div>
+            </div>
+        </div> 
         </div>
     </div> 
 </div></br>

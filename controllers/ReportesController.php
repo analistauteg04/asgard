@@ -14,12 +14,17 @@ use yii\helpers\ArrayHelper;
 use yii\base\Exception;
 use app\models\Utilities;
 use app\models\Reporte;
+use app\models\Empresa;
 use app\models\ExportFile;
 use app\modules\academico\Module as academico;
 academico::registerTranslations();
 class ReportesController extends CController {
-    public function actionIndex() {        
-        return $this->render('index');
+    public function actionIndex() {    
+        $empresa_mod = new Empresa();
+        $empresa = $empresa_mod->getAllEmpresa();
+        return $this->render('index',[
+            'arr_empresa' => ArrayHelper::map(array_merge([["id" => "0", "value" => "Todas"]], $empresa), "id", "value"),
+        ]);
     }
     public function actionExpexcelreport(){
         $objDat= new Reporte();
