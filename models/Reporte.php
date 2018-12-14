@@ -63,7 +63,7 @@ class Reporte extends \yii\db\ActiveRecord {
                 $str_search .= "bact.bact_fecha_registro >= :fec_ini AND ";
                 $str_search .= "bact.bact_fecha_registro <= :fec_fin AND ";
             }
-            if ($arrFiltro['empresa'] > "0") {
+            if ($arrFiltro['empresa_id'] > 0) {
                 $str_search .= " op.emp_id = :empresa  AND";
             }
         }
@@ -90,9 +90,8 @@ class Reporte extends \yii\db\ActiveRecord {
                 INNER JOIN db_crm.estado_oportunidad eop ON eop.eopo_id=op.eopo_id
                 INNER JOIN db_crm.bitacora_actividades bact ON bact.opo_id=op.opo_id
                 INNER JOIN db_crm.observacion_actividades as oact on oact.oact_id=bact.oact_id
-                WHERE $str_search op.opo_estado=1;
-             ";
-        $sql .= " ORDER BY bact.bact_fecha_proxima_atencion; ";
+                WHERE $str_search op.opo_estado = 1 ";
+        $sql .= " ORDER BY bact.bact_fecha_proxima_atencion ";
         $comando = $con->createCommand($sql);
         if (isset($arrFiltro) && count($arrFiltro) > 0) {
             if ($arrFiltro['search_dni'] != "") {
@@ -105,7 +104,8 @@ class Reporte extends \yii\db\ActiveRecord {
                 $comando->bindParam(":fec_ini", $fecha_ini, \PDO::PARAM_STR);
                 $comando->bindParam(":fec_fin", $fecha_fin, \PDO::PARAM_STR);
             }
-            if ($arrFiltro['empresa'] > "0") {
+            if ($arrFiltro['empresa_id'] > "0") {
+                $empresa = $arrFiltro['empresa_id'];
                 $comando->bindParam(":empresa", $empresa, \PDO::PARAM_INT);
             }
         }
