@@ -7,6 +7,7 @@ use app\modules\academico\models\PeriodoAcademicoMetIngreso;
 use app\modules\academico\models\MatriculadosReprobado;
 use app\modules\academico\models\EstudioAcademico;
 use app\modules\academico\models\Admitido;
+use app\modules\admision\models\SolicitudInscripcion;
 use app\modules\admision\models\ItemMetodoUnidad;
 use app\modules\financiero\models\DetalleDescuentoItem;
 use app\modules\academico\models\ModuloEstudio;
@@ -61,6 +62,7 @@ class MatriculadosreprobadosController extends \app\components\CController {
                     'arrCarreras' => $arrCarreras,
         ]);
     }
+
     public function actionSavereprobadostemp() {
         if (Yii::$app->request->isAjax) {
             $model = new MatriculadosReprobado();
@@ -76,12 +78,10 @@ class MatriculadosreprobadosController extends \app\components\CController {
                         return json_encode(['error' => Yii::t("notificaciones", "Error to process File {file}. Try again.", ['{file}' => basename($files['name'])])]);
                     }
                     $matr_repro_id = $data["matr_repro_id"];
-                    \app\models\Utilities::putMessageLogFile('id: ' . $matr_repro_id);
                     $files = $_FILES[key($_FILES)];
                     $arrIm = explode(".", basename($files['name']));
                     $typeFile = strtolower($arrIm[count($arrIm) - 1]);
                     $dirFileEnd = Yii::$app->params["documentFolder"] . "academico/" . $matr_repro_id . "/" . $data["name_file"] . "_per_" . $matr_repro_id . "." . $typeFile;
-                    \app\models\Utilities::putMessageLogFile($dirFileEnd);
                     $status = Utilities::moveUploadFile($files['tmp_name'], $dirFileEnd);
                     if ($status) {
                         return true;
@@ -90,100 +90,126 @@ class MatriculadosreprobadosController extends \app\components\CController {
                     }
                 }
                 if ($accion == "create" || $accion == "Create") {
-                    \app\models\Utilities::putMessageLogFile('Va insertar en la temporal');
                     $resul = $model->insertarReprobadoTemp($con, $data["DATA_1"]);
                 } else if ($accion == "Update") {
-                    $matr_repro_id=$data["DATA_1"][0]['twre_id'];
-                    $keys_act = [
-                        'twre_nombre', 'twre_apellido', 'twre_dni', 'twre_numero'
-                        , 'twre_correo', 'twre_pais', 'twre_celular'
-                        , 'uaca_id', 'mod_id', 'car_id'
-                        , 'twre_metodo_ingreso', 'ruta_doc_titulo', 'ruta_doc_dni'
-                        , 'ruta_doc_certvota', 'ruta_doc_foto', 'ruta_doc_certificado'
-                        , 'ruta_doc_hojavida', 'twre_mensaje1', 'twre_mensaje2'
-                        , 'twre_fecha_solicitud', 'sdes_id', 'ite_id'
-                    ];
-                    //ruta_doc_titulo
-                    $path_title = $data["DATA_1"][0]['ruta_doc_titulo'];
-                    if (strpos($path_title, "fakepath") !== false) {
-                        $path_title_true = explode("\\", $path_title)[2];
-                    } else {
-                        $path_title_true = $path_title;
+                    $matr_repro_id = $data["DATA_1"][0]['twre_id'];
+                    if ($data["PASO"] == 1){
+                        $keys_act = [
+                            'twre_nombre', 'twre_apellido', 'twre_dni', 'twre_numero'
+                            , 'twre_correo', 'twre_pais', 'twre_celular'
+                            , 'uaca_id', 'mod_id', 'car_id'
+                        ];
+                        $values_act = [
+                            $data["DATA_1"][0]['pges_pri_nombre'], $data["DATA_1"][0]['pges_pri_apellido'], $data["DATA_1"][0]['tipo_dni'], $data["DATA_1"][0]['pges_cedula'],
+                            $data["DATA_1"][0]['pges_correo'], $data["DATA_1"][0]['pais'], $data["DATA_1"][0]['pges_celular'],
+                            $data["DATA_1"][0]['unidad_academica'], $data["DATA_1"][0]['modalidad'], $data["DATA_1"][0]['carrera']
+                        ];
+                    }else if ($data["PASO"] == 1 || $data["PASO"] == 2) {
+                        $path_title = $data["DATA_1"][0]['ruta_doc_titulo'];
+                        if (strpos($path_title, "fakepath") !== false) {
+                            $path_title_true = explode("\\", $path_title)[2];
+                        } else {
+                            $path_title_true = $path_title;
+                        }
+                        //ruta_doc_dni
+                        $path_dni = $data["DATA_1"][0]['ruta_doc_dni'];
+                        if (strpos($path_dni, "fakepath") !== false) {
+                            $path_dni_true = explode("\\", $path_dni)[2];
+                        } else {
+                            $path_dni_true = $path_dni;
+                        }
+                        //ruta_doc_certvota
+                        $path_certvota = $data["DATA_1"][0]['ruta_doc_certvota'];
+                        if (strpos($path_certvota, "fakepath") !== false) {
+                            $path_certvota_true = explode("\\", $path_certvota)[2];
+                        } else {
+                            $path_certvota_true = $path_certvota;
+                        }
+                        //ruta_doc_certificado
+                        $path_certificado = $data["DATA_1"][0]['ruta_doc_certificado'];
+                        if (strpos($path_certificado, "fakepath") !== false) {
+                            $path_certificado_true = explode("\\", $path_certificado)[2];
+                        } else {
+                            $path_certificado_true = $path_certificado;
+                        }
+                        if (isset($path_title_true) && $path_title_true != "") {
+                            $arrIm = explode(".", basename($path_title_true));
+                            $typeFile = strtolower($arrIm[count($arrIm) - 1]);
+                            $titulo_archivoOld = Yii::$app->params["documentFolder"] . "academico/" . $matr_repro_id . "/doc_titulo_per_" . $matr_repro_id . "." . $typeFile;
+                            \app\models\Utilities::putMessageLogFile('address: ' . $titulo_archivoOld);
+                            $titulo_archivo = MatriculadosReprobado::addLabelTimeDocumentos($matr_repro_id, $titulo_archivoOld, $timeSt);
+                            $data["DATA_1"][0]["ruta_doc_titulo"] = $titulo_archivo;
+                            if ($titulo_archivo === false)
+                                throw new Exception('Error doc Titulo no renombrado.');
+                        }
+                        if (isset($path_dni_true) && $path_dni_true != "") {
+                            $arrIm = explode(".", basename($path_dni_true));
+                            $typeFile = strtolower($arrIm[count($arrIm) - 1]);
+                            $dni_archivoOld = Yii::$app->params["documentFolder"] . "academico/" . $matr_repro_id . "/doc_dni_per_" . $matr_repro_id . "." . $typeFile;
+                            $dni_archivo = MatriculadosReprobado::addLabelTimeDocumentos($matr_repro_id, $dni_archivoOld, $timeSt);
+                            $data["DATA_1"][0]["ruta_doc_dni"] = $dni_archivo;
+                            if ($dni_archivo === false)
+                                throw new Exception('Error doc Dni no renombrado.');
+                        }
+                        if (isset($path_certvota_true) && $path_certvota_true != "") {
+                            $arrIm = explode(".", basename($path_certvota_true));
+                            $typeFile = strtolower($arrIm[count($arrIm) - 1]);
+                            $certvota_archivoOld = Yii::$app->params["documentFolder"] . "academico/" . $matr_repro_id . "/doc_certvota_per_" . $matr_repro_id . "." . $typeFile;
+                            $certvota_archivo = MatriculadosReprobado::addLabelTimeDocumentos($matr_repro_id, $certvota_archivoOld, $timeSt);
+                            $data["DATA_1"][0]["ruta_doc_certvota"] = $certvota_archivo;
+                            if ($certvota_archivo === false)
+                                throw new Exception('Error doc certificado vot. no renombrado.');
+                        }
+                        if (isset($path_certificado_true) && $path_certificado_true != "") {
+                            $arrIm = explode(".", basename($path_certificado_true));
+                            $typeFile = strtolower($arrIm[count($arrIm) - 1]);
+                            $certificado_archivoOld = Yii::$app->params["documentFolder"] . "academico/" . $matr_repro_id . "/doc_certvota_per_" . $matr_repro_id . "." . $typeFile;
+                            $certificado_archivo = MatriculadosReprobado::addLabelTimeDocumentos($matr_repro_id, $certificado_archivoOld, $timeSt);
+                            $data["DATA_1"][0]["ruta_doc_certificado"] = $certificado_archivo;
+                            if ($certvota_archivo === false)
+                                throw new Exception('Error doc certificado vot. no renombrado.');
+                        }
+                        $keys_act = [
+                            'twre_nombre', 'twre_apellido', 'twre_dni', 'twre_numero'
+                            , 'twre_correo', 'twre_pais', 'twre_celular'
+                            , 'uaca_id', 'mod_id', 'car_id'
+                            , 'twre_metodo_ingreso', 'ruta_doc_titulo', 'ruta_doc_dni'
+                            , 'ruta_doc_certvota', 'ruta_doc_foto', 'ruta_doc_certificado'
+                            , 'ruta_doc_hojavida', 'twre_mensaje1', 'twre_mensaje2'
+                            , 'twre_fecha_solicitud', 'sdes_id', 'ite_id', 'twre_precio_item'
+                            , 'twre_precio_descuento', 'twre_observacion_sol'
+                        ];
+                        $values_act = [
+                            $data["DATA_1"][0]['pges_pri_nombre'], $data["DATA_1"][0]['pges_pri_apellido'], $data["DATA_1"][0]['tipo_dni'], $data["DATA_1"][0]['pges_cedula'],
+                            $data["DATA_1"][0]['pges_correo'], $data["DATA_1"][0]['pais'], $data["DATA_1"][0]['pges_celular'],
+                            $data["DATA_1"][0]['unidad_academica'], $data["DATA_1"][0]['modalidad'], $data["DATA_1"][0]['carrera'],
+                            $data["DATA_1"][0]['ming_id'], $data["DATA_1"][0]["ruta_doc_titulo"], $data["DATA_1"][0]["ruta_doc_dni"],
+                            $data["DATA_1"][0]["ruta_doc_certvota"], $data["DATA_1"][0]['ruta_doc_foto'], $data["DATA_1"][0]["ruta_doc_certvota"],
+                            $data["DATA_1"][0]['ruta_doc_hojavida'], $data["DATA_1"][0]['twre_mensaje1'], $data["DATA_1"][0]['twre_mensaje2']                            
+                        ];
+                    } #end step 1 and step 2
+                    else if($data["PASO"] == 3){
+                            $keys_act = [
+                                'twre_nombre', 'twre_apellido', 'twre_dni', 'twre_numero'
+                                , 'twre_correo', 'twre_pais', 'twre_celular'
+                                , 'uaca_id', 'mod_id', 'car_id', 'twre_metodo_ingreso'
+                                , 'twre_mensaje1', 'twre_mensaje2','twre_beca'
+                                , 'twre_fecha_solicitud', 'sdes_id', 'ite_id', 'twre_precio_item'
+                                , 'twre_precio_descuento', 'twre_observacion_sol'
+                            ];
+                            $values_act = [
+                                $data["DATA_1"][0]['pges_pri_nombre'], $data["DATA_1"][0]['pges_pri_apellido'], $data["DATA_1"][0]['tipo_dni'], $data["DATA_1"][0]['pges_cedula'],
+                                $data["DATA_1"][0]['pges_correo'], $data["DATA_1"][0]['pais'], $data["DATA_1"][0]['pges_celular'],
+                                $data["DATA_1"][0]['unidad_academica'], $data["DATA_1"][0]['modalidad'], $data["DATA_1"][0]['carrera'],
+                                $data["DATA_1"][0]['ming_id'],$data["DATA_1"][0]['twre_mensaje1'], 
+                                $data["DATA_1"][0]['twre_mensaje2'], $data["DATA_1"][0]['beca'],
+                                $data["DATA_1"][0]['fecha_solicitud'], $data["DATA_1"][0]['sdes_id'], $data["DATA_1"][0]['ite_id'],
+                                $data["DATA_1"][0]['precio_item'], $data["DATA_1"][0]['precio_item_desc'], $data["DATA_1"][0]['observacionw'],
+                            ];
                     }
-                    //ruta_doc_dni
-                    $path_dni = $data["DATA_1"][0]['ruta_doc_dni'];
-                    if (strpos($path_dni, "fakepath") !== false) {
-                        $path_dni_true = explode("\\", $path_dni)[2];
-                    } else {
-                        $path_dni_true = $path_dni;
-                    }
-                    //ruta_doc_certvota
-                    $path_certvota = $data["DATA_1"][0]['ruta_doc_certvota'];
-                    if (strpos($path_certvota, "fakepath") !== false) {
-                        $path_certvota_true = explode("\\", $path_certvota)[2];
-                    } else {
-                        $path_certvota_true = $path_certvota;
-                    }
-                    //ruta_doc_certificado
-                    $path_certificado = $data["DATA_1"][0]['ruta_doc_certificado'];
-                    if (strpos($path_certificado, "fakepath") !== false) {
-                        $path_certificado_true = explode("\\", $path_certificado)[2];
-                    } else {
-                        $path_certificado_true = $path_certificado;
-                    }
-                    if (isset($path_title_true) && $path_title_true != "") {
-                        $arrIm = explode(".", basename($path_title_true));
-                        $typeFile = strtolower($arrIm[count($arrIm) - 1]);
-                        $titulo_archivoOld = Yii::$app->params["documentFolder"] . "academico/" . $matr_repro_id . "/doc_titulo_per_" . $matr_repro_id . "." . $typeFile;
-                        \app\models\Utilities::putMessageLogFile('address: '. $titulo_archivoOld);                        
-                        $titulo_archivo = MatriculadosReprobado::addLabelTimeDocumentos($matr_repro_id, $titulo_archivoOld, $timeSt);
-                        $data["DATA_1"][0]["ruta_doc_titulo"] = $titulo_archivo;
-                        if ($titulo_archivo === false)
-                            throw new Exception('Error doc Titulo no renombrado.');
-                    }
-                    if (isset($path_dni_true) && $path_dni_true != "") {
-                        $arrIm = explode(".", basename($path_dni_true));
-                        $typeFile = strtolower($arrIm[count($arrIm) - 1]);
-                        $dni_archivoOld = Yii::$app->params["documentFolder"] . "academico/" . $matr_repro_id . "/doc_dni_per_" . $matr_repro_id . "." . $typeFile;
-                        $dni_archivo = MatriculadosReprobado::addLabelTimeDocumentos($matr_repro_id, $dni_archivoOld, $timeSt);
-                        $data["DATA_1"][0]["ruta_doc_dni"] = $dni_archivo;
-                        if ($dni_archivo === false)
-                            throw new Exception('Error doc Dni no renombrado.');
-                    }
-                    if (isset($path_certvota_true) && $path_certvota_true != "") {
-                        $arrIm = explode(".", basename($path_certvota_true));
-                        $typeFile = strtolower($arrIm[count($arrIm) - 1]);
-                        $certvota_archivoOld = Yii::$app->params["documentFolder"] . "academico/" . $matr_repro_id . "/doc_certvota_per_" . $matr_repro_id . "." . $typeFile;
-                        $certvota_archivo = MatriculadosReprobado::addLabelTimeDocumentos($matr_repro_id, $certvota_archivoOld, $timeSt);
-                        $data["DATA_1"][0]["ruta_doc_certvota"] = $certvota_archivo;
-                        if ($certvota_archivo === false)
-                            throw new Exception('Error doc certificado vot. no renombrado.');
-                    }
-                    if (isset($path_certificado_true) && $path_certificado_true != "") {
-                        $arrIm = explode(".", basename($path_certificado_true));
-                        $typeFile = strtolower($arrIm[count($arrIm) - 1]);
-                        $certificado_archivoOld = Yii::$app->params["documentFolder"] . "academico/" . $matr_repro_id . "/doc_certvota_per_" . $matr_repro_id . "." . $typeFile;
-                        $certificado_archivo = MatriculadosReprobado::addLabelTimeDocumentos($matr_repro_id, $certificado_archivoOld, $timeSt);
-                        $data["DATA_1"][0]["ruta_doc_certificado"] = $certificado_archivo;
-                        if ($certvota_archivo === false)
-                            throw new Exception('Error doc certificado vot. no renombrado.');
-                    }
-                    
-                    $values_act = [
-                        $data["DATA_1"][0]['pges_pri_nombre'], $data["DATA_1"][0]['pges_pri_apellido'], $data["DATA_1"][0]['tipo_dni'], $data["DATA_1"][0]['pges_cedula'],
-                        $data["DATA_1"][0]['pges_correo'], $data["DATA_1"][0]['pais'], $data["DATA_1"][0]['pges_celular'],
-                        $data["DATA_1"][0]['unidad_academica'], $data["DATA_1"][0]['modalidad'], $data["DATA_1"][0]['carrera'],
-                        $data["DATA_1"][0]['ming_id'], $data["DATA_1"][0]["ruta_doc_titulo"], $data["DATA_1"][0]["ruta_doc_dni"],
-                        $data["DATA_1"][0]["ruta_doc_certvota"], $data["DATA_1"][0]['ruta_doc_foto'], $data["DATA_1"][0]["ruta_doc_certvota"],
-                        $data["DATA_1"][0]['ruta_doc_hojavida'], $data["DATA_1"][0]['twre_mensaje1'], $data["DATA_1"][0]['twre_mensaje2'],
-                        $data["DATA_1"][0]['fecha_solicitud'],$data["DATA_1"][0]['sdes_id'],$data["DATA_1"][0]['ite_id']
-                    ];
-                    \app\models\Utilities::putMessageLogFile('Tabla Temporal');                    
-                    $cadena_presentar="";
                     $resul = $model->actualizarReprobadoTemp($con, $data["DATA_1"][0]['twre_id'], $values_act, $keys_act, 'temporal_wizard_reprobados');
                     if($data["PASO"]==3){
-                        \app\models\Utilities::putMessageLogFile('Se va actualizar la tabla de asgard');
-                        $resul=$model->insertaOriginal($resul["twre_id"]);
+                        $resul=$model->insertaOriginal($resul["twre_id"]);                        
                     }
                 }
                 if ($resul['status']) {
@@ -283,6 +309,7 @@ class MatriculadosreprobadosController extends \app\components\CController {
         $per_id = Yii::$app->session->get("PB_perid");
         $mod_persona = Persona::findIdentity($per_id);
         $mod_modalidad = new Modalidad();
+        $mod_solins = new SolicitudInscripcion();
         $empresa_mod = new Empresa();
         $mod_pergestion = new PersonaGestion();
         $mod_unidad = new UnidadAcademica();
@@ -321,7 +348,7 @@ class MatriculadosreprobadosController extends \app\components\CController {
                 $message = array("modalidad" => $modalidad);
                 return Utilities::ajaxResponse('OK', 'alert', Yii::t('jslang', 'Success'), 'false', $message);
             }
-            if (isset($data["getcarrera"])) {                            
+            if (isset($data["getcarrera"])) {
                 if ($data["empresa_id"] == 1) {
                     $carrera = $modcanal->consultarCarreraModalidad($data["unidada"], $data["moda_id"]);
                 } else {
@@ -337,47 +364,47 @@ class MatriculadosreprobadosController extends \app\components\CController {
             }
             if (isset($data["getdescuento"])) {                
                 $resItems = $modItemMetNivel->consultarXitemMetniv($data["unidada"], $data["moda_id"], $data["metodo"], $data["empresa_id"], $data["carrera_id"]);                            
-                $descuentos = $modDescuento->consultarDesctoxitem($resItems["ite_id"]);
+                $descuentos = $modDescuento->consultarDesctohistoriaxitem($resItems["ite_id"], $data["fecha"]);
                 $message = array("descuento" => $descuentos);
-                return Utilities::ajaxResponse('OK', 'alert', Yii::t('jslang', 'Success'), 'false', $message);                
+                return Utilities::ajaxResponse('OK', 'alert', Yii::t('jslang', 'Success'), 'false', $message);
             }
-            if (isset($data["getitem"])) {                 
+            if (isset($data["getitem"])) {
                 if ($data["empresa_id"] != 1) {
                     $metodo = 0;
                 } else {
                     $metodo = $data["metodo"];
                 }
-                $resItem = $modItemMetNivel->consultarXitemPrecio($data["unidada"], $data["moda_id"], $metodo, $data["carrera_id"], $data["empresa_id"]);              
+                $resItem = $modItemMetNivel->consultarXitemPrecio($data["unidada"], $data["moda_id"], $metodo, $data["carrera_id"], $data["empresa_id"]);
                 $message = array("items" => $resItem);
-                return Utilities::ajaxResponse('OK', 'alert', Yii::t('jslang', 'Success'), 'false', $message);                
+                return Utilities::ajaxResponse('OK', 'alert', Yii::t('jslang', 'Success'), 'false', $message);
             }
-            if (isset($data["getprecio"])) {                                
-                $resp_precio = $mod_solins->ObtenerPrecioXitem($data["ite_id"]);                  
+            if (isset($data["getprecio"])) {      
+                \app\models\Utilities::putMessageLogFile('item:'.$data["ite_id"]);      
+                \app\models\Utilities::putMessageLogFile('fecha:'.$data["fecha"]);      
+                $resp_precio = $mod_solins->ObtenerPreciohistoricoXitem($data["ite_id"], $data["fecha"]);                  
                 $message = array("precio" => $resp_precio["precio"]);
-                return Utilities::ajaxResponse('OK', 'alert', Yii::t('jslang', 'Success'), 'false', $message);                
+                return Utilities::ajaxResponse('OK', 'alert', Yii::t('jslang', 'Success'), 'false', $message);
             }
             if (isset($data["getpreciodescuento"])) {                                 
-                $resp_precio = $mod_solins->ObtenerPrecioXitem($data["ite_id"]);                  
-                \app\models\Utilities::putMessageLogFile('descuento:'.$data["descuento_id"]);                
-                \app\models\Utilities::putMessageLogFile('precio:'.$resp_precio["precio"]);                
+                $resp_precio = $mod_solins->ObtenerPreciohistoricoXitem($data["ite_id"], $data["fecha"]);                                  
                 if ($data["descuento_id"] > 0) {                        
                     $respDescuento = $modDescuento->consultarValdctoItem($data["descuento_id"]); 
                     if ($resp_precio["precio"] == 0) {                                    
                         $precioDescuento = 0;   
                     } else {                                     
                         if ($respDescuento["ddit_tipo_beneficio"] == 'P') {
-                            $descuento = ($resp_precio["precio"] * $respDescuento["ddit_porcentaje"])/100;
+                            $descuento = ($resp_precio["precio"] * $respDescuento["ddit_porcentaje"]) / 100;
                         } else {
                             $descuento = $respDescuento["ddit_valor"];
-                        }                   
-                        $precioDescuento = $resp_precio["precio"]-$descuento; 
-                    }   
+                        }
+                        $precioDescuento = $resp_precio["precio"] - $descuento;
+                    }
                 } else {
-                    $precioDescuento = 0;  
-                }         
-                \app\models\Utilities::putMessageLogFile('precio descuento:'.$precioDescuento);                
+                    $precioDescuento = 0;
+                }
+                \app\models\Utilities::putMessageLogFile('precio descuento:' . $precioDescuento);
                 $message = array("preciodescuento" => $precioDescuento);
-                return Utilities::ajaxResponse('OK', 'alert', Yii::t('jslang', 'Success'), 'false', $message);                
+                return Utilities::ajaxResponse('OK', 'alert', Yii::t('jslang', 'Success'), 'false', $message);
             }
         }
         $arr_pais_dom = Pais::find()->select("pai_id AS id, pai_nombre AS value")->where(["pai_estado_logico" => "1", "pai_estado" => "1"])->asArray()->all();
@@ -392,9 +419,16 @@ class MatriculadosreprobadosController extends \app\components\CController {
         $arr_carrerra1 = $modcanal->consultarCarreraModalidad(1, $arr_modalidad[0]["id"]);
         $arr_metodos = $mod_metodo->consultarMetodoUnidadAca_2($arr_ninteres[0]["id"]);
         $_SESSION['JSLANG']['Your information has not been saved. Please try again.'] = Yii::t('notificaciones', 'Your information has not been saved. Please try again.');
-        //Descuentos y precios.
-        $resp_item = $modItemMetNivel->consultarXitemPrecio(1, 1, 1, 2, 1);
-        $arr_descuento = $modDescuento->consultarDesctoxitem($resp_item["ite_id"]);
+        $resp_item = $modItemMetNivel->consultarXitemPrecio($arr_ninteres[0]["id"], $arr_modalidad[0]["id"], $arr_metodos[0]["id"], $arr_carrerra1[0]["id"], $empresa[0]["id"]);
+        $resp_precio = $mod_solins->ObtenerPrecioXitem($resp_item[0]["id"]);
+        $arr_descuento = $modDescuento->consultarDesctoxitem($resp_item[0]["id"]);
+        $respDescuento = $modDescuento->consultarValdctoItem($arr_descuento[0]["id"]);
+        if ($respDescuento["ddit_tipo_beneficio"] == 'P') {
+            $descuento = ($resp_precio["precio"] * $respDescuento["ddit_porcentaje"]) / 100;
+        } else {
+            $descuento = $respDescuento["ddit_valor"];
+        }
+        $precioDescuento = $resp_precio["precio"] - $descuento;
         return $this->render('new', [
                     "tipos_dni" => array("CED" => Yii::t("formulario", "DNI Document"), "PASS" => Yii::t("formulario", "Passport")),
                     "tipos_dni2" => array("CED" => Yii::t("formulario", "DNI Document1"), "PASS" => Yii::t("formulario", "Passport1")),
@@ -409,9 +443,8 @@ class MatriculadosreprobadosController extends \app\components\CController {
                     "arr_conuteg" => ArrayHelper::map($arr_conuteg, "id", "name"),
                     "arr_carrerra1" => ArrayHelper::map($arr_carrerra1, "id", "name"),
                     "arr_metodos" => ArrayHelper::map($arr_metodos, "id", "name"),
-                    "arr_item" => ArrayHelper::map(array_merge(["id" => "0", "name" => "Seleccionar"], $resp_item), "id", "name"), 
-                    "arr_empresa" => ArrayHelper::map($empresa, "id", "value"),
-                    "resp_datos" => $resp_datos,
+                    "arr_item" => ArrayHelper::map($resp_item, "id", "name"),
+                    "arr_empresa" => ArrayHelper::map($empresa, "id", "value"),                   
         ]);
     }
 

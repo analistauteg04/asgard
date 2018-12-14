@@ -226,7 +226,8 @@ create table if not exists `orden_pago` (
 --
 create table if not exists `desglose_pago` (
   `dpag_id` bigint(20) not null auto_increment primary key,  
-  `opag_id` bigint(20) not null,      
+  `opag_id` bigint(20) not null,  
+  `ite_id` bigint(20) null,     
   `dpag_subtotal` double not null,
   `dpag_iva` double not null,  
   `dpag_total` double not null,

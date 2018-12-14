@@ -46,7 +46,7 @@ class NubefacturaController extends \app\components\CController {
         $aproba= new VSacceso();
         $contBuscar = array();
         $data = Yii::$app->request->get();
-        if ($data['PBgetFilter']) {
+        if ($data['PBgetFilter'] || $data['page']) {
             //$contBuscar = isset($_POST['CONT_BUSCAR']) ? json_encode($_POST['CONT_BUSCAR']) : array();
             //echo CJSON::encode($modelo->mostrarDocumentos($contBuscar));
             $arrayData = array();
@@ -80,7 +80,7 @@ class NubefacturaController extends \app\components\CController {
         try {
             $ids = isset($_GET['ids']) ? base64_decode($_GET['ids']) : NULL;
             $rep= $report = new ExportFile();
-            $this->view->title = "Invoices";
+            //$this->view->title = "Invoices";
             $modelo = new NubeFactura(); //Ejmpleo code 3
             $cabFact = $modelo->mostrarCabFactura($ids);
             $detFact = $modelo->mostrarDetFacturaImp($ids);

@@ -5,6 +5,7 @@ namespace app\modules\academico\models;
 use Yii;
 use yii\data\ArrayDataProvider;
 use app\modules\financiero\models\OrdenPago;
+use \app\modules\financiero\models\DetalleDescuentoItem;
 use app\models\Persona;
 use app\models\Utilities;
 use app\models\EmpresaPersona;
@@ -616,12 +617,18 @@ class MatriculadosReprobado extends \yii\db\ActiveRecord {
                 (twre_nombre,twre_apellido,twre_dni,twre_numero,twre_correo,twre_pais,twre_celular,
                 uaca_id, mod_id,car_id,twre_metodo_ingreso,conuteg_id,ruta_doc_titulo, 
                 ruta_doc_dni, ruta_doc_certvota, ruta_doc_foto,ruta_doc_certificado, 
-                twre_mensaje1,twre_mensaje2,twre_estado,twre_fecha_creacion,twre_estado_logico)
+                twre_mensaje1,twre_mensaje2, 
+                twre_fecha_solicitud, sdes_id, ite_id, 
+                twre_precio_item, twre_precio_descuento, twre_observacion_sol,
+                twre_estado,twre_fecha_creacion,twre_estado_logico)
                 VALUES
                 (:twre_nombre,:twre_apellido,:twre_dni,:twre_numero,:twre_correo,:twre_pais,
                 :twre_celular,:uaca_id, :mod_id,:car_id,:twre_metodo_ingreso,:conuteg_id,
                 :ruta_doc_titulo,:ruta_doc_dni,:ruta_doc_certvota, :ruta_doc_foto,
-                :ruta_doc_certificado,:twre_mensaje1,:twre_mensaje2,1,CURRENT_TIMESTAMP(),1)";
+                :ruta_doc_certificado,:twre_mensaje1,:twre_mensaje2,
+                :twre_fecha_solicitud, :sdes_id, :ite_id,
+                :twre_precio_item, :twre_precio_descuento, :twre_observacion_sol,
+                1,CURRENT_TIMESTAMP(),1)";
 
             $command = $con->createCommand($sql);
             $command->bindParam(":twre_nombre", $data[0]['pges_pri_nombre'], \PDO::PARAM_STR);
@@ -631,9 +638,6 @@ class MatriculadosReprobado extends \yii\db\ActiveRecord {
             $command->bindParam(":twre_correo", $data[0]['pges_correo'], \PDO::PARAM_STR);
             $command->bindParam(":twre_pais", $data[0]['pais'], \PDO::PARAM_STR);
             $command->bindParam(":twre_celular", $data[0]['pges_celular'], \PDO::PARAM_STR);
-            
-            $command->bindParam(":twre_celular", $data[0]['pges_celular'], \PDO::PARAM_STR);
-            
             $command->bindParam(":uaca_id", $data[0]['unidad_academica'], \PDO::PARAM_STR);
             $command->bindParam(":mod_id", $data[0]['modalidad'], \PDO::PARAM_STR);
             $command->bindParam(":car_id", $data[0]['carrera'], \PDO::PARAM_STR);
@@ -644,6 +648,12 @@ class MatriculadosReprobado extends \yii\db\ActiveRecord {
             $command->bindParam(":ruta_doc_certvota", $ruta_doc_certvota, \PDO::PARAM_STR);
             $command->bindParam(":ruta_doc_foto", $ruta_doc_foto, \PDO::PARAM_STR);
             $command->bindParam(":ruta_doc_certificado", $ruta_doc_certificado, \PDO::PARAM_STR);
+            $command->bindParam(":twre_fecha_solicitud", $data[0]['fecha_solicitud'], \PDO::PARAM_STR);
+            $command->bindParam(":sdes_id", $data[0]['sdes_id'], \PDO::PARAM_INT);
+            $command->bindParam(":ite_id", $data[0]['ite_id'], \PDO::PARAM_INT);
+            $command->bindParam(":twre_precio_item", $data[0]['precio_item'], \PDO::PARAM_STR);
+            $command->bindParam(":twre_precio_descuento", $data[0]['precio_item_desc'], \PDO::PARAM_STR);
+            $command->bindParam(":twre_observacion_sol", $data[0]['observacionw'], \PDO::PARAM_STR);
             $command->bindParam(":twre_mensaje1", $twin_mensaje1, \PDO::PARAM_STR);
             $command->bindParam(":twre_mensaje2", $twin_mensaje2, \PDO::PARAM_STR);
             $command->execute();
@@ -655,6 +665,7 @@ class MatriculadosReprobado extends \yii\db\ActiveRecord {
             else
                 return ["status" => false, "twre_id" => 0];
         } catch (Exception $ex) {
+            \app\models\Utilities::putMessageLogFile($ex->getMessage());            
             if ($trans !== null)
                 $trans->rollback();
             return ["status" => false, "twre_id" => 0];
@@ -680,7 +691,6 @@ class MatriculadosReprobado extends \yii\db\ActiveRecord {
             $sql = "UPDATE " . $con->dbname . '.' . $name_table .
                     " SET $params_sql" .
                     " WHERE twre_id=$id";
-            \app\models\Utilities::putMessageLogFile('sql: ' . $sql);
             $comando = $con->createCommand($sql);
             $result = $comando->execute();
             $trans->commit();
@@ -876,6 +886,12 @@ class MatriculadosReprobado extends \yii\db\ActiveRecord {
                         twre_apellido,
                         twre_numero,
                         twre_correo,
+                        twre_precio_item,
+                        twi.sdes_id,
+                        twi.ite_id,
+                        twre_precio_descuento,
+                        twre_beca,
+                        twre_observacion_sol,
                         twre_pais,
                         twre_celular,
                         twi.uaca_id,
@@ -934,7 +950,6 @@ class MatriculadosReprobado extends \yii\db\ActiveRecord {
         $transaction2 = $con2->beginTransaction();
         try {
             //Se consulta la información grabada en la tabla temporal.
-            \app\models\Utilities::putMessageLogFile('Va actualizar la temporal');
             $resp_datos = $this->consultarDatosInscripcion($twreIds);
             // He colocado al inicio la informacion para que cargue al principio
             if ($resp_datos) {
@@ -947,7 +962,7 @@ class MatriculadosReprobado extends \yii\db\ActiveRecord {
                     $identificacion = $resp_datos['twre_numero'];
                 }
                 if (isset($identificacion) && strlen($identificacion) > 0) {
-                    $id_persona = 0;
+                    $id_persona = 0;                    
                     $mod_persona = new Persona();
                     $keys_per = [
                         'per_pri_nombre', 'per_seg_nombre', 
@@ -976,6 +991,7 @@ class MatriculadosReprobado extends \yii\db\ActiveRecord {
                         $id_persona = $mod_persona->insertarPersona($con, $parametros_per, $keys_per, 'persona');
                     }
                     if ($id_persona > 0) {
+                        \app\models\Utilities::putMessageLogFile('Ingreso persona');
                         //Modifificaion para Mover Imagenes de temp a Persona
                         //self::movePersonFiles($twinIds,$id_persona);
                         $concap = \Yii::$app->db_captacion;
@@ -987,6 +1003,7 @@ class MatriculadosReprobado extends \yii\db\ActiveRecord {
                             $emp_per_id = $mod_emp_persona->insertarEmpresaPersona($con, $parametros, $keys, 'empresa_persona');
                         }
                         if ($emp_per_id > 0) {
+                            \app\models\Utilities::putMessageLogFile('Ingreso empresa');
                             $usuario = new Usuario();
                             $usuario_id = $usuario->consultarIdUsuario($id_persona, $resp_datos['twre_correo']);
                             if ($usuario_id == 0) {
@@ -998,6 +1015,7 @@ class MatriculadosReprobado extends \yii\db\ActiveRecord {
                                 $usuario_id = $usuario->crearUsuarioTemporal($con, $parametros, $keys, 'usuario');
                             }
                             if ($usuario_id > 0) {
+                                \app\models\Utilities::putMessageLogFile('Ingreso usuario');
                                 $mod_us_gr_ep = new UsuaGrolEper();
                                 $grol_id = 30;
                                 $keys = ['eper_id', 'usu_id', 'grol_id', 'ugep_estado', 'ugep_estado_logico'];
@@ -1014,6 +1032,7 @@ class MatriculadosReprobado extends \yii\db\ActiveRecord {
                                         $interesado_id = $mod_interesado->insertarInteresado($concap, $parametros, $keys, 'interesado');
                                     }
                                     if ($interesado_id > 0) {
+                                        \app\models\Utilities::putMessageLogFile('Ingreso interesado');
                                         $mod_inte_emp = new InteresadoEmpresa(); // se guarda con estado_interesado 1
                                         $iemp_id = $mod_inte_emp->consultaInteresadoEmpresaById($interesado_id, $emp_id);
                                         if ($iemp_id == 0) {
@@ -1032,9 +1051,11 @@ class MatriculadosReprobado extends \yii\db\ActiveRecord {
                                             $rsin_id = 1; //Solicitud pendiente     
                                             $solins_model = new SolicitudInscripcion();
                                             //$mensaje = 'intId: ' . $interesado_id . '/uaca: ' . $pgest['unidad_academica'] . '/modalidad: ' . $pgest['modalidad'] . '/ming: ' . $pgest['ming_id'] . '/eaca: ' . $eaca_id . '/mest: ' . $mest_id . '/empresa: ' . $emp_id . '/secuencia: ' . $num_secuencia . '/rsin_id: ' . $rsin_id . '/sins_fechasol: ' . $sins_fechasol . '/usuario_id: ' . $usuario_id;
-                                            $sins_id = $solins_model->insertarSolicitud($interesado_id, $resp_datos['uaca_id'], $resp_datos['mod_id'], $resp_datos['twre_metodo_ingreso'], $eaca_id, null, $emp_id, $num_secuencia, $rsin_id, $sins_fechasol, $usuario_id);
+                                            \app\models\Utilities::putMessageLogFile('insertar solicitud');
+                                            $sins_id = $solins_model->insertarSolicitud($interesado_id, $resp_datos['uaca_id'], $resp_datos['mod_id'], $resp_datos['twre_metodo_ingreso'], $eaca_id, null, $emp_id, $num_secuencia, $rsin_id, $resp_datos['twre_fecha_solicitud'], $usuario_id);
                                             //grabar los documentos
                                             if ($sins_id) {
+                                                \app\models\Utilities::putMessageLogFile('solicitud ingresada');
                                                 if (($resp_datos['ruta_doc_titulo'] != "") || ($resp_datos['ruta_doc_dni'] != "") || ($resp_datos['ruta_doc_certvota'] != "") || ($resp_datos['ruta_doc_foto'] != "") || ($resp_datos['ruta_doc_certificado'] != "") || ($resp_datos['ruta_doc_hojavida'] != "")) {
                                                     $subidaDocumentos = 1;
                                                 } else {
@@ -1108,16 +1129,15 @@ class MatriculadosReprobado extends \yii\db\ActiveRecord {
                                                           } */
                                                     }
                                                 }
+                                                \app\models\Utilities::putMessageLogFile('va a preguntar si tiene beca');
                                                 //Obtener el precio de la solicitud.
+                                                $beca=$resp_datos['beca'];
+                                                \app\models\Utilities::putMessageLogFile('beca: ' . $beca);
                                                 if ($beca == "1") {
+                                                    \app\models\Utilities::putMessageLogFile('Tiene Beca');
                                                     $precio = 0;
                                                 } else {
-                                                    $resp_precio = $solins_model->ObtenerPrecio($resp_datos['twre_metodo_ingreso'], $resp_datos['uaca_id'], $resp_datos['mod_id'], $eaca_id);
-                                                    if ($resp_precio) {
-                                                        $precio = $resp_precio['precio'];
-                                                    } else {
-                                                        $mensaje = 'No existe registrado ningún precio para la unidad, modalidad y método de ingreso seleccionada.';
-                                                    }
+                                                    $precio = $resp_datos['twre_precio_item'];
                                                 }
                                                 $mod_ordenpago = new OrdenPago();
                                                 //Se verifica si seleccionó descuento.
@@ -1133,13 +1153,26 @@ class MatriculadosReprobado extends \yii\db\ActiveRecord {
                                                 } else {
                                                     $estadopago = 'P';
                                                 }
-                                                $val_total = $precio - $val_descuento;
+                                                \app\models\Utilities::putMessageLogFile('va a insertar la orden de pago');
+                                                if($resp_datos['sdes_id']==0){
+                                                    $val_total = $resp_datos['twre_precio_item'];
+                                                }else{
+                                                    $val_total = $resp_datos['twre_precio_descuento'];
+                                                }
+                                                \app\models\Utilities::putMessageLogFile('valor orden: '.$val_total);
+                                                \app\models\Utilities::putMessageLogFile(array($sins_id, $val_total, 0, $val_total, $estadopago, $usuario_id));
                                                 $resp_opago = $mod_ordenpago->insertarOrdenpago($sins_id, null, $val_total, 0, $val_total, $estadopago, $usuario_id);
                                                 if ($resp_opago) {
+                                                    \app\models\Utilities::putMessageLogFile('va a insertar la desglose pago');
                                                     //insertar desglose del pago                                    
-                                                    $fecha_ini = date(Yii::$app->params["dateByDefault"]);
-                                                    $resp_dpago = $mod_ordenpago->insertarDesglosepago($resp_opago, $val_total, 0, $val_total, $fecha_ini, null, $estadopago, $usuario_id);
+                                                    $resp_dpago = $mod_ordenpago->insertarDesglosepago($resp_opago,$resp_datos['ite_id'], $val_total, 0, $val_total, $resp_datos['twre_fecha_solicitud'], null, $estadopago, $usuario_id);
                                                     if ($resp_dpago) {
+                                                        if ($resp_datos['sdes_id'] > 0) {
+                                                            \app\models\Utilities::putMessageLogFile('insertar en descuento');
+                                                            $detDescitem=new DetalleDescuentoItem();                                                            
+                                                            $respDescuento=$detDescitem->consultarHistoricodctoXitem($resp_datos['sdes_id'],$resp_datos['twre_fecha_solicitud']);
+                                                            $resp_SolicDcto = $mod_ordenpago->insertarSolicDscto($sins_id, $resp_datos['sdes_id'], $resp_datos['twre_precio_item'], $respDescuento["ddit_porcentaje"], $respDescuento["ddit_valor"]);
+                                                        }
                                                         $exito = 1;
                                                     }
                                                 }
