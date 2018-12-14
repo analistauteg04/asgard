@@ -57,11 +57,11 @@ class Reporte extends \yii\db\ActiveRecord {
         if (isset($arrFiltro) && count($arrFiltro) > 0) {
 
             if ($arrFiltro['search_dni'] != "") {
-                $str_search .= "(C.pges_cedula like :search) and ";
+                $str_search .= "(pg.pges_cedula like :search) and ";
             }
             if ($arrFiltro['f_ini'] != "" && $arrFiltro['f_fin'] != "") {
-                $str_search .= "A.bact_fecha_registro >= :fec_ini AND ";
-                $str_search .= "A.bact_fecha_registro <= :fec_fin AND ";
+                $str_search .= "bact.bact_fecha_registro >= :fec_ini AND ";
+                $str_search .= "bact.bact_fecha_registro <= :fec_fin AND ";
             }
         }
         $sql = "
@@ -94,7 +94,7 @@ class Reporte extends \yii\db\ActiveRecord {
                 INNER JOIN db_crm.observacion_actividades as oact on oact.oact_id=bact.oact_id
                 WHERE $str_search op.opo_estado=1;
              ";
-        $sql .= " ORDER BY A.bact_fecha_proxima_atencion; ";
+        $sql .= " ORDER BY bact.bact_fecha_proxima_atencion; ";
         $comando = $con->createCommand($sql);
         if (isset($arrFiltro) && count($arrFiltro) > 0) {
             if ($arrFiltro['search_dni'] != "") {
