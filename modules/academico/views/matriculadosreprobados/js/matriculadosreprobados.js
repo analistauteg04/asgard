@@ -709,51 +709,122 @@ $(document).ready(function () {
             }, true);
         }, true);
     });
-    $('#txt_fecha_solicitud').on('change',function(e){
+    $('#txt_fecha_solicitud').on('change', function (e) {
         cambioFechaSolicitud(e);
+    });
+
+    //Control del div de beneficiario
+    $('#rdo_matricula').change(function () {
+        if ($('#rdo_matricula').val() == 1) {
+            $("#rdo_matricula_no").prop("checked", "");
+            $('#matriculado').css('display', 'none');
+            document.getElementById("cmb_unidadmat").options.item(0).selected = 'selected';
+            document.getElementById("cmb_modamat").options.item(0).selected = 'selected';
+            document.getElementById("cmb_carreramat").options.item(0).selected = 'selected';
+        } else {
+            $('#matriculado').css('display', 'block');
+            document.getElementById("cmb_unidadmat").options.item(0).selected = 'selected';
+            document.getElementById("cmb_modamat").options.item(0).selected = 'selected';
+            document.getElementById("cmb_carreramat").options.item(0).selected = 'selected';
+        }
+    });
+
+    $('#rdo_matricula_no').change(function () {
+        if ($('#rdo_matricula_no').val() == 2) {
+            $("#rdo_matricula").prop("checked", "");
+            $('#matriculado').css('display', 'block');
+            document.getElementById("cmb_unidadmat").options.item(0).selected = 'selected';
+            document.getElementById("cmb_modamat").options.item(0).selected = 'selected';
+            document.getElementById("cmb_carreramat").options.item(0).selected = 'selected';
+        } else {
+            $('#matriculado').css('display', 'none');
+            document.getElementById("cmb_unidadmat").options.item(0).selected = 'selected';
+            document.getElementById("cmb_modamat").options.item(0).selected = 'selected';
+            document.getElementById("cmb_carreramat").options.item(0).selected = 'selected';
+        }
+    });
+
+    $('#cmb_unidadmat').change(function () {
+        //document.getElementById("cmb_periodo").options.item(0).selected = 'selected';
+        var link = $('#txth_base').val() + "/academico/matriculadosreprobados/newreprobado";
+        var arrParams = new Object();
+        arrParams.unimat_id = $(this).val();
+        arrParams.getmodamat = true;
+        requestHttpAjax(link, arrParams, function (response) {
+            if (response.status == "OK") {
+                data = response.message;
+                setComboDataselect(data.modalidadmat, "cmb_modamat", "Seleccionar");
+                var arrParams = new Object();
+                if (data.modalidadmat.length > 0) {
+                    arrParams.unimati = $('#cmb_unidadmat').val();
+                    arrParams.modamat_id = data.modalidadmat[0].id;
+                    arrParams.getcarreramat = true;
+                    requestHttpAjax(link, arrParams, function (response) {
+                        if (response.status == "OK") {
+                            data = response.message;
+                            setComboDataselect(data.carreramat, "cmb_carreramat", "Seleccionar");
+                        }
+                    }, true);
+                }
+            }
+        }, true);
+    });
+    $('#cmb_modamat').change(function () {
+        //document.getElementById("cmb_periodo").options.item(0).selected = 'selected';
+        var link = $('#txth_base').val() + "/academico/matriculadosreprobados/newreprobado";
+        var arrParams = new Object();
+        arrParams.unimati = $('#cmb_unidadmat').val();
+        arrParams.modamat_id = $(this).val();
+        arrParams.getcarreramat = true;
+        requestHttpAjax(link, arrParams, function (response) {
+            if (response.status == "OK") {
+                data = response.message;
+                setComboDataselect(data.carreramat, "cmb_carreramat", "Seleccionar");
+            }
+        }, true);
     });
 
 });
 function cambioFechaSolicitud(e) {
     var link = $('#txth_base').val() + "/academico/matriculadosreprobados/new";
-        //Precio.           
+    //Precio.           
+    var arrParams = new Object();
+    arrParams.ite_id = $('#cmb_item_solicitudw').val();
+    arrParams.fecha = $('#txt_fecha_solicitud').val();
+    arrParams.getprecio = true;
+    requestHttpAjax(link, arrParams, function (response) {
+        if (response.status == "OK") {
+            data = response.message;
+            $('#txt_precio_itemw').val(data.precio);
+        }
+    }, true);
+    //Descuentos.
+    var arrParams = new Object();
+    arrParams.unidada = $('#cmb_unidad_solicitudw').val();
+    arrParams.moda_id = $('#cmb_modalidad_solicitudw').val();
+    arrParams.metodo = $('#cmb_metodo_solicitudw').val();
+    arrParams.empresa_id = $('#cmb_empresa').val();
+    arrParams.carrera_id = $('#cmb_carrera_solicitudw').val();
+    arrParams.fecha = $('#txt_fecha_solicitud').val();
+    arrParams.getdescuento = true;
+    requestHttpAjax(link, arrParams, function (response) {
+        if (response.status == "OK") {
+            data = response.message;
+            setComboData(data.descuento, "cmb_descuento_solicitudw");
+        }
+        //Precio con descuento.
         var arrParams = new Object();
+        arrParams.descuento_id = $('#cmb_descuento_solicitudw').val();
         arrParams.ite_id = $('#cmb_item_solicitudw').val();
         arrParams.fecha = $('#txt_fecha_solicitud').val();
-        arrParams.getprecio = true;
+        arrParams.getpreciodescuento = true;
         requestHttpAjax(link, arrParams, function (response) {
             if (response.status == "OK") {
                 data = response.message;
-                $('#txt_precio_itemw').val(data.precio);
+                $('#txt_precio_item2w').val(data.preciodescuento);
             }
         }, true);
-        //Descuentos.
-        var arrParams = new Object();
-        arrParams.unidada = $('#cmb_unidad_solicitudw').val();
-        arrParams.moda_id = $('#cmb_modalidad_solicitudw').val();
-        arrParams.metodo = $('#cmb_metodo_solicitudw').val();
-        arrParams.empresa_id = $('#cmb_empresa').val();
-        arrParams.carrera_id = $('#cmb_carrera_solicitudw').val();
-        arrParams.fecha = $('#txt_fecha_solicitud').val();
-        arrParams.getdescuento = true;
-        requestHttpAjax(link, arrParams, function (response) {
-            if (response.status == "OK") {
-                data = response.message;
-                setComboData(data.descuento, "cmb_descuento_solicitudw");
-            }
-            //Precio con descuento.
-            var arrParams = new Object();
-            arrParams.descuento_id = $('#cmb_descuento_solicitudw').val();
-            arrParams.ite_id = $('#cmb_item_solicitudw').val();
-            arrParams.fecha = $('#txt_fecha_solicitud').val();
-            arrParams.getpreciodescuento = true;
-            requestHttpAjax(link, arrParams, function (response) {
-                if (response.status == "OK") {
-                    data = response.message;
-                    $('#txt_precio_item2w').val(data.preciodescuento);
-                }
-            }, true);
-        }, true);
+    }, true);
 }
 function asignarPrecio() {
     var link = $('#txth_base').val() + "/academico/matriculadosreprobados/new";
@@ -801,9 +872,33 @@ function guardarAdmiMateriarep() {
             selected += $(this).val() + ' ';
         }
     });
-    if (selected != '')
+    if (selected != '') // reprobaron materias, debe guardarse las misma unidad, modalidad y carrera
     {
         arrParams.materia = selected;
+        if ($('#rdo_matricula').val() == 1) {
+            arrParams.uniacademicamat = $('#cmb_ninteres').val();
+            arrParams.modalidadmat = $('#cmb_modalidad').val();
+            arrParams.carreprogmat = $('#cmb_carrera1').val();
+        }
+        if ($('#rdo_matricula').val() == 2) {
+            arrParams.uniacademicamat = $('#cmb_unidadmat').val();
+            arrParams.modalidadmat = $('#cmb_modamat').val();
+            arrParams.carreprogmat = $('#cmb_carreramat').val();
+        }
+
+    } else // aprobo todas materias, debe guardarse las matriculo unidad, matriculo modalidad, matriculo carrera y validadar que sea mayor a 0
+    {
+        if ($('#rdo_matricula').val() == 1) {
+            arrParams.uniacademicamat = $('#cmb_ninteres').val();
+            arrParams.modalidadmat = $('#cmb_modalidad').val();
+            arrParams.carreprogmat = $('#cmb_carrera1').val();
+        }
+        if ($('#rdo_matricula_no').val() == 2) {
+            arrParams.uniacademicamat = $('#cmb_unidadmat').val();
+            arrParams.modalidadmat = $('#cmb_modamat').val();
+            arrParams.carreprogmat = $('#cmb_carreramat').val();
+            //alert($('#cmb_unidadmat option:selected').val());            
+        }
     }
     if (arrParams.ids === undefined)
     {
@@ -815,14 +910,41 @@ function guardarAdmiMateriarep() {
                 if ($('#cmb_carrera1 option:selected').val() > '0') {
                     if ($('#cmb_periodo option:selected').val() > '0') {
                         if ($('#cmb_estado option:selected').val() > '0') {
-                            if (!validateForm()) {
-                                requestHttpAjax(link, arrParams, function (response) {
-                                    showAlert(response.status, response.label, response.message);
-                                    setTimeout(function () {
-                                        window.location.href = $('#txth_base').val() + "/academico/matriculadosreprobados/index";
-                                    }, 3000);
-                                }, true);
+                            if ($('input:radio[name=rdo_matricula]:checked').val() == 2) {
+                                if ($('#cmb_unidadmat option:selected').val() > '0') {
+                                    if ($('#cmb_modamat option:selected').val() > '0') {
+                                        if ($('#cmb_carreramat option:selected').val() > '0') {
+                                            if (!validateForm()) {
+                                                requestHttpAjax(link, arrParams, function (response) {
+                                                    showAlert(response.status, response.label, response.message);
+                                                    setTimeout(function () {
+                                                        window.location.href = $('#txth_base').val() + "/academico/matriculadosreprobados/index";
+                                                    }, 3000);
+                                                }, true);
+                                            }
+                                        } else {
+                                            var mensaje = {wtmessage: "Matriculó Carrera: El campo no debe estar vacío.", title: "Error"};
+                                            showAlert("NO_OK", "Error", mensaje);
+                                        }
+                                    } else {
+                                        var mensaje = {wtmessage: "Matriculó Modalidad: El campo no debe estar vacío.", title: "Error"};
+                                        showAlert("NO_OK", "Error", mensaje);
+                                    }
+                                } else {
+                                    var mensaje = {wtmessage: "Matriculó Unidad Académica: El campo no debe estar vacío.", title: "Error"};
+                                    showAlert("NO_OK", "Error", mensaje);                                    
+                                }
+                            } else {
+                                if (!validateForm()) {
+                                    requestHttpAjax(link, arrParams, function (response) {
+                                        showAlert(response.status, response.label, response.message);
+                                        setTimeout(function () {
+                                            window.location.href = $('#txth_base').val() + "/academico/matriculadosreprobados/index";
+                                        }, 3000);
+                                    }, true);
+                                }
                             }
+
                         } else {
                             var mensaje = {wtmessage: "Estado: El campo no debe estar vacío.", title: "Error"};
                             showAlert("NO_OK", "Error", mensaje);

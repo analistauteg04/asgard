@@ -121,7 +121,57 @@ $leyenda = '<div class="col-md-12 col-xs-12 col-sm-12 col-lg-12">
                     ]);
                     ?> 
                 </div>
-            </div>            
+            </div>
+            <div class="col-sm-5">&nbsp;</div>
+            <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12"> 
+                <div class="col-lg-6 col-md-6 col-sm-6 col-xs-6">
+                    <div class="form-group">
+                        <label for="lbl_carreramat" class="col-sm-9 col-md-9 col-xs-9 col-lg-9 control-label"><?= academico::t("Academico", "He enrolled in the same career that applied the income") ?></label>
+                        <div class="col-sm-3 col-md-3 col-xs-3 col-lg-3">
+                            <label> 
+                                <input type="radio" name="rdo_matricula" id="rdo_matricula" value="1" checked> Si<br> 
+                            </label>
+                            <label> 
+                                <input type="radio" name="rdo_matricula" id="rdo_matricula_no" value="2" > No<br>
+                            </label>
+                        </div> 
+                    </div>
+                </div>
+            </div>
+            <div class='col-md-12 col-sm-12 col-xs-12 col-lg-12'>
+                <div id="estudiante" style="display: block;">        
+                    <div id="matriculado" style="display: none;">
+                        <div class='col-md-12 col-sm-12 col-xs-12 col-lg-12'>        
+                            <div class="col-md-6 col-sm-6 col-xs-6 col-lg-6">
+                                <div class="form-group">
+                                    <label for="cmb_unidadmat" class="col-sm-4 col-md-4 col-xs-4 col-lg-4 control-label"><?= Yii::t("formulario", "Academic unit") ?></label>
+                                    <div class="col-sm-7 col-md-7 col-xs-7 col-lg-7">
+                                        <?= Html::dropDownList("cmb_unidadmat", 0, $arr_ninteres, ["class" => "form-control PBvalidation", "id" => "cmb_unidadmat"]) ?>
+                                    </div>
+                                </div>
+                            </div>   
+                            <div class="col-md-6 col-sm-6 col-xs-6 col-lg-6">
+                                <div class="form-group">
+                                    <label for="cmb_modamat" class="col-sm-4 col-md-4 col-xs-4 col-lg-4 control-label"><?= Yii::t("formulario", "Mode") ?></label>
+                                    <div class="col-sm-7 col-md-7 col-xs-7 col-lg-7">
+                                        <?= Html::dropDownList("cmb_modamat", 0, $arr_modalidad, ["class" => "form-control PBvalidation", "id" => "cmb_modamat"]) ?> 
+                                    </div>
+                                </div>
+                            </div> 
+                        </div>  
+                        <div class='col-md-12 col-sm-12 col-xs-12 col-lg-12'>  
+                            <div class="col-md-6 col-sm-6 col-xs-6 col-lg-6">
+                                <div class="form-group">            
+                                    <label for="cmb_carreramat" class="col-sm-4 col-md-4 col-xs-4 col-lg-4 control-label"><?= Yii::t("academico", "Career") . ' /Programa' ?></label>
+                                    <div class="col-sm-7 col-md-7 col-xs-7 col-lg-7">
+                                        <?= Html::dropDownList("cmb_carreramat", 0, $arr_carrerra1, ["class" => "form-control", "id" => "cmb_carreramat"]) ?>
+                                    </div>
+                                </div>
+                            </div>                     
+                        </div>
+                    </div>
+                </div>
+            </div>
         </div>
     </div>
 </form>

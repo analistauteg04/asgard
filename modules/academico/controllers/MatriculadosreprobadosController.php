@@ -277,6 +277,18 @@ class MatriculadosreprobadosController extends \app\components\CController {
                 return Utilities::ajaxResponse('OK', 'alert', Yii::t('jslang', 'Success'), 'false', $message);
                 return;
             }
+            if (isset($data["getmodamat"])) {
+                $modalidadmat = $mod_modalidad->consultarModalidad($data["unimat_id"], 1);
+                $message = array("modalidadmat" => $modalidadmat);
+                return Utilities::ajaxResponse('OK', 'alert', Yii::t('jslang', 'Success'), 'false', $message);
+                return;
+            }
+            if (isset($data["getcarreramat"])) {
+                $carreramat = $modcanal->consultarCarreraModalidad($data["unimati"], $data["modamat_id"]);
+                $message = array("carreramat" => $carreramat);
+                return Utilities::ajaxResponse('OK', 'alert', Yii::t('jslang', 'Success'), 'false', $message);
+                return;
+            }
         }
         $arrperiodo = $mod_periodo->consultarPeriodo();
         $arradmitido = $mod_admitido->getMatriculados(0);
