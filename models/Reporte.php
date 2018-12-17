@@ -17,10 +17,15 @@ use yii;
  */
 class Reporte extends \yii\db\ActiveRecord {
 
-    //put your code here
-
+    /**
+     * Function consulta el nombre de modalidad
+     * @author  Kleber Loayza <analistadesarrollo03@uteg.edu.ec>;
+     * @property       
+     * @return  
+     */
     public function consultarActividadporOportunidad($data) {
-        $con = \Yii::$app->db_crm;  //A.bact_id,B.opo_id,      
+        $con = \Yii::$app->db_crm;  
+        
         $sql = "SELECT LPAD(B.opo_id,9,'0') opo_id,DATE(A.bact_fecha_registro) Fecha,G.emp_razon_social,
             CONCAT(C.pges_pri_nombre, ' ', ifnull(C.pges_seg_nombre,' ')) Nombres,
             CONCAT(C.pges_pri_apellido, ' ', ifnull(C.pges_seg_apellido,' ')) Apellidos, 
@@ -49,9 +54,16 @@ class Reporte extends \yii\db\ActiveRecord {
         }
         return $comando->queryAll();
     }
-
+    /**
+     * Function consulta el nombre de modalidad
+     * @author  Kleber Loayza <analistadesarrollo03@uteg.edu.ec>;
+     * @property       
+     * @return  
+     */
     public function consultarOportunidadProximaAten($arrFiltro = array()) {
-        $con = \Yii::$app->db_crm;
+        $con = \Yii::$app->db_crm;        
+        $con1 = \Yii::$app->db_asgard;
+        $con2 = \Yii::$app->db_academico;
         $str_search = "";
         $estado =1 ;
         if (isset($arrFiltro) && count($arrFiltro) > 0) {
@@ -80,17 +92,26 @@ class Reporte extends \yii\db\ActiveRecord {
                 eop.eopo_nombre,
                 oact.oact_nombre,
                 CONCAT(per.per_pri_nombre, ' ', ifnull(per.per_pri_apellido,' ')) Agente
-                FROM db_crm.oportunidad op
-                INNER JOIN db_crm.persona_gestion pg ON pg.pges_id=op.pges_id
-                inner join db_crm.conocimiento_canal ccan on ccan.ccan_id=op.ccan_id
-                INNER JOIN db_crm.personal_admision pad on pad.padm_id = op.padm_id
-                INNER JOIN db_asgard.persona per on per.per_id = pad.per_id
-                INNER JOIN db_asgard.empresa emp ON emp.emp_id=op.emp_id
-                INNER JOIN db_academico.unidad_academica uac ON uac.uaca_id=op.uaca_id
-                INNER JOIN db_crm.estado_oportunidad eop ON eop.eopo_id=op.eopo_id
-                INNER JOIN db_crm.bitacora_actividades bact ON bact.opo_id=op.opo_id
-                INNER JOIN db_crm.observacion_actividades as oact on oact.oact_id=bact.oact_id
-                WHERE $str_search op.opo_estado = 1 ";
+                FROM " . $con->dbname . ".oportunidad op
+                INNER JOIN " . $con->dbname . ".persona_gestion pg ON pg.pges_id=op.pges_id
+                inner join " . $con->dbname . ".conocimiento_canal ccan on ccan.ccan_id=op.ccan_id
+                INNER JOIN " . $con1->dbname . ".empresa emp ON emp.emp_id=op.emp_id
+                INNER JOIN " . $con2->dbname . ".unidad_academica uac ON uac.uaca_id=op.uaca_id
+                INNER JOIN " . $con->dbname . ".estado_oportunidad eop ON eop.eopo_id=op.eopo_id
+                INNER JOIN " . $con->dbname . ".bitacora_actividades bact ON bact.opo_id=op.opo_id
+                INNER JOIN " . $con1->dbname . ".persona per on per.per_id = bact.bact_usuario
+                INNER JOIN " . $con->dbname . ".observacion_actividades as oact on oact.oact_id=bact.oact_id
+                WHERE $str_search 
+                    op.opo_estado = :estado and op.opo_estado_logico = :estado and 
+                    pg.pges_estado = :estado and pg.pges_estado_logico = :estado and
+                    ccan.ccan_estado = :estado and ccan.ccan_estado_logico = :estado and 
+                    emp.emp_estado = :estado and emp.emp_estado_logico = :estado and
+                    uac.uaca_estado = :estado and uac.uaca_estado_logico = :estado and
+                    eop.eopo_estado = :estado and eop.eopo_estado_logico = :estado and
+                    bact.bact_estado = :estado and bact.bact_estado_logico = :estado  and
+                    per.per_estado = :estado and per.per_estado_logico = :estado and
+                    oact.oact_estado = :estado and oact.oact_estado_logico = :estado 
+                ";
         $sql .= " ORDER BY bact.bact_fecha_proxima_atencion ";
         $comando = $con->createCommand($sql);
         if (isset($arrFiltro) && count($arrFiltro) > 0) {
@@ -109,9 +130,15 @@ class Reporte extends \yii\db\ActiveRecord {
                 $comando->bindParam(":empresa", $empresa, \PDO::PARAM_INT);
             }
         }
+        $comando->bindParam(":estado", $estado, \PDO::PARAM_STR);
         return $comando->queryAll();
     }
-
+    /**
+     * Function consulta el nombre de modalidad
+     * @author  Kleber Loayza <analistadesarrollo03@uteg.edu.ec>;
+     * @property       
+     * @return  
+     */
     public function consultarAspirantesPendientes($arrFiltro = array()) {
         $con = \Yii::$app->db_captacion;
         $con1 = \Yii::$app->db_asgard;
@@ -125,7 +152,6 @@ class Reporte extends \yii\db\ActiveRecord {
                 $str_search .= "sins.sins_fecha_solicitud <= :fec_fin AND ";
             }
         }
-
         $sql = "
                     select 
                         ifnull(per.per_cedula,per.per_pasaporte) as DNI,                    
