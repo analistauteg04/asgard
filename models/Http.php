@@ -2,7 +2,7 @@
 
 namespace app\models;
 
-class Http_Exception extends Exception{
+class Http_Exception extends \Exception{
     const NOT_MODIFIED = 304; 
     const BAD_REQUEST = 400; 
     const NOT_FOUND = 404; 
@@ -115,11 +115,14 @@ class Http
     {
         $this->_user = $user;
         $this->_pass = $pass;
+        return $this;
     }
 
     const POST   = 'POST';
     const GET    = 'GET';
     const DELETE = 'DELETE';
+    const PATCH  = 'PATCH';
+    const PUT    = 'PUT';
 
     private $_requests = array();
     /**
@@ -141,6 +144,28 @@ class Http
     public function get($url, $params=array())
     {
         $this->_requests[] = array(self::GET, $this->_url($url), $params);
+        return $this;
+    }
+
+    /**
+     * @param string $url
+     * @param array $params
+     * @return Http
+     */
+    public function put($url, $params = array())
+    {
+        $this->_requests[] = array(self::PUT, $this->_url($url), $params);
+        return $this;
+    }
+
+    /**
+     * @param string $url
+     * @param array $params
+     * @return Http
+     */
+    public function patch($url, $params = array())
+    {
+        $this->_requests[] = array(self::PATCH, $this->_url($url), $params);
         return $this;
     }
     
@@ -182,6 +207,30 @@ class Http
     public function doGet($url, $params=array())
     {
         return $this->_exec(self::GET, $this->_url($url), $params);
+    }
+
+    /**
+     * PUT Request
+     *
+     * @param string $url
+     * @param array $params
+     * @return string
+     */
+    public function doPut($url, $params = array())
+    {
+        return $this->_exec(self::PUT, $this->_url($url), $params);
+    }
+
+    /**
+     * PATH Request
+     *
+     * @param string $url
+     * @param array $params
+     * @return string
+     */
+    public function doPatch($url, $params = array())
+    {
+        return $this->_exec(self::PATCH, $this->_url($url), $params);
     }
     
     /**
@@ -246,6 +295,16 @@ class Http
                 curl_setopt($s, CURLOPT_URL, $url . '?' . http_build_query($params));
                 curl_setopt($s, CURLOPT_CUSTOMREQUEST, self::DELETE);
                 break;
+            case self::PATCH:
+                curl_setopt($s, CURLOPT_URL, $url . '?' . http_build_query($params));
+                curl_setopt($s, CURLOPT_CUSTOMREQUEST, self::PATCH);
+                curl_setopt($s, CURLOPT_POSTFIELDS, $params);
+                break;
+            case self::PUT:
+                curl_setopt($s, CURLOPT_URL, $url . '?' . http_build_query($params));
+                curl_setopt($s, CURLOPT_CUSTOMREQUEST, self::PUT);
+                curl_setopt($s, CURLOPT_POSTFIELDS, $params);
+                break;
             case self::POST:
                 curl_setopt($s, CURLOPT_URL, $url);
                 curl_setopt($s, CURLOPT_POST, true);
@@ -260,6 +319,7 @@ class Http
         curl_setopt($s, CURLOPT_HTTPHEADER, $headers);
         $_out = curl_exec($s);
         $status = curl_getinfo($s, CURLINFO_HTTP_CODE);
+        //exit($_out);
         curl_close($s);
         switch ($status) {
             case self::HTTP_OK:
