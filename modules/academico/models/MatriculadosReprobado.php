@@ -188,8 +188,7 @@ class MatriculadosReprobado extends \yii\db\ActiveRecord {
     public static function getMatriculadosreprobados($arrFiltro = array(), $onlyData = false) {
         $con = \Yii::$app->db_captacion;
         $con2 = \Yii::$app->db;
-        $con3 = \Yii::$app->db_academico;
-        $con1 = \Yii::$app->db_facturacion;
+        $con3 = \Yii::$app->db_academico;     
         $estado = 1;
         $columnsAdd = "";
         $estado_opago = "S";
@@ -227,14 +226,14 @@ class MatriculadosReprobado extends \yii\db\ActiveRecord {
                     sins.ming_id, 
                     ifnull((select min.ming_alias from " . $con->dbname . ".metodo_ingreso min where min.ming_id = sins.ming_id),'N/A') as abr_metodo,
                     ifnull((select min.ming_nombre from " . $con->dbname . ".metodo_ingreso min where min.ming_id = sins.ming_id),'N/A') as ming_nombre,
-                    ifnull((select uaca.uaca_nombre from " . $con3->dbname . ".unidad_academica uaca where uaca.uaca_id = sins.uaca_id),'N/A') as uaca_nombre,
-                    ifnull((select moda.mod_nombre from " . $con3->dbname . ".modalidad moda where moda.mod_id = sins.mod_id),'N/A') as mod_nombre,
+                    ifnull((select uaca.uaca_nombre from " . $con3->dbname . ".unidad_academica uaca where uaca.uaca_id = mre.uaca_id),'N/A') as uaca_nombre,
+                    ifnull((select moda.mod_nombre from " . $con3->dbname . ".modalidad moda where moda.mod_id = mre.mod_id),'N/A') as mod_nombre,
                     sins.eaca_id,
                     sins.mest_id,
                     case when (ifnull(sins.eaca_id,0)=0) then
                                (select mest_nombre from " . $con3->dbname . ".modulo_estudio me where me.mest_id = sins.mest_id and me.mest_estado = '1' and me.mest_estado_logico = '1')
                                 else
-                           (select eaca_nombre from " . $con3->dbname . ".estudio_academico ea where ea.eaca_id = sins.eaca_id and ea.eaca_estado = '1' and ea.eaca_estado_logico = '1')
+                           (select eaca_nombre from " . $con3->dbname . ".estudio_academico ea where ea.eaca_id = mre.eaca_id and ea.eaca_estado = '1' and ea.eaca_estado_logico = '1')
                     end as carrera,
                     -- MONTHNAME(CONCAT('00','-',ami.mes_id_academico,'-','0000')) as mes_id_academico               
                     case pami_mes 
@@ -426,8 +425,8 @@ class MatriculadosReprobado extends \yii\db\ActiveRecord {
                     per.per_seg_apellido,
                     per.per_correo,
                     per.per_celular,
-                    ifnull((select uaca.uaca_nombre from " . $con3->dbname . ".unidad_academica uaca where uaca.uaca_id = sins.uaca_id),'N/A') as uaca_nombre,
-                    ifnull((select moda.mod_nombre from " . $con3->dbname . ".modalidad moda where moda.mod_id = sins.mod_id),'N/A') as mod_nombre, 
+                    ifnull((select uaca.uaca_nombre from " . $con3->dbname . ".unidad_academica uaca where uaca.uaca_id = mre.uaca_id),'N/A') as uaca_nombre,
+                    ifnull((select moda.mod_nombre from " . $con3->dbname . ".modalidad moda where moda.mod_id = mre.mod_id),'N/A') as mod_nombre, 
                     case pami_mes 
                         when 1 then 'Enero' 
                         when 2 then 'Febrero'
@@ -445,7 +444,7 @@ class MatriculadosReprobado extends \yii\db\ActiveRecord {
                     case when (ifnull(sins.eaca_id,0)=0) then
                                (select mest_nombre from " . $con3->dbname . ".modulo_estudio me where me.mest_id = sins.mest_id and me.mest_estado = '1' and me.mest_estado_logico = '1')
                                 else
-                           (select eaca_nombre from " . $con3->dbname . ".estudio_academico ea where ea.eaca_id = sins.eaca_id and ea.eaca_estado = '1' and ea.eaca_estado_logico = '1')
+                           (select eaca_nombre from " . $con3->dbname . ".estudio_academico ea where ea.eaca_id = mre.eaca_id and ea.eaca_estado = '1' and ea.eaca_estado_logico = '1')
                     end as carrera,
                     ifnull((select min.ming_nombre from " . $con->dbname . ".metodo_ingreso min where min.ming_id = sins.ming_id),'N/A') as ming_nombre,
                     ifnull((SELECT GROUP_CONCAT(CONCAT(asi.asi_nombre, '(', IF(mmr.mmr_estado_materia =1,'Aprobado','Reprobado'), ')')  SEPARATOR ', ') as asignaturas 
@@ -518,7 +517,7 @@ class MatriculadosReprobado extends \yii\db\ActiveRecord {
      * @param
      * @return
      */
-    public function insertarMatricureprobado($adm_id, $pami_id, $sins_id, $mre_usuario_ingreso, $mre_estado_matriculado, $mre_fecha_creacion) {
+    public function insertarMatricureprobado($adm_id, $pami_id, $sins_id, $uaca_id, $mod_id, $eaca_id, $mre_usuario_ingreso, $mre_estado_matriculado, $mre_fecha_creacion) {
         $con = \Yii::$app->db_captacion;
         $trans = $con->getTransaction(); // se obtiene la transacción actual
         if ($trans !== null) {
@@ -545,6 +544,20 @@ class MatriculadosReprobado extends \yii\db\ActiveRecord {
             $param_sql .= ", sins_id";
             $bdet_sql .= ", :sins_id";
         }
+        /***/
+        if (isset($uaca_id)) {
+            $param_sql .= ", uaca_id";
+            $bdet_sql .= ", :uaca_id";
+        }
+        if (isset($mod_id)) {
+            $param_sql .= ", mod_id";
+            $bdet_sql .= ", :mod_id";
+        }
+        if (isset($eaca_id)) {
+            $param_sql .= ", eaca_id";
+            $bdet_sql .= ", :eaca_id";
+        }
+        /***/
         if (isset($mre_usuario_ingreso)) {
             $param_sql .= ", mre_usuario_ingreso";
             $bdet_sql .= ", :mre_usuario_ingreso";
@@ -571,6 +584,17 @@ class MatriculadosReprobado extends \yii\db\ActiveRecord {
             if (isset($sins_id)) {
                 $comando->bindParam(':sins_id', $sins_id, \PDO::PARAM_INT);
             }
+            /****/
+            if (isset($uaca_id)) {
+                $comando->bindParam(':uaca_id', $uaca_id, \PDO::PARAM_INT);
+            }
+            if (isset($mod_id)) {
+                $comando->bindParam(':mod_id', $mod_id, \PDO::PARAM_INT);
+            }
+            if (isset($eaca_id)) {
+                $comando->bindParam(':eaca_id', $eaca_id, \PDO::PARAM_INT);
+            }
+            /****/
             if (!empty((isset($mre_usuario_ingreso)))) {
                 $comando->bindParam(':mre_usuario_ingreso', $mre_usuario_ingreso, \PDO::PARAM_INT);
             }

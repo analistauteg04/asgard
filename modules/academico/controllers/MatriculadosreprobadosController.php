@@ -480,12 +480,15 @@ class MatriculadosreprobadosController extends \app\components\CController {
             $con = \Yii::$app->db_captacion;
             $transaction = $con->beginTransaction();
             $reprobar = '';
+            $uniacademicamat = $data["uniacademicamat"];
+            $modalidadmat = $data["modalidadmat"];
+            $carreramat = $data['carreprogmat'];
             try {
                 $mod_reprobado = new MatriculadosReprobado();
                 $fecha_creacion = date(Yii::$app->params["dateTimeByDefault"]);
                 $resp_matreprobado = $mod_reprobado->consultarReprobado($sins_id);
                 if ($resp_matreprobado["encontrado"] == 0) {
-                    $resp_ingreso = $mod_reprobado->insertarMatricureprobado($admitido, $periodo, $sins_id, $usuario, $estadomat, $fecha_creacion);
+                    $resp_ingreso = $mod_reprobado->insertarMatricureprobado($admitido, $periodo, $sins_id, $uniacademicamat, $modalidadmat, $carreramat, $usuario, $estadomat, $fecha_creacion);
                     $mre_id = Yii::$app->db_captacion->getLastInsertID('db_captacion.matriculados_reprobado');
                     if ($resp_ingreso) {
                         if (!empty($asigna)) {

@@ -861,6 +861,9 @@ function guardarAdmiMateriarep() {
     var link = $('#txth_base').val() + "/academico/matriculadosreprobados/save";
     var arrParams = new Object();
     var selected = '';
+    arrParams.uniacademicamat = '';
+    arrParams.modalidadmat = '';
+    arrParams.carreprogmat = '';
     arrParams.uniacademica = $('#cmb_ninteres').val();
     arrParams.modalidad = $('#cmb_modalidad').val();
     arrParams.carreprog = $('#cmb_carrera1').val();
@@ -875,12 +878,12 @@ function guardarAdmiMateriarep() {
     if (selected != '') // reprobaron materias, debe guardarse las misma unidad, modalidad y carrera
     {
         arrParams.materia = selected;
-        if ($('#rdo_matricula').val() == 1) {
+        if ($('input:radio[name=rdo_matricula]:checked').val() == 1) {
             arrParams.uniacademicamat = $('#cmb_ninteres').val();
             arrParams.modalidadmat = $('#cmb_modalidad').val();
             arrParams.carreprogmat = $('#cmb_carrera1').val();
         }
-        if ($('#rdo_matricula').val() == 2) {
+        if ($('input:radio[name=rdo_matricula]:checked').val() == 2) {
             arrParams.uniacademicamat = $('#cmb_unidadmat').val();
             arrParams.modalidadmat = $('#cmb_modamat').val();
             arrParams.carreprogmat = $('#cmb_carreramat').val();
@@ -888,16 +891,16 @@ function guardarAdmiMateriarep() {
 
     } else // aprobo todas materias, debe guardarse las matriculo unidad, matriculo modalidad, matriculo carrera y validadar que sea mayor a 0
     {
-        if ($('#rdo_matricula').val() == 1) {
+        if ($('input:radio[name=rdo_matricula]:checked').val() == 1) {
             arrParams.uniacademicamat = $('#cmb_ninteres').val();
             arrParams.modalidadmat = $('#cmb_modalidad').val();
             arrParams.carreprogmat = $('#cmb_carrera1').val();
         }
-        if ($('#rdo_matricula_no').val() == 2) {
+        if ($('input:radio[name=rdo_matricula]:checked').val() == 2) {
             arrParams.uniacademicamat = $('#cmb_unidadmat').val();
             arrParams.modalidadmat = $('#cmb_modamat').val();
             arrParams.carreprogmat = $('#cmb_carreramat').val();
-            //alert($('#cmb_unidadmat option:selected').val());            
+                       
         }
     }
     if (arrParams.ids === undefined)
@@ -911,28 +914,33 @@ function guardarAdmiMateriarep() {
                     if ($('#cmb_periodo option:selected').val() > '0') {
                         if ($('#cmb_estado option:selected').val() > '0') {
                             if ($('input:radio[name=rdo_matricula]:checked').val() == 2) {
-                                if ($('#cmb_unidadmat option:selected').val() > '0') {
-                                    if ($('#cmb_modamat option:selected').val() > '0') {
-                                        if ($('#cmb_carreramat option:selected').val() > '0') {
-                                            if (!validateForm()) {
-                                                requestHttpAjax(link, arrParams, function (response) {
-                                                    showAlert(response.status, response.label, response.message);
-                                                    setTimeout(function () {
-                                                        window.location.href = $('#txth_base').val() + "/academico/matriculadosreprobados/index";
-                                                    }, 3000);
-                                                }, true);
+                                if (selected == '') {
+                                    if ($('#cmb_unidadmat option:selected').val() > '0') {
+                                        if ($('#cmb_modamat option:selected').val() > '0') {
+                                            if ($('#cmb_carreramat option:selected').val() > '0') {
+                                                if (!validateForm()) {
+                                                    requestHttpAjax(link, arrParams, function (response) {
+                                                        showAlert(response.status, response.label, response.message);
+                                                        setTimeout(function () {
+                                                            window.location.href = $('#txth_base').val() + "/academico/matriculadosreprobados/index";
+                                                        }, 3000);
+                                                    }, true);
+                                                }
+                                            } else {
+                                                var mensaje = {wtmessage: "Matriculó Carrera: El campo no debe estar vacío.", title: "Error"};
+                                                showAlert("NO_OK", "Error", mensaje);
                                             }
                                         } else {
-                                            var mensaje = {wtmessage: "Matriculó Carrera: El campo no debe estar vacío.", title: "Error"};
+                                            var mensaje = {wtmessage: "Matriculó Modalidad: El campo no debe estar vacío.", title: "Error"};
                                             showAlert("NO_OK", "Error", mensaje);
                                         }
                                     } else {
-                                        var mensaje = {wtmessage: "Matriculó Modalidad: El campo no debe estar vacío.", title: "Error"};
+                                        var mensaje = {wtmessage: "Matriculó Unidad Académica: El campo no debe estar vacío.", title: "Error"};
                                         showAlert("NO_OK", "Error", mensaje);
                                     }
                                 } else {
-                                    var mensaje = {wtmessage: "Matriculó Unidad Académica: El campo no debe estar vacío.", title: "Error"};
-                                    showAlert("NO_OK", "Error", mensaje);                                    
+                                    var mensaje = {wtmessage: "Todas las materias no estan aprobadas, no pudó matricularse.", title: "Error"};
+                                    showAlert("NO_OK", "Error", mensaje);
                                 }
                             } else {
                                 if (!validateForm()) {

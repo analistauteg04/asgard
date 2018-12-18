@@ -41,7 +41,7 @@ $leyenda = '<div class="col-md-12 col-xs-12 col-sm-12 col-lg-12">
                         PbSearchBox::widget([
                             'boxId' => 'boxgrid',
                             'type' => 'searchBox',
-                            'placeHolder' => academico::t("Academico", "Search DNI"),
+                            'placeHolder' => Yii::t("solicitud_ins", "Search by Dni or Names"),
                             'controller' => '',
                             'callbackListSource' => 'searchAdmitido',
                             'callbackListSourceParams' => ["'boxgrid'", "'TbG_Admitido'"],
