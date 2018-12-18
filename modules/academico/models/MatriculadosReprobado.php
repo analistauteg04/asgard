@@ -543,8 +543,7 @@ class MatriculadosReprobado extends \yii\db\ActiveRecord {
         if (isset($sins_id)) {
             $param_sql .= ", sins_id";
             $bdet_sql .= ", :sins_id";
-        }
-        /***/
+        }       
         if (isset($uaca_id)) {
             $param_sql .= ", uaca_id";
             $bdet_sql .= ", :uaca_id";
@@ -556,8 +555,7 @@ class MatriculadosReprobado extends \yii\db\ActiveRecord {
         if (isset($eaca_id)) {
             $param_sql .= ", eaca_id";
             $bdet_sql .= ", :eaca_id";
-        }
-        /***/
+        }        
         if (isset($mre_usuario_ingreso)) {
             $param_sql .= ", mre_usuario_ingreso";
             $bdet_sql .= ", :mre_usuario_ingreso";
@@ -584,7 +582,6 @@ class MatriculadosReprobado extends \yii\db\ActiveRecord {
             if (isset($sins_id)) {
                 $comando->bindParam(':sins_id', $sins_id, \PDO::PARAM_INT);
             }
-            /****/
             if (isset($uaca_id)) {
                 $comando->bindParam(':uaca_id', $uaca_id, \PDO::PARAM_INT);
             }
@@ -594,7 +591,6 @@ class MatriculadosReprobado extends \yii\db\ActiveRecord {
             if (isset($eaca_id)) {
                 $comando->bindParam(':eaca_id', $eaca_id, \PDO::PARAM_INT);
             }
-            /****/
             if (!empty((isset($mre_usuario_ingreso)))) {
                 $comando->bindParam(':mre_usuario_ingreso', $mre_usuario_ingreso, \PDO::PARAM_INT);
             }
