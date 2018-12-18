@@ -10,6 +10,24 @@ var browseLabel = " Examinar..";
 var FileSize = 1024;
 var nsegundos = 3000;//3000ms = 3s
 /* variable globales */
+/* variable globales fe_edoc */
+var t_show=0;
+var t_hide=5000;
+var t_transi=1500;
+var buttonAlert='<button aria-hidden="true" data-dismiss="alert" class="close" type="button">×</button>';
+var selecDoc='Seleccionar documento para autorizar';
+var selecDocAnu='Seleccionar documento para Anular';
+var selecDocMail='Seleccionar documento para Reenviar';
+var mgEliminar='Está seguro que desea Eliminar estos Item';
+var mgGuardar='Está seguro que desea Guardar estos Item';
+var mgEnvDocum='Está seguro que desea Enviar estos Documentos';
+var mgEnvDocumAnu='Está seguro que desea Anular estos Documentos';
+
+function alerMessage(){
+    setTimeout(function() {$("#messageInfo").fadeIn(t_transi);},t_show);
+    setTimeout(function() {$("#messageInfo").fadeOut(t_transi);},t_hide);
+}
+/* fin variable globales fe_edoc */
 var ico = new Object();
 ico.hidden = {
     'background-position': '113%'

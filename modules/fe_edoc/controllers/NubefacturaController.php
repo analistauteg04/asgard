@@ -18,27 +18,6 @@ use yii\base\Exception;
 
 class NubefacturaController extends \app\components\CController {
 
-    
-//    public function accessRules() {
-//        return array(
-//            array('allow', // permite a todos los usuarios ejecutar las acciones
-//                'actions' => array('index', 'view'),
-//                'users' => array('*'),
-//            ),
-//            array('allow', // permite a los usuarios logueados ejecutar las acciones 
-//                'actions' => array('create', 'update', 'GenerarPdf', 'BuscaDataIndex', 'BuscarPersonas', 'GenerarXml', 'EnviarDocumento',
-//                    'EnviarCorreccion','EnviarAnular','EnviarCorreo','Updatemail','Savemail','XmlAutorizado'),
-//                'users' => array('@'),
-//            ),
-//            array('allow', // permite que únicamente el usuario admin ejecute las , 
-//                'actions' => array('admin', 'delete'),
-//                'users' => array('admin'),
-//            ),
-//            array('deny', // niega cualquier otra acción para cualquier usuario
-//                'users' => array('*'),
-//            ),
-//        );
-//    }
 
     public function actionIndex() {
         $modelo = new NubeFactura();
@@ -76,7 +55,7 @@ class NubefacturaController extends \app\components\CController {
         ));
     }
 
-    public function actionGenerarpdf($ids) {
+    public function actionGenerarpdf($ids) {//ok
         try {
             $ids = isset($_GET['ids']) ? base64_decode($_GET['ids']) : NULL;
             $rep= $report = new ExportFile();
@@ -118,25 +97,8 @@ class NubefacturaController extends \app\components\CController {
         }
     }
 
-    public function actionGenerarxml($ids) {
-        $ids = isset($_GET['ids']) ? base64_decode($_GET['ids']) : NULL;
-        $modelo = new NubeFactura();
-        $firmaDig = new VSFirmaDigital();
-        $firma = $firmaDig->recuperarXAdES_BES();
-        $cabFact = $modelo->mostrarCabFactura($ids, '01');
-        $detFact = $modelo->mostrarDetFacturaImp($ids);
-        $impFact = $modelo->mostrarFacturaImp($ids);
-        $adiFact = $modelo->mostrarFacturaDataAdicional($ids); //
-        return $this->render('facturaXML', array(
-            'cabFact' => $cabFact,
-            'detFact' => $detFact,
-            'impFact' => $impFact,
-            'adiFact' => $adiFact,
-            'firma' => $firma,
-        ));
-    }
     
-    public function actionXmlautorizado($ids) {
+    public function actionXmlautorizado($ids) {//ok
         $ids = isset($_GET['ids']) ? base64_decode($_GET['ids']) : NULL;
         $modelo = new NubeFactura();
         $nomDocfile= array();
@@ -154,16 +116,7 @@ class NubefacturaController extends \app\components\CController {
         }
     }
 
-    public function actionEnviarDocumento() {
-        if (Yii::$app->request->isAjax) {
-            $ids = isset($_POST['ids']) ? base64_decode($_POST['ids']) : NULL;
-            $res = new NubeFactura;
-            $arroout=$res->enviarDocumentos($ids);
-            header('Content-type: application/json');
-            echo json_encode($arroout);
-            return;
-        }
-    }
+   
     
     public function actionEnviarCorreccion() {
         if (Yii::$app->request->isAjax) {

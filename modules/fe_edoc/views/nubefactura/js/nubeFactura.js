@@ -140,7 +140,7 @@ function fun_EnviarCorreccion(){
     var ids = String($('#TbG_DOCUMENTO').PbGridView('getSelectedRows'));
     var count=ids.split(",");
     if(count.length>0 && ids!=""){
-        if(!confirm(mgEnvDocumAnu)) return false;
+        if(!confirm(mgEnvDocum)) return false;
         var link = $('#txth_base').val() +"/fe_edoc/nubefactura/EnviarCorreccion";
         var encodedIds = base64_encode(ids);  //Verificar cofificacion Base
         $("#TbG_DOCUMENTO").addClass("loading");

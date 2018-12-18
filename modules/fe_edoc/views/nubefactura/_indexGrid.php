@@ -30,79 +30,81 @@ PbGridView::widget([
         ],
         [
             'attribute' => 'IdDoc',
-            'header' => Yii::t('COMPANIA', 'IdDoc'),
+            'header' => Yii::t('fe_edoc', 'IdDoc'),
             'value' => 'IdDoc',
+            'visible' => '0',
             //'header' => false,
             //'filter' => false,
             //'headerHtmlOptions' => array('style' => 'width:0px; display:none; border:none; textdecoration:none'),
-            'options' => array('style' => 'display:none; border:none;'),
+            //'options' => array('style' => 'display:none; border:none;'),
         ],
         [
-            'header' => Yii::t('COMPANIA', 'Download'),
+            'header' => Yii::t('fe_edoc', 'Download'),
             'class' => 'yii\grid\ActionColumn',
             'options' => array('style' => 'text-align:center', 'width' => '85px'),
             'template' => '{pdf} {xml}',
             'buttons' => array(
                 'pdf' => function ($url, $model) {
-                    return Html::a('<span class="text-danger fa fa-file-pdf-o"></span>', Url::to(['nubefactura/generarpdf', 'ids' => base64_encode($model['IdDoc'])]), ["data-toggle" => "tooltip", "title" => Yii::t('COMPANIA', 'Download PDF document'), "data-pjax" => 0]);
+                    return Html::a('<span class="text-danger fa fa-file-pdf-o"></span>', Url::to(['nubefactura/generarpdf', 'ids' => base64_encode($model['IdDoc'])]), ["data-toggle" => "tooltip", "title" => Yii::t('fe_edoc', 'Download PDF document'), "data-pjax" => 0]);
                 },
                 'xml' => function ($url, $model) {
-                    return Html::a('<span class="text-success fa fa-file-code-o"></span>', Url::to(['nubefactura/xmlautorizado', 'ids' => base64_encode($model['IdDoc'])]), ["data-toggle" => "tooltip", "title" => Yii::t('COMPANIA', 'Download XML document'), "data-pjax" => 0]);
+                    return Html::a('<span class="text-success fa fa-file-code-o"></span>', Url::to(['nubefactura/xmlautorizado', 'ids' => base64_encode($model['IdDoc'])]), ["data-toggle" => "tooltip", "title" => Yii::t('fe_edoc', 'Download XML document'), "data-pjax" => 0]);
                 },
             ),
         ],
         [
             'attribute' => 'Estado',
-            'header' => Yii::t('COMPANIA', 'Status'),
+            'header' => Yii::t('fe_edoc', 'Status'),
             'value' => function ($data) {
                 return VSacceso::estadoAprobacion($data["Estado"]);
             },
         ],
         [
             'attribute' => 'NombreDocumento',
-            'header' => Yii::t('COMPANIA', 'Document type'),
+            'header' => Yii::t('fe_edoc', 'Document type'),
             'value' => 'NombreDocumento',
         ],
         [
             'attribute' => 'NumDocumento',
-            'header' => Yii::t('COMPANIA', 'Document Number'),
+            'header' => Yii::t('fe_edoc', 'Document Number'),
             'options' => array('style' => 'text-align:center'),
             'value' => 'NumDocumento',
         ],
         [
             'attribute' => 'FechaEmision',
-            'header' => Yii::t('COMPANIA', 'Issuance date'),
+            'header' => Yii::t('fe_edoc', 'Issuance date'),
             'value' => function ($data) {
                 return date(Yii::$app->params["dateByDefault"], strtotime($data["FechaEmision"]));
             },
         ],
         [
             'attribute' => 'UsuarioCreador',
-            'header' => Yii::t('COMPANIA', 'Serving'),
+            'header' => Yii::t('fe_edoc', 'Serving'),
             'value' => 'UsuarioCreador',
             'options' => array('style' => 'text-align:center'),
+            'visible' => '0',
         ],
         [
             'attribute' => 'FechaAutorizacion',
-            'header' => Yii::t('COMPANIA', 'Authorization date'),
+            'header' => Yii::t('fe_edoc', 'Authorization date'),
             'value' => function ($data) {
                 return ($data["FechaAutorizacion"] <> "") ? date(Yii::$app->params["dateByDefault"], strtotime($data["FechaAutorizacion"])) : "";
             },
         ],
         [
             'attribute' => 'IdentificacionComprador',
-            'header' => Yii::t('COMPANIA', 'Dni/Ruc'),
+            'header' => Yii::t('fe_edoc', 'Dni/Ruc'),
             'value' => 'IdentificacionComprador',
         ],
         [
             'attribute' => 'RazonSocialComprador',
-            'header' => Yii::t('COMPANIA', 'Company name'),
+            'header' => Yii::t('fe_edoc', 'Company name'),
             //'htmlOptions' => array('style' => 'text-align:left', 'width' => '300px'),
             'value' => 'RazonSocialComprador',
         ],
         [
             'attribute' => 'ImporteTotal',
-            'header' => Yii::t('COMPANIA', 'Total amount'),
+            'header' => Yii::t('fe_edoc', 'Total amount'),
             //'value' => '$data["ImporteTotal"]',
             'options' => array('style' => 'text-align:right', 'width' => '8px'),
             'value' => function ($data) {

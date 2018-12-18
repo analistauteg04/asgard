@@ -13,7 +13,7 @@ use app\models\Rol;
         'name' => 'txt_PER_CEDULA',
         'id' => 'txt_PER_CEDULA',
         'options' => array(
-            'placeholder' => Yii::t('COMPANIA', 'Social reason o Ruc'),
+            'placeholder' => Yii::t('fe_edoc', 'Social reason o Ruc'),
             'class' => 'ui-autocomplete-input form-control',
         ),
         'clientOptions' => [
@@ -35,7 +35,7 @@ use app\models\Rol;
     <?php
     echo Html::dropDownList(
             'cmb_tipoApr', '0'
-            , array('0' => Yii::t('COMPANIA', 'All')) + $tipoApr
+            , array('0' => Yii::t('fe_edoc', 'All')) + $tipoApr
             , array('class' => 'form-control', 'id' => 'cmb_tipoApr')
     );
     ?> 
@@ -69,7 +69,7 @@ use app\models\Rol;
     ?>
 </div>
 <div class="col-lg-2 form-group">
-    <?php echo Html::button(Yii::t('CONTROL_ACCIONES', 'Search'), array('id' => 'btn_buscar', 'name' => 'btn_buscar', 'class' => 'btn btn-success', 'onclick' => 'buscarDataIndex("","")')); ?>
+    <?php echo Html::button(Yii::t('fe_edoc', 'Search'), array('id' => 'btn_buscar', 'name' => 'btn_buscar', 'class' => 'btn btn-success', 'onclick' => 'buscarDataIndex("","")')); ?>
 </div>
 <div class="col-lg-12 form-group">
     <?php
@@ -77,10 +77,10 @@ use app\models\Rol;
     $model_rol = new Rol();
     $rol = $model_rol->getMainRol(Yii::$app->session->get('PB_username', false));
     if ($rol['id'] == 1 || $rol['id'] == 2 || $rol['id'] == 3) { //CONTROLA POR ROL ADMIN
-        echo Html::button(Yii::t('CONTROL_ACCIONES', 'To correct'), array('id' => 'btn_corregir', 'name' => 'btn_corregir', 'class' => 'btn btn-danger', 'onclick' => 'fun_EnviarCorreccion()'));
-        echo Html::button(Yii::t('CONTROL_ACCIONES', 'Cancel'), array('id' => 'btn_cancel', 'name' => 'btn_cancel', 'class' => 'btn btn-danger', 'onclick' => 'fun_EnviarAnular()'));
+        echo Html::button(Yii::t('fe_edoc', 'To correct'), array('id' => 'btn_corregir', 'name' => 'btn_corregir', 'class' => 'btn btn-danger', 'onclick' => 'fun_EnviarCorreccion()'));
+        echo Html::button(Yii::t('fe_edoc', 'invalidate'), array('id' => 'btn_cancel', 'name' => 'btn_cancel', 'class' => 'btn btn-danger', 'onclick' => 'fun_EnviarAnular()'));
     }
     ?>
-    <?php echo Html::a(Yii::t('CONTROL_ACCIONES', 'Edit mail'), array('NubeFactura/updatemail'), array('id' => 'btn_Update', 'name' => 'btn_Update', 'title' => Yii::t('CONTROL_ACCIONES', 'Edit mail'), 'class' => 'btn btn-primary', 'onclick' => 'fun_UpdateMail()')); ?>
-    <?php echo Html::button(Yii::t('CONTROL_ACCIONES', 'Forward mail'), array('id' => 'btn_reenviar', 'name' => 'btn_reenviar', 'class' => 'btn btn-primary', 'onclick' => 'fun_EnviarCorreo()')); ?> 
+    <?php echo Html::a(Yii::t('fe_edoc', 'Edit mail'), array('NubeFactura/updatemail'), array('id' => 'btn_Update', 'name' => 'btn_Update', 'title' => Yii::t('CONTROL_ACCIONES', 'Edit mail'), 'class' => 'btn btn-primary', 'onclick' => 'fun_UpdateMail()')); ?>
+    <?php echo Html::button(Yii::t('fe_edoc', 'Forward mail'), array('id' => 'btn_reenviar', 'name' => 'btn_reenviar', 'class' => 'btn btn-primary', 'onclick' => 'fun_EnviarCorreo()')); ?> 
 </div>
