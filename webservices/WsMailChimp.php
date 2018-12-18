@@ -88,7 +88,7 @@ class WsMailChimp
             ->setCredentials($this->user, $this->apiKey)
             ->doPost($WS_URI, $params);
         $arr_response = json_decode($response, true);
-        return $response;
+        return $arr_response;
     }
 
     // Get information about members in a list
