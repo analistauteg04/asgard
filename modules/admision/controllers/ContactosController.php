@@ -7,6 +7,7 @@ use app\modules\admision\models\EstadoContacto;
 use app\modules\admision\models\PersonaGestion;
 use app\modules\admision\models\Oportunidad;
 use app\modules\admision\models\PersonalAdmision;
+use app\models\Empresa;
 use app\models\Pais;
 use app\models\Provincia;
 use app\models\Canton;
@@ -26,9 +27,11 @@ class ContactosController extends \app\components\CController {
     public function actionIndex() {
         $per_id = @Yii::$app->session->get("PB_iduser");
         $modcanal = new Oportunidad();
+        $empresa_mod = new Empresa();
         $estado_contacto = EstadoContacto::find()->select("econ_id AS id, econ_nombre AS name")->where(["econ_estado_logico" => "1", "econ_estado" => "1"])->orderBy("name asc")->asArray()->all();
         $modPersonaGestion = new PersonaGestion();
         $modagente = new PersonalAdmision();
+        $empresa = $empresa_mod->getAllEmpresa();
         $data = Yii::$app->request->get();
         if ($data['PBgetFilter']) {
             $arrSearch["search"] = $data['search'];
@@ -40,6 +43,7 @@ class ContactosController extends \app\components\CController {
             $arrSearch["agente"] = $data['agente'];
             $arrSearch["correo"] = $data['correo'];
             $arrSearch["telefono"] = $data['telefono'];
+            $arrSearch["empresa"] = $data['empresa'];
             $mod_gestion = $modPersonaGestion->consultarClienteCont($arrSearch);
             return $this->render('index-grid', [
                         "model" => $mod_gestion,
@@ -57,6 +61,7 @@ class ContactosController extends \app\components\CController {
                     'arr_contacto' => ArrayHelper::map(array_merge([["id" => "0", "name" => "Todas"]], $estado_contacto), "id", "name"),
                     'arr_canalconta' => ArrayHelper::map(array_merge([["id" => "0", "name" => "Todas"]], $canalconta), "id", "name"),
                     'arra_agente' => ArrayHelper::map(array_merge([["id" => "0", "name" => "Todas"], ["id" => "1", "name" => "Admin UTEG"]], $arra_agente), "id", "name"),
+                    'arr_empresa' => ArrayHelper::map(array_merge([["id" => "0", "value" => "Todas"]], $empresa), "id", "value"),
         ]);
     }
 
@@ -406,7 +411,9 @@ class ContactosController extends \app\components\CController {
             Yii::t("crm", "Contact"),
             Yii::t("formulario", "Country"),
             Yii::t("formulario", "Email"),
-            Yii::t("formulario", "Date"),        
+            Yii::t("formulario", "CellPhone"),
+            Yii::t("formulario", "Phone"),
+            Yii::t("formulario", "Date"),
             admision::t("crm", "Channel"),
             Yii::t("formulario", "User login"),
             Yii::t("formulario", "Open Opportunities"),
@@ -421,6 +428,7 @@ class ContactosController extends \app\components\CController {
         $arrSearch["agente"] = $data['agente'];
         $arrSearch["correo"] = $data['correo'];
         $arrSearch["telefono"] = $data['telefono'];
+        $arrSearch["empresa"] = $data['empresa'];
         $arrData = array();
         if (empty($arrSearch)) {
             $arrData = $modPersonaGestion->consultarReportContactos(array(), true);

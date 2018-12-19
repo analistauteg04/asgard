@@ -83,10 +83,11 @@ function actualizarGridContacto() {
     var agente = $('#cmb_agente option:selected').val();
     var correo = $('#txt_correo').val();
     var telefono = $('#txt_telefono').val();
+    var empresa = $('#cmb_empresa option:selected').val();
     //Buscar almenos una clase con el nombre para ejecutar
     if (!$(".blockUI").length) {
         showLoadingPopup();
-        $('#Pbcontacto').PbGridView('applyFilterData', {'search': search, 'estado': estado, 'fase': fase, 'f_ini': f_ini, 'f_fin': f_fin, 'medio': medio, 'agente': agente, 'correo': correo, 'telefono': telefono});
+        $('#Pbcontacto').PbGridView('applyFilterData', {'search': search, 'estado': estado, 'fase': fase, 'f_ini': f_ini, 'f_fin': f_fin, 'medio': medio, 'agente': agente, 'correo': correo, 'telefono': telefono, 'empresa': empresa});
         setTimeout(hideLoadingPopup, 2000);
     }
 }
@@ -98,7 +99,8 @@ function exportExcel() {
     var agente = $('#cmb_agente option:selected').val();
     var correo = $('#txt_correo').val();
     var telefono = $('#txt_telefono').val();
-    window.location.href = $('#txth_base').val() + "/admision/contactos/expexcel?search=" + search + "&f_ini=" + f_ini + "&f_fin=" + f_fin + "&medio=" + medio + "&agente=" + agente + "&correo=" + correo + "&telefono=" + telefono;    
+    var empresa = $('#cmb_empresa option:selected').val();
+    window.location.href = $('#txth_base').val() + "/admision/contactos/expexcel?search=" + search + "&f_ini=" + f_ini + "&f_fin=" + f_fin + "&medio=" + medio + "&agente=" + agente + "&correo=" + correo + "&telefono=" + telefono + "&empresa=" + empresa;    
 }
 function exportPdf() {
     var search = $('#txt_buscarDataPersona').val();
@@ -108,7 +110,8 @@ function exportPdf() {
     var agente = $('#cmb_agente option:selected').val();
     var correo = $('#txt_correo').val();
     var telefono = $('#txt_telefono').val();
-    window.location.href = $('#txth_base').val() + "/admision/contactos/exppdf?pdf=1&search=" + search  + "&f_ini=" + f_ini + "&f_fin=" + f_fin + "&medio=" + medio + "&agente=" + agente + "&correo=" + correo + "&telefono=" + telefono;    
+    var empresa = $('#cmb_empresa option:selected').val();
+    window.location.href = $('#txth_base').val() + "/admision/contactos/exppdf?pdf=1&search=" + search  + "&f_ini=" + f_ini + "&f_fin=" + f_fin + "&medio=" + medio + "&agente=" + agente + "&correo=" + correo + "&telefono=" + telefono + "&empresa=" + empresa;    
 }
 
 function loadLeads(){

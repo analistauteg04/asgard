@@ -962,6 +962,9 @@ class PersonaGestion extends \app\modules\admision\components\CActiveRecord {
                 $str_search .= "pg.pges_domicilio_celular2 like :telefono OR ";
                 $str_search .= "pg.pges_trabajo_telefono like :telefono )  AND ";
             }
+            if ($arrFiltro['empresa'] != "" && $arrFiltro['empresa'] > 0) {
+                $str_search .= " emp.emp_id = :empresa AND ";
+            }
         } else {
             $columnsAdd = "                
                 pg.pges_pri_nombre as pges_pri_nombre,
@@ -1049,6 +1052,10 @@ class PersonaGestion extends \app\modules\admision\components\CActiveRecord {
             if ($arrFiltro['telefono'] != "") {
                 $search_tfn = "%" . $arrFiltro["telefono"] . "%";
                 $comando->bindParam(":telefono", $search_tfn, \PDO::PARAM_STR);
+            }
+            if ($arrFiltro['empresa'] != "" && $arrFiltro['empresa'] > 0) {
+                $search_emp = $arrFiltro["empresa"];
+                $comando->bindParam(":empresa", $search_emp, \PDO::PARAM_INT);
             }
         }
 
@@ -1784,7 +1791,8 @@ class PersonaGestion extends \app\modules\admision\components\CActiveRecord {
             $str_search .= "(pg.pges_pri_nombre like :search OR ";
             $str_search .= "pg.pges_seg_nombre like :search OR ";
             $str_search .= "pg.pges_pri_apellido like :search OR ";
-            $str_search .= "pg.pges_seg_apellido like :search)  AND ";
+            $str_search .= "pg.pges_seg_apellido like :search OR ";
+            $str_search .= "pg.pges_codigo like :search )  AND ";
             if ($arrFiltro['f_ini'] != "" && $arrFiltro['f_fin'] != "") {
                 $str_search .= "pg.pges_fecha_creacion >= :fec_ini AND ";
                 $str_search .= "pg.pges_fecha_creacion <= :fec_fin AND ";
@@ -1802,6 +1810,9 @@ class PersonaGestion extends \app\modules\admision\components\CActiveRecord {
                 $str_search .= "(pg.pges_celular like :telefono OR ";
                 $str_search .= "pg.pges_domicilio_telefono like :telefono )  AND ";
             }
+            if ($arrFiltro['empresa'] != "" && $arrFiltro['empresa'] > 0) {
+                $str_search .= " emp.emp_id = :empresa AND ";
+            }
         } else {
             $columnsAdd = "                
                 pg.pges_pri_nombre as pges_pri_nombre,
@@ -1812,10 +1823,10 @@ class PersonaGestion extends \app\modules\admision\components\CActiveRecord {
         $sql = "
                 SELECT  
                         concat(ifnull(pges_pri_nombre,''), ' ',ifnull(pges_seg_nombre,' '),ifnull(pges_pri_apellido,''), ' ', ifnull(pges_seg_apellido,' ')) as contacto,
+                        ifnull((select pai.pai_nombre from " . $con1->dbname . ".pais pai where pai.pai_id = pg.pai_id_nacimiento),'') as pais,
                         pg.pges_correo,
                         pg.pges_celular,
                         pg.pges_domicilio_telefono,
-                        ifnull((select pai.pai_nombre from " . $con1->dbname . ".pais pai where pai.pai_id = pg.pai_id_nacimiento),'') as pais,
                         DATE(pg.pges_fecha_creacion) as fecha_creacion,
                         -- ifnull(uaca.uaca_nombre,'Sin Unidad') as unidad_academica,
                         -- ifnull(emp.emp_nombre_comercial,'Sin Empresa') as empresa,
@@ -1830,8 +1841,13 @@ class PersonaGestion extends \app\modules\admision\components\CActiveRecord {
                 FROM " . $con->dbname . ".persona_gestion pg inner join " . $con->dbname . ".estado_contacto ec on ec.econ_id = pg.econ_id
                 INNER JOIN " . $con1->dbname . ".tipo_persona tp on tp.tper_id = pg.tper_id
                 INNER JOIN " . $con->dbname . ".conocimiento_canal cc on cc.ccan_id = pg.ccan_id 
-                -- LEFT JOIN " . $con1->dbname . ".empresa as emp on emp.emp_id=o.emp_id
-                -- LEFT JOIN " . $con2->dbname . ".unidad_academica uaca on uaca.uaca_id = o.uaca_id
+                 left JOIN (
+                    select max(opo.opo_id) as opo_id,opo.pges_id
+                    from " . $con->dbname . ".oportunidad as opo
+                    group by opo.pges_id
+                ) AS max_opor on max_opor.pges_id=pg.pges_id
+                left JOIN " . $con->dbname . ".oportunidad opo on opo.opo_id = max_opor.opo_id
+                LEFT JOIN " . $con1->dbname . ".empresa as emp on emp.emp_id=opo.emp_id                
                 WHERE   
                         $str_search
                         pg.pges_estado = :estado
@@ -1872,6 +1888,10 @@ class PersonaGestion extends \app\modules\admision\components\CActiveRecord {
                 $search_tfn = "%" . $arrFiltro["telefono"] . "%";
                 $comando->bindParam(":telefono", $search_tfn, \PDO::PARAM_STR);
             }
+            if ($arrFiltro['empresa'] != "" && $arrFiltro['empresa'] > 0) {
+                $search_emp = $arrFiltro["empresa"];
+                $comando->bindParam(":empresa", $search_emp, \PDO::PARAM_INT);
+            }  
         }
         $resultData = $comando->queryAll();
         $dataProvider = new ArrayDataProvider([
