@@ -1,4 +1,3 @@
-
 $(document).ready(function () {
 
     $('input[name=opt_tipo_DNI]:radio').change(function () {
@@ -779,7 +778,6 @@ $(document).ready(function () {
             }
         }, true);      
     });
-    
 });
 
 function setComboDataselect(arr_data, element_id, texto) {
