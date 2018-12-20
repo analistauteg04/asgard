@@ -138,7 +138,7 @@ INSERT INTO `objeto_modulo` (`omod_id`, `mod_id`, `omod_padre_id`, `omod_nombre`
 (118, 5, 115, 'Documentos Pendientes Aspirantes', 'A', '0', '', '', '', 'reportes/index', 1, '0', 'Admision', '1', '2018-09-23 00:07:01', NULL, '1'),
 (119, 4, 119, 'Matriculados Método Ingreso', 'P', '0', '', '', '', 'academico/matriculadosreprobados/index', 1, '1', 'Academico', '1', '2018-11-06 23:39:15', NULL, '1'),
 (120, 4, 119, 'Nuevo Matriculado Método Ingreso', 'A', '0', '', '', '', 'academico/matriculadosreprobados/newreprobado', 1, '1', 'Academico', '1', '2018-11-07 14:52:28', NULL, '1'),
-(121, 4, 119, 'Reprobado Pendiente', 'A', '0', '', '', '', 'academico/matriculadosreprobados/new', 1, '1', 'Academico', '1', '2018-11-07 19:10:30', NULL, '1'),
+(121, 4, 119, 'Inscrito Pendiente', 'A', '0', '', '', '', 'academico/matriculadosreprobados/new', 1, '1', 'Academico', '1', '2018-11-07 19:10:30', NULL, '1'),
 (122, 4, 82, 'Ficha Aspirante', 'S', '0', '', '', '', 'academico/ficha/update', 1, '1', 'Academico', '1', '2018-11-09 15:16:38', NULL, '1'),
 (123, 4, 122, 'GuardarFichaAspirante', 'A', '0', '', '', '', 'academico/ficha/update', 1, '1', 'Academico', '1', '2018-11-09 15:22:14', NULL, '1'),
 (124, 4, 124, 'Período Método Ingreso', 'P', '0', '', '', '', 'academico/adminmetodoingreso/index', 3, '1', 'academico', '1', '2018-11-12 22:21:54', NULL, '1'),

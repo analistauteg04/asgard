@@ -183,7 +183,7 @@ class DetalleDescuentoItem extends \app\modules\financiero\components\CActiveRec
                 WHERE hdi.ddit_id = :dite_id
                     and :fecha between hdi.hdit_fecha_inicio and ifnull(hdi.hdit_fecha_fin, now())  
                     and hdi.hdit_estado = :estado
-                    and hdi.hdit_estado_logico = :estado";  
+                    and hdi.hdit_estado_logico = :estado";         
         $comando = $con->createCommand($sql);
         $comando->bindParam(":estado", $estado, \PDO::PARAM_STR);
         $comando->bindParam(":dite_id", $dite_id, \PDO::PARAM_INT);

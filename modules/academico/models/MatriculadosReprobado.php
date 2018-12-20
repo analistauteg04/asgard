@@ -926,7 +926,8 @@ class MatriculadosReprobado extends \yii\db\ActiveRecord {
                         ruta_doc_foto,
                         ruta_doc_certificado,                        
                         ruta_doc_hojavida,
-                        twre_dni
+                        twre_dni,
+                        twre_fecha_solicitud
                 FROM " . $con->dbname . ".temporal_wizard_reprobados twi 
                      inner join " . $con1->dbname . ".unidad_academica ua on ua.uaca_id = twi.uaca_id
                      inner join " . $con1->dbname . ".modalidad m on m.mod_id = twi.mod_id
@@ -1151,10 +1152,8 @@ class MatriculadosReprobado extends \yii\db\ActiveRecord {
                                                 }
                                                 \app\models\Utilities::putMessageLogFile('va a preguntar si tiene beca');
                                                 //Obtener el precio de la solicitud.
-                                                $beca=$resp_datos['beca'];
-                                                \app\models\Utilities::putMessageLogFile('beca: ' . $beca);
-                                                if ($beca == "1") {
-                                                    \app\models\Utilities::putMessageLogFile('Tiene Beca');
+                                                $beca=$resp_datos['beca'];                                                
+                                                if ($beca == "1") {                                                    
                                                     $precio = 0;
                                                 } else {
                                                     $precio = $resp_datos['twre_precio_item'];
@@ -1172,28 +1171,34 @@ class MatriculadosReprobado extends \yii\db\ActiveRecord {
                                                     $estadopago = 'S';
                                                 } else {
                                                     $estadopago = 'P';
-                                                }
-                                                \app\models\Utilities::putMessageLogFile('va a insertar la orden de pago');
+                                                }                                                
                                                 if($resp_datos['sdes_id']==0){
                                                     $val_total = $resp_datos['twre_precio_item'];
                                                 }else{
                                                     $val_total = $resp_datos['twre_precio_descuento'];
                                                 }
-                                                \app\models\Utilities::putMessageLogFile('valor orden: '.$val_total);
-                                                \app\models\Utilities::putMessageLogFile(array($sins_id, $val_total, 0, $val_total, $estadopago, $usuario_id));
+                                                \app\models\Utilities::putMessageLogFile('valor orden: '.$val_total);                                                
                                                 $resp_opago = $mod_ordenpago->insertarOrdenpago($sins_id, null, $val_total, 0, $val_total, $estadopago, $usuario_id);
                                                 if ($resp_opago) {
                                                     \app\models\Utilities::putMessageLogFile('va a insertar la desglose pago');
                                                     //insertar desglose del pago                                    
                                                     $resp_dpago = $mod_ordenpago->insertarDesglosepago($resp_opago,$resp_datos['ite_id'], $val_total, 0, $val_total, $resp_datos['twre_fecha_solicitud'], null, $estadopago, $usuario_id);
                                                     if ($resp_dpago) {
+                                                        $exito = 1;
                                                         if ($resp_datos['sdes_id'] > 0) {
-                                                            \app\models\Utilities::putMessageLogFile('insertar en descuento');
+                                                            \app\models\Utilities::putMessageLogFile('descuento:'. $resp_datos['sdes_id']);
+                                                            \app\models\Utilities::putMessageLogFile('fecha:'. $resp_datos['twre_fecha_solicitud']);
                                                             $detDescitem=new DetalleDescuentoItem();                                                            
                                                             $respDescuento=$detDescitem->consultarHistoricodctoXitem($resp_datos['sdes_id'],$resp_datos['twre_fecha_solicitud']);
-                                                            $resp_SolicDcto = $mod_ordenpago->insertarSolicDscto($sins_id, $resp_datos['sdes_id'], $resp_datos['twre_precio_item'], $respDescuento["ddit_porcentaje"], $respDescuento["ddit_valor"]);
-                                                        }
-                                                        $exito = 1;
+                                                            \app\models\Utilities::putMessageLogFile('porcentaje descuento:' . $respDescuento["hdit_porcentaje"]);
+                                                            \app\models\Utilities::putMessageLogFile('valor descuento:' . $respDescuento["hdit_valor"]);                                                            
+                                                            $resp_SolicDcto = $mod_ordenpago->insertarSolicDscto($sins_id, $resp_datos['sdes_id'], $resp_datos['twre_precio_item'], $respDescuento["hdit_porcentaje"], $respDescuento["hdit_valor"]);
+                                                            if ($resp_SolicDcto) {
+                                                                $exito = 1;
+                                                            } else {
+                                                                $exito = 0;
+                                                            }
+                                                        }                                                        
                                                     }
                                                 }
                                             }

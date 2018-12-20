@@ -177,7 +177,7 @@ academico::registerTranslations();
         </div>
         <div class="col-lg-6 col-md-6 col-sm-6 col-xs-6">
             <div class="form-group">
-                <label for="txt_precio_item2w" class="col-sm-3 col-md-3 col-xs-3 col-lg-3 control-label" id="lbl_nombre1"><?= financiero::t("Pagos", "Price") ?></label>
+                <label for="txt_precio_item2w" class="col-sm-3 col-md-3 col-xs-3 col-lg-3 control-label" id="lbl_nombre1"><?= financiero::t("Pagos", "Price with discount") ?></label>
                 <div class="col-sm-9 col-md-9 col-xs-9 col-lg-9">
                     <input type="text" class="form-control keyupmce" value="0" id="txt_precio_item2w" disabled data-type="alfa" align="rigth" placeholder="<?= financiero::t("Pagos", "Price") ?>">
                 </div>

@@ -399,15 +399,16 @@ class MatriculadosreprobadosController extends \app\components\CController {
             }
             if (isset($data["getpreciodescuento"])) {                                 
                 $resp_precio = $mod_solins->ObtenerPreciohistoricoXitem($data["ite_id"], $data["fecha"]);                                  
-                if ($data["descuento_id"] > 0) {                        
-                    $respDescuento = $modDescuento->consultarValdctoItem($data["descuento_id"]); 
+                if ($data["descuento_id"] > 0) {     
+                    \app\models\Utilities::putMessageLogFile('id descuento:'.$data["descuento_id"]);  
+                    $respDescuento = $modDescuento->consultarHistoricodctoXitem($data["descuento_id"], $data["fecha"]); 
                     if ($resp_precio["precio"] == 0) {                                    
                         $precioDescuento = 0;   
                     } else {                                     
-                        if ($respDescuento["ddit_tipo_beneficio"] == 'P') {
-                            $descuento = ($resp_precio["precio"] * $respDescuento["ddit_porcentaje"]) / 100;
+                        if ($respDescuento["hdit_tipo_beneficio"] == 'P') {
+                            $descuento = ($resp_precio["precio"] * $respDescuento["hdit_porcentaje"]) / 100;
                         } else {
-                            $descuento = $respDescuento["ddit_valor"];
+                            $descuento = $respDescuento["hdit_valor"];
                         }
                         $precioDescuento = $resp_precio["precio"] - $descuento;
                     }
