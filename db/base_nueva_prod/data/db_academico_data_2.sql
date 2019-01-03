@@ -141,7 +141,7 @@ INSERT INTO `malla_academica_detalle` (`made_id`,`maca_id`,`asi_id`,`uest_id`,`n
 -- Ingenieria en Logística y Transporte - presencial
 -- -----------------------
 (31,7,1,1,1,6,'',1,1,1),
-(32,7,2,1,1,6,'',1,1,1),
+(32,7,6,1,1,6,'',1,1,1),
 (33,7,3,1,1,6,'',1,1,1),
 (34,7,4,1,1,6,'',1,1,1),
 (35,7,5,1,1,6,'',1,1,1),
@@ -149,7 +149,7 @@ INSERT INTO `malla_academica_detalle` (`made_id`,`maca_id`,`asi_id`,`uest_id`,`n
 -- Ingenieria en Telecomunicaciones - presencial
 -- -----------------------
 (36,8,1,1,1,6,'',1,1,1),
-(37,8,2,1,1,6,'',1,1,1),
+(37,8,6,1,1,6,'',1,1,1),
 (38,8,3,1,1,6,'',1,1,1),
 (39,8,4,1,1,6,'',1,1,1),
 (40,8,5,1,1,6,'',1,1,1),
@@ -157,7 +157,7 @@ INSERT INTO `malla_academica_detalle` (`made_id`,`maca_id`,`asi_id`,`uest_id`,`n
 -- Ingenieria en Software - presencial
 -- -----------------------
 (41,9,1,1,1,6,'',1,1,1),
-(42,9,2,1,1,6,'',1,1,1),
+(42,9,6,1,1,6,'',1,1,1),
 (43,9,3,1,1,6,'',1,1,1),
 (44,9,4,1,1,6,'',1,1,1),
 (45,9,5,1,1,6,'',1,1,1),
@@ -165,7 +165,7 @@ INSERT INTO `malla_academica_detalle` (`made_id`,`maca_id`,`asi_id`,`uest_id`,`n
 -- Ingenieria en Tecnologias de la Información - presencial
 -- -----------------------
 (46,10,1,1,1,6,'',1,1,1),
-(47,10,2,1,1,6,'',1,1,1),
+(47,10,6,1,1,6,'',1,1,1),
 (48,10,3,1,1,6,'',1,1,1),
 (49,10,4,1,1,6,'',1,1,1),
 (50,10,5,1,1,6,'',1,1,1),

@@ -527,7 +527,8 @@ INSERT INTO `asignatura` (`asi_id`, `scon_id`, `asi_nombre`, `asi_descripcion`, 
 (2, 1, 'Contabilidad - CAN', 'Contabilidad - CAN', 1, '1', '2018-05-08 22:15:37', NULL, '1'),
 (3, 1, 'Técnicas de comunicación oral - CAN', 'Técnicas de comunicación oral - CAN', 1, '1', '2018-05-08 22:16:01', NULL, '1'),
 (4, 1, 'Desarrollo del Pensamiento - CAN', 'Desarrollo del Pensamiento - CAN', 1, '1', '2018-05-08 22:16:52', NULL, '1'),
-(5, 1, 'Emprendimiento - CAN', 'Emprendimiento - CAN', 1, '1', '2018-05-08 22:16:52', NULL, '1');
+(5, 1, 'Emprendimiento - CAN', 'Emprendimiento - CAN', 1, '1', '2018-05-08 22:16:52', NULL, '1'),
+(6, 1, 'Física - CAN', 'Física - CAN', 1, '1', '2018-05-08 22:16:52', NULL, '1');
 
 -- --------------------------------------------------------
 --
