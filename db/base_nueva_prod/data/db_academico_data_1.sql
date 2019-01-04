@@ -522,13 +522,155 @@ INSERT INTO `subarea_conocimiento` (`scon_id`, `acon_id`, `scon_nombre`, `scon_d
 --
 -- Volcado de datos para la tabla `asignatura` 
 
-INSERT INTO `asignatura` (`asi_id`, `scon_id`, `asi_nombre`, `asi_descripcion`, `asi_usuario_ingreso`, `asi_estado`, `asi_fecha_creacion`, `asi_fecha_modificacion`, `asi_estado_logico`) VALUES
-(1, 1, 'Matemáticas - CAN', 'Matemáticas - CAN', 1, '1', '2018-05-08 22:15:37', NULL, '1'),
-(2, 1, 'Contabilidad - CAN', 'Contabilidad - CAN', 1, '1', '2018-05-08 22:15:37', NULL, '1'),
-(3, 1, 'Técnicas de comunicación oral - CAN', 'Técnicas de comunicación oral - CAN', 1, '1', '2018-05-08 22:16:01', NULL, '1'),
-(4, 1, 'Desarrollo del Pensamiento - CAN', 'Desarrollo del Pensamiento - CAN', 1, '1', '2018-05-08 22:16:52', NULL, '1'),
-(5, 1, 'Emprendimiento - CAN', 'Emprendimiento - CAN', 1, '1', '2018-05-08 22:16:52', NULL, '1'),
-(6, 1, 'Física - CAN', 'Física - CAN', 1, '1', '2018-05-08 22:16:52', NULL, '1');
+INSERT INTO `asignatura` (`asi_id`, `scon_id`, `asi_nombre`, `asi_descripcion`, `asi_usuario_ingreso`, `asi_usuario_modifica`, `asi_estado`, `asi_fecha_creacion`, `asi_fecha_modificacion`, `asi_estado_logico`) VALUES
+(1, 1, 'Matemáticas - CAN', 'Matemáticas - CAN', 1, NULL, '1', '2018-05-08 22:15:37', NULL, '1'),
+(2, 1, 'Contabilidad - CAN', 'Contabilidad - CAN', 1, NULL, '1', '2018-05-08 22:15:37', NULL, '1'),
+(3, 1, 'Técnicas de comunicación oral - CAN', 'Técnicas de comunicación oral - CAN', 1, NULL, '1', '2018-05-08 22:16:01', NULL, '1'),
+(4, 1, 'Desarrollo del Pensamiento - CAN', 'Desarrollo del Pensamiento - CAN', 1, NULL, '1', '2018-05-08 22:16:52', NULL, '1'),
+(5, 1, 'Emprendimiento - CAN', 'Emprendimiento - CAN', 1, NULL, '1', '2018-05-08 22:16:52', NULL, '1'),
+(6, 1, 'Física - CAN', 'Física - CAN', 1, NULL, '1', '2018-05-08 22:16:52', NULL, '1'),
+-- seguir modificando
+(7, 13, 'Matematicas I', 'Matematicas II', '1', NULL, '1', '2018-05-08 22:15:37', NULL, '1'),
+(8, 14, 'Fundamentos Para Softwares Especializados', 'Fundamentos para softwares especializados', '1', NULL, '1', '2018-05-08 22:15:37', NULL, '1'),
+(9, 7, 'Fundamentos De Economia', 'Fundamentos de economia', '1', NULL, '1', '2018-05-08 22:15:37', NULL, '1'),
+(10, 10, 'Derecho Constitucional', 'Derecho constitucional', '1', NULL, '1', '2018-05-08 22:15:37', NULL, '1'),
+(11, 9, 'Fundamentos De Administracion', 'Fundamentos de administracion', '1', NULL, '1', '2018-05-08 22:15:37', NULL, '1'),
+(12, 6, 'Tecnicas De Comunicacion Oral Y Escrita', 'Tecnicas de comunicacion oral y escrita', '1', NULL, '1', '2018-05-08 22:15:37', NULL, '1'),
+(13, 13, 'Matematicas II', 'Matematicas II', '1', NULL, '1', '2018-05-08 22:15:37', NULL, '1'),
+(14, 13, 'Matematicas Financieras', 'Matematicas financieras', '1', NULL, '1', '2018-05-08 22:15:37', NULL, '1'),
+(15, 6, 'Microeconomia', 'Microeconomia', '1', NULL, '1', '2018-05-08 22:15:37', NULL, '1'),
+(16, 9, 'Contabilidad General', 'Contabilidad general', '1', NULL, '1', '2018-05-08 22:15:37', NULL, '1'),
+(17, 9, 'Fundamentos De Mercadotecnia', 'Fundamentos de mercadotecnia', '1', NULL, '1', '2018-05-08 22:15:37', NULL, '1'),
+(18, 13, 'Estadisticas I', 'Estadisticas I', '1', NULL, '1', '2018-05-08 22:15:37', NULL, '1'),
+(19, 7, 'Actualidad Economica', 'Actualidad economica', '1', NULL, '1', '2018-05-08 22:15:37', NULL, '1'),
+(20, 6, 'Macroeconomia', 'Macroeconomia', '1', NULL, '1', '2018-05-08 22:15:37', NULL, '1'),
+(21, 10, 'Legislacion Y Derecho Aduanero', 'Legislacion y derecho aduanero', '1', NULL, '1', '2018-05-08 22:15:37', NULL, '1'),
+(22, 9, 'Contabilidad Gerencial', 'Contabilidad gerencial', '1', NULL, '1', '2018-05-08 22:15:37', NULL, '1'),
+(23, 6, 'Etica Profesional', 'Etica profesional', '1', NULL, '1', '2018-05-08 22:15:37', NULL, '1'),
+(24, 13, 'Estadisticas II', 'Estadisticas II', '1', NULL, '1', '2018-05-08 22:15:37', NULL, '1'),
+(25, 9, 'Planeacion Y Direccion Estrategica', 'Planeacion y direccion estrategica', '1', NULL, '1', '2018-05-08 22:15:37', NULL, '1'),
+(26, 6, 'Epistemologia Del Comercio Exterior', 'Epistemologia del comercio exterior', '1', NULL, '1', '2018-05-08 22:15:37', NULL, '1'),
+(27, 10, 'Derecho Internacional', 'Derecho internacional', '1', NULL, '1', '2018-05-08 22:15:37', NULL, '1'),
+(28, 9, 'Finanzas', 'Finanzas', '1', NULL, '1', '2018-05-08 22:15:37', NULL, '1'),
+-- (29, '1', 'Practicas Pre Profesionales I', 'Practicas pre profesionales i', '1', NULL, '1', '2018-05-08 22:15:37', NULL, '1'), -- APARECE COMO Sectores desconocidos no especificados y esa no esta en la base
+(30, 13, 'Investigacion De Operaciones', 'Investigacion de operaciones', '1', NULL, '1', '2018-05-08 22:15:37', NULL, '1'),
+-- (31, '1', 'Negocios Internacionales', 'Negocios internacionales', '1', NULL, '1', '2018-05-08 22:15:37', NULL, '1'),
+-- (32, '1', 'Nomenclatura Arancelaria', 'Nomenclatura arancelaria', '1', NULL, '1', '2018-05-08 22:15:37', NULL, '1'),
+-- (33, '1', 'Presupuesto', 'Presupuesto', '1', NULL, '1', '2018-05-08 22:15:37', NULL, '1'),
+-- (34, '1', 'Finanzas Internacionales', 'Finanzas internacionales', '1', NULL, '1', '2018-05-08 22:15:37', NULL, '1'),
+-- (35, '1', 'Practicas Pre Profesionales II', 'Practicas pre profesionales II', '1', NULL, '1', '2018-05-08 22:15:37', NULL, '1'), -- APARECE COMO Sectores desconocidos no especificados y esa no esta en la base
+-- (36, '1', 'Investigacion De Mercados Internacionales', 'Investigacion de mercados internacionales', '1', NULL, '1', '2018-05-08 22:15:37', NULL, '1'),
+(37, 9, 'Emprendimiento e Innovacion', 'Emprendimiento e innovacion', '1', NULL, '1', '2018-05-08 22:15:37', NULL, '1'),
+(38, 9, 'Gestion Ambiental', 'Gestion ambiental', '1', NULL, '1', '2018-05-08 22:15:37', NULL, '1'),
+(39, 9, 'Valoracion Aduanera', 'Valoracion aduanera', '1', NULL, '1', '2018-05-08 22:15:37', NULL, '1'),
+-- (40, '1', 'Logistica Y Transporte Internacional', 'Logistica y transporte internacional', '1', NULL, '1', '2018-05-08 22:15:37', NULL, '1'),
+(41, 13, 'Metodologia De La Investigacion', 'Metodologia de la investigacion', '1', NULL, '1', '2018-05-08 22:15:37', NULL, '1'),
+-- (42, '1', 'Oferta Exportable Del Ecuador', 'Oferta exportable del ecuador', '1', NULL, '1', '2018-05-08 22:15:37', NULL, '1'),
+(43, 9, 'Formulacion Y Evaluacion De Proyectos', 'Formulacion y evaluacion de proyectos', '1', NULL, '1', '2018-05-08 22:15:37', NULL, '1'),
+(44, 9, 'Responsabilidad Social Y Empresarial', 'Responsabilidad social y empresarial', '1', NULL, '1', '2018-05-08 22:15:37', NULL, '1'),
+-- (45, '1', 'Merceologia', 'Merceologia', '1', NULL, '1', '2018-05-08 22:15:37', NULL, '1'),
+-- (46, '1', 'Distribucion Fisica Internacional', 'Distribucion fisica internacional', '1', NULL, '1', '2018-05-08 22:15:37', NULL, '1'),
+(47, 7, 'Gestion Del Talento Humano', 'Gestion del talento humano', '1', NULL, '1', '2018-05-08 22:15:37', NULL, '1'),
+(48, 6, 'Interculturalidad: Culturas Ancestrales Y Generos', 'Interculturalidad: culturas ancestrales y generos', '1', NULL, '1', '2018-05-08 22:15:37', NULL, '1'),
+-- (49, '1', 'Comercio Electronico', 'Comercio electronico', '1', NULL, '1', '2018-05-08 22:15:37', NULL, '1'),
+-- (50, '1', 'Diplomacia Internacional', 'Diplomacia internacional', '1', NULL, '1', '2018-05-08 22:15:37', NULL, '1'),
+-- (51, '1', 'Introduccion Al Trabajo De Titulacion', 'Introduccion al trabajo de titulacion', '1', NULL, '1', '2018-05-08 22:15:37', NULL, '1'), -- APARECE COMO Sectores desconocidos no especificados y esa no esta en la base
+-- (52, '1', 'Trabajo De Titulacion I', 'Trabajo de titulacion I', '1', NULL, '1', '2018-05-08 22:15:37', NULL, '1'), -- APARECE COMO Sectores desconocidos no especificados y esa no esta en la base
+-- (53, '1', 'Practicas Pre Profesionales III (vinculacion)', 'Practicas pre profesionales III (vinculacion)', '1', NULL, '1', '2018-05-08 22:15:37', NULL, '1'), -- APARECE COMO Sectores desconocidos no especificados y esa no esta en la base
+-- (54, '1', 'Normas Internacionales De Calidad', 'Normas internacionales de calidad', '1', NULL, '1', '2018-05-08 22:15:37', NULL, '1'),
+(55, 9, 'Negocios Internacionales', 'Negocios internacionales', '1', NULL, '1', '2018-05-08 22:15:37', NULL, '1'),
+-- (56, '1', 'Sistemas Aduaneros', 'Sistemas aduaneros', '1', NULL, '1', '2018-05-08 22:15:37', NULL, '1'),
+(57, 9, 'Economia Internacional', 'Economia internacional', '1', NULL, '1', '2018-05-08 22:15:37', NULL, '1'),
+-- (58, '1', 'Liderazgo Y Habilidades Gerenciales', 'Liderazgo y habilidades gerenciales', '1', NULL, '1', '2018-05-08 22:15:37', NULL, '1'),
+(59, 9, 'Marketing Internacional', 'Marketing internacional', '1', NULL, '1', '2018-05-08 22:15:37', NULL, '1'),
+-- (60, '1', 'Trabajo De Titulacion II', 'Trabajo de titulacion II', '1', NULL, '1', '2018-05-08 22:15:37', NULL, '1'), -- APARECE COMO Sectores desconocidos no especificados y esa no esta en la base
+-- (61, '1', 'Epistemologia De La Economia', 'Epistemologia de la economia', '1', NULL, '1', '2018-05-08 22:15:37', NULL, '1'),
+(62, 13, 'Algebra Lineal', 'Algebra lineal', '1', NULL, '1', '2018-05-08 22:15:37', NULL, '1'),
+(63, 6, 'Microeconomia II', 'Microeconomia II', '1', NULL, '1', '2018-05-08 22:15:37', NULL, '1'),
+(64, 10, 'Derecho Laboral', 'Derecho laboral', '1', NULL, '1', '2018-05-08 22:15:37', NULL, '1'),
+(65, 9, 'Administracion Financiera', 'Administracion financiera', '1', NULL, '1', '2018-05-08 22:15:37', NULL, '1'),
+-- (66, '1', 'Econometria I', 'Econometria i', '1', NULL, '1', '2018-05-08 22:15:37', NULL, '1'),
+(67, 6, 'Macroeconomia II', 'Macroeconomia II', '1', NULL, '1', '2018-05-08 22:15:37', NULL, '1'),
+-- (68, '1', 'Econometria II', 'Econometria II', '1', NULL, '1', '2018-05-08 22:15:37', NULL, '1'),
+-- (69, '1', 'Moneda E Instituciones Financieras', 'Moneda e instituciones financieras', '1', NULL, '1', '2018-05-08 22:15:37', NULL, '1'),
+-- (70, '1', 'Historia Economica Y Politica Del Ecuador', 'Historia economica y politica del ecuador', '1', NULL, '1', '2018-05-08 22:15:37', NULL, '1'),
+-- (71, '1', 'Teoria Del Desarrollo Economico', 'Teoria del desarrollo economico', '1', NULL, '1', '2018-05-08 22:15:37', NULL, '1'),
+(72, 9, 'Gestion De Calidad', 'Gestion de calidad', '1', NULL, '1', '2018-05-08 22:15:37', NULL, '1'),
+-- (73, '1', 'Economia Ambiental', 'Economia ambiental', '1', NULL, '1', '2018-05-08 22:15:37', NULL, '1'),
+-- (74, '1', 'Derecho Economico', 'Derecho economico', '1', NULL, '1', '2018-05-08 22:15:37', NULL, '1'),
+-- (75, '1', 'Teoria Monetaria Internacional', 'Teoria monetaria internacional', '1', NULL, '1', '2018-05-08 22:15:37', NULL, '1'),
+(76, 9, 'Tributacion', 'Tributacion', '1', NULL, '1', '2018-05-08 22:15:37', NULL, '1'),
+-- (77, '1', 'Finanzas Publicas', 'Finanzas publicas', '1', NULL, '1', '2018-05-08 22:15:37', NULL, '1'),
+-- (78, '1', 'Politica Economica Y Fiscal', 'Politica economica y fiscal', '1', NULL, '1', '2018-05-08 22:15:37', NULL, '1'),
+-- (79, '1', 'Modelos Econometricos', 'Modelos econometricos', '1', NULL, '1', '2018-05-08 22:15:37', NULL, '1'),
+-- (80, '1', 'Public Choice', 'Public choice', '1', NULL, '1', '2018-05-08 22:15:37', NULL, '1'),
+-- (81', '1', 'Epistemologia De Las Finanzas', 'Epistemologia de las finanzas', '1', NULL, '1', '2018-05-08 22:15:37', NULL, '1'),
+-- (82, '1', 'Derecho Financiero Y Tributario', 'Derecho financiero y tributario', '1', NULL, '1', '2018-05-08 22:15:37', NULL, '1'),
+-- (83, '1', 'Mercado De Valores', 'Mercado de valores', '1', NULL, '1', '2018-05-08 22:15:37', NULL, '1'), -- APARECE COMO Sectores desconocidos no especificados y esa no esta en la base
+-- (84, '1', 'Finanzas Corporativas I', 'Finanzas corporativas i', '1', NULL, '1', '2018-05-08 22:15:37', NULL, '1'),
+-- (85, '1', 'Derecho Mercantil', 'Derecho mercantil', '1', NULL, '1', '2018-05-08 22:15:37', NULL, '1'),
+-- (86, '1', 'Finanzas Corporativas II', 'Finanzas corporativas II', '1', NULL, '1', '2018-05-08 22:15:37', NULL, '1'),
+-- (87, '1', 'Auditoria', 'Auditoria', '1', NULL, '1', '2018-05-08 22:15:37', NULL, '1'),
+-- (88, '1', 'Adm Del Riesgo', 'Adm del riesgo', '1', NULL, '1', '2018-05-08 22:15:37', NULL, '1'),
+-- (89, '1', 'Auditoria Tributaria', 'Auditoria tributaria', '1', NULL, '1', '2018-05-08 22:15:37', NULL, '1'),
+-- (90, '1', 'Auditoria Financiera', 'Auditoria financiera', '1', NULL, '1', '2018-05-08 22:15:37', NULL, '1'),
+-- (91, '1', 'Gerencia Financiera', 'Gerencia financiera', '1', NULL, '1', '2018-05-08 22:15:37', NULL, '1'),
+(92, 9, 'Simulacion De Negocios', 'Simulacion de negocios', '1', NULL, '1', '2018-05-08 22:15:37', NULL, '1'),
+-- (93, '1', 'Fusiones Y Adquisiciones', 'Fusiones y adquisiciones', '1', NULL, '1', '2018-05-08 22:15:37', NULL, '1'),
+-- (94, '1', 'Auditoria De Sistemas', 'Auditoria de sistemas', '1', NULL, '1', '2018-05-08 22:15:37', NULL, '1'),
+-- (95, '1', 'Gestion Practica Y Tributaria', 'Gestion practica y tributaria', '1', NULL, '1', '2018-05-08 22:15:37', NULL, '1'),
+(96, 6, 'Epistemologia', 'Epistemologia', '1', NULL, '1', '2018-05-08 22:15:37', NULL, '1'),
+-- (97, '1', 'Marco Legal De La Mercadotecnia', 'Marco legal de la mercadotecnia', '1', NULL, '1', '2018-05-08 22:15:37', NULL, '1'),
+-- (98, '1', 'Marketing Estrategico', 'Marketing estrategico', '1', NULL, '1', '2018-05-08 22:15:37', NULL, '1'),
+-- (99, '1', 'Investigacion De Mercados', 'Investigacion de mercados', '1', NULL, '1', '2018-05-08 22:15:37', NULL, '1'),
+-- (100, '1', 'Plan De Marketing', 'Plan de marketing', '1', NULL, '1', '2018-05-08 22:15:37', NULL, '1'),
+-- (101, '1', 'Creatividad e Innovacion', 'Creatividad e innovacion', '1', NULL, '1', '2018-05-08 22:15:37', NULL, '1'),
+-- (102, '1', 'Comportamiento Del Consumidor', 'Comportamiento del consumidor', '1', NULL, '1', '2018-05-08 22:15:37', NULL, '1'),
+-- (103, '1', 'Marketing Digital', 'Marketing digital', '1', NULL, '1', '2018-05-08 22:15:37', NULL, '1'),
+-- (104, '1', 'Diseño Grafico Publicitario', 'Diseño grafico publicitario', '1', NULL, '1', '2018-05-08 22:15:37', NULL, '1'),
+-- (105, '1', 'Politicas De Precio Y Producto', 'Politicas de precio y producto', '1', NULL, '1', '2018-05-08 22:15:37', NULL, '1'),
+-- (106, '1', 'Logistica Y Distribucion', 'Logistica y distribucion', '1', NULL, '1', '2018-05-08 22:15:37', NULL, '1'),
+-- (107, '1', 'Publicidad Y Promocion', 'Publicidad y promocion', '1', NULL, '1', '2018-05-08 22:15:37', NULL, '1'),
+-- (108, '1', 'Emprendimiento', 'Emprendimiento', '1', NULL, '1', '2018-05-08 22:15:37', NULL, '1'),
+-- (109, '1', 'Marketing De Servicios', 'Marketing de servicios', '1', NULL, '1', '2018-05-08 22:15:37', NULL, '1'),
+-- (110, '1', 'Retailing', 'Retailing', '1', NULL, '1', '2018-05-08 22:15:37', NULL, '1'),
+(111, 9, 'Gerencia De Marketing', 'Gerencia de marketing', '1', NULL, '1', '2018-05-08 22:15:37', NULL, '1'),
+(112, 9, 'Desarrollo Y Administracion De Nuevos Productos', 'Desarrollo y administracion de nuevos productos', '1', NULL, '1', '2018-05-08 22:15:37', NULL, '1'),
+-- (113, '1', 'Relaciones Publicas Y Marketing Directo', 'Relaciones publicas y marketing directo', '1', NULL, '1', '2018-05-08 22:15:37', NULL, '1'),
+(114, 9, 'Marketing Internacional', 'Marketing internacional', '1', NULL, '1', '2018-05-08 22:15:37', NULL, '1'),
+-- (115, '1', 'Epistemologia Del Turismo', 'Epistemologia del turismo', '1', NULL, '1', '2018-05-08 22:15:37', NULL, '1'),
+-- (116, '1', 'Historia Del Ecuador', 'Historia del ecuador', '1', NULL, '1', '2018-05-08 22:15:37', NULL, '1'),
+-- (117, '1', 'Psicologia Del Turismo', 'Psicologia del turismo', '1', NULL, '1', '2018-05-08 22:15:37', NULL, '1'),
+-- (118, '1', 'Derecho', 'Derecho', '1', NULL, '1', '2018-05-08 22:15:37', NULL, '1'),
+-- (119, '1', 'Geografia Turistica', 'Geografia turistica', '1', NULL, '1', '2018-05-08 22:15:37', NULL, '1'),
+-- (120, '1', 'Sociologia Del Turismo', 'Sociologia del turismo', '1', NULL, '1', '2018-05-08 22:15:37', NULL, '1'),
+-- (121, '1', 'Patrimomio Natural Del Ecuador', 'Patrimomio natural del ecuador', '1', NULL, '1', '2018-05-08 22:15:37', NULL, '1'),
+-- (122, '1', 'Asistencia De Grupos Turisticos', 'Asistencia de grupos turisticos', '1', NULL, '1', '2018-05-08 22:15:37', NULL, '1'),
+-- (123, '1', 'Desarrollo De Infraestructura Turistica', 'Desarrollo de infraestructura turistica', '1', NULL, '1', '2018-05-08 22:15:37', NULL, '1'),
+-- (124, '1', 'Patrimonio Universal', 'Patrimonio universal', '1', NULL, '1', '2018-05-08 22:15:37', NULL, '1'),
+-- (125, '1', 'Tecnicas De Operaciones Turisticas', 'Tecnicas de operaciones turisticas', '1', NULL, '1', '2018-05-08 22:15:37', NULL, '1'), -- AUN NO LE PONEN LA SUBAREA MALLA TURISMO
+-- (126, '1', 'Legislacion Turistica', 'Legislacion turistica', '1', NULL, '1', '2018-05-08 22:15:37', NULL, '1'), -- AUN NO LE PONEN LA SUBAREA MALLA TURISMO
+-- (127, '1', 'Gestion Hotelera', 'Gestion hotelera', '1', NULL, '1', '2018-05-08 22:15:37', NULL, '1'), -- AUN NO LE PONEN LA SUBAREA MALLA TURISMO
+-- (128, '1', 'Agencia De Viajes', 'Agencia de viajes', '1', NULL, '1', '2018-05-08 22:15:37', NULL, '1'), -- AUN NO LE PONEN LA SUBAREA MALLA TURISMO
+-- (129, '1', 'Tecnicas Culinarias', 'Tecnicas culinarias', '1', NULL, '1', '2018-05-08 22:15:37', NULL, '1'), -- AUN NO LE PONEN LA SUBAREA MALLA TURISMO
+-- (130, '1', 'Gestion De Restauracion', 'Gestion de restauracion', '1', NULL, '1', '2018-05-08 22:15:37', NULL, '1'), -- AUN NO LE PONEN LA SUBAREA MALLA TURISMO
+-- (131, '1', 'Turismo Sostenible', 'Turismo sostenible', '1', NULL, '1', '2018-05-08 22:15:37', NULL, '1'), -- AUN NO LE PONEN LA SUBAREA MALLA TURISMO
+-- (132, '1', 'Gestion De Seguridad', 'Gestion de seguridad', '1', NULL, '1', '2018-05-08 22:15:37', NULL, '1'), -- AUN NO LE PONEN LA SUBAREA MALLA TURISMO
+-- (133, '1', 'Transporte Turistico', 'Transporte turistico', '1', NULL, '1', '2018-05-08 22:15:37', NULL, '1'), -- AUN NO LE PONEN LA SUBAREA MALLA TURISMO
+-- (134, '1', 'Gastronomia', 'Gastronomia', '1', NULL, '1', '2018-05-08 22:15:37', NULL, '1'), -- AUN NO LE PONEN LA SUBAREA MALLA TURISMO
+-- (135, '1', 'Planeacion Estrategica Sostenible', 'Planeacion estrategica sostenible', '1', NULL, '1', '2018-05-08 22:15:37', NULL, '1'), -- AUN NO LE PONEN LA SUBAREA MALLA TURISMO
+(136, 9, 'Evaluacion De Proyectos', 'Evaluacion de proyectos', '1', NULL, '1', '2018-05-08 22:15:37', NULL, '1');
+-- (137, '1', 'Tendencias Tecnologicas Del Turismo', 'Tendencias tecnologicas del turismo', '1', NULL, '1', '2018-05-08 22:15:37', NULL, '1'), -- AUN NO LE PONEN LA SUBAREA MALLA TURISMO
+-- (138, '1', 'Trafico Aereo Gds De Reservas', 'Trafico aereo gds de reservas', '1', NULL, '1', '2018-05-08 22:15:37', NULL, '1'), -- AUN NO LE PONEN LA SUBAREA MALLA TURISMO
+-- (139, '1', 'Eventos Y Convenciones', 'Eventos y convenciones', '1', NULL, '1', '2018-05-08 22:15:37', NULL, '1'),
+-- (140, '1', 'Contabilidad De Costo', 'Contabilidad de costo', '1', NULL, '1', '2018-05-08 22:15:37', NULL, '1'),
+-- (141, '1', 'Investigacion De Mercado', 'Investigacion de mercado', '1', NULL, '1', '2018-05-08 22:15:37', NULL, '1'),
+-- (142, '1', 'Derecho Tributario Y Financiero', 'Derecho tributario y financiero', '1', NULL, '1', '2018-05-08 22:15:37', NULL, '1'),
+-- (143, '1', 'Gestion De La Cadena De Suministros Scm', 'Gestion de la cadena de suministros scm', '1', NULL, '1', '2018-05-08 22:15:37', NULL, '1'),
+-- (144, '1', 'Gerencia De Produccion', 'Gerencia de produccion', '1', NULL, '1', '2018-05-08 22:15:37', NULL, '1'),
+-- (145, '1', 'Elaboracion Y Evaluacion De Proyectos', 'Elaboracion y evaluacion de proyectos', '1', NULL, '1', '2018-05-08 22:15:37', NULL, '1'),
+-- (146, '1', 'Sistema De Informacion Gerencial', 'Sistema de informacion gerencial', '1', NULL, '1', '2018-05-08 22:15:37', NULL, '1'),
+-- (148, '1', 'Gerencia Del Marketing', 'Gerencia del marketing', '1', NULL, '1', '2018-05-08 22:15:37', NULL, '1'),
 
 -- --------------------------------------------------------
 --
