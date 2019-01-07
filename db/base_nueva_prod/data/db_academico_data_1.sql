@@ -602,52 +602,52 @@ INSERT INTO `asignatura` (`asi_id`, `scon_id`, `asi_nombre`, `asi_descripcion`, 
 (76, 9, 'Tributacion', 'Tributacion', '1', NULL, '1', '2018-05-08 22:15:37', NULL, '1'),
 -- (77, '1', 'Finanzas Publicas', 'Finanzas publicas', '1', NULL, '1', '2018-05-08 22:15:37', NULL, '1'),
 -- (78, '1', 'Politica Economica Y Fiscal', 'Politica economica y fiscal', '1', NULL, '1', '2018-05-08 22:15:37', NULL, '1'), -- Malla de economia
--- (79, '1', 'Modelos Econometricos', 'Modelos econometricos', '1', NULL, '1', '2018-05-08 22:15:37', NULL, '1'),
--- (80, '1', 'Public Choice', 'Public choice', '1', NULL, '1', '2018-05-08 22:15:37', NULL, '1'),
--- (81', '1', 'Epistemologia De Las Finanzas', 'Epistemologia de las finanzas', '1', NULL, '1', '2018-05-08 22:15:37', NULL, '1'),
--- (82, '1', 'Derecho Financiero Y Tributario', 'Derecho financiero y tributario', '1', NULL, '1', '2018-05-08 22:15:37', NULL, '1'),
+-- (79, '1', 'Modelos Econometricos', 'Modelos econometricos', '1', NULL, '1', '2018-05-08 22:15:37', NULL, '1'), -- Malla de economia
+-- (80, '1', 'Public Choice', 'Public choice', '1', NULL, '1', '2018-05-08 22:15:37', NULL, '1'), -- Malla de economia
+-- (81', '1', 'Epistemologia De Las Finanzas', 'Epistemologia de las finanzas', '1', NULL, '1', '2018-05-08 22:15:37', NULL, '1'), -- No se encuentra en ninguna malla
+-- (82, '1', 'Derecho Financiero Y Tributario', 'Derecho financiero y tributario', '1', NULL, '1', '2018-05-08 22:15:37', NULL, '1'), -- Malla de contabilidad y auditoria
 -- (83, '1', 'Mercado De Valores', 'Mercado de valores', '1', NULL, '1', '2018-05-08 22:15:37', NULL, '1'), -- APARECE COMO Sectores desconocidos no especificados y esa no esta en la base
--- (84, '1', 'Finanzas Corporativas I', 'Finanzas corporativas i', '1', NULL, '1', '2018-05-08 22:15:37', NULL, '1'),
--- (85, '1', 'Derecho Mercantil', 'Derecho mercantil', '1', NULL, '1', '2018-05-08 22:15:37', NULL, '1'),
--- (86, '1', 'Finanzas Corporativas II', 'Finanzas corporativas II', '1', NULL, '1', '2018-05-08 22:15:37', NULL, '1'),
--- (87, '1', 'Auditoria', 'Auditoria', '1', NULL, '1', '2018-05-08 22:15:37', NULL, '1'),
--- (88, '1', 'Adm Del Riesgo', 'Adm del riesgo', '1', NULL, '1', '2018-05-08 22:15:37', NULL, '1'),
--- (89, '1', 'Auditoria Tributaria', 'Auditoria tributaria', '1', NULL, '1', '2018-05-08 22:15:37', NULL, '1'),
--- (90, '1', 'Auditoria Financiera', 'Auditoria financiera', '1', NULL, '1', '2018-05-08 22:15:37', NULL, '1'),
--- (91, '1', 'Gerencia Financiera', 'Gerencia financiera', '1', NULL, '1', '2018-05-08 22:15:37', NULL, '1'),
+-- (84, '1', 'Finanzas Corporativas I', 'Finanzas corporativas i', '1', NULL, '1', '2018-05-08 22:15:37', NULL, '1'), -- malla de finanzas
+-- (85, '1', 'Derecho Mercantil', 'Derecho mercantil', '1', NULL, '1', '2018-05-08 22:15:37', NULL, '1'), -- malla de finanzas
+-- (86, '1', 'Finanzas Corporativas II', 'Finanzas corporativas II', '1', NULL, '1', '2018-05-08 22:15:37', NULL, '1'), -- malla finanzas
+-- (87, '1', 'Auditoria', 'Auditoria', '1', NULL, '1', '2018-05-08 22:15:37', NULL, '1'), -- malla finanzas
+-- (88, '1', 'Adm Del Riesgo', 'Adm del riesgo', '1', NULL, '1', '2018-05-08 22:15:37', NULL, '1'), -- malla de finanzas
+-- (89, '1', 'Auditoria Tributaria', 'Auditoria tributaria', '1', NULL, '1', '2018-05-08 22:15:37', NULL, '1'), -- malla contabilidad y auditoria
+-- (90, '1', 'Auditoria Financiera', 'Auditoria financiera', '1', NULL, '1', '2018-05-08 22:15:37', NULL, '1'), - malla contabilidad y auditoria
+-- (91, '1', 'Gerencia Financiera', 'Gerencia financiera', '1', NULL, '1', '2018-05-08 22:15:37', NULL, '1'), - malla contabilidad y auditoria
 (92, 9, 'Simulacion De Negocios', 'Simulacion de negocios', '1', NULL, '1', '2018-05-08 22:15:37', NULL, '1'),
--- (93, '1', 'Fusiones Y Adquisiciones', 'Fusiones y adquisiciones', '1', NULL, '1', '2018-05-08 22:15:37', NULL, '1'),
--- (94, '1', 'Auditoria De Sistemas', 'Auditoria de sistemas', '1', NULL, '1', '2018-05-08 22:15:37', NULL, '1'),
--- (95, '1', 'Gestion Practica Y Tributaria', 'Gestion practica y tributaria', '1', NULL, '1', '2018-05-08 22:15:37', NULL, '1'),
-(96, 6, 'Epistemologia', 'Epistemologia', '1', NULL, '1', '2018-05-08 22:15:37', NULL, '1'),
--- (97, '1', 'Marco Legal De La Mercadotecnia', 'Marco legal de la mercadotecnia', '1', NULL, '1', '2018-05-08 22:15:37', NULL, '1'),
--- (98, '1', 'Marketing Estrategico', 'Marketing estrategico', '1', NULL, '1', '2018-05-08 22:15:37', NULL, '1'),
--- (99, '1', 'Investigacion De Mercados', 'Investigacion de mercados', '1', NULL, '1', '2018-05-08 22:15:37', NULL, '1'),
--- (100, '1', 'Plan De Marketing', 'Plan de marketing', '1', NULL, '1', '2018-05-08 22:15:37', NULL, '1'),
--- (101, '1', 'Creatividad e Innovacion', 'Creatividad e innovacion', '1', NULL, '1', '2018-05-08 22:15:37', NULL, '1'),
--- (102, '1', 'Comportamiento Del Consumidor', 'Comportamiento del consumidor', '1', NULL, '1', '2018-05-08 22:15:37', NULL, '1'),
--- (103, '1', 'Marketing Digital', 'Marketing digital', '1', NULL, '1', '2018-05-08 22:15:37', NULL, '1'),
--- (104, '1', 'Diseño Grafico Publicitario', 'Diseño grafico publicitario', '1', NULL, '1', '2018-05-08 22:15:37', NULL, '1'),
--- (105, '1', 'Politicas De Precio Y Producto', 'Politicas de precio y producto', '1', NULL, '1', '2018-05-08 22:15:37', NULL, '1'),
--- (106, '1', 'Logistica Y Distribucion', 'Logistica y distribucion', '1', NULL, '1', '2018-05-08 22:15:37', NULL, '1'),
--- (107, '1', 'Publicidad Y Promocion', 'Publicidad y promocion', '1', NULL, '1', '2018-05-08 22:15:37', NULL, '1'),
--- (108, '1', 'Emprendimiento', 'Emprendimiento', '1', NULL, '1', '2018-05-08 22:15:37', NULL, '1'),
--- (109, '1', 'Marketing De Servicios', 'Marketing de servicios', '1', NULL, '1', '2018-05-08 22:15:37', NULL, '1'),
--- (110, '1', 'Retailing', 'Retailing', '1', NULL, '1', '2018-05-08 22:15:37', NULL, '1'),
+-- (93, '1', 'Fusiones Y Adquisiciones', 'Fusiones y adquisiciones', '1', NULL, '1', '2018-05-08 22:15:37', NULL, '1'), -- malla finanzas
+-- (94, '1', 'Auditoria De Sistemas', 'Auditoria de sistemas', '1', NULL, '1', '2018-05-08 22:15:37', NULL, '1'), -- malla finanzas
+-- (95, '1', 'Gestion Practica Y Tributaria', 'Gestion practica y tributaria', '1', NULL, '1', '2018-05-08 22:15:37', NULL, '1'), malla finanzas
+(96, 6, '8', 'Epistemologia', '1', NULL, '1', '2018-05-08 22:15:37', NULL, '1'),
+-- (97, '1', 'Marco Legal De La Mercadotecnia', 'Marco legal de la mercadotecnia', '1', NULL, '1', '2018-05-08 22:15:37', NULL, '1'), -- malla mercadotecnia
+-- (98, '1', 'Marketing Estrategico', 'Marketing estrategico', '1', NULL, '1', '2018-05-08 22:15:37', NULL, '1'), -- malla mercadotecnia
+-- (99, '1', 'Investigacion De Mercados', 'Investigacion de mercados', '1', NULL, '1', '2018-05-08 22:15:37', NULL, '1'), -- malla mercadotecnia
+-- (100, '1', 'Plan De Marketing', 'Plan de marketing', '1', NULL, '1', '2018-05-08 22:15:37', NULL, '1'), -- malla mercadotecnia
+-- (101, '1', 'Creatividad e Innovacion', 'Creatividad e innovacion', '1', NULL, '1', '2018-05-08 22:15:37', NULL, '1'), -- malla mercadotecnia
+-- (102, '1', 'Comportamiento Del Consumidor', 'Comportamiento del consumidor', '1', NULL, '1', '2018-05-08 22:15:37', NULL, '1'), -- malla mercadotecnia
+-- (103, '1', 'Marketing Digital', 'Marketing digital', '1', NULL, '1', '2018-05-08 22:15:37', NULL, '1'), -- malla mercadotecnia
+-- (104, '1', 'Diseño Grafico Publicitario', 'Diseño grafico publicitario', '1', NULL, '1', '2018-05-08 22:15:37', NULL, '1'), -- malla mercadotecnia
+-- (105, '1', 'Politicas De Precio Y Producto', 'Politicas de precio y producto', '1', NULL, '1', '2018-05-08 22:15:37', NULL, '1'), -- malla mercadotecnia
+-- (106, '1', 'Logistica Y Distribucion', 'Logistica y distribucion', '1', NULL, '1', '2018-05-08 22:15:37', NULL, '1'), -- malla mercadotecnia
+-- (107, '1', 'Publicidad Y Promocion', 'Publicidad y promocion', '1', NULL, '1', '2018-05-08 22:15:37', NULL, '1'), -- malla mercadotecnia
+-- (108, '1', 'Emprendimiento', 'Emprendimiento', '1', NULL, '1', '2018-05-08 22:15:37', NULL, '1'), -- malla mercadotecnia
+-- (109, '1', 'Marketing De Servicios', 'Marketing de servicios', '1', NULL, '1', '2018-05-08 22:15:37', NULL, '1'), -- malla mercadotecnia
+-- (110, '1', 'Retailing', 'Retailing', '1', NULL, '1', '2018-05-08 22:15:37', NULL, '1'), -- malla mercadotecnia
 (111, 9, 'Gerencia De Marketing', 'Gerencia de marketing', '1', NULL, '1', '2018-05-08 22:15:37', NULL, '1'),
 (112, 9, 'Desarrollo Y Administracion De Nuevos Productos', 'Desarrollo y administracion de nuevos productos', '1', NULL, '1', '2018-05-08 22:15:37', NULL, '1'),
--- (113, '1', 'Relaciones Publicas Y Marketing Directo', 'Relaciones publicas y marketing directo', '1', NULL, '1', '2018-05-08 22:15:37', NULL, '1'),
+-- (113, '1', 'Relaciones Publicas Y Marketing Directo', 'Relaciones publicas y marketing directo', '1', NULL, '1', '2018-05-08 22:15:37', NULL, '1'), -- malla mercadotecnia
 (114, 9, 'Marketing Internacional', 'Marketing internacional', '1', NULL, '1', '2018-05-08 22:15:37', NULL, '1'),
--- (115, '1', 'Epistemologia Del Turismo', 'Epistemologia del turismo', '1', NULL, '1', '2018-05-08 22:15:37', NULL, '1'),
--- (116, '1', 'Historia Del Ecuador', 'Historia del ecuador', '1', NULL, '1', '2018-05-08 22:15:37', NULL, '1'),
--- (117, '1', 'Psicologia Del Turismo', 'Psicologia del turismo', '1', NULL, '1', '2018-05-08 22:15:37', NULL, '1'),
--- (118, '1', 'Derecho', 'Derecho', '1', NULL, '1', '2018-05-08 22:15:37', NULL, '1'),
--- (119, '1', 'Geografia Turistica', 'Geografia turistica', '1', NULL, '1', '2018-05-08 22:15:37', NULL, '1'),
--- (120, '1', 'Sociologia Del Turismo', 'Sociologia del turismo', '1', NULL, '1', '2018-05-08 22:15:37', NULL, '1'),
--- (121, '1', 'Patrimomio Natural Del Ecuador', 'Patrimomio natural del ecuador', '1', NULL, '1', '2018-05-08 22:15:37', NULL, '1'),
--- (122, '1', 'Asistencia De Grupos Turisticos', 'Asistencia de grupos turisticos', '1', NULL, '1', '2018-05-08 22:15:37', NULL, '1'),
--- (123, '1', 'Desarrollo De Infraestructura Turistica', 'Desarrollo de infraestructura turistica', '1', NULL, '1', '2018-05-08 22:15:37', NULL, '1'),
--- (124, '1', 'Patrimonio Universal', 'Patrimonio universal', '1', NULL, '1', '2018-05-08 22:15:37', NULL, '1'),
+-- (115, '1', 'Epistemologia Del Turismo', 'Epistemologia del turismo', '1', NULL, '1', '2018-05-08 22:15:37', NULL, '1'), -- malla turismo
+-- (116, '1', 'Historia Del Ecuador', 'Historia del ecuador', '1', NULL, '1', '2018-05-08 22:15:37', NULL, '1'), -- malla turismo
+-- (117, '1', 'Psicologia Del Turismo', 'Psicologia del turismo', '1', NULL, '1', '2018-05-08 22:15:37', NULL, '1'), -- malla turismo
+-- (118, '1', 'Derecho', 'Derecho', '1', NULL, '1', '2018-05-08 22:15:37', NULL, '1'), -- malla turismo
+-- (119, '1', 'Geografia Turistica', 'Geografia turistica', '1', NULL, '1', '2018-05-08 22:15:37', NULL, '1'), -- malla turismo
+-- (120, '1', 'Sociologia Del Turismo', 'Sociologia del turismo', '1', NULL, '1', '2018-05-08 22:15:37', NULL, '1'), -- malla turismo
+-- (121, '1', 'Patrimomio Natural Del Ecuador', 'Patrimomio natural del ecuador', '1', NULL, '1', '2018-05-08 22:15:37', NULL, '1'), --NO se encuentra materia
+-- (122, '1', 'Asistencia De Grupos Turisticos', 'Asistencia de grupos turisticos', '1', NULL, '1', '2018-05-08 22:15:37', NULL, '1'), -- malla turismo
+-- (123, '1', 'Desarrollo De Infraestructura Turistica', 'Desarrollo de infraestructura turistica', '1', NULL, '1', '2018-05-08 22:15:37', NULL, '1'), -- malla turismo
+-- (124, '1', 'Patrimonio Universal', 'Patrimonio universal', '1', NULL, '1', '2018-05-08 22:15:37', NULL, '1'), -- malla turismo
 -- (125, '1', 'Tecnicas De Operaciones Turisticas', 'Tecnicas de operaciones turisticas', '1', NULL, '1', '2018-05-08 22:15:37', NULL, '1'), -- AUN NO LE PONEN LA SUBAREA MALLA TURISMO
 -- (126, '1', 'Legislacion Turistica', 'Legislacion turistica', '1', NULL, '1', '2018-05-08 22:15:37', NULL, '1'), -- AUN NO LE PONEN LA SUBAREA MALLA TURISMO
 -- (127, '1', 'Gestion Hotelera', 'Gestion hotelera', '1', NULL, '1', '2018-05-08 22:15:37', NULL, '1'), -- AUN NO LE PONEN LA SUBAREA MALLA TURISMO
@@ -659,18 +659,18 @@ INSERT INTO `asignatura` (`asi_id`, `scon_id`, `asi_nombre`, `asi_descripcion`, 
 -- (133, '1', 'Transporte Turistico', 'Transporte turistico', '1', NULL, '1', '2018-05-08 22:15:37', NULL, '1'), -- AUN NO LE PONEN LA SUBAREA MALLA TURISMO
 -- (134, '1', 'Gastronomia', 'Gastronomia', '1', NULL, '1', '2018-05-08 22:15:37', NULL, '1'), -- AUN NO LE PONEN LA SUBAREA MALLA TURISMO
 -- (135, '1', 'Planeacion Estrategica Sostenible', 'Planeacion estrategica sostenible', '1', NULL, '1', '2018-05-08 22:15:37', NULL, '1'), -- AUN NO LE PONEN LA SUBAREA MALLA TURISMO
-(136, 9, 'Evaluacion De Proyectos', 'Evaluacion de proyectos', '1', NULL, '1', '2018-05-08 22:15:37', NULL, '1');
+(136, 9, 'Evaluacion De Proyectos', 'Evaluacion de proyectos', '1', NULL, '1', '2018-05-08 22:15:37', NULL, '1'),
 -- (137, '1', 'Tendencias Tecnologicas Del Turismo', 'Tendencias tecnologicas del turismo', '1', NULL, '1', '2018-05-08 22:15:37', NULL, '1'), -- AUN NO LE PONEN LA SUBAREA MALLA TURISMO
 -- (138, '1', 'Trafico Aereo Gds De Reservas', 'Trafico aereo gds de reservas', '1', NULL, '1', '2018-05-08 22:15:37', NULL, '1'), -- AUN NO LE PONEN LA SUBAREA MALLA TURISMO
--- (139, '1', 'Eventos Y Convenciones', 'Eventos y convenciones', '1', NULL, '1', '2018-05-08 22:15:37', NULL, '1'),
--- (140, '1', 'Contabilidad De Costo', 'Contabilidad de costo', '1', NULL, '1', '2018-05-08 22:15:37', NULL, '1'),
--- (141, '1', 'Investigacion De Mercado', 'Investigacion de mercado', '1', NULL, '1', '2018-05-08 22:15:37', NULL, '1'),
--- (142, '1', 'Derecho Tributario Y Financiero', 'Derecho tributario y financiero', '1', NULL, '1', '2018-05-08 22:15:37', NULL, '1'),
--- (143, '1', 'Gestion De La Cadena De Suministros Scm', 'Gestion de la cadena de suministros scm', '1', NULL, '1', '2018-05-08 22:15:37', NULL, '1'),
--- (144, '1', 'Gerencia De Produccion', 'Gerencia de produccion', '1', NULL, '1', '2018-05-08 22:15:37', NULL, '1'),
--- (145, '1', 'Elaboracion Y Evaluacion De Proyectos', 'Elaboracion y evaluacion de proyectos', '1', NULL, '1', '2018-05-08 22:15:37', NULL, '1'),
--- (146, '1', 'Sistema De Informacion Gerencial', 'Sistema de informacion gerencial', '1', NULL, '1', '2018-05-08 22:15:37', NULL, '1'),
--- (148, '1', 'Gerencia Del Marketing', 'Gerencia del marketing', '1', NULL, '1', '2018-05-08 22:15:37', NULL, '1'),
+-- (139, '1', 'Eventos Y Convenciones', 'Eventos y convenciones', '1', NULL, '1', '2018-05-08 22:15:37', NULL, '1'), -- malla turismo
+(140, 9, 'Contabilidad De Costo', 'Contabilidad de costo', '1', NULL, '1', '2018-05-08 22:15:37', NULL, '1'),
+(141, 9, 'Investigacion De Mercado', 'Investigacion de mercado', '1', NULL, '1', '2018-05-08 22:15:37', NULL, '1'),
+(142, 10, 'Derecho Tributario Y Financiero', 'Derecho tributario y financiero', '1', NULL, '1', '2018-05-08 22:15:37', NULL, '1'),
+(143, 9, 'Gestion De La Cadena De Suministros Scm', 'Gestion de la cadena de suministros scm', '1', NULL, '1', '2018-05-08 22:15:37', NULL, '1')
+(144, 9, 'Gerencia De Produccion', 'Gerencia de produccion', '1', NULL, '1', '2018-05-08 22:15:37', NULL, '1'),
+(145, 9, 'Elaboracion Y Evaluacion De Proyectos', 'Elaboracion y evaluacion de proyectos', '1', NULL, '1', '2018-05-08 22:15:37', NULL, '1'),
+(146, 14, 'Sistema De Informacion Gerencial', 'Sistema de informacion gerencial', '1', NULL, '1', '2018-05-08 22:15:37', NULL, '1');
+-- (148, '1', 'Gerencia Del Marketing', 'Gerencia del marketing', '1', NULL, '1', '2018-05-08 22:15:37', NULL, '1'), -- no se encuentra en las mallas
 
 -- --------------------------------------------------------
 --
