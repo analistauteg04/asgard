@@ -666,7 +666,7 @@ INSERT INTO `asignatura` (`asi_id`, `scon_id`, `asi_nombre`, `asi_descripcion`, 
 (140, 9, 'Contabilidad De Costo', 'Contabilidad de costo', '1', NULL, '1', '2018-05-08 22:15:37', NULL, '1'),
 (141, 9, 'Investigacion De Mercado', 'Investigacion de mercado', '1', NULL, '1', '2018-05-08 22:15:37', NULL, '1'),
 (142, 10, 'Derecho Tributario Y Financiero', 'Derecho tributario y financiero', '1', NULL, '1', '2018-05-08 22:15:37', NULL, '1'),
-(143, 9, 'Gestion De La Cadena De Suministros Scm', 'Gestion de la cadena de suministros scm', '1', NULL, '1', '2018-05-08 22:15:37', NULL, '1')
+(143, 9, 'Gestion De La Cadena De Suministros Scm', 'Gestion de la cadena de suministros scm', '1', NULL, '1', '2018-05-08 22:15:37', NULL, '1'),
 (144, 9, 'Gerencia De Produccion', 'Gerencia de produccion', '1', NULL, '1', '2018-05-08 22:15:37', NULL, '1'),
 (145, 9, 'Elaboracion Y Evaluacion De Proyectos', 'Elaboracion y evaluacion de proyectos', '1', NULL, '1', '2018-05-08 22:15:37', NULL, '1'),
 (146, 14, 'Sistema De Informacion Gerencial', 'Sistema de informacion gerencial', '1', NULL, '1', '2018-05-08 22:15:37', NULL, '1');
