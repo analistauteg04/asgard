@@ -554,34 +554,34 @@ INSERT INTO `asignatura` (`asi_id`, `scon_id`, `asi_nombre`, `asi_descripcion`, 
 (28, 9, 'Finanzas', 'Finanzas', '1', NULL, '1', '2018-05-08 22:15:37', NULL, '1'),
 -- (29, '1', 'Practicas Pre Profesionales I', 'Practicas pre profesionales i', '1', NULL, '1', '2018-05-08 22:15:37', NULL, '1'), -- APARECE COMO Sectores desconocidos no especificados y esa no esta en la base
 (30, 13, 'Investigacion De Operaciones', 'Investigacion de operaciones', '1', NULL, '1', '2018-05-08 22:15:37', NULL, '1'),
--- (31, '1', 'Negocios Internacionales', 'Negocios internacionales', '1', NULL, '1', '2018-05-08 22:15:37', NULL, '1'),
--- (32, '1', 'Nomenclatura Arancelaria', 'Nomenclatura arancelaria', '1', NULL, '1', '2018-05-08 22:15:37', NULL, '1'),
--- (33, '1', 'Presupuesto', 'Presupuesto', '1', NULL, '1', '2018-05-08 22:15:37', NULL, '1'),
--- (34, '1', 'Finanzas Internacionales', 'Finanzas internacionales', '1', NULL, '1', '2018-05-08 22:15:37', NULL, '1'),
+(31, 9, 'Negocios Internacionales', 'Negocios internacionales', '1', NULL, '1', '2018-05-08 22:15:37', NULL, '1'),
+(32, 9, 'Nomenclatura Arancelaria', 'Nomenclatura arancelaria', '1', NULL, '1', '2018-05-08 22:15:37', NULL, '1'),
+(33, 9, 'Presupuesto', 'Presupuesto', '1', NULL, '1', '2018-05-08 22:15:37', NULL, '1'),
+(34, 9, 'Finanzas Internacionales', 'Finanzas internacionales', '1', NULL, '1', '2018-05-08 22:15:37', NULL, '1'),
 -- (35, '1', 'Practicas Pre Profesionales II', 'Practicas pre profesionales II', '1', NULL, '1', '2018-05-08 22:15:37', NULL, '1'), -- APARECE COMO Sectores desconocidos no especificados y esa no esta en la base
--- (36, '1', 'Investigacion De Mercados Internacionales', 'Investigacion de mercados internacionales', '1', NULL, '1', '2018-05-08 22:15:37', NULL, '1'),
+(36, 9, 'Investigacion De Mercados Internacionales', 'Investigacion de mercados internacionales', '1', NULL, '1', '2018-05-08 22:15:37', NULL, '1'),
 (37, 9, 'Emprendimiento e Innovacion', 'Emprendimiento e innovacion', '1', NULL, '1', '2018-05-08 22:15:37', NULL, '1'),
 (38, 9, 'Gestion Ambiental', 'Gestion ambiental', '1', NULL, '1', '2018-05-08 22:15:37', NULL, '1'),
 (39, 9, 'Valoracion Aduanera', 'Valoracion aduanera', '1', NULL, '1', '2018-05-08 22:15:37', NULL, '1'),
--- (40, '1', 'Logistica Y Transporte Internacional', 'Logistica y transporte internacional', '1', NULL, '1', '2018-05-08 22:15:37', NULL, '1'),
+(40, 23, 'Logistica Y Transporte Internacional', 'Logistica y transporte internacional', '1', NULL, '1', '2018-05-08 22:15:37', NULL, '1'),
 (41, 13, 'Metodologia De La Investigacion', 'Metodologia de la investigacion', '1', NULL, '1', '2018-05-08 22:15:37', NULL, '1'),
--- (42, '1', 'Oferta Exportable Del Ecuador', 'Oferta exportable del ecuador', '1', NULL, '1', '2018-05-08 22:15:37', NULL, '1'),
+(42, 9, 'Oferta Exportable Del Ecuador', 'Oferta exportable del ecuador', '1', NULL, '1', '2018-05-08 22:15:37', NULL, '1'),
 (43, 9, 'Formulacion Y Evaluacion De Proyectos', 'Formulacion y evaluacion de proyectos', '1', NULL, '1', '2018-05-08 22:15:37', NULL, '1'),
 (44, 9, 'Responsabilidad Social Y Empresarial', 'Responsabilidad social y empresarial', '1', NULL, '1', '2018-05-08 22:15:37', NULL, '1'),
--- (45, '1', 'Merceologia', 'Merceologia', '1', NULL, '1', '2018-05-08 22:15:37', NULL, '1'),
--- (46, '1', 'Distribucion Fisica Internacional', 'Distribucion fisica internacional', '1', NULL, '1', '2018-05-08 22:15:37', NULL, '1'),
+(45, 9, 'Merceologia', 'Merceologia', '1', NULL, '1', '2018-05-08 22:15:37', NULL, '1'),
+(46, 23, 'Distribucion Fisica Internacional', 'Distribucion fisica internacional', '1', NULL, '1', '2018-05-08 22:15:37', NULL, '1'),
 (47, 7, 'Gestion Del Talento Humano', 'Gestion del talento humano', '1', NULL, '1', '2018-05-08 22:15:37', NULL, '1'),
 (48, 6, 'Interculturalidad: Culturas Ancestrales Y Generos', 'Interculturalidad: culturas ancestrales y generos', '1', NULL, '1', '2018-05-08 22:15:37', NULL, '1'),
--- (49, '1', 'Comercio Electronico', 'Comercio electronico', '1', NULL, '1', '2018-05-08 22:15:37', NULL, '1'),
--- (50, '1', 'Diplomacia Internacional', 'Diplomacia internacional', '1', NULL, '1', '2018-05-08 22:15:37', NULL, '1'),
+(49, 9, 'Comercio Electronico', 'Comercio electronico', '1', NULL, '1', '2018-05-08 22:15:37', NULL, '1'),
+(50, 9, 'Diplomacia Internacional', 'Diplomacia internacional', '1', NULL, '1', '2018-05-08 22:15:37', NULL, '1'),
 -- (51, '1', 'Introduccion Al Trabajo De Titulacion', 'Introduccion al trabajo de titulacion', '1', NULL, '1', '2018-05-08 22:15:37', NULL, '1'), -- APARECE COMO Sectores desconocidos no especificados y esa no esta en la base
 -- (52, '1', 'Trabajo De Titulacion I', 'Trabajo de titulacion I', '1', NULL, '1', '2018-05-08 22:15:37', NULL, '1'), -- APARECE COMO Sectores desconocidos no especificados y esa no esta en la base
 -- (53, '1', 'Practicas Pre Profesionales III (vinculacion)', 'Practicas pre profesionales III (vinculacion)', '1', NULL, '1', '2018-05-08 22:15:37', NULL, '1'), -- APARECE COMO Sectores desconocidos no especificados y esa no esta en la base
--- (54, '1', 'Normas Internacionales De Calidad', 'Normas internacionales de calidad', '1', NULL, '1', '2018-05-08 22:15:37', NULL, '1'),
+(54, 9, 'Normas Internacionales De Calidad', 'Normas internacionales de calidad', '1', NULL, '1', '2018-05-08 22:15:37', NULL, '1'),
 (55, 9, 'Negocios Internacionales', 'Negocios internacionales', '1', NULL, '1', '2018-05-08 22:15:37', NULL, '1'),
--- (56, '1', 'Sistemas Aduaneros', 'Sistemas aduaneros', '1', NULL, '1', '2018-05-08 22:15:37', NULL, '1'),
+(56, 9, 'Sistemas Aduaneros', 'Sistemas aduaneros', '1', NULL, '1', '2018-05-08 22:15:37', NULL, '1'),
 (57, 9, 'Economia Internacional', 'Economia internacional', '1', NULL, '1', '2018-05-08 22:15:37', NULL, '1'),
--- (58, '1', 'Liderazgo Y Habilidades Gerenciales', 'Liderazgo y habilidades gerenciales', '1', NULL, '1', '2018-05-08 22:15:37', NULL, '1'),
+(58, 9, 'Liderazgo Y Habilidades Gerenciales', 'Liderazgo y habilidades gerenciales', '1', NULL, '1', '2018-05-08 22:15:37', NULL, '1'),
 (59, 9, 'Marketing Internacional', 'Marketing internacional', '1', NULL, '1', '2018-05-08 22:15:37', NULL, '1'),
 -- (60, '1', 'Trabajo De Titulacion II', 'Trabajo de titulacion II', '1', NULL, '1', '2018-05-08 22:15:37', NULL, '1'), -- APARECE COMO Sectores desconocidos no especificados y esa no esta en la base
 -- (61, '1', 'Epistemologia De La Economia', 'Epistemologia de la economia', '1', NULL, '1', '2018-05-08 22:15:37', NULL, '1'),
@@ -589,19 +589,19 @@ INSERT INTO `asignatura` (`asi_id`, `scon_id`, `asi_nombre`, `asi_descripcion`, 
 (63, 6, 'Microeconomia II', 'Microeconomia II', '1', NULL, '1', '2018-05-08 22:15:37', NULL, '1'),
 (64, 10, 'Derecho Laboral', 'Derecho laboral', '1', NULL, '1', '2018-05-08 22:15:37', NULL, '1'),
 (65, 9, 'Administracion Financiera', 'Administracion financiera', '1', NULL, '1', '2018-05-08 22:15:37', NULL, '1'),
--- (66, '1', 'Econometria I', 'Econometria i', '1', NULL, '1', '2018-05-08 22:15:37', NULL, '1'),
+-- (66, '1', 'Econometria I', 'Econometria I', '1', NULL, '1', '2018-05-08 22:15:37', NULL, '1'), --Malla de economia
 (67, 6, 'Macroeconomia II', 'Macroeconomia II', '1', NULL, '1', '2018-05-08 22:15:37', NULL, '1'),
--- (68, '1', 'Econometria II', 'Econometria II', '1', NULL, '1', '2018-05-08 22:15:37', NULL, '1'),
--- (69, '1', 'Moneda E Instituciones Financieras', 'Moneda e instituciones financieras', '1', NULL, '1', '2018-05-08 22:15:37', NULL, '1'),
--- (70, '1', 'Historia Economica Y Politica Del Ecuador', 'Historia economica y politica del ecuador', '1', NULL, '1', '2018-05-08 22:15:37', NULL, '1'),
--- (71, '1', 'Teoria Del Desarrollo Economico', 'Teoria del desarrollo economico', '1', NULL, '1', '2018-05-08 22:15:37', NULL, '1'),
+-- (68, '1', 'Econometria II', 'Econometria II', '1', NULL, '1', '2018-05-08 22:15:37', NULL, '1'), --Malla de economia
+-- (69, '1', 'Moneda e Instituciones Financieras', 'Moneda e instituciones financieras', '1', NULL, '1', '2018-05-08 22:15:37', NULL, '1'), -- Malla de economia
+-- (70, '1', 'Historia Economica Y Politica Del Ecuador', 'Historia economica y politica del ecuador', '1', NULL, '1', '2018-05-08 22:15:37', NULL, '1'), -- Malla de economia
+-- (71, '1', 'Teoria Del Desarrollo Economico', 'Teoria del desarrollo economico', '1', NULL, '1', '2018-05-08 22:15:37', NULL, '1'), -- Malla de economia
 (72, 9, 'Gestion De Calidad', 'Gestion de calidad', '1', NULL, '1', '2018-05-08 22:15:37', NULL, '1'),
--- (73, '1', 'Economia Ambiental', 'Economia ambiental', '1', NULL, '1', '2018-05-08 22:15:37', NULL, '1'),
--- (74, '1', 'Derecho Economico', 'Derecho economico', '1', NULL, '1', '2018-05-08 22:15:37', NULL, '1'),
--- (75, '1', 'Teoria Monetaria Internacional', 'Teoria monetaria internacional', '1', NULL, '1', '2018-05-08 22:15:37', NULL, '1'),
+-- (73, '1', 'Economia Ambiental', 'Economia ambiental', '1', NULL, '1', '2018-05-08 22:15:37', NULL, '1'), -- Malla de economia
+-- (74, '1', 'Derecho Economico', 'Derecho economico', '1', NULL, '1', '2018-05-08 22:15:37', NULL, '1'), -- Malla de economia
+-- (75, '1', 'Teoria Monetaria Internacional', 'Teoria monetaria internacional', '1', NULL, '1', '2018-05-08 22:15:37', NULL, '1'), -- Malla de economia
 (76, 9, 'Tributacion', 'Tributacion', '1', NULL, '1', '2018-05-08 22:15:37', NULL, '1'),
 -- (77, '1', 'Finanzas Publicas', 'Finanzas publicas', '1', NULL, '1', '2018-05-08 22:15:37', NULL, '1'),
--- (78, '1', 'Politica Economica Y Fiscal', 'Politica economica y fiscal', '1', NULL, '1', '2018-05-08 22:15:37', NULL, '1'),
+-- (78, '1', 'Politica Economica Y Fiscal', 'Politica economica y fiscal', '1', NULL, '1', '2018-05-08 22:15:37', NULL, '1'), -- Malla de economia
 -- (79, '1', 'Modelos Econometricos', 'Modelos econometricos', '1', NULL, '1', '2018-05-08 22:15:37', NULL, '1'),
 -- (80, '1', 'Public Choice', 'Public choice', '1', NULL, '1', '2018-05-08 22:15:37', NULL, '1'),
 -- (81', '1', 'Epistemologia De Las Finanzas', 'Epistemologia de las finanzas', '1', NULL, '1', '2018-05-08 22:15:37', NULL, '1'),
