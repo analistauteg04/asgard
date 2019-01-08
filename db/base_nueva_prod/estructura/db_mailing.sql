@@ -11,8 +11,8 @@ USE `db_general`;
 --
 create table if not exists `lista` (
  `lis_id` bigint(20) not null auto_increment primary key,
- `lis_nombre` varchar(50) default not null, 
- `lis_descripcion` varchar(500) default not null, 
+ `lis_nombre` varchar(50) not null, 
+ `lis_descripcion` varchar(500) not null, 
  `lis_estado` varchar(1) not null,
  `lis_fecha_creacion` timestamp not null default current_timestamp,
  `lis_fecha_modificacion` timestamp null default null,
@@ -26,9 +26,9 @@ create table if not exists `suscriptor` (
  `sus_id` bigint(20) not null auto_increment primary key,
  `per_id` bigint(20) null,
  `pges_id` bigint(20) null,
- `sus_nombres` varchar(100) default not null,  
- `sus_apellidos` varchar(100) default not null,  
- `sus_correo` varchar(50) default not null,  
+ `sus_nombres` varchar(100) not null,  
+ `sus_apellidos` varchar(100) not null,  
+ `sus_correo` varchar(50) not null,  
  `sus_estado` varchar(1) not null, 
  `sus_fecha_creacion` timestamp not null default current_timestamp,
  `sus_fecha_modificacion` timestamp null default null,
@@ -47,7 +47,7 @@ create table if not exists `lista_suscriptor` (
  `lsus_fecha_modificacion` timestamp null default null,
  `lsus_estado_logico` varchar(1) not null,
  foreign key (lis_id) references `lista`(lis_id),
- foreign key (sus_id) references `suscriptor`(sus_id),
+ foreign key (sus_id) references `suscriptor`(sus_id)
 );
 
 -- --------------------------------------------------------
@@ -56,7 +56,7 @@ create table if not exists `lista_suscriptor` (
 create table if not exists `plantilla` (
  `pla_id` bigint(20) not null auto_increment primary key,
  `pla_nombre` varchar(50) not null,
- `pla_descripcion` varchar(500) default null, 
+ `pla_descripcion` varchar(500) null, 
  `pla_estado` varchar(1) not null,
  `pla_fecha_creacion` timestamp not null default current_timestamp,
  `pla_fecha_modificacion` timestamp null default null,
