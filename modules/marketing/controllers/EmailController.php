@@ -4,7 +4,7 @@ namespace app\modules\marketing\controllers;
 
 use Yii;
 use app\models\Utilities;
-
+use app\modules\admision\Module as PersonaGestion;
 use app\modules\academico\Module as academico;
 use app\modules\financiero\Module as financiero;
 
@@ -17,11 +17,8 @@ class EmailController extends \app\components\CController {
         return $this->render('index', []);        
     }
     
-    public function actionCreateLista(){
-        return $this->render('index', []);        
-    }
-    public function actionEditarLista(){
-        return $this->render('index', []);        
+    public function actionListasubscriptores(){
+        return $this->render('listaSubscriptores', []);        
     }
     
     public function actionProgramacion() {
