@@ -11,6 +11,8 @@ USE `db_mailing`;
 --
 create table if not exists `lista` (
  `lis_id` bigint(20) not null auto_increment primary key,
+ `eaca_id` bigint(20) null,
+ `mest_id` bigint(20) null,
  `lis_nombre` varchar(50) not null, 
  `lis_descripcion` varchar(500) not null, 
  `lis_estado` varchar(1) not null,
