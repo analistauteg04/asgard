@@ -1,7 +1,8 @@
 <?php
-
 use yii\helpers\Html;
+
 use app\modules\marketing\Module as marketing;
+
 ?>
 <?= Html::hiddenInput('txth_ids', '', ['id' => 'txth_ids']); ?>
 <div class="col-md-12">

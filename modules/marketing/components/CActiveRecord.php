@@ -1,5 +1,5 @@
 <?php
-namespace app\modules\admision\components;
+namespace app\modules\marketing\components;
 
 use Yii;
 use yii\base\Application;
@@ -24,5 +24,4 @@ class CActiveRecord extends \yii\db\ActiveRecord {
         }
         return '{{%' . Inflector::camel2id(StringHelper::basename(get_called_class()), '_') . '}}';
     }
-
 }

@@ -3,7 +3,7 @@
 namespace app\modules\marketing\controllers;
 
 use Yii;
-use app\models\Utilities;
+/*use app\models\Utilities;
 use app\models\ExportFile;
 use app\models\Persona;
 use yii\helpers\Url;
@@ -30,14 +30,15 @@ use app\models\Empresa;
 
 academico::registerTranslations();
 financiero::registerTranslations();
-
+*/
 class EmailController extends \app\components\CController {
 
     public function actionIndex() {
-        return $this->render('index', []);
+        //return $this->render('index', []);
+        return ;
     }
 
-    public function actionProgramacion() {
+    /*public function actionProgramacion() {
         $per_id = @Yii::$app->session->get("PB_perid");
         if (Yii::$app->request->isAjax) {
             $data = Yii::$app->request->post();            
@@ -50,5 +51,5 @@ class EmailController extends \app\components\CController {
         return $this->render('programacion', [
         ]);
     }
-
+    */
 }
