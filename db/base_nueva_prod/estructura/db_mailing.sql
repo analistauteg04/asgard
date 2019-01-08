@@ -4,7 +4,7 @@ DROP SCHEMA IF EXISTS `db_mailing` ;
 CREATE SCHEMA IF NOT EXISTS `db_mailing` default CHARACTER SET utf8 ;
 USE `db_mailing`;
 
--- GRANT ALL PRIVILEGES ON `db_mailing`.* TO 'uteg'@'localhost' IDENTIFIED BY 'Utegadmin2016*';
+GRANT ALL PRIVILEGES ON `db_mailing`.* TO 'uteg'@'localhost' IDENTIFIED BY 'Utegadmin2016*';
 -- --------------------------------------------------------
 --
 -- Estructura de tabla para la tabla `lista`
