@@ -14,10 +14,16 @@ financiero::registerTranslations();
 class EmailController extends \app\components\CController {
 
     public function actionIndex() {
-        return $this->render('index', []);
-        //return ;
+        return $this->render('index', []);        
     }
-
+    
+    public function actionCreateLista(){
+        return $this->render('index', []);        
+    }
+    public function actionEditarLista(){
+        return $this->render('index', []);        
+    }
+    
     public function actionProgramacion() {
         $per_id = @Yii::$app->session->get("PB_perid");
         if (Yii::$app->request->isAjax) {
