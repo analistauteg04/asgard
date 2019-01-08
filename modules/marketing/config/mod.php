@@ -1,5 +1,5 @@
 <?php
-return ['mailing' => [
+return ['marketing' => [
             'class' => 'app\modules\marketing\Module',
             'db_mailing' => [
                 'class' => 'app\components\CConnection',
