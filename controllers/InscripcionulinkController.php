@@ -107,9 +107,7 @@ class InscripcionulinkController extends \yii\web\Controller {
     public function actionGuardarinscripcion() {
         $mod_empresa = new Empresa();
         $mod_estcontacto = new EstadoContacto();
-        $mod_persona = new Persona();
-        //$mod_modalidad = new Modalidad();
-        //$mod_unidad = new UnidadAcademica();
+        $mod_persona = new Persona();       
         $celular = null;
         $celular2 = null;
         $telefono = null;
@@ -149,27 +147,12 @@ class InscripcionulinkController extends \yii\web\Controller {
             $celularbeni = $data["celular"];
             $celularbeni2 = null;
             $telefonobeni = null;
-            $correobeni = strtolower($data["correo"]);
-            //$nivelestudio = $data["unidad"];
-            //$modalidad = $data["modalidad"];
-            //$nombre_unidad = $mod_unidad->consultarNombreunidad($nivelestudio);
-            //$nombre_modalidad = $mod_modalidad->consultarNombremoda($modalidad);
-            //$tipo_dni = $data["tipo_dni"];
-            //$cedula = $data["cedula"];
+            $correobeni = strtolower($data["correo"]);           
             $tipo_dni = null;
             $cedula = null;
             $pasaporte = $data["pasaporte"];
             //$conoce_uteg = $data["conoce"];
-            $conoce_uteg = null;
-            /*$hora_inicio = $data["horaini"];
-            $hora_fin = $data["horafin"];*/
-            /*if ($tipo_dni == "CED") {
-                $dnis = "Cédula";
-                $numidentificacion = $cedula;
-            } elseif ($tipo_dni == "PASS") {
-                $dnis = "Pasaporte";
-                $numidentificacion = $pasaporte;
-            }*/
+            $conoce_uteg = null;           
             switch ($nivelestudio) { // esto cambiarlo hacer funcion que consulte el usaurio y traer el id           
                 case "1":
                     $agente = 14;
@@ -191,12 +174,8 @@ class InscripcionulinkController extends \yii\web\Controller {
                     $tipoportunidad = 10;
                     $pagina = "registerulink";
                     break;
-            }
-            //$subcarera = 1;
-            //$canal = 1;
-            //$estado = 1;
-            $usuario = 1; // 1 equivale al usuario administrador
-            //$carrera = $data["carrera"]; // este va ser el modulo de estudio
+            }            
+            $usuario = 1; // 1 equivale al usuario administrador            
             $carrera = null; 
             $fecha_registro = date(Yii::$app->params["dateTimeByDefault"]);
             $con = \Yii::$app->db_crm;
@@ -232,13 +211,10 @@ class InscripcionulinkController extends \yii\web\Controller {
                         $asunto = Yii::t("register", "User Register") . " " . Yii::$app->params["siteName"];
                         $body = Utilities::getMailMessage("registernew_ulink", array(
                                     "[[primer_nombre]]" => $nombre1,
-                                    "[[primer_apellido]]" => $apellido1,
-                                    //"[[dni]]" => $dnis,
-                                    //"[[numero_dni]]" => $numidentificacion,
+                                    "[[primer_apellido]]" => $apellido1,                                    
                                     "[[celular]]" => $celular,
                                     "[[mail]]" => $correo,
-                                    /*"[[unidad_academica]]" => $nombre_unidad["nombre_unidad"],
-                                    "[[modalidad]]" => $nombre_modalidad["nombre_modalidad"]*/), Yii::$app->language);
+                                    ), Yii::$app->language);
                         Utilities::sendEmail($tituloMensaje, Yii::$app->params["adminEmail"], [Yii::$app->params["lidercontact"] => "Lider", Yii::$app->params["contact1"] => "contact1", Yii::$app->params["contact2"] => "contact2", Yii::$app->params["contact3"] => "contact3", Yii::$app->params["contact4"] => "contact4", Yii::$app->params["admisiones1"] => "admisiones1", Yii::$app->params["admisiones2"] => "admisiones2", Yii::$app->params["admisiones3"] => "admisiones3", Yii::$app->params["admisiones4"] => "admisiones4", Yii::$app->params["ventasposgrado1"] => "ventasposgrado1", Yii::$app->params["ventasposgrado2"] => "ventasposgrado2",Yii::$app->params["ventasposgrado3"] => "ventasposgrado3"], $asunto, $body);
 
                         $message = array(
@@ -260,14 +236,13 @@ class InscripcionulinkController extends \yii\web\Controller {
                     $asunto = Yii::t("register", "Existing Record") . " " . Yii::$app->params["siteName"];
                     $body = Utilities::getMailMessage("registeragain_ulink", array(
                                     "[[primer_nombre]]" => $nombre1,
-                                    "[[primer_apellido]]" => $apellido1,
-                                    //"[[dni]]" => $dnis,
-                                    //"[[numero_dni]]" => $numidentificacion,
+                                    "[[primer_apellido]]" => $apellido1,                                   
                                     "[[celular]]" => $celular,
                                     "[[mail]]" => $correo,
-                                    /*"[[unidad_academica]]" => $nombre_unidad["nombre_unidad"],
-                                    "[[modalidad]]" => $nombre_modalidad["nombre_modalidad"]*/), Yii::$app->language);
-                    Utilities::sendEmail($tituloMensaje, Yii::$app->params["adminEmail"], [Yii::$app->params["soporteEmail"] => "Soporte", Yii::$app->params["lidercontact"] => "lider", Yii::$app->params["adminlider"] => "adminlider"], $asunto, $body);
+                                    ), Yii::$app->language);
+                    
+                    Utilities::sendEmail($tituloMensaje, Yii::$app->params["adminEmail"], [Yii::$app->params["soporteEmail"] => "Soporte", Yii::$app->params["adminlider"] => "adminlider", Yii::$app->params["contact1"] => "contact1", Yii::$app->params["contact2"] => "contact2", Yii::$app->params["contact3"] => "contact3", Yii::$app->params["contact4"] => "contact4", Yii::$app->params["admisiones1"] => "admisiones1", Yii::$app->params["admisiones2"] => "admisiones2", Yii::$app->params["admisiones3"] => "admisiones3", Yii::$app->params["admisiones4"] => "admisiones4", Yii::$app->params["ventasposgrado1"] => "ventasposgrado1", Yii::$app->params["ventasposgrado2"] => "ventasposgrado2",Yii::$app->params["ventasposgrado3"] => "ventasposgrado3"], $asunto, $body);
+
                     $transaction->rollback();
                     $message = array(
                         "wtmessage" => Yii::t("notificaciones", $mensaje),

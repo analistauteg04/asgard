@@ -284,11 +284,7 @@ class InscripcionesController extends \yii\web\Controller {
                     $agente = $mod_oportunidad->consultarAgentebyCod($nivelestudio, $modalidad, 1); //16;
                     $tipoportunidad = $data["metodo"];
                     $pagina = "register_ps";
-                    break;
-                /* case "3":
-                  $agente = 17;
-                  $tipoportunidad = 8;
-                  break; */
+                    break;               
             }
             $subcarera = 1;
             $canal = 1;
@@ -343,8 +339,7 @@ class InscripcionesController extends \yii\web\Controller {
                                     "[[mail]]" => $correo,
                                     "[[unidad_academica]]" => $nombre_unidad["nombre_unidad"],
                                     "[[modalidad]]" => $nombre_modalidad["nombre_modalidad"]), Yii::$app->language);
-                        Utilities::sendEmail($tituloMensaje, Yii::$app->params["adminEmail"], [Yii::$app->params["lidercontact"] => "Lider", Yii::$app->params["contact1"] => "contact1", Yii::$app->params["contact2"] => "contact2", Yii::$app->params["contact3"] => "contact3", Yii::$app->params["contact4"] => "contact4", Yii::$app->params["admisiones1"] => "admisiones1", Yii::$app->params["admisiones2"] => "admisiones2", Yii::$app->params["admisiones3"] => "admisiones3", Yii::$app->params["admisiones4"] => "admisiones4", Yii::$app->params["ventasposgrado1"] => "ventasposgrado1", Yii::$app->params["ventasposgrado2"] => "ventasposgrado2",Yii::$app->params["ventasposgrado3"] => "ventasposgrado3"], $asunto, $body);
-
+                        Utilities::sendEmail($tituloMensaje, Yii::$app->params["adminEmail"], [Yii::$app->params["lidercontact"] => "Lider", Yii::$app->params["contact1"] => "contact1", Yii::$app->params["contact2"] => "contact2", Yii::$app->params["contact3"] => "contact3", Yii::$app->params["contact4"] => "contact4", Yii::$app->params["admisiones1"] => "admisiones1", Yii::$app->params["admisiones2"] => "admisiones2", Yii::$app->params["admisiones3"] => "admisiones3", Yii::$app->params["admisiones4"] => "admisiones4", Yii::$app->params["ventasposgrado1"] => "ventasposgrado1", Yii::$app->params["ventasposgrado2"] => "ventasposgrado2", Yii::$app->params["ventasposgrado3"] => "ventasposgrado3"], $asunto, $body);
                         $message = array(
                             "wtmessage" => Yii::t("notificaciones", "Gracias por tu interés en UTEG. Un asesor lo contactará en las proximas 24 horas. "),
                             "title" => Yii::t('jslang', 'Success'),
@@ -371,8 +366,7 @@ class InscripcionesController extends \yii\web\Controller {
                                 "[[mail]]" => $correo,
                                 "[[unidad_academica]]" => $nombre_unidad["nombre_unidad"],
                                 "[[modalidad]]" => $nombre_modalidad["nombre_modalidad"]), Yii::$app->language);
-                    Utilities::sendEmail($tituloMensaje, Yii::$app->params["adminEmail"], [Yii::$app->params["soporteEmail"] => "Soporte", Yii::$app->params["lidercontact"] => "lider", Yii::$app->params["adminlider"] => "adminlider"], $asunto, $body);
-
+                    Utilities::sendEmail($tituloMensaje, Yii::$app->params["adminEmail"], [Yii::$app->params["soporteEmail"] => "Soporte", Yii::$app->params["adminlider"] => "adminlider", Yii::$app->params["contact1"] => "contact1", Yii::$app->params["contact2"] => "contact2", Yii::$app->params["contact3"] => "contact3", Yii::$app->params["contact4"] => "contact4", Yii::$app->params["admisiones1"] => "admisiones1", Yii::$app->params["admisiones2"] => "admisiones2", Yii::$app->params["admisiones3"] => "admisiones3", Yii::$app->params["admisiones4"] => "admisiones4", Yii::$app->params["ventasposgrado1"] => "ventasposgrado1", Yii::$app->params["ventasposgrado2"] => "ventasposgrado2", Yii::$app->params["ventasposgrado3"] => "ventasposgrado3"], $asunto, $body);
                     $transaction->rollback();
                     $message = array(
                         "wtmessage" => Yii::t("notificaciones", $mensaje),

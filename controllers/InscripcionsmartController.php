@@ -53,7 +53,7 @@ class InscripcionsmartController extends \yii\web\Controller {
                 return;
             }
             if (isset($data["getmodalidad"])) {
-                $modalidad = $mod_modalidad->consultarModalidad($data["nint_id"],3);
+                $modalidad = $mod_modalidad->consultarModalidad($data["nint_id"], 3);
                 $message = array("modalidad" => $modalidad);
                 return Utilities::ajaxResponse('OK', 'alert', Yii::t('jslang', 'Success'), 'false', $message);
                 return;
@@ -85,8 +85,8 @@ class InscripcionsmartController extends \yii\web\Controller {
         $arr_conuteg = $mod_pergestion->consultarConociouteg();
         //$arr_carrerra1 = $modestudio->consultarEstudioEmpresa(3);
         $arr_ninteres = $mod_unidad->consultarUnidadAcademicasEmpresa(3);
-        $arr_modalidad = $mod_modalidad->consultarModalidad($arr_ninteres[0]["id"],3);
-        $arr_carrerra1 = $modestudio->consultarCursoModalidad($arr_ninteres[0]["id"], $arr_modalidad[0]["id"],3);                
+        $arr_modalidad = $mod_modalidad->consultarModalidad($arr_ninteres[0]["id"], 3);
+        $arr_carrerra1 = $modestudio->consultarCursoModalidad($arr_ninteres[0]["id"], $arr_modalidad[0]["id"], 3);
         $tipo_oportunidad_data = $modTipoOportunidad->consultarOporxUnidad(3);
         return $this->render('index', [
                     "tipos_dni" => array("CED" => Yii::t("formulario", "DNI Document"), "PASS" => Yii::t("formulario", "Passport")),
@@ -170,7 +170,7 @@ class InscripcionsmartController extends \yii\web\Controller {
             switch ($nivelestudio) { // esto cambiarlo hacer funcion que consulte el usaurio y traer el id           
                 case "3":
                     $agente = 15;
-                    $tipoportunidad = 8;//$data["metodo"];
+                    $tipoportunidad = 8; //$data["metodo"];
                     $pagina = "registersmart";
                     break;
             }
@@ -220,7 +220,7 @@ class InscripcionsmartController extends \yii\web\Controller {
                                     "[[mail]]" => $correo,
                                     "[[unidad_academica]]" => $nombre_unidad["nombre_unidad"],
                                     "[[modalidad]]" => $nombre_modalidad["nombre_modalidad"]), Yii::$app->language);
-                        Utilities::sendEmail($tituloMensaje, Yii::$app->params["adminEmail"], [Yii::$app->params["lidercontact"] => "Lider", Yii::$app->params["contact1"] => "contact1", Yii::$app->params["contact2"] => "contact2", Yii::$app->params["contact3"] => "contact3", Yii::$app->params["contact4"] => "contact4", Yii::$app->params["admisiones1"] => "admisiones1", Yii::$app->params["admisiones2"] => "admisiones2", Yii::$app->params["admisiones3"] => "admisiones3", Yii::$app->params["admisiones4"] => "admisiones4", Yii::$app->params["ventasposgrado1"] => "ventasposgrado1", Yii::$app->params["ventasposgrado2"] => "ventasposgrado2",Yii::$app->params["ventasposgrado3"] => "ventasposgrado3"], $asunto, $body);
+                        Utilities::sendEmail($tituloMensaje, Yii::$app->params["adminEmail"], [Yii::$app->params["lidercontact"] => "Lider", Yii::$app->params["contact1"] => "contact1", Yii::$app->params["contact2"] => "contact2", Yii::$app->params["contact3"] => "contact3", Yii::$app->params["contact4"] => "contact4", Yii::$app->params["admisiones1"] => "admisiones1", Yii::$app->params["admisiones2"] => "admisiones2", Yii::$app->params["admisiones3"] => "admisiones3", Yii::$app->params["admisiones4"] => "admisiones4", Yii::$app->params["ventasposgrado1"] => "ventasposgrado1", Yii::$app->params["ventasposgrado2"] => "ventasposgrado2", Yii::$app->params["ventasposgrado3"] => "ventasposgrado3"], $asunto, $body);
 
                         $message = array(
                             "wtmessage" => Yii::t("notificaciones", "Gracias por tu interés en Smart. Un asesor lo contactará en las proximas 24 horas.. "),
@@ -236,19 +236,20 @@ class InscripcionsmartController extends \yii\web\Controller {
                         return Utilities::ajaxResponse('NO_OK', 'alert', Yii::t("jslang", "Error"), false, $message);
                     }
                 } else {
-                    $mensaje = 'Sus datos ya se encuentran registrados, nos contactaremos con usted';                   
+                    $mensaje = 'Sus datos ya se encuentran registrados, nos contactaremos con usted';
                     $tituloMensaje = Yii::t("register", "Existing Record");
                     $asunto = Yii::t("register", "Existing Record") . " " . Yii::$app->params["siteName"];
                     $body = Utilities::getMailMessage("registeragain", array(
-                                    "[[primer_nombre]]" => $nombre1,
-                                    "[[primer_apellido]]" => $apellido1,
-                                    "[[dni]]" => $dnis,
-                                    "[[numero_dni]]" => $numidentificacion,
-                                    "[[celular]]" => $celular,
-                                    "[[mail]]" => $correo,
-                                    "[[unidad_academica]]" => $nombre_unidad["nombre_unidad"],
-                                    "[[modalidad]]" => $nombre_modalidad["nombre_modalidad"]), Yii::$app->language);
-                    Utilities::sendEmail($tituloMensaje, Yii::$app->params["adminEmail"], [Yii::$app->params["soporteEmail"] => "Soporte", Yii::$app->params["lidercontact"] => "lider", Yii::$app->params["adminlider"] => "adminlider"], $asunto, $body);$message = array(
+                                "[[primer_nombre]]" => $nombre1,
+                                "[[primer_apellido]]" => $apellido1,
+                                "[[dni]]" => $dnis,
+                                "[[numero_dni]]" => $numidentificacion,
+                                "[[celular]]" => $celular,
+                                "[[mail]]" => $correo,
+                                "[[unidad_academica]]" => $nombre_unidad["nombre_unidad"],
+                                "[[modalidad]]" => $nombre_modalidad["nombre_modalidad"]), Yii::$app->language);
+                    Utilities::sendEmail($tituloMensaje, Yii::$app->params["adminEmail"], [Yii::$app->params["soporteEmail"] => "Soporte", Yii::$app->params["adminlider"] => "adminlider", Yii::$app->params["contact1"] => "contact1", Yii::$app->params["contact2"] => "contact2", Yii::$app->params["contact3"] => "contact3", Yii::$app->params["contact4"] => "contact4", Yii::$app->params["admisiones1"] => "admisiones1", Yii::$app->params["admisiones2"] => "admisiones2", Yii::$app->params["admisiones3"] => "admisiones3", Yii::$app->params["admisiones4"] => "admisiones4", Yii::$app->params["ventasposgrado1"] => "ventasposgrado1", Yii::$app->params["ventasposgrado2"] => "ventasposgrado2", Yii::$app->params["ventasposgrado3"] => "ventasposgrado3"], $asunto, $body);
+                    $message = array(
                         "wtmessage" => Yii::t("notificaciones", $mensaje),
                         "title" => Yii::t('jslang', 'OK'),
                     );
