@@ -43,15 +43,12 @@
  * Diana Lopez <dianalopez784@gmail.com>
  */
 
-return [
-    "Academic Study" => 'Estudio Académico',
-    "Academic Unit" => 'Unidad Academica',
-    "Career/Program/Course" => "Carre/Progr/Curso",
+return [    
     "Days Schedule" => "Días Programar",
     "List" => 'Lista',
-    "Moda" => 'Modalidad',
-    "Provisional Contacts" => "Contactos Pendientes",
     "Programtion" => "Programación",
     "Shipping Time" => "Hora Envío",
-    "Template" => "Plantilla"
+    "Subscriber number" => "Número suscriptores",
+    "Template" => "Plantilla",
+    
 ];

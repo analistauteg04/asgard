@@ -16,3 +16,10 @@ use app\modules\marketing\Module as marketing;
         ?>
     </form>
 </div>
+<div>    
+        <?=
+        $this->render('index-grid', [
+            'model' => $model,
+           ]);
+        ?>    
+</div>

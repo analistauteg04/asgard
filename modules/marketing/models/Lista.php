@@ -1,7 +1,7 @@
 <?php
 
 namespace app\modules\marketing\models;
-
+use yii\data\ArrayDataProvider;
 use Yii;
 
 /**
@@ -86,4 +86,54 @@ class Lista extends \yii\db\ActiveRecord
     {
         return $this->hasMany(Programacion::className(), ['lis_id' => 'lis_id']);
     }
+    
+    /**
+     * Function consultarLista
+     * @author  Grace Viteri <analistadesarrollo01@uteg.edu.ec>
+     * @param   
+     * @return  Listas creadas en mailchimp.
+     */
+    public function consultarLista() {
+        $con = \Yii::$app->db_mailing;
+        $con1 = \Yii::$app->db_academico;
+        $estado = 1;
+        $sql = "SELECT l.lis_id, l.lis_nombre, 
+                        case when l.eaca_id > 0 then 
+                                     ea.eaca_nombre else me.mest_nombre end as programa,
+                        sum(case when (ls.lsus_estado = '1' and ls.lsus_estado_logico = '1') then
+                                     1 else 0 end) as num_suscriptores
+                FROM " . $con->dbname .".lista l left join " . $con->dbname .".lista_suscriptor ls on ls.lis_id = l.lis_id
+                  left join " . $con1->dbname .".estudio_academico ea on ea.eaca_id = l.eaca_id
+                  left join " . $con1->dbname .".modulo_estudio me on me.mest_id = l.mest_id
+                WHERE lis_estado = :estado
+                        and lis_estado_logico = :estado
+                GROUP BY l.lis_id, l.lis_nombre, ea.eaca_nombre;";
+        
+        $comando = $con->createCommand($sql);
+        $comando->bindParam(":estado", $estado, \PDO::PARAM_STR);       
+        
+        $resultData = $comando->queryAll();
+        $dataProvider = new ArrayDataProvider([
+            'key' => 'id',
+            'allModels' => $resultData,
+            'pagination' => [
+                'pageSize' => Yii::$app->params["pageSize"],
+            ],
+            'sort' => [
+                'attributes' => [
+                    'lis_id',
+                    'lis_nombre',
+                    'num_suscriptores',                    
+                ],
+            ],
+        ]);
+        return $dataProvider;
+        /*if ($onlyData) {
+            return $resultData;
+        } else {
+            return $dataProvider;
+        }*/
+    }
+    
+               
 }
