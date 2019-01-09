@@ -1,6 +1,7 @@
 <?php
 
 namespace app\modules\marketing\models;
+
 use yii\data\ArrayDataProvider;
 use Yii;
 
@@ -20,29 +21,26 @@ use Yii;
  * @property ListaSuscriptor[] $listaSuscriptors
  * @property Programacion[] $programacions
  */
-class Lista extends \yii\db\ActiveRecord
-{
+class Lista extends \yii\db\ActiveRecord {
+
     /**
      * {@inheritdoc}
      */
-    public static function tableName()
-    {
+    public static function tableName() {
         return 'lista';
     }
 
     /**
      * @return \yii\db\Connection the database connection used by this AR class.
      */
-    public static function getDb()
-    {
+    public static function getDb() {
         return Yii::$app->get('db_mailing');
     }
 
     /**
      * {@inheritdoc}
      */
-    public function rules()
-    {
+    public function rules() {
         return [
             [['eaca_id', 'mest_id'], 'integer'],
             [['lis_nombre', 'lis_descripcion', 'lis_estado', 'lis_estado_logico'], 'required'],
@@ -56,8 +54,7 @@ class Lista extends \yii\db\ActiveRecord
     /**
      * {@inheritdoc}
      */
-    public function attributeLabels()
-    {
+    public function attributeLabels() {
         return [
             'lis_id' => 'Lis ID',
             'eaca_id' => 'Eaca ID',
@@ -74,19 +71,17 @@ class Lista extends \yii\db\ActiveRecord
     /**
      * @return \yii\db\ActiveQuery
      */
-    public function getListaSuscriptors()
-    {
+    public function getListaSuscriptors() {
         return $this->hasMany(ListaSuscriptor::className(), ['lis_id' => 'lis_id']);
     }
 
     /**
      * @return \yii\db\ActiveQuery
      */
-    public function getProgramacions()
-    {
+    public function getProgramacions() {
         return $this->hasMany(Programacion::className(), ['lis_id' => 'lis_id']);
     }
-    
+
     /**
      * Function consultarLista
      * @author  Grace Viteri <analistadesarrollo01@uteg.edu.ec>
@@ -102,16 +97,16 @@ class Lista extends \yii\db\ActiveRecord
                                      ea.eaca_nombre else me.mest_nombre end as programa,
                         sum(case when (ls.lsus_estado = '1' and ls.lsus_estado_logico = '1') then
                                      1 else 0 end) as num_suscriptores
-                FROM " . $con->dbname .".lista l left join " . $con->dbname .".lista_suscriptor ls on ls.lis_id = l.lis_id
-                  left join " . $con1->dbname .".estudio_academico ea on ea.eaca_id = l.eaca_id
-                  left join " . $con1->dbname .".modulo_estudio me on me.mest_id = l.mest_id
+                FROM " . $con->dbname . ".lista l left join " . $con->dbname . ".lista_suscriptor ls on ls.lis_id = l.lis_id
+                  left join " . $con1->dbname . ".estudio_academico ea on ea.eaca_id = l.eaca_id
+                  left join " . $con1->dbname . ".modulo_estudio me on me.mest_id = l.mest_id
                 WHERE lis_estado = :estado
                         and lis_estado_logico = :estado
                 GROUP BY l.lis_id, l.lis_nombre, ea.eaca_nombre;";
-        
+
         $comando = $con->createCommand($sql);
-        $comando->bindParam(":estado", $estado, \PDO::PARAM_STR);       
-        
+        $comando->bindParam(":estado", $estado, \PDO::PARAM_STR);
+
         $resultData = $comando->queryAll();
         $dataProvider = new ArrayDataProvider([
             'key' => 'id',
@@ -123,17 +118,41 @@ class Lista extends \yii\db\ActiveRecord
                 'attributes' => [
                     'lis_id',
                     'lis_nombre',
-                    'num_suscriptores',                    
+                    'num_suscriptores',
                 ],
             ],
         ]);
         return $dataProvider;
-        /*if ($onlyData) {
-            return $resultData;
-        } else {
-            return $dataProvider;
-        }*/
+        /* if ($onlyData) {
+          return $resultData;
+          } else {
+          return $dataProvider;
+          } */
     }
-    
-               
+    /**
+     * Function consulta listas creadas de mailchimp.
+     * @author Giovanni Vergara <analistadesarrollo02@uteg.edu.ec>;
+     * @param
+     * @return
+     */
+    public function consultarListaProgramacion() {
+        $con = \Yii::$app->db_mailing;
+        $estado = 1;
+
+        $sql = "SELECT 
+                   lst.lis_id as id,
+                   lst.lis_nombre as name
+                FROM 
+                   " . $con->dbname . ".lista  lst
+                WHERE 
+                      lst.lis_estado = :estado AND
+                      lst.lis_estado_logico = :estado
+                ORDER BY name asc  ";
+
+        $comando = $con->createCommand($sql);
+        $comando->bindParam(":estado", $estado, \PDO::PARAM_STR);
+        $resultData = $comando->queryAll();
+        return $resultData;
+    }
+
 }

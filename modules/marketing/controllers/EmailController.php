@@ -4,6 +4,7 @@ namespace app\modules\marketing\controllers;
 
 use Yii;
 use app\models\Utilities;
+use yii\helpers\ArrayHelper;
 use app\modules\marketing\models\Lista;
 use app\modules\academico\Module as academico;
 use app\modules\financiero\Module as financiero;
@@ -30,16 +31,19 @@ class EmailController extends \app\components\CController {
     }
     
     public function actionProgramacion() {
+        $mod_lista = new Lista();
         $per_id = @Yii::$app->session->get("PB_perid");
         if (Yii::$app->request->isAjax) {
             $data = Yii::$app->request->post();            
             if (isset($data["gettemplate"])) {
-                //$template = $modlista->consultarListaTemplate($data["lista"]);
+               //$template = $mod_lista->consultarListaTemplate($data["lista"]);
                 $message = array("template" => $template);
                 return Utilities::ajaxResponse('OK', 'alert', Yii::t('jslang', 'Success'), 'false', $message);
             }
         }
-        return $this->render('programacion', [
+        $arr_lista = $mod_lista->consultarListaProgramacion();
+        return $this->render('programacion', [            
+            "arr_lista" => ArrayHelper::map($arr_lista, "id", "name"),
         ]);
     }
     
