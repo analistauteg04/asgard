@@ -16,7 +16,10 @@ class EmailController extends \app\components\CController {
     public function actionIndex() {
         $mod_lista = new Lista();
         $resp_lista = $mod_lista->consultarLista();
+        $resp_combo_lista = $mod_lista->consultarLista();
+        
         return $this->render('index', [
+            'lista' => $resp_combo_lista,
             'model' => $resp_lista]);        
     }
     

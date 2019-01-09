@@ -10,9 +10,9 @@
 <div class="row">
     <div class="col-md-12 col-xs-12 col-sm-12 col-lg-12">
         <div class="form-group">
-            <label for="txt_buscarData" class="col-sm-2 col-md-2 col-xs-2 col-lg-2 control-label"><?= Yii::t("formulario", "Search") ?></label>
+            <label for="txt_buscar_lista" class="col-sm-2 col-md-2 col-xs-2 col-lg-2 control-label"><?= marketing::t("marketing", "List") ?></label>
             <div class="col-sm-8 col-md-8 col-xs-8 col-lg-8">
-                <input type="text" class="form-control" value="" id="txt_buscarData" placeholder="<?= Yii::t("solicitud_ins", "Search by Dni or Names") ?>">
+                <?= Html::dropDownList("cmb_lista", 0,  $arr_lista , ["class" => "form-control", "id" => "cmb_lista"]) ?>
             </div>
         </div>
     </div>

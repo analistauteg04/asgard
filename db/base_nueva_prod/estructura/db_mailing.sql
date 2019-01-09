@@ -63,8 +63,21 @@ create table if not exists `plantilla` (
 );
 
 -- --------------------------------------------------------
+-- Estructura de tabla para la tabla `lista_plantilla` 
+-- --------------------------------------------------------
+create table if not exists `lista_plantilla` (
+ `lpla_id` bigint(20) not null auto_increment primary key,
+ `lis_id` bigint(20) not null,
+ `pla_id` bigint(20) not null,
+ `lpla_estado` varchar(1) not null,
+ `lpla_fecha_creacion` timestamp not null default current_timestamp,
+ `lpla_fecha_modificacion` timestamp null default null,
+ `lpla_estado_logico` varchar(1) not null
+);
+
+-- --------------------------------------------------------
 -- Estructura de tabla para la tabla `programacion`
---
+-- --------------------------------------------------------
 create table if not exists `programacion` (
   `pro_id` bigint(20) not null auto_increment primary key,    
   `lis_id` bigint(20) not null,
@@ -82,7 +95,7 @@ create table if not exists `programacion` (
 
 -- --------------------------------------------------------
 -- Estructura de tabla para la tabla `dia_programacion`
---
+-- --------------------------------------------------------
 create table if not exists `dia_programacion` (
   `dpro_id` bigint(20) not null auto_increment primary key,    
   `pro_id` bigint(20) not null,
@@ -96,7 +109,7 @@ create table if not exists `dia_programacion` (
 
 -- --------------------------------------------------------
 -- Estructura de tabla para la tabla `bitacora_envio`
---
+-- --------------------------------------------------------
 create table if not exists `bitacora_envio` (
   `benv_id` bigint(20) not null auto_increment primary key,    
   `sus_id` bigint(20) not null,

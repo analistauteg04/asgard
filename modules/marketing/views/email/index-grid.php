@@ -55,7 +55,7 @@ PbGridView::widget([
             'template' => '{programar} {editar} {eliminar}',
             'buttons' => [
                 'programar' => function ($url, $model) {
-                    return Html::a('<span class="glyphicon glyphicon-check"></span>', Url::to(['/marketing/email/programacion', /* 'empid' => base64_encode($model['emp_id'])*/]), ["data-toggle" => "tooltip", "title" => "Programación de envío", "data-pjax" => 0]);
+                    return Html::a('<span class="glyphicon glyphicon-calendar"></span>', Url::to(['/marketing/email/programacion', /* 'empid' => base64_encode($model['emp_id'])*/]), ["data-toggle" => "tooltip", "title" => "Programación de envío", "data-pjax" => 0]);
                 },     
                 'editar' => function ($url, $model) {
                     return Html::a('<span class="glyphicon glyphicon-pencil"></span>', Url::to(['/marketing/email/edit', /* 'empid' => base64_encode($model['emp_id'])*/]), ["data-toggle" => "tooltip", "title" => "Editar lista", "data-pjax" => 0]);
