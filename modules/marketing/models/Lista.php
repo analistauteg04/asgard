@@ -143,7 +143,7 @@ class Lista extends \yii\db\ActiveRecord {
           return $dataProvider;
         }
     }
-    
+
     /**
      * Function consulta listas creadas de mailchimp.
      * @author Giovanni Vergara <analistadesarrollo02@uteg.edu.ec>;
@@ -236,4 +236,93 @@ class Lista extends \yii\db\ActiveRecord {
         }
     }
     
+
+    /**
+     * Function insertarProgramacion crea una programacion.
+     * @author  Giovanni Vergara <analistadesarrollo02@uteg.edu.ec>;
+     * @param
+     * @return
+     */
+    public function insertarProgramacion($lis_id, $pla_id, $pro_fecha_desde, $pro_fecha_hasta, $pro_hora_envio, $pro_usuario_ingreso, $pro_fecha_creacion) {
+        $con = \Yii::$app->db_mailing;
+        $trans = $con->getTransaction(); // se obtiene la transacción actual
+        if ($trans !== null) {
+            $trans = null; // si existe la transacción entonces no se crea una
+        } else {
+            $trans = $con->beginTransaction(); // si no existe la transacción entonces se crea una
+        }
+
+        $param_sql = "pro_estado";
+        $bdet_sql = "1";
+
+        $param_sql .= ", pro_estado_logico";
+        $bdet_sql .= ", 1";
+
+        if (isset($lis_id)) {
+            $param_sql .= ", lis_id";
+            $bdet_sql .= ", :lis_id";
+        }
+        if (isset($pla_id)) {
+            $param_sql .= ", pla_id";
+            $bdet_sql .= ", :pla_id";
+        }
+        if (isset($pro_fecha_desde)) {
+            $param_sql .= ", pro_fecha_desde";
+            $bdet_sql .= ", :pro_fecha_desde";
+        }
+        if (isset($pro_fecha_hasta)) {
+            $param_sql .= ", pro_fecha_hasta";
+            $bdet_sql .= ", :pro_fecha_hasta";
+        }
+        if (isset($pro_hora_envio)) {
+            $hora_envio = date(Yii::$app->params["dateByDefault"]). " " .$pro_hora_envio.":00";
+            $param_sql .= ", pro_hora_envio";
+            $bdet_sql .= ", :pro_hora_envio";
+        }
+        if (isset($pro_usuario_ingreso)) {
+            $param_sql .= ", pro_usuario_ingreso";
+            $bdet_sql .= ", :pro_usuario_ingreso";
+        }
+        if (isset($pro_fecha_creacion)) {
+            $param_sql .= ", pro_fecha_creacion";
+            $bdet_sql .= ", :pro_fecha_creacion";
+        }
+
+        try {
+            $sql = "INSERT INTO " . $con->dbname . ".programacion ($param_sql) VALUES($bdet_sql)";
+            $comando = $con->createCommand($sql);
+
+            if (isset($lis_id)) {
+                $comando->bindParam(':lis_id', $lis_id, \PDO::PARAM_INT);
+            }
+            if (isset($pla_id)) {
+                $comando->bindParam(':pla_id', $pla_id, \PDO::PARAM_INT);
+            }
+            if (isset($pro_fecha_desde)) {
+                $comando->bindParam(':pro_fecha_desde', $pro_fecha_desde, \PDO::PARAM_STR);
+            }
+            if (!empty((isset($pro_fecha_hasta)))) {
+                $comando->bindParam(':pro_fecha_hasta', $pro_fecha_hasta, \PDO::PARAM_STR);
+            }
+            if (!empty((isset($pro_hora_envio)))) {
+                $comando->bindParam(':pro_hora_envio', $hora_envio, \PDO::PARAM_STR);
+            }
+            if (!empty((isset($pro_usuario_ingreso)))) {
+                $comando->bindParam(':pro_usuario_ingreso', $pro_usuario_ingreso, \PDO::PARAM_STR);
+            }
+            if (!empty((isset($pro_fecha_creacion)))) {
+                $comando->bindParam(':pro_fecha_creacion', $pro_fecha_creacion, \PDO::PARAM_STR);
+            }
+            
+            $result = $comando->execute();
+            if ($trans !== null)
+                $trans->commit();
+            return $con->getLastInsertID($con->dbname . '.programacion');
+        } catch (Exception $ex) {
+            if ($trans !== null)
+                $trans->rollback();
+            return FALSE;
+        }
+    }
+
 }

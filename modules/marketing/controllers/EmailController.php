@@ -29,27 +29,27 @@ class EmailController extends \app\components\CController {
             "arr_lista" => ArrayHelper::map(array_merge(["id" => "0", "name" => "Seleccionar"],$resp_combo_lista), "id", "name"),                               
             'model' => $resp_lista]);        
     }
-    
-    public function actionListasubscriptores(){
-        
+
+    public function actionListasubscriptores() {
+
         return $this->render('listaSubscriptores', [
-                ]);        
+        ]);
     }
-    
+
     public function actionProgramacion() {
         $mod_lista = new Lista();
         $per_id = @Yii::$app->session->get("PB_perid");
         if (Yii::$app->request->isAjax) {
-            $data = Yii::$app->request->post();            
+            $data = Yii::$app->request->post();
             if (isset($data["gettemplate"])) {
-               //$template = $mod_lista->consultarListaTemplate($data["lista"]);
+                //$template = $mod_lista->consultarListaTemplate($data["lista"]);
                 $message = array("template" => $template);
                 return Utilities::ajaxResponse('OK', 'alert', Yii::t('jslang', 'Success'), 'false', $message);
             }
         }
         $arr_lista = $mod_lista->consultarListaProgramacion();
-        return $this->render('programacion', [            
-            "arr_lista" => ArrayHelper::map($arr_lista, "id", "name"),
+        return $this->render('programacion', [
+                    "arr_lista" => ArrayHelper::map($arr_lista, "id", "name"),
         ]);
     }
     
@@ -67,7 +67,7 @@ class EmailController extends \app\components\CController {
                     $resp_lista = $mod_lista->inactivaLista($lis_id);
                     if ($resp_lista) {
                         $exito = '1';
-                    } 
+                    }
                 }
                 if ($exito) {
                     $transaction->commit();
@@ -92,6 +92,43 @@ class EmailController extends \app\components\CController {
                     "title" => Yii::t('jslang', 'Success'),
                 );
                 return Utilities::ajaxResponse('NO_OK', 'alert', Yii::t("jslang", "Sucess"), false, $message);
+            }
+        }
+    }
+    
+    public function actionGuardarprogramacion() {        
+        if (Yii::$app->request->isAjax) {
+            $data = Yii::$app->request->post();
+            $lista = $data["lista"];
+            $plantilla = $data["plantilla"];
+            $fecinicio = $data["fecha_inicio"];
+            $fecfin = $data["fecha_fin"];
+            $horenvio = $data["hora_envio"];
+            $fecha_registro = date(Yii::$app->params["dateTimeByDefault"]);
+            $usuario = @Yii::$app->user->identity->usu_id;
+            $con = \Yii::$app->db_mailing;
+            $transaction = $con->beginTransaction();
+            try {
+                $mod_lista = new Lista();
+                $resp_programacion = $mod_lista->insertarProgramacion($lista, $plantilla, $fecinicio, $fecfin, $horenvio, $usuario, $fecha_registro);
+                if ($resp_programacion) {
+                    $exito = 1;
+                }
+                if ($exito) {
+                    $transaction->commit();
+                    $message = array(
+                    "wtmessage" => Yii::t("notificaciones", "Error al grabar."),
+                        "title" => Yii::t('jslang', 'Error'),
+                    );
+                    return Utilities::ajaxResponse('NO_OK', 'alert', Yii::t("jslang", "Error"), false, $message);
+                }
+            } catch (Exception $ex) {
+                $transaction->rollback();
+                $message = array(
+                    "wtmessage" => $ex->getMessage(), Yii::t("notificaciones", "Error al grabar."),
+                    "title" => Yii::t('jslang', 'Error'),
+                );
+                return Utilities::ajaxResponse('NO_OK', 'alert', Yii::t("jslang", "Error"), true, $message);
             }
         }
     }

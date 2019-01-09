@@ -348,7 +348,7 @@ class InscripcionesController extends \yii\web\Controller {
                     } else {
                         $transaction->rollback();
                         $message = array(
-                            "wtmessage" => Yii::t("notificaciones", "Error al grabar." . $este),
+                            "wtmessage" => Yii::t("notificaciones", "Error al grabar."),
                             "title" => Yii::t('jslang', 'Error'),
                         );
                         return Utilities::ajaxResponse('NO_OK', 'alert', Yii::t("jslang", "Error"), false, $message);
