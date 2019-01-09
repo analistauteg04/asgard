@@ -155,5 +155,155 @@ class Lista extends \yii\db\ActiveRecord {
         $resultData = $comando->queryAll();
         return $resultData;
     }
+    
+    /**
+     * Function insertarProgramacion crea una programacion.
+     * @author  Giovanni Vergara <analistadesarrollo02@uteg.edu.ec>;
+     * @param
+     * @return
+     */
+    /*public function insertarProgramacion($lis_id, $pla_id, $fecinicio, $fecfin, $horenvio, $fecha_registro, $usuario) {
+        $con = \Yii::$app->db_crm;
+        $trans = $con->getTransaction(); // se obtiene la transacción actual
+        if ($trans !== null) {
+            $trans = null; // si existe la transacción entonces no se crea una
+        } else {
+            $trans = $con->beginTransaction(); // si no existe la transacción entonces se crea una
+        }
 
+        $param_sql = "opo_estado";
+        $bdet_sql = "1";
+
+        $param_sql .= ", opo_estado_logico";
+        $bdet_sql .= ", 1";
+
+        if (isset($opo_codigo)) {
+            $param_sql .= ", opo_codigo";
+            $bdet_sql .= ", :opo_codigo";
+        }
+        if (isset($emp_id)) {
+            $param_sql .= ", emp_id";
+            $bdet_sql .= ", :emp_id";
+        }
+        if (isset($pges_id)) {
+            $param_sql .= ", pges_id";
+            $bdet_sql .= ", :pges_id";
+        }
+        if (isset($mest_id)) {
+            $param_sql .= ", mest_id";
+            $bdet_sql .= ", :mest_id";
+        }
+        if (isset($eaca_id)) {
+            $param_sql .= ", eaca_id";
+            $bdet_sql .= ", :eaca_id";
+        }
+        if (isset($uaca_id)) {
+            $param_sql .= ", uaca_id";
+            $bdet_sql .= ", :uaca_id";
+        }
+        if (isset($mod_id)) {
+            $param_sql .= ", mod_id";
+            $bdet_sql .= ", :mod_id";
+        }
+        if (isset($tove_id)) {
+            $param_sql .= ", tove_id";
+            $bdet_sql .= ", :tove_id";
+        }
+        if (isset($tsca_id)) {
+            $param_sql .= ", tsca_id";
+            $bdet_sql .= ", :tsca_id";
+        }
+        if (isset($ccan_id)) {
+            $param_sql .= ", ccan_id";
+            $bdet_sql .= ", :ccan_id";
+        }
+        if (isset($eopo_id)) {
+            $param_sql .= ", eopo_id";
+            $bdet_sql .= ", :eopo_id";
+        }
+        if (isset($opo_hora_ini_contacto)) {
+            $param_sql .= ", opo_hora_ini_contacto";
+            $bdet_sql .= ", :opo_hora_ini_contacto";
+        }
+        if (isset($opo_hora_fin_contacto)) {
+            $param_sql .= ", opo_hora_fin_contacto";
+            $bdet_sql .= ", :opo_hora_fin_contacto";
+        }
+        
+        if (isset($opo_fecha_registro)) {
+            $param_sql .= ", opo_fecha_registro";
+            $bdet_sql .= ", :opo_fecha_registro";
+        }
+        if (isset($padm_id)) {
+            $param_sql .= ", padm_id";
+            $bdet_sql .= ", :padm_id";
+        }
+        if (isset($opo_usuario)) {
+            $param_sql .= ", opo_usuario";
+            $bdet_sql .= ", :opo_usuario";
+        }
+
+        try {
+            $sql = "INSERT INTO " . $con->dbname . ".oportunidad ($param_sql) VALUES($bdet_sql)";
+            $comando = $con->createCommand($sql);
+
+            if (isset($opo_codigo)) {
+                $comando->bindParam(':opo_codigo', $opo_codigo, \PDO::PARAM_STR);
+            }
+            if (isset($emp_id)) {
+                $comando->bindParam(':emp_id', $emp_id, \PDO::PARAM_INT);
+            }
+            if (isset($pges_id)) {
+                $comando->bindParam(':pges_id', $pges_id, \PDO::PARAM_INT);
+            }
+            if (!empty((isset($mest_id)))) {
+                $comando->bindParam(':mest_id', $mest_id, \PDO::PARAM_INT);
+            }
+            if (!empty((isset($eaca_id)))) {
+                $comando->bindParam(':eaca_id', $eaca_id, \PDO::PARAM_INT);
+            }
+            if (!empty((isset($uaca_id)))) {
+                $comando->bindParam(':uaca_id', $uaca_id, \PDO::PARAM_INT);
+            }
+            if (!empty((isset($mod_id)))) {
+                $comando->bindParam(':mod_id', $mod_id, \PDO::PARAM_INT);
+            }
+            if (!empty((isset($tove_id)))) {
+                $comando->bindParam(':tove_id', $tove_id, \PDO::PARAM_INT);
+            }
+            if (!empty((isset($tsca_id)))) {
+                $comando->bindParam(':tsca_id', $tsca_id, \PDO::PARAM_INT);
+            }
+            if (!empty((isset($ccan_id)))) {
+                $comando->bindParam(':ccan_id', $ccan_id, \PDO::PARAM_INT);
+            }
+            if (!empty((isset($eopo_id)))) {
+                $comando->bindParam(':eopo_id', $eopo_id, \PDO::PARAM_INT);
+            }
+             if (!empty((isset($opo_hora_ini_contacto)))) {
+                $comando->bindParam(':opo_hora_ini_contacto', $opo_hora_ini_contacto, \PDO::PARAM_STR);
+            }
+            if (!empty((isset($opo_hora_fin_contacto)))) {
+                $comando->bindParam(':opo_hora_fin_contacto', $opo_hora_fin_contacto, \PDO::PARAM_STR);
+            }           
+            if (!empty((isset($opo_fecha_registro)))) {
+                $comando->bindParam(':opo_fecha_registro', $opo_fecha_registro, \PDO::PARAM_STR);
+            }
+            if (!empty((isset($padm_id)))) {
+                $comando->bindParam(':padm_id', $padm_id, \PDO::PARAM_INT);
+            }
+            if (!empty((isset($opo_usuario)))) {
+                $comando->bindParam(':opo_usuario', $opo_usuario, \PDO::PARAM_INT);
+            }
+
+            $result = $comando->execute();
+            if ($trans !== null)
+                $trans->commit();
+            return $con->getLastInsertID($con->dbname . '.oportunidad');
+        } catch (Exception $ex) {
+            if ($trans !== null)
+                $trans->rollback();
+            return FALSE;
+        }
+    }*/
 }
