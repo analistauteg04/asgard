@@ -2,7 +2,7 @@ $(document).ready(function () {
 
 //Guardar programacion luego borrar cuando se hace el boton desde el frm configuracion
     $('#sendProgramacion').click(function () {
-        var link = $('#txth_base').val() + "/email/guardarprogramacion";
+        var link = $('#txth_base').val() + "/marketing/email/guardarprogramacion";        
         var arrParams = new Object();
         arrParams.lista = $('#cmb_lista').val();
         arrParams.plantilla = $('#cmb_template').val();
@@ -21,7 +21,7 @@ $(document).ready(function () {
                 showAlert(response.status, response.label, response.message);
                 if (!response.error) {
                     setTimeout(function () {
-                        window.location.href = $('#txth_base').val() + "/email/programacion";
+                        window.location.href = $('#txth_base').val() + "/marketing/email/programacion";
                     }, 5000);
                 }
 

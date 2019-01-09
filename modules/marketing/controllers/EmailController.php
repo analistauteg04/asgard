@@ -48,7 +48,7 @@ class EmailController extends \app\components\CController {
     }
 
     public function actionGuardarprogramacion() {
-        $mod_lista = new Lista();
+        
         if (Yii::$app->request->isAjax) {
             $data = Yii::$app->request->post();
             $lista = $data["lista"];
@@ -58,15 +58,21 @@ class EmailController extends \app\components\CController {
             $horenvio = $data["hora_envio"];
             $fecha_registro = date(Yii::$app->params["dateTimeByDefault"]);
             $usuario = @Yii::$app->user->identity->usu_id;
-            $con = \Yii::$app->db_crm;
+            $con = \Yii::$app->db_mailing;
             $transaction = $con->beginTransaction();
             try {
-                $resp_programacion = $mod_lista->insertarProgramacion($lista, $plantilla, $fecinicio, $fecfin, $horenvio, $fecha_registro, $usuario);
+                $mod_lista = new Lista();
+                $resp_programacion = $mod_lista->insertarProgramacion($lista, $plantilla, $fecinicio, $fecfin, $horenvio, $usuario, $fecha_registro);
                 if ($resp_programacion) {
                     $exito = 1;
                 }
                 if ($exito) {
                     $transaction->commit();
+                    $message = array(
+                        "wtmessage" => Yii::t("notificaciones", "La infomación ha sido grabada. "),
+                        "title" => Yii::t('jslang', 'Success'),
+                    );
+                    return Utilities::ajaxResponse('OK', 'alert', Yii::t("jslang", "Sucess"), false, $message);
                 } else {
                     $transaction->rollback();
                     $message = array(

@@ -4,7 +4,7 @@ DROP SCHEMA IF EXISTS `db_mailing` ;
 CREATE SCHEMA IF NOT EXISTS `db_mailing` default CHARACTER SET utf8 ;
 USE `db_mailing`;
 
-GRANT ALL PRIVILEGES ON `db_mailing`.* TO 'uteg'@'localhost' IDENTIFIED BY 'Utegadmin2016*';
+-- GRANT ALL PRIVILEGES ON `db_mailing`.* TO 'uteg'@'localhost' IDENTIFIED BY 'Utegadmin2016*';
 -- --------------------------------------------------------
 --
 -- Estructura de tabla para la tabla `lista`
@@ -86,7 +86,7 @@ create table if not exists `programacion` (
   `pla_id` bigint(20) not null,
   `pro_fecha_desde` timestamp null,
   `pro_fecha_hasta` timestamp null,
-  `hora_envio` timestamp null,
+  `pro_hora_envio` timestamp null,
   `pro_usuario_ingreso` bigint(20) not null,
   `pro_usuario_modifica` bigint(20)  null, 
   `pro_estado` varchar(1) not null,

@@ -92,7 +92,7 @@ use app\modules\marketing\Module;
                             'value' => '',
                             //'disabled' => $habilita,
                             'type' => DatePicker::TYPE_INPUT,
-                            'options' => ["class" => "form-control PBvalidation keyupmce", "id" => "txt_fecha_fin", "data-type" => "fecha_pro", "data-keydown" => "true", "placeholder" => Yii::t("formulario", "End date")],
+                            'options' => ["class" => "form-control PBvalidation keyupmce", "id" => "txt_fecha_fin", "data-type" => "", "data-keydown" => "true", "placeholder" => Yii::t("formulario", "End date")],
                             'pluginOptions' => [
                                 'autoclose' => true,
                                 'format' => Yii::$app->params["dateByDatePicker"],

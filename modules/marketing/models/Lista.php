@@ -129,7 +129,7 @@ class Lista extends \yii\db\ActiveRecord {
           return $dataProvider;
           } */
     }
-    
+
     /**
      * Function consulta listas creadas de mailchimp.
      * @author Giovanni Vergara <analistadesarrollo02@uteg.edu.ec>;
@@ -155,15 +155,15 @@ class Lista extends \yii\db\ActiveRecord {
         $resultData = $comando->queryAll();
         return $resultData;
     }
-    
+
     /**
      * Function insertarProgramacion crea una programacion.
      * @author  Giovanni Vergara <analistadesarrollo02@uteg.edu.ec>;
      * @param
      * @return
      */
-    /*public function insertarProgramacion($lis_id, $pla_id, $fecinicio, $fecfin, $horenvio, $fecha_registro, $usuario) {
-        $con = \Yii::$app->db_crm;
+    public function insertarProgramacion($lis_id, $pla_id, $pro_fecha_desde, $pro_fecha_hasta, $pro_hora_envio, $pro_usuario_ingreso, $pro_fecha_creacion) {
+        $con = \Yii::$app->db_mailing;
         $trans = $con->getTransaction(); // se obtiene la transacción actual
         if ($trans !== null) {
             $trans = null; // si existe la transacción entonces no se crea una
@@ -171,139 +171,77 @@ class Lista extends \yii\db\ActiveRecord {
             $trans = $con->beginTransaction(); // si no existe la transacción entonces se crea una
         }
 
-        $param_sql = "opo_estado";
+        $param_sql = "pro_estado";
         $bdet_sql = "1";
 
-        $param_sql .= ", opo_estado_logico";
+        $param_sql .= ", pro_estado_logico";
         $bdet_sql .= ", 1";
 
-        if (isset($opo_codigo)) {
-            $param_sql .= ", opo_codigo";
-            $bdet_sql .= ", :opo_codigo";
+        if (isset($lis_id)) {
+            $param_sql .= ", lis_id";
+            $bdet_sql .= ", :lis_id";
         }
-        if (isset($emp_id)) {
-            $param_sql .= ", emp_id";
-            $bdet_sql .= ", :emp_id";
+        if (isset($pla_id)) {
+            $param_sql .= ", pla_id";
+            $bdet_sql .= ", :pla_id";
         }
-        if (isset($pges_id)) {
-            $param_sql .= ", pges_id";
-            $bdet_sql .= ", :pges_id";
+        if (isset($pro_fecha_desde)) {
+            $param_sql .= ", pro_fecha_desde";
+            $bdet_sql .= ", :pro_fecha_desde";
         }
-        if (isset($mest_id)) {
-            $param_sql .= ", mest_id";
-            $bdet_sql .= ", :mest_id";
+        if (isset($pro_fecha_hasta)) {
+            $param_sql .= ", pro_fecha_hasta";
+            $bdet_sql .= ", :pro_fecha_hasta";
         }
-        if (isset($eaca_id)) {
-            $param_sql .= ", eaca_id";
-            $bdet_sql .= ", :eaca_id";
+        if (isset($pro_hora_envio)) {
+            $hora_envio = date(Yii::$app->params["dateByDefault"]). " " .$pro_hora_envio.":00";
+            $param_sql .= ", pro_hora_envio";
+            $bdet_sql .= ", :pro_hora_envio";
         }
-        if (isset($uaca_id)) {
-            $param_sql .= ", uaca_id";
-            $bdet_sql .= ", :uaca_id";
+        if (isset($pro_usuario_ingreso)) {
+            $param_sql .= ", pro_usuario_ingreso";
+            $bdet_sql .= ", :pro_usuario_ingreso";
         }
-        if (isset($mod_id)) {
-            $param_sql .= ", mod_id";
-            $bdet_sql .= ", :mod_id";
-        }
-        if (isset($tove_id)) {
-            $param_sql .= ", tove_id";
-            $bdet_sql .= ", :tove_id";
-        }
-        if (isset($tsca_id)) {
-            $param_sql .= ", tsca_id";
-            $bdet_sql .= ", :tsca_id";
-        }
-        if (isset($ccan_id)) {
-            $param_sql .= ", ccan_id";
-            $bdet_sql .= ", :ccan_id";
-        }
-        if (isset($eopo_id)) {
-            $param_sql .= ", eopo_id";
-            $bdet_sql .= ", :eopo_id";
-        }
-        if (isset($opo_hora_ini_contacto)) {
-            $param_sql .= ", opo_hora_ini_contacto";
-            $bdet_sql .= ", :opo_hora_ini_contacto";
-        }
-        if (isset($opo_hora_fin_contacto)) {
-            $param_sql .= ", opo_hora_fin_contacto";
-            $bdet_sql .= ", :opo_hora_fin_contacto";
-        }
-        
-        if (isset($opo_fecha_registro)) {
-            $param_sql .= ", opo_fecha_registro";
-            $bdet_sql .= ", :opo_fecha_registro";
-        }
-        if (isset($padm_id)) {
-            $param_sql .= ", padm_id";
-            $bdet_sql .= ", :padm_id";
-        }
-        if (isset($opo_usuario)) {
-            $param_sql .= ", opo_usuario";
-            $bdet_sql .= ", :opo_usuario";
+        if (isset($pro_fecha_creacion)) {
+            $param_sql .= ", pro_fecha_creacion";
+            $bdet_sql .= ", :pro_fecha_creacion";
         }
 
         try {
-            $sql = "INSERT INTO " . $con->dbname . ".oportunidad ($param_sql) VALUES($bdet_sql)";
+            $sql = "INSERT INTO " . $con->dbname . ".programacion ($param_sql) VALUES($bdet_sql)";
             $comando = $con->createCommand($sql);
 
-            if (isset($opo_codigo)) {
-                $comando->bindParam(':opo_codigo', $opo_codigo, \PDO::PARAM_STR);
+            if (isset($lis_id)) {
+                $comando->bindParam(':lis_id', $lis_id, \PDO::PARAM_INT);
             }
-            if (isset($emp_id)) {
-                $comando->bindParam(':emp_id', $emp_id, \PDO::PARAM_INT);
+            if (isset($pla_id)) {
+                $comando->bindParam(':pla_id', $pla_id, \PDO::PARAM_INT);
             }
-            if (isset($pges_id)) {
-                $comando->bindParam(':pges_id', $pges_id, \PDO::PARAM_INT);
+            if (isset($pro_fecha_desde)) {
+                $comando->bindParam(':pro_fecha_desde', $pro_fecha_desde, \PDO::PARAM_STR);
             }
-            if (!empty((isset($mest_id)))) {
-                $comando->bindParam(':mest_id', $mest_id, \PDO::PARAM_INT);
+            if (!empty((isset($pro_fecha_hasta)))) {
+                $comando->bindParam(':pro_fecha_hasta', $pro_fecha_hasta, \PDO::PARAM_STR);
             }
-            if (!empty((isset($eaca_id)))) {
-                $comando->bindParam(':eaca_id', $eaca_id, \PDO::PARAM_INT);
+            if (!empty((isset($pro_hora_envio)))) {
+                $comando->bindParam(':pro_hora_envio', $hora_envio, \PDO::PARAM_STR);
             }
-            if (!empty((isset($uaca_id)))) {
-                $comando->bindParam(':uaca_id', $uaca_id, \PDO::PARAM_INT);
+            if (!empty((isset($pro_usuario_ingreso)))) {
+                $comando->bindParam(':pro_usuario_ingreso', $pro_usuario_ingreso, \PDO::PARAM_STR);
             }
-            if (!empty((isset($mod_id)))) {
-                $comando->bindParam(':mod_id', $mod_id, \PDO::PARAM_INT);
+            if (!empty((isset($pro_fecha_creacion)))) {
+                $comando->bindParam(':pro_fecha_creacion', $pro_fecha_creacion, \PDO::PARAM_STR);
             }
-            if (!empty((isset($tove_id)))) {
-                $comando->bindParam(':tove_id', $tove_id, \PDO::PARAM_INT);
-            }
-            if (!empty((isset($tsca_id)))) {
-                $comando->bindParam(':tsca_id', $tsca_id, \PDO::PARAM_INT);
-            }
-            if (!empty((isset($ccan_id)))) {
-                $comando->bindParam(':ccan_id', $ccan_id, \PDO::PARAM_INT);
-            }
-            if (!empty((isset($eopo_id)))) {
-                $comando->bindParam(':eopo_id', $eopo_id, \PDO::PARAM_INT);
-            }
-             if (!empty((isset($opo_hora_ini_contacto)))) {
-                $comando->bindParam(':opo_hora_ini_contacto', $opo_hora_ini_contacto, \PDO::PARAM_STR);
-            }
-            if (!empty((isset($opo_hora_fin_contacto)))) {
-                $comando->bindParam(':opo_hora_fin_contacto', $opo_hora_fin_contacto, \PDO::PARAM_STR);
-            }           
-            if (!empty((isset($opo_fecha_registro)))) {
-                $comando->bindParam(':opo_fecha_registro', $opo_fecha_registro, \PDO::PARAM_STR);
-            }
-            if (!empty((isset($padm_id)))) {
-                $comando->bindParam(':padm_id', $padm_id, \PDO::PARAM_INT);
-            }
-            if (!empty((isset($opo_usuario)))) {
-                $comando->bindParam(':opo_usuario', $opo_usuario, \PDO::PARAM_INT);
-            }
-
+            
             $result = $comando->execute();
             if ($trans !== null)
                 $trans->commit();
-            return $con->getLastInsertID($con->dbname . '.oportunidad');
+            return $con->getLastInsertID($con->dbname . '.programacion');
         } catch (Exception $ex) {
             if ($trans !== null)
                 $trans->rollback();
             return FALSE;
         }
-    }*/
+    }
+
 }
