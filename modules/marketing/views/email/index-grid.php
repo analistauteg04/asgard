@@ -17,7 +17,7 @@ academico::registerTranslations();
 
 PbGridView::widget([
     //'dataProvider' => new yii\data\ArrayDataProvider(array()),
-    'id' => 'Tbg_Solicitudes',
+    'id' => 'Tbg_Lista',
     'showExport' => true,
     'fnExportEXCEL' => "exportExcel",
     'fnExportPDF' => "exportPdf",
@@ -61,7 +61,7 @@ PbGridView::widget([
                     return Html::a('<span class="glyphicon glyphicon-pencil"></span>', Url::to(['/marketing/email/edit', /* 'empid' => base64_encode($model['emp_id'])*/]), ["data-toggle" => "tooltip", "title" => "Editar lista", "data-pjax" => 0]);
                 },     
                 'eliminar' => function ($url, $model) {
-                    return Html::a('<span class="glyphicon glyphicon-remove"></span>', Url::to(['/marketing/email/drop', /* 'empid' => base64_encode($model['emp_id'])*/]), ["data-toggle" => "tooltip", "title" => "Eliminar lista", "data-pjax" => 0]);
+                    return Html::a('<span class="glyphicon glyphicon-remove"></span>', Url::to(['/marketing/email/delete',  'lis_id' => base64_encode($model['lis_id'])]), ["data-toggle" => "tooltip", "title" => "Eliminar lista", "data-pjax" => 0]);
                 },     
             ],
         ],

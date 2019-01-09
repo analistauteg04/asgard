@@ -32,5 +32,21 @@ $(document).ready(function () {
         }
 
     });
+    
+    $('#btn_buscarDataLista').click(function () {
+        mostrar_grid_lista();
+    });
+    
 });
+
+function mostrar_grid_lista() {    
+    var lista_id = $('#cmb_lista option:selected').val();    
+
+    //Buscar almenos una clase con el nombre para ejecutar
+    if (!$(".blockUI").length) {
+        showLoadingPopup();
+        $('#Tbg_Lista').PbGridView('applyFilterData', {'lista_id': lista_id});
+        setTimeout(hideLoadingPopup, 2000);
+    }
+}
 

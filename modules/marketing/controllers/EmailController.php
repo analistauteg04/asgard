@@ -16,12 +16,18 @@ class EmailController extends \app\components\CController {
 
     public function actionIndex() {
         $mod_lista = new Lista();
-        $resp_lista = $mod_lista->consultarLista();
-        $resp_combo_lista = $mod_lista->consultarListaProgramacion();
-
+        
+        if ($data['PBgetFilter']) {
+            $arrSearch["lista_id"] = $data['lista_id'];                        
+            $resp_lista = $mod_lista->consultarLista($arrSearch);
+        } else {
+            $resp_lista = $mod_lista->consultarLista();
+        }
+        
+        $resp_combo_lista = $mod_lista->consultarListaProgramacion();                
         return $this->render('index', [
-                    "arr_lista" => ArrayHelper::map($resp_combo_lista, "id", "name"),
-                    'model' => $resp_lista]);
+            "arr_lista" => ArrayHelper::map(array_merge(["id" => "0", "name" => "Seleccionar"],$resp_combo_lista), "id", "name"),                               
+            'model' => $resp_lista]);        
     }
 
     public function actionListasubscriptores() {
@@ -46,9 +52,51 @@ class EmailController extends \app\components\CController {
                     "arr_lista" => ArrayHelper::map($arr_lista, "id", "name"),
         ]);
     }
-
-    public function actionGuardarprogramacion() {
-        
+    
+    public function actionDelete() {
+        $mod_lista = new Lista();
+        if (Yii::$app->request->isAjax) {
+            $data = Yii::$app->request->post();
+            //$lis_id = $data["list_id"];
+            $lis_id = base64_decode($_GET['lis_id']);
+            $con = \Yii::$app->db_mailing;
+            $transaction = $con->beginTransaction();
+            try {
+                $resp_listsuscriptor = $mod_lista->inactivaListaSuscriptor($lis_id);
+                if ($resp_listsuscriptor) {
+                    $resp_lista = $mod_lista->inactivaLista($lis_id);
+                    if ($resp_lista) {
+                        $exito = '1';
+                    }
+                }
+                if ($exito) {
+                    $transaction->commit();
+                    $message = array(
+                        "wtmessage" => Yii::t("notificaciones", "Se ha eliminado la lista exitosamente."),
+                        "title" => Yii::t('jslang', 'Success'),
+                    );
+                    return Utilities::ajaxResponse('OK', 'alert', Yii::t("jslang", "Sucess"), false, $message);
+                } else {
+                    $transaction->rollback();
+                    $message = array(
+                        "wtmessage" => Yii::t("notificaciones", "Error al eliminar."),
+                        "title" => Yii::t('jslang', 'Success'),
+                    );
+                    return Utilities::ajaxResponse('NO_OK', 'alert', Yii::t("jslang", "Sucess"), false, $message);
+                }
+                
+            } catch (Exception $ex) {
+                $transaction->rollback();
+                $message = array(
+                    "wtmessage" => Yii::t("notificaciones", "Error al eliminar."),
+                    "title" => Yii::t('jslang', 'Success'),
+                );
+                return Utilities::ajaxResponse('NO_OK', 'alert', Yii::t("jslang", "Sucess"), false, $message);
+            }
+        }
+    }
+    
+    public function actionGuardarprogramacion() {        
         if (Yii::$app->request->isAjax) {
             $data = Yii::$app->request->post();
             $lista = $data["lista"];
@@ -69,14 +117,7 @@ class EmailController extends \app\components\CController {
                 if ($exito) {
                     $transaction->commit();
                     $message = array(
-                        "wtmessage" => Yii::t("notificaciones", "La infomación ha sido grabada. "),
-                        "title" => Yii::t('jslang', 'Success'),
-                    );
-                    return Utilities::ajaxResponse('OK', 'alert', Yii::t("jslang", "Sucess"), false, $message);
-                } else {
-                    $transaction->rollback();
-                    $message = array(
-                        "wtmessage" => Yii::t("notificaciones", "Error al grabar."),
+                    "wtmessage" => Yii::t("notificaciones", "Error al grabar."),
                         "title" => Yii::t('jslang', 'Error'),
                     );
                     return Utilities::ajaxResponse('NO_OK', 'alert', Yii::t("jslang", "Error"), false, $message);
@@ -91,5 +132,5 @@ class EmailController extends \app\components\CController {
             }
         }
     }
-
+    
 }

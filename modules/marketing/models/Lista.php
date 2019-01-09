@@ -88,10 +88,17 @@ class Lista extends \yii\db\ActiveRecord {
      * @param   
      * @return  Listas creadas en mailchimp.
      */
-    public function consultarLista() {
+    public function consultarLista($arrFiltro = array(), $onlyData = false) {
         $con = \Yii::$app->db_mailing;
         $con1 = \Yii::$app->db_academico;
         $estado = 1;
+        
+        if (isset($arrFiltro) && count($arrFiltro) > 0) {
+            if ($arrFiltro['list_id'] != "" && $arrFiltro['list_id'] > 0) {
+                $str_search = "l.list_id = :lista_id AND ";
+            }
+        }
+            
         $sql = "SELECT l.lis_id, l.lis_nombre, 
                         case when l.eaca_id > 0 then 
                                      ea.eaca_nombre else me.mest_nombre end as programa,
@@ -100,13 +107,21 @@ class Lista extends \yii\db\ActiveRecord {
                 FROM " . $con->dbname . ".lista l left join " . $con->dbname . ".lista_suscriptor ls on ls.lis_id = l.lis_id
                   left join " . $con1->dbname . ".estudio_academico ea on ea.eaca_id = l.eaca_id
                   left join " . $con1->dbname . ".modulo_estudio me on me.mest_id = l.mest_id
-                WHERE lis_estado = :estado
-                        and lis_estado_logico = :estado
+                WHERE $str_search
+                      lis_estado = :estado
+                      and lis_estado_logico = :estado
                 GROUP BY l.lis_id, l.lis_nombre, ea.eaca_nombre;";
 
         $comando = $con->createCommand($sql);
         $comando->bindParam(":estado", $estado, \PDO::PARAM_STR);
-
+        
+        if (isset($arrFiltro) && count($arrFiltro) > 0) {
+            if ($arrFiltro['list_id'] != "" && $arrFiltro['list_id'] > 0) {
+                $lista_id = $arrFiltro["lista_id"];
+                $comando->bindParam(":lista_id", $lista_id, \PDO::PARAM_INT); 
+            }
+        }
+        
         $resultData = $comando->queryAll();
         $dataProvider = new ArrayDataProvider([
             'key' => 'id',
@@ -121,13 +136,12 @@ class Lista extends \yii\db\ActiveRecord {
                     'num_suscriptores',
                 ],
             ],
-        ]);
-        return $dataProvider;
-        /* if ($onlyData) {
+        ]);        
+        if ($onlyData) {
           return $resultData;
-          } else {
+        } else {
           return $dataProvider;
-          } */
+        }
     }
 
     /**
@@ -155,6 +169,73 @@ class Lista extends \yii\db\ActiveRecord {
         $resultData = $comando->queryAll();
         return $resultData;
     }
+
+     /**
+     * Function inactivaLista
+     * @author  Grace Viteri <analistadesarrollo01@uteg.edu.ec>
+     * @param   
+     * @return  Inactiva las listas creadas en mailchimp.
+     */
+    public function inactivaLista($lis_id) {
+    $con = \Yii::$app->db_mailing;
+        $estado = 1;
+        $fecha_modificacion = date(Yii::$app->params["dateTimeByDefault"]);        
+
+        try {
+            $comando = $con->createCommand
+                (
+                    "UPDATE " . $con->dbname . ".lista		       
+                      SET 
+                          lis_estado = '0',
+                          lis_estado_logico = '0',
+                          lis_fecha_modificacion = :fecha_modificacion
+                      WHERE lis_id = :list_id AND                        
+                            lis_estado = :estado AND
+                            lis_estado_logico = :estado"
+                );
+            $comando->bindParam(":estado", $estado, \PDO::PARAM_STR);
+            $comando->bindParam(":fecha_modificacion", $fecha_modificacion, \PDO::PARAM_STR);            
+            $comando->bindParam(":list_id", $lis_id, \PDO::PARAM_INT);  
+            $response = $comando->execute();            
+            return $response;
+        } catch (Exception $ex) {            
+            return FALSE;
+        }
+    }
+    
+    /**
+     * Function inactivaListaSuscriptor
+     * @author  Grace Viteri <analistadesarrollo01@uteg.edu.ec>
+     * @param   
+     * @return  Inactiva la relación de lista y suscriptor creadas en mailchimp.
+     */
+    public function inactivaListaSuscriptor($lis_id) {
+    $con = \Yii::$app->db_mailing;
+        $estado = 1;
+        $fecha_modificacion = date(Yii::$app->params["dateTimeByDefault"]);        
+
+        try {
+            $comando = $con->createCommand
+                (
+                    "UPDATE " . $con->dbname . ".lista_suscriptor		       
+                      SET 
+                          lsus_estado = '0',
+                          lsus_estado_logico = '0',
+                          lsus_fecha_modificacion = :fecha_modificacion
+                      WHERE lsus_id = :list_id AND                        
+                            lsus_estado = :estado AND
+                            lsus_estado_logico = :estado"
+                );
+            $comando->bindParam(":estado", $estado, \PDO::PARAM_STR);
+            $comando->bindParam(":fecha_modificacion", $fecha_modificacion, \PDO::PARAM_STR);            
+            $comando->bindParam(":list_id", $lis_id, \PDO::PARAM_INT);  
+            $response = $comando->execute();            
+            return $response;
+        } catch (Exception $ex) {            
+            return FALSE;
+        }
+    }
+    
 
     /**
      * Function insertarProgramacion crea una programacion.
