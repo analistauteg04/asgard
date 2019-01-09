@@ -6,13 +6,15 @@ $(document).ready(function () {
         var arrParams = new Object();
         arrParams.lista = $('#cmb_lista').val();
         arrParams.plantilla = $('#cmb_template').val();
-        /*arrParams.check_dia_1 = $('#cmb_tipo_dni').val();
-        arrParams.check_dia_2 = $('#txt_cedula').val();
-        arrParams.check_dia_3 = $('#txt_correo').val();
-        arrParams.check_dia_4 = $('#cmb_pais_dom').val();
-        arrParams.check_dia_5 = $('#txt_celular').val();
-        arrParams.check_dia_6 = $('#txt_pasaporte').val();
-        arrParams.check_dia_7 = $('#cmb_ninteres').val();*/
+        /************************************************/
+        /*arrParams.check_dia_1 = $('#check_dia_1').val();
+        arrParams.check_dia_2 = $('#check_dia_2').val();
+        arrParams.check_dia_3 = $('#check_dia_3').val();
+        arrParams.check_dia_4 = $('#check_dia_4').val();
+        arrParams.check_dia_5 = $('#check_dia_5').val();
+        arrParams.check_dia_6 = $('#check_dia_6').val();
+        arrParams.check_dia_7 = $('#check_dia_7').val();*/
+        /************************************************/
         arrParams.fecha_inicio = $('#txt_fecha_inicio').val();
         arrParams.fecha_fin = $('#txt_fecha_fin').val();
         arrParams.hora_envio = $('#txthoraenvio').val();        
