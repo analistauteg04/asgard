@@ -70,7 +70,7 @@ class EstadoContacto extends \app\modules\admision\components\CActiveRecord {
 
     /**
      * Function consulta los subestados de los clientes.
-     * @author Giovanni Vergara <analistadesarrollo01@uteg.edu.ec>;
+     * @author Giovanni Vergara <analistadesarrollo02@uteg.edu.ec>;
      * @param
      * @return
      */
