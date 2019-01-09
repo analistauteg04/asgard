@@ -129,6 +129,7 @@ class Lista extends \yii\db\ActiveRecord {
           return $dataProvider;
           } */
     }
+    
     /**
      * Function consulta listas creadas de mailchimp.
      * @author Giovanni Vergara <analistadesarrollo02@uteg.edu.ec>;

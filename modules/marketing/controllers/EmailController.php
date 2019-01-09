@@ -17,10 +17,10 @@ class EmailController extends \app\components\CController {
     public function actionIndex() {
         $mod_lista = new Lista();
         $resp_lista = $mod_lista->consultarLista();
-        $resp_combo_lista = $mod_lista->consultarLista();
+        $resp_combo_lista = $mod_lista->consultarListaProgramacion();
         
         return $this->render('index', [
-            'lista' => $resp_combo_lista,
+            "arr_lista" => ArrayHelper::map($resp_combo_lista, "id", "name"),            
             'model' => $resp_lista]);        
     }
     

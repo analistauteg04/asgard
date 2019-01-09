@@ -72,7 +72,9 @@ create table if not exists `lista_plantilla` (
  `lpla_estado` varchar(1) not null,
  `lpla_fecha_creacion` timestamp not null default current_timestamp,
  `lpla_fecha_modificacion` timestamp null default null,
- `lpla_estado_logico` varchar(1) not null
+ `lpla_estado_logico` varchar(1) not null,
+  foreign key (lis_id) references `lista`(lis_id),
+  foreign key (pla_id) references `plantilla`(pla_id)
 );
 
 -- --------------------------------------------------------
