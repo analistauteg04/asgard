@@ -1286,12 +1286,12 @@ class OrdenPago extends \app\modules\financiero\components\CActiveRecord {
     }
 
     /**
-     * Function consultaNumerotransaccion (Botón de pago).
+     * Function consultarTransacxId (Botón de pago).
      * @author  Grace Viteri <analistadesarrollo01@uteg.edu.ec>
      * @param   
      * @return  
      */
-    public function consultaNumerotransaccion($num_transaccion) {
+    public function consultarTransacxId($num_transaccion) {
         $con = \Yii::$app->db;
         $con1 = \Yii::$app->db_facturacion;
         $con2 = \Yii::$app->db_captacion;
@@ -1374,12 +1374,12 @@ class OrdenPago extends \app\modules\financiero\components\CActiveRecord {
     }
 
     /**
-     * Function verificaordenpago (Se verifica el estado de la orden de pago)
+     * Function consultarSolicitxOrd (Se verifica el estado de la orden de pago)
      * @author  Grace Viteri <analistadesarrollo01@uteg.edu.ec>
      * @param   
      * @return  
      */
-    public function verificaordenpago($opag_id) {
+    public function consultarSolicitxOrd($opag_id) {
         $con = \Yii::$app->db_facturacion;
         $estado = 1;
         $estado_pago = 'P';
