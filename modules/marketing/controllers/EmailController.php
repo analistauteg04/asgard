@@ -3,7 +3,7 @@
 namespace app\modules\marketing\controllers;
 
 use Yii;
-use app\models\Utilities;
+use app\models\Utilities;//
 use yii\helpers\ArrayHelper;
 use app\modules\marketing\models\Lista;
 use app\modules\academico\Module as academico;
