@@ -11,7 +11,6 @@ USE `db_mailing`;
 INSERT INTO `lista` (`lis_id`, `lis_codigo`, `eaca_id`, `mest_id`, `lis_nombre`, `lis_descripcion`, `lis_correo_principal`, `lis_nombre_principal`, `lis_nombre_empresa`, `lis_correo_empresa`, `lis_ciudad`, `lis_codigo_postal`, `lis_pais`, `lis_estado`, `lis_estado_logico`) VALUES
 (1, '0056789am', 2, null, 'Economia', 'Lista Economía', 'principal@yopmail.com', 'Grace Viteri', 'Cranea', 'craneaec@gmail.com', 'Guayaquil', '090205', 'Ecuador', '1', '1');
 
-
 -- 
 --
 -- Volcado de datos para la tabla `suscriptor`

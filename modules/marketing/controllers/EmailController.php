@@ -8,6 +8,8 @@ use yii\helpers\ArrayHelper;
 use app\modules\marketing\models\Lista;
 use app\modules\academico\Module as academico;
 use app\modules\financiero\Module as financiero;
+use \app\modules\admision\models\PersonaGestion;
+use app\modules\marketing\models\Suscriptor;
 
 academico::registerTranslations();
 financiero::registerTranslations();
@@ -16,23 +18,27 @@ class EmailController extends \app\components\CController {
 
     public function actionIndex() {
         $mod_lista = new Lista();
-
         if ($data['PBgetFilter']) {
             $arrSearch["lista_id"] = $data['lista_id'];
             $resp_lista = $mod_lista->consultarLista($arrSearch);
         } else {
             $resp_lista = $mod_lista->consultarLista();
-        }
-
-        $resp_combo_lista = $mod_lista->consultarListaProgramacion();
+        } 
+        $resp_combo_lista = $mod_lista->consultarListaProgramacion();                
         return $this->render('index', [
                     "arr_lista" => ArrayHelper::map(array_merge(["id" => "0", "name" => "Seleccionar"], $resp_combo_lista), "id", "name"),
                     'model' => $resp_lista]);
     }
 
-    public function actionListasubscriptores() {
-
-        return $this->render('listaSubscriptores', [
+    public function actionAsignar() {
+        $mod_lista = new Lista();
+        $lis_id = base64_decode($_GET['lis_id']);
+        $per_id = @Yii::$app->session->get("PB_perid");        
+        $mod_pg= new Suscriptor();
+        if (Yii::$app->request->isAjax) {
+            
+        }        
+        return $this->render('asignar', [
         ]);
     }
 

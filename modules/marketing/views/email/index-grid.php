@@ -52,13 +52,13 @@ PbGridView::widget([
         [
             'class' => 'yii\grid\ActionColumn',
             'header' => Yii::t("formulario", "Actions"),
-            'template' => '{programar} {editar} {eliminar}',
+            'template' => '{programar} {asignar} {eliminar}',
             'buttons' => [
                 'programar' => function ($url, $model) {
                     return Html::a('<span class="glyphicon glyphicon-calendar"></span>', Url::to(['/marketing/email/programacion', /* 'empid' => base64_encode($model['emp_id'])*/]), ["data-toggle" => "tooltip", "title" => "Programación de envío", "data-pjax" => 0]);
                 },     
-                'editar' => function ($url, $model) {
-                    return Html::a('<span class="glyphicon glyphicon-pencil"></span>', Url::to(['/marketing/email/edit', /* 'empid' => base64_encode($model['emp_id'])*/]), ["data-toggle" => "tooltip", "title" => "Editar lista", "data-pjax" => 0]);
+                'asignar' => function ($url, $model) {
+                    return Html::a('<span class="glyphicon glyphicon-plus"></span>', Url::to(['/marketing/email/asignar',  'lis_id' => base64_encode($model['lis_id'])]), ["data-toggle" => "tooltip", "title" => "Asignar Subscriptores", "data-pjax" => 0]);
                 },     
                 'eliminar' => function ($url, $model) {
                     return Html::a('<span class="glyphicon glyphicon-remove"></span>', Url::to(['/marketing/email/delete',  'lis_id' => base64_encode($model['lis_id'])]), ["data-toggle" => "tooltip", "title" => "Eliminar lista", "data-pjax" => 0]);
