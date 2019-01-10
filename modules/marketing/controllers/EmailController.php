@@ -8,7 +8,6 @@ use yii\helpers\ArrayHelper;
 use app\modules\marketing\models\Lista;
 use app\modules\academico\Module as academico;
 use app\modules\financiero\Module as financiero;
-use \app\modules\admision\models\PersonaGestion;
 use app\modules\marketing\models\Suscriptor;
 
 academico::registerTranslations();
@@ -35,6 +34,7 @@ class EmailController extends \app\components\CController {
         $lis_id = base64_decode($_GET['lis_id']);
         $per_id = @Yii::$app->session->get("PB_perid");        
         $mod_pg= new Suscriptor();
+        
         if (Yii::$app->request->isAjax) {
             
         }        
