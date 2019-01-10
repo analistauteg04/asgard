@@ -53,7 +53,7 @@ use app\modules\marketing\Module;
                         <?php
                         for ($j = 1; $j < 8; $j++) {
                             ?>                                    
-                            <td><input type="checkbox" class="check_dias" name="<?php echo 'check_dia_' . $j; ?>"  id="<?php echo 'check_nivel_' . $j; ?>" value="<?php echo $j; ?>"> </td> 
+                            <td><input type="checkbox" class="check_dias" name="<?php echo 'check_dia_' . $j; ?>"  id="<?php echo 'check_dia_' . $j; ?>" value="<?php echo $j; ?>"> </td> 
                             <?php
                         }
                         ?>  
