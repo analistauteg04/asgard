@@ -92,13 +92,13 @@ class Lista extends \yii\db\ActiveRecord {
         $con = \Yii::$app->db_mailing;
         $con1 = \Yii::$app->db_academico;
         $estado = 1;
-        
+
         if (isset($arrFiltro) && count($arrFiltro) > 0) {
             if ($arrFiltro['list_id'] != "" && $arrFiltro['list_id'] > 0) {
                 $str_search = "l.list_id = :lista_id AND ";
             }
         }
-            
+
         $sql = "SELECT l.lis_id, l.lis_nombre, 
                         case when l.eaca_id > 0 then 
                                      ea.eaca_nombre else me.mest_nombre end as programa,
@@ -114,14 +114,14 @@ class Lista extends \yii\db\ActiveRecord {
 
         $comando = $con->createCommand($sql);
         $comando->bindParam(":estado", $estado, \PDO::PARAM_STR);
-        
+
         if (isset($arrFiltro) && count($arrFiltro) > 0) {
             if ($arrFiltro['list_id'] != "" && $arrFiltro['list_id'] > 0) {
                 $lista_id = $arrFiltro["lista_id"];
-                $comando->bindParam(":lista_id", $lista_id, \PDO::PARAM_INT); 
+                $comando->bindParam(":lista_id", $lista_id, \PDO::PARAM_INT);
             }
         }
-        
+
         $resultData = $comando->queryAll();
         $dataProvider = new ArrayDataProvider([
             'key' => 'id',
@@ -136,11 +136,11 @@ class Lista extends \yii\db\ActiveRecord {
                     'num_suscriptores',
                 ],
             ],
-        ]);        
+        ]);
         if ($onlyData) {
-          return $resultData;
+            return $resultData;
         } else {
-          return $dataProvider;
+            return $dataProvider;
         }
     }
 
@@ -170,20 +170,20 @@ class Lista extends \yii\db\ActiveRecord {
         return $resultData;
     }
 
-     /**
+    /**
      * Function inactivaLista
      * @author  Grace Viteri <analistadesarrollo01@uteg.edu.ec>
      * @param   
      * @return  Inactiva las listas creadas en mailchimp.
      */
     public function inactivaLista($lis_id) {
-    $con = \Yii::$app->db_mailing;
+        $con = \Yii::$app->db_mailing;
         $estado = 1;
-        $fecha_modificacion = date(Yii::$app->params["dateTimeByDefault"]);        
+        $fecha_modificacion = date(Yii::$app->params["dateTimeByDefault"]);
 
         try {
             $comando = $con->createCommand
-                (
+                    (
                     "UPDATE " . $con->dbname . ".lista		       
                       SET 
                           lis_estado = '0',
@@ -192,17 +192,17 @@ class Lista extends \yii\db\ActiveRecord {
                       WHERE lis_id = :list_id AND                        
                             lis_estado = :estado AND
                             lis_estado_logico = :estado"
-                );
+            );
             $comando->bindParam(":estado", $estado, \PDO::PARAM_STR);
-            $comando->bindParam(":fecha_modificacion", $fecha_modificacion, \PDO::PARAM_STR);            
-            $comando->bindParam(":list_id", $lis_id, \PDO::PARAM_INT);  
-            $response = $comando->execute();            
+            $comando->bindParam(":fecha_modificacion", $fecha_modificacion, \PDO::PARAM_STR);
+            $comando->bindParam(":list_id", $lis_id, \PDO::PARAM_INT);
+            $response = $comando->execute();
             return $response;
-        } catch (Exception $ex) {            
+        } catch (Exception $ex) {
             return FALSE;
         }
     }
-    
+
     /**
      * Function inactivaListaSuscriptor
      * @author  Grace Viteri <analistadesarrollo01@uteg.edu.ec>
@@ -210,13 +210,13 @@ class Lista extends \yii\db\ActiveRecord {
      * @return  Inactiva la relación de lista y suscriptor creadas en mailchimp.
      */
     public function inactivaListaSuscriptor($lis_id) {
-    $con = \Yii::$app->db_mailing;
+        $con = \Yii::$app->db_mailing;
         $estado = 1;
-        $fecha_modificacion = date(Yii::$app->params["dateTimeByDefault"]);        
+        $fecha_modificacion = date(Yii::$app->params["dateTimeByDefault"]);
 
         try {
             $comando = $con->createCommand
-                (
+                    (
                     "UPDATE " . $con->dbname . ".lista_suscriptor		       
                       SET 
                           lsus_estado = '0',
@@ -225,17 +225,16 @@ class Lista extends \yii\db\ActiveRecord {
                       WHERE lsus_id = :list_id AND                        
                             lsus_estado = :estado AND
                             lsus_estado_logico = :estado"
-                );
+            );
             $comando->bindParam(":estado", $estado, \PDO::PARAM_STR);
-            $comando->bindParam(":fecha_modificacion", $fecha_modificacion, \PDO::PARAM_STR);            
-            $comando->bindParam(":list_id", $lis_id, \PDO::PARAM_INT);  
-            $response = $comando->execute();            
+            $comando->bindParam(":fecha_modificacion", $fecha_modificacion, \PDO::PARAM_STR);
+            $comando->bindParam(":list_id", $lis_id, \PDO::PARAM_INT);
+            $response = $comando->execute();
             return $response;
-        } catch (Exception $ex) {            
+        } catch (Exception $ex) {
             return FALSE;
         }
     }
-    
 
     /**
      * Function insertarProgramacion crea una programacion.
@@ -275,7 +274,7 @@ class Lista extends \yii\db\ActiveRecord {
             $bdet_sql .= ", :pro_fecha_hasta";
         }
         if (isset($pro_hora_envio)) {
-            $hora_envio = date(Yii::$app->params["dateByDefault"]). " " .$pro_hora_envio.":00";
+            $hora_envio = date(Yii::$app->params["dateByDefault"]) . " " . $pro_hora_envio . ":00";
             $param_sql .= ", pro_hora_envio";
             $bdet_sql .= ", :pro_hora_envio";
         }
@@ -313,11 +312,70 @@ class Lista extends \yii\db\ActiveRecord {
             if (!empty((isset($pro_fecha_creacion)))) {
                 $comando->bindParam(':pro_fecha_creacion', $pro_fecha_creacion, \PDO::PARAM_STR);
             }
-            
+
             $result = $comando->execute();
             if ($trans !== null)
                 $trans->commit();
             return $con->getLastInsertID($con->dbname . '.programacion');
+        } catch (Exception $ex) {
+            if ($trans !== null)
+                $trans->rollback();
+            return FALSE;
+        }
+    }
+
+    /**
+     * Function insertarDiaProgra crea dia atados a una programacion.
+     * @author  Giovanni Vergara <analistadesarrollo02@uteg.edu.ec>;
+     * @param
+     * @return
+     */
+    public function insertarDiaProgra($pro_id, $dia_id, $dpro_fecha_creacion) {
+        $con = \Yii::$app->db_mailing;
+        $trans = $con->getTransaction(); // se obtiene la transacción actual
+        if ($trans !== null) {
+            $trans = null; // si existe la transacción entonces no se crea una
+        } else {
+            $trans = $con->beginTransaction(); // si no existe la transacción entonces se crea una
+        }
+
+        $param_sql = "dpro_estado";
+        $bdet_sql = "1";
+
+        $param_sql .= ", dpro_estado_logico";
+        $bdet_sql .= ", 1";
+
+        if (isset($pro_id)) {
+            $param_sql .= ", pro_id";
+            $bdet_sql .= ", :pro_id";
+        }
+        if (isset($dia_id)) {
+            $param_sql .= ", dia_id";
+            $bdet_sql .= ", :dia_id";
+        }
+        if (isset($dpro_fecha_creacion)) {
+            $param_sql .= ", dpro_fecha_creacion";
+            $bdet_sql .= ", :dpro_fecha_creacion";
+        }
+
+        try {
+            $sql = "INSERT INTO " . $con->dbname . ".dia_programacion ($param_sql) VALUES($bdet_sql)";
+            $comando = $con->createCommand($sql);
+
+            if (isset($pro_id)) {
+                $comando->bindParam(':pro_id', $pro_id, \PDO::PARAM_INT);
+            }
+            if (isset($dia_id)) {
+                $comando->bindParam(':dia_id', $dia_id, \PDO::PARAM_INT);
+            }
+            if (!empty((isset($dpro_fecha_creacion)))) {
+                $comando->bindParam(':dpro_fecha_creacion', $dpro_fecha_creacion, \PDO::PARAM_STR);
+            }
+
+            $result = $comando->execute();
+            if ($trans !== null)
+                $trans->commit();
+            return $con->getLastInsertID($con->dbname . '.dia_programacion');
         } catch (Exception $ex) {
             if ($trans !== null)
                 $trans->rollback();
