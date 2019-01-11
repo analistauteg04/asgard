@@ -23,6 +23,7 @@ class EmailController extends \app\components\CController {
         } else {
             $resp_lista = $mod_lista->consultarLista();
         } 
+        $op = isset($_POST['op']) ? $_POST['op'] : "";
         $resp_combo_lista = $mod_lista->consultarListaProgramacion();                
         return $this->render('index', [
                     "arr_lista" => ArrayHelper::map(array_merge(["id" => "0", "name" => "Seleccionar"], $resp_combo_lista), "id", "name"),
