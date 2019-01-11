@@ -82,4 +82,30 @@ function mostrar_grid_lista() {
         setTimeout(hideLoadingPopup, 2000);
     }
 }
-
+function autocompletarBuscarLista(requestq, responseq,control,op){
+    var link = $('#txth_base').val() +"/marketing/email/index";
+    var arrParams = new Object();
+    arrParams.valor = $('#' + control).val();
+    arrParams.op = op;
+    requestHttpAjax(link, arrParams, function (response) {
+        //showAlert(response.status, response.label, response.message);
+        //if (response.status == 'OK') {
+            var arrayList = new Array;
+            var count = response.length;
+            for (var i = 0; i < count; i++) {
+                row = new Object();
+                row.IdentificacionComprador = response[i]['IdentificacionComprador'];
+                row.RazonSocialComprador = response[i]['RazonSocialComprador'];
+ 
+                // Campos Importandes relacionados con el  CJuiAutoComplete
+                row.id = response[i]['IdentificacionComprador'];
+                row.label = response[i]['RazonSocialComprador'] + ' - ' + response[i]['IdentificacionComprador'];//+' - '+data[i]['SEGURO_SOCIAL'];//Lo sugerido
+                //row.value=response[i]['IdentificacionComprador'];//lo que se almacena en en la caja de texto
+                row.value = response[i]['RazonSocialComprador'];//lo que se almacena en en la caja de texto
+                arrayList[i] = row;
+            }
+            sessionStorage.src_buscIndex = JSON.stringify(arrayList);//dss=>DataSessionStore
+            responseq(arrayList);  
+        //}
+    }, true);
+}
