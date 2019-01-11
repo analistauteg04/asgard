@@ -599,3 +599,9 @@ INSERT INTO `asignacion_paralelo` (`apar_id`, `par_id`, `mat_id`, `mest_id`, `ap
 (210, 16, 210, NULL, 'Asignación Paralelo: 1', '2018-08-15 16:03:02', 27, NULL, '1', '2018-08-15 16:03:02', NULL, '1'),
 (211, 16, 211, NULL, 'Asignación Paralelo: 1', '2018-08-15 16:03:13', 27, NULL, '1', '2018-08-15 16:03:13', NULL, '1'),
 (212, 16, 212, NULL, 'Asignación Paralelo: 1', '2018-08-16 21:20:17', 27, NULL, '1', '2018-08-16 21:20:17', NULL, '1'); 
+
+
+--
+-- Volcado de datos para la tabla `estudio_academico_area_conocimiento`
+--
+INSERT INTO `estudio_academico_area_conocimiento` (`eaac_id`, `eaca_id`, `mest_id`, `acon_id`, `eaac_estado`,`eaac_fecha_creacion`,`eaac_fecha_modificacion`,`eaac_estado_logico`) VALUES(1, 2, NULL, 1,1, '2017-10-11 01:22:45',NULL, '1');

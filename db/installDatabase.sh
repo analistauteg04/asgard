@@ -90,6 +90,22 @@ if [ $UPDB -eq 1 ] || [ $CAP -eq 1 ]; then
     mysql -uroot -p${ROOT_PASS} -e "GRANT ALL PRIVILEGES ON db_captacion.* TO '${USER}'@'localhost';"
 fi
 
+
+# DATABASE MAILING
+if [ $UPDB -ne 1 ]; then
+    echo -n "Desea Instalar la Base de datos para Correo Electronico Masivo  YES (1) o NO (2):"
+    read -s EMAI
+    echo $EMAI
+fi
+if [ $UPDB -eq 1 ] || [ $EMAI -eq 1 ]; then
+    echo "SUBIENDO db_mailing......"
+    mysql -u${USER} -p${PASS} < $CURRENT_DIR/base_nueva_prod/estructura/db_mailing.sql
+    mysql -u${USER} -p${PASS} < $CURRENT_DIR/base_nueva_prod/data/db_mailing_data.sql
+    mysql -uroot -p${ROOT_PASS} -e "GRANT ALL PRIVILEGES ON db_mailing.* TO '${USER}'@'localhost';"
+fi
+
+
+
 # DATABASE ACADEMICO
 if [ $UPDB -ne 1 ]; then
     echo -n "Desea Instalar la Base de datos Academico YES (1) o NO (2):"

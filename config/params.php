@@ -14,7 +14,7 @@ return [
     'analistatalento' => /*'kmunoz@uteg.edu.ec',*/ 'analistadesarrollo02@uteg.edu.ec',
     'analistanomina' => /*'glamota@uteg.edu.ec',*/ 'analistadesarrollo02@uteg.edu.ec', 
     'lidercontact' => /*'lidercontactcenter@uteg.edu.ec',*/ 'analistadesarrollo02@uteg.edu.ec', 
-    'adminlider' => /*'abejarano@uteg.edu.ec',*/ 'analistadesarrollo02@uteg.edu.ec',     
+    'adminlider' => /*'coordinacionadmisiones@uteg.edu.ec',*/ 'analistadesarrollo02@uteg.edu.ec',     
     'contact1' => /*'contactcenter01@uteg.edu.ec',*/ 'inxszeta@hotmail.com', 
     'contact2' => /*'contactcenter02@uteg.edu.ec',*/ 'gianvergarazarate@gmail.com', 
     'contact3' => /*'contactcenter03@uteg.edu.ec',*/ 'gianverg@espol.edu.ec', 

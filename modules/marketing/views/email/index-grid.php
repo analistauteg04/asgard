@@ -9,7 +9,7 @@
 use yii\helpers\Html;
 use yii\helpers\Url;
 use app\widgets\PbGridView\PbGridView;
-use app\modules\admision\Module as admision;
+use app\modules\marketing\Module as marketing;
 use app\modules\academico\Module as academico;
 academico::registerTranslations();
 ?>
@@ -17,7 +17,7 @@ academico::registerTranslations();
 
 PbGridView::widget([
     //'dataProvider' => new yii\data\ArrayDataProvider(array()),
-    'id' => 'Tbg_Solicitudes',
+    'id' => 'Tbg_Lista',
     'showExport' => true,
     'fnExportEXCEL' => "exportExcel",
     'fnExportPDF' => "exportPdf",
@@ -25,42 +25,21 @@ PbGridView::widget([
     'columns' =>
     [
         [
-            'attribute' => 'Solicitud #',
-            'header' => admision::t("Solicitudes", "Request #"),
-            'value' => 'num_solicitud',
+            'attribute' => 'Lista',
+            'header' => marketing::t("marketing", "List"),
+            'value' => 'lis_nombre',
         ],
         [
-            'attribute' => 'Fecha Solicitud ',
-            'header' => admision::t("Solicitudes", "Application date"),
-            'value' => 'fecha_solicitud',
+            'attribute' => 'Programa',
+            'header' => academico::t("Academico", "Career/Program/Course"),
+            'value' => 'programa',
         ],
         [
-            'attribute' => 'DNI',
-            'header' => Yii::t("formulario", "DNI 1"),
-            'value' => 'per_dni',
-        ],
-        [
-            'attribute' => 'Nombres',
-            'header' => Yii::t("formulario", "First Names"),
-            'value' => 'per_pri_nombre',
-        ],
-        [
-            'attribute' => 'Apellidos',
-            'header' => Yii::t("formulario", "Last Names"),
-            'value' => 'per_pri_apellido',
-        ],
-        [
-            'attribute' => 'Unidad Académica',
-            'header' => academico::t("Academico", "Aca. Uni."),
-            'value' => 'uaca_nombre',
-        ],
-        [
-            'attribute' => 'Metodo Ingreso',
-            'header' => academico::t("Academico", "Income Method"),
-            'value' => 'ming_nombre',
-        ], 
-       
-        [
+            'attribute' => 'Subscriber number',
+            'header' => marketing::t("marketing", "Subscriber number"),
+            'value' => 'num_suscriptores',
+        ],             
+        /*[
             'class' => 'yii\grid\ActionColumn',
             'header' => academico::t("Academico", "Career/Program/Course"),
             'template' => '{view}',
@@ -69,45 +48,21 @@ PbGridView::widget([
                     return Html::a('<span>' . substr($model['carrera'], 0, 20) . '... </span>', Url::to(['#']), ["data-toggle" => "tooltip", "title" => $model['carrera']]);
                 },
             ],
-        ],
-        [
-            'attribute' => 'Estado',
-            'header' => Yii::t("formulario", "Status"),
-            'value' => 'estado',
-        ],
-        [
-            'attribute' => 'Pago',
-            'header' => Yii::t("formulario", "Pago"),
-            'value' => 'pago',
-        ],
+        ],*/      
         [
             'class' => 'yii\grid\ActionColumn',
             'header' => Yii::t("formulario", "Actions"),
-            'template' => '{view} {documentos}',
+            'template' => '{programar} {asignar} {eliminar}',
             'buttons' => [
-                'view' => function ($url, $model) {
-                    return Html::a('<span class="glyphicon glyphicon-check"></span>', Url::to(['/admision/solicitudes/view', 'ids' => base64_encode($model['sins_id']), 'int' => base64_encode($model['int_id']), 'perid' => base64_encode($model['persona']), 'empid' => base64_encode($model['emp_id'])]), ["data-toggle" => "tooltip", "title" => "Ver Solicitud", "data-pjax" => 0]);
-                },
-                'documentos' => function ($url, $model) {
-                    if ($model['uaca_id'] < 3) {
-                        if ($model['numDocumentos'] == 0) {
-                            return Html::a('<span class="glyphicon glyphicon-folder-open"></span>', Url::to(['/admision/solicitudes/subirdocumentos', 'id_sol' => base64_encode($model['sins_id']), 'int' => base64_encode($model['int_id']), 'perid' => base64_encode($model['persona']), 'opcion' => base64_encode(2), 'uaca' => base64_encode($model['uaca_id'])]), ["data-toggle" => "tooltip", "title" => "Subir Documentos", "data-pjax" => 0]);
-                        } else {
-                            if ($model['rsin_id'] == 4)
-                                return Html::a('<span class="glyphicon glyphicon-folder-open"></span>', Url::to(['/admision/solicitudes/actualizardocumentos', 'id_sol' => base64_encode($model['sins_id']), 'int' => base64_encode($model['int_id']), 'perid' => base64_encode($model['persona']), 'opcion' => base64_encode(2), 'uaca' => base64_encode($model['uaca_id'])]), ["data-toggle" => "tooltip", "title" => "Actualizar Documentos", "data-pjax" => 0]);
-                            else
-                                return '<span class="glyphicon glyphicon-folder-open"></span>';
-                        }
-                    }
-                    else {
-                            return '<span class="glyphicon glyphicon-folder-open"></span>';
-                        }
-                    /*'factura' => function ($url, $model) {
-                        if ($model['pago'] != "No generado") {
-                            return Html::a('<span class="glyphicon glyphicon-usd"></span>', Url::to(['/admision/solicitudes/descargafactura', 'id_sol' => base64_encode($model['sins_id']), 'int' => base64_encode($model['int_id']), 'perid' => base64_encode($model['persona']), 'opcion' => base64_encode(2)]), ["data-toggle" => "tooltip", "title" => "Descargar Factura", "data-pjax" => 0]);
-                        }
-                    },*/
-                },
+                'programar' => function ($url, $model) {
+                    return Html::a('<span class="glyphicon glyphicon-calendar"></span>', Url::to(['/marketing/email/programacion', /* 'empid' => base64_encode($model['emp_id'])*/]), ["data-toggle" => "tooltip", "title" => "Programación de envío", "data-pjax" => 0]);
+                },     
+                'asignar' => function ($url, $model) {
+                    return Html::a('<span class="glyphicon glyphicon-plus"></span>', Url::to(['/marketing/email/asignar',  'lis_id' => base64_encode($model['lis_id'])]), ["data-toggle" => "tooltip", "title" => "Asignar Subscriptores", "data-pjax" => 0]);
+                },     
+                'eliminar' => function ($url, $model) {
+                    return Html::a('<span class="glyphicon glyphicon-remove"></span>', Url::to(['/marketing/email/delete',  'lis_id' => base64_encode($model['lis_id'])]), ["data-toggle" => "tooltip", "title" => "Eliminar lista", "data-pjax" => 0]);
+                },     
             ],
         ],
     ],

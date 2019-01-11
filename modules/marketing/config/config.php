@@ -5,7 +5,7 @@ $arr_conf = [
         'urlManager' => [
             'class' => 'yii\web\UrlManager',
             'rules' => [
-                '<module:marketing>/<controller:\w+>/<action:\w+>/<id:\w+>' => '<module>/<controller>/<action>',
+                '<module:mailing>/<controller:\w+>/<action:\w+>/<id:\w+>' => '<module>/<controller>/<action>',
             ]
         ],
     ],

@@ -292,6 +292,16 @@ function validateType(type, valor, ref) {
                 result.errorMessage = objLang.The_next_date_can_not_be_before_the_attention_date;
             }
             break;
+        case 'fecha_fin':
+            var fecha_fin = valor;
+            if (fecha_fin >= $('#txt_fecha_inicio').val())
+            {
+                result.response = validarExpresion(/^(19|20)\d\d[-](0[1-9]|1[012])[-](0[1-9]|[12][0-9]|3[01])/, valor);
+            }
+            if (!result.response) {
+                result.errorMessage = objLang.The_end_date_can_not_be_before_the_begin_date;
+            }
+            break;    
         case 'url':
             result.response = validarExpresion(/^(http|https)\:\/\/[a-z0-9\.-]+\.[a-z]{2,4}/, valor);
             if (!result.response) {

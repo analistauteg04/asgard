@@ -573,3 +573,22 @@ create table if not exists `modalidad_unidad_academico` (
   foreign key (uaca_id) references `unidad_academica`(uaca_id),
   foreign key (mod_id) references `modalidad`(mod_id)
 );
+
+
+-- --------------------------------------------------------
+-- 
+-- Estructura de tabla para la tabla `estudio_academico_area_conocimiento`
+-- --------------------------------------------------------
+create table if not exists `estudio_academico_area_conocimiento` (
+  `eaac_id` bigint(20) not null auto_increment primary key,   
+  `eaca_id` bigint(20) null,
+  `mest_id` bigint(20) null,
+  `acon_id` bigint(20) not null,     
+  `eaac_estado` varchar(1) not null,
+  `eaac_fecha_creacion` timestamp not null default current_timestamp,
+  `eaac_fecha_modificacion` timestamp null default null,
+  `eaac_estado_logico` varchar(1) not null,
+  foreign key (eaca_id) references `estudio_academico`(eaca_id),
+  foreign key (mest_id) references `modulo_estudio`(mest_id),
+  foreign key (acon_id) references `area_conocimiento`(acon_id)  
+);

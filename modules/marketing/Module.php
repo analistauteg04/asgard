@@ -5,7 +5,7 @@ use Yii;
 
 class Module extends \yii\base\Module
 {
-    public $db_admision;    // se debe colocar el identificador de la base que se define en el archivo de modulos: mod.php
+    public $db_mailing;    // se debe colocar el identificador de la base que se define en el archivo de modulos: mod.php
     public $class;  // se debe colocar el la clase de la conexion de la base que se define en el archivo de modulos: mod.php
     public $controllerNamespace = 'app\modules\marketing\controllers';
     private static $module_name = 'marketing';
