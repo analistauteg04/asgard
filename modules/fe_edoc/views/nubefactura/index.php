@@ -5,6 +5,7 @@
  * @copyright Copyright &copy; SolucionesVillacreses 2014-09-24
  * @license http://www.opensource.org/licenses/bsd-license.php New BSD License
  */
+
 ?>
 <?php //echo $this->render('_include'); ?>
 <div class="col-lg-12">
