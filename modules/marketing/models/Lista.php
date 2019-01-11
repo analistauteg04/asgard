@@ -383,4 +383,34 @@ class Lista extends \yii\db\ActiveRecord {
         }
     }
 
+    /**
+     * Function consulta plantillas segun lista. 
+     * @author Giovanni Vergara <analistadesarrollo02@uteg.edu.ec>;
+     * @param
+     * @return
+     */
+    public function consultarListaTemplate($list_id) {
+        $con = \Yii::$app->db_mailing;
+        $estado = 1;
+        $sql = "SELECT 
+                   pla.pla_id as id, 
+                   pla.pla_nombre as name
+                   
+                FROM 
+                   " . $con->dbname . ".lista_plantilla lpa 
+                   INNER JOIN " . $con->dbname . ".plantilla  pla on pla.pla_id = lpa.pla_id ";
+        $sql .= "  
+                WHERE  
+                   lpa.lis_id = :list_id AND  
+                   lpa.lpla_estado = :estado AND
+                   lpa.lpla_estado_logico = :estado
+                ORDER BY name asc";
+
+        $comando = $con->createCommand($sql);
+        $comando->bindParam(":estado", $estado, \PDO::PARAM_STR);
+        $comando->bindParam(":list_id", $list_id, \PDO::PARAM_INT);
+        $resultData = $comando->queryAll();
+        return $resultData;
+    }
+
 }

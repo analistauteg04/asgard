@@ -3,7 +3,7 @@
 namespace app\modules\marketing\controllers;
 
 use Yii;
-use app\models\Utilities;//
+use app\models\Utilities;
 use yii\helpers\ArrayHelper;
 use app\modules\marketing\models\Lista;
 use app\modules\academico\Module as academico;
@@ -47,15 +47,17 @@ class EmailController extends \app\components\CController {
         $per_id = @Yii::$app->session->get("PB_perid");
         if (Yii::$app->request->isAjax) {
             $data = Yii::$app->request->post();
-            if (isset($data["gettemplate"])) {
-                //$template = $mod_lista->consultarListaTemplate($data["lista"]);
+            if (isset($data["getplantilla"])) {
+                $template = $mod_lista->consultarListaTemplate($data["lis_id"]);
                 $message = array("template" => $template);
                 return Utilities::ajaxResponse('OK', 'alert', Yii::t('jslang', 'Success'), 'false', $message);
             }
         }
         $arr_lista = $mod_lista->consultarListaProgramacion();
+        $arr_template = $mod_lista->consultarListaTemplate($arr_lista[0]["id"]);
         return $this->render('programacion', [
-                    "arr_lista" => ArrayHelper::map($arr_lista, "id", "name"),
+                    "arr_lista" => ArrayHelper::map(array_merge([["id" => "0", "name" => Yii::t("formulario", "Select")]], $arr_lista), "id", "name"),
+                    "arr_template" => ArrayHelper::map(array_merge([["id" => "0", "name" => Yii::t("formulario", "Select")]], $arr_template), "id", "name"),
         ]);
     }
 
