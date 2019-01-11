@@ -11,6 +11,7 @@ namespace app\webservices;
 use yii;
 use app\models\Http;
 use yii\helpers\Url;
+use PhpOffice\PhpSpreadsheet\Reader\Xls\MD5;
 
 /**
  * Description of ConsumirWsdl
@@ -41,13 +42,11 @@ class WsMailChimp
     }
 
     // Get information about all lists
-    public function getList(){
-        $WS_HOST = $this->host;
-        $WS_PORT = $this->port;
+    public function getAllList(){
         $WS_URI = $this->apiUrl . "lists";
         $params = array();
 
-        $response = Http::connect($WS_HOST, $WS_PORT, http::HTTPS)
+        $response = Http::connect($this->host, $this->port, http::HTTPS)
             //->setHeaders(array('Content-Type: application/json', 'Accept: application/json'))
             ->setCredentials($this->user, $this->apiKey)
             ->doGet($WS_URI, $params);
@@ -55,10 +54,57 @@ class WsMailChimp
         return $arr_response;
     }
 
+    // Get information about a specific list
+    public function getList($listId){
+        $WS_URI = $this->apiUrl . "lists/$listId";
+        $params = array();
+
+        $response = Http::connect($this->host, $this->port, http::HTTPS)
+            //->setHeaders(array('Content-Type: application/json', 'Accept: application/json'))
+            ->setCredentials($this->user, $this->apiKey)
+            ->doGet($WS_URI, $params);
+        $arr_response = json_decode($response, true);
+        return $arr_response;
+    }
+
+    // Get information about a specific list
+    public function editList($listId, $name, $contact, $permission_reminder, 
+    $sender_name, $sender_email, $subject_email, $language = "es", $email_type_option = true)
+    {
+        $WS_URI = $this->apiUrl . "lists/$listId";
+        $params = json_encode(array(
+            "name" => $name,
+            /*"contact" => array(
+                "company" => "UTEG",
+                "address1" => "test1",
+                "address2" => "test2",
+                "city" => "Guayaquil",
+                "state" => "GY",
+                "zip" => "12345",
+                "country" => "Ecuador",
+                "phone" => "112233445566",
+            ),*/
+            "contact" => $contact,
+            "permission_reminder" => $permission_reminder,
+            "campaign_defaults" => array(
+                "from_name" => $sender_name,
+                "from_email" => $sender_email,
+                "subject" => $subject_email,
+                "language" => $language,
+            ),
+            "email_type_option" => $email_type_option,
+        ));
+
+        $response = Http::connect($this->host, $this->port, http::HTTPS)
+            ->setHeaders(array('Content-Type: application/json', 'Accept: application/json'))
+            ->setCredentials($this->user, $this->apiKey)
+            ->doPatch($WS_URI, $params);
+        $arr_response = json_decode($response, true);
+        return $arr_response;
+    }
+
     // Create a new list
     public function newList($nameList, $from_name, $from_email, $subject, $contact, $lang = "es"){
-        $WS_HOST = $this->host;
-        $WS_PORT = $this->port;
         $WS_URI = $this->apiUrl . "lists";
         $params = json_encode(array(
             "name" => $nameList,
@@ -83,7 +129,7 @@ class WsMailChimp
             "email_type_option" => true
         ));
 
-        $response = Http::connect($WS_HOST, $WS_PORT, http::HTTPS)
+        $response = Http::connect($this->host, $this->port, http::HTTPS)
             ->setHeaders(array('Content-Type: application/json', 'Accept: application/json'))
             ->setCredentials($this->user, $this->apiKey)
             ->doPost($WS_URI, $params);
@@ -91,14 +137,39 @@ class WsMailChimp
         return $arr_response;
     }
 
-    // Get information about members in a list
-    function getMember($memberId){
-        $WS_HOST = $this->host;
-        $WS_PORT = $this->port;
-        $WS_URI = $this->apiUrl . "lists/$memberId/members";
+    // Remove a list member
+    function deleteList($listId){
+        $WS_URI = $this->apiUrl . "lists/$listId";
         $params = array();
 
-        $response = Http::connect($WS_HOST, $WS_PORT, http::HTTPS)
+        $response = Http::connect($this->host, $this->port, http::HTTPS)
+            //->setHeaders(array('Content-Type: application/json', 'Accept: application/json'))
+            ->setCredentials($this->user, $this->apiKey)
+            ->doDelete($WS_URI, $params);
+        $arr_response = json_decode($response, true);
+        return $arr_response;
+    }
+
+    // Get information about members in a list
+    function getMembersList($listId){
+        $WS_URI = $this->apiUrl . "lists/$listId/members";
+        $params = array();
+
+        $response = Http::connect($this->host, $this->port, http::HTTPS)
+            //->setHeaders(array('Content-Type: application/json', 'Accept: application/json'))
+            ->setCredentials($this->user, $this->apiKey)
+            ->doGet($WS_URI, $params);
+        $arr_response = json_decode($response, true);
+        return $arr_response;
+    }
+
+    // Get information about a specific list member
+    function getMemberSuscribedList($listId, $email_suscribed){
+        $subscriber_hash = strtolower(MD5($email_suscribed));
+        $WS_URI = $this->apiUrl . "/lists/$listId/members/$subscriber_hash";
+        $params = array();
+
+        $response = Http::connect($this->host, $this->port, http::HTTPS)
             //->setHeaders(array('Content-Type: application/json', 'Accept: application/json'))
             ->setCredentials($this->user, $this->apiKey)
             ->doGet($WS_URI, $params);
@@ -107,24 +178,46 @@ class WsMailChimp
     }
 
     // Add a new list member
-    function newMember($memberId, $email_member, $tags = array())
-    {
-        $WS_HOST = $this->host;
-        $WS_PORT = $this->port;
-        $WS_URI = $this->apiUrl . "lists/$memberId/members";
+    function newMember($listId, $email_member, $tags = array()){
+        $WS_URI = $this->apiUrl . "lists/$listId/members";
         $params = json_encode(array(
             "email_address" => $email_member,
             "status" => "subscribed",
             "tags" => $tags,
         ));
 
-        $response = Http::connect($WS_HOST, $WS_PORT, http::HTTPS)
+        $response = Http::connect($this->host, $this->port, http::HTTPS)
             ->setHeaders(array('Content-Type: application/json', 'Accept: application/json'))
             ->setCredentials($this->user, $this->apiKey)
             ->doPost($WS_URI, $params);
         $arr_response = json_decode($response, true);
         return $arr_response;
     }
-    
+
+    // 	Get all templates
+    function getAllTemplates(){
+        $WS_URI = $this->apiUrl . "templates";
+        $params = array();
+
+        $response = Http::connect($this->host, $this->port, http::HTTPS)
+            //->setHeaders(array('Content-Type: application/json', 'Accept: application/json'))
+            ->setCredentials($this->user, $this->apiKey)
+            ->doGet($WS_URI, $params);
+        $arr_response = json_decode($response, true);
+        return $arr_response;
+    }
+
+    // Get information about a specific template
+    function getTemplate($template_id){
+        $WS_URI = $this->apiUrl . "templates/$template_id";
+        $params = array();
+
+        $response = Http::connect($this->host, $this->port, http::HTTPS)
+            //->setHeaders(array('Content-Type: application/json', 'Accept: application/json'))
+            ->setCredentials($this->user, $this->apiKey)
+            ->doGet($WS_URI, $params);
+        $arr_response = json_decode($response, true);
+        return $arr_response;
+    }
 
 }

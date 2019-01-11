@@ -10,7 +10,6 @@ use app\modules\fe_edoc\models\VSFirmaDigital;
 use app\modules\fe_edoc\models\VSexception;
 use app\modules\fe_edoc\models\VSacceso;
 use app\modules\fe_edoc\models\mailSystem;
-use app\modules\fe_edoc\models\REPORTES;
 use app\modules\fe_edoc\models\USUARIO;
 use app\models\ExportFile;
 use yii\helpers\ArrayHelper;
@@ -58,7 +57,8 @@ class NubefacturaController extends \app\components\CController {
     public function actionGenerarpdf($ids) {//ok
         try {
             $ids = isset($_GET['ids']) ? base64_decode($_GET['ids']) : NULL;
-            $rep= $report = new ExportFile();
+            $rep = new ExportFile();
+            $this->layout = false;
             //$this->view->title = "Invoices";
             $modelo = new NubeFactura(); //Ejmpleo code 3
             $cabFact = $modelo->mostrarCabFactura($ids);
