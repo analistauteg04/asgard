@@ -317,7 +317,15 @@ class Http
 
         curl_setopt($s, CURLOPT_RETURNTRANSFER, true);
         curl_setopt($s, CURLOPT_HTTPHEADER, $headers);
+
+        //curl_setopt($s, CURLINFO_HEADER_OUT, true);
+        //curl_setopt($s, CURLOPT_RETURNTRANSFER, true);
+        
         $_out = curl_exec($s);
+
+        //$sent_request = curl_getinfo($s);
+        //\app\models\Utilities::putMessageLogFile($sent_request);
+
         $status = curl_getinfo($s, CURLINFO_HTTP_CODE);
         //exit($_out);
         curl_close($s);
@@ -328,9 +336,11 @@ class Http
                 $out = $_out;
                 break;
             default:
-                if (!$this->_silentMode) {
+                /*if (!$this->_silentMode) {
                     throw new Http_Exception("http error: {$status}", $status);
-                }
+                }*/
+                $out = $_out;
+                break;
         }
         return $out;
     }
