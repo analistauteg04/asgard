@@ -153,7 +153,7 @@ INSERT INTO `objeto_modulo` (`omod_id`, `mod_id`, `omod_padre_id`, `omod_nombre`
 (133, 6, 133, 'Email Marketing', 'P', '0', '', '', '', 'marketing/email/index', 1, '1', 'Marketing', '1', '2018-11-15 15:26:23', NULL, '1'),
 (134, 6, 134, 'Whatsapp Marketing', 'P', '0', '', '', '', 'marketing/whatsapp/index', 2, '1', 'Marketing', '1', '2018-11-15 15:26:23', NULL, '1'),
 (135, 6, 133, 'Programacion Envio', 'S', '0', '', '', '', 'marketing/email/programacion', 1, '1', 'Marketing', '1', '2018-11-15 15:26:23', NULL, '1'),
-(136, 4, 135, 'Guardar Programacion', 'A', '0', '', '', '', 'marketing/email/programacion', 1, '1', 'Marketing', '1', '2018-11-15 15:26:23', NULL, '1');
+(136, 6, 135, 'Guardar Programacion', 'A', '0', '', '', '', 'marketing/email/programacion', 1, '1', 'Marketing', '1', '2018-11-15 15:26:23', NULL, '1');
 -- --------------------------------------------------------
 --
 -- Volcado de datos para la tabla `OBMO_ACCI`
