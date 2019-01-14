@@ -382,7 +382,7 @@ return [
     "Monday" => "Lunes",
     "Montubio" => "Montubio",
     "Month" => "Mes",
-    "Name" => "Nombre",
+    "Name" => "Nombre",    
     "Names" => "Nombres",
     "Name Language" => "Nombre Lenguaje",
     "National identity document" => "Documento Nacional de Identidad",

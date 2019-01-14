@@ -12,7 +12,7 @@ $(document).ready(function () {
             }
         }, true);
     });
-
+    
 //Guardar programacion luego borrar cuando se hace el boton desde el frm configuracion
     $('#sendProgramacion').click(function () {
         if ($('#cmb_lista option:selected').val() > '0') {
@@ -91,6 +91,42 @@ $(document).ready(function () {
 
     $('#btn_buscarDataLista').click(function () {
         mostrar_grid_lista();
+    });
+    
+    $('#cmb_empresa').change(function () {
+        var link = $('#txth_base').val() + "/marketing/email/new";
+        var arrParams = new Object();
+        arrParams.emp_id = $(this).val();
+        arrParams.getcarrera = true;
+        requestHttpAjax(link, arrParams, function (response) {
+            if (response.status == "OK") {
+                data = response.message;
+                setComboDataselect(data.carrera, "cmb_carrera_programa", "Seleccionar");
+            }
+        }, true);
+    });
+    
+    $('#sendNewList').click(function () {
+        var link = $('#txth_base').val() + "/marketing/email/guardarlista";
+        var arrParams = new Object();
+        arrParams.emp_id = $('#cmb_empresa').val();
+        arrParams.carrera_id = $('#cmb_carrera_programa').val();
+        arrParams.nombre_lista = $('#txt_nombre_lista').val();
+        arrParams.nombre_empresa = $('#txt_nombre_empresa').val();
+        arrParams.txt_nombre_contacto = $('#txt_nombre_contacto').val();
+        arrParams.txt_correo_contacto = $('#txt_correo_contacto').val();
+        arrParams.txt_asunto = $('#txt_asunto').val();
+        
+        if (!validateForm()) {
+            requestHttpAjax(link, arrParams, function (response) {
+                showAlert(response.status, response.label, response.message);
+                if (!response.error) {
+                    setTimeout(function () {
+                        window.location.href = $('#txth_base').val() + "/marketing/email/new";
+                    }, 5000);
+                }
+            }, true);
+        }
     });
 
 });
