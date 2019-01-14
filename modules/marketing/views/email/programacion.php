@@ -16,7 +16,7 @@ use app\modules\marketing\Module;
                 <div class="form-group">
                     <label for="cmb_lista" class="col-sm-5 col-md-5 col-xs-5 col-lg-5 control-label keyupmce"><?= Module::t("marketing", "List") ?></label>
                     <div class="col-sm-7 col-md-7 col-xs-7 col-lg-7">
-                        <?= Html::dropDownList("cmb_lista", 1, $arr_lista, ["class" => "form-control", "id" => "cmb_lista"]) ?>
+                        <?= Html::dropDownList("cmb_lista", 0, $arr_lista, ["class" => "form-control", "id" => "cmb_lista"]) ?>
                     </div>
                 </div>
             </div>
@@ -24,7 +24,7 @@ use app\modules\marketing\Module;
                 <div class="form-group">
                     <label for="cmb_template" class="col-sm-5 col-md-5 col-xs-5 col-lg-5 control-label keyupmce"><?= Module::t("marketing", "Template") ?></label>
                     <div class="col-sm-7 col-md-7 col-xs-7 col-lg-7">
-                        <?= Html::dropDownList("cmb_template", 1, ["1" => "Template 1", "2" => "Template 2"], ["class" => "form-control", "id" => "cmb_template"]) ?>
+                        <?= Html::dropDownList("cmb_template", 0, $arr_template, ["class" => "form-control", "id" => "cmb_template"]) ?>
                     </div>
                 </div>
             </div>

@@ -8,7 +8,6 @@ use yii\helpers\ArrayHelper;
 use app\modules\marketing\models\Lista;
 use app\modules\academico\Module as academico;
 use app\modules\financiero\Module as financiero;
-use \app\modules\admision\models\PersonaGestion;
 use app\modules\marketing\models\Suscriptor;
 
 academico::registerTranslations();
@@ -24,6 +23,7 @@ class EmailController extends \app\components\CController {
         } else {
             $resp_lista = $mod_lista->consultarLista();
         } 
+        $op = isset($_POST['op']) ? $_POST['op'] : "";
         $resp_combo_lista = $mod_lista->consultarListaProgramacion();                
         return $this->render('index', [
                     "arr_lista" => ArrayHelper::map(array_merge(["id" => "0", "name" => "Seleccionar"], $resp_combo_lista), "id", "name"),
@@ -35,6 +35,7 @@ class EmailController extends \app\components\CController {
         $lis_id = base64_decode($_GET['lis_id']);
         $per_id = @Yii::$app->session->get("PB_perid");        
         $mod_pg= new Suscriptor();
+        
         if (Yii::$app->request->isAjax) {
             
         }        
@@ -47,15 +48,17 @@ class EmailController extends \app\components\CController {
         $per_id = @Yii::$app->session->get("PB_perid");
         if (Yii::$app->request->isAjax) {
             $data = Yii::$app->request->post();
-            if (isset($data["gettemplate"])) {
-                //$template = $mod_lista->consultarListaTemplate($data["lista"]);
+            if (isset($data["getplantilla"])) {
+                $template = $mod_lista->consultarListaTemplate($data["lis_id"]);
                 $message = array("template" => $template);
                 return Utilities::ajaxResponse('OK', 'alert', Yii::t('jslang', 'Success'), 'false', $message);
             }
         }
         $arr_lista = $mod_lista->consultarListaProgramacion();
+        $arr_template = $mod_lista->consultarListaTemplate($arr_lista[0]["id"]);
         return $this->render('programacion', [
-                    "arr_lista" => ArrayHelper::map($arr_lista, "id", "name"),
+                    "arr_lista" => ArrayHelper::map(array_merge([["id" => "0", "name" => Yii::t("formulario", "Select")]], $arr_lista), "id", "name"),
+                    "arr_template" => ArrayHelper::map(array_merge([["id" => "0", "name" => Yii::t("formulario", "Select")]], $arr_template), "id", "name"),
         ]);
     }
 

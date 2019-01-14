@@ -90,20 +90,22 @@ class Suscriptor extends \yii\db\ActiveRecord
                SELECT 
                     per.per_pri_nombre, per.per_pri_apellido, 
                     if(isnull(mest.mest_nombre),eaca.eaca_nombre,mest.mest_nombre) ,per.per_correo,
-                    ifnull(sus.sus_id,0) as es_susbcriptor
-
+                    ifnull(sus.sus_id,0) as es_susbcriptor,
+                    acon.acon_nombre    
                 FROM 
-                        db_mailing.lista lst
-                        left join db_academico.estudio_academico as eaca on eaca.eaca_id= lst.eaca_id
-                        left join db_academico.modulo_estudio as mest on mest.mest_id = lst.mest_id
-                        left join db_captacion.solicitud_inscripcion as sins on sins.eaca_id = eaca.eaca_id or sins.mest_id = mest.mest_id
-                        left join db_captacion.interesado as inte on inte.int_id = sins.int_id
+                    db_mailing.lista lst
+                    left join db_academico.estudio_academico as eaca on eaca.eaca_id= lst.eaca_id
+                    left join db_academico.modulo_estudio as mest on mest.mest_id = lst.mest_id
+                    left join db_captacion.solicitud_inscripcion as sins on sins.eaca_id = eaca.eaca_id or sins.mest_id = mest.mest_id
+                    left join db_captacion.interesado as inte on inte.int_id = sins.int_id
                     left join db_asgard.persona as per on per.per_id = inte.per_id
                     left join db_mailing.suscriptor as sus on sus.per_id = per.per_id
+                    left join db_academico.estudio_academico_area_conocimiento as eaac on eaac.eaca_id=eaca.eaca_id
+                    left join db_academico.area_conocimiento as acon on acon.acon_id=eaac.acon_id
                 WHERE 
-                        lst.lis_id=1 and
-                        lst.lis_estado = 1 AND
-                        lst.lis_estado_logico = 1
+                    lst.lis_id=1 and
+                    lst.lis_estado = 1 AND
+                    lst.lis_estado_logico = 1
                ";
 
         $comando = $con->createCommand($sql);
