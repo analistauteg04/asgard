@@ -221,7 +221,7 @@ INSERT INTO `obmo_acci` (`oacc_id`, `omod_id`, `acc_id`, `oacc_tipo_boton`, `oac
 (60, 125, 1, '0', 'academico/adminmetodoingreso/newperiodo', '', '1', '2018-11-12 23:12:53', NULL, '1'),
 (61, 132, 4, '1', '', 'guardarAdmiMateriarep', '1', '2018-11-15 15:26:23', NULL, '1'),
 (62, 120, 20, '0', 'academico/matriculadosreprobados/newreprobado', '', '1', '2018-11-15 15:30:56', NULL, '1'),
-(63, 136, 4, '1', '', 'saveProgrammation', '1', '2018-11-12 22:56:47', NULL, '1');
+(63, 136, 4, '1', '', 'guardarProgramacion', '1', '2018-11-12 22:56:47', NULL, '1');
 
 -- --------------------------------------------------------
 --
