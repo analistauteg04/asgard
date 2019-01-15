@@ -117,8 +117,7 @@ class EmailController extends \app\components\CController {
     public function actionGuardarprogramacion() {
         if (Yii::$app->request->isAjax) {
             $data = Yii::$app->request->post();
-            $lista = base64_decode($data["lista"]);
-            //$plantilla = $data["plantilla"];
+            $lista = base64_decode($data["lista"]);          
             $fecinicio = $data["fecha_inicio"];
             $fecfin = $data["fecha_fin"];
             $horenvio = $data["hora_envio"];
