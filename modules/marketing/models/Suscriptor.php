@@ -88,6 +88,7 @@ class Suscriptor extends \yii\db\ActiveRecord
         $estado = 1;
         $sql = "
                SELECT 
+                    if(ifnull(per.per_id,0)>0,1,2) per_tipo,
                     if(ifnull(per.per_id,0)>0,per.per_id,pges.pges_id) id_psus,
                     concat(per.per_pri_nombre,' ',per.per_pri_apellido) as contacto, 
                     if(isnull(mest.mest_nombre),eaca.eaca_nombre,mest.mest_nombre) carrera,

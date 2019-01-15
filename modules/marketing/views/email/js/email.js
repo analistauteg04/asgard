@@ -125,11 +125,26 @@ function mostrar_grid_lista() {
     }
 }
 
-function SuscribirContacto(psus_id) {
-    var mensaje ={
-        wtmessage: "Días Programar : El campo no debe estar vacío.", title: "Error"
-    };
-    showAlert("OK", "error", mensaje);
+function SuscribirContacto(psus_id,per_tipo) {
+//    var link = $('#txth_base').val() + "/marketing/email/asignar";
+//    var arrParams = new Object();
+//    arrParams.per_sus = psus_id;
+//    arrParams.per_tipo = per_tipo;
+//    if (!validateForm()) {
+//        requestHttpAjax(link, arrParams, function (response) {
+//            showAlert(response.status, response.label, response.message);
+//        }, true);
+//    }
+var mensj = "Maria Sanchez ha sido suscrita a la lista de Economia.<br/>";
+var mensj=mensj+"Las personas que se suscribieron a esta lista tambien les intereso las listas:<br/>";
+var mensj=mensj+"- Finanzas<br/>";
+var mensj=mensj+"- Economia<br/>";
+var mensj=mensj+"- Adminsitracion empresas<br/>";
+var mensj=mensj+"Desea suscribirlo a estas listas tambien?";
+var mensaje ={
+    wtmessage: mensj, title: "OK"
+};
+    showAlert("OK", "Ok", mensaje);
 }
 
 function setComboDataselect(arr_data, element_id, texto) {

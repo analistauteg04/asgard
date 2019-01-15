@@ -49,9 +49,7 @@ class EmailController extends \app\components\CController {
             
         }
         return $this->render('asignar', [
-            'arr_estado' => array("Seleccionar","Subscrito","No Subscrito"),
             'arr_lista' => $lista_model,
-            'model' => $susbs_lista,
             'arr_estado' => array("Seleccionar", "Subscrito", "No Subscrito"),
             'model' => $susbs_lista,
         ]);
