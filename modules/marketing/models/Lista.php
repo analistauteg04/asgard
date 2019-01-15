@@ -409,7 +409,8 @@ class Lista extends \yii\db\ActiveRecord {
         $comando = $con->createCommand($sql);
         $comando->bindParam(":estado", $estado, \PDO::PARAM_STR);
         $comando->bindParam(":list_id", $list_id, \PDO::PARAM_INT);
-        $resultData = $comando->queryAll();
+        //$resultData = $comando->queryAll();
+        $resultData = $comando->queryOne();
         return $resultData;
     }
 

@@ -55,7 +55,7 @@ PbGridView::widget([
             'template' => '{programar} {asignar} {eliminar}',
             'buttons' => [
                 'programar' => function ($url, $model) {
-                    return Html::a('<span class="glyphicon glyphicon-calendar"></span>', Url::to(['/marketing/email/programacion', /* 'empid' => base64_encode($model['emp_id'])*/]), ["data-toggle" => "tooltip", "title" => "Programación de envío", "data-pjax" => 0]);
+                    return Html::a('<span class="glyphicon glyphicon-calendar"></span>', Url::to(['/marketing/email/programacion', 'lisid' => base64_encode($model['lis_id'])]), ["data-toggle" => "tooltip", "title" => "Programación de envío", "data-pjax" => 0]);
                 },     
                 'asignar' => function ($url, $model) {
                     return Html::a('<span class="glyphicon glyphicon-plus"></span>', Url::to(['/marketing/email/asignar',  'lis_id' => base64_encode($model['lis_id'])]), ["data-toggle" => "tooltip", "title" => "Asignar Subscriptores", "data-pjax" => 0]);

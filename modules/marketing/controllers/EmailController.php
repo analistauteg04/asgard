@@ -55,17 +55,15 @@ class EmailController extends \app\components\CController {
         $per_id = @Yii::$app->session->get("PB_perid");
         if (Yii::$app->request->isAjax) {
             $data = Yii::$app->request->post();
-            if (isset($data["getplantilla"])) {
+            /*if (isset($data["getplantilla"])) {
                 $template = $mod_lista->consultarListaTemplate($data["lis_id"]);
                 $message = array("template" => $template);
                 return Utilities::ajaxResponse('OK', 'alert', Yii::t('jslang', 'Success'), 'false', $message);
-            }
+            }*/
         }
-        $arr_lista = $mod_lista->consultarListaProgramacion();
-        $arr_template = $mod_lista->consultarListaTemplate($arr_lista[0]["id"]);
+        $arr_lista = $mod_lista->consultarListaProgramacion();       
         return $this->render('programacion', [
-                    "arr_lista" => ArrayHelper::map(array_merge([["id" => "0", "name" => Yii::t("formulario", "Select")]], $arr_lista), "id", "name"),
-                    "arr_template" => ArrayHelper::map(array_merge([["id" => "0", "name" => Yii::t("formulario", "Select")]], $arr_template), "id", "name"),
+                    "arr_lista" => ArrayHelper::map(array_merge([["id" => "0", "name" => Yii::t("formulario", "Select")]], $arr_lista), "id", "name"),                    
         ]);
     }
 
@@ -114,18 +112,19 @@ class EmailController extends \app\components\CController {
     public function actionGuardarprogramacion() {
         if (Yii::$app->request->isAjax) {
             $data = Yii::$app->request->post();
-            $lista = $data["lista"];
-            $plantilla = $data["plantilla"];
+            $lista = base64_decode($data["lista"]);
+            //$plantilla = $data["plantilla"];
             $fecinicio = $data["fecha_inicio"];
             $fecfin = $data["fecha_fin"];
             $horenvio = $data["hora_envio"];        
-            $fecha_registro = date(Yii::$app->params["dateTimeByDefault"]);
+            $fecha_registro = date(Yii::$app->params["dateTimeByDefault"]);            
             $usuario = @Yii::$app->user->identity->usu_id;
             $con = \Yii::$app->db_mailing;
             $transaction = $con->beginTransaction();
             try {
                 $mod_lista = new Lista();
-                $resp_programacion = $mod_lista->insertarProgramacion($lista, $plantilla, $fecinicio, $fecfin, $horenvio, $usuario, $fecha_registro);
+                $plantilla = $mod_lista->consultarListaTemplate($lista);
+                $resp_programacion = $mod_lista->insertarProgramacion($lista, $plantilla['id'], $fecinicio, $fecfin, $horenvio, $usuario, $fecha_registro);
                 $pro_id = Yii::$app->db_mailing->getLastInsertID('db_mailing.programacion');
                 if ($resp_programacion) {
                     for ($i = 1; $i < 8; $i++) {
