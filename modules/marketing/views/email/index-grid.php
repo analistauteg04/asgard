@@ -33,6 +33,7 @@ PbGridView::widget([
             'attribute' => 'Programa',
             'header' => academico::t("Academico", "Career/Program/Course"),
             'value' => 'programa',
+            
         ],
         [
             'attribute' => 'Subscriber number',

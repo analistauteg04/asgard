@@ -408,8 +408,36 @@ class Lista extends \yii\db\ActiveRecord {
 
         $comando = $con->createCommand($sql);
         $comando->bindParam(":estado", $estado, \PDO::PARAM_STR);
-        $comando->bindParam(":list_id", $list_id, \PDO::PARAM_INT);
-        //$resultData = $comando->queryAll();
+        $comando->bindParam(":list_id", $list_id, \PDO::PARAM_INT);   
+        $resultData = $comando->queryOne();
+        return $resultData;
+    }
+    
+    /**
+     * Function consulta si no se ha ingresado anteriormente una programacion a una lista y plantilla. 
+     * @author Giovanni Vergara <analistadesarrollo02@uteg.edu.ec>;
+     * @param
+     * @return
+     */
+    public function consultarIngresoProgramacion($list_id, $pla_id) {
+        $con = \Yii::$app->db_mailing;
+        $estado = 1;
+        $sql = "SELECT 
+                   count(pro_id) as ingresado
+                   
+                FROM 
+                   " . $con->dbname . ".programacion ";
+        $sql .= "  
+                WHERE  
+                   lis_id = :list_id AND  
+                   pla_id = :pla_id AND
+                   pro_estado = :estado AND
+                   pro_estado_logico = :estado";
+
+        $comando = $con->createCommand($sql);
+        $comando->bindParam(":estado", $estado, \PDO::PARAM_STR);
+        $comando->bindParam(":list_id", $list_id, \PDO::PARAM_INT);  
+        $comando->bindParam(":pla_id", $pla_id, \PDO::PARAM_INT); 
         $resultData = $comando->queryOne();
         return $resultData;
     }

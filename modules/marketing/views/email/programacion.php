@@ -6,30 +6,7 @@ use app\modules\marketing\Module;
 ?>
 <?= Html::hiddenInput('txth_list', /*base64_decode(*/$_GET["lisid"]/*)*/, ['id' => 'txth_list']); ?>
 <form class="form-horizontal" enctype="multipart/form-data" > 
-    <div class="col-md-12 col-xs-12 col-sm-12 col-lg-12 ">     
-       <!-- <div class="col-md-7 col-sm-7 col-xs-7 col-lg-7">
-            <div class="form-group">
-                <h4><span id="lbl_general"><? Module::t("marketing", "Programtion") ?></span></h4> 
-            </div>
-        </div>     
-        <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
-            <div class="col-lg-6 col-md-6 col-sm-6 col-xs-6">
-                <div class="form-group">
-                    <label for="cmb_lista" class="col-sm-5 col-md-5 col-xs-5 col-lg-5 control-label keyupmce"><? Module::t("marketing", "List") ?></label>
-                    <div class="col-sm-7 col-md-7 col-xs-7 col-lg-7">
-                        <? Html::dropDownList("cmb_lista", 0, $arr_lista, ["class" => "form-control", "id" => "cmb_lista"]) ?>
-                    </div>
-                </div>
-            </div>
-            <div class="col-lg-6 col-md-6 col-sm-6 col-xs-6">
-                <div class="form-group">
-                    <label for="cmb_template" class="col-sm-5 col-md-5 col-xs-5 col-lg-5 control-label keyupmce"><? Module::t("marketing", "Template") ?></label>
-                    <div class="col-sm-7 col-md-7 col-xs-7 col-lg-7">
-                        <? Html::dropDownList("cmb_template", 0, $arr_template, ["class" => "form-control", "id" => "cmb_template"]) ?>
-                    </div>
-                </div>
-            </div>
-        </div> -->
+    <div class="col-md-12 col-xs-12 col-sm-12 col-lg-12 ">    
         <div class="col-md-7 col-sm-7 col-xs-7 col-lg-7">
             <div class="form-group">
                 <h4><span id="lbl_general"><?= Module::t("marketing", "Days Schedule") ?></span></h4> 

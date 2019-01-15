@@ -104,8 +104,6 @@ function setComboDataselect(arr_data, element_id, texto) {
 }
 
 function guardarProgramacion() {
-    //if ($('#cmb_lista option:selected').val() > '0') {
-            //if ($('#cmb_template option:selected').val() > '0') {
                 var link = $('#txth_base').val() + "/marketing/email/guardarprogramacion";
                 var arrParams = new Object();
                 arrParams.check_dia_1 = "";
@@ -115,8 +113,7 @@ function guardarProgramacion() {
                 arrParams.check_dia_5 = "";
                 arrParams.check_dia_6 = "";
                 arrParams.check_dia_7 = "";
-                arrParams.lista = $('#txth_list').val();                
-                //arrParams.plantilla = $('#cmb_template').val();
+                arrParams.lista = $('#txth_list').val();   
              
                 if ($('input:checkbox[name=check_dia_1]:checked').val() > 0)
                 {
@@ -167,14 +164,6 @@ function guardarProgramacion() {
 
                         }, true);
                     }
-                }
-            /*} else {
-                var mensaje = {wtmessage: "Plantilla: El campo no debe estar vacío.", title: "Error"};
-                showAlert("NO_OK", "Error", mensaje);
-            }
-        } else {
-            var mensaje = {wtmessage: "Lista: El campo no debe estar vacío.", title: "Error"};
-            showAlert("NO_OK", "Error", mensaje);
-        }*/
+                }           
     }
     
