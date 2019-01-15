@@ -13,6 +13,7 @@ namespace app\widgets\PbVPOS;
 use Yii;
 use yii\base\Widget;
 use app\models\Http;
+use yii\helpers\Url;
 use app\widgets\PbVPOS\assets\VPOSAsset;
 
 class PbVPOS extends Widget {
@@ -55,6 +56,8 @@ class PbVPOS extends Widget {
 
     public function run()
     {
+        $this->returnUrl = Url::current([], true) . "?referenceID=" . $this->referenceID;
+        $response = null;
         $data = [
             "titleBox" => $this->titleBox,
             "nombre_cliente" => $this->nombre_cliente,
@@ -63,17 +66,26 @@ class PbVPOS extends Widget {
             "total" => $this->total,
             "referenceID" => $this->referenceID,
         ];
+        echo json_encode($data);
+        if($this->isCheckout === false){
+            $response = $this->redirectRequest();
+        }else{
+            $response = $this->getInfoPayment($this->requestID);
+        }
         
-        $response = $this->redirectRequest();
-        echo json_encode($response);
+        //echo $this->returnUrl;
+        //echo json_encode($response);
         //if($response["status"]["status"] != "FAILED") {
         if($response["status"]["status"] != "OK"){
             echo $this->render('error');
         }else{
-            $requestId  = $response["requestId"];
-            $processUrl = $response["processUrl"];
-            //$data["processUrl"] = "http://www.penblu.com";
-            $data["processUrl"] = $processUrl;
+            if ($this->isCheckout === false) {
+                $requestId = $response["requestId"];
+                $processUrl = $response["processUrl"];
+                $data["processUrl"] = $processUrl;
+            }else{
+
+            }
             if($this->type == "button")
                 echo $this->render('button', $data);
             else
@@ -93,7 +105,7 @@ class PbVPOS extends Widget {
             $nonce = mt_rand();
         }
         $this->nounce   = base64_encode($nonce);
-        $this->transKey = base64_encode(sha1($nounce . $this->seed . $this->secret, true));
+        $this->transKey = base64_encode(sha1($nonce . $this->seed . $this->secret, true));
     }
 
     public function redirectRequest(){
@@ -101,7 +113,7 @@ class PbVPOS extends Widget {
         $params = [
             "auth" => [
                 "login" => $this->login,
-                "seed" => $this->seed,
+                "seed"  => $this->seed,
                 "nonce" => $this->nounce,
                 "tranKey" => $this->transKey,
             ],
