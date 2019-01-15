@@ -13,6 +13,9 @@ use app\modules\academico\Module as academico;
 use app\modules\financiero\Module as financiero;
 use app\modules\marketing\models\Suscriptor;
 use app\webservices\WsMailChimp;
+use app\models\Pais;
+use app\models\Provincia;
+use app\models\Canton;
 
 academico::registerTranslations();
 financiero::registerTranslations();
@@ -21,6 +24,7 @@ class EmailController extends \app\components\CController {
 
     public function actionIndex() {
         $mod_lista = new Lista();
+        $data = Yii::$app->request->get();
         if ($data['PBgetFilter']) {
             $arrSearch["lista_id"] = $data['lista_id'];
             $resp_lista = $mod_lista->consultarLista($arrSearch);
@@ -165,7 +169,7 @@ class EmailController extends \app\components\CController {
     public function actionNew() {  
         $empresa_mod = new Empresa();
         $oportunidad_mod = new Oportunidad();
-        $estudio_mod = new ModuloEstudio();
+        $estudio_mod = new ModuloEstudio();        
         if (Yii::$app->request->isAjax) {
             $data = Yii::$app->request->post();
             if (isset($data["getcarrera"])) {
@@ -177,54 +181,84 @@ class EmailController extends \app\components\CController {
                 $message = array("carrera" => $arreglo_carrerra);
                 return Utilities::ajaxResponse('OK', 'alert', Yii::t('jslang', 'Success'), 'false', $message);
             }
-        }
+            if (isset($data["getprovincias"])) {
+                $provincias = Provincia::find()->select("pro_id AS id, pro_nombre AS name")->where(["pro_estado_logico" => "1", "pro_estado" => "1", "pai_id" => $data['pai_id']])->asArray()->all();
+                $message = array("provincias" => $provincias);
+                echo Utilities::ajaxResponse('OK', 'alert', Yii::t('jslang', 'Success'), 'false', $message);
+                return;
+            }
+            if (isset($data["getcantones"])) {
+                $cantones = Canton::find()->select("can_id AS id, can_nombre AS name")->where(["can_estado_logico" => "1", "can_estado" => "1", "pro_id" => $data['prov_id']])->asArray()->all();
+                $message = array("cantones" => $cantones);
+                echo Utilities::ajaxResponse('OK', 'alert', Yii::t('jslang', 'Success'), 'false', $message);
+                return;
+            }
+        }        
         $arreglo_empresa = $empresa_mod->getAllEmpresa();
         $arreglo_carrerra = $oportunidad_mod->consultarCarreras();         
-                
+        $arreglo_pais = Pais::find()->select("pai_id AS id, pai_nombre AS value")->where(["pai_estado_logico" => "1", "pai_estado" => "1"])->asArray()->all();
+        $arreglo_provincia = Provincia::provinciaXPais(1);        
+        $arreglo_ciudad = Canton::cantonXProvincia(1);
         return $this->render('new', [
                     "arr_empresa" => ArrayHelper::map(array_merge([["id" => "0", "name" => Yii::t("formulario", "Select")]], $arreglo_empresa), "id", "value"),
                     "arr_carrera" => ArrayHelper::map(array_merge([["id" => "0", "name" => Yii::t("formulario", "Select")]], $arreglo_carrerra), "id", "name"),
+                    "arr_pais" => ArrayHelper::map(array_merge([["id" => "0", "name" => Yii::t("formulario", "Select")]], $arreglo_pais), "id", "value"),
+                    "arr_provincia" => ArrayHelper::map(array_merge([["id" => "0", "name" => Yii::t("formulario", "Select")]], $arreglo_provincia), "id", "value"),
+                    "arr_ciudad" => ArrayHelper::map(array_merge([["id" => "0", "name" => Yii::t("formulario", "Select")]], $arreglo_ciudad), "id", "value"),
         ]);       
     }
 
     public function actionGuardarlista() {
         if (Yii::$app->request->isAjax) {
             $data = Yii::$app->request->post();
-            $emp_id = $data["emp_id"];
-            $carrera_id = $data["carrera_id"];
+            $emp_id = $data["emp_id"];            
             $nombre_lista = ucwords(mb_strtolower($data["nombre_lista"]));
             $nombre_empresa = ucwords(mb_strtolower($data["nombre_empresa"]));
             $nombre_contacto = ucwords(mb_strtolower($data["txt_nombre_contacto"]));
             $correo_contacto = ucwords(mb_strtolower($data["txt_correo_contacto"]));
             $asunto = ucwords(mb_strtolower($data["txt_asunto"]));
-           
+            $pais = ucwords(mb_strtolower($data["pais_texto"]));
+            $pais_id = $data["pais_id"];
+            $ciudad = ucwords(mb_strtolower($data["ciudad_texto"]));
+            $ciudad_id = $data["ciudad_id"];
+            $provincia = ucwords(mb_strtolower($data["provincia_texto"]));
+            $provincia_id = $data["provincia_id"];
+            $direccion1 = ucwords(mb_strtolower($data["direccion1"]));
+            $direccion2= ucwords(mb_strtolower($data["direccion2"]));
+            $telefono= $data["telefono"];
+            $codigo_postal= ucwords(mb_strtolower($data["codigo_postal"]));
+            $eaca_id= null;
+            $mest_id = null;
+            if ($emp_id != 1) {
+                $mest_id = $data["carrera_id"];                
+            } else {
+                $eaca_id= $data["carrera_id"];
+            }
+            
             $con = \Yii::$app->db_mailing;
             $transaction = $con->beginTransaction();
-            try {
-                
-                
-                /*"contact" => array(
-                "company" => "UTEG",
-                "address1" => "test1",
-                "address2" => "test2",
-                "city" => "Guayaquil",
-                "state" => "GY",
-                "zip" => "12345",
-                "country" => "Ecuador",
-                "phone" => "112233445566",
-            )*/
-                        
+            try {                                
+                $contacto = array(
+                "company" => $nombre_empresa,
+                "address1" => $direccion1,
+                "address2" => $direccion2,
+                "city" => $ciudad,
+                "state" => $provincia,
+                "zip" => $codigo_postal,
+                "country" => $pais,
+                "phone" => $telefono,
+                );
+                //Grabar en mailchimp    
                 $webs_mailchimp = new WsMailChimp();
-                $conLista = $webs_mailchimp->newList($nombre_lista, $nombre_contacto, $correo_contacto, $asunto, $nombre_empresa, "es");
-                \app\models\Utilities::putMessageLogFile('lista:'.$nombre_lista);  
-                \app\models\Utilities::putMessageLogFile('contacto:'.$nombre_contacto);  
-                \app\models\Utilities::putMessageLogFile('correo:'.$correo_contacto);  
-                \app\models\Utilities::putMessageLogFile('empresa:'.$nombre_empresa);  
-                \app\models\Utilities::putMessageLogFile('asunto:'.$asunto);  
-                
-                \app\models\Utilities::putMessageLogFile('resultado:'.$conLista[0]);                
+                $conLista = $webs_mailchimp->newList($nombre_lista, $nombre_contacto, $correo_contacto, $asunto, $contacto, "es");                                
+                \app\models\Utilities::putMessageLogFile('resultado:'.$conLista);
                 if ($conLista) {
-                    $exito=1;
+                    //Grabar en asgard
+                    $lista = new Lista();
+                    $resp_lista = $lista->insertarLista('001', $eaca_id, $mest_id, $emp_id, $nombre_lista, $correo_contacto, $nombre_contacto, $pais_id, $provincia_id, $ciudad_id, $direccion1, $direccion2, $telefono, $codigo_postal);
+                    if ($resp_lista) {
+                        $exito=1;
+                    }                    
                 }
                 if ($exito) {
                     $transaction->commit();

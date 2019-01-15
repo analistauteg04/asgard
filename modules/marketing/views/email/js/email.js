@@ -37,12 +37,30 @@ $(document).ready(function () {
         var link = $('#txth_base').val() + "/marketing/email/guardarlista";
         var arrParams = new Object();
         arrParams.emp_id = $('#cmb_empresa').val();
+        var combo_empresa = document.getElementById("cmb_empresa");        
+        arrParams.nombre_empresa = combo_empresa.options[combo_empresa.selectedIndex].text;
+        
         arrParams.carrera_id = $('#cmb_carrera_programa').val();
-        arrParams.nombre_lista = $('#txt_nombre_lista').val();
-        arrParams.nombre_empresa = $('#txt_nombre_empresa').val();
+        arrParams.nombre_lista = $('#txt_nombre_lista').val();        
         arrParams.txt_nombre_contacto = $('#txt_nombre_contacto').val();
         arrParams.txt_correo_contacto = $('#txt_correo_contacto').val();
         arrParams.txt_asunto = $('#txt_asunto').val();
+        arrParams.pais_id = $('#cmb_pais').val();        
+        var combo_pais = document.getElementById("cmb_pais");
+        arrParams.pais_texto = combo_pais.options[combo_pais.selectedIndex].text;
+            
+        arrParams.provincia_id = $('#cmb_provincia').val();
+        var combo_provincia = document.getElementById("cmb_provincia");
+        arrParams.provincia_texto = combo_provincia.options[combo_provincia.selectedIndex].text;
+        
+        arrParams.ciudad_id = $('#cmb_ciudad').val();
+        var combo_ciudad = document.getElementById("cmb_ciudad");
+        arrParams.ciudad_texto = combo_ciudad.options[combo_ciudad.selectedIndex].text;
+        
+        arrParams.direccion1 = $('#txt_direccion1').val();
+        arrParams.direccion2 = $('#txt_direccion2').val();
+        arrParams.telefono = $('#telefono').val();
+        arrParams.codigo_postal = $('#txt_codigo_postal').val();                
         
         if (!validateForm()) {
             requestHttpAjax(link, arrParams, function (response) {
@@ -56,6 +74,44 @@ $(document).ready(function () {
         }
     });
 
+    $('#cmb_pais').change(function () {
+        var link = $('#txth_base').val() + "/marketing/email/new";
+        var arrParams = new Object();
+        arrParams.pai_id = $(this).val();
+        arrParams.getprovincias = true;
+        arrParams.getarea = true;
+        requestHttpAjax(link, arrParams, function (response) {
+            if (response.status == "OK") {
+                data = response.message;
+                setComboData(data.provincias, "cmb_provincia");
+                var arrParams = new Object();
+                if (data.provincias.length > 0) {
+                    arrParams.prov_id = data.provincias[0].id;
+                    arrParams.getcantones = true;
+                    requestHttpAjax(link, arrParams, function (response) {
+                        if (response.status == "OK") {
+                            data = response.message;
+                            setComboData(data.cantones, "cmb_ciudad");
+                        }
+                    }, true);
+                }
+
+            }
+        }, true);      
+    });
+
+    $('#cmb_provincia').change(function () {
+        var link = $('#txth_base').val() + "/marketing/email/new";
+        var arrParams = new Object();
+        arrParams.prov_id = $(this).val();
+        arrParams.getcantones = true;
+        requestHttpAjax(link, arrParams, function (response) {
+            if (response.status == "OK") {
+                data = response.message;
+                setComboData(data.cantones, "cmb_ciudad");
+            }
+        }, true);
+    });
 });
 
 function mostrar_grid_lista() {
@@ -67,30 +123,6 @@ function mostrar_grid_lista() {
         $('#Tbg_Lista').PbGridView('applyFilterData', {'lista_id': lista_id});
         setTimeout(hideLoadingPopup, 2000);
     }
-}
-function autocompletarBuscarLista(requestq, responseq, control, op) {
-    var link = $('#txth_base').val() + "/marketing/email/index";
-    var arrParams = new Object();
-    arrParams.valor = $('#' + control).val();
-    arrParams.op = op;
-    requestHttpAjax(link, arrParams, function (response) {
-        if (response.status == 'OK') {
-            var arrayList = new Array;
-            var count = response.length;
-            for (var i = 0; i < count; i++) {
-                var row = new Object();
-                row.IdentificacionComprador = response[i]['IdentificacionComprador'];
-                // Campos Importandes relacionados con el  CJuiAutoComplete
-                row.id = response[i]['IdentificacionComprador'];
-                row.label = response[i]['RazonSocialComprador'] + ' - ' + response[i]['IdentificacionComprador'];//+' - '+data[i]['SEGURO_SOCIAL'];//Lo sugerido
-                //row.value=response[i]['IdentificacionComprador'];//lo que se almacena en en la caja de texto
-                row.value = response[i]['RazonSocialComprador'];//lo que se almacena en en la caja de texto
-                arrayList[i] = row;
-            }
-            sessionStorage.src_buscIndex = JSON.stringify(arrayList);//dss=>DataSessionStore
-            responseq(arrayList);  
-        }
-    }, true);
 }
 function setComboDataselect(arr_data, element_id, texto) {
     var option_arr = "";
