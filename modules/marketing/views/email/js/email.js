@@ -68,6 +68,12 @@ function mostrar_grid_lista() {
         setTimeout(hideLoadingPopup, 2000);
     }
 }
+function SuscribirContacto(psus_id) {
+    var mensaje ={
+        wtmessage: "Días Programar : El campo no debe estar vacío.", title: "Error"
+    };
+    showAlert("OK", "error", mensaje);
+}
 function autocompletarBuscarLista(requestq, responseq, control, op) {
     var link = $('#txth_base').val() + "/marketing/email/index";
     var arrParams = new Object();

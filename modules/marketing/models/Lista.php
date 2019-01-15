@@ -84,64 +84,28 @@ class Lista extends \yii\db\ActiveRecord {
 
     /**
      * Function consultarLista
-     * @author  Grace Viteri <analistadesarrollo01@uteg.edu.ec>
+     * @author  Kleber Loayza <analistadesarrollo03@uteg.edu.ec>
      * @param   
-     * @return  Listas creadas en mailchimp.
+     * @return  Consulta una lista dada un Id.
      */
-    public function consultarLista($arrFiltro = array(), $onlyData = false) {
+    public function consultarLista($lista_id) {
         $con = \Yii::$app->db_mailing;
-        $con1 = \Yii::$app->db_academico;
         $estado = 1;
-
-        if (isset($arrFiltro) && count($arrFiltro) > 0) {
-            if ($arrFiltro['list_id'] != "" && $arrFiltro['list_id'] > 0) {
-                $str_search = "l.list_id = :lista_id AND ";
-            }
-        }
-
-        $sql = "SELECT l.lis_id, l.lis_nombre, 
-                        case when l.eaca_id > 0 then 
-                                     ea.eaca_nombre else me.mest_nombre end as programa,
-                        sum(case when (ls.lsus_estado = '1' and ls.lsus_estado_logico = '1') then
-                                     1 else 0 end) as num_suscriptores
-                FROM " . $con->dbname . ".lista l left join " . $con->dbname . ".lista_suscriptor ls on ls.lis_id = l.lis_id
-                  left join " . $con1->dbname . ".estudio_academico ea on ea.eaca_id = l.eaca_id
-                  left join " . $con1->dbname . ".modulo_estudio me on me.mest_id = l.mest_id
-                WHERE $str_search
-                      lis_estado = :estado
-                      and lis_estado_logico = :estado
-                GROUP BY l.lis_id, l.lis_nombre, ea.eaca_nombre;";
-
+        $sql = "
+                    SELECT
+                        lst.lis_nombre,
+                        count(lsu.sus_id) as num_suscr
+                    FROM 
+                        db_mailing.lista lst
+                        left join lista_suscriptor as lsu on lsu.lis_id=lst.lis_id
+                    WHERE
+                        lst.lis_id=1
+                        group by lst.lis_id
+                ";
         $comando = $con->createCommand($sql);
         $comando->bindParam(":estado", $estado, \PDO::PARAM_STR);
-
-        if (isset($arrFiltro) && count($arrFiltro) > 0) {
-            if ($arrFiltro['list_id'] != "" && $arrFiltro['list_id'] > 0) {
-                $lista_id = $arrFiltro["lista_id"];
-                $comando->bindParam(":lista_id", $lista_id, \PDO::PARAM_INT);
-            }
-        }
-
-        $resultData = $comando->queryAll();
-        $dataProvider = new ArrayDataProvider([
-            'key' => 'id',
-            'allModels' => $resultData,
-            'pagination' => [
-                'pageSize' => Yii::$app->params["pageSize"],
-            ],
-            'sort' => [
-                'attributes' => [
-                    'lis_id',
-                    'lis_nombre',
-                    'num_suscriptores',
-                ],
-            ],
-        ]);
-        if ($onlyData) {
-            return $resultData;
-        } else {
-            return $dataProvider;
-        }
+        $resultData = $comando->queryOne();
+        return $resultData;
     }
 
     /**
@@ -153,7 +117,6 @@ class Lista extends \yii\db\ActiveRecord {
     public function consultarListaProgramacion() {
         $con = \Yii::$app->db_mailing;
         $estado = 1;
-
         $sql = "SELECT 
                    lst.lis_id as id,
                    lst.lis_nombre as name

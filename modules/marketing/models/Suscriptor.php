@@ -88,19 +88,23 @@ class Suscriptor extends \yii\db\ActiveRecord
         $estado = 1;
         $sql = "
                SELECT 
+                    if(ifnull(per.per_id,0)>0,per.per_id,pges.pges_id) id_psus,
                     concat(per.per_pri_nombre,' ',per.per_pri_apellido) as contacto, 
                     if(isnull(mest.mest_nombre),eaca.eaca_nombre,mest.mest_nombre) carrera,
                     per.per_correo,
                     if(ifnull(sus.sus_id,0)>0,'Subscrito','No Subscrito') as estado,
-                    acon.acon_nombre    
+                    acon.acon_id,
+                    acon.acon_nombre
                 FROM 
                     db_mailing.lista lst
-                    left join db_academico.estudio_academico as eaca on eaca.eaca_id= lst.eaca_id
+                    left join db_academico.estudio_academico as eaca on eaca.eaca_id= lst.eaca_id                    
                     left join db_academico.modulo_estudio as mest on mest.mest_id = lst.mest_id
                     left join db_captacion.solicitud_inscripcion as sins on sins.eaca_id = eaca.eaca_id or sins.mest_id = mest.mest_id
-                    left join db_captacion.interesado as inte on inte.int_id = sins.int_id
+                    left join db_crm.oportunidad as opo on opo.eaca_id=eaca.eaca_id or opo.mest_id=mest.mest_id and opo.eaca_id != sins.eaca_id and opo.mest_id!=sins.mest_id                    
+                    left join db_captacion.interesado as inte on inte.int_id = sins.int_id                    
+                    left join db_crm.persona_gestion as pges on pges.pges_id=opo.pges_id
                     left join db_asgard.persona as per on per.per_id = inte.per_id
-                    left join db_mailing.suscriptor as sus on sus.per_id = per.per_id
+                    left join db_mailing.suscriptor as sus on sus.per_id = per.per_id or sus.pges_id=pges.pges_id
                     left join db_academico.estudio_academico_area_conocimiento as eaac on eaac.eaca_id=eaca.eaca_id
                     left join db_academico.area_conocimiento as acon on acon.acon_id=eaac.acon_id
                 WHERE 
@@ -117,7 +121,6 @@ class Suscriptor extends \yii\db\ActiveRecord
                 $comando->bindParam(":lista_id", $lista_id, \PDO::PARAM_INT);
             }
         }
-
         $resultData = $comando->queryAll();
         $dataProvider = new ArrayDataProvider([
             'key' => 'id',

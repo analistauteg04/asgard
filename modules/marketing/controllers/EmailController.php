@@ -39,13 +39,14 @@ class EmailController extends \app\components\CController {
         $lis_id = base64_decode($_GET['lis_id']);
         $per_id = @Yii::$app->session->get("PB_perid");        
         $mod_sb= new Suscriptor();
+        $lista_model=$mod_lista->consultarLista($lis_id);
         $susbs_lista=$mod_sb->consultarSuscriptoresxLista($lis_id);
-        
         if (Yii::$app->request->isAjax) {
             
         }        
         return $this->render('asignar', [
             'arr_estado' => array("Seleccionar","Subscrito","No Subscrito"),
+            'arr_lista' => $lista_model,
             'model' => $susbs_lista,
         ]);
     }

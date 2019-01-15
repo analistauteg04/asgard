@@ -16,17 +16,20 @@ use app\modules\marketing\Module as marketing;
     <div class='col-md-12 col-sm-12 col-xs-12 col-lg-12'>
         <div class="col-md-6 col-sm-6 col-xs-6 col-lg-6">
             <div class="form-group">
-                <label for="txt_nombre" class="col-sm-3 col-md-3 col-xs-3 col-lg-3 control-label" id="lbl_nombre"><?= Yii::t("formulario", "Names") ?></label>
-                <span for="txt_nombre" class="col-sm-3 col-md-3 col-xs-3 col-lg-3 control-label" id="lbl_nombre"><?= 'Economia' ?> </span> 
+                <label for="txt_nombre" class="col-sm-3 col-md-3 col-xs-3 col-lg-3 control-label" id="lbl_nombre"><?= Yii::t("formulario", "Name") ?></label>
+                <span for="txt_nombre" class="col-sm-3 col-md-3 col-xs-3 col-lg-3 control-label" id="lbl_nombre"><?= $arr_lista['lis_nombre'] ?> </span> 
             </div>
         </div> 
         <div class="col-md-6 col-sm-6 col-xs-6 col-lg-6">
             <div class="form-group">
                 <label for="txt_no_subs" class="col-sm-3 col-md-3 col-xs-3 col-lg-3 control-label" id="txt_no_subs"><?= Yii::t("formulario", "No. Subscr..") ?></label>
-                <span for="txt_no_subs" class="col-sm-3 col-md-3 col-xs-3 col-lg-3 control-label" id="txt_no_subs"><?= 12 ?> </span> 
+                <span for="txt_no_subs" class="col-sm-3 col-md-3 col-xs-3 col-lg-3 control-label" id="txt_no_subs"><?= $arr_lista['num_suscr'] ?> </span> 
             </div>
         </div> 
     </div>
+</div>   
+<div class="col-md-12 col-xs-12 col-sm-12 col-lg-12 ">
+    <br/>
 </div>    
 <div>    
     <?=
