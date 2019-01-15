@@ -30,9 +30,9 @@ class EmailController extends \app\components\CController {
             $resp_lista = $mod_lista->consultarLista($arrSearch);
         } else {
             $resp_lista = $mod_lista->consultarLista();
-        } 
+        }
         $op = isset($_POST['op']) ? $_POST['op'] : "";
-        $resp_combo_lista = $mod_lista->consultarListaProgramacion();                
+        $resp_combo_lista = $mod_lista->consultarListaProgramacion();
         return $this->render('index', [
                     "arr_lista" => ArrayHelper::map(array_merge(["id" => "0", "name" => "Seleccionar"], $resp_combo_lista), "id", "name"),
                     'model' => $resp_lista]);
@@ -43,13 +43,16 @@ class EmailController extends \app\components\CController {
         $lis_id = base64_decode($_GET['lis_id']);
         $per_id = @Yii::$app->session->get("PB_perid");        
         $mod_sb= new Suscriptor();
-        $susbs_lista=$mod_sb->consultarSuscriptoresxLista($lis_id);
-        
+        $lista_model=$mod_lista->consultarLista($lis_id);
+        $susbs_lista = $mod_sb->consultarSuscriptoresxLista($lis_id);
         if (Yii::$app->request->isAjax) {
             
-        }        
+        }
         return $this->render('asignar', [
             'arr_estado' => array("Seleccionar","Subscrito","No Subscrito"),
+            'arr_lista' => $lista_model,
+            'model' => $susbs_lista,
+            'arr_estado' => array("Seleccionar", "Subscrito", "No Subscrito"),
             'model' => $susbs_lista,
         ]);
     }
@@ -59,17 +62,15 @@ class EmailController extends \app\components\CController {
         $per_id = @Yii::$app->session->get("PB_perid");
         if (Yii::$app->request->isAjax) {
             $data = Yii::$app->request->post();
-            if (isset($data["getplantilla"])) {
-                $template = $mod_lista->consultarListaTemplate($data["lis_id"]);
-                $message = array("template" => $template);
-                return Utilities::ajaxResponse('OK', 'alert', Yii::t('jslang', 'Success'), 'false', $message);
-            }
+            /* if (isset($data["getplantilla"])) {
+              $template = $mod_lista->consultarListaTemplate($data["lis_id"]);
+              $message = array("template" => $template);
+              return Utilities::ajaxResponse('OK', 'alert', Yii::t('jslang', 'Success'), 'false', $message);
+              } */
         }
         $arr_lista = $mod_lista->consultarListaProgramacion();
-        $arr_template = $mod_lista->consultarListaTemplate($arr_lista[0]["id"]);
         return $this->render('programacion', [
                     "arr_lista" => ArrayHelper::map(array_merge([["id" => "0", "name" => Yii::t("formulario", "Select")]], $arr_lista), "id", "name"),
-                    "arr_template" => ArrayHelper::map(array_merge([["id" => "0", "name" => Yii::t("formulario", "Select")]], $arr_template), "id", "name"),
         ]);
     }
 
@@ -118,40 +119,50 @@ class EmailController extends \app\components\CController {
     public function actionGuardarprogramacion() {
         if (Yii::$app->request->isAjax) {
             $data = Yii::$app->request->post();
-            $lista = $data["lista"];
-            $plantilla = $data["plantilla"];
+            $lista = base64_decode($data["lista"]);
+            //$plantilla = $data["plantilla"];
             $fecinicio = $data["fecha_inicio"];
             $fecfin = $data["fecha_fin"];
-            $horenvio = $data["hora_envio"];        
+            $horenvio = $data["hora_envio"];
             $fecha_registro = date(Yii::$app->params["dateTimeByDefault"]);
             $usuario = @Yii::$app->user->identity->usu_id;
             $con = \Yii::$app->db_mailing;
             $transaction = $con->beginTransaction();
             try {
                 $mod_lista = new Lista();
-                $resp_programacion = $mod_lista->insertarProgramacion($lista, $plantilla, $fecinicio, $fecfin, $horenvio, $usuario, $fecha_registro);
-                $pro_id = Yii::$app->db_mailing->getLastInsertID('db_mailing.programacion');
-                if ($resp_programacion) {
-                    for ($i = 1; $i < 8; $i++) {
-                        $dia =  $data["check_dia_".$i];
-                        if($dia > 0) {
-                            $resp_dia = $mod_lista->insertarDiaProgra($resp_programacion, $dia, $fecha_registro);                            
+                $plantilla = $mod_lista->consultarListaTemplate($lista);
+                $ingreso = $mod_lista->consultarIngresoProgramacion($lista, $plantilla['id']);
+                if ($ingreso['ingresado'] == 0) {
+                    $resp_programacion = $mod_lista->insertarProgramacion($lista, $plantilla['id'], $fecinicio, $fecfin, $horenvio, $usuario, $fecha_registro);
+                    if ($resp_programacion) {
+                        for ($i = 1; $i < 8; $i++) {
+                            $dia = $data["check_dia_" . $i];
+                            if ($dia > 0) {
+                                $resp_dia = $mod_lista->insertarDiaProgra($resp_programacion, $dia, $fecha_registro);
+                            }
                         }
+                        $exito = 1;
                     }
-                    $exito = 1;
-                }
-                if ($exito) {
-                    $transaction->commit();
-                    $message = array(
-                        "wtmessage" => Yii::t("notificaciones", "La infomación ha sido grabada. "),
-                        "title" => Yii::t('jslang', 'Success'),
-                    );
-                    echo Utilities::ajaxResponse('OK', 'alert', Yii::t("jslang", "Sucess"), false, $message);
+                    if ($exito) {
+                        $transaction->commit();
+                        $message = array(
+                            "wtmessage" => Yii::t("notificaciones", "La infomación ha sido grabada. "),
+                            "title" => Yii::t('jslang', 'Success'),
+                        );
+                        echo Utilities::ajaxResponse('OK', 'alert', Yii::t("jslang", "Sucess"), false, $message);
+                    } else {
+                        $transaction->rollback();
+                        $message = array(
+                            "wtmessage" => Yii::t("notificaciones", "Error al grabar." . $mensaje),
+                            "title" => Yii::t('jslang', 'Error'),
+                        );
+                        echo Utilities::ajaxResponse('NO_OK', 'Error', Yii::t("jslang", "Error"), false, $message);
+                    }
                 } else {
                     $transaction->rollback();
                     $message = array(
-                        "wtmessage" => Yii::t("notificaciones", "Error al grabar." . $mensaje),
-                        "title" => Yii::t('jslang', 'Success'),
+                        "wtmessage" => Yii::t("notificaciones", "Ya se encuentra una programación ingresada para esta lista."),
+                        "title" => Yii::t('jslang', 'Error'),
                     );
                     echo Utilities::ajaxResponse('NO_OK', 'Error', Yii::t("jslang", "Error"), false, $message);
                 }
@@ -165,8 +176,8 @@ class EmailController extends \app\components\CController {
             }
         }
     }
-    
-    public function actionNew() {  
+
+    public function actionNew() {
         $empresa_mod = new Empresa();
         $oportunidad_mod = new Oportunidad();
         $estudio_mod = new ModuloEstudio();        
@@ -174,10 +185,10 @@ class EmailController extends \app\components\CController {
             $data = Yii::$app->request->post();
             if (isset($data["getcarrera"])) {
                 if ($data["emp_id"] == 1) {
-                    $arreglo_carrerra = $oportunidad_mod->consultarCarreras(); 
-                }  else {
-                    $arreglo_carrerra = $estudio_mod->consultarEstudioEmpresa($data["emp_id"] ); // tomar id de impresa        
-                }                
+                    $arreglo_carrerra = $oportunidad_mod->consultarCarreras();
+                } else {
+                    $arreglo_carrerra = $estudio_mod->consultarEstudioEmpresa($data["emp_id"]); // tomar id de impresa        
+                }
                 $message = array("carrera" => $arreglo_carrerra);
                 return Utilities::ajaxResponse('OK', 'alert', Yii::t('jslang', 'Success'), 'false', $message);
             }
@@ -258,7 +269,7 @@ class EmailController extends \app\components\CController {
                     $resp_lista = $lista->insertarLista('001', $eaca_id, $mest_id, $emp_id, $nombre_lista, $correo_contacto, $nombre_contacto, $pais_id, $provincia_id, $ciudad_id, $direccion1, $direccion2, $telefono, $codigo_postal);
                     if ($resp_lista) {
                         $exito=1;
-                    }                    
+                    }   
                 }
                 if ($exito) {
                     $transaction->commit();
@@ -285,5 +296,5 @@ class EmailController extends \app\components\CController {
             }
         }
     }
-    
+
 }
