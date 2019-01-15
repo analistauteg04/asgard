@@ -117,7 +117,32 @@ class Lista extends \yii\db\ActiveRecord
     {
         return $this->hasMany(Programacion::className(), ['lis_id' => 'lis_id']);
     }
-    
+    /**
+     * Function consultarLista
+     * @author  Kleber Loayza <analistadesarrollo03@uteg.edu.ec>
+     * @param   
+     * @return  Consulta una lista dada un Id.
+     */
+    public function consultarListaXID($lista_id) {
+        $con = \Yii::$app->db_mailing;
+        $estado = 1;
+        $sql = "
+                    SELECT
+                        lst.lis_nombre,
+                        count(lsu.sus_id) as num_suscr
+                    FROM 
+                        db_mailing.lista lst
+                        left join lista_suscriptor as lsu on lsu.lis_id=lst.lis_id
+                    WHERE
+                        lst.lis_id=1
+                        group by lst.lis_id
+                ";
+        $comando = $con->createCommand($sql);
+        $comando->bindParam(":estado", $estado, \PDO::PARAM_STR);
+        $resultData = $comando->queryOne();
+        return $resultData;
+    }
+
     /**
      * Function consultarLista
      * @author  Grace Viteri <analistadesarrollo01@uteg.edu.ec>
