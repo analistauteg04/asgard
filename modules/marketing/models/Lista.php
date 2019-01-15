@@ -1,7 +1,6 @@
 <?php
 
 namespace app\modules\marketing\models;
-
 use yii\data\ArrayDataProvider;
 use Yii;
 
@@ -9,44 +8,60 @@ use Yii;
  * This is the model class for table "lista".
  *
  * @property int $lis_id
+ * @property string $lis_codigo
  * @property int $eaca_id
  * @property int $mest_id
+ * @property int $emp_id
  * @property string $lis_nombre
- * @property string $lis_descripcion
+ * @property string $lis_correo_principal
+ * @property string $lis_nombre_principal
+ * @property int $pai_id
+ * @property int $pro_id
+ * @property int $can_id
+ * @property string $lis_direccion1_empresa
+ * @property string $lis_direccion2_empresa
+ * @property string $lis_telefono_empresa
+ * @property string $lis_codigo_postal
  * @property string $lis_estado
  * @property string $lis_fecha_creacion
  * @property string $lis_fecha_modificacion
  * @property string $lis_estado_logico
  *
+ * @property ListaPlantilla[] $listaPlantillas
  * @property ListaSuscriptor[] $listaSuscriptors
  * @property Programacion[] $programacions
  */
-class Lista extends \yii\db\ActiveRecord {
-
+class Lista extends \yii\db\ActiveRecord
+{
     /**
      * {@inheritdoc}
      */
-    public static function tableName() {
+    public static function tableName()
+    {
         return 'lista';
     }
 
     /**
      * @return \yii\db\Connection the database connection used by this AR class.
      */
-    public static function getDb() {
+    public static function getDb()
+    {
         return Yii::$app->get('db_mailing');
     }
 
     /**
      * {@inheritdoc}
      */
-    public function rules() {
+    public function rules()
+    {
         return [
-            [['eaca_id', 'mest_id'], 'integer'],
-            [['lis_nombre', 'lis_descripcion', 'lis_estado', 'lis_estado_logico'], 'required'],
+            [['eaca_id', 'mest_id', 'emp_id', 'pai_id', 'pro_id', 'can_id'], 'integer'],
+            [['emp_id', 'lis_nombre', 'lis_correo_principal', 'lis_nombre_principal', 'pai_id', 'pro_id', 'can_id', 'lis_direccion1_empresa', 'lis_telefono_empresa', 'lis_codigo_postal', 'lis_estado', 'lis_estado_logico'], 'required'],
             [['lis_fecha_creacion', 'lis_fecha_modificacion'], 'safe'],
-            [['lis_nombre'], 'string', 'max' => 50],
-            [['lis_descripcion'], 'string', 'max' => 500],
+            [['lis_codigo', 'lis_nombre', 'lis_correo_principal'], 'string', 'max' => 50],
+            [['lis_nombre_principal', 'lis_direccion1_empresa', 'lis_direccion2_empresa'], 'string', 'max' => 100],
+            [['lis_telefono_empresa'], 'string', 'max' => 20],
+            [['lis_codigo_postal'], 'string', 'max' => 10],
             [['lis_estado', 'lis_estado_logico'], 'string', 'max' => 1],
         ];
     }
@@ -54,13 +69,24 @@ class Lista extends \yii\db\ActiveRecord {
     /**
      * {@inheritdoc}
      */
-    public function attributeLabels() {
+    public function attributeLabels()
+    {
         return [
             'lis_id' => 'Lis ID',
+            'lis_codigo' => 'Lis Codigo',
             'eaca_id' => 'Eaca ID',
             'mest_id' => 'Mest ID',
+            'emp_id' => 'Emp ID',
             'lis_nombre' => 'Lis Nombre',
-            'lis_descripcion' => 'Lis Descripcion',
+            'lis_correo_principal' => 'Lis Correo Principal',
+            'lis_nombre_principal' => 'Lis Nombre Principal',
+            'pai_id' => 'Pai ID',
+            'pro_id' => 'Pro ID',
+            'can_id' => 'Can ID',
+            'lis_direccion1_empresa' => 'Lis Direccion1 Empresa',
+            'lis_direccion2_empresa' => 'Lis Direccion2 Empresa',
+            'lis_telefono_empresa' => 'Lis Telefono Empresa',
+            'lis_codigo_postal' => 'Lis Codigo Postal',
             'lis_estado' => 'Lis Estado',
             'lis_fecha_creacion' => 'Lis Fecha Creacion',
             'lis_fecha_modificacion' => 'Lis Fecha Modificacion',
@@ -71,15 +97,50 @@ class Lista extends \yii\db\ActiveRecord {
     /**
      * @return \yii\db\ActiveQuery
      */
-    public function getListaSuscriptors() {
+    public function getListaPlantillas()
+    {
+        return $this->hasMany(ListaPlantilla::className(), ['lis_id' => 'lis_id']);
+    }
+
+    /**
+     * @return \yii\db\ActiveQuery
+     */
+    public function getListaSuscriptors()
+    {
         return $this->hasMany(ListaSuscriptor::className(), ['lis_id' => 'lis_id']);
     }
 
     /**
      * @return \yii\db\ActiveQuery
      */
-    public function getProgramacions() {
+    public function getProgramacions()
+    {
         return $this->hasMany(Programacion::className(), ['lis_id' => 'lis_id']);
+    }
+    /**
+     * Function consultarLista
+     * @author  Kleber Loayza <analistadesarrollo03@uteg.edu.ec>
+     * @param   
+     * @return  Consulta una lista dada un Id.
+     */
+    public function consultarListaXID($lista_id) {
+        $con = \Yii::$app->db_mailing;
+        $estado = 1;
+        $sql = "
+                    SELECT
+                        lst.lis_nombre,
+                        count(lsu.sus_id) as num_suscr
+                    FROM 
+                        db_mailing.lista lst
+                        left join lista_suscriptor as lsu on lsu.lis_id=lst.lis_id
+                    WHERE
+                        lst.lis_id=1
+                        group by lst.lis_id
+                ";
+        $comando = $con->createCommand($sql);
+        $comando->bindParam(":estado", $estado, \PDO::PARAM_STR);
+        $resultData = $comando->queryOne();
+        return $resultData;
     }
 
     /**
@@ -408,38 +469,134 @@ class Lista extends \yii\db\ActiveRecord {
 
         $comando = $con->createCommand($sql);
         $comando->bindParam(":estado", $estado, \PDO::PARAM_STR);
-        $comando->bindParam(":list_id", $list_id, \PDO::PARAM_INT);   
-        $resultData = $comando->queryOne();
+        $comando->bindParam(":list_id", $list_id, \PDO::PARAM_INT);
+        $resultData = $comando->queryAll();
         return $resultData;
     }
     
     /**
-     * Function consulta si no se ha ingresado anteriormente una programacion a una lista y plantilla. 
-     * @author Giovanni Vergara <analistadesarrollo02@uteg.edu.ec>;
+     * Function insertarLista crea lista.
+     * @author  Grace Viteri <analistadesarrollo01@uteg.edu.ec>;
      * @param
      * @return
      */
-    public function consultarIngresoProgramacion($list_id, $pla_id) {
+    public function insertarLista($lis_codigo, $eaca_id, $mest_id, $emp_id, $lis_nombre, $lis_correo_principal, $lis_nombre_principal, 
+                                  $pai_id, $pro_id, $can_id, $lis_direccion1_empresa, $lis_direccion2_empresa, $lis_telefono_empresa, 
+                                  $lis_codigo_postal) {
         $con = \Yii::$app->db_mailing;
-        $estado = 1;
-        $sql = "SELECT 
-                   count(pro_id) as ingresado
-                   
-                FROM 
-                   " . $con->dbname . ".programacion ";
-        $sql .= "  
-                WHERE  
-                   lis_id = :list_id AND  
-                   pla_id = :pla_id AND
-                   pro_estado = :estado AND
-                   pro_estado_logico = :estado";
+       
+        $param_sql = "lis_estado";
+        $bdet_sql = "1";
 
-        $comando = $con->createCommand($sql);
-        $comando->bindParam(":estado", $estado, \PDO::PARAM_STR);
-        $comando->bindParam(":list_id", $list_id, \PDO::PARAM_INT);  
-        $comando->bindParam(":pla_id", $pla_id, \PDO::PARAM_INT); 
-        $resultData = $comando->queryOne();
-        return $resultData;
+        $param_sql .= ", lis_estado_logico";
+        $bdet_sql .= ", 1";
+
+        if (isset($lis_codigo)) {
+            $param_sql .= ", lis_codigo";
+            $bdet_sql .= ", :lis_codigo";
+        }
+        if (isset($eaca_id)) {
+            $param_sql .= ", eaca_id";
+            $bdet_sql .= ", :eaca_id";
+        }
+        if (isset($mest_id)) {
+            $param_sql .= ", mest_id";
+            $bdet_sql .= ", :mest_id";
+        }
+        if (isset($emp_id)) {
+            $param_sql .= ", emp_id";
+            $bdet_sql .= ", :emp_id";
+        }
+        if (isset($lis_nombre)) {
+            $param_sql .= ", lis_nombre";
+            $bdet_sql .= ", :lis_nombre";
+        }
+        if (isset($lis_correo_principal)) {
+            $param_sql .= ", lis_correo_principal";
+            $bdet_sql .= ", :lis_correo_principal";
+        }
+        if (isset($lis_nombre_principal)) {
+            $param_sql .= ", lis_nombre_principal";
+            $bdet_sql .= ", :lis_nombre_principal";
+        }
+        if (isset($pai_id)) {
+            $param_sql .= ", pai_id";
+            $bdet_sql .= ", :pai_id";
+        }
+        if (isset($pro_id)) {
+            $param_sql .= ", pro_id";
+            $bdet_sql .= ", :pro_id";
+        }
+        if (isset($can_id)) {
+            $param_sql .= ", can_id";
+            $bdet_sql .= ", :can_id";
+        }
+        if (isset($lis_direccion1_empresa)) {
+            $param_sql .= ", lis_direccion1_empresa";
+            $bdet_sql .= ", :lis_direccion1_empresa";
+        }
+        if (isset($lis_direccion2_empresa)) {
+            $param_sql .= ", lis_direccion2_empresa";
+            $bdet_sql .= ", :lis_direccion2_empresa";
+        }
+        if (isset($lis_telefono_empresa)) {
+            $param_sql .= ", lis_telefono_empresa";
+            $bdet_sql .= ", :lis_telefono_empresa";
+        }
+        if (isset($lis_codigo_postal)) {
+            $param_sql .= ", lis_codigo_postal";
+            $bdet_sql .= ", :lis_codigo_postal";
+        }
+        try {
+            $sql = "INSERT INTO " . $con->dbname . ".lista ($param_sql) VALUES($bdet_sql)";
+            $comando = $con->createCommand($sql);
+
+            if (isset($lis_codigo)) {
+                $comando->bindParam(':lis_codigo', $lis_codigo, \PDO::PARAM_STR);
+            }
+            if (isset($eaca_id)) {
+                $comando->bindParam(':eaca_id', $eaca_id, \PDO::PARAM_INT);
+            }
+            if (!empty((isset($mest_id)))) {
+                $comando->bindParam(':mest_id', $mest_id, \PDO::PARAM_INT);
+            }
+            if (!empty((isset($emp_id)))) {
+                $comando->bindParam(':emp_id', $emp_id, \PDO::PARAM_INT);
+            }
+            if (!empty((isset($lis_nombre)))) {
+                $comando->bindParam(':lis_nombre', $lis_nombre, \PDO::PARAM_STR);
+            }
+            if (!empty((isset($lis_correo_principal)))) {
+                $comando->bindParam(':lis_correo_principal', $lis_correo_principal, \PDO::PARAM_STR);
+            }
+            if (!empty((isset($lis_nombre_principal)))) {
+                $comando->bindParam(':lis_nombre_principal', $lis_nombre_principal, \PDO::PARAM_STR);
+            }
+            if (!empty((isset($pai_id)))) {
+                $comando->bindParam(':pai_id', $pai_id, \PDO::PARAM_INT);
+            }
+            if (!empty((isset($pro_id)))) {
+                $comando->bindParam(':pro_id', $pro_id, \PDO::PARAM_INT);
+            }
+            if (!empty((isset($can_id)))) {
+                $comando->bindParam(':can_id', $can_id, \PDO::PARAM_INT);
+            }
+            if (!empty((isset($lis_direccion1_empresa)))) {
+                $comando->bindParam(':lis_direccion1_empresa', $lis_direccion1_empresa, \PDO::PARAM_STR);
+            }
+            if (!empty((isset($lis_direccion2_empresa)))) {
+                $comando->bindParam(':lis_direccion2_empresa', $lis_direccion2_empresa, \PDO::PARAM_STR);
+            }
+            if (!empty((isset($lis_telefono_empresa)))) {
+                $comando->bindParam(':lis_telefono_empresa', $lis_telefono_empresa, \PDO::PARAM_STR);
+            }
+            if (!empty((isset($lis_codigo_postal)))) {
+                $comando->bindParam(':lis_codigo_postal', $lis_codigo_postal, \PDO::PARAM_STR);
+            }
+            $result = $comando->execute();           
+            return $con->getLastInsertID($con->dbname . '.lista');
+        } catch (Exception $ex) {            
+            return FALSE;
+        }
     }
-
 }

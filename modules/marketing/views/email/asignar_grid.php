@@ -46,27 +46,14 @@ PbGridView::widget([
         ],             
         [
             'class' => 'yii\grid\ActionColumn',
-            'header' => "Listas de  interes",
-            'template' => '{view}',
-            'buttons' => [
-                'view' => function ($url, $model) {
-                    return Html::a('<span>...</span>', Url::to(['#']), ["data-toggle" => "tooltip", "title" => 'Economia - Finanzas - Literatura']);
-                },
-            ],
-        ],
-        [
-            'class' => 'yii\grid\ActionColumn',
             'header' => Yii::t("formulario", "Actions"),
             'template' => '{addsubs} {addsublistinte} {rmsubs}',
             'buttons' => [
                 'addsubs' => function ($url, $model) {
-                    return Html::a('<span class="glyphicon glyphicon-plus"></span>', Url::to(['/marketing/email/asignar',  'lis_id' => base64_encode($model['lis_id'])]), ["data-toggle" => "tooltip", "title" => "Subscribirse a lista", "data-pjax" => 0]);
-                },     
-                'addsublistinte' => function ($url, $model) {
-                    return Html::a('<span class="glyphicon glyphicon-th-list"></span>', Url::to(['/marketing/email/delete',  'lis_id' => base64_encode($model['lis_id'])]), ["data-toggle" => "tooltip", "title" => "Agregar Subscriptor a Listas Interes", "data-pjax" => 0]);
+                    return Html::a('<span class="glyphicon glyphicon-plus"></span>', "#", ["onclick" => "SuscribirContacto(" . $model['id_psus'] . "," . $model['per_tipo'] . ");", "data-toggle" => "tooltip", "title" => "Suscribirse a la lista", "data-pjax" => 0]);
                 },     
                 'rmsubs' => function ($url, $model) {
-                    return Html::a('<span class="glyphicon glyphicon-remove"></span>', Url::to(['/marketing/email/delete',  'lis_id' => base64_encode($model['lis_id'])]), ["data-toggle" => "tooltip", "title" => "Eliminar Subscriptor", "data-pjax" => 0]);
+                    return Html::a('<span class="glyphicon glyphicon-remove"></span>', Url::to(['/marketing/email/delete',  'lis_id' => base64_encode($model['lis_id'])]), ["data-toggle" => "tooltip", "title" => "Remover suscriptor", "data-pjax" => 0]);
                 },        
             ],
         ],
