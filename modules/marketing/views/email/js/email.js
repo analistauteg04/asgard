@@ -135,18 +135,35 @@ function SuscribirContacto(psus_id,per_tipo) {
 //            showAlert(response.status, response.label, response.message);
 //        }, true);
 //    }
-var mensj = "Maria Sanchez ha sido suscrita a la lista de Economia.<br/>";
-var mensj=mensj+"Las personas que se suscribieron a esta lista tambien les intereso las listas:<br/>";
-var mensj=mensj+"- Finanzas<br/>";
-var mensj=mensj+"- Economia<br/>";
-var mensj=mensj+"- Adminsitracion empresas<br/>";
-var mensj=mensj+"Desea suscribirlo a estas listas tambien?";
-var mensaje ={
-    wtmessage: mensj, title: "OK"
-};
-    showAlert("OK", "Ok", mensaje);
+    var mensj = "Maria Sanchez ha sido suscrita a la lista de Economia.<br/>";
+    var mensj=mensj+"Las personas que se suscribieron a esta lista tambien les intereso las listas:<br/>";
+    var mensj=mensj+"- Finanzas<br/>";
+    var mensj=mensj+"- Marketing<br/>";
+    var mensj=mensj+"- Adminsitracion empresas<br/>";
+    var mensj=mensj+"Desea suscribirlo a estas listas tambien?";
+    var mensaje ={
+        wtmessage: mensj, title: "Suscribir Contacto"
+    };
+        showAlert("Success", "Ok", mensaje);
 }
-
+function RemoverSuscritor(){
+    var mensj="Seguro Desea eliminar el suscritor de la lista?";
+    var messagePB = new Object();
+    messagePB.wtmessage = mensj;
+    messagePB.title = "Eliminar";
+    
+    var objAccept = new Object();
+    objAccept.id = "btnid2del";
+    objAccept.class = "btn-primary clclass praclose";
+    objAccept.value = "Aceptar";
+    //objAccept.callback = callback;
+    
+    messagePB.acciones = new Array();
+    messagePB.acciones[0] = objAccept;    
+    showAlert("OK", "info", messagePB);
+    
+    
+}
 function setComboDataselect(arr_data, element_id, texto) {
     var option_arr = "";
     option_arr += "<option value= '0'>" + texto + "</option>";
