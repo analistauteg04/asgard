@@ -45,9 +45,13 @@
 
 return [    
     "Days Schedule" => "Días Programar",
-    "List" => 'Lista',
+    "Contact Email" => "Email Contacto",
+    "List" => "Lista",
+    "Name Contact" => "Nombre Contacto",
+    "New List" => "Lista Nueva",
     "Programtion" => "Programación",
     "Shipping Time" => "Hora Envío",
+    "Subject" => "Tema",
     "Subscriber number" => "Número suscriptores",
     "Template" => "Plantilla",
     

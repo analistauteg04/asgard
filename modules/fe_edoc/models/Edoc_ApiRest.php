@@ -40,7 +40,7 @@ class Edoc_ApiRest extends \app\modules\fe_edoc\components\CActiveRecord {
                 return $this->insertarFacturas();
                 break;
             case "04"://NOTA DE CREDITO
-                Utilities::putMessageLogFile($this->detEdoc);
+                //Utilities::putMessageLogFile($this->detEdoc);
                 return array("status" => "OK", "tipoEdoc" => $this->tipoEdoc,"data" => $this->detEdoc);
                 return $this->insertarEdocNc();
                 break;
@@ -260,7 +260,7 @@ class Edoc_ApiRest extends \app\modules\fe_edoc\components\CActiveRecord {
     }
 
     private function InsertarFacturaFormaPago($con, $idCab) {
-        Utilities::putMessageLogFile("LLEGO A FORMA PAGO");
+        //Utilities::putMessageLogFile("LLEGO A FORMA PAGO");
         $fpagEdoc= $this->fpagEdoc;
         //Implementado 8/08/2016
         //FOR_PAG_SRI,PAG_PLZ,PAG_TMP,VAL_NET =>$cabFact[$i]['VAL_NET']

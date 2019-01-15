@@ -88,9 +88,10 @@ class Suscriptor extends \yii\db\ActiveRecord
         $estado = 1;
         $sql = "
                SELECT 
-                    per.per_pri_nombre, per.per_pri_apellido, 
-                    if(isnull(mest.mest_nombre),eaca.eaca_nombre,mest.mest_nombre) ,per.per_correo,
-                    ifnull(sus.sus_id,0) as es_susbcriptor,
+                    concat(per.per_pri_nombre,' ',per.per_pri_apellido) as contacto, 
+                    if(isnull(mest.mest_nombre),eaca.eaca_nombre,mest.mest_nombre) carrera,
+                    per.per_correo,
+                    if(ifnull(sus.sus_id,0)>0,'Subscrito','No Subscrito') as estado,
                     acon.acon_nombre    
                 FROM 
                     db_mailing.lista lst
@@ -110,8 +111,34 @@ class Suscriptor extends \yii\db\ActiveRecord
 
         $comando = $con->createCommand($sql);
         $comando->bindParam(":estado", $estado, \PDO::PARAM_STR);
+        if (isset($arrFiltro) && count($arrFiltro) > 0) {
+            if ($arrFiltro['list_id'] != "" && $arrFiltro['list_id'] > 0) {
+                $lista_id = $arrFiltro["lista_id"];
+                $comando->bindParam(":lista_id", $lista_id, \PDO::PARAM_INT);
+            }
+        }
+
         $resultData = $comando->queryAll();
-        return $resultData;
+        $dataProvider = new ArrayDataProvider([
+            'key' => 'id',
+            'allModels' => $resultData,
+            'pagination' => [
+                'pageSize' => Yii::$app->params["pageSize"],
+            ],
+            'sort' => [
+                'attributes' => [
+                    'contacto',
+                    'carrera',
+                    'per_correo',
+                    'es_susbcriptor',
+                ],
+            ],
+        ]);
+        if ($onlyData) {
+            return $resultData;
+        } else {
+            return $dataProvider;
+        }
     }
     
     /**

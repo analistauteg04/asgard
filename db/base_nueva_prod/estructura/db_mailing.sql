@@ -11,10 +11,13 @@ USE `db_mailing`;
 --
 create table if not exists `lista` (
  `lis_id` bigint(20) not null auto_increment primary key,
+ `lis_codigo` varchar(50) null, 
  `eaca_id` bigint(20) null,
  `mest_id` bigint(20) null,
- `lis_nombre` varchar(50) not null, 
- `lis_descripcion` varchar(500) not null, 
+ `lis_nombre` varchar(50) not null,  
+ `lis_correo_principal` varchar(50) not null, 
+ `lis_nombre_principal` varchar(100) not null, 
+ `lis_nombre_empresa` varchar(100) not null,  
  `lis_estado` varchar(1) not null,
  `lis_fecha_creacion` timestamp not null default current_timestamp,
  `lis_fecha_modificacion` timestamp null default null,

@@ -2050,5 +2050,31 @@ class Oportunidad extends \app\modules\admision\components\CActiveRecord {
             return $dataProvider;
         }
     }
+    
+    
+    /**
+     * Function obtener carreras.
+     * @author  Grace Viteri <analistadesarrollo01@uteg.edu.ec>;
+     * @property       
+     * @return  
+     */
+    public function consultarCarreras() {
+        $con = \Yii::$app->db_academico;
+        $estado = 1;
+        $sql = "
+                SELECT 
+                        eac.eaca_id as id,
+                        eac.eaca_nombre as name
+                    FROM " . $con->dbname . ".estudio_academico as eac 
+                    WHERE                                 
+                        eac.eaca_estado_logico=:estado AND
+                        eac.eaca_estado=:estado                         
+                        ORDER BY 2 asc";
+
+        $comando = $con->createCommand($sql);
+        $comando->bindParam(":estado", $estado, \PDO::PARAM_STR);        
+        $resultData = $comando->queryAll();
+        return $resultData;
+    }
 
 }

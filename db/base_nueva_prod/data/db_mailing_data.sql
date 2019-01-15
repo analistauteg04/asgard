@@ -8,8 +8,8 @@ USE `db_mailing`;
 --
 -- Volcado de datos para la tabla `lista`
 --
-INSERT INTO `lista` (`lis_id`, `eaca_id`, `mest_id`, `lis_nombre`, `lis_descripcion`, `lis_estado`,`lis_fecha_creacion`, `lis_fecha_modificacion`, `lis_estado_logico`) VALUES
-(1, 2, null, 'Economia','Economia',1,'2019-08-10 01:06:52', NULL, '1');
+INSERT INTO `lista` (`lis_id`, `lis_codigo`, `eaca_id`, `mest_id`, `lis_nombre`, `lis_correo_principal`, `lis_nombre_principal`, `lis_nombre_empresa`, `lis_estado`, `lis_estado_logico`) VALUES
+(1, '0056789am', 2, null, 'Economia',  'principal@yopmail.com', 'Grace Viteri', 'Cranea Prueba', '1', '1');
 
 -- 
 --
