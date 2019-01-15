@@ -76,7 +76,7 @@ admision::registerTranslations();
     <div class="col-md-12 col-sm-12 col-xs-12 col-lg-12">
         <div class="col-md-6 col-sm-6 col-xs-6 col-lg-6">
             <div class="form-group">
-                <label for="txt_pais" class="col-sm-4 control-label" id="lbl_pais"><?= Module::t("marketing", "País") ?><span class="text-danger">*</span></label> 
+                <label for="txt_pais" class="col-sm-4 control-label" id="lbl_pais"><?= Yii::t("formulario", "Country") ?><span class="text-danger">*</span></label> 
                 <div class="col-sm-8 ">
                     <?= Html::dropDownList("cmb_pais", 0, $arr_pais, ["class" => "form-control can_combo", "id" => "cmb_pais"]) ?>
                 </div>
@@ -84,7 +84,7 @@ admision::registerTranslations();
         </div> 
         <div class="col-md-6 col-sm-6 col-xs-6 col-lg-6">
             <div class="form-group">
-                <label for="txt_provincia" class="col-sm-4 control-label" id="lbl_provincia"><?= Module::t("marketing", "Provincia") ?><span class="text-danger">*</span></label> 
+                <label for="txt_provincia" class="col-sm-4 control-label" id="lbl_provincia"><?= Yii::t("formulario", "State") ?><span class="text-danger">*</span></label> 
                 <div class="col-sm-8 ">
                     <?= Html::dropDownList("cmb_provincia", 0, $arr_provincia, ["class" => "form-control can_combo", "id" => "cmb_provincia"]) ?>
                 </div>
@@ -94,7 +94,7 @@ admision::registerTranslations();
     <div class="col-md-12 col-sm-12 col-xs-12 col-lg-12">
         <div class="col-md-6 col-sm-6 col-xs-6 col-lg-6">
             <div class="form-group">
-                <label for="txt_ciudad" class="col-sm-4 control-label" id="lbl_ciudad"><?= Module::t("marketing", "Ciudad") ?><span class="text-danger">*</span></label> 
+                <label for="txt_ciudad" class="col-sm-4 control-label" id="lbl_ciudad"><?= Yii::t("formulario", "City") ?><span class="text-danger">*</span></label> 
                 <div class="col-sm-8 ">
                     <?= Html::dropDownList("cmb_ciudad", 0, $arr_ciudad, ["class" => "form-control can_combo", "id" => "cmb_ciudad"]) ?>
                 </div>
@@ -102,9 +102,9 @@ admision::registerTranslations();
         </div> 
         <div class="col-md-6 col-sm-6 col-xs-6 col-lg-6">
             <div class="form-group">
-                <label for="txt_direccion1" class="col-sm-4 control-label" id="lbl_direccion1"><?= Module::t("marketing", "Dirección1") ?><span class="text-danger">*</span></label> 
+                <label for="txt_direccion1" class="col-sm-4 control-label" id="lbl_direccion1"><?= Module::t("marketing", "Address1") ?><span class="text-danger">*</span></label> 
                 <div class="col-sm-8 ">
-                    <input type="text" class="form-control PBvalidation keyupmce" value="" id="txt_direccion1" data-type="alfanumerico" placeholder="<?= Module::t("marketing", "Dirección1") ?>">                 
+                    <input type="text" class="form-control PBvalidation keyupmce" value="" id="txt_direccion1" data-type="alfanumerico" placeholder="<?= Module::t("marketing", "Address1") ?>">                 
                 </div>
             </div>
         </div>           
@@ -112,17 +112,17 @@ admision::registerTranslations();
     <div class="col-md-12 col-sm-12 col-xs-12 col-lg-12">
         <div class="col-md-6 col-sm-6 col-xs-6 col-lg-6">
             <div class="form-group">
-                <label for="txt_direccion2" class="col-sm-4 control-label" id="lbl_direccion2"><?= Module::t("marketing", "Dirección2") ?></label> 
+                <label for="txt_direccion2" class="col-sm-4 control-label" id="lbl_direccion2"><?= Module::t("marketing", "Address2") ?></label> 
                 <div class="col-sm-8 ">
-                    <input type="text" class="form-control" value="" id="txt_direccion2" data-type="alfanumerico" placeholder="<?= Module::t("marketing", "Dirección2") ?>">                 
+                    <input type="text" class="form-control" value="" id="txt_direccion2" data-type="alfanumerico" placeholder="<?= Module::t("marketing", "Address2") ?>">                 
                 </div>
             </div>
         </div> 
         <div class="col-md-6 col-sm-6 col-xs-6 col-lg-6">
             <div class="form-group">
-                <label for="txt_telefono" class="col-sm-4 control-label" id="lbl_telefono"><?= Module::t("marketing", "Teléfono") ?><span class="text-danger">*</span></label> 
+                <label for="txt_telefono" class="col-sm-4 control-label" id="lbl_telefono"><?= Yii::t("formulario", "Phone") ?><span class="text-danger">*</span></label> 
                 <div class="col-sm-8 ">
-                    <input type="text" class="form-control PBvalidation keyupmce" value="" id="txt_telefono" data-type="telefono_sin" placeholder="<?= Module::t("marketing", "Teléfono") ?>">                 
+                    <input type="text" class="form-control PBvalidation keyupmce" value="" id="txt_telefono" data-type="telefono_sin" placeholder="<?= Yii::t("formulario", "Phone") ?>">                 
                 </div>
             </div>
         </div>           
@@ -130,9 +130,9 @@ admision::registerTranslations();
     <div class="col-md-12 col-sm-12 col-xs-12 col-lg-12">
         <div class="col-md-6 col-sm-6 col-xs-6 col-lg-6">
             <div class="form-group">
-                <label for="txt_codigo_postal" class="col-sm-4 control-label" id="lbl_codigo_postal"><?= Module::t("marketing", "Código Postal") ?><span class="text-danger">*</span></label> 
+                <label for="txt_codigo_postal" class="col-sm-4 control-label" id="lbl_codigo_postal"><?= Yii::t("formulario", "Postal Code") ?><span class="text-danger">*</span></label> 
                 <div class="col-sm-8 ">
-                    <input type="text" class="form-control PBvalidation keyupmce" value="" id="txt_codigo_postal" data-type="alfanumerico" placeholder="<?= Module::t("marketing", "Código Postal") ?>">                 
+                    <input type="text" class="form-control PBvalidation keyupmce" value="" id="txt_codigo_postal" data-type="alfanumerico" placeholder="<?= Yii::t("formulario", "Postal Code") ?>">                 
                 </div>
             </div>
         </div>                 

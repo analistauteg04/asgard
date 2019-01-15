@@ -57,18 +57,18 @@ class EmailController extends \app\components\CController {
 
     public function actionProgramacion() {
         $mod_lista = new Lista();
-        $per_id = @Yii::$app->session->get("PB_perid");
-        if (Yii::$app->request->isAjax) {
-            $data = Yii::$app->request->post();
-            /* if (isset($data["getplantilla"])) {
-              $template = $mod_lista->consultarListaTemplate($data["lis_id"]);
-              $message = array("template" => $template);
-              return Utilities::ajaxResponse('OK', 'alert', Yii::t('jslang', 'Success'), 'false', $message);
-              } */
+        $muestra = 0;
+        $per_id = @Yii::$app->session->get("PB_perid");     
+        $lista = base64_decode($_GET["lisid"]);
+        $plantilla = $mod_lista->consultarListaTemplate($lista);
+        $ingreso = $mod_lista->consultarIngresoProgramacion($lista, $plantilla['id']);
+        if ($ingreso['ingresado'] == 0) {
+            $muestra = 1;
         }
         $arr_lista = $mod_lista->consultarListaProgramacion();
         return $this->render('programacion', [
                     "arr_lista" => ArrayHelper::map(array_merge([["id" => "0", "name" => Yii::t("formulario", "Select")]], $arr_lista), "id", "name"),
+                    "muestra" => $muestra,
         ]);
     }
 
@@ -117,8 +117,7 @@ class EmailController extends \app\components\CController {
     public function actionGuardarprogramacion() {
         if (Yii::$app->request->isAjax) {
             $data = Yii::$app->request->post();
-            $lista = base64_decode($data["lista"]);
-            //$plantilla = $data["plantilla"];
+            $lista = base64_decode($data["lista"]);          
             $fecinicio = $data["fecha_inicio"];
             $fecfin = $data["fecha_fin"];
             $horenvio = $data["hora_envio"];
