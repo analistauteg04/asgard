@@ -18,8 +18,7 @@ $(document).ready(function () {
         mostrar_grid_lista();
     });
     
-    
-    
+      
     $('#cmb_empresa').change(function () {
         var link = $('#txth_base').val() + "/marketing/email/new";
         var arrParams = new Object();
@@ -34,44 +33,7 @@ $(document).ready(function () {
     });
     
     $('#sendNewList').click(function () {
-        var link = $('#txth_base').val() + "/marketing/email/guardarlista";
-        var arrParams = new Object();
-        arrParams.emp_id = $('#cmb_empresa').val();
-        var combo_empresa = document.getElementById("cmb_empresa");        
-        arrParams.nombre_empresa = combo_empresa.options[combo_empresa.selectedIndex].text;
-        
-        arrParams.carrera_id = $('#cmb_carrera_programa').val();
-        arrParams.nombre_lista = $('#txt_nombre_lista').val();        
-        arrParams.txt_nombre_contacto = $('#txt_nombre_contacto').val();
-        arrParams.txt_correo_contacto = $('#txt_correo_contacto').val();
-        arrParams.txt_asunto = $('#txt_asunto').val();
-        arrParams.pais_id = $('#cmb_pais').val();        
-        var combo_pais = document.getElementById("cmb_pais");
-        arrParams.pais_texto = combo_pais.options[combo_pais.selectedIndex].text;
-            
-        arrParams.provincia_id = $('#cmb_provincia').val();
-        var combo_provincia = document.getElementById("cmb_provincia");
-        arrParams.provincia_texto = combo_provincia.options[combo_provincia.selectedIndex].text;
-        
-        arrParams.ciudad_id = $('#cmb_ciudad').val();
-        var combo_ciudad = document.getElementById("cmb_ciudad");
-        arrParams.ciudad_texto = combo_ciudad.options[combo_ciudad.selectedIndex].text;
-        
-        arrParams.direccion1 = $('#txt_direccion1').val();
-        arrParams.direccion2 = $('#txt_direccion2').val();
-        arrParams.telefono = $('#telefono').val();
-        arrParams.codigo_postal = $('#txt_codigo_postal').val();                
-        
-        if (!validateForm()) {
-            requestHttpAjax(link, arrParams, function (response) {
-                showAlert(response.status, response.label, response.message);
-                if (!response.error) {
-                    setTimeout(function () {
-                        window.location.href = $('#txth_base').val() + "/marketing/email/new";
-                    }, 5000);
-                }
-            }, true);
-        }
+        guardarLista();
     });
 
     $('#cmb_pais').change(function () {
@@ -238,4 +200,45 @@ function guardarProgramacion() {
                     }
                 }           
     }
+    
+function guardarLista() {
+    var link = $('#txth_base').val() + "/marketing/email/guardarlista";
+    var arrParams = new Object();
+    arrParams.emp_id = $('#cmb_empresa').val();
+    var combo_empresa = document.getElementById("cmb_empresa");        
+    arrParams.nombre_empresa = combo_empresa.options[combo_empresa.selectedIndex].text;
+
+    arrParams.carrera_id = $('#cmb_carrera_programa').val();
+    arrParams.nombre_lista = $('#txt_nombre_lista').val();        
+    arrParams.txt_nombre_contacto = $('#txt_nombre_contacto').val();
+    arrParams.txt_correo_contacto = $('#txt_correo_contacto').val();
+    arrParams.txt_asunto = $('#txt_asunto').val();
+    arrParams.pais_id = $('#cmb_pais').val();        
+    var combo_pais = document.getElementById("cmb_pais");
+    arrParams.pais_texto = combo_pais.options[combo_pais.selectedIndex].text;
+
+    arrParams.provincia_id = $('#cmb_provincia').val();
+    var combo_provincia = document.getElementById("cmb_provincia");
+    arrParams.provincia_texto = combo_provincia.options[combo_provincia.selectedIndex].text;
+
+    arrParams.ciudad_id = $('#cmb_ciudad').val();
+    var combo_ciudad = document.getElementById("cmb_ciudad");
+    arrParams.ciudad_texto = combo_ciudad.options[combo_ciudad.selectedIndex].text;
+
+    arrParams.direccion1 = $('#txt_direccion1').val();
+    arrParams.direccion2 = $('#txt_direccion2').val();
+    arrParams.telefono = $('#telefono').val();
+    arrParams.codigo_postal = $('#txt_codigo_postal').val();                
+
+    if (!validateForm()) {
+        requestHttpAjax(link, arrParams, function (response) {
+            showAlert(response.status, response.label, response.message);
+            if (!response.error) {
+                setTimeout(function () {
+                    window.location.href = $('#txth_base').val() + "/marketing/email/new";
+                }, 5000);
+            }
+        }, true);
+    }
+}
     
