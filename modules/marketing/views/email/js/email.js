@@ -123,20 +123,21 @@ function mostrar_grid_lista() {
     }
 }
 function suscribirContacto(psus_id,per_tipo){
-    var link = $('#txth_base').val() + "/marketing/email/asignar";
-    var arrParams = new Object();
-    arrParams.psus_id = psus_id;
-    arrParams.per_tipo = per_tipo;
-    arrParams.accion = 'sc';
-    if (!validateForm()) {
-        requestHttpAjax(link, arrParams, function (response) {
-            if (!response.error) {
-                setTimeout(function () {
-                    preguntaSuscribirOtrasListas();
-                }, 5000);
-            }
-        }, true);
-    }
+    preguntaSuscribirOtrasListas();
+//    var link = $('#txth_base').val() + "/marketing/email/asignar";
+//    var arrParams = new Object();
+//    arrParams.psus_id = psus_id;
+//    arrParams.per_tipo = per_tipo;
+//    arrParams.accion = 'sc';
+//    if (!validateForm()) {
+//        requestHttpAjax(link, arrParams, function (response) {
+//            if (!response.error) {
+//                setTimeout(function () {
+//                    preguntaSuscribirOtrasListas();
+//                }, 5000);
+//            }
+//        }, true);
+//    }
 }
 function preguntaSuscribirOtrasListas() {
     var mensj = "Maria Sanchez ha sido suscrita a la lista de Economia.<br/>";
