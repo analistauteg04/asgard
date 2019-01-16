@@ -46,6 +46,8 @@ class PbVPOS extends Widget {
     public $type = "button"; // boton, form
     public $titleBox = ""; 
 
+    public $dbConection = "";
+
     public function init()
     {
         parent::init();
