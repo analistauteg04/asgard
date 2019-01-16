@@ -78,16 +78,19 @@ class EmailController extends \app\components\CController {
         $lista = base64_decode($_GET["lisid"]);
         $plantilla = $mod_lista->consultarListaTemplate($lista);
         $ingreso = $mod_lista->consultarIngresoProgramacion($lista, $plantilla['id']);
+        $lista_model = $mod_lista->consultarListaXID($lista);
         if (count($ingreso) == 0) {
             $muestra = 1;
             return $this->render('programacion', [
                         "muestra" => $muestra,
-                        "arr_ingreso" => $ingreso
+                        "arr_ingreso" => $ingreso,
+                        'arr_lista' => $lista_model
             ]);
         } else {
             return $this->render('viewprograma', [
                         "muestra" => $muestra,
-                        "arr_ingreso" => $ingreso
+                        "arr_ingreso" => $ingreso,
+                        'arr_lista' => $lista_model
             ]);
         }
     }

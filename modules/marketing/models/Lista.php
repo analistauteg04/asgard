@@ -120,20 +120,29 @@ class Lista extends \yii\db\ActiveRecord {
      */
     public function consultarListaXID($lista_id) {
         $con = \Yii::$app->db_mailing;
+        $con1 = \Yii::$app->db_academico;
         $estado = 1;
         $sql = "
                     SELECT
                         lst.lis_nombre,
-                        count(lsu.sus_id) as num_suscr
+                        case when lst.eaca_id > 0 then 
+                                     ea.eaca_nombre else me.mest_nombre end as programa,
+                        sum(case when (lsu.lsus_estado = '1' and lsu.lsus_estado_logico = '1') then
+                                     1 else 0 end) as num_suscr
                     FROM 
-                        db_mailing.lista lst
-                        left join lista_suscriptor as lsu on lsu.lis_id=lst.lis_id
+                        " . $con->dbname . ".lista lst
+                        left join " . $con->dbname . ".lista_suscriptor as lsu on lsu.lis_id=lst.lis_id
+                        left join " . $con1->dbname . ".estudio_academico ea on ea.eaca_id = lst.eaca_id
+                        left join " . $con1->dbname . ".modulo_estudio me on me.mest_id = lst.mest_id
                     WHERE
-                        lst.lis_id=1
+                        lst.lis_id= :lista and
+                        lst.lis_estado = :estado and
+                        lst.lis_estado_logico = :estado
                         group by lst.lis_id
                 ";
         $comando = $con->createCommand($sql);
         $comando->bindParam(":estado", $estado, \PDO::PARAM_STR);
+        $comando->bindParam(":lista", $lista_id, \PDO::PARAM_INT);
         $resultData = $comando->queryOne();
         return $resultData;
     }
