@@ -17,8 +17,7 @@ $(document).ready(function () {
     $('#btn_buscarDataLista').click(function () {
         mostrar_grid_lista();
     });
-    
-      
+
     $('#cmb_empresa').change(function () {
         var link = $('#txth_base').val() + "/marketing/email/new";
         var arrParams = new Object();
@@ -115,6 +114,9 @@ function SuscribirContacto(psus_id,per_tipo) {
     messagePB.acciones[0] = objAccept;    
     showAlert("OK", "success", messagePB);
 }
+function elminarsuscritor(){
+    
+}
 function RemoverSuscritor(){
     var mensj="Seguro Desea eliminar el suscritor de la lista?";
     var messagePB = new Object();
@@ -124,7 +126,7 @@ function RemoverSuscritor(){
     objAccept.id = "btnid2del";
     objAccept.class = "btn-primary clclass praclose";
     objAccept.value = "Aceptar";
-    //objAccept.callback = callback;    
+    objAccept.callback = 'elminarsuscritor';    
     messagePB.acciones = new Array();
     messagePB.acciones[0] = objAccept;    
     showAlert("warning", "warning", messagePB);
