@@ -82,7 +82,6 @@ class Suscriptor extends \yii\db\ActiveRecord
         return $this->hasMany(BitacoraEnvio::className(), ['sus_id' => 'sus_id']);
     }
     
-    
     public function consultarSuscriptoresxLista($list_id) {
         $con = \Yii::$app->db_mailing;
         $estado = 1;

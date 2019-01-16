@@ -16,7 +16,8 @@ use app\webservices\WsMailChimp;
 use app\models\Pais;
 use app\models\Provincia;
 use app\models\Canton;
-
+use \app\models\Persona;
+use \app\modules\admision\models\PersonaGestion;
 academico::registerTranslations();
 financiero::registerTranslations();
 
@@ -43,10 +44,27 @@ class EmailController extends \app\components\CController {
         $lis_id = base64_decode($_GET['lis_id']);
         $per_id = @Yii::$app->session->get("PB_perid");        
         $mod_sb= new Suscriptor();
+        $mod_persona=new Persona();
+        $mod_perge=new PersonaGestion();
         $lista_model=$mod_lista->consultarListaXID($lis_id);
         $susbs_lista = $mod_sb->consultarSuscriptoresxLista($lis_id);
         if (Yii::$app->request->isAjax) {
-            
+            $data = Yii::$app->request->post();
+            if($data["accion"]='sc'){
+                $ps_id=$data["psus_id"];
+                $per_tipo=$data["per_tipo"];
+                $data_source=array();
+                if($per_tipo==1){
+                    $data_source=$mod_persona->consultaPersonaId($ps_id);
+                    $mod_sb->per_id=$ps_id;
+                    $mod_sb->pges_id=NULL;
+                    $mod_sb->per_id=$ps_id;
+                            
+                }if($per_tipo==2){
+                    $data_source=$mod_perge->consultarPersonaGestion($ps_id);
+                }
+                
+            }
         }
         return $this->render('asignar', [
             'arr_lista' => $lista_model,

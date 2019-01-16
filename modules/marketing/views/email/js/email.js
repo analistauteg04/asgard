@@ -122,17 +122,23 @@ function mostrar_grid_lista() {
         setTimeout(hideLoadingPopup, 2000);
     }
 }
-
-function SuscribirContacto(psus_id,per_tipo) {
-//    var link = $('#txth_base').val() + "/marketing/email/asignar";
-//    var arrParams = new Object();
-//    arrParams.per_sus = psus_id;
-//    arrParams.per_tipo = per_tipo;
-//    if (!validateForm()) {
-//        requestHttpAjax(link, arrParams, function (response) {
-//            showAlert(response.status, response.label, response.message);
-//        }, true);
-//    }
+function suscribirContacto(psus_id,per_tipo){
+    var link = $('#txth_base').val() + "/marketing/email/asignar";
+    var arrParams = new Object();
+    arrParams.psus_id = psus_id;
+    arrParams.per_tipo = per_tipo;
+    arrParams.accion = 'sc';
+    if (!validateForm()) {
+        requestHttpAjax(link, arrParams, function (response) {
+            if (!response.error) {
+                setTimeout(function () {
+                    preguntaSuscribirOtrasListas();
+                }, 5000);
+            }
+        }, true);
+    }
+}
+function preguntaSuscribirOtrasListas() {
     var mensj = "Maria Sanchez ha sido suscrita a la lista de Economia.<br/>";
     var mensj=mensj+"Las personas que se suscribieron a esta lista tambien les intereso las listas:<br/>";
     var mensj=mensj+"- Finanzas<br/>";
@@ -146,10 +152,13 @@ function SuscribirContacto(psus_id,per_tipo) {
     objAccept.id = "btnid2del";
     objAccept.class = "btn-primary clclass praclose";
     objAccept.value = "Aceptar";
-    //objAccept.callback = callback;    
+    objAccept.callback = 'suscribirOtrasListas';    
     messagePB.acciones = new Array();
     messagePB.acciones[0] = objAccept;    
     showAlert("OK", "success", messagePB);
+}
+function suscribirOtrasListas(){
+    
 }
 function elminarsuscritor(){
     
