@@ -1,6 +1,7 @@
 <?php
 
 namespace app\modules\marketing\models;
+
 use yii\data\ArrayDataProvider;
 use Yii;
 
@@ -31,29 +32,26 @@ use Yii;
  * @property ListaSuscriptor[] $listaSuscriptors
  * @property Programacion[] $programacions
  */
-class Lista extends \yii\db\ActiveRecord
-{
+class Lista extends \yii\db\ActiveRecord {
+
     /**
      * {@inheritdoc}
      */
-    public static function tableName()
-    {
+    public static function tableName() {
         return 'lista';
     }
 
     /**
      * @return \yii\db\Connection the database connection used by this AR class.
      */
-    public static function getDb()
-    {
+    public static function getDb() {
         return Yii::$app->get('db_mailing');
     }
 
     /**
      * {@inheritdoc}
      */
-    public function rules()
-    {
+    public function rules() {
         return [
             [['eaca_id', 'mest_id', 'emp_id', 'pai_id', 'pro_id', 'can_id'], 'integer'],
             [['emp_id', 'lis_nombre', 'lis_correo_principal', 'lis_nombre_principal', 'pai_id', 'pro_id', 'can_id', 'lis_direccion1_empresa', 'lis_telefono_empresa', 'lis_codigo_postal', 'lis_estado', 'lis_estado_logico'], 'required'],
@@ -69,8 +67,7 @@ class Lista extends \yii\db\ActiveRecord
     /**
      * {@inheritdoc}
      */
-    public function attributeLabels()
-    {
+    public function attributeLabels() {
         return [
             'lis_id' => 'Lis ID',
             'lis_codigo' => 'Lis Codigo',
@@ -97,26 +94,24 @@ class Lista extends \yii\db\ActiveRecord
     /**
      * @return \yii\db\ActiveQuery
      */
-    public function getListaPlantillas()
-    {
+    public function getListaPlantillas() {
         return $this->hasMany(ListaPlantilla::className(), ['lis_id' => 'lis_id']);
     }
 
     /**
      * @return \yii\db\ActiveQuery
      */
-    public function getListaSuscriptors()
-    {
+    public function getListaSuscriptors() {
         return $this->hasMany(ListaSuscriptor::className(), ['lis_id' => 'lis_id']);
     }
 
     /**
      * @return \yii\db\ActiveQuery
      */
-    public function getProgramacions()
-    {
+    public function getProgramacions() {
         return $this->hasMany(Programacion::className(), ['lis_id' => 'lis_id']);
     }
+
     /**
      * Function consultarLista
      * @author  Kleber Loayza <analistadesarrollo03@uteg.edu.ec>
@@ -470,21 +465,19 @@ class Lista extends \yii\db\ActiveRecord
         $comando = $con->createCommand($sql);
         $comando->bindParam(":estado", $estado, \PDO::PARAM_STR);
         $comando->bindParam(":list_id", $list_id, \PDO::PARAM_INT);
-        $resultData = $comando->queryAll();
+        $resultData = $comando->queryOne();
         return $resultData;
     }
-    
+
     /**
      * Function insertarLista crea lista.
      * @author  Grace Viteri <analistadesarrollo01@uteg.edu.ec>;
      * @param
      * @return
      */
-    public function insertarLista($lis_codigo, $eaca_id, $mest_id, $emp_id, $lis_nombre, $lis_correo_principal, $lis_nombre_principal, 
-                                  $pai_id, $pro_id, $can_id, $lis_direccion1_empresa, $lis_direccion2_empresa, $lis_telefono_empresa, 
-                                  $lis_codigo_postal) {
+    public function insertarLista($lis_codigo, $eaca_id, $mest_id, $emp_id, $lis_nombre, $lis_correo_principal, $lis_nombre_principal, $pai_id, $pro_id, $can_id, $lis_direccion1_empresa, $lis_direccion2_empresa, $lis_telefono_empresa, $lis_codigo_postal) {
         $con = \Yii::$app->db_mailing;
-       
+
         $param_sql = "lis_estado";
         $bdet_sql = "1";
 
@@ -593,10 +586,39 @@ class Lista extends \yii\db\ActiveRecord
             if (!empty((isset($lis_codigo_postal)))) {
                 $comando->bindParam(':lis_codigo_postal', $lis_codigo_postal, \PDO::PARAM_STR);
             }
-            $result = $comando->execute();           
+            $result = $comando->execute();
             return $con->getLastInsertID($con->dbname . '.lista');
-        } catch (Exception $ex) {            
+        } catch (Exception $ex) {
             return FALSE;
         }
     }
+
+    /**
+     * Function consulta si no se ha ingresado anteriormente una programacion a una lista y plantilla. 
+     * @author Giovanni Vergara <analistadesarrollo02@uteg.edu.ec>;
+     * @param
+     * @return
+     */
+    public function consultarIngresoProgramacion($list_id, $pla_id) {
+        $con = \Yii::$app->db_mailing;
+        $estado = 1;
+        $sql = "SELECT 
+                   count(pro_id) as ingresado
+                   
+                FROM 
+                   " . $con->dbname . ".programacion ";
+        $sql .= "  
+                WHERE  
+                   lis_id = :list_id AND  
+                   pla_id = :pla_id AND
+                   pro_estado = :estado AND
+                   pro_estado_logico = :estado";
+        $comando = $con->createCommand($sql);
+        $comando->bindParam(":estado", $estado, \PDO::PARAM_STR);
+        $comando->bindParam(":list_id", $list_id, \PDO::PARAM_INT);
+        $comando->bindParam(":pla_id", $pla_id, \PDO::PARAM_INT);
+        $resultData = $comando->queryOne();
+        return $resultData;
+    }
+
 }
