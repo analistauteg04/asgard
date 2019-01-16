@@ -94,6 +94,7 @@ class Suscriptor extends \yii\db\ActiveRecord
                     if(isnull(mest.mest_nombre),eaca.eaca_nombre,mest.mest_nombre) carrera,
                     per.per_correo,
                     if(ifnull(sus.sus_id,0)>0,'Subscrito','No Subscrito') as estado,
+                    ifnull(sus.sus_id,0) as estado_id,
                     acon.acon_id,
                     acon.acon_nombre
                 FROM 

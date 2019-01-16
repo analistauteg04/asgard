@@ -53,8 +53,14 @@ PbGridView::widget([
                     return Html::a('<span class="glyphicon glyphicon-plus"></span>', "#", ["onclick" => "SuscribirContacto(" . $model['id_psus'] . "," . $model['per_tipo'] . ");", "data-toggle" => "tooltip", "title" => "Suscribirse a la lista", "data-pjax" => 0]);
                 },     
                 'rmsubs' => function ($url, $model) {
-                    return Html::a('<span class="glyphicon glyphicon-remove"></span>', "#", ["onclick" => "RemoverSuscritor(" . $model['id_sus'] . ");", "data-toggle" => "tooltip", "title" => "Eliminar Suscritor", "data-pjax" => 0]);
+                    $estado=$model['estado_id'];
+                    if($estado_id==1){                    
+                        return Html::a('<span class="glyphicon glyphicon-remove"></span>', "#", ["onclick" => "RemoverSuscritor(" . $model['id_sus'] . ");", "data-toggle" => "tooltip", "title" => "Eliminar Suscritor", "data-pjax" => 0]);
+                    }else{
+                        
+                    }
                 },        
+                        
             ],
         ],
     ],
