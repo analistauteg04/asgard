@@ -150,11 +150,10 @@ class Lista extends \yii\db\ActiveRecord {
         $estado = 1;
 
         if (isset($arrFiltro) && count($arrFiltro) > 0) {
-            if ($arrFiltro['list_id'] != "" && $arrFiltro['list_id'] > 0) {
-                $str_search = "l.list_id = :lista_id AND ";
+            if ($arrFiltro['lista'] != "" && $arrFiltro['lista'] > 0) {
+                $str_search = "l.lis_nombre like :lista AND ";
             }
         }
-
         $sql = "SELECT l.lis_id, l.lis_nombre, 
                         case when l.eaca_id > 0 then 
                                      ea.eaca_nombre else me.mest_nombre end as programa,
@@ -167,17 +166,17 @@ class Lista extends \yii\db\ActiveRecord {
                       lis_estado = :estado
                       and lis_estado_logico = :estado
                 GROUP BY l.lis_id, l.lis_nombre, ea.eaca_nombre;";
-
+        
         $comando = $con->createCommand($sql);
         $comando->bindParam(":estado", $estado, \PDO::PARAM_STR);
-
         if (isset($arrFiltro) && count($arrFiltro) > 0) {
-            if ($arrFiltro['list_id'] != "" && $arrFiltro['list_id'] > 0) {
-                $lista_id = $arrFiltro["lista_id"];
-                $comando->bindParam(":lista_id", $lista_id, \PDO::PARAM_INT);
-            }
+            //if ($arrFiltro['lista'] != "" ) {
+                $lista = "%" . $arrFiltro["lista"] . "%";
+                $comando->bindParam(":lista", $lista, \PDO::PARAM_STR);
+            //}
         }
-
+        \app\models\Utilities::putMessageLogFile('lista: '. $lista);
+        \app\models\Utilities::putMessageLogFile('sql: '. $sql);
         $resultData = $comando->queryAll();
         $dataProvider = new ArrayDataProvider([
             'key' => 'id',

@@ -6,8 +6,6 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-use yii\jui\AutoComplete;
-use yii\web\JsExpression;
 use yii\helpers\Html;
 use app\modules\marketing\Module as marketing;
 ?>
@@ -16,7 +14,7 @@ use app\modules\marketing\Module as marketing;
         <div class="form-group">
             <label for="txt_buscar_lista" class="col-sm-3 col-md-3 col-xs-3 col-lg-3 control-label"><?= marketing::t("marketing", "List") ?></label>
             <div class="col-sm-6 col-md-6 col-xs-6 col-lg-6">
-               <?= Html::dropDownList("cmb_lista", 0,  $arr_lista , ["class" => "form-control", "id" => "cmb_lista"]) ?>
+               <input type="text" class="form-control " value="" id="txt_buscar_lista" data-type="alfa" placeholder="<?= marketing::t("marketing", "List") ?>">                 
             </div>
             <div class="col-sm-3 col-md-3 col-xs-3 col-lg-3 "></div>
         </div>

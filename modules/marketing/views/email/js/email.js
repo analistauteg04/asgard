@@ -77,12 +77,12 @@ $(document).ready(function () {
 });
 
 function mostrar_grid_lista() {
-    var lista_id = $('#cmb_lista option:selected').val();
+    var lista = $('#txt_buscar_lista').val();
 
-    //Buscar almenos una clase con el nombre para ejecutar
+    //Buscar al menos una clase con el nombre para ejecutar.
     if (!$(".blockUI").length) {
         showLoadingPopup();
-        $('#Tbg_Lista').PbGridView('applyFilterData', {'lista_id': lista_id});
+        $('#Tbg_Lista').PbGridView('applyFilterData', {'lista': lista});
         setTimeout(hideLoadingPopup, 2000);
     }
 }
@@ -230,7 +230,7 @@ function guardarLista() {
 
     arrParams.direccion1 = $('#txt_direccion1').val();
     arrParams.direccion2 = $('#txt_direccion2').val();
-    arrParams.telefono = $('#telefono').val();
+    arrParams.telefono = $('#txt_telefono').val();
     arrParams.codigo_postal = $('#txt_codigo_postal').val();                
 
     if (!validateForm()) {

@@ -120,9 +120,9 @@ admision::registerTranslations();
         </div> 
         <div class="col-md-6 col-sm-6 col-xs-6 col-lg-6">
             <div class="form-group">
-                <label for="txt_telefono" class="col-sm-4 control-label" id="lbl_telefono"><?= Yii::t("formulario", "Phone") ?><span class="text-danger">*</span></label> 
+                <label for="txt_telefono" class="col-sm-4 control-label" id="lbl_telefono"><?= Yii::t("formulario", "Phone") ?></label> 
                 <div class="col-sm-8 ">
-                    <input type="text" class="form-control PBvalidation keyupmce" value="" id="txt_telefono" data-type="telefono_sin" placeholder="<?= Yii::t("formulario", "Phone") ?>">                 
+                    <input type="text" class="form-control " value="" id="txt_telefono" data-type="telefono_sin" placeholder="<?= Yii::t("formulario", "Phone") ?>">                 
                 </div>
             </div>
         </div>           
