@@ -1,7 +1,6 @@
 <?php
 
 namespace app\modules\marketing\models;
-
 use yii\data\ArrayDataProvider;
 use Yii;
 
@@ -11,9 +10,6 @@ use Yii;
  * @property int $sus_id
  * @property int $per_id
  * @property int $pges_id
- * @property string $sus_nombres
- * @property string $sus_apellidos
- * @property string $sus_correo
  * @property string $sus_estado
  * @property string $sus_fecha_creacion
  * @property string $sus_fecha_modificacion
@@ -47,10 +43,8 @@ class Suscriptor extends \yii\db\ActiveRecord
     {
         return [
             [['per_id', 'pges_id'], 'integer'],
-            [['sus_nombres', 'sus_apellidos', 'sus_correo', 'sus_estado', 'sus_estado_logico'], 'required'],
+            [['sus_estado', 'sus_estado_logico'], 'required'],
             [['sus_fecha_creacion', 'sus_fecha_modificacion'], 'safe'],
-            [['sus_nombres', 'sus_apellidos'], 'string', 'max' => 100],
-            [['sus_correo'], 'string', 'max' => 50],
             [['sus_estado', 'sus_estado_logico'], 'string', 'max' => 1],
         ];
     }
@@ -64,16 +58,13 @@ class Suscriptor extends \yii\db\ActiveRecord
             'sus_id' => 'Sus ID',
             'per_id' => 'Per ID',
             'pges_id' => 'Pges ID',
-            'sus_nombres' => 'Sus Nombres',
-            'sus_apellidos' => 'Sus Apellidos',
-            'sus_correo' => 'Sus Correo',
             'sus_estado' => 'Sus Estado',
             'sus_fecha_creacion' => 'Sus Fecha Creacion',
             'sus_fecha_modificacion' => 'Sus Fecha Modificacion',
             'sus_estado_logico' => 'Sus Estado Logico',
         ];
     }
-    
+
     /**
      * @return \yii\db\ActiveQuery
      */
@@ -81,8 +72,15 @@ class Suscriptor extends \yii\db\ActiveRecord
     {
         return $this->hasMany(BitacoraEnvio::className(), ['sus_id' => 'sus_id']);
     }
-    
-    
+
+    /**
+     * @return \yii\db\ActiveQuery
+     */
+    public function getListaSuscriptors()
+    {
+        return $this->hasMany(ListaSuscriptor::className(), ['sus_id' => 'sus_id']);
+    }
+
     public function consultarSuscriptoresxLista($list_id) {
         $con = \Yii::$app->db_mailing;
         $estado = 1;
@@ -143,13 +141,5 @@ class Suscriptor extends \yii\db\ActiveRecord
         } else {
             return $dataProvider;
         }
-    }
-    
-    /**
-     * @return \yii\db\ActiveQuery
-     */
-    public function getListaSuscriptors()
-    {
-        return $this->hasMany(ListaSuscriptor::className(), ['sus_id' => 'sus_id']);
     }
 }

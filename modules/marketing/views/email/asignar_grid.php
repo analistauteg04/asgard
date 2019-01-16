@@ -50,11 +50,17 @@ PbGridView::widget([
             'template' => '{addsubs} {addsublistinte} {rmsubs}',
             'buttons' => [
                 'addsubs' => function ($url, $model) {
-                    return Html::a('<span class="glyphicon glyphicon-plus"></span>', "#", ["onclick" => "SuscribirContacto(" . $model['id_psus'] . "," . $model['per_tipo'] . ");", "data-toggle" => "tooltip", "title" => "Suscribirse a la lista", "data-pjax" => 0]);
+                    return Html::a('<span class="glyphicon glyphicon-plus"></span>', "#", ["onclick" => "suscribirContacto(" . $model['id_psus'] . "," . $model['per_tipo'] . ");", "data-toggle" => "tooltip", "title" => "Suscribirse a la lista", "data-pjax" => 0]);
                 },     
                 'rmsubs' => function ($url, $model) {
-                    return Html::a('<span class="glyphicon glyphicon-remove"></span>', "#", ["onclick" => "RemoverSuscritor(" . $model['id_sus'] . ");", "data-toggle" => "tooltip", "title" => "Eliminar Suscritor", "data-pjax" => 0]);
+                    $estado=$model['estado_id'];
+                    if($estado_id==1){                    
+                        return Html::a('<span class="glyphicon glyphicon-remove"></span>', "#", ["onclick" => "RemoverSuscritor(" . $model['id_sus'] . ");", "data-toggle" => "tooltip", "title" => "Eliminar Suscritor", "data-pjax" => 0]);
+                    }else{
+                        return "<span class = 'glyphicon glyphicon-remove' data-toggle = 'tooltip' title ='No se puede remover un contacto que no se haya suscrito'  data-pjax = 0></span>";
+                    }
                 },        
+                        
             ],
         ],
     ],

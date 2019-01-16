@@ -16,7 +16,8 @@ use app\webservices\WsMailChimp;
 use app\models\Pais;
 use app\models\Provincia;
 use app\models\Canton;
-
+use \app\models\Persona;
+use \app\modules\admision\models\PersonaGestion;
 academico::registerTranslations();
 financiero::registerTranslations();
 
@@ -24,17 +25,17 @@ class EmailController extends \app\components\CController {
 
     public function actionIndex() {
         $mod_lista = new Lista();
-        $data = Yii::$app->request->get();
+        $data = Yii::$app->request->get();        
         if ($data['PBgetFilter']) {
-            $arrSearch["lista_id"] = $data['lista_id'];
+            $arrSearch["lista"] = $data['lista'];
+            \app\models\Utilities::putMessageLogFile('si hay filtro');
             $resp_lista = $mod_lista->consultarLista($arrSearch);
-        } else {
+        } else {            
             $resp_lista = $mod_lista->consultarLista();
-        }
-        $op = isset($_POST['op']) ? $_POST['op'] : "";
-        $resp_combo_lista = $mod_lista->consultarListaProgramacion();
+        }        
+        //$resp_combo_lista = $mod_lista->consultarListaProgramacion();
         return $this->render('index', [
-                    "arr_lista" => ArrayHelper::map(array_merge(["id" => "0", "name" => "Seleccionar"], $resp_combo_lista), "id", "name"),
+                    //"arr_lista" => ArrayHelper::map(array_merge(["id" => "0", "name" => "Seleccionar"], $resp_combo_lista), "id", "name"),
                     'model' => $resp_lista]);
     }
 
@@ -43,10 +44,27 @@ class EmailController extends \app\components\CController {
         $lis_id = base64_decode($_GET['lis_id']);
         $per_id = @Yii::$app->session->get("PB_perid");        
         $mod_sb= new Suscriptor();
+        $mod_persona=new Persona();
+        $mod_perge=new PersonaGestion();
         $lista_model=$mod_lista->consultarListaXID($lis_id);
         $susbs_lista = $mod_sb->consultarSuscriptoresxLista($lis_id);
         if (Yii::$app->request->isAjax) {
-            
+            $data = Yii::$app->request->post();
+            if($data["accion"]='sc'){
+                $ps_id=$data["psus_id"];
+                $per_tipo=$data["per_tipo"];
+                $data_source=array();
+                if($per_tipo==1){
+                    $data_source=$mod_persona->consultaPersonaId($ps_id);
+                    $mod_sb->per_id=$ps_id;
+                    $mod_sb->pges_id=NULL;
+                    $mod_sb->per_id=$ps_id;
+                            
+                }if($per_tipo==2){
+                    $data_source=$mod_perge->consultarPersonaGestion($ps_id);
+                }
+                
+            }
         }
         return $this->render('asignar', [
             'arr_lista' => $lista_model,
@@ -260,12 +278,11 @@ class EmailController extends \app\components\CController {
                 );
                 //Grabar en mailchimp    
                 $webs_mailchimp = new WsMailChimp();
-                $conLista = $webs_mailchimp->newList($nombre_lista, $nombre_contacto, $correo_contacto, $asunto, $contacto, "es");                                
-                \app\models\Utilities::putMessageLogFile('resultado:'.$conLista);
+                $conLista = $webs_mailchimp->newList($nombre_lista, $nombre_contacto, $correo_contacto, $asunto, $contacto, "es");                                                
                 if ($conLista) {
                     //Grabar en asgard
                     $lista = new Lista();
-                    $resp_lista = $lista->insertarLista('001', $eaca_id, $mest_id, $emp_id, $nombre_lista, $correo_contacto, $nombre_contacto, $pais_id, $provincia_id, $ciudad_id, $direccion1, $direccion2, $telefono, $codigo_postal);
+                    $resp_lista = $lista->insertarLista($conLista["id"], $eaca_id, $mest_id, $emp_id, $nombre_lista, $correo_contacto, $nombre_contacto, $pais_id, $provincia_id, $ciudad_id, $direccion1, $direccion2, $telefono, $codigo_postal);
                     if ($resp_lista) {
                         $exito=1;
                     }   
