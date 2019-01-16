@@ -18,6 +18,7 @@ use app\models\Provincia;
 use app\models\Canton;
 use \app\models\Persona;
 use \app\modules\admision\models\PersonaGestion;
+
 academico::registerTranslations();
 financiero::registerTranslations();
 
@@ -25,66 +26,69 @@ class EmailController extends \app\components\CController {
 
     public function actionIndex() {
         $mod_lista = new Lista();
-        $data = Yii::$app->request->get();        
+        $data = Yii::$app->request->get();
         if ($data['PBgetFilter']) {
             $arrSearch["lista"] = $data['lista'];
             \app\models\Utilities::putMessageLogFile('si hay filtro');
             $resp_lista = $mod_lista->consultarLista($arrSearch);
-        } else {            
+        } else {
             $resp_lista = $mod_lista->consultarLista();
         }                
-        return $this->render('index', [                    
+       
+        return $this->render('index', [
                     'model' => $resp_lista]);
     }
 
     public function actionAsignar() {
         $mod_lista = new Lista();
         $lis_id = base64_decode($_GET['lis_id']);
-        $per_id = @Yii::$app->session->get("PB_perid");        
-        $mod_sb= new Suscriptor();
-        $mod_persona=new Persona();
-        $mod_perge=new PersonaGestion();
-        $lista_model=$mod_lista->consultarListaXID($lis_id);
+        $per_id = @Yii::$app->session->get("PB_perid");
+        $mod_sb = new Suscriptor();
+        $mod_persona = new Persona();
+        $mod_perge = new PersonaGestion();
+        $lista_model = $mod_lista->consultarListaXID($lis_id);
         $susbs_lista = $mod_sb->consultarSuscriptoresxLista($lis_id);
         if (Yii::$app->request->isAjax) {
-            $data = Yii::$app->request->post();
-            if($data["accion"]='sc'){
-                $ps_id=$data["psus_id"];
-                $per_tipo=$data["per_tipo"];
-                $data_source=array();
-                if($per_tipo==1){
-                    $data_source=$mod_persona->consultaPersonaId($ps_id);
-                    $mod_sb->per_id=$ps_id;
-                    $mod_sb->pges_id=NULL;
-                    $mod_sb->per_id=$ps_id;
-                            
-                }if($per_tipo==2){
-                    $data_source=$mod_perge->consultarPersonaGestion($ps_id);
-                }                
+            $data = Yii::$app->request->post();           
+            if ($data["accion"] = 'sc') {
+                $ps_id = $data["psus_id"];
+                $per_tipo = $data["per_tipo"];
+                $data_source = array();
+                if ($per_tipo == 1) {
+                    $data_source = $mod_persona->consultaPersonaId($ps_id);
+                    $mod_sb->per_id = $ps_id;
+                    $mod_sb->pges_id = NULL;
+                    $mod_sb->per_id = $ps_id;
+                }if ($per_tipo == 2) {
+                    $data_source = $mod_perge->consultarPersonaGestion($ps_id);
+                }
             }
         }
         return $this->render('asignar', [
-            'arr_lista' => $lista_model,
-            'arr_estado' => array("Seleccionar", "Subscrito", "No Subscrito"),
-            'model' => $susbs_lista,
+                    'arr_lista' => $lista_model,
+                    'arr_estado' => array("Seleccionar", "Subscrito", "No Subscrito"),
+                    'model' => $susbs_lista,
         ]);
     }
 
     public function actionProgramacion() {
         $mod_lista = new Lista();
         $muestra = 0;
-        $per_id = @Yii::$app->session->get("PB_perid");     
         $lista = base64_decode($_GET["lisid"]);
         $plantilla = $mod_lista->consultarListaTemplate($lista);
         $ingreso = $mod_lista->consultarIngresoProgramacion($lista, $plantilla['id']);
-        if ($ingreso['ingresado'] == 0) {
+        if (count($ingreso) == 0) {
             $muestra = 1;
+            return $this->render('programacion', [
+                        "muestra" => $muestra,
+                        "arr_ingreso" => $ingreso
+            ]);
+        } else {
+            return $this->render('viewprograma', [
+                        "muestra" => $muestra,
+                        "arr_ingreso" => $ingreso
+            ]);
         }
-        $arr_lista = $mod_lista->consultarListaProgramacion();
-        return $this->render('programacion', [
-                    "arr_lista" => ArrayHelper::map(array_merge([["id" => "0", "name" => Yii::t("formulario", "Select")]], $arr_lista), "id", "name"),
-                    "muestra" => $muestra,
-        ]);
     }
 
     public function actionDelete() {
@@ -132,7 +136,7 @@ class EmailController extends \app\components\CController {
     public function actionGuardarprogramacion() {
         if (Yii::$app->request->isAjax) {
             $data = Yii::$app->request->post();
-            $lista = base64_decode($data["lista"]);          
+            $lista = base64_decode($data["lista"]);
             $fecinicio = $data["fecha_inicio"];
             $fecfin = $data["fecha_fin"];
             $horenvio = $data["hora_envio"];
@@ -144,7 +148,7 @@ class EmailController extends \app\components\CController {
                 $mod_lista = new Lista();
                 $plantilla = $mod_lista->consultarListaTemplate($lista);
                 $ingreso = $mod_lista->consultarIngresoProgramacion($lista, $plantilla['id']);
-                if ($ingreso['ingresado'] == 0) {
+                if (count($ingreso) == 0) {
                     $resp_programacion = $mod_lista->insertarProgramacion($lista, $plantilla['id'], $fecinicio, $fecfin, $horenvio, $usuario, $fecha_registro);
                     if ($resp_programacion) {
                         for ($i = 1; $i < 8; $i++) {
@@ -192,7 +196,7 @@ class EmailController extends \app\components\CController {
     public function actionNew() {
         $empresa_mod = new Empresa();
         $oportunidad_mod = new Oportunidad();
-        $estudio_mod = new ModuloEstudio();        
+        $estudio_mod = new ModuloEstudio();
         if (Yii::$app->request->isAjax) {
             $data = Yii::$app->request->post();
             if (isset($data["getcarrera"])) {
@@ -216,11 +220,11 @@ class EmailController extends \app\components\CController {
                 echo Utilities::ajaxResponse('OK', 'alert', Yii::t('jslang', 'Success'), 'false', $message);
                 return;
             }
-        }        
+        }
         $arreglo_empresa = $empresa_mod->getAllEmpresa();
-        $arreglo_carrerra = $oportunidad_mod->consultarCarreras();         
+        $arreglo_carrerra = $oportunidad_mod->consultarCarreras();
         $arreglo_pais = Pais::find()->select("pai_id AS id, pai_nombre AS value")->where(["pai_estado_logico" => "1", "pai_estado" => "1"])->asArray()->all();
-        $arreglo_provincia = Provincia::provinciaXPais(1);        
+        $arreglo_provincia = Provincia::provinciaXPais(1);
         $arreglo_ciudad = Canton::cantonXProvincia(1);
         return $this->render('new', [
                     "arr_empresa" => ArrayHelper::map(array_merge([["id" => "0", "name" => Yii::t("formulario", "Select")]], $arreglo_empresa), "id", "value"),
@@ -228,13 +232,13 @@ class EmailController extends \app\components\CController {
                     "arr_pais" => ArrayHelper::map(array_merge([["id" => "0", "name" => Yii::t("formulario", "Select")]], $arreglo_pais), "id", "value"),
                     "arr_provincia" => ArrayHelper::map(array_merge([["id" => "0", "name" => Yii::t("formulario", "Select")]], $arreglo_provincia), "id", "value"),
                     "arr_ciudad" => ArrayHelper::map(array_merge([["id" => "0", "name" => Yii::t("formulario", "Select")]], $arreglo_ciudad), "id", "value"),
-        ]);       
+        ]);
     }
 
     public function actionGuardarlista() {
         if (Yii::$app->request->isAjax) {
             $data = Yii::$app->request->post();
-            $emp_id = $data["emp_id"];            
+            $emp_id = $data["emp_id"];
             $nombre_lista = ucwords(mb_strtolower($data["nombre_lista"]));
             $nombre_empresa = ucwords(mb_strtolower($data["nombre_empresa"]));
             $nombre_contacto = ucwords(mb_strtolower($data["txt_nombre_contacto"]));
@@ -247,40 +251,40 @@ class EmailController extends \app\components\CController {
             $provincia = ucwords(mb_strtolower($data["provincia_texto"]));
             $provincia_id = $data["provincia_id"];
             $direccion1 = ucwords(mb_strtolower($data["direccion1"]));
-            $direccion2= ucwords(mb_strtolower($data["direccion2"]));
-            $telefono= $data["telefono"];
-            $codigo_postal= ucwords(mb_strtolower($data["codigo_postal"]));
-            $eaca_id= null;
+            $direccion2 = ucwords(mb_strtolower($data["direccion2"]));
+            $telefono = $data["telefono"];
+            $codigo_postal = ucwords(mb_strtolower($data["codigo_postal"]));
+            $eaca_id = null;
             $mest_id = null;
             if ($emp_id != 1) {
-                $mest_id = $data["carrera_id"];                
+                $mest_id = $data["carrera_id"];
             } else {
-                $eaca_id= $data["carrera_id"];
+                $eaca_id = $data["carrera_id"];
             }
-            
+
             $con = \Yii::$app->db_mailing;
             $transaction = $con->beginTransaction();
-            try {                                
+            try {
                 $contacto = array(
-                "company" => $nombre_empresa,
-                "address1" => $direccion1,
-                "address2" => $direccion2,
-                "city" => $ciudad,
-                "state" => $provincia,
-                "zip" => $codigo_postal,
-                "country" => $pais,
-                "phone" => $telefono,
+                    "company" => $nombre_empresa,
+                    "address1" => $direccion1,
+                    "address2" => $direccion2,
+                    "city" => $ciudad,
+                    "state" => $provincia,
+                    "zip" => $codigo_postal,
+                    "country" => $pais,
+                    "phone" => $telefono,
                 );
                 //Grabar en mailchimp    
                 $webs_mailchimp = new WsMailChimp();
-                $conLista = $webs_mailchimp->newList($nombre_lista, $nombre_contacto, $correo_contacto, $asunto, $contacto, "es");                                                
+                $conLista = $webs_mailchimp->newList($nombre_lista, $nombre_contacto, $correo_contacto, $asunto, $contacto, "es");
                 if ($conLista) {
                     //Grabar en asgard
                     $lista = new Lista();
                     $resp_lista = $lista->insertarLista($conLista["id"], $eaca_id, $mest_id, $emp_id, $nombre_lista, $correo_contacto, $nombre_contacto, $pais_id, $provincia_id, $ciudad_id, $direccion1, $direccion2, $telefono, $codigo_postal);
                     if ($resp_lista) {
-                        $exito=1;
-                    }   
+                        $exito = 1;
+                    }
                 }
                 if ($exito) {
                     $transaction->commit();
@@ -306,6 +310,10 @@ class EmailController extends \app\components\CController {
                 return Utilities::ajaxResponse('NO_OK', 'alert', Yii::t("jslang", "Error"), true, $message);
             }
         }
+    }
+
+    public function actionUpdateprogramacion() {
+        
     }
 
 }
