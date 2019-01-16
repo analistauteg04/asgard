@@ -32,10 +32,8 @@ class EmailController extends \app\components\CController {
             $resp_lista = $mod_lista->consultarLista($arrSearch);
         } else {            
             $resp_lista = $mod_lista->consultarLista();
-        }        
-        //$resp_combo_lista = $mod_lista->consultarListaProgramacion();
-        return $this->render('index', [
-                    //"arr_lista" => ArrayHelper::map(array_merge(["id" => "0", "name" => "Seleccionar"], $resp_combo_lista), "id", "name"),
+        }                
+        return $this->render('index', [                    
                     'model' => $resp_lista]);
     }
 
@@ -62,8 +60,7 @@ class EmailController extends \app\components\CController {
                             
                 }if($per_tipo==2){
                     $data_source=$mod_perge->consultarPersonaGestion($ps_id);
-                }
-                
+                }                
             }
         }
         return $this->render('asignar', [

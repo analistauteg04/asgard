@@ -30,10 +30,6 @@ $(document).ready(function () {
             }
         }, true);
     });
-    
-    $('#sendNewList').click(function () {
-        guardarLista();
-    });
 
     $('#cmb_pais').change(function () {
         var link = $('#txth_base').val() + "/marketing/email/new";
@@ -255,5 +251,20 @@ function guardarLista() {
             }
         }, true);
     }
+}
+
+function eliminarLista(){
+    var mensj="¿Seguro desea eliminar la lista?";
+    var messagePB = new Object();
+    messagePB.wtmessage = mensj;
+    messagePB.title = "Eliminar";    
+    var objAccept = new Object();
+    objAccept.id = "btnid2del";
+    objAccept.class = "btn-primary clclass praclose";
+    objAccept.value = "Aceptar";
+    objAccept.callback = 'borrarlista';    
+    messagePB.acciones = new Array();
+    messagePB.acciones[0] = objAccept;    
+    showAlert("warning", "warning", messagePB);
 }
     

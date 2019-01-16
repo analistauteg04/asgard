@@ -150,7 +150,7 @@ class Lista extends \yii\db\ActiveRecord {
         $estado = 1;
 
         if (isset($arrFiltro) && count($arrFiltro) > 0) {
-            if ($arrFiltro['lista'] != "" && $arrFiltro['lista'] > 0) {
+            if ($arrFiltro['lista'] != "" ) {
                 $str_search = "l.lis_nombre like :lista AND ";
             }
         }
@@ -170,13 +170,11 @@ class Lista extends \yii\db\ActiveRecord {
         $comando = $con->createCommand($sql);
         $comando->bindParam(":estado", $estado, \PDO::PARAM_STR);
         if (isset($arrFiltro) && count($arrFiltro) > 0) {
-            //if ($arrFiltro['lista'] != "" ) {
+            if ($arrFiltro['lista'] != "" ) {
                 $lista = "%" . $arrFiltro["lista"] . "%";
                 $comando->bindParam(":lista", $lista, \PDO::PARAM_STR);
-            //}
-        }
-        \app\models\Utilities::putMessageLogFile('lista: '. $lista);
-        \app\models\Utilities::putMessageLogFile('sql: '. $sql);
+            }
+        }      
         $resultData = $comando->queryAll();
         $dataProvider = new ArrayDataProvider([
             'key' => 'id',
