@@ -141,28 +141,31 @@ function SuscribirContacto(psus_id,per_tipo) {
     var mensj=mensj+"- Marketing<br/>";
     var mensj=mensj+"- Adminsitracion empresas<br/>";
     var mensj=mensj+"Desea suscribirlo a estas listas tambien?";
-    var mensaje ={
-        wtmessage: mensj, title: "Suscribir Contacto"
-    };
-        showAlert("Success", "Ok", mensaje);
+    var messagePB = new Object();
+    messagePB.wtmessage = mensj;
+    messagePB.title = "Suscribirse";    
+    var objAccept = new Object();
+    objAccept.id = "btnid2del";
+    objAccept.class = "btn-primary clclass praclose";
+    objAccept.value = "Aceptar";
+    //objAccept.callback = callback;    
+    messagePB.acciones = new Array();
+    messagePB.acciones[0] = objAccept;    
+    showAlert("OK", "success", messagePB);
 }
 function RemoverSuscritor(){
     var mensj="Seguro Desea eliminar el suscritor de la lista?";
     var messagePB = new Object();
     messagePB.wtmessage = mensj;
-    messagePB.title = "Eliminar";
-    
+    messagePB.title = "Eliminar";    
     var objAccept = new Object();
     objAccept.id = "btnid2del";
     objAccept.class = "btn-primary clclass praclose";
     objAccept.value = "Aceptar";
-    //objAccept.callback = callback;
-    
+    //objAccept.callback = callback;    
     messagePB.acciones = new Array();
     messagePB.acciones[0] = objAccept;    
-    showAlert("OK", "info", messagePB);
-    
-    
+    showAlert("warning", "warning", messagePB);
 }
 function setComboDataselect(arr_data, element_id, texto) {
     var option_arr = "";
