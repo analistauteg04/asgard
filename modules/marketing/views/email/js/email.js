@@ -252,8 +252,25 @@ function guardarLista() {
         }, true);
     }
 }
+function borrarLista(id, codigo) {
+    var link = $('#txth_base').val() + "/marketing/email/delete";
+    var arrParams = new Object();
+    arrParams.lis_id = id;                   
+    arrParams.codigo = codigo;                   
+    alert('saludos');
+    if (!validateForm()) {
+        requestHttpAjax(link, arrParams, function (response) {
+            showAlert(response.status, response.label, response.message);
+            if (!response.error) {
+                setTimeout(function () {
+                    window.location.href = $('#txth_base').val() + "/marketing/email/index";
+                }, 5000);
+            }
+        }, true);
+    }
+}
 
-function eliminarLista(){
+function eliminarLista(id, codigo){
     var mensj="¿Seguro desea eliminar la lista?";
     var messagePB = new Object();
     messagePB.wtmessage = mensj;
@@ -262,7 +279,10 @@ function eliminarLista(){
     objAccept.id = "btnid2del";
     objAccept.class = "btn-primary clclass praclose";
     objAccept.value = "Aceptar";
-    objAccept.callback = 'borrarlista';    
+    objAccept.callback = 'borrarLista';   
+    alert ('ingresa');
+    var params= new Array(id, codigo);
+    objAccept.paramCallback = params;
     messagePB.acciones = new Array();
     messagePB.acciones[0] = objAccept;    
     showAlert("warning", "warning", messagePB);

@@ -154,7 +154,7 @@ class Lista extends \yii\db\ActiveRecord {
                 $str_search = "l.lis_nombre like :lista AND ";
             }
         }
-        $sql = "SELECT l.lis_id, l.lis_nombre, 
+        $sql = "SELECT l.lis_id, l.lis_nombre, l.lis_codigo,
                         case when l.eaca_id > 0 then 
                                      ea.eaca_nombre else me.mest_nombre end as programa,
                         sum(case when (ls.lsus_estado = '1' and ls.lsus_estado_logico = '1') then
@@ -165,7 +165,7 @@ class Lista extends \yii\db\ActiveRecord {
                 WHERE $str_search
                       lis_estado = :estado
                       and lis_estado_logico = :estado
-                GROUP BY l.lis_id, l.lis_nombre, ea.eaca_nombre;";
+                GROUP BY l.lis_id, l.lis_nombre, l.lis_codigo;";
         
         $comando = $con->createCommand($sql);
         $comando->bindParam(":estado", $estado, \PDO::PARAM_STR);

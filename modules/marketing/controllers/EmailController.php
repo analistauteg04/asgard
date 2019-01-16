@@ -97,6 +97,7 @@ class EmailController extends \app\components\CController {
             $data = Yii::$app->request->post();
             //$lis_id = $data["list_id"];
             $lis_id = base64_decode($_GET['lis_id']);
+            $codigo = base64_decode($_GET['codigo']);
             $con = \Yii::$app->db_mailing;
             $transaction = $con->beginTransaction();
             try {
