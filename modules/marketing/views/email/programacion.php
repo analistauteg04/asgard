@@ -1,17 +1,23 @@
-<?php
+    <?php
 
 use yii\helpers\Html;
 use kartik\date\DatePicker;
 use app\modules\marketing\Module;
-if ($muestra == 1){
+
+/*if ($muestra == 1) {
     $habilita = '';
     $deshabilita = '';
-}
-else{
+} else {
     $habilita = 'disabled';
     $deshabilita = 'disabled = disabled';
+}*/
+
+$dia_marcados = explode(",", $arr_ingreso[0]["dia_programa"]);
+for ($m = 0; $m < count($dia_marcados); $m++) {
+
+    $keys[$dia_marcados[$m]] = $dia_marcados[$m];
 }
-    
+
 ?>
 <?= Html::hiddenInput('txth_list', $_GET["lisid"], ['id' => 'txth_list']); ?>
 <form class="form-horizontal" enctype="multipart/form-data" > 
@@ -35,15 +41,20 @@ else{
                         <td><?= Yii::t("formulario", "Sunday") ?></td>
                     </tr>
                 </thead>
+                <!-- checked="checked" -->
                 <?php for ($i = 1; $i < 2; $i++) { ?>
                     <tr align="center">                           
                         <?php
                         for ($j = 1; $j < 8; $j++) {
                             ?>                                    
-                            <td><input type="checkbox" class="check_dias" <?php echo $deshabilita; ?> name="<?php echo 'check_dia_' . $j; ?>"  id="<?php echo 'check_dia_' . $j; ?>" value="<?php echo $j; ?>"> </td> 
-                            <?php
-                        }
-                        ?>  
+                            <td><input type="checkbox" class="check_dias" <?php echo $deshabilita; ?>  <?php
+                                if ($keys[$j] == $j) {
+                                    echo 'checked="checked"';
+                                }
+                                ?> name="<?php echo 'check_dia_' . $j; ?>"  id="<?php echo 'check_dia_' . $j; ?>" value="<?php echo $j; ?>"> </td> 
+                                <?php                               
+                            }
+                            ?>  
                     </tr>                      
                 <?php } ?>
             </table> 
@@ -57,7 +68,7 @@ else{
                         <?=
                         DatePicker::widget([
                             'name' => 'txt_fecha_inicio',
-                            'value' => '',
+                            'value' => $arr_ingreso[0]["fecha_desde"],
                             'disabled' => $habilita,
                             'type' => DatePicker::TYPE_INPUT,
                             'options' => ["class" => "form-control PBvalidation keyupmce", "id" => "txt_fecha_inicio", "data-type" => "", "data-keydown" => "true", "placeholder" => Yii::t("formulario", "Start date")],
@@ -77,7 +88,7 @@ else{
                         <?=
                         DatePicker::widget([
                             'name' => 'txt_fecha_fin',
-                            'value' => '',
+                            'value' => $arr_ingreso[0]["fecha_hasta"],
                             'disabled' => $habilita,
                             'type' => DatePicker::TYPE_INPUT,
                             'options' => ["class" => "form-control PBvalidation keyupmce", "id" => "txt_fecha_fin", "data-type" => "fecha_fin", "data-keydown" => "true", "placeholder" => Yii::t("formulario", "End date")],
@@ -96,7 +107,7 @@ else{
                 <div class="form-group">
                     <label for="txthoraenvio" class="col-sm-5 col-md-5 col-xs-5 col-lg-5 control-label keyupmce"><?= Module::t("marketing", "Shipping Time") ?></label>
                     <div class="col-sm-7 col-md-7 col-xs-7 col-lg-7">
-                        <input type="text" class="form-control PBvalidation keyupmce" value="" id="txthoraenvio" <?php echo $deshabilita; ?> data-type="tiempo" data-keydown="true" placeholder="<?= Yii::t('formulario', 'HH:MM') ?>">
+                        <input type="text" class="form-control PBvalidation keyupmce" value="<?= $arr_ingreso[0]["hora_envio"] ?>" id="txthoraenvio" <?php echo $deshabilita; ?> data-type="tiempo" data-keydown="true" placeholder="<?= Yii::t('formulario', 'HH:MM') ?>">
                     </div>
                 </div>
             </div>         

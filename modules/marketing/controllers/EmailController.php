@@ -62,13 +62,15 @@ class EmailController extends \app\components\CController {
         $lista = base64_decode($_GET["lisid"]);
         $plantilla = $mod_lista->consultarListaTemplate($lista);
         $ingreso = $mod_lista->consultarIngresoProgramacion($lista, $plantilla['id']);
-        if ($ingreso['ingresado'] == 0) {
+        if (count($ingreso) == 0) {
             $muestra = 1;
+            \app\models\Utilities::putMessageLogFile('count ingreso: ' . count($ingreso));
         }
         $arr_lista = $mod_lista->consultarListaProgramacion();
         return $this->render('programacion', [
                     "arr_lista" => ArrayHelper::map(array_merge([["id" => "0", "name" => Yii::t("formulario", "Select")]], $arr_lista), "id", "name"),
                     "muestra" => $muestra,
+                    "arr_ingreso" => $ingreso
         ]);
     }
 

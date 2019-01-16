@@ -603,10 +603,19 @@ class Lista extends \yii\db\ActiveRecord {
         $con = \Yii::$app->db_mailing;
         $estado = 1;
         $sql = "SELECT 
-                   count(pro_id) as ingresado
-                   
+                  pro.pro_id, 
+                  pro.lis_id, 
+                  pro.pla_id,
+                  DATE_FORMAT(pro.pro_fecha_desde, '%Y-%m-%d') as fecha_desde,
+                  DATE_FORMAT(pro.pro_fecha_hasta, '%Y-%m-%d') as fecha_hasta,
+                  DATE_FORMAT(pro.pro_hora_envio, '%H:%i') as hora_envio,
+                  ifnull((SELECT GROUP_CONCAT(dpro.dia_id)
+                            FROM " . $con->dbname . ".dia_programacion dpro
+                            WHERE dpro.pro_id = pro.pro_id AND
+                            dpro.dpro_estado = '1' AND 
+                            dpro.dpro_estado_logico = '1'),'N/A') as dia_programa 
                 FROM 
-                   " . $con->dbname . ".programacion ";
+                   " . $con->dbname . ".programacion as pro";
         $sql .= "  
                 WHERE  
                    lis_id = :list_id AND  
@@ -617,7 +626,7 @@ class Lista extends \yii\db\ActiveRecord {
         $comando->bindParam(":estado", $estado, \PDO::PARAM_STR);
         $comando->bindParam(":list_id", $list_id, \PDO::PARAM_INT);
         $comando->bindParam(":pla_id", $pla_id, \PDO::PARAM_INT);
-        $resultData = $comando->queryOne();
+        $resultData = $comando->queryAll();
         return $resultData;
     }
 
