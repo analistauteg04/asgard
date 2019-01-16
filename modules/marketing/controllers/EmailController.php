@@ -25,17 +25,17 @@ class EmailController extends \app\components\CController {
 
     public function actionIndex() {
         $mod_lista = new Lista();
-        $data = Yii::$app->request->get();
+        $data = Yii::$app->request->get();        
         if ($data['PBgetFilter']) {
-            $arrSearch["lista_id"] = $data['lista_id'];
+            $arrSearch["lista"] = $data['lista'];
+            \app\models\Utilities::putMessageLogFile('si hay filtro');
             $resp_lista = $mod_lista->consultarLista($arrSearch);
-        } else {
+        } else {            
             $resp_lista = $mod_lista->consultarLista();
-        }
-        $op = isset($_POST['op']) ? $_POST['op'] : "";
-        $resp_combo_lista = $mod_lista->consultarListaProgramacion();
+        }        
+        //$resp_combo_lista = $mod_lista->consultarListaProgramacion();
         return $this->render('index', [
-                    "arr_lista" => ArrayHelper::map(array_merge(["id" => "0", "name" => "Seleccionar"], $resp_combo_lista), "id", "name"),
+                    //"arr_lista" => ArrayHelper::map(array_merge(["id" => "0", "name" => "Seleccionar"], $resp_combo_lista), "id", "name"),
                     'model' => $resp_lista]);
     }
 
@@ -276,12 +276,11 @@ class EmailController extends \app\components\CController {
                 );
                 //Grabar en mailchimp    
                 $webs_mailchimp = new WsMailChimp();
-                $conLista = $webs_mailchimp->newList($nombre_lista, $nombre_contacto, $correo_contacto, $asunto, $contacto, "es");                                
-                \app\models\Utilities::putMessageLogFile('resultado:'.$conLista);
+                $conLista = $webs_mailchimp->newList($nombre_lista, $nombre_contacto, $correo_contacto, $asunto, $contacto, "es");                                                
                 if ($conLista) {
                     //Grabar en asgard
                     $lista = new Lista();
-                    $resp_lista = $lista->insertarLista('001', $eaca_id, $mest_id, $emp_id, $nombre_lista, $correo_contacto, $nombre_contacto, $pais_id, $provincia_id, $ciudad_id, $direccion1, $direccion2, $telefono, $codigo_postal);
+                    $resp_lista = $lista->insertarLista($conLista["id"], $eaca_id, $mest_id, $emp_id, $nombre_lista, $correo_contacto, $nombre_contacto, $pais_id, $provincia_id, $ciudad_id, $direccion1, $direccion2, $telefono, $codigo_postal);
                     if ($resp_lista) {
                         $exito=1;
                     }   

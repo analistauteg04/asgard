@@ -23,7 +23,7 @@ create table if not exists `lista` (
  `can_id` bigint(20) not null,   
  `lis_direccion1_empresa` varchar(100) not null,  
  `lis_direccion2_empresa` varchar(100) null,  
- `lis_telefono_empresa` varchar(20) not null,  
+ `lis_telefono_empresa` varchar(20) null,  
  `lis_codigo_postal` varchar(10) not null, 
  `lis_estado` varchar(1) not null,
  `lis_fecha_creacion` timestamp not null default current_timestamp,
