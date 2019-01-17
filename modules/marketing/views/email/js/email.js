@@ -1,7 +1,10 @@
 $(document).ready(function () {
-    
+
     // LUEGO BORRA CUANDO ESTE EL BOTON DE BD
-    
+    $('#sendEditprograma').click(function () {
+        lista = $('#txth_list').val();
+        window.location.href = $('#txth_base').val() + "/marketing/email/editprogramacion?lisid=" + lista;
+    });
     $('#sendModificaprograma').click(function () {
         var link = $('#txth_base').val() + "/marketing/email/updateprogramacion";
         var arrParams = new Object();
@@ -12,7 +15,7 @@ $(document).ready(function () {
         arrParams.check_dia_5 = "";
         arrParams.check_dia_6 = "";
         arrParams.check_dia_7 = "";
-        arrParams.lista = $('#txth_list').val();   
+        arrParams.lista = $('#txth_list').val();
 
         if ($('input:checkbox[name=check_dia_1]:checked').val() > 0)
         {
@@ -63,9 +66,9 @@ $(document).ready(function () {
 
                 }, true);
             }
-        }           
+        }
     });
-    
+
     $('#cmb_lista').change(function () {
         var link = $('#txth_base').val() + "/marketing/email/programacion";
         var arrParams = new Object();
@@ -78,7 +81,7 @@ $(document).ready(function () {
             }
         }, true);
     });
-    
+
 
     $('#btn_buscarDataLista').click(function () {
         mostrar_grid_lista();
@@ -120,7 +123,7 @@ $(document).ready(function () {
                 }
 
             }
-        }, true);      
+        }, true);
     });
 
     $('#cmb_provincia').change(function () {
@@ -147,7 +150,7 @@ function mostrar_grid_lista() {
         setTimeout(hideLoadingPopup, 2000);
     }
 }
-function suscribirContacto(psus_id,per_tipo){
+function suscribirContacto(psus_id, per_tipo) {
     preguntaSuscribirOtrasListas();
 //    var link = $('#txth_base').val() + "/marketing/email/asignar";
 //    var arrParams = new Object();
@@ -166,41 +169,41 @@ function suscribirContacto(psus_id,per_tipo){
 }
 function preguntaSuscribirOtrasListas() {
     var mensj = "Maria Sanchez ha sido suscrita a la lista de Economia.<br/>";
-    var mensj=mensj+"Las personas que se suscribieron a esta lista tambien les intereso las listas:<br/>";
-    var mensj=mensj+"- Finanzas<br/>";
-    var mensj=mensj+"- Marketing<br/>";
-    var mensj=mensj+"- Adminsitracion empresas<br/>";
-    var mensj=mensj+"Desea suscribirlo a estas listas tambien?";
+    var mensj = mensj + "Las personas que se suscribieron a esta lista tambien les intereso las listas:<br/>";
+    var mensj = mensj + "- Finanzas<br/>";
+    var mensj = mensj + "- Marketing<br/>";
+    var mensj = mensj + "- Adminsitracion empresas<br/>";
+    var mensj = mensj + "Desea suscribirlo a estas listas tambien?";
     var messagePB = new Object();
     messagePB.wtmessage = mensj;
-    messagePB.title = "Suscribirse";    
+    messagePB.title = "Suscribirse";
     var objAccept = new Object();
     objAccept.id = "btnid2del";
     objAccept.class = "btn-primary clclass praclose";
     objAccept.value = "Aceptar";
-    objAccept.callback = 'suscribirOtrasListas';    
+    objAccept.callback = 'suscribirOtrasListas';
     messagePB.acciones = new Array();
-    messagePB.acciones[0] = objAccept;    
+    messagePB.acciones[0] = objAccept;
     showAlert("OK", "success", messagePB);
 }
-function suscribirOtrasListas(){
-    
+function suscribirOtrasListas() {
+
 }
-function elminarsuscritor(){
-    
+function elminarsuscritor() {
+
 }
-function RemoverSuscritor(){
-    var mensj="Seguro Desea eliminar el suscritor de la lista?";
+function RemoverSuscritor() {
+    var mensj = "Seguro Desea eliminar el suscritor de la lista?";
     var messagePB = new Object();
     messagePB.wtmessage = mensj;
-    messagePB.title = "Eliminar";    
+    messagePB.title = "Eliminar";
     var objAccept = new Object();
     objAccept.id = "btnid2del";
     objAccept.class = "btn-primary clclass praclose";
     objAccept.value = "Aceptar";
-    objAccept.callback = 'elminarsuscritor';    
+    objAccept.callback = 'elminarsuscritor';
     messagePB.acciones = new Array();
-    messagePB.acciones[0] = objAccept;    
+    messagePB.acciones[0] = objAccept;
     showAlert("warning", "warning", messagePB);
 }
 function setComboDataselect(arr_data, element_id, texto) {
@@ -215,82 +218,82 @@ function setComboDataselect(arr_data, element_id, texto) {
 }
 
 function guardarProgramacion() {
-        var link = $('#txth_base').val() + "/marketing/email/guardarprogramacion";
-        var arrParams = new Object();
-        arrParams.check_dia_1 = "";
-        arrParams.check_dia_2 = "";
-        arrParams.check_dia_3 = "";
-        arrParams.check_dia_4 = "";
-        arrParams.check_dia_5 = "";
-        arrParams.check_dia_6 = "";
-        arrParams.check_dia_7 = "";
-        arrParams.lista = $('#txth_list').val();   
+    var link = $('#txth_base').val() + "/marketing/email/guardarprogramacion";
+    var arrParams = new Object();
+    arrParams.check_dia_1 = "";
+    arrParams.check_dia_2 = "";
+    arrParams.check_dia_3 = "";
+    arrParams.check_dia_4 = "";
+    arrParams.check_dia_5 = "";
+    arrParams.check_dia_6 = "";
+    arrParams.check_dia_7 = "";
+    arrParams.lista = $('#txth_list').val();
 
-        if ($('input:checkbox[name=check_dia_1]:checked').val() > 0)
-        {
-            arrParams.check_dia_1 = $('input:checkbox[name=check_dia_1]:checked').val();
-        }
-        if ($('input:checkbox[name=check_dia_2]:checked').val() > 0)
-        {
-            arrParams.check_dia_2 = $('input:checkbox[name=check_dia_2]:checked').val();
-        }
-        if ($('input:checkbox[name=check_dia_3]:checked').val() > 0)
-        {
-            arrParams.check_dia_3 = $('input:checkbox[name=check_dia_3]:checked').val();
-        }
-        if ($('input:checkbox[name=check_dia_4]:checked').val() > 0)
-        {
-            arrParams.check_dia_4 = $('input:checkbox[name=check_dia_4]:checked').val();
-        }
-        if ($('input:checkbox[name=check_dia_5]:checked').val() > 0)
-        {
-            arrParams.check_dia_5 = $('input:checkbox[name=check_dia_5]:checked').val();
-        }
-        if ($('input:checkbox[name=check_dia_6]:checked').val() > 0)
-        {
-            arrParams.check_dia_6 = $('input:checkbox[name=check_dia_6]:checked').val();
-        }
-        if ($('input:checkbox[name=check_dia_7]:checked').val() > 0)
-        {
-            arrParams.check_dia_7 = $('input:checkbox[name=check_dia_7]:checked').val();
-        }
-        if (arrParams.check_dia_1 === "" && arrParams.check_dia_2 === "" && arrParams.check_dia_3 === "" && arrParams.check_dia_4 === "" && arrParams.check_dia_5 === "" && arrParams.check_dia_6 === "" && arrParams.check_dia_7 === "")
-        {
-            var mensaje =
-                    {wtmessage: "Días Programar : El campo no debe estar vacío.", title: "Error"};
-            showAlert("NO_OK", "error", mensaje);
-        } else {
-            arrParams.fecha_inicio = $('#txt_fecha_inicio').val();
-            arrParams.fecha_fin = $('#txt_fecha_fin').val();
-            arrParams.hora_envio = $('#txthoraenvio').val();
-            if (!validateForm()) {
-                requestHttpAjax(link, arrParams, function (response) {
-                    showAlert(response.status, response.label, response.message);
-                    if (!response.error) {
-                        setTimeout(function () {
-                            window.location.href = $('#txth_base').val() + "/marketing/email/index";
-                        }, 5000);
-                    }
-
-
-                }, true);
-            }
-        }           
+    if ($('input:checkbox[name=check_dia_1]:checked').val() > 0)
+    {
+        arrParams.check_dia_1 = $('input:checkbox[name=check_dia_1]:checked').val();
     }
-    
+    if ($('input:checkbox[name=check_dia_2]:checked').val() > 0)
+    {
+        arrParams.check_dia_2 = $('input:checkbox[name=check_dia_2]:checked').val();
+    }
+    if ($('input:checkbox[name=check_dia_3]:checked').val() > 0)
+    {
+        arrParams.check_dia_3 = $('input:checkbox[name=check_dia_3]:checked').val();
+    }
+    if ($('input:checkbox[name=check_dia_4]:checked').val() > 0)
+    {
+        arrParams.check_dia_4 = $('input:checkbox[name=check_dia_4]:checked').val();
+    }
+    if ($('input:checkbox[name=check_dia_5]:checked').val() > 0)
+    {
+        arrParams.check_dia_5 = $('input:checkbox[name=check_dia_5]:checked').val();
+    }
+    if ($('input:checkbox[name=check_dia_6]:checked').val() > 0)
+    {
+        arrParams.check_dia_6 = $('input:checkbox[name=check_dia_6]:checked').val();
+    }
+    if ($('input:checkbox[name=check_dia_7]:checked').val() > 0)
+    {
+        arrParams.check_dia_7 = $('input:checkbox[name=check_dia_7]:checked').val();
+    }
+    if (arrParams.check_dia_1 === "" && arrParams.check_dia_2 === "" && arrParams.check_dia_3 === "" && arrParams.check_dia_4 === "" && arrParams.check_dia_5 === "" && arrParams.check_dia_6 === "" && arrParams.check_dia_7 === "")
+    {
+        var mensaje =
+                {wtmessage: "Días Programar : El campo no debe estar vacío.", title: "Error"};
+        showAlert("NO_OK", "error", mensaje);
+    } else {
+        arrParams.fecha_inicio = $('#txt_fecha_inicio').val();
+        arrParams.fecha_fin = $('#txt_fecha_fin').val();
+        arrParams.hora_envio = $('#txthoraenvio').val();
+        if (!validateForm()) {
+            requestHttpAjax(link, arrParams, function (response) {
+                showAlert(response.status, response.label, response.message);
+                if (!response.error) {
+                    setTimeout(function () {
+                        window.location.href = $('#txth_base').val() + "/marketing/email/index";
+                    }, 5000);
+                }
+
+
+            }, true);
+        }
+    }
+}
+
 function guardarLista() {
     var link = $('#txth_base').val() + "/marketing/email/guardarlista";
     var arrParams = new Object();
     arrParams.emp_id = $('#cmb_empresa').val();
-    var combo_empresa = document.getElementById("cmb_empresa");        
+    var combo_empresa = document.getElementById("cmb_empresa");
     arrParams.nombre_empresa = combo_empresa.options[combo_empresa.selectedIndex].text;
 
     arrParams.carrera_id = $('#cmb_carrera_programa').val();
-    arrParams.nombre_lista = $('#txt_nombre_lista').val();        
+    arrParams.nombre_lista = $('#txt_nombre_lista').val();
     arrParams.txt_nombre_contacto = $('#txt_nombre_contacto').val();
     arrParams.txt_correo_contacto = $('#txt_correo_contacto').val();
     arrParams.txt_asunto = $('#txt_asunto').val();
-    arrParams.pais_id = $('#cmb_pais').val();        
+    arrParams.pais_id = $('#cmb_pais').val();
     var combo_pais = document.getElementById("cmb_pais");
     arrParams.pais_texto = combo_pais.options[combo_pais.selectedIndex].text;
 
@@ -305,7 +308,7 @@ function guardarLista() {
     arrParams.direccion1 = $('#txt_direccion1').val();
     arrParams.direccion2 = $('#txt_direccion2').val();
     arrParams.telefono = $('#txt_telefono').val();
-    arrParams.codigo_postal = $('#txt_codigo_postal').val();                
+    arrParams.codigo_postal = $('#txt_codigo_postal').val();
 
     if (!validateForm()) {
         requestHttpAjax(link, arrParams, function (response) {
@@ -321,8 +324,8 @@ function guardarLista() {
 function borrarLista(id, codigo) {
     var link = $('#txth_base').val() + "/marketing/email/delete";
     var arrParams = new Object();
-    arrParams.lis_id = id;                   
-    arrParams.codigo = codigo;                   
+    arrParams.lis_id = id;
+    arrParams.codigo = codigo;
     alert('saludos');
     if (!validateForm()) {
         requestHttpAjax(link, arrParams, function (response) {
@@ -336,21 +339,21 @@ function borrarLista(id, codigo) {
     }
 }
 
-function eliminarLista(id, codigo){
-    var mensj="¿Seguro desea eliminar la lista?";
+function eliminarLista(id, codigo) {
+    var mensj = "¿Seguro desea eliminar la lista?";
     var messagePB = new Object();
     messagePB.wtmessage = mensj;
-    messagePB.title = "Eliminar";    
+    messagePB.title = "Eliminar";
     var objAccept = new Object();
     objAccept.id = "btnid2del";
     objAccept.class = "btn-primary clclass praclose";
     objAccept.value = "Aceptar";
-    objAccept.callback = 'borrarLista';   
-    alert ('ingresa');
-    var params= new Array(id, codigo);
+    objAccept.callback = 'borrarLista';
+    alert('ingresa');
+    var params = new Array(id, codigo);
     objAccept.paramCallback = params;
     messagePB.acciones = new Array();
-    messagePB.acciones[0] = objAccept;    
+    messagePB.acciones[0] = objAccept;
     showAlert("warning", "warning", messagePB);
 }
-    
+

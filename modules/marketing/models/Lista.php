@@ -637,7 +637,7 @@ class Lista extends \yii\db\ActiveRecord {
     }
 
     /**
-     * Function modifica los datos de una oportunidad de venta.
+     * Function modifica los datos de programacion.
      * @author  Giovanni Vergara <analistadesarrollo02@uteg.edu.ec>;     *          
      * @param
      * @return
@@ -685,5 +685,43 @@ class Lista extends \yii\db\ActiveRecord {
             return FALSE;
         }
     }
+    /**
+     * Function elimina logicamente los dias de programacion.
+     * @author  Giovanni Vergara <analistadesarrollo02@uteg.edu.ec>;     *          
+     * @param
+     * @return
+     */
+    public function modificarDiaProgramacion($pro_id, $dpro_fecha_modificacion) {
+        $con = \Yii::$app->db_mailing;
+        $estado = 1;
+        $estado_cambio = 0;
+        if ($trans !== null) {
+            $trans = null; // si existe la transacción entonces no se crea una
+        } else {
+            $trans = $con->beginTransaction(); // si no existe la transacción entonces se crea una
+        }
 
+        try {
+            $comando = $con->createCommand
+                    ("UPDATE " . $con->dbname . ".dia_programacion		       
+                      SET dpro_estado = ifnull(:dpro_estado, dpro_estado),                          
+                          dpro_fecha_modificacion = :dpro_fecha_modificacion
+                      WHERE pro_id = :pro_id AND                        
+                            dpro_estado = :estado AND
+                            dpro_estado_logico = :estado");
+            
+            $comando->bindParam(":pro_id", $pro_id, \PDO::PARAM_INT); 
+            $comando->bindParam(":dpro_fecha_modificacion", $dpro_fecha_modificacion, \PDO::PARAM_STR);
+            $comando->bindParam(":estado", $estado, \PDO::PARAM_STR);
+            $comando->bindParam(":dpro_estado", $estado_cambio, \PDO::PARAM_STR);
+            $response = $comando->execute();
+            if ($trans !== null)
+                $trans->commit();
+            return $response;
+        } catch (Exception $ex) {
+            if ($trans !== null)
+                $trans->rollback();
+            return FALSE;
+        }
+    }
 }
