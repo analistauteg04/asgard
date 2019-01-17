@@ -33,8 +33,7 @@ class EmailController extends \app\components\CController {
             $resp_lista = $mod_lista->consultarLista($arrSearch);
         } else {
             $resp_lista = $mod_lista->consultarLista();
-        }                
-       
+        }                       
         return $this->render('index', [
                     'model' => $resp_lista]);
     }
@@ -221,6 +220,12 @@ class EmailController extends \app\components\CController {
             if (isset($data["getcantones"])) {
                 $cantones = Canton::find()->select("can_id AS id, can_nombre AS name")->where(["can_estado_logico" => "1", "can_estado" => "1", "pro_id" => $data['prov_id']])->asArray()->all();
                 $message = array("cantones" => $cantones);
+                echo Utilities::ajaxResponse('OK', 'alert', Yii::t('jslang', 'Success'), 'false', $message);
+                return;
+            }            
+            if (isset($data["getempresa"])) {
+                $resp_empresa = $empresa_mod->consultarEmpresaXid($data["emp_id"]);
+                $message = array("empresa" => $resp_empresa);
                 echo Utilities::ajaxResponse('OK', 'alert', Yii::t('jslang', 'Success'), 'false', $message);
                 return;
             }

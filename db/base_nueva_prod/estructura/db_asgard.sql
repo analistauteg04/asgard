@@ -311,8 +311,13 @@ CREATE TABLE IF NOT EXISTS `empresa` (
   `emp_imap_port` varchar(20) DEFAULT NULL,
   `emp_imap_user` varchar(100) DEFAULT NULL,
   `emp_imap_pass` varchar(200) DEFAULT NULL,
+  `pai_id` bigint(20) NULL,
+  `pro_id` bigint(20) NULL,
+  `can_id` bigint(20) NULL,
   `emp_direccion` varchar(45) DEFAULT NULL,
+  `emp_direccion1` varchar(100) NULL,
   `emp_telefono` varchar(50) DEFAULT NULL,
+  `emp_codigo_postal` varchar(10) NULL,
   `emp_descripcion` varchar(50) DEFAULT NULL,
   `emp_estado` varchar(1) DEFAULT NULL,
   `emp_fecha_creacion` timestamp NULL DEFAULT NULL,
@@ -704,3 +709,18 @@ create table if not exists `dash` (
   `dash_fecha_modificacion` timestamp null default null,
   `dash_estado_logico` varchar(1) not null
 );
+
+-- --------------------------------------------------------
+--
+-- Estructura de tabla para la tabla `empresa_correo`
+--
+CREATE TABLE IF NOT EXISTS `empresa_correo` (
+  `ecor_id` bigint(20) NOT NULL AUTO_INCREMENT PRIMARY KEY,
+  `emp_id` bigint(20) NOT NULL,
+  `ecor_correo` varchar(50) NOT NULL,
+  `ecor_estado` varchar(1) DEFAULT NULL,
+  `ecor_fecha_creacion` timestamp NULL DEFAULT NULL,
+  `ecor_fecha_modificacion` timestamp NULL DEFAULT NULL,
+  `ecor_estado_logico` varchar(1) DEFAULT NULL,
+  FOREIGN KEY (emp_id) REFERENCES `empresa`(emp_id)
+) ;

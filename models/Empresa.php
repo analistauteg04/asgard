@@ -226,4 +226,27 @@ class Empresa extends \yii\db\ActiveRecord {
         return $resultData;
     }
     
+    /**
+     * Function consulta los datos de la empresa segun el id de la empresa.
+     * @author Grace Viteri <analistadesarrollo02@uteg.edu.ec>;
+     * @param
+     * @return
+     */
+    public function consultarEmpresaXid($emp_id) {
+        $con = \Yii::$app->db_asgard;
+        $estado = 1;
+        $sql = "SELECT  emp_nombre_comercial, emp_direccion, emp_telefono,
+                        emp_direccion1, emp_codigo_postal,
+                        pai_id, pro_id, can_id
+                FROM " . $con->dbname . ".empresa  empr
+                WHERE empr.emp_id = :emp_id AND
+                      empr.emp_estado = :estado AND
+                      empr.emp_estado_logico = :estado";
+                               
+        $comando = $con->createCommand($sql);
+        $comando->bindParam(":estado", $estado, \PDO::PARAM_STR);
+        $comando->bindParam(":emp_id", $emp_id, \PDO::PARAM_INT);
+        $resultData = $comando->queryOne();
+        return $resultData;
+    }
 }
