@@ -33,8 +33,8 @@ class EmailController extends \app\components\CController {
             $resp_lista = $mod_lista->consultarLista($arrSearch);
         } else {
             $resp_lista = $mod_lista->consultarLista();
-        }                
-       
+        }
+
         return $this->render('index', [
                     'model' => $resp_lista]);
     }
@@ -49,7 +49,7 @@ class EmailController extends \app\components\CController {
         $lista_model = $mod_lista->consultarListaXID($lis_id);
         $susbs_lista = $mod_sb->consultarSuscriptoresxLista($lis_id);
         if (Yii::$app->request->isAjax) {
-            $data = Yii::$app->request->post();           
+            $data = Yii::$app->request->post();
             if ($data["accion"] = 'sc') {
                 $ps_id = $data["psus_id"];
                 $per_tipo = $data["per_tipo"];
@@ -317,7 +317,46 @@ class EmailController extends \app\components\CController {
     }
 
     public function actionUpdateprogramacion() {
-        
+        $mod_lista = new Lista();
+        if (Yii::$app->request->isAjax) {
+            $data = Yii::$app->request->post();
+            $lista = base64_decode($data["lista"]);
+            $fecinicio = $data["fecha_inicio"];
+            $fecfin = $data["fecha_fin"];
+            $horenvio = $data["hora_envio"];
+            $fecha_modifica = date(Yii::$app->params["dateTimeByDefault"]);
+            $usuario = @Yii::$app->user->identity->usu_id;
+            $con = \Yii::$app->db_mailing;
+            $transaction = $con->beginTransaction();
+            try {
+                $plantilla = $mod_lista->consultarListaTemplate($lista);
+                $programa = $mod_lista->consultarIngresoProgramacion($lista, $plantilla['id']);
+                $respuesta = $mod_lista->modificarProgramacionxId($programa['pro_id'], $lista, $plantilla['id'], $fecinicio, $fecfin, $horenvio, $usuario, $fecha_modifica);
+                if ($respuesta) {
+                    $transaction->commit();
+                    $message = array(
+                        "wtmessage" => Yii::t("notificaciones", "La información ha sido modificada. "),
+                        "title" => Yii::t('jslang', 'Success'),
+                    );
+                    return Utilities::ajaxResponse('OK', 'alert', Yii::t("jslang", "Sucess"), false, $message);
+                } else {
+                    $transaction->rollback();
+                    $message = array(
+                        "wtmessage" => Yii::t("notificaciones", "Error al modificar." . $mensaje),
+                        "title" => Yii::t('jslang', 'Bad Request'),
+                    );
+                    return Utilities::ajaxResponse('NO_OK', 'alert', Yii::t("jslang", "Bad Request"), false, $message);
+                }
+            } catch (Exception $ex) {
+                $transaction->rollback();
+                $message = array(
+                    "wtmessage" => Yii::t("notificaciones", "Error al modificar." . $mensaje),
+                    "title" => Yii::t('jslang', 'Bad Request'),
+                );
+                return Utilities::ajaxResponse('NO_OK', 'alert', Yii::t("jslang", "Bad Request"), false, $message);
+            }
+            return;
+        }
     }
 
 }
