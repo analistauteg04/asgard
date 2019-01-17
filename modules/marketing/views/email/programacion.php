@@ -4,7 +4,7 @@ use yii\helpers\Html;
 use kartik\date\DatePicker;
 use app\modules\marketing\Module;
 
-$dia_marcados = explode(",", $arr_ingreso[0]["dia_programa"]);
+$dia_marcados = explode(",", $arr_ingreso["dia_programa"]);
 for ($m = 0; $m < count($dia_marcados); $m++) {
 
     $keys[$dia_marcados[$m]] = $dia_marcados[$m];
@@ -79,7 +79,7 @@ for ($m = 0; $m < count($dia_marcados); $m++) {
                         <?=
                         DatePicker::widget([
                             'name' => 'txt_fecha_inicio',
-                            'value' => $arr_ingreso[0]["fecha_desde"],
+                            'value' => $arr_ingreso["fecha_desde"],
                             'disabled' => $habilita,
                             'type' => DatePicker::TYPE_INPUT,
                             'options' => ["class" => "form-control PBvalidation keyupmce", "id" => "txt_fecha_inicio", "data-type" => "", "data-keydown" => "true", "placeholder" => Yii::t("formulario", "Start date")],
@@ -99,7 +99,7 @@ for ($m = 0; $m < count($dia_marcados); $m++) {
                         <?=
                         DatePicker::widget([
                             'name' => 'txt_fecha_fin',
-                            'value' => $arr_ingreso[0]["fecha_hasta"],
+                            'value' => $arr_ingreso["fecha_hasta"],
                             'disabled' => $habilita,
                             'type' => DatePicker::TYPE_INPUT,
                             'options' => ["class" => "form-control PBvalidation keyupmce", "id" => "txt_fecha_fin", "data-type" => "fecha_fin", "data-keydown" => "true", "placeholder" => Yii::t("formulario", "End date")],
@@ -118,7 +118,7 @@ for ($m = 0; $m < count($dia_marcados); $m++) {
                 <div class="form-group">
                     <label for="txthoraenvio" class="col-sm-5 col-md-5 col-xs-5 col-lg-5 control-label keyupmce"><?= Module::t("marketing", "Shipping Time") ?></label>
                     <div class="col-sm-7 col-md-7 col-xs-7 col-lg-7">
-                        <input type="text" class="form-control PBvalidation keyupmce" value="<?= $arr_ingreso[0]["hora_envio"] ?>" id="txthoraenvio" <?php echo $deshabilita; ?> data-type="tiempo" data-keydown="true" placeholder="<?= Yii::t('formulario', 'HH:MM') ?>">
+                        <input type="text" class="form-control PBvalidation keyupmce" value="<?= $arr_ingreso["hora_envio"] ?>" id="txthoraenvio" <?php echo $deshabilita; ?> data-type="tiempo" data-keydown="true" placeholder="<?= Yii::t('formulario', 'HH:MM') ?>">
                     </div>
                 </div>
             </div>         

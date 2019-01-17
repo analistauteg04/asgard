@@ -159,7 +159,7 @@ class Lista extends \yii\db\ActiveRecord {
         $estado = 1;
 
         if (isset($arrFiltro) && count($arrFiltro) > 0) {
-            if ($arrFiltro['lista'] != "" ) {
+            if ($arrFiltro['lista'] != "") {
                 $str_search = "l.lis_nombre like :lista AND ";
             }
         }
@@ -175,15 +175,15 @@ class Lista extends \yii\db\ActiveRecord {
                       lis_estado = :estado
                       and lis_estado_logico = :estado
                 GROUP BY l.lis_id, l.lis_nombre, l.lis_codigo;";
-        
+
         $comando = $con->createCommand($sql);
         $comando->bindParam(":estado", $estado, \PDO::PARAM_STR);
         if (isset($arrFiltro) && count($arrFiltro) > 0) {
-            if ($arrFiltro['lista'] != "" ) {
+            if ($arrFiltro['lista'] != "") {
                 $lista = "%" . $arrFiltro["lista"] . "%";
                 $comando->bindParam(":lista", $lista, \PDO::PARAM_STR);
             }
-        }      
+        }
         $resultData = $comando->queryAll();
         $dataProvider = new ArrayDataProvider([
             'key' => 'id',
@@ -632,8 +632,58 @@ class Lista extends \yii\db\ActiveRecord {
         $comando->bindParam(":estado", $estado, \PDO::PARAM_STR);
         $comando->bindParam(":list_id", $list_id, \PDO::PARAM_INT);
         $comando->bindParam(":pla_id", $pla_id, \PDO::PARAM_INT);
-        $resultData = $comando->queryAll();
+        $resultData = $comando->queryOne();
         return $resultData;
+    }
+
+    /**
+     * Function modifica los datos de una oportunidad de venta.
+     * @author  Giovanni Vergara <analistadesarrollo02@uteg.edu.ec>;     *          
+     * @param
+     * @return
+     */
+    public function modificarProgramacionxId($pro_id, $lis_id, $pla_id, $pro_fecha_desde, $pro_fecha_hasta, $pro_hora_envio, $pro_usuario_modifica, $pro_fecha_modificacion) {
+        $con = \Yii::$app->db_mailing;
+        $estado = 1;
+        $hora_envio = date(Yii::$app->params["dateByDefault"]) . " " . $pro_hora_envio . ":00";
+        if ($trans !== null) {
+            $trans = null; // si existe la transacción entonces no se crea una
+        } else {
+            $trans = $con->beginTransaction(); // si no existe la transacción entonces se crea una
+        }
+
+        try {
+            $comando = $con->createCommand
+                    ("UPDATE " . $con->dbname . ".programacion		       
+                      SET lis_id = ifnull(:lis_id, lis_id),
+                          pla_id = ifnull(:pla_id, pla_id),                                              
+                          pro_fecha_desde = ifnull(:pro_fecha_desde, pro_fecha_desde),
+                          pro_fecha_hasta = ifnull(:pro_fecha_hasta, pro_fecha_hasta),
+                          pro_hora_envio = ifnull(:pro_hora_envio, pro_hora_envio),
+                          pro_usuario_modifica = :pro_usuario_modifica,
+                          pro_fecha_modificacion = :pro_fecha_modificacion
+                      WHERE pro_id = :pro_id AND                        
+                            pro_estado = :estado AND
+                            pro_estado_logico = :estado");
+            
+            $comando->bindParam(":pro_id", $pro_id, \PDO::PARAM_INT);
+            $comando->bindParam(":lis_id", $lis_id, \PDO::PARAM_INT);
+            $comando->bindParam(":pla_id", $pla_id, \PDO::PARAM_INT);
+            $comando->bindParam(":pro_fecha_desde", $pro_fecha_desde, \PDO::PARAM_STR);
+            $comando->bindParam(":pro_fecha_hasta", $pro_fecha_hasta, \PDO::PARAM_STR);
+            $comando->bindParam(":pro_hora_envio", $hora_envio, \PDO::PARAM_STR);
+            $comando->bindParam(":pro_usuario_modifica", $pro_usuario_modifica, \PDO::PARAM_STR);
+            $comando->bindParam(":pro_fecha_modificacion", $pro_fecha_modificacion, \PDO::PARAM_STR);
+            $comando->bindParam(":estado", $estado, \PDO::PARAM_STR);
+            $response = $comando->execute();
+            if ($trans !== null)
+                $trans->commit();
+            return $response;
+        } catch (Exception $ex) {
+            if ($trans !== null)
+                $trans->rollback();
+            return FALSE;
+        }
     }
 
 }
