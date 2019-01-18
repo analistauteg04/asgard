@@ -47,21 +47,27 @@ class EmailController extends \app\components\CController {
         $mod_persona = new Persona();
         $mod_perge = new PersonaGestion();
         $lista_model = $mod_lista->consultarListaXID($lis_id);
-        $susbs_lista = $mod_sb->consultarSuscriptoresxLista($lis_id);
+        $susbs_lista = $mod_sb->consultarSuscriptoresxLista($lis_id);        
         if (Yii::$app->request->isAjax) {
+            $con = \Yii::$app->db_asgard;
+            $transaction = $con->beginTransaction();
             $data = Yii::$app->request->post();
             if ($data["accion"] = 'sc') {
                 $ps_id = $data["psus_id"];
                 $per_tipo = $data["per_tipo"];
                 $data_source = array();
+                $per_id=null;
+                $pge_id=null;
                 if ($per_tipo == 1) {
-                    $data_source = $mod_persona->consultaPersonaId($ps_id);
-                    $mod_sb->per_id = $ps_id;
-                    $mod_sb->pges_id = NULL;
-                    $mod_sb->per_id = $ps_id;
+                    $data_source = $mod_persona->consultaPersonaId($ps_id);                    
+                    $per_id=$ps_id;
                 }if ($per_tipo == 2) {
                     $data_source = $mod_perge->consultarPersonaGestion($ps_id);
+                    $pge_id=$ps_id;
                 }
+                $keys = ['per_id', 'int_estado_interesado', 'int_usuario_ingreso', 'int_estado', 'int_estado_logico'];
+                $parametros = [$id_persona, 1, $usuario_id, 1, 1];
+                $su_id=$mod_sb->insertarSuscritor($con, $parametros, $keys, 'suscriptor');
             }
         }
         return $this->render('asignar', [

@@ -1,6 +1,7 @@
 <?php
 
 namespace app\modules\marketing\models;
+
 use yii\data\ArrayDataProvider;
 use Yii;
 
@@ -18,29 +19,26 @@ use Yii;
  * @property BitacoraEnvio[] $bitacoraEnvios
  * @property ListaSuscriptor[] $listaSuscriptors
  */
-class Suscriptor extends \yii\db\ActiveRecord
-{
+class Suscriptor extends \yii\db\ActiveRecord {
+
     /**
      * {@inheritdoc}
      */
-    public static function tableName()
-    {
+    public static function tableName() {
         return 'suscriptor';
     }
 
     /**
      * @return \yii\db\Connection the database connection used by this AR class.
      */
-    public static function getDb()
-    {
+    public static function getDb() {
         return Yii::$app->get('db_mailing');
     }
 
     /**
      * {@inheritdoc}
      */
-    public function rules()
-    {
+    public function rules() {
         return [
             [['per_id', 'pges_id'], 'integer'],
             [['sus_estado', 'sus_estado_logico'], 'required'],
@@ -52,8 +50,7 @@ class Suscriptor extends \yii\db\ActiveRecord
     /**
      * {@inheritdoc}
      */
-    public function attributeLabels()
-    {
+    public function attributeLabels() {
         return [
             'sus_id' => 'Sus ID',
             'per_id' => 'Per ID',
@@ -68,17 +65,41 @@ class Suscriptor extends \yii\db\ActiveRecord
     /**
      * @return \yii\db\ActiveQuery
      */
-    public function getBitacoraEnvios()
-    {
+    public function getBitacoraEnvios() {
         return $this->hasMany(BitacoraEnvio::className(), ['sus_id' => 'sus_id']);
     }
 
     /**
      * @return \yii\db\ActiveQuery
      */
-    public function getListaSuscriptors()
-    {
+    public function getListaSuscriptors() {
         return $this->hasMany(ListaSuscriptor::className(), ['sus_id' => 'sus_id']);
+    }
+
+    public function insertarSuscritor($con, $parameters, $keys, $name_table) {
+        $trans = $con->getTransaction();
+        $param_sql .= "" . $keys[0];
+        $bdet_sql .= "'" . $parameters[0] . "'";
+        for ($i = 1; $i < count($parameters); $i++) {
+            if (isset($parameters[$i])) {
+                $param_sql .= ", " . $keys[$i];
+                $bdet_sql .= ", '" . $parameters[$i] . "'";
+            }
+        }
+        try {
+            $sql = "INSERT INTO " . $con->dbname . '.' . $name_table . " ($param_sql) VALUES($bdet_sql);";
+            $comando = $con->createCommand($sql);
+            $result = $comando->execute();
+            $idtable = $con->getLastInsertID($con->dbname . '.' . $name_table);
+            if ($trans !== null)
+                $trans->commit();
+            return $idtable;
+        } catch (Exception $ex) {
+            if ($trans !== null) {
+                $trans->rollback();
+            }
+            return 0;
+        }
     }
 
     public function consultarSuscriptoresxLista($list_id) {
@@ -142,4 +163,5 @@ class Suscriptor extends \yii\db\ActiveRecord
             return $dataProvider;
         }
     }
+
 }
