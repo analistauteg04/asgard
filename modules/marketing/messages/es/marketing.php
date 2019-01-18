@@ -43,7 +43,9 @@
  * Diana Lopez <dianalopez784@gmail.com>
  */
 
-return [    
+return [
+    "Address1" => "Dirección1",
+    "Address2" => "Dirección2",
     "Days Schedule" => "Días Programar",
     "Contact Email" => "Email Contacto",
     "List" => "Lista",

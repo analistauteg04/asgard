@@ -5,6 +5,11 @@
 -- ------------------------------------------------------
 -- Server version	5.6.40
 
+DROP SCHEMA IF EXISTS `db_finaciero`;
+CREATE SCHEMA IF NOT EXISTS `db_finaciero` DEFAULT CHARACTER SET utf8 ;
+USE `db_finaciero` ;
+
+-- GRANT ALL PRIVILEGES ON `db_facturacion`.* TO 'uteg'@'localhost' IDENTIFIED BY 'Utegadmin2016*';
 
 --`cat_id` bigint(20) not null auto_increment primary key,
 -- Table structure for table `CATALOGO`
@@ -140,10 +145,10 @@ CREATE TABLE `tarjeta_credito` (
 ) ENGINE=InnoDB AUTO_INCREMENT=0 DEFAULT CHARSET=utf8;
 
 --
--- Table structure for table `CB0002`
+-- Table structure for table `cuenta_bancarias`
 --
 
-DROP TABLE IF EXISTS `cuenta_bancarias`;
+DROP TABLE IF EXISTS `cuenta_bancarias`;--CB0002
 CREATE TABLE `cuenta_bancarias` (
   `cban_id` bigint(20) NOT NULL AUTO_INCREMENT,
   `cban_codigo` varchar(10) NOT NULL DEFAULT '',
@@ -191,3 +196,67 @@ CREATE TABLE `cuenta_bancarias` (
   KEY `CB02_CTA_CON_FK` (`CTA_CON`)
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 
+
+
+-- TABLAS DE BOTON DE PAGO
+DROP TABLE IF EXISTS `vpos_request`;
+CREATE TABLE `vpos_request` (
+  `reference` bigint(20) NOT NULL AUTO_INCREMENT PRIMARY KEY,
+  `descripcion` varchar(200) DEFAULT NULL,
+  `currency` varchar(5) DEFAULT NULL,
+  `total` float DEFAULT NULL,
+  `tax` float DEFAULT NULL,
+  `session` varchar(50) DEFAULT NULL,
+  `date` timestamp NULL DEFAULT NULL,
+  `returnUrl` varchar(200) DEFAULT NULL,
+  `expiration` timestamp NULL DEFAULT NULL,
+  `document` varchar(50) DEFAULT NULL,
+  `documentType` varchar(20) DEFAULT NULL,
+  `name` varchar(100) DEFAULT NULL,
+  `surname` varchar(100) DEFAULT NULL,
+  `email` varchar(100) DEFAULT NULL,
+  `mobile` varchar(50) DEFAULT NULL,
+  `json_request` text DEFAULT NULL,
+  `fecha_creacion` timestamp NULL DEFAULT CURRENT_TIMESTAMP,
+  `fecha_modificacion` timestamp NULL DEFAULT NULL,
+  `estado_logico` varchar(1) DEFAULT NULL
+) ENGINE=InnoDB AUTO_INCREMENT=0 DEFAULT CHARSET=utf8;
+
+DROP TABLE IF EXISTS `vpos_response`;
+CREATE TABLE `vpos_response` (
+  `reference` bigint(20) NOT NULL AUTO_INCREMENT PRIMARY KEY,
+  `requestId` varchar(20) DEFAULT NULL,
+  `status` varchar(20) DEFAULT NULL,
+  `reason` varchar(10) DEFAULT NULL,
+  `message` varchar(200) DEFAULT NULL,
+  `date` timestamp NULL DEFAULT NULL,
+  `processUrl` varchar(200) DEFAULT NULL,
+  `json_response` text DEFAULT NULL,
+  `fecha_creacion` timestamp NULL DEFAULT CURRENT_TIMESTAMP,
+  `fecha_modificacion` timestamp NULL DEFAULT NULL,
+  `estado_logico` varchar(1) DEFAULT NULL
+) ENGINE=InnoDB AUTO_INCREMENT=0 DEFAULT CHARSET=utf8;
+
+DROP TABLE IF EXISTS `vpos_info_response`;
+CREATE TABLE `vpos_info_response` (
+  `reference` bigint(20) NOT NULL AUTO_INCREMENT PRIMARY KEY,
+  `requestId` varchar(20) DEFAULT NULL,
+  `status` varchar(20) DEFAULT NULL,
+  `reason` varchar(10) DEFAULT NULL,
+  `message` varchar(200) DEFAULT NULL,
+  `date` timestamp NULL DEFAULT NULL,
+  `payment_status` varchar(20) DEFAULT NULL,
+  `payment_reason` varchar(10) DEFAULT NULL,
+  `payment_message` varchar(200) DEFAULT NULL,
+  `payment_date` timestamp NULL DEFAULT NULL,
+  `internalReference` varchar(50) DEFAULT NULL,
+  `paymenMethod` varchar(100) DEFAULT NULL,
+  `paymentMethodName` varchar(50) DEFAULT NULL,
+  `issuerName` varchar(100) DEFAULT NULL,
+  `autorization` varchar(100) DEFAULT NULL,
+  `receipt` varchar(50) DEFAULT NULL,
+  `json_info` text DEFAULT NULL,
+  `fecha_creacion` timestamp NULL DEFAULT CURRENT_TIMESTAMP,
+  `fecha_modificacion` timestamp NULL DEFAULT NULL,
+  `estado_logico` varchar(1) DEFAULT NULL
+) ENGINE=InnoDB AUTO_INCREMENT=0 DEFAULT CHARSET=utf8;

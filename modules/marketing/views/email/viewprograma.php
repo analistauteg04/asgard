@@ -4,6 +4,14 @@ use yii\helpers\Html;
 use kartik\date\DatePicker;
 use app\modules\marketing\Module;
 
+if ($muestra == 1) {
+    $habilita = '';
+    $deshabilita = '';
+} else {
+    $habilita = 'disabled';
+    $deshabilita = 'disabled = disabled';
+}
+
 $dia_marcados = explode(",", $arr_ingreso["dia_programa"]);
 for ($m = 0; $m < count($dia_marcados); $m++) {
 
@@ -28,11 +36,11 @@ for ($m = 0; $m < count($dia_marcados); $m++) {
             <div class="col-md-6 col-sm-6 col-xs-6 col-lg-6">
                 <div class="form-group">
                     <label for="txt_no_subs" class="col-sm-3 col-md-3 col-xs-3 col-lg-3 control-label" id="txt_no_subs"><?= Yii::t("formulario", "No. Subscr..") ?></label>
-                    <span for="txt_no_subs" class="col-sm-4 col-md-4 col-xs-4 col-lg-4  control-label" id="txt_no_subs"><?= $arr_lista['num_suscr'] ?> </span> 
+                    <span for="txt_no_subs" class="col-sm-4 col-md-4 col-xs-4 col-lg-4 control-label" id="txt_no_subs"><?= $arr_lista['num_suscr'] ?> </span> 
                 </div>
             </div> 
         </div>
-    </div> 
+    </div>   
     <div class="col-md-12 col-xs-12 col-sm-12 col-lg-12 ">    
         <div class="col-md-7 col-sm-7 col-xs-7 col-lg-7">
             <div class="form-group">
@@ -52,18 +60,18 @@ for ($m = 0; $m < count($dia_marcados); $m++) {
                         <td><?= Yii::t("formulario", "Saturday") ?></td>
                         <td><?= Yii::t("formulario", "Sunday") ?></td>
                     </tr>
-                </thead>              
+                </thead>         
                 <?php for ($i = 1; $i < 2; $i++) { ?>
                     <tr align="center">                           
                         <?php
                         for ($j = 1; $j < 8; $j++) {
                             ?>                                    
                             <td><input type="checkbox" class="check_dias" <?php echo $deshabilita; ?>  <?php
-                    if ($keys[$j] == $j) {
-                        echo 'checked="checked"';
-                    }
-                            ?> name="<?php echo 'check_dia_' . $j; ?>"  id="<?php echo 'check_dia_' . $j; ?>" value="<?php echo $j; ?>"> </td> 
-                                       <?php
+                                if ($keys[$j] == $j) {
+                                    echo 'checked="checked"';
+                                }
+                                ?> name="<?php echo 'check_dia_' . $j; ?>"  id="<?php echo 'check_dia_' . $j; ?>" value="<?php echo $j; ?>"> </td> 
+                                <?php
                             }
                             ?>  
                     </tr>                      
@@ -122,6 +130,13 @@ for ($m = 0; $m < count($dia_marcados); $m++) {
                     </div>
                 </div>
             </div>         
-        </div>        
+        </div> 
+        <div class="row"> 
+            <div class="col-lg-9 col-md-9 col-sm-9 col-xs-9"></div>
+
+            <div class="col-lg-3 col-md-3 col-sm-3 col-xs-3">
+                <a id="sendEditprograma" href="javascript:" class="btn btn-primary btn-block"> <?= Yii::t("formulario", "Edit") ?> </a>
+            </div>
+        </div>
     </div>    
 </form>

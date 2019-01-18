@@ -604,4 +604,16 @@ INSERT INTO `asignacion_paralelo` (`apar_id`, `par_id`, `mat_id`, `mest_id`, `ap
 --
 -- Volcado de datos para la tabla `estudio_academico_area_conocimiento`
 --
-INSERT INTO `estudio_academico_area_conocimiento` (`eaac_id`, `eaca_id`, `mest_id`, `acon_id`, `eaac_estado`,`eaac_fecha_creacion`,`eaac_fecha_modificacion`,`eaac_estado_logico`) VALUES(1, 2, NULL, 1,1, '2017-10-11 01:22:45',NULL, '1');
+INSERT INTO `estudio_academico_area_conocimiento` (`eaac_id`, `eaca_id`, `mest_id`, `acon_id`, `eaac_estado`,`eaac_fecha_creacion`,`eaac_fecha_modificacion`,`eaac_estado_logico`) VALUES
+(1, 1, 4, 1,1, '2019-01-16 01:22:45',NULL, '1'),
+(2, 2, 4, 1,1, '2019-01-16 01:22:45',NULL, '1'),
+(3, 3, 4, 1,1, '2019-01-16 01:22:45',NULL, '1'),
+(4, 4, 4, 1,1, '2019-01-16 01:22:45',NULL, '1'),
+(5, 5, 9, 1,1, '2019-01-16 01:22:45',NULL, '1'),
+(6, 6, 4, 1,1, '2019-01-16 01:22:45',NULL, '1'),
+(7, 7, 5, 1,1, '2019-01-16 01:22:45',NULL, '1'),
+(8, 8, 6, 1,1, '2019-01-16 01:22:45',NULL, '1'),
+(9, 9, 4, 1,1, '2019-01-16 01:22:45',NULL, '1'),
+(10, 10, 5, 1,1, '2019-01-16 01:22:45',NULL, '1'),
+(11, 11, 9, 1,1, '2019-01-16 01:22:45',NULL, '1'),
+(12, 13, 4, 1,1, '2019-01-16 01:22:45',NULL, '1');

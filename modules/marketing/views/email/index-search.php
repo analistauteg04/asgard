@@ -6,8 +6,6 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-use yii\jui\AutoComplete;
-use yii\web\JsExpression;
 use yii\helpers\Html;
 use app\modules\marketing\Module as marketing;
 ?>
@@ -16,25 +14,7 @@ use app\modules\marketing\Module as marketing;
         <div class="form-group">
             <label for="txt_buscar_lista" class="col-sm-3 col-md-3 col-xs-3 col-lg-3 control-label"><?= marketing::t("marketing", "List") ?></label>
             <div class="col-sm-6 col-md-6 col-xs-6 col-lg-6">
-                <?=
-                    AutoComplete::widget([
-                        'name' => 'txt_lista',
-                        'id' => 'txt_lista',
-                        'options' => array(
-                            'placeholder' => Yii::t('marketing', 'nombre de la lista'),
-                            'class' => 'ui-autocomplete-input form-control',
-                        ),
-                        'clientOptions' => [
-                            'source' => new JsExpression(
-                                "function(request, response){ 
-                                  autocompletarBuscarLista(request, response,'txt_lista','lista');
-                                }"),
-                            'minLength' => '2',
-                            'select' => new JsExpression("function( event, ui ) {
-                        }")
-                        ],
-                    ]);
-                ?>
+               <input type="text" class="form-control " value="" id="txt_buscar_lista" data-type="alfa" placeholder="<?= marketing::t("marketing", "List") ?>">                 
             </div>
             <div class="col-sm-3 col-md-3 col-xs-3 col-lg-3 "></div>
         </div>

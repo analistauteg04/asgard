@@ -9,15 +9,26 @@ use Yii;
  * This is the model class for table "lista".
  *
  * @property int $lis_id
+ * @property string $lis_codigo
  * @property int $eaca_id
  * @property int $mest_id
+ * @property int $emp_id
  * @property string $lis_nombre
- * @property string $lis_descripcion
+ * @property string $lis_correo_principal
+ * @property string $lis_nombre_principal
+ * @property int $pai_id
+ * @property int $pro_id
+ * @property int $can_id
+ * @property string $lis_direccion1_empresa
+ * @property string $lis_direccion2_empresa
+ * @property string $lis_telefono_empresa
+ * @property string $lis_codigo_postal
  * @property string $lis_estado
  * @property string $lis_fecha_creacion
  * @property string $lis_fecha_modificacion
  * @property string $lis_estado_logico
  *
+ * @property ListaPlantilla[] $listaPlantillas
  * @property ListaSuscriptor[] $listaSuscriptors
  * @property Programacion[] $programacions
  */
@@ -42,11 +53,13 @@ class Lista extends \yii\db\ActiveRecord {
      */
     public function rules() {
         return [
-            [['eaca_id', 'mest_id'], 'integer'],
-            [['lis_nombre', 'lis_descripcion', 'lis_estado', 'lis_estado_logico'], 'required'],
+            [['eaca_id', 'mest_id', 'emp_id', 'pai_id', 'pro_id', 'can_id'], 'integer'],
+            [['emp_id', 'lis_nombre', 'lis_correo_principal', 'lis_nombre_principal', 'pai_id', 'pro_id', 'can_id', 'lis_direccion1_empresa', 'lis_telefono_empresa', 'lis_codigo_postal', 'lis_estado', 'lis_estado_logico'], 'required'],
             [['lis_fecha_creacion', 'lis_fecha_modificacion'], 'safe'],
-            [['lis_nombre'], 'string', 'max' => 50],
-            [['lis_descripcion'], 'string', 'max' => 500],
+            [['lis_codigo', 'lis_nombre', 'lis_correo_principal'], 'string', 'max' => 50],
+            [['lis_nombre_principal', 'lis_direccion1_empresa', 'lis_direccion2_empresa'], 'string', 'max' => 100],
+            [['lis_telefono_empresa'], 'string', 'max' => 20],
+            [['lis_codigo_postal'], 'string', 'max' => 10],
             [['lis_estado', 'lis_estado_logico'], 'string', 'max' => 1],
         ];
     }
@@ -57,15 +70,32 @@ class Lista extends \yii\db\ActiveRecord {
     public function attributeLabels() {
         return [
             'lis_id' => 'Lis ID',
+            'lis_codigo' => 'Lis Codigo',
             'eaca_id' => 'Eaca ID',
             'mest_id' => 'Mest ID',
+            'emp_id' => 'Emp ID',
             'lis_nombre' => 'Lis Nombre',
-            'lis_descripcion' => 'Lis Descripcion',
+            'lis_correo_principal' => 'Lis Correo Principal',
+            'lis_nombre_principal' => 'Lis Nombre Principal',
+            'pai_id' => 'Pai ID',
+            'pro_id' => 'Pro ID',
+            'can_id' => 'Can ID',
+            'lis_direccion1_empresa' => 'Lis Direccion1 Empresa',
+            'lis_direccion2_empresa' => 'Lis Direccion2 Empresa',
+            'lis_telefono_empresa' => 'Lis Telefono Empresa',
+            'lis_codigo_postal' => 'Lis Codigo Postal',
             'lis_estado' => 'Lis Estado',
             'lis_fecha_creacion' => 'Lis Fecha Creacion',
             'lis_fecha_modificacion' => 'Lis Fecha Modificacion',
             'lis_estado_logico' => 'Lis Estado Logico',
         ];
+    }
+
+    /**
+     * @return \yii\db\ActiveQuery
+     */
+    public function getListaPlantillas() {
+        return $this->hasMany(ListaPlantilla::className(), ['lis_id' => 'lis_id']);
     }
 
     /**
@@ -84,6 +114,41 @@ class Lista extends \yii\db\ActiveRecord {
 
     /**
      * Function consultarLista
+     * @author  Kleber Loayza <analistadesarrollo03@uteg.edu.ec>
+     * @param   
+     * @return  Consulta una lista dada un Id.
+     */
+    public function consultarListaXID($lista_id) {
+        $con = \Yii::$app->db_mailing;
+        $con1 = \Yii::$app->db_academico;
+        $estado = 1;
+        $sql = "
+                    SELECT
+                        lst.lis_nombre,
+                        case when lst.eaca_id > 0 then 
+                                     ea.eaca_nombre else me.mest_nombre end as programa,
+                        sum(case when (lsu.lsus_estado = '1' and lsu.lsus_estado_logico = '1') then
+                                     1 else 0 end) as num_suscr
+                    FROM 
+                        " . $con->dbname . ".lista lst
+                        left join " . $con->dbname . ".lista_suscriptor as lsu on lsu.lis_id=lst.lis_id
+                        left join " . $con1->dbname . ".estudio_academico ea on ea.eaca_id = lst.eaca_id
+                        left join " . $con1->dbname . ".modulo_estudio me on me.mest_id = lst.mest_id
+                    WHERE
+                        lst.lis_id= :lista and
+                        lst.lis_estado = :estado and
+                        lst.lis_estado_logico = :estado
+                        group by lst.lis_id
+                ";
+        $comando = $con->createCommand($sql);
+        $comando->bindParam(":estado", $estado, \PDO::PARAM_STR);
+        $comando->bindParam(":lista", $lista_id, \PDO::PARAM_INT);
+        $resultData = $comando->queryOne();
+        return $resultData;
+    }
+
+    /**
+     * Function consultarLista
      * @author  Grace Viteri <analistadesarrollo01@uteg.edu.ec>
      * @param   
      * @return  Listas creadas en mailchimp.
@@ -94,12 +159,11 @@ class Lista extends \yii\db\ActiveRecord {
         $estado = 1;
 
         if (isset($arrFiltro) && count($arrFiltro) > 0) {
-            if ($arrFiltro['list_id'] != "" && $arrFiltro['list_id'] > 0) {
-                $str_search = "l.list_id = :lista_id AND ";
+            if ($arrFiltro['lista'] != "") {
+                $str_search = "l.lis_nombre like :lista AND ";
             }
         }
-
-        $sql = "SELECT l.lis_id, l.lis_nombre, 
+        $sql = "SELECT l.lis_id, l.lis_nombre, l.lis_codigo,
                         case when l.eaca_id > 0 then 
                                      ea.eaca_nombre else me.mest_nombre end as programa,
                         sum(case when (ls.lsus_estado = '1' and ls.lsus_estado_logico = '1') then
@@ -110,18 +174,16 @@ class Lista extends \yii\db\ActiveRecord {
                 WHERE $str_search
                       lis_estado = :estado
                       and lis_estado_logico = :estado
-                GROUP BY l.lis_id, l.lis_nombre, ea.eaca_nombre;";
+                GROUP BY l.lis_id, l.lis_nombre, l.lis_codigo;";
 
         $comando = $con->createCommand($sql);
         $comando->bindParam(":estado", $estado, \PDO::PARAM_STR);
-
         if (isset($arrFiltro) && count($arrFiltro) > 0) {
-            if ($arrFiltro['list_id'] != "" && $arrFiltro['list_id'] > 0) {
-                $lista_id = $arrFiltro["lista_id"];
-                $comando->bindParam(":lista_id", $lista_id, \PDO::PARAM_INT);
+            if ($arrFiltro['lista'] != "") {
+                $lista = "%" . $arrFiltro["lista"] . "%";
+                $comando->bindParam(":lista", $lista, \PDO::PARAM_STR);
             }
         }
-
         $resultData = $comando->queryAll();
         $dataProvider = new ArrayDataProvider([
             'key' => 'id',
@@ -409,8 +471,257 @@ class Lista extends \yii\db\ActiveRecord {
         $comando = $con->createCommand($sql);
         $comando->bindParam(":estado", $estado, \PDO::PARAM_STR);
         $comando->bindParam(":list_id", $list_id, \PDO::PARAM_INT);
-        $resultData = $comando->queryAll();
+        $resultData = $comando->queryOne();
         return $resultData;
     }
 
+    /**
+     * Function insertarLista crea lista.
+     * @author  Grace Viteri <analistadesarrollo01@uteg.edu.ec>;
+     * @param
+     * @return
+     */
+    public function insertarLista($lis_codigo, $eaca_id, $mest_id, $emp_id, $lis_nombre, $lis_correo_principal, $lis_nombre_principal, $pai_id, $pro_id, $can_id, $lis_direccion1_empresa, $lis_direccion2_empresa, $lis_telefono_empresa, $lis_codigo_postal) {
+        $con = \Yii::$app->db_mailing;
+
+        $param_sql = "lis_estado";
+        $bdet_sql = "1";
+
+        $param_sql .= ", lis_estado_logico";
+        $bdet_sql .= ", 1";
+
+        if (isset($lis_codigo)) {
+            $param_sql .= ", lis_codigo";
+            $bdet_sql .= ", :lis_codigo";
+        }
+        if (isset($eaca_id)) {
+            $param_sql .= ", eaca_id";
+            $bdet_sql .= ", :eaca_id";
+        }
+        if (isset($mest_id)) {
+            $param_sql .= ", mest_id";
+            $bdet_sql .= ", :mest_id";
+        }
+        if (isset($emp_id)) {
+            $param_sql .= ", emp_id";
+            $bdet_sql .= ", :emp_id";
+        }
+        if (isset($lis_nombre)) {
+            $param_sql .= ", lis_nombre";
+            $bdet_sql .= ", :lis_nombre";
+        }
+        if (isset($lis_correo_principal)) {
+            $param_sql .= ", lis_correo_principal";
+            $bdet_sql .= ", :lis_correo_principal";
+        }
+        if (isset($lis_nombre_principal)) {
+            $param_sql .= ", lis_nombre_principal";
+            $bdet_sql .= ", :lis_nombre_principal";
+        }
+        if (isset($pai_id)) {
+            $param_sql .= ", pai_id";
+            $bdet_sql .= ", :pai_id";
+        }
+        if (isset($pro_id)) {
+            $param_sql .= ", pro_id";
+            $bdet_sql .= ", :pro_id";
+        }
+        if (isset($can_id)) {
+            $param_sql .= ", can_id";
+            $bdet_sql .= ", :can_id";
+        }
+        if (isset($lis_direccion1_empresa)) {
+            $param_sql .= ", lis_direccion1_empresa";
+            $bdet_sql .= ", :lis_direccion1_empresa";
+        }
+        if (isset($lis_direccion2_empresa)) {
+            $param_sql .= ", lis_direccion2_empresa";
+            $bdet_sql .= ", :lis_direccion2_empresa";
+        }
+        if (isset($lis_telefono_empresa)) {
+            $param_sql .= ", lis_telefono_empresa";
+            $bdet_sql .= ", :lis_telefono_empresa";
+        }
+        if (isset($lis_codigo_postal)) {
+            $param_sql .= ", lis_codigo_postal";
+            $bdet_sql .= ", :lis_codigo_postal";
+        }
+        try {
+            $sql = "INSERT INTO " . $con->dbname . ".lista ($param_sql) VALUES($bdet_sql)";
+            $comando = $con->createCommand($sql);
+
+            if (isset($lis_codigo)) {
+                $comando->bindParam(':lis_codigo', $lis_codigo, \PDO::PARAM_STR);
+            }
+            if (isset($eaca_id)) {
+                $comando->bindParam(':eaca_id', $eaca_id, \PDO::PARAM_INT);
+            }
+            if (!empty((isset($mest_id)))) {
+                $comando->bindParam(':mest_id', $mest_id, \PDO::PARAM_INT);
+            }
+            if (!empty((isset($emp_id)))) {
+                $comando->bindParam(':emp_id', $emp_id, \PDO::PARAM_INT);
+            }
+            if (!empty((isset($lis_nombre)))) {
+                $comando->bindParam(':lis_nombre', $lis_nombre, \PDO::PARAM_STR);
+            }
+            if (!empty((isset($lis_correo_principal)))) {
+                $comando->bindParam(':lis_correo_principal', $lis_correo_principal, \PDO::PARAM_STR);
+            }
+            if (!empty((isset($lis_nombre_principal)))) {
+                $comando->bindParam(':lis_nombre_principal', $lis_nombre_principal, \PDO::PARAM_STR);
+            }
+            if (!empty((isset($pai_id)))) {
+                $comando->bindParam(':pai_id', $pai_id, \PDO::PARAM_INT);
+            }
+            if (!empty((isset($pro_id)))) {
+                $comando->bindParam(':pro_id', $pro_id, \PDO::PARAM_INT);
+            }
+            if (!empty((isset($can_id)))) {
+                $comando->bindParam(':can_id', $can_id, \PDO::PARAM_INT);
+            }
+            if (!empty((isset($lis_direccion1_empresa)))) {
+                $comando->bindParam(':lis_direccion1_empresa', $lis_direccion1_empresa, \PDO::PARAM_STR);
+            }
+            if (!empty((isset($lis_direccion2_empresa)))) {
+                $comando->bindParam(':lis_direccion2_empresa', $lis_direccion2_empresa, \PDO::PARAM_STR);
+            }
+            if (!empty((isset($lis_telefono_empresa)))) {
+                $comando->bindParam(':lis_telefono_empresa', $lis_telefono_empresa, \PDO::PARAM_STR);
+            }
+            if (!empty((isset($lis_codigo_postal)))) {
+                $comando->bindParam(':lis_codigo_postal', $lis_codigo_postal, \PDO::PARAM_STR);
+            }
+            $result = $comando->execute();
+            return $con->getLastInsertID($con->dbname . '.lista');
+        } catch (Exception $ex) {
+            return FALSE;
+        }
+    }
+
+    /**
+     * Function consulta si no se ha ingresado anteriormente una programacion a una lista y plantilla. 
+     * @author Giovanni Vergara <analistadesarrollo02@uteg.edu.ec>;
+     * @param
+     * @return
+     */
+    public function consultarIngresoProgramacion($list_id, $pla_id) {
+        $con = \Yii::$app->db_mailing;
+        $estado = 1;
+        $sql = "SELECT 
+                  pro.pro_id, 
+                  pro.lis_id, 
+                  pro.pla_id,
+                  DATE_FORMAT(pro.pro_fecha_desde, '%Y-%m-%d') as fecha_desde,
+                  DATE_FORMAT(pro.pro_fecha_hasta, '%Y-%m-%d') as fecha_hasta,
+                  DATE_FORMAT(pro.pro_hora_envio, '%H:%i') as hora_envio,
+                  ifnull((SELECT GROUP_CONCAT(dpro.dia_id)
+                            FROM " . $con->dbname . ".dia_programacion dpro
+                            WHERE dpro.pro_id = pro.pro_id AND
+                            dpro.dpro_estado = '1' AND 
+                            dpro.dpro_estado_logico = '1'),'N/A') as dia_programa 
+                FROM 
+                   " . $con->dbname . ".programacion as pro";
+        $sql .= "  
+                WHERE  
+                   lis_id = :list_id AND  
+                   pla_id = :pla_id AND
+                   pro_estado = :estado AND
+                   pro_estado_logico = :estado";
+        $comando = $con->createCommand($sql);
+        $comando->bindParam(":estado", $estado, \PDO::PARAM_STR);
+        $comando->bindParam(":list_id", $list_id, \PDO::PARAM_INT);
+        $comando->bindParam(":pla_id", $pla_id, \PDO::PARAM_INT);
+        $resultData = $comando->queryOne();
+        return $resultData;
+    }
+
+    /**
+     * Function modifica los datos de programacion.
+     * @author  Giovanni Vergara <analistadesarrollo02@uteg.edu.ec>;     *          
+     * @param
+     * @return
+     */
+    public function modificarProgramacionxId($pro_id, $lis_id, $pla_id, $pro_fecha_desde, $pro_fecha_hasta, $pro_hora_envio, $pro_usuario_modifica, $pro_fecha_modificacion) {
+        $con = \Yii::$app->db_mailing;
+        $estado = 1;
+        $hora_envio = date(Yii::$app->params["dateByDefault"]) . " " . $pro_hora_envio . ":00";
+        if ($trans !== null) {
+            $trans = null; // si existe la transacción entonces no se crea una
+        } else {
+            $trans = $con->beginTransaction(); // si no existe la transacción entonces se crea una
+        }
+
+        try {
+            $comando = $con->createCommand
+                    ("UPDATE " . $con->dbname . ".programacion		       
+                      SET lis_id = ifnull(:lis_id, lis_id),
+                          pla_id = ifnull(:pla_id, pla_id),                                              
+                          pro_fecha_desde = ifnull(:pro_fecha_desde, pro_fecha_desde),
+                          pro_fecha_hasta = ifnull(:pro_fecha_hasta, pro_fecha_hasta),
+                          pro_hora_envio = ifnull(:pro_hora_envio, pro_hora_envio),
+                          pro_usuario_modifica = :pro_usuario_modifica,
+                          pro_fecha_modificacion = :pro_fecha_modificacion
+                      WHERE pro_id = :pro_id AND                        
+                            pro_estado = :estado AND
+                            pro_estado_logico = :estado");
+            
+            $comando->bindParam(":pro_id", $pro_id, \PDO::PARAM_INT);
+            $comando->bindParam(":lis_id", $lis_id, \PDO::PARAM_INT);
+            $comando->bindParam(":pla_id", $pla_id, \PDO::PARAM_INT);
+            $comando->bindParam(":pro_fecha_desde", $pro_fecha_desde, \PDO::PARAM_STR);
+            $comando->bindParam(":pro_fecha_hasta", $pro_fecha_hasta, \PDO::PARAM_STR);
+            $comando->bindParam(":pro_hora_envio", $hora_envio, \PDO::PARAM_STR);
+            $comando->bindParam(":pro_usuario_modifica", $pro_usuario_modifica, \PDO::PARAM_STR);
+            $comando->bindParam(":pro_fecha_modificacion", $pro_fecha_modificacion, \PDO::PARAM_STR);
+            $comando->bindParam(":estado", $estado, \PDO::PARAM_STR);
+            $response = $comando->execute();
+            if ($trans !== null)
+                $trans->commit();
+            return $response;
+        } catch (Exception $ex) {
+            if ($trans !== null)
+                $trans->rollback();
+            return FALSE;
+        }
+    }
+    /**
+     * Function elimina logicamente los dias de programacion.
+     * @author  Giovanni Vergara <analistadesarrollo02@uteg.edu.ec>;     *          
+     * @param
+     * @return
+     */
+    public function modificarDiaProgramacion($pro_id, $dpro_fecha_modificacion) {
+        $con = \Yii::$app->db_mailing;
+        $estado = 1;
+        $estado_cambio = 0;
+        if ($trans !== null) {
+            $trans = null; // si existe la transacción entonces no se crea una
+        } else {
+            $trans = $con->beginTransaction(); // si no existe la transacción entonces se crea una
+        }
+
+        try {
+            $comando = $con->createCommand
+                    ("UPDATE " . $con->dbname . ".dia_programacion		       
+                      SET dpro_estado = ifnull(:dpro_estado, dpro_estado),                          
+                          dpro_fecha_modificacion = :dpro_fecha_modificacion
+                      WHERE pro_id = :pro_id AND                        
+                            dpro_estado = :estado AND
+                            dpro_estado_logico = :estado");
+            
+            $comando->bindParam(":pro_id", $pro_id, \PDO::PARAM_INT); 
+            $comando->bindParam(":dpro_fecha_modificacion", $dpro_fecha_modificacion, \PDO::PARAM_STR);
+            $comando->bindParam(":estado", $estado, \PDO::PARAM_STR);
+            $comando->bindParam(":dpro_estado", $estado_cambio, \PDO::PARAM_STR);
+            $response = $comando->execute();
+            if ($trans !== null)
+                $trans->commit();
+            return $response;
+        } catch (Exception $ex) {
+            if ($trans !== null)
+                $trans->rollback();
+            return FALSE;
+        }
+    }
 }

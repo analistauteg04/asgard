@@ -12,7 +12,7 @@ use app\modules\marketing\Module as marketing;
     <form class="form-horizontal">
         <?=
         $this->render('index-search', [         
-          'arr_lista' => $arr_lista,
+          //'arr_lista' => $arr_lista,
             ]);
         ?>
     </form>
