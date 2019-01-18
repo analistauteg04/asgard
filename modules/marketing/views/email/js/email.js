@@ -105,9 +105,10 @@ $(document).ready(function () {
                 data = response.message;
                 alert('empresa:'+arrParams.emp_id);
                 alert('sin pais');                
-                alert('pais:'+data.empresa.emp_telefono);
+                alert('pais1: '+data.empresa.pro_id);
+                console.log(data.empresa) ;
                
-                $('#cmb_pais').val(data.empresa.pai_id);
+                $('#cmb_pais').val(data.pai_id);
                 $('#cmb_provincia').val(data.empresa.pro_id);
                 $('#cmb_ciudad').val(data.empresa.can_id);
                 $('#txt_direccion1').val(data.empresa.emp_direccion);
