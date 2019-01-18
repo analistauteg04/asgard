@@ -43,17 +43,20 @@ PbGridView::widget([
         [
             'class' => 'yii\grid\ActionColumn',
             'header' => Yii::t("formulario", "Actions"),
-            'template' => '{programar} {asignar} {eliminar}',
+            'template' => '{asignar} {eliminar} {plantilla} ',
             'buttons' => [
-                'programar' => function ($url, $model) {
+                /*'programar' => function ($url, $model) {
                     return Html::a('<span class="glyphicon glyphicon-calendar"></span>', Url::to(['/marketing/email/programacion', 'lisid' => base64_encode($model['lis_id'])]), ["data-toggle" => "tooltip", "title" => "Programación de envío", "data-pjax" => 0]);
-                },     
+                },     */
                 'asignar' => function ($url, $model) {
                     return Html::a('<span class="glyphicon glyphicon-plus"></span>', Url::to(['/marketing/email/asignar',  'lis_id' => base64_encode($model['lis_id'])]), ["data-toggle" => "tooltip", "title" => "Asignar Subscriptores", "data-pjax" => 0]);
                 },     
                 'eliminar' => function ($url, $model) {
                     return Html::a('<span class="glyphicon glyphicon-remove"></span>', "#", ["onclick" => "eliminarLista(" . base64_encode($model['lis_id']), base64_encode($model['lis_codigo']) . ");", "data-toggle" => "tooltip", "title" => "Eliminar lista", "data-pjax" => 0]);
                     //return Html::a('<span class="glyphicon glyphicon-remove"></span>', Url::to(['/marketing/email/delete',  'lis_id' => base64_encode($model['lis_id'])]), ["data-toggle" => "tooltip", "title" => "Eliminar lista", "data-pjax" => 0]);
+                },   
+                'plantilla' => function ($url, $model) {
+                    return Html::a('<span class="glyphicon glyphicon-file"></span>', Url::to(['/marketing/email/plantilla', 'lisid' => base64_encode($model['lis_id'])]), ["data-toggle" => "tooltip", "title" => "Asignar plantilla", "data-pjax" => 0]);
                 },     
             ],
         ],

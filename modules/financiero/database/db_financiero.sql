@@ -144,6 +144,59 @@ CREATE TABLE `tarjeta_credito` (
   PRIMARY KEY (`tcre_id`)
 ) ENGINE=InnoDB AUTO_INCREMENT=0 DEFAULT CHARSET=utf8;
 
+--
+-- Table structure for table `cuenta_bancarias`
+--
+
+DROP TABLE IF EXISTS `cuenta_bancarias`;--CB0002
+CREATE TABLE `cuenta_bancarias` (
+  `cban_id` bigint(20) NOT NULL AUTO_INCREMENT,
+  `cban_codigo` varchar(10) NOT NULL DEFAULT '',
+  `cban_nombre` varchar(40) DEFAULT NULL,
+  `cban_tipo_cuenta` varchar(1) DEFAULT NULL,
+  `cban_numero_cuenta` varchar(20) NOT NULL DEFAULT '',
+  `cban_numero_cheque` varchar(10) DEFAULT NULL,
+  `cban_titular` varchar(30) DEFAULT NULL,
+  `cban_contacto` varchar(30) DEFAULT NULL,
+  `cban_tel_contacto` decimal(10,0) DEFAULT NULL,
+  `cban_n_mov_b` decimal(5,0) default null,
+  `v_dep_b` decimal(14,2) default null,
+  `v_ret_b` decimal(14,2) default null,
+  `v_sal_b` decimal(14,2) default null,
+  `v_sal_i` decimal(14,2) default null,
+  `f_u_act` date default null,
+  `cmes_01` varchar(1) default null,
+  `cmes_02` varchar(1) default null,
+  `cmes_03` varchar(1) default null,
+  `cmes_04` varchar(1) default null,
+  `cmes_05` varchar(1) default null,
+  `cmes_06` varchar(1) default null,
+  `cmes_07` varchar(1) default null,
+  `cmes_08` varchar(1) default null,
+  `cmes_09` varchar(1) default null,
+  `cmes_10` varchar(1) default null,
+  `cmes_11` varchar(1) default null,
+  `cmes_12` varchar(1) default null,
+  `cta_con` varchar(12) default null,
+  `che_ord` varchar(5) default null,
+  `che_val` varchar(5) default null,
+  `che_l01` varchar(5) default null,
+  `che_l02` varchar(5) default null,
+  `che_ciu` varchar(5) default null,
+  `che_fec` varchar(5) default null,
+  `cod_div` varchar(2) default null,
+  `mos_sald` varchar(1) default null,
+  `estado` varchar(1) DEFAULT NULL,
+  `usuario_creacion` varchar(45) DEFAULT NULL,
+  `fecha_creacion` timestamp NULL DEFAULT CURRENT_TIMESTAMP,
+  `fecha_modificacion` timestamp NULL DEFAULT NULL,
+  `estado_logico` varchar(1) DEFAULT NULL,
+  `equipo` varchar(45) DEFAULT NULL,
+  PRIMARY KEY (`cban_id`,`cban_codigo`,`cban_numero_cuenta`),
+  KEY `CB02_CTA_CON_FK` (`CTA_CON`)
+) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+
+
 
 -- TABLAS DE BOTON DE PAGO
 DROP TABLE IF EXISTS `vpos_request`;

@@ -33,7 +33,7 @@ class EmailController extends \app\components\CController {
             $resp_lista = $mod_lista->consultarLista($arrSearch);
         } else {
             $resp_lista = $mod_lista->consultarLista();
-        }
+        }                               
 
         return $this->render('index', [
                     'model' => $resp_lista]);
@@ -84,7 +84,7 @@ class EmailController extends \app\components\CController {
         $plantilla = $mod_lista->consultarListaTemplate($lista);
         $ingreso = $mod_lista->consultarIngresoProgramacion($lista, $plantilla['id']);
         $lista_model = $mod_lista->consultarListaXID($lista);
-        if (count($ingreso) == 0) {
+        if (empty($ingreso)) {
             $muestra = 1;
             return $this->render('programacion', [
                         "muestra" => $muestra,
@@ -158,7 +158,7 @@ class EmailController extends \app\components\CController {
                 $mod_lista = new Lista();
                 $plantilla = $mod_lista->consultarListaTemplate($lista);
                 $ingreso = $mod_lista->consultarIngresoProgramacion($lista, $plantilla['id']);
-                if (count($ingreso) == 0) {
+                if (empty($ingreso)) {
                     $resp_programacion = $mod_lista->insertarProgramacion($lista, $plantilla['id'], $fecinicio, $fecfin, $horenvio, $usuario, $fecha_registro);
                     if ($resp_programacion) {
                         for ($i = 1; $i < 8; $i++) {
@@ -227,6 +227,12 @@ class EmailController extends \app\components\CController {
             if (isset($data["getcantones"])) {
                 $cantones = Canton::find()->select("can_id AS id, can_nombre AS name")->where(["can_estado_logico" => "1", "can_estado" => "1", "pro_id" => $data['prov_id']])->asArray()->all();
                 $message = array("cantones" => $cantones);
+                echo Utilities::ajaxResponse('OK', 'alert', Yii::t('jslang', 'Success'), 'false', $message);
+                return;
+            }            
+            if (isset($data["getempresa"])) {
+                $resp_empresa = $empresa_mod->consultarEmpresaXid($data["emp_id"]);
+                $message = array("empresa" => $resp_empresa);
                 echo Utilities::ajaxResponse('OK', 'alert', Yii::t('jslang', 'Success'), 'false', $message);
                 return;
             }
@@ -339,12 +345,28 @@ class EmailController extends \app\components\CController {
                 $programa = $mod_lista->consultarIngresoProgramacion($lista, $plantilla['id']);
                 $respuesta = $mod_lista->modificarProgramacionxId($programa['pro_id'], $lista, $plantilla['id'], $fecinicio, $fecfin, $horenvio, $usuario, $fecha_modifica);
                 if ($respuesta) {
-                    $transaction->commit();
-                    $message = array(
-                        "wtmessage" => Yii::t("notificaciones", "La información ha sido modificada. "),
-                        "title" => Yii::t('jslang', 'Success'),
-                    );
-                    return Utilities::ajaxResponse('OK', 'alert', Yii::t("jslang", "Sucess"), false, $message);
+                    $resp_dia = $mod_lista->modificarDiaProgramacion($programa['pro_id'], $fecha_modifica);
+                    if ($resp_dia) {
+                        for ($i = 1; $i < 8; $i++) {
+                            $dia = $data["check_dia_" . $i];
+                            if ($dia > 0) {
+                                $resp_dia = $mod_lista->insertarDiaProgra($programa['pro_id'], $dia, $fecha_modifica);
+                            }
+                        }
+                        $transaction->commit();
+                        $message = array(
+                            "wtmessage" => Yii::t("notificaciones", "La información ha sido modificada. "),
+                            "title" => Yii::t('jslang', 'Success'),
+                        );
+                        return Utilities::ajaxResponse('OK', 'alert', Yii::t("jslang", "Sucess"), false, $message);
+                    } else {
+                        $transaction->rollback();
+                        $message = array(
+                            "wtmessage" => Yii::t("notificaciones", "Error al eliminar." . $mensaje),
+                            "title" => Yii::t('jslang', 'Bad Request'),
+                        );
+                        return Utilities::ajaxResponse('NO_OK', 'alert', Yii::t("jslang", "Bad Request"), false, $message);
+                    }
                 } else {
                     $transaction->rollback();
                     $message = array(
@@ -363,6 +385,19 @@ class EmailController extends \app\components\CController {
             }
             return;
         }
+    }
+
+    public function actionEditprogramacion() {
+        $mod_lista = new Lista();
+        $lista = base64_decode($_GET["lisid"]);
+        $plantilla = $mod_lista->consultarListaTemplate($lista);
+        $ingreso = $mod_lista->consultarIngresoProgramacion($lista, $plantilla['id']);
+        $lista_model = $mod_lista->consultarListaXID($lista);
+        return $this->render('editprograma', [
+                    "muestra" => $muestra,
+                    "arr_ingreso" => $ingreso,
+                    'arr_lista' => $lista_model
+        ]);
     }
 
 }

@@ -21,14 +21,17 @@
  * The followings are the available model relations:
  * @property USUARIOEMPRESA[] $uSUARIOEMPRESAs
  */
+
+namespace app\modules\fe_edoc\models;
+
 class Empresa extends \app\modules\fe_edoc\components\CActiveRecord {
 
     public function buscarDataEmpresa($emp_id,$est_id,$pemi_id) {
         $conApp = Yii::$app->db_edoc;
         $rawData = array();
         $sql = "SELECT A.emp_id,A.emp_ruc Ruc,A.emp_razonsocial RazonSocial,A.emp_nom_comercial NombreComercial,
-                    A.emp_ambiente Ambiente,A.emp_tipo_emision TipoEmision,emp_direccion_matriz DireccionMatriz,est_direccion DireccionSucursal,
-                    A.emp_obliga_contabilidad ObligadoContabilidad,emp_contri_especial ContribuyenteEspecial,emp_email_digital,
+                    A.emp_ambiente Ambiente,A.emp_tipo_emision TipoEmision,A.emp_direccion_matriz DireccionMatriz,B.est_direccion DireccionSucursal,
+                    A.emp_obliga_contabilidad ObligadoContabilidad,A.emp_contri_especial ContribuyenteEspecial,A.emp_email_digital,
                     B.est_numero Establecimiento,C.pemi_numero PuntoEmision,A.emp_moneda Moneda,A.emp_email_conta CorreoConta
                     FROM " . $conApp->dbname . ".empresa A
                             INNER JOIN (" . $conApp->dbname . ".establecimiento B

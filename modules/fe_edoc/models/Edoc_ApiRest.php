@@ -4,10 +4,11 @@ namespace app\modules\fe_edoc\models;
 
 use Yii;
 use app\models\Utilities;
+use app\modules\fe_edoc\models\Empresa;
 
 
 class Edoc_ApiRest extends \app\modules\fe_edoc\components\CActiveRecord {
-    private $tipoEmision=1;//Valor por defecto
+    private $tipoEmision=1;//Valor por defecto "NORMAL"
     public $tipoEdoc = "";
     public $cabEdoc = array();
     public $detEdoc = array();
@@ -41,14 +42,14 @@ class Edoc_ApiRest extends \app\modules\fe_edoc\components\CActiveRecord {
                 break;
             case "04"://NOTA DE CREDITO
                 //Utilities::putMessageLogFile($this->detEdoc);
-                return array("status" => "OK", "tipoEdoc" => $this->tipoEdoc,"data" => $this->detEdoc);
+                //return array("status" => "OK", "tipoEdoc" => $this->tipoEdoc,"data" => $this->detEdoc);
                 return $this->insertarEdocNc();
                 break;
             case "05"://NOTA DE DEBITO
-
+                return $this->insertarEdocNd();
                 break;
             case "06"://GUIA DE REMISION
-
+                return $this->insertarGuiasRemision();
                 break;
             case "07"://RETENCIONES
                 //Utilities::putMessageLogFile($this->detEdoc);
@@ -113,12 +114,14 @@ class Edoc_ApiRest extends \app\modules\fe_edoc\components\CActiveRecord {
     
     private function insertarCabFactura($con) {
         $cabFact= $this->cabEdoc;
-        $TipoEmision=1;//Valor por Defecto
-        $RazonSocial="UTEG S.A.";
-        $NombreComercial="UTEG S.A.";
-        $Ruc="1310328404001";//Ruc de la EMpesa
-        $DireccionMatriz="Direccion de la Matriz empresa";
-        $DireccionEstablecimiento="Direccion de Establecimiento Empresa ";
+        $objEmpData= new Empresa;
+        $empresaEnt=$objEmpData->buscarDataEmpresa($emp_id,$est_id,$pemi_id);        
+        $TipoEmision=$this->tipoEmision;//Valor por Defecto
+        $RazonSocial=$empresaEnt['RazonSocial'];
+        $NombreComercial=$empresaEnt['NombreComercial'];
+        $Ruc=$empresaEnt['Ruc'];//Ruc de la EMpesa
+        $DireccionMatriz=$empresaEnt['DireccionMatriz'];
+        $DireccionEstablecimiento=$empresaEnt['DireccionSucursal'];
         $ContribuyenteEspecial=($cabFact['CONTRIB_ESPECIAL']!=0)?'SI':'';
         $ObligadoContabilidad=$cabFact['OBLIGADOCONTAB'];//($cabFact['OBLIGADOCONTAB']!=0)?'SI':'';
         $CodigoTransaccionERP='XX';//
@@ -334,13 +337,15 @@ class Edoc_ApiRest extends \app\modules\fe_edoc\components\CActiveRecord {
     
     
     private function InsertarCabRetencion($con) {
-        $cabFact= $this->cabEdoc;
+        $cabFact= $this->cabEdoc;       
+        $objEmpData= new Empresa;
+        $empresaEnt=$objEmpData->buscarDataEmpresa($emp_id,$est_id,$pemi_id);        
         $TipoEmision=$this->tipoEmision;//Valor por Defecto
-        $RazonSocial="UTEG S.A.";
-        $NombreComercial="UTEG S.A.";
-        $Ruc="1310328404001";//Ruc de la EMpesa
-        $DireccionMatriz="Direccion de la Matriz empresa";
-        $DireccionEstablecimiento="Direccion de Establecimiento Empresa ";
+        $RazonSocial=$empresaEnt['RazonSocial'];
+        $NombreComercial=$empresaEnt['NombreComercial'];
+        $Ruc=$empresaEnt['Ruc'];//Ruc de la EMpesa
+        $DireccionMatriz=$empresaEnt['DireccionMatriz'];
+        $DireccionEstablecimiento=$empresaEnt['DireccionSucursal'];
         $ContribuyenteEspecial=($cabFact['CONTRIB_ESPECIAL']!=0)?'SI':'';//Estreare de tabla Empresa
         $ObligadoContabilidad=($cabFact['OBLIGADOCONTAB']!=0)?'SI':'';//Estreare de tabla Empresa
         $CodigoTransaccionERP='XX';//
@@ -503,13 +508,15 @@ class Edoc_ApiRest extends \app\modules\fe_edoc\components\CActiveRecord {
     }
     
     private function InsertarCabNC($con) {
-        $cabFact= $this->cabEdoc;
-        $TipoEmision=1;//Valor por Defecto
-        $RazonSocial="UTEG S.A.";
-        $NombreComercial="UTEG S.A.";
-        $Ruc="1310328404001";//Ruc de la EMpesa
-        $DireccionMatriz="Direccion de la Matriz empresa";
-        $DireccionEstablecimiento="Direccion de Establecimiento Empresa ";
+        $cabFact= $this->cabEdoc;        
+        $objEmpData= new Empresa;
+        $empresaEnt=$objEmpData->buscarDataEmpresa($emp_id,$est_id,$pemi_id);        
+        $TipoEmision=$this->tipoEmision;//Valor por Defecto
+        $RazonSocial=$empresaEnt['RazonSocial'];
+        $NombreComercial=$empresaEnt['NombreComercial'];
+        $Ruc=$empresaEnt['Ruc'];//Ruc de la EMpesa
+        $DireccionMatriz=$empresaEnt['DireccionMatriz'];
+        $DireccionEstablecimiento=$empresaEnt['DireccionSucursal'];
         $ContribuyenteEspecial=($cabFact['CONTRIB_ESPECIAL']!=0)?'SI':'';
         $ObligadoContabilidad=$cabFact['OBLIGADOCONTAB'];//($cabFact['OBLIGADOCONTAB']!=0)?'SI':'';
         $CodigoTransaccionERP='XX';//
@@ -672,6 +679,73 @@ class Edoc_ApiRest extends \app\modules\fe_edoc\components\CActiveRecord {
     
      /*
      * FIN DE PROCESO DE RETENCIONES
+     */
+    
+    
+    /*
+     * INICIO DE PROCESO DE GUIAS DE REMISION
+     */
+    
+    private function insertarGuiasRemision() {
+        $con = Yii::$app->db_edoc;
+        if ($trans !== null) {
+            $trans = null; // si existe la transacción entonces no se crea una
+        } else {
+            $trans = $con->beginTransaction();
+        }
+        try {
+            //$idCab= $this->insertarCabFactura($con);            
+            //$this->InsertarDetFactura($con,$idCab);
+            //$this->InsertarFacturaFormaPago($con,$idCab);
+            //$this->InsertarFacturaDatoAdicional($con,$idCab);
+            //if ($trans !== null){
+            //    $trans->commit();
+            //}
+            //return array("status"=>"OK");
+            return array("status"=>"OK", "Ids_Doc"=>$idCab);
+        } catch (\Exception $e) {
+            $trans->rollBack();
+            //throw $e;
+            return array("status"=>"NO_OK","error"=>$e);
+        }
+        
+    }
+    
+    /*
+     * FIN DE PROCESO DE GUIAS DE REMISION
+     */
+    
+    /*
+     * INICIO DE PROCESO DE NOTAS DE DEBITO
+     */
+    
+    private function insertarEdocNd() {
+        $con = Yii::$app->db_edoc;
+        if ($trans !== null) {
+            $trans = null; // si existe la transacción entonces no se crea una
+        } else {
+            $trans = $con->beginTransaction();
+        }
+        try {
+            //$idCab= $this->insertarCabFactura($con);            
+            //$this->InsertarDetFactura($con,$idCab);
+            //$this->InsertarFacturaFormaPago($con,$idCab);
+            //$this->InsertarFacturaDatoAdicional($con,$idCab);
+            //if ($trans !== null){
+            //    $trans->commit();
+            //}
+            //return array("status"=>"OK");
+            return array("status"=>"OK", "Ids_Doc"=>$idCab);
+        } catch (\Exception $e) {
+            $trans->rollBack();
+            //throw $e;
+            return array("status"=>"NO_OK","error"=>$e);
+        }
+        
+    }
+    
+    /*
+     * FIN DE PROCESO DE NOTAS DE DEBITO
      */
     
     
