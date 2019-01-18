@@ -50,7 +50,7 @@ PbGridView::widget([
             'template' => '{addsubs} {addsublistinte} {rmsubs}',
             'buttons' => [
                 'addsubs' => function ($url, $model) {
-                    return Html::a('<span class="glyphicon glyphicon-plus"></span>', "#", ["onclick" => "suscribirContacto(" . $model['id_psus'] . "," . $model['per_tipo'] . ");", "data-toggle" => "tooltip", "title" => "Suscribirse a la lista", "data-pjax" => 0]);
+                    return Html::a('<span class="glyphicon glyphicon-plus"></span>', "#", ["onclick" => "preguntasuscribirContacto(" . $model['id_psus'] . "," . $model['per_tipo'] . ");", "data-toggle" => "tooltip", "title" => "Suscribirse a la lista", "data-pjax" => 0]);
                 },     
                 'rmsubs' => function ($url, $model) {
                     $estado=$model['estado_id'];
