@@ -152,7 +152,7 @@ INSERT INTO `objeto_modulo` (`omod_id`, `mod_id`, `omod_padre_id`, `omod_nombre`
 (132, 4, 120, 'Guardar Nuevo Matriculado', 'A', '0', '', '', '', 'academico/matriculadosreprobados/newreprobado', 1, '1', 'Academico', '1', '2018-11-15 15:26:23', NULL, '1'),
 (133, 6, 133, 'Email Marketing', 'P', '0', '', '', '', 'marketing/email/index', 1, '1', 'Marketing', '1', '2018-11-15 15:26:23', NULL, '1'),
 (134, 6, 134, 'Whatsapp Marketing', 'P', '0', '', '', '', 'marketing/whatsapp/index', 2, '1', 'Marketing', '1', '2018-11-15 15:26:23', NULL, '1'),
-(135, 6, 133, 'Programacion Envio', 'S', '0', '', '', '', 'marketing/email/programacion', 1, '0', 'Marketing', '1', '2018-11-15 20:26:23', NULL, '1'),
+(135, 6, 139, 'Programacion Envio', 'S', '0', '', '', '', 'marketing/email/programacion', 1, '0', 'Marketing', '1', '2018-11-15 20:26:23', NULL, '1'),
 (136, 6, 135, 'Guardar Programacion', 'A', '0', '', '', '', 'marketing/email/programacion', 1, '1', 'Marketing', '1', '2018-11-15 20:26:23', NULL, '1'),
 (137, 6, 133, 'Crear Lista', 'A', '0', '', '', '', 'marketing/email/new', 1, '1', 'marketing', '1', '2019-01-16 18:11:18', NULL, '1'),
 (138, 6, 137, 'Guardar Lista', 'A', '0', '', '', '', 'marketing/email/new', 1, '0', 'marketing', '1', '2019-01-16 18:12:36', NULL, '1'),
@@ -227,7 +227,8 @@ INSERT INTO `obmo_acci` (`oacc_id`, `omod_id`, `acc_id`, `oacc_tipo_boton`, `oac
 (63, 136, 4, '1', '', 'guardarProgramacion', '1', '2018-11-12 22:56:47', NULL, '1'),
 (64, 138, 4, '1', '', 'guardarLista', '1', '2019-01-16 18:12:36', NULL, '1'),
 (65, 137, 1, '0', 'marketing/email/new', '', '0', '2019-01-16 18:13:20', NULL, '1'),
-(66, 137, 1, '0', 'marketing/email/new', '', '1', '2019-01-16 19:26:00', NULL, '1');
+(66, 137, 1, '0', 'marketing/email/new', '', '1', '2019-01-16 19:26:00', NULL, '1'),
+(67, 139, 22, '0', 'marketing/email/programacion', '', '1', '2019-01-16 19:26:00', NULL, '1');
 
 -- --------------------------------------------------------
 --
