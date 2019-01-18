@@ -106,7 +106,6 @@ $(document).ready(function () {
                 alert('empresa:' + arrParams.emp_id);
                 alert('sin pais');
                 alert('pais:' + data.empresa.emp_telefono);
-
                 $('#cmb_pais').val(data.empresa.pai_id);
                 $('#cmb_provincia').val(data.empresa.pro_id);
                 $('#cmb_ciudad').val(data.empresa.can_id);
@@ -169,29 +168,22 @@ function mostrar_grid_lista() {
     }
 }
 function suscribirContacto(psus_id, per_tipo) {
-    preguntaSuscribirOtrasListas();
-//    var link = $('#txth_base').val() + "/marketing/email/asignar";
-//    var arrParams = new Object();
-//    arrParams.psus_id = psus_id;
-//    arrParams.per_tipo = per_tipo;
-//    arrParams.accion = 'sc';
-//    if (!validateForm()) {
-//        requestHttpAjax(link, arrParams, function (response) {
-//            if (!response.error) {
-//                setTimeout(function () {
-//                    preguntaSuscribirOtrasListas();
-//                }, 5000);
-//            }
-//        }, true);
-//    }
+    var link = $('#txth_base').val() + "/marketing/email/asignar";
+    var arrParams = new Object();
+    arrParams.psus_id = psus_id;
+    arrParams.per_tipo = per_tipo;
+    arrParams.accion = 'sc';
+    if (!validateForm()) {
+        requestHttpAjax(link, arrParams, function (response) {
+            if (!response.error) {
+                setTimeout(function () {
+                    preguntaSuscribirOtrasListas(response.message.wtmessage);
+                }, 5000);
+            }
+        }, true);
+    }
 }
-function preguntaSuscribirOtrasListas() {
-    var mensj = "Maria Sanchez ha sido suscrita a la lista de Economia.<br/>";
-    var mensj = mensj + "Las personas que se suscribieron a esta lista tambien les intereso las listas:<br/>";
-    var mensj = mensj + "- Finanzas<br/>";
-    var mensj = mensj + "- Marketing<br/>";
-    var mensj = mensj + "- Adminsitracion empresas<br/>";
-    var mensj = mensj + "Desea suscribirlo a estas listas tambien?";
+function preguntaSuscribirOtrasListas(mensj) {    
     var messagePB = new Object();
     messagePB.wtmessage = mensj;
     messagePB.title = "Suscribirse";
