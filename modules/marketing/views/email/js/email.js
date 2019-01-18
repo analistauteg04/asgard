@@ -126,6 +126,21 @@ function mostrar_grid_lista() {
         setTimeout(hideLoadingPopup, 2000);
     }
 }
+function preguntasuscribirContacto(psus_id, per_tipo) {
+    var messagePB = new Object();
+    messagePB.wtmessage = "Haga clic en aceptar para suscribir el contacto, caso contrario haga clic en cancelar.";
+    messagePB.title = "";
+    var objAccept = new Object();
+    objAccept.id = "btnid2del";
+    objAccept.class = "btn-primary clclass praclose";
+    objAccept.value = "Aceptar";
+    objAccept.callback = 'suscribirContacto';
+    var params = new Array(psus_id, per_tipo);
+    objAccept.paramCallback = params;
+    messagePB.acciones = new Array();
+    messagePB.acciones[0] = objAccept;
+    showAlert("OK", "info", messagePB);
+}
 function suscribirContacto(psus_id, per_tipo) {
     var link = $('#txth_base').val() + "/marketing/email/asignar";
     var arrParams = new Object();
@@ -136,16 +151,16 @@ function suscribirContacto(psus_id, per_tipo) {
         requestHttpAjax(link, arrParams, function (response) {
             if (!response.error) {
                 setTimeout(function () {
-                    preguntaSuscribirOtrasListas(response.message.wtmessage);
+                    preguntaSuscribirOtrasListas(response.message);
                 }, 5000);
             }
         }, true);
     }
 }
-function preguntaSuscribirOtrasListas(mensj) {
+function preguntaSuscribirOtrasListas(message) {
     var messagePB = new Object();
-    messagePB.wtmessage = mensj;
-    messagePB.title = "Suscribirse";
+    messagePB.wtmessage = message.wtmessage;
+    messagePB.title = message.title;
     var objAccept = new Object();
     objAccept.id = "btnid2del";
     objAccept.class = "btn-primary clclass praclose";
@@ -156,7 +171,7 @@ function preguntaSuscribirOtrasListas(mensj) {
     showAlert("OK", "success", messagePB);
 }
 function suscribirOtrasListas() {
-
+    
 }
 function elminarsuscritor() {
 

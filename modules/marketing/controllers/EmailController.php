@@ -33,7 +33,7 @@ class EmailController extends \app\components\CController {
             $resp_lista = $mod_lista->consultarLista($arrSearch);
         } else {
             $resp_lista = $mod_lista->consultarLista();
-        }                               
+        }
 
         return $this->render('index', [
                     'model' => $resp_lista]);
@@ -47,10 +47,10 @@ class EmailController extends \app\components\CController {
         $mod_persona = new Persona();
         $mod_perge = new PersonaGestion();
         $lista_model = $mod_lista->consultarListaXID($lis_id);
-        $susbs_lista = $mod_sb->consultarSuscriptoresxLista($lis_id);        
-        $su_id=0;
-        $error=0;
-        $mensaje="";
+        $susbs_lista = $mod_sb->consultarSuscriptoresxLista($lis_id);
+        $su_id = 0;
+        $error = 0;
+        $mensaje = "";
         if (Yii::$app->request->isAjax) {
             $con = \Yii::$app->db_asgard;
             $transaction = $con->beginTransaction();
@@ -59,29 +59,36 @@ class EmailController extends \app\components\CController {
                 $ps_id = $data["psus_id"];
                 $per_tipo = $data["per_tipo"];
                 $data_source = array();
-                $per_id=null;
-                $pge_id=null;
+                $per_id = null;
+                $pge_id = null;
                 if ($per_tipo == 1) {
-                    $data_source = $mod_persona->consultaPersonaId($ps_id);                    
-                    $per_id=$ps_id;
+                    $data_source = $mod_persona->consultaPersonaId($ps_id);
+                    $per_id = $ps_id;
                 }if ($per_tipo == 2) {
                     $data_source = $mod_perge->consultarPersonaGestion($ps_id);
-                    $pge_id=$ps_id;
+                    $pge_id = $ps_id;
                 }
                 $keys = ['per_id', 'pges_id', 'sus_estado', 'sus_estado_logico'];
                 $parametros = [$id_persona, $pge_id, 1, 1];
-                $su_id=$mod_sb->insertarSuscritor($con, $parametros, $keys, 'suscriptor');
-                if($su_id>0){
-                    $mensaje="The information have been saved and the information has been sent to your email";
-                }else{
-                    $mensaje="Error: El suscritor no fue guardado.";
+                $su_id = $mod_sb->insertarSuscritor($con, $parametros, $keys, 'suscriptor');
+                if ($su_id > 0) {
+                    $mensaje = "The information have been saved and the information has been sent to your email";
+                } else {
+                    $mensaje = "Error: El suscritor no fue guardado.";
                     $error++;
                 }
             }
-            $message = array(
-                "wtmessage" => Yii::t("formulario", $mensaje),
-                "title" => Yii::t('jslang', 'Success'),
-            );
+            if ($error == 0) {
+                $message = array(
+                    "wtmessage" => Yii::t("formulario", $mensaje),
+                    "title" => Yii::t('jslang', 'Success'),
+                );
+            } else {
+                $message = array(
+                    "wtmessage" => Yii::t("formulario", $mensaje),
+                    "title" => Yii::t('jslang', 'Success'),
+                );
+            }
             return Utilities::ajaxResponse('OK', 'alert', Yii::t("jslang", "Sucess"), false, $message);
         }
         return $this->render('asignar', [
