@@ -42,9 +42,9 @@ INSERT INTO `tipo_empresa` (`temp_id`, `temp_nombre`, `temp_descripcion`, `temp_
 -- Volcado de datos para la tabla `EMPRESA`
 --
 INSERT INTO `empresa` (`emp_id`, `temp_id`, `emp_razon_social`, `emp_nombre_comercial`, `emp_alias`, `emp_ruc`, `emp_dominio`, `emp_imap_domain`, `emp_imap_port`, `emp_imap_user`, `emp_imap_pass`, `pai_id`, `pro_id`, `can_id`, `emp_direccion`, `emp_direccion1`, `emp_telefono`, `emp_codigo_postal`,  `emp_estado`, `emp_fecha_creacion`, `emp_fecha_modificacion`, `emp_estado_logico`) VALUES
-(1, 2, 'UTEG', 'UTEG', 'UTEG', '', 'www.uteg.edu.ec', 'www.uteg.edu.ec', '587', '', '', NULL, NULL, NULL, 1, 10, 87, 'Guayacanes 520 y la Quinta', NULL, '2884833', '090512', '1', '2017-02-01 15:05:26', NULL, '1'),
-(2, 2, 'ULINK', 'ULINK', 'ULINK', '', 'www.ulink.us', 'www.ulink.us', '587', '', '', NULL, NULL, NULL, 17, 324, 1, 'Guayacanes 520 y la Quinta', NULL, '2884833', '090512', '1', '2017-02-01 15:05:26', NULL, '1'),
-(3, 2, 'SMART', 'SMART', 'SMART', '', 'www.sbc.com.ec', 'www.sbc.com.ec', '587', '', '', NULL, NULL, NULL, 1, 10, 87, 'Guayacanes 520 y la Quinta', NULL, '2884833', '090512', '1', '2017-02-01 15:05:26', NULL, '1');
+(1, 2, 'UTEG', 'UTEG', 'UTEG', '', 'www.uteg.edu.ec', 'www.uteg.edu.ec', '587', '', '', 1, 10, 87, 'Guayacanes 520 y la Quinta', NULL, '2884833', '090512', '1', '2017-02-01 15:05:26', NULL, '1'),
+(2, 2, 'ULINK', 'ULINK', 'ULINK', '', 'www.ulink.us', 'www.ulink.us', '587', '', '', 17, 324, 1, 'Guayacanes 520 y la Quinta', NULL, '2884833', '090512', '1', '2017-02-01 15:05:26', NULL, '1'),
+(3, 2, 'SMART', 'SMART', 'SMART', '', 'www.sbc.com.ec', 'www.sbc.com.ec', '587', '', '', 1, 10, 87, 'Guayacanes 520 y la Quinta', NULL, '2884833', '090512', '1', '2017-02-01 15:05:26', NULL, '1');
 
 -- --------------------------------------------------------
 --
@@ -268,8 +268,8 @@ INSERT INTO `grup_rol` (`grol_id`, `gru_id`, `rol_id`, `grol_estado`, `grol_esta
 --
 INSERT INTO `empresa_correo` (`ecor_id`, `emp_id`, `ecor_correo`, `ecor_estado`, `ecor_estado_logico`) VALUES
 (1, 1, 'noreply@uteg.edu.ec', '1', '1'),
-(1, 2, 'noreply@ulink.us', '1', '1'),
-(1, 3, 'noreply@sbc.com.ec', '1', '1');
+(2, 2, 'noreply@ulink.us', '1', '1'),
+(3, 3, 'noreply@sbc.com.ec', '1', '1');
 
 
 

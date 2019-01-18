@@ -91,8 +91,7 @@ $(document).ready(function () {
         var link = $('#txth_base').val() + "/marketing/email/new";
         var arrParams = new Object();
         arrParams.emp_id = $(this).val();
-        arrParams.getcarrera = true;        
-        console.log(arrParams);
+        arrParams.getcarrera = true;               
         requestHttpAjax(link, arrParams, function (response) {
             if (response.status == "OK") {                
                 data = response.message;
@@ -100,61 +99,21 @@ $(document).ready(function () {
             }
         }, true);
         var arrParams = new Object();
-                arrParams.getempresa = true;                
-                arrParams.emp_id = $(this).val();        
-                requestHttpAjax(link, arrParams, function (response) {
-                    if (response.status == "OK") {
-                        data2 = response.message;
-                        console.log(data2);
-                        $('#cmb_pais').val(data.empresa.pai_id);
-                        $('#cmb_provincia').val(data.empresa.pro_id);
-                        $('#cmb_ciudad').val(data.empresa.can_id);
-                        $('#txt_direccion1').val(data.empresa.emp_direccion);
-                        $('#txt_direccion2').val(data.empresa.emp_direccion1);
-                        $('#txt_telefono').val(data.empresa.emp_telefono);
-                        $('#txt_codigo_postal').val(data.empresa.emp_codigo_postal);
-                    }
-                }, true);
-    });
-    
-    $('#cmb_pais').change(function () {
-        var link = $('#txth_base').val() + "/marketing/email/new";
-        var arrParams = new Object();
-        arrParams.pai_id = $(this).val();
-        arrParams.getprovincias = true;
-        arrParams.getarea = true;
+        arrParams.getempresa = true;                
+        arrParams.emp_id = $(this).val();        
         requestHttpAjax(link, arrParams, function (response) {
             if (response.status == "OK") {
-                data = response.message;
-                setComboData(data.provincias, "cmb_provincia");
-                var arrParams = new Object();
-                if (data.provincias.length > 0) {
-                    arrParams.prov_id = data.provincias[0].id;
-                    arrParams.getcantones = true;
-                    requestHttpAjax(link, arrParams, function (response) {
-                        if (response.status == "OK") {
-                            data = response.message;
-                            setComboData(data.cantones, "cmb_ciudad");
-                        }
-                    }, true);
-                }
-
+                data2 = response.message;                        
+                $('#txt_pais').val(data2[0].pai_nombre);
+                $('#txt_provincia').val(data2[0].pro_nombre);
+                $('#txt_ciudad').val(data2[0].can_nombre);
+                $('#txt_direccion1').val(data2[0].emp_direccion);
+                $('#txt_direccion2').val(data2[0].emp_direccion1);
+                $('#txt_telefono').val(data2[0].emp_telefono);
+                $('#txt_codigo_postal').val(data2[0].emp_codigo_postal);
             }
         }, true);
-    });
-
-    $('#cmb_provincia').change(function () {
-        var link = $('#txth_base').val() + "/marketing/email/new";
-        var arrParams = new Object();
-        arrParams.prov_id = $(this).val();
-        arrParams.getcantones = true;
-        requestHttpAjax(link, arrParams, function (response) {
-            if (response.status == "OK") {
-                data = response.message;
-                setComboData(data.cantones, "cmb_ciudad");
-            }
-        }, true);
-    });
+    });      
 });
 
 function mostrar_grid_lista() {

@@ -237,11 +237,20 @@ class Empresa extends \yii\db\ActiveRecord {
         $estado = 1;
         $sql = "SELECT  emp_nombre_comercial, emp_direccion, emp_telefono,
                         emp_direccion1, emp_codigo_postal,
-                        pai_id, pro_id, can_id
-                FROM " . $con->dbname . ".empresa  empr
+                        empr.pai_id, empr.pro_id, empr.can_id,
+                        p.pai_nombre, pro.pro_nombre, c.can_nombre
+                FROM " . $con->dbname . ".empresa  empr inner join " . $con->dbname . ".pais p on p.pai_id = empr.pai_id
+		     inner join " . $con->dbname . ".provincia pro on pro.pro_id = empr.pro_id
+                     inner join " . $con->dbname . ".canton c on c.can_id = empr.can_id                
                 WHERE empr.emp_id = :emp_id AND
                       empr.emp_estado = :estado AND
-                      empr.emp_estado_logico = :estado";
+                      empr.emp_estado_logico = :estado AND
+                      p.pai_estado = :estado AND
+                      p.pai_estado_logico = :estado AND
+                      pro.pro_estado = :estado AND
+                      pro.pro_estado_logico = :estado AND
+                      c.can_estado = :estado AND
+                      c.can_estado_logico = :estado";
                                
         $comando = $con->createCommand($sql);
         $comando->bindParam(":estado", $estado, \PDO::PARAM_STR);

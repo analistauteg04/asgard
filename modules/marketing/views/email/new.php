@@ -67,7 +67,7 @@ admision::registerTranslations();
             <div class="form-group">
                 <label for="txt_pais" class="col-sm-4 control-label" id="lbl_pais"><?= Yii::t("formulario", "Country") ?><span class="text-danger">*</span></label> 
                 <div class="col-sm-8 ">
-                    <?= Html::dropDownList("cmb_pais", 0, $arr_pais, ["class" => "form-control can_combo", "id" => "cmb_pais", "disabled" => true]) ?>
+                    <input type="text" class="form-control" value="" id="txt_pais" data-type="alfa" placeholder="<?= Yii::t("formulario", "Country") ?>" disabled="true">        
                 </div>
             </div>
         </div> 
@@ -78,7 +78,7 @@ admision::registerTranslations();
             <div class="form-group">
                 <label for="txt_provincia" class="col-sm-4 control-label" id="lbl_provincia"><?= Yii::t("formulario", "State") ?><span class="text-danger">*</span></label> 
                 <div class="col-sm-8 ">
-                    <?= Html::dropDownList("cmb_provincia", 0, $arr_provincia, ["class" => "form-control can_combo", "id" => "cmb_provincia", "disabled" => true]) ?>
+                    <input type="text" class="form-control" value="" id="txt_provincia" data-type="alfa" placeholder="<?= Yii::t("formulario", "State") ?>" disabled="true" >        
                 </div>
             </div>
         </div>
@@ -86,7 +86,7 @@ admision::registerTranslations();
             <div class="form-group">
                 <label for="txt_ciudad" class="col-sm-4 control-label" id="lbl_ciudad"><?= Yii::t("formulario", "City") ?><span class="text-danger">*</span></label> 
                 <div class="col-sm-8 ">
-                    <?= Html::dropDownList("cmb_ciudad", 0, $arr_ciudad, ["class" => "form-control can_combo", "id" => "cmb_ciudad", "disabled" => true]) ?>
+                    <input type="text" class="form-control" value="" id="txt_ciudad" data-type="alfa" placeholder="<?= Yii::t("formulario", "City") ?>" disabled="true" >        
                 </div>
             </div>
         </div> 

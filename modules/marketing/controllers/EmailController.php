@@ -231,18 +231,6 @@ class EmailController extends \app\components\CController {
                 }
                 $message = array("carrera" => $arreglo_carrerra);
                 return Utilities::ajaxResponse('OK', 'alert', Yii::t('jslang', 'Success'), 'false', $message);
-            }
-            if (isset($data["getprovincias"])) {
-                $provincias = Provincia::find()->select("pro_id AS id, pro_nombre AS name")->where(["pro_estado_logico" => "1", "pro_estado" => "1", "pai_id" => $data['pai_id']])->asArray()->all();
-                $message = array("provincias" => $provincias);
-                echo Utilities::ajaxResponse('OK', 'alert', Yii::t('jslang', 'Success'), 'false', $message);
-                return;
-            }
-            if (isset($data["getcantones"])) {
-                $cantones = Canton::find()->select("can_id AS id, can_nombre AS name")->where(["can_estado_logico" => "1", "can_estado" => "1", "pro_id" => $data['prov_id']])->asArray()->all();
-                $message = array("cantones" => $cantones);
-                echo Utilities::ajaxResponse('OK', 'alert', Yii::t('jslang', 'Success'), 'false', $message);
-                return;
             }            
             if (isset($data["getempresa"])) {
                 $resp_empresa = $empresa_mod->consultarEmpresaXid($data["emp_id"]);
@@ -253,15 +241,10 @@ class EmailController extends \app\components\CController {
         }
         $arreglo_empresa = $empresa_mod->getAllEmpresa();
         $arreglo_carrerra = $oportunidad_mod->consultarCarreras();
-        $arreglo_pais = Pais::find()->select("pai_id AS id, pai_nombre AS value")->where(["pai_estado_logico" => "1", "pai_estado" => "1"])->asArray()->all();
-        $arreglo_provincia = Provincia::provinciaXPais(1);
-        $arreglo_ciudad = Canton::cantonXProvincia(1);
+
         return $this->render('new', [
                     "arr_empresa" => ArrayHelper::map(array_merge([["id" => "0", "name" => Yii::t("formulario", "Select")]], $arreglo_empresa), "id", "value"),
-                    "arr_carrera" => ArrayHelper::map(array_merge([["id" => "0", "name" => Yii::t("formulario", "Select")]], $arreglo_carrerra), "id", "name"),
-                    "arr_pais" => ArrayHelper::map(array_merge([["id" => "0", "name" => Yii::t("formulario", "Select")]], $arreglo_pais), "id", "value"),
-                    "arr_provincia" => ArrayHelper::map(array_merge([["id" => "0", "name" => Yii::t("formulario", "Select")]], $arreglo_provincia), "id", "value"),
-                    "arr_ciudad" => ArrayHelper::map(array_merge([["id" => "0", "name" => Yii::t("formulario", "Select")]], $arreglo_ciudad), "id", "value"),
+                    "arr_carrera" => ArrayHelper::map(array_merge([["id" => "0", "name" => Yii::t("formulario", "Select")]], $arreglo_carrerra), "id", "name"),                 
         ]);
     }
 
