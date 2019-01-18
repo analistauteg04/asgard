@@ -91,33 +91,32 @@ $(document).ready(function () {
         var link = $('#txth_base').val() + "/marketing/email/new";
         var arrParams = new Object();
         arrParams.emp_id = $(this).val();
-        arrParams.getcarrera = true;
+        arrParams.getcarrera = true;        
+        console.log(arrParams);
         requestHttpAjax(link, arrParams, function (response) {
-            if (response.status == "OK") {
+            if (response.status == "OK") {                
                 data = response.message;
                 setComboDataselect(data.carrera, "cmb_carrera_programa", "Seleccionar");
             }
         }, true);
-        arrParams.emp_id = $(this).val();
-        arrParams.getempresa = true;
-        requestHttpAjax(link, arrParams, function (response) {
-            if (response.status == "OK") {
-                data = response.message;
-                alert('empresa:'+arrParams.emp_id);
-                alert('sin pais');                
-                alert('pais1: '+data.empresa.pro_id);
-                console.log(data.empresa) ;
-                $('#cmb_pais').val(data.empresa.pai_id);
-                $('#cmb_provincia').val(data.empresa.pro_id);
-                $('#cmb_ciudad').val(data.empresa.can_id);
-                $('#txt_direccion1').val(data.empresa.emp_direccion);
-                $('#txt_direccion2').val(data.empresa.emp_direccion1);
-                $('#txt_telefono').val(data.empresa.emp_telefono);
-                $('#txt_codigo_postal').val(data.empresa.emp_codigo_postal);
-            }
-        }, true);
+        var arrParams = new Object();
+                arrParams.getempresa = true;                
+                arrParams.emp_id = $(this).val();        
+                requestHttpAjax(link, arrParams, function (response) {
+                    if (response.status == "OK") {
+                        data2 = response.message;
+                        console.log(data2);
+                        $('#cmb_pais').val(data.empresa.pai_id);
+                        $('#cmb_provincia').val(data.empresa.pro_id);
+                        $('#cmb_ciudad').val(data.empresa.can_id);
+                        $('#txt_direccion1').val(data.empresa.emp_direccion);
+                        $('#txt_direccion2').val(data.empresa.emp_direccion1);
+                        $('#txt_telefono').val(data.empresa.emp_telefono);
+                        $('#txt_codigo_postal').val(data.empresa.emp_codigo_postal);
+                    }
+                }, true);
     });
-
+    
     $('#cmb_pais').change(function () {
         var link = $('#txth_base').val() + "/marketing/email/new";
         var arrParams = new Object();
@@ -184,7 +183,7 @@ function suscribirContacto(psus_id, per_tipo) {
         }, true);
     }
 }
-function preguntaSuscribirOtrasListas(mensj) {    
+function preguntaSuscribirOtrasListas(mensj) {
     var messagePB = new Object();
     messagePB.wtmessage = mensj;
     messagePB.title = "Suscribirse";

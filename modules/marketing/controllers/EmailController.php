@@ -246,7 +246,7 @@ class EmailController extends \app\components\CController {
             }            
             if (isset($data["getempresa"])) {
                 $resp_empresa = $empresa_mod->consultarEmpresaXid($data["emp_id"]);
-                $message = array("empresa" => $resp_empresa);
+                $message = array($resp_empresa);
                 echo Utilities::ajaxResponse('OK', 'alert', Yii::t('jslang', 'Success'), 'false', $message);
                 return;
             }
