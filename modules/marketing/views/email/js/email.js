@@ -4,8 +4,8 @@ $(document).ready(function () {
         var id_lista= base64_decode($('#txth_list').val());
         if(id_lista>0){
             var newcon=$("<i class='glyphicon glyphicon-pencil'> Editar</i>");
-            $('.btnAccion').html(newcon);
-            $(".btnAccion").attr("onclick","editarProgramacion()");
+            //$('.btnAccion').html(newcon);
+            //$(".btnAccion").attr("onclick","editarProgramacion()");
         }
     }
     $('#cmb_lista').change(function () {
