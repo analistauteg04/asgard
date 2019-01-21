@@ -128,7 +128,7 @@ class Suscriptor extends \yii\db\ActiveRecord {
                     left join db_academico.estudio_academico_area_conocimiento as eaac on eaac.eaca_id=eaca.eaca_id
                     left join db_academico.area_conocimiento as acon on acon.acon_id=eaac.acon_id
                 WHERE 
-                    lst.lis_id=1 and
+                    lst.lis_id=$list_id and
                     lst.lis_estado = 1 AND
                     lst.lis_estado_logico = 1
                ";
