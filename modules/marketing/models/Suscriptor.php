@@ -107,6 +107,7 @@ class Suscriptor extends \yii\db\ActiveRecord {
         $estado = 1;
         $sql = "
                SELECT 
+                    lst.lis_id,
                     if(ifnull(per.per_id,0)>0,1,2) per_tipo,
                     if(ifnull(per.per_id,0)>0,per.per_id,pges.pges_id) id_psus,
                     concat(per.per_pri_nombre,' ',per.per_pri_apellido) as contacto, 
@@ -128,13 +129,14 @@ class Suscriptor extends \yii\db\ActiveRecord {
                     left join db_academico.estudio_academico_area_conocimiento as eaac on eaac.eaca_id=eaca.eaca_id
                     left join db_academico.area_conocimiento as acon on acon.acon_id=eaac.acon_id
                 WHERE 
-                    lst.lis_id=1 and
-                    lst.lis_estado = 1 AND
-                    lst.lis_estado_logico = 1
+                    lst.lis_id= :list_id and
+                    lst.lis_estado = :estado AND
+                    lst.lis_estado_logico = :estado
                ";
 
         $comando = $con->createCommand($sql);
         $comando->bindParam(":estado", $estado, \PDO::PARAM_STR);
+        $comando->bindParam(":list_id", $list_id, \PDO::PARAM_INT);
         if (isset($arrFiltro) && count($arrFiltro) > 0) {
             if ($arrFiltro['list_id'] != "" && $arrFiltro['list_id'] > 0) {
                 $lista_id = $arrFiltro["lista_id"];
@@ -161,6 +163,38 @@ class Suscriptor extends \yii\db\ActiveRecord {
             return $resultData;
         } else {
             return $dataProvider;
+        }
+    }
+
+    /**
+     * Function insertarListaSuscritor
+     * @author  Giovanni Vergara <analistadesarrollo02@uteg.edu.ec>
+     * @property integer $userid
+     * @return  
+     */
+    public function insertarListaSuscritor($con, $parameters, $keys, $name_table) {
+        $trans = $con->getTransaction();
+        $param_sql .= "" . $keys[0];
+        $bdet_sql .= "'" . $parameters[0] . "'";
+        for ($i = 1; $i < count($parameters); $i++) {
+            if (isset($parameters[$i])) {
+                $param_sql .= ", " . $keys[$i];
+                $bdet_sql .= ", '" . $parameters[$i] . "'";
+            }
+        }
+        try {
+            $sql = "INSERT INTO " . $con->dbname . '.' . $name_table . " ($param_sql) VALUES($bdet_sql);";
+            $comando = $con->createCommand($sql);
+            $result = $comando->execute();
+            $idtable = $con->getLastInsertID($con->dbname . '.' . $name_table);
+            if ($trans !== null)
+                $trans->commit();
+            return $idtable;
+        } catch (Exception $ex) {
+            if ($trans !== null) {
+                $trans->rollback();
+            }
+            return 0;
         }
     }
 

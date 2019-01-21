@@ -48,6 +48,7 @@ class EmailController extends \app\components\CController {
         $mod_perge = new PersonaGestion();
         $lista_model = $mod_lista->consultarListaXID($lis_id);
         $susbs_lista = $mod_sb->consultarSuscriptoresxLista($lis_id);
+        $fecha_crea = date(Yii::$app->params["dateTimeByDefault"]);
         $su_id = 0;
         $error = 0;
         $mensaje = "";
@@ -58,9 +59,11 @@ class EmailController extends \app\components\CController {
             if ($data["accion"] = 'sc') {
                 $ps_id = $data["psus_id"];
                 $per_tipo = $data["per_tipo"];
+                $list_id = $data["list_id"];
                 $data_source = array();
                 $per_id = null;
-                $pge_id = null;
+                $pge_id = null;         
+                
                 if ($per_tipo == 1) {
                     $per_id = $ps_id;
                 }if ($per_tipo == 2) {
@@ -70,9 +73,16 @@ class EmailController extends \app\components\CController {
                 $parametros = [$per_id, $pge_id, 1, 1];
                 $su_id = $mod_sb->insertarSuscritor($con, $parametros, $keys, 'suscriptor');
                 if ($su_id > 0) {
-                    $mensaje = "El contacto ha sido asignado a la lista satisfactoriamente";
-                    
-                } else {
+                    $key = ['lis_id', 'sus_id', 'lsus_estado', 'lsus_fecha_creacion', 'lsus_estado_logico'];
+                    $parametro = [$list_id, $su_id, 1, $fecha_crea, 1];
+                    $lsu_id = $mod_sb->insertarListaSuscritor($con, $parametro, $key, 'lista_suscriptor');
+                    if ($lsu_id > 0) {
+                        $mensaje = "El contacto ha sido asignado a la lista satisfactoriamente";                       
+                    } else {                        
+                        $mensaje = "Error: El suscritor no fue guardado.";
+                        $error++;
+                    }
+                } else {                    
                     $mensaje = "Error: El suscritor no fue guardado.";
                     $error++;
                 }
@@ -81,7 +91,7 @@ class EmailController extends \app\components\CController {
                 $message = array(
                     "wtmessage" => Yii::t("formulario", $mensaje),
                     "title" => Yii::t('jslang', 'Success'),
-                    "rederict" => Yii::$app->response->redirect(['/marketing/email/asignar']),
+                    "rederict" => Yii::$app->response->redirect(['/marketing/email/asignar?lis_id='.base64_encode($list_id)]),
                 );
             } else {
                 $message = array(
@@ -124,14 +134,14 @@ class EmailController extends \app\components\CController {
     public function actionDelete() {
         $mod_lista = new Lista();
         if (Yii::$app->request->isAjax) {
-            $data = Yii::$app->request->post();            
-            $lis_id = $data["lis_id"];            
+            $data = Yii::$app->request->post();
+            $lis_id = $data["lis_id"];
             $con = \Yii::$app->db_mailing;
             $transaction = $con->beginTransaction();
             try {
                 //consultar la lista.  
-                \app\models\Utilities::putMessageLogFile('empieza controlador:'.$lis_id);
-                $resp_consulta =  $mod_lista->consultarListaXID($lis_id);
+                \app\models\Utilities::putMessageLogFile('empieza controlador:' . $lis_id);
+                $resp_consulta = $mod_lista->consultarListaXID($lis_id);
                 \app\models\Utilities::putMessageLogFile('despues de consultarListaXID');
                 if ($resp_consulta["num_suscr"] > 0) {
                     \app\models\Utilities::putMessageLogFile('ingresa a inactivar lista suscriptores.');
@@ -148,11 +158,11 @@ class EmailController extends \app\components\CController {
                     if ($resp_lista) {
                         $exito = '1';
                     }
-                }                
+                }
                 if ($exito) {
                     //Eliminar en mailchimp
                     \app\models\Utilities::putMessageLogFile('empieza Maichimp');
-                    \app\models\Utilities::putMessageLogFile('Id lista:'.$lis_id);
+                    \app\models\Utilities::putMessageLogFile('Id lista:' . $lis_id);
                     $webs_mailchimp = new WsMailChimp();
                     $conMailch = $webs_mailchimp->deleteList($lis_id);
                     if ($conMailch) {
@@ -164,7 +174,6 @@ class EmailController extends \app\components\CController {
                         );
                         return Utilities::ajaxResponse('OK', 'alert', Yii::t("jslang", "Sucess"), false, $message);
                     }
-                    
                 } else {
                     $transaction->rollback();
                     $message = array(
@@ -258,7 +267,7 @@ class EmailController extends \app\components\CController {
                 }
                 $message = array("carrera" => $arreglo_carrerra);
                 return Utilities::ajaxResponse('OK', 'alert', Yii::t('jslang', 'Success'), 'false', $message);
-            }            
+            }
             if (isset($data["getempresa"])) {
                 $resp_empresa = $empresa_mod->consultarEmpresaXid($data["emp_id"]);
                 $message = array($resp_empresa);
@@ -267,18 +276,18 @@ class EmailController extends \app\components\CController {
             }
             if (isset($data["getcorreo"])) {
                 $resp_correo = $empresa_mod->consultarCorreoXempresa($data["emp_id"]);
-                $message = array("correo"=> $resp_correo);
+                $message = array("correo" => $resp_correo);
                 echo Utilities::ajaxResponse('OK', 'alert', Yii::t('jslang', 'Success'), 'false', $message);
                 return;
-            }            
+            }
         }
-        $arreglo_empresa = $empresa_mod->getAllEmpresa();        
+        $arreglo_empresa = $empresa_mod->getAllEmpresa();
         $arreglo_carrerra = $oportunidad_mod->consultarCarreras();
         $arreglo_correo = $empresa_mod->consultarCorreoXempresa(1);
         return $this->render('new', [
                     "arr_empresa" => ArrayHelper::map(array_merge([["id" => "0", "value" => Yii::t("formulario", "Select")]], $arreglo_empresa), "id", "value"),
-                    "arr_carrera" => ArrayHelper::map(array_merge([["id" => "0", "name" => Yii::t("formulario", "Select")]], $arreglo_carrerra), "id", "name"),                 
-                    "arr_correo" => ArrayHelper::map(array_merge([["id" => "0", "name" => Yii::t("formulario", "Select")]], $arreglo_correo), "id", "name"),                 
+                    "arr_carrera" => ArrayHelper::map(array_merge([["id" => "0", "name" => Yii::t("formulario", "Select")]], $arreglo_carrerra), "id", "name"),
+                    "arr_correo" => ArrayHelper::map(array_merge([["id" => "0", "name" => Yii::t("formulario", "Select")]], $arreglo_correo), "id", "name"),
         ]);
     }
 
@@ -291,9 +300,9 @@ class EmailController extends \app\components\CController {
             $nombre_contacto = ucwords(mb_strtolower($data["txt_nombre_contacto"]));
             $correo_contacto = ucwords(mb_strtolower($data["txt_correo_contacto"]));
             $asunto = ucwords(mb_strtolower($data["txt_asunto"]));
-            $pais = ucwords(mb_strtolower($data["pais_texto"]));            
-            $ciudad = ucwords(mb_strtolower($data["ciudad_texto"]));            
-            $provincia = ucwords(mb_strtolower($data["provincia_texto"]));            
+            $pais = ucwords(mb_strtolower($data["pais_texto"]));
+            $ciudad = ucwords(mb_strtolower($data["ciudad_texto"]));
+            $provincia = ucwords(mb_strtolower($data["provincia_texto"]));
             $direccion1 = ucwords(mb_strtolower($data["direccion1"]));
             $direccion2 = ucwords(mb_strtolower($data["direccion2"]));
             $telefono = $data["telefono"];
