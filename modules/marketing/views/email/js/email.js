@@ -246,8 +246,8 @@ function guardarLista() {
 function borrarLista(id) {
     var link = $('#txth_base').val() + "/marketing/email/delete";
     var arrParams = new Object();
-    arrParams.lis_id = 1;//id;    
-    alert('id:'+id);    
+    arrParams.lis_id = id;    
+    alert('id:'+2);    
     if (!validateForm()) {
         requestHttpAjax(link, arrParams, function (response) {
             showAlert(response.status, response.label, response.message);
@@ -261,6 +261,7 @@ function borrarLista(id) {
 }
 
 function eliminarLista(id) {     
+    alert('id inicial:'+id);    
     var mensj = "¿Seguro desea eliminar la lista?";
     var messagePB = new Object();
     messagePB.wtmessage = mensj;
