@@ -124,27 +124,40 @@ class EmailController extends \app\components\CController {
     public function actionDelete() {
         $mod_lista = new Lista();
         if (Yii::$app->request->isAjax) {
-            $data = Yii::$app->request->post();
-            //$lis_id = $data["list_id"];
-            $lis_id = base64_decode($_GET['lis_id']);
-            $codigo = base64_decode($_GET['codigo']);
+            $data = Yii::$app->request->post();            
+            $lis_id = $data['lis_id'];            
             $con = \Yii::$app->db_mailing;
             $transaction = $con->beginTransaction();
             try {
-                $resp_listsuscriptor = $mod_lista->inactivaListaSuscriptor($lis_id);
-                if ($resp_listsuscriptor) {
+                //consultar la lista.  
+                $resp_consulta =  $mod_lista->consultarListaXID($lis_id);
+                if ($resp_consulta["num_suscr"] > 0) {
+                    $resp_listsuscriptor = $mod_lista->inactivaListaSuscriptor($lis_id);
+                    if ($resp_listsuscriptor) {
+                        $resp_lista = $mod_lista->inactivaLista($lis_id);
+                        if ($resp_lista) {
+                            $exito = '1';
+                        }
+                    }
+                } else {
                     $resp_lista = $mod_lista->inactivaLista($lis_id);
                     if ($resp_lista) {
                         $exito = '1';
                     }
-                }
+                }                
                 if ($exito) {
-                    $transaction->commit();
-                    $message = array(
-                        "wtmessage" => Yii::t("notificaciones", "Se ha eliminado la lista exitosamente."),
-                        "title" => Yii::t('jslang', 'Success'),
-                    );
-                    return Utilities::ajaxResponse('OK', 'alert', Yii::t("jslang", "Sucess"), false, $message);
+                    //Eliminar en mailchimp
+                    $webs_mailchimp = new WsMailChimp();
+                    $conMailch = $webs_mailchimp->deleteList($lis_id);
+                    if ($conMailch) {
+                        $transaction->commit();
+                        $message = array(
+                            "wtmessage" => Yii::t("notificaciones", "Se ha eliminado la lista exitosamente."),
+                            "title" => Yii::t('jslang', 'Success'),
+                        );
+                        return Utilities::ajaxResponse('OK', 'alert', Yii::t("jslang", "Sucess"), false, $message);
+                    }
+                    
                 } else {
                     $transaction->rollback();
                     $message = array(

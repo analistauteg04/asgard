@@ -124,7 +124,7 @@ class Lista extends \yii\db\ActiveRecord {
         $estado = 1;
         $sql = "
                     SELECT
-                        lst.lis_nombre,
+                        lst.lis_nombre, lst.lis_codigo,
                         case when lst.eaca_id > 0 then 
                                      ea.eaca_nombre else me.mest_nombre end as programa,
                         sum(case when (lsu.lsus_estado = '1' and lsu.lsus_estado_logico = '1') then
@@ -138,7 +138,7 @@ class Lista extends \yii\db\ActiveRecord {
                         lst.lis_id= :lista and
                         lst.lis_estado = :estado and
                         lst.lis_estado_logico = :estado
-                        group by lst.lis_id
+                    group by lst.lis_id, lst.lis_codigo
                 ";
         $comando = $con->createCommand($sql);
         $comando->bindParam(":estado", $estado, \PDO::PARAM_STR);
@@ -284,7 +284,7 @@ class Lista extends \yii\db\ActiveRecord {
                           lsus_estado = '0',
                           lsus_estado_logico = '0',
                           lsus_fecha_modificacion = :fecha_modificacion
-                      WHERE lsus_id = :list_id AND                        
+                      WHERE lis_id = :list_id AND                        
                             lsus_estado = :estado AND
                             lsus_estado_logico = :estado"
             );
