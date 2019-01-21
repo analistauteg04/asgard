@@ -71,6 +71,7 @@ class EmailController extends \app\components\CController {
                 $su_id = $mod_sb->insertarSuscritor($con, $parametros, $keys, 'suscriptor');
                 if ($su_id > 0) {
                     $mensaje = "El contacto ha sido asignado a la lista satisfactoriamente";
+                    
                 } else {
                     $mensaje = "Error: El suscritor no fue guardado.";
                     $error++;
@@ -80,6 +81,7 @@ class EmailController extends \app\components\CController {
                 $message = array(
                     "wtmessage" => Yii::t("formulario", $mensaje),
                     "title" => Yii::t('jslang', 'Success'),
+                    "rederict" => Yii::$app->response->redirect(['/marketing/email/asignar']),
                 );
             } else {
                 $message = array(
