@@ -286,7 +286,8 @@ function eliminarLista(id) {
     messagePB.acciones[0] = objAccept;
 
     showAlert("warning", "warning", messagePB);
-function editarProgramacion() {
+}
+    function editarProgramacion() {
     lista = $('#txth_list').val();
     window.location.href = $('#txth_base').val() + "/marketing/email/editprogramacion?lisid=" + lista;
 }
