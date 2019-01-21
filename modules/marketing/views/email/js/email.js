@@ -64,6 +64,10 @@ function mostrar_grid_lista() {
         setTimeout(hideLoadingPopup, 2000);
     }
 }
+function programarEnvio(){
+    var lista = $('#txth_ids').val();
+    window.location.href = $('#txth_base').val() + "/marketing/email/programacion?lisid=" + lista;
+}
 function preguntasuscribirContacto(psus_id, per_tipo) {
     var messagePB = new Object();
     messagePB.wtmessage = "Haga clic en aceptar para suscribir el contacto, caso contrario haga clic en cancelar.";

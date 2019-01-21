@@ -52,7 +52,7 @@ class EmailController extends \app\components\CController {
         $error = 0;
         $mensaje = "";
         if (Yii::$app->request->isAjax) {
-            $con = \Yii::$app->db_asgard;
+            $con = \Yii::$app->db_mailing;
             $transaction = $con->beginTransaction();
             $data = Yii::$app->request->post();
             if ($data["accion"] = 'sc') {
@@ -62,17 +62,15 @@ class EmailController extends \app\components\CController {
                 $per_id = null;
                 $pge_id = null;
                 if ($per_tipo == 1) {
-                    $data_source = $mod_persona->consultaPersonaId($ps_id);
                     $per_id = $ps_id;
                 }if ($per_tipo == 2) {
-                    $data_source = $mod_perge->consultarPersonaGestion($ps_id);
                     $pge_id = $ps_id;
                 }
                 $keys = ['per_id', 'pges_id', 'sus_estado', 'sus_estado_logico'];
-                $parametros = [$id_persona, $pge_id, 1, 1];
+                $parametros = [$per_id, $pge_id, 1, 1];
                 $su_id = $mod_sb->insertarSuscritor($con, $parametros, $keys, 'suscriptor');
                 if ($su_id > 0) {
-                    $mensaje = "The information have been saved and the information has been sent to your email";
+                    $mensaje = "El contacto ha sido asignado a la lista satisfactoriamente";
                 } else {
                     $mensaje = "Error: El suscritor no fue guardado.";
                     $error++;

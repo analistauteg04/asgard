@@ -124,7 +124,7 @@ class Lista extends \yii\db\ActiveRecord {
         $estado = 1;
         $sql = "
                     SELECT
-                        lst.lis_nombre, lst.lis_codigo,
+                        lst.lis_id,lst.lis_nombre, lst.lis_codigo,
                         case when lst.eaca_id > 0 then 
                                      ea.eaca_nombre else me.mest_nombre end as programa,
                         sum(case when (lsu.lsus_estado = '1' and lsu.lsus_estado_logico = '1') then
