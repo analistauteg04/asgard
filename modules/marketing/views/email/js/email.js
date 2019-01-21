@@ -68,7 +68,7 @@ function programarEnvio(){
     var lista = $('#txth_ids').val();
     window.location.href = $('#txth_base').val() + "/marketing/email/programacion?lisid=" + lista;
 }
-function preguntasuscribirContacto(psus_id, per_tipo) {
+function preguntasuscribirContacto(psus_id, per_tipo, list_id) {
     var messagePB = new Object();
     messagePB.wtmessage = "Haga clic en aceptar para suscribir el contacto, caso contrario haga clic en cancelar.";
     messagePB.title = "";
@@ -77,17 +77,18 @@ function preguntasuscribirContacto(psus_id, per_tipo) {
     objAccept.class = "btn-primary clclass praclose";
     objAccept.value = "Aceptar";
     objAccept.callback = 'suscribirContacto';
-    var params = new Array(psus_id, per_tipo);
+    var params = new Array(psus_id, per_tipo, list_id);
     objAccept.paramCallback = params;
     messagePB.acciones = new Array();
     messagePB.acciones[0] = objAccept;
     showAlert("OK", "info", messagePB);
 }
-function suscribirContacto(psus_id, per_tipo) {
+function suscribirContacto(psus_id, per_tipo , list_id) {
     var link = $('#txth_base').val() + "/marketing/email/asignar";
     var arrParams = new Object();
     arrParams.psus_id = psus_id;
     arrParams.per_tipo = per_tipo;
+    arrParams.list_id = list_id;
     arrParams.accion = 'sc';
     if (!validateForm()) {
         requestHttpAjax(link, arrParams, function (response) {
