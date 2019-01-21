@@ -53,7 +53,7 @@ return [
     "New List" => "Lista Nueva",
     "Programtion" => "Programación",
     "Shipping Time" => "Hora Envío",
-    "Subject" => "Tema",
+    "Subject" => "Asunto",
     "Subscriber number" => "Número suscriptores",
     "Template" => "Plantilla",
     

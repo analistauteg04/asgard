@@ -77,7 +77,7 @@ function programarEnvio(){
     var lista = $('#txth_ids').val();
     window.location.href = $('#txth_base').val() + "/marketing/email/programacion?lisid=" + lista;
 }
-function preguntasuscribirContacto(psus_id, per_tipo) {
+function preguntasuscribirContacto(psus_id, per_tipo, list_id) {
     var messagePB = new Object();
     messagePB.wtmessage = "Haga clic en aceptar para suscribir el contacto, caso contrario haga clic en cancelar.";
     messagePB.title = "";
@@ -86,17 +86,18 @@ function preguntasuscribirContacto(psus_id, per_tipo) {
     objAccept.class = "btn-primary clclass praclose";
     objAccept.value = "Aceptar";
     objAccept.callback = 'suscribirContacto';
-    var params = new Array(psus_id, per_tipo);
+    var params = new Array(psus_id, per_tipo, list_id);
     objAccept.paramCallback = params;
     messagePB.acciones = new Array();
     messagePB.acciones[0] = objAccept;
     showAlert("OK", "info", messagePB);
 }
-function suscribirContacto(psus_id, per_tipo) {
+function suscribirContacto(psus_id, per_tipo , list_id) {
     var link = $('#txth_base').val() + "/marketing/email/asignar";
     var arrParams = new Object();
     arrParams.psus_id = psus_id;
     arrParams.per_tipo = per_tipo;
+    arrParams.list_id = list_id;
     arrParams.accion = 'sc';
     if (!validateForm()) {
         requestHttpAjax(link, arrParams, function (response) {
@@ -226,9 +227,9 @@ function guardarLista() {
     arrParams.carrera_id = $('#cmb_carrera_programa').val();
     var combo_carrera = document.getElementById("cmb_carrera_programa");
     arrParams.nombre_lista = combo_carrera.options[combo_carrera.selectedIndex].text;
-    arrParams.txt_asunto = arrParams.nombre_lista;
+    arrParams.txt_asunto = $('#txt_asunto').val();
     
-    arrParams.txt_nombre_contacto = $('#txt_nombre_contacto').val();
+    arrParams.txt_nombre_contacto = arrParams.nombre_empresa;
     var combo_correo = document.getElementById("cmb_correo_empresa");
     arrParams.txt_correo_contacto = combo_correo.options[combo_correo.selectedIndex].text;
     
@@ -246,7 +247,7 @@ function guardarLista() {
             showAlert(response.status, response.label, response.message);
             if (!response.error) {
                 setTimeout(function () {
-                    window.location.href = $('#txth_base').val() + "/marketing/email/new";
+                    window.location.href = $('#txth_base').val() + "/marketing/email/index";
                 }, 5000);
             }
         }, true);
