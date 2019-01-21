@@ -127,42 +127,35 @@ class EmailController extends \app\components\CController {
             $con = \Yii::$app->db_mailing;
             $transaction = $con->beginTransaction();
             try {
-                //consultar la lista.  
-                \app\models\Utilities::putMessageLogFile('empieza controlador:'.$lis_id);
-                $resp_consulta =  $mod_lista->consultarListaXID($lis_id);
-                \app\models\Utilities::putMessageLogFile('despues de consultarListaXID');
-                if ($resp_consulta["num_suscr"] > 0) {
-                    \app\models\Utilities::putMessageLogFile('ingresa a inactivar lista suscriptores.');
-                    $resp_listsuscriptor = $mod_lista->inactivaListaSuscriptor($lis_id);
-                    if ($resp_listsuscriptor) {
-                        \app\models\Utilities::putMessageLogFile('ingresa a inactivar lista.');
-                        $resp_lista = $mod_lista->inactivaLista($lis_id);
-                        if ($resp_lista) {
+                //consultar la lista.    
+                 \app\models\Utilities::putMessageLogFile('id:'.$lis_id);  
+                $resp_consulta =  $mod_lista->consultarListaXID($lis_id);  
+                //Eliminar en mailchimp    
+                if ($resp_consulta) {
+                    $webs_mailchimp = new WsMailChimp();
+                    $conMailch = $webs_mailchimp->deleteList($resp_consulta["lis_codigo"]);                                            
+                    if ($resp_consulta["num_suscr"] > 0) {                    
+                        $resp_listsuscriptor = $mod_lista->inactivaListaSuscriptor($lis_id);
+                        if ($resp_listsuscriptor) {                        
+                            $resp_lista = $mod_lista->inactivaLista($lis_id);                        
+                            if ($resp_lista) {                                   
+                                $exito = '1';
+                            }
+                        }
+                    } else {                      
+                        $resp_lista1 = $mod_lista->inactivaLista($lis_id);                    
+                        if ($resp_lista1) {                                
                             $exito = '1';
                         }
-                    }
-                } else {
-                    $resp_lista = $mod_lista->inactivaLista($lis_id);
-                    if ($resp_lista) {
-                        $exito = '1';
-                    }
-                }                
-                if ($exito) {
-                    //Eliminar en mailchimp
-                    \app\models\Utilities::putMessageLogFile('empieza Maichimp');
-                    \app\models\Utilities::putMessageLogFile('Id lista:'.$lis_id);
-                    $webs_mailchimp = new WsMailChimp();
-                    $conMailch = $webs_mailchimp->deleteList($lis_id);
-                    if ($conMailch) {
-                        \app\models\Utilities::putMessageLogFile('Se ejecutò sin problemas.');
-                        $transaction->commit();
-                        $message = array(
-                            "wtmessage" => Yii::t("notificaciones", "Se ha eliminado la lista exitosamente."),
-                            "title" => Yii::t('jslang', 'Success'),
-                        );
-                        return Utilities::ajaxResponse('OK', 'alert', Yii::t("jslang", "Sucess"), false, $message);
-                    }
-                    
+                    }                    
+                }
+                if ($exito) {                     
+                    $transaction->commit();
+                    $message = array(
+                        "wtmessage" => Yii::t("notificaciones", "Se ha eliminado la lista exitosamente."),
+                        "title" => Yii::t('jslang', 'Success'),
+                    );
+                    return Utilities::ajaxResponse('OK', 'alert', Yii::t("jslang", "Sucess"), false, $message);                                        
                 } else {
                     $transaction->rollback();
                     $message = array(
