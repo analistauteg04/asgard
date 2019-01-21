@@ -519,16 +519,16 @@ class Lista extends \yii\db\ActiveRecord {
             $bdet_sql .= ", :lis_nombre_principal";
         }
         if (isset($pai_id)) {
-            $param_sql .= ", pai_id";
-            $bdet_sql .= ", :pai_id";
+            $param_sql .= ", lis_pais";
+            $bdet_sql .= ", :lis_pais";
         }
         if (isset($pro_id)) {
-            $param_sql .= ", pro_id";
-            $bdet_sql .= ", :pro_id";
+            $param_sql .= ", lis_provincia";
+            $bdet_sql .= ", :lis_provincia";
         }
         if (isset($can_id)) {
-            $param_sql .= ", can_id";
-            $bdet_sql .= ", :can_id";
+            $param_sql .= ", lis_ciudad";
+            $bdet_sql .= ", :lis_ciudad";
         }
         if (isset($lis_direccion1_empresa)) {
             $param_sql .= ", lis_direccion1_empresa";
@@ -572,13 +572,13 @@ class Lista extends \yii\db\ActiveRecord {
                 $comando->bindParam(':lis_nombre_principal', $lis_nombre_principal, \PDO::PARAM_STR);
             }
             if (!empty((isset($pai_id)))) {
-                $comando->bindParam(':pai_id', $pai_id, \PDO::PARAM_INT);
+                $comando->bindParam(':lis_pais', $pai_id, \PDO::PARAM_STR);
             }
             if (!empty((isset($pro_id)))) {
-                $comando->bindParam(':pro_id', $pro_id, \PDO::PARAM_INT);
+                $comando->bindParam(':lis_provincia', $pro_id, \PDO::PARAM_STR);
             }
             if (!empty((isset($can_id)))) {
-                $comando->bindParam(':can_id', $can_id, \PDO::PARAM_INT);
+                $comando->bindParam(':lis_ciudad', $can_id, \PDO::PARAM_STR);
             }
             if (!empty((isset($lis_direccion1_empresa)))) {
                 $comando->bindParam(':lis_direccion1_empresa', $lis_direccion1_empresa, \PDO::PARAM_STR);
