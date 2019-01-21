@@ -101,6 +101,14 @@ class Suscriptor extends \yii\db\ActiveRecord {
             return 0;
         }
     }
+    
+    /**
+     * Function consultarSuscriptoresxLista
+     * @author  Giovanni Vergara <analistadesarrollo02@uteg.edu.ec>
+     * @author  Kleber Loayza <analistadesarrollo03@uteg.edu.ec>
+     * @property integer $userid
+     * @return  
+     */
 
     public function consultarSuscriptoresxLista($list_id) {
         $con = \Yii::$app->db_mailing;
