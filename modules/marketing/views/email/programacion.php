@@ -10,7 +10,7 @@ for ($m = 0; $m < count($dia_marcados); $m++) {
     $keys[$dia_marcados[$m]] = $dia_marcados[$m];
 }
 ?>
-<?= Html::hiddenInput('txth_list', $_GET["lisid"], ['id' => 'txth_list']); ?>
+<?= Html::hiddenInput('txth_list', isset($_GET["lisid"])?$_GET["lisid"]:base64_encode(0), ['id' => 'txth_list']); ?>
 <form class="form-horizontal" enctype="multipart/form-data" > 
     <div class="col-md-12 col-xs-12 col-sm-12 col-lg-12 ">
         <div class="col-md-7 col-sm-7 col-xs-7 col-lg-7">

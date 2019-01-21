@@ -1,4 +1,13 @@
 $(document).ready(function () {
+    var valor = $('.btnAccion').attr("onclick");
+    if(valor=="guardarProgramacion()"){
+        var id_lista= base64_decode($('#txth_list').val());
+        if(id_lista>0){
+            var newcon=$("<i class='glyphicon glyphicon-pencil'> Editar</i>");
+            $('.btnAccion').html(newcon);
+            $(".btnAccion").attr("onclick","editarProgramacion()");
+        }
+    }
     $('#cmb_lista').change(function () {
         var link = $('#txth_base').val() + "/marketing/email/programacion";
         var arrParams = new Object();
@@ -276,7 +285,6 @@ function eliminarLista(id) {
     messagePB.acciones[0] = objAccept;
 
     showAlert("warning", "warning", messagePB);
-}
 function editarProgramacion() {
     lista = $('#txth_list').val();
     window.location.href = $('#txth_base').val() + "/marketing/email/editprogramacion?lisid=" + lista;
