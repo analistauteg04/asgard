@@ -122,13 +122,7 @@ for ($m = 0; $m < count($dia_marcados); $m++) {
                     </div>
                 </div>
             </div>         
-        </div> 
-        <!--<div class="row"> 
-            <div class="col-lg-9 col-md-9 col-sm-9 col-xs-9"></div>
-
-            <div class="col-lg-3 col-md-3 col-sm-3 col-xs-3">
-                <a id="sendModificaprograma" href="javascript:" class="btn btn-primary btn-block"> <? Yii::t("formulario", "Update") ?> </a>
-            </div>
-        </div>-->
+        </div>         
+        </div>
     </div>    
 </form>
