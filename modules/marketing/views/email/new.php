@@ -40,7 +40,7 @@ admision::registerTranslations();
             <div class="form-group">
                 <label for="txt_correo_contacto" class="col-sm-4 control-label" id="lbl_correo_contacto"><?= Module::t("marketing", "Contact Email") ?><span class="text-danger">*</span></label> 
                 <div class="col-sm-8 ">
-                    <input type="text" class="form-control PBvalidation keyupmce" value="" id="txt_correo_contacto" data-type="email" placeholder="<?= Module::t("marketing", "Contact Email") ?>">                 
+                    <?= Html::dropDownList("cmb_correo_empresa", 0, $arr_correo, ["class" => "form-control can_combo", "id" => "cmb_correo_empresa"]) ?>
                 </div>
             </div>
         </div>          

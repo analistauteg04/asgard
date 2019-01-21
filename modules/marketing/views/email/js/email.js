@@ -113,6 +113,15 @@ $(document).ready(function () {
                 $('#txt_codigo_postal').val(data2[0].emp_codigo_postal);
             }
         }, true);
+        var arrParams = new Object();
+        arrParams.emp_id = $(this).val();
+        arrParams.getcorreo = true;               
+        requestHttpAjax(link, arrParams, function (response) {
+            if (response.status == "OK") {                
+                data = response.message;
+                setComboDataselect(data.correo, "cmb_correo_empresa", "Seleccionar");
+            }
+        }, true);                
     });      
 });
 
@@ -273,21 +282,17 @@ function guardarLista() {
     arrParams.nombre_empresa = combo_empresa.options[combo_empresa.selectedIndex].text;
 
     arrParams.carrera_id = $('#cmb_carrera_programa').val();
-    arrParams.nombre_lista = $('#txt_nombre_lista').val();
+    var combo_carrera = document.getElementById("cmb_carrera_programa");
+    arrParams.nombre_lista = combo_carrera.options[combo_carrera.selectedIndex].text;
+    arrParams.txt_asunto = arrParams.nombre_lista;
+    
     arrParams.txt_nombre_contacto = $('#txt_nombre_contacto').val();
-    arrParams.txt_correo_contacto = $('#txt_correo_contacto').val();
-    arrParams.txt_asunto = $('#txt_asunto').val();
-    arrParams.pais_id = $('#cmb_pais').val();
-    var combo_pais = document.getElementById("cmb_pais");
-    arrParams.pais_texto = combo_pais.options[combo_pais.selectedIndex].text;
-
-    arrParams.provincia_id = $('#cmb_provincia').val();
-    var combo_provincia = document.getElementById("cmb_provincia");
-    arrParams.provincia_texto = combo_provincia.options[combo_provincia.selectedIndex].text;
-
-    arrParams.ciudad_id = $('#cmb_ciudad').val();
-    var combo_ciudad = document.getElementById("cmb_ciudad");
-    arrParams.ciudad_texto = combo_ciudad.options[combo_ciudad.selectedIndex].text;
+    var combo_correo = document.getElementById("cmb_correo_empresa");
+    arrParams.txt_correo_contacto = combo_correo.options[combo_correo.selectedIndex].text;
+    
+    arrParams.pais_texto = $('#txt_pais').val();    
+    arrParams.provincia_texto = $('#txt_provincia').val();    
+    arrParams.ciudad_texto = $('#txt_ciudad').val();    
 
     arrParams.direccion1 = $('#txt_direccion1').val();
     arrParams.direccion2 = $('#txt_direccion2').val();
@@ -324,6 +329,7 @@ function borrarLista(id, codigo) {
 }
 
 function eliminarLista(id, codigo) {
+     alert('ingresa a eliminar');
     var mensj = "¿Seguro desea eliminar la lista?";
     var messagePB = new Object();
     messagePB.wtmessage = mensj;
@@ -333,7 +339,7 @@ function eliminarLista(id, codigo) {
     objAccept.class = "btn-primary clclass praclose";
     objAccept.value = "Aceptar";
     objAccept.callback = 'borrarLista';
-    alert('ingresa');
+   
     var params = new Array(id, codigo);
     objAccept.paramCallback = params;
     messagePB.acciones = new Array();

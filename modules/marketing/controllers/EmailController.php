@@ -245,13 +245,20 @@ class EmailController extends \app\components\CController {
                 echo Utilities::ajaxResponse('OK', 'alert', Yii::t('jslang', 'Success'), 'false', $message);
                 return;
             }
+            if (isset($data["getcorreo"])) {
+                $resp_correo = $empresa_mod->consultarCorreoXempresa($data["emp_id"]);
+                $message = array("correo"=> $resp_correo);
+                echo Utilities::ajaxResponse('OK', 'alert', Yii::t('jslang', 'Success'), 'false', $message);
+                return;
+            }            
         }
-        $arreglo_empresa = $empresa_mod->getAllEmpresa();
+        $arreglo_empresa = $empresa_mod->getAllEmpresa();        
         $arreglo_carrerra = $oportunidad_mod->consultarCarreras();
-
+        $arreglo_correo = $empresa_mod->consultarCorreoXempresa(1);
         return $this->render('new', [
-                    "arr_empresa" => ArrayHelper::map(array_merge([["id" => "0", "name" => Yii::t("formulario", "Select")]], $arreglo_empresa), "id", "value"),
+                    "arr_empresa" => ArrayHelper::map(array_merge([["id" => "0", "value" => Yii::t("formulario", "Select")]], $arreglo_empresa), "id", "value"),
                     "arr_carrera" => ArrayHelper::map(array_merge([["id" => "0", "name" => Yii::t("formulario", "Select")]], $arreglo_carrerra), "id", "name"),                 
+                    "arr_correo" => ArrayHelper::map(array_merge([["id" => "0", "name" => Yii::t("formulario", "Select")]], $arreglo_correo), "id", "name"),                 
         ]);
     }
 
@@ -264,12 +271,9 @@ class EmailController extends \app\components\CController {
             $nombre_contacto = ucwords(mb_strtolower($data["txt_nombre_contacto"]));
             $correo_contacto = ucwords(mb_strtolower($data["txt_correo_contacto"]));
             $asunto = ucwords(mb_strtolower($data["txt_asunto"]));
-            $pais = ucwords(mb_strtolower($data["pais_texto"]));
-            $pais_id = $data["pais_id"];
-            $ciudad = ucwords(mb_strtolower($data["ciudad_texto"]));
-            $ciudad_id = $data["ciudad_id"];
-            $provincia = ucwords(mb_strtolower($data["provincia_texto"]));
-            $provincia_id = $data["provincia_id"];
+            $pais = ucwords(mb_strtolower($data["pais_texto"]));            
+            $ciudad = ucwords(mb_strtolower($data["ciudad_texto"]));            
+            $provincia = ucwords(mb_strtolower($data["provincia_texto"]));            
             $direccion1 = ucwords(mb_strtolower($data["direccion1"]));
             $direccion2 = ucwords(mb_strtolower($data["direccion2"]));
             $telefono = $data["telefono"];
@@ -301,7 +305,7 @@ class EmailController extends \app\components\CController {
                 if ($conLista) {
                     //Grabar en asgard
                     $lista = new Lista();
-                    $resp_lista = $lista->insertarLista($conLista["id"], $eaca_id, $mest_id, $emp_id, $nombre_lista, $correo_contacto, $nombre_contacto, $pais_id, $provincia_id, $ciudad_id, $direccion1, $direccion2, $telefono, $codigo_postal);
+                    $resp_lista = $lista->insertarLista($conLista["id"], $eaca_id, $mest_id, $emp_id, $nombre_lista, $correo_contacto, $nombre_contacto, $pais, $provincia, $ciudad, $direccion1, $direccion2, $telefono, $codigo_postal);
                     if ($resp_lista) {
                         $exito = 1;
                     }
@@ -316,7 +320,7 @@ class EmailController extends \app\components\CController {
                 } else {
                     $transaction->rollback();
                     $message = array(
-                        "wtmessage" => Yii::t("notificaciones", "Error al grabar." . $mensaje),
+                        "wtmessage" => Yii::t("notificaciones", "Error al grabar."),
                         "title" => Yii::t('jslang', 'Success'),
                     );
                     echo Utilities::ajaxResponse('NO_OK', 'Error', Yii::t("jslang", "Error"), false, $message);

@@ -258,4 +258,25 @@ class Empresa extends \yii\db\ActiveRecord {
         $resultData = $comando->queryOne();
         return $resultData;
     }
+    /**
+     * Function consulta los correos por empresa segun el id de la empresa.
+     * @author Grace Viteri <analistadesarrollo02@uteg.edu.ec>;
+     * @param
+     * @return
+     */
+    public function consultarCorreoXempresa($emp_id) {
+        $con = \Yii::$app->db_asgard;
+        $estado = 1;
+        $sql = "SELECT emp_id id , ecor_correo name
+                FROM db_asgard.empresa_correo
+                WHERE emp_id = :emp_id
+                      and ecor_estado = :estado
+                      and ecor_estado_logico = :estado";
+                               
+        $comando = $con->createCommand($sql);
+        $comando->bindParam(":estado", $estado, \PDO::PARAM_STR);
+        $comando->bindParam(":emp_id", $emp_id, \PDO::PARAM_INT);
+        $resultData = $comando->queryAll();
+        return $resultData;
+    }
 }
