@@ -156,7 +156,8 @@ INSERT INTO `objeto_modulo` (`omod_id`, `mod_id`, `omod_padre_id`, `omod_nombre`
 (136, 6, 135, 'Guardar Programacion', 'A', '0', '', '', '', 'marketing/email/programacion', 1, '1', 'Marketing', '1', '2018-11-15 20:26:23', NULL, '1'),
 (137, 6, 133, 'Crear Lista', 'A', '0', '', '', '', 'marketing/email/new', 1, '1', 'marketing', '1', '2019-01-16 18:11:18', NULL, '1'),
 (138, 6, 137, 'Guardar Lista', 'A', '0', '', '', '', 'marketing/email/new', 1, '0', 'marketing', '1', '2019-01-16 18:12:36', NULL, '1'),
-(139, 6, 133, 'Asignar Suscriptores', 'S', '0', '', '', '', 'marketing/email/asignar', 1, '0', 'Marketing', '1', '2018-11-15 20:26:23', NULL, '1');
+(139, 6, 133, 'Asignar Suscriptores', 'S', '0', '', '', '', 'marketing/email/asignar', 1, '0', 'Marketing', '1', '2018-11-15 20:26:23', NULL, '1'),
+(140, 6, 133, 'Asignar Suscriptores', 'A', '0', '', '', '', 'marketing/email/asignar', 1, '0', 'Marketing', '1', '2018-11-15 20:26:23', NULL, '1');
 -- --------------------------------------------------------
 --
 -- Volcado de datos para la tabla `OBMO_ACCI`
@@ -228,7 +229,8 @@ INSERT INTO `obmo_acci` (`oacc_id`, `omod_id`, `acc_id`, `oacc_tipo_boton`, `oac
 (64, 138, 4, '1', '', 'guardarLista', '1', '2019-01-16 18:12:36', NULL, '1'),
 (65, 137, 1, '0', 'marketing/email/new', '', '0', '2019-01-16 18:13:20', NULL, '1'),
 (66, 137, 1, '0', 'marketing/email/new', '', '1', '2019-01-16 19:26:00', NULL, '1'),
-(67, 139, 22, '0', 'marketing/email/programacion', '', '1', '2019-01-16 19:26:00', NULL, '1');
+(67, 139, 22, '0', 'marketing/email/programacion', '', '1', '2019-01-16 19:26:00', NULL, '1'),
+(68, 140, 22, '0', 'programarEnvio', '', '1', '2019-01-16 19:26:00', NULL, '1');
 
 -- --------------------------------------------------------
 --
