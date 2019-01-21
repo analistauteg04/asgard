@@ -217,9 +217,9 @@ function guardarLista() {
     arrParams.carrera_id = $('#cmb_carrera_programa').val();
     var combo_carrera = document.getElementById("cmb_carrera_programa");
     arrParams.nombre_lista = combo_carrera.options[combo_carrera.selectedIndex].text;
-    arrParams.txt_asunto = arrParams.nombre_lista;
+    arrParams.txt_asunto = $('#txt_asunto').val();
     
-    arrParams.txt_nombre_contacto = $('#txt_nombre_contacto').val();
+    arrParams.txt_nombre_contacto = arrParams.nombre_empresa;
     var combo_correo = document.getElementById("cmb_correo_empresa");
     arrParams.txt_correo_contacto = combo_correo.options[combo_correo.selectedIndex].text;
     
@@ -237,7 +237,7 @@ function guardarLista() {
             showAlert(response.status, response.label, response.message);
             if (!response.error) {
                 setTimeout(function () {
-                    window.location.href = $('#txth_base').val() + "/marketing/email/new";
+                    window.location.href = $('#txth_base').val() + "/marketing/email/index";
                 }, 5000);
             }
         }, true);
