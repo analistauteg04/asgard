@@ -79,4 +79,5 @@ return [
     "To register" => "Registrar",
     "Register" => "Matricular",
     "Inscribed pending" => "Inscritos Pendientes",
+    "Schedule shipping"=> "Programacion Envio",
 ];

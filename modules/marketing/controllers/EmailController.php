@@ -62,7 +62,7 @@ class EmailController extends \app\components\CController {
                 $per_id = null;
                 $pge_id = null;
                 if ($per_tipo == 1) {
-                    $data_source = $mod_persona->consultaPersonaId($ps_id);
+                    $data_source = $mod_persona->consultaPaersonaId($ps_id);
                     $per_id = $ps_id;
                 }if ($per_tipo == 2) {
                     $data_source = $mod_perge->consultarPersonaGestion($ps_id);
