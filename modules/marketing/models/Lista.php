@@ -124,7 +124,10 @@ class Lista extends \yii\db\ActiveRecord {
         $estado = 1;
         $sql = "
                     SELECT
-                        lst.lis_id,lst.lis_nombre, lst.lis_codigo,
+                        lst.lis_id,lst.lis_nombre, lst.lis_codigo, ifnull(lst.eaca_id, lst.mest_id) as codigo_estudio,
+                        emp_id, lis_correo_principal, lis_pais, lis_provincia, lis_ciudad, 
+                        lis_direccion1_empresa, lis_direccion2_empresa, lis_telefono_empresa,
+                        lis_codigo_postal,
                         case when lst.eaca_id > 0 then 
                                      ea.eaca_nombre else me.mest_nombre end as programa,
                         sum(case when (lsu.lsus_estado = '1' and lsu.lsus_estado_logico = '1') then
@@ -138,7 +141,10 @@ class Lista extends \yii\db\ActiveRecord {
                         lst.lis_id= :lista and
                         lst.lis_estado = :estado and
                         lst.lis_estado_logico = :estado
-                    group by lst.lis_id, lst.lis_codigo
+                    group by lst.lis_id, lst.lis_nombre, lst.lis_codigo, ifnull(lst.eaca_id, lst.mest_id),
+                        emp_id, lis_correo_principal, lis_pais, lis_provincia, lis_ciudad, 
+                        lis_direccion1_empresa, lis_direccion2_empresa, lis_telefono_empresa,
+                        lis_codigo_postal
                 ";
         $comando = $con->createCommand($sql);
         $comando->bindParam(":estado", $estado, \PDO::PARAM_STR);
@@ -724,5 +730,30 @@ class Lista extends \yii\db\ActiveRecord {
                 $trans->rollback();
             return FALSE;
         }
+    }
+    
+    /**
+     * Function consultarListaXnombre
+     * @author  Grace Viteri <analistadesarrollo01@uteg.edu.ec>
+     * @param   
+     * @return  Consulta una lista por nombre.
+     */
+    public function consultarListaXnombre($nombre_lista) {
+        $con = \Yii::$app->db_mailing;        
+        $estado = 1;
+        $sql = "
+                    SELECT
+                        'S' existe
+                    FROM 
+                        " . $con->dbname . ".lista lst                        
+                    WHERE
+                        lst.lis_nombre= :lis_nombre and
+                        lst.lis_estado = :estado and
+                        lst.lis_estado_logico = :estado";
+        $comando = $con->createCommand($sql);
+        $comando->bindParam(":estado", $estado, \PDO::PARAM_STR);
+        $comando->bindParam(":lis_nombre", $nombre_lista, \PDO::PARAM_STR);
+        $resultData = $comando->queryOne();
+        return $resultData;
     }
 }

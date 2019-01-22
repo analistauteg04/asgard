@@ -28,7 +28,8 @@ create table if not exists `lista` (
  `lis_estado` varchar(1) not null,
  `lis_fecha_creacion` timestamp not null default current_timestamp,
  `lis_fecha_modificacion` timestamp null default null,
- `lis_estado_logico` varchar(1) not null
+ `lis_estado_logico` varchar(1) not null,
+ constraint unique (lis_nombre)
 );
 
 -- --------------------------------------------------------
