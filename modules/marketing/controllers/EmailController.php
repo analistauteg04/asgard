@@ -155,15 +155,14 @@ class EmailController extends \app\components\CController {
             $con = \Yii::$app->db_mailing;
             $transaction = $con->beginTransaction();
             try {
-                //consultar la lista.  
-                \app\models\Utilities::putMessageLogFile('empieza controlador:' . $lis_id);
-                $resp_consulta = $mod_lista->consultarListaXID($lis_id);
-                \app\models\Utilities::putMessageLogFile('despues de consultarListaXID');
-                if ($resp_consulta["num_suscr"] > 0) {
-                    \app\models\Utilities::putMessageLogFile('ingresa a inactivar lista suscriptores.');
+                //consultar la lista.                  
+                $resp_consulta = $mod_lista->consultarListaXID($lis_id);                
+                $webs_mailchimp = new WsMailChimp();
+                $conMailch = $webs_mailchimp->deleteList($resp_consulta["lis_codigo"]);                 
+                \app\models\Utilities::putMessageLogFile('arreglo1: '. print_r($conMailch));                
+                if ($resp_consulta["num_suscr"] > 0) {                    
                     $resp_listsuscriptor = $mod_lista->inactivaListaSuscriptor($lis_id);
-                    if ($resp_listsuscriptor) {
-                        \app\models\Utilities::putMessageLogFile('ingresa a inactivar lista.');
+                    if ($resp_listsuscriptor) {                        
                         $resp_lista = $mod_lista->inactivaLista($lis_id);
                         if ($resp_lista) {
                             $exito = '1';
@@ -175,25 +174,19 @@ class EmailController extends \app\components\CController {
                         $exito = '1';
                     }
                 }
+                     
                 if ($exito) {
-                    //Eliminar en mailchimp
-                    \app\models\Utilities::putMessageLogFile('empieza Maichimp');
-                    \app\models\Utilities::putMessageLogFile('Id lista:' . $lis_id);
-                    $webs_mailchimp = new WsMailChimp();
-                    $conMailch = $webs_mailchimp->deleteList($lis_id);
-                    if ($conMailch) {
-                        \app\models\Utilities::putMessageLogFile('Se ejecutò sin problemas.');
-                        $transaction->commit();
-                        $message = array(
-                            "wtmessage" => Yii::t("notificaciones", "Se ha eliminado la lista exitosamente."),
-                            "title" => Yii::t('jslang', 'Success'),
-                        );
-                        return Utilities::ajaxResponse('OK', 'alert', Yii::t("jslang", "Sucess"), false, $message);
-                    }
+                    //Eliminar en mailchimp                                        
+                    $transaction->commit();
+                    $message = array(
+                        "wtmessage" => Yii::t("notificaciones", "Se ha eliminado la lista exitosamente."),
+                        "title" => Yii::t('jslang', 'Success'),
+                    );
+                    return Utilities::ajaxResponse('OK', 'alert', Yii::t("jslang", "Sucess"), false, $message);                    
                 } else {
                     $transaction->rollback();
                     $message = array(
-                        "wtmessage" => Yii::t("notificaciones", "Error al eliminar."),
+                        "wtmessage" => Yii::t("notificaciones", "Error al eliminar. ". $mensaje),
                         "title" => Yii::t('jslang', 'Success'),
                     );
                     return Utilities::ajaxResponse('NO_OK', 'alert', Yii::t("jslang", "Sucess"), false, $message);
@@ -201,7 +194,7 @@ class EmailController extends \app\components\CController {
             } catch (Exception $ex) {
                 $transaction->rollback();
                 $message = array(
-                    "wtmessage" => Yii::t("notificaciones", "Error al eliminar."),
+                    "wtmessage" => Yii::t("notificaciones", "Error al eliminar. " .$mensaje),
                     "title" => Yii::t('jslang', 'Success'),
                 );
                 return Utilities::ajaxResponse('NO_OK', 'alert', Yii::t("jslang", "Sucess"), false, $message);
@@ -318,7 +311,7 @@ class EmailController extends \app\components\CController {
             $nombre_lista = ucwords(mb_strtolower($data["nombre_lista"]));
             $nombre_empresa = ucwords(mb_strtolower($data["nombre_empresa"]));
             $nombre_contacto = ucwords(mb_strtolower($data["txt_nombre_contacto"]));
-            $correo_contacto = ucwords(mb_strtolower($data["txt_correo_contacto"]));
+            $correo_contacto = strtolower($data["txt_correo_contacto"]);
             $asunto = ucwords(mb_strtolower($data["txt_asunto"]));
             $pais = ucwords(mb_strtolower($data["pais_texto"]));
             $ciudad = ucwords(mb_strtolower($data["ciudad_texto"]));
@@ -347,18 +340,23 @@ class EmailController extends \app\components\CController {
                     "zip" => $codigo_postal,
                     "country" => $pais,
                     "phone" => $telefono,
-                );
-                //Grabar en mailchimp    
-                $webs_mailchimp = new WsMailChimp();
-                $conLista = $webs_mailchimp->newList($nombre_lista, $nombre_contacto, $correo_contacto, $asunto, $contacto, "es");
-                if ($conLista) {
-                    //Grabar en asgard
-                    $lista = new Lista();
-                    $resp_lista = $lista->insertarLista($conLista["id"], $eaca_id, $mest_id, $emp_id, $nombre_lista, $correo_contacto, $nombre_contacto, $pais, $provincia, $ciudad, $direccion1, $direccion2, $telefono, $codigo_postal);
-                    if ($resp_lista) {
-                        $exito = 1;
+                );                
+                $lista = new Lista();
+                $resp_consulta = $lista->consultarListaXnombre($nombre_lista);
+                if ($resp_consulta["existe"] != 'S') {
+                    //Grabar en mailchimp    
+                    $webs_mailchimp = new WsMailChimp();
+                    $conLista = $webs_mailchimp->newList($nombre_lista, $nombre_contacto, $correo_contacto, $asunto, $contacto, "es");
+                    if ($conLista) {
+                        //Grabar en asgard                    
+                        $resp_lista = $lista->insertarLista($conLista["id"], $eaca_id, $mest_id, $emp_id, $nombre_lista, $correo_contacto, $nombre_contacto, $pais, $provincia, $ciudad, $direccion1, $direccion2, $telefono, $codigo_postal);
+                        if ($resp_lista) {
+                            $exito = 1;
+                        }
                     }
-                }
+                } else {
+                   $mensaje = 'Ya se encuentra creada una lista con el mismo nombre.'; 
+                }                
                 if ($exito) {
                     $transaction->commit();
                     $message = array(
@@ -369,7 +367,7 @@ class EmailController extends \app\components\CController {
                 } else {
                     $transaction->rollback();
                     $message = array(
-                        "wtmessage" => Yii::t("notificaciones", "Error al grabar."),
+                        "wtmessage" => Yii::t("notificaciones", "Error al grabar. ".$mensaje),
                         "title" => Yii::t('jslang', 'Success'),
                     );
                     echo Utilities::ajaxResponse('NO_OK', 'Error', Yii::t("jslang", "Error"), false, $message);
@@ -377,7 +375,7 @@ class EmailController extends \app\components\CController {
             } catch (Exception $ex) {
                 $transaction->rollback();
                 $message = array(
-                    "wtmessage" => $ex->getMessage(), Yii::t("notificaciones", "Error al grabar."),
+                    "wtmessage" => $ex->getMessage(), Yii::t("notificaciones", "Error al grabar. ".$mensaje),
                     "title" => Yii::t('jslang', 'Error'),
                 );
                 return Utilities::ajaxResponse('NO_OK', 'alert', Yii::t("jslang", "Error"), true, $message);
@@ -458,6 +456,55 @@ class EmailController extends \app\components\CController {
                     'arr_ingreso' => $ingreso,
                     'arr_lista' => $lista_model,
                     'arr_templates' => ArrayHelper::map($arr_templates["templates"], "id", "name")
+        ]);
+    }
+    
+    
+    public function actionEdit() {
+        $empresa_mod = new Empresa();
+        $oportunidad_mod = new Oportunidad();
+        $estudio_mod = new ModuloEstudio();
+        $lista = new Lista();      
+        $list_id = base64_decode($_GET["lis_id"]);
+        
+        if (Yii::$app->request->isAjax) {
+            $data = Yii::$app->request->post();
+            if (isset($data["getcarrera"])) {
+                if ($data["emp_id"] == 1) {
+                    $arreglo_carrerra = $oportunidad_mod->consultarCarreras();
+                } else {
+                    $arreglo_carrerra = $estudio_mod->consultarEstudioEmpresa($data["emp_id"]); // tomar id de impresa        
+                }
+                $message = array("carrera" => $arreglo_carrerra);
+                return Utilities::ajaxResponse('OK', 'alert', Yii::t('jslang', 'Success'), 'false', $message);
+            }
+            if (isset($data["getempresa"])) {
+                $resp_empresa = $empresa_mod->consultarEmpresaXid($data["emp_id"]);
+                $message = array($resp_empresa);
+                echo Utilities::ajaxResponse('OK', 'alert', Yii::t('jslang', 'Success'), 'false', $message);
+                return;
+            }
+            if (isset($data["getcorreo"])) {
+                $resp_correo = $empresa_mod->consultarCorreoXempresa($data["emp_id"]);
+                $message = array("correo" => $resp_correo);
+                echo Utilities::ajaxResponse('OK', 'alert', Yii::t('jslang', 'Success'), 'false', $message);
+                return;
+            }
+        }
+        $resp_consulta = $lista->consultarListaXID($list_id);
+        if ($resp_consulta["emp_id"] == 1) {
+            $arreglo_carrerra = $oportunidad_mod->consultarCarreras();
+        } else {
+            $arreglo_carrerra = $estudio_mod->consultarEstudioEmpresa($data["emp_id"]);
+        }        
+        $arreglo_empresa = $empresa_mod->getAllEmpresa();        
+        $arreglo_correo = $empresa_mod->consultarCorreoXempresa($resp_consulta["emp_id"]);
+        
+        return $this->render('edit', [
+                    "arr_empresa" => ArrayHelper::map(array_merge([["id" => "0", "value" => Yii::t("formulario", "Select")]], $arreglo_empresa), "id", "value"),
+                    "arr_carrera" => ArrayHelper::map(array_merge([["id" => "0", "name" => Yii::t("formulario", "Select")]], $arreglo_carrerra), "id", "name"),
+                    "arr_correo" => ArrayHelper::map(array_merge([["id" => "0", "name" => Yii::t("formulario", "Select")]], $arreglo_correo), "id", "name"),
+                    "respuesta" => $resp_consulta,
         ]);
     }
 
