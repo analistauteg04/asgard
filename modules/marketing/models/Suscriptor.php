@@ -110,7 +110,7 @@ class Suscriptor extends \yii\db\ActiveRecord {
      * @return  
      */
 
-    public function consultarSuscriptoresxLista($list_id, $subscrito = 0) {
+    public function consultarSuscriptoresxLista($list_id, $subscrito = 0, $onlyData = false) {
         $con = \Yii::$app->db_mailing;
         $estado = 1;
         $query_subscrito = ($subscrito==1)? "AND ifnull(sus.sus_id,0)>0":(($subscrito == 2)? "AND ifnull(sus.sus_id,0)<1":"");

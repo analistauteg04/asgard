@@ -53,11 +53,11 @@ class EmailController extends \app\components\CController {
         $error = 0;
         $mensaje = "";
         if (Yii::$app->request->isAjax) {
-            $data = Yii::$app->request->get();
+             $data = Yii::$app->request->get();
             if (isset($data["PBgetFilter"])) {
-                if(isset($data["cmb_estado"])== 1){
+                if(isset($data["estado"])== 1){
                     $susbs_lista = $mod_sb->consultarSuscriptoresxLista($lis_id, 1);
-                }elseif(isset($data["cmb_estado"]) == 2){
+                }elseif(isset($data["estado"]) == 2){
                     $susbs_lista = $mod_sb->consultarSuscriptoresxLista($lis_id, 0);
                 }
                 return $this->renderPartial('asignar-grid', [
