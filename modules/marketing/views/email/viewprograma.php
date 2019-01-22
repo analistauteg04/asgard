@@ -19,6 +19,7 @@ for ($m = 0; $m < count($dia_marcados); $m++) {
 }
 ?>
 <?= Html::hiddenInput('txth_list', $_GET["lisid"], ['id' => 'txth_list']); ?>
+<?= Html::hiddenInput('txth_muestra', $muestra, ['id' => 'txth_muestra']); ?>
 <form class="form-horizontal" enctype="multipart/form-data" > 
     <div class="col-md-12 col-xs-12 col-sm-12 col-lg-12 ">
         <div class="col-md-7 col-sm-7 col-xs-7 col-lg-7">

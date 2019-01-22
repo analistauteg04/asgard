@@ -6,11 +6,11 @@ $(document).ready(function () {
     });
     var valor = $('.btnAccion').attr("onclick");
     if (valor == "guardarProgramacion()") {
-        var id_lista = base64_decode($('#txth_list').val());
-        if (id_lista > 0) {
+        var id_muestra = $('#txth_muestra').val();
+        if (id_muestra == 0) {
             var newcon = $("<i class='glyphicon glyphicon-pencil'> Editar</i>");
-            //$('.btnAccion').html(newcon);
-            //$(".btnAccion").attr("onclick","editarProgramacion()");
+            $('.btnAccion').html(newcon);
+            $(".btnAccion").attr("onclick","editarProgramacion()");
         }
     }
     $('#cmb_lista').change(function () {

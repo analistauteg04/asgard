@@ -456,18 +456,15 @@ class Lista extends \yii\db\ActiveRecord {
         $con = \Yii::$app->db_mailing;
         $estado = 1;
         $sql = "SELECT 
-                   pla.pla_id as id, 
-                   pla.pla_nombre as name
+                   pla.pla_id as id
                    
                 FROM 
-                   " . $con->dbname . ".lista_plantilla lpa 
-                   INNER JOIN " . $con->dbname . ".plantilla  pla on pla.pla_id = lpa.pla_id ";
+                   " . $con->dbname . ".programacion pla  ";
         $sql .= "  
                 WHERE  
-                   lpa.lis_id = :list_id AND  
-                   lpa.lpla_estado = :estado AND
-                   lpa.lpla_estado_logico = :estado
-                ORDER BY name asc";
+                   pla.lis_id = :list_id AND  
+                   pla.pro_estado = :estado AND
+                   pla.pro_estado_logico = :estado";
 
         $comando = $con->createCommand($sql);
         $comando->bindParam(":estado", $estado, \PDO::PARAM_STR);
