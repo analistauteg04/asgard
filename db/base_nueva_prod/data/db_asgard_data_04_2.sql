@@ -157,7 +157,9 @@ INSERT INTO `objeto_modulo` (`omod_id`, `mod_id`, `omod_padre_id`, `omod_nombre`
 (137, 6, 133, 'Crear Lista', 'A', '0', '', '', '', 'marketing/email/new', 1, '1', 'marketing', '1', '2019-01-16 18:11:18', NULL, '1'),
 (138, 6, 137, 'Guardar Lista', 'A', '0', '', '', '', 'marketing/email/new', 1, '0', 'marketing', '1', '2019-01-16 18:12:36', NULL, '1'),
 (139, 6, 133, 'Asignar Suscriptores', 'S', '0', '', '', '', 'marketing/email/asignar', 1, '0', 'Marketing', '1', '2018-11-15 20:26:23', NULL, '1'),
-(140, 6, 139, 'Asignar Suscriptores', 'A', '0', '', '', '', 'marketing/email/asignar', 1, '0', 'Marketing', '1', '2018-11-15 20:26:23', NULL, '1');
+(140, 6, 139, 'Asignar Suscriptores', 'A', '0', '', '', '', 'marketing/email/asignar', 1, '0', 'Marketing', '1', '2018-11-15 20:26:23', NULL, '1'),
+(141, 6, 135, 'Editar Programacion', 'S', '0', '', '', '', 'marketing/email/editprogramacion', 1, '1', 'Marketing', '1', '2018-11-15 20:26:23', NULL, '1'),
+(142, 6, 141, 'Guardar Editar Programacion', 'A', '0', '', '', '', 'marketing/email/programacion', 1, '1', 'Marketing', '1', '2018-11-15 20:26:23', NULL, '1');
 -- --------------------------------------------------------
 --
 -- Volcado de datos para la tabla `OBMO_ACCI`
@@ -228,7 +230,8 @@ INSERT INTO `obmo_acci` (`oacc_id`, `omod_id`, `acc_id`, `oacc_tipo_boton`, `oac
 (63, 136, 4, '1', '', 'guardarProgramacion', '1', '2018-11-12 22:56:47', NULL, '1'),
 (64, 138, 4, '1', '', 'guardarLista', '1', '2019-01-16 18:12:36', NULL, '1'),
 (65, 137, 1, '0', 'marketing/email/new', '', '1', '2019-01-16 18:13:20', NULL, '1'),
-(66, 140, 22, '1', '', 'programarEnvio', '1', '2019-01-16 19:26:00', NULL, '1');
+(66, 140, 22, '1', '', 'programarEnvio', '1', '2019-01-16 19:26:00', NULL, '1'),
+(67, 142, 4, '1', '', 'modificarProgramacion', '1', '2018-11-09 15:22:14', NULL, '1');
 
 -- --------------------------------------------------------
 --
@@ -360,7 +363,9 @@ INSERT INTO `grup_obmo` (`gmod_id`, `gru_id`, `omod_id`, `gmod_estado`,  `gmod_e
 (137, 1, 137, '1', '1'),
 (138, 1, 138, '1', '1'),
 (139, 1, 139, '1', '1'),
-(140, 1, 140, '1', '1');
+(140, 1, 140, '1', '1'),
+(141, 1, 141, '1', '1'),
+(142, 1, 142, '1', '1');
 -- --------------------------------------------------------
 --
 -- Volcado de datos para la tabla `GRUP_OBMO_GRUP_ROL`
@@ -491,4 +496,6 @@ INSERT INTO `grup_obmo_grup_rol` (`gogr_id`, `grol_id`, `gmod_id`, `gogr_estado`
 (137, 1, 137, '1', '1'),
 (138, 1, 138, '1', '1'),
 (139, 1, 139, '1', '1'),
-(140, 1, 140, '1', '1');
+(140, 1, 140, '1', '1'),
+(141, 1, 141, '1', '1'),
+(142, 1, 142, '1', '1');

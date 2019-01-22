@@ -32,7 +32,6 @@ $(document).ready(function () {
         alert("entro buscar");
         //mostrar_grid_lista_suscriptor();
     });
-
     $('#cmb_empresa').change(function () {
         var link = $('#txth_base').val() + "/marketing/email/new";
         var arrParams = new Object();
