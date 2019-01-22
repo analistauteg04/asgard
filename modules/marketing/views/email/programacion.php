@@ -36,7 +36,7 @@ for ($m = 0; $m < count($dia_marcados); $m++) {
         <div class='col-md-12 col-sm-12 col-xs-12 col-lg-12'>
             <div class="col-md-6 col-sm-6 col-xs-6 col-lg-6">
                 <div class="form-group">
-                    <label for="cmb_pla_id" class="col-sm-3 col-md-3 col-xs-3 col-lg-3 control-label" id="lbl_nombre"><?= Yii::t("formulario", "Template") ?></label>
+                    <label for="cmb_pla_id" class="col-sm-3 col-md-3 col-xs-3 col-lg-3 control-label" id="lbl_nombre"><?= Module::t("marketing", "Template") ?></label>
                     <div class="col-sm-9">
                         <?= Html::dropDownList("cmb_pla_id", 1, $arr_templates, ["class" => "form-control", "id" => "cmb_pla_id"]) ?>
                     </div>
