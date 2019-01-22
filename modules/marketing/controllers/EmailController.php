@@ -392,6 +392,7 @@ class EmailController extends \app\components\CController {
             $fecinicio = $data["fecha_inicio"];
             $fecfin = $data["fecha_fin"];
             $horenvio = $data["hora_envio"];
+            $template = $data["pla_id"];
             $fecha_modifica = date(Yii::$app->params["dateTimeByDefault"]);
             $usuario = @Yii::$app->user->identity->usu_id;
             $con = \Yii::$app->db_mailing;
@@ -399,7 +400,7 @@ class EmailController extends \app\components\CController {
             try {
                 $plantilla = $mod_lista->consultarListaTemplate($lista);
                 $programa = $mod_lista->consultarIngresoProgramacion($lista, $plantilla['id']);
-                $respuesta = $mod_lista->modificarProgramacionxId($programa['pro_id'], $lista, $plantilla['id'], $fecinicio, $fecfin, $horenvio, $usuario, $fecha_modifica);
+                $respuesta = $mod_lista->modificarProgramacionxId($programa['pro_id'], $lista, $template, $fecinicio, $fecfin, $horenvio, $usuario, $fecha_modifica);
                 if ($respuesta) {
                     $resp_dia = $mod_lista->modificarDiaProgramacion($programa['pro_id'], $fecha_modifica);
                     if ($resp_dia) {
@@ -449,10 +450,13 @@ class EmailController extends \app\components\CController {
         $plantilla = $mod_lista->consultarListaTemplate($lista);
         $ingreso = $mod_lista->consultarIngresoProgramacion($lista, $plantilla['id']);
         $lista_model = $mod_lista->consultarListaXID($lista);
+        $webs_mailchimp = new WsMailChimp();
+        $arr_templates = $webs_mailchimp->getAllTemplates();
         return $this->render('editprograma', [
-                    "muestra" => $muestra,
-                    "arr_ingreso" => $ingreso,
-                    'arr_lista' => $lista_model
+                    'muestra' => $muestra,
+                    'arr_ingreso' => $ingreso,
+                    'arr_lista' => $lista_model,
+                    'arr_templates' => ArrayHelper::map($arr_templates["templates"], "id", "name")
         ]);
     }
 
