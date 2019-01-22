@@ -1,4 +1,9 @@
 $(document).ready(function () {
+    $('#txthoraenvio').timepicker({
+        minuteStep: 5,
+        maxHours: 24,
+        showMeridian: false,
+    });
     var valor = $('.btnAccion').attr("onclick");
     if(valor=="guardarProgramacion()"){
         var id_lista= base64_decode($('#txth_list').val());
@@ -73,6 +78,18 @@ function mostrar_grid_lista() {
         setTimeout(hideLoadingPopup, 2000);
     }
 }
+
+function mostrar_grid_lista_suscriptor() {
+    var estado = $('#cmb_estado').val();
+
+    //Buscar al menos una clase con el nombre para ejecutar.
+    if (!$(".blockUI").length) {
+        showLoadingPopup();
+        $('#Tbg_SubsLista').PbGridView('applyFilterData', { 'cmb_estado': estado });
+        setTimeout(hideLoadingPopup, 2000);
+    }
+}
+
 function programarEnvio(){
     var lista = $('#txth_ids').val();
     window.location.href = $('#txth_base').val() + "/marketing/email/programacion?lisid=" + lista;
@@ -164,6 +181,7 @@ function guardarProgramacion() {
     arrParams.check_dia_6 = "";
     arrParams.check_dia_7 = "";
     arrParams.lista = $('#txth_list').val();
+    arrParams.pla_id = $('#cmb_pla_id').val();
 
     if ($('input:checkbox[name=check_dia_1]:checked').val() > 0)
     {

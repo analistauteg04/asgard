@@ -23,7 +23,7 @@ use app\modules\marketing\Module as marketing;
     <div class="col-md-12 col-xs-12 col-lg-12 col-sm-12">
         <div class="col-sm-8"></div>
         <div class="col-sm-2 col-md-2 col-xs-2 col-lg-2">
-            <a id="btn_buscarDataLista" href="javascript:" class="btn btn-primary btn-block"> <?= Yii::t("formulario", "Search") ?></a>
+            <a id="btn_buscarDataListaSuscrip" href="javascript:" onclick="mostrar_grid_lista_suscriptor()" class="btn btn-primary btn-block"> <?= Yii::t("formulario", "Search") ?></a>
         </div>
         
     </div>

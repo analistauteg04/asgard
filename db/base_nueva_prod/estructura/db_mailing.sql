@@ -96,15 +96,15 @@ create table if not exists `programacion` (
   `pla_id` bigint(20) not null,
   `pro_fecha_desde` timestamp null,
   `pro_fecha_hasta` timestamp null,
-  `pro_hora_envio` timestamp null,
+  `pro_hora_envio` varchar(5) not null,
   `pro_usuario_ingreso` bigint(20) not null,
   `pro_usuario_modifica` bigint(20)  null, 
   `pro_estado` varchar(1) not null,
   `pro_fecha_creacion` timestamp not null default current_timestamp,
   `pro_fecha_modificacion` timestamp null default null,
   `pro_estado_logico` varchar(1) not null,
-  foreign key (lis_id) references `lista`(lis_id),
-  foreign key (pla_id) references `plantilla`(pla_id)
+  foreign key (lis_id) references `lista`(lis_id)
+  -- foreign key (pla_id) references `plantilla`(pla_id)
 );
 
 -- --------------------------------------------------------

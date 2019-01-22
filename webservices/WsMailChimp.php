@@ -32,7 +32,7 @@ class WsMailChimp
 
     public function __construct()
     {
-        $this->apiKey  = "4d6064da3ab51d18e0586027f4cdbda9-us19";
+        $this->apiKey  = "1aa07fb04cd96c63cdba23f9424cd826-us8";//"4d6064da3ab51d18e0586027f4cdbda9-us19";
         $this->user = "Uteg";
         $arr_data = explode("-",$this->apiKey);
         $this->dc = $arr_data[1];
@@ -216,6 +216,42 @@ class WsMailChimp
             //->setHeaders(array('Content-Type: application/json', 'Accept: application/json'))
             ->setCredentials($this->user, $this->apiKey)
             ->doGet($WS_URI, $params);
+        $arr_response = json_decode($response, true);
+        return $arr_response;
+    }
+
+    function createCampaign($listId, $addressInfo = array(), $type="regular"){
+        $WS_URI = $this->apiUrl . "campaigns";
+        $params = json_encode(array(
+            "type" => $type,
+            "recipients" => array(
+                "list_id" => $listId,
+            ),
+            /*"settings" => array(
+                "subject_line" => "",
+                "title" => "",
+                "from_name" => "",
+                "reply_to" => "",
+            ),*/
+            "settings" => $addressInfo,
+        ));
+
+        $response = Http::connect($this->host, $this->port, http::HTTPS)
+            ->setHeaders(array('Content-Type: application/json', 'Accept: application/json'))
+            ->setCredentials($this->user, $this->apiKey)
+            ->doPost($WS_URI, $params);
+        $arr_response = json_decode($response, true);
+        return $arr_response;
+    }
+
+    function sendCampaign($campaignId){
+        $WS_URI = $this->apiUrl . "campaigns/$campaignId/actions/send";
+        $params = array();
+
+        $response = Http::connect($this->host, $this->port, http::HTTPS)
+            ->setHeaders(array('Content-Type: application/json', 'Accept: application/json'))
+            ->setCredentials($this->user, $this->apiKey)
+            ->doPost($WS_URI, $params);
         $arr_response = json_decode($response, true);
         return $arr_response;
     }

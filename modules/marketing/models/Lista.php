@@ -336,7 +336,8 @@ class Lista extends \yii\db\ActiveRecord {
             $bdet_sql .= ", :pro_fecha_hasta";
         }
         if (isset($pro_hora_envio)) {
-            $hora_envio = date(Yii::$app->params["dateByDefault"]) . " " . $pro_hora_envio . ":00";
+            //$hora_envio = date(Yii::$app->params["dateByDefault"]) . " " . $pro_hora_envio . ":00";
+            $hora_envio = $pro_hora_envio;
             $param_sql .= ", pro_hora_envio";
             $bdet_sql .= ", :pro_hora_envio";
         }

@@ -110,9 +110,10 @@ class Suscriptor extends \yii\db\ActiveRecord {
      * @return  
      */
 
-    public function consultarSuscriptoresxLista($list_id) {
+    public function consultarSuscriptoresxLista($list_id, $subscrito = 0) {
         $con = \Yii::$app->db_mailing;
         $estado = 1;
+        $query_subscrito = ($subscrito==1)? "AND ifnull(sus.sus_id,0)>0":(($subscrito == 2)? "AND ifnull(sus.sus_id,0)<1":"");
         $sql = "
                SELECT 
                     lst.lis_id,
@@ -140,6 +141,7 @@ class Suscriptor extends \yii\db\ActiveRecord {
                     lst.lis_id= :list_id and
                     lst.lis_estado = :estado AND
                     lst.lis_estado_logico = :estado
+                    $query_subscrito
                ";
 
         $comando = $con->createCommand($sql);
@@ -163,7 +165,7 @@ class Suscriptor extends \yii\db\ActiveRecord {
                     'contacto',
                     'carrera',
                     'per_correo',
-                    'es_susbcriptor',
+                    'estado',
                 ],
             ],
         ]);

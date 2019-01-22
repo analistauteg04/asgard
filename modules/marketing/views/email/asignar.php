@@ -7,7 +7,7 @@ use app\modules\marketing\Module as marketing;
 <div class="col-md-12">
     <h3><span id="lbl_Personeria"><?= marketing::t("marketing", "Asignación de Subscriptores") ?></span></h3>
 </div>
-<div class="col-md-12 col-xs-12 col-sm-12 col-lg-12 ">
+<div class="col-md-12 col-xs-12 col-sm-12 col-lg-12">
     <div class="col-md-7 col-sm-7 col-xs-7 col-lg-7">
         <div class="form-group">
             <h4><span id="lbl_general"><?= Yii::t("formulario", "Datos de la Lista") ?></span></h4> 
@@ -28,15 +28,17 @@ use app\modules\marketing\Module as marketing;
         </div> 
     </div>
 </div>   
-<div class="col-md-12 col-xs-12 col-sm-12 col-lg-12 ">
-    <br/>
+<div class="clear">
+    <br/><br/>
 </div>    
 <div>    
+    <form class="form-horizontal">
     <?=
     $this->render('asignar-search', [
         'arr_estado' => $arr_estado,
     ]);
     ?>    
+    </form>
 </div>
 <div>    
     <?=

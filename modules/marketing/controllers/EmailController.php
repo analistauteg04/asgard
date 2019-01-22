@@ -53,6 +53,17 @@ class EmailController extends \app\components\CController {
         $error = 0;
         $mensaje = "";
         if (Yii::$app->request->isAjax) {
+            $data = Yii::$app->request->get();
+            if (isset($data["PBgetFilter"])) {
+                if(isset($data["cmb_estado"])== 1){
+                    $susbs_lista = $mod_sb->consultarSuscriptoresxLista($lis_id, 1);
+                }elseif(isset($data["cmb_estado"]) == 2){
+                    $susbs_lista = $mod_sb->consultarSuscriptoresxLista($lis_id, 0);
+                }
+                return $this->renderPartial('asignar-grid', [
+                    'model' => $susbs_lista,
+                ]);
+            }
             $con = \Yii::$app->db_mailing;
             $transaction = $con->beginTransaction();
             $data = Yii::$app->request->post();
@@ -115,18 +126,22 @@ class EmailController extends \app\components\CController {
         $plantilla = $mod_lista->consultarListaTemplate($lista);
         $ingreso = $mod_lista->consultarIngresoProgramacion($lista, $plantilla['id']);
         $lista_model = $mod_lista->consultarListaXID($lista);
+        $webs_mailchimp = new WsMailChimp();
+        $arr_templates = $webs_mailchimp->getAllTemplates();
         if (empty($ingreso)) {
             $muestra = 1;
             return $this->render('programacion', [
-                        "muestra" => $muestra,
-                        "arr_ingreso" => $ingreso,
-                        'arr_lista' => $lista_model
+                "muestra" => $muestra,
+                "arr_ingreso" => $ingreso,
+                'arr_lista' => $lista_model,
+                'arr_templates' => ArrayHelper::map($arr_templates["templates"], "id", "name")
             ]);
         } else {
             return $this->render('viewprograma', [
-                        "muestra" => $muestra,
-                        "arr_ingreso" => $ingreso,
-                        'arr_lista' => $lista_model
+                "muestra" => $muestra,
+                "arr_ingreso" => $ingreso,
+                'arr_lista' => $lista_model,
+                'arr_templates' => ArrayHelper::map($arr_templates["templates"], "id", "name")
             ]);
         }
     }
@@ -197,6 +212,7 @@ class EmailController extends \app\components\CController {
         if (Yii::$app->request->isAjax) {
             $data = Yii::$app->request->post();
             $lista = base64_decode($data["lista"]);
+            $plantilla = $data["pla_id"];
             $fecinicio = $data["fecha_inicio"];
             $fecfin = $data["fecha_fin"];
             $horenvio = $data["hora_envio"];
@@ -204,12 +220,15 @@ class EmailController extends \app\components\CController {
             $usuario = @Yii::$app->user->identity->usu_id;
             $con = \Yii::$app->db_mailing;
             $transaction = $con->beginTransaction();
+
             try {
                 $mod_lista = new Lista();
-                $plantilla = $mod_lista->consultarListaTemplate($lista);
-                $ingreso = $mod_lista->consultarIngresoProgramacion($lista, $plantilla['id']);
+                //$plantilla = $mod_lista->consultarListaTemplate($lista);
+                //$ingreso = $mod_lista->consultarIngresoProgramacion($lista, $plantilla['id']);
+                $ingreso = $mod_lista->consultarIngresoProgramacion($lista, $plantilla);
                 if (empty($ingreso)) {
-                    $resp_programacion = $mod_lista->insertarProgramacion($lista, $plantilla['id'], $fecinicio, $fecfin, $horenvio, $usuario, $fecha_registro);
+                    //$resp_programacion = $mod_lista->insertarProgramacion($lista, $plantilla['id'], $fecinicio, $fecfin, $horenvio, $usuario, $fecha_registro);
+                    $resp_programacion = $mod_lista->insertarProgramacion($lista, $plantilla, $fecinicio, $fecfin, $horenvio, $usuario, $fecha_registro);
                     if ($resp_programacion) {
                         for ($i = 1; $i < 8; $i++) {
                             $dia = $data["check_dia_" . $i];

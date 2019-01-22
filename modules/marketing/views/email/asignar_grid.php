@@ -43,7 +43,15 @@ PbGridView::widget([
         [
             'attribute' => 'Subscriptor',
             'header' => marketing::t("marketing", "Estado"),
-            'value' => 'estado',
+            'contentOptions' => ['class' => 'text-center'],
+            'headerOptions' => ['class' => 'text-center'],
+            'format' => 'html',
+            'value' => function ($model) {
+                if (strtolower($model["estado"]) == "subscrito")
+                    return '<small class="label label-success">' . $model["estado"] . '</small>';
+                else
+                    return '<small class="label label-danger">' . $model["estado"] . '</small>';
+            },
         ],             
         [
             'class' => 'yii\grid\ActionColumn',

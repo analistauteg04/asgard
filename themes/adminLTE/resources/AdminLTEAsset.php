@@ -74,6 +74,7 @@ class AdminLTEAsset extends AssetBundle
         'plugins/iCheck/square/blue.css',
         'plugins/colorpicker/bootstrap-colorpicker.min.css',
         'plugins/datepicker/datepicker3.css',
+        'plugins/timepicker/bootstrap-timepicker.min.css',
         ];
     public $js = [
         'js/app.min.js',  
@@ -85,6 +86,7 @@ class AdminLTEAsset extends AssetBundle
         'plugins/date-format/date.format.js',
         'plugins/slimScroll/jquery.slimscroll.min.js',
         'plugins/datepicker/bootstrap-datepicker.js',
+        'plugins/timepicker/bootstrap-timepicker.min.js',
         ];
     public $jsOptions = ['position' => \yii\web\View::POS_END];
     public $depends = [
