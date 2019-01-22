@@ -68,7 +68,6 @@ crm::registerTranslations();
                         }
                     },
                     'rmsubs' => function ($url, $model) {
-                        //$estado = $model['estado_id'];
                         if ($model["estado"] == 'Subscrito') {
                             return Html::a('<span class="glyphicon glyphicon-remove"></span>', "#", ["onclick" => "RemoverSuscritor(" . $model['id_sus'] . ");", "data-toggle" => "tooltip", "title" => "Eliminar Suscritor", "data-pjax" => 0]);
                         } else {

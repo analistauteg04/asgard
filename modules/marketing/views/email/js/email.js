@@ -25,12 +25,12 @@ $(document).ready(function () {
             }
         }, true);
     });
-
     $('#btn_buscarDataLista').click(function () {
         mostrar_grid_lista();
     });
     $('#btn_buscarDataListaSus').click(function () {
-        mostrar_grid_lista_suscriptor();
+        alert("entro buscar");
+        //mostrar_grid_lista_suscriptor();
     });
 
     $('#cmb_empresa').change(function () {
@@ -73,7 +73,6 @@ $(document).ready(function () {
 
 function mostrar_grid_lista() {
     var lista = $('#txt_buscar_lista').val();
-
     //Buscar al menos una clase con el nombre para ejecutar.
     if (!$(".blockUI").length) {
         showLoadingPopup();
@@ -83,14 +82,13 @@ function mostrar_grid_lista() {
 }
 
 function mostrar_grid_lista_suscriptor() {
-    var estado = $('#cmb_estado').val();
+    var estado = $('#cmb_suscrito').val();
     //Buscar al menos una clase con el nombre para ejecutar.
     if (!$(".blockUI").length) {
         showLoadingPopup();
         $('#Tbg_SubsLista').PbGridView('applyFilterData', {'estado': estado});
         setTimeout(hideLoadingPopup, 2000);
     }
-
 }
 
 function programarEnvio() {

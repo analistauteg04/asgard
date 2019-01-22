@@ -35,7 +35,7 @@ use yii\helpers\Html;
                 <div class="form-group">
                     <label for="lbl_estado" class="col-sm-3 col-md-3 col-xs-3 col-lg-3 control-label"><?= Yii::t("formulario", "Estado") ?></label>
                     <div class="col-sm-6 col-md-6 col-xs-6 col-lg-6 control-label">
-                        <?= Html::dropDownList("cmb_estado", 0, $arr_estado, ["class" => "form-control pro_combo", "id" => "cmb_estado"]) ?>
+                        <?= Html::dropDownList("cmb_suscrito", 0, $arr_estado, ["class" => "form-control pro_combo", "id" => "cmb_suscrito"]) ?>
                     </div>
                 </div>
             </div>        
