@@ -231,7 +231,7 @@ INSERT INTO `obmo_acci` (`oacc_id`, `omod_id`, `acc_id`, `oacc_tipo_boton`, `oac
 (64, 138, 4, '1', '', 'guardarLista', '1', '2019-01-16 18:12:36', NULL, '1'),
 (65, 137, 1, '0', 'marketing/email/new', '', '1', '2019-01-16 18:13:20', NULL, '1'),
 (66, 140, 22, '1', '', 'programarEnvio', '1', '2019-01-16 19:26:00', NULL, '1'),
-(67, 142, 4, '1', '', 'modificarProgramacion', '1', '2018-11-09 15:22:14', NULL, '1');
+(67, 142, 2, '1', '', 'modificarProgramacion', '1', '2018-11-09 15:22:14', NULL, '1');
 
 -- --------------------------------------------------------
 --

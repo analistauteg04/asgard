@@ -102,7 +102,7 @@ class EmailController extends \app\components\CController {
                 $message = array(
                     "wtmessage" => Yii::t("formulario", $mensaje),
                     "title" => Yii::t('jslang', 'Success'),
-                    "rederict" => Yii::$app->response->redirect(['/marketing/email/asignar?lis_id='.base64_encode($list_id)]),
+                    //"rederict" => Yii::$app->response->redirect(['/marketing/email/asignar?lis_id='.base64_encode($list_id)]),
                 );
             } else {
                 $message = array(

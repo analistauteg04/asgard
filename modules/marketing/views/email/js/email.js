@@ -29,8 +29,7 @@ $(document).ready(function () {
         mostrar_grid_lista();
     });
     $('#btn_buscarDataListaSus').click(function () {
-        alert("entro buscar");
-        //mostrar_grid_lista_suscriptor();
+        mostrar_grid_lista_suscriptor();
     });
     $('#cmb_empresa').change(function () {
         var link = $('#txth_base').val() + "/marketing/email/new";
