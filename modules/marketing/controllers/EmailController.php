@@ -53,11 +53,11 @@ class EmailController extends \app\components\CController {
         $error = 0;
         $mensaje = "";
         if (Yii::$app->request->isAjax) {
-            $data = Yii::$app->request->get();
+             $data = Yii::$app->request->get();
             if (isset($data["PBgetFilter"])) {
-                if(isset($data["cmb_estado"])== 1){
+                if(isset($data["estado"])== 1){
                     $susbs_lista = $mod_sb->consultarSuscriptoresxLista($lis_id, 1);
-                }elseif(isset($data["cmb_estado"]) == 2){
+                }elseif(isset($data["estado"]) == 2){
                     $susbs_lista = $mod_sb->consultarSuscriptoresxLista($lis_id, 0);
                 }
                 return $this->renderPartial('asignar-grid', [
@@ -102,7 +102,7 @@ class EmailController extends \app\components\CController {
                 $message = array(
                     "wtmessage" => Yii::t("formulario", $mensaje),
                     "title" => Yii::t('jslang', 'Success'),
-                    "rederict" => Yii::$app->response->redirect(['/marketing/email/asignar?lis_id='.base64_encode($list_id)]),
+                    //"rederict" => Yii::$app->response->redirect(['/marketing/email/asignar?lis_id='.base64_encode($list_id)]),
                 );
             } else {
                 $message = array(
@@ -390,6 +390,7 @@ class EmailController extends \app\components\CController {
             $fecinicio = $data["fecha_inicio"];
             $fecfin = $data["fecha_fin"];
             $horenvio = $data["hora_envio"];
+            $template = $data["pla_id"];
             $fecha_modifica = date(Yii::$app->params["dateTimeByDefault"]);
             $usuario = @Yii::$app->user->identity->usu_id;
             $con = \Yii::$app->db_mailing;
@@ -397,7 +398,7 @@ class EmailController extends \app\components\CController {
             try {
                 $plantilla = $mod_lista->consultarListaTemplate($lista);
                 $programa = $mod_lista->consultarIngresoProgramacion($lista, $plantilla['id']);
-                $respuesta = $mod_lista->modificarProgramacionxId($programa['pro_id'], $lista, $plantilla['id'], $fecinicio, $fecfin, $horenvio, $usuario, $fecha_modifica);
+                $respuesta = $mod_lista->modificarProgramacionxId($programa['pro_id'], $lista, $template, $fecinicio, $fecfin, $horenvio, $usuario, $fecha_modifica);
                 if ($respuesta) {
                     $resp_dia = $mod_lista->modificarDiaProgramacion($programa['pro_id'], $fecha_modifica);
                     if ($resp_dia) {
@@ -447,10 +448,13 @@ class EmailController extends \app\components\CController {
         $plantilla = $mod_lista->consultarListaTemplate($lista);
         $ingreso = $mod_lista->consultarIngresoProgramacion($lista, $plantilla['id']);
         $lista_model = $mod_lista->consultarListaXID($lista);
+        $webs_mailchimp = new WsMailChimp();
+        $arr_templates = $webs_mailchimp->getAllTemplates();
         return $this->render('editprograma', [
-                    "muestra" => $muestra,
-                    "arr_ingreso" => $ingreso,
-                    'arr_lista' => $lista_model
+                    'muestra' => $muestra,
+                    'arr_ingreso' => $ingreso,
+                    'arr_lista' => $lista_model,
+                    'arr_templates' => ArrayHelper::map($arr_templates["templates"], "id", "name")
         ]);
     }
     

@@ -110,10 +110,13 @@ class Suscriptor extends \yii\db\ActiveRecord {
      * @return  
      */
 
-    public function consultarSuscriptoresxLista($list_id, $subscrito = 0) {
+    public function consultarSuscriptoresxLista($list_id, $subscrito = 0, $onlyData = false) {
         $con = \Yii::$app->db_mailing;
         $estado = 1;
         $query_subscrito = ($subscrito==1)? "AND ifnull(sus.sus_id,0)>0":(($subscrito == 2)? "AND ifnull(sus.sus_id,0)<1":"");
+        $nosuscrito=" left join db_mailing.suscriptor as sus on sus.per_id = per.per_id or sus.pges_id=pges.pges_id ";
+        $suscrito=" join db_mailing.suscriptor as sus on sus.per_id = per.per_id or sus.pges_id=pges.pges_id ";
+        $join_subscrito = ($subscrito==1)? $suscrito:(($subscrito == 2)? $nosuscrito:$nosuscrito);
         $sql = "
                SELECT 
                     lst.lis_id,
@@ -134,7 +137,7 @@ class Suscriptor extends \yii\db\ActiveRecord {
                     left join db_captacion.interesado as inte on inte.int_id = sins.int_id                    
                     left join db_crm.persona_gestion as pges on pges.pges_id=opo.pges_id
                     left join db_asgard.persona as per on per.per_id = inte.per_id
-                    left join db_mailing.suscriptor as sus on sus.per_id = per.per_id or sus.pges_id=pges.pges_id
+                    $join_subscrito
                     left join db_academico.estudio_academico_area_conocimiento as eaac on eaac.eaca_id=eaca.eaca_id
                     left join db_academico.area_conocimiento as acon on acon.acon_id=eaac.acon_id
                 WHERE 
@@ -143,7 +146,6 @@ class Suscriptor extends \yii\db\ActiveRecord {
                     lst.lis_estado_logico = :estado
                     $query_subscrito
                ";
-
         $comando = $con->createCommand($sql);
         $comando->bindParam(":estado", $estado, \PDO::PARAM_STR);
         $comando->bindParam(":list_id", $list_id, \PDO::PARAM_INT);

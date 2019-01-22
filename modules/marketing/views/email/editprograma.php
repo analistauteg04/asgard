@@ -11,6 +11,7 @@ for ($m = 0; $m < count($dia_marcados); $m++) {
 }
 ?>
 <?= Html::hiddenInput('txth_list', $_GET["lisid"], ['id' => 'txth_list']); ?>
+<?= Html::hiddenInput('txth_muestra', $muestra, ['id' => 'txth_muestra']); ?>
 <form class="form-horizontal" enctype="multipart/form-data" > 
     <div class="col-md-12 col-xs-12 col-sm-12 col-lg-12 ">
         <div class="col-md-7 col-sm-7 col-xs-7 col-lg-7">
@@ -31,6 +32,17 @@ for ($m = 0; $m < count($dia_marcados); $m++) {
                     <span for="txt_no_subs" class="col-sm-4 col-md-4 col-xs-4 col-lg-4 control-label" id="txt_no_subs"><?= $arr_lista['num_suscr'] ?> </span> 
                 </div>
             </div> 
+        </div>
+        <div class='col-md-12 col-sm-12 col-xs-12 col-lg-12'>
+            <div class="col-md-6 col-sm-6 col-xs-6 col-lg-6">
+                <div class="form-group">
+                    <label for="cmb_pla_id" class="col-sm-3 col-md-3 col-xs-3 col-lg-3 control-label" id="lbl_nombre"><?= Module::t("marketing", "Template") ?></label>
+                    <div class="col-sm-9">
+                        <?= Html::dropDownList("cmb_pla_id", $arr_ingreso["pla_id"], $arr_templates, ["class" => "form-control", "id" => "cmb_pla_id"]) ?>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-6 col-sm-6 col-xs-6 col-lg-6"></div>
         </div>
     </div>   
     <div class="col-md-12 col-xs-12 col-sm-12 col-lg-12 ">    
@@ -118,11 +130,12 @@ for ($m = 0; $m < count($dia_marcados); $m++) {
                 <div class="form-group">
                     <label for="txthoraenvio" class="col-sm-5 col-md-5 col-xs-5 col-lg-5 control-label keyupmce"><?= Module::t("marketing", "Shipping Time") ?></label>
                     <div class="col-sm-7 col-md-7 col-xs-7 col-lg-7">
-                        <input type="text" class="form-control PBvalidation keyupmce" value="<?= $arr_ingreso["hora_envio"] ?>" id="txthoraenvio" data-type="tiempo" data-keydown="true" placeholder="<?= Yii::t('formulario', 'HH:MM') ?>">
+                        <div class="input-group bootstrap-timepicker timepicker">
+                            <input id="txthoraenvio" type="text" class="form-control PBvalidation keyupmce input-small" <?php echo $deshabilita; ?> value="<?= $arr_ingreso["hora_envio"] ?>" data-type="tiempo" data-keydown="true" placeholder="<?= Yii::t('formulario', 'HH:MM') ?>">
+                        </div>
                     </div>
                 </div>
             </div>         
         </div>         
-        </div>
-    </div>    
+    </div> 
 </form>

@@ -220,18 +220,19 @@ class WsMailChimp
         return $arr_response;
     }
 
-    function createCampaign($listId, $addressInfo = array(), $type="regular"){
+    function createCampaign($listId, $addressInfo = array(), $type = "regular"){
         $WS_URI = $this->apiUrl . "campaigns";
         $params = json_encode(array(
-            "type" => $type,
             "recipients" => array(
-                "list_id" => $listId,
+                "list_id" => "$listId",
             ),
+            "type" => $type,
             /*"settings" => array(
                 "subject_line" => "",
                 "title" => "",
                 "from_name" => "",
                 "reply_to" => "",
+                "template_id" => "",
             ),*/
             "settings" => $addressInfo,
         ));

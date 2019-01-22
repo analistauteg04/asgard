@@ -5,12 +5,12 @@ $(document).ready(function () {
         showMeridian: false,
     });
     var valor = $('.btnAccion').attr("onclick");
-    if(valor=="guardarProgramacion()"){
-        var id_lista= base64_decode($('#txth_list').val());
-        if(id_lista>0){
-            var newcon=$("<i class='glyphicon glyphicon-pencil'> Editar</i>");
-            //$('.btnAccion').html(newcon);
-            //$(".btnAccion").attr("onclick","editarProgramacion()");
+    if (valor == "guardarProgramacion()") {
+        var id_muestra = $('#txth_muestra').val();
+        if (id_muestra == 0) {
+            var newcon = $("<i class='glyphicon glyphicon-pencil'> Editar</i>");
+            $('.btnAccion').html(newcon);
+            $(".btnAccion").attr("onclick","editarProgramacion()");
         }
     }
     $('#cmb_lista').change(function () {
@@ -25,28 +25,29 @@ $(document).ready(function () {
             }
         }, true);
     });
-
     $('#btn_buscarDataLista').click(function () {
         mostrar_grid_lista();
     });
-
+    $('#btn_buscarDataListaSus').click(function () {
+        mostrar_grid_lista_suscriptor();
+    });
     $('#cmb_empresa').change(function () {
         var link = $('#txth_base').val() + "/marketing/email/new";
         var arrParams = new Object();
         arrParams.emp_id = $(this).val();
-        arrParams.getcarrera = true;               
+        arrParams.getcarrera = true;
         requestHttpAjax(link, arrParams, function (response) {
-            if (response.status == "OK") {                
+            if (response.status == "OK") {
                 data = response.message;
                 setComboDataselect(data.carrera, "cmb_carrera_programa", "Seleccionar");
             }
         }, true);
         var arrParams = new Object();
-        arrParams.getempresa = true;                
-        arrParams.emp_id = $(this).val();        
+        arrParams.getempresa = true;
+        arrParams.emp_id = $(this).val();
         requestHttpAjax(link, arrParams, function (response) {
             if (response.status == "OK") {
-                data2 = response.message;                        
+                data2 = response.message;
                 $('#txt_pais').val(data2[0].pai_nombre);
                 $('#txt_provincia').val(data2[0].pro_nombre);
                 $('#txt_ciudad').val(data2[0].can_nombre);
@@ -58,19 +59,18 @@ $(document).ready(function () {
         }, true);
         var arrParams = new Object();
         arrParams.emp_id = $(this).val();
-        arrParams.getcorreo = true;               
+        arrParams.getcorreo = true;
         requestHttpAjax(link, arrParams, function (response) {
-            if (response.status == "OK") {                
+            if (response.status == "OK") {
                 data = response.message;
                 setComboDataselect(data.correo, "cmb_correo_empresa", "Seleccionar");
             }
-        }, true);                
-    });      
+        }, true);
+    });
 });
 
 function mostrar_grid_lista() {
     var lista = $('#txt_buscar_lista').val();
-
     //Buscar al menos una clase con el nombre para ejecutar.
     if (!$(".blockUI").length) {
         showLoadingPopup();
@@ -80,17 +80,16 @@ function mostrar_grid_lista() {
 }
 
 function mostrar_grid_lista_suscriptor() {
-    var estado = $('#cmb_estado').val();
-
+    var estado = $('#cmb_suscrito').val();
     //Buscar al menos una clase con el nombre para ejecutar.
     if (!$(".blockUI").length) {
         showLoadingPopup();
-        $('#Tbg_SubsLista').PbGridView('applyFilterData', { 'cmb_estado': estado });
+        $('#Tbg_SubsLista').PbGridView('applyFilterData', {'estado': estado});
         setTimeout(hideLoadingPopup, 2000);
     }
 }
 
-function programarEnvio(){
+function programarEnvio() {
     var lista = $('#txth_ids').val();
     window.location.href = $('#txth_base').val() + "/marketing/email/programacion?lisid=" + lista;
 }
@@ -109,7 +108,7 @@ function preguntasuscribirContacto(psus_id, per_tipo, list_id) {
     messagePB.acciones[0] = objAccept;
     showAlert("OK", "info", messagePB);
 }
-function suscribirContacto(psus_id, per_tipo , list_id) {
+function suscribirContacto(psus_id, per_tipo, list_id) {
     var link = $('#txth_base').val() + "/marketing/email/asignar";
     var arrParams = new Object();
     arrParams.psus_id = psus_id;
@@ -140,7 +139,7 @@ function preguntaSuscribirOtrasListas(message) {
     showAlert("OK", "success", messagePB);
 }
 function suscribirOtrasListas() {
-    
+
 }
 function elminarsuscritor() {
 
@@ -246,14 +245,14 @@ function guardarLista() {
     var combo_carrera = document.getElementById("cmb_carrera_programa");
     arrParams.nombre_lista = combo_carrera.options[combo_carrera.selectedIndex].text;
     arrParams.txt_asunto = $('#txt_asunto').val();
-    
+
     arrParams.txt_nombre_contacto = arrParams.nombre_empresa;
     var combo_correo = document.getElementById("cmb_correo_empresa");
     arrParams.txt_correo_contacto = combo_correo.options[combo_correo.selectedIndex].text;
-    
-    arrParams.pais_texto = $('#txt_pais').val();    
-    arrParams.provincia_texto = $('#txt_provincia').val();    
-    arrParams.ciudad_texto = $('#txt_ciudad').val();    
+
+    arrParams.pais_texto = $('#txt_pais').val();
+    arrParams.provincia_texto = $('#txt_provincia').val();
+    arrParams.ciudad_texto = $('#txt_ciudad').val();
 
     arrParams.direccion1 = $('#txt_direccion1').val();
     arrParams.direccion2 = $('#txt_direccion2').val();
@@ -271,10 +270,10 @@ function guardarLista() {
         }, true);
     }
 }
-function borrarLista(id,temp) {
+function borrarLista(id, temp) {
     var link = $('#txth_base').val() + "/marketing/email/delete";
     var arrParams = new Object();
-    arrParams.lis_id = id;        
+    arrParams.lis_id = id;
     if (!validateForm()) {
         requestHttpAjax(link, arrParams, function (response) {
             showAlert(response.status, response.label, response.message);
@@ -287,7 +286,7 @@ function borrarLista(id,temp) {
     }
 }
 
-function eliminarLista(id) {            
+function eliminarLista(id) {
     var mensj = "¿Seguro desea eliminar la lista?";
     var messagePB = new Object();
     messagePB.wtmessage = mensj;
@@ -297,15 +296,15 @@ function eliminarLista(id) {
     objAccept.class = "btn-primary clclass praclose";
     objAccept.value = "Aceptar";
     objAccept.callback = 'borrarLista';
-   
-    var params = new Array(id,0);
+
+    var params = new Array(id, 0);
     objAccept.paramCallback = params;
     messagePB.acciones = new Array();
     messagePB.acciones[0] = objAccept;
 
     showAlert("warning", "warning", messagePB);
 }
-    function editarProgramacion() {
+function editarProgramacion() {
     lista = $('#txth_list').val();
     window.location.href = $('#txth_base').val() + "/marketing/email/editprogramacion?lisid=" + lista;
 }
@@ -320,7 +319,8 @@ function modificarProgramacion() {
     arrParams.check_dia_6 = "";
     arrParams.check_dia_7 = "";
     arrParams.lista = $('#txth_list').val();
-
+    arrParams.pla_id = $('#cmb_pla_id').val();
+    
     if ($('input:checkbox[name=check_dia_1]:checked').val() > 0)
     {
         arrParams.check_dia_1 = $('input:checkbox[name=check_dia_1]:checked').val();

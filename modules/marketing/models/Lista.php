@@ -462,18 +462,15 @@ class Lista extends \yii\db\ActiveRecord {
         $con = \Yii::$app->db_mailing;
         $estado = 1;
         $sql = "SELECT 
-                   pla.pla_id as id, 
-                   pla.pla_nombre as name
+                   pla.pla_id as id
                    
                 FROM 
-                   " . $con->dbname . ".lista_plantilla lpa 
-                   INNER JOIN " . $con->dbname . ".plantilla  pla on pla.pla_id = lpa.pla_id ";
+                   " . $con->dbname . ".programacion pla  ";
         $sql .= "  
                 WHERE  
-                   lpa.lis_id = :list_id AND  
-                   lpa.lpla_estado = :estado AND
-                   lpa.lpla_estado_logico = :estado
-                ORDER BY name asc";
+                   pla.lis_id = :list_id AND  
+                   pla.pro_estado = :estado AND
+                   pla.pro_estado_logico = :estado";
 
         $comando = $con->createCommand($sql);
         $comando->bindParam(":estado", $estado, \PDO::PARAM_STR);
@@ -621,7 +618,7 @@ class Lista extends \yii\db\ActiveRecord {
                   pro.pla_id,
                   DATE_FORMAT(pro.pro_fecha_desde, '%Y-%m-%d') as fecha_desde,
                   DATE_FORMAT(pro.pro_fecha_hasta, '%Y-%m-%d') as fecha_hasta,
-                  DATE_FORMAT(pro.pro_hora_envio, '%H:%i') as hora_envio,
+                  pro.pro_hora_envio as hora_envio,
                   ifnull((SELECT GROUP_CONCAT(dpro.dia_id)
                             FROM " . $con->dbname . ".dia_programacion dpro
                             WHERE dpro.pro_id = pro.pro_id AND
@@ -651,8 +648,7 @@ class Lista extends \yii\db\ActiveRecord {
      */
     public function modificarProgramacionxId($pro_id, $lis_id, $pla_id, $pro_fecha_desde, $pro_fecha_hasta, $pro_hora_envio, $pro_usuario_modifica, $pro_fecha_modificacion) {
         $con = \Yii::$app->db_mailing;
-        $estado = 1;
-        $hora_envio = date(Yii::$app->params["dateByDefault"]) . " " . $pro_hora_envio . ":00";
+        $estado = 1;        
         if ($trans !== null) {
             $trans = null; // si existe la transacción entonces no se crea una
         } else {
@@ -678,7 +674,7 @@ class Lista extends \yii\db\ActiveRecord {
             $comando->bindParam(":pla_id", $pla_id, \PDO::PARAM_INT);
             $comando->bindParam(":pro_fecha_desde", $pro_fecha_desde, \PDO::PARAM_STR);
             $comando->bindParam(":pro_fecha_hasta", $pro_fecha_hasta, \PDO::PARAM_STR);
-            $comando->bindParam(":pro_hora_envio", $hora_envio, \PDO::PARAM_STR);
+            $comando->bindParam(":pro_hora_envio", $pro_hora_envio, \PDO::PARAM_STR);
             $comando->bindParam(":pro_usuario_modifica", $pro_usuario_modifica, \PDO::PARAM_STR);
             $comando->bindParam(":pro_fecha_modificacion", $pro_fecha_modificacion, \PDO::PARAM_STR);
             $comando->bindParam(":estado", $estado, \PDO::PARAM_STR);
