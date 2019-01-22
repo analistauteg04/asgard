@@ -149,12 +149,6 @@ class Suscriptor extends \yii\db\ActiveRecord {
         $comando = $con->createCommand($sql);
         $comando->bindParam(":estado", $estado, \PDO::PARAM_STR);
         $comando->bindParam(":list_id", $list_id, \PDO::PARAM_INT);
-        if (isset($arrFiltro) && count($arrFiltro) > 0) {
-            if ($arrFiltro['list_id'] != "" && $arrFiltro['list_id'] > 0) {
-                $lista_id = $arrFiltro["lista_id"];
-                $comando->bindParam(":lista_id", $lista_id, \PDO::PARAM_INT);
-            }
-        }
         $resultData = $comando->queryAll();
         $dataProvider = new ArrayDataProvider([
             'key' => 'id',

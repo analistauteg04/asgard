@@ -81,7 +81,6 @@ function mostrar_grid_lista() {
 
 function mostrar_grid_lista_suscriptor() {
     var estado = $('#cmb_suscrito').val();
-    //Buscar al menos una clase con el nombre para ejecutar.
     if (!$(".blockUI").length) {
         showLoadingPopup();
         $('#Tbg_SubsLista').PbGridView('applyFilterData', {'estado': estado});

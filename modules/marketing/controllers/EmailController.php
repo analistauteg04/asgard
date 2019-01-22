@@ -52,18 +52,20 @@ class EmailController extends \app\components\CController {
         $su_id = 0;
         $error = 0;
         $mensaje = "";
-        if (Yii::$app->request->isAjax) {
-             $data = Yii::$app->request->get();
-            if (isset($data["PBgetFilter"])) {
-                if(isset($data["estado"])== 1){
-                    $susbs_lista = $mod_sb->consultarSuscriptoresxLista($lis_id, 1);
-                }elseif(isset($data["estado"]) == 2){
-                    $susbs_lista = $mod_sb->consultarSuscriptoresxLista($lis_id, 0);
-                }
-                return $this->renderPartial('asignar-grid', [
-                    'model' => $susbs_lista,
-                ]);
+        \app\models\Utilities::putMessageLogFile('entro a la funcion');
+        $data = Yii::$app->request->get();
+        if (isset($data["PBgetFilter"])) {
+                \app\models\Utilities::putMessageLogFile('entro al ajax filter');
+            if (isset($data["estado"]) == 1) {
+                \app\models\Utilities::putMessageLogFile('entro a la opcion 1');
+                $susbs_lista = $mod_sb->consultarSuscriptoresxLista($lis_id, 1);
+            } elseif (isset($data["estado"]) == 2) {
+                \app\models\Utilities::putMessageLogFile('entro a la opcion 2');
+                $susbs_lista = $mod_sb->consultarSuscriptoresxLista($lis_id, 0);
             }
+        }
+        if (Yii::$app->request->isAjax) {
+            \app\models\Utilities::putMessageLogFile('entro al ajax');            
             $con = \Yii::$app->db_mailing;
             $transaction = $con->beginTransaction();
             $data = Yii::$app->request->post();
@@ -73,8 +75,7 @@ class EmailController extends \app\components\CController {
                 $list_id = $data["list_id"];
                 $data_source = array();
                 $per_id = null;
-                $pge_id = null;         
-                
+                $pge_id = null;
                 if ($per_tipo == 1) {
                     $per_id = $ps_id;
                 }if ($per_tipo == 2) {
@@ -88,12 +89,12 @@ class EmailController extends \app\components\CController {
                     $parametro = [$list_id, $su_id, 1, $fecha_crea, 1];
                     $lsu_id = $mod_sb->insertarListaSuscritor($con, $parametro, $key, 'lista_suscriptor');
                     if ($lsu_id > 0) {
-                        $mensaje = "El contacto ha sido asignado a la lista satisfactoriamente";                       
-                    } else {                        
+                        $mensaje = "El contacto ha sido asignado a la lista satisfactoriamente";
+                    } else {
                         $mensaje = "Error: El suscritor no fue guardado.";
                         $error++;
                     }
-                } else {                    
+                } else {
                     $mensaje = "Error: El suscritor no fue guardado.";
                     $error++;
                 }
@@ -102,7 +103,7 @@ class EmailController extends \app\components\CController {
                 $message = array(
                     "wtmessage" => Yii::t("formulario", $mensaje),
                     "title" => Yii::t('jslang', 'Success'),
-                    //"rederict" => Yii::$app->response->redirect(['/marketing/email/asignar?lis_id='.base64_encode($list_id)]),
+                        //"rederict" => Yii::$app->response->redirect(['/marketing/email/asignar?lis_id='.base64_encode($list_id)]),
                 );
             } else {
                 $message = array(
@@ -131,17 +132,17 @@ class EmailController extends \app\components\CController {
         if (empty($ingreso)) {
             $muestra = 1;
             return $this->render('programacion', [
-                "muestra" => $muestra,
-                "arr_ingreso" => $ingreso,
-                'arr_lista' => $lista_model,
-                'arr_templates' => ArrayHelper::map($arr_templates["templates"], "id", "name")
+                        "muestra" => $muestra,
+                        "arr_ingreso" => $ingreso,
+                        'arr_lista' => $lista_model,
+                        'arr_templates' => ArrayHelper::map($arr_templates["templates"], "id", "name")
             ]);
         } else {
             return $this->render('viewprograma', [
-                "muestra" => $muestra,
-                "arr_ingreso" => $ingreso,
-                'arr_lista' => $lista_model,
-                'arr_templates' => ArrayHelper::map($arr_templates["templates"], "id", "name")
+                        "muestra" => $muestra,
+                        "arr_ingreso" => $ingreso,
+                        'arr_lista' => $lista_model,
+                        'arr_templates' => ArrayHelper::map($arr_templates["templates"], "id", "name")
             ]);
         }
     }
