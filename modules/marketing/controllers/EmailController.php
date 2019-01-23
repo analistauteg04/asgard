@@ -34,7 +34,6 @@ class EmailController extends \app\components\CController {
         } else {
             $resp_lista = $mod_lista->consultarLista();
         }
-
         return $this->render('index', [
                     'model' => $resp_lista]);
     }
@@ -173,8 +172,7 @@ class EmailController extends \app\components\CController {
                     if ($resp_lista) {
                         $exito = '1';
                     }
-                }
-                     
+                }                     
                 if ($exito) {
                     //Eliminar en mailchimp                                        
                     $transaction->commit();
@@ -349,7 +347,7 @@ class EmailController extends \app\components\CController {
                     $conLista = $webs_mailchimp->newList($nombre_lista, $nombre_contacto, $correo_contacto, $asunto, $contacto, "es");
                     if ($conLista) {
                         //Grabar en asgard                    
-                        $resp_lista = $lista->insertarLista($conLista["id"], $eaca_id, $mest_id, $emp_id, $nombre_lista, $correo_contacto, $nombre_contacto, $pais, $provincia, $ciudad, $direccion1, $direccion2, $telefono, $codigo_postal);
+                        $resp_lista = $lista->insertarLista($conLista["id"], $eaca_id, $mest_id, $emp_id, $nombre_lista, $correo_contacto, $nombre_contacto, $pais, $provincia, $ciudad, $direccion1, $direccion2, $telefono, $codigo_postal, $asunto);
                         if ($resp_lista) {
                             $exito = 1;
                         }

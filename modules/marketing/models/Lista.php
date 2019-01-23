@@ -485,7 +485,7 @@ class Lista extends \yii\db\ActiveRecord {
      * @param
      * @return
      */
-    public function insertarLista($lis_codigo, $eaca_id, $mest_id, $emp_id, $lis_nombre, $lis_correo_principal, $lis_nombre_principal, $pai_id, $pro_id, $can_id, $lis_direccion1_empresa, $lis_direccion2_empresa, $lis_telefono_empresa, $lis_codigo_postal) {
+    public function insertarLista($lis_codigo, $eaca_id, $mest_id, $emp_id, $lis_nombre, $lis_correo_principal, $lis_nombre_principal, $pai_id, $pro_id, $can_id, $lis_direccion1_empresa, $lis_direccion2_empresa, $lis_telefono_empresa, $lis_codigo_postal, $lis_asunto) {
         $con = \Yii::$app->db_mailing;
 
         $param_sql = "lis_estado";
@@ -550,6 +550,10 @@ class Lista extends \yii\db\ActiveRecord {
             $param_sql .= ", lis_codigo_postal";
             $bdet_sql .= ", :lis_codigo_postal";
         }
+        if (isset($lis_asunto)) {
+            $param_sql .= ", lis_asunto";
+            $bdet_sql .= ", :lis_asunto";
+        }
         try {
             $sql = "INSERT INTO " . $con->dbname . ".lista ($param_sql) VALUES($bdet_sql)";
             $comando = $con->createCommand($sql);
@@ -595,6 +599,9 @@ class Lista extends \yii\db\ActiveRecord {
             }
             if (!empty((isset($lis_codigo_postal)))) {
                 $comando->bindParam(':lis_codigo_postal', $lis_codigo_postal, \PDO::PARAM_STR);
+            }
+            if (!empty((isset($lis_asunto)))) {
+                $comando->bindParam(':lis_asunto', $lis_asunto, \PDO::PARAM_STR);
             }
             $result = $comando->execute();
             return $con->getLastInsertID($con->dbname . '.lista');
