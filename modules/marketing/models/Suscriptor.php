@@ -120,6 +120,7 @@ class Suscriptor extends \yii\db\ActiveRecord {
         $sql = "
                SELECT 
                     lst.lis_id,
+                    per.per_id,
                     if(ifnull(per.per_id,0)>0,1,2) per_tipo,
                     if(ifnull(per.per_id,0)>0,per.per_id,pges.pges_id) id_psus,
                     concat(per.per_pri_nombre,' ',per.per_pri_apellido) as contacto, 

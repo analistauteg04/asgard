@@ -143,7 +143,7 @@ function suscribirOtrasListas() {
 function elminarsuscritor() {
 
 }
-function RemoverSuscritor() {
+function RemoverSuscritor(per_id, list_id) {
     var mensj = "Seguro Desea eliminar el suscritor de la lista?";
     var messagePB = new Object();
     messagePB.wtmessage = mensj;
