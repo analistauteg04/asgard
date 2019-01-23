@@ -45,8 +45,10 @@ use yii\helpers\Html;
             <div class="col-sm-2 col-md-2 col-xs-2 col-lg-2">
                 <a id="btn_buscarDataListaSus" href="javascript:" class="btn btn-primary btn-block"> <?= Yii::t("formulario", "Search") ?></a>
             </div>
-
-        </div>
+            <div class="col-sm-2 col-md-2 col-xs-2 col-lg-2">
+                <a id="btn_inscribirTodos" href="javascript:" class="btn btn-primary btn-block"> <?= Yii::t("formulario", "Subscribe all"). ' ' .$arr_lista['lis_id'] ?></a>
+            </div>
+        </div>        
     </div> 
 </div> 
 
