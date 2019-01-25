@@ -17,7 +17,7 @@ create table if not exists `lista` (
  `emp_id` bigint(20) not null,  
  `lis_nombre` varchar(200) not null,  
  `lis_asunto` varchar(200) null,  
- `lis_correo_principal` varchar(50) not null, 
+ `ecor_id` bigint(20) not null, 
  `lis_nombre_principal` varchar(100) not null, 
  `lis_pais` varchar(100) not null, 
  `lis_provincia` varchar(100) not null,  

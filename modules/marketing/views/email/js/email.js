@@ -246,6 +246,7 @@ function guardarLista() {
     arrParams.txt_asunto = $('#txt_asunto').val();
 
     arrParams.txt_nombre_contacto = arrParams.nombre_empresa;
+    arrParams.correo_id = $('#cmb_correo_empresa').val();
     var combo_correo = document.getElementById("cmb_correo_empresa");
     arrParams.txt_correo_contacto = combo_correo.options[combo_correo.selectedIndex].text;
 

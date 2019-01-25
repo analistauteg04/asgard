@@ -5,6 +5,7 @@ use yii\helpers\Url;
 use app\modules\marketing\Module;
 use app\modules\admision\Module as admision;
 admision::registerTranslations();
+print_r($respuesta["codigo_estudio"]) . print_r("Emp:") . print_r($respuesta["emp_id"]);
 
 ?>
 
@@ -40,7 +41,7 @@ admision::registerTranslations();
             <div class="form-group">
                 <label for="txt_correo_contacto" class="col-sm-4 control-label" id="lbl_correo_contacto"><?= Module::t("marketing", "Contact Email") ?><span class="text-danger">*</span></label> 
                 <div class="col-sm-8 ">
-                    <?= Html::dropDownList("cmb_correo_empresa", 0, $arr_correo, ["class" => "form-control can_combo", "id" => "cmb_correo_empresa"]) ?>
+                    <?= Html::dropDownList("cmb_correo_empresa", $respuesta["ecor_id"], $arr_correo, ["class" => "form-control can_combo", "id" => "cmb_correo_empresa"]) ?>
                 </div>
             </div>
         </div>                  
@@ -121,7 +122,7 @@ admision::registerTranslations();
             <div class="form-group">
                 <label for="txt_asunto" class="col-sm-4 control-label" id="lbl_asunto"><?= Module::t("marketing", "Subject") ?><span class="text-danger">*</span></label> 
                 <div class="col-sm-8 ">
-                    <textarea  class="form-control PBvalidation keyupmce" id="txt_asunto" rows="3" value=""></textarea>                  
+                    <textarea  class="form-control PBvalidation keyupmce" text="<?= $respuesta["lis_asunto"] ?>" id="txt_asunto" rows="3" ></textarea>                  
                    <!-- <input type="text" class="form-control PBvalidation keyupmce" value="" id="txt_asunto" data-type="alfa" placeholder="<?= Module::t("marketing", "Subject") ?>"> -->
                 </div>
             </div>

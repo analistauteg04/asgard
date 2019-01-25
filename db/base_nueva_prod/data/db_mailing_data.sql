@@ -8,8 +8,8 @@ USE `db_mailing`;
 --
 -- Volcado de datos para la tabla `lista`
 --
-INSERT INTO `lista` (`lis_id`, `lis_codigo`, `eaca_id`, `mest_id`, `emp_id`, `lis_nombre`, `lis_correo_principal`, `lis_nombre_principal`, `lis_pais`, `lis_provincia`, `lis_ciudad`, `lis_direccion1_empresa`, `lis_direccion2_empresa`, `lis_telefono_empresa`, `lis_codigo_postal`, `lis_estado`, `lis_estado_logico`) VALUES
-(1, '0056789am', 2, null, 1, 'Lista Economia',  'principal@yopmail.com', 'Grace Viteri', 'Ecuador', 'Guayas', 'Guayaquil', 'Boyaca y Victor Manuel Rendon', null, '2439727', '090512', '1', '1');
+INSERT INTO `lista` (`lis_id`, `lis_codigo`, `eaca_id`, `mest_id`, `emp_id`, `lis_nombre`, `ecor_id`, `lis_nombre_principal`, `lis_pais`, `lis_provincia`, `lis_ciudad`, `lis_direccion1_empresa`, `lis_direccion2_empresa`, `lis_telefono_empresa`, `lis_codigo_postal`, `lis_estado`, `lis_estado_logico`) VALUES
+(1, '0056789am', 2, null, 1, 'Lista Economia', 1, 'Grace Viteri', 'Ecuador', 'Guayas', 'Guayaquil', 'Boyaca y Victor Manuel Rendon', null, '2439727', '090512', '1', '1');
 
 -- 
 --

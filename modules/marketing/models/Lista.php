@@ -125,7 +125,7 @@ class Lista extends \yii\db\ActiveRecord {
         $sql = "
                     SELECT
                         lst.lis_id,lst.lis_nombre, lst.lis_codigo, ifnull(lst.eaca_id, lst.mest_id) as codigo_estudio,
-                        emp_id, lis_correo_principal, lis_pais, lis_provincia, lis_ciudad, 
+                        lst.emp_id, ecor_id, lis_pais, lis_provincia, lis_ciudad, 
                         lis_direccion1_empresa, lis_direccion2_empresa, lis_telefono_empresa,
                         lis_codigo_postal,
                         case when lst.eaca_id > 0 then 
@@ -142,10 +142,9 @@ class Lista extends \yii\db\ActiveRecord {
                         lst.lis_estado = :estado and
                         lst.lis_estado_logico = :estado
                     group by lst.lis_id, lst.lis_nombre, lst.lis_codigo, ifnull(lst.eaca_id, lst.mest_id),
-                        emp_id, lis_correo_principal, lis_pais, lis_provincia, lis_ciudad, 
+                        lst.emp_id, ecor_id, lis_pais, lis_provincia, lis_ciudad, 
                         lis_direccion1_empresa, lis_direccion2_empresa, lis_telefono_empresa,
-                        lis_codigo_postal
-                ";
+                        lis_codigo_postal";
         $comando = $con->createCommand($sql);
         $comando->bindParam(":estado", $estado, \PDO::PARAM_STR);
         $comando->bindParam(":lista", $lista_id, \PDO::PARAM_INT);
@@ -485,7 +484,7 @@ class Lista extends \yii\db\ActiveRecord {
      * @param
      * @return
      */
-    public function insertarLista($lis_codigo, $eaca_id, $mest_id, $emp_id, $lis_nombre, $lis_correo_principal, $lis_nombre_principal, $pai_id, $pro_id, $can_id, $lis_direccion1_empresa, $lis_direccion2_empresa, $lis_telefono_empresa, $lis_codigo_postal, $lis_asunto) {
+    public function insertarLista($lis_codigo, $eaca_id, $mest_id, $emp_id, $lis_nombre, $ecor_id, $lis_nombre_principal, $pai_id, $pro_id, $can_id, $lis_direccion1_empresa, $lis_direccion2_empresa, $lis_telefono_empresa, $lis_codigo_postal, $lis_asunto) {
         $con = \Yii::$app->db_mailing;
 
         $param_sql = "lis_estado";
@@ -514,9 +513,9 @@ class Lista extends \yii\db\ActiveRecord {
             $param_sql .= ", lis_nombre";
             $bdet_sql .= ", :lis_nombre";
         }
-        if (isset($lis_correo_principal)) {
-            $param_sql .= ", lis_correo_principal";
-            $bdet_sql .= ", :lis_correo_principal";
+        if (isset($ecor_id)) {
+            $param_sql .= ", ecor_id";
+            $bdet_sql .= ", :ecor_id";
         }
         if (isset($lis_nombre_principal)) {
             $param_sql .= ", lis_nombre_principal";
@@ -573,8 +572,8 @@ class Lista extends \yii\db\ActiveRecord {
             if (!empty((isset($lis_nombre)))) {
                 $comando->bindParam(':lis_nombre', $lis_nombre, \PDO::PARAM_STR);
             }
-            if (!empty((isset($lis_correo_principal)))) {
-                $comando->bindParam(':lis_correo_principal', $lis_correo_principal, \PDO::PARAM_STR);
+            if (!empty((isset($ecor_id)))) {
+                $comando->bindParam(':ecor_id', $ecor_id, \PDO::PARAM_INT);
             }
             if (!empty((isset($lis_nombre_principal)))) {
                 $comando->bindParam(':lis_nombre_principal', $lis_nombre_principal, \PDO::PARAM_STR);

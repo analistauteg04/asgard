@@ -310,6 +310,7 @@ class EmailController extends \app\components\CController {
             $nombre_empresa = ucwords(mb_strtolower($data["nombre_empresa"]));
             $nombre_contacto = ucwords(mb_strtolower($data["txt_nombre_contacto"]));
             $correo_contacto = strtolower($data["txt_correo_contacto"]);
+            $ecor_id = $data["correo_id"];
             $asunto = ucwords(mb_strtolower($data["txt_asunto"]));
             $pais = ucwords(mb_strtolower($data["pais_texto"]));
             $ciudad = ucwords(mb_strtolower($data["ciudad_texto"]));
@@ -347,7 +348,7 @@ class EmailController extends \app\components\CController {
                     $conLista = $webs_mailchimp->newList($nombre_lista, $nombre_contacto, $correo_contacto, $asunto, $contacto, "es");
                     if ($conLista) {
                         //Grabar en asgard                    
-                        $resp_lista = $lista->insertarLista($conLista["id"], $eaca_id, $mest_id, $emp_id, $nombre_lista, $correo_contacto, $nombre_contacto, $pais, $provincia, $ciudad, $direccion1, $direccion2, $telefono, $codigo_postal, $asunto);
+                        $resp_lista = $lista->insertarLista($conLista["id"], $eaca_id, $mest_id, $emp_id, $nombre_lista, $ecor_id, $nombre_contacto, $pais, $provincia, $ciudad, $direccion1, $direccion2, $telefono, $codigo_postal, $asunto);
                         if ($resp_lista) {
                             $exito = 1;
                         }
