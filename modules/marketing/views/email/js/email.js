@@ -115,18 +115,29 @@ function suscribirContacto(psus_id, per_tipo, list_id) {
     arrParams.list_id = list_id;
     arrParams.accion = 'sc';
     if (!validateForm()) {
+        showLoadingPopup();
         requestHttpAjax(link, arrParams, function (response) {
             if (!response.error) {
-                setTimeout(function () {
+                setTimeout(function () {                    
                     preguntaSuscribirOtrasListas(response.message);
                 }, 5000);
             }
         }, true);
+        setTimeout(hideLoadingPopup, 2000);
     }
 }
-function preguntaSuscribirOtrasListas(message) {
+function preguntaSuscribirOtrasListas(message) {    
     var messagePB = new Object();
-    messagePB.wtmessage = message.wtmessage;
+    var mens_tot = message.wtmessage;
+    mens_tot=mens_tot+"<br/> Las personas que se han suscrito a estas listas, tambien les ha interesado las siguientes listas:<br/>";
+    var materias = message.materias;
+    var i=0;
+    var str_materias='';
+    for(i=0;i<3;i++){
+        str_materias=str_materias+'- '+materias[i]+'<br/>';
+    }    
+    mens_tot=mens_tot+"<br/>"+str_materias;
+    messagePB.wtmessage = mens_tot;
     messagePB.title = message.title;
     var objAccept = new Object();
     objAccept.id = "btnid2del";
@@ -143,7 +154,7 @@ function suscribirOtrasListas() {
 function elminarsuscritor() {
 
 }
-function RemoverSuscritor() {
+function RemoverSuscritor(per_id, list_id) {
     var mensj = "Seguro Desea eliminar el suscritor de la lista?";
     var messagePB = new Object();
     messagePB.wtmessage = mensj;

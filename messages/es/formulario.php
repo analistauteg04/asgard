@@ -569,6 +569,7 @@ return [
     "Survey E:" => "ENCUESTA E:",
     "Survey F:" => "ENCUESTA F:",
     "Survey G:" => "ENCUESTA G:",
+    "Subscribe all" => "Suscribir Todos",
     "Third Level Studies" => "Estudios Tercer Nivel",
     "Teacher" => "Profesor",
     "Teaching Days" => "Días Docencia",

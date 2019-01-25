@@ -18,7 +18,6 @@ use app\models\Provincia;
 use app\models\Canton;
 use \app\models\Persona;
 use \app\modules\admision\models\PersonaGestion;
-
 academico::registerTranslations();
 financiero::registerTranslations();
 
@@ -102,7 +101,8 @@ class EmailController extends \app\components\CController {
                 $message = array(
                     "wtmessage" => Yii::t("formulario", $mensaje),
                     "title" => Yii::t('jslang', 'Success'),
-                    "rederict" => Yii::$app->response->redirect(['/marketing/email/asignar?lis_id='.base64_encode($list_id)]),
+                    "materias" => array("software","telecomunicaciones","marketing"),
+                    //"rederict" => Yii::$app->response->redirect(['/marketing/email/asignar?lis_id='.base64_encode($list_id)]),
                 );
             } else {
                 $message = array(
