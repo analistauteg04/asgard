@@ -1,6 +1,9 @@
 <?php
 $IRBPNR=0;
 $ICE=0;
+$BASEIVA0=0;
+$NOOBJIVA=0;
+$EXENTOIVA=0;
 //TABLA 18 FICHA TECNICA
 for ($i = 0; $i < sizeof($impFact); $i++) {
     if ($impFact[$i]['Codigo'] == '2') {//Valores de IVA
@@ -83,7 +86,7 @@ for ($i = 0; $i < sizeof($impFact); $i++) {
                 <span><?php echo Yii::t('DOCUMENTOS', 'ICE') ?></span>
             </td>
             <td class="marcoCel dataNumber">
-                <span><?php Yii::$app->formatter->format($ICE, ["decimal", 2])  ?></span>
+                <span><?php echo Yii::$app->formatter->format($ICE, ["decimal", 2])  ?></span>
             </td>
         </tr>
         <tr>
@@ -91,7 +94,7 @@ for ($i = 0; $i < sizeof($impFact); $i++) {
                 <span><?php echo Yii::t('DOCUMENTOS', 'IVA ').Yii::$app->params['IVAdefault'].'%' ?></span>
             </td>
             <td class="marcoCel dataNumber">
-                <span><?php Yii::$app->formatter->format($VALORIVA12, ["decimal", 2])  ?></span>
+                <span><?php echo Yii::$app->formatter->format($VALORIVA12, ["decimal", 2])  ?></span>
                 <!--<span><?php //echo number_format($VALORIVA12, Yii::$app->params['decimalPDF'], Yii::$app->params['SepdecimalPDF'], '')  ?></span>-->
                 <!--<span><?php //echo VSValidador::truncateFloat($VALORIVA12, 2)  ?></span>-->
             </td>
