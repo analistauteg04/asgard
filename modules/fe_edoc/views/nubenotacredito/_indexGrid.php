@@ -8,6 +8,7 @@
 use yii\helpers\Html;
 use yii\helpers\Url;
 use app\widgets\PbGridView\PbGridView;
+use app\modules\fe_edoc\models\VSacceso;
 ?>
 <?=
 PbGridView::widget([
@@ -27,15 +28,12 @@ PbGridView::widget([
         ],
         [
             'attribute' => 'IdDoc',
-            'header' => Yii::t('COMPANIA', 'IdDoc'),
+            'header' => Yii::t('fe_edoc', 'IdDoc'),
             'value' => 'IdDoc',
-            //'header' => false,
-            //'filter' => false,
-            //'headerHtmlOptions' => array('style' => 'width:0px; display:none; border:none; textdecoration:none'),
-            'options' => array('style' => 'display:none; border:none;'),
+            'visible' => '0',
         ],
         [
-            'header' => Yii::t('COMPANIA', 'Download'),
+            'header' => Yii::t('fe_edoc', 'Download'),
             'class' => 'yii\grid\ActionColumn',
             'options' => array('style' => 'text-align:center', 'width' => '85px'),
             'template' => '{pdf}{xml}',
@@ -50,48 +48,56 @@ PbGridView::widget([
         ],
         [
             'attribute' => 'Estado',
-            'header' => Yii::t('COMPANIA', 'Status'),
-            'value' => 'VSacceso::estadoAprobacion($data["Estado"])',
+            'header' => Yii::t('fe_edoc', 'Status'),
+            'value' => function ($data) {
+                return VSacceso::estadoAprobacion($data["Estado"]);
+            },
         ],
         [
             'attribute' => 'NumDocumento',
-            'header' => Yii::t('COMPANIA', 'Document Number'),
+            'header' => Yii::t('fe_edoc', 'Document Number'),
             'options' => array('style' => 'text-align:center'),
-            'value' => '$data["NumDocumento"]',
+            'value' => 'NumDocumento',
         ],
         [
             'attribute' => 'FechaEmision',
-            'header' => Yii::t('COMPANIA', 'Issuance date'),
-            'value' => 'date(Yii::$app->params["dateByDefault"],strtotime($data["FechaEmision"]))',
+            'header' => Yii::t('fe_edoc', 'Issuance date'),
+            'value' => function ($data) {
+                return date(Yii::$app->params["dateByDefault"], strtotime($data["FechaEmision"]));
+            },
         ],
         [
             'attribute' => 'UsuarioCreador',
-            'header' => Yii::t('COMPANIA', 'Serving'),
-            'value' => '$data["UsuarioCreador"]',
+            'header' => Yii::t('fe_edoc', 'Serving'),
+            'value' => 'UsuarioCreador',
             'options' => array('style' => 'text-align:center'),
+            'visible' => '0',
         ],
         [
             'attribute' => 'FechaAutorizacion',
-            'header' => Yii::t('COMPANIA', 'Authorization date'),
-            'value' => '($data["FechaAutorizacion"]<>"")?date(Yii::$app->params["dateByDefault"],strtotime($data["FechaAutorizacion"])):"";',
+            'header' => Yii::t('fe_edoc', 'Authorization date'),
+            'value' => function ($data) {
+                return ($data["FechaAutorizacion"] <> "") ? date(Yii::$app->params["dateByDefault"], strtotime($data["FechaAutorizacion"])) : "";
+            },
         ],
         [
             'attribute' => 'IdentificacionComprador',
-            'header' => Yii::t('COMPANIA', 'Dni/Ruc'),
-            'value' => '$data["IdentificacionComprador"]',
+            'header' => Yii::t('fe_edoc', 'Dni/Ruc'),
+            'value' => 'IdentificacionComprador',
         ],
         [
             'attribute' => 'RazonSocialComprador',
-            'header' => Yii::t('COMPANIA', 'Company name'),
+            'header' => Yii::t('fe_edoc', 'Company name'),
             //'htmlOptions' => array('style' => 'text-align:left', 'width' => '300px'),
-            'value' => '$data["RazonSocialComprador"]',
+            'value' => 'RazonSocialComprador',
         ],
         [
             'attribute' => 'ValorModificacion',
-            'header' => Yii::t('COMPANIA', 'Total amount'),
-            //'value' => '$data["ImporteTotal"]',
-            'value' => 'Yii::$app->format->formatNumber($data["ValorModificacion"])',
+            'header' => Yii::t('fe_edoc', 'Total amount'),
             'options' => array('style' => 'text-align:right', 'width' => '8px'),
+            'value' => function ($data) {
+                return Yii::$app->params["currency"].Yii::$app->formatter->format($data["ValorModificacion"],["decimal", 2]);
+            },
         ],
     ],
 ]);

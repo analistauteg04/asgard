@@ -8,6 +8,7 @@
 use yii\helpers\Html;
 use yii\helpers\Url;
 use app\widgets\PbGridView\PbGridView;
+use app\modules\fe_edoc\models\VSacceso;
 ?>
 <?=
 
@@ -30,10 +31,8 @@ PbGridView::widget([
             'attribute' => 'IdDoc',
             'header' => Yii::t('COMPANIA', 'IdDoc'),
             'value' => 'IdDoc',
-            //'header' => false,
-            //'filter' => false,
-            //'headerHtmlOptions' => array('style' => 'width:0px; display:none; border:none; textdecoration:none'),
-            'options' => array('style' => 'display:none; border:none;'),
+            'visible' => '0',
+            
         ],
         [
             'header' => Yii::t('COMPANIA', 'Download'),
@@ -51,46 +50,53 @@ PbGridView::widget([
         ],
         [
             'attribute' => 'Estado',
-            'header' => Yii::t('COMPANIA', 'Status'),
-            'value' => 'VSacceso::estadoAprobacion($data["Estado"])',
+            'header' => Yii::t('fe_edoc', 'Status'),
+            'value' => function ($data) {
+                return VSacceso::estadoAprobacion($data["Estado"]);
+            },
         ],
         [
             'attribute' => 'NombreDocumento',
-            'header' => Yii::t('COMPANIA', 'Document type'),
+            'header' => Yii::t('fe_edoc', 'Document type'),
             'value' => 'NombreDocumento',
         ],
         [
             'attribute' => 'NumDocumento',
-            'header' => Yii::t('COMPANIA', 'Document Number'),
+            'header' => Yii::t('fe_edoc', 'Document Number'),
             'options' => array('style' => 'text-align:center'),
-            'value' => '$data["NumDocumento"]',
+            'value' => 'NumDocumento',
         ],
         [
             'attribute' => 'FechaEmisionErp',
-            'header' => Yii::t('COMPANIA', 'Issuance date'),
-            'value' => 'date(Yii::$app->params["dateByDefault"],strtotime($data["FechaEmisionErp"]))',
+            'header' => Yii::t('fe_edoc', 'Issuance date'),
+            'value' => function ($data) {
+                return date(Yii::$app->params["dateByDefault"], strtotime($data["FechaEmision"]));
+            },
         ],
         [
             'attribute' => 'UsuarioCreador',
-            'header' => Yii::t('COMPANIA', 'Serving'),
-            'value' => '$data["UsuarioCreador"]',
+            'header' => Yii::t('fe_edoc', 'Serving'),
+            'value' => 'UsuarioCreador',
             'options' => array('style' => 'text-align:center'),
+            'visible' => '0',
         ],
         [
             'attribute' => 'FechaAutorizacion',
-            'header' => Yii::t('COMPANIA', 'Authorization date'),
-            'value' => '($data["FechaAutorizacion"]<>"")?date(Yii::$app->params["dateByDefault"],strtotime($data["FechaAutorizacion"])):"";',
+            'header' => Yii::t('fe_edoc', 'Authorization date'),
+            'value' => function ($data) {
+                return ($data["FechaAutorizacion"] <> "") ? date(Yii::$app->params["dateByDefault"], strtotime($data["FechaAutorizacion"])) : "";
+            },
         ],
         [
             'attribute' => 'IdentificacionComprador',
-            'header' => Yii::t('COMPANIA', 'Dni/Ruc'),
-            'value' => '$data["IdentificacionComprador"]',
+            'header' => Yii::t('fe_edoc', 'Dni/Ruc'),
+            'value' => 'IdentificacionDestinatario',
         ],
         [
             'attribute' => 'RazonSocialComprador',
-            'header' => Yii::t('COMPANIA', 'Company name'),
+            'header' => Yii::t('fe_edoc', 'Company name'),
             //'htmlOptions' => array('style' => 'text-align:left', 'width' => '300px'),
-            'value' => '$data["RazonSocialComprador"]',
+            'value' => 'RazonSocialDestinatario',
         ],
     ],
 ]);
