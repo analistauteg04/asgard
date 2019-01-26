@@ -643,7 +643,8 @@ class NubeFactura {
                     $pagFact = $this->mostrarFormaPago($con,$obj_con,$cabDoc[$i]["Ids"]);
                     $adiFact = $this->mostrarFacturaDataAdicional($con,$obj_con,$cabDoc[$i]["Ids"]);
                     
-                    $usuData=$objEmpData->buscarDatoVendedor($cabFact[0]["USU_ID"]);//DATOS vendedor Correos
+                    $usuData=array();
+                    //$usuData=$objEmpData->buscarDatoVendedor($cabFact[0]["USU_ID"]);//DATOS vendedor Correos
                     include('formatFact/facturaPDF.php');
                   
                     //COMETAR EN CASO DE NO PRESENTAR ESTA INFO
@@ -653,11 +654,9 @@ class NubeFactura {
                     $mPDF1->showWatermarkText=($cabDoc[$i]["Ambiente"]==1)?TRUE:FALSE; // 1=Pruebas y 2=Produccion
                     //****************************************                    
                     $mPDF1->WriteHTML($mensajePDF); //hacemos un render partial a una vista preparada, en este caso es la vista docPDF
-                    $mPDF1->Output($obj_var->rutaPDF.$dataMail->filePDF, 'F');//I=lo presenta navegador  F=ENVIA A UN ARCHVIO
+                    $mPDF1->Output($obj_var->rutaPDF.$dataMail->filePDF, 'F');//I=lo presenta navegador  F=ENVIA A UN ARCHVIO                   
                     
-                    //$usuData=$objEmpData->buscarDatoVendedor($cabFact[0]["USU_ID"]);                    
-                    
-                    //$resulMail=$dataMail->enviarMail($htmlMail,$cabDoc,$obj_var,$usuData,$i);
+                    $resulMail=$dataMail->enviarMail($htmlMail,$cabDoc,$obj_var,$usuData,$i);
                     if($resulMail["status"]=='OK'){
                         $cabDoc[$i]['EstadoEnv']=6;//Correo Envia
                     }else{

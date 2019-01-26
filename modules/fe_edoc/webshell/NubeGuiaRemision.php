@@ -398,7 +398,9 @@ class NubeGuiaRemision {
                     $cabFact = $this->mostrarCabGuia($con,$obj_con,$cabDoc[$i]["Ids"]);
                     $destDoc = $this->mostrarDestinoGuia($con,$obj_con,$cabDoc[$i]["Ids"]);
                     $adiDoc = $this->mostrarCabGuiaDataAdicional($con,$obj_con,$cabDoc[$i]["Ids"]);
-                    $usuData=$objEmpData->buscarDatoVendedor($cabFact[0]["USU_ID"]);//Correo del Usuario de autoriza
+                    
+                    $usuData=array();
+                    //$usuData=$objEmpData->buscarDatoVendedor($cabFact[0]["USU_ID"]);//Correo del Usuario de autoriza
                     include('formatGuia/guiaremiPDF.php');                    
                     
                     //COMETAR EN CASO DE NO PRESENTAR ESTA INFO

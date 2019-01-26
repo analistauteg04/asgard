@@ -28,7 +28,7 @@ class EMPRESA {
         $obj_con = new cls_Base();
         $conApp = $obj_con->conexionIntermedio();
         //$rawData = array();
-        $sql = "SELECT USU_NOMBRE NombreUser,USU_CORREO CorreoUser FROM " . $obj_con->BdIntermedio . ".USUARIO WHERE USU_ID='$vend_id';";
+        $sql = "SELECT usu_nombre NombreUser,usu_correo CorreoUser FROM " . $obj_con->BdIntermedio . ".usuario WHERE usu_id='$vend_id';";
         $sentencia = $conApp->query($sql);
         $conApp->close();
         return $sentencia->fetch_assoc();

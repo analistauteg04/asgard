@@ -73,7 +73,7 @@ class USUARIO extends \app\modules\fe_edoc\components\CActiveRecord {
         $con = yii::$app->db_edoc;
         $trans = $con->beginTransaction();
         try {
-            $sql = "UPDATE " . $con->dbname . ".USUARIO SET USU_PASSWORD=MD5('$pass') WHERE USU_ID=$ids ";
+            $sql = "UPDATE " . $con->dbname . ".usuario SET usu_password=MD5('$pass') WHERE usu_id=$ids ";
             $comando = $con->createCommand($sql);
             $comando->execute();
             //echo $sql;
@@ -92,7 +92,7 @@ class USUARIO extends \app\modules\fe_edoc\components\CActiveRecord {
         $trans = $con->beginTransaction();
         if($ids==0){return $msg->messageSystem('NO_OK', $e->getMessage(), 11, null, null);}
         try {
-            $sql = "UPDATE " . $con->dbname . ".USUARIO SET USU_CORREO='$correo' WHERE USU_ID=$ids ";
+            $sql = "UPDATE " . $con->dbname . ".usuario SET usu_correo='$correo' WHERE usu_id=$ids ";
             $comando = $con->createCommand($sql);
             $comando->execute();
             //echo $sql;
@@ -109,43 +109,43 @@ class USUARIO extends \app\modules\fe_edoc\components\CActiveRecord {
         $con = yii::$app->db_edoc;
                 switch ($tipDoc) {
                     Case "FA"://FACTURAS
-                        $sql = "SELECT A.IdentificacionComprador CedRuc,C.USU_ID UsuId,B.PER_NOMBRE Nombres,C.USU_CORREO Correo
-                                FROM VSSEAINTERMEDIA.NubeFactura A
-                                        INNER JOIN (" . $con->dbname . ".PERSONA B
-                                                        INNER JOIN " . $con->dbname . ".USUARIO C
-                                                                ON C.PER_ID=B.PER_ID)
-                                                ON B.PER_CED_RUC=A.IdentificacionComprador
+                        $sql = "SELECT A.IdentificacionComprador CedRuc,C.usu_id UsuId,B.per_nombre Nombres,C.usu_correo Correo
+                                FROM " . $con->dbname . ".NubeFactura A
+                                        INNER JOIN (" . $con->dbname . ".persona B
+                                                        INNER JOIN " . $con->dbname . ".usuario C
+                                                                ON C.per_id=B.per_id)
+                                                ON B.per_ced_ruc=A.IdentificacionComprador
                             WHERE A.IdFactura='$id';";                       
                         break;
                     Case "GR"://GUIAS DE REMISION
-                        $sql = "SELECT D.IdentificacionDestinatario CedRuc,C.USU_ID UsuId,B.PER_NOMBRE Nombres,C.USU_CORREO Correo
-                                FROM VSSEAINTERMEDIA.NubeGuiaRemision A
-                                        INNER JOIN VSSEAINTERMEDIA.NubeGuiaRemisionDestinatario D
+                        $sql = "SELECT D.IdentificacionDestinatario CedRuc,C.usu_id UsuId,B.per_nombre Nombres,C.usu_correo Correo
+                                FROM " . $con->dbname . ".NubeGuiaRemision A
+                                        INNER JOIN " . $con->dbname . ".NubeGuiaRemisionDestinatario D
                                                 ON D.IdGuiaRemision=A.IdGuiaRemision
-                                        INNER JOIN (" . $con->dbname . ".PERSONA B
-                                                INNER JOIN " . $con->dbname . ".USUARIO C
-                                                        ON C.PER_ID=B.PER_ID)
-                                                ON B.PER_CED_RUC=D.IdentificacionDestinatario
+                                        INNER JOIN (" . $con->dbname . ".persona B
+                                                INNER JOIN " . $con->dbname . ".usuario C
+                                                        ON C.per_id=B.per_id)
+                                                ON B.per_ced_ruc=D.IdentificacionDestinatario
                             WHERE A.IdGuiaRemision='$id'";
                            
                         break;
                     Case "RT"://RETENCIONES
-                            $sql = "SELECT A.IdentificacionSujetoRetenido CedRuc,C.USU_ID UsuId,B.PER_NOMBRE Nombres,C.USU_CORREO Correo
-                                    FROM VSSEAINTERMEDIA.NubeRetencion A
-                                            INNER JOIN (" . $con->dbname . ".PERSONA B
-                                                    INNER JOIN " . $con->dbname . ".USUARIO C
-                                                            ON C.PER_ID=B.PER_ID)
-                                                    ON B.PER_CED_RUC=A.IdentificacionSujetoRetenido
+                            $sql = "SELECT A.IdentificacionSujetoRetenido CedRuc,C.usu_id UsuId,B.per_nombre Nombres,C.usu_correo Correo
+                                    FROM " . $con->dbname . ".NubeRetencion A
+                                            INNER JOIN (" . $con->dbname . ".persona B
+                                                    INNER JOIN " . $con->dbname . ".usuario C
+                                                            ON C.per_id=B.per_id)
+                                                    ON B.per_ced_ruc=A.IdentificacionSujetoRetenido
                             WHERE A.IdRetencion='$id' ";
                         
                         break;
                     Case "NC"://NOTAS DE CREDITO
-                        $sql = "SELECT A.IdentificacionComprador CedRuc,C.USU_ID UsuId,B.PER_NOMBRE Nombres,C.USU_CORREO Correo
-                                FROM VSSEAINTERMEDIA.NubeNotaCredito A
-                                        INNER JOIN (" . $con->dbname . ".PERSONA B
-                                                INNER JOIN " . $con->dbname . ".USUARIO C
-                                                        ON C.PER_ID=B.PER_ID)
-                                                ON B.PER_CED_RUC=A.IdentificacionComprador
+                        $sql = "SELECT A.IdentificacionComprador CedRuc,C.usu_id UsuId,B.per_nombre Nombres,C.usu_correo Correo
+                                FROM " . $con->dbname . ".NubeNotaCredito A
+                                        INNER JOIN (" . $con->dbname . ".persona B
+                                                INNER JOIN " . $con->dbname . ".usuario C
+                                                        ON C.per_id=B.per_id)
+                                                ON B.per_ced_ruc=A.IdentificacionComprador
                             WHERE A.IdNotaCredito='$id'";
                         
                         break;

@@ -9,9 +9,10 @@ require_once('PHPMailerAutoload.php');
 class mailSystem {
     private $domEmpresa='uteg.edu.ec';
     private $mailSMTP='mail.uteg.edu.ec';
-    private $noResponder='no-responder@uteg.edu.ec';
-    private $adminMail='web@uteg.edu.ec';//Cambiar 
-    private $noResponderPass='F0E4CwUyWy?h';//Clave de correo NO responder
+    //private $noResponder='no-responder@uteg.edu.ec';
+    private $noResponder='developer@uteg.edu.ec';
+    private $adminMail='developer@uteg.edu.ec';//Cambiar 
+    private $noResponderPass='developer1806';//Clave de correo NO responder
     public $Subject='Ha Recibido un(a)  Nuevo(a)!!! ';
     public $file_to_attachXML='';
     public $file_to_attachPDF='';
@@ -52,22 +53,17 @@ class mailSystem {
                 $mail->AddAddress(trim($DataCorreos[$icor]), trim($CabPed[$fil]["RazonSoc"]));
             }else{
                 //Correos Alternativos de admin  $adminMail
-                $mail->addBCC("bvillacreses@utimpor.com", "Byron Villa");
-                $mail->addBCC($usuData["CorreoUser"], $usuData["NombreUser"]);//Enviar Correos del Vendedor
+                $mail->addBCC("byron_villacresesf@hotmail.com", "Byron Villa");
+                //$mail->addBCC($usuData["CorreoUser"], $usuData["NombreUser"]);//Enviar Correos del Vendedor
             }
         }
         //if($DataCorreos==0){
             //Correos Alternativos de admin  $adminMail
             $mail->addBCC("bvillacreses@utimpor.com", "Byron Villa");
-            $mail->addBCC($usuData["CorreoUser"], $usuData["NombreUser"]);//Enviar Correos del Vendedor
+            //$mail->addBCC($usuData["CorreoUser"], $usuData["NombreUser"]);//Enviar Correos del Vendedor
         //}
         
-        //##############################################
-        // podemos hacer varios AddAdress 
-        //$mail->AddAddress($CabPed[0]["CorreoUser"], $CabPed[0]["NombreUser"]);//Usuario Autoriza Pedido
-        //$mail->AddAddress($CabPed[0]["CorreoPersona"], $CabPed[0]["NombrePersona"]);//Usuario Genera Pedido CorreoUser
-        //$mail->AddAddress("byron_villacresesf@hotmail.com", "Byron Villa");        
-        //$mail->AddAddress("byronvillacreses@gmail.com", "Byron Villa");
+     
         
         /******** COPIA OCULTA PARA VENTAS  ***************/
         //$mail->addBCC('byronvillacreses@gmail.com', 'Byron Villa'); //Para con copia

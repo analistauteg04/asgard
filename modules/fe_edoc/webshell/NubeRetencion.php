@@ -430,7 +430,9 @@ class NubeRetencion {
                     $cabFact = $this->mostrarCabRetencion($con,$obj_con,$cabDoc[$i]["Ids"]);
                     $detDoc = $this->mostrarDetRetencion($con,$obj_con,$cabDoc[$i]["Ids"]);
                     $adiDoc = $this->mostrarRetencionDataAdicional($con,$obj_con,$cabDoc[$i]["Ids"]);
-                    $usuData=$objEmpData->buscarDatoVendedor($cabFact[0]["USU_ID"]);//Correo del Uusiro que Autoriza
+                    
+                    $usuData=array();
+                    //$usuData=$objEmpData->buscarDatoVendedor($cabFact[0]["USU_ID"]);//Correo del Uusiro que Autoriza
                     include('formatRet/retencionPDF.php');
                     
                     //COMETAR EN CASO DE NO PRESENTAR ESTA INFO

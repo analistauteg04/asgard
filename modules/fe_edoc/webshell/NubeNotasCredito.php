@@ -566,7 +566,9 @@ class NubeNotasCredito {
                     $detDoc = $this->mostrarDetNc($con,$obj_con,$cabDoc[$i]["Ids"]);
                     $impDoc = $this->mostrarNcImp($con,$obj_con,$cabDoc[$i]["Ids"]);
                     $adiDoc = $this->mostrarNcDataAdicional($con,$obj_con,$cabDoc[$i]["Ids"]);
-                    $usuData=$objEmpData->buscarDatoVendedor($cabFact[0]["USU_ID"]);//Correo del Usuario que Autoriza
+                    
+                    $usuData=array();
+                    //$usuData=$objEmpData->buscarDatoVendedor($cabFact[0]["USU_ID"]);//Correo del Usuario que Autoriza
                     include('formatNc/ncPDF.php');
                     
                     //COMETAR EN CASO DE NO PRESENTAR ESTA INFO
