@@ -18,6 +18,20 @@ use yii\base\Exception;
 
 class NubefacturaController extends \app\components\CController {
 
+    public $pdf_numeroaut = "";
+    public $pdf_numero = "";
+    public $pdf_nom_empresa = "";
+    public $pdf_ruc = "";
+    public $pdf_num_contribuyente = "";
+    public $pdf_contabilidad = "";
+    public $pdf_dir_matriz = "";
+    public $pdf_dir_sucursal = "";
+    public $pdf_fec_autorizacion = "";
+    public $pdf_emision = "";
+    public $pdf_ambiente = "";
+    public $pdf_cla_acceso = "";
+    public $pdf_tipo_documento = "";
+    public $pdf_cod_barra = "";
 
     public function actionIndex() {
         $modelo = new NubeFactura();
@@ -59,7 +73,8 @@ class NubefacturaController extends \app\components\CController {
         try {
             $ids = isset($_GET['ids']) ? base64_decode($_GET['ids']) : NULL;
             $rep = new ExportFile();
-            $this->layout = false;
+            //$this->layout = false;
+            $this->layout = '@modules/fe_edoc/views/tpl_fe/main';
             //$this->view->title = "Invoices";
             $modelo = new NubeFactura(); //Ejmpleo code 3
             $cabFact = $modelo->mostrarCabFactura($ids);
@@ -69,9 +84,25 @@ class NubefacturaController extends \app\components\CController {
             $adiFact = $modelo->mostrarFacturaDataAdicional($ids);
             $venFact= VSDocumentos::buscarDatoVendedor($cabFact['USU_ID']);//DATOS DEL VENDEDOR QUE AUTORIZO
 
-            $rep->orientation = "P"; // tipo de orientacion L => Horizontal, P => Vertical    
+            $this->pdf_numeroaut = $cabFact['AutorizacionSri'];
+            $this->pdf_numero = $cabFact['NumDocumento'];
+            $this->pdf_nom_empresa = $cabFact['RazonSocial'];
+            $this->pdf_ruc = $cabFact['Ruc'];
+            $this->pdf_num_contribuyente = $cabFact['ContribuyenteEspecial'];
+            $this->pdf_contabilidad = $cabFact['ObligadoContabilidad'];
+            $this->pdf_dir_matriz = $cabFact['DireccionMatriz'];
+            $this->pdf_dir_sucursal = $cabFact['DireccionEstablecimiento'];
+            $this->pdf_fec_autorizacion = $cabFact['FechaAutorizacion'];
+            $this->pdf_emision = \app\modules\fe_edoc\Module::t("fe", 'NORMAL');//$cabFact['TipoEmision'];
+            $this->pdf_ambiente = ($cabFact['Ambiente']==1)? \app\modules\fe_edoc\Module::t("fe", 'PRODUCTION'): \app\modules\fe_edoc\Module::t("fe", 'TEST');
+            $this->pdf_cla_acceso = $cabFact['ClaveAcceso'];
+            $this->pdf_tipo_documento = \app\modules\fe_edoc\Module::t("fe", 'INVOICE');
+            $this->pdf_cod_barra = "";
+
+            $rep->orientation = "P"; // tipo de orientacion L => Horizontal, P => Vertical   
+            
             $rep->createReportPdf(
-                $this->render('facturaPDF', [
+                $this->render('@modules/fe_edoc/views/tpl_fe/factura', [
                     'cabFact' => $cabFact,
                     'detFact' => $detFact,
                     'impFact' => $impFact,

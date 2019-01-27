@@ -128,7 +128,7 @@ class NubeFactura extends \app\modules\fe_edoc\components\CActiveRecord {
     public function mostrarCabFactura($id) {
         $rawData = array();
         $con = Yii::$app->db_edoc;
-        $sql = "SELECT A.IdFactura IdDoc,A.Estado,A.CodigoTransaccionERP,A.SecuencialERP,A.UsuarioCreador,
+        $sql = "SELECT A.IdFactura IdDoc,A.Estado,A.RazonSocial,A.CodigoTransaccionERP,A.SecuencialERP,A.UsuarioCreador,
                         A.FechaAutorizacion,A.AutorizacionSRI,A.DireccionMatriz,A.DireccionEstablecimiento,
                         CONCAT(A.Establecimiento,'-',A.PuntoEmision,'-',A.Secuencial) NumDocumento,
                         A.ContribuyenteEspecial,A.ObligadoContabilidad,A.TipoIdentificacionComprador,

@@ -16,6 +16,21 @@ use yii\base\Exception;
 
 class NubeguiaremisionController extends \app\components\CController  {
 
+    public $pdf_numeroaut = "";
+    public $pdf_numero = "";
+    public $pdf_nom_empresa = "";
+    public $pdf_ruc = "";
+    public $pdf_num_contribuyente = "";
+    public $pdf_contabilidad = "";
+    public $pdf_dir_matriz = "";
+    public $pdf_dir_sucursal = "";
+    public $pdf_fec_autorizacion = "";
+    public $pdf_emision = "";
+    public $pdf_ambiente = "";
+    public $pdf_cla_acceso = "";
+    public $pdf_tipo_documento = "";
+    public $pdf_cod_barra = "";
+    
     /**
      * Displays a particular model.
      * @param integer $id the ID of the model to be displayed
