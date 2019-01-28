@@ -31,6 +31,7 @@ class NuberetencionController extends \app\components\CController  {
     public $pdf_cla_acceso = "";
     public $pdf_tipo_documento = "";
     public $pdf_cod_barra = "";
+
     /**
      * Displays a particular model.
      * @param integer $id the ID of the model to be displayed
@@ -190,38 +191,61 @@ class NuberetencionController extends \app\components\CController  {
         try {
             $ids = isset($_GET['ids']) ? base64_decode($_GET['ids']) : NULL;
             $rep = new ExportFile();
+            $this->layout = '@modules/fe_edoc/views/tpl_fe/main';
             $modelo = new NubeRetencion(); //Ejmpleo code 3
             $cabDoc = $modelo->mostrarCabRetencion($ids);
             $detDoc = $modelo->mostrarDetRetencion($ids);
             $adiDoc = $modelo->mostrarRetencionDataAdicional($ids);
+
+            $this->pdf_numeroaut = $cabDoc['AutorizacionSRI'];
+            $this->pdf_numero = $cabDoc['NumDocumento'];
+            $this->pdf_nom_empresa = $cabDoc['RazonSocial'];
+            $this->pdf_ruc = $cabDoc['Ruc'];
+            $this->pdf_num_contribuyente = $cabDoc['ContribuyenteEspecial'];
+            $this->pdf_contabilidad = $cabDoc['ObligadoContabilidad'];
+            $this->pdf_dir_matriz = $cabDoc['DireccionMatriz'];
+            $this->pdf_dir_sucursal = $cabDoc['DireccionEstablecimiento'];
+            $this->pdf_fec_autorizacion = $cabDoc['FechaAutorizacion'];
+            $this->pdf_emision = \app\modules\fe_edoc\Module::t("fe", 'NORMAL');//$cabDoc['TipoEmision'];
+            $this->pdf_ambiente = ($cabDoc['Ambiente'] == 1) ? \app\modules\fe_edoc\Module::t("fe", 'PRODUCTION') : \app\modules\fe_edoc\Module::t("fe", 'TEST');
+            $this->pdf_cla_acceso = $cabDoc['ClaveAcceso'];
+            $this->pdf_tipo_documento = \app\modules\fe_edoc\Module::t("fe", 'VOUCHER RETENTION');
+            $this->pdf_cod_barra = "";
             
-            $Titulo=Yii::$app->getSession()->get('RazonSocial', FALSE) . " - " . $cabDoc['NombreDocumento'];
-            $nameFile=$cabDoc['NombreDocumento'] . '-' . $cabDoc['NumDocumento'];
+            //$Titulo=Yii::$app->getSession()->get('RazonSocial', FALSE) . " - " . $cabDoc['NombreDocumento'];
+            //$nameFile=$cabDoc['NombreDocumento'] . '-' . $cabDoc['NumDocumento'];
             $rep->createReportPdf(
-                    $this->render('retencionPDF', array(
+                    $this->render('@modules/fe_edoc/views/tpl_fe/retencion', array(
                         'cabDoc' => $cabDoc,
                         'detDoc' => $detDoc,
                         'adiDoc' => $adiDoc,
                                 ))
                     );
-             $rep->mpdf->Output($nameFile . '_' . date("Ymdhis") . ".pdf", ExportFile::OUTPUT_TO_DOWNLOAD);
+             $rep->mpdf->Output('COMPROBANTE DE RETENCION_' . $cabDoc['NumDocumento'] . ".pdf", ExportFile::OUTPUT_TO_DOWNLOAD);
             //exit;
         } catch (Exception $e) {
+            \app\models\Utilities::putMessageLogFile($e);
             $this->errorControl($e);
         }
     }
     
-    public function actionXmlAutorizado($ids) {
+    public function actionXmlautorizado($ids) {
         $ids = isset($_GET['ids']) ? base64_decode($_GET['ids']) : NULL;
         $modelo = new NubeRetencion();
         $nomDocfile= array();
         $nomDocfile=$modelo->mostrarRutaXMLAutorizado($ids);
-        return $this->render('facturaAutXML', array(
-            'nomDocfile' => $nomDocfile,
-        ));
+        if ($nomDocfile["EstadoDocumento"] == "AUTORIZADO") { // Si retorna un Valor en el Array
+            $nombreDocumento = $nomDocfile["NombreDocumento"];
+            //echo "file created";exit;
+            header('Content-type: text/xml');   // i am getting error on this line
+            //Cannot modify header information - headers already sent by (output started at D:\xampp\htdocs\yii\framework\web\CController.php:793)
+            header('Content-Disposition: Attachment; filename="' . $nombreDocumento . '"');
+            // File to download
+            readfile($nomDocfile["DirectorioDocumento"] . $nombreDocumento);        // i am not able to download the same file
+        } else {
+            echo "Documento No autorizado";
+        }
     }
-    
- 
     
     public function actionEnviarCorreccion() {
         if (Yii::$app->request->isAjax) {

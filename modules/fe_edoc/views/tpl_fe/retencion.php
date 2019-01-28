@@ -98,33 +98,29 @@
     <div class="bordeDivDet">
         <div class="div_modInfoDet modCab">
             <div>
-                <div class="tcoll_cen"><?php echo app\modules\fe_edoc\Module::t("fe", "Business Name / Names and Lastnames") ?>:</div>
-                <div class="tcolr_cen"><?php echo $arr_docelec['nombre2'] . " " . $arr_docelec['nombre'] ?></div>
+                <div class="tcoll_cen bold"><?php echo app\modules\fe_edoc\Module::t("fe", "Business Name / Names and Lastnames") ?>:</div>
+                <div class="tcolr_cen"><?php echo $cabDoc['RazonSocialSujetoRetenido'] ?></div>
             </div>
             <div>
-                <div class="tcoll_cen"><?php echo app\modules\fe_edoc\Module::t("fe", "Date Issue") ?>:</div>
-                <div class="tcolr_cen"><?php echo $arr_docelec['fec_emision']; ?></div>
+                <div class="tcoll_cen bold"><?php echo app\modules\fe_edoc\Module::t("fe", "Date Issue") ?>:</div>
+                <div class="tcolr_cen"><?php echo date("Y-m-d", strtotime($cabDoc['FechaEmision'])); ?></div>
             </div>
         </div>
         <div class="div_modInfoDet1 modCab">
             <div>
-                <div class="tcoll_cen"><?php echo app\modules\fe_edoc\Module::t("fe", "DNI") ?>:</div>
+                <div class="tcoll_cen bold"><?php echo app\modules\fe_edoc\Module::t("fe", "DNI") ?>:</div>
                 <div class="tcolr_cen">
-                    <?php
-                    if ($arr_docelec['dni1']) {
-                        $arr_docelec_dni = $arr_docelec['dni1'];
-                    } elseif ($arr_docelec['dni2']) {
-                        $arr_docelec_dni = $arr_docelec['dni2'];
-                    } elseif ($arr_docelec['dni3']) {
-                        $arr_docelec_dni = $arr_docelec['dni3'];
-                    }
-                    ?>
-                    <?php echo $arr_docelec_dni; ?>
+                    <?php echo $cabDoc['IdentificacionSujetoRetenido']; ?>
                 </div>
+            </div>
+            <div>
+                <div class="tcoll_cen bold"><?php echo "" ?></div>
+                <div class="tcolr_cen"><?php echo "" ?></div>
             </div>
         </div>
         <div class="clear"></div>
     </div>
+    <br />
     <div class="div_modInfoVal">
         <table>    
             <tr>
@@ -138,29 +134,16 @@
                 <td class="thcol"><?php echo app\modules\fe_edoc\Module::t("fe", 'Retained Value'); ?></td>
             </tr>
             <?php
-            foreach ($arr_detalles as $arr_detalle) {
-                $comprobante = isset($arr_detalle["codDocSustento"]) ? trim($arr_detalle["codDocSustento"]) : "";
-                $numero = isset($arr_detalle["numDocSustento"]) ? trim($arr_detalle["numDocSustento"]) : "";
-                $fecha_emision = isset($arr_detalle["fechaEmisionDocSustento"]) ? trim($arr_detalle["fechaEmisionDocSustento"]) : "";
-                $año_fiscal = $periodoFiscal;
-                $base = isset($arr_detalle["baseImponible"]) ? trim($arr_detalle["baseImponible"]) : "";
-                $impuesto = isset($arr_detalle["codigo"]) ? trim($arr_detalle["codigo"]) : "";
-                $impuesto_descripcion = IMPUESTO_RETENER::obtenerImpuestoRetenerXCod($impuesto);
-                $impuesto_texto = "-";
-                if (isset($impuesto_descripcion)) {
-                    $impuesto_texto = $impuesto_descripcion['descripcion'];
-                }
-                $porcentaje = isset($arr_detalle["porcentajeRetener"]) ? trim($arr_detalle["porcentajeRetener"]) : "";
-                $valor_retenido = isset($arr_detalle["valorRetenido"]) ? trim($arr_detalle["valorRetenido"]) : "";
+            for ($i = 0; $i < sizeof($detDoc); $i++) {
                 echo "<tr>";
-                echo "<td style='text-align: center;'>" . app\modules\fe_edoc\Module::t("fe", 'INVOICE') . "</td>";
-                echo "<td style='text-align: center;'>" . $numero . "</td>";
-                echo "<td style='text-align: center;'>" . $fecha_emision . "</td>";
-                echo "<td style='text-align: right;'>" . $año_fiscal . "</td>";
-                echo "<td style='text-align: left;'>" . $base . "</td>";
-                echo "<td style='text-align: left;'>" . $impuesto_texto . "</td>";
-                echo "<td style='text-align: left;'>" . $porcentaje . "</td>";
-                echo "<td style='text-align: left;'>" . $valor_retenido . "</td>";
+                echo "<td style='text-align: center;'>" . (($detDoc[$i]['CodDocRetener'] == '01') ? \app\modules\fe_edoc\Module::t("fe", 'INVOICE') : '') . "</td>";
+                echo "<td style='text-align: center;'>" . $detDoc[$i]['NumDocRetener'] . "</td>";
+                echo "<td style='text-align: center;'>" . date(Yii::$app->params["dateByDefault"], strtotime($detDoc[$i]['FechaEmisionDocRetener'])) . "</td>";
+                echo "<td style='text-align: center;'>" . $cabDoc['PeriodoFiscal'] . "</td>";
+                echo "<td style='text-align: right;'>" . Yii::$app->formatter->format($detDoc[$i]['BaseImponible'], ["decimal", 2]) . "</td>";
+                echo "<td style='text-align: center;'>" . (($detDoc[$i]['Codigo'] == '1') ? 'RENTA' : (($detDoc[$i]['Codigo'] == '2') ? 'IVA' : 'ISD')) . "</td>";
+                echo "<td style='text-align: right;'>" . Yii::$app->formatter->format($detDoc[$i]['PorcentajeRetener'], ["decimal", 2]) . "</td>";
+                echo "<td style='text-align: right;'>" . Yii::$app->formatter->format($detDoc[$i]['ValorRetenido'], ["decimal", 2]) . "</td>";
                 echo "</tr>";
             }
             ?>
@@ -168,37 +151,28 @@
     </div>
     <div class="divDetalles">
         <div class="divDetalleAd ">
-            <div class="bordeDivDet modCab div_modInfoAd <?php if (!isset($arr_infoAdicional)) { ?>divDetaVacio<?php 
-                                                                                                            } ?>">
+            <div class="bordeDivDet modCab div_modInfoAd <?php if (!isset($adiDoc)) { ?>divDetaVacio<?php  } ?>">
                 <div>
                     <div class="tcoll bold" style="width: 90%; alignment-adjust: center"><?php echo app\modules\fe_edoc\Module::t("fe", "Additional Information") ?></div>
-                </div>
+                </div><br />
                 <?php
-                if (isset($arr_infoAdicional)) {
-                    $arr_detalles_adi = $arr_infoAdicional["campoAdicional"];
-                    if (array_key_exists('0', $arr_detalles_adi)) {
-                        $arr_detalles_adi = $arr_infoAdicional["campoAdicional"];
-                    } else {
-                        $arr_detalles_adi = $arr_infoAdicional;
-                    }
-                    foreach ($arr_detalles_adi as $arr_detallesadi) {
-                        $detalle_nombre = trim($arr_detallesadi["@nombre"]);
-                        $detalle_valor = trim($arr_detallesadi["$"]);
-                        if ($detalle_nombre != "" && $detalle_valor != "") {
-                            $nombre_adicional = GALGOMEDIA::cambiarFormatoCapitalizar($detalle_nombre, true);
+                if (isset($adiDoc)) {
+                    for ($i = 0; $i < sizeof($adiDoc); $i++) {
+                        if ($adiDoc[$i]['Descripcion'] <> '') {
                             ?>
                             <div>
-                                <div class="tcoll_ad"><?php echo $nombre_adicional ?>:</div>
-                                <div class="tcolr_ad"><?php echo $detalle_valor; ?></div>
+                                <div class="tcoll_ad bold"><?php echo $adiDoc[$i]['Nombre'] ?>:</div>
+                                <div class="tcolr_ad"><?php echo $adiDoc[$i]['Descripcion'] ?></div>
                             </div> 
-                            <?php
-
+                <?php
                         }
                     }
                 }
                 ?>
                 <div class="clear"></div>
             </div>
+            <div class="clear"></div>
+            <br />
         </div>
     </div>
 </div>

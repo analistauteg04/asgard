@@ -97,6 +97,12 @@ $config = [
             'siteKey' => '6Lcp0iUUAAAAAKsTKhSd1BOdrhKJK79xN8D4pjMP',
             'secret' => '6Lcp0iUUAAAAALG0aDTkfhAVsuNRn523AsomdhDd',
         ],
+        'formatter' => [
+            //'dateFormat' => 'dd.MM.yyyy',
+            'decimalSeparator' => '.',
+            'thousandSeparator' => ',',
+            'currencyCode' => 'USD',
+        ],
     ],
     'params' => $params,
 ];

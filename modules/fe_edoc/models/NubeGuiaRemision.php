@@ -261,7 +261,8 @@ class NubeGuiaRemision extends \app\modules\fe_edoc\components\CActiveRecord {
                     A.DireccionPartida,A.RazonSocialTransportista,A.IdentificacionTransportista,
                     A.FechaInicioTransporte,A.FechaFinTransporte,A.Placa,A.DireccionEstablecimiento,
                     'GUIA DE REMISION' NombreDocumento,A.TipoIdentificacionTransportista,A.Rise,A.CodigoDocumento,A.FechaEmisionErp,
-                    A.Establecimiento,A.PuntoEmision,A.Secuencial,A.DireccionMatriz,A.ObligadoContabilidad,A.ContribuyenteEspecial
+                    A.Establecimiento,A.PuntoEmision,A.Secuencial,A.DireccionMatriz,A.ObligadoContabilidad,A.ContribuyenteEspecial,
+                    A.RazonSocial, A.Ruc
                     FROM " . $con->dbname . ".NubeGuiaRemision A
             WHERE A.CodigoDocumento='$this->tipoDoc' AND A.IdGuiaRemision =$id ";
         

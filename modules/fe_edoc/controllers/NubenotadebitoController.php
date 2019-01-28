@@ -147,4 +147,68 @@ class NubenotadebitoController extends \app\components\CController
 			Yii::$app->end();
 		}
 	}
+
+	public function actionGenerarpdf($ids)
+	{
+		try {
+			$ids = isset($_GET['ids']) ? base64_decode($_GET['ids']) : null;
+			$rep = new ExportFile();
+			$this->layout = '@modules/fe_edoc/views/tpl_fe/main';
+			$modelo = new NubeNotaDebito(); //Ejmpleo code 3
+			$cabFact = $modelo->mostrarCabNc($ids);
+			$detFact = $modelo->mostrarDetNc($ids);
+			$impFact = $modelo->mostrarNcImp($ids);
+			$adiFact = $modelo->mostrarNcDataAdicional($ids);
+            
+            //$Titulo=Yii::$app->getSession()->get('RazonSocial', FALSE) . " - " . $cabFact['NombreDocumento'];
+            //$nameFile=$cabFact['NombreDocumento'] . '-' . $cabFact['NumDocumento'];
+
+			$this->pdf_numeroaut = $cabFact['AutorizacionSRI'];
+			$this->pdf_numero = $cabFact['NumDocumento'];
+			$this->pdf_nom_empresa = $cabFact['RazonSocial'];
+			$this->pdf_ruc = $cabFact['Ruc'];
+			$this->pdf_num_contribuyente = $cabFact['ContribuyenteEspecial'];
+			$this->pdf_contabilidad = $cabFact['ObligadoContabilidad'];
+			$this->pdf_dir_matriz = $cabFact['DireccionMatriz'];
+			$this->pdf_dir_sucursal = $cabFact['DireccionEstablecimiento'];
+			$this->pdf_fec_autorizacion = $cabFact['FechaAutorizacion'];
+			$this->pdf_emision = \app\modules\fe_edoc\Module::t("fe", 'NORMAL');//$cabFact['TipoEmision'];
+			$this->pdf_ambiente = ($cabFact['Ambiente'] == 1) ? \app\modules\fe_edoc\Module::t("fe", 'PRODUCTION') : \app\modules\fe_edoc\Module::t("fe", 'TEST');
+			$this->pdf_cla_acceso = $cabFact['ClaveAcceso'];
+			$this->pdf_tipo_documento = \app\modules\fe_edoc\Module::t("fe", 'CREDIT NOTE');
+			$this->pdf_cod_barra = "";
+
+			$rep->createReportPdf(
+				$this->render('@modules/fe_edoc/views/tpl_fe/ndebito', array(
+					'cabFact' => $cabFact,
+					'detFact' => $detFact,
+					'impFact' => $impFact,
+					'adiFact' => $adiFact,
+				))
+			);
+			$rep->mpdf->Output('NOTA DE CREDITO_' . $cabFact['NumDocumento'] . ".pdf", ExportFile::OUTPUT_TO_DOWNLOAD);
+            //exit;
+		} catch (Exception $e) {
+			$this->errorControl($e);
+		}
+	}
+
+	public function actionXmlAutorizado($ids)
+	{
+		$ids = isset($_GET['ids']) ? base64_decode($_GET['ids']) : null;
+		$modelo = new NubeNotaDebito();
+		$nomDocfile = array();
+		$nomDocfile = $modelo->mostrarRutaXMLAutorizado($ids);
+		if ($nomDocfile["EstadoDocumento"] == "AUTORIZADO") { // Si retorna un Valor en el Array
+			$nombreDocumento = $nomDocfile["NombreDocumento"];
+            //echo "file created";exit;
+			header('Content-type: text/xml');   // i am getting error on this line
+            //Cannot modify header information - headers already sent by (output started at D:\xampp\htdocs\yii\framework\web\CController.php:793)
+			header('Content-Disposition: Attachment; filename="' . $nombreDocumento . '"');
+            // File to download
+			readfile($nomDocfile["DirectorioDocumento"] . $nombreDocumento);        // i am not able to download the same file
+		} else {
+			echo "Documento No autorizado";
+		}
+	}
 }

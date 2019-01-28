@@ -283,7 +283,7 @@ class NubeNotaCredito extends \app\modules\fe_edoc\components\CActiveRecord {
                         A.CodDocModificado,A.NumDocModificado,A.FechaEmisionDocModificado,
                         A.TotalSinImpuesto,A.ValorModificacion,A.MotivoModificacion,
                         'NOTA DE CREDITO' NombreDocumento,A.AutorizacionSri,A.ClaveAcceso,A.FechaAutorizacion,
-                        A.Ambiente,A.TipoEmision,A.Moneda,A.Ruc,A.CodigoError
+                        A.Ambiente,A.TipoEmision,A.Moneda,A.Ruc,A.CodigoError, A.RazonSocial
                         FROM " . $con->dbname . ".NubeNotaCredito A
                 WHERE A.CodigoDocumento='$this->tipoDoc' AND A.IdNotaCredito =$id ";
         //echo $sql;

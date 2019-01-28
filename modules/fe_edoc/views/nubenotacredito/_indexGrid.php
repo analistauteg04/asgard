@@ -36,13 +36,13 @@ PbGridView::widget([
             'header' => Yii::t('fe_edoc', 'Download'),
             'class' => 'yii\grid\ActionColumn',
             'options' => array('style' => 'text-align:center', 'width' => '85px'),
-            'template' => '{pdf}{xml}',
+            'template' => '{pdf} {xml}',
             'buttons' => array(
                 'pdf' => function ($url, $model) {
-                    return Html::a('<span class="text-danger fa fa-file-pdf-o"></span>', Url::to(['NubeFactura/GenerarPdf', 'ids' => base64_encode($model['IdDoc'])]), ["data-toggle" => "tooltip", "title" => Yii::t('COMPANIA', 'Download PDF document'), "data-pjax" => 0]);
+                    return Html::a('<span class="text-danger fa fa-file-pdf-o"></span>', Url::to(['nubenotacredito/generarpdf', 'ids' => base64_encode($model['IdDoc'])]), ["data-toggle" => "tooltip", "title" => Yii::t('fe_edoc', 'Download PDF document'), "data-pjax" => 0]);
                 },
                 'xml' => function ($url, $model) {
-                    return Html::a('<span class="text-success fa fa-file-code-o"></span>', Url::to(['NubeFactura/XmlAutorizado', 'ids' => base64_encode($model['IdDoc'])]), ["data-toggle" => "tooltip", "title" => Yii::t('COMPANIA', 'Download XML document'), "data-pjax" => 0]);
+                    return Html::a('<span class="text-success fa fa-file-code-o"></span>', Url::to(['nubenotacredito/xmlautorizado', 'ids' => base64_encode($model['IdDoc'])]), ["data-toggle" => "tooltip", "title" => Yii::t('fe_edoc', 'Download XML document'), "data-pjax" => 0]);
                 },
             ),
         ],

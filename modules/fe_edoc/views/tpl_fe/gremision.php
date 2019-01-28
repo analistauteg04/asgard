@@ -98,84 +98,78 @@
     <div class="bordeDivDet">
         <div class="div_modInfoDet modCab">
             <div>
-                <div class="tcoll_cen"><?php echo app\modules\fe_edoc\Module::t("fe", "DNI (Haulier)") ?>:</div>
-                <div class="tcolr_cen"><?php echo $rucTransportista; ?></div>
+                <div class="tcoll_cen bold"><?php echo app\modules\fe_edoc\Module::t("fe", "DNI (Haulier)") ?>:</div>
+                <div class="tcolr_cen"><?php echo $cabDoc['IdentificacionTransportista']; ?></div>
             </div>
             <div>
-                <div class="tcoll_cen"><?php echo app\modules\fe_edoc\Module::t("fe", "Business Name / Names and Lastnames") ?>:</div>
-                <div class="tcolr_cen"><?php echo $razonSocTransportista; ?></div>
+                <div class="tcoll_cen bold"><?php echo app\modules\fe_edoc\Module::t("fe", "Business Name / Names and Lastnames") ?>:</div>
+                <div class="tcolr_cen"><?php echo $cabDoc['RazonSocialTransportista']; ?></div>
             </div>
             <div>
-                <div class="tcoll_cen"><?php echo app\modules\fe_edoc\Module::t("fe", "Plaque") ?>:</div>
-                <div class="tcolr_cen"><?php echo $placa; ?></div>
-            </div>
-            <div>
-                <div class="tcoll_cen"><?php echo app\modules\fe_edoc\Module::t("fe", "Starting Point") ?>:</div>
-                <div class="tcolr_cen"><?php echo $dirPartida; ?></div>
-            </div>
-        </div>
-        <div class="clear"></div>
-        <div class="div_modInfoDet modCab">
-            <div>
-                <div class="tcoll_cen"><?php echo app\modules\fe_edoc\Module::t("fe", "Start Date Transport") ?>:</div>
-                <div class="tcolr_cen"><?php echo $fechaIniTransporte; ?></div>
+                <div class="tcoll_cen bold"><?php echo app\modules\fe_edoc\Module::t("fe", "Starting Point") ?>:</div>
+                <div class="tcolr_cen"><?php echo $cabDoc['DireccionPartida']; ?></div>
             </div>
         </div>
         <div class="div_modInfoDet1 modCab">
             <div>
-                <div class="tcoll_cen"><?php echo app\modules\fe_edoc\Module::t("fe", "Fin Date Transport") ?>:</div>
-                <div class="tcolr_cen"><?php echo $fechaFinTransporte; ?></div>
+                <div class="tcoll_cen bold"><?php echo app\modules\fe_edoc\Module::t("fe", "Start Date Transport") ?>:</div>
+                <div class="tcolr_cen"><?php echo date("Y-m-d", strtotime($cabDoc['FechaInicioTransporte'])); ?></div>
+            </div>
+            <div>
+                <div class="tcoll_cen bold"><?php echo app\modules\fe_edoc\Module::t("fe", "Fin Date Transport") ?>:</div>
+                <div class="tcolr_cen"><?php echo date("Y-m-d", strtotime($cabDoc['FechaFinTransporte'])); ?></div>
+            </div>
+            <div>
+                <div class="tcoll_cen bold"><?php echo app\modules\fe_edoc\Module::t("fe", "Plaque") ?>:</div>
+                <div class="tcolr_cen"><?php echo $cabDoc['Placa']; ?></div>
             </div>
         </div>
         <div class="clear"></div>
     </div>
+    <br />
     <div class="bordeDivDet">
         <div class="div_modInfoDet modCab">
             <div>
-                <div class="tcoll_cen"><?php echo app\modules\fe_edoc\Module::t("fe", "Proof of Purchase") ?>:</div>
-                <div class="tcolr_cen"><?php echo app\modules\fe_edoc\Module::t("fe", "INVOICE") . "  " . $numDocSustento; ?></div>
+                <div class="tcoll_cen bold"><?php echo app\modules\fe_edoc\Module::t("fe", "Proof of Purchase") ?>:</div>
+                <div class="tcolr_cen"><?php echo app\modules\fe_edoc\Module::t("fe", "INVOICE") . "  " . $destDoc[0]['NumDocSustento']; ?></div>
+            </div>
+            <div>
+                <div class="tcoll_cen bold"><?php echo app\modules\fe_edoc\Module::t("fe", "Authorization Number") ?>:</div>
+                <div class="tcolr_cen"><?php echo $destDoc[0]['NumAutDocSustento']; ?></div>
+            </div>
+            <div>
+                <div class="tcoll_cen bold"><?php echo app\modules\fe_edoc\Module::t("fe", "Reason Transfer") ?>:</div>
+                <div class="tcolr_cen"><?php echo $destDoc[0]['MotivoTraslado']; ?></div>
+            </div>
+            <div>
+                <div class="tcoll_cen bold"><?php echo app\modules\fe_edoc\Module::t("fe", "Destination (Point of Arrival)") ?>:</div>
+                <div class="tcolr_cen"><?php echo $destDoc[0]['DirDestinatario']; ?></div>
+            </div>
+            <div>
+                <div class="tcoll_cen bold"><?php echo app\modules\fe_edoc\Module::t("fe", "DNI (Recipient)") ?>:</div>
+                <div class="tcolr_cen"><?php echo $destDoc[0]['IdentificacionDestinatario']; ?></div>
+            </div>
+            <div>
+                <div class="tcoll_cen bold" ><?php echo app\modules\fe_edoc\Module::t("fe", "Business Name / Names and Lastnames") ?>:</div>
+                <div class="tcolr_cen"><?php echo $destDoc[0]['RazonSocialDestinatario']; ?></div>
             </div>
         </div>
         <div class="div_modInfoDet1 modCab">
             <div> 
-                <div class="tcoll_cen"><?php echo app\modules\fe_edoc\Module::t("fe", "Date of Issue") ?>:</div>
-                <div class="tcolr_cen"><?php echo $fechaEmisionDocSustento; ?></div>
-            </div>
-        </div>
-        <div class="clear"></div>
-        <div class="div_modInfoDet2 modCab">
-            <div>
-                <div class="tcoll_cen2"><?php echo app\modules\fe_edoc\Module::t("fe", "Authorization Number") ?>:</div>
-                <div class="tcolr_cen2"><?php echo $numAutDocSustento; ?></div>
-            </div>
-            <br/>
-            <div>
-                <div class="tcoll_cen2"><?php echo app\modules\fe_edoc\Module::t("fe", "Reason Transfer") ?>:</div>
-                <div class="tcolr_cen2"><?php echo $motivoTraslado; ?></div>
+                <div class="tcoll_cen bold"><?php echo app\modules\fe_edoc\Module::t("fe", "Date of Issue") ?>:</div>
+                <div class="tcolr_cen"><?php echo (($destDoc[0]['FechaEmisionDocSustento'] <> '0000-00-00') ? date("Y-m-d", strtotime($destDoc[0]['FechaEmisionDocSustento'])) : ''); ?></div>
             </div>
             <div>
-                <div class="tcoll_cen2"><?php echo app\modules\fe_edoc\Module::t("fe", "Destination (Point of Arrival)") ?>:</div>
-                <div class="tcolr_cen2"><?php echo $dirDestinatario; ?></div>
+                <div class="tcoll_cen bold"><?php echo app\modules\fe_edoc\Module::t("fe", "Customs Document") ?>:</div>
+                <div class="tcolr_cen"><?php echo $destDoc[0]['DocAduaneroUnico']; ?></div>
             </div>
             <div>
-                <div class="tcoll_cen2"><?php echo app\modules\fe_edoc\Module::t("fe", "DNI (Recipient)") ?>:</div>
-                <div class="tcolr_cen2"><?php echo $identificacionDestinatario; ?></div>
+                <div class="tcoll_cen bold"><?php echo app\modules\fe_edoc\Module::t("fe", "Set Destination Code") ?>:</div>
+                <div class="tcolr_cen"><?php echo $destDoc[0]['CodEstabDestino']; ?></div>
             </div>
             <div>
-                <div class="tcoll_cen2" ><?php echo app\modules\fe_edoc\Module::t("fe", "Business Name / Names and Lastnames") ?>:</div>
-                <div class="tcolr_cen2"><?php echo $razonSocialDestinatario; ?></div>
-            </div>
-            <div>
-                <div class="tcoll_cen2"><?php echo app\modules\fe_edoc\Module::t("fe", "Customs Document") ?>:</div>
-                <div class="tcolr_cen2"><?php echo $docAduaneroUnico; ?></div>
-            </div>
-            <div>
-                <div class="tcoll_cen2"><?php echo app\modules\fe_edoc\Module::t("fe", "Set Destination Code") ?>:</div>
-                <div class="tcolr_cen2"><?php echo $codEstabDestino; ?></div>
-            </div>
-            <div>
-                <div class="tcoll_cen2"><?php echo app\modules\fe_edoc\Module::t("fe", "Ruta") ?>:</div>
-                <div class="tcolr_cen2"><?php echo $ruta; ?></div>
+                <div class="tcoll_cen bold"><?php echo app\modules\fe_edoc\Module::t("fe", "Ruta") ?>:</div>
+                <div class="tcolr_cen"><?php echo $destDoc[0]['Ruta']; ?></div>
             </div>
         </div>
         <br/>
@@ -188,18 +182,16 @@
                     <td class="thcol"><?php echo app\modules\fe_edoc\Module::t("fe", 'Code Principal'); ?></td>
                     <td class="thcol"><?php echo app\modules\fe_edoc\Module::t("fe", 'Code Auxiliary'); ?></td>
                 </tr>
-                <?php
-                foreach ($arr_detalles as $arr_detalle) {
-                    $cantidad = isset($arr_detalle["cantidad"]) ? trim($arr_detalle["cantidad"]) : "";
-                    $descripcion = isset($arr_detalle["descripcion"]) ? trim($arr_detalle["descripcion"]) : "";
-                    $codPrincipal = isset($arr_detalle["codigoInterno"]) ? trim($arr_detalle["codigoInterno"]) : "";
-                    $codAuxiliar = isset($arr_detalle["codigoAdicional"]) ? trim($arr_detalle["codigoAdicional"]) : "";
-                    echo "<tr>";
-                    echo "<td style='text-align: left;'>" . $cantidad . "</td>";
-                    echo "<td style='text-align: left;'>" . $descripcion . "</td>";
-                    echo "<td style='text-align: left;'>" . $codPrincipal . "</td>";
-                    echo "<td style='text-align: left;'>" . $codAuxiliar . "</td>";
-                    echo "</tr>";
+                <?php \app\models\Utilities::putMessageLogFile($destDoc);
+                for ($i = 0; $i < sizeof($destDoc); $i++) {
+                    foreach ($destDoc[$i]["GuiaDet"] as $key => $value){
+                        echo "<tr>";
+                        echo "<td style='text-align: center;'>" . intval($value['Cantidad']) . "</td>";
+                        echo "<td style='text-align: left;'>" . $value['Descripcion'] . "</td>";
+                        echo "<td style='text-align: center;'>" . $value['CodigoInterno'] . "</td>";
+                        echo "<td style='text-align: center;'>" . $value['CodigoAdicional'] . "</td>";
+                        echo "</tr>";
+                    }
                 }
                 ?>
             </table>
@@ -207,37 +199,28 @@
     </div>
     <div class="divDetalles">
         <div class="divDetalleAd ">
-            <div class="bordeDivDet modCab div_modInfoAd <?php if (!isset($arr_infoAdicional)) { ?>divDetaVacio<?php 
-                                                                                                            } ?>">
+            <div class="bordeDivDet modCab div_modInfoAd <?php if (!isset($adiDoc)) { ?>divDetaVacio<?php } ?>">
                 <div>
                     <div class="tcoll bold" style="width: 90%; alignment-adjust: center"><?php echo app\modules\fe_edoc\Module::t("fe", "Additional Information") ?></div>
-                </div>
+                </div><br />
                 <?php
-                if (isset($arr_infoAdicional)) {
-                    $arr_detalles_adi = $arr_infoAdicional["campoAdicional"];
-                    if (array_key_exists('0', $arr_detalles_adi)) {
-                        $arr_detalles_adi = $arr_infoAdicional["campoAdicional"];
-                    } else {
-                        $arr_detalles_adi = $arr_infoAdicional;
-                    }
-                    foreach ($arr_detalles_adi as $arr_detallesadi) {
-                        $detalle_nombre = trim($arr_detallesadi["@nombre"]);
-                        $detalle_valor = trim($arr_detallesadi["$"]);
-                        if ($detalle_nombre != "" && $detalle_valor != "") {
-                            $nombre_adicional = GALGOMEDIA::cambiarFormatoCapitalizar($detalle_nombre, true);
+                if (isset($adiDoc)) {
+                    for ($i = 0; $i < sizeof($adiDoc); $i++) {
+                        if ($adiDoc[$i]['Descripcion'] <> '') {
                             ?>
                             <div>
-                                <div class="tcoll_ad"><?php echo $nombre_adicional ?>:</div>
-                                <div class="tcolr_ad"><?php echo $detalle_valor; ?></div>
+                                <div class="tcoll_ad bold"><?php echo $adiDoc[$i]['Nombre'] ?>:</div>
+                                <div class="tcolr_ad"><?php echo $adiDoc[$i]['Descripcion'] ?></div>
                             </div> 
-                            <?php
-
+                <?php
                         }
                     }
                 }
                 ?>
                 <div class="clear"></div>
             </div>
+            <div class="clear"></div>
+            <br />
         </div>
     </div>
 </div>

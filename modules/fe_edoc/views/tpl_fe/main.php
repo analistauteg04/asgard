@@ -174,10 +174,10 @@
                         width: 260px;
                     }
                     .tcolr_num_aut {
-                        width: 90%;                      
+                        width: 100%;                      
                         color: #000000;
                         float: left;
-                        font-size: 11px;                   
+                        font-size: 10.5px;                   
                         text-align: left;
                     }                   
                 </style>

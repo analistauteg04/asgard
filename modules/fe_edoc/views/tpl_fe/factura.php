@@ -106,7 +106,7 @@
             </div>
             <div>
                 <div class="tcoll_cen bold"><?php echo app\modules\fe_edoc\Module::t("fe", "Date Issue") ?>:</div>
-                <div class="tcolr_cen"><?php echo $cabFact['FechaEmision']; ?></div>
+                <div class="tcolr_cen"><?php echo date("Y-m-d", strtotime($cabFact['FechaEmision'])); ?></div>
             </div>
         </div>
         <div class="div_modInfoDet1 modCab">

@@ -98,28 +98,19 @@
     <div class="bordeDivDet">
         <div class="div_modInfoDet modCab">
             <div>
-                <div class="tcoll_cen"><?php echo app\modules\fe_edoc\Module::t("fe", "Business Name / Names and Lastnames") ?>:</div>
-                <div class="tcolr_cen"><?php echo $arr_docelec['nombre2'] . " " . $arr_docelec['nombre'] ?></div>
+                <div class="tcoll_cen bold"><?php echo app\modules\fe_edoc\Module::t("fe", "Business Name / Names and Lastnames") ?>:</div>
+                <div class="tcolr_cen"><?php echo $cabFact['RazonSocialComprador'] ?></div>
             </div>
             <div>
-                <div class="tcoll_cen"><?php echo app\modules\fe_edoc\Module::t("fe", "Date Issue") ?>:</div>
-                <div class="tcolr_cen"><?php echo $arr_docelec['fec_emision']; ?></div>
+                <div class="tcoll_cen bold"><?php echo app\modules\fe_edoc\Module::t("fe", "Date Issue") ?>:</div>
+                <div class="tcolr_cen"><?php echo date("Y-m-d", strtotime($cabFact['FechaEmision'])) ?></div>
             </div>
         </div>
         <div class="div_modInfoDet1 modCab">
             <div>
-                <div class="tcoll_cen"><?php echo app\modules\fe_edoc\Module::t("fe", "DNI") ?>:</div>
+                <div class="tcoll_cen bold"><?php echo app\modules\fe_edoc\Module::t("fe", "DNI") ?>:</div>
                 <div class="tcolr_cen">
-                    <?php
-                    if ($arr_docelec['dni1']) {
-                        $arr_docelec_dni = $arr_docelec['dni1'];
-                    } elseif ($arr_docelec['dni2']) {
-                        $arr_docelec_dni = $arr_docelec['dni2'];
-                    } elseif ($arr_docelec['dni3']) {
-                        $arr_docelec_dni = $arr_docelec['dni3'];
-                    }
-                    ?>
-                    <?php echo $arr_docelec_dni; ?>
+                    <?php echo $cabFact['IdentificacionComprador']; ?>
                 </div>
             </div>
         </div>
@@ -127,16 +118,16 @@
         <hr/>
         <div class="div_modInfoDet modCab">
             <div>
-                <div class="tcoll_cen"><?php echo app\modules\fe_edoc\Module::t("fe", "Document to modify") ?>:</div>
-                <div class="tcolr_cen"><?php echo app\modules\fe_edoc\Module::t("fe", "INVOICE") . "   " . $numDocModificado; ?></div>
+                <div class="tcoll_cen bold"><?php echo app\modules\fe_edoc\Module::t("fe", "Document to modify") ?>:</div>
+                <div class="tcolr_cen"><?php echo app\modules\fe_edoc\Module::t("fe", "INVOICE") . " " . $cabFact['NumDocModificado']; ?></div>
             </div>
             <div>
-                <div class="tcoll_cen"><?php echo app\modules\fe_edoc\Module::t("fe", "Date Issue") ?>:</div>
-                <div class="tcolr_cen"><?php echo $fechaEmisionDocSustento; ?></div>
+                <div class="tcoll_cen bold"><?php echo app\modules\fe_edoc\Module::t("fe", "Date Issue") ?>:</div>
+                <div class="tcolr_cen"><?php echo date("Y-m-d", strtotime($cabFact['FechaEmisionDocModificado'])) ?></div>
             </div>
             <div>
-                <div class="tcoll_cen"><?php echo app\modules\fe_edoc\Module::t("fe", "Reason Modification") ?>:</div>
-                <div class="tcolr_cen"><?php echo $motivo; ?></div>
+                <div class="tcoll_cen bold"><?php echo app\modules\fe_edoc\Module::t("fe", "Reason Modification") ?>:</div>
+                <div class="tcolr_cen"><?php echo $cabFact['MotivoModificacion'] ?></div>
             </div>
         </div>
         <div class="clear"></div>
@@ -146,135 +137,83 @@
         <table>    
             <tr>
                 <td class="thcol"><?php echo app\modules\fe_edoc\Module::t("fe", 'Code Principal'); ?></td>
-                <td class="thcol"><?php echo app\modules\fe_edoc\Module::t("fe", 'Code Auxiliar'); ?></td>
                 <td class="thcol"><?php echo app\modules\fe_edoc\Module::t("fe", 'Amount'); ?></td>
                 <td class="thcol"><?php echo app\modules\fe_edoc\Module::t("fe", 'Description'); ?></td>
-                <td class="thcol"><?php echo app\modules\fe_edoc\Module::t("fe", 'Additional Detail'); ?></td>
-                <td class="thcol"><?php echo app\modules\fe_edoc\Module::t("fe", 'Additional Detail'); ?></td>
-                <td class="thcol"><?php echo app\modules\fe_edoc\Module::t("fe", 'Additional Detail'); ?></td>
                 <td class="thcol"><?php echo app\modules\fe_edoc\Module::t("fe", 'Unit Price'); ?></td>
                 <td class="thcol"><?php echo app\modules\fe_edoc\Module::t("fe", 'Descount'); ?></td>
                 <td class="thcol"><?php echo app\modules\fe_edoc\Module::t("fe", 'Total Price'); ?></td>
             </tr>
             <?php
-            $total_descuento = 0;
-            foreach ($arr_detalles as $arr_detalle) {
-                $codPrincipal = isset($arr_detalle["codigoInterno"]) ? trim($arr_detalle["codigoInterno"]) : "";
-                $codAuxiliar = isset($arr_detalle["codAuxiliar"]) ? trim($arr_detalle["codAuxiliar"]) : "";
-                $cantidad = isset($arr_detalle["cantidad"]) ? trim($arr_detalle["cantidad"]) : "";
-                $descripcion = isset($arr_detalle["descripcion"]) ? trim($arr_detalle["descripcion"]) : "";
-                $precioUnitario = isset($arr_detalle["precioUnitario"]) ? trim($arr_detalle["precioUnitario"]) : "";
-                $descuento = isset($arr_detalle["descuento"]) ? trim($arr_detalle["descuento"]) : "";
-                $precioTotal = isset($arr_detalle["precioTotalSinImpuesto"]) ? trim($arr_detalle["precioTotalSinImpuesto"]) : "";
-                $detaAdicional = array();
-                if (isset($arr_detalle["detallesAdicionales"])) {
-                    $arr_detalles_adi = $arr_detalle["detallesAdicionales"]["detAdicional"];
-                    if (array_key_exists('0', $arr_detalles_adi)) {
-                        $arr_detalles_adi = $arr_detalle["detallesAdicionales"]["detAdicional"];
-                    } else {
-                        $arr_detalles_adi = $arr_detalle["detallesAdicionales"];
-                    }
-                    foreach ($arr_detalles_adi as $arr_detallesadi) {
-                        $detalle_nombre = trim($arr_detallesadi["@nombre"]);
-                        $detalle_valor = trim($arr_detallesadi["@valor"]);
-                        if ($detalle_nombre != "") {
-                            if ($detalle_valor != "") {
-                                $detaAdicional[] = $detalle_nombre . ": " . $detalle_valor;
-                            } else {
-                                $detaAdicional[] = $detalle_nombre;
-                            }
-                        } elseif ($detalle_valor != "") {
-                            $detaAdicional[] = $detalle_valor;
-                        } else {
-                            $detaAdicional[] = "";
-                        }
-                    }
-                }
-                $total_descuento = $total_descuento + $descuento;
+            for ($i = 0; $i < sizeof($detFact); $i++) {
                 echo "<tr>";
-                echo "<td style = 'text-align: center;'>" . $codPrincipal . "</td>";
-                echo "<td style = 'text-align: center;'>" . $codAuxiliar . "</td>";
-                echo "<td style = 'text-align: right;'>" . $cantidad . "</td>";
-                echo "<td style = 'text-align: left;'>" . $descripcion . "</td>";
-                echo "<td style = 'text-align: left;'>" . $detaAdicional[0] . "</td>";
-                echo "<td style = 'text-align: left;'>" . $detaAdicional[1] . "</td>";
-                echo "<td style = 'text-align: left;'>" . $detaAdicional[2] . "</td>";
-                echo "<td style = 'text-align: right;'>" . $precioUnitario . "</td>"; //En Nota de Credito el orden es 1ero Descuento 2do Precio unitario
-                echo "<td style = 'text-align: right;'>" . $descuento . "</td>";
-                echo "<td style = 'text-align: right;'>" . $precioTotal . "</td>";
+                echo "<td style = 'text-align: center;'>" . $detFact[$i]['CodigoPrincipal'] . "</td>";
+                echo "<td style = 'text-align: center;'>" . intval($detFact[$i]['Cantidad']) . "</td>";
+                echo "<td style = 'text-align: left;'>" . $detFact[$i]['Descripcion'] . "</td>";
+                echo "<td style = 'text-align: right;'>" . Yii::$app->formatter->format($detFact[$i]['PrecioUnitario'], ["decimal", 2]) . "</td>"; //En Nota de Credito el orden es 1ero Descuento 2do Precio unitario
+                echo "<td style = 'text-align: right;'>" . Yii::$app->formatter->format($detFact[$i]['Descuento'], ["decimal", 2]) . "</td>";
+                echo "<td style = 'text-align: right;'>" . Yii::$app->formatter->format($detFact[$i]['PrecioTotalSinImpuesto'], ["decimal", 2]) . "</td>";
                 echo "</tr>";
             }
             ?>
         </table>
     </div>
+    <div class="clear"></div>
     <div class="divDetalles">
         <div class="divDetalleAd ">
-            <div class="bordeDivDet modCab div_modInfoAd <?php if (!isset($arr_infoAdicional)) { ?>divDetaVacio<?php 
-                                                                                                            } ?>">
+            <div class="bordeDivDet modCab div_modInfoAd <?php if (!isset($adiFact)) { ?>divDetaVacio<?php 
+                                                                                                } ?>">
                 <div>
                     <div class="tcoll bold" style="width: 90%; alignment-adjust: center"><?php echo app\modules\fe_edoc\Module::t("fe", "Additional Information") ?></div>
-                </div>
+                </div><br />
                 <?php
-                if (isset($arr_infoAdicional)) {
-                    $arr_detalles_adi = $arr_infoAdicional["campoAdicional"];
-                    if (array_key_exists('0', $arr_detalles_adi)) {
-                        $arr_detalles_adi = $arr_infoAdicional["campoAdicional"];
-                    } else {
-                        $arr_detalles_adi = $arr_infoAdicional;
-                    }
-                    foreach ($arr_detalles_adi as $arr_detallesadi) {
-                        $detalle_nombre = trim($arr_detallesadi["@nombre"]);
-                        $detalle_valor = trim($arr_detallesadi["$"]);
-                        if ($detalle_nombre != "" && $detalle_valor != "") {
-                            $nombre_adicional = GALGOMEDIA::cambiarFormatoCapitalizar($detalle_nombre, true);
+                if (isset($adiFact)) {
+                    for ($i = 0; $i < sizeof($adiFact); $i++) {
+                        if ($adiFact[$i]['Descripcion'] <> '') {
                             ?>
                             <div>
-                                <div class="tcoll_ad"><?php echo $nombre_adicional ?>:</div>
-                                <div class="tcolr_ad"><?php echo $detalle_valor; ?></div>
+                                <div class="tcoll_ad bold"><?php echo $adiFact[$i]['Nombre'] ?>:</div>
+                                <div class="tcolr_ad"><?php echo $adiFact[$i]['Descripcion'] ?></div>
                             </div> 
-                            <?php
-
+                <?php
                         }
                     }
                 }
                 ?>
                 <div class="clear"></div>
             </div>
+            <div class="clear"></div>
+            <br />
         </div>
         <?php
-        $iva = "0.00";
-        $ice = "0.00";
-        $irbpnr = "0.00";
-        $subtotal_12 = "0.00";
-        $subtotal_0 = "0.00";
-        $subtotal_no_objeto = "0.00";
-        $subtotal_exento = "0.00";
-        foreach ($arr_infoNotaCredito as $arr_info) {
-            $codigo = trim($arr_info["codigo"]);
-            $codigoPorcentaje = trim($arr_info["codigoPorcentaje"]);
-            $baseImponible = trim($arr_info["baseImponible"]);
-            $valor = trim($arr_info["valor"]);
-            if ($codigo == "2" && $codigoPorcentaje == "0") {
-                $iva = $valor;
-                $subtotal_0 = $baseImponible;
-            }
-            if ($codigo == "2" && $codigoPorcentaje == "2") {
-                $iva = $valor;
-                $subtotal_12 = $baseImponible;
-            }
-            if ($codigo == "2" && $codigoPorcentaje == "6") {
-                $iva = $valor;
-                $subtotal_no_objeto = $baseImponible;
-            }
-            if ($codigo == "2" && $codigoPorcentaje == "7") {
-                $iva = $valor;
-                $subtotal_exento = $baseImponible;
-            }
-            if ($codigo == "3") {
-                $ice = $valor;
-            }
-            if ($codigo == "5") {
-                $irbpnr = $valor;
+        $IRBPNR = "0.00";
+        $ICE = "0.00";
+        $BASEIVA0 = "0.00";
+        $NOOBJIVA = "0.00";
+        $EXENTOIVA = "0.00";
+        $DESCUENTO = "0.00";
+
+        for ($i = 0; $i < sizeof($impFact); $i++) {
+            if ($impFact[$i]['Codigo'] == '2') {//Valores de IVA
+                switch ($impFact[$i]['CodigoPorcentaje']) {
+                    case 0:
+                        $BASEIVA0 = $impFact[$i]['BaseImponible'];
+                        break;
+                    case 2:
+                        $BASEIVA12 = $impFact[$i]['BaseImponible'];
+                        $VALORIVA12 = $impFact[$i]['Valor'];
+                        break;
+                    case 3:
+                        $BASEIVA12 = $impFact[$i]['BaseImponible'];
+                        $VALORIVA12 = $impFact[$i]['Valor'];
+                        break;
+                    case 6://No objeto Iva
+                        $NOOBJIVA = $impFact[$i]['BaseImponible'];
+                        break;
+                    case 7://Excento de Iva
+                        $EXENTOIVA = $impFact[$i]['BaseImponible'];
+                        break;
+                    default:
+                }
             }
         }
         ?>
@@ -282,43 +221,43 @@
             <table>
                 <tr>
                     <td><?php echo app\modules\fe_edoc\Module::t("fe", 'SUBTOTAL 12%'); ?></td>
-                    <td align="right"><?php echo $subtotal_12 ?></td>
+                    <td align="right"><?php echo Yii::$app->formatter->format($BASEIVA12, ["decimal", 2]) ?></td>
                 </tr>
                 <tr>
                     <td><?php echo app\modules\fe_edoc\Module::t("fe", 'SUBTOTAL 0%'); ?></td>
-                    <td align="right"><?php echo $subtotal_0 ?></td>
+                    <td align="right"><?php echo Yii::$app->formatter->format($BASEIVA0, ["decimal", 2]) ?></td>
                 </tr>
                 <tr>
                     <td><?php echo app\modules\fe_edoc\Module::t("fe", 'SUBTOTAL not liable to IVA'); ?></td>
-                    <td align="right"><?php echo $subtotal_no_objeto ?></td>
+                    <td align="right"><?php echo Yii::$app->formatter->format($NOOBJIVA, ["decimal", 2]) ?></td>
                 </tr>
-                <tr>
-                    <td><?php echo app\modules\fe_edoc\Module::t("fe", 'SUBTOTAL TAX FREE'); ?></td>
-                    <td align="right"><?php echo $totalSinImpuestos ?></td>
-                </tr>
+                <!--<tr>
+                    <td><?php //echo app\modules\fe_edoc\Module::t("fe", 'SUBTOTAL TAX FREE'); ?></td>
+                    <td align="right"><?php //echo Yii::$app->formatter->format($EXENTOIVA, ["decimal", 2]) ?></td>
+                </tr>-->
                 <tr>
                     <td><?php echo app\modules\fe_edoc\Module::t("fe", 'SUBTOTAL exempt IVA'); ?></td>
-                    <td align="right"><?php echo $subtotal_exento ?></td>
+                    <td align="right"><?php echo Yii::$app->formatter->format($EXENTOIVA, ["decimal", 2]) ?></td>
                 </tr>
-                <tr>
-                    <td><?php echo app\modules\fe_edoc\Module::t("fe", 'TOTAL Descount'); ?></td>
-                    <td align="right"><?php echo $total_descuento ?></td>
-                </tr>
+                <!--<tr>
+                    <td><?php //echo app\modules\fe_edoc\Module::t("fe", 'DESCUENTO'); ?></td>
+                    <td align="right"><?php //echo Yii::$app->formatter->format($DESCUENTO, ["decimal", 2]) ?></td>
+                </tr>-->
                 <tr>
                     <td><?php echo app\modules\fe_edoc\Module::t("fe", 'ICE'); ?></td>
-                    <td align="right"><?php echo $ice ?></td>
+                    <td align="right"><?php echo Yii::$app->formatter->format($ICE, ["decimal", 2]) ?></td>
                 </tr>
                 <tr>
                     <td><?php echo app\modules\fe_edoc\Module::t("fe", 'IVA  12%'); ?></td>
-                    <td align="right"><?php echo $iva; ?></td>
+                    <td align="right"><?php echo Yii::$app->formatter->format($VALORIVA12, ["decimal", 2]) ?></td>
                 </tr>
                 <tr>
                     <td><?php echo app\modules\fe_edoc\Module::t("fe", 'IRBPNR'); ?></td>
-                    <td align="right"><?php echo $irbpnr; ?></td>
+                    <td align="right"><?php echo Yii::$app->formatter->format($IRBPNR, ["decimal", 2]) ?></td>
                 </tr>
                 <tr>
                     <td><?php echo app\modules\fe_edoc\Module::t("fe", 'TOTAL VALUE'); ?></td>
-                    <td style="text-align: right"><?php echo $valorModificacion ?></td>
+                    <td style="text-align: right"><?php echo Yii::$app->formatter->format($cabFact['ValorModificacion'], ["decimal", 2]) ?></td>
                 </tr>
             </table>
         </div>    

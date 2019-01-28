@@ -111,7 +111,7 @@ class NubefacturaController extends \app\components\CController {
                     'venFact' => $venFact,
                 ])
             );
-            $rep->mpdf->Output('Factura_' . $cabFact['NumDocumento'] . ".pdf", ExportFile::OUTPUT_TO_DOWNLOAD); 
+            $rep->mpdf->Output('FACTURA_' . $cabFact['NumDocumento'] . ".pdf", ExportFile::OUTPUT_TO_DOWNLOAD); 
             //exit;
         } catch (Exception $e) {
             echo $e->getMessage();
@@ -137,7 +137,6 @@ class NubefacturaController extends \app\components\CController {
         $nomDocfile=$modelo->mostrarRutaXMLAutorizado($ids);
         if ($nomDocfile["EstadoDocumento"] == "AUTORIZADO") { // Si retorna un Valor en el Array
             $nombreDocumento = $nomDocfile["NombreDocumento"];
-            //Utilities::putMessageLogFile($nomDocfile["DirectorioDocumento"] . $nombreDocumento);
             //echo "file created";exit;
             header('Content-type: text/xml');   // i am getting error on this line
             //Cannot modify header information - headers already sent by (output started at D:\xampp\htdocs\yii\framework\web\CController.php:793)

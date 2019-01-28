@@ -190,24 +190,37 @@ class NubeguiaremisionController extends \app\components\CController  {
         try {
             $ids = isset($_GET['ids']) ? base64_decode($_GET['ids']) : NULL;
             $rep = new ExportFile();
+            $this->layout = '@modules/fe_edoc/views/tpl_fe/main';
             $modelo = new NubeGuiaRemision(); //Ejmpleo code 3
             $cabDoc = $modelo->mostrarCabGuia($ids);
             $destDoc = $modelo->mostrarDestinoGuia($ids);
             $adiDoc = $modelo->mostrarCabGuiaDataAdicional($ids);
 
-            $Titulo=Yii::$app->getSession()->get('RazonSocial', FALSE) . " - " . $cabDoc['NombreDocumento'];
-            $nameFile=$cabDoc['NombreDocumento'] . '-' . $cabDoc['NumDocumento'];
+            $this->pdf_numeroaut = $cabDoc['AutorizacionSRI'];
+            $this->pdf_numero = $cabDoc['NumDocumento'];
+            $this->pdf_nom_empresa = $cabDoc['RazonSocial'];
+            $this->pdf_ruc = $cabDoc['Ruc'];
+            $this->pdf_num_contribuyente = $cabDoc['ContribuyenteEspecial'];
+            $this->pdf_contabilidad = $cabDoc['ObligadoContabilidad'];
+            $this->pdf_dir_matriz = $cabDoc['DireccionMatriz'];
+            $this->pdf_dir_sucursal = $cabDoc['DireccionEstablecimiento'];
+            $this->pdf_fec_autorizacion = $cabDoc['FechaAutorizacion'];
+            $this->pdf_emision = \app\modules\fe_edoc\Module::t("fe", 'NORMAL');//$cabDoc['TipoEmision'];
+            $this->pdf_ambiente = ($cabDoc['Ambiente'] == 1) ? \app\modules\fe_edoc\Module::t("fe", 'PRODUCTION') : \app\modules\fe_edoc\Module::t("fe", 'TEST');
+            $this->pdf_cla_acceso = $cabDoc['ClaveAcceso'];
+            $this->pdf_tipo_documento = \app\modules\fe_edoc\Module::t("fe", 'REFERRAL GUIDE');
+            $this->pdf_cod_barra = "";
 
             $rep->orientation = "P"; // tipo de orientacion L => Horizontal, P => Vertical    
             $rep->createReportPdf(
-                    $this->render('guiaremiPDF', array(
+                    $this->render('@modules/fe_edoc/views/tpl_fe/gremision', array(
                         'cabDoc' => $cabDoc,
                         'destDoc' => $destDoc,
                         'adiDoc' => $adiDoc,
                                 ))
             );
 
-            $rep->mpdf->Output($nameFile . '_' . date("Ymdhis") . ".pdf", ExportFile::OUTPUT_TO_DOWNLOAD); 
+            $rep->mpdf->Output('GUIA REMISION_' . $cabDoc['NumDocumento']  . ".pdf", ExportFile::OUTPUT_TO_DOWNLOAD); 
             //exit;
         } catch (Exception $e) {
             $this->errorControl($e);
@@ -219,9 +232,17 @@ class NubeguiaremisionController extends \app\components\CController  {
         $modelo = new NubeGuiaRemision();
         $nomDocfile= array();
         $nomDocfile=$modelo->mostrarRutaXMLAutorizado($ids);
-        return $this->render('guiaAutXML', array(
-            'nomDocfile' => $nomDocfile,
-        ));
+        if ($nomDocfile["EstadoDocumento"] == "AUTORIZADO") { // Si retorna un Valor en el Array
+            $nombreDocumento = $nomDocfile["NombreDocumento"];
+            //echo "file created";exit;
+            header('Content-type: text/xml');   // i am getting error on this line
+            //Cannot modify header information - headers already sent by (output started at D:\xampp\htdocs\yii\framework\web\CController.php:793)
+            header('Content-Disposition: Attachment; filename="' . $nombreDocumento . '"');
+            // File to download
+            readfile($nomDocfile["DirectorioDocumento"] . $nombreDocumento);        // i am not able to download the same file
+        } else {
+            echo "Documento No autorizado";
+        }
     }
     
    
