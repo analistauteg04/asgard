@@ -614,7 +614,7 @@ class NubeNotasCredito {
             $fechaIni=$obj_var->dateStartFact;
             $limitEnvMail=$obj_var->limitEnvMail;            
             $sql = "SELECT A.IdNotaCredito Ids,A.AutorizacionSRI,A.FechaAutorizacion,A.IdentificacionComprador CedRuc,A.RazonSocialComprador RazonSoc,
-                    'NOTA DE CREDITO' NombreDocumento,A.Ruc,A.Ambiente,A.TipoEmision,A.EstadoEnv,
+                    'NOTA DE CREDITO' NombreDocumento,A.Ruc,A.Ambiente,A.TipoEmision,A.EstadoEnv,EmailResponsable CorreoPer,
                     A.ClaveAcceso,CONCAT(A.Establecimiento,'-',A.PuntoEmision,'-',A.Secuencial) NumDocumento
                 FROM " . $obj_con->BdIntermedio . ".NubeNotaCredito A "
                     . " WHERE A.Estado=3 "

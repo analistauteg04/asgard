@@ -20,7 +20,7 @@ class cls_Global {
     public static $ambt_id='1';//Ambiente de Pruebas por Defecto =1 =>2 Produccion (cambiar en caso de Pruebas)
     //public static $IdsUsu='1';//Valor por defecto(Alimenta al Autorizar el Documento)
     var $consumidorfinal='9999999999';
-    var $dateStartFact='2018-06-29';
+    var $dateStartFact='2019-01-01';
     var $datebydefault='d-m-Y';
     public static $dateXML = "d/m/Y";
     public $decimalPDF=2;
@@ -32,7 +32,7 @@ class cls_Global {
     var $Author="UTEG";
     var $rutaPDF="/home/EDOC/DOCPDF/";
     var $rutaXML="/home/EDOC/AUTORIZADO/";
-    var $rutaLink='http://edoc.uteg.com';
+    var $rutaLink='http://edoc.uteg.com';//Ruta donde se consultan los documentos
     var $tipoFacLocal='F4';
     var $tipoGuiLocal='GR';
     var $tipoRetLocal='RT';
@@ -120,7 +120,8 @@ class cls_Global {
         $emp_id=cls_Global::$emp_id;
         $usuNombre = $objEnt[$i]['CedRuc'];
         $RazonSoc = $objEnt[$i]['RazonSoc'];
-        $correo = ($objEnt[$i]['CorreoPer']<>'')?$objEnt[$i]['CorreoPer']:$this->buscarCorreoERP($obj_con,$usuNombre,$DBTable);//Consulta Tabla Clientes
+        //$correo = ($objEnt[$i]['CorreoPer']<>'')?$objEnt[$i]['CorreoPer']:$this->buscarCorreoERP($obj_con,$usuNombre,$DBTable);//Consulta Tabla Clientes
+        $correo = ($objEnt[$i]['CorreoPer']<>'')?$objEnt[$i]['CorreoPer']:'';//Consulta Tabla Clientes
         $pass =$this->generarCodigoKey(8);// $objEnt[$i]['CedRuc'];
         //Inserta Datos Tabla USUARIO
         $sql = "INSERT INTO " . $obj_con->BdIntermedio . ".usuario

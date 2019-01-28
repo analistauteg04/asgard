@@ -447,7 +447,7 @@ class NubeGuiaRemision {
             $fechaIni=$obj_var->dateStartFact;
             $limitEnvMail=$obj_var->limitEnvMail;
             $sql = "SELECT A.IdGuiaRemision Ids,A.AutorizacionSRI,A.FechaAutorizacion,B.IdentificacionDestinatario CedRuc,B.RazonSocialDestinatario RazonSoc,
-                    'GUIA DE REMISION' NombreDocumento,A.Ruc,A.Ambiente,A.TipoEmision,A.EstadoEnv,
+                    'GUIA DE REMISION' NombreDocumento,A.Ruc,A.Ambiente,A.TipoEmision,A.EstadoEnv,EmailResponsable CorreoPer,
                     ClaveAcceso,CONCAT(A.Establecimiento,'-',A.PuntoEmision,'-',A.Secuencial) NumDocumento
                 FROM " . $obj_con->BdIntermedio . ".NubeGuiaRemision A"
                     ." INNER JOIN " . $obj_con->BdIntermedio . ".NubeGuiaRemisionDestinatario B ON A.IdGuiaRemision=B.IdGuiaRemision "

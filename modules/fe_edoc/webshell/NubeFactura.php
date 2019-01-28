@@ -656,8 +656,13 @@ class NubeFactura {
                     $mPDF1->WriteHTML($mensajePDF); //hacemos un render partial a una vista preparada, en este caso es la vista docPDF
                     $mPDF1->Output($obj_var->rutaPDF.$dataMail->filePDF, 'F');//I=lo presenta navegador  F=ENVIA A UN ARCHVIO                   
                     
+                    $body = "El archivo con nombre no cumple con el formato.";
                     $resulMail=$dataMail->enviarMail($htmlMail,$cabDoc,$obj_var,$usuData,$i);
+                    //$resulMail=$dataMail->sendEmail(null,$cabDoc[$i]["CorreoPer"],array($dataMail->fileXML,$dataMail->filePDF)
+                    //                                ,$dataMail->Subject,$body);
+                    
                     if($resulMail["status"]=='OK'){
+                    //if($resulMail){
                         $cabDoc[$i]['EstadoEnv']=6;//Correo Envia
                     }else{
                         $cabDoc[$i]['EstadoEnv']=7;//Correo No enviado
@@ -689,7 +694,7 @@ class NubeFactura {
             $fechaIni=$obj_var->dateStartFact;
             $limitEnvMail=$obj_var->limitEnvMail;
             $sql = "SELECT IdFactura Ids,AutorizacionSRI,FechaAutorizacion,IdentificacionComprador CedRuc,RazonSocialComprador RazonSoc,
-                    'FACTURA' NombreDocumento,Ruc,Ambiente,TipoEmision,EstadoEnv,
+                    'FACTURA' NombreDocumento,Ruc,Ambiente,TipoEmision,EstadoEnv,EmailResponsable CorreoPer,
                     ClaveAcceso,ImporteTotal Importe,CONCAT(Establecimiento,'-',PuntoEmision,'-',Secuencial) NumDocumento
                 FROM " . $obj_con->BdIntermedio . ".NubeFactura WHERE Estado=3 "
                     . "AND EstadoEnv=2 AND FechaAutorizacion>='$fechaIni' limit $limitEnvMail "; 
