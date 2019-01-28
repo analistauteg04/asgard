@@ -9,6 +9,9 @@ use app\modules\fe_edoc\models\Empresa;
 
 class Edoc_ApiRest extends \app\modules\fe_edoc\components\CActiveRecord {
     private $tipoEmision=1;//Valor por defecto "NORMAL"
+    private $emp_id=1;
+    private $est_id=1;    
+    private $pemi_id=1;
     public $tipoEdoc = "";
     public $cabEdoc = array();
     public $detEdoc = array();
@@ -115,7 +118,7 @@ class Edoc_ApiRest extends \app\modules\fe_edoc\components\CActiveRecord {
     private function insertarCabFactura($con) {
         $cabFact= $this->cabEdoc;
         $objEmpData= new Empresa;
-        $empresaEnt=$objEmpData->buscarDataEmpresa($emp_id,$est_id,$pemi_id);        
+        $empresaEnt=$objEmpData->buscarDataEmpresa($this->emp_id,$this->est_id,$this->pemi_id);        
         $TipoEmision=$this->tipoEmision;//Valor por Defecto
         $RazonSocial=$empresaEnt['RazonSocial'];
         $NombreComercial=$empresaEnt['NombreComercial'];
@@ -132,11 +135,11 @@ class Edoc_ApiRest extends \app\modules\fe_edoc\components\CActiveRecord {
                (Ambiente,TipoEmision, RazonSocial, NombreComercial, Ruc,ClaveAcceso,CodigoDocumento, Establecimiento,
                 PuntoEmision, Secuencial, DireccionMatriz, FechaEmision, DireccionEstablecimiento, ContribuyenteEspecial,
                 ObligadoContabilidad, TipoIdentificacionComprador, GuiaRemision, RazonSocialComprador, IdentificacionComprador,
-                TotalSinImpuesto, TotalDescuento, Propina, ImporteTotal, Moneda, SecuencialERP, CodigoTransaccionERP,UsuarioCreador,Estado,FechaCarga) VALUES 
+                TotalSinImpuesto, TotalDescuento, Propina, ImporteTotal, Moneda,EmailResponsable, SecuencialERP, CodigoTransaccionERP,UsuarioCreador,Estado,FechaCarga) VALUES 
                (:Ambiente,:TipoEmision, :RazonSocial, :NombreComercial, :Ruc,:ClaveAcceso,:CodigoDocumento, :Establecimiento,
                 :PuntoEmision, :Secuencial, :DireccionMatriz, :FechaEmision, :DireccionEstablecimiento, :ContribuyenteEspecial,
                 :ObligadoContabilidad, :TipoIdentificacionComprador, :GuiaRemision, :RazonSocialComprador, :IdentificacionComprador,
-                :TotalSinImpuesto, :TotalDescuento, :Propina, :ImporteTotal, :Moneda, :SecuencialERP, :CodigoTransaccionERP,:UsuarioCreador,1,CURRENT_TIMESTAMP())";
+//                :TotalSinImpuesto, :TotalDescuento, :Propina, :ImporteTotal, :Moneda,:EmailResponsable, :SecuencialERP, :CodigoTransaccionERP,:UsuarioCreador,1,CURRENT_TIMESTAMP())";
         $comando = $con->createCommand($sql);
 
         //$comando->bindParam(":id", $id_docElectronico, PDO::PARAM_INT);
@@ -164,6 +167,7 @@ class Edoc_ApiRest extends \app\modules\fe_edoc\components\CActiveRecord {
         $comando->bindParam(":Propina", $cabFact['PROPINA'], \PDO::PARAM_STR);
         $comando->bindParam(":ImporteTotal", $cabFact['TOTALDOC'], \PDO::PARAM_STR);
         $comando->bindParam(":Moneda", $cabFact['MONEDA'], \PDO::PARAM_STR);
+        $comando->bindParam(":EmailResponsable", $cabFact['MAILSUJETO'], \PDO::PARAM_STR);
         $comando->bindParam(":SecuencialERP", $cabFact['SECUENCIAL'], \PDO::PARAM_STR);
         $comando->bindParam(":CodigoTransaccionERP", $CodigoTransaccionERP, \PDO::PARAM_STR);
         $comando->bindParam(":UsuarioCreador", $UsuarioCreador, \PDO::PARAM_STR);
@@ -339,7 +343,7 @@ class Edoc_ApiRest extends \app\modules\fe_edoc\components\CActiveRecord {
     private function InsertarCabRetencion($con) {
         $cabFact= $this->cabEdoc;       
         $objEmpData= new Empresa;
-        $empresaEnt=$objEmpData->buscarDataEmpresa($emp_id,$est_id,$pemi_id);        
+        $empresaEnt=$objEmpData->buscarDataEmpresa($this->emp_id,$this->est_id,$this->pemi_id);               
         $TipoEmision=$this->tipoEmision;//Valor por Defecto
         $RazonSocial=$empresaEnt['RazonSocial'];
         $NombreComercial=$empresaEnt['NombreComercial'];
@@ -358,11 +362,11 @@ class Edoc_ApiRest extends \app\modules\fe_edoc\components\CActiveRecord {
                 (Ambiente,TipoEmision,RazonSocial,NombreComercial,Ruc,ClaveAcceso,CodigoDocumento,PuntoEmision,Establecimiento, 
                  Secuencial,DireccionMatriz,FechaEmision,DireccionEstablecimiento,ContribuyenteEspecial,ObligadoContabilidad, 
                  TipoIdentificacionSujetoRetenido,IdentificacionSujetoRetenido,RazonSocialSujetoRetenido,PeriodoFiscal, 
-                 TotalRetencion,UsuarioCreador,SecuencialERP,CodigoTransaccionERP,DocSustentoERP,Estado,USU_ID,FechaCarga)VALUES 
+                 TotalRetencion,UsuarioCreador,SecuencialERP,CodigoTransaccionERP,DocSustentoERP,Estado,USU_ID,FechaCarga,EmailResponsable)VALUES 
                 (:Ambiente,:TipoEmision,:RazonSocial,:NombreComercial,:Ruc,:ClaveAcceso,:CodigoDocumento,:PuntoEmision,:Establecimiento, 
                  :Secuencial,:DireccionMatriz,:FechaEmision,:DireccionEstablecimiento,:ContribuyenteEspecial,:ObligadoContabilidad, 
                  :TipoIdentificacionSujetoRetenido,:IdentificacionSujetoRetenido,:RazonSocialSujetoRetenido,:PeriodoFiscal, 
-                 :TotalRetencion,:UsuarioCreador,:SecuencialERP,:CodigoTransaccionERP,:DocSustentoERP,1,:UsuarioCreador,CURRENT_TIMESTAMP() );";
+                 :TotalRetencion,:UsuarioCreador,:SecuencialERP,:CodigoTransaccionERP,:DocSustentoERP,1,:UsuarioCreador,CURRENT_TIMESTAMP(),:EmailResponsable );";
         
         $comando = $con->createCommand($sql);
 
@@ -391,7 +395,7 @@ class Edoc_ApiRest extends \app\modules\fe_edoc\components\CActiveRecord {
         $comando->bindParam(":CodigoTransaccionERP", $CodigoTransaccionERP, \PDO::PARAM_STR);
         $comando->bindParam(":DocSustentoERP", $DocSustentoERP, \PDO::PARAM_STR);        
         $comando->bindParam(":UsuarioCreador", $UsuarioCreador, \PDO::PARAM_STR);
-
+        $comando->bindParam(":EmailResponsable", $cabFact['MAILSUJETO'], \PDO::PARAM_STR);
         $comando->execute();
         return $con->getLastInsertID();
         
@@ -510,7 +514,7 @@ class Edoc_ApiRest extends \app\modules\fe_edoc\components\CActiveRecord {
     private function InsertarCabNC($con) {
         $cabFact= $this->cabEdoc;        
         $objEmpData= new Empresa;
-        $empresaEnt=$objEmpData->buscarDataEmpresa($emp_id,$est_id,$pemi_id);        
+        $empresaEnt=$objEmpData->buscarDataEmpresa($this->emp_id,$this->est_id,$this->pemi_id);                
         $TipoEmision=$this->tipoEmision;//Valor por Defecto
         $RazonSocial=$empresaEnt['RazonSocial'];
         $NombreComercial=$empresaEnt['NombreComercial'];
@@ -527,12 +531,12 @@ class Edoc_ApiRest extends \app\modules\fe_edoc\components\CActiveRecord {
                 PuntoEmision, Secuencial, DireccionMatriz, FechaEmision, DireccionEstablecimiento, ContribuyenteEspecial,
                 ObligadoContabilidad, TipoIdentificacionComprador, RazonSocialComprador, IdentificacionComprador,
                 Rise,CodDocModificado,NumDocModificado,FechaEmisionDocModificado,TotalSinImpuesto,ValorModificacion,MotivoModificacion,
-                Moneda, SecuencialERP, CodigoTransaccionERP,UsuarioCreador,Estado,FechaCarga) VALUES 
+                Moneda,EmailResponsable, SecuencialERP, CodigoTransaccionERP,UsuarioCreador,Estado,FechaCarga) VALUES 
                (:Ambiente,:TipoEmision, :RazonSocial, :NombreComercial, :Ruc,:ClaveAcceso,:CodigoDocumento, :Establecimiento,
                 :PuntoEmision, :Secuencial, :DireccionMatriz, :FechaEmision, :DireccionEstablecimiento, :ContribuyenteEspecial,
                 :ObligadoContabilidad, :TipoIdentificacionComprador, :RazonSocialComprador, :IdentificacionComprador,
                 :Rise,:CodDocModificado,:NumDocModificado,:FechaEmisionDocModificado,:TotalSinImpuesto,:ValorModificacion,:MotivoModificacion,
-                :Moneda, :SecuencialERP, :CodigoTransaccionERP,:UsuarioCreador,1,CURRENT_TIMESTAMP())";
+                :Moneda,:EmailResponsable, :SecuencialERP, :CodigoTransaccionERP,:UsuarioCreador,1,CURRENT_TIMESTAMP())";
         $comando = $con->createCommand($sql);
 
         //$comando->bindParam(":id", $id_docElectronico, PDO::PARAM_INT);
@@ -564,6 +568,7 @@ class Edoc_ApiRest extends \app\modules\fe_edoc\components\CActiveRecord {
         $comando->bindParam(":MotivoModificacion", $cabFact['MOTIVO_DEVOLUCION'], \PDO::PARAM_STR);
         
         $comando->bindParam(":Moneda", $cabFact['MONEDA'], \PDO::PARAM_STR);
+        $comando->bindParam(":EmailResponsable", $cabFact['MAILSUJETO'], \PDO::PARAM_STR);
         $comando->bindParam(":SecuencialERP", $cabFact['SECUENCIAL'], \PDO::PARAM_STR);
         $comando->bindParam(":CodigoTransaccionERP", $CodigoTransaccionERP, \PDO::PARAM_STR);
         $comando->bindParam(":UsuarioCreador", $UsuarioCreador, \PDO::PARAM_STR);

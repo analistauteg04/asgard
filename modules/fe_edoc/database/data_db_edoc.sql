@@ -3,15 +3,17 @@ USE `db_edoc`;
 
 --
 -- Dumping data for table `empresa`
+-- PRUEBAS ambiente 1 tipoemison 1
+-- PRODUCCION ambiente 2 tipoemision 1
 --
 INSERT INTO `empresa` (`emp_ruc`, `emp_razonsocial`, `emp_nom_comercial`, `emp_ambiente`, `emp_tipo_emision`, `emp_direccion_matriz`, `emp_obliga_contabilidad`, `emp_contri_especial`, `emp_telefono`, `emp_fax`, `emp_email`, `emp_email_digital`, `emp_email_conta`, `emp_moneda`, `emp_website`, `emp_logo`, `emp_est_log`) VALUES 
-('9999999999999', 'UTEG', 'UTEG', '1', '1', 'DIRECCION UTEG', 'SI', '', '9999999', '99999', 'info@uteg.edu.ec', 'digital@uteg.edu.ec', 'contador@uteg.edu.ec', 'DOLAR', 'www.uteg.edu.ec', '/ruta/', '1');
+('0992164913001', 'UNIVERSIDAD TECNOLÓGICA EMPRESARIAL DE GUAYAQUIL - UTEG', 'UNIVERSIDAD TECNOLÓGICA EMPRESARIAL DE GUAYAQUIL - UTEG', '1', '1', 'GUAYACANES 520 Y LA 5TA. - URDESA CENTRAL', 'SI', '', '46052450', '46052450', 'info@uteg.edu.ec', 'digital@uteg.edu.ec', 'contador@uteg.edu.ec', 'DOLAR', 'www.uteg.edu.ec', '/ruta/', '1');
 
 --
 -- Dumping data for table `VSFirmaDigital`
 --
 INSERT INTO `VSFirmaDigital` (`Id`, `emp_id`, `Clave`, `RutaFile`, `RutaFileCrt`, `FechaCaducidad`, `EmpresaCertificadora`, `SeaDocXml`, `Wdsl_local`, `Estado`, `UsuarioCreacion`) VALUES 
-('1', '1', 'VXQxRjRjVHU4NDJvbzE1', 'Y2FybG9zX2VucmlxdWVfY2FzdHJvX2VzcGFuYS5wMTI=', '', '2017-11-05', 'BCE', '/opt/SEADOC/GENERADO/', 'http://127.0.0.1:8080/FIRMARSRI/FirmaElectronicaSRI?wsdl', '1', '1');
+('1', '1', 'R2FsbzM0NTQxMQ==', 'Y2FybG9zX2VucmlxdWVfY2FzdHJvX2VzcGFuYS5wMTI=', '', '2019-01-27', 'BCE', '/opt/SEADOC/GENERADO/', 'http://127.0.0.1:8080/FIRMARSRI/FirmaElectronicaSRI?wsdl', '1', '1');
 
 --
 -- Dumping data for table `establecimiento`

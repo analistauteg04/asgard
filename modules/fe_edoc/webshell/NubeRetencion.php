@@ -479,7 +479,7 @@ class NubeRetencion {
             $fechaIni=$obj_var->dateStartFact;
             $limitEnvMail=$obj_var->limitEnvMail;
             $sql = "SELECT A.IdRetencion Ids,A.AutorizacionSRI,A.FechaAutorizacion,A.IdentificacionSujetoRetenido CedRuc,A.RazonSocialSujetoRetenido RazonSoc,
-                    'COMPROBANTE DE RETENCION' NombreDocumento,A.Ruc,A.Ambiente,A.TipoEmision,A.EstadoEnv,
+                    'COMPROBANTE DE RETENCION' NombreDocumento,A.Ruc,A.Ambiente,A.TipoEmision,A.EstadoEnv,EmailResponsable CorreoPer,
                     A.ClaveAcceso,CONCAT(A.Establecimiento,'-',A.PuntoEmision,'-',A.Secuencial) NumDocumento
                 FROM " . $obj_con->BdIntermedio . ".NubeRetencion A "
                     . " WHERE A.Estado=3"

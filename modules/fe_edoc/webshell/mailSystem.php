@@ -126,5 +126,96 @@ class mailSystem {
             return $obj_var->messageSystem('OK', "¡¡Enviado!!", null, null, null);
         }*/
     }
+    
+    
+    function sendEmail($from = "no-responder@uteg.edu.ec", $to = array(), $files = array(), $subject, $body, $smtpConfig = NULL, $titleMessage = "") {
+        $mail = new PHPMailer;
+        $smtpConfig = isset($smtpConfig) ? $smtpConfig : (getDataSMTPClient());
+        //$mail->SMTPDebug = 3; // Enable verbose debug output
+        $mail->isSMTP();
+        $mail->Host = $smtpConfig["Host"];
+        $mail->SMTPAuth = isset($smtpConfig["SMTPAuth"]) ? $smtpConfig["SMTPAuth"] : true;
+        $mail->Username = $this->noResponder;//$smtpConfig["Username"];
+        $mail->Password = $this->noResponderPass;//$smtpConfig["Password"];
+        //$mail->SMTPSecure = isset($smtpConfig["tls"])?$smtpConfig["tls"]:'tls';
+        $mail->Port = 465;//$smtpConfig["Port"];                                    // TCP port to connect to
+
+        $mail->From = isset($from) ? $from : ($this->$adminMail);
+        $mail->CharSet = "UTF-8";
+        $arr_mail = explode("@", $from);
+        $mail->FromName = $arr_mail[0];
+        if (count($to) > 0) {
+            for ($i = 0; $i < count($to); $i++) {
+                $mail->addAddress($to[$i]);
+            }
+        }
+
+        if (count($files) > 0 && is_array($files)) {
+            for ($i = 0; $i < count($files); $i++) {
+                if (is_array($files[$i])) {
+                    $item = $files[$i];
+                    $content = $item["content"];
+                    $mime = $item["mime-type"];
+                    $name = $item["name"];
+                    $mail->addStringAttachment($content, $name, "base64", $mime);
+                } else
+                    $mail->addAttachment($files[$i]);
+            }
+            //$mail->addAttachment('/tmp/image.jpg', 'new.jpg');    // Optional name
+        }
+
+        // adjunta files/imagen.jpg
+        $ruta_images = dirname(__FILE__) . DIRECTORY_SEPARATOR . "/layouts/images/";
+        $mail->AddEmbeddedImage($ruta_images . "logo.png", 'logo', 'file/logo.png');
+        $mail->AddEmbeddedImage($ruta_images . "fb.png", 'facebook', 'file/facebook.png');
+        $mail->AddEmbeddedImage($ruta_images . "tw.png", 'twitter', 'file/twitter.png');
+        $mail->AddEmbeddedImage($ruta_images . "banner.jpg", 'banner', 'file/banner.jpg');
+        $mail->isHTML(true);
+
+        $mail->Subject = $subject;
+        $mail->Body = printFormatEmailClient($body);
+        $mail->AltBody = $body;
+
+        if (!$mail->send()) {
+            putMessageLogFile("Message could not be sent. Mailer Error: " . $mail->ErrorInfo);
+            return FALSE;
+        } else {
+            return TRUE;
+        }
+    }
+
+    function printFormatEmailClient($message, $titleMessage = "") {
+        Global $empresa;
+        $file = dirname(__FILE__) . DIRECTORY_SEPARATOR . "/layouts/mailing.php";
+        if ($titleMessage == "")
+            $titleMessage = "Facturación Electrónica";
+        $name = "UTEG";
+        $cabecera_head = $name . ", " . "la solución que usted necesita";
+        $browser_label = "Ver en su Browser";
+        $copyright = "Copyright &copy; " . date("Y") . " UTEG";
+        $label_mailing = "Nuestra dirección de email es: ";
+        $webmail = $this->adminMail;
+        $social = array("twitter" => "https://twitter.com", "facebook" => "https://www.facebook.com");
+        $twitter = $social["twitter"];
+        $facebook = $social["facebook"];
+
+        $message = str_replace("\\n", "<br />", $message);
+        $message = str_replace("\n", "<br />", $message);
+        $content = file_get_contents($file);
+        $content = str_replace("[[NAME]]", $name, $content);
+        $content = str_replace("[[TITLE]]", htmlentities($titleMessage), $content);
+        $content = str_replace("[[CABECERA_HEAD]]", htmlentities($cabecera_head), $content);
+        $content = str_replace("[[BROWSER_LABEL]]", htmlentities($browser_label), $content);
+
+        $content = str_replace("[[FACEBOOK]]", htmlentities($facebook), $content);
+        $content = str_replace("[[TWITTER]]", htmlentities($twitter), $content);
+        $content = str_replace("[[WEBMAIL]]", htmlentities($webmail), $content);
+        $content = str_replace("[[COPYRIGHT]]", $copyright, $content);
+        $content = str_replace("[[LABEL_MAILING]]", htmlentities($label_mailing), $content);
+
+        $content = str_replace("[[MESSAGE]]", $message, $content);
+
+        return $content;
+    }
 
 }
