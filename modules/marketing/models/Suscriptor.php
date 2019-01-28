@@ -113,8 +113,8 @@ class Suscriptor extends \yii\db\ActiveRecord {
         $con = \Yii::$app->db_mailing;
         $estado = 1;
         $query_subscrito = ($subscrito == 1) ? "AND ifnull(sus.sus_id,0)>0" : (($subscrito == 2) ? "AND ifnull(sus.sus_id,0)<1" : "");
-        $nosuscrito = " left join db_mailing.suscriptor as sus on sus.per_id = per.per_id or sus.pges_id=pges.pges_id ";
-        $suscrito = " join db_mailing.suscriptor as sus on sus.per_id = per.per_id or sus.pges_id=pges.pges_id ";
+        $nosuscrito = " left join db_mailing.suscriptor as sus on sus.per_id = per.per_id or sus.pges_id=pges.pges_id  ";
+        $suscrito = " join db_mailing.suscriptor as sus on sus.per_id = per.per_id or sus.pges_id=pges.pges_id";
         $join_subscrito = ($subscrito == 1) ? $suscrito : (($subscrito == 2) ? $nosuscrito : $nosuscrito);
         $sql = "
                SELECT 
@@ -125,7 +125,7 @@ class Suscriptor extends \yii\db\ActiveRecord {
                     concat(per.per_pri_nombre,' ',per.per_pri_apellido) as contacto, 
                     if(isnull(mest.mest_nombre),eaca.eaca_nombre,mest.mest_nombre) carrera,
                     per.per_correo,
-                    if(ifnull(sus.sus_id,0)>0,'Subscrito','No Subscrito') as estado,
+                    if(ifnull(sus.sus_id,0)>0 and sus.sus_estado =:estado,'Subscrito','No Subscrito') as estado,
                     acon.acon_id,
                     acon.acon_nombre
                 FROM 
@@ -210,10 +210,9 @@ class Suscriptor extends \yii\db\ActiveRecord {
      * @property 
      * @return  
      */
-    public function eliminarSuscriptor($per_id, $lista_id) {
+    public function updateSuscripto($per_id, $lista_id, $estado_cambio) {
         $con = \Yii::$app->db_mailing;
-        $estado = 1;
-        $estado_cambio = 0;
+        $estado = 1;       
         $fecha_modificacion = date(Yii::$app->params["dateTimeByDefault"]);
         if ($trans !== null) {
             $trans = null; // si existe la transacción entonces no se crea una
@@ -225,16 +224,12 @@ class Suscriptor extends \yii\db\ActiveRecord {
                     ("UPDATE " . $con->dbname . ".suscriptor sus 
                       INNER JOIN " . $con->dbname . ".lista_suscriptor lsus 
                       ON sus.sus_id = lsus.sus_id  
-                      SET sus.sus_estado_logico = :estado_cambio, 
-                          lsus.lsus_estado_logico = :estado_cambio,
+                      SET sus.sus_estado = :estado_cambio, 
+                          lsus.lsus_estado = :estado_cambio,
                           sus.sus_fecha_modificacion = :fecha_modificacion, 
                           lsus.lsus_fecha_modificacion = :fecha_modificacion
                       WHERE sus.per_id = :per_id AND
-                            lsus.lis_id = :lista_id AND
-                            sus.sus_estado_logico = :estado AND
-                            sus.sus_estado = :estado AND
-                            lsus.lsus_estado_logico = :estado AND
-                            lsus.lsus_estado = :estado");
+                            lsus.lis_id = :lista_id ");
 
             $comando->bindParam(":estado", $estado, \PDO::PARAM_STR);
             $comando->bindParam(":per_id", $per_id, \PDO::PARAM_INT);
@@ -250,6 +245,32 @@ class Suscriptor extends \yii\db\ActiveRecord {
                 $trans->rollback();
             return FALSE;
         }
+    }
+
+    /**
+     * Function consultarSuscriptoxPerylis
+     * @author  Giovanni Vergara <analistadesarrollo02@uteg.edu.ec>
+     * @param   
+     * @return  
+     */
+    public function consultarSuscriptoxPerylis($per_id/*, $list_id*/) {
+        $con = \Yii::$app->db_mailing;
+        // $estado = 0;
+
+        $sql = "select count(*) as inscantes	
+                FROM " . $con->dbname . ".suscriptor sus 
+                -- INNER JOIN " . $con->dbname . ".lista_suscriptor lsus     
+                WHERE sus.per_id = :per_id -- AND
+                      -- lsus.lis_id = :list_id AND
+                      -- sus.sus_estado = :estado AND
+                      -- lsus.lsus_estado = :estado ";
+
+        $comando = $con->createCommand($sql);
+        // $comando->bindParam(":estado", $estado, \PDO::PARAM_STR);
+        $comando->bindParam(":per_id", $per_id, \PDO::PARAM_INT);
+        // $comando->bindParam(":list_id", $list_id, \PDO::PARAM_INT);
+        $resultData = $comando->queryOne();
+        return $resultData;
     }
 
 }

@@ -51,7 +51,7 @@ class EmailController extends \app\components\CController {
         $su_id = 0;
         $error = 0;
         $mensaje = "";
-        \app\models\Utilities::putMessageLogFile('entro a la funcion');
+        $estado_cambio = 1;       
         $data = Yii::$app->request->get();
         if (isset($data["PBgetFilter"])) {
             \app\models\Utilities::putMessageLogFile('entro al ajax filter');
@@ -80,23 +80,41 @@ class EmailController extends \app\components\CController {
                 }if ($per_tipo == 2) {
                     $pge_id = $ps_id;
                 }
-                $keys = ['per_id', 'pges_id', 'sus_estado', 'sus_estado_logico'];
-                $parametros = [$per_id, $pge_id, 1, 1];
-                $su_id = $mod_sb->insertarSuscritor($con, $parametros, $keys, 'suscriptor');
-                if ($su_id > 0) {
-                    $key = ['lis_id', 'sus_id', 'lsus_estado', 'lsus_fecha_creacion', 'lsus_estado_logico'];
-                    $parametro = [$list_id, $su_id, 1, $fecha_crea, 1];
-                    $lsu_id = $mod_sb->insertarListaSuscritor($con, $parametro, $key, 'lista_suscriptor');
-                    if ($lsu_id > 0) {
+                // conusltar por $per_id y $list_id
+                $esus = $mod_sb->consultarSuscriptoxPerylis($per_id, $list_id);
+                // if consulta trae datos modificar tablas suscriptor y lista_suscriptor el estado a 1 
+                if ($esus["inscantes"] > 0) {
+                    $esusc = $mod_sb->updateSuscripto($per_id, $list_id, $estado_cambio);
+                    \app\models\Utilities::putMessageLogFile('contadores: ' . $esusc);
+                    if ($esusc > 0) {
                         $mensaje = "El contacto ha sido asignado a la lista satisfactoriamente";
+                        $error = 0;
                     } else {
                         $mensaje = "Error: El suscritor no fue guardado.";
                         $error++;
                     }
-                } else {
-                    $mensaje = "Error: El suscritor no fue guardado.";
-                    $error++;
                 }
+                // else el ingreso
+                else {
+                    //inicia ingreso
+                    $keys = ['per_id', 'pges_id', 'sus_estado', 'sus_estado_logico'];
+                    $parametros = [$per_id, $pge_id, 1, 1];
+                    $su_id = $mod_sb->insertarSuscritor($con, $parametros, $keys, 'suscriptor');
+                    if ($su_id > 0) {
+                        $key = ['lis_id', 'sus_id', 'lsus_estado', 'lsus_fecha_creacion', 'lsus_estado_logico'];
+                        $parametro = [$list_id, $su_id, 1, $fecha_crea, 1];
+                        $lsu_id = $mod_sb->insertarListaSuscritor($con, $parametro, $key, 'lista_suscriptor');
+                        if ($lsu_id > 0) {
+                            $mensaje = "El contacto ha sido asignado a la lista satisfactoriamente";
+                        } else {
+                            $mensaje = "Error: El suscritor no fue guardado.";
+                            $error++;
+                        }
+                    } else {
+                        $mensaje = "Error: El suscritor no fue guardado.";
+                        $error++;
+                    }
+                }// termina ingreso
             }
             if ($error == 0) {
                 $message = array(
@@ -109,6 +127,7 @@ class EmailController extends \app\components\CController {
                 $message = array(
                     "wtmessage" => Yii::t("formulario", $mensaje),
                     "title" => Yii::t('jslang', 'Success'),
+                    "rederict" => Yii::$app->response->redirect(['/marketing/email/asignar?lis_id=' . base64_encode($list_id)]),
                 );
             }
             return Utilities::ajaxResponse('OK', 'alert', Yii::t("jslang", "Sucess"), false, $message);
@@ -519,6 +538,7 @@ class EmailController extends \app\components\CController {
         $su_id = 0;
         $error = 0;
         $mensaje = "";
+        $estado_cambio = 0;
         $data = Yii::$app->request->get();
         if (isset($data["PBgetFilter"])) {
             if (isset($data["estado"]) == 1) {
@@ -532,7 +552,7 @@ class EmailController extends \app\components\CController {
             if ($data["accion"] = 'sc') {
                 $per_id = $data["per_id"];
                 $lista_id = $data["list_id"];
-                $esus = $mod_sb->eliminarSuscriptor($per_id, $lista_id);
+                $esus = $mod_sb->updateSuscripto($per_id, $lista_id, $estado_cambio);
                 if ($esus > 0) {
                     if ($esus > 0) {
                         $mensaje = "El contacto ya no esta suscripto a la lista";
@@ -549,12 +569,16 @@ class EmailController extends \app\components\CController {
                 $message = array(
                     "wtmessage" => Yii::t("formulario", $mensaje),
                     "title" => Yii::t('jslang', 'Success'),
-                    "materias" => array("software", "telecomunicaciones", "marketing"),
+                        //"materias" => array("software", "telecomunicaciones", "marketing"),
+                    "rederict" => Yii::$app->response->redirect(['/marketing/email/asignar?lis_id=' . base64_encode($lista_id)]),
+                
                 );
             } else {
                 $message = array(
                     "wtmessage" => Yii::t("formulario", $mensaje),
                     "title" => Yii::t('jslang', 'Success'),
+                    "rederict" => Yii::$app->response->redirect(['/marketing/email/asignar?lis_id=' . base64_encode($lista_id)]),
+                
                 );
             }
             return Utilities::ajaxResponse('OK', 'alert', Yii::t("jslang", "Sucess"), false, $message);
