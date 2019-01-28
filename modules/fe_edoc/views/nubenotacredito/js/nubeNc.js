@@ -44,34 +44,34 @@ function controlBuscarIndex(control,op){
     buscarIndex.F_INI=$('#dtp_fec_ini').val();
     buscarIndex.F_FIN=$('#dtp_fec_fin').val();
     buscarArray[0] = buscarIndex;
-    return buscarArray[0];
-    //return JSON.stringify(buscarArray);
+    //return buscarArray[0];
+    return JSON.stringify(buscarArray);
 }
 
 function autocompletarBuscarPersona(requestq, responseq,control,op){
-    var link = $('#txth_base').val() +"/fe_edoc/nubenotacredito/BuscarPersonas";
+    var link = $('#txth_base').val() +"/fe_edoc/nubenotacredito/index";
     var arrParams = new Object();
     arrParams.valor = $('#' + control).val();
     arrParams.op = op;
     requestHttpAjax(link, arrParams, function (response) {
         //showAlert(response.status, response.label, response.message);
         //if (response.status == 'OK') {
-        var arrayList = new Array;
-        var count = data.length;
-        for (var i = 0; i < count; i++) {
-            row = new Object();
-            row.IdentificacionComprador = data[i]['IdentificacionComprador'];
-            row.RazonSocialComprador = data[i]['RazonSocialComprador'];
+            var arrayList = new Array;
+            var count = response.length;
+            for (var i = 0; i < count; i++) {
+                row = new Object();
+                row.IdentificacionComprador = response[i]['IdentificacionComprador'];
+                row.RazonSocialComprador = response[i]['RazonSocialComprador'];
 
-            // Campos Importandes relacionados con el  CJuiAutoComplete
-            row.id = data[i]['IdentificacionComprador'];
-            row.label = data[i]['RazonSocialComprador'] + ' - ' + data[i]['IdentificacionComprador'];//+' - '+data[i]['SEGURO_SOCIAL'];//Lo sugerido
-            //row.value=data[i]['IdentificacionComprador'];//lo que se almacena en en la caja de texto
-            row.value = data[i]['RazonSocialComprador'];//lo que se almacena en en la caja de texto
-            arrayList[i] = row;
-        }
-        sessionStorage.src_buscIndex = JSON.stringify(arrayList);//dss=>DataSessionStore
-        responseq(arrayList);
+                // Campos Importandes relacionados con el  CJuiAutoComplete
+                row.id = response[i]['IdentificacionComprador'];
+                row.label = response[i]['RazonSocialComprador'] + ' - ' + response[i]['IdentificacionComprador'];//+' - '+data[i]['SEGURO_SOCIAL'];//Lo sugerido
+                //row.value=response[i]['IdentificacionComprador'];//lo que se almacena en en la caja de texto
+                row.value = response[i]['RazonSocialComprador'];//lo que se almacena en en la caja de texto
+                arrayList[i] = row;
+            }
+            sessionStorage.src_buscIndex = JSON.stringify(arrayList);//dss=>DataSessionStore
+            responseq(arrayList);
         //}
     }, true);     
 }
@@ -100,17 +100,14 @@ function verificaAutorizado(TbGtable) {
     });
 }
 
-
 function fun_EnviarDocumento(){
     var ids = String($('#TbG_DOCUMENTO').PbGridView('getSelectedRows'));
     var count=ids.split(",");
     if(count.length>0 && ids!=""){
         if(!confirm(mgEnvDocum)) return false;
         var link = $('#txth_base').val() +"/fe_edoc/nubefactura/EnviarDocumento";
-        var encodedIds = base64_encode(ids);  //Verificar cofificacion Base
         $("#TbG_DOCUMENTO").addClass("loading");
         var encodedIds = base64_encode(ids);  //Verificar cofificacion Base
-        $("#TbG_DOCUMENTO").addClass("loading");
         var arrParams = new Object();
         arrParams.ids = encodedIds;
         requestHttpAjax(link, arrParams, function (response) {
@@ -134,7 +131,8 @@ function fun_EnviarDocumento(){
 }
 
 function actualizarTbG_DOCUMENTO(){
-    String($('#TbG_DOCUMENTO').PbGridView('getSelectedRows'));
+    //String($('#TbG_DOCUMENTO').PbGridView('getSelectedRows'));
+    $('#TbG_DOCUMENTO').PbGridView('getSelectedRows');
 }
 
 /*
@@ -198,7 +196,6 @@ function fun_EnviarAnular(){
     }
     return true;
 }
-
 
 function fun_EnviarCorreo(){
     var ids = String($('#TbG_DOCUMENTO').PbGridView('getSelectedRows'));
@@ -264,7 +261,4 @@ function fun_CambiaMail() {
     }else{
         alert('Los Datos de correo no son correctos.');
     }
-
 }
-
-

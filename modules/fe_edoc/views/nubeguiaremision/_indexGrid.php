@@ -70,7 +70,7 @@ PbGridView::widget([
             'attribute' => 'FechaEmisionErp',
             'header' => Yii::t('fe_edoc', 'Issuance date'),
             'value' => function ($data) {
-                return date(Yii::$app->params["dateByDefault"], strtotime($data["FechaEmision"]));
+                return date(Yii::$app->params["dateByDefault"], strtotime($data["FechaEmisionErp"]));
             },
         ],
         [

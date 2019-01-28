@@ -44,34 +44,34 @@ function controlBuscarIndex(control,op){
     buscarIndex.F_INI=$('#dtp_fec_ini').val();
     buscarIndex.F_FIN=$('#dtp_fec_fin').val();
     buscarArray[0] = buscarIndex;
-    return buscarArray[0];
-    //return JSON.stringify(buscarArray);
+    //return buscarArray[0];
+    return JSON.stringify(buscarArray);
 }
 
 function autocompletarBuscarPersona(requestq, responseq,control,op){
-    var link = $('#txth_base').val() +"/fe_edoc/nuberetencion/BuscarPersonas";
+    var link = $('#txth_base').val() +"/fe_edoc/nuberetencion/index";
     var arrParams = new Object();
     arrParams.valor = $('#' + control).val();
     arrParams.op = op;
     requestHttpAjax(link, arrParams, function (response) {
         //showAlert(response.status, response.label, response.message);
         //if (response.status == 'OK') {
-        var arrayList = new Array;
-        var count = data.length;
-        for (var i = 0; i < count; i++) {
-            row = new Object();
-            row.IdentificacionSujetoRetenido = data[i]['IdentificacionSujetoRetenido'];
-            row.RazonSocialSujetoRetenido = data[i]['RazonSocialSujetoRetenido'];
+            var arrayList = new Array;
+            var count = response.length;
+            for (var i = 0; i < count; i++) {
+                row = new Object();
+                row.IdentificacionSujetoRetenido = response[i]['IdentificacionSujetoRetenido'];
+                row.RazonSocialSujetoRetenido = response[i]['RazonSocialSujetoRetenido'];
 
-            // Campos Importandes relacionados con el  CJuiAutoComplete
-            row.id = data[i]['IdentificacionSujetoRetenido'];
-            row.label = data[i]['RazonSocialSujetoRetenido'] + ' - ' + data[i]['IdentificacionSujetoRetenido'];//+' - '+data[i]['SEGURO_SOCIAL'];//Lo sugerido
-            //row.value=data[i]['IdentificacionSujetoRetenido'];//lo que se almacena en en la caja de texto
-            row.value = data[i]['RazonSocialSujetoRetenido'];//lo que se almacena en en la caja de texto
-            arrayList[i] = row;
-        }
-        sessionStorage.src_buscIndex = JSON.stringify(arrayList);//dss=>DataSessionStore
-        responseq(arrayList); 
+                // Campos Importandes relacionados con el  CJuiAutoComplete
+                row.id = response[i]['IdentificacionSujetoRetenido'];
+                row.label = response[i]['RazonSocialSujetoRetenido'] + ' - ' + response[i]['IdentificacionSujetoRetenido'];//+' - '+data[i]['SEGURO_SOCIAL'];//Lo sugerido
+                //row.value=response[i]['IdentificacionSujetoRetenido'];//lo que se almacena en en la caja de texto
+                row.value = response[i]['RazonSocialSujetoRetenido'];//lo que se almacena en en la caja de texto
+                arrayList[i] = row;
+            }
+            sessionStorage.src_buscIndex = JSON.stringify(arrayList);//dss=>DataSessionStore
+            responseq(arrayList); 
         //}
     }, true);         
 }
@@ -92,7 +92,7 @@ function verificaAutorizado(TbGtable) {
         var estado = $(this).find("td").eq(3).html();//Columna Estado
         //Verifica que este CHeck la Primera COlumna
         if ($(this).children(':first-child').children(':first-child').is(':checked')){
-            alert(estado);
+            //alert(estado);
             if (estado == 'Autorizado') {//Si es Igual Autorizado no lo deja Check
                 
             }
@@ -100,15 +100,14 @@ function verificaAutorizado(TbGtable) {
     });
 }
 
-
 function fun_EnviarDocumento(){
     var ids = String($('#TbG_DOCUMENTO').PbGridView('getSelectedRows'));
     var count=ids.split(",");
     if(count.length>0 && ids!=""){
         if(!confirm(mgEnvDocum)) return false;
         var link = $('#txth_base').val() +"/fe_edoc/nuberetencion/EnviarDocumento";
-        var encodedIds = base64_encode(ids);  //Verificar cofificacion Base
         $("#TbG_DOCUMENTO").addClass("loading");
+        var encodedIds = base64_encode(ids);  //Verificar cofificacion Base
         var arrParams = new Object();
         arrParams.ids = encodedIds;
         requestHttpAjax(link, arrParams, function (response) {
@@ -128,7 +127,6 @@ function fun_EnviarDocumento(){
         $("#messageInfo").html(selecDoc+buttonAlert); 
         alerMessage();
     }
-    
     return true;
 }
 
@@ -206,13 +204,12 @@ function fun_EnviarAnular(){
     return true;
 }
 
-
 function fun_EnviarCorreo(){
     var ids = String($('#TbG_DOCUMENTO').PbGridView('getSelectedRows'));
     var count=ids.split(",");
     if(count.length>0 && ids!=""){
         if(!confirm(mgEnvDocum)) return false;
-        var link=$('#txth_controlador').val()+"/EnviarCorreo";
+        var link = $('#txth_base').val() + "/fe_edoc/nuberetencion/EnviarCorreo";
         var encodedIds = base64_encode(ids);  //Verificar cofificacion Base
         $("#TbG_DOCUMENTO").addClass("loading");
         var arrParams = new Object();

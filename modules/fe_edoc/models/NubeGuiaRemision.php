@@ -148,16 +148,15 @@ class NubeGuiaRemision extends \app\modules\fe_edoc\components\CActiveRecord {
         //$fecInifact=Yii::$app->params['dateStartFact'];//Fecha Inicial de Facturacion Electronica
         $fecInifact= date(Yii::$app->params['dateByDefault']);
         $con = Yii::$app->db_edoc;
-
         $sql = "SELECT A.IdGuiaRemision IdDoc,A.Estado,A.SecuencialERP,A.UsuarioCreador,
-                    A.FechaAutorizacion,A.AutorizacionSRI,A.ClaveAcceso,
-                    CONCAT(A.Establecimiento,'-',A.PuntoEmision,'-',A.Secuencial) NumDocumento,
-                B.FechaEmisionDocSustento,B.IdentificacionDestinatario,B.RazonSocialDestinatario,
-                B.MotivoTraslado,'GUIA DE REMISION' NombreDocumento,A.FechaEmisionErp	
-                    FROM " . $con->dbname . ".NubeGuiaRemision A
-                            INNER JOIN " . $con->dbname . ".NubeGuiaRemisionDestinatario B
+                        A.FechaAutorizacion,A.AutorizacionSRI,A.ClaveAcceso,
+                        CONCAT(A.Establecimiento,'-',A.PuntoEmision,'-',A.Secuencial) NumDocumento,
+                        B.FechaEmisionDocSustento,B.IdentificacionDestinatario,B.RazonSocialDestinatario,
+                        B.MotivoTraslado,'GUIA DE REMISION' NombreDocumento,A.FechaEmisionErp	
+                        FROM " . $con->dbname . ".NubeGuiaRemision A
+                        INNER JOIN " . $con->dbname . ".NubeGuiaRemisionDestinatario B
                                     ON A.IdGuiaRemision=B.IdGuiaRemision
-            WHERE A.CodigoDocumento='$this->tipoDoc' AND A.Estado NOT IN (5) ";
+                WHERE A.CodigoDocumento='$this->tipoDoc' AND A.Estado NOT IN (5) ";
         
         //Usuarios Vendedor con * es privilegiado y puede ver lo que factura el resta
         $sql .= ($usuarioErp!='1') ? "AND A.UsuarioCreador IN ('$usuarioErp')" : "";//Para Usuario Vendedores.

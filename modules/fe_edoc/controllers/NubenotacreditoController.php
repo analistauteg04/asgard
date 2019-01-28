@@ -119,8 +119,7 @@ class NubenotacreditoController extends \app\components\CController  {
             $valor = isset($_POST['valor']) ? $_POST['valor'] : "";
             $op = isset($_POST['op']) ? $_POST['op'] : "";
             $arrayData = array();
-            $data = new NubeFactura();
-            $arrayData = $data->retornarPersona($valor, $op);
+            $arrayData = $modelo->retornarPersona($valor, $op);
             header('Content-type: application/json');
             echo json_encode($arrayData);
             return;

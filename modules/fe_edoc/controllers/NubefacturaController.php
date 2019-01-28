@@ -54,8 +54,7 @@ class NubefacturaController extends \app\components\CController {
             $valor = isset($_POST['valor']) ? $_POST['valor'] : "";
             $op = isset($_POST['op']) ? $_POST['op'] : "";
             $arrayData = array();
-            $data = new NubeFactura();
-            $arrayData = $data->retornarPersona($valor, $op);
+            $arrayData = $modelo->retornarPersona($valor, $op);
             header('Content-type: application/json');
             echo json_encode($arrayData);
             return;
@@ -129,7 +128,6 @@ class NubefacturaController extends \app\components\CController {
         }
     }
 
-    
     public function actionXmlautorizado($ids) {//ok
         $ids = isset($_GET['ids']) ? base64_decode($_GET['ids']) : NULL;
         $modelo = new NubeFactura();
@@ -148,8 +146,6 @@ class NubefacturaController extends \app\components\CController {
         }
     }
 
-   
-    
     public function actionEnviarCorreccion() {
         if (Yii::$app->request->isAjax) {
             $modelo = new NubeRetencion(); //Ejmpleo code 3

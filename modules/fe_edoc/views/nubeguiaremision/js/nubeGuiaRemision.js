@@ -41,37 +41,37 @@ function controlBuscarIndex(control, op) {
     buscarIndex.TIPO_APR = $('#cmb_tipoApr option:selected').val();
     buscarIndex.RAZONSOCIAL = $('#' + control).val(),
 
-        buscarIndex.F_INI = $('#dtp_fec_ini').val();
+    buscarIndex.F_INI = $('#dtp_fec_ini').val();
     buscarIndex.F_FIN = $('#dtp_fec_fin').val();
     buscarArray[0] = buscarIndex;
-    return buscarArray[0];
-    //return JSON.stringify(buscarArray);
+    //return buscarArray[0];
+    return JSON.stringify(buscarArray);
 }
 
 function autocompletarBuscarPersona(requestq, responseq, control, op) {
-    var link = $('#txth_base').val() + "/fe_edoc/nubeguiaremision/BuscarPersonas";
+    var link = $('#txth_base').val() + "/fe_edoc/nubeguiaremision/index";
     var arrParams = new Object();
     arrParams.valor = $('#' + control).val();
     arrParams.op = op;
     requestHttpAjax(link, arrParams, function (response) {
         //showAlert(response.status, response.label, response.message);
         //if (response.status == 'OK') {
-        var arrayList = new Array;
-        var count = data.length;
-        for (var i = 0; i < count; i++) {
-            row = new Object();
-            row.IdentificacionSujetoRetenido = data[i]['IdentificacionDestinatario'];
-            row.RazonSocialSujetoRetenido = data[i]['RazonSocialDestinatario'];
+            var arrayList = new Array;
+            var count = response.length;
+            for (var i = 0; i < count; i++) {
+                row = new Object();
+                row.IdentificacionSujetoRetenido = response[i]['IdentificacionDestinatario'];
+                row.RazonSocialSujetoRetenido = response[i]['RazonSocialDestinatario'];
 
-            // Campos Importandes relacionados con el  CJuiAutoComplete
-            row.id = data[i]['IdentificacionDestinatario'];
-            row.label = data[i]['RazonSocialDestinatario'] + ' - ' + data[i]['IdentificacionDestinatario'];//+' - '+data[i]['SEGURO_SOCIAL'];//Lo sugerido
-            //row.value=data[i]['IdentificacionSujetoRetenido'];//lo que se almacena en en la caja de texto
-            row.value = data[i]['RazonSocialDestinatario'];//lo que se almacena en en la caja de texto
-            arrayList[i] = row;
-        }
-        sessionStorage.src_buscIndex = JSON.stringify(arrayList);//dss=>DataSessionStore
-        responseq(arrayList);
+                // Campos Importandes relacionados con el  CJuiAutoComplete
+                row.id = response[i]['IdentificacionDestinatario'];
+                row.label = response[i]['RazonSocialDestinatario'] + ' - ' + response[i]['IdentificacionDestinatario'];//+' - '+data[i]['SEGURO_SOCIAL'];//Lo sugerido
+                //row.value=response[i]['IdentificacionSujetoRetenido'];//lo que se almacena en en la caja de texto
+                row.value = response[i]['RazonSocialDestinatario'];//lo que se almacena en en la caja de texto
+                arrayList[i] = row;
+            }
+            sessionStorage.src_buscIndex = JSON.stringify(arrayList);//dss=>DataSessionStore
+            responseq(arrayList);
         //}
     }, true);
 }
@@ -127,10 +127,8 @@ function fun_EnviarDocumento(){
         $("#messageInfo").html(selecDoc+buttonAlert); 
         alerMessage();
     }
-    
     return true;
 }
-
 
 function actualizarTbG_DOCUMENTO(){
     $('#TbG_DOCUMENTO').PbGridView('getSelectedRows');
@@ -205,7 +203,6 @@ function fun_EnviarAnular(){
     }
     return true;
 }
-
 
 function fun_EnviarCorreo(){
     var ids = String($('#TbG_DOCUMENTO').PbGridView('getSelectedRows'));
