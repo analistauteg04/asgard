@@ -155,19 +155,42 @@ function elminarsuscritor() {
 
 }
 function RemoverSuscritor(per_id, list_id) {
-    var mensj = "Seguro Desea eliminar el suscritor de la lista?";
     var messagePB = new Object();
+    var mensj = "Seguro Desea eliminar el suscritor de la lista?";   
     messagePB.wtmessage = mensj;
     messagePB.title = "Eliminar";
     var objAccept = new Object();
     objAccept.id = "btnid2del";
     objAccept.class = "btn-primary clclass praclose";
     objAccept.value = "Aceptar";
-    objAccept.callback = 'elminarsuscritor';
+    objAccept.callback = 'elminarSuscriptor';
+    var params = new Array(per_id, list_id);
+    objAccept.paramCallback = params;
     messagePB.acciones = new Array();
     messagePB.acciones[0] = objAccept;
     showAlert("warning", "warning", messagePB);
 }
+
+/***/
+function elminarSuscriptor(per_id, list_id) {
+    var link = $('#txth_base').val() + "/marketing/email/deletesuscriptor";
+    var arrParams = new Object();
+    arrParams.per_id = per_id;    
+    arrParams.list_id = list_id;
+    arrParams.accion = 'sc';
+    if (!validateForm()) {
+        showLoadingPopup();
+        requestHttpAjax(link, arrParams, function (response) {
+            if (!response.error) {
+                setTimeout(function () {                    
+                    //preguntaSuscribirOtrasListas(response.message);
+                }, 5000);
+            }
+        }, true);
+        setTimeout(hideLoadingPopup, 2000);
+    }
+}
+/**/
 function setComboDataselect(arr_data, element_id, texto) {
     var option_arr = "";
     option_arr += "<option value= '0'>" + texto + "</option>";
