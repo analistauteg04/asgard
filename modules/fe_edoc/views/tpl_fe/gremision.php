@@ -178,7 +178,7 @@
             <table>    
                 <tr>
                     <td class="thcol"><?php echo app\modules\fe_edoc\Module::t("fe", 'Amount'); ?></td>
-                    <td class="thcol"><?php echo app\modules\fe_edoc\Module::t("fe", 'Description'); ?></td>
+                    <td class="thcol" style="width: 60%;"><?php echo app\modules\fe_edoc\Module::t("fe", 'Description'); ?></td>
                     <td class="thcol"><?php echo app\modules\fe_edoc\Module::t("fe", 'Code Principal'); ?></td>
                     <td class="thcol"><?php echo app\modules\fe_edoc\Module::t("fe", 'Code Auxiliary'); ?></td>
                 </tr>
