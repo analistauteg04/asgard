@@ -171,8 +171,7 @@ class EmailController extends \app\components\CController {
                 //consultar la lista.                  
                 $resp_consulta = $mod_lista->consultarListaXID($lis_id);
                 $webs_mailchimp = new WsMailChimp();
-                $conMailch = $webs_mailchimp->deleteList($resp_consulta["lis_codigo"]);
-                \app\models\Utilities::putMessageLogFile('arreglo1: ' . print_r($conMailch));
+                $conMailch = $webs_mailchimp->deleteList($resp_consulta["lis_codigo"]);                
                 if ($resp_consulta["num_suscr"] > 0) {
                     $resp_listsuscriptor = $mod_lista->inactivaListaSuscriptor($lis_id);
                     if ($resp_listsuscriptor) {
@@ -335,6 +334,9 @@ class EmailController extends \app\components\CController {
             $codigo_postal = ucwords(mb_strtolower($data["codigo_postal"]));
             $eaca_id = null;
             $mest_id = null;
+            /*$opcion = $data["opcion"];
+            $codigo = $data["codigo"];
+            $list_id = $data["list_id"];*/
             if ($emp_id != 1) {
                 $mest_id = $data["carrera_id"];
             } else {
@@ -356,17 +358,28 @@ class EmailController extends \app\components\CController {
                 );
                 $lista = new Lista();
                 $resp_consulta = $lista->consultarListaXnombre($nombre_lista);
-                if ($resp_consulta["existe"] != 'S') {
+                if ($resp_consulta["existe"] != 'S') { //or $resp_consulta["list_id"] == $list_id)                 
                     //Grabar en mailchimp    
                     $webs_mailchimp = new WsMailChimp();
-                    $conLista = $webs_mailchimp->newList($nombre_lista, $nombre_contacto, $correo_contacto, $asunto, $contacto, "es");
-                    if ($conLista) {
-                        //Grabar en asgard                    
-                        $resp_lista = $lista->insertarLista($conLista["id"], $eaca_id, $mest_id, $emp_id, $nombre_lista, $ecor_id, $nombre_contacto, $pais, $provincia, $ciudad, $direccion1, $direccion2, $telefono, $codigo_postal, $asunto);
-                        if ($resp_lista) {
-                            $exito = 1;
+                    //if ($opcion == 'N') { // Ingreso
+                        $conLista = $webs_mailchimp->newList($nombre_lista, $nombre_contacto, $correo_contacto, $asunto, $contacto, "es");
+                        if ($conLista) {
+                            //Grabar en asgard                    
+                            $resp_lista = $lista->insertarLista($conLista["id"], $eaca_id, $mest_id, $emp_id, $nombre_lista, $ecor_id, $nombre_contacto, $pais, $provincia, $ciudad, $direccion1, $direccion2, $telefono, $codigo_postal, $asunto);
+                            if ($resp_lista) {
+                                $exito = 1;
+                            }
                         }
-                    }
+                    /*} else {  //Modificación                                
+                        $conLista = $webs_mailchimp->editList($codigo, $nombre_lista, $contacto, null, $nombre_contacto, $correo_contacto, $asunto, "es", true);
+                        if ($conLista) {
+                            //Grabar en asgard                    
+                            $resp_lista = $lista->modificarLista($list_id, $eaca_id, $mest_id, $emp_id, $nombre_lista, $ecor_id, $nombre_contacto, $pais, $provincia, $ciudad, $direccion1, $direccion2, $telefono, $codigo_postal, $asunto);
+                            if ($resp_lista) {
+                                $exito = 1;
+                            }
+                        }
+                    }*/
                 } else {
                     $mensaje = 'Ya se encuentra creada una lista con el mismo nombre.';
                 }
@@ -507,7 +520,7 @@ class EmailController extends \app\components\CController {
         if ($resp_consulta["emp_id"] == 1) {
             $arreglo_carrerra = $oportunidad_mod->consultarCarreras();
         } else {
-            $arreglo_carrerra = $estudio_mod->consultarEstudioEmpresa($data["emp_id"]);
+            $arreglo_carrerra = $estudio_mod->consultarEstudioEmpresa($resp_consulta["emp_id"]);            
         }
         $arreglo_empresa = $empresa_mod->getAllEmpresa();
         $arreglo_correo = $empresa_mod->consultarCorreoXempresa($resp_consulta["emp_id"]);

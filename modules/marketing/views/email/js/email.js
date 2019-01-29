@@ -67,6 +67,10 @@ $(document).ready(function () {
             }
         }, true);
     });
+    
+    $('#btn_actualizar').click(function () {
+        guardarLista();
+    });
 });
 
 function mostrar_grid_lista() {
@@ -292,6 +296,15 @@ function guardarLista() {
     arrParams.direccion2 = $('#txt_direccion2').val();
     arrParams.telefono = $('#txt_telefono').val();
     arrParams.codigo_postal = $('#txt_codigo_postal').val();
+    
+    arrParams.codigo = $('#txth_codigo').val();
+    arrParams.list_id = $('#txth_list_id').val();
+    
+    if (arrParams.list_id > 0) {
+        arrParams.opcion =  "N";
+    } else {    
+        arrParams.opcion =  "E";
+    }
 
     if (!validateForm()) {
         requestHttpAjax(link, arrParams, function (response) {
