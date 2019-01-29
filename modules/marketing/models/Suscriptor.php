@@ -109,13 +109,22 @@ class Suscriptor extends \yii\db\ActiveRecord {
      * @property integer $userid
      * @return  
      */
-    public function consultarSuscriptoresxLista($list_id, $subscrito = 0, $onlyData = false) {
+    public function consultarSuscriptoresxLista($arrFiltro = array(), $list_id, $subscrito = 0, $onlyData = false) {
         $con = \Yii::$app->db_mailing;
         $estado = 1;
+        $str_search = '';
         $query_subscrito = ($subscrito == 1) ? "AND ifnull(sus.sus_id,0)>0" : (($subscrito == 2) ? "AND ifnull(sus.sus_id,0)<1" : "");
         $nosuscrito = " left join db_mailing.suscriptor as sus on sus.per_id = per.per_id or sus.pges_id=pges.pges_id  ";
         $suscrito = " join db_mailing.suscriptor as sus on sus.per_id = per.per_id or sus.pges_id=pges.pges_id";
         $join_subscrito = ($subscrito == 1) ? $suscrito : (($subscrito == 2) ? $nosuscrito : $nosuscrito);
+        if (isset($arrFiltro) && count($arrFiltro) > 0) {
+            if ($arrFiltro['estado'] == 1) {
+                $str_search = " AND ifnull(sus.sus_id,0) > 0 ";
+            }
+            if ($arrFiltro['estado'] == 2) {
+                $str_search = " AND ifnull(sus.sus_id,0) = 0 ";
+            }
+        }
         $sql = "
                SELECT 
                     lst.lis_id,
@@ -129,26 +138,33 @@ class Suscriptor extends \yii\db\ActiveRecord {
                     acon.acon_id,
                     acon.acon_nombre
                 FROM 
-                    db_mailing.lista lst
-                    left join db_academico.estudio_academico as eaca on eaca.eaca_id= lst.eaca_id                    
-                    left join db_academico.modulo_estudio as mest on mest.mest_id = lst.mest_id
-                    left join db_captacion.solicitud_inscripcion as sins on sins.eaca_id = eaca.eaca_id or sins.mest_id = mest.mest_id
-                    left join db_crm.oportunidad as opo on opo.eaca_id=eaca.eaca_id or opo.mest_id=mest.mest_id and opo.eaca_id != sins.eaca_id and opo.mest_id!=sins.mest_id                    
-                    left join db_captacion.interesado as inte on inte.int_id = sins.int_id                    
-                    left join db_crm.persona_gestion as pges on pges.pges_id=opo.pges_id
-                    left join db_asgard.persona as per on per.per_id = inte.per_id
+                    " . $con->dbname . ".lista lst
+                    LEFT JOIN db_academico.estudio_academico as eaca on eaca.eaca_id= lst.eaca_id                    
+                    LEFT JOIN db_academico.modulo_estudio as mest on mest.mest_id = lst.mest_id
+                    LEFT JOIN db_captacion.solicitud_inscripcion as sins on sins.eaca_id = eaca.eaca_id or sins.mest_id = mest.mest_id
+                    LEFT JOIN db_crm.oportunidad as opo on opo.eaca_id=eaca.eaca_id or opo.mest_id=mest.mest_id and opo.eaca_id != sins.eaca_id and opo.mest_id!=sins.mest_id                    
+                    LEFT JOIN db_captacion.interesado as inte on inte.int_id = sins.int_id                    
+                    LEFT JOIN db_crm.persona_gestion as pges on pges.pges_id=opo.pges_id
+                    LEFT JOIN db_asgard.persona as per on per.per_id = inte.per_id
                     $join_subscrito
-                    left join db_academico.estudio_academico_area_conocimiento as eaac on eaac.eaca_id=eaca.eaca_id
-                    left join db_academico.area_conocimiento as acon on acon.acon_id=eaac.acon_id
+                    LEFT JOIN db_academico.estudio_academico_area_conocimiento as eaac on eaac.eaca_id=eaca.eaca_id
+                    LEFT JOIN db_academico.area_conocimiento as acon on acon.acon_id=eaac.acon_id
                 WHERE 
-                    lst.lis_id= :list_id and
+                    lst.lis_id= :list_id AND
                     lst.lis_estado = :estado AND
                     lst.lis_estado_logico = :estado
                     $query_subscrito
+                    $str_search
                ";
         $comando = $con->createCommand($sql);
         $comando->bindParam(":estado", $estado, \PDO::PARAM_STR);
         $comando->bindParam(":list_id", $list_id, \PDO::PARAM_INT);
+        /*if (isset($arrFiltro) && count($arrFiltro) > 0) {
+            $estado_ate = $arrFiltro["estado"];
+            if ($arrFiltro['estado'] != "" && $arrFiltro['estado'] > 0) {
+                $comando->bindParam(":estado_ate", $estado_ate, \PDO::PARAM_INT);
+            }
+        }*/
         $resultData = $comando->queryAll();
         $dataProvider = new ArrayDataProvider([
             'key' => 'id',

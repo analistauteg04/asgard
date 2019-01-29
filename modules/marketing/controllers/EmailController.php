@@ -40,13 +40,14 @@ class EmailController extends \app\components\CController {
 
     public function actionAsignar() {
         $mod_lista = new Lista();
+        $arrSearch  = array();
         $lis_id = base64_decode($_GET['lis_id']);
         $per_id = @Yii::$app->session->get("PB_perid");
         $mod_sb = new Suscriptor();
-        $mod_persona = new Persona();
-        $mod_perge = new PersonaGestion();
+        //$mod_persona = new Persona();
+        //$mod_perge = new PersonaGestion();
         $lista_model = $mod_lista->consultarListaXID($lis_id);
-        $susbs_lista = $mod_sb->consultarSuscriptoresxLista($lis_id);
+        $susbs_lista = $mod_sb->consultarSuscriptoresxLista($arrSearch, $lis_id);
         $fecha_crea = date(Yii::$app->params["dateTimeByDefault"]);
         $su_id = 0;
         $error = 0;
@@ -54,13 +55,11 @@ class EmailController extends \app\components\CController {
         $estado_cambio = 1;       
         $data = Yii::$app->request->get();
         if (isset($data["PBgetFilter"])) {
-            \app\models\Utilities::putMessageLogFile('entro al ajax filter');
-            if (isset($data["estado"]) == 1) {
-                \app\models\Utilities::putMessageLogFile('entro a la opcion 1');
-                $susbs_lista = $mod_sb->consultarSuscriptoresxLista($lis_id, 1);
-            } elseif (isset($data["estado"]) == 2) {
-                \app\models\Utilities::putMessageLogFile('entro a la opcion 2');
-                $susbs_lista = $mod_sb->consultarSuscriptoresxLista($lis_id, 0);
+             $arrSearch["estado"] = $data['estado'];     
+            if ($data["estado"] == '1') {            
+                $susbs_lista = $mod_sb->consultarSuscriptoresxLista($arrSearch, $lis_id, 1);
+            } elseif ($data["estado"] == '2') {           
+                $susbs_lista = $mod_sb->consultarSuscriptoresxLista($arrSearch, $lis_id, 0);
             }
         }
         if (Yii::$app->request->isAjax) {
