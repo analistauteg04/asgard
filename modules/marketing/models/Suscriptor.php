@@ -212,7 +212,7 @@ class Suscriptor extends \yii\db\ActiveRecord {
      */
     public function updateSuscripto($per_id, $lista_id, $estado_cambio) {
         $con = \Yii::$app->db_mailing;
-        $estado = 1;       
+        $estado = 1;
         $fecha_modificacion = date(Yii::$app->params["dateTimeByDefault"]);
         if ($trans !== null) {
             $trans = null; // si existe la transacción entonces no se crea una
@@ -253,22 +253,21 @@ class Suscriptor extends \yii\db\ActiveRecord {
      * @param   
      * @return  
      */
-    public function consultarSuscriptoxPerylis($per_id/*, $list_id*/) {
+    public function consultarSuscriptoxPerylis($per_id, $list_id) {
         $con = \Yii::$app->db_mailing;
-        // $estado = 0;
+        //$estado = 0;
 
         $sql = "select count(*) as inscantes	
                 FROM " . $con->dbname . ".suscriptor sus 
-                -- INNER JOIN " . $con->dbname . ".lista_suscriptor lsus     
-                WHERE sus.per_id = :per_id -- AND
-                      -- lsus.lis_id = :list_id AND
-                      -- sus.sus_estado = :estado AND
-                      -- lsus.lsus_estado = :estado ";
+                INNER JOIN " . $con->dbname . ".lista_suscriptor lsus     
+                ON sus.sus_id = lsus.sus_id
+                WHERE sus.per_id = :per_id AND
+                lsus.lis_id = :list_id  ";
 
         $comando = $con->createCommand($sql);
-        // $comando->bindParam(":estado", $estado, \PDO::PARAM_STR);
+        //$comando->bindParam(":estado", $estado, \PDO::PARAM_STR);
         $comando->bindParam(":per_id", $per_id, \PDO::PARAM_INT);
-        // $comando->bindParam(":list_id", $list_id, \PDO::PARAM_INT);
+        $comando->bindParam(":list_id", $list_id, \PDO::PARAM_INT);
         $resultData = $comando->queryOne();
         return $resultData;
     }

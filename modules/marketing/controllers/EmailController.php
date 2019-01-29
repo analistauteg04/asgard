@@ -65,8 +65,7 @@ class EmailController extends \app\components\CController {
         }
         if (Yii::$app->request->isAjax) {
             \app\models\Utilities::putMessageLogFile('entro al ajax');
-            $con = \Yii::$app->db_mailing;
-            $transaction = $con->beginTransaction();
+            $con = \Yii::$app->db_mailing;        
             $data = Yii::$app->request->post();
             if ($data["accion"] = 'sc') {
                 $ps_id = $data["psus_id"];
@@ -79,13 +78,10 @@ class EmailController extends \app\components\CController {
                     $per_id = $ps_id;
                 }if ($per_tipo == 2) {
                     $pge_id = $ps_id;
-                }
-                // conusltar por $per_id y $list_id
+                }               
                 $esus = $mod_sb->consultarSuscriptoxPerylis($per_id, $list_id);
-                // if consulta trae datos modificar tablas suscriptor y lista_suscriptor el estado a 1 
-                if ($esus["inscantes"] > 0) {
-                    $esusc = $mod_sb->updateSuscripto($per_id, $list_id, $estado_cambio);
-                    \app\models\Utilities::putMessageLogFile('contadores: ' . $esusc);
+                 if ($esus["inscantes"] > 0) {
+                    $esusc = $mod_sb->updateSuscripto($per_id, $list_id, $estado_cambio);                    
                     if ($esusc > 0) {
                         $mensaje = "El contacto ha sido asignado a la lista satisfactoriamente";
                         $error = 0;
@@ -93,10 +89,8 @@ class EmailController extends \app\components\CController {
                         $mensaje = "Error: El suscritor no fue guardado.";
                         $error++;
                     }
-                }
-                // else el ingreso
-                else {
-                    //inicia ingreso
+                }               
+                else {                  
                     $keys = ['per_id', 'pges_id', 'sus_estado', 'sus_estado_logico'];
                     $parametros = [$per_id, $pge_id, 1, 1];
                     $su_id = $mod_sb->insertarSuscritor($con, $parametros, $keys, 'suscriptor');
@@ -114,7 +108,7 @@ class EmailController extends \app\components\CController {
                         $mensaje = "Error: El suscritor no fue guardado.";
                         $error++;
                     }
-                }// termina ingreso
+                }
             }
             if ($error == 0) {
                 $message = array(
