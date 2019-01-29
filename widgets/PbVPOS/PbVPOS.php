@@ -147,13 +147,13 @@ class PbVPOS extends Widget {
             "userAgent"  => $_SERVER['HTTP_USER_AGENT'], 
         ];
         //\app\models\Utilities::putMessageLogFile($params);
-        $this->saveRequestDB($params);
+        //$this->saveRequestDB($params);
         $response = Http::connect($this->payment_gateway, $this->port, http::HTTPS)
             ->setHeaders(array('Content-Type: application/json', 'Accept: application/json'))
             //->setCredentials($user, $apiKey)
             ->doPost($WS_URI, json_encode($params));
         $arr_response = json_decode($response, true);
-        $this->saveResponseDB($this->referenceID, $arr_response);
+        //$this->saveResponseDB($this->referenceID, $arr_response);
         return $arr_response;
     }
 
@@ -175,7 +175,7 @@ class PbVPOS extends Widget {
             //->setCredentials($user, $apiKey)
             ->doPost($WS_URI, json_encode ($params));
         $arr_response = json_decode($response, true);
-        $this->saveInfoResponseDB($arr_response);
+        //$this->saveInfoResponseDB($arr_response);
         return $arr_response;
     }
 
