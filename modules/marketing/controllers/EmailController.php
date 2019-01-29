@@ -11,6 +11,8 @@ use app\modules\academico\models\ModuloEstudio;
 use app\modules\marketing\models\Lista;
 use app\modules\academico\Module as academico;
 use app\modules\financiero\Module as financiero;
+use app\modules\marketing\Module as marketing;
+use app\modules\admision\Module as crm;
 use app\modules\marketing\models\Suscriptor;
 use app\webservices\WsMailChimp;
 use app\models\Pais;
@@ -21,6 +23,7 @@ use \app\modules\admision\models\PersonaGestion;
 
 academico::registerTranslations();
 financiero::registerTranslations();
+crm::registerTranslations();
 
 class EmailController extends \app\components\CController {
 
@@ -40,28 +43,28 @@ class EmailController extends \app\components\CController {
 
     public function actionAsignar() {
         $mod_lista = new Lista();
-        $arrSearch  = array();
+        $arrSearch = array();
         $lis_id = base64_decode($_GET['lis_id']);
         $per_id = @Yii::$app->session->get("PB_perid");
-        $mod_sb = new Suscriptor();       
+        $mod_sb = new Suscriptor();
         $lista_model = $mod_lista->consultarListaXID($lis_id);
         $susbs_lista = $mod_sb->consultarSuscriptoresxLista($arrSearch, $lis_id);
         $fecha_crea = date(Yii::$app->params["dateTimeByDefault"]);
         $su_id = 0;
         $error = 0;
         $mensaje = "";
-        $estado_cambio = 1;       
+        $estado_cambio = 1;
         $data = Yii::$app->request->get();
         if (isset($data["PBgetFilter"])) {
-             $arrSearch["estado"] = $data['estado'];     
-            if ($data["estado"] == '1') {            
+            $arrSearch["estado"] = $data['estado'];
+            if ($data["estado"] == '1') {
                 $susbs_lista = $mod_sb->consultarSuscriptoresxLista($arrSearch, $lis_id, 1);
-            } elseif ($data["estado"] == '2') {           
+            } elseif ($data["estado"] == '2') {
                 $susbs_lista = $mod_sb->consultarSuscriptoresxLista($arrSearch, $lis_id, 0);
             }
         }
-        if (Yii::$app->request->isAjax) {           
-            $con = \Yii::$app->db_mailing;        
+        if (Yii::$app->request->isAjax) {
+            $con = \Yii::$app->db_mailing;
             $data = Yii::$app->request->post();
             if ($data["accion"] = 'sc') {
                 $ps_id = $data["psus_id"];
@@ -74,10 +77,10 @@ class EmailController extends \app\components\CController {
                     $per_id = $ps_id;
                 }if ($per_tipo == 2) {
                     $pge_id = $ps_id;
-                }               
+                }
                 $esus = $mod_sb->consultarSuscriptoxPerylis($per_id, $list_id);
-                 if ($esus["inscantes"] > 0) {
-                    $esusc = $mod_sb->updateSuscripto($per_id, $list_id, $estado_cambio);                    
+                if ($esus["inscantes"] > 0) {
+                    $esusc = $mod_sb->updateSuscripto($per_id, $list_id, $estado_cambio);
                     if ($esusc > 0) {
                         $mensaje = "El contacto ha sido asignado a la lista satisfactoriamente";
                         $error = 0;
@@ -85,8 +88,7 @@ class EmailController extends \app\components\CController {
                         $mensaje = "Error: El suscritor no fue guardado.";
                         $error++;
                     }
-                }               
-                else {                  
+                } else {
                     $keys = ['per_id', 'pges_id', 'sus_estado', 'sus_estado_logico'];
                     $parametros = [$per_id, $pge_id, 1, 1];
                     $su_id = $mod_sb->insertarSuscritor($con, $parametros, $keys, 'suscriptor');
@@ -559,16 +561,14 @@ class EmailController extends \app\components\CController {
                 $message = array(
                     "wtmessage" => Yii::t("formulario", $mensaje),
                     "title" => Yii::t('jslang', 'Success'),
-                        //"materias" => array("software", "telecomunicaciones", "marketing"),
+                    //"materias" => array("software", "telecomunicaciones", "marketing"),
                     "rederict" => Yii::$app->response->redirect(['/marketing/email/asignar?lis_id=' . base64_encode($lista_id)]),
-                
                 );
             } else {
                 $message = array(
                     "wtmessage" => Yii::t("formulario", $mensaje),
                     "title" => Yii::t('jslang', 'Success'),
                     "rederict" => Yii::$app->response->redirect(['/marketing/email/asignar?lis_id=' . base64_encode($lista_id)]),
-                
                 );
             }
             return Utilities::ajaxResponse('OK', 'alert', Yii::t("jslang", "Sucess"), false, $message);
@@ -578,6 +578,41 @@ class EmailController extends \app\components\CController {
                     'arr_estado' => array("Seleccionar", "Subscrito", "No Subscrito"),
                     'model' => $susbs_lista,
         ]);
+    }
+
+    public function actionExpexcel() {
+        ini_set('memory_limit', '256M');
+        $content_type = Utilities::mimeContentType("xls");
+        $nombarch = "Report-" . date("YmdHis") . ".xls";
+        header("Content-Type: $content_type");
+        header("Content-Disposition: attachment;filename=" . $nombarch);
+        header('Cache-Control: max-age=0');
+        $colPosition = array("C", "D", "E", "F", "G", "H", "I");
+
+        $arrHeader = array(
+            crm::t("crm", "Contact"),
+            academico::t("Academico", "Career/Program"),
+            marketing::t("marketing", "Email"),
+            marketing::t("marketing", "Estado"),
+        );
+        $data = Yii::$app->request->get();
+        $arrSearch["estado"] = $data["estado"];
+        $lis_id = base64_decode($data["lista"]);      
+        \app\models\Utilities::putMessageLogFile('fgdg: ' . $data["estado"]);
+        $modsuscriptor = new Suscriptor();
+        $arrData = array();
+        if ($arrSearch["estado"] == 0) {
+            $arrData = $modsuscriptor->consultarSuscriptoexcel($arrSearch, $lis_id);
+        } else {
+            if ($data["estado"] == 1) {
+                $arrData = $modsuscriptor->consultarSuscriptoexcel($arrSearch, $lis_id, 1);
+            } elseif ($data["estado"] == 2) {
+                $arrData = $modsuscriptor->consultarSuscriptoexcel($arrSearch, $lis_id, 0);
+            }
+        }
+        $nameReport = marketing::t("marketing", "List Subscriber Allocation");
+        Utilities::generarReporteXLS($nombarch, $nameReport, $arrHeader, $arrData, $colPosition);
+        exit;
     }
 
 }

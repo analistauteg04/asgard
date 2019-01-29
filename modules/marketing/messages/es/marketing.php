@@ -49,12 +49,13 @@ return [
     "Days Schedule" => "Días Programar",
     "Contact Email" => "Email Contacto",
     "List" => "Lista",
+    "List Subscriber Allocation" => "Lista Asignación de Suscriptores",
     "Name Contact" => "Nombre Contacto",
     "New List" => "Lista Nueva",
     "Programtion" => "Programación",
     "Shipping Time" => "Hora Envío",
     "Subject" => "Asunto",
+    "Subscriber Allocation" => "Asignación de Suscriptores",
     "Subscriber number" => "Número suscriptores",
     "Template" => "Plantilla",
-    
 ];

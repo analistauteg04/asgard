@@ -406,4 +406,9 @@ function modificarProgramacion() {
         }
     }
 }
+function exportExcel() {
+    var estado = $('#cmb_suscrito').val();
+    var lista = $('#txth_ids').val();
+    window.location.href = $('#txth_base').val() + "/marketing/email/expexcel?estado=" + estado + "&lista=" + lista;
+}
 
