@@ -338,8 +338,7 @@ function actualizarLista() {
     arrParams.direccion2 = $('#txt_direccion2').val();
     arrParams.telefono = $('#txt_telefono').val();
     arrParams.codigo_postal = $('#txt_codigo_postal').val();
-    
-    arrParams.codigo = $('#txth_codigo').val();
+        
     arrParams.list_id = $('#txth_list_id').val();
     arrParams.opcion =  "E";
     

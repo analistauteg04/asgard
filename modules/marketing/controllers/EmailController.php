@@ -332,9 +332,8 @@ class EmailController extends \app\components\CController {
             $codigo_postal = ucwords(mb_strtolower($data["codigo_postal"]));
             $eaca_id = null;
             $mest_id = null;
-            /*$opcion = $data["opcion"];
-            $codigo = $data["codigo"];
-            $list_id = $data["list_id"];*/
+            $opcion = $data["opcion"];            
+            $list_id = base64_decode($data["list_id"]);
             if ($emp_id != 1) {
                 $mest_id = $data["carrera_id"];
             } else {
@@ -356,10 +355,10 @@ class EmailController extends \app\components\CController {
                 );
                 $lista = new Lista();
                 $resp_consulta = $lista->consultarListaXnombre($nombre_lista);
-                if ($resp_consulta["existe"] != 'S') { //or $resp_consulta["list_id"] == $list_id)                 
+                if (($resp_consulta["existe"] != 'S') or ($resp_consulta["lis_id"] == $list_id)) {
                     //Grabar en mailchimp    
                     $webs_mailchimp = new WsMailChimp();
-                    //if ($opcion == 'N') { // Ingreso
+                    if ($opcion == 'N') { // Ingreso
                         $conLista = $webs_mailchimp->newList($nombre_lista, $nombre_contacto, $correo_contacto, $asunto, $contacto, "es");
                         if ($conLista) {
                             //Grabar en asgard                    
@@ -368,16 +367,17 @@ class EmailController extends \app\components\CController {
                                 $exito = 1;
                             }
                         }
-                    /*} else {  //Modificación                                
-                        $conLista = $webs_mailchimp->editList($codigo, $nombre_lista, $contacto, null, $nombre_contacto, $correo_contacto, $asunto, "es", true);
-                        if ($conLista) {
+                    } else {  //Modificación     
+                        \app\models\Utilities::putMessageLogFile('antes de editar mailchimp');
+                        //$conLista = $webs_mailchimp->editList($resp_consulta["lis_codigo"], $nombre_lista, $contacto, "permiso", $nombre_contacto, $correo_contacto, $asunto, "es", true);
+                        //if ($conLista) {                            
                             //Grabar en asgard                    
                             $resp_lista = $lista->modificarLista($list_id, $eaca_id, $mest_id, $emp_id, $nombre_lista, $ecor_id, $nombre_contacto, $pais, $provincia, $ciudad, $direccion1, $direccion2, $telefono, $codigo_postal, $asunto);
-                            if ($resp_lista) {
+                            if ($resp_lista) {                                
                                 $exito = 1;
                             }
-                        }
-                    }*/
+                       // }
+                    }
                 } else {
                     $mensaje = 'Ya se encuentra creada una lista con el mismo nombre.';
                 }
@@ -528,6 +528,7 @@ class EmailController extends \app\components\CController {
                     "arr_carrera" => ArrayHelper::map(array_merge([["id" => "0", "name" => Yii::t("formulario", "Select")]], $arreglo_carrerra), "id", "name"),
                     "arr_correo" => ArrayHelper::map(array_merge([["id" => "0", "name" => Yii::t("formulario", "Select")]], $arreglo_correo), "id", "name"),
                     "respuesta" => $resp_consulta,
+                    "list_id" => $list_id,
         ]);
     }
 

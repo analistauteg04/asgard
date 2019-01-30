@@ -745,7 +745,7 @@ class Lista extends \yii\db\ActiveRecord {
         $estado = 1;
         $sql = "
                     SELECT
-                        'S' existe, lis_id
+                        'S' existe, lis_id, lis_codigo
                     FROM 
                         " . $con->dbname . ".lista lst                        
                     WHERE
@@ -765,25 +765,36 @@ class Lista extends \yii\db\ActiveRecord {
      * @param
      * @return
      */
-    public function modificarLista($lis_id, $eaca_id, $mest_id, $emp_id, $lis_nombre, $ecor_id, $lis_nombre_principal, $pai_id, $pro_id, $can_id, $lis_direccion1_empresa, $lis_direccion2_empresa, $lis_telefono_empresa, $lis_codigo_postal, $lis_asunto) {
+    public function modificarLista($lis_id, $eaca_id, $mest_id, $emp_id, $lis_nombre, $ecor_id, $lis_nombre_principal, $pai_id, $pro_id, $can_id, 
+                                   $lis_direccion1_empresa, $lis_direccion2_empresa, $lis_telefono_empresa, $lis_codigo_postal, $lis_asunto) {
         $con = \Yii::$app->db_mailing;
         $estado = 1;       
         $fecha_modificacion = date(Yii::$app->params["dateTimeByDefault"]);
+        
+        if ($emp_id==1) {
+            $carrera_id = $eaca_id;
+            $programa_id = null;
+        } else { 
+            $programa_id = $mest_id;
+            $carrera_id = null;
+        }            
         try {
             $comando = $con->createCommand
                     ("UPDATE " . $con->dbname . ".lista		       
                       SET emp_id = :emp_id,                          
-                          lis_nombre = :lis_nombre
-                          lis_asunto = :lis_asunto
-                          ecor_id = :ecor_id
-                          lis_nombre_principal = :lis_nombre_principal
-                          lis_pais = :pai_id
-                          lis_provincia = :pro_id
-                          lis_ciudad = :can_id
-                          lis_direccion1_empresa = :lis_direccion1_empresa
-                          lis_direccion2_empresa = :lis_direccion2_empresa
-                          lis_telefono_empresa = :lis_telefono_empresa
-                          lis_codigo_postal = :lis_codigo_postal
+                          lis_nombre = :lis_nombre,
+                          lis_asunto = :lis_asunto,
+                          eaca_id = :eaca_id,
+                          mest_id = :mest_id,
+                          ecor_id = :ecor_id,
+                          lis_nombre_principal = :lis_nombre_principal,
+                          lis_pais = :pai_id,
+                          lis_provincia = :pro_id,
+                          lis_ciudad = :can_id,
+                          lis_direccion1_empresa = :lis_direccion1_empresa,
+                          lis_direccion2_empresa = :lis_direccion2_empresa,
+                          lis_telefono_empresa = :lis_telefono_empresa,
+                          lis_codigo_postal = :lis_codigo_postal,
                           lis_fecha_modificacion = :lis_fecha_modificacion
                       WHERE lis_id = :lis_id AND                        
                             lis_estado = :estado AND
@@ -800,9 +811,12 @@ class Lista extends \yii\db\ActiveRecord {
             $comando->bindParam(":lis_direccion1_empresa", $lis_direccion1_empresa, \PDO::PARAM_STR);  
             $comando->bindParam(":lis_direccion2_empresa", $lis_direccion2_empresa, \PDO::PARAM_STR);  
             $comando->bindParam(":lis_telefono_empresa", $lis_telefono_empresa, \PDO::PARAM_STR);  
-            $comando->bindParam(":lis_codigo_postal", $lis_codigo_postal, \PDO::PARAM_STR);  
-            $comando->bindParam(":eaca_id", $eaca_id, \PDO::PARAM_INT);  
-            $comando->bindParam(":mest_id", $mest_id, \PDO::PARAM_INT);  
+            $comando->bindParam(":lis_codigo_postal", $lis_codigo_postal, \PDO::PARAM_STR);              
+            $comando->bindParam(":pai_id", $pai_id, \PDO::PARAM_STR);  
+            $comando->bindParam(":pro_id", $pro_id, \PDO::PARAM_STR);  
+            $comando->bindParam(":can_id", $can_id, \PDO::PARAM_STR);  
+            $comando->bindParam(":eaca_id", $carrera_id, \PDO::PARAM_INT);  
+            $comando->bindParam(":mest_id", $programa_id, \PDO::PARAM_INT);  
             
             $response = $comando->execute();            
             return $response;
