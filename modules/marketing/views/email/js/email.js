@@ -10,7 +10,7 @@ $(document).ready(function () {
         if (id_muestra == 0) {
             var newcon = $("<i class='glyphicon glyphicon-pencil'> Editar</i>");
             $('.btnAccion').html(newcon);
-            $(".btnAccion").attr("onclick","editarProgramacion()");
+            $(".btnAccion").attr("onclick", "editarProgramacion()");
         }
     }
     $('#cmb_lista').change(function () {
@@ -67,7 +67,7 @@ $(document).ready(function () {
             }
         }, true);
     });
-    
+
     $('#btn_actualizar').click(function () {
         actualizarLista();
     });
@@ -91,7 +91,25 @@ function mostrar_grid_lista_suscriptor() {
         setTimeout(hideLoadingPopup, 2000);
     }
 }
-
+function suscribirTodos(){
+    var messagePB = new Object();
+    messagePB.wtmessage = "Va a suscribir todos los contactos, esta opcion, solo guarda en la base como suscrito, vinculando a esta lista.<br/> Pero aun no esta como suscrito en mailchimp.`";
+    messagePB.title = "";
+    var list_id = $('#txth_ids').val();
+    var objAccept = new Object();
+    objAccept.id = "btnid2del";
+    objAccept.class = "btn-primary clclass praclose";
+    objAccept.value = "Aceptar";
+    objAccept.callback = 'fnsuscribirLista';
+    var params = new Array(list_id);
+    objAccept.paramCallback = params;
+    messagePB.acciones = new Array();
+    messagePB.acciones[0] = objAccept;
+    showAlert("OK", "info", messagePB);
+}
+function fnsuscribirLista(lista_id){
+    alert("suscribir contrato");
+}
 function programarEnvio() {
     var lista = $('#txth_ids').val();
     window.location.href = $('#txth_base').val() + "/marketing/email/programacion?lisid=" + lista;
@@ -122,7 +140,7 @@ function suscribirContacto(psus_id, per_tipo, list_id) {
         showLoadingPopup();
         requestHttpAjax(link, arrParams, function (response) {
             if (!response.error) {
-                setTimeout(function () {                    
+                setTimeout(function () {
                     preguntaSuscribirOtrasListas(response.message);
                 }, 5000);
             }
@@ -130,17 +148,17 @@ function suscribirContacto(psus_id, per_tipo, list_id) {
         setTimeout(hideLoadingPopup, 2000);
     }
 }
-function preguntaSuscribirOtrasListas(message) {    
+function preguntaSuscribirOtrasListas(message) {
     var messagePB = new Object();
     var mens_tot = message.wtmessage;
-    mens_tot=mens_tot+"<br/> Las personas que se han suscrito a estas listas, tambien les ha interesado las siguientes listas:<br/>";
+    mens_tot = mens_tot + "<br/> Las personas que se han suscrito a estas listas, tambien les ha interesado las siguientes listas:<br/>";
     var materias = message.materias;
-    var i=0;
-    var str_materias='';
-    for(i=0;i<3;i++){
-        str_materias=str_materias+'- '+materias[i]+'<br/>';
-    }    
-    mens_tot=mens_tot+"<br/>"+str_materias;
+    var i = 0;
+    var str_materias = '';
+    for (i = 0; i < 3; i++) {
+        str_materias = str_materias + '- ' + materias[i] + '<br/>';
+    }
+    mens_tot = mens_tot + "<br/>" + str_materias;
     messagePB.wtmessage = mens_tot;
     messagePB.title = message.title;
     var objAccept = new Object();
@@ -160,7 +178,7 @@ function elminarsuscritor() {
 }
 function RemoverSuscritor(per_id, list_id) {
     var messagePB = new Object();
-    var mensj = "Seguro Desea eliminar el suscritor de la lista?";   
+    var mensj = "Seguro Desea eliminar el suscritor de la lista?";
     messagePB.wtmessage = mensj;
     messagePB.title = "Eliminar";
     var objAccept = new Object();
@@ -179,14 +197,14 @@ function RemoverSuscritor(per_id, list_id) {
 function elminarSuscriptor(per_id, list_id) {
     var link = $('#txth_base').val() + "/marketing/email/deletesuscriptor";
     var arrParams = new Object();
-    arrParams.per_id = per_id;    
+    arrParams.per_id = per_id;
     arrParams.list_id = list_id;
     arrParams.accion = 'sc';
     if (!validateForm()) {
         showLoadingPopup();
         requestHttpAjax(link, arrParams, function (response) {
             if (!response.error) {
-                setTimeout(function () {                    
+                setTimeout(function () {
                     //preguntaSuscribirOtrasListas(response.message);
                 }, 5000);
             }
@@ -295,8 +313,7 @@ function guardarLista() {
     arrParams.direccion1 = $('#txt_direccion1').val();
     arrParams.direccion2 = $('#txt_direccion2').val();
     arrParams.telefono = $('#txt_telefono').val();
-    arrParams.codigo_postal = $('#txt_codigo_postal').val();
-    
+    arrParams.codigo_postal = $('#txt_codigo_postal').val();   
     arrParams.codigo = null;
     arrParams.list_id = 0;        
     arrParams.opcion =  "N";    
@@ -340,8 +357,8 @@ function actualizarLista() {
     arrParams.codigo_postal = $('#txt_codigo_postal').val();
         
     arrParams.list_id = $('#txth_list_id').val();
-    arrParams.opcion =  "E";
-    
+    arrParams.opcion =  "E";    
+
     if (!validateForm()) {
         requestHttpAjax(link, arrParams, function (response) {
             showAlert(response.status, response.label, response.message);
@@ -404,7 +421,7 @@ function modificarProgramacion() {
     arrParams.check_dia_7 = "";
     arrParams.lista = $('#txth_list').val();
     arrParams.pla_id = $('#cmb_pla_id').val();
-    
+
     if ($('input:checkbox[name=check_dia_1]:checked').val() > 0)
     {
         arrParams.check_dia_1 = $('input:checkbox[name=check_dia_1]:checked').val();

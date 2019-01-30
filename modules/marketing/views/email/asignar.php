@@ -17,6 +17,7 @@ use app\modules\marketing\Module as marketing;
         $this->render('asignar-search', [
             'arr_estado' => $arr_estado,
             'arr_lista' =>$arr_lista,
+            'noescritos' => $noescritos,
         ]);
         ?>    
     </form>

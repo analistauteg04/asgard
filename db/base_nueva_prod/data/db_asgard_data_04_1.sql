@@ -28,7 +28,8 @@ INSERT INTO `accion` (`acc_id`, `acc_nombre`, `acc_url_accion`, `acc_tipo`, `acc
 (19,'pendingApplicants','pendingApplicants','General','pendingApplicants','accion','glyphicon glyphicon-ok','1','2017-02-01 20:05:26',NULL,'1'),
 (20,'Register','Register','General','Register','accion','glyphicon glyphicon-check','1','2018-11-07 17:53:22',NULL,'1'),
 (21,'Inscribed pending','Inscribed pending','General','Inscribed pending','accion','glyphicon glyphicon-info-sign','1','2018-11-07 19:04:25',NULL,'1'),
-(22,'Schedule shipping','Schedule shipping','General','Schedule shipping','accion','glyphicon glyphicon-calendar','1','2018-11-07 19:04:25',NULL,'1');
+(22,'Schedule shipping','Schedule shipping','General','Schedule shipping','accion','glyphicon glyphicon-calendar','1','2018-11-07 19:04:25',NULL,'1'),
+(23,'Suscribe all','Suscribe all','General','Suscribe all','accion','glyphicon glyphicon-list-alt','1','2018-11-07 19:04:25',NULL,'1');
 
 -- --------------------------------------------------------
 --

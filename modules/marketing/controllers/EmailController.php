@@ -48,6 +48,7 @@ class EmailController extends \app\components\CController {
         $per_id = @Yii::$app->session->get("PB_perid");
         $mod_sb = new Suscriptor();
         $lista_model = $mod_lista->consultarListaXID($lis_id);
+        $noescritos = $mod_sb->consultarNumnoescritos($lis_id);
         $susbs_lista = $mod_sb->consultarSuscriptoresxLista($arrSearch, $lis_id);
         $fecha_crea = date(Yii::$app->params["dateTimeByDefault"]);
         $su_id = 0;
@@ -128,6 +129,7 @@ class EmailController extends \app\components\CController {
                     'arr_lista' => $lista_model,
                     'arr_estado' => array("Seleccionar", "Subscrito", "No Subscrito"),
                     'model' => $susbs_lista,
+                    'noescritos' => $noescritos['noescritos'], //
         ]);
     }
 
@@ -613,10 +615,19 @@ class EmailController extends \app\components\CController {
         $data = Yii::$app->request->get();
         $arrSearch["estado"] = $data["estado"];
         $lis_id = base64_decode($data["lista"]);      
-        \app\models\Utilities::putMessageLogFile('fgdg: ' . $data["estado"]);
+        \app\models\Utilities::putMessageLogFile('XXX: ' . $arrSearch["estado"]);
         $modsuscriptor = new Suscriptor();
-        $arrData = array();
-        if ($arrSearch["estado"] == 0) {
+        $arrData = array();  
+        if ($arrSearch["estado"] == 0) {            
+            $arrData = $modsuscriptor->consultarSuscriptoexcel($arrSearch, $lis_id);
+        } else {
+            if ($arrSearch["estado"] == 1) {
+                $arrData = $modsuscriptor->consultarSuscriptoexcel($arrSearch, $lis_id, 1);
+            } elseif ($arrSearch["estado"] == 2) {
+                $arrData = $modsuscriptor->consultarSuscriptoexcel($arrSearch, $lis_id, 0);
+            }
+        }
+        /*if ($arrSearch["estado"] == 0) {
             $arrData = $modsuscriptor->consultarSuscriptoexcel($arrSearch, $lis_id);
         } else {
             if ($data["estado"] == 1) {
@@ -624,7 +635,7 @@ class EmailController extends \app\components\CController {
             } elseif ($data["estado"] == 2) {
                 $arrData = $modsuscriptor->consultarSuscriptoexcel($arrSearch, $lis_id, 0);
             }
-        }
+        }*/
         $nameReport = marketing::t("marketing", "List Subscriber Allocation");
         Utilities::generarReporteXLS($nombarch, $nameReport, $arrHeader, $arrData, $colPosition);
         exit;
