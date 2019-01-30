@@ -69,7 +69,7 @@ $(document).ready(function () {
     });
 
     $('#btn_actualizar').click(function () {
-        guardarLista();
+        actualizarLista();
     });
 });
 
@@ -295,16 +295,10 @@ function guardarLista() {
     arrParams.direccion1 = $('#txt_direccion1').val();
     arrParams.direccion2 = $('#txt_direccion2').val();
     arrParams.telefono = $('#txt_telefono').val();
-    arrParams.codigo_postal = $('#txt_codigo_postal').val();
-
-    arrParams.codigo = $('#txth_codigo').val();
-    arrParams.list_id = $('#txth_list_id').val();
-
-    if (arrParams.list_id > 0) {
-        arrParams.opcion = "N";
-    } else {
-        arrParams.opcion = "E";
-    }
+    arrParams.codigo_postal = $('#txt_codigo_postal').val();   
+    arrParams.codigo = null;
+    arrParams.list_id = 0;        
+    arrParams.opcion =  "N";    
 
     if (!validateForm()) {
         requestHttpAjax(link, arrParams, function (response) {
@@ -317,6 +311,49 @@ function guardarLista() {
         }, true);
     }
 }
+
+function actualizarLista() {
+    var link = $('#txth_base').val() + "/marketing/email/guardarlista";
+    var arrParams = new Object();
+    arrParams.emp_id = $('#cmb_empresa').val();
+    var combo_empresa = document.getElementById("cmb_empresa");
+    arrParams.nombre_empresa = combo_empresa.options[combo_empresa.selectedIndex].text;
+
+    arrParams.carrera_id = $('#cmb_carrera_programa').val();
+    var combo_carrera = document.getElementById("cmb_carrera_programa");
+    arrParams.nombre_lista = combo_carrera.options[combo_carrera.selectedIndex].text;
+    arrParams.txt_asunto = $('#txt_asunto').val();
+
+    arrParams.txt_nombre_contacto = arrParams.nombre_empresa;
+    arrParams.correo_id = $('#cmb_correo_empresa').val();
+    var combo_correo = document.getElementById("cmb_correo_empresa");
+    arrParams.txt_correo_contacto = combo_correo.options[combo_correo.selectedIndex].text;
+
+    arrParams.pais_texto = $('#txt_pais').val();
+    arrParams.provincia_texto = $('#txt_provincia').val();
+    arrParams.ciudad_texto = $('#txt_ciudad').val();
+
+    arrParams.direccion1 = $('#txt_direccion1').val();
+    arrParams.direccion2 = $('#txt_direccion2').val();
+    arrParams.telefono = $('#txt_telefono').val();
+    arrParams.codigo_postal = $('#txt_codigo_postal').val();
+    
+    arrParams.codigo = $('#txth_codigo').val();
+    arrParams.list_id = $('#txth_list_id').val();
+    arrParams.opcion =  "E";    
+
+    if (!validateForm()) {
+        requestHttpAjax(link, arrParams, function (response) {
+            showAlert(response.status, response.label, response.message);
+            if (!response.error) {
+                setTimeout(function () {
+                    window.location.href = $('#txth_base').val() + "/marketing/email/index";
+                }, 5000);
+            }
+        }, true);
+    }
+}
+
 function borrarLista(id, temp) {
     var link = $('#txth_base').val() + "/marketing/email/delete";
     var arrParams = new Object();
