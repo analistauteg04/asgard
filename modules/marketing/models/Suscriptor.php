@@ -123,10 +123,10 @@ class Suscriptor extends \yii\db\ActiveRecord {
         $join_subscrito = ($subscrito == 1) ? $suscrito : (($subscrito == 2) ? $nosuscrito : $nosuscrito);
         if (isset($arrFiltro) && count($arrFiltro) > 0) {
             if ($arrFiltro['estado'] == 1) {
-                $str_search = " AND ifnull(sus.sus_id,0) > 0 ";
+                $str_search = " AND ifnull(sus.sus_id,0) > 0 and sus.sus_estado ='1'";
             }
             if ($arrFiltro['estado'] == 2) {
-                $str_search = " AND ifnull(sus.sus_id,0) = 0 ";
+                $str_search = " AND (ifnull(sus.sus_id,0) = 0 or sus.sus_estado ='0') ";
             }
         }
         $sql = "
@@ -306,10 +306,10 @@ class Suscriptor extends \yii\db\ActiveRecord {
         $join_subscrito = ($subscrito == 1) ? $suscrito : (($subscrito == 2) ? $nosuscrito : $nosuscrito);
         if (isset($arrFiltro) && count($arrFiltro) > 0) {
             if ($arrFiltro['estado'] == 1) {
-                $str_search = " AND ifnull(sus.sus_id,0) > 0 ";
+                $str_search = " AND ifnull(sus.sus_id,0) > 0 and sus.sus_estado ='1' ";
             }
             if ($arrFiltro['estado'] == 2) {
-                $str_search = " AND ifnull(sus.sus_id,0) = 0 ";
+                $str_search = " AND (ifnull(sus.sus_id,0) = 0 or sus.sus_estado ='0') ";
             }
         }
         $sql = "
