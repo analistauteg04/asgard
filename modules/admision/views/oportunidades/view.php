@@ -173,6 +173,7 @@ $fecha_actual = date("Y-m-d");
             </div>
         </div>
         <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
+            <?php if($arr_oportunidad["uaca_id"] > 1)  { ?>
             <div class="col-lg-6 col-md-6 col-sm-6 col-xs-6">
                 <div class="form-group">
                     <label for="cmb_opportunity_type" class="col-sm-5 col-md-5 col-xs-5 col-lg-5 control-label keyupmce"><?= Module::t("crm", "Opportunity type") ?></label>
@@ -181,6 +182,7 @@ $fecha_actual = date("Y-m-d");
                     </div>
                 </div>
             </div>
+            <?php } ?>
             <div class="col-lg-6 col-md-6 col-sm-6 col-xs-6">
                 <div class="form-group">
                     <label for="cmb_state_opportunity" class="col-sm-5 col-md-5 col-xs-5 col-lg-5 control-label keyupmce"><?= Module::t("crm", "Opportunity state") ?></label>

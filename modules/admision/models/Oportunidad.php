@@ -245,7 +245,11 @@ class Oportunidad extends \app\modules\admision\components\CActiveRecord {
                     pges.pges_pasaporte as pasaporte,
                     eo.eopo_id as estado_oportunidad_id,
                     eo.eopo_nombre as estado_oportunidad,
-                    tov.tove_nombre as tipo_oportunidad,
+                    -- tov.tove_nombre as tipo_oportunidad,
+                    ifnull((SELECT topo.tove_nombre
+                    FROM db_crm.oportunidad as opo
+                    INNER JOIN db_crm.tipo_oportunidad_venta as topo on topo.tove_id=opo.tove_id
+                    WHERE opo_id = op.opo_id),'N/A') as tipo_oportunidad,
                     case emp.emp_id
                     when 1 then (select eaca.eaca_nombre from " . $con2->dbname . ".estudio_academico eaca where eaca.eaca_id = op.eaca_id)
                     when 2 then (select mes.mest_nombre from " . $con2->dbname . ".modulo_estudio mes where mes.mest_id = op.mest_id)
@@ -267,7 +271,7 @@ class Oportunidad extends \app\modules\admision\components\CActiveRecord {
                     inner join " . $con1->dbname . ".persona agent on agent.per_id = padm.per_id                    
                     inner join " . $con2->dbname . ".modalidad moda on moda.mod_id = op.mod_id
                     inner join " . $con2->dbname . ".unidad_academica uac on uac.uaca_id = op.uaca_id
-                    inner join " . $con->dbname . ".tipo_oportunidad_venta tov on tov.tove_id = op.tove_id
+                    -- inner join " . $con->dbname . ".tipo_oportunidad_venta tov on tov.tove_id = op.tove_id
                     
                 WHERE ";
         if (!empty($str_search)) {
@@ -283,8 +287,8 @@ class Oportunidad extends \app\modules\admision\components\CActiveRecord {
                         and padm.padm_estado_logico = 1
                         and agent.per_estado = 1
                         and agent.per_estado_logico = 1  
-                        and tov.tove_estado = 1
-                        and tov.tove_estado_logico = 1
+                        -- and tov.tove_estado = 1
+                        -- and tov.tove_estado_logico = 1
                         order by op.opo_id desc
                ";
 
@@ -1662,8 +1666,8 @@ class Oportunidad extends \app\modules\admision\components\CActiveRecord {
                         uaca.uaca_nombre as unidad_academica,
                         opo.mod_id,
                         moda.mod_nombre as modalidad,
-                        opo.tove_id,
-                        top.tove_nombre as tipo_oportunidad,
+                        -- opo.tove_id,
+                        -- top.tove_nombre as tipo_oportunidad,
                         opo.eopo_id,
                         eop.eopo_nombre as estado_oportunidad,
                         opo.oper_id as oportunidad_perdida,
@@ -1697,7 +1701,7 @@ class Oportunidad extends \app\modules\admision\components\CActiveRecord {
                          inner join " . $con1->dbname . ".persona per on per.per_id = pa.per_id	
                          inner join " . $con2->dbname . ".unidad_academica uaca on uaca.uaca_id = opo.uaca_id	
                          inner join " . $con2->dbname . ".modalidad moda on moda.mod_id = opo.mod_id	
-                         inner join " . $con->dbname . ".tipo_oportunidad_venta top on top.tove_id = opo.tove_id
+                         -- inner join " . $con->dbname . ".tipo_oportunidad_venta top on top.tove_id = opo.tove_id
                          inner join " . $con->dbname . ".estado_oportunidad eop on eop.eopo_id = opo.eopo_id                                                  
                 WHERE 	opo.opo_id = :opo_id
                         and opo.opo_estado = :estado
@@ -1706,8 +1710,8 @@ class Oportunidad extends \app\modules\admision\components\CActiveRecord {
                         and pa.padm_estado_logico = :estado
                         and per.per_estado = :estado
                         and per.per_estado_logico = :estado                        
-                        and top.tove_estado = :estado
-                        and top.tove_estado_logico = :estado
+                        -- and top.tove_estado = :estado
+                        -- and top.tove_estado_logico = :estado
                         and eop.eopo_estado = :estado
                         and eop.eopo_estado_logico = :estado";
 
