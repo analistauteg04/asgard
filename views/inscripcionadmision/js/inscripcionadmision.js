@@ -20,6 +20,13 @@ function habilitarSecciones() {
 
 $(document).ready(function () {
     // para mostrar codigo de area
+    var unisol=$('#cmb_unidad_solicitud').val();
+    if(unisol==1){
+        $('#divmetodocan').css('display', 'none');
+    }else if(unisol==2){
+        $('#divmetodocan').css('display', 'block');
+    }
+    
     $('#cmb_pais_dom').change(function () {
         var link = $('#txth_base').val() + "/inscripcionadmision/index";
         var arrParams = new Object();
@@ -198,6 +205,18 @@ $(document).ready(function () {
     });
 
     $('#cmb_unidad_solicitud').change(function () {
+        var unisol=$('#cmb_unidad_solicitud').val();
+        if(unisol==1){
+            $('#divmetodocan').css('display', 'none');
+            $('#divRequisitosCANP').css('display', 'none');
+            $('#divRequisitosCANSP').css('display', 'none');
+            $('#divRequisitosCANAD').css('display', 'none');
+            $('#divRequisitosCANO').css('display', 'none');
+            $('#divRequisitosEXA').css('display', 'none');
+            $('#divRequisitosPRP').css('display', 'none');
+        }else if(unisol==2){
+            $('#divmetodocan').css('display', 'block');
+        }
         var link = $('#txth_base').val() + "/inscripcionadmision/index";
         var arrParams = new Object();
         arrParams.nint_id = $(this).val();
@@ -308,52 +327,58 @@ $(document).ready(function () {
         if ($('#cmb_metodo_solicitud').val() != 0) {
             //Grado
             if ($('#cmb_unidad_solicitud').val() == 1) {
+                $('#divRequisitosCANO').css('display', 'none');
+                $('#divRequisitosCANP').css('display', 'none');
+                $('#divRequisitosCANSP').css('display', 'none');
+                $('#divRequisitosCANAD').css('display', 'none');
+                $('#divRequisitosEXA').css('display', 'none');
+                $('#divRequisitosPRP').css('display', 'none');
                 //Método: CAN
-                if ($('#cmb_metodo_solicitud').val() == 1) {
-                    //Online
-                    if ($('#cmb_modalidad_solicitud').val() == 1) {
-                        $('#divRequisitosCANO').css('display', 'block');
-                        $('#divRequisitosCANP').css('display', 'none');
-                        $('#divRequisitosCANSP').css('display', 'none');
-                        $('#divRequisitosCANAD').css('display', 'none');
-                        $('#divRequisitosEXA').css('display', 'none');
-                        $('#divRequisitosPRP').css('display', 'none');
-                    } else {  //Presencial
-                        if ($('#cmb_modalidad_solicitud').val() == 2) {
-                            $('#divRequisitosCANP').css('display', 'block');
-                            $('#divRequisitosCANO').css('display', 'none');
-                            $('#divRequisitosCANSP').css('display', 'none');
-                            $('#divRequisitosCANAD').css('display', 'none');
-                            $('#divRequisitosEXA').css('display', 'none');
-                            $('#divRequisitosPRP').css('display', 'none');
-                        } else {   //Semipresencial
-                            if ($('#cmb_modalidad_solicitud').val() == 3) {
-                                $('#divRequisitosCANSP').css('display', 'block');
-                                $('#divRequisitosCANO').css('display', 'none');
-                                $('#divRequisitosCANP').css('display', 'none');
-                                $('#divRequisitosCANAD').css('display', 'none');
-                                $('#divRequisitosEXA').css('display', 'none');
-                                $('#divRequisitosPRP').css('display', 'none');
-                            } else {  // distancia
-                                $('#divRequisitosCANAD').css('display', 'block');
-                                $('#divRequisitosCANO').css('display', 'none');
-                                $('#divRequisitosCANP').css('display', 'none');
-                                $('#divRequisitosCANSP').css('display', 'none');
-                                $('#divRequisitosEXA').css('display', 'none');
-                                $('#divRequisitosPRP').css('display', 'none');
-                            }
-                        }
-                    }
-                } else {  //examen
-                    //Online                    
-                    $('#divRequisitosEXA').css('display', 'block');
-                    $('#divRequisitosCANO').css('display', 'none');
-                    $('#divRequisitosCANP').css('display', 'none');
-                    $('#divRequisitosCANSP').css('display', 'none');
-                    $('#divRequisitosCANAD').css('display', 'none');
-                    $('#divRequisitosPRP').css('display', 'none');
-                }
-            } else {  //Posgrado  Semipresencial
+//                if ($('#cmb_metodo_solicitud').val() == 1) {
+//                //Online
+//                if ($('#cmb_modalidad_solicitud').val() == 1) {
+//                    $('#divRequisitosCANO').css('display', 'block');
+//                    $('#divRequisitosCANP').css('display', 'none');
+//                    $('#divRequisitosCANSP').css('display', 'none');
+//                    $('#divRequisitosCANAD').css('display', 'none');
+//                    $('#divRequisitosEXA').css('display', 'none');
+//                    $('#divRequisitosPRP').css('display', 'none');
+//                } else {  //Presencial
+//                    if ($('#cmb_modalidad_solicitud').val() == 2) {
+//                        $('#divRequisitosCANP').css('display', 'block');
+//                        $('#divRequisitosCANO').css('display', 'none');
+//                        $('#divRequisitosCANSP').css('display', 'none');
+//                        $('#divRequisitosCANAD').css('display', 'none');
+//                        $('#divRequisitosEXA').css('display', 'none');
+//                        $('#divRequisitosPRP').css('display', 'none');
+//                    } else {   //Semipresencial
+//                        if ($('#cmb_modalidad_solicitud').val() == 3) {
+//                            $('#divRequisitosCANSP').css('display', 'block');
+//                            $('#divRequisitosCANO').css('display', 'none');
+//                            $('#divRequisitosCANP').css('display', 'none');
+//                            $('#divRequisitosCANAD').css('display', 'none');
+//                            $('#divRequisitosEXA').css('display', 'none');
+//                            $('#divRequisitosPRP').css('display', 'none');
+//                        } else {  // distancia
+//                            $('#divRequisitosCANAD').css('display', 'block');
+//                            $('#divRequisitosCANO').css('display', 'none');
+//                            $('#divRequisitosCANP').css('display', 'none');
+//                            $('#divRequisitosCANSP').css('display', 'none');
+//                            $('#divRequisitosEXA').css('display', 'none');
+//                            $('#divRequisitosPRP').css('display', 'none');
+//                        }
+//                    }
+//                }
+//            } else {  //examen
+//                //Online                    
+//                $('#divRequisitosEXA').css('display', 'block');
+//                $('#divRequisitosCANO').css('display', 'none');
+//                $('#divRequisitosCANP').css('display', 'none');
+//                $('#divRequisitosCANSP').css('display', 'none');
+//                $('#divRequisitosCANAD').css('display', 'none');
+//                $('#divRequisitosPRP').css('display', 'none');
+//            }
+        } else {  //Posgrado  Semipresencial
                 if (($('#cmb_modalidad_solicitud').val() == 3) || ($('#cmb_modalidad_solicitud').val() == 2)) {
                     //Taller introductorio            
                     if ($('#cmb_metodo_solicitud').val() == 4) {

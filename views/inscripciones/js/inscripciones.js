@@ -4,7 +4,13 @@
  * and open the template in the editor.
  */
 $(document).ready(function () {
-    // para mostrar codigo de area
+    // para mostrar codigo de area    
+    var unisol = $('#cmb_ninteres').val();
+    if (unisol == 1) {
+        $('#divIdUnidad').css('display', 'none');
+    } else if (unisol == 2) {
+        $('#divIdUnidad').css('display', 'block');
+    }
     $('#cmb_pais_dom').change(function () {
         var link = $('#txth_base').val() + "/inscripciones/index";
         var arrParams = new Object();
@@ -50,8 +56,8 @@ $(document).ready(function () {
         }
 
     });
-    
-    $('#sendInscripcionsolicitud').click(function () {        
+
+    $('#sendInscripcionsolicitud').click(function () {
         var link = $('#txth_base').val() + "/inscripciones/guardarinscripcionsolicitud";
         var arrParams = new Object();
         arrParams.pges_pri_nombre = $('#txt_primer_nombre').val();
@@ -98,6 +104,12 @@ $(document).ready(function () {
     });
 
     $('#cmb_ninteres').change(function () {
+        var unisol = $('#cmb_ninteres').val();
+        if (unisol == 1) {
+            $('#divIdUnidad').css('display', 'none');
+        } else if (unisol == 2) {
+            $('#divIdUnidad').css('display', 'block');
+        }
         var link = $('#txth_base').val() + "/inscripciones/index";
         var arrParams = new Object();
         arrParams.nint_id = $(this).val();
@@ -161,25 +173,25 @@ $(document).ready(function () {
                         if (response.status == "OK") {
                             data = response.message;
                             setComboData(data.carrera, "cmb_carrera_solicitud");
-                            
+
                         }
                     }, true);
                 }
             }
         }, true);
-        
+
         //métodos.
-        var arrParams = new Object();  
+        var arrParams = new Object();
         arrParams.nint_id = $(this).val();
         arrParams.metodo = $('#cmb_metodo_solicitud').val();
         arrParams.getmetodo = true;
         requestHttpAjax(link, arrParams, function (response) {
             if (response.status == "OK") {
                 data = response.message;
-                setComboData(data.metodos, "cmb_metodo_solicitud");   
-                 AparecerDocumento();
+                setComboData(data.metodos, "cmb_metodo_solicitud");
+                AparecerDocumento();
             }
-        }, true);       
+        }, true);
     });
 
     $('#cmb_modalidad_solicitud').change(function () {
@@ -195,20 +207,20 @@ $(document).ready(function () {
             }
         }, true);
     });
-    
-        
-    $('#cmb_metodo_solicitud').change(function () {        
+
+
+    $('#cmb_metodo_solicitud').change(function () {
         AparecerDocumento();
-       
+
     });
-    
+
     function AparecerDocumento() {
-         if ($('#cmb_metodo_solicitud').val() == 3) {           
+        if ($('#cmb_metodo_solicitud').val() == 3) {
             $('#divCertificado').css('display', 'block');
-            
+
         } else {
             $('#divCertificado').css('display', 'none');
-            
+
         }
     }
 });
