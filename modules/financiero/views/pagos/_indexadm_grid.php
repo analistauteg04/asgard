@@ -48,11 +48,11 @@ admision::registerTranslations();
                 'header' => Yii::t("formulario", "Academic unit"),
                 'value' => 'nivel',
             ],
-            [
-                'attribute' => 'MetodoIngreso',
-                'header' => admision::t("Solicitudes", "Income Method"),
-                'value' => 'metodo',
-            ],            
+//            [
+//                'attribute' => 'MetodoIngreso',
+//                'header' => admision::t("Solicitudes", "Income Method"),
+//                'value' => 'metodo',
+//            ],            
             [
                 'attribute' => 'estado',
                 'header' => Yii::t("formulario", "Status"),
