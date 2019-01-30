@@ -91,7 +91,25 @@ function mostrar_grid_lista_suscriptor() {
         setTimeout(hideLoadingPopup, 2000);
     }
 }
-
+function suscribirTodos(){
+    var messagePB = new Object();
+    messagePB.wtmessage = "Va a suscribir todos los contactos, esta opcion, solo guarda en la base como suscrito, vinculando a esta lista.<br/> Pero aun no esta como suscrito en mailchimp.`";
+    messagePB.title = "";
+    var list_id = $('#txth_ids').val();
+    var objAccept = new Object();
+    objAccept.id = "btnid2del";
+    objAccept.class = "btn-primary clclass praclose";
+    objAccept.value = "Aceptar";
+    objAccept.callback = 'fnsuscribirLista';
+    var params = new Array(list_id);
+    objAccept.paramCallback = params;
+    messagePB.acciones = new Array();
+    messagePB.acciones[0] = objAccept;
+    showAlert("OK", "info", messagePB);
+}
+function fnsuscribirLista(lista_id){
+    alert("suscribir contrato");
+}
 function programarEnvio() {
     var lista = $('#txth_ids').val();
     window.location.href = $('#txth_base').val() + "/marketing/email/programacion?lisid=" + lista;
