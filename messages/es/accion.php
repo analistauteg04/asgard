@@ -80,4 +80,5 @@ return [
     "Register" => "Matricular",
     "Inscribed pending" => "Inscritos Pendientes",
     "Schedule shipping"=> "Programacion Envio",
+    "Suscribe all"=> "Suscribir Todos",
 ];
