@@ -460,7 +460,7 @@ function guardarInscripcion(accion, paso) {
                             $('#val_item_1').text(response.data.data.precio);
                             $('#lbl_valor_pagar_tx').text(response.data.data.precio);
 
-                            $('#lbl_fcur_tx').text("17 de noviembre del 2018");
+                            $('#lbl_fcur_tx').text("15 abril del 2019");
                         } else if (uaca_id == 1) {
                             leyenda = 'El valor a cancelar por concepto de ' + response.data.data.metodo + ' en la modalidad ' + response.data.data.modalidad + ' es:';
                             if (mod_id == 1) {//online
@@ -564,7 +564,11 @@ function dataInscripPart1(ID) {
     objDat.pges_celular = $('#txt_celular').val();
     objDat.unidad_academica = $('#cmb_unidad_solicitud option:selected').val();
     objDat.modalidad = $('#cmb_modalidad_solicitud option:selected').val();
-    objDat.ming_id = $('#cmb_metodo_solicitud option:selected').val();
+    if(objDat.unidad_academica==1){
+        objDat.ming_id = null;
+    }else if(objDat.unidad_academica==2){
+        objDat.ming_id = $('#cmb_metodo_solicitud option:selected').val();
+    }
     objDat.conoce = $('#cmb_conuteg option:selected').val();
     objDat.carrera = $('#cmb_carrera_solicitud option:selected').val();
     //TABA 2
