@@ -379,7 +379,7 @@ class SolicitudesController extends \app\components\CController {
                             $resp_precios_maximos = $mod_solins->ValidarPrecioXitem($ite_id); 
                             if ($resp_precios_maximos) {
                                 if ($precioGrado > $resp_precios_maximos["precio_mat"] or $precioGrado < $resp_precios_maximos["precio_ins"]) {
-                                    $mensaje = 'El precio digitado debe esar entre '.$resp_precios_maximos["precio_ins"]. ' y '. $resp_precios_maximos["precio_mat"];
+                                    $mensaje = 'El precio digitado debe estar entre '.$resp_precios_maximos["precio_ins"]. ' y '. $resp_precios_maximos["precio_mat"];
                                     $errorprecio = 0;
                                 }
                             }
@@ -465,8 +465,7 @@ class SolicitudesController extends \app\components\CController {
                 } else {
                     $estadopago = 'P';
                 }
-                $val_total = $precio - $val_descuento;
-                \app\models\Utilities::putMessageLogFile('valTotal:' . $val_total);
+                $val_total = $precio - $val_descuento;                
                 $resp_opago = $mod_ordenpago->insertarOrdenpago($id_sins, null, $val_total, 0, $val_total, $estadopago, $usu_id);
                 if ($resp_opago) {
                     //insertar desglose del pago                                    
@@ -503,19 +502,67 @@ class SolicitudesController extends \app\components\CController {
                 $tipoDNI = ((SolicitudInscripcion::$arr_DNI[$dataTipDNI]) ? SolicitudInscripcion::$arr_DNI[$dataTipDNI] : SolicitudInscripcion::$arr_DNI["3"]);
                 /* Obtención de datos de la factura */
                 $respDatoFactura = $mod_solins->consultarDatosfacturaxIdsol($id_sins);
+             
+                $resp_sol = $mod_solins->Obtenerdatosolicitud($id_sins);
+                //Se obtiene el curso para luego registrarlo.
+                if ($resp_sol) {
+                    $mod_persona = new Persona();
+                    $resp_persona = $mod_persona->consultaPersonaId($per_id);
+                    $correo = $resp_persona["usu_user"];                    
+                    $apellidos = $resp_persona["per_pri_apellido"];
+                    $nombres = $resp_persona["per_pri_nombre"];                  
+                    $link = "http://www.uteg.edu.ec";                    
+                    $modalidad = ($resp_sol["nombre_modalidad"]);
+                    $unidad_academica = ($resp_sol["nombre_nivel_interes"]);
 
-                $tituloMensaje = Yii::t("interesado", "UTEG - Registration Online");
-                $asunto = Yii::t("interesado", "UTEG - Registration Online");
-                $body = Utilities::getMailMessage("Paidinterested", array("[[nombre]]" => $nombres, "[[metodo]]" => $metodo, "[[precio]]" => $val_total, "[[link]]" => $link, "[[link1]]" => $link1, "[[link_pypal]]" => $link_paypal), Yii::$app->language);
-                $bodyadmision = Utilities::getMailMessage("Paidadmissions", array("[[nombre]]" => $pri_nombre, "[[apellido]]" => $pri_apellido, "[[correo]]" => $correo, "[[identificacion]]" => $identificacion, "[[tipoDNI]]" => $tipoDNI, "[[curso]]" => $curso, "[[telefono]]" => $telefono), Yii::$app->language);
-                $bodycolecturia = Utilities::getMailMessage("Approvedapplicationcollected", array("[[nombres_completos]]" => $nombres, "[[metodo]]" => $metodo, "[[nombre]]" => $respDatoFactura["sdfa_nombres"], "[[apellido]]" => $respDatoFactura["sdfa_apellidos"], "[[identificacion]]" => $respDatoFactura["sdfa_dni"], "[[tipoDNI]]" => $respDatoFactura["sdfa_tipo_dni"], "[[direccion]]" => $respDatoFactura["sdfa_direccion"], "[[telefono]]" => $respDatoFactura["sdfa_telefono"]), Yii::$app->language);
-/*
-                Utilities::sendEmail($tituloMensaje, Yii::$app->params["adminEmail"], [$correo => $pri_apellido . " " . $pri_nombre], $asunto, $body);
-                Utilities::sendEmail($tituloMensaje, Yii::$app->params["adminEmail"], [Yii::$app->params["admisiones"] => "Jefe"], $asunto, $bodyadmision);
-                Utilities::sendEmail($tituloMensaje, Yii::$app->params["adminEmail"], [Yii::$app->params["soporteEmail"] => "Soporte"], $asunto, $body);
-                Utilities::sendEmail($tituloMensaje, Yii::$app->params["adminEmail"], [Yii::$app->params["soporteEmail"] => "Soporte"], $asunto, $bodyadmision);
-                Utilities::sendEmail($tituloMensaje, Yii::$app->params["adminEmail"], [Yii::$app->params["colecturia"] => "Colecturia"], $asunto, $bodycolecturia);
-*/
+                    if ($resp_sol["nivel_interes"] == 1) {  //Grado
+                        switch ($resp_sol["mod_id"]) {
+                            case 1:
+                                $file1 = Url::base(true) . "/files/Bienvenida UTEG ONLINE.pdf";
+                                $rutaFile = array($file1);
+                                break;
+                            case 2:
+                                $file1 = Url::base(true) . "/files/BienvenidaPresencial.pdf";
+                                $rutaFile = array($file1);
+                                break;
+                            case 3:
+                                $file1 = Url::base(true) . "/files/BienvenidaSemiPresencial.pdf";
+                                $rutaFile = array($file1);
+                                break;
+                        }
+                    } else {
+                        if ($resp_sol["nivel_interes"] == 2) {   //Posgrado
+                            $file1 = Url::base(true) . "/files/BienvenidaPosgrado.pdf";
+                            $rutaFile = array($file1);
+                        }
+                    }
+                    if ($resp_sol["nivel_interes"] == 1) { 
+                        $tituloMensaje = Yii::t("interesado", "UTEG - Registration Online");
+                        $asunto = Yii::t("interesado", "UTEG - Registration Online");
+                        $body = Utilities::getMailMessage("Applicantrecord", array("[[nombre]]" => $nombres, "[[apellido]]" => $apellidos, "[[modalidad]]" => $modalidad, "[[link]]" => $link), Yii::$app->language);
+                        $bodycolecturia = Utilities::getMailMessage("Approvedapplicationcollected", array("[[nombres_completos]]" => $nombres." ". $apellidos, "[[modalidad]]" => $modalidad, "[[unidad]]" => $unidad_academica, "[[nombre]]" => $respDatoFactura["sdfa_nombres"], "[[apellido]]" => $respDatoFactura["sdfa_apellidos"], "[[identificacion]]" => $respDatoFactura["sdfa_dni"], "[[tipoDNI]]" => $respDatoFactura["sdfa_tipo_dni"], "[[direccion]]" => $respDatoFactura["sdfa_direccion"], "[[telefono]]" => $respDatoFactura["sdfa_telefono"]), Yii::$app->language);
+                        $bodyadmision = Utilities::getMailMessage("Paidadmissions", array("[[nombre]]" => $nombres, "[[apellido]]" => $apellidos, "[[correo]]" => $correo, "[[identificacion]]" => $identificacion, "[[tipoDNI]]" => $tipoDNI, "[[modalidad]]" => $modalidad, "[[unidad]]" => $unidad_academica, "[[telefono]]" => $telefono), Yii::$app->language);
+                        // if (!empty($rutaFile)) {
+                        //     Utilities::sendEmail($tituloMensaje, Yii::$app->params["adminEmail"], [$correo => $apellidos . " " . $nombres], $asunto, $body, $rutaFile);
+                        // } else {
+                        Utilities::sendEmail($tituloMensaje, Yii::$app->params["adminEmail"], [$correo => $apellidos . " " . $nombres], $asunto, $body);                  
+                        Utilities::sendEmail($tituloMensaje, Yii::$app->params["adminEmail"], [Yii::$app->params["soporteEmail"] => "Soporte"], $asunto, $body);
+                        Utilities::sendEmail($tituloMensaje, Yii::$app->params["adminEmail"], [Yii::$app->params["colecturia"] => "Colecturia"], $asunto, $bodycolecturia);
+                        Utilities::sendEmail($tituloMensaje, Yii::$app->params["adminEmail"], [Yii::$app->params["soporteEmail"] => "Soporte"], $asunto, $bodyadmision);
+                    } else {                        
+                        $tituloMensaje = Yii::t("interesado", "UTEG - Registration Online");
+                        $asunto = Yii::t("interesado", "UTEG - Registration Online");
+                        $body = Utilities::getMailMessage("Paidinterested", array("[[nombre]]" => $nombres, "[[metodo]]" => $metodo, "[[precio]]" => $val_total, "[[link]]" => $link, "[[link1]]" => $link1, "[[link_pypal]]" => $link_paypal), Yii::$app->language);
+                        $bodyadmision = Utilities::getMailMessage("Paidadmissions", array("[[nombre]]" => $pri_nombre, "[[apellido]]" => $pri_apellido, "[[correo]]" => $correo, "[[identificacion]]" => $identificacion, "[[tipoDNI]]" => $tipoDNI, "[[curso]]" => $curso, "[[telefono]]" => $telefono), Yii::$app->language);
+                        $bodycolecturia = Utilities::getMailMessage("Approvedapplicationcollected", array("[[nombres_completos]]" => $nombres, "[[metodo]]" => $metodo, "[[nombre]]" => $respDatoFactura["sdfa_nombres"], "[[apellido]]" => $respDatoFactura["sdfa_apellidos"], "[[identificacion]]" => $respDatoFactura["sdfa_dni"], "[[tipoDNI]]" => $respDatoFactura["sdfa_tipo_dni"], "[[direccion]]" => $respDatoFactura["sdfa_direccion"], "[[telefono]]" => $respDatoFactura["sdfa_telefono"]), Yii::$app->language);
+                        Utilities::sendEmail($tituloMensaje, Yii::$app->params["adminEmail"], [$correo => $pri_apellido . " " . $pri_nombre], $asunto, $body);
+                        Utilities::sendEmail($tituloMensaje, Yii::$app->params["adminEmail"], [Yii::$app->params["admisiones"] => "Jefe"], $asunto, $bodyadmision);
+                        Utilities::sendEmail($tituloMensaje, Yii::$app->params["adminEmail"], [Yii::$app->params["soporteEmail"] => "Soporte"], $asunto, $body);
+                        Utilities::sendEmail($tituloMensaje, Yii::$app->params["adminEmail"], [Yii::$app->params["soporteEmail"] => "Soporte"], $asunto, $bodyadmision);
+                        Utilities::sendEmail($tituloMensaje, Yii::$app->params["adminEmail"], [Yii::$app->params["colecturia"] => "Colecturia"], $asunto, $bodycolecturia);                       
+                    }                    
+                }
+                
                 //$num_secuencia;secuencia que se debe retornar
                 $message = array(
                     "wtmessage" => Yii::t("notificaciones", "La infomación ha sido grabada. Por favor verifique su correo."),
@@ -531,6 +578,7 @@ class SolicitudesController extends \app\components\CController {
                 );
                 return Utilities::ajaxResponse('OK', 'alert', Yii::t("jslang", "Sucess"), false, $message);
             }
+            
         } catch (Exception $ex) {
             $transaction->rollback();
             $transaction1->rollback();
@@ -1170,9 +1218,11 @@ class SolicitudesController extends \app\components\CController {
                                                 // if (!empty($rutaFile)) {
                                                 //     Utilities::sendEmail($tituloMensaje, Yii::$app->params["adminEmail"], [$correo => $apellidos . " " . $nombres], $asunto, $body, $rutaFile);
                                                 // } else {
-                                                Utilities::sendEmail($tituloMensaje, Yii::$app->params["adminEmail"], [$correo => $apellidos . " " . $nombres], $asunto, $body);
+                                                if ($resp_sol["nivel_interes"] != 1) { 
+                                                    Utilities::sendEmail($tituloMensaje, Yii::$app->params["adminEmail"], [$correo => $apellidos . " " . $nombres], $asunto, $body);
                                                 // }
-                                                Utilities::sendEmail($tituloMensaje, Yii::$app->params["adminEmail"], [Yii::$app->params["soporteEmail"] => "Soporte"], $asunto, $body);
+                                                    Utilities::sendEmail($tituloMensaje, Yii::$app->params["adminEmail"], [Yii::$app->params["soporteEmail"] => "Soporte"], $asunto, $body);
+                                                }
                                                 $exito = 1;
                                             }
                                         }

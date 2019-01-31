@@ -662,7 +662,7 @@ class SolicitudInscripcion extends \yii\db\ActiveRecord
                         (select uaca.uaca_nombre from " . $con3->dbname . ".unidad_academica uaca where uaca.uaca_id = sins.uaca_id and uaca.uaca_estado = :estado AND uaca.uaca_estado_logico = :estado) as nombre_nivel_interes,
                         (select m.mod_nombre from " . $con3->dbname . ".modalidad m where  m.mod_id = sins.mod_id and m.mod_estado = :estado AND m.mod_estado_logico = :estado) as nombre_modalidad
                 FROM " . $con->dbname . ".solicitud_inscripcion sins INNER JOIN " . $con2->dbname . ".item_metodo_unidad imni 
-                     on ((sins.ming_id = imni.ming_id and sins.uaca_id = imni.uaca_id and sins.mod_id = imni.mod_id) or (sins.uaca_id = imni.uaca_id and sins.mod_id = imni.mod_id and sins.mest_id = imni.mest_id))
+                     on ((ifnull(sins.ming_id,0) = ifnull(imni.ming_id,0) and sins.uaca_id = imni.uaca_id and sins.mod_id = imni.mod_id) or (sins.uaca_id = imni.uaca_id and sins.mod_id = imni.mod_id and sins.mest_id = imni.mest_id))
                      INNER JOIN " . $con2->dbname . ".item_precio ipre on imni.ite_id = ipre.ite_id	
                 WHERE ipre.ipre_estado_precio =:estado_precio AND
                        sins.sins_id = :sins_id AND
@@ -671,7 +671,8 @@ class SolicitudInscripcion extends \yii\db\ActiveRecord
                        imni.imni_estado =:estado AND
                        imni.imni_estado_logico = :estado AND
                        ipre.ipre_estado = :estado AND
-                       ipre.ipre_estado_logico = :estado";
+                       ipre.ipre_estado_logico = :estado
+                limit 1";
 
         $comando = $con->createCommand($sql);
         $comando->bindParam(":estado", $estado, \PDO::PARAM_STR);
