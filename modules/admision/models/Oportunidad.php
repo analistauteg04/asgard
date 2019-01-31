@@ -892,7 +892,7 @@ class Oportunidad extends \app\modules\admision\components\CActiveRecord {
             $param_sql .= ", opo_hora_fin_contacto";
             $bdet_sql .= ", :opo_hora_fin_contacto";
         }
-        
+
         if (isset($opo_fecha_registro)) {
             $param_sql .= ", opo_fecha_registro";
             $bdet_sql .= ", :opo_fecha_registro";
@@ -943,12 +943,12 @@ class Oportunidad extends \app\modules\admision\components\CActiveRecord {
             if (!empty((isset($eopo_id)))) {
                 $comando->bindParam(':eopo_id', $eopo_id, \PDO::PARAM_INT);
             }
-             if (!empty((isset($opo_hora_ini_contacto)))) {
+            if (!empty((isset($opo_hora_ini_contacto)))) {
                 $comando->bindParam(':opo_hora_ini_contacto', $opo_hora_ini_contacto, \PDO::PARAM_STR);
             }
             if (!empty((isset($opo_hora_fin_contacto)))) {
                 $comando->bindParam(':opo_hora_fin_contacto', $opo_hora_fin_contacto, \PDO::PARAM_STR);
-            }           
+            }
             if (!empty((isset($opo_fecha_registro)))) {
                 $comando->bindParam(':opo_fecha_registro', $opo_fecha_registro, \PDO::PARAM_STR);
             }
@@ -969,9 +969,8 @@ class Oportunidad extends \app\modules\admision\components\CActiveRecord {
             return FALSE;
         }
     }
-    
-     
-    /** 
+
+    /**
      * Function consultarCodigoArea
      * @author  Byron Villacreses <developer@uteg.edu.ec>
      * @property integer car_id      
@@ -985,10 +984,10 @@ class Oportunidad extends \app\modules\admision\components\CActiveRecord {
         $comando = $con->createCommand($sql);
         $comando->bindParam(":uaca_id", $uaca_id, \PDO::PARAM_INT);
         //$comando->bindParam(":emp_id", $emp_id, \PDO::PARAM_INT);
-        $rawData=$comando->queryScalar();        
+        $rawData = $comando->queryScalar();
         if ($rawData === false)
             return 0; //Falso si no Existe
-        return $rawData;//Si Existe en la Tabla
+        return $rawData; //Si Existe en la Tabla
     }
 
     /**     * **
@@ -999,18 +998,21 @@ class Oportunidad extends \app\modules\admision\components\CActiveRecord {
      */
     public function insertarOportunidadLeads($con, $opo_codigo, $emp_id, $pges_id, $padm_id, $data) {
         //opo_id,oper_id,ins_id,
-        $mest_id=NULL;
-        $eaca_id=NULL;
-        if($emp_id=="1"){
-            $eaca_id=$data['pgest_carr_nombre'];
-        }elseif($emp_id=="2" ||$emp_id=="3"){
-            $mest_id=$data['pgest_carr_nombre'];
+        $mest_id = NULL;
+        $eaca_id = NULL;
+        $tove_id = NULL;
+        if ($emp_id == "1") {
+            $eaca_id = $data['pgest_carr_nombre'];
+        } elseif ($emp_id == "2" || $emp_id == "3") {
+            $mest_id = $data['pgest_carr_nombre'];
         } else {
             
         }
 
         $uaca_id = $data['pgest_unidad_academica'];
-        $tove_id = $this->consultarOportVentas($uaca_id);  ; //se puede obtener a partir d ela unidad academica
+        if ($uaca_id > 1) {
+            $tove_id = $this->consultarOportVentas($uaca_id); //se puede obtener a partir d ela unidad academica
+        }
         $mod_id = $data['pgest_modalidad'];
         $ccan_id = 3; //Redes sociales (Facebook) o ->$data['pgest_contacto'];       
         $eopo_id = 1; //estado oportunidad => En Curso
@@ -1019,7 +1021,6 @@ class Oportunidad extends \app\modules\admision\components\CActiveRecord {
         $opo_hora_fin_contacto = $hora_atiende[2]; //date('h:i',strtotime($hora_atiende[2]));        
         $opo_usuario = @Yii::$app->session->get("PB_iduser"); // 1 equivale al usuario administrador
         //$fecha_registro = date(Yii::$app->params["dateTimeByDefault"]);
-
         //$mest_id;
         $sql = "INSERT INTO " . $con->dbname . ".oportunidad
             (opo_codigo,emp_id,pges_id,eaca_id,uaca_id,mod_id,tove_id,ccan_id,mest_id,
@@ -1604,7 +1605,7 @@ class Oportunidad extends \app\modules\admision\components\CActiveRecord {
         if ($tipoProceso == "LEADS") {
             $path = Yii::$app->basePath . Yii::$app->params['documentFolder'] . "leads/" . $fname;
             //return $mod_pergestion->insertarDtosPersonaGestion($emp_id, $tipoProceso);
-            $carga_archivo = $mod_perTemp->uploadFile($emp_id,$path);
+            $carga_archivo = $mod_perTemp->uploadFile($emp_id, $path);
             if ($carga_archivo['status']) {
                 return $mod_pergestion->insertarDtosPersonaGestion($emp_id, $tipoProceso);
             } else {
@@ -1894,7 +1895,7 @@ class Oportunidad extends \app\modules\admision\components\CActiveRecord {
                                 INNER JOIN db_academico.unidad_academica C ON A.uaca_id=C.uaca_id
                 WHERE A.opo_estado_logico=1 GROUP BY A.uaca_id,A.eopo_id ORDER BY A.eopo_id; ";
         $comando = $con->createCommand($sql);
-        
+
         return $comando->queryAll();
     }
 
@@ -2023,7 +2024,7 @@ class Oportunidad extends \app\modules\admision\components\CActiveRecord {
             $agente = "%" . $arrFiltro["agente"] . "%";
             $estado_ate = $arrFiltro["estado"];
             $empresa = $arrFiltro["empresa"];
-            
+
             if ($arrFiltro['interesado'] != "") {
                 $comando->bindParam(":interesado", $search_cond, \PDO::PARAM_STR);
             }
@@ -2054,8 +2055,7 @@ class Oportunidad extends \app\modules\admision\components\CActiveRecord {
             return $dataProvider;
         }
     }
-    
-    
+
     /**
      * Function obtener carreras.
      * @author  Grace Viteri <analistadesarrollo01@uteg.edu.ec>;
@@ -2076,7 +2076,7 @@ class Oportunidad extends \app\modules\admision\components\CActiveRecord {
                         ORDER BY 2 asc";
 
         $comando = $con->createCommand($sql);
-        $comando->bindParam(":estado", $estado, \PDO::PARAM_STR);        
+        $comando->bindParam(":estado", $estado, \PDO::PARAM_STR);
         $resultData = $comando->queryAll();
         return $resultData;
     }
