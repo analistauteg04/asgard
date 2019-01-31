@@ -20,13 +20,13 @@ function habilitarSecciones() {
 
 $(document).ready(function () {
     // para mostrar codigo de area
-    var unisol=$('#cmb_unidad_solicitud').val();
-    if(unisol==1){
+    var unisol = $('#cmb_unidad_solicitud').val();
+    if (unisol == 1) {
         $('#divmetodocan').css('display', 'none');
-    }else if(unisol==2){
+    } else if (unisol == 2) {
         $('#divmetodocan').css('display', 'block');
     }
-    
+
     $('#cmb_pais_dom').change(function () {
         var link = $('#txth_base').val() + "/inscripcionadmision/index";
         var arrParams = new Object();
@@ -205,8 +205,8 @@ $(document).ready(function () {
     });
 
     $('#cmb_unidad_solicitud').change(function () {
-        var unisol=$('#cmb_unidad_solicitud').val();
-        if(unisol==1){
+        var unisol = $('#cmb_unidad_solicitud').val();
+        if (unisol == 1) {
             $('#divmetodocan').css('display', 'none');
             $('#divRequisitosCANP').css('display', 'none');
             $('#divRequisitosCANSP').css('display', 'none');
@@ -214,7 +214,7 @@ $(document).ready(function () {
             $('#divRequisitosCANO').css('display', 'none');
             $('#divRequisitosEXA').css('display', 'none');
             $('#divRequisitosPRP').css('display', 'none');
-        }else if(unisol==2){
+        } else if (unisol == 2) {
             $('#divmetodocan').css('display', 'block');
         }
         var link = $('#txth_base').val() + "/inscripcionadmision/index";
@@ -378,7 +378,7 @@ $(document).ready(function () {
 //                $('#divRequisitosCANAD').css('display', 'none');
 //                $('#divRequisitosPRP').css('display', 'none');
 //            }
-        } else {  //Posgrado  Semipresencial
+            } else {  //Posgrado  Semipresencial
                 if (($('#cmb_modalidad_solicitud').val() == 3) || ($('#cmb_modalidad_solicitud').val() == 2)) {
                     //Taller introductorio            
                     if ($('#cmb_metodo_solicitud').val() == 4) {
@@ -415,110 +415,110 @@ function guardarInscripcion(accion, paso) {
             var message = response.message;
             //console.log(response);
             if (response.status == "OK") {
-                if ($('#cmb_metodo_solicitud').val() > 0) {
-                    if (accion == "Create") {
-                        $('#txth_twin_id').val(response.data.ids)
+                if (accion == "Create") {
+                    $('#txth_twin_id').val(response.data.ids)
+                    paso1next();
+                } else {
+                    if (paso == "1") {
                         paso1next();
                     } else {
-                        if (paso == "1") {
-                            paso1next();
-                        } else {
-                            paso2next();
-                        }
-                        var uaca_id = response.data.data.uaca_id;
-                        //Inicio ingreso informacion del tab 3\
-                        $('#lbl_uaca_tx').text(response.data.data.unidad);
-                        $('#lbl_moda_tx').text(response.data.data.modalidad);
-                        $('#lbl_carrera_tx').text(response.data.data.carrera);
-                        $('#lbl_ming_tx').text(response.data.data.metodo);
+                        paso2next();
+                    }
+                    var uaca_id = response.data.data.uaca_id;
+                    //Inicio ingreso informacion del tab 3\
+                    alert(response.data.data);
+                    $('#lbl_uaca_tx').text(response.data.data.unidad);
+                    $('#lbl_moda_tx').text(response.data.data.modalidad);
+                    $('#lbl_carrera_tx').text(response.data.data.carrera);
+                    $('#lbl_ming_tx').text(response.data.data.metodo);
 
-                        if (uaca_id == 1) {
-                            $('#id_item_1').css('display', 'block');
-                            $('#id_item_2').css('display', 'block');
-                        } else if (uaca_id == 2) {
-                            $('#id_item_1').css('display', 'none');
-                            $('#id_item_2').css('display', 'none');
-                            $('#id_mat_cur').css('display', 'none');
-                        }
+                    if (uaca_id == 1) {
+                        $('#id_item_1').css('display', 'block');
+                        $('#id_item_2').css('display', 'block');
+                    } else if (uaca_id == 2) {
                         $('#id_item_1').css('display', 'none');
                         $('#id_item_2').css('display', 'none');
-                        var leyenda = '';
-                        var ming = response.data.data.twin_metodo_ingreso;
-                        var mod_id = response.data.data.mod_id;
-                        var id_carrera = response.data.data.id_carrera;
-                        var materias_online = "Matemáticas, Técnicas de Comunicación Oral y Escrita, Contabilidad";
-                        var materias_otros = "Matemáticas, Técnicas de Comunicación Oral y Escrita, Contabilidad, Desarrollo del Pensamiento, Emprendimiento";
-                        $('#lbl_fcur_lb').text("Fecha del curso:");
-                        if (uaca_id == 2) {
-                            if (id_carrera == 22) {
-                                leyenda = 'El valor de la maestría: $15,500.00';
-                            } else {
-                                leyenda = 'El valor de la maestría: $11,300.00';
-                            }
-                            leyenda += '<br/><br/>El valor a cancelar por concepto de inscripción es: ';
-                            $('#lbl_item_1').text("Valor Inscripción: ");
-                            $('#val_item_1').text(response.data.data.precio);
-                            $('#lbl_valor_pagar_tx').text(response.data.data.precio);
-
-                            $('#lbl_fcur_tx').text("15 abril del 2019");
-                        } else if (uaca_id == 1) {
-                            leyenda = 'El valor a cancelar por concepto de ' + response.data.data.metodo + ' en la modalidad ' + response.data.data.modalidad + ' es:';
-                            if (mod_id == 1) {//online
-                                $('#lbl_mcur_tx').text(materias_online);
-                                if (ming == 1) {// curso
-                                    $('#lbl_valor_pagar_tx').text(response.data.data.precio);
-                                    $('#lbl_mcur_lb').text("Materias a cursar");
-                                    $('#lbl_fcur_lb').text("Fecha del curso:");
-                                    $('#lbl_fcur_tx').text("22 de octubre al 14 de diciembre");
-                                } else if (ming == 2) { // examen
-                                    $('#lbl_mcur_lb').text("Examenes a rendir");
-                                    $('#lbl_fcur_lb').text("Fecha de las pruebas:");
-                                    $('#lbl_valor_pagar_tx').text(response.data.data.precio);
-                                    $('#lbl_fcur_tx').text("En quince (15) días a partir del registro (un coordinador te contactará para brindarte mayor información)");
-                                }
-                            } else if (mod_id == 2 || mod_id == 3 || mod_id == 4) {//presencial y semi presencial
-                                $('#lbl_mcur_tx').text(materias_otros);
-                                if (ming == 1) {// curso
-                                    if (mod_id == 2 || mod_id == 3) {
-                                        $('#lbl_fcur_tx').text("22 de octubre al 30 de noviembre");
-                                    } else if (mod_id == 4) {
-                                        $('#lbl_fcur_tx').text("20 de octubre al 8 de diciembre");
-                                    }
-                                    $('#lbl_mcur_lb').text("Materias a cursar");
-                                    $('#lbl_item_1').text("Curso de nivelación: ");
-                                    $('#val_item_1').text(response.data.data.precio);
-                                    $('#lbl_item_2').text("Descuento especial: ");
-                                    $('#val_item_2').text(response.data.data.ddit_valor);
-                                    var totalvalor = parseInt(response.data.data.precio) - parseInt(response.data.data.ddit_valor);
-                                    $('#lbl_valor_pagar_tx').text(totalvalor);
-                                    $('#lbl_fcur_lb').text("Fecha del curso:");
-                                    $('#id_item_1').css('display', 'block');
-                                    $('#id_item_2').css('display', 'block');
-                                } else if (ming == 2) { // examen
-                                    $('#lbl_fcur_tx').text("En quince (15) días a partir del registro (un coordinador te contactará para brindarte mayor información)");
-                                    $('#lbl_item_1').text("Exámen de Admisión: ");
-                                    $('#val_item_1').text(response.data.data.precio);
-                                    $('#lbl_item_2').text("Descuento especial: ");
-                                    $('#lbl_mcur_lb').text("Examenes a rendir");
-                                    $('#val_item_2').text(response.data.data.ddit_valor);
-                                    var totalvalor = parseInt(response.data.data.precio) - parseInt(response.data.data.ddit_valor);
-                                    $('#lbl_valor_pagar_tx').text(totalvalor);
-                                    $('#lbl_fcur_lb').text("Fecha de las pruebas:");
-                                    $('#id_item_1').css('display', 'block');
-                                    $('#id_item_2').css('display', 'block');
-                                }
-                            }
-                        }
-
-                        $('#lbl_leyenda_pago_tx').html(leyenda);
-                        //fin ingreso informacion del tab 3
-                        $('#txth_twin_id').val(response.data.ids);//SE AGREGA AL FINAL                            
-                        //paso2next();
+                        $('#id_mat_cur').css('display', 'none');
                     }
-                } else {
-                    var mensaje = {wtmessage: "Método Ingreso *: El campo no debe estar vacío.", title: "Error"};
-                    showAlert("NO_OK", "Error", mensaje);
+                    $('#id_item_1').css('display', 'none');
+                    $('#id_item_2').css('display', 'none');
+                    var leyenda = '';
+                    var ming = response.data.data.twin_metodo_ingreso;
+                    var mod_id = response.data.data.mod_id;
+                    var id_carrera = response.data.data.id_carrera;
+                    $('#lbl_fcur_lb').text("Fecha del curso:");
+                    $('#lbl_item_1').text("Valor Matriculacion: ");
+                    if (uaca_id == 2) {
+                        if (id_carrera == 22) {
+                            leyenda = 'El valor de la maestría: $15,500.00';
+                        } else {
+                            leyenda = 'El valor de la maestría: $11,300.00';
+                        }
+                        leyenda += '<br/><br/>El valor a cancelar por concepto de inscripción es: ';
+                        $('#lbl_item_1').text("Valor Matriculacion: ");
+                        $('#val_item_1').text(response.data.data.precio);
+                        $('#lbl_valor_pagar_tx').text(response.data.data.precio);
+                        $('#lbl_fcur_tx').text("15 abril del 2019");
+                    } else if (uaca_id == 1) {
+                        leyenda = 'El valor a cancelar por concepto de matriculación en la modalidad ' + response.data.data.modalidad + ' es:';
+                        if (mod_id == 1) {//online                                  
+                            $('#val_item_1').text('$65');
+                            $('#lbl_item_2').text("Plataforma: ");
+                            $('#val_item_2').text('$50');
+                            $('#lbl_valor_pagar_tx').text("$115");
+                            $('#lbl_item_3').text("Pago Mínimo: ");
+                            $('#val_item_3').text('$115');
+//                                $('#lbl_valor_pagar_tx').text(response.data.data.precio);
+//                                $('#lbl_fcur_lb').text("Fecha del curso:");
+//                                $('#lbl_fcur_tx').text("22 de octubre al 14 de diciembre");
+//                                $('#lbl_mcur_lb').text("Examenes a rendir");
+//                                $('#lbl_fcur_lb').text("Fecha de las pruebas:");
+//                                $('#lbl_valor_pagar_tx').text(response.data.data.precio);
+                            //$('#lbl_fcur_tx').text("En quince (15) días a partir del registro (un coordinador te contactará para brindarte mayor información)");                                
+                        } else if (mod_id == 2 || mod_id == 3 || mod_id == 4) {//presencial y semi presencial
+                            //if (ming == 1) {// curso
+                            if (mod_id == 2 || mod_id == 3) {
+                                //$('#lbl_fcur_tx').text("22 de octubre al 30 de noviembre");
+                                $('#val_item_1').text('$250');
+                            } else if (mod_id == 4) {
+                                $('#val_item_1').text('$250');
+                                //$('#lbl_fcur_tx').text("20 de octubre al 8 de diciembre");
+                            }
+//                                    $('#lbl_mcur_lb').text("Materias a cursar");
+//                                    $('#lbl_item_1').text("Curso de nivelación: ");
+                            $('#val_item_1').text(response.data.data.precio);
+                            $('#lbl_item_2').text("Plataforma: ");
+                            $('#val_item_2').text('$0');
+                            $('#lbl_valor_pagar_tx').text("$250");
+                            $('#lbl_item_3').text("Pago Mínimo: ");
+                            $('#val_item_3').text('$100');
+                            //var totalvalor = parseInt(response.data.data.precio) - parseInt(response.data.data.ddit_valor);
+                            //$('#lbl_valor_pagar_tx').text(totalvalor);
+//                                    $('#lbl_fcur_lb').text("Fecha del curso:");
+//                                    $('#id_item_1').css('display', 'block');
+//                                    $('#id_item_2').css('display', 'block');
+//                                } else if (ming == 2) { // examen
+//                                    $('#lbl_fcur_tx').text("En quince (15) días a partir del registro (un coordinador te contactará para brindarte mayor información)");
+//                                    $('#lbl_item_1').text("Exámen de Admisión: ");
+//                                    $('#val_item_1').text(response.data.data.precio);
+//                                    $('#lbl_item_2').text("Descuento especial: ");
+//                                    $('#lbl_mcur_lb').text("Examenes a rendir");
+//                                    $('#val_item_2').text(response.data.data.ddit_valor);
+//                                    var totalvalor = parseInt(response.data.data.precio) - parseInt(response.data.data.ddit_valor);
+//                                    $('#lbl_valor_pagar_tx').text(totalvalor);
+//                                    $('#lbl_fcur_lb').text("Fecha de las pruebas:");
+//                                    $('#id_item_1').css('display', 'block');
+//                                    $('#id_item_2').css('display', 'block');
+//                                }
+                        }
+                    }
+
+                    $('#lbl_leyenda_pago_tx').html(leyenda);
+                    //fin ingreso informacion del tab 3
+                    $('#txth_twin_id').val(response.data.ids);//SE AGREGA AL FINAL                            
+                    //paso2next();
                 }
+
                 //var data =response.data;
                 //AccionTipo=data.accion;
                 //limpiarDatos();
@@ -564,9 +564,9 @@ function dataInscripPart1(ID) {
     objDat.pges_celular = $('#txt_celular').val();
     objDat.unidad_academica = $('#cmb_unidad_solicitud option:selected').val();
     objDat.modalidad = $('#cmb_modalidad_solicitud option:selected').val();
-    if(objDat.unidad_academica==1){
+    if (objDat.unidad_academica == 1) {
         objDat.ming_id = null;
-    }else if(objDat.unidad_academica==2){
+    } else if (objDat.unidad_academica == 2) {
         objDat.ming_id = $('#cmb_metodo_solicitud option:selected').val();
     }
     objDat.conoce = $('#cmb_conuteg option:selected').val();

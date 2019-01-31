@@ -81,30 +81,30 @@ use yii\helpers\Html;
                 <span id="lbl_carrera_tx"><?= "" ?></span>
             </div>
         </div>         
-<!--        <div id="id_met_ing" class="col-md-12 col-xs-12 col-sm-12 col-lg-12">-->
-<!--            <div class="col-md-4 col-xs-4 col-sm-4 col-lg-4">
-                <span id="lbl_ming_lb"><b><?php //Yii::t("formulario", "Metodo ingreso: ") ?></b></span>
-            </div>
-            <div class="col-md-8 col-xs-8 col-sm-8 col-lg-8">-->
-<!--                <span id="lbl_ming_tx"><?php // "Curso Nivelacion" ?></span>-->
-<!--            </div>-->
-<!--        </div>         -->
-<!--        <div id="id_mat_cur" class="col-md-12 col-xs-12 col-sm-12 col-lg-12">
-            <div class="col-md-4 col-xs-4 col-sm-4 col-lg-4">
-                <b><span id="lbl_mcur_lb"></span></b>
-            </div>
-            <div class="col-md-8 col-xs-8 col-sm-8 col-lg-8">
-                <span id="lbl_mcur_tx"></span>
-            </div>
-        </div>         -->
-<!--        <div class="col-md-12 col-xs-12 col-sm-12 col-lg-12">
-            <div class="col-md-4 col-xs-4 col-sm-4 col-lg-4">
-                <b><span id="lbl_fcur_lb"></span></b>
-            </div>
-            <div class="col-md-8 col-xs-8 col-sm-8 col-lg-8">
-                <span id="lbl_fcur_tx"></span>
-            </div>
-        </div>-->
+        <!--        <div id="id_met_ing" class="col-md-12 col-xs-12 col-sm-12 col-lg-12">-->
+        <!--            <div class="col-md-4 col-xs-4 col-sm-4 col-lg-4">
+                        <span id="lbl_ming_lb"><b><?php //Yii::t("formulario", "Metodo ingreso: ")  ?></b></span>
+                    </div>
+                    <div class="col-md-8 col-xs-8 col-sm-8 col-lg-8">-->
+        <!--                <span id="lbl_ming_tx"><?php // "Curso Nivelacion"  ?></span>-->
+        <!--            </div>-->
+        <!--        </div>         -->
+        <!--        <div id="id_mat_cur" class="col-md-12 col-xs-12 col-sm-12 col-lg-12">
+                    <div class="col-md-4 col-xs-4 col-sm-4 col-lg-4">
+                        <b><span id="lbl_mcur_lb"></span></b>
+                    </div>
+                    <div class="col-md-8 col-xs-8 col-sm-8 col-lg-8">
+                        <span id="lbl_mcur_tx"></span>
+                    </div>
+                </div>         -->
+        <!--        <div class="col-md-12 col-xs-12 col-sm-12 col-lg-12">
+                    <div class="col-md-4 col-xs-4 col-sm-4 col-lg-4">
+                        <b><span id="lbl_fcur_lb"></span></b>
+                    </div>
+                    <div class="col-md-8 col-xs-8 col-sm-8 col-lg-8">
+                        <span id="lbl_fcur_tx"></span>
+                    </div>
+                </div>-->
     </div>
     <div class="col-md-6 col-xs-6 col-sm-6col-lg-6">
         <!-- fin de ingreso de informacion -->
@@ -135,9 +135,17 @@ use yii\helpers\Html;
                 <span><b><?= Yii::t("formulario", "Valor total a pagar: ") ?></b></span>
             </div>
             <div class="col-md-8 col-xs-8 col-sm-8 col-lg-8">
-                $ <span id="lbl_valor_pagar_tx"></span><br/><br/>
+                 <span id="lbl_valor_pagar_tx"></span><br/><br/>
                 <small><b><?= Yii::t("formulario", "**Valores están en ($) USD ") ?></b></small>
             </div>         
+        </div>
+        <div id="id_item_3" class="col-md-12 col-xs-12 col-sm-12 col-lg-12" style="display:none">
+            <div class="col-md-4 col-xs-4 col-sm-4 col-lg-4">
+                <b><span id="lbl_item_3"></span></b>
+            </div>
+            <div class="col-md-8 col-xs-8 col-sm-8 col-lg-8">
+                $ <span id="val_item_3"></span>
+            </div>
         </div>      
     </div>
     <!--    <div class="col-md-12 col-xs-12 col-sm-12 col-lg-12">
