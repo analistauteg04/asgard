@@ -27,6 +27,7 @@ $(document).ready(function () {
     $('#sendInscripcion').click(function () {
         var link = $('#txth_base').val() + "/inscripciones/guardarinscripcion";
         var arrParams = new Object();
+        arrParams.metodo = null;
         arrParams.pri_nombre = $('#txt_primer_nombre').val();
         arrParams.pri_apellido = $('#txt_primer_apellido').val();
         arrParams.tipo_dni = $('#cmb_tipo_dni').val();
@@ -39,7 +40,9 @@ $(document).ready(function () {
         arrParams.modalidad = $('#cmb_modalidad').val();
         arrParams.conoce = $('#cmb_conuteg').val();
         arrParams.carrera = $('#cmb_carrera1').val();
-        arrParams.metodo = $('#cmb_tipo_oportunidad').val();
+        if ($('#cmb_ninteres').val() > 1) {
+            arrParams.metodo = $('#cmb_tipo_oportunidad').val();
+        }
         arrParams.horaini = $('#txt_hora_atencionini').val();
         arrParams.horafin = $('#txt_hora_atencionfin').val();
         if (!validateForm()) {
