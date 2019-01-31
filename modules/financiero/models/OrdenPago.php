@@ -2176,10 +2176,15 @@ class OrdenPago extends \app\modules\financiero\components\CActiveRecord {
                         concat(per.per_pri_apellido) apellidos, 
                         concat(per.per_pri_nombre) nombres,
                         uaca_descripcion nivel,
-                        ming_descripcion metodo,   
+                        -- ming_descripcion metodo,  
+                        ifnull((select ming.ming_descripcion 
+                                    from " . $con->dbname . ".metodo_ingreso as ming 
+                                    where sins.ming_id = ming.ming_id AND
+                                    ming.ming_estado = :estado AND
+                                    ming.ming_estado_logico = :estado),'NA') as metodo,
                         (case opag.opag_estado_pago when 'P' then 'Pendiente' when 'S' then 'Pagada' end) as estado_desc_pago                       
                 FROM " . $con->dbname . ".solicitud_inscripcion sins INNER JOIN " . $con3->dbname . ".unidad_academica uaca on uaca.uaca_id = sins.uaca_id
-                     INNER JOIN " . $con->dbname . ".metodo_ingreso ming on ming.ming_id = sins.ming_id
+                     -- INNER JOIN " . $con->dbname . ".metodo_ingreso ming on ming.ming_id = sins.ming_id
                      INNER JOIN " . $con->dbname . ".interesado inte on sins.int_id = inte.int_id                     
                      INNER JOIN " . $con1->dbname . ".persona per on inte.per_id = per.per_id
                      LEFT JOIN " . $con2->dbname . ".orden_pago opag on sins.sins_id = opag.sins_id                       
@@ -2194,8 +2199,8 @@ class OrdenPago extends \app\modules\financiero\components\CActiveRecord {
                       sins.sins_estado_logico = :estado AND
                       uaca.uaca_estado = :estado AND
                       uaca.uaca_estado_logico = :estado AND
-                      ming.ming_estado = :estado AND
-                      ming.ming_estado_logico = :estado AND
+                      -- ming.ming_estado = :estado AND
+                      -- ming.ming_estado_logico = :estado AND
                       inte.int_estado_logico = :estado AND                                            
                       inte.int_estado = :estado AND                           
                       per.per_estado = :estado AND
@@ -2270,11 +2275,16 @@ class OrdenPago extends \app\modules\financiero\components\CActiveRecord {
                         concat(per.per_pri_apellido) apellidos, 
                         concat(per.per_pri_nombre) nombres,
                         uaca_nombre nivel,
-                        ming_descripcion metodo,                                                                                               
+                        -- ming_descripcion metodo,
+                        ifnull((select ming.ming_descripcion 
+                                    from " . $con->dbname . ".metodo_ingreso as ming 
+                                    where sins.ming_id = ming.ming_id AND
+                                    ming.ming_estado = :estado AND
+                                    ming.ming_estado_logico = :estado),'NA') as metodo,
                         (case opag.opag_estado_pago when 'P' then 'Pendiente' when 'S' then 'Pagada' end) as estado_desc_pago
                 FROM " . $con->dbname . ".solicitud_inscripcion sins 
                      INNER JOIN " . $con3->dbname . ".unidad_academica uaca on uaca.uaca_id = sins.uaca_id
-                     INNER JOIN " . $con->dbname . ".metodo_ingreso ming on ming.ming_id = sins.ming_id
+                     -- INNER JOIN " . $con->dbname . ".metodo_ingreso ming on ming.ming_id = sins.ming_id
                      INNER JOIN " . $con->dbname . ".interesado inte on sins.int_id = inte.int_id                      
                      INNER JOIN " . $con1->dbname . ".persona per on inte.per_id = per.per_id
                      INNER JOIN " . $con2->dbname . ".orden_pago opag on sins.sins_id = opag.sins_id                     
@@ -2284,8 +2294,8 @@ class OrdenPago extends \app\modules\financiero\components\CActiveRecord {
                       sins.sins_estado_logico = :estado AND
                       uaca.uaca_estado = :estado AND
                       uaca.uaca_estado_logico = :estado AND
-                      ming.ming_estado = :estado AND
-                      ming.ming_estado_logico = :estado AND
+                      -- ming.ming_estado = :estado AND
+                      -- ming.ming_estado_logico = :estado AND
                       inte.int_estado_logico = :estado AND
                       inte.int_estado = :estado AND                                                                  
                       per.per_estado = :estado AND
@@ -2364,14 +2374,19 @@ class OrdenPago extends \app\modules\financiero\components\CActiveRecord {
                         concat(per.per_pri_apellido) apellidos, 
                         concat(per.per_pri_nombre) nombres,
                         uaca_descripcion nivel,
-                        ming_descripcion metodo,                                           
+                        -- ming_descripcion metodo,
+                        ifnull((select ming.ming_descripcion 
+                                    from " . $con->dbname . ".metodo_ingreso as ming 
+                                    where sins.ming_id = ming.ming_id AND
+                                    ming.ming_estado = :estado AND
+                                    ming.ming_estado_logico = :estado),'NA') as metodo,
                         (case ifnull((select icpr_id 
                                       from " . $con2->dbname . ".info_carga_prepago icp 
                                       where icp.opag_id = opag.opag_id 
                                             and icp.icpr_estado = :estado 
                                             and icp.icpr_estado_logico = :estado),'P') when 'P' then 'Pendiente' else 'No Aprobada' end) as estado_desc_pago
                 FROM " . $con->dbname . ".solicitud_inscripcion sins INNER JOIN " . $con3->dbname . ".unidad_academica uaca on uaca.uaca_id = sins.uaca_id
-                     INNER JOIN " . $con->dbname . ".metodo_ingreso ming on ming.ming_id = sins.ming_id
+                     -- INNER JOIN " . $con->dbname . ".metodo_ingreso ming on ming.ming_id = sins.ming_id
                      INNER JOIN " . $con->dbname . ".interesado inte on sins.int_id = inte.int_id
                      INNER JOIN " . $con1->dbname . ".persona per on inte.per_id = per.per_id
                      INNER JOIN " . $con2->dbname . ".orden_pago opag on sins.sins_id = opag.sins_id
@@ -2381,8 +2396,8 @@ class OrdenPago extends \app\modules\financiero\components\CActiveRecord {
                       sins.sins_estado_logico = :estado AND
                       uaca.uaca_estado = :estado AND
                       uaca.uaca_estado_logico = :estado AND
-                      ming.ming_estado = :estado AND
-                      ming.ming_estado_logico = :estado AND
+                      -- ming.ming_estado = :estado AND
+                      -- ming.ming_estado_logico = :estado AND
                       inte.int_estado_logico = :estado AND
                       inte.int_estado = :estado AND                      
                       per.per_estado = :estado AND

@@ -514,7 +514,12 @@ class SolicitudInscripcion extends \yii\db\ActiveRecord
                     per.per_pri_apellido as per_pri_apellido,
                     per.per_seg_apellido as per_seg_apellido,
                     nint.nint_nombre as nint_nombre,
-                    ming.ming_nombre as ming_nombre,
+                    -- ming.ming_nombre as ming_nombre,
+                    ifnull((select ming.ming_nombre 
+                                    from " . $con->dbname . ".metodo_ingreso as ming 
+                                    where sins.ming_id = ming.ming_id AND
+                                    ming.ming_estado = :estado AND
+                                    ming.ming_estado_logico = :estado),'NA') as ming_nombre,
                     concat(per.per_pri_nombre ,' ', per.per_seg_nombre) as per_nombres,
                     concat(per.per_pri_apellido ,' ', per.per_seg_apellido) as per_apellidos,
                     sins_fecha_solicitud as fecha_solicitud
@@ -525,7 +530,7 @@ class SolicitudInscripcion extends \yii\db\ActiveRecord
                     INNER JOIN " . $con->dbname . ".pre_interesado as pint on inte.pint_id = pint.pint_id
                     INNER JOIN " . $con2->dbname . ".persona as per on pint.per_id = per.per_id 
                     INNER JOIN " . $con->dbname . ".nivel_interes as nint on sins.nint_id = nint.nint_id 
-                    INNER JOIN " . $con->dbname . ".metodo_ingreso as ming on sins.ming_id = ming.ming_id 
+                    -- INNER JOIN " . $con->dbname . ".metodo_ingreso as ming on sins.ming_id = ming.ming_id 
                 WHERE 
                     sins.sins_estado_logico=:estado AND 
                     inte.int_estado_logico=:estado AND 
@@ -966,7 +971,12 @@ class SolicitudInscripcion extends \yii\db\ActiveRecord
                     per.per_pri_apellido as per_pri_apellido,
                     per.per_seg_apellido as per_seg_apellido,
                     uaca.uaca_nombre as nint_nombre,
-                    ming.ming_nombre as ming_nombre,
+                    -- ming.ming_nombre as ming_nombre,
+                    ifnull((select ming.ming_nombre 
+                                    from " . $con->dbname . ".metodo_ingreso as ming 
+                                    where sins.ming_id = ming.ming_id AND
+                                    ming.ming_estado = :estado AND
+                                    ming.ming_estado_logico = :estado),'NA') as ming_nombre,
                     eaca.eaca_nombre as car_nombre,
                     concat(per.per_pri_nombre ,' ', ifnull(per.per_seg_nombre,' ')) as per_nombres,
                     concat(per.per_pri_apellido ,' ', ifnull(per.per_seg_apellido,' ')) as per_apellidos,
@@ -988,7 +998,7 @@ class SolicitudInscripcion extends \yii\db\ActiveRecord
                     INNER JOIN " . $con->dbname . ".interesado as inte on sins.int_id = inte.int_id                    
                     INNER JOIN " . $con2->dbname . ".persona as per on inte.per_id = per.per_id 
                     INNER JOIN " . $con1->dbname . ".unidad_academica as uaca on sins.uaca_id = uaca.uaca_id 
-                    INNER JOIN " . $con->dbname . ".metodo_ingreso as ming on sins.ming_id = ming.ming_id
+                    -- INNER JOIN " . $con->dbname . ".metodo_ingreso as ming on sins.ming_id = ming.ming_id
                     INNER JOIN " . $con->dbname . ".res_sol_inscripcion as rsol on rsol.rsin_id = sins.rsin_id                    
                     INNER JOIN " . $con->dbname . ".interesado_ejecutivo as intej on intej.int_id = sins.int_id 
                     INNER JOIN " . $con1->dbname . ".estudio_academico as eaca on eaca.eaca_id = sins.eaca_id 
