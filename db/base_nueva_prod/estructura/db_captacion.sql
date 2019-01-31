@@ -147,8 +147,7 @@ create table if not exists `solicitud_inscripcion` (
  `sins_fecha_creacion` timestamp not null default current_timestamp,
  `sins_fecha_modificacion` timestamp null default null,
  `sins_estado_logico` varchar(1) not null,
- foreign key (int_id) references `interesado`(int_id),
- foreign key (ming_id) references `metodo_ingreso`(ming_id),
+ foreign key (int_id) references `interesado`(int_id), 
  foreign key (rsin_id) references `res_sol_inscripcion`(rsin_id)
 );
 
