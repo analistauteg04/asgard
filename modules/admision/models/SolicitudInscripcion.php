@@ -697,7 +697,7 @@ class SolicitudInscripcion extends \yii\db\ActiveRecord
                     FROM " . $con->dbname . ".solicitud_inscripcion sins
                     WHERE sins.int_id = :int_id AND
                           sins.uaca_id = :uaca_id AND
-                          sins.ming_id = :ming_id AND
+                          ifnull(sins.ming_id,0) = :ming_id AND
                           sins.eaca_id = :eaca_id AND
                           sins.rsin_id <> 4 AND
                           sins.sins_estado = :estado AND

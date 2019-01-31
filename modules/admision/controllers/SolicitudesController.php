@@ -214,7 +214,7 @@ class SolicitudesController extends \app\components\CController {
                 return;
             }
             if (isset($data["getcarrera"])) {                            
-                if ($data["empresa_id"] == 1) {
+                if ($data["empresa_id"] == 1) {                     
                     $carrera = $modcanal->consultarCarreraModalidad($data["unidada"], $data["moda_id"]);
                 } else {
                     $carrera = $modestudio->consultarCursoModalidad($data["unidada"], $data["moda_id"], $data["empresa_id"]); // tomar id de impresa
@@ -232,7 +232,12 @@ class SolicitudesController extends \app\components\CController {
                 if ($data["empresa_id"] != 1) {
                     $metodo = 0;
                 } else {
-                    $metodo = $data["metodo"];
+                    if ($data["unidada"] != 1) {
+                        $metodo = $data["metodo"];
+                    }
+                    else {
+                        $metodo = 0;
+                    }                    
                 }
                 $resItem = $modItemMetNivel->consultarXitemPrecio($data["unidada"], $data["moda_id"], $metodo, $data["carrera_id"], $data["empresa_id"]);              
                 $message = array("items" => $resItem);
@@ -341,7 +346,8 @@ class SolicitudesController extends \app\components\CController {
             $mod_id = $data["modalidad"];
             $car_id = $data["carrera"];
             $emp_id = $data["emp_id"];
-            $ite_id = $data["ite_id"];   
+            $ite_id = $data["ite_id"];  
+            $precioGrado = $data["precio"];  
             if ($emp_id > 1) {
                 $mest_id = $car_id;
                 $carrera_id = "";
@@ -371,9 +377,14 @@ class SolicitudesController extends \app\components\CController {
                 $precio = 0;
             } else {
                 //$resp_precio = $mod_solins->ObtenerPrecio($ming_id, $nint_id, $mod_id, $car_id);  //hasta el 9 de diciembre/2018.
-                $resp_precio = $mod_solins->ObtenerPrecioXitem($ite_id);                  
+                $resp_precio = $mod_solins->ObtenerPrecioXitem($ite_id);                 
                 if ($resp_precio) {
-                    $precio = $resp_precio['precio'];
+                    if ($nint_id==1) {
+                        $ming_id = 0;
+                        $precio = $precioGrado;
+                    } else {
+                        $precio = $resp_precio['precio'];
+                    }
                 } else {
                     $mensaje = 'No existe registrado ningún precio para la unidad, modalidad y método de ingreso seleccionada.';
                     $errorprecio = 0;
@@ -389,6 +400,9 @@ class SolicitudesController extends \app\components\CController {
                     $mod_solins->int_id = $interesado_id;
                     $mod_solins->uaca_id = $nint_id;
                     $mod_solins->mod_id = $mod_id;
+                    if ($nint_id==1) {
+                        $ming_id = null;
+                    }
                     $mod_solins->ming_id = $ming_id;
                     $mod_solins->eaca_id = $carrera_id;
                     $mod_solins->mest_id = $mest_id;
@@ -440,7 +454,10 @@ class SolicitudesController extends \app\components\CController {
                         }
                     }
                 }
-                //Generar la orden de pago con valor correspondiente. Buscar precio para orden de pago.                                                                     
+                //Generar la orden de pago con valor correspondiente. Buscar precio para orden de pago.     
+                  \app\models\Utilities::putMessageLogFile('precio:' . $precio);
+                  \app\models\Utilities::putMessageLogFile('descuento:' . $val_descuento);
+                  \app\models\Utilities::putMessageLogFile('total:' . $val_total);
                 if ($precio == 0) {
                     $estadopago = 'S';
                 } else {

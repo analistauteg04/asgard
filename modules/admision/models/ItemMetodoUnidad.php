@@ -142,9 +142,11 @@ class ItemMetodoUnidad extends \yii\db\ActiveRecord
                             on imu.ite_id = i.ite_id
                     WHERE imu.uaca_id = :nint_id
                           and mod_id = :mod_id
-                          and ming_id = :ming_id
+                          and ifnull(ming_id,0) = :ming_id
                           and imni_estado = :estado
-                          and imni_estado_logico = :estado";
+                          and imni_estado_logico = :estado
+                          and i.ite_estado = :estado
+                          and i.ite_estado_logico = :estado";
         } else {
             $sql = "SELECT i.ite_id id, i.ite_nombre name
                     FROM  " . $con->dbname . ".item_metodo_unidad imu inner join " . $con->dbname . ".item i
@@ -153,7 +155,9 @@ class ItemMetodoUnidad extends \yii\db\ActiveRecord
                           and mod_id = :mod_id                          
                           and mest_id = :eaca_id
                           and imni_estado = :estado
-                          and imni_estado_logico = :estado";
+                          and imni_estado_logico = :estado
+                          and i.ite_estado = :estado
+                          and i.ite_estado_logico = :estado";
         }                         
         $comando = $con->createCommand($sql);
         $comando->bindParam(":estado", $estado, \PDO::PARAM_STR);
