@@ -426,7 +426,6 @@ function guardarInscripcion(accion, paso) {
                     }
                     var uaca_id = response.data.data.uaca_id;
                     //Inicio ingreso informacion del tab 3\
-                    alert(response.data.data);
                     $('#lbl_uaca_tx').text(response.data.data.unidad);
                     $('#lbl_moda_tx').text(response.data.data.modalidad);
                     $('#lbl_carrera_tx').text(response.data.data.carrera);
