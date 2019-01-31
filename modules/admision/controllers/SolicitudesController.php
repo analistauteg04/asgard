@@ -300,13 +300,7 @@ class SolicitudesController extends \app\components\CController {
         $valida = " ";
         if (Yii::$app->request->isAjax) {
             $data = Yii::$app->request->post();
-            $per_id = base64_decode($data["persona_id"]);
-//            if ($_SESSION['persona_solicita'] != '') {// tomar el de parametro)
-//                $per_id = $_SESSION['persona_solicita'];
-//            } else {
-//                unset($_SESSION['persona_ingresa']);
-//                $per_id = Yii::$app->session->get("PB_perid");
-//            }                          
+            $per_id = base64_decode($data["persona_id"]);                      
         }
         $con = \Yii::$app->db_captacion;
         $con1 = \Yii::$app->db_facturacion;
@@ -381,7 +375,18 @@ class SolicitudesController extends \app\components\CController {
                 if ($resp_precio) {
                     if ($nint_id==1) {
                         $ming_id = 0;
-                        $precio = $precioGrado;
+                        if ($ite_id == 155 or $ite_id == 156 or $ite_id == 157) {
+                            $resp_precios_maximos = $mod_solins->ValidarPrecioXitem($ite_id); 
+                            if ($resp_precios_maximos) {
+                                if ($precioGrado > $resp_precios_maximos["precio_mat"] or $precioGrado < $resp_precios_maximos["precio_ins"]) {
+                                    $mensaje = 'El precio digitado debe esar entre '.$resp_precios_maximos["precio_ins"]. ' y '. $resp_precios_maximos["precio_mat"];
+                                    $errorprecio = 0;
+                                }
+                            }
+                            $precio = $precioGrado;                            
+                        } else {
+                            $precio = $resp_precio['precio'];
+                        }
                     } else {
                         $precio = $resp_precio['precio'];
                     }
@@ -454,10 +459,7 @@ class SolicitudesController extends \app\components\CController {
                         }
                     }
                 }
-                //Generar la orden de pago con valor correspondiente. Buscar precio para orden de pago.     
-                  \app\models\Utilities::putMessageLogFile('precio:' . $precio);
-                  \app\models\Utilities::putMessageLogFile('descuento:' . $val_descuento);
-                  \app\models\Utilities::putMessageLogFile('total:' . $val_total);
+                //Generar la orden de pago con valor correspondiente. Buscar precio para orden de pago.                                     
                 if ($precio == 0) {
                     $estadopago = 'S';
                 } else {
@@ -507,13 +509,13 @@ class SolicitudesController extends \app\components\CController {
                 $body = Utilities::getMailMessage("Paidinterested", array("[[nombre]]" => $nombres, "[[metodo]]" => $metodo, "[[precio]]" => $val_total, "[[link]]" => $link, "[[link1]]" => $link1, "[[link_pypal]]" => $link_paypal), Yii::$app->language);
                 $bodyadmision = Utilities::getMailMessage("Paidadmissions", array("[[nombre]]" => $pri_nombre, "[[apellido]]" => $pri_apellido, "[[correo]]" => $correo, "[[identificacion]]" => $identificacion, "[[tipoDNI]]" => $tipoDNI, "[[curso]]" => $curso, "[[telefono]]" => $telefono), Yii::$app->language);
                 $bodycolecturia = Utilities::getMailMessage("Approvedapplicationcollected", array("[[nombres_completos]]" => $nombres, "[[metodo]]" => $metodo, "[[nombre]]" => $respDatoFactura["sdfa_nombres"], "[[apellido]]" => $respDatoFactura["sdfa_apellidos"], "[[identificacion]]" => $respDatoFactura["sdfa_dni"], "[[tipoDNI]]" => $respDatoFactura["sdfa_tipo_dni"], "[[direccion]]" => $respDatoFactura["sdfa_direccion"], "[[telefono]]" => $respDatoFactura["sdfa_telefono"]), Yii::$app->language);
-
+/*
                 Utilities::sendEmail($tituloMensaje, Yii::$app->params["adminEmail"], [$correo => $pri_apellido . " " . $pri_nombre], $asunto, $body);
                 Utilities::sendEmail($tituloMensaje, Yii::$app->params["adminEmail"], [Yii::$app->params["admisiones"] => "Jefe"], $asunto, $bodyadmision);
                 Utilities::sendEmail($tituloMensaje, Yii::$app->params["adminEmail"], [Yii::$app->params["soporteEmail"] => "Soporte"], $asunto, $body);
                 Utilities::sendEmail($tituloMensaje, Yii::$app->params["adminEmail"], [Yii::$app->params["soporteEmail"] => "Soporte"], $asunto, $bodyadmision);
                 Utilities::sendEmail($tituloMensaje, Yii::$app->params["adminEmail"], [Yii::$app->params["colecturia"] => "Colecturia"], $asunto, $bodycolecturia);
-
+*/
                 //$num_secuencia;secuencia que se debe retornar
                 $message = array(
                     "wtmessage" => Yii::t("notificaciones", "La infomación ha sido grabada. Por favor verifique su correo."),

@@ -132,8 +132,7 @@ $leyenda = '<div class="col-md-12 col-xs-12 col-sm-12 col-lg-12">
                     <?= Html::dropDownList("cmb_metodos", 0, array_merge([Yii::t("formulario", "Select")], $arr_metodos), ["class" => "form-control", "id" => "cmb_metodos"]) ?>
                 </div>
             </div>
-        </div>
-        
+        </div>        
     </div>
     
     <div class="col-md-12 col-xs-12 col-sm-12 col-lg-12" id="divItem" style="display: block">        
@@ -163,7 +162,7 @@ $leyenda = '<div class="col-md-12 col-xs-12 col-sm-12 col-lg-12">
             </div>            
         </div>        
     </div>
-    <div class="col-md-12 col-xs-12 col-sm-12 col-lg-12" id="divAplicaDescuento" style="display: block">               
+    <div class="col-md-12 col-xs-12 col-sm-12 col-lg-12" id="divAplicaDescuento" style="display: none">               
         <div class="form-group">
             <label for="txt_declararDescuento" class="col-sm-5 control-label"><?= financiero::t("Pagos", "Apply Discount") ?></label>
             <div class="col-sm-7">  

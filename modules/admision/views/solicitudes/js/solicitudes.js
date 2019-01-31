@@ -262,23 +262,22 @@ $(document).ready(function () {
                     }, true);                   
                 }, true);                
             }
-        }, true);      
-            
-        //Sólo mostrar el bloque de beca Fundación Cala cuando sea Unidad:Grado y Método:examen.                  
-        if (arrParams.nint_id == 1) {
-            if ($('#cmb_metodos') == 2) {
-                $('#divBeca').css('display', 'block');
-            } else {
-                $('#divBeca').css('display', 'none');
+        }, true);                  
+        //                     
+        if (arrParams.nint_id == 1) {  //Grado                   
+            $('#divMetodo').css('display', 'none');    
+            $('#divAplicaDescuento').css('display', 'none');             
+            if (arrParams.ite_id == 155 || arrParams.ite_id == 156 || arrParams.ite_id== 157 || arrParams.ite_id== 0 || arrParams.ite_id== null)  {                   
+                $("#txt_precio_item").prop('disabled', false);       
+            } else {   
+                alert('Item2:'+arrParams.ite_id);
+                $("#txt_precio_item").prop('disabled', true);
             }
-            $('#divMetodo').css('display', 'none');   
-            
-                             
-        } else {
-            $('#divBeca').css('display', 'none');
-            $('#divMetodo').css('display', 'block');   
-        }
-        
+        } else {               
+            $('#divMetodo').css('display', 'block');
+            $('#divAplicaDescuento').css('display', 'block');       
+            $("#txt_precio_item").prop('disabled', true);
+        }        
     });
 
     $('#cmb_modalidad').change(function () {
@@ -352,7 +351,13 @@ $(document).ready(function () {
                     }, true);                        
                 }, true);                  
             }            
-        }, true);                  
+        }, true);    
+        arrParams.ite_id = $('#cmb_item').val();
+        if (arrParams.ite_id == 155 || arrParams.ite_id == 156 || arrParams.ite_id== 157 || arrParams.ite_id== 0 || arrParams.ite_id== null)  {                  
+            $("#txt_precio_item").prop('disabled', false);       
+        } else {                
+            $("#txt_precio_item").prop('disabled', true);
+        }  
     });
 
     $('#cmb_unidad').change(function () {
@@ -739,7 +744,13 @@ $(document).ready(function () {
                     $('#txt_precio_item2').val(data.preciodescuento);
                 }
             }, true);      
-        }, true);        
+        }, true);   
+        arrParams.ite_id = $('#cmb_item').val();
+        if (arrParams.ite_id == 155 || arrParams.ite_id == 156 || arrParams.ite_id== 157 || arrParams.ite_id== 0 || arrParams.ite_id== null)  {                  
+            $("#txt_precio_item").prop('disabled', false);       
+        } else {                
+            $("#txt_precio_item").prop('disabled', true);
+        }  
     });
     
     $('#cmb_carrera').change(function () {
@@ -792,7 +803,14 @@ $(document).ready(function () {
                     $('#txt_precio_item2').val(data.preciodescuento);
                 }
             }, true);      
-        }, true);               
+        }, true);    
+        
+        arrParams.ite_id = $('#cmb_item').val();
+        if (arrParams.ite_id == 155 || arrParams.ite_id == 156 || arrParams.ite_id== 157 || arrParams.ite_id== 0 || arrParams.ite_id== null)  {                  
+            $("#txt_precio_item").prop('disabled', false);       
+        } else {                
+            $("#txt_precio_item").prop('disabled', true);
+        }  
     });
 
     $('#cmb_item').change(function () {
@@ -817,7 +835,13 @@ $(document).ready(function () {
                 data = response.message;
                 $('#txt_precio_item2').val(data.preciodescuento);
             }
-        }, true);           
+        }, true);                 
+                   
+        if (arrParams.ite_id == 155 || arrParams.ite_id == 156 || arrParams.ite_id== 157 || arrParams.ite_id== 0 || arrParams.ite_id== null)  {                  
+            $("#txt_precio_item").prop('disabled', false);       
+        } else {                
+            $("#txt_precio_item").prop('disabled', true);
+        }        
     });
     
     $('#cmb_descuento').change(function () {

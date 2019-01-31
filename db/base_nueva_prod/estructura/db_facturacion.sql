@@ -553,3 +553,19 @@ create table if not exists `secuencias` (
  primary key(`emp_id`,`estab_id`,`pemis_id`,`secu_tipo_doc`)
 )ENGINE=InnoDB DEFAULT CHARSET=latin1;
 
+
+-- -------------------------------------------------------------
+--
+-- Estructura de tabla para la tabla `item_parametro`
+-- -------------------------------------------------------------
+create table if not exists db_facturacion.`item_parametro` (
+  `ipar_id` bigint(20) not null auto_increment primary key,  
+  `uaca_id` bigint(20) not null,  
+  `mod_id` bigint(20) not null,    
+  `ipar_ite_inscripcion` bigint(20) null,  
+  `ipar_ite_matriculacion` bigint(20) null,  
+  `ipar_estado` varchar(1) not null,
+  `ipar_fecha_creacion` timestamp not null default current_timestamp,
+  `ipar_fecha_modificacion` timestamp null default null,
+  `ipar_estado_logico` varchar(1) not null  
+);

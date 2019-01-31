@@ -368,7 +368,7 @@ class SolicitudInscripcion extends \yii\db\ActiveRecord
                         sins.sins_fecha_solicitud as fecha_solicitud,
                         uaca.uaca_id,
                         uaca.uaca_nombre as nint_nombre,
-                        ifnull((select min.ming_nombre from " . $con->dbname . ".metodo_ingreso min where min.ming_id = sins.ming_id),'') as metodo_ingreso,
+                        ifnull((select min.ming_nombre from " . $con->dbname . ".metodo_ingreso min where min.ming_id = sins.ming_id),'N/A') as metodo_ingreso,
                         sins.eaca_id,
                         (case when (sins.emp_id = 1) then
                                 (case when (sins.uaca_id < 3) then
@@ -1818,7 +1818,7 @@ class SolicitudInscripcion extends \yii\db\ActiveRecord
         $con = \Yii::$app->db_facturacion;
         $estado = 1;
         $sql = "SELECT hipr_precio precio 
-                FROM db_facturacion.historial_item_precio  
+                FROM " . $con->dbname . ".historial_item_precio  
                 WHERE ite_id = :ite_id                    
                     and (:fecha between hipr_fecha_inicio and hipr_fecha_fin)
                     and hipr_estado = :estado
@@ -1828,6 +1828,35 @@ class SolicitudInscripcion extends \yii\db\ActiveRecord
         $comando->bindParam(":estado", $estado, \PDO::PARAM_STR);
         $comando->bindParam(":ite_id", $ite_id, \PDO::PARAM_INT);     
         $comando->bindParam(":fecha", $fecha, \PDO::PARAM_STR);     
+        $resultData = $comando->queryOne();
+        return $resultData;
+    }
+    
+    /**
+     * Function ValidarPrecioXitem
+     * @author  Grace Viteri <analistadesarrollo01@uteg.edu.ec>
+     * @param   
+     * @return  $resultData (Precio del item)
+     */
+    public function ValidarPrecioXitem($ite_id) {
+        $con = \Yii::$app->db_facturacion;
+        $estado = 1;
+        $sql = "SELECT ip.ipre_precio precio_ins, ip1.ipre_precio precio_mat
+                FROM " . $con->dbname . ".item_precio ip inner join " . $con->dbname . ".item_parametro im on ip.ite_id = im.ipar_ite_inscripcion
+                     inner join " . $con->dbname . ".item_precio ip1 on im.ipar_ite_matriculacion = ip1.ite_id
+                WHERE ip.ite_id = :ite_id
+                        and ip.ipre_estado_precio = 'A'
+                        and (now() between ip.ipre_fecha_inicio and ip.ipre_fecha_fin)   
+                    and ip1.ipre_estado_precio = 'A'
+                        and (now() between ip1.ipre_fecha_inicio and ip1.ipre_fecha_fin)  
+                        and ip.ipre_estado = :estado
+                        and ip.ipre_estado_logico = :estado
+                    and ip1.ipre_estado = :estado
+                        and ip1.ipre_estado_logico = :estado";
+
+        $comando = $con->createCommand($sql);
+        $comando->bindParam(":estado", $estado, \PDO::PARAM_STR);
+        $comando->bindParam(":ite_id", $ite_id, \PDO::PARAM_INT);     
         $resultData = $comando->queryOne();
         return $resultData;
     }
