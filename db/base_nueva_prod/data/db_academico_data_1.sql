@@ -102,13 +102,13 @@ INSERT INTO `estudio_academico` (`eaca_id`, `teac_id`, `eaca_nombre`, `eaca_desc
 (13, 1, 'Licenciatura en Gestión y Talento Humano', 'Licenciatura en Gestión y Talento Humano', 'licenciatura_en_gestión_y_talento_humano', 1, NULL, '1', '2017-02-01 16:25:00', NULL, '1'),
 (14, 1, 'Licenciatura en Administración Portuaria y Aduanera', 'Licenciatura en Administración Portuaria y Aduanera', 'licenciatura_en_administración_portuaria_y_aduanera', 1, NULL, '1', '2017-02-01 16:25:00', NULL, '1'),
 (15, 2, 'Administración de Empresas', 'Administración de Empresas', 'administración_de_empresas', 1, NULL, '1', '2017-02-01 16:25:00', NULL, '1'),
-(16, 2, 'Finanzas', 'Finanzas', 'finanzas', 1, NULL, '1', '2017-02-01 16:25:00', NULL, '1'),
+(16, 2, 'Finanzas en con Mención en Tributación', 'Finanzas en con Mención en Tributación', 'finanzas', 1, NULL, '1', '2017-02-01 16:25:00', NULL, '1'),
 (17, 2, 'Marketing', 'Marketing', 'marketing', 1, NULL, '1', '2017-02-01 16:25:00', NULL, '1'),
 (18, 2, 'Sistema de Información Gerencial', 'Sistema de Información Gerencial', 'sistema_de_información_gerencial', 1, NULL, '1', '2017-02-01 16:25:00', NULL, '1'),
-(19, 2, 'Turismo', 'Turismo', 'turismo', 1, NULL, '1', '2017-02-01 16:25:00', NULL, '1'),
-(20, 2, 'Talento Humano', 'Talento Humano', 'talento_humano', 1, NULL, '1', '2017-02-01 16:25:00', NULL, '1'),
-(21, 2, 'Empresas Familiares', 'Empresas Familiares', 'empresas_familiares', 1, NULL, '1', '2017-02-01 16:25:00', NULL, '1'),
-(22, 2, 'Investigación', 'Investigación', 'investigación', 1, NULL, '1', '2017-02-01 16:25:00', NULL, '1');
+(19, 2, 'Gestión de Empresas Turísticas', 'Gestión de Empresas Turísticas', 'turismo', 1, NULL, '1', '2017-02-01 16:25:00', NULL, '1'),
+(20, 2, 'Gestión del Talento Humano', 'Gestión del Talento Humano', 'talento_humano', 1, NULL, '1', '2017-02-01 16:25:00', NULL, '1'),
+(21, 2, 'Dirección Estratégica en Empresas Familiares', 'Dirección Estratégica en Empresas Familiares', 'empresas_familiares', 1, NULL, '1', '2017-02-01 16:25:00', NULL, '1'),
+(22, 2, 'Gestión en Procesos Organizacionales', 'Gestión en Procesos Organizacionales', 'investigación', 1, NULL, '1', '2017-02-01 16:25:00', NULL, '1');
 
 
 
