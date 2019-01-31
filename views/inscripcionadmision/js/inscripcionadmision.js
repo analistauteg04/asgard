@@ -564,7 +564,9 @@ function dataInscripPart1(ID) {
     objDat.pges_celular = $('#txt_celular').val();
     objDat.unidad_academica = $('#cmb_unidad_solicitud option:selected').val();
     objDat.modalidad = $('#cmb_modalidad_solicitud option:selected').val();
+    //anaksunamun
     objDat.ming_id = $('#cmb_metodo_solicitud option:selected').val();
+    
     objDat.conoce = $('#cmb_conuteg option:selected').val();
     objDat.carrera = $('#cmb_carrera_solicitud option:selected').val();
     //TABA 2
