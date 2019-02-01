@@ -171,7 +171,7 @@ function preguntaSuscribirOtrasListas(message) {
     showAlert("OK", "success", messagePB);
 }
 function suscribirOtrasListas() {
-
+    
 }
 function elminarsuscritor() {
 
