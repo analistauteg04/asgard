@@ -479,3 +479,8 @@ function exportExcel() {
     window.location.href = $('#txth_base').val() + "/marketing/email/expexcel?estado=" + estado + "&lista=" + lista;
 }
 
+function exportPdf() {
+    var estado = $('#cmb_suscrito').val();
+    var lista = $('#txth_ids').val();
+    window.location.href = $('#txth_base').val() + "/marketing/email/exppdf?pdf=1&estado=" + estado + "&lista=" + lista;
+}

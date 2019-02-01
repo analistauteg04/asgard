@@ -15,9 +15,7 @@ use app\modules\marketing\Module as marketing;
 use app\modules\admision\Module as crm;
 use app\modules\marketing\models\Suscriptor;
 use app\webservices\WsMailChimp;
-use app\models\Pais;
-use app\models\Provincia;
-use app\models\Canton;
+use app\models\ExportFile;
 use \app\models\Persona;
 use \app\modules\admision\models\PersonaGestion;
 
@@ -60,8 +58,14 @@ class EmailController extends \app\components\CController {
             $arrSearch["estado"] = $data['estado'];
             if ($data["estado"] == '1') {
                 $susbs_lista = $mod_sb->consultarSuscriptoresxLista($arrSearch, $lis_id, 1);
+                return $this->render('asignar_grid', [
+                            "model" => $susbs_lista,
+                ]);
             } elseif ($data["estado"] == '2') {
                 $susbs_lista = $mod_sb->consultarSuscriptoresxLista($arrSearch, $lis_id, 0);
+                return $this->render('asignar_grid', [
+                            "model" => $susbs_lista,
+                ]);
             }
         }
         if (Yii::$app->request->isAjax) {
@@ -171,7 +175,7 @@ class EmailController extends \app\components\CController {
                 //consultar la lista.                  
                 $resp_consulta = $mod_lista->consultarListaXID($lis_id);
                 $webs_mailchimp = new WsMailChimp();
-                $conMailch = $webs_mailchimp->deleteList($resp_consulta["lis_codigo"]);                
+                $conMailch = $webs_mailchimp->deleteList($resp_consulta["lis_codigo"]);
                 if ($resp_consulta["num_suscr"] > 0) {
                     $resp_listsuscriptor = $mod_lista->inactivaListaSuscriptor($lis_id);
                     if ($resp_listsuscriptor) {
@@ -334,7 +338,7 @@ class EmailController extends \app\components\CController {
             $codigo_postal = ucwords(mb_strtolower($data["codigo_postal"]));
             $eaca_id = null;
             $mest_id = null;
-            $opcion = $data["opcion"];            
+            $opcion = $data["opcion"];
             $list_id = base64_decode($data["list_id"]);
             if ($emp_id != 1) {
                 $mest_id = $data["carrera_id"];
@@ -379,7 +383,8 @@ class EmailController extends \app\components\CController {
                         \app\models\Utilities::putMessageLogFile('correo contacto:'.$correo_contacto);
                         \app\models\Utilities::putMessageLogFile('asunto:'.$asunto);
                         $conLista = $webs_mailchimp->editList($resp_consulta["lis_codigo"], $nombre_lista, $contacto, "permiso", $nombre_contacto, $correo_contacto, $asunto, "es", true);
-                        if ($conLista) {      \app\models\Utilities::putMessageLogFile('conLista:'.$conLista);                      
+                        if ($conLista) {      
+                            \app\models\Utilities::putMessageLogFile('conLista:'.$conLista);                      
                             //Grabar en asgard                    
                             $resp_lista = $lista->modificarLista($list_id, $eaca_id, $mest_id, $emp_id, $nombre_lista, $ecor_id, $nombre_contacto, $pais, $provincia, $ciudad, $direccion1, $direccion2, $telefono, $codigo_postal, $asunto);
                             if ($resp_lista) {                                
@@ -527,7 +532,7 @@ class EmailController extends \app\components\CController {
         if ($resp_consulta["emp_id"] == 1) {
             $arreglo_carrerra = $oportunidad_mod->consultarCarreras();
         } else {
-            $arreglo_carrerra = $estudio_mod->consultarEstudioEmpresa($resp_consulta["emp_id"]);            
+            $arreglo_carrerra = $estudio_mod->consultarEstudioEmpresa($resp_consulta["emp_id"]);
         }
         $arreglo_empresa = $empresa_mod->getAllEmpresa();
         $arreglo_correo = $empresa_mod->consultarCorreoXempresa($resp_consulta["emp_id"]);
@@ -549,7 +554,7 @@ class EmailController extends \app\components\CController {
         $mod_persona = new Persona();
         $mod_perge = new PersonaGestion();
         $lista_model = $mod_lista->consultarListaXID($lis_id);
-        $susbs_lista = $mod_sb->consultarSuscriptoresxLista($arrData,$lis_id);
+        $susbs_lista = $mod_sb->consultarSuscriptoresxLista($arrData, $lis_id);
         $fecha_crea = date(Yii::$app->params["dateTimeByDefault"]);
         $su_id = 0;
         $error = 0;
@@ -558,7 +563,7 @@ class EmailController extends \app\components\CController {
         $data = Yii::$app->request->get();
         if (isset($data["PBgetFilter"])) {
             if (isset($data["estado"]) == 1) {
-                $susbs_lista = $mod_sb->consultarSuscriptoresxLista($arrData,$lis_id, 1);
+                $susbs_lista = $mod_sb->consultarSuscriptoresxLista($arrData, $lis_id, 1);
             } elseif (isset($data["estado"]) == 2) {
                 $susbs_lista = $mod_sb->consultarSuscriptoresxLista($arrData, $lis_id, 0);
             }
@@ -621,11 +626,11 @@ class EmailController extends \app\components\CController {
         );
         $data = Yii::$app->request->get();
         $arrSearch["estado"] = $data["estado"];
-        $lis_id = base64_decode($data["lista"]);      
-        \app\models\Utilities::putMessageLogFile('XXX: ' . $arrSearch["estado"]);
+        $lis_id = base64_decode($data["lista"]);
+
         $modsuscriptor = new Suscriptor();
-        $arrData = array();  
-        if ($arrSearch["estado"] == 0) {            
+        $arrData = array();
+        if ($arrSearch["estado"] == 0) {
             $arrData = $modsuscriptor->consultarSuscriptoexcel($arrSearch, $lis_id);
         } else {
             if ($arrSearch["estado"] == 1) {
@@ -634,18 +639,49 @@ class EmailController extends \app\components\CController {
                 $arrData = $modsuscriptor->consultarSuscriptoexcel($arrSearch, $lis_id, 0);
             }
         }
-        /*if ($arrSearch["estado"] == 0) {
-            $arrData = $modsuscriptor->consultarSuscriptoexcel($arrSearch, $lis_id);
-        } else {
-            if ($data["estado"] == 1) {
-                $arrData = $modsuscriptor->consultarSuscriptoexcel($arrSearch, $lis_id, 1);
-            } elseif ($data["estado"] == 2) {
-                $arrData = $modsuscriptor->consultarSuscriptoexcel($arrSearch, $lis_id, 0);
-            }
-        }*/
+
         $nameReport = marketing::t("marketing", "List Subscriber Allocation");
         Utilities::generarReporteXLS($nombarch, $nameReport, $arrHeader, $arrData, $colPosition);
         exit;
+    }
+
+    public function actionExppdf() {
+        $report = new ExportFile();
+        $this->view->title = marketing::t("marketing", "List Subscriber Allocation"); // Titulo del reporte
+
+        $modsuscriptor = new Suscriptor();
+        $data = Yii::$app->request->get();
+        $arr_body = array();
+
+        $arrSearch["estado"] = $data["estado"];
+        $lis_id = base64_decode($data["lista"]);
+
+        $arr_head = array(
+            crm::t("crm", "Contact"),
+            academico::t("Academico", "Career/Program"),
+            marketing::t("marketing", "Email"),
+            marketing::t("marketing", "Estado"),
+        );
+        \app\models\Utilities::putMessageLogFile('XXX: ' . $arrSearch["estado"] . ' YYYY ' . $lis_id);
+        if ($arrSearch["estado"] == 0) {
+            $arr_body = $modsuscriptor->consultarSuscriptoexcel(array(), $lis_id);
+        } else {
+            if ($arrSearch["estado"] == 1) {
+                $arr_body = $modsuscriptor->consultarSuscriptoexcel($arrSearch, $lis_id, 1);
+            } elseif ($arrSearch["estado"] == 2) {
+                $arr_body = $modsuscriptor->consultarSuscriptoexcel($arrSearch, $lis_id, 0);
+            }
+        }
+
+        $report->orientation = "L"; // tipo de orientacion L => Horizontal, P => Vertical
+        $report->createReportPdf(
+                $this->render('exportpdf', [
+                    'arr_head' => $arr_head,
+                    'arr_body' => $arr_body
+                ])
+        );
+        $report->mpdf->Output('Reporte_' . date("Ymdhis") . ".pdf", ExportFile::OUTPUT_TO_DOWNLOAD);
+        return;
     }
 
 }
