@@ -1076,45 +1076,50 @@ class SolicitudInscripcion extends \yii\db\ActiveRecord
         $con1 = \Yii::$app->db_academico;
         $estado = 1;
         $estado_precio = 'A';
-        if (!empty($ming_id)) {
+        if ($nint_id<3) {
             $sql = "SELECT  imni.imni_id, 
                             ipre.ipre_precio+(ipre.ipre_precio*ifnull(ipre.ipre_porcentaje_iva,0)) as precio,	   
                             ming.ming_nombre as nombre_metodo_ingreso,
                             ua.uaca_nombre as nombre_nivel_interes,
                             imni.ite_id    
-                    FROM " . $con2->dbname . ".item_metodo_unidad imni INNER JOIN " . $con2->dbname . ".item_precio ipre on imni.ite_id = ipre.ite_id
-                         INNER JOIN " . $con->dbname . ".metodo_ingreso ming on ming.ming_id = imni.ming_id
-                         INNER JOIN " . $con1->dbname . ".unidad_academica ua on ua.uaca_id = imni.uaca_id                                             
-                    WHERE imni.ming_id = :ming_id AND 
+                    FROM " . $con2->dbname . ".item_metodo_unidad imni LEFT JOIN " . $con2->dbname . ".item_precio ipre on imni.ite_id = ipre.ite_id
+                         LEFT JOIN " . $con->dbname . ".metodo_ingreso ming on ming.ming_id = imni.ming_id
+                         LEFT JOIN " . $con1->dbname . ".unidad_academica ua on ua.uaca_id = imni.uaca_id                                             
+                    WHERE ifnull(imni.ming_id,0) = 0 AND 
                           imni.uaca_id = :nint_id AND
                           imni.mod_id = :mod_id AND                         
                           ipre.ipre_estado_precio = :estado_precio AND
                           now() between ipre.ipre_fecha_inicio and ipre.ipre_fecha_fin AND
                           imni.imni_estado = :estado AND
                           imni.imni_estado_logico = :estado AND
-                          ipre.ipre_estado = :estado AND
-                          ipre.ipre_estado_logico = :estado AND 
-                          ming.ming_estado = :estado AND
-                          ming.ming_estado_logico = :estado AND
+                          -- ipre.ipre_estado = :estado AND
+                          -- ipre.ipre_estado_logico = :estado AND 
+                          -- ming.ming_estado = :estado AND
+                          -- ming.ming_estado_logico = :estado AND
+                          imni.ite_id  in (158,159,160,162) and
                           ua.uaca_estado = :estado AND
                           ua.uaca_estado_logico = :estado";
+            
+                \app\models\Utilities::putMessageLogFile('sql:'.$sql);  
         } else {
-            $sql = "SELECT  imni.imni_id, 
+            $sql = "
+                    SELECT  imni.imni_id, 
                             ipre.ipre_precio+(ipre.ipre_precio*ifnull(ipre.ipre_porcentaje_iva,0)) as precio,	   
-                            null as nombre_metodo_ingreso,
+                            ming.ming_nombre as nombre_metodo_ingreso,
                             ua.uaca_nombre as nombre_nivel_interes,
-                            imni.ite_id                            
-                    FROM " . $con2->dbname . ".item_metodo_unidad imni INNER JOIN " . $con2->dbname . ".item_precio ipre on imni.ite_id = ipre.ite_id                         
-                         INNER JOIN " . $con1->dbname . ".unidad_academica ua on ua.uaca_id = imni.uaca_id                         
-                    WHERE imni.uaca_id = :nint_id AND
+                            imni.ite_id    
+                    FROM db_facturacion.item_metodo_unidad imni LEFT JOIN db_facturacion.item_precio ipre on imni.ite_id = ipre.ite_id
+                         LEFT JOIN db_captacion.metodo_ingreso ming on ming.ming_id = imni.ming_id
+                         LEFT JOIN db_academico.unidad_academica ua on ua.uaca_id = imni.uaca_id                                             
+                    WHERE 
+                          imni.uaca_id = :nint_id AND
                           imni.mod_id = :mod_id AND    
                           imni.mest_id = :car_id AND
                           ipre.ipre_estado_precio = :estado_precio AND
                           now() between ipre.ipre_fecha_inicio and ipre.ipre_fecha_fin AND
                           imni.imni_estado = :estado AND
                           imni.imni_estado_logico = :estado AND
-                          ipre.ipre_estado = :estado AND
-                          ipre.ipre_estado_logico = :estado AND                          
+                          imni.ite_id  in (158,159,160,162) and
                           ua.uaca_estado = :estado AND
                           ua.uaca_estado_logico = :estado";
         }        

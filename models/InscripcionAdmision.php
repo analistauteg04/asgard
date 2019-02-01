@@ -223,7 +223,7 @@ class InscripcionAdmision extends \yii\db\ActiveRecord {
                         conuteg_id,
                         ruta_doc_titulo,
                         ruta_doc_dni,
-                        96 as ddit_valor,-- ddit.ddit_valor,
+                        -- 96 as ddit_valor,-- ddit.ddit_valor,
                         ruta_doc_certvota,
                         ruta_doc_foto,
                         ruta_doc_certificado,                        
@@ -456,12 +456,15 @@ class InscripcionAdmision extends \yii\db\ActiveRecord {
                                                 if ($beca == "1") {
                                                     $precio = 0;
                                                 } else {
+                                                   
                                                     $resp_precio = $solins_model->ObtenerPrecio($resp_datos['twin_metodo_ingreso'], $resp_datos['uaca_id'], $resp_datos['mod_id'], $eaca_id);
                                                     if ($resp_precio) {
+                                                        \app\models\Utilities::putMessageLogFile('obtener precio');    
                                                         if ($resp_datos['uaca_id'] == 2) {
                                                             $ite_id = 10;
                                                         } else {
                                                             $ite_id = $resp_precio['ite_id'];
+                                                            \app\models\Utilities::putMessageLogFile('item:'.$ite_id);                
                                                         }
                                                         $precio = $resp_precio['precio'];
                                                     } else {
@@ -469,13 +472,15 @@ class InscripcionAdmision extends \yii\db\ActiveRecord {
                                                     }
                                                 }
                                                 $mod_ordenpago = new OrdenPago();
+                                                $val_descuento = 0;
+                                                \app\models\Utilities::putMessageLogFile('precio:'.$precio);    
                                                 //Se verifica si seleccionó descuento.
                                                 //descuento para grado online y posgrado no tiene descuento, caso contrario es 96 dol
-                                                if ($resp_datos['uaca_id'] == 1) {
+                                                /*if ($resp_datos['uaca_id'] == 1) {
                                                     if (($resp_datos['mod_id'] == 2) or ( $resp_datos['mod_id'] == 3) or ( $resp_datos['mod_id'] == 4)) {
                                                         $val_descuento = 96;
                                                     }
-                                                }
+                                                }*/
                                                 //Generar la orden de pago con valor correspondiente. Buscar precio para orden de pago.                                                                     
                                                 if ($precio == 0) {
                                                     $estadopago = 'S';
@@ -483,12 +488,15 @@ class InscripcionAdmision extends \yii\db\ActiveRecord {
                                                     $estadopago = 'P';
                                                 }
                                                 $val_total = $precio - $val_descuento;
-                                                $resp_opago = $mod_ordenpago->insertarOrdenpago($sins_id, null, $val_total, 0, $val_total, $estadopago, $usuario_id);
+                                                \app\models\Utilities::putMessageLogFile('total:'.$val_total);    
+                                                $resp_opago = $mod_ordenpago->insertarOrdenpago($sins_id, null, $val_total, 0, $val_total, $estadopago, $usuario_id);                                                
                                                 if ($resp_opago) {
+                                                    \app\models\Utilities::putMessageLogFile('ingresa o/p');    
                                                     //insertar desglose del pago                                    
                                                     $fecha_ini = date(Yii::$app->params["dateByDefault"]);
                                                     $resp_dpago = $mod_ordenpago->insertarDesglosepago($resp_opago, $ite_id, $val_total, 0, $val_total, $fecha_ini, null, $estadopago, $usuario_id);
                                                     if ($resp_dpago) {
+                                                        \app\models\Utilities::putMessageLogFile('ingresa d/p');    
                                                         $exito = 1;
                                                     }
                                                 }
