@@ -122,8 +122,8 @@ $(document).ready(function () {
                     switch (uaca_id) {
                         case 1:
                             switch (mod_id) {
-                                case 1:
-                                window.location.href = "https://www.uteg.edu.ec/pago-online-nivelacion/";
+                                case 1: //online
+                                window.location.href = "https://www.uteg.edu.ec/pagos-grado-online/";
                                 break;
 //                                case 1:
 //                                    switch (ming) {
@@ -139,8 +139,8 @@ $(document).ready(function () {
 //                                            break;
 //                                    }
 //                                    break;
-                                case 2:// grado
-                                    window.location.href = "https://www.uteg.edu.ec/pagos-online/";
+                                case 2:// presencial
+                                    window.location.href = "https://www.uteg.edu.ec/pago-grado-presencial/";
                                     break;
 //                                    switch (ming) {
 //                                        case 1:
@@ -156,7 +156,7 @@ $(document).ready(function () {
 //                                    }
                                     break;
                                 case 3:// semipresencial
-                                      window.location.href = "https://www.uteg.edu.ec/pagos-online/";
+                                      window.location.href = "https://www.uteg.edu.ec/pago-grado-semipresencial/";
 //                                    switch (ming) {
 //                                        case 1:
 //                                            //alert('grado semipresencial curso');
@@ -169,7 +169,7 @@ $(document).ready(function () {
 //                                    }
                                     break;
                                 case 4: //distancia
-                                    window.location.href = "https://www.uteg.edu.ec/pagos-online/";
+                                    window.location.href = "https://www.uteg.edu.ec/pago-grado-distancia/";
 //                                    switch (ming) {
 //                                        case 1:
 //                                            $('#tx_paypal').attr("href", "https://www.uteg.edu.ec/pago-grado-distancia/")
