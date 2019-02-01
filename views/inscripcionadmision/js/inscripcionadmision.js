@@ -139,8 +139,8 @@ $(document).ready(function () {
 //                                            break;
 //                                    }
 //                                    break;
-                                case 2:
-                                    window.location.href = "https://www.uteg.edu.ec/pago-grado-presencial/";
+                                case 2:// grado
+                                    window.location.href = "https://www.uteg.edu.ec/pagos-online/";
                                     break;
 //                                    switch (ming) {
 //                                        case 1:
@@ -155,7 +155,8 @@ $(document).ready(function () {
 //                                            break;
 //                                    }
                                     break;
-                                case 3:
+                                case 3:// semipresencial
+                                      window.location.href = "https://www.uteg.edu.ec/pagos-online/";
 //                                    switch (ming) {
 //                                        case 1:
 //                                            //alert('grado semipresencial curso');
@@ -167,8 +168,8 @@ $(document).ready(function () {
 //                                            break;
 //                                    }
                                     break;
-                                case 4:
-                                    window.location.href = "https://www.uteg.edu.ec/pago-grado-distancia/";
+                                case 4: //distancia
+                                    window.location.href = "https://www.uteg.edu.ec/pagos-online/";
 //                                    switch (ming) {
 //                                        case 1:
 //                                            $('#tx_paypal').attr("href", "https://www.uteg.edu.ec/pago-grado-distancia/")

@@ -194,13 +194,13 @@ insert into `item` (`ite_id`, `scat_id`,  `ite_codigo`, `ite_nombre`, `ite_descr
 (153, 5, '0153', 'Matrícula Posgrado', 'Matrícula Posgrado', 1, '1', '1'),
 (154, 5, '0154', 'Derechos Posgrado', 'Derechos Posgrado', 1, '1', '1'),
 
-(155, 2, '0155', 'Inscripción Presencial', 'Inscripción Presencial', 1, '1', '1'),
-(156, 3, '0156', 'Inscripción Semipresencial', 'Inscripción Semipresencial', 1, '1', '1'),
-(157, 4, '0157', 'Inscripción Distancia', 'Inscripción Distancia', 1, '1', '1'),
+(155, 2, '0155', 'Inscripción Presencial', 'Inscripción Presencial', 1, '0', '1'),
+(156, 3, '0156', 'Inscripción Semipresencial', 'Inscripción Semipresencial', 1, '0', '1'),
+(157, 4, '0157', 'Inscripción Distancia', 'Inscripción Distancia', 1, '0', '1'),
 (158, 1, '0158', 'Gestión de Entornos Virtuales + Matrícula Online', 'Gestión de Entornos Virtuales + Matrícula Online', 1, '1', '1'),
-(159, 2, '0159', 'Inscripción + Matrícula Presencial', 'Inscripción + Matrícula Presencial', 1, '1', '1'),
-(160, 3, '0160', 'Inscripción + Matrícula Semipresencial', 'Inscripción + Matrícula Semipresencial', 1, '1', '1'),
-(161, 4, '0161', 'Inscripción + Matrícula Distancia', 'Inscripción + Matrícula Distancia', 1, '1', '1');
+(159, 2, '0159', 'Matrícula Presencial', 'Matrícula Presencial', 1, '1', '1'),
+(160, 3, '0160', 'Matrícula Semipresencial', 'Matrícula Semipresencial', 1, '1', '1'),
+(161, 4, '0161', 'Matrícula Distancia', 'Matrícula Distancia', 1, '1', '1');
 
 -- --------------------------------------------------------
 --

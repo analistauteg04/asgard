@@ -117,15 +117,16 @@ $(document).ready(function () {
             }
         }, true);                
         //No mostrar el campo método ingreso cuando sea Unidad:Educación Continua.
+        arrParams.nint_id = $('#cmb_ninteres').val();       
         if (arrParams.empresa_id > 1) {
             $('#divMetodo').css('display', 'none');
             $('#divDocumento').css('display', 'none');
             $('#lbl_carrera').text('Programa');
-        } else {
-            $('#divMetodo').css('display', 'block');
+        } else {           
+            $('#divMetodo').css('display', 'none');           
             $('#divDocumento').css('display', 'block');
             $('#lbl_carrera').text('Carrera');
-        }     
+        }                   
     });
     
     $('#cmb_ninteres').change(function () {
@@ -263,21 +264,24 @@ $(document).ready(function () {
                 }, true);                
             }
         }, true);                  
-        //                     
-        if (arrParams.nint_id == 1) {  //Grado                   
-            $('#divMetodo').css('display', 'none');    
-            $('#divAplicaDescuento').css('display', 'none');             
-            if (arrParams.ite_id == 155 || arrParams.ite_id == 156 || arrParams.ite_id== 157 || arrParams.ite_id== 0 || arrParams.ite_id== null)  {                   
-                $("#txt_precio_item").prop('disabled', false);       
-            } else {   
-                alert('Item2:'+arrParams.ite_id);
-                $("#txt_precio_item").prop('disabled', true);
+        //                            
+        arrParams.empresa_id = $('#cmb_empresa').val();
+        arrParams.nint_id = $(this).val();
+        if (arrParams.empresa_id > 1) {
+            $('#divMetodo').css('display', 'none');
+            $('#divDocumento').css('display', 'none');
+            $('#lbl_carrera').text('Programa');
+        } else {
+            if (arrParams.nint_id == 1) { 
+                $('#divMetodo').css('display', 'none');
+                $('#divAplicaDescuento').css('display', 'none');   
+            } else {
+                $('#divMetodo').css('display', 'block');
+                $('#divAplicaDescuento').css('display', 'block');   
             }
-        } else {               
-            $('#divMetodo').css('display', 'block');
-            $('#divAplicaDescuento').css('display', 'block');       
-            $("#txt_precio_item").prop('disabled', true);
-        }        
+            $('#divDocumento').css('display', 'block');
+            $('#lbl_carrera').text('Carrera');
+        }                           
     });
 
     $('#cmb_modalidad').change(function () {
@@ -352,12 +356,12 @@ $(document).ready(function () {
                 }, true);                  
             }            
         }, true);    
-        arrParams.ite_id = $('#cmb_item').val();
+        /*arrParams.ite_id = $('#cmb_item').val();
         if (arrParams.ite_id == 155 || arrParams.ite_id == 156 || arrParams.ite_id== 157 || arrParams.ite_id== 0 || arrParams.ite_id== null)  {                  
             $("#txt_precio_item").prop('disabled', false);       
         } else {                
             $("#txt_precio_item").prop('disabled', true);
-        }  
+        }  */
     });
 
     $('#cmb_unidad').change(function () {
@@ -745,12 +749,12 @@ $(document).ready(function () {
                 }
             }, true);      
         }, true);   
-        arrParams.ite_id = $('#cmb_item').val();
+       /* arrParams.ite_id = $('#cmb_item').val();
         if (arrParams.ite_id == 155 || arrParams.ite_id == 156 || arrParams.ite_id== 157 || arrParams.ite_id== 0 || arrParams.ite_id== null)  {                  
             $("#txt_precio_item").prop('disabled', false);       
         } else {                
             $("#txt_precio_item").prop('disabled', true);
-        }  
+        }  */
     });
     
     $('#cmb_carrera').change(function () {
@@ -805,12 +809,12 @@ $(document).ready(function () {
             }, true);      
         }, true);    
         
-        arrParams.ite_id = $('#cmb_item').val();
+        /*arrParams.ite_id = $('#cmb_item').val();
         if (arrParams.ite_id == 155 || arrParams.ite_id == 156 || arrParams.ite_id== 157 || arrParams.ite_id== 0 || arrParams.ite_id== null)  {                  
             $("#txt_precio_item").prop('disabled', false);       
         } else {                
             $("#txt_precio_item").prop('disabled', true);
-        }  
+        } */ 
     });
 
     $('#cmb_item').change(function () {
@@ -837,11 +841,11 @@ $(document).ready(function () {
             }
         }, true);                 
                    
-        if (arrParams.ite_id == 155 || arrParams.ite_id == 156 || arrParams.ite_id== 157 || arrParams.ite_id== 0 || arrParams.ite_id== null)  {                  
+       /* if (arrParams.ite_id == 155 || arrParams.ite_id == 156 || arrParams.ite_id== 157 || arrParams.ite_id== 0 || arrParams.ite_id== null)  {                  
             $("#txt_precio_item").prop('disabled', false);       
         } else {                
             $("#txt_precio_item").prop('disabled', true);
-        }        
+        }   */     
     });
     
     $('#cmb_descuento').change(function () {
