@@ -58,8 +58,14 @@ class EmailController extends \app\components\CController {
             $arrSearch["estado"] = $data['estado'];
             if ($data["estado"] == '1') {
                 $susbs_lista = $mod_sb->consultarSuscriptoresxLista($arrSearch, $lis_id, 1);
+                return $this->render('asignar_grid', [
+                            "model" => $susbs_lista,
+                ]);
             } elseif ($data["estado"] == '2') {
                 $susbs_lista = $mod_sb->consultarSuscriptoresxLista($arrSearch, $lis_id, 0);
+                return $this->render('asignar_grid', [
+                            "model" => $susbs_lista,
+                ]);
             }
         }
         if (Yii::$app->request->isAjax) {
@@ -613,7 +619,7 @@ class EmailController extends \app\components\CController {
         $data = Yii::$app->request->get();
         $arrSearch["estado"] = $data["estado"];
         $lis_id = base64_decode($data["lista"]);
-        
+
         $modsuscriptor = new Suscriptor();
         $arrData = array();
         if ($arrSearch["estado"] == 0) {
@@ -648,7 +654,7 @@ class EmailController extends \app\components\CController {
             marketing::t("marketing", "Email"),
             marketing::t("marketing", "Estado"),
         );
-        \app\models\Utilities::putMessageLogFile('XXX: ' . $arrSearch["estado"]. ' YYYY '.$lis_id);
+        \app\models\Utilities::putMessageLogFile('XXX: ' . $arrSearch["estado"] . ' YYYY ' . $lis_id);
         if ($arrSearch["estado"] == 0) {
             $arr_body = $modsuscriptor->consultarSuscriptoexcel(array(), $lis_id);
         } else {
