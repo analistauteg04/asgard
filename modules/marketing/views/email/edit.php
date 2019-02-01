@@ -10,7 +10,7 @@ admision::registerTranslations();
 <?= Html::hiddenInput('txth_list_id', base64_encode($list_id), ['id' => 'txth_list_id']); ?>
 <form class="form-horizontal" enctype="multipart/form-data" id="formnewlista">
     <div class="col-md-12 col-sm-12 col-xs-12 col-lg-12">
-        <h3><span id="lbl_solicitud"><?= Module::t("marketing", "New List") ?></span></h3>
+        <h3><span id="lbl_solicitud"><?= Module::t("marketing", "Edit List") ?></span></h3>
     </div>
     <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12"> 
         <div class="col-lg-6 col-md-6 col-sm-6 col-xs-6">

@@ -357,7 +357,8 @@ class EmailController extends \app\components\CController {
                 );
                 $lista = new Lista();
                 $resp_consulta = $lista->consultarListaXnombre($nombre_lista);
-                if (($resp_consulta["existe"] != 'S') or ($resp_consulta["lis_id"] == $list_id)) {
+                if (($resp_consulta["existe"] != 'S') or ($resp_consulta["lis_id"] == $list_id)) {   
+                    \app\models\Utilities::putMessageLogFile('antes de new mailchimp');
                     //Grabar en mailchimp    
                     $webs_mailchimp = new WsMailChimp();
                     if ($opcion == 'N') { // Ingreso
@@ -371,14 +372,20 @@ class EmailController extends \app\components\CController {
                         }
                     } else {  //Modificación     
                         \app\models\Utilities::putMessageLogFile('antes de editar mailchimp');
-                        //$conLista = $webs_mailchimp->editList($resp_consulta["lis_codigo"], $nombre_lista, $contacto, "permiso", $nombre_contacto, $correo_contacto, $asunto, "es", true);
-                        //if ($conLista) {                            
+                        \app\models\Utilities::putMessageLogFile('codigo:'.$resp_consulta["lis_codigo"]);
+                        \app\models\Utilities::putMessageLogFile('lista:'.$nombre_lista);
+                        \app\models\Utilities::putMessageLogFile('contacto:'.print_r($contacto));
+                        \app\models\Utilities::putMessageLogFile('nombre contacto:'.$nombre_contacto);
+                        \app\models\Utilities::putMessageLogFile('correo contacto:'.$correo_contacto);
+                        \app\models\Utilities::putMessageLogFile('asunto:'.$asunto);
+                        $conLista = $webs_mailchimp->editList($resp_consulta["lis_codigo"], $nombre_lista, $contacto, "permiso", $nombre_contacto, $correo_contacto, $asunto, "es", true);
+                        if ($conLista) {      \app\models\Utilities::putMessageLogFile('conLista:'.$conLista);                      
                             //Grabar en asgard                    
                             $resp_lista = $lista->modificarLista($list_id, $eaca_id, $mest_id, $emp_id, $nombre_lista, $ecor_id, $nombre_contacto, $pais, $provincia, $ciudad, $direccion1, $direccion2, $telefono, $codigo_postal, $asunto);
                             if ($resp_lista) {                                
                                 $exito = 1;
                             }
-                       // }
+                        }
                     }
                 } else {
                     $mensaje = 'Ya se encuentra creada una lista con el mismo nombre.';

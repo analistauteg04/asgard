@@ -94,12 +94,13 @@ class WsMailChimp
             ),
             "email_type_option" => $email_type_option,
         ));
-
+        \app\models\Utilities::putMessageLogFile('parametros:'.$params);
         $response = Http::connect($this->host, $this->port, http::HTTPS)
             ->setHeaders(array('Content-Type: application/json', 'Accept: application/json'))
             ->setCredentials($this->user, $this->apiKey)
             ->doPatch($WS_URI, $params);
         $arr_response = json_decode($response, true);
+        \app\models\Utilities::putMessageLogFile('despues de actualizar en mailchimp:');
         return $arr_response;
     }
 
