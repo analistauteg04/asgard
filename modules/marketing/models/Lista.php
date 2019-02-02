@@ -131,17 +131,21 @@ class Lista extends \yii\db\ActiveRecord {
                         case when lst.eaca_id > 0 then 
                                      ea.eaca_nombre else me.mest_nombre end as programa,
                         sum(case when (lsu.lsus_estado = '1' and lsu.lsus_estado_logico = '1') then
-                                     1 else 0 end) as num_suscr
+                                     1 else 0 end) as num_suscr,
+                        sum(case when (sus.sus_estado_mailchimp = '1' and sus.sus_estado_logico = '1') then
+                                     1 else 0 end) as num_suscr_mailchimp
                     FROM 
                         " . $con->dbname . ".lista lst
                         left join " . $con->dbname . ".lista_suscriptor as lsu on lsu.lis_id=lst.lis_id
+                        left join " . $con->dbname . ".suscriptor as sus on sus.sus_id=lsu.sus_id
                         left join " . $con1->dbname . ".estudio_academico ea on ea.eaca_id = lst.eaca_id
                         left join " . $con1->dbname . ".modulo_estudio me on me.mest_id = lst.mest_id
                     WHERE
                         lst.lis_id= :lista and
                         lst.lis_estado = :estado and
                         lst.lis_estado_logico = :estado
-                    group by lst.lis_id, lst.lis_nombre, lst.lis_codigo, ifnull(lst.eaca_id, lst.mest_id),
+                    group by 
+                        lst.lis_id, lst.lis_nombre, lst.lis_codigo, ifnull(lst.eaca_id, lst.mest_id),
                         lst.emp_id, ecor_id, lis_pais, lis_provincia, lis_ciudad, 
                         lis_direccion1_empresa, lis_direccion2_empresa, lis_telefono_empresa,
                         lis_codigo_postal, lis_asunto";

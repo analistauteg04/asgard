@@ -49,10 +49,12 @@ crm::registerTranslations();
                 'headerOptions' => ['class' => 'text-center'],
                 'format' => 'html',
                 'value' => function ($model) {
-                    if (strtolower($model["estado"]) == "subscrito")
-                        return '<small class="label label-success">' . $model["estado"] . '</small>';
+                    if ($model["estado_mailchimp"] == 1)
+                        return '<small class="label label-warning">Mailchip</small>';
+                    else if ($model["estado"] == 1)
+                        return '<small class="label label-success">Suscrito</small>';
                     else
-                        return '<small class="label label-danger">' . $model["estado"] . '</small>';
+                        return '<small class="label label-danger">No suscrito</small>';
                 },
             ],
             [
@@ -61,17 +63,26 @@ crm::registerTranslations();
                 'template' => '{addsubs} {addsublistinte} {rmsubs}',
                 'buttons' => [
                     'addsubs' => function ($url, $model) {
-                        if (($model["estado"] == 'Subscrito')) {
+                        if ($model["estado_mailchimp"] == 0){
+                            if (($model["estado"] == 1)) {
+                                return '<span class="glyphicon glyphicon-plus"></span>';
+                            } else {
+                                return Html::a('<span class="glyphicon glyphicon-plus"></span>', "#", ["onclick" => "preguntasuscribirContacto(" . $model['id_psus'] . "," . $model['per_tipo'] . "," . $model['lis_id'] .");", "data-toggle" => "tooltip", "title" => "Suscribirse a la lista", "data-pjax" => 0]);
+                            }
+                        }else{
                             return '<span class="glyphicon glyphicon-plus"></span>';
-                        } else {
-                            return Html::a('<span class="glyphicon glyphicon-plus"></span>', "#", ["onclick" => "preguntasuscribirContacto(" . $model['id_psus'] . "," . $model['per_tipo'] . "," . $model['lis_id'] .");", "data-toggle" => "tooltip", "title" => "Suscribirse a la lista", "data-pjax" => 0]);
                         }
+                            
                     },
                     'rmsubs' => function ($url, $model) {
-                        if ($model["estado"] == 'Subscrito') {
-                            return Html::a('<span class="glyphicon glyphicon-remove"></span>', "#", ["onclick" => "RemoverSuscritor(" . $model['per_id'] . "," . $model['lis_id'] . ");", "data-toggle" => "tooltip", "title" => "Eliminar Suscritor", "data-pjax" => 0]);
-                        } else {
-                            return "<span class = 'glyphicon glyphicon-remove' data-toggle = 'tooltip' title ='No se puede remover un contacto que no se haya suscrito'  data-pjax = 0></span>";
+                        if ($model["estado_mailchimp"] == 0){
+                            if ($model["estado"] == 1) {
+                                return Html::a('<span class="glyphicon glyphicon-remove"></span>', "#", ["onclick" => "RemoverSuscritor(" . $model['per_id'] . "," . $model['lis_id'] . ");", "data-toggle" => "tooltip", "title" => "Eliminar Suscritor", "data-pjax" => 0]);
+                            } else {
+                                return "<span class = 'glyphicon glyphicon-remove' data-toggle = 'tooltip' title ='No se puede remover un contacto que no se haya suscrito'  data-pjax = 0></span>";
+                            }
+                        }else{
+                            return "<span class = 'glyphicon glyphicon-remove' data-toggle = 'tooltip' title ='No se puede remover un contacto que ya se ha cargado a Mailchimp'  data-pjax = 0></span>";
                         }
                     },
                 ],

@@ -64,7 +64,7 @@ class EmailController extends \app\components\CController {
             } elseif ($data["estado"] == '2') {
                 $susbs_lista = $mod_sb->consultarSuscriptoresxLista($arrSearch, $lis_id, 0);
                 return $this->render('asignar_grid', [
-                            "model" => $susbs_lista,
+                            "model" => $susbs_listas,
                 ]);
             }
         }
@@ -117,8 +117,7 @@ class EmailController extends \app\components\CController {
                 $message = array(
                     "wtmessage" => Yii::t("formulario", $mensaje),
                     "title" => Yii::t('jslang', 'Success'),
-                    "materias" => array("software", "telecomunicaciones", "marketing"),
-                    "rederict" => Yii::$app->response->redirect(['/marketing/email/asignar?lis_id=' . base64_encode($list_id)]),
+                    "materias" => array("software", "telecomunicaciones", "marketing"),                    
                 );
             } else {
                 $message = array(

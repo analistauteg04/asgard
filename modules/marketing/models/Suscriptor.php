@@ -138,7 +138,8 @@ class Suscriptor extends \yii\db\ActiveRecord {
                     concat(per.per_pri_nombre,' ',per.per_pri_apellido) as contacto, 
                     if(isnull(mest.mest_nombre),eaca.eaca_nombre,mest.mest_nombre) carrera,
                     per.per_correo,
-                    if(ifnull(sus.sus_id,0)>0 and sus.sus_estado =:estado,'Subscrito','No Subscrito') as estado,
+                    ifnull(sus.sus_estado_mailchimp,0) as estado_mailchimp,
+                    if(ifnull(sus.sus_id,0)>0 and sus.sus_estado =:estado,1,0) as estado,
                     acon.acon_id,
                     acon.acon_nombre
                 FROM 
