@@ -272,7 +272,8 @@ class Suscriptor extends \yii\db\ActiveRecord {
         $con = \Yii::$app->db_mailing;
         //$estado = 0;
 
-        $sql = "select count(*) as inscantes	
+        $sql = "
+                select count(*) as inscantes	
                 FROM " . $con->dbname . ".suscriptor sus 
                 INNER JOIN " . $con->dbname . ".lista_suscriptor lsus     
                 ON sus.sus_id = lsus.sus_id

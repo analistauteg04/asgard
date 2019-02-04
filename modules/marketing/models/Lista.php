@@ -125,6 +125,7 @@ class Lista extends \yii\db\ActiveRecord {
         $sql = "
                     SELECT
                         lst.lis_id,lst.lis_nombre, lst.lis_codigo, ifnull(lst.eaca_id, lst.mest_id) as codigo_estudio,
+                        lst.eaca_id as eaca_id, lst.mest_id mest_id,
                         lst.emp_id, ecor_id, lis_pais, lis_provincia, lis_ciudad, 
                         lis_direccion1_empresa, lis_direccion2_empresa, lis_telefono_empresa,
                         lis_codigo_postal, lis_asunto,
