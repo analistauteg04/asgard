@@ -302,12 +302,12 @@ class OrdenPago extends \app\modules\financiero\components\CActiveRecord {
         $sql .= "itp.ipre_estado_precio = :estado_precio AND
                 orp.opag_estado_logico = :estado AND                
                 itp.ipre_estado_logico = :estado AND
-                ite.ite_estado_logico = :estado AND                               
+                -- ite.ite_estado_logico = :estado AND                               
                 inte.int_estado_logico = :estado AND
                 sins.sins_estado_logico = :estado AND
                 orp.opag_estado = :estado AND                
                 itp.ipre_estado = :estado AND
-                ite.ite_estado = :estado AND                
+                -- ite.ite_estado = :estado AND                
                 inte.int_estado = :estado AND                
                 sins.sins_estado = :estado AND
                 dp.dpag_estado = :estado AND
