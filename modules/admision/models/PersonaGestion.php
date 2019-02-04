@@ -800,7 +800,7 @@ class PersonaGestion extends \app\modules\admision\components\CActiveRecord {
         $estado = 1;
 
         if (!empty($pges_celular)) {
-            $filtro .= "pges_celular = :pges_celular ";
+            $filtro .= "pges_celular like :pges_celular ";
         }
         if (!empty($pges_correo)) {
             if (!empty($pges_celular)) {
@@ -812,13 +812,13 @@ class PersonaGestion extends \app\modules\admision\components\CActiveRecord {
             if (!empty($pges_correo) || !empty($pges_celular)) {
                 $filtro .= " OR ";
             }
-            $filtro .= " pges_domicilio_telefono = :pges_domicilio_telefono ";
+            $filtro .= " pges_domicilio_telefono like :pges_domicilio_telefono ";
         }
         if (!empty($pges_domicilio_celular2)) {
             if (!empty($pges_domicilio_telefono) || !empty($pges_celular)) {
                 $filtro .= " OR ";
             }
-            $filtro .= " pges_domicilio_celular2 = :pges_domicilio_celular2";
+            $filtro .= " pges_domicilio_celular2 like :pges_domicilio_celular2";
         }
         if (!empty($pges_cedula)) {
 
@@ -844,16 +844,19 @@ class PersonaGestion extends \app\modules\admision\components\CActiveRecord {
         $comando = $con->createCommand($sql);
         $comando->bindParam(":estado", $estado, \PDO::PARAM_STR);
         if (!empty(($pges_celular))) {
-            $comando->bindParam(':pges_celular', $pges_celular, \PDO::PARAM_STR);
+            $pges_celularc = "%".substr($pges_celular, -9)."%";
+            $comando->bindParam(':pges_celular', $pges_celularc, \PDO::PARAM_STR);
         }
         if (!empty($pges_correo)) {
             $comando->bindParam(':pges_correo', $pges_correo, \PDO::PARAM_STR);
         }
         if (!empty($pges_domicilio_telefono)) {
-            $comando->bindParam(':pges_domicilio_telefono', $pges_domicilio_telefono, \PDO::PARAM_STR);
+            $pges_domicilio_telefonoc = "%".$pges_domicilio_telefono."%";
+            $comando->bindParam(':pges_domicilio_telefono', $pges_domicilio_telefonoc, \PDO::PARAM_STR);
         }
         if (!empty($pges_domicilio_celular2)) {
-            $comando->bindParam(':pges_domicilio_celular2', $pges_domicilio_celular2, \PDO::PARAM_STR);
+            $pges_domicilio_celular2c = "%".$pges_domicilio_celular2."%";
+            $comando->bindParam(':pges_domicilio_celular2', $pges_domicilio_celular2c, \PDO::PARAM_STR);
         }
         if (!empty($pges_cedula)) {
             $comando->bindParam(':pges_cedula', $pges_cedula, \PDO::PARAM_STR);
@@ -1580,12 +1583,13 @@ class PersonaGestion extends \app\modules\admision\components\CActiveRecord {
     public static function existePersonaGestLeads($correo, $numero) {
         //pgest_nombre,pgest_numero,pgest_correo 
         $con = \Yii::$app->db_crm;
+        $celular = "%".substr($numero, -9)."%";
         $sql = "SELECT pges_id Ids
                     FROM " . $con->dbname . ".persona_gestion  
                 WHERE pges_estado_logico=1 AND (pges_correo=:pges_correo OR pges_celular=:pges_celular)";
         $comando = $con->createCommand($sql);
         $comando->bindParam(":pges_correo", $correo, \PDO::PARAM_STR);
-        $comando->bindParam(":pges_celular", $numero, \PDO::PARAM_STR);
+        $comando->bindParam(":pges_celular", $celular, \PDO::PARAM_STR);
         //return $comando->queryAll();
         $rawData = $comando->queryScalar();
         if ($rawData === false)
