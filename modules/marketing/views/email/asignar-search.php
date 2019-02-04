@@ -19,7 +19,7 @@ use app\modules\marketing\Module as marketing;
             <div class="col-md-6 col-sm-6 col-xs-6 col-lg-6">
                 <div class="form-group">
                     <label for="txt_nombre" class="col-sm-4 col-md-4 col-xs-4 col-lg-4 control-label" id="lbl_nombre"><?= Yii::t("formulario", "Name") ?></label>
-                    <span for="txt_nombre" class="col-sm-4 col-md-4 col-xs-4 col-lg-4 control-label" id="lbl_nombre"><?= $arr_lista['lis_nombre'] ?> </span> 
+                    <span for="txt_nombre" class="col-sm-6 col-md-6 col-xs-6 col-lg-6 control-label" id="lbl_nombre"><?= $arr_lista['lis_nombre'] ?> </span> 
                 </div>
             </div> 
             <div class="col-md-6 col-sm-6 col-xs-6 col-lg-6">
@@ -35,7 +35,7 @@ use app\modules\marketing\Module as marketing;
             <div class="col-md-6 col-sm-6 col-xs-6 col-lg-6">
                 <div class="form-group">
                     <label for="lbl_estado" class="col-sm-4 col-md-4 col-xs-4 col-lg-4 control-label"><?= Yii::t("formulario", "Estado") ?></label>
-                    <div class="col-sm-4 col-md-4 col-xs-4 col-lg-4 control-label">
+                    <div class="col-sm-6 col-md-6 col-xs-6 col-lg-6 control-label">
                         <?= Html::dropDownList("cmb_suscrito", 0, $arr_estado, ["class" => "form-control", "id" => "cmb_suscrito"]) ?>
                     </div>
                 </div>
