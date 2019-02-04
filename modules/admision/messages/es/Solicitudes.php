@@ -18,9 +18,11 @@ namespace app\modules\admision\messages;
      "Does not meet acceptance conditions on identity document" => "No cumple condiciones de aceptación en documento de identidad:",
      "Does not meet acceptance conditions in voting certificate" => "No cumple condiciones de aceptación certifcado de votación:",
      "General Information Registered" => "Datos Generales Inscrito",
+     "Generate enrollment balance" => "Generar Saldo Matrícula",
      "Income Method" => "Método Ingreso",        
      "List Requests" => "Listar Solicitudes",
      "Observations:" => "Observaciones:",
+     "Order Registration balance" => "Orden Saldo Matrícula",
      "Request #" => "Solicitud",
      "Request by Interested" => "Solicitudes por Interesado",   
      "Result Review" => "Resultado Revisión:",
@@ -36,5 +38,5 @@ namespace app\modules\admision\messages;
      "Total" => "Total",
      "Transaction date" => "Fecha Transacción",
      "Transaction number" => "Número Transacción",
-     "Voting Certificate" => "Certificado Votación",
+     "Voting Certificate" => "Certificado Votación",     
  ];

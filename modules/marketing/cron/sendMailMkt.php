@@ -88,6 +88,7 @@ function getCampaignOnTime($webServer)
                         echo "error crear campania: " . json_encode($sendCampaign);
                         putMessageLogFile("Error al enviar campaña ". $sendCampaign);
                     }
+                    \app\models\Utilities::putMessageLogFile('Se envia campaña');
                 }else{
                     echo "error crear campania: ". json_encode($obj_new);
                     putMessageLogFile("Error al crear campaña " . $obj_new);

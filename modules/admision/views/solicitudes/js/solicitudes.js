@@ -1,6 +1,7 @@
 
 $(document).ready(function () {
-
+    $("#txt_precio_item").prop('disabled', false); 
+    
     $('input[name=opt_tipo_DNI]:radio').change(function () {
         if ($(this).val() == 1) {//ced
             $('#txt_dni_fac').attr("data-lengthMin", "10");
@@ -59,13 +60,13 @@ $(document).ready(function () {
                                         data = response.message;
                                         setComboData(data.carrera, "cmb_carrera");
                                     }         
-                                    if ($('#cmb_ninteres').val()!=1) {
+                                   // if ($('#cmb_ninteres').val()!=1) {
                                         var arrParams = new Object();
                                         arrParams.unidada = $('#cmb_ninteres').val();
                                         arrParams.metodo = $('#cmb_metodos').val();        
                                         arrParams.moda_id = $('#cmb_modalidad').val();
                                         arrParams.carrera_id = $('#cmb_carrera').val();
-                                        arrParams.empresa_id = $('#cmb_empresa').val();
+                                        arrParams.empresa_id = $('#cmb_empresa').val();                                       
                                         arrParams.getitem = true;
                                         requestHttpAjax(link, arrParams, function (response) {
                                             if (response.status == "OK") {
@@ -108,7 +109,7 @@ $(document).ready(function () {
                                                 }
                                             }, true);      
                                         }, true);
-                                    }
+                                  //  }
                                 }, true);                                                                
                             }
                         }
@@ -122,11 +123,14 @@ $(document).ready(function () {
             $('#divMetodo').css('display', 'none');
             $('#divDocumento').css('display', 'none');
             $('#lbl_carrera').text('Programa');
+            $("#txt_precio_item").prop('disabled', true);      
         } else {           
             $('#divMetodo').css('display', 'none');           
             $('#divDocumento').css('display', 'block');
             $('#lbl_carrera').text('Carrera');
-        }                   
+            $("#txt_precio_item").prop('disabled', false);                     
+        }          
+     
     });
     
     $('#cmb_ninteres').change(function () {
@@ -274,14 +278,17 @@ $(document).ready(function () {
         } else {
             if (arrParams.nint_id == 1) { 
                 $('#divMetodo').css('display', 'none');
-                $('#divAplicaDescuento').css('display', 'none');   
+                $('#divAplicaDescuento').css('display', 'none');  
+                $("#txt_precio_item").prop('disabled', false);                     
             } else {
                 $('#divMetodo').css('display', 'block');
                 $('#divAplicaDescuento').css('display', 'block');   
+                $("#txt_precio_item").prop('disabled', true);                     
             }
             $('#divDocumento').css('display', 'block');
             $('#lbl_carrera').text('Carrera');
-        }                           
+        }
+                   
     });
 
     $('#cmb_modalidad').change(function () {
@@ -355,13 +362,17 @@ $(document).ready(function () {
                     }, true);                        
                 }, true);                  
             }            
-        }, true);    
-        /*arrParams.ite_id = $('#cmb_item').val();
-        if (arrParams.ite_id == 155 || arrParams.ite_id == 156 || arrParams.ite_id== 157 || arrParams.ite_id== 0 || arrParams.ite_id== null)  {                  
-            $("#txt_precio_item").prop('disabled', false);       
-        } else {                
-            $("#txt_precio_item").prop('disabled', true);
-        }  */
+        }, true);   
+        var arrParams = new Object();
+        arrParams.unidada = $('#cmb_ninteres').val();
+        arrParams.moda_id = $(this).val();
+        arrParams.empresa_id = $('#cmb_empresa').val();
+        if (arrParams.moda_id==1) {
+            $("#txt_precio_item").prop('disabled', true);   
+        } else {
+            $("#txt_precio_item").prop('disabled', false);   
+        }       
+          
     });
 
     $('#cmb_unidad').change(function () {
@@ -748,13 +759,8 @@ $(document).ready(function () {
                     $('#txt_precio_item2').val(data.preciodescuento);
                 }
             }, true);      
-        }, true);   
-       /* arrParams.ite_id = $('#cmb_item').val();
-        if (arrParams.ite_id == 155 || arrParams.ite_id == 156 || arrParams.ite_id== 157 || arrParams.ite_id== 0 || arrParams.ite_id== null)  {                  
-            $("#txt_precio_item").prop('disabled', false);       
-        } else {                
-            $("#txt_precio_item").prop('disabled', true);
-        }  */
+        }, true); 
+               
     });
     
     $('#cmb_carrera').change(function () {
@@ -808,13 +814,7 @@ $(document).ready(function () {
                 }
             }, true);      
         }, true);    
-        
-        /*arrParams.ite_id = $('#cmb_item').val();
-        if (arrParams.ite_id == 155 || arrParams.ite_id == 156 || arrParams.ite_id== 157 || arrParams.ite_id== 0 || arrParams.ite_id== null)  {                  
-            $("#txt_precio_item").prop('disabled', false);       
-        } else {                
-            $("#txt_precio_item").prop('disabled', true);
-        } */ 
+   
     });
 
     $('#cmb_item').change(function () {
@@ -840,12 +840,21 @@ $(document).ready(function () {
                 $('#txt_precio_item2').val(data.preciodescuento);
             }
         }, true);                 
-                   
-       /* if (arrParams.ite_id == 155 || arrParams.ite_id == 156 || arrParams.ite_id== 157 || arrParams.ite_id== 0 || arrParams.ite_id== null)  {                  
-            $("#txt_precio_item").prop('disabled', false);       
-        } else {                
-            $("#txt_precio_item").prop('disabled', true);
-        }   */     
+                      
+        var arrParams = new Object();   
+        arrParams.ite_id = $('#cmb_item').val();
+        arrParams.gethabilita = true;
+        requestHttpAjax(link, arrParams, function (response) {
+            if (response.status == "OK") {
+                data = response.message;
+                var $habilita = data.habilita;                    
+                if ($habilita=='1')  {                  
+                    $("#txt_precio_item").prop('disabled', false);                     
+                } else {                
+                    $("#txt_precio_item").prop('disabled', true);                    
+                }  
+            }            
+        }, true);             
     });
     
     $('#cmb_descuento').change(function () {

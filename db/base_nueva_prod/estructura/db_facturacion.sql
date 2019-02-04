@@ -569,3 +569,23 @@ create table if not exists db_facturacion.`item_parametro` (
   `ipar_fecha_modificacion` timestamp null default null,
   `ipar_estado_logico` varchar(1) not null  
 );
+
+
+-- -------------------------------------------------------------
+--
+-- Estructura de tabla para la tabla `otros_item_metodo_nivel`
+-- -------------------------------------------------------------
+create table if not exists `otros_item_metodo_nivel` (
+  `oimn_id` bigint(20) not null primary key,  
+  `ite_id`  bigint(20) not null,  
+  `ming_id` bigint(20) null,  
+  `uaca_id` bigint(20) null,
+  `mod_id` bigint(20) null, 
+  `oimn_usu_ingreso` bigint(20) not null,
+  `oimn_usu_modifica` bigint(20) null,
+  `oimn_estado` varchar(1) not null,
+  `oimn_fecha_creacion` timestamp not null default current_timestamp,
+  `oimn_fecha_modificacion` timestamp null default null,
+  `oimn_estado_logico` varchar(1) not null, 
+  foreign key (ite_id) references `item`(ite_id)  
+);

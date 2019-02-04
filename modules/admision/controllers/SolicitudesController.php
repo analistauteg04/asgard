@@ -268,7 +268,17 @@ class SolicitudesController extends \app\components\CController {
                 }                                     
                 $message = array("preciodescuento" => $precioDescuento);
                 return Utilities::ajaxResponse('OK', 'alert', Yii::t('jslang', 'Success'), 'false', $message);                
-            }           
+            } 
+            if (isset($data["gethabilita"])) {  
+                //\app\models\Utilities::putMessageLogFile('item:'.$data["ite_id"]);   
+                if ($data["ite_id"]==155 or $data["ite_id"]==156 or $data["ite_id"]==157) {                    
+                    $habilita = '1';
+                } else {
+                    $habilita = '0';
+                };                       
+                $message = array("habilita" => $habilita);
+                return Utilities::ajaxResponse('OK', 'alert', Yii::t('jslang', 'Success'), 'false', $message);                
+            }
         }
         $arr_unidadac = $mod_unidad->consultarUnidadAcademicasEmpresa($emp_id);
         $arr_modalidad = $mod_modalidad->consultarModalidad(1, 1);
@@ -1522,6 +1532,33 @@ class SolicitudesController extends \app\components\CController {
         );
         $report->mpdf->Output('Reporte_' . date("Ymdhis") . ".pdf", ExportFile::OUTPUT_TO_DOWNLOAD);
         return;
+    }
+    
+    public function actionSaldo() {
+        $sins_id = base64_decode($_GET['ids']);
+        $int_id = base64_decode($_GET['int']);
+        $per_id = base64_decode($_GET['perid']);
+        $emp_id = base64_decode($_GET['empid']);
+        $mod_solins = new SolicitudInscripcion();
+        $personaData = $mod_solins->consultarInteresadoPorSol_id($sins_id);               
+        $mod_ordenpago = new OrdenPago();
+        \app\models\Utilities::putMessageLogFile('unidad:'.$personaData["uaca_id"]);                
+        \app\models\Utilities::putMessageLogFile('modalidad:'.$personaData["mod_id"]);             
+        if (empty($personaData["ming_id"])){
+            $metodo = 0;
+        } else {
+            $metodo = $personaData["ming_id"];
+        }
+        \app\models\Utilities::putMessageLogFile('metodo:'.$metodo);     
+        $resp_item = $mod_ordenpago->consultarPrecioXotroItem($personaData["uaca_id"], $personaData["mod_id"], $metodo);
+        return $this->render('saldo', [                   
+                    "personaData" => $personaData,                                        
+                    "sins_id" => $sins_id,
+                    "int_id" => $int_id,
+                    "per_id" => $per_id,                    
+                    "emp_id" => $emp_id,
+                    "arr_item" => ArrayHelper::map(array_merge(["id" => "0", "name" => "Seleccionar"], $resp_item), "id", "name"), 
+        ]);
     }
 
 }

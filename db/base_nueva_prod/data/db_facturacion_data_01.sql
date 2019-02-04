@@ -194,13 +194,17 @@ insert into `item` (`ite_id`, `scat_id`,  `ite_codigo`, `ite_nombre`, `ite_descr
 (153, 5, '0153', 'Matrícula Posgrado', 'Matrícula Posgrado', 1, '1', '1'),
 (154, 5, '0154', 'Derechos Posgrado', 'Derechos Posgrado', 1, '1', '1'),
 
-(155, 2, '0155', 'Inscripción Presencial', 'Inscripción Presencial', 1, '0', '1'),
-(156, 3, '0156', 'Inscripción Semipresencial', 'Inscripción Semipresencial', 1, '0', '1'),
-(157, 4, '0157', 'Inscripción Distancia', 'Inscripción Distancia', 1, '0', '1'),
+(155, 2, '0155', 'Inscripción Presencial', 'Inscripción Presencial', 1, '1', '1'),
+(156, 3, '0156', 'Inscripción Semipresencial', 'Inscripción Semipresencial', 1, '1', '1'),
+(157, 4, '0157', 'Inscripción Distancia', 'Inscripción Distancia', 1, '1', '1'),
 (158, 1, '0158', 'Gestión de Entornos Virtuales + Matrícula Online', 'Gestión de Entornos Virtuales + Matrícula Online', 1, '1', '1'),
 (159, 2, '0159', 'Matrícula Presencial', 'Matrícula Presencial', 1, '1', '1'),
 (160, 3, '0160', 'Matrícula Semipresencial', 'Matrícula Semipresencial', 1, '1', '1'),
-(161, 4, '0161', 'Matrícula Distancia', 'Matrícula Distancia', 1, '1', '1');
+(161, 4, '0161', 'Matrícula Distancia', 'Matrícula Distancia', 1, '1', '1'),
+
+(162, 2, '0162', 'Saldo Matrícula Presencial', 'Saldo Matrícula Presencial', 1, '1', '1'),
+(163, 3, '0163', 'Saldo Matrícula Semipresencial', 'Saldo Matrícula Semipresencial', 1, '1', '1'),
+(164, 4, '0164', 'Saldo Matrícula Distancia', 'Saldo Matrícula Distancia', 1, '1', '1');
 
 -- --------------------------------------------------------
 --
@@ -378,7 +382,11 @@ insert into `item_precio` (`ipre_id`, `ite_id`, `ipre_precio`, `ipre_porcentaje_
 (158, 158, 115, null, 'A', null, null, '2019/01/30 00:00:00', '2019/12/31 23:59:59', 1, '1', '1'),
 (159, 159, 250, null, 'A', null, null, '2019/01/30 00:00:00', '2019/12/31 23:59:59', 1, '1', '1'),
 (160, 160, 250, null, 'A', null, null, '2019/01/30 00:00:00', '2019/12/31 23:59:59', 1, '1', '1'),
-(161, 161, 250, null, 'A', null, null, '2019/01/30 00:00:00', '2019/12/31 23:59:59', 1, '1', '1');
+(161, 161, 250, null, 'A', null, null, '2019/01/30 00:00:00', '2019/12/31 23:59:59', 1, '1', '1'),
+
+(162, 162, 150, null, 'A', null, null, '2019/01/30 00:00:00', '2019/12/31 23:59:59', 1, '1', '1'),
+(163, 163, 150, null, 'A', null, null, '2019/01/30 00:00:00', '2019/12/31 23:59:59', 1, '1', '1'),
+(164, 164, 150, null, 'A', null, null, '2019/01/30 00:00:00', '2019/12/31 23:59:59', 1, '1', '1');
 
 -- --------------------------------------------------------
 --
@@ -561,7 +569,11 @@ insert into `historial_item_precio` (`hipr_id`, `ite_id`, `hipr_precio`, `hipr_p
 (163, 158, 115, null, '2019/01/30 00:00:00', '2019/12/31 23:59:59', null, null, 1, '1', '1'),
 (164, 159, 250, null, '2019/01/30 00:00:00', '2019/12/31 23:59:59', null, null, 1, '1', '1'),
 (165, 160, 250, null, '2019/01/30 00:00:00', '2019/12/31 23:59:59', null, null, 1, '1', '1'),
-(166, 161, 250, null, '2019/01/30 00:00:00', '2019/12/31 23:59:59', null, null, 1, '1', '1');
+(166, 161, 250, null, '2019/01/30 00:00:00', '2019/12/31 23:59:59', null, null, 1, '1', '1'),
+
+(167, 162, 150, null, '2019/01/30 00:00:00', '2019/12/31 23:59:59', null, null, 1, '1', '1'),
+(168, 163, 150, null, '2019/01/30 00:00:00', '2019/12/31 23:59:59', null, null, 1, '1', '1'),
+(169, 164, 150, null, '2019/01/30 00:00:00', '2019/12/31 23:59:59', null, null, 1, '1', '1');
 -- --------------------------------------------------------
 --
 -- Volcado de datos para la tabla `item_metodo_nivel` 
@@ -920,3 +932,13 @@ insert into db_facturacion.`item_parametro` (`ipar_id`, `uaca_id`, `mod_id`, `ip
 (2, 1, 2, 155, 159, '1', '1'),
 (3, 1, 3, 156, 160, '1', '1'),
 (4, 1, 4, 157, 161, '1', '1');
+
+-- --------------------------------------------------------
+--
+-- Volcado de datos para la tabla `otros_item_metodo_nivel` 
+-- --------------------------------------------------------
+insert into `otros_item_metodo_nivel` (`oimn_id`, `ite_id`, `ming_id`, `uaca_id`, `mod_id`, `oimn_usu_ingreso`, `oimn_estado`, `oimn_estado_logico`) values
+(1, 162, null, 1, 2, 1, '1', '1'),
+(2, 163, null, 1, 3, 1, '1', '1'),
+(3, 164, null, 1, 4, 1, '1', '1');
+

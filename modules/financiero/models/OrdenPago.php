@@ -2451,4 +2451,33 @@ class OrdenPago extends \app\modules\financiero\components\CActiveRecord {
         }
     }
 
+    
+    /**
+     * Function consultarPrecioXotroItem consulta de precio de otros items como saldos.
+     * @author  Grace Viteri <analistadesarrollo01@uteg.edu.ec>
+     * @param   
+     * @return  
+     */
+    public function consultarPrecioXotroItem($uaca_id, $mod_id, $ming_id) {
+        $con = \Yii::$app->db_facturacion;
+        $estado = 1;
+
+        $sql = "SELECT i.ite_id id, i.ite_nombre name
+                FROM " . $con->dbname . ".otros_item_metodo_nivel oi inner join " . $con->dbname . ".item i
+                on i.ite_id = oi.ite_id
+                where uaca_id = :uaca_id
+                        and mod_id = :mod_id
+                        and ifnull(ming_id,0) = :ming_id
+                        and oimn_estado = :estado
+                        and oimn_estado_logico = :estado";
+        $comando = $con->createCommand($sql);
+        $comando->bindParam(":estado", $estado, \PDO::PARAM_STR);
+        $comando->bindParam(":uaca_id", $uaca_id, \PDO::PARAM_INT);
+        $comando->bindParam(":mod_id", $mod_id, \PDO::PARAM_INT);
+        $comando->bindParam(":ming_id", $ming_id, \PDO::PARAM_INT);
+        
+        \app\models\Utilities::putMessageLogFile('sql:'.$sql);
+        $resultData = $comando->queryOne();
+        return $resultData;
+    }
 }
