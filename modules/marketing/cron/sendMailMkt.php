@@ -60,11 +60,11 @@ function getCampaignOnTime($webServer)
         "p.pro_hora_envio < '".$endTime."' " . 
         ";";
         //echo $sql;
-        \app\models\Utilities::putMessageLogFile('SQL:' . $sql);
-        \app\models\Utilities::putMessageLogFile('HOY:' . $now);
-        \app\models\Utilities::putMessageLogFile('DIA:' . $dia);
-        \app\models\Utilities::putMessageLogFile('FECHA DESDE:' . $iniTime);
-        \app\models\Utilities::putMessageLogFile('FECHA HASTA:' . $endTime);
+        putMessageLogFile('SQL:' . $sql);
+        putMessageLogFile('HOY:' . $now);
+        putMessageLogFile('DIA:' . $dia);
+        putMessageLogFile('FECHA DESDE:' . $iniTime);
+        putMessageLogFile('FECHA HASTA:' . $endTime);
         $cmd = $pdo->prepare($sql);
         //$cmd->execute([":now" => $now, ":dia" => $dia, ":iniDate" => $iniTime, ":endDate" => $endTime]);
         $cmd->execute();

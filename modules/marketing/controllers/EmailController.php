@@ -394,8 +394,7 @@ class EmailController extends \app\components\CController {
                 );
                 $lista = new Lista();
                 $resp_consulta = $lista->consultarListaXnombre($nombre_lista);
-                if (($resp_consulta["existe"] != 'S') or ( $resp_consulta["lis_id"] == $list_id)) {
-                    \app\models\Utilities::putMessageLogFile('antes de new mailchimp');
+                if (($resp_consulta["existe"] != 'S') or ( $resp_consulta["lis_id"] == $list_id)) {                    
                     //Grabar en mailchimp    
                     $webs_mailchimp = new WsMailChimp();
                     if ($opcion == 'N') { // Ingreso
@@ -411,7 +410,7 @@ class EmailController extends \app\components\CController {
                         \app\models\Utilities::putMessageLogFile('antes de editar mailchimp');
                         \app\models\Utilities::putMessageLogFile('codigo:' . $resp_consulta["lis_codigo"]);
                         \app\models\Utilities::putMessageLogFile('lista:' . $nombre_lista);
-                        \app\models\Utilities::putMessageLogFile('contacto:' . print_r($contacto));
+                        \app\models\Utilities::putMessageLogFile('contacto:' . $contacto);
                         \app\models\Utilities::putMessageLogFile('nombre contacto:' . $nombre_contacto);
                         \app\models\Utilities::putMessageLogFile('correo contacto:' . $correo_contacto);
                         \app\models\Utilities::putMessageLogFile('asunto:' . $asunto);
