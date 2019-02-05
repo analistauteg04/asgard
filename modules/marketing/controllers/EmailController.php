@@ -133,7 +133,7 @@ class EmailController extends \app\components\CController {
                 }
                 return Utilities::ajaxResponse('OK', 'alert', Yii::t("jslang", "Sucess"), false, $message);
             } else if (trim($data["accion"]) == 'lis_rel') {
-                $list_id = base64_decode($data["list_id"]);
+                $list_id = $data["list_id"];
                 $list_ids = array();
                 if (isset($data['list_ids'])) {
                     $list_ids = explode(",", $data['list_ids']);
@@ -164,7 +164,7 @@ class EmailController extends \app\components\CController {
                 $message = array(
                     "wtmessage" => Yii::t("formulario", $mensaje),
                     "title" => Yii::t('jslang', 'Success'),
-                    "rederict" => Yii::$app->response->redirect(['/marketing/email/asignar?lis_id=' . base64_encode($list_id)]),
+                    "rederict" => Yii::$app->response->redirect(['/marketing/email/asignar?lis_id=' . $list_id]),
                 );
                 return Utilities::ajaxResponse('OK', 'alert', Yii::t("jslang", "Sucess"), false, $message);
             }
