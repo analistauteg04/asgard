@@ -65,7 +65,7 @@ class EmailController extends \app\components\CController {
             } elseif ($data["estado"] == '2') {
                 $susbs_lista = $mod_sb->consultarSuscriptoresxLista($arrSearch, $lis_id, 0);
                 return $this->render('asignar_grid', [
-                            "model" => $susbs_listas,
+                            "model" => $susbs_lista,
                 ]);
             }
         }
@@ -150,7 +150,7 @@ class EmailController extends \app\components\CController {
                         }
                         $i = $i + 1;
                     }
-                }else{
+                } else {
                     $mensaje = $mensaje . " No hay listas para dicho suscrito <br/>";
                 }
 
@@ -663,12 +663,12 @@ class EmailController extends \app\components\CController {
         $modsuscriptor = new Suscriptor();
         $arrData = array();
         if ($arrSearch["estado"] == 0) {
-            $arrData = $modsuscriptor->consultarSuscriptoexcel($arrSearch, $lis_id);
+            $arrData = $modsuscriptor->consultarSuscriptoexcel($arrSearch, $lis_id, '',0);
         } else {
             if ($arrSearch["estado"] == 1) {
-                $arrData = $modsuscriptor->consultarSuscriptoexcel($arrSearch, $lis_id, 1);
+                $arrData = $modsuscriptor->consultarSuscriptoexcel($arrSearch, $lis_id, 1, 0);
             } elseif ($arrSearch["estado"] == 2) {
-                $arrData = $modsuscriptor->consultarSuscriptoexcel($arrSearch, $lis_id, 0);
+                $arrData = $modsuscriptor->consultarSuscriptoexcel($arrSearch, $lis_id, 0, 0);
             }
         }
 
@@ -694,14 +694,13 @@ class EmailController extends \app\components\CController {
             marketing::t("marketing", "Email"),
             marketing::t("marketing", "Estado"),
         );
-        \app\models\Utilities::putMessageLogFile('XXX: ' . $arrSearch["estado"] . ' YYYY ' . $lis_id);
         if ($arrSearch["estado"] == 0) {
-            $arr_body = $modsuscriptor->consultarSuscriptoexcel(array(), $lis_id);
+            $arr_body = $modsuscriptor->consultarSuscriptoexcel(array(), $lis_id, '',0);
         } else {
             if ($arrSearch["estado"] == 1) {
-                $arr_body = $modsuscriptor->consultarSuscriptoexcel($arrSearch, $lis_id, 1);
+                $arr_body = $modsuscriptor->consultarSuscriptoexcel($arrSearch, $lis_id, 1, 0);
             } elseif ($arrSearch["estado"] == 2) {
-                $arr_body = $modsuscriptor->consultarSuscriptoexcel($arrSearch, $lis_id, 0);
+                $arr_body = $modsuscriptor->consultarSuscriptoexcel($arrSearch, $lis_id, 0, 0);
             }
         }
 
@@ -714,6 +713,70 @@ class EmailController extends \app\components\CController {
         );
         $report->mpdf->Output('Reporte_' . date("Ymdhis") . ".pdf", ExportFile::OUTPUT_TO_DOWNLOAD);
         return;
+    }
+
+    public function actionSuscribirtodos() {
+        if (Yii::$app->request->isAjax) {
+            $data = Yii::$app->request->post();
+            $lis_id = base64_decode($data["lis_id"]);
+            //\app\models\Utilities::putMessageLogFile('xxYY...  ' . $lis_id);
+            $fecha_registro = date(Yii::$app->params["dateTimeByDefault"]);
+            $usuario = @Yii::$app->user->identity->usu_id;
+            $con = \Yii::$app->db_mailing;
+            $transaction = $con->beginTransaction();
+            $estado = '1';
+            $estado_logico = '1';
+            $arrSearch["estado"] = 2;
+            try {
+                $mod_sb = new Suscriptor();
+                $no_suscitos = $mod_sb->consultarSuscriptoexcel($arrSearch, $lis_id, 0, 1);
+                if (count($no_suscitos) > 0) {                    
+                    for ($i = 0; $i < count($no_suscitos); $i++) {
+                        $asuscribir .= 'INSERT INTO db_mailing.suscriptor (per_id, sus_estado, sus_estado_logico)';
+                        $asuscribir .= 'VALUES('. $no_suscitos[$i]["per_id"]. ', '. $estado. ', '. $estado_logico. '); ';                        
+                        $sus_id = $no_suscitos[$i]["per_id"]. ',';
+                        
+                    }
+                    $insertartodos = $mod_sb->insertarListaSuscritorTodos($asuscribir);
+                    \app\models\Utilities::putMessageLogFile('sus_uds..  ' . $sus_id);
+                     if ($insertartodos) {
+                         // consulto todos los id $no_suscitos[$i]["per_id"] de la tabla suscriptor
+                         // para crear nuevamente el script a insertar con los sus_id
+                         $exito = 1;
+                     }                    
+                    if ($exito) {
+                        $transaction->commit();
+                        $message = array(
+                            "wtmessage" => Yii::t("notificaciones", "La infomación ha sido grabada. "),
+                            "title" => Yii::t('jslang', 'Success'),
+                        );
+                        echo Utilities::ajaxResponse('OK', 'alert', Yii::t("jslang", "Sucess"), false, $message);
+                    } else {
+                        $transaction->rollback();
+                        $message = array(
+                            "wtmessage" => Yii::t("notificaciones", "Error al grabar." . $mensaje),
+                            "title" => Yii::t('jslang', 'Error'),
+                        );
+                        echo Utilities::ajaxResponse('NO_OK', 'Error', Yii::t("jslang", "Error"), false, $message);
+                    }
+                } else {
+                    \app\models\Utilities::putMessageLogFile('nooo data.  ' . $lis_id);
+                    $transaction->rollback();
+                    $message = array(
+                        "wtmessage" => Yii::t("notificaciones", "No hay elementos a suscribir en la lista."),
+                        "title" => Yii::t('jslang', 'Error'),
+                    );
+                    echo Utilities::ajaxResponse('NO_OK', 'Error', Yii::t("jslang", "Error"), false, $message);
+                }
+            } catch (Exception $ex) {
+                $transaction->rollback();
+                $message = array(
+                    "wtmessage" => $ex->getMessage(), Yii::t("notificaciones", "Error al grabar."),
+                    "title" => Yii::t('jslang', 'Error'),
+                );
+                return Utilities::ajaxResponse('NO_OK', 'alert', Yii::t("jslang", "Error"), true, $message);
+            }
+        }
     }
 
 }
