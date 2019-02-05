@@ -95,20 +95,34 @@ function suscribirTodos() {
     var messagePB = new Object();
     messagePB.wtmessage = "Va a suscribir todos los contactos, esta opcion, solo guarda en la base como suscrito, vinculando a esta lista.<br/> Pero aun no esta como suscrito en mailchimp.`";
     messagePB.title = "";
-    var list_id = $('#txth_ids').val();
+    //var list_id = $('#txth_ids').val();
     var objAccept = new Object();
     objAccept.id = "btnid2del";
     objAccept.class = "btn-primary clclass praclose";
     objAccept.value = "Aceptar";
     objAccept.callback = 'fnsuscribirLista';
-    var params = new Array(list_id);
+    var params = new Array();
     objAccept.paramCallback = params;
     messagePB.acciones = new Array();
     messagePB.acciones[0] = objAccept;
     showAlert("OK", "info", messagePB);
 }
-function fnsuscribirLista(lista_id) {
-    alert("suscribir contrato");
+function fnsuscribirLista() {
+     var lista = $('#txth_ids').val();
+    /*window.location.href = $('#txth_base').val() + "/marketing/email/suscribirtodos?lisid=" + lista;*/
+    var link = $('#txth_base').val() + "/marketing/email/suscribirtodos?lisid=" + lista;
+    var arrParams = new Object();
+    arrParams.lis_id = lista;
+    if (!validateForm()) {
+        requestHttpAjax(link, arrParams, function (response) {
+            showAlert(response.status, response.label, response.message);
+            if (!response.error) {
+                setTimeout(function () {
+                    window.location.href = $('#txth_base').val() + "/marketing/email/asignar?lis_id="+ arrParams.lis_id;
+                }, 5000);
+            }
+        }, true);
+    }
 }
 function programarEnvio() {
     var lista = $('#txth_ids').val();
