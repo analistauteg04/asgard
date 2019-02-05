@@ -744,7 +744,8 @@ class EmailController extends \app\components\CController {
                         $sus_id .= $no_suscitos[$i]["per_id"] . ',';
                     }
                     $insertartodos = $mod_sb->insertarListaTodos($asuscribir);
-                    \app\models\Utilities::putMessageLogFile('sus_uds..  ' . $sus_id);
+                    //\app\models\Utilities::putMessageLogFile('rert..  ' . substr($sus_id, 0, -1));
+
                     if ($insertartodos) {
                         $idinsertados = $mod_sb->consultarSuscritosbtn(substr($sus_id, 0, -1));
                         // para crear nuevamente el script a insertar con los sus_id
