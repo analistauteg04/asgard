@@ -7,7 +7,7 @@ $dbname = $dataDB["marketing"]["db_mailing"]["dbname"];
 $dbuser = $dataDB["marketing"]["db_mailing"]["username"];
 $dbpass = $dataDB["marketing"]["db_mailing"]["password"];
 $dbserver = "127.0.0.1";//$dataDB["marketing"]["db_mailing"]["dbserver"];
-$dbport = 8889;
+$dbport = 3306;
 $dsn = "mysql:host=$dbserver;dbname=$dbname;port=$dbport";
 spl_autoload_register('my_autoloader');
 use app\webservices\WsMailChimp as mailchimp;
@@ -40,8 +40,8 @@ function getCampaignOnTime($webServer)
     try {
         $now = date("Ymd");
         $dia = date("N");
-        $iniTime = date('H:i', strtotime("-3 minutes", strtotime(date("Y-m-d H:i:s"))));
-        $endTime = date('H:i', strtotime("+3 minutes", strtotime(date("Y-m-d H:i:s"))));
+        $iniTime = date('H:i', strtotime("-2 minutes", strtotime(date("Y-m-d H:i:s"))));
+        $endTime = date('H:i', strtotime("+2 minutes", strtotime(date("Y-m-d H:i:s"))));
         $pdo = new \PDO($dsn, $dbuser, $dbpass);
         $pdo->setAttribute(\PDO::ATTR_ERRMODE, \PDO::ERRMODE_EXCEPTION);
         $sql = "SELECT * , p.pla_id as temp_id " .
@@ -60,6 +60,11 @@ function getCampaignOnTime($webServer)
         "p.pro_hora_envio < '".$endTime."' " . 
         ";";
         //echo $sql;
+        \app\models\Utilities::putMessageLogFile('SQL:' . $sql);
+        \app\models\Utilities::putMessageLogFile('HOY:' . $now);
+        \app\models\Utilities::putMessageLogFile('DIA:' . $dia);
+        \app\models\Utilities::putMessageLogFile('FECHA DESDE:' . $iniTime);
+        \app\models\Utilities::putMessageLogFile('FECHA HASTA:' . $endTime);
         $cmd = $pdo->prepare($sql);
         //$cmd->execute([":now" => $now, ":dia" => $dia, ":iniDate" => $iniTime, ":endDate" => $endTime]);
         $cmd->execute();
@@ -83,6 +88,7 @@ function getCampaignOnTime($webServer)
                         echo "error crear campania: " . json_encode($sendCampaign);
                         putMessageLogFile("Error al enviar campaña ". $sendCampaign);
                     }
+                    \app\models\Utilities::putMessageLogFile('Se envia campaña');
                 }else{
                     echo "error crear campania: ". json_encode($obj_new);
                     putMessageLogFile("Error al crear campaña " . $obj_new);

@@ -5,13 +5,12 @@ use yii\helpers\Url;
 use app\modules\marketing\Module;
 use app\modules\admision\Module as admision;
 admision::registerTranslations();
-print_r($respuesta["codigo_estudio"]) . print_r("Emp:") . print_r($respuesta["emp_id"]);
 
 ?>
-
+<?= Html::hiddenInput('txth_list_id', base64_encode($list_id), ['id' => 'txth_list_id']); ?>
 <form class="form-horizontal" enctype="multipart/form-data" id="formnewlista">
     <div class="col-md-12 col-sm-12 col-xs-12 col-lg-12">
-        <h3><span id="lbl_solicitud"><?= Module::t("marketing", "New List") ?></span></h3>
+        <h3><span id="lbl_solicitud"><?= Module::t("marketing", "Edit List") ?></span></h3>
     </div>
     <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12"> 
         <div class="col-lg-6 col-md-6 col-sm-6 col-xs-6">
@@ -122,11 +121,16 @@ print_r($respuesta["codigo_estudio"]) . print_r("Emp:") . print_r($respuesta["em
             <div class="form-group">
                 <label for="txt_asunto" class="col-sm-4 control-label" id="lbl_asunto"><?= Module::t("marketing", "Subject") ?><span class="text-danger">*</span></label> 
                 <div class="col-sm-8 ">
-                    <textarea  class="form-control PBvalidation keyupmce" text="<?= $respuesta["lis_asunto"] ?>" id="txt_asunto" rows="3" ></textarea>                  
-                   <!-- <input type="text" class="form-control PBvalidation keyupmce" value="" id="txt_asunto" data-type="alfa" placeholder="<?= Module::t("marketing", "Subject") ?>"> -->
+                    <textarea  class="form-control PBvalidation keyupmce" id="txt_asunto" rows="3" ><?= $respuesta["lis_asunto"] ?></textarea>                                     
                 </div>
             </div>
         </div>      
     </div>         
-        
+    
+    <div class="col-md-12 col-xs-12 col-lg-12 col-sm-12">
+        <div class="col-sm-8 col-md-8 col-xs-8 col-lg-8 "></div>
+        <div class="col-sm-2 col-md-2 col-xs-4 col-lg-2">                
+            <a id="btn_actualizar" href="javascript:" class="btn btn-primary btn-block"> <?= Yii::t("formulario", "Send") ?></a>
+        </div>
+    </div>
 </form>

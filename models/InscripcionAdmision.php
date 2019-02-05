@@ -37,13 +37,14 @@ class InscripcionAdmision extends \yii\db\ActiveRecord {
         $trans = $con->beginTransaction();
         try {
             $twin_id = $this->insertarDataInscripcion($con, $data["DATA_1"]);
+            $data = $this->consultarDatosInscripcion($twin_id);
             $trans->commit();
             //RETORNA DATOS 
             $arroout["status"] = TRUE;
             $arroout["error"] = null;
             $arroout["message"] = null;
             $arroout["ids"] = $twin_id;
-            $arroout["data"] = null; //$rawData;
+            $arroout["data"] = $data; //$rawData;
             return $arroout;
         } catch (\Exception $e) {
             $trans->rollback();
@@ -70,7 +71,7 @@ class InscripcionAdmision extends \yii\db\ActiveRecord {
             $arroout["ids"] = $twin_id;
             $arroout["data"] = $data; //$rawData;
             return $arroout;
-        } catch (\Exception $e) {
+        } catch (Exception $e) {
             $trans->rollback();
             $arroout["status"] = FALSE;
             $arroout["error"] = $e->getCode();
@@ -96,7 +97,13 @@ class InscripcionAdmision extends \yii\db\ActiveRecord {
             (:twin_nombre,:twin_apellido,:twin_dni,:twin_numero,:twin_correo,:twin_pais,:twin_celular,:uaca_id, 
              :mod_id,:car_id,:twin_metodo_ingreso,:conuteg_id,:ruta_doc_titulo,:ruta_doc_dni,:ruta_doc_certvota,
              :ruta_doc_foto,:ruta_doc_certificado,:twin_mensaje1,:twin_mensaje2,1,CURRENT_TIMESTAMP(),1)";
-
+        
+        $met_ing=0;
+        if(empty($data[0]['ming_id'])){
+            $met_ing=0;
+        }else{
+            $met_ing=$data[0]['ming_id'];
+        }
         $command = $con->createCommand($sql);
         $command->bindParam(":twin_nombre", $data[0]['pges_pri_nombre'], \PDO::PARAM_STR);
         $command->bindParam(":twin_apellido", $data[0]['pges_pri_apellido'], \PDO::PARAM_STR);
@@ -108,7 +115,7 @@ class InscripcionAdmision extends \yii\db\ActiveRecord {
         $command->bindParam(":uaca_id", $data[0]['unidad_academica'], \PDO::PARAM_STR);
         $command->bindParam(":mod_id", $data[0]['modalidad'], \PDO::PARAM_STR);
         $command->bindParam(":car_id", $data[0]['carrera'], \PDO::PARAM_STR);
-        $command->bindParam(":twin_metodo_ingreso", $data[0]['ming_id'], \PDO::PARAM_STR);
+        $command->bindParam(":twin_metodo_ingreso", $met_ing, \PDO::PARAM_INT);
         $command->bindParam(":conuteg_id", $data[0]['conoce'], \PDO::PARAM_STR);
         $command->bindParam(":ruta_doc_titulo", $ruta_doc_titulo, \PDO::PARAM_STR);
         $command->bindParam(":ruta_doc_dni", $ruta_doc_dni, \PDO::PARAM_STR);
@@ -130,6 +137,12 @@ class InscripcionAdmision extends \yii\db\ActiveRecord {
                     ruta_doc_hojavida=:ruta_doc_hojavida,ruta_doc_certificado=:ruta_doc_certificado, 
                     twin_mensaje1=:twin_mensaje1,twin_mensaje2=:twin_mensaje2,twin_fecha_modificacion=CURRENT_TIMESTAMP() 
                  WHERE twin_id =:twin_id ";
+        $met_ing=0;
+        if(empty($data[0]['ming_id'])){
+            $met_ing=0;
+        }else{
+            $met_ing=$data[0]['ming_id'];
+        }
         $command = $con->createCommand($sql);
         $command->bindParam(":twin_id", $data[0]['twin_id'], \PDO::PARAM_STR);
         $command->bindParam(":twin_nombre", $data[0]['pges_pri_nombre'], \PDO::PARAM_STR);
@@ -142,7 +155,7 @@ class InscripcionAdmision extends \yii\db\ActiveRecord {
         $command->bindParam(":uaca_id", $data[0]['unidad_academica'], \PDO::PARAM_STR);
         $command->bindParam(":mod_id", $data[0]['modalidad'], \PDO::PARAM_STR);
         $command->bindParam(":car_id", $data[0]['carrera'], \PDO::PARAM_STR);
-        $command->bindParam(":twin_metodo_ingreso", $data[0]['ming_id'], \PDO::PARAM_STR);
+        $command->bindParam(":twin_metodo_ingreso", $met_ing, \PDO::PARAM_INT);
         $command->bindParam(":conuteg_id", $data[0]['conoce'], \PDO::PARAM_STR);
         $command->bindParam(":ruta_doc_titulo", basename($data[0]['ruta_doc_titulo']), \PDO::PARAM_STR);
         $command->bindParam(":ruta_doc_dni", basename($data[0]['ruta_doc_dni']), \PDO::PARAM_STR);
@@ -210,7 +223,7 @@ class InscripcionAdmision extends \yii\db\ActiveRecord {
                         conuteg_id,
                         ruta_doc_titulo,
                         ruta_doc_dni,
-                        96 as ddit_valor,-- ddit.ddit_valor,
+                        -- 96 as ddit_valor,-- ddit.ddit_valor,
                         ruta_doc_certvota,
                         ruta_doc_foto,
                         ruta_doc_certificado,                        
@@ -219,25 +232,23 @@ class InscripcionAdmision extends \yii\db\ActiveRecord {
                 FROM " . $con->dbname . ".temporal_wizard_inscripcion twi inner join db_academico.unidad_academica ua on ua.uaca_id = twi.uaca_id
                      inner join " . $con1->dbname . ".modalidad m on m.mod_id = twi.mod_id
                      inner join " . $con1->dbname . ".estudio_academico ea on ea.eaca_id = twi.car_id
-                     inner join " . $con->dbname . ".metodo_ingreso mi on mi.ming_id = twi.twin_metodo_ingreso
-                     inner join " . $con2->dbname . ".item_metodo_unidad imi on (imi.ming_id =  twi.twin_metodo_ingreso and imi.uaca_id = twi.uaca_id and imi.mod_id = twi.mod_id)
+                     left join " . $con->dbname . ".metodo_ingreso mi on mi.ming_id = twi.twin_metodo_ingreso
+                     left join " . $con2->dbname . ".item_metodo_unidad imi on (imi.ming_id =  twi.twin_metodo_ingreso and imi.uaca_id = twi.uaca_id and imi.mod_id = twi.mod_id)
                      left join " . $con2->dbname . ".item_precio ip on ip.ite_id = imi.ite_id
                      left join " . $con2->dbname . ".descuento_item as ditem on ditem.ite_id=imi.ite_id
                      left join " . $con2->dbname . ".detalle_descuento_item as ddit on ddit.dite_id=ditem.dite_id
                 WHERE twi.twin_id = :twin_id AND                     
-                     ip.ipre_estado_precio = :estado_precio AND
+                     -- ip.ipre_estado_precio = :estado_precio AND
                      ua.uaca_estado = :estado AND
                      ua.uaca_estado_logico = :estado AND
                      m.mod_estado = :estado AND
                      m.mod_estado_logico = :estado AND
                      ea.eaca_estado = :estado AND
-                     ea.eaca_estado_logico = :estado AND
-                     mi.ming_estado = :estado AND
-                     mi.ming_estado_logico = :estado AND
-                     imi.imni_estado = :estado AND
-                     imi.imni_estado_logico = :estado AND
-                     ip.ipre_estado = :estado AND
-                     ip.ipre_estado_logico = :estado
+                     ea.eaca_estado_logico = :estado
+                     -- imi.imni_estado = :estado AND
+                     -- imi.imni_estado_logico = :estado 
+                     -- AND ip.ipre_estado = :estado AND
+                     -- ip.ipre_estado_logico = :estado
                 ";
 
         $comando = $con->createCommand($sql);
@@ -354,6 +365,17 @@ class InscripcionAdmision extends \yii\db\ActiveRecord {
                                             $rsin_id = 1; //Solicitud pendiente     
                                             $solins_model = new SolicitudInscripcion();
                                             //$mensaje = 'intId: ' . $interesado_id . '/uaca: ' . $pgest['unidad_academica'] . '/modalidad: ' . $pgest['modalidad'] . '/ming: ' . $pgest['ming_id'] . '/eaca: ' . $eaca_id . '/mest: ' . $mest_id . '/empresa: ' . $emp_id . '/secuencia: ' . $num_secuencia . '/rsin_id: ' . $rsin_id . '/sins_fechasol: ' . $sins_fechasol . '/usuario_id: ' . $usuario_id;
+                                            $ming=null;
+                                            if($resp_datos['uaca_id']==1){
+                                                $ming=null;
+                                            }else{
+                                                if($resp_datos['twin_metodo_ingreso']==0){
+                                                    $ming=null;
+                                                }
+                                                else{
+                                                    $ming=$resp_datos['twin_metodo_ingreso'];
+                                                }
+                                            }
                                             $sins_id = $solins_model->insertarSolicitud($interesado_id, $resp_datos['uaca_id'], $resp_datos['mod_id'], $resp_datos['twin_metodo_ingreso'], $eaca_id, null, $emp_id, $num_secuencia, $rsin_id, $sins_fechasol, $usuario_id);
                                             //grabar los documentos
                                             if ($sins_id) {
@@ -434,12 +456,15 @@ class InscripcionAdmision extends \yii\db\ActiveRecord {
                                                 if ($beca == "1") {
                                                     $precio = 0;
                                                 } else {
+                                                   
                                                     $resp_precio = $solins_model->ObtenerPrecio($resp_datos['twin_metodo_ingreso'], $resp_datos['uaca_id'], $resp_datos['mod_id'], $eaca_id);
                                                     if ($resp_precio) {
+                                                        \app\models\Utilities::putMessageLogFile('obtener precio');    
                                                         if ($resp_datos['uaca_id'] == 2) {
                                                             $ite_id = 10;
                                                         } else {
                                                             $ite_id = $resp_precio['ite_id'];
+                                                            \app\models\Utilities::putMessageLogFile('item:'.$ite_id);                
                                                         }
                                                         $precio = $resp_precio['precio'];
                                                     } else {
@@ -447,13 +472,15 @@ class InscripcionAdmision extends \yii\db\ActiveRecord {
                                                     }
                                                 }
                                                 $mod_ordenpago = new OrdenPago();
+                                                $val_descuento = 0;
+                                                \app\models\Utilities::putMessageLogFile('precio:'.$precio);    
                                                 //Se verifica si seleccionó descuento.
                                                 //descuento para grado online y posgrado no tiene descuento, caso contrario es 96 dol
-                                                if ($resp_datos['uaca_id'] == 1) {
+                                                /*if ($resp_datos['uaca_id'] == 1) {
                                                     if (($resp_datos['mod_id'] == 2) or ( $resp_datos['mod_id'] == 3) or ( $resp_datos['mod_id'] == 4)) {
                                                         $val_descuento = 96;
                                                     }
-                                                }
+                                                }*/
                                                 //Generar la orden de pago con valor correspondiente. Buscar precio para orden de pago.                                                                     
                                                 if ($precio == 0) {
                                                     $estadopago = 'S';
@@ -461,12 +488,15 @@ class InscripcionAdmision extends \yii\db\ActiveRecord {
                                                     $estadopago = 'P';
                                                 }
                                                 $val_total = $precio - $val_descuento;
-                                                $resp_opago = $mod_ordenpago->insertarOrdenpago($sins_id, null, $val_total, 0, $val_total, $estadopago, $usuario_id);
+                                                \app\models\Utilities::putMessageLogFile('total:'.$val_total);    
+                                                $resp_opago = $mod_ordenpago->insertarOrdenpago($sins_id, null, $val_total, 0, $val_total, $estadopago, $usuario_id);                                                
                                                 if ($resp_opago) {
+                                                    \app\models\Utilities::putMessageLogFile('ingresa o/p');    
                                                     //insertar desglose del pago                                    
                                                     $fecha_ini = date(Yii::$app->params["dateByDefault"]);
                                                     $resp_dpago = $mod_ordenpago->insertarDesglosepago($resp_opago, $ite_id, $val_total, 0, $val_total, $fecha_ini, null, $estadopago, $usuario_id);
                                                     if ($resp_dpago) {
+                                                        \app\models\Utilities::putMessageLogFile('ingresa d/p');    
                                                         $exito = 1;
                                                     }
                                                 }

@@ -125,26 +125,31 @@ class Lista extends \yii\db\ActiveRecord {
         $sql = "
                     SELECT
                         lst.lis_id,lst.lis_nombre, lst.lis_codigo, ifnull(lst.eaca_id, lst.mest_id) as codigo_estudio,
+                        lst.eaca_id as eaca_id, lst.mest_id mest_id,
                         lst.emp_id, ecor_id, lis_pais, lis_provincia, lis_ciudad, 
                         lis_direccion1_empresa, lis_direccion2_empresa, lis_telefono_empresa,
-                        lis_codigo_postal,
+                        lis_codigo_postal, lis_asunto,
                         case when lst.eaca_id > 0 then 
                                      ea.eaca_nombre else me.mest_nombre end as programa,
                         sum(case when (lsu.lsus_estado = '1' and lsu.lsus_estado_logico = '1') then
-                                     1 else 0 end) as num_suscr
+                                     1 else 0 end) as num_suscr,
+                        sum(case when (sus.sus_estado_mailchimp = '1' and sus.sus_estado_logico = '1') then
+                                     1 else 0 end) as num_suscr_mailchimp
                     FROM 
                         " . $con->dbname . ".lista lst
                         left join " . $con->dbname . ".lista_suscriptor as lsu on lsu.lis_id=lst.lis_id
+                        left join " . $con->dbname . ".suscriptor as sus on sus.sus_id=lsu.sus_id
                         left join " . $con1->dbname . ".estudio_academico ea on ea.eaca_id = lst.eaca_id
                         left join " . $con1->dbname . ".modulo_estudio me on me.mest_id = lst.mest_id
                     WHERE
                         lst.lis_id= :lista and
                         lst.lis_estado = :estado and
                         lst.lis_estado_logico = :estado
-                    group by lst.lis_id, lst.lis_nombre, lst.lis_codigo, ifnull(lst.eaca_id, lst.mest_id),
+                    group by 
+                        lst.lis_id, lst.lis_nombre, lst.lis_codigo, ifnull(lst.eaca_id, lst.mest_id),
                         lst.emp_id, ecor_id, lis_pais, lis_provincia, lis_ciudad, 
                         lis_direccion1_empresa, lis_direccion2_empresa, lis_telefono_empresa,
-                        lis_codigo_postal";
+                        lis_codigo_postal, lis_asunto";
         $comando = $con->createCommand($sql);
         $comando->bindParam(":estado", $estado, \PDO::PARAM_STR);
         $comando->bindParam(":lista", $lista_id, \PDO::PARAM_INT);
@@ -745,7 +750,7 @@ class Lista extends \yii\db\ActiveRecord {
         $estado = 1;
         $sql = "
                     SELECT
-                        'S' existe
+                        'S' existe, lis_id, lis_codigo
                     FROM 
                         " . $con->dbname . ".lista lst                        
                     WHERE
@@ -757,5 +762,71 @@ class Lista extends \yii\db\ActiveRecord {
         $comando->bindParam(":lis_nombre", $nombre_lista, \PDO::PARAM_STR);
         $resultData = $comando->queryOne();
         return $resultData;
+    }
+    
+    /**
+     * Function modifica datos de lista
+     * @author  Grace Viteri <analistadesarrollo01@uteg.edu.ec>;     *          
+     * @param
+     * @return
+     */
+    public function modificarLista($lis_id, $eaca_id, $mest_id, $emp_id, $lis_nombre, $ecor_id, $lis_nombre_principal, $pai_id, $pro_id, $can_id, 
+                                   $lis_direccion1_empresa, $lis_direccion2_empresa, $lis_telefono_empresa, $lis_codigo_postal, $lis_asunto) {
+        $con = \Yii::$app->db_mailing;
+        $estado = 1;       
+        $fecha_modificacion = date(Yii::$app->params["dateTimeByDefault"]);
+        
+        if ($emp_id==1) {
+            $carrera_id = $eaca_id;
+            $programa_id = null;
+        } else { 
+            $programa_id = $mest_id;
+            $carrera_id = null;
+        }            
+        try {
+            $comando = $con->createCommand
+                    ("UPDATE " . $con->dbname . ".lista		       
+                      SET emp_id = :emp_id,                          
+                          lis_nombre = :lis_nombre,
+                          lis_asunto = :lis_asunto,
+                          eaca_id = :eaca_id,
+                          mest_id = :mest_id,
+                          ecor_id = :ecor_id,
+                          lis_nombre_principal = :lis_nombre_principal,
+                          lis_pais = :pai_id,
+                          lis_provincia = :pro_id,
+                          lis_ciudad = :can_id,
+                          lis_direccion1_empresa = :lis_direccion1_empresa,
+                          lis_direccion2_empresa = :lis_direccion2_empresa,
+                          lis_telefono_empresa = :lis_telefono_empresa,
+                          lis_codigo_postal = :lis_codigo_postal,
+                          lis_fecha_modificacion = :lis_fecha_modificacion
+                      WHERE lis_id = :lis_id AND                        
+                            lis_estado = :estado AND
+                            lis_estado_logico = :estado");                                 
+            
+            $comando->bindParam(":lis_id", $lis_id, \PDO::PARAM_INT); 
+            $comando->bindParam(":lis_fecha_modificacion", $fecha_modificacion, \PDO::PARAM_STR);
+            $comando->bindParam(":estado", $estado, \PDO::PARAM_STR);  
+            $comando->bindParam(":emp_id", $emp_id, \PDO::PARAM_INT);  
+            $comando->bindParam(":lis_nombre", $lis_nombre, \PDO::PARAM_STR);  
+            $comando->bindParam(":lis_asunto", $lis_asunto, \PDO::PARAM_STR);  
+            $comando->bindParam(":ecor_id", $ecor_id, \PDO::PARAM_INT);  
+            $comando->bindParam(":lis_nombre_principal", $lis_nombre_principal, \PDO::PARAM_STR);  
+            $comando->bindParam(":lis_direccion1_empresa", $lis_direccion1_empresa, \PDO::PARAM_STR);  
+            $comando->bindParam(":lis_direccion2_empresa", $lis_direccion2_empresa, \PDO::PARAM_STR);  
+            $comando->bindParam(":lis_telefono_empresa", $lis_telefono_empresa, \PDO::PARAM_STR);  
+            $comando->bindParam(":lis_codigo_postal", $lis_codigo_postal, \PDO::PARAM_STR);              
+            $comando->bindParam(":pai_id", $pai_id, \PDO::PARAM_STR);  
+            $comando->bindParam(":pro_id", $pro_id, \PDO::PARAM_STR);  
+            $comando->bindParam(":can_id", $can_id, \PDO::PARAM_STR);  
+            $comando->bindParam(":eaca_id", $carrera_id, \PDO::PARAM_INT);  
+            $comando->bindParam(":mest_id", $programa_id, \PDO::PARAM_INT);  
+            
+            $response = $comando->execute();            
+            return $response;
+        } catch (Exception $ex) {            
+            return FALSE;
+        }
     }
 }

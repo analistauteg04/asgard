@@ -91,12 +91,12 @@ if (!empty($personalData['pges_cedula'])) {
         </div> 
     </div>
     <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
-        <div class="col-lg-6 col-md-6 col-sm-6 col-xs-6">
+        <!--<div class="col-lg-6 col-md-6 col-sm-6 col-xs-6">
             <div class="form-group">
-                <label for="txt_tioportunidad" class="col-sm-3 col-md-3 col-xs-3 col-lg-3 control-label"><?= Yii::t("formulario", "Opportunity") ?></label> 
-                <span for="txt_tioportunidad" class="col-sm-8 col-md-8 col-xs-8 col-lg-8 control-label"><?= $oportuniData['tipo_oportunidad'] ?></span> 
+                <label for="txt_tioportunidad" class="col-sm-3 col-md-3 col-xs-3 col-lg-3 control-label"><? Yii::t("formulario", "Opportunity") ?></label> 
+                <span for="txt_tioportunidad" class="col-sm-8 col-md-8 col-xs-8 col-lg-8 control-label"><? $oportuniData['tipo_oportunidad'] ?></span> 
             </div>
-        </div>
+        </div>-->
         <div class="col-lg-6 col-md-6 col-sm-6 col-xs-6">
             <div class="form-group">
                 <label for="txt_estoportunidad" class="col-sm-3 col-md-3 col-xs-3 col-lg-3 control-label"><?= Yii::t("formulario", "Status") ?></label> 

@@ -245,7 +245,11 @@ class Oportunidad extends \app\modules\admision\components\CActiveRecord {
                     pges.pges_pasaporte as pasaporte,
                     eo.eopo_id as estado_oportunidad_id,
                     eo.eopo_nombre as estado_oportunidad,
-                    tov.tove_nombre as tipo_oportunidad,
+                    -- tov.tove_nombre as tipo_oportunidad,
+                    ifnull((SELECT topo.tove_nombre
+                    FROM db_crm.oportunidad as opo
+                    INNER JOIN db_crm.tipo_oportunidad_venta as topo on topo.tove_id=opo.tove_id
+                    WHERE opo_id = op.opo_id),'N/A') as tipo_oportunidad,
                     case emp.emp_id
                     when 1 then (select eaca.eaca_nombre from " . $con2->dbname . ".estudio_academico eaca where eaca.eaca_id = op.eaca_id)
                     when 2 then (select mes.mest_nombre from " . $con2->dbname . ".modulo_estudio mes where mes.mest_id = op.mest_id)
@@ -267,7 +271,7 @@ class Oportunidad extends \app\modules\admision\components\CActiveRecord {
                     inner join " . $con1->dbname . ".persona agent on agent.per_id = padm.per_id                    
                     inner join " . $con2->dbname . ".modalidad moda on moda.mod_id = op.mod_id
                     inner join " . $con2->dbname . ".unidad_academica uac on uac.uaca_id = op.uaca_id
-                    inner join " . $con->dbname . ".tipo_oportunidad_venta tov on tov.tove_id = op.tove_id
+                    -- inner join " . $con->dbname . ".tipo_oportunidad_venta tov on tov.tove_id = op.tove_id
                     
                 WHERE ";
         if (!empty($str_search)) {
@@ -283,8 +287,8 @@ class Oportunidad extends \app\modules\admision\components\CActiveRecord {
                         and padm.padm_estado_logico = 1
                         and agent.per_estado = 1
                         and agent.per_estado_logico = 1  
-                        and tov.tove_estado = 1
-                        and tov.tove_estado_logico = 1
+                        -- and tov.tove_estado = 1
+                        -- and tov.tove_estado_logico = 1
                         order by op.opo_id desc
                ";
 
@@ -888,7 +892,7 @@ class Oportunidad extends \app\modules\admision\components\CActiveRecord {
             $param_sql .= ", opo_hora_fin_contacto";
             $bdet_sql .= ", :opo_hora_fin_contacto";
         }
-        
+
         if (isset($opo_fecha_registro)) {
             $param_sql .= ", opo_fecha_registro";
             $bdet_sql .= ", :opo_fecha_registro";
@@ -939,12 +943,12 @@ class Oportunidad extends \app\modules\admision\components\CActiveRecord {
             if (!empty((isset($eopo_id)))) {
                 $comando->bindParam(':eopo_id', $eopo_id, \PDO::PARAM_INT);
             }
-             if (!empty((isset($opo_hora_ini_contacto)))) {
+            if (!empty((isset($opo_hora_ini_contacto)))) {
                 $comando->bindParam(':opo_hora_ini_contacto', $opo_hora_ini_contacto, \PDO::PARAM_STR);
             }
             if (!empty((isset($opo_hora_fin_contacto)))) {
                 $comando->bindParam(':opo_hora_fin_contacto', $opo_hora_fin_contacto, \PDO::PARAM_STR);
-            }           
+            }
             if (!empty((isset($opo_fecha_registro)))) {
                 $comando->bindParam(':opo_fecha_registro', $opo_fecha_registro, \PDO::PARAM_STR);
             }
@@ -965,9 +969,8 @@ class Oportunidad extends \app\modules\admision\components\CActiveRecord {
             return FALSE;
         }
     }
-    
-     
-    /** 
+
+    /**
      * Function consultarCodigoArea
      * @author  Byron Villacreses <developer@uteg.edu.ec>
      * @property integer car_id      
@@ -981,10 +984,10 @@ class Oportunidad extends \app\modules\admision\components\CActiveRecord {
         $comando = $con->createCommand($sql);
         $comando->bindParam(":uaca_id", $uaca_id, \PDO::PARAM_INT);
         //$comando->bindParam(":emp_id", $emp_id, \PDO::PARAM_INT);
-        $rawData=$comando->queryScalar();        
+        $rawData = $comando->queryScalar();
         if ($rawData === false)
             return 0; //Falso si no Existe
-        return $rawData;//Si Existe en la Tabla
+        return $rawData; //Si Existe en la Tabla
     }
 
     /**     * **
@@ -995,18 +998,21 @@ class Oportunidad extends \app\modules\admision\components\CActiveRecord {
      */
     public function insertarOportunidadLeads($con, $opo_codigo, $emp_id, $pges_id, $padm_id, $data) {
         //opo_id,oper_id,ins_id,
-        $mest_id=NULL;
-        $eaca_id=NULL;
-        if($emp_id=="1"){
-            $eaca_id=$data['pgest_carr_nombre'];
-        }elseif($emp_id=="2" ||$emp_id=="3"){
-            $mest_id=$data['pgest_carr_nombre'];
+        $mest_id = NULL;
+        $eaca_id = NULL;
+        $tove_id = NULL;
+        if ($emp_id == "1") {
+            $eaca_id = $data['pgest_carr_nombre'];
+        } elseif ($emp_id == "2" || $emp_id == "3") {
+            $mest_id = $data['pgest_carr_nombre'];
         } else {
             
         }
 
         $uaca_id = $data['pgest_unidad_academica'];
-        $tove_id = $this->consultarOportVentas($uaca_id);  ; //se puede obtener a partir d ela unidad academica
+        if ($uaca_id > 1) {
+            $tove_id = $this->consultarOportVentas($uaca_id); //se puede obtener a partir d ela unidad academica
+        }
         $mod_id = $data['pgest_modalidad'];
         $ccan_id = 3; //Redes sociales (Facebook) o ->$data['pgest_contacto'];       
         $eopo_id = 1; //estado oportunidad => En Curso
@@ -1015,7 +1021,6 @@ class Oportunidad extends \app\modules\admision\components\CActiveRecord {
         $opo_hora_fin_contacto = $hora_atiende[2]; //date('h:i',strtotime($hora_atiende[2]));        
         $opo_usuario = @Yii::$app->session->get("PB_iduser"); // 1 equivale al usuario administrador
         //$fecha_registro = date(Yii::$app->params["dateTimeByDefault"]);
-
         //$mest_id;
         $sql = "INSERT INTO " . $con->dbname . ".oportunidad
             (opo_codigo,emp_id,pges_id,eaca_id,uaca_id,mod_id,tove_id,ccan_id,mest_id,
@@ -1600,7 +1605,7 @@ class Oportunidad extends \app\modules\admision\components\CActiveRecord {
         if ($tipoProceso == "LEADS") {
             $path = Yii::$app->basePath . Yii::$app->params['documentFolder'] . "leads/" . $fname;
             //return $mod_pergestion->insertarDtosPersonaGestion($emp_id, $tipoProceso);
-            $carga_archivo = $mod_perTemp->uploadFile($emp_id,$path);
+            $carga_archivo = $mod_perTemp->uploadFile($emp_id, $path);
             if ($carga_archivo['status']) {
                 return $mod_pergestion->insertarDtosPersonaGestion($emp_id, $tipoProceso);
             } else {
@@ -1662,8 +1667,8 @@ class Oportunidad extends \app\modules\admision\components\CActiveRecord {
                         uaca.uaca_nombre as unidad_academica,
                         opo.mod_id,
                         moda.mod_nombre as modalidad,
-                        opo.tove_id,
-                        top.tove_nombre as tipo_oportunidad,
+                        -- opo.tove_id,
+                        -- top.tove_nombre as tipo_oportunidad,
                         opo.eopo_id,
                         eop.eopo_nombre as estado_oportunidad,
                         opo.oper_id as oportunidad_perdida,
@@ -1697,7 +1702,7 @@ class Oportunidad extends \app\modules\admision\components\CActiveRecord {
                          inner join " . $con1->dbname . ".persona per on per.per_id = pa.per_id	
                          inner join " . $con2->dbname . ".unidad_academica uaca on uaca.uaca_id = opo.uaca_id	
                          inner join " . $con2->dbname . ".modalidad moda on moda.mod_id = opo.mod_id	
-                         inner join " . $con->dbname . ".tipo_oportunidad_venta top on top.tove_id = opo.tove_id
+                         -- inner join " . $con->dbname . ".tipo_oportunidad_venta top on top.tove_id = opo.tove_id
                          inner join " . $con->dbname . ".estado_oportunidad eop on eop.eopo_id = opo.eopo_id                                                  
                 WHERE 	opo.opo_id = :opo_id
                         and opo.opo_estado = :estado
@@ -1706,8 +1711,8 @@ class Oportunidad extends \app\modules\admision\components\CActiveRecord {
                         and pa.padm_estado_logico = :estado
                         and per.per_estado = :estado
                         and per.per_estado_logico = :estado                        
-                        and top.tove_estado = :estado
-                        and top.tove_estado_logico = :estado
+                        -- and top.tove_estado = :estado
+                        -- and top.tove_estado_logico = :estado
                         and eop.eopo_estado = :estado
                         and eop.eopo_estado_logico = :estado";
 
@@ -1890,7 +1895,7 @@ class Oportunidad extends \app\modules\admision\components\CActiveRecord {
                                 INNER JOIN db_academico.unidad_academica C ON A.uaca_id=C.uaca_id
                 WHERE A.opo_estado_logico=1 GROUP BY A.uaca_id,A.eopo_id ORDER BY A.eopo_id; ";
         $comando = $con->createCommand($sql);
-        
+
         return $comando->queryAll();
     }
 
@@ -2019,7 +2024,7 @@ class Oportunidad extends \app\modules\admision\components\CActiveRecord {
             $agente = "%" . $arrFiltro["agente"] . "%";
             $estado_ate = $arrFiltro["estado"];
             $empresa = $arrFiltro["empresa"];
-            
+
             if ($arrFiltro['interesado'] != "") {
                 $comando->bindParam(":interesado", $search_cond, \PDO::PARAM_STR);
             }
@@ -2050,8 +2055,7 @@ class Oportunidad extends \app\modules\admision\components\CActiveRecord {
             return $dataProvider;
         }
     }
-    
-    
+
     /**
      * Function obtener carreras.
      * @author  Grace Viteri <analistadesarrollo01@uteg.edu.ec>;
@@ -2072,7 +2076,7 @@ class Oportunidad extends \app\modules\admision\components\CActiveRecord {
                         ORDER BY 2 asc";
 
         $comando = $con->createCommand($sql);
-        $comando->bindParam(":estado", $estado, \PDO::PARAM_STR);        
+        $comando->bindParam(":estado", $estado, \PDO::PARAM_STR);
         $resultData = $comando->queryAll();
         return $resultData;
     }

@@ -46,15 +46,20 @@
 return [
     "Address1" => "Dirección1",
     "Address2" => "Dirección2",
-    "Days Schedule" => "Días Programar",
     "Contact Email" => "Email Contacto",
+    "Days Schedule" => "Días Programar",    
+    "Edit List" => "Editar Lista",
     "List" => "Lista",
+    "List Subscriber Allocation" => "Lista Asignación de Suscritores",
     "Name Contact" => "Nombre Contacto",
     "New List" => "Lista Nueva",
+    "No Subscribers" => "No Suscritos",
+    "Malichimp" => "Malichimp",
     "Programtion" => "Programación",
     "Shipping Time" => "Hora Envío",
     "Subject" => "Asunto",
+    "Subscribers" => "Suscritos",
+    "Subscriber Allocation" => "Asignación de Suscriptores",
     "Subscriber number" => "Número suscriptores",
     "Template" => "Plantilla",
-    
 ];

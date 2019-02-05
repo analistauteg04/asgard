@@ -368,7 +368,7 @@ class SolicitudInscripcion extends \yii\db\ActiveRecord
                         sins.sins_fecha_solicitud as fecha_solicitud,
                         uaca.uaca_id,
                         uaca.uaca_nombre as nint_nombre,
-                        ifnull((select min.ming_nombre from " . $con->dbname . ".metodo_ingreso min where min.ming_id = sins.ming_id),'') as metodo_ingreso,
+                        ifnull((select min.ming_nombre from " . $con->dbname . ".metodo_ingreso min where min.ming_id = sins.ming_id),'N/A') as metodo_ingreso,
                         sins.eaca_id,
                         (case when (sins.emp_id = 1) then
                                 (case when (sins.uaca_id < 3) then
@@ -514,7 +514,12 @@ class SolicitudInscripcion extends \yii\db\ActiveRecord
                     per.per_pri_apellido as per_pri_apellido,
                     per.per_seg_apellido as per_seg_apellido,
                     nint.nint_nombre as nint_nombre,
-                    ming.ming_nombre as ming_nombre,
+                    -- ming.ming_nombre as ming_nombre,
+                    ifnull((select ming.ming_nombre 
+                                    from " . $con->dbname . ".metodo_ingreso as ming 
+                                    where sins.ming_id = ming.ming_id AND
+                                    ming.ming_estado = :estado AND
+                                    ming.ming_estado_logico = :estado),'NA') as ming_nombre,
                     concat(per.per_pri_nombre ,' ', per.per_seg_nombre) as per_nombres,
                     concat(per.per_pri_apellido ,' ', per.per_seg_apellido) as per_apellidos,
                     sins_fecha_solicitud as fecha_solicitud
@@ -525,7 +530,7 @@ class SolicitudInscripcion extends \yii\db\ActiveRecord
                     INNER JOIN " . $con->dbname . ".pre_interesado as pint on inte.pint_id = pint.pint_id
                     INNER JOIN " . $con2->dbname . ".persona as per on pint.per_id = per.per_id 
                     INNER JOIN " . $con->dbname . ".nivel_interes as nint on sins.nint_id = nint.nint_id 
-                    INNER JOIN " . $con->dbname . ".metodo_ingreso as ming on sins.ming_id = ming.ming_id 
+                    -- INNER JOIN " . $con->dbname . ".metodo_ingreso as ming on sins.ming_id = ming.ming_id 
                 WHERE 
                     sins.sins_estado_logico=:estado AND 
                     inte.int_estado_logico=:estado AND 
@@ -662,7 +667,7 @@ class SolicitudInscripcion extends \yii\db\ActiveRecord
                         (select uaca.uaca_nombre from " . $con3->dbname . ".unidad_academica uaca where uaca.uaca_id = sins.uaca_id and uaca.uaca_estado = :estado AND uaca.uaca_estado_logico = :estado) as nombre_nivel_interes,
                         (select m.mod_nombre from " . $con3->dbname . ".modalidad m where  m.mod_id = sins.mod_id and m.mod_estado = :estado AND m.mod_estado_logico = :estado) as nombre_modalidad
                 FROM " . $con->dbname . ".solicitud_inscripcion sins INNER JOIN " . $con2->dbname . ".item_metodo_unidad imni 
-                     on ((sins.ming_id = imni.ming_id and sins.uaca_id = imni.uaca_id and sins.mod_id = imni.mod_id) or (sins.uaca_id = imni.uaca_id and sins.mod_id = imni.mod_id and sins.mest_id = imni.mest_id))
+                     on ((ifnull(sins.ming_id,0) = ifnull(imni.ming_id,0) and sins.uaca_id = imni.uaca_id and sins.mod_id = imni.mod_id) or (sins.uaca_id = imni.uaca_id and sins.mod_id = imni.mod_id and sins.mest_id = imni.mest_id))
                      INNER JOIN " . $con2->dbname . ".item_precio ipre on imni.ite_id = ipre.ite_id	
                 WHERE ipre.ipre_estado_precio =:estado_precio AND
                        sins.sins_id = :sins_id AND
@@ -671,7 +676,8 @@ class SolicitudInscripcion extends \yii\db\ActiveRecord
                        imni.imni_estado =:estado AND
                        imni.imni_estado_logico = :estado AND
                        ipre.ipre_estado = :estado AND
-                       ipre.ipre_estado_logico = :estado";
+                       ipre.ipre_estado_logico = :estado
+                limit 1";
 
         $comando = $con->createCommand($sql);
         $comando->bindParam(":estado", $estado, \PDO::PARAM_STR);
@@ -697,7 +703,7 @@ class SolicitudInscripcion extends \yii\db\ActiveRecord
                     FROM " . $con->dbname . ".solicitud_inscripcion sins
                     WHERE sins.int_id = :int_id AND
                           sins.uaca_id = :uaca_id AND
-                          sins.ming_id = :ming_id AND
+                          ifnull(sins.ming_id,0) = :ming_id AND
                           sins.eaca_id = :eaca_id AND
                           sins.rsin_id <> 4 AND
                           sins.sins_estado = :estado AND
@@ -966,7 +972,12 @@ class SolicitudInscripcion extends \yii\db\ActiveRecord
                     per.per_pri_apellido as per_pri_apellido,
                     per.per_seg_apellido as per_seg_apellido,
                     uaca.uaca_nombre as nint_nombre,
-                    ming.ming_nombre as ming_nombre,
+                    -- ming.ming_nombre as ming_nombre,
+                    ifnull((select ming.ming_nombre 
+                                    from " . $con->dbname . ".metodo_ingreso as ming 
+                                    where sins.ming_id = ming.ming_id AND
+                                    ming.ming_estado = :estado AND
+                                    ming.ming_estado_logico = :estado),'NA') as ming_nombre,
                     eaca.eaca_nombre as car_nombre,
                     concat(per.per_pri_nombre ,' ', ifnull(per.per_seg_nombre,' ')) as per_nombres,
                     concat(per.per_pri_apellido ,' ', ifnull(per.per_seg_apellido,' ')) as per_apellidos,
@@ -988,7 +999,7 @@ class SolicitudInscripcion extends \yii\db\ActiveRecord
                     INNER JOIN " . $con->dbname . ".interesado as inte on sins.int_id = inte.int_id                    
                     INNER JOIN " . $con2->dbname . ".persona as per on inte.per_id = per.per_id 
                     INNER JOIN " . $con1->dbname . ".unidad_academica as uaca on sins.uaca_id = uaca.uaca_id 
-                    INNER JOIN " . $con->dbname . ".metodo_ingreso as ming on sins.ming_id = ming.ming_id
+                    -- INNER JOIN " . $con->dbname . ".metodo_ingreso as ming on sins.ming_id = ming.ming_id
                     INNER JOIN " . $con->dbname . ".res_sol_inscripcion as rsol on rsol.rsin_id = sins.rsin_id                    
                     INNER JOIN " . $con->dbname . ".interesado_ejecutivo as intej on intej.int_id = sins.int_id 
                     INNER JOIN " . $con1->dbname . ".estudio_academico as eaca on eaca.eaca_id = sins.eaca_id 
@@ -1065,45 +1076,50 @@ class SolicitudInscripcion extends \yii\db\ActiveRecord
         $con1 = \Yii::$app->db_academico;
         $estado = 1;
         $estado_precio = 'A';
-        if (!empty($ming_id)) {
+        if ($nint_id<3) {
             $sql = "SELECT  imni.imni_id, 
                             ipre.ipre_precio+(ipre.ipre_precio*ifnull(ipre.ipre_porcentaje_iva,0)) as precio,	   
                             ming.ming_nombre as nombre_metodo_ingreso,
                             ua.uaca_nombre as nombre_nivel_interes,
                             imni.ite_id    
-                    FROM " . $con2->dbname . ".item_metodo_unidad imni INNER JOIN " . $con2->dbname . ".item_precio ipre on imni.ite_id = ipre.ite_id
-                         INNER JOIN " . $con->dbname . ".metodo_ingreso ming on ming.ming_id = imni.ming_id
-                         INNER JOIN " . $con1->dbname . ".unidad_academica ua on ua.uaca_id = imni.uaca_id                                             
-                    WHERE imni.ming_id = :ming_id AND 
+                    FROM " . $con2->dbname . ".item_metodo_unidad imni LEFT JOIN " . $con2->dbname . ".item_precio ipre on imni.ite_id = ipre.ite_id
+                         LEFT JOIN " . $con->dbname . ".metodo_ingreso ming on ming.ming_id = imni.ming_id
+                         LEFT JOIN " . $con1->dbname . ".unidad_academica ua on ua.uaca_id = imni.uaca_id                                             
+                    WHERE ifnull(imni.ming_id,0) = 0 AND 
                           imni.uaca_id = :nint_id AND
                           imni.mod_id = :mod_id AND                         
                           ipre.ipre_estado_precio = :estado_precio AND
                           now() between ipre.ipre_fecha_inicio and ipre.ipre_fecha_fin AND
                           imni.imni_estado = :estado AND
                           imni.imni_estado_logico = :estado AND
-                          ipre.ipre_estado = :estado AND
-                          ipre.ipre_estado_logico = :estado AND 
-                          ming.ming_estado = :estado AND
-                          ming.ming_estado_logico = :estado AND
+                          -- ipre.ipre_estado = :estado AND
+                          -- ipre.ipre_estado_logico = :estado AND 
+                          -- ming.ming_estado = :estado AND
+                          -- ming.ming_estado_logico = :estado AND
+                          imni.ite_id  in (158,159,160,162) and
                           ua.uaca_estado = :estado AND
                           ua.uaca_estado_logico = :estado";
+            
+                \app\models\Utilities::putMessageLogFile('sql:'.$sql);  
         } else {
-            $sql = "SELECT  imni.imni_id, 
+            $sql = "
+                    SELECT  imni.imni_id, 
                             ipre.ipre_precio+(ipre.ipre_precio*ifnull(ipre.ipre_porcentaje_iva,0)) as precio,	   
-                            null as nombre_metodo_ingreso,
+                            ming.ming_nombre as nombre_metodo_ingreso,
                             ua.uaca_nombre as nombre_nivel_interes,
-                            imni.ite_id                            
-                    FROM " . $con2->dbname . ".item_metodo_unidad imni INNER JOIN " . $con2->dbname . ".item_precio ipre on imni.ite_id = ipre.ite_id                         
-                         INNER JOIN " . $con1->dbname . ".unidad_academica ua on ua.uaca_id = imni.uaca_id                         
-                    WHERE imni.uaca_id = :nint_id AND
+                            imni.ite_id    
+                    FROM db_facturacion.item_metodo_unidad imni LEFT JOIN db_facturacion.item_precio ipre on imni.ite_id = ipre.ite_id
+                         LEFT JOIN db_captacion.metodo_ingreso ming on ming.ming_id = imni.ming_id
+                         LEFT JOIN db_academico.unidad_academica ua on ua.uaca_id = imni.uaca_id                                             
+                    WHERE 
+                          imni.uaca_id = :nint_id AND
                           imni.mod_id = :mod_id AND    
                           imni.mest_id = :car_id AND
                           ipre.ipre_estado_precio = :estado_precio AND
                           now() between ipre.ipre_fecha_inicio and ipre.ipre_fecha_fin AND
                           imni.imni_estado = :estado AND
                           imni.imni_estado_logico = :estado AND
-                          ipre.ipre_estado = :estado AND
-                          ipre.ipre_estado_logico = :estado AND                          
+                          imni.ite_id  in (158,159,160,162) and
                           ua.uaca_estado = :estado AND
                           ua.uaca_estado_logico = :estado";
         }        
@@ -1818,7 +1834,7 @@ class SolicitudInscripcion extends \yii\db\ActiveRecord
         $con = \Yii::$app->db_facturacion;
         $estado = 1;
         $sql = "SELECT hipr_precio precio 
-                FROM db_facturacion.historial_item_precio  
+                FROM " . $con->dbname . ".historial_item_precio  
                 WHERE ite_id = :ite_id                    
                     and (:fecha between hipr_fecha_inicio and hipr_fecha_fin)
                     and hipr_estado = :estado
@@ -1828,6 +1844,35 @@ class SolicitudInscripcion extends \yii\db\ActiveRecord
         $comando->bindParam(":estado", $estado, \PDO::PARAM_STR);
         $comando->bindParam(":ite_id", $ite_id, \PDO::PARAM_INT);     
         $comando->bindParam(":fecha", $fecha, \PDO::PARAM_STR);     
+        $resultData = $comando->queryOne();
+        return $resultData;
+    }
+    
+    /**
+     * Function ValidarPrecioXitem
+     * @author  Grace Viteri <analistadesarrollo01@uteg.edu.ec>
+     * @param   
+     * @return  $resultData (Precio del item)
+     */
+    public function ValidarPrecioXitem($ite_id) {
+        $con = \Yii::$app->db_facturacion;
+        $estado = 1;
+        $sql = "SELECT ip.ipre_precio precio_ins, ip1.ipre_precio precio_mat
+                FROM " . $con->dbname . ".item_precio ip inner join " . $con->dbname . ".item_parametro im on ip.ite_id = im.ipar_ite_inscripcion
+                     inner join " . $con->dbname . ".item_precio ip1 on im.ipar_ite_matriculacion = ip1.ite_id
+                WHERE ip.ite_id = :ite_id
+                        and ip.ipre_estado_precio = 'A'
+                        and (now() between ip.ipre_fecha_inicio and ip.ipre_fecha_fin)   
+                    and ip1.ipre_estado_precio = 'A'
+                        and (now() between ip1.ipre_fecha_inicio and ip1.ipre_fecha_fin)  
+                        and ip.ipre_estado = :estado
+                        and ip.ipre_estado_logico = :estado
+                    and ip1.ipre_estado = :estado
+                        and ip1.ipre_estado_logico = :estado";
+
+        $comando = $con->createCommand($sql);
+        $comando->bindParam(":estado", $estado, \PDO::PARAM_STR);
+        $comando->bindParam(":ite_id", $ite_id, \PDO::PARAM_INT);     
         $resultData = $comando->queryOne();
         return $resultData;
     }

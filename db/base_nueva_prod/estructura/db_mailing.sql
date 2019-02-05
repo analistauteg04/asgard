@@ -29,9 +29,8 @@ create table if not exists `lista` (
  `lis_estado` varchar(1) not null,
  `lis_fecha_creacion` timestamp not null default current_timestamp,
  `lis_fecha_modificacion` timestamp null default null,
- `lis_estado_logico` varchar(1) not null,
- constraint unique (lis_nombre)
-);
+ `lis_estado_logico` varchar(1) not null
+ );
 
 -- --------------------------------------------------------
 -- Estructura de tabla para la tabla `suscriptor` 
@@ -41,6 +40,7 @@ create table if not exists `suscriptor` (
  `per_id` bigint(20) null,
  `pges_id` bigint(20) null,
  `sus_estado` varchar(1) not null, 
+ `sus_estado_mailchimp` varchar(1) null, 
  `sus_fecha_creacion` timestamp not null default current_timestamp,
  `sus_fecha_modificacion` timestamp null default null,
  `sus_estado_logico` varchar(1) not null

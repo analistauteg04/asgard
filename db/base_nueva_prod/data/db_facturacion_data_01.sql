@@ -29,14 +29,14 @@ insert into `sub_categoria` (`scat_id`, `cat_id`, `scat_nombre`, `scat_descripci
 --
 insert into `item` (`ite_id`, `scat_id`,  `ite_codigo`, `ite_nombre`, `ite_descripcion`, `ite_usu_ingreso`, `ite_estado`, `ite_estado_logico`) values 
 -- Uteg -- 
-(1, 1, '0001', 'Curso de admisión y nivelación Online', 'Curso de admisión y nivelación Online', 1, '1', '1'),
-(2, 1, '0002', 'Examen de admisión Online', 'Examen de admisión Online', 1, '1', '1'),
-(3, 2, '0003', 'Curso de admisión y nivelación Presencial', 'Curso de admisión y nivelación Presencial', 1, '1', '1'),
-(4, 2, '0004', 'Examen de admisión Presencial', 'Examen de admisión Presencial', 1, '1', '1'),
-(5, 3, '0005', 'Curso de admisión y nivelación Semipresencial', 'Curso de admisión y nivelación Semipresencial', 1, '1', '1'),
-(6, 3, '0006', 'Examen de admisión Semipresencial', 'Examen de admisión Semipresencial', 1, '1', '1'),
-(7, 4, '0007', 'Curso de admisión y nivelación a Distancia', 'Curso de admisión y nivelación a Distancia', 1, '1', '1'),
-(8, 4, '0008', 'Examen de admisión a Distancia', 'Examen de admisión  a Distancia', 1, '1', '1'),
+(1, 1, '0001', 'Curso de admisión y nivelación Online', 'Curso de admisión y nivelación Online', 1, '0', '1'),
+(2, 1, '0002', 'Examen de admisión Online', 'Examen de admisión Online', 1, '0', '1'),
+(3, 2, '0003', 'Curso de admisión y nivelación Presencial', 'Curso de admisión y nivelación Presencial', 1, '0', '1'),
+(4, 2, '0004', 'Examen de admisión Presencial', 'Examen de admisión Presencial', 1, '0', '1'),
+(5, 3, '0005', 'Curso de admisión y nivelación Semipresencial', 'Curso de admisión y nivelación Semipresencial', 1, '0', '1'),
+(6, 3, '0006', 'Examen de admisión Semipresencial', 'Examen de admisión Semipresencial', 1, '0', '1'),
+(7, 4, '0007', 'Curso de admisión y nivelación a Distancia', 'Curso de admisión y nivelación a Distancia', 1, '0', '1'),
+(8, 4, '0008', 'Examen de admisión a Distancia', 'Examen de admisión  a Distancia', 1, '0', '1'),
 (9, 5, '0009', 'Pago total Matrícula+Derecho Posgrado', 'Pago total Matrícula+Derecho Posgrado', 1, '1', '1'),
 (10, 5, '0010', 'Inscripción Posgrado', 'Inscripción Posgrado', 1, '1', '1'),
 -- Smart --
@@ -191,8 +191,20 @@ insert into `item` (`ite_id`, `scat_id`,  `ite_codigo`, `ite_nombre`, `ite_descr
 (151, 7, '0151', 'Curso Uwork', 'Diseño de políticas de personal en la gestión estratégica del talento humano basado en competencias', 1, '1', '1'),
 (152, 7, '0152', 'Curso Uwork', 'Controles y políticas en la organización, claves para el éxito empresarial', 1, '1', '1'),
 
-(153, 5, '0092', 'Matrícula Posgrado', 'Matrícula Posgrado', 1, '1', '1'),
-(154, 5, '0093', 'Derechos Posgrado', 'Derechos Posgrado', 1, '1', '1');
+(153, 5, '0153', 'Matrícula Posgrado', 'Matrícula Posgrado', 1, '1', '1'),
+(154, 5, '0154', 'Derechos Posgrado', 'Derechos Posgrado', 1, '1', '1'),
+
+(155, 2, '0155', 'Inscripción Presencial', 'Inscripción Presencial', 1, '1', '1'),
+(156, 3, '0156', 'Inscripción Semipresencial', 'Inscripción Semipresencial', 1, '1', '1'),
+(157, 4, '0157', 'Inscripción Distancia', 'Inscripción Distancia', 1, '1', '1'),
+(158, 1, '0158', 'Gestión de Entornos Virtuales + Matrícula Online', 'Gestión de Entornos Virtuales + Matrícula Online', 1, '1', '1'),
+(159, 2, '0159', 'Matrícula Presencial', 'Matrícula Presencial', 1, '1', '1'),
+(160, 3, '0160', 'Matrícula Semipresencial', 'Matrícula Semipresencial', 1, '1', '1'),
+(161, 4, '0161', 'Matrícula Distancia', 'Matrícula Distancia', 1, '1', '1'),
+
+(162, 2, '0162', 'Saldo Matrícula Presencial', 'Saldo Matrícula Presencial', 1, '1', '1'),
+(163, 3, '0163', 'Saldo Matrícula Semipresencial', 'Saldo Matrícula Semipresencial', 1, '1', '1'),
+(164, 4, '0164', 'Saldo Matrícula Distancia', 'Saldo Matrícula Distancia', 1, '1', '1');
 
 -- --------------------------------------------------------
 --
@@ -362,7 +374,19 @@ insert into `item_precio` (`ipre_id`, `ite_id`, `ipre_precio`, `ipre_porcentaje_
 
 (152, 4, 390, null, 'A', null, null, '2018/10/01 00:00:00', '2019/12/31 23:59:59', 1, '1', '1'),
 (153, 6, 390, null, 'A', null, null, '2018/10/01 00:00:00', '2019/12/31 23:59:59', 1, '1', '1'),
-(154, 8, 390, null, 'A', null, null, '2018/10/01 00:00:00', '2019/12/31 23:59:59', 1, '1', '1');
+(154, 8, 390, null, 'A', null, null, '2018/10/01 00:00:00', '2019/12/31 23:59:59', 1, '1', '1'),
+
+(155, 155, 100, null, 'A', null, null, '2019/01/30 00:00:00', '2019/12/31 23:59:59', 1, '1', '1'),
+(156, 156, 100, null, 'A', null, null, '2019/01/30 00:00:00', '2019/12/31 23:59:59', 1, '1', '1'),
+(157, 157, 100, null, 'A', null, null, '2019/01/30 00:00:00', '2019/12/31 23:59:59', 1, '1', '1'),
+(158, 158, 115, null, 'A', null, null, '2019/01/30 00:00:00', '2019/12/31 23:59:59', 1, '1', '1'),
+(159, 159, 250, null, 'A', null, null, '2019/01/30 00:00:00', '2019/12/31 23:59:59', 1, '1', '1'),
+(160, 160, 250, null, 'A', null, null, '2019/01/30 00:00:00', '2019/12/31 23:59:59', 1, '1', '1'),
+(161, 161, 250, null, 'A', null, null, '2019/01/30 00:00:00', '2019/12/31 23:59:59', 1, '1', '1'),
+
+(162, 162, 150, null, 'A', null, null, '2019/01/30 00:00:00', '2019/12/31 23:59:59', 1, '1', '1'),
+(163, 163, 150, null, 'A', null, null, '2019/01/30 00:00:00', '2019/12/31 23:59:59', 1, '1', '1'),
+(164, 164, 150, null, 'A', null, null, '2019/01/30 00:00:00', '2019/12/31 23:59:59', 1, '1', '1');
 
 -- --------------------------------------------------------
 --
@@ -537,7 +561,19 @@ insert into `historial_item_precio` (`hipr_id`, `ite_id`, `hipr_precio`, `hipr_p
 (156, 2, 50, null, '2018/10/06 00:00:00', '2019/12/31 23:59:59', null, null, 1, '1', '1'),
 (157, 12, 100, null, '2018/12/11 00:00:00', '2019/12/31 23:59:59', null, null, 1, '1', '1'),
 (158, 13, 100, null, '2018/12/11 00:00:00', '2019/12/31 23:59:59', null, null, 1, '1', '1'),
-(159, 22, 100, null, '2018/12/11 00:00:00', '2019/12/31 23:59:59', null, null, 1, '1', '1');
+(159, 22, 100, null, '2018/12/11 00:00:00', '2019/12/31 23:59:59', null, null, 1, '1', '1'),
+-- 
+(160, 155, 100, null, '2019/01/30 00:00:00', '2019/12/31 23:59:59', null, null, 1, '1', '1'),
+(161, 156, 100, null, '2019/01/30 00:00:00', '2019/12/31 23:59:59', null, null, 1, '1', '1'),
+(162, 157, 100, null, '2019/01/30 00:00:00', '2019/12/31 23:59:59', null, null, 1, '1', '1'),
+(163, 158, 115, null, '2019/01/30 00:00:00', '2019/12/31 23:59:59', null, null, 1, '1', '1'),
+(164, 159, 250, null, '2019/01/30 00:00:00', '2019/12/31 23:59:59', null, null, 1, '1', '1'),
+(165, 160, 250, null, '2019/01/30 00:00:00', '2019/12/31 23:59:59', null, null, 1, '1', '1'),
+(166, 161, 250, null, '2019/01/30 00:00:00', '2019/12/31 23:59:59', null, null, 1, '1', '1'),
+
+(167, 162, 150, null, '2019/01/30 00:00:00', '2019/12/31 23:59:59', null, null, 1, '1', '1'),
+(168, 163, 150, null, '2019/01/30 00:00:00', '2019/12/31 23:59:59', null, null, 1, '1', '1'),
+(169, 164, 150, null, '2019/01/30 00:00:00', '2019/12/31 23:59:59', null, null, 1, '1', '1');
 -- --------------------------------------------------------
 --
 -- Volcado de datos para la tabla `item_metodo_nivel` 
@@ -713,7 +749,15 @@ insert into `item_metodo_unidad` (`imni_id`, `ite_id`, `ming_id`, `uaca_id`, `mo
 (155, 4, 2, 1, 2, null, 1, '1', '1'),
 (156, 6, 2, 1, 3, null,  1, '1', '1'),
 (157, 8, 2, 1, 4, null,  1, '1', '1'),
-(158, 10, 4, 2, 2, null,  1, '1', '1');
+(158, 10, 4, 2, 2, null,  1, '1', '1'),
+-- 
+(159, 155, null, 1, 2, null, 1, '1', '1'),
+(160, 156, null, 1, 3, null, 1, '1', '1'),
+(161, 157, null, 1, 4, null, 1, '1', '1'),
+(162, 158, null, 1, 1, null, 1, '1', '1'),
+(163, 159, null, 1, 2, null, 1, '1', '1'),
+(164, 160, null, 1, 3, null, 1, '1', '1'),
+(165, 161, null, 1, 4, null, 1, '1', '1');
 
 -- --------------------------------------------------------
 --
@@ -878,3 +922,23 @@ insert into `secuencias` (`emp_id`, `estab_id`, `pemis_id`, `secu_tipo_doc`, `se
 (1, 1, 1, 'SOL', '000000215', 'SOLICITUDES UTEG', '1', '1'),
 (2, 1, 1, 'SOL', '000000000', 'SOLICITUDES SMART', '1', '1'),
 (3, 1, 1, 'SOL', '000000000', 'SOLICITUDES ULINK', '1', '1');
+
+-- --------------------------------------------------------
+--
+-- Volcado de datos para la tabla `item_parametro` 
+-- --------------------------------------------------------
+insert into db_facturacion.`item_parametro` (`ipar_id`, `uaca_id`, `mod_id`, `ipar_ite_inscripcion`, `ipar_ite_matriculacion`, `ipar_estado`,  `ipar_estado_logico`) VALUES
+(1, 1, 1, null, 158, '1', '1'),
+(2, 1, 2, 155, 159, '1', '1'),
+(3, 1, 3, 156, 160, '1', '1'),
+(4, 1, 4, 157, 161, '1', '1');
+
+-- --------------------------------------------------------
+--
+-- Volcado de datos para la tabla `otros_item_metodo_nivel` 
+-- --------------------------------------------------------
+insert into `otros_item_metodo_nivel` (`oimn_id`, `ite_id`, `ming_id`, `uaca_id`, `mod_id`, `oimn_usu_ingreso`, `oimn_estado`, `oimn_estado_logico`) values
+(1, 162, null, 1, 2, 1, '1', '1'),
+(2, 163, null, 1, 3, 1, '1', '1'),
+(3, 164, null, 1, 4, 1, '1', '1');
+
