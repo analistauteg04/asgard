@@ -395,12 +395,53 @@ class Suscriptor extends \yii\db\ActiveRecord {
      * @param
      * @return
      */
-    public function insertarListaSuscritorTodos($asuscribir) {
+    public function insertarListaTodos($asuscribir) {
         $con = \Yii::$app->db_mailing;
         $trans = $con->getTransaction();
-        
+
         try {
             $sql = $asuscribir;
+            $command = $con->createCommand($sql);
+            $command->execute();
+            return $con->getLastInsertID();
+        } catch (Exception $ex) {
+            if ($trans !== null) {
+                $trans->rollback();
+            }
+            return 0;
+        }
+    }
+
+    /**
+     * Function consultarSuscriptoresxLista
+     * @author  Giovanni Vergara <analistadesarrollo02@uteg.edu.ec>    
+     * @property integer $userid
+     * @return  
+     */
+    public function consultarSuscritosbtn($sus_id) {
+        $con = \Yii::$app->db_mailing;
+        $sql = "
+               SELECT sus_id 
+               FROM db_mailing.suscriptor
+               WHERE per_id in ($sus_id)
+               ";
+        $comando = $con->createCommand($sql);        
+        $resultData = $comando->queryAll();
+        return $resultData;
+    }
+
+    /**
+     * Function suscribe todos segunlista. 
+     * @author Giovanni Vergara <analistadesarrollo02@uteg.edu.ec>;
+     * @param
+     * @return
+     */
+    public function insertarListaSuscritorTodos($asuscribirli) {
+        $con = \Yii::$app->db_mailing;
+        $trans = $con->getTransaction();
+
+        try {
+            $sql = $asuscribirli;
             $command = $con->createCommand($sql);
             $command->execute();
             return $con->getLastInsertID();
