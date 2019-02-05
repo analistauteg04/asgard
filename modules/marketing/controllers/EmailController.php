@@ -664,7 +664,7 @@ class EmailController extends \app\components\CController {
         $modsuscriptor = new Suscriptor();
         $arrData = array();
         if ($arrSearch["estado"] == 0) {
-            $arrData = $modsuscriptor->consultarSuscriptoexcel($arrSearch, $lis_id, '',0);
+            $arrData = $modsuscriptor->consultarSuscriptoexcel($arrSearch, $lis_id, '', 0);
         } else {
             if ($arrSearch["estado"] == 1) {
                 $arrData = $modsuscriptor->consultarSuscriptoexcel($arrSearch, $lis_id, 1, 0);
@@ -696,7 +696,7 @@ class EmailController extends \app\components\CController {
             marketing::t("marketing", "Estado"),
         );
         if ($arrSearch["estado"] == 0) {
-            $arr_body = $modsuscriptor->consultarSuscriptoexcel(array(), $lis_id, '',0);
+            $arr_body = $modsuscriptor->consultarSuscriptoexcel(array(), $lis_id, '', 0);
         } else {
             if ($arrSearch["estado"] == 1) {
                 $arr_body = $modsuscriptor->consultarSuscriptoexcel($arrSearch, $lis_id, 1, 0);
@@ -721,7 +721,7 @@ class EmailController extends \app\components\CController {
             $data = Yii::$app->request->post();
             $lis_id = base64_decode($data["lis_id"]);
             //\app\models\Utilities::putMessageLogFile('xxYY...  ' . $lis_id);
-            $fecha_registro = date(Yii::$app->params["dateTimeByDefault"]);
+            $fecha_registro = "'". date(Yii::$app->params["dateTimeByDefault"])."'";
             $usuario = @Yii::$app->user->identity->usu_id;
             $con = \Yii::$app->db_mailing;
             $transaction = $con->beginTransaction();
@@ -731,20 +731,29 @@ class EmailController extends \app\components\CController {
             try {
                 $mod_sb = new Suscriptor();
                 $no_suscitos = $mod_sb->consultarSuscriptoexcel($arrSearch, $lis_id, 0, 1);
-                if (count($no_suscitos) > 0) {                    
+                if (count($no_suscitos) > 0) {
                     for ($i = 0; $i < count($no_suscitos); $i++) {
                         $asuscribir .= 'INSERT INTO db_mailing.suscriptor (per_id, sus_estado, sus_estado_logico)';
-                        $asuscribir .= 'VALUES('. $no_suscitos[$i]["per_id"]. ', '. $estado. ', '. $estado_logico. '); ';                        
-                        $sus_id = $no_suscitos[$i]["per_id"]. ',';
-                        
+                        $asuscribir .= 'VALUES(' . $no_suscitos[$i]["per_id"] . ', ' . $estado . ', ' . $estado_logico . '); ';
+                        $sus_id .= $no_suscitos[$i]["per_id"] . ',';
                     }
-                    $insertartodos = $mod_sb->insertarListaSuscritorTodos($asuscribir);
+                    $insertartodos = $mod_sb->insertarListaTodos($asuscribir);
                     \app\models\Utilities::putMessageLogFile('sus_uds..  ' . $sus_id);
-                     if ($insertartodos) {
-                         // consulto todos los id $no_suscitos[$i]["per_id"] de la tabla suscriptor
-                         // para crear nuevamente el script a insertar con los sus_id
-                         $exito = 1;
-                     }                    
+                    if ($insertartodos) {
+                    $idinsertados = $mod_sb->consultarSuscritosbtn(substr($sus_id,0, -1));
+                    // para crear nuevamente el script a insertar con los sus_id
+                    if (count($idinsertados) > 0) {
+                        for ($i = 0; $i < count($idinsertados); $i++) {
+                            $asuscribirli .= 'INSERT INTO db_mailing.lista_suscriptor (lis_id, sus_id, lsus_estado, lsus_fecha_creacion, lsus_estado_logico)';
+                            $asuscribirli .= 'VALUES(' . $lis_id . ', '. $idinsertados[$i]["sus_id"] . ', ' . $estado . ', ' . $fecha_registro. ', '. $estado_logico . '); ';
+                        }
+                    }
+                    $insertadalista = $mod_sb->insertarListaSuscritorTodos($asuscribirli);
+                    \app\models\Utilities::putMessageLogFile('ccc..  ' . $asuscribirli);
+                    if ($insertadalista) {
+                        $exito = 1;
+                    }
+                    }
                     if ($exito) {
                         $transaction->commit();
                         $message = array(
