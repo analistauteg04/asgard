@@ -281,11 +281,11 @@
                                     <div>                                    
                                         <!--<div class="posright" id="codigo_barra"><img src="<?php echo Yii::$app->controller->pdf_cod_barra; ?>" alt="<?php echo Yii::$app->controller->pdf_cla_acceso; ?>" /></div>-->
                                         <div class="posright" id="codigo_barra">
-                                            <?= \barcode\barcode\GeneratedCodebar::widget([
+                                            <?php echo (Yii::$app->controller->pdf_cla_acceso) ? \barcode\barcode\GeneratedCodebar::widget([
                                                 "message" => Yii::$app->controller->pdf_cla_acceso,
                                                 "base64" => true,
                                                 "font_size" => 35
-                                            ]); ?>
+                                            ]) : ""; ?>
                                         </div>
                                     </div>
                                 </div>
