@@ -137,16 +137,14 @@ function suscribirContacto(psus_id, per_tipo, list_id) {
     arrParams.list_id = list_id;
     arrParams.accion = 'sc';
     if (!validateForm()) {
-        showLoadingPopup();
         requestHttpAjax(link, arrParams, function (response) {
-            if (!response.error) {
-                preguntaSuscribirOtrasListas(response.message);
-            }
+           alert("ha llegado aca");
+           preguntaSuscribirOtrasListas(response.message);
         }, true);
-        setTimeout(hideLoadingPopup, 2000);
     }
 }
 function preguntaSuscribirOtrasListas(message) {
+    //alert("ha entrado a las funciones");
     var messagePB = new Object();
     var mens_tot = message.wtmessage;
     mens_tot = mens_tot + "<br/> Las personas que se han suscrito a estas listas, tambien les ha interesado las siguientes listas:<br/>";
@@ -163,33 +161,32 @@ function preguntaSuscribirOtrasListas(message) {
     }
     messagePB.wtmessage = mens_tot;
     messagePB.title = message.title;
-    if (listas.length > 0) {
-        var objAccept = new Object();
-        objAccept.id = "btnid2del";
-        objAccept.class = "btn-primary clclass praclose";
-        objAccept.value = "Aceptar";
-        objAccept.callback = 'suscribirOtrasListas';
-        var params = new Array(listas, message.sus_id);
-        objAccept.paramCallback = params;
-        messagePB.acciones = new Array();
-        messagePB.acciones[0] = objAccept;
-        showAlert("OK", "success", messagePB);
-    } else {
-        showAlert("OK", "success", messagePB);
-    }
-
+    var objAccept = new Object();
+    objAccept.id = "btnid2del";
+    objAccept.class = "btn-primary clclass praclose";
+    objAccept.value = "Aceptar";
+    objAccept.callback = 'suscribirOtrasListas';
+    var params = new Array(listas, message.sus_id);
+    objAccept.paramCallback = params;
+    messagePB.acciones = new Array();
+    messagePB.acciones[0] = objAccept;
+    showAlert("OK", "success", messagePB);
+     
 }
 function suscribirOtrasListas(lista_rel, sus_id) {
-    var link = $('#txth_base').val() + "/marketing/email/asignar";
-    var arrParams = new Object();
-    arrParams.sus_id = sus_id;
-    arrParams.list_ids = JSON.stringify(lista_rel);
-    arrParams.accion = 'lis_rel';
-    if (!validateForm()) {
-        requestHttpAjax(link, arrParams, function (response) {
-            showAlert(response.status, response.label, response.message);
-        }, true);
-    }
+        console.log(lista_rel);
+        console.log(sus_id);
+//    var link = $('#txth_base').val() + "/marketing/email/asignar";
+//    var arrParams = new Object();
+//    arrParams.sus_id = sus_id;
+//    arrParams.list_ids = JSON.stringify(lista_rel);
+//    arrParams.accion = 'lis_rel';
+//    if (!validateForm()) {
+//        requestHttpAjax(link, arrParams, function (response) {
+//            showAlert(response.status, response.label, response.message);
+//        }, true);
+//    }
+    
 }
 function RemoverSuscritor(per_id, list_id) {
     var messagePB = new Object();
