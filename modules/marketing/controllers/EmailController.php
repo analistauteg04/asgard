@@ -54,6 +54,7 @@ class EmailController extends \app\components\CController {
         $error = 0;
         $mensaje = "";
         $estado_cambio = 1;
+        \app\models\Utilities::putMessageLogFile("Llego a la accion asignar");
         $data = Yii::$app->request->get();
         if (isset($data["PBgetFilter"])) {
             $arrSearch["estado"] = $data['estado'];
@@ -73,7 +74,7 @@ class EmailController extends \app\components\CController {
             $con = \Yii::$app->db_mailing;
             $data = Yii::$app->request->post();
             $lista_model = $mod_lista->consultarListaXID($data["list_id"]);
-            if ($data["accion"] = 'sc') {
+            if ($data["accion"] == 'sc') {
                 $ps_id = $data["psus_id"];
                 $per_tipo = $data["per_tipo"];
                 $list_id = $data["list_id"];
@@ -116,10 +117,7 @@ class EmailController extends \app\components\CController {
                 }
                 //Aqui se va a consultar los estudios referenciados
                 $mod_eaca_acon = new EstudioAcademicoAreaConocimiento();
-                \app\models\Utilities::putMessageLogFile('valor eaca_id' . $lista_model['eaca_id']);
                 $est_rel = $mod_eaca_acon->consultarEstudiosRelacionadoXEstudioId($lista_model['eaca_id']);
-                \app\models\Utilities::putMessageLogFile("impresion de las carreras relacinadas");
-                \app\models\Utilities::putMessageLogFile($est_rel);
                 if ($error == 0) {
                     $message = array(
                         "wtmessage" => Yii::t("formulario", $mensaje),
@@ -134,8 +132,14 @@ class EmailController extends \app\components\CController {
                     );
                 }
                 return Utilities::ajaxResponse('OK', 'alert', Yii::t("jslang", "Sucess"), false, $message);
-            } else if ($data["accion"] = 'lis_rel') {
-                $list_ids = json_decode($data['list_ids']);
+            } else if (trim($data["accion"]) == 'lis_rel') {
+                $list_id = base64_decode($data["list_id"]);
+                $list_ids = array();
+                if(isset($data['list_ids'])){
+                    $list_ids = json_decode($data['list_ids']);
+                }
+                \app\models\Utilities::putMessageLogFile("listas relacoinadas:");;
+                \app\models\Utilities::putMessageLogFile($list_ids);
                 $sus_id = $data['sus_id'];
                 $i = 0;
                 if (count($list_ids) > 0) {
