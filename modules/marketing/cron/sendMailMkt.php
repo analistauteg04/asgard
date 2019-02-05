@@ -41,15 +41,15 @@ function getCampaignOnTime($webServer)
     try {
         $now = date("Ymd");
         $dia = date("N");
-        //$iniTime = date('H:i', strtotime("-2 minutes", strtotime(date("Y-m-d H:i:s"))));
-        $iniTime = date('H:i', date("Y-m-d H:i:s"));
+        $iniTime = date('H:i', strtotime("-2 minutes", strtotime(date("Y-m-d H:i:s"))));
+        //$iniTime = date('H:i', date("Y-m-d H:i:s"));
         $endTime = date('H:i', strtotime("+2 minutes", strtotime(date("Y-m-d H:i:s"))));
         $pdo = new \PDO($dsn, $dbuser, $dbpass);
         $pdo->setAttribute(\PDO::ATTR_ERRMODE, \PDO::ERRMODE_EXCEPTION);
-        $sql = "SELECT l.lis_nombre_principal, l.lis_asunto, p.pla_id as temp_id, ec.ecor_correo " .
-        "FROM programacion AS p " .
-        "INNER JOIN dia_programacion AS dp ON p.pro_id = dp.pro_id " .
-        "INNER JOIN lista AS l ON l.lis_id = p.lis_id " .
+        $sql = "SELECT l.lis_nombre_principal, l.lis_asunto, l.lis_codigo, l.lis_nombre, p.pla_id as temp_id, ec.ecor_correo " .
+        "FROM db_mailing.programacion AS p " .
+        "INNER JOIN db_mailing.dia_programacion AS dp ON p.pro_id = dp.pro_id " .
+        "INNER JOIN db_mailing.lista AS l ON l.lis_id = p.lis_id " .
         "INNER JOIN db_asgard.empresa_correo AS ec ON ec.ecor_id = l.ecor_id " .
         "WHERE " .
         "p.pro_estado=1 AND " .
@@ -76,7 +76,7 @@ function getCampaignOnTime($webServer)
                     //"subject_line" => $rows[$i][""],
                     //"title" => $rows[$i][""],
                     "subject_line" => $rows[$i]["lis_asunto"],//"Subject de Envio",
-                    "title" => "Titulo de Envio",
+                    "title" => $rows[$i]["lis_nombre_principal"] . " Marketing", //$rows[$i]["lis_nombre"],//"Titulo de Envio",
                     "from_name" => $rows[$i]["lis_nombre_principal"],
                     "reply_to" => $rows[$i]["ecor_correo"],
                     "template_id" => (int) $rows[$i]["temp_id"],
