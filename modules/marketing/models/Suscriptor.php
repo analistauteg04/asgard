@@ -294,7 +294,7 @@ class Suscriptor extends \yii\db\ActiveRecord {
      * @property integer $userid
      * @return  
      */
-    public function consultarSuscriptoexcel($arrFiltro = array(), $list_id, $subscrito = 0) {
+    public function consultarSuscriptoexcel($arrFiltro = array(), $list_id, $subscrito = 0, $mpid) {
         $con = \Yii::$app->db_mailing;
         $con1 = \Yii::$app->db;
         $con2 = \Yii::$app->db_academico;
@@ -314,8 +314,12 @@ class Suscriptor extends \yii\db\ActiveRecord {
                 $str_search = " AND (ifnull(sus.sus_id,0) = 0 or sus.sus_estado ='0') ";
             }
         }
+        if ($mpid == 1) {
+            $mostraper_id = 'per.per_id,';
+        }
         $sql = "
-               SELECT                    
+               SELECT  
+                    $mostraper_id
                     concat(per.per_pri_nombre,' ',per.per_pri_apellido) as contacto, 
                     if(isnull(mest.mest_nombre),eaca.eaca_nombre,mest.mest_nombre) carrera,
                     per.per_correo,
@@ -383,6 +387,29 @@ class Suscriptor extends \yii\db\ActiveRecord {
         $comando->bindParam(":list_id", $list_id, \PDO::PARAM_INT);
         $resultData = $comando->queryOne();
         return $resultData;
+    }
+
+    /**
+     * Function suscribe todos segunlista. 
+     * @author Giovanni Vergara <analistadesarrollo02@uteg.edu.ec>;
+     * @param
+     * @return
+     */
+    public function insertarListaSuscritorTodos($asuscribir) {
+        $con = \Yii::$app->db_mailing;
+        $trans = $con->getTransaction();
+        
+        try {
+            $sql = $asuscribir;
+            $command = $con->createCommand($sql);
+            $command->execute();
+            return $con->getLastInsertID();
+        } catch (Exception $ex) {
+            if ($trans !== null) {
+                $trans->rollback();
+            }
+            return 0;
+        }
     }
 
 }
