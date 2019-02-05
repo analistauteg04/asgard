@@ -178,11 +178,18 @@ function preguntaSuscribirOtrasListas(message) {
     objAccept.id = "btnid2del";
     objAccept.class = "btn-primary clclass praclose";
     objAccept.value = "Aceptar";
-    objAccept.callback = 'suscribirOtrasListas';
+    objAccept.callback = 'suscribirOtrasListas';    
+    var slistas='';
     if (listas.length > 0) {
-        var slistas=JSON.stringify(listas);
-    }else{
-        var slistas='';
+        var ids='';
+        for (i = 0; i < listas.length; i++) {
+            if(i<(listas.length-1)){
+                ids = ids + listas[i]['lis_id']+ ',';
+            }else{
+                ids = ids + listas[i]['lis_id'];
+            }
+        }
+        slistas=ids;
     }    
     var params = new Array(slistas, message.sus_id);
     objAccept.paramCallback = params;
