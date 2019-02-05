@@ -99,8 +99,6 @@ function getCampaignOnTime($webServer)
         echo 'Falló la conexión: ' . $e->getMessage();
         putMessageLogFile('Error: ' . $e->getMessage());
         exit;
-    }
-    
+    }    
 }
-
 ?>
