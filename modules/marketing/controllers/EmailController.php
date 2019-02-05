@@ -54,6 +54,7 @@ class EmailController extends \app\components\CController {
         $error = 0;
         $mensaje = "";
         $estado_cambio = 1;
+        \app\models\Utilities::putMessageLogFile("Llego a la accion asignar");
         $data = Yii::$app->request->get();
         if (isset($data["PBgetFilter"])) {
             $arrSearch["estado"] = $data['estado'];
@@ -73,7 +74,7 @@ class EmailController extends \app\components\CController {
             $con = \Yii::$app->db_mailing;
             $data = Yii::$app->request->post();
             $lista_model = $mod_lista->consultarListaXID($data["list_id"]);
-            if ($data["accion"] = 'sc') {
+            if ($data["accion"] == 'sc') {
                 $ps_id = $data["psus_id"];
                 $per_tipo = $data["per_tipo"];
                 $list_id = $data["list_id"];
@@ -116,10 +117,7 @@ class EmailController extends \app\components\CController {
                 }
                 //Aqui se va a consultar los estudios referenciados
                 $mod_eaca_acon = new EstudioAcademicoAreaConocimiento();
-                \app\models\Utilities::putMessageLogFile('valor eaca_id' . $lista_model['eaca_id']);
                 $est_rel = $mod_eaca_acon->consultarEstudiosRelacionadoXEstudioId($lista_model['eaca_id']);
-                \app\models\Utilities::putMessageLogFile("impresion de las carreras relacinadas");
-                \app\models\Utilities::putMessageLogFile($est_rel);
                 if ($error == 0) {
                     $message = array(
                         "wtmessage" => Yii::t("formulario", $mensaje),
@@ -134,19 +132,28 @@ class EmailController extends \app\components\CController {
                     );
                 }
                 return Utilities::ajaxResponse('OK', 'alert', Yii::t("jslang", "Sucess"), false, $message);
-            } else if ($data["accion"] = 'lis_rel') {
-                $list_ids = json_decode($data['list_ids']);
+            } else if (trim($data["accion"]) == 'lis_rel') {
+                $list_id = base64_decode($data["list_id"]);
+                $list_ids = array();
+                if (isset($data['list_ids'])) {
+                    $list_ids = explode(",", $data['list_ids']);
+                }
+                \app\models\Utilities::putMessageLogFile("listas relacoinadas:");
+                ;
+                \app\models\Utilities::putMessageLogFile($list_ids);
                 $sus_id = $data['sus_id'];
                 $i = 0;
                 if (count($list_ids) > 0) {
                     while ($i < count($list_ids)) {
-                        $key = ['lis_id', 'sus_id', 'lsus_estado', 'lsus_fecha_creacion', 'lsus_estado_logico'];
-                        $parametro = [$list_ids[$i]['lis_id'], $sus_id, 1, $fecha_crea, 1];
-                        $lsu_id = $mod_sb->insertarListaSuscritor($con, $parametro, $key, 'lista_suscriptor');
-                        if ($lsu_id > 0) {
-                            $mensaje = $mensaje . " El suscritor fue guardado en la lista " . $list_ids[$i]['lis_nombre'] . "<br/>";
-                        } else {
-                            $mensaje = $mensaje . " El suscritor no fue guardado en la lista " . $list_ids[$i]['lis_nombre'] . "<br/>";
+                        if (!empty($list_ids[$i])) {
+                            $key = ['lis_id', 'sus_id', 'lsus_estado', 'lsus_fecha_creacion', 'lsus_estado_logico'];
+                            $parametro = [$list_ids[$i], $sus_id, 1, $fecha_crea, 1];
+                            $lsu_id = $mod_sb->insertarListaSuscritor($con, $parametro, $key, 'lista_suscriptor');
+                            if ($lsu_id > 0) {
+                                $mensaje = $mensaje . " El suscritor fue guardado en la lista " . $list_ids[$i]['lis_nombre'] . "<br/>";
+                            } else {
+                                $mensaje = $mensaje . " El suscritor no fue guardado en la lista " . $list_ids[$i]['lis_nombre'] . "<br/>";
+                            }
                         }
                         $i = $i + 1;
                     }
@@ -741,14 +748,18 @@ class EmailController extends \app\components\CController {
 
                     if ($insertartodos) {
                         $idinsertados = $mod_sb->consultarSuscritosbtn(substr($sus_id, 0, -1));
-                        for ($i = 0; $i < count($idinsertados); $i++) {
-                            $asuscribirli .= 'INSERT INTO db_mailing.lista_suscriptor (lis_id, sus_id, lsus_estado, lsus_fecha_creacion, lsus_estado_logico)';
-                            $asuscribirli .= 'VALUES(' . $lis_id . ', ' . $idinsertados[$i]["sus_id"] . ', ' . $estado . ', ' . $fecha_registro . ', ' . $estado_logico . '); ';
+                        // para crear nuevamente el script a insertar con los sus_id
+                        if (count($idinsertados) > 0) {
+                            for ($i = 0; $i < count($idinsertados); $i++) {
+                                $asuscribirli .= 'INSERT INTO db_mailing.lista_suscriptor (lis_id, sus_id, lsus_estado, lsus_fecha_creacion, lsus_estado_logico)';
+                                $asuscribirli .= 'VALUES(' . $lis_id . ', ' . $idinsertados[$i]["sus_id"] . ', ' . $estado . ', ' . $fecha_registro . ', ' . $estado_logico . '); ';
+                            }
                         }
-
                         $insertadalista = $mod_sb->insertarListaSuscritorTodos($asuscribirli);
-                        //\app\models\Utilities::putMessageLogFile('ccc..  ' . $asuscribirli);
-                        $exito = 1;
+                        \app\models\Utilities::putMessageLogFile('ccc..  ' . $asuscribirli);
+                        if ($insertadalista) {
+                            $exito = 1;
+                        }
                     }
                     if ($exito) {
                         $transaction->commit();

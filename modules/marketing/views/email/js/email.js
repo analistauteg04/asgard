@@ -152,7 +152,6 @@ function suscribirContacto(psus_id, per_tipo, list_id) {
     arrParams.accion = 'sc';
     if (!validateForm()) {
         requestHttpAjax(link, arrParams, function (response) {
-           alert("ha llegado aca");
            preguntaSuscribirOtrasListas(response.message);
         }, true);
     }
@@ -179,28 +178,39 @@ function preguntaSuscribirOtrasListas(message) {
     objAccept.id = "btnid2del";
     objAccept.class = "btn-primary clclass praclose";
     objAccept.value = "Aceptar";
-    objAccept.callback = 'suscribirOtrasListas';
-    var params = new Array(listas, message.sus_id);
+    objAccept.callback = 'suscribirOtrasListas';    
+    var slistas='';
+    if (listas.length > 0) {
+        var ids='';
+        for (i = 0; i < listas.length; i++) {
+            if(i<(listas.length-1)){
+                ids = ids + listas[i]['lis_id']+ ',';
+            }else{
+                ids = ids + listas[i]['lis_id'];
+            }
+        }
+        slistas=ids;
+    }    
+    var params = new Array(slistas, message.sus_id);
     objAccept.paramCallback = params;
     messagePB.acciones = new Array();
     messagePB.acciones[0] = objAccept;
-    showAlert("OK", "success", messagePB);
-     
+    showAlert("OK", "success", messagePB);         
 }
 function suscribirOtrasListas(lista_rel, sus_id) {
-        console.log(lista_rel);
-        console.log(sus_id);
-//    var link = $('#txth_base').val() + "/marketing/email/asignar";
-//    var arrParams = new Object();
-//    arrParams.sus_id = sus_id;
-//    arrParams.list_ids = JSON.stringify(lista_rel);
-//    arrParams.accion = 'lis_rel';
-//    if (!validateForm()) {
-//        requestHttpAjax(link, arrParams, function (response) {
-//            showAlert(response.status, response.label, response.message);
-//        }, true);
-//    }
-    
+    var link = $('#txth_base').val() + "/marketing/email/asignar";
+    var arrParams = new Object();
+    arrParams.list_id = $('#txth_ids').val();;    
+    arrParams.sus_id = sus_id;    
+    if(lista_rel.length>0){
+        arrParams.list_ids = lista_rel;    
+    }
+    arrParams.accion = 'lis_rel';
+    if (!validateForm()) {
+        requestHttpAjax(link, arrParams, function (response) {
+            showAlert(response.status, response.label, response.message);
+        }, true);
+    }
 }
 function RemoverSuscritor(per_id, list_id) {
     var messagePB = new Object();
