@@ -394,7 +394,7 @@ class EmailController extends \app\components\CController {
                 );
                 $lista = new Lista();
                 $resp_consulta = $lista->consultarListaXnombre($nombre_lista);
-                if (($resp_consulta["existe"] != 'S') or ( $resp_consulta["lis_id"] == $list_id)) {                    
+                if (($resp_consulta["existe"] != 'S') or ( $resp_consulta["lis_id"] == $list_id)) {
                     //Grabar en mailchimp    
                     $webs_mailchimp = new WsMailChimp();
                     if ($opcion == 'N') { // Ingreso
@@ -720,7 +720,7 @@ class EmailController extends \app\components\CController {
             $data = Yii::$app->request->post();
             $lis_id = base64_decode($data["lis_id"]);
             //\app\models\Utilities::putMessageLogFile('xxYY...  ' . $lis_id);
-            $fecha_registro = "'". date(Yii::$app->params["dateTimeByDefault"])."'";
+            $fecha_registro = "'" . date(Yii::$app->params["dateTimeByDefault"]) . "'";
             $usuario = @Yii::$app->user->identity->usu_id;
             $con = \Yii::$app->db_mailing;
             $transaction = $con->beginTransaction();
@@ -737,21 +737,18 @@ class EmailController extends \app\components\CController {
                         $sus_id .= $no_suscitos[$i]["per_id"] . ',';
                     }
                     $insertartodos = $mod_sb->insertarListaTodos($asuscribir);
-                    \app\models\Utilities::putMessageLogFile('sus_uds..  ' . $sus_id);
+                    //\app\models\Utilities::putMessageLogFile('rert..  ' . substr($sus_id, 0, -1));
+
                     if ($insertartodos) {
-                    $idinsertados = $mod_sb->consultarSuscritosbtn(substr($sus_id,0, -1));
-                    // para crear nuevamente el script a insertar con los sus_id
-                    if (count($idinsertados) > 0) {
+                        $idinsertados = $mod_sb->consultarSuscritosbtn(substr($sus_id, 0, -1));
                         for ($i = 0; $i < count($idinsertados); $i++) {
                             $asuscribirli .= 'INSERT INTO db_mailing.lista_suscriptor (lis_id, sus_id, lsus_estado, lsus_fecha_creacion, lsus_estado_logico)';
-                            $asuscribirli .= 'VALUES(' . $lis_id . ', '. $idinsertados[$i]["sus_id"] . ', ' . $estado . ', ' . $fecha_registro. ', '. $estado_logico . '); ';
+                            $asuscribirli .= 'VALUES(' . $lis_id . ', ' . $idinsertados[$i]["sus_id"] . ', ' . $estado . ', ' . $fecha_registro . ', ' . $estado_logico . '); ';
                         }
-                    }
-                    $insertadalista = $mod_sb->insertarListaSuscritorTodos($asuscribirli);
-                    \app\models\Utilities::putMessageLogFile('ccc..  ' . $asuscribirli);
-                    if ($insertadalista) {
+
+                        $insertadalista = $mod_sb->insertarListaSuscritorTodos($asuscribirli);
+                        //\app\models\Utilities::putMessageLogFile('ccc..  ' . $asuscribirli);
                         $exito = 1;
-                    }
                     }
                     if ($exito) {
                         $transaction->commit();

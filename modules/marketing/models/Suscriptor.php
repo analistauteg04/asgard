@@ -423,10 +423,9 @@ class Suscriptor extends \yii\db\ActiveRecord {
         $sql = "
                SELECT sus_id 
                FROM db_mailing.suscriptor
-               WHERE per_id in (:sus_id)
+               WHERE per_id in ($sus_id)
                ";
-        $comando = $con->createCommand($sql);
-        $comando->bindParam(":sus_id", $sus_id, \PDO::PARAM_STR);
+        $comando = $con->createCommand($sql);        
         $resultData = $comando->queryAll();
         return $resultData;
     }
