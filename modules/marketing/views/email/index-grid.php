@@ -20,7 +20,7 @@ PbGridView::widget([
     'id' => 'Tbg_Lista',
     'showExport' => true,
     'fnExportEXCEL' => "exportExcelLista",
-    //'fnExportPDF' => "exportPdfLista",
+    'fnExportPDF' => "exportPdfLista",
     'dataProvider' => $model,
     'columns' =>
     [

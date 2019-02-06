@@ -535,5 +535,5 @@ function exportExcelLista() {
 
 function exportPdfLista() {
     var lista = $('#txt_buscar_lista').val();          
-    window.location.href = $('#txth_base').val() + "/marketing/email/exppdfl?lista=" + lista;
+    window.location.href = $('#txth_base').val() + "/marketing/email/exppdfl?pdf=1&lista=" + lista;
 }

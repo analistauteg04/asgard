@@ -876,11 +876,12 @@ class EmailController extends \app\components\CController {
     public function actionExppdfl() {    
         $report = new ExportFile();
         $this->view->title = marketing::t("marketing", "List"); // Titulo del reporte        
+                
+        $mod_lista = new Lista();  
         $data = Yii::$app->request->get();
-        
-        $mod_lista = new Lista();
         $arr_data = array();
-        $arrSearch["lista"] = $data["lista"];            
+        $arrSearch["lista"] = $data["lista"];  
+                
         $arrHeader = array(            
             marketing::t("marketing", "List"),
             academico::t("Academico", "Career/Program/Course"),
@@ -891,7 +892,7 @@ class EmailController extends \app\components\CController {
             $arr_data = $mod_lista->consultarListaReporte($arrSearch);
         } else {
             \app\models\Utilities::putMessageLogFile('no ingresa con parametros');
-            $arr_data = $mod_lista->consultarListaReporte();
+            $arr_data = $mod_lista->consultarListaReporte(array());
         }
         $report->orientation = "P"; // tipo de orientacion L => Horizontal, P => Vertical
         $report->createReportPdf(
