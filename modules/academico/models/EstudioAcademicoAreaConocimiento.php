@@ -103,7 +103,7 @@ class EstudioAcademicoAreaConocimiento extends \yii\db\ActiveRecord
                     (
                             select selranea.eaca_id
                             from(
-                            select eaac.eaca_id,RAND() sel
+                            select eaac.eaca_id, 1 sel -- RAND() sel
                             FROM db_academico.estudio_academico_area_conocimiento as eaac
                             where eaac.acon_id = (select eaac.acon_id from db_academico.estudio_academico_area_conocimiento eaac where eaac.eaca_id=$eaca_id)
                             and eaac.eaca_id !=$eaca_id
