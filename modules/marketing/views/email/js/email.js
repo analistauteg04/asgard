@@ -107,8 +107,11 @@ function suscribirTodos() {
     showAlert("OK", "info", messagePB);
 }
 function fnsuscribirLista() {
+<<<<<<< HEAD
     var lista = $('#txth_ids').val();
     /*window.location.href = $('#txth_base').val() + "/marketing/email/suscribirtodos?lisid=" + lista;*/
+=======
+>>>>>>> 8489e6461a89e7720b56925583a7e4e9a2e6c144
     var lista = $('#txth_ids').val();    
     var link = $('#txth_base').val() + "/marketing/email/suscribirtodos?lisid=" + lista;
     var arrParams = new Object();
@@ -531,6 +534,11 @@ function exportPdf() {
 }
 
 function exportExcelLista() {
-    var lista = $('#txt_buscar_lista').val();    
-    window.location.href = $('#txth_base').val() + "/marketing/email/expexcellista?lista=" + lista;
+    var lista = $('#txt_buscar_lista').val();        
+    window.location.href = $('#txth_base').val() + "/marketing/email/expexcel1?lista=" + lista;
+}
+
+function exportPdfLista() {
+    var lista = $('#txt_buscar_lista').val();          
+    window.location.href = $('#txth_base').val() + "/marketing/email/exppdfl?lista=" + lista;
 }

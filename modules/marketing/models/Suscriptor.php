@@ -248,8 +248,8 @@ class Suscriptor extends \yii\db\ActiveRecord {
         }
     }
     /**
-     * Function eliminarSuscriptor
-     * @author  Gioavanni Vergara <analistadesarrollo02@uteg.edu.ec>
+     * Function eliminar logica Suscriptor, cambia el estado a 0
+     * @author  Giovanni Vergara <analistadesarrollo02@uteg.edu.ec>
      * @property 
      * @return  
      */
@@ -324,7 +324,7 @@ class Suscriptor extends \yii\db\ActiveRecord {
      */
     public function consultarSuscriptoxPerylis($per_id, $list_id) {
         $con = \Yii::$app->db_mailing;
-        //$estado = 0;
+        // $estado = 1;
 
         $sql = "
                 select count(*) as inscantes	
@@ -332,10 +332,12 @@ class Suscriptor extends \yii\db\ActiveRecord {
                 INNER JOIN " . $con->dbname . ".lista_suscriptor lsus     
                 ON sus.sus_id = lsus.sus_id
                 WHERE sus.per_id = :per_id AND
-                lsus.lis_id = :list_id  ";
+                lsus.lis_id = :list_id 
+                -- AND sus.sus_estado_logico = :estado
+                -- AND lsus.lsus_estado_logico = :estado";
 
         $comando = $con->createCommand($sql);
-        //$comando->bindParam(":estado", $estado, \PDO::PARAM_STR);
+        // $comando->bindParam(":estado", $estado, \PDO::PARAM_STR);
         $comando->bindParam(":per_id", $per_id, \PDO::PARAM_INT);
         $comando->bindParam(":list_id", $list_id, \PDO::PARAM_INT);
         $resultData = $comando->queryOne();
@@ -493,7 +495,6 @@ class Suscriptor extends \yii\db\ActiveRecord {
     public function insertarListaSuscritorTodos($asuscribirli) {
         $con = \Yii::$app->db_mailing;
         $trans = $con->getTransaction();
-
         try {
             $sql = $asuscribirli;
             $command = $con->createCommand($sql);
@@ -506,5 +507,25 @@ class Suscriptor extends \yii\db\ActiveRecord {
             return 0;
         }
     }
-
+    /**
+     * Function eliminar todos los Suscriptor 
+     * @author Giovanni Vergara <analistadesarrollo02@uteg.edu.ec>;
+     * @param
+     * @return
+     */
+    public function updateSuscriptodos($suscribirtodos) {
+        $con = \Yii::$app->db_mailing;        
+        $trans = $con->getTransaction();
+        try {
+            $sql = $suscribirtodos;            
+            $command = $con->createCommand($sql);
+            $command->execute();
+            return $con->getLastInsertID();            
+        } catch (Exception $ex) {
+            if ($trans !== null) {
+                $trans->rollback();
+            }
+            return 0;
+        }
+    }
 }

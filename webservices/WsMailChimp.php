@@ -99,6 +99,7 @@ class WsMailChimp
             ->setHeaders(array('Content-Type: application/json', 'Accept: application/json'))
             ->setCredentials($this->user, $this->apiKey)
             ->doPatch($WS_URI, $params);
+        \app\models\Utilities::putMessageLogFile('despues del response'.$response);
         $arr_response = json_decode($response, true);
         \app\models\Utilities::putMessageLogFile('despues de actualizar en mailchimp:');
         return $arr_response;
