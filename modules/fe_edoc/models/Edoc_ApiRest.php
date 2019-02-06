@@ -141,39 +141,39 @@ class Edoc_ApiRest extends \app\modules\fe_edoc\components\CActiveRecord {
     }
     
     private function insertarCabFactura($con) {
-		$valida = new VSValidador();
+        $valida = new VSValidador();
         $cabFact= $this->cabEdoc;
-		$empresaEnt=$this->buscarDataEmpresa($this->emp_id,$this->est_id,$this->pemi_id);  		
+	$empresaEnt=$this->buscarDataEmpresa($this->emp_id,$this->est_id,$this->pemi_id);  		
         $TipoEmision=$this->tipoEmision;//Valor por Defecto
         $RazonSocial=$empresaEnt['RazonSocial'];
         $NombreComercial=$empresaEnt['NombreComercial'];
         $Ruc=$empresaEnt['Ruc'];//Ruc de la EMpesa		  
-		$DireccionMatriz=$empresaEnt['DireccionMatriz'];
+	$DireccionMatriz=$empresaEnt['DireccionMatriz'];
         $DireccionEstablecimiento=$empresaEnt['DireccionSucursal'];
         $ContribuyenteEspecial=($cabFact['CONTRIB_ESPECIAL']!=0)?'SI':'';
         $ObligadoContabilidad=$cabFact['OBLIGADOCONTAB'];//($cabFact['OBLIGADOCONTAB']!=0)?'SI':'';
         $CodigoTransaccionERP='XX';//
         $UsuarioCreador="1";//idde la Persona que genera la factura
 		
-		/* Datos para Genera Clave */
+	/* Datos para Genera Clave */
         //$tip_doc,$fec_doc,$ruc,$ambiente,$serie,$numDoc,$tipoemision
-		$objCla = new VSClaveAcceso();
-		//$ClaveAcceso=$cabFact['CLAVEACCESO']; //Cuando la clave se extrae del sistema ERP
-		$codDoc=$cabFact['TIPOCOMPROBANTE'];
-		$Ambiente=$cabFact['TIPOAMBIENTE'];
-		$serie = $cabFact['COD_ESTAB'] . $cabFact['PTOEMI'];
+        $objCla = new VSClaveAcceso();
+        //$ClaveAcceso=$cabFact['CLAVEACCESO']; //Cuando la clave se extrae del sistema ERP
+        $codDoc = $cabFact['TIPOCOMPROBANTE'];
+        $Ambiente = $cabFact['TIPOAMBIENTE'];
+        $serie = $cabFact['COD_ESTAB'] . $cabFact['PTOEMI'];
         $fec_doc = date("Y-m-d", strtotime($cabFact['FECHAEMISION']));
-		//$Secuencial=$cabFact['SECUENCIAL'];
-		$Secuencial=$valida->ajusteNumDoc($cabFact['SECUENCIAL'], 9);
-		$ClaveAcceso=$objCla->claveAcceso($codDoc, $fec_doc,$Ruc,$Ambiente, $serie, $Secuencial, $TipoEmision);
+        //$Secuencial=$cabFact['SECUENCIAL'];
+        $Secuencial = $valida->ajusteNumDoc($cabFact['SECUENCIAL'], 9);
+        $ClaveAcceso = $objCla->claveAcceso($codDoc, $fec_doc, $Ruc, $Ambiente, $serie, $Secuencial, $TipoEmision);
         //Fin generador de Clave
-		$tipoIdentificaion=$cabFact['TIPOID_SUJETO'];
-		//$tipoIdentificaion = $valida->tipoIdent($cabFact['RUC_SUJETO']);
-		$cedulaRucFinal=($tipoIdentificaion == '07') ? '9999999999999' : $cabFact['RUC_SUJETO'];
-		$por_iva=intval($cabFact['IVA_PORCENTAJE']);//12;
-		//0=IVa 0% y 2=iva 12%
-		$ImporteTotal=(intval($cabFact['IVA_CODIGO']) == 2) ? (floatval($cabFact['TOTALBRUTO'])*(floatval($por_iva)/100))+floatval($cabFact['TOTALBRUTO']) : $cabFact['TOTALBRUTO'];
-        
+        $tipoIdentificaion = $cabFact['TIPOID_SUJETO'];
+        //$tipoIdentificaion = $valida->tipoIdent($cabFact['RUC_SUJETO']);
+        $cedulaRucFinal = ($tipoIdentificaion == '07') ? '9999999999999' : $cabFact['RUC_SUJETO'];
+        $por_iva = intval($cabFact['IVA_PORCENTAJE']); //12;
+        //0=IVa 0% y 2=iva 12%
+        $ImporteTotal = (intval($cabFact['IVA_CODIGO']) == 2) ? (floatval($cabFact['TOTALBRUTO']) * (floatval($por_iva) / 100)) + floatval($cabFact['TOTALBRUTO']) : $cabFact['TOTALBRUTO'];
+
         $sql = "INSERT INTO " . $con->dbname . ".NubeFactura
                (Ambiente,TipoEmision, RazonSocial, NombreComercial, Ruc,ClaveAcceso,CodigoDocumento, Establecimiento,
                 PuntoEmision, Secuencial, DireccionMatriz, FechaEmision, DireccionEstablecimiento, ContribuyenteEspecial,
@@ -193,11 +193,11 @@ class Edoc_ApiRest extends \app\modules\fe_edoc\components\CActiveRecord {
         $comando->bindParam(":NombreComercial", $NombreComercial, \PDO::PARAM_STR);
         $comando->bindParam(":Ruc", $Ruc, \PDO::PARAM_STR);
         $comando->bindParam(":ClaveAcceso", $ClaveAcceso, \PDO::PARAM_STR);
-        $comando->bindParam(":CodigoDocumento", $cabFact['TIPOCOMPROBANTE'], \PDO::PARAM_STR);
+        $comando->bindParam(":CodigoDocumento", $codDoc, \PDO::PARAM_STR);
         $comando->bindParam(":Establecimiento", $cabFact['COD_ESTAB'], \PDO::PARAM_STR);
         $comando->bindParam(":PuntoEmision", $cabFact['PTOEMI'], \PDO::PARAM_STR);
         $comando->bindParam(":DireccionMatriz", $DireccionMatriz, \PDO::PARAM_STR);
-        $comando->bindParam(":FechaEmision", $cabFact['FECHAEMISION'], \PDO::PARAM_STR);
+        $comando->bindParam(":FechaEmision", $fec_doc, \PDO::PARAM_STR);
         $comando->bindParam(":DireccionEstablecimiento", $DireccionEstablecimiento, \PDO::PARAM_STR);
         $comando->bindParam(":ContribuyenteEspecial", $ContribuyenteEspecial, \PDO::PARAM_STR);
         $comando->bindParam(":ObligadoContabilidad", $ObligadoContabilidad, \PDO::PARAM_STR);
@@ -391,21 +391,43 @@ class Edoc_ApiRest extends \app\modules\fe_edoc\components\CActiveRecord {
     
     private function InsertarCabRetencion($con) {
         $cabFact= $this->cabEdoc;       
-        $objEmpData= new Empresa;
-        $empresaEnt=$objEmpData->buscarDataEmpresa($this->emp_id,$this->est_id,$this->pemi_id);               
+        $valida = new VSValidador();
+        $cabFact= $this->cabEdoc;
+	$empresaEnt=$this->buscarDataEmpresa($this->emp_id,$this->est_id,$this->pemi_id);  		
         $TipoEmision=$this->tipoEmision;//Valor por Defecto
         $RazonSocial=$empresaEnt['RazonSocial'];
         $NombreComercial=$empresaEnt['NombreComercial'];
-        $Ruc=$empresaEnt['Ruc'];//Ruc de la EMpesa
-        $DireccionMatriz=$empresaEnt['DireccionMatriz'];
+        $Ruc=$empresaEnt['Ruc'];//Ruc de la EMpesa		  
+	$DireccionMatriz=$empresaEnt['DireccionMatriz'];
         $DireccionEstablecimiento=$empresaEnt['DireccionSucursal'];
-        $ContribuyenteEspecial=($cabFact['CONTRIB_ESPECIAL']!=0)?'SI':'';//Estreare de tabla Empresa
-        $ObligadoContabilidad=($cabFact['OBLIGADOCONTAB']!=0)?'SI':'';//Estreare de tabla Empresa
+        $ContribuyenteEspecial=($cabFact['CONTRIB_ESPECIAL']!=0)?'SI':'';
+        $ObligadoContabilidad=$cabFact['OBLIGADOCONTAB'];//($cabFact['OBLIGADOCONTAB']!=0)?'SI':'';
         $CodigoTransaccionERP='XX';//
         $UsuarioCreador="1";//idde la Persona que genera la factura
+		
+	/* Datos para Genera Clave */
+        //$tip_doc,$fec_doc,$ruc,$ambiente,$serie,$numDoc,$tipoemision
+        $objCla = new VSClaveAcceso();
+        //$ClaveAcceso=$cabFact['CLAVEACCESO']; //Cuando la clave se extrae del sistema ERP
+        $codDoc = $cabFact['CODDOC'];
+        $Ambiente = $cabFact['TIPOAMBIENTE'];
+        $serie = $cabFact['COD_ESTAB'] . $cabFact['PTOEMI'];
+        $fec_doc = date("Y-m-d", strtotime($cabFact['FECHAEMISION']));
+        //$Secuencial=$cabFact['SECUENCIAL'];
+        $Secuencial = $valida->ajusteNumDoc($cabFact['SECUENCIAL'], 9);
+        $ClaveAcceso = $objCla->claveAcceso($codDoc, $fec_doc, $Ruc, $Ambiente, $serie, $Secuencial, $TipoEmision);
+        //Fin generador de Clave
+        $tipoIdentificaion = $cabFact['TIPOID_SUJETO'];
+        //$tipoIdentificaion = $valida->tipoIdent($cabFact['RUC_SUJETO']);
+        $cedulaRucFinal = ($tipoIdentificaion == '07') ? '9999999999999' : $cabFact['RUC_SUJETO'];
+        //$por_iva = intval($cabFact['IVA_PORCENTAJE']); //12;
+        //0=IVa 0% y 2=iva 12%
+        //$ImporteTotal = (intval($cabFact['IVA_CODIGO']) == 2) ? (floatval($cabFact['TOTALBRUTO']) * (floatval($por_iva) / 100)) + floatval($cabFact['TOTALBRUTO']) : $cabFact['TOTALBRUTO'];
+
         
         $TotalRetencion=0;//Este valor es actualiado despues de insertar el detalle
         $DocSustentoERP=$cabFact['SECUENCIAL_DOCSUST'];
+        
         
         $sql = "INSERT INTO " . $con->dbname . ".NubeRetencion 
                 (Ambiente,TipoEmision,RazonSocial,NombreComercial,Ruc,ClaveAcceso,CodigoDocumento,PuntoEmision,Establecimiento, 
@@ -420,27 +442,27 @@ class Edoc_ApiRest extends \app\modules\fe_edoc\components\CActiveRecord {
         $comando = $con->createCommand($sql);
 
         //$comando->bindParam(":id", $id_docElectronico, PDO::PARAM_INT);
-        $comando->bindParam(":Ambiente", $cabFact['TIPOAMBIENTE'], \PDO::PARAM_STR);
+        $comando->bindParam(":Ambiente", $Ambiente, \PDO::PARAM_STR);
         $comando->bindParam(":TipoEmision", $TipoEmision, \PDO::PARAM_STR);
-        $comando->bindParam(":Secuencial", $cabFact['SECUENCIAL'], \PDO::PARAM_STR);        
+        $comando->bindParam(":Secuencial", $Secuencial, \PDO::PARAM_STR);        
         $comando->bindParam(":RazonSocial", $RazonSocial, \PDO::PARAM_STR);
         $comando->bindParam(":NombreComercial", $NombreComercial, \PDO::PARAM_STR);
         $comando->bindParam(":Ruc", $Ruc, \PDO::PARAM_STR);
-        $comando->bindParam(":ClaveAcceso", $cabFact['CLAVEACCESO'], \PDO::PARAM_STR);        
-        $comando->bindParam(":CodigoDocumento", $cabFact['CODDOC'], \PDO::PARAM_STR);
+        $comando->bindParam(":ClaveAcceso", $ClaveAcceso, \PDO::PARAM_STR);        
+        $comando->bindParam(":CodigoDocumento", $codDoc, \PDO::PARAM_STR);
         $comando->bindParam(":Establecimiento", $cabFact['COD_ESTAB'], \PDO::PARAM_STR);
         $comando->bindParam(":PuntoEmision", $cabFact['PTOEMI'], \PDO::PARAM_STR);        
         $comando->bindParam(":DireccionMatriz", $DireccionMatriz, \PDO::PARAM_STR);
-        $comando->bindParam(":FechaEmision", $cabFact['FECHAEMISION'], \PDO::PARAM_STR);
+        $comando->bindParam(":FechaEmision", $fec_doc, \PDO::PARAM_STR);
         $comando->bindParam(":DireccionEstablecimiento", $DireccionEstablecimiento, \PDO::PARAM_STR);        
         $comando->bindParam(":ContribuyenteEspecial", $ContribuyenteEspecial, \PDO::PARAM_STR);        
         $comando->bindParam(":ObligadoContabilidad", $ObligadoContabilidad, \PDO::PARAM_STR);        
-        $comando->bindParam(":TipoIdentificacionSujetoRetenido", $cabFact['TIPOID_SUJETO'], \PDO::PARAM_STR);        
+        $comando->bindParam(":TipoIdentificacionSujetoRetenido", $tipoIdentificaion, \PDO::PARAM_STR);        
         $comando->bindParam(":RazonSocialSujetoRetenido", $cabFact['RAZONSOCIAL_SUJETO'], \PDO::PARAM_STR);
-        $comando->bindParam(":IdentificacionSujetoRetenido", $cabFact['RUC_SUJETO'], \PDO::PARAM_STR);
+        $comando->bindParam(":IdentificacionSujetoRetenido", $cedulaRucFinal, \PDO::PARAM_STR);
         $comando->bindParam(":PeriodoFiscal", $cabFact['PERIODOFISCAL'], \PDO::PARAM_STR);
         $comando->bindParam(":TotalRetencion", $TotalRetencion, \PDO::PARAM_STR);
-        $comando->bindParam(":SecuencialERP", $cabFact['SECUENCIAL'], \PDO::PARAM_STR);
+        $comando->bindParam(":SecuencialERP", $Secuencial, \PDO::PARAM_STR);
         $comando->bindParam(":CodigoTransaccionERP", $CodigoTransaccionERP, \PDO::PARAM_STR);
         $comando->bindParam(":DocSustentoERP", $DocSustentoERP, \PDO::PARAM_STR);        
         $comando->bindParam(":UsuarioCreador", $UsuarioCreador, \PDO::PARAM_STR);
@@ -560,20 +582,40 @@ class Edoc_ApiRest extends \app\modules\fe_edoc\components\CActiveRecord {
         
     }
     
-    private function InsertarCabNC($con) {
-        $cabFact= $this->cabEdoc;        
-        $objEmpData= new Empresa;
-        $empresaEnt=$objEmpData->buscarDataEmpresa($this->emp_id,$this->est_id,$this->pemi_id);                
+    private function InsertarCabNC($con) {      
+        $valida = new VSValidador();
+        $cabFact= $this->cabEdoc;
+	$empresaEnt=$this->buscarDataEmpresa($this->emp_id,$this->est_id,$this->pemi_id);  		
         $TipoEmision=$this->tipoEmision;//Valor por Defecto
         $RazonSocial=$empresaEnt['RazonSocial'];
         $NombreComercial=$empresaEnt['NombreComercial'];
-        $Ruc=$empresaEnt['Ruc'];//Ruc de la EMpesa
-        $DireccionMatriz=$empresaEnt['DireccionMatriz'];
+        $Ruc=$empresaEnt['Ruc'];//Ruc de la EMpesa		  
+	$DireccionMatriz=$empresaEnt['DireccionMatriz'];
         $DireccionEstablecimiento=$empresaEnt['DireccionSucursal'];
         $ContribuyenteEspecial=($cabFact['CONTRIB_ESPECIAL']!=0)?'SI':'';
         $ObligadoContabilidad=$cabFact['OBLIGADOCONTAB'];//($cabFact['OBLIGADOCONTAB']!=0)?'SI':'';
         $CodigoTransaccionERP='XX';//
         $UsuarioCreador="1";//idde la Persona que genera la factura
+		
+	/* Datos para Genera Clave */
+        //$tip_doc,$fec_doc,$ruc,$ambiente,$serie,$numDoc,$tipoemision
+        $objCla = new VSClaveAcceso();
+        //$ClaveAcceso=$cabFact['CLAVEACCESO']; //Cuando la clave se extrae del sistema ERP
+        $codDoc = $cabFact['TIPOCOMPROBANTE'];
+        $Ambiente = $cabFact['TIPOAMBIENTE'];
+        $serie = $cabFact['COD_ESTAB'] . $cabFact['PTOEMI'];
+        $fec_doc = date("Y-m-d", strtotime($cabFact['FECHAEMISION']));
+        //$Secuencial=$cabFact['SECUENCIAL'];
+        $Secuencial = $valida->ajusteNumDoc($cabFact['SECUENCIAL'], 9);
+        $ClaveAcceso = $objCla->claveAcceso($codDoc, $fec_doc, $Ruc, $Ambiente, $serie, $Secuencial, $TipoEmision);
+        //Fin generador de Clave
+        $tipoIdentificaion = $cabFact['TIPOID_SUJETO'];
+        //$tipoIdentificaion = $valida->tipoIdent($cabFact['RUC_SUJETO']);
+        $cedulaRucFinal = ($tipoIdentificaion == '07') ? '9999999999999' : $cabFact['RUC_SUJETO'];
+        $por_iva = intval($cabFact['IVA_PORCENTAJE']); //12;
+        //0=IVa 0% y 2=iva 12%
+        $ImporteTotal = (intval($cabFact['IVA_CODIGO']) == 2) ? (floatval($cabFact['TOTALBRUTO']) * (floatval($por_iva) / 100)) + floatval($cabFact['TOTALBRUTO']) : $cabFact['TOTALBRUTO'];
+
 
         $sql = "INSERT INTO " . $con->dbname . ".NubeNotaCredito
                (Ambiente,TipoEmision, RazonSocial, NombreComercial, Ruc,ClaveAcceso,CodigoDocumento, Establecimiento,
@@ -589,24 +631,24 @@ class Edoc_ApiRest extends \app\modules\fe_edoc\components\CActiveRecord {
         $comando = $con->createCommand($sql);
 
         //$comando->bindParam(":id", $id_docElectronico, PDO::PARAM_INT);
-        $comando->bindParam(":Ambiente", $cabFact['TIPOAMBIENTE'], \PDO::PARAM_STR);
+        $comando->bindParam(":Ambiente", $Ambiente, \PDO::PARAM_STR);
         $comando->bindParam(":TipoEmision", $TipoEmision, \PDO::PARAM_STR);
-        $comando->bindParam(":Secuencial", $cabFact['SECUENCIAL'], \PDO::PARAM_STR);        
+        $comando->bindParam(":Secuencial", $Secuencial, \PDO::PARAM_STR);        
         $comando->bindParam(":RazonSocial", $RazonSocial, \PDO::PARAM_STR);
         $comando->bindParam(":NombreComercial", $NombreComercial, \PDO::PARAM_STR);
         $comando->bindParam(":Ruc", $Ruc, \PDO::PARAM_STR);
-        $comando->bindParam(":ClaveAcceso", $cabFact['CLAVEACCESO'], \PDO::PARAM_STR);
-        $comando->bindParam(":CodigoDocumento", $cabFact['TIPOCOMPROBANTE'], \PDO::PARAM_STR);
+        $comando->bindParam(":ClaveAcceso", $ClaveAcceso, \PDO::PARAM_STR);
+        $comando->bindParam(":CodigoDocumento", $codDoc, \PDO::PARAM_STR);
         $comando->bindParam(":Establecimiento", $cabFact['COD_ESTAB'], \PDO::PARAM_STR);
         $comando->bindParam(":PuntoEmision", $cabFact['PTOEMI'], \PDO::PARAM_STR);
         $comando->bindParam(":DireccionMatriz", $DireccionMatriz, \PDO::PARAM_STR);
-        $comando->bindParam(":FechaEmision", $cabFact['FECHAEMISION'], \PDO::PARAM_STR);
+        $comando->bindParam(":FechaEmision", $fec_doc, \PDO::PARAM_STR);
         $comando->bindParam(":DireccionEstablecimiento", $DireccionEstablecimiento, \PDO::PARAM_STR);
         $comando->bindParam(":ContribuyenteEspecial", $ContribuyenteEspecial, \PDO::PARAM_STR);
         $comando->bindParam(":ObligadoContabilidad", $ObligadoContabilidad, \PDO::PARAM_STR);
-        $comando->bindParam(":TipoIdentificacionComprador", $cabFact['TIPOID_SUJETO'], \PDO::PARAM_STR);
+        $comando->bindParam(":TipoIdentificacionComprador", $tipoIdentificaion, \PDO::PARAM_STR);
         $comando->bindParam(":RazonSocialComprador", $cabFact['RAZONSOCIAL_SUJETO'], \PDO::PARAM_STR);
-        $comando->bindParam(":IdentificacionComprador", $cabFact['RUC_SUJETO'], \PDO::PARAM_STR);
+        $comando->bindParam(":IdentificacionComprador", $cedulaRucFinal, \PDO::PARAM_STR);
               
         $comando->bindParam(":Rise", $cabFact['RISE'], \PDO::PARAM_STR);
         $comando->bindParam(":CodDocModificado", $cabFact['TIPCOMP_MODIFICA'], \PDO::PARAM_STR);
@@ -618,7 +660,7 @@ class Edoc_ApiRest extends \app\modules\fe_edoc\components\CActiveRecord {
         
         $comando->bindParam(":Moneda", $cabFact['MONEDA'], \PDO::PARAM_STR);
         $comando->bindParam(":EmailResponsable", $cabFact['MAILSUJETO'], \PDO::PARAM_STR);
-        $comando->bindParam(":SecuencialERP", $cabFact['SECUENCIAL'], \PDO::PARAM_STR);
+        $comando->bindParam(":SecuencialERP", $Secuencial, \PDO::PARAM_STR);
         $comando->bindParam(":CodigoTransaccionERP", $CodigoTransaccionERP, \PDO::PARAM_STR);
         $comando->bindParam(":UsuarioCreador", $UsuarioCreador, \PDO::PARAM_STR);
 

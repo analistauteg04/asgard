@@ -39,7 +39,7 @@ class SybaseNC {
                     $fpagEdoc = null;//$this->consultarSybForPagFacturas($pdo, $cabEdoc['SYS_FACTURANC_ID']);
 
                     $response = Http::connect($WS_HOST, $WS_PORT)->doPost($WS_URI, 
-                            array('tipoEdoc' => $tipEdoc, 'cabEdoc' => json_encode($cabEdoc), 'detEdoc' => json_encode($detFact), 
+                            array('tipoEdoc' => $tipEdoc, 'cabEdoc' => json_encode($cabEdoc), 'detEdoc' => json_encode($detEdoc), 
                                   'dadcEdoc' => json_encode($dadcEdoc), 'fpagEdoc' => json_encode($fpagEdoc)));
                     //putMessageLogFile($response);
                     $arr_response = json_decode($response, true);
