@@ -1,7 +1,7 @@
 <?php
 
 $logFile = dirname(__FILE__) . "/../../../runtime/logs/pb.log";
-$dataDB = include_once("../config/mod.php");
+$dataDB = include_once(dirname(__FILE__) . "/../config/mod.php");
 //include_once("../../../webservices/WsMailChimp.php");
 $dbname = $dataDB["marketing"]["db_mailing"]["dbname"];
 $dbuser = $dataDB["marketing"]["db_mailing"]["username"];
@@ -64,7 +64,7 @@ function getCampaignOnTime($webServer)
         "p.pro_hora_envio > '".$iniTime."' AND " .
         "p.pro_hora_envio < '".$endTime."' " . 
         ";";
-        echo $sql;       
+
         $cmd = $pdo->prepare($sql);
         //$cmd->execute([":now" => $now, ":dia" => $dia, ":iniDate" => $iniTime, ":endDate" => $endTime]);
         $cmd->execute();
@@ -81,22 +81,22 @@ function getCampaignOnTime($webServer)
                     "reply_to" => $rows[$i]["ecor_correo"],
                     "template_id" => (int) $rows[$i]["temp_id"],
                 );
-                echo json_encode($addressInfo);
                 $obj_new = $webServer->createCampaign($rows[$i]["lis_codigo"], $addressInfo);
                 if(isset($obj_new["id"])){
                     $sendCampaign = $webServer->sendCampaign($obj_new["id"]);
                     if(is_array($sendCampaign)){
-                        echo "error crear campania 1: " . json_encode($sendCampaign);
-                        //putMessageLogFile("Error al enviar campaña ". $sendCampaign);
-                    }                    
+                        //echo "error crear campania 1: " . json_encode($sendCampaign);
+                        putMessageLogFile("Error al enviar campaña ". $sendCampaign);
+                    }//else
+                        //putMessageLogFile("Campaña Enviada: ". $sendCampaign);
                 }else{
-                    echo "error crear campania 2: ". json_encode($obj_new);
-                    //putMessageLogFile("Error al crear campaña " . $obj_new);
+                    //echo "error crear campania 2: ". json_encode($obj_new);
+                    putMessageLogFile("Error al crear campaña " . $obj_new);
                 }
             }
         }
     } catch (PDOException $e) {
-        echo 'Falló la conexión: ' . $e->getMessage();
+        //echo 'Falló la conexión: ' . $e->getMessage();
         putMessageLogFile('Error: ' . $e->getMessage());
         exit;
     }    

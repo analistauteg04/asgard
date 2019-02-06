@@ -107,12 +107,7 @@ function suscribirTodos() {
     showAlert("OK", "info", messagePB);
 }
 function fnsuscribirLista() {
-<<<<<<< HEAD
-    var lista = $('#txth_ids').val();
-    /*window.location.href = $('#txth_base').val() + "/marketing/email/suscribirtodos?lisid=" + lista;*/
-=======
     var lista = $('#txth_ids').val();    
->>>>>>> ec76b5cbea96ea3cfb45bc5cc8a3b9e1e9dc1091
     var link = $('#txth_base').val() + "/marketing/email/suscribirtodos?lisid=" + lista;
     var arrParams = new Object();
     arrParams.lis_id = lista;
