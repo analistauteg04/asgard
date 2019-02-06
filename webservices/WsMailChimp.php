@@ -186,7 +186,6 @@ class WsMailChimp
             "status" => "subscribed",
             "tags" => $tags,
         ));
-
         $response = Http::connect($this->host, $this->port, http::HTTPS)
             ->setHeaders(array('Content-Type: application/json', 'Accept: application/json'))
             ->setCredentials($this->user, $this->apiKey)

@@ -39,15 +39,41 @@ class EmailController extends \app\components\CController {
         return $this->render('index', [
                     'model' => $resp_lista]);
     }
+
     public function actionCargarmailchimp() {
         if (Yii::$app->request->isAjax) {
             $data = Yii::$app->request->post();
             $lis_id = base64_decode($data['lis_id']);
-            $su_mod=new Suscriptor();
-            $lsus_id=$su_mod->consultarSuscrito_rxlista($lis_id);
-            //Aqui se va a sucribir a cada suscriptor en al lista de mailchimp.            
+            $su_mod = new Suscriptor();
+            $sus_chimps = $su_mod->consultarSuscrito_rxlista($lis_id);
+            $mailchimp = new WsMailChimp();
+            $cts_sus = 0;
+            $cts_no = 0;
+            for ($i = 0; $i < count($sus_chimps); $i++) {
+                $resp = $mailchimp->newMember($sus_chimps[$i]['codigo'], $sus_chimps[$i]['correo']);
+                if ($resp) {
+                    $eact = $su_mod->actualizarEstadoChimp($sus_chimps[$i]['sus_id']);
+                    if ($eact)
+                        $cts_sus = $cts_sus + 1;
+                }else {
+                    $cts_no = $cts_no + 1;
+                }
+                sleep(1);
+            }
+            \app\models\Utilities::putMessageLogFile("Ha terminado el procesos de suscribir");
+            $mensaje='De un total de '.count($sus_chimps).' suscritos:<br/>';
+            $mensaje.=$cts_sus.' se han suscritos a la lista<br/>';
+            $mensaje.=$cts_no.' no se han suscritos a la lista<br/>';
+            \app\models\Utilities::putMessageLogFile($mensaje);
+            $message = array(
+                "wtmessage" => Yii::t("formulario", $mensaje),
+                "title" => Yii::t('jslang', 'Success'),
+                "rederict" => Yii::$app->response->redirect(['/marketing/email/asignar?lis_id=' . base64_encode($lis_id)]),
+            );
+            return Utilities::ajaxResponse('OK', 'alert', Yii::t("jslang", "Sucess"), false, $message);
         }
     }
+
     public function actionAsignar() {
         $mod_lista = new Lista();
         $arrSearch = array();
@@ -750,17 +776,16 @@ class EmailController extends \app\components\CController {
                         //consulto
                         //$exitesuscrito = $mod_sb->consultarSuscriptoxPerylis($no_suscitos[$i]["per_id"], $lis_id);
                         // si existe en la base update
-                        /*if (count($exitesuscrito) > 0) {
-                            $asusbribirmo .= '';
-                            $modsus_id .= $no_suscitos[$i]["per_id"] . ','; // verificar bien puede que haya q regresar el
-                        }*/
+                        /* if (count($exitesuscrito) > 0) {
+                          $asusbribirmo .= '';
+                          $modsus_id .= $no_suscitos[$i]["per_id"] . ','; // verificar bien puede que haya q regresar el
+                          } */
                         // else insert
                         //else {
-                            $asuscribir .= 'INSERT INTO db_mailing.suscriptor (per_id, sus_estado, sus_estado_logico)';
-                            $asuscribir .= 'VALUES(' . $no_suscitos[$i]["per_id"] . ', ' . $estado . ', ' . $estado_logico . '); ';
-                            $sus_id .= $no_suscitos[$i]["per_id"] . ',';
+                        $asuscribir .= 'INSERT INTO db_mailing.suscriptor (per_id, sus_estado, sus_estado_logico)';
+                        $asuscribir .= 'VALUES(' . $no_suscitos[$i]["per_id"] . ', ' . $estado . ', ' . $estado_logico . '); ';
+                        $sus_id .= $no_suscitos[$i]["per_id"] . ',';
                         // }                     
-                        
                         // variable $modsus_id 
                     }
                     $insertartodos = $mod_sb->insertarListaTodos($asuscribir);
@@ -817,7 +842,7 @@ class EmailController extends \app\components\CController {
             }
         }
     }
-        
+
     public function actionExpexcelLista() {
         ini_set('memory_limit', '256M');
         $content_type = Utilities::mimeContentType("xls");
@@ -827,16 +852,16 @@ class EmailController extends \app\components\CController {
         header('Cache-Control: max-age=0');
         $colPosition = array("C", "D", "E", "F", "G", "H", "I");
 
-        $arrHeader = array(            
+        $arrHeader = array(
             marketing::t("marketing", "List"),
             academico::t("Academico", "Career/Program/Course"),
             marketing::t("marketing", "Subscriber number"),
         );
         $data = Yii::$app->request->get();
-        $arrSearch["lista"] = $data["lista"];        
+        $arrSearch["lista"] = $data["lista"];
 
-        $mod_lista = new Lista();                
-                        
+        $mod_lista = new Lista();
+
         $arrData = array();
         if ($arrSearch["estado"] == 0) {
             $arrData = $mod_lista->consultarLista($arrSearch);
@@ -847,5 +872,5 @@ class EmailController extends \app\components\CController {
         Utilities::generarReporteXLS($nombarch, $nameReport, $arrHeader, $arrData, $colPosition);
         exit;
     }
-   
+
 }

@@ -107,12 +107,9 @@ function suscribirTodos() {
     showAlert("OK", "info", messagePB);
 }
 function fnsuscribirLista() {
-<<<<<<< HEAD
     var lista = $('#txth_ids').val();
     /*window.location.href = $('#txth_base').val() + "/marketing/email/suscribirtodos?lisid=" + lista;*/
-=======
     var lista = $('#txth_ids').val();    
->>>>>>> ec76b5cbea96ea3cfb45bc5cc8a3b9e1e9dc1091
     var link = $('#txth_base').val() + "/marketing/email/suscribirtodos?lisid=" + lista;
     var arrParams = new Object();
     arrParams.lis_id = lista;
@@ -233,7 +230,6 @@ function RemoverSuscritor(per_id, list_id) {
     showAlert("warning", "warning", messagePB);
 }
 
-/***/
 function elminarSuscriptor(per_id, list_id) {
     var link = $('#txth_base').val() + "/marketing/email/deletesuscriptor";
     var arrParams = new Object();
@@ -247,7 +243,6 @@ function elminarSuscriptor(per_id, list_id) {
         setTimeout(hideLoadingPopup, 2000);
     }
 }
-/**/
 function setComboDataselect(arr_data, element_id, texto) {
     var option_arr = "";
     option_arr += "<option value= '0'>" + texto + "</option>";
@@ -439,7 +434,6 @@ function editarProgramacion() {
 }
 function subirMailchimp() {
     var mensj = "<b>Nota:</b><br/><br/> Al momento de cargar a mailchimp, ya no se podra eliminar el suscritor de la lista,<br/>si desea ya no enviar correos a ese suscritor debe eliminar toda lista desde el modulo lista. <br/> ¿Seguro desea cargar todos los suscritos a Mailchimp?";
-    var idlista = $('#txth_list').val();
     var messagePB = new Object();
     messagePB.wtmessage = mensj;
     messagePB.title = "Cargar a Mailchimp";
@@ -448,19 +442,18 @@ function subirMailchimp() {
     objAccept.class = "btn-primary clclass praclose";
     objAccept.value = "Aceptar";
     objAccept.callback = 'cargarMailchimp';
-    var params = new Array(idlista, 0);
-    objAccept.paramCallback = params;
     messagePB.acciones = new Array();
     messagePB.acciones[0] = objAccept;
     showAlert("warning", "warning", messagePB);
 }
-function cargarMailchimp(idl, temp) {
+function cargarMailchimp() {
+    var idlista = $('#txth_ids').val();    
     var arrParams = new Object();
-    arrParams.lis_id = idl;
+    arrParams.lis_id = idlista;
     var link = $('#txth_base').val() + "/marketing/email/cargarmailchimp";
+    alert("Va a entar a la funcion");
     requestHttpAjax(link, arrParams, function (response) {
-        showAlert(response.status, response.label, response.message);
-        alert("ha cargado en mailchimp");
+        showAlert(response.status, response.label, response.message);        
     }, true);
 }
 function modificarProgramacion() {
