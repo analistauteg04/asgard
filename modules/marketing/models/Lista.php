@@ -131,7 +131,7 @@ class Lista extends \yii\db\ActiveRecord {
                         lis_codigo_postal, lis_asunto,
                         case when lst.eaca_id > 0 then 
                                      ea.eaca_nombre else me.mest_nombre end as programa,
-                        sum(case when (lsu.lsus_estado = '1' and lsu.lsus_estado_logico = '1') then
+                        sum(case when (sus.sus_estado_mailchimp = '0' and lsu.lsus_estado = '1' and lsu.lsus_estado_logico = '1') then
                                      1 else 0 end) as num_suscr,
                         sum(case when (sus.sus_estado_mailchimp = '1' and sus.sus_estado_logico = '1') then
                                      1 else 0 end) as num_suscr_mailchimp

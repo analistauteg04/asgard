@@ -45,8 +45,30 @@ class EmailController extends \app\components\CController {
             $data = Yii::$app->request->post();
             $lis_id = base64_decode($data['lis_id']);
             $su_mod = new Suscriptor();
-            $lsus_id = $su_mod->consultarSuscrito_rxlista($lis_id);
-            //Aqui se va a sucribir a cada suscriptor en al lista de mailchimp.            
+            $sus_chimps = $su_mod->consultarSuscrito_rxlista($lis_id);
+            $mailchimp = new WsMailChimp();
+            $cts_sus = 0;
+            $cts_no = 0;
+            for ($i = 0; $i < count($sus_chimps); $i++) {
+                $resp = $mailchimp->newMember($sus_chimps[$i]['codigo'], $sus_chimps[$i]['correo']);
+                if ($resp) {
+                    $eact = $su_mod->actualizarEstadoChimp($sus_chimps[$i]['sus_id']);
+                    if ($eact)
+                        $cts_sus = $cts_sus + 1;
+                }else {
+                    $cts_no = $cts_no + 1;
+                }
+                sleep(1);
+            }
+            $mensaje='De un total de '.count($sus_chimps).' suscritos:<br/>';
+            $mensaje.=$cts_sus.' se han suscritos a la lista<br/>';
+            $mensaje.=$cts_no.' no se han suscritos a la lista<br/>';
+            $message = array(
+                "wtmessage" => Yii::t("formulario", $mensaje),
+                "title" => Yii::t('jslang', 'Success'),
+                "rederict" => Yii::$app->response->redirect(['/marketing/email/asignar?lis_id=' . base64_encode($lis_id)]),
+            );
+            return Utilities::ajaxResponse('OK', 'alert', Yii::t("jslang", "Sucess"), false, $message);            
         }
     }
 
@@ -823,7 +845,6 @@ class EmailController extends \app\components\CController {
             }
         }
     }
-                          
     public function actionExpexcel1() {        
         ini_set('memory_limit', '256M');
         $content_type = Utilities::mimeContentType("xls");
@@ -857,11 +878,12 @@ class EmailController extends \app\components\CController {
     public function actionExppdfl() {    
         $report = new ExportFile();
         $this->view->title = marketing::t("marketing", "List"); // Titulo del reporte        
+                
+        $mod_lista = new Lista();  
         $data = Yii::$app->request->get();
-        
-        $mod_lista = new Lista();
         $arr_data = array();
-        $arrSearch["lista"] = $data["lista"];            
+        $arrSearch["lista"] = $data["lista"];  
+                
         $arrHeader = array(            
             marketing::t("marketing", "List"),
             academico::t("Academico", "Career/Program/Course"),
@@ -872,7 +894,7 @@ class EmailController extends \app\components\CController {
             $arr_data = $mod_lista->consultarListaReporte($arrSearch);
         } else {
             \app\models\Utilities::putMessageLogFile('no ingresa con parametros');
-            $arr_data = $mod_lista->consultarListaReporte();
+            $arr_data = $mod_lista->consultarListaReporte(array());
         }
         $report->orientation = "P"; // tipo de orientacion L => Horizontal, P => Vertical
         $report->createReportPdf(
