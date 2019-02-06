@@ -150,12 +150,13 @@ function suscribirContacto(psus_id, per_tipo, list_id) {
     arrParams.accion = 'sc';
     if (!validateForm()) {
         requestHttpAjax(link, arrParams, function (response) {
+            alert('llego respueta ajax');
             preguntaSuscribirOtrasListas(response.message);
         }, true);
     }
 }
 function preguntaSuscribirOtrasListas(message) {
-    //alert("ha entrado a las funciones");
+    alert('llego a esta funcion');
     var messagePB = new Object();
     var mens_tot = message.wtmessage;
     mens_tot = mens_tot + "<br/> Las personas que se han suscrito a estas listas, tambien les ha interesado las siguientes listas:<br/>";
@@ -189,6 +190,7 @@ function preguntaSuscribirOtrasListas(message) {
         }
         slistas = ids;
     }
+    alert(slistas);
     var params = new Array(slistas, message.sus_id);
     objAccept.paramCallback = params;
     messagePB.acciones = new Array();

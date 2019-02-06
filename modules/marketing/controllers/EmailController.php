@@ -171,13 +171,14 @@ class EmailController extends \app\components\CController {
                     $list_ids = explode(",", $data['list_ids']);
                 }
                 \app\models\Utilities::putMessageLogFile("listas relacoinadas:");
-                ;
                 \app\models\Utilities::putMessageLogFile($list_ids);
                 $sus_id = $data['sus_id'];
                 $i = 0;
                 if (count($list_ids) > 0) {
+                    \app\models\Utilities::putMessageLogFile("si hay listas".count($list_ids));
                     while ($i < count($list_ids)) {
                         if (!empty($list_ids[$i])) {
+                            \app\models\Utilities::putMessageLogFile("list_id: ".$list_ids[$i]);
                             $key = ['lis_id', 'sus_id', 'lsus_estado', 'lsus_fecha_creacion', 'lsus_estado_logico'];
                             $parametro = [$list_ids[$i], $sus_id, 1, $fecha_crea, 1];
                             $lsu_id = $mod_sb->insertarListaSuscritor($con, $parametro, $key, 'lista_suscriptor');
@@ -196,7 +197,7 @@ class EmailController extends \app\components\CController {
                 $message = array(
                     "wtmessage" => Yii::t("formulario", $mensaje),
                     "title" => Yii::t('jslang', 'Success'),
-                    "rederict" => Yii::$app->response->redirect(['/marketing/email/asignar?lis_id=' . $list_id]),
+                    //"rederict" => Yii::$app->response->redirect(['/marketing/email/asignar?lis_id=' . $list_id]),
                 );
                 return Utilities::ajaxResponse('OK', 'alert', Yii::t("jslang", "Sucess"), false, $message);
             }
