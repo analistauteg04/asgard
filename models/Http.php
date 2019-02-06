@@ -295,7 +295,7 @@ class Http
                 curl_setopt($s, CURLOPT_URL, $url . '?' . http_build_query($params));
                 curl_setopt($s, CURLOPT_CUSTOMREQUEST, self::DELETE);
                 break;
-            case self::PATCH:
+            case self::PATCH:                
                 curl_setopt($s, CURLOPT_URL, $url . '?' . http_build_query($params));
                 curl_setopt($s, CURLOPT_CUSTOMREQUEST, self::PATCH);
                 curl_setopt($s, CURLOPT_POSTFIELDS, $params);

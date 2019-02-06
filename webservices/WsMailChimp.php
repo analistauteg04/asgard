@@ -58,20 +58,24 @@ class WsMailChimp
     public function getList($listId){
         $WS_URI = $this->apiUrl . "lists/$listId";
         $params = array();
-
+        \app\models\Utilities::putMessageLogFile('$WS_URI:'.$WS_URI);
         $response = Http::connect($this->host, $this->port, http::HTTPS)
             //->setHeaders(array('Content-Type: application/json', 'Accept: application/json'))
             ->setCredentials($this->user, $this->apiKey)
             ->doGet($WS_URI, $params);
         $arr_response = json_decode($response, true);
+        \app\models\Utilities::putMessageLogFile('responseConsulta:'.json_encode($response, true));
         return $arr_response;
     }
 
     // Get information about a specific list
     public function editList($listId, $name, $contact, $permission_reminder, 
-    $sender_name, $sender_email, $subject_email, $language = "es", $email_type_option = true)
+                             $sender_name, $sender_email, $subject_email, 
+                             $language = "es", $email_type_option = true)
     {
-        $WS_URI = $this->apiUrl . "lists/$listId";
+        \app\models\Utilities::putMessageLogFile("ide de la lista");
+        \app\models\Utilities::putMessageLogFile($listId);
+        $WS_URI = $this->apiUrl . "lists/".$listId;
         $params = json_encode(array(
             "name" => $name,
             /*"contact" => array(
@@ -95,6 +99,7 @@ class WsMailChimp
             "email_type_option" => $email_type_option,
         ));
         \app\models\Utilities::putMessageLogFile('parametros:'.$params);
+        \app\models\Utilities::putMessageLogFile('$WS_URI:'.$WS_URI);
         $response = Http::connect($this->host, $this->port, http::HTTPS)
             ->setHeaders(array('Content-Type: application/json', 'Accept: application/json'))
             ->setCredentials($this->user, $this->apiKey)

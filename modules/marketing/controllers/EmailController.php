@@ -398,7 +398,7 @@ class EmailController extends \app\components\CController {
 
             $con = \Yii::$app->db_mailing;
             $transaction = $con->beginTransaction();
-            try {
+            try {             
                 $contacto = array(
                     "company" => $nombre_empresa,
                     "address1" => $direccion1,
@@ -408,8 +408,10 @@ class EmailController extends \app\components\CController {
                     "zip" => $codigo_postal,
                     "country" => $pais,
                     "phone" => $telefono,
-                );
+                );              
+                
                 $lista = new Lista();
+                \app\models\Utilities::putMessageLogFile('nombre:' . $nombre_lista);                       
                 $resp_consulta = $lista->consultarListaXnombre($nombre_lista);
                 if (($resp_consulta["existe"] != 'S') or ( $resp_consulta["lis_id"] == $list_id)) {
                     //Grabar en mailchimp    
@@ -423,16 +425,16 @@ class EmailController extends \app\components\CController {
                                 $exito = 1;
                             }
                         }
-                    } else {  //Modificación     
-                        \app\models\Utilities::putMessageLogFile('antes de editar mailchimp');
-                        \app\models\Utilities::putMessageLogFile('codigo:' . $resp_consulta["lis_codigo"]);
-                        \app\models\Utilities::putMessageLogFile('lista:' . $nombre_lista);
-                        \app\models\Utilities::putMessageLogFile('contacto:' . $contacto);
-                        \app\models\Utilities::putMessageLogFile('nombre contacto:' . $nombre_contacto);
-                        \app\models\Utilities::putMessageLogFile('correo contacto:' . $correo_contacto);
-                        \app\models\Utilities::putMessageLogFile('asunto:' . $asunto);
-                        $conLista = $webs_mailchimp->editList($resp_consulta["lis_codigo"], $nombre_lista, $contacto, "permiso", $nombre_contacto, $correo_contacto, $asunto, "es", true);
+                    } else {  //Modificación                             
+                        \app\models\Utilities::putMessageLogFile('codigo:' . $resp_consulta["lis_codigo"]);                       
+                        //$listId = array("lis_id" => $resp_consulta["lis_codigo"]);
+                        \app\models\Utilities::putMessageLogFile('listId:' .  $resp_consulta["lis_id"]);
+                        /*$conLista = $webs_mailchimp->getList($resp_consulta["lis_codigo"]);
                         if ($conLista) {
+                            $edLista = $webs_mailchimp->editList($conLista, $nombre_lista, $contacto, "permiso", $nombre_contacto, $correo_contacto, $asunto);
+                        }*/
+                        $edLista = $webs_mailchimp->editList($resp_consulta['lis_codigo'], $nombre_lista, $contacto, "permiso", $nombre_contacto, $correo_contacto, $asunto);
+                        if ($edLista) {
                             \app\models\Utilities::putMessageLogFile('conLista:' . $conLista);
                             //Grabar en asgard                    
                             $resp_lista = $lista->modificarLista($list_id, $eaca_id, $mest_id, $emp_id, $nombre_lista, $ecor_id, $nombre_contacto, $pais, $provincia, $ciudad, $direccion1, $direccion2, $telefono, $codigo_postal, $asunto);
