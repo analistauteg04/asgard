@@ -526,3 +526,8 @@ function exportPdf() {
     var lista = $('#txth_ids').val();
     window.location.href = $('#txth_base').val() + "/marketing/email/exppdf?pdf=1&estado=" + estado + "&lista=" + lista;
 }
+
+function exportExcelLista() {
+    var lista = $('#txt_buscar_lista').val();    
+    window.location.href = $('#txth_base').val() + "/marketing/email/expexcellista?lista=" + lista;
+}
