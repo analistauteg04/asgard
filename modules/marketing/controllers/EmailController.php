@@ -45,7 +45,6 @@ class EmailController extends \app\components\CController {
             $data = Yii::$app->request->post();
             $lis_id = base64_decode($data['lis_id']);
             $su_mod = new Suscriptor();
-<<<<<<< HEAD
             $sus_chimps = $su_mod->consultarSuscrito_rxlista($lis_id);
             $mailchimp = new WsMailChimp();
             $cts_sus = 0;
@@ -61,21 +60,15 @@ class EmailController extends \app\components\CController {
                 }
                 sleep(1);
             }
-            \app\models\Utilities::putMessageLogFile("Ha terminado el procesos de suscribir");
             $mensaje='De un total de '.count($sus_chimps).' suscritos:<br/>';
             $mensaje.=$cts_sus.' se han suscritos a la lista<br/>';
             $mensaje.=$cts_no.' no se han suscritos a la lista<br/>';
-            \app\models\Utilities::putMessageLogFile($mensaje);
             $message = array(
                 "wtmessage" => Yii::t("formulario", $mensaje),
                 "title" => Yii::t('jslang', 'Success'),
                 "rederict" => Yii::$app->response->redirect(['/marketing/email/asignar?lis_id=' . base64_encode($lis_id)]),
             );
-            return Utilities::ajaxResponse('OK', 'alert', Yii::t("jslang", "Sucess"), false, $message);
-=======
-            $lsus_id = $su_mod->consultarSuscrito_rxlista($lis_id);
-            //Aqui se va a sucribir a cada suscriptor en al lista de mailchimp.            
->>>>>>> 8489e6461a89e7720b56925583a7e4e9a2e6c144
+            return Utilities::ajaxResponse('OK', 'alert', Yii::t("jslang", "Sucess"), false, $message);            
         }
     }
 
@@ -779,24 +772,6 @@ class EmailController extends \app\components\CController {
                         //consulto
                         $exitesuscrito = $mod_sb->consultarSuscriptoxPerylis($no_suscitos[$i]["per_id"], $lis_id);
                         // si existe en la base update
-<<<<<<< HEAD
-                        /* if (count($exitesuscrito) > 0) {
-                          $asusbribirmo .= '';
-                          $modsus_id .= $no_suscitos[$i]["per_id"] . ','; // verificar bien puede que haya q regresar el
-                          } */
-                        // else insert
-                        //else {
-                        $asuscribir .= 'INSERT INTO db_mailing.suscriptor (per_id, sus_estado, sus_estado_logico)';
-                        $asuscribir .= 'VALUES(' . $no_suscitos[$i]["per_id"] . ', ' . $estado . ', ' . $estado_logico . '); ';
-                        $sus_id .= $no_suscitos[$i]["per_id"] . ',';
-                        // }                     
-                        // variable $modsus_id 
-                    }
-                    $insertartodos = $mod_sb->insertarListaTodos($asuscribir);
-                    // modificar los $asusbribirmo
-                    //\app\models\Utilities::putMessageLogFile('rert..  ' . substr($sus_id, 0, -1));
-
-=======
                         if ($exitesuscrito["inscantes"] > 0) {
                             $modsus_id .= $no_suscitos[$i]["per_id"] . ',';
                         }                     
@@ -808,7 +783,6 @@ class EmailController extends \app\components\CController {
                     }                    
                     if (!empty($asuscribir)) {                       
                         $insertartodos = $mod_sb->insertarListaTodos($asuscribir);  
->>>>>>> 8489e6461a89e7720b56925583a7e4e9a2e6c144
                     if ($insertartodos) {
                         $idinsertados = $mod_sb->consultarSuscritosbtn(substr($sus_id, 0, -1));
                         // para crear nuevamente el script a insertar con los sus_id
@@ -869,13 +843,7 @@ class EmailController extends \app\components\CController {
             }
         }
     }
-<<<<<<< HEAD
-
     public function actionExpexcelLista() {
-=======
-                          
-    public function actionExpexcel1() {        
->>>>>>> 8489e6461a89e7720b56925583a7e4e9a2e6c144
         ini_set('memory_limit', '256M');
         $content_type = Utilities::mimeContentType("xls");
         $nombarch = "Report-" . date("YmdHis") . ".xls";
@@ -883,8 +851,6 @@ class EmailController extends \app\components\CController {
         header("Content-Disposition: attachment;filename=" . $nombarch);
         header('Cache-Control: max-age=0');
         $colPosition = array("C", "D", "E", "F", "G", "H", "I");
-<<<<<<< HEAD
-
         $arrHeader = array(
             marketing::t("marketing", "List"),
             academico::t("Academico", "Career/Program/Course"),
@@ -894,8 +860,6 @@ class EmailController extends \app\components\CController {
         $arrSearch["lista"] = $data["lista"];
 
         $mod_lista = new Lista();
-
-=======
         $arrHeader = array(            
             marketing::t("marketing", "List"),
             academico::t("Academico", "Career/Program/Course"),
@@ -904,8 +868,6 @@ class EmailController extends \app\components\CController {
         $data = Yii::$app->request->get();        
         $arrSearch["lista"] = $data["lista"];                
         $mod_lista = new Lista();                
-    
->>>>>>> 8489e6461a89e7720b56925583a7e4e9a2e6c144
         $arrData = array();
         if ($arrSearch["lista"] != "") {
             \app\models\Utilities::putMessageLogFile('ingresa con parametros');
@@ -918,10 +880,6 @@ class EmailController extends \app\components\CController {
         Utilities::generarReporteXLS($nombarch, $nameReport, $arrHeader, $arrData, $colPosition);
         exit;
     }
-<<<<<<< HEAD
-
-=======
-   
     public function actionExppdfl() {    
         $report = new ExportFile();
         $this->view->title = marketing::t("marketing", "List"); // Titulo del reporte        
@@ -952,5 +910,4 @@ class EmailController extends \app\components\CController {
         $report->mpdf->Output('Reporte_' . date("Ymdhis") . ".pdf", ExportFile::OUTPUT_TO_DOWNLOAD);
         return;                
     }
->>>>>>> 8489e6461a89e7720b56925583a7e4e9a2e6c144
 }
