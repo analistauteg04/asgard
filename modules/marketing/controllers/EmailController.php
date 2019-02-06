@@ -747,11 +747,24 @@ class EmailController extends \app\components\CController {
                 $no_suscitos = $mod_sb->consultarSuscriptoexcel($arrSearch, $lis_id, 0, 1);
                 if (count($no_suscitos) > 0) {
                     for ($i = 0; $i < count($no_suscitos); $i++) {
-                        $asuscribir .= 'INSERT INTO db_mailing.suscriptor (per_id, sus_estado, sus_estado_logico)';
-                        $asuscribir .= 'VALUES(' . $no_suscitos[$i]["per_id"] . ', ' . $estado . ', ' . $estado_logico . '); ';
-                        $sus_id .= $no_suscitos[$i]["per_id"] . ',';
+                        //consulto
+                        //$exitesuscrito = $mod_sb->consultarSuscriptoxPerylis($no_suscitos[$i]["per_id"], $lis_id);
+                        // si existe en la base update
+                        /*if (count($exitesuscrito) > 0) {
+                            $asusbribirmo .= '';
+                            $modsus_id .= $no_suscitos[$i]["per_id"] . ','; // verificar bien puede que haya q regresar el
+                        }*/
+                        // else insert
+                        //else {
+                            $asuscribir .= 'INSERT INTO db_mailing.suscriptor (per_id, sus_estado, sus_estado_logico)';
+                            $asuscribir .= 'VALUES(' . $no_suscitos[$i]["per_id"] . ', ' . $estado . ', ' . $estado_logico . '); ';
+                            $sus_id .= $no_suscitos[$i]["per_id"] . ',';
+                        // }                     
+                        
+                        // variable $modsus_id 
                     }
                     $insertartodos = $mod_sb->insertarListaTodos($asuscribir);
+                    // modificar los $asusbribirmo
                     //\app\models\Utilities::putMessageLogFile('rert..  ' . substr($sus_id, 0, -1));
 
                     if ($insertartodos) {
@@ -764,6 +777,7 @@ class EmailController extends \app\components\CController {
                             }
                         }
                         $insertadalista = $mod_sb->insertarListaSuscritorTodos($asuscribirli);
+                        // modificar los substr($modsus_id, 0, -1) 
                         \app\models\Utilities::putMessageLogFile('ccc..  ' . $asuscribirli);
                         if ($insertadalista) {
                             $exito = 1;
@@ -803,5 +817,35 @@ class EmailController extends \app\components\CController {
             }
         }
     }
+        
+    public function actionExpexcelLista() {
+        ini_set('memory_limit', '256M');
+        $content_type = Utilities::mimeContentType("xls");
+        $nombarch = "Report-" . date("YmdHis") . ".xls";
+        header("Content-Type: $content_type");
+        header("Content-Disposition: attachment;filename=" . $nombarch);
+        header('Cache-Control: max-age=0');
+        $colPosition = array("C", "D", "E", "F", "G", "H", "I");
 
+        $arrHeader = array(            
+            marketing::t("marketing", "List"),
+            academico::t("Academico", "Career/Program/Course"),
+            marketing::t("marketing", "Subscriber number"),
+        );
+        $data = Yii::$app->request->get();
+        $arrSearch["lista"] = $data["lista"];        
+
+        $mod_lista = new Lista();                
+                        
+        $arrData = array();
+        if ($arrSearch["estado"] == 0) {
+            $arrData = $mod_lista->consultarLista($arrSearch);
+        } else {
+            $mod_lista->consultarLista();
+        }
+        $nameReport = marketing::t("marketing", "List");
+        Utilities::generarReporteXLS($nombarch, $nameReport, $arrHeader, $arrData, $colPosition);
+        exit;
+    }
+   
 }
