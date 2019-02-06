@@ -42,7 +42,7 @@ class Empresa extends \app\modules\fe_edoc\components\CActiveRecord {
                      AND B.est_id='$est_id' AND C.pemi_id='$pemi_id'";
         //echo $sql;
         //$rawData = $conApp->createCommand($sql)->queryAll(); //Varios registros =>  $rawData[0]['RazonSocial']
-        $rawData = $conApp->createCommand($sql)->queryRow();  //Un solo Registro => $rawData['RazonSocial']
+        $rawData = $conApp->createCommand($sql)->queryOne();  //Un solo Registro => $rawData['RazonSocial']
         return $rawData;
     }
     
