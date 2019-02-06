@@ -533,6 +533,11 @@ function exportPdf() {
 }
 
 function exportExcelLista() {
-    var lista = $('#txt_buscar_lista').val();    
-    window.location.href = $('#txth_base').val() + "/marketing/email/expexcellista?lista=" + lista;
+    var lista = $('#txt_buscar_lista').val();        
+    window.location.href = $('#txth_base').val() + "/marketing/email/expexcel1?lista=" + lista;
+}
+
+function exportPdfLista() {
+    var lista = $('#txt_buscar_lista').val();          
+    window.location.href = $('#txth_base').val() + "/marketing/email/exppdfl?lista=" + lista;
 }

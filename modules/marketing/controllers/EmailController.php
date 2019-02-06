@@ -817,8 +817,8 @@ class EmailController extends \app\components\CController {
             }
         }
     }
-        
-    public function actionExpexcelLista() {
+                          
+    public function actionExpexcel1() {        
         ini_set('memory_limit', '256M');
         $content_type = Utilities::mimeContentType("xls");
         $nombarch = "Report-" . date("YmdHis") . ".xls";
@@ -826,26 +826,57 @@ class EmailController extends \app\components\CController {
         header("Content-Disposition: attachment;filename=" . $nombarch);
         header('Cache-Control: max-age=0');
         $colPosition = array("C", "D", "E", "F", "G", "H", "I");
-
+                
         $arrHeader = array(            
             marketing::t("marketing", "List"),
             academico::t("Academico", "Career/Program/Course"),
             marketing::t("marketing", "Subscriber number"),
-        );
-        $data = Yii::$app->request->get();
-        $arrSearch["lista"] = $data["lista"];        
-
+        );        
+        $data = Yii::$app->request->get();        
+        $arrSearch["lista"] = $data["lista"];                
         $mod_lista = new Lista();                
                         
         $arrData = array();
-        if ($arrSearch["estado"] == 0) {
-            $arrData = $mod_lista->consultarLista($arrSearch);
+        if ($arrSearch["lista"] != "") {
+            \app\models\Utilities::putMessageLogFile('ingresa con parametros');
+            $arrData = $mod_lista->consultarListaReporte($arrSearch);
         } else {
-            $mod_lista->consultarLista();
+            \app\models\Utilities::putMessageLogFile('no ingresa con parametros');
+            $arrData = $mod_lista->consultarListaReporte();
         }
         $nameReport = marketing::t("marketing", "List");
         Utilities::generarReporteXLS($nombarch, $nameReport, $arrHeader, $arrData, $colPosition);
         exit;
     }
    
+    public function actionExppdfl() {    
+        $report = new ExportFile();
+        $this->view->title = marketing::t("marketing", "List"); // Titulo del reporte        
+        $data = Yii::$app->request->get();
+        
+        $mod_lista = new Lista();
+        $arr_data = array();
+        $arrSearch["lista"] = $data["lista"];            
+        $arrHeader = array(            
+            marketing::t("marketing", "List"),
+            academico::t("Academico", "Career/Program/Course"),
+            marketing::t("marketing", "Subscriber number"),
+        );         
+        if ($arrSearch["lista"] != "") {
+            \app\models\Utilities::putMessageLogFile('ingresa con parametros');
+            $arr_data = $mod_lista->consultarListaReporte($arrSearch);
+        } else {
+            \app\models\Utilities::putMessageLogFile('no ingresa con parametros');
+            $arr_data = $mod_lista->consultarListaReporte();
+        }
+        $report->orientation = "P"; // tipo de orientacion L => Horizontal, P => Vertical
+        $report->createReportPdf(
+                $this->render('exportpdf', [
+                    'arr_head' => $arrHeader,
+                    'arr_body' => $arr_data
+                ])
+        );
+        $report->mpdf->Output('Reporte_' . date("Ymdhis") . ".pdf", ExportFile::OUTPUT_TO_DOWNLOAD);
+        return;                
+    }
 }
