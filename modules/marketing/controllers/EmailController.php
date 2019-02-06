@@ -165,6 +165,7 @@ class EmailController extends \app\components\CController {
                 }
                 return Utilities::ajaxResponse('OK', 'alert', Yii::t("jslang", "Sucess"), false, $message);
             } else if (trim($data["accion"]) == 'lis_rel') {
+                \app\models\Utilities::putMessageLogFile("Ingresa lista relacionada");
                 $list_id = $data["list_id"];
                 $list_ids = array();
                 if (isset($data['list_ids'])) {
@@ -844,7 +845,7 @@ class EmailController extends \app\components\CController {
             }
         }
     }
-    public function actionExpexcel1() {        
+    public function actionExpexcelLista() {
         ini_set('memory_limit', '256M');
         $content_type = Utilities::mimeContentType("xls");
         $nombarch = "Report-" . date("YmdHis") . ".xls";
@@ -852,6 +853,15 @@ class EmailController extends \app\components\CController {
         header("Content-Disposition: attachment;filename=" . $nombarch);
         header('Cache-Control: max-age=0');
         $colPosition = array("C", "D", "E", "F", "G", "H", "I");
+        $arrHeader = array(
+            marketing::t("marketing", "List"),
+            academico::t("Academico", "Career/Program/Course"),
+            marketing::t("marketing", "Subscriber number"),
+        );
+        $data = Yii::$app->request->get();
+        $arrSearch["lista"] = $data["lista"];
+
+        $mod_lista = new Lista();
         $arrHeader = array(            
             marketing::t("marketing", "List"),
             academico::t("Academico", "Career/Program/Course"),
@@ -860,7 +870,6 @@ class EmailController extends \app\components\CController {
         $data = Yii::$app->request->get();        
         $arrSearch["lista"] = $data["lista"];                
         $mod_lista = new Lista();                
-    
         $arrData = array();
         if ($arrSearch["lista"] != "") {
             \app\models\Utilities::putMessageLogFile('ingresa con parametros');
@@ -873,16 +882,14 @@ class EmailController extends \app\components\CController {
         Utilities::generarReporteXLS($nombarch, $nameReport, $arrHeader, $arrData, $colPosition);
         exit;
     }
-   
     public function actionExppdfl() {    
         $report = new ExportFile();
         $this->view->title = marketing::t("marketing", "List"); // Titulo del reporte        
-                
-        $mod_lista = new Lista();  
         $data = Yii::$app->request->get();
+        
+        $mod_lista = new Lista();
         $arr_data = array();
-        $arrSearch["lista"] = $data["lista"];  
-                
+        $arrSearch["lista"] = $data["lista"];            
         $arrHeader = array(            
             marketing::t("marketing", "List"),
             academico::t("Academico", "Career/Program/Course"),
@@ -893,7 +900,7 @@ class EmailController extends \app\components\CController {
             $arr_data = $mod_lista->consultarListaReporte($arrSearch);
         } else {
             \app\models\Utilities::putMessageLogFile('no ingresa con parametros');
-            $arr_data = $mod_lista->consultarListaReporte(array());
+            $arr_data = $mod_lista->consultarListaReporte();
         }
         $report->orientation = "P"; // tipo de orientacion L => Horizontal, P => Vertical
         $report->createReportPdf(
