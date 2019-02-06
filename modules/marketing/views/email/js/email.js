@@ -93,9 +93,8 @@ function mostrar_grid_lista_suscriptor() {
 }
 function suscribirTodos() {
     var messagePB = new Object();
-    messagePB.wtmessage = "Va a suscribir todos los contactos, esta opcion, solo guarda en la base como suscrito, vinculando a esta lista.<br/> Pero aun no esta como suscrito en mailchimp.`";
-    messagePB.title = "";
-    //var list_id = $('#txth_ids').val();
+    messagePB.wtmessage = "Va a suscribir todos los contactos, esta opcion, solo guarda en la base como suscrito, vinculando a esta lista.<br/> Pero aun no esta como suscrito en mailchimp.";
+    messagePB.title = "";  
     var objAccept = new Object();
     objAccept.id = "btnid2del";
     objAccept.class = "btn-primary clclass praclose";
@@ -108,8 +107,7 @@ function suscribirTodos() {
     showAlert("OK", "info", messagePB);
 }
 function fnsuscribirLista() {
-     var lista = $('#txth_ids').val();
-    /*window.location.href = $('#txth_base').val() + "/marketing/email/suscribirtodos?lisid=" + lista;*/
+    var lista = $('#txth_ids').val();    
     var link = $('#txth_base').val() + "/marketing/email/suscribirtodos?lisid=" + lista;
     var arrParams = new Object();
     arrParams.lis_id = lista;
