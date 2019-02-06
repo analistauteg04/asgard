@@ -108,7 +108,7 @@ function suscribirTodos() {
     showAlert("OK", "info", messagePB);
 }
 function fnsuscribirLista() {
-     var lista = $('#txth_ids').val();
+    var lista = $('#txth_ids').val();
     /*window.location.href = $('#txth_base').val() + "/marketing/email/suscribirtodos?lisid=" + lista;*/
     var link = $('#txth_base').val() + "/marketing/email/suscribirtodos?lisid=" + lista;
     var arrParams = new Object();
@@ -118,7 +118,7 @@ function fnsuscribirLista() {
             showAlert(response.status, response.label, response.message);
             if (!response.error) {
                 setTimeout(function () {
-                    window.location.href = $('#txth_base').val() + "/marketing/email/asignar?lis_id="+ arrParams.lis_id;
+                    window.location.href = $('#txth_base').val() + "/marketing/email/asignar?lis_id=" + arrParams.lis_id;
                 }, 5000);
             }
         }, true);
@@ -152,7 +152,7 @@ function suscribirContacto(psus_id, per_tipo, list_id) {
     arrParams.accion = 'sc';
     if (!validateForm()) {
         requestHttpAjax(link, arrParams, function (response) {
-           preguntaSuscribirOtrasListas(response.message);
+            preguntaSuscribirOtrasListas(response.message);
         }, true);
     }
 }
@@ -178,32 +178,33 @@ function preguntaSuscribirOtrasListas(message) {
     objAccept.id = "btnid2del";
     objAccept.class = "btn-primary clclass praclose";
     objAccept.value = "Aceptar";
-    objAccept.callback = 'suscribirOtrasListas';    
-    var slistas='';
+    objAccept.callback = 'suscribirOtrasListas';
+    var slistas = '';
     if (listas.length > 0) {
-        var ids='';
+        var ids = '';
         for (i = 0; i < listas.length; i++) {
-            if(i<(listas.length-1)){
-                ids = ids + listas[i]['lis_id']+ ',';
-            }else{
+            if (i < (listas.length - 1)) {
+                ids = ids + listas[i]['lis_id'] + ',';
+            } else {
                 ids = ids + listas[i]['lis_id'];
             }
         }
-        slistas=ids;
-    }    
+        slistas = ids;
+    }
     var params = new Array(slistas, message.sus_id);
     objAccept.paramCallback = params;
     messagePB.acciones = new Array();
     messagePB.acciones[0] = objAccept;
-    showAlert("OK", "success", messagePB);         
+    showAlert("OK", "success", messagePB);
 }
 function suscribirOtrasListas(lista_rel, sus_id) {
     var link = $('#txth_base').val() + "/marketing/email/asignar";
     var arrParams = new Object();
-    arrParams.list_id = $('#txth_ids').val();;    
-    arrParams.sus_id = sus_id;    
-    if(lista_rel.length>0){
-        arrParams.list_ids = lista_rel;    
+    arrParams.list_id = $('#txth_ids').val();
+    ;
+    arrParams.sus_id = sus_id;
+    if (lista_rel.length > 0) {
+        arrParams.list_ids = lista_rel;
     }
     arrParams.accion = 'lis_rel';
     if (!validateForm()) {
@@ -450,8 +451,14 @@ function subirMailchimp() {
     messagePB.acciones[0] = objAccept;
     showAlert("warning", "warning", messagePB);
 }
-function cargarMailchimp(idl) {
-
+function cargarMailchimp(idl, temp) {
+    var arrParams = new Object();
+    arrParams.lis_id = idl;
+    var link = $('#txth_base').val() + "/marketing/email/cargarmailchimp";
+    requestHttpAjax(link, arrParams, function (response) {
+        showAlert(response.status, response.label, response.message);
+        alert("ha cargado en mailchimp");
+    }, true);
 }
 function modificarProgramacion() {
     var link = $('#txth_base').val() + "/marketing/email/updateprogramacion";
@@ -511,8 +518,6 @@ function modificarProgramacion() {
                         window.location.href = $('#txth_base').val() + "/marketing/email/index";
                     }, 5000);
                 }
-
-
             }, true);
         }
     }

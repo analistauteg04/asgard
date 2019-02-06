@@ -261,7 +261,31 @@ class Suscriptor extends \yii\db\ActiveRecord {
             return FALSE;
         }
     }
+    /**
+     * Function consultarSuscriptoxPerylis
+     * @author  Kleber Loayza <analistadesarrollo03@uteg.edu.ec>
+     * @param   
+     * @return  
+     */
+    public function consultarSuscrito_rxlista($per_id, $list_id) {
+        $con = \Yii::$app->db_mailing;
+        //$estado = 0;
 
+        $sql = "
+                select count(*) as inscantes	
+                FROM " . $con->dbname . ".suscriptor sus 
+                INNER JOIN " . $con->dbname . ".lista_suscriptor lsus     
+                ON sus.sus_id = lsus.sus_id
+                WHERE sus.per_id = :per_id AND
+                lsus.lis_id = :list_id  ";
+
+        $comando = $con->createCommand($sql);
+        //$comando->bindParam(":estado", $estado, \PDO::PARAM_STR);
+        $comando->bindParam(":per_id", $per_id, \PDO::PARAM_INT);
+        $comando->bindParam(":list_id", $list_id, \PDO::PARAM_INT);
+        $resultData = $comando->queryOne();
+        return $resultData;
+    }
     /**
      * Function consultarSuscriptoxPerylis
      * @author  Giovanni Vergara <analistadesarrollo02@uteg.edu.ec>

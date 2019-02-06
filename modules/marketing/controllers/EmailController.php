@@ -39,7 +39,15 @@ class EmailController extends \app\components\CController {
         return $this->render('index', [
                     'model' => $resp_lista]);
     }
-
+    public function actionCargarmailchimp() {
+        if (Yii::$app->request->isAjax) {
+            $data = Yii::$app->request->post();
+            $lis_id = base64_decode($data['lis_id']);
+            $su_mod=new Suscriptor();
+            $lsus_id=$su_mod->consultarSuscrito_rxlista($lis_id);
+            //Aqui se va a sucribir a cada suscriptor en al lista de mailchimp.            
+        }
+    }
     public function actionAsignar() {
         $mod_lista = new Lista();
         $arrSearch = array();
