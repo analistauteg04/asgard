@@ -448,17 +448,12 @@ class EmailController extends \app\components\CController {
                                 $exito = 1;
                             }
                         }
-                    } else {  //Modificación                             
-                        \app\models\Utilities::putMessageLogFile('codigo:' . $resp_consulta["lis_codigo"]);                       
-                        //$listId = array("lis_id" => $resp_consulta["lis_codigo"]);
-                        \app\models\Utilities::putMessageLogFile('listId:' .  $resp_consulta["lis_id"]);
-                        /*$conLista = $webs_mailchimp->getList($resp_consulta["lis_codigo"]);
-                        if ($conLista) {
-                            $edLista = $webs_mailchimp->editList($conLista, $nombre_lista, $contacto, "permiso", $nombre_contacto, $correo_contacto, $asunto);
-                        }*/
+                    } else {  //Modificación                                                                                                                        
+                        $conLista = $webs_mailchimp->getList($resp_consulta['lis_codigo']);
+                        \app\models\Utilities::putMessageLogFile('conLista:' . $conLista);
                         $edLista = $webs_mailchimp->editList($resp_consulta['lis_codigo'], $nombre_lista, $contacto, "permiso", $nombre_contacto, $correo_contacto, $asunto);
                         if ($edLista) {
-                            \app\models\Utilities::putMessageLogFile('conLista:' . $conLista);
+                            \app\models\Utilities::putMessageLogFile('conLista:' . $edLista);
                             //Grabar en asgard                    
                             $resp_lista = $lista->modificarLista($list_id, $eaca_id, $mest_id, $emp_id, $nombre_lista, $ecor_id, $nombre_contacto, $pais, $provincia, $ciudad, $direccion1, $direccion2, $telefono, $codigo_postal, $asunto);
                             if ($resp_lista) {
@@ -577,7 +572,6 @@ class EmailController extends \app\components\CController {
         $estudio_mod = new ModuloEstudio();
         $lista = new Lista();
         $list_id = base64_decode($_GET["lis_id"]);
-
         if (Yii::$app->request->isAjax) {
             $data = Yii::$app->request->post();
             if (isset($data["getcarrera"])) {
