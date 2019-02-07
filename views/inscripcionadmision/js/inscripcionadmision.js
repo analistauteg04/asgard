@@ -437,8 +437,8 @@ function guardarInscripcion(accion, paso) {
                     $('#lbl_moda_tx').text(response.data.data.modalidad);
                     $('#lbl_carrera_tx').text(response.data.data.carrera);
                     $('#lbl_ming_tx').text(response.data.data.metodo);
-
-                    if (uaca_id == 1) {
+                    
+                    if (uaca_id == 1) {                        
                         $('#id_item_1').css('display', 'block');
                         $('#id_item_2').css('display', 'block');
                     } else if (uaca_id == 2) {
@@ -467,13 +467,16 @@ function guardarInscripcion(accion, paso) {
                         $('#lbl_fcur_tx').text("15 abril del 2019");
                     } else if (uaca_id == 1) {
                         leyenda = 'El valor a cancelar por concepto de matriculación en la modalidad ' + response.data.data.modalidad + ' es:';
-                        if (mod_id == 1) {//online                                  
+                        if (mod_id == 1) {//online                                
                             $('#val_item_1').text('$65');
                             $('#lbl_item_2').text("Plataforma: ");
                             $('#val_item_2').text('$50');
                             $('#lbl_valor_pagar_tx').text("$115");
                             $('#lbl_item_3').text("Pago Mínimo: ");
                             $('#val_item_3').text('$115');
+                            // Habilitar los items.
+                            $('#id_item_1').css('display', 'block');
+                            $('#id_item_2').css('display', 'block');
 //                                $('#lbl_valor_pagar_tx').text(response.data.data.precio);
 //                                $('#lbl_fcur_lb').text("Fecha del curso:");
 //                                $('#lbl_fcur_tx').text("22 de octubre al 14 de diciembre");
@@ -483,19 +486,22 @@ function guardarInscripcion(accion, paso) {
                             //$('#lbl_fcur_tx').text("En quince (15) días a partir del registro (un coordinador te contactará para brindarte mayor información)");                                
                         } else if (mod_id == 2 || mod_id == 3 || mod_id == 4) {//presencial y semi presencial
                             //if (ming == 1) {// curso
+                            var $val_item_1 = "";
                             if (mod_id == 2 || mod_id == 3) {
                                 //$('#lbl_fcur_tx').text("22 de octubre al 30 de noviembre");
                                 $('#val_item_1').text('$250');
+                                $val_item_1 = '$250';
                             } else if (mod_id == 4) {
-                                $('#val_item_1').text('$250');
+                                $('#val_item_1').text('$115');
+                                $val_item_1 = '$115';
                                 //$('#lbl_fcur_tx').text("20 de octubre al 8 de diciembre");
                             }
 //                                    $('#lbl_mcur_lb').text("Materias a cursar");
-//                                    $('#lbl_item_1').text("Curso de nivelación: ");
+//                                    $('#lbl_item_1').text("Curso de nivelación: ");                            
                             $('#val_item_1').text(response.data.data.precio);
                             $('#lbl_item_2').text("Plataforma: ");
                             $('#val_item_2').text('$0');
-                            $('#lbl_valor_pagar_tx').text("$250");
+                            $('#lbl_valor_pagar_tx').text($val_item_1);
                             $('#lbl_item_3').text("Pago Mínimo: ");
                             $('#val_item_3').text('$100');
                             //var totalvalor = parseInt(response.data.data.precio) - parseInt(response.data.data.ddit_valor);
