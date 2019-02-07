@@ -149,14 +149,12 @@ function suscribirContacto(psus_id, per_tipo, list_id) {
     arrParams.list_id = list_id;
     arrParams.accion = 'sc';
     if (!validateForm()) {
-        requestHttpAjax(link, arrParams, function (response) {
-            alert('llego respueta ajax');
+        requestHttpAjax(link, arrParams, function (response) {      
             preguntaSuscribirOtrasListas(response.message);
         }, true);
     }
 }
-function preguntaSuscribirOtrasListas(message) {
-    alert('llego a esta funcion');
+function preguntaSuscribirOtrasListas(message) {  
     var messagePB = new Object();
     var mens_tot = message.wtmessage;
     mens_tot = mens_tot + "<br/> Las personas que se han suscrito a estas listas, tambien les ha interesado las siguientes listas:<br/>";
@@ -189,23 +187,21 @@ function preguntaSuscribirOtrasListas(message) {
             }
         }
         slistas = ids;
-    }
-    alert(slistas);
+    }   
     var params = new Array(slistas, message.sus_id);
     objAccept.paramCallback = params;
     messagePB.acciones = new Array();
     messagePB.acciones[0] = objAccept;
     showAlert("OK", "success", messagePB);
 }
-function suscribirOtrasListas(lista_rel, sus_id) {
+function suscribirOtrasListas(lista_rel, sus_id) {    
     var link = $('#txth_base').val() + "/marketing/email/asignar";
     var arrParams = new Object();
     arrParams.list_id = $('#txth_ids').val();
-    ;
     arrParams.sus_id = sus_id;
-    if (lista_rel.length > 0) {
+    if (lista_rel.length != '') {        
         arrParams.list_ids = lista_rel;
-    }
+    }    
     arrParams.accion = 'lis_rel';
     if (!validateForm()) {
         requestHttpAjax(link, arrParams, function (response) {
@@ -451,7 +447,6 @@ function cargarMailchimp() {
     var arrParams = new Object();
     arrParams.lis_id = idlista;
     var link = $('#txth_base').val() + "/marketing/email/cargarmailchimp";
-    alert("Va a entar a la funcion");
     requestHttpAjax(link, arrParams, function (response) {
         showAlert(response.status, response.label, response.message);        
     }, true);

@@ -86,7 +86,6 @@ class EmailController extends \app\components\CController {
         $error = 0;
         $mensaje = "";
         $estado_cambio = 1;
-        //\app\models\Utilities::putMessageLogFile("Llego a la accion asignar");
         $data = Yii::$app->request->get();
         if (isset($data["PBgetFilter"])) {
             $arrSearch["estado"] = $data['estado'];
@@ -167,6 +166,7 @@ class EmailController extends \app\components\CController {
             } else if (trim($data["accion"]) == 'lis_rel') {
                 \app\models\Utilities::putMessageLogFile("Ingresa lista relacionada");
                 $list_id = $data["list_id"];
+                \app\models\Utilities::putMessageLogFile('que tienes esta lista... '.$list_ids);
                 $list_ids = array();
                 if (isset($data['list_ids'])) {
                     $list_ids = explode(",", $data['list_ids']);
@@ -183,10 +183,10 @@ class EmailController extends \app\components\CController {
                             $key = ['lis_id', 'sus_id', 'lsus_estado', 'lsus_fecha_creacion', 'lsus_estado_logico'];
                             $parametro = [$list_ids[$i], $sus_id, 1, $fecha_crea, 1];
                             $lsu_id = $mod_sb->insertarListaSuscritor($con, $parametro, $key, 'lista_suscriptor');
-                            if ($lsu_id > 0) {
-                                $mensaje = $mensaje . " El suscritor fue guardado en la lista " . $list_ids[$i]['lis_nombre'] . "<br/>";
+                            if ($lsu_id) {
+                                $mensaje = $mensaje . " El suscritor fue guardado en la lista " . ''/*$list_ids[$i]['lis_nombre']*/ . "<br/>";
                             } else {
-                                $mensaje = $mensaje . " El suscritor no fue guardado en la lista " . $list_ids[$i]['lis_nombre'] . "<br/>";
+                                $mensaje = $mensaje . " El suscritor no fue guardado en la lista " . ''/*$list_ids[$i]['lis_nombre']*/ . "<br/>";
                             }
                         }
                         $i = $i + 1;
