@@ -138,11 +138,11 @@ class EmailController extends \app\components\CController {
                         if ($lsu_id > 0) {
                             $mensaje = "El contacto ha sido asignado a la lista satisfactoriamente";
                         } else {
-                            $mensaje = "Error: El suscritor no fue guardado.";
+                            $mensaje = "Error: El suscriptor no fue guardado.";
                             $error++;
                         }
                     } else {
-                        $mensaje = "Error: El suscritor no fue guardado.";
+                        $mensaje = "Error: El suscriptor no fue guardado.";
                         $error++;
                     }
                 }
@@ -155,6 +155,7 @@ class EmailController extends \app\components\CController {
                         "title" => Yii::t('jslang', 'Success'),
                         "listas" => $est_rel,
                         "sus_id" => $su_id,
+                        "rederict" => Yii::$app->response->redirect(['/marketing/email/asignar?lis_id=' . base64_encode($list_id)]),
                     );
                 } else {
                     $message = array(
@@ -184,9 +185,9 @@ class EmailController extends \app\components\CController {
                             $parametro = [$list_ids[$i], $sus_id, 1, $fecha_crea, 1];
                             $lsu_id = $mod_sb->insertarListaSuscritor($con, $parametro, $key, 'lista_suscriptor');
                             if ($lsu_id) {
-                                $mensaje = $mensaje . " El suscritor fue guardado en la lista " . ''/*$list_ids[$i]['lis_nombre']*/ . "<br/>";
+                                $mensaje = $mensaje . " El suscriptor fue guardado en la lista " . ''/*$list_ids[$i]['lis_nombre']*/ . "<br/>";
                             } else {
-                                $mensaje = $mensaje . " El suscritor no fue guardado en la lista " . ''/*$list_ids[$i]['lis_nombre']*/ . "<br/>";
+                                $mensaje = $mensaje . " El suscriptor no fue guardado en la lista " . ''/*$list_ids[$i]['lis_nombre']*/ . "<br/>";
                             }
                         }
                         $i = $i + 1;
@@ -198,9 +199,9 @@ class EmailController extends \app\components\CController {
                 $message = array(
                     "wtmessage" => Yii::t("formulario", $mensaje),
                     "title" => Yii::t('jslang', 'Success'),
-                    //"rederict" => Yii::$app->response->redirect(['/marketing/email/asignar?lis_id=' . $list_id]),
+                    //"rederict" => Yii::$app->response->redirect(['/marketing/email/asignar?lis_id=' . base64_encode($lis_id)]),
                 );
-                return Utilities::ajaxResponse('OK', 'alert', Yii::t("jslang", "Sucess"), false, $message);
+                return Utilities::ajaxResponse('OK', 'alert', Yii::t("jslang", "Sucess"), false, $message);                     
             }
         }
         return $this->render('asignar', [
@@ -645,13 +646,13 @@ class EmailController extends \app\components\CController {
                 $esus = $mod_sb->updateSuscripto($per_id, $lista_id, $estado_cambio);
                 if ($esus > 0) {
                     if ($esus > 0) {
-                        $mensaje = "El contacto ya no esta suscripto a la lista";
+                        $mensaje = "El contacto ya no está suscrito a la lista";
                     } else {
-                        $mensaje = "Error: El suscritor no fue eliminado.";
+                        $mensaje = "Error: El suscriptor no fue eliminado.";
                         $error++;
                     }
                 } else {
-                    $mensaje = "Error: El suscritor no fue eliminado.";
+                    $mensaje = "Error: El suscriptor no fue eliminado.";
                     $error++;
                 }
             }
@@ -673,7 +674,7 @@ class EmailController extends \app\components\CController {
         }
         return $this->render('asignar', [
                     'arr_lista' => $lista_model,
-                    'arr_estado' => array("Seleccionar", "Subscrito", "No Subscrito"),
+                    'arr_estado' => array("Seleccionar", "Suscripto", "No Suscripto"),
                     'model' => $susbs_lista,
         ]);
     }
