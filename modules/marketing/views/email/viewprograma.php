@@ -36,8 +36,8 @@ for ($m = 0; $m < count($dia_marcados); $m++) {
             </div> 
             <div class="col-md-6 col-sm-6 col-xs-6 col-lg-6">
                 <div class="form-group">
-                    <label for="txt_no_subs" class="col-sm-3 col-md-3 col-xs-3 col-lg-3 control-label" id="txt_no_subs"><?= Yii::t("formulario", "No. Subscr..") ?></label>
-                    <span for="txt_no_subs" class="col-sm-4 col-md-4 col-xs-4 col-lg-4 control-label" id="txt_no_subs"><?= $arr_lista['num_suscr'] ?> </span> 
+                    <label for="txt_no_subs" class="col-sm-3 col-md-3 col-xs-3 col-lg-3 control-label" id="txt_no_subs"><?= Module::t("marketing", "No. Subscribers in Mailchimp") ?></label>
+                    <span for="txt_no_subs" class="col-sm-4 col-md-4 col-xs-4 col-lg-4 control-label" id="txt_no_subs"><?= $arr_lista['num_suscr_mailchimp'] ?> </span> 
                 </div>
             </div> 
         </div>

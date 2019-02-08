@@ -54,6 +54,7 @@ return [
     "Name Contact" => "Nombre Contacto",
     "New List" => "Lista Nueva",
     "No Subscribers" => "No Suscritos",
+    "No. Subscribers in Mailchimp" => "Suscrip. Mailchimp:",
     "Malichimp" => "Malichimp",
     "Programtion" => "Programación",
     "Shipping Time" => "Hora Envío",
@@ -62,4 +63,5 @@ return [
     "Subscriber Allocation" => "Asignación de Suscriptores",
     "Subscriber number" => "Número suscriptores",
     "Template" => "Plantilla",
+    
 ];

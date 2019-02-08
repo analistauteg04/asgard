@@ -270,9 +270,12 @@ INSERT INTO `grup_rol` (`grol_id`, `gru_id`, `rol_id`, `grol_estado`, `grol_esta
 -- Volcado de datos para la tabla `empresa_correo`
 --
 INSERT INTO `empresa_correo` (`ecor_id`, `emp_id`, `ecor_correo`, `ecor_estado`, `ecor_estado_logico`) VALUES
-(1, 1, 'noreply@uteg.edu.ec', '1', '1'),
+/*(1, 1, 'noreply@uteg.edu.ec', '1', '1'),
 (2, 2, 'info@ulink.us', '1', '1'),
-(3, 3, 'noreply@sbc.com.ec', '1', '1');
+(3, 3, 'noreply@sbc.com.ec', '1', '1');*/
+(1, 1, 'craneaec@gmail.com', '1', '1'),
+(2, 2, 'craneaec@gmail.com', '1', '1'),
+(3, 3, 'craneaec@gmail.com', '1', '1');
 
 
 

@@ -93,7 +93,7 @@ function mostrar_grid_lista_suscriptor() {
 }
 function suscribirTodos() {
     var messagePB = new Object();
-    messagePB.wtmessage = "Va a suscribir todos los contactos, esta opcion, solo guarda en la base como suscrito, vinculando a esta lista.<br/> Pero aun no esta como suscrito en mailchimp.";
+    messagePB.wtmessage = "Va a suscribir todos los contactos, esta opción sólo guarda en la base como suscrito, vinculando a esta lista.<br/> Pero aún no está como suscrito en mailchimp.";
     messagePB.title = "";  
     var objAccept = new Object();
     objAccept.id = "btnid2del";

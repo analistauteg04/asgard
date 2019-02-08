@@ -172,8 +172,15 @@ class Edoc_ApiRest extends \app\modules\fe_edoc\components\CActiveRecord {
         $cedulaRucFinal = ($tipoIdentificaion == '07') ? '9999999999999' : $cabFact['RUC_SUJETO'];
         $por_iva = intval($cabFact['IVA_PORCENTAJE']); //12;
         //0=IVa 0% y 2=iva 12%
-        $ImporteTotal = (intval($cabFact['IVA_CODIGO']) == 2) ? (floatval($cabFact['TOTALBRUTO']) * (floatval($por_iva) / 100)) + floatval($cabFact['TOTALBRUTO']) : $cabFact['TOTALBRUTO'];
-
+        //$ImporteTotal = (intval($cabFact['IVA_CODIGO']) == 2) ? (floatval($cabFact['TOTALBRUTO']) * (floatval($por_iva) / 100)) + floatval($cabFact['TOTALBRUTO']) : $cabFact['TOTALBRUTO'];
+        $TotalSinImpuesto=$cabFact['TOTALBRUTO'];
+        $ImporteTotal=$cabFact['TOTALDOC'];
+        if(intval($cabFact['IVA_CODIGO']) == 2){
+            if(floatval($cabFact['IVA_VALOR'])>0){
+                $ImporteTotal=floatval($cabFact['TOTALBRUTO'])+floatval($cabFact['IVA_VALOR']);
+            }            
+        }
+        
         $sql = "INSERT INTO " . $con->dbname . ".NubeFactura
                (Ambiente,TipoEmision, RazonSocial, NombreComercial, Ruc,ClaveAcceso,CodigoDocumento, Establecimiento,
                 PuntoEmision, Secuencial, DireccionMatriz, FechaEmision, DireccionEstablecimiento, ContribuyenteEspecial,
@@ -205,7 +212,7 @@ class Edoc_ApiRest extends \app\modules\fe_edoc\components\CActiveRecord {
         $comando->bindParam(":GuiaRemision", $cabFact['NUMGUIA'], \PDO::PARAM_STR);
         $comando->bindParam(":RazonSocialComprador", $cabFact['RAZONSOCIAL_SUJETO'], \PDO::PARAM_STR);
         $comando->bindParam(":IdentificacionComprador", $cedulaRucFinal, \PDO::PARAM_STR);
-        $comando->bindParam(":TotalSinImpuesto", $cabFact['TOTALBRUTO'], \PDO::PARAM_STR);
+        $comando->bindParam(":TotalSinImpuesto", $TotalSinImpuesto, \PDO::PARAM_STR);
         $comando->bindParam(":TotalDescuento", $cabFact['TOTALDESC'], \PDO::PARAM_STR);
         $comando->bindParam(":Propina", $cabFact['PROPINA'], \PDO::PARAM_STR);
         $comando->bindParam(":ImporteTotal", $ImporteTotal, \PDO::PARAM_STR);
