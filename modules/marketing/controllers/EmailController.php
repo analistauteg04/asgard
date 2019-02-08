@@ -171,8 +171,6 @@ class EmailController extends \app\components\CController {
                 if (isset($data['list_ids'])) {
                     $list_ids = explode(",", $data['list_ids']);
                 }
-                \app\models\Utilities::putMessageLogFile("listas relacoinadas:");
-                \app\models\Utilities::putMessageLogFile($list_ids);
                 $sus_id = $data['sus_id'];
                 $i = 0;
                 if (count($list_ids) > 0) {
