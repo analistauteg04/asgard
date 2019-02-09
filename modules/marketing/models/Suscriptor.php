@@ -218,10 +218,38 @@ class Suscriptor extends \yii\db\ActiveRecord {
             return 0;
         }
     }
-
     /**
      * Function eliminarSuscriptor
      * @author  Gioavanni Vergara <analistadesarrollo02@uteg.edu.ec>
+     * @property 
+     * @return  
+     */
+    public function actualizarEstadoChimp($sus_id) {
+        $con = \Yii::$app->db_mailing;
+        $fecha_modificacion = date(Yii::$app->params["dateTimeByDefault"]);
+        $trans = $con->beginTransaction(); // si no existe la transacción entonces se crea una
+        try {
+            $comando = $con->createCommand
+                    ("                    
+                        UPDATE " . $con->dbname . ".suscriptor sus 
+                        SET 
+                            sus.sus_estado_mailchimp = 1,
+                            sus.sus_fecha_modificacion = :fecha_modificacion                          
+                        WHERE sus.sus_id = $sus_id
+                    ");
+
+            $comando->bindParam(":fecha_modificacion", $fecha_modificacion, \PDO::PARAM_STR);
+            $response = $comando->execute();
+            $trans->commit();
+            return $response;
+        } catch (Exception $ex) {
+            $trans->rollback();
+            return FALSE;
+        }
+    }
+    /**
+     * Function eliminar logica Suscriptor, cambia el estado a 0
+     * @author  Giovanni Vergara <analistadesarrollo02@uteg.edu.ec>
      * @property 
      * @return  
      */
@@ -261,7 +289,33 @@ class Suscriptor extends \yii\db\ActiveRecord {
             return FALSE;
         }
     }
+    /**
+     * Function consultarSuscriptoxPerylis
+     * @author  Kleber Loayza <analistadesarrollo03@uteg.edu.ec>
+     * @param   
+     * @return  
+     */
+    public function consultarSuscrito_rxlista($list_id) {
+        $con = \Yii::$app->db_mailing;
+        $sql = "
+                    select list.lis_codigo as codigo,sus.sus_id, if(ifnull(pges.pges_id,0)>0,pges.pges_correo,per.per_correo) as correo
+                    FROM 
+                                db_mailing.suscriptor sus     
+                    join        db_mailing.lista as list on list.lis_id=$list_id
+                    JOIN        db_mailing.lista_suscriptor lsus ON sus.sus_id = lsus.sus_id
+                    left join   db_asgard.persona as per on per.per_id=sus.per_id	
+                    left join   db_crm.persona_gestion as pges on pges.pges_id=sus.pges_id	
+                    WHERE 
+                        lsus.lis_id = $list_id and
+                    sus.sus_estado=1 and sus.sus_estado_logico=1;
+        ";
 
+        $comando = $con->createCommand($sql);
+        #$comando->bindParam(":per_id", $per_id, \PDO::PARAM_INT);
+        #$comando->bindParam(":list_id", $list_id, \PDO::PARAM_INT);
+        $resultData = $comando->queryAll();
+        return $resultData;
+    }
     /**
      * Function consultarSuscriptoxPerylis
      * @author  Giovanni Vergara <analistadesarrollo02@uteg.edu.ec>
@@ -270,7 +324,7 @@ class Suscriptor extends \yii\db\ActiveRecord {
      */
     public function consultarSuscriptoxPerylis($per_id, $list_id) {
         $con = \Yii::$app->db_mailing;
-        //$estado = 0;
+        // $estado = 1;
 
         $sql = "
                 select count(*) as inscantes	
@@ -278,10 +332,12 @@ class Suscriptor extends \yii\db\ActiveRecord {
                 INNER JOIN " . $con->dbname . ".lista_suscriptor lsus     
                 ON sus.sus_id = lsus.sus_id
                 WHERE sus.per_id = :per_id AND
-                lsus.lis_id = :list_id  ";
+                lsus.lis_id = :list_id 
+                -- AND sus.sus_estado_logico = :estado
+                -- AND lsus.lsus_estado_logico = :estado";
 
         $comando = $con->createCommand($sql);
-        //$comando->bindParam(":estado", $estado, \PDO::PARAM_STR);
+        // $comando->bindParam(":estado", $estado, \PDO::PARAM_STR);
         $comando->bindParam(":per_id", $per_id, \PDO::PARAM_INT);
         $comando->bindParam(":list_id", $list_id, \PDO::PARAM_INT);
         $resultData = $comando->queryOne();
@@ -294,7 +350,7 @@ class Suscriptor extends \yii\db\ActiveRecord {
      * @property integer $userid
      * @return  
      */
-    public function consultarSuscriptoexcel($arrFiltro = array(), $list_id, $subscrito = 0) {
+    public function consultarSuscriptoexcel($arrFiltro = array(), $list_id, $subscrito = 0, $mpid) {
         $con = \Yii::$app->db_mailing;
         $con1 = \Yii::$app->db;
         $con2 = \Yii::$app->db_academico;
@@ -314,8 +370,12 @@ class Suscriptor extends \yii\db\ActiveRecord {
                 $str_search = " AND (ifnull(sus.sus_id,0) = 0 or sus.sus_estado ='0') ";
             }
         }
+        if ($mpid == 1) {
+            $mostraper_id = 'per.per_id,';
+        }
         $sql = "
-               SELECT                    
+               SELECT  
+                    $mostraper_id
                     concat(per.per_pri_nombre,' ',per.per_pri_apellido) as contacto, 
                     if(isnull(mest.mest_nombre),eaca.eaca_nombre,mest.mest_nombre) carrera,
                     per.per_correo,
@@ -385,4 +445,87 @@ class Suscriptor extends \yii\db\ActiveRecord {
         return $resultData;
     }
 
+    /**
+     * Function suscribe todos segunlista. 
+     * @author Giovanni Vergara <analistadesarrollo02@uteg.edu.ec>;
+     * @param
+     * @return
+     */
+    public function insertarListaTodos($asuscribir) {
+        $con = \Yii::$app->db_mailing;
+        $trans = $con->getTransaction();
+
+        try {
+            $sql = $asuscribir;
+            $command = $con->createCommand($sql);
+            $command->execute();
+            return $con->getLastInsertID();
+        } catch (Exception $ex) {
+            if ($trans !== null) {
+                $trans->rollback();
+            }
+            return 0;
+        }
+    }
+
+    /**
+     * Function consultarSuscriptoresxLista
+     * @author  Giovanni Vergara <analistadesarrollo02@uteg.edu.ec>    
+     * @property integer $userid
+     * @return  
+     */
+    public function consultarSuscritosbtn($sus_id) {
+        $con = \Yii::$app->db_mailing;
+        $sql = "
+               SELECT sus_id 
+               FROM db_mailing.suscriptor
+               WHERE per_id in ($sus_id)
+               ";
+        $comando = $con->createCommand($sql);        
+        $resultData = $comando->queryAll();
+        return $resultData;
+    }
+
+    /**
+     * Function suscribe todos segunlista. 
+     * @author Giovanni Vergara <analistadesarrollo02@uteg.edu.ec>;
+     * @param
+     * @return
+     */
+    public function insertarListaSuscritorTodos($asuscribirli) {
+        $con = \Yii::$app->db_mailing;
+        $trans = $con->getTransaction();
+        try {
+            $sql = $asuscribirli;
+            $command = $con->createCommand($sql);
+            $command->execute();
+            return $con->getLastInsertID();
+        } catch (Exception $ex) {
+            if ($trans !== null) {
+                $trans->rollback();
+            }
+            return 0;
+        }
+    }
+    /**
+     * Function eliminar todos los Suscriptor 
+     * @author Giovanni Vergara <analistadesarrollo02@uteg.edu.ec>;
+     * @param
+     * @return
+     */
+    public function updateSuscriptodos($suscribirtodos) {
+        $con = \Yii::$app->db_mailing;        
+        $trans = $con->getTransaction();
+        try {
+            $sql = $suscribirtodos;            
+            $command = $con->createCommand($sql);
+            $command->execute();
+            return $con->getLastInsertID();            
+        } catch (Exception $ex) {
+            if ($trans !== null) {
+                $trans->rollback();
+            }
+            return 0;
+        }
+    }
 }

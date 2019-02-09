@@ -93,22 +93,34 @@ function mostrar_grid_lista_suscriptor() {
 }
 function suscribirTodos() {
     var messagePB = new Object();
-    messagePB.wtmessage = "Va a suscribir todos los contactos, esta opcion, solo guarda en la base como suscrito, vinculando a esta lista.<br/> Pero aun no esta como suscrito en mailchimp.`";
-    messagePB.title = "";
-    var list_id = $('#txth_ids').val();
+    messagePB.wtmessage = "Va a suscribir todos los contactos, esta opción sólo guarda en la base como suscrito, vinculando a esta lista.<br/> Pero aún no está como suscrito en mailchimp.";
+    messagePB.title = "";  
     var objAccept = new Object();
     objAccept.id = "btnid2del";
     objAccept.class = "btn-primary clclass praclose";
     objAccept.value = "Aceptar";
     objAccept.callback = 'fnsuscribirLista';
-    var params = new Array(list_id);
+    var params = new Array();
     objAccept.paramCallback = params;
     messagePB.acciones = new Array();
     messagePB.acciones[0] = objAccept;
     showAlert("OK", "info", messagePB);
 }
-function fnsuscribirLista(lista_id) {
-    alert("suscribir contrato");
+function fnsuscribirLista() {
+    var lista = $('#txth_ids').val();    
+    var link = $('#txth_base').val() + "/marketing/email/suscribirtodos?lisid=" + lista;
+    var arrParams = new Object();
+    arrParams.lis_id = lista;
+    if (!validateForm()) {
+        requestHttpAjax(link, arrParams, function (response) {
+            showAlert(response.status, response.label, response.message);
+            if (!response.error) {
+                setTimeout(function () {
+                    window.location.href = $('#txth_base').val() + "/marketing/email/asignar?lis_id=" + arrParams.lis_id;
+                }, 5000);
+            }
+        }, true);
+    }
 }
 function programarEnvio() {
     var lista = $('#txth_ids').val();
@@ -137,16 +149,12 @@ function suscribirContacto(psus_id, per_tipo, list_id) {
     arrParams.list_id = list_id;
     arrParams.accion = 'sc';
     if (!validateForm()) {
-        showLoadingPopup();
-        requestHttpAjax(link, arrParams, function (response) {
-            if (!response.error) {
-                preguntaSuscribirOtrasListas(response.message);
-            }
+        requestHttpAjax(link, arrParams, function (response) {      
+            preguntaSuscribirOtrasListas(response.message);
         }, true);
-        setTimeout(hideLoadingPopup, 2000);
     }
 }
-function preguntaSuscribirOtrasListas(message) {
+function preguntaSuscribirOtrasListas(message) {  
     var messagePB = new Object();
     var mens_tot = message.wtmessage;
     mens_tot = mens_tot + "<br/> Las personas que se han suscrito a estas listas, tambien les ha interesado las siguientes listas:<br/>";
@@ -163,27 +171,37 @@ function preguntaSuscribirOtrasListas(message) {
     }
     messagePB.wtmessage = mens_tot;
     messagePB.title = message.title;
+    var objAccept = new Object();
+    objAccept.id = "btnid2del";
+    objAccept.class = "btn-primary clclass praclose";
+    objAccept.value = "Aceptar";
+    objAccept.callback = 'suscribirOtrasListas';
+    var slistas = '';
     if (listas.length > 0) {
-        var objAccept = new Object();
-        objAccept.id = "btnid2del";
-        objAccept.class = "btn-primary clclass praclose";
-        objAccept.value = "Aceptar";
-        objAccept.callback = 'suscribirOtrasListas';
-        var params = new Array(listas, message.sus_id);
-        objAccept.paramCallback = params;
-        messagePB.acciones = new Array();
-        messagePB.acciones[0] = objAccept;
-        showAlert("OK", "success", messagePB);
-    } else {
-        showAlert("OK", "success", messagePB);
-    }
-
+        var ids = '';
+        for (i = 0; i < listas.length; i++) {
+            if (i < (listas.length - 1)) {
+                ids = ids + listas[i]['lis_id'] + ',';
+            } else {
+                ids = ids + listas[i]['lis_id'];
+            }
+        }
+        slistas = ids;
+    }   
+    var params = new Array(slistas, message.sus_id);
+    objAccept.paramCallback = params;
+    messagePB.acciones = new Array();
+    messagePB.acciones[0] = objAccept;
+    showAlert("OK", "success", messagePB);
 }
-function suscribirOtrasListas(lista_rel, sus_id) {
+function suscribirOtrasListas(lista_rel, sus_id) {    
     var link = $('#txth_base').val() + "/marketing/email/asignar";
     var arrParams = new Object();
+    arrParams.list_id = $('#txth_ids').val();
     arrParams.sus_id = sus_id;
-    arrParams.list_ids = JSON.stringify(lista_rel);
+    if (lista_rel.length != '') {        
+        arrParams.list_ids = lista_rel;
+    }    
     arrParams.accion = 'lis_rel';
     if (!validateForm()) {
         requestHttpAjax(link, arrParams, function (response) {
@@ -208,7 +226,6 @@ function RemoverSuscritor(per_id, list_id) {
     showAlert("warning", "warning", messagePB);
 }
 
-/***/
 function elminarSuscriptor(per_id, list_id) {
     var link = $('#txth_base').val() + "/marketing/email/deletesuscriptor";
     var arrParams = new Object();
@@ -222,7 +239,6 @@ function elminarSuscriptor(per_id, list_id) {
         setTimeout(hideLoadingPopup, 2000);
     }
 }
-/**/
 function setComboDataselect(arr_data, element_id, texto) {
     var option_arr = "";
     option_arr += "<option value= '0'>" + texto + "</option>";
@@ -414,7 +430,6 @@ function editarProgramacion() {
 }
 function subirMailchimp() {
     var mensj = "<b>Nota:</b><br/><br/> Al momento de cargar a mailchimp, ya no se podra eliminar el suscritor de la lista,<br/>si desea ya no enviar correos a ese suscritor debe eliminar toda lista desde el modulo lista. <br/> ¿Seguro desea cargar todos los suscritos a Mailchimp?";
-    var idlista = $('#txth_list').val();
     var messagePB = new Object();
     messagePB.wtmessage = mensj;
     messagePB.title = "Cargar a Mailchimp";
@@ -423,14 +438,18 @@ function subirMailchimp() {
     objAccept.class = "btn-primary clclass praclose";
     objAccept.value = "Aceptar";
     objAccept.callback = 'cargarMailchimp';
-    var params = new Array(idlista, 0);
-    objAccept.paramCallback = params;
     messagePB.acciones = new Array();
     messagePB.acciones[0] = objAccept;
     showAlert("warning", "warning", messagePB);
 }
-function cargarMailchimp(idl) {
-
+function cargarMailchimp() {
+    var idlista = $('#txth_ids').val();    
+    var arrParams = new Object();
+    arrParams.lis_id = idlista;
+    var link = $('#txth_base').val() + "/marketing/email/cargarmailchimp";
+    requestHttpAjax(link, arrParams, function (response) {
+        showAlert(response.status, response.label, response.message);        
+    }, true);
 }
 function modificarProgramacion() {
     var link = $('#txth_base').val() + "/marketing/email/updateprogramacion";
@@ -490,8 +509,6 @@ function modificarProgramacion() {
                         window.location.href = $('#txth_base').val() + "/marketing/email/index";
                     }, 5000);
                 }
-
-
             }, true);
         }
     }
@@ -506,4 +523,14 @@ function exportPdf() {
     var estado = $('#cmb_suscrito').val();
     var lista = $('#txth_ids').val();
     window.location.href = $('#txth_base').val() + "/marketing/email/exppdf?pdf=1&estado=" + estado + "&lista=" + lista;
+}
+
+function exportExcelLista() {
+    var lista = $('#txt_buscar_lista').val();        
+    window.location.href = $('#txth_base').val() + "/marketing/email/expexcel1?lista=" + lista;
+}
+
+function exportPdfLista() {
+    var lista = $('#txt_buscar_lista').val();          
+    window.location.href = $('#txth_base').val() + "/marketing/email/exppdfl?pdf=1&lista=" + lista;
 }

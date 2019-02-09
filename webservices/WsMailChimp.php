@@ -57,21 +57,22 @@ class WsMailChimp
     // Get information about a specific list
     public function getList($listId){
         $WS_URI = $this->apiUrl . "lists/$listId";
-        $params = array();
-
+        $params = array();        
         $response = Http::connect($this->host, $this->port, http::HTTPS)
             //->setHeaders(array('Content-Type: application/json', 'Accept: application/json'))
             ->setCredentials($this->user, $this->apiKey)
             ->doGet($WS_URI, $params);
         $arr_response = json_decode($response, true);
+        \app\models\Utilities::putMessageLogFile('responseConsulta:'.json_encode($response));
         return $arr_response;
     }
 
     // Get information about a specific list
     public function editList($listId, $name, $contact, $permission_reminder, 
-    $sender_name, $sender_email, $subject_email, $language = "es", $email_type_option = true)
-    {
-        $WS_URI = $this->apiUrl . "lists/$listId";
+                             $sender_name, $sender_email, $subject_email, 
+                             $language = "es", $email_type_option = true)
+    {        
+        $WS_URI = $this->apiUrl . "lists/".$listId;
         $params = json_encode(array(
             "name" => $name,
             /*"contact" => array(
@@ -94,13 +95,12 @@ class WsMailChimp
             ),
             "email_type_option" => $email_type_option,
         ));
-        \app\models\Utilities::putMessageLogFile('parametros:'.$params);
+        //\app\models\Utilities::putMessageLogFile('parametros:'.$params);        
         $response = Http::connect($this->host, $this->port, http::HTTPS)
             ->setHeaders(array('Content-Type: application/json', 'Accept: application/json'))
             ->setCredentials($this->user, $this->apiKey)
-            ->doPatch($WS_URI, $params);
-        $arr_response = json_decode($response, true);
-        \app\models\Utilities::putMessageLogFile('despues de actualizar en mailchimp:');
+            ->doPatch($WS_URI, $params);        
+        $arr_response = json_decode($response, true);        
         return $arr_response;
     }
 
@@ -186,7 +186,6 @@ class WsMailChimp
             "status" => "subscribed",
             "tags" => $tags,
         ));
-
         $response = Http::connect($this->host, $this->port, http::HTTPS)
             ->setHeaders(array('Content-Type: application/json', 'Accept: application/json'))
             ->setCredentials($this->user, $this->apiKey)
@@ -237,7 +236,6 @@ class WsMailChimp
             ),*/
             "settings" => $addressInfo,
         ));
-
         $response = Http::connect($this->host, $this->port, http::HTTPS)
             ->setHeaders(array('Content-Type: application/json', 'Accept: application/json'))
             ->setCredentials($this->user, $this->apiKey)

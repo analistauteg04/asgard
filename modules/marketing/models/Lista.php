@@ -131,9 +131,9 @@ class Lista extends \yii\db\ActiveRecord {
                         lis_codigo_postal, lis_asunto,
                         case when lst.eaca_id > 0 then 
                                      ea.eaca_nombre else me.mest_nombre end as programa,
-                        sum(case when (lsu.lsus_estado = '1' and lsu.lsus_estado_logico = '1') then
+                        sum(case when (ifnull(sus.sus_estado_mailchimp,0) = '0' and lsu.lsus_estado = '1' and lsu.lsus_estado_logico = '1') then
                                      1 else 0 end) as num_suscr,
-                        sum(case when (sus.sus_estado_mailchimp = '1' and sus.sus_estado_logico = '1') then
+                        sum(case when (ifnull(sus.sus_estado_mailchimp,0) = '1' and sus.sus_estado_logico = '1') then
                                      1 else 0 end) as num_suscr_mailchimp
                     FROM 
                         " . $con->dbname . ".lista lst
@@ -208,7 +208,7 @@ class Lista extends \yii\db\ActiveRecord {
                     'num_suscriptores',
                 ],
             ],
-        ]);
+        ]);        
         if ($onlyData) {
             return $resultData;
         } else {
@@ -828,5 +828,48 @@ class Lista extends \yii\db\ActiveRecord {
         } catch (Exception $ex) {            
             return FALSE;
         }
+    }
+    
+    
+    /**
+     * Function consultarListaReporte
+     * @author  Grace Viteri <analistadesarrollo01@uteg.edu.ec>
+     * @param   
+     * @return  Listas creadas en mailchimp.
+     */
+    public function consultarListaReporte($arrFiltro = array()) {
+        $con = \Yii::$app->db_mailing;
+        $con1 = \Yii::$app->db_academico;
+        $estado = 1;
+
+        if (isset($arrFiltro) && count($arrFiltro) > 0) {
+            if ($arrFiltro['lista'] != "") {
+                $str_search = "l.lis_nombre like :lista AND ";
+            }
+        }
+        $sql = "SELECT  l.lis_nombre, 
+                        case when l.eaca_id > 0 then 
+                                     ea.eaca_nombre else me.mest_nombre end as programa,
+                        sum(case when (ls.lsus_estado = '1' and ls.lsus_estado_logico = '1') then
+                                     1 else 0 end) as num_suscriptores
+                FROM " . $con->dbname . ".lista l left join " . $con->dbname . ".lista_suscriptor ls on ls.lis_id = l.lis_id
+                  left join " . $con1->dbname . ".estudio_academico ea on ea.eaca_id = l.eaca_id
+                  left join " . $con1->dbname . ".modulo_estudio me on me.mest_id = l.mest_id
+                WHERE $str_search
+                      lis_estado = :estado
+                      and lis_estado_logico = :estado
+                GROUP BY l.lis_nombre, 2 ;";
+
+        $comando = $con->createCommand($sql);
+        $comando->bindParam(":estado", $estado, \PDO::PARAM_STR);
+        if (isset($arrFiltro) && count($arrFiltro) > 0) {
+            if ($arrFiltro['lista'] != "") {
+                $lista = "%" . $arrFiltro["lista"] . "%";
+                $comando->bindParam(":lista", $lista, \PDO::PARAM_STR);
+            }
+        }
+        $resultData = $comando->queryAll();        
+        \app\models\Utilities::putMessageLogFile('sql lista:' . $sql);        
+        return $resultData;
     }
 }

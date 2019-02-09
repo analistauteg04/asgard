@@ -19,8 +19,8 @@ PbGridView::widget([
     //'dataProvider' => new yii\data\ArrayDataProvider(array()),
     'id' => 'Tbg_Lista',
     'showExport' => true,
-    'fnExportEXCEL' => "exportExcel",
-    'fnExportPDF' => "exportPdf",
+    'fnExportEXCEL' => "exportExcelLista",
+    'fnExportPDF' => "exportPdfLista",
     'dataProvider' => $model,
     'columns' =>
     [

@@ -1096,7 +1096,7 @@ class SolicitudInscripcion extends \yii\db\ActiveRecord
                           -- ipre.ipre_estado_logico = :estado AND 
                           -- ming.ming_estado = :estado AND
                           -- ming.ming_estado_logico = :estado AND
-                          imni.ite_id  in (158,159,160,162) and
+                          imni.ite_id  in (158,159,160,161) and
                           ua.uaca_estado = :estado AND
                           ua.uaca_estado_logico = :estado";
             
@@ -1119,7 +1119,7 @@ class SolicitudInscripcion extends \yii\db\ActiveRecord
                           now() between ipre.ipre_fecha_inicio and ipre.ipre_fecha_fin AND
                           imni.imni_estado = :estado AND
                           imni.imni_estado_logico = :estado AND
-                          imni.ite_id  in (158,159,160,162) and
+                          imni.ite_id  in (158,159,160,161) and
                           ua.uaca_estado = :estado AND
                           ua.uaca_estado_logico = :estado";
         }        

@@ -189,7 +189,9 @@ INSERT INTO `grupo` (`gru_id`, `cseg_id`, `gru_nombre`, `gru_descripcion`, `gru_
 (10, 1, 'Interesado', 'Interesado', NULL, '1', '2017-02-01 15:05:28', NULL, '1'),
 (11, 1, 'Admitido', 'Aspirante', NULL, '1', '2017-02-01 15:05:28', NULL, '1'),
 (12, 1, 'Estudiante', 'Estudiante', NULL, '1', '2017-02-01 15:05:28', NULL, '1'),
-(13, 2, 'Docente', 'Docente', NULL, '1', '2017-02-01 15:05:28', NULL, '1');
+(13, 2, 'Docente', 'Docente', NULL, '1', '2017-02-01 15:05:28', NULL, '1'),
+
+(14, 2, 'Marketing', 'Marketing', NULL, '1', '2019-02-09 11:30:00', NULL, '1');
 
 
 
@@ -214,7 +216,9 @@ INSERT INTO `rol` (`rol_id`, `rol_nombre`, `rol_descripcion`, `rol_estado`, `rol
 (14, 'Interesado', 'Interesado', '1', '2017-02-01 15:05:28', NULL, '1'),
 (15, 'Admitido', 'Aspirante', '1', '2017-02-01 15:05:28', NULL, '1'),
 (16, 'Estudiante', 'Estudiante', '1', '2017-02-01 15:05:28', NULL, '1'),
-(17, 'Docente', 'Docente', '1', '2017-02-01 15:05:28', NULL, '1');
+(17, 'Docente', 'Docente', '1', '2017-02-01 15:05:28', NULL, '1'),
+
+(18, 'Webmaster', 'Webmaster', '1', '2019-02-09 11:30:00', NULL, '1');
 
 -- --------------------------------------------------------
 --
@@ -262,17 +266,21 @@ INSERT INTO `grup_rol` (`grol_id`, `gru_id`, `rol_id`, `grol_estado`, `grol_esta
 (30, 10, 14, '1', '1'),
 (31, 11, 15, '1', '1'),
 (32, 12, 16, '1', '1'),
-(33, 13, 17, '1', '1');
+(33, 13, 17, '1', '1'),
 
+(34, 14, 18, '1', '1');
 
 -- --------------------------------------------------------
 --
 -- Volcado de datos para la tabla `empresa_correo`
 --
 INSERT INTO `empresa_correo` (`ecor_id`, `emp_id`, `ecor_correo`, `ecor_estado`, `ecor_estado_logico`) VALUES
-(1, 1, 'noreply@uteg.edu.ec', '1', '1'),
+/*(1, 1, 'noreply@uteg.edu.ec', '1', '1'),
 (2, 2, 'info@ulink.us', '1', '1'),
-(3, 3, 'noreply@sbc.com.ec', '1', '1');
+(3, 3, 'noreply@sbc.com.ec', '1', '1');*/
+(1, 1, 'craneaec@gmail.com', '1', '1'),
+(2, 2, 'craneaec@gmail.com', '1', '1'),
+(3, 3, 'craneaec@gmail.com', '1', '1');
 
 
 

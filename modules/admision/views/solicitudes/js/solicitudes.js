@@ -49,7 +49,7 @@ $(document).ready(function () {
                         if (response.status == "OK") {
                             data = response.message;
                             setComboData(data.modalidad, "cmb_modalidad");
-                            if (data.modalidad.length > 0) {
+                            if (data.modalidad.length > 0) {                                                                
                                 var arrParams = new Object();
                                 arrParams.unidada = $('#cmb_ninteres').val();
                                 arrParams.moda_id = $('#cmb_modalidad').val();
@@ -83,10 +83,24 @@ $(document).ready(function () {
                                                     $('#txt_precio_item').val(data.precio);
                                                 }
                                             }, true);
+                                            //habilita y deshabilita control de precio.
+                                            var arrParams = new Object();
+                                            arrParams.ite_id = $('#cmb_item').val();                                            
+                                            arrParams.gethabilita = true;   
+                                            requestHttpAjax(link, arrParams, function (response) {
+                                                if (response.status == "OK") {
+                                                    data = response.message;   
+                                                    if (data.habilita == 1) {                                                        
+                                                        $("#txt_precio_item").prop('disabled', false);  
+                                                    } else {                                                        
+                                                        $("#txt_precio_item").prop('disabled', true);  
+                                                    }
+                                                }
+                                            }, true);
                                         }, true);                                     
                                         //Descuentos.
                                         var arrParams = new Object();
-                                        arrParams.unidada = $('#cmb_ninteres').val();
+                                        arrParams.unidada = $('#cmb_ninteres').val();arrParams
                                         arrParams.moda_id = $('#cmb_modalidad').val();
                                         arrParams.metodo = $('#cmb_metodos').val();
                                         arrParams.empresa_id = $('#cmb_empresa').val();
@@ -118,17 +132,16 @@ $(document).ready(function () {
             }
         }, true);                
         //No mostrar el campo método ingreso cuando sea Unidad:Educación Continua.
-        arrParams.nint_id = $('#cmb_ninteres').val();       
+        arrParams.nint_id = $('#cmb_ninteres').val();   
+        arrParams.moda_id = $('#cmb_modalidad').val();
         if (arrParams.empresa_id > 1) {
             $('#divMetodo').css('display', 'none');
             $('#divDocumento').css('display', 'none');
-            $('#lbl_carrera').text('Programa');
-            $("#txt_precio_item").prop('disabled', true);      
+            $('#lbl_carrera').text('Programa');           
         } else {           
             $('#divMetodo').css('display', 'none');           
             $('#divDocumento').css('display', 'block');
-            $('#lbl_carrera').text('Carrera');
-            $("#txt_precio_item").prop('disabled', false);                     
+            $('#lbl_carrera').text('Carrera');           
         }          
      
     });
@@ -177,7 +190,21 @@ $(document).ready(function () {
                                     data = response.message;                                 
                                     $('#txt_precio_item').val(data.precio);
                                 }
-                            }, true);                
+                            }, true);    
+                             //habilita y deshabilita control de precio.
+                            var arrParams = new Object();
+                            arrParams.ite_id = $('#cmb_item').val();                            
+                            arrParams.gethabilita = true;   
+                            requestHttpAjax(link, arrParams, function (response) {
+                                if (response.status == "OK") {
+                                    data = response.message;   
+                                    if (data.habilita == 1) {                                        
+                                        $("#txt_precio_item").prop('disabled', false);  
+                                    } else {                                        
+                                        $("#txt_precio_item").prop('disabled', true);  
+                                    }
+                                }
+                            }, true);
                         }, true);
                         //Descuentos.
                         var arrParams = new Object();
@@ -239,7 +266,7 @@ $(document).ready(function () {
                             data = response.message;                                 
                             $('#txt_precio_item').val(data.precio);
                         }
-                    }, true);                
+                    }, true);             
                 }, true);
                 //Descuentos.
                 var arrParams = new Object();
@@ -271,6 +298,7 @@ $(document).ready(function () {
         //                            
         arrParams.empresa_id = $('#cmb_empresa').val();
         arrParams.nint_id = $(this).val();
+        arrParams.moda_id = $('#cmb_modalidad').val();
         if (arrParams.empresa_id > 1) {
             $('#divMetodo').css('display', 'none');
             $('#divDocumento').css('display', 'none');
@@ -278,12 +306,10 @@ $(document).ready(function () {
         } else {
             if (arrParams.nint_id == 1) { 
                 $('#divMetodo').css('display', 'none');
-                $('#divAplicaDescuento').css('display', 'none');  
-                $("#txt_precio_item").prop('disabled', false);                     
+                $('#divAplicaDescuento').css('display', 'none');                 
             } else {
                 $('#divMetodo').css('display', 'block');
-                $('#divAplicaDescuento').css('display', 'block');   
-                $("#txt_precio_item").prop('disabled', true);                     
+                $('#divAplicaDescuento').css('display', 'block');                  
             }
             $('#divDocumento').css('display', 'block');
             $('#lbl_carrera').text('Carrera');
@@ -333,7 +359,21 @@ $(document).ready(function () {
                                 data = response.message;                                 
                                 $('#txt_precio_item').val(data.precio);
                             }
-                        }, true);            
+                        }, true);     
+                         //habilita y deshabilita control de precio.
+                        var arrParams = new Object();
+                        arrParams.ite_id = $('#cmb_item').val();                        
+                        arrParams.gethabilita = true;   
+                        requestHttpAjax(link, arrParams, function (response) {
+                            if (response.status == "OK") {
+                                data = response.message;   
+                                if (data.habilita == 1) {                                    
+                                    $("#txt_precio_item").prop('disabled', false);  
+                                } else {                                    
+                                    $("#txt_precio_item").prop('disabled', true);  
+                                }
+                            }
+                        }, true);
                     }, true);   
                     //Descuentos.
                     var arrParams = new Object();        
@@ -362,17 +402,7 @@ $(document).ready(function () {
                     }, true);                        
                 }, true);                  
             }            
-        }, true);   
-        var arrParams = new Object();
-        arrParams.unidada = $('#cmb_ninteres').val();
-        arrParams.moda_id = $(this).val();
-        arrParams.empresa_id = $('#cmb_empresa').val();
-        if (arrParams.moda_id==1) {
-            $("#txt_precio_item").prop('disabled', true);   
-        } else {
-            $("#txt_precio_item").prop('disabled', false);   
-        }       
-          
+        }, true);               
     });
 
     $('#cmb_unidad').change(function () {
