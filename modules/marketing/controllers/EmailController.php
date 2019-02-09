@@ -840,7 +840,7 @@ class EmailController extends \app\components\CController {
             }
         }
     }
-    public function actionExpexcelLista() {
+    public function actionExpexcel1() {
         ini_set('memory_limit', '256M');
         $content_type = Utilities::mimeContentType("xls");
         $nombarch = "Report-" . date("YmdHis") . ".xls";

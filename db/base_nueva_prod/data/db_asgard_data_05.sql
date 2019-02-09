@@ -66,4 +66,6 @@ INSERT INTO `persona` (`per_id`, `per_pri_nombre`, `per_seg_nombre`, `per_pri_ap
 (43, 'Yolanda', 'Stefanía' , 'Bustos', 'Guamán', '0923343644', NULL, NULL, 1, 1, 'F', NULL, 1, 10, 87, NULL, NULL, NULL, NULL, NULL, 7, NULL, NULL, NULL, NULL, NULL, NULL, NULL, 1, 10, 87, NULL, NULL, NULL, NULL, 1, 10, 87, '1', '2018-11-22 13:45:00', NULL, '1'),
 
 (44, 'José', 'Manuel' , 'Sarabia', 'Quintero', '0926976572', NULL, NULL, 1, 1, 'M', NULL, 1, 10, 87, NULL, NULL, NULL, NULL, NULL, 7, NULL, NULL, NULL, NULL, NULL, NULL, NULL, 1, 10, 87, NULL, NULL, NULL, NULL, 1, 10, 87, '1', '2018-12-20 10:30:00', NULL, '1'),
-(45, 'Félix', 'Xavier' , 'Calderón', 'Mora', '0951537455', NULL, NULL, 1, 1, 'M', NULL, 1, 10, 87, NULL, NULL, NULL, NULL, NULL, 7, NULL, NULL, NULL, NULL, NULL, NULL, NULL, 1, 10, 87, NULL, NULL, NULL, NULL, 1, 10, 87, '1', '2018-12-20 10:30:00', NULL, '1');
+(45, 'Félix', 'Xavier' , 'Calderón', 'Mora', '0951537455', NULL, NULL, 1, 1, 'M', NULL, 1, 10, 87, NULL, NULL, NULL, NULL, NULL, 7, NULL, NULL, NULL, NULL, NULL, NULL, NULL, 1, 10, 87, NULL, NULL, NULL, NULL, 1, 10, 87, '1', '2018-12-20 10:30:00', NULL, '1'),
+
+(46, 'Tito', 'Damián' , 'Cadena', 'Estrella', '0924700875', NULL, NULL, 1, 1, 'M', NULL, 1, 10, 87, NULL, NULL, NULL, NULL, NULL, 7, NULL, NULL, NULL, NULL, NULL, NULL, NULL, 1, 10, 87, NULL, NULL, NULL, NULL, 1, 10, 87, '1', '2019-02-09 11:30:00', NULL, '1');
