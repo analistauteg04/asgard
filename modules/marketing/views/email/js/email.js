@@ -149,12 +149,12 @@ function suscribirContacto(psus_id, per_tipo, list_id) {
     arrParams.list_id = list_id;
     arrParams.accion = 'sc';
     if (!validateForm()) {
-        requestHttpAjax(link, arrParams, function (response) {      
+        requestHttpAjax(link, arrParams, function (response) {           
             preguntaSuscribirOtrasListas(response.message);
         }, true);
     }
 }
-function preguntaSuscribirOtrasListas(message) {  
+function preguntaSuscribirOtrasListas(message) {      
     var messagePB = new Object();
     var mens_tot = message.wtmessage;
     mens_tot = mens_tot + "<br/> Las personas que se han suscrito a estas listas, tambien les ha interesado las siguientes listas:<br/>";
