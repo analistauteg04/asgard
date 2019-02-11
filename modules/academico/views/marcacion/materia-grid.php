@@ -46,10 +46,13 @@ PbGridView::widget([
             'template' => '{iniciar} {finalizar} ',
             'buttons' => [
                 'iniciar' => function ($url, $model) {
-                    return Html::a('<button type="button" class="btn btn-primary btn-sm">Iniciar</button>', Url::to(['/academico/marcacion/marcacion']), ["data-toggle" => "tooltip", "title" => "Iniciar Marcación", "data-pjax" => 0]);
-                },                    
+                    $model['horario'] = '09:00 11:00'; // LUEGO BORRAR CUANDO SE TOME DE LA BD
+                    return Html::a('<button type="button" class="btn btn-primary btn-sm">Iniciar</button>', "#", ["onclick" => "Marcacion(" . $model['id'] . "," . $model['horario'] . ", 'I', ". $dia = date("w", strtotime(date("Y-m-d"))) . ");", "data-toggle" => "tooltip", "title" => "Iniciar Marcación", "data-pjax" => 0]);
+                    
+                },
                 'finalizar' => function ($url, $model) {
-                    return Html::a('<button type="button" class="btn btn-primary btn-sm">Finalizar</button>', Url::to(['/academico/marcacion/marcacion']), ["data-toggle" => "tooltip", "title" => "Finalizar Marcación", "data-pjax" => 0]);
+                    $model['horario'] = '09:00 11:00'; // LUEGO BORRAR CUANDO SE TOME DE LA BD
+                    return Html::a('<button type="button" class="btn btn-primary btn-sm">Finalizar</button>', "#", ["onclick" => "Marcacion(" . $model['id'] . "," . $model['horario'] . ", 'F', ". $dia = date("w", strtotime(date("Y-m-d"))) . ");", "data-toggle" => "tooltip", "title" => "Finalizar Marcación", "data-pjax" => 0]);
                 },
             ],
         ],

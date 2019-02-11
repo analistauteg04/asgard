@@ -256,4 +256,17 @@ class WsMailChimp
         return $arr_response;
     }
 
+    // Get report details for a specific sent campaign.
+    function getReportCampaign($campaignId){
+        $WS_URI = $this->apiUrl . "/reports/$campaignId";
+        $params = array();
+
+        $response = Http::connect($this->host, $this->port, http::HTTPS)
+            //->setHeaders(array('Content-Type: application/json', 'Accept: application/json'))
+            ->setCredentials($this->user, $this->apiKey)
+            ->doGet($WS_URI, $params);
+        $arr_response = json_decode($response, true);
+        return $arr_response;
+    }
+
 }

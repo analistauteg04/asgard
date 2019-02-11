@@ -115,9 +115,9 @@ class Utilities {
      */
     public static function getClientRealIP() {
         $ip = $_SERVER['REMOTE_ADDR'];
-        if (!empty($_SERVER['HTTP_CLIENT_IP']))
+        if (!empty($_SERVER['HTTP_CLIENT_IP']) && self::validateTypeField($_SERVER['HTTP_CLIENT_IP'], 'ip'))
             $ip = $_SERVER['HTTP_CLIENT_IP'];
-        if (!empty($_SERVER['HTTP_X_FORWARDED_FOR']))
+        if (!empty($_SERVER['HTTP_X_FORWARDED_FOR']) && self::validateTypeField($_SERVER['HTTP_X_FORWARDED_FOR'], 'ip'))
             $ip = $_SERVER['HTTP_X_FORWARDED_FOR'];
         return $ip;
     }
@@ -584,6 +584,10 @@ class Utilities {
     public static function validateTypeField($field, $type){
         $status = false;
         switch($type) {
+            case 'ip': //solo ip
+                if (preg_match("/^(([1-9]?[0-9]|1[0-9]{2}|2[0-4][0-9]|25[0-5]).){3}([1-9]?[0-9]|1[0-9]{2}|2[0-4][0-9]|25[0-5])$/", $field))
+                    $status = true;
+                break;
             case 'number'://solo numeros
                 if(preg_match("/^(?:\+|-)?\d+$/", $field))
                     $status = true;

@@ -15,34 +15,36 @@ INSERT INTO `semestre_academico` (`saca_id`, `saca_nombre`, `saca_descripcion`, 
 --
 -- Volcado de datos para la tabla `bloque`
 --
-INSERT INTO `bloque_academico` (`baca_id`,`baca_nombre`, `baca_descripcion`, `baca_usuario_ingreso`, `baca_usuario_modifica`, `baca_estado`, `baca_estado_logico`) VALUES 
-(1, 'Abril - Junio', 'Abril - Junio', '1', '1', '1', '1'),
-(2, 'Julio - Agosto', 'Julio - Agosto', '1', '1', '1', '1');
+INSERT INTO `bloque_academico` (`baca_id`,`baca_nombre`, `baca_descripcion`, `baca_usuario_ingreso`, `baca_estado`, `baca_estado_logico`) VALUES 
+(1, 'Abril - Junio', 'Abril - Junio', 1, '1', '1'),
+(2, 'Julio - Agosto', 'Julio - Agosto', 1,  '1', '1'),
+(3, 'Enero - Febrero', 'Enero - Febrero', 1, '1', '1'),
+(4, 'Octubre - Diciembre', 'Octubre - Diciembre', 1, '1', '1');
 
 -- -- ------------------------ ------------------------------
 --
 -- Volcado de datos para la tabla `periodo_academico`
 --
 
-INSERT INTO `periodo_academico` (`paca_id`,`saca_id`, `baca_id`, `paca_anio_academico`, `paca_usuario_ingreso`, `paca_usuario_modifica`, `paca_estado`, `paca_estado_logico`) VALUES 
-('1','1', '1', '2017-2018', '1', '1', '1', '1'),
-('2','1', '2', '2017-2018', '1', '1', '1', '1'),
-('3','2', '1', '2017-2018', '1', '1', '1', '1'),
-('4','2', '2', '2017-2018', '1', '1', '1', '1'),
-('5','1', '1', '2018-2019', '1', '1', '1', '1'),
-('6','1', '2', '2018-2019', '1', '1', '1', '1'),
-('7','2', '1', '2018-2019', '1', '1', '1', '1'),
-('8','2', '2', '2018-2019', '1', '1', '1', '1');
+INSERT INTO `periodo_academico` (`paca_id`,`saca_id`, `baca_id`, `paca_anio_academico`, `paca_usuario_ingreso`, `paca_estado`, `paca_estado_logico`) VALUES 
+('1','1', '1', '2017-2018', '1', '1', '1'),
+('2','1', '2', '2017-2018', '1', '1', '1'),
+('3','2', '1', '2017-2018', '1', '1', '1'),
+('4','2', '2', '2017-2018', '1', '1', '1'),
+('5','1', '1', '2018-2019', '1', '1', '1'),
+('6','1', '2', '2018-2019', '1', '1', '1'),
+('7','2', '1', '2018-2019', '1', '1', '1'),
+('8','2', '2', '2018-2019', '1', '1', '1'),
+(9, 2, 3, '2018-2019', 1, '1', '1');
 
-INSERT INTO `profesor` (`pro_id`,`per_id`,`pro_usuario_ingreso`,`pro_usuario_modifica`,`pro_estado`,`pro_estado_logico`)VALUES
-(1,500,1,null,1,1),
-(2,501,1,null,1,1),
-(3,502,1,null,1,1),
-(4,503,1,null,1,1),
-(5,504,1,null,1,1),
-(6,505,1,null,1,1),
-(7,506,1,null,1,1),
-(8,507,1,null,1,1);
+-- --------------------------------------------------------
+--
+-- Volcado de datos para la tabla `profesor`
+--
+INSERT INTO `profesor` (`pro_id`,`per_id`,`pro_usuario_ingreso`, `pro_estado`,`pro_estado_logico`) VALUES
+(1, 47, 1, '1', '1'),
+(2, 30, 1, '1', '1');
+
 
 
 INSERT INTO `malla_academica` (`maca_id`,`eaca_id`,`uaca_id`,`mod_id`, `maca_tipo`, `maca_nombre`,`maca_fecha_vigencia_inicio`,`maca_fecha_vigencia_fin`,`maca_usuario_ingreso`,`maca_estado`,`maca_estado_logico`) VALUES 
@@ -359,3 +361,11 @@ INSERT INTO `distributivo_horario` (`dhor_id`,`dia_id`,`dhor_hora_inicio`,`dhor_
 (2,1,'13:20','18:00','Vespertino',1,1,1),
 (3,1,'18:20','22:20','Nocturno',1,1,1),
 (4,1,'10:00','17:00','Intensivo',1,1,1);
+
+
+INSERT INTO `horario_asignatura_periodo` (`hape_id`,`asi_id`,`paca_id`,`pro_id`, `uaca_id`, `mod_id`, `dia_id`, `hape_hora_entrada`,`hape_hora_salida`, `hape_estado`, `hape_estado_logico`) VALUES
+(1, 7, 9, 1, 1, 2, 1, '09:00:00', '11:00:00', '1', '1'),
+(2, 7, 9, 1, 1, 2, 2, '09:00:00', '11:00:00', '1', '1'),
+(3, 7, 9, 1, 1, 2, 4, '09:00:00', '11:00:00', '1', '1'),
+(4, 8, 9, 2, 1, 2, 1, '13:30:00', '15:30:00', '1', '1'),
+(5, 8, 9, 2, 1, 2, 3, '13:30:00', '15:30:00', '1', '1');

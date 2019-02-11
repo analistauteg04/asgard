@@ -299,10 +299,15 @@ $(document).ready(function () {
         arrParams.empresa_id = $('#cmb_empresa').val();
         arrParams.nint_id = $(this).val();
         arrParams.moda_id = $('#cmb_modalidad').val();
+        $('#divAplicaDescuento').css('display', 'block');  
+        $('#divDescuento').css('display', 'block');   
         if (arrParams.empresa_id > 1) {
             $('#divMetodo').css('display', 'none');
             $('#divDocumento').css('display', 'none');
-            $('#lbl_carrera').text('Programa');
+            $('#lbl_carrera').text('Programa');            
+            $('#divAplicaDescuento').css('display', 'block');   
+            $('#divDescuento').css('display', 'block');   
+            
         } else {
             if (arrParams.nint_id == 1) { 
                 $('#divMetodo').css('display', 'none');
