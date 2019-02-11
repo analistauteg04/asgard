@@ -218,6 +218,7 @@ class Suscriptor extends \yii\db\ActiveRecord {
             return 0;
         }
     }
+
     /**
      * Function eliminarSuscriptor
      * @author  Gioavanni Vergara <analistadesarrollo02@uteg.edu.ec>
@@ -247,6 +248,7 @@ class Suscriptor extends \yii\db\ActiveRecord {
             return FALSE;
         }
     }
+
     /**
      * Function eliminar logica Suscriptor, cambia el estado a 0
      * @author  Giovanni Vergara <analistadesarrollo02@uteg.edu.ec>
@@ -289,6 +291,7 @@ class Suscriptor extends \yii\db\ActiveRecord {
             return FALSE;
         }
     }
+
     /**
      * Function consultarSuscriptoxPerylis
      * @author  Kleber Loayza <analistadesarrollo03@uteg.edu.ec>
@@ -316,6 +319,7 @@ class Suscriptor extends \yii\db\ActiveRecord {
         $resultData = $comando->queryAll();
         return $resultData;
     }
+
     /**
      * Function consultarSuscriptoxPerylis
      * @author  Giovanni Vergara <analistadesarrollo02@uteg.edu.ec>
@@ -481,7 +485,7 @@ class Suscriptor extends \yii\db\ActiveRecord {
                FROM db_mailing.suscriptor
                WHERE per_id in ($sus_id)
                ";
-        $comando = $con->createCommand($sql);        
+        $comando = $con->createCommand($sql);
         $resultData = $comando->queryAll();
         return $resultData;
     }
@@ -507,6 +511,7 @@ class Suscriptor extends \yii\db\ActiveRecord {
             return 0;
         }
     }
+
     /**
      * Function eliminar todos los Suscriptor 
      * @author Giovanni Vergara <analistadesarrollo02@uteg.edu.ec>;
@@ -514,18 +519,75 @@ class Suscriptor extends \yii\db\ActiveRecord {
      * @return
      */
     public function updateSuscriptodos($suscribirtodos) {
-        $con = \Yii::$app->db_mailing;        
+        $con = \Yii::$app->db_mailing;
         $trans = $con->getTransaction();
         try {
-            $sql = $suscribirtodos;            
+            $sql = $suscribirtodos;
             $command = $con->createCommand($sql);
             $command->execute();
-            return $con->getLastInsertID();            
+            return $con->getLastInsertID();
         } catch (Exception $ex) {
             if ($trans !== null) {
                 $trans->rollback();
             }
             return 0;
+        }
+    }
+
+    /**
+     * Function consultarListaSuscxsusidylis
+     * @author  Giovanni Vergara <analistadesarrollo02@uteg.edu.ec>
+     * @param   
+     * @return  
+     */
+    public function consultarListaSuscxsusidylis($list_id, $sus_id) {
+        $con = \Yii::$app->db_mailing;
+        // $estado = 1;
+
+        $sql = "
+                select count(*) as suscrito	
+                FROM " . $con->dbname . ".lista_suscriptor lsus                 
+                WHERE lsus.lis_id = :list_id AND
+                lsus.sus_id = :sus_id ";
+
+        $comando = $con->createCommand($sql);
+        // $comando->bindParam(":estado", $estado, \PDO::PARAM_STR);        
+        $comando->bindParam(":list_id", $list_id, \PDO::PARAM_INT);
+        $comando->bindParam(":sus_id", $sus_id, \PDO::PARAM_INT);
+        $resultData = $comando->queryOne();
+        return $resultData;
+    }
+    /**
+     * Function modificarListaSuscritor
+     * @author  Gioavanni Vergara <analistadesarrollo02@uteg.edu.ec>
+     * @property 
+     * @return  
+     */
+    public function modificarListaSuscritor($list_id, $sus_id) {
+        $con = \Yii::$app->db_mailing;
+        $fecha_modificacion = date(Yii::$app->params["dateTimeByDefault"]);
+        $trans = $con->beginTransaction(); // si no existe la transacción entonces se crea una
+        try {
+            $comando = $con->createCommand
+                    ("                    
+                        UPDATE " . $con->dbname . ".lista_suscriptor lsus 
+                        SET 
+                            lsus.lsus_estado = 1,
+                            lsus.lsus_fecha_modificacion = :fecha_modificacion                          
+                        WHERE 
+                        lsus.lis_id = :list_id AND
+                        lsus.sus_id = :sus_id
+                    ");
+
+            $comando->bindParam(":fecha_modificacion", $fecha_modificacion, \PDO::PARAM_STR);
+            $comando->bindParam(":list_id", $list_id, \PDO::PARAM_INT);
+            $comando->bindParam(":sus_id", $sus_id, \PDO::PARAM_INT);
+            $response = $comando->execute();
+            $trans->commit();
+            return $response;
+        } catch (Exception $ex) {
+            $trans->rollback();
+            return FALSE;
         }
     }
 }

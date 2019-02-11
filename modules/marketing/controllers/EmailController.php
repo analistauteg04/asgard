@@ -30,7 +30,7 @@ class EmailController extends \app\components\CController {
         $mod_lista = new Lista();
         $data = Yii::$app->request->get();
         if ($data['PBgetFilter']) {
-            $arrSearch["lista"] = $data['lista'];           
+            $arrSearch["lista"] = $data['lista'];
             $resp_lista = $mod_lista->consultarLista($arrSearch);
         } else {
             $resp_lista = $mod_lista->consultarLista();
@@ -176,8 +176,16 @@ class EmailController extends \app\components\CController {
                         if (!empty($list_ids[$i])) {
                             $key = ['lis_id', 'sus_id', 'lsus_estado', 'lsus_fecha_creacion', 'lsus_estado_logico'];
                             $parametro = [$list_ids[$i], $sus_id, 1, $fecha_crea, 1];
-                            $lsu_id = $mod_sb->insertarListaSuscritor($con, $parametro, $key, 'lista_suscriptor');                          
-                            if ($lsu_id) {
+                            $exitesuscrito = $mod_sb->consultarListaSuscxsusidylis($list_ids[$i], $sus_id);
+                            if ($exitesuscrito["suscrito"] > 0) {
+                                $lsu_id = $mod_sb->modificarListaSuscritor($list_ids[$i], $sus_id);
+                                $modifica = 1; 
+                            } else {                                
+                                $lsu_id = $mod_sb->insertarListaSuscritor($con, $parametro, $key, 'lista_suscriptor');
+                                $modifica = 1; 
+                            }
+
+                            if ($modifica == 1) {
                                 $mensaje = $mensaje . " El suscriptor fue guardado en la lista " . ''/* $list_ids[$i]['lis_nombre'] */ . "<br/>";
                                 $message = array(
                                     "wtmessage" => Yii::t("formulario", $mensaje),
@@ -187,12 +195,24 @@ class EmailController extends \app\components\CController {
                                 return Utilities::ajaxResponse('OK', 'alert', Yii::t("jslang", "Sucess"), false, $message);
                             } else {
                                 $mensaje = $mensaje . " El suscriptor no fue guardado en la lista " . ''/* $list_ids[$i]['lis_nombre'] */ . "<br/>";
+                                $message = array(
+                                    "wtmessage" => Yii::t("formulario", $mensaje),
+                                    "title" => Yii::t('jslang', 'Error'),
+                                    "rederict" => Yii::$app->response->redirect(['/marketing/email/asignar?lis_id=' . $list_id]),
+                                );
+                                return Utilities::ajaxResponse('NO_OK', 'alert', Yii::t("jslang", "Error"), false, $message);
                             }
                         }
                         $i = $i + 1;
                     }
                 } else {
                     $mensaje = $mensaje . " No hay listas para dicho suscrito <br/>";
+                    $message = array(
+                        "wtmessage" => Yii::t("formulario", $mensaje),
+                        "title" => Yii::t('jslang', 'Success'),
+                        "rederict" => Yii::$app->response->redirect(['/marketing/email/asignar?lis_id=' . $list_id]),
+                    );
+                    return Utilities::ajaxResponse('OK', 'alert', Yii::t("jslang", "Sucess"), false, $message);
                 }
 
                 $message = array(
@@ -275,9 +295,9 @@ class EmailController extends \app\components\CController {
                     $transaction->rollback();
                     $message = array(
                         "wtmessage" => Yii::t("notificaciones", "Error al eliminar. " . $mensaje),
-                        "title" => Yii::t('jslang', 'Success'),
+                        "title" => Yii::t('jslang', 'Error'),
                     );
-                    return Utilities::ajaxResponse('NO_OK', 'alert', Yii::t("jslang", "Sucess"), false, $message);
+                    return Utilities::ajaxResponse('NO_OK', 'alert', Yii::t("jslang", "Error"), false, $message);
                 }
             } catch (Exception $ex) {
                 $transaction->rollback();
@@ -285,7 +305,7 @@ class EmailController extends \app\components\CController {
                     "wtmessage" => Yii::t("notificaciones", "Error al eliminar. " . $mensaje),
                     "title" => Yii::t('jslang', 'Success'),
                 );
-                return Utilities::ajaxResponse('NO_OK', 'alert', Yii::t("jslang", "Sucess"), false, $message);
+                return Utilities::ajaxResponse('NO_OK', 'alert', Yii::t("jslang", "Error"), false, $message);
             }
         }
     }
