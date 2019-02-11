@@ -72,7 +72,8 @@ INSERT INTO `persona` (`per_id`, `per_pri_nombre`, `per_seg_nombre`, `per_pri_ap
 
 /* Profesores */ 
 (47, 'Favio', 'Fabricio' , 'Aguiar', 'Malta', '0924700875', NULL, NULL, 1, 1, 'M', NULL, 1, 10, 87, NULL, NULL, NULL, NULL, NULL, 7, NULL, NULL, NULL, NULL, NULL, NULL, NULL, 1, 10, 87, NULL, NULL, NULL, NULL, 1, 10, 87, '1', '2019-02-11 13:40:00', NULL, '1'),
-(48, 'Diego', 'Francisco' , 'Aguirre', 'González', '0703473454', NULL, NULL, 1, 1, 'M', NULL, 1, 10, 87, NULL, NULL, NULL, NULL, NULL, 7, NULL, NULL, NULL, NULL, NULL, NULL, NULL, 1, 10, 87, NULL, NULL, NULL, NULL, 1, 10, 87, '1', '2019-02-11 13:40:00', NULL, '1');
+(48, 'Pedro', 'Luis' , 'Andrade', 'Rodríguez', '0918746934', NULL, NULL, 1, 1, 'M', NULL, 1, 10, 87, NULL, NULL, NULL, NULL, NULL, 7, NULL, NULL, NULL, NULL, NULL, NULL, NULL, 1, 10, 87, NULL, NULL, NULL, NULL, 1, 10, 87, '1', '2019-02-11 13:40:00', NULL, '1');
 
 
  	 
+

@@ -43,7 +43,7 @@ INSERT INTO `periodo_academico` (`paca_id`,`saca_id`, `baca_id`, `paca_anio_acad
 --
 INSERT INTO `profesor` (`pro_id`,`per_id`,`pro_usuario_ingreso`, `pro_estado`,`pro_estado_logico`) VALUES
 (1, 47, 1, '1', '1'),
-(2, 48, 1, '1', '1');
+(2, 30, 1, '1', '1');
 
 
 
