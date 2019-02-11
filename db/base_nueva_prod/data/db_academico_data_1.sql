@@ -108,7 +108,8 @@ INSERT INTO `estudio_academico` (`eaca_id`, `teac_id`, `eaca_nombre`, `eaca_desc
 (19, 2, 'Gestión de Empresas Turísticas', 'Gestión de Empresas Turísticas', 'turismo', 1, NULL, '1', '2017-02-01 16:25:00', NULL, '1'),
 (20, 2, 'Gestión del Talento Humano', 'Gestión del Talento Humano', 'talento_humano', 1, NULL, '1', '2017-02-01 16:25:00', NULL, '1'),
 (21, 2, 'Dirección Estratégica en Empresas Familiares', 'Dirección Estratégica en Empresas Familiares', 'empresas_familiares', 1, NULL, '1', '2017-02-01 16:25:00', NULL, '1'),
-(22, 2, 'Gestión en Procesos Organizacionales', 'Gestión en Procesos Organizacionales', 'investigación', 1, NULL, '1', '2017-02-01 16:25:00', NULL, '1');
+(22, 2, 'Gestión en Procesos Organizacionales', 'Gestión en Procesos Organizacionales', 'investigación', 1, NULL, '1', '2017-02-01 16:25:00', NULL, '1'),
+(23, 2, 'Negocios Internacionales', 'Negocios Internacionales', 'negocios', 1, NULL, '1', '2019-02-11 18:00:00', NULL, '1');
 
 
 
@@ -150,7 +151,8 @@ INSERT INTO `modalidad_estudio_unidad` (`meun_id`, `uaca_id`, `mod_id`, `eaca_id
 (31, 2, 3, 19, 1, 1, NULL, '1', '2017-02-01 18:10:00', NULL, '1'),
 (32, 2, 3, 20, 1, 1, NULL, '1', '2017-02-01 18:10:00', NULL, '1'),
 (33, 2, 3, 21, 1, 1, NULL, '1', '2017-02-01 18:10:00', NULL, '1'),
-(34, 2, 2, 22, 1, 1, NULL, '1', '2017-02-01 18:10:00', NULL, '1');
+(34, 2, 2, 22, 1, 1, NULL, '1', '2017-02-01 18:10:00', NULL, '1'),
+(35, 2, 2, 23, 1, 1, NULL, '1', '2019-02-11 18:00:00', NULL, '1');
 
 
 
