@@ -529,8 +529,11 @@ INSERT INTO `asignatura` (`asi_id`, `scon_id`, `asi_nombre`, `asi_descripcion`, 
 (4, 1, 'Desarrollo del Pensamiento - CAN', 'Desarrollo del Pensamiento - CAN', 1, NULL, '1', '2018-05-08 22:16:52', NULL, '1'),
 (5, 1, 'Emprendimiento - CAN', 'Emprendimiento - CAN', 1, NULL, '1', '2018-05-08 22:16:52', NULL, '1'),
 (6, 1, 'Física - CAN', 'Física - CAN', 1, NULL, '1', '2018-05-08 22:16:52', NULL, '1'),
+
+(7, 1, 'Derecho Constitucional - (FT)-MKT', 'Derecho Constitucional - (FT)-MKT', 1, NULL, '1', '2019-02-11 14:00:00', NULL, '1'),
+(8, 1, 'Análisis de Redes Eléctricas I - (PP)', 'Análisis de Redes Eléctricas I - (PP)', 1, NULL, '1', '2019-02-11 14:00:00', NULL, '1');
 -- seguir modificando
-(7, 13, 'Matematicas I', 'Matematicas II', '1', NULL, '1', '2018-05-08 22:15:37', NULL, '1'),
+/*(7, 13, 'Matematicas I', 'Matematicas II', '1', NULL, '1', '2018-05-08 22:15:37', NULL, '1'),
 (8, 14, 'Fundamentos Para Softwares Especializados', 'Fundamentos para softwares especializados', '1', NULL, '1', '2018-05-08 22:15:37', NULL, '1'),
 (9, 7, 'Fundamentos De Economia', 'Fundamentos de economia', '1', NULL, '1', '2018-05-08 22:15:37', NULL, '1'),
 (10, 10, 'Derecho Constitucional', 'Derecho constitucional', '1', NULL, '1', '2018-05-08 22:15:37', NULL, '1'),
@@ -671,7 +674,7 @@ INSERT INTO `asignatura` (`asi_id`, `scon_id`, `asi_nombre`, `asi_descripcion`, 
 (145, 9, 'Elaboracion Y Evaluacion De Proyectos', 'Elaboracion y evaluacion de proyectos', '1', NULL, '1', '2018-05-08 22:15:37', NULL, '1'),
 (146, 14, 'Sistema De Informacion Gerencial', 'Sistema de informacion gerencial', '1', NULL, '1', '2018-05-08 22:15:37', NULL, '1');
 -- (148, '1', 'Gerencia Del Marketing', 'Gerencia del marketing', '1', NULL, '1', '2018-05-08 22:15:37', NULL, '1'), -- no se encuentra en las mallas
-
+*/
 -- --------------------------------------------------------
 --
 -- Volcado de datos para la tabla `modalidad_unidad_academico`
@@ -694,3 +697,6 @@ INSERT INTO `modalidad_unidad_academico` (`muac_id`,`uaca_id`,`mod_id`, `emp_id`
 (15,7,1,2,1,'1','2018-12-10 10:55:00','1'),
 (16,8,2,2,1,'1','2018-12-10 10:55:00','1'),
 (17,9,1,2,1,'1','2018-12-10 10:55:00','1');
+
+
+ 
