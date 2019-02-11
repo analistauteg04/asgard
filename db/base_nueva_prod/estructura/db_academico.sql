@@ -592,3 +592,49 @@ create table if not exists `estudio_academico_area_conocimiento` (
   foreign key (mest_id) references `modulo_estudio`(mest_id),
   foreign key (acon_id) references `area_conocimiento`(acon_id)  
 );
+
+
+-- --------------------------------------------------------
+-- 
+-- Estructura de tabla para la tabla `horario_asignatura_periodo`
+-- --------------------------------------------------------
+create table if not exists `horario_asignatura_periodo` (
+  `hape_id` bigint(20) not null auto_increment primary key,   
+  `asi_id` bigint(20) not null,
+  `paca_id` bigint(20) not null,
+  `pro_id` bigint(20) not null,
+  `uaca_id` bigint(20) not null,
+  `mod_id` bigint(20) not null,
+  `hape_fecha_hora_entrada` timestamp null,
+  `hape_fecha_hora_salida` timestamp null,      
+  `hape_estado` varchar(1) not null,
+  `hape_fecha_creacion` timestamp not null default current_timestamp,
+  `hape_fecha_modificacion` timestamp null default null,
+  `hape_estado_logico` varchar(1) not null,
+  foreign key (asi_id) references `asignatura`(asi_id),
+  foreign key (paca_id) references `periodo_academico`(paca_id),
+  foreign key (pro_id) references `profesor`(pro_id),
+  foreign key (uaca_id) references `unidad_academica`(uaca_id),
+  foreign key (mod_id) references `modalidad`(mod_id)
+);
+
+-- --------------------------------------------------------
+-- 
+-- Estructura de tabla para la tabla `registro_marcacion`
+-- --------------------------------------------------------
+create table if not exists `registro_marcacion` (
+  `rmar_id` bigint(20) not null auto_increment primary key,   
+  `rmar_tipo` varchar(1) not null, -- 'E' entrada clases 'S' salida de clases
+  `pro_id` bigint(20) not null,
+  `hape_id` bigint(20) not null,
+  `rmar_fecha_hora_entrada` timestamp null,    
+  `rmar_fecha_hora_salida` timestamp null,  
+  `rmar_direccion_ip` varchar(20) not null,
+  `usu_id` bigint(20) not null,
+  `rmar_estado` varchar(1) not null,
+  `rmar_fecha_creacion` timestamp not null default current_timestamp,
+  `rmar_fecha_modificacion` timestamp null default null,
+  `rmar_estado_logico` varchar(1) not null,
+  foreign key (pro_id) references `profesor`(pro_id),
+  foreign key (hape_id) references `horario_asignatura_periodo`(hape_id)
+);
