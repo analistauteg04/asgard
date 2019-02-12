@@ -111,7 +111,8 @@ class RegistroMarcacion extends \yii\db\ActiveRecord {
                     FROM
                     " . $con->dbname . ".horario_asignatura_periodo hap
                     INNER JOIN " . $con->dbname . ".profesor prof ON prof.pro_id = hap.pro_id
-                    INNER JOIN " . $con->dbname . ".asignatura asig ON asig.asi_id = hap.asi_id  
+                    INNER JOIN " . $con->dbname . ".asignatura asig ON asig.asi_id = hap.asi_id
+                    -- INNER JOIN " . $con->dbname . ".periodo_academico paca ON paca.paca_id = hap.paca_id    
                     WHERE
                     hap.dia_id = :dia AND
                     prof.per_id = :per_id AND
@@ -120,7 +121,7 @@ class RegistroMarcacion extends \yii\db\ActiveRecord {
                     prof.pro_estado = :estado AND
                     prof.pro_estado_logico = :estado AND
                     asig.asi_estado = :estado AND
-                    asig.asi_estado_logico = :estado
+                    asig.asi_estado_logico = :estado                     
                ";
         $comando = $con->createCommand($sql);
         $comando->bindParam(":estado", $estado, \PDO::PARAM_STR);
@@ -155,27 +156,125 @@ class RegistroMarcacion extends \yii\db\ActiveRecord {
      * @param   
      * @return  Consulta una marcacion.
      */
-    public function consultarMarcacionExiste($hape_id, $profesor, $fecha) {
+    public function consultarMarcacionExiste($hape_id, $profesor, $fecha, $rmar_tipo) {
         $con = \Yii::$app->db_academico;
         $estado = 1;
+        $fecha_registro = "%" . $fecha . "%";
         $sql = "
                     SELECT
-                        count(*) as existe
+                        count(*) as marcacion
                     FROM 
                         " . $con->dbname . ".registro_marcacion rem                    
                     WHERE
                         rem.hape_id= :hape_id AND
                         rem.pro_id= :profesor AND
-                        DATE_FORMAT(rem.rmar_fecha_creacion,'%Y - %m - %d')= :fecha AND     
+                        rem.rmar_fecha_creacion like :fecha AND  
+                        rem.rmar_tipo = :rmar_tipo AND
                         rem.rmar_estado = :estado AND
                         rem.rmar_estado_logico = :estado";
         $comando = $con->createCommand($sql);
         $comando->bindParam(":estado", $estado, \PDO::PARAM_STR);
         $comando->bindParam(":hape_id", $hape_id, \PDO::PARAM_INT);
         $comando->bindParam(":profesor", $profesor, \PDO::PARAM_INT);  
-        $comando->bindParam(":fecha", $fecha, \PDO::PARAM_STR);
+        $comando->bindParam(":fecha", $fecha_registro, \PDO::PARAM_STR);
+        $comando->bindParam(":rmar_tipo", $rmar_tipo, \PDO::PARAM_STR);
         $resultData = $comando->queryOne();
         return $resultData;
+    }
+    
+    /**
+     * Function insertarMarcacion crea marcacion.
+     * @author  Giovanni Vergara <analistadesarrollo02@uteg.edu.ec>;
+     * @param
+     * @return
+     */
+    public function insertarMarcacion($rmar_tipo, $pro_id, $hape_id, $rmar_fecha_hora_entrada, $rmar_fecha_hora_salida, $rmar_direccion_ip, $usu_id) {
+        $con = \Yii::$app->db_academico;
+        $rmar_fecha_creacion = date(Yii::$app->params["dateTimeByDefault"]); 
+        $trans = $con->getTransaction(); // se obtiene la transacción actual
+        if ($trans !== null) {
+            $trans = null; // si existe la transacción entonces no se crea una
+        } else {
+            $trans = $con->beginTransaction(); // si no existe la transacción entonces se crea una
+        }
+
+        $param_sql = "rmar_estado";
+        $bdet_sql = "1";
+
+        $param_sql .= ", rmar_estado_logico";
+        $bdet_sql .= ", 1";
+
+        if (isset($rmar_tipo)) {
+            $param_sql .= ", rmar_tipo";
+            $bdet_sql .= ", :rmar_tipo";
+        }
+        if (isset($pro_id)) {
+            $param_sql .= ", pro_id";
+            $bdet_sql .= ", :pro_id";
+        }
+        if (isset($hape_id)) {
+            $param_sql .= ", hape_id";
+            $bdet_sql .= ", :hape_id";
+        }       
+        if (isset($rmar_fecha_hora_entrada)) {
+            $param_sql .= ", rmar_fecha_hora_entrada";
+            $bdet_sql .= ", :rmar_fecha_hora_entrada";
+        }
+        if (isset($rmar_fecha_hora_salida)) {
+            $param_sql .= ", rmar_fecha_hora_salida";
+            $bdet_sql .= ", :rmar_fecha_hora_salida";
+        }
+        if (isset($rmar_direccion_ip)) {
+            $param_sql .= ", rmar_direccion_ip";
+            $bdet_sql .= ", :rmar_direccion_ip";
+        }        
+        if (isset($usu_id)) {
+            $param_sql .= ", usu_id";
+            $bdet_sql .= ", :usu_id";
+        } 
+        if (isset($rmar_fecha_creacion)) {
+            $param_sql .= ", rmar_fecha_creacion";
+            $bdet_sql .= ", :rmar_fecha_creacion";
+        }
+
+        try {
+            $sql = "INSERT INTO " . $con->dbname . ".registro_marcacion ($param_sql) VALUES($bdet_sql)";
+            $comando = $con->createCommand($sql);
+
+            if (isset($rmar_tipo)) {
+                $comando->bindParam(':rmar_tipo', $rmar_tipo, \PDO::PARAM_STR);
+            }
+            if (isset($pro_id)) {
+                $comando->bindParam(':pro_id', $pro_id, \PDO::PARAM_INT);
+            }
+            if (isset($hape_id)) {
+                $comando->bindParam(':hape_id', $hape_id, \PDO::PARAM_INT);
+            }
+            if (isset($rmar_fecha_hora_entrada)) {
+                $comando->bindParam(':rmar_fecha_hora_entrada', $rmar_fecha_hora_entrada, \PDO::PARAM_STR);
+            }
+            if (isset($rmar_fecha_hora_salida)) {
+                $comando->bindParam(':rmar_fecha_hora_salida', $rmar_fecha_hora_salida, \PDO::PARAM_STR);
+            }
+            if (isset($rmar_direccion_ip)) {
+                $comando->bindParam(':rmar_direccion_ip', $rmar_direccion_ip, \PDO::PARAM_STR);
+            }
+            if (!empty((isset($usu_id)))) {
+                $comando->bindParam(':usu_id', $usu_id, \PDO::PARAM_INT);
+            }      
+            if (!empty((isset($rmar_fecha_creacion)))) {
+                $comando->bindParam(':rmar_fecha_creacion', $rmar_fecha_creacion, \PDO::PARAM_STR);
+            }
+
+            $result = $comando->execute();
+            if ($trans !== null)
+                $trans->commit();
+            return $con->getLastInsertID($con->dbname . '.registro_marcacion');
+        } catch (Exception $ex) {
+            if ($trans !== null)
+                $trans->rollback();
+            return FALSE;
+        }
     }
 
 }

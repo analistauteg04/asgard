@@ -9,9 +9,7 @@ function Marcacion(hape_id,horario,accion,dia,prof_id) {
     arrParams.horario = horario;
     arrParams.accion = accion;
     arrParams.dia = dia;
-    arrParams.profesor = prof_id;
-    
-
+    arrParams.profesor = prof_id;    
     if (!validateForm()) {
         requestHttpAjax(link, arrParams, function (response) {
             showAlert(response.status, response.label, response.message);
