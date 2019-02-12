@@ -164,7 +164,10 @@ INSERT INTO `objeto_modulo` (`omod_id`, `mod_id`, `omod_padre_id`, `omod_nombre`
 (144, 6, 139, 'Subir Mailchimp', 'A', '0', '', '', '', '', 1, '1', 'Marketing', '1', '2018-11-15 20:26:23', NULL, '1'),
 
 (145, 6, 133, 'Editar Lista', 'S', '0', '', '', '', 'marketing/email/edit', 1, '0', 'marketing', '1', '2019-02-08 12:18:16', NULL, '1'),
-(146, 6, 145, 'Actualizar Lista', 'A', '0', '', '', '', 'marketing/email/edit', 1, '1', 'marketing', '1', '2019-02-08 12:18:16', NULL, '1');
+(146, 6, 145, 'Actualizar Lista', 'A', '0', '', '', '', 'marketing/email/edit', 1, '1', 'marketing', '1', '2019-02-08 12:18:16', NULL, '1'),
+
+(147, 4, 147, 'Marcación', 'P', '0', '', '', '', 'academico/marcacion/marcacion', 1, '1', 'Academico', '1', '2019-02-12 15:46:09', NULL, '1'),
+(148, 4, 148, 'Listado Marcaciones', 'P', '0', '', '', '', 'academico/marcacion/index', 2, '1', 'Academico', '1', '2019-02-12 15:49:43', NULL, '1');
 -- --------------------------------------------------------
 --
 -- Volcado de datos para la tabla `OBMO_ACCI`
