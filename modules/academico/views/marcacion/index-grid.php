@@ -16,8 +16,6 @@ admision::registerTranslations();
     PbGridView::widget([
         'id' => 'Pbcontacto',
         'showExport' => true,
-        //'fnExportEXCEL' => "exportExcel",
-        //'fnExportPDF' => "exportPdf",
         'dataProvider' => $model,
         'columns' => [
             [

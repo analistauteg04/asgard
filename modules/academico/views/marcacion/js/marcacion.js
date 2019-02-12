@@ -2,13 +2,14 @@ $(document).ready(function () {
 
 });
 
-function Marcacion(materia,horario,accion, dia) {
+function Marcacion(hape_id,horario,accion,dia,prof_id) {    
     var link = $('#txth_base').val() + "/academico/marcacion/save";
     var arrParams = new Object();
-    arrParams.materia = materia;
+    arrParams.hape_id = hape_id;
     arrParams.horario = horario;
     arrParams.accion = accion;
     arrParams.dia = dia;
+    arrParams.profesor = prof_id;
     
 
     if (!validateForm()) {

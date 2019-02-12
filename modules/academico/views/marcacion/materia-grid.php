@@ -32,10 +32,10 @@ PbGridView::widget([
         [
             'attribute' => 'materia',
             'header' => Yii::t("formulario", "Matter"),
-            'value' => 'asi_descripcion',
+            'value' => 'materia',
         ],
         [
-            'attribute' => 'materia',
+            'attribute' => 'horario',
             'header' => academico::t("Academico", "Schedule"),
             'value' => 'horario',
         ],
@@ -45,14 +45,12 @@ PbGridView::widget([
             'contentOptions' => ['style' => 'max-width:50px;'],
             'template' => '{iniciar} {finalizar} ',
             'buttons' => [
-                'iniciar' => function ($url, $model) {
-                    $model['horario'] = '09:00 11:00'; // LUEGO BORRAR CUANDO SE TOME DE LA BD
-                    return Html::a('<button type="button" class="btn btn-primary btn-sm">Iniciar</button>', "#", ["onclick" => "Marcacion(" . $model['id'] . "," . $model['horario'] . ", 'I', ". $dia = date("w", strtotime(date("Y-m-d"))) . ");", "data-toggle" => "tooltip", "title" => "Iniciar Marcación", "data-pjax" => 0]);
+                'iniciar' => function ($url, $model) {                    
+                    return Html::a('<button type="button" class="btn btn-primary btn-sm">Iniciar</button>', "#", ["onclick" => "Marcacion(" . $model['id'] . ",'" . $model['horario'] . "', 'E', ". $model['dia'] . ", ". $model['profesor'] . ");", "data-toggle" => "tooltip", "title" => "Iniciar Marcación", "data-pjax" => 0]);
                     
                 },
-                'finalizar' => function ($url, $model) {
-                    $model['horario'] = '09:00 11:00'; // LUEGO BORRAR CUANDO SE TOME DE LA BD
-                    return Html::a('<button type="button" class="btn btn-primary btn-sm">Finalizar</button>', "#", ["onclick" => "Marcacion(" . $model['id'] . "," . $model['horario'] . ", 'F', ". $dia = date("w", strtotime(date("Y-m-d"))) . ");", "data-toggle" => "tooltip", "title" => "Finalizar Marcación", "data-pjax" => 0]);
+                'finalizar' => function ($url, $model) {                    
+                    return Html::a('<button type="button" class="btn btn-primary btn-sm">Finalizar</button>', "#", ["onclick" => "Marcacion(" . $model['id'] . ",'" . $model['horario'] . "', 'S', ". $model['dia'] . ", ". $model['profesor'] . ");", "data-toggle" => "tooltip", "title" => "Finalizar Marcación", "data-pjax" => 0]);
                 },
             ],
         ],

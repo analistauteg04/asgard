@@ -5,13 +5,16 @@ namespace app\modules\academico\controllers;
 use Yii;
 use yii\helpers\ArrayHelper;
 use app\models\Utilities;
-use app\modules\academico\models\MatriculadosReprobado; // ESTO CAMBIAR QUE NO VA SER DE AQUI LA DATA
+use app\modules\academico\models\MatriculadosReprobado;
+use app\modules\academico\models\RegistroMarcacion;
 
 class MarcacionController extends \app\components\CController {
 
     public function actionMarcacion() {
-        $mod_admitido = new MatriculadosReprobado();
-        $arr_materia = $mod_admitido->consultarMateriasPorUnidadModalidadCarrera(1, 1, 1, '', '');
+        $per_id = @Yii::$app->session->get("PB_perid");
+        $dia = date("w", strtotime(date("Y-m-d")));
+        $mod_marcacion = new RegistroMarcacion();
+        $arr_materia = $mod_marcacion->consultarMateriasMarcabyPro($per_id, $dia);
         return $this->render('marcacion', [
                     'model' => $arr_materia
         ]);
@@ -28,39 +31,40 @@ class MarcacionController extends \app\components\CController {
     }
 
     public function actionSave() {
-        $per_id = @Yii::$app->session->get("PB_perid");
-        $profesor = @Yii::$app->session->get("PB_iduser");
+        //$per_id = @Yii::$app->session->get("PB_perid");
+        $usuario = @Yii::$app->session->get("PB_iduser");
         $busqueda = 0;
         if (Yii::$app->request->isAjax) {
             $data = Yii::$app->request->post();
-            $materia = $data["materia"];
-            $horario = $data["horario"];
             $accion = $data["accion"];
+            $profesor = $data["profesor"];
+            $hape_id = $data["hape_id"];    
+            $horario = $data["horario"];
             $dia = $data["dia"];
-            $fecha = date(Yii::$app->params["dateByDefault"]);
+            $fecha = date(Yii::$app->params["dateByDefault"]); // solo envia Y-m-d
             $ip = \app\models\Utilities::getClientRealIP(); // ip de la maquina
-            $con = \Yii::$app->db_academico; //CAMBIAR A BASE QUE ES SI NO ES ACADEMICO OJO
+            $con = \Yii::$app->db_academico; 
             $transaction = $con->beginTransaction();
             try {
-                $mod_marcacion = new MatriculadosReprobado();
+                $mod_marcacion = new RegistroMarcacion();
                 // consultar si no ha guardado ya el registro de esta marcacion
-                if (!empty($materia) && !empty($profesor) && !empty($horario) && !empty($dia) && !empty($fecha)) {
-                    $cons_marcacion = $mod_marcacion->consultarMarcacionExiste($materia, $profesor, $horario, $fecha);
+                if (!empty($hape_id) && !empty($profesor) && !empty($horario) && !empty($dia) && !empty($fecha)) {
+                    $cons_marcacion = $mod_marcacion->consultarMarcacionExiste($hape_id, $profesor, $dia, $fecha);
                     if ($cons_marcacion["marcacion"] > 0) {
                         $busqueda = 1;
                     }
                 }
                 if ($busqueda == 0) {
-                    //Guardar Marcacion (iniciar o finalizar). 
-                    if ($accion == 'I') {
-                        $hora_inicio = date(Yii::$app->params["TimeByDefault"]); //$data["hora_inicio"];
-                        $resp_marca = $mod_marcacion->insertarMarcacion($profesor, $materia, $horario, $dia, $hora_inicio, null, $fecha, $ip);
+                    //Guardar Marcacion (iniciar (E) o finalizar (S)). 
+                    if ($accion == 'E') {
+                        $hora_inicio = date(Yii::$app->params["dateTimeByDefault"]); 
+                        $resp_marca = $mod_marcacion->insertarMarcacion($accion, $profesor, $hape_id, $hora_inicio, null, $ip, $usuario);
                         if ($resp_marca) {
                             $exito = 1;
                         }
                     } else {
-                        $hora_fin = date(Yii::$app->params["TimeByDefault"]);
-                        $resp_marca = $mod_marcacion->insertarMarcacion($profesor, $materia, $horario, $dia, null, $hora_fin, $fecha, $ip);
+                        $hora_fin = date(Yii::$app->params["dateTimeByDefault"]);
+                        $resp_marca = $mod_marcacion->insertarMarcacion($accion, $profesor, $hape_id, $hora_inicio, null, $ip, $usuario);
                         if ($resp_marca) {
                             $exito = 1;
                         }
