@@ -180,16 +180,17 @@ class Edoc_ApiRest extends \app\modules\fe_edoc\components\CActiveRecord {
                 $ImporteTotal=floatval($cabFact['TOTALBRUTO'])+floatval($cabFact['IVA_VALOR']);
             }            
         }
+		$IdLote=$cabFact['SYS_FACTURANC_ID'];//Numero ID autoIncremetable del ERP
         
         $sql = "INSERT INTO " . $con->dbname . ".NubeFactura
                (Ambiente,TipoEmision, RazonSocial, NombreComercial, Ruc,ClaveAcceso,CodigoDocumento, Establecimiento,
                 PuntoEmision, Secuencial, DireccionMatriz, FechaEmision, DireccionEstablecimiento, ContribuyenteEspecial,
                 ObligadoContabilidad, TipoIdentificacionComprador, GuiaRemision, RazonSocialComprador, IdentificacionComprador,
-                TotalSinImpuesto, TotalDescuento, Propina, ImporteTotal, Moneda,EmailResponsable, SecuencialERP, CodigoTransaccionERP,UsuarioCreador,Estado,FechaCarga) VALUES 
+                TotalSinImpuesto, TotalDescuento, Propina, ImporteTotal, Moneda,EmailResponsable, SecuencialERP, CodigoTransaccionERP,UsuarioCreador,Estado,FechaCarga,IdLote) VALUES 
                (:Ambiente,:TipoEmision, :RazonSocial, :NombreComercial, :Ruc,:ClaveAcceso,:CodigoDocumento, :Establecimiento,
                 :PuntoEmision, :Secuencial, :DireccionMatriz, :FechaEmision, :DireccionEstablecimiento, :ContribuyenteEspecial,
                 :ObligadoContabilidad, :TipoIdentificacionComprador, :GuiaRemision, :RazonSocialComprador, :IdentificacionComprador,
-                :TotalSinImpuesto, :TotalDescuento, :Propina, :ImporteTotal, :Moneda,:EmailResponsable, :SecuencialERP, :CodigoTransaccionERP,:UsuarioCreador,1,CURRENT_TIMESTAMP())";
+                :TotalSinImpuesto, :TotalDescuento, :Propina, :ImporteTotal, :Moneda,:EmailResponsable, :SecuencialERP, :CodigoTransaccionERP,:UsuarioCreador,1,CURRENT_TIMESTAMP(),:IdLote)";
         $comando = $con->createCommand($sql);
 
         //$comando->bindParam(":id", $id_docElectronico, PDO::PARAM_INT);
@@ -221,6 +222,7 @@ class Edoc_ApiRest extends \app\modules\fe_edoc\components\CActiveRecord {
         $comando->bindParam(":SecuencialERP", $Secuencial, \PDO::PARAM_STR);
         $comando->bindParam(":CodigoTransaccionERP", $CodigoTransaccionERP, \PDO::PARAM_STR);
         $comando->bindParam(":UsuarioCreador", $UsuarioCreador, \PDO::PARAM_STR);
+		$comando->bindParam(":IdLote", $IdLote, \PDO::PARAM_STR);
 
         $comando->execute();
         return $con->getLastInsertID();
@@ -231,7 +233,7 @@ class Edoc_ApiRest extends \app\modules\fe_edoc\components\CActiveRecord {
         $cabFact= $this->cabEdoc;
         $detFact= $this->detEdoc;
         //Dim por_iva As Decimal = CDbl(dtsData.Tables("VC010101").Rows(0).Item("POR_IVA")) / 100
-        $por_iva=intval($cabFact['IVA_PORCENTAJE']);//12;//Recuperar el impuesto de alguna tabla    o recuperar de la Cabecera    
+		$por_iva=0;
         $idDet=0;
         $valSinImp = 0;
         $val_iva12 = 0;
@@ -239,10 +241,12 @@ class Edoc_ApiRest extends \app\modules\fe_edoc\components\CActiveRecord {
         $val_iva0 = 0;//Valor de Iva
         $vet_iva0 = 0;//Venta total con Iva
         for ($i = 0; $i < sizeof($detFact); $i++) {
+			$por_iva=intval($detFact[$i]['IMP_PORCENTAJE']);//TARIFA % DE IVA SEGUN TABLA 17
+			//Utilities::putMessageLogFile($por_iva);
             $valSinImp = $detFact[$i]['TOTALSINIMPUESTOS'];//floatval($detFact[$i]['T_VENTA']) - floatval($detFact[$i]['VAL_DES']);
             //%codigo iva segun tabla #17
             $codigoImp=$detFact[$i]['IMP_CODIGO'];
-            if ($codigoImp == '2') {
+            if ($por_iva > 0) {
                 $val_iva12 = $val_iva12 + ((floatval($detFact[$i]['CANTIDAD'])*floatval($detFact[$i]['PRECIOUNITARIO'])-floatval($detFact[$i]['DESC']))* (floatval($por_iva)/100));
                 $vet_iva12 = $vet_iva12 + $valSinImp;
             } else {
@@ -267,7 +271,7 @@ class Edoc_ApiRest extends \app\modules\fe_edoc\components\CActiveRecord {
             $idDet = $con->getLastInsertID();
             
             //Inserta el IVA de cada Item             
-            if ($codigoImp == '2') {//Verifico si el ITEM tiene Impuesto 12%
+            if ($por_iva > 0) {//Verifico si el ITEM tiene Impuesto 12%
                 //Segun Datos Sri
                 $valIvaImp=(floatval($valSinImp)*floatval($por_iva))/100;//Calculo del Valor del Impuesto Generado por Detalle
                 $this->InsertarDetImpFactura($con, $idDet, '2',$por_iva, $valSinImp, $valIvaImp); //12%
@@ -277,10 +281,12 @@ class Edoc_ApiRest extends \app\modules\fe_edoc\components\CActiveRecord {
         }
         //Inserta el Total del Iva Acumulado en el detalle
         //Insertar Datos de Iva 0%
+		//Utilities::putMessageLogFile($vet_iva0.' IVA0');
         If ($vet_iva0 > 0) {
             $this->InsertarFacturaImpuesto($con, $idCab, '2','0', $vet_iva0, $val_iva0);
         }
         //Inserta Datos de Iva 12
+		//Utilities::putMessageLogFile($vet_iva12.' IVA12');
         If ($vet_iva12 > 0) {
             $this->InsertarFacturaImpuesto($con, $idCab, '2', $por_iva, $vet_iva12, $val_iva12);
         }
