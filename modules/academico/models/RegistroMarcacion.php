@@ -112,7 +112,7 @@ class RegistroMarcacion extends \yii\db\ActiveRecord {
                     " . $con->dbname . ".horario_asignatura_periodo hap
                     INNER JOIN " . $con->dbname . ".profesor prof ON prof.pro_id = hap.pro_id
                     INNER JOIN " . $con->dbname . ".asignatura asig ON asig.asi_id = hap.asi_id
-                    -- INNER JOIN " . $con->dbname . ".periodo_academico paca ON paca.paca_id = hap.paca_id    
+                    INNER JOIN " . $con->dbname . ".periodo_academico paca ON paca.paca_id = hap.paca_id    
                     WHERE
                     hap.dia_id = :dia AND
                     prof.per_id = :per_id AND
@@ -121,7 +121,8 @@ class RegistroMarcacion extends \yii\db\ActiveRecord {
                     prof.pro_estado = :estado AND
                     prof.pro_estado_logico = :estado AND
                     asig.asi_estado = :estado AND
-                    asig.asi_estado_logico = :estado                     
+                    asig.asi_estado_logico = :estado  AND
+                    paca.paca_activo = 'A'
                ";
         $comando = $con->createCommand($sql);
         $comando->bindParam(":estado", $estado, \PDO::PARAM_STR);
