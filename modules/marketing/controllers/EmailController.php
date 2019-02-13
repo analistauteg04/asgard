@@ -90,9 +90,9 @@ class EmailController extends \app\components\CController {
             $arrSearch["estado"] = $data['estado'];
             if ($data["estado"] == '0') {
                 $susbs_lista = $mod_sb->consultarSuscriptoresxLista(array(), $lis_id);
-                    return $this->render('asignar_grid', [
-                                "model" => $susbs_lista,
-                    ]);
+                return $this->render('asignar_grid', [
+                            "model" => $susbs_lista,
+                ]);
             } else {
                 if ($data["estado"] == '1') {
                     $susbs_lista = $mod_sb->consultarSuscriptoresxLista($arrSearch, $lis_id, 1);
@@ -161,11 +161,13 @@ class EmailController extends \app\components\CController {
                         "title" => Yii::t('jslang', 'Success'),
                         "listas" => $est_rel,
                         "sus_id" => $su_id,
+                        //"rederict" => Yii::$app->response->redirect(['/marketing/email/asignar?lis_id=' . base64_encode($list_id)]),
                     );
                 } else {
                     $message = array(
                         "wtmessage" => Yii::t("formulario", $mensaje),
                         "title" => Yii::t('jslang', 'Success'),
+                        //"rederict" => Yii::$app->response->redirect(['/marketing/email/asignar?lis_id=' . base64_encode($list_id)]),
                     );
                 }
                 return Utilities::ajaxResponse('OK', 'alert', Yii::t("jslang", "Sucess"), false, $message);
@@ -176,9 +178,8 @@ class EmailController extends \app\components\CController {
                     $list_ids = explode(",", $data['list_ids']);
                 }
                 $sus_id = $data['sus_id'];
-                $i = 0;
-                if (count($list_ids) > 0) {
-                    \app\models\Utilities::putMessageLogFile("si hay listas" . count($list_ids));
+                $i = 0;                
+                if (count($list_ids) > 0) {                    
                     while ($i < count($list_ids)) {
                         if (!empty($list_ids[$i])) {
                             $key = ['lis_id', 'sus_id', 'lsus_estado', 'lsus_fecha_creacion', 'lsus_estado_logico'];
@@ -222,12 +223,6 @@ class EmailController extends \app\components\CController {
                     return Utilities::ajaxResponse('OK', 'alert', Yii::t("jslang", "Sucess"), false, $message);
                 }
             }
-            $message = array(
-                "wtmessage" => Yii::t("formulario", $mensaje),
-                "rederict" => Yii::$app->response->redirect(['/marketing/email/asignar?lis_id=' . $list_id]),
-                "title" => Yii::t('jslang', 'Success'),
-            );
-            return Utilities::ajaxResponse('OK', 'alert', Yii::t("jslang", "Sucess"), false, $message);
         }
         return $this->render('asignar', [
                     'arr_lista' => $lista_model,
