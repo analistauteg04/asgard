@@ -649,7 +649,7 @@ class Suscriptor extends \yii\db\ActiveRecord {
      * @property integer $userid
      * @return  
      */
-    public function insertarCampaniaxLista($con, $parameters, $keys, $name_table) {
+    public function insertarCampaniaxLista($con, $parameters, $keys, $name_table) {    
         $trans = $con->getTransaction();
         $param_sql .= "" . $keys[0];
         $bdet_sql .= "'" . $parameters[0] . "'";
@@ -663,9 +663,14 @@ class Suscriptor extends \yii\db\ActiveRecord {
             $sql = "INSERT INTO " . $con->dbname . '.' . $name_table . " ($param_sql) VALUES($bdet_sql);";
             $comando = $con->createCommand($sql);
             $result = $comando->execute();
-            $idtable = $con->getLastInsertID($con->dbname . '.' . $name_table);            
-            return $idtable;
+            $idtable = $con->getLastInsertID($con->dbname . '.' . $name_table);    
+            if ($trans !== null)
+                $trans->commit();
+            return $idtable;            
         } catch (Exception $ex) {            
+            if ($trans !== null) {
+                $trans->rollback();
+            }            
             return 0;
         }
     }
