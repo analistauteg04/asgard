@@ -88,16 +88,23 @@ class EmailController extends \app\components\CController {
         $data = Yii::$app->request->get();
         if (isset($data["PBgetFilter"])) {
             $arrSearch["estado"] = $data['estado'];
-            if ($data["estado"] == '1') {
-                $susbs_lista = $mod_sb->consultarSuscriptoresxLista($arrSearch, $lis_id, 1);
-                return $this->render('asignar_grid', [
-                            "model" => $susbs_lista,
-                ]);
-            } elseif ($data["estado"] == '2') {
-                $susbs_lista = $mod_sb->consultarSuscriptoresxLista($arrSearch, $lis_id, 0);
-                return $this->render('asignar_grid', [
-                            "model" => $susbs_lista,
-                ]);
+            if ($data["estado"] == '0') {
+                $susbs_lista = $mod_sb->consultarSuscriptoresxLista(array(), $lis_id);
+                    return $this->render('asignar_grid', [
+                                "model" => $susbs_lista,
+                    ]);
+            } else {
+                if ($data["estado"] == '1') {
+                    $susbs_lista = $mod_sb->consultarSuscriptoresxLista($arrSearch, $lis_id, 1);
+                    return $this->render('asignar_grid', [
+                                "model" => $susbs_lista,
+                    ]);
+                } elseif ($data["estado"] == '2') {
+                    $susbs_lista = $mod_sb->consultarSuscriptoresxLista($arrSearch, $lis_id, 0);
+                    return $this->render('asignar_grid', [
+                                "model" => $susbs_lista,
+                    ]);
+                }
             }
         }
         if (Yii::$app->request->isAjax) {
@@ -179,10 +186,10 @@ class EmailController extends \app\components\CController {
                             $exitesuscrito = $mod_sb->consultarListaSuscxsusidylis($list_ids[$i], $sus_id);
                             if ($exitesuscrito["suscrito"] > 0) {
                                 $lsu_id = $mod_sb->modificarListaSuscritor($list_ids[$i], $sus_id);
-                                $modifica = 1; 
-                            } else {                                
+                                $modifica = 1;
+                            } else {
                                 $lsu_id = $mod_sb->insertarListaSuscritor($con, $parametro, $key, 'lista_suscriptor');
-                                $modifica = 1; 
+                                $modifica = 1;
                             }
 
                             if ($modifica == 1) {
@@ -214,13 +221,13 @@ class EmailController extends \app\components\CController {
                     );
                     return Utilities::ajaxResponse('OK', 'alert', Yii::t("jslang", "Sucess"), false, $message);
                 }
-
-                $message = array(
-                    "wtmessage" => Yii::t("formulario", $mensaje),
-                    "title" => Yii::t('jslang', 'Success'),
-                );
-                return Utilities::ajaxResponse('OK', 'alert', Yii::t("jslang", "Sucess"), false, $message);
             }
+            $message = array(
+                "wtmessage" => Yii::t("formulario", $mensaje),
+                "rederict" => Yii::$app->response->redirect(['/marketing/email/asignar?lis_id=' . $list_id]),
+                "title" => Yii::t('jslang', 'Success'),
+            );
+            return Utilities::ajaxResponse('OK', 'alert', Yii::t("jslang", "Sucess"), false, $message);
         }
         return $this->render('asignar', [
                     'arr_lista' => $lista_model,
@@ -886,10 +893,10 @@ class EmailController extends \app\components\CController {
         $arrSearch["lista"] = $data["lista"];
         $mod_lista = new Lista();
         $arrData = array();
-        if ($arrSearch["lista"] != "") {            
+
+        if ($arrSearch["lista"] != "") {
             $arrData = $mod_lista->consultarListaReporte($arrSearch);
         } else {
-            //\app\models\Utilities::putMessageLogFile('no ingresa con parametros');
             $arrData = $mod_lista->consultarListaReporte();
         }
         $nameReport = marketing::t("marketing", "List");
