@@ -886,11 +886,10 @@ class EmailController extends \app\components\CController {
         $arrSearch["lista"] = $data["lista"];
         $mod_lista = new Lista();
         $arrData = array();
-        if ($arrSearch["lista"] != "") {
-            \app\models\Utilities::putMessageLogFile('ingresa con parametros');
+        if ($arrSearch["lista"] != "") {            
             $arrData = $mod_lista->consultarListaReporte($arrSearch);
         } else {
-            \app\models\Utilities::putMessageLogFile('no ingresa con parametros');
+            //\app\models\Utilities::putMessageLogFile('no ingresa con parametros');
             $arrData = $mod_lista->consultarListaReporte();
         }
         $nameReport = marketing::t("marketing", "List");
