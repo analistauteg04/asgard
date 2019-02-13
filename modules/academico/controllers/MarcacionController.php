@@ -22,17 +22,16 @@ class MarcacionController extends \app\components\CController {
     }
 
     public function actionIndex() {
-        $mod_admitido = new MatriculadosReprobado();
-        $arr_materia = $mod_admitido->consultarMateriasPorUnidadModalidadCarrera(1, 1, 1, '', '');
+        $mod_marcacion = new RegistroMarcacion();
+        $arr_historico = $mod_marcacion->consultarRegistroMarcacion();
         return $this->render('index', [
-                    'model' => $arr_materia,
+                    'model' => $arr_historico,
                     'arr_periodo' => ArrayHelper::map(array_merge([["id" => "0", "name" => "Todas"], ["id" => "1", "name" => "Periodo 1"]]/* , $periodo */), "id", "name"),
                     'arr_materia' => ArrayHelper::map(array_merge([["id" => "0", "name" => "Todas"], ["id" => "1", "name" => "Materia 1"]]/* , $materia */), "id", "name"),
         ]);
     }
 
-    public function actionSave() {
-        //$per_id = @Yii::$app->session->get("PB_perid");
+    public function actionSave() {     
         $usuario = @Yii::$app->session->get("PB_iduser");
         $busqueda = 0;
         if (Yii::$app->request->isAjax) {
@@ -41,9 +40,7 @@ class MarcacionController extends \app\components\CController {
             $profesor = $data["profesor"];
             $hape_id = $data["hape_id"];
             $horario = $data["horario"];
-            $dia = $data["dia"];
-
-            //$real_fin = date(Yii::$app->params["dateByDefault"]) . ' ' . $hora[1];
+            $dia = $data["dia"];           
             $fecha = date(Yii::$app->params["dateByDefault"]); // solo envia Y-m-d
             if ($accion == 'E') {
                 $texto = 'entrada';
@@ -68,17 +65,24 @@ class MarcacionController extends \app\components\CController {
                         $hora = explode("-", $horario);
                         $hora_inicio = date(Yii::$app->params["dateTimeByDefault"]);
                         $real_inicia = date(Yii::$app->params["dateByDefault"]) . ' ' . $hora[0];
+                        $hora_fin = date(Yii::$app->params["dateByDefault"]) . ' ' . $hora[1];
                         $intervalo = date_diff(new DateTime($hora_inicio), new DateTime($real_inicia));
                         $horacalculada = $intervalo->format('%H:%i:%s');
                         list($horas, $minutos, $segundos) = explode(':', $horacalculada);
                         $hora_en_segundos = ($horas * 3600 ) + ($minutos * 60 ) + $segundos;
                         $minutosfinales = $hora_en_segundos / 60;
-                        /*\app\models\Utilities::putMessageLogFile('hora actual: ' . $real_inicia);
+                        /*\app\models\Utilities::putMessageLogFile('hora actual: ' . $hora_fin);
                         \app\models\Utilities::putMessageLogFile('hota inicia: ' . $hora_inicio);
-                        \app\models\Utilities::putMessageLogFile('diferencia: ' . $minutosfinales); */
-                        if ($minutosfinales <= 30) { // solo toca verificar que pueda marcar inicio hasta 30 minutos antes del inicio materia OJO a esto
+                         \ \app\models\Utilities::putMessageLogFile('diferencia: ' . $minutosfinales); */
+                        if (new DateTime($hora_inicio) < new DateTime($real_inicia)) {
+                            $minutosfinales = $minutosfinales * -1;
+                        }                      
+                        if ($minutosfinales >= -30 && new DateTime($hora_inicio) < new DateTime($hora_fin)) { //SOLO PUEDE MARCAR 30 MINUTOS ANTES DEL INICIO Y UN 1 MINUTO ANTES DEL FINAL
                             $resp_marca = $mod_marcacion->insertarMarcacion($accion, $profesor, $hape_id, $hora_inicio, null, $ip, $usuario);
                             if ($resp_marca) {
+                                if ($minutosfinales >= 15) { // AL MARCAR 15 MINUTOS DESPUES ENVIA MENSAJE
+                                    $retraso = 'La entrado fue '. round($minutosfinales, 0, PHP_ROUND_HALF_DOWN) . ' después';
+                                }
                                 $exito = 1;
                             }
                         } else {
@@ -94,29 +98,36 @@ class MarcacionController extends \app\components\CController {
                         list($horas, $minutos, $segundos) = explode(':', $horacalculada);
                         $hora_en_segundos = ($horas * 3600 ) + ($minutos * 60 ) + $segundos;
                         $minutosfinales = $hora_en_segundos / 60;
-                        if ($minutosfinales >= 30) { // solo toca verificar que pueda marcar inicio hasta 30 despues antes del inicio materia
+                        if (new DateTime($hora_fin) < new DateTime($real_fin)) {
+                            $minutosfinales = $minutosfinales * -1;
+                        }
+                        /* \app\models\Utilities::putMessageLogFile('dasd: ' . $real_fin);
+                          \app\models\Utilities::putMessageLogFile('sdd: ' . $hora_fin); */                    
+                        if ($minutosfinales >= 0 && $minutosfinales <= 30) { // SOLO PUEDE MARCAR SALIDA DE A LA HORA DE LA SALIDA Y HASTA 30 MINUTOS DESPUES
                             $cons_marcainicio = $mod_marcacion->consultarMarcacionExiste($hape_id, $profesor, $fecha, 'E');
-                            if ($cons_marcainicio["marcacion"] > 0) {                             
+                            if ($cons_marcainicio["marcacion"] > 0) {
                                 $resp_marca = $mod_marcacion->insertarMarcacion($accion, $profesor, $hape_id, null, $hora_fin, $ip, $usuario);
                             }
-                        }
-                        if ($resp_marca) {
-                            $exito = 1;
+                            if ($resp_marca) {
+                                $exito = 1;
+                            } else {
+                                $exito = 0;
+                                $mensaje = ' No ha marcado aún el inicio, por lo que no puede finalizar';
+                            }
                         } else {
                             $exito = 0;
-                            $mensaje = ' No ha marcado aún el inicio, por lo que puede finalizar';
-                            
+                            $mensaje = ' No puede marcar';
                         }
                     }
                     if ($exito) {
-                        $mensaje = 'Ha registrado la hora de ' . $texto;
+                        $mensaje = 'Ha registrado la hora de ' . $texto. ' '.$retraso;
                         $transaction->commit();
                         $message = array(
                             "wtmessage" => Yii::t("notificaciones", "La infomación ha sido grabada. " . $mensaje),
                             "title" => Yii::t('jslang', 'Success'),
                         );
                         return Utilities::ajaxResponse('OK', 'alert', Yii::t("jslang", "Sucess"), false, $message);
-                    } else {                        
+                    } else {
                         $transaction->rollback();
                         $message = array(
                             "wtmessage" => Yii::t("notificaciones", "Error al grabar. " . $mensaje),

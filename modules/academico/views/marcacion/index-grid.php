@@ -19,48 +19,40 @@ admision::registerTranslations();
         'dataProvider' => $model,
         'columns' => [
             [
+                'attribute' => 'materia',
+                'header' => Yii::t("formulario", "Matter"),
+                'value' => 'materia',
+            ],
+            [
                 'attribute' => 'Fecha',
                 'header' => Yii::t("formulario", "Date"),
-                'value' => 'cliente',
+                'value' => 'fecha',
             ],
             [
                 'attribute' => 'Horaini',
                 'header' => academico::t("Academico", "Hour start date"),
-                'value' => 'pges_codigo',
+                'value' => 'hora_inicio',
             ],
             [
                 'attribute' => 'Horainipon',
-                'header' => academico::t("Academico", "Hour end date"). ' '. academico::t("Academico", "Expected"),
-                'value' => 'pais',
+                'header' => academico::t("Academico", "Hour start date") . ' ' . academico::t("Academico", "Expected"),
+                'value' => 'inicio_esperado',
             ],
             [
                 'attribute' => 'Horafin',
-                'header' => academico::t("Academico", "Hour start date"),
-                'value' => 'fecha_creacion',
+                'header' => academico::t("Academico", "Hour end date"),
+                'value' => 'hora_salida',
             ],
             [
                 'attribute' => 'Horafinpon',
-                'header' => academico::t("Academico", "Hour end date"). ' '. academico::t("Academico", "Expected"),
-                'value' => 'unidad_academica',
+                'header' => academico::t("Academico", "Hour end date") . ' ' . academico::t("Academico", "Expected"),
+                'value' => 'salida_esperada',
             ],
             [
-                'attribute' => 'Ip',
+                'attribute' => 'ip',
                 'header' => academico::t("Academico", "IP Marcación"),
-                'value' => 'empresa',
+                'value' => 'ip',
             ],
-            /*[
-                'class' => 'yii\grid\ActionColumn',
-                'header' => Yii::t("formulario", "Actions"), 
-                'template' => '{view} {opportunities}', 
-                'buttons' => [
-                    'view' => function ($url, $model) {
-                        return Html::a('<span class="glyphicon glyphicon-eye-open"></span>', Url::to(['contactos/view', 'codigo' => base64_encode($model["pestion_id"]), 'tper' => base64_encode($model["tipo_persona"])]), ["data-toggle" => "tooltip", "title" => "Ver Contacto", "data-pjax" => 0]);
-                    },
-                    'opportunities' => function ($url, $model) {
-                        return Html::a('<span class="glyphicon glyphicon-th-large"></span>', Url::to(['contactos/listaroportunidad', 'pgid' => base64_encode($model['pestion_id'])]), ["data-toggle" => "tooltip", "title" => "Lista de Oportunidades", "data-pjax" => 0]);
-                    },
-                ],
-            ],*/
         ],
     ])
     ?>

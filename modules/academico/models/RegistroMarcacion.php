@@ -137,10 +137,6 @@ class RegistroMarcacion extends \yii\db\ActiveRecord {
             ],
             'sort' => [
                 'attributes' => [
-                    'contacto',
-                    'carrera',
-                    'per_correo',
-                    'estado',
                 ],
             ],
         ]);
@@ -176,13 +172,13 @@ class RegistroMarcacion extends \yii\db\ActiveRecord {
         $comando = $con->createCommand($sql);
         $comando->bindParam(":estado", $estado, \PDO::PARAM_STR);
         $comando->bindParam(":hape_id", $hape_id, \PDO::PARAM_INT);
-        $comando->bindParam(":profesor", $profesor, \PDO::PARAM_INT);  
+        $comando->bindParam(":profesor", $profesor, \PDO::PARAM_INT);
         $comando->bindParam(":fecha", $fecha_registro, \PDO::PARAM_STR);
         $comando->bindParam(":rmar_tipo", $rmar_tipo, \PDO::PARAM_STR);
         $resultData = $comando->queryOne();
         return $resultData;
     }
-    
+
     /**
      * Function insertarMarcacion crea marcacion.
      * @author  Giovanni Vergara <analistadesarrollo02@uteg.edu.ec>;
@@ -191,7 +187,7 @@ class RegistroMarcacion extends \yii\db\ActiveRecord {
      */
     public function insertarMarcacion($rmar_tipo, $pro_id, $hape_id, $rmar_fecha_hora_entrada, $rmar_fecha_hora_salida, $rmar_direccion_ip, $usu_id) {
         $con = \Yii::$app->db_academico;
-        $rmar_fecha_creacion = date(Yii::$app->params["dateTimeByDefault"]); 
+        $rmar_fecha_creacion = date(Yii::$app->params["dateTimeByDefault"]);
         $trans = $con->getTransaction(); // se obtiene la transacción actual
         if ($trans !== null) {
             $trans = null; // si existe la transacción entonces no se crea una
@@ -216,7 +212,7 @@ class RegistroMarcacion extends \yii\db\ActiveRecord {
         if (isset($hape_id)) {
             $param_sql .= ", hape_id";
             $bdet_sql .= ", :hape_id";
-        }       
+        }
         if (isset($rmar_fecha_hora_entrada)) {
             $param_sql .= ", rmar_fecha_hora_entrada";
             $bdet_sql .= ", :rmar_fecha_hora_entrada";
@@ -228,11 +224,11 @@ class RegistroMarcacion extends \yii\db\ActiveRecord {
         if (isset($rmar_direccion_ip)) {
             $param_sql .= ", rmar_direccion_ip";
             $bdet_sql .= ", :rmar_direccion_ip";
-        }        
+        }
         if (isset($usu_id)) {
             $param_sql .= ", usu_id";
             $bdet_sql .= ", :usu_id";
-        } 
+        }
         if (isset($rmar_fecha_creacion)) {
             $param_sql .= ", rmar_fecha_creacion";
             $bdet_sql .= ", :rmar_fecha_creacion";
@@ -262,7 +258,7 @@ class RegistroMarcacion extends \yii\db\ActiveRecord {
             }
             if (!empty((isset($usu_id)))) {
                 $comando->bindParam(':usu_id', $usu_id, \PDO::PARAM_INT);
-            }      
+            }
             if (!empty((isset($rmar_fecha_creacion)))) {
                 $comando->bindParam(':rmar_fecha_creacion', $rmar_fecha_creacion, \PDO::PARAM_STR);
             }
@@ -275,6 +271,56 @@ class RegistroMarcacion extends \yii\db\ActiveRecord {
             if ($trans !== null)
                 $trans->rollback();
             return FALSE;
+        }
+    }
+
+    /**
+     * Function consultarRegistroMarcacion
+     * @author  Giovanni Vergara <analistadesarrollo02@uteg.edu.ec>    
+     * @property  
+     * @return  
+     */
+    public function consultarRegistroMarcacion() {
+        $con = \Yii::$app->db_academico;
+        $estado = 1;
+        $sql = "
+               SELECT
+                    asig.asi_nombre as materia,
+                    DATE_FORMAT(rma.rmar_fecha_creacion, '%Y-%m-%d') as fecha,
+                    DATE_FORMAT(rma.rmar_fecha_hora_entrada, '%H:%i:%s') as hora_inicio,
+                    hap.hape_hora_entrada as inicio_esperado,
+                    DATE_FORMAT(rma.rmar_fecha_hora_salida, '%H:%i:%s') as hora_salida,
+                    hap.hape_hora_salida as salida_esperada,
+                    rma.rmar_direccion_ip as ip 
+                    FROM " . $con->dbname . ".registro_marcacion rma
+                    INNER JOIN " . $con->dbname . ".horario_asignatura_periodo hap on hap.hape_id = rma.hape_id
+                    INNER JOIN " . $con->dbname . ".asignatura asig on asig.asi_id = hap.asi_id    
+                    WHERE
+                    rma.rmar_estado = :estado AND
+                    rma.rmar_estado_logico = :estado AND
+                    hap.hape_estado = :estado AND
+                    hap.hape_estado_logico = :estado AND
+                    asig.asi_estado = :estado AND
+                    asig.asi_estado_logico = :estado
+               ";
+        $comando = $con->createCommand($sql);
+        $comando->bindParam(":estado", $estado, \PDO::PARAM_STR);
+        $resultData = $comando->queryAll();
+        $dataProvider = new ArrayDataProvider([
+            'key' => 'id',
+            'allModels' => $resultData,
+            'pagination' => [
+                'pageSize' => Yii::$app->params["pageSize"],
+            ],
+            'sort' => [
+                'attributes' => [
+                ],
+            ],
+        ]);
+        if ($onlyData) {
+            return $resultData;
+        } else {
+            return $dataProvider;
         }
     }
 
