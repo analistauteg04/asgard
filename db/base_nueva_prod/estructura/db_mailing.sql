@@ -140,3 +140,20 @@ create table if not exists `bitacora_envio` (
   foreign key (sus_id) references `suscriptor`(sus_id),
   foreign key (pla_id) references `plantilla`(pla_id)
 );
+
+
+-- --------------------------------------------------------
+-- Estructura de tabla para la tabla `campania_lista`
+-- --------------------------------------------------------
+create table if not exists `campania_lista` (
+  `clis_id` bigint(20) not null auto_increment primary key,    
+  `lis_id` bigint(20) not null, 
+  `clis_codigo` varchar(20) not null,  
+  `clis_nombre` varchar(200) not null,  
+  `clis_fecha_registro` timestamp null,  
+  `clis_estado` varchar(1) not null,
+  `clis_fecha_creacion` timestamp not null default current_timestamp,
+  `clis_fecha_modificacion` timestamp null default null,
+  `clis_estado_logico` varchar(1) not null,
+  foreign key (lis_id) references `lista`(lis_id)  
+);
