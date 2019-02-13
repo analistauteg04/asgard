@@ -51,7 +51,7 @@ class EmailController extends \app\components\CController {
             for ($i = 0; $i < count($sus_chimps); $i++) {
                 $resp = $mailchimp->newMember($sus_chimps[$i]['codigo'], $sus_chimps[$i]['correo']);
                 if ($resp) {
-                    $eact = $su_mod->actualizarEstadoChimp($sus_chimps[$i]['sus_id']);
+                    $eact = $su_mod->actualizarEstadoChimp($sus_chimps[$i]['sus_id'], $lis_id);
                     if ($eact)
                         $cts_sus = $cts_sus + 1;
                 }else {

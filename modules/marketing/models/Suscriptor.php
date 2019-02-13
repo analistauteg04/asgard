@@ -130,7 +130,7 @@ class Suscriptor extends \yii\db\ActiveRecord {
             }
         }
         $sql = "
-               SELECT 
+               SELECT
                     lst.lis_id,
                     per.per_id,
                     if(ifnull(per.per_id,0)>0,1,2) per_tipo,
@@ -138,7 +138,7 @@ class Suscriptor extends \yii\db\ActiveRecord {
                     concat(per.per_pri_nombre,' ',per.per_pri_apellido) as contacto, 
                     if(isnull(mest.mest_nombre),eaca.eaca_nombre,mest.mest_nombre) carrera,
                     per.per_correo,
-                    ifnull(sus.sus_estado_mailchimp,0) as estado_mailchimp,
+                    ifnull(ls.lsus_estado_mailchimp,0) as estado_mailchimp,
                     if(ifnull(sus.sus_id,0)>0 and sus.sus_estado =:estado,1,0) as estado,
                     acon.acon_id,
                     acon.acon_nombre
@@ -150,16 +150,43 @@ class Suscriptor extends \yii\db\ActiveRecord {
                     LEFT JOIN " . $con3->dbname . ".oportunidad as opo on opo.eaca_id=eaca.eaca_id or opo.mest_id=mest.mest_id and opo.eaca_id != sins.eaca_id and opo.mest_id!=sins.mest_id                    
                     LEFT JOIN " . $con4->dbname . ".interesado as inte on inte.int_id = sins.int_id                    
                     LEFT JOIN " . $con3->dbname . ".persona_gestion as pges on pges.pges_id=opo.pges_id
-                    LEFT JOIN " . $con1->dbname . ".persona as per on per.per_id = inte.per_id
-                    $join_subscrito
+                    LEFT JOIN " . $con1->dbname . ".persona as per on per.per_id = inte.per_id                    
+                    $join_subscrito                    
                     LEFT JOIN " . $con2->dbname . ".estudio_academico_area_conocimiento as eaac on eaac.eaca_id=eaca.eaca_id
                     LEFT JOIN " . $con2->dbname . ".area_conocimiento as acon on acon.acon_id=eaac.acon_id
+                    LEFT JOIN " . $con->dbname . ".lista_suscriptor ls on (sus.sus_id = ls.sus_id and ls.lis_id = lst.lis_id)
                 WHERE 
                     lst.lis_id= :list_id AND
                     lst.lis_estado = :estado AND
                     lst.lis_estado_logico = :estado
                     $query_subscrito
                     $str_search
+                UNION
+                SELECT  ls.lis_id,
+                        sus.per_id per_id,
+                        if(ifnull(sus.per_id,0)>0,1,2) per_tipo,
+                        if(ifnull(sus.per_id,0)>0,p.per_id,pg.pges_id) id_psus,        
+                        if(ifnull(sus.per_id,0)=0,concat(pg.pges_pri_nombre, ' ', pg.pges_pri_apellido),concat(p.per_pri_nombre,' ',p.per_pri_apellido)) as contacto,	
+                        if(isnull(mest.mest_nombre),eaca.eaca_nombre,mest.mest_nombre) carrera,
+                        p.per_correo,
+                        ifnull(ls.lsus_estado_mailchimp,0) as estado_mailchimp,
+                        if(ifnull(sus.sus_id,0)>0 and sus.sus_estado ='1',1,0) as estado,
+                        acon.acon_id,
+                        acon.acon_nombre
+                FROM " . $con->dbname . ".lista_suscriptor ls inner join " . $con->dbname . ".suscriptor sus on sus.sus_id = ls.sus_id
+                INNER JOIN " . $con1->dbname . ".persona p on p.per_id = sus.per_id
+                INNER JOIN " . $con->dbname . ".lista l on l.lis_id = ls.lis_id
+                LEFT JOIN " . $con2->dbname . ".estudio_academico as eaca on eaca.eaca_id= l.eaca_id 
+                LEFT JOIN " . $con2->dbname . ".modulo_estudio as mest on mest.mest_id = l.mest_id
+                LEFT JOIN " . $con3->dbname . ".persona_gestion pg on pg.pges_id = sus.pges_id   	
+                LEFT JOIN " . $con2->dbname . ".estudio_academico_area_conocimiento as eaac on eaac.eaca_id=eaca.eaca_id
+                LEFT JOIN " . $con2->dbname . ".area_conocimiento as acon on acon.acon_id=eaac.acon_id
+                WHERE   ls.lis_id = :list_id AND
+                        ls.lsus_estado = :estado AND
+                        ls.lsus_estado_logico = :estado AND
+                        sus.sus_estado = :estado AND
+                        sus.sus_estado_logico = :estado                        
+                        $str_search
                ";
         $comando = $con->createCommand($sql);
         $comando->bindParam(":estado", $estado, \PDO::PARAM_STR);
@@ -225,21 +252,24 @@ class Suscriptor extends \yii\db\ActiveRecord {
      * @property 
      * @return  
      */
-    public function actualizarEstadoChimp($sus_id) {
+    public function actualizarEstadoChimp($sus_id, $lis_id) {
         $con = \Yii::$app->db_mailing;
         $fecha_modificacion = date(Yii::$app->params["dateTimeByDefault"]);
         $trans = $con->beginTransaction(); // si no existe la transacción entonces se crea una
         try {
             $comando = $con->createCommand
                     ("                    
-                        UPDATE " . $con->dbname . ".suscriptor sus 
+                        UPDATE " . $con->dbname . ".lista_suscriptor lsus 
                         SET 
-                            sus.sus_estado_mailchimp = 1,
-                            sus.sus_fecha_modificacion = :fecha_modificacion                          
-                        WHERE sus.sus_id = $sus_id
+                            lsus.lsus_estado_mailchimp = 1,
+                            lsus.lsus_fecha_modificacion = :fecha_modificacion                          
+                        WHERE lsus.lis_id = $lis_id AND
+                              lsus.sus_id = $sus_id AND
+                              lsus.lsus_estado = 1 AND
+                              lsus.lsus_estado_logico = 1
                     ");
 
-            $comando->bindParam(":fecha_modificacion", $fecha_modificacion, \PDO::PARAM_STR);
+            $comando->bindParam(":fecha_modificacion", $fecha_modificacion, \PDO::PARAM_STR);            
             $response = $comando->execute();
             $trans->commit();
             return $response;

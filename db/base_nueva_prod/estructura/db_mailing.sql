@@ -40,7 +40,7 @@ create table if not exists `suscriptor` (
  `per_id` bigint(20) null,
  `pges_id` bigint(20) null,
  `sus_estado` varchar(1) not null, 
- `sus_estado_mailchimp` varchar(1) null, 
+-- `sus_estado_mailchimp` varchar(1) null, 
  `sus_fecha_creacion` timestamp not null default current_timestamp,
  `sus_fecha_modificacion` timestamp null default null,
  `sus_estado_logico` varchar(1) not null
@@ -53,6 +53,7 @@ create table if not exists `lista_suscriptor` (
  `lsus_id` bigint(20) not null auto_increment primary key,
  `lis_id` bigint(20) not null,
  `sus_id` bigint(20) not null,
+ `lsus_estado_mailchimp` varchar(1) null, 
  `lsus_estado` varchar(1) not null, 
  `lsus_fecha_creacion` timestamp not null default current_timestamp,
  `lsus_fecha_modificacion` timestamp null default null,
