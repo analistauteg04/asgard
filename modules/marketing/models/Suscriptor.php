@@ -123,10 +123,13 @@ class Suscriptor extends \yii\db\ActiveRecord {
         $join_subscrito = ($subscrito == 1) ? $suscrito : (($subscrito == 2) ? $nosuscrito : $nosuscrito);
         if (isset($arrFiltro) && count($arrFiltro) > 0) {
             if ($arrFiltro['estado'] == 1) {
-                $str_search = " AND ifnull(sus.sus_id,0) > 0 and sus.sus_estado ='1'";
+                $str_search = " AND ifnull(sus.sus_id,0) > 0 and sus.sus_estado ='1' and ls.lsus_estado_mailchimp IS NULL";
             }
             if ($arrFiltro['estado'] == 2) {
                 $str_search = " AND (ifnull(sus.sus_id,0) = 0 or sus.sus_estado ='0') ";
+            }
+            if ($arrFiltro['estado'] == 3) {
+                $str_search = " AND (ifnull(ls.lsus_estado_mailchimp,0) = '1' and sus.sus_estado_logico = '1') ";
             }
         }
         $sql = "

@@ -105,6 +105,12 @@ class EmailController extends \app\components\CController {
                                 "model" => $susbs_lista,
                     ]);
                 }
+                elseif ($data["estado"] == '3') {
+                    $susbs_lista = $mod_sb->consultarSuscriptoresxLista($arrSearch, $lis_id, 0);
+                    return $this->render('asignar_grid', [
+                                "model" => $susbs_lista,
+                    ]);
+                }
             }
         }
         if (Yii::$app->request->isAjax) {
@@ -226,7 +232,7 @@ class EmailController extends \app\components\CController {
         }
         return $this->render('asignar', [
                     'arr_lista' => $lista_model,
-                    'arr_estado' => array("Seleccionar", "Subscrito", "No Subscrito"),
+                    'arr_estado' => array("Seleccionar", "Subscrito", "No Subscrito", "Mailchimp"),
                     'model' => $susbs_lista,
                     'noescritos' => $noescritos['noescritos'],
         ]);
