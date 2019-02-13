@@ -888,6 +888,7 @@ class EmailController extends \app\components\CController {
         $arrSearch["lista"] = $data["lista"];
         $mod_lista = new Lista();
         $arrData = array();
+
         if ($arrSearch["lista"] != "") {
             $arrData = $mod_lista->consultarListaReporte($arrSearch);
         } else {
