@@ -408,12 +408,12 @@ class Suscriptor extends \yii\db\ActiveRecord {
             $mostraper_id = 'per.per_id,';
         }
         $sql = "
-               SELECT  
+                SELECT  
                     $mostraper_id
-                    concat(per.per_pri_nombre,' ',per.per_pri_apellido) as contacto, 
+                    concat(per.per_pri_nombre,' ',per.per_pri_apellido) as contacto,
                     if(isnull(mest.mest_nombre),eaca.eaca_nombre,mest.mest_nombre) carrera,
                     per.per_correo,
-                    if(ifnull(sus.sus_id,0)>0 and sus.sus_estado =:estado,'Subscrito','No Subscrito') as estado                   
+                    if(ifnull(sus.sus_id,0)>0 and sus.sus_estado =:estado,'Subscrito','No Subscrito') as estado                  
                 FROM 
                     " . $con->dbname . ".lista lst
                     LEFT JOIN " . $con2->dbname . ".estudio_academico as eaca on eaca.eaca_id= lst.eaca_id                    
@@ -426,12 +426,34 @@ class Suscriptor extends \yii\db\ActiveRecord {
                     $join_subscrito
                     LEFT JOIN " . $con2->dbname . ".estudio_academico_area_conocimiento as eaac on eaac.eaca_id=eaca.eaca_id
                     LEFT JOIN " . $con2->dbname . ".area_conocimiento as acon on acon.acon_id=eaac.acon_id
+                    LEFT JOIN " . $con->dbname . ".lista_suscriptor ls on (sus.sus_id = ls.sus_id and ls.lis_id = lst.lis_id)
                 WHERE 
                     lst.lis_id= :list_id AND
                     lst.lis_estado = :estado AND
                     lst.lis_estado_logico = :estado
                     $query_subscrito
                     $str_search
+                UNION
+                SELECT  
+                        $mostraper_id                     
+                        if(ifnull(sus.per_id,0)=0,concat(pg.pges_pri_nombre, ' ', pg.pges_pri_apellido),concat(p.per_pri_nombre,' ',p.per_pri_apellido)) as contacto,
+                        if(isnull(mest.mest_nombre),eaca.eaca_nombre,mest.mest_nombre) carrera,                        
+                        p.per_correo,                                           
+                        if(ifnull(sus.sus_id,0)>0 and sus.sus_estado =:estado,'Subscrito','No Subscrito') as estado
+                FROM " . $con->dbname . ".lista_suscriptor ls inner join " . $con->dbname . ".suscriptor sus on sus.sus_id = ls.sus_id
+                    INNER JOIN " . $con1->dbname . ".persona p on p.per_id = sus.per_id
+                    INNER JOIN " . $con->dbname . ".lista l on l.lis_id = ls.lis_id
+                    LEFT JOIN " . $con2->dbname . ".estudio_academico as eaca on eaca.eaca_id= l.eaca_id
+                    LEFT JOIN " . $con2->dbname . ".modulo_estudio as mest on mest.mest_id = l.mest_id
+                    LEFT JOIN " . $con3->dbname . ".persona_gestion pg on pg.pges_id = sus.pges_id
+                    LEFT JOIN " . $con2->dbname . ".estudio_academico_area_conocimiento as eaac on eaac.eaca_id=eaca.eaca_id
+                    LEFT JOIN " . $con2->dbname . ".area_conocimiento as acon on acon.acon_id=eaac.acon_id
+                WHERE   ls.lis_id = :list_id AND
+                        ls.lsus_estado = :estado AND
+                        ls.lsus_estado_logico = :estado AND
+                        sus.sus_estado = :estado AND
+                        sus.sus_estado_logico = :estado                   
+                        $str_search
                ";
         $comando = $con->createCommand($sql);
         $comando->bindParam(":estado", $estado, \PDO::PARAM_STR);
@@ -618,6 +640,33 @@ class Suscriptor extends \yii\db\ActiveRecord {
         } catch (Exception $ex) {
             $trans->rollback();
             return FALSE;
+        }
+    }
+    
+    /**
+     * Function insertarCampaniaxLista
+     * @author  Grace Viteri <analistadesarrollo01@uteg.edu.ec>
+     * @property integer $userid
+     * @return  
+     */
+    public function insertarCampaniaxLista($con, $parameters, $keys, $name_table) {
+        $trans = $con->getTransaction();
+        $param_sql .= "" . $keys[0];
+        $bdet_sql .= "'" . $parameters[0] . "'";
+        for ($i = 1; $i < count($parameters); $i++) {
+            if (isset($parameters[$i])) {
+                $param_sql .= ", " . $keys[$i];
+                $bdet_sql .= ", '" . $parameters[$i] . "'";
+            }
+        }
+        try {
+            $sql = "INSERT INTO " . $con->dbname . '.' . $name_table . " ($param_sql) VALUES($bdet_sql);";
+            $comando = $con->createCommand($sql);
+            $result = $comando->execute();
+            $idtable = $con->getLastInsertID($con->dbname . '.' . $name_table);            
+            return $idtable;
+        } catch (Exception $ex) {            
+            return 0;
         }
     }
 }
