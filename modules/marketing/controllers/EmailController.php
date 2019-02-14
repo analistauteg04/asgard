@@ -129,8 +129,12 @@ class EmailController extends \app\components\CController {
                 }if ($per_tipo == 2) {
                     $pge_id = $ps_id;
                 }
-                $esus = $mod_sb->consultarSuscriptoxPerylis($per_id, $list_id);
+                \app\models\Utilities::putMessageLogFile('per_id:' . $per_id);
+                \app\models\Utilities::putMessageLogFile('pges_id:' . $pge_id);
+                $esus = $mod_sb->consultarSuscriptoxPerylis($per_id, $pge_id, $list_id);
+                \app\models\Utilities::putMessageLogFile('encuentra:' . $esus);
                 if ($esus["inscantes"] > 0) {
+                    \app\models\Utilities::putMessageLogFile('actualiza:');
                     $su_id = $mod_sb->updateSuscripto($per_id, $list_id, $estado_cambio);
                     if ($su_id > 0) {
                         $mensaje = "El contacto ha sido asignado a la lista satisfactoriamente";
@@ -140,6 +144,7 @@ class EmailController extends \app\components\CController {
                         $error++;
                     }
                 } else {
+                    \app\models\Utilities::putMessageLogFile('inserta:');
                     $keys = ['per_id', 'pges_id', 'sus_estado', 'sus_estado_logico'];
                     $parametros = [$per_id, $pge_id, 1, 1];
                     $su_id = $mod_sb->insertarSuscritor($con, $parametros, $keys, 'suscriptor');
@@ -462,7 +467,7 @@ class EmailController extends \app\components\CController {
                 );
 
                 $lista = new Lista();
-                \app\models\Utilities::putMessageLogFile('nombre:' . $nombre_lista);
+                //\app\models\Utilities::putMessageLogFile('nombre:' . $nombre_lista);
                 $resp_consulta = $lista->consultarListaXnombre($nombre_lista);
                 if (($resp_consulta["existe"] != 'S') or ( $resp_consulta["lis_id"] == $list_id)) {
                     //Grabar en mailchimp    

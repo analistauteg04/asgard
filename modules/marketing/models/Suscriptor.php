@@ -138,9 +138,9 @@ class Suscriptor extends \yii\db\ActiveRecord {
                     per.per_id,
                     if(ifnull(per.per_id,0)>0,1,2) per_tipo,
                     if(ifnull(per.per_id,0)>0,per.per_id,pges.pges_id) id_psus,
-                    concat(per.per_pri_nombre,' ',per.per_pri_apellido) as contacto, 
+                    if(ifnull(per.per_id,0)=0,concat(pges.pges_pri_nombre, ' ', ifnull(pges.pges_pri_apellido,'')),concat(per.per_pri_nombre,' ',per.per_pri_apellido)) as contacto,	                    
                     if(isnull(mest.mest_nombre),eaca.eaca_nombre,mest.mest_nombre) carrera,
-                    per.per_correo,
+                    ifnull(per.per_correo, pges.pges_correo) per_correo,
                     ifnull(ls.lsus_estado_mailchimp,0) as estado_mailchimp,
                     if(ifnull(sus.sus_id,0)>0 and sus.sus_estado =:estado,1,0) as estado,
                     acon.acon_id,
@@ -169,9 +169,9 @@ class Suscriptor extends \yii\db\ActiveRecord {
                         sus.per_id per_id,
                         if(ifnull(sus.per_id,0)>0,1,2) per_tipo,
                         if(ifnull(sus.per_id,0)>0,p.per_id,pg.pges_id) id_psus,        
-                        if(ifnull(sus.per_id,0)=0,concat(pg.pges_pri_nombre, ' ', pg.pges_pri_apellido),concat(p.per_pri_nombre,' ',p.per_pri_apellido)) as contacto,	
+                        if(ifnull(sus.per_id,0)=0,concat(pg.pges_pri_nombre, ' ', ifnull(pg.pges_pri_apellido,'')),concat(p.per_pri_nombre,' ',p.per_pri_apellido)) as contacto,	
                         if(isnull(mest.mest_nombre),eaca.eaca_nombre,mest.mest_nombre) carrera,
-                        p.per_correo,
+                        ifnull(p.per_correo, pg.pges_correo) per_correo,
                         ifnull(ls.lsus_estado_mailchimp,0) as estado_mailchimp,
                         if(ifnull(sus.sus_id,0)>0 and sus.sus_estado ='1',1,0) as estado,
                         acon.acon_id,
@@ -359,7 +359,7 @@ class Suscriptor extends \yii\db\ActiveRecord {
      * @param   
      * @return  
      */
-    public function consultarSuscriptoxPerylis($per_id, $list_id) {
+    public function consultarSuscriptoxPerylis($per_id, $pges_id, $list_id) {
         $con = \Yii::$app->db_mailing;
         // $estado = 1;
 
@@ -368,8 +368,8 @@ class Suscriptor extends \yii\db\ActiveRecord {
                 FROM " . $con->dbname . ".suscriptor sus 
                 INNER JOIN " . $con->dbname . ".lista_suscriptor lsus     
                 ON sus.sus_id = lsus.sus_id
-                WHERE sus.per_id = :per_id AND
-                lsus.lis_id = :list_id 
+                WHERE (sus.per_id = :per_id or sus.pges_id = :pges_id) AND
+                    lsus.lis_id = :list_id 
                 -- AND sus.sus_estado_logico = :estado
                 -- AND lsus.lsus_estado_logico = :estado";
 
@@ -377,6 +377,7 @@ class Suscriptor extends \yii\db\ActiveRecord {
         // $comando->bindParam(":estado", $estado, \PDO::PARAM_STR);
         $comando->bindParam(":per_id", $per_id, \PDO::PARAM_INT);
         $comando->bindParam(":list_id", $list_id, \PDO::PARAM_INT);
+        $comando->bindParam(":pges_id", $pges_id, \PDO::PARAM_INT);
         $resultData = $comando->queryOne();
         return $resultData;
     }
@@ -413,9 +414,9 @@ class Suscriptor extends \yii\db\ActiveRecord {
         $sql = "
                 SELECT  
                     $mostraper_id
-                    concat(per.per_pri_nombre,' ',per.per_pri_apellido) as contacto,
+                    if(ifnull(sus.per_id,0)=0,concat(pges.pges_pri_nombre, ' ', ifnull(pges.pges_pri_apellido,'')),concat(per.per_pri_nombre,' ',per.per_pri_apellido)) as contacto,	                                        
                     if(isnull(mest.mest_nombre),eaca.eaca_nombre,mest.mest_nombre) carrera,
-                    per.per_correo,
+                    ifnull(per.per_correo, pges.pges_correo) per_correo,                      
                     if(ifnull(sus.sus_id,0)>0 and sus.sus_estado =:estado,'Subscrito','No Subscrito') as estado                  
                 FROM 
                     " . $con->dbname . ".lista lst
@@ -441,7 +442,7 @@ class Suscriptor extends \yii\db\ActiveRecord {
                         $mostraper_id                     
                         if(ifnull(sus.per_id,0)=0,concat(pg.pges_pri_nombre, ' ', pg.pges_pri_apellido),concat(p.per_pri_nombre,' ',p.per_pri_apellido)) as contacto,
                         if(isnull(mest.mest_nombre),eaca.eaca_nombre,mest.mest_nombre) carrera,                        
-                        p.per_correo,                                           
+                        ifnull(p.per_correo, pg.pges_correo) per_correo,                                        
                         if(ifnull(sus.sus_id,0)>0 and sus.sus_estado =:estado,'Subscrito','No Subscrito') as estado
                 FROM " . $con->dbname . ".lista_suscriptor ls inner join " . $con->dbname . ".suscriptor sus on sus.sus_id = ls.sus_id
                     INNER JOIN " . $con1->dbname . ".persona p on p.per_id = sus.per_id

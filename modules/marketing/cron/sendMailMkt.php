@@ -85,15 +85,14 @@ function getCampaignOnTime($webServer)
                 $obj_new = $webServer->createCampaign($rows[$i]["lis_codigo"], $addressInfo);
                 if(isset($obj_new["id"])){                                        
                     $sendCampaign = $webServer->sendCampaign($obj_new["id"]);
-                    $fecha_crea = date("Y-m-d H:i:s");//date(Yii::$app->params["dateTimeByDefault"]);
+                    echo $obj_new["id"];
+                    $fecha_crea = date("Y-m-d H:i:s");
                     $nombre_campania = $rows[$i]["lis_nombre_principal"] . " " . $rows[$i]["lis_nombre"] . " - " . $now;
                     $sql1 = "INSERT INTO db_mailing.campania_lista (lis_id, clis_codigo, clis_nombre, clis_fecha_registro, clis_estado, clis_estado_logico) " .
                             "VALUES(". $rows[$i]["lis_id"] . "," . $obj_new["id"] . "," . $nombre_campania . "," . $fecha_crea . "," . "1, 1";
                     $cmd = $pdo->prepare($sql1);        
                     $cmd->execute();
-                    
-                    echo $fecha_crea;
-                    echo $sql1;
+                 
                     /*$mod_sb = new Suscriptor();
                     $con = \Yii::$app->db_mailing;
                     $fecha_crea = date(Yii::$app->params["dateTimeByDefault"]);
@@ -110,8 +109,8 @@ function getCampaignOnTime($webServer)
                         //echo "error crear campania 1: " . json_encode($sendCampaign);
                         putMessageLogFile("Error al enviar campaña ". $sendCampaign);
                     } /*else {
-                        
-                    }  putMessageLogFile("Campaña Enviada: ". $sendCampaign);*/
+                        putMessageLogFile("Campaña Enviada: ". $sendCampaign);
+                    }  */
                 }else{
                     //echo "error crear campania 2: ". json_encode($obj_new);
                     putMessageLogFile("Error al crear campaña " . $obj_new);
