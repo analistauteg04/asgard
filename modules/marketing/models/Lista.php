@@ -131,9 +131,9 @@ class Lista extends \yii\db\ActiveRecord {
                         lis_codigo_postal, lis_asunto,
                         case when lst.eaca_id > 0 then 
                                      ea.eaca_nombre else me.mest_nombre end as programa,
-                        sum(case when (ifnull(lsu.lsus_estado_mailchimp,0) = '0' and lsu.lsus_estado = '1' and lsu.lsus_estado_logico = '1') then
+                        sum(case when (ifnull(lsu.lsus_estado_mailchimp,0) = '0' and lsu.lsus_estado = '1' and lsu.lsus_estado_logico = '1' and sus.sus_estado = '1' and sus.sus_estado_logico = '1') then
                                      1 else 0 end) as num_suscr,
-                        sum(case when (ifnull(lsu.lsus_estado_mailchimp,0) = '1' and sus.sus_estado_logico = '1') then
+                        sum(case when (ifnull(lsu.lsus_estado_mailchimp,0) = '1' and lsu.lsus_estado_logico = '1' and sus.sus_estado = '1' and sus.sus_estado_logico = '1') then
                                      1 else 0 end) as num_suscr_mailchimp
                     FROM 
                         " . $con->dbname . ".lista lst
