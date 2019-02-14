@@ -1,0 +1,6 @@
+Observaciones
+http://localhost/webshellasgard/envRecFact.php
+cambiar en la base la ruta base datos 
+SELECT * FROM db_edoc.VSFirmaDigital;
+/home/EDOC/GENERADO/
+cambiar la ruta de firma y el nombre 
