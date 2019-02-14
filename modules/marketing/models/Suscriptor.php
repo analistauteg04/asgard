@@ -406,6 +406,9 @@ class Suscriptor extends \yii\db\ActiveRecord {
             if ($arrFiltro['estado'] == 2) {
                 $str_search = " AND (ifnull(sus.sus_id,0) = 0 or sus.sus_estado ='0') ";
             }
+            /*if ($arrFiltro['estado'] == 3) {
+                $str_search = " AND (ifnull(ls.lsus_estado_mailchimp,0) = '1' and sus.sus_estado_logico = '1') ";
+            }*/
         }
         if ($mpid == 1) {
             $mostraper_id = 'per.per_id,';
