@@ -88,23 +88,23 @@ class EmailController extends \app\components\CController {
         $data = Yii::$app->request->get();
         if (isset($data["PBgetFilter"])) {
             $arrSearch["estado"] = $data['estado'];
-            if ($data["estado"] == '0') {
+            if ($data["estado"] == '0') { //Todos
                 $susbs_lista = $mod_sb->consultarSuscriptoresxLista(array(), $lis_id);
                 return $this->render('asignar_grid', [
                             "model" => $susbs_lista,
                 ]);
             } else {
-                if ($data["estado"] == '1') {
+                if ($data["estado"] == '1') { //Sucrito
                     $susbs_lista = $mod_sb->consultarSuscriptoresxLista($arrSearch, $lis_id, 1);
                     return $this->render('asignar_grid', [
                                 "model" => $susbs_lista,
                     ]);
-                } elseif ($data["estado"] == '2') {
+                } elseif ($data["estado"] == '2') {  //No suscrito
                     $susbs_lista = $mod_sb->consultarSuscriptoresxLista($arrSearch, $lis_id, 0);
                     return $this->render('asignar_grid', [
                                 "model" => $susbs_lista,
                     ]);
-                } elseif ($data["estado"] == '3') {
+                } elseif ($data["estado"] == '3') {  //En Mailchimp
                     $susbs_lista = $mod_sb->consultarSuscriptoresxLista($arrSearch, $lis_id, 0);
                     return $this->render('asignar_grid', [
                                 "model" => $susbs_lista,
@@ -688,11 +688,8 @@ class EmailController extends \app\components\CController {
                 } else {
                     $pges_id = $data["pges_id"];
                     $per_id = 0;
-                }
-                \app\models\Utilities::putMessageLogFile('per_id:'.$per_id);
-                \app\models\Utilities::putMessageLogFile('pges_id:'.$pges_id);
-                \app\models\Utilities::putMessageLogFile('lis_id:'.$lista_id);
-                \app\models\Utilities::putMessageLogFile('estado_cambio:'.$estado_cambio);
+                }               
+                //\app\models\Utilities::putMessageLogFile('estado_cambio:'.$estado_cambio);
                 $esus = $mod_sb->updateSuscripto($per_id, $pges_id, $lista_id, $estado_cambio);
                 if ($esus > 0) {
                     if ($esus > 0) {

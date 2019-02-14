@@ -122,14 +122,14 @@ class Suscriptor extends \yii\db\ActiveRecord {
         $suscrito = " join " . $con->dbname . ".suscriptor as sus on sus.per_id = per.per_id or sus.pges_id=pges.pges_id";
         $join_subscrito = ($subscrito == 1) ? $suscrito : (($subscrito == 2) ? $nosuscrito : $nosuscrito);
         if (isset($arrFiltro) && count($arrFiltro) > 0) {
-            if ($arrFiltro['estado'] == 1) {
-                $str_search = " AND ifnull(sus.sus_id,0) > 0 and sus.sus_estado ='1' and ls.lsus_estado_mailchimp IS NULL";
+            if ($arrFiltro['estado'] == 1) {  //suscritos
+                $str_search = " AND ifnull(sus.sus_id,0) > 0 and sus.sus_estado ='1' and ls.lsus_estado = '1' and ls.lsus_estado_mailchimp IS NULL";
             }
-            if ($arrFiltro['estado'] == 2) {
-                $str_search = " AND (ifnull(sus.sus_id,0) = 0 or sus.sus_estado ='0') ";
+            if ($arrFiltro['estado'] == 2) { //No suscrito
+                $str_search = " AND (ifnull(sus.sus_id,0) = 0 or sus.sus_estado ='0' and ls.lsus_estado = '0') ";
             }
-            if ($arrFiltro['estado'] == 3) {
-                $str_search = " AND (ifnull(ls.lsus_estado_mailchimp,0) = '1' and sus.sus_estado_logico = '1') ";
+            if ($arrFiltro['estado'] == 3) {  //Mailchimp
+                $str_search = " AND (ifnull(ls.lsus_estado_mailchimp,0) = '1' and sus.sus_estado = '1' and ls.lsus_estado = '1') ";
             }
         }
         $sql = "
@@ -405,14 +405,14 @@ class Suscriptor extends \yii\db\ActiveRecord {
         $join_subscrito = ($subscrito == 1) ? $suscrito : (($subscrito == 2) ? $nosuscrito : $nosuscrito);
         if (isset($arrFiltro) && count($arrFiltro) > 0) {
             if ($arrFiltro['estado'] == 1) {
-                $str_search = " AND ifnull(sus.sus_id,0) > 0 and sus.sus_estado ='1' ";
+                $str_search = " AND ifnull(sus.sus_id,0) > 0 and sus.sus_estado ='1' and ifnull(ls.lsus_estado_mailchimp,0) = 0 ";
             }
             if ($arrFiltro['estado'] == 2) {
-                $str_search = " AND (ifnull(sus.sus_id,0) = 0 or sus.sus_estado ='0') ";
+                $str_search = " AND (ifnull(sus.sus_id,0) = 0 or (sus.sus_estado ='0' and ls.lsus_estado = '0') ";
             }
-            /*if ($arrFiltro['estado'] == 3) {
-                $str_search = " AND (ifnull(ls.lsus_estado_mailchimp,0) = '1' and sus.sus_estado_logico = '1') ";
-            }*/
+            if ($arrFiltro['estado'] == 3) {
+                $str_search = " AND (ifnull(ls.lsus_estado_mailchimp,0) = '1' and ls.lsus_estado = '1' and sus.sus_estado = '1') ";
+            }
         }
         if ($mpid == 1) {
             $mostraper_id = 'per.per_id,';
@@ -456,7 +456,7 @@ class Suscriptor extends \yii\db\ActiveRecord {
                         if(isnull(mest.mest_nombre),eaca.eaca_nombre,mest.mest_nombre) carrera,                        
                         ifnull(per.per_correo, pges.pges_correo) per_correo,                                        
                         if(ifnull(sus.sus_id,0)>0 and sus.sus_estado =:estado,'Subscrito','No Subscrito') as estado
-                FROM " . $con->dbname . ".lista_suscriptor ls inner join " . $con->dbname . ".suscriptor sus on sus.sus_id = ls.sus_id
+                FROM " . $con->dbname . ".lista_suscriptor ls inner join " . $con->dbname . ".suscriptor sus on (sus.sus_id = ls.sus_id)
                     INNER JOIN " . $con1->dbname . ".persona per on per.per_id = sus.per_id
                     INNER JOIN " . $con->dbname . ".lista l on l.lis_id = ls.lis_id
                     LEFT JOIN " . $con2->dbname . ".estudio_academico as eaca on eaca.eaca_id= l.eaca_id
@@ -504,10 +504,11 @@ class Suscriptor extends \yii\db\ActiveRecord {
                 LEFT JOIN db_crm.persona_gestion as pges on pges.pges_id=opo.pges_id
                 LEFT JOIN " . $con1->dbname . ".persona as per on per.per_id = inte.per_id
                 LEFT JOIN " . $con3->dbname . ".suscriptor as sus on sus.per_id = per.per_id or sus.pges_id=pges.pges_id 
+                LEFT JOIN " . $con3->dbname . ".lista_suscriptor as lsus on lsus.lis_id = lst.lis_id and lsus.sus_id=sus.sus_id     
                 WHERE 
                 lst.lis_id= :list_id AND
                 lst.lis_estado = :estado_valido AND
-                lst.lis_estado_logico = :estado_valido AND (ifnull(sus.sus_id,0) = :estado or sus.sus_estado =:estado)";
+                lst.lis_estado_logico = :estado_valido AND (ifnull(sus.sus_id,0) = :estado or (sus.sus_estado =:estado and lsus.lsus_estado =:estado))";
 
         $comando = $con->createCommand($sql);
         $comando->bindParam(":estado", $estado, \PDO::PARAM_STR);
