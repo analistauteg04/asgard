@@ -64,8 +64,8 @@ function getCampaignOnTime($webServer)
         "p.pro_hora_envio < '".$endTime."' " . 
         ";";
         //putMessageLogFile("campagna:  ". $sql);
-        echo "sql: " . json_encode($sql);
-        echo "sql: " . $sql;
+        //echo "sql: " . json_encode($sql);
+        //echo "sql: " . $sql;
         $cmd = $pdo->prepare($sql);
         //$cmd->execute([":now" => $now, ":dia" => $dia, ":iniDate" => $iniTime, ":endDate" => $endTime]);
         $cmd->execute();

@@ -104,8 +104,7 @@ class EmailController extends \app\components\CController {
                     return $this->render('asignar_grid', [
                                 "model" => $susbs_lista,
                     ]);
-                }
-                elseif ($data["estado"] == '3') {
+                } elseif ($data["estado"] == '3') {
                     $susbs_lista = $mod_sb->consultarSuscriptoresxLista($arrSearch, $lis_id, 0);
                     return $this->render('asignar_grid', [
                                 "model" => $susbs_lista,
@@ -181,13 +180,13 @@ class EmailController extends \app\components\CController {
                         "title" => Yii::t('jslang', 'Success'),
                         "listas" => $est_rel,
                         "sus_id" => $su_id,
-                        //"rederict" => Yii::$app->response->redirect(['/marketing/email/asignar?lis_id=' . base64_encode($list_id)]),
+                            //"rederict" => Yii::$app->response->redirect(['/marketing/email/asignar?lis_id=' . base64_encode($list_id)]),
                     );
                 } else {
                     $message = array(
                         "wtmessage" => Yii::t("formulario", $mensaje),
                         "title" => Yii::t('jslang', 'Success'),
-                        //"rederict" => Yii::$app->response->redirect(['/marketing/email/asignar?lis_id=' . base64_encode($list_id)]),
+                            //"rederict" => Yii::$app->response->redirect(['/marketing/email/asignar?lis_id=' . base64_encode($list_id)]),
                     );
                 }
                 return Utilities::ajaxResponse('OK', 'alert', Yii::t("jslang", "Sucess"), false, $message);
@@ -198,8 +197,8 @@ class EmailController extends \app\components\CController {
                     $list_ids = explode(",", $data['list_ids']);
                 }
                 $sus_id = $data['sus_id'];
-                $i = 0;                
-                if (count($list_ids) > 0) {                    
+                $i = 0;
+                if (count($list_ids) > 0) {
                     while ($i < count($list_ids)) {
                         if (!empty($list_ids[$i])) {
                             $key = ['lis_id', 'sus_id', 'lsus_estado', 'lsus_fecha_creacion', 'lsus_estado_logico'];
@@ -246,7 +245,7 @@ class EmailController extends \app\components\CController {
         }
         return $this->render('asignar', [
                     'arr_lista' => $lista_model,
-                    'arr_estado' => array("Seleccionar", "Subscrito", "No Subscrito", "Mailchimp"),
+                    'arr_estado' => array("Todos", "Subscrito", "No Subscrito", "Mailchimp"),
                     'model' => $susbs_lista,
                     'noescritos' => $noescritos['noescritos'],
         ]);
@@ -758,7 +757,9 @@ class EmailController extends \app\components\CController {
                 $arrData = $modsuscriptor->consultarSuscriptoexcel($arrSearch, $lis_id, 1, 0);
             } elseif ($arrSearch["estado"] == 2) {
                 $arrData = $modsuscriptor->consultarSuscriptoexcel($arrSearch, $lis_id, 0, 0);
-            }
+            } /*elseif ($arrSearch["estado"] == '3') {                
+                $arrData = $modsuscriptor->consultarSuscriptoexcel($arrSearch, $lis_id, 1, 0);
+            }*/
         }
 
         $nameReport = marketing::t("marketing", "List Subscriber Allocation");
@@ -791,6 +792,9 @@ class EmailController extends \app\components\CController {
             } elseif ($arrSearch["estado"] == 2) {
                 $arr_body = $modsuscriptor->consultarSuscriptoexcel($arrSearch, $lis_id, 0, 0);
             }
+            /*elseif ($arrSearch["estado"] == '3') {                
+                $arrData = $modsuscriptor->consultarSuscriptoexcel($arrSearch, $lis_id, 1, 0);
+            }*/
         }
 
         $report->orientation = "L"; // tipo de orientacion L => Horizontal, P => Vertical
