@@ -416,8 +416,8 @@ class Suscriptor extends \yii\db\ActiveRecord {
         }
         if ($mpid == 1) {
             $mostraper_id = 'ifnull(per.per_id,0) as per_id,';
-            $mostrapges_id = 'ifnull(pges.pges_id,0) as pges_id,';
-            $mostrartipo = 'if(ifnull(per.per_id,0)>0,1,2) per_tipo,';
+            $mostrapges_id = 'ifnull(pges.pges_id,0) as pges_id,';        // ESTO DUPLICA LA DATA
+            $mostrartipo = 'if(ifnull(per.per_id,0)>0,1,2) per_tipo,';    // ESTO DUPLICA LA DATA
         }
         $sql = "
                 SELECT
