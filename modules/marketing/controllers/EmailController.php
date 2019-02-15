@@ -817,31 +817,33 @@ class EmailController extends \app\components\CController {
             $estado_logico = '1';
             $arrSearch["estado"] = 2;
             try {
-                $mod_sb = new Suscriptor();
-                //$no_suscitos = $mod_sb->consultarSuscriptoresxLista($arrSearch, $lis_id);
+                $mod_sb = new Suscriptor();           
                 $no_suscitos = $mod_sb->consultarSuscriptoexcel($arrSearch, $lis_id, 0, 1);
                 if (count($no_suscitos) > 0) {
                     for ($i = 0; $i < count($no_suscitos); $i++) {
                         //consulto
-                        $per_id = 0; //null;
-                        $pge_id = null;
-                        if ($no_suscitos["per_tipo"] == 1) {
-                            $per_id = $no_suscitos[$i]["per_id"];
-                        } else {
-                            $pge_id = $no_suscitos[$i]["pges_id"];
-                            ;
-                        }
-                        $exitesuscrito = $mod_sb->consultarSuscriptoxPerylis($no_suscitos[$i]["per_id"], $pge_id, $lis_id);
+                            //$per_id = 0; 
+                            //$pge_id = 0;
+                            /*if ($no_suscitos["per_tipo"] == 1) {
+                                //$per_id = $no_suscitos[$i]["per_id"];
+                                $no_suscitos[$i]["pges_id"]= null;
+                            } else {
+                                $no_suscitos[$i]["per_id"] = null;
+                                //$pge_id = $no_suscitos[$i]["pges_id"];            
+                            }*/
+                        $exitesuscrito = $mod_sb->consultarSuscriptoxPerylis($no_suscitos[$i]["per_id"], $no_suscitos[$i]["pges_id"], $lis_id);
                         // si existe en la base update
                         if ($exitesuscrito["inscantes"] > 0) {
-                            //$modsus_id .= $no_suscitos[$i]["per_id"] . ',';
-                            $modsus_id .= $per_id . ',';
-                            $modsus_id2 .= $pge_id . ',';
-                        } else {
+                            $modsus_id .= $no_suscitos[$i]["per_id"] . ',';
+                            //$modsus_id .= $per_id . ',';
+                            //$modsus_id2 .= $pge_id . ',';
+                            $modsus_id2 .= $no_suscitos[$i]["pges_id"] . ',';
+                        } else {                         
                             $asuscribir .= 'INSERT INTO db_mailing.suscriptor (per_id, pges_id, sus_estado, sus_estado_logico)';
-                            $asuscribir .= 'VALUES(' . $per_id . ', ' . $pge_id . ', ' . $estado . ', ' . $estado_logico . '); ';
-                            $sper_id .= $per_id . ',';   //$no_suscitos[$i]["per_id"] . ',';
-                            $spges_id .= $pge_id . ',';
+                            $asuscribir .= 'VALUES(' . $no_suscitos[$i]["per_id"] . ', ' . $no_suscitos[$i]["pges_id"] . ', ' . $estado . ', ' . $estado_logico . '); ';
+                            //$sper_id .= $per_id . ',';   //$no_suscitos[$i]["per_id"] . ',';
+                            $sper_id .= $no_suscitos[$i]["per_id"] . ',';
+                            $spges_id .= $no_suscitos[$i]["pges_id"] . ',';
                         }
                     }
                     if (!empty($asuscribir)) {
