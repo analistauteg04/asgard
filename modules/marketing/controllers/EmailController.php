@@ -746,8 +746,7 @@ class EmailController extends \app\components\CController {
         );
         $data = Yii::$app->request->get();
         $arrSearch["estado"] = $data["estado"];
-        $lis_id = base64_decode($data["lista"]);
-        \app\models\Utilities::putMessageLogFile('estalista: ' . $lis_id);
+        $lis_id = base64_decode($data["lista"]);  
         $modsuscriptor = new Suscriptor();
         $arrData = array();
         if ($arrSearch["estado"] == 0) {
