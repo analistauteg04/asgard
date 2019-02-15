@@ -122,7 +122,7 @@ class EmailController extends \app\components\CController {
                 $per_tipo = $data["per_tipo"];
                 $list_id = $data["list_id"];
                 $data_source = array();
-                $per_id = 0;//null;
+                $per_id = 0; //null;
                 $pge_id = 0;
                 if ($per_tipo == 1) {
                     $per_id = $ps_id;
@@ -139,8 +139,8 @@ class EmailController extends \app\components\CController {
                         $mensaje = "Error: El suscritor no fue guardado.";
                         $error++;
                     }
-                } else {  
-                    $encontrar = $mod_sb->consultarSuscritosbtn($per_id, $pge_id);                    
+                } else {
+                    $encontrar = $mod_sb->consultarSuscritosbtn($per_id, $pge_id);
                     if (!($encontrar)) {
                         $keys = ['per_id', 'pges_id', 'sus_estado', 'sus_estado_logico'];
                         $parametros = [$per_id, $pge_id, 1, 1];
@@ -169,7 +169,7 @@ class EmailController extends \app\components\CController {
                             $mensaje = "Error: El suscriptor no fue guardado en esta lista.";
                             $error++;
                         }
-                    }                                        
+                    }
                 }
                 //Aqui se va a consultar los estudios referenciados
                 $mod_eaca_acon = new EstudioAcademicoAreaConocimiento();
@@ -237,7 +237,7 @@ class EmailController extends \app\components\CController {
                     $message = array(
                         "wtmessage" => Yii::t("formulario", $mensaje),
                         "title" => Yii::t('jslang', 'Success'),
-                        //"rederict" => Yii::$app->response->redirect(['/marketing/email/asignar?lis_id=' . $list_id]),
+                            //"rederict" => Yii::$app->response->redirect(['/marketing/email/asignar?lis_id=' . $list_id]),
                     );
                     return Utilities::ajaxResponse('OK', 'alert', Yii::t("jslang", "Sucess"), false, $message);
                 }
@@ -679,16 +679,16 @@ class EmailController extends \app\components\CController {
         }
         if (Yii::$app->request->isAjax) {
             $data = Yii::$app->request->post();
-            if ($data["accion"] = 'sc') {                
-                $lista_id = $data["list_id"];                
+            if ($data["accion"] = 'sc') {
+                $lista_id = $data["list_id"];
                 $per_tipo = $data["per_tipo"];
-                if ($per_tipo==1) {
+                if ($per_tipo == 1) {
                     $per_id = $data["per_id"];
                     $pges_id = null;
                 } else {
                     $pges_id = $data["pges_id"];
                     $per_id = 0;
-                }               
+                }
                 //\app\models\Utilities::putMessageLogFile('estado_cambio:'.$estado_cambio);
                 $esus = $mod_sb->updateSuscripto($per_id, $pges_id, $lista_id, $estado_cambio);
                 if ($esus > 0) {
@@ -743,8 +743,7 @@ class EmailController extends \app\components\CController {
         );
         $data = Yii::$app->request->get();
         $arrSearch["estado"] = $data["estado"];
-        $lis_id = base64_decode($data["lista"]);
-
+        $lis_id = base64_decode($data["lista"]);  
         $modsuscriptor = new Suscriptor();
         $arrData = array();
         if ($arrSearch["estado"] == 0) {
@@ -754,7 +753,7 @@ class EmailController extends \app\components\CController {
                 $arrData = $modsuscriptor->consultarSuscriptoexcel($arrSearch, $lis_id, 1, 0);
             } elseif ($arrSearch["estado"] == 2) {
                 $arrData = $modsuscriptor->consultarSuscriptoexcel($arrSearch, $lis_id, 0, 0);
-            } elseif ($arrSearch["estado"] == '3') {                
+            } elseif ($arrSearch["estado"] == 3) {
                 $arrData = $modsuscriptor->consultarSuscriptoexcel($arrSearch, $lis_id, 0, 0);
             }
         }
@@ -788,10 +787,9 @@ class EmailController extends \app\components\CController {
                 $arr_body = $modsuscriptor->consultarSuscriptoexcel($arrSearch, $lis_id, 1, 0);
             } elseif ($arrSearch["estado"] == 2) {
                 $arr_body = $modsuscriptor->consultarSuscriptoexcel($arrSearch, $lis_id, 0, 0);
+            } elseif ($arrSearch["estado"] == 3) {
+                $arr_body = $modsuscriptor->consultarSuscriptoexcel($arrSearch, $lis_id, 0, 0);
             }
-            /*elseif ($arrSearch["estado"] == '3') {                
-                $arrData = $modsuscriptor->consultarSuscriptoexcel($arrSearch, $lis_id, 1, 0);
-            }*/
         }
 
         $report->orientation = "L"; // tipo de orientacion L => Horizontal, P => Vertical
@@ -816,36 +814,39 @@ class EmailController extends \app\components\CController {
             $estado_logico = '1';
             $arrSearch["estado"] = 2;
             try {
-                $mod_sb = new Suscriptor();
-                //$no_suscitos = $mod_sb->consultarSuscriptoresxLista($arrSearch, $lis_id);
+                $mod_sb = new Suscriptor();           
                 $no_suscitos = $mod_sb->consultarSuscriptoexcel($arrSearch, $lis_id, 0, 1);
                 if (count($no_suscitos) > 0) {
                     for ($i = 0; $i < count($no_suscitos); $i++) {
                         //consulto
-                        $per_id = 0;//null;
-                        $pge_id = null;
-                        if ($no_suscitos["per_tipo"] ==1) {
-                            $per_id = $no_suscitos[$i]["per_id"];                            
-                        } else {
-                            $pge_id = $no_suscitos[$i]["pges_id"];   ;
-                        }                                                          
-                        $exitesuscrito = $mod_sb->consultarSuscriptoxPerylis($no_suscitos[$i]["per_id"], $pge_id, $lis_id);
+                            //$per_id = 0; 
+                            //$pge_id = 0;
+                            /*if ($no_suscitos["per_tipo"] == 1) {
+                                //$per_id = $no_suscitos[$i]["per_id"];
+                                $no_suscitos[$i]["pges_id"]= null;
+                            } else {
+                                $no_suscitos[$i]["per_id"] = null;
+                                //$pge_id = $no_suscitos[$i]["pges_id"];            
+                            }*/
+                        $exitesuscrito = $mod_sb->consultarSuscriptoxPerylis($no_suscitos[$i]["per_id"], $no_suscitos[$i]["pges_id"], $lis_id);
                         // si existe en la base update
                         if ($exitesuscrito["inscantes"] > 0) {
-                            //$modsus_id .= $no_suscitos[$i]["per_id"] . ',';
-                            $modsus_id .= $per_id . ',';
-                            $modsus_id2 .= $pge_id . ',';
-                        } else {
+                            $modsus_id .= $no_suscitos[$i]["per_id"] . ',';
+                            //$modsus_id .= $per_id . ',';
+                            //$modsus_id2 .= $pge_id . ',';
+                            $modsus_id2 .= $no_suscitos[$i]["pges_id"] . ',';
+                        } else {                         
                             $asuscribir .= 'INSERT INTO db_mailing.suscriptor (per_id, pges_id, sus_estado, sus_estado_logico)';
-                            $asuscribir .= 'VALUES(' . $per_id . ', ' . $pge_id . ', '. $estado . ', ' . $estado_logico . '); ';
-                            $sper_id .= $per_id . ',';   //$no_suscitos[$i]["per_id"] . ',';
-                            $spges_id .= $pge_id . ',';
+                            $asuscribir .= 'VALUES(' . $no_suscitos[$i]["per_id"] . ', ' . $no_suscitos[$i]["pges_id"] . ', ' . $estado . ', ' . $estado_logico . '); ';
+                            //$sper_id .= $per_id . ',';   //$no_suscitos[$i]["per_id"] . ',';
+                            $sper_id .= $no_suscitos[$i]["per_id"] . ',';
+                            $spges_id .= $no_suscitos[$i]["pges_id"] . ',';
                         }
                     }
                     if (!empty($asuscribir)) {
                         $insertartodos = $mod_sb->insertarListaTodos($asuscribir);
                         if ($insertartodos) {
-                            $idinsertados = $mod_sb->consultarSuscritosbtn(substr($sper_id, 0, -1), substr($spges_id, 0, -1));                                                        
+                            $idinsertados = $mod_sb->consultarSuscritosbtn(substr($sper_id, 0, -1), substr($spges_id, 0, -1));
                             // para crear nuevamente el script a insertar con los sus_id
                             if (count($idinsertados) > 0) {
                                 for ($i = 0; $i < count($idinsertados); $i++) {
@@ -989,7 +990,7 @@ class EmailController extends \app\components\CController {
             $con = \Yii::$app->db_mailing;
             $data = Yii::$app->request->post();
             $lista_model = $mod_lista->consultarListaXID($data["list_id"]);
-            \app\models\Utilities::putMessageLogFile('acción:'. $data["accion"] );                        
+            //\app\models\Utilities::putMessageLogFile('acción:'. $data["accion"] );                        
             if ($data["accion"] == 'sc') {
                 $ps_id = $data["psus_id"];
                 $per_tipo = $data["per_tipo"];
@@ -1047,8 +1048,7 @@ class EmailController extends \app\components\CController {
                 //Aqui se va a consultar los estudios referenciados
                 $mod_eaca_acon = new EstudioAcademicoAreaConocimiento();
                 $est_rel = $mod_eaca_acon->consultarEstudiosRelacionadoXEstudioId($lista_model['eaca_id']);
-                if ($error == 0) {
-                    \app\models\Utilities::putMessageLogFile('termina sc:'. $data["accion"] );   
+                if ($error == 0) {                    
                     $message = array(
                         "wtmessage" => Yii::t("formulario", $mensaje),
                         "title" => Yii::t('jslang', 'Success'),
@@ -1064,10 +1064,8 @@ class EmailController extends \app\components\CController {
                     );
                 }
                 \app\models\Utilities::putMessageLogFile('antes del msg sc final:'. $data["accion"] );   
-                return Utilities::ajaxResponse('OK', 'alert', Yii::t("jslang", "Sucess"), false, $message);
-                \app\models\Utilities::putMessageLogFile('después del msg sc final:'. $data["accion"] );   
-            } else if (trim($data["accion"]) == 'lis_rel') {
-                \app\models\Utilities::putMessageLogFile('ingresa 1:'. $data["accion"] );   
+                return Utilities::ajaxResponse('OK', 'alert', Yii::t("jslang", "Sucess"), false, $message);               
+            } else if (trim($data["accion"]) == 'lis_rel') {                 
                 $list_id = $data["list_id"];
                 $list_ids = array();
                 if (isset($data['list_ids'])) {
@@ -1109,16 +1107,14 @@ class EmailController extends \app\components\CController {
                         }
                         $i = $i + 1;
                     }
-                } else {
-                    \app\models\Utilities::putMessageLogFile('ingresa 2:');   
+                } else {                    
                     $mensaje = $mensaje . " No hay listas para dicho suscrito <br/>";
                     $message = array(
                         "wtmessage" => Yii::t("formulario", $mensaje),
                         "title" => Yii::t('jslang', 'Success'),
                         "rederict" => Yii::$app->response->redirect(['/marketing/email/asignar?lis_id=' . $list_id]),
                     );
-                    return Utilities::ajaxResponse('OK', 'alert', Yii::t("jslang", "Sucess"), false, $message);
-                    \app\models\Utilities::putMessageLogFile('ingresa 3:' );   
+                    return Utilities::ajaxResponse('OK', 'alert', Yii::t("jslang", "Sucess"), false, $message);                    
                 }
             }
         }      
