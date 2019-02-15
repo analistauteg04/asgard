@@ -121,18 +121,18 @@ class EmailController extends \app\components\CController {
                 $per_tipo = $data["per_tipo"];
                 $list_id = $data["list_id"];
                 $data_source = array();
-                $per_id = 0;//null;
+                $per_id = 0; //null;
                 $pge_id = 0;
                 if ($per_tipo == 1) {
                     $per_id = $ps_id;
                 }if ($per_tipo == 2) {
                     $pge_id = $ps_id;
-                }                
-                $esus = $mod_sb->consultarSuscriptoxPerylis($per_id, $pge_id, $list_id);                
-                if ($esus["inscantes"] > 0) {    
-                    \app\models\Utilities::putMessageLogFile('per_id'. $per_id);                        
-                    \app\models\Utilities::putMessageLogFile('list_id'. $list_id);                        
-                    \app\models\Utilities::putMessageLogFile('estado_cambio'. $estado_cambio);        
+                }
+                $esus = $mod_sb->consultarSuscriptoxPerylis($per_id, $pge_id, $list_id);
+                if ($esus["inscantes"] > 0) {
+                    \app\models\Utilities::putMessageLogFile('per_id' . $per_id);
+                    \app\models\Utilities::putMessageLogFile('list_id' . $list_id);
+                    \app\models\Utilities::putMessageLogFile('estado_cambio' . $estado_cambio);
                     $su_id = $mod_sb->updateSuscripto($per_id, $list_id, $estado_cambio);
                     if ($su_id > 0) {
                         $mensaje = "El contacto ha sido asignado a la lista satisfactoriamente";
@@ -141,12 +141,12 @@ class EmailController extends \app\components\CController {
                         $mensaje = "Error: El suscritor no fue guardado.";
                         $error++;
                     }
-                } else {  
-                    $encontrar = $mod_sb->consultarSuscritosbtn($per_id, $pge_id);                    
+                } else {
+                    $encontrar = $mod_sb->consultarSuscritosbtn($per_id, $pge_id);
                     if (!($encontrar)) {
                         $keys = ['per_id', 'pges_id', 'sus_estado', 'sus_estado_logico'];
                         $parametros = [$per_id, $pge_id, 1, 1];
-                        $su_id = $mod_sb->insertarSuscritor($con, $parametros, $keys, 'suscriptor'); 
+                        $su_id = $mod_sb->insertarSuscritor($con, $parametros, $keys, 'suscriptor');
                         if ($su_id > 0) {
                             //\app\models\Utilities::putMessageLogFile('inserta lista_suscriptor:'. $su_id);                        
                             $key = ['lis_id', 'sus_id', 'lsus_estado', 'lsus_fecha_creacion', 'lsus_estado_logico'];
@@ -172,7 +172,7 @@ class EmailController extends \app\components\CController {
                             $mensaje = "Error: El suscriptor no fue guardado en esta lista.";
                             $error++;
                         }
-                    }                                        
+                    }
                 }
                 //Aqui se va a consultar los estudios referenciados
                 $mod_eaca_acon = new EstudioAcademicoAreaConocimiento();
@@ -240,7 +240,7 @@ class EmailController extends \app\components\CController {
                     $message = array(
                         "wtmessage" => Yii::t("formulario", $mensaje),
                         "title" => Yii::t('jslang', 'Success'),
-                        //"rederict" => Yii::$app->response->redirect(['/marketing/email/asignar?lis_id=' . $list_id]),
+                            //"rederict" => Yii::$app->response->redirect(['/marketing/email/asignar?lis_id=' . $list_id]),
                     );
                     return Utilities::ajaxResponse('OK', 'alert', Yii::t("jslang", "Sucess"), false, $message);
                 }
@@ -682,16 +682,16 @@ class EmailController extends \app\components\CController {
         }
         if (Yii::$app->request->isAjax) {
             $data = Yii::$app->request->post();
-            if ($data["accion"] = 'sc') {                
-                $lista_id = $data["list_id"];                
+            if ($data["accion"] = 'sc') {
+                $lista_id = $data["list_id"];
                 $per_tipo = $data["per_tipo"];
-                if ($per_tipo==1) {
+                if ($per_tipo == 1) {
                     $per_id = $data["per_id"];
                     $pges_id = null;
                 } else {
                     $pges_id = $data["pges_id"];
                     $per_id = 0;
-                }               
+                }
                 //\app\models\Utilities::putMessageLogFile('estado_cambio:'.$estado_cambio);
                 $esus = $mod_sb->updateSuscripto($per_id, $pges_id, $lista_id, $estado_cambio);
                 if ($esus > 0) {
@@ -747,7 +747,7 @@ class EmailController extends \app\components\CController {
         $data = Yii::$app->request->get();
         $arrSearch["estado"] = $data["estado"];
         $lis_id = base64_decode($data["lista"]);
-
+        \app\models\Utilities::putMessageLogFile('estalista: ' . $lis_id);
         $modsuscriptor = new Suscriptor();
         $arrData = array();
         if ($arrSearch["estado"] == 0) {
@@ -757,7 +757,7 @@ class EmailController extends \app\components\CController {
                 $arrData = $modsuscriptor->consultarSuscriptoexcel($arrSearch, $lis_id, 1, 0);
             } elseif ($arrSearch["estado"] == 2) {
                 $arrData = $modsuscriptor->consultarSuscriptoexcel($arrSearch, $lis_id, 0, 0);
-            } elseif ($arrSearch["estado"] == '3') {                
+            } elseif ($arrSearch["estado"] == 3) {
                 $arrData = $modsuscriptor->consultarSuscriptoexcel($arrSearch, $lis_id, 0, 0);
             }
         }
@@ -791,10 +791,9 @@ class EmailController extends \app\components\CController {
                 $arr_body = $modsuscriptor->consultarSuscriptoexcel($arrSearch, $lis_id, 1, 0);
             } elseif ($arrSearch["estado"] == 2) {
                 $arr_body = $modsuscriptor->consultarSuscriptoexcel($arrSearch, $lis_id, 0, 0);
+            } elseif ($arrSearch["estado"] == 3) {
+                $arr_body = $modsuscriptor->consultarSuscriptoexcel($arrSearch, $lis_id, 0, 0);
             }
-            /*elseif ($arrSearch["estado"] == '3') {                
-                $arrData = $modsuscriptor->consultarSuscriptoexcel($arrSearch, $lis_id, 1, 0);
-            }*/
         }
 
         $report->orientation = "L"; // tipo de orientacion L => Horizontal, P => Vertical
@@ -825,13 +824,14 @@ class EmailController extends \app\components\CController {
                 if (count($no_suscitos) > 0) {
                     for ($i = 0; $i < count($no_suscitos); $i++) {
                         //consulto
-                        $per_id = 0;//null;
+                        $per_id = 0; //null;
                         $pge_id = null;
-                        if ($no_suscitos["per_tipo"] ==1) {
-                            $per_id = $no_suscitos[$i]["per_id"];                            
+                        if ($no_suscitos["per_tipo"] == 1) {
+                            $per_id = $no_suscitos[$i]["per_id"];
                         } else {
-                            $pge_id = $no_suscitos[$i]["pges_id"];   ;
-                        }                                                          
+                            $pge_id = $no_suscitos[$i]["pges_id"];
+                            ;
+                        }
                         $exitesuscrito = $mod_sb->consultarSuscriptoxPerylis($no_suscitos[$i]["per_id"], $pge_id, $lis_id);
                         // si existe en la base update
                         if ($exitesuscrito["inscantes"] > 0) {
@@ -840,7 +840,7 @@ class EmailController extends \app\components\CController {
                             $modsus_id2 .= $pge_id . ',';
                         } else {
                             $asuscribir .= 'INSERT INTO db_mailing.suscriptor (per_id, pges_id, sus_estado, sus_estado_logico)';
-                            $asuscribir .= 'VALUES(' . $per_id . ', ' . $pge_id . ', '. $estado . ', ' . $estado_logico . '); ';
+                            $asuscribir .= 'VALUES(' . $per_id . ', ' . $pge_id . ', ' . $estado . ', ' . $estado_logico . '); ';
                             $sper_id .= $per_id . ',';   //$no_suscitos[$i]["per_id"] . ',';
                             $spges_id .= $pge_id . ',';
                         }
@@ -848,7 +848,7 @@ class EmailController extends \app\components\CController {
                     if (!empty($asuscribir)) {
                         $insertartodos = $mod_sb->insertarListaTodos($asuscribir);
                         if ($insertartodos) {
-                            $idinsertados = $mod_sb->consultarSuscritosbtn(substr($sper_id, 0, -1), substr($spges_id, 0, -1));                                                        
+                            $idinsertados = $mod_sb->consultarSuscritosbtn(substr($sper_id, 0, -1), substr($spges_id, 0, -1));
                             // para crear nuevamente el script a insertar con los sus_id
                             if (count($idinsertados) > 0) {
                                 for ($i = 0; $i < count($idinsertados); $i++) {

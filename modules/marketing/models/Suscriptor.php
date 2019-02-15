@@ -405,7 +405,7 @@ class Suscriptor extends \yii\db\ActiveRecord {
         $join_subscrito = ($subscrito == 1) ? $suscrito : (($subscrito == 2) ? $nosuscrito : $nosuscrito);
         if (isset($arrFiltro) && count($arrFiltro) > 0) {
             if ($arrFiltro['estado'] == 1) {
-                $str_search = " AND ifnull(sus.sus_id,0) > 0 and sus.sus_estado ='1' and ifnull(ls.lsus_estado_mailchimp,0) = 0 ";
+                $str_search = " AND ifnull(sus.sus_id,0) > 0 and sus.sus_estado ='1' and ls.lsus_estado = '1' and ls.lsus_estado_mailchimp IS NULL ";
             }
             if ($arrFiltro['estado'] == 2) {
                 $str_search = " AND (ifnull(sus.sus_id,0) = 0 or (sus.sus_estado ='0' and ls.lsus_estado = '0')) ";
@@ -424,10 +424,15 @@ class Suscriptor extends \yii\db\ActiveRecord {
                     $mostraper_id
                     $mostrapges_id
                     $mostrartipo
-                    if(ifnull(sus.per_id,0)=0,concat(pges.pges_pri_nombre, ' ', ifnull(pges.pges_pri_apellido,'')),concat(per.per_pri_nombre,' ',per.per_pri_apellido)) as contacto,	                                        
+                    if(ifnull(per.per_id,0)=0,concat(pges.pges_pri_nombre, ' ', ifnull(pges.pges_pri_apellido,'')),concat(per.per_pri_nombre,' ',per.per_pri_apellido)) as contacto,	                                        
                     if(isnull(mest.mest_nombre),eaca.eaca_nombre,mest.mest_nombre) carrera,
-                    ifnull(per.per_correo, pges.pges_correo) per_correo,                      
-                    if(ifnull(sus.sus_id,0)>0 and sus.sus_estado =:estado,'Subscrito','No Subscrito') as estado                  
+                    ifnull(per.per_correo, pges.pges_correo) per_correo, 
+                    CASE   
+                      WHEN ifnull(sus.sus_id,0) > 0 and sus.sus_estado ='1' and ls.lsus_estado = '1' and ls.lsus_estado_mailchimp IS NULL THEN 'Suscrito'   
+                      WHEN ifnull(sus.sus_id,0) = 0 or (sus.sus_estado ='0' and ls.lsus_estado = '0') THEN 'No suscrito'   
+                      WHEN ifnull(ls.lsus_estado_mailchimp,0) = '1' and ls.lsus_estado = '1' and sus.sus_estado = '1' THEN 'Mailing'
+                    END as estado
+                    -- if(ifnull(sus.sus_id,0)>0 and sus.sus_estado =:estado,'Subscrito','No Subscrito') as estado                  
                 FROM 
                     " . $con->dbname . ".lista lst
                     LEFT JOIN " . $con2->dbname . ".estudio_academico as eaca on eaca.eaca_id= lst.eaca_id                    
@@ -452,10 +457,15 @@ class Suscriptor extends \yii\db\ActiveRecord {
                         $mostraper_id
                         $mostrapges_id
                         $mostrartipo
-                        if(ifnull(sus.per_id,0)=0,concat(pges.pges_pri_nombre, ' ', ifnull(pges.pges_pri_apellido,'')),concat(per.per_pri_nombre,' ',per.per_pri_apellido)) as contacto,
+                        if(ifnull(per.per_id,0)=0,concat(pges.pges_pri_nombre, ' ', ifnull(pges.pges_pri_apellido,'')),concat(per.per_pri_nombre,' ',per.per_pri_apellido)) as contacto,
                         if(isnull(mest.mest_nombre),eaca.eaca_nombre,mest.mest_nombre) carrera,                        
-                        ifnull(per.per_correo, pges.pges_correo) per_correo,                                        
-                        if(ifnull(sus.sus_id,0)>0 and sus.sus_estado =:estado,'Subscrito','No Subscrito') as estado
+                        ifnull(per.per_correo, pges.pges_correo) per_correo, 
+                        CASE   
+                            WHEN ifnull(sus.sus_id,0) > 0 and sus.sus_estado ='1' and ls.lsus_estado = '1' and ls.lsus_estado_mailchimp IS NULL THEN 'Suscrito'   
+                            WHEN ifnull(sus.sus_id,0) = 0 or (sus.sus_estado ='0' and ls.lsus_estado = '0') THEN 'No suscrito'   
+                            WHEN ifnull(ls.lsus_estado_mailchimp,0) = '1' and ls.lsus_estado = '1' and sus.sus_estado = '1' THEN 'Mailing'
+                    END as estado
+                        -- if(ifnull(sus.sus_id,0)>0 and sus.sus_estado =:estado,'Subscrito','No Subscrito') as estado
                 FROM " . $con->dbname . ".lista_suscriptor ls inner join " . $con->dbname . ".suscriptor sus on (sus.sus_id = ls.sus_id)
                     INNER JOIN " . $con1->dbname . ".persona per on per.per_id = sus.per_id
                     INNER JOIN " . $con->dbname . ".lista l on l.lis_id = ls.lis_id
