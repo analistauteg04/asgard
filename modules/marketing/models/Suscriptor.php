@@ -408,7 +408,7 @@ class Suscriptor extends \yii\db\ActiveRecord {
                 $str_search = " AND ifnull(sus.sus_id,0) > 0 and sus.sus_estado ='1' and ifnull(ls.lsus_estado_mailchimp,0) = 0 ";
             }
             if ($arrFiltro['estado'] == 2) {
-                $str_search = " AND (ifnull(sus.sus_id,0) = 0 or (sus.sus_estado ='0' and ls.lsus_estado = '0') ";
+                $str_search = " AND (ifnull(sus.sus_id,0) = 0 or (sus.sus_estado ='0' and ls.lsus_estado = '0')) ";
             }
             if ($arrFiltro['estado'] == 3) {
                 $str_search = " AND (ifnull(ls.lsus_estado_mailchimp,0) = '1' and ls.lsus_estado = '1' and sus.sus_estado = '1') ";

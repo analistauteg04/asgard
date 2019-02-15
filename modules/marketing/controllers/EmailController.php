@@ -129,7 +129,10 @@ class EmailController extends \app\components\CController {
                     $pge_id = $ps_id;
                 }                
                 $esus = $mod_sb->consultarSuscriptoxPerylis($per_id, $pge_id, $list_id);                
-                if ($esus["inscantes"] > 0) {                    
+                if ($esus["inscantes"] > 0) {    
+                    \app\models\Utilities::putMessageLogFile('per_id'. $per_id);                        
+                    \app\models\Utilities::putMessageLogFile('list_id'. $list_id);                        
+                    \app\models\Utilities::putMessageLogFile('estado_cambio'. $estado_cambio);        
                     $su_id = $mod_sb->updateSuscripto($per_id, $list_id, $estado_cambio);
                     if ($su_id > 0) {
                         $mensaje = "El contacto ha sido asignado a la lista satisfactoriamente";
@@ -754,9 +757,9 @@ class EmailController extends \app\components\CController {
                 $arrData = $modsuscriptor->consultarSuscriptoexcel($arrSearch, $lis_id, 1, 0);
             } elseif ($arrSearch["estado"] == 2) {
                 $arrData = $modsuscriptor->consultarSuscriptoexcel($arrSearch, $lis_id, 0, 0);
-            } /*elseif ($arrSearch["estado"] == '3') {                
-                $arrData = $modsuscriptor->consultarSuscriptoexcel($arrSearch, $lis_id, 1, 0);
-            }*/
+            } elseif ($arrSearch["estado"] == '3') {                
+                $arrData = $modsuscriptor->consultarSuscriptoexcel($arrSearch, $lis_id, 0, 0);
+            }
         }
 
         $nameReport = marketing::t("marketing", "List Subscriber Allocation");
