@@ -6,7 +6,7 @@
  * @license http://www.opensource.org/licenses/bsd-license.php New BSD License
  */
 
-use app\widgets\PbVPOS\PbVPOS;
+/*use app\widgets\PbVPOS\PbVPOS;
 echo PbVPOS::widget([
     "id" => "VPOS",
     "referenceID" => rand(10000, 50000),
@@ -19,7 +19,7 @@ echo PbVPOS::widget([
     "isCheckout" => false,
     "requestID" => "",
     "type" => "button",
-]);
+]);*/
 ?>
 <?php //echo $this->render('_include'); ?>
 <div class="col-lg-12">
