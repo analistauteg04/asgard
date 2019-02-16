@@ -4,3 +4,6 @@ cambiar en la base la ruta base datos
 SELECT * FROM db_edoc.VSFirmaDigital;
 /home/EDOC/GENERADO/
 cambiar la ruta de firma y el nombre 
+agregar privilegios a la carpeta
+chown -R apache.apache webshellasgard/
+chmod 777 -R EDOC/ a la carpeta EDOC y sub carpetas
