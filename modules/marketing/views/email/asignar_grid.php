@@ -67,7 +67,7 @@ crm::registerTranslations();
                             if (($model["estado"] == 1)) {
                                 return '<span class="glyphicon glyphicon-plus"></span>';
                             } else {
-                                return Html::a('<span class="glyphicon glyphicon-plus"></span>', "#", ["onclick" => "preguntasuscribirContacto(" . $model['id_psus'] . "," . $model['per_tipo'] . "," . $model['lis_id'] .");", "data-toggle" => "tooltip", "title" => "Suscribirse a la lista", "data-pjax" => 0]);
+                                return Html::a('<span class="glyphicon glyphicon-plus"></span>', "#", ["onclick" => "preguntasuscribirContacto(" . $model['per_id'] . "," . $model['id_psus'] . "," . $model['lis_id'] .");", "data-toggle" => "tooltip", "title" => "Suscribirse a la lista", "data-pjax" => 0]);
                             }
                         }else{
                             return '<span class="glyphicon glyphicon-plus"></span>';

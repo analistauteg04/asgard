@@ -551,14 +551,13 @@ class Suscriptor extends \yii\db\ActiveRecord {
      * @property integer $userid
      * @return  
      */
-    public function consultarSuscritosbtn($sus_id, $pges_id) {
+    public function consultarSuscritosbtn($condicion, $ids) {
         $con = \Yii::$app->db_mailing;
         $sql = "
                SELECT sus_id 
                FROM db_mailing.suscriptor
-               WHERE per_id in ($sus_id) AND
-                     pges_id in ($pges_id)
-               ";
+               WHERE $condicion in ($ids) 
+               ";       
         $comando = $con->createCommand($sql);
         $resultData = $comando->queryAll();
         return $resultData;
