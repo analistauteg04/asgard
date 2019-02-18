@@ -831,8 +831,7 @@ class EmailController extends \app\components\CController {
                             }
                         }
                     }
-                    \app\models\Utilities::putMessageLogFile('sdffd... : ' . $sper_id);
-                    \app\models\Utilities::putMessageLogFile('dfdsf... : ' . $spges_id);
+                    \app\models\Utilities::putMessageLogFile('asds... : ' . $modsus_id2);
                     if (!empty($asuscribir)) {
                         $insertartodos = $mod_sb->insertarListaTodos($asuscribir);
                         if ($insertartodos) {
@@ -855,7 +854,6 @@ class EmailController extends \app\components\CController {
                             }
                             $insertadalista = $mod_sb->insertarListaSuscritorTodos($asuscribirli);
                         }
-                        \app\models\Utilities::putMessageLogFile('insert lista_suscriptor... : ' . $asuscribirli);
                     }
                     if (!empty($modsus_id)) {
                         $susctodos .= 'UPDATE db_mailing.suscriptor sus
@@ -867,9 +865,10 @@ class EmailController extends \app\components\CController {
                         lsus.lsus_fecha_modificacion = ' . $fecha_registro . '
                         WHERE sus.per_id in (' . substr($modsus_id, 0, -1) . ') AND                      
                         lsus.lis_id = ' . $lis_id;
-                        $listatodos = $mod_sb->updateSuscriptodos($susctodos);
+                        $listatodos = $mod_sb->updateSuscriptodos($susctodos);                       
                         $exito = 1;
-                    } elseif (!empty($modsus_id2)) {
+                    }
+                    if (!empty($modsus_id2)) {
                         $susctodospg .= 'UPDATE db_mailing.suscriptor sus
                         INNER JOIN db_mailing.lista_suscriptor lsus
                         ON sus.sus_id = lsus.sus_id
@@ -879,9 +878,7 @@ class EmailController extends \app\components\CController {
                         lsus.lsus_fecha_modificacion = ' . $fecha_registro . '
                         WHERE  sus.pges_id in (' . substr($modsus_id2, 0, -1) . ') AND
                         lsus.lis_id = ' . $lis_id;
-                        $listatodos = $mod_sb->updateSuscriptodos($susctodospg);
-                        $exito = 1;
-                    } else {
+                        $listatodos = $mod_sb->updateSuscriptodos($susctodospg);                       
                         $exito = 1;
                     }
                     if ($exito) {
