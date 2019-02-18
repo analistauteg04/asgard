@@ -496,24 +496,45 @@ class Suscriptor extends \yii\db\ActiveRecord {
         $con4 = \Yii::$app->db_crm;
         $estado_valido = 1;
         $estado = 0;
-        $sql = "SELECT 
-                count(*) as noescritos
-                FROM 
-                " . $con3->dbname . ".lista lst
-                LEFT JOIN " . $con->dbname . ".estudio_academico as eaca on eaca.eaca_id= lst.eaca_id 
-                LEFT JOIN " . $con->dbname . ".modulo_estudio as mest on mest.mest_id = lst.mest_id
-                LEFT JOIN " . $con2->dbname . ".solicitud_inscripcion as sins on sins.eaca_id = eaca.eaca_id or sins.mest_id = mest.mest_id
-                LEFT JOIN " . $con4->dbname . ".oportunidad as opo on opo.eaca_id=eaca.eaca_id or opo.mest_id=mest.mest_id and opo.eaca_id != sins.eaca_id and opo.mest_id!=sins.mest_id 
-                LEFT JOIN " . $con2->dbname . ".interesado as inte on inte.int_id = sins.int_id 
-                LEFT JOIN db_crm.persona_gestion as pges on pges.pges_id=opo.pges_id
-                LEFT JOIN " . $con1->dbname . ".persona as per on per.per_id = inte.per_id
-                LEFT JOIN " . $con3->dbname . ".suscriptor as sus on sus.per_id = per.per_id or sus.pges_id=pges.pges_id 
-                LEFT JOIN " . $con3->dbname . ".lista_suscriptor as lsus on lsus.lis_id = lst.lis_id and lsus.sus_id=sus.sus_id     
-                WHERE 
-                lst.lis_id= :list_id AND
-                lst.lis_estado = :estado_valido AND
-                lst.lis_estado_logico = :estado_valido AND (ifnull(sus.sus_id,0) = :estado or (sus.sus_estado =:estado and lsus.lsus_estado =:estado))";
-
+        $sql = "SELECT count(a.lis_id) as noescritos
+                FROM (
+                    SELECT lst.lis_id
+                    FROM 
+                        " . $con3->dbname . ".lista lst
+                        LEFT JOIN " . $con->dbname . ".estudio_academico as eaca on eaca.eaca_id= lst.eaca_id 
+                        LEFT JOIN " . $con->dbname . ".modulo_estudio as mest on mest.mest_id = lst.mest_id
+                        LEFT JOIN " . $con4->dbname . ".oportunidad as opo on (opo.eaca_id=eaca.eaca_id or opo.mest_id=mest.mest_id) 
+                        LEFT JOIN " . $con4->dbname . ".persona_gestion as pges on pges.pges_id=opo.pges_id
+                        LEFT JOIN " . $con1->dbname . ".persona as per on per.per_correo = pges.pges_correo
+                        LEFT JOIN " . $con2->dbname . ".interesado as inte on inte.per_id = per.per_id 
+                        LEFT JOIN " . $con2->dbname . ".solicitud_inscripcion as sins on ((sins.int_id = inte.int_id) and (sins.eaca_id = eaca.eaca_id or sins.mest_id = mest.mest_id))
+                        left join " . $con3->dbname . ".suscriptor as sus on (sus.per_id = per.per_id or sus.pges_id=pges.pges_id)
+                        LEFT JOIN " . $con->dbname . ".estudio_academico_area_conocimiento as eaac on eaac.eaca_id=eaca.eaca_id
+                        LEFT JOIN " . $con->dbname . ".area_conocimiento as acon on acon.acon_id=eaac.acon_id
+                        LEFT JOIN " . $con3->dbname . ".lista_suscriptor lsus on (sus.sus_id = lsus.sus_id and lsus.lis_id = lst.lis_id)
+                    WHERE 
+                        lst.lis_id= :list_id AND
+                        lst.lis_estado = :estado_valido AND
+                        lst.lis_estado_logico = :estado_valido AND (ifnull(sus.sus_id,0) = '0' or (sus.sus_estado ='0' and lsus.lsus_estado ='0'))
+                    UNION ALL
+                    SELECT lst.lis_id
+                    FROM " . $con3->dbname . ".lista lst
+                        LEFT JOIN " . $con->dbname . ".estudio_academico as eaca on eaca.eaca_id= lst.eaca_id 
+                        LEFT JOIN " . $con->dbname . ".modulo_estudio as mest on mest.mest_id = lst.mest_id
+                        LEFT JOIN " . $con2->dbname . ".solicitud_inscripcion as sins on (sins.eaca_id = eaca.eaca_id or sins.mest_id = mest.mest_id)
+                        LEFT JOIN " . $con2->dbname . ".interesado i on i.int_id = sins.int_id
+                        LEFT JOIN " . $con1->dbname . ".persona per on per.per_id = i.per_id
+                        LEFT JOIN " . $con4->dbname . ".persona_gestion as pges on per.per_correo = pges.pges_correo
+                        LEFT JOIN " . $con->dbname . ".estudio_academico_area_conocimiento as eaac on eaac.eaca_id=eaca.eaca_id
+                        LEFT JOIN " . $con->dbname . ".area_conocimiento as acon on acon.acon_id=eaac.acon_id
+                        left join " . $con3->dbname . ".suscriptor as sus on (sus.per_id = per.per_id or sus.pges_id=pges.pges_id)
+                        LEFT JOIN " . $con3->dbname . ".lista_suscriptor lsus on sus.sus_id = lsus.sus_id
+                    WHERE 
+                        lst.lis_id= :list_id AND
+                        lst.lis_estado = :estado_valido AND
+                        lst.lis_estado_logico = :estado_valido AND (ifnull(sus.sus_id,0) = '0' or (sus.sus_estado ='0' and lsus.lsus_estado ='0'))
+                ) a";
+            
         $comando = $con->createCommand($sql);
         $comando->bindParam(":estado", $estado, \PDO::PARAM_STR);
         $comando->bindParam(":estado_valido", $estado_valido, \PDO::PARAM_STR);
