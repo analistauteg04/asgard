@@ -830,8 +830,7 @@ class EmailController extends \app\components\CController {
                                 $spges_id .= $no_suscitos[$i]["pges_id"] . ',';
                             }
                         }
-                    }
-                    \app\models\Utilities::putMessageLogFile('asds... : ' . $modsus_id2);
+                    }                    
                     if (!empty($asuscribir)) {
                         $insertartodos = $mod_sb->insertarListaTodos($asuscribir);
                         if ($insertartodos) {
@@ -892,7 +891,7 @@ class EmailController extends \app\components\CController {
                     } else {
                         $transaction->rollback();
                         $message = array(
-                            "wtmessage" => Yii::t("notificaciones", "Error al grabar1." . $mensaje),
+                            "wtmessage" => Yii::t("notificaciones", "Error al grabar." . $mensaje),
                             "title" => Yii::t('jslang', 'Error'),
                         );
                         echo Utilities::ajaxResponse('NO_OK', 'Error', Yii::t("jslang", "Error"), false, $message);
@@ -908,7 +907,7 @@ class EmailController extends \app\components\CController {
             } catch (Exception $ex) {
                 $transaction->rollback();
                 $message = array(
-                    "wtmessage" => $ex->getMessage(), Yii::t("notificaciones", "Error al grabar2."),
+                    "wtmessage" => $ex->getMessage(), Yii::t("notificaciones", "Error al grabar."),
                     "title" => Yii::t('jslang', 'Error'),
                 );
                 return Utilities::ajaxResponse('NO_OK', 'alert', Yii::t("jslang", "Error"), true, $message);
