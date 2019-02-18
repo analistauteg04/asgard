@@ -309,7 +309,8 @@ class NuberetencionController extends \app\components\CController  {
         if (Yii::$app->request->isAjax) {
             $ids = isset($_POST['ID']) ? $_POST['ID'] : 0;
             $correo = isset($_POST['DATA']) ? trim($_POST['DATA']) : '';
-            $arrayData = $model->cambiarMailDoc($ids,$correo);
+            $dni= isset($_POST['DNI']) ? trim($_POST['DNI']) :0;
+            $arrayData = $model->cambiarMailDoc($ids,$correo,$dni);
             header('Content-type: application/json');
             echo json_encode($arrayData);
             return;

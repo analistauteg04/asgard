@@ -86,13 +86,15 @@ class USUARIO extends \app\modules\fe_edoc\components\CActiveRecord {
         }
     }
     
-    public function cambiarMailDoc($ids,$correo) {
+    public function cambiarMailDoc($ids,$correo,$dni) {
         $msg = new VSexception();
         $con = yii::$app->db_edoc;
         $trans = $con->beginTransaction();
         if($ids==0){return $msg->messageSystem('NO_OK', $e->getMessage(), 11, null, null);}
         try {
-            $sql = "UPDATE " . $con->dbname . ".usuario SET usu_correo='$correo' WHERE usu_id=$ids ";
+            //,usu_nombre='$dni'
+            $sql = "UPDATE " . $con->dbname . ".usuario SET usu_correo='$correo' WHERE usu_id=$ids; ";
+            //$sql .= "UPDATE " . $con->dbname . ".$tabla SET $campoCedula='$dni' WHERE $campoId=$IdsDoc; ";
             $comando = $con->createCommand($sql);
             $comando->execute();
             //echo $sql;
@@ -109,7 +111,7 @@ class USUARIO extends \app\modules\fe_edoc\components\CActiveRecord {
         $con = yii::$app->db_edoc;
                 switch ($tipDoc) {
                     Case "FA"://FACTURAS
-                        $sql = "SELECT A.IdentificacionComprador CedRuc,C.usu_id UsuId,B.per_nombre Nombres,C.usu_correo Correo
+                        $sql = "SELECT A.IdFactura IdsDoc,A.IdentificacionComprador CedRuc,C.usu_id UsuId,B.per_nombre Nombres,C.usu_correo Correo
                                 FROM " . $con->dbname . ".NubeFactura A
                                         INNER JOIN (" . $con->dbname . ".persona B
                                                         INNER JOIN " . $con->dbname . ".usuario C
@@ -118,7 +120,7 @@ class USUARIO extends \app\modules\fe_edoc\components\CActiveRecord {
                             WHERE A.IdFactura='$id';";                       
                         break;
                     Case "GR"://GUIAS DE REMISION
-                        $sql = "SELECT D.IdentificacionDestinatario CedRuc,C.usu_id UsuId,B.per_nombre Nombres,C.usu_correo Correo
+                        $sql = "SELECT A.IdGuiaRemision IdsDoc,D.IdentificacionDestinatario CedRuc,C.usu_id UsuId,B.per_nombre Nombres,C.usu_correo Correo
                                 FROM " . $con->dbname . ".NubeGuiaRemision A
                                         INNER JOIN " . $con->dbname . ".NubeGuiaRemisionDestinatario D
                                                 ON D.IdGuiaRemision=A.IdGuiaRemision
@@ -130,7 +132,7 @@ class USUARIO extends \app\modules\fe_edoc\components\CActiveRecord {
                            
                         break;
                     Case "RT"://RETENCIONES
-                            $sql = "SELECT A.IdentificacionSujetoRetenido CedRuc,C.usu_id UsuId,B.per_nombre Nombres,C.usu_correo Correo
+                            $sql = "SELECT A.IdRetencion IdsDoc,A.IdentificacionSujetoRetenido CedRuc,C.usu_id UsuId,B.per_nombre Nombres,C.usu_correo Correo
                                     FROM " . $con->dbname . ".NubeRetencion A
                                             INNER JOIN (" . $con->dbname . ".persona B
                                                     INNER JOIN " . $con->dbname . ".usuario C
@@ -140,7 +142,7 @@ class USUARIO extends \app\modules\fe_edoc\components\CActiveRecord {
                         
                         break;
                     Case "NC"://NOTAS DE CREDITO
-                        $sql = "SELECT A.IdentificacionComprador CedRuc,C.usu_id UsuId,B.per_nombre Nombres,C.usu_correo Correo
+                        $sql = "SELECT A.IdNotaCredito IdsDoc,A.IdentificacionComprador CedRuc,C.usu_id UsuId,B.per_nombre Nombres,C.usu_correo Correo
                                 FROM " . $con->dbname . ".NubeNotaCredito A
                                         INNER JOIN (" . $con->dbname . ".persona B
                                                 INNER JOIN " . $con->dbname . ".usuario C
