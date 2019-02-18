@@ -126,7 +126,8 @@ class Suscriptor extends \yii\db\ActiveRecord {
                 $str_search = " AND ifnull(sus.sus_id,0) > 0 and sus.sus_estado ='1' and ls.lsus_estado = '1' and ls.lsus_estado_mailchimp IS NULL";
             }
             if ($arrFiltro['estado'] == 2) { //No suscrito
-                $str_search = " AND (ifnull(sus.sus_id,0) = 0 or sus.sus_estado ='0' and ls.lsus_estado = '0') ";
+                $str_search = " AND (ifnull(ls.sus_id,0) = 0 or (ls.lsus_estado = '0'  and ls.lis_id = :list_id)) ";
+                //$str_search = " AND (ifnull(sus.sus_id,0) = 0 or sus.sus_estado ='0' and ls.lsus_estado = '0') ";
             }
             if ($arrFiltro['estado'] == 3) {  //Mailchimp
                 $str_search = " AND (ifnull(ls.lsus_estado_mailchimp,0) = '1' and sus.sus_estado = '1' and ls.lsus_estado = '1') ";
@@ -406,8 +407,9 @@ class Suscriptor extends \yii\db\ActiveRecord {
             if ($arrFiltro['estado'] == 1) {
                 $str_search = " AND ifnull(sus.sus_id,0) > 0 and sus.sus_estado ='1' and ls.lsus_estado = '1' and ls.lsus_estado_mailchimp IS NULL ";
             }
-            if ($arrFiltro['estado'] == 2) {
-                $str_search = " AND (ifnull(sus.sus_id,0) = 0 or (sus.sus_estado ='0' and ls.lsus_estado = '0')) ";
+            if ($arrFiltro['estado'] == 2) {            
+                $str_search = " AND (ifnull(ls.sus_id,0) = 0 or (ls.lsus_estado = '0'  and ls.lis_id = :list_id)) ";
+                //$str_search = " AND (ifnull(sus.sus_id,0) = 0 or (sus.sus_estado ='0' and ls.lsus_estado = '0')) ";
             }
             if ($arrFiltro['estado'] == 3) {
                 $str_search = " AND (ifnull(ls.lsus_estado_mailchimp,0) = '1' and ls.lsus_estado = '1' and sus.sus_estado = '1') ";
@@ -425,8 +427,8 @@ class Suscriptor extends \yii\db\ActiveRecord {
                     if(isnull(mest.mest_nombre),eaca.eaca_nombre,mest.mest_nombre) carrera,
                     ifnull(per.per_correo, pges.pges_correo) per_correo, 
                     CASE   
-                      WHEN ifnull(sus.sus_id,0) > 0 and sus.sus_estado ='1' and ls.lsus_estado = '1' and ls.lsus_estado_mailchimp IS NULL THEN 'Suscrito'   
-                      WHEN ifnull(sus.sus_id,0) = 0 or (sus.sus_estado ='0' and ls.lsus_estado = '0') THEN 'No suscrito'   
+                      WHEN ifnull(ls.sus_id,0) > 0 and ls.lsus_estado = '1' and ls.lis_id = :list_id and ls.lsus_estado_mailchimp IS NULL THEN 'Suscrito'                       
+                      WHEN ifnull(ls.sus_id,0) = 0 or (ls.lsus_estado = '0' and ls.lis_id = :list_id) THEN 'No suscrito'   
                       WHEN ifnull(ls.lsus_estado_mailchimp,0) = '1' and ls.lsus_estado = '1' and sus.sus_estado = '1' THEN 'Mailing'
                     END as estado                    
                 FROM                     
@@ -456,8 +458,8 @@ class Suscriptor extends \yii\db\ActiveRecord {
                         if(isnull(mest.mest_nombre),eaca.eaca_nombre,mest.mest_nombre) carrera,                        
                         ifnull(per.per_correo, pges.pges_correo) per_correo, 
                         CASE   
-                            WHEN ifnull(sus.sus_id,0) > 0 and sus.sus_estado ='1' and ls.lsus_estado = '1' and ls.lsus_estado_mailchimp IS NULL THEN 'Suscrito'   
-                            WHEN ifnull(sus.sus_id,0) = 0 or (sus.sus_estado ='0' and ls.lsus_estado = '0') THEN 'No suscrito'   
+                            WHEN ifnull(ls.sus_id,0) > 0 and ls.lsus_estado = '1' and ls.lis_id =:list_id and ls.lsus_estado_mailchimp IS NULL THEN 'Suscrito'                             
+                            WHEN ifnull(ls.sus_id,0) = 0 or (ls.lsus_estado = '0' and ls.lis_id = :list_id) THEN 'No suscrito'   
                             WHEN ifnull(ls.lsus_estado_mailchimp,0) = '1' and ls.lsus_estado = '1' and sus.sus_estado = '1' THEN 'Mailing'
                     END as estado                        
                 FROM " . $con->dbname . ".lista lst
@@ -470,7 +472,7 @@ class Suscriptor extends \yii\db\ActiveRecord {
                     LEFT JOIN " . $con2->dbname . ".estudio_academico_area_conocimiento as eaac on eaac.eaca_id=eaca.eaca_id
                     LEFT JOIN " . $con2->dbname . ".area_conocimiento as acon on acon.acon_id=eaac.acon_id
                     $join_subscrito
-                    LEFT JOIN " . $con->dbname . ".lista_suscriptor ls on sus.sus_id = ls.sus_id
+                    LEFT JOIN " . $con->dbname . ".lista_suscriptor ls on (sus.sus_id = ls.sus_id and ls.lis_id = lst.lis_id)
                     WHERE lst.lis_id = :list_id AND
                     lst.lis_estado = :estado AND
                     lst.lis_estado_logico = :estado
@@ -515,7 +517,7 @@ class Suscriptor extends \yii\db\ActiveRecord {
                     WHERE 
                         lst.lis_id= :list_id AND
                         lst.lis_estado = :estado_valido AND
-                        lst.lis_estado_logico = :estado_valido AND (ifnull(sus.sus_id,0) = '0' or (sus.sus_estado ='0' and lsus.lsus_estado ='0'))
+                        lst.lis_estado_logico = :estado_valido AND (ifnull(lsus.sus_id,0) = '0' or (lsus.lsus_estado ='0' and lsus.lis_id = :list_id ))
                     UNION ALL
                     SELECT lst.lis_id
                     FROM " . $con3->dbname . ".lista lst
@@ -528,11 +530,11 @@ class Suscriptor extends \yii\db\ActiveRecord {
                         LEFT JOIN " . $con->dbname . ".estudio_academico_area_conocimiento as eaac on eaac.eaca_id=eaca.eaca_id
                         LEFT JOIN " . $con->dbname . ".area_conocimiento as acon on acon.acon_id=eaac.acon_id
                         left join " . $con3->dbname . ".suscriptor as sus on (sus.per_id = per.per_id or sus.pges_id=pges.pges_id)
-                        LEFT JOIN " . $con3->dbname . ".lista_suscriptor lsus on sus.sus_id = lsus.sus_id
+                        LEFT JOIN " . $con3->dbname . ".lista_suscriptor lsus on (sus.sus_id = lsus.sus_id and lsus.lis_id = lst.lis_id)
                     WHERE 
                         lst.lis_id= :list_id AND
                         lst.lis_estado = :estado_valido AND
-                        lst.lis_estado_logico = :estado_valido AND (ifnull(sus.sus_id,0) = '0' or (sus.sus_estado ='0' and lsus.lsus_estado ='0'))
+                        lst.lis_estado_logico = :estado_valido AND (ifnull(lsus.sus_id,0) = '0' or (lsus.lsus_estado ='0' and  lsus.lis_id = :list_id ))
                 ) a";
             
         $comando = $con->createCommand($sql);
