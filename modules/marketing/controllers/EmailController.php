@@ -807,6 +807,9 @@ class EmailController extends \app\components\CController {
             $estado = '1';
             $estado_logico = '1';
             $arrSearch["estado"] = 2;
+            $idinsertados = Array();
+            $idinsertadopg = Array();
+            
             try {
                 $mod_sb = new Suscriptor();
                 $no_suscitos = $mod_sb->consultarSuscriptoexcel($arrSearch, $lis_id, 0, 1);
@@ -828,16 +831,21 @@ class EmailController extends \app\components\CController {
                                 $sper_id .= $no_suscitos[$i]["per_id"] . ',';
                             } elseif ($no_suscitos[$i]["pges_id"] != 0) {
                                 $spges_id .= $no_suscitos[$i]["pges_id"] . ',';
+                                \app\models\Utilities::putMessageLogFile('no suscritos:' . ($no_suscitos[$i]["pges_id"]));
                             }
                         }
-                    }                    
+                    }
                     if (!empty($asuscribir)) {
                         $insertartodos = $mod_sb->insertarListaTodos($asuscribir);
                         if ($insertartodos) {
                             //insertar por per_id
-                            $idinsertados = $mod_sb->consultarSuscritosbtn('per_id', substr($sper_id, 0, -1));
+                            if (!empty($sper_id)) {
+                                $idinsertados = $mod_sb->consultarSuscritosbtn('per_id', substr($sper_id, 0, -1));
+                            }
                             //insertar por pges_id
-                            $idinsertadopg = $mod_sb->consultarSuscritosbtn('pges_id', substr($spges_id, 0, -1));
+                            if (!empty($spges_id)) {
+                                $idinsertadopg = $mod_sb->consultarSuscritosbtn('pges_id', substr($spges_id, 0, -1));
+                            }
                             // para crear nuevamente el script a insertar con los sus_id
                             if (count($idinsertados) > 0) {
                                 for ($i = 0; $i < count($idinsertados); $i++) {
@@ -865,7 +873,7 @@ class EmailController extends \app\components\CController {
                         lsus.lsus_fecha_modificacion = ' . $fecha_registro . '
                         WHERE sus.per_id in (' . substr($modsus_id, 0, -1) . ') AND                      
                         lsus.lis_id = ' . $lis_id;
-                        $listatodos = $mod_sb->updateSuscriptodos($susctodos);                       
+                        $listatodos = $mod_sb->updateSuscriptodos($susctodos);
                         $exito = 1;
                     }
                     if (!empty($modsus_id2)) {
@@ -878,7 +886,7 @@ class EmailController extends \app\components\CController {
                         lsus.lsus_fecha_modificacion = ' . $fecha_registro . '
                         WHERE  sus.pges_id in (' . substr($modsus_id2, 0, -1) . ') AND
                         lsus.lis_id = ' . $lis_id;
-                        $listatodos = $mod_sb->updateSuscriptodos($susctodospg);                       
+                        $listatodos = $mod_sb->updateSuscriptodos($susctodospg);
                         $exito = 1;
                     }
                     if ($exito) {
@@ -1071,7 +1079,6 @@ class EmailController extends \app\components\CController {
                             //"rederict" => Yii::$app->response->redirect(['/marketing/email/asignar?lis_id=' . base64_encode($list_id)]),
                     );
                 }
-                \app\models\Utilities::putMessageLogFile('antes del msg sc final:' . $data["accion"]);
                 return Utilities::ajaxResponse('OK', 'alert', Yii::t("jslang", "Sucess"), false, $message);
             } else if (trim($data["accion"]) == 'lis_rel') {
                 $list_id = $data["list_id"];
