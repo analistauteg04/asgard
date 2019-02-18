@@ -22,7 +22,8 @@ class SybaseFactura {
     //put your code here
 
     public function consultarSybCabFacturas() {//OK
-        GLOBAL $limit, $WS_URI, $WS_PORT, $WS_HOST,$timeWait;;
+        GLOBAL $limit, $WS_URI, $WS_PORT, $WS_HOST, $timeWait;
+        ;
         $obj_con = new cls_BaseSybase();
         $pdo = $obj_con->conexionSybase();
         try {
@@ -34,32 +35,41 @@ class SybaseFactura {
             if (count($rows) > 0) {
                 for ($i = 0; $i < sizeof($rows); $i++) {
                     //putMessageLogFile($rows[$i]['SYS_FACTURANC_ID']);
-                    $tipEdoc = $this->tipoDoc;//"01";
-                    $cabFact = $rows[$i];//Cabecera de Factura
+                    $tipEdoc = $this->tipoDoc; //"01";
+                    $cabFact = $rows[$i]; //Cabecera de Factura
                     $detFact = $this->consultarSybDetFacturas($pdo, $cabFact['SYS_FACTURANC_ID']);
                     $dadcFact = $this->consultarSybDatAdiFacturas($pdo, $cabFact['SYS_FACTURANC_ID']);
                     $fpagFact = $this->consultarSybForPagFacturas($pdo, $cabFact['SYS_FACTURANC_ID']);
+                    //putMessageLogFile($cabFact);
 
-                    $response = Http::connect($WS_HOST, $WS_PORT)->doPost($WS_URI, 
-                            array('tipoEdoc' => $tipEdoc, 'cabEdoc' => json_encode($cabFact), 'detEdoc' => json_encode($detFact), 
-                                  'dadcEdoc' => json_encode($dadcFact), 'fpagEdoc' => json_encode($fpagFact)));
+                    $response = Http::connect($WS_HOST, $WS_PORT)->doPost($WS_URI, array(
+                        'tipoEdoc' => $tipEdoc,
+                        'cabEdoc' => json_encode($cabFact),
+                        'detEdoc' => json_encode($detFact),
+                        'dadcEdoc' => json_encode($dadcFact),
+                        'fpagEdoc' => json_encode($fpagFact)));
                     //putMessageLogFile($response);
+                    //exit($response);
                     $arr_response = json_decode($response, true);
                     if ($arr_response["state"] == 200 && $arr_response["error"] == 'false') {
                         //putMessageLogFile("OK");
-                        $rows[$i]['ESTADO']='OK';
+                        $estado = $arr_response["message"];
+                        //putMessageLogFile($estado);
+                        $rows[$i]['ESTADO'] = $estado["status"];                        
                         // actualizar registro en sysbase
                     } else {
                         //putMessageLogFile("ERROR");
-                        $rows[$i]['ESTADO']='NO_OK';
+                        $rows[$i]['ESTADO'] = 'NO_OK';
                         // no actualizar registro en sysbase y enviar mail de error a sysadmin
                     }
                     sleep($timeWait);
                 }
                 //putMessageLogFile($rows);
                 for ($i = 0; $i < sizeof($rows); $i++) {
-                    if($rows[$i]['ESTADO']=='OK'){
-                         $this->actualizarEstadoDoc($rows[$i]['SYS_FACTURANC_ID']);
+                    if ($rows[$i]['ESTADO'] == 'OK') {
+                        $this->actualizarEstadoDoc($rows[$i]['SYS_FACTURANC_ID'],1);
+                    }else{
+                        $this->actualizarEstadoDoc($rows[$i]['SYS_FACTURANC_ID'],2);
                     }
                 }
                 return TRUE;
@@ -99,10 +109,10 @@ class SybaseFactura {
             foreach ($rows as $row) {
                 $rawData[] = $row;
             }
-        } 
+        }
         return $rawData;
     }
-    
+
     private function consultarSybForPagFacturas($pdo, $Ids) {//OK
         $rawData = array();
         $sql = "SELECT * FROM DBA.TCIDE_FACTURANC_FPAG WHERE SYS_FACTURANC_ID=:id ORDER BY SECUENCIA ";
@@ -114,19 +124,23 @@ class SybaseFactura {
             foreach ($rows as $row) {
                 $rawData[] = $row;
             }
-        } 
+        }
         return $rawData;
     }
-    
-    private function actualizarEstadoDoc($id_docElectronico) { //OK
+
+    private function actualizarEstadoDoc($id_docElectronico,$EstPro) { //OK
+        //Estados de Proceso
+        //1=OK
+        //2=NO_OK ->Error o volver a enviar
         $obj_con = new cls_BaseSybase();
         $pdo = $obj_con->conexionSybase();
         $pdo->beginTransaction();
         try {
-            $sql = "UPDATE DBA.TCIDE_FACTURANC_TEMP SET estado_proceso=1
+            $sql = "UPDATE DBA.TCIDE_FACTURANC_TEMP SET estado_proceso=:estado
                         WHERE SYS_FACTURANC_ID=:id ";
             $comando = $pdo->prepare($sql);
             $comando->bindParam(":id", $id_docElectronico, PDO::PARAM_INT);
+            $comando->bindParam(":estado", $EstPro, PDO::PARAM_INT);
             $resultado = $comando->execute();
             if ($resultado) {
                 $pdo->commit();
@@ -143,5 +157,4 @@ class SybaseFactura {
         return FALSE;
     }
 
-  
 }

@@ -36,35 +36,50 @@ class Edoc_ApiRest extends \app\modules\fe_edoc\components\CActiveRecord {
         }
     }
 
-    public function sendEdoc()
-    {
-        switch ($this->tipoEdoc) {
-            case "01"://FACTURAS
-                //Utilities::putMessageLogFile(array("tipoEdoc" => $this->dadcEdoc));
-                //return array("status" => "OK", "tipoEdoc" => $this->tipoEdoc);
-                return $this->insertarFacturas();
-                break;
-            case "04"://NOTA DE CREDITO
-                //Utilities::putMessageLogFile($this->detEdoc);
-                //return array("status" => "OK", "tipoEdoc" => $this->tipoEdoc,"data" => $this->detEdoc);
-                return $this->insertarEdocNc();
-                break;
-            case "05"://NOTA DE DEBITO
-                return $this->insertarEdocNd();
-                break;
-            case "06"://GUIA DE REMISION
-                return $this->insertarGuiasRemision();
-                break;
-            case "07"://RETENCIONES
-                //Utilities::putMessageLogFile($this->detEdoc);
-                //return array("status" => "OK", "tipoEdoc" => $this->tipoEdoc,"data" => $this->cabEdoc);
-                return $this->insertarRetenciones();
-                break;
-
-        }
-
-    }
     
+    public function sendEdoc() {
+        try {
+            $cabFact = $this->cabEdoc;
+            switch ($this->tipoEdoc) {
+                case "01"://FACTURAS
+                    //Utilities::putMessageLogFile(array("tipoEdoc" => $this->dadcEdoc));
+                    //return array("status" => "OK", "tipoEdoc" => $this->tipoEdoc);                    
+                    if (is_array($cabFact)) {
+                        return $this->insertarFacturas();
+                    } else {
+                        return array("status" => "NO_OK", "error" => "NO DATA:" . $this->cabEdoc);
+                    }
+                    break;
+                case "04"://NOTA DE CREDITO
+                    if (is_array($cabFact)) {
+                        return $this->insertarEdocNc();
+                    } else {
+                        return array("status" => "NO_OK", "error" => "NO DATA:" . $this->cabEdoc);
+                    }
+                    break;
+                case "05"://NOTA DE DEBITO
+                    return $this->insertarEdocNd();
+                    break;
+                case "06"://GUIA DE REMISION
+                    return $this->insertarGuiasRemision();
+                    break;
+                case "07"://RETENCIONES
+                    Utilities::putMessageLogFile($this->dadcEdoc);
+                    //return array("status" => "OK", "tipoEdoc" => $this->tipoEdoc,"data" => $this->cabEdoc);
+                    if (is_array($cabFact)) {
+                        return $this->insertarRetenciones();
+                    } else {
+                        return array("status" => "NO_OK", "error" => "NO DATA:" . $this->cabEdoc);
+                    }
+                    break;
+            }
+        } catch (\Exception $e) {
+            Utilities::putMessageLogFile($e);
+            //throw $e;
+            return array("status" => "NO_OK", "error" => $e->getMessage());
+        }
+    }
+
     private function retornaTarifaDelIva($tarifa) {
          //TABLA 18 FICHA TECNICA SEGUN SRI
         $codigo=0;
@@ -152,7 +167,7 @@ class Edoc_ApiRest extends \app\modules\fe_edoc\components\CActiveRecord {
         $DireccionEstablecimiento=$empresaEnt['DireccionSucursal'];
         $ContribuyenteEspecial=($cabFact['CONTRIB_ESPECIAL']!=0)?'SI':'';
         $ObligadoContabilidad=$cabFact['OBLIGADOCONTAB'];//($cabFact['OBLIGADOCONTAB']!=0)?'SI':'';
-        $CodigoTransaccionERP='XX';//
+        $CodigoTransaccionERP='FE';//
         $UsuarioCreador="1";//idde la Persona que genera la factura
 		
 	/* Datos para Genera Clave */
@@ -222,7 +237,7 @@ class Edoc_ApiRest extends \app\modules\fe_edoc\components\CActiveRecord {
         $comando->bindParam(":SecuencialERP", $Secuencial, \PDO::PARAM_STR);
         $comando->bindParam(":CodigoTransaccionERP", $CodigoTransaccionERP, \PDO::PARAM_STR);
         $comando->bindParam(":UsuarioCreador", $UsuarioCreador, \PDO::PARAM_STR);
-		$comando->bindParam(":IdLote", $IdLote, \PDO::PARAM_STR);
+	$comando->bindParam(":IdLote", $IdLote, \PDO::PARAM_STR);
 
         $comando->execute();
         return $con->getLastInsertID();
@@ -414,8 +429,8 @@ class Edoc_ApiRest extends \app\modules\fe_edoc\components\CActiveRecord {
 	$DireccionMatriz=$empresaEnt['DireccionMatriz'];
         $DireccionEstablecimiento=$empresaEnt['DireccionSucursal'];
         $ContribuyenteEspecial=($cabFact['CONTRIB_ESPECIAL']!=0)?'SI':'';
-        $ObligadoContabilidad=$cabFact['OBLIGADOCONTAB'];//($cabFact['OBLIGADOCONTAB']!=0)?'SI':'';
-        $CodigoTransaccionERP='XX';//
+        $ObligadoContabilidad=$empresaEnt['ObligadoContabilidad'];//$cabFact['OBLIGADOCONTAB'];//($cabFact['OBLIGADOCONTAB']!=0)?'SI':'';
+        $CodigoTransaccionERP='RT';//
         $UsuarioCreador="1";//idde la Persona que genera la factura
 		
 	/* Datos para Genera Clave */
@@ -440,17 +455,18 @@ class Edoc_ApiRest extends \app\modules\fe_edoc\components\CActiveRecord {
         
         $TotalRetencion=0;//Este valor es actualiado despues de insertar el detalle
         $DocSustentoERP=$cabFact['SECUENCIAL_DOCSUST'];
+        $IdLote=$cabFact['SYS_RETENCION_ID'];//Numero ID autoIncremetable del ERP 
         
         
         $sql = "INSERT INTO " . $con->dbname . ".NubeRetencion 
                 (Ambiente,TipoEmision,RazonSocial,NombreComercial,Ruc,ClaveAcceso,CodigoDocumento,PuntoEmision,Establecimiento, 
                  Secuencial,DireccionMatriz,FechaEmision,DireccionEstablecimiento,ContribuyenteEspecial,ObligadoContabilidad, 
                  TipoIdentificacionSujetoRetenido,IdentificacionSujetoRetenido,RazonSocialSujetoRetenido,PeriodoFiscal, 
-                 TotalRetencion,UsuarioCreador,SecuencialERP,CodigoTransaccionERP,DocSustentoERP,Estado,USU_ID,FechaCarga,EmailResponsable)VALUES 
+                 TotalRetencion,UsuarioCreador,SecuencialERP,CodigoTransaccionERP,DocSustentoERP,Estado,USU_ID,FechaCarga,EmailResponsable,IdLote)VALUES 
                 (:Ambiente,:TipoEmision,:RazonSocial,:NombreComercial,:Ruc,:ClaveAcceso,:CodigoDocumento,:PuntoEmision,:Establecimiento, 
                  :Secuencial,:DireccionMatriz,:FechaEmision,:DireccionEstablecimiento,:ContribuyenteEspecial,:ObligadoContabilidad, 
                  :TipoIdentificacionSujetoRetenido,:IdentificacionSujetoRetenido,:RazonSocialSujetoRetenido,:PeriodoFiscal, 
-                 :TotalRetencion,:UsuarioCreador,:SecuencialERP,:CodigoTransaccionERP,:DocSustentoERP,1,:UsuarioCreador,CURRENT_TIMESTAMP(),:EmailResponsable );";
+                 :TotalRetencion,:UsuarioCreador,:SecuencialERP,:CodigoTransaccionERP,:DocSustentoERP,1,:UsuarioCreador,CURRENT_TIMESTAMP(),:EmailResponsable,:IdLote );";
         
         $comando = $con->createCommand($sql);
 
@@ -480,6 +496,7 @@ class Edoc_ApiRest extends \app\modules\fe_edoc\components\CActiveRecord {
         $comando->bindParam(":DocSustentoERP", $DocSustentoERP, \PDO::PARAM_STR);        
         $comando->bindParam(":UsuarioCreador", $UsuarioCreador, \PDO::PARAM_STR);
         $comando->bindParam(":EmailResponsable", $cabFact['MAILSUJETO'], \PDO::PARAM_STR);
+        $comando->bindParam(":IdLote", $IdLote, \PDO::PARAM_STR);
         $comando->execute();
         return $con->getLastInsertID();
         
@@ -541,10 +558,24 @@ class Edoc_ApiRest extends \app\modules\fe_edoc\components\CActiveRecord {
                 
             }
         }
+        $this->actualizaTotalCabRetencion($con,$idCab,$TotalRetencion);
 
     }
     
+    //Nota Dato adicional personalizado solo para ALTERSOF
     private function InsertarRetencionDatoAdicional($con, $idCab) {
+        $cabFact = $this->cabEdoc;
+        $correo="Correo";
+        $sql = "INSERT INTO " . $con->dbname . ".NubeDatoAdicionalRetencion 
+                 (Nombre,Descripcion,IdRetencion) VALUES (:Nombre,:Descripcion,:IdRetencion);";       
+        $comando = $con->createCommand($sql);
+        $comando->bindParam(":Nombre", $correo, \PDO::PARAM_STR);
+        $comando->bindParam(":Descripcion", $cabFact['MAILSUJETO'], \PDO::PARAM_STR);
+        $comando->bindParam(":IdRetencion", $idCab, \PDO::PARAM_INT);
+        $comando->execute();
+    }
+
+    /*private function InsertarRetencionDatoAdicional($con, $idCab) {
         $dadcEdoc = $this->dadcEdoc;
         for ($i = 0; $i < sizeof($dadcEdoc); $i++) {
             $sql = "INSERT INTO " . $con->dbname . ".NubeDatoAdicionalRetencion 
@@ -557,6 +588,14 @@ class Edoc_ApiRest extends \app\modules\fe_edoc\components\CActiveRecord {
             $comando->bindParam(":IdRetencion", $idCab, \PDO::PARAM_INT);
             $comando->execute();
         }
+    }*/
+       
+    private function actualizaTotalCabRetencion($con, $idCab,$Total) {
+        $sql = "UPDATE " . $con->dbname . ".NubeRetencion SET TotalRetencion=:TotalRetencion WHERE IdRetencion=:IdRetencion";
+        $comando = $con->createCommand($sql);
+        $comando->bindParam(":TotalRetencion", $Total, \PDO::PARAM_STR);
+        $comando->bindParam(":IdRetencion", $idCab, \PDO::PARAM_INT);
+        $comando->execute();
     }
 
 
@@ -607,7 +646,7 @@ class Edoc_ApiRest extends \app\modules\fe_edoc\components\CActiveRecord {
         $DireccionEstablecimiento=$empresaEnt['DireccionSucursal'];
         $ContribuyenteEspecial=($cabFact['CONTRIB_ESPECIAL']!=0)?'SI':'';
         $ObligadoContabilidad=$cabFact['OBLIGADOCONTAB'];//($cabFact['OBLIGADOCONTAB']!=0)?'SI':'';
-        $CodigoTransaccionERP='XX';//
+        $CodigoTransaccionERP='NC';//
         $UsuarioCreador="1";//idde la Persona que genera la factura
 		
 	/* Datos para Genera Clave */
@@ -775,7 +814,7 @@ class Edoc_ApiRest extends \app\modules\fe_edoc\components\CActiveRecord {
         $dadcEdoc = $this->dadcEdoc;
         for ($i = 0; $i < sizeof($dadcEdoc); $i++) {
             $sql = "INSERT INTO " . $con->dbname . ".NubeDatoAdicionalNotaCredito 
-                 (Nombre,Descripcion,IdFactura) VALUES (:Nombre,:Descripcion,:IdNotaCredito);";
+                 (Nombre,Descripcion,IdNotaCredito) VALUES (:Nombre,:Descripcion,:IdNotaCredito);";
 
             $comando = $con->createCommand($sql);
             $comando->bindParam(":Nombre", $dadcEdoc[$i]['NOMBRECAMPO'], \PDO::PARAM_STR);

@@ -23,6 +23,7 @@ class SybaseRetenciones {
         GLOBAL $limit, $WS_URI, $WS_PORT, $WS_HOST,$timeWait;
         $obj_con = new cls_BaseSybase();
         $pdo = $obj_con->conexionSybase();
+        //$dadcDoc=array();
         try {
             $sql = "SELECT TOP $limit * FROM DBA.TCIDE_RETENCION_TEMP WHERE estado_proceso=0 ";
             $comando = $pdo->prepare($sql);
@@ -34,7 +35,10 @@ class SybaseRetenciones {
                     $tipEdoc = $this->tipoDoc;//"07";
                     $cabDoc = $rows[$i];//Cabecera de Factura
                     $detDoc = $this->consultarSybDetRetencion($pdo, $cabDoc['SYS_RETENCION_ID']);
-                    $dadcDoc = $this->consultarSybDatAdiRetencion($pdo, $cabDoc['SYS_RETENCION_ID']);
+                    $dadcDoc = $this->consultarSybDatAdiRetencion($pdo, $cabDoc['SYS_RETENCION_ID']);//NO GUARDA DATOS EN LA TABLA
+                    //$dadcDoc['NOMBRECAMPO']="Correo";
+                    //$dadcDoc['VALORCAMPO']=$cabDoc['MAILSUJETO'];
+                    //putMessageLogFile($dadcDoc);
                     $fpagFact=0;
                     //$fpagFact = $this->consultarSybForPagFacturas($pdo, $cabFact['SYS_RETENCION_ID']);
 
@@ -44,12 +48,12 @@ class SybaseRetenciones {
                     //putMessageLogFile($response);
                     $arr_response = json_decode($response, true);
                     if ($arr_response["state"] == 200 && $arr_response["error"] == 'false') {
-                        //putMessageLogFile("OK");
-                        $rows[$i]['ESTADO']='OK';
-                        // actualizar registro en sysbase
-                    } else {
+                        $estado = $arr_response["message"];
+                        //putMessageLogFile($estado);
+                        $rows[$i]['ESTADO'] = $estado["status"]; 
+                    }else {
                         //putMessageLogFile("ERROR");
-                        $rows[$i]['ESTADO']='NO_OK';
+                        $rows[$i]['ESTADO'] = 'NO_OK';
                         // no actualizar registro en sysbase y enviar mail de error a sysadmin
                     }
                     sleep($timeWait);
@@ -57,7 +61,9 @@ class SybaseRetenciones {
                 //putMessageLogFile($rows);
                 for ($i = 0; $i < sizeof($rows); $i++) {
                     if($rows[$i]['ESTADO']=='OK'){
-                        $this->actualizarEstadoDoc($rows[$i]['SYS_RETENCION_ID']);
+                        $this->actualizarEstadoDoc($rows[$i]['SYS_RETENCION_ID'],1);
+                    }else{
+                        $this->actualizarEstadoDoc($rows[$i]['SYS_RETENCION_ID'],2);
                     }
                 }
                 return TRUE;
@@ -103,15 +109,16 @@ class SybaseRetenciones {
     
  
     
-    private function actualizarEstadoDoc($id_docElectronico) { //OK
+    private function actualizarEstadoDoc($id_docElectronico,$EstPro) { //OK
         $obj_con = new cls_BaseSybase();
         $pdo = $obj_con->conexionSybase();
         $pdo->beginTransaction();
         try {
-            $sql = "UPDATE DBA.TCIDE_RETENCION_TEMP SET estado_proceso=1
+            $sql = "UPDATE DBA.TCIDE_RETENCION_TEMP SET estado_proceso=:estado
                         WHERE SYS_RETENCION_ID=:id ";
             $comando = $pdo->prepare($sql);
             $comando->bindParam(":id", $id_docElectronico, PDO::PARAM_INT);
+            $comando->bindParam(":estado", $EstPro, PDO::PARAM_INT);
             $resultado = $comando->execute();
             if ($resultado) {
                 $pdo->commit();

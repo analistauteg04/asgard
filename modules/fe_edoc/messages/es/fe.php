@@ -81,5 +81,6 @@ return array(
     'Total' => 'Total',
     'Term' => 'Plazo',
     'Time' => 'Tiempo',
+    'Save' => 'Guardar',
 );
 ?>

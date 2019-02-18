@@ -3,6 +3,7 @@ http://localhost/webshellasgard/envRecFact.php
 cambiar en la base la ruta base datos 
 SELECT * FROM db_edoc.VSFirmaDigital;
 /home/EDOC/GENERADO/
+UPDATE `db_edoc`.`VSFirmaDigital` SET `SeaDocXml`='/home/EDOC/GENERADO/' WHERE `Id`='1';
 cambiar la ruta de firma y el nombre 
 agregar privilegios a la carpeta
 chown -R apache.apache webshellasgard/

@@ -188,6 +188,8 @@
         $IRBPNR = "0.00";
         $ICE = "0.00";
         $BASEIVA0 = "0.00";
+        $BASEIVA12="0.00";
+	$VALORIVA12="0.00";
         $NOOBJIVA = "0.00";
         $EXENTOIVA = "0.00";
         $DESCUENTO = "0.00";

@@ -243,12 +243,14 @@ function fun_UpdateMail(){
 function fun_CambiaMail() {
     var ids = $('#txth_usu_mail').val();
     var correo = $('#txt_correo').val();
+    var dni = $('#txt_cedularuc').val();
     if ($('#txt_correo').val()!='' && ids!=0) {
         //pass = base64_encode(pass);
         var link = $('#txth_base').val() +"/fe_edoc/nubenotacredito/Savemail";
         var arrParams = new Object();
         arrParams.DATA = correo;
         arrParams.ID = ids;
+        arrParams.DNI = dni;
         requestHttpAjax(link, arrParams, function (response) {
             if (response.status == "OK") {
                 $("#messageInfo").html(response.message + buttonAlert);

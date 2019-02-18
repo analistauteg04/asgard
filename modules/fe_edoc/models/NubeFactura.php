@@ -97,7 +97,7 @@ class NubeFactura extends \app\modules\fe_edoc\components\CActiveRecord {
                 $sql .= "AND DATE(A.FechaEmision) BETWEEN '" . date("Y-m-d", strtotime($control[0]['F_INI'])) . "' AND '" . date("Y-m-d", strtotime($control[0]['F_FIN'])) . "'  ";
             }
         }
-        //$sql .= "ORDER BY A.IdFactura DESC  $limitrowsql";
+        $sql .= "ORDER BY A.IdFactura DESC  $limitrowsql";
         //echo $sql;
         
         $rawData = $con->createCommand($sql)->queryAll();
