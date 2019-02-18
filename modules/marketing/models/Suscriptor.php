@@ -135,10 +135,9 @@ class Suscriptor extends \yii\db\ActiveRecord {
         $sql = "
                SELECT
                     lst.lis_id,
-                    ifnull(per.per_id,0) per_id,
-                    if(ifnull(per.per_id,0)>0,1,2) per_tipo,
-                    if(ifnull(per.per_id,0)>0,per.per_id,pges.pges_id) id_psus,
-                    if(ifnull(per.per_id,0)=0,concat(pges.pges_pri_nombre, ' ', ifnull(pges.pges_pri_apellido,'')),concat(per.per_pri_nombre,' ',per.per_pri_apellido)) as contacto,	                    
+                    ifnull(per.per_id, 0) per_id,
+                    ifnull(pges.pges_id,0) id_psus,
+                    if(ifnull(per.per_id,0)=0,concat(pges.pges_pri_nombre, ' ', ifnull(pges.pges_pri_apellido,'')),concat(per.per_pri_nombre,' ',per.per_pri_apellido)) as contacto,	
                     if(isnull(mest.mest_nombre),eaca.eaca_nombre,mest.mest_nombre) carrera,
                     ifnull(per.per_correo, pges.pges_correo) per_correo,
                     ifnull(ls.lsus_estado_mailchimp,0) as estado_mailchimp,
@@ -147,14 +146,14 @@ class Suscriptor extends \yii\db\ActiveRecord {
                     acon.acon_nombre
                 FROM 
                     " . $con->dbname . ".lista lst
-                    LEFT JOIN " . $con2->dbname . ".estudio_academico as eaca on eaca.eaca_id= lst.eaca_id                    
+                    LEFT JOIN " . $con2->dbname . ".estudio_academico as eaca on eaca.eaca_id= lst.eaca_id 
                     LEFT JOIN " . $con2->dbname . ".modulo_estudio as mest on mest.mest_id = lst.mest_id
-                    LEFT JOIN " . $con4->dbname . ".solicitud_inscripcion as sins on sins.eaca_id = eaca.eaca_id or sins.mest_id = mest.mest_id
-                    LEFT JOIN " . $con3->dbname . ".oportunidad as opo on opo.eaca_id=eaca.eaca_id or opo.mest_id=mest.mest_id and opo.eaca_id != sins.eaca_id and opo.mest_id!=sins.mest_id                    
-                    LEFT JOIN " . $con4->dbname . ".interesado as inte on inte.int_id = sins.int_id                    
+                    LEFT JOIN " . $con3->dbname . ".oportunidad as opo on (opo.eaca_id=eaca.eaca_id or opo.mest_id=mest.mest_id) 
                     LEFT JOIN " . $con3->dbname . ".persona_gestion as pges on pges.pges_id=opo.pges_id
-                    LEFT JOIN " . $con1->dbname . ".persona as per on per.per_id = inte.per_id                    
-                    $join_subscrito                    
+                    LEFT JOIN " . $con1->dbname . ".persona as per on per.per_correo = pges.pges_correo
+                    LEFT JOIN " . $con4->dbname . ".interesado as inte on inte.per_id = per.per_id 
+                    LEFT JOIN " . $con4->dbname . ".solicitud_inscripcion as sins on ((sins.int_id = inte.int_id) and (sins.eaca_id = eaca.eaca_id or sins.mest_id = mest.mest_id))
+                    $join_subscrito
                     LEFT JOIN " . $con2->dbname . ".estudio_academico_area_conocimiento as eaac on eaac.eaca_id=eaca.eaca_id
                     LEFT JOIN " . $con2->dbname . ".area_conocimiento as acon on acon.acon_id=eaac.acon_id
                     LEFT JOIN " . $con->dbname . ".lista_suscriptor ls on (sus.sus_id = ls.sus_id and ls.lis_id = lst.lis_id)
@@ -165,32 +164,32 @@ class Suscriptor extends \yii\db\ActiveRecord {
                     $query_subscrito
                     $str_search
                 UNION
-                SELECT  ls.lis_id,
-                        sus.per_id per_id,
-                        if(ifnull(sus.per_id,0)>0,1,2) per_tipo,
-                        if(ifnull(sus.per_id,0)>0,p.per_id,pg.pges_id) id_psus,        
-                        if(ifnull(sus.per_id,0)=0,concat(pg.pges_pri_nombre, ' ', ifnull(pg.pges_pri_apellido,'')),concat(p.per_pri_nombre,' ',p.per_pri_apellido)) as contacto,	
-                        if(isnull(mest.mest_nombre),eaca.eaca_nombre,mest.mest_nombre) carrera,
-                        ifnull(p.per_correo, pg.pges_correo) per_correo,
-                        ifnull(ls.lsus_estado_mailchimp,0) as estado_mailchimp,
-                        if(ifnull(sus.sus_id,0)>0 and ls.lis_id = :list_id and sus.sus_estado ='1',1,0) as estado,
-                        acon.acon_id,
-                        acon.acon_nombre
-                FROM " . $con->dbname . ".lista_suscriptor ls inner join " . $con->dbname . ".suscriptor sus on sus.sus_id = ls.sus_id
-                INNER JOIN " . $con1->dbname . ".persona p on p.per_id = sus.per_id
-                INNER JOIN " . $con->dbname . ".lista l on l.lis_id = ls.lis_id
-                LEFT JOIN " . $con2->dbname . ".estudio_academico as eaca on eaca.eaca_id= l.eaca_id 
-                LEFT JOIN " . $con2->dbname . ".modulo_estudio as mest on mest.mest_id = l.mest_id
-                LEFT JOIN " . $con3->dbname . ".persona_gestion pg on pg.pges_id = sus.pges_id   	
-                LEFT JOIN " . $con2->dbname . ".estudio_academico_area_conocimiento as eaac on eaac.eaca_id=eaca.eaca_id
-                LEFT JOIN " . $con2->dbname . ".area_conocimiento as acon on acon.acon_id=eaac.acon_id
-                WHERE   ls.lis_id = :list_id AND
-                        ls.lsus_estado = :estado AND
-                        ls.lsus_estado_logico = :estado AND
-                        sus.sus_estado = :estado AND
-                        sus.sus_estado_logico = :estado                        
-                        $str_search
-               ";
+                SELECT lst.lis_id,
+                    ifnull(per.per_id, 0) per_id,
+                    ifnull(pges.pges_id,0) id_psus,
+                    if(ifnull(per.per_id,0)=0,concat(pges.pges_pri_nombre, ' ', ifnull(pges.pges_pri_apellido,'')),concat(per.per_pri_nombre,' ',per.per_pri_apellido)) as contacto,	
+                    if(isnull(mest.mest_nombre),eaca.eaca_nombre,mest.mest_nombre) carrera,
+                    ifnull(per.per_correo, pges.pges_correo) per_correo,
+                    ifnull(ls.lsus_estado_mailchimp,0) as estado_mailchimp,
+                    if(ifnull(sus.sus_id,0)>0 and lst.lis_id = :list_id and sus.sus_estado =:estado,1,0) as estado,
+                    acon.acon_id,
+                    acon.acon_nombre
+                    FROM " . $con->dbname . ".lista lst
+                    LEFT JOIN " . $con2->dbname . ".estudio_academico as eaca on eaca.eaca_id= lst.eaca_id 
+                    LEFT JOIN " . $con2->dbname . ".modulo_estudio as mest on mest.mest_id = lst.mest_id
+                    LEFT JOIN " . $con4->dbname . ".solicitud_inscripcion as sins on (sins.eaca_id = eaca.eaca_id or sins.mest_id = mest.mest_id)
+                    LEFT JOIN " . $con4->dbname . ".interesado i on i.int_id = sins.int_id
+                    LEFT JOIN " . $con1->dbname . ".persona per on per.per_id = i.per_id
+                    LEFT JOIN " . $con3->dbname . ".persona_gestion as pges on per.per_correo = pges.pges_correo
+                    LEFT JOIN " . $con2->dbname . ".estudio_academico_area_conocimiento as eaac on eaac.eaca_id=eaca.eaca_id
+                    LEFT JOIN " . $con2->dbname . ".area_conocimiento as acon on acon.acon_id=eaac.acon_id
+                    $join_subscrito
+                    LEFT JOIN " . $con->dbname . ".lista_suscriptor ls on sus.sus_id = ls.sus_id
+                    WHERE lst.lis_id = :list_id AND
+                    lst.lis_estado = :estado AND
+                    lst.lis_estado_logico = :estado
+                    $str_search";
+               
         $comando = $con->createCommand($sql);
         $comando->bindParam(":estado", $estado, \PDO::PARAM_STR);
         $comando->bindParam(":list_id", $list_id, \PDO::PARAM_INT);
@@ -306,8 +305,8 @@ class Suscriptor extends \yii\db\ActiveRecord {
                           lsus.lsus_estado = :estado_cambio,
                           sus.sus_fecha_modificacion = :fecha_modificacion, 
                           lsus.lsus_fecha_modificacion = :fecha_modificacion
-                      WHERE sus.per_id = ifnull(:per_id,0) AND
-                            ifnull(sus.pges_id,0) = ifnull(:pges_id,0) AND
+                      WHERE sus.per_id = :per_id AND
+                            sus.pges_id = :pges_id AND
                             lsus.lis_id = :lista_id ");
 
             $comando->bindParam(":estado", $estado, \PDO::PARAM_STR);
@@ -416,14 +415,12 @@ class Suscriptor extends \yii\db\ActiveRecord {
         }
         if ($mpid == 1) {
             $mostraper_id = 'ifnull(per.per_id,0) as per_id,';
-            $mostrapges_id = 'ifnull(pges.pges_id,0) as pges_id,';        // ESTO DUPLICA LA DATA
-            $mostrartipo = 'if(ifnull(per.per_id,0)>0,1,2) per_tipo,';    // ESTO DUPLICA LA DATA
+            $mostrapges_id = 'ifnull(pges.pges_id,0) as pges_id,';        // ESTO DUPLICA LA DATA            
         }
         $sql = "
                 SELECT
                     $mostraper_id
-                    $mostrapges_id
-                    $mostrartipo
+                    $mostrapges_id                    
                     if(ifnull(per.per_id,0)=0,concat(pges.pges_pri_nombre, ' ', ifnull(pges.pges_pri_apellido,'')),concat(per.per_pri_nombre,' ',per.per_pri_apellido)) as contacto,	                                        
                     if(isnull(mest.mest_nombre),eaca.eaca_nombre,mest.mest_nombre) carrera,
                     ifnull(per.per_correo, pges.pges_correo) per_correo, 
@@ -431,17 +428,16 @@ class Suscriptor extends \yii\db\ActiveRecord {
                       WHEN ifnull(sus.sus_id,0) > 0 and sus.sus_estado ='1' and ls.lsus_estado = '1' and ls.lsus_estado_mailchimp IS NULL THEN 'Suscrito'   
                       WHEN ifnull(sus.sus_id,0) = 0 or (sus.sus_estado ='0' and ls.lsus_estado = '0') THEN 'No suscrito'   
                       WHEN ifnull(ls.lsus_estado_mailchimp,0) = '1' and ls.lsus_estado = '1' and sus.sus_estado = '1' THEN 'Mailing'
-                    END as estado
-                    -- if(ifnull(sus.sus_id,0)>0 and sus.sus_estado =:estado,'Subscrito','No Subscrito') as estado                  
-                FROM 
+                    END as estado                    
+                FROM                     
                     " . $con->dbname . ".lista lst
-                    LEFT JOIN " . $con2->dbname . ".estudio_academico as eaca on eaca.eaca_id= lst.eaca_id                    
+                    LEFT JOIN " . $con2->dbname . ".estudio_academico as eaca on eaca.eaca_id= lst.eaca_id 
                     LEFT JOIN " . $con2->dbname . ".modulo_estudio as mest on mest.mest_id = lst.mest_id
-                    LEFT JOIN " . $con4->dbname . ".solicitud_inscripcion as sins on sins.eaca_id = eaca.eaca_id or sins.mest_id = mest.mest_id
-                    LEFT JOIN " . $con3->dbname . ".oportunidad as opo on opo.eaca_id=eaca.eaca_id or opo.mest_id=mest.mest_id and opo.eaca_id != sins.eaca_id and opo.mest_id!=sins.mest_id                    
-                    LEFT JOIN " . $con4->dbname . ".interesado as inte on inte.int_id = sins.int_id                    
+                    LEFT JOIN " . $con3->dbname . ".oportunidad as opo on (opo.eaca_id=eaca.eaca_id or opo.mest_id=mest.mest_id) 
                     LEFT JOIN " . $con3->dbname . ".persona_gestion as pges on pges.pges_id=opo.pges_id
-                    LEFT JOIN " . $con1->dbname . ".persona as per on per.per_id = inte.per_id
+                    LEFT JOIN " . $con1->dbname . ".persona as per on per.per_correo = pges.pges_correo
+                    LEFT JOIN " . $con4->dbname . ".interesado as inte on inte.per_id = per.per_id 
+                    LEFT JOIN " . $con4->dbname . ".solicitud_inscripcion as sins on ((sins.int_id = inte.int_id) and (sins.eaca_id = eaca.eaca_id or sins.mest_id = mest.mest_id))
                     $join_subscrito
                     LEFT JOIN " . $con2->dbname . ".estudio_academico_area_conocimiento as eaac on eaac.eaca_id=eaca.eaca_id
                     LEFT JOIN " . $con2->dbname . ".area_conocimiento as acon on acon.acon_id=eaac.acon_id
@@ -455,8 +451,7 @@ class Suscriptor extends \yii\db\ActiveRecord {
                 UNION
                 SELECT  
                         $mostraper_id
-                        $mostrapges_id
-                        $mostrartipo
+                        $mostrapges_id                        
                         if(ifnull(per.per_id,0)=0,concat(pges.pges_pri_nombre, ' ', ifnull(pges.pges_pri_apellido,'')),concat(per.per_pri_nombre,' ',per.per_pri_apellido)) as contacto,
                         if(isnull(mest.mest_nombre),eaca.eaca_nombre,mest.mest_nombre) carrera,                        
                         ifnull(per.per_correo, pges.pges_correo) per_correo, 
@@ -464,23 +459,22 @@ class Suscriptor extends \yii\db\ActiveRecord {
                             WHEN ifnull(sus.sus_id,0) > 0 and sus.sus_estado ='1' and ls.lsus_estado = '1' and ls.lsus_estado_mailchimp IS NULL THEN 'Suscrito'   
                             WHEN ifnull(sus.sus_id,0) = 0 or (sus.sus_estado ='0' and ls.lsus_estado = '0') THEN 'No suscrito'   
                             WHEN ifnull(ls.lsus_estado_mailchimp,0) = '1' and ls.lsus_estado = '1' and sus.sus_estado = '1' THEN 'Mailing'
-                    END as estado
-                        -- if(ifnull(sus.sus_id,0)>0 and sus.sus_estado =:estado,'Subscrito','No Subscrito') as estado
-                FROM " . $con->dbname . ".lista_suscriptor ls inner join " . $con->dbname . ".suscriptor sus on (sus.sus_id = ls.sus_id)
-                    INNER JOIN " . $con1->dbname . ".persona per on per.per_id = sus.per_id
-                    INNER JOIN " . $con->dbname . ".lista l on l.lis_id = ls.lis_id
-                    LEFT JOIN " . $con2->dbname . ".estudio_academico as eaca on eaca.eaca_id= l.eaca_id
-                    LEFT JOIN " . $con2->dbname . ".modulo_estudio as mest on mest.mest_id = l.mest_id
-                    LEFT JOIN " . $con3->dbname . ".persona_gestion pges on pges.pges_id = sus.pges_id
+                    END as estado                        
+                FROM " . $con->dbname . ".lista lst
+                    LEFT JOIN " . $con2->dbname . ".estudio_academico as eaca on eaca.eaca_id= lst.eaca_id 
+                    LEFT JOIN " . $con2->dbname . ".modulo_estudio as mest on mest.mest_id = lst.mest_id
+                    LEFT JOIN " . $con4->dbname . ".solicitud_inscripcion as sins on (sins.eaca_id = eaca.eaca_id or sins.mest_id = mest.mest_id)
+                    LEFT JOIN " . $con4->dbname . ".interesado i on i.int_id = sins.int_id
+                    LEFT JOIN " . $con1->dbname . ".persona per on per.per_id = i.per_id
+                    LEFT JOIN " . $con3->dbname . ".persona_gestion as pges on per.per_correo = pges.pges_correo
                     LEFT JOIN " . $con2->dbname . ".estudio_academico_area_conocimiento as eaac on eaac.eaca_id=eaca.eaca_id
                     LEFT JOIN " . $con2->dbname . ".area_conocimiento as acon on acon.acon_id=eaac.acon_id
-                WHERE   ls.lis_id = :list_id AND
-                        ls.lsus_estado = :estado AND
-                        ls.lsus_estado_logico = :estado AND
-                        sus.sus_estado = :estado AND
-                        sus.sus_estado_logico = :estado                   
-                        $str_search
-               ";
+                    $join_subscrito
+                    LEFT JOIN " . $con->dbname . ".lista_suscriptor ls on sus.sus_id = ls.sus_id
+                    WHERE lst.lis_id = :list_id AND
+                    lst.lis_estado = :estado AND
+                    lst.lis_estado_logico = :estado
+                    $str_search";               
         $comando = $con->createCommand($sql);
         $comando->bindParam(":estado", $estado, \PDO::PARAM_STR);
         $comando->bindParam(":list_id", $list_id, \PDO::PARAM_INT);

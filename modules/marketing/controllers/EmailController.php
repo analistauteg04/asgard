@@ -116,7 +116,7 @@ class EmailController extends \app\components\CController {
             $con = \Yii::$app->db_mailing;
             $data = Yii::$app->request->post();
             $lista_model = $mod_lista->consultarListaXID($data["list_id"]);
-            \app\models\Utilities::putMessageLogFile('acción:'. $data["accion"] );                        
+            //\app\models\Utilities::putMessageLogFile('acción:'. $data["accion"] );                        
             if ($data["accion"] == 'sc') {
                 $ps_id = $data["psus_id"];
                 $per_tipo = $data["per_tipo"];
@@ -680,15 +680,9 @@ class EmailController extends \app\components\CController {
         if (Yii::$app->request->isAjax) {
             $data = Yii::$app->request->post();
             if ($data["accion"] = 'sc') {
-                $lista_id = $data["list_id"];
-                $per_tipo = $data["per_tipo"];
-                if ($per_tipo == 1) {
-                    $per_id = $data["per_id"];
-                    $pges_id = null;
-                } else {
-                    $pges_id = $data["pges_id"];
-                    $per_id = 0;
-                }
+                $lista_id = $data["list_id"];                
+                $per_id = $data["per_id"];                
+                $pges_id = $data["pges_id"];                               
                 //\app\models\Utilities::putMessageLogFile('estado_cambio:'.$estado_cambio);
                 $esus = $mod_sb->updateSuscripto($per_id, $pges_id, $lista_id, $estado_cambio);
                 if ($esus > 0) {
