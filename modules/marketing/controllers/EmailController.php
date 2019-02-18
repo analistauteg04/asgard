@@ -853,6 +853,7 @@ class EmailController extends \app\components\CController {
                                 }
                             }
                             $insertadalista = $mod_sb->insertarListaSuscritorTodos($asuscribirli);
+                            $exito = 1;
                         }
                     }
                     if (!empty($modsus_id)) {
@@ -891,7 +892,7 @@ class EmailController extends \app\components\CController {
                     } else {
                         $transaction->rollback();
                         $message = array(
-                            "wtmessage" => Yii::t("notificaciones", "Error al grabar." . $mensaje),
+                            "wtmessage" => Yii::t("notificaciones", "Error al grabar1." . $mensaje),
                             "title" => Yii::t('jslang', 'Error'),
                         );
                         echo Utilities::ajaxResponse('NO_OK', 'Error', Yii::t("jslang", "Error"), false, $message);
@@ -907,7 +908,7 @@ class EmailController extends \app\components\CController {
             } catch (Exception $ex) {
                 $transaction->rollback();
                 $message = array(
-                    "wtmessage" => $ex->getMessage(), Yii::t("notificaciones", "Error al grabar."),
+                    "wtmessage" => $ex->getMessage(), Yii::t("notificaciones", "Error al grabar2."),
                     "title" => Yii::t('jslang', 'Error'),
                 );
                 return Utilities::ajaxResponse('NO_OK', 'alert', Yii::t("jslang", "Error"), true, $message);

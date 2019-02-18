@@ -141,7 +141,7 @@ class Suscriptor extends \yii\db\ActiveRecord {
                     if(isnull(mest.mest_nombre),eaca.eaca_nombre,mest.mest_nombre) carrera,
                     ifnull(per.per_correo, pges.pges_correo) per_correo,
                     ifnull(ls.lsus_estado_mailchimp,0) as estado_mailchimp,
-                    if(ifnull(sus.sus_id,0)>0 and ls.lis_id = :list_id and sus.sus_estado =:estado,1,0) as estado,
+                    if(ifnull(ls.sus_id,0)>0 and ls.lis_id = :list_id  and ls.lsus_estado =:estado,1,0) as estado,                    
                     acon.acon_id,
                     acon.acon_nombre
                 FROM 
@@ -171,7 +171,7 @@ class Suscriptor extends \yii\db\ActiveRecord {
                     if(isnull(mest.mest_nombre),eaca.eaca_nombre,mest.mest_nombre) carrera,
                     ifnull(per.per_correo, pges.pges_correo) per_correo,
                     ifnull(ls.lsus_estado_mailchimp,0) as estado_mailchimp,
-                    if(ifnull(sus.sus_id,0)>0 and lst.lis_id = :list_id and sus.sus_estado =:estado,1,0) as estado,
+                    if(ifnull(ls.sus_id,0)>0 and ls.lis_id = :list_id and ls.lsus_estado =:estado,1,0) as estado,                    
                     acon.acon_id,
                     acon.acon_nombre
                     FROM " . $con->dbname . ".lista lst
@@ -184,7 +184,7 @@ class Suscriptor extends \yii\db\ActiveRecord {
                     LEFT JOIN " . $con2->dbname . ".estudio_academico_area_conocimiento as eaac on eaac.eaca_id=eaca.eaca_id
                     LEFT JOIN " . $con2->dbname . ".area_conocimiento as acon on acon.acon_id=eaac.acon_id
                     $join_subscrito
-                    LEFT JOIN " . $con->dbname . ".lista_suscriptor ls on sus.sus_id = ls.sus_id
+                    LEFT JOIN " . $con->dbname . ".lista_suscriptor ls on (sus.sus_id = ls.sus_id and ls.lis_id = lst.lis_id)
                     WHERE lst.lis_id = :list_id AND
                     lst.lis_estado = :estado AND
                     lst.lis_estado_logico = :estado
