@@ -54,7 +54,7 @@ class SybaseFactura {
                     if ($arr_response["state"] == 200 && $arr_response["error"] == 'false') {
                         //putMessageLogFile("OK");
                         $estado = $arr_response["message"];
-                        putMessageLogFile($estado);
+                        //putMessageLogFile($estado);
                         $rows[$i]['ESTADO'] = $estado["status"];                        
                         // actualizar registro en sysbase
                     } else {
