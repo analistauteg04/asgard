@@ -5,7 +5,7 @@ namespace app\modules\academico\controllers;
 use Yii;
 use yii\helpers\ArrayHelper;
 use app\models\Utilities;
-use app\modules\academico\models\MatriculadosReprobado;
+use app\modules\academico\models\PeriodoAcademicoMetIngreso;
 use app\modules\academico\models\RegistroMarcacion;
 use DateTime;
 
@@ -23,15 +23,33 @@ class MarcacionController extends \app\components\CController {
 
     public function actionIndex() {
         $mod_marcacion = new RegistroMarcacion();
-        $arr_historico = $mod_marcacion->consultarRegistroMarcacion();
+        $mod_periodo = new PeriodoAcademicoMetIngreso();
+        //$arr_historico = $mod_marcacion->consultarRegistroMarcacion();
+        $periodo = $mod_periodo->consultarPeriodoAcademico();
+        $data = Yii::$app->request->get();
+        if ($data['PBgetFilter']) {
+            $arrSearch["profesor"] = $data['profesor'];
+            $arrSearch["materia"] = $data['materia'];
+            $arrSearch["f_ini"] = $data['f_ini'];
+            $arrSearch["f_fin"] = $data['f_fin'];          
+            $arrSearch["periodo"] = $data['periodo'];
+            $arr_historico = $mod_marcacion->consultarRegistroMarcacion($arrSearch);
+            return $this->render('index-grid', [
+                        'model' => $arr_historico,
+            ]);
+        } else {
+            $arr_historico = $mod_marcacion->consultarRegistroMarcacion($arrSearch);
+        }
+        if (Yii::$app->request->isAjax) {
+            $data = Yii::$app->request->post();
+        }
         return $this->render('index', [
                     'model' => $arr_historico,
-                    'arr_periodo' => ArrayHelper::map(array_merge([["id" => "0", "name" => "Todas"], ["id" => "1", "name" => "Periodo 1"]]/* , $periodo */), "id", "name"),
-                    'arr_materia' => ArrayHelper::map(array_merge([["id" => "0", "name" => "Todas"], ["id" => "1", "name" => "Materia 1"]]/* , $materia */), "id", "name"),
+                    'arr_periodo' => ArrayHelper::map(array_merge([["id" => "0", "name" => "Todas"]], $periodo), "id", "name"),
         ]);
     }
 
-    public function actionSave() {     
+    public function actionSave() {
         $usuario = @Yii::$app->session->get("PB_iduser");
         $busqueda = 0;
         if (Yii::$app->request->isAjax) {
@@ -40,7 +58,7 @@ class MarcacionController extends \app\components\CController {
             $profesor = $data["profesor"];
             $hape_id = $data["hape_id"];
             $horario = $data["horario"];
-            $dia = $data["dia"];           
+            $dia = $data["dia"];
             $fecha = date(Yii::$app->params["dateByDefault"]); // solo envia Y-m-d
             if ($accion == 'E') {
                 $texto = 'entrada';
@@ -71,17 +89,17 @@ class MarcacionController extends \app\components\CController {
                         list($horas, $minutos, $segundos) = explode(':', $horacalculada);
                         $hora_en_segundos = ($horas * 3600 ) + ($minutos * 60 ) + $segundos;
                         $minutosfinales = $hora_en_segundos / 60;
-                        /*\app\models\Utilities::putMessageLogFile('hora actual: ' . $hora_fin);
-                        \app\models\Utilities::putMessageLogFile('hota inicia: ' . $hora_inicio);
-                         \ \app\models\Utilities::putMessageLogFile('diferencia: ' . $minutosfinales); */
+                        /* \app\models\Utilities::putMessageLogFile('hora actual: ' . $hora_fin);
+                          \app\models\Utilities::putMessageLogFile('hota inicia: ' . $hora_inicio);
+                          \ \app\models\Utilities::putMessageLogFile('diferencia: ' . $minutosfinales); */
                         if (new DateTime($hora_inicio) < new DateTime($real_inicia)) {
                             $minutosfinales = $minutosfinales * -1;
-                        }                      
+                        }
                         if ($minutosfinales >= -30 && new DateTime($hora_inicio) < new DateTime($hora_fin)) { //SOLO PUEDE MARCAR 30 MINUTOS ANTES DEL INICIO Y UN 1 MINUTO ANTES DEL FINAL
                             $resp_marca = $mod_marcacion->insertarMarcacion($accion, $profesor, $hape_id, $hora_inicio, null, $ip, $usuario);
                             if ($resp_marca) {
                                 if ($minutosfinales >= 15) { // AL MARCAR 15 MINUTOS DESPUES ENVIA MENSAJE
-                                    $retraso = 'La entrado fue '. round($minutosfinales, 0, PHP_ROUND_HALF_DOWN) . ' después';
+                                    $retraso = 'La entrado fue ' . round($minutosfinales, 0, PHP_ROUND_HALF_DOWN) . ' después';
                                 }
                                 $exito = 1;
                             }
@@ -102,7 +120,7 @@ class MarcacionController extends \app\components\CController {
                             $minutosfinales = $minutosfinales * -1;
                         }
                         /* \app\models\Utilities::putMessageLogFile('dasd: ' . $real_fin);
-                          \app\models\Utilities::putMessageLogFile('sdd: ' . $hora_fin); */                    
+                          \app\models\Utilities::putMessageLogFile('sdd: ' . $hora_fin); */
                         if ($minutosfinales >= 0 && $minutosfinales <= 30) { // SOLO PUEDE MARCAR SALIDA DE A LA HORA DE LA SALIDA Y HASTA 30 MINUTOS DESPUES
                             $cons_marcainicio = $mod_marcacion->consultarMarcacionExiste($hape_id, $profesor, $fecha, 'E');
                             if ($cons_marcainicio["marcacion"] > 0) {
@@ -120,7 +138,7 @@ class MarcacionController extends \app\components\CController {
                         }
                     }
                     if ($exito) {
-                        $mensaje = 'Ha registrado la hora de ' . $texto. ' '.$retraso;
+                        $mensaje = 'Ha registrado la hora de ' . $texto . ' ' . $retraso;
                         $transaction->commit();
                         $message = array(
                             "wtmessage" => Yii::t("notificaciones", "La infomación ha sido grabada. " . $mensaje),
@@ -130,7 +148,7 @@ class MarcacionController extends \app\components\CController {
                     } else {
                         $transaction->rollback();
                         $message = array(
-                            "wtmessage" => Yii::t("notificaciones", "Error al grabar. " . $mensaje),
+                            "wtmessage" => Yii::t("notificaciones", $mensaje),
                             "title" => Yii::t('jslang', 'Error'),
                         );
                         return Utilities::ajaxResponse('NO_OK', 'alert', Yii::t("jslang", "Error"), true, $message);

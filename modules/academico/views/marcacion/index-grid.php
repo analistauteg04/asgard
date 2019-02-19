@@ -14,7 +14,7 @@ admision::registerTranslations();
 <div>        
     <?=
     PbGridView::widget([
-        'id' => 'Pbcontacto',
+        'id' => 'PbMarcacion',
         'showExport' => true,
         'dataProvider' => $model,
         'columns' => [

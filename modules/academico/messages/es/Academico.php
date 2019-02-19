@@ -44,6 +44,7 @@ return [
     "Registered" => "Matriculado",
     "Registration by Homologation" => "Matriculación por Homologación",
     "Search DNI" => "Buscar DNI",
+    "Search by Matter" => "Buscar por Materia",
     "Schedule" => "Horario",
     "Teacher" => "Profesor",
     "Teacher Dialing" => "Marcación Profesor",

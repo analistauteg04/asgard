@@ -280,9 +280,31 @@ class RegistroMarcacion extends \yii\db\ActiveRecord {
      * @property  
      * @return  
      */
-    public function consultarRegistroMarcacion() {
+    public function consultarRegistroMarcacion($arrFiltro = array(), $onlyData = false) {
         $con = \Yii::$app->db_academico;
         $estado = 1;
+         if (isset($arrFiltro) && count($arrFiltro) > 0) {
+            /*$str_search .= "(pg.pges_pri_nombre like :search OR ";
+            $str_search .= "pg.pges_seg_nombre like :search OR ";
+            $str_search .= "pg.pges_pri_apellido like :search OR ";
+            $str_search .= "pg.pges_seg_apellido like :search OR ";
+            $str_search .= "pg.pges_codigo like :search )  AND ";*/
+            
+            /*if ($arrFiltro['materia'] != "" && $arrFiltro['materia'] > 0) {
+                $str_search .= "(pg.pges_pri_nombre like :search OR ";
+                $str_search .= "pg.pges_seg_nombre like :search OR ";
+                $str_search .= "pg.pges_pri_apellido like :search OR ";
+                $str_search .= "pg.pges_seg_apellido like :search OR ";
+                $str_search .= "pg.pges_codigo like :search )  AND ";
+            } */           
+            if ($arrFiltro['f_ini'] != "" && $arrFiltro['f_fin'] != "") {
+                $str_search .= "hap.hape_fecha_creacion >= :fec_ini AND ";
+                $str_search .= "hap.hape_fecha_creacion <= :fec_fin AND ";
+            }  
+            if ($arrFiltro['periodo'] != "" && $arrFiltro['periodo'] > 0) {
+                $str_search .= " hap.paca_id = :periodo AND ";
+            }
+        }
         $sql = "
                SELECT
                     asig.asi_nombre as materia,
@@ -291,11 +313,12 @@ class RegistroMarcacion extends \yii\db\ActiveRecord {
                     hap.hape_hora_entrada as inicio_esperado,
                     DATE_FORMAT(rma.rmar_fecha_hora_salida, '%H:%i:%s') as hora_salida,
                     hap.hape_hora_salida as salida_esperada,
-                    rma.rmar_direccion_ip as ip 
+                    rma.rmar_direccion_ip as ip,
+                    hap.paca_id as periodo
                     FROM " . $con->dbname . ".registro_marcacion rma
                     INNER JOIN " . $con->dbname . ".horario_asignatura_periodo hap on hap.hape_id = rma.hape_id
                     INNER JOIN " . $con->dbname . ".asignatura asig on asig.asi_id = hap.asi_id    
-                    WHERE
+                    WHERE $str_search
                     rma.rmar_estado = :estado AND
                     rma.rmar_estado_logico = :estado AND
                     hap.hape_estado = :estado AND
@@ -305,6 +328,28 @@ class RegistroMarcacion extends \yii\db\ActiveRecord {
                ";
         $comando = $con->createCommand($sql);
         $comando->bindParam(":estado", $estado, \PDO::PARAM_STR);
+        if (isset($arrFiltro) && count($arrFiltro) > 0) {
+            /*$search_cond = "%" . $arrFiltro["search"] . "%";
+            $comando->bindParam(":search", $search_cond, \PDO::PARAM_STR); */
+            
+            $fecha_ini = $arrFiltro["f_ini"] . " 00:00:00";
+            $fecha_fin = $arrFiltro["f_fin"] . " 23:59:59";
+            
+            /*if ($arrFiltro['materia'] != "" && $arrFiltro['materia'] > 0) {                
+                $materia = "%" . $arrFiltro["materia"] . "%";
+                $comando->bindParam(":materia", $materia, \PDO::PARAM_STR);
+            }*/
+            
+            if ($arrFiltro['f_ini'] != "" && $arrFiltro['f_fin'] != "") {
+                $comando->bindParam(":fec_ini", $fecha_ini, \PDO::PARAM_STR);
+                $comando->bindParam(":fec_fin", $fecha_fin, \PDO::PARAM_STR);
+            }
+            if ($arrFiltro['periodo'] != "" && $arrFiltro['periodo'] > 0) {
+                $periodo = $arrFiltro["periodo"];
+                $comando->bindParam(":periodo", $periodo, \PDO::PARAM_INT);
+            }            
+            
+        }
         $resultData = $comando->queryAll();
         $dataProvider = new ArrayDataProvider([
             'key' => 'id',

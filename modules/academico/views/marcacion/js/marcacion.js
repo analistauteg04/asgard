@@ -1,5 +1,7 @@
 $(document).ready(function () {
-
+$('#btn_buscarMarcacion').click(function () {
+        actualizarGridMarcacion();
+    });
 });
 
 function Marcacion(hape_id,horario,accion,dia,prof_id) {    
@@ -19,5 +21,20 @@ function Marcacion(hape_id,horario,accion,dia,prof_id) {
                 }, 5000);
             }
         }, true);
+    }
+}
+
+function actualizarGridMarcacion() {
+    var profesor = $('#txt_buscarDataProfesor').val();
+    var materia = $('#txt_buscarDataMateria').val();    
+    var f_ini = $('#txt_fecha_ini').val();
+    var f_fin = $('#txt_fecha_fin').val();    
+    var periodo = $('#cmb_periodo option:selected').val();
+    
+    //Buscar almenos una clase con el nombre para ejecutar
+    if (!$(".blockUI").length) {
+        showLoadingPopup();
+        $('#PbMarcacion').PbGridView('applyFilterData', {'profesor': profesor, 'materia': materia, 'f_ini': f_ini, 'f_fin': f_fin, 'periodo': periodo});
+        setTimeout(hideLoadingPopup, 2000);
     }
 }

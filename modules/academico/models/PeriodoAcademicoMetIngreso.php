@@ -623,10 +623,11 @@ class PeriodoAcademicoMetIngreso extends  \app\modules\academico\components\CAct
         $estado = 1;
         $sql = "SELECT 
                    pera.paca_id as id,
-                   pera.paca_codigo as name
+                   pera.paca_anio_academico as name
                 FROM 
                    " . $con->dbname . ".periodo_academico pera WHERE ";
-        $sql .= "  pera.paca_estado = :estado AND
+        $sql .= "  pera.paca_activo = 'A' AND
+                   pera.paca_estado = :estado AND
                    pera.paca_estado_logico = :estado";
 
         $comando = $con->createCommand($sql);
