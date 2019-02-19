@@ -76,6 +76,7 @@ class PbVPOS extends Widget {
             $response = $this->redirectRequest();
         }else{
             $response = $this->getInfoPayment($this->requestID);
+            return $response;
         }
         
         //echo $this->returnUrl;
@@ -174,7 +175,7 @@ class PbVPOS extends Widget {
             //->setCredentials($user, $apiKey)
             ->doPost($WS_URI, json_encode($params));
         $arr_response = json_decode($response, true);
-        //$this->saveResponseDB($this->referenceID, $arr_response);
+        $this->saveResponseDB($this->referenceID, $arr_response);
         return $arr_response;
     }
 
@@ -196,7 +197,7 @@ class PbVPOS extends Widget {
             //->setCredentials($user, $apiKey)
             ->doPost($WS_URI, json_encode ($params));
         $arr_response = json_decode($response, true);
-        //$this->saveInfoResponseDB($arr_response);
+        $this->saveInfoResponseDB($arr_response);
         return $arr_response;
     }
 
@@ -328,7 +329,7 @@ class PbVPOS extends Widget {
             :processUrl,
             :json_response,
             :estado_logico)";
-
+        $comando = $con->createCommand($sql);
         $comando->bindParam(":reference", $reference, \PDO::PARAM_INT);
         $comando->bindParam(":requestId", $requestId, \PDO::PARAM_STR);
         $comando->bindParam(":status", $status, \PDO::PARAM_STR);
@@ -344,23 +345,23 @@ class PbVPOS extends Widget {
     private function saveInfoResponseDB($params){
         $conection = $this->dbConection;
         $con = \Yii::$app->$conection;
-        $reference = $params["reference"];
+        $reference = $params["request"]["payment"]["reference"];
         $requestId = $params["requestId"];
         $status = $params["status"]["status"];
         $reason = $params["status"]["reason"];
         $message = $params["status"]["message"];
         $date = $params["status"]["date"];
         
-        $payment_status = $params["payment"]["status"]["status"];
-        $payment_reason = $params["payment"]["status"]["reason"];
-        $payment_message = $params["payment"]["status"]["message"];
-        $payment_date = $params["payment"]["status"]["date"];
-        $internalReference = $params["payment"]["internalReference"];
-        $paymenMethod = $params["payment"]["paymentMethod"];
-        $paymentMethodName = $params["payment"]["paymentMethodName"];
-        $issuerName = $params["payment"]["issuerName"];
-        $autorization = $params["payment"]["authorization"];
-        $receipt = $params["payment"]["receipt"];
+        $payment_status = $params["payment"][0]["status"]["status"];
+        $payment_reason = $params["payment"][0]["status"]["reason"];
+        $payment_message = $params["payment"][0]["status"]["message"];
+        $payment_date = $params["payment"][0]["status"]["date"];
+        $internalReference = $params["payment"][0]["internalReference"];
+        $paymenMethod = $params["payment"][0]["paymentMethod"];
+        $paymentMethodName = $params["payment"][0]["paymentMethodName"];
+        $issuerName = $params["payment"][0]["issuerName"];
+        $autorization = $params["payment"][0]["authorization"];
+        $receipt = $params["payment"][0]["receipt"];
         $json_info = json_encode($params);
         $estado_logico = "1";
 
@@ -402,7 +403,7 @@ class PbVPOS extends Widget {
             :receipt,
             :json_info,
             :estado_logico)";
-
+        $comando = $con->createCommand($sql);
         $comando->bindParam(":reference", $reference, \PDO::PARAM_INT);
         $comando->bindParam(":requestId", $requestId, \PDO::PARAM_STR);
         $comando->bindParam(":status", $status, \PDO::PARAM_STR);

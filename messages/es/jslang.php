@@ -92,6 +92,7 @@ return array(
     'Page not found' => 'Página no encontrada.',
     'Payment required' => 'Pago requerido.',
     'Problem with request or your session has ended' => 'Hay problemas con la petición realizada o su sesión ha finalizado.',
+    'Reload' => 'Recargar',
     'Restart Session' => 'Reiniciar Sesión',
     'second(s)' => 'segundo(s)',
     'Send' => 'Enviar',
