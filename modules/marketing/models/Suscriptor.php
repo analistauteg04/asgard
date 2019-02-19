@@ -327,7 +327,7 @@ class Suscriptor extends \yii\db\ActiveRecord {
             return FALSE;
         }
     }
-
+    
     /**
      * Function consultarSuscriptoxPerylis
      * @author  Kleber Loayza <analistadesarrollo03@uteg.edu.ec>
@@ -717,5 +717,74 @@ class Suscriptor extends \yii\db\ActiveRecord {
             }            
             return 0;
         }
+    }
+    
+    /**
+     * Function eliminar logica Lista suscriptor, cambia el estado a 0
+     * @author  Grace Viteri <analistadesarrollo01@uteg.edu.ec>
+     * @property 
+     * @return  
+     */
+    public function eliminarListaSuscriptor($per_id, $pges_id, $lista_id) {
+        $con = \Yii::$app->db_mailing;
+        $estado = 0;
+        $fecha_modificacion = date(Yii::$app->params["dateTimeByDefault"]);
+        if ($trans !== null) {
+            $trans = null; // si existe la transacción entonces no se crea una
+        } else {
+            $trans = $con->beginTransaction(); // si no existe la transacción entonces se crea una
+        }
+        try {
+            $comando = $con->createCommand
+                    ("UPDATE " . $con->dbname . ".suscriptor sus 
+                      INNER JOIN " . $con->dbname . ".lista_suscriptor lsus 
+                      ON sus.sus_id = lsus.sus_id  
+                      SET lsus.lsus_estado = :estado,                          
+                          lsus.lsus_fecha_modificacion = :fecha_modificacion
+                      WHERE sus.per_id = :per_id AND
+                            sus.pges_id = :pges_id AND
+                            lsus.lis_id = :lista_id ");
+
+            $comando->bindParam(":estado", $estado, \PDO::PARAM_STR);
+            $comando->bindParam(":per_id", $per_id, \PDO::PARAM_INT);
+            $comando->bindParam(":pges_id", $pges_id, \PDO::PARAM_INT);
+            $comando->bindParam(":lista_id", $lista_id, \PDO::PARAM_INT);
+            $comando->bindParam(":fecha_modificacion", $fecha_modificacion, \PDO::PARAM_STR);
+            
+            $response = $comando->execute();
+            if ($trans !== null)
+                $trans->commit();
+            return $response;
+        } catch (Exception $ex) {
+            if ($trans !== null)
+                $trans->rollback();
+            return FALSE;
+        }
+    }
+    
+    /**
+     * Function consultarMasListaXsuscriptor
+     * @author  Grace Viteri <analistadesarrollo01@uteg.edu.ec>
+     * @param   
+     * @return  
+     */
+    public function consultarMasListaXsuscriptor($list_id, $per_id, $pges_id) {
+        $con = \Yii::$app->db_mailing;
+        $estado = 1;
+
+        $sql = "SELECT count(*) as suscrito	
+                FROM " . $con->dbname . ".lista_suscriptor lsus INNER JOIN " . $con->dbname . ".lista lis on (lis.lis_id = lsus.lis_id)
+                     INNER JOIN " . $con->dbname . ".suscriptor sus on (sus.sus_id = lsus.sus_id)               
+                WHERE sus.per_id = :per_id AND
+                      sus.pges_id = :pges_id AND
+                      lsus.lis_id != :list_id AND
+                      lsus.lsus_estado = :estado";                  
+        $comando = $con->createCommand($sql);
+        $comando->bindParam(":estado", $estado, \PDO::PARAM_STR);        
+        $comando->bindParam(":list_id", $list_id, \PDO::PARAM_INT);
+        $comando->bindParam(":per_id", $per_id, \PDO::PARAM_INT);
+        $comando->bindParam(":pges_id", $pges_id, \PDO::PARAM_INT);
+        $resultData = $comando->queryOne();
+        return $resultData;
     }
 }

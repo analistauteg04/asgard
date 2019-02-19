@@ -872,4 +872,28 @@ class Lista extends \yii\db\ActiveRecord {
         \app\models\Utilities::putMessageLogFile('sql lista:' . $sql);        
         return $resultData;
     }
+    
+    /**
+     * Function consultarSuscriptoresXlista
+     * @author  Grace Viteri <analistadesarrollo01@uteg.edu.ec>
+     * @param   
+     * @return  Consulta los suscriptores por lista.
+     */
+    public function consultarSuscriptoresXlista($lis_id) {
+        $con = \Yii::$app->db_mailing;        
+        $estado = 1;
+        $sql = "SELECT ls.sus_id, s.per_id, s.pges_id
+                FROM " . $con->dbname . ".lista lst INNER JOIN " . $con->dbname . ".lista_suscriptor ls on (ls.lis_id = lst.lis_id)
+                INNER JOIN " . $con->dbname . ".suscriptor s on (s.sus_id = ls.sus_id)
+                WHERE lst.lis_id= :lis_id
+                      and lst.lis_estado = :estado
+                      and lst.lis_estado_logico = :estado";
+        
+        $comando = $con->createCommand($sql);
+        $comando->bindParam(":estado", $estado, \PDO::PARAM_STR);
+        $comando->bindParam(":lis_id", $lis_id, \PDO::PARAM_STR);
+        $resultData = $comando->queryAll();
+        return $resultData;
+    }
+    
 }

@@ -121,14 +121,7 @@ class EmailController extends \app\components\CController {
                 $per_id = $data["psus_id"];
                 $pge_id = $data["per_tipo"];
                 $list_id = $data["list_id"];
-                $data_source = array();
-                /* $per_id = 0; //null;
-                  $pge_id = 0; */
-                /* if ($per_tipo == 1) {
-                  $per_id = $ps_id;
-                  }if ($per_tipo == 2) {
-                  $pge_id = $ps_id;
-                  } */
+                $data_source = array();            
                 $esus = $mod_sb->consultarSuscriptoxPerylis($per_id, $pge_id, $list_id);
                 if ($esus["inscantes"] > 0) {
                     $su_id = $mod_sb->updateSuscripto($per_id, $pge_id, $list_id, $estado_cambio);
@@ -280,6 +273,7 @@ class EmailController extends \app\components\CController {
 
     public function actionDelete() {
         $mod_lista = new Lista();
+        $mod_suscritor = new Suscriptor();
         if (Yii::$app->request->isAjax) {
             $data = Yii::$app->request->post();
             $lis_id = $data["lis_id"];
@@ -290,14 +284,23 @@ class EmailController extends \app\components\CController {
                 $resp_consulta = $mod_lista->consultarListaXID($lis_id);
                 $webs_mailchimp = new WsMailChimp();
                 $conMailch = $webs_mailchimp->deleteList($resp_consulta["lis_codigo"]);
-                if ($resp_consulta["num_suscr"] > 0) {
-                    $resp_listsuscriptor = $mod_lista->inactivaListaSuscriptor($lis_id);
-                    if ($resp_listsuscriptor) {
-                        $resp_lista = $mod_lista->inactivaLista($lis_id);
-                        if ($resp_lista) {
-                            $exito = '1';
-                        }
-                    }
+                if (($resp_consulta["num_suscr"] > 0) or ($resp_consulta["num_suscr_mailchimp"] > 0)){                                                                
+                    $resp_suscritor = $mod_lista->consultarSuscriptoresXlista($lis_id);
+                    if (count($resp_suscritor)>0) {
+                        \app\models\Utilities::putMessageLogFile('contador:' . count($resp_suscritor));
+                        for ($i=0; $i<count($resp_suscritor); $i++) {                              
+                            $respuesta = $mod_suscritor->consultarMasListaXsuscriptor($lis_id, $resp_suscritor[$i]["per_id"], $resp_suscritor[$i]["pges_id"]);
+                            if ($respuesta["suscrito"]==0) {
+                                $respUpdate = $mod_suscritor->updateSuscripto($resp_suscritor[$i]["per_id"], $resp_suscritor[$i]["pges_id"], $lis_id, 0);
+                            } else {
+                                $respUpdate = $mod_suscritor->eliminarListaSuscriptor($resp_suscritor[$i]["per_id"], $resp_suscritor[$i]["pges_id"], $lis_id);
+                            }
+                        }                            
+                    }                        
+                    $resp_lista = $mod_lista->inactivaLista($lis_id);
+                    if ($resp_lista) {
+                        $exito = '1';
+                    }                   
                 } else {
                     $resp_lista = $mod_lista->inactivaLista($lis_id);
                     if ($resp_lista) {
@@ -683,8 +686,14 @@ class EmailController extends \app\components\CController {
                 $lista_id = $data["list_id"];
                 $per_id = $data["per_id"];
                 $pges_id = $data["pges_id"];
-                //\app\models\Utilities::putMessageLogFile('estado_cambio:'.$estado_cambio);
-                $esus = $mod_sb->updateSuscripto($per_id, $pges_id, $lista_id, $estado_cambio);
+                
+                $cons = $mod_sb->consultarMasListaXsuscriptor($lista_id, $per_id, $pges_id);
+                if ($cons["suscrito"] ==0) {
+                    //\app\models\Utilities::putMessageLogFile('estado_cambio:'.$estado_cambio);
+                    $esus = $mod_sb->updateSuscripto($per_id, $pges_id, $lista_id, $estado_cambio);                    
+                } else {
+                    $esus = $mod_sb->eliminarListaSuscriptor($per_id, $pges_id, $lista_id);
+                }
                 if ($esus > 0) {
                     if ($esus > 0) {
                         $mensaje = "El contacto ya no está suscrito a la lista";
