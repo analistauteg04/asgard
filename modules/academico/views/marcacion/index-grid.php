@@ -19,6 +19,11 @@ admision::registerTranslations();
         'dataProvider' => $model,
         'columns' => [
             [
+                'attribute' => 'profesor',
+                'header' => Yii::t("formulario", "Teacher"),
+                'value' => 'nombres',
+            ],
+            [
                 'attribute' => 'materia',
                 'header' => Yii::t("formulario", "Matter"),
                 'value' => 'materia',
