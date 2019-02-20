@@ -289,14 +289,8 @@ class RegistroMarcacion extends \yii\db\ActiveRecord {
             $str_search .= "per.per_seg_nombre like :profesor OR ";
             $str_search .= "per.per_pri_apellido like :profesor OR ";
             $str_search .= "per.per_seg_nombre like :profesor )  AND ";
+            $str_search .= "asig.asi_nombre like :materia  AND ";
 
-            if ($arrFiltro['materia'] != "" && $arrFiltro['materia'] > 0) {
-                $str_search .= "(pg.pges_pri_nombre like :search OR ";
-                $str_search .= "pg.pges_seg_nombre like :search OR ";
-                $str_search .= "pg.pges_pri_apellido like :search OR ";
-                $str_search .= "pg.pges_seg_apellido like :search OR ";
-                $str_search .= "pg.pges_codigo like :search )  AND ";
-            }
             if ($arrFiltro['f_ini'] != "" && $arrFiltro['f_fin'] != "") {
                 $str_search .= "rma.rmar_fecha_creacion >= :fec_ini AND ";
                 $str_search .= "rma.rmar_fecha_creacion <= :fec_fin AND ";
@@ -334,14 +328,10 @@ class RegistroMarcacion extends \yii\db\ActiveRecord {
         if (isset($arrFiltro) && count($arrFiltro) > 0) {
             $search_cond = "%" . $arrFiltro["profesor"] . "%";
             $comando->bindParam(":profesor", $search_cond, \PDO::PARAM_STR);
-
             $fecha_ini = $arrFiltro["f_ini"] . " 00:00:00";
             $fecha_fin = $arrFiltro["f_fin"] . " 23:59:59";
-
-            /* if ($arrFiltro['materia'] != "" && $arrFiltro['materia'] > 0) {                
-              $materia = "%" . $arrFiltro["materia"] . "%";
-              $comando->bindParam(":materia", $materia, \PDO::PARAM_STR);
-              } */
+            $materia = "%" . $arrFiltro["materia"] . "%";
+            $comando->bindParam(":materia", $materia, \PDO::PARAM_STR);
 
             if ($arrFiltro['f_ini'] != "" && $arrFiltro['f_fin'] != "") {
                 $comando->bindParam(":fec_ini", $fecha_ini, \PDO::PARAM_STR);
