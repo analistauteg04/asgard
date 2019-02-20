@@ -301,6 +301,7 @@ class RegistroMarcacion extends \yii\db\ActiveRecord {
         }
         if ($onlyData == false) {
             $periodoacademico = 'hap.paca_id as periodo, ';
+            $grupoperi = ',periodo';
         }
         $sql = "
                SELECT
@@ -309,7 +310,9 @@ class RegistroMarcacion extends \yii\db\ActiveRecord {
                     DATE_FORMAT(rma.rmar_fecha_creacion, '%Y-%m-%d') as fecha,
                     DATE_FORMAT(rma.rmar_fecha_hora_entrada, '%H:%i:%s') as hora_inicio,
                     hap.hape_hora_entrada as inicio_esperado,
-                    DATE_FORMAT(rma.rmar_fecha_hora_salida, '%H:%i:%s') as hora_salida,
+                    ifnull((SELECT DATE_FORMAT(marc.rmar_fecha_hora_salida, '%H:%i:%s') 
+                            FROM db_academico.registro_marcacion marc
+                            WHERE marc.pro_id = rma.pro_id AND marc.hape_id = rma.hape_id AND marc.rmar_tipo = 'S'),'') as hora_salida,
                     hap.hape_hora_salida as salida_esperada,
                     rma.rmar_direccion_ip as ip,
                     $periodoacademico
@@ -335,6 +338,7 @@ class RegistroMarcacion extends \yii\db\ActiveRecord {
                     peri.paca_estado = :estado AND
                     peri.paca_estado_logico = :estado AND
                     peri.paca_activo = 'A'
+                    group by nombres,materia,fecha
                ";
         $comando = $con->createCommand($sql);
         $comando->bindParam(":estado", $estado, \PDO::PARAM_STR);
