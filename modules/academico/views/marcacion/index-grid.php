@@ -4,7 +4,6 @@ use yii\helpers\Html;
 use yii\helpers\Url;
 use \app\models\Persona;
 use app\widgets\PbGridView\PbGridView;
-use app\modules\admision\Module;
 use app\modules\admision\Module as admision;
 use app\modules\academico\Module as academico;
 
@@ -16,6 +15,8 @@ admision::registerTranslations();
     PbGridView::widget([
         'id' => 'PbMarcacion',
         'showExport' => true,
+        'fnExportEXCEL' => "exportExcel",
+        'fnExportPDF' => "exportPdf",
         'dataProvider' => $model,
         'columns' => [
             [

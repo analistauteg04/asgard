@@ -299,8 +299,12 @@ class RegistroMarcacion extends \yii\db\ActiveRecord {
                 $str_search .= " hap.paca_id = :periodo AND ";
             }
         }
+        if ($onlyData == false) {
+            $periodoacademico = 'hap.paca_id as periodo, ';
+        }
         $sql = "
                SELECT
+                    CONCAT(ifnull(per.per_pri_nombre,' '), ' ', ifnull(per.per_pri_apellido,' ')) as nombres,
                     asig.asi_nombre as materia,
                     DATE_FORMAT(rma.rmar_fecha_creacion, '%Y-%m-%d') as fecha,
                     DATE_FORMAT(rma.rmar_fecha_hora_entrada, '%H:%i:%s') as hora_inicio,
@@ -308,20 +312,29 @@ class RegistroMarcacion extends \yii\db\ActiveRecord {
                     DATE_FORMAT(rma.rmar_fecha_hora_salida, '%H:%i:%s') as hora_salida,
                     hap.hape_hora_salida as salida_esperada,
                     rma.rmar_direccion_ip as ip,
-                    hap.paca_id as periodo,
-                    CONCAT(ifnull(per.per_pri_nombre,' '), ' ', ifnull(per.per_pri_apellido,' ')) as nombres
+                    $periodoacademico
+                    peri.paca_anio_academico
+                    
                     FROM " . $con->dbname . ".registro_marcacion rma
                     INNER JOIN " . $con->dbname . ".horario_asignatura_periodo hap on hap.hape_id = rma.hape_id
                     INNER JOIN " . $con->dbname . ".asignatura asig on asig.asi_id = hap.asi_id
                     INNER JOIN " . $con->dbname . ".profesor profe on profe.pro_id = rma.pro_id 
                     INNER JOIN " . $con1->dbname . ".persona per on per.per_id = profe.per_id
+                    INNER JOIN " . $con->dbname . ".periodo_academico peri on peri.paca_id = hap.paca_id
                     WHERE $str_search
                     rma.rmar_estado = :estado AND
                     rma.rmar_estado_logico = :estado AND
                     hap.hape_estado = :estado AND
                     hap.hape_estado_logico = :estado AND
                     asig.asi_estado = :estado AND
-                    asig.asi_estado_logico = :estado
+                    asig.asi_estado_logico = :estado AND
+                    profe.pro_estado = :estado AND
+                    profe.pro_estado_logico = :estado AND
+                    per.per_estado = :estado AND
+                    per.per_estado_logico = :estado AND
+                    peri.paca_estado = :estado AND
+                    peri.paca_estado_logico = :estado AND
+                    peri.paca_activo = 'A'
                ";
         $comando = $con->createCommand($sql);
         $comando->bindParam(":estado", $estado, \PDO::PARAM_STR);

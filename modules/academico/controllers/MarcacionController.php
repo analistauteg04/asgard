@@ -3,11 +3,16 @@
 namespace app\modules\academico\controllers;
 
 use Yii;
+use app\models\ExportFile;
 use yii\helpers\ArrayHelper;
 use app\models\Utilities;
 use app\modules\academico\models\PeriodoAcademicoMetIngreso;
 use app\modules\academico\models\RegistroMarcacion;
 use DateTime;
+use app\modules\admision\Module as admision;
+use app\modules\academico\Module as academico;
+
+admision::registerTranslations();
 
 class MarcacionController extends \app\components\CController {
 
@@ -24,14 +29,13 @@ class MarcacionController extends \app\components\CController {
     public function actionIndex() {
         $mod_marcacion = new RegistroMarcacion();
         $mod_periodo = new PeriodoAcademicoMetIngreso();
-        //$arr_historico = $mod_marcacion->consultarRegistroMarcacion();
         $periodo = $mod_periodo->consultarPeriodoAcademico();
         $data = Yii::$app->request->get();
         if ($data['PBgetFilter']) {
             $arrSearch["profesor"] = $data['profesor'];
             $arrSearch["materia"] = $data['materia'];
             $arrSearch["f_ini"] = $data['f_ini'];
-            $arrSearch["f_fin"] = $data['f_fin'];          
+            $arrSearch["f_fin"] = $data['f_fin'];
             $arrSearch["periodo"] = $data['periodo'];
             $arr_historico = $mod_marcacion->consultarRegistroMarcacion($arrSearch);
             return $this->render('index-grid', [
@@ -89,9 +93,6 @@ class MarcacionController extends \app\components\CController {
                         list($horas, $minutos, $segundos) = explode(':', $horacalculada);
                         $hora_en_segundos = ($horas * 3600 ) + ($minutos * 60 ) + $segundos;
                         $minutosfinales = $hora_en_segundos / 60;
-                        /* \app\models\Utilities::putMessageLogFile('hora actual: ' . $hora_fin);
-                          \app\models\Utilities::putMessageLogFile('hota inicia: ' . $hora_inicio);
-                          \ \app\models\Utilities::putMessageLogFile('diferencia: ' . $minutosfinales); */
                         if (new DateTime($hora_inicio) < new DateTime($real_inicia)) {
                             $minutosfinales = $minutosfinales * -1;
                         }
@@ -119,8 +120,6 @@ class MarcacionController extends \app\components\CController {
                         if (new DateTime($hora_fin) < new DateTime($real_fin)) {
                             $minutosfinales = $minutosfinales * -1;
                         }
-                        /* \app\models\Utilities::putMessageLogFile('dasd: ' . $real_fin);
-                          \app\models\Utilities::putMessageLogFile('sdd: ' . $hora_fin); */
                         if ($minutosfinales >= 0 && $minutosfinales <= 30) { // SOLO PUEDE MARCAR SALIDA DE A LA HORA DE LA SALIDA Y HASTA 30 MINUTOS DESPUES
                             $cons_marcainicio = $mod_marcacion->consultarMarcacionExiste($hape_id, $profesor, $fecha, 'E');
                             if ($cons_marcainicio["marcacion"] > 0) {
@@ -174,6 +173,88 @@ class MarcacionController extends \app\components\CController {
             }
             return;
         }
+    }
+
+    public function actionExpexcel() {
+        ini_set('memory_limit', '256M');
+        $content_type = Utilities::mimeContentType("xls");
+        $nombarch = "Report-" . date("YmdHis") . ".xls";
+        header("Content-Type: $content_type");
+        header("Content-Disposition: attachment;filename=" . $nombarch);
+        header('Cache-Control: max-age=0');
+        $colPosition = array("C", "D", "E", "F", "G", "H", "I", "J", "K", "L");
+        $arrHeader = array(
+            Yii::t("formulario", "Teacher"),
+            Yii::t("formulario", "Matter"),
+            Yii::t("formulario", "Date"),
+            academico::t("Academico", "Hour start date"),
+            academico::t("Academico", "Hour start date") . ' ' . academico::t("Academico", "Expected"),
+            academico::t("Academico", "Hour end date"),
+            academico::t("Academico", "Hour end date") . ' ' . academico::t("Academico", "Expected"),
+            academico::t("Academico", "IP Marcación"),
+            Yii::t("formulario", "Period"),
+            ""
+        );
+        $mod_marcacion = new RegistroMarcacion();
+        $data = Yii::$app->request->get();
+        $arrSearch["profesor"] = $data['profesor'];
+        $arrSearch["materia"] = $data['materia'];
+        $arrSearch["f_ini"] = $data['f_ini'];
+        $arrSearch["f_fin"] = $data['f_fin'];
+        $arrSearch["periodo"] = $data['periodo'];
+        $arrData = array();
+        if (empty($arrSearch)) {
+            $arrData = $mod_marcacion->consultarRegistroMarcacion(array(), true);
+        } else {
+            $arrData = $mod_marcacion->consultarRegistroMarcacion($arrSearch, true);
+        }
+        $nameReport = academico::t("Academico", "List Bearings");
+        Utilities::generarReporteXLS($nombarch, $nameReport, $arrHeader, $arrData, $colPosition);
+        exit;
+    }
+
+    public function actionExppdf() {
+        $report = new ExportFile();
+        $this->view->title = academico::t("Academico", "List Bearings"); // Titulo del reporte
+
+        $mod_marcacion = new RegistroMarcacion();
+        $data = Yii::$app->request->get();
+        $arr_body = array();
+
+        $arrSearch["profesor"] = $data['profesor'];
+        $arrSearch["materia"] = $data['materia'];
+        $arrSearch["f_ini"] = $data['f_ini'];
+        $arrSearch["f_fin"] = $data['f_fin'];
+        $arrSearch["periodo"] = $data['periodo'];
+
+        $arr_head = array(
+            Yii::t("formulario", "Teacher"),
+            Yii::t("formulario", "Matter"),
+            Yii::t("formulario", "Date"),
+            academico::t("Academico", "Hour start date"),
+            academico::t("Academico", "Hour start date") . ' ' . academico::t("Academico", "Expected"),
+            academico::t("Academico", "Hour end date"),
+            academico::t("Academico", "Hour end date") . ' ' . academico::t("Academico", "Expected"),
+            academico::t("Academico", "IP Marcación"),
+            Yii::t("formulario", "Period"),
+            ""
+        );
+
+        if (empty($arrSearch)) {
+            $arr_body = $mod_marcacion->consultarRegistroMarcacion(array(), true);
+        } else {
+            $arr_body = $mod_marcacion->consultarRegistroMarcacion($arrSearch, true);
+        }
+
+        $report->orientation = "L"; // tipo de orientacion L => Horizontal, P => Vertical
+        $report->createReportPdf(
+                $this->render('exportpdf', [
+                    'arr_head' => $arr_head,
+                    'arr_body' => $arr_body
+                ])
+        );
+        $report->mpdf->Output('Reporte_' . date("Ymdhis") . ".pdf", ExportFile::OUTPUT_TO_DOWNLOAD);
+        return;
     }
 
 }
