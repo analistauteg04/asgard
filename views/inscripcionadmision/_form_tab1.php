@@ -41,7 +41,7 @@ $requisitosCANSP = ' <div class="col-md-12 col-sm-12 col-xs-12 col-lg-12">
                     </div>
                 </div>'; 
 
-$requisitosCANAD = ' <div class="col-md-12 col-sm-12 col-xs-12 col-lg-12">
+$requisitosCANAD = '<div class="col-md-12 col-sm-12 col-xs-12 col-lg-12">
                     <div class="form-group">
                         <div class="col-sm-3 col-md-3 col-xs-3 col-lg-3">
                         </div>
@@ -92,7 +92,7 @@ $requisitosPRP = '<div class="col-md-12 col-sm-12 col-xs-12 col-lg-12">
                         <div class="col-sm-3 col-md-3 col-xs-3 col-lg-3">
                         </div>
                         <div class="col-sm-9 col-md-9 col-xs-9 col-lg-9">
-                            <div style = "width: 410px;" class="well"><span style="font-weight: bold">Fecha del taller introductorio: 19 y 20 de enero del 2019. Deberás cargar en el siguiente paso estos documentos:<br></span>
+                            <div style = "width: 410px;" class="well"><span style="font-weight: bold">Fecha del taller introductorio: 16 y 17 de marzo del 2019. Deberás cargar en el siguiente paso estos documentos:<br></span>
                                     Cédula de identidad o pasaporte <br>
                                     Certificado de votación (ecuatorianos). <br>
                                     Título de tercer nivel notarizado. <br>

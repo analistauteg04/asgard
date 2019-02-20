@@ -19,7 +19,19 @@ INSERT INTO `bloque_academico` (`baca_id`,`baca_nombre`, `baca_descripcion`, `ba
 (1, 'Abril - Junio', 'Abril - Junio', 1, '1', '1'),
 (2, 'Julio - Agosto', 'Julio - Agosto', 1,  '1', '1'),
 (3, 'Enero - Febrero', 'Enero - Febrero', 1, '1', '1'),
-(4, 'Octubre - Diciembre', 'Octubre - Diciembre', 1, '1', '1');
+(4, 'Octubre - Diciembre', 'Octubre - Diciembre', 1, '1', '1'),
+(5, 'Enero', 'Enero', 1, '1', '1'),
+(6, 'Febrero', 'Febrero', 1, '1', '1'),
+(7, 'Marzo', 'Marzo', 1, '1', '1'),
+(8, 'Abril', 'Abril', 1, '1', '1'),
+(9, 'Mayo', 'Mayo', 1, '1', '1'),
+(10, 'Junio', 'Junio', 1, '1', '1'),
+(11, 'Julio', 'Julio', 1, '1', '1'),
+(12, 'Agosto', 'Agosto', 1, '1', '1'),
+(13, 'Septiembre', 'Septiembre', 1, '1', '1'),
+(14, 'Octubre', 'Octubre', 1, '1', '1'),
+(15, 'Noviembre', 'Noviembre', 1, '1', '1'),
+(16, 'Diciembre', 'Diciembre', 1, '1', '1');
 
 -- -- ------------------------ ------------------------------
 --
@@ -27,15 +39,8 @@ INSERT INTO `bloque_academico` (`baca_id`,`baca_nombre`, `baca_descripcion`, `ba
 --
 
 INSERT INTO `periodo_academico` (`paca_id`,`saca_id`, `baca_id`, `paca_anio_academico`, `paca_activo`, `paca_usuario_ingreso`, `paca_estado`, `paca_estado_logico`) VALUES 
-('1','1', '1', '2017-2018', 'I', 1, '1', '1'),
-('2','1', '2', '2017-2018', 'I', 1, '1', '1'),
-('3','2', '1', '2017-2018', 'I', 1, '1', '1'),
-('4','2', '2', '2017-2018', 'I', 1, '1', '1'),
-('5','1', '1', '2018-2019', 'I', 1, '1', '1'),
-('6','1', '2', '2018-2019', 'I', 1, '1', '1'),
-('7','2', '1', '2018-2019', 'I', 1, '1', '1'),
-('8','2', '2', '2018-2019', 'I', 1, '1', '1'),
-(9, 2, 3, '2018-2019', 'A', 1, '1', '1');
+(1, 2, 3, '2019', 'A', 1, '1', '1'),
+(2, 2, 6, '2019', 'A', 1, '1', '1');
 
 -- --------------------------------------------------------
 --
@@ -534,8 +539,8 @@ INSERT INTO `distributivo_horario` (`dhor_id`,`dia_id`,`dhor_hora_inicio`,`dhor_
 
 
 INSERT INTO `horario_asignatura_periodo` (`hape_id`,`asi_id`,`paca_id`,`pro_id`, `uaca_id`, `mod_id`, `dia_id`, `hape_hora_entrada`,`hape_hora_salida`, `hape_estado`, `hape_estado_logico`) VALUES
-(1, 7, 9, 1, 1, 2, 1, '09:00:00', '11:00:00', '1', '1'),
-(2, 7, 9, 1, 1, 2, 2, '09:00:00', '11:00:00', '1', '1'),
-(3, 7, 9, 1, 1, 2, 4, '09:00:00', '11:00:00', '1', '1'),
-(4, 8, 9, 2, 1, 2, 1, '13:30:00', '15:30:00', '1', '1'),
-(5, 8, 9, 2, 1, 2, 3, '13:30:00', '15:30:00', '1', '1');
+(1, 7, 1, 15, 1, 2, 1, '09:00:00', '11:00:00', '1', '1'),
+(2, 7, 1, 15, 1, 2, 2, '09:00:00', '11:00:00', '1', '1'),
+(3, 7, 1, 15, 1, 2, 4, '09:00:00', '11:00:00', '1', '1'),
+(4, 8, 1, 16, 1, 2, 1, '13:30:00', '15:30:00', '1', '1'),
+(5, 8, 1, 16, 1, 2, 3, '13:30:00', '15:30:00', '1', '1');
