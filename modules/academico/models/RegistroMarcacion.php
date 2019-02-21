@@ -338,7 +338,8 @@ class RegistroMarcacion extends \yii\db\ActiveRecord {
                     peri.paca_estado = :estado AND
                     peri.paca_estado_logico = :estado AND
                     peri.paca_activo = 'A'
-                    group by nombres,materia,fecha
+                    GROUP BY nombres,materia,fecha
+                    ORDER BY fecha DESC
                ";
         $comando = $con->createCommand($sql);
         $comando->bindParam(":estado", $estado, \PDO::PARAM_STR);
