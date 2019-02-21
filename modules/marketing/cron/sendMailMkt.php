@@ -64,13 +64,11 @@ function getCampaignOnTime($webServer)
         "p.pro_hora_envio < '".$endTime."' " . 
         ";";
         //putMessageLogFile("campagna:  ". $sql);
-        //echo "sql: " . json_encode($sql);
-        //echo "sql: " . $sql;
+        //echo "sql: " . json_encode($sql);        
         $cmd = $pdo->prepare($sql);
         //$cmd->execute([":now" => $now, ":dia" => $dia, ":iniDate" => $iniTime, ":endDate" => $endTime]);
         $cmd->execute();
-        $rows = $cmd->fetchAll(\PDO::FETCH_ASSOC);
-        //echo json_encode($rows);
+        $rows = $cmd->fetchAll(\PDO::FETCH_ASSOC);        
         if (count($rows) > 0) {
             for ($i = 0; $i < count($rows); $i++) {
                 $addressInfo = array(
@@ -82,10 +80,11 @@ function getCampaignOnTime($webServer)
                     "reply_to" => $rows[$i]["ecor_correo"],
                     "template_id" => (int) $rows[$i]["temp_id"],
                 );
+                
                 $obj_new = $webServer->createCampaign($rows[$i]["lis_codigo"], $addressInfo);
-                if(isset($obj_new["id"])){                                        
+                if(isset($obj_new["id"])){                     
                     $sendCampaign = $webServer->sendCampaign($obj_new["id"]);
-                    echo $obj_new["id"];
+                    //echo $obj_new["id"];
                     $fecha_crea = date("Y-m-d H:i:s");
                     $nombre_campania = $rows[$i]["lis_nombre_principal"] . " " . $rows[$i]["lis_nombre"] . " - " . $now;
                     $sql1 = "INSERT INTO db_mailing.campania_lista (lis_id, clis_codigo, clis_nombre, clis_fecha_registro, clis_estado, clis_estado_logico) " .
