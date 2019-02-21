@@ -408,7 +408,7 @@ class EmailController extends \app\components\CController {
                 if ($data["emp_id"] == 1) {
                     $arreglo_carrerra = $oportunidad_mod->consultarCarreras();
                 } else {
-                    $arreglo_carrerra = $estudio_mod->consultarEstudioEmpresa($data["emp_id"]); // tomar id de impresa        
+                    $arreglo_carrerra = $estudio_mod->consultarDesModuloestudio($data["emp_id"]); // tomar id de impresa        
                 }
                 $message = array("carrera" => $arreglo_carrerra);
                 return Utilities::ajaxResponse('OK', 'alert', Yii::t('jslang', 'Success'), 'false', $message);
@@ -493,11 +493,9 @@ class EmailController extends \app\components\CController {
                             }
                         }
                     } else {  //Modificación                                                                                                                        
-                        $conLista = $webs_mailchimp->getList($resp_consulta['lis_codigo']);
-                        \app\models\Utilities::putMessageLogFile('conLista:' . $conLista);
+                        $conLista = $webs_mailchimp->getList($resp_consulta['lis_codigo']);                        
                         $edLista = $webs_mailchimp->editList($resp_consulta['lis_codigo'], $nombre_lista, $contacto, "permiso", $nombre_contacto, $correo_contacto, $asunto);
-                        if ($edLista) {
-                            \app\models\Utilities::putMessageLogFile('conLista:' . $edLista);
+                        if ($edLista) {                            
                             //Grabar en asgard                    
                             $resp_lista = $lista->modificarLista($list_id, $eaca_id, $mest_id, $emp_id, $nombre_lista, $ecor_id, $nombre_contacto, $pais, $provincia, $ciudad, $direccion1, $direccion2, $telefono, $codigo_postal, $asunto);
                             if ($resp_lista) {
@@ -622,7 +620,7 @@ class EmailController extends \app\components\CController {
                 if ($data["emp_id"] == 1) {
                     $arreglo_carrerra = $oportunidad_mod->consultarCarreras();
                 } else {
-                    $arreglo_carrerra = $estudio_mod->consultarEstudioEmpresa($data["emp_id"]); // tomar id de impresa        
+                    $arreglo_carrerra = $estudio_mod->consultarDesModuloestudio($data["emp_id"]); // tomar id de impresa        
                 }
                 $message = array("carrera" => $arreglo_carrerra);
                 return Utilities::ajaxResponse('OK', 'alert', Yii::t('jslang', 'Success'), 'false', $message);
