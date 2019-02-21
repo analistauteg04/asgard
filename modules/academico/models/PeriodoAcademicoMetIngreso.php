@@ -623,10 +623,12 @@ class PeriodoAcademicoMetIngreso extends  \app\modules\academico\components\CAct
         $estado = 1;
         $sql = "SELECT 
                    pera.paca_id as id,
-                   pera.paca_anio_academico as name
+                   CONCAT(pera.paca_anio_academico,' (',blq.baca_nombre,'-',sem.saca_nombre,')') as name
                 FROM 
-                   " . $con->dbname . ".periodo_academico pera WHERE ";
-        $sql .= "  pera.paca_activo = 'A' AND
+                   " . $con->dbname . ".periodo_academico pera "
+                . "INNER JOIN " . $con->dbname . ".semestre_academico sem  ON sem.saca_id = pera.saca_id "
+                . "INNER JOIN " . $con->dbname . ".bloque_academico blq ON blq.baca_id = pera.baca_id";
+        $sql .= "  WHERE pera.paca_activo = 'A' AND
                    pera.paca_estado = :estado AND
                    pera.paca_estado_logico = :estado";
 

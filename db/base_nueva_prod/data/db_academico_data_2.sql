@@ -40,7 +40,7 @@ INSERT INTO `bloque_academico` (`baca_id`,`baca_nombre`, `baca_descripcion`, `ba
 
 INSERT INTO `periodo_academico` (`paca_id`,`saca_id`, `baca_id`, `paca_anio_academico`, `paca_activo`, `paca_usuario_ingreso`, `paca_estado`, `paca_estado_logico`) VALUES 
 (1, 2, 3, '2019', 'A', 1, '1', '1'),
-(2, 2, 6, '2019 CN-FB', 'A', 1, '1', '1');
+(2, 2, 6, '2019', 'A', 1, '1', '1');
 
 -- --------------------------------------------------------
 --
