@@ -95,8 +95,14 @@ class RegistroMarcacion extends \yii\db\ActiveRecord {
      * @property integer $userid
      * @return  
      */
-    public function consultarMateriasMarcabyPro($per_id, $dia) {
+    public function consultarMateriasMarcabyPro($per_id, $dia, $hape_fecha_clase) {
         $con = \Yii::$app->db_academico;
+        // recibir parametro de fecha
+        // si parametro de fecha es !empty entonces
+        // se crea la linea hap.hape_fecha_clase = ':fecha' AND 
+        if (!empty($hape_fecha_clase)) {
+            $filtro = "hap.hape_fecha_clase = ':fecha' AND ";
+        }
 
         $estado = 1;
         $sql = "
@@ -114,6 +120,7 @@ class RegistroMarcacion extends \yii\db\ActiveRecord {
                     INNER JOIN " . $con->dbname . ".asignatura asig ON asig.asi_id = hap.asi_id
                     INNER JOIN " . $con->dbname . ".periodo_academico paca ON paca.paca_id = hap.paca_id    
                     WHERE
+                    $filtro
                     hap.dia_id = :dia AND
                     prof.per_id = :per_id AND
                     hap.hape_estado = :estado AND
@@ -128,6 +135,11 @@ class RegistroMarcacion extends \yii\db\ActiveRecord {
         $comando->bindParam(":estado", $estado, \PDO::PARAM_STR);
         $comando->bindParam(":per_id", $per_id, \PDO::PARAM_INT);
         $comando->bindParam(":dia", $dia, \PDO::PARAM_INT);
+        // si parametro de fecha es !empty entonces se crea parametro $fecha
+        if (!empty($hape_fecha_clase)) {
+            $fecha = $fecha_registro = $hape_fecha_clase . "00:00:00";
+            $comando->bindParam(':hape_fecha_clase', $fecha, \PDO::PARAM_STR);
+        }
         $resultData = $comando->queryAll();
         $dataProvider = new ArrayDataProvider([
             'key' => 'id',
@@ -377,6 +389,40 @@ class RegistroMarcacion extends \yii\db\ActiveRecord {
         } else {
             return $dataProvider;
         }
+    }
+
+    /**
+     * Function consultarFechaDistancia
+     * @author  Giovanni Vergara <analistadesarrollo01@uteg.edu.ec>
+     * @param   
+     * @return  Consulta una marcacion.
+     */
+    public function consultarFechaDistancia($hape_fecha_clase, $mod_id, $per_id) {
+        $con = \Yii::$app->db_academico;
+        $estado = 1;
+        $fecha_registro = $hape_fecha_clase . "00:00:00";
+        $sql = "
+                    SELECT
+                        COUNT(*) AS existe_distancia
+                    FROM 
+                        " . $con->dbname . ".horario_asignatura_periodo hap
+                        INNER JOIN " . $con->dbname . ".profesor prof ON prof.pro_id = hap.pro_id    
+                    WHERE
+                        hap.hape_fecha_clase= :fecha AND
+                        prof.per_id = :per_id AND
+                        hap.mod_id = :mod_id AND
+                        hap.hape_estado = :estado AND
+                        hap.hape_estado_logico = :estado  AND
+                        prof.pro_estado = :estado AND
+                        prof.pro_estado_logico = :estado";
+        $comando = $con->createCommand($sql);
+        $comando->bindParam(":fecha", $fecha_registro, \PDO::PARAM_STR);
+        $comando->bindParam(":mod_id", $mod_id, \PDO::PARAM_INT);
+        $comando->bindParam(":per_id", $per_id, \PDO::PARAM_INT);
+        $comando->bindParam(":estado", $estado, \PDO::PARAM_STR);
+
+        $resultData = $comando->queryOne();
+        return $resultData;
     }
 
 }
