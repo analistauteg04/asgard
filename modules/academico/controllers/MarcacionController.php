@@ -100,7 +100,7 @@ class MarcacionController extends \app\components\CController {
                             $resp_marca = $mod_marcacion->insertarMarcacion($accion, $profesor, $hape_id, $hora_inicio, null, $ip, $usuario);
                             if ($resp_marca) {
                                 if ($minutosfinales >= 15) { // AL MARCAR 15 MINUTOS DESPUES ENVIA MENSAJE
-                                    $retraso = 'La entrada fue ' . round($minutosfinales, 0, PHP_ROUND_HALF_DOWN) . ' después';
+                                    $retraso = 'La entrada fue ' . round($minutosfinales, 0, PHP_ROUND_HALF_DOWN) . ' minutos después';
                                 }
                                 $exito = 1;
                             }
