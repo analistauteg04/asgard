@@ -16,10 +16,10 @@ INSERT INTO `semestre_academico` (`saca_id`, `saca_nombre`, `saca_descripcion`, 
 -- Volcado de datos para la tabla `bloque`
 --
 INSERT INTO `bloque_academico` (`baca_id`,`baca_nombre`, `baca_descripcion`, `baca_usuario_ingreso`, `baca_estado`, `baca_estado_logico`) VALUES 
-(1, 'Abril - Junio', 'Abril - Junio', 1, '1', '1'),
-(2, 'Julio - Agosto', 'Julio - Agosto', 1,  '1', '1'),
-(3, 'Enero - Febrero', 'Enero - Febrero', 1, '1', '1'),
-(4, 'Octubre - Diciembre', 'Octubre - Diciembre', 1, '1', '1'),
+(1, 'B1', 'Abril - Junio', 1, '1', '1'),
+(2, 'B2', 'Julio - Agosto', 1,  '1', '1'),
+(3, 'B2', 'Enero - Febrero', 1, '1', '1'),
+(4, 'B1', 'Octubre - Diciembre', 1, '1', '1'),
 (5, 'Enero', 'Enero', 1, '1', '1'),
 (6, 'Febrero', 'Febrero', 1, '1', '1'),
 (7, 'Marzo', 'Marzo', 1, '1', '1'),
@@ -40,7 +40,7 @@ INSERT INTO `bloque_academico` (`baca_id`,`baca_nombre`, `baca_descripcion`, `ba
 
 INSERT INTO `periodo_academico` (`paca_id`,`saca_id`, `baca_id`, `paca_anio_academico`, `paca_activo`, `paca_usuario_ingreso`, `paca_estado`, `paca_estado_logico`) VALUES 
 (1, 2, 3, '2019', 'A', 1, '1', '1'),
-(2, 2, 6, '2019', 'A', 1, '1', '1');
+(2, 2, 6, '2019 CN-FB', 'A', 1, '1', '1');
 
 -- --------------------------------------------------------
 --
