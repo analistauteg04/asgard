@@ -97,9 +97,6 @@ class RegistroMarcacion extends \yii\db\ActiveRecord {
      */
     public function consultarMateriasMarcabyPro($per_id, $dia, $hape_fecha_clase) {
         $con = \Yii::$app->db_academico;
-        // recibir parametro de fecha
-        // si parametro de fecha es !empty entonces
-        // se crea la linea hap.hape_fecha_clase = ':fecha' AND 
         if (!empty($hape_fecha_clase)) {
             $filtro = "hap.hape_fecha_clase = ':fecha' AND ";
         }
@@ -416,8 +413,7 @@ class RegistroMarcacion extends \yii\db\ActiveRecord {
                         prof.pro_estado = :estado AND
                         prof.pro_estado_logico = :estado";
         $comando = $con->createCommand($sql);
-        $comando->bindParam(":fecha", $fecha_registro, \PDO::PARAM_STR);
-        $comando->bindParam(":mod_id", $mod_id, \PDO::PARAM_INT);
+        $comando->bindParam(":fecha", $fecha_registro, \PDO::PARAM_STR);   
         $comando->bindParam(":per_id", $per_id, \PDO::PARAM_INT);
         $comando->bindParam(":estado", $estado, \PDO::PARAM_STR);
 
