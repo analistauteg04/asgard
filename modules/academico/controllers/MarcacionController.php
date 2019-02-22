@@ -19,19 +19,14 @@ class MarcacionController extends \app\components\CController {
     public function actionMarcacion() {
         $mod_marcacion = new RegistroMarcacion();
         $per_id = @Yii::$app->session->get("PB_perid");
-        $dia = date("w", strtotime(date("Y-m-d")));
-        // INICIALIZAR LA VARIABLE FECHA_CONSULTA = '';
-        $fecha_consulta = '';
-        // // CAPTURAR FECHA FORMATO YYYY-MM-DD 00:00:00
+        $dia = date("w", strtotime(date("Y-m-d")));       
+        $fecha_consulta = '';      
         $fecha_compara = date(Yii::$app->params["dateByDefault"]);
-        //LLAMAR FUNCION PARA VER SI HAY DE DISTANCIA ENVIA PARAMENTROS FECHA, MODALIDAD 4, $per_id
         $cons_distancia = $mod_marcacion->consultarFechaDistancia($fecha_compara, 4, $per_id);
-        // SI VALOR QUE DEVUELVE LA FUNCION ES 1 EXISTE
+        // si valor devuelve 1 existe y fecha consulta toma el valor de fecha compra
         if ($cons_distancia["existe_distancia"] > 0) {
             $fecha_consulta = $fecha_compara;
-        }
-        // FECHA_CONSULTA = FECHA FORMATO YYYY-MM-DD 00:00:00
-        // consultarMateriasMarcabyPro SE ENVIA TAMBIEN EL PARAMETRO FECHA_CONSULTA (VACIO O LA FECHA)
+        }     
         $arr_materia = $mod_marcacion->consultarMateriasMarcabyPro($per_id, $dia, $fecha_consulta);
         return $this->render('marcacion', [
                     'model' => $arr_materia
