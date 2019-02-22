@@ -18,12 +18,12 @@ use app\widgets\PbVPOS\assets\VPOSAsset;
 
 class PbVPOS extends Widget {
     private static $widget_name = "PbVPOS";
-    protected $login = "f06b5be68e988a6248b528d3a85c43e8";
-    protected $secret = "jeb3d66Sfhyml5LO";
+    protected $login = "";
+    protected $secret = "";
     protected $transKey = "";
     protected $seed = "";
     protected $nounce = "";
-    protected $payment_gateway = "test.placetopay.ec";
+    protected $payment_gateway = "";
     protected $port = "443";
 
     public $referenceID = "";
@@ -45,12 +45,15 @@ class PbVPOS extends Widget {
     public $ipAddress = "127.0.0.1";
     public $type = "button"; // boton, form
     public $titleBox = ""; 
+    public $producction = false;
+    public $type_vpos = "1"; // 1=>Dinnes, 2=>Produbanco
 
-    public $dbConection = "db_facturacion";
+    public $dbConection = "db_financiero";
 
     public function init()
     {
         parent::init();
+        $this->selectVPOST();
         $this->generateAuthetication();
         $this->registerClientScript();
         $this->registerTranslations();
@@ -73,6 +76,7 @@ class PbVPOS extends Widget {
             $response = $this->redirectRequest();
         }else{
             $response = $this->getInfoPayment($this->requestID);
+            return $response;
         }
         
         //echo $this->returnUrl;
@@ -93,6 +97,24 @@ class PbVPOS extends Widget {
             else
                 echo $this->render('form', $data);
             //return Html::encode($this->message);
+        }
+    }
+
+    private function selectVPOST(){
+        switch($this->type_vpos){
+            case "1":
+                $this->payment_gateway = "test.placetopay.ec";
+                if($this->producction){
+                    $this->login = "";
+                    $this->secret = "";
+                }else{
+                    $this->login = "f06b5be68e988a6248b528d3a85c43e8";
+                    $this->secret = "jeb3d66Sfhyml5LO";
+                }
+                break;
+            case "2":
+
+                break;
         }
     }
 
@@ -147,13 +169,13 @@ class PbVPOS extends Widget {
             "userAgent"  => $_SERVER['HTTP_USER_AGENT'], 
         ];
         //\app\models\Utilities::putMessageLogFile($params);
-        //$this->saveRequestDB($params);
+        $this->saveRequestDB($params);
         $response = Http::connect($this->payment_gateway, $this->port, http::HTTPS)
             ->setHeaders(array('Content-Type: application/json', 'Accept: application/json'))
             //->setCredentials($user, $apiKey)
             ->doPost($WS_URI, json_encode($params));
         $arr_response = json_decode($response, true);
-        //$this->saveResponseDB($this->referenceID, $arr_response);
+        $this->saveResponseDB($this->referenceID, $arr_response);
         return $arr_response;
     }
 
@@ -175,7 +197,7 @@ class PbVPOS extends Widget {
             //->setCredentials($user, $apiKey)
             ->doPost($WS_URI, json_encode ($params));
         $arr_response = json_decode($response, true);
-        //$this->saveInfoResponseDB($arr_response);
+        $this->saveInfoResponseDB($arr_response);
         return $arr_response;
     }
 
@@ -198,7 +220,8 @@ class PbVPOS extends Widget {
     }
 
     private function saveRequestDB($params){
-        $con = \Yii::$app->$this->dbConection;
+        $conection = $this->dbConection;
+        $con = \Yii::$app->$conection;
         $reference    = $params["payment"]["reference"];
         $descripcion  = $params["payment"]["description"];
         $currency     = $params["payment"]["amount"]["currency"];
@@ -207,15 +230,15 @@ class PbVPOS extends Widget {
         $session      = $params["payment"]["reference"];
         $expiration   = $params["expiration"];
         $returnUrl    = $params["returnUrl"];
-        $date         = strtotime(date("Y-m-d H:i:s"));
+        $date         = date("Y-m-d H:i:s");
         $document     = "";
         $documentType = "";
         $name         = $params["buyer"]["name"];
         $surname      = $params["buyer"]["surname"];
         $email        = $params["buyer"]["email"];
         $mobile       = "";
+        $estado_logico = "1";
         $json_request = json_encode($params);
-
         $sql = "INSERT INTO " . $con->dbname . ".vpos_request 
             (reference,
             descripcion,
@@ -260,6 +283,7 @@ class PbVPOS extends Widget {
         $comando->bindParam(":tax", $tax, \PDO::PARAM_STR);
         $comando->bindParam(":session", $session, \PDO::PARAM_STR);
         $comando->bindParam(":date", $date, \PDO::PARAM_STR);
+        $comando->bindParam(":returnUrl", $this->returnUrl, \PDO::PARAM_STR);
         $comando->bindParam(":expiration", $expiration, \PDO::PARAM_STR);
         $comando->bindParam(":document", $document, \PDO::PARAM_STR);
         $comando->bindParam(":documentType", $documentType, \PDO::PARAM_STR);
@@ -268,12 +292,13 @@ class PbVPOS extends Widget {
         $comando->bindParam(":email", $email, \PDO::PARAM_STR);
         $comando->bindParam(":mobile", $mobile, \PDO::PARAM_STR);
         $comando->bindParam(":json_request", $json_request, \PDO::PARAM_STR);
-        $comando->bindParam(":estado_logico", "1", \PDO::PARAM_STR);
+        $comando->bindParam(":estado_logico", $estado_logico, \PDO::PARAM_STR);
         $comando->execute();
     }
 
     private function saveResponseDB($referenceId, $params){
-        $con = \Yii::$app->$this->dbConection;
+        $conection = $this->dbConection;
+        $con = \Yii::$app->$conection;
         $reference = $referenceId;
         $requestId = $params["requestId"];
         $status    = $params["status"]["status"];
@@ -282,6 +307,7 @@ class PbVPOS extends Widget {
         $date      = $params["status"]["date"];
         $processUrl    = $params["processUrl"];
         $json_response = json_encode($params);
+        $estado_logico = "1";
 
         $sql = "INSERT INTO " . $con->dbname . ".vpos_response 
             (reference,
@@ -303,7 +329,7 @@ class PbVPOS extends Widget {
             :processUrl,
             :json_response,
             :estado_logico)";
-
+        $comando = $con->createCommand($sql);
         $comando->bindParam(":reference", $reference, \PDO::PARAM_INT);
         $comando->bindParam(":requestId", $requestId, \PDO::PARAM_STR);
         $comando->bindParam(":status", $status, \PDO::PARAM_STR);
@@ -312,30 +338,32 @@ class PbVPOS extends Widget {
         $comando->bindParam(":date", $date, \PDO::PARAM_STR);
         $comando->bindParam(":processUrl", $processUrl, \PDO::PARAM_STR);
         $comando->bindParam(":json_response", $json_response, \PDO::PARAM_STR);
-        $comando->bindParam(":estado_logico", "1", \PDO::PARAM_STR);
+        $comando->bindParam(":estado_logico", $estado_logico, \PDO::PARAM_STR);
         $comando->execute();
     }
 
     private function saveInfoResponseDB($params){
-        $con = \Yii::$app->$this->dbConection;
-        $reference = $params["reference"];
+        $conection = $this->dbConection;
+        $con = \Yii::$app->$conection;
+        $reference = $params["request"]["payment"]["reference"];
         $requestId = $params["requestId"];
         $status = $params["status"]["status"];
         $reason = $params["status"]["reason"];
         $message = $params["status"]["message"];
         $date = $params["status"]["date"];
         
-        $payment_status = $params["payment"]["status"]["status"];
-        $payment_reason = $params["payment"]["status"]["reason"];
-        $payment_message = $params["payment"]["status"]["message"];
-        $payment_date = $params["payment"]["status"]["date"];
-        $internalReference = $params["payment"]["internalReference"];
-        $paymenMethod = $params["payment"]["paymentMethod"];
-        $paymentMethodName = $params["payment"]["paymentMethodName"];
-        $issuerName = $params["payment"]["issuerName"];
-        $autorization = $params["payment"]["authorization"];
-        $receipt = $params["payment"]["receipt"];
+        $payment_status = $params["payment"][0]["status"]["status"];
+        $payment_reason = $params["payment"][0]["status"]["reason"];
+        $payment_message = $params["payment"][0]["status"]["message"];
+        $payment_date = $params["payment"][0]["status"]["date"];
+        $internalReference = $params["payment"][0]["internalReference"];
+        $paymenMethod = $params["payment"][0]["paymentMethod"];
+        $paymentMethodName = $params["payment"][0]["paymentMethodName"];
+        $issuerName = $params["payment"][0]["issuerName"];
+        $autorization = $params["payment"][0]["authorization"];
+        $receipt = $params["payment"][0]["receipt"];
         $json_info = json_encode($params);
+        $estado_logico = "1";
 
         $sql = "INSERT INTO " . $con->dbname . ".vpos_info_response 
             (reference,
@@ -375,7 +403,7 @@ class PbVPOS extends Widget {
             :receipt,
             :json_info,
             :estado_logico)";
-
+        $comando = $con->createCommand($sql);
         $comando->bindParam(":reference", $reference, \PDO::PARAM_INT);
         $comando->bindParam(":requestId", $requestId, \PDO::PARAM_STR);
         $comando->bindParam(":status", $status, \PDO::PARAM_STR);
@@ -393,7 +421,7 @@ class PbVPOS extends Widget {
         $comando->bindParam(":autorization", $autorization, \PDO::PARAM_STR);
         $comando->bindParam(":receipt", $receipt, \PDO::PARAM_STR);
         $comando->bindParam(":json_info", $json_info, \PDO::PARAM_STR);
-        $comando->bindParam(":estado_logico", "1", \PDO::PARAM_STR);
+        $comando->bindParam(":estado_logico", $estado_logico, \PDO::PARAM_STR);
         $comando->execute();
     }
 

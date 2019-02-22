@@ -64,7 +64,6 @@ class CController extends \yii\web\Controller {
     public function beforeAction($action)
     {
         $this->createMenuModule();
-        
         if (parent::beforeAction($action)) {
             $request = array_merge($_GET, $_POST);
             if(isset($request['pdf']) && $request['pdf'] == true){

@@ -209,9 +209,11 @@
         <?php
         $IRBPNR = "0.00";
         $ICE = "0.00";
-        $BASEIVA0 = "0.00";
-        $NOOBJIVA = "0.00";
-        $EXENTOIVA = "0.00";
+        $BASEIVA0 ="0.00";
+		$BASEIVA12="0.00";
+		$VALORIVA12="0.00";
+        $NOOBJIVA ="0.00";
+        $EXENTOIVA ="0.00";
 
         for ($i = 0; $i < sizeof($impFact); $i++) {
             if ($impFact[$i]['Codigo'] == '2') {//Valores de IVA

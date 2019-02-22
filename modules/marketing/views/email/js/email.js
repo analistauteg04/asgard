@@ -143,6 +143,7 @@ function preguntasuscribirContacto(psus_id, per_tipo, list_id) {
 }
 function suscribirContacto(psus_id, per_tipo, list_id) {
     var link = $('#txth_base').val() + "/marketing/email/asignar";
+    //var link = $('#txth_base').val() + "/marketing/email/guardarasignacion";
     var arrParams = new Object();
     arrParams.psus_id = psus_id;
     arrParams.per_tipo = per_tipo;
@@ -160,15 +161,15 @@ function preguntaSuscribirOtrasListas(message) {
     mens_tot = mens_tot + "<br/> Las personas que se han suscrito a estas listas, tambien les ha interesado las siguientes listas:<br/>";
     var listas = message.listas;
     var i = 0;
-    var str_listas = '';
+    var str_listas = '';   
     if (listas.length > 0) {
         for (i = 0; i < listas.length; i++) {
             str_listas = str_listas + '- ' + listas[i]['lis_nombre'] + '<br/>';
         }
-        mens_tot = mens_tot + "<br/>" + str_listas + "<br/>" + "¿Desea suscribirlo a estas listas?";
+        mens_tot = mens_tot + "<br/>" + str_listas + "<br/>" + "¿Desea suscribirlo a estas listas?";        
     } else {
-        mens_tot = mens_tot + "<br/>No hay listas referenciadas para dicho suscrito <br/>";
-    }
+        mens_tot = mens_tot + "<br/>No hay listas referenciadas para dicho suscrito <br/>";   
+    }    
     messagePB.wtmessage = mens_tot;
     messagePB.title = message.title;
     var objAccept = new Object();
@@ -191,11 +192,12 @@ function preguntaSuscribirOtrasListas(message) {
     var params = new Array(slistas, message.sus_id);
     objAccept.paramCallback = params;
     messagePB.acciones = new Array();
-    messagePB.acciones[0] = objAccept;
-    showAlert("OK", "success", messagePB);
+    messagePB.acciones[0] = objAccept;    
+    showAlert("OK", "success", messagePB); 
 }
-function suscribirOtrasListas(lista_rel, sus_id) {    
+function suscribirOtrasListas(lista_rel, sus_id) {        
     var link = $('#txth_base').val() + "/marketing/email/asignar";
+    //var link = $('#txth_base').val() + "/marketing/email/guardarasignacion";
     var arrParams = new Object();
     arrParams.list_id = $('#txth_ids').val();
     arrParams.sus_id = sus_id;
@@ -207,9 +209,9 @@ function suscribirOtrasListas(lista_rel, sus_id) {
         requestHttpAjax(link, arrParams, function (response) {
             showAlert(response.status, response.label, response.message);
         }, true);
-    }
+    }       
 }
-function RemoverSuscritor(per_id, list_id) {
+function RemoverSuscritor(per_id, pges_id, list_id) {
     var messagePB = new Object();
     var mensj = "Seguro Desea eliminar el suscritor de la lista?";
     messagePB.wtmessage = mensj;
@@ -219,17 +221,18 @@ function RemoverSuscritor(per_id, list_id) {
     objAccept.class = "btn-primary clclass praclose";
     objAccept.value = "Aceptar";
     objAccept.callback = 'elminarSuscriptor';
-    var params = new Array(per_id, list_id);
+    var params = new Array(per_id, pges_id, list_id);
     objAccept.paramCallback = params;
     messagePB.acciones = new Array();
     messagePB.acciones[0] = objAccept;
     showAlert("warning", "warning", messagePB);
 }
 
-function elminarSuscriptor(per_id, list_id) {
+function elminarSuscriptor(per_id, pges_id, list_id) {
     var link = $('#txth_base').val() + "/marketing/email/deletesuscriptor";
     var arrParams = new Object();
     arrParams.per_id = per_id;
+    arrParams.pges_id = pges_id;    
     arrParams.list_id = list_id;
     arrParams.accion = 'sc';
     if (!validateForm()) {

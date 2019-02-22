@@ -137,11 +137,16 @@ $(document).ready(function () {
         if (arrParams.empresa_id > 1) {
             $('#divMetodo').css('display', 'none');
             $('#divDocumento').css('display', 'none');
-            $('#lbl_carrera').text('Programa');           
+            $('#lbl_carrera').text('Programa');  
+             $('#divAplicaDescuento').css('display', 'block'); 
+             $('#divDescuento').css('display', 'block');              
         } else {           
             $('#divMetodo').css('display', 'none');           
             $('#divDocumento').css('display', 'block');
-            $('#lbl_carrera').text('Carrera');           
+            $('#lbl_carrera').text('Carrera');    
+            $('#divAplicaDescuento').css('display', 'none');  
+            $('#divDescuento').css('display', 'none'); 
+            $('#opt_declara_Dctosi').val(2);            
         }          
      
     });
@@ -298,20 +303,20 @@ $(document).ready(function () {
         //                            
         arrParams.empresa_id = $('#cmb_empresa').val();
         arrParams.nint_id = $(this).val();
-        arrParams.moda_id = $('#cmb_modalidad').val();
-        $('#divAplicaDescuento').css('display', 'block');  
-        $('#divDescuento').css('display', 'block');   
-        if (arrParams.empresa_id > 1) {
+        arrParams.moda_id = $('#cmb_modalidad').val();       
+        if (arrParams.empresa_id > 1) {         
             $('#divMetodo').css('display', 'none');
             $('#divDocumento').css('display', 'none');
             $('#lbl_carrera').text('Programa');            
             $('#divAplicaDescuento').css('display', 'block');   
             $('#divDescuento').css('display', 'block');   
             
-        } else {
+        } else {            
             if (arrParams.nint_id == 1) { 
                 $('#divMetodo').css('display', 'none');
-                $('#divAplicaDescuento').css('display', 'none');                 
+                $('#divAplicaDescuento').css('display', 'none');    
+                $('#divDescuento').css('display', 'none'); 
+                $('#opt_declara_Dctosi').val(2);
             } else {
                 $('#divMetodo').css('display', 'block');
                 $('#divAplicaDescuento').css('display', 'block');                  

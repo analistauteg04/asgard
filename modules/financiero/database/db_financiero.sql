@@ -5,11 +5,11 @@
 -- ------------------------------------------------------
 -- Server version	5.6.40
 
-DROP SCHEMA IF EXISTS `db_finaciero`;
-CREATE SCHEMA IF NOT EXISTS `db_finaciero` DEFAULT CHARACTER SET utf8 ;
-USE `db_finaciero` ;
+DROP SCHEMA IF EXISTS `db_financiero`;
+CREATE SCHEMA IF NOT EXISTS `db_financiero` DEFAULT CHARACTER SET utf8 ;
+USE `db_financiero` ;
 
--- GRANT ALL PRIVILEGES ON `db_facturacion`.* TO 'uteg'@'localhost' IDENTIFIED BY 'Utegadmin2016*';
+-- GRANT ALL PRIVILEGES ON `db_financiero`.* TO 'uteg'@'localhost' IDENTIFIED BY 'Utegadmin2016*';
 
 --`cat_id` bigint(20) not null auto_increment primary key,
 -- Table structure for table `CATALOGO`

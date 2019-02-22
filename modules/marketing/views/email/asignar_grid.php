@@ -67,7 +67,7 @@ crm::registerTranslations();
                             if (($model["estado"] == 1)) {
                                 return '<span class="glyphicon glyphicon-plus"></span>';
                             } else {
-                                return Html::a('<span class="glyphicon glyphicon-plus"></span>', "#", ["onclick" => "preguntasuscribirContacto(" . $model['id_psus'] . "," . $model['per_tipo'] . "," . $model['lis_id'] .");", "data-toggle" => "tooltip", "title" => "Suscribirse a la lista", "data-pjax" => 0]);
+                                return Html::a('<span class="glyphicon glyphicon-plus"></span>', "#", ["onclick" => "preguntasuscribirContacto(" . $model['per_id'] . "," . $model['id_psus'] . "," . $model['lis_id'] .");", "data-toggle" => "tooltip", "title" => "Suscribirse a la lista", "data-pjax" => 0]);
                             }
                         }else{
                             return '<span class="glyphicon glyphicon-plus"></span>';
@@ -77,7 +77,7 @@ crm::registerTranslations();
                     'rmsubs' => function ($url, $model) {
                         if ($model["estado_mailchimp"] == 0){
                             if ($model["estado"] == 1) {
-                                return Html::a('<span class="glyphicon glyphicon-remove"></span>', "#", ["onclick" => "RemoverSuscritor(" . $model['per_id'] . "," . $model['lis_id'] . ");", "data-toggle" => "tooltip", "title" => "Eliminar Suscritor", "data-pjax" => 0]);
+                                return Html::a('<span class="glyphicon glyphicon-remove"></span>', "#", ["onclick" => "RemoverSuscritor(" . $model['per_id'] . "," . $model['id_psus'] . "," . $model['lis_id'] . ");", "data-toggle" => "tooltip", "title" => "Eliminar Suscritor", "data-pjax" => 0]);
                             } else {
                                 return "<span class = 'glyphicon glyphicon-remove' data-toggle = 'tooltip' title ='No se puede remover un contacto que no se haya suscrito'  data-pjax = 0></span>";
                             }

@@ -158,4 +158,34 @@ class ModuloEstudio extends \app\modules\academico\components\CActiveRecord {
         return $resultData;
     }
 
+    /**
+     * Function obtener cursos de Smart y Ulink
+     * @author  Grace Viteri <analistadesarrollo01@uteg.edu.ec>;
+     * @property       
+     * @return  
+     */
+    public function consultarDesModuloestudio($emp_id) {
+        $con = \Yii::$app->db_academico;
+        $estado = 1;
+
+        $sql = "SELECT 
+                    mes.mest_id as id, 
+                    mes.mest_descripcion as name
+                    FROM 
+                    " . $con->dbname . ".modulo_estudio_empresa mee "
+                    . "inner join " . $con->dbname . ".modulo_estudio mes on mes.mest_id = mee.mest_id
+                    WHERE                     
+                    emp_id = :emp_id AND
+                    mes.mest_estado_logico= :estado AND
+                    mes.mest_estado= :estado AND
+                    mee.meem_estado_logico = :estado AND
+                    mee.meem_estado = :estado
+                    ORDER BY name asc";
+
+        $comando = $con->createCommand($sql);
+        $comando->bindParam(":estado", $estado, \PDO::PARAM_STR);
+        $comando->bindParam(":emp_id", $emp_id, \PDO::PARAM_INT);       
+        $resultData = $comando->queryAll();
+        return $resultData;
+    }
 }

@@ -344,14 +344,17 @@ create table if not exists `periodo_academico` (
   `saca_id` bigint(20) not null,
   `baca_id` bigint(20) not null,
   `paca_anio_academico` varchar(10) not null,
+  `paca_activo` varchar(1) not null,
+  `paca_fecha_inicio` timestamp null default null,
+  `paca_fecha_fin` timestamp null default null,
   `paca_usuario_ingreso` bigint(20) not null,
-  `paca_usuario_modifica` bigint(20)  null,
+  `paca_usuario_modifica` bigint(20)  null,  
   `paca_estado` varchar(1) not null,
   `paca_fecha_creacion` timestamp not null default current_timestamp,
   `paca_fecha_modificacion` timestamp null default null,
-  `paca_estado_logico` varchar(1) not null 
---  foreign key (sem_id) references `semestre`(sem_id),
---  foreign key (blo_id) references `bloque`(blo_id)
+  `paca_estado_logico` varchar(1) not null,
+  foreign key (saca_id) references `semestre_academico`(saca_id),
+  foreign key (baca_id) references `bloque_academico`(baca_id)
 );
 
 -- --------------------------------------------------------
@@ -606,6 +609,7 @@ create table if not exists `horario_asignatura_periodo` (
   `uaca_id` bigint(20) not null,
   `mod_id` bigint(20) not null,
   `dia_id` bigint(20) not null,
+  `hape_fecha_clase` timestamp null default null,
   `hape_hora_entrada` varchar(10) not null,
   `hape_hora_salida` varchar(10) not null,
   `hape_estado` varchar(1) not null,

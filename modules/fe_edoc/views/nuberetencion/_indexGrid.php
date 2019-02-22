@@ -58,11 +58,11 @@ PbGridView::widget([
                 return VSacceso::estadoAprobacion($data["Estado"]);
             },
         ],
-        [
+        /*[
             'attribute' => 'DocSustentoERP',
             'header' => Yii::t('fe_edoc', 'Document type'),
             'value' => 'DocSustentoERP',
-        ],
+        ],*/
         [
             'attribute' => 'NumDocumento',
             'header' => Yii::t('fe_edoc', 'Document Number'),

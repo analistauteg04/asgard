@@ -41,12 +41,11 @@ function getCampaignOnTime($webServer)
     try {
         $now = date("Ymd");
         $dia = date("N");
-        $iniTime = date('H:i', strtotime("-2 minutes", strtotime(date("Y-m-d H:i:s"))));
-        //$iniTime = date('H:i', date("Y-m-d H:i:s"));
+        $iniTime = date('H:i', strtotime("-2 minutes", strtotime(date("Y-m-d H:i:s"))));        
         $endTime = date('H:i', strtotime("+2 minutes", strtotime(date("Y-m-d H:i:s"))));
         $pdo = new \PDO($dsn, $dbuser, $dbpass);
         $pdo->setAttribute(\PDO::ATTR_ERRMODE, \PDO::ERRMODE_EXCEPTION);
-        $sql = "SELECT l.lis_nombre_principal, l.lis_asunto, l.lis_codigo, l.lis_nombre, p.pla_id as temp_id, ec.ecor_correo " .
+        $sql = "SELECT l.lis_nombre_principal, l.lis_asunto, l.lis_codigo, l.lis_nombre, p.pla_id as temp_id, ec.ecor_correo, l.lis_id " .
         "FROM db_mailing.programacion AS p " .
         "INNER JOIN db_mailing.dia_programacion AS dp ON p.pro_id = dp.pro_id " .
         "INNER JOIN db_mailing.lista AS l ON l.lis_id = p.lis_id " .
@@ -65,35 +64,55 @@ function getCampaignOnTime($webServer)
         "p.pro_hora_envio < '".$endTime."' " . 
         ";";
         //putMessageLogFile("campagna:  ". $sql);
-        echo "sql: " . json_encode($sql);
-        echo "sql: " . $sql;
+        //echo "sql: " . json_encode($sql);        
         $cmd = $pdo->prepare($sql);
         //$cmd->execute([":now" => $now, ":dia" => $dia, ":iniDate" => $iniTime, ":endDate" => $endTime]);
         $cmd->execute();
-        $rows = $cmd->fetchAll(\PDO::FETCH_ASSOC);
-        //echo json_encode($rows);
+        $rows = $cmd->fetchAll(\PDO::FETCH_ASSOC);        
         if (count($rows) > 0) {
             for ($i = 0; $i < count($rows); $i++) {
                 $addressInfo = array(
                     //"subject_line" => $rows[$i][""],
                     //"title" => $rows[$i][""],
                     "subject_line" => $rows[$i]["lis_asunto"],//"Subject de Envio",
-                    "title" => $rows[$i]["lis_nombre_principal"] . " " . $rows[$i]["lis_nombre"],//"Titulo de Envio",
+                    "title" => $rows[$i]["lis_nombre_principal"] . " " . substr($rows[$i]["lis_nombre"],0,70) . " - " . $now,//"Titulo de Envio",
                     "from_name" => $rows[$i]["lis_nombre_principal"],
                     "reply_to" => $rows[$i]["ecor_correo"],
                     "template_id" => (int) $rows[$i]["temp_id"],
                 );
+                
                 $obj_new = $webServer->createCampaign($rows[$i]["lis_codigo"], $addressInfo);
-                if(isset($obj_new["id"])){
+                if(isset($obj_new["id"])){                     
                     $sendCampaign = $webServer->sendCampaign($obj_new["id"]);
+                    //echo $obj_new["id"];
+                    $fecha_crea = date("Y-m-d H:i:s");
+                    $nombre_campania = $rows[$i]["lis_nombre_principal"] . " " . $rows[$i]["lis_nombre"] . " - " . $now;
+                    $sql1 = "INSERT INTO db_mailing.campania_lista (lis_id, clis_codigo, clis_nombre, clis_fecha_registro, clis_estado, clis_estado_logico) " .
+                            "VALUES(". $rows[$i]["lis_id"] . ",'" . $obj_new["id"] . "','" . $nombre_campania . "','" . $fecha_crea . "'," . "1, 1)";
+                    $cmd = $pdo->prepare($sql1);        
+                    $cmd->execute();
+                 
+                    /*$mod_sb = new Suscriptor();
+                    $con = \Yii::$app->db_mailing;
+                    $fecha_crea = date(Yii::$app->params["dateTimeByDefault"]);
+                    $nombre_campania = $rows[$i]["lis_nombre_principal"] . " " . $rows[$i]["lis_nombre"] . " - " . $now;
+                    $key = ['lis_id', 'clis_codigo', 'clis_nombre', 'clis_fecha_registro', 'clis_fecha_creacion', 'clis_estado', 'clis_estado_logico'];
+                    $parametro = [$rows[$i]["lis_id"], $obj_new["id"], $nombre_campania, $fecha_crea, $fecha_crea, '1', '1'];
+                    echo "sql: " . $parametro;
+                    $res_campania = $mod_sb->insertarCampaniaxLista($con, $parametro, $key, 'campania_lista');                    
+                    if ($res_campania) {
+                        $ok = 1;
+                        echo "insert: ";
+                    }  */            
                     if(is_array($sendCampaign)){
                         //echo "error crear campania 1: " . json_encode($sendCampaign);
-                        putMessageLogFile("Error al enviar campaña ". $sendCampaign);
-                    }//else
-                        //putMessageLogFile("Campaña Enviada: ". $sendCampaign);
+                        putMessageLogFile("Error al enviar campaña ". $sendCampaign . " - ID:" . $obj_new["id"]);
+                    } else {
+                        putMessageLogFile("Campaña Enviada: ". $sendCampaign . " - ID:" . $obj_new["id"]);
+                    } 
                 }else{
                     //echo "error crear campania 2: ". json_encode($obj_new);
-                    putMessageLogFile("Error al crear campaña " . $obj_new);
+                    putMessageLogFile("Error al crear campaña " . json_encode($obj_new));
                 }
             }
         }

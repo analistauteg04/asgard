@@ -33,6 +33,28 @@ class NubefacturaController extends \app\components\CController {
     public $pdf_tipo_documento = "";
     public $pdf_cod_barra = "";
 
+    public function actionTest() {
+        $data = Yii::$app->request->post();
+        $referenceID = isset($data["referenceID"])?$data["referenceID"]:null;
+        Utilities::putMessageLogFile($data);
+        if(is_null($referenceID) && Yii::$app->request->isAjax){
+            $response = $this->render('test', array(
+                "referenceID" => $data["resp"]["reference"],
+                "requestID" => $data["requestID"],
+                "response" => $data["resp"],
+            ));
+            $message = array(
+                "wtmessage" => Yii::t("notificaciones", "Your information was successfully saved."),
+                "title" => Yii::t('jslang', 'Success'),
+                "data" => $response,
+            );
+            return Utilities::ajaxResponse('OK', 'alert', Yii::t('jslang', 'Success'), 'false', $message);
+        }
+        return $this->render('test', array(
+            "referenceID" => rand(10000, 50000)
+        ));
+    }
+
     public function actionIndex() {
         $modelo = new NubeFactura();
         $tipDoc= new VSDirectorio();
@@ -81,7 +103,7 @@ class NubefacturaController extends \app\components\CController {
             $impFact = $modelo->mostrarFacturaImp($ids);
             $pagFact = $modelo->mostrarFormaPago($ids);
             $adiFact = $modelo->mostrarFacturaDataAdicional($ids);
-            $venFact= VSDocumentos::buscarDatoVendedor($cabFact['USU_ID']);//DATOS DEL VENDEDOR QUE AUTORIZO
+            //$venFact= VSDocumentos::buscarDatoVendedor($cabFact['USU_ID']);//DATOS DEL VENDEDOR QUE AUTORIZO
 
             $this->pdf_numeroaut = $cabFact['AutorizacionSri'];
             $this->pdf_numero = $cabFact['NumDocumento'];
@@ -93,7 +115,7 @@ class NubefacturaController extends \app\components\CController {
             $this->pdf_dir_sucursal = $cabFact['DireccionEstablecimiento'];
             $this->pdf_fec_autorizacion = $cabFact['FechaAutorizacion'];
             $this->pdf_emision = \app\modules\fe_edoc\Module::t("fe", 'NORMAL');//$cabFact['TipoEmision'];
-            $this->pdf_ambiente = ($cabFact['Ambiente']==1)? \app\modules\fe_edoc\Module::t("fe", 'PRODUCTION'): \app\modules\fe_edoc\Module::t("fe", 'TEST');
+            $this->pdf_ambiente = ($cabFact['Ambiente']==2)? \app\modules\fe_edoc\Module::t("fe", 'PRODUCTION'): \app\modules\fe_edoc\Module::t("fe", 'TEST');
             $this->pdf_cla_acceso = $cabFact['ClaveAcceso'];
             $this->pdf_tipo_documento = \app\modules\fe_edoc\Module::t("fe", 'INVOICE');
             $this->pdf_cod_barra = "";
@@ -208,7 +230,11 @@ class NubefacturaController extends \app\components\CController {
         if (Yii::$app->request->isAjax) {
             $ids = isset($_POST['ID']) ? $_POST['ID'] : 0;
             $correo = isset($_POST['DATA']) ? trim($_POST['DATA']) : '';
-            $arrayData = $model->cambiarMailDoc($ids,$correo);
+            $dni= isset($_POST['DNI']) ? trim($_POST['DNI']) :0;
+            //$IdsDoc= isset($_POST['IDSDOC']) ? trim($_POST['IDSDOC']) :0;
+            //ids=user,idsdoc=idDocumento, correo, cedula/ruc,tabla de docuemnto,campo id,nombre del acmpo actualizar
+            //$arrayData = $model->cambiarMailDoc($ids,$IdsDoc,$correo,$dni,'NubeFactura','IdFactura','IdentificacionComprador');
+            $arrayData = $model->cambiarMailDoc($ids,$correo,$dni);
             header('Content-type: application/json');
             echo json_encode($arrayData);
             return;

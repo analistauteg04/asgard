@@ -28,11 +28,11 @@
         "bower-asset/toastr": "*",
         "penblu/blockui": "*",
         "penblu/magnificpopup": "*",
+        "penblu/barcode": "*",
         "odaialali/yii2-toastr": "1.0b",
         "kartik-v/yii2-widget-fileinput": "*",
         "kartik-v/yii2-widget-datepicker": "*",
-        "himiklab/yii2-recaptcha-widget": "*",
-        "barcode/yii2-barcode": "@dev"
+        "himiklab/yii2-recaptcha-widget": "*"
     },
     "require-dev": {
         "yiisoft/yii2-debug": "~2.0.0",

@@ -236,13 +236,17 @@ function fun_UpdateMail(){
 
 function fun_CambiaMail() {
     var ids = $('#txth_usu_mail').val();
+    //var IdsDoc = $('#txth_IdsDoc').val();
     var correo = $('#txt_correo').val();
+    var dni = $('#txt_cedularuc').val();
     if ($('#txt_correo').val()!='' && ids!=0) {
         //pass = base64_encode(pass);
-        var link = $('#txth_base').val() +"/fe_edoc/nubefactura/Savemail";
+        var link = $('#txth_base').val() +"/fe_edoc/nubefactura/savemail";
         var arrParams = new Object();
         arrParams.DATA = correo;
+        //arrParams.DNI = dni;
         arrParams.ID = ids;
+        //arrParams.IDSDOC = IdsDoc;
         requestHttpAjax(link, arrParams, function (response) {
             if (response.status == "OK") {
                 $("#messageInfo").html(response.message + buttonAlert);
