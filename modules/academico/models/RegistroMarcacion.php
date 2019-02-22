@@ -350,7 +350,7 @@ class RegistroMarcacion extends \yii\db\ActiveRecord {
                     peri.paca_estado = :estado AND
                     peri.paca_estado_logico = :estado AND
                     peri.paca_activo = 'A'
-                    GROUP BY nombres,materia,fecha
+                    GROUP BY nombres,materia,fecha, rma.hape_id
                     ORDER BY fecha DESC
                ";
         $comando = $con->createCommand($sql);
@@ -397,7 +397,7 @@ class RegistroMarcacion extends \yii\db\ActiveRecord {
      * @param   
      * @return  Consulta una marcacion.
      */
-    public function consultarFechaDistancia($hape_fecha_clase, $mod_id, $per_id) {
+    public function consultarFechaDistancia($hape_fecha_clase, $per_id) {
         $con = \Yii::$app->db_academico;
         $estado = 1;
         $fecha_registro = $hape_fecha_clase . "00:00:00";
@@ -410,7 +410,7 @@ class RegistroMarcacion extends \yii\db\ActiveRecord {
                     WHERE
                         hap.hape_fecha_clase= :fecha AND
                         prof.per_id = :per_id AND
-                        hap.mod_id = :mod_id AND
+                        ((hap.uaca_id = 1 && hap.mod_id = 4) OR  (hap.uaca_id = 2))AND
                         hap.hape_estado = :estado AND
                         hap.hape_estado_logico = :estado  AND
                         prof.pro_estado = :estado AND

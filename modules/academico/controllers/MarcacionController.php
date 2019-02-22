@@ -22,7 +22,7 @@ class MarcacionController extends \app\components\CController {
         $dia = date("w", strtotime(date("Y-m-d")));       
         $fecha_consulta = '';      
         $fecha_compara = date(Yii::$app->params["dateByDefault"]);
-        $cons_distancia = $mod_marcacion->consultarFechaDistancia($fecha_compara, 4, $per_id);
+        $cons_distancia = $mod_marcacion->consultarFechaDistancia($fecha_compara, $per_id);
         // si valor devuelve 1 existe y fecha consulta toma el valor de fecha compra
         if ($cons_distancia["existe_distancia"] > 0) {
             $fecha_consulta = $fecha_compara;
