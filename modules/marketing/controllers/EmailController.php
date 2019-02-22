@@ -154,10 +154,7 @@ class EmailController extends \app\components\CController {
                         "title" => Yii::t('jslang', 'Success'),
                         "listas" => $est_rel,
                         "sus_id" => $su_id,
-<<<<<<< HEAD
                         //"rederict" => Yii::$app->response->redirect(['/marketing/email/asignar?lis_id=' . base64_encode($list_id)]),
-=======
->>>>>>> e682aa48ddc80031eaa0c095faa33bc87294e930
                     );
                 } else {
                     $message = array(
