@@ -341,9 +341,9 @@ create table if not exists `bloque_academico` (
 -- Semestre
 create table if not exists `periodo_academico` (
   `paca_id` bigint(20) not null auto_increment primary key, 
-  `saca_id` bigint(20) not null,
-  `baca_id` bigint(20) not null,
-  `paca_anio_academico` varchar(10) not null,
+  `saca_id` bigint(20) null,
+  `baca_id` bigint(20) null,
+  `paca_anio_academico` varchar(50) not null,
   `paca_activo` varchar(1) not null,
   `paca_fecha_inicio` timestamp null default null,
   `paca_fecha_fin` timestamp null default null,
