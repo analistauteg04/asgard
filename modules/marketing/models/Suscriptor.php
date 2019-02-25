@@ -299,7 +299,8 @@ class Suscriptor extends \yii\db\ActiveRecord {
         }
         try {
             $comando = $con->createCommand
-                    ("UPDATE " . $con->dbname . ".suscriptor sus 
+                    ("  
+                      UPDATE " . $con->dbname . ".suscriptor sus
                       INNER JOIN " . $con->dbname . ".lista_suscriptor lsus 
                       ON sus.sus_id = lsus.sus_id  
                       SET sus.sus_estado = :estado_cambio, 
@@ -365,7 +366,6 @@ class Suscriptor extends \yii\db\ActiveRecord {
     public function consultarSuscriptoxPerylis($per_id, $pges_id, $list_id) {
         $con = \Yii::$app->db_mailing;
         // $estado = 1;
-
         $sql = "
                 select count(*) as inscantes	
                 FROM " . $con->dbname . ".suscriptor sus 

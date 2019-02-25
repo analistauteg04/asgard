@@ -124,6 +124,7 @@ class EmailController extends \app\components\CController {
                 $data_source = array();            
                 $esus = $mod_sb->consultarSuscriptoxPerylis($per_id, $pge_id, $list_id);
                 if ($esus["inscantes"] > 0) {
+                    \app\models\Utilities::putMessageLogFile('suscritos: '. $esus["inscantes"] );
                     $su_id = $mod_sb->updateSuscripto($per_id, $pge_id, $list_id, $estado_cambio);
                     if ($su_id > 0) {
                         $mensaje = "El contacto ha sido asignado a la lista satisfactoriamente";
@@ -134,15 +135,19 @@ class EmailController extends \app\components\CController {
                     }
                 } else {
                     $encontrar = $mod_sb->consultarSuscritosbtn($per_id, $pge_id);
+                    \app\models\Utilities::putMessageLogFile('encontrar: '. $encontrar);
                     if (!($encontrar)) {
+                        \app\models\Utilities::putMessageLogFile('Va a proceder a insertar el suscrito');
                         $keys = ['per_id', 'pges_id', 'sus_estado', 'sus_estado_logico'];
                         $parametros = [$per_id, $pge_id, 1, 1];
                         $su_id = $mod_sb->insertarSuscritor($con, $parametros, $keys, 'suscriptor');
                         if ($su_id > 0) {
+                            \app\models\Utilities::putMessageLogFile('Se ha insertado el suscritos');
                             $key = ['lis_id', 'sus_id', 'lsus_estado', 'lsus_fecha_creacion', 'lsus_estado_logico'];
                             $parametro = [$list_id, $su_id, 1, $fecha_crea, 1];
                             $lsu_id = $mod_sb->insertarListaSuscritor($con, $parametro, $key, 'lista_suscriptor');
                             if ($lsu_id > 0) {
+                                \app\models\Utilities::putMessageLogFile('Se ha asignado el suscrito a la lista');
                                 $mensaje = "El contacto ha sido asignado a la lista satisfactoriamente";
                             } else {
                                 $mensaje = "Error: El suscriptor no fue guardado.";
@@ -173,11 +178,7 @@ class EmailController extends \app\components\CController {
                         "title" => Yii::t('jslang', 'Success'),
                         "listas" => $est_rel,
                         "sus_id" => $su_id,
-<<<<<<< HEAD
                         //"rederict" => Yii::$app->response->redirect(['/marketing/email/asignar?lis_id=' . base64_encode($list_id)]),
-=======
-                            //"rederict" => Yii::$app->response->redirect(['/marketing/email/asignar?lis_id=' . base64_encode($list_id)]),
->>>>>>> 2ec88c8efea35bcfcd30debfe5932e551ab2b722
                     );
                 } else {
                     $message = array(
@@ -350,7 +351,6 @@ class EmailController extends \app\components\CController {
             $usuario = @Yii::$app->user->identity->usu_id;
             $con = \Yii::$app->db_mailing;
             $transaction = $con->beginTransaction();
-
             try {
                 $mod_lista = new Lista();
                 //$plantilla = $mod_lista->consultarListaTemplate($lista);
