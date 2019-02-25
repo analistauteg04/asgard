@@ -94,7 +94,7 @@ function mostrar_grid_lista_suscriptor() {
 function suscribirTodos() {
     var messagePB = new Object();
     messagePB.wtmessage = "Va a suscribir todos los contactos, esta opción sólo guarda en la base como suscrito, vinculando a esta lista.<br/> Pero aún no está como suscrito en mailchimp.";
-    messagePB.title = "";  
+    messagePB.title = "";
     var objAccept = new Object();
     objAccept.id = "btnid2del";
     objAccept.class = "btn-primary clclass praclose";
@@ -107,7 +107,7 @@ function suscribirTodos() {
     showAlert("OK", "info", messagePB);
 }
 function fnsuscribirLista() {
-    var lista = $('#txth_ids').val();    
+    var lista = $('#txth_ids').val();
     var link = $('#txth_base').val() + "/marketing/email/suscribirtodos?lisid=" + lista;
     var arrParams = new Object();
     arrParams.lis_id = lista;
@@ -128,7 +128,8 @@ function programarEnvio() {
 }
 function preguntasuscribirContacto(psus_id, per_tipo, list_id) {
     var messagePB = new Object();
-    messagePB.wtmessage = "Haga clic en aceptar para suscribir el contacto, caso contrario haga clic en cancelar.";
+    var mens_tot = "Haga clic en aceptar para suscribir el contacto, caso contrario haga clic en cancelar.";
+    messagePB.wtmessage = mens_tot;
     messagePB.title = "";
     var objAccept = new Object();
     objAccept.id = "btnid2del";
@@ -142,74 +143,19 @@ function preguntasuscribirContacto(psus_id, per_tipo, list_id) {
     showAlert("OK", "info", messagePB);
 }
 function suscribirContacto(psus_id, per_tipo, list_id) {
-    var link = $('#txth_base').val() + "/marketing/email/asignar";
-    //var link = $('#txth_base').val() + "/marketing/email/guardarasignacion";
+    var lista = $('#txth_ids').val();
+    var link = $('#txth_base').val() + "/marketing/email/guardarasignacion";
     var arrParams = new Object();
     arrParams.psus_id = psus_id;
     arrParams.per_tipo = per_tipo;
     arrParams.list_id = list_id;
-    arrParams.accion = 'sc';
     if (!validateForm()) {
-        requestHttpAjax(link, arrParams, function (response) {           
-            preguntaSuscribirOtrasListas(response.message);
+        requestHttpAjax(link, arrParams, function (response) {            
+            //showAlert(response.status, response.label, response.message);
+            alert(response.message.wtmessage);
+            window.location.href = $('#txth_base').val() + "/marketing/email/asignar?lis_id="+lista;
         }, true);
     }
-}
-function preguntaSuscribirOtrasListas(message) {      
-    var messagePB = new Object();
-    var mens_tot = message.wtmessage;
-    mens_tot = mens_tot + "<br/> Las personas que se han suscrito a estas listas, tambien les ha interesado las siguientes listas:<br/>";
-    var listas = message.listas;
-    var i = 0;
-    var str_listas = '';   
-    if (listas.length > 0) {
-        for (i = 0; i < listas.length; i++) {
-            str_listas = str_listas + '- ' + listas[i]['lis_nombre'] + '<br/>';
-        }
-        mens_tot = mens_tot + "<br/>" + str_listas + "<br/>" + "¿Desea suscribirlo a estas listas?";        
-    } else {
-        mens_tot = mens_tot + "<br/>No hay listas referenciadas para dicho suscrito <br/>";   
-    }    
-    messagePB.wtmessage = mens_tot;
-    messagePB.title = message.title;
-    var objAccept = new Object();
-    objAccept.id = "btnid2del";
-    objAccept.class = "btn-primary clclass praclose";
-    objAccept.value = "Aceptar";
-    objAccept.callback = 'suscribirOtrasListas';
-    var slistas = '';
-    if (listas.length > 0) {
-        var ids = '';
-        for (i = 0; i < listas.length; i++) {
-            if (i < (listas.length - 1)) {
-                ids = ids + listas[i]['lis_id'] + ',';
-            } else {
-                ids = ids + listas[i]['lis_id'];
-            }
-        }
-        slistas = ids;
-    }   
-    var params = new Array(slistas, message.sus_id);
-    objAccept.paramCallback = params;
-    messagePB.acciones = new Array();
-    messagePB.acciones[0] = objAccept;    
-    showAlert("OK", "success", messagePB); 
-}
-function suscribirOtrasListas(lista_rel, sus_id) {        
-    var link = $('#txth_base').val() + "/marketing/email/asignar";
-    //var link = $('#txth_base').val() + "/marketing/email/guardarasignacion";
-    var arrParams = new Object();
-    arrParams.list_id = $('#txth_ids').val();
-    arrParams.sus_id = sus_id;
-    if (lista_rel.length != '') {        
-        arrParams.list_ids = lista_rel;
-    }    
-    arrParams.accion = 'lis_rel';
-    if (!validateForm()) {
-        requestHttpAjax(link, arrParams, function (response) {
-            showAlert(response.status, response.label, response.message);
-        }, true);
-    }       
 }
 function RemoverSuscritor(per_id, pges_id, list_id) {
     var messagePB = new Object();
@@ -232,7 +178,7 @@ function elminarSuscriptor(per_id, pges_id, list_id) {
     var link = $('#txth_base').val() + "/marketing/email/deletesuscriptor";
     var arrParams = new Object();
     arrParams.per_id = per_id;
-    arrParams.pges_id = pges_id;    
+    arrParams.pges_id = pges_id;
     arrParams.list_id = list_id;
     arrParams.accion = 'sc';
     if (!validateForm()) {
@@ -446,12 +392,12 @@ function subirMailchimp() {
     showAlert("warning", "warning", messagePB);
 }
 function cargarMailchimp() {
-    var idlista = $('#txth_ids').val();    
+    var idlista = $('#txth_ids').val();
     var arrParams = new Object();
     arrParams.lis_id = idlista;
     var link = $('#txth_base').val() + "/marketing/email/cargarmailchimp";
     requestHttpAjax(link, arrParams, function (response) {
-        showAlert(response.status, response.label, response.message);        
+        showAlert(response.status, response.label, response.message);
     }, true);
 }
 function modificarProgramacion() {
@@ -529,11 +475,11 @@ function exportPdf() {
 }
 
 function exportExcelLista() {
-    var lista = $('#txt_buscar_lista').val();        
+    var lista = $('#txt_buscar_lista').val();
     window.location.href = $('#txth_base').val() + "/marketing/email/expexcel1?lista=" + lista;
 }
 
 function exportPdfLista() {
-    var lista = $('#txt_buscar_lista').val();          
+    var lista = $('#txt_buscar_lista').val();
     window.location.href = $('#txth_base').val() + "/marketing/email/exppdfl?pdf=1&lista=" + lista;
 }
