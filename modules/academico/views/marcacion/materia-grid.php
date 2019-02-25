@@ -16,6 +16,7 @@ use app\modules\academico\Module as academico;
 
 admision::registerTranslations();
 academico::registerTranslations();
+
 ?>
 <?=
 
@@ -42,7 +43,7 @@ PbGridView::widget([
         [
             'class' => 'yii\grid\ActionColumn',
             'header' => Yii::t("formulario", "Actions"),
-            'contentOptions' => ['style' => 'max-width:50px;'],
+            'contentOptions' => ['style' => 'max-width:100px;'],
             'template' => '{iniciar} {finalizar} ',
             'buttons' => [
                 'iniciar' => function ($url, $model) {                    

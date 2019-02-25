@@ -26,7 +26,8 @@ class MarcacionController extends \app\components\CController {
         // si valor devuelve 1 existe y fecha consulta toma el valor de fecha compra
         if ($cons_distancia["existe_distancia"] > 0) {
             $fecha_consulta = $fecha_compara;
-        }     
+        }   
+        \app\models\Utilities::putMessageLogFile('si tiene: ' . $cons_distancia["existe_distancia"]);
         $arr_materia = $mod_marcacion->consultarMateriasMarcabyPro($per_id, $dia, $fecha_consulta);
         return $this->render('marcacion', [
                     'model' => $arr_materia

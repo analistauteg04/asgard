@@ -95,10 +95,12 @@ class RegistroMarcacion extends \yii\db\ActiveRecord {
      * @property integer $userid
      * @return  
      */
-    public function consultarMateriasMarcabyPro($per_id, $dia, $hape_fecha_clase) {
+    public function consultarMateriasMarcabyPro($per_id, $dia, $hape_fecha_clase, $onlyData = false) {
         $con = \Yii::$app->db_academico;
         if (!empty($hape_fecha_clase)) {
-            $filtro = "hap.hape_fecha_clase = ':fecha' AND ";
+            $filtro = "hap.hape_fecha_clase = :hape_fecha_clase AND ";
+        } else {
+            $filtro = "hap.hape_fecha_clase is null AND ";
         }
 
         $estado = 1;
@@ -133,10 +135,10 @@ class RegistroMarcacion extends \yii\db\ActiveRecord {
         $comando->bindParam(":per_id", $per_id, \PDO::PARAM_INT);
         $comando->bindParam(":dia", $dia, \PDO::PARAM_INT);
         // si parametro de fecha es !empty entonces se crea parametro $fecha
-        if (!empty($hape_fecha_clase)) {
-            $fecha = $fecha_registro = $hape_fecha_clase . "00:00:00";
-            $comando->bindParam(':hape_fecha_clase', $fecha, \PDO::PARAM_STR);
-        }
+        //if (!empty($hape_fecha_clase)) {
+        $fecha_registro = $hape_fecha_clase . ' 00:00:00';
+        $comando->bindParam(':hape_fecha_clase', $fecha_registro, \PDO::PARAM_STR);
+        //}
         $resultData = $comando->queryAll();
         $dataProvider = new ArrayDataProvider([
             'key' => 'id',
@@ -397,7 +399,7 @@ class RegistroMarcacion extends \yii\db\ActiveRecord {
     public function consultarFechaDistancia($hape_fecha_clase, $per_id) {
         $con = \Yii::$app->db_academico;
         $estado = 1;
-        $fecha_registro = $hape_fecha_clase . "00:00:00";
+        $fecha_registro = $hape_fecha_clase . " 00:00:00";
         $sql = "
                     SELECT
                         COUNT(*) AS existe_distancia
@@ -405,15 +407,15 @@ class RegistroMarcacion extends \yii\db\ActiveRecord {
                         " . $con->dbname . ".horario_asignatura_periodo hap
                         INNER JOIN " . $con->dbname . ".profesor prof ON prof.pro_id = hap.pro_id    
                     WHERE
-                        hap.hape_fecha_clase= :fecha AND
+                        hap.hape_fecha_clase = :fecha AND
                         prof.per_id = :per_id AND
-                        ((hap.uaca_id = 1 && hap.mod_id = 4) OR  (hap.uaca_id = 2))AND
+                        ((hap.uaca_id = 1 && hap.mod_id = 4) OR  (hap.uaca_id = 2)) AND
                         hap.hape_estado = :estado AND
                         hap.hape_estado_logico = :estado  AND
                         prof.pro_estado = :estado AND
                         prof.pro_estado_logico = :estado";
         $comando = $con->createCommand($sql);
-        $comando->bindParam(":fecha", $fecha_registro, \PDO::PARAM_STR);   
+        $comando->bindParam(":fecha", $fecha_registro, \PDO::PARAM_STR);
         $comando->bindParam(":per_id", $per_id, \PDO::PARAM_INT);
         $comando->bindParam(":estado", $estado, \PDO::PARAM_STR);
 
