@@ -819,6 +819,52 @@ class Usuario extends \yii\db\ActiveRecord implements IdentityInterface {
         $command->bindParam(":usu_password",$password, \PDO::PARAM_STR);        
         $command->execute();
         return $con->getLastInsertID();
-    }       
-
+    }
+    
+    /**
+     * Function consultarDataUsuario para profesores.
+     * @author  Grace Viteri <analistadesarrollo01@uteg.edu.ec>
+     * @param      
+     * @return  
+     */    
+    public function consultarDataUsuario($id_inicio, $id_final) {
+        $con = \Yii::$app->db;          
+        $sql = "select usu_id, p.per_cedula from " . $con->dbname . ".usuario u inner join " . $con->dbname . ".persona p on (p.per_id = u.per_id) "
+                . "where usu_id between :id_inicio and :id_final "
+                . "and u.usu_estado = '1' and p.per_estado = '1' ";
+        $command = $con->createCommand($sql);
+        $command->bindParam(":id_inicio", $id_inicio, \PDO::PARAM_INT);
+        $command->bindParam(":id_final", $id_final, \PDO::PARAM_INT); 
+        return $command->queryAll();        
+    }
+    
+    /**
+     * Function actualizarDataUsuario para profesores.
+     * @author  Grace Viteri <analistadesarrollo01@uteg.edu.ec>
+     * @param      
+     * @return  
+     */    
+    public function actualizarDataUsuario($usu_sha, $usu_pass, $usu_id) {
+        $con = \Yii::$app->db;
+        $trans = $con->beginTransaction();
+        try {            
+            
+            $sql = "UPDATE " . $con->dbname . ".usuario 
+                    SET usu_sha = :usu_sha,
+                    usu_password= :usu_password
+                    WHERE usu_id=:usu_id; ";
+            $command = $con->createCommand($sql);
+            $command->bindParam(":usu_id", $usu_id, \PDO::PARAM_INT);
+            $command->bindParam(":usu_sha", $usu_sha, \PDO::PARAM_STR);
+            $command->bindParam(":usu_password", $usu_pass, \PDO::PARAM_STR);
+            $command->execute();
+            $trans->commit();
+            $con->close();
+            return true;
+        } catch (\Exception $e) {
+            $trans->rollBack();
+            $con->close();            
+            return false;
+        }
+    }    
 }
