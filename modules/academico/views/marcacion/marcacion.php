@@ -17,8 +17,7 @@ $dia = date("w", strtotime(date("Y-m-d")));
         </div> 
         <div class="col-md-12 col-sm-12 col-xs-12 col-lg-12">   
             <div class="col-md-6 col-sm-6 col-xs-6 col-lg-6">
-                <div class="form-group">
-                    <!--<h4><span id="lbl_general"><?= academico::t("Academico", "Teacher Dialing") ?></span></h4> -->
+                <div class="form-group">                    
                     <table width="300px">
                         <thead>                            
                             <tr align="center" style="font-weight: bold;"> 
