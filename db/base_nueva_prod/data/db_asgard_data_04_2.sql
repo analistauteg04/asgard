@@ -10,7 +10,7 @@ INSERT INTO `modulo` (`mod_id`, `apl_id`, `mod_nombre`, `mod_tipo`, `mod_dir_ima
 (1, 1, 'Configuraciones', 'Configuraciones', 'glyphicon glyphicon-cog', 'grupo/index', 1, 'menu', '1', '1', '2018-09-16 08:44:54', NULL, '1'),
 (2, 1, 'Admisiones', 'Admisiones', 'glyphicon glyphicon-cog', 'admision/contactos/index', 2, 'menu', '1', '1', '2018-09-16 08:44:54', NULL, '1'),
 (3, 1, 'Financiero', 'Financiero', 'glyphicon glyphicon-cog', 'financiero/pagos/index', 3, 'menu', '1', '1', '2018-09-18 05:06:44', NULL, '1'),
-(4, 1, 'Academico', 'Academico', 'glyphicon glyphicon-cog', 'academico/admitidos/index', 4, 'menu', '1', '1', '2018-09-18 05:06:58', NULL, '1'),
+(4, 1, 'Académico', 'Academico', 'glyphicon glyphicon-cog', 'academico/admitidos/index', 4, 'menu', '1', '1', '2018-09-18 05:06:58', NULL, '1'),
 (5, 1, 'Reportes', 'Academico', 'glyphicon glyphicon-cog', 'academico/admitidos/index', 5, 'menu', '1', '1', '2018-09-18 05:06:58', NULL, '1'),
 (6, 1, 'Marketing', 'Marketing', 'glyphicon glyphicon-envelope', 'academico/admitidos/index', 6, 'menu', '1', '1', '2018-09-18 05:06:58', NULL, '1');
 

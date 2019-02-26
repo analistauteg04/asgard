@@ -28,8 +28,10 @@ class MarcacionController extends \app\components\CController {
             $fecha_consulta = $fecha_compara;
         }
         $arr_materia = $mod_marcacion->consultarMateriasMarcabyPro($per_id, $dia, $fecha_consulta);
+        $arr_periodo = $mod_marcacion->consultarMateriasMarcabyPro($per_id, $dia, $fecha_consulta, true);
         return $this->render('marcacion', [
-                    'model' => $arr_materia
+                    'model' => $arr_materia,
+                    'periodo' => $arr_periodo
         ]);
     }
 
@@ -161,10 +163,10 @@ class MarcacionController extends \app\components\CController {
                     }
                 } else {
 
-                    $mensaje = 'Ya registro la ' . $texto . ' de esta materia';
+                    $mensaje = 'Ya registró la ' . $texto . ' de esta materia';
                     $transaction->rollback();
                     $message = array(
-                        "wtmessage" => Yii::t("notificaciones", "No se puede guardar la marcacion " . $mensaje),
+                        "wtmessage" => Yii::t("notificaciones", "No se puede guardar la marcación. " . $mensaje),
                         "title" => Yii::t('jslang', 'Error'),
                     );
                     return Utilities::ajaxResponse('NO_OK', 'alert', Yii::t("jslang", "Error"), true, $message);

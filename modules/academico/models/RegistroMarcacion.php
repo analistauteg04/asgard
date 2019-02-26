@@ -112,12 +112,15 @@ class RegistroMarcacion extends \yii\db\ActiveRecord {
                     hap.uaca_id as unidad,
                     hap.mod_id as modalidad,
                     asig.asi_nombre as materia,
-                    hap.pro_id as profesor
+                    hap.pro_id as profesor,
+                    ifnull(CONCAT(paca.paca_anio_academico,' (',blq.baca_nombre,'-',sem.saca_nombre,')'),paca.paca_anio_academico) as periodo
                     FROM
                     " . $con->dbname . ".horario_asignatura_periodo hap
                     INNER JOIN " . $con->dbname . ".profesor prof ON prof.pro_id = hap.pro_id
                     INNER JOIN " . $con->dbname . ".asignatura asig ON asig.asi_id = hap.asi_id
-                    INNER JOIN " . $con->dbname . ".periodo_academico paca ON paca.paca_id = hap.paca_id    
+                    INNER JOIN " . $con->dbname . ".periodo_academico paca ON paca.paca_id = hap.paca_id 
+                    LEFT JOIN " . $con->dbname . ".semestre_academico sem  ON sem.saca_id = paca.saca_id 
+                    LEFT JOIN " . $con->dbname . ".bloque_academico blq ON blq.baca_id = paca.baca_id
                     WHERE
                     $filtro
                     hap.dia_id = :dia AND

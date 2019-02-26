@@ -26,11 +26,6 @@ PbGridView::widget([
     'columns' =>
     [
         [
-            'attribute' => 'codigo',
-            'header' => Yii::t("formulario", "Code"),
-            'value' => 'id',
-        ],
-        [
             'attribute' => 'materia',
             'header' => Yii::t("formulario", "Matter"),
             'value' => 'materia',
