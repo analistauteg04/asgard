@@ -170,6 +170,7 @@ class NubeGuiaRemision extends \app\modules\fe_edoc\components\CActiveRecord {
             }
         }
         //$sql .= "ORDER BY A.IdGuiaRemision DESC  $limitrowsql";
+        $sql .= "ORDER BY A.IdGuiaRemision DESC";
         //echo $sql;
 
         $rawData = $con->createCommand($sql)->queryAll();
