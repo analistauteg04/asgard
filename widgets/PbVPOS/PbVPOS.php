@@ -228,7 +228,7 @@ class PbVPOS extends Widget {
         $total        = $params["payment"]["amount"]["total"];
         $tax          = $params["payment"]["amount"]["tax"];
         $session      = $params["payment"]["reference"];
-        $expiration   = $params["expiration"];
+        $expiration   = date("Y-m-d H:i:s", strtotime($params["expiration"]));
         $returnUrl    = $params["returnUrl"];
         $date         = date("Y-m-d H:i:s");
         $document     = "";
@@ -304,7 +304,7 @@ class PbVPOS extends Widget {
         $status    = $params["status"]["status"];
         $reason    = $params["status"]["reason"];
         $message   = $params["status"]["message"];
-        $date      = $params["status"]["date"];
+        $date      = date("Y-m-d H:i:s", strtotime($params["status"]["date"]));
         $processUrl    = $params["processUrl"];
         $json_response = json_encode($params);
         $estado_logico = "1";
@@ -350,12 +350,12 @@ class PbVPOS extends Widget {
         $status = $params["status"]["status"];
         $reason = $params["status"]["reason"];
         $message = $params["status"]["message"];
-        $date = $params["status"]["date"];
+        $date = date("Y-m-d H:i:s", strtotime($params["status"]["date"]));
         
         $payment_status = $params["payment"][0]["status"]["status"];
         $payment_reason = $params["payment"][0]["status"]["reason"];
         $payment_message = $params["payment"][0]["status"]["message"];
-        $payment_date = $params["payment"][0]["status"]["date"];
+        $payment_date = date("Y-m-d H:i:s", strtotime($params["payment"][0]["status"]["date"]));
         $internalReference = $params["payment"][0]["internalReference"];
         $paymenMethod = $params["payment"][0]["paymentMethod"];
         $paymentMethodName = $params["payment"][0]["paymentMethodName"];

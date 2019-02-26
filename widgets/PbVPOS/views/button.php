@@ -6,7 +6,7 @@
  */
 use app\widgets\PbVPOS\PbVPOS;
 ?>
-<div class="input-group margin">
+<div class="input-group margin btnPago">
     <button type="button" class="btn btn-block btn-success" onclick="playOnPay('<?= $processUrl ?>')"><?= PbVPOS::t("vpos", "Buy") ?></button>
 </div>
 <div id="lightbox-response"></div>

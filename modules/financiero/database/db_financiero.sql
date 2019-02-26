@@ -201,7 +201,7 @@ CREATE TABLE `cuenta_bancarias` (
 -- TABLAS DE BOTON DE PAGO
 DROP TABLE IF EXISTS `vpos_request`;
 CREATE TABLE `vpos_request` (
-  `reference` bigint(20) NOT NULL AUTO_INCREMENT PRIMARY KEY,
+  `reference` bigint(20) NOT NULL, -- AUTO_INCREMENT PRIMARY KEY,
   `descripcion` varchar(200) DEFAULT NULL,
   `currency` varchar(5) DEFAULT NULL,
   `total` float DEFAULT NULL,
@@ -220,11 +220,11 @@ CREATE TABLE `vpos_request` (
   `fecha_creacion` timestamp NULL DEFAULT CURRENT_TIMESTAMP,
   `fecha_modificacion` timestamp NULL DEFAULT NULL,
   `estado_logico` varchar(1) DEFAULT NULL
-) ENGINE=InnoDB AUTO_INCREMENT=0 DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 DROP TABLE IF EXISTS `vpos_response`;
 CREATE TABLE `vpos_response` (
-  `reference` bigint(20) NOT NULL AUTO_INCREMENT PRIMARY KEY,
+  `reference` bigint(20) NOT NULL, -- AUTO_INCREMENT PRIMARY KEY,
   `requestId` varchar(20) DEFAULT NULL,
   `status` varchar(20) DEFAULT NULL,
   `reason` varchar(10) DEFAULT NULL,
@@ -235,11 +235,11 @@ CREATE TABLE `vpos_response` (
   `fecha_creacion` timestamp NULL DEFAULT CURRENT_TIMESTAMP,
   `fecha_modificacion` timestamp NULL DEFAULT NULL,
   `estado_logico` varchar(1) DEFAULT NULL
-) ENGINE=InnoDB AUTO_INCREMENT=0 DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 DROP TABLE IF EXISTS `vpos_info_response`;
 CREATE TABLE `vpos_info_response` (
-  `reference` bigint(20) NOT NULL AUTO_INCREMENT PRIMARY KEY,
+  `reference` bigint(20) NOT NULL, -- AUTO_INCREMENT PRIMARY KEY,
   `requestId` varchar(20) DEFAULT NULL,
   `status` varchar(20) DEFAULT NULL,
   `reason` varchar(10) DEFAULT NULL,
@@ -259,4 +259,4 @@ CREATE TABLE `vpos_info_response` (
   `fecha_creacion` timestamp NULL DEFAULT CURRENT_TIMESTAMP,
   `fecha_modificacion` timestamp NULL DEFAULT NULL,
   `estado_logico` varchar(1) DEFAULT NULL
-) ENGINE=InnoDB AUTO_INCREMENT=0 DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;

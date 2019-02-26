@@ -56,6 +56,6 @@ return [
     'Your information has not been saved.' => 'Su información no ha sido guardada.',
     'Your information has not been saved. Please try again.' => 'Su información no ha sido guardada. Por favor intente de nuevo.',
     'Your session is about to expire!' => 'Su sesión esta por expirar!',
-    'Invalid request. Please do not repeat this request again.' => 'Petición Invalida. Por favor, no repita esta solicitud nuevamente.',
+    'Invalid request. Please do not repeat this request again. Contact to Administrator.' => 'Petición Invalida. Por favor, no repita esta solicitud nuevamente. Contacte al Administrador.',
     'The information above has been entered' => 'La información ya ha sido ingresada anteriormente',
 ];
