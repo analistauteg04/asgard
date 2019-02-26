@@ -201,7 +201,19 @@ class Suscriptor extends \yii\db\ActiveRecord {
                         LEFT JOIN
                     db_asgard.persona per ON per.per_id = i.per_id
                         LEFT JOIN
-                    db_crm.persona_gestion AS pges ON per.per_correo = pges.pges_correo            
+                    db_crm.persona_gestion AS pges ON per.per_correo = pges.pges_correo                                
+                    WHERE
+                        lst.lis_id = :list_id
+                        and lst.lis_estado = :estado
+                        and lst.lis_estado_logico = :estado
+                        and  per.per_id 
+                        not in(
+                               select sus.per_id 
+                                from db_mailing.lista_suscriptor as ls
+                                join db_mailing.suscriptor as sus on sus.sus_id=ls.sus_id
+                               where lis_id =:list_id
+                               )
+                        $str_search
             ";
         } else {
             $sql = "
@@ -263,14 +275,15 @@ class Suscriptor extends \yii\db\ActiveRecord {
                         db_crm.persona_gestion AS pges ON per.per_correo = pges.pges_correo            
                     ";
             }
-        }
-        $sql .= "
+            $sql .= "
                     WHERE
                         lst.lis_id = :list_id
                         AND lst.lis_estado = :estado
                         AND lst.lis_estado_logico = :estado
                         $str_search
                 ";
+        }
+        
         $comando = $con->createCommand($sql);
         $comando->bindParam(":estado", $estado, \PDO::PARAM_STR);
         $comando->bindParam(":list_id", $list_id, \PDO::PARAM_INT);
