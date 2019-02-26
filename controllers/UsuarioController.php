@@ -54,7 +54,7 @@ use app\models\Persona;
 use app\models\Utilities;
 use yii\data\ArrayDataProvider;
 use yii\helpers\ArrayHelper;
-
+use yii\base\Security;
 class UsuarioController extends CController
 {
     public function actions()
@@ -205,7 +205,26 @@ class UsuarioController extends CController
         }
     }
     
- 
+    /* Grace Viteri */
+    public function actionGeneraclaves() {
+        $usuario = new Usuario();     
+        $security = new Security();
+        $dataInicial = 47;
+        $dataFinal = 205;
+        $resul = $usuario->consultarDataUsuario($dataInicial, $dataFinal);
+        if (count($resul)>0) {            
+            for ($i=0; $i<count($resul); $i++) {                
+                $usu_sha = $security->generateRandomString();
+                $usu_pass= base64_encode($security->encryptByPassword($usu_sha, $resul[$i]["per_cedula"]));                                
+                /*\app\models\Utilities::putMessageLogFile('usu_sha:' . $usu_sha);
+                \app\models\Utilities::putMessageLogFile('usu_pass:' . $usu_pass);                */
+                $respUsu = $usuario->actualizarDataUsuario($usu_sha, $usu_pass, $resul[$i]["usu_id"]);                   
+            }
+        }
+        return $this->render('generaclaves', [
+                    ]);
+
+    }
 
 }
 

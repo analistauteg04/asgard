@@ -52,13 +52,18 @@ admision::registerTranslations();
             [
                 'class' => 'yii\grid\ActionColumn',
                 'header' => Yii::t("formulario", "Actions"),
-                'template' => '{view} ',
+                'template' => '{view}  {btnPago}',
                 'buttons' => [
                     'view' => function ($url, $model) {
                         if ($model['rol'] == 1) {
                             return Html::a('<span class="glyphicon glyphicon-check"></span>', Url::to(['pagos/cargardocpagos', 'sins_id'=> base64_encode($model['sins_id']),'ids' => base64_encode($model['opag_id']), 'tot' => base64_encode($model['pag_total']), 'estado' => base64_encode($model['estado']), 'pe' => base64_encode($model['pendiente']), 'peid' => base64_encode($model['per_id'])]), ["data-toggle" => "tooltip", "title" => "Subir Documento", "data-pjax" => 0]);
                         }
-                    }
+                    },
+                    'btnPago' => function ($url, $model) {
+                        if ($model['rol'] == 1 && $model['estado'] != 'S') {
+                            return Html::a('<span class="glyphicon glyphicon-credit-card"></span>', Url::to(['/financiero/pagos/botonpago', 'sins_id'=> base64_encode($model['sins_id']),'ids' => base64_encode($model['opag_id']), 'popup' => 'true' ], true), ["data-toggle" => "tooltip", "title" => financiero::t("Pagos", "Payment Button"), "data-pjax" => 0, "class" => "pbpopup"]);
+                        }
+                    },
                 ],
             ],
         ],

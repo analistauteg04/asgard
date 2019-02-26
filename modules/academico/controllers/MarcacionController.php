@@ -19,18 +19,19 @@ class MarcacionController extends \app\components\CController {
     public function actionMarcacion() {
         $mod_marcacion = new RegistroMarcacion();
         $per_id = @Yii::$app->session->get("PB_perid");
-        $dia = date("w", strtotime(date("Y-m-d")));       
-        $fecha_consulta = '';      
+        $dia = date("w", strtotime(date("Y-m-d")));
+        $fecha_consulta = '';
         $fecha_compara = date(Yii::$app->params["dateByDefault"]);
         $cons_distancia = $mod_marcacion->consultarFechaDistancia($fecha_compara, $per_id);
         // si valor devuelve 1 existe y fecha consulta toma el valor de fecha compra
         if ($cons_distancia["existe_distancia"] > 0) {
             $fecha_consulta = $fecha_compara;
-        }   
-        \app\models\Utilities::putMessageLogFile('si tiene: ' . $cons_distancia["existe_distancia"]);
+        }
         $arr_materia = $mod_marcacion->consultarMateriasMarcabyPro($per_id, $dia, $fecha_consulta);
+        $arr_periodo = $mod_marcacion->consultarMateriasMarcabyPro($per_id, $dia, $fecha_consulta, true);
         return $this->render('marcacion', [
-                    'model' => $arr_materia
+                    'model' => $arr_materia,
+                    'periodo' => $arr_periodo
         ]);
     }
 
@@ -162,10 +163,10 @@ class MarcacionController extends \app\components\CController {
                     }
                 } else {
 
-                    $mensaje = 'Ya registro la ' . $texto . ' de esta materia';
+                    $mensaje = 'Ya registró la ' . $texto . ' de esta materia';
                     $transaction->rollback();
                     $message = array(
-                        "wtmessage" => Yii::t("notificaciones", "No se puede guardar la marcacion " . $mensaje),
+                        "wtmessage" => Yii::t("notificaciones", "No se puede guardar la marcación. " . $mensaje),
                         "title" => Yii::t('jslang', 'Error'),
                     );
                     return Utilities::ajaxResponse('NO_OK', 'alert', Yii::t("jslang", "Error"), true, $message);

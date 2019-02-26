@@ -1,6 +1,5 @@
 <?php
-
-/* 
+/*
  * The PenBlu framework is free software. It is released under the terms of
  * the following BSD License.
  *
@@ -40,22 +39,8 @@
  * Authors:
  *
  * Eduardo Cueva <ecueva@penblu.com>
+ * 
  */
+?>
 
-return [
-    'Are you sure you want to delete this record?' => '¿Está seguro que desea eliminar este registro?',
-    'Error' => 'Error',
-    'Error to process File. Try again.' => 'Error al procesar el archivo. Intente Nuevamente.',
-    'Error to process File {file}. Try again.' => 'Error al procesar archivo {file}. Intente Nuevamente.',
-    'File uploaded successfully. Do you refresh the web page?' => 'Archivo subido exitosamente. ¿Desea actualizar la página?',
-    'Success' => 'Éxito',
-    'Stay connected' => 'Permanecer conectado',
-    'Your information was successfully saved.' => 'Su información fue guardada correctamente.',
-    'Your information was successfully delete.' => 'Su información fue eliminada correctamente.',
-    'Your information was successfully update.' => 'Su información fue actualizada correctamente.',
-    'Your information has not been saved.' => 'Su información no ha sido guardada.',
-    'Your information has not been saved. Please try again.' => 'Su información no ha sido guardada. Por favor intente de nuevo.',
-    'Your session is about to expire!' => 'Su sesión esta por expirar!',
-    'Invalid request. Please do not repeat this request again. Contact to Administrator.' => 'Petición Invalida. Por favor, no repita esta solicitud nuevamente. Contacte al Administrador.',
-    'The information above has been entered' => 'La información ya ha sido ingresada anteriormente',
-];
+Claves Generadas.

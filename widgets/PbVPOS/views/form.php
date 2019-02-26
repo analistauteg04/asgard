@@ -28,7 +28,7 @@ use app\widgets\PbVPOS\PbVPOS;
             <input type="text" class="form-control" id="frmAmount" value="<?= $total ?>" placeholder="<?= PbVPOS::t("vpos", "Amount") ?>" disabled="disabled">
         </div>
     </div>
-    <div class="box-footer">
+    <div class="box-footer btnPago">
         <button type="button" class="btn btn-block btn-success" onclick="playOnPay('<?= $processUrl ?>')"><?= PbVPOS::t("vpos", "Buy") ?></button>
     </div>
 </form>
