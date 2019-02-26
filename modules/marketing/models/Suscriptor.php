@@ -121,10 +121,6 @@ class Suscriptor extends \yii\db\ActiveRecord {
             if ($arrFiltro['estado'] == 1) {  //suscritos
                 $str_search = " AND ifnull(sus.sus_id,0) > 0 and sus.sus_estado ='1' and ls.lsus_estado = '1' and ls.lsus_estado_mailchimp IS NULL";
             }
-            if ($arrFiltro['estado'] == 2) { //No suscrito
-                $str_search = " AND (ifnull(ls.sus_id,0) = 0 or (ls.lsus_estado = '0'  and ls.lis_id = :list_id)) ";
-                //$str_search = " AND (ifnull(sus.sus_id,0) = 0 or sus.sus_estado ='0' and ls.lsus_estado = '0') ";
-            }
             if ($arrFiltro['estado'] == 3) {  //Mailchimp
                 $str_search = " AND (ifnull(ls.lsus_estado_mailchimp,0) = '1' and sus.sus_estado = '1' and ls.lsus_estado = '1') ";
             }
@@ -275,15 +271,32 @@ class Suscriptor extends \yii\db\ActiveRecord {
                         db_crm.persona_gestion AS pges ON per.per_correo = pges.pges_correo            
                     ";
             }
-            $sql .= "
+            if ($subscrito == 1 || $subscrito == 3) {
+                $sql .= "
                     WHERE
                         lst.lis_id = :list_id
                         AND lst.lis_estado = :estado
                         AND lst.lis_estado_logico = :estado
                         $str_search
                 ";
+            } else if ($subscrito == 2) {
+                $sql .= "
+                    WHERE
+                        lst.lis_id = :list_id
+                        AND lst.lis_estado = :estado
+                        AND lst.lis_estado_logico = :estado
+                        and per.per_id 
+                        not in(
+                               select sus.per_id 
+                                from db_mailing.lista_suscriptor as ls
+                                join db_mailing.suscriptor as sus on sus.sus_id=ls.sus_id
+                               where lis_id =:list_id
+                               )
+                        $str_search
+                ";
+            }
         }
-        
+
         $comando = $con->createCommand($sql);
         $comando->bindParam(":estado", $estado, \PDO::PARAM_STR);
         $comando->bindParam(":list_id", $list_id, \PDO::PARAM_INT);
