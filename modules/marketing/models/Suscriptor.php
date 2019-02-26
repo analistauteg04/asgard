@@ -117,10 +117,6 @@ class Suscriptor extends \yii\db\ActiveRecord {
         $con4 = \Yii::$app->db_captacion;
         $estado = 1;
         $str_search = '';
-        $query_subscrito = ($subscrito == 1) ? "AND ifnull(sus.sus_id,0)>0" : (($subscrito == 2) ? "AND ifnull(sus.sus_id,0)<1" : "");
-        $nosuscrito = " left join " . $con->dbname . ".suscriptor as sus on sus.per_id = per.per_id or sus.pges_id=pges.pges_id  ";
-        $suscrito = " join " . $con->dbname . ".suscriptor as sus on sus.per_id = per.per_id or sus.pges_id=pges.pges_id";
-        $join_subscrito = ($subscrito == 1) ? $suscrito : (($subscrito == 2) ? $nosuscrito : $nosuscrito);
         if (isset($arrFiltro) && count($arrFiltro) > 0) {
             if ($arrFiltro['estado'] == 1) {  //suscritos
                 $str_search = " AND ifnull(sus.sus_id,0) > 0 and sus.sus_estado ='1' and ls.lsus_estado = '1' and ls.lsus_estado_mailchimp IS NULL";
@@ -133,64 +129,148 @@ class Suscriptor extends \yii\db\ActiveRecord {
                 $str_search = " AND (ifnull(ls.lsus_estado_mailchimp,0) = '1' and sus.sus_estado = '1' and ls.lsus_estado = '1') ";
             }
         }
-        $sql = "
-               SELECT
+        if ($subscrito == 0) {
+            $sql = "
+                SELECT 
                     lst.lis_id,
-                    ifnull(per.per_id, 0) per_id,
-                    ifnull(pges.pges_id,0) id_psus,
-                    if(ifnull(per.per_id,0)=0,concat(pges.pges_pri_nombre, ' ', ifnull(pges.pges_pri_apellido,'')),concat(per.per_pri_nombre,' ',per.per_pri_apellido)) as contacto,	
-                    if(isnull(mest.mest_nombre),eaca.eaca_nombre,mest.mest_nombre) carrera,
-                    ifnull(per.per_correo, pges.pges_correo) per_correo,
-                    ifnull(ls.lsus_estado_mailchimp,0) as estado_mailchimp,
-                    if(ifnull(ls.sus_id,0)>0 and ls.lis_id = :list_id  and ls.lsus_estado =:estado,1,0) as estado,                    
+                    IFNULL(per.per_id, 0) per_id,
+                    IFNULL(pges.pges_id, 0) id_pges,
+                    IF(IFNULL(per.per_id, 0) = 0,
+                        CONCAT(pges.pges_pri_nombre,' ',IFNULL(pges.pges_pri_apellido, '')),
+                        CONCAT(per.per_pri_nombre,' ',per.per_pri_apellido)) 
+                        AS contacto,
+                    IF(ISNULL(mest.mest_nombre),
+                        eaca.eaca_nombre,
+                        mest.mest_nombre) carrera,
+                    IFNULL(per.per_correo, pges.pges_correo) per_correo,
                     acon.acon_id,
-                    acon.acon_nombre
-                FROM 
-                    " . $con->dbname . ".lista lst
-                    LEFT JOIN " . $con2->dbname . ".estudio_academico as eaca on eaca.eaca_id= lst.eaca_id 
-                    LEFT JOIN " . $con2->dbname . ".modulo_estudio as mest on mest.mest_id = lst.mest_id
-                    LEFT JOIN " . $con3->dbname . ".oportunidad as opo on (opo.eaca_id=eaca.eaca_id or opo.mest_id=mest.mest_id) 
-                    LEFT JOIN " . $con3->dbname . ".persona_gestion as pges on pges.pges_id=opo.pges_id
-                    LEFT JOIN " . $con1->dbname . ".persona as per on per.per_correo = pges.pges_correo
-                    LEFT JOIN " . $con4->dbname . ".interesado as inte on inte.per_id = per.per_id 
-                    LEFT JOIN " . $con4->dbname . ".solicitud_inscripcion as sins on ((sins.int_id = inte.int_id) and (sins.eaca_id = eaca.eaca_id or sins.mest_id = mest.mest_id))
-                    $join_subscrito
-                    LEFT JOIN " . $con2->dbname . ".estudio_academico_area_conocimiento as eaac on eaac.eaca_id=eaca.eaca_id
-                    LEFT JOIN " . $con2->dbname . ".area_conocimiento as acon on acon.acon_id=eaac.acon_id
-                    LEFT JOIN " . $con->dbname . ".lista_suscriptor ls on (sus.sus_id = ls.sus_id and ls.lis_id = lst.lis_id)
-                WHERE 
-                    lst.lis_id= :list_id AND
-                    lst.lis_estado = :estado AND
-                    lst.lis_estado_logico = :estado
-                    $query_subscrito
+                    acon.acon_nombre,
+                    ifnull(ls.lsus_estado_mailchimp,0) as estado_mailchimp,
+                    if(ifnull(ls.sus_id,0)>0 and ls.lis_id = :list_id and ls.lsus_estado =:estado,1,0) as estado
+                FROM
+                    db_mailing.lista lst
+                        left JOIN
+                    db_academico.estudio_academico AS eaca ON eaca.eaca_id = lst.eaca_id
+                        left JOIN
+                    db_academico.modulo_estudio AS mest ON mest.mest_id = lst.mest_id                
+                        left JOIN
+                    db_academico.estudio_academico_area_conocimiento AS eaac ON eaac.eaca_id = eaca.eaca_id
+                        JOIN
+                    db_academico.area_conocimiento AS acon ON acon.acon_id = eaac.acon_id
+                    JOIN db_mailing.lista_suscriptor ls ON ls.lis_id = lst.lis_id
+                    JOIN db_mailing.suscriptor AS sus ON sus.sus_id = ls.sus_id
+                    left JOIN db_asgard.persona per ON per.per_id = sus.per_id
+                    left join db_crm.persona_gestion AS pges ON pges.pges_id = sus.pges_id
+                WHERE
+                    lst.lis_id = :list_id
+                    AND lst.lis_estado = :estado
+                    AND lst.lis_estado_logico = :estado
                     $str_search
                 UNION
-                SELECT lst.lis_id,
-                    ifnull(per.per_id, 0) per_id,
-                    ifnull(pges.pges_id,0) id_psus,
-                    if(ifnull(per.per_id,0)=0,concat(pges.pges_pri_nombre, ' ', ifnull(pges.pges_pri_apellido,'')),concat(per.per_pri_nombre,' ',per.per_pri_apellido)) as contacto,	
-                    if(isnull(mest.mest_nombre),eaca.eaca_nombre,mest.mest_nombre) carrera,
-                    ifnull(per.per_correo, pges.pges_correo) per_correo,
-                    ifnull(ls.lsus_estado_mailchimp,0) as estado_mailchimp,
-                    if(ifnull(ls.sus_id,0)>0 and ls.lis_id = :list_id and ls.lsus_estado =:estado,1,0) as estado,                    
+                SELECT 
+                    lst.lis_id,
+                    IFNULL(per.per_id, 0) per_id,
+                    IFNULL(pges.pges_id, 0) id_pges,
+                    IF(IFNULL(per.per_id, 0) = 0,
+                        CONCAT(pges.pges_pri_nombre,' ',IFNULL(pges.pges_pri_apellido, '')),
+                        CONCAT(per.per_pri_nombre,' ',per.per_pri_apellido)) 
+                        AS contacto,
+                    IF(ISNULL(mest.mest_nombre),
+                        eaca.eaca_nombre,
+                        mest.mest_nombre) carrera,
+                    IFNULL(per.per_correo, pges.pges_correo) per_correo,
                     acon.acon_id,
-                    acon.acon_nombre
-                    FROM " . $con->dbname . ".lista lst
-                    LEFT JOIN " . $con2->dbname . ".estudio_academico as eaca on eaca.eaca_id= lst.eaca_id 
-                    LEFT JOIN " . $con2->dbname . ".modulo_estudio as mest on mest.mest_id = lst.mest_id
-                    LEFT JOIN " . $con4->dbname . ".solicitud_inscripcion as sins on (sins.eaca_id = eaca.eaca_id or sins.mest_id = mest.mest_id)
-                    LEFT JOIN " . $con4->dbname . ".interesado i on i.int_id = sins.int_id
-                    LEFT JOIN " . $con1->dbname . ".persona per on per.per_id = i.per_id
-                    LEFT JOIN " . $con3->dbname . ".persona_gestion as pges on per.per_correo = pges.pges_correo
-                    LEFT JOIN " . $con2->dbname . ".estudio_academico_area_conocimiento as eaac on eaac.eaca_id=eaca.eaca_id
-                    LEFT JOIN " . $con2->dbname . ".area_conocimiento as acon on acon.acon_id=eaac.acon_id
-                    $join_subscrito
-                    LEFT JOIN " . $con->dbname . ".lista_suscriptor ls on (sus.sus_id = ls.sus_id and ls.lis_id = lst.lis_id)
-                    WHERE lst.lis_id = :list_id AND
-                    lst.lis_estado = :estado AND
-                    lst.lis_estado_logico = :estado
-                    $str_search";
-               
+                    acon.acon_nombre,
+                    0 as estado_mailchimp,
+                    0 as estado
+                FROM
+                    db_mailing.lista lst
+                        left JOIN
+                    db_academico.estudio_academico AS eaca ON eaca.eaca_id = lst.eaca_id
+                        left JOIN
+                    db_academico.modulo_estudio AS mest ON mest.mest_id = lst.mest_id                
+                        left JOIN
+                    db_academico.estudio_academico_area_conocimiento AS eaac ON eaac.eaca_id = eaca.eaca_id
+                        JOIN
+                    db_academico.area_conocimiento AS acon ON acon.acon_id = eaac.acon_id
+                    left join
+                    db_captacion.solicitud_inscripcion AS sins ON (sins.eaca_id = eaca.eaca_id
+                        OR sins.mest_id = mest.mest_id)
+                        LEFT JOIN
+                    db_captacion.interesado i ON i.int_id = sins.int_id
+                        LEFT JOIN
+                    db_asgard.persona per ON per.per_id = i.per_id
+                        LEFT JOIN
+                    db_crm.persona_gestion AS pges ON per.per_correo = pges.pges_correo            
+            ";
+        } else {
+            $sql = "
+                SELECT 
+                    lst.lis_id,
+                    IFNULL(per.per_id, 0) per_id,
+                    IFNULL(pges.pges_id, 0) id_pges,
+                    IF(IFNULL(per.per_id, 0) = 0,
+                        CONCAT(pges.pges_pri_nombre,' ',IFNULL(pges.pges_pri_apellido, '')),
+                        CONCAT(per.per_pri_nombre,' ',per.per_pri_apellido)) 
+                        AS contacto,
+                    IF(ISNULL(mest.mest_nombre),
+                        eaca.eaca_nombre,
+                        mest.mest_nombre) carrera,
+                    IFNULL(per.per_correo, pges.pges_correo) per_correo,
+                    acon.acon_id,
+                    acon.acon_nombre,
+                ";
+            if ($subscrito == 1 || $subscrito == 3) {
+                $sql .= "
+                            ifnull(ls.lsus_estado_mailchimp,0) as estado_mailchimp,
+                            if(ifnull(ls.sus_id,0)>0 and ls.lis_id = :list_id and ls.lsus_estado =:estado,1,0) as estado
+                    ";
+            } else if ($subscrito == 2) {
+                $sql .= "
+                        0 as estado_mailchimp,
+                        0 as estado
+                     ";
+            }
+            $sql .= "
+                    FROM
+                    db_mailing.lista lst
+                        left JOIN
+                    db_academico.estudio_academico AS eaca ON eaca.eaca_id = lst.eaca_id
+                        left JOIN
+                    db_academico.modulo_estudio AS mest ON mest.mest_id = lst.mest_id                
+                        left JOIN
+                    db_academico.estudio_academico_area_conocimiento AS eaac ON eaac.eaca_id = eaca.eaca_id
+                        JOIN
+                    db_academico.area_conocimiento AS acon ON acon.acon_id = eaac.acon_id
+                ";
+            if ($subscrito == 1 || $subscrito == 3) {
+                $sql .= "
+                        JOIN db_mailing.lista_suscriptor ls ON ls.lis_id = lst.lis_id
+                        JOIN db_mailing.suscriptor AS sus ON sus.sus_id = ls.sus_id
+                        left JOIN db_asgard.persona per ON per.per_id = sus.per_id
+                        left join db_crm.persona_gestion AS pges ON pges.pges_id = sus.pges_id
+                        ";
+            } else if ($subscrito == 2) {
+                $sql .= "
+                        left join
+                        db_captacion.solicitud_inscripcion AS sins ON (sins.eaca_id = eaca.eaca_id
+                            OR sins.mest_id = mest.mest_id)
+                            LEFT JOIN
+                        db_captacion.interesado i ON i.int_id = sins.int_id
+                            LEFT JOIN
+                        db_asgard.persona per ON per.per_id = i.per_id
+                            LEFT JOIN
+                        db_crm.persona_gestion AS pges ON per.per_correo = pges.pges_correo            
+                    ";
+            }
+        }
+        $sql .= "
+                    WHERE
+                        lst.lis_id = :list_id
+                        AND lst.lis_estado = :estado
+                        AND lst.lis_estado_logico = :estado
+                        $str_search
+                ";
         $comando = $con->createCommand($sql);
         $comando->bindParam(":estado", $estado, \PDO::PARAM_STR);
         $comando->bindParam(":list_id", $list_id, \PDO::PARAM_INT);
@@ -272,7 +352,7 @@ class Suscriptor extends \yii\db\ActiveRecord {
                               lsus.lsus_estado_logico = 1
                     ");
 
-            $comando->bindParam(":fecha_modificacion", $fecha_modificacion, \PDO::PARAM_STR);            
+            $comando->bindParam(":fecha_modificacion", $fecha_modificacion, \PDO::PARAM_STR);
             $response = $comando->execute();
             $trans->commit();
             return $response;
@@ -317,7 +397,6 @@ class Suscriptor extends \yii\db\ActiveRecord {
             $comando->bindParam(":lista_id", $lista_id, \PDO::PARAM_INT);
             $comando->bindParam(":estado_cambio", $estado_cambio, \PDO::PARAM_STR);
             $comando->bindParam(":fecha_modificacion", $fecha_modificacion, \PDO::PARAM_STR);
-            
             $response = $comando->execute();
             if ($trans !== null)
                 $trans->commit();
@@ -328,7 +407,7 @@ class Suscriptor extends \yii\db\ActiveRecord {
             return FALSE;
         }
     }
-    
+
     /**
      * Function consultarSuscriptoxPerylis
      * @author  Kleber Loayza <analistadesarrollo03@uteg.edu.ec>
@@ -355,6 +434,30 @@ class Suscriptor extends \yii\db\ActiveRecord {
         #$comando->bindParam(":list_id", $list_id, \PDO::PARAM_INT);
         $resultData = $comando->queryAll();
         return $resultData;
+    }
+
+    /**
+     * Function consultarSuscriptoxPerylis
+     * @author  Giovanni Vergara <analistadesarrollo02@uteg.edu.ec>
+     * @param   
+     * @return  
+     */
+    public function consultarSuscriptoxPer($per_id, $pges_id) {
+        $con = \Yii::$app->db_mailing;
+        // $estado = 1;
+        $sql = "
+                select 	sus_id
+                FROM " . $con->dbname . ".suscriptor sus 
+                ON sus.sus_id = lsus.sus_id
+                WHERE (sus.per_id = :per_id and sus.pges_id = :pges_id)";
+
+        $comando = $con->createCommand($sql);
+        // $comando->bindParam(":estado", $estado, \PDO::PARAM_STR);
+        $comando->bindParam(":per_id", $per_id, \PDO::PARAM_INT);
+        $comando->bindParam(":list_id", $list_id, \PDO::PARAM_INT);
+        $comando->bindParam(":pges_id", $pges_id, \PDO::PARAM_INT);
+        $resultData = $comando->queryOne();
+        return $resultData['sus_id'];
     }
 
     /**
@@ -407,7 +510,7 @@ class Suscriptor extends \yii\db\ActiveRecord {
             if ($arrFiltro['estado'] == 1) {
                 $str_search = " AND ifnull(sus.sus_id,0) > 0 and sus.sus_estado ='1' and ls.lsus_estado = '1' and ls.lsus_estado_mailchimp IS NULL ";
             }
-            if ($arrFiltro['estado'] == 2) {            
+            if ($arrFiltro['estado'] == 2) {
                 $str_search = " AND (ifnull(ls.sus_id,0) = 0 or (ls.lsus_estado = '0'  and ls.lis_id = :list_id)) ";
                 //$str_search = " AND (ifnull(sus.sus_id,0) = 0 or (sus.sus_estado ='0' and ls.lsus_estado = '0')) ";
             }
@@ -476,7 +579,7 @@ class Suscriptor extends \yii\db\ActiveRecord {
                     WHERE lst.lis_id = :list_id AND
                     lst.lis_estado = :estado AND
                     lst.lis_estado_logico = :estado
-                    $str_search";               
+                    $str_search";
         $comando = $con->createCommand($sql);
         $comando->bindParam(":estado", $estado, \PDO::PARAM_STR);
         $comando->bindParam(":list_id", $list_id, \PDO::PARAM_INT);
@@ -536,7 +639,7 @@ class Suscriptor extends \yii\db\ActiveRecord {
                         lst.lis_estado = :estado_valido AND
                         lst.lis_estado_logico = :estado_valido AND (ifnull(lsus.sus_id,0) = '0' or (lsus.lsus_estado ='0' and  lsus.lis_id = :list_id ))
                 ) a";
-            
+
         $comando = $con->createCommand($sql);
         $comando->bindParam(":estado", $estado, \PDO::PARAM_STR);
         $comando->bindParam(":estado_valido", $estado_valido, \PDO::PARAM_STR);
@@ -580,7 +683,7 @@ class Suscriptor extends \yii\db\ActiveRecord {
                SELECT sus_id 
                FROM db_mailing.suscriptor
                WHERE $condicion in ($ids) 
-               ";       
+               ";
         $comando = $con->createCommand($sql);
         $resultData = $comando->queryAll();
         return $resultData;
@@ -651,8 +754,15 @@ class Suscriptor extends \yii\db\ActiveRecord {
         $comando->bindParam(":list_id", $list_id, \PDO::PARAM_INT);
         $comando->bindParam(":sus_id", $sus_id, \PDO::PARAM_INT);
         $resultData = $comando->queryOne();
-        return $resultData;
+        $out = 0;
+        if (count($resultData) > 0) {
+            if ($resultData['suscrito'] > 0) {
+                $out = 1;
+            }
+        }
+        return $out;
     }
+
     /**
      * Function modificarListaSuscritor
      * @author  Gioavanni Vergara <analistadesarrollo02@uteg.edu.ec>
@@ -686,14 +796,14 @@ class Suscriptor extends \yii\db\ActiveRecord {
             return FALSE;
         }
     }
-    
+
     /**
      * Function insertarCampaniaxLista
      * @author  Grace Viteri <analistadesarrollo01@uteg.edu.ec>
      * @property integer $userid
      * @return  
      */
-    public function insertarCampaniaxLista($con, $parameters, $keys, $name_table) {    
+    public function insertarCampaniaxLista($con, $parameters, $keys, $name_table) {
         $trans = $con->getTransaction();
         $param_sql .= "" . $keys[0];
         $bdet_sql .= "'" . $parameters[0] . "'";
@@ -707,18 +817,18 @@ class Suscriptor extends \yii\db\ActiveRecord {
             $sql = "INSERT INTO " . $con->dbname . '.' . $name_table . " ($param_sql) VALUES($bdet_sql);";
             $comando = $con->createCommand($sql);
             $result = $comando->execute();
-            $idtable = $con->getLastInsertID($con->dbname . '.' . $name_table);    
+            $idtable = $con->getLastInsertID($con->dbname . '.' . $name_table);
             if ($trans !== null)
                 $trans->commit();
-            return $idtable;            
-        } catch (Exception $ex) {            
+            return $idtable;
+        } catch (Exception $ex) {
             if ($trans !== null) {
                 $trans->rollback();
-            }            
+            }
             return 0;
         }
     }
-    
+
     /**
      * Function eliminar logica Lista suscriptor, cambia el estado a 0
      * @author  Grace Viteri <analistadesarrollo01@uteg.edu.ec>
@@ -750,7 +860,7 @@ class Suscriptor extends \yii\db\ActiveRecord {
             $comando->bindParam(":pges_id", $pges_id, \PDO::PARAM_INT);
             $comando->bindParam(":lista_id", $lista_id, \PDO::PARAM_INT);
             $comando->bindParam(":fecha_modificacion", $fecha_modificacion, \PDO::PARAM_STR);
-            
+
             $response = $comando->execute();
             if ($trans !== null)
                 $trans->commit();
@@ -761,7 +871,7 @@ class Suscriptor extends \yii\db\ActiveRecord {
             return FALSE;
         }
     }
-    
+
     /**
      * Function consultarMasListaXsuscriptor
      * @author  Grace Viteri <analistadesarrollo01@uteg.edu.ec>
@@ -778,13 +888,14 @@ class Suscriptor extends \yii\db\ActiveRecord {
                 WHERE sus.per_id = :per_id AND
                       sus.pges_id = :pges_id AND
                       lsus.lis_id != :list_id AND
-                      lsus.lsus_estado = :estado";                  
+                      lsus.lsus_estado = :estado";
         $comando = $con->createCommand($sql);
-        $comando->bindParam(":estado", $estado, \PDO::PARAM_STR);        
+        $comando->bindParam(":estado", $estado, \PDO::PARAM_STR);
         $comando->bindParam(":list_id", $list_id, \PDO::PARAM_INT);
         $comando->bindParam(":per_id", $per_id, \PDO::PARAM_INT);
         $comando->bindParam(":pges_id", $pges_id, \PDO::PARAM_INT);
         $resultData = $comando->queryOne();
         return $resultData;
     }
+
 }

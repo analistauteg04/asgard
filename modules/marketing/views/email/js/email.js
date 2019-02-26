@@ -126,36 +126,53 @@ function programarEnvio() {
     var lista = $('#txth_ids').val();
     window.location.href = $('#txth_base').val() + "/marketing/email/programacion?lisid=" + lista;
 }
-function preguntasuscribirContacto(psus_id, per_tipo, list_id) {
+function preguntasuscribirContacto(per_id, pges_id, list_id) {
     var messagePB = new Object();
     var mens_tot = "Haga clic en aceptar para suscribir el contacto, caso contrario haga clic en cancelar.";
     messagePB.wtmessage = mens_tot;
     messagePB.title = "";
     var objAccept = new Object();
     objAccept.id = "btnid2del";
-    objAccept.class = "btn-primary clclass praclose";
+    objAccept.class = "btn-primary";
     objAccept.value = "Aceptar";
     objAccept.callback = 'suscribirContacto';
-    var params = new Array(psus_id, per_tipo, list_id);
+    var params = new Array(per_id, pges_id, list_id);
     objAccept.paramCallback = params;
     messagePB.acciones = new Array();
     messagePB.acciones[0] = objAccept;
     showAlert("OK", "info", messagePB);
 }
-function suscribirContacto(psus_id, per_tipo, list_id) {
-    var lista = $('#txth_ids').val();
+function suscribirContacto(per_id, pges_id, list_id) {    
     var link = $('#txth_base').val() + "/marketing/email/guardarasignacion";
     var arrParams = new Object();
-    arrParams.psus_id = psus_id;
-    arrParams.per_tipo = per_tipo;
+    arrParams.per_id = per_id;
+    arrParams.pges_id = pges_id;
     arrParams.list_id = list_id;
     if (!validateForm()) {
-        requestHttpAjax(link, arrParams, function (response) {            
-            //showAlert(response.status, response.label, response.message);
-            alert(response.message.wtmessage);
-            window.location.href = $('#txth_base').val() + "/marketing/email/asignar?lis_id="+lista;
+        requestHttpAjax(link, arrParams, function (response) {                        
+            setTimeout(function(){ 
+                var messagePB = new Object();
+                var mens_tot = response.message.wtmessage;
+                messagePB.wtmessage = mens_tot;
+                messagePB.title = "";
+                var objAccept = new Object();
+                objAccept.id = "btnid2del";
+                objAccept.class = "btn-primary clclass praclose";
+                objAccept.value = "Aceptar";
+                objAccept.callback = 'redirigirAsignarSucriptor';
+                var params = new Array(per_id, pges_id, list_id);
+                objAccept.paramCallback = params;
+                messagePB.acciones = new Array();
+                messagePB.acciones[0] = objAccept;
+                showAlert("OK", "success", messagePB);
+            }, 2000);              
+            
         }, true);
     }
+}
+function redirigirAsignarSucriptor(){
+    var lista = $('#txth_ids').val();
+    window.location.href = $('#txth_base').val() + "/marketing/email/asignar?lis_id="+lista;
 }
 function RemoverSuscritor(per_id, pges_id, list_id) {
     var messagePB = new Object();
