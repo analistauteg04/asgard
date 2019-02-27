@@ -18,7 +18,7 @@ $(document).on('ready', function() {
             var lblAccept = (data["status"]["status"] == "APPROVED") ? objLang.Accept : objLang.Reload;
             resetSession(wtmessage, label, status, callback, lblAccept);
             //}
-        });
+        }, true);
     });
 });
 
