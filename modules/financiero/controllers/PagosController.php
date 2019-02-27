@@ -948,20 +948,20 @@ class PagosController extends \app\components\CController {
                             $transaction->commit();
                             return Utilities::ajaxResponse('OK', 'alert', Yii::t('jslang', 'Success'), 'false', $message);
                         }else{
-                            Utilities::putMessageLogFile("Boton Pagos: Error al crear Registro Pago. RefId: ". $referenceID);
+                            Utilities::putMessageLogFile("Boton Pagos: Error al crear Registro Pago. RefId: ". $referenceID . " Error: " . json_encode($regpag_mod->errors));
                             throw new Exception('Error al crear Registro Pago.');
                         }
                     }else{
-                        Utilities::putMessageLogFile("Boton Pagos: Error al actualizar Desglose Pago RefId: ". $referenceID);
+                        Utilities::putMessageLogFile("Boton Pagos: Error al actualizar Desglose Pago RefId: ". $referenceID . " Error: " . json_encode($dpag_mod->errors));
                         throw new Exception('Error al actualizar Desglose Pago.');
                     }
                 }else{
-                    Utilities::putMessageLogFile("Boton Pagos: Error al actualizar pago. RefId: ". $referenceID);
+                    Utilities::putMessageLogFile("Boton Pagos: Error al actualizar pago. RefId: ". $referenceID . " Error: " . json_encode($opago_mod->errors));
                     throw new Exception('Error al actualizar pago.');
                 }              
             }catch(Exception $e) {
                 $transaction->rollBack();
-                Utilities::putMessageLogFile("Boton Pagos: Error al crear Registro Pago. RefId: ". $referenceID);
+                Utilities::putMessageLogFile("Boton Pagos: Error . RefId: ". $referenceID .  "Error: " . $e->getMessage());
                 $message = array(
                     "wtmessage" => Yii::t('notificaciones', 'Invalid request. Please do not repeat this request again. Contact to Administrator.'),
                     "title" => Yii::t('jslang', 'Error'),

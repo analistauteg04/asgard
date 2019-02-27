@@ -191,7 +191,7 @@ class MarcacionController extends \app\components\CController {
         header("Content-Type: $content_type");
         header("Content-Disposition: attachment;filename=" . $nombarch);
         header('Cache-Control: max-age=0');
-        $colPosition = array("C", "D", "E", "F", "G", "H", "I", "J", "K", "L");
+        $colPosition = array("C", "D", "E", "F", "G", "H", "I", "J", "K", "L", "M");
         $arrHeader = array(
             Yii::t("formulario", "Teacher"),
             Yii::t("formulario", "Matter"),
@@ -200,7 +200,8 @@ class MarcacionController extends \app\components\CController {
             academico::t("Academico", "Hour start date") . ' ' . academico::t("Academico", "Expected"),
             academico::t("Academico", "Hour end date"),
             academico::t("Academico", "Hour end date") . ' ' . academico::t("Academico", "Expected"),
-            academico::t("Academico", "IP Marcación"),
+            academico::t("Academico", "Start IP"),
+            academico::t("Academico", "End IP"),
             Yii::t("formulario", "Period"),
             ""
         );
@@ -244,7 +245,8 @@ class MarcacionController extends \app\components\CController {
             academico::t("Academico", "Hour start date") . ' ' . academico::t("Academico", "Expected"),
             academico::t("Academico", "Hour end date"),
             academico::t("Academico", "Hour end date") . ' ' . academico::t("Academico", "Expected"),
-            academico::t("Academico", "IP Marcación"),
+            academico::t("Academico", "Start IP"),
+            academico::t("Academico", "End IP"),
             Yii::t("formulario", "Period"),
             ""
         );
