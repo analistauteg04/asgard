@@ -23,11 +23,19 @@ admision::registerTranslations();
                 'attribute' => 'profesor',
                 'header' => Yii::t("formulario", "Teacher"),
                 'value' => 'nombres',
-            ],
+            ],  
             [
-                'attribute' => 'materia',
+                'class' => 'yii\grid\ActionColumn',
                 'header' => Yii::t("formulario", "Matter"),
-                'value' => 'materia',
+                'template' => '{view}',
+                'buttons' => [
+                    'view' => function ($url, $model) {
+                        if (strlen($model['materia']) > 30) {
+                            $texto = '...';
+                        }
+                        return Html::a('<span>' . substr($model['materia'], 0, 30) . $texto . '</span>', "javascript:", ["data-toggle" => "tooltip", "title" => $model['materia']]);
+                    },
+                ],
             ],
             [
                 'attribute' => 'Fecha',
@@ -56,8 +64,13 @@ admision::registerTranslations();
             ],
             [
                 'attribute' => 'ip',
-                'header' => academico::t("Academico", "IP Marcación"),
+                'header' => academico::t("Academico", "Start IP"),
                 'value' => 'ip',
+            ],
+            [
+                'attribute' => 'ips',
+                'header' => academico::t("Academico", "End IP"),
+                'value' => 'ip_salida',
             ],
         ],
     ])

@@ -329,9 +329,11 @@ class RegistroMarcacion extends \yii\db\ActiveRecord {
                             WHERE marc.pro_id = rma.pro_id AND marc.hape_id = rma.hape_id AND marc.rmar_tipo = 'S'),'') as hora_salida,
                     hap.hape_hora_salida as salida_esperada,
                     rma.rmar_direccion_ip as ip,
+                    ifnull((SELECT marc.rmar_direccion_ip
+                            FROM db_academico.registro_marcacion marc
+                            WHERE marc.pro_id = rma.pro_id AND marc.hape_id = rma.hape_id AND marc.rmar_tipo = 'S'),'') as ip_salida,
                     $periodoacademico
-                    peri.paca_anio_academico
-                    
+                    peri.paca_anio_academico                    
                     FROM " . $con->dbname . ".registro_marcacion rma
                     INNER JOIN " . $con->dbname . ".horario_asignatura_periodo hap on hap.hape_id = rma.hape_id
                     INNER JOIN " . $con->dbname . ".asignatura asig on asig.asi_id = hap.asi_id
