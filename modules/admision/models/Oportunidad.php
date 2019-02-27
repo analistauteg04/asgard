@@ -2068,7 +2068,7 @@ class Oportunidad extends \app\modules\admision\components\CActiveRecord {
         $sql = "
                 SELECT 
                         eac.eaca_id as id,
-                        eac.eaca_descripcion as name
+                        eac.eaca_nombre as name
                     FROM " . $con->dbname . ".estudio_academico as eac 
                     WHERE                                 
                         eac.eaca_estado_logico=:estado AND

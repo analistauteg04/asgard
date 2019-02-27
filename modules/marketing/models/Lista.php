@@ -170,7 +170,7 @@ class Lista extends \yii\db\ActiveRecord {
         $sql = "SELECT l.lis_id, l.lis_nombre, l.lis_codigo,
                         case when l.eaca_id > 0 then 
                                      ea.eaca_nombre else me.mest_nombre end as programa,
-                        sum(case when (ls.lsus_estado = '1' and ls.lsus_estado_logico = '1') then
+                        sum(case when (ls.lsus_estado_mailchimp = '1' and ls.lsus_estado = '1' and ls.lsus_estado_logico = '1') then
                                      1 else 0 end) as num_suscriptores
                 FROM " . $con->dbname . ".lista l left join " . $con->dbname . ".lista_suscriptor ls on ls.lis_id = l.lis_id
                   left join " . $con1->dbname . ".estudio_academico ea on ea.eaca_id = l.eaca_id
