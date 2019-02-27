@@ -694,11 +694,13 @@ class EmailController extends \app\components\CController {
             $arrSearch["estado"] = 2;
             $idinsertados = Array();
             $idinsertadopg = Array();
-            $mod_lis=  new Lista();                
+            $mod_lis=  new Lista();               
+            \app\models\Utilities::putMessageLogFile('lis_id:' . $lis_id);
             $data_lis=$mod_lis->consultarListaXID($lis_id);
             try {
-                $mod_sb = new Suscriptor();       
+                $mod_sb = new Suscriptor();                       
                 $no_suscitos = $mod_sb->consultarSuscriptoresxLista($arrSearch, $lis_id, 2,True);
+                \app\models\Utilities::putMessageLogFile($no_suscitos);
                 if (count($no_suscitos) > 0) {
                     for ($i = 0; $i < count($no_suscitos); $i++) {
                         $exitesuscrito = $mod_sb->consultarSuscriptoxPerylis($no_suscitos[$i]["per_id"], $no_suscitos[$i]["pges_id"], $lis_id);

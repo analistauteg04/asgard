@@ -108,7 +108,7 @@ function suscribirTodos() {
 }
 function fnsuscribirLista() {
     var lista = $('#txth_ids').val();
-    var link = $('#txth_base').val() + "/marketing/email/suscribirtodos?lisid=" + lista;
+    var link = $('#txth_base').val() + "/marketing/email/suscribirtodos";
     var arrParams = new Object();
     arrParams.lis_id = lista;
     if (!validateForm()) {

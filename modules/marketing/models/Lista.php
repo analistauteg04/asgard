@@ -138,8 +138,7 @@ class Lista extends \yii\db\ActiveRecord {
                     WHERE
                         lst.lis_id= :lista and
                         lst.lis_estado = :estado and
-                        lst.lis_estado_logico = :estado and
-                        lsu.lsus_estado_logico= :estado
+                        lst.lis_estado_logico = :estado
                     group by 
                         lst.lis_id, lst.lis_nombre, lst.lis_codigo, ifnull(lst.eaca_id, lst.mest_id),
                         lst.emp_id, ecor_id, lis_pais, lis_provincia, lis_ciudad, 
