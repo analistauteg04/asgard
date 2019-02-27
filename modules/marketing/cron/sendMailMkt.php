@@ -74,7 +74,7 @@ function getCampaignOnTime($webServer)
                 $addressInfo = array(
                     //"subject_line" => $rows[$i][""],
                     //"title" => $rows[$i][""],
-                    "subject_line" => $rows[$i]["lis_asunto"],//"Subject de Envio",
+                    "subject_line" => utf8_encode($rows[$i]["lis_asunto"]),//"Subject de Envio",
                     "title" => $rows[$i]["lis_nombre_principal"] . " " . substr($rows[$i]["lis_nombre"],0,70) . " - " . $now,//"Titulo de Envio",
                     "from_name" => $rows[$i]["lis_nombre_principal"],
                     "reply_to" => $rows[$i]["ecor_correo"],
