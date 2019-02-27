@@ -314,7 +314,7 @@ class EmailController extends \app\components\CController {
         if (Yii::$app->request->isAjax) {
             $data = Yii::$app->request->post();
             $emp_id = $data["emp_id"];
-            $nombre_lista = ucwords(mb_strtolower($data["nombre_lista"]));
+            $nombre_lista = $data["nombre_lista"];//ucwords(mb_strtolower($data["nombre_lista"]));
             $nombre_empresa = ucwords(mb_strtolower($data["nombre_empresa"]));
             $nombre_contacto = ucwords(mb_strtolower($data["txt_nombre_contacto"]));
             $correo_contacto = strtolower($data["txt_correo_contacto"]);

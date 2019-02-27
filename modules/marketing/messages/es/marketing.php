@@ -54,7 +54,7 @@ return [
     "Name Contact" => "Nombre Contacto",
     "New List" => "Lista Nueva",
     "No Subscribers" => "No Suscritos",
-    "No. Subscribers in Mailchimp" => "Suscrip. Mailchimp:",
+    "No. Subscribers in Mailchimp" => "Suscrip. Mailchimp",
     "Malichimp" => "Malichimp",
     "Programtion" => "Programación",
     "Shipping Time" => "Hora Envío",
