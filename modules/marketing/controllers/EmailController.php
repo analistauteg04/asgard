@@ -64,19 +64,18 @@ class EmailController extends \app\components\CController {
             $message = array(
                 "wtmessage" => Yii::t("formulario", $mensaje),
                 "title" => Yii::t('jslang', 'Success'),
-                "rederict" => Yii::$app->response->redirect(['/marketing/email/asignar?lis_id=' . base64_encode($lis_id)]),
             );
             return Utilities::ajaxResponse('OK', 'alert', Yii::t("jslang", "Sucess"), false, $message);
         }
     }
-
     public function actionAsignar() {
         $mod_lista = new Lista();
         $mod_sb = new Suscriptor();
         $arrSearch = array();
         $lis_id = base64_decode($_GET['lis_id']);
-        //$per_id = @Yii::$app->session->get("PB_perid");        
         $lista_model = $mod_lista->consultarListaXID($lis_id);
+        $suscritos = $mod_sb->consultarsuscritos($lis_id);
+        $suschimp = $mod_sb->consultarsuschimp($lis_id);
         $noescritos = $mod_sb->consultarNumnoescritos($lis_id);
         $susbs_lista = $mod_sb->consultarSuscriptoresxLista($arrSearch, $lis_id,0);
         $fecha_crea = date(Yii::$app->params["dateTimeByDefault"]);
@@ -104,7 +103,7 @@ class EmailController extends \app\components\CController {
                                 "model" => $susbs_lista,
                     ]);
                 } elseif ($data["estado"] == '3') {  //En Mailchimp
-                    $susbs_lista = $mod_sb->consultarSuscriptoresxLista($arrSearch, $lis_id, 2);
+                    $susbs_lista = $mod_sb->consultarSuscriptoresxLista($arrSearch, $lis_id, 3);
                     return $this->render('asignar_grid', [
                                 "model" => $susbs_lista,
                     ]);
@@ -116,6 +115,9 @@ class EmailController extends \app\components\CController {
                     'arr_estado' => array("Todos", "Subscrito", "No Subscrito", "Mailchimp"),
                     'model' => $susbs_lista,
                     'noescritos' => $noescritos['noescritos'],
+                    'num_suscr' => $suscritos['num_suscr'],
+                    'num_suscr_chimp' => $suschimp['num_suscr_chimp'],
+                    
         ]);
     }
 
@@ -314,7 +316,7 @@ class EmailController extends \app\components\CController {
         if (Yii::$app->request->isAjax) {
             $data = Yii::$app->request->post();
             $emp_id = $data["emp_id"];
-            $nombre_lista = ucwords(mb_strtolower($data["nombre_lista"]));
+            $nombre_lista = $data["nombre_lista"];//ucwords(mb_strtolower($data["nombre_lista"]));
             $nombre_empresa = ucwords(mb_strtolower($data["nombre_empresa"]));
             $nombre_contacto = ucwords(mb_strtolower($data["txt_nombre_contacto"]));
             $correo_contacto = strtolower($data["txt_correo_contacto"]);
@@ -690,9 +692,10 @@ class EmailController extends \app\components\CController {
             $arrSearch["estado"] = 2;
             $idinsertados = Array();
             $idinsertadopg = Array();
-
+            $mod_lis=  new Lista();                
+            $data_lis=$mod_lis->consultarListaXID($lis_id);
             try {
-                $mod_sb = new Suscriptor();
+                $mod_sb = new Suscriptor();                
                 $no_suscitos = $mod_sb->consultarSuscriptoexcel($arrSearch, $lis_id, 0, 1);
                 if (count($no_suscitos) > 0) {
                     for ($i = 0; $i < count($no_suscitos); $i++) {
@@ -772,8 +775,9 @@ class EmailController extends \app\components\CController {
                     }
                     if ($exito) {
                         $transaction->commit();
+                        $totalsuscritos=count($no_suscitos);
                         $message = array(
-                            "wtmessage" => Yii::t("notificaciones", "La infomación ha sido grabada. "),
+                            "wtmessage" => Yii::t("notificaciones", "Se han suscrito un total de ".$totalsuscritos." contactos a la lista de ". $data_lis['lis_nombre']."."),
                             "title" => Yii::t('jslang', 'Success'),
                         );
                         echo Utilities::ajaxResponse('OK', 'alert', Yii::t("jslang", "Sucess"), false, $message);
@@ -788,7 +792,7 @@ class EmailController extends \app\components\CController {
                 } else {
                     $transaction->rollback();
                     $message = array(
-                        "wtmessage" => Yii::t("notificaciones", "No hay elementos a suscribir en la lista."),
+                        "wtmessage" => Yii::t("notificaciones", "No hay elementos a suscribir en la lista"),
                         "title" => Yii::t('jslang', 'Error'),
                     );
                     echo Utilities::ajaxResponse('NO_OK', 'Error', Yii::t("jslang", "Error"), false, $message);

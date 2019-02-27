@@ -37,7 +37,7 @@ PbGridView::widget([
         ],
         [
             'attribute' => 'Subscriber number',
-            'header' => marketing::t("marketing", "Subscriber number"),
+            'header' => marketing::t("marketing", "No. Subscribers in Mailchimp"),
             'value' => 'num_suscriptores',
         ],   
         [

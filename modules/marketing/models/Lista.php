@@ -128,13 +128,7 @@ class Lista extends \yii\db\ActiveRecord {
                         lst.eaca_id as eaca_id, lst.mest_id mest_id,
                         lst.emp_id, ecor_id, lis_pais, lis_provincia, lis_ciudad, 
                         lis_direccion1_empresa, lis_direccion2_empresa, lis_telefono_empresa,
-                        lis_codigo_postal, lis_asunto,
-                        case when lst.eaca_id > 0 then 
-                                     ea.eaca_nombre else me.mest_nombre end as programa,
-                        sum(case when (ifnull(lsu.lsus_estado_mailchimp,0) = '0' and lsu.lsus_estado = '1' and lsu.lsus_estado_logico = '1' and sus.sus_estado = '1' and sus.sus_estado_logico = '1') then
-                                     1 else 0 end) as num_suscr,
-                        sum(case when (ifnull(lsu.lsus_estado_mailchimp,0) = '1' and lsu.lsus_estado_logico = '1' and sus.sus_estado = '1' and sus.sus_estado_logico = '1') then
-                                     1 else 0 end) as num_suscr_mailchimp
+                        lis_codigo_postal, lis_asunto                        
                     FROM 
                         " . $con->dbname . ".lista lst
                         left join " . $con->dbname . ".lista_suscriptor as lsu on lsu.lis_id=lst.lis_id
@@ -176,7 +170,7 @@ class Lista extends \yii\db\ActiveRecord {
         $sql = "SELECT l.lis_id, l.lis_nombre, l.lis_codigo,
                         case when l.eaca_id > 0 then 
                                      ea.eaca_nombre else me.mest_nombre end as programa,
-                        sum(case when (ls.lsus_estado = '1' and ls.lsus_estado_logico = '1') then
+                        sum(case when (ls.lsus_estado_mailchimp = '1' and ls.lsus_estado = '1' and ls.lsus_estado_logico = '1') then
                                      1 else 0 end) as num_suscriptores
                 FROM " . $con->dbname . ".lista l left join " . $con->dbname . ".lista_suscriptor ls on ls.lis_id = l.lis_id
                   left join " . $con1->dbname . ".estudio_academico ea on ea.eaca_id = l.eaca_id

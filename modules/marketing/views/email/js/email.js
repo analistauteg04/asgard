@@ -97,7 +97,7 @@ function suscribirTodos() {
     messagePB.title = "";
     var objAccept = new Object();
     objAccept.id = "btnid2del";
-    objAccept.class = "btn-primary clclass praclose";
+    objAccept.class = "btn-primary";
     objAccept.value = "Aceptar";
     objAccept.callback = 'fnsuscribirLista';
     var params = new Array();
@@ -113,12 +113,20 @@ function fnsuscribirLista() {
     arrParams.lis_id = lista;
     if (!validateForm()) {
         requestHttpAjax(link, arrParams, function (response) {
-            showAlert(response.status, response.label, response.message);
-            if (!response.error) {
-                setTimeout(function () {
-                    window.location.href = $('#txth_base').val() + "/marketing/email/asignar?lis_id=" + arrParams.lis_id;
-                }, 5000);
-            }
+            setTimeout(function(){ 
+                var messagePB = new Object();
+                var mens_tot = response.message.wtmessage;
+                messagePB.wtmessage = mens_tot;
+                messagePB.title = "";
+                var objAccept = new Object();
+                objAccept.id = "btnid2del";
+                objAccept.class = "btn-primary clclass praclose";
+                objAccept.value = "Aceptar";
+                objAccept.callback = 'redirigirAsignarSucriptor';
+                messagePB.acciones = new Array();
+                messagePB.acciones[0] = objAccept;
+                showAlert("OK", "success", messagePB);
+            }, 2000);              
         }, true);
     }
 }

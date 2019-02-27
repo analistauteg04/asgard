@@ -127,7 +127,43 @@ class Suscriptor extends \yii\db\ActiveRecord {
         }
         if ($subscrito == 0) {
             $sql = "
-                SELECT 
+                SELECT -- suscritos
+                    lst.lis_id,
+                    IFNULL(per.per_id, 0) per_id,
+                    IFNULL(pges.pges_id, 0) id_pges,
+                    IF(IFNULL(per.per_id, 0) = 0,
+                        CONCAT(pges.pges_pri_nombre,' ',IFNULL(pges.pges_pri_apellido, '')),
+                        CONCAT(per.per_pri_nombre,' ',per.per_pri_apellido)) 
+                        AS contacto,
+                    IF(ISNULL(mest.mest_nombre),
+                        eaca.eaca_nombre,
+                        mest.mest_nombre) carrera,
+                    IFNULL(per.per_correo, pges.pges_correo) per_correo,
+                    acon.acon_id,
+                    acon.acon_nombre,
+                    ifnull(ls.lsus_estado_mailchimp,0) as estado_mailchimp,
+                    if(ifnull(ls.sus_id,0)>0 and ls.lis_id = :list_id and ls.lsus_estado =:estado,1,0) as estado
+                FROM
+                    db_mailing.lista lst
+                        left JOIN
+                    db_academico.estudio_academico AS eaca ON eaca.eaca_id = lst.eaca_id
+                        left JOIN
+                    db_academico.modulo_estudio AS mest ON mest.mest_id = lst.mest_id                
+                        left JOIN
+                    db_academico.estudio_academico_area_conocimiento AS eaac ON eaac.eaca_id = eaca.eaca_id
+                        JOIN
+                    db_academico.area_conocimiento AS acon ON acon.acon_id = eaac.acon_id
+                    JOIN db_mailing.lista_suscriptor ls ON ls.lis_id = lst.lis_id
+                    JOIN db_mailing.suscriptor AS sus ON sus.sus_id = ls.sus_id
+                    left JOIN db_asgard.persona per ON per.per_id = sus.per_id
+                    left join db_crm.persona_gestion AS pges ON pges.pges_id = sus.pges_id
+                WHERE
+                    lst.lis_id = :list_id                    
+                    and ifnull(ls.lsus_estado_mailchimp,0)=0
+                    AND lst.lis_estado = :estado
+                    AND lst.lis_estado_logico = :estado                
+                UNION
+                SELECT -- mailchimp
                     lst.lis_id,
                     IFNULL(per.per_id, 0) per_id,
                     IFNULL(pges.pges_id, 0) id_pges,
@@ -159,11 +195,11 @@ class Suscriptor extends \yii\db\ActiveRecord {
                     left join db_crm.persona_gestion AS pges ON pges.pges_id = sus.pges_id
                 WHERE
                     lst.lis_id = :list_id
+                    AND (ifnull(ls.lsus_estado_mailchimp,0) = '1' and sus.sus_estado = '1' and ls.lsus_estado = '1') 
                     AND lst.lis_estado = :estado
-                    AND lst.lis_estado_logico = :estado
-                    $str_search
+                    AND lst.lis_estado_logico = :estado                
                 UNION
-                SELECT 
+                SELECT -- no suscritos
                     lst.lis_id,
                     IFNULL(per.per_id, 0) per_id,
                     IFNULL(pges.pges_id, 0) id_pges,
@@ -208,8 +244,7 @@ class Suscriptor extends \yii\db\ActiveRecord {
                                 from db_mailing.lista_suscriptor as ls
                                 join db_mailing.suscriptor as sus on sus.sus_id=ls.sus_id
                                where lis_id =:list_id
-                               )
-                        $str_search
+                               )                
             ";
         } else {
             $sql = "
@@ -276,9 +311,21 @@ class Suscriptor extends \yii\db\ActiveRecord {
                     WHERE
                         lst.lis_id = :list_id
                         AND lst.lis_estado = :estado
-                        AND lst.lis_estado_logico = :estado
-                        $str_search
+                        AND lst.lis_estado_logico = :estado                        
                 ";
+                if($subscrito == 1){
+                    $sql .= "                    
+                        and ls.lsus_estado_mailchimp=0
+                    ";
+                }else if($subscrito == 3){
+                    $sql .= "                    
+                        and ls.lsus_estado_mailchimp=1
+                    ";
+                }
+                $sql .= "                    
+                    $str_search
+                    ";
+                
             } else if ($subscrito == 2) {
                 $sql .= "
                     WHERE
@@ -445,9 +492,9 @@ class Suscriptor extends \yii\db\ActiveRecord {
         $sql = "
                     select list.lis_codigo as codigo,sus.sus_id, if(ifnull(pges.pges_id,0)>0,pges.pges_correo,per.per_correo) as correo
                     FROM 
-                                db_mailing.suscriptor sus     
-                    join        db_mailing.lista as list on list.lis_id=$list_id
+                                db_mailing.suscriptor sus                         
                     JOIN        db_mailing.lista_suscriptor lsus ON sus.sus_id = lsus.sus_id
+                    join        db_mailing.lista as list on list.lis_id=lsus.lis_id
                     left join   db_asgard.persona as per on per.per_id=sus.per_id	
                     left join   db_crm.persona_gestion as pges on pges.pges_id=sus.pges_id	
                     WHERE 
@@ -456,8 +503,6 @@ class Suscriptor extends \yii\db\ActiveRecord {
         ";
 
         $comando = $con->createCommand($sql);
-        #$comando->bindParam(":per_id", $per_id, \PDO::PARAM_INT);
-        #$comando->bindParam(":list_id", $list_id, \PDO::PARAM_INT);
         $resultData = $comando->queryAll();
         return $resultData;
     }
@@ -612,7 +657,48 @@ class Suscriptor extends \yii\db\ActiveRecord {
         $resultData = $comando->queryAll();
         return $resultData;
     }
+    public function consultarsuscritos($list_id) {
+        $con = \Yii::$app->db_mailing;
+        $estado=1;
+        $sql = "
+            SELECT 
+                    count(lst.lis_id) as num_suscr
+                    FROM db_mailing.lista lst 
+                    join db_mailing.lista_suscriptor as lsu on lsu.lis_id=lst.lis_id
+            WHERE
+                    lst.lis_id = :list_id
+                    and ifnull(lsu.lsus_estado_mailchimp,0)=0
+                    and lst.lis_estado = :estado
+                    and lst.lis_estado_logico = :estado
+                ";
 
+        $comando = $con->createCommand($sql);
+        $comando->bindParam(":estado", $estado, \PDO::PARAM_STR);
+        $comando->bindParam(":list_id", $list_id, \PDO::PARAM_INT);
+        $resultData = $comando->queryOne();
+        return $resultData;
+    }
+    public function consultarsuschimp($list_id) {
+        $con = \Yii::$app->db_mailing;
+        $estado=1;
+        $sql = "
+            SELECT 
+                    count(lst.lis_id) as num_suscr_chimp
+                    FROM db_mailing.lista lst 
+                    join db_mailing.lista_suscriptor as lsu on lsu.lis_id=lst.lis_id
+            WHERE
+                    lst.lis_id = :list_id
+                    and ifnull(lsu.lsus_estado_mailchimp,0)=1
+                    and lst.lis_estado = :estado
+                    and lst.lis_estado_logico = :estado
+                ";
+
+        $comando = $con->createCommand($sql);
+        $comando->bindParam(":estado", $estado, \PDO::PARAM_STR);
+        $comando->bindParam(":list_id", $list_id, \PDO::PARAM_INT);
+        $resultData = $comando->queryOne();
+        return $resultData;
+    }
     /**
      * Function consulta numero de no suscritos. 
      * @author Giovanni Vergara <analistadesarrollo02@uteg.edu.ec>;

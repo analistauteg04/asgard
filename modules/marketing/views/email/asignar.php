@@ -18,6 +18,8 @@ use app\modules\marketing\Module as marketing;
             'arr_estado' => $arr_estado,
             'arr_lista' =>$arr_lista,
             'noescritos' => $noescritos,
+            'num_suscr' => $num_suscr,
+            'num_suscr_chimp' => $num_suscr_chimp,
         ]);
         ?>    
     </form>
