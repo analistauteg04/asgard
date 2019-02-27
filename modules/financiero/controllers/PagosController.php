@@ -916,17 +916,17 @@ class PagosController extends \app\components\CController {
                     "title" => Yii::t('jslang', 'Success'),
                     "data" => $response,
                 );
-                $transaction = Yii::$app->db->beginTransaction();
+                $transaction = $con1->beginTransaction();
                 $sins_id = base64_decode($dataGet["sins_id"]);
                 $solInc_mod = SolicitudInscripcion::findOne($sins_id);
-                $opago_mod = OrdenPago::findOne(["sins_id" => $sins_id, "opag_estado_pago" => "P", "opag_estado" => 1, "opag_estado_logico" => 1]);
+                $opago_mod = OrdenPago::findOne(["sins_id" => $sins_id, "opag_estado_pago" => "P", "opag_estado" => "1", "opag_estado_logico" => "1"]);
                 $opago_mod->opag_estado_pago = "S";
                 $opago_mod->opag_valor_pagado = $opago_mod->opag_total;
                 $opago_mod->opag_fecha_pago_total = date("Y-m-d H:i:s");
                 $opago_mod->opag_usu_modifica = @Yii::$app->session->get("PB_iduser");
                 $opago_mod->opag_fecha_modificacion = date("Y-m-d H:i:s");
                 if($opago_mod->save()){
-                    $dpag_mod = DesglosePago::findOne(["opag_id" => $solInc_mod->opag_id, "dpag_estado_pago" => "P", "dpag_estado" => 1, "dpag_estado_logico" => 1]);
+                    $dpag_mod = DesglosePago::findOne(["opag_id" => $opago_mod->opag_id, "dpag_estado_pago" => "P", "dpag_estado" => "1", "dpag_estado_logico" => "1"]);
                     $dpag_mod->dpag_estado_pago = "S";
                     $dpag_mod->dpag_usu_modifica = @Yii::$app->session->get("PB_iduser");
                     $dpag_mod->dpag_fecha_modificacion = date("Y-m-d H:i:s");
@@ -942,22 +942,22 @@ class PagosController extends \app\components\CController {
                         $regpag_mod->rpag_fecha_transaccion = $opago_mod->opag_fecha_pago_total;
                         $regpag_mod->rpag_usuario_transaccion = @Yii::$app->session->get("PB_iduser");
                         $regpag_mod->rpag_codigo_autorizacion = "";
-                        $regpag_mod->rpag_estado = 1;
-                        $regpag_mod->rpag_estado_logico = 1;
+                        $regpag_mod->rpag_estado = "1";
+                        $regpag_mod->rpag_estado_logico = "1";
                         if($regpag_mod->save()){
                             $transaction->commit();
                             return Utilities::ajaxResponse('OK', 'alert', Yii::t('jslang', 'Success'), 'false', $message);
                         }else{
                             Utilities::putMessageLogFile("Boton Pagos: Error al crear Registro Pago. RefId: ". $referenceID . " Error: " . json_encode($regpag_mod->errors));
-                            throw new Exception('Error al crear Registro Pago.');
+                            throw new Exception('Error al crear Registro Pago.' . json_encode($regpag_mod->errors));
                         }
                     }else{
                         Utilities::putMessageLogFile("Boton Pagos: Error al actualizar Desglose Pago RefId: ". $referenceID . " Error: " . json_encode($dpag_mod->errors));
-                        throw new Exception('Error al actualizar Desglose Pago.');
+                        throw new Exception('Error al actualizar Desglose Pago.' . json_encode($dpag_mod->errors));
                     }
                 }else{
                     Utilities::putMessageLogFile("Boton Pagos: Error al actualizar pago. RefId: ". $referenceID . " Error: " . json_encode($opago_mod->errors));
-                    throw new Exception('Error al actualizar pago.');
+                    throw new Exception('Error al actualizar pago.' . json_encode($opago_mod->errors));
                 }              
             }catch(Exception $e) {
                 $transaction->rollBack();
