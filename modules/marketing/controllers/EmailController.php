@@ -157,11 +157,13 @@ class EmailController extends \app\components\CController {
             $con = \Yii::$app->db_mailing;
             $transaction = $con->beginTransaction();
             try {
-                //consultar la lista.                  
                 $resp_consulta = $mod_lista->consultarListaXID($lis_id);
                 $webs_mailchimp = new WsMailChimp();
                 $conMailch = $webs_mailchimp->deleteList($resp_consulta["lis_codigo"]);
-                if (($resp_consulta["num_suscr"] > 0) or ( $resp_consulta["num_suscr_mailchimp"] > 0)) {
+                $suscritos = $mod_suscritor->consultarsuscritos($lis_id);
+                $suschimp = $mod_suscritor->consultarsuschimp($lis_id);
+                \app\models\Utilities::putMessageLogFile('suscritos:' . $suscritos['num_suscr']);
+                if (($suscritos['num_suscr'] > 0) or ( $suschimp['num_suscr_chimp'] > 0)) {
                     $resp_suscritor = $mod_lista->consultarSuscriptoresXlista($lis_id);
                     if (count($resp_suscritor) > 0) {
                         \app\models\Utilities::putMessageLogFile('contador:' . count($resp_suscritor));
@@ -695,8 +697,8 @@ class EmailController extends \app\components\CController {
             $mod_lis=  new Lista();                
             $data_lis=$mod_lis->consultarListaXID($lis_id);
             try {
-                $mod_sb = new Suscriptor();                
-                $no_suscitos = $mod_sb->consultarSuscriptoexcel($arrSearch, $lis_id, 0, 1);
+                $mod_sb = new Suscriptor();       
+                $no_suscitos = $mod_sb->consultarSuscriptoresxLista($arrSearch, $lis_id, 2,True);
                 if (count($no_suscitos) > 0) {
                     for ($i = 0; $i < count($no_suscitos); $i++) {
                         $exitesuscrito = $mod_sb->consultarSuscriptoxPerylis($no_suscitos[$i]["per_id"], $no_suscitos[$i]["pges_id"], $lis_id);
@@ -704,18 +706,18 @@ class EmailController extends \app\components\CController {
                         if ($exitesuscrito["inscantes"] > 0) {
                             if ($no_suscitos[$i]["per_id"] != 0) {
                                 $modsus_id .= $no_suscitos[$i]["per_id"] . ',';
-                            } elseif ($no_suscitos[$i]["pges_id"] != 0) {
-                                $modsus_id2 .= $no_suscitos[$i]["pges_id"] . ',';
+                            } elseif ($no_suscitos[$i]["id_pges"] != 0) {
+                                $modsus_id2 .= $no_suscitos[$i]["id_pges"] . ',';
                             }
                         } else {
                             $asuscribir .= 'INSERT INTO db_mailing.suscriptor (per_id, pges_id, sus_estado, sus_estado_logico)';
-                            $asuscribir .= 'VALUES(' . $no_suscitos[$i]["per_id"] . ', ' . $no_suscitos[$i]["pges_id"] . ', ' . $estado . ', ' . $estado_logico . '); ';
+                            $asuscribir .= 'VALUES(' . $no_suscitos[$i]["per_id"] . ', ' . $no_suscitos[$i]["id_pges"] . ', ' . $estado . ', ' . $estado_logico . '); ';
                             //$sper_id .= $per_id . ',';   //$no_suscitos[$i]["per_id"] . ',';
                             if ($no_suscitos[$i]["per_id"] != 0) {
                                 $sper_id .= $no_suscitos[$i]["per_id"] . ',';
-                            } elseif ($no_suscitos[$i]["pges_id"] != 0) {
-                                $spges_id .= $no_suscitos[$i]["pges_id"] . ',';
-                                \app\models\Utilities::putMessageLogFile('no suscritos:' . ($no_suscitos[$i]["pges_id"]));
+                            } elseif ($no_suscitos[$i]["id_pges"] != 0) {
+                                $spges_id .= $no_suscitos[$i]["id_pges"] . ',';
+                                \app\models\Utilities::putMessageLogFile('no suscritos:' . ($no_suscitos[$i]["id_pges"]));
                             }
                         }
                     }
@@ -728,7 +730,7 @@ class EmailController extends \app\components\CController {
                             }
                             //insertar por pges_id
                             if (!empty($spges_id)) {
-                                $idinsertadopg = $mod_sb->consultarSuscritosbtn('pges_id', substr($spges_id, 0, -1));
+                                $idinsertadopg = $mod_sb->consultarSuscritosbtn('id_pges', substr($spges_id, 0, -1));
                             }
                             // para crear nuevamente el script a insertar con los sus_id
                             if (count($idinsertados) > 0) {

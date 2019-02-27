@@ -387,7 +387,7 @@ function eliminarLista(id) {
     messagePB.title = "Eliminar";
     var objAccept = new Object();
     objAccept.id = "btnid2del";
-    objAccept.class = "btn-primary clclass praclose";
+    objAccept.class = "btn-primary";
     objAccept.value = "Aceptar";
     objAccept.callback = 'borrarLista';
     var params = new Array(id, 0);

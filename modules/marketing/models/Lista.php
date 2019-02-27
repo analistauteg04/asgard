@@ -138,7 +138,8 @@ class Lista extends \yii\db\ActiveRecord {
                     WHERE
                         lst.lis_id= :lista and
                         lst.lis_estado = :estado and
-                        lst.lis_estado_logico = :estado
+                        lst.lis_estado_logico = :estado and
+                        lsu.lsus_estado_logico= :estado
                     group by 
                         lst.lis_id, lst.lis_nombre, lst.lis_codigo, ifnull(lst.eaca_id, lst.mest_id),
                         lst.emp_id, ecor_id, lis_pais, lis_provincia, lis_ciudad, 
@@ -877,10 +878,12 @@ class Lista extends \yii\db\ActiveRecord {
         $con = \Yii::$app->db_mailing;        
         $estado = 1;
         $sql = "SELECT ls.sus_id, s.per_id, s.pges_id
-                FROM " . $con->dbname . ".lista lst INNER JOIN " . $con->dbname . ".lista_suscriptor ls on (ls.lis_id = lst.lis_id)
+                FROM " . $con->dbname . ".lista lst 
+                INNER JOIN " . $con->dbname . ".lista_suscriptor ls on ls.lis_id = lst.lis_id
                 INNER JOIN " . $con->dbname . ".suscriptor s on (s.sus_id = ls.sus_id)
                 WHERE lst.lis_id= :lis_id
                       and lst.lis_estado = :estado
+                      and ls.lsus_estado_logico = :estado
                       and lst.lis_estado_logico = :estado";
         
         $comando = $con->createCommand($sql);
