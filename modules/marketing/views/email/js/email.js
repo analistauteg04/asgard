@@ -160,8 +160,6 @@ function suscribirContacto(per_id, pges_id, list_id) {
                 objAccept.class = "btn-primary clclass praclose";
                 objAccept.value = "Aceptar";
                 objAccept.callback = 'redirigirAsignarSucriptor';
-                var params = new Array(per_id, pges_id, list_id);
-                objAccept.paramCallback = params;
                 messagePB.acciones = new Array();
                 messagePB.acciones[0] = objAccept;
                 showAlert("OK", "success", messagePB);
@@ -401,7 +399,7 @@ function subirMailchimp() {
     messagePB.title = "Cargar a Mailchimp";
     var objAccept = new Object();
     objAccept.id = "btnid2del";
-    objAccept.class = "btn-primary clclass praclose";
+    objAccept.class = "btn-primary";
     objAccept.value = "Aceptar";
     objAccept.callback = 'cargarMailchimp';
     messagePB.acciones = new Array();
@@ -414,7 +412,20 @@ function cargarMailchimp() {
     arrParams.lis_id = idlista;
     var link = $('#txth_base').val() + "/marketing/email/cargarmailchimp";
     requestHttpAjax(link, arrParams, function (response) {
-        showAlert(response.status, response.label, response.message);
+        setTimeout(function(){ 
+                var messagePB = new Object();
+                var mens_tot = response.message.wtmessage;
+                messagePB.wtmessage = mens_tot;
+                messagePB.title = "";
+                var objAccept = new Object();
+                objAccept.id = "btnid2del";
+                objAccept.class = "btn-primary clclass praclose";
+                objAccept.value = "Aceptar";
+                objAccept.callback = 'redirigirAsignarSucriptor';
+                messagePB.acciones = new Array();
+                messagePB.acciones[0] = objAccept;
+                showAlert("OK", "success", messagePB);
+            }, 2000);              
     }, true);
 }
 function modificarProgramacion() {

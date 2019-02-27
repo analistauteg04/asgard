@@ -38,7 +38,6 @@ class EmailController extends \app\components\CController {
         return $this->render('index', [
                     'model' => $resp_lista]);
     }
-
     public function actionCargarmailchimp() {
         if (Yii::$app->request->isAjax) {
             $data = Yii::$app->request->post();
