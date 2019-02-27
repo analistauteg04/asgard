@@ -25,7 +25,7 @@ use app\modules\marketing\Module as marketing;
             <div class="col-md-6 col-sm-6 col-xs-6 col-lg-6">
                 <div class="form-group">
                     <label for="txt_sus" class="col-sm-3 col-md-3 col-xs-3 col-lg-3 control-label" id="txt_no_subs"><span  class="label label-success"><?=  marketing::t("marketing", "Subscribers") ?>:</span></label>
-                    <span for="txt_sus" class="col-sm-4 col-md-4 col-xs-4 col-lg-4 control-label" id="txt_no_subs"><?= $arr_lista['num_suscr'] ?> </span> 
+                    <span for="txt_sus" class="col-sm-4 col-md-4 col-xs-4 col-lg-4 control-label" id="txt_no_subs"><?= $num_suscr ?> </span> 
                 </div>
             </div> 
         </div>
@@ -49,7 +49,7 @@ use app\modules\marketing\Module as marketing;
             <div class="col-md-6 col-sm-6 col-xs-6 col-lg-6">
                 <div class="form-group">
                     <label for="txt_mailchimp" class="col-sm-3 col-md-3 col-xs-3 col-lg-3 control-label" id="txt_no_subs"><span  class="label label-warning"><?=  marketing::t("marketing", "Mailchimp") ?></span></label>
-                    <span for="txt_mailchimp" class="col-sm-4 col-md-4 col-xs-4 col-lg-4 control-label" id="txt_no_subs"><?= $arr_lista['num_suscr_mailchimp'] ?> </span> 
+                    <span for="txt_mailchimp" class="col-sm-4 col-md-4 col-xs-4 col-lg-4 control-label" id="txt_no_subs"><?= $num_suscr_chimp ?> </span> 
                 </div>
             </div> 
         </div>        
