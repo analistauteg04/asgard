@@ -15,6 +15,7 @@ use yii\base\Widget;
 use app\models\Http;
 use yii\helpers\Url;
 use app\widgets\PbVPOS\assets\VPOSAsset;
+use app\models\Utilities;
 
 class PbVPOS extends Widget {
     private static $widget_name = "PbVPOS";
@@ -27,6 +28,7 @@ class PbVPOS extends Widget {
     protected $port = "443";
 
     public $referenceID = "";
+    public $ordenPago = "";
     public $requestID = "";
     public $moneda = "USD";
     public $pais = "EC";
@@ -71,17 +73,25 @@ class PbVPOS extends Widget {
             "total" => $this->total,
             "referenceID" => $this->referenceID,
         ];
-        //echo json_encode($data);
         if($this->isCheckout === false){
+            // hay una orden de pago previa
+            $resp = $this->existsOrdenResponse();
+            if($resp > 0 && !$this->existsPayment()){
+                $response = $this->getInfoPayment($resp);
+                if($response["status"]["status"] == "APPROVED"){
+                    echo $this->render('error', [
+                        "reloadDB" => true,
+                        "data" => json_encode($response),
+                        ]);
+                    return;
+                }
+            }
             $response = $this->redirectRequest();
         }else{
             $response = $this->getInfoPayment($this->requestID);
             return $response;
         }
         
-        //echo $this->returnUrl;
-        //echo json_encode($response);
-        //if($response["status"]["status"] != "FAILED") {
         if($response["status"]["status"] != "OK"){
             echo $this->render('error');
         }else{
@@ -242,6 +252,7 @@ class PbVPOS extends Widget {
         $sql = "INSERT INTO " . $con->dbname . ".vpos_request 
             (reference,
             descripcion,
+            ordenPago,
             currency,
             total,
             tax,
@@ -260,6 +271,7 @@ class PbVPOS extends Widget {
             VALUES
             (:reference,
             :descripcion,
+            :ordenPago,
             :currency,
             :total,
             :tax,
@@ -278,6 +290,7 @@ class PbVPOS extends Widget {
         $comando = $con->createCommand($sql);
         $comando->bindParam(":reference", $reference, \PDO::PARAM_INT);
         $comando->bindParam(":descripcion", $descripcion, \PDO::PARAM_STR);
+        $comando->bindParam(":ordenPago", $this->ordenPago, \PDO::PARAM_STR);
         $comando->bindParam(":currency", $currency, \PDO::PARAM_STR);
         $comando->bindParam(":total", $total, \PDO::PARAM_STR);
         $comando->bindParam(":tax", $tax, \PDO::PARAM_STR);
@@ -312,6 +325,7 @@ class PbVPOS extends Widget {
         $sql = "INSERT INTO " . $con->dbname . ".vpos_response 
             (reference,
             requestId,
+            ordenPago,
             status,
             reason,
             message,
@@ -322,6 +336,7 @@ class PbVPOS extends Widget {
             VALUES
             (:reference,
             :requestId,
+            :ordenPago,
             :status,
             :reason,
             :message,
@@ -332,6 +347,7 @@ class PbVPOS extends Widget {
         $comando = $con->createCommand($sql);
         $comando->bindParam(":reference", $reference, \PDO::PARAM_INT);
         $comando->bindParam(":requestId", $requestId, \PDO::PARAM_STR);
+        $comando->bindParam(":ordenPago", $this->ordenPago, \PDO::PARAM_STR);
         $comando->bindParam(":status", $status, \PDO::PARAM_STR);
         $comando->bindParam(":reason", $reason, \PDO::PARAM_STR);
         $comando->bindParam(":message", $message, \PDO::PARAM_STR);
@@ -355,7 +371,7 @@ class PbVPOS extends Widget {
         $payment_status = $params["payment"][0]["status"]["status"];
         $payment_reason = $params["payment"][0]["status"]["reason"];
         $payment_message = $params["payment"][0]["status"]["message"];
-        $payment_date = date("Y-m-d H:i:s", strtotime($params["payment"][0]["status"]["date"]));
+        $payment_date = ($params["payment"][0]["status"]["date"])?date("Y-m-d H:i:s", strtotime($params["payment"][0]["status"]["date"])):NULL;
         $internalReference = $params["payment"][0]["internalReference"];
         $paymenMethod = $params["payment"][0]["paymentMethod"];
         $paymentMethodName = $params["payment"][0]["paymentMethodName"];
@@ -368,6 +384,7 @@ class PbVPOS extends Widget {
         $sql = "INSERT INTO " . $con->dbname . ".vpos_info_response 
             (reference,
             requestId,
+            ordenPago,
             status,
             reason,
             message,
@@ -387,6 +404,7 @@ class PbVPOS extends Widget {
             VALUES
             (:reference,
             :requestId,
+            :ordenPago,
             :status,
             :reason,
             :message,
@@ -406,6 +424,7 @@ class PbVPOS extends Widget {
         $comando = $con->createCommand($sql);
         $comando->bindParam(":reference", $reference, \PDO::PARAM_INT);
         $comando->bindParam(":requestId", $requestId, \PDO::PARAM_STR);
+        $comando->bindParam(":ordenPago", $this->ordenPago, \PDO::PARAM_STR);
         $comando->bindParam(":status", $status, \PDO::PARAM_STR);
         $comando->bindParam(":reason", $reason, \PDO::PARAM_STR);
         $comando->bindParam(":message", $message, \PDO::PARAM_STR);
@@ -423,6 +442,34 @@ class PbVPOS extends Widget {
         $comando->bindParam(":json_info", $json_info, \PDO::PARAM_STR);
         $comando->bindParam(":estado_logico", $estado_logico, \PDO::PARAM_STR);
         $comando->execute();
+    }
+
+    private function existsPayment(){
+        $conection = $this->dbConection;
+        $con = \Yii::$app->$conection;
+        $status = "APPROVED";
+        $sql = "select * from " . $con->dbname . ".vpos_info_response i inner join " . $con->dbname . ".vpos_response r on i.ordenPago = r.ordenPago " .
+        " where r.ordenPago = :ordenPago and i.status = :status and i.estado_logico = 1 and r.estado_logico = 1 order by r.date desc";
+        $comando = $con->createCommand($sql);
+        $comando->bindParam(":ordenPago", $this->ordenPago, \PDO::PARAM_STR);
+        $comando->bindParam(":status", $status, \PDO::PARAM_STR);
+        $resultData = $comando->queryOne();
+        if(is_array($resultData) && count($resultData) > 0)
+            return true;
+        return false;
+    }
+
+    private function existsOrdenResponse(){
+        $conection = $this->dbConection;
+        $con = \Yii::$app->$conection;
+        $sql = "select * from " . $con->dbname . ".vpos_response " .
+        " where ordenPago = :ordenPago and estado_logico = 1 order by date desc";
+        $comando = $con->createCommand($sql);
+        $comando->bindParam(":ordenPago", $this->ordenPago, \PDO::PARAM_STR);
+        $resultData = $comando->queryOne();
+        if(is_array($resultData) && count($resultData) > 0)
+            return $resultData["requestId"];
+        return 0;
     }
 
     /**

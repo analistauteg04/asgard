@@ -202,6 +202,7 @@ CREATE TABLE `cuenta_bancarias` (
 DROP TABLE IF EXISTS `vpos_request`;
 CREATE TABLE `vpos_request` (
   `reference` bigint(20) NOT NULL, -- AUTO_INCREMENT PRIMARY KEY,
+  `ordenPago` varchar(20) DEFAULT NULL,
   `descripcion` varchar(200) DEFAULT NULL,
   `currency` varchar(5) DEFAULT NULL,
   `total` float DEFAULT NULL,
@@ -226,6 +227,7 @@ DROP TABLE IF EXISTS `vpos_response`;
 CREATE TABLE `vpos_response` (
   `reference` bigint(20) NOT NULL, -- AUTO_INCREMENT PRIMARY KEY,
   `requestId` varchar(20) DEFAULT NULL,
+  `ordenPago` varchar(20) DEFAULT NULL,
   `status` varchar(20) DEFAULT NULL,
   `reason` varchar(10) DEFAULT NULL,
   `message` varchar(200) DEFAULT NULL,
@@ -241,6 +243,7 @@ DROP TABLE IF EXISTS `vpos_info_response`;
 CREATE TABLE `vpos_info_response` (
   `reference` bigint(20) NOT NULL, -- AUTO_INCREMENT PRIMARY KEY,
   `requestId` varchar(20) DEFAULT NULL,
+  `ordenPago` varchar(20) DEFAULT NULL,
   `status` varchar(20) DEFAULT NULL,
   `reason` varchar(10) DEFAULT NULL,
   `message` varchar(200) DEFAULT NULL,

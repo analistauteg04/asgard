@@ -33,28 +33,6 @@ class NubefacturaController extends \app\components\CController {
     public $pdf_tipo_documento = "";
     public $pdf_cod_barra = "";
 
-    public function actionTest() {
-        $data = Yii::$app->request->post();
-        $referenceID = isset($data["referenceID"])?$data["referenceID"]:null;
-        Utilities::putMessageLogFile($data);
-        if(is_null($referenceID) && Yii::$app->request->isAjax){
-            $response = $this->render('test', array(
-                "referenceID" => $data["resp"]["reference"],
-                "requestID" => $data["requestID"],
-                "response" => $data["resp"],
-            ));
-            $message = array(
-                "wtmessage" => Yii::t("notificaciones", "Your information was successfully saved."),
-                "title" => Yii::t('jslang', 'Success'),
-                "data" => $response,
-            );
-            return Utilities::ajaxResponse('OK', 'alert', Yii::t('jslang', 'Success'), 'false', $message);
-        }
-        return $this->render('test', array(
-            "referenceID" => rand(10000, 50000)
-        ));
-    }
-
     public function actionIndex() {
         $modelo = new NubeFactura();
         $tipDoc= new VSDirectorio();
