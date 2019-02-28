@@ -27,8 +27,8 @@ function setResponseData(data, execute) {
         var arrParams = new Object();
         var link = window.location.href;
         arrParams.resp = resp;
-        arrParams.requestID = data["requestId"];
-        arrParams.referenceID = data["reference"];
+        arrParams.requestID = (data["requestId"])?data["requestId"]:data["requestID"];
+        arrParams.referenceID = (data["reference"])?data["reference"]:data["payment"]["0"]["reference"];
         $(".btnPago").hide();
         requestHttpAjax(link, arrParams, function(response) {
             var wtmessage = data["status"]["message"];
