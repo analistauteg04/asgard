@@ -27,6 +27,8 @@ use yii\helpers\Html;
 <div class="input-group margin btnPago">
     <button type="button" class="btn btn-block btn-success" onclick="returnFn()"><?= PbVPOS::t("vpos", "Reload") ?></button>
 </div>
+<?= Html::hiddenInput('vpos_execute_data', $data, ["id" => "vpos_execute_data"]) ?>
+<?= Html::hiddenInput('vpos_execute', "2", ["id" => "vpos_execute"]) ?>
 <?php else: ?>
 <div class="alert alert-warning alert-dismissible">
     <button type="button" class="close" data-dismiss="alert" aria-hidden="true">×</button>

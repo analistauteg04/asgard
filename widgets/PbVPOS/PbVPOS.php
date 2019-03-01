@@ -80,7 +80,7 @@ class PbVPOS extends Widget {
             $estado = $this->existsPayment();
             if($resp > 0 && ($estado == "" || $estado == "PENDING")){
                 $response = $this->getInfoPayment($resp);
-                Utilities::putMessageLogFile("$resp     $estado    ".json_encode($response));
+                //Utilities::putMessageLogFile("$resp     $estado    ".json_encode($response));
                 if($response["status"]["status"] == "APPROVED"){
                     echo $this->render('error', [
                         "reloadDB" => true,
