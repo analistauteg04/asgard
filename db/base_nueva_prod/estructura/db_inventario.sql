@@ -55,18 +55,18 @@ create table if not exists `seccion` (
 --
 -- Estructura de tabla para la tabla `activo`
 --
-create table if not exists `activo` (
- `act_id` bigint(20) not null auto_increment primary key,
+create table if not exists `activo_fijo` (
+ `afij_id` bigint(20) not null auto_increment primary key,
  `sec_id` bigint(100) not null,
  `per_id` bigint(100) not null,
- `act_codigo` varchar(50) not null, 
- `act_descripcion` varchar(200) not null,
- `act_marca` varchar(100) null,
- `act_modelo` varchar(100) null,
- `act_num_serie` varchar(100) null, 
- `act_estado` varchar(1) not null,
- `act_fecha_creacion` timestamp not null default current_timestamp,
- `act_fecha_modificacion` timestamp null default null,
- `act_estado_logico` varchar(1) not null,
+ `afij_codigo` varchar(50) not null, 
+ `afij_descripcion` varchar(200) not null,
+ `afij_marca` varchar(100) null,
+ `afij_modelo` varchar(100) null,
+ `afij_num_serie` varchar(100) null, 
+ `afij_estado` varchar(1) not null,
+ `afij_fecha_creacion` timestamp not null default current_timestamp,
+ `afij_fecha_modificacion` timestamp null default null,
+ `afij_estado_logico` varchar(1) not null,
  foreign key (sec_id) references `seccion`(sec_id)
  );
