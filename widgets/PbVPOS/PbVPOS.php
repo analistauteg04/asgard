@@ -16,6 +16,7 @@ use app\models\Http;
 use yii\helpers\Url;
 use app\widgets\PbVPOS\assets\VPOSAsset;
 use app\models\Utilities;
+use app\models\Utilities as AppUtilities;
 
 class PbVPOS extends Widget {
     private static $widget_name = "PbVPOS";
@@ -76,11 +77,19 @@ class PbVPOS extends Widget {
         if($this->isCheckout === false){
             // hay una orden de pago previa
             $resp = $this->existsOrdenResponse();
-            if($resp > 0 && !$this->existsPayment()){
+            $estado = $this->existsPayment();
+            if($resp > 0 && ($estado == "" || $estado == "PENDING")){
                 $response = $this->getInfoPayment($resp);
+                Utilities::putMessageLogFile("$resp     $estado    ".json_encode($response));
                 if($response["status"]["status"] == "APPROVED"){
                     echo $this->render('error', [
                         "reloadDB" => true,
+                        "data" => json_encode($response),
+                        ]);
+                    return;
+                }else if($response["status"]["status"] == "PENDING"){
+                    echo $this->render('error', [
+                        "reloadDB" => false,
                         "data" => json_encode($response),
                         ]);
                     return;
@@ -447,16 +456,16 @@ class PbVPOS extends Widget {
     private function existsPayment(){
         $conection = $this->dbConection;
         $con = \Yii::$app->$conection;
-        $status = "APPROVED";
-        $sql = "select * from " . $con->dbname . ".vpos_info_response i inner join " . $con->dbname . ".vpos_response r on i.ordenPago = r.ordenPago " .
-        " where r.ordenPago = :ordenPago and i.status = :status and i.estado_logico = 1 and r.estado_logico = 1 order by r.date desc";
+        //$status = "APPROVED";
+        $sql = "select i.status as status from " . $con->dbname . ".vpos_info_response i inner join " . $con->dbname . ".vpos_response r on i.ordenPago = r.ordenPago " .
+        " where r.ordenPago = :ordenPago and i.estado_logico = 1 and r.estado_logico = 1 order by r.date desc";
         $comando = $con->createCommand($sql);
         $comando->bindParam(":ordenPago", $this->ordenPago, \PDO::PARAM_STR);
-        $comando->bindParam(":status", $status, \PDO::PARAM_STR);
+        //$comando->bindParam(":status", $status, \PDO::PARAM_STR);
         $resultData = $comando->queryOne();
         if(is_array($resultData) && count($resultData) > 0)
-            return true;
-        return false;
+            return $resultData["status"];
+        return "";
     }
 
     private function existsOrdenResponse(){
