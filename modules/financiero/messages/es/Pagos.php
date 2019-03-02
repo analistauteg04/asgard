@@ -19,6 +19,8 @@ namespace app\modules\financiero\messages;
      "Payment" => "Pago",    
      "Payment approval" => "Fecha Aprobación Pago",
      "Payment approved" => "Aprobó Pago",
+     "Payment Course/Career/Program: " => "Pago de Curso/Carrera/Programa: ",
+     "Payment of " => "Pago de ",
      "Payment Button" => "Botón de Pago",
      "Payment Upload" => "Subió Pago",
      "Payments charged by Student" => "Pagos Cargados por Estudiante",

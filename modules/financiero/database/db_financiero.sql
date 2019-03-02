@@ -201,7 +201,8 @@ CREATE TABLE `cuenta_bancarias` (
 -- TABLAS DE BOTON DE PAGO
 DROP TABLE IF EXISTS `vpos_request`;
 CREATE TABLE `vpos_request` (
-  `reference` bigint(20) NOT NULL, -- AUTO_INCREMENT PRIMARY KEY,
+  `id` bigint(20) NOT NULL AUTO_INCREMENT AUTO_INCREMENT PRIMARY KEY,
+  `reference` bigint(20) NOT NULL,
   `ordenPago` varchar(20) DEFAULT NULL,
   `descripcion` varchar(200) DEFAULT NULL,
   `currency` varchar(5) DEFAULT NULL,
@@ -218,6 +219,7 @@ CREATE TABLE `vpos_request` (
   `email` varchar(100) DEFAULT NULL,
   `mobile` varchar(50) DEFAULT NULL,
   `json_request` text DEFAULT NULL,
+  `finish_transaccion` int NULL DEFAULT 0,
   `fecha_creacion` timestamp NULL DEFAULT CURRENT_TIMESTAMP,
   `fecha_modificacion` timestamp NULL DEFAULT NULL,
   `estado_logico` varchar(1) DEFAULT NULL
@@ -225,7 +227,8 @@ CREATE TABLE `vpos_request` (
 
 DROP TABLE IF EXISTS `vpos_response`;
 CREATE TABLE `vpos_response` (
-  `reference` bigint(20) NOT NULL, -- AUTO_INCREMENT PRIMARY KEY,
+  `id` bigint(20) NOT NULL AUTO_INCREMENT AUTO_INCREMENT PRIMARY KEY,
+  `reference` bigint(20) NOT NULL, 
   `requestId` varchar(20) DEFAULT NULL,
   `ordenPago` varchar(20) DEFAULT NULL,
   `status` varchar(20) DEFAULT NULL,
@@ -234,6 +237,7 @@ CREATE TABLE `vpos_response` (
   `date` timestamp NULL DEFAULT NULL,
   `processUrl` varchar(200) DEFAULT NULL,
   `json_response` text DEFAULT NULL,
+  `finish_transaccion` int NULL DEFAULT 0,
   `fecha_creacion` timestamp NULL DEFAULT CURRENT_TIMESTAMP,
   `fecha_modificacion` timestamp NULL DEFAULT NULL,
   `estado_logico` varchar(1) DEFAULT NULL
@@ -241,7 +245,8 @@ CREATE TABLE `vpos_response` (
 
 DROP TABLE IF EXISTS `vpos_info_response`;
 CREATE TABLE `vpos_info_response` (
-  `reference` bigint(20) NOT NULL, -- AUTO_INCREMENT PRIMARY KEY,
+  `id` bigint(20) NOT NULL AUTO_INCREMENT AUTO_INCREMENT PRIMARY KEY,
+  `reference` bigint(20) NOT NULL,
   `requestId` varchar(20) DEFAULT NULL,
   `ordenPago` varchar(20) DEFAULT NULL,
   `status` varchar(20) DEFAULT NULL,
@@ -259,6 +264,7 @@ CREATE TABLE `vpos_info_response` (
   `autorization` varchar(100) DEFAULT NULL,
   `receipt` varchar(50) DEFAULT NULL,
   `json_info` text DEFAULT NULL,
+  `finish_transaccion` int NULL DEFAULT 0,
   `fecha_creacion` timestamp NULL DEFAULT CURRENT_TIMESTAMP,
   `fecha_modificacion` timestamp NULL DEFAULT NULL,
   `estado_logico` varchar(1) DEFAULT NULL

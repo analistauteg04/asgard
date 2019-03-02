@@ -2,6 +2,7 @@
 $(document).on('ready', function() {
     P.on('response', function(data) {
         //var resp = JSON.stringify(data, null, 2);
+        $(".btnPago").hide();
         setResponseData(data);
     });
     setResponseData($("#vpos_execute_data").val(), $("#vpos_execute").val());
@@ -23,7 +24,7 @@ function setResponseData(data, execute) {
         data = JSON.parse(data);
         resp = data;
     } else if (execute == "3") {
-        $(".btnPago").hide();
+
     }
     if (execute == "1" || execute == "2" || execute == "3") {
         var arrParams = new Object();
