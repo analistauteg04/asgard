@@ -128,220 +128,369 @@ class Suscriptor extends \yii\db\ActiveRecord {
         if ($subscrito == 0) {
             $sql = "
                 SELECT -- suscritos
-                    lst.lis_id,
-                    IFNULL(per.per_id, 0) per_id,
-                    IFNULL(pges.pges_id, 0) id_pges,
-                    IF(IFNULL(per.per_id, 0) = 0,
-                        CONCAT(pges.pges_pri_nombre,' ',IFNULL(pges.pges_pri_apellido, '')),
-                        CONCAT(per.per_pri_nombre,' ',per.per_pri_apellido)) 
-                        AS contacto,
-                    IF(ISNULL(mest.mest_nombre),
-                        eaca.eaca_nombre,
-                        mest.mest_nombre) carrera,
-                    IFNULL(per.per_correo, pges.pges_correo) per_correo,
-                    acon.acon_id,
-                    acon.acon_nombre,
-                    ifnull(ls.lsus_estado_mailchimp,0) as estado_mailchimp,
-                    if(ifnull(ls.sus_id,0)>0 and ls.lis_id = :list_id and ls.lsus_estado =:estado,1,0) as estado
+                        lst.lis_id,
+                        IFNULL(per.per_id, 0) per_id,
+                        0 id_pges,	
+                        CONCAT(per.per_pri_nombre,' ',per.per_pri_apellido) AS contacto,
+                        IF(ISNULL(mest.mest_nombre),
+                                eaca.eaca_nombre,
+                                mest.mest_nombre) carrera,
+                        per_correo,
+                        acon.acon_id,
+                        acon.acon_nombre,
+                        ifnull(ls.lsus_estado_mailchimp,0) as estado_mailchimp,
+                        if(ifnull(ls.sus_id,0)>0 and ls.lis_id = :list_id and ls.lsus_estado =1,1,0) as estado
                 FROM
-                    db_mailing.lista lst
-                        left JOIN
-                    db_academico.estudio_academico AS eaca ON eaca.eaca_id = lst.eaca_id
-                        left JOIN
-                    db_academico.modulo_estudio AS mest ON mest.mest_id = lst.mest_id                
-                        left JOIN
-                    db_academico.estudio_academico_area_conocimiento AS eaac ON eaac.eaca_id = eaca.eaca_id
-                        JOIN
-                    db_academico.area_conocimiento AS acon ON acon.acon_id = eaac.acon_id
-                    JOIN db_mailing.lista_suscriptor ls ON ls.lis_id = lst.lis_id
-                    JOIN db_mailing.suscriptor AS sus ON sus.sus_id = ls.sus_id
-                    left JOIN db_asgard.persona per ON per.per_id = sus.per_id
-                    left join db_crm.persona_gestion AS pges ON pges.pges_id = sus.pges_id
+                        db_mailing.lista lst
+                        left JOIN db_academico.estudio_academico AS eaca ON eaca.eaca_id = lst.eaca_id
+                        left JOIN db_academico.modulo_estudio AS mest ON mest.mest_id = lst.mest_id                
+                        left JOIN db_academico.estudio_academico_area_conocimiento AS eaac ON eaac.eaca_id = eaca.eaca_id
+                        JOIN db_academico.area_conocimiento AS acon ON acon.acon_id = eaac.acon_id
+                        JOIN db_mailing.lista_suscriptor ls ON ls.lis_id = lst.lis_id
+                        JOIN db_mailing.suscriptor AS sus ON sus.sus_id = ls.sus_id
+                        JOIN db_asgard.persona per ON per.per_id = sus.per_id
                 WHERE
-                    lst.lis_id = :list_id                    
-                    and ifnull(ls.lsus_estado_mailchimp,0)=0
-                    AND lst.lis_estado = :estado
-                    AND lst.lis_estado_logico = :estado                
+                        lst.lis_id = :list_id                    
+                        and ifnull(ls.lsus_estado_mailchimp,0)=0
+                        AND lst.lis_estado = 1
+                        AND lst.lis_estado_logico = 1                
                 UNION
                 SELECT -- mailchimp
-                    lst.lis_id,
-                    IFNULL(per.per_id, 0) per_id,
-                    IFNULL(pges.pges_id, 0) id_pges,
-                    IF(IFNULL(per.per_id, 0) = 0,
-                        CONCAT(pges.pges_pri_nombre,' ',IFNULL(pges.pges_pri_apellido, '')),
-                        CONCAT(per.per_pri_nombre,' ',per.per_pri_apellido)) 
-                        AS contacto,
-                    IF(ISNULL(mest.mest_nombre),
-                        eaca.eaca_nombre,
-                        mest.mest_nombre) carrera,
-                    IFNULL(per.per_correo, pges.pges_correo) per_correo,
-                    acon.acon_id,
-                    acon.acon_nombre,
-                    ifnull(ls.lsus_estado_mailchimp,0) as estado_mailchimp,
-                    if(ifnull(ls.sus_id,0)>0 and ls.lis_id = :list_id and ls.lsus_estado =:estado,1,0) as estado
+                        lst.lis_id,
+                        IFNULL(per.per_id, 0) per_id,
+                        0 id_pges,
+                        CONCAT(per.per_pri_nombre,' ',per.per_pri_apellido) AS contacto,
+                        IF(ISNULL(mest.mest_nombre),
+                                eaca.eaca_nombre,
+                                mest.mest_nombre) carrera,
+                        per_correo,
+                        acon.acon_id,
+                        acon.acon_nombre,
+                        ifnull(ls.lsus_estado_mailchimp,0) as estado_mailchimp,
+                        if(ifnull(ls.sus_id,0)>0 and ls.lis_id = :list_id and ls.lsus_estado =1,1,0) as estado
                 FROM
-                    db_mailing.lista lst
-                        left JOIN
-                    db_academico.estudio_academico AS eaca ON eaca.eaca_id = lst.eaca_id
-                        left JOIN
-                    db_academico.modulo_estudio AS mest ON mest.mest_id = lst.mest_id                
-                        left JOIN
-                    db_academico.estudio_academico_area_conocimiento AS eaac ON eaac.eaca_id = eaca.eaca_id
-                        JOIN
-                    db_academico.area_conocimiento AS acon ON acon.acon_id = eaac.acon_id
-                    JOIN db_mailing.lista_suscriptor ls ON ls.lis_id = lst.lis_id
-                    JOIN db_mailing.suscriptor AS sus ON sus.sus_id = ls.sus_id
-                    left JOIN db_asgard.persona per ON per.per_id = sus.per_id
-                    left join db_crm.persona_gestion AS pges ON pges.pges_id = sus.pges_id
+                        db_mailing.lista lst
+                        left JOIN db_academico.estudio_academico AS eaca ON eaca.eaca_id = lst.eaca_id
+                        left JOIN db_academico.modulo_estudio AS mest ON mest.mest_id = lst.mest_id                
+                        left JOIN db_academico.estudio_academico_area_conocimiento AS eaac ON eaac.eaca_id = eaca.eaca_id
+                        JOIN db_academico.area_conocimiento AS acon ON acon.acon_id = eaac.acon_id
+                        JOIN db_mailing.lista_suscriptor ls ON ls.lis_id = lst.lis_id
+                        JOIN db_mailing.suscriptor AS sus ON sus.sus_id = ls.sus_id
+                        JOIN db_asgard.persona per ON per.per_id = sus.per_id
                 WHERE
-                    lst.lis_id = :list_id
-                    AND (ifnull(ls.lsus_estado_mailchimp,0) = '1' and sus.sus_estado = '1' and ls.lsus_estado = '1') 
-                    AND lst.lis_estado = :estado
-                    AND lst.lis_estado_logico = :estado                
+                        lst.lis_id = :list_id
+                        AND (ifnull(ls.lsus_estado_mailchimp,0) = '1' and sus.sus_estado = '1' and ls.lsus_estado = '1') 
+                        AND lst.lis_estado = 1
+                        AND lst.lis_estado_logico = 1                
                 UNION
                 SELECT -- no suscritos
+                        lst.lis_id,
+                        IFNULL(per.per_id, 0) per_id,
+                        0 id_pges,
+                        CONCAT(per.per_pri_nombre,' ',per.per_pri_apellido) AS contacto,
+                        IF(ISNULL(mest.mest_nombre),
+                                eaca.eaca_nombre,
+                                mest.mest_nombre) carrera,
+                        per_correo,
+                        acon.acon_id,
+                        acon.acon_nombre,
+                        0 as estado_mailchimp,
+                        0 as estado
+                FROM
+                        db_mailing.lista lst
+                        left JOIN db_academico.estudio_academico AS eaca ON eaca.eaca_id = lst.eaca_id
+                        left JOIN db_academico.modulo_estudio AS mest ON mest.mest_id = lst.mest_id                
+                        left JOIN db_academico.estudio_academico_area_conocimiento AS eaac ON eaac.eaca_id = eaca.eaca_id
+                        JOIN db_academico.area_conocimiento AS acon ON acon.acon_id = eaac.acon_id
+                        left join db_captacion.solicitud_inscripcion AS sins ON (sins.eaca_id = eaca.eaca_id OR sins.mest_id = mest.mest_id)
+                        LEFT JOIN db_captacion.interesado i ON i.int_id = sins.int_id
+                        JOIN db_asgard.persona per ON per.per_id = i.per_id	
+                        WHERE
+                                lst.lis_id = :list_id
+                                and lst.lis_estado = 1
+                                and lst.lis_estado_logico = 1
+                                and  per.per_id 
+                                not in(
+                                           select sus.per_id 
+                                                from db_mailing.lista_suscriptor as ls
+                                                join db_mailing.suscriptor as sus on sus.sus_id=ls.sus_id
+                                           where lis_id =:list_id
+                                           )
+                UNION -- persona gestion
+                SELECT -- suscritos
+                        lst.lis_id,
+                        0 per_id,
+                        IFNULL(pges.pges_id, 0) id_pges,
+                        CONCAT(pges.pges_pri_nombre,' ',IFNULL(pges.pges_pri_apellido, ''))	AS contacto,
+                        IF(ISNULL(mest.mest_nombre),
+                                eaca.eaca_nombre,
+                                mest.mest_nombre) carrera,
+                        pges.pges_correo as per_correo,
+                        acon.acon_id,
+                        acon.acon_nombre,
+                        ifnull(ls.lsus_estado_mailchimp,0) as estado_mailchimp,
+                        if(ifnull(ls.sus_id,0)>0 and ls.lis_id = :list_id and ls.lsus_estado =1,1,0) as estado
+                FROM
+                        db_mailing.lista lst
+                        left JOIN db_academico.estudio_academico AS eaca ON eaca.eaca_id = lst.eaca_id
+                        left JOIN db_academico.modulo_estudio AS mest ON mest.mest_id = lst.mest_id                
+                        left JOIN db_academico.estudio_academico_area_conocimiento AS eaac ON eaac.eaca_id = eaca.eaca_id
+                        JOIN db_academico.area_conocimiento AS acon ON acon.acon_id = eaac.acon_id
+                        JOIN db_mailing.lista_suscriptor ls ON ls.lis_id = lst.lis_id
+                        JOIN db_mailing.suscriptor AS sus ON sus.sus_id = ls.sus_id
+                        join db_crm.persona_gestion AS pges ON pges.pges_id = sus.pges_id
+                WHERE
+                        lst.lis_id = :list_id
+                        and ifnull(ls.lsus_estado_mailchimp,0)=0
+                        AND lst.lis_estado = 1
+                        AND lst.lis_estado_logico = 1                
+                UNION
+                SELECT -- mailchimp
+                        lst.lis_id,
+                        0 per_id,
+                        IFNULL(pges.pges_id, 0) id_pges,
+                        CONCAT(pges.pges_pri_nombre,' ',IFNULL(pges.pges_pri_apellido, '')) AS contacto,
+                        IF(ISNULL(mest.mest_nombre),
+                                eaca.eaca_nombre,
+                                mest.mest_nombre) carrera,
+                        pges.pges_correo as per_correo,
+                        acon.acon_id,
+                        acon.acon_nombre,
+                        ifnull(ls.lsus_estado_mailchimp,0) as estado_mailchimp,
+                        if(ifnull(ls.sus_id,0)>0 and ls.lis_id = :list_id and ls.lsus_estado =1,1,0) as estado
+                FROM
+                    db_mailing.lista lst
+                    left JOIN db_academico.estudio_academico AS eaca ON eaca.eaca_id = lst.eaca_id
+                    left JOIN db_academico.modulo_estudio AS mest ON mest.mest_id = lst.mest_id                
+                    left JOIN db_academico.estudio_academico_area_conocimiento AS eaac ON eaac.eaca_id = eaca.eaca_id
+                    JOIN db_academico.area_conocimiento AS acon ON acon.acon_id = eaac.acon_id
+                    JOIN db_mailing.lista_suscriptor ls ON ls.lis_id = lst.lis_id
+                    JOIN db_mailing.suscriptor AS sus ON sus.sus_id = ls.sus_id
+                    join db_crm.persona_gestion AS pges ON pges.pges_id = sus.pges_id
+            WHERE
+                    lst.lis_id = :list_id
+                    AND (ifnull(ls.lsus_estado_mailchimp,0) = '1' and sus.sus_estado = '1' and ls.lsus_estado = '1') 
+                    AND lst.lis_estado = 1
+                    AND lst.lis_estado_logico = 1                
+            UNION
+            SELECT -- no suscritos
                     lst.lis_id,
-                    IFNULL(per.per_id, 0) per_id,
+                    0 per_id,
                     IFNULL(pges.pges_id, 0) id_pges,
-                    IF(IFNULL(per.per_id, 0) = 0,
-                        CONCAT(pges.pges_pri_nombre,' ',IFNULL(pges.pges_pri_apellido, '')),
-                        CONCAT(per.per_pri_nombre,' ',per.per_pri_apellido)) 
-                        AS contacto,
+                    CONCAT(pges.pges_pri_nombre,' ',IFNULL(pges.pges_pri_apellido, '')) AS contacto,
                     IF(ISNULL(mest.mest_nombre),
-                        eaca.eaca_nombre,
-                        mest.mest_nombre) carrera,
-                    IFNULL(per.per_correo, pges.pges_correo) per_correo,
+                            eaca.eaca_nombre,
+                            mest.mest_nombre) carrera,
+                    pges.pges_correo as per_correo,
+                    acon.acon_id,
+                    acon.acon_nombre,
+                    0 as estado_mailchimp,
+                    0 as estado
+            FROM
+                    db_mailing.lista lst
+                    left JOIN db_academico.estudio_academico AS eaca ON eaca.eaca_id = lst.eaca_id
+                    left JOIN db_academico.modulo_estudio AS mest ON mest.mest_id = lst.mest_id                
+                    left JOIN db_academico.estudio_academico_area_conocimiento AS eaac ON eaac.eaca_id = eaca.eaca_id
+                    JOIN db_academico.area_conocimiento AS acon ON acon.acon_id = eaac.acon_id
+                    left join db_crm.oportunidad AS opo ON (opo.eaca_id = eaca.eaca_id OR opo.mest_id = mest.mest_id)
+                    JOIN db_crm.persona_gestion AS pges ON pges.pges_id = opo.pges_id                                
+            WHERE
+		lst.lis_id = :list_id
+		and lst.lis_estado = 1
+		and lst.lis_estado_logico = 1
+		and pges.pges_id 
+		not in(
+			   select sus.pges_id 
+				from db_mailing.lista_suscriptor as ls
+				join db_mailing.suscriptor as sus on sus.sus_id=ls.sus_id
+			   where lis_id =:list_id
+			   )                      
+            ";
+        } else if ($subscrito == 1) {
+            $sql = "
+                SELECT -- suscritos
+                        lst.lis_id,
+                        IFNULL(per.per_id, 0) per_id,
+                        0 id_pges,	
+                        CONCAT(per.per_pri_nombre,' ',per.per_pri_apellido) AS contacto,
+                        IF(ISNULL(mest.mest_nombre),
+                                eaca.eaca_nombre,
+                                mest.mest_nombre) carrera,
+                        per_correo,
+                        acon.acon_id,
+                        acon.acon_nombre,
+                        ifnull(ls.lsus_estado_mailchimp,0) as estado_mailchimp,
+                        if(ifnull(ls.sus_id,0)>0 and ls.lis_id = :list_id and ls.lsus_estado =1,1,0) as estado
+                FROM
+                        db_mailing.lista lst
+                        left JOIN db_academico.estudio_academico AS eaca ON eaca.eaca_id = lst.eaca_id
+                        left JOIN db_academico.modulo_estudio AS mest ON mest.mest_id = lst.mest_id                
+                        left JOIN db_academico.estudio_academico_area_conocimiento AS eaac ON eaac.eaca_id = eaca.eaca_id
+                        JOIN db_academico.area_conocimiento AS acon ON acon.acon_id = eaac.acon_id
+                        JOIN db_mailing.lista_suscriptor ls ON ls.lis_id = lst.lis_id
+                        JOIN db_mailing.suscriptor AS sus ON sus.sus_id = ls.sus_id
+                        JOIN db_asgard.persona per ON per.per_id = sus.per_id
+                WHERE
+                        lst.lis_id = :list_id                    
+                        and ifnull(ls.lsus_estado_mailchimp,0)=0
+                        AND lst.lis_estado = 1
+                        AND lst.lis_estado_logico = 1                
+                UNION -- persona gestion
+                SELECT -- suscritos
+                        lst.lis_id,
+                        0 per_id,
+                        IFNULL(pges.pges_id, 0) id_pges,
+                        CONCAT(pges.pges_pri_nombre,' ',IFNULL(pges.pges_pri_apellido, ''))	AS contacto,
+                        IF(ISNULL(mest.mest_nombre),
+                                eaca.eaca_nombre,
+                                mest.mest_nombre) carrera,
+                        pges.pges_correo as per_correo,
+                        acon.acon_id,
+                        acon.acon_nombre,
+                        ifnull(ls.lsus_estado_mailchimp,0) as estado_mailchimp,
+                        if(ifnull(ls.sus_id,0)>0 and ls.lis_id = :list_id and ls.lsus_estado =1,1,0) as estado
+                FROM
+                        db_mailing.lista lst
+                        left JOIN db_academico.estudio_academico AS eaca ON eaca.eaca_id = lst.eaca_id
+                        left JOIN db_academico.modulo_estudio AS mest ON mest.mest_id = lst.mest_id                
+                        left JOIN db_academico.estudio_academico_area_conocimiento AS eaac ON eaac.eaca_id = eaca.eaca_id
+                        JOIN db_academico.area_conocimiento AS acon ON acon.acon_id = eaac.acon_id
+                        JOIN db_mailing.lista_suscriptor ls ON ls.lis_id = lst.lis_id
+                        JOIN db_mailing.suscriptor AS sus ON sus.sus_id = ls.sus_id
+                        join db_crm.persona_gestion AS pges ON pges.pges_id = sus.pges_id
+                WHERE
+                        lst.lis_id = :list_id
+                        and ifnull(ls.lsus_estado_mailchimp,0)=0
+                        AND lst.lis_estado = 1
+                        AND lst.lis_estado_logico = 1                                
+            ";
+        } else if ($subscrito == 2) {
+            $sql = "
+                SELECT -- no suscritos
+                        lst.lis_id,
+                        IFNULL(per.per_id, 0) per_id,
+                        0 id_pges,
+                        CONCAT(per.per_pri_nombre,' ',per.per_pri_apellido) AS contacto,
+                        IF(ISNULL(mest.mest_nombre),
+                                eaca.eaca_nombre,
+                                mest.mest_nombre) carrera,
+                        per_correo,
+                        acon.acon_id,
+                        acon.acon_nombre,
+                        0 as estado_mailchimp,
+                        0 as estado
+                FROM
+                        db_mailing.lista lst
+                        left JOIN db_academico.estudio_academico AS eaca ON eaca.eaca_id = lst.eaca_id
+                        left JOIN db_academico.modulo_estudio AS mest ON mest.mest_id = lst.mest_id                
+                        left JOIN db_academico.estudio_academico_area_conocimiento AS eaac ON eaac.eaca_id = eaca.eaca_id
+                        JOIN db_academico.area_conocimiento AS acon ON acon.acon_id = eaac.acon_id
+                        left join db_captacion.solicitud_inscripcion AS sins ON (sins.eaca_id = eaca.eaca_id OR sins.mest_id = mest.mest_id)
+                        LEFT JOIN db_captacion.interesado i ON i.int_id = sins.int_id
+                        JOIN db_asgard.persona per ON per.per_id = i.per_id	
+                        WHERE
+                                lst.lis_id = :list_id
+                                and lst.lis_estado = 1
+                                and lst.lis_estado_logico = 1
+                                and  per.per_id 
+                                not in(
+                                           select sus.per_id 
+                                                from db_mailing.lista_suscriptor as ls
+                                                join db_mailing.suscriptor as sus on sus.sus_id=ls.sus_id
+                                           where lis_id =:list_id
+                                           )
+                UNION -- persona gestion
+                SELECT -- no suscritos
+                    lst.lis_id,
+                    0 per_id,
+                    IFNULL(pges.pges_id, 0) id_pges,
+                    CONCAT(pges.pges_pri_nombre,' ',IFNULL(pges.pges_pri_apellido, '')) AS contacto,
+                    IF(ISNULL(mest.mest_nombre),
+                            eaca.eaca_nombre,
+                            mest.mest_nombre) carrera,
+                    pges.pges_correo as per_correo,
                     acon.acon_id,
                     acon.acon_nombre,
                     0 as estado_mailchimp,
                     0 as estado
                 FROM
-                    db_mailing.lista lst
-                        left JOIN
-                    db_academico.estudio_academico AS eaca ON eaca.eaca_id = lst.eaca_id
-                        left JOIN
-                    db_academico.modulo_estudio AS mest ON mest.mest_id = lst.mest_id                
-                        left JOIN
-                    db_academico.estudio_academico_area_conocimiento AS eaac ON eaac.eaca_id = eaca.eaca_id
-                        JOIN
-                    db_academico.area_conocimiento AS acon ON acon.acon_id = eaac.acon_id
-                    left join
-                    db_captacion.solicitud_inscripcion AS sins ON (sins.eaca_id = eaca.eaca_id
-                        OR sins.mest_id = mest.mest_id)
-                        LEFT JOIN
-                    db_captacion.interesado i ON i.int_id = sins.int_id
-                        LEFT JOIN
-                    db_asgard.persona per ON per.per_id = i.per_id
-                        LEFT JOIN
-                    db_crm.persona_gestion AS pges ON per.per_correo = pges.pges_correo                                
-                    WHERE
-                        lst.lis_id = :list_id
-                        and lst.lis_estado = :estado
-                        and lst.lis_estado_logico = :estado
-                        and  per.per_id 
-                        not in(
-                               select sus.per_id 
-                                from db_mailing.lista_suscriptor as ls
-                                join db_mailing.suscriptor as sus on sus.sus_id=ls.sus_id
+                        db_mailing.lista lst
+                        left JOIN db_academico.estudio_academico AS eaca ON eaca.eaca_id = lst.eaca_id
+                        left JOIN db_academico.modulo_estudio AS mest ON mest.mest_id = lst.mest_id                
+                        left JOIN db_academico.estudio_academico_area_conocimiento AS eaac ON eaac.eaca_id = eaca.eaca_id
+                        JOIN db_academico.area_conocimiento AS acon ON acon.acon_id = eaac.acon_id
+                        left join db_crm.oportunidad AS opo ON (opo.eaca_id = eaca.eaca_id OR opo.mest_id = mest.mest_id)
+                        JOIN db_crm.persona_gestion AS pges ON pges.pges_id = opo.pges_id                                
+                WHERE
+                    lst.lis_id = :list_id
+                    and lst.lis_estado = 1
+                    and lst.lis_estado_logico = 1
+                    and pges.pges_id 
+                    not in(
+                               select sus.pges_id 
+                                    from db_mailing.lista_suscriptor as ls
+                                    join db_mailing.suscriptor as sus on sus.sus_id=ls.sus_id
                                where lis_id =:list_id
-                               )                
+                               )      
             ";
-        } else {
+        } else if ($subscrito == 3) {
             $sql = "
-                SELECT 
-                    lst.lis_id,
-                    IFNULL(per.per_id, 0) per_id,
-                    IFNULL(pges.pges_id, 0) id_pges,
-                    IF(IFNULL(per.per_id, 0) = 0,
-                        CONCAT(pges.pges_pri_nombre,' ',IFNULL(pges.pges_pri_apellido, '')),
-                        CONCAT(per.per_pri_nombre,' ',per.per_pri_apellido)) 
-                        AS contacto,
-                    IF(ISNULL(mest.mest_nombre),
-                        eaca.eaca_nombre,
-                        mest.mest_nombre) carrera,
-                    IFNULL(per.per_correo, pges.pges_correo) per_correo,
-                    acon.acon_id,
-                    acon.acon_nombre,
-                ";
-            if ($subscrito == 1 || $subscrito == 3) {
-                $sql .= "
-                            ifnull(ls.lsus_estado_mailchimp,0) as estado_mailchimp,
-                            if(ifnull(ls.sus_id,0)>0 and ls.lis_id = :list_id and ls.lsus_estado =:estado,1,0) as estado
-                    ";
-            } else if ($subscrito == 2) {
-                $sql .= "
-                        0 as estado_mailchimp,
-                        0 as estado
-                     ";
-            }
-            $sql .= "
-                    FROM
-                    db_mailing.lista lst
-                        left JOIN
-                    db_academico.estudio_academico AS eaca ON eaca.eaca_id = lst.eaca_id
-                        left JOIN
-                    db_academico.modulo_estudio AS mest ON mest.mest_id = lst.mest_id                
-                        left JOIN
-                    db_academico.estudio_academico_area_conocimiento AS eaac ON eaac.eaca_id = eaca.eaca_id
-                        JOIN
-                    db_academico.area_conocimiento AS acon ON acon.acon_id = eaac.acon_id
-                ";
-            if ($subscrito == 1 || $subscrito == 3) {
-                $sql .= "
+                SELECT -- mailchimp
+                        lst.lis_id,
+                        IFNULL(per.per_id, 0) per_id,
+                        0 id_pges,
+                        CONCAT(per.per_pri_nombre,' ',per.per_pri_apellido) AS contacto,
+                        IF(ISNULL(mest.mest_nombre),
+                                eaca.eaca_nombre,
+                                mest.mest_nombre) carrera,
+                        per_correo,
+                        acon.acon_id,
+                        acon.acon_nombre,
+                        ifnull(ls.lsus_estado_mailchimp,0) as estado_mailchimp,
+                        if(ifnull(ls.sus_id,0)>0 and ls.lis_id = :list_id and ls.lsus_estado =1,1,0) as estado
+                FROM
+                        db_mailing.lista lst
+                        left JOIN db_academico.estudio_academico AS eaca ON eaca.eaca_id = lst.eaca_id
+                        left JOIN db_academico.modulo_estudio AS mest ON mest.mest_id = lst.mest_id                
+                        left JOIN db_academico.estudio_academico_area_conocimiento AS eaac ON eaac.eaca_id = eaca.eaca_id
+                        JOIN db_academico.area_conocimiento AS acon ON acon.acon_id = eaac.acon_id
                         JOIN db_mailing.lista_suscriptor ls ON ls.lis_id = lst.lis_id
                         JOIN db_mailing.suscriptor AS sus ON sus.sus_id = ls.sus_id
-                        left JOIN db_asgard.persona per ON per.per_id = sus.per_id
-                        left join db_crm.persona_gestion AS pges ON pges.pges_id = sus.pges_id
-                        ";
-            } else if ($subscrito == 2) {
-                $sql .= "
-                        left join
-                        db_captacion.solicitud_inscripcion AS sins ON (sins.eaca_id = eaca.eaca_id
-                            OR sins.mest_id = mest.mest_id)
-                            LEFT JOIN
-                        db_captacion.interesado i ON i.int_id = sins.int_id
-                            LEFT JOIN
-                        db_asgard.persona per ON per.per_id = i.per_id
-                            LEFT JOIN
-                        db_crm.persona_gestion AS pges ON per.per_correo = pges.pges_correo            
-                    ";
-            }
-            if ($subscrito == 1 || $subscrito == 3) {
-                $sql .= "
-                    WHERE
+                        JOIN db_asgard.persona per ON per.per_id = sus.per_id
+                WHERE
                         lst.lis_id = :list_id
-                        AND lst.lis_estado = :estado
-                        AND lst.lis_estado_logico = :estado                        
-                ";
-                if($subscrito == 1){
-                    $sql .= "                    
-                        and ls.lsus_estado_mailchimp=0
-                    ";
-                }else if($subscrito == 3){
-                    $sql .= "                    
-                        and ls.lsus_estado_mailchimp=1
-                    ";
-                }
-                $sql .= "                    
-                    $str_search
-                    ";
-                
-            } else if ($subscrito == 2) {
-                $sql .= "
-                    WHERE
-                        lst.lis_id = :list_id
-                        AND lst.lis_estado = :estado
-                        AND lst.lis_estado_logico = :estado
-                        and per.per_id 
-                        not in(
-                               select sus.per_id 
-                                from db_mailing.lista_suscriptor as ls
-                                join db_mailing.suscriptor as sus on sus.sus_id=ls.sus_id
-                               where lis_id =:list_id
-                               )
-                        $str_search
-                ";
-            }
+                        AND (ifnull(ls.lsus_estado_mailchimp,0) = '1' and sus.sus_estado = '1' and ls.lsus_estado = '1') 
+                        AND lst.lis_estado = 1
+                        AND lst.lis_estado_logico = 1                
+                UNION -- persona gestion
+                SELECT -- mailchimp
+                        lst.lis_id,
+                        0 per_id,
+                        IFNULL(pges.pges_id, 0) id_pges,
+                        CONCAT(pges.pges_pri_nombre,' ',IFNULL(pges.pges_pri_apellido, '')) AS contacto,
+                        IF(ISNULL(mest.mest_nombre),
+                                eaca.eaca_nombre,
+                                mest.mest_nombre) carrera,
+                        pges.pges_correo as per_correo,
+                        acon.acon_id,
+                        acon.acon_nombre,
+                        ifnull(ls.lsus_estado_mailchimp,0) as estado_mailchimp,
+                        if(ifnull(ls.sus_id,0)>0 and ls.lis_id = :list_id and ls.lsus_estado =1,1,0) as estado
+                FROM
+                    db_mailing.lista lst
+                    left JOIN db_academico.estudio_academico AS eaca ON eaca.eaca_id = lst.eaca_id
+                    left JOIN db_academico.modulo_estudio AS mest ON mest.mest_id = lst.mest_id                
+                    left JOIN db_academico.estudio_academico_area_conocimiento AS eaac ON eaac.eaca_id = eaca.eaca_id
+                    JOIN db_academico.area_conocimiento AS acon ON acon.acon_id = eaac.acon_id
+                    JOIN db_mailing.lista_suscriptor ls ON ls.lis_id = lst.lis_id
+                    JOIN db_mailing.suscriptor AS sus ON sus.sus_id = ls.sus_id
+                    join db_crm.persona_gestion AS pges ON pges.pges_id = sus.pges_id
+            WHERE
+                    lst.lis_id = :list_id
+                    AND (ifnull(ls.lsus_estado_mailchimp,0) = '1' and sus.sus_estado = '1' and ls.lsus_estado = '1') 
+                    AND lst.lis_estado = 1
+                    AND lst.lis_estado_logico = 1                
+            ";
         }
         $comando = $con->createCommand($sql);
         $comando->bindParam(":estado", $estado, \PDO::PARAM_STR);
@@ -516,15 +665,15 @@ class Suscriptor extends \yii\db\ActiveRecord {
         $con = \Yii::$app->db_mailing;
         // $estado = 1;
         $sql = "
-                select 	sus_id
-                FROM " . $con->dbname . ".suscriptor sus 
-                ON sus.sus_id = lsus.sus_id
-                WHERE (sus.per_id = :per_id and sus.pges_id = :pges_id)";
+                select 	sus.sus_id
+                FROM db_mailing.suscriptor sus 
+                WHERE (sus.per_id = :per_id and sus.pges_id = :pges_id)
+                and sus.sus_estado_logico=1 and sus.sus_estado=1
+                ";
 
         $comando = $con->createCommand($sql);
         // $comando->bindParam(":estado", $estado, \PDO::PARAM_STR);
         $comando->bindParam(":per_id", $per_id, \PDO::PARAM_INT);
-        $comando->bindParam(":list_id", $list_id, \PDO::PARAM_INT);
         $comando->bindParam(":pges_id", $pges_id, \PDO::PARAM_INT);
         $resultData = $comando->queryOne();
         return $resultData['sus_id'];
@@ -656,9 +805,10 @@ class Suscriptor extends \yii\db\ActiveRecord {
         $resultData = $comando->queryAll();
         return $resultData;
     }
+
     public function consultarsuscritos($list_id) {
         $con = \Yii::$app->db_mailing;
-        $estado=1;
+        $estado = 1;
         $sql = "
             SELECT 
                     count(lst.lis_id) as num_suscr
@@ -666,6 +816,7 @@ class Suscriptor extends \yii\db\ActiveRecord {
                     join db_mailing.lista_suscriptor as lsu on lsu.lis_id=lst.lis_id
             WHERE
                     lst.lis_id = :list_id
+                    and lsu.lsus_estado=:estado
                     and ifnull(lsu.lsus_estado_mailchimp,0)=0
                     and lst.lis_estado = :estado
                     and lst.lis_estado_logico = :estado
@@ -677,9 +828,10 @@ class Suscriptor extends \yii\db\ActiveRecord {
         $resultData = $comando->queryOne();
         return $resultData;
     }
+
     public function consultarsuschimp($list_id) {
         $con = \Yii::$app->db_mailing;
-        $estado=1;
+        $estado = 1;
         $sql = "
             SELECT 
                     count(lst.lis_id) as num_suscr_chimp
@@ -698,6 +850,7 @@ class Suscriptor extends \yii\db\ActiveRecord {
         $resultData = $comando->queryOne();
         return $resultData;
     }
+
     /**
      * Function consulta numero de no suscritos. 
      * @author Giovanni Vergara <analistadesarrollo02@uteg.edu.ec>;
@@ -712,30 +865,56 @@ class Suscriptor extends \yii\db\ActiveRecord {
         $con4 = \Yii::$app->db_crm;
         $estado = 1;
         $sql = "
-            SELECT 
-                count(lst.lis_id) as noescritos
-                FROM db_mailing.lista lst 
-                left JOIN db_academico.estudio_academico AS eaca ON eaca.eaca_id = lst.eaca_id
-                left JOIN db_academico.modulo_estudio AS mest ON mest.mest_id = lst.mest_id                
-                left JOIN db_academico.estudio_academico_area_conocimiento AS eaac ON eaac.eaca_id = eaca.eaca_id
-                JOIN db_academico.area_conocimiento AS acon ON acon.acon_id = eaac.acon_id
-                left join db_captacion.solicitud_inscripcion AS sins ON (sins.eaca_id = eaca.eaca_id OR sins.mest_id = mest.mest_id)
-                LEFT JOIN db_captacion.interesado i ON i.int_id = sins.int_id
-                LEFT JOIN db_asgard.persona per ON per.per_id = i.per_id
-                LEFT JOIN db_crm.persona_gestion AS pges ON per.per_correo = pges.pges_correo                                
-            WHERE
-                lst.lis_id = :list_id
-                and lst.lis_estado = :estado
-                and lst.lis_estado_logico = :estado
-                and  per.per_id 
-                not in(
-                    select sus.per_id 
-                         from db_mailing.lista_suscriptor as ls
-                         join db_mailing.suscriptor as sus on sus.sus_id=ls.sus_id
-                    where lis_id =:list_id
-                )
+                select sum(noescritos) as noescritos
+                from(
+                SELECT 
+                        count(lst.lis_id) as noescritos
+                        FROM db_mailing.lista lst 
+                        left JOIN db_academico.estudio_academico AS eaca ON eaca.eaca_id = lst.eaca_id
+                        left JOIN db_academico.modulo_estudio AS mest ON mest.mest_id = lst.mest_id                
+                        left JOIN db_academico.estudio_academico_area_conocimiento AS eaac ON eaac.eaca_id = eaca.eaca_id
+                        JOIN db_academico.area_conocimiento AS acon ON acon.acon_id = eaac.acon_id
+                        left join db_captacion.solicitud_inscripcion AS sins ON (sins.eaca_id = eaca.eaca_id OR sins.mest_id = mest.mest_id)    
+                        LEFT JOIN db_captacion.interesado i ON i.int_id = sins.int_id
+                        LEFT JOIN db_asgard.persona per ON per.per_id = i.per_id
+                WHERE
+                        lst.lis_id = :list_id
+                        and lst.lis_estado = 1
+                        and lst.lis_estado_logico = 1
+                        and  per.per_id 
+                        not in(
+                                select sus.per_id 
+                                from db_mailing.lista_suscriptor as ls
+                                join db_mailing.suscriptor as sus on sus.sus_id=ls.sus_id
+                                where lis_id =:list_id
+                                and ls.lsus_estado=1
+                        )
+                union
+                SELECT 
+                        count(lst.lis_id) as noescritos
+                        FROM db_mailing.lista lst 
+                        left JOIN db_academico.estudio_academico AS eaca ON eaca.eaca_id = lst.eaca_id
+                        left JOIN db_academico.modulo_estudio AS mest ON mest.mest_id = lst.mest_id                
+                        left JOIN db_academico.estudio_academico_area_conocimiento AS eaac ON eaac.eaca_id = eaca.eaca_id
+                        JOIN db_academico.area_conocimiento AS acon ON acon.acon_id = eaac.acon_id
+                        left join db_crm.oportunidad as opo on (opo.eaca_id=eaca.eaca_id or opo.mest_id=mest.mest_id)
+                        LEFT JOIN db_crm.persona_gestion AS pges ON pges.pges_id=opo.pges_id                               
+                WHERE
+                        lst.lis_id = :list_id
+                        and lst.lis_estado = 1
+                        and lst.lis_estado_logico = 1
+                    and pges.pges_id 
+                                not in(
+                                           select 
+                                                sus.pges_id 
+                                           from db_mailing.lista_suscriptor as ls
+                                                join db_mailing.suscriptor as sus on sus.sus_id=ls.sus_id
+                                           where 
+                                                lis_id =:list_id
+                                                and ls.lsus_estado=1
+                                           )      
+                ) as tabla_no       
                 ";
-
         $comando = $con->createCommand($sql);
         $comando->bindParam(":estado", $estado, \PDO::PARAM_STR);
         $comando->bindParam(":list_id", $list_id, \PDO::PARAM_INT);
@@ -778,6 +957,7 @@ class Suscriptor extends \yii\db\ActiveRecord {
                SELECT sus_id 
                FROM db_mailing.suscriptor
                WHERE $condicion in ($ids) 
+               and sus_estado=1 and sus_estado_logico=1
                ";
         $comando = $con->createCommand($sql);
         $resultData = $comando->queryAll();

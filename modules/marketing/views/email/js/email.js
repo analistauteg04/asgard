@@ -234,7 +234,6 @@ function guardarProgramacion() {
     arrParams.check_dia_7 = "";
     arrParams.lista = $('#txth_list').val();
     arrParams.pla_id = $('#cmb_pla_id').val();
-
     if ($('input:checkbox[name=check_dia_1]:checked').val() > 0)
     {
         arrParams.check_dia_1 = $('input:checkbox[name=check_dia_1]:checked').val();

@@ -163,21 +163,26 @@ class EmailController extends \app\components\CController {
                 $suscritos = $mod_suscritor->consultarsuscritos($lis_id);
                 $suschimp = $mod_suscritor->consultarsuschimp($lis_id);
                 \app\models\Utilities::putMessageLogFile('suscritos:' . $suscritos['num_suscr']);
+                \app\models\Utilities::putMessageLogFile('sus chimp:' . $suscritos['$suschimp']);
                 if (($suscritos['num_suscr'] > 0) or ( $suschimp['num_suscr_chimp'] > 0)) {
+                    \app\models\Utilities::putMessageLogFile('registros a eliminar:');
                     $resp_suscritor = $mod_lista->consultarSuscriptoresXlista($lis_id);
+                    \app\models\Utilities::putMessageLogFile($resp_suscritor);
                     if (count($resp_suscritor) > 0) {
                         \app\models\Utilities::putMessageLogFile('contador:' . count($resp_suscritor));
                         for ($i = 0; $i < count($resp_suscritor); $i++) {
                             $respuesta = $mod_suscritor->consultarMasListaXsuscriptor($lis_id, $resp_suscritor[$i]["per_id"], $resp_suscritor[$i]["pges_id"]);
+                            \app\models\Utilities::putMessageLogFile('suscriptor en otras listas: ' .$respuesta["suscrito"]);
                             if ($respuesta["suscrito"] == 0) {
                                 $respUpdate = $mod_suscritor->updateSuscripto($resp_suscritor[$i]["per_id"], $resp_suscritor[$i]["pges_id"], $lis_id, 0);
                             } else {
                                 $respUpdate = $mod_suscritor->eliminarListaSuscriptor($resp_suscritor[$i]["per_id"], $resp_suscritor[$i]["pges_id"], $lis_id);
                             }
                         }
-                    }
-                    $resp_lista = $mod_lista->inactivaLista($lis_id);
+                    }                    
+                    $resp_lista = $mod_lista->inactivaLista($lis_id);                    
                     if ($resp_lista) {
+                        \app\models\Utilities::putMessageLogFile('La lista ha sido eliminada');
                         $exito = '1';
                     }
                 } else {
@@ -700,10 +705,11 @@ class EmailController extends \app\components\CController {
             try {
                 $mod_sb = new Suscriptor();                       
                 $no_suscitos = $mod_sb->consultarSuscriptoresxLista($arrSearch, $lis_id, 2,True);
-                \app\models\Utilities::putMessageLogFile($no_suscitos);
+                \app\models\Utilities::putMessageLogFile("Cantidad de no suscritos: ".count($no_suscitos));
                 if (count($no_suscitos) > 0) {
-                    for ($i = 0; $i < count($no_suscitos); $i++) {
+                    for ($i = 0; $i < count($no_suscitos); $i++) {                        
                         $exitesuscrito = $mod_sb->consultarSuscriptoxPerylis($no_suscitos[$i]["per_id"], $no_suscitos[$i]["pges_id"], $lis_id);
+                        \app\models\Utilities::putMessageLogFile("si existe suscriptor: ".$exitesuscrito["inscantes"]);                        
                         // si existe en la base update
                         if ($exitesuscrito["inscantes"] > 0) {
                             if ($no_suscitos[$i]["per_id"] != 0) {
@@ -853,7 +859,6 @@ class EmailController extends \app\components\CController {
         $report = new ExportFile();
         $this->view->title = marketing::t("marketing", "List"); // Titulo del reporte        
         $data = Yii::$app->request->get();
-
         $mod_lista = new Lista();
         $arr_data = array();
         $arrSearch["lista"] = $data["lista"];
