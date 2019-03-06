@@ -74,7 +74,7 @@ class PbGridView extends GridView {
             'addButton_fn' => $this->addButton_fn,
             'addButton_lk' => $this->addButton_link,
             'addButton_pp' => $this->addButton_popup,
-            'totalCount' => $this->dataProvider->totalCount,
+            'totalCount' => $this->dataProvider->getCount(), //$this->dataProvider->totalCount,
             ]);
         echo Html::tag($tag, $content, $this->options);
         if($this->pajax)
