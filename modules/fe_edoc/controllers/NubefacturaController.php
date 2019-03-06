@@ -117,7 +117,7 @@ class NubefacturaController extends \app\components\CController {
         }
     }
 
-    public function actionBuscaDataIndex() {
+    public function actionBuscadataIndex() {
         if (Yii::$app->request->isAjax) {
             $arrayData = array();
             $obj = new NubeFactura();
