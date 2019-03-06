@@ -1,7 +1,5 @@
 <?php
-
 namespace app\modules\fe_edoc\controllers;
-
 use Yii;
 use app\modules\fe_edoc\models\VSacceso;
 use app\modules\fe_edoc\models\VSDirectorio;
@@ -14,9 +12,7 @@ use app\modules\fe_edoc\models\NubeRetencion;
 use app\models\ExportFile;
 use yii\helpers\ArrayHelper;
 use yii\base\Exception;
-
 class NuberetencionController extends \app\components\CController  {
-
     public $pdf_numeroaut = "";
     public $pdf_numero = "";
     public $pdf_nom_empresa = "";
@@ -31,7 +27,6 @@ class NuberetencionController extends \app\components\CController  {
     public $pdf_cla_acceso = "";
     public $pdf_tipo_documento = "";
     public $pdf_cod_barra = "";
-
     /**
      * Displays a particular model.
      * @param integer $id the ID of the model to be displayed
@@ -41,28 +36,23 @@ class NuberetencionController extends \app\components\CController  {
             'model' => $this->loadModel($id),
         ));
     }
-
     /**
      * Creates a new model.
      * If creation is successful, the browser will be redirected to the 'view' page.
      */
     public function actionCreate() {
         $model = new NubeRetencion;
-
         // Uncomment the following line if AJAX validation is needed
         // $this->performAjaxValidation($model);
-
         if (isset($_POST['NubeRetencion'])) {
             $model->attributes = $_POST['NubeRetencion'];
             if ($model->save())
                 $this->redirect(array('view', 'id' => $model->IdRetencion));
         }
-
         return $this->render('create', array(
             'model' => $model,
         ));
     }
-
     /**
      * Updates a particular model.
      * If update is successful, the browser will be redirected to the 'view' page.
@@ -70,21 +60,17 @@ class NuberetencionController extends \app\components\CController  {
      */
     public function actionUpdate($id) {
         $model = $this->loadModel($id);
-
         // Uncomment the following line if AJAX validation is needed
         // $this->performAjaxValidation($model);
-
         if (isset($_POST['NubeRetencion'])) {
             $model->attributes = $_POST['NubeRetencion'];
             if ($model->save())
                 $this->redirect(array('view', 'id' => $model->IdRetencion));
         }
-
         return $this->render('update', array(
             'model' => $model,
         ));
     }
-
     /**
      * Deletes a particular model.
      * If deletion is successful, the browser will be redirected to the 'admin' page.
@@ -92,12 +78,10 @@ class NuberetencionController extends \app\components\CController  {
      */
     public function actionDelete($id) {
         $this->loadModel($id)->delete();
-
         // if AJAX request (triggered by deletion via admin grid view), we should not redirect the browser
         if (!isset($_GET['ajax']))
             $this->redirect(isset($_POST['returnUrl']) ? $_POST['returnUrl'] : array('admin'));
     }
-
     /**
      * Lists all models.
      */
@@ -134,7 +118,6 @@ class NuberetencionController extends \app\components\CController  {
             'tipoApr' => $aproba->tipoAprobacion(),
         ));
     }
-
     /**
      * Manages all models.
      */
@@ -143,12 +126,10 @@ class NuberetencionController extends \app\components\CController  {
         $model->unsetAttributes();  // clear any default values
         if (isset($_GET['NubeRetencion']))
             $model->attributes = $_GET['NubeRetencion'];
-
         return $this->render('admin', array(
             'model' => $model,
         ));
     }
-
     /**
      * Returns the data model based on the primary key given in the GET variable.
      * If the data model is not found, an HTTP exception will be raised.
@@ -162,7 +143,6 @@ class NuberetencionController extends \app\components\CController  {
             throw new CHttpException(404, 'The requested page does not exist.');
         return $model;
     }
-
     /**
      * Performs the AJAX validation.
      * @param NubeRetencion $model the model to be validated
@@ -195,7 +175,6 @@ class NuberetencionController extends \app\components\CController  {
             $cabDoc = $modelo->mostrarCabRetencion($ids);
             $detDoc = $modelo->mostrarDetRetencion($ids);
             $adiDoc = $modelo->mostrarRetencionDataAdicional($ids);
-
             $this->pdf_numeroaut = $cabDoc['AutorizacionSRI'];
             $this->pdf_numero = $cabDoc['NumDocumento'];
             $this->pdf_nom_empresa = $cabDoc['RazonSocial'];
@@ -246,20 +225,18 @@ class NuberetencionController extends \app\components\CController  {
         }
     }
     
-    public function actionEnviarCorreccion() {
+    public function actionEnviarcorreccion() {
         if (Yii::$app->request->isAjax) {
-            $modelo = new NubeRetencion(); //Ejmpleo code 3
             $errAuto= new VSexception();
             $ids = isset($_POST['ids']) ? base64_decode($_POST['ids']) : NULL;
-            $cabDoc = $modelo->mostrarCabRetencion($ids);
-            $tipDoc=substr($cabDoc['CodigoTransaccionERP'], 0, 2);//Devuelve las 2 primero caracters sean CO Y PP
-            $result=VSDocumentos::anularDodSri($ids, 'RT',5);//Anula Documentos Retenciones del Sistema
+            $result=VSDocumentos::anularDodSri($ids, 'RT',1);//Reenviar Documentos AUTORIZAR
             $arroout=$errAuto->messageSystem('NO_OK',null, 1, null, null);
             if($result['status'] == 'OK'){//Si es Verdadero actualizo datos de base intermedia
-                $result=VSDocumentos::corregirDocSEA($ids, $tipDoc);
+                /*$result=VSDocumentos::corregirDocSEA($ids, $tipDoc);
                 if($result['status'] == 'OK'){
                     $arroout=  $errAuto->messageSystem('OK', null,12,null, null);
-                }
+                }*/
+                $arroout=  $errAuto->messageSystem('OK', null,12,null, null);
             }
             header('Content-type: application/json');
             echo json_encode($arroout);
@@ -267,12 +244,12 @@ class NuberetencionController extends \app\components\CController  {
         }
     }
     
-    public function actionEnviarAnular() {
+    public function actionEnviaranular() {
         if (Yii::$app->request->isAjax) {
-            $dataMail = new mailSystem;
+            //$dataMail = new mailSystem;
             $ids = isset($_POST['ids']) ? base64_decode($_POST['ids']) : NULL;
             $arroout=VSDocumentos::anularDodSri($ids, 'RT',8);//Anula Documentos Autorizados del Websea
-            if($arroout['status'] == 'OK'){//Si es Verdadero actualizo datos de base intermedia
+            /*if($arroout['status'] == 'OK'){//Si es Verdadero actualizo datos de base intermedia
                 $CabPed=VSDocumentos::enviarInfoDodSri($ids,'RT');
                 $DatVen=VSDocumentos::buscarDatoVendedor($CabPed["UsuId"]);//Datos del Vendedor que AUTORIZO
                 $htmlMail = $this->render('mensaje', array(
@@ -281,13 +258,13 @@ class NuberetencionController extends \app\components\CController  {
                     ));
                 $Subject = "Ha Recibido un(a) Orden de Anulación!!!";
                 $dataMail->enviarMailInforma($htmlMail,$CabPed,$DatVen,$Subject,1);//Notificacion a Usuarios
-            }
+            }*/
             header('Content-type: application/json');
             echo json_encode($arroout);
             return;
         }
     }
-    public function actionEnviarCorreo() {
+    public function actionEnviarcorreo() {
         if (Yii::$app->request->isAjax) {
             $ids = isset($_POST['ids']) ? base64_decode($_POST['ids']) : NULL;
             $arroout=VSDocumentos::reenviarDodSri($ids, 'RT',2);//Anula Documentos Autorizados del Websea
@@ -315,8 +292,6 @@ class NuberetencionController extends \app\components\CController  {
             echo json_encode($arrayData);
             return;
         }
-
     }
     
-
 }
