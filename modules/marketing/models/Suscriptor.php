@@ -151,6 +151,7 @@ class Suscriptor extends \yii\db\ActiveRecord {
                         JOIN db_asgard.persona per ON per.per_id = sus.per_id
                 WHERE
                         lst.lis_id = :list_id                    
+                        and ls.lsus_estado=1
                         and ifnull(ls.lsus_estado_mailchimp,0)=0
                         AND lst.lis_estado = 1
                         AND lst.lis_estado_logico = 1                
@@ -215,6 +216,7 @@ class Suscriptor extends \yii\db\ActiveRecord {
                                                 from db_mailing.lista_suscriptor as ls
                                                 join db_mailing.suscriptor as sus on sus.sus_id=ls.sus_id
                                            where lis_id =:list_id
+                                           and ls.lsus_estado=1
                                            )
                 UNION -- persona gestion
                 SELECT -- suscritos
@@ -241,6 +243,7 @@ class Suscriptor extends \yii\db\ActiveRecord {
                         join db_crm.persona_gestion AS pges ON pges.pges_id = sus.pges_id
                 WHERE
                         lst.lis_id = :list_id
+                        and ls.lsus_estado=1
                         and ifnull(ls.lsus_estado_mailchimp,0)=0
                         AND lst.lis_estado = 1
                         AND lst.lis_estado_logico = 1                
@@ -304,7 +307,14 @@ class Suscriptor extends \yii\db\ActiveRecord {
 				from db_mailing.lista_suscriptor as ls
 				join db_mailing.suscriptor as sus on sus.sus_id=ls.sus_id
 			   where lis_id =:list_id
+                           and ls.lsus_estado=1
 			   )                      
+                and pges.pges_correo
+                    not in(
+                        select per_correo
+                        from db_asgard.persona as per
+                        where per.per_estado=1 and per.per_estado_logico=1
+                    )
             ";
         } else if ($subscrito == 1) {
             $sql = "
@@ -332,6 +342,7 @@ class Suscriptor extends \yii\db\ActiveRecord {
                         JOIN db_asgard.persona per ON per.per_id = sus.per_id
                 WHERE
                         lst.lis_id = :list_id                    
+                        and ls.lsus_estado=1
                         and ifnull(ls.lsus_estado_mailchimp,0)=0
                         AND lst.lis_estado = 1
                         AND lst.lis_estado_logico = 1                
@@ -360,6 +371,7 @@ class Suscriptor extends \yii\db\ActiveRecord {
                         join db_crm.persona_gestion AS pges ON pges.pges_id = sus.pges_id
                 WHERE
                         lst.lis_id = :list_id
+                        and ls.lsus_estado=1
                         and ifnull(ls.lsus_estado_mailchimp,0)=0
                         AND lst.lis_estado = 1
                         AND lst.lis_estado_logico = 1                                
@@ -398,6 +410,7 @@ class Suscriptor extends \yii\db\ActiveRecord {
                                                 from db_mailing.lista_suscriptor as ls
                                                 join db_mailing.suscriptor as sus on sus.sus_id=ls.sus_id
                                            where lis_id =:list_id
+                                           and ls.lsus_estado=1
                                            )
                 UNION -- persona gestion
                 SELECT -- no suscritos
@@ -431,7 +444,14 @@ class Suscriptor extends \yii\db\ActiveRecord {
                                     from db_mailing.lista_suscriptor as ls
                                     join db_mailing.suscriptor as sus on sus.sus_id=ls.sus_id
                                where lis_id =:list_id
+                               and ls.lsus_estado=1
                                )      
+                    and pges.pges_correo
+                    not in(
+                        select per_correo
+                        from db_asgard.persona as per
+                        where per.per_estado=1 and per.per_estado_logico=1
+                    )
             ";
         } else if ($subscrito == 3) {
             $sql = "
@@ -874,9 +894,9 @@ class Suscriptor extends \yii\db\ActiveRecord {
                         left JOIN db_academico.modulo_estudio AS mest ON mest.mest_id = lst.mest_id                
                         left JOIN db_academico.estudio_academico_area_conocimiento AS eaac ON eaac.eaca_id = eaca.eaca_id
                         JOIN db_academico.area_conocimiento AS acon ON acon.acon_id = eaac.acon_id
-                        left join db_captacion.solicitud_inscripcion AS sins ON (sins.eaca_id = eaca.eaca_id OR sins.mest_id = mest.mest_id)    
-                        LEFT JOIN db_captacion.interesado i ON i.int_id = sins.int_id
-                        LEFT JOIN db_asgard.persona per ON per.per_id = i.per_id
+                        join db_captacion.solicitud_inscripcion AS sins ON (sins.eaca_id = eaca.eaca_id OR sins.mest_id = mest.mest_id)    
+                        JOIN db_captacion.interesado i ON i.int_id = sins.int_id
+                        JOIN db_asgard.persona per ON per.per_id = i.per_id
                 WHERE
                         lst.lis_id = :list_id
                         and lst.lis_estado = 1
@@ -897,8 +917,8 @@ class Suscriptor extends \yii\db\ActiveRecord {
                         left JOIN db_academico.modulo_estudio AS mest ON mest.mest_id = lst.mest_id                
                         left JOIN db_academico.estudio_academico_area_conocimiento AS eaac ON eaac.eaca_id = eaca.eaca_id
                         JOIN db_academico.area_conocimiento AS acon ON acon.acon_id = eaac.acon_id
-                        left join db_crm.oportunidad as opo on (opo.eaca_id=eaca.eaca_id or opo.mest_id=mest.mest_id)
-                        LEFT JOIN db_crm.persona_gestion AS pges ON pges.pges_id=opo.pges_id                               
+                        join db_crm.oportunidad as opo on (opo.eaca_id=eaca.eaca_id or opo.mest_id=mest.mest_id)
+                        JOIN db_crm.persona_gestion AS pges ON pges.pges_id=opo.pges_id                               
                 WHERE
                         lst.lis_id = :list_id
                         and lst.lis_estado = 1
@@ -913,6 +933,12 @@ class Suscriptor extends \yii\db\ActiveRecord {
                                                 lis_id =:list_id
                                                 and ls.lsus_estado=1
                                            )      
+                    and pges.pges_correo
+                    not in(
+                        select per_correo
+                        from db_asgard.persona as per
+                        where per.per_estado=1 and per.per_estado_logico=1
+                    )
                 ) as tabla_no       
                 ";
         $comando = $con->createCommand($sql);

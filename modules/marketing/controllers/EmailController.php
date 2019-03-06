@@ -738,7 +738,7 @@ class EmailController extends \app\components\CController {
                             }
                             //insertar por pges_id
                             if (!empty($spges_id)) {
-                                $idinsertadopg = $mod_sb->consultarSuscritosbtn('id_pges', substr($spges_id, 0, -1));
+                                $idinsertadopg = $mod_sb->consultarSuscritosbtn('pges_id', substr($spges_id, 0, -1));
                             }
                             // para crear nuevamente el script a insertar con los sus_id
                             if (count($idinsertados) > 0) {
