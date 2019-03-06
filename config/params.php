@@ -42,6 +42,7 @@ return [
     'imgFolder' => '/site/getimage/?route=/uploads/',
     'FileExtensions' => ['jpg', 'png', 'pdf'],
     'MaxFileSize' => 1024, //Tamaño 1 MB
+    'MaxFileLogSize' => 50000000, // 50000000 bytes -> 50 MB
     'timeRecursive' => '2', // segundos
     'numRecursive' => '3',
     'currency' => '$',

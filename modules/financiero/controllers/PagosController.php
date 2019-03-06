@@ -906,22 +906,23 @@ class PagosController extends \app\components\CController {
         $referenceID = isset($data["referenceID"])?$data["referenceID"]:null;
         if(!is_null($referenceID)){
             try {
+                $transaction = $con1->beginTransaction();
+                $sins_id = base64_decode($dataGet["sins_id"]);
+                $solInc_mod = SolicitudInscripcion::findOne($sins_id);
+                $opago_mod = OrdenPago::findOne(["sins_id" => $sins_id, "opag_estado_pago" => "P", "opag_estado" => "1", "opag_estado_logico" => "1"]);
+                
+                $response = $this->render('btnpago', array(
+                    "referenceID" => $data["resp"]["reference"],
+                    "requestID" => $data["requestID"],
+                    "ordenPago" => $opago_mod->opag_id,
+                    "response" => $data["resp"],
+                ));
                 if($data["resp"]["status"]["status"] == "APPROVED"){
-                    $transaction = $con1->beginTransaction();
-                    $sins_id = base64_decode($dataGet["sins_id"]);
-                    $solInc_mod = SolicitudInscripcion::findOne($sins_id);
-                    $opago_mod = OrdenPago::findOne(["sins_id" => $sins_id, "opag_estado_pago" => "P", "opag_estado" => "1", "opag_estado_logico" => "1"]);
                     $opago_mod->opag_estado_pago = "S";
                     $opago_mod->opag_valor_pagado = $opago_mod->opag_total;
                     $opago_mod->opag_fecha_pago_total = date("Y-m-d H:i:s");
                     $opago_mod->opag_usu_modifica = @Yii::$app->session->get("PB_iduser");
                     $opago_mod->opag_fecha_modificacion = date("Y-m-d H:i:s");
-                    $response = $this->render('btnpago', array(
-                        "referenceID" => $data["resp"]["reference"],
-                        "requestID" => $data["requestID"],
-                        "ordenPago" => $opago_mod->opag_id,
-                        "response" => $data["resp"],
-                    ));
                     $message = array(
                         "wtmessage" => Yii::t("notificaciones", "Your information was successfully saved."),
                         "title" => Yii::t('jslang', 'Success'),
@@ -985,8 +986,9 @@ class PagosController extends \app\components\CController {
         $int_mod = Interesado::findOne($solInc_mod->int_id);
         $per_mod = Persona::findOne($int_mod->per_id);
         $opago_mod = OrdenPago::findOne(["sins_id" => $sins_id, "opag_estado_pago" => "P", "opag_estado" => 1, "opag_estado_logico" => 1]);
-        $descripcionItem = "Compra de curso";
-        $titleBox = "Compras en Linea";
+        $obj_sol = $solInc_mod::consultarInteresadoPorSol_id($sins_id);
+        $descripcionItem = financiero::t("Pagos", "Payment of ") . $obj_sol["carrera"];
+        $titleBox = financiero::t("Pagos", "Payment Course/Career/Program: ") . $obj_sol["carrera"];
         $totalpagar = $opago_mod->opag_total;
         return $this->render('btnpago', array(
             "referenceID" => str_pad(Secuencias::nuevaSecuencia($con1, $emp_id, 1, 1, 'BPA'), 8, "0", STR_PAD_LEFT),

@@ -7,7 +7,9 @@
  */
 ?>
 <div class="col-lg-12">
-    <?php echo $this->render('_frm_BuscarGrid', array('model' => $model, 'tipoDoc' => $tipoDoc,'tipoApr'=> $tipoApr)); ?>
+    <form class="form-horizontal">
+        <?= $this->render('_frm_BuscarGrid', array('model' => $model, 'tipoDoc' => $tipoDoc,'tipoApr'=> $tipoApr)); ?>
+    </form>
 </div>
 <div class="col-lg-12">
     <?php echo $this->render('_indexGrid', array('model' => $model)); ?>

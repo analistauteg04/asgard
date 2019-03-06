@@ -82,5 +82,7 @@ return array(
     'Term' => 'Plazo',
     'Time' => 'Tiempo',
     'Save' => 'Guardar',
+    
+   
 );
 ?>

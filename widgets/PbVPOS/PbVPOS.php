@@ -16,6 +16,8 @@ use app\models\Http;
 use yii\helpers\Url;
 use app\widgets\PbVPOS\assets\VPOSAsset;
 use app\models\Utilities;
+use app\models\Utilities as AppUtilities;
+use PhpOffice\PhpSpreadsheet\Chart\Exception;
 
 class PbVPOS extends Widget {
     private static $widget_name = "PbVPOS";
@@ -26,6 +28,7 @@ class PbVPOS extends Widget {
     protected $nounce = "";
     protected $payment_gateway = "";
     protected $port = "443";
+    protected $logTrans = __DIR__ . "/../../runtime/logs/vpos.log";
 
     public $referenceID = "";
     public $ordenPago = "";
@@ -56,58 +59,78 @@ class PbVPOS extends Widget {
     {
         parent::init();
         $this->selectVPOST();
-        $this->generateAuthetication();
+        if($this->type_vpos == 1)
+            $this->generateAuthetication();
         $this->registerClientScript();
         $this->registerTranslations();
     }
 
     public function run()
     {
-        $this->returnUrl = Url::current([], true) . "?referenceID=" . $this->referenceID;
-        $response = null;
-        $data = [
-            "titleBox" => $this->titleBox,
-            "nombre_cliente" => $this->nombre_cliente,
-            "apellido_cliente" => $this->apellido_cliente,
-            "email_cliente" => $this->email_cliente,
-            "total" => $this->total,
-            "referenceID" => $this->referenceID,
-        ];
-        if($this->isCheckout === false){
-            // hay una orden de pago previa
-            $resp = $this->existsOrdenResponse();
-            if($resp > 0 && !$this->existsPayment()){
-                $response = $this->getInfoPayment($resp);
-                if($response["status"]["status"] == "APPROVED"){
-                    echo $this->render('error', [
-                        "reloadDB" => true,
-                        "data" => json_encode($response),
-                        ]);
-                    return;
+        if($this->type_vpos == 1){
+            $this->returnUrl = Url::current([], true) . "?referenceID=" . $this->referenceID;
+            $response = null;
+            $data = [
+                "titleBox" => $this->titleBox,
+                "nombre_cliente" => $this->nombre_cliente,
+                "apellido_cliente" => $this->apellido_cliente,
+                "email_cliente" => $this->email_cliente,
+                "total" => $this->total,
+                "referenceID" => $this->referenceID,
+            ];
+            if($this->isCheckout === false){
+                // hay una orden de pago previa
+                $resp = $this->existsOrdenResponse();
+                $estado = $this->existsPayment();
+                if($resp > 0 && ($estado == "" || $estado["status"] == "PENDING" || $estado["status"] == "PENDING_VALIDATION")){
+                    $response = $this->getInfoPayment($resp);
+                    //Utilities::putMessageLogFile("$resp     $estado    ".json_encode($response));
+                    if($response["status"]["status"] == "APPROVED"){
+                        echo $this->render('error', [
+                            "reloadDB" => true,
+                            "data" => json_encode($response),
+                            ]);
+                            $this->updateTransactionFinished();
+                        return;
+                    }else if($response["status"]["status"] == "PENDING" || $response["status"]["status"] == "PENDING_VALIDATION"){
+                        echo $this->render('error', [
+                            "reloadDB" => false,
+                            "data" => json_encode($response),
+                            ]);
+                        return;
+                    }else if($response["status"]["status"] == "REJECTED"){
+                        $this->updateTransactionFinished();
+                    }
+                }else if($resp > 0 && ($estado == "" || $estado["status"] == "REJECTED" || $estado["status"] == "APPROVED")){
+                    $this->updateTransactionFinished();
                 }
+                $response = $this->redirectRequest();
+            }else{
+                $response = $this->getInfoPayment($this->requestID);
+                if($response["status"]["status"] == "APPROVED" || $response["status"]["status"] == "REJECTED"){
+                    $this->updateTransactionFinished();
+                }
+                return $response;
             }
-            $response = $this->redirectRequest();
-        }else{
-            $response = $this->getInfoPayment($this->requestID);
-            return $response;
+            
+            if($response["status"]["status"] != "OK"){
+                echo $this->render('error');
+            }else{
+                if ($this->isCheckout === false) {
+                    $requestId = $response["requestId"];
+                    $processUrl = $response["processUrl"];
+                    $data["processUrl"] = $processUrl;
+                }else{
+
+                }
+                if($this->type == "button")
+                    echo $this->render('button', $data);
+                else
+                    echo $this->render('form', $data);
+                //return Html::encode($this->message);
+            }
         }
         
-        if($response["status"]["status"] != "OK"){
-            echo $this->render('error');
-        }else{
-            if ($this->isCheckout === false) {
-                $requestId = $response["requestId"];
-                $processUrl = $response["processUrl"];
-                $data["processUrl"] = $processUrl;
-            }else{
-
-            }
-            if($this->type == "button")
-                echo $this->render('button', $data);
-            else
-                echo $this->render('form', $data);
-            //return Html::encode($this->message);
-        }
     }
 
     private function selectVPOST(){
@@ -180,11 +203,13 @@ class PbVPOS extends Widget {
         ];
         //\app\models\Utilities::putMessageLogFile($params);
         $this->saveRequestDB($params);
+        $this->putMessageLogFile("Params Init Request: Uri -> $this->payment_gateway:$this->port/$WS_URI  -  Params -> " . json_encode($params));
         $response = Http::connect($this->payment_gateway, $this->port, http::HTTPS)
             ->setHeaders(array('Content-Type: application/json', 'Accept: application/json'))
             //->setCredentials($user, $apiKey)
             ->doPost($WS_URI, json_encode($params));
         $arr_response = json_decode($response, true);
+        $this->putMessageLogFile("Params Get Response: Uri -> $this->payment_gateway:$this->port/$WS_URI  -  Params -> " . json_encode($arr_response));
         $this->saveResponseDB($this->referenceID, $arr_response);
         return $arr_response;
     }
@@ -202,12 +227,36 @@ class PbVPOS extends Widget {
             "userAgent" => $_SERVER['HTTP_USER_AGENT'],
         ];
         //\app\models\Utilities::putMessageLogFile($params);
+        $this->putMessageLogFile("Params Info Request: Uri -> $this->payment_gateway:$this->port/$WS_URI  -  Params -> " . json_encode($params));
         $response = Http::connect($this->payment_gateway, $this->port, http::HTTPS)
             ->setHeaders(array('Content-Type: application/json', 'Accept: application/json'))
             //->setCredentials($user, $apiKey)
             ->doPost($WS_URI, json_encode ($params));
         $arr_response = json_decode($response, true);
+        $this->putMessageLogFile("Params Info Response: Uri -> $this->payment_gateway:$this->port/$WS_URI  -  Params -> " . json_encode($arr_response));
         $this->saveInfoResponseDB($arr_response);
+        return $arr_response;
+    }
+
+    public function reversePayment(){
+        $WS_URI = "redirection/api/reverse/";
+        $params = [
+            "auth" => [
+                "login" => $this->login,
+                "seed" => $this->seed,
+                "nonce" => $this->nounce,
+                "tranKey" => $this->transKey,
+            ],
+            "internalReference" => "",
+        ];
+        $this->putMessageLogFile("Params Reverse Request: Uri -> $this->payment_gateway:$this->port/$WS_URI  -  Params -> " . json_encode($params));
+        $response = Http::connect($this->payment_gateway, $this->port, http::HTTPS)
+            ->setHeaders(array('Content-Type: application/json', 'Accept: application/json'))
+            //->setCredentials($user, $apiKey)
+            ->doPost($WS_URI, json_encode ($params));
+        $arr_response = json_decode($response, true);
+        $this->putMessageLogFile("Params Reverse Response: Uri -> $this->payment_gateway:$this->port/$WS_URI  -  Params -> " . json_encode($arr_response));
+        //$this->saveInfoResponseDB($arr_response);
         return $arr_response;
     }
 
@@ -447,29 +496,100 @@ class PbVPOS extends Widget {
     private function existsPayment(){
         $conection = $this->dbConection;
         $con = \Yii::$app->$conection;
-        $status = "APPROVED";
-        $sql = "select * from " . $con->dbname . ".vpos_info_response i inner join " . $con->dbname . ".vpos_response r on i.ordenPago = r.ordenPago " .
-        " where r.ordenPago = :ordenPago and i.status = :status and i.estado_logico = 1 and r.estado_logico = 1 order by r.date desc";
+        //$status = "APPROVED";
+        $sql = "select i.status as status, i.reason as reason from " . $con->dbname . ".vpos_info_response i inner join " . $con->dbname . ".vpos_response r on i.ordenPago = r.ordenPago " .
+        " where r.ordenPago = :ordenPago and i.estado_logico = 1 and r.estado_logico = 1 and r.finish_transaccion = 0 and i.finish_transaccion = 0 " . 
+        " order by r.date desc";
         $comando = $con->createCommand($sql);
         $comando->bindParam(":ordenPago", $this->ordenPago, \PDO::PARAM_STR);
-        $comando->bindParam(":status", $status, \PDO::PARAM_STR);
+        //$comando->bindParam(":status", $status, \PDO::PARAM_STR);
         $resultData = $comando->queryOne();
         if(is_array($resultData) && count($resultData) > 0)
-            return true;
-        return false;
+            return $resultData;
+        return "";
     }
 
     private function existsOrdenResponse(){
         $conection = $this->dbConection;
         $con = \Yii::$app->$conection;
         $sql = "select * from " . $con->dbname . ".vpos_response " .
-        " where ordenPago = :ordenPago and estado_logico = 1 order by date desc";
+        " where ordenPago = :ordenPago and estado_logico = 1 and finish_transaccion = 0 order by date desc";
         $comando = $con->createCommand($sql);
         $comando->bindParam(":ordenPago", $this->ordenPago, \PDO::PARAM_STR);
         $resultData = $comando->queryOne();
         if(is_array($resultData) && count($resultData) > 0)
             return $resultData["requestId"];
         return 0;
+    }
+
+    private function updateTransactionFinished(){
+        $conection = $this->dbConection;
+        $con = \Yii::$app->$conection;
+        $transaction = $con->beginTransaction();
+        $date = date("Y-m-d H:i:s");
+        try{
+            $sql = "update " . $con->dbname . ".vpos_request set finish_transaccion = 1, fecha_modificacion = :date " .
+            " where ordenPago = :ordenPago and estado_logico = 1";
+            $comando = $con->createCommand($sql);
+            $comando->bindParam(":ordenPago", $this->ordenPago, \PDO::PARAM_STR);
+            $comando->bindParam(":date", $date, \PDO::PARAM_STR);
+            $resultData = $comando->execute();
+            if($resultData){
+                $sql = "update " . $con->dbname . ".vpos_response set finish_transaccion = 1, fecha_modificacion = :date " .
+                " where ordenPago = :ordenPago and estado_logico = 1";
+                $comando = $con->createCommand($sql);
+                $comando->bindParam(":ordenPago", $this->ordenPago, \PDO::PARAM_STR);
+                $comando->bindParam(":date", $date, \PDO::PARAM_STR);
+                $resultData = $comando->execute();
+                if($resultData){
+                    $sql = "update " . $con->dbname . ".vpos_info_response set finish_transaccion = 1, fecha_modificacion = :date " .
+                    " where ordenPago = :ordenPago and estado_logico = 1";
+                    $comando = $con->createCommand($sql);
+                    $comando->bindParam(":ordenPago", $this->ordenPago, \PDO::PARAM_STR);
+                    $comando->bindParam(":date", $date, \PDO::PARAM_STR);
+                    $resultData = $comando->execute();
+                    if($resultData){
+                        $transaction->commit();
+                        return true;
+                    }else{
+                        throw new Exception('Error al actualizar vpos_info_response.');
+                    }
+                }else{
+                    throw new Exception('Error al actualizar vpos_response.');
+                }
+            }else{
+                throw new Exception('Error al actualizar vpos_request.');
+            }
+        }catch(Exception $e){
+            $transaction->rollback();
+            return false;
+        }
+        return false;
+    }
+
+    /**
+     * Función escribir en log de VPOS
+     *
+     * @access public
+     * @author Eduardo Cueva
+     * @param  string $message       Escribe variable en archivo de logs.
+     */
+    public function putMessageLogFile($message) {
+        if (is_array($message))
+            $message = json_encode($message);
+            $message = date("Y-m-d H:i:s") . " - Payment_". $this->type_vpos ." - " . " " . $message . "\n";
+        if (!is_dir(dirname($this->logTrans))) {
+            mkdir(dirname($this->logTrans), 0777, true);
+            chmod(dirname($this->logTrans), 0777);
+            touch($this->logTrans);
+        }
+        if(filesize($this->logTrans) >= Yii::$app->params["MaxFileLogSize"]){
+            $newName = str_replace(".log", "-" . date("YmdHis") . ".log", $this->logTrans);
+            rename($this->logTrans, $newName);
+            touch($this->logTrans);
+        }
+        //se escribe en el fichero
+        file_put_contents($this->logTrans, $message, FILE_APPEND | LOCK_EX);
     }
 
     /**
