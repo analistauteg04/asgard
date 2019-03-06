@@ -8,7 +8,9 @@
 ?>
 <?php //echo $this->render('_include'); ?>
 <div class="col-lg-12">
-    <?= $this->render('_frm_BuscarGrid', array('model' => $model, 'tipoDoc' => $tipoDoc,'tipoApr'=> $tipoApr)); ?>
+    <form class="form-horizontal">
+        <?= $this->render('_frm_BuscarGrid', array('model' => $model, 'tipoDoc' => $tipoDoc,'tipoApr'=> $tipoApr)); ?>
+    </form>
 </div>
 <div class="col-lg-12">
     <?= $this->render('_indexGrid', array('model' => $model)); ?>

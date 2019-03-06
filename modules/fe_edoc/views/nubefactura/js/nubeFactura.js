@@ -107,7 +107,7 @@ function fun_EnviarDocumento(){
     var count=ids.split(",");
     if(count.length>0 && ids!=""){
         if(!confirm(mgEnvDocum)) return false;
-        var link = $('#txth_base').val() +"/fe_edoc/nubefactura/EnviarDocumento";
+        var link = $('#txth_base').val() +"/fe_edoc/nubefactura/enviardocumento";
         var encodedIds = base64_encode(ids);  //Verificar cofificacion Base
         $("#TbG_DOCUMENTO").addClass("loading");
         var arrParams = new Object();
@@ -141,7 +141,7 @@ function fun_EnviarCorreccion(){
     var count=ids.split(",");
     if(count.length>0 && ids!=""){
         if(!confirm(mgEnvDocum)) return false;
-        var link = $('#txth_base').val() +"/fe_edoc/nubefactura/EnviarCorreccion";
+        var link = $('#txth_base').val() +"/fe_edoc/nubefactura/enviarcorreccion";
         var encodedIds = base64_encode(ids);  //Verificar cofificacion Base
         $("#TbG_DOCUMENTO").addClass("loading");
         var arrParams = new Object();
@@ -170,7 +170,7 @@ function fun_EnviarAnular(){
     var count=ids.split(",");
     if(count.length>0 && ids!=""){
         if(!confirm(mgEnvDocumAnu)) return false;
-        var link = $('#txth_base').val() +"/fe_edoc/nubefactura/EnviarAnular";
+        var link = $('#txth_base').val() +"/fe_edoc/nubefactura/enviaranular";
         var encodedIds = base64_encode(ids);  //Verificar cofificacion Base
         $("#TbG_DOCUMENTO").addClass("loading");
         var arrParams = new Object();
@@ -199,20 +199,22 @@ function fun_EnviarCorreo(){
     var count=ids.split(",");
     if(count.length>0 && ids!=""){
         if(!confirm(mgEnvDocum)) return false;
-        var link = $('#txth_base').val() +"/fe_edoc/nubefactura/EnviarCorreo";
+        var link = $('#txth_base').val() +"/fe_edoc/nubefactura/enviarcorreo";
         var encodedIds = base64_encode(ids);  //Verificar cofificacion Base
         $("#TbG_DOCUMENTO").addClass("loading");
         var arrParams = new Object();
         arrParams.ids = encodedIds;
         requestHttpAjax(link, arrParams, function (response) {
             if (response.status == "OK") {
-                $("#messageInfo").html(response.message + buttonAlert);
-                alerMessage();
+                showAlert(response.status, response.label, response.message);
+                //$("#messageInfo").html(response.message + buttonAlert);
+                //alerMessage();
                 //actualizarTbG_DOCUMENTO();
-                buscarDataIndex('', '');
+                //buscarDataIndex('', '');
             } else {
-                $("#messageInfo").html(response.message + buttonAlert);
-                alerMessage();
+                showAlert(response.status, response.label, response.message);
+                //$("#messageInfo").html(response.message + buttonAlert);
+                //alerMessage();
             }
         }, true);
         $("#TbG_DOCUMENTO").removeClass("loading");

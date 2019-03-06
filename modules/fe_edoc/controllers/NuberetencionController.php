@@ -246,20 +246,18 @@ class NuberetencionController extends \app\components\CController  {
         }
     }
     
-    public function actionEnviarCorreccion() {
+    public function actionEnviarcorreccion() {
         if (Yii::$app->request->isAjax) {
-            $modelo = new NubeRetencion(); //Ejmpleo code 3
             $errAuto= new VSexception();
             $ids = isset($_POST['ids']) ? base64_decode($_POST['ids']) : NULL;
-            $cabDoc = $modelo->mostrarCabRetencion($ids);
-            $tipDoc=substr($cabDoc['CodigoTransaccionERP'], 0, 2);//Devuelve las 2 primero caracters sean CO Y PP
-            $result=VSDocumentos::anularDodSri($ids, 'RT',5);//Anula Documentos Retenciones del Sistema
+            $result=VSDocumentos::anularDodSri($ids, 'RT',1);//Reenviar Documentos AUTORIZAR
             $arroout=$errAuto->messageSystem('NO_OK',null, 1, null, null);
             if($result['status'] == 'OK'){//Si es Verdadero actualizo datos de base intermedia
-                $result=VSDocumentos::corregirDocSEA($ids, $tipDoc);
+                /*$result=VSDocumentos::corregirDocSEA($ids, $tipDoc);
                 if($result['status'] == 'OK'){
                     $arroout=  $errAuto->messageSystem('OK', null,12,null, null);
-                }
+                }*/
+                $arroout=  $errAuto->messageSystem('OK', null,12,null, null);
             }
             header('Content-type: application/json');
             echo json_encode($arroout);
@@ -267,12 +265,12 @@ class NuberetencionController extends \app\components\CController  {
         }
     }
     
-    public function actionEnviarAnular() {
+    public function actionEnviaranular() {
         if (Yii::$app->request->isAjax) {
-            $dataMail = new mailSystem;
+            //$dataMail = new mailSystem;
             $ids = isset($_POST['ids']) ? base64_decode($_POST['ids']) : NULL;
             $arroout=VSDocumentos::anularDodSri($ids, 'RT',8);//Anula Documentos Autorizados del Websea
-            if($arroout['status'] == 'OK'){//Si es Verdadero actualizo datos de base intermedia
+            /*if($arroout['status'] == 'OK'){//Si es Verdadero actualizo datos de base intermedia
                 $CabPed=VSDocumentos::enviarInfoDodSri($ids,'RT');
                 $DatVen=VSDocumentos::buscarDatoVendedor($CabPed["UsuId"]);//Datos del Vendedor que AUTORIZO
                 $htmlMail = $this->render('mensaje', array(
@@ -281,13 +279,13 @@ class NuberetencionController extends \app\components\CController  {
                     ));
                 $Subject = "Ha Recibido un(a) Orden de Anulación!!!";
                 $dataMail->enviarMailInforma($htmlMail,$CabPed,$DatVen,$Subject,1);//Notificacion a Usuarios
-            }
+            }*/
             header('Content-type: application/json');
             echo json_encode($arroout);
             return;
         }
     }
-    public function actionEnviarCorreo() {
+    public function actionEnviarcorreo() {
         if (Yii::$app->request->isAjax) {
             $ids = isset($_POST['ids']) ? base64_decode($_POST['ids']) : NULL;
             $arroout=VSDocumentos::reenviarDodSri($ids, 'RT',2);//Anula Documentos Autorizados del Websea

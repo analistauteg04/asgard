@@ -247,18 +247,18 @@ class NubenotacreditoController extends \app\components\CController  {
     }
     
   
-    public function actionEnviarCorreccion() {
+    public function actionEnviarcorreccion() {
         if (Yii::$app->request->isAjax) {
-            $modelo = new NubeRetencion(); //Ejmpleo code 3
             $errAuto= new VSexception();
             $ids = isset($_POST['ids']) ? base64_decode($_POST['ids']) : NULL;
-            $result=VSDocumentos::anularDodSri($ids,'NC',5);//Anula Documentos Retenciones del Sistema
+            $result=VSDocumentos::anularDodSri($ids,'NC',1);//Reenviar Documentos AUTORIZAR
             $arroout=$errAuto->messageSystem('NO_OK',null, 1, null, null);
             if($result['status'] == 'OK'){//Si es Verdadero actualizo datos de base intermedia
-                $result=VSDocumentos::corregirDocSEA($ids,'NC');
+                /*$result=VSDocumentos::corregirDocSEA($ids,'NC');
                 if($result['status'] == 'OK'){
                     $arroout=  $errAuto->messageSystem('OK', null,12,null, null);
-                }
+                }*/
+                $arroout=  $errAuto->messageSystem('OK', null,12,null, null);
             }
             header('Content-type: application/json');
             echo json_encode($arroout);
@@ -266,27 +266,27 @@ class NubenotacreditoController extends \app\components\CController  {
         }
     }
     
-    public function actionEnviarAnular() {
+    public function actionEnviaranular() {
         if (Yii::$app->request->isAjax) {
-            $dataMail = new mailSystem;
+            //$dataMail = new mailSystem;
             $ids = isset($_POST['ids']) ? base64_decode($_POST['ids']) : NULL;
             $arroout=VSDocumentos::anularDodSri($ids, 'NC',8);//Anula Documentos Autorizados del Websea
-            if($arroout['status'] == 'OK'){//Si es Verdadero actualizo datos de base intermedia
+            /*if($arroout['status'] == 'OK'){//Si es Verdadero actualizo datos de base intermedia
                 $CabPed=VSDocumentos::enviarInfoDodSri($ids,'NC');
                 $DatVen=VSDocumentos::buscarDatoVendedor($CabPed["UsuId"]);//Datos del Vendedor que AUTORIZO
                 $htmlMail = $this->render('mensaje', array(
                 'CabPed' => $CabPed,
                 'DatVen' => $DatVen,
                     ));
-                $Subject = "Ha Recibido un(a) Orden de Anulación!!!";
+                $Subject = "Ha Recibido un(a) Orden de Anulaci//Anula Documentos Retenciones del Sistemaón!!!";
                 $dataMail->enviarMailInforma($htmlMail,$CabPed,$DatVen,$Subject,1);//Notificacion a Usuarios
-            }
+            }*/
             header('Content-type: application/json');
             echo json_encode($arroout);
             return;
         }
     }
-    public function actionEnviarCorreo() {
+    public function actionEnviarcorreo() {
         if (Yii::$app->request->isAjax) {
             $ids = isset($_POST['ids']) ? base64_decode($_POST['ids']) : NULL;
             $arroout=VSDocumentos::reenviarDodSri($ids, 'NC',2);//Anula Documentos Autorizados del Websea
@@ -301,7 +301,7 @@ class NubenotacreditoController extends \app\components\CController  {
         $model = $model->getMailUserDoc($id,'NC');
         return $this->render('updatemail', array(
             'model' => $model,
-        ));
+        ));//Anula Documentos Retenciones del Sistema
     }
     public function actionSavemail() {
         $model = new USUARIO;
