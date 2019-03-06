@@ -60,7 +60,7 @@ admision::registerTranslations();
                         }
                     },
                     'btnPago' => function ($url, $model) {
-                        if ($model['rol'] == 1 && $model['estado'] != 'S') {
+                        if ($model['rol'] == 1 && $model['statusPago'] != 'S') {
                             return Html::a('<span class="glyphicon glyphicon-credit-card"></span>', Url::to(['/financiero/pagos/botonpago', 'sins_id'=> base64_encode($model['sins_id']),'ids' => base64_encode($model['opag_id']), 'popup' => 'true' ], true), ["data-toggle" => "tooltip", "title" => financiero::t("Pagos", "Payment Button"), "data-pjax" => 0, "class" => "pbpopup"]);
                         }
                     },

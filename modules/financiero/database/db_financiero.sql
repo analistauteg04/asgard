@@ -9,9 +9,9 @@ DROP SCHEMA IF EXISTS `db_financiero`;
 CREATE SCHEMA IF NOT EXISTS `db_financiero` DEFAULT CHARACTER SET utf8 ;
 USE `db_financiero` ;
 
--- GRANT ALL PRIVILEGES ON `db_financiero`.* TO 'uteg'@'localhost' IDENTIFIED BY 'Utegadmin2016*';
+GRANT ALL PRIVILEGES ON `db_financiero`.* TO 'uteg'@'localhost' IDENTIFIED BY 'Utegadmin2016*';
 
---`cat_id` bigint(20) not null auto_increment primary key,
+-- `cat_id` bigint(20) not null auto_increment primary key,
 -- Table structure for table `CATALOGO`
 --
 
@@ -59,7 +59,7 @@ CREATE TABLE `catalogo` (
   `equipo` varchar(45) DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 
---`cat_id` bigint(20) not null auto_increment primary key,
+-- `cat_id` bigint(20) not null auto_increment primary key,
 -- Table structure for table `CATALOGO`
 --
 
@@ -112,7 +112,7 @@ CREATE TABLE `catalogo_2019` (
 -- Table structure for table `entidad_bancaria`
 --
 
-DROP TABLE IF EXISTS `entidad_bancaria`;--CB0001
+DROP TABLE IF EXISTS `entidad_bancaria`; -- CB0001
 CREATE TABLE `entidad_bancaria` (
   `eban_id` bigint(20) NOT NULL AUTO_INCREMENT,
   `eban_nombre` varchar(50) DEFAULT NULL,
@@ -130,7 +130,7 @@ CREATE TABLE `entidad_bancaria` (
 -- Table structure for table `tarjeta_credito`
 --
 
-DROP TABLE IF EXISTS `tarjeta_credito`;--CB0001T
+DROP TABLE IF EXISTS `tarjeta_credito`;-- CB0001T
 CREATE TABLE `tarjeta_credito` (
   `tcre_id` bigint(20) NOT NULL AUTO_INCREMENT,
   `tcre_nombre` varchar(50) DEFAULT NULL,
@@ -148,7 +148,7 @@ CREATE TABLE `tarjeta_credito` (
 -- Table structure for table `cuenta_bancarias`
 --
 
-DROP TABLE IF EXISTS `cuenta_bancarias`;--CB0002
+DROP TABLE IF EXISTS `cuenta_bancarias`;-- CB0002
 CREATE TABLE `cuenta_bancarias` (
   `cban_id` bigint(20) NOT NULL AUTO_INCREMENT,
   `cban_codigo` varchar(10) NOT NULL DEFAULT '',
@@ -201,7 +201,9 @@ CREATE TABLE `cuenta_bancarias` (
 -- TABLAS DE BOTON DE PAGO
 DROP TABLE IF EXISTS `vpos_request`;
 CREATE TABLE `vpos_request` (
-  `reference` bigint(20) NOT NULL, -- AUTO_INCREMENT PRIMARY KEY,
+  `id` bigint(20) NOT NULL AUTO_INCREMENT AUTO_INCREMENT PRIMARY KEY,
+  `reference` bigint(20) NOT NULL,
+  `ordenPago` varchar(20) DEFAULT NULL,
   `descripcion` varchar(200) DEFAULT NULL,
   `currency` varchar(5) DEFAULT NULL,
   `total` float DEFAULT NULL,
@@ -217,6 +219,7 @@ CREATE TABLE `vpos_request` (
   `email` varchar(100) DEFAULT NULL,
   `mobile` varchar(50) DEFAULT NULL,
   `json_request` text DEFAULT NULL,
+  `finish_transaccion` int NULL DEFAULT 0,
   `fecha_creacion` timestamp NULL DEFAULT CURRENT_TIMESTAMP,
   `fecha_modificacion` timestamp NULL DEFAULT NULL,
   `estado_logico` varchar(1) DEFAULT NULL
@@ -224,14 +227,17 @@ CREATE TABLE `vpos_request` (
 
 DROP TABLE IF EXISTS `vpos_response`;
 CREATE TABLE `vpos_response` (
-  `reference` bigint(20) NOT NULL, -- AUTO_INCREMENT PRIMARY KEY,
+  `id` bigint(20) NOT NULL AUTO_INCREMENT AUTO_INCREMENT PRIMARY KEY,
+  `reference` bigint(20) NOT NULL, 
   `requestId` varchar(20) DEFAULT NULL,
+  `ordenPago` varchar(20) DEFAULT NULL,
   `status` varchar(20) DEFAULT NULL,
   `reason` varchar(10) DEFAULT NULL,
   `message` varchar(200) DEFAULT NULL,
   `date` timestamp NULL DEFAULT NULL,
   `processUrl` varchar(200) DEFAULT NULL,
   `json_response` text DEFAULT NULL,
+  `finish_transaccion` int NULL DEFAULT 0,
   `fecha_creacion` timestamp NULL DEFAULT CURRENT_TIMESTAMP,
   `fecha_modificacion` timestamp NULL DEFAULT NULL,
   `estado_logico` varchar(1) DEFAULT NULL
@@ -239,8 +245,10 @@ CREATE TABLE `vpos_response` (
 
 DROP TABLE IF EXISTS `vpos_info_response`;
 CREATE TABLE `vpos_info_response` (
-  `reference` bigint(20) NOT NULL, -- AUTO_INCREMENT PRIMARY KEY,
+  `id` bigint(20) NOT NULL AUTO_INCREMENT AUTO_INCREMENT PRIMARY KEY,
+  `reference` bigint(20) NOT NULL,
   `requestId` varchar(20) DEFAULT NULL,
+  `ordenPago` varchar(20) DEFAULT NULL,
   `status` varchar(20) DEFAULT NULL,
   `reason` varchar(10) DEFAULT NULL,
   `message` varchar(200) DEFAULT NULL,
@@ -256,6 +264,7 @@ CREATE TABLE `vpos_info_response` (
   `autorization` varchar(100) DEFAULT NULL,
   `receipt` varchar(50) DEFAULT NULL,
   `json_info` text DEFAULT NULL,
+  `finish_transaccion` int NULL DEFAULT 0,
   `fecha_creacion` timestamp NULL DEFAULT CURRENT_TIMESTAMP,
   `fecha_modificacion` timestamp NULL DEFAULT NULL,
   `estado_logico` varchar(1) DEFAULT NULL

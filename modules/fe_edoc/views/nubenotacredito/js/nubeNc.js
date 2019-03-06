@@ -105,7 +105,7 @@ function fun_EnviarDocumento(){
     var count=ids.split(",");
     if(count.length>0 && ids!=""){
         if(!confirm(mgEnvDocum)) return false;
-        var link = $('#txth_base').val() +"/fe_edoc/nubefactura/EnviarDocumento";
+        var link = $('#txth_base').val() +"/fe_edoc/nubefactura/enviardocumento";
         $("#TbG_DOCUMENTO").addClass("loading");
         var encodedIds = base64_encode(ids);  //Verificar cofificacion Base
         var arrParams = new Object();
@@ -144,7 +144,7 @@ function fun_EnviarCorreccion(){
     var count=ids.split(",");
     if(count.length>0 && ids!=""){
         if(!confirm(mgEnvDocumAnu)) return false;
-        var link = $('#txth_base').val() +"/fe_edoc/nubenotacredito/EnviarCorreccion";
+        var link = $('#txth_base').val() +"/fe_edoc/nubenotacredito/enviarcorreccion";
         var encodedIds = base64_encode(ids);  //Verificar cofificacion Base
         $("#TbG_DOCUMENTO").addClass("loading");
         var arrParams = new Object();
@@ -173,7 +173,7 @@ function fun_EnviarAnular(){
     var count=ids.split(",");
     if(count.length>0 && ids!=""){
         if(!confirm(mgEnvDocumAnu)) return false;
-        var link = $('#txth_base').val() +"/fe_edoc/nubenotacredito/EnviarAnular";
+        var link = $('#txth_base').val() +"/fe_edoc/nubenotacredito/enviaranular";
         var encodedIds = base64_encode(ids);  //Verificar cofificacion Base
         $("#TbG_DOCUMENTO").addClass("loading");
         var arrParams = new Object();
@@ -202,7 +202,7 @@ function fun_EnviarCorreo(){
     var count=ids.split(",");
     if(count.length>0 && ids!=""){
         if(!confirm(mgEnvDocum)) return false;
-        var link = $('#txth_base').val() +"/fe_edoc/nubenotacredito/EnviarCorreo";
+        var link = $('#txth_base').val() +"/fe_edoc/nubenotacredito/enviarcorreo";
         var encodedIds = base64_encode(ids);  //Verificar cofificacion Base
         $("#TbG_DOCUMENTO").addClass("loading");
         var arrParams = new Object();
@@ -246,7 +246,7 @@ function fun_CambiaMail() {
     var dni = $('#txt_cedularuc').val();
     if ($('#txt_correo').val()!='' && ids!=0) {
         //pass = base64_encode(pass);
-        var link = $('#txth_base').val() +"/fe_edoc/nubenotacredito/Savemail";
+        var link = $('#txth_base').val() +"/fe_edoc/nubenotacredito/savemail";
         var arrParams = new Object();
         arrParams.DATA = correo;
         arrParams.ID = ids;

@@ -59,7 +59,8 @@ class ObjetomodulosController extends CController {
         if (isset($data['id'])) {
             $id = $data['id'];
             $arr_modulos = Modulo::findAll(["mod_estado" => 1, "mod_estado_logico" => 1]);
-            $arr_ObjetoModulos = ObjetoModulo::find(["omod_estado" => 1, "omod_estado_logico" => 1])->andWhere('omod_tipo <> "A"')->all();
+            $arr_ObjetoModulos = ObjetoModulo::find()->select(['omod_id', 'concat(omod_nombre, " (",omod_tipo,")") as omod_nombre'])->andWhere('omod_tipo <> "A" and omod_estado = "1" and omod_estado_logico = "1"')->all();
+            //$arr_ObjetoModulos = ObjetoModulo::find(["omod_estado" => 1, "omod_estado_logico" => 1])->andWhere('omod_tipo <> "A"')->all();
             $arr_typeObjMod = ObjetoModulo::getAllTypesObjModules();
             $arr_typeBtnObjMod = ObjetoModulo::getAllTypesBtnObjModules();
             $arr_Acciones = Accion::findAll(["acc_estado" => 1, "acc_estado_logico" => 1]);
@@ -78,7 +79,8 @@ class ObjetomodulosController extends CController {
 
     public function actionNew() {
         $arr_modulos = Modulo::findAll(["mod_estado" => 1, "mod_estado_logico" => 1]);
-        $arr_ObjetoModulos = ObjetoModulo::find(["omod_estado" => 1, "omod_estado_logico" => 1])->andWhere('omod_tipo <> "A" and omod_estado_logico = "1"')->all();
+        $arr_ObjetoModulos = ObjetoModulo::find()->select(['omod_id', 'concat(omod_nombre, " (",omod_tipo,")") as omod_nombre'])->andWhere('omod_tipo <> "A" and omod_estado = "1" and omod_estado_logico = "1"')->all();
+        //$arr_ObjetoModulos = ObjetoModulo::find(["omod_estado" => 1, "omod_estado_logico" => 1])->andWhere('omod_tipo <> "A" and omod_estado_logico = "1"')->all();
         $arr_typeObjMod = ObjetoModulo::getAllTypesObjModules();
         $arr_typeBtnObjMod = ObjetoModulo::getAllTypesBtnObjModules();
         $arr_Acciones = Accion::findAll(["acc_estado" => 1, "acc_estado_logico" => 1]);

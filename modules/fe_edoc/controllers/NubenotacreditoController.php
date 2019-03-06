@@ -1,6 +1,5 @@
 <?php
 namespace app\modules\fe_edoc\controllers;
-
 use Yii;
 use app\modules\fe_edoc\models\VSacceso;
 use app\modules\fe_edoc\models\VSDirectorio;
@@ -14,7 +13,6 @@ use app\modules\fe_edoc\models\NubeRetencion;
 use app\models\ExportFile;
 use yii\helpers\ArrayHelper;
 use yii\base\Exception;
-
 class NubenotacreditoController extends \app\components\CController  {
     public $pdf_numeroaut = "";
     public $pdf_numero = "";
@@ -39,28 +37,23 @@ class NubenotacreditoController extends \app\components\CController  {
             'model' => $this->loadModel($id),
         ));
     }
-
     /**
      * Creates a new model.
      * If creation is successful, the browser will be redirected to the 'view' page.
      */
     public function actionCreate() {
         $model = new NubeNotaCredito;
-
         // Uncomment the following line if AJAX validation is needed
         // $this->performAjaxValidation($model);
-
         if (isset($_POST['NubeNotaCredito'])) {
             $model->attributes = $_POST['NubeNotaCredito'];
             if ($model->save())
                 $this->redirect(array('view', 'id' => $model->IdNotaCredito));
         }
-
         return $this->render('create', array(
             'model' => $model,
         ));
     }
-
     /**
      * Updates a particular model.
      * If update is successful, the browser will be redirected to the 'view' page.
@@ -68,21 +61,17 @@ class NubenotacreditoController extends \app\components\CController  {
      */
     public function actionUpdate($id) {
         $model = $this->loadModel($id);
-
         // Uncomment the following line if AJAX validation is needed
         // $this->performAjaxValidation($model);
-
         if (isset($_POST['NubeNotaCredito'])) {
             $model->attributes = $_POST['NubeNotaCredito'];
             if ($model->save())
                 $this->redirect(array('view', 'id' => $model->IdNotaCredito));
         }
-
         return $this->render('update', array(
             'model' => $model,
         ));
     }
-
     /**
      * Deletes a particular model.
      * If deletion is successful, the browser will be redirected to the 'admin' page.
@@ -90,12 +79,10 @@ class NubenotacreditoController extends \app\components\CController  {
      */
     public function actionDelete($id) {
         $this->loadModel($id)->delete();
-
         // if AJAX request (triggered by deletion via admin grid view), we should not redirect the browser
         if (!isset($_GET['ajax']))
             $this->redirect(isset($_POST['returnUrl']) ? $_POST['returnUrl'] : array('admin'));
     }
-
     /**
      * Lists all models.
      */
@@ -132,7 +119,6 @@ class NubenotacreditoController extends \app\components\CController  {
             'tipoApr' => $aproba->tipoAprobacion(),
         ));
     }
-
     /**
      * Manages all models.
      */
@@ -141,12 +127,10 @@ class NubenotacreditoController extends \app\components\CController  {
         $model->unsetAttributes();  // clear any default values
         if (isset($_GET['NubeNotaCredito']))
             $model->attributes = $_GET['NubeNotaCredito'];
-
         return $this->render('admin', array(
             'model' => $model,
         ));
     }
-
     /**
      * Returns the data model based on the primary key given in the GET variable.
      * If the data model is not found, an HTTP exception will be raised.
@@ -160,7 +144,6 @@ class NubenotacreditoController extends \app\components\CController  {
             throw new CHttpException(404, 'The requested page does not exist.');
         return $model;
     }
-
     /**
      * Performs the AJAX validation.
      * @param NubeNotaCredito $model the model to be validated
@@ -171,7 +154,6 @@ class NubenotacreditoController extends \app\components\CController  {
             Yii::$app->end();
         }
     }
-
     public function actionBuscarPersonas() {
         if (Yii::$app->request->isAjax) {
             $valor = isset($_POST['valor']) ? $_POST['valor'] : "";
@@ -197,7 +179,6 @@ class NubenotacreditoController extends \app\components\CController  {
             
             //$Titulo=Yii::$app->getSession()->get('RazonSocial', FALSE) . " - " . $cabFact['NombreDocumento'];
             //$nameFile=$cabFact['NombreDocumento'] . '-' . $cabFact['NumDocumento'];
-
             $this->pdf_numeroaut = $cabFact['AutorizacionSRI'];
             $this->pdf_numero = $cabFact['NumDocumento'];
             $this->pdf_nom_empresa = $cabFact['RazonSocial'];
@@ -212,7 +193,6 @@ class NubenotacreditoController extends \app\components\CController  {
             $this->pdf_cla_acceso = $cabFact['ClaveAcceso'];
             $this->pdf_tipo_documento = \app\modules\fe_edoc\Module::t("fe", 'CREDIT NOTE');
             $this->pdf_cod_barra = "";
-
             $rep->createReportPdf(
                     $this->render('@modules/fe_edoc/views/tpl_fe/ncredito', array(
                         'cabFact' => $cabFact,
@@ -247,18 +227,18 @@ class NubenotacreditoController extends \app\components\CController  {
     }
     
   
-    public function actionEnviarCorreccion() {
+    public function actionEnviarcorreccion() {
         if (Yii::$app->request->isAjax) {
-            $modelo = new NubeRetencion(); //Ejmpleo code 3
             $errAuto= new VSexception();
             $ids = isset($_POST['ids']) ? base64_decode($_POST['ids']) : NULL;
-            $result=VSDocumentos::anularDodSri($ids,'NC',5);//Anula Documentos Retenciones del Sistema
+            $result=VSDocumentos::anularDodSri($ids,'NC',1);//Reenviar Documentos AUTORIZAR
             $arroout=$errAuto->messageSystem('NO_OK',null, 1, null, null);
             if($result['status'] == 'OK'){//Si es Verdadero actualizo datos de base intermedia
-                $result=VSDocumentos::corregirDocSEA($ids,'NC');
+                /*$result=VSDocumentos::corregirDocSEA($ids,'NC');
                 if($result['status'] == 'OK'){
                     $arroout=  $errAuto->messageSystem('OK', null,12,null, null);
-                }
+                }*/
+                $arroout=  $errAuto->messageSystem('OK', null,12,null, null);
             }
             header('Content-type: application/json');
             echo json_encode($arroout);
@@ -266,27 +246,27 @@ class NubenotacreditoController extends \app\components\CController  {
         }
     }
     
-    public function actionEnviarAnular() {
+    public function actionEnviaranular() {
         if (Yii::$app->request->isAjax) {
-            $dataMail = new mailSystem;
+            //$dataMail = new mailSystem;
             $ids = isset($_POST['ids']) ? base64_decode($_POST['ids']) : NULL;
             $arroout=VSDocumentos::anularDodSri($ids, 'NC',8);//Anula Documentos Autorizados del Websea
-            if($arroout['status'] == 'OK'){//Si es Verdadero actualizo datos de base intermedia
+            /*if($arroout['status'] == 'OK'){//Si es Verdadero actualizo datos de base intermedia
                 $CabPed=VSDocumentos::enviarInfoDodSri($ids,'NC');
                 $DatVen=VSDocumentos::buscarDatoVendedor($CabPed["UsuId"]);//Datos del Vendedor que AUTORIZO
                 $htmlMail = $this->render('mensaje', array(
                 'CabPed' => $CabPed,
                 'DatVen' => $DatVen,
                     ));
-                $Subject = "Ha Recibido un(a) Orden de Anulación!!!";
+                $Subject = "Ha Recibido un(a) Orden de Anulaci//Anula Documentos Retenciones del Sistemaón!!!";
                 $dataMail->enviarMailInforma($htmlMail,$CabPed,$DatVen,$Subject,1);//Notificacion a Usuarios
-            }
+            }*/
             header('Content-type: application/json');
             echo json_encode($arroout);
             return;
         }
     }
-    public function actionEnviarCorreo() {
+    public function actionEnviarcorreo() {
         if (Yii::$app->request->isAjax) {
             $ids = isset($_POST['ids']) ? base64_decode($_POST['ids']) : NULL;
             $arroout=VSDocumentos::reenviarDodSri($ids, 'NC',2);//Anula Documentos Autorizados del Websea
@@ -301,7 +281,7 @@ class NubenotacreditoController extends \app\components\CController  {
         $model = $model->getMailUserDoc($id,'NC');
         return $this->render('updatemail', array(
             'model' => $model,
-        ));
+        ));//Anula Documentos Retenciones del Sistema
     }
     public function actionSavemail() {
         $model = new USUARIO;
@@ -314,9 +294,6 @@ class NubenotacreditoController extends \app\components\CController  {
             echo json_encode($arrayData);
             return;
         }
-
     }
-
     
-
 }

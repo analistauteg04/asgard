@@ -33,28 +33,6 @@ class NubefacturaController extends \app\components\CController {
     public $pdf_tipo_documento = "";
     public $pdf_cod_barra = "";
 
-    public function actionTest() {
-        $data = Yii::$app->request->post();
-        $referenceID = isset($data["referenceID"])?$data["referenceID"]:null;
-        Utilities::putMessageLogFile($data);
-        if(is_null($referenceID) && Yii::$app->request->isAjax){
-            $response = $this->render('test', array(
-                "referenceID" => $data["resp"]["reference"],
-                "requestID" => $data["requestID"],
-                "response" => $data["resp"],
-            ));
-            $message = array(
-                "wtmessage" => Yii::t("notificaciones", "Your information was successfully saved."),
-                "title" => Yii::t('jslang', 'Success'),
-                "data" => $response,
-            );
-            return Utilities::ajaxResponse('OK', 'alert', Yii::t('jslang', 'Success'), 'false', $message);
-        }
-        return $this->render('test', array(
-            "referenceID" => rand(10000, 50000)
-        ));
-    }
-
     public function actionIndex() {
         $modelo = new NubeFactura();
         $tipDoc= new VSDirectorio();
@@ -168,18 +146,23 @@ class NubefacturaController extends \app\components\CController {
         }
     }
 
-    public function actionEnviarCorreccion() {
-        if (Yii::$app->request->isAjax) {
-            $modelo = new NubeRetencion(); //Ejmpleo code 3
+    public function actionEnviarcorreccion() {        
+        if (Yii::$app->request->isAjax) {          
             $errAuto= new VSexception();
             $ids = isset($_POST['ids']) ? base64_decode($_POST['ids']) : NULL;
-            $result=VSDocumentos::anularDodSri($ids,'FA',5);//Anula Documentos Retenciones del Sistema
+            $result=VSDocumentos::anularDodSri($ids,'FA',1);//Reenviar Documentos AUTORIZAR
             $arroout=$errAuto->messageSystem('NO_OK',null, 1, null, null);
             if($result['status'] == 'OK'){//Si es Verdadero actualizo datos de base intermedia
-                $result=VSDocumentos::corregirDocSEA($ids,'FA');
+                /*$result=VSDocumentos::corregirDocSEA($ids,'FA');//Actualiza los datos de la Tablas de ERP o Altersoft
                 if($result['status'] == 'OK'){
                     $arroout=  $errAuto->messageSystem('OK', null,12,null, null);
-                }
+                }*/
+                //$arroout=  $errAuto->messageSystem('OK', null,12,null, null);
+                $message = array(
+                    "wtmessage" => Yii::t("notificaciones", $arroout['message']),
+                    "title" => Yii::t('jslang', 'Success'),
+                );
+                return Utilities::ajaxResponse($arroout['status'], 'alert', Yii::t("jslang", "Success"), false, $message);
             }
             header('Content-type: application/json');
             echo json_encode($arroout);
@@ -187,37 +170,42 @@ class NubefacturaController extends \app\components\CController {
         }
     }
     
-    public function actionEnviarAnular() {
+    public function actionEnviaranular() {
         if (Yii::$app->request->isAjax) {
-            $dataMail = new mailSystem;
+            //$dataMail = new mailSystem;
             $ids = isset($_POST['ids']) ? base64_decode($_POST['ids']) : NULL;
             $arroout=VSDocumentos::anularDodSri($ids, 'FA',8);//Anula Documentos Autorizados del Websea
-            if($arroout['status'] == 'OK'){//Si es Verdadero actualizo datos de base intermedia
+            /*if($arroout['status'] == 'OK'){//Si es Verdadero actualizo datos de base intermedia
                 $CabPed=VSDocumentos::enviarInfoDodSri($ids,'FA');
-                $DatVen=VSDocumentos::buscarDatoVendedor($CabPed["UsuId"]);//Datos del Vendedor que AUTORIZO
+                //$DatVen=VSDocumentos::buscarDatoVendedor($CabPed["UsuId"]);//Datos del Vendedor que AUTORIZO
                 $htmlMail = $this->render('mensaje', array(
                 'CabPed' => $CabPed,
                 'DatVen' => $DatVen,
                     ));
                 $Subject = "Ha Recibido un(a) Orden de Anulación!!!";
                 $dataMail->enviarMailInforma($htmlMail,$CabPed,$DatVen,$Subject,1);//Notificacion a Usuarios
-            }
+            }*/
             header('Content-type: application/json');
             echo json_encode($arroout);
             return;
         }
     }
     
-    public function actionEnviarCorreo() {
+    public function actionEnviarcorreo() {
         if (Yii::$app->request->isAjax) {
             $ids = isset($_POST['ids']) ? base64_decode($_POST['ids']) : NULL;
-            $arroout=VSDocumentos::reenviarDodSri($ids, 'FA',2);//Anula Documentos Autorizados del Websea
-            header('Content-type: application/json');
-            echo json_encode($arroout);
-            return;
+            $arroout = VSDocumentos::reenviarDodSri($ids, 'FA', 2); //Anula Documentos Autorizados del Websea
+            $message = array(
+                "wtmessage" => Yii::t("notificaciones", $arroout['message']),
+                "title" => Yii::t('jslang', 'Success'),
+            );
+            return Utilities::ajaxResponse($arroout['status'], 'alert', Yii::t("jslang", "Success"), false, $message);
+            //header('Content-type: application/json');
+            //echo json_encode($arroout);
+            //return;
         }
     }
-    
+
     public function actionUpdatemail($id) {
         $model = new USUARIO;
         $model = $model->getMailUserDoc($id,'FA');

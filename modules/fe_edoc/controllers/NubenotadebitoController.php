@@ -173,7 +173,7 @@ class NubenotadebitoController extends \app\components\CController
 			$this->pdf_dir_sucursal = $cabFact['DireccionEstablecimiento'];
 			$this->pdf_fec_autorizacion = $cabFact['FechaAutorizacion'];
 			$this->pdf_emision = \app\modules\fe_edoc\Module::t("fe", 'NORMAL');//$cabFact['TipoEmision'];
-			$this->pdf_ambiente = ($cabFact['Ambiente'] == 1) ? \app\modules\fe_edoc\Module::t("fe", 'PRODUCTION') : \app\modules\fe_edoc\Module::t("fe", 'TEST');
+			$this->pdf_ambiente = ($cabFact['Ambiente'] == 2) ? \app\modules\fe_edoc\Module::t("fe", 'PRODUCTION') : \app\modules\fe_edoc\Module::t("fe", 'TEST');
 			$this->pdf_cla_acceso = $cabFact['ClaveAcceso'];
 			$this->pdf_tipo_documento = \app\modules\fe_edoc\Module::t("fe", 'CREDIT NOTE');
 			$this->pdf_cod_barra = "";

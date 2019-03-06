@@ -266,7 +266,8 @@ class OrdenPago extends \app\modules\financiero\components\CActiveRecord {
                     ite.ite_nombre,  
                     orp.opag_total as pag_total,
                     format(orp.opag_total,2) as ipre_precio,   
-                    format((round(orp.opag_total,2) - ifnull(orp.opag_valor_pagado,0)),2) as pendiente,   
+                    format((round(orp.opag_total,2) - ifnull(orp.opag_valor_pagado,0)),2) as pendiente,
+                    orp.opag_estado_pago as statusPago,
                     (case orp.opag_estado_pago when 'P' then 'Pendiente' when 'R' then 'Revisando' when 'S' then 'Pagado' end) as estado,
                     orp.opag_id as orden_id,
                     (case when ifnull((select sum(icpr.icpr_valor)

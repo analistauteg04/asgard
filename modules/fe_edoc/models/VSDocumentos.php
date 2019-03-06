@@ -123,7 +123,6 @@ class VSDocumentos extends \app\modules\fe_edoc\components\CActiveRecord{
                         //$sql = "UPDATE " . $con->dbname . ".NubeFactura SET EstadoEnv='$Estado' WHERE IdFactura='$Ids';";
                         break;
                 }
-            //VSValidador::putMessageLogFile($sql);
             if ($sql <> '') {//Verifica si Existe Sentencia SQL
                 $comando = $con->createCommand($sql);
                 $comando->execute();

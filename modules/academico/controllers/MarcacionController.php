@@ -115,7 +115,7 @@ class MarcacionController extends \app\components\CController {
                             }
                         } else {
                             $exito = 0;
-                            $mensaje = ' No puede marcar';
+                            $mensaje = ' Las marcaciones solo se pueden realizar 30 minutos antes del inicio de la clase, hasta 1 minuto antes que finalice. ';
                         }
                     } else {
                         $hora = explode("-", $horario);
@@ -138,11 +138,11 @@ class MarcacionController extends \app\components\CController {
                                 $exito = 1;
                             } else {
                                 $exito = 0;
-                                $mensaje = ' No ha marcado aún el inicio, por lo que no puede finalizar';
+                                $mensaje = ' No puede finalizar la clase si no a iniciado la marcación';
                             }
                         } else {
                             $exito = 0;
-                            $mensaje = ' No puede marcar';
+                            $mensaje = ' Las marcaciones solo se pueden finalizar en el minuto exacto o hasta 30 minutos después. ';
                         }
                     }
                     if ($exito) {

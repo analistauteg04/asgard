@@ -13,8 +13,8 @@ class VPOSAsset extends AssetBundle
         'css/style.css',
     ];
     public $js = [
-        'js/lightbox.min.js',
-        'js/script.js',
+        'js/vpos-lightbox.min.js',
+        'js/vpos.js',
     ];
     public $depends = [
         'yii\web\YiiAsset',

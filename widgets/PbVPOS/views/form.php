@@ -6,30 +6,55 @@
  */
 use app\widgets\PbVPOS\PbVPOS;
 ?>
-<div class="box-header with-border">
-    <h3 class="box-title"><?= $titleBox ?></h3>
-</div>
-<form role="form">
-    <div class="box-body">
+
+<form class="form-horizontal" enctype="multipart/form-data" >
+    <div class="col-md-10 col-sm-10 col-xs-10 col-lg-10">
         <div class="form-group">
-            <label for="frmFirstName"><?= PbVPOS::t("vpos", "First Name") ?></label>
-            <input type="text" class="form-control" id="frmFirstName" value="<?= $nombre_cliente ?>" placeholder="<?= PbVPOS::t("vpos", "First Name") ?>">
-        </div>
-        <div class="form-group">
-            <label for="frmLastName"><?= PbVPOS::t("vpos", "Last Name") ?></label>
-            <input type="text" class="form-control" id="frmLastName" value="<?= $apellido_cliente ?>" placeholder="<?= PbVPOS::t("vpos", "Last Name") ?>">
-        </div>
-        <div class="form-group">
-            <label for="frmEmail"><?= PbVPOS::t("vpos", "Email") ?></label>
-            <input type="text" class="form-control" id="frmEmail" value="<?= $email_cliente ?>" placeholder="<?= PbVPOS::t("vpos", "Email") ?>">
-        </div>
-        <div class="form-group">
-            <label for="frmAmount"><?= PbVPOS::t("vpos", "Amount") ?></label>
-            <input type="text" class="form-control" id="frmAmount" value="<?= $total ?>" placeholder="<?= PbVPOS::t("vpos", "Amount") ?>" disabled="disabled">
+            <h3 class="box-title"><span id="lbl_Personeria"><?= $titleBox ?></span></h3>                 
         </div>
     </div>
-    <div class="box-footer btnPago">
-        <button type="button" class="btn btn-block btn-success" onclick="playOnPay('<?= $processUrl ?>')"><?= PbVPOS::t("vpos", "Buy") ?></button>
+    <div class="col-md-12 col-sm-12 col-xs-12 col-lg-12">
+        <div class="form-group">
+            <label for="frmFirstName" class="col-sm-4 col-md-4 col-xs-4 col-lg-4 control-label"><?= PbVPOS::t("vpos", "First Name") ?></label>
+            <div class="col-sm-8 col-md-8 col-xs-8 col-lg-8 ">
+                <input type="text" class="form-control" id="frmFirstName" value="<?= $nombre_cliente ?>" placeholder="<?= PbVPOS::t("vpos", "First Name") ?>">           
+            </div>
+        </div>
+    </div>
+    <div class="col-md-12 col-sm-12 col-xs-12 col-lg-12">
+        <div class="form-group">
+            <label for="frmLastName" class="col-sm-4 col-md-4 col-xs-4 col-lg-4 control-label"><?= PbVPOS::t("vpos", "Last Name") ?></label>
+            <div class="col-sm-8 col-md-8 col-xs-8 col-lg-8 ">
+                <input type="text" class="form-control" id="frmLastName" value="<?= $apellido_cliente ?>" placeholder="<?= PbVPOS::t("vpos", "Last Name") ?>">          
+            </div>
+        </div>
+    </div> 
+    <div class="col-md-12 col-sm-12 col-xs-12 col-lg-12">
+        <div class="form-group">
+            <label for="frmEmail" class="col-sm-4 col-md-4 col-xs-4 col-lg-4 control-label"><?= PbVPOS::t("vpos", "Email") ?></label>
+            <div class="col-sm-8 col-md-8 col-xs-8 col-lg-8 ">
+                <input type="text" class="form-control" id="frmEmail" value="<?= $email_cliente ?>" placeholder="<?= PbVPOS::t("vpos", "Email") ?>">           
+            </div>
+        </div>
+    </div> 
+    <div class="col-md-12 col-sm-12 col-xs-12 col-lg-12">
+        <div class="form-group">
+            <label for="frmAmount" class="col-sm-4 col-md-4 col-xs-4 col-lg-4 control-label"><?= PbVPOS::t("vpos", "Amount") ?></label>
+            <div class="col-sm-8 col-md-8 col-xs-8 col-lg-8 ">
+                <input type="text" class="form-control" id="frmAmount" value="<?= $total ?>" placeholder="<?= PbVPOS::t("vpos", "Amount") ?>" disabled="disabled">           
+            </div>
+        </div>
+    </div>
+    <div class="col-md-12 col-sm-12 col-xs-12 col-lg-12"> 
+        <div class="form-group">
+            <div class="col-sm-4 col-md-4 col-xs-4 col-lg-4">                                  
+            </div> 
+            <div class="col-sm-4 col-md-4 col-xs-4 col-lg-4 btnPago">                  
+                <button type="button" class="btn btn-block btn-primary" onclick="playOnPay('<?= $processUrl ?>')"><?= PbVPOS::t("vpos", "Buy") ?></button>
+            </div>      
+            <div class="col-sm-4">                                  
+            </div> 
+        </div>    
     </div>
 </form>
 <div id="lightbox-response"></div>
