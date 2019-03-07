@@ -909,7 +909,9 @@ class NubeNotasCredito {
         $dom->appendChild($detalles);
         
         //INFORMACION ADICIONAL
-        $dom->appendChild(EMPRESA::infoAdicionalXML($adiFact, $xml));
+        if(sizeof($adiFact)>0){
+            $dom->appendChild(EMPRESA::infoAdicionalXML($adiFact, $xml));
+        }
         
         $xml->formatOutput = true;
 

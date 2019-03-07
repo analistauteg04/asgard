@@ -754,7 +754,9 @@ class NubeGuiaRemision {
         $dom->appendChild($destinatarios);
         
         //INFORMACION ADICIONAL
-        $dom->appendChild(EMPRESA::infoAdicionalXML($adiFact, $xml));
+        if(sizeof($adiFact)>0){
+            $dom->appendChild(EMPRESA::infoAdicionalXML($adiFact, $xml));
+        }
         
         $xml->formatOutput = true;
 

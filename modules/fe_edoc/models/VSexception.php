@@ -124,7 +124,8 @@ class VSexception {
                 $messageError = Yii::t('fe_edoc', 'Access key registered, retry in a few minutes.');
                 break;
             case 44://Este documento ya fue autorizado por SRI.
-                $messageError = Yii::t('fe_edoc', 'At a time when your mail will be sent.');
+                $messageError = \app\modules\fe_edoc\Module::t('fe','At a time when your mail will be sent.');
+                //$messageError = \app\modules\fe_edoc\Module::t('fe', 'At a time when your mail will be sent.');
                 break;
 
             default:

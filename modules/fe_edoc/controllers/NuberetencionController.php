@@ -185,7 +185,7 @@ class NuberetencionController extends \app\components\CController  {
             $this->pdf_dir_sucursal = $cabDoc['DireccionEstablecimiento'];
             $this->pdf_fec_autorizacion = $cabDoc['FechaAutorizacion'];
             $this->pdf_emision = \app\modules\fe_edoc\Module::t("fe", 'NORMAL');//$cabDoc['TipoEmision'];
-            $this->pdf_ambiente = ($cabDoc['Ambiente'] == 1) ? \app\modules\fe_edoc\Module::t("fe", 'PRODUCTION') : \app\modules\fe_edoc\Module::t("fe", 'TEST');
+            $this->pdf_ambiente = ($cabDoc['Ambiente'] == 2) ? \app\modules\fe_edoc\Module::t("fe", 'PRODUCTION') : \app\modules\fe_edoc\Module::t("fe", 'TEST');
             $this->pdf_cla_acceso = $cabDoc['ClaveAcceso'];
             $this->pdf_tipo_documento = \app\modules\fe_edoc\Module::t("fe", 'VOUCHER RETENTION');
             $this->pdf_cod_barra = "";
