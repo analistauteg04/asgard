@@ -29,13 +29,13 @@ use PhpOffice\PhpSpreadsheet\Style\Border;
  */
 class Utilities {
 
-    public static function sendEmail($titleMessage = "", $from, $to = array(), $subject, $body, $files = array(), $template = "/mail/layouts/mailing", $fileRoute = "/mail/layouts/files") {
+    public static function sendEmail($titleMessage = "", $from, $to = array(), $subject, $body, $files = array(), $template = "/mail/layouts/mailing", $fileRoute = "/mail/layouts/files", $basePath = NULL) {
         if (function_exists('proc_open')) {
             //self::putMessageLogFile("Mail function exist");
         } else {
             self::putMessageLogFile("Error Mail function not exist");
         }
-        $routeBase = Yii::$app->basePath;
+        $routeBase = (isset($basePath))?($basePath):(Yii::$app->basePath);
         $socialNetwork = Yii::$app->params["socialNetworks"];
 
         $mail = Yii::$app->mailer->compose("@app" . $template, [
@@ -67,8 +67,8 @@ class Utilities {
      * @param      
      * @return  
      */
-    public static function getMailMessage($file, $slack = array(), $lang = "es") {
-        $routeBase = Yii::$app->basePath . "/mail/layouts/messages/";
+    public static function getMailMessage($file, $slack = array(), $lang = "es", $basePath = NULL) {
+        $routeBase = (isset($basePath))?($basePath . "/mail/layouts/messages/"):(Yii::$app->basePath . "/mail/layouts/messages/");
         $content = "";
         if (is_dir($routeBase . $lang)) {
             $routeBase .= $lang . "/" . $file;
