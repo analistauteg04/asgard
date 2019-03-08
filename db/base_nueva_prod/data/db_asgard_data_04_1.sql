@@ -30,7 +30,12 @@ INSERT INTO `accion` (`acc_id`, `acc_nombre`, `acc_url_accion`, `acc_tipo`, `acc
 (21,'Inscribed pending','Inscribed pending','General','Inscribed pending','accion','glyphicon glyphicon-info-sign','1','2018-11-07 19:04:25',NULL,'1'),
 (22,'Schedule shipping','Schedule shipping','General','Schedule shipping','accion','glyphicon glyphicon-calendar','1','2018-11-07 19:04:25',NULL,'1'),
 (23,'Suscribe all','Suscribe all','General','Suscribe all','accion','glyphicon glyphicon-list-alt','1','2018-11-07 19:04:25',NULL,'1'),
-(24,'Upload Mailchimp','Upload Mailchimp','General','Upload Mailchimp','accion','glyphicon glyphicon-list-alt','1','2018-11-07 19:04:25',NULL,'1');
+(24,'Upload Mailchimp','Upload Mailchimp','General','Upload Mailchimp','accion','glyphicon glyphicon-list-alt','1','2018-11-07 19:04:25',NULL,'1'),
+(25,'Editar Correo','Editar Correo','General','Editar Correo','accion','glyphicon glyphicon-envelope','1','2019-03-08 10:00:00',NULL,'1'),
+(26,'Reenviar Correo','Reenviar Correo','General','Reenviar Correo','accion','glyphicon glyphicon-envelope','1','2019-03-08 10:00:00',NULL,'1'),
+(27,'Anular','Anular','General','Anular','accion','glyphicon glyphicon-trash','1','2019-03-08 10:00:00',NULL,'1'),
+(28,'Corregir','Corregir','General','Corregir','accion','glyphicon glyphicon-edit','1','2019-03-08 10:00:00',NULL,'1'),
+(29,'Cancelar','Cancelar','General','Cancelar','accion','glyphicon glyphicon-trash','1','2019-03-08 10:00:00',NULL,'1');
 
 -- --------------------------------------------------------
 --

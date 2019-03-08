@@ -250,7 +250,8 @@ INSERT INTO `profesor` (`pro_id`,`per_id`,`pro_usuario_ingreso`, `pro_estado`,`p
 (170, 202, 1, 1, 1),
 (171, 203, 1, 1, 1),
 (172, 204, 1, 1, 1),
-(173, 205, 1, 1, 1);
+(173, 205, 1, 1, 1),
+(174, 206, 1, 1, 1);
 
 
 INSERT INTO `malla_academica` (`maca_id`,`eaca_id`,`uaca_id`,`mod_id`, `maca_tipo`, `maca_nombre`,`maca_fecha_vigencia_inicio`,`maca_fecha_vigencia_fin`,`maca_usuario_ingreso`,`maca_estado`,`maca_estado_logico`) VALUES 

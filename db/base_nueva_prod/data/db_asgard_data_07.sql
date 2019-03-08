@@ -221,7 +221,8 @@ INSERT INTO `usuario` (`usu_id`, `per_id`, `usu_user`, `usu_sha`, `usu_password`
 (202, 202, 'aleycaza@hotmail.com', 'jqmFNcpKvjQXzIWvv50cGOhoydnl4Ury', 'hbjfPjmJ2x2IxvGFMBMsgjVhNWJjMzIxNmRhODMzODQ4MjU1YTRmNjlmOGYzOTI3ZTdhMDYxMDZlZWMyMTQ2NjMwODg5YjI5MDVkN2UwODiviuyXksvBNTsKNhYVepSdzXneV79z/GXD1kEvxoUYkmAQga7+iY2YsJBoxd45wyZNRNYlbZcspVG2XgPZoq6X', NULL, NULL, NULL, NULL, '1', '2019-02-25 23:07:46', NULL, '1'),
 (203, 203, 'andrea-yoncon@hotmail.com', 'Fb_a-JIzDQTOFiGwIL5--R7vJJFXBV5e', 'pcBBfVFISxaeezKAz1lLQzhmOTdjMGVlYWU1ZjdmMjM5OGI0N2MwNGNlMzM5OTdlZWUwMmZlZWExNTNmM2IwZjY3MmIxZWYyZDdlZWQ3YjalJJx2yorDMDEWIK2QpHicfhRstgYSvD2FUzddnLMM6DDDJeqSsBRGKF/B35Ro1kX2Jv5/PRQ+2lV5/vI+Vkmb', NULL, NULL, NULL, NULL, '1', '2019-02-25 23:07:46', NULL, '1'),
 (204, 204, 'jzea1986@outlook.com', 'U7SaMICqoeTAzO2F-E2-Y-KHvjzMTbgu', 'T/e98IFa3JaA6CXV1j7o0mE3N2JhMmUyNmFkMGJlNTI4Y2FjZWZkZTI1YzI0NDVlZjM0NzBjZDBkZDlmNTJjNTBkYWMwNzA0ZTFlOWIwMTGBxJzmeJrioc7+WtQDwnP9QEOD4MNy4rqckbck0LE/08RS1xRMS46CbYOQyPtbvcg+9/32o9tY0K76gupkw7F7', NULL, NULL, NULL, NULL, '1', '2019-02-25 23:07:47', NULL, '1'),
-(205, 205, 'eduardo.zea.74@gmail.com', 'VHWml2hcagvyq5_7fvKF6Ry6gPqedV_2', 'wfuExCSSzjZpX2SrkzJMKzA2Y2UwZTE0Zjk5Y2I1NmI2Y2JiNjc1N2JjYzJhZTM0YzlkYTg3MzYyZDUwMDNkNTQwNzNlN2M4MWJjOWFkNzJKl+LIvUxSWLiRbJqB+YHQUrJ1APuuSRK0h3u9uXdj19vuIfp4of3HSt1k3impjD41iW0VlqkpDm1edwrEe+hY', NULL, NULL, NULL, NULL, '1', '2019-02-25 23:07:47', NULL, '1');
+(205, 205, 'eduardo.zea.74@gmail.com', 'VHWml2hcagvyq5_7fvKF6Ry6gPqedV_2', 'wfuExCSSzjZpX2SrkzJMKzA2Y2UwZTE0Zjk5Y2I1NmI2Y2JiNjc1N2JjYzJhZTM0YzlkYTg3MzYyZDUwMDNkNTQwNzNlN2M4MWJjOWFkNzJKl+LIvUxSWLiRbJqB+YHQUrJ1APuuSRK0h3u9uXdj19vuIfp4of3HSt1k3impjD41iW0VlqkpDm1edwrEe+hY', NULL, NULL, NULL, NULL, '1', '2019-02-25 23:07:47', NULL, '1'),
+(206, 206, 'juridicojorgsosa@hotmail.com', 'VHWml2hcagvyq5_7fvKF6Ry6gPqedV_2', 'wfuExCSSzjZpX2SrkzJMKzA2Y2UwZTE0Zjk5Y2I1NmI2Y2JiNjc1N2JjYzJhZTM0YzlkYTg3MzYyZDUwMDNkNTQwNzNlN2M4MWJjOWFkNzJKl+LIvUxSWLiRbJqB+YHQUrJ1APuuSRK0h3u9uXdj19vuIfp4of3HSt1k3impjD41iW0VlqkpDm1edwrEe+hY', NULL, NULL, NULL, NULL, '1', '2019-02-25 23:07:47', NULL, '1');
 
 --
 -- Volcado de datos para la tabla `empresa_persona`
@@ -437,7 +438,8 @@ INSERT INTO `empresa_persona` (`eper_id`, `emp_id`, `per_id`, `eper_estado`, `ep
 (202, 1, 202, 1, '2019-02-12 13:40:00', NULL, 1),
 (203, 1, 203, 1, '2019-02-12 13:40:00', NULL, 1),
 (204, 1, 204, 1, '2019-02-12 13:40:00', NULL, 1),
-(205, 1, 205, 1, '2019-02-12 13:40:00', NULL, 1);
+(205, 1, 205, 1, '2019-02-12 13:40:00', NULL, 1),
+(206, 1, 206, 1, '2019-02-12 13:40:00', NULL, 1);
 
 --
 -- Volcado de datos para la tabla `usua_grol_eper`
@@ -656,9 +658,6 @@ INSERT INTO `usua_grol_eper` (`ugep_id`, `eper_id`, `usu_id`, `grol_id`, `ugep_e
 (202, 202, 202, 33, 1, '2019-02-12 13:40:00', NULL, 1),
 (203, 203, 203, 33, 1, '2019-02-12 13:40:00', NULL, 1),
 (204, 204, 204, 33, 1, '2019-02-12 13:40:00', NULL, 1),
-(205, 205, 205, 33, 1, '2019-02-12 13:40:00', NULL, 1);
-
-
-
-
+(205, 205, 205, 33, 1, '2019-02-12 13:40:00', NULL, 1),
+(206, 206, 206, 33, 1, '2019-02-12 13:40:00', NULL, 1);
 
