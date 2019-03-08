@@ -268,3 +268,41 @@ function fun_CambiaMail() {
 function exportPdf() {
     
 }
+
+/********************************************
+ * DATOS
+ * VER ERRORES DE DOCUMENTOS
+ * Retorno de Valores a  los campos
+ ********************************************/
+function verCorrecciones(ids) {
+    var link = $('#txth_base').val() + "/mceformulariotemp/viewmessage";
+    var arrParams = new Object();
+    arrParams.ids = ids;
+    requestHttpAjax(link, arrParams, function (response) {
+        var data = response.message;
+        if (response.status == "OK") {
+            divComentario(data.dataComentario);            
+        }
+        //showAlert(response.status, response.type, {"wtmessage": data.info, "title": response.label});
+    }, true);
+}
+
+function divComentario(data) {
+    //$("#countMensaje").html(data.length);
+    var option_arr = '';
+    option_arr += '<div style="overflow-y: scroll;height:200px;">';
+    for (var i = 0; i < data.length; i++) {
+        option_arr += '<div class="post clearfix">';
+            option_arr += '<div class="user-block">';
+                option_arr += '<span>';
+                    option_arr += '<a href="#">'+(data[i]["Nombres"]).toUpperCase()+'</a>';
+                    //option_arr += '<a onclick="deleteComentario(\'' + data[i]['Ids'] + '\')" class="pull-right btn-box-tool" href="#"><i class="fa fa-times"></i></a>';
+                option_arr += '</span><br>';
+                option_arr += '<span>'+(data[i]["fecha"]).toUpperCase()+'</span>';
+            option_arr += '</div>';
+            option_arr += '<p>'+(data[i]["Mensaje"]).toUpperCase()+'</p>';
+        option_arr += '</div>';
+    }
+    option_arr += '</div>';
+    showAlert("OK", "info", {"wtmessage": option_arr, "title": "Correcciones"});
+}

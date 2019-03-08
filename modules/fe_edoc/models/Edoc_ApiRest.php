@@ -188,14 +188,16 @@ class Edoc_ApiRest extends \app\modules\fe_edoc\components\CActiveRecord {
         $por_iva = intval($cabFact['IVA_PORCENTAJE']); //12;
         //0=IVa 0% y 2=iva 12%
         //$ImporteTotal = (intval($cabFact['IVA_CODIGO']) == 2) ? (floatval($cabFact['TOTALBRUTO']) * (floatval($por_iva) / 100)) + floatval($cabFact['TOTALBRUTO']) : $cabFact['TOTALBRUTO'];
-        $TotalSinImpuesto=$cabFact['TOTALBRUTO'];
+        //$TotalSinImpuesto=$cabFact['TOTALBRUTO'];
+        //TotalSinImpuesto=total_sin_impuestos - total descuento - total devolucion iva  - total compensaciones + total impuestos  + propina + total retenciones + totalExportaciones + total rubros terceros
+        $TotalSinImpuesto=floatval($cabFact['TOTALBRUTO'])-floatval($cabFact['TOTALDESC']);
         $ImporteTotal=$cabFact['TOTALDOC'];
         if(intval($cabFact['IVA_CODIGO']) == 2){
             if(floatval($cabFact['IVA_VALOR'])>0){
                 $ImporteTotal=floatval($cabFact['TOTALBRUTO'])+floatval($cabFact['IVA_VALOR']);
             }            
         }
-		$IdLote=$cabFact['SYS_FACTURANC_ID'];//Numero ID autoIncremetable del ERP
+	$IdLote=$cabFact['SYS_FACTURANC_ID'];//Numero ID autoIncremetable del ERP
         
         $sql = "INSERT INTO " . $con->dbname . ".NubeFactura
                (Ambiente,TipoEmision, RazonSocial, NombreComercial, Ruc,ClaveAcceso,CodigoDocumento, Establecimiento,
@@ -339,28 +341,30 @@ class Edoc_ApiRest extends \app\modules\fe_edoc\components\CActiveRecord {
 
     private function InsertarFacturaFormaPago($con, $idCab) {
         //Utilities::putMessageLogFile("LLEGO A FORMA PAGO");
-        $fpagEdoc= $this->fpagEdoc;
+        $fpagEdoc = $this->fpagEdoc;
         //Implementado 8/08/2016
         //FOR_PAG_SRI,PAG_PLZ,PAG_TMP,VAL_NET =>$cabFact[$i]['VAL_NET']
         //Nota la Tabla Forma de Pago debe ser aigual que la SEA Y WEBSEA los IDS deben conincidir.
         //Si no tiene codigo usa el codigo 1 (SIN UTILIZACION DEL SISTEMA FINANCIERO o Efectivo)
-        $IdsForma = $fpagEdoc[0]['COD_FORMAPAG']; //($fpagEdoc['COD_FORMAPAG']!='')?$fpagEdoc['FOR_PAG_SRI']:'1';
-        $Total=$fpagEdoc[0]['VALOR'];//($fpagEdoc['VALOR']!='')?$fpagEdoc['VAL_NET']:0;
-        $Plazo=$fpagEdoc[0]['PLAZO'];//($fpagEdoc['PLAZO']>0)?$fpagEdoc['PLAZO']:'30';
-        $UnidadTiempo=$fpagEdoc[0]['UNIDAD_TIEMPO'];//($fpagEdoc['UNIDAD_TIEMPO']!='')?$fpagEdoc['UNIDAD_TIEMPO']:'DIAS';
-        
-        $sql = "INSERT INTO " . $con->dbname . ".NubeFacturaFormaPago
+        for ($i = 0; $i < sizeof($fpagEdoc); $i++) {
+            $IdsForma = $fpagEdoc[$i]['COD_FORMAPAG']; //($fpagEdoc['COD_FORMAPAG']!='')?$fpagEdoc['FOR_PAG_SRI']:'1';
+            $Total = $fpagEdoc[$i]['VALOR']; //($fpagEdoc['VALOR']!='')?$fpagEdoc['VAL_NET']:0;
+            $Plazo = $fpagEdoc[$i]['PLAZO']; //($fpagEdoc['PLAZO']>0)?$fpagEdoc['PLAZO']:'30';
+            $UnidadTiempo = $fpagEdoc[$i]['UNIDAD_TIEMPO']; //($fpagEdoc['UNIDAD_TIEMPO']!='')?$fpagEdoc['UNIDAD_TIEMPO']:'DIAS';
+
+            $sql = "INSERT INTO " . $con->dbname . ".NubeFacturaFormaPago
                 (IdForma,IdFactura,FormaPago,Total,Plazo,UnidadTiempo)VALUES
                 (:IdForma,:IdFactura,:FormaPago,:Total,:Plazo,:UnidadTiempo);";
-        
-        $comando = $con->createCommand($sql);
-        $comando->bindParam(":IdForma", $IdsForma, \PDO::PARAM_STR);
-        $comando->bindParam(":IdFactura", $idCab, \PDO::PARAM_INT);
-        $comando->bindParam(":FormaPago", $IdsForma, \PDO::PARAM_STR);
-        $comando->bindParam(":Total", $Total, \PDO::PARAM_STR);
-        $comando->bindParam(":Plazo", $Plazo, \PDO::PARAM_STR);
-        $comando->bindParam(":UnidadTiempo", $UnidadTiempo, \PDO::PARAM_STR);
-        $comando->execute();       
+
+            $comando = $con->createCommand($sql);
+            $comando->bindParam(":IdForma", $IdsForma, \PDO::PARAM_STR);
+            $comando->bindParam(":IdFactura", $idCab, \PDO::PARAM_INT);
+            $comando->bindParam(":FormaPago", $IdsForma, \PDO::PARAM_STR);
+            $comando->bindParam(":Total", $Total, \PDO::PARAM_STR);
+            $comando->bindParam(":Plazo", $Plazo, \PDO::PARAM_STR);
+            $comando->bindParam(":UnidadTiempo", $UnidadTiempo, \PDO::PARAM_STR);
+            $comando->execute();
+        }
     }
 
     private function InsertarFacturaDatoAdicional($con, $idCab) {
