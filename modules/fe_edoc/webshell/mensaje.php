@@ -1,9 +1,5 @@
 <?php 
 
-$pathBanner = __DIR__ . '/layouts/images/banner.png';
-$typeBanner = pathinfo($path, PATHINFO_EXTENSION);
-$base64Banner = 'data:image/' . $typeBanner . ';base64,' . base64_encode($file_get_contents($pathBanner));
-
 $mensaje='
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml">
@@ -46,7 +42,9 @@ $mensaje='
                     </tr>
                 </table>
             </div>
-            <div style="text-align: center;"><img alt="banner" src="'. $base64Banner .'"></div>
+            <div style="text-align: center;"><img alt="banner" src="'. 
+                'data:image/' . pathinfo(__DIR__ . '/layouts/images/banner_'.$objEmp["Ruc"].'.jpg', PATHINFO_EXTENSION) . ';base64,' . 
+                base64_encode(file_get_contents(__DIR__ . '/layouts/images/banner_'.$objEmp["Ruc"].'.jpg')) .'"></div>
             <br /><br />
             <div style="text-align: center; font-family: Arial; padding: 10px 50px 0px;">
                 <span style="color:#9a4d9d; font-size:35px;">
@@ -103,8 +101,8 @@ $mensaje='
                         $mensaje.='<div class="trow">
                             <div class="tcol-td form-group">
                                 <p>
-                                    Adem&aacute;s puede realizar la impresi&oacute;n su documento accediendo a nuestro portal <a target="_blank" href="'.$obj_var->rutaLink.'">aqui</a>.<br>
-                                    Atentamente,<br>
+                                    Adem&aacute;s puede realizar la impresi&oacute;n su documento accediendo a nuestro portal <a target="_blank" href="'.$obj_var->rutaLink.'">aqui</a>.<br><br>
+                                    Atentamente,<br><br>
                                     <label class="titleLabel">'.strtoupper($objEmp["RazonSocial"]) .'</label>
                                 </p>
                             </div>
@@ -121,7 +119,7 @@ $mensaje='
                     <tr>
                         <td valign="middle" width="370">
                             <div>
-                                <span style="color: #ffffff; font-family: Helvetica; font-size: 11px; line-height: 16px;"><?= Html::encode(Yii::$app->params["copyright"]) ?></span>
+                                <span style="color: #ffffff; font-family: Helvetica; font-size: 11px; line-height: 16px;">Todos los derechos reservados '.$objEmp["RazonSocial"].' </span>
                             </div>
                         </td>
                         <td valign="middle" width="170">
