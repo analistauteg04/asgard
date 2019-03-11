@@ -197,8 +197,8 @@ INSERT INTO `grupo` (`gru_id`, `cseg_id`, `gru_nombre`, `gru_descripcion`, `gru_
 (13, 2, 'Docente', 'Docente', NULL, '1', '2017-02-01 15:05:28', NULL, '1'),
 
 (14, 2, 'Marketing', 'Marketing', NULL, '1', '2019-02-09 11:30:00', NULL, '1'),
-(15, 2, 'Talento Humano', 'Talento Humano', NULL, '1', '2019-02-09 11:30:00', NULL, '1');
-
+(15, 2, 'Talento Humano', 'Talento Humano', NULL, '1', '2019-02-09 11:30:00', NULL, '1'),
+(16, 2, 'Facturacion Electronica', 'Facturacion Electronica', NULL, '1', '2019-03-09 11:30:00', NULL, '1');
 
 
 -- --------------------------------------------------------
@@ -224,7 +224,8 @@ INSERT INTO `rol` (`rol_id`, `rol_nombre`, `rol_descripcion`, `rol_estado`, `rol
 (16, 'Estudiante', 'Estudiante', '1', '2017-02-01 15:05:28', NULL, '1'),
 (17, 'Docente', 'Docente', '1', '2017-02-01 15:05:28', NULL, '1'),
 
-(18, 'Webmaster', 'Webmaster', '1', '2019-02-09 11:30:00', NULL, '1');
+(18, 'Webmaster', 'Webmaster', '1', '2019-02-09 11:30:00', NULL, '1'),
+(19, 'Proveedor', 'Proveedor', '1', '2019-03-09 11:30:00', NULL, '1');
 
 -- --------------------------------------------------------
 --
