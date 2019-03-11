@@ -8,11 +8,11 @@
 require_once('PHPMailerAutoload.php');
 class mailSystem {
     private $domEmpresa='uteg.edu.ec';
-    private $mailSMTP='mail.uteg.edu.ec';
+    private $mailSMTP='smtp.gmail.com';
     //private $noResponder='no-responder@uteg.edu.ec';
-    private $noResponder='developer@uteg.edu.ec';
-    private $adminMail='developer@uteg.edu.ec';//Cambiar 
-    private $noResponderPass='developer1806';//Clave de correo NO responder
+    private $noResponder='notificaciones@uteg.edu.ec';
+    private $adminMail='analistadesarrollo01@uteg.edu.ec';//Cambiar 
+    private $noResponderPass='F@cult@d0nline2o17';//Clave de correo NO responder
     public $Subject='Ha Recibido un(a)  Nuevo(a)!!! ';
     public $file_to_attachXML='';
     public $file_to_attachPDF='';
@@ -32,8 +32,8 @@ class mailSystem {
         $mail = new PHPMailer();
         
         $mail->IsSMTP();
-        $mail->SMTPSecure = "ssl";
-        $mail->Port = 465;
+        $mail->SMTPSecure = "tls";//"ssl";
+        $mail->Port = 587;//465;
         // la dirección del servidor, p. ej.: smtp.servidor.com
         $mail->Host = $this->mailSMTP;
         $mail->setFrom($this->noResponder, 'Servicio de envío automático '.$this->domEmpresa);

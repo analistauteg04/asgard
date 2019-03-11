@@ -56,9 +56,12 @@ $cabDocPDF = '<div>
                 </td>
             </tr>
             <tr>
-                <td style="width:50%">
-                            <img src="'.$obj_var->rutaPDF.$cabFact[0]["IdentificacionComprador"].'.png" style="width:280px;height:20px;">
-                </td>
+                <td style="width:50%">';
+                            $filename = sys_get_temp_dir() . "/" . $cabDoc[0]['CedRuc'] . ".png";
+                            $barcode = new barCodeGenrator($code_number,1,$filename, 280, 150, false, true);    
+                            $imgTxt = $barcode->getBase64Image();
+                            $cabDocPDF .= $imgTxt;
+$cabDocPDF .=   '</td>
             </tr>
             <tr>
                 <td>

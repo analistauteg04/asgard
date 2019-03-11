@@ -111,6 +111,17 @@ PbGridView::widget([
                 return Yii::$app->params["currency"].Yii::$app->formatter->format($data["ImporteTotal"],["decimal", 2]);
             },
         ],
+        /*[
+            //'attribute' => 'Observacion',
+            'label' => 'Observacion',
+            //'contentOptions' => ['class' => 'table_class', 'style' => 'display:block;'],
+            'options' => ['width' => '400'],
+            'format' => 'raw',
+            'value' => function ($model) {
+                $urlReporte = Html::a((strlen($model['Observacion']) < 30) ? $model['Observacion'] : substr($model['Observacion'], 0, 30) . ' (Ver Mas..)', null, ['href' => 'javascript:verCorrecciones(\'' . base64_encode($model['Ids']) . '\')', "data-toggle" => "tooltip", "title" => "Ver Correcciones"]);
+                return ($model['Observacion'] != '') ? Html::decode($urlReporte) : Yii::t("formulario", "Without comments");
+            },
+        ],*/
     ],
 ]);
 ?>

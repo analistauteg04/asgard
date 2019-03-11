@@ -8,3 +8,11 @@ cambiar la ruta de firma y el nombre
 agregar privilegios a la carpeta
 chown -R apache.apache webshellasgard/
 chmod 777 -R EDOC/ a la carpeta EDOC y sub carpetas
+
+SELECT * FROM db_edoc.NubeFactura WHERE Ambiente is null;
+update db_edoc.NubeFactura set Estado=5 WHERE Ambiente is null;
+
+#*/2 7-21 * * 1,2,3,4,5,6 /home/CronEdoc/SeaFacturacionRec.cron.sh
+#*/3 7-21 * * 1,2,3,4,5,6 /home/CronEdoc/SeaFacturacionAut.cron.sh
+
+ps -ef | grep tomcat

@@ -133,7 +133,7 @@ INSERT INTO `usuario` (`usu_id`, `per_id`, `usu_user`, `usu_sha`, `usu_password`
 (115, 115, 'edgarjimenezb@gmail.com', 'Pjuw1IwTuE0IYq_WLofrb5Cj5v8c7z9u', 'RtI+PbIDssnSFBLjj4OCpzMyMmZhZjdmOTlhYWMxZmRkYjQ3MDQzMjJiMmEyZDU0ZTg1ZTBjZWRlNmY1MjA4YjI3ZTM4YjMzMDk1ZmEzNjZUtaIahuNDWGUbhvSQl48aD+K2o6uGSE3ExIZFifj3siWlHvhADb9Hmu677LFqZK7M9E79zSIwQ82rGEeGdR2t', NULL, NULL, NULL, NULL, '1', '2019-02-25 23:07:16', NULL, '1'),
 (116, 116, 'mauri0204@hotmail.com', 'NlEdG4N4NEx7yjbJrgH6kTUtP0M6UN6u', 'ktQCtJmmUJI/vC3rDeivnTcyNzNmNWEwY2FhMGM3ODQ1ZjE1Mjc0YjJhZjZjMzE2ZDNiZTk4ZDlkOWQ1MTE4NjU2YTE5MDBlNjlmMWEyYmbYId3JPe+gyaCJ+xN29ud7P3D5AYZyUfudcIaO0Tq6R5ZY0wc0+EgYj5aTGRpsLFtaE6M13q4BYIYuyGDcncYo', NULL, NULL, NULL, NULL, '1', '2019-02-25 23:07:16', NULL, '1'),
 (117, 117, 'docenteidiomas@uteg.edu.ec', 'lUo0AWAgWnOckX23mEuqihRotfYnK4gl', 'S/bkJciAN5LX8Qwh0JHHLDdjNjk2NmI5NDg1NjI4ZGUyMmVmOGRiOTY4ZWRmNGQxYTkzY2M0ZWI2NTgzNzU5Y2NiNTNkOWFkM2Q1YTVlNTFXeDxgrorvkxVyY2NGlQFXeigZZOOtjEP8eSg7eqC3/X8R1Pt27FiP3CzkOFgtiUiNQi63+JNdJhf0FP8Yu1/S', NULL, NULL, NULL, NULL, '1', '2019-02-25 23:07:16', NULL, '1'),
-(118, 118, 'gustavo.lamota@gmail.com', 'GUJBJCYuWwk2ulxOh9pb9uWwXLcgo2PE', 'JRh4pLGxmOiwGZQn+BUBsDkxNDcwN2Q1ZjU3NWJhNTJiYTc3Yzk0OTVhMTFjZWUxMzEyZGI1YWZkMGE0YmY5MDMyNTE1MDhkMGZlZmY4NmQrtawj4yum3CRCO/rs5El1tibWsOgLVFNMO3nGkBFupA0D93BcaaXl9jIZdAG1j8869CNmm+4FVVUYfbqf7Y2K', NULL, NULL, NULL, NULL, '1', '2019-02-25 23:07:16', NULL, '1'),
+(118, 118, 'glamota@uteg.edu.ec', 'GUJBJCYuWwk2ulxOh9pb9uWwXLcgo2PE', 'JRh4pLGxmOiwGZQn+BUBsDkxNDcwN2Q1ZjU3NWJhNTJiYTc3Yzk0OTVhMTFjZWUxMzEyZGI1YWZkMGE0YmY5MDMyNTE1MDhkMGZlZmY4NmQrtawj4yum3CRCO/rs5El1tibWsOgLVFNMO3nGkBFupA0D93BcaaXl9jIZdAG1j8869CNmm+4FVVUYfbqf7Y2K', NULL, NULL, NULL, NULL, '1', '2019-02-25 23:07:16', NULL, '1'),
 (119, 119, 'manuellarrochelli@hotmail.com', '2zQIMgSxPpQkFPPe8gXpUaIyB2jOYJXa', '5b+65qpUTDfp6g4BcsFjTmZmMjE3MGFhMzU3NTVjZDk1MDBmZWEzZWRiODA0MGM0MDhkMWQ4YTIzMDczZGRmMTkzYWMwMWZkOTU2MmRjNTEjxWPWE4egWULqs+/l700nZZfOEoeRVwV5anQTd657SnVHRrVW0blNZh5vgPFxdwr2rc9+0tBCspI1MLzyDeaw', NULL, NULL, NULL, NULL, '1', '2019-02-25 23:07:17', NULL, '1'),
 (120, 120, 'jlulema@hotmail.com', 'bwiUn95pVeFZ_YLRPpLFxbnhL4l6dzyQ', '9Y7Z4P6y20OpS6w2XiMrMTcwYjVlM2E5NmU1MzJhMzA4YTY3OGY5ZDg2Nzk5YWIwMjE4MzQ1OTdkYjJlMWJhMzAwNzhjMDE5YmI2M2M4M2Wk8jQEglcxElVVpecRF7j0cL5yP+atMxmxi00DwN8cpye51siWr4n9+uaOZhXuygcJEzikXxA6Z54XR2T2SVaz', NULL, NULL, NULL, NULL, '1', '2019-02-25 23:07:17', NULL, '1'),
 (121, 121, 'linch.luis@gmail.com', 'py3652G0xMKf0c5jb46b6y1ICzQdRUm4', 'XbzjTNuzulivdQUsfDxYBTIwNTYxZWQ4ZTY2NzRlZmQzYjA2NDY5OTc1MzkyZTI3NjEwODU3MDI5ZTk5MjFmNDE3NzMyYTg5OGQ2M2RkMGa6LvyL/OJhboAl2uf1zJGcV7Xj8/rwNd4qIUgUC3+dB8qsLcomUKIDufOwju8+BKwEYN/AJOh+UGhrqOEP9iTM', NULL, NULL, NULL, NULL, '1', '2019-02-25 23:07:17', NULL, '1'),
@@ -221,7 +221,8 @@ INSERT INTO `usuario` (`usu_id`, `per_id`, `usu_user`, `usu_sha`, `usu_password`
 (202, 202, 'aleycaza@hotmail.com', 'jqmFNcpKvjQXzIWvv50cGOhoydnl4Ury', 'hbjfPjmJ2x2IxvGFMBMsgjVhNWJjMzIxNmRhODMzODQ4MjU1YTRmNjlmOGYzOTI3ZTdhMDYxMDZlZWMyMTQ2NjMwODg5YjI5MDVkN2UwODiviuyXksvBNTsKNhYVepSdzXneV79z/GXD1kEvxoUYkmAQga7+iY2YsJBoxd45wyZNRNYlbZcspVG2XgPZoq6X', NULL, NULL, NULL, NULL, '1', '2019-02-25 23:07:46', NULL, '1'),
 (203, 203, 'andrea-yoncon@hotmail.com', 'Fb_a-JIzDQTOFiGwIL5--R7vJJFXBV5e', 'pcBBfVFISxaeezKAz1lLQzhmOTdjMGVlYWU1ZjdmMjM5OGI0N2MwNGNlMzM5OTdlZWUwMmZlZWExNTNmM2IwZjY3MmIxZWYyZDdlZWQ3YjalJJx2yorDMDEWIK2QpHicfhRstgYSvD2FUzddnLMM6DDDJeqSsBRGKF/B35Ro1kX2Jv5/PRQ+2lV5/vI+Vkmb', NULL, NULL, NULL, NULL, '1', '2019-02-25 23:07:46', NULL, '1'),
 (204, 204, 'jzea1986@outlook.com', 'U7SaMICqoeTAzO2F-E2-Y-KHvjzMTbgu', 'T/e98IFa3JaA6CXV1j7o0mE3N2JhMmUyNmFkMGJlNTI4Y2FjZWZkZTI1YzI0NDVlZjM0NzBjZDBkZDlmNTJjNTBkYWMwNzA0ZTFlOWIwMTGBxJzmeJrioc7+WtQDwnP9QEOD4MNy4rqckbck0LE/08RS1xRMS46CbYOQyPtbvcg+9/32o9tY0K76gupkw7F7', NULL, NULL, NULL, NULL, '1', '2019-02-25 23:07:47', NULL, '1'),
-(205, 205, 'eduardo.zea.74@gmail.com', 'VHWml2hcagvyq5_7fvKF6Ry6gPqedV_2', 'wfuExCSSzjZpX2SrkzJMKzA2Y2UwZTE0Zjk5Y2I1NmI2Y2JiNjc1N2JjYzJhZTM0YzlkYTg3MzYyZDUwMDNkNTQwNzNlN2M4MWJjOWFkNzJKl+LIvUxSWLiRbJqB+YHQUrJ1APuuSRK0h3u9uXdj19vuIfp4of3HSt1k3impjD41iW0VlqkpDm1edwrEe+hY', NULL, NULL, NULL, NULL, '1', '2019-02-25 23:07:47', NULL, '1');
+(205, 205, 'eduardo.zea.74@gmail.com', 'VHWml2hcagvyq5_7fvKF6Ry6gPqedV_2', 'wfuExCSSzjZpX2SrkzJMKzA2Y2UwZTE0Zjk5Y2I1NmI2Y2JiNjc1N2JjYzJhZTM0YzlkYTg3MzYyZDUwMDNkNTQwNzNlN2M4MWJjOWFkNzJKl+LIvUxSWLiRbJqB+YHQUrJ1APuuSRK0h3u9uXdj19vuIfp4of3HSt1k3impjD41iW0VlqkpDm1edwrEe+hY', NULL, NULL, NULL, NULL, '1', '2019-02-25 23:07:47', NULL, '1'),
+(206, 206, 'juridicojorgsosa@hotmail.com', 'VHWml2hcagvyq5_7fvKF6Ry6gPqedV_2', 'wfuExCSSzjZpX2SrkzJMKzA2Y2UwZTE0Zjk5Y2I1NmI2Y2JiNjc1N2JjYzJhZTM0YzlkYTg3MzYyZDUwMDNkNTQwNzNlN2M4MWJjOWFkNzJKl+LIvUxSWLiRbJqB+YHQUrJ1APuuSRK0h3u9uXdj19vuIfp4of3HSt1k3impjD41iW0VlqkpDm1edwrEe+hY', NULL, NULL, NULL, NULL, '1', '2019-02-25 23:07:47', NULL, '1');
 
 --
 -- Volcado de datos para la tabla `empresa_persona`
@@ -437,7 +438,8 @@ INSERT INTO `empresa_persona` (`eper_id`, `emp_id`, `per_id`, `eper_estado`, `ep
 (202, 1, 202, 1, '2019-02-12 13:40:00', NULL, 1),
 (203, 1, 203, 1, '2019-02-12 13:40:00', NULL, 1),
 (204, 1, 204, 1, '2019-02-12 13:40:00', NULL, 1),
-(205, 1, 205, 1, '2019-02-12 13:40:00', NULL, 1);
+(205, 1, 205, 1, '2019-02-12 13:40:00', NULL, 1),
+(206, 1, 206, 1, '2019-02-12 13:40:00', NULL, 1);
 
 --
 -- Volcado de datos para la tabla `usua_grol_eper`
@@ -479,7 +481,7 @@ INSERT INTO `usua_grol_eper` (`ugep_id`, `eper_id`, `usu_id`, `grol_id`, `ugep_e
 
 (30, 30, 30, 33, '1', '2017-09-01 03:28:39', NULL, '1'),
 (31, 31, 31, 33, '1', '2017-09-01 03:34:01', NULL, '1'),
-(33, 33, 33, 33, '1', '2017-09-01 07:42:00', NULL, '1'),
+(33, 33, 33, 35, '1', '2017-09-01 07:42:00', NULL, '1'),
 (34, 34, 34, 33, '1', '2017-09-01 01:18:00', NULL, '1'),
 (35, 35, 35, 33, '1', '2017-09-01 05:01:00', NULL, '1'),
 (36, 36, 36, 33, '1', '2017-09-01 22:46:00', NULL, '1'),
@@ -569,7 +571,7 @@ INSERT INTO `usua_grol_eper` (`ugep_id`, `eper_id`, `usu_id`, `grol_id`, `ugep_e
 (115, 115, 115, 33, 1, '2019-02-12 13:40:00', NULL, 1),
 (116, 116, 116, 33, 1, '2019-02-12 13:40:00', NULL, 1),
 (117, 117, 117, 33, 1, '2019-02-12 13:40:00', NULL, 1),
-(118, 118, 118, 33, 1, '2019-02-12 13:40:00', NULL, 1),
+(118, 118, 118, 35, 1, '2019-02-12 13:40:00', NULL, 1),
 (119, 119, 119, 33, 1, '2019-02-12 13:40:00', NULL, 1),
 (120, 120, 120, 33, 1, '2019-02-12 13:40:00', NULL, 1),
 (121, 121, 121, 33, 1, '2019-02-12 13:40:00', NULL, 1),
@@ -656,9 +658,6 @@ INSERT INTO `usua_grol_eper` (`ugep_id`, `eper_id`, `usu_id`, `grol_id`, `ugep_e
 (202, 202, 202, 33, 1, '2019-02-12 13:40:00', NULL, 1),
 (203, 203, 203, 33, 1, '2019-02-12 13:40:00', NULL, 1),
 (204, 204, 204, 33, 1, '2019-02-12 13:40:00', NULL, 1),
-(205, 205, 205, 33, 1, '2019-02-12 13:40:00', NULL, 1);
-
-
-
-
+(205, 205, 205, 33, 1, '2019-02-12 13:40:00', NULL, 1),
+(206, 206, 206, 33, 1, '2019-02-12 13:40:00', NULL, 1);
 

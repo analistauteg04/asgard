@@ -128,7 +128,7 @@ class VSAutoDocumento {
                 $op=16;//Su documento fue rechazado o negado
                 $status="NO_OK";
                 $mensaje=$response['mensajes']['mensaje'];//Array de Errores Sri
-                $this->mensajeErrorDocumentos($con,$mensaje,$ids,$DocErr);
+                $this->mensajeErrorDocumentos($con,$obj_con,$mensaje,$ids,$DocErr);
                 //$CodigoError=$mensaje[0]['identificador'];
                 //$InformacionAdicional=(!empty($mensaje[0]['informacionAdicional']))?$mensaje[0]['informacionAdicional']:'';
                 $CodigoError=$mensaje['identificador'];
@@ -252,7 +252,7 @@ class VSAutoDocumento {
     }
 
 
-    private function mensajeErrorDocumentos($con, $mensaje, $ids, $tipDoc) {
+    private function mensajeErrorDocumentos($con,$obj_con, $mensaje, $ids, $tipDoc) {
         $valida= new cls_Global();
         $IdFactura='';$IdRetencion='';$IdNotaCredito='';$IdNotaDebito='';$IdGuiaRemision='';
         switch ($tipDoc) {
@@ -298,7 +298,7 @@ class VSAutoDocumento {
             //$InformacionAdicional=(!empty($mensaje['informacionAdicional']))?$mensaje['informacionAdicional']:'';
             $InformacionAdicional=(!empty($mensaje['informacionAdicional']))?utf8_encode($valida->limpioCaracteresXML(trim($mensaje['informacionAdicional']))):'';
             
-            $sql = "INSERT INTO " . $con->BdIntermedio . ".NubeMensajeError 
+            $sql = "INSERT INTO " . $obj_con->BdIntermedio . ".NubeMensajeError 
                  (IdFactura,IdRetencion,IdNotaCredito,IdNotaDebito,IdGuiaRemision,Identificador,TipoMensaje,Mensaje,InformacionAdicional)
                  VALUES
                  ('$IdFactura','$IdRetencion','$IdNotaCredito','$IdNotaDebito','$IdGuiaRemision','$Identificador','$TipoMensaje','$Mensaje','$InformacionAdicional')";

@@ -30,7 +30,12 @@ INSERT INTO `accion` (`acc_id`, `acc_nombre`, `acc_url_accion`, `acc_tipo`, `acc
 (21,'Inscribed pending','Inscribed pending','General','Inscribed pending','accion','glyphicon glyphicon-info-sign','1','2018-11-07 19:04:25',NULL,'1'),
 (22,'Schedule shipping','Schedule shipping','General','Schedule shipping','accion','glyphicon glyphicon-calendar','1','2018-11-07 19:04:25',NULL,'1'),
 (23,'Suscribe all','Suscribe all','General','Suscribe all','accion','glyphicon glyphicon-list-alt','1','2018-11-07 19:04:25',NULL,'1'),
-(24,'Upload Mailchimp','Upload Mailchimp','General','Upload Mailchimp','accion','glyphicon glyphicon-list-alt','1','2018-11-07 19:04:25',NULL,'1');
+(24,'Upload Mailchimp','Upload Mailchimp','General','Upload Mailchimp','accion','glyphicon glyphicon-list-alt','1','2018-11-07 19:04:25',NULL,'1'),
+(25,'Editar Correo','Editar Correo','General','Editar Correo','accion','glyphicon glyphicon-envelope','1','2019-03-08 10:00:00',NULL,'1'),
+(26,'Reenviar Correo','Reenviar Correo','General','Reenviar Correo','accion','glyphicon glyphicon-envelope','1','2019-03-08 10:00:00',NULL,'1'),
+(27,'Anular','Anular','General','Anular','accion','glyphicon glyphicon-trash','1','2019-03-08 10:00:00',NULL,'1'),
+(28,'Corregir','Corregir','General','Corregir','accion','glyphicon glyphicon-edit','1','2019-03-08 10:00:00',NULL,'1'),
+(29,'Cancelar','Cancelar','General','Cancelar','accion','glyphicon glyphicon-trash','1','2019-03-08 10:00:00',NULL,'1');
 
 -- --------------------------------------------------------
 --
@@ -191,8 +196,9 @@ INSERT INTO `grupo` (`gru_id`, `cseg_id`, `gru_nombre`, `gru_descripcion`, `gru_
 (12, 1, 'Estudiante', 'Estudiante', NULL, '1', '2017-02-01 15:05:28', NULL, '1'),
 (13, 2, 'Docente', 'Docente', NULL, '1', '2017-02-01 15:05:28', NULL, '1'),
 
-(14, 2, 'Marketing', 'Marketing', NULL, '1', '2019-02-09 11:30:00', NULL, '1');
-
+(14, 2, 'Marketing', 'Marketing', NULL, '1', '2019-02-09 11:30:00', NULL, '1'),
+(15, 2, 'Talento Humano', 'Talento Humano', NULL, '1', '2019-02-09 11:30:00', NULL, '1'),
+(16, 2, 'Facturacion Electronica', 'Facturacion Electronica', NULL, '1', '2019-03-09 11:30:00', NULL, '1');
 
 
 -- --------------------------------------------------------
@@ -218,7 +224,8 @@ INSERT INTO `rol` (`rol_id`, `rol_nombre`, `rol_descripcion`, `rol_estado`, `rol
 (16, 'Estudiante', 'Estudiante', '1', '2017-02-01 15:05:28', NULL, '1'),
 (17, 'Docente', 'Docente', '1', '2017-02-01 15:05:28', NULL, '1'),
 
-(18, 'Webmaster', 'Webmaster', '1', '2019-02-09 11:30:00', NULL, '1');
+(18, 'Webmaster', 'Webmaster', '1', '2019-02-09 11:30:00', NULL, '1'),
+(19, 'Proveedor', 'Proveedor', '1', '2019-03-09 11:30:00', NULL, '1');
 
 -- --------------------------------------------------------
 --
@@ -268,7 +275,8 @@ INSERT INTO `grup_rol` (`grol_id`, `gru_id`, `rol_id`, `grol_estado`, `grol_esta
 (32, 12, 16, '1', '1'),
 (33, 13, 17, '1', '1'),
 
-(34, 14, 18, '1', '1');
+(34, 14, 18, '1', '1'),
+(35, 15, 9, '1', '1');
 
 -- --------------------------------------------------------
 --

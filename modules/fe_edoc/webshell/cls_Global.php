@@ -1,5 +1,7 @@
 <?php
 
+use PHPUnit\Framework\Exception;
+
 /*
  * To change this license header, choose License Headers in Project Properties.
  * To change this template file, choose Tools | Templates
@@ -68,12 +70,41 @@ class cls_Global {
             $obj_con = new cls_Base();
             $conCont = $obj_con->conexionIntermedio();
             $rawData = array();
-            $cedRuc=trim($cedRuc);            
+            $cedRuc=trim($cedRuc);
             $sql = "SELECT A.per_id Ids,A.per_nombre RazonSocial,IFNULL(B.usu_correo,'') CorreoPer
                         FROM " . $obj_con->BdIntermedio . ".persona A
                                 INNER JOIN " . $obj_con->BdIntermedio . ".usuario B
                                         ON A.per_id=B.per_id AND B.usu_est_log=1
                 WHERE A.per_ced_ruc='$cedRuc' AND A.per_est_log=1 ";
+            //echo $sql;
+            $sentencia = $conCont->query($sql);
+            if ($sentencia->num_rows > 0) {
+                //Retorna Solo 1 Registro Asociado
+                $rawData=$this->messageSystem('OK',null,null,null, $sentencia->fetch_assoc());  
+            }else{
+                $rawData=$this->messageSystem('NO_OK',null,null,null,null);  
+            }
+            $conCont->close();
+            return $rawData;
+        } catch (Exception $e) {
+            //echo $e;
+            $conCont->close();
+            return $this->messageSystem('NO_OK', $e->getMessage(), null, null, null);
+        }
+    }
+
+    public function buscarCedRudDBMain($cedRuc){
+        try {
+            $obj_con = new cls_Base();
+            $obj_con->BdIntermedio = 'db_asgard';
+            $conCont = $obj_con->conexionIntermedio();
+            $rawData = array();
+            $cedRuc=trim($cedRuc);
+            $sql = "SELECT A.per_id Ids, B.usu_user usuario
+                        FROM " . $obj_con->BdIntermedio . ".persona A
+                                INNER JOIN " . $obj_con->BdIntermedio . ".usuario B
+                                        ON A.per_id=B.per_id
+                WHERE (A.per_cedula='$cedRuc' OR A.per_ruc='$cedRuc' OR A.per_pasaporte='$cedRuc') AND A.per_estado_logico=1 AND A.per_estado=1 AND B.usu_estado_logico=1";
             //echo $sql;
             $sentencia = $conCont->query($sql);
             if ($sentencia->num_rows > 0) {
@@ -114,6 +145,46 @@ class cls_Global {
                 ('" . $objEnt[$i]['CedRuc'] . "','" . $objEnt[$i]['RazonSoc'] . "','M','1',CURRENT_TIMESTAMP()) ";
         $command = $con->prepare($sql);
         $command->execute();
+    }
+
+    private function InsertarUserDBMain($con, $objEnt,$obj_con,$i) {
+        $obj_con->BdIntermedio = 'db_asgard';
+        $attrDni = "per_pasaporte";
+        $valDni  = $objEnt[$i]['CedRuc'];
+        $attrName = "per_pri_nombre";
+        $valName = $objEnt[$i]['RazonSoc'];
+        $usu_sha = "";
+        $usu_pass = "";
+        $correo = ($objEnt[$i]['CorreoPer']<>'')?$objEnt[$i]['CorreoPer']:'';//Consulta Tabla Clientes
+        if(strlen($valDni)==13){
+            $attrDni = "per_ruc";
+        }else if(strlen($valDni)==10){
+            $attrDni = "per_cedula";
+        }
+        try{
+            // CREACION DE LA PERSONA
+            $sql = "INSERT INTO " . $obj_con->BdIntermedio . ".persona
+                ($attrDni,$attrName,per_genero,per_estado, per_estado_logico, per_correo)VALUES
+                ('" . $valDni . "','" . $valName . "','M','1','1' '".$correo."')";
+            $command = $con->prepare($sql);
+            $command->execute();
+            $IdPer = $con->insert_id;
+            // CREACION DEL USUARIO
+            $sql = "INSERT INTO " . $obj_con->BdIntermedio . ".usuario
+                (per_id,usu_user,usu_sha,usu_password,usu_estado_logico,usu_estado)VALUES
+                ($IdPer,'$correo','$usu_sha','$usu_pass','1','1' ";
+            $command2 = $con->prepare($sql);
+            $command2->execute();
+            // ASIGNACION DE ROLES A USUARIO
+
+            // GENERACION DE LINK DE ACTIVACION DE CUENTA
+
+        }catch(Exception $e){
+
+        }
+        
+
+
     }
     
     private function InsertarUsuario($con, $objEnt,$obj_con, $IdPer,$DBTable,$i) {
