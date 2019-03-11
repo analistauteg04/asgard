@@ -32,7 +32,7 @@ class WsMailChimp
 
     public function __construct()
     {
-        $this->apiKey  = "4d6064da3ab51d18e0586027f4cdbda9-us19"; //"1aa07fb04cd96c63cdba23f9424cd826-us8";
+        $this->apiKey  = "2a2dbbb8a33adbb41b46fb0efbb46fc4-us20";//"4d6064da3ab51d18e0586027f4cdbda9-us19"; ambiente desarrollo
         $this->user = "Uteg";
         $arr_data = explode("-",$this->apiKey);
         $this->dc = $arr_data[1];

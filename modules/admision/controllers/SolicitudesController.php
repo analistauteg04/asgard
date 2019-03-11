@@ -249,8 +249,7 @@ class SolicitudesController extends \app\components\CController {
                 return Utilities::ajaxResponse('OK', 'alert', Yii::t('jslang', 'Success'), 'false', $message);                
             }
             if (isset($data["getpreciodescuento"])) {                                 
-                $resp_precio = $mod_solins->ObtenerPrecioXitem($data["ite_id"]);                                  
-                \app\models\Utilities::putMessageLogFile('precio:'.$resp_precio["precio"]);                
+                $resp_precio = $mod_solins->ObtenerPrecioXitem($data["ite_id"]);                                                               
                 if ($data["descuento_id"] > 0) {                        
                     $respDescuento = $modDescuento->consultarValdctoItem($data["descuento_id"]); 
                     if ($resp_precio["precio"] == 0) {                                    
@@ -271,7 +270,7 @@ class SolicitudesController extends \app\components\CController {
             } 
             if (isset($data["gethabilita"])) {  
                 //\app\models\Utilities::putMessageLogFile('item:'.$data["ite_id"]);   
-                if ($data["ite_id"]==155 or $data["ite_id"]==156 or $data["ite_id"]==157) {                    
+                if ($data["ite_id"]==155 or $data["ite_id"]==156 or $data["ite_id"]==157 or $data["ite_id"]==10) {                    
                     $habilita = '1';
                 } else {
                     $habilita = '0';
@@ -383,17 +382,19 @@ class SolicitudesController extends \app\components\CController {
                 //$resp_precio = $mod_solins->ObtenerPrecio($ming_id, $nint_id, $mod_id, $car_id);  //hasta el 9 de diciembre/2018.
                 $resp_precio = $mod_solins->ObtenerPrecioXitem($ite_id);                 
                 if ($resp_precio) {
-                    if ($nint_id==1) {
-                        $ming_id = 0;
-                        if ($ite_id == 155 or $ite_id == 156 or $ite_id == 157) {
+                    if ($nint_id<3) { //GViteri: para grado y posgrado los items que corresponden a inscripción, está abierto la caja de texto hasta un valor tope.                       
+                        if ($nint_id==1) {
+                            $ming_id = 0;
+                        }
+                        if ($ite_id == 155 or $ite_id == 156 or $ite_id == 157 or $ite_id == 10) {                            
                             $resp_precios_maximos = $mod_solins->ValidarPrecioXitem($ite_id); 
                             if ($resp_precios_maximos) {
                                 if ($precioGrado > $resp_precios_maximos["precio_mat"] or $precioGrado < $resp_precios_maximos["precio_ins"]) {
                                     $mensaje = 'El precio digitado debe estar entre '.$resp_precios_maximos["precio_ins"]. ' y '. $resp_precios_maximos["precio_mat"];
-                                    $errorprecio = 0;
+                                    $errorprecio = 0;                                    
                                 }
                             }
-                            $precio = $precioGrado;                            
+                            $precio = $precioGrado;             
                         } else {
                             $precio = $resp_precio['precio'];
                         }
@@ -410,7 +411,7 @@ class SolicitudesController extends \app\components\CController {
                 //Validar que no exista el registro en solicitudes.                    
                 $resp_valida = $mod_solins->Validarsolicitud($interesado_id, $nint_id, $ming_id, $car_id);
                 if (empty($resp_valida['existe'])) {
-                    $num_secuencia = Secuencias::nuevaSecuencia($con1, $emp_id, 1, 1, 'SOL');
+                    $num_secuencia = Secuencias::nuevaSecuencia($con1, $emp_id, 1, 1, 'SOL');                    
                     $mod_solins->num_solicitud = $num_secuencia;
                     $mod_solins->int_id = $interesado_id;
                     $mod_solins->uaca_id = $nint_id;
@@ -436,9 +437,9 @@ class SolicitudesController extends \app\components\CController {
                     if ($beca == "1") {
                         $mod_solins->sins_beca = "1";
                     }
-                    if ($subirDocumentos == 0) {
+                    if ($subirDocumentos == 0) {                        
                         $mod_solins->save();
-                        $id_sins = $mod_solins->sins_id;
+                        $id_sins = $mod_solins->sins_id;                          
                         if (!$mod_solins->crearDatosFacturaSolicitud($id_sins, ucwords(strtolower($dataNombres)), ucwords(strtolower($dataApellidos)), $dataTipDNI, $dataDNI, ucwords(strtolower($dataDireccion)), $dataTelefono)) {
                             throw new Exception('Problemas al registrar Datos a Facturar.');
                         }

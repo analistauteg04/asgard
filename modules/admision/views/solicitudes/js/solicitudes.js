@@ -138,15 +138,13 @@ $(document).ready(function () {
             $('#divMetodo').css('display', 'none');
             $('#divDocumento').css('display', 'none');
             $('#lbl_carrera').text('Programa');  
-             $('#divAplicaDescuento').css('display', 'block'); 
-             $('#divDescuento').css('display', 'block');              
+            $('#divAplicaDescuento').css('display', 'block');                         
         } else {           
             $('#divMetodo').css('display', 'none');           
             $('#divDocumento').css('display', 'block');
             $('#lbl_carrera').text('Carrera');    
-            $('#divAplicaDescuento').css('display', 'none');  
-            $('#divDescuento').css('display', 'none'); 
-            $('#opt_declara_Dctosi').val(2);            
+            $('#divAplicaDescuento').css('display', 'block');    
+            $('#opt_declara_Dctono').val(2);            
         }          
      
     });
@@ -308,15 +306,13 @@ $(document).ready(function () {
             $('#divMetodo').css('display', 'none');
             $('#divDocumento').css('display', 'none');
             $('#lbl_carrera').text('Programa');            
-            $('#divAplicaDescuento').css('display', 'block');   
-            $('#divDescuento').css('display', 'block');   
+            $('#divAplicaDescuento').css('display', 'block');               
             
         } else {            
             if (arrParams.nint_id == 1) { 
-                $('#divMetodo').css('display', 'none');
-                $('#divAplicaDescuento').css('display', 'none');    
-                $('#divDescuento').css('display', 'none'); 
-                $('#opt_declara_Dctosi').val(2);
+                $('#divMetodo').css('display', 'none');                
+                $('#divAplicaDescuento').css('display', 'block');                    
+                $('#opt_declara_Dctono').val(2);
             } else {
                 $('#divMetodo').css('display', 'block');
                 $('#divAplicaDescuento').css('display', 'block');                  

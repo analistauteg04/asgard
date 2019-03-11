@@ -162,7 +162,7 @@ $leyenda = '<div class="col-md-12 col-xs-12 col-sm-12 col-lg-12">
             </div>            
         </div>        
     </div>
-    <div class="col-md-12 col-xs-12 col-sm-12 col-lg-12" id="divAplicaDescuento" style="display: none">               
+    <div class="col-md-12 col-xs-12 col-sm-12 col-lg-12" id="divAplicaDescuento" style="display: block">
         <div class="form-group">
             <label for="txt_declararDescuento" class="col-sm-5 control-label"><?= financiero::t("Pagos", "Apply Discount") ?></label>
             <div class="col-sm-7">  
