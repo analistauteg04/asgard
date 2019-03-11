@@ -313,7 +313,7 @@ class Suscriptor extends \yii\db\ActiveRecord {
                     not in(
                         select per_correo
                         from db_asgard.persona as per
-                        where per.per_estado=1 and per.per_estado_logico=1
+                        where per.per_estado=1 and per.per_estado_logico=1 and per_correo = pges.pges_correo
                     )
             ";
         } else if ($subscrito == 1) {
@@ -450,7 +450,7 @@ class Suscriptor extends \yii\db\ActiveRecord {
                     not in(
                         select per_correo
                         from db_asgard.persona as per
-                        where per.per_estado=1 and per.per_estado_logico=1
+                        where per.per_estado=1 and per.per_estado_logico=1 and per_correo=pges.pges_correo
                     )
             ";
         } else if ($subscrito == 3) {
@@ -937,7 +937,7 @@ class Suscriptor extends \yii\db\ActiveRecord {
                     not in(
                         select per_correo
                         from db_asgard.persona as per
-                        where per.per_estado=1 and per.per_estado_logico=1
+                        where per.per_estado=1 and per.per_estado_logico=1 and per_correo=pges.pges_correo
                     )
                 ) as tabla_no       
                 ";
