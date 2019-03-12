@@ -96,13 +96,12 @@ class cls_Global {
     public function buscarCedRudDBMain($cedRuc){
         try {
             $obj_con = new cls_Base();
-            $obj_con->BdIntermedio = 'db_asgard';
-            $conCont = $obj_con->conexionIntermedio();
+            $conCont = $obj_con->conexionAppWeb();
             $rawData = array();
             $cedRuc=trim($cedRuc);
             $sql = "SELECT A.per_id Ids, B.usu_user usuario
-                        FROM " . $obj_con->BdIntermedio . ".persona A
-                                INNER JOIN " . $obj_con->BdIntermedio . ".usuario B
+                        FROM " . $obj_con->BdAppweb . ".persona A
+                                INNER JOIN " . $obj_con->BdAppweb . ".usuario B
                                         ON A.per_id=B.per_id
                 WHERE (A.per_cedula='$cedRuc' OR A.per_ruc='$cedRuc' OR A.per_pasaporte='$cedRuc') AND A.per_estado_logico=1 AND A.per_estado=1 AND B.usu_estado_logico=1";
             //echo $sql;
@@ -139,6 +138,7 @@ class cls_Global {
             return $this->messageSystem('NO_OK', $e->getMessage(), null, null, null);
         }   
     }
+
     private function InsertarPersona($con, $objEnt,$obj_con,$i) {
         $sql = "INSERT INTO " . $obj_con->BdIntermedio . ".persona
                 (per_ced_ruc,per_nombre,per_genero,per_est_log,per_fec_cre)VALUES
@@ -147,14 +147,18 @@ class cls_Global {
         $command->execute();
     }
 
-    private function InsertarUserDBMain($con, $objEnt,$obj_con,$i) {
-        $obj_con->BdIntermedio = 'db_asgard';
+    // SOLO SE CREA USUARIO A PROVEEDORES YA QUE LOS ESTUDIANTES YA TIENEN UNA CUENTA DE USUARIO
+    private function InsertarUserDBMain($objEnt,$obj_con,$i, $password) {
+        $obj_con = new cls_Base();
+        $con = $obj_con->conexionAppWeb();
         $attrDni = "per_pasaporte";
         $valDni  = $objEnt[$i]['CedRuc'];
         $attrName = "per_pri_nombre";
         $valName = $objEnt[$i]['RazonSoc'];
-        $usu_sha = "";
-        $usu_pass = "";
+        $rucEmp = $objEnt[$i]['Ruc'];
+        $grol_id = 36; // grol del grupo y rol de proveedor
+        $usu_sha = $this->generateRandomString();
+        $usu_pass = $this->generatePassword($password, $usu_sha);
         $correo = ($objEnt[$i]['CorreoPer']<>'')?$objEnt[$i]['CorreoPer']:'';//Consulta Tabla Clientes
         if(strlen($valDni)==13){
             $attrDni = "per_ruc";
@@ -163,28 +167,74 @@ class cls_Global {
         }
         try{
             // CREACION DE LA PERSONA
-            $sql = "INSERT INTO " . $obj_con->BdIntermedio . ".persona
+            $sql = "INSERT INTO " . $obj_con->BdAppweb . ".persona
                 ($attrDni,$attrName,per_genero,per_estado, per_estado_logico, per_correo)VALUES
                 ('" . $valDni . "','" . $valName . "','M','1','1' '".$correo."')";
             $command = $con->prepare($sql);
             $command->execute();
             $IdPer = $con->insert_id;
+
             // CREACION DEL USUARIO
-            $sql = "INSERT INTO " . $obj_con->BdIntermedio . ".usuario
+            $sql = "INSERT INTO " . $obj_con->BdAppweb . ".usuario
                 (per_id,usu_user,usu_sha,usu_password,usu_estado_logico,usu_estado)VALUES
-                ($IdPer,'$correo','$usu_sha','$usu_pass','1','1' ";
+                ($IdPer,'$correo','$usu_sha','$usu_pass','1','1') ";
             $command2 = $con->prepare($sql);
             $command2->execute();
-            // ASIGNACION DE ROLES A USUARIO
+            $IdUsu = $con->insert_id;
+
+            // ASIGNACION DE PERSONA A EMPRESA
+            $empresa = $this->getIdEmpresa($rucEmp);
+            $sql = "INSERT INTO " . $obj_con->BdAppweb . ".empresa_persona
+                (emp_id, per_id,eper_estado_logico,eper_estado)VALUES
+                (".$empresa['Id'].",$IdPer,'1','1') ";
+            $command3 = $con->prepare($sql);
+            $command3->execute();
+            $IdEper = $con->insert_id;
+
+            // ASIGNACION DE ROLES A USUARIO Y EMPRESA
+            $sql = "INSERT INTO " . $obj_con->BdAppweb . ".usua_grol_eper
+                (eper_id, usu_id, grol_id, ugep_estado_logico, ugep_estado)VALUES
+                ($IdEper,$IdUsu,$grol_id,'1','1') ";
+            $command3 = $con->prepare($sql);
+            $command3->execute();
 
             // GENERACION DE LINK DE ACTIVACION DE CUENTA
 
+
+            $con->commit();
+            $con->close();
         }catch(Exception $e){
-
+            $con->rollback();
+            $con->close();
+            //throw $e;
+            return $this->messageSystem('NO_OK', $e->getMessage(), null, null, null);
         }
-        
+    }
 
-
+    private function getIdEmpresa($ruc){
+        try {
+            $obj_con = new cls_Base();
+            $conCont = $obj_con->conexionAppWeb();
+            $rawData = array();
+            $cedRuc=trim($cedRuc);
+            $sql = "SELECT emp_id Id, emp_nombre_comercial Nombre
+                    FROM " . $obj_con->BdAppweb . ".empresa 
+                    WHERE emp_ruc='$ruc' AND emp_estado_logico=1 AND emp_estado=1";
+            //echo $sql;
+            $sentencia = $conCont->query($sql);
+            if ($sentencia->num_rows > 0) {
+                //Retorna Solo 1 Registro Asociado
+                $rawData=$this->messageSystem('OK',null,null,null, $sentencia->fetch_assoc());  
+            }else{
+                $rawData=$this->messageSystem('NO_OK',null,null,null,null);  
+            }
+            $conCont->close();
+            return $rawData;
+        } catch (Exception $e) {
+            //echo $e;
+            $conCont->close();
+            return $this->messageSystem('NO_OK', $e->getMessage(), null, null, null);
+        }
     }
     
     private function InsertarUsuario($con, $objEnt,$obj_con, $IdPer,$DBTable,$i) {
@@ -442,6 +492,163 @@ class cls_Global {
         $obj_var = new cls_Global();
         return number_format($valor, $obj_var->decimalPDF, $obj_var->SepdecimalPDF, '');
     }
+
+
+
+    /************************** FUNCIONES DE CIFRADO ********************************** */
+
+
+    private function generateRandomString($length = 32){
+        $bytes = "";
+        if (function_exists('random_bytes')) {
+            $bytes = random_bytes($length);
+        }
+        return substr(strtr(base64_encode($bytes), '+/', '-_'), 0, $length);
+    }
+
+    private function generatePassword($password, $hash){
+        //$hash = $this->generateRandomString();
+        return base64_encode($this->encrypt($hash, true, $password, null));
+    }
+
+    private function encrypt($data, $passwordBased, $secret, $info)
+    {
+        $cipher = 'AES-128-CBC';
+        $kdfHash = 'sha256';
+        $authKeyInfo = 'AuthorizationKey';
+        $derivationIterations = 100000;
+        $allowedCiphers = [
+            'AES-128-CBC' => [16, 16],
+            'AES-192-CBC' => [16, 24],
+            'AES-256-CBC' => [16, 32],
+        ];
+        if (!extension_loaded('openssl')) {
+            throw new Exception('Encryption requires the OpenSSL PHP extension');
+        }
+        if (!isset($allowedCiphers[$cipher][0], $allowedCiphers[$cipher][1])) {
+            throw new Exception($cipher . ' is not an allowed cipher');
+        }
+
+        list($blockSize, $keySize) = $allowedCiphers[$cipher];
+
+        $keySalt = $this->generateRandomString($keySize);
+        if ($passwordBased) {
+            $key = $this->pbkdf2($kdfHash, $secret, $keySalt, $derivationIterations, $keySize);
+        } else {
+            $key = $this->hkdf($kdfHash, $secret, $keySalt, $info, $keySize);
+        }
+
+        $iv = $this->generateRandomString($blockSize);
+
+        $encrypted = openssl_encrypt($data, $cipher, $key, OPENSSL_RAW_DATA, $iv);
+        if ($encrypted === false) {
+            throw new Exception('OpenSSL failure on encryption: ' . openssl_error_string());
+        }
+
+        $authKey = $this->hkdf($kdfHash, $key, null, $authKeyInfo, $keySize);
+        $hashed = $this->hashData($iv . $encrypted, $authKey);
+
+        /*
+         * Output: [keySalt][MAC][IV][ciphertext]
+         * - keySalt is KEY_SIZE bytes long
+         * - MAC: message authentication code, length same as the output of MAC_HASH
+         * - IV: initialization vector, length $blockSize
+         */
+        return $keySalt . $hashed;
+    }
+
+    private function hkdf($algo, $inputKey, $salt = null, $info = null, $length = 0)
+    {
+        if (function_exists('hash_hkdf')) {
+            $outputKey = hash_hkdf($algo, $inputKey, $length, $info, $salt);
+            if ($outputKey === false) {
+                throw new Exception('Invalid parameters to hash_hkdf()');
+            }
+
+            return $outputKey;
+        }
+
+        $test = @hash_hmac($algo, '', '', true);
+        if (!$test) {
+            throw new Exception('Failed to generate HMAC with hash algorithm: ' . $algo);
+        }
+        $hashLength = mb_strlen($test, '8bit');
+        if (is_string($length) && preg_match('{^\d{1,16}$}', $length)) {
+            $length = (int) $length;
+        }
+        if (!is_int($length) || $length < 0 || $length > 255 * $hashLength) {
+            throw new Exception('Invalid length');
+        }
+        $blocks = $length !== 0 ? ceil($length / $hashLength) : 1;
+
+        if ($salt === null) {
+            $salt = str_repeat("\0", $hashLength);
+        }
+        $prKey = hash_hmac($algo, $inputKey, $salt, true);
+
+        $hmac = '';
+        $outputKey = '';
+        for ($i = 1; $i <= $blocks; $i++) {
+            $hmac = hash_hmac($algo, $hmac . $info . chr($i), $prKey, true);
+            $outputKey .= $hmac;
+        }
+
+        if ($length !== 0) {
+            $outputKey = mb_substr($outputKey, 0, $length === null ? mb_strlen($outputKey, '8bit') : $length, '8bit');
+        }
+
+        return $outputKey;
+    }
+
+    private function pbkdf2($algo, $password, $salt, $iterations, $length = 0)
+    {
+        if (function_exists('hash_pbkdf2')) {
+            $outputKey = hash_pbkdf2($algo, $password, $salt, $iterations, $length, true);
+            if ($outputKey === false) {
+                throw new Exception('Invalid parameters to hash_pbkdf2()');
+            }
+
+            return $outputKey;
+        }
+
+        // todo: is there a nice way to reduce the code repetition in hkdf() and pbkdf2()?
+        $test = @hash_hmac($algo, '', '', true);
+        if (!$test) {
+            throw new Exception('Failed to generate HMAC with hash algorithm: ' . $algo);
+        }
+        if (is_string($iterations) && preg_match('{^\d{1,16}$}', $iterations)) {
+            $iterations = (int) $iterations;
+        }
+        if (!is_int($iterations) || $iterations < 1) {
+            throw new Exception('Invalid iterations');
+        }
+        if (is_string($length) && preg_match('{^\d{1,16}$}', $length)) {
+            $length = (int) $length;
+        }
+        if (!is_int($length) || $length < 0) {
+            throw new Exception('Invalid length');
+        }
+        $hashLength = mb_strlen($test, '8bit');
+        $blocks = $length !== 0 ? ceil($length / $hashLength) : 1;
+
+        $outputKey = '';
+        for ($j = 1; $j <= $blocks; $j++) {
+            $hmac = hash_hmac($algo, $salt . pack('N', $j), $password, true);
+            $xorsum = $hmac;
+            for ($i = 1; $i < $iterations; $i++) {
+                $hmac = hash_hmac($algo, $hmac, $password, true);
+                $xorsum ^= $hmac;
+            }
+            $outputKey .= $xorsum;
+        }
+
+        if ($length !== 0) {
+            $outputKey = mb_substr($outputKey, 0, $length === null ? mb_strlen($outputKey, '8bit') : $length, '8bit');
+        }
+
+        return $outputKey;
+    }
+
     
 
 }

@@ -50,7 +50,7 @@ INSERT INTO `tipo_empresa` (`temp_id`, `temp_nombre`, `temp_descripcion`, `temp_
 -- Volcado de datos para la tabla `EMPRESA`
 --
 INSERT INTO `empresa` (`emp_id`, `temp_id`, `emp_razon_social`, `emp_nombre_comercial`, `emp_alias`, `emp_ruc`, `emp_dominio`, `emp_imap_domain`, `emp_imap_port`, `emp_imap_user`, `emp_imap_pass`, `pai_id`, `pro_id`, `can_id`, `emp_direccion`, `emp_direccion1`, `emp_telefono`, `emp_codigo_postal`,  `emp_estado`, `emp_fecha_creacion`, `emp_fecha_modificacion`, `emp_estado_logico`) VALUES
-(1, 2, 'UTEG', 'UTEG', 'UTEG', '', 'www.uteg.edu.ec', 'www.uteg.edu.ec', '587', '', '', 1, 10, 87, 'Guayacanes 520 y la Quinta', NULL, '2884833', '090512', '1', '2017-02-01 15:05:26', NULL, '1'),
+(1, 2, 'UTEG', 'UTEG', 'UTEG', '0992164913001', 'www.uteg.edu.ec', 'www.uteg.edu.ec', '587', '', '', 1, 10, 87, 'Guayacanes 520 y la Quinta', NULL, '2884833', '090512', '1', '2017-02-01 15:05:26', NULL, '1'),
 (2, 2, 'ULINK', 'ULINK', 'ULINK', '', 'www.ulink.us', 'www.ulink.us', '587', '', '', 17, 324, 4560, '7791 NW 46 Street Suite 407', NULL, '305-984-2003', '33166', '1', '2017-02-01 15:05:26', NULL, '1'),
 (3, 2, 'SMART', 'SMART', 'SMART', '', 'www.sbc.com.ec', 'www.sbc.com.ec', '587', '', '', 1, 10, 87, 'Lomas de Urdesa Mz. 44 edificio 4', NULL, '0959719016', '090512', '1', '2017-02-01 15:05:26', NULL, '1');
 
@@ -174,6 +174,7 @@ INSERT INTO `configuracion_seguridad` (`cseg_id`, `tpas_id`, `cseg_long_pass`, `
 (1, 1, '5', 0, 'Claves Simples min 5 caracteres. No tiene caducidad.', 'observación seguridad', '1','1'),
 (2, 2, '6', 30, 'Claves SemiComplejas min 6 caracteres. Caducidad 30 dias.', 'observación seguridad','1', '1'),
 (3, 3, '7', 60, 'Claves Complejas min 7 caracteres. Caducidad 60 dias.', 'observación seguirdad','1', '1');
+
 -- --------------------------------------------------------
 --
 -- Volcado de datos para la tabla `GRUPO`
@@ -198,7 +199,7 @@ INSERT INTO `grupo` (`gru_id`, `cseg_id`, `gru_nombre`, `gru_descripcion`, `gru_
 
 (14, 2, 'Marketing', 'Marketing', NULL, '1', '2019-02-09 11:30:00', NULL, '1'),
 (15, 2, 'Talento Humano', 'Talento Humano', NULL, '1', '2019-02-09 11:30:00', NULL, '1'),
-(16, 2, 'Facturacion Electronica', 'Facturacion Electronica', NULL, '1', '2019-03-09 11:30:00', NULL, '1');
+(16, 2, 'Proveedor', 'Proveedor', NULL, '1', '2019-03-09 11:30:00', NULL, '1');
 
 
 -- --------------------------------------------------------
@@ -276,7 +277,8 @@ INSERT INTO `grup_rol` (`grol_id`, `gru_id`, `rol_id`, `grol_estado`, `grol_esta
 (33, 13, 17, '1', '1'),
 
 (34, 14, 18, '1', '1'),
-(35, 15, 9, '1', '1');
+(35, 15, 9, '1', '1'),
+(36, 16, 19, '1', '1');
 
 -- --------------------------------------------------------
 --
