@@ -197,7 +197,9 @@ class WsMailChimp
     // 	Get all templates
     function getAllTemplates(){
         $WS_URI = $this->apiUrl . "templates";
-        $params = array();
+        $params = json_encode(array(
+            "count" => 200,
+        ));
 
         $response = Http::connect($this->host, $this->port, http::HTTPS)
             //->setHeaders(array('Content-Type: application/json', 'Accept: application/json'))
