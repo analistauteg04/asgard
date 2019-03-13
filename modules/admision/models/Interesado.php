@@ -1122,7 +1122,7 @@ class Interesado extends \app\modules\admision\components\CActiveRecord {
     public function consultagruporol($per_id) {
         $con = \Yii::$app->db_asgard;
         $estado = 1;
-        $sql = "SELECT                   
+        $sql = "SELECT                 
                   usug.grol_id as grol_id
                 FROM " . $con->dbname . ".usuario usu 
                   INNER JOIN " . $con->dbname . ".usua_grol_eper usug ON usug.usu_id = usu.usu_id

@@ -30,7 +30,7 @@ class PagosController extends \app\components\CController {
     public function actionIndex() {
         $per_id = @Yii::$app->session->get("PB_iduser");
         $model_interesado = new Interesado();
-        $resp_gruporol = $model_interesado->consultagruporol($per_id);
+        $resp_gruporol = $model_interesado->consultagruporol($per_id);                
         $mod_pago = new OrdenPago();
         $data = null;
         $data = Yii::$app->request->get();
@@ -571,7 +571,11 @@ class PagosController extends \app\components\CController {
     }
 
     public function actionListarpagosolicitud() {
-        $per_id = Yii::$app->session->get("PB_perid");
+        $per_id = Yii::$app->session->get("PB_perid");        
+        $model_interesado = new Interesado();
+        $resp_gruporol = $model_interesado->consultagruporol($per_id);  
+        \app\models\Utilities::putMessageLogFile('rol:'.$resp_gruporol[0]);   
+        
         $per_ids = base64_decode($_GET['perid']);
         $sol_id = base64_decode($_GET['id_sol']);
         $model_pag = new OrdenPago();
@@ -582,7 +586,7 @@ class PagosController extends \app\components\CController {
             $arrSearch["search"] = $data['search'];
             //if (empty($per_ids)) {  //vista para el interesado  
             $rol = 1;
-            $resp_pago = $model_pag->listarSolicitud($sol_id, $per_id, null, $rol, $arrSearch);
+            $resp_pago = $model_pag->listarSolicitud($sol_id, $per_id, null, $resp_gruporol["grol_id"], $arrSearch);
             
             return $this->renderPartial('_listarpagosolicitud_grid', [
                         "model" => $resp_pago,
@@ -590,7 +594,7 @@ class PagosController extends \app\components\CController {
         } else {
             // if (empty($per_ids)) {  //vista para el interesado  
             $rol = 1;
-            $resp_pago = $model_pag->listarSolicitud($sol_id, $per_id, null, $rol);
+            $resp_pago = $model_pag->listarSolicitud($sol_id, $per_id, null, $resp_gruporol["grol_id"]);
           
         }
         //verificar rol de la persona que esta en sesión
