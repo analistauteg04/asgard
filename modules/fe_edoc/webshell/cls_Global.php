@@ -148,7 +148,7 @@ class cls_Global {
     }
 
     // SOLO SE CREA USUARIO A PROVEEDORES YA QUE LOS ESTUDIANTES YA TIENEN UNA CUENTA DE USUARIO
-    private function InsertarUserDBMain($objEnt,$obj_con,$i, $password) {
+    private function InsertarUserDBMain($objEnt,$i, $password) {
         $obj_con = new cls_Base();
         $con = $obj_con->conexionAppWeb();
         $attrDni = "per_pasaporte";
@@ -197,9 +197,6 @@ class cls_Global {
                 ($IdEper,$IdUsu,$grol_id,'1','1') ";
             $command3 = $con->prepare($sql);
             $command3->execute();
-
-            // GENERACION DE LINK DE ACTIVACION DE CUENTA
-
 
             $con->commit();
             $con->close();
@@ -265,6 +262,11 @@ class cls_Global {
         //Retorna el Pass y el Correo Guardado
         $arroout["Clave"] = $pass;
         $arroout["CorreoPer"] = $correo;
+
+        // CREACION DE USUARIO EN SISTEMA ASGARD
+        $existPersona = $this->buscarCedRudDBMain($usuNombre);
+        if($existPersona['status'] == 'NO_OK')
+            $this->InsertarUserDBMain($objEnt,$i, $pass);
         return $arroout;
     }
     //Retrona ROL SEGUN TABLA ROLES
