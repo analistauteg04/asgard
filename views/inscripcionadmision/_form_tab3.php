@@ -146,8 +146,23 @@ use yii\helpers\Html;
             <div class="col-md-8 col-xs-8 col-sm-8 col-lg-8">
                 $ <span id="val_item_3"></span>
             </div>
-        </div>      
+        </div>  
+        <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">             
+            <div class="col-md-4 col-xs-4 col-sm-4 col-lg-4">
+                <span><b><?= Yii::t("formulario", "Forma Pago: ") ?></b></span>
+            </div>
+            <div class="col-sm-8 col-md-8 col-xs-8 col-lg-8">
+                <label> 
+                    <input type="radio" name="rdo_forma_pago_dinner" id="rdo_forma_pago_dinner" value="1" checked> Dinners<br> 
+                </label>
+                <label> 
+                    <input type="radio" name="rdo_forma_pago_otros" id="rdo_forma_pago_otros" value="2" > Stripe Payment<br>
+                </label>
+            </div>                             
+        </div> 
     </div>
+    
+    
     <!--    <div class="col-md-12 col-xs-12 col-sm-12 col-lg-12">
             <h4><b><span id="lbl_detalle2"><?= Yii::t("formulario", "Pago:") ?></span></b></h4>
             <h4><span id="lbl_detalle2"><?= Yii::t("formulario", "Pago en línea PayPal: ") ?></span><a href="http://www.uteg.edu.ec/pagos-online/">http://www.uteg.edu.ec/pagos-online/</a></h4>        
