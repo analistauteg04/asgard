@@ -113,7 +113,17 @@ class RegistroMarcacion extends \yii\db\ActiveRecord {
                     hap.mod_id as modalidad,
                     asig.asi_nombre as materia,
                     hap.pro_id as profesor,
-                    ifnull(CONCAT(paca.paca_anio_academico,' (',blq.baca_nombre,'-',sem.saca_nombre,')'),paca.paca_anio_academico) as periodo
+                    ifnull(CONCAT(paca.paca_anio_academico,' (',blq.baca_nombre,'-',sem.saca_nombre,')'),paca.paca_anio_academico) as periodo,
+                    ifnull((SELECT DATE_FORMAT(marc.rmar_fecha_hora_entrada, '%H:%i:%s')
+                            FROM db_academico.registro_marcacion marc
+                            WHERE marc.pro_id = prof.pro_id 
+                            AND marc.hape_id = hap.hape_id 
+                            AND marc.rmar_tipo = 'E'),'') as inicio,
+                    ifnull((SELECT DATE_FORMAT(marc.rmar_fecha_hora_salida, '%H:%i:%s')
+                            FROM db_academico.registro_marcacion marc
+                            WHERE marc.pro_id = prof.pro_id 
+                            AND marc.hape_id = hap.hape_id 
+                            AND marc.rmar_tipo = 'S'),'') as salida 
                     FROM
                     " . $con->dbname . ".horario_asignatura_periodo hap
                     INNER JOIN " . $con->dbname . ".profesor prof ON prof.pro_id = hap.pro_id

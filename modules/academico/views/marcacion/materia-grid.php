@@ -36,6 +36,16 @@ PbGridView::widget([
             'value' => 'horario',
         ],
         [
+            'attribute' => 'inicio',
+            'header' => academico::t("Academico", "Hour start date"),
+            'value' => 'inicio',
+        ],
+        [
+            'attribute' => 'fin',
+            'header' => academico::t("Academico", "Hour end date"),
+            'value' => 'salida',
+        ],
+        [
             'class' => 'yii\grid\ActionColumn',
             'header' => Yii::t("formulario", "Actions"),
             'contentOptions' => ['style' => 'max-width:100px;'],
