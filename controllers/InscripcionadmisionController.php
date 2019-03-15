@@ -31,6 +31,7 @@ use app\modules\admision\models\EstadoContacto;
 use app\modules\admision\models\MetodoIngreso;
 use app\modules\financiero\models\Secuencias;
 use app\models\InscripcionAdmision;
+use app\modules\financiero\Module as financiero;
 
 class InscripcionadmisionController extends \yii\web\Controller {
 
@@ -238,4 +239,108 @@ class InscripcionadmisionController extends \yii\web\Controller {
         }   
     }
 
+    public function actionSavepagodinner() {
+        $data = Yii::$app->request->post();
+        $dataGet = Yii::$app->request->get();
+        $con1 = \Yii::$app->db_facturacion;
+        $emp_id = @Yii::$app->session->get("PB_idempresa");
+        $referenceID = isset($data["referenceID"])?$data["referenceID"]:null;
+        if(!is_null($referenceID)){
+            try {
+                $transaction = $con1->beginTransaction();
+                $sins_id = $data["sins_id"];//base64_decode($dataGet["sins_id"]);
+                $solInc_mod = SolicitudInscripcion::findOne($sins_id);
+                $opago_mod = OrdenPago::findOne(["sins_id" => $sins_id, "opag_estado_pago" => "P", "opag_estado" => "1", "opag_estado_logico" => "1"]);
+                
+                $response = $this->render('btnpago', array(
+                    "referenceID" => $data["resp"]["reference"],
+                    "requestID" => $data["requestID"],
+                    "ordenPago" => $opago_mod->opag_id,
+                    "response" => $data["resp"],
+                ));
+                if($data["resp"]["status"]["status"] == "APPROVED"){
+                    $opago_mod->opag_estado_pago = "S";
+                    $opago_mod->opag_valor_pagado = $opago_mod->opag_total;
+                    $opago_mod->opag_fecha_pago_total = date("Y-m-d H:i:s");
+                    $opago_mod->opag_usu_modifica = @Yii::$app->session->get("PB_iduser");
+                    $opago_mod->opag_fecha_modificacion = date("Y-m-d H:i:s");
+                    $message = array(
+                        "wtmessage" => Yii::t("notificaciones", "Your information was successfully saved."),
+                        "title" => Yii::t('jslang', 'Success'),
+                        //"data" => $response,
+                    );
+                    if($opago_mod->save()){
+                        $dpag_mod = DesglosePago::findOne(["opag_id" => $opago_mod->opag_id, "dpag_estado_pago" => "P", "dpag_estado" => "1", "dpag_estado_logico" => "1"]);
+                        $dpag_mod->dpag_estado_pago = "S";
+                        $dpag_mod->dpag_usu_modifica = @Yii::$app->session->get("PB_iduser");
+                        $dpag_mod->dpag_fecha_modificacion = date("Y-m-d H:i:s");
+                        if($dpag_mod->save()){
+                            $regpag_mod = new RegistroPago();
+                            $regpag_mod->dpag_id = $dpag_mod->dpag_id;
+                            $regpag_mod->fpag_id = 6; // boton de pagos
+                            $regpag_mod->rpag_valor = $opago_mod->opag_total;
+                            $regpag_mod->rpag_fecha_pago = $opago_mod->opag_fecha_pago_total;
+                            $regpag_mod->rpag_revisado = "RE";
+                            $regpag_mod->rpag_resultado = "AP";
+                            $regpag_mod->rpag_num_transaccion = $referenceID;
+                            $regpag_mod->rpag_fecha_transaccion = $opago_mod->opag_fecha_pago_total;
+                            $regpag_mod->rpag_usuario_transaccion = @Yii::$app->session->get("PB_iduser");
+                            $regpag_mod->rpag_codigo_autorizacion = "";
+                            $regpag_mod->rpag_estado = "1";
+                            $regpag_mod->rpag_estado_logico = "1";
+                            if($regpag_mod->save()){
+                                $transaction->commit();
+                                return Utilities::ajaxResponse('OK', 'alert', Yii::t('jslang', 'Success'), 'false', $message);
+                            }else{
+                                Utilities::putMessageLogFile("Boton Pagos: Error al crear Registro Pago. RefId: ". $referenceID . " Error: " . json_encode($regpag_mod->errors));
+                                throw new Exception('Error al crear Registro Pago.' . json_encode($regpag_mod->errors));
+                            }
+                        }else{
+                            Utilities::putMessageLogFile("Boton Pagos: Error al actualizar Desglose Pago RefId: ". $referenceID . " Error: " . json_encode($dpag_mod->errors));
+                            throw new Exception('Error al actualizar Desglose Pago.' . json_encode($dpag_mod->errors));
+                        }
+                    }else{
+                        Utilities::putMessageLogFile("Boton Pagos: Error al actualizar pago. RefId: ". $referenceID . " Error: " . json_encode($opago_mod->errors));
+                        throw new Exception('Error al actualizar pago.' . json_encode($opago_mod->errors));
+                    } 
+                }else {
+                    $message = array(
+                        "wtmessage" => $data["resp"]["status"]["message"],
+                        "title" => Yii::t('jslang', 'Error'),
+                    );
+                    return Utilities::ajaxResponse('NOOK', 'alert', Yii::t('jslang', 'Error'), 'true', $message);
+                }            
+            }catch(Exception $e) {
+                $transaction->rollBack();
+                Utilities::putMessageLogFile("Boton Pagos: Error . RefId: ". $referenceID .  "Error: " . $e->getMessage());
+                $message = array(
+                    "wtmessage" => Yii::t('notificaciones', 'Invalid request. Please do not repeat this request again. Contact to Administrator.'),
+                    "title" => Yii::t('jslang', 'Error'),
+                );
+                return Utilities::ajaxResponse('NOOK', 'alert', Yii::t('jslang', 'Error'), 'true', $message);
+            }
+        }
+        \app\models\Utilities::putMessageLogFile('ingresa');    
+        Secuencias::initSecuencia($con1, $emp_id, 1, 1, 'BPA',"BOTON DE PAGOS DINERS");
+        // Info de Solicitud Inscripcion
+        $sins_id = $data["sins_id"];//base64_decode($dataGet["sins_id"]);
+        $solInc_mod = SolicitudInscripcion::findOne($sins_id);
+        $int_mod = Interesado::findOne($solInc_mod->int_id);
+        $per_mod = Persona::findOne($int_mod->per_id);
+        $opago_mod = OrdenPago::findOne(["sins_id" => $sins_id, "opag_estado_pago" => "P", "opag_estado" => 1, "opag_estado_logico" => 1]);
+        $obj_sol = $solInc_mod::consultarInteresadoPorSol_id($sins_id);
+        $descripcionItem = financiero::t("Pagos", "Payment of ") . $obj_sol["carrera"];
+        $titleBox = financiero::t("Pagos", "Payment Course/Career/Program: ") . $obj_sol["carrera"];
+        $totalpagar = $opago_mod->opag_total;
+        return $this->render('btnpago', array(
+            "referenceID" => str_pad(Secuencias::nuevaSecuencia($con1, $emp_id, 1, 1, 'BPA'), 8, "0", STR_PAD_LEFT),
+            "ordenPago" => $opago_mod->opag_id,
+            "nombre_cliente" => $per_mod->per_pri_nombre,
+            "apellido_cliente" => $per_mod->per_pri_apellido,
+            "descripcionItem" => $descripcionItem,
+            "titleBox" => $titleBox,
+            "email_cliente" => $per_mod->per_correo,
+            "total" => $totalpagar,
+        ));
+    }
 }
