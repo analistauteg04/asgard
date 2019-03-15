@@ -100,12 +100,12 @@ class RegistroMarcacion extends \yii\db\ActiveRecord {
         if (!empty($hape_fecha_clase)) {
             $filtro = "hap.hape_fecha_clase = :hape_fecha_clase AND ";
         } else {
-            $filtro = "hap.hape_fecha_clase is null AND ";
+            $filtro = "hap.hape_fecha_clase is null AND paca_fecha_fin > now() AND paca_fecha_inicio <= now() AND ";
         }
 
         $estado = 1;
         $sql = "
-               SELECT 
+                    SELECT
                     hap.hape_id as id,
                     concat(hap.hape_hora_entrada, '-',hap.hape_hora_salida) as horario,
                     hap.dia_id as dia,
@@ -141,8 +141,7 @@ class RegistroMarcacion extends \yii\db\ActiveRecord {
                     prof.pro_estado_logico = :estado AND
                     asig.asi_estado = :estado AND
                     asig.asi_estado_logico = :estado  AND
-                    paca.paca_activo = 'A' AND
-                    paca_fecha_fin > now() and paca_fecha_inicio <= now() -- SI EL PERIODO NO TIENE FECHA INICIO Y FIN NO SALE
+                    paca.paca_activo = 'A' 
                ";
         $comando = $con->createCommand($sql);
         $comando->bindParam(":estado", $estado, \PDO::PARAM_STR);
