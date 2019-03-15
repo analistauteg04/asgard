@@ -80,6 +80,12 @@ class MarcacionController extends \app\components\CController {
             }
             $ip = \app\models\Utilities::getClientRealIP(); // ip de la maquina
             $con = \Yii::$app->db_academico;
+            /*$algoritmo = MCRYPT_BLOWFISH;
+            $llave = 'marcacion';
+            $modo = MCRYPT_MODE_CBC;
+            $iv = mcrypt_create_iv(mcrypt_get_iv_size($algoritmo, $modo), MCRYPT_DEV_URANDOM);
+            $encrypted_data = mcrypt_encrypt($algoritmo, $llave, $ip, $modo, $iv);
+            $ipcripta = base64_encode($encrypted_data);*/
             $transaction = $con->beginTransaction();
             try {
                 $mod_marcacion = new RegistroMarcacion();
@@ -106,7 +112,7 @@ class MarcacionController extends \app\components\CController {
                             $minutosfinales = $minutosfinales * -1;
                         }
                         if ($minutosfinales >= -30 && new DateTime($hora_inicio) < new DateTime($hora_fin)) { //SOLO PUEDE MARCAR 30 MINUTOS ANTES DEL INICIO Y UN 1 MINUTO ANTES DEL FINAL
-                            $resp_marca = $mod_marcacion->insertarMarcacion($accion, $profesor, $hape_id, $hora_inicio, null, $ip, $usuario);
+                            $resp_marca = $mod_marcacion->insertarMarcacion($accion, $profesor, $hape_id, $hora_inicio, null, $ip/*$ipcripta*/, $usuario);
                             if ($resp_marca) {
                                 if ($minutosfinales >= 15) { // AL MARCAR 15 MINUTOS DESPUES ENVIA MENSAJE
                                     $retraso = ', fue ' . round($minutosfinales, 0, PHP_ROUND_HALF_DOWN) . ' minutos después';

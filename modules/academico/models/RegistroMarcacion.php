@@ -141,7 +141,8 @@ class RegistroMarcacion extends \yii\db\ActiveRecord {
                     prof.pro_estado_logico = :estado AND
                     asig.asi_estado = :estado AND
                     asig.asi_estado_logico = :estado  AND
-                    paca.paca_activo = 'A'
+                    paca.paca_activo = 'A' AND
+                    paca_fecha_fin > now() and paca_fecha_inicio <= now() -- SI EL PERIODO NO TIENE FECHA INICIO Y FIN NO SALE
                ";
         $comando = $con->createCommand($sql);
         $comando->bindParam(":estado", $estado, \PDO::PARAM_STR);
@@ -247,7 +248,7 @@ class RegistroMarcacion extends \yii\db\ActiveRecord {
         }
         if (isset($rmar_direccion_ip)) {
             $param_sql .= ", rmar_direccion_ip";
-            $bdet_sql .= ", :rmar_direccion_ip";
+            $bdet_sql .= ", TO_BASE64(:rmar_direccion_ip)";
         }
         if (isset($usu_id)) {
             $param_sql .= ", usu_id";
@@ -338,8 +339,8 @@ class RegistroMarcacion extends \yii\db\ActiveRecord {
                             FROM db_academico.registro_marcacion marc
                             WHERE marc.pro_id = rma.pro_id AND marc.hape_id = rma.hape_id AND marc.rmar_tipo = 'S'),'') as hora_salida,
                     hap.hape_hora_salida as salida_esperada,
-                    rma.rmar_direccion_ip as ip,
-                    ifnull((SELECT marc.rmar_direccion_ip
+                    FROM_BASE64(rma.rmar_direccion_ip) as ip,
+                    ifnull((SELECT FROM_BASE64(marc.rmar_direccion_ip)
                             FROM db_academico.registro_marcacion marc
                             WHERE marc.pro_id = rma.pro_id AND marc.hape_id = rma.hape_id AND marc.rmar_tipo = 'S'),'') as ip_salida,
                     $periodoacademico
