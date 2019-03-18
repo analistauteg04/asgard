@@ -622,11 +622,11 @@ function dataInscripPart1(ID) {
     return datArray;
 }
 
-function PagoDinners(solicitud) {
-    alert(solicitud)
+function PagoDinners(solicitud) {    
     var link = $('#txth_base').val() + "/inscripcionadmision/savepagodinner";
     var arrParams = new Object();
     arrParams.sins_id = solicitud;    
+    alert('solicitud-proc:PagoDinner:'+solicitud);
     requestHttpAjax(link, arrParams, function (response) {
         var message = response.message;        
         if (response.status == "OK") {

@@ -325,7 +325,7 @@ class InscripcionAdmision extends \yii\db\ActiveRecord {
                             if ($usuario_id == 0) {
                                 $security = new Security();
                                 $hash = $security->generateRandomString();
-                                $passencrypt = base64_encode($security->encryptByPassword($hash, 'Uteg2018'));
+                                $passencrypt = base64_encode($security->encryptByPassword($hash, 'Uteg2019'));
                                 $keys = ['per_id', 'usu_user', 'usu_sha', 'usu_password', 'usu_estado', 'usu_estado_logico'];
                                 $parametros = [$id_persona, $resp_datos['twin_correo'], $hash, $passencrypt, 1, 1];
                                 $usuario_id = $usuario->crearUsuarioTemporal($con, $parametros, $keys, 'usuario');
