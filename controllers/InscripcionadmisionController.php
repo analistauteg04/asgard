@@ -332,19 +332,9 @@ class InscripcionadmisionController extends \yii\web\Controller {
             $obj_sol = $solInc_mod::consultarInteresadoPorSol_id($sins_id);
             $descripcionItem = Yii::t("formulario", "Payment of ") . $obj_sol["carrera"]; //financiero::t("Pagos", "Payment of ") . $obj_sol["carrera"];
             $titleBox = Yii::t("formulario", "Payment Course/Career/Program: ") . $obj_sol["carrera"]; //financiero::t("Pagos", "Payment Course/Career/Program: ") . $obj_sol["carrera"];
-            $totalpagar = $opago_mod->opag_total;     
-            \app\models\Utilities::putMessageLogFile('después de los mensajes');                           
-            \app\models\Utilities::putMessageLogFile('pago total:'. $opago_mod->opag_total);        
-            \app\models\Utilities::putMessageLogFile('antes del formulario botón de pagos');     
-            $secuencia = 130;Secuencias::nuevaSecuencia($con1, $emp_id, 1, 1, 'BPA');
-            \app\models\Utilities::putMessageLogFile('secuencia:'. $secuencia);
-            \app\models\Utilities::putMessageLogFile('o/p:'. $opago_mod->opag_id);        
-            \app\models\Utilities::putMessageLogFile('nombre cliente:'. $per_mod->per_pri_nombre);        
-            \app\models\Utilities::putMessageLogFile('apellidos cliente:'. $per_mod->per_pri_apellido);        
-            \app\models\Utilities::putMessageLogFile('descItem:'. $descripcionItem);        
-            \app\models\Utilities::putMessageLogFile('título:'. $titleBox);        
-            \app\models\Utilities::putMessageLogFile('email:'. $per_mod->per_correo);        
+            $totalpagar = $opago_mod->opag_total;                 
             \app\models\Utilities::putMessageLogFile('total a pagar:'. $totalpagar);        
+            $secuencia = 130;//Secuencias::nuevaSecuencia($con1, $emp_id, 1, 1, 'BPA');
             return $this->render('btnpago', array(
                 "referenceID" => $secuencia, //str_pad(Secuencias::nuevaSecuencia($con1, $emp_id, 1, 1, 'BPA'), 8, "0", STR_PAD_LEFT),
                 "ordenPago" => $opago_mod->opag_id,
