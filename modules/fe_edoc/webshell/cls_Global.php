@@ -518,6 +518,7 @@ class cls_Global {
         $cipher = 'AES-128-CBC';
         $kdfHash = 'sha256';
         $authKeyInfo = 'AuthorizationKey';
+        $macHash = 'sha256';
         $derivationIterations = 100000;
         $allowedCiphers = [
             'AES-128-CBC' => [16, 16],
@@ -548,7 +549,7 @@ class cls_Global {
         }
 
         $authKey = $this->hkdf($kdfHash, $key, null, $authKeyInfo, $keySize);
-        $hashed = $this->hashData($iv . $encrypted, $authKey);
+        $hashed = hash_hmac($macHash, $iv . $encrypted, $authKey, FALSE) . $iv . $encrypted;
 
         /*
          * Output: [keySalt][MAC][IV][ciphertext]
