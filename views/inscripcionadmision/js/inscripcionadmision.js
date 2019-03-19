@@ -105,14 +105,104 @@ $(document).ready(function () {
             guardarInscripcion('Update', '2');
         }
     });
+    
     $('#sendInscripcionsolicitud').click(function () {
-        if ($('input[name=rdo_forma_pago_dinner]:checked').val() == 2) {
-            PagoStripe();
-        } else {
-            // diners
-        }
-        
+        var link = $('#txth_base').val() + "/inscripcionadmision/saveinscripciontemp";
+        var arrParams = new Object();
+        arrParams.codigo = $('#txth_twin_id').val();
+        arrParams.ACCION = 'Fin';
+        requestHttpAjax(link, arrParams, function (response) {
+            var message = response.message;
+            //console.log(response);
+            if (response.status == "OK") {
+                showLoadingPopup();
+                setTimeout(function () {
+                    var uaca_id = parseInt(response.data.data.uaca_id);
+                    var mod_id = parseInt(response.data.data.mod_id);
+                    var ming = parseInt(response.data.data.twin_metodo_ingreso);
+                    var sins_id = parseInt(response.data.dataext);
+                    alert('solicitud:'+sins_id);
+                    if ($('input[name=rdo_forma_pago_dinner]:checked').val() == 1) {
+                        PagoDinners(sins_id);
+                    } else {
+                        switch (uaca_id) {
+                        case 1:
+                            switch (mod_id) {
+                                case 1: //online
+                                window.location.href = "https://www.uteg.edu.ec/pagos-grado-online/";
+                                break;
+    //                                case 1:
+    //                                    switch (ming) {
+    //                                        case 1:
+    //                                            $('#tx_paypal').attr("href", "https://www.uteg.edu.ec/pago-online-nivelacion/")
+    //                                            $('#tx_paypal').val("https://www.uteg.edu.ec/pago-online-nivelacion/");
+    //                                            window.location.href = "https://www.uteg.edu.ec/pago-online-nivelacion/";
+    //                                            break;
+    //                                        case 2:
+    //                                            $('#tx_paypal').attr("href", "https://www.uteg.edu.ec/pago-examen-online/")
+    //                                            $('#tx_paypal').val("https://www.uteg.edu.ec/pago-examen-online/");
+    //                                            window.location.href = "https://www.uteg.edu.ec/pago-examen-online/";
+    //                                            break;
+    //                                    }
+    //                                    break;
+                                case 2:// presencial
+                                    window.location.href = "https://www.uteg.edu.ec/pago-grado-presencial/";
+                                    break;
+    //                                    switch (ming) {
+    //                                        case 1:
+    //                                            $('#tx_paypal').attr("href", "https://www.uteg.edu.ec/pago-grado-presencial/")
+    //                                            $('#tx_paypal').val("https://www.uteg.edu.ec/pago-grado-presencial/");
+    //                                            window.location.href = "https://www.uteg.edu.ec/pago-grado-presencial/";
+    //                                            break;
+    //                                        case 2:
+    //                                            $('#tx_paypal').attr("href", "https://www.uteg.edu.ec/pago-examen-presencial/")
+    //                                            $('#tx_paypal').val("https://www.uteg.edu.ec/pago-examen-presencial/");
+    //                                            window.location.href = "https://www.uteg.edu.ec/pago-examen-presencial/";
+    //                                            break;
+    //                                    }
+                                    break;
+                                case 3:// semipresencial
+                                      window.location.href = "https://www.uteg.edu.ec/pago-grado-semipresencial/";
+    //                                    switch (ming) {
+    //                                        case 1:
+    //                                            //alert('grado semipresencial curso');
+    //                                            //Todavia no hay enlace para grado semipresencial curso
+    //                                            break;
+    //                                        case 2:
+    //                                            //alert('grado semipresencial examen');
+    //                                            //Todavia no hay enlace para grado semipresencial Examen
+    //                                            break;
+    //                                    }
+                                    break;
+                                case 4: //distancia
+                                    window.location.href = "https://www.uteg.edu.ec/pago-grado-distancia/";
+    //                                    switch (ming) {
+    //                                        case 1:
+    //                                            $('#tx_paypal').attr("href", "https://www.uteg.edu.ec/pago-grado-distancia/")
+    //                                            $('#tx_paypal').val("https://www.uteg.edu.ec/pago-grado-distancia/");
+    //                                            window.location.href = "https://www.uteg.edu.ec/pago-grado-distancia/";
+    //                                            break;
+    //                                        case 2:
+    //                                            $('#tx_paypal').attr("href", "https://www.uteg.edu.ec/pago-examen-distancia/")
+    //                                            $('#tx_paypal').val("https://www.uteg.edu.ec/pago-examen-distancia/");
+    //                                            window.location.href = "https://www.uteg.edu.ec/pago-examen-distancia/";
+    //                                            break;
+    //                                    }
+                                    break;
+                            }
+                            break;
+                        case 2:
+                            $('#tx_paypal').attr("href", "https://www.uteg.edu.ec/pago-posgrado/")
+                            $('#tx_paypal').val("https://www.uteg.edu.ec/pago-posgrado/");
+                            window.location.href = "https://www.uteg.edu.ec/pago-posgrado/";
+                            break;
+                        }
+                    }                            
+                }, 5000);
+            }
+        });     
     });
+    
     
     $('#cmb_tipo_dni').change(function () {
         if ($('#cmb_tipo_dni').val() == 'PASS') {
@@ -532,98 +622,17 @@ function dataInscripPart1(ID) {
     return datArray;
 }
 
-function PagoStripe(){
-    var link = $('#txth_base').val() + "/inscripcionadmision/saveinscripciontemp";
-        var arrParams = new Object();
-        arrParams.codigo = $('#txth_twin_id').val();
-        arrParams.ACCION = 'Fin';
-        requestHttpAjax(link, arrParams, function (response) {
-            var message = response.message;
-            //console.log(response);
-            if (response.status == "OK") {
-                showLoadingPopup();
-                setTimeout(function () {
-                    var uaca_id = parseInt(response.data.data.uaca_id);
-                    var mod_id = parseInt(response.data.data.mod_id);
-                    var ming = parseInt(response.data.data.twin_metodo_ingreso);
-                    switch (uaca_id) {
-                        case 1:
-                            switch (mod_id) {
-                                case 1: //online
-                                window.location.href = "https://www.uteg.edu.ec/pagos-grado-online/";
-                                break;
-//                                case 1:
-//                                    switch (ming) {
-//                                        case 1:
-//                                            $('#tx_paypal').attr("href", "https://www.uteg.edu.ec/pago-online-nivelacion/")
-//                                            $('#tx_paypal').val("https://www.uteg.edu.ec/pago-online-nivelacion/");
-//                                            window.location.href = "https://www.uteg.edu.ec/pago-online-nivelacion/";
-//                                            break;
-//                                        case 2:
-//                                            $('#tx_paypal').attr("href", "https://www.uteg.edu.ec/pago-examen-online/")
-//                                            $('#tx_paypal').val("https://www.uteg.edu.ec/pago-examen-online/");
-//                                            window.location.href = "https://www.uteg.edu.ec/pago-examen-online/";
-//                                            break;
-//                                    }
-//                                    break;
-                                case 2:// presencial
-                                    window.location.href = "https://www.uteg.edu.ec/pago-grado-presencial/";
-                                    break;
-//                                    switch (ming) {
-//                                        case 1:
-//                                            $('#tx_paypal').attr("href", "https://www.uteg.edu.ec/pago-grado-presencial/")
-//                                            $('#tx_paypal').val("https://www.uteg.edu.ec/pago-grado-presencial/");
-//                                            window.location.href = "https://www.uteg.edu.ec/pago-grado-presencial/";
-//                                            break;
-//                                        case 2:
-//                                            $('#tx_paypal').attr("href", "https://www.uteg.edu.ec/pago-examen-presencial/")
-//                                            $('#tx_paypal').val("https://www.uteg.edu.ec/pago-examen-presencial/");
-//                                            window.location.href = "https://www.uteg.edu.ec/pago-examen-presencial/";
-//                                            break;
-//                                    }
-                                    break;
-                                case 3:// semipresencial
-                                      window.location.href = "https://www.uteg.edu.ec/pago-grado-semipresencial/";
-//                                    switch (ming) {
-//                                        case 1:
-//                                            //alert('grado semipresencial curso');
-//                                            //Todavia no hay enlace para grado semipresencial curso
-//                                            break;
-//                                        case 2:
-//                                            //alert('grado semipresencial examen');
-//                                            //Todavia no hay enlace para grado semipresencial Examen
-//                                            break;
-//                                    }
-                                    break;
-                                case 4: //distancia
-                                    window.location.href = "https://www.uteg.edu.ec/pago-grado-distancia/";
-//                                    switch (ming) {
-//                                        case 1:
-//                                            $('#tx_paypal').attr("href", "https://www.uteg.edu.ec/pago-grado-distancia/")
-//                                            $('#tx_paypal').val("https://www.uteg.edu.ec/pago-grado-distancia/");
-//                                            window.location.href = "https://www.uteg.edu.ec/pago-grado-distancia/";
-//                                            break;
-//                                        case 2:
-//                                            $('#tx_paypal').attr("href", "https://www.uteg.edu.ec/pago-examen-distancia/")
-//                                            $('#tx_paypal').val("https://www.uteg.edu.ec/pago-examen-distancia/");
-//                                            window.location.href = "https://www.uteg.edu.ec/pago-examen-distancia/";
-//                                            break;
-//                                    }
-                                    break;
-                            }
-                            break;
-                        case 2:
-                            $('#tx_paypal').attr("href", "https://www.uteg.edu.ec/pago-posgrado/")
-                            $('#tx_paypal').val("https://www.uteg.edu.ec/pago-posgrado/");
-                            window.location.href = "https://www.uteg.edu.ec/pago-posgrado/";
-                            break;
-                    }
-                }, 5000);
-            }
-        });
-}
-
-function PagoDinners() {
-    
-    
+function PagoDinners(solicitud) {    
+    var link = $('#txth_base').val() + "/inscripcionadmision/savepagodinner";
+    var arrParams = new Object();
+    arrParams.sins_id = solicitud;    
+    alert('solicitud-proc:PagoDinner:'+solicitud);
+    requestHttpAjax(link, arrParams, function (response) {
+        var message = response.message;        
+        if (response.status == "OK") {
+            showLoadingPopup();
+            setTimeout(function () {                                                         
+            }, 1000);
+        } 
+    });
 }
