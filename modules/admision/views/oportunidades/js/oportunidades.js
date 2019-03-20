@@ -206,6 +206,9 @@ $(document).ready(function () {
         }
     });
 
+    $('#btn_cargarGestion').click(function () {
+        cargarGestion();
+    });
 });
 
 function actualizarGridGestion() {
@@ -300,4 +303,23 @@ function exportPdf() {
     var empresa = $('#cmb_empresa').val();
     var f_estado = $('#cmb_estadop').val();
     window.location.href = $('#txth_base').val() + "/admision/oportunidades/exppdfoportunidades?pdf=1&search=" + search + "&contacto=" + contacto + "&empresa=" + empresa + "&f_estado=" + f_estado;
+}
+
+
+function cargarGestion() {
+    var arrParams = new Object();
+    var link = $('#txth_base').val() + "/admision/oportunidades/cargargestion";
+    arrParams.procesar_file = true;
+    //arrParams.tipo_proceso = proceso;*/
+    arrParams.emp_id = $('#cmb_empresa option:selected').val();
+    arrParams.archivo = $('#txth_doc_adj_leads2').val() + "." + $('#txth_doc_adj_leads').val().split('.').pop();
+    alert('Saludos');
+    if (!validateForm()) {
+        requestHttpAjax(link, arrParams, function (response) {
+            showAlert(response.status, response.label, response.message);
+            setTimeout(function () {
+                window.location.href = $('#txth_base').val() + "/admision/oportunidades/index";
+            }, 3000);
+        }, true);
+    }
 }

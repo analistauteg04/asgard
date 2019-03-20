@@ -1599,22 +1599,20 @@ class Oportunidad extends \app\modules\admision\components\CActiveRecord {
      * @param
      * @return
      */
-    public function CargarArchivo($fname, $emp_id, $tipoProceso) {
-        $mod_perTemp = new PersonaGestionTmp();
-        $mod_pergestion = new PersonaGestion();
-        if ($tipoProceso == "LEADS") {
-            $path = Yii::$app->basePath . Yii::$app->params['documentFolder'] . "leads/" . $fname;
-            //return $mod_pergestion->insertarDtosPersonaGestion($emp_id, $tipoProceso);
-            $carga_archivo = $mod_perTemp->uploadFile($emp_id, $path);
-            if ($carga_archivo['status']) {
-                return $mod_pergestion->insertarDtosPersonaGestion($emp_id, $tipoProceso);
-            } else {
-                return $carga_archivo;
+    public function CargarArchivo($fname, $usu_id, $padm_id) {
+        $mod_actividadTemp = new BitacoraActividadesTmp();
+        $mod_actividad = new Oportunidad();       
+        $path = Yii::$app->basePath . Yii::$app->params['documentFolder'] . "leads/" . $fname;            
+        $carga_archivo = $mod_actividadTemp->uploadFile($usu_id, $padm_id, $path);
+        if ($carga_archivo['status']) {
+            $data = $mod_actividadTemp->consultarBitacoraTemp();                
+            for ($i = 0; $i < sizeof($data); $i++) {
+                $resultado = $mod_actividad->insertarActividad($data[i]["opo_id"], $data[i]["usu_id"], $data[i]["padm_id"], $data[i]["eopo_id"], $data[i]["oact_id"], $data[i]["bact_fecha_registro"], $data[i]["bact_descripcion"], $data[i]["bact_fecha_proxima_atencion"]);            
             }
         } else {
-            //PROCESO PARA SUBIR EN LOTES LEADS COLOMBIA
-            return $mod_pergestion->insertarDtosPersonaGestionLotes($emp_id, $tipoProceso);
+            return $carga_archivo;
         }
+       
     }
 
     /**
@@ -1630,7 +1628,7 @@ class Oportunidad extends \app\modules\admision\components\CActiveRecord {
         $sql = "SELECT 	pgco_primer_nombre, 
                         pgco_segundo_nombre,
                         pgco_primer_apellido,
-                        pgco_segundo_apellido,
+                        pgc$cono_segundo_apellido,
                         pgco_correo, 
                         pgco_telefono, 
                         pgco_celular, 

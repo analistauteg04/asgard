@@ -415,3 +415,20 @@ create table if not exists `bitacora_actividades` (
  foreign key (padm_id) references `personal_admision`(padm_id),
  foreign key (oact_id) references `observacion_actividades`(oact_id)
 );
+
+
+-- --------------------------------------------------------
+--
+-- Estructura de tabla `bitacora_actividades_tmp`
+--
+create table if not exists `bitacora_actividades_tmp` (
+ `bact_id` bigint(20) not null auto_increment primary key,
+ `opo_id` bigint(20) null,
+ `usu_id` bigint(20) default null,
+ `padm_id` bigint(20) default null,
+ `eopo_id` bigint(20) null,
+ `oact_id` bigint(20) null,
+ `bact_fecha_registro` timestamp null default null,
+ `bact_descripcion` varchar(1000) null,
+ `bact_fecha_proxima_atencion` timestamp null default null
+);

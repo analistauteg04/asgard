@@ -513,4 +513,55 @@ class OportunidadesController extends \app\components\CController {
         return;
     }
 
+    public function actionCargargestion() {
+        $per_id = @Yii::$app->session->get("PB_perid");    
+        $usu_id = @Yii::$app->session->get("PB_user");    
+        $mod_gestion = new Oportunidad();
+        //\app\models\Utilities::putMessageLogFile('ingresa');  
+        if (Yii::$app->request->isAjax) {
+            $data = Yii::$app->request->post();
+            if ($data["upload_file"]) {
+                if (empty($_FILES)) {
+                    return json_encode(['error' => Yii::t("notificaciones", "Error to process File {file}. Try again.", ['{file}' => basename($files['name'])])]);
+                }
+                //Recibe Parámetros
+                $files = $_FILES[key($_FILES)];
+                $arrIm = explode(".", basename($files['name']));
+                $typeFile = strtolower($arrIm[count($arrIm) - 1]);
+                if ($typeFile == 'xlsx' || $typeFile == 'csv' || $typeFile == 'xls') {
+                    $dirFileEnd = Yii::$app->params["documentFolder"] . "leads/" . $data["name_file"] . "." . $typeFile;
+                    $status = Utilities::moveUploadFile($files['tmp_name'], $dirFileEnd);
+                    if ($status) {
+                        return true;
+                    } else {
+                        return json_encode(['error' => Yii::t("notificaciones", "Error to process File {file}. Try again.", ['{file}' => basename($files['name'])])]);
+                    }
+                }
+            }            
+            if ($data["procesar_file"]) {
+                //Buscar el Padm_id
+                \app\models\Utilities::putMessageLogFile('item:'.$data["procesar_file"]);   
+                $mod_actividadTemp = new BitacoraActividadesTmp();
+                $resp_padm = $mod_actividadTemp->consultarIdXPadm($per_id);                
+                \app\models\Utilities::putMessageLogFile('padm_id:'.$resp_padm["padm_id"]);   
+                $carga_archivo = $mod_gestion->CargarArchivo($data["archivo"], $usu_id, $resp_padm["padm_id"]);
+                if ($carga_archivo['status']) {
+                    $message = array(
+                        "wtmessage" => Yii::t("notificaciones", "Archivo procesado correctamente." . $carga_archivo['data']),
+                        "title" => Yii::t('jslang', 'Success'),
+                    );
+                    return Utilities::ajaxResponse('OK', 'alert', Yii::t("jslang", "Success"), false, $message);
+                } else {
+                    $message = array(
+                        "wtmessage" => Yii::t("notificaciones", "Error al procesar el archivo. " . $carga_archivo['message']),
+                        "title" => Yii::t('jslang', 'Error'),
+                    );
+                    return Utilities::ajaxResponse('NO_OK', 'alert', Yii::t("jslang", "Error"), true, $message);
+                }
+                return;
+            }
+        } else {
+            return $this->render('cargargestion', []);
+        }
+    }
 }
