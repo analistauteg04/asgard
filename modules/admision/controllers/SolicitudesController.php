@@ -384,7 +384,7 @@ class SolicitudesController extends \app\components\CController {
                 if ($resp_precio) {
                     if ($nint_id<3) { //GViteri: para grado y posgrado los items que corresponden a inscripción, está abierto la caja de texto hasta un valor tope.                       
                         if ($nint_id==1) {
-                            $ming_id = 0;
+                            $ming_id = null;
                         }
                         if ($ite_id == 155 or $ite_id == 156 or $ite_id == 157 or $ite_id == 10) {                            
                             $resp_precios_maximos = $mod_solins->ValidarPrecioXitem($ite_id); 
@@ -415,10 +415,7 @@ class SolicitudesController extends \app\components\CController {
                     $mod_solins->num_solicitud = $num_secuencia;
                     $mod_solins->int_id = $interesado_id;
                     $mod_solins->uaca_id = $nint_id;
-                    $mod_solins->mod_id = $mod_id;
-                    if ($nint_id==1) {
-                        $ming_id = null;
-                    }
+                    $mod_solins->mod_id = $mod_id;                  
                     $mod_solins->ming_id = $ming_id;
                     $mod_solins->eaca_id = $carrera_id;
                     $mod_solins->mest_id = $mest_id;
@@ -1039,7 +1036,9 @@ class SolicitudesController extends \app\components\CController {
                 $arrIm = explode(".", basename($data["arc_doc_certmat"]));
                 $typeFile = strtolower($arrIm[count($arrIm) - 1]);
                 $certmate_archivo = Yii::$app->params["documentFolder"] . "solicitudinscripcion/" . $per_id . "/doc_certificado_per_" . $per_id . "." . $typeFile;
+                \app\models\Utilities::putMessageLogFile('adjuntar cert materias:'.$certmate_archivo);                   
                 $certmate_archivo = DocumentoAdjuntar::addLabelTimeDocumentos($sins_id, $certmate_archivo, $timeSt);
+                \app\models\Utilities::putMessageLogFile('despues de adjuntar cert materias:'.$certmate_archivo);   
                 if ($certmate_archivo === FALSE)
                     throw new Exception('Error doc certificado materia no renombrado.');
             }
@@ -1058,11 +1057,11 @@ class SolicitudesController extends \app\components\CController {
                         throw new Exception('Error no se reemplazo files.');
                     $mod_solinsxdoc1 = new SolicitudinsDocumento();
                     //1-Título, 2-DNI,3-Cert votación, 4-Foto, 5-Doc-Beca  
-                    if ($mod_solinsxdoc1->insertNewDocument($sins_id, $interesado_id, 1, $titulo_archivo, $observacion)) {
-                        if ($mod_solinsxdoc1->insertNewDocument($sins_id, $interesado_id, 2, $dni_archivo, $observacion)) {
-                            if ($mod_solinsxdoc1->insertNewDocument($sins_id, $interesado_id, 4, $foto_archivo, $observacion)) {
-                                if ($es_extranjero == "1" or ( empty($es_extranjero))) {
-                                    if (!$mod_solinsxdoc1->insertNewDocument($sins_id, $interesado_id, 3, $certvota_archivo, $observacion)) {
+                    if ($mod_solinsxdoc1->insertNewDocument($sins_id, $interesado_id, 1, $titulo_archivo, $observacion)) {                        
+                        if ($mod_solinsxdoc1->insertNewDocument($sins_id, $interesado_id, 2, $dni_archivo, $observacion)) {                            
+                            if ($mod_solinsxdoc1->insertNewDocument($sins_id, $interesado_id, 4, $foto_archivo, $observacion)) {                                
+                                if ($es_extranjero == "1" or ( empty($es_extranjero))) {                                      
+                                    if (!$mod_solinsxdoc1->insertNewDocument($sins_id, $interesado_id, 3, $certvota_archivo, $observacion)) {                                        
                                         throw new Exception('Error doc certvot no creado.');
                                     }
                                     if ($beca == "1") {
@@ -1071,7 +1070,8 @@ class SolicitudesController extends \app\components\CController {
                                         }
                                     }
                                     if ($uaca_id == "2") {
-                                        if ($mod_solinsxdoc1->insertNewDocument($sins_id, $interesado_id, 6, $certmate_archivo, $observacion)) {
+                                        //\app\models\Utilities::putMessageLogFile('cert materias:');   
+                                        if ($mod_solinsxdoc1->insertNewDocument($sins_id, $interesado_id, 6, $certmate_archivo, $observacion)) {                                            
                                             if (!$mod_solinsxdoc1->insertNewDocument($sins_id, $interesado_id, 7, $curriculum_archivo, $observacion)) {
                                                 throw new Exception('Error doc curriculum no creado.');
                                             }
@@ -1089,9 +1089,10 @@ class SolicitudesController extends \app\components\CController {
                     } else {
                         throw new Exception('Error doc titulo no creado.' . $mensaje);
                     }
-                    // se cambia a pendiente la solicitud para revision.
-                    $solicitudInscripcion = SolicitudInscripcion::findOne($sins_id);
-                    $solicitudInscripcion->rsin_id = 1;
+                    // se cambia a pendiente la solicitud para revision.                    
+                    $mod_solinsxdoc1 = new SolicitudinsDocumento();
+                    $solicitudInscripcion = SolicitudInscripcion::findOne($sins_id);                    
+                    $solicitudInscripcion->rsin_id = 1;                    
                     if (!$solicitudInscripcion->save()) {
                         throw new Exception('Error al actualizar Solicitud.');
                     }

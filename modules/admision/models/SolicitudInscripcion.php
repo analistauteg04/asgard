@@ -702,12 +702,14 @@ class SolicitudInscripcion extends \yii\db\ActiveRecord
             $sql = "SELECT 'S' existe
                     FROM " . $con->dbname . ".solicitud_inscripcion sins
                     WHERE sins.int_id = :int_id AND
-                          sins.uaca_id = :uaca_id AND
-                          ifnull(sins.ming_id,0) = :ming_id AND
-                          sins.eaca_id = :eaca_id AND
-                          sins.rsin_id <> 4 AND
-                          sins.sins_estado = :estado AND
-                          sins.sins_estado_logico = :estado";
+                          sins.uaca_id = :uaca_id AND ";
+                    if ($ming_id != null)  {
+                        $sql .= "ifnull(sins.ming_id,0) = :ming_id AND ";
+                    }
+            $sql .= "sins.eaca_id = :eaca_id AND
+                     sins.rsin_id <> 4 AND
+                     sins.sins_estado = :estado AND
+                     sins.sins_estado_logico = :estado";
         } else {
             if ($nint_id == 3) {
                 $sql = "SELECT 'S' existe
@@ -732,7 +734,9 @@ class SolicitudInscripcion extends \yii\db\ActiveRecord
         $comando->bindParam(":estado", $estado, \PDO::PARAM_STR);
         $comando->bindParam(":int_id", $int_id, \PDO::PARAM_INT);
         $comando->bindParam(":uaca_id", $nint_id, \PDO::PARAM_INT);
-        $comando->bindParam(":ming_id", $ming_id, \PDO::PARAM_INT);
+        if ($ming_id != null)  {
+            $comando->bindParam(":ming_id", $ming_id, \PDO::PARAM_INT);
+        }
         $comando->bindParam(":eaca_id", $car_id, \PDO::PARAM_INT);
         $resultData = $comando->queryOne();
         return $resultData;
