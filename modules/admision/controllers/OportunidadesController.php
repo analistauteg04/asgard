@@ -16,6 +16,7 @@ use app\models\Utilities;
 use yii\helpers\ArrayHelper;
 use app\modules\admision\Module;
 use app\modules\admision\Module as admision;
+use app\modules\admision\models\BitacoraActividadesTmp;
 
 class OportunidadesController extends \app\components\CController {
 
@@ -515,9 +516,8 @@ class OportunidadesController extends \app\components\CController {
 
     public function actionCargargestion() {
         $per_id = @Yii::$app->session->get("PB_perid");    
-        $usu_id = @Yii::$app->session->get("PB_user");    
-        $mod_gestion = new Oportunidad();
-        \app\models\Utilities::putMessageLogFile('ingresa');  
+        $usu_id = @Yii::$app->session->get("PB_iduser");    
+        $mod_gestion = new Oportunidad();        
         if (Yii::$app->request->isAjax) {
             $data = Yii::$app->request->post();
             if ($data["upload_file"]) {
@@ -540,12 +540,11 @@ class OportunidadesController extends \app\components\CController {
             }            
             if ($data["procesar_file"]) {
                 //Buscar el Padm_id
-                \app\models\Utilities::putMessageLogFile('item:'.$data["procesar_file"]);   
-                $mod_actividadTemp = new BitacoraActividadesTmp();
-                $resp_padm = $mod_actividadTemp->consultarIdXPadm($per_id);                
-                \app\models\Utilities::putMessageLogFile('padm_id:'.$resp_padm["padm_id"]);   
+                //\app\models\Utilities::putMessageLogFile('item:'.$data["procesar_file"]);   
+                $mod_actividadTemp = new BitacoraActividadesTmp();                
+                $resp_padm = $mod_actividadTemp->consultarIdXPadm($per_id);                    
                 $carga_archivo = $mod_gestion->CargarArchivo($data["archivo"], $usu_id, $resp_padm["padm_id"]);
-                if ($carga_archivo['status']) {
+                if ($carga_archivo) {
                     $message = array(
                         "wtmessage" => Yii::t("notificaciones", "Archivo procesado correctamente." . $carga_archivo['data']),
                         "title" => Yii::t('jslang', 'Success'),

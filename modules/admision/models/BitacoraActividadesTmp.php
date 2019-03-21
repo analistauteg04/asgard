@@ -81,7 +81,7 @@ class BitacoraActividadesTmp extends \yii\db\ActiveRecord
             try {
                 $handle = fopen($file, "r");
                 $cont = 0;
-                $this->deletetablaTemp($con);
+                $this->deletetablaTemp($con);                
                 //PersonaGestionTmp::deletetablaTemp($con);
                 while (($data = fgetcsv($handle, ",")) !== FALSE) {
                     $filaError++;
@@ -89,14 +89,17 @@ class BitacoraActividadesTmp extends \yii\db\ActiveRecord
                         $model = new BitacoraActividadesTmp(); //isset
                         $respOport = $model->consultarOportunidad($data[0]);
                         if (!($respOport)) {
+                            \app\models\Utilities::putMessageLogFile('ingresa por validación de oportunidad.'.$data[0]);   
                             $bandera= '0';
                         }
                         $respEstadoOpo = $model->consultarEstadoXoportunidad($data[1]);
                         if (!($respEstadoOpo)) {
+                            \app\models\Utilities::putMessageLogFile('ingresa por validación de estado oportunidad.'.$data[1]);   
                             $bandera= '0';
                         }
                         $respObservaOpo = $model->consultarObservacionXoportunidad($data[2]);
                         if (!($respObservaOpo)) {
+                            \app\models\Utilities::putMessageLogFile('ingresa por validación de observación.'.$data[2]);   
                             $bandera= '0';
                         }
                         if ($bandera == '0') {
@@ -167,46 +170,51 @@ class BitacoraActividadesTmp extends \yii\db\ActiveRecord
                 $filaError = 1;
                 foreach ($dataArr as $val) {
                     $filaError++;                    
-                    $model = new BitacoraActividadesTmp(); //isset
-                    $respOport = $model->consultarOportunidad($data[0]);
-                    if (!($respOport)) {
+                    $model = new BitacoraActividadesTmp(); //isset                    
+                    \app\models\Utilities::putMessageLogFile('data columna 4.'. date("Y-m-d H:i:s", strtotime($val[4])));   
+                    \app\models\Utilities::putMessageLogFile('data columna 4.'. $val[4]);   
+                    //\app\models\Utilities::putMessageLogFile('data columna 5.'. strtotime($val[5]));                       
+                    $respOport = $model->consultarOportunidad($val[1]);
+                    if (!($respOport)) {                        
                         $bandera= '0';
                     }
-                    $respEstadoOpo = $model->consultarEstadoXoportunidad($data[1]);
-                    if (!($respEstadoOpo)) {
+                    $respEstadoOpo = $model->consultarEstadoXoportunidad($val[2]);
+                    if (!($respEstadoOpo)) {                        
                         $bandera= '0';
                     }
-                    $respObservaOpo = $model->consultarObservacionXoportunidad($data[2]);
-                    if (!($respObservaOpo)) {
+                    $respObservaOpo = $model->consultarObservacionXoportunidad($val[3]);
+                    if (!($respObservaOpo)) {                        
                         $bandera= '0';
                     }
                     if ($bandera == '0') {
                         $arroout["status"] = FALSE;
                         $arroout["error"] = null;
-                        $arroout["message"] = " Error en la Fila => N°$filaError Código Oportunidad => $data[5]";
+                        $arroout["message"] = " Error en la Fila => N°$filaError Código Oportunidad => $val[1]";
                         $arroout["data"] = null;
                         throw new Exception('Error, Item no almacenado');
                     }
 
-                    $model->opo_id = $data[0];
+                    $model->opo_id = $val[1];
                     $model->usu_id = $usu_id; //"$data[1]";
                     $model->padm_id = $padm_id;
-                    $model->eopo_id = $data[1]; //"$data[3]";
-                    $model->oact_id = $data[2]; //"$data[4]";
-                    $model->bact_fecha_registro = "$data[3]";                        
-                    $model->bact_fecha_proxima_atencion = "$data[4]";
-                    $model->bact_descripcion = "$data[5]";
+                    $model->eopo_id = $val[2]; //"$data[3]";
+                    $model->oact_id = $val[3]; //"$data[4]";
+                    $model->bact_fecha_registro = $val[4];//$val[4];     
+                    /*if ($val[2] == 1) { //Estado en curso
+                        $model->bact_fecha_proxima_atencion = $val[5];
+                    } */                                                        
+                    $model->bact_descripcion = $val[6];                    
                     if (!$model->save()) {
                         $arroout["status"] = FALSE;
                         $arroout["error"] = null;
-                        $arroout["message"] = " Error en la Fila => N°$filaError Código Oportunidad => $data[5]";
+                        $arroout["message"] = " Error en la Fila => N°$filaError Código Oportunidad => $val[5]";
                         $arroout["data"] = null;
                         throw new Exception('Error, Item no almacenado');
                     }
                 }
                 if ($trans !== null)
                     $trans->commit();
-
+                
                 $arroout["status"] = TRUE;
                 $arroout["error"] = null;
                 $arroout["message"] = null;
@@ -215,6 +223,7 @@ class BitacoraActividadesTmp extends \yii\db\ActiveRecord
                 return $arroout;
             } catch (Exception $ex) {
                 if ($trans !== null)
+                    \app\models\Utilities::putMessageLogFile('se fue por el rollback');  
                     $trans->rollback();
                 //return false;
                 return $arroout;
@@ -235,6 +244,7 @@ class BitacoraActividadesTmp extends \yii\db\ActiveRecord
                 WHERE opo_codigo = :opo_codigo
                       AND opo_estado = :estado
                       AND opo_estado_logico = :estado";
+        \app\models\Utilities::putMessageLogFile('codigo oportunidad'.$opo_codigo);   
         $comando = $con->createCommand($sql);
         $comando->bindParam(":estado", $estado, \PDO::PARAM_STR);
         $comando->bindParam(":opo_codigo", $opo_codigo, \PDO::PARAM_STR);
