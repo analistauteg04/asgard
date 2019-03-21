@@ -165,8 +165,7 @@ class BitacoraActividadesTmp extends \yii\db\ActiveRecord
                 $filaError = 1;
                 foreach ($dataArr as $val) {
                     $filaError++;                    
-                    $model = new BitacoraActividadesTmp(); //isset                    
-                    //\app\models\Utilities::putMessageLogFile('data columna 4.'. date("Y-m-d H:i:s", strtotime($val[4])));                       
+                    $model = new BitacoraActividadesTmp(); //isset                                        
                     //\app\models\Utilities::putMessageLogFile('data columna 5.'. strtotime($val[5]));                       
                     $respOport = $model->consultarOportunidad($val[1]);
                     if (!($respOport)) {                        
@@ -187,18 +186,16 @@ class BitacoraActividadesTmp extends \yii\db\ActiveRecord
                         $arroout["data"] = null;
                         throw new Exception('Error, Item no almacenado');
                     }
-                    $fecha_registro = date("Y-m-d H:i:s", $val[4]);
-                    $fecha_proxima = date("Y-m-d H:i:s", $val[5]);
-                    \app\models\Utilities::putMessageLogFile('fecha registro'. $fecha_registro);   
-                    \app\models\Utilities::putMessageLogFile('fecha proxima'. $fecha_proxima);   
+                    $fecha_registro =  $val[4];
+                    $fecha_proxima =  $val[5];                    
                     $model->opo_id = $respOport["opo_id"];
-                    $model->usu_id = $usu_id; //"$data[1]";
+                    $model->usu_id = $usu_id;
                     $model->padm_id = $padm_id;
-                    $model->eopo_id = $val[2]; //"$data[3]";
-                    $model->oact_id = $val[3]; //"$data[4]";
-                    $model->bact_fecha_registro = "2019-03-21 13:30:00"; 
+                    $model->eopo_id = $val[2];
+                    $model->oact_id = $val[3];
+                    $model->bact_fecha_registro = $val[4];
                     if ($val[2] == 1) { //Estado en curso
-                        $model->bact_fecha_proxima_atencion = "2019-03-22 13:30:00";//$val[5];
+                        $model->bact_fecha_proxima_atencion =$val[5];
                     }
                     $model->bact_descripcion = $val[6];                    
                     if (!$model->save()) {
@@ -219,8 +216,7 @@ class BitacoraActividadesTmp extends \yii\db\ActiveRecord
                 //return true;
                 return $arroout;
             } catch (Exception $ex) {
-                if ($trans !== null)
-                    \app\models\Utilities::putMessageLogFile('se fue por el rollback');  
+                if ($trans !== null)                    
                     $trans->rollback();
                 //return false;
                 return $arroout;
