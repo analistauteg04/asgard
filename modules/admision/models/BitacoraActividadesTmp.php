@@ -81,7 +81,7 @@ class BitacoraActividadesTmp extends \yii\db\ActiveRecord
             try {
                 $handle = fopen($file, "r");
                 $cont = 0;
-                $this->deletetablaTemp($con);                
+                $this->deletetablaTemp($con, $usu_id);                
                 //PersonaGestionTmp::deletetablaTemp($con);
                 while (($data = fgetcsv($handle, ",")) !== FALSE) {
                     $filaError++;
@@ -161,7 +161,7 @@ class BitacoraActividadesTmp extends \yii\db\ActiveRecord
                     }
                     unset($dataArr[1]); // Se elimina la cabecera de titulos del file
                 }
-                $this->deletetablaTemp($con);                
+                $this->deletetablaTemp($con, $usu_id);                
                 $filaError = 1;
                 foreach ($dataArr as $val) {
                     $filaError++;                    
@@ -228,9 +228,10 @@ class BitacoraActividadesTmp extends \yii\db\ActiveRecord
         }
     }
 
-    public function deletetablaTemp($con) {
-        $sql = "DELETE FROM " . $con->dbname . ".bitacora_actividades_tmp";
-        $command = $con->createCommand($sql);
+    public function deletetablaTemp($con, $usu_id) {
+        $sql = "DELETE FROM " . $con->dbname . ".bitacora_actividades_tmp where usu_id = :usu_id";
+        $command = $con->createCommand($sql);        
+        $command->bindParam(":usu_id", $usu_id, \PDO::PARAM_INT);
         $command->execute();
     }
     
