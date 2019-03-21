@@ -430,5 +430,6 @@ create table if not exists `bitacora_actividades_tmp` (
  `oact_id` bigint(20) null,
  `bact_fecha_registro` varchar(20) null,
  `bact_descripcion` varchar(1000) null,
- `bact_fecha_proxima_atencion` varchar(20) null
+ `bact_fecha_proxima_atencion` varchar(20) null,
+ `oper_id` bigint(20) null
 );
