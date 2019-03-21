@@ -529,7 +529,7 @@ class OportunidadesController extends \app\components\CController {
                 $arrIm = explode(".", basename($files['name']));
                 $typeFile = strtolower($arrIm[count($arrIm) - 1]);
                 if ($typeFile == 'xlsx' || $typeFile == 'csv' || $typeFile == 'xls') {
-                    $dirFileEnd = Yii::$app->params["documentFolder"] . "leads/" . $data["name_file"] . "." . $typeFile;
+                    $dirFileEnd = Yii::$app->params["documentFolder"] . "gestion/" . $data["name_file"] . "." . $typeFile;
                     $status = Utilities::moveUploadFile($files['tmp_name'], $dirFileEnd);
                     if ($status) {
                         return true;
@@ -544,9 +544,9 @@ class OportunidadesController extends \app\components\CController {
                 $mod_actividadTemp = new BitacoraActividadesTmp();                
                 $resp_padm = $mod_actividadTemp->consultarIdXPadm($per_id);                    
                 $carga_archivo = $mod_gestion->CargarArchivo($data["archivo"], $usu_id, $resp_padm["padm_id"]);
-                if ($carga_archivo) {
+                if ($carga_archivo['status']) {
                     $message = array(
-                        "wtmessage" => Yii::t("notificaciones", "Archivo procesado correctamente." . $carga_archivo['data']),
+                        "wtmessage" => Yii::t("notificaciones", "Archivo procesado correctamente. " . $carga_archivo['message']),
                         "title" => Yii::t('jslang', 'Success'),
                     );
                     return Utilities::ajaxResponse('OK', 'alert', Yii::t("jslang", "Success"), false, $message);
