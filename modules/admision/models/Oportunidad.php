@@ -1606,21 +1606,14 @@ class Oportunidad extends \app\modules\admision\components\CActiveRecord {
         $path = Yii::$app->basePath . Yii::$app->params['documentFolder'] . "leads/" . $fname;            
         $carga_archivo = $mod_actividadTemp->uploadFile($usu_id, $padm_id, $path);
         if ($carga_archivo['status']) {
-            $data = $mod_actividadTemp->consultarBitacoraTemp();    
+            $data = $mod_actividadTemp->consultarBitacoraTemp($usu_id);    
             \app\models\Utilities::putMessageLogFile('despues de obtener data de temporal');  
-            for ($i = 0; $i < sizeof($data); $i++) {
-                \app\models\Utilities::putMessageLogFile('oportunidad:'.$data[$i]["opo_id"]);  
-                \app\models\Utilities::putMessageLogFile('usuari:'.$data[$i]["usu_id"]);  
-                \app\models\Utilities::putMessageLogFile('oportunidad:'.$data[$i]["padm_id"]);  
-                \app\models\Utilities::putMessageLogFile('oportunidad:'.$data[$i]["eopo_id"]);  
-                \app\models\Utilities::putMessageLogFile('oportunidad:'.$data[$i]["oact_id"]);  
-                \app\models\Utilities::putMessageLogFile('oportunidad:'.$data[$i]["bact_fecha_registro"]);  
-                \app\models\Utilities::putMessageLogFile('oportunidad:'.$data[$i]["bact_descripcion"]);  
-                \app\models\Utilities::putMessageLogFile('oportunidad:'.$data[$i]["bact_fecha_proxima_atencion"]);  
-                $resultado = $mod_actividad->insertarActividad($data[$i]["opo_id"], $data[$i]["usu_id"], $data[$i]["padm_id"], $data[$i]["eopo_id"], $data[$i]["oact_id"], $data[$i]["bact_fecha_registro"], $data[$i]["bact_descripcion"], $data[$i]["bact_fecha_proxima_atencion"]);            
+            for ($i = 0; $i < sizeof($data); $i++) {                 
+                $resultado = $mod_actividad->insertarActividad($data[$i]["opo_id"], $data[$i]["usu_id"], $data[$i]["padm_id"], $data[$i]["eopo_id"], $data[$i]["bact_fecha_registro"], $data[$i]["oact_id"],  $data[$i]["bact_descripcion"], $data[$i]["bact_fecha_proxima_atencion"]);                
             }
+            return true;
         } else {
-            return $carga_archivo;
+            return false;
         }
        
     }

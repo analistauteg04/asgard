@@ -25,13 +25,13 @@ $leyenda = '<div class="col-md-12 col-xs-12 col-sm-12 col-lg-12">
         <?php echo $leyenda; ?>
     </div>
     <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">  
-        <div class="form-group">
+        <!--<div class="form-group">
             <label for="txth_doc_adj_leads" class="col-lg-2 col-md-2 col-sm-2 col-xs-2 control-label keyupmce"><?= Yii::t("formulario", "Company") ?></label>
             <div class="col-sm-5 col-md-5 col-xs-5 col-lg-5">
                 <?= Html::dropDownList("cmb_empresa", 0, ArrayHelper::map(\app\models\Empresa::getAllEmpresa(), 'id', 'value'), ["class" => "form-control", "id" => "cmb_empresa"]) ?>
             </div>
 
-        </div>
+        </div>-->
 
         <div class="form-group">
             <label for="txth_doc_adj_leads" class="col-lg-2 col-md-2 col-sm-2 col-xs-2 control-label keyupmce"><?= Yii::t("formulario", "Attach document") ?></label>

@@ -311,7 +311,7 @@ function cargarGestion() {
     var link = $('#txth_base').val() + "/admision/oportunidades/cargargestion";
     arrParams.procesar_file = true;
     //arrParams.tipo_proceso = proceso;*/
-    arrParams.emp_id = $('#cmb_empresa option:selected').val();
+    //arrParams.emp_id = $('#cmb_empresa option:selected').val();
     arrParams.archivo = $('#txth_doc_adj_leads2').val() + "." + $('#txth_doc_adj_leads').val().split('.').pop();    
     if (!validateForm()) {
         requestHttpAjax(link, arrParams, function (response) {

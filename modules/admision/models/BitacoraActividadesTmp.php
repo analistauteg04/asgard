@@ -197,9 +197,9 @@ class BitacoraActividadesTmp extends \yii\db\ActiveRecord
                     $model->padm_id = $padm_id;
                     $model->eopo_id = $val[2]; //"$data[3]";
                     $model->oact_id = $val[3]; //"$data[4]";
-                    $model->bact_fecha_registro = "2019-03-21 11:30:00";                      
+                    $model->bact_fecha_registro = "2019-03-21 13:30:00";                      
                     if ($val[2] == 1) { //Estado en curso
-                        $model->bact_fecha_proxima_atencion = "2019-03-22 11:30:00";//$val[5];
+                        $model->bact_fecha_proxima_atencion = "2019-03-22 13:30:00";//$val[5];
                     }
                     $model->bact_descripcion = $val[6];                    
                     if (!$model->save()) {
@@ -292,10 +292,11 @@ class BitacoraActividadesTmp extends \yii\db\ActiveRecord
         return $resultData;                
     }
     
-    public function consultarBitacoraTemp() {
+    public function consultarBitacoraTemp($usu_id) {
         $con = \Yii::$app->db_crm;        
-        $sql = "SELECT * FROM " . $con->dbname . ".bitacora_actividades_tmp";        
+        $sql = "SELECT * FROM " . $con->dbname . ".bitacora_actividades_tmp where usu_id = :usu_id";        
         $comando = $con->createCommand($sql);
+        $comando->bindParam(":usu_id", $usu_id, \PDO::PARAM_INT);
         return $comando->queryAll();
     }
 }
