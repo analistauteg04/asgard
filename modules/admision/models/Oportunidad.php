@@ -1609,7 +1609,15 @@ class Oportunidad extends \app\modules\admision\components\CActiveRecord {
             $data = $mod_actividadTemp->consultarBitacoraTemp();    
             \app\models\Utilities::putMessageLogFile('despues de obtener data de temporal');  
             for ($i = 0; $i < sizeof($data); $i++) {
-                $resultado = $mod_actividad->insertarActividad($data[i]["opo_id"], $data[i]["usu_id"], $data[i]["padm_id"], $data[i]["eopo_id"], $data[i]["oact_id"], $data[i]["bact_fecha_registro"], $data[i]["bact_descripcion"], $data[i]["bact_fecha_proxima_atencion"]);            
+                \app\models\Utilities::putMessageLogFile('oportunidad:'.$data[$i]["opo_id"]);  
+                \app\models\Utilities::putMessageLogFile('usuari:'.$data[$i]["usu_id"]);  
+                \app\models\Utilities::putMessageLogFile('oportunidad:'.$data[$i]["padm_id"]);  
+                \app\models\Utilities::putMessageLogFile('oportunidad:'.$data[$i]["eopo_id"]);  
+                \app\models\Utilities::putMessageLogFile('oportunidad:'.$data[$i]["oact_id"]);  
+                \app\models\Utilities::putMessageLogFile('oportunidad:'.$data[$i]["bact_fecha_registro"]);  
+                \app\models\Utilities::putMessageLogFile('oportunidad:'.$data[$i]["bact_descripcion"]);  
+                \app\models\Utilities::putMessageLogFile('oportunidad:'.$data[$i]["bact_fecha_proxima_atencion"]);  
+                $resultado = $mod_actividad->insertarActividad($data[$i]["opo_id"], $data[$i]["usu_id"], $data[$i]["padm_id"], $data[$i]["eopo_id"], $data[$i]["oact_id"], $data[$i]["bact_fecha_registro"], $data[$i]["bact_descripcion"], $data[$i]["bact_fecha_proxima_atencion"]);            
             }
         } else {
             return $carga_archivo;
@@ -1630,7 +1638,7 @@ class Oportunidad extends \app\modules\admision\components\CActiveRecord {
         $sql = "SELECT 	pgco_primer_nombre, 
                         pgco_segundo_nombre,
                         pgco_primer_apellido,
-                        pgc$cono_segundo_apellido,
+                        pgco_segundo_apellido,
                         pgco_correo, 
                         pgco_telefono, 
                         pgco_celular, 

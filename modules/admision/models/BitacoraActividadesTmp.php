@@ -88,18 +88,15 @@ class BitacoraActividadesTmp extends \yii\db\ActiveRecord
                     if ($cont != 0) {
                         $model = new BitacoraActividadesTmp(); //isset
                         $respOport = $model->consultarOportunidad($data[0]);
-                        if (!($respOport)) {
-                            \app\models\Utilities::putMessageLogFile('ingresa por validación de oportunidad.'.$data[0]);   
+                        if (!($respOport)) {                            
                             $bandera= '0';
                         }
                         $respEstadoOpo = $model->consultarEstadoXoportunidad($data[1]);
-                        if (!($respEstadoOpo)) {
-                            \app\models\Utilities::putMessageLogFile('ingresa por validación de estado oportunidad.'.$data[1]);   
+                        if (!($respEstadoOpo)) {                            
                             $bandera= '0';
                         }
                         $respObservaOpo = $model->consultarObservacionXoportunidad($data[2]);
-                        if (!($respObservaOpo)) {
-                            \app\models\Utilities::putMessageLogFile('ingresa por validación de observación.'.$data[2]);   
+                        if (!($respObservaOpo)) {                            
                             $bandera= '0';
                         }
                         if ($bandera == '0') {
@@ -171,8 +168,8 @@ class BitacoraActividadesTmp extends \yii\db\ActiveRecord
                 foreach ($dataArr as $val) {
                     $filaError++;                    
                     $model = new BitacoraActividadesTmp(); //isset                    
+                    //\app\models\Utilities::putMessageLogFile('data columna 4.'. date("Y-m-d H:i:s", strtotime($val[4])));   
                     \app\models\Utilities::putMessageLogFile('data columna 4.'. date("Y-m-d H:i:s", strtotime($val[4])));   
-                    \app\models\Utilities::putMessageLogFile('data columna 4.'. $val[4]);   
                     //\app\models\Utilities::putMessageLogFile('data columna 5.'. strtotime($val[5]));                       
                     $respOport = $model->consultarOportunidad($val[1]);
                     if (!($respOport)) {                        
@@ -193,16 +190,17 @@ class BitacoraActividadesTmp extends \yii\db\ActiveRecord
                         $arroout["data"] = null;
                         throw new Exception('Error, Item no almacenado');
                     }
-
+                    $fecha_registro = date("Y-m-d H:i:s", strtotime($val[4]));
+                    $fecha_proxima = date("Y-m-d H:i:s", strtotime($val[5]));
                     $model->opo_id = $val[1];
                     $model->usu_id = $usu_id; //"$data[1]";
                     $model->padm_id = $padm_id;
                     $model->eopo_id = $val[2]; //"$data[3]";
                     $model->oact_id = $val[3]; //"$data[4]";
-                    $model->bact_fecha_registro = $val[4];//$val[4];     
-                    /*if ($val[2] == 1) { //Estado en curso
-                        $model->bact_fecha_proxima_atencion = $val[5];
-                    } */                                                        
+                    $model->bact_fecha_registro = "2019-03-21 11:30:00";                      
+                    if ($val[2] == 1) { //Estado en curso
+                        $model->bact_fecha_proxima_atencion = "2019-03-22 11:30:00";//$val[5];
+                    }
                     $model->bact_descripcion = $val[6];                    
                     if (!$model->save()) {
                         $arroout["status"] = FALSE;
