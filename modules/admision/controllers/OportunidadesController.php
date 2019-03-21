@@ -517,7 +517,7 @@ class OportunidadesController extends \app\components\CController {
         $per_id = @Yii::$app->session->get("PB_perid");    
         $usu_id = @Yii::$app->session->get("PB_user");    
         $mod_gestion = new Oportunidad();
-        //\app\models\Utilities::putMessageLogFile('ingresa');  
+        \app\models\Utilities::putMessageLogFile('ingresa');  
         if (Yii::$app->request->isAjax) {
             $data = Yii::$app->request->post();
             if ($data["upload_file"]) {
