@@ -11,7 +11,8 @@ use yii\helpers\Html;
             'arr_contacto' => $arr_contacto,
             'arr_canalconta' => $arr_canalconta,
             'arra_agente' => $arra_agente,
-            'arr_empresa' => $arr_empresa
+            'arr_empresa' => $arr_empresa,
+            'arr_unidad' => $arr_unidad,
         ]);
         ?>
     </form>

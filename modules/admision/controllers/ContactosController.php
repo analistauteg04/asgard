@@ -7,6 +7,7 @@ use app\modules\admision\models\EstadoContacto;
 use app\modules\admision\models\PersonaGestion;
 use app\modules\admision\models\Oportunidad;
 use app\modules\admision\models\PersonalAdmision;
+use app\modules\academico\models\UnidadAcademica;
 use app\models\Empresa;
 use app\models\Pais;
 use app\models\Provincia;
@@ -28,6 +29,7 @@ class ContactosController extends \app\components\CController {
         $per_id = @Yii::$app->session->get("PB_iduser");
         $modcanal = new Oportunidad();
         $empresa_mod = new Empresa();
+        $mod_unidad = new UnidadAcademica();
         $estado_contacto = EstadoContacto::find()->select("econ_id AS id, econ_nombre AS name")->where(["econ_estado_logico" => "1", "econ_estado" => "1"])->orderBy("name asc")->asArray()->all();
         $modPersonaGestion = new PersonaGestion();
         $modagente = new PersonalAdmision();
@@ -44,6 +46,7 @@ class ContactosController extends \app\components\CController {
             $arrSearch["correo"] = $data['correo'];
             $arrSearch["telefono"] = $data['telefono'];
             $arrSearch["empresa"] = $data['empresa'];
+            $arrSearch["unidad"] = $data['unidad'];
             $mod_gestion = $modPersonaGestion->consultarClienteCont($arrSearch);
             return $this->render('index-grid', [
                         "model" => $mod_gestion,
@@ -56,12 +59,14 @@ class ContactosController extends \app\components\CController {
         }
         $arra_agente = $modagente->consultarAgenteconta();
         $canalconta = $modcanal->consultarConocimientoCanal('1');
+        $arr_unidad = $mod_unidad->consultarUnidadAcademicasEmpresa(0);
         return $this->render('index', [
                     'model' => $mod_gestion,
                     'arr_contacto' => ArrayHelper::map(array_merge([["id" => "0", "name" => "Todas"]], $estado_contacto), "id", "name"),
                     'arr_canalconta' => ArrayHelper::map(array_merge([["id" => "0", "name" => "Todas"]], $canalconta), "id", "name"),
                     'arra_agente' => ArrayHelper::map(array_merge([["id" => "0", "name" => "Todas"], ["id" => "1", "name" => "Admin UTEG"]], $arra_agente), "id", "name"),
                     'arr_empresa' => ArrayHelper::map(array_merge([["id" => "0", "value" => "Todas"]], $empresa), "id", "value"),
+                    'arr_unidad' => ArrayHelper::map(array_merge([["id" => "0", "name" => "Todas"]], $arr_unidad), "id", "name"),
         ]);
     }
 
@@ -370,7 +375,7 @@ class ContactosController extends \app\components\CController {
         header("Content-Type: $content_type");
         header("Content-Disposition: attachment;filename=" . $nombarch);
         header('Cache-Control: max-age=0');
-        $colPosition = array("C", "D", "E", "F", "G", "H", "I", "J", "K", "L");
+        $colPosition = array("C", "D", "E", "F", "G", "H", "I", "J", "K", "L", "M");
         $arrHeader = array(
             Yii::t("crm", "Contact"),
             Yii::t("formulario", "Country"),
@@ -378,6 +383,7 @@ class ContactosController extends \app\components\CController {
             Yii::t("formulario", "CellPhone"),
             Yii::t("formulario", "Phone"),
             Yii::t("formulario", "Date"),
+            Yii::t("formulario", "Academic unit"),
             admision::t("crm", "Channel"),
             Yii::t("formulario", "User login"),
             Yii::t("formulario", "Open Opportunities"),
@@ -392,6 +398,8 @@ class ContactosController extends \app\components\CController {
         $arrSearch["agente"] = $data['agente'];
         $arrSearch["correo"] = $data['correo'];
         $arrSearch["telefono"] = $data['telefono'];
+        $arrSearch["empresa"] = $data['empresa'];
+        $arrSearch["unidad"] = $data['unidad'];
         $arrData = array();
         if (empty($arrSearch)) {
             $arrData = $modPersonaGestion->consultarReportContactos(array(), true);
@@ -414,6 +422,7 @@ class ContactosController extends \app\components\CController {
             Yii::t("formulario", "CellPhone"),
             Yii::t("formulario", "Phone"),
             Yii::t("formulario", "Date"),
+            Yii::t("formulario", "Academic unit"),
             admision::t("crm", "Channel"),
             Yii::t("formulario", "User login"),
             Yii::t("formulario", "Open Opportunities"),
@@ -429,6 +438,7 @@ class ContactosController extends \app\components\CController {
         $arrSearch["correo"] = $data['correo'];
         $arrSearch["telefono"] = $data['telefono'];
         $arrSearch["empresa"] = $data['empresa'];
+        $arrSearch["unidad"] = $data['unidad'];
         $arrData = array();
         if (empty($arrSearch)) {
             $arrData = $modPersonaGestion->consultarReportContactos(array(), true);

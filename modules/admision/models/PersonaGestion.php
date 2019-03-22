@@ -968,6 +968,9 @@ class PersonaGestion extends \app\modules\admision\components\CActiveRecord {
             if ($arrFiltro['empresa'] != "" && $arrFiltro['empresa'] > 0) {
                 $str_search .= " emp.emp_id = :empresa AND ";
             }
+            if ($arrFiltro['unidad'] != "" && $arrFiltro['unidad'] > 0) {
+                $str_search .= " uaca.uaca_id = :unidad AND ";
+            }
         } else {
             $columnsAdd = "                
                 pg.pges_pri_nombre as pges_pri_nombre,
@@ -1059,6 +1062,10 @@ class PersonaGestion extends \app\modules\admision\components\CActiveRecord {
             if ($arrFiltro['empresa'] != "" && $arrFiltro['empresa'] > 0) {
                 $search_emp = $arrFiltro["empresa"];
                 $comando->bindParam(":empresa", $search_emp, \PDO::PARAM_INT);
+            }
+            if ($arrFiltro['unidad'] != "" && $arrFiltro['unidad'] > 0) {
+                $search_uni = $arrFiltro["unidad"];
+                $comando->bindParam(":unidad", $search_uni, \PDO::PARAM_INT);
             }
         }
 
@@ -1817,6 +1824,9 @@ class PersonaGestion extends \app\modules\admision\components\CActiveRecord {
             if ($arrFiltro['empresa'] != "" && $arrFiltro['empresa'] > 0) {
                 $str_search .= " emp.emp_id = :empresa AND ";
             }
+            if ($arrFiltro['unidad'] != "" && $arrFiltro['unidad'] > 0) {
+                $str_search .= " uaca.uaca_id = :unidad AND ";
+            }
         } else {
             $columnsAdd = "                
                 pg.pges_pri_nombre as pges_pri_nombre,
@@ -1832,7 +1842,7 @@ class PersonaGestion extends \app\modules\admision\components\CActiveRecord {
                         pg.pges_celular,
                         pg.pges_domicilio_telefono,
                         DATE(pg.pges_fecha_creacion) as fecha_creacion,
-                        -- ifnull(uaca.uaca_nombre,'Sin Unidad') as unidad_academica,
+                        ifnull(uaca.uaca_nombre,'Sin Unidad') as unidad_academica,
                         -- ifnull(emp.emp_nombre_comercial,'Sin Empresa') as empresa,
                         cc.ccan_nombre as canal,
                         -- ec.econ_nombre estado_contacto,
@@ -1851,7 +1861,8 @@ class PersonaGestion extends \app\modules\admision\components\CActiveRecord {
                     group by opo.pges_id
                 ) AS max_opor on max_opor.pges_id=pg.pges_id
                 left JOIN " . $con->dbname . ".oportunidad opo on opo.opo_id = max_opor.opo_id
-                LEFT JOIN " . $con1->dbname . ".empresa as emp on emp.emp_id=opo.emp_id                
+                LEFT JOIN " . $con1->dbname . ".empresa as emp on emp.emp_id=opo.emp_id  
+                LEFT JOIN " . $con2->dbname . ".unidad_academica uaca on uaca.uaca_id = opo.uaca_id
                 WHERE   
                         $str_search
                         pg.pges_estado = :estado
@@ -1895,7 +1906,11 @@ class PersonaGestion extends \app\modules\admision\components\CActiveRecord {
             if ($arrFiltro['empresa'] != "" && $arrFiltro['empresa'] > 0) {
                 $search_emp = $arrFiltro["empresa"];
                 $comando->bindParam(":empresa", $search_emp, \PDO::PARAM_INT);
-            }  
+            }
+            if ($arrFiltro['unidad'] != "" && $arrFiltro['unidad'] > 0) {
+                $search_uni = $arrFiltro["unidad"];
+                $comando->bindParam(":unidad", $search_uni, \PDO::PARAM_INT);
+            }
         }
         $resultData = $comando->queryAll();
         $dataProvider = new ArrayDataProvider([

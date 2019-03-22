@@ -116,12 +116,16 @@ class UnidadAcademica extends \app\modules\academico\components\CActiveRecord {
     public function consultarUnidadAcademicasEmpresa($empresa) {
         $con = \Yii::$app->db_academico;
         $estado = 1;
+        if ($empresa > 0) {
+           $condicion = 'emp_id = :empresa AND '; 
+        }
+            
         $sql = "
                     SELECT 
                         distinct una.uaca_id as id, una.uaca_nombre as name
                         FROM db_academico.modalidad_unidad_academico mua
                         Inner JOIN db_academico.unidad_academica una on una.uaca_id = mua.uaca_id 
-                    where emp_id = :empresa AND
+                    where $condicion
                         mua.muac_estado = :estado AND
                         mua.muac_estado_logico = :estado AND
                         una.uaca_estado = :estado AND
