@@ -1603,22 +1603,34 @@ class Oportunidad extends \app\modules\admision\components\CActiveRecord {
     public function CargarArchivo($fname, $usu_id, $padm_id) {
         $mod_actividadTemp = new BitacoraActividadesTmp();
         $mod_actividad = new Oportunidad();       
-        $path = Yii::$app->basePath . Yii::$app->params['documentFolder'] . "leads/" . $fname;            
+        $path = Yii::$app->basePath . Yii::$app->params['documentFolder'] . "gestion/" . $fname;            
         $carga_archivo = $mod_actividadTemp->uploadFile($usu_id, $padm_id, $path);
         if ($carga_archivo['status']) {
-            $data = $mod_actividadTemp->consultarBitacoraTemp($usu_id);    
-            \app\models\Utilities::putMessageLogFile('despues de obtener data de temporal');  
+            $data = $mod_actividadTemp->consultarBitacoraTemp($usu_id);   
+            //$cont = 0;
             for ($i = 0; $i < sizeof($data); $i++) {                 
                 $resultado = $mod_actividad->insertarActividad($data[$i]["opo_id"], $data[$i]["usu_id"], $data[$i]["padm_id"], $data[$i]["eopo_id"], $data[$i]["bact_fecha_registro"], $data[$i]["oact_id"],  $data[$i]["bact_descripcion"], $data[$i]["bact_fecha_proxima_atencion"]); 
                 //Modificar estado de la oportunidad.
                 if ($resultado) {
                     $respOport = $mod_actividad->modificarOportunixId(null, $data[$i]["opo_id"], null, null, null, null, null, null, null, null, null, $data[$i]["eopo_id"], $usu_id, $oporper);
-                }
-                
+                }   
+                /*$respOport = $mod_actividad->modificarOportunixId(null, $data[$i]["opo_id"], null, null, null, null, null, null, null, null, null, $data[$i]["eopo_id"], $usu_id, $data[$i]["oper_id"]);                
+                $cont++;*/
+
             }
-            return true;
+            //return true;
+            $arroout["status"] = TRUE;
+            $arroout["error"] = null;
+            $arroout["message"] = "Se ha procesado $cont registros.";
+            $arroout["data"] = null;
+            return $arroout;
         } else {
-            return false;
+            //return false;
+            $arroout["status"] = FALSE;
+            $arroout["error"] = null;
+            $arroout["message"] = null;
+            $arroout["data"] = null;
+            return $arroout;
         }
        
     }

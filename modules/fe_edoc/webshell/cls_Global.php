@@ -168,15 +168,15 @@ class cls_Global {
         try{
             // CREACION DE LA PERSONA
             $sql = "INSERT INTO " . $obj_con->BdAppweb . ".persona
-                ($attrDni,$attrName,per_genero,per_estado, per_estado_logico, per_correo)VALUES
-                ('" . $valDni . "','" . $valName . "','M','1','1' '".$correo."')";
+                ($attrDni,$attrName,per_genero,per_estado, per_estado_logico, per_correo) VALUES
+                ('" . $valDni . "','" . $valName . "','M','1','1', '".$correo."')";
             $command = $con->prepare($sql);
             $command->execute();
             $IdPer = $con->insert_id;
 
             // CREACION DEL USUARIO
             $sql = "INSERT INTO " . $obj_con->BdAppweb . ".usuario
-                (per_id,usu_user,usu_sha,usu_password,usu_estado_logico,usu_estado)VALUES
+                (per_id,usu_user,usu_sha,usu_password,usu_estado_logico,usu_estado) VALUES
                 ($IdPer,'$correo','$usu_sha','$usu_pass','1','1') ";
             $command2 = $con->prepare($sql);
             $command2->execute();
@@ -185,7 +185,7 @@ class cls_Global {
             // ASIGNACION DE PERSONA A EMPRESA
             $empresa = $this->getIdEmpresa($rucEmp);
             $sql = "INSERT INTO " . $obj_con->BdAppweb . ".empresa_persona
-                (emp_id, per_id,eper_estado_logico,eper_estado)VALUES
+                (emp_id, per_id,eper_estado_logico,eper_estado) VALUES
                 (".$empresa['Id'].",$IdPer,'1','1') ";
             $command3 = $con->prepare($sql);
             $command3->execute();
@@ -193,7 +193,7 @@ class cls_Global {
 
             // ASIGNACION DE ROLES A USUARIO Y EMPRESA
             $sql = "INSERT INTO " . $obj_con->BdAppweb . ".usua_grol_eper
-                (eper_id, usu_id, grol_id, ugep_estado_logico, ugep_estado)VALUES
+                (eper_id, usu_id, grol_id, ugep_estado_logico, ugep_estado) VALUES
                 ($IdEper,$IdUsu,$grol_id,'1','1') ";
             $command3 = $con->prepare($sql);
             $command3->execute();
@@ -203,7 +203,7 @@ class cls_Global {
         }catch(Exception $e){
             $con->rollback();
             $con->close();
-            //throw $e;
+            //throw $e; 
             return $this->messageSystem('NO_OK', $e->getMessage(), null, null, null);
         }
     }
