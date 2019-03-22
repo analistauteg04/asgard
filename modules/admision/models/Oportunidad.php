@@ -1611,6 +1611,9 @@ class Oportunidad extends \app\modules\admision\components\CActiveRecord {
             for ($i = 0; $i < sizeof($data); $i++) {                 
                 $resultado = $mod_actividad->insertarActividad($data[$i]["opo_id"], $data[$i]["usu_id"], $data[$i]["padm_id"], $data[$i]["eopo_id"], $data[$i]["bact_fecha_registro"], $data[$i]["oact_id"],  $data[$i]["bact_descripcion"], $data[$i]["bact_fecha_proxima_atencion"]); 
                 //Modificar estado de la oportunidad.
+                if ($resultado) {
+                    $respOport = $mod_actividad->modificarOportunixId(null, $data[$i]["opo_id"], null, null, null, null, null, null, null, null, null, $data[$i]["eopo_id"], $usu_id, $oporper);
+                }
                 
             }
             return true;
