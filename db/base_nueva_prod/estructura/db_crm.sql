@@ -416,7 +416,6 @@ create table if not exists `bitacora_actividades` (
  foreign key (oact_id) references `observacion_actividades`(oact_id)
 );
 
-
 -- --------------------------------------------------------
 --
 -- Estructura de tabla `bitacora_actividades_tmp`
@@ -432,4 +431,29 @@ create table if not exists `bitacora_actividades_tmp` (
  `bact_descripcion` varchar(1000) null,
  `bact_fecha_proxima_atencion` varchar(20) null,
  `oper_id` bigint(20) null
+);
+
+-- ---------------------------------------------------------
+--
+-- Estructura de tabla `bitacora_actividades_noprocesadas`
+--
+create table if not exists db_crm.`bitacora_actividades_noprocesadas` (
+ `bano_id` bigint(20) not null auto_increment primary key,
+ `bano_unidad` varchar(100) null,
+ `bano_modalidad` varchar(100) null,
+ `bano_carrera` varchar(500) null,
+ `bano_nombre` varchar(200) null,
+ `bano_telefono` varchar(50) null,
+ `bano_correo` varchar(100) null,
+ `bano_contacto` varchar(100) null,
+ `eopo_id` bigint(20) null,
+ `oact_id` bigint(20) null,
+ `bano_fecha_registro` varchar(20) null,
+ `bano_descripcion` varchar(1000) null,
+ `bano_fecha_proxima_atencion` varchar(20) null,
+ `oper_id` bigint(20) null,
+ `usu_id` bigint(20) default null,
+ `bano_tipoarchivo` varchar(1) null, /* '1': archivo gestiona actividades, '2': archivo crea contactos diferentes a leads */
+ `bano_novedad` varchar(1000) null,
+ `bano_fecha_creacion` timestamp not null default current_timestamp
 );

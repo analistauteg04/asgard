@@ -539,11 +539,10 @@ class OportunidadesController extends \app\components\CController {
                 }
             }            
             if ($data["procesar_file"]) {
-                //Buscar el Padm_id
-                //\app\models\Utilities::putMessageLogFile('item:'.$data["procesar_file"]);   
+                $emp_id = $data["emp_id"];                
                 $mod_actividadTemp = new BitacoraActividadesTmp();                
-                $resp_padm = $mod_actividadTemp->consultarIdXPadm($per_id);                    
-                $carga_archivo = $mod_gestion->CargarArchivo($data["archivo"], $usu_id, $resp_padm["padm_id"]);
+                $resp_padm = $mod_actividadTemp->consultarIdXPadm($per_id);   //Buscar el Padm_id                 
+                $carga_archivo = $mod_gestion->CargarArchivoGestion($emp_id, $data["archivo"], $usu_id, $resp_padm["padm_id"]);
                 if ($carga_archivo['status']) {
                     $message = array(
                         "wtmessage" => Yii::t("notificaciones", "Archivo procesado correctamente. " . $carga_archivo['message']),

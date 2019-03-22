@@ -1600,36 +1600,22 @@ class Oportunidad extends \app\modules\admision\components\CActiveRecord {
      * @param
      * @return
      */
-    public function CargarArchivo($fname, $usu_id, $padm_id) {
-        $mod_actividadTemp = new BitacoraActividadesTmp();
-        $mod_actividad = new Oportunidad();       
-        $path = Yii::$app->basePath . Yii::$app->params['documentFolder'] . "gestion/" . $fname;            
-        $carga_archivo = $mod_actividadTemp->uploadFile($usu_id, $padm_id, $path);
-        if ($carga_archivo['status']) {
-            $data = $mod_actividadTemp->consultarBitacoraTemp($usu_id);   
-            $cont = 0;
-            for ($i = 0; $i < sizeof($data); $i++) {                 
-                $resultado = $mod_actividad->insertarActividad($data[$i]["opo_id"], $data[$i]["usu_id"], $data[$i]["padm_id"], $data[$i]["eopo_id"], $data[$i]["bact_fecha_registro"], $data[$i]["oact_id"],  $data[$i]["bact_descripcion"], $data[$i]["bact_fecha_proxima_atencion"]); 
-                //Modificar estado de la oportunidad.                
-                $respOport = $mod_actividad->modificarOportunixId(null, $data[$i]["opo_id"], null, null, null, null, null, null, null, null, null, $data[$i]["eopo_id"], $usu_id, $data[$i]["oper_id"]);                
-                $cont++;
-
+    public function CargarArchivo($fname, $emp_id, $tipoProceso) {
+        $mod_perTemp = new PersonaGestionTmp();
+        $mod_pergestion = new PersonaGestion();
+        if ($tipoProceso == "LEADS") {
+            $path = Yii::$app->basePath . Yii::$app->params['documentFolder'] . "leads/" . $fname;
+            //return $mod_pergestion->insertarDtosPersonaGestion($emp_id, $tipoProceso);
+            $carga_archivo = $mod_perTemp->uploadFile($emp_id, $path);
+            if ($carga_archivo['status']) {
+                return $mod_pergestion->insertarDtosPersonaGestion($emp_id, $tipoProceso);
+            } else {
+                return $carga_archivo;
             }
-            //return true;
-            $arroout["status"] = TRUE;
-            $arroout["error"] = null;
-            $arroout["message"] = "Se ha procesado $cont registros.";
-            $arroout["data"] = null;
-            return $arroout;
         } else {
-            //return false;
-            $arroout["status"] = FALSE;
-            $arroout["error"] = null;
-            $arroout["message"] = null;
-            $arroout["data"] = null;
-            return $arroout;
+            //PROCESO PARA SUBIR EN LOTES LEADS COLOMBIA
+            return $mod_pergestion->insertarDtosPersonaGestionLotes($emp_id, $tipoProceso);
         }
-       
     }
 
     /**
@@ -2095,5 +2081,45 @@ class Oportunidad extends \app\modules\admision\components\CActiveRecord {
         $resultData = $comando->queryAll();
         return $resultData;
     }
+    
+    /**
+     * Function carga archivo csv o xls, xlsx a base de datos de las gestiones.
+     * @author Grace Viteri <analistadesarrollo01@uteg.edu.ec>;
+     * @param
+     * @return
+     */
+    public function CargarArchivoGestion($emp_id, $fname, $usu_id, $padm_id) {
+        $mod_actividadTemp = new BitacoraActividadesTmp();
+        $mod_actividad = new Oportunidad();       
+        $path = Yii::$app->basePath . Yii::$app->params['documentFolder'] . "gestion/" . $fname;            
+        $carga_archivo = $mod_actividadTemp->uploadFile($emp_id, $usu_id, $padm_id, $path);
+        if ($carga_archivo['status']) {
+            $data = $mod_actividadTemp->consultarBitacoraTemp($usu_id);  
+            \app\models\Utilities::putMessageLogFile('despues de la consulta');
+            $cont = 0;
+            for ($i = 0; $i < sizeof($data); $i++) {    
+                \app\models\Utilities::putMessageLogFile('ingresa con registros');
+                $resultado = $mod_actividad->insertarActividad($data[$i]["opo_id"], $data[$i]["usu_id"], $data[$i]["padm_id"], $data[$i]["eopo_id"], $data[$i]["bact_fecha_registro"], $data[$i]["oact_id"],  $data[$i]["bact_descripcion"], $data[$i]["bact_fecha_proxima_atencion"]); 
+                //Modificar estado de la oportunidad.        
+                \app\models\Utilities::putMessageLogFile('graba act opor:'. $data[$i]["opo_id"]);
+                $respOport = $mod_actividad->modificarOportunixId(null, $data[$i]["opo_id"], null, null, null, null, null, null, null, null, null, $data[$i]["eopo_id"], $usu_id, $data[$i]["oper_id"]);                
+                \app\models\Utilities::putMessageLogFile('graba opor:'. $data[$i]["opo_id"]);
+                $cont++;
 
+            }            
+            $arroout["status"] = TRUE;
+            $arroout["error"] = null;
+            $arroout["message"] = "Se ha procesado $cont registros.";
+            $arroout["data"] = null;
+            \app\models\Utilities::putMessageLogFile('contador:'.$cont);
+            return $arroout;
+        } else {            
+            $arroout["status"] = FALSE;
+            $arroout["error"] = null;
+            $arroout["message"] = $carga_archivo['message'];
+            $arroout["data"] = null;
+            return $arroout;
+        }       
+    }
 }
+
