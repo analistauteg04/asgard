@@ -203,7 +203,7 @@ class cls_Global {
         }catch(Exception $e){
             $con->rollback();
             $con->close();
-            //throw $e;
+            //throw $e; 
             return $this->messageSystem('NO_OK', $e->getMessage(), null, null, null);
         }
     }
