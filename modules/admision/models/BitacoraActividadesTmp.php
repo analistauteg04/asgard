@@ -102,11 +102,8 @@ class BitacoraActividadesTmp extends \yii\db\ActiveRecord
                     unset($dataArr[1]); // Se elimina la cabecera de titulos del file
                 }
                 $this->deletetablaTemp($con, $usu_id);                
-                $filaError = 1;    
-                \app\models\Utilities::putMessageLogFile('antes de for');
-                foreach ($dataArr as $val) {
-                    \app\models\Utilities::putMessageLogFile('inicia');
-                    //$bandera = '1';
+                $filaError = 1;                    
+                foreach ($dataArr as $val) {                                        
                     $filaError++;        
                     $modelPerGestion = new PersonaGestion();
                     $modelUnidad = new UnidadAcademica();
@@ -127,8 +124,7 @@ class BitacoraActividadesTmp extends \yii\db\ActiveRecord
                     $respEstAcade = $modelEstAcademico::consultarIdsEstudioAca($val[3]);  
                     if (!($respEstAcade)) {
                         $mensaje = "No se encuentra carrera.";                        
-                    }                    
-                    //\app\models\Utilities::putMessageLogFile('data columna 5.'. strtotime($val[5]));                       
+                    }                                        
                     $respOport = $model->consultarOportunidad($emp_id, $respIdPerGes, $respEstAcade, $respUnidad, $respModalidad);                    
                     if (!($respOport)) {                           
                         $bandera= '0';
@@ -144,7 +140,7 @@ class BitacoraActividadesTmp extends \yii\db\ActiveRecord
                         $bandera= '0';
                         $mensaje = "No se encontró código de observación.";                           
                     }
-                    if ($val[2] == 5) { //Estado oportunidad perdida
+                    if ($val[7] == 5) { //Estado oportunidad perdida
                         $respOpoPerdida = $model->consultarOporPerdida($val[12]);
                         if (!($respOpoPerdida)) {                                 
                             $bandera= '0';
@@ -157,31 +153,34 @@ class BitacoraActividadesTmp extends \yii\db\ActiveRecord
                         $arroout["message"] = " Error en la Fila => N°$filaError Nombres => $val[4]";
                         $arroout["data"] = null;
                         throw new Exception('Error, Item no almacenado');
-                    }                     
+                    }
+                    \app\models\Utilities::putMessageLogFile('oport:'.$respOport["opo_id"]);
                     $model->opo_id = $respOport["opo_id"];
                     $model->usu_id = $usu_id;
                     $model->padm_id = $padm_id;
                     $model->eopo_id = $val[7];
                     $model->oact_id = $val[8];
                     $model->bact_fecha_registro = $val[9];                    
-                    if ($val[2] == 1) { //Estado en curso
+                    if ($val[7] == 1) { //Estado en curso
                         $model->bact_fecha_proxima_atencion =$val[10];
                     }
-                    if ($val[2] == 5) { //Estado oportunidad perdida
+                    if ($val[7] == 5) { //Estado oportunidad perdida
                         $model->oper_id =$val[12];                        
                     }
-                    $model->bact_descripcion = $val[11]; 
-                    \app\models\Utilities::putMessageLogFile('cuenta:'.$filaError);
-                    if (!$model->save()) {                        
+                    $model->bact_descripcion = $val[11];                                         
+                    if (!$model->save()) {     
+                        //\app\models\Utilities::putMessageLogFile('opor error:'.$respOport["opo_id"]);
                         $arroout["status"] = FALSE;
                         $arroout["error"] = null;
                         $arroout["message"] = " Error en la Fila => N°$filaError Nombres => $val[4]";
                         $arroout["data"] = null;
                         throw new Exception('Error, Item no almacenado');
                     }
-                }
-                if ($trans !== null)
-                    $trans->commit();                
+                } 
+                if ($trans !== null) 
+                    \app\models\Utilities::putMessageLogFile('graba');
+                    $trans->commit(); 
+               
                 $arroout["status"] = TRUE;
                 $arroout["error"] = null;
                 $arroout["message"] = null;
@@ -189,8 +188,8 @@ class BitacoraActividadesTmp extends \yii\db\ActiveRecord
                 return $arroout;
             } catch (Exception $ex) {
                 if ($trans !== null)                    
-                    $trans->rollback();                         
-                    \app\models\Utilities::putMessageLogFile('mensaje graba error:'. $mensaje);
+                    $trans->rollback(); 
+                                    \app\models\Utilities::putMessageLogFile('rollbacjk');
                     $arroout["status"] = FALSE;
                     $arroout["error"] = null;
                     $arroout["message"] = " Error en la Fila => N°$filaError Nombres => $val[4]. $mensaje";

@@ -1251,10 +1251,12 @@ class Oportunidad extends \app\modules\admision\components\CActiveRecord {
             $result = $comando->execute();
             if ($trans !== null)
                 $trans->commit();
+            \app\models\Utilities::putMessageLogFile('al hacer commit');
             return $con->getLastInsertID($con->dbname . '.bitacora_actividades');
         } catch (Exception $ex) {
             if ($trans !== null)
                 $trans->rollback();
+            \app\models\Utilities::putMessageLogFile('al hacer rollback');
             return FALSE;
         }
     }
@@ -2093,25 +2095,20 @@ class Oportunidad extends \app\modules\admision\components\CActiveRecord {
         $mod_actividad = new Oportunidad();       
         $path = Yii::$app->basePath . Yii::$app->params['documentFolder'] . "gestion/" . $fname;            
         $carga_archivo = $mod_actividadTemp->uploadFile($emp_id, $usu_id, $padm_id, $path);
-        if ($carga_archivo['status']) {
-            $data = $mod_actividadTemp->consultarBitacoraTemp($usu_id);  
-            \app\models\Utilities::putMessageLogFile('despues de la consulta');
+        if ($carga_archivo['status']) {            
+            $data = $mod_actividadTemp->consultarBitacoraTemp($usu_id);                          
             $cont = 0;
-            for ($i = 0; $i < sizeof($data); $i++) {    
-                \app\models\Utilities::putMessageLogFile('ingresa con registros');
+            for ($i = 0; $i < sizeof($data); $i++) {                   
                 $resultado = $mod_actividad->insertarActividad($data[$i]["opo_id"], $data[$i]["usu_id"], $data[$i]["padm_id"], $data[$i]["eopo_id"], $data[$i]["bact_fecha_registro"], $data[$i]["oact_id"],  $data[$i]["bact_descripcion"], $data[$i]["bact_fecha_proxima_atencion"]); 
-                //Modificar estado de la oportunidad.        
-                \app\models\Utilities::putMessageLogFile('graba act opor:'. $data[$i]["opo_id"]);
-                $respOport = $mod_actividad->modificarOportunixId(null, $data[$i]["opo_id"], null, null, null, null, null, null, null, null, null, $data[$i]["eopo_id"], $usu_id, $data[$i]["oper_id"]);                
-                \app\models\Utilities::putMessageLogFile('graba opor:'. $data[$i]["opo_id"]);
+                //Modificar estado de la oportunidad.                        
+                $respOport = $mod_actividad->modificarOportunixId(null, $data[$i]["opo_id"], null, null, null, null, null, null, null, null, null, $data[$i]["eopo_id"], $usu_id, $data[$i]["oper_id"]);                                
                 $cont++;
 
             }            
             $arroout["status"] = TRUE;
             $arroout["error"] = null;
             $arroout["message"] = "Se ha procesado $cont registros.";
-            $arroout["data"] = null;
-            \app\models\Utilities::putMessageLogFile('contador:'.$cont);
+            $arroout["data"] = null;            
             return $arroout;
         } else {            
             $arroout["status"] = FALSE;
