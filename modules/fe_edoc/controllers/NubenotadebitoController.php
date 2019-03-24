@@ -100,6 +100,8 @@ class NubenotadebitoController extends \app\components\CController
 	 */
 	public function actionIndex()
 	{
+		$_SESSION['JSLANG']['Select an item to process the request.'] = \app\modules\fe_edoc\Module::t("fe", 'Select an item to process the request.');
+        $_SESSION['JSLANG']['Email is incorrect.'] = \app\modules\fe_edoc\Module::t("fe", 'Email is incorrect.');
 		return $this->render('index',array(
 			
 		));

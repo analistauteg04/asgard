@@ -82,7 +82,8 @@ $mensaje='
                         if($cabDoc[$i]["Clave"]<>''){//Adjunta Clave en Caso de Ser un Usuario Nuevo
                             $mensaje.='<div class="trow">
                                             <div class="tcol-td form-group">
-                                                <span>Usuario Nuevo</span><br> 
+                                                <label class="titleLabel">Usuario :</label>
+                                                <span>'.((isset($cabDoc[$i]["CorreoPer"]) && $cabDoc[$i]["CorreoPer"] != "")?$cabDoc[$i]["CorreoPer"]:$cabDoc[$i]["CedRuc"]).'</span><br> 
                                                 <label class="titleLabel">Clave :</label>
                                                 <span>'.$cabDoc[$i]["Clave"].'</span>
                                             </div>

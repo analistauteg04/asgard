@@ -83,6 +83,8 @@ return array(
     'Time' => 'Tiempo',
     'Save' => 'Guardar',
     
+    'Select an item to process the request.' => 'Selecciona una fila para procesar la solicitud.',
+    'Email is incorrect.' => 'Los Datos de correo no son correctos.',
    
 );
 ?>

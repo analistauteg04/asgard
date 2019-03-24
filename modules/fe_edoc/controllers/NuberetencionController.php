@@ -91,6 +91,8 @@ class NuberetencionController extends \app\components\CController  {
         $tipDoc= new VSDirectorio();
         $contBuscar = array();
         $data = Yii::$app->request->get();
+        $_SESSION['JSLANG']['Select an item to process the request.'] = \app\modules\fe_edoc\Module::t("fe", 'Select an item to process the request.');
+        $_SESSION['JSLANG']['Email is incorrect.'] = \app\modules\fe_edoc\Module::t("fe", 'Email is incorrect.');
         if ($data['PBgetFilter'] || $data['page']) {
             //$contBuscar = isset($_POST['CONT_BUSCAR']) ? json_encode($_POST['CONT_BUSCAR']) : array();
             //echo CJSON::encode($modelo->mostrarDocumentos($contBuscar));

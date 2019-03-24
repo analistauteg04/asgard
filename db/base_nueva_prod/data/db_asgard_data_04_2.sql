@@ -12,7 +12,9 @@ INSERT INTO `modulo` (`mod_id`, `apl_id`, `mod_nombre`, `mod_tipo`, `mod_dir_ima
 (3, 1, 'Financiero', 'Financiero', 'glyphicon glyphicon-cog', 'financiero/pagos/index', 3, 'menu', '1', '1', '2018-09-18 05:06:44', NULL, '1'),
 (4, 1, 'Académico', 'Academico', 'glyphicon glyphicon-cog', 'academico/admitidos/index', 4, 'menu', '1', '1', '2018-09-18 05:06:58', NULL, '1'),
 (5, 1, 'Reportes', 'Academico', 'glyphicon glyphicon-cog', 'academico/admitidos/index', 5, 'menu', '1', '1', '2018-09-18 05:06:58', NULL, '1'),
-(6, 1, 'Marketing', 'Marketing', 'glyphicon glyphicon-envelope', 'academico/admitidos/index', 6, 'menu', '1', '1', '2018-09-18 05:06:58', NULL, '1');
+(6, 1, 'Marketing', 'Marketing', 'glyphicon glyphicon-envelope', 'academico/admitidos/index', 6, 'menu', '1', '1', '2018-09-18 05:06:58', NULL, '1'),
+(7, 1, 'Facturación Electrónica', 'Facturación Electrónica', 'glyphicon glyphicon-cog', 'fe_edoc/nubefactura/index', 7, 'fe', '1', '1', '2019-02-18 14:54:42', NULL, '1');
+
 
 --
 -- Volcado de datos para la tabla `objeto_modulo`
@@ -167,7 +169,25 @@ INSERT INTO `objeto_modulo` (`omod_id`, `mod_id`, `omod_padre_id`, `omod_nombre`
 (146, 6, 145, 'Actualizar Lista', 'A', '0', '', '', '', 'marketing/email/edit', 1, '1', 'marketing', '1', '2019-02-08 12:18:16', NULL, '1'),
 
 (147, 4, 147, 'Marcación', 'P', '0', '', '', '', 'academico/marcacion/marcacion', 1, '1', 'Academico', '1', '2019-02-12 15:46:09', NULL, '1'),
-(148, 4, 148, 'Listado Marcaciones', 'P', '0', '', '', '', 'academico/marcacion/index', 2, '1', 'Academico', '1', '2019-02-12 15:49:43', NULL, '1');
+(148, 4, 148, 'Listado Marcaciones', 'P', '0', '', '', '', 'academico/marcacion/index', 2, '1', 'Academico', '1', '2019-02-12 15:49:43', NULL, '1'),
+
+
+(149, 7, 149, 'Facturas', 'P', '0', '', '', '', 'fe_edoc/nubefactura/index', '1', '1', 'fe', '1', '2019-02-18 15:03:52', NULL, '1'),
+(150, 7, 150, 'Retenciones', 'P', '0', '', '', '', 'fe_edoc/nuberetencion/index', '2', '1', 'fe', '1', '2019-02-18 15:05:09', NULL, '1'),
+(151, 7, 151, 'Notas de Crédito', 'P', '0', '', '', '', 'fe_edoc/nubenotacredito/index', '3', '1', 'fe', '1', '2019-02-18 15:06:31', NULL, '1'),
+(152, 7, 149, 'Corregir', 'A', '0', '', '', '', 'fe_edoc/nubefactura/index', '1', '1', 'fe', '1', '2019-03-08 11:25:26', NULL, '1'),
+(153, 7, 149, 'Anular', 'A', '0', '', '', '', 'fe_edoc/nubefactura/index', '2', '1', 'fe', '1', '2019-03-08 11:29:08', NULL, '1'),
+(154, 7, 149, 'Editar Correo', 'A', '0', '', '', '', 'fe_edoc/nubefactura/index', '3', '1', 'fe', '1', '2019-03-08 11:43:44', NULL, '1'),
+(155, 7, 149, 'Reenviar Correo', 'A', '0', '', '', '', 'fe_edoc/nubefactura/index', '4', '1', 'fe', '1', '2019-03-08 11:49:38', NULL, '1'),
+(156, 7, 150, 'Corregir', 'A', '0', '', '', '', 'fe_edoc/nuberetencion/index', '1', '1', 'fe', '1', '2019-03-08 12:13:44', NULL, '1'),
+(157, 7, 150, 'Anular', 'A', '0', '', '', '', 'fe_edoc/nuberetencion/index', '2', '1', 'fe', '1', '2019-03-08 12:15:01', NULL, '1'),
+(158, 7, 150, 'Editar Correo', 'A', '0', '', '', '', 'fe_edoc/nuberetencion/index', '3', '1', 'fe', '1', '2019-03-08 12:20:25', NULL, '1'),
+(159, 7, 150, 'Reenviar Correo', 'A', '0', '', '', '', 'fe_edoc/nuberetencion/index', '4', '1', 'fe', '1', '2019-03-08 12:22:24', NULL, '1'),
+(160, 7, 151, 'Corregir', 'A', '0', '', '', '', 'fe_edoc/nubenotacredito/index', '1', '1', 'fe', '1', '2019-03-08 12:26:25', NULL, '1'),
+(161, 7, 151, 'Anular', 'A', '0', '', '', '', 'fe_edoc/nubenotacredito/index', '2', '1', 'fe', '1', '2019-03-08 12:29:20', NULL, '1'),
+(162, 7, 151, 'Editar Correo', 'A', '0', '', '', '', 'fe_edoc/nubenotacredito/index', '3', '1', 'fe', '1', '2019-03-08 12:29:20', NULL, '1'),
+(163, 7, 151, 'Reenviar Correo', 'A', '0', '', '', '', 'fe_edoc/nubenotacredito/index', '4', '1', 'fe', '1', '2019-03-08 12:30:13', NULL, '1');
+
 -- --------------------------------------------------------
 --
 -- Volcado de datos para la tabla `OBMO_ACCI`
@@ -242,7 +262,21 @@ INSERT INTO `obmo_acci` (`oacc_id`, `omod_id`, `acc_id`, `oacc_tipo_boton`, `oac
 (67, 142, 2, '1', '', 'modificarProgramacion', '1', '2018-11-09 15:22:14', NULL, '1'),
 (68, 143, 23, '1', '', 'suscribirTodos', '1', '2018-11-09 15:22:14', NULL, '1'),
 (69, 144, 24, '1', '', 'subirMailchimp', '1', '2018-11-09 15:22:14', NULL, '1'),
-(70, 146, 4, '1', '', 'actualizarLista', '1', '2019-02-11 10:35:20', NULL, '1');
+(70, 146, 4, '1', '', 'actualizarLista', '1', '2019-02-11 10:35:20', NULL, '1'),
+
+(71, 152, 28, '1', '', 'fun_EnviarCorreccion', '1', '2019-03-08 11:25:26', NULL, '1'),
+(72, 153, 27, '1', '', 'fun_EnviarAnular', '1', '2019-03-08 11:29:08', NULL, '1'),
+(73, 154, 25, '1', '', 'fun_UpdateMail', '1', '2019-03-08 11:43:44', NULL, '1'),
+(74, 155, 26, '1', '', 'fun_EnviarCorreo', '1', '2019-03-08 11:49:38', NULL, '1'),
+(75, 156, 28, '1', '', 'fun_EnviarCorreccion', '1', '2019-03-08 12:13:44', NULL, '1'),
+(76, 157, 29, '1', '', 'fun_EnviarAnular', '1', '2019-03-08 12:15:01', NULL, '1'),
+(77, 158, 25, '1', '', 'fun_UpdateMail', '1', '2019-03-08 12:20:25', NULL, '1'),
+(78, 159, 26, '1', '', 'fun_EnviarCorreo', '1', '2019-03-08 12:22:24', NULL, '1'),
+(79, 160, 28, '1', '', 'fun_EnviarCorreccion', '1', '2019-03-08 12:26:25', NULL, '1'),
+(80, 161, 27, '0', 'fun_EnviarAnular', '', '1', '2019-03-08 12:29:20', NULL, '1'),
+(81, 162, 25, '0', 'fun_UpdateMail', '', '1', '2019-03-08 12:29:20', NULL, '1'),
+(82, 163, 26, '1', '', 'fun_EnviarCorreo', '1', '2019-03-08 12:30:13', NULL, '1');
+
 
 -- --------------------------------------------------------
 --
@@ -381,6 +415,7 @@ INSERT INTO `grup_obmo` (`gmod_id`, `gru_id`, `omod_id`, `gmod_estado`,  `gmod_e
 (144, 1, 144, '1', '1'),
 (145, 1, 145, '1', '1'),
 (146, 1, 146, '1', '1');
+
 -- --------------------------------------------------------
 --
 -- Volcado de datos para la tabla `GRUP_OBMO_GRUP_ROL`

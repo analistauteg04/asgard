@@ -39,6 +39,8 @@ class NubefacturaController extends \app\components\CController {
         $aproba= new VSacceso();
         $contBuscar = array();
         $data = Yii::$app->request->get();
+        $_SESSION['JSLANG']['Select an item to process the request.'] = \app\modules\fe_edoc\Module::t("fe", 'Select an item to process the request.');
+        $_SESSION['JSLANG']['Email is incorrect.'] = \app\modules\fe_edoc\Module::t("fe", 'Email is incorrect.');
         if ($data['PBgetFilter'] || $data['page']) {
             //$contBuscar = isset($_POST['CONT_BUSCAR']) ? json_encode($_POST['CONT_BUSCAR']) : array();
             //echo CJSON::encode($modelo->mostrarDocumentos($contBuscar));
@@ -146,7 +148,7 @@ class NubefacturaController extends \app\components\CController {
         }
     }
 
-    public function actionEnviarcorreccion() {        
+    public function actionEnviarcorreccion() {
         if (Yii::$app->request->isAjax) {          
             $errAuto= new VSexception();
             $ids = isset($_POST['ids']) ? base64_decode($_POST['ids']) : NULL;
@@ -164,9 +166,10 @@ class NubefacturaController extends \app\components\CController {
                 );
                 return Utilities::ajaxResponse($arroout['status'], 'alert', Yii::t("jslang", "Success"), false, $message);
             }
-            header('Content-type: application/json');
-            echo json_encode($arroout);
-            return;
+            return Utilities::ajaxResponse($arroout['status'], 'alert', Yii::t("jslang", "Error"), true, $message);
+            //header('Content-type: application/json');
+            //echo json_encode($arroout);
+            //return;
         }
     }
     

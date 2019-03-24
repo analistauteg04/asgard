@@ -108,6 +108,8 @@ return array(
     'This document was already authorized by SRI.' => 'Este documento ya fue autorizado por SRI.',
     'Access key registered, retry in a few minutes.' => 'Clave de Acceso registrada, Vuelva a intentar en unos minutos.',
     'At a time when your mail will be sent.' => 'En unos momentos su correo será enviado.',
-    'The request was completed successfully.' => 'La solicitud se completó con éxito.'
+    'The request was completed successfully.' => 'La solicitud se completó con éxito.',
+    'Select an item to process the request.' => 'Select an item to process the request.',
+    'Email is incorrect.' => 'Email is incorrect.',
 );
 ?>

@@ -186,7 +186,7 @@ class cls_Global {
             $empresa = $this->getIdEmpresa($rucEmp);
             $sql = "INSERT INTO " . $obj_con->BdAppweb . ".empresa_persona
                 (emp_id, per_id,eper_estado_logico,eper_estado) VALUES
-                (".$empresa['Id'].",$IdPer,'1','1') ";
+                (".$empresa['data']['Id'].",$IdPer,'1','1') ";
             $command3 = $con->prepare($sql);
             $command3->execute();
             $IdEper = $con->insert_id;
