@@ -71,6 +71,11 @@ $(document).ready(function () {
     $('#btn_buscarContacto').click(function () {
         actualizarGridContacto();
     });
+    
+    $('#btn_cargarotroscanales').click(function () {
+        cargarOtrosCanales("OTROS_CANALES");
+    });
+    
 });
 
 function actualizarGridContacto() {
@@ -372,4 +377,22 @@ function exportLostContact(){
 function exportStatContact(){
     var op=2;
     window.location.href = $('#txth_base').val() + "/admision/contactos/export?op=" + op;
+}
+
+function cargarOtrosCanales(proceso) {
+    var arrParams = new Object();
+    var link = $('#txth_base').val() + "/admision/contactos/cargarotroscanales";
+    arrParams.procesar_file = true;
+    arrParams.tipo_proceso = proceso;
+    arrParams.emp_id = $('#cmb_empresa option:selected').val();
+    arrParams.archivo = $('#txth_doc_adj_leads2').val() + "." + $('#txth_doc_adj_leads').val().split('.').pop();
+
+    if (!validateForm()) {
+        requestHttpAjax(link, arrParams, function (response) {
+            showAlert(response.status, response.label, response.message);
+            setTimeout(function () {
+                window.location.href = $('#txth_base').val() + "/admision/contactos/index";
+            }, 3000);
+        }, true);
+    }
 }

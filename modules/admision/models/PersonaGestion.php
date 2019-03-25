@@ -1225,7 +1225,7 @@ class PersonaGestion extends \app\modules\admision\components\CActiveRecord {
      */
     public function consultarPerGesTemp($op) {
         $con = \Yii::$app->db_crm;
-        if ($op == "LEADS") {
+        if (($op == "LEADS") || ($op == "OTROS_CANALES")) {
             $sql = "SELECT * FROM " . $con->dbname . ".persona_gestion_tmp;";
         } else {
             //PROCESO LOTES LOTES
@@ -1277,7 +1277,12 @@ class PersonaGestion extends \app\modules\admision\components\CActiveRecord {
                     $nombre = $Data[$i]['pgest_nombre'];
                     $telefono = $Data[$i]['pgest_numero'];
                     $correo = $Data[$i]['pgest_correo'];
-                    $contacto = 2; //$Data[$i]['pgest_contacto'];
+                    if ($tipoProceso == "LEADS") {
+                        $contacto = 2; //$Data[$i]['pgest_contacto'];
+                    } else {
+                        $contacto = $Data[$i]['pgest_contacto']; 
+                    }
+                    
                     $tper_id = 1; //Por defecto Natural
                     $econ_id = 1; //=>En Contacto por defecto
                     $pges_id = PersonaGestion::insertarPersonaGestionLeads($con, $pges_codigo, $tper_id, $nombre, $telefono, $correo, $contacto, $econ_id);
@@ -1329,7 +1334,7 @@ class PersonaGestion extends \app\modules\admision\components\CActiveRecord {
                         $opo_id = $mod_oportunidad->insertarOportunidadLeads($con, $opo_codigo, $emp_id, $pges_id, $padm_id, $Data[$i]);
                         $opo_codigo++;
                         if ($opo_id > 0) {
-                            $bact_id = $mod_oportunidad->insertarActividadLeads($con, $opo_id, $padm_id);
+                            $bact_id = $mod_oportunidad->insertarActividadLeads($con, $opo_id, $padm_id, $Data[$i]['bact_descripcion']);
                         }
                     }
                 } else {

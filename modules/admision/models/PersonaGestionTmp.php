@@ -106,6 +106,7 @@ class PersonaGestionTmp extends \app\modules\admision\components\CActiveRecord {
                         $model->pgest_nombre = "$data[5]";
                         $model->pgest_numero = "$data[6]";
                         $model->pgest_correo = "$data[7]";
+                        $model->pgest_comentario = "$data[8]";
 
                         if (!$model->save()) {
                             $arroout["status"] = FALSE;
@@ -169,6 +170,7 @@ class PersonaGestionTmp extends \app\modules\admision\components\CActiveRecord {
                     $model->pgest_nombre = "$val[6]";
                     $model->pgest_numero = "$val[7]";
                     $model->pgest_correo = "$val[8]";
+                    $model->pgest_comentario = "$data[9]";
                     if (!$model->save()) {
                         $arroout["status"] = FALSE;
                         $arroout["error"] = null;
