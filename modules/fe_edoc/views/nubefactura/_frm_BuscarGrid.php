@@ -95,7 +95,7 @@ use app\models\Rol;
 </div>
 
 
-
+<!--
 <div class="col-lg-12 form-group">
     <?php
     //Yii::$app->session->get('user_name', FALSE); CONTROLA POR USUARIO
@@ -109,4 +109,4 @@ use app\models\Rol;
     ?>
     <?php echo Html::a(Yii::t('fe_edoc', 'Edit mail'), array('NubeFactura/updatemail'), array('id' => 'btn_Update', 'name' => 'btn_Update', 'title' => Yii::t('CONTROL_ACCIONES', 'Edit mail'), 'class' => 'btn btn-primary', 'onclick' => 'fun_UpdateMail()')); ?>
     <?php echo Html::button(Yii::t('fe_edoc', 'Forward mail'), array('id' => 'btn_reenviar', 'name' => 'btn_reenviar', 'class' => 'btn btn-primary', 'onclick' => 'fun_EnviarCorreo()')); ?> 
-</div>
+</div>-->

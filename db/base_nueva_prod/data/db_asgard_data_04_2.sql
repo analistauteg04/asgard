@@ -175,18 +175,51 @@ INSERT INTO `objeto_modulo` (`omod_id`, `mod_id`, `omod_padre_id`, `omod_nombre`
 (149, 7, 149, 'Facturas', 'P', '0', '', '', '', 'fe_edoc/nubefactura/index', '1', '1', 'fe', '1', '2019-02-18 15:03:52', NULL, '1'),
 (150, 7, 150, 'Retenciones', 'P', '0', '', '', '', 'fe_edoc/nuberetencion/index', '2', '1', 'fe', '1', '2019-02-18 15:05:09', NULL, '1'),
 (151, 7, 151, 'Notas de Crédito', 'P', '0', '', '', '', 'fe_edoc/nubenotacredito/index', '3', '1', 'fe', '1', '2019-02-18 15:06:31', NULL, '1'),
-(152, 7, 149, 'Corregir', 'A', '0', '', '', '', 'fe_edoc/nubefactura/index', '1', '1', 'fe', '1', '2019-03-08 11:25:26', NULL, '1'),
-(153, 7, 149, 'Anular', 'A', '0', '', '', '', 'fe_edoc/nubefactura/index', '2', '1', 'fe', '1', '2019-03-08 11:29:08', NULL, '1'),
-(154, 7, 149, 'Editar Correo', 'A', '0', '', '', '', 'fe_edoc/nubefactura/index', '3', '1', 'fe', '1', '2019-03-08 11:43:44', NULL, '1'),
-(155, 7, 149, 'Reenviar Correo', 'A', '0', '', '', '', 'fe_edoc/nubefactura/index', '4', '1', 'fe', '1', '2019-03-08 11:49:38', NULL, '1'),
-(156, 7, 150, 'Corregir', 'A', '0', '', '', '', 'fe_edoc/nuberetencion/index', '1', '1', 'fe', '1', '2019-03-08 12:13:44', NULL, '1'),
-(157, 7, 150, 'Anular', 'A', '0', '', '', '', 'fe_edoc/nuberetencion/index', '2', '1', 'fe', '1', '2019-03-08 12:15:01', NULL, '1'),
-(158, 7, 150, 'Editar Correo', 'A', '0', '', '', '', 'fe_edoc/nuberetencion/index', '3', '1', 'fe', '1', '2019-03-08 12:20:25', NULL, '1'),
-(159, 7, 150, 'Reenviar Correo', 'A', '0', '', '', '', 'fe_edoc/nuberetencion/index', '4', '1', 'fe', '1', '2019-03-08 12:22:24', NULL, '1'),
-(160, 7, 151, 'Corregir', 'A', '0', '', '', '', 'fe_edoc/nubenotacredito/index', '1', '1', 'fe', '1', '2019-03-08 12:26:25', NULL, '1'),
-(161, 7, 151, 'Anular', 'A', '0', '', '', '', 'fe_edoc/nubenotacredito/index', '2', '1', 'fe', '1', '2019-03-08 12:29:20', NULL, '1'),
-(162, 7, 151, 'Editar Correo', 'A', '0', '', '', '', 'fe_edoc/nubenotacredito/index', '3', '1', 'fe', '1', '2019-03-08 12:29:20', NULL, '1'),
-(163, 7, 151, 'Reenviar Correo', 'A', '0', '', '', '', 'fe_edoc/nubenotacredito/index', '4', '1', 'fe', '1', '2019-03-08 12:30:13', NULL, '1');
+
+(152, 7, 149, 'Corregir', 'S', '0', '', '', '', 'fe_edoc/nubefactura/enviarcorreccion', '1', '0', 'fe', '1', '2019-03-08 11:25:26', NULL, '1'),
+(153, 7, 149, 'Corregir', 'A', '0', '', '', '', '', '1', '1', 'fe', '1', '2019-03-08 11:25:26', NULL, '1'),
+
+(154, 7, 149, 'Anular', 'S', '0', '', '', '', 'fe_edoc/nubefactura/enviaranular', '2', '0', 'fe', '1', '2019-03-08 11:29:08', NULL, '1'),
+(155, 7, 149, 'Anular', 'A', '0', '', '', '', '', '2', '1', 'fe', '1', '2019-03-08 11:29:08', NULL, '1'),
+
+(156, 7, 149, 'Editar Correo', 'S', '0', '', '', '', 'fe_edoc/nubefactura/updatemail', '3', '0', 'fe', '1', '2019-03-08 11:43:44', NULL, '1'),
+(157, 7, 149, 'Editar Correo', 'A', '0', '', '', '', '', '3', '1', 'fe', '1', '2019-03-08 11:43:44', NULL, '1'),
+
+(158, 7, 149, 'Reenviar Correo', 'S', '0', '', '', '', 'fe_edoc/nubefactura/enviarcorreo', '4', '0', 'fe', '1', '2019-03-08 11:49:38', NULL, '1'),
+(159, 7, 149, 'Reenviar Correo', 'A', '0', '', '', '', '', '4', '1', 'fe', '1', '2019-03-08 11:49:38', NULL, '1'),
+
+(160, 7, 149, 'Guardar Correo', 'S', '0', '', '', '', 'fe_edoc/nubefactura/savemail', '4', '0', 'fe', '1', '2019-03-08 11:49:38', NULL, '1'),
+(161, 7, 156, 'Guardar Correo', 'A', '0', '', '', '', '', '4', '1', 'fe', '1', '2019-03-08 11:49:38', NULL, '1'),
+
+(162, 7, 150, 'Corregir', 'S', '0', '', '', '', 'fe_edoc/nuberetencion/enviarcorreccion', '1', '0', 'fe', '1', '2019-03-08 12:13:44', NULL, '1'),
+(163, 7, 150, 'Corregir', 'A', '0', '', '', '', '', '1', '1', 'fe', '1', '2019-03-08 12:13:44', NULL, '1'),
+
+(164, 7, 150, 'Anular', 'S', '0', '', '', '', 'fe_edoc/nuberetencion/enviaranular', '2', '0', 'fe', '1', '2019-03-08 12:15:01', NULL, '1'),
+(165, 7, 150, 'Anular', 'A', '0', '', '', '', '', '2', '1', 'fe', '1', '2019-03-08 12:15:01', NULL, '1'),
+
+(166, 7, 150, 'Editar Correo', 'S', '0', '', '', '', 'fe_edoc/nuberetencion/updatemail', '3', '0', 'fe', '1', '2019-03-08 12:20:25', NULL, '1'),
+(167, 7, 150, 'Editar Correo', 'A', '0', '', '', '', '', '3', '1', 'fe', '1', '2019-03-08 12:20:25', NULL, '1'),
+
+(168, 7, 150, 'Reenviar Correo', 'S', '0', '', '', '', 'fe_edoc/nuberetencion/enviarcorreo', '4', '0', 'fe', '1', '2019-03-08 12:22:24', NULL, '1'),
+(169, 7, 150, 'Reenviar Correo', 'A', '0', '', '', '', '', '4', '1', 'fe', '1', '2019-03-08 12:22:24', NULL, '1'),
+
+(170, 7, 150, 'Guardar Correo', 'S', '0', '', '', '', 'fe_edoc/nuberetencion/savemail', '4', '0', 'fe', '1', '2019-03-08 12:22:24', NULL, '1'),
+(171, 7, 166, 'Guardar Correo', 'A', '0', '', '', '', '', '4', '1', 'fe', '1', '2019-03-08 12:22:24', NULL, '1'),
+
+(172, 7, 151, 'Corregir', 'S', '0', '', '', '', 'fe_edoc/nubenotacredito/enviarcorreccion', '1', '0', 'fe', '1', '2019-03-08 12:26:25', NULL, '1'),
+(173, 7, 151, 'Corregir', 'A', '0', '', '', '', '', '1', '1', 'fe', '1', '2019-03-08 12:26:25', NULL, '1'),
+
+(174, 7, 151, 'Anular', 'S', '0', '', '', '', 'fe_edoc/nubenotacredito/enviaranular', '2', '0', 'fe', '1', '2019-03-08 12:29:20', NULL, '1'),
+(175, 7, 151, 'Anular', 'A', '0', '', '', '', '', '2', '1', 'fe', '1', '2019-03-08 12:29:20', NULL, '1'),
+
+(176, 7, 151, 'Editar Correo', 'S', '0', '', '', '', 'fe_edoc/nubenotacredito/updatemail', '3', '0', 'fe', '1', '2019-03-08 12:29:20', NULL, '1'),
+(177, 7, 151, 'Editar Correo', 'A', '0', '', '', '', '', '3', '1', 'fe', '1', '2019-03-08 12:29:20', NULL, '1'),
+
+(178, 7, 151, 'Reenviar Correo', 'S', '0', '', '', '', 'fe_edoc/nubenotacredito/enviarcorreo', '4', '0', 'fe', '1', '2019-03-08 12:30:13', NULL, '1'),
+(179, 7, 151, 'Reenviar Correo', 'A', '0', '', '', '', '', '4', '1', 'fe', '1', '2019-03-08 12:30:13', NULL, '1'),
+
+(180, 7, 151, 'Guardar Correo', 'S', '0', '', '', '', 'fe_edoc/nubenotacredito/savemail', '4', '0', 'fe', '1', '2019-03-08 12:30:13', NULL, '1'),
+(181, 7, 176, 'Guardar Correo', 'A', '0', '', '', '', '', '4', '1', 'fe', '1', '2019-03-08 12:30:13', NULL, '1');
 
 -- --------------------------------------------------------
 --
@@ -264,18 +297,21 @@ INSERT INTO `obmo_acci` (`oacc_id`, `omod_id`, `acc_id`, `oacc_tipo_boton`, `oac
 (69, 144, 24, '1', '', 'subirMailchimp', '1', '2018-11-09 15:22:14', NULL, '1'),
 (70, 146, 4, '1', '', 'actualizarLista', '1', '2019-02-11 10:35:20', NULL, '1'),
 
-(71, 152, 28, '1', '', 'fun_EnviarCorreccion', '1', '2019-03-08 11:25:26', NULL, '1'),
-(72, 153, 27, '1', '', 'fun_EnviarAnular', '1', '2019-03-08 11:29:08', NULL, '1'),
-(73, 154, 25, '1', '', 'fun_UpdateMail', '1', '2019-03-08 11:43:44', NULL, '1'),
-(74, 155, 26, '1', '', 'fun_EnviarCorreo', '1', '2019-03-08 11:49:38', NULL, '1'),
-(75, 156, 28, '1', '', 'fun_EnviarCorreccion', '1', '2019-03-08 12:13:44', NULL, '1'),
-(76, 157, 29, '1', '', 'fun_EnviarAnular', '1', '2019-03-08 12:15:01', NULL, '1'),
-(77, 158, 25, '1', '', 'fun_UpdateMail', '1', '2019-03-08 12:20:25', NULL, '1'),
-(78, 159, 26, '1', '', 'fun_EnviarCorreo', '1', '2019-03-08 12:22:24', NULL, '1'),
-(79, 160, 28, '1', '', 'fun_EnviarCorreccion', '1', '2019-03-08 12:26:25', NULL, '1'),
-(80, 161, 27, '0', 'fun_EnviarAnular', '', '1', '2019-03-08 12:29:20', NULL, '1'),
-(81, 162, 25, '0', 'fun_UpdateMail', '', '1', '2019-03-08 12:29:20', NULL, '1'),
-(82, 163, 26, '1', '', 'fun_EnviarCorreo', '1', '2019-03-08 12:30:13', NULL, '1');
+(71, 153, 28, '1', '', 'fun_EnviarCorreccion', '1', '2019-03-08 11:25:26', NULL, '1'),
+(72, 155, 27, '1', '', 'fun_EnviarAnular', '1', '2019-03-08 11:29:08', NULL, '1'),
+(73, 157, 25, '1', '', 'fun_UpdateMail', '1', '2019-03-08 11:43:44', NULL, '1'),
+(74, 159, 26, '1', '', 'fun_EnviarCorreo', '1', '2019-03-08 11:49:38', NULL, '1'),
+(75, 161, 4, '1', '', 'fun_CambiaMail', '1', '2019-03-08 11:49:38', NULL, '1'),
+(76, 163, 28, '1', '', 'fun_EnviarCorreccion', '1', '2019-03-08 12:13:44', NULL, '1'),
+(77, 165, 29, '1', '', 'fun_EnviarAnular', '1', '2019-03-08 12:15:01', NULL, '1'),
+(78, 167, 25, '1', '', 'fun_UpdateMail', '1', '2019-03-08 12:20:25', NULL, '1'),
+(79, 169, 26, '1', '', 'fun_EnviarCorreo', '1', '2019-03-08 12:22:24', NULL, '1'),
+(80, 171, 4, '1', '', 'fun_CambiaMail', '1', '2019-03-08 11:49:38', NULL, '1'),
+(81, 173, 28, '1', '', 'fun_EnviarCorreccion', '1', '2019-03-08 12:26:25', NULL, '1'),
+(82, 175, 27, '1', '', 'fun_EnviarAnular', '1', '2019-03-08 12:29:20', NULL, '1'),
+(83, 177, 25, '1', '', 'fun_UpdateMail', '1', '2019-03-08 12:29:20', NULL, '1'),
+(84, 179, 26, '1', '', 'fun_EnviarCorreo', '1', '2019-03-08 12:30:13', NULL, '1'),
+(85, 181, 4, '1', '', 'fun_CambiaMail', '1', '2019-03-08 11:49:38', NULL, '1');
 
 
 -- --------------------------------------------------------
