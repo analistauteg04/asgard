@@ -40,7 +40,7 @@ insert into `item` (`ite_id`, `scat_id`,  `ite_codigo`, `ite_nombre`, `ite_descr
 (9, 5, '0009', 'Pago total Matrícula+Derecho Posgrado', 'Pago total Matrícula+Derecho Posgrado', 1, '1', '1'),
 (10, 5, '0010', 'Inscripción Posgrado', 'Inscripción Posgrado', 1, '1', '1'),
 -- Smart --
-(11, 6, '0011', 'Emprendimiento y Ventas', 'Emprendimiento y Ventas', 1, '0', '1'),
+(11, 6, '0011', 'Emprendimiento y Ventas reales', 'Emprendimiento y Ventas reales', 1, '0', '1'),
 (12, 6, '0012', 'Excel Avanzado', 'Excel Avanzado', 1, '1', '1'),
 (13, 6, '0013', 'Fotografía', 'Fotografía', 1, '1', '1'),
 (14, 6, '0014', 'Event Planner', 'Event Planner', 1, '1', '1'),
@@ -206,7 +206,10 @@ insert into `item` (`ite_id`, `scat_id`,  `ite_codigo`, `ite_nombre`, `ite_descr
 (163, 3, '0163', 'Saldo Matrícula Semipresencial', 'Saldo Matrícula Semipresencial', 1, '1', '1'),
 (164, 4, '0164', 'Saldo Matrícula Distancia', 'Saldo Matrícula Distancia', 1, '1', '1'),
 
-(165, 3, '0165', 'Posgrado Total', 'Posgrado Total', 1, '1', '1');
+(165, 3, '0165', 'Posgrado Total', 'Posgrado Total', 1, '1', '1'),
+
+(166, 6, '0166', 'Actualización normativa laboral', 'Actualización normativa laboral', 1, '1', '1'),
+(167, 6, '0167', 'Seguridad y Salud Ocupacional', 'Seguridad y Salud Ocupacional', 1, '1', '1');
 
 -- --------------------------------------------------------
 --
@@ -390,7 +393,10 @@ insert into `item_precio` (`ipre_id`, `ite_id`, `ipre_precio`, `ipre_porcentaje_
 (163, 163, 150, null, 'A', null, null, '2019/01/30 00:00:00', '2019/12/31 23:59:59', 1, '1', '1'),
 (164, 164, 150, null, 'A', null, null, '2019/01/30 00:00:00', '2019/12/31 23:59:59', 1, '1', '1'),
 
-(165, 165, 11000, null, 'A', null, null, '2019/01/30 00:00:00', '2019/12/31 23:59:59', 1, '1', '1');
+(165, 165, 11000, null, 'A', null, null, '2019/01/30 00:00:00', '2019/12/31 23:59:59', 1, '1', '1'),
+
+(166, 166, 100, null, 'A', null, null, '2019/03/26 00:00:00', '2019/12/31 23:59:59', 1, '1', '1'),
+(167, 167, 100, null, 'A', null, null, '2019/03/26 00:00:00', '2019/12/31 23:59:59', 1, '1', '1');
 
 -- --------------------------------------------------------
 --
@@ -577,7 +583,11 @@ insert into `historial_item_precio` (`hipr_id`, `ite_id`, `hipr_precio`, `hipr_p
 
 (167, 162, 150, null, '2019/01/30 00:00:00', '2019/12/31 23:59:59', null, null, 1, '1', '1'),
 (168, 163, 150, null, '2019/01/30 00:00:00', '2019/12/31 23:59:59', null, null, 1, '1', '1'),
-(169, 164, 150, null, '2019/01/30 00:00:00', '2019/12/31 23:59:59', null, null, 1, '1', '1');
+(169, 164, 150, null, '2019/01/30 00:00:00', '2019/12/31 23:59:59', null, null, 1, '1', '1'),
+
+(170, 11, 100, null, '2019/03/26 00:00:00', '2019/12/31 23:59:59', null, null, 1, '1', '1'),
+(171, 166, 100, null, '2019/03/26 00:00:00', '2019/12/31 23:59:59', null, null, 1, '1', '1'),
+(172, 167, 100, null, '2019/03/26 00:00:00', '2019/12/31 23:59:59', null, null, 1, '1', '1');
 -- --------------------------------------------------------
 --
 -- Volcado de datos para la tabla `item_metodo_nivel` 
@@ -761,7 +771,10 @@ insert into `item_metodo_unidad` (`imni_id`, `ite_id`, `ming_id`, `uaca_id`, `mo
 (162, 158, null, 1, 1, null, 1, '1', '1'),
 (163, 159, null, 1, 2, null, 1, '1', '1'),
 (164, 160, null, 1, 3, null, 1, '1', '1'),
-(165, 161, null, 1, 4, null, 1, '1', '1');
+(165, 161, null, 1, 4, null, 1, '1', '1'),
+
+(166, 166, null, 3, 2, 145, 1, '1', '1'),
+(167, 167, null, 3, 2, 146, 1, '1', '1');
 
 -- --------------------------------------------------------
 --
@@ -803,7 +816,11 @@ insert into `descuento_item` (`dite_id`, `ite_id`, `dite_usu_creacion`, `dite_es
 (8, 12, 1, '1', '1'), -- Excel Avanzado
 (9, 13, 1, '1', '1'), -- Fotografía
 (10, 14, 1, '1', '1'), -- Event Planner
-(11, 22, 1, '1', '1'); -- Illustrator y fotoshop: intermedio
+(11, 22, 1, '1', '1'), -- Illustrator y fotoshop: intermedio
+
+(12, 11, 1, '1', '1'), -- Emprendimiento y Ventas
+(13, 166, 1, '1', '1'), -- Actualización normativa laboral
+(14, 167, 1, '1', '1'); -- Seguridad y Salud Ocupacional
 
 -- --------------------------------------------------------
 --

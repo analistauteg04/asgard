@@ -161,7 +161,7 @@ INSERT INTO `modalidad_estudio_unidad` (`meun_id`, `uaca_id`, `mod_id`, `eaca_id
 -- Volcado de datos para la tabla `modulo_estudio`
 --
 INSERT INTO `modulo_estudio` (`mest_id`, `uaca_id`, `mod_id`, `mest_codigo`, `mest_nombre`, `mest_descripcion`, `mest_alias`, `mest_usuario_ingreso`, `mest_usuario_modifica`, `mest_estado`, `mest_fecha_creacion`, `mest_fecha_modificacion`, `mest_estado_logico`) VALUES
-(1, 3, 2, 'SM1-EMVE01', 'Emprendimiento y Ventas', 'Emprendimiento y Ventas', 'emprendimiento_y_ventas', 1, NULL, '0', '2017-02-01 03:43:48', NULL, '1'),
+(1, 3, 2, 'SM1-EMVE01', 'Emprendimiento y Ventas reales', 'Emprendimiento y Ventas reales', 'emprendimiento_y_ventas', 1, NULL, '0', '2017-02-01 03:43:48', NULL, '1'),
 (2, 3, 2, 'SM2-EXAV01', 'Excel Avanzado', 'Excel Avanzado', 'excel_Avanzado', 1, NULL, '1', '2017-02-01 03:43:48', NULL, '1'),
 (3, 3, 2, 'SM3-FOTO01', 'Fotografía', 'Fotografia', 'fotografia', 1, NULL, '1', '2017-02-01 03:43:48', NULL, '1'),
 (4, 3, 2, 'SM4-EVPL01', 'Event Planner', 'Event Planner', 'event_planner', 1, NULL, '1', '2017-02-01 03:43:48', NULL, '1'),
@@ -306,7 +306,10 @@ INSERT INTO `modulo_estudio` (`mest_id`, `uaca_id`, `mod_id`, `mest_codigo`, `me
 (141, 9, 1, 'UL178CSAL-01', 'Configuración e implementación de un servidor apache basado en distribuciones Linux', 'Configuracion e implementacion de un servidor apache basado en distribuciones Linux', 'configuración_e_implementación_de_un_servidor_apache_basado_en_distribuciones_linux', 1, NULL, '1', '2018-12-10 12:15:48', NULL, '1'),
 (142, 9, 1, 'UL179DAWP-01', 'Desarrollo de Aplicaciones Web con Python', 'Desarrollo de Aplicaciones Web con Python', 'desarrollo_de_aplicaciones_web_con_python', 1, NULL, '1', '2018-12-10 12:15:48', NULL, '1'),
 (143, 9, 1, 'UL180DPCB-01', 'Desarrollo de procesos con BIZAGI', 'Desarrollo de procesos con BIZAGI', 'desarrollo_de_procesos_con_bizagi', 1, NULL, '1', '2018-12-10 12:15:48', NULL, '1'),
-(144, 9, 1, 'UL181BPPR-01', 'Bootstrap para principiantes', 'Bootstrap para principiantes', 'bootstrap_para_principiantes', 1, NULL, '1', '2018-12-10 12:15:48', NULL, '1');
+(144, 9, 1, 'UL181BPPR-01', 'Bootstrap para principiantes', 'Bootstrap para principiantes', 'bootstrap_para_principiantes', 1, NULL, '1', '2018-12-10 12:15:48', NULL, '1'),
+(145, 3, 2, 'SM145-ANLA01', 'Actualización Normativa Laboral', 'Actualización Normativa Laboral', 'actualización_normativa_laboral', 1, NULL, '1', '2019-03-26 12:15:48', NULL, '1'),
+(146, 3, 2, 'SM146-SSOC01', 'Seguridad y Salud Ocupacional', 'Seguridad y Salud Ocupacional', 'seguridad_salud', 1, NULL, '1', '2019-03-26 12:15:48', NULL, '1');
+
 -- --------------------------------------------------------
 --
 -- Volcado de datos para la tabla `formacion_malla_academica`
@@ -471,7 +474,10 @@ INSERT INTO `modulo_estudio_empresa` (`meem_id`, `mest_id`, `emp_id`, `meem_fech
 (141, 141, 2, '2018-09-01 05:00:00', '2018-12-31 05:00:00', 1, NULL, '1', '1', '2018-12-10 13:30:00', NULL, '1'),
 (142, 142, 2, '2018-09-01 05:00:00', '2018-12-31 05:00:00', 1, NULL, '1', '1', '2018-12-10 13:30:00', NULL, '1'),
 (143, 143, 2, '2018-09-01 05:00:00', '2018-12-31 05:00:00', 1, NULL, '1', '1', '2018-12-10 13:30:00', NULL, '1'),
-(144, 144, 2, '2018-09-01 05:00:00', '2018-12-31 05:00:00', 1, NULL, '1', '1', '2018-12-10 13:30:00', NULL, '1');
+(144, 144, 2, '2018-09-01 05:00:00', '2018-12-31 05:00:00', 1, NULL, '1', '1', '2018-12-10 13:30:00', NULL, '1'),
+
+(145, 145, 3, '2019-03-26 15:30:00', '2019-12-31 23:59:59', 1, NULL, '1', '1', '2019-03-26 15:30:00', NULL, '1'),
+(146, 146, 3, '2019-03-26 15:30:00', '2019-12-31 23:59:59', 1, NULL, '1', '1', '2019-03-26 15:30:00', NULL, '1');
 
 -- --------------------------------------------------------
 --
