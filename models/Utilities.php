@@ -610,7 +610,7 @@ class Utilities {
                     $status = true;
                 break;
             case 'email'://email        
-                if (preg_match("/^[\w-\.]{3,}@([\w-]{2,}\.)*([\w-]{2,}\.)[\w-]{2,4}$/", $field))
+                if (preg_match("/^[\w\-\.]{3,}@([\w\-]{2,}\.)*([\w\-]{2,}\.)[\w\-]{2,4}$/", $field))
                     $status = true;
                 break;
             case 'telefono':

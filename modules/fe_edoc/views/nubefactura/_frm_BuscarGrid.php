@@ -7,6 +7,22 @@ use yii\helpers\Url;
 use kartik\date\DatePicker;
 use yii\helpers\ArrayHelper;
 use app\models\Rol;
+/*
+use app\widgets\PbVPOS\PbVPOS;
+echo PbVPOS::widget([
+    "id" => "VPOS",
+    "referenceID" => rand(200,10000),
+    "ordenPago" => "123123",
+    "descripcionItem" => "item",
+    "titleBox" => "titleBox",
+    "nombre_cliente" => "edu",
+    "apellido_cliente" => "cuev",
+    "email_cliente" => "edewewu@eeeew.com",
+    "total" => "10.0",
+    "isCheckout" => false,
+    "requestID" => "",
+    "type" => "form",
+]);*/
 ?>
 
 <div class="col-md-12 col-sm-12 col-xs-12 col-lg-12">

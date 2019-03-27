@@ -78,6 +78,14 @@ class PbVPOS extends Widget {
                 "total" => $this->total,
                 "referenceID" => $this->referenceID,
             ];
+            if(!(Utilities::validateTypeField($this->email_cliente, "email")) || 
+            !(Utilities::validateTypeField($this->nombre_cliente, "alfa")) || 
+            !(Utilities::validateTypeField($this->apellido_cliente, "alfa")) ||
+            !(Utilities::validateTypeField($this->total, "dinero")) || 
+            $this->total <= 0){
+                echo $this->render('validaError');
+                return;
+            }
             if($this->isCheckout === false){
                 // hay una orden de pago previa
                 $resp = $this->existsOrdenResponse();
