@@ -209,7 +209,9 @@ insert into `item` (`ite_id`, `scat_id`,  `ite_codigo`, `ite_nombre`, `ite_descr
 (165, 3, '0165', 'Posgrado Total', 'Posgrado Total', 1, '1', '1'),
 
 (166, 6, '0166', 'Actualización normativa laboral', 'Actualización normativa laboral', 1, '1', '1'),
-(167, 6, '0167', 'Seguridad y Salud Ocupacional', 'Seguridad y Salud Ocupacional', 1, '1', '1');
+(167, 6, '0167', 'Seguridad y Salud Ocupacional', 'Seguridad y Salud Ocupacional', 1, '1', '1'),
+
+(168, 1, '0168', 'Inscripción Online', 'Inscripción Online', 1, '1', '1');
 
 -- --------------------------------------------------------
 --
@@ -396,7 +398,9 @@ insert into `item_precio` (`ipre_id`, `ite_id`, `ipre_precio`, `ipre_porcentaje_
 (165, 165, 11000, null, 'A', null, null, '2019/01/30 00:00:00', '2019/12/31 23:59:59', 1, '1', '1'),
 
 (166, 166, 100, null, 'A', null, null, '2019/03/26 00:00:00', '2019/12/31 23:59:59', 1, '1', '1'),
-(167, 167, 100, null, 'A', null, null, '2019/03/26 00:00:00', '2019/12/31 23:59:59', 1, '1', '1');
+(167, 167, 100, null, 'A', null, null, '2019/03/26 00:00:00', '2019/12/31 23:59:59', 1, '1', '1'),
+
+(168, 168, 65, null, 'A', null, null, '2019/03/29 00:00:00', '2019/12/31 23:59:59', 1, '1', '1');
 
 -- --------------------------------------------------------
 --
@@ -587,7 +591,9 @@ insert into `historial_item_precio` (`hipr_id`, `ite_id`, `hipr_precio`, `hipr_p
 
 (170, 11, 100, null, '2019/03/26 00:00:00', '2019/12/31 23:59:59', null, null, 1, '1', '1'),
 (171, 166, 100, null, '2019/03/26 00:00:00', '2019/12/31 23:59:59', null, null, 1, '1', '1'),
-(172, 167, 100, null, '2019/03/26 00:00:00', '2019/12/31 23:59:59', null, null, 1, '1', '1');
+(172, 167, 100, null, '2019/03/26 00:00:00', '2019/12/31 23:59:59', null, null, 1, '1', '1'),
+
+(173, 168, 65, null, '2019/03/29 00:00:00', '2019/12/31 23:59:59', null, null, 1, '1', '1');
 -- --------------------------------------------------------
 --
 -- Volcado de datos para la tabla `item_metodo_nivel` 
@@ -774,7 +780,9 @@ insert into `item_metodo_unidad` (`imni_id`, `ite_id`, `ming_id`, `uaca_id`, `mo
 (165, 161, null, 1, 4, null, 1, '1', '1'),
 
 (166, 166, null, 3, 2, 145, 1, '1', '1'),
-(167, 167, null, 3, 2, 146, 1, '1', '1');
+(167, 167, null, 3, 2, 146, 1, '1', '1'),
+
+(168, 168, null, 1, 1, null, 1, '1', '1');
 
 -- --------------------------------------------------------
 --

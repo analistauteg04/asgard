@@ -1333,8 +1333,9 @@ class PersonaGestion extends \app\modules\admision\components\CActiveRecord {
                         //$pgco_id = $mod_oportunidad->insertarPersonaGestionContactoLeads($con, $pges_id,$Data[$i]);                        
                         $opo_id = $mod_oportunidad->insertarOportunidadLeads($con, $opo_codigo, $emp_id, $pges_id, $padm_id, $Data[$i]);
                         $opo_codigo++;
-                        if ($opo_id > 0) {
-                            $bact_id = $mod_oportunidad->insertarActividadLeads($con, $opo_id, $padm_id, $Data[$i]['bact_descripcion']);
+                        if ($opo_id > 0) {              
+                            \app\models\Utilities::putMessageLogFile('antes de insertar actividad'); 
+                            $bact_id = $mod_oportunidad->insertarActividadLeads($con, $opo_id, $padm_id, $Data[$i]['pgest_comentario']);
                         }
                     }
                 } else {

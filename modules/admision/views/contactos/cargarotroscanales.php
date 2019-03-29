@@ -56,12 +56,12 @@ $leyenda = '<div class="col-md-12 col-xs-12 col-sm-12 col-lg-12">
                         'uploadUrl' => Url::to(['contactos/cargarotroscanales']),
                         'maxFileSize' => Yii::$app->params["MaxFileSize"],
                         'uploadExtraData' => 'javascript:function (previewId,index) {
-            return {"upload_file": true, "name_file": "op_leads-' . @Yii::$app->session->get("PB_iduser") . '-' . time() . '"};
+            return {"upload_file": true, "name_file": "op_canalnew-' . @Yii::$app->session->get("PB_iduser") . '-' . time() . '"};
         }',
                     ],
                     'pluginEvents' => [
                         "filebatchselected" => "function (event) {
-        $('#txth_doc_adj_leads2').val('op_leads-" . @Yii::$app->session->get("PB_iduser") . '-' . time() . "');
+        $('#txth_doc_adj_leads2').val('op_canalnew-" . @Yii::$app->session->get("PB_iduser") . '-' . time() . "');
         $('#txth_doc_adj_leads').val($('#txt_doc_adj_leads').val());
         $('#txt_doc_adj_leads').fileinput('upload');
     }",

@@ -86,9 +86,9 @@ class PersonaGestionTmp extends \app\modules\admision\components\CActiveRecord {
             $trans = null; // si existe la transacción entonces no se crea una
         } else {
             $trans = $con->beginTransaction(); // si no existe la transacción entonces se crea una
-        }
+        }        
         if (strtolower(end($chk_ext)) == "csv") {
-            //si es correcto, entonces damos permisos de lectura para subir          
+            //si es correcto, entonces damos permisos de lectura para subir                  
             try {
                 $handle = fopen($file, "r");
                 $cont = 0;
@@ -136,9 +136,9 @@ class PersonaGestionTmp extends \app\modules\admision\components\CActiveRecord {
                 return $arroout;
             }
         }else if (strtolower(end($chk_ext)) == "xls" || strtolower(end($chk_ext)) == "xlsx") {
-            //Create new PHPExcel object
+            //Create new PHPExcel object            
             $objPHPExcel = \PhpOffice\PhpSpreadsheet\IOFactory::load($file);
-            $dataArr = array();
+            $dataArr = array();    
             try {
                 //$sheetData = $objPHPExcel->getActiveSheet()->toArray(null, true, true, true);
                 foreach ($objPHPExcel->getWorksheetIterator() as $worksheet) {
@@ -157,7 +157,7 @@ class PersonaGestionTmp extends \app\modules\admision\components\CActiveRecord {
                     unset($dataArr[1]); // Se elimina la cabecera de titulos del file
                 }
                 $this->deletetablaTemp($con);
-                //PersonaGestionTmp::deletetablaTemp($con);
+                //PersonaGestionTmp::deletetablaTemp($con);                
                 $filaError = 1;
                 foreach ($dataArr as $val) {
                     $filaError++;
@@ -170,7 +170,7 @@ class PersonaGestionTmp extends \app\modules\admision\components\CActiveRecord {
                     $model->pgest_nombre = "$val[6]";
                     $model->pgest_numero = "$val[7]";
                     $model->pgest_correo = "$val[8]";
-                    $model->pgest_comentario = "$data[9]";
+                    $model->pgest_comentario = "$val[9]";                    
                     if (!$model->save()) {
                         $arroout["status"] = FALSE;
                         $arroout["error"] = null;
@@ -180,8 +180,8 @@ class PersonaGestionTmp extends \app\modules\admision\components\CActiveRecord {
                     }
                 }
                 if ($trans !== null)
-                    $trans->commit();
-
+                    $trans->commit();                    
+                    
                 $arroout["status"] = TRUE;
                 $arroout["error"] = null;
                 $arroout["message"] = null;
@@ -191,8 +191,9 @@ class PersonaGestionTmp extends \app\modules\admision\components\CActiveRecord {
             } catch (Exception $ex) {
                 if ($trans !== null)
                     $trans->rollback();
+                    \app\models\Utilities::putMessageLogFile('Error en la Fila => N° ' .$filaError .' Nombre =>'. $val[6]); 
                 //return false;
-                return $arroout;
+                return $arroout;                
             }
         }
     }

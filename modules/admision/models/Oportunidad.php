@@ -1117,12 +1117,20 @@ class Oportunidad extends \app\modules\admision\components\CActiveRecord {
         $eopo_id = 1; //???? En curso por defecto  
         $oact_id = 1; //Observacion de Actividades
         $bact_usuario = $usuario;
-        $sql = "INSERT INTO " . $con->dbname . ".bitacora_actividades
-                (opo_id,usu_id,padm_id,eopo_id,bact_fecha_registro,bact_fecha_proxima_atencion,oact_id,
-                 bact_usuario,bact_descripcion, bact_estado,bact_estado_logico)VALUES
-                (:opo_id,:usu_id,:padm_id,:eopo_id,CURRENT_TIMESTAMP(),CURRENT_TIMESTAMP(),
-                 :oact_id,:bact_usuario, :bact_descripcion, 1,1); ";
-
+        
+        if (!empty($bact_descripcion)) {
+            $sql = "INSERT INTO " . $con->dbname . ".bitacora_actividades
+                    (opo_id,usu_id,padm_id,eopo_id,bact_fecha_registro,bact_fecha_proxima_atencion,oact_id,
+                     bact_usuario,bact_descripcion, bact_estado,bact_estado_logico)VALUES
+                    (:opo_id,:usu_id,:padm_id,:eopo_id,CURRENT_TIMESTAMP(),CURRENT_TIMESTAMP(),
+                     :oact_id,:bact_usuario, :bact_descripcion, 1,1)";
+        } else {
+            $sql = "INSERT INTO " . $con->dbname . ".bitacora_actividades
+                    (opo_id,usu_id,padm_id,eopo_id,bact_fecha_registro,bact_fecha_proxima_atencion,oact_id,
+                     bact_usuario, bact_estado,bact_estado_logico)VALUES
+                    (:opo_id,:usu_id,:padm_id,:eopo_id,CURRENT_TIMESTAMP(),CURRENT_TIMESTAMP(),
+                     :oact_id,:bact_usuario, 1,1)";
+        }       
         $command = $con->createCommand($sql);
         $command->bindParam(":opo_id", $opo_id, \PDO::PARAM_INT);
         $command->bindParam(":usu_id", $usuario, \PDO::PARAM_INT);
@@ -1612,7 +1620,7 @@ class Oportunidad extends \app\modules\admision\components\CActiveRecord {
             $path = Yii::$app->basePath . Yii::$app->params['documentFolder'] . "leads/" . $fname;
             //return $mod_pergestion->insertarDtosPersonaGestion($emp_id, $tipoProceso);
             $carga_archivo = $mod_perTemp->uploadFile($emp_id, $path);
-            if ($carga_archivo['status']) {
+            if ($carga_archivo['status']) {                
                 return $mod_pergestion->insertarDtosPersonaGestion($emp_id, $tipoProceso);
             } else {
                 return $carga_archivo;
@@ -2135,7 +2143,7 @@ class Oportunidad extends \app\modules\admision\components\CActiveRecord {
         
         $path = Yii::$app->basePath . Yii::$app->params['documentFolder'] . "gestion/" . $fname;        
         $carga_archivo = $mod_perTemp->uploadFile($emp_id, $path);
-        if ($carga_archivo['status']) {
+        if ($carga_archivo['status']) {            
             return $mod_pergestion->insertarDtosPersonaGestion($emp_id, $tipoProceso);
         } else {
             return $carga_archivo;

@@ -798,7 +798,7 @@ class ContactosController extends \app\components\CController {
                 $arrIm = explode(".", basename($files['name']));
                 $typeFile = strtolower($arrIm[count($arrIm) - 1]);
                 if ($typeFile == 'xlsx' || $typeFile == 'csv' || $typeFile == 'xls') {
-                    $dirFileEnd = Yii::$app->params["documentFolder"] . "leads/" . $data["name_file"] . "." . $typeFile;
+                    $dirFileEnd = Yii::$app->params["documentFolder"] . "gestion/" . $data["name_file"] . "." . $typeFile;
                     $status = Utilities::moveUploadFile($files['tmp_name'], $dirFileEnd);
                     if ($status) {
                         return true;
@@ -808,6 +808,7 @@ class ContactosController extends \app\components\CController {
                 }
             }
             if ($data["procesar_file"]) {
+                //\app\models\Utilities::putMessageLogFile('ingresa:'); 
                 $carga_archivo = $mod_gestion->CargarArchivoOtroscanales($data["archivo"], $data["emp_id"], $data["tipo_proceso"]);
                 if ($carga_archivo['status']) {
                     $message = array(
