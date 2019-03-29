@@ -19,6 +19,8 @@ return [
     "Amount" => "Amount",
     "Reload" => "Reload",
     "Problems with Payment Method" => "Problems with Payment Method",
+    "I am agree with terms and conditions." => "I am agree with terms and conditions.",
+    "Check terms and conditions here." => "Check terms and conditions here.",
     "Please check your information. Names only letters and Email must be valid." => "Please check your information. Names only letters and Email must be valid.",
     "Your payment is pending payment. Please wait a few minutes to try to update your payment." => "Your payment is pending payment. Please wait a few minutes to try to update your payment.",
     "Your payment has already been executed. Click on the button to update the page." => "Your payment has already been executed. Click on the button to update the page.",

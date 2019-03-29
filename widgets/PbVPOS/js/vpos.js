@@ -9,7 +9,8 @@ $(document).on('ready', function() {
 });
 
 function playOnPay(processUrl) {
-    P.init(processUrl);
+    if (!$(".btnBuy").hasClass("disabled"))
+        P.init(processUrl);
 }
 
 function returnFn() {
@@ -46,5 +47,13 @@ function setResponseData(data, execute) {
             }
             resetSession(wtmessage, label, status, callback, lblAccept);
         }, true);
+    }
+}
+
+function checkTerms(ref) {
+    if ($(ref).is(':checked')) {
+        $(".btnBuy").removeClass("disabled");
+    } else {
+        $(".btnBuy").addClass("disabled");
     }
 }

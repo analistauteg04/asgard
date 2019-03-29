@@ -48,6 +48,8 @@ class PbVPOS extends Widget {
     public $returnUrl = "";
     public $locale = "es_EC";
     public $ipAddress = "127.0.0.1";
+    public $publicAssetUrl = "";
+    public $termsConditions = "#";
     public $type = "button"; // boton, form
     public $titleBox = ""; 
     public $producction = false;
@@ -133,8 +135,12 @@ class PbVPOS extends Widget {
                 }
                 if($this->type == "button")
                     echo $this->render('button', $data);
-                else
-                    echo $this->render('form', $data);
+                else{
+                        $data['publicAssetUrl'] = $this->publicAssetUrl;
+                        $data['pbId'] = $this->type_vpos;
+                        $data['termsConditions'] = $this->termsConditions;
+                        echo $this->render('form', $data);
+                }
                 //return Html::encode($this->message);
             }
         }
@@ -607,6 +613,7 @@ class PbVPOS extends Widget {
     {
         $view = $this->getView();
         $assetVPOS = VPOSAsset::register($view);
+        $this->publicAssetUrl = $assetVPOS->baseUrl;
         //$view->registerJs($script, View::POS_END, $id);
         /*
         $view->registerJsFile(

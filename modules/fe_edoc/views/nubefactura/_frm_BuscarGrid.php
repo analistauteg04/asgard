@@ -7,7 +7,7 @@ use yii\helpers\Url;
 use kartik\date\DatePicker;
 use yii\helpers\ArrayHelper;
 use app\models\Rol;
-/*
+
 use app\widgets\PbVPOS\PbVPOS;
 echo PbVPOS::widget([
     "id" => "VPOS",
@@ -22,7 +22,7 @@ echo PbVPOS::widget([
     "isCheckout" => false,
     "requestID" => "",
     "type" => "form",
-]);*/
+]);
 ?>
 
 <div class="col-md-12 col-sm-12 col-xs-12 col-lg-12">

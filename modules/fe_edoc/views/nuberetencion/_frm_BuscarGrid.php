@@ -99,11 +99,11 @@ use app\models\Rol;
     $model_rol = new Rol();
     $rol = $model_rol->getMainRol(Yii::$app->session->get('PB_username', false));
     if ($rol['id'] == 1 || $rol['id'] == 2 || $rol['id'] == 3) { //CONTROLA POR ROL ADMIN
-        echo Html::button(Yii::t('fe_edoc', 'To correct'), array('id' => 'btn_corregir', 'name' => 'btn_corregir', 'class' => 'btn btn-danger', 'onclick' => 'fun_EnviarCorreccion()'));
-        echo ' ';
-        echo Html::button(Yii::t('fe_edoc', 'Cancel'), array('id' => 'btn_cancel', 'name' => 'btn_cancel', 'class' => 'btn btn-danger', 'onclick' => 'fun_EnviarAnular()'));
+        //echo Html::button(Yii::t('fe_edoc', 'To correct'), array('id' => 'btn_corregir', 'name' => 'btn_corregir', 'class' => 'btn btn-danger', 'onclick' => 'fun_EnviarCorreccion()'));
+        //echo ' ';
+        //echo Html::button(Yii::t('fe_edoc', 'Cancel'), array('id' => 'btn_cancel', 'name' => 'btn_cancel', 'class' => 'btn btn-danger', 'onclick' => 'fun_EnviarAnular()'));
     }
     ?>
-    <?php echo Html::a(Yii::t('fe_edoc', 'Edit mail'), array('nuberetencion/updatemail'), array('id' => 'btn_Update', 'name' => 'btn_Update', 'title' => Yii::t('CONTROL_ACCIONES', 'Edit mail'), 'class' => 'btn btn-primary', 'onclick' => 'fun_UpdateMail()')); ?>
-    <?php echo Html::button(Yii::t('fe_edoc', 'Forward mail'), array('id' => 'btn_reenviar', 'name' => 'btn_reenviar', 'class' => 'btn btn-primary', 'onclick' => 'fun_EnviarCorreo()')); ?> 
+    <?php //echo Html::a(Yii::t('fe_edoc', 'Edit mail'), array('nuberetencion/updatemail'), array('id' => 'btn_Update', 'name' => 'btn_Update', 'title' => Yii::t('CONTROL_ACCIONES', 'Edit mail'), 'class' => 'btn btn-primary', 'onclick' => 'fun_UpdateMail()')); ?>
+    <?php //echo Html::button(Yii::t('fe_edoc', 'Forward mail'), array('id' => 'btn_reenviar', 'name' => 'btn_reenviar', 'class' => 'btn btn-primary', 'onclick' => 'fun_EnviarCorreo()')); ?> 
 </div>
