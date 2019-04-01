@@ -379,6 +379,7 @@ return [
     "Module" => "Módulo",
     "Materials Certificate" => "Certificado Materias",
     "Management number" => "Número Gestión",
+    "Management State" => "Estado Gestión",
     "Monday" => "Lunes",
     "Montubio" => "Montubio",
     "Month" => "Mes",

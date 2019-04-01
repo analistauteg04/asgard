@@ -13,6 +13,7 @@ use yii\helpers\Html;
             'arra_agente' => $arra_agente,
             'arr_empresa' => $arr_empresa,
             'arr_unidad' => $arr_unidad,
+            'arr_gestion' => $arr_estado_gestion,
         ]);
         ?>
     </form>

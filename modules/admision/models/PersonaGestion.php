@@ -1000,7 +1000,16 @@ class PersonaGestion extends \app\modules\admision\components\CActiveRecord {
                                   where usu.usu_id = pg.pges_usuario_ingreso),'') as usuario_ing,                      
                         (select count(*) from " . $con->dbname . ".oportunidad o where o.pges_id = pg.pges_id and o.eopo_id in(1,2,3) and o.opo_estado = :estado and o.opo_estado_logico = :estado) as num_oportunidad_abiertas,                        
                         (select count(*) from " . $con->dbname . ".oportunidad o where o.pges_id = pg.pges_id and o.eopo_id in(4,5) and o.opo_estado = :estado and o.opo_estado_logico = :estado) as num_oportunidad_cerradas,
-                        DATE(pg.pges_fecha_creacion) as fecha_creacion    
+                        DATE(pg.pges_fecha_creacion) as fecha_creacion,
+                        
+                        case when (select count(ba.bact_id) from " . $con->dbname . ".oportunidad o inner join " . $con->dbname . ".bitacora_actividades ba on ba.opo_id = o.opo_id
+                        inner join " . $con1->dbname . ".usua_grol_eper uge on uge.usu_id = ba.usu_id
+                        where o.pges_id = pg.pges_id
+                            and o.eopo_id in(1,2,3)
+                            and uge.grol_id in (1,28)
+                            and o.opo_estado = :estado
+                            and o.opo_estado_logico = :estado)=1 then 'Pendiente Gestión' else 'Gestionado' end as gestion
+                        
                 FROM " . $con->dbname . ".persona_gestion pg
                 INNER JOIN " . $con->dbname . ".estado_contacto ec on ec.econ_id = pg.econ_id
                 INNER JOIN " . $con1->dbname . ".tipo_persona tp on tp.tper_id = pg.tper_id  
@@ -1795,6 +1804,7 @@ class PersonaGestion extends \app\modules\admision\components\CActiveRecord {
     /**
      * Function consultarReportAspirantes.
      * @author  Kleber Loayza <analistadesarrollo03@uteg.edu.ec>
+     *          Grace Viteri <analistadesarrollo01@uteg.edu.ec>
      * @param     
      * @return  
      */
@@ -1857,7 +1867,16 @@ class PersonaGestion extends \app\modules\admision\components\CActiveRecord {
                                   inner join " . $con1->dbname . ".persona pers on pers.per_id = usu.usu_id
                                   where usu.usu_id = pg.pges_usuario_ingreso),'') as usuario_ing, 
                         (select count(*) from " . $con->dbname . ".oportunidad o where o.pges_id = pg.pges_id and o.eopo_id in(1,2,3) and o.opo_estado = :estado and o.opo_estado_logico = :estado) as oportunidad_abiertas,
-                        (select count(*) from " . $con->dbname . ".oportunidad o where o.pges_id = pg.pges_id and o.eopo_id in(4,5) and o.opo_estado = :estado and o.opo_estado_logico = :estado) as oportunidad_cerradas
+                        (select count(*) from " . $con->dbname . ".oportunidad o where o.pges_id = pg.pges_id and o.eopo_id in(4,5) and o.opo_estado = :estado and o.opo_estado_logico = :estado) as oportunidad_cerradas,
+                        
+                        case when (select count(ba.bact_id) from " . $con->dbname . ".oportunidad o inner join " . $con->dbname . ".bitacora_actividades ba on ba.opo_id = o.opo_id
+                        inner join " . $con1->dbname . ".usua_grol_eper uge on uge.usu_id = ba.usu_id
+                        where o.pges_id = pg.pges_id
+                            and o.eopo_id in(1,2,3)
+                            and uge.grol_id in (1,28)
+                            and o.opo_estado = :estado
+                            and o.opo_estado_logico = :estado) >= 1 then 'Pendiente Gestión' else 'Gestionado' end as gestion
+                            
                 FROM " . $con->dbname . ".persona_gestion pg inner join " . $con->dbname . ".estado_contacto ec on ec.econ_id = pg.econ_id
                 INNER JOIN " . $con1->dbname . ".tipo_persona tp on tp.tper_id = pg.tper_id
                 INNER JOIN " . $con->dbname . ".conocimiento_canal cc on cc.ccan_id = pg.ccan_id 

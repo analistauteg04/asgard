@@ -90,6 +90,19 @@ admision::registerTranslations();
                 'value' => 'num_oportunidad_cerradas',
             ],
             [
+                'attribute' => 'estadogestion',
+                'header' => Yii::t("formulario", "Management State"),
+                'contentOptions' => ['class' => 'text-center'],
+                'headerOptions' => ['class' => 'text-center'],
+                'format' => 'html',
+                'value' => function ($model) {
+                    if ($model["gestion"] == 'Gestionado')
+                        return '<small class="label label-success">Gestionado</small>';                    
+                    else
+                        return '<small class="label label-danger">Pendiente Gestionar</small>';
+                },                
+            ],                            
+            [
                 'class' => 'yii\grid\ActionColumn',
                 'header' => Yii::t("formulario", "Actions"), //{update} 
                 'template' => '{view} {opportunities}', //    

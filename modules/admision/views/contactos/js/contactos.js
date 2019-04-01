@@ -107,7 +107,8 @@ function exportExcel() {
     var telefono = $('#txt_telefono').val();
     var empresa = $('#cmb_empresa option:selected').val();
     var unidad = $('#cmb_unidad option:selected').val();
-    window.location.href = $('#txth_base').val() + "/admision/contactos/expexcel?search=" + search + "&f_ini=" + f_ini + "&f_fin=" + f_fin + "&medio=" + medio + "&agente=" + agente + "&correo=" + correo + "&telefono=" + telefono + "&empresa=" + empresa + "&unidad=" + unidad;    
+    var gestion = $('#cmb_estado_gestion option:selected').val();   
+    window.location.href = $('#txth_base').val() + "/admision/contactos/expexcel?search=" + search + "&f_ini=" + f_ini + "&f_fin=" + f_fin + "&medio=" + medio + "&agente=" + agente + "&correo=" + correo + "&telefono=" + telefono + "&empresa=" + empresa + "&unidad=" + unidad + "&gestion=" + gestion;
 }
 function exportPdf() {
     var search = $('#txt_buscarDataPersona').val();
@@ -119,7 +120,8 @@ function exportPdf() {
     var telefono = $('#txt_telefono').val();
     var empresa = $('#cmb_empresa option:selected').val();
     var unidad = $('#cmb_unidad option:selected').val();
-    window.location.href = $('#txth_base').val() + "/admision/contactos/exppdf?pdf=1&search=" + search  + "&f_ini=" + f_ini + "&f_fin=" + f_fin + "&medio=" + medio + "&agente=" + agente + "&correo=" + correo + "&telefono=" + telefono + "&empresa=" + empresa + "&unidad=" + unidad;    
+    var gestion = $('#cmb_estado_gestion option:selected').val();   
+    window.location.href = $('#txth_base').val() + "/admision/contactos/exppdf?pdf=1&search=" + search  + "&f_ini=" + f_ini + "&f_fin=" + f_fin + "&medio=" + medio + "&agente=" + agente + "&correo=" + correo + "&telefono=" + telefono + "&empresa=" + empresa + "&unidad=" + unidad + "&gestion=" + gestion;
 }
 
 function loadLeads(){

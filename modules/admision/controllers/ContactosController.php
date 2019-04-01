@@ -47,6 +47,7 @@ class ContactosController extends \app\components\CController {
             $arrSearch["telefono"] = $data['telefono'];
             $arrSearch["empresa"] = $data['empresa'];
             $arrSearch["unidad"] = $data['unidad'];
+            $arrSearch["gestion"] = $data['gestion'];
             $mod_gestion = $modPersonaGestion->consultarClienteCont($arrSearch);
             return $this->render('index-grid', [
                         "model" => $mod_gestion,
@@ -60,6 +61,7 @@ class ContactosController extends \app\components\CController {
         $arra_agente = $modagente->consultarAgenteconta();
         $canalconta = $modcanal->consultarConocimientoCanal('1');
         $arr_unidad = $mod_unidad->consultarUnidadAcademicasEmpresa(0);
+        $arrEstados = ArrayHelper::map(array_merge([["id" => "0", "value" => Yii::t("formulario", "Grid")], ["id" => "1", "value" => Yii::t("formulario", "Pendiente Gestionar")], ["id" => "2", "value" => Yii::t("formulario", "Gestionado")]]), "id", "value");
         return $this->render('index', [
                     'model' => $mod_gestion,
                     'arr_contacto' => ArrayHelper::map(array_merge([["id" => "0", "name" => "Todas"]], $estado_contacto), "id", "name"),
@@ -67,6 +69,7 @@ class ContactosController extends \app\components\CController {
                     'arra_agente' => ArrayHelper::map(array_merge([["id" => "0", "name" => "Todas"], ["id" => "1", "name" => "Admin UTEG"]], $arra_agente), "id", "name"),
                     'arr_empresa' => ArrayHelper::map(array_merge([["id" => "0", "value" => "Todas"]], $empresa), "id", "value"),
                     'arr_unidad' => ArrayHelper::map(array_merge([["id" => "0", "name" => "Todas"]], $arr_unidad), "id", "name"),
+                    'arr_estado_gestion' => $arrEstados,
         ]);
     }
 
@@ -375,7 +378,7 @@ class ContactosController extends \app\components\CController {
         header("Content-Type: $content_type");
         header("Content-Disposition: attachment;filename=" . $nombarch);
         header('Cache-Control: max-age=0');
-        $colPosition = array("C", "D", "E", "F", "G", "H", "I", "J", "K", "L", "M");
+        $colPosition = array("C", "D", "E", "F", "G", "H", "I", "J", "K", "L", "M", "N");
         $arrHeader = array(
             Yii::t("crm", "Contact"),
             Yii::t("formulario", "Country"),
@@ -387,7 +390,8 @@ class ContactosController extends \app\components\CController {
             admision::t("crm", "Channel"),
             Yii::t("formulario", "User login"),
             Yii::t("formulario", "Open Opportunities"),
-            Yii::t("formulario", "Close Opportunities")
+            Yii::t("formulario", "Close Opportunities"),
+            Yii::t("formulario", "Management State")
         );
         $modPersonaGestion = new PersonaGestion();
         $data = Yii::$app->request->get();
@@ -426,11 +430,12 @@ class ContactosController extends \app\components\CController {
             admision::t("crm", "Channel"),
             Yii::t("formulario", "User login"),
             Yii::t("formulario", "Open Opportunities"),
-            Yii::t("formulario", "Close Opportunities")
+            Yii::t("formulario", "Close Opportunities"),
+            Yii::t("formulario", "Management State")
         );
         $modPersonaGestion = new PersonaGestion();
         $data = Yii::$app->request->get();
-        $arrSearch["search"] = $data['search'];       
+        $arrSearch["search"] = $data['search'];
         $arrSearch["medio"] = $data['medio'];
         $arrSearch["f_ini"] = $data['f_ini'];
         $arrSearch["f_fin"] = $data['f_fin'];
@@ -445,7 +450,7 @@ class ContactosController extends \app\components\CController {
         } else {
             $arrData = $modPersonaGestion->consultarReportContactos($arrSearch, true);
         }
-        $report->orientation = "P"; // tipo de orientacion L => Horizontal, P => Vertical                                
+        $report->orientation = "L"; // tipo de orientacion L => Horizontal, P => Vertical                                
         $report->createReportPdf(
                 $this->render('exportpdf', [
                     'arr_head' => $arrHeader,
