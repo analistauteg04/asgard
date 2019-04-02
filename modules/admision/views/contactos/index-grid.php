@@ -96,7 +96,7 @@ admision::registerTranslations();
                 'headerOptions' => ['class' => 'text-center'],
                 'format' => 'html',
                 'value' => function ($model) {
-                    if ($model["gestion"] == 'Gestionado')
+                    if ($model["gestion"] == 2)
                         return '<small class="label label-success">Gestionado</small>';                    
                     else
                         return '<small class="label label-danger">Pendiente Gestionar</small>';

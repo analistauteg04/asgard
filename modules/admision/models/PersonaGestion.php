@@ -938,38 +938,41 @@ class PersonaGestion extends \app\modules\admision\components\CActiveRecord {
         $estado = 1;
         $columnsAdd = "";
         if (isset($arrFiltro) && count($arrFiltro) > 0) {
-            $str_search .= "(pg.pges_pri_nombre like :search OR ";
-            $str_search .= "pg.pges_seg_nombre like :search OR ";
-            $str_search .= "pg.pges_pri_apellido like :search OR ";
-            $str_search .= "pg.pges_seg_apellido like :search OR ";
-            $str_search .= "pg.pges_codigo like :search )  AND ";
+            $str_search .= "(a.pges_pri_nombre like :search OR ";
+            $str_search .= "a.pges_seg_nombre like :search OR ";
+            $str_search .= "a.pges_pri_apellido like :search OR ";
+            $str_search .= "a.pges_seg_apellido like :search OR ";
+            $str_search .= "a.pges_codigo like :search )  AND ";
             if ($arrFiltro['estado'] != "" && $arrFiltro['estado'] > 0) {
                 $str_search .= " pg.econ_id = :estcontacto AND ";
             }
             if ($arrFiltro['medio'] != "" && $arrFiltro['medio'] > 0) {
-                $str_search .= " pg.ccan_id = :medio AND ";
+                $str_search .= " a.ccan_id = :medio AND ";
             }
             if ($arrFiltro['f_ini'] != "" && $arrFiltro['f_fin'] != "") {
-                $str_search .= "pg.pges_fecha_creacion >= :fec_ini AND ";
-                $str_search .= "pg.pges_fecha_creacion <= :fec_fin AND ";
+                $str_search .= "a.pges_fecha_creacion >= :fec_ini AND ";
+                $str_search .= "a.pges_fecha_creacion <= :fec_fin AND ";
             }
             if ($arrFiltro['agente'] != "" && $arrFiltro['agente'] > 0) {
-                $str_search .= " pg.pges_usuario_ingreso = :agente AND ";
+                $str_search .= " a.pges_usuario_ingreso = :agente AND ";
             }
             if ($arrFiltro['correo'] != "") {
-                $str_search .= " pg.pges_correo like :correo AND ";
+                $str_search .= " a.pges_correo like :correo AND ";
             }
             if ($arrFiltro['telefono'] != "") {
-                $str_search .= "(pg.pges_celular like :telefono OR ";
-                $str_search .= "pg.pges_domicilio_telefono like :telefono OR ";
-                $str_search .= "pg.pges_domicilio_celular2 like :telefono OR ";
-                $str_search .= "pg.pges_trabajo_telefono like :telefono )  AND ";
+                $str_search .= "(a.pges_celular like :telefono OR ";
+                $str_search .= "a.pges_domicilio_telefono like :telefono OR ";
+                $str_search .= "a.pges_domicilio_celular2 like :telefono OR ";
+                $str_search .= "a.pges_trabajo_telefono like :telefono )  AND ";
             }
             if ($arrFiltro['empresa'] != "" && $arrFiltro['empresa'] > 0) {
-                $str_search .= " emp.emp_id = :empresa AND ";
+                $str_search .= " a.emp_id = :empresa AND ";
             }
             if ($arrFiltro['unidad'] != "" && $arrFiltro['unidad'] > 0) {
-                $str_search .= " uaca.uaca_id = :unidad AND ";
+                $str_search .= " a.uaca_id = :unidad AND ";
+            }
+            if ($arrFiltro['gestion'] != "" && $arrFiltro['gestion'] > 0) {
+                $str_search .= " a.gestion = :gestion AND ";
             }
         } else {
             $columnsAdd = "                
@@ -978,10 +981,14 @@ class PersonaGestion extends \app\modules\admision\components\CActiveRecord {
                 pg.pges_pri_apellido as pges_pri_apellido,
                 pg.pges_seg_apellido as pges_seg_apellido,";
         }
-        $sql = "
+        $sql = "SELECT * FROM (
                 SELECT  
                         tp.tper_id tipo_persona, 
-                        tp.tper_nombre des_tipo_persona, 
+                        tp.tper_nombre des_tipo_persona,
+                        pges_pri_nombre,
+                        pges_seg_nombre,
+                        pges_pri_apellido,
+                        pges_seg_apellido,
                         concat(pges_pri_nombre, ' ', ifnull(pges_seg_nombre,' ')) as nombres,
                         concat(pges_pri_apellido, ' ', ifnull(pges_seg_apellido,' ')) as apellidos,                 
                         concat(pges_pri_nombre, ' ', ifnull(pges_pri_apellido,' ')) as cliente,
@@ -994,6 +1001,7 @@ class PersonaGestion extends \app\modules\admision\components\CActiveRecord {
                         cc.ccan_nombre as canal,
                         pg.pges_codigo,
                         pg.pges_correo,
+                        pg.pges_fecha_creacion,
                         ifnull((select concat(pers.per_pri_nombre, ' ', ifnull(pers.per_pri_apellido,' ')) 
                                   from " . $con1->dbname . ".usuario usu 
                                   inner join " . $con1->dbname . ".persona pers on pers.per_id = usu.usu_id
@@ -1001,14 +1009,20 @@ class PersonaGestion extends \app\modules\admision\components\CActiveRecord {
                         (select count(*) from " . $con->dbname . ".oportunidad o where o.pges_id = pg.pges_id and o.eopo_id in(1,2,3) and o.opo_estado = :estado and o.opo_estado_logico = :estado) as num_oportunidad_abiertas,                        
                         (select count(*) from " . $con->dbname . ".oportunidad o where o.pges_id = pg.pges_id and o.eopo_id in(4,5) and o.opo_estado = :estado and o.opo_estado_logico = :estado) as num_oportunidad_cerradas,
                         DATE(pg.pges_fecha_creacion) as fecha_creacion,
-                        
+                        pg.pges_usuario_ingreso,
+                        pg.pges_celular,
+                        pg.pges_domicilio_telefono,
+                        pg.pges_domicilio_celular2,
+                        pg.pges_trabajo_telefono,
+                        emp.emp_id,
+                        uaca.uaca_id,
                         case when (select count(ba.bact_id) from " . $con->dbname . ".oportunidad o inner join " . $con->dbname . ".bitacora_actividades ba on ba.opo_id = o.opo_id
                         inner join " . $con1->dbname . ".usua_grol_eper uge on uge.usu_id = ba.usu_id
                         where o.pges_id = pg.pges_id
                             and o.eopo_id in(1,2,3)
                             and uge.grol_id in (1,28)
                             and o.opo_estado = :estado
-                            and o.opo_estado_logico = :estado)=1 then 'Pendiente Gestión' else 'Gestionado' end as gestion
+                            and o.opo_estado_logico = :estado)=1 then 1 else 2 end as gestion
                         
                 FROM " . $con->dbname . ".persona_gestion pg
                 INNER JOIN " . $con->dbname . ".estado_contacto ec on ec.econ_id = pg.econ_id
@@ -1022,7 +1036,7 @@ class PersonaGestion extends \app\modules\admision\components\CActiveRecord {
                 left JOIN " . $con->dbname . ".oportunidad opo on opo.opo_id = max_opor.opo_id                                
                 left join " . $con1->dbname . ".empresa as emp on emp.emp_id=opo.emp_id
                 left JOIN " . $con2->dbname . ".unidad_academica uaca on uaca.uaca_id = opo.uaca_id
-                WHERE   $str_search
+                WHERE   
                         pg.pges_estado = :estado
                         and pg.pges_estado_logico = :estado
                         and tp.tper_estado = :estado
@@ -1031,7 +1045,11 @@ class PersonaGestion extends \app\modules\admision\components\CActiveRecord {
                         and ec.econ_estado_logico = :estado 
                         and cc.ccan_estado = :estado 
                         and cc.ccan_estado_logico = :estado 
-                ORDER BY pg.pges_fecha_creacion desc";
+                ORDER BY pg.pges_fecha_creacion desc) a ";
+        if (isset($arrFiltro) && count($arrFiltro) > 0) {
+            $sql .= "WHERE $str_search 
+                           a.pges_codigo = a.pges_codigo";
+        }           
 
         $comando = $con->createCommand($sql);
         $comando->bindParam(":estado", $estado, \PDO::PARAM_STR);
@@ -1075,6 +1093,10 @@ class PersonaGestion extends \app\modules\admision\components\CActiveRecord {
             if ($arrFiltro['unidad'] != "" && $arrFiltro['unidad'] > 0) {
                 $search_uni = $arrFiltro["unidad"];
                 $comando->bindParam(":unidad", $search_uni, \PDO::PARAM_INT);
+            }
+            if ($arrFiltro['gestion'] != "" && $arrFiltro['gestion'] > 0) {
+                $search_gest = $arrFiltro["gestion"];
+                $comando->bindParam(":gestion", $search_gest, \PDO::PARAM_INT);
             }
         }
 
@@ -1815,33 +1837,36 @@ class PersonaGestion extends \app\modules\admision\components\CActiveRecord {
         $estado = 1;
         $columnsAdd = "";
         if (isset($arrFiltro) && count($arrFiltro) > 0) {
-            $str_search .= "(pg.pges_pri_nombre like :search OR ";
-            $str_search .= "pg.pges_seg_nombre like :search OR ";
-            $str_search .= "pg.pges_pri_apellido like :search OR ";
-            $str_search .= "pg.pges_seg_apellido like :search OR ";
-            $str_search .= "pg.pges_codigo like :search )  AND ";
+            $str_search .= "(a.pges_pri_nombre like :search OR ";
+            $str_search .= "a.pges_seg_nombre like :search OR ";
+            $str_search .= "a.pges_pri_apellido like :search OR ";
+            $str_search .= "a.pges_seg_apellido like :search OR ";
+            $str_search .= "a.pges_codigo like :search )  AND ";
             if ($arrFiltro['f_ini'] != "" && $arrFiltro['f_fin'] != "") {
-                $str_search .= "pg.pges_fecha_creacion >= :fec_ini AND ";
-                $str_search .= "pg.pges_fecha_creacion <= :fec_fin AND ";
+                $str_search .= "a.pges_fecha_creacion >= :fec_ini AND ";
+                $str_search .= "a.pges_fecha_creacion <= :fec_fin AND ";
             }
             if ($arrFiltro['medio'] != "" && $arrFiltro['medio'] > 0) {
-                $str_search .= " pg.ccan_id = :medio AND ";
+                $str_search .= " a.ccan_id = :medio AND ";
             }
             if ($arrFiltro['agente'] != "" && $arrFiltro['agente'] > 0) {
-                $str_search .= " pg.pges_usuario_ingreso = :agente AND ";
+                $str_search .= "a.pges_usuario_ingreso = :agente AND ";
             }
             if ($arrFiltro['correo'] != "") {
-                $str_search .= " pg.pges_correo like :correo AND ";
+                $str_search .= "a.pges_correo like :correo AND ";
             }
             if ($arrFiltro['telefono'] != "") {
-                $str_search .= "(pg.pges_celular like :telefono OR ";
-                $str_search .= "pg.pges_domicilio_telefono like :telefono )  AND ";
+                $str_search .= "(a.pges_celular like :telefono OR ";
+                $str_search .= "a.pges_domicilio_telefono like :telefono )  AND ";
             }
             if ($arrFiltro['empresa'] != "" && $arrFiltro['empresa'] > 0) {
-                $str_search .= " emp.emp_id = :empresa AND ";
+                $str_search .= "a.emp_id = :empresa AND ";
             }
             if ($arrFiltro['unidad'] != "" && $arrFiltro['unidad'] > 0) {
-                $str_search .= " uaca.uaca_id = :unidad AND ";
+                $str_search .= "a.uaca_id = :unidad AND ";
+            }
+            if ($arrFiltro['gestion'] != "" && $arrFiltro['gestion'] > 0) {
+                $str_search .= "a.gestion = :gestion AND ";
             }
         } else {
             $columnsAdd = "                
@@ -1850,18 +1875,38 @@ class PersonaGestion extends \app\modules\admision\components\CActiveRecord {
                 pg.pges_pri_apellido as pges_pri_apellido,
                 pg.pges_seg_apellido as pges_seg_apellido,";
         }
-        $sql = "
+        $sql = "SELECT  contacto,
+                        pais,
+                        pges_correo,
+                        pges_celular,
+                        pges_domicilio_telefono,
+                        fecha_creacion,
+                        unidad_academica,
+                        canal,
+                        usuario_ing,
+                        oportunidad_abiertas,
+                        oportunidad_cerradas,                        
+                        case when (gestion=1) then 'Pendiente Gestionar' else 'Gestionado' end as gestion
+                FROM (
                 SELECT  
                         concat(ifnull(pges_pri_nombre,''), ' ',ifnull(pges_seg_nombre,' '),ifnull(pges_pri_apellido,''), ' ', ifnull(pges_seg_apellido,' ')) as contacto,
                         ifnull((select pai.pai_nombre from " . $con1->dbname . ".pais pai where pai.pai_id = pg.pai_id_nacimiento),'') as pais,
+                        pges_pri_nombre,
+                        pges_seg_nombre,
+                        pges_pri_apellido,
+                        pges_seg_apellido,
                         pg.pges_correo,
                         pg.pges_celular,
                         pg.pges_domicilio_telefono,
                         DATE(pg.pges_fecha_creacion) as fecha_creacion,
+                        pg.pges_fecha_creacion,
                         ifnull(uaca.uaca_nombre,'Sin Unidad') as unidad_academica,
-                        -- ifnull(emp.emp_nombre_comercial,'Sin Empresa') as empresa,
-                        cc.ccan_nombre as canal,
-                        -- ec.econ_nombre estado_contacto,
+                        pg.pges_codigo,
+                        pg.ccan_id,
+                        cc.ccan_nombre as canal,  
+                        pg.pges_usuario_ingreso,
+                        emp.emp_id,
+                        uaca.uaca_id,
                         ifnull((select concat(pers.per_pri_nombre, ' ', ifnull(pers.per_pri_apellido,' ')) 
                                   from " . $con1->dbname . ".usuario usu 
                                   inner join " . $con1->dbname . ".persona pers on pers.per_id = usu.usu_id
@@ -1875,7 +1920,7 @@ class PersonaGestion extends \app\modules\admision\components\CActiveRecord {
                             and o.eopo_id in(1,2,3)
                             and uge.grol_id in (1,28)
                             and o.opo_estado = :estado
-                            and o.opo_estado_logico = :estado) >= 1 then 'Pendiente Gestión' else 'Gestionado' end as gestion
+                            and o.opo_estado_logico = :estado)=1 then 1 else 2 end as gestion
                             
                 FROM " . $con->dbname . ".persona_gestion pg inner join " . $con->dbname . ".estado_contacto ec on ec.econ_id = pg.econ_id
                 INNER JOIN " . $con1->dbname . ".tipo_persona tp on tp.tper_id = pg.tper_id
@@ -1888,18 +1933,20 @@ class PersonaGestion extends \app\modules\admision\components\CActiveRecord {
                 left JOIN " . $con->dbname . ".oportunidad opo on opo.opo_id = max_opor.opo_id
                 LEFT JOIN " . $con1->dbname . ".empresa as emp on emp.emp_id=opo.emp_id  
                 LEFT JOIN " . $con2->dbname . ".unidad_academica uaca on uaca.uaca_id = opo.uaca_id
-                WHERE   
-                        $str_search
+                WHERE                           
                         pg.pges_estado = :estado
                         and pg.pges_estado_logico = :estado
                         and tp.tper_estado = :estado
                         and tp.tper_estado_logico = :estado                        
                         and ec.econ_estado = :estado 
-                        and ec.econ_estado_logico = :estado 
-                        -- and cc.ccan_estado = :estado 
-                        -- and cc.ccan_estado_logico = :estado
-                ORDER BY pg.pges_fecha_creacion desc
-                ";
+                        and ec.econ_estado_logico = :estado                         
+                ORDER BY pg.pges_fecha_creacion desc) a ";
+        
+        if (isset($arrFiltro) && count($arrFiltro) > 0) {
+            $sql .= "WHERE $str_search 
+                           a.pges_codigo = a.pges_codigo";
+        }       
+        
         $comando = $con->createCommand($sql);
         $comando->bindParam(":estado", $estado, \PDO::PARAM_STR);
         if (isset($arrFiltro) && count($arrFiltro) > 0) {
@@ -1935,6 +1982,10 @@ class PersonaGestion extends \app\modules\admision\components\CActiveRecord {
             if ($arrFiltro['unidad'] != "" && $arrFiltro['unidad'] > 0) {
                 $search_uni = $arrFiltro["unidad"];
                 $comando->bindParam(":unidad", $search_uni, \PDO::PARAM_INT);
+            }
+            if ($arrFiltro['gestion'] != "" && $arrFiltro['gestion'] > 0) {
+                $search_gest = $arrFiltro["gestion"];
+                $comando->bindParam(":gestion", $search_gest, \PDO::PARAM_INT);
             }
         }
         $resultData = $comando->queryAll();

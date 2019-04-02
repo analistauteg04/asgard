@@ -404,6 +404,7 @@ class ContactosController extends \app\components\CController {
         $arrSearch["telefono"] = $data['telefono'];
         $arrSearch["empresa"] = $data['empresa'];
         $arrSearch["unidad"] = $data['unidad'];
+        $arrSearch["gestion"] = $data['gestion'];
         $arrData = array();
         if (empty($arrSearch)) {
             $arrData = $modPersonaGestion->consultarReportContactos(array(), true);
@@ -444,6 +445,7 @@ class ContactosController extends \app\components\CController {
         $arrSearch["telefono"] = $data['telefono'];
         $arrSearch["empresa"] = $data['empresa'];
         $arrSearch["unidad"] = $data['unidad'];
+        $arrSearch["gestion"] = $data['gestion'];
         $arrData = array();
         if (empty($arrSearch)) {
             $arrData = $modPersonaGestion->consultarReportContactos(array(), true);

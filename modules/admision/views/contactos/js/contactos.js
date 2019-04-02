@@ -90,10 +90,11 @@ function actualizarGridContacto() {
     var telefono = $('#txt_telefono').val();
     var empresa = $('#cmb_empresa option:selected').val();
     var unidad = $('#cmb_unidad option:selected').val();
+    var gestion = $('#cmb_estado_gestion option:selected').val();   
     //Buscar almenos una clase con el nombre para ejecutar
     if (!$(".blockUI").length) {
         showLoadingPopup();
-        $('#Pbcontacto').PbGridView('applyFilterData', {'search': search, 'estado': estado, 'fase': fase, 'f_ini': f_ini, 'f_fin': f_fin, 'medio': medio, 'agente': agente, 'correo': correo, 'telefono': telefono, 'empresa': empresa, 'unidad': unidad});
+        $('#Pbcontacto').PbGridView('applyFilterData', {'search': search, 'estado': estado, 'fase': fase, 'f_ini': f_ini, 'f_fin': f_fin, 'medio': medio, 'agente': agente, 'correo': correo, 'telefono': telefono, 'empresa': empresa, 'unidad': unidad, 'gestion': gestion});
         setTimeout(hideLoadingPopup, 2000);
     }
 }
