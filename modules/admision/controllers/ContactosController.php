@@ -814,8 +814,7 @@ class ContactosController extends \app\components\CController {
                     }
                 }
             }
-            if ($data["procesar_file"]) {
-                //\app\models\Utilities::putMessageLogFile('ingresa:'); 
+            if ($data["procesar_file"]) {                
                 $carga_archivo = $mod_gestion->CargarArchivoOtroscanales($data["archivo"], $data["emp_id"], $data["tipo_proceso"]);
                 if ($carga_archivo['status']) {
                     $message = array(

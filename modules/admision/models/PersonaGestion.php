@@ -844,18 +844,18 @@ class PersonaGestion extends \app\modules\admision\components\CActiveRecord {
         $comando = $con->createCommand($sql);
         $comando->bindParam(":estado", $estado, \PDO::PARAM_STR);
         if (!empty(($pges_celular))) {
-            $pges_celularc = "%".substr($pges_celular, -9)."%";
+            $pges_celularc = "%" . substr($pges_celular, -9) . "%";
             $comando->bindParam(':pges_celular', $pges_celularc, \PDO::PARAM_STR);
         }
         if (!empty($pges_correo)) {
             $comando->bindParam(':pges_correo', $pges_correo, \PDO::PARAM_STR);
         }
         if (!empty($pges_domicilio_telefono)) {
-            $pges_domicilio_telefonoc = "%".$pges_domicilio_telefono."%";
+            $pges_domicilio_telefonoc = "%" . $pges_domicilio_telefono . "%";
             $comando->bindParam(':pges_domicilio_telefono', $pges_domicilio_telefonoc, \PDO::PARAM_STR);
         }
         if (!empty($pges_domicilio_celular2)) {
-            $pges_domicilio_celular2c = "%".$pges_domicilio_celular2."%";
+            $pges_domicilio_celular2c = "%" . $pges_domicilio_celular2 . "%";
             $comando->bindParam(':pges_domicilio_celular2', $pges_domicilio_celular2c, \PDO::PARAM_STR);
         }
         if (!empty($pges_cedula)) {
@@ -1016,14 +1016,20 @@ class PersonaGestion extends \app\modules\admision\components\CActiveRecord {
                         pg.pges_trabajo_telefono,
                         emp.emp_id,
                         uaca.uaca_id,
-                        case when (select count(ba.bact_id) from " . $con->dbname . ".oportunidad o inner join " . $con->dbname . ".bitacora_actividades ba on ba.opo_id = o.opo_id
-                        inner join " . $con1->dbname . ".usua_grol_eper uge on uge.usu_id = ba.usu_id
-                        where o.pges_id = pg.pges_id
-                            and o.eopo_id in(1,2,3)
-                            and uge.grol_id in (1,28)
+                        (select 
+                            case  count(ba.bact_id)
+                               when 0 then 1 
+                               when 1 then 1
+                               when 2 then 2
+                            end as bact_id 
+                            from db_crm.oportunidad o 
+                            inner join db_crm.bitacora_actividades ba on ba.opo_id = o.opo_id
+                            inner join db_asgard.usua_grol_eper uge on uge.usu_id = ba.usu_id
+                            where o.pges_id = pg.pges_id
+                            -- and o.eopo_id in(1,2,3)
+                            -- and uge.grol_id in (1,28)
                             and o.opo_estado = :estado
-                            and o.opo_estado_logico = :estado)=1 then 1 else 2 end as gestion
-                        
+                            and o.opo_estado_logico = :estado) as gestion                        
                 FROM " . $con->dbname . ".persona_gestion pg
                 INNER JOIN " . $con->dbname . ".estado_contacto ec on ec.econ_id = pg.econ_id
                 INNER JOIN " . $con1->dbname . ".tipo_persona tp on tp.tper_id = pg.tper_id  
@@ -1049,7 +1055,7 @@ class PersonaGestion extends \app\modules\admision\components\CActiveRecord {
         if (isset($arrFiltro) && count($arrFiltro) > 0) {
             $sql .= "WHERE $str_search 
                            a.pges_codigo = a.pges_codigo";
-        }           
+        }
 
         $comando = $con->createCommand($sql);
         $comando->bindParam(":estado", $estado, \PDO::PARAM_STR);
@@ -1311,9 +1317,9 @@ class PersonaGestion extends \app\modules\admision\components\CActiveRecord {
                     if ($tipoProceso == "LEADS") {
                         $contacto = 2; //$Data[$i]['pgest_contacto'];
                     } else {
-                        $contacto = $Data[$i]['pgest_contacto']; 
+                        $contacto = $Data[$i]['pgest_contacto'];
                     }
-                    
+
                     $tper_id = 1; //Por defecto Natural
                     $econ_id = 1; //=>En Contacto por defecto
                     $pges_id = PersonaGestion::insertarPersonaGestionLeads($con, $pges_codigo, $tper_id, $nombre, $telefono, $correo, $contacto, $econ_id);
@@ -1364,8 +1370,8 @@ class PersonaGestion extends \app\modules\admision\components\CActiveRecord {
                         //$pgco_id = $mod_oportunidad->insertarPersonaGestionContactoLeads($con, $pges_id,$Data[$i]);                        
                         $opo_id = $mod_oportunidad->insertarOportunidadLeads($con, $opo_codigo, $emp_id, $pges_id, $padm_id, $Data[$i]);
                         $opo_codigo++;
-                        if ($opo_id > 0) {              
-                            \app\models\Utilities::putMessageLogFile('antes de insertar actividad'); 
+                        if ($opo_id > 0) {
+                            \app\models\Utilities::putMessageLogFile('antes de insertar actividad');
                             $bact_id = $mod_oportunidad->insertarActividadLeads($con, $opo_id, $padm_id, $Data[$i]['pgest_comentario']);
                         }
                     }
@@ -1627,7 +1633,7 @@ class PersonaGestion extends \app\modules\admision\components\CActiveRecord {
     public static function existePersonaGestLeads($correo, $numero) {
         //pgest_nombre,pgest_numero,pgest_correo 
         $con = \Yii::$app->db_crm;
-        $celular = "%".substr($numero, -9)."%";
+        $celular = "%" . substr($numero, -9) . "%";
         $sql = "SELECT pges_id Ids
                     FROM " . $con->dbname . ".persona_gestion  
                 WHERE pges_estado_logico=1 AND (pges_correo=:pges_correo OR pges_celular=:pges_celular)";
@@ -1913,14 +1919,20 @@ class PersonaGestion extends \app\modules\admision\components\CActiveRecord {
                                   where usu.usu_id = pg.pges_usuario_ingreso),'') as usuario_ing, 
                         (select count(*) from " . $con->dbname . ".oportunidad o where o.pges_id = pg.pges_id and o.eopo_id in(1,2,3) and o.opo_estado = :estado and o.opo_estado_logico = :estado) as oportunidad_abiertas,
                         (select count(*) from " . $con->dbname . ".oportunidad o where o.pges_id = pg.pges_id and o.eopo_id in(4,5) and o.opo_estado = :estado and o.opo_estado_logico = :estado) as oportunidad_cerradas,
-                        
-                        case when (select count(ba.bact_id) from " . $con->dbname . ".oportunidad o inner join " . $con->dbname . ".bitacora_actividades ba on ba.opo_id = o.opo_id
-                        inner join " . $con1->dbname . ".usua_grol_eper uge on uge.usu_id = ba.usu_id
-                        where o.pges_id = pg.pges_id
-                            and o.eopo_id in(1,2,3)
-                            and uge.grol_id in (1,28)
+                        (select 
+                            case  count(ba.bact_id)
+                               when 0 then 1 
+                               when 1 then 1
+                               when 2 then 2
+                            end as bact_id 
+                            from db_crm.oportunidad o 
+                            inner join db_crm.bitacora_actividades ba on ba.opo_id = o.opo_id
+                            inner join db_asgard.usua_grol_eper uge on uge.usu_id = ba.usu_id
+                            where o.pges_id = pg.pges_id
+                            -- and o.eopo_id in(1,2,3)
+                            -- and uge.grol_id in (1,28)
                             and o.opo_estado = :estado
-                            and o.opo_estado_logico = :estado)=1 then 1 else 2 end as gestion
+                            and o.opo_estado_logico = :estado) as gestion 
                             
                 FROM " . $con->dbname . ".persona_gestion pg inner join " . $con->dbname . ".estado_contacto ec on ec.econ_id = pg.econ_id
                 INNER JOIN " . $con1->dbname . ".tipo_persona tp on tp.tper_id = pg.tper_id
@@ -1941,12 +1953,12 @@ class PersonaGestion extends \app\modules\admision\components\CActiveRecord {
                         and ec.econ_estado = :estado 
                         and ec.econ_estado_logico = :estado                         
                 ORDER BY pg.pges_fecha_creacion desc) a ";
-        
+
         if (isset($arrFiltro) && count($arrFiltro) > 0) {
             $sql .= "WHERE $str_search 
                            a.pges_codigo = a.pges_codigo";
-        }       
-        
+        }
+
         $comando = $con->createCommand($sql);
         $comando->bindParam(":estado", $estado, \PDO::PARAM_STR);
         if (isset($arrFiltro) && count($arrFiltro) > 0) {
