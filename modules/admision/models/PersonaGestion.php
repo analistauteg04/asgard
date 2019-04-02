@@ -1004,7 +1004,7 @@ class PersonaGestion extends \app\modules\admision\components\CActiveRecord {
                         pg.pges_fecha_creacion,
                         ifnull((select concat(pers.per_pri_nombre, ' ', ifnull(pers.per_pri_apellido,' ')) 
                                   from " . $con1->dbname . ".usuario usu 
-                                  inner join " . $con1->dbname . ".persona pers on pers.per_id = usu.usu_id
+                                  inner join " . $con1->dbname . ".persona pers on pers.per_id = usu.per_id
                                   where usu.usu_id = pg.pges_usuario_ingreso),'') as usuario_ing,                      
                         (select count(*) from " . $con->dbname . ".oportunidad o where o.pges_id = pg.pges_id and o.eopo_id in(1,2,3) and o.opo_estado = :estado and o.opo_estado_logico = :estado) as num_oportunidad_abiertas,                        
                         (select count(*) from " . $con->dbname . ".oportunidad o where o.pges_id = pg.pges_id and o.eopo_id in(4,5) and o.opo_estado = :estado and o.opo_estado_logico = :estado) as num_oportunidad_cerradas,

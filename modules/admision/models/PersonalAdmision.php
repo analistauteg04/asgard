@@ -166,15 +166,20 @@ class PersonalAdmision extends \yii\db\ActiveRecord {
         $con = \Yii::$app->db_crm;
         $con1 = \Yii::$app->db_asgard;
         $estado = 1;
-        $sql = "SELECT 
-                per.per_id as id, 
+        $sql = "SELECT u.usu_id as id,
+                -- per.per_id as id, 
                 concat(per.per_pri_nombre, ' ', ifnull(per.per_pri_apellido,' '))  as name                   
                 FROM 
                    " . $con->dbname . ".personal_admision pad
-                INNER JOIN " . $con1->dbname . ".persona per on per.per_id = pad.per_id";
+                INNER JOIN " . $con1->dbname . ".persona per on per.per_id = pad.per_id
+                INNER JOIN " . $con1->dbname . ".usuario u on u.per_id = per.per_id";
         $sql .= "  WHERE                   
                    padm_estado = :estado AND
-                   padm_estado_logico = :estado
+                   padm_estado_logico = :estado AND
+                   per.per_estado = :estado AND
+                   per.per_estado_logico = :estado AND
+                   u.usu_estado = :estado AND
+                   u.usu_estado_logico = :estado
                 ORDEr BY name";
 
         $comando = $con->createCommand($sql);
