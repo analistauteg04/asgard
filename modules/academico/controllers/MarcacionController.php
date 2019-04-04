@@ -112,7 +112,7 @@ class MarcacionController extends \app\components\CController {
                             $minutosfinales = $minutosfinales * -1;
                         }
                         if ($minutosfinales >= -30 && new DateTime($hora_inicio) < new DateTime($hora_fin)) { //SOLO PUEDE MARCAR 30 MINUTOS ANTES DEL INICIO Y UN 1 MINUTO ANTES DEL FINAL
-                            $resp_marca = $mod_marcacion->insertarMarcacion($accion, $profesor, $hape_id, $hora_inicio, null, $ip/*$ipcripta*/, $usuario);
+                            $resp_marca = $mod_marcacion->insertarMarcacion($accion, $profesor, $hape_id, $hora_inicio, null, $ip, $usuario, null);
                             if ($resp_marca) {
                                 if ($minutosfinales >= 15) { // AL MARCAR 15 MINUTOS DESPUES ENVIA MENSAJE
                                     $retraso = ', fue ' . round($minutosfinales, 0, PHP_ROUND_HALF_DOWN) . ' minutos después';
@@ -138,7 +138,8 @@ class MarcacionController extends \app\components\CController {
                         if ($minutosfinales >= 0 && $minutosfinales <= 30) { // SOLO PUEDE MARCAR SALIDA DE A LA HORA DE LA SALIDA Y HASTA 30 MINUTOS DESPUES
                             $cons_marcainicio = $mod_marcacion->consultarMarcacionExiste($hape_id, $profesor, $fecha, 'E');
                             if ($cons_marcainicio["marcacion"] > 0) {
-                                $resp_marca = $mod_marcacion->insertarMarcacion($accion, $profesor, $hape_id, null, $hora_fin, $ip, $usuario);
+                                $rmar_idingreso = $mod_marcacion->consultarmIdMarcacion('E',$profesor, $hape_id, $fecha);
+                                $resp_marca = $mod_marcacion->insertarMarcacion($accion, $profesor, $hape_id, null, $hora_fin, $ip, $usuario, $rmar_idingreso["rmar_id"]);
                             }
                             if ($resp_marca) {
                                 $exito = 1;

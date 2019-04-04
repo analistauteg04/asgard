@@ -210,7 +210,7 @@ class RegistroMarcacion extends \yii\db\ActiveRecord {
      * @param
      * @return
      */
-    public function insertarMarcacion($rmar_tipo, $pro_id, $hape_id, $rmar_fecha_hora_entrada, $rmar_fecha_hora_salida, $rmar_direccion_ip, $usu_id) {
+    public function insertarMarcacion($rmar_tipo, $pro_id, $hape_id, $rmar_fecha_hora_entrada, $rmar_fecha_hora_salida, $rmar_direccion_ip, $usu_id, $rmar_idingreso) {
         $con = \Yii::$app->db_academico;
         $rmar_fecha_creacion = date(Yii::$app->params["dateTimeByDefault"]);
         $trans = $con->getTransaction(); // se obtiene la transacción actual
@@ -258,7 +258,10 @@ class RegistroMarcacion extends \yii\db\ActiveRecord {
             $param_sql .= ", rmar_fecha_creacion";
             $bdet_sql .= ", :rmar_fecha_creacion";
         }
-
+        if (isset($rmar_idingreso)) {
+            $param_sql .= ", rmar_idingreso";
+            $bdet_sql .= ", :rmar_idingreso";
+        }
         try {
             $sql = "INSERT INTO " . $con->dbname . ".registro_marcacion ($param_sql) VALUES($bdet_sql)";
             $comando = $con->createCommand($sql);
@@ -287,7 +290,9 @@ class RegistroMarcacion extends \yii\db\ActiveRecord {
             if (!empty((isset($rmar_fecha_creacion)))) {
                 $comando->bindParam(':rmar_fecha_creacion', $rmar_fecha_creacion, \PDO::PARAM_STR);
             }
-
+            if (!empty((isset($rmar_idingreso)))) {
+                $comando->bindParam(':rmar_idingreso', $rmar_idingreso, \PDO::PARAM_INT);
+            }
             $result = $comando->execute();
             if ($trans !== null)
                 $trans->commit();
@@ -337,12 +342,12 @@ class RegistroMarcacion extends \yii\db\ActiveRecord {
                     hap.hape_hora_entrada as inicio_esperado,
                     ifnull((SELECT DATE_FORMAT(marc.rmar_fecha_hora_salida, '%H:%i:%s') 
                             FROM db_academico.registro_marcacion marc
-                            WHERE marc.pro_id = rma.pro_id AND marc.hape_id = rma.hape_id AND marc.rmar_tipo = 'S'),'') as hora_salida,
+                            WHERE marc.pro_id = rma.pro_id AND marc.hape_id = rma.hape_id AND marc.rmar_tipo = 'S' and marc.rmar_idingreso = rma.rmar_id),'') as hora_salida,
                     hap.hape_hora_salida as salida_esperada,
                     FROM_BASE64(rma.rmar_direccion_ip) as ip,
                     ifnull((SELECT FROM_BASE64(marc.rmar_direccion_ip)
                             FROM db_academico.registro_marcacion marc
-                            WHERE marc.pro_id = rma.pro_id AND marc.hape_id = rma.hape_id AND marc.rmar_tipo = 'S'),'') as ip_salida,
+                            WHERE marc.pro_id = rma.pro_id AND marc.hape_id = rma.hape_id AND marc.rmar_tipo = 'S' and marc.rmar_idingreso = rma.rmar_id),'') as ip_salida,
                     $periodoacademico
                     peri.paca_anio_academico                    
                     FROM " . $con->dbname . ".registro_marcacion rma
@@ -433,6 +438,39 @@ class RegistroMarcacion extends \yii\db\ActiveRecord {
         $comando = $con->createCommand($sql);
         $comando->bindParam(":fecha", $fecha_registro, \PDO::PARAM_STR);
         $comando->bindParam(":per_id", $per_id, \PDO::PARAM_INT);
+        $comando->bindParam(":estado", $estado, \PDO::PARAM_STR);
+
+        $resultData = $comando->queryOne();
+        return $resultData;
+    }
+
+    /**
+     * Function consultarmIdMarcacion
+     * @author  Giovanni Vergara <analistadesarrollo01@uteg.edu.ec>
+     * @param   
+     * @return  Consulta el id de la marcacion de entrada para guardar en la marcacion de salida.
+     */
+    public function consultarmIdMarcacion($rmar_tipo, $pro_id, $hape_id, $fecha) {
+        $con = \Yii::$app->db_academico;
+        $estado = 1;
+        $sql = "
+                    SELECT
+                        rmar_id
+                    FROM 
+                        " . $con->dbname . ".registro_marcacion rma
+                        
+                    WHERE
+                        rma.rmar_tipo = :rmar_tipo AND 
+                        rma.pro_id = :pro_id AND
+                        rma.hape_id = :hape_id AND
+                        DATE_FORMAT(rma.rmar_fecha_creacion, '%Y-%m-%d') = :fecha AND
+                        rma.rmar_estado = :estado AND
+                        rma.rmar_estado_logico = :estado";
+        $comando = $con->createCommand($sql);
+        $comando->bindParam(":rmar_tipo", $rmar_tipo, \PDO::PARAM_STR);
+        $comando->bindParam(":pro_id", $pro_id, \PDO::PARAM_INT);
+        $comando->bindParam(":hape_id", $hape_id, \PDO::PARAM_INT);
+        $comando->bindParam(":fecha", $fecha, \PDO::PARAM_STR);
         $comando->bindParam(":estado", $estado, \PDO::PARAM_STR);
 
         $resultData = $comando->queryOne();
