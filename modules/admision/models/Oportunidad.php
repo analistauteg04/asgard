@@ -1335,8 +1335,7 @@ class Oportunidad extends \app\modules\admision\components\CActiveRecord {
         $con = \Yii::$app->db_crm;
         $con1 = \Yii::$app->db;
         $estado = 1;
-        $sql = "
-                
+        $sql = "                
                 SELECT  ba.bact_id, 
                         opo.pges_id,
                         concat(ifnull(per_pri_nombre,''), ' ', ifnull(per_pri_apellido,'')) as agente,
@@ -1352,7 +1351,7 @@ class Oportunidad extends \app\modules\admision\components\CActiveRecord {
                         ifnull(oac.oact_nombre, '') as observacion,
                         ifnull((select concat(pers.per_pri_nombre, ' ', ifnull(pers.per_pri_apellido,' ')) 
                                   from " . $con1->dbname . ".usuario usu 
-                                  inner join " . $con1->dbname . ".persona pers on pers.per_id = usu.usu_id
+                                  inner join " . $con1->dbname . ".persona pers on pers.per_id = usu.per_id
                                   where usu.usu_id = ba.usu_id),'') as usuario_ing 
                 FROM " . $con->dbname . ".oportunidad opo 
                          inner join " . $con->dbname . ".persona_gestion pges on opo.pges_id = pges.pges_id 
@@ -2114,7 +2113,6 @@ class Oportunidad extends \app\modules\admision\components\CActiveRecord {
                 //Modificar estado de la oportunidad.                        
                 $respOport = $mod_actividad->modificarOportunixId(null, $data[$i]["opo_id"], null, null, null, null, null, null, null, null, null, $data[$i]["eopo_id"], $usu_id, $data[$i]["oper_id"]);                                
                 $cont++;
-
             }            
             $arroout["status"] = TRUE;
             $arroout["error"] = null;

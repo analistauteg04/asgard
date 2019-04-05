@@ -26,6 +26,7 @@ $leyendarc = '<div class="col-md-12 col-sm-12 col-xs-12 col-lg-12">
           </div>
           </div>
           </div>';
+print_r($per_id);
 ?>
 <div class="col-md-12 col-sm-12 col-xs-12 col-lg-12 ">    
     <h3><span id="lbl_Personeria"><?= financiero::t("Pagos", "Payment Registration") ?></span>

@@ -87,12 +87,12 @@ $leyenda = '<div class="col-md-12 col-xs-12 col-sm-12 col-lg-12">
                 ?>
             </div>     
         </div>   
-        <!--<div class='col-md-12 col-sm-12 col-xs-12 col-lg-12'>        
+        <div class='col-md-12 col-sm-12 col-xs-12 col-lg-12'>        
             <div class="col-sm-8 col-md-8 col-xs-8 col-lg-8"></div>
             <div class="col-sm-2 col-md-2 col-xs-4 col-lg-2">                
                 <a id="btn_cargarGestion" href="javascript:" class="btn btn-primary btn-block"> <?= Yii::t("formulario", "Send") ?></a>
             </div>        
-        </div>-->
+        </div>
     </div>
 </form>
 

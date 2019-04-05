@@ -7,8 +7,9 @@ use `db_facturacion`;
 --
 -- Volcado de datos para la tabla `categoria` 
 --
-insert into `categoria` (`cat_id`, `cat_nombre`, `cat_descripcion`, `cat_usu_ingreso`, `cat_estado`, `cat_estado_logico`)
-values(1, 'Solicitudes de Inscripción', 'Solicitudes de Inscripción', 1, '1', '1');
+insert into `categoria` (`cat_id`, `cat_nombre`, `cat_descripcion`, `cat_usu_ingreso`, `cat_estado`, `cat_estado_logico`) values
+(1, 'Solicitudes de Inscripción', 'Solicitudes de Inscripción', 1, '1', '1'),
+(2, 'Pagos frecuentes', 'Pagos frecuentes', 1, '1', '1');
 
 -- ---------------------------------------------git pull-----------
 --
@@ -21,7 +22,8 @@ insert into `sub_categoria` (`scat_id`, `cat_id`, `scat_nombre`, `scat_descripci
 (4, 1, 'Grado A distancia', 'Grado A distancia', 1, '1', '1'),
 (5, 1, 'Posgrado', 'Posgrado', 1, '1', '1'),
 (6, 1, 'Smart', 'Smart', 1, '1', '1'),
-(7, 1, 'Ulink', 'Ulink', 1, '1', '1');
+(7, 1, 'Ulink', 'Ulink', 1, '1', '1'),
+(8, 2, 'Pagos frecuentes', 'Pagos frecuentes', 1, '1', '1');
 
 -- --------------------------------------------------------
 --
@@ -211,7 +213,8 @@ insert into `item` (`ite_id`, `scat_id`,  `ite_codigo`, `ite_nombre`, `ite_descr
 (166, 6, '0166', 'Actualización normativa laboral', 'Actualización normativa laboral', 1, '1', '1'),
 (167, 6, '0167', 'Seguridad y Salud Ocupacional', 'Seguridad y Salud Ocupacional', 1, '1', '1'),
 
-(168, 1, '0168', 'Inscripción Online', 'Inscripción Online', 1, '1', '1');
+(168, 1, '0168', 'Inscripción Online', 'Inscripción Online', 1, '1', '1'),
+(169, 8, '0169', 'Matrícula período', 'Matrícula período', 1, '1', '1');
 
 -- --------------------------------------------------------
 --
@@ -400,7 +403,9 @@ insert into `item_precio` (`ipre_id`, `ite_id`, `ipre_precio`, `ipre_porcentaje_
 (166, 166, 100, null, 'A', null, null, '2019/03/26 00:00:00', '2019/12/31 23:59:59', 1, '1', '1'),
 (167, 167, 100, null, 'A', null, null, '2019/03/26 00:00:00', '2019/12/31 23:59:59', 1, '1', '1'),
 
-(168, 168, 65, null, 'A', null, null, '2019/03/29 00:00:00', '2019/12/31 23:59:59', 1, '1', '1');
+(168, 168, 65, null, 'A', null, null, '2019/03/29 00:00:00', '2019/12/31 23:59:59', 1, '1', '1'),
+
+(169, 169, 300, null, 'A', null, null, '2019/04/01 00:00:00', '2019/12/31 23:59:59', 1, '1', '1');
 
 -- --------------------------------------------------------
 --

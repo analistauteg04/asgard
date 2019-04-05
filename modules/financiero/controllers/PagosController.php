@@ -182,6 +182,8 @@ class PagosController extends \app\components\CController {
         if (Yii::$app->request->isAjax) {
             $data = Yii::$app->request->post();
             $per_id = $_SESSION['persona_solicita'];
+            //$per_id = $data["per_id"];
+            \app\models\Utilities::putMessageLogFile('perId en savepago: ' . $per_id);
             if ($data["upload_file"]) {
                 if (empty($_FILES)) {
                     echo json_encode(['error' => Yii::t("notificaciones", "Error to process File {file}. Try again.", ['{file}' => basename($files['name'])])]);
@@ -192,6 +194,7 @@ class PagosController extends \app\components\CController {
                 $arrIm = explode(".", basename($files['name']));
                 $typeFile = strtolower($arrIm[count($arrIm) - 1]);
                 $dirFileEnd = Yii::$app->params["documentFolder"] . "documento/" . $per_id . "/" . $data["name_file"] . "." . $typeFile;
+                \app\models\Utilities::putMessageLogFile('dirFileEnd: ' . $dirFileEnd);
                 $status = Utilities::moveUploadFile($files['tmp_name'], $dirFileEnd);
                 if ($status) {
                     return true;
@@ -503,7 +506,8 @@ class PagosController extends \app\components\CController {
     }
 
     public function actionIndexadm() {
-        $per_id = @Yii::$app->session->get("PB_iduser");
+        $per_id = @Yii::$app->session->get("PB_perid"); //@Yii::$app->session->get("PB_iduser");
+        \app\models\Utilities::putMessageLogFile('perId en Indexadm: ' . $per_id);
         $model_interesado = new Interesado();
         $resp_gruporol = $model_interesado->consultagruporol($per_id);
         $mod_pago = new OrdenPago();
@@ -557,6 +561,7 @@ class PagosController extends \app\components\CController {
                 
             }
         }
+        \app\models\Utilities::putMessageLogFile('perId en Registrarpagoadm: ' . $per_id);
         return $this->render('registrarpagoadm', [
                     "arr_forma_pago" => ArrayHelper::map($arr_forma_pago, "id", "value"),
                     'model' => $resp_doc,
