@@ -8,6 +8,7 @@ use yii\helpers\ArrayHelper;
 use yii\base\Exception;
 use app\models\Persona;
 use app\models\EmpresaPersona;
+use app\modules\admision\models\ItemMetodoUnidad;
 use \app\modules\admision\models\SolicitudInscripcion;
 use app\models\Pais;
 use app\modules\admision\models\Interesado;
@@ -34,21 +35,23 @@ use app\modules\financiero\models\Secuencias;
 use app\models\InscripcionAdmision;
 
 class PagosfrecuentesController extends \yii\web\Controller {
+
     public function init() {
         if (!is_dir(Yii::getAlias('@bower')))
             Yii::setAlias('@bower', '@vendor/bower-asset');
         return parent::init();
     }
+
     public function actionIndex() {
         $this->layout = '@themes/' . \Yii::$app->getView()->theme->themeName . '/layouts/basic.php';
         $per_id = Yii::$app->session->get("PB_perid");
         $mod_persona = Persona::findIdentity($per_id);
         $mod_modalidad = new Modalidad();
         $mod_pergestion = new PersonaGestion();
+        $modItemMetNivel = new ItemMetodoUnidad();
         $mod_unidad = new UnidadAcademica();
         $modcanal = new Oportunidad();
         $mod_metodo = new MetodoIngreso();
-        $mod_inscripcion = new InscripcionAdmision();        
         if (Yii::$app->request->isAjax) {
             $data = Yii::$app->request->post();
             if (isset($data["getprovincias"])) {
@@ -83,6 +86,25 @@ class PagosfrecuentesController extends \yii\web\Controller {
                 $message = array("metodos" => $metodos);
                 return Utilities::ajaxResponse('OK', 'alert', Yii::t('jslang', 'Success'), 'false', $message);
             }
+            if (isset($data["getitem"])) {
+                if ($data["empresa_id"] != 1) {
+                    $metodo = 0;
+                } else {
+                    if ($data["unidada"] != 1) {
+                        $metodo = $data["metodo"];
+                    } else {
+                        $metodo = 0;
+                    }
+                }
+                $resItem = $modItemMetNivel->consultarXitemPrecio($data["unidada"], $data["moda_id"], $metodo, $data["carrera_id"], $data["empresa_id"]);
+                $message = array("items" => $resItem);
+                return Utilities::ajaxResponse('OK', 'alert', Yii::t('jslang', 'Success'), 'false', $message);
+            }
+            if (isset($data["getprecio"])) {                                
+                $resp_precio = $mod_solins->ObtenerPrecioXitem($data["ite_id"]);                  
+                $message = array("precio" => $resp_precio["precio"]);
+                return Utilities::ajaxResponse('OK', 'alert', Yii::t('jslang', 'Success'), 'false', $message);                
+            }
         }
         $arr_pais_dom = Pais::find()->select("pai_id AS id, pai_nombre AS value")->where(["pai_estado_logico" => "1", "pai_estado" => "1"])->asArray()->all();
         $pais_id = 1; //Ecuador
@@ -92,10 +114,10 @@ class PagosfrecuentesController extends \yii\web\Controller {
         $arr_ninteres = $mod_unidad->consultarUnidadAcademicasEmpresa(1);
         $arr_modalidad = $mod_modalidad->consultarModalidad(1, 1);
         $arr_conuteg = $mod_pergestion->consultarConociouteg();
+        $resp_item = $modItemMetNivel->consultarXitemPrecio(1, 1, 1, 2, 1);
         $arr_carrerra1 = $modcanal->consultarCarreraModalidad(1, $arr_modalidad[0]["id"]);
         $arr_metodos = $mod_metodo->consultarMetodoUnidadAca_2($arr_ninteres[0]["id"]);
         $_SESSION['JSLANG']['Your information has not been saved. Please try again.'] = Yii::t('notificaciones', 'Your information has not been saved. Please try again.');
-                
         return $this->render('index', [
                     "tipos_dni" => array("CED" => Yii::t("formulario", "DNI Document"), "PASS" => Yii::t("formulario", "Passport")),
                     "tipos_dni2" => array("CED" => Yii::t("formulario", "DNI Document1"), "PASS" => Yii::t("formulario", "Passport1")),
@@ -105,24 +127,26 @@ class PagosfrecuentesController extends \yii\web\Controller {
                     "arr_ciu_dom" => ArrayHelper::map($arr_ciu_dom, "id", "value"),
                     "arr_ninteres" => ArrayHelper::map($arr_ninteres, "id", "name"),
                     "arr_medio" => ArrayHelper::map($arr_medio, "id", "value"),
+                    "arr_item" => ArrayHelper::map(array_merge(["id" => "0", "name" => "Seleccionar"], $resp_item), "id", "name"), //ArrayHelper::map($resp_item, "id", "name"),
                     "arr_modalidad" => ArrayHelper::map($arr_modalidad, "id", "name"),
                     "arr_conuteg" => ArrayHelper::map($arr_conuteg, "id", "name"),
                     "arr_carrerra1" => ArrayHelper::map($arr_carrerra1, "id", "name"),
                     "arr_metodos" => ArrayHelper::map($arr_metodos, "id", "name"),
                     "resp_datos" => $resp_datos,
-        ]);                        
+        ]);
     }
+
     public function actionSavepagodinner() {
         if (Yii::$app->request->isAjax) {
             $data = Yii::$app->request->post();
             $dataGet = Yii::$app->request->get();
             $con1 = \Yii::$app->db_facturacion;
             $emp_id = @Yii::$app->session->get("PB_idempresa");
-            $referenceID = isset($data["referenceID"])?$data["referenceID"]:null;
-            if(!is_null($referenceID)){
+            $referenceID = isset($data["referenceID"]) ? $data["referenceID"] : null;
+            if (!is_null($referenceID)) {
                 try {
                     $transaction = $con1->beginTransaction();
-                    $sins_id = $data["sins_id"];//base64_decode($dataGet["sins_id"]);
+                    $sins_id = $data["sins_id"]; //base64_decode($dataGet["sins_id"]);
                     $solInc_mod = SolicitudInscripcion::findOne($sins_id);
                     $opago_mod = OrdenPago::findOne(["sins_id" => $sins_id, "opag_estado_pago" => "P", "opag_estado" => "1", "opag_estado_logico" => "1"]);
 
@@ -132,7 +156,7 @@ class PagosfrecuentesController extends \yii\web\Controller {
                         "ordenPago" => $opago_mod->opag_id,
                         "response" => $data["resp"],
                     ));
-                    if($data["resp"]["status"]["status"] == "APPROVED"){
+                    if ($data["resp"]["status"]["status"] == "APPROVED") {
                         $opago_mod->opag_estado_pago = "S";
                         $opago_mod->opag_valor_pagado = $opago_mod->opag_total;
                         $opago_mod->opag_fecha_pago_total = date("Y-m-d H:i:s");
@@ -141,14 +165,14 @@ class PagosfrecuentesController extends \yii\web\Controller {
                         $message = array(
                             "wtmessage" => Yii::t("notificaciones", "Your information was successfully saved."),
                             "title" => Yii::t('jslang', 'Success'),
-                            //"data" => $response,
+                                //"data" => $response,
                         );
-                        if($opago_mod->save()){
+                        if ($opago_mod->save()) {
                             $dpag_mod = DesglosePago::findOne(["opag_id" => $opago_mod->opag_id, "dpag_estado_pago" => "P", "dpag_estado" => "1", "dpag_estado_logico" => "1"]);
                             $dpag_mod->dpag_estado_pago = "S";
                             $dpag_mod->dpag_usu_modifica = @Yii::$app->session->get("PB_iduser");
                             $dpag_mod->dpag_fecha_modificacion = date("Y-m-d H:i:s");
-                            if($dpag_mod->save()){
+                            if ($dpag_mod->save()) {
                                 $regpag_mod = new RegistroPago();
                                 $regpag_mod->dpag_id = $dpag_mod->dpag_id;
                                 $regpag_mod->fpag_id = 6; // boton de pagos
@@ -162,42 +186,42 @@ class PagosfrecuentesController extends \yii\web\Controller {
                                 $regpag_mod->rpag_codigo_autorizacion = "";
                                 $regpag_mod->rpag_estado = "1";
                                 $regpag_mod->rpag_estado_logico = "1";
-                                if($regpag_mod->save()){
+                                if ($regpag_mod->save()) {
                                     $transaction->commit();
                                     return Utilities::ajaxResponse('OK', 'alert', Yii::t('jslang', 'Success'), 'false', $message);
-                                }else{
-                                    Utilities::putMessageLogFile("Boton Pagos: Error al crear Registro Pago. RefId: ". $referenceID . " Error: " . json_encode($regpag_mod->errors));
+                                } else {
+                                    Utilities::putMessageLogFile("Boton Pagos: Error al crear Registro Pago. RefId: " . $referenceID . " Error: " . json_encode($regpag_mod->errors));
                                     throw new Exception('Error al crear Registro Pago.' . json_encode($regpag_mod->errors));
                                 }
-                            }else{
-                                Utilities::putMessageLogFile("Boton Pagos: Error al actualizar Desglose Pago RefId: ". $referenceID . " Error: " . json_encode($dpag_mod->errors));
+                            } else {
+                                Utilities::putMessageLogFile("Boton Pagos: Error al actualizar Desglose Pago RefId: " . $referenceID . " Error: " . json_encode($dpag_mod->errors));
                                 throw new Exception('Error al actualizar Desglose Pago.' . json_encode($dpag_mod->errors));
                             }
-                        }else{
-                            Utilities::putMessageLogFile("Boton Pagos: Error al actualizar pago. RefId: ". $referenceID . " Error: " . json_encode($opago_mod->errors));
+                        } else {
+                            Utilities::putMessageLogFile("Boton Pagos: Error al actualizar pago. RefId: " . $referenceID . " Error: " . json_encode($opago_mod->errors));
                             throw new Exception('Error al actualizar pago.' . json_encode($opago_mod->errors));
-                        } 
-                    }else {
+                        }
+                    } else {
                         $message = array(
                             "wtmessage" => $data["resp"]["status"]["message"],
                             "title" => Yii::t('jslang', 'Error'),
                         );
                         return Utilities::ajaxResponse('NOOK', 'alert', Yii::t('jslang', 'Error'), 'true', $message);
-                    }            
-                }catch(Exception $e) {
+                    }
+                } catch (Exception $e) {
                     $transaction->rollBack();
-                    Utilities::putMessageLogFile("Boton Pagos: Error . RefId: ". $referenceID .  "Error: " . $e->getMessage());
+                    Utilities::putMessageLogFile("Boton Pagos: Error . RefId: " . $referenceID . "Error: " . $e->getMessage());
                     $message = array(
                         "wtmessage" => Yii::t('notificaciones', 'Invalid request. Please do not repeat this request again. Contact to Administrator.'),
                         "title" => Yii::t('jslang', 'Error'),
                     );
                     return Utilities::ajaxResponse('NOOK', 'alert', Yii::t('jslang', 'Error'), 'true', $message);
                 }
-            }            
+            }
             //Secuencias::initSecuencia($con1, $emp_id, 1, 1, 'BPA',"BOTON DE PAGOS DINERS"); 
             // Info de Solicitud Inscripcion
-            $sins_id = $data["sins_id"];//base64_decode($dataGet["sins_id"]);
-            \app\models\Utilities::putMessageLogFile('sins_id:'.$sins_id);        
+            $sins_id = $data["sins_id"]; //base64_decode($dataGet["sins_id"]);
+            \app\models\Utilities::putMessageLogFile('sins_id:' . $sins_id);
             $solInc_mod = SolicitudInscripcion::findOne($sins_id);
             $int_mod = Interesado::findOne($solInc_mod->int_id);
             $per_mod = Persona::findOne($int_mod->per_id);
@@ -205,19 +229,20 @@ class PagosfrecuentesController extends \yii\web\Controller {
             $obj_sol = $solInc_mod::consultarInteresadoPorSol_id($sins_id);
             $descripcionItem = Yii::t("formulario", "Payment of ") . $obj_sol["carrera"]; //financiero::t("Pagos", "Payment of ") . $obj_sol["carrera"];
             $titleBox = Yii::t("formulario", "Payment Course/Career/Program: ") . $obj_sol["carrera"]; //financiero::t("Pagos", "Payment Course/Career/Program: ") . $obj_sol["carrera"];
-            $totalpagar = $opago_mod->opag_total;                 
-            \app\models\Utilities::putMessageLogFile('total a pagar:'. $totalpagar);        
-            $secuencia = 130;//Secuencias::nuevaSecuencia($con1, $emp_id, 1, 1, 'BPA');
+            $totalpagar = $opago_mod->opag_total;
+            \app\models\Utilities::putMessageLogFile('total a pagar:' . $totalpagar);
+            $secuencia = 130; //Secuencias::nuevaSecuencia($con1, $emp_id, 1, 1, 'BPA');
             return $this->render('btnpago', array(
-                "referenceID" => $secuencia, //str_pad(Secuencias::nuevaSecuencia($con1, $emp_id, 1, 1, 'BPA'), 8, "0", STR_PAD_LEFT),
-                "ordenPago" => $opago_mod->opag_id,
-                "nombre_cliente" => $per_mod->per_pri_nombre,
-                "apellido_cliente" => $per_mod->per_pri_apellido,
-                "descripcionItem" => $descripcionItem,
-                "titleBox" => $titleBox,
-                "email_cliente" => $per_mod->per_correo,
-                "total" => $totalpagar,
+                        "referenceID" => $secuencia, //str_pad(Secuencias::nuevaSecuencia($con1, $emp_id, 1, 1, 'BPA'), 8, "0", STR_PAD_LEFT),
+                        "ordenPago" => $opago_mod->opag_id,
+                        "nombre_cliente" => $per_mod->per_pri_nombre,
+                        "apellido_cliente" => $per_mod->per_pri_apellido,
+                        "descripcionItem" => $descripcionItem,
+                        "titleBox" => $titleBox,
+                        "email_cliente" => $per_mod->per_correo,
+                        "total" => $totalpagar,
             ));
         }
     }
+
 }

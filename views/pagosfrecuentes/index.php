@@ -15,6 +15,7 @@ use yii\helpers\Html;
             "arr_prov_dom" => $arr_prov_dom,
             "arr_ciu_dom" => $arr_ciu_dom,
             "arr_ninteres" => $arr_ninteres,
+            "arr_item"=>$arr_item,
             "arr_medio" => $arr_medio,
             "arr_modalidad" => $arr_modalidad,
             "arr_conuteg" => $arr_conuteg,
@@ -43,4 +44,10 @@ use yii\helpers\Html;
         ]);
         ?>
     </form>
+    <div class="col-md-12  col-xs-12 col-sm-12 col-lg-12">
+        <div class="col-md-10  col-xs-10 col-sm-10 col-lg-10"></div>
+        <div class="col-md-2  col-xs-2 col-sm-2 col-lg-2">
+            <a id="btnpagofrecuentes" href="javascript:" class="btn btn-primary btn-block"><?php echo "Guardar"; ?> </a>
+        </div>
+    </div>
 </div>
