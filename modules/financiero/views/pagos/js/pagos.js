@@ -86,8 +86,7 @@ $(document).ready(function () {
         arrParams.sins_id = $('#txth_sins').val();
         arrParams.per_id = $('#txth_perid').val();
         arrParams.banderacrea = '1';
-        arrParams.controladm = '1';
-        alert('perid:'+$('#txth_perid').val());
+        arrParams.controladm = '1';       
         if (parseFloat(arrParams.valor) > parseFloat(arrParams.totpago))
         {
             alert("Esta tratando de ingresar un pago mayor al valor de su servicio. " + parseFloat(arrParams.totpago));

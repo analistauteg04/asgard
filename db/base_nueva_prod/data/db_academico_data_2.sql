@@ -39,38 +39,37 @@ INSERT INTO `bloque_academico` (`baca_id`,`baca_nombre`, `baca_descripcion`, `ba
 --
 
 INSERT INTO `periodo_academico` (`paca_id`,`saca_id`, `baca_id`, `paca_anio_academico`, `paca_activo`, `paca_fecha_inicio`, `paca_fecha_fin`, `paca_usuario_ingreso`, `paca_estado`, `paca_estado_logico`) VALUES 
-(1, 2, 3, '2019', 'A', '2019-01-07', '2019-03-22', 1, '1', '1'),
-(2, 2, 6, '2019', 'A', null, null, 1, '1', '1'),
-(3, null, null,	'SIG-GI', 'A',	null, null, 1,	'1', '1'),
-(4, null, null,	'SIG-GII', 'A',	null, null, 1,	'1', '1'),
-(5, null, null,	'M-GET-TUR-GII', 'A',	null, null, 1,	'1', '1'),
-(6, null, null,	'SIG-GIII', 'A',	null, null, 1,	'1', '1'),
-(7, null, null,	'SIG-GIV', 'A',	null, null, 1,	'1', '1'),
-(8, null, null,	'MAE-FIN-TRI-G1', 'A',	null, null, 1,	'1', '1'),
-(9, null, null,	'MAE-ADM-EMP-GI', 'A',	null, null, 1,	'1', '1'),
-(10, null, null, 'MAE-ADM-GI-FIN', 'A',	null, null, 1,	'1', '1'),
-(11, null, null, 'M-GET-TUR-GIII', 'A',	null, null, 1,	'1', '1'),
-(12, null, null, 'MAE-MARK-GI', 'A',	null, null, 1,	'1', '1'),
-(13, null, null, 'MAE-ADM-EMP-GII', 'A',	null, null, 1,	'1', '1'),
-(14, null, null, 'SIG-GV', 'A',	null, null, 1,	'1', '1'),
-(15, null, null, 'MAE-ADM-EMP-GIII', 'A',	null, null, 1,	'1', '1'),
-(16, null, null, 'MAE-FIN-TRI-G2', 'A',	null, null, 1,	'1', '1'),
-(17, null, null, 'MAE-ADM-EMP-GIV', 'A',	null, null, 1,	'1', '1'),
-(18, null, null, 'SIG-GVI', 'A',	null, null, 1,	'1', '1'),
-(19, null, null, 'MAE-ADM-EMP-GV', 'A',	null, null, 1,	'1', '1'),
-(20, null, null, 'M-GET-TUR-GIV', 'A',	null, null, 1,	'1', '1'),
-(21, null, null, 'MAE-MARK-GII', 'A',	null, null, 1,	'1', '1'),
-(22, null, null, 'MAE-FIN-TRI-G3', 'A',	null, null, 1,	'1', '1'),
-(23, null, null, 'MAE-FIN-TRI-G4', 'A',	null, null, 1,	'1', '1'),
-(24, null, null, 'MAE-ADM-EMP-GVI', 'A',	null, null, 1,	'1', '1'),
-(25, null, null, 'SIG-GVII', 'A',	null, null, 1,	'1', '1'),
-(26, null, null, 'MAE-FIN-TRI-G5', 'A',	null, null, 1,	'1', '1'),
-(27, null, null, 'MAE-FAM-G1', 'A',	null, null, 1,	'1', '1'),
-(28, null, null, 'MAE-FIN-TRI-G6', 'A',	null, null, 1,	'1', '1'),
-(29, null, null, 'MAE-TH-GI', 'A',	null, null, 1,	'1', '1'),
-(30, null, null, 'MAE-ADM-EMP-GVII', 'A',	null, null, 1,	'1', '1'),
-(31, null, null, 'MAE-MARK-GIII', 'A',	null, null, 1,	'1', '1'),
-(32, null, null, 'SIG-GVIII', 'A',	null, null, 1,	'1', '1');
+(1, 1, 1, '2019', 'A', '2019-04-13', '2019-06-29', 1, '1', '1'),
+(2, null, null,	'SIG-GI', 'A',	null, null, 1,	'1', '1'),
+(3, null, null,	'SIG-GII', 'A',	null, null, 1,	'1', '1'),
+(4, null, null,	'M-GET-TUR-GII', 'A',	null, null, 1,	'1', '1'),
+(5, null, null,	'SIG-GIII', 'A',	null, null, 1,	'1', '1'),
+(6, null, null,	'SIG-GIV', 'A',	null, null, 1,	'1', '1'),
+(7, null, null,	'MAE-FIN-TRI-G1', 'A',	null, null, 1,	'1', '1'),
+(8, null, null,	'MAE-ADM-EMP-GI', 'A',	null, null, 1,	'1', '1'),
+(9, null, null, 'MAE-ADM-GI-FIN', 'A',	null, null, 1,	'1', '1'),
+(10, null, null, 'M-GET-TUR-GIII', 'A',	null, null, 1,	'1', '1'),
+(11, null, null, 'MAE-MARK-GI', 'A',	null, null, 1,	'1', '1'),
+(12, null, null, 'MAE-ADM-EMP-GII', 'A',	null, null, 1,	'1', '1'),
+(13, null, null, 'SIG-GV', 'A',	null, null, 1,	'1', '1'),
+(14, null, null, 'MAE-ADM-EMP-GIII', 'A',	null, null, 1,	'1', '1'),
+(15, null, null, 'MAE-FIN-TRI-G2', 'A',	null, null, 1,	'1', '1'),
+(16, null, null, 'MAE-ADM-EMP-GIV', 'A',	null, null, 1,	'1', '1'),
+(17, null, null, 'SIG-GVI', 'A',	null, null, 1,	'1', '1'),
+(18, null, null, 'MAE-ADM-EMP-GV', 'A',	null, null, 1,	'1', '1'),
+(19, null, null, 'M-GET-TUR-GIV', 'A',	null, null, 1,	'1', '1'),
+(20, null, null, 'MAE-MARK-GII', 'A',	null, null, 1,	'1', '1'),
+(21, null, null, 'MAE-FIN-TRI-G3', 'A',	null, null, 1,	'1', '1'),
+(22, null, null, 'MAE-FIN-TRI-G4', 'A',	null, null, 1,	'1', '1'),
+(23, null, null, 'MAE-ADM-EMP-GVI', 'A',	null, null, 1,	'1', '1'),
+(24, null, null, 'SIG-GVII', 'A',	null, null, 1,	'1', '1'),
+(25, null, null, 'MAE-FIN-TRI-G5', 'A',	null, null, 1,	'1', '1'),
+(26, null, null, 'MAE-FAM-G1', 'A',	null, null, 1,	'1', '1'),
+(27, null, null, 'MAE-FIN-TRI-G6', 'A',	null, null, 1,	'1', '1'),
+(28, null, null, 'MAE-TH-GI', 'A',	null, null, 1,	'1', '1'),
+(29, null, null, 'MAE-ADM-EMP-GVII', 'A', null, null, 1, '1', '1'),
+(30, null, null, 'MAE-MARK-GIII', 'A',	null, null, 1,	'1', '1'),
+(31, null, null, 'SIG-GVIII', 'A',	null, null, 1,	'1', '1');
 
 
 -- --------------------------------------------------------
@@ -570,7 +569,7 @@ INSERT INTO `distributivo_horario` (`dhor_id`,`dia_id`,`dhor_hora_inicio`,`dhor_
 (4,1,'10:00','17:00','Intensivo',1,1,1);
 
    
-INSERT INTO `horario_asignatura_periodo` (`hape_id`, `asi_id`, `paca_id`, `pro_id`, `uaca_id`, `mod_id`, `dia_id`, `hape_fecha_clase`, `hape_hora_entrada`, `hape_hora_salida`, `hape_estado`, `hape_fecha_creacion`, `hape_fecha_modificacion`, `hape_estado_logico`) VALUES
+/*INSERT INTO `horario_asignatura_periodo` (`hape_id`, `asi_id`, `paca_id`, `pro_id`, `uaca_id`, `mod_id`, `dia_id`, `hape_fecha_clase`, `hape_hora_entrada`, `hape_hora_salida`, `hape_estado`, `hape_fecha_creacion`, `hape_fecha_modificacion`, `hape_estado_logico`) VALUES
 (1, 51, 1, 62, 1, 4, 6, '2019-02-23 00:00:00', '10:30:00', '12:30:00', '1', '2019-02-21 20:17:20', NULL, '1'),
 (2, 51, 1, 62, 1, 4, 6, '2019-03-09 00:00:00', '10:30:00', '12:30:00', '1', '2019-02-21 20:17:20', NULL, '1'),
 (3, 51, 1, 62, 1, 4, 6, '2019-03-16 00:00:00', '10:30:00', '12:30:00', '1', '2019-02-21 20:17:20', NULL, '1'),
@@ -800,7 +799,9 @@ INSERT INTO `horario_asignatura_periodo` (`hape_id`, `asi_id`, `paca_id`, `pro_i
 (227, 62, 1, 2, 1, 3, 6, NULL, '07:15:00', '10:15:00', '1', '2019-02-21 20:17:20', NULL, '1'),
 (228, 106, 1, 171, 1, 3, 6, NULL, '07:15:00', '10:15:00', '1', '2019-02-21 20:17:20', NULL, '1'),
 (229, 15, 1, 173, 1, 3, 6, NULL, '07:15:00', '10:15:00', '1', '2019-02-21 20:17:20', NULL, '1');
+*/
 /* POsgrado */
+/*
 INSERT INTO `horario_asignatura_periodo` (`hape_id`, `asi_id`, `paca_id`, `pro_id`, `uaca_id`, `mod_id`, `dia_id`, `hape_fecha_clase`, `hape_hora_entrada`, `hape_hora_salida`, `hape_estado`, `hape_estado_logico`) VALUES
 (230, 136, 27, 73, 2, 3, 4, '2019-02-21', '18:00:00', '22:00:00', 1, 1),
 (231, 124, 24, 33, 2, 3, 5, '2019-02-22', '18:00:00', '22:00:00', 1, 1),
@@ -828,7 +829,9 @@ INSERT INTO `horario_asignatura_periodo` (`hape_id`, `asi_id`, `paca_id`, `pro_i
 (253, 115, 25, 31, 2, 3, 7, '2019-02-24', '08:30:00', '18:00:00', 1, 1),
 (254, 234, 32, 5, 2, 3, 7, '2019-02-24', '08:30:00', '18:00:00', 1, 1),
 (255, 171, 20, 109, 2, 3, 7, '2019-02-24', '08:30:00', '18:00:00', 1, 1);
+*/
 /* POsgrado 06/03/2019 */
+/*
 INSERT INTO `horario_asignatura_periodo` (`hape_id`, `asi_id`, `paca_id`, `pro_id`, `uaca_id`, `mod_id`, `dia_id`, `hape_fecha_clase`, `hape_hora_entrada`, `hape_hora_salida`, `hape_estado`, `hape_estado_logico`) VALUES
 (256, 136, 27, 73, 2, 3, 4, '2019-03-07', '18:00:00', '22:00:00', 1, 1),
 (257, 136, 27, 73, 2, 3, 5, '2019-03-08', '18:00:00', '22:00:00', 1, 1),
@@ -866,3 +869,4 @@ INSERT INTO `horario_asignatura_periodo` (`hape_id`, `asi_id`, `paca_id`, `pro_i
 (289, 234, 32, 5, 2, 3, 7, '2019-03-10', '10:00:00', '12:00:00', 1, 1),
 (290, 171, 20, 109, 2, 3, 6, '2019-03-09', '08:30:00', '18:00:00', 1, 1),
 (291, 171, 20, 109, 2, 3, 7, '2019-03-10', '10:00:00', '12:00:00', 1, 1);
+*/

@@ -18,7 +18,7 @@ use app\modules\admision\Module as admision;
 
 admision::registerTranslations();
 session_start();
-$_SESSION['personaid'] = $per_id;
+$_SESSION['persona_solicita'] = $per_id;
 $leyendarc = '<div class="col-md-12 col-sm-12 col-xs-12 col-lg-12">
           <div class="form-group">
           <div class="col-sm-10 col-md-10 col-xs-10 col-lg-10">
@@ -26,7 +26,6 @@ $leyendarc = '<div class="col-md-12 col-sm-12 col-xs-12 col-lg-12">
           </div>
           </div>
           </div>';
-print_r($per_id);
 ?>
 <div class="col-md-12 col-sm-12 col-xs-12 col-lg-12 ">    
     <h3><span id="lbl_Personeria"><?= financiero::t("Pagos", "Payment Registration") ?></span>

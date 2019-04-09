@@ -99,9 +99,7 @@ class BitacoraActividadesTmp extends \yii\db\ActiveRecord
                         }                        
                     }
                     unset($dataArr[1]); // Se elimina la cabecera de titulos del file
-                }
-                \app\models\Utilities::putMessageLogFile('antes de eliminar');
-                \app\models\Utilities::putMessageLogFile('usuario:'.$usu_id);
+                }               
                 $this->deletetablaTemp($con, $usu_id);                
                 $fila = 1;                    
                 foreach ($dataArr as $val) {                                        

@@ -1016,7 +1016,7 @@ class PersonaGestion extends \app\modules\admision\components\CActiveRecord {
                         pg.pges_trabajo_telefono,
                         emp.emp_id,
                         uaca.uaca_id,
-                        (select 
+                        /* (select 
                             case  count(ba.bact_id)
                                when 0 then 1 
                                when 1 then 1
@@ -1029,7 +1029,14 @@ class PersonaGestion extends \app\modules\admision\components\CActiveRecord {
                             -- and o.eopo_id in(1,2,3)
                             -- and uge.grol_id in (1,28)
                             and o.opo_estado = :estado
-                            and o.opo_estado_logico = :estado) as gestion                        
+                            and o.opo_estado_logico = :estado) as gestion */
+                        case when (select ifnull(count(ba.bact_id),0)
+				from db_crm.oportunidad o 
+				inner join db_crm.bitacora_actividades ba on ba.opo_id = o.opo_id
+				inner join db_asgard.usua_grol_eper uge on uge.usu_id = ba.usu_id
+				where o.pges_id = pg.pges_id
+				and o.opo_estado = :estado
+				and o.opo_estado_logico = :estado) <=1 then 1 else 2 end as gestion
                 FROM " . $con->dbname . ".persona_gestion pg
                 INNER JOIN " . $con->dbname . ".estado_contacto ec on ec.econ_id = pg.econ_id
                 INNER JOIN " . $con1->dbname . ".tipo_persona tp on tp.tper_id = pg.tper_id  
