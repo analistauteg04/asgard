@@ -2131,7 +2131,7 @@ class Oportunidad extends \app\modules\admision\components\CActiveRecord {
     
     /**
      * Function carga archivo csv a base de datos
-     * @author Giovanni Vergara <analistadesarrollo02@uteg.edu.ec>;
+     * @author Grace Viteri <analistadesarrollo01@uteg.edu.ec>;
      * @param
      * @return
      */

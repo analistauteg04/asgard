@@ -2,6 +2,10 @@ $(document).ready(function () {
     $('#btn_buscarMarcacion').click(function () {
         actualizarGridMarcacion();
     });
+    
+    $('#btn_cargarHorario').click(function () {
+        cargarHorario();
+    });
 });
 
 function Marcacion(hape_id, horario, accion, dia, prof_id) {
@@ -53,4 +57,21 @@ function exportPdf() {
     var f_fin = $('#txt_fecha_fin').val();
     var periodo = $('#cmb_periodo option:selected').val();
     window.location.href = $('#txth_base').val() + "/academico/marcacion/exppdf?pdf=1&profesor=" + profesor + "&materia=" + materia + "&f_ini=" + f_ini + "&f_fin=" + f_fin + "&periodo=" + periodo;
+}
+
+
+function cargarHorario() {
+    var arrParams = new Object();
+    var link = $('#txth_base').val() + "/academico/marcacion/cargarhorario";
+    arrParams.procesar_file = true;    
+    arrParams.periodo_id = $('#cmb_periodo option:selected').val();
+    arrParams.archivo = $('#txth_doc_adj_horario2').val() + "." + $('#txth_doc_adj_horario').val().split('.').pop();    
+    if (!validateForm()) {
+        requestHttpAjax(link, arrParams, function (response) {
+            showAlert(response.status, response.label, response.message);
+            setTimeout(function () {
+                window.location.href = $('#txth_base').val() + "/academico/marcacion/index";
+            }, 3000);
+        }, true);
+    }
 }

@@ -174,10 +174,9 @@ create table if not exists `persona_gestion_tmp`(
  `pgest_modalidad` varchar(100) default null,
  `pgest_unidad_academica` varchar(100) default null,
  `pgest_numero` varchar(20) default null, 
- `pgest_correo` varchar(100) default null
+ `pgest_correo` varchar(100) default null,
+ `pgest_comentario` varchar(1000) default null
 );
-
-
 
 -- --------------------------------------------------------
 --
