@@ -164,51 +164,38 @@ class HorarioAsignaturaPeriodoTmp extends \yii\db\ActiveRecord
                     if (!($respMateria)) {                           
                         $bandera= '0';
                         $mensaje = "No se encontró materia con ese nombre o se encuentra inactiva.";                                                     
-                    }
-                    \app\models\Utilities::putMessageLogFile('asig:'.$respMateria["asi_id"]);                      
+                    }                    
                     //Validación de unidad académica.
                     $respUnidad = $model->consultarExisteUnidad($val[5]);
                     if (!($respUnidad)) {                           
                         $bandera= '0';
                         $mensaje = "No se encontró unidad académica o se encuentra inactiva.";                                                     
-                    }
-                    \app\models\Utilities::putMessageLogFile('uaca_id:'.$val[5]);                
+                    }                    
                     //Validación modalidad.                    
                     $respMod = $model->consultarExisteModalidad($val[6]);
                     if (!($respMod)) {                           
                         $bandera= '0';
                         $mensaje = "No se encontró modalidad o se encuentra inactiva.";                                                     
-                    }
-                    \app\models\Utilities::putMessageLogFile('mod_id:'. $val[6]);                
+                    }                    
                     //Validación profesor.                    
                     $respProfesor = $model->consultarExisteProfesor($val[3]);
                     if (!($respProfesor)) {                           
                         $bandera= '0';
                         $mensaje = "No se encontró profesor o se encuentra inactivo.";                                                     
-                    }
-                    \app\models\Utilities::putMessageLogFile('pro_id:'.$respProfesor["pro_id"]);                
-                    //Validación de período académico.
-                    
-                    \app\models\Utilities::putMessageLogFile('paca_id:'.$periodo_id);                
+                    }                                                                                
                     //Validación de días.
                     if (($val[7]>7) or ($val[7]<1)) {
                         $bandera= '0';
                         $mensaje = "Código de día incorrecto."; 
-                    }
-                    \app\models\Utilities::putMessageLogFile('dia_id:'. $val[7]);                
+                    }                    
                     if ($bandera == '0') {
                         $arroout["status"] = FALSE;
                         $arroout["error"] = null;
                         $arroout["message"] = " Error en la Fila => N°$fila Materia => $val[1]";
                         $arroout["data"] = null;
                         throw new Exception('Error en la Fila => N°'.$fila. ' Materia => '. $val[1]);
-                    }    
-                    
-                    \app\models\Utilities::putMessageLogFile('hapt_hora_entrada:'. $val[9]);   
-                    \app\models\Utilities::putMessageLogFile('hapt_hora_salida:'. $val[10]);                        
-                    \app\models\Utilities::putMessageLogFile('usuario:'.$usu_id);                    
-
-                    $model->asi_id = $respMateria["asi_id"];
+                    }                                            
+                    /*$model->asi_id = $respMateria["asi_id"];
                     $model->paca_id = $periodo_id;
                     $model->pro_id = $respProfesor["pro_id"];
                     $model->uaca_id = $val[5];
@@ -216,26 +203,28 @@ class HorarioAsignaturaPeriodoTmp extends \yii\db\ActiveRecord
                     $model->dia_id = $val[7];                    
                     $model->hapt_hora_entrada =$val[9];
                     $model->hapt_hora_salida =$val[10];                    
-                    $model->usu_id =$usu_id;
+                    $model->usu_id =$usu_id;*/
                     //$model->hapt_fecha_creacion = $fecha;
-                    if ($val[6] == 4) { //modalidad a distancia
-                        $model->hapt_fecha_clase = $val[8];    
-                    } else {
-                        $model->hapt_fecha_clase = '10/04/2019';   
-                    }
-                    $model->save();
-                    \app\models\Utilities::putMessageLogFile('despues de grabar.');   
-                    if (empty($model->hapt_id)) {                             
+                    if ($val[6] == 4) { //modalidad a distancia                        
+                        $fecha_hora_clase = $val[8];
+                    }  else {
+                        $fecha_hora_clase = null;
+                    }   
+                    $model->hapt_fecha_clase = $fecha_hora_clase;    
+                    $respuesta = $model->insertarHorarioTmp($respMateria["asi_id"], $periodo_id, $respProfesor["pro_id"], $val[5], $val[6], $val[7], $fecha_hora_clase, $val[9], $val[10], $usu_id);                    
+                    //$model->save();                    
+                    //if (empty($model->hapt_id)) {                  
+                    if (!($respuesta)) {                                        
                         $arroout["status"] = FALSE;
                         $arroout["error"] = null;
                         $arroout["message"] = " Error en la Fila => N°$fila Materia => $val[1]";
                         $arroout["data"] = null;
-                        \app\models\Utilities::putMessageLogFile('error fila '.$fila);   
+                        \app\models\Utilities::putMessageLogFile('error fila '.$fila);
                         throw new Exception('Error, al grabar horario.');
-                    }
+                    }                     
                 } 
                 if ($trans !== null)                    
-                    $trans->commit();                
+                    $trans->commit();  
                 $arroout["status"] = TRUE;
                 $arroout["error"] = null;
                 $arroout["message"] = null;
@@ -243,13 +232,11 @@ class HorarioAsignaturaPeriodoTmp extends \yii\db\ActiveRecord
                 return $arroout;
             } catch (Exception $ex) {
                 if ($trans !== null)                    
-                    $trans->rollback();    
-                    \app\models\Utilities::putMessageLogFile('rollback');
+                    $trans->rollback();                        
                     $arroout["status"] = FALSE;
                     $arroout["error"] = null;
                     $arroout["message"] = " Error en la Fila => N°$fila Materia => $val[1]. $mensaje";
-                    $arroout["data"] = null;
-                    
+                    $arroout["data"] = null;                    
                 return $arroout;
             }
         }
@@ -327,10 +314,112 @@ class HorarioAsignaturaPeriodoTmp extends \yii\db\ActiveRecord
     }        
     
     public function consultarHorarioTemp($usu_id) {
-        $con = \Yii::$app->db_crm;        
-        $sql = "SELECT * FROM " . $con->dbname . ".horario_asignatura_periodo_tmp where usu_id = :usu_id";        
+        $con = \Yii::$app->db_academico;        
+        $sql = "SELECT * FROM " . $con->dbname . ".horario_asignatura_periodo_tmp where usu_id = :usu_id";    
+        \app\models\Utilities::putMessageLogFile('sql cuenta total - usuario:'.$usu_id);
+        \app\models\Utilities::putMessageLogFile('sql cuenta total:'.$sql);
         $comando = $con->createCommand($sql);
         $comando->bindParam(":usu_id", $usu_id, \PDO::PARAM_INT);
         return $comando->queryAll();
+    }
+    
+     /**
+     * Function insertarHorarioTmp graba horario según período.
+     * @author  Grace Viteri <analistadesarrollo01@uteg.edu.ec>;     
+     * @param
+     * @return
+     */
+    public function insertarHorarioTmp($asi_id, $paca_id, $pro_id, $uaca_id, $mod_id, $dia_id, $hapt_fecha_clase, $hapt_hora_entrada, $hapt_hora_salida, $usu_id) {
+        $con = \Yii::$app->db_academico;
+        /*$trans = $con->getTransaction(); // se obtiene la transacción actual
+        if ($trans !== null) {
+            $trans = null; // si existe la transacción entonces no se crea una
+        } else {
+            $trans = $con->beginTransaction(); // si no existe la transacción entonces se crea una
+        } */       
+        if (isset($asi_id)) {
+            $param_sql .= "asi_id";
+            $bdet_sql .= ":asi_id";
+        }
+        if (isset($paca_id)) {
+            $param_sql .= ", paca_id";
+            $bdet_sql .= ", :paca_id";
+        }
+        if (isset($pro_id)) {
+            $param_sql .= ", pro_id";
+            $bdet_sql .= ", :pro_id";
+        }
+        if (isset($uaca_id)) {
+            $param_sql .= ", uaca_id";
+            $bdet_sql .= ", :uaca_id";
+        }
+        if (isset($mod_id)) {
+            $param_sql .= ", mod_id";
+            $bdet_sql .= ", :mod_id";
+        }
+        if (isset($dia_id)) {
+            $param_sql .= ", dia_id";
+            $bdet_sql .= ", :dia_id";
+        }        
+        if (isset($hapt_fecha_clase)) {
+            $param_sql .= ", hapt_fecha_clase";
+            $bdet_sql .= ", :hapt_fecha_clase";
+        }
+        if (isset($hapt_hora_entrada)) {
+            $param_sql .= ", hapt_hora_entrada";
+            $bdet_sql .= ", :hapt_hora_entrada";
+        }
+        if (isset($hapt_hora_salida)) {
+            $param_sql .= ", hapt_hora_salida";
+            $bdet_sql .= ", :hapt_hora_salida";
+        }  
+        if (isset($usu_id)) {
+            $param_sql .= ", usu_id";
+            $bdet_sql .= ", :usu_id";
+        } 
+        try {
+            $sql = "INSERT INTO " . $con->dbname . ".horario_asignatura_periodo_tmp ($param_sql) VALUES($bdet_sql)";
+            $comando = $con->createCommand($sql);
+
+            if (isset($asi_id)) {
+                $comando->bindParam(':asi_id', $asi_id, \PDO::PARAM_INT);
+            }
+            if (isset($paca_id)) {
+                $comando->bindParam(':paca_id', $paca_id, \PDO::PARAM_INT);
+            }
+            if (isset($pro_id)) {
+                $comando->bindParam(':pro_id', $pro_id, \PDO::PARAM_INT);
+            }
+            if (!empty((isset($uaca_id)))) {
+                $comando->bindParam(':uaca_id', $uaca_id, \PDO::PARAM_INT);
+            }
+            if (!empty((isset($mod_id)))) {
+                $comando->bindParam(':mod_id', $mod_id, \PDO::PARAM_INT);
+            }
+            if (!empty((isset($dia_id)))) {
+                $comando->bindParam(':dia_id', $dia_id, \PDO::PARAM_INT);
+            }
+            if (!empty((isset($hapt_fecha_clase)))) {
+                $comando->bindParam(':hapt_fecha_clase', $hapt_fecha_clase, \PDO::PARAM_STR);
+            }
+            if (!empty((isset($hapt_hora_entrada)))) {
+                $comando->bindParam(':hapt_hora_entrada', $hapt_hora_entrada, \PDO::PARAM_STR);
+            }
+            if (!empty((isset($hapt_hora_salida)))) {
+                $comando->bindParam(':hapt_hora_salida', $hapt_hora_salida, \PDO::PARAM_STR);
+            }  
+            if (isset($usu_id)) {
+                $comando->bindParam(':usu_id', $usu_id, \PDO::PARAM_INT);
+            }
+            \app\models\Utilities::putMessageLogFile('sentencia: '.$sql);
+            $result = $comando->execute();
+            /*if ($trans !== null)
+                $trans->commit();*/
+            return $con->getLastInsertID($con->dbname . '.horario_asignatura_periodo_tmp');
+        } catch (Exception $ex) {
+           /* if ($trans !== null)
+                $trans->rollback();*/
+            return FALSE;
+        }
     }
 }

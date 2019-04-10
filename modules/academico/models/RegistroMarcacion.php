@@ -489,19 +489,18 @@ class RegistroMarcacion extends \yii\db\ActiveRecord {
         $mod_horarioTemp = new HorarioAsignaturaPeriodoTmp();             
         $mod_horario = new HorarioAsignaturaPeriodo();       
         $path = Yii::$app->basePath . Yii::$app->params['documentFolder'] . "horario/" . $fname;            
-        $carga_archivo = $mod_horarioTemp->uploadFile($periodo_id, $usu_id, $path);
-        \app\models\Utilities::putMessageLogFile('despues de upload'); 
-        if ($carga_archivo['status']) {      
-            \app\models\Utilities::putMessageLogFile('existe'); 
-            $data = $mod_horarioTemp->consultarHorarioTemp($usu_id);   
-            \app\models\Utilities::putMessageLogFile('contador reg:'.$data);                
+        $carga_archivo = $mod_horarioTemp->uploadFile($periodo_id, $usu_id, $path);        
+        if ($carga_archivo['status']) {                  
+            $data = $mod_horarioTemp->consultarHorarioTemp($usu_id);               
             $cont = 0;
-            for ($i = 0; $i < sizeof($data); $i++) {  
-                \app\models\Utilities::putMessageLogFile('insertar horario'); 
-                $resultado = $mod_horario->insertarHorario($data[$i]["asi_id"], $data[$i]["paca_id"], $data[$i]["pro_id"], $data[$i]["uaca_id"], $data[$i]["mod_id"], $data[$i]["dia_id"],  $data[$i]["hape_fecha_clase"], $data[$i]["hape_hora_entrada"], $data[$i]["hape_hora_salida"]); 
+            for ($i = 0; $i < sizeof($data); $i++) {   
+                if (!empty($data[$i]["hapt_fecha_clase"])) {
+                    $fecha = $data[$i]["hapt_fecha_clase"];                            
+                }                                
+                $resultado = $mod_horario->insertarHorario($data[$i]["asi_id"], $data[$i]["paca_id"], $data[$i]["pro_id"], $data[$i]["uaca_id"], $data[$i]["mod_id"], $data[$i]["dia_id"], $data[$i]["hapt_fecha_clase"], $data[$i]["hapt_hora_entrada"], $data[$i]["hapt_hora_salida"]); 
                 //Modificar estado de la oportunidad.                                        
                 $cont++;
-            }         
+            }      
             $arroout["status"] = TRUE;
             $arroout["error"] = null;
             $arroout["message"] = "Se ha procesado $cont registros.";

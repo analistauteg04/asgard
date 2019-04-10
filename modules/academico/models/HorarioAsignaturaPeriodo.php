@@ -222,7 +222,7 @@ class HorarioAsignaturaPeriodo extends \yii\db\ActiveRecord
             }
             if (!empty((isset($hape_hora_salida)))) {
                 $comando->bindParam(':hape_hora_salida', $hape_hora_salida, \PDO::PARAM_STR);
-            }            
+            }                 
             $result = $comando->execute();
             if ($trans !== null)
                 $trans->commit();
