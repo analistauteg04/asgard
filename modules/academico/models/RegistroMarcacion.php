@@ -1,6 +1,8 @@
 <?php
 
 namespace app\modules\academico\models;
+use app\modules\academico\models\HorarioAsignaturaPeriodoTmp;
+use app\modules\academico\models\HorarioAsignaturaPeriodo;
 
 use Yii;
 use yii\data\ArrayDataProvider;
@@ -477,4 +479,41 @@ class RegistroMarcacion extends \yii\db\ActiveRecord {
         return $resultData;
     }
 
+    /**
+     * Function carga archivo csv o xls, xlsx a base de datos de los horarios.
+     * @author Grace Viteri <analistadesarrollo01@uteg.edu.ec>;
+     * @param
+     * @return
+     */
+    public function CargarArchivoHorario($periodo_id, $fname, $usu_id) {                
+        $mod_horarioTemp = new HorarioAsignaturaPeriodoTmp();             
+        $mod_horario = new HorarioAsignaturaPeriodo();       
+        $path = Yii::$app->basePath . Yii::$app->params['documentFolder'] . "horario/" . $fname;            
+        $carga_archivo = $mod_horarioTemp->uploadFile($periodo_id, $usu_id, $path);
+        \app\models\Utilities::putMessageLogFile('despues de upload'); 
+        if ($carga_archivo['status']) {      
+            \app\models\Utilities::putMessageLogFile('existe'); 
+            $data = $mod_horarioTemp->consultarHorarioTemp($usu_id);   
+            \app\models\Utilities::putMessageLogFile('contador reg:'.$data);                
+            $cont = 0;
+            for ($i = 0; $i < sizeof($data); $i++) {  
+                \app\models\Utilities::putMessageLogFile('insertar horario'); 
+                $resultado = $mod_horario->insertarHorario($data[$i]["asi_id"], $data[$i]["paca_id"], $data[$i]["pro_id"], $data[$i]["uaca_id"], $data[$i]["mod_id"], $data[$i]["dia_id"],  $data[$i]["hape_fecha_clase"], $data[$i]["hape_hora_entrada"], $data[$i]["hape_hora_salida"]); 
+                //Modificar estado de la oportunidad.                                        
+                $cont++;
+            }         
+            $arroout["status"] = TRUE;
+            $arroout["error"] = null;
+            $arroout["message"] = "Se ha procesado $cont registros.";
+            $arroout["data"] = null;            
+            return $arroout;
+        } else {            
+            $arroout["status"] = FALSE;
+            $arroout["error"] = null;
+            $arroout["message"] = $carga_archivo['message'];
+            $arroout["data"] = null;
+            return $arroout;
+        }       
+    }
+    
 }

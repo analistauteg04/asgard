@@ -26,21 +26,21 @@ $leyenda = '<div class="col-md-12 col-xs-12 col-sm-12 col-lg-12">
     </div>
     <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">  
         <div class="form-group">
-            <label for="txth_doc_adj_leads" class="col-lg-2 col-md-2 col-sm-2 col-xs-2 control-label keyupmce"><?= Yii::t("formulario", "Período Académico") ?></label>
+            <label for="txth_doc_adj_horario" class="col-lg-2 col-md-2 col-sm-2 col-xs-2 control-label keyupmce"><?= Yii::t("formulario", "Período Académico") ?></label>
             <div class="col-sm-5 col-md-5 col-xs-5 col-lg-5">
-                <?= Html::dropDownList("cmb_periodo", 0, ArrayHelper::map(\app\models\Empresa::getAllEmpresa(), 'id', 'value'), ["class" => "form-control", "id" => "cmb_empresa", "disabled"=>"true"]) ?>
+                <?= Html::dropDownList("cmb_periodo", 0, $arr_periodo, ["class" => "form-control", "id" => "cmb_periodo"]) ?>
             </div>
         </div>
 
         <div class="form-group">
-            <label for="txth_doc_adj_leads" class="col-lg-2 col-md-2 col-sm-2 col-xs-2 control-label keyupmce"><?= Yii::t("formulario", "Attach document") ?></label>
+            <label for="txth_doc_adj_horario" class="col-lg-2 col-md-2 col-sm-2 col-xs-2 control-label keyupmce"><?= Yii::t("formulario", "Attach document") ?></label>
             <div class="col-sm-5 col-md-5 col-xs-5 col-lg-5">
-                <?= Html::hiddenInput('txth_doc_adj_leads', '', ['id' => 'txth_doc_adj_leads']); ?>
-                <?= Html::hiddenInput('txth_doc_adj_leads2', '', ['id' => 'txth_doc_adj_leads2']); ?>
+                <?= Html::hiddenInput('txth_doc_adj_horario', '', ['id' => 'txth_doc_adj_horario']); ?>
+                <?= Html::hiddenInput('txth_doc_adj_horario2', '', ['id' => 'txth_doc_adj_horario2']); ?>
                 <?php
                 echo CFileInputAjax::widget([
-                    'id' => 'txt_doc_adj_leads',
-                    'name' => 'txt_doc_adj_leads',
+                    'id' => 'txt_doc_adj_horario',
+                    'name' => 'txt_doc_adj_horario',
                     'pluginLoading' => false,
                     'showMessage' => false,
                     'pluginOptions' => [
@@ -52,21 +52,21 @@ $leyenda = '<div class="col-md-12 col-xs-12 col-sm-12 col-lg-12">
                         'browseClass' => 'btn btn-primary btn-block',
                         'browseIcon' => '<i class="fa fa-folder-open"></i> ',
                         'browseLabel' => "Subir Archivo",
-                        'uploadUrl' => Url::to(['oportunidades/cargargestion']),
+                        'uploadUrl' => Url::to(['marcacion/cargarhorario']),
                         'maxFileSize' => Yii::$app->params["MaxFileSize"],
                         'uploadExtraData' => 'javascript:function (previewId,index) {
-            return {"upload_file": true, "name_file": "op_gestion-' . @Yii::$app->session->get("PB_iduser") . '-' . time() . '"};
+            return {"upload_file": true, "name_file": "op_horario-' . @Yii::$app->session->get("PB_iduser") . '-' . time() . '"};
         }',
                     ],
                     'pluginEvents' => [
                         "filebatchselected" => "function (event) {
-        $('#txth_doc_adj_leads2').val('op_gestion-" . @Yii::$app->session->get("PB_iduser") . '-' . time() . "');
-        $('#txth_doc_adj_leads').val($('#txt_doc_adj_leads').val());
-        $('#txt_doc_adj_leads').fileinput('upload');
+        $('#txth_doc_adj_horario2').val('op_horario-" . @Yii::$app->session->get("PB_iduser") . '-' . time() . "');
+        $('#txth_doc_adj_horario').val($('#txt_doc_adj_horario').val());
+        $('#txt_doc_adj_horario').fileinput('upload');
     }",
                         "fileuploaderror" => "function (event, data, msg) {
         $(this).parent().parent().children().first().addClass('hide');
-        $('#txth_doc_adj_leads').val('');        
+        $('#txth_doc_adj_horario').val('');        
     }",
                         "filebatchuploadcomplete" => "function (event, files, extra) { 
         $(this).parent().parent().children().first().addClass('hide');
@@ -89,7 +89,7 @@ $leyenda = '<div class="col-md-12 col-xs-12 col-sm-12 col-lg-12">
         <div class='col-md-12 col-sm-12 col-xs-12 col-lg-12'>        
             <div class="col-sm-8 col-md-8 col-xs-8 col-lg-8"></div>
             <div class="col-sm-2 col-md-2 col-xs-4 col-lg-2">                
-                <a id="btn_cargarGestion" href="javascript:" class="btn btn-primary btn-block"> <?= Yii::t("formulario", "Send") ?></a>
+                <a id="btn_cargarHorario" href="javascript:" class="btn btn-primary btn-block"> <?= Yii::t("formulario", "Send") ?></a>
             </div>        
         </div>
     </div>

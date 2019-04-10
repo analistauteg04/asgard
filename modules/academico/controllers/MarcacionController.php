@@ -277,9 +277,11 @@ class MarcacionController extends \app\components\CController {
     
     
     public function actionCargarhorario() {
-        $per_id = @Yii::$app->session->get("PB_perid");    
+        //$per_id = @Yii::$app->session->get("PB_perid");    
         $usu_id = @Yii::$app->session->get("PB_iduser");    
-        $mod_gestion = new Oportunidad();        
+        $mod_marcacion = new RegistroMarcacion();
+        $mod_periodo = new PeriodoAcademicoMetIngreso();
+        $periodo = $mod_periodo->consultarPeriodoAcademico();
         if (Yii::$app->request->isAjax) {
             $data = Yii::$app->request->post();
             if ($data["upload_file"]) {
@@ -291,7 +293,7 @@ class MarcacionController extends \app\components\CController {
                 $arrIm = explode(".", basename($files['name']));
                 $typeFile = strtolower($arrIm[count($arrIm) - 1]);
                 if ($typeFile == 'xlsx' || $typeFile == 'csv' || $typeFile == 'xls') {
-                    $dirFileEnd = Yii::$app->params["documentFolder"] . "gestion/" . $data["name_file"] . "." . $typeFile;
+                    $dirFileEnd = Yii::$app->params["documentFolder"] . "horario/" . $data["name_file"] . "." . $typeFile;
                     $status = Utilities::moveUploadFile($files['tmp_name'], $dirFileEnd);
                     if ($status) {
                         return true;
@@ -301,10 +303,8 @@ class MarcacionController extends \app\components\CController {
                 }
             }            
             if ($data["procesar_file"]) {
-                $emp_id = $data["emp_id"];                
-                $mod_actividadTemp = new BitacoraActividadesTmp();     
-                //\app\models\Utilities::putMessageLogFile('perId:'.$per_id);                
-                $carga_archivo = $mod_gestion->CargarArchivoGestion($emp_id, $data["archivo"], $usu_id);
+                $periodo_id = $data["periodo_id"];                                                
+                $carga_archivo = $mod_marcacion->CargarArchivoHorario($periodo_id, $data["archivo"], $usu_id);
                 if ($carga_archivo['status']) {
                     $message = array(
                         "wtmessage" => Yii::t("notificaciones", "Archivo procesado correctamente. " . $carga_archivo['message']),
@@ -321,7 +321,9 @@ class MarcacionController extends \app\components\CController {
                 return;
             }
         } else {
-            return $this->render('cargarhorario', []);
+            return $this->render('cargarhorario', [
+                'arr_periodo' => ArrayHelper::map(array_merge([["id" => "0", "name" => "Todas"]], $periodo), "id", "name"),
+            ]);
         }
     }
 

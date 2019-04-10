@@ -644,3 +644,27 @@ create table if not exists `registro_marcacion` (
   foreign key (pro_id) references `profesor`(pro_id),
   foreign key (hape_id) references `horario_asignatura_periodo`(hape_id)
 );
+
+
+-- --------------------------------------------------------
+-- 
+-- Estructura de tabla para la tabla `horario_asignatura_periodo_tmp`
+-- --------------------------------------------------------
+create table if not exists `horario_asignatura_periodo_tmp` (
+  `hapt_id` bigint(20) not null auto_increment primary key,   
+  `asi_id` bigint(20) not null,
+  `paca_id` bigint(20) not null,
+  `pro_id` bigint(20) not null,
+  `uaca_id` bigint(20) not null,
+  `mod_id` bigint(20) not null,
+  `dia_id` bigint(20) not null,
+  `hapt_fecha_clase` timestamp null,
+  `hapt_hora_entrada` varchar(10) not null,
+  `hapt_hora_salida` varchar(10) not null,  
+  `usu_id` bigint(20) not null,  
+  foreign key (asi_id) references `asignatura`(asi_id),
+  foreign key (paca_id) references `periodo_academico`(paca_id),
+  foreign key (pro_id) references `profesor`(pro_id),
+  foreign key (uaca_id) references `unidad_academica`(uaca_id),
+  foreign key (mod_id) references `modalidad`(mod_id)
+);
