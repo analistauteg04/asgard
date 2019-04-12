@@ -515,4 +515,60 @@ class RegistroMarcacion extends \yii\db\ActiveRecord {
         }       
     }
     
+    /**
+     * Function consultarHorarios
+     * @author  Grace Viteri <analistadesarrollo01@uteg.edu.ec>    
+     * @property  
+     * @return  
+     */
+    public function consultarHorarios($arrFiltro = array(), $onlyData = false) {
+        $con = \Yii::$app->db_academico;
+        $con1 = \Yii::$app->db_asgard;
+        $estado = 1;
+        if (isset($arrFiltro) && count($arrFiltro) > 0) {
+            $str_search .= "(per.per_pri_nombre like :profesor OR ";
+            $str_search .= "per.per_seg_nombre like :profesor OR ";
+            $str_search .= "per.per_pri_apellido like :profesor OR ";
+            $str_search .= "per.per_seg_nombre like :profesor )  AND ";
+            //$str_search .= "asig.asi_nombre like :materia  AND ";
+           
+            if ($arrFiltro['periodo'] != "" && $arrFiltro['periodo'] > 0) {
+                $str_search .= " hap.paca_id = :periodo AND ";
+            }
+        }
+        $sql = "
+               
+               ";
+        $comando = $con->createCommand($sql);
+        $comando->bindParam(":estado", $estado, \PDO::PARAM_STR);
+        if (isset($arrFiltro) && count($arrFiltro) > 0) {
+            $search_cond = "%" . $arrFiltro["profesor"] . "%";
+            $comando->bindParam(":profesor", $search_cond, \PDO::PARAM_STR);           
+            $materia = "%" . $arrFiltro["materia"] . "%";
+            $comando->bindParam(":materia", $materia, \PDO::PARAM_STR);
+            
+            if ($arrFiltro['periodo'] != "" && $arrFiltro['periodo'] > 0) {
+                $periodo = $arrFiltro["periodo"];
+                $comando->bindParam(":periodo", $periodo, \PDO::PARAM_INT);
+            }
+        }
+        $resultData = $comando->queryAll();
+        $dataProvider = new ArrayDataProvider([
+            'key' => 'id',
+            'allModels' => $resultData,
+            'pagination' => [
+                'pageSize' => Yii::$app->params["pageSize"],
+            ],
+            'sort' => [
+                'attributes' => [
+                ],
+            ],
+        ]);
+        if ($onlyData) {
+            return $resultData;
+        } else {
+            return $dataProvider;
+        }
+    }
+    
 }

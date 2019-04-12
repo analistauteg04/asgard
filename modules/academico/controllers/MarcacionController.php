@@ -326,5 +326,31 @@ class MarcacionController extends \app\components\CController {
             ]);
         }
     }
+    
+    
+    public function actionListarhorario() {
+        $mod_marcacion = new RegistroMarcacion();
+        $mod_periodo = new PeriodoAcademicoMetIngreso();
+        $periodo = $mod_periodo->consultarPeriodoAcademico();
+        $data = Yii::$app->request->get();
+        if ($data['PBgetFilter']) {            
+            $arrSearch["periodo"] = $data['periodo'];
+            $arrSearch["unidad"] = $data['unidad'];
+            $arrSearch["modalidad"] = $data['modalidad'];
+            $arr_horario = $mod_marcacion->consultarRegistroMarcacion($arrSearch);
+            return $this->render('_listarhorario-grid', [
+                        'model' => $arr_horario,
+            ]);
+        } else {
+            $arr_historico = $mod_marcacion->consultarRegistroMarcacion($arrSearch);
+        }
+        if (Yii::$app->request->isAjax) {
+            $data = Yii::$app->request->post();
+        }
+        return $this->render('listarhorario', [
+                    'model' => $arr_historico,
+                    'arr_periodo' => ArrayHelper::map(array_merge([["id" => "0", "name" => "Todas"]], $periodo), "id", "name"),
+        ]);
+    }
 
 }
