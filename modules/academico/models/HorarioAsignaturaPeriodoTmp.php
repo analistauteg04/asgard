@@ -2,6 +2,7 @@
 
 namespace app\modules\academico\models;
 use app\modules\academico\models\HorarioAsignaturaPeriodoTmp;
+use yii\base\Exception;
 
 use Yii;
 
@@ -153,13 +154,14 @@ class HorarioAsignaturaPeriodoTmp extends \yii\db\ActiveRecord
                     unset($dataArr[1]); // Se elimina la cabecera de titulos del file
                 }                 
                 $this->deletetablaTemp($con, $usu_id); 
-                $fecha = date(Yii::$app->params["dateTimeByDefault"]);
+                //$fecha = date(Yii::$app->params["dateTimeByDefault"]);
                 $fila = 1;                    
                 foreach ($dataArr as $val) {                     
                     $fila++;                                                
                     $model = new HorarioAsignaturaPeriodoTmp();
                     //Validación de materia.  
-                    \app\models\Utilities::putMessageLogFile('nombre asig:'.$val[1]); 
+                    //\app\models\Utilities::putMessageLogFile('nombre asig:'.$val[1]); 
+                    //\app\models\Utilities::putMessageLogFile('valores:'.$val[1].' '.$val[2].' '.$val[3].' '.$val[4].' '.$val[5].' '.$val[6].' '.$val[7].' '.$val[8].' '.$val[9].' '.$val[10]);
                     $respMateria = $model->consultarMateriaXnombre($val[1]);                    
                     if (!($respMateria)) {                           
                         $bandera= '0';
@@ -177,7 +179,8 @@ class HorarioAsignaturaPeriodoTmp extends \yii\db\ActiveRecord
                         $bandera= '0';
                         $mensaje = "No se encontró modalidad o se encuentra inactiva.";                                                     
                     }                    
-                    //Validación profesor.                    
+                    //Validación profesor.    
+                    \app\models\Utilities::putMessageLogFile('cedula... '.$val[3]);
                     $respProfesor = $model->consultarExisteProfesor($val[3]);
                     if (!($respProfesor)) {                           
                         $bandera= '0';
@@ -219,7 +222,7 @@ class HorarioAsignaturaPeriodoTmp extends \yii\db\ActiveRecord
                         $arroout["error"] = null;
                         $arroout["message"] = " Error en la Fila => N°$fila Materia => $val[1]";
                         $arroout["data"] = null;
-                        \app\models\Utilities::putMessageLogFile('error fila '.$fila);
+                        //\app\models\Utilities::putMessageLogFile('error fila '.$fila);
                         throw new Exception('Error, al grabar horario.');
                     }                     
                 } 
