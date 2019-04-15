@@ -319,13 +319,7 @@ class HorarioAsignaturaPeriodoTmp extends \yii\db\ActiveRecord
      * @return
      */
     public function insertarHorarioTmp($asi_id, $paca_id, $pro_id, $uaca_id, $mod_id, $dia_id, $hapt_fecha_clase, $hapt_hora_entrada, $hapt_hora_salida, $usu_id) {
-        $con = \Yii::$app->db_academico;
-        /*$trans = $con->getTransaction(); // se obtiene la transacción actual
-        if ($trans !== null) {
-            $trans = null; // si existe la transacción entonces no se crea una
-        } else {
-            $trans = $con->beginTransaction(); // si no existe la transacción entonces se crea una
-        } */       
+        $con = \Yii::$app->db_academico;         
         if (isset($asi_id)) {
             $param_sql .= "asi_id";
             $bdet_sql .= ":asi_id";
@@ -399,16 +393,10 @@ class HorarioAsignaturaPeriodoTmp extends \yii\db\ActiveRecord
             }  
             if (isset($usu_id)) {
                 $comando->bindParam(':usu_id', $usu_id, \PDO::PARAM_INT);
-            }
-            \app\models\Utilities::putMessageLogFile('sentencia: '.$sql);
-            $result = $comando->execute();
-            /*if ($trans !== null)
-                $trans->commit();*/
-            return $con->getLastInsertID($con->dbname . '.horario_asignatura_periodo_tmp');
-            \app\models\Utilities::putMessageLogFile('grabo en temporal');
-        } catch (Exception $ex) {
-           /* if ($trans !== null)
-                $trans->rollback();*/
+            }            
+            $result = $comando->execute();            
+            return $con->getLastInsertID($con->dbname . '.horario_asignatura_periodo_tmp');            
+        } catch (Exception $ex) {         
             return FALSE;
         }
     }

@@ -2,7 +2,6 @@
 
 use yii\helpers\Html;
 use yii\helpers\Url;
-use \app\models\Persona;
 use app\widgets\PbGridView\PbGridView;
 use app\modules\admision\Module as admision;
 use app\modules\academico\Module as academico;
@@ -13,7 +12,7 @@ admision::registerTranslations();
 <div>        
     <?=
     PbGridView::widget([
-        'id' => 'PbMarcacion',
+        'id' => 'PbHorario',
         'showExport' => true,
         'fnExportEXCEL' => "exportExcel",
         'fnExportPDF' => "exportPdf",
@@ -22,7 +21,7 @@ admision::registerTranslations();
             [
                 'attribute' => 'profesor',
                 'header' => Yii::t("formulario", "Teacher"),
-                'value' => 'nombres',
+                'value' => 'profesor',
             ],  
             [
                 'class' => 'yii\grid\ActionColumn',
@@ -38,40 +37,40 @@ admision::registerTranslations();
                 ],
             ],
             [
-                'attribute' => 'Fecha',
-                'header' => Yii::t("formulario", "Date"),
-                'value' => 'fecha',
+                'attribute' => 'Periodo',
+                'header' => academico::t("Academico", "Period"),
+                'value' => 'periodo',
             ],
+            [
+                'attribute' => 'Unidad',
+                'header' => academico::t("Academico", "Aca. Uni."),
+                'value' => 'unidad',
+            ], 
+            [
+                'attribute' => 'Modalidad',
+                'header' => academico::t("Academico", "Modality"),
+                'value' => 'modalidad',
+            ], 
+            [
+                'attribute' => 'Fechaclase',
+                'header' => academico::t("Academico", "Class date"),
+                'value' => 'fecha_clase',
+            ],
+            [
+                'attribute' => 'Dia',
+                'header' => academico::t("Academico", "Day"),
+                'value' => 'dia_descripcion',
+            ], 
             [
                 'attribute' => 'Horaini',
                 'header' => academico::t("Academico", "Hour start date"),
-                'value' => 'hora_inicio',
-            ],
-            [
-                'attribute' => 'Horainipon',
-                'header' => academico::t("Academico", "Hour start date") . ' ' . academico::t("Academico", "Expected"),
-                'value' => 'inicio_esperado',
-            ],
+                'value' => 'hape_hora_entrada',
+            ],            
             [
                 'attribute' => 'Horafin',
                 'header' => academico::t("Academico", "Hour end date"),
-                'value' => 'hora_salida',
-            ],
-            [
-                'attribute' => 'Horafinpon',
-                'header' => academico::t("Academico", "Hour end date") . ' ' . academico::t("Academico", "Expected"),
-                'value' => 'salida_esperada',
-            ],
-            [
-                'attribute' => 'ip',
-                'header' => academico::t("Academico", "Start IP"),
-                'value' => 'ip',
-            ],
-            [
-                'attribute' => 'ips',
-                'header' => academico::t("Academico", "End IP"),
-                'value' => 'ip_salida',
-            ],
+                'value' => 'hape_hora_salida',
+            ],                        
         ],
     ])
     ?>

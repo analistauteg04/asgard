@@ -516,40 +516,84 @@ class RegistroMarcacion extends \yii\db\ActiveRecord {
     }
     
     /**
-     * Function consultarHorarios
+     * Function consultarHorarioMarcacion
      * @author  Grace Viteri <analistadesarrollo01@uteg.edu.ec>    
      * @property  
      * @return  
      */
-    public function consultarHorarios($arrFiltro = array(), $onlyData = false) {
+    public function consultarHorarioMarcacion($arrFiltro = array(), $onlyData = false) {
         $con = \Yii::$app->db_academico;
         $con1 = \Yii::$app->db_asgard;
+        $con2 = \Yii::$app->db_general;
         $estado = 1;
         if (isset($arrFiltro) && count($arrFiltro) > 0) {
-            $str_search .= "(per.per_pri_nombre like :profesor OR ";
-            $str_search .= "per.per_seg_nombre like :profesor OR ";
-            $str_search .= "per.per_pri_apellido like :profesor OR ";
-            $str_search .= "per.per_seg_nombre like :profesor )  AND ";
-            //$str_search .= "asig.asi_nombre like :materia  AND ";
-           
+            if ($arrFiltro['profesor'] != "") {
+                $str_search .= "(p.per_pri_nombre like :profesor OR ";                
+                $str_search .= "p.per_pri_apellido like :profesor OR ";
+                $str_search .= "p.per_seg_nombre like :profesor )  AND ";            
+            }
             if ($arrFiltro['periodo'] != "" && $arrFiltro['periodo'] > 0) {
                 $str_search .= " hap.paca_id = :periodo AND ";
             }
+            if ($arrFiltro['unidad'] != "" && $arrFiltro['unidad'] > 0) {
+                $str_search .= " hap.uaca_id = :unidad AND ";
+            }
+            if ($arrFiltro['modalidad'] != "" && $arrFiltro['modalidad'] > 0) {
+                $str_search .= " hap.mod_id = :modalidad AND ";
+            }
+            if ($arrFiltro['modalidad'] > 0) {
+                if ($arrFiltro['f_ini'] != "" && $arrFiltro['f_fin'] != "") {
+                    $str_search .= "hap.hape_fecha_clase >= :fec_ini AND ";
+                    $str_search .= "hap.hape_fecha_clase <= :fec_fin AND ";
+                }
+            }
         }
-        $sql = "
-               
-               ";
+        $sql = "SELECT 	p.per_pri_nombre, p.per_seg_nombre, p.per_pri_apellido, p.per_seg_apellido, p.per_cedula, hap.pro_id,
+                        concat(p.per_pri_nombre,' ', p.per_pri_apellido, ' ', ifnull(p.per_seg_apellido,'')) as profesor, hap.paca_id, 
+                        case when (pera.saca_id > 0) and (pera.baca_id > 0) then 
+                            ifnull(CONCAT(pera.paca_anio_academico,' (',blq.baca_nombre,'-',sem.saca_nombre,')'),pera.paca_anio_academico)
+                            else pera.paca_anio_academico end as periodo,
+                        hap.asi_id, a.asi_descripcion as materia, hap.uaca_id, ua.uaca_descripcion as unidad, 
+                        hap.mod_id, m.mod_descripcion as modalidad, hap.dia_id, d.dia_descripcion,
+                        ifnull(hap.hape_fecha_clase,'N/A') as fecha_clase, hap.hape_hora_entrada, hap.hape_hora_salida
+                FROM    " . $con->dbname . ".horario_asignatura_periodo hap
+                        inner join " . $con->dbname . ".profesor pr on pr.pro_id= hap.pro_id
+                        inner join " . $con->dbname . ".asignatura a on a.asi_id = hap.asi_id
+                        inner join " . $con1->dbname . ".persona p on p.per_id = pr.per_id
+                        inner join " . $con->dbname . ".unidad_academica ua on ua.uaca_id = hap.uaca_id
+                        inner join " . $con->dbname . ".modalidad m on m.mod_id = hap.mod_id
+                        inner join " . $con2->dbname . ".dia d on d.dia_id = hap.dia_id
+                        inner join " . $con->dbname . ".periodo_academico pera on pera.paca_id = hap.paca_id
+                        left join " . $con->dbname . ".semestre_academico sem  ON sem.saca_id = pera.saca_id
+                        left join " . $con->dbname . ".bloque_academico blq ON blq.baca_id = pera.baca_id
+                WHERE   $str_search
+                        hap.hape_estado = :estado
+                        and hap.hape_estado_logico = :estado";
+        
         $comando = $con->createCommand($sql);
         $comando->bindParam(":estado", $estado, \PDO::PARAM_STR);
         if (isset($arrFiltro) && count($arrFiltro) > 0) {
-            $search_cond = "%" . $arrFiltro["profesor"] . "%";
-            $comando->bindParam(":profesor", $search_cond, \PDO::PARAM_STR);           
-            $materia = "%" . $arrFiltro["materia"] . "%";
-            $comando->bindParam(":materia", $materia, \PDO::PARAM_STR);
-            
+            if ($arrFiltro['profesor'] != "") {
+                $search_cond = "%" . $arrFiltro["profesor"] . "%";
+                $comando->bindParam(":profesor", $search_cond, \PDO::PARAM_STR); 
+            }
             if ($arrFiltro['periodo'] != "" && $arrFiltro['periodo'] > 0) {
                 $periodo = $arrFiltro["periodo"];
                 $comando->bindParam(":periodo", $periodo, \PDO::PARAM_INT);
+            }
+            if ($arrFiltro['unidad'] != "" && $arrFiltro['unidad'] > 0) {
+                $unidad = $arrFiltro["unidad"];
+                $comando->bindParam(":unidad", $unidad, \PDO::PARAM_INT);
+            }
+            if ($arrFiltro['modalidad'] != "" && $arrFiltro['modalidad'] > 0) {
+                $modalidad = $arrFiltro["modalidad"];
+                $comando->bindParam(":modalidad", $modalidad, \PDO::PARAM_INT);
+            }
+            $fecha_ini = $arrFiltro["f_ini"] . " 00:00:00";
+            $fecha_fin = $arrFiltro["f_fin"] . " 23:59:59";
+            if ($arrFiltro['f_ini'] != "" && $arrFiltro['f_fin'] != "") {
+                $comando->bindParam(":fec_ini", $fecha_ini, \PDO::PARAM_STR);
+                $comando->bindParam(":fec_fin", $fecha_fin, \PDO::PARAM_STR);
             }
         }
         $resultData = $comando->queryAll();

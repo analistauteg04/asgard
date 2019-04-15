@@ -9,6 +9,8 @@ use yii\helpers\Html;
         <?=
         $this->render('_formhorario', [
             'arr_periodo' => $arr_periodo,            
+            'arr_unidad' => $arr_unidad,            
+            'arr_modalidad' => $arr_modalidad,            
         ]);
         ?>
     </form>
