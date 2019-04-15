@@ -2,6 +2,7 @@
 
 namespace app\modules\academico\models;
 use app\modules\academico\models\HorarioAsignaturaPeriodoTmp;
+use yii\base\Exception;
 
 use Yii;
 
@@ -160,10 +161,8 @@ class HorarioAsignaturaPeriodoTmp extends \yii\db\ActiveRecord
                     $fila++;                                                
                     $model = new HorarioAsignaturaPeriodoTmp();
                     //Validación de materia.  
-                    \app\models\Utilities::putMessageLogFile('fila:'.$fila); 
-                    \app\models\Utilities::putMessageLogFile('nombre asig:'.$val[1]); 
                     $respMateria = $model->consultarMateriaXnombre($val[1]); 
-                    \app\models\Utilities::putMessageLogFile('codigo materia:'.$respMateria["asi_id"]); 
+                    //\app\models\Utilities::putMessageLogFile('codigo materia:'.$respMateria["asi_id"]); 
                     if (!($respMateria)) {                           
                         $bandera= '0';
                         $mensaje = "No se encontró materia con ese nombre o se encuentra inactiva.";                                                     
@@ -180,10 +179,8 @@ class HorarioAsignaturaPeriodoTmp extends \yii\db\ActiveRecord
                         $bandera= '0';
                         $mensaje = "No se encontró modalidad o se encuentra inactiva.";                                                     
                     }                    
-                    //Validación profesor.                    
-                    $respProfesor = $model->consultarExisteProfesor($val[3]);
-                    \app\models\Utilities::putMessageLogFile('cedula prof:'.$val[3]); 
-                    \app\models\Utilities::putMessageLogFile('codigo profesor:'.$respProfesor["pro_id"]); 
+                    //Validación profesor.    
+                    $respProfesor = $model->consultarExisteProfesor($val[3]);                    
                     if (!($respProfesor)) {                           
                         $bandera= '0';
                         $mensaje = "No se encontró profesor o se encuentra inactivo.";                                                     
@@ -204,7 +201,7 @@ class HorarioAsignaturaPeriodoTmp extends \yii\db\ActiveRecord
                         $fecha_hora_clase = $val[8];
                     }  else {
                         $fecha_hora_clase = null;
-                    }            
+                    }
                     if (!empty($respMateria["asi_id"])) {
                         $respuesta = $model->insertarHorarioTmp($respMateria["asi_id"], $periodo_id, $respProfesor["pro_id"], $val[5], $val[6], $val[7], $fecha_hora_clase, $val[9], $val[10], $usu_id);                                                                                    
                         if (!($respuesta)) {                                        

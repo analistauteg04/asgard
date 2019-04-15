@@ -80,12 +80,6 @@ class MarcacionController extends \app\components\CController {
             }
             $ip = \app\models\Utilities::getClientRealIP(); // ip de la maquina
             $con = \Yii::$app->db_academico;
-            /*$algoritmo = MCRYPT_BLOWFISH;
-            $llave = 'marcacion';
-            $modo = MCRYPT_MODE_CBC;
-            $iv = mcrypt_create_iv(mcrypt_get_iv_size($algoritmo, $modo), MCRYPT_DEV_URANDOM);
-            $encrypted_data = mcrypt_encrypt($algoritmo, $llave, $ip, $modo, $iv);
-            $ipcripta = base64_encode($encrypted_data);*/
             $transaction = $con->beginTransaction();
             try {
                 $mod_marcacion = new RegistroMarcacion();
@@ -135,6 +129,7 @@ class MarcacionController extends \app\components\CController {
                         if (new DateTime($hora_fin) < new DateTime($real_fin)) {
                             $minutosfinales = $minutosfinales * -1;
                         }
+                        // si se quiere marcar la salida 10 minutos antes se pone $minutos finales >= -10
                         if ($minutosfinales >= 0 && $minutosfinales <= 30) { // SOLO PUEDE MARCAR SALIDA DE A LA HORA DE LA SALIDA Y HASTA 30 MINUTOS DESPUES
                             $cons_marcainicio = $mod_marcacion->consultarMarcacionExiste($hape_id, $profesor, $fecha, 'E');
                             if ($cons_marcainicio["marcacion"] > 0) {
