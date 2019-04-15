@@ -26,7 +26,6 @@ admision::registerTranslations();
 academico::registerTranslations();
 
 class PagosController extends \app\components\CController {
-
     public function actionIndex() {
         $per_id = @Yii::$app->session->get("PB_iduser");
         $model_interesado = new Interesado();

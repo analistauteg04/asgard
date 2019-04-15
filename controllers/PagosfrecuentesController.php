@@ -105,6 +105,16 @@ class PagosfrecuentesController extends \yii\web\Controller {
                 $message = array("precio" => $resp_precio["precio"]);
                 return Utilities::ajaxResponse('OK', 'alert', Yii::t('jslang', 'Success'), 'false', $message);                
             }
+            if (isset($data["gethabilita"])) {  
+                //\app\models\Utilities::putMessageLogFile('item:'.$data["ite_id"]);   
+                if ($data["ite_id"]==155 or $data["ite_id"]==156 or $data["ite_id"]==157 or $data["ite_id"]==10) {                    
+                    $habilita = '1';
+                } else {
+                    $habilita = '0';
+                };                       
+                $message = array("habilita" => $habilita);
+                return Utilities::ajaxResponse('OK', 'alert', Yii::t('jslang', 'Success'), 'false', $message);                
+            }
         }
         $arr_pais_dom = Pais::find()->select("pai_id AS id, pai_nombre AS value")->where(["pai_estado_logico" => "1", "pai_estado" => "1"])->asArray()->all();
         $pais_id = 1; //Ecuador

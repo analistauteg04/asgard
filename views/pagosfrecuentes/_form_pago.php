@@ -12,8 +12,6 @@ use app\modules\academico\Module as academico;
 use app\modules\financiero\Module as financiero;
 use app\modules\academico\Module as aspirante;
 
-
-
 academico::registerTranslations();
 financiero::registerTranslations();
 aspirante::registerTranslations();

@@ -17,7 +17,6 @@ function habilitarSecciones() {
         $('#divCertvota').css('display', 'none');
     }
 }
-
 $(document).ready(function () {
     // para mostrar codigo de area
     var unisol = $('#cmb_unidad_solicitud').val();
@@ -26,7 +25,6 @@ $(document).ready(function () {
     } else if (unisol == 2) {
         $('#divmetodocan').css('display', 'block');
     }
-
     $('#cmb_pais_dom').change(function () {
         var link = $('#txth_base').val() + "/inscripcionadmision/index";
         var arrParams = new Object();
@@ -46,7 +44,6 @@ $(document).ready(function () {
         } else {
             guardarInscripcion('Update', '1');
         }
-
     });
     $('#sendInformacionAspirante2').click(function () {
         var error = 0;
@@ -105,7 +102,6 @@ $(document).ready(function () {
             guardarInscripcion('Update', '2');
         }
     });
-
     $('#sendInscripcionsolicitud').click(function () {
         var link = $('#txth_base').val() + "/inscripcionadmision/saveinscripciontemp";
         var arrParams = new Object();
@@ -202,8 +198,6 @@ $(document).ready(function () {
             }
         });
     });
-
-
     $('#cmb_tipo_dni').change(function () {
         if ($('#cmb_tipo_dni').val() == 'PASS') {
             $('#txt_cedula').removeClass("PBvalidation");
@@ -218,7 +212,6 @@ $(document).ready(function () {
             $('#Divcedula').show();
         }
     });
-
     $('#cmb_unidad_solicitud').change(function () {
         var unisol = $('#cmb_unidad_solicitud').val();
         if (unisol == 1) {
@@ -252,49 +245,47 @@ $(document).ready(function () {
                         }
                         //Item.-
                         var arrParams = new Object();
-                        arrParams.unidada = $('#cmb_unidad_solicitud').val();                                        
-                        arrParams.metodo = $('#cmb_metodo_solicitud').val();        
+                        arrParams.unidada = $('#cmb_unidad_solicitud').val();
+                        arrParams.metodo = $('#cmb_metodo_solicitud').val();
                         arrParams.moda_id = $('#cmb_modalidad_solicitud').val();
-                        arrParams.carrera_id = $('#cmb_carrera_solicitud').val();     
+                        arrParams.carrera_id = $('#cmb_carrera_solicitud').val();
                         arrParams.empresa_id = 1; // se coloca 1, porque solo se trabaja con uteg
                         arrParams.getitem = true;
                         requestHttpAjax(link, arrParams, function (response) {
                             if (response.status == "OK") {
-                                data = response.message;                        
+                                data = response.message;
                                 setComboData(data.items, "cmb_item");
-                            } 
+                            }
 //                            //Precio.
                             var arrParams = new Object();
                             arrParams.ite_id = $('#cmb_item').val();
-                            arrParams.getprecio = true;        
+                            arrParams.getprecio = true;
                             requestHttpAjax(link, arrParams, function (response) {
                                 if (response.status == "OK") {
-                                    data = response.message;                                 
+                                    data = response.message;
                                     $('#txt_precio_item').val(data.precio);
                                 }
-                            }, true);    
-//                             //habilita y deshabilita control de precio.
-//                            var arrParams = new Object();
-//                            arrParams.ite_id = $('#cmb_item').val();                            
-//                            arrParams.gethabilita = true;   
-//                            requestHttpAjax(link, arrParams, function (response) {
-//                                if (response.status == "OK") {
-//                                    data = response.message;   
-//                                    if (data.habilita == 1) {                                        
-//                                        $("#txt_precio_item").prop('disabled', false);  
-//                                    } else {                                        
-//                                        $("#txt_precio_item").prop('disabled', true);  
-//                                    }
-//                                }
-//                            }, true);
+                            }, true);
+                            //habilita y deshabilita control de precio.
+                            var arrParams = new Object();
+                            arrParams.ite_id = $('#cmb_item').val();
+                            arrParams.gethabilita = true;
+                            requestHttpAjax(link, arrParams, function (response) {
+                                if (response.status == "OK") {
+                                    data = response.message;
+                                    if (data.habilita == 1) {
+                                        $("#txt_precio_item").prop('disabled', false);
+                                    } else {
+                                        $("#txt_precio_item").prop('disabled', true);
+                                    }
+                                }
+                            }, true);
                         }, true);
-                        
-                    }, true);
 
+                    }, true);
                 }
             }
         }, true);
-
         //métodos.
         var arrParams = new Object();
         arrParams.nint_id = $(this).val();
@@ -347,8 +338,33 @@ $(document).ready(function () {
             $("#rdo_forma_pago_otros").prop("checked", true);
         }
     });
-});
+    var dataItems = [];
+    dataItems = obtDataHorario();
+    representarItems(dataItems);
 
+});
+function obtDataHorario() {
+    var storedListItems = sessionStorage.getItem('itemsHorario');
+    if (storedListItems === null) {
+        itemList = [];
+    } else {
+        itemList = JSON.parse(storedListItems);
+    }
+    return itemList;
+}
+function representarItems(dataItems) {
+    html = " <div class='grid-view'>" +
+            "<table class='table table-striped table-bordered dataTable'>" +
+            "<tbody>" +
+            "  <tr> <th>Día</th> <th>Hora Inicio</th> <th>Hora Fin</th><th> </th></tr>";
+    for (i = 0; i < dataItems.length; i++) {
+        html += "<tr><td>" + dataItems[i]['semana'] + "</td> <td>" + dataItems[i]['hora_inicio'] + "</td> <td>" + dataItems[i]['hora_fin'] + "</td><td><button type='button' class='btn btn-link' onclick='eliminarhorario(" + dataItems[i]['hora_clave'] + ")'> <span class='glyphicon glyphicon-remove'></span> </button></td></tr>";
+    }
+    html += "<tr height='40'> <th></th> <th></th> <th></th><th></th></tr>";
+    html += "</tbody>";
+    html += "    </table>" + "</div>";
+    $("#dataListItem").html(html);
+}
 ////INSERTAR DATOS
 //function guardarInscripcion(accion, paso) {
 //    var ID = (accion == "Update") ? $('#txth_twin_id').val() : 0;

@@ -128,67 +128,53 @@ create table if not exists `item_metodo_unidad` (
 --
 -- Estructura de tabla para la tabla `persona_solicitud`
 --
-create table if not exists `persona_solicitud` (
- `psol_id` bigint(20) not null auto_increment primary key,
- `psol_pri_nombre` varchar(250) default null,
- `psol_seg_nombre` varchar(250) default null,
- `psol_pri_apellido` varchar(250) default null, 
- `psol_seg_apellido` varchar(250) default null,
- `psol_cedula` varchar(15) not null,
- `psol_ruc` varchar(15) default null,
- `psol_pasaporte` varchar(50) default null, 
- `psol_genero` varchar(1) default null,  
- `psol_celular` varchar(50) default null,
- `psol_correo` varchar(250) default null, 
- `psol_domicilio_sector` varchar(250) default null,
- `psol_domicilio_cpri` varchar(500) default null,
- `psol_domicilio_csec` varchar(500) default null,
- `psol_domicilio_num` varchar(100) default null,
- `psol_domicilio_ref` varchar(500) default null,
- `psol_domicilio_telefono` varchar(50) default null,
- `pai_id_domicilio` bigint(20) default null, 
- `pro_id_domicilio` bigint(20) default null, 
- `can_id_domicilio` bigint(20) default null,   
- `psol_estado` varchar(1) not null,
- `psol_fecha_creacion` timestamp not null default current_timestamp,
- `psol_fecha_modificacion` timestamp null default null,
- `psol_estado_logico` varchar(1) not null 
+create table if not exists `persona_beneficiaria` (
+ `pben_id` bigint(20) not null auto_increment primary key,
+ `pben_nombre` varchar(250) default null,
+ `pben_apellido` varchar(250) default null, 
+ `pben_cedula` varchar(15) not null,
+ `pben_ruc` varchar(15) default null,
+ `pben_pasaporte` varchar(50) default null, 
+ `pben_celular` varchar(50) default null,
+ `pben_correo` varchar(250) default null, 
+ `pben_estado` varchar(1) not null,
+ `pben_fecha_creacion` timestamp not null default current_timestamp,
+ `pben_fecha_modificacion` timestamp null default null,
+ `pben_estado_logico` varchar(1) not null 
 );
 
 -- --------------------------------------------------------
 -- 
 -- Estructura de tabla para la tabla `solicitud_general`
 --
-create table if not exists `solicitud_general` (
-  `sgen_id` bigint(20) not null auto_increment primary key,    
-  `psol_id` bigint(20) null,
-  `per_id` bigint(20) null,
-  `adm_id` bigint(20) null,
-  `psol_fecha_solicitud` timestamp null,
-  `sgen_estado` varchar(1) not null,
-  `sgen_fecha_creacion` timestamp not null default current_timestamp,
-  `sgen_fecha_modificacion` timestamp null default null, 
-  `sgen_estado_logico` varchar(1) not null,  
-  foreign key (psol_id) references `persona_solicitud` (psol_id)
+create table if not exists `solicitud_boton_pago` (
+  `sbpa_id` bigint(20) not null auto_increment primary key,    
+  `pben_id` bigint(20) null,  
+  `sbpa_fecha_solicitud` timestamp null,
+  `sbpa_estado` varchar(1) not null,
+  `sbpa_fecha_creacion` timestamp not null default current_timestamp,
+  `sbpa_fecha_modificacion` timestamp null default null, 
+  `sbpa_estado_logico` varchar(1) not null,  
+  foreign key (pben_id) references `persona_beneficiaria` (pben_id)
 ) ;
 
 -- --------------------------------------------------------
 -- 
 -- Estructura de tabla para la tabla `detalle_solicitud_general`
 --
-create table if not exists `detalle_solicitud_general` (
-  `dsgen_id` bigint(20) not null auto_increment primary key,    
-  `sgen_id` bigint(20) not null,    
+create table if not exists `detalle_solicitud_boton_pago` (
+  `dsbp_id` bigint(20) not null auto_increment primary key,    
+  `sbpa_id` bigint(20) not null,    
   `ite_id` bigint(20) not null,  
-  `dsgen_cantidad` int not null,    
-  `dsgen_precio` double not null,    
-  `dsgen_valor_iva` double not null, 
-  `dsgen_valor_total` double not null, 
-  `dsgen_estado` varchar(1) not null,
-  `dsgen_fecha_creacion` timestamp not null default current_timestamp,
-  `dsgen_fecha_modificacion` timestamp null default null, 
-  `dsgen_estado_logico` varchar(1) not null,  
-  foreign key (sgen_id) references `solicitud_general` (sgen_id),
+  `dsbp_cantidad` int not null,    
+  `dsbp_precio` double not null,    
+  `dsbp_valor_iva` double not null, 
+  `dsbp_valor_total` double not null, 
+  `dsbp_estado` varchar(1) not null,
+  `dsbp_fecha_creacion` timestamp not null default current_timestamp,
+  `dsbp_fecha_modificacion` timestamp null default null, 
+  `dsbp_estado_logico` varchar(1) not null,  
+  foreign key (sbpa_id) references `solicitud_boton_pago` (sbpa_id),
   foreign key (ite_id) references `item` (ite_id)
 ) ;
 
@@ -199,8 +185,8 @@ create table if not exists `detalle_solicitud_general` (
 create table if not exists `orden_pago` (
   `opag_id` bigint(20) not null auto_increment primary key,  
   `sins_id` bigint(20) null, 
-  `sgen_id` bigint(20) null,   
-  `com_id` bigint(20) null,   
+  `sbpa_id` bigint(20) null,   
+  `doc_id` bigint(20) null,   
   `opag_subtotal` double not null,
   `opag_iva` double not null,  
   `opag_total` double not null,
@@ -342,55 +328,54 @@ create table if not exists `info_carga_prepago` (
 --
 -- Estructura de tabla para la tabla `tipo_comprobante`
 --
-create table if not exists `tipo_comprobante` (
-  `tcom_id` bigint(20) not null auto_increment primary key,  
-  `tcom_nombre` varchar(50) not null,    
-  `tcom_usuario_ingreso` bigint(20) not null,
-  `tcom_usuario_modifica` bigint(20) null,
-  `tcom_estado` varchar(1) default null,
-  `tcom_fecha_creacion` timestamp not null default current_timestamp,
-  `tcom_fecha_modificacion` timestamp null default null,
-  `tcom_estado_logico` varchar(1) default null
+create table if not exists `tipo_documento` (
+  `tdoc_id` bigint(20) not null auto_increment primary key,  
+  `tdoc_nombre` varchar(50) not null,    
+  `tdoc_usuario_ingreso` bigint(20) not null,
+  `tdoc_usuario_modifica` bigint(20) null,
+  `tdoc_estado` varchar(1) default null,
+  `tdoc_fecha_creacion` timestamp not null default current_timestamp,
+  `tdoc_fecha_modificacion` timestamp null default null,
+  `tdoc_estado_logico` varchar(1) default null
 ) ;
 
 -- --------------------------------------------------------
 --
 -- Estructura de tabla para la tabla `comprobante`
 --
-create table if not exists `comprobante` (
-  `com_id` bigint(20) not null auto_increment primary key,  
-  `tcom_id` bigint(20) not null,
-  `com_padre_id` bigint(20) null,
-  `com_nombres_cliente` varchar(250) not null,    
-  `com_direccion` varchar(500) default null,
-  `com_telefono` varchar(50) default null, 
-  `com_correo` varchar(50) default null, 
-  `com_valor` double not null, 
-  `com_usuario_transaccion` bigint(20) not null,  
-  `com_estado` varchar(1) default null,
-  `com_fecha_creacion` timestamp not null default current_timestamp,
-  `com_fecha_modificacion` timestamp null default null,
-  `com_estado_logico` varchar(1) default null
+create table if not exists `documento` (
+  `doc_id` bigint(20) not null auto_increment primary key,  
+  `tdoc_id` bigint(20) not null,
+  `doc_nombres_cliente` varchar(250) not null,    
+  `doc_direccion` varchar(500) default null,
+  `doc_telefono` varchar(50) default null, 
+  `doc_correo` varchar(50) default null, 
+  `doc_valor` double not null, 
+  `doc_usuario_transaccion` bigint(20) not null,  
+  `doc_estado` varchar(1) default null,
+  `doc_fecha_creacion` timestamp not null default current_timestamp,
+  `doc_fecha_modificacion` timestamp null default null,
+  `doc_estado_logico` varchar(1) default null
 ) ;
 
 -- --------------------------------------------------------
 --
 -- Estructura de tabla para la tabla `detalle_comprobante`
 --
-create table if not exists `detalle_comprobante` (
-  `dcom_id` bigint(20) not null auto_increment primary key,  
-  `com_id` bigint(20) not null,  
+create table if not exists `detalle_documento` (
+  `ddoc_id` bigint(20) not null auto_increment primary key,  
+  `doc_id` bigint(20) not null,  
   `ite_id` bigint(20) not null,
-  `dcom_cantidad` int not null,    
-  `dcom_precio` double not null,   
-  `dcom_valor_iva` double not null, 
-  `dcom_valor_total` double not null, 
-  `dcom_usuario_transaccion` bigint(20) not null,  
-  `dcom_estado` varchar(1) default null,
-  `dcom_fecha_creacion` timestamp not null default current_timestamp,
-  `dcom_fecha_modificacion` timestamp null default null,
-  `dcom_estado_logico` varchar(1) default null,
-  foreign key (com_id) references `comprobante` (com_id),
+  `ddoc_cantidad` int not null,    
+  `ddoc_precio` double not null,   
+  `ddoc_valor_iva` double not null, 
+  `ddoc_valor_total` double not null, 
+  `ddoc_usuario_transaccion` bigint(20) not null,  
+  `ddoc_estado` varchar(1) default null,
+  `ddoc_fecha_creacion` timestamp not null default current_timestamp,
+  `ddoc_fecha_modificacion` timestamp null default null,
+  `ddoc_estado_logico` varchar(1) default null,
+  foreign key (doc_id) references `documento` (doc_id),
   foreign key (ite_id) references `item` (ite_id)
 ) ;
 
