@@ -209,8 +209,8 @@ class UsuarioController extends CController
     public function actionGeneraclaves() {
         $usuario = new Usuario();     
         $security = new Security();
-        $dataInicial = 206;
-        $dataFinal = 206;
+        $dataInicial = 99;
+        $dataFinal = 100;
         $resul = $usuario->consultarDataUsuario($dataInicial, $dataFinal);
         if (count($resul)>0) {            
             for ($i=0; $i<count($resul); $i++) {                
@@ -223,7 +223,6 @@ class UsuarioController extends CController
         }
         return $this->render('generaclaves', [
                     ]);
-
     }
 
 }

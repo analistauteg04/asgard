@@ -488,7 +488,7 @@ class RegistroMarcacion extends \yii\db\ActiveRecord {
     public function CargarArchivoHorario($periodo_id, $fname, $usu_id) {                
         $mod_horarioTemp = new HorarioAsignaturaPeriodoTmp();             
         $mod_horario = new HorarioAsignaturaPeriodo();       
-        $path = Yii::$app->basePath . Yii::$app->params['documentFolder'] . "horario/" . $fname;            
+        $path = Yii::$app->basePath . Yii::$app->params['documentFolder'] . "horario/" . $fname;
         $carga_archivo = $mod_horarioTemp->uploadFile($periodo_id, $usu_id, $path);        
         if ($carga_archivo['status']) {                  
             $data = $mod_horarioTemp->consultarHorarioTemp($usu_id);               

@@ -154,13 +154,16 @@ class HorarioAsignaturaPeriodoTmp extends \yii\db\ActiveRecord
                 }                 
                 $this->deletetablaTemp($con, $usu_id); 
                 $fecha = date(Yii::$app->params["dateTimeByDefault"]);
-                $fila = 1;                    
+                $fila = 1; 
+                $bandera = '1';                
                 foreach ($dataArr as $val) {                     
                     $fila++;                                                
                     $model = new HorarioAsignaturaPeriodoTmp();
                     //Validación de materia.  
+                    \app\models\Utilities::putMessageLogFile('fila:'.$fila); 
                     \app\models\Utilities::putMessageLogFile('nombre asig:'.$val[1]); 
-                    $respMateria = $model->consultarMateriaXnombre($val[1]);                    
+                    $respMateria = $model->consultarMateriaXnombre($val[1]); 
+                    \app\models\Utilities::putMessageLogFile('codigo materia:'.$respMateria["asi_id"]); 
                     if (!($respMateria)) {                           
                         $bandera= '0';
                         $mensaje = "No se encontró materia con ese nombre o se encuentra inactiva.";                                                     
@@ -179,6 +182,8 @@ class HorarioAsignaturaPeriodoTmp extends \yii\db\ActiveRecord
                     }                    
                     //Validación profesor.                    
                     $respProfesor = $model->consultarExisteProfesor($val[3]);
+                    \app\models\Utilities::putMessageLogFile('cedula prof:'.$val[3]); 
+                    \app\models\Utilities::putMessageLogFile('codigo profesor:'.$respProfesor["pro_id"]); 
                     if (!($respProfesor)) {                           
                         $bandera= '0';
                         $mensaje = "No se encontró profesor o se encuentra inactivo.";                                                     
@@ -194,34 +199,23 @@ class HorarioAsignaturaPeriodoTmp extends \yii\db\ActiveRecord
                         $arroout["message"] = " Error en la Fila => N°$fila Materia => $val[1]";
                         $arroout["data"] = null;
                         throw new Exception('Error en la Fila => N°'.$fila. ' Materia => '. $val[1]);
-                    }                                            
-                    /*$model->asi_id = $respMateria["asi_id"];
-                    $model->paca_id = $periodo_id;
-                    $model->pro_id = $respProfesor["pro_id"];
-                    $model->uaca_id = $val[5];
-                    $model->mod_id = $val[6];
-                    $model->dia_id = $val[7];                    
-                    $model->hapt_hora_entrada =$val[9];
-                    $model->hapt_hora_salida =$val[10];                    
-                    $model->usu_id =$usu_id;*/
-                    //$model->hapt_fecha_creacion = $fecha;
+                    }                                                                
                     if ($val[6] == 4) { //modalidad a distancia                        
                         $fecha_hora_clase = $val[8];
                     }  else {
                         $fecha_hora_clase = null;
-                    }   
-                    $model->hapt_fecha_clase = $fecha_hora_clase;    
-                    $respuesta = $model->insertarHorarioTmp($respMateria["asi_id"], $periodo_id, $respProfesor["pro_id"], $val[5], $val[6], $val[7], $fecha_hora_clase, $val[9], $val[10], $usu_id);                    
-                    //$model->save();                    
-                    //if (empty($model->hapt_id)) {                  
-                    if (!($respuesta)) {                                        
-                        $arroout["status"] = FALSE;
-                        $arroout["error"] = null;
-                        $arroout["message"] = " Error en la Fila => N°$fila Materia => $val[1]";
-                        $arroout["data"] = null;
-                        \app\models\Utilities::putMessageLogFile('error fila '.$fila);
-                        throw new Exception('Error, al grabar horario.');
-                    }                     
+                    }            
+                    if (!empty($respMateria["asi_id"])) {
+                        $respuesta = $model->insertarHorarioTmp($respMateria["asi_id"], $periodo_id, $respProfesor["pro_id"], $val[5], $val[6], $val[7], $fecha_hora_clase, $val[9], $val[10], $usu_id);                                                                                    
+                        if (!($respuesta)) {                                        
+                            $arroout["status"] = FALSE;
+                            $arroout["error"] = null;
+                            $arroout["message"] = " Error en la Fila => N°$fila Materia => $val[1]";
+                            $arroout["data"] = null;
+                            \app\models\Utilities::putMessageLogFile('error fila '.$fila);
+                            throw new Exception('Error, al grabar horario.');
+                        }
+                    }                                         
                 } 
                 if ($trans !== null)                    
                     $trans->commit();  
@@ -315,9 +309,7 @@ class HorarioAsignaturaPeriodoTmp extends \yii\db\ActiveRecord
     
     public function consultarHorarioTemp($usu_id) {
         $con = \Yii::$app->db_academico;        
-        $sql = "SELECT * FROM " . $con->dbname . ".horario_asignatura_periodo_tmp where usu_id = :usu_id";    
-        \app\models\Utilities::putMessageLogFile('sql cuenta total - usuario:'.$usu_id);
-        \app\models\Utilities::putMessageLogFile('sql cuenta total:'.$sql);
+        $sql = "SELECT * FROM " . $con->dbname . ".horario_asignatura_periodo_tmp where usu_id = :usu_id";            
         $comando = $con->createCommand($sql);
         $comando->bindParam(":usu_id", $usu_id, \PDO::PARAM_INT);
         return $comando->queryAll();
@@ -416,6 +408,7 @@ class HorarioAsignaturaPeriodoTmp extends \yii\db\ActiveRecord
             /*if ($trans !== null)
                 $trans->commit();*/
             return $con->getLastInsertID($con->dbname . '.horario_asignatura_periodo_tmp');
+            \app\models\Utilities::putMessageLogFile('grabo en temporal');
         } catch (Exception $ex) {
            /* if ($trans !== null)
                 $trans->rollback();*/
