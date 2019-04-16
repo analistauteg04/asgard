@@ -4,12 +4,17 @@ use kartik\date\DatePicker;
 use yii\helpers\Html;
 use app\modules\academico\Module as academico;
 ?>
-<div class="row">
+
+<div class="col-md-12 col-sm-12 col-xs-12 col-lg-12 ">
+            <h3><span id="lbl_Personeria"><?= academico::t("Academico", "List of schedules") ?></span></h3>
+            <br>
+        </div>
+<div class="row">          
     <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
         <div class="form-group">
             <label for="txt_buscarDataProfesor" class="col-sm-2 col-lg-2 col-md-2 col-xs-2 control-label"><?= Yii::t("formulario", "Search") ?></label>
             <div class="col-sm-8 col-xs-8 col-md-8 col-lg-8">
-                <input type="text" class="form-control" value="" id="txt_buscarDataProfesor" placeholder="<?= Yii::t("formulario", "Search by Names") .' '. academico::t("Academico", "Teacher")?>">
+                <input type="text" class="form-control" value="" id="txt_buscarDataProfesor" placeholder="<?= Yii::t("formulario", "Search by Names") .' '. academico::t("Academico", "Teacher") .'/ '. Yii::t("formulario", "DNI Document")?>">
             </div>
         </div>
     </div>   

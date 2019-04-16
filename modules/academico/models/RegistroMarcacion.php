@@ -529,8 +529,10 @@ class RegistroMarcacion extends \yii\db\ActiveRecord {
         if (isset($arrFiltro) && count($arrFiltro) > 0) {
             if ($arrFiltro['profesor'] != "") {
                 $str_search .= "(p.per_pri_nombre like :profesor OR ";                
+                $str_search .= "p.per_seg_nombre like :profesor OR ";                
                 $str_search .= "p.per_pri_apellido like :profesor OR ";
-                $str_search .= "p.per_seg_nombre like :profesor )  AND ";            
+                $str_search .= "p.per_seg_apellido like :profesor OR ";
+                $str_search .= "p.per_cedula like :profesor ) AND ";            
             }
             if ($arrFiltro['periodo'] != "" && $arrFiltro['periodo'] > 0) {
                 $str_search .= " hap.paca_id = :periodo AND ";
@@ -548,14 +550,13 @@ class RegistroMarcacion extends \yii\db\ActiveRecord {
                 }
             }
         }
-        $sql = "SELECT 	p.per_pri_nombre, p.per_seg_nombre, p.per_pri_apellido, p.per_seg_apellido, p.per_cedula, hap.pro_id,
-                        concat(p.per_pri_nombre,' ', p.per_pri_apellido, ' ', ifnull(p.per_seg_apellido,'')) as profesor, hap.paca_id, 
+        $sql = "SELECT 	concat(p.per_pri_nombre,' ', p.per_pri_apellido, ' ', ifnull(p.per_seg_apellido,'')) as profesor,  
                         case when (pera.saca_id > 0) and (pera.baca_id > 0) then 
                             ifnull(CONCAT(pera.paca_anio_academico,' (',blq.baca_nombre,'-',sem.saca_nombre,')'),pera.paca_anio_academico)
                             else pera.paca_anio_academico end as periodo,
-                        hap.asi_id, a.asi_descripcion as materia, hap.uaca_id, ua.uaca_descripcion as unidad, 
-                        hap.mod_id, m.mod_descripcion as modalidad, hap.dia_id, d.dia_descripcion,
-                        ifnull(hap.hape_fecha_clase,'N/A') as fecha_clase, hap.hape_hora_entrada, hap.hape_hora_salida
+                        a.asi_descripcion as materia, ua.uaca_descripcion as unidad, 
+                        m.mod_descripcion as modalidad, ifnull(hap.hape_fecha_clase,'N/A') as fecha_clase, 
+                        d.dia_descripcion, hap.hape_hora_entrada, hap.hape_hora_salida
                 FROM    " . $con->dbname . ".horario_asignatura_periodo hap
                         inner join " . $con->dbname . ".profesor pr on pr.pro_id= hap.pro_id
                         inner join " . $con->dbname . ".asignatura a on a.asi_id = hap.asi_id
@@ -568,8 +569,7 @@ class RegistroMarcacion extends \yii\db\ActiveRecord {
                         left join " . $con->dbname . ".bloque_academico blq ON blq.baca_id = pera.baca_id
                 WHERE   $str_search
                         hap.hape_estado = :estado
-                        and hap.hape_estado_logico = :estado";
-        
+                        and hap.hape_estado_logico = :estado";        
         $comando = $con->createCommand($sql);
         $comando->bindParam(":estado", $estado, \PDO::PARAM_STR);
         if (isset($arrFiltro) && count($arrFiltro) > 0) {
@@ -613,6 +613,5 @@ class RegistroMarcacion extends \yii\db\ActiveRecord {
         } else {
             return $dataProvider;
         }
-    }
-    
+    }        
 }
