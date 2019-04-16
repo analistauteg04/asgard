@@ -256,7 +256,7 @@ $(document).ready(function () {
                                 data = response.message;
                                 setComboData(data.items, "cmb_item");
                             }
-//                            //Precio.
+                        //Precio.
                             var arrParams = new Object();
                             arrParams.ite_id = $('#cmb_item').val();
                             arrParams.getprecio = true;
@@ -266,40 +266,11 @@ $(document).ready(function () {
                                     $('#txt_precio_item').val(data.precio);
                                 }
                             }, true);
-                            //habilita y deshabilita control de precio.
-                            var arrParams = new Object();
-                            arrParams.ite_id = $('#cmb_item').val();
-                            arrParams.gethabilita = true;
-                            requestHttpAjax(link, arrParams, function (response) {
-                                if (response.status == "OK") {
-                                    data = response.message;
-                                    if (data.habilita == 1) {
-                                        $("#txt_precio_item").prop('disabled', false);
-                                    } else {
-                                        $("#txt_precio_item").prop('disabled', true);
-                                    }
-                                }
-                            }, true);
                         }, true);
-
                     }, true);
                 }
             }
         }, true);
-        //métodos.
-        var arrParams = new Object();
-        arrParams.nint_id = $(this).val();
-        arrParams.metodo = $('#cmb_metodo_solicitud').val();
-        arrParams.getmetodo = true;
-        requestHttpAjax(link, arrParams, function (response) {
-            if (response.status == "OK") {
-                data = response.message;
-                setComboData(data.metodos, "cmb_metodo_solicitud");
-                AparecerDocumento();
-                Requisitos();
-            }
-        }, true);
-
     });
 
     $('#cmb_modalidad_solicitud').change(function () {
@@ -330,7 +301,6 @@ $(document).ready(function () {
             $("#rdo_forma_pago_dinner").prop("checked", true);
         }
     });
-
     $('#rdo_forma_pago_otros').change(function () {
         if ($('#rdo_forma_pago_otros').val() == 2) {
             $("#rdo_forma_pago_dinner").prop("checked", "");
@@ -338,13 +308,29 @@ $(document).ready(function () {
             $("#rdo_forma_pago_otros").prop("checked", true);
         }
     });
-    var dataItems = [];
-    dataItems = obtDataHorario();
-    representarItems(dataItems);
-
+    $('#btn_AgregarItem').click(function () {
+        guardarItem();
+        dataItems = obtDataList();
+        representarItems(dataItems);
+    });
 });
-function obtDataHorario() {
-    var storedListItems = sessionStorage.getItem('itemsHorario');
+function guardarItem() {
+        var cmb_unidad = $('#cmb_unidad_solicitud').val();
+        var txt_modalidad = $('#cmb_modalidad_solicitud').val();
+        var txt_item = $('#cmb_item').val();
+        var txt_precio = $('#txt_precio_item').val();
+        var datalist = obtDataList();
+        var dataitem = {
+            unidad: cmb_unidad,
+            modalidad: txt_modalidad,
+            item: txt_item,
+            precio: txt_precio
+        }
+        datalist.push(dataitem);
+        sessionStorage.setItem('datosItem', JSON.stringify(datalist));
+}
+function obtDataList() {
+    var storedListItems = sessionStorage.getItem('datosItem');
     if (storedListItems === null) {
         itemList = [];
     } else {
@@ -356,147 +342,15 @@ function representarItems(dataItems) {
     html = " <div class='grid-view'>" +
             "<table class='table table-striped table-bordered dataTable'>" +
             "<tbody>" +
-            "  <tr> <th>Día</th> <th>Hora Inicio</th> <th>Hora Fin</th><th> </th></tr>";
+            "  <tr> <th>Unidad Academica</th> <th>Modalidad</th> <th>Item</th> <th>Precio</th></tr>";
     for (i = 0; i < dataItems.length; i++) {
-        html += "<tr><td>" + dataItems[i]['semana'] + "</td> <td>" + dataItems[i]['hora_inicio'] + "</td> <td>" + dataItems[i]['hora_fin'] + "</td><td><button type='button' class='btn btn-link' onclick='eliminarhorario(" + dataItems[i]['hora_clave'] + ")'> <span class='glyphicon glyphicon-remove'></span> </button></td></tr>";
+        html += "<tr><td>" + dataItems[i]['unidad'] + "</td> <td>" + dataItems[i]['modalidad'] + "</td> <td>" + dataItems[i]['item'] + "</td> <td>" + dataItems[i]['precio'] + "</td><td><button type='button' class='btn btn-link' onclick='eliminarhorario(" + dataItems[i]['hora_clave'] + ")'> <span class='glyphicon glyphicon-remove'></span> </button></td></tr>";
     }
     html += "<tr height='40'> <th></th> <th></th> <th></th><th></th></tr>";
     html += "</tbody>";
     html += "    </table>" + "</div>";
     $("#dataListItem").html(html);
 }
-////INSERTAR DATOS
-//function guardarInscripcion(accion, paso) {
-//    var ID = (accion == "Update") ? $('#txth_twin_id').val() : 0;
-//    var link = $('#txth_base').val() + "/pagosfrecuentes/saveinscripciontemp";
-//    var arrParams = new Object();
-//    arrParams.DATA_1 = dataInscripPart1(ID);
-//    arrParams.ACCION = accion;
-//    if (!validateForm()) {
-//        requestHttpAjax(link, arrParams, function (response) {
-//            var message = response.message;
-//            //console.log(response);
-//            if (response.status == "OK") {
-//                if (accion == "Create") {
-//                    $('#txth_twin_id').val(response.data.ids)
-//                    paso1next();
-//                } else {
-//                    if (paso == "1") {
-//                        paso1next();
-//                    } else {
-//                        paso2next();
-//                    }
-//                    var uaca_id = response.data.data.uaca_id;
-//                    //Inicio ingreso informacion del tab 3\
-//                    $('#lbl_uaca_tx').text(response.data.data.unidad);
-//                    $('#lbl_moda_tx').text(response.data.data.modalidad);
-//                    $('#lbl_carrera_tx').text(response.data.data.carrera);
-//                    $('#lbl_ming_tx').text(response.data.data.metodo);
-//
-//                    if (uaca_id == 1) {
-//                        $('#id_item_1').css('display', 'block');
-//                        $('#id_item_2').css('display', 'block');
-//                    } else if (uaca_id == 2) {
-//                        $('#id_item_1').css('display', 'none');
-//                        $('#id_item_2').css('display', 'none');
-//                        $('#id_mat_cur').css('display', 'none');
-//                    }
-//                    $('#id_item_1').css('display', 'none');
-//                    $('#id_item_2').css('display', 'none');
-//                    var leyenda = '';
-//                    var ming = response.data.data.twin_metodo_ingreso;
-//                    var mod_id = response.data.data.mod_id;
-//                    var id_carrera = response.data.data.id_carrera;
-//                    $('#lbl_fcur_lb').text("Fecha del curso:");
-//                    $('#lbl_item_1').text("Valor Matriculacion: ");
-//                    if (uaca_id == 2) {
-//                        if (id_carrera == 22) {
-//                            leyenda = 'El valor de la maestría: $15,500.00';
-//                        } else {
-//                            leyenda = 'El valor de la maestría: $11,300.00';
-//                        }
-//                        leyenda += '<br/><br/>El valor a cancelar por concepto de inscripción es: ';
-//                        $('#lbl_item_1').text("Valor Matriculacion: ");
-//                        $('#val_item_1').text(response.data.data.precio);
-//                        $('#lbl_valor_pagar_tx').text(response.data.data.precio);
-//                        $('#lbl_fcur_tx').text("15 abril del 2019");
-//                    } else if (uaca_id == 1) {
-//                        leyenda = 'El valor a cancelar por concepto de matriculación en la modalidad ' + response.data.data.modalidad + ' es:';
-//                        if (mod_id == 1) {//online                                
-//                            $('#val_item_1').text('$65');
-//                            $('#lbl_item_2').text("Plataforma: ");
-//                            $('#val_item_2').text('$50');
-//                            $('#lbl_valor_pagar_tx').text("$115");
-//                            $('#lbl_item_3').text("Pago Mínimo: ");
-//                            $('#val_item_3').text('$115');
-//                            // Habilitar los items.
-//                            $('#id_item_1').css('display', 'block');
-//                            $('#id_item_2').css('display', 'block');
-////                                $('#lbl_valor_pagar_tx').text(response.data.data.precio);
-////                                $('#lbl_fcur_lb').text("Fecha del curso:");
-////                                $('#lbl_fcur_tx').text("22 de octubre al 14 de diciembre");
-////                                $('#lbl_mcur_lb').text("Examenes a rendir");
-////                                $('#lbl_fcur_lb').text("Fecha de las pruebas:");
-////                                $('#lbl_valor_pagar_tx').text(response.data.data.precio);
-//                            //$('#lbl_fcur_tx').text("En quince (15) días a partir del registro (un coordinador te contactará para brindarte mayor información)");                                
-//                        } else if (mod_id == 2 || mod_id == 3 || mod_id == 4) {//presencial y semi presencial
-//                            //if (ming == 1) {// curso
-//                            var $val_item_1 = "";
-//                            if (mod_id == 2 || mod_id == 3) {
-//                                //$('#lbl_fcur_tx').text("22 de octubre al 30 de noviembre");
-//                                $('#val_item_1').text('$250');
-//                                $val_item_1 = '$250';
-//                            } else if (mod_id == 4) {
-//                                $('#val_item_1').text('$115');
-//                                $val_item_1 = '$115';
-//                                //$('#lbl_fcur_tx').text("20 de octubre al 8 de diciembre");
-//                            }
-////                                    $('#lbl_mcur_lb').text("Materias a cursar");
-////                                    $('#lbl_item_1').text("Curso de nivelación: ");                            
-//                            $('#val_item_1').text(response.data.data.precio);
-//                            $('#lbl_item_2').text("Plataforma: ");
-//                            $('#val_item_2').text('$0');
-//                            $('#lbl_valor_pagar_tx').text($val_item_1);
-//                            $('#lbl_item_3').text("Pago Mínimo: ");
-//                            $('#val_item_3').text('$100');
-//                            //var totalvalor = parseInt(response.data.data.precio) - parseInt(response.data.data.ddit_valor);
-//                            //$('#lbl_valor_pagar_tx').text(totalvalor);
-////                                    $('#lbl_fcur_lb').text("Fecha del curso:");
-////                                    $('#id_item_1').css('display', 'block');
-////                                    $('#id_item_2').css('display', 'block');
-////                                } else if (ming == 2) { // examen
-////                                    $('#lbl_fcur_tx').text("En quince (15) días a partir del registro (un coordinador te contactará para brindarte mayor información)");
-////                                    $('#lbl_item_1').text("Exámen de Admisión: ");
-////                                    $('#val_item_1').text(response.data.data.precio);
-////                                    $('#lbl_item_2').text("Descuento especial: ");
-////                                    $('#lbl_mcur_lb').text("Examenes a rendir");
-////                                    $('#val_item_2').text(response.data.data.ddit_valor);
-////                                    var totalvalor = parseInt(response.data.data.precio) - parseInt(response.data.data.ddit_valor);
-////                                    $('#lbl_valor_pagar_tx').text(totalvalor);
-////                                    $('#lbl_fcur_lb').text("Fecha de las pruebas:");
-////                                    $('#id_item_1').css('display', 'block');
-////                                    $('#id_item_2').css('display', 'block');
-////                                }
-//                        }
-//                    }
-//
-//                    $('#lbl_leyenda_pago_tx').html(leyenda);
-//                    //fin ingreso informacion del tab 3
-//                    $('#txth_twin_id').val(response.data.ids);//SE AGREGA AL FINAL                            
-//                    //paso2next();
-//                }
-//
-//                //var data =response.data;
-//                //AccionTipo=data.accion;
-//                //limpiarDatos();
-//                //var renderurl = $('#txth_base').val() + "/inscripciones/index";
-//                //window.location = renderurl;
-//            }
-//            //showAlert(response.status, response.label, response.message);
-//        }, true);
-//    }
-//
-//}
 
 function PagoDinners(solicitud) {
     var link = $('#txth_base').val() + "/pagosfrecuentes/savepagodinner";
