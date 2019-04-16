@@ -6,6 +6,32 @@ $(document).ready(function () {
     $('#btn_cargarHorario').click(function () {
         cargarHorario();
     });
+    
+    /*$('#cmb_unidad').change(function () {
+        var link = $('#txth_base').val() + "/academico/marcacion/listarhorario";        
+        var arrParams = new Object();
+        arrParams.uaca_id = $(this).val();
+        arrParams.getmodalidad = true;
+        requestHttpAjax(link, arrParams, function (response) {
+            if (response.status == "OK") {
+                data = response.message;
+                setComboDataselect(data.modalidad, "cmb_modalidad", "Todos");              
+            }
+        }, true);
+    });
+    */
+    $('#cmb_modalidad').change(function () {
+        if ($(this).val() == 4) {
+            $('#divFechasDistancia').css('display', 'block');
+        } else {
+            $('#divFechasDistancia').css('display', 'none');
+        }            
+    });
+    
+    $('#btn_buscarHorario').click(function () {
+        actualizarGridHorario();
+    });
+    
 });
 
 function Marcacion(hape_id, horario, accion, dia, prof_id) {
@@ -59,7 +85,6 @@ function exportPdf() {
     window.location.href = $('#txth_base').val() + "/academico/marcacion/exppdf?pdf=1&profesor=" + profesor + "&materia=" + materia + "&f_ini=" + f_ini + "&f_fin=" + f_fin + "&periodo=" + periodo;
 }
 
-
 function cargarHorario() {
     var arrParams = new Object();
     var link = $('#txth_base').val() + "/academico/marcacion/cargarhorario";
@@ -73,5 +98,21 @@ function cargarHorario() {
                 window.location.href = $('#txth_base').val() + "/academico/marcacion/index";
             }, 3000);
         }, true);
+    }
+}
+
+function actualizarGridHorario() {
+    var profesor = $('#txt_buscarDataProfesor').val();
+    var unidad = $('#cmb_unidad option:selected').val();
+    var modalidad = $('#cmb_modalidad option:selected').val();
+    var f_ini = $('#txt_fecha_ini').val();
+    var f_fin = $('#txt_fecha_fin').val();
+    var periodo = $('#cmb_periodo option:selected').val();
+
+    //Buscar almenos una clase con el nombre para ejecutar
+    if (!$(".blockUI").length) {
+        showLoadingPopup();
+        $('#PbHorario').PbGridView('applyFilterData', {'profesor': profesor, 'unidad': unidad, 'modalidad': modalidad, 'f_ini': f_ini, 'f_fin': f_fin, 'periodo': periodo});
+        setTimeout(hideLoadingPopup, 2000);
     }
 }

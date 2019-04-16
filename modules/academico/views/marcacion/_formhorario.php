@@ -12,16 +12,20 @@ use app\modules\academico\Module as academico;
                 <input type="text" class="form-control" value="" id="txt_buscarDataProfesor" placeholder="<?= Yii::t("formulario", "Search by Names") .' '. academico::t("Academico", "Teacher")?>">
             </div>
         </div>
-    </div>
+    </div>   
     <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
-        <div class="form-group">
-            <label for="txt_buscarDataMateria" class="col-sm-2 col-lg-2 col-md-2 col-xs-2 control-label"><?= Yii::t("formulario", "Matter") ?></label>
-            <div class="col-sm-8 col-xs-8 col-md-8 col-lg-8">
-                <input type="text" class="form-control" value="" id="txt_buscarDataMateria" placeholder="<?= academico::t("Academico", "Search by Matter") ?>">
+        <div class="form-group">            
+            <label for="cmb_unidad" class="col-sm-2 col-sm-2 col-lg-2 col-md-2 col-xs-2 control-label"><?= Yii::t("formulario", "Academic unit") ?></label>
+            <div class="col-sm-3 col-xs-3 col-md-3 col-lg-3">
+                <?= Html::dropDownList("cmb_unidad", 0,  $arr_unidad , ["class" => "form-control", "id" => "cmb_unidad"]) ?>
             </div>
+            <label for="cmb_modalidad" class="col-sm-2 col-sm-2 col-lg-2 col-md-2 col-xs-2 control-label"><?= Yii::t("formulario", "Mode") ?></label>
+            <div class="col-sm-3 col-xs-3 col-md-3 col-lg-3">
+                <?= Html::dropDownList("cmb_modalidad", 0, $arr_modalidad, ["class" => "form-control", "id" => "cmb_modalidad"]) ?>
+            </div>      
         </div>
     </div>
-    <div class="col-md-12">
+    <div class="col-md-12" id="divFechasDistancia" style="display: none">
         <div class="form-group">
             <label for="lbl_inicio" class="col-sm-2 col-md-2 col-xs-2 col-lg-2 control-label"><?= Yii::t("formulario", "Start date") ?></label>
             <div class="col-sm-3 col-md-3 col-xs-3 col-lg-3">
@@ -62,11 +66,11 @@ use app\modules\academico\Module as academico;
                 <?= Html::dropDownList("cmb_periodo", 0, $arr_periodo, ["class" => "form-control", "id" => "cmb_periodo"]) ?>
             </div>        
         </div>
-    </div>    
+    </div>   
     <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">  
         <div class="col-sm-8"></div>
         <div class="col-sm-2">                
-            <a id="btn_buscarMarcacion" href="javascript:" class="btn btn-primary btn-block"> <?= Yii::t("formulario", "Search") ?></a>
+            <a id="btn_buscarHorario" href="javascript:" class="btn btn-primary btn-block"> <?= Yii::t("formulario", "Search") ?></a>
         </div>
     </div>
 </div></br>

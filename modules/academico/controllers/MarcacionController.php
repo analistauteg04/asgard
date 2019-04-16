@@ -11,6 +11,8 @@ use app\modules\academico\models\RegistroMarcacion;
 use DateTime;
 use app\modules\admision\Module as admision;
 use app\modules\academico\Module as academico;
+use app\modules\academico\models\Modalidad;
+use app\modules\academico\models\UnidadAcademica;
 
 admision::registerTranslations();
 
@@ -327,24 +329,40 @@ class MarcacionController extends \app\components\CController {
         $mod_marcacion = new RegistroMarcacion();
         $mod_periodo = new PeriodoAcademicoMetIngreso();
         $periodo = $mod_periodo->consultarPeriodoAcademico();
+        $mod_modalidad = new Modalidad();
+        $mod_unidad = new UnidadAcademica();
         $data = Yii::$app->request->get();
         if ($data['PBgetFilter']) {            
-            $arrSearch["periodo"] = $data['periodo'];
+            $arrSearch["profesor"] = $data['profesor'];
             $arrSearch["unidad"] = $data['unidad'];
             $arrSearch["modalidad"] = $data['modalidad'];
-            $arr_horario = $mod_marcacion->consultarRegistroMarcacion($arrSearch);
+            $arrSearch["f_ini"] = $data['f_ini'];
+            $arrSearch["f_fin"] = $data['f_fin'];
+            $arrSearch["periodo"] = $data['periodo'];            
+            
+            $arr_horario = $mod_marcacion->consultarHorarioMarcacion($arrSearch);
             return $this->render('_listarhorario-grid', [
                         'model' => $arr_horario,
             ]);
         } else {
-            $arr_historico = $mod_marcacion->consultarRegistroMarcacion($arrSearch);
-        }
+            $arr_horario = $mod_marcacion->consultarHorarioMarcacion();
+        }                
         if (Yii::$app->request->isAjax) {
-            $data = Yii::$app->request->post();
+            $data = Yii::$app->request->post();            
+            if (isset($data["getmodalidad"])) {
+                $modalidad = $mod_modalidad->consultarModalidad($data["uaca_id"], 1);
+                $message = array("modalidad" => $modalidad);
+                return Utilities::ajaxResponse('OK', 'alert', Yii::t('jslang', 'Success'), 'false', $message);                
+            }                  
         }
+        
+        $arr_ninteres = $mod_unidad->consultarUnidadAcademicasEmpresa(1);
+        $arr_modalidad = $mod_modalidad->consultarModalidad($arr_ninteres[0]["id"], 1);
         return $this->render('listarhorario', [
-                    'model' => $arr_historico,
+                    'model' => $arr_horario,
                     'arr_periodo' => ArrayHelper::map(array_merge([["id" => "0", "name" => "Todas"]], $periodo), "id", "name"),
+                    'arr_unidad' => ArrayHelper::map(array_merge([["id" => "0", "name" => Yii::t("formulario", "Grid")]], $arr_ninteres), "id", "name"),
+                    'arr_modalidad' => ArrayHelper::map(array_merge([["id" => "0", "name" => Yii::t("formulario", "Grid")]], $arr_modalidad), "id", "name"),
         ]);
     }
 
