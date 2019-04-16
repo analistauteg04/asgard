@@ -108,14 +108,6 @@ financiero::registerTranslations();
                 </div>
             </div>
         </div>
-        <div class="col-md-6 col-sm-6 col-xs-6 col-lg-6">
-            <div class="form-group">            
-                <label for="cmb_carrera_solicitud" class="col-lg-3 col-md-3 col-sm-3 col-xs-3 control-label"><?= Yii::t("academico", "Career") . ' /Programa' ?> <span class="text-danger">*</span></label>
-                <div class="col-lg-9 col-md-9 col-sm-9 col-xs-9">
-                    <?= Html::dropDownList("cmb_carrera_solicitud", 0, $arr_carrerra1, ["class" => "form-control", "id" => "cmb_carrera_solicitud"]) ?>
-                </div>
-            </div>
-        </div>
     </div>
     <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12" style="display: none;" id="divmetodocan">
         <div class="col-md-6 col-sm-6 col-xs-6 col-lg-6">
@@ -145,5 +137,16 @@ financiero::registerTranslations();
             </div>
         </div>
     </div>
+    <br/>
+    <br/>
+    <div class='col-md-12 col-sm-12 col-xs-12 col-lg-12'> 
+        <div class="col-md-6 col-sm-6 col-xs-6 col-lg-6"></div>
+        <div class="col-md-6 col-sm-6 col-xs-6 col-lg-6">
+            <div class='col-md-7 col-xs-7 col-lg-7 col-sm-7'></div>
+            <div class='col-md-3 col-xs-3 col-lg-3 col-sm-3'>         
+                <p> <a id="btn_AgregarItem" href="javascript:" class="btn btn-primary btn-block"> <?= Yii::t("formulario", "Add") ?></a></p>
+            </div>
+        </div>        
+    </div> 
     <div id = "dataListItem"></div>
 </form>

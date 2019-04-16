@@ -48,6 +48,7 @@ class PagosfrecuentesController extends \yii\web\Controller {
         $mod_persona = Persona::findIdentity($per_id);
         $mod_modalidad = new Modalidad();
         $mod_pergestion = new PersonaGestion();
+        $mod_solins= new SolicitudInscripcion();
         $modItemMetNivel = new ItemMetodoUnidad();
         $mod_unidad = new UnidadAcademica();
         $modcanal = new Oportunidad();
@@ -103,16 +104,6 @@ class PagosfrecuentesController extends \yii\web\Controller {
             if (isset($data["getprecio"])) {                                
                 $resp_precio = $mod_solins->ObtenerPrecioXitem($data["ite_id"]);                  
                 $message = array("precio" => $resp_precio["precio"]);
-                return Utilities::ajaxResponse('OK', 'alert', Yii::t('jslang', 'Success'), 'false', $message);                
-            }
-            if (isset($data["gethabilita"])) {  
-                //\app\models\Utilities::putMessageLogFile('item:'.$data["ite_id"]);   
-                if ($data["ite_id"]==155 or $data["ite_id"]==156 or $data["ite_id"]==157 or $data["ite_id"]==10) {                    
-                    $habilita = '1';
-                } else {
-                    $habilita = '0';
-                };                       
-                $message = array("habilita" => $habilita);
                 return Utilities::ajaxResponse('OK', 'alert', Yii::t('jslang', 'Success'), 'false', $message);                
             }
         }
