@@ -100,7 +100,7 @@ $(document).ready(function () {
                                         }, true);                                     
                                         //Descuentos.
                                         var arrParams = new Object();
-                                        arrParams.unidada = $('#cmb_ninteres').val();arrParams
+                                        arrParams.unidada = $('#cmb_ninteres').val();
                                         arrParams.moda_id = $('#cmb_modalidad').val();
                                         arrParams.metodo = $('#cmb_metodos').val();
                                         arrParams.empresa_id = $('#cmb_empresa').val();

@@ -17,6 +17,7 @@ use yii\helpers\Html;
             "arr_ninteres" => $arr_ninteres,
             "arr_item"=>$arr_item,
             "arr_medio" => $arr_medio,
+            "txt_precio" => $txt_precio,
             "arr_modalidad" => $arr_modalidad,
             "arr_conuteg" => $arr_conuteg,
             "arr_carrerra1" => $arr_carrerra1,

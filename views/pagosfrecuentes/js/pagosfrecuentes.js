@@ -19,6 +19,8 @@ function habilitarSecciones() {
 }
 $(document).ready(function () {
     // para mostrar codigo de area
+    dataItems = obtDataList();
+    representarItems(dataItems);
     var unisol = $('#cmb_unidad_solicitud').val();
     if (unisol == 1) {
         $('#divmetodocan').css('display', 'none');
@@ -235,20 +237,46 @@ $(document).ready(function () {
                 setComboData(data.modalidad, "cmb_modalidad_solicitud");
                 var arrParams = new Object();
                 if (data.modalidad.length > 0) {
-                    arrParams.unidada = $('#cmb_unidad_solicitud').val();
-                    arrParams.moda_id = data.modalidad[0].id;
-                    arrParams.getcarrera = true;
-                    requestHttpAjax(link, arrParams, function (response) {
-                        if (response.status == "OK") {
-                            data = response.message;
-                            setComboData(data.carrera, "cmb_carrera_solicitud");
-                        }
+                    if (unisol == 2) {
+                        var arrParams = new Object();
+                        arrParams.nint_id = $('#cmb_unidad_solicitud').val();
+                        arrParams.metodo = $('#cmb_metodo_solicitud').val();
+                        arrParams.getmetodo = true;
+                        requestHttpAjax(link, arrParams, function (response) {
+                            if (response.status == "OK") {
+                                data = response.message;
+                                setComboData(data.metodos, "cmb_metodo_solicitud");
+                                //Item.-
+                                var arrParams = new Object();
+                                arrParams.unidada = $('#cmb_unidad_solicitud').val();
+                                arrParams.metodo = $('#cmb_metodo_solicitud').val();
+                                arrParams.moda_id = $('#cmb_modalidad_solicitud').val();
+                                arrParams.empresa_id = 1; // se coloca 1, porque solo se trabaja con uteg
+                                arrParams.getitem = true;
+                                requestHttpAjax(link, arrParams, function (response) {
+                                    if (response.status == "OK") {
+                                        data = response.message;
+                                        setComboData(data.items, "cmb_item");
+                                    }
+                                    //Precio.
+                                    var arrParams = new Object();
+                                    arrParams.ite_id = $('#cmb_item').val();
+                                    arrParams.getprecio = true;
+                                    requestHttpAjax(link, arrParams, function (response) {
+                                        if (response.status == "OK") {
+                                            data = response.message;
+                                            $('#txt_precio_item').val(data.precio);
+                                        }
+                                    }, true);
+                                }, true);
+                            }
+                        }, true);
+                    } else {
                         //Item.-
                         var arrParams = new Object();
                         arrParams.unidada = $('#cmb_unidad_solicitud').val();
                         arrParams.metodo = $('#cmb_metodo_solicitud').val();
                         arrParams.moda_id = $('#cmb_modalidad_solicitud').val();
-                        arrParams.carrera_id = $('#cmb_carrera_solicitud').val();
                         arrParams.empresa_id = 1; // se coloca 1, porque solo se trabaja con uteg
                         arrParams.getitem = true;
                         requestHttpAjax(link, arrParams, function (response) {
@@ -256,7 +284,7 @@ $(document).ready(function () {
                                 data = response.message;
                                 setComboData(data.items, "cmb_item");
                             }
-                        //Precio.
+                            //Precio.
                             var arrParams = new Object();
                             arrParams.ite_id = $('#cmb_item').val();
                             arrParams.getprecio = true;
@@ -267,33 +295,49 @@ $(document).ready(function () {
                                 }
                             }, true);
                         }, true);
-                    }, true);
+                    }
                 }
             }
         }, true);
     });
-
     $('#cmb_modalidad_solicitud').change(function () {
         var link = $('#txth_base').val() + "/pagosfrecuentes/index";
         var arrParams = new Object();
         arrParams.unidada = $('#cmb_unidad_solicitud').val();
-        arrParams.moda_id = $(this).val();
-        arrParams.getcarrera = true;
+        arrParams.metodo = $('#cmb_metodo_solicitud').val();
+        arrParams.moda_id = $('#cmb_modalidad_solicitud').val();
+        arrParams.carrera_id = $('#cmb_carrera_solicitud').val();
+        arrParams.empresa_id = 1; // se coloca 1, porque solo se trabaja con uteg
+        arrParams.getitem = true;
         requestHttpAjax(link, arrParams, function (response) {
             if (response.status == "OK") {
                 data = response.message;
-                setComboData(data.carrera, "cmb_carrera_solicitud");
+                setComboData(data.items, "cmb_item");
+            }
+            //Precio.
+            var arrParams = new Object();
+            arrParams.ite_id = $('#cmb_item').val();
+            arrParams.getprecio = true;
+            requestHttpAjax(link, arrParams, function (response) {
+                if (response.status == "OK") {
+                    data = response.message;
+                    $('#txt_precio_item').val(data.precio);
+                }
+            }, true);
+        }, true);
+    });
+    $('#cmb_item').change(function () {
+        var link = $('#txth_base').val() + "/pagosfrecuentes/index";
+        var arrParams = new Object();
+        arrParams.ite_id = $('#cmb_item').val();
+        arrParams.getprecio = true;
+        requestHttpAjax(link, arrParams, function (response) {
+            if (response.status == "OK") {
+                data = response.message;
+                $('#txt_precio_item').val(data.precio);
             }
         }, true);
-        Requisitos();
     });
-
-    $('#cmb_metodo_solicitud').change(function () {
-        Requisitos();
-        AparecerDocumento();
-    });
-
-    //Control del div de beneficiario
     $('#rdo_forma_pago_dinner').change(function () {
         if ($('#rdo_forma_pago_dinner').val() == 1) {
             $("#rdo_forma_pago_otros").prop("checked", "");
@@ -315,19 +359,25 @@ $(document).ready(function () {
     });
 });
 function guardarItem() {
-        var cmb_unidad = $('#cmb_unidad_solicitud').val();
-        var txt_modalidad = $('#cmb_modalidad_solicitud').val();
-        var txt_item = $('#cmb_item').val();
-        var txt_precio = $('#txt_precio_item').val();
-        var datalist = obtDataList();
-        var dataitem = {
-            unidad: cmb_unidad,
-            modalidad: txt_modalidad,
-            item: txt_item,
-            precio: txt_precio
-        }
-        datalist.push(dataitem);
-        sessionStorage.setItem('datosItem', JSON.stringify(datalist));
+    var unidad_id = $('#cmb_unidad_solicitud').val();
+    var unidad_txt = $('#cmb_unidad_solicitud option:selected').html();
+    var modalidad_id = $('#cmb_modalidad_solicitud').val();
+    var txt_modalidad = $('#cmb_modalidad_solicitud option:selected').html();
+    var item_id = $('#cmb_item').val();
+    var txt_item = $('#cmb_item option:selected').html();
+    var txt_precio = $('#txt_precio_item').val();
+    var datalist = obtDataList();
+    var dataitem = {
+        item_id: item_id,
+        unidad_id: unidad_id,
+        unidad: unidad_txt,
+        modalidad_id: modalidad_id,
+        modalidad: txt_modalidad,
+        item: txt_item,
+        precio: txt_precio
+    }
+    datalist.push(dataitem);
+    sessionStorage.setItem('datosItem', JSON.stringify(datalist));
 }
 function obtDataList() {
     var storedListItems = sessionStorage.getItem('datosItem');
@@ -342,16 +392,24 @@ function representarItems(dataItems) {
     html = " <div class='grid-view'>" +
             "<table class='table table-striped table-bordered dataTable'>" +
             "<tbody>" +
-            "  <tr> <th>Unidad Academica</th> <th>Modalidad</th> <th>Item</th> <th>Precio</th></tr>";
+            "  <tr><th>Unidad Academica</th> <th>Modalidad</th> <th>Item</th> <th>Precio</th></tr>";
+    var total =0;
     for (i = 0; i < dataItems.length; i++) {
-        html += "<tr><td>" + dataItems[i]['unidad'] + "</td> <td>" + dataItems[i]['modalidad'] + "</td> <td>" + dataItems[i]['item'] + "</td> <td>" + dataItems[i]['precio'] + "</td><td><button type='button' class='btn btn-link' onclick='eliminarhorario(" + dataItems[i]['hora_clave'] + ")'> <span class='glyphicon glyphicon-remove'></span> </button></td></tr>";
+        html += "<tr><td>" + dataItems[i]['unidad'] + "</td> <td>" + dataItems[i]['modalidad'] + "</td> <td>" + dataItems[i]['item'] + "</td> <td>" + dataItems[i]['precio'] + "</td><td><button type='button' class='btn btn-link' onclick='eliminaritem(" + dataItems[i]['item_id'] + ")'> <span class='glyphicon glyphicon-remove'></span> </button></td></tr>";
+        total= total + parseInt(dataItems[i]['precio'], 10);
     }
-    html += "<tr height='40'> <th></th> <th></th> <th></th><th></th></tr>";
+    html += "<tr height='40'><th>Total</th><th></th><th></th><th>"+total+"</th><th></th></tr>";
     html += "</tbody>";
     html += "    </table>" + "</div>";
     $("#dataListItem").html(html);
 }
-
+function eliminaritem(indice) {
+    var tmp = JSON.parse(sessionStorage.getItem('datosItem'));
+    var filteredItems = tmp.filter(item => item.item_id !== indice);
+    sessionStorage.setItem('datosItem', JSON.stringify(filteredItems));
+    var dataItem = obtDataList();
+    representarItems(dataItem);
+}
 function PagoDinners(solicitud) {
     var link = $('#txth_base').val() + "/pagosfrecuentes/savepagodinner";
     var arrParams = new Object();

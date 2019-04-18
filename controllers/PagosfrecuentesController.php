@@ -77,11 +77,6 @@ class PagosfrecuentesController extends \yii\web\Controller {
                 $message = array("modalidad" => $modalidad);
                 return Utilities::ajaxResponse('OK', 'alert', Yii::t('jslang', 'Success'), 'false', $message);
             }
-            if (isset($data["getcarrera"])) {
-                $carrera = $modcanal->consultarCarreraModalidad($data["unidada"], $data["moda_id"]);
-                $message = array("carrera" => $carrera);
-                return Utilities::ajaxResponse('OK', 'alert', Yii::t('jslang', 'Success'), 'false', $message);
-            }
             if (isset($data["getmetodo"])) {
                 $metodos = $mod_metodo->consultarMetodoUnidadAca_2($data['nint_id']);
                 $message = array("metodos" => $metodos);
@@ -115,7 +110,8 @@ class PagosfrecuentesController extends \yii\web\Controller {
         $arr_ninteres = $mod_unidad->consultarUnidadAcademicasEmpresa(1);
         $arr_modalidad = $mod_modalidad->consultarModalidad(1, 1);
         $arr_conuteg = $mod_pergestion->consultarConociouteg();
-        $resp_item = $modItemMetNivel->consultarXitemPrecio(1, 1, 1, 2, 1);
+        $resp_item = $modItemMetNivel->consultarXitemPrecio(1, 4, 0, 1, 1);
+        $resp_precio = $mod_solins->ObtenerPrecioXitem($resp_item[0]["id"]);
         $arr_carrerra1 = $modcanal->consultarCarreraModalidad(1, $arr_modalidad[0]["id"]);
         $arr_metodos = $mod_metodo->consultarMetodoUnidadAca_2($arr_ninteres[0]["id"]);
         $_SESSION['JSLANG']['Your information has not been saved. Please try again.'] = Yii::t('notificaciones', 'Your information has not been saved. Please try again.');
@@ -128,7 +124,8 @@ class PagosfrecuentesController extends \yii\web\Controller {
                     "arr_ciu_dom" => ArrayHelper::map($arr_ciu_dom, "id", "value"),
                     "arr_ninteres" => ArrayHelper::map($arr_ninteres, "id", "name"),
                     "arr_medio" => ArrayHelper::map($arr_medio, "id", "value"),
-                    "arr_item" => ArrayHelper::map(array_merge(["id" => "0", "name" => "Seleccionar"], $resp_item), "id", "name"), //ArrayHelper::map($resp_item, "id", "name"),
+                    "arr_item" => ArrayHelper::map($resp_item, "id", "name"),
+                    "txt_precio" => $resp_precio['precio'],
                     "arr_modalidad" => ArrayHelper::map($arr_modalidad, "id", "name"),
                     "arr_conuteg" => ArrayHelper::map($arr_conuteg, "id", "name"),
                     "arr_carrerra1" => ArrayHelper::map($arr_carrerra1, "id", "name"),
@@ -136,7 +133,6 @@ class PagosfrecuentesController extends \yii\web\Controller {
                     "resp_datos" => $resp_datos,
         ]);
     }
-
     public function actionSavepagodinner() {
         if (Yii::$app->request->isAjax) {
             $data = Yii::$app->request->post();

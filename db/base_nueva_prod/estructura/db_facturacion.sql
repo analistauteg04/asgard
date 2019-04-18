@@ -141,12 +141,11 @@ create table if not exists `persona_beneficiaria` (
  `pben_fecha_creacion` timestamp not null default current_timestamp,
  `pben_fecha_modificacion` timestamp null default null,
  `pben_estado_logico` varchar(1) not null 
-);
-
+); 
 -- --------------------------------------------------------
 -- 
--- Estructura de tabla para la tabla `solicitud_general`
---
+-- Estructura de tabla para la tabla `solicitud_boton_pago`
+-- 
 create table if not exists `solicitud_boton_pago` (
   `sbpa_id` bigint(20) not null auto_increment primary key,    
   `pben_id` bigint(20) null,  
@@ -155,7 +154,7 @@ create table if not exists `solicitud_boton_pago` (
   `sbpa_fecha_creacion` timestamp not null default current_timestamp,
   `sbpa_fecha_modificacion` timestamp null default null, 
   `sbpa_estado_logico` varchar(1) not null,  
-  foreign key (pben_id) references `persona_beneficiaria` (pben_id)
+   foreign key (pben_id) references `persona_beneficiaria` (pben_id)
 ) ;
 
 -- --------------------------------------------------------
@@ -201,7 +200,7 @@ create table if not exists `orden_pago` (
   `opag_fecha_creacion` timestamp not null default current_timestamp,
   `opag_fecha_modificacion` timestamp null default null, 
   `opag_estado_logico` varchar(1) not null,
-  foreign key (sgen_id) references `solicitud_general` (sgen_id)
+  foreign key (sbpa_id) references `solicitud_boton_pago` (sbpa_id)
 ) ;
 
 
@@ -326,7 +325,7 @@ create table if not exists `info_carga_prepago` (
 
 -- --------------------------------------------------------
 --
--- Estructura de tabla para la tabla `tipo_comprobante`
+-- Estructura de tabla para la tabla `tipo_documento`
 --
 create table if not exists `tipo_documento` (
   `tdoc_id` bigint(20) not null auto_increment primary key,  
@@ -341,7 +340,7 @@ create table if not exists `tipo_documento` (
 
 -- --------------------------------------------------------
 --
--- Estructura de tabla para la tabla `comprobante`
+-- Estructura de tabla para la tabla `documento`
 --
 create table if not exists `documento` (
   `doc_id` bigint(20) not null auto_increment primary key,  

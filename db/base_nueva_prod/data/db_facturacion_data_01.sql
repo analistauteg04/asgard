@@ -783,10 +783,8 @@ insert into `item_metodo_unidad` (`imni_id`, `ite_id`, `ming_id`, `uaca_id`, `mo
 (163, 159, null, 1, 2, null, 1, '1', '1'),
 (164, 160, null, 1, 3, null, 1, '1', '1'),
 (165, 161, null, 1, 4, null, 1, '1', '1'),
-
 (166, 166, null, 3, 2, 145, 1, '1', '1'),
 (167, 167, null, 3, 2, 146, 1, '1', '1'),
-
 (168, 168, null, 1, 1, null, 1, '1', '1');
 
 -- --------------------------------------------------------
@@ -806,11 +804,11 @@ insert into `forma_pago` (`fpag_id`,  `fpag_nombre`, `fpag_descripcion`, `fpag_d
 --
 -- Volcado de datos para la tabla `tipo_comprobante` 
 --
-insert into `tipo_comprobante` (`tcom_id`, `tcom_nombre`, `tcom_usuario_ingreso`, `tcom_estado`, `tcom_estado_logico`) values
+insert into `tipo_documento` (`tdoc_id`, `tdoc_nombre`, `tdoc_usuario_ingreso`, `tdoc_estado`, `tdoc_estado_logico`) values
 (1, 'Factura', 1, '1', '1'),
 (2, 'Nota de Crédito', 1, '1', '1'),
 (3, 'Nota de Débito', 1, '1', '1'),
-(4, 'Comprobantes de Retención', 1, '1', '1'),
+(4, 'Comprobantes de Retención', 1, '1', '1'),  
 (5, 'Guía de Remisión', 1, '1', '1');
 
 -- --------------------------------------------------------

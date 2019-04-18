@@ -14,7 +14,7 @@ financiero::registerTranslations();
 ?>
 <form class="form-horizontal" enctype="multipart/form-data">    
     <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
-        <h3><span id="lbl_Personeria"><?= Yii::t("formulario", "Formulario de Inscripción") ?></span></h3>
+        <h3><span id="lbl_Personeria"><?= Yii::t("formulario", "Datos Personales") ?></span></h3>
     </div>
     <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
         <p class="text-danger"> <?= Yii::t("formulario", "Fields with * are required") ?> </p>        
@@ -114,7 +114,7 @@ financiero::registerTranslations();
             <div class="form-group">            
                 <label for="cmb_metodo_solicitud" class="col-sm-3 col-md-3 col-xs-3 col-lg-3 control-label keyupmce"><?= Yii::t("formulario", "Income Method") ?><span class="text-danger">*</span></label>
                 <div class="col-sm-9 col-md-9 col-xs-9 col-lg-9">
-                    <?= Html::dropDownList("cmb_metodo_solicitud", 0, array_merge([Yii::t("formulario", "Select")], $arr_metodos), ["class" => "form-control", "id" => "cmb_metodo_solicitud"]) ?>
+                    <?= Html::dropDownList("cmb_metodo_solicitud", 0, $arr_metodos, ["class" => "form-control", "id" => "cmb_metodo_solicitud"]) ?>
                 </div>
             </div>
         </div>
@@ -124,7 +124,7 @@ financiero::registerTranslations();
             <div class="form-group">
                 <label for="cmb_item" class="col-sm-5 col-md-5 col-xs-5 col-lg-5 control-label keyupmce"><?= financiero::t("Pagos", "Item") ?></label>
                 <div class="col-sm-7 col-md-7 col-xs-7 col-lg-7">
-                    <?= Html::dropDownList("cmb_item", 0, array_merge([Yii::t("formulario", "Select")], $arr_item), ["class" => "form-control", "id" => "cmb_item"]) ?>
+                    <?= Html::dropDownList("cmb_item", 1, $arr_item, ["class" => "form-control", "id" => "cmb_item"]) ?>
                 </div>
             </div>
         </div>
@@ -132,7 +132,7 @@ financiero::registerTranslations();
             <div class="form-group">
                 <label for="txt_precio_item" class="col-sm-5 col-md-5 col-xs-5 col-lg-5 control-label" id="lbl_nombre1"><?= financiero::t("Pagos", "Price") ?></label>
                 <div class="col-sm-7 col-md-7 col-xs-7 col-lg-7">
-                    <input type="text" class="form-control keyupmce" value="0" id="txt_precio_item" data-type="alfa" align="rigth" disabled="true" placeholder="<?= financiero::t("Pagos", "Price") ?>">
+                    <input type="text" class="form-control keyupmce" value="<?php echo $txt_precio ?>" id="txt_precio_item" data-type="alfa" align="rigth" disabled="true" placeholder="<?= financiero::t("Pagos", "Price") ?>">
                 </div>
             </div>
         </div>
@@ -148,5 +148,8 @@ financiero::registerTranslations();
             </div>
         </div>        
     </div> 
+    <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
+        <h3><span id="lbl_Personeria"><?= Yii::t("formulario", "Formulario de Inscripción") ?></span></h3>
+    </div>
     <div id = "dataListItem"></div>
 </form>

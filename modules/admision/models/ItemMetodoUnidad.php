@@ -138,8 +138,8 @@ class ItemMetodoUnidad extends \yii\db\ActiveRecord
         $estado = 1;
         if ($empresa_id == 1) {
             $sql = "SELECT i.ite_id id, i.ite_nombre name
-                    FROM  " . $con->dbname . ".item_metodo_unidad imu inner join " . $con->dbname . ".item i
-                            on imu.ite_id = i.ite_id
+                    FROM  " . $con->dbname . ".item_metodo_unidad imu inner "
+                            . "join " . $con->dbname . ".item i on imu.ite_id = i.ite_id
                     WHERE imu.uaca_id = :nint_id
                           and mod_id = :mod_id
                           and ifnull(ming_id,0) = :ming_id
