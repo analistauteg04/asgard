@@ -408,16 +408,8 @@ function eliminaritem(indice) {
     var filteredItems = tmp.filter(it => it.item_id !== indice);
     sessionStorage.clear();    
     sessionStorage.setItem('datosItem', JSON.stringify(filteredItems));
-    //sleep(1);
     representarItems(obtDataList());
 }
-function sleep(milliseconds) {
-  var start = new Date().getTime();
-  for (var i = 0; i < 1e7; i++) {
-    if ((new Date().getTime() - start) > milliseconds){
-      break;
-    }
-  }
 function PagoDinners(solicitud) {
     var link = $('#txth_base').val() + "/pagosfrecuentes/savepagodinner";
     var arrParams = new Object();
