@@ -149,7 +149,7 @@ financiero::registerTranslations();
         </div>        
     </div> 
     <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
-        <h3><span id="lbl_Personeria"><?= Yii::t("formulario", "Formulario de Inscripción") ?></span></h3>
+        <h3><span id="lbl_Personeria"><?= Yii::t("formulario", "Productos Seleccionados") ?></span></h3>
     </div>
     <div id = "dataListItem"></div>
 </form>
