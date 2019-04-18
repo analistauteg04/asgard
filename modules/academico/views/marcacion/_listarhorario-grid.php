@@ -14,8 +14,8 @@ admision::registerTranslations();
     PbGridView::widget([
         'id' => 'PbHorario',
         'showExport' => true,
-        'fnExportEXCEL' => "exportExcel",
-        'fnExportPDF' => "exportPdf",
+        'fnExportEXCEL' => "exportExcelhorario",
+        'fnExportPDF' => "exportPdfhorario",
         'dataProvider' => $model,
         'columns' => [
             [

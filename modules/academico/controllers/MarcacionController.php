@@ -132,7 +132,7 @@ class MarcacionController extends \app\components\CController {
                             $minutosfinales = $minutosfinales * -1;
                         }
                         // si se quiere marcar la salida 10 minutos antes se pone $minutos finales >= -10
-                        if ($minutosfinales >= 0 && $minutosfinales <= 30) { // SOLO PUEDE MARCAR SALIDA DE A LA HORA DE LA SALIDA Y HASTA 30 MINUTOS DESPUES
+                        if ($minutosfinales >= -10 && $minutosfinales <= 30) { // SOLO PUEDE MARCAR SALIDA DE A LA HORA DE LA SALIDA Y HASTA 30 MINUTOS DESPUES
                             $cons_marcainicio = $mod_marcacion->consultarMarcacionExiste($hape_id, $profesor, $fecha, 'E');
                             if ($cons_marcainicio["marcacion"] > 0) {
                                 $rmar_idingreso = $mod_marcacion->consultarmIdMarcacion('E',$profesor, $hape_id, $fecha);
@@ -146,7 +146,8 @@ class MarcacionController extends \app\components\CController {
                             }
                         } else {
                             $exito = 0;
-                            $mensaje = ' Las marcaciones solo se pueden finalizar en el minuto exacto o hasta 30 minutos después. ';
+                            //$mensaje = ' Las marcaciones solo se pueden finalizar en el minuto exacto o hasta 30 minutos después. ';
+                            $mensaje = ' Las marcaciones sólo se pueden finalizar 10 minutos antes o hasta 30 minutos después de la hora establecida. ';
                         }
                     }
                     if ($exito) {
@@ -354,8 +355,7 @@ class MarcacionController extends \app\components\CController {
                 $message = array("modalidad" => $modalidad);
                 return Utilities::ajaxResponse('OK', 'alert', Yii::t('jslang', 'Success'), 'false', $message);                
             }                  
-        }
-        
+        }        
         $arr_ninteres = $mod_unidad->consultarUnidadAcademicasEmpresa(1);
         $arr_modalidad = $mod_modalidad->consultarModalidad($arr_ninteres[0]["id"], 1);
         return $this->render('listarhorario', [
@@ -365,5 +365,82 @@ class MarcacionController extends \app\components\CController {
                     'arr_modalidad' => ArrayHelper::map(array_merge([["id" => "0", "name" => Yii::t("formulario", "Grid")]], $arr_modalidad), "id", "name"),
         ]);
     }
+    
+    
+    public function actionExpexcelhorario() {
+        ini_set('memory_limit', '256M');
+        $content_type = Utilities::mimeContentType("xls");
+        $nombarch = "Report-" . date("YmdHis") . ".xls";
+        header("Content-Type: $content_type");
+        header("Content-Disposition: attachment;filename=" . $nombarch);
+        header('Cache-Control: max-age=0');
+        $colPosition = array("C", "D", "E", "F", "G", "H", "I", "J", "K", "L");
+        $arrHeader = array(
+            Yii::t("formulario", "Teacher"),
+            Yii::t("formulario", "Period"),
+            Yii::t("formulario", "Matter"),            
+            academico::t("Academico", "Aca. Uni."),
+            academico::t("Academico", "Modality"),
+            academico::t("Academico", "Class date"),
+            academico::t("Academico", "Day"),
+            academico::t("Academico", "Hour start date"),
+            academico::t("Academico", "Hour end date"),                                    
+        );
+        $mod_marcacion = new RegistroMarcacion();
+        $data = Yii::$app->request->get();                 
+            $arrSearch["profesor"] = $data['profesor'];
+            $arrSearch["unidad"] = $data['unidad'];
+            $arrSearch["modalidad"] = $data['modalidad'];
+            $arrSearch["f_ini"] = $data['f_ini'];
+            $arrSearch["f_fin"] = $data['f_fin'];
+            $arrSearch["periodo"] = $data['periodo'];               
+        $arrData = array();
+        if (empty($arrSearch)) {
+            $arrData = $mod_marcacion->consultarHorarioMarcacion(array(), true);
+        } else {
+            $arrData = $mod_marcacion->consultarHorarioMarcacion($arrSearch, true);
+        }
+        $nameReport = academico::t("Academico", "List of schedules");
+        Utilities::generarReporteXLS($nombarch, $nameReport, $arrHeader, $arrData, $colPosition);
+        exit;
+    }
 
+    public function actionExppdfhorario() {
+        $report = new ExportFile();
+        $this->view->title = academico::t("Academico", "List of schedules"); // Titulo del reporte                
+        $arrHeader = array(
+            Yii::t("formulario", "Teacher"),
+            Yii::t("formulario", "Period"),
+            Yii::t("formulario", "Matter"),            
+            academico::t("Academico", "Aca. Uni."),
+            academico::t("Academico", "Modality"),
+            academico::t("Academico", "Class date"),
+            academico::t("Academico", "Day"),
+            academico::t("Academico", "Hour start date"),
+            academico::t("Academico", "Hour end date"),                                    
+        );
+        $mod_marcacion = new RegistroMarcacion();
+        $data = Yii::$app->request->get();                 
+            $arrSearch["profesor"] = $data['profesor'];
+            $arrSearch["unidad"] = $data['unidad'];
+            $arrSearch["modalidad"] = $data['modalidad'];
+            $arrSearch["f_ini"] = $data['f_ini'];
+            $arrSearch["f_fin"] = $data['f_fin'];
+            $arrSearch["periodo"] = $data['periodo'];               
+        $arrData = array();
+        if (empty($arrSearch)) {
+            $arrData = $mod_marcacion->consultarHorarioMarcacion(array(), true);
+        } else {
+            $arrData = $mod_marcacion->consultarHorarioMarcacion($arrSearch, true);
+        }
+        $report->orientation = "L"; // tipo de orientacion L => Horizontal, P => Vertical
+        $report->createReportPdf(
+                $this->render('exportpdf', [
+                    'arr_head' => $arrHeader,
+                    'arr_body' => $arrData
+                ])
+        );
+        $report->mpdf->Output('Reporte_' . date("Ymdhis") . ".pdf", ExportFile::OUTPUT_TO_DOWNLOAD);
+        return;
+    }
 }

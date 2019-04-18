@@ -7,10 +7,11 @@ $(document).ready(function () {
         cargarHorario();
     });
     
-    /*$('#cmb_unidad').change(function () {
+    $('#cmb_unidad').change(function () {
         var link = $('#txth_base').val() + "/academico/marcacion/listarhorario";        
-        var arrParams = new Object();
+        var arrParams = new Object();        
         arrParams.uaca_id = $(this).val();
+        alert('UNidad:'+$(this).val());
         arrParams.getmodalidad = true;
         requestHttpAjax(link, arrParams, function (response) {
             if (response.status == "OK") {
@@ -19,7 +20,7 @@ $(document).ready(function () {
             }
         }, true);
     });
-    */
+    
     $('#cmb_modalidad').change(function () {
         if ($(this).val() == 4) {
             $('#divFechasDistancia').css('display', 'block');
@@ -33,6 +34,18 @@ $(document).ready(function () {
     });
     
 });
+
+function setComboDataselect(arr_data, element_id, texto) {
+    var option_arr = "";
+    option_arr += "<option value= '0'>" + texto + "</option>";
+    for (var i = 0; i < arr_data.length; i++) {
+        var id = arr_data[i].id;
+        var value = arr_data[i].name;
+
+        option_arr += "<option value='" + id + "'>" + value + "</option>";
+    }
+    $("#" + element_id).html(option_arr);
+}
 
 function Marcacion(hape_id, horario, accion, dia, prof_id) {
     var link = $('#txth_base').val() + "/academico/marcacion/save";
@@ -115,4 +128,24 @@ function actualizarGridHorario() {
         $('#PbHorario').PbGridView('applyFilterData', {'profesor': profesor, 'unidad': unidad, 'modalidad': modalidad, 'f_ini': f_ini, 'f_fin': f_fin, 'periodo': periodo});
         setTimeout(hideLoadingPopup, 2000);
     }
+}
+
+function exportExcelhorario() {
+    var profesor = $('#txt_buscarDataProfesor').val();   
+    var unidad = $('#cmb_unidad option:selected').val();
+    var modalidad = $('#cmb_modalidad option:selected').val();
+    var f_ini = $('#txt_fecha_ini').val();
+    var f_fin = $('#txt_fecha_fin').val();
+    var periodo = $('#cmb_periodo option:selected').val();
+    window.location.href = $('#txth_base').val() + "/academico/marcacion/expexcelhorario?profesor=" + profesor + "&unidad="+ unidad + '&modalidad='+ modalidad + "&f_ini=" + f_ini + "&f_fin=" + f_fin + "&periodo=" + periodo;
+}
+
+function exportPdfhorario() {
+    var profesor = $('#txt_buscarDataProfesor').val();   
+    var unidad = $('#cmb_unidad option:selected').val();
+    var modalidad = $('#cmb_modalidad option:selected').val();
+    var f_ini = $('#txt_fecha_ini').val();
+    var f_fin = $('#txt_fecha_fin').val();
+    var periodo = $('#cmb_periodo option:selected').val();
+    window.location.href = $('#txth_base').val() + "/academico/marcacion/exppdfhorario?pdf=1&profesor=" + profesor + "&unidad="+ unidad + '&modalidad='+ modalidad + "&f_ini=" + f_ini + "&f_fin=" + f_fin + "&periodo=" + periodo;
 }
