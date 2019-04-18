@@ -19,8 +19,7 @@ function habilitarSecciones() {
 }
 $(document).ready(function () {
     // para mostrar codigo de area
-    dataItems = obtDataList();
-    representarItems(dataItems);
+    representarItems(obtDataList());
     var unisol = $('#cmb_unidad_solicitud').val();
     if (unisol == 1) {
         $('#divmetodocan').css('display', 'none');
@@ -389,6 +388,7 @@ function obtDataList() {
     return itemList;
 }
 function representarItems(dataItems) {
+    $("#dataListItem").html("");
     html = " <div class='grid-view'>" +
             "<table class='table table-striped table-bordered dataTable'>" +
             "<tbody>" +
@@ -405,11 +405,19 @@ function representarItems(dataItems) {
 }
 function eliminaritem(indice) {
     var tmp = JSON.parse(sessionStorage.getItem('datosItem'));
-    var filteredItems = tmp.filter(item => item.item_id !== indice);
+    var filteredItems = tmp.filter(it => it.item_id !== indice);
+    sessionStorage.clear();    
     sessionStorage.setItem('datosItem', JSON.stringify(filteredItems));
-    var dataItem = obtDataList();
-    representarItems(dataItem);
+    //sleep(1);
+    representarItems(obtDataList());
 }
+function sleep(milliseconds) {
+  var start = new Date().getTime();
+  for (var i = 0; i < 1e7; i++) {
+    if ((new Date().getTime() - start) > milliseconds){
+      break;
+    }
+  }
 function PagoDinners(solicitud) {
     var link = $('#txth_base').val() + "/pagosfrecuentes/savepagodinner";
     var arrParams = new Object();
