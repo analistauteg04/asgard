@@ -540,23 +540,30 @@ class OportunidadesController extends \app\components\CController {
             }            
             if ($data["procesar_file"]) {
                 $emp_id = $data["emp_id"];                
-                $mod_actividadTemp = new BitacoraActividadesTmp();     
-                \app\models\Utilities::putMessageLogFile('perId:'.$per_id);
-                $resp_padm = $mod_actividadTemp->consultarIdXPadm($per_id);   //Buscar el Padm_id                 
-                $carga_archivo = $mod_gestion->CargarArchivoGestion($emp_id, $data["archivo"], $usu_id, $resp_padm["padm_id"]);
-                if ($carga_archivo['status']) {
-                    $message = array(
-                        "wtmessage" => Yii::t("notificaciones", "Archivo procesado correctamente. " . $carga_archivo['message']),
-                        "title" => Yii::t('jslang', 'Success'),
-                    );
-                    return Utilities::ajaxResponse('OK', 'alert', Yii::t("jslang", "Success"), false, $message);
+                $mod_actividadTemp = new BitacoraActividadesTmp();                     
+                $resp_padm = $mod_actividadTemp->consultarIdXPadm($per_id);   //Buscar el Padm_id 
+                if ($resp_padm) {
+                    $carga_archivo = $mod_gestion->CargarArchivoGestion($emp_id, $data["archivo"], $usu_id, $resp_padm["padm_id"]);
+                    if ($carga_archivo['status']) {
+                        $message = array(
+                            "wtmessage" => Yii::t("notificaciones", "Archivo procesado correctamente. " . $carga_archivo['message']),
+                            "title" => Yii::t('jslang', 'Success'),
+                        );
+                        return Utilities::ajaxResponse('OK', 'alert', Yii::t("jslang", "Success"), false, $message);
+                    } else {
+                        $message = array(
+                            "wtmessage" => Yii::t("notificaciones", "Error al procesar el archivo. " . $carga_archivo['message']),
+                            "title" => Yii::t('jslang', 'Error'),
+                        );
+                        return Utilities::ajaxResponse('NO_OK', 'alert', Yii::t("jslang", "Error"), true, $message);
+                    }
                 } else {
                     $message = array(
-                        "wtmessage" => Yii::t("notificaciones", "Error al procesar el archivo. " . $carga_archivo['message']),
+                        "wtmessage" => Yii::t("notificaciones", "Error al procesar el archivo, no es un usuario autorizado para realizar la carga."),
                         "title" => Yii::t('jslang', 'Error'),
                     );
                     return Utilities::ajaxResponse('NO_OK', 'alert', Yii::t("jslang", "Error"), true, $message);
-                }
+                }                                
                 return;
             }
         } else {

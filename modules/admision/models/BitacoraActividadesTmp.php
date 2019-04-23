@@ -80,8 +80,10 @@ class BitacoraActividadesTmp extends \yii\db\ActiveRecord
         } else {
             $trans = $con->beginTransaction(); // si no existe la transacción entonces se crea una
         }
+        \app\models\Utilities::putMessageLogFile("archivo:". $file);
         if (strtolower(end($chk_ext)) == "xls" || strtolower(end($chk_ext)) == "xlsx") {            
             //Create new PHPExcel object
+            \app\models\Utilities::putMessageLogFile("archivo tipo: ".strtolower(end($chk_ext)));
             $objPHPExcel = \PhpOffice\PhpSpreadsheet\IOFactory::load($file);
             $dataArr = array();            
             try {                
@@ -100,8 +102,10 @@ class BitacoraActividadesTmp extends \yii\db\ActiveRecord
                     }
                     unset($dataArr[1]); // Se elimina la cabecera de titulos del file
                 }               
+                \app\models\Utilities::putMessageLogFile("antes del borrado");
                 $this->deletetablaTemp($con, $usu_id);                
-                $fila = 1;                    
+                $fila = 1;   
+                \app\models\Utilities::putMessageLogFile("antes del for");
                 foreach ($dataArr as $val) {                                        
                     $fila++;        
                     $modelPerGestion = new PersonaGestion();
@@ -112,18 +116,22 @@ class BitacoraActividadesTmp extends \yii\db\ActiveRecord
                     $respIdPerGes = $modelPerGestion::existePersonaGestLeads($val[6], $val[5]);                       
                     $respUnidad = $modelUnidad::consultarIdsUnid_Academica($val[1]);                    
                     $respModalidad = $modelModalidad::consultarIdsModalidad($val[2]);                    
-                    $respEstAcade = $modelEstAcademico::consultarIdsEstudioAca($val[3]);                                                        
-                    $respOport = $model->consultarOportunidad($emp_id, $respIdPerGes, $respEstAcade, $respUnidad, $respModalidad);                    
+                    $respEstAcade = $modelEstAcademico::consultarIdsEstudioAca($val[3]);     
+                    \app\models\Utilities::putMessageLogFile("antes del consultar oportunidad");
+                    $respOport = $model->consultarOportunidad($emp_id, $respIdPerGes, $respEstAcade, $respUnidad, $respModalidad);      
+                    \app\models\Utilities::putMessageLogFile("después del consultar oportunidad");
                     if (!($respOport)) {                           
                         $bandera= '0';
                         $mensaje = "No se encontró ninguna oportunidad asociada.";                                                     
                     }
                     $respEstadoOpo = $model->consultarEstadoXoportunidad($val[7]);
+                    \app\models\Utilities::putMessageLogFile("después del consultar estado oportunidad");
                     if (!($respEstadoOpo)) {                           
                         $bandera= '0';
                         $mensaje = "No se encontró estado de oportunidad.";                           
                     }
                     $respObservaOpo = $model->consultarObservacionXoportunidad($val[8]);
+                    \app\models\Utilities::putMessageLogFile("después del consultar obs oportunidad");
                     if (!($respObservaOpo)) {                          
                         $bandera= '0';
                         $mensaje = "No se encontró código de observación.";                           
@@ -138,9 +146,9 @@ class BitacoraActividadesTmp extends \yii\db\ActiveRecord
                     if ($bandera == '0') {
                         $arroout["status"] = FALSE;
                         $arroout["error"] = null;
-                        $arroout["message"] = " Error en la Fila => N°$fila Nombres => $val[4]";
+                        $arroout["message"] = " Error en la Fila => N°$fila Nombres => $val[4]. ' '. $mensaje";
                         $arroout["data"] = null;
-                        throw new Exception('Error en la Fila => N°'.$fila. ' Nombres => '. $val[4]);
+                        throw new Exception('Error en la Fila => N°'.$fila. ' Nombres => '. $val[4]. ' '. $mensaje);
                     }                    
                     $model->opo_id = $respOport["opo_id"];
                     $model->usu_id = $usu_id;
@@ -159,10 +167,11 @@ class BitacoraActividadesTmp extends \yii\db\ActiveRecord
                     if (empty($model->bact_id)) {                             
                         $arroout["status"] = FALSE;
                         $arroout["error"] = null;
-                        $arroout["message"] = " Error en la Fila => N°$fila Nombres => $val[4]";
+                        $arroout["message"] = " Error en la Fila => N°$fila Nombres => $val[4]. ' '. $mensaje";
                         $arroout["data"] = null;
                         throw new Exception('Error, al grabar actividad.');
                     }
+                    \app\models\Utilities::putMessageLogFile("Procesado Fila => N°$fila Nombres => $val[4]");
                 } 
                 if ($trans !== null)                    
                     $trans->commit(); 
@@ -170,7 +179,7 @@ class BitacoraActividadesTmp extends \yii\db\ActiveRecord
                 $arroout["status"] = TRUE;
                 $arroout["error"] = null;
                 $arroout["message"] = null;
-                $arroout["data"] = null;                   
+                $arroout["data"] = null;                    
                 return $arroout;
             } catch (Exception $ex) {
                 if ($trans !== null)                    

@@ -197,7 +197,7 @@ class HorarioAsignaturaPeriodoTmp extends \yii\db\ActiveRecord
                         $arroout["data"] = null;
                         throw new Exception('Error en la Fila => N°'.$fila. ' Materia => '. $val[1]);
                     }                                                                
-                    if ($val[6] == 4) { //modalidad a distancia                        
+                    if ($val[6] == 4 or $val[6] == 1) { //modalidad a distancia                        
                         $fecha_hora_clase = $val[8];
                     }  else {
                         $fecha_hora_clase = null;
