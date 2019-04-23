@@ -432,7 +432,7 @@ class RegistroMarcacion extends \yii\db\ActiveRecord {
                     WHERE
                         hap.hape_fecha_clase = :fecha AND
                         prof.per_id = :per_id AND
-                        ((hap.uaca_id = 1 && hap.mod_id = 4) OR  (hap.uaca_id = 2)) AND
+                        ((hap.uaca_id = 1 && hap.mod_id = 4) OR  (hap.uaca_id = 2) OR (hap.uaca_id = 1 && hap.mod_id = 1)) AND
                         hap.hape_estado = :estado AND
                         hap.hape_estado_logico = :estado  AND
                         prof.pro_estado = :estado AND

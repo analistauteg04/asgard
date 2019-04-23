@@ -10,8 +10,7 @@ $(document).ready(function () {
     $('#cmb_unidad').change(function () {
         var link = $('#txth_base').val() + "/academico/marcacion/listarhorario";        
         var arrParams = new Object();        
-        arrParams.uaca_id = $(this).val();
-        alert('UNidad:'+$(this).val());
+        arrParams.uaca_id = $(this).val();        
         arrParams.getmodalidad = true;
         requestHttpAjax(link, arrParams, function (response) {
             if (response.status == "OK") {
@@ -22,7 +21,7 @@ $(document).ready(function () {
     });
     
     $('#cmb_modalidad').change(function () {
-        if ($(this).val() == 4) {
+        if ($(this).val() == 4 || $(this).val() ==1) {
             $('#divFechasDistancia').css('display', 'block');
         } else {
             $('#divFechasDistancia').css('display', 'none');

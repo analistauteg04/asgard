@@ -2103,7 +2103,8 @@ class Oportunidad extends \app\modules\admision\components\CActiveRecord {
     public function CargarArchivoGestion($emp_id, $fname, $usu_id, $padm_id) {
         $mod_actividadTemp = new BitacoraActividadesTmp();
         $mod_actividad = new Oportunidad();       
-        $path = Yii::$app->basePath . Yii::$app->params['documentFolder'] . "gestion/" . $fname;            
+        $path = Yii::$app->basePath . Yii::$app->params['documentFolder'] . "gestion/" . $fname;     
+        \app\models\Utilities::putMessageLogFile('usuario:'.$usu_id);
         $carga_archivo = $mod_actividadTemp->uploadFile($emp_id, $usu_id, $padm_id, $path);
         if ($carga_archivo['status']) {            
             $data = $mod_actividadTemp->consultarBitacoraTemp($usu_id);                          
