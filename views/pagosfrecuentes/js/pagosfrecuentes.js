@@ -395,22 +395,25 @@ function representarItems(dataItems) {
             "  <tr><th>Unidad Academica</th> <th>Modalidad</th> <th>Item</th> <th>Precio</th></tr>";
     var total =0;
     for (i = 0; i < dataItems.length; i++) {
-        html += "<tr><td>" + dataItems[i]['unidad'] + "</td> <td>" + dataItems[i]['modalidad'] + "</td> <td>" + dataItems[i]['item'] + "</td> <td>" + dataItems[i]['precio'] + "</td><td><button type='button' class='btn btn-link' onclick='eliminaritem(" + dataItems[i]['item_id'] + ")'> <span class='glyphicon glyphicon-remove'></span> </button></td></tr>";
+        html += "<tr><td>" + dataItems[i]['unidad'] + "</td> <td>" + dataItems[i]['modalidad'] + "</td> <td>" + dataItems[i]['item'] + "</td> <td>$" + dataItems[i]['precio'] + "</td><td><button type='button' class='btn btn-link' onclick='eliminaritem(" + dataItems[i]['item_id'] + ")'> <span class='glyphicon glyphicon-remove'></span> </button></td></tr>";
         total= total + parseInt(dataItems[i]['precio'], 10);
     }
-    html += "<tr height='40'><th>Total</th><th></th><th></th><th>"+total+"</th><th></th></tr>";
+    html += "<tr height='40'><th>Total</th><th></th><th></th><th>$"+total+"</th><th></th></tr>";
     html += "</tbody>";
     html += "    </table>" + "</div>";
     $("#dataListItem").html(html);
 }
 function eliminaritem(indice) {
-    alert(sessionStorage.getItem('datosItem'));
-    alert(indice);
     var tmp = JSON.parse(sessionStorage.getItem('datosItem'));
-    var filteredItems = tmp.filter(it => it.item_id !== indice);
-    sessionStorage.clear();    
-    sessionStorage.setItem('datosItem', JSON.stringify(filteredItems));
-    alert(sessionStorage.getItem('datosItem'));
+    var newArr=[];
+    console.log(tmp.length);
+    for (it=0;it<parseInt(tmp.length);it++){
+        if(parseInt(tmp[it].item_id) !== parseInt(indice)){
+            newArr.push(tmp[it]);
+        }            
+    }
+    sessionStorage.setItem('datosItem', JSON.stringify(newArr));
+    alert("posterior:"+sessionStorage.getItem('datosItem'));
     representarItems(obtDataList());
 }
 function sleep(milliseconds) {
