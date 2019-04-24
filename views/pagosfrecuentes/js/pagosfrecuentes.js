@@ -408,6 +408,8 @@ function eliminaritem(indice) {
     var newArr=[];
     console.log(tmp.length);
     for (it=0;it<parseInt(tmp.length);it++){
+        alert("item current: "+tmp[it].item_id);
+        alert("item delete: "+indice);
         if(parseInt(tmp[it].item_id) !== parseInt(indice)){
             newArr.push(tmp[it]);
         }            
