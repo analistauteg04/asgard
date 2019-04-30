@@ -4,7 +4,7 @@ DROP SCHEMA IF EXISTS `db_inventario` ;
 CREATE SCHEMA IF NOT EXISTS `db_inventario` default CHARACTER SET utf8 ;
 USE `db_inventario`;
 
-GRANT ALL PRIVILEGES ON `db_inventario`.* TO 'uteg'@'localhost' IDENTIFIED BY 'Utegadmin2016*';
+-- GRANT ALL PRIVILEGES ON `db_inventario`.* TO 'uteg'@'localhost' IDENTIFIED BY 'Utegadmin2016*';
 
 
 -- --------------------------------------------------------

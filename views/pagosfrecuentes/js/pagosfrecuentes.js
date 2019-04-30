@@ -356,7 +356,17 @@ $(document).ready(function () {
         dataItems = obtDataList();
         representarItems(dataItems);
     });
+    $('#btnpagofrecuentes').click(function () {
+        guardarPagos();
+    });
 });
+function guardarPagos() {
+    var link = $('#txth_base').val() + "/pagosfrecuentes/savepayment";
+    var arrParams = new Object();    
+    requestHttpAjax(link, arrParams, function (response) {
+        showAlert("OK", "success", response.message);
+    });
+}
 function guardarItem() {
     var unidad_id = $('#cmb_unidad_solicitud').val();
     var unidad_txt = $('#cmb_unidad_solicitud option:selected').html();
@@ -393,38 +403,34 @@ function representarItems(dataItems) {
             "<table class='table table-striped table-bordered dataTable'>" +
             "<tbody>" +
             "  <tr><th>Unidad Academica</th> <th>Modalidad</th> <th>Item</th> <th>Precio</th></tr>";
-    var total =0;
+    var total = 0;
     for (i = 0; i < dataItems.length; i++) {
         html += "<tr><td>" + dataItems[i]['unidad'] + "</td> <td>" + dataItems[i]['modalidad'] + "</td> <td>" + dataItems[i]['item'] + "</td> <td>$" + dataItems[i]['precio'] + "</td><td><button type='button' class='btn btn-link' onclick='eliminaritem(" + dataItems[i]['item_id'] + ")'> <span class='glyphicon glyphicon-remove'></span> </button></td></tr>";
-        total= total + parseInt(dataItems[i]['precio'], 10);
+        total = total + parseInt(dataItems[i]['precio'], 10);
     }
-    html += "<tr height='40'><th>Total</th><th></th><th></th><th>$"+total+"</th><th></th></tr>";
+    html += "<tr height='40'><th>Total</th><th></th><th></th><th>$" + total + "</th><th></th></tr>";
     html += "</tbody>";
     html += "    </table>" + "</div>";
     $("#dataListItem").html(html);
 }
 function eliminaritem(indice) {
     var tmp = JSON.parse(sessionStorage.getItem('datosItem'));
-    var newArr=[];
-    console.log(tmp.length);
-    for (it=0;it<parseInt(tmp.length);it++){
-        alert("item current: "+tmp[it].item_id);
-        alert("item delete: "+indice);
-        if(parseInt(tmp[it].item_id) !== parseInt(indice)){
+    var newArr = [];
+    for (it = 0; it < parseInt(tmp.length); it++) {
+        if (parseInt(tmp[it].item_id) !== parseInt(indice)) {
             newArr.push(tmp[it]);
-        }            
+        }
     }
     sessionStorage.setItem('datosItem', JSON.stringify(newArr));
-    alert("posterior:"+sessionStorage.getItem('datosItem'));
     representarItems(obtDataList());
 }
 function sleep(milliseconds) {
-  var start = new Date().getTime();
-  for (var i = 0; i < 1e7; i++) {
-    if ((new Date().getTime() - start) > milliseconds){
-      break;
+    var start = new Date().getTime();
+    for (var i = 0; i < 1e7; i++) {
+        if ((new Date().getTime() - start) > milliseconds) {
+            break;
+        }
     }
-  }
 }
 function PagoDinners(solicitud) {
     var link = $('#txth_base').val() + "/pagosfrecuentes/savepagodinner";
