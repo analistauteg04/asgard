@@ -48,7 +48,7 @@ class PagosfrecuentesController extends \yii\web\Controller {
         $mod_persona = Persona::findIdentity($per_id);
         $mod_modalidad = new Modalidad();
         $mod_pergestion = new PersonaGestion();
-        $mod_solins= new SolicitudInscripcion();
+        $mod_solins = new SolicitudInscripcion();
         $modItemMetNivel = new ItemMetodoUnidad();
         $mod_unidad = new UnidadAcademica();
         $modcanal = new Oportunidad();
@@ -96,10 +96,10 @@ class PagosfrecuentesController extends \yii\web\Controller {
                 $message = array("items" => $resItem);
                 return Utilities::ajaxResponse('OK', 'alert', Yii::t('jslang', 'Success'), 'false', $message);
             }
-            if (isset($data["getprecio"])) {                                
-                $resp_precio = $mod_solins->ObtenerPrecioXitem($data["ite_id"]);                  
+            if (isset($data["getprecio"])) {
+                $resp_precio = $mod_solins->ObtenerPrecioXitem($data["ite_id"]);
                 $message = array("precio" => $resp_precio["precio"]);
-                return Utilities::ajaxResponse('OK', 'alert', Yii::t('jslang', 'Success'), 'false', $message);                
+                return Utilities::ajaxResponse('OK', 'alert', Yii::t('jslang', 'Success'), 'false', $message);
             }
         }
         $arr_pais_dom = Pais::find()->select("pai_id AS id, pai_nombre AS value")->where(["pai_estado_logico" => "1", "pai_estado" => "1"])->asArray()->all();
@@ -133,6 +133,25 @@ class PagosfrecuentesController extends \yii\web\Controller {
                     "resp_datos" => $resp_datos,
         ]);
     }
+
+    public function actionSavepayment() {
+        if (Yii::$app->request->isAjax) {
+            $con1 = \Yii::$app->db_facturacion;
+            $transaction = $con1->beginTransaction();
+            try {
+                
+                $transaction->commit();                
+            } catch (Exception $ex) {
+                $transaction->rollBack();
+            }
+            $message = array(
+                "wtmessage" => "ha entrado al servidor",
+                "title" => "Informacion",
+            );
+            return Utilities::ajaxResponse('OK', 'alert', Yii::t('jslang', 'Ok'), 'true', $message);
+        }
+    }
+
     public function actionSavepagodinner() {
         if (Yii::$app->request->isAjax) {
             $data = Yii::$app->request->post();
