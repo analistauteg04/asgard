@@ -185,23 +185,24 @@ class RegistroMarcacion extends \yii\db\ActiveRecord {
         $estado = 1;
         $fecha_registro = "%" . $fecha . "%";
         $sql = "
-                    SELECT
-                        count(*) as marcacion
+                    SELECT count(*) as marcacion
                     FROM 
                         " . $con->dbname . ".registro_marcacion rem                    
                     WHERE
                         rem.hape_id= :hape_id AND
                         rem.pro_id= :profesor AND
-                        rem.rmar_fecha_creacion like :fecha AND  
+                        date_format(rem.rmar_fecha_creacion, '%Y-%m-%d') = :fecha AND
                         rem.rmar_tipo = :rmar_tipo AND
                         rem.rmar_estado = :estado AND
                         rem.rmar_estado_logico = :estado";
+        
         $comando = $con->createCommand($sql);
         $comando->bindParam(":estado", $estado, \PDO::PARAM_STR);
         $comando->bindParam(":hape_id", $hape_id, \PDO::PARAM_INT);
         $comando->bindParam(":profesor", $profesor, \PDO::PARAM_INT);
-        $comando->bindParam(":fecha", $fecha_registro, \PDO::PARAM_STR);
-        $comando->bindParam(":rmar_tipo", $rmar_tipo, \PDO::PARAM_STR);
+        $comando->bindParam(":fecha", $fecha, \PDO::PARAM_STR);
+        $comando->bindParam(":rmar_tipo", $rmar_tipo, \PDO::PARAM_STR);               
+        
         $resultData = $comando->queryOne();
         return $resultData;
     }
@@ -430,7 +431,7 @@ class RegistroMarcacion extends \yii\db\ActiveRecord {
                         " . $con->dbname . ".horario_asignatura_periodo hap
                         INNER JOIN " . $con->dbname . ".profesor prof ON prof.pro_id = hap.pro_id    
                     WHERE
-                        hap.hape_fecha_clase = :fecha AND
+                        date_format(hap.hape_fecha_clase, '%Y-%m-%d') = :fecha AND
                         prof.per_id = :per_id AND
                         ((hap.uaca_id = 1 && hap.mod_id = 4) OR  (hap.uaca_id = 2) OR (hap.uaca_id = 1 && hap.mod_id = 1)) AND
                         hap.hape_estado = :estado AND
@@ -438,7 +439,7 @@ class RegistroMarcacion extends \yii\db\ActiveRecord {
                         prof.pro_estado = :estado AND
                         prof.pro_estado_logico = :estado";
         $comando = $con->createCommand($sql);
-        $comando->bindParam(":fecha", $fecha_registro, \PDO::PARAM_STR);
+        $comando->bindParam(":fecha", $hape_fecha_clase, \PDO::PARAM_STR);
         $comando->bindParam(":per_id", $per_id, \PDO::PARAM_INT);
         $comando->bindParam(":estado", $estado, \PDO::PARAM_STR);
 
