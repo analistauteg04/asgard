@@ -86,15 +86,15 @@ class MarcacionController extends \app\components\CController {
             try {
                 $mod_marcacion = new RegistroMarcacion();
                 // consultar si no ha guardado ya el registro de esta marcacion
-                if (!empty($hape_id) && !empty($profesor) && !empty($horario) && !empty($dia) && !empty($fecha) && !empty($accion)) {
-                    $cons_marcacion = $mod_marcacion->consultarMarcacionExiste($hape_id, $profesor, $fecha, $accion);
+                if (!empty($hape_id) && !empty($profesor) && !empty($horario) && !empty($dia) && !empty($fecha) && !empty($accion)) {                    
+                    $cons_marcacion = $mod_marcacion->consultarMarcacionExiste($hape_id, $profesor, $fecha, $accion);                    
                     if ($cons_marcacion["marcacion"] > 0) {
-                        $busqueda = 1;
+                        $busqueda = 1;                        
                     }
-                }
-                if ($busqueda == 0) {
+                }                
+                if ($busqueda == 0) {                    
                     //Guardar Marcacion (iniciar (E) o finalizar (S)). 
-                    if ($accion == 'E') {
+                    if ($accion == 'E') {                        
                         $hora = explode("-", $horario);
                         $hora_inicio = date(Yii::$app->params["dateTimeByDefault"]);
                         $real_inicia = date(Yii::$app->params["dateByDefault"]) . ' ' . $hora[0];
@@ -107,7 +107,7 @@ class MarcacionController extends \app\components\CController {
                         if (new DateTime($hora_inicio) < new DateTime($real_inicia)) {
                             $minutosfinales = $minutosfinales * -1;
                         }
-                        if ($minutosfinales >= -30 && new DateTime($hora_inicio) < new DateTime($hora_fin)) { //SOLO PUEDE MARCAR 30 MINUTOS ANTES DEL INICIO Y UN 1 MINUTO ANTES DEL FINAL
+                        if ($minutosfinales >= -30 && new DateTime($hora_inicio) < new DateTime($hora_fin)) { //SOLO PUEDE MARCAR 30 MINUTOS ANTES DEL INICIO Y UN 1 MINUTO ANTES DEL FINAL                            
                             $resp_marca = $mod_marcacion->insertarMarcacion($accion, $profesor, $hape_id, $hora_inicio, null, $ip, $usuario, null);
                             if ($resp_marca) {
                                 if ($minutosfinales >= 15) { // AL MARCAR 15 MINUTOS DESPUES ENVIA MENSAJE
@@ -142,7 +142,7 @@ class MarcacionController extends \app\components\CController {
                                 $exito = 1;
                             } else {
                                 $exito = 0;
-                                $mensaje = ' No puede finalizar la clase si no a iniciado la marcación';
+                                $mensaje = ' No puede finalizar la clase si no ha iniciado la marcación';
                             }
                         } else {
                             $exito = 0;
