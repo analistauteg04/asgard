@@ -86,19 +86,21 @@ class Documento extends \yii\db\ActiveRecord
         return $this->hasMany(DetalleDocumento::className(), ['doc_id' => 'doc_id']);
     }
     
-    public function insertDocumento($con,$idsbp) {  
+    public function insertDocumento($con,$tdoc_id,$nombres,$direccion,$telefono,$correo,$valor,$usuario) {  
         $estado = 1;        
         $sql = "INSERT INTO " . $con->dbname . ".solicitud_boton_pago
-            (sbpa_id, ite_id, dsbp_cantidad, dsbp_precio, dsbp_valor_total, dsbp_estado, dsbp_estado_logico) VALUES
-            (:idsbp,:ite_id,:cantidad,:dsbp_precio,:dsbp_valor_total:sbpa_estado,sbpa_estado)";
-        
+            (tdoc_id, doc_nombres_cliente, doc_direccion, doc_telefono, doc_correo, doc_valor, doc_usuario_transaccion,doc_estado,doc_estado_logico) VALUES
+            (:tdoc_id,:doc_nombres_cliente,:doc_direccion,:doc_telefono,:doc_correo,:doc_valor,:doc_usuario_transaccion,:doc_estado,:doc_estado)";
+                        
         $command = $con->createCommand($sql);        
-        $command->bindParam(":idsbp", $idsbp, \PDO::PARAM_INT);
-        $command->bindParam(":ite_id", $item_ids, \PDO::PARAM_INT);
-        $command->bindParam(":cantidad", $cantidad, \PDO::PARAM_INT);
-        $command->bindParam(":dsbp_precio", $item_precio, \PDO::PARAM_INT);
-        $command->bindParam(":dsbp_valor_total", $total, \PDO::PARAM_INT);
-        $command->bindParam(":dsbp_estado", $estado, \PDO::PARAM_STR);        
+        $command->bindParam(":tdoc_id", $tdoc_id, \PDO::PARAM_INT);
+        $command->bindParam(":doc_nombres_cliente", $nombres, \PDO::PARAM_STR);
+        $command->bindParam(":doc_direccion", $direccion, \PDO::PARAM_STR);
+        $command->bindParam(":doc_telefono", $telefono, \PDO::PARAM_STR);
+        $command->bindParam(":doc_correo", $correo, \PDO::PARAM_STR);
+        $command->bindParam(":doc_valor", $valor, \PDO::PARAM_INT);        
+        $command->bindParam(":doc_usuario_transaccion", $usuario, \PDO::PARAM_STR);    
+        $command->bindParam(":doc_estado", $estado, \PDO::PARAM_STR);    
         $command->execute();
         return $con->getLastInsertID();        
     }

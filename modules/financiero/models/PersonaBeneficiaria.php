@@ -104,7 +104,7 @@ class PersonaBeneficiaria extends \yii\db\ActiveRecord
         $estado = 1;
         $sql = "INSERT INTO " . $con->dbname . ".persona_beneficiaria
             (pben_nombre,pben_apellido,pben_cedula,pben_ruc,pben_pasaporte,pben_celular,pben_correo,pben_estado,pben_estado_logico) VALUES
-            (:pben_nombre,:pben_apellido,:pben_cedula,:pben_ruc,:pben_pasaporte,:pben_celular,:pben_correo,:pben_estado,pben_estado)";
+            (:pben_nombre,:pben_apellido,:pben_cedula,:pben_ruc,:pben_pasaporte,:pben_celular,:pben_correo,:pben_estado,:pben_estado)";
         
         $command = $con->createCommand($sql);
         $command->bindParam(":pben_nombre", $nombre, \PDO::PARAM_STR);
