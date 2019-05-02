@@ -88,4 +88,8 @@ aspirante::registerTranslations();
         <a id="paso3back" href="javascript:" class="btn btn-primary btn-block"><span class="glyphicon glyphicon-menu-left"></span><?= Yii::t("formulario", "Back") ?> </a>
     </div>
     <div class="col-md-8"></div>    
+    <div class="col-lg-8 col-md-8 col-sm-8 col-xs-8"> &nbsp;</div>
+    <div class="col-md-2">
+        <a id="paso2next" href="javascript:" class="btn btn-primary btn-block"> <?= Yii::t("formulario", "Pay") ?> <span class="glyphicon glyphicon-menu-right"></span></a>
+    </div>
 </div>

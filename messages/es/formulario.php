@@ -431,6 +431,7 @@ return [
     "Parish" => "Parroquia",
     "Participation" => "Participación",
     "Passport" => "Pasaporte",
+    "Pay" => "Pagar",
     "Payment" => "Pago",
     "Payments" => "Pagos",
     "Payments charged by Student" => "Pagos Cargados por Estudiante",

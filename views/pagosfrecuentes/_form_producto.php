@@ -54,6 +54,14 @@ financiero::registerTranslations();
     </div>
     <div class="col-lg-6 col-md-6 col-sm-6 col-xs-6">
         <div class="form-group">
+            <label for="txt_cantidad_item" class="col-lg-4 col-md-4 col-sm-4 col-xs-4 control-label" id="lbl_nombre1"><?= financiero::t("Pagos", "Amount") ?></label>
+            <div class="col-lg-8 col-md-8 col-sm-8 col-xs-8">
+                <input type="text" class="form-control keyupmce" value="" id="txt_cantidad_item" data-type="alfa" align="rigth" disabled="true" placeholder="<?= financiero::t("Pagos", "Amount") ?>">
+            </div>
+        </div>
+    </div>
+    <div class="col-lg-6 col-md-6 col-sm-6 col-xs-6">
+        <div class="form-group">
             <label for="txt_precio_item" class="col-lg-4 col-md-4 col-sm-4 col-xs-4 control-label" id="lbl_nombre1"><?= financiero::t("Pagos", "Price") ?></label>
             <div class="col-lg-8 col-md-8 col-sm-8 col-xs-8">
                 <input type="text" class="form-control keyupmce" value="<?php echo $txt_precio ?>" id="txt_precio_item" data-type="alfa" align="rigth" disabled="true" placeholder="<?= financiero::t("Pagos", "Price") ?>">

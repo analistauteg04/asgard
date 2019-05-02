@@ -142,7 +142,7 @@ class PagosfrecuentesController extends \yii\web\Controller {
 
     public function actionSavepayment() {
         if (Yii::$app->request->isAjax) {
-            $con1 = \Yii::$app->db_facturacion;
+            $con1 = \Yii::$app->db_facturacion;            
             $transaction = $con1->beginTransaction();
             $pben_model = new PersonaBeneficiaria();
             $sbp_model = new SolicitudBotonPago();
@@ -168,12 +168,17 @@ class PagosfrecuentesController extends \yii\web\Controller {
                         }
                         $iddoc=$doc_model->insertDocumento($idsbp);
                         if($iddoc>0){
-                            $mensaje = $mensaje."";
+                            $mensaje = $mensaje."Se ha guardado exitosamente su solicitud de Pago.";
                         }else{
-                            $mensaje = $mensaje."";
+                            $mensaje = $mensaje. "No se ha guardado el documento de factura";
                         }
+                    }else{
+                        $mensaje = $mensaje. "No se ha guardado la solicitud del boton";
                     }
+                }else{
+                    $mensaje = $mensaje. "No se ha guardado el beneficiario";
                 }
+                
                 $transaction->commit();                
             } catch (Exception $ex) {
                 $transaction->rollBack();
