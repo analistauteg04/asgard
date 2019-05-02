@@ -359,10 +359,62 @@ $(document).ready(function () {
     $('#btnpagofrecuentes').click(function () {
         guardarPagos();
     });
+
+    /* DESPLAZAR TAB */
+    // Tabs View
+    $('#paso1nextView').click(function () {
+        $("a[href='#paso2']").trigger("click");
+    });
+    $('#paso2backView').click(function () {
+        $("a[href='#paso1']").trigger("click");
+    });
+    $('#paso2nextView').click(function () {
+        $("a[href='#paso3']").trigger("click");
+    });
+    $('#paso3backView').click(function () {
+        $("a[href='#paso2']").trigger("click");
+    });    
+    // tabs create
+    $('#paso1next').click(function () {
+        $("a[data-href='#paso1']").attr('data-toggle', 'none');
+        $("a[data-href='#paso1']").parent().attr('class', 'disabled');
+        $("a[data-href='#paso1']").attr('data-href', $("a[href='#paso1']").attr('href'));
+        $("a[data-href='#paso1']").removeAttr('href');
+        $("a[data-href='#paso2']").attr('data-toggle', 'tab');
+        $("a[data-href='#paso2']").attr('href', $("a[data-href='#paso2']").attr('data-href'));
+        $("a[data-href='#paso2']").trigger("click");
+    });
+    $('#paso2back').click(function () {
+        $("a[data-href='#paso2']").attr('data-toggle', 'none');
+        $("a[data-href='#paso2']").parent().attr('class', 'disabled');
+        $("a[data-href='#paso2']").attr('data-href', $("a[href='#paso2']").attr('href'));
+        $("a[data-href='#paso2']").removeAttr('href');
+        $("a[data-href='#paso1']").attr('data-toggle', 'tab');
+        $("a[data-href='#paso1']").attr('href', $("a[data-href='#paso1']").attr('data-href'));
+        $("a[data-href='#paso1']").trigger("click");
+    });
+    $('#paso2next').click(function () {
+        $("a[data-href='#paso2']").attr('data-toggle', 'none');
+        $("a[data-href='#paso2']").parent().attr('class', 'disabled');
+        $("a[data-href='#paso2']").attr('data-href', $("a[href='#paso2']").attr('href'));
+        $("a[data-href='#paso2']").removeAttr('href');
+        $("a[data-href='#paso3']").attr('data-toggle', 'tab');
+        $("a[data-href='#paso3']").attr('href', $("a[data-href='#paso3']").attr('data-href'));
+        $("a[data-href='#paso3']").trigger("click");
+    });
+    $('#paso3back').click(function () {
+        $("a[data-href='#paso3']").attr('data-toggle', 'none');
+        $("a[data-href='#paso3']").parent().attr('class', 'disabled');
+        $("a[data-href='#paso3']").attr('data-href', $("a[href='#paso3']").attr('href'));
+        $("a[data-href='#paso3']").removeAttr('href');
+        $("a[data-href='#paso2']").attr('data-toggle', 'tab');
+        $("a[data-href='#paso2']").attr('href', $("a[data-href='#paso2']").attr('data-href'));
+        $("a[data-href='#paso2']").trigger("click");
+    });    
 });
 function guardarPagos() {
-    var link = $('#txth_base').val() + "/pagosfrecuentes/savepayment";    
-    var arrParams = new Object();    
+    var link = $('#txth_base').val() + "/pagosfrecuentes/savepayment";
+    var arrParams = new Object();
     arrParams.nombre = $('#txt_primer_nombre').val();
     arrParams.apellido = $('#txt_primer_apellido').val();
     arrParams.pasaporte = $('#txt_pasaporte').val();
@@ -375,18 +427,18 @@ function guardarPagos() {
     arrParams.dir_fac = $('#txt_dir_fac').val();
     arrParams.telfono_fac = $('#txt_tel_fac').val();
     arrParams.tipo_dni_fac = $("input[name='opt_tipo_DNI']:checked").val();
-    arrParams.dni_fac = $('#txt_dni_fac').val();    
+    arrParams.dni_fac = $('#txt_dni_fac').val();
     requestHttpAjax(link, arrParams, function (response) {
         showAlert("OK", "success", response.message);
     });
 }
-function getItemsIds(){
+function getItemsIds() {
     var newList = [];
     var lstcurrent = obtDataList();
-    for (i = 0; i < lstcurrent.length; i++) { 
+    for (i = 0; i < lstcurrent.length; i++) {
         newList.push(lstcurrent[i]['item_id']);
-    }    
-    return JSON.stringify(newList);    
+    }
+    return JSON.stringify(newList);
 }
 function guardarItem() {
     var unidad_id = $('#cmb_unidad_solicitud').val();
@@ -396,7 +448,7 @@ function guardarItem() {
     var item_id = $('#cmb_item').val();
     var txt_item = $('#cmb_item option:selected').html();
     var txt_precio = $('#txt_precio_item').val();
-    var datalist = obtDataList();    
+    var datalist = obtDataList();
     var dataitem = {
         item_id: item_id,
         unidad_id: unidad_id,
@@ -406,22 +458,22 @@ function guardarItem() {
         item: txt_item,
         precio: txt_precio
     }
-    if(!existeitem(item_id)){
-        datalist.push(dataitem);    
+    if (!existeitem(item_id)) {
+        datalist.push(dataitem);
         sessionStorage.setItem('datosItem', JSON.stringify(datalist));
-    }else{
+    } else {
         var mensaje = {wtmessage: "El item ya se encuentra ingresado.", title: "Exito"};
-        showAlert("OK", "success", mensaje);   
-    }    
+        showAlert("OK", "success", mensaje);
+    }
 }
-function existeitem(item_id){
-   var lstcurrent = obtDataList();
-   for (i = 0; i < lstcurrent.length; i++) { 
-       if(lstcurrent[i]['item_id']==item_id){
-           return true;
-       }
-   }    
-   return false;
+function existeitem(item_id) {
+    var lstcurrent = obtDataList();
+    for (i = 0; i < lstcurrent.length; i++) {
+        if (lstcurrent[i]['item_id'] == item_id) {
+            return true;
+        }
+    }
+    return false;
 }
 function obtDataList() {
     var storedListItems = sessionStorage.getItem('datosItem');
