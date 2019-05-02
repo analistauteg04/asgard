@@ -470,7 +470,7 @@ return [
     "Process State" => "Estado Proceso",
     "Processing" => "Procesando",
     "Profession" => "Profesión",
-    "Product Selection" => "Selección Producto",
+    "Product Selection" => "Seleccionar Producto",
     "Project Content" => "Contenido Proyecto",
     "Project Data" => "Datos Proyecto",
     "Project Description" => "Descripción Proyecto",
