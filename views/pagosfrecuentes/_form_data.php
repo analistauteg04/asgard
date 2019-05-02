@@ -16,9 +16,6 @@ financiero::registerTranslations();
     <h3><span id="lbl_Personeria"><?= Yii::t("formulario", "Beneficiary data") ?></span></h3>
 </div>
 <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
-    <p class="text-danger"> <?= Yii::t("formulario", "Fields with * are required") ?> </p>        
-</div>
-<div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
     <div class="col-md-6 col-sm-6 col-xs-6 col-lg-6">
         <div class="form-group">
             <label for="txt_primer_nombre" class="col-lg-4 col-md-4 col-sm-4 col-xs-4 control-label"><?= Yii::t("formulario", "Name") ?> <span class="text-danger">*</span></label>

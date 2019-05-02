@@ -20,9 +20,6 @@ aspirante::registerTranslations();
 <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
     <h3><span id="lbl_Personeria"><?= Yii::t("formulario", "Data Invoices") ?></span></h3>
 </div>
-<div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
-    <p class="text-danger"> <?= Yii::t("formulario", "Fields with * are required") ?> </p>        
-</div>
 <div class="col-md-12 col-xs-12 col-sm-12 col-lg-12">
     <div class="col-md-7 col-sm-7 col-xs-7 col-lg-7">
         <div class="form-group">
