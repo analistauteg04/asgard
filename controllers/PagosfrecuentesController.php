@@ -147,15 +147,28 @@ class PagosfrecuentesController extends \yii\web\Controller {
             $sbp_model = new SolicitudBotonPago();
             $dsbp_model = new DetalleSolicitudBotonPago();
             $doc_model = new Documento();            
+            $item_ids=array();
+            $mensaje = "";
             try {                    
-                $id_pben=$pben_model->getIdPerBenByCed();
+                $id_pben=$pben_model->getIdPerBenByCed($con1);
                 if($id_pben<=0){
-                    $id_pben=$pben_model->insertPersonaBeneficia();                
+                    $id_pben=$pben_model->insertPersonaBeneficia($con1);                
                 }
                 if($id_pben>0){
-                    $idsbp=$sbp_model->insertSolicitudBotonPago();
+                    $idsbp=$sbp_model->insertSolicitudBotonPago($con1);
                     if($idsbp>0){
-                        
+                        for($i=0; $i< count($item_ids); $i++){
+                            $id_dsbp=$dsbp_model->insertarDetSolBotPag();
+                            if($id_dsbp>0){
+                                $mensaje = $mensaje."";
+                            }
+                        }
+                        $iddoc=$doc_model->insertDocumento($idsbp);
+                        if($iddoc>0){
+                            $mensaje = $mensaje."";
+                        }else{
+                            
+                        }
                     }
                 }
                 $transaction->commit();                
