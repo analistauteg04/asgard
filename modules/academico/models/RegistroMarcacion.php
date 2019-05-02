@@ -100,9 +100,9 @@ class RegistroMarcacion extends \yii\db\ActiveRecord {
     public function consultarMateriasMarcabyPro($per_id, $dia, $hape_fecha_clase, $onlyData = false) {
         $con = \Yii::$app->db_academico;
         if (!empty($hape_fecha_clase)) {
-            $filtro = "hap.hape_fecha_clase = :hape_fecha_clase AND ";
+            $filtro = "(DATE_FORMAT(hap.hape_fecha_clase,'%Y-%m-%d') = :hape_fecha_clase or hap.hape_fecha_clase is null) AND ";
         } else {
-            $filtro = "hap.hape_fecha_clase is null AND paca_fecha_fin > now() AND paca_fecha_inicio <= now() AND ";
+            $filtro = "DATE_FORMAT(hap.hape_fecha_clase,'%Y-%m-%d') is null AND paca_fecha_fin > now() AND paca_fecha_inicio <= now() AND ";
         }
 
         $estado = 1;
@@ -153,7 +153,7 @@ class RegistroMarcacion extends \yii\db\ActiveRecord {
         // si parametro de fecha es !empty entonces se crea parametro $fecha
         //if (!empty($hape_fecha_clase)) {
         $fecha_registro = $hape_fecha_clase . ' 00:00:00';
-        $comando->bindParam(':hape_fecha_clase', $fecha_registro, \PDO::PARAM_STR);
+        $comando->bindParam(':hape_fecha_clase', $hape_fecha_clase, \PDO::PARAM_STR); //antes estaba $fecha_registro
         //}
         $resultData = $comando->queryAll();
         $dataProvider = new ArrayDataProvider([
@@ -337,7 +337,7 @@ class RegistroMarcacion extends \yii\db\ActiveRecord {
             $grupoperi = ',periodo';
         }
         $sql = "
-               SELECT
+               SELECTx
                     CONCAT(ifnull(per.per_pri_nombre,' '), ' ', ifnull(per.per_pri_apellido,' ')) as nombres,
                     asig.asi_nombre as materia,
                     DATE_FORMAT(rma.rmar_fecha_creacion, '%Y-%m-%d') as fecha,
@@ -431,7 +431,7 @@ class RegistroMarcacion extends \yii\db\ActiveRecord {
                         " . $con->dbname . ".horario_asignatura_periodo hap
                         INNER JOIN " . $con->dbname . ".profesor prof ON prof.pro_id = hap.pro_id    
                     WHERE
-                        date_format(hap.hape_fecha_clase, '%Y-%m-%d') = :fecha AND
+                        date_format(hap.hape_fecha_clase, '%Y-%m-%d') = date_format(:fecha,'%Y-%m-%d') AND
                         prof.per_id = :per_id AND
                         ((hap.uaca_id = 1 && hap.mod_id = 4) OR  (hap.uaca_id = 2) OR (hap.uaca_id = 1 && hap.mod_id = 1)) AND
                         hap.hape_estado = :estado AND

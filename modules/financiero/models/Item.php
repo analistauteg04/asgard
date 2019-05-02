@@ -171,4 +171,22 @@ class Item extends \yii\db\ActiveRecord
         ]);
         return $dataProvider;
     }
+    
+    
+    public function getPrecios($con, $ite_id) {
+        $estado = 1;
+        $sql= "select ipre_precio 
+               from ". $con->db_name . ".item_precio 
+               where ite_id = :ite_id
+               and ipre_estado_precio = 'A'
+               and ipre_estado = :estado
+               and ipre_estado_logico = :estado";
+                    
+        $comando = $con->createCommand($sql);
+        $comando->bindParam(":estado", $estado, \PDO::PARAM_STR);
+        $comando->bindParam(":ite_id", $ite_id, \PDO::PARAM_INT);
+        
+        $resultData = $comando->queryOne();
+        return $resultData;
+    }
 }

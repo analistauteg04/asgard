@@ -90,4 +90,19 @@ class SolicitudBotonPago extends \yii\db\ActiveRecord
     {
         return $this->hasOne(PersonaBeneficiaria::className(), ['pben_id' => 'pben_id']);
     }
+    
+    public function insertSolicitudBotonPago($con,$id_pben) {  
+        $estado = 1;
+        $fecha_solicitud = date(Yii::$app->params["dateTimeByDefault"]);
+        $sql = "INSERT INTO " . $con->dbname . ".solicitud_boton_pago
+            (pben_id, sbpa_fecha_solicitud, sbpa_estado, sbpa_estado_logico) VALUES
+            (:id_pben,:fecha_solicitud,:sbpa_estado,sbpa_estado)";
+        
+        $command = $con->createCommand($sql);        
+        $command->bindParam(":id_pben", $id_pben, \PDO::PARAM_INT);
+        $command->bindParam(":fecha_solicitud", $fecha_solicitud, \PDO::PARAM_STR);
+        $command->bindParam(":sbpa_estado", $estado, \PDO::PARAM_STR);        
+        $command->execute();
+        return $con->getLastInsertID();        
+    }
 }

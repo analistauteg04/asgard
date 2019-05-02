@@ -91,4 +91,22 @@ class DetalleSolicitudBotonPago extends \yii\db\ActiveRecord
     {
         return $this->hasOne(Item::className(), ['ite_id' => 'ite_id']);
     }
+    
+    public function insertarDetSolBotPag($con,$idsbp,$item_ids,$cantidad,$item_precio) {  
+        $estado = 1;
+        $total = $cantidad*$item_precio;
+        $sql = "INSERT INTO " . $con->dbname . ".solicitud_boton_pago
+            (sbpa_id, ite_id, dsbp_cantidad, dsbp_precio, dsbp_valor_total, dsbp_estado, dsbp_estado_logico) VALUES
+            (:idsbp,:ite_id,:cantidad,:dsbp_precio,:dsbp_valor_total:sbpa_estado,sbpa_estado)";
+        
+        $command = $con->createCommand($sql);        
+        $command->bindParam(":idsbp", $idsbp, \PDO::PARAM_INT);
+        $command->bindParam(":ite_id", $item_ids, \PDO::PARAM_INT);
+        $command->bindParam(":cantidad", $cantidad, \PDO::PARAM_INT);
+        $command->bindParam(":dsbp_precio", $item_precio, \PDO::PARAM_INT);
+        $command->bindParam(":dsbp_valor_total", $total, \PDO::PARAM_INT);
+        $command->bindParam(":dsbp_estado", $estado, \PDO::PARAM_STR);        
+        $command->execute();
+        return $con->getLastInsertID();        
+    }
 }
