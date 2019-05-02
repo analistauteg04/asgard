@@ -18,6 +18,11 @@ use yii\base\Security;
 use app\models\UsuaGrolEper;
 use app\models\Provincia;
 use app\modules\financiero\models\OrdenPago;
+use app\modules\financiero\models\PersonaBeneficiaria;
+use app\modules\financiero\models\SolicitudBotonPago;
+use app\modules\financiero\models\DetalleSolicitudBotonPago;
+use app\modules\financiero\models\Documento;
+use app\modules\financiero\models\TipoDocumento;
 use app\modules\financiero\models\DetalleDescuentoItem;
 use app\models\Canton;
 use app\models\MedioPublicitario;
@@ -138,6 +143,10 @@ class PagosfrecuentesController extends \yii\web\Controller {
         if (Yii::$app->request->isAjax) {
             $con1 = \Yii::$app->db_facturacion;
             $transaction = $con1->beginTransaction();
+            $pben_model = new PersonaBeneficiaria();
+            $sbp_model = new SolicitudBotonPago();
+            $dsbp_model = new DetalleSolicitudBotonPago();
+            $doc_model = new Documento();            
             try {
                 
                 $transaction->commit();                

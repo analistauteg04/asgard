@@ -353,7 +353,7 @@ $(document).ready(function () {
     });
     $('#btn_AgregarItem').click(function () {
         guardarItem();
-        dataItems = obtDataList();
+        var dataItems = obtDataList();
         representarItems(dataItems);
     });
     $('#btnpagofrecuentes').click(function () {
@@ -361,11 +361,32 @@ $(document).ready(function () {
     });
 });
 function guardarPagos() {
-    var link = $('#txth_base').val() + "/pagosfrecuentes/savepayment";
+    var link = $('#txth_base').val() + "/pagosfrecuentes/savepayment";    
     var arrParams = new Object();    
+    arrParams.nombre = $('#txt_primer_nombre').val();
+    arrParams.apellido = $('#txt_primer_apellido').val();
+    arrParams.pasaporte = $('#txt_pasaporte').val();
+    arrParams.correo = $('#txt_correo').val();
+    arrParams.celular = $('#txt_celular').val();
+    arrParams.pais_id = $('#cmb_pais_dom').val();
+    arrParams.item_ids = getItemsIds();
+    arrParams.nombre_fac = $('#txt_nombres_fac').val();
+    arrParams.apellidos_fac = $('#txt_apellidos_fac').val();
+    arrParams.dir_fac = $('#txt_dir_fac').val();
+    arrParams.telfono_fac = $('#txt_tel_fac').val();
+    arrParams.tipo_dni_fac = $("input[name='opt_tipo_DNI']:checked").val();
+    arrParams.dni_fac = $('#txt_dni_fac').val();    
     requestHttpAjax(link, arrParams, function (response) {
         showAlert("OK", "success", response.message);
     });
+}
+function getItemsIds(){
+    var newList = [];
+    var lstcurrent = obtDataList();
+    for (i = 0; i < lstcurrent.length; i++) { 
+        newList.push(lstcurrent[i]['item_id']);
+    }    
+    return JSON.stringify(newList);    
 }
 function guardarItem() {
     var unidad_id = $('#cmb_unidad_solicitud').val();
@@ -375,7 +396,7 @@ function guardarItem() {
     var item_id = $('#cmb_item').val();
     var txt_item = $('#cmb_item option:selected').html();
     var txt_precio = $('#txt_precio_item').val();
-    var datalist = obtDataList();
+    var datalist = obtDataList();    
     var dataitem = {
         item_id: item_id,
         unidad_id: unidad_id,
@@ -385,8 +406,22 @@ function guardarItem() {
         item: txt_item,
         precio: txt_precio
     }
-    datalist.push(dataitem);
-    sessionStorage.setItem('datosItem', JSON.stringify(datalist));
+    if(!existeitem(item_id)){
+        datalist.push(dataitem);    
+        sessionStorage.setItem('datosItem', JSON.stringify(datalist));
+    }else{
+        var mensaje = {wtmessage: "El item ya se encuentra ingresado.", title: "Exito"};
+        showAlert("OK", "success", mensaje);   
+    }    
+}
+function existeitem(item_id){
+   var lstcurrent = obtDataList();
+   for (i = 0; i < lstcurrent.length; i++) { 
+       if(lstcurrent[i]['item_id']==item_id){
+           return true;
+       }
+   }    
+   return false;
 }
 function obtDataList() {
     var storedListItems = sessionStorage.getItem('datosItem');
