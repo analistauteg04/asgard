@@ -54,7 +54,9 @@ class PersonaBeneficiaria extends \yii\db\ActiveRecord
             [['pben_estado', 'pben_estado_logico'], 'string', 'max' => 1],
         ];
     }
-
+    public function insertPersonaBeneficia(){
+        
+    }
     /**
      * {@inheritdoc}
      */

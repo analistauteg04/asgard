@@ -147,8 +147,17 @@ class PagosfrecuentesController extends \yii\web\Controller {
             $sbp_model = new SolicitudBotonPago();
             $dsbp_model = new DetalleSolicitudBotonPago();
             $doc_model = new Documento();            
-            try {
-                
+            try {                    
+                $id_pben=$pben_model->getIdPerBenByCed();
+                if($id_pben<=0){
+                    $id_pben=$pben_model->insertPersonaBeneficia();                
+                }
+                if($id_pben>0){
+                    $idsbp=$sbp_model->insertSolicitudBotonPago();
+                    if($idsbp>0){
+                        
+                    }
+                }
                 $transaction->commit();                
             } catch (Exception $ex) {
                 $transaction->rollBack();
