@@ -22,6 +22,7 @@ use app\modules\financiero\models\PersonaBeneficiaria;
 use app\modules\financiero\models\SolicitudBotonPago;
 use app\modules\financiero\models\DetalleSolicitudBotonPago;
 use app\modules\financiero\models\Documento;
+use app\modules\financiero\models\Item;
 use app\modules\financiero\models\TipoDocumento;
 use app\modules\financiero\models\DetalleDescuentoItem;
 use app\models\Canton;
@@ -146,9 +147,33 @@ class PagosfrecuentesController extends \yii\web\Controller {
             $pben_model = new PersonaBeneficiaria();
             $sbp_model = new SolicitudBotonPago();
             $dsbp_model = new DetalleSolicitudBotonPago();
+            $item_model = new Item();
             $doc_model = new Documento();            
-            try {
-                
+            $item_ids=array();
+            $mensaje = "";
+            try {                    
+                $id_pben=$pben_model->getIdPerBenByCed($con1,$cedula);
+                if($id_pben<=0){
+                    $id_pben=$pben_model->insertPersonaBeneficia($con1,$cedula,$nombre,$apellido,$correo,$celular);                
+                }
+                if($id_pben>0){
+                    $idsbp=$sbp_model->insertSolicitudBotonPago($con1,$id_pben);
+                    if($idsbp>0){
+                        for($i=0; $i< count($item_ids); $i++){
+                            $item_precio=$item_model->getPrecios($item_ids[$i]);
+                            $id_dsbp=$dsbp_model->insertarDetSolBotPag($con1,$idsbp,$item_ids[$i],$item_precio);
+                            if($id_dsbp>0){
+                                $mensaje = $mensaje."";
+                            }
+                        }
+                        $iddoc=$doc_model->insertDocumento($idsbp);
+                        if($iddoc>0){
+                            $mensaje = $mensaje."";
+                        }else{
+                            $mensaje = $mensaje."";
+                        }
+                    }
+                }
                 $transaction->commit();                
             } catch (Exception $ex) {
                 $transaction->rollBack();
