@@ -97,7 +97,7 @@ class DetalleSolicitudBotonPago extends \yii\db\ActiveRecord
         $total = $cantidad*$item_precio;
         $sql = "INSERT INTO " . $con->dbname . ".solicitud_boton_pago
             (sbpa_id, ite_id, dsbp_cantidad, dsbp_precio, dsbp_valor_total, dsbp_estado, dsbp_estado_logico) VALUES
-            (:idsbp,:ite_id,:cantidad,:dsbp_precio,:dsbp_valor_total:sbpa_estado,sbpa_estado)";
+            (:idsbp,:ite_id,:cantidad,:dsbp_precio,:dsbp_valor_total:sbpa_estado,:sbpa_estado)";
         
         $command = $con->createCommand($sql);        
         $command->bindParam(":idsbp", $idsbp, \PDO::PARAM_INT);

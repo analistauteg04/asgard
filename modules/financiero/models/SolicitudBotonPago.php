@@ -96,7 +96,7 @@ class SolicitudBotonPago extends \yii\db\ActiveRecord
         $fecha_solicitud = date(Yii::$app->params["dateTimeByDefault"]);
         $sql = "INSERT INTO " . $con->dbname . ".solicitud_boton_pago
             (pben_id, sbpa_fecha_solicitud, sbpa_estado, sbpa_estado_logico) VALUES
-            (:id_pben,:fecha_solicitud,:sbpa_estado,sbpa_estado)";
+            (:id_pben,:fecha_solicitud,:sbpa_estado,:sbpa_estado)";
         
         $command = $con->createCommand($sql);        
         $command->bindParam(":id_pben", $id_pben, \PDO::PARAM_INT);
