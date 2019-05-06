@@ -376,6 +376,7 @@ $(document).ready(function () {
     });    
     // tabs create
     $('#paso1next').click(function () {
+        guardarBenPagoTemp();
         $("a[data-href='#paso1']").attr('data-toggle', 'none');
         $("a[data-href='#paso1']").parent().attr('class', 'disabled');
         $("a[data-href='#paso1']").attr('data-href', $("a[href='#paso1']").attr('href'));
@@ -412,7 +413,24 @@ $(document).ready(function () {
         $("a[data-href='#paso2']").trigger("click");
     });    
 });
-function guardarPagos() {
+function guardarBenPagoTemp(){
+    var dataBen = obtBenData();
+    var arrParams = new Object();
+    arrParams.nombre = $('#txt_primer_nombre').val();
+    arrParams.apellido = $('#txt_primer_apellido').val();
+    arrParams.pasaporte = $('#txt_pasaporte').val();
+    arrParams.correo = $('#txt_correo').val();
+    arrParams.celular = $('#txt_celular').val();
+    arrParams.pais_id = $('#cmb_pais_dom').val();    
+    if (!existeBenData(arrParams)) {
+        dataBen.push(arrParams);
+        sessionStorage.setItem('datosBen', JSON.stringify(dataBen));
+    } else {
+        var mensaje = {wtmessage: "El item ya se encuentra ingresado.", title: "Exito"};
+        showAlert("OK", "success", mensaje);
+    }
+}
+function guardarPagos() {    
     var link = $('#txth_base').val() + "/pagosfrecuentes/savepayment";
     var arrParams = new Object();
     arrParams.nombre = $('#txt_primer_nombre').val();
