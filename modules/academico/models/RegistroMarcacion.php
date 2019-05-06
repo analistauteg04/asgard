@@ -337,7 +337,7 @@ class RegistroMarcacion extends \yii\db\ActiveRecord {
             $grupoperi = ',periodo';
         }
         $sql = "
-               SELECTx
+               SELECT
                     CONCAT(ifnull(per.per_pri_nombre,' '), ' ', ifnull(per.per_pri_apellido,' ')) as nombres,
                     asig.asi_nombre as materia,
                     DATE_FORMAT(rma.rmar_fecha_creacion, '%Y-%m-%d') as fecha,
