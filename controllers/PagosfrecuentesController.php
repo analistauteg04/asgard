@@ -151,13 +151,16 @@ class PagosfrecuentesController extends \yii\web\Controller {
             $doc_model = new Documento();            
             $item_ids=array();
             $mensaje = "";
+            $dataBeneficiario = $data["dataBenList"];
+            $cedula = $dataBeneficiario["cedula"];            
             try {                    
                 $id_pben=$pben_model->getIdPerBenByCed($con1,$cedula);
                 if($id_pben<=0){
-                    $id_pben=$pben_model->insertPersonaBeneficia($con1,$cedula,$nombre,$apellido,$correo,$celular);                
+                    $id_pben=$pben_model->insertPersonaBeneficia($con1,$cedula,$dataBeneficiario["nombre"],$dataBeneficiario["apellido"],
+                                                                $dataBeneficiario["correo"],$dataBeneficiario["celular"]);                
                 }
                 if($id_pben>0){
-                    $idsbp=$sbp_model->insertSolicitudBotonPago($con1,$id_pben);
+                    /*$idsbp=$sbp_model->insertSolicitudBotonPago($con1,$id_pben);
                     if($idsbp>0){
                         for($i=0; $i< count($item_ids); $i++){
                             $item_precio=$item_model->getPrecios($item_ids[$i]);
@@ -174,7 +177,7 @@ class PagosfrecuentesController extends \yii\web\Controller {
                         }
                     }else{
                         $mensaje = $mensaje. "No se ha guardado la solicitud del boton";
-                    }
+                    }*/
                 }else{
                     $mensaje = $mensaje. "No se ha guardado el beneficiario";
                 }
@@ -184,7 +187,7 @@ class PagosfrecuentesController extends \yii\web\Controller {
                 $transaction->rollBack();
             }
             $message = array(
-                "wtmessage" => "ha entrado al servidor",
+                "wtmessage" => "ha entrado al servidor - cedula:".$cedula,
                 "title" => "Informacion",
             );
             return Utilities::ajaxResponse('OK', 'alert', Yii::t('jslang', 'Ok'), 'true', $message);

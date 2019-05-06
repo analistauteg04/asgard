@@ -395,6 +395,8 @@ $(document).ready(function () {
         $("a[data-href='#paso1']").trigger("click");
     });
     $('#paso2next').click(function () {
+        guardarFacturaTemp();
+        guardarPagos();
         $("a[data-href='#paso2']").attr('data-toggle', 'none');
         $("a[data-href='#paso2']").parent().attr('class', 'disabled');
         $("a[data-href='#paso2']").attr('data-href', $("a[href='#paso2']").attr('href'));
@@ -414,38 +416,50 @@ $(document).ready(function () {
     });    
 });
 function guardarBenPagoTemp(){
-    var dataBen = obtBenData();
     var arrParams = new Object();
     arrParams.nombre = $('#txt_primer_nombre').val();
     arrParams.apellido = $('#txt_primer_apellido').val();
     arrParams.pasaporte = $('#txt_pasaporte').val();
     arrParams.correo = $('#txt_correo').val();
     arrParams.celular = $('#txt_celular').val();
-    arrParams.pais_id = $('#cmb_pais_dom').val();    
-    if (!existeBenData(arrParams)) {
-        dataBen.push(arrParams);
-        sessionStorage.setItem('datosBen', JSON.stringify(dataBen));
-    } else {
-        var mensaje = {wtmessage: "El item ya se encuentra ingresado.", title: "Exito"};
-        showAlert("OK", "success", mensaje);
-    }
+    arrParams.pais_id = $('#cmb_pais_dom').val();  
+    arrParams.cedula = $('#txt_cedula').val();
+    sessionStorage.setItem('datosBen', JSON.stringify(arrParams));
 }
-function guardarPagos() {    
-    var link = $('#txth_base').val() + "/pagosfrecuentes/savepayment";
+
+function guardarFacturaTemp(){
     var arrParams = new Object();
-    arrParams.nombre = $('#txt_primer_nombre').val();
-    arrParams.apellido = $('#txt_primer_apellido').val();
-    arrParams.pasaporte = $('#txt_pasaporte').val();
-    arrParams.correo = $('#txt_correo').val();
-    arrParams.celular = $('#txt_celular').val();
-    arrParams.pais_id = $('#cmb_pais_dom').val();
-    arrParams.item_ids = getItemsIds();
     arrParams.nombre_fac = $('#txt_nombres_fac').val();
     arrParams.apellidos_fac = $('#txt_apellidos_fac').val();
     arrParams.dir_fac = $('#txt_dir_fac').val();
     arrParams.telfono_fac = $('#txt_tel_fac').val();
     arrParams.tipo_dni_fac = $("input[name='opt_tipo_DNI']:checked").val();
     arrParams.dni_fac = $('#txt_dni_fac').val();
+    sessionStorage.setItem('datosFactura', JSON.stringify(arrParams));    
+}
+
+function guardarPagos() {  
+    var dataBenList=[];
+    var dataFacturaList= [];
+    var link = $('#txth_base').val() + "/pagosfrecuentes/savepayment";
+    var arrParams = new Object();
+    var storedListBen = sessionStorage.getItem('datosBen');
+    if (storedListBen == null) {
+        dataBenList = [];
+    } else {        
+        dataBenList = JSON.parse(storedListBen);
+        alert('Obtiene beneficiario:'+storedListBen);
+    }   
+    var storedListFactura = sessionStorage.getItem('datosFactura');
+    if (storedListFactura == null) {
+        dataFacturaList = [];
+    } else {
+        dataFacturaList = JSON.parse(storedListFactura);
+        alert('Obtiene factura:'+storedListFactura);
+    }  
+    arrParams.dataBenList = dataBenList;
+    arrParams.dataFacturaList = dataFacturaList;    
+    //arrParams.dataItemList = datosBen;    
     requestHttpAjax(link, arrParams, function (response) {
         showAlert("OK", "success", response.message);
     });
@@ -477,7 +491,8 @@ function guardarItem() {
         precio: txt_precio
     }
     if (!existeitem(item_id)) {
-        datalist.push(dataitem);
+        //alert('Agrega al storage');
+        datalist.push(dataitem);        
         sessionStorage.setItem('datosItem', JSON.stringify(datalist));
     } else {
         var mensaje = {wtmessage: "El item ya se encuentra ingresado.", title: "Exito"};
