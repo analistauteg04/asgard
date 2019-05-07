@@ -167,11 +167,11 @@ class OrdenPago extends \app\modules\financiero\components\CActiveRecord {
                         per.per_correo as correo,
                         sins.emp_id,
                         $columnsAdd
-                        (case ifnull((select icpr_id 
+                        (case ifnull((select max(icpr_id) 
                                       from " . $con2->dbname . ".info_carga_prepago icp 
                                       where icp.opag_id = opag.opag_id 
                                             and icp.icpr_estado = :estado 
-                                            and icp.icpr_estado_logico = :estado),'P') when 'P' then 'Pendiente' else 'No Aprobada' end) as estado_desc_pago
+                                            and icp.icpr_estado_logico = :estado ),'P') when 'P' then 'Pendiente' else 'No Aprobada' end) as estado_desc_pago
                         
                 $rolgrupo
                 FROM " . $con->dbname . ".solicitud_inscripcion sins INNER JOIN " . $con3->dbname . ".unidad_academica uaca on uaca.uaca_id = sins.uaca_id
