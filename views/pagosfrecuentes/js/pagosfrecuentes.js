@@ -17,7 +17,8 @@ function habilitarSecciones() {
         $('#divCertvota').css('display', 'none');
     }
 }
-$(document).ready(function () {
+var itemList = [];
+$(document).ready(function () {    
     // para mostrar codigo de area
     representarItems(obtDataList());
     var unisol = $('#cmb_unidad_solicitud').val();
@@ -355,25 +356,8 @@ $(document).ready(function () {
         guardarItem();
         var dataItems = obtDataList();
         representarItems(dataItems);
-    });
-    $('#btnpagofrecuentes').click(function () {
-        guardarPagos();
-    });
-
-    /* DESPLAZAR TAB */
-    // Tabs View
-    $('#paso1nextView').click(function () {
-        $("a[href='#paso2']").trigger("click");
-    });
-    $('#paso2backView').click(function () {
-        $("a[href='#paso1']").trigger("click");
-    });
-    $('#paso2nextView').click(function () {
-        $("a[href='#paso3']").trigger("click");
-    });
-    $('#paso3backView').click(function () {
-        $("a[href='#paso2']").trigger("click");
     });    
+    
     // tabs create
     $('#paso1next').click(function () {
         guardarBenPagoTemp();
@@ -394,9 +378,7 @@ $(document).ready(function () {
         $("a[data-href='#paso1']").attr('href', $("a[data-href='#paso1']").attr('data-href'));
         $("a[data-href='#paso1']").trigger("click");
     });
-    $('#paso2next').click(function () {
-        guardarFacturaTemp();
-        guardarPagos();
+    $('#paso2next').click(function () {        
         $("a[data-href='#paso2']").attr('data-toggle', 'none');
         $("a[data-href='#paso2']").parent().attr('class', 'disabled');
         $("a[data-href='#paso2']").attr('data-href', $("a[href='#paso2']").attr('href'));
@@ -412,8 +394,20 @@ $(document).ready(function () {
         $("a[data-href='#paso3']").removeAttr('href');
         $("a[data-href='#paso2']").attr('data-toggle', 'tab');
         $("a[data-href='#paso2']").attr('href', $("a[data-href='#paso2']").attr('data-href'));
-        $("a[data-href='#paso2']").trigger("click");
+        $("a[data-href='#paso2']").trigger("click");        
     });    
+    $('#paso3next').click(function () {        
+        guardarFacturaTemp();
+        guardarPagos();
+        $("a[data-href='#paso2']").attr('data-toggle', 'none');
+        $("a[data-href='#paso2']").parent().attr('class', 'disabled');
+        $("a[data-href='#paso2']").attr('data-href', $("a[href='#paso2']").attr('href'));
+        $("a[data-href='#paso2']").removeAttr('href');
+        $("a[data-href='#paso3']").attr('data-toggle', 'tab');
+        $("a[data-href='#paso3']").attr('href', $("a[data-href='#paso3']").attr('data-href'));
+        $("a[data-href='#paso3']").trigger("click");
+    });
+    
 });
 function guardarBenPagoTemp(){
     var arrParams = new Object();
@@ -447,19 +441,17 @@ function guardarPagos() {
     if (storedListBen == null) {
         dataBenList = [];
     } else {        
-        dataBenList = JSON.parse(storedListBen);
-        alert('Obtiene beneficiario:'+storedListBen);
+        dataBenList = JSON.parse(storedListBen);        
     }   
     var storedListFactura = sessionStorage.getItem('datosFactura');
     if (storedListFactura == null) {
         dataFacturaList = [];
     } else {
-        dataFacturaList = JSON.parse(storedListFactura);
-        alert('Obtiene factura:'+storedListFactura);
-    }  
+        dataFacturaList = JSON.parse(storedListFactura);        
+    }     
     arrParams.dataBenList = dataBenList;
-    arrParams.dataFacturaList = dataFacturaList;    
-    //arrParams.dataItemList = datosBen;    
+    arrParams.dataFacturaList = dataFacturaList;  
+    arrParams.dataItems = itemList;    
     requestHttpAjax(link, arrParams, function (response) {
         showAlert("OK", "success", response.message);
     });

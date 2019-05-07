@@ -141,53 +141,65 @@ class PagosfrecuentesController extends \yii\web\Controller {
     }
 
     public function actionSavepayment() {
+        $pben_model = new PersonaBeneficiaria();
+        $sbp_model = new SolicitudBotonPago();
+        $dsbp_model = new DetalleSolicitudBotonPago();
+        $item_model = new Item();
+        $doc_model = new Documento();        
         if (Yii::$app->request->isAjax) {
-            $con1 = \Yii::$app->db_facturacion;            
-            $transaction = $con1->beginTransaction();
-            $pben_model = new PersonaBeneficiaria();
-            $sbp_model = new SolicitudBotonPago();
-            $dsbp_model = new DetalleSolicitudBotonPago();
-            $item_model = new Item();
-            $doc_model = new Documento();            
-            $item_ids=array();
+            $con1 = \Yii::$app->db_facturacion;
+            $item_ids = array();
             $mensaje = "";
+            $data = Yii::$app->request->post();
             $dataBeneficiario = $data["dataBenList"];
-            $cedula = $dataBeneficiario["cedula"];            
-            try {                    
-                $id_pben=$pben_model->getIdPerBenByCed($con1,$cedula);
-                if($id_pben<=0){
-                    $id_pben=$pben_model->insertPersonaBeneficia($con1,$cedula,$dataBeneficiario["nombre"],$dataBeneficiario["apellido"],
-                                                                $dataBeneficiario["correo"],$dataBeneficiario["celular"]);                
+            $cedula = $dataBeneficiario["cedula"];
+            $transaction = $con1->beginTransaction();
+            try {                
+                \app\models\Utilities::putMessageLogFile('cedula: ' . $cedula);
+                \app\models\Utilities::putMessageLogFile('nombre: ' . $dataBeneficiario["nombre"]);
+                \app\models\Utilities::putMessageLogFile('apellido: ' . $dataBeneficiario["apellido"]);
+                \app\models\Utilities::putMessageLogFile('correo: ' . $dataBeneficiario["correo"]);
+                \app\models\Utilities::putMessageLogFile('celular: ' . $dataBeneficiario["celular"]);
+                $id_pben=$pben_model->getIdPerBenByCed($con1,$cedula);    
+                \app\models\Utilities::putMessageLogFile('result: ' . $id_pben);                
+                if(empty($id_pben)){                                    
+                \app\models\Utilities::putMessageLogFile('assd: ' . $entro);
+                $id_pbens = $pben_model->insertPersonaBeneficia($con1, $cedula, $dataBeneficiario["nombre"], $dataBeneficiario["apellido"], $dataBeneficiario["correo"], $dataBeneficiario["celular"]);
                 }
-                if($id_pben>0){
-                    /*$idsbp=$sbp_model->insertSolicitudBotonPago($con1,$id_pben);
-                    if($idsbp>0){
-                        for($i=0; $i< count($item_ids); $i++){
-                            $item_precio=$item_model->getPrecios($item_ids[$i]);
-                            $id_dsbp=$dsbp_model->insertarDetSolBotPag($con1,$idsbp,$item_ids[$i],$item_precio);
-                            if($id_dsbp>0){
-                                $mensaje = $mensaje."";
+                if ($id_pbens > 0) {                    
+                    /*\app\models\Utilities::putMessageLogFile('sdd: ' . $entro);
+                    \app\models\Utilities::putMessageLogFile('ingreso beneficiario');                    
+                    // $idsbp=$sbp_model->insertSolicitudBotonPago($con1,$id_pben);
+                    if ($idsbp > 0) {
+                        $entro = 22;
+                        for ($i = 0; $i < count($item_ids); $i++) {
+                            $item_precio = $item_model->getPrecios($item_ids[$i]);
+                            $id_dsbp = $dsbp_model->insertarDetSolBotPag($con1, $idsbp, $item_ids[$i], $item_precio);
+                            if ($id_dsbp > 0) {
+                                $mensaje = $mensaje . "";
                             }
                         }
-                        $iddoc=$doc_model->insertDocumento($idsbp);
-                        if($iddoc>0){
-                            $mensaje = $mensaje."Se ha guardado exitosamente su solicitud de Pago.";
-                        }else{
-                            $mensaje = $mensaje. "No se ha guardado el documento de factura";
+                        $iddoc = $doc_model->insertDocumento($idsbp);
+                        if ($iddoc > 0) {
+                            $mensaje = $mensaje . "Se ha guardado exitosamente su solicitud de Pago.";
+                        } else {
+                            $mensaje = $mensaje . "No se ha guardado el documento de factura";
                         }
-                    }else{
-                        $mensaje = $mensaje. "No se ha guardado la solicitud del boton";
-                    }*/
-                }else{
-                    $mensaje = $mensaje. "No se ha guardado el beneficiario";
+                    } else {
+                        $mensaje = $mensaje . "No se ha guardado la solicitud del boton";
+                    }
+                } else {
+                    $mensaje = $mensaje . "No se ha guardado el beneficiario";
+                }*/
+
+                $transaction->commit();
                 }
-                
-                $transaction->commit();                
             } catch (Exception $ex) {
+                $entro = 7;
                 $transaction->rollBack();
-            }
+            }            
             $message = array(
-                "wtmessage" => "ha entrado al servidor - cedula:".$cedula,
+                "wtmessage" => "ha entrado al servidor - cedula:" . $entro,
                 "title" => "Informacion",
             );
             return Utilities::ajaxResponse('OK', 'alert', Yii::t('jslang', 'Ok'), 'true', $message);

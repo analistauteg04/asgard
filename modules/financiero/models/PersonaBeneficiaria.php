@@ -89,15 +89,15 @@ class PersonaBeneficiaria extends \yii\db\ActiveRecord
         $sql= "select ifnull(pben_id,0) id 
                from " . $con->db_name . ".persona_beneficiaria 
                where pben_cedula = :cedula";
-        
+          \app\models\Utilities::putMessageLogFile('sql: ' . $sql);
+          
         $comando = $con->createCommand($sql);
         $comando->bindParam(":estado", $estado, \PDO::PARAM_STR);
-        $comando->bindParam(":cedula", $cedula, \PDO::PARAM_STR);
-        
+        $comando->bindParam(":cedula", $cedula, \PDO::PARAM_STR);      
         $resultData = $comando->queryOne();
-        if($resultData['id']>0)
+        //if($resultData['id']>0 )
             return $resultData['id'];
-        else return 0;
+        //else return '0';
     }
     
     public function insertPersonaBeneficia($con, $cedula,$nombre,$apellido,$correo,$celular) {  
@@ -105,7 +105,7 @@ class PersonaBeneficiaria extends \yii\db\ActiveRecord
         $sql = "INSERT INTO " . $con->dbname . ".persona_beneficiaria
             (pben_nombre,pben_apellido,pben_cedula,pben_ruc,pben_pasaporte,pben_celular,pben_correo,pben_estado,pben_estado_logico) VALUES
             (:pben_nombre,:pben_apellido,:pben_cedula,:pben_ruc,:pben_pasaporte,:pben_celular,:pben_correo,:pben_estado,:pben_estado)";
-        
+         \app\models\Utilities::putMessageLogFile('sql: ' . $sql);
         $command = $con->createCommand($sql);
         $command->bindParam(":pben_nombre", $nombre, \PDO::PARAM_STR);
         $command->bindParam(":pben_apellido", $apellido, \PDO::PARAM_STR);
