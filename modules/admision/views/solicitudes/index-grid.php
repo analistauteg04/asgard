@@ -108,9 +108,9 @@ PbGridView::widget([
                         }
                     },*/
                 },
-                'saldo' => function ($url, $model) {
+                /*'saldo' => function ($url, $model) {
                     return Html::a('<span class="glyphicon glyphicon-usd"></span>', Url::to(['/admision/solicitudes/saldo', 'ids' => base64_encode($model['sins_id']), 'int' => base64_encode($model['int_id']), 'perid' => base64_encode($model['persona']), 'empid' => base64_encode($model['emp_id'])]), ["data-toggle" => "tooltip", "title" => "Generar Saldo Matrícula", "data-pjax" => 0]);
-                },
+                },*/
             ],
         ],
     ],
