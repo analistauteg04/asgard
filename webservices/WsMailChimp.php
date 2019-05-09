@@ -32,7 +32,8 @@ class WsMailChimp
 
     public function __construct()
     {
-        $this->apiKey  = "2a2dbbb8a33adbb41b46fb0efbb46fc4-us20";//"4d6064da3ab51d18e0586027f4cdbda9-us19"; ambiente desarrollo
+        $this->apiKey  = "2a2dbbb8a33adbb41b46fb0efbb46fc4-us20";// produccion; 
+        //$this->apiKey  = "4d6064da3ab51d18e0586027f4cdbda9-us19";// desarrollo;
         $this->user = "Uteg";
         $arr_data = explode("-",$this->apiKey);
         $this->dc = $arr_data[1];
@@ -129,12 +130,15 @@ class WsMailChimp
             ),
             "email_type_option" => true
         ));
-
+        \app\models\Utilities::putMessageLogFile("antes de llamar a Http");   
+        \app\models\Utilities::putMessageLogFile("Parámetros:". $params); 
         $response = Http::connect($this->host, $this->port, http::HTTPS)
             ->setHeaders(array('Content-Type: application/json', 'Accept: application/json'))
             ->setCredentials($this->user, $this->apiKey)
             ->doPost($WS_URI, $params);
+        \app\models\Utilities::putMessageLogFile("despues de llamar a Http");           
         $arr_response = json_decode($response, true);
+        \app\models\Utilities::putMessageLogFile("response:".$arr_response);   
         return $arr_response;
     }
 

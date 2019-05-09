@@ -161,18 +161,12 @@ class EmailController extends \app\components\CController {
                 $webs_mailchimp = new WsMailChimp();
                 $conMailch = $webs_mailchimp->deleteList($resp_consulta["lis_codigo"]);
                 $suscritos = $mod_suscritor->consultarsuscritos($lis_id);
-                $suschimp = $mod_suscritor->consultarsuschimp($lis_id);
-                \app\models\Utilities::putMessageLogFile('suscritos:' . $suscritos['num_suscr']);
-                \app\models\Utilities::putMessageLogFile('sus chimp:' . $suscritos['$suschimp']);
-                if (($suscritos['num_suscr'] > 0) or ( $suschimp['num_suscr_chimp'] > 0)) {
-                    \app\models\Utilities::putMessageLogFile('registros a eliminar:');
-                    $resp_suscritor = $mod_lista->consultarSuscriptoresXlista($lis_id);
-                    \app\models\Utilities::putMessageLogFile($resp_suscritor);
-                    if (count($resp_suscritor) > 0) {
-                        \app\models\Utilities::putMessageLogFile('contador:' . count($resp_suscritor));
+                $suschimp = $mod_suscritor->consultarsuschimp($lis_id);                
+                if (($suscritos['num_suscr'] > 0) or ( $suschimp['num_suscr_chimp'] > 0)) {                    
+                    $resp_suscritor = $mod_lista->consultarSuscriptoresXlista($lis_id);                    
+                    if (count($resp_suscritor) > 0) {                        
                         for ($i = 0; $i < count($resp_suscritor); $i++) {
-                            $respuesta = $mod_suscritor->consultarMasListaXsuscriptor($lis_id, $resp_suscritor[$i]["per_id"], $resp_suscritor[$i]["pges_id"]);
-                            \app\models\Utilities::putMessageLogFile('suscriptor en otras listas: ' .$respuesta["suscrito"]);
+                            $respuesta = $mod_suscritor->consultarMasListaXsuscriptor($lis_id, $resp_suscritor[$i]["per_id"], $resp_suscritor[$i]["pges_id"]);                            
                             if ($respuesta["suscrito"] == 0) {
                                 $respUpdate = $mod_suscritor->updateSuscripto($resp_suscritor[$i]["per_id"], $resp_suscritor[$i]["pges_id"], $lis_id, 0);
                             } else {
@@ -344,8 +338,7 @@ class EmailController extends \app\components\CController {
                 $mest_id = $data["carrera_id"];
             } else {
                 $eaca_id = $data["carrera_id"];
-            }
-
+            }            
             $con = \Yii::$app->db_mailing;
             $transaction = $con->beginTransaction();
             try {
@@ -359,19 +352,18 @@ class EmailController extends \app\components\CController {
                     "country" => $pais,
                     "phone" => $telefono,
                 );
-
-                $lista = new Lista();
-                //\app\models\Utilities::putMessageLogFile('nombre:' . $nombre_lista);
+                $lista = new Lista();                
                 $resp_consulta = $lista->consultarListaXnombre($nombre_lista);
                 if (($resp_consulta["existe"] != 'S') or ( $resp_consulta["lis_id"] == $list_id)) {
                     //Grabar en mailchimp    
                     $webs_mailchimp = new WsMailChimp();
-                    if ($opcion == 'N') { // Ingreso
+                    if ($opcion == 'N') { // Ingreso                        
                         $conLista = $webs_mailchimp->newList($nombre_lista, $nombre_contacto, $correo_contacto, $asunto, $contacto, "es");
+                        \app\models\Utilities::putMessageLogFile('despues wsmailchimp');
                         if ($conLista) {
-                            //Grabar en asgard                    
+                            //Grabar en asgard                                                
                             $resp_lista = $lista->insertarLista($conLista["id"], $eaca_id, $mest_id, $emp_id, $nombre_lista, $ecor_id, $nombre_contacto, $pais, $provincia, $ciudad, $direccion1, $direccion2, $telefono, $codigo_postal, $asunto);
-                            if ($resp_lista) {
+                            if ($resp_lista) {                                
                                 $exito = 1;
                             }
                         }
