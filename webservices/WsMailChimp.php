@@ -171,13 +171,13 @@ class WsMailChimp
     // Get information about a specific list member
     function getMemberSuscribedList($listId, $email_suscribed){
         $subscriber_hash = strtolower(MD5($email_suscribed));
-        $WS_URI = $this->apiUrl . "/lists/$listId/members/$subscriber_hash";
+        $WS_URI = $this->apiUrl . "/lists/$listI    d/members/$subscriber_hash";
         $params = array();
 
         $response = Http::connect($this->host, $this->port, http::HTTPS)
             //->setHeaders(array('Content-Type: application/json', 'Accept: application/json'))
             ->setCredentials($this->user, $this->apiKey)
-            ->doGet($WS_URI, $params);
+            ->doGet($WS_URI, $params);              
         $arr_response = json_decode($response, true);
         return $arr_response;
     }

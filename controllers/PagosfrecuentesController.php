@@ -160,11 +160,11 @@ class PagosfrecuentesController extends \yii\web\Controller {
                 \app\models\Utilities::putMessageLogFile('apellido: ' . $dataBeneficiario["apellido"]);
                 \app\models\Utilities::putMessageLogFile('correo: ' . $dataBeneficiario["correo"]);
                 \app\models\Utilities::putMessageLogFile('celular: ' . $dataBeneficiario["celular"]);
-                $id_pben=$pben_model->getIdPerBenByCed($con1,$cedula);    
-                \app\models\Utilities::putMessageLogFile('result: ' . $id_pben);                
-                if(empty($id_pben)){                                    
+                $id_pben=$pben_model->getIdPerBenByCed($cedula);    
+                \app\models\Utilities::putMessageLogFile('result: ' . $id_pben["id"]);                
+                if(empty($id_pben["id"])){                                    
                 \app\models\Utilities::putMessageLogFile('assd: ' . $entro);
-                $id_pbens = $pben_model->insertPersonaBeneficia($con1, $cedula, $dataBeneficiario["nombre"], $dataBeneficiario["apellido"], $dataBeneficiario["correo"], $dataBeneficiario["celular"]);
+                    $id_pbens = $pben_model->insertPersonaBeneficia($con1, $cedula, $dataBeneficiario["nombre"], $dataBeneficiario["apellido"], $dataBeneficiario["correo"], $dataBeneficiario["celular"]);
                 }
                 if ($id_pbens > 0) {                    
                     /*\app\models\Utilities::putMessageLogFile('sdd: ' . $entro);

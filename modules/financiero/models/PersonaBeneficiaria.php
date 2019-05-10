@@ -84,7 +84,8 @@ class PersonaBeneficiaria extends \yii\db\ActiveRecord
         return $this->hasMany(SolicitudBotonPago::className(), ['pben_id' => 'pben_id']);
     }
     
-    public function getIdPerBenByCed($con, $cedula){        
+    public function getIdPerBenByCed($cedula){     
+        $con = \Yii::$app->db_facturacion;
         $estado = 1;
         $sql= "select ifnull(pben_id,0) id 
                from " . $con->db_name . ".persona_beneficiaria 
@@ -96,7 +97,7 @@ class PersonaBeneficiaria extends \yii\db\ActiveRecord
         $comando->bindParam(":cedula", $cedula, \PDO::PARAM_STR);      
         $resultData = $comando->queryOne();
         //if($resultData['id']>0 )
-            return $resultData['id'];
+        return $resultData;
         //else return '0';
     }
     
