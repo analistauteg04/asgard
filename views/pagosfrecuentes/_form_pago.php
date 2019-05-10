@@ -31,7 +31,7 @@ aspirante::registerTranslations();
             <div class="form-group">
                 <label for="txt_nombres_fac" class="col-sm-5 col-md-5 col-xs-5 col-lg-5 control-label" id="lbl_nombre1"><?= Yii::t("formulario", "Names") ?></label>
                 <div class="col-sm-7 col-md-7 col-xs-7 col-lg-7">
-                    <input type="text" class="form-control keyupmce" value="<?php echo $arr_persona['per_pri_nombre'] . " " . $arr_persona['per_seg_nombre'] ?>" id="txt_nombres_fac" data-type="alfa" placeholder="<?= Yii::t("formulario", "First Name") ?>">
+                    <input type="text" class="form-control keyupmce" value="" id="txt_nombres_fac" data-type="alfa" placeholder="<?= Yii::t("formulario", "Names") ?>">
                 </div>
             </div>
         </div> 
@@ -39,7 +39,7 @@ aspirante::registerTranslations();
             <div class="form-group">
                 <label for="txt_apellidos_fac" class="col-sm-5 col-md-5 col-xs-5 col-lg-5 control-label" id="lbl_apellido1"><?= Yii::t("formulario", "Last Names") ?></label>
                 <div class="col-sm-7 col-md-7 col-xs-7 col-lg-7">
-                    <input type="text" class="form-control keyupmce" value="<?php echo $arr_persona['per_pri_apellido'] . " " . $arr_persona['per_seg_apellido'] ?>" id="txt_apellidos_fac" data-type="alfa" placeholder="<?= Yii::t("formulario", "First Name") ?>">
+                    <input type="text" class="form-control keyupmce" value="" id="txt_apellidos_fac" data-type="alfa" placeholder="<?= Yii::t("formulario", "Last Names") ?>">
                 </div>
             </div>
         </div> 
@@ -61,12 +61,12 @@ aspirante::registerTranslations();
                 </div>
             </div>
         </div> 
-    </div>
+    </div>    
     <div class='col-md-12 col-sm-12 col-xs-12 col-lg-12'>
         <div class="col-md-6 col-sm-6 col-xs-6 col-lg-6">
             <div class="form-group">
                 <label for="opt_tipo_DNI" class="col-sm-5 col-md-5 col-xs-5 col-lg-5 control-label" id="lbl_nombre1"><?= Yii::t("formulario", "Type DNI") ?></label>
-                <div class="col-sm-7">  
+                <div class="col-sm-7 col-md-7 col-xs-7 col-lg-7">  
                     <label><input type="radio" name="opt_tipo_DNI"  value="1" checked>&nbsp;&nbsp;<b><?= Yii::t("formulario", "DNI Document") . '/' . Yii::t("formulario", "DNI 1") ?></b></label><br/>
                     <label><input type="radio" name="opt_tipo_DNI"  value="2" ><b>&nbsp;&nbsp;<?= Yii::t("formulario", "RUC") ?></b></label><br/>                                              
                     <label><input type="radio" name="opt_tipo_DNI"  value="3" ><b>&nbsp;&nbsp;<?= Yii::t("formulario", "Passport") ?></b></label>                                              
@@ -82,6 +82,16 @@ aspirante::registerTranslations();
             </div>
         </div> 
     </div> 
+    <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
+        <div class="col-md-6 col-sm-6 col-xs-6 col-lg-6">
+            <div class="form-group">
+                <label for="txt_correo" class="col-sm-5 col-md-5 col-xs-5 col-lg-5 control-label"><?= Yii::t("formulario", "Email") ?></label>
+                <div class="col-sm-7 col-md-7 col-xs-7 col-lg-7">
+                    <input type="text" class="form-control PBvalidation" id="txt_correo" data-type="email" data-keydown="true" placeholder="<?= Yii::t("formulario", "Email") ?>">
+                </div>
+            </div>
+        </div>    
+    </div>
 </div> 
 <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">   
     <div class="col-md-2">
