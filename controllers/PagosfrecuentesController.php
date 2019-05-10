@@ -151,7 +151,7 @@ class PagosfrecuentesController extends \yii\web\Controller {
                     $id_pbens = $pben_model->insertPersonaBeneficia($con1, $cedula, ucwords(strtolower($dataBeneficiario["nombre"])), ucwords(strtolower($dataBeneficiario["apellido"])), $dataBeneficiario["correo"], $dataBeneficiario["celular"]);
                 }
                 if ($id_pbens > 0) {
-                    $idsbp = $sbp_model->insertSolicitudBotonPago($con1, $id_pben);
+                    $idsbp = $sbp_model->insertSolicitudBotonPago($con1, $id_pbens);
                     if ($idsbp > 0) {
                         for ($i = 0; $i < count($item_ids); $i++) {
                             $item_precio = $item_model->getPrecios($item_ids[$i]);
