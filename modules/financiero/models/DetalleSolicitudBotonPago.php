@@ -98,7 +98,7 @@ class DetalleSolicitudBotonPago extends \yii\db\ActiveRecord
         $sql = "INSERT INTO " . $con->dbname . ".solicitud_boton_pago
             (sbpa_id, ite_id, dsbp_cantidad, dsbp_precio, dsbp_valor_total, dsbp_estado, dsbp_estado_logico) VALUES
             (:idsbp,:ite_id,:cantidad,:dsbp_precio,:dsbp_valor_total:dsbp_estado,:dsbp_estado)";
-        
+        \app\models\Utilities::putMessageLogFile('sql detalle solicitud:'.$sql);
         $command = $con->createCommand($sql);        
         $command->bindParam(":idsbp", $idsbp, \PDO::PARAM_INT);
         $command->bindParam(":ite_id", $item_ids, \PDO::PARAM_INT);

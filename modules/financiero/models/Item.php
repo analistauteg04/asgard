@@ -174,9 +174,9 @@ class Item extends \yii\db\ActiveRecord
     
     
     public function getPrecios($con, $ite_id) {
-        $estado = 1;
-        $sql= "select ipre_precio 
-               from ". $con->db_name . ".item_precio 
+        $estado = 1;        
+        $sql= "select ipre_precio             
+               from " . $con->dbname . ".item_precio 
                where ite_id = :ite_id
                and ipre_estado_precio = 'A'
                and ipre_estado = :estado

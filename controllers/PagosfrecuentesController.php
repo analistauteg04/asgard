@@ -136,13 +136,13 @@ class PagosfrecuentesController extends \yii\web\Controller {
         $item_model = new Item();
         $doc_model = new Documento();
         if (Yii::$app->request->isAjax) {
-            $con1 = \Yii::$app->db_facturacion;
-            $item_ids = array();
+            $con1 = \Yii::$app->db_facturacion;            
             $mensaje = "";
             $data = Yii::$app->request->post();
             $dataBeneficiario = $data["dataBenList"];
             $dataFactura = $data["dataFacturaList"];
             $cedula = $dataBeneficiario["cedula"];
+            $item_ids = $data["dataItems"];
             $transaction = $con1->beginTransaction();
 
             try {
@@ -153,9 +153,13 @@ class PagosfrecuentesController extends \yii\web\Controller {
                 if ($id_pbens > 0) {
                     $idsbp = $sbp_model->insertSolicitudBotonPago($con1, $id_pbens);
                     if ($idsbp > 0) {
+                        \app\models\Utilities::putMessageLogFile('Ingresa a obtener precio.');
                         for ($i = 0; $i < count($item_ids); $i++) {
-                            $item_precio = $item_model->getPrecios($item_ids[$i]);
-                            $id_dsbp = $dsbp_model->insertarDetSolBotPag($con1, $idsbp, $item_ids[$i], $item_precio);
+                            \app\models\Utilities::putMessageLogFile('item precio:'.$item_ids[$i]["item_id"]);
+                            $item_precio = $item_model->getPrecios($con1, $item_ids[$i]["item_id"]);
+                            \app\models\Utilities::putMessageLogFile('item id:'.$idsbp);
+                            \app\models\Utilities::putMessageLogFile('precio:'.$item_precio["ipre_precio"]);
+                            $id_dsbp = $dsbp_model->insertarDetSolBotPag($con1, $idsbp, $item_ids[$i]["item_id"], 1, $item_precio["ipre_precio"]);
                             if ($id_dsbp > 0) {
                                 $mensaje = $mensaje . "";
                             }
@@ -164,13 +168,12 @@ class PagosfrecuentesController extends \yii\web\Controller {
                         // $tdoc_id quemado el 1 por ser factura ojo modiifcarlo no debe ir asi quemado
                         // El correo que se envia no es, hay que crear uno nuevo en la 3ra pestaña
                         // el valor es el total que aparece en le grid toca capturarlo
-
                         $iddoc = $doc_model->insertDocumento($con1, 1, $idsbp, ucwords(strtolower($dataFactura["nombre_fac"])) . ' ' . ucwords(strtolower($dataFactura["apellidos_fac"])), ucwords(strtolower($dataFactura["dir_fac"])), $dataFactura["telfono_fac"], $dataBeneficiario["correo"], 22, null);
                         if ($iddoc > 0) {
                             $transaction->commit();
                             $mensaje = $mensaje . "Se ha guardado exitosamente su solicitud de Pago.";                            
                             $message = array(
-                                "wtmessage" => Yii::t("notificaciones", "Guardo.... "),
+                                "wtmessage" => Yii::t("notificaciones", $mensaje),
                                 "title" => Yii::t('jslang', 'Success'),
                             );
                             return Utilities::ajaxResponse('OK', 'alert', Yii::t("jslang", "Sucess"), false, $message);
