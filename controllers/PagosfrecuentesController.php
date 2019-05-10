@@ -7,15 +7,10 @@ use app\models\Utilities;
 use yii\helpers\ArrayHelper;
 use yii\base\Exception;
 use app\models\Persona;
-use app\models\EmpresaPersona;
 use app\modules\admision\models\ItemMetodoUnidad;
 use \app\modules\admision\models\SolicitudInscripcion;
 use app\models\Pais;
 use app\modules\admision\models\Interesado;
-use app\modules\admision\models\InteresadoEmpresa;
-use app\models\Usuario;
-use yii\base\Security;
-use app\models\UsuaGrolEper;
 use app\models\Provincia;
 use app\modules\financiero\models\OrdenPago;
 use app\modules\financiero\models\PersonaBeneficiaria;
@@ -23,8 +18,6 @@ use app\modules\financiero\models\SolicitudBotonPago;
 use app\modules\financiero\models\DetalleSolicitudBotonPago;
 use app\modules\financiero\models\Documento;
 use app\modules\financiero\models\Item;
-use app\modules\financiero\models\TipoDocumento;
-use app\modules\financiero\models\DetalleDescuentoItem;
 use app\models\Canton;
 use app\models\MedioPublicitario;
 use app\modules\academico\models\Modalidad;
@@ -32,11 +25,7 @@ use app\modules\academico\models\UnidadAcademica;
 use yii\helpers\Url;
 use app\modules\admision\models\PersonaGestion;
 use app\modules\admision\models\Oportunidad;
-use app\models\Empresa;
-use app\modules\admision\models\TipoOportunidadVenta;
-use app\modules\admision\models\EstadoContacto;
 use app\modules\admision\models\MetodoIngreso;
-use app\modules\financiero\models\Secuencias;
 //use app\models\Secuencias;
 use app\models\InscripcionAdmision;
 
@@ -145,33 +134,24 @@ class PagosfrecuentesController extends \yii\web\Controller {
         $sbp_model = new SolicitudBotonPago();
         $dsbp_model = new DetalleSolicitudBotonPago();
         $item_model = new Item();
-        $doc_model = new Documento();        
+        $doc_model = new Documento();
         if (Yii::$app->request->isAjax) {
             $con1 = \Yii::$app->db_facturacion;
             $item_ids = array();
             $mensaje = "";
             $data = Yii::$app->request->post();
             $dataBeneficiario = $data["dataBenList"];
+            $dataFactura = $data["dataFacturaList"];
             $cedula = $dataBeneficiario["cedula"];
             $transaction = $con1->beginTransaction();
-            try {                
-                \app\models\Utilities::putMessageLogFile('cedula: ' . $cedula);
-                \app\models\Utilities::putMessageLogFile('nombre: ' . $dataBeneficiario["nombre"]);
-                \app\models\Utilities::putMessageLogFile('apellido: ' . $dataBeneficiario["apellido"]);
-                \app\models\Utilities::putMessageLogFile('correo: ' . $dataBeneficiario["correo"]);
-                \app\models\Utilities::putMessageLogFile('celular: ' . $dataBeneficiario["celular"]);
-                $id_pben=$pben_model->getIdPerBenByCed($con1,$cedula);    
-                \app\models\Utilities::putMessageLogFile('result: ' . $id_pben);                
-                if(empty($id_pben)){                                    
-                \app\models\Utilities::putMessageLogFile('assd: ' . $entro);
-                $id_pbens = $pben_model->insertPersonaBeneficia($con1, $cedula, $dataBeneficiario["nombre"], $dataBeneficiario["apellido"], $dataBeneficiario["correo"], $dataBeneficiario["celular"]);
+            try {
+                $id_pben = $pben_model->getIdPerBenByCed($con1, $cedula);
+                if (empty($id_pben)) {
+                    $id_pbens = $pben_model->insertPersonaBeneficia($con1, $cedula, ucwords(strtolower($dataBeneficiario["nombre"])), ucwords(strtolower($dataBeneficiario["apellido"])), $dataBeneficiario["correo"], $dataBeneficiario["celular"]);
                 }
-                if ($id_pbens > 0) {                    
-                    /*\app\models\Utilities::putMessageLogFile('sdd: ' . $entro);
-                    \app\models\Utilities::putMessageLogFile('ingreso beneficiario');                    
-                    // $idsbp=$sbp_model->insertSolicitudBotonPago($con1,$id_pben);
+                if ($id_pbens > 0) {
+                    $idsbp = $sbp_model->insertSolicitudBotonPago($con1, $id_pben);
                     if ($idsbp > 0) {
-                        $entro = 22;
                         for ($i = 0; $i < count($item_ids); $i++) {
                             $item_precio = $item_model->getPrecios($item_ids[$i]);
                             $id_dsbp = $dsbp_model->insertarDetSolBotPag($con1, $idsbp, $item_ids[$i], $item_precio);
@@ -179,9 +159,20 @@ class PagosfrecuentesController extends \yii\web\Controller {
                                 $mensaje = $mensaje . "";
                             }
                         }
-                        $iddoc = $doc_model->insertDocumento($idsbp);
+                        //$con,$tdoc_id,$sbpa_id,$nombres,$direccion,$telefono,$correo,$valor,$usuario)
+                        // $tdoc_id quemado el 1 por ser factura ojo modiifcarlo no debe ir asi quemado
+                        // El correo que se envia no es, hay que crear uno nuevo en la 3ra pestaña
+                        // el valor es el total que aparece en le grid toca capturarlo
+
+                        $iddoc = $doc_model->insertDocumento($con1, 1, $idsbp, ucwords(strtolower($dataFactura["nombre_fac"])) . ' ' . ucwords(strtolower($dataFactura["apellidos_fac"])), ucwords(strtolower($dataFactura["dir_fac"])), $dataFactura["telfono_fac"], $dataBeneficiario["correo"], 22, null);
                         if ($iddoc > 0) {
-                            $mensaje = $mensaje . "Se ha guardado exitosamente su solicitud de Pago.";
+                            $transaction->commit();
+                            $mensaje = $mensaje . "Se ha guardado exitosamente su solicitud de Pago.";                            
+                            $message = array(
+                                "wtmessage" => Yii::t("notificaciones", "Guardo.... "),
+                                "title" => Yii::t('jslang', 'Success'),
+                            );
+                            return Utilities::ajaxResponse('OK', 'alert', Yii::t("jslang", "Sucess"), false, $message);
                         } else {
                             $mensaje = $mensaje . "No se ha guardado el documento de factura";
                         }
@@ -190,19 +181,15 @@ class PagosfrecuentesController extends \yii\web\Controller {
                     }
                 } else {
                     $mensaje = $mensaje . "No se ha guardado el beneficiario";
-                }*/
-
-                $transaction->commit();
                 }
             } catch (Exception $ex) {
-                $entro = 7;
                 $transaction->rollBack();
-            }            
-            $message = array(
-                "wtmessage" => "ha entrado al servidor - cedula:" . $entro,
-                "title" => "Informacion",
-            );
-            return Utilities::ajaxResponse('OK', 'alert', Yii::t('jslang', 'Ok'), 'true', $message);
+                $message = array(
+                    "wtmessage" => $ex->getMessage(), Yii::t("notificaciones", "Error al grabar."),
+                    "title" => Yii::t('jslang', 'Error'),
+                );
+                return Utilities::ajaxResponse('NO_OK', 'alert', Yii::t("jslang", "Error"), true, $message);
+            }
         }
     }
 

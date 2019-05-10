@@ -345,16 +345,18 @@ create table if not exists `tipo_documento` (
 create table if not exists `documento` (
   `doc_id` bigint(20) not null auto_increment primary key,  
   `tdoc_id` bigint(20) not null,
+  `sbpa_id` bigint(20) not null, 
   `doc_nombres_cliente` varchar(250) not null,    
   `doc_direccion` varchar(500) default null,
   `doc_telefono` varchar(50) default null, 
   `doc_correo` varchar(50) default null, 
   `doc_valor` double not null, 
-  `doc_usuario_transaccion` bigint(20) not null,  
+  `doc_usuario_transaccion` bigint(20) null,  
   `doc_estado` varchar(1) default null,
   `doc_fecha_creacion` timestamp not null default current_timestamp,
   `doc_fecha_modificacion` timestamp null default null,
-  `doc_estado_logico` varchar(1) default null
+  `doc_estado_logico` varchar(1) default null,
+   foreign key (sbpa_id) references `solicitud_boton_pago` (sbpa_id)
 ) ;
 
 -- --------------------------------------------------------

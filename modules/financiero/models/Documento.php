@@ -86,14 +86,15 @@ class Documento extends \yii\db\ActiveRecord
         return $this->hasMany(DetalleDocumento::className(), ['doc_id' => 'doc_id']);
     }
     
-    public function insertDocumento($con,$tdoc_id,$nombres,$direccion,$telefono,$correo,$valor,$usuario) {  
+    public function insertDocumento($con,$tdoc_id,$sbpa_id,$nombres,$direccion,$telefono,$correo,$valor,$usuario) {  
         $estado = 1;        
-        $sql = "INSERT INTO " . $con->dbname . ".solicitud_boton_pago
-            (tdoc_id, doc_nombres_cliente, doc_direccion, doc_telefono, doc_correo, doc_valor, doc_usuario_transaccion,doc_estado,doc_estado_logico) VALUES
-            (:tdoc_id,:doc_nombres_cliente,:doc_direccion,:doc_telefono,:doc_correo,:doc_valor,:doc_usuario_transaccion,:doc_estado,:doc_estado)";
+        $sql = "INSERT INTO " . $con->dbname . ".documento
+            (tdoc_id, sbpa_id, doc_nombres_cliente, doc_direccion, doc_telefono, doc_correo, doc_valor, doc_usuario_transaccion,doc_estado,doc_estado_logico) VALUES
+            (:tdoc_id,:sbpa_id,:doc_nombres_cliente,:doc_direccion,:doc_telefono,:doc_correo,:doc_valor,:doc_usuario_transaccion,:doc_estado,:doc_estado)";
                         
         $command = $con->createCommand($sql);        
         $command->bindParam(":tdoc_id", $tdoc_id, \PDO::PARAM_INT);
+        $command->bindParam(":sbpa_id", $sbpa_id, \PDO::PARAM_INT);
         $command->bindParam(":doc_nombres_cliente", $nombres, \PDO::PARAM_STR);
         $command->bindParam(":doc_direccion", $direccion, \PDO::PARAM_STR);
         $command->bindParam(":doc_telefono", $telefono, \PDO::PARAM_STR);

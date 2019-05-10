@@ -85,10 +85,12 @@ class PersonaBeneficiaria extends \yii\db\ActiveRecord
     }
     
     public function getIdPerBenByCed($con, $cedula){        
+        $con = \Yii::$app->db_facturacion;
         $estado = 1;
         $sql= "select ifnull(pben_id,0) id 
-               from " . $con->db_name . ".persona_beneficiaria 
-               where pben_cedula = :cedula";
+               from " . $con->dbname . ".persona_beneficiaria 
+               where pben_cedula = :cedula and
+               pben_estado = :estado and pben_estado_logico = :estado";
           \app\models\Utilities::putMessageLogFile('sql: ' . $sql);
           
         $comando = $con->createCommand($sql);
