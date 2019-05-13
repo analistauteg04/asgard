@@ -20,8 +20,8 @@ function habilitarSecciones() {
 var itemList = [];
 $(document).ready(function () {    
     // para mostrar codigo de area
-    representarItems(obtDataList());
     llenarDatosBen(obtDataBen());
+    representarItems(obtDataList());
     var unisol = $('#cmb_unidad_solicitud').val();
     if (unisol == 1) {
         $('#divmetodocan').css('display', 'none');
@@ -443,7 +443,7 @@ function guardarBenPagoTemp(){
     arrParams.celular = $('#txt_celular').val();
     arrParams.pais_id = $('#cmb_pais_dom').val();  
     arrParams.cedula = $('#txt_cedula').val();
-    sessionStorage.setItem('datosBen', JSON.stringify(arrParams));
+    sessionStorage.setItem('datosBen', JSON.stringify(arrParams));        
 }
 
 function guardarFacturaTemp(){
