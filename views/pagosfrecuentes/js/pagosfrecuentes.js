@@ -18,9 +18,10 @@ function habilitarSecciones() {
     }
 }
 var itemList = [];
+var total = 0;
 $(document).ready(function () {    
     // para mostrar codigo de area
-    llenarDatosBen(obtDataBen());
+    //llenarDatosBen(obtDataBen());    
     representarItems(obtDataList());
     var unisol = $('#cmb_unidad_solicitud').val();
     if (unisol == 1) {
@@ -39,168 +40,8 @@ $(document).ready(function () {
                 $('#txt_codigoarea').val(data.area['name']);
             }
         }, true);
-    });
-    $('#sendInformacionAspirante').click(function () {
-        habilitarSecciones();
-        if ($('#txth_twin_id').val() == 0) {
-            guardarInscripcion('Create', '1');
-        } else {
-            guardarInscripcion('Update', '1');
-        }
-    });
-    $('#sendInformacionAspirante2').click(function () {
-        var error = 0;
-        var pais = $('#cmb_pais_dom').val();
-        if ($("#chk_mensaje1").prop("checked") && $("#chk_mensaje2").prop("checked")) {
-            error = 0;
-        } else {
-            var mensaje = {wtmessage: "Debe Aceptar los términos de la Información.", title: "Exito"};
-            error++;
-            showAlert("NO_OK", "success", mensaje);
-        }
-        if ($('#txth_doc_titulo').val() == "") {
-            error++;
-            var mensaje = {wtmessage: "Debe adjuntar título.", title: "Información"};
-            showAlert("NO_OK", "error", mensaje);
-        } else {
-            if ($('#txth_doc_dni').val() == "") {
-                error++;
-                var mensaje = {wtmessage: "Debe adjuntar documento de identidad.", title: "Información"};
-                showAlert("NO_OK", "error", mensaje);
-            } else {
-                if ($('#cmb_tipo_dni').val() == "CED") {
-                    if (pais == 1) {
-                        if ($('#txth_doc_certvota').val() == "") {
-                            error++;
-                            var mensaje = {wtmessage: "Debe adjuntar certificado de votación.", title: "Información"};
-                            showAlert("NO_OK", "error", mensaje);
-                        }
-                    } else {
-                        if ($('#txth_doc_foto').val() == "") {
-                            error++;
-                            var mensaje = {wtmessage: "Debe adjuntar foto.", title: "Información"};
-                            showAlert("NO_OK", "error", mensaje);
-                        }
-                    }
-                } else {
-                    if ($('#txth_doc_hojavida').val() == "") {
-                        error++;
-                        var mensaje = {wtmessage: "Debe adjuntar hoja de vida.", title: "Información"};
-                        showAlert("NO_OK", "error", mensaje);
-                    }
-                }
-            }
-        }
-        if ($('#cmb_unidad_solicitud').val() == 2) {
-            if ($('#txth_doc_certificado').val() == "") {
-                error++;
-                var mensaje = {wtmessage: "Debe adjuntar certificado de materias.", title: "Información"};
-                showAlert("NO_OK", "error", mensaje);
-            }
-            //alert($('#cmb_tipo_dni').val());
-
-        }
-        //alert(error);
-        if (error == 0) {
-            guardarInscripcion('Update', '2');
-        }
-    });
-    $('#sendInscripcionsolicitud').click(function () {
-        var link = $('#txth_base').val() + "/inscripcionadmision/saveinscripciontemp";
-        var arrParams = new Object();
-        arrParams.codigo = $('#txth_twin_id').val();
-        arrParams.ACCION = 'Fin';
-        requestHttpAjax(link, arrParams, function (response) {
-            var message = response.message;
-            //console.log(response);
-            if (response.status == "OK") {
-                showLoadingPopup();
-                setTimeout(function () {
-                    var uaca_id = parseInt(response.data.data.uaca_id);
-                    var mod_id = parseInt(response.data.data.mod_id);
-                    var ming = parseInt(response.data.data.twin_metodo_ingreso);
-                    var sins_id = parseInt(response.data.dataext);
-                    alert('solicitud:' + sins_id);
-                    if ($('input[name=rdo_forma_pago_dinner]:checked').val() == 1) {
-                        PagoDinners(sins_id);
-                    } else {
-                        switch (uaca_id) {
-                            case 1:
-                                switch (mod_id) {
-                                    case 1: //online
-                                        window.location.href = "https://www.uteg.edu.ec/pagos-grado-online/";
-                                        break;
-                                        //                                case 1:
-                                        //                                    switch (ming) {
-                                        //                                        case 1:
-                                        //                                            $('#tx_paypal').attr("href", "https://www.uteg.edu.ec/pago-online-nivelacion/")
-                                        //                                            $('#tx_paypal').val("https://www.uteg.edu.ec/pago-online-nivelacion/");
-                                        //                                            window.location.href = "https://www.uteg.edu.ec/pago-online-nivelacion/";
-                                        //                                            break;
-                                        //                                        case 2:
-                                        //                                            $('#tx_paypal').attr("href", "https://www.uteg.edu.ec/pago-examen-online/")
-                                        //                                            $('#tx_paypal').val("https://www.uteg.edu.ec/pago-examen-online/");
-                                        //                                            window.location.href = "https://www.uteg.edu.ec/pago-examen-online/";
-                                        //                                            break;
-                                        //                                    }
-                                        //                                    break;
-                                    case 2:// presencial
-                                        window.location.href = "https://www.uteg.edu.ec/pago-grado-presencial/";
-                                        break;
-                                        //                                    switch (ming) {
-                                        //                                        case 1:
-                                        //                                            $('#tx_paypal').attr("href", "https://www.uteg.edu.ec/pago-grado-presencial/")
-                                        //                                            $('#tx_paypal').val("https://www.uteg.edu.ec/pago-grado-presencial/");
-                                        //                                            window.location.href = "https://www.uteg.edu.ec/pago-grado-presencial/";
-                                        //                                            break;
-                                        //                                        case 2:
-                                        //                                            $('#tx_paypal').attr("href", "https://www.uteg.edu.ec/pago-examen-presencial/")
-                                        //                                            $('#tx_paypal').val("https://www.uteg.edu.ec/pago-examen-presencial/");
-                                        //                                            window.location.href = "https://www.uteg.edu.ec/pago-examen-presencial/";
-                                        //                                            break;
-                                        //                                    }
-                                        break;
-                                    case 3:// semipresencial
-                                        window.location.href = "https://www.uteg.edu.ec/pago-grado-semipresencial/";
-                                        //                                    switch (ming) {
-                                        //                                        case 1:
-                                        //                                            //alert('grado semipresencial curso');
-                                        //                                            //Todavia no hay enlace para grado semipresencial curso
-                                        //                                            break;
-                                        //                                        case 2:
-                                        //                                            //alert('grado semipresencial examen');
-                                        //                                            //Todavia no hay enlace para grado semipresencial Examen
-                                        //                                            break;
-                                        //                                    }
-                                        break;
-                                    case 4: //distancia
-                                        window.location.href = "https://www.uteg.edu.ec/pago-grado-distancia/";
-                                        //                                    switch (ming) {
-                                        //                                        case 1:
-                                        //                                            $('#tx_paypal').attr("href", "https://www.uteg.edu.ec/pago-grado-distancia/")
-                                        //                                            $('#tx_paypal').val("https://www.uteg.edu.ec/pago-grado-distancia/");
-                                        //                                            window.location.href = "https://www.uteg.edu.ec/pago-grado-distancia/";
-                                        //                                            break;
-                                        //                                        case 2:
-                                        //                                            $('#tx_paypal').attr("href", "https://www.uteg.edu.ec/pago-examen-distancia/")
-                                        //                                            $('#tx_paypal').val("https://www.uteg.edu.ec/pago-examen-distancia/");
-                                        //                                            window.location.href = "https://www.uteg.edu.ec/pago-examen-distancia/";
-                                        //                                            break;
-                                        //                                    }
-                                        break;
-                                }
-                                break;
-                            case 2:
-                                $('#tx_paypal').attr("href", "https://www.uteg.edu.ec/pago-posgrado/")
-                                $('#tx_paypal').val("https://www.uteg.edu.ec/pago-posgrado/");
-                                window.location.href = "https://www.uteg.edu.ec/pago-posgrado/";
-                                break;
-                        }
-                    }
-                }, 5000);
-            }
-        });
-    });
+    });    
+    
     $('#cmb_tipo_dni').change(function () {
         if ($('#cmb_tipo_dni').val() == 'PASS') {
             $('#txt_cedula').removeClass("PBvalidation");
@@ -371,7 +212,7 @@ $(document).ready(function () {
         $("a[data-href='#paso2']").trigger("click");
     });
     $('#paso2back').click(function () {
-        llenarDatosBen(obtDataBen());
+        //llenarDatosBen(obtDataBen());
         $("a[data-href='#paso2']").attr('data-toggle', 'none');
         $("a[data-href='#paso2']").parent().attr('class', 'disabled');
         $("a[data-href='#paso2']").attr('data-href', $("a[href='#paso2']").attr('href'));
@@ -454,6 +295,8 @@ function guardarFacturaTemp(){
     arrParams.telfono_fac = $('#txt_tel_fac').val();
     arrParams.tipo_dni_fac = $("input[name='opt_tipo_DNI']:checked").val();
     arrParams.dni_fac = $('#txt_dni_fac').val();
+    arrParams.correo = $('#txt_correo').val();
+    arrParams.total = total;
     sessionStorage.setItem('datosFactura', JSON.stringify(arrParams));    
 }
 
@@ -505,7 +348,7 @@ function guardarItem() {
         modalidad_id: modalidad_id,
         modalidad: txt_modalidad,
         item: txt_item,
-        precio: txt_precio
+        precio: txt_precio        
     }
     if (!existeitem(item_id)) {
         //alert('Agrega al storage');
@@ -549,7 +392,7 @@ function representarItems(dataItems) {
             "<table class='table table-striped table-bordered dataTable'>" +
             "<tbody>" +
             "  <tr><th>Unidad Academica</th> <th>Modalidad</th> <th>Item</th> <th>Precio</th></tr>";
-    var total = 0;
+    total = 0;
     for (i = 0; i < dataItems.length; i++) {
         html += "<tr><td>" + dataItems[i]['unidad'] + "</td> <td>" + dataItems[i]['modalidad'] + "</td> <td>" + dataItems[i]['item'] + "</td> <td>$" + dataItems[i]['precio'] + "</td><td><button type='button' class='btn btn-link' onclick='eliminaritem(" + dataItems[i]['item_id'] + ")'> <span class='glyphicon glyphicon-remove'></span> </button></td></tr>";
         total = total + parseInt(dataItems[i]['precio'], 10);

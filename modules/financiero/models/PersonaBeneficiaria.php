@@ -122,4 +122,30 @@ class PersonaBeneficiaria extends \yii\db\ActiveRecord
         return $con->getLastInsertID();        
     }
     
+    public function updatePersonaBeneficia($con, $cedula,$nombre,$apellido,$correo,$celular) {  
+        $estado = 1;
+        $sql = "UPDATE " . $con->dbname . ".persona_beneficiaria
+                set pben_nombre = :pben_nombre,
+                    pben_apellido = :pben_apellido,                    
+                    pben_ruc = :pben_ruc,
+                    pben_pasaporte = :pben_pasaporte,
+                    pben_celular = :pben_celular,
+                    pben_correo = :pben_correo
+                WHERE pben_cedula = :pben_cedula
+                and pben_estado = :pben_estado
+                and pben_estado_logico = :pben_estado";
+                
+         \app\models\Utilities::putMessageLogFile('sql: ' . $sql);
+        $command = $con->createCommand($sql);
+        $command->bindParam(":pben_nombre", $nombre, \PDO::PARAM_STR);
+        $command->bindParam(":pben_apellido", $apellido, \PDO::PARAM_STR);
+        $command->bindParam(":pben_cedula", $cedula, \PDO::PARAM_STR);
+        $command->bindParam(":pben_ruc", $cedula, \PDO::PARAM_STR);
+        $command->bindParam(":pben_pasaporte", $cedula, \PDO::PARAM_STR);
+        $command->bindParam(":pben_celular", $celular, \PDO::PARAM_STR);
+        $command->bindParam(":pben_correo", $correo, \PDO::PARAM_STR);
+        $command->bindParam(":pben_estado", $estado, \PDO::PARAM_STR);      
+        $response = $command->execute();
+        return $response;              
+    }
 }
