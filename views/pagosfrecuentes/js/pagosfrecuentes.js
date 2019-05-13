@@ -454,7 +454,6 @@ function guardarFacturaTemp(){
     arrParams.telfono_fac = $('#txt_tel_fac').val();
     arrParams.tipo_dni_fac = $("input[name='opt_tipo_DNI']:checked").val();
     arrParams.dni_fac = $('#txt_dni_fac').val();
-    arrParams.correo = $('#txt_correo').val();
     sessionStorage.setItem('datosFactura', JSON.stringify(arrParams));    
 }
 
@@ -480,12 +479,6 @@ function guardarPagos() {
     arrParams.dataItems = itemList;    
     requestHttpAjax(link, arrParams, function (response) {
         showAlert("OK", "success", response.message);
-        if (!response.error) {
-                setTimeout(function () {
-                    window.location.href = $('#txth_base').val() + "/pagosfrecuentes/index";
-                }, 5000);
-            }
-
     });
 }
 function getItemsIds() {
