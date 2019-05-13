@@ -159,7 +159,7 @@ class PagosfrecuentesController extends \yii\web\Controller {
                             $item_precio = $item_model->getPrecios($con1, $item_ids[$i]["item_id"]);
                             \app\models\Utilities::putMessageLogFile('item id:'.$idsbp);
                             \app\models\Utilities::putMessageLogFile('precio:'.$item_precio["ipre_precio"]);
-                            $id_dsbp = $dsbp_model->insertarDetSolBotPag($con1, $idsbp, $item_ids[$i]["item_id"], 1, $item_precio["ipre_precio"]);
+                            $id_dsbp = $dsbp_model->insertarDetSolBotPag($con1, $idsbp, $item_ids[$i]["item_id"], 1, $item_precio["ipre_precio"], 0);
                             if ($id_dsbp > 0) {
                                 $mensaje = $mensaje . "";
                             }
