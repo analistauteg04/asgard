@@ -371,7 +371,7 @@ $(document).ready(function () {
         $("a[data-href='#paso2']").trigger("click");
     });
     $('#paso2back').click(function () {
-        llenarDatosBen()
+        llenarDatosBen(obtDataBen());
         $("a[data-href='#paso2']").attr('data-toggle', 'none');
         $("a[data-href='#paso2']").parent().attr('class', 'disabled');
         $("a[data-href='#paso2']").attr('data-href', $("a[href='#paso2']").attr('href'));
@@ -412,13 +412,27 @@ $(document).ready(function () {
     
 });
 function llenarDatosBen(benData){
-    alert(benData['nombre']);
-//    console.log(benData['apellido']);
-//    console.log(benData['pasaporte']);
-//    console.log(benData['correo']);
-//    console.log(benData['celular']);
-//    console.log(benData['cedula']);
-//    console.log(benData['pais_id']);
+    if(benData['nombre'].length > 0){
+        $('#txt_primer_nombre').val(benData['nombre']);
+    }
+    if(benData['nombre'].length > 0){
+        $('#txt_primer_nombre').val(benData['apellido']);
+    }
+    if(benData['nombre'].length > 0){
+        $('#txt_primer_nombre').val(benData['pasaporte']);
+    }
+    if(benData['nombre'].length > 0){
+        $('#txt_primer_nombre').val(benData['correo']);
+    }
+    if(benData['nombre'].length > 0){
+        $('#txt_primer_nombre').val(benData['celular']);
+    }
+    if(benData['nombre'].length > 0){
+        $('#txt_primer_nombre').val(benData['cedula']);
+    }
+    if(benData['nombre'].length > 0){
+        $('#txt_primer_nombre').val(benData['pais_id']);
+    }
 }
 function guardarBenPagoTemp(){
     var arrParams = new Object();
