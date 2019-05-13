@@ -154,24 +154,19 @@ class PagosfrecuentesController extends \yii\web\Controller {
                     $idsbp = $sbp_model->insertSolicitudBotonPago($con1, $id_pbens);
                     if ($idsbp > 0) {
                         \app\models\Utilities::putMessageLogFile('Ingresa a obtener precio.');
-                        for ($i = 0; $i < count($item_ids); $i++) {
-                            \app\models\Utilities::putMessageLogFile('item precio:'.$item_ids[$i]["item_id"]);
-                            $item_precio = $item_model->getPrecios($con1, $item_ids[$i]["item_id"]);
-                            \app\models\Utilities::putMessageLogFile('item id:'.$idsbp);
-                            \app\models\Utilities::putMessageLogFile('precio:'.$item_precio["ipre_precio"]);
-                            $id_dsbp = $dsbp_model->insertarDetSolBotPag($con1, $idsbp, $item_ids[$i]["item_id"], 1, $item_precio["ipre_precio"], 0);
+                        for ($i = 0; $i < count($item_ids); $i++) {                            
+                            $item_precio = $item_model->getPrecios($con1, $item_ids[$i]["item_id"]);      
+                            $val_iva = 0;
+                            //\app\models\Utilities::putMessageLogFile('precio:'.$item_precio["ipre_precio"]);
+                            $id_dsbp = $dsbp_model->insertarDetSolBotPag($con1, $idsbp, $item_ids[$i]["item_id"], 1, $item_precio["ipre_precio"], $val_iva);
                             if ($id_dsbp > 0) {
                                 $mensaje = $mensaje . "";
                             }
-                        }
-                        //$con,$tdoc_id,$sbpa_id,$nombres,$direccion,$telefono,$correo,$valor,$usuario)
-                        // $tdoc_id quemado el 1 por ser factura ojo modiifcarlo no debe ir asi quemado
-                        // El correo que se envia no es, hay que crear uno nuevo en la 3ra pestaña
-                        // el valor es el total que aparece en le grid toca capturarlo
-                        $iddoc = $doc_model->insertDocumento($con1, 1, $idsbp, ucwords(strtolower($dataFactura["nombre_fac"])) . ' ' . ucwords(strtolower($dataFactura["apellidos_fac"])), ucwords(strtolower($dataFactura["dir_fac"])), $dataFactura["telfono_fac"], $dataBeneficiario["correo"], 22, null);
+                        }                        
+                        $iddoc = $doc_model->insertDocumento($con1, 1, $idsbp, ucwords(strtolower($dataFactura["nombre_fac"])) . ' ' . ucwords(strtolower($dataFactura["apellidos_fac"])), ucwords(strtolower($dataFactura["dir_fac"])), $dataFactura["telfono_fac"], $dataFactura["correo"], 22, null);
                         if ($iddoc > 0) {
                             $transaction->commit();
-                            $mensaje = $mensaje . "Se ha guardado exitosamente su solicitud de Pago.";                            
+                            $mensaje = $mensaje . "Se ha guardado exitosamente su solicitud de pago.";                            
                             $message = array(
                                 "wtmessage" => Yii::t("notificaciones", $mensaje),
                                 "title" => Yii::t('jslang', 'Success'),
@@ -181,7 +176,7 @@ class PagosfrecuentesController extends \yii\web\Controller {
                             $mensaje = $mensaje . "No se ha guardado el documento de factura";
                         }
                     } else {
-                        $mensaje = $mensaje . "No se ha guardado la solicitud del boton";
+                        $mensaje = $mensaje . "No se ha guardado la solicitud del pago";
                     }
                 } else {
                     $mensaje = $mensaje . "No se ha guardado el beneficiario";
