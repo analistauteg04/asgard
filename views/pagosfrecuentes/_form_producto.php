@@ -52,7 +52,7 @@ financiero::registerTranslations();
             </div>
         </div>
     </div>
-    <div class="col-lg-6 col-md-6 col-sm-6 col-xs-6">
+    <div class="col-lg-6 col-md-6 col-sm-6 col-xs-6" style="display:none">
         <div class="form-group">
             <label for="txt_cantidad_item" class="col-lg-4 col-md-4 col-sm-4 col-xs-4 control-label" id="lbl_nombre1"><?= financiero::t("Pagos", "Amount") ?></label>
             <div class="col-lg-8 col-md-8 col-sm-8 col-xs-8">

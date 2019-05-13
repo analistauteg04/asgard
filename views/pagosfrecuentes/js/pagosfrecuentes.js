@@ -21,6 +21,7 @@ var itemList = [];
 $(document).ready(function () {    
     // para mostrar codigo de area
     representarItems(obtDataList());
+    llenarDatosBen(obtDataBen());
     var unisol = $('#cmb_unidad_solicitud').val();
     if (unisol == 1) {
         $('#divmetodocan').css('display', 'none');
@@ -370,6 +371,7 @@ $(document).ready(function () {
         $("a[data-href='#paso2']").trigger("click");
     });
     $('#paso2back').click(function () {
+        llenarDatosBen()
         $("a[data-href='#paso2']").attr('data-toggle', 'none');
         $("a[data-href='#paso2']").parent().attr('class', 'disabled');
         $("a[data-href='#paso2']").attr('data-href', $("a[href='#paso2']").attr('href'));
@@ -409,6 +411,15 @@ $(document).ready(function () {
     });
     
 });
+function llenarDatosBen(benData){
+    alert(benData['nombre']);
+//    console.log(benData['apellido']);
+//    console.log(benData['pasaporte']);
+//    console.log(benData['correo']);
+//    console.log(benData['celular']);
+//    console.log(benData['cedula']);
+//    console.log(benData['pais_id']);
+}
 function guardarBenPagoTemp(){
     var arrParams = new Object();
     arrParams.nombre = $('#txt_primer_nombre').val();
@@ -508,6 +519,15 @@ function obtDataList() {
         itemList = JSON.parse(storedListItems);
     }
     return itemList;
+}
+function obtDataBen() {
+    var storedListBen = sessionStorage.getItem('datosBen');
+    if (storedListBen === null) {
+        benList = [];
+    } else {
+        benList = JSON.parse(storedListBen);
+    }
+    return benList;
 }
 function representarItems(dataItems) {
     $("#dataListItem").html("");
