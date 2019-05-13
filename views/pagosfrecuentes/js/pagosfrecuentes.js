@@ -415,23 +415,23 @@ function llenarDatosBen(benData){
     if(benData['nombre'].length > 0){
         $('#txt_primer_nombre').val(benData['nombre']);
     }
-    if(benData['nombre'].length > 0){
-        $('#txt_primer_nombre').val(benData['apellido']);
+    if(benData['apellido'].length > 0){
+        $('#txt_primer_apellido').val(benData['apellido']);
     }
     if(benData['nombre'].length > 0){
-        $('#txt_primer_nombre').val(benData['pasaporte']);
+        $('#txt_pasaporte').val(benData['pasaporte']);
     }
-    if(benData['nombre'].length > 0){
-        $('#txt_primer_nombre').val(benData['correo']);
+    if(benData['correo'].length > 0){
+        $('#txt_correo').val(benData['correo']);
     }
-    if(benData['nombre'].length > 0){
-        $('#txt_primer_nombre').val(benData['celular']);
+    if(benData['celular'].length > 0){
+        $('#txt_celular').val(benData['celular']);
     }
-    if(benData['nombre'].length > 0){
-        $('#txt_primer_nombre').val(benData['cedula']);
+    if(benData['cedula'].length > 0){
+        $('#txt_cedula').val(benData['cedula']);
     }
-    if(benData['nombre'].length > 0){
-        $('#txt_primer_nombre').val(benData['pais_id']);
+    if(benData['pais_id'].length > 0){
+        $('#cmb_pais_dom').val(benData['pais_id']);
     }
 }
 function guardarBenPagoTemp(){
