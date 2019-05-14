@@ -146,48 +146,52 @@ class PagosfrecuentesController extends \yii\web\Controller {
             $transaction = $con1->beginTransaction();
 
             try {
-                $id_pben = $pben_model->getIdPerBenByCed($con1, $cedula);
-                if (empty($id_pben)) {
-                    $id_pbens = $pben_model->insertPersonaBeneficia($con1, $cedula, ucwords(strtolower($dataBeneficiario["nombre"])), ucwords(strtolower($dataBeneficiario["apellido"])), $dataBeneficiario["correo"], $dataBeneficiario["celular"]);
-                } else {
-                    $id_actualiza = $pben_model->updatePersonaBeneficia($con1, $cedula, ucwords(strtolower($dataBeneficiario["nombre"])), ucwords(strtolower($dataBeneficiario["apellido"])), $dataBeneficiario["correo"], $dataBeneficiario["celular"]);                
-                    if ($id_actualiza){                       
-                        $id_pbens= $id_pben["id"];                      
+                if (!empty($item_ids)) {
+                    $id_pben = $pben_model->getIdPerBenByCed($con1, $cedula);
+                    if (empty($id_pben)) {
+                        $id_pbens = $pben_model->insertPersonaBeneficia($con1, $cedula, ucwords(strtolower($dataBeneficiario["nombre"])), ucwords(strtolower($dataBeneficiario["apellido"])), $dataBeneficiario["correo"], $dataBeneficiario["celular"]);
                     } else {
-                        $id_pbens=0;   //Cuando hubo error en la actualización.                        
-                    }
-                }
-                if ($id_pbens > 0) {
-                    $idsbp = $sbp_model->insertSolicitudBotonPago($con1, $id_pbens);
-                    if ($idsbp > 0) {                        
-                        for ($i = 0; $i < count($item_ids); $i++) {                            
-                            $item_precio = $item_model->getPrecios($con1, $item_ids[$i]["item_id"]);      
-                            $val_iva = 0;
-                            //\app\models\Utilities::putMessageLogFile('precio:'.$item_precio["ipre_precio"]);
-                            $id_dsbp = $dsbp_model->insertarDetSolBotPag($con1, $idsbp, $item_ids[$i]["item_id"], 1, $item_precio["ipre_precio"], $val_iva);
-                            if ($id_dsbp > 0) {
-                                $mensaje = $mensaje . "";
-                            }
-                        }                        
-                        $iddoc = $doc_model->insertDocumento($con1, 1, $idsbp, ucwords(strtolower($dataFactura["nombre_fac"])) . ' ' . ucwords(strtolower($dataFactura["apellidos_fac"])), 
-                                            ucwords(strtolower($dataFactura["dir_fac"])), $dataFactura["telfono_fac"], $dataFactura["correo"], 
-                                            $dataFactura["total"], null);
-                        if ($iddoc > 0) {
-                            $transaction->commit();
-                            $mensaje = $mensaje . "Se ha guardado exitosamente su solicitud de pago.";                            
-                            $message = array(
-                                "wtmessage" => Yii::t("notificaciones", $mensaje),
-                                "title" => Yii::t('jslang', 'Success'),
-                            );
-                            return Utilities::ajaxResponse('OK', 'alert', Yii::t("jslang", "Sucess"), false, $message);
+                        $id_actualiza = $pben_model->updatePersonaBeneficia($con1, $cedula, ucwords(strtolower($dataBeneficiario["nombre"])), ucwords(strtolower($dataBeneficiario["apellido"])), $dataBeneficiario["correo"], $dataBeneficiario["celular"]);                
+                        if ($id_actualiza){                       
+                            $id_pbens= $id_pben["id"];                      
                         } else {
-                            $mensaje = $mensaje . "No se ha guardado el documento de factura";
+                            $id_pbens=0;   //Cuando hubo error en la actualización.                        
+                        }
+                    }
+                    if ($id_pbens > 0) {
+                        $idsbp = $sbp_model->insertSolicitudBotonPago($con1, $id_pbens);
+                        if ($idsbp > 0) {                        
+                            for ($i = 0; $i < count($item_ids); $i++) {                            
+                                $item_precio = $item_model->getPrecios($con1, $item_ids[$i]["item_id"]);      
+                                $val_iva = 0;
+                                //\app\models\Utilities::putMessageLogFile('precio:'.$item_precio["ipre_precio"]);
+                                $id_dsbp = $dsbp_model->insertarDetSolBotPag($con1, $idsbp, $item_ids[$i]["item_id"], 1, $item_precio["ipre_precio"], $val_iva);
+                                if ($id_dsbp > 0) {
+                                    $mensaje = $mensaje . "";
+                                }
+                            }                        
+                            $iddoc = $doc_model->insertDocumento($con1, 1, $idsbp, ucwords(strtolower($dataFactura["nombre_fac"])) . ' ' . ucwords(strtolower($dataFactura["apellidos_fac"])), 
+                                                ucwords(strtolower($dataFactura["dir_fac"])), $dataFactura["telfono_fac"], $dataFactura["correo"], 
+                                                $dataFactura["total"], null);
+                            if ($iddoc > 0) {
+                                $transaction->commit();
+                                $mensaje = $mensaje . "Se ha guardado exitosamente su solicitud de pago.";                            
+                                $message = array(
+                                    "wtmessage" => Yii::t("notificaciones", $mensaje),
+                                    "title" => Yii::t('jslang', 'Success'),
+                                );
+                                return Utilities::ajaxResponse('OK', 'alert', Yii::t("jslang", "Sucess"), false, $message);
+                            } else {
+                                $mensaje = $mensaje . "No se ha guardado el documento de factura";
+                            }
+                        } else {
+                            $mensaje = $mensaje . "No se ha guardado la solicitud del pago";
                         }
                     } else {
-                        $mensaje = $mensaje . "No se ha guardado la solicitud del pago";
+                        $mensaje = $mensaje . "No se ha guardado el beneficiario";
                     }
                 } else {
-                    $mensaje = $mensaje . "No se ha guardado el beneficiario";
+                    $mensaje = $mensaje . "No se ha seleccionado ningún item a facturar.";
                 }
             } catch (Exception $ex) {
                 $transaction->rollBack();

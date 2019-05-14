@@ -7,6 +7,7 @@
  * 
  * @returns {voids}
  * Created: Kleber Loayza(kloayza@uteg.edu.ec)
+ * Updated: Grace Viteri (analistadesarrollo01@uteg.edu.ec)
  * date: Oct/23/18
  */
 function habilitarSecciones() {
@@ -251,6 +252,25 @@ $(document).ready(function () {
         $("a[data-href='#paso3']").trigger("click");
     });
     
+    $('input[name=opt_tipo_DNI]:radio').change(function () {
+        if ($(this).val() == 1) {//ced
+            $('#txt_dni_fac').attr("data-lengthMin", "10");
+            $('#txt_dni_fac').attr("data-lengthMax", "10");
+            $('#txt_dni_fac').attr("placeholder", $('#txth_ced_lb').val());
+            $('label[for=txt_dni_fac]').text($('#txth_ced_lb').val() + "");
+        } else if ($(this).val() == 2) { // ruc
+            $('#txt_dni_fac').attr("data-lengthMin", "13");
+            $('#txt_dni_fac').attr("data-lengthMax", "13");
+            $('#txt_dni_fac').attr("placeholder", $('#txth_ruc_lb').val());
+            $('label[for=txt_dni_fac]').text($('#txth_ruc_lb').val() + "");
+        } else { // pasaporte
+            $('#txt_dni_fac').attr("data-lengthMin", "7");
+            $('#txt_dni_fac').attr("data-lengthMax", "13");
+            $('#txt_dni_fac').attr("placeholder", $('#txth_ruc_lb').val());
+            $('label[for=txt_dni_fac]').text($('#txth_pas_lb').val() + "");
+        }
+    });
+    
 });
 function llenarDatosBen(benData){
     if(benData['nombre'].length > 0){
@@ -320,10 +340,19 @@ function guardarPagos() {
     arrParams.dataBenList = dataBenList;
     arrParams.dataFacturaList = dataFacturaList;  
     arrParams.dataItems = itemList;    
-    requestHttpAjax(link, arrParams, function (response) {
-        showAlert("OK", "success", response.message);
-    });
+        
+    if (!validateForm()) {   
+        requestHttpAjax(link, arrParams, function (response) {
+            showAlert("OK", "success", response.message);
+            setTimeout(function () {
+                //sessionStorage.removeItem('datosFamiliares');
+                sessionStorage.clear();
+                window.location.href = $('#txth_base').val() + "/pagosfrecuentes/index";
+             }, 3000);
+        });
+    }
 }
+
 function getItemsIds() {
     var newList = [];
     var lstcurrent = obtDataList();
