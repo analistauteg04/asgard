@@ -181,20 +181,7 @@ $(document).ready(function () {
             }
         }, true);
     });
-    $('#rdo_forma_pago_dinner').change(function () {
-        if ($('#rdo_forma_pago_dinner').val() == 1) {
-            $("#rdo_forma_pago_otros").prop("checked", "");
-        } else {
-            $("#rdo_forma_pago_dinner").prop("checked", true);
-        }
-    });
-    $('#rdo_forma_pago_otros').change(function () {
-        if ($('#rdo_forma_pago_otros').val() == 2) {
-            $("#rdo_forma_pago_dinner").prop("checked", "");
-        } else {
-            $("#rdo_forma_pago_otros").prop("checked", true);
-        }
-    });
+    
     $('#btn_AgregarItem').click(function () {
         guardarItem();
         var dataItems = obtDataList();
@@ -321,36 +308,45 @@ function guardarFacturaTemp(){
 }
 
 function guardarPagos() {  
-    var dataBenList=[];
-    var dataFacturaList= [];
     var link = $('#txth_base').val() + "/pagosfrecuentes/savepayment";
     var arrParams = new Object();
-    var storedListBen = sessionStorage.getItem('datosBen');
-    if (storedListBen == null) {
-        dataBenList = [];
-    } else {        
-        dataBenList = JSON.parse(storedListBen);        
-    }   
-    var storedListFactura = sessionStorage.getItem('datosFactura');
-    if (storedListFactura == null) {
-        dataFacturaList = [];
-    } else {
-        dataFacturaList = JSON.parse(storedListFactura);        
-    }     
+    var dataBenList = obtDataBen();
+    var dataFacturaList = obtDataFact();
+
     arrParams.dataBenList = dataBenList;
-    arrParams.dataFacturaList = dataFacturaList;  
-    arrParams.dataItems = itemList;    
-        
-    if (!validateForm()) {   
-        requestHttpAjax(link, arrParams, function (response) {
-            showAlert("OK", "success", response.message);
-            setTimeout(function () {
-                //sessionStorage.removeItem('datosFamiliares');
-                sessionStorage.clear();
-                window.location.href = $('#txth_base').val() + "/pagosfrecuentes/index";
-             }, 3000);
-        });
+    arrParams.dataFacturaList = dataFacturaList;      
+    if (total==0){        
+        mensaje("No ha seleccionado productos para la factura.");
+    } else {
+        var dataItemList = obtDataList();
+        arrParams.dataItems = dataItemList;//itemList;                
+        if (!validateForm()) {   
+            requestHttpAjax(link, arrParams, function (response) {
+                showAlert("OK", "success", response.message);
+                setTimeout(function () {
+                    //sessionStorage.removeItem('datosFamiliares');
+                    sessionStorage.clear();
+                    window.location.href = $('#txth_base').val() + "/pagosfrecuentes/index";
+                 }, 3000);
+            });
+        }
     }
+}
+
+function mensaje(lv_mensaje) {
+    var messagePB = new Object();
+    messagePB.wtmessage = lv_mensaje;
+    messagePB.title = "Mensaje del Sistema";
+    var objAccept = new Object();
+    objAccept.id = "btnid2del";
+    objAccept.class = "btn-primary";
+    objAccept.value = "Aceptar";
+    //objAccept.callback = 'fnsuscribirLista';
+    var params = new Array();
+    objAccept.paramCallback = params;
+    messagePB.acciones = new Array();
+    messagePB.acciones[0] = objAccept;
+    showAlert("OK", "info", messagePB);
 }
 
 function getItemsIds() {
@@ -414,6 +410,15 @@ function obtDataBen() {
         benList = JSON.parse(storedListBen);
     }
     return benList;
+}
+function obtDataFact() {
+    var storedListFact = sessionStorage.getItem('datosFactura');
+    if (storedListFact === null) {
+        factList = [];
+    } else {
+        factList = JSON.parse(storedListFact);
+    }
+    return factList;
 }
 function representarItems(dataItems) {
     $("#dataListItem").html("");

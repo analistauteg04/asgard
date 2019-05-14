@@ -170,7 +170,7 @@ class PagosfrecuentesController extends \yii\web\Controller {
                                     $mensaje = $mensaje . "";
                                 }
                             }                        
-                            $iddoc = $doc_model->insertDocumento($con1, 1, $idsbp, ucwords(strtolower($dataFactura["nombre_fac"])) . ' ' . ucwords(strtolower($dataFactura["apellidos_fac"])), 
+                            $iddoc = $doc_model->insertDocumento($con1, $dataFactura["tipo_dni_fac"], $idsbp, ucwords(strtolower($dataFactura["nombre_fac"])) . ' ' . ucwords(strtolower($dataFactura["apellidos_fac"])), 
                                                 ucwords(strtolower($dataFactura["dir_fac"])), $dataFactura["telfono_fac"], $dataFactura["correo"], 
                                                 $dataFactura["total"], null);
                             if ($iddoc > 0) {
