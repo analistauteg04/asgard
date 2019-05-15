@@ -351,6 +351,8 @@ create table if not exists `documento` (
   `doc_telefono` varchar(50) default null, 
   `doc_correo` varchar(50) default null, 
   `doc_valor` double not null, 
+  `doc_pagado` varchar(1) not null, 
+  `doc_fecha_pago` timestamp null, 
   `doc_usuario_transaccion` bigint(20) null,  
   `doc_estado` varchar(1) default null,
   `doc_fecha_creacion` timestamp not null default current_timestamp,

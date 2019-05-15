@@ -89,9 +89,9 @@ aspirante::registerTranslations();
         <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
             <div class="col-md-6 col-sm-6 col-xs-6 col-lg-6">
                 <div class="form-group">
-                    <label for="txt_correo" class="col-sm-5 col-md-5 col-xs-5 col-lg-5 control-label"><?= Yii::t("formulario", "Email") ?></label>
+                    <label for="txt_correo_factura" class="col-sm-5 col-md-5 col-xs-5 col-lg-5 control-label"><?= Yii::t("formulario", "Email") ?></label>
                     <div class="col-sm-7 col-md-7 col-xs-7 col-lg-7">
-                        <input type="text" class="form-control PBvalidation" id="txt_correo" data-type="email" data-keydown="true" placeholder="<?= Yii::t("formulario", "Email") ?>">
+                        <input type="text" class="form-control PBvalidation" id="txt_correo_factura" data-type="email" data-keydown="true" placeholder="<?= Yii::t("formulario", "Email") ?>">
                     </div>
                 </div>
             </div>    

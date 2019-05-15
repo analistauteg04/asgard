@@ -89,8 +89,8 @@ class Documento extends \yii\db\ActiveRecord
     public function insertDocumento($con,$tdoc_id,$sbpa_id,$nombres,$direccion,$telefono,$correo,$valor,$usuario) {  
         $estado = 1;        
         $sql = "INSERT INTO " . $con->dbname . ".documento
-            (tdoc_id, sbpa_id, doc_nombres_cliente, doc_direccion, doc_telefono, doc_correo, doc_valor, doc_usuario_transaccion,doc_estado,doc_estado_logico) VALUES
-            (:tdoc_id,:sbpa_id,:doc_nombres_cliente,:doc_direccion,:doc_telefono,:doc_correo,:doc_valor,:doc_usuario_transaccion,:doc_estado,:doc_estado)";
+            (tdoc_id, sbpa_id, doc_nombres_cliente, doc_direccion, doc_telefono, doc_correo, doc_valor, doc_pagado, doc_usuario_transaccion,doc_estado,doc_estado_logico) VALUES
+            (:tdoc_id,:sbpa_id,:doc_nombres_cliente,:doc_direccion,:doc_telefono,:doc_correo,:doc_valor, 'N', :doc_usuario_transaccion,:doc_estado,:doc_estado)";
                         
         $command = $con->createCommand($sql);        
         $command->bindParam(":tdoc_id", $tdoc_id, \PDO::PARAM_INT);
@@ -104,5 +104,45 @@ class Documento extends \yii\db\ActiveRecord
         $command->bindParam(":doc_estado", $estado, \PDO::PARAM_STR);    
         $command->execute();
         return $con->getLastInsertID();        
+    }
+
+    public function actualizarDocumento($con, $doc_id) {  
+        $estado = 1;
+        $fecha = date(Yii::$app->params["dateTimeByDefault"]);
+        $sql = "UPDATE " . $con->dbname . ".documento
+                set doc_pagado = :doc_pagado,
+                    doc_fecha_pago = :fecha_pago,                    
+                    doc_fecha_modificacion = :fecha_pago
+                WHERE doc_id = :doc_id
+                and doc_estado = :estado
+                and doc_estado_logico = :estado";
+                
+         \app\models\Utilities::putMessageLogFile('sql: ' . $sql);
+        $command = $con->createCommand($sql);
+        $command->bindParam(":doc_id", $doc_id, \PDO::PARAM_INT);
+        $command->bindParam(":fecha_pago", $fecha, \PDO::PARAM_STR);
+        $command->bindParam(":estado", $estado, \PDO::PARAM_STR);      
+        $response = $command->execute();
+        return $response;              
+    }
+    
+    public function consultarDatosxId($con, $doc_id){                
+        $estado = 1;
+        $sql=  "SELECT pb.pben_nombre, pb.pben_apellido, d.doc_valor, d.doc_correo
+                FROM " . $con->dbname . ".documento d inner join " . $con->dbname . ".solicitud_boton_pago sb 
+                         on sb.sbpa_id = d.sbpa_id     
+                     inner join " . $con->dbname . ".persona_beneficiaria pb on pb.pben_id = sb.pben_id
+                WHERE d.doc_id = :doc_id
+                and d.doc_estado = :estado
+                and d.doc_estado_logico = :estado
+                and pb.pben_estado = :estado
+                and pb.pben_estado_logico = :estado
+                and sb.sbpa_estado = :estado
+                and sb.sbpa_estado_logico = :estado";                    
+        $comando = $con->createCommand($sql);
+        $comando->bindParam(":estado", $estado, \PDO::PARAM_STR);
+        $comando->bindParam(":doc_id", $doc_id, \PDO::PARAM_INT);      
+        $resultData = $comando->queryOne();        
+        return $resultData;      
     }
 }
