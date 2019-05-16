@@ -38,6 +38,10 @@ iptables -A OUTPUT -p tcp --sport 80 -j ACCEPT
 iptables -A INPUT  -p tcp --dport 443 -j ACCEPT
 iptables -A OUTPUT -p tcp --sport 443 -j ACCEPT
 
+## Se agrega permisos para Salida puertos mail server
+iptables -A INPUT  -p tcp --dport 587 -j ACCEPT
+iptables -A OUTPUT -p tcp --sport 587 -j ACCEPT
+
 ## Cerramos otros puertos que estan abiertos
 iptables -A INPUT -p udp --dport 5353 -j DROP
 
