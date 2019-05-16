@@ -1,6 +1,10 @@
 #!/bin/bash
+
 IP_UTEG_DES="181.39.139.67"
-IP_UTEG_OFI="23.34.44.55"
+IP_UTEG_OFI="186.68.143.106"
+RED_PRIVADA="130.107.1.0/24"
+ETH0="em1"
+ETH1="em2"
 echo "Aplicando Reglas de Firewall..."
 
 ## FLUSH de reglas
@@ -23,6 +27,10 @@ iptables -A INPUT  -s $IP_UTEG_DES -j ACCEPT
 iptables -A OUTPUT -d $IP_UTEG_DES -j ACCEPT
 iptables -A INPUT  -s $IP_UTEG_OFI -j ACCEPT
 iptables -A OUTPUT -d $IP_UTEG_OFI -j ACCEPT
+
+## Se permite acceso desde la red 
+iptables -A INPUT -i $ETH1 -s $RED_PRIVADA -j ACCEPT
+iptables -A OUTPUT -i $ETH1 -d $RED_PRIVADA -j ACCEPT
 
 ## El puerto 80 y 433 de www debe estar abierto, es un servidor web.
 iptables -A INPUT  -p tcp --dport 80 -j ACCEPT
