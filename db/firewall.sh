@@ -30,7 +30,7 @@ iptables -A OUTPUT -d $IP_UTEG_OFI -j ACCEPT
 
 ## Se permite acceso desde la red 
 iptables -A INPUT -i $ETH1 -s $RED_PRIVADA -j ACCEPT
-iptables -A OUTPUT -i $ETH1 -d $RED_PRIVADA -j ACCEPT
+iptables -A OUTPUT -o $ETH1 -d $RED_PRIVADA -j ACCEPT
 
 ## El puerto 80 y 433 de www debe estar abierto, es un servidor web.
 iptables -A INPUT  -p tcp --dport 80 -j ACCEPT
