@@ -614,5 +614,102 @@ class RegistroMarcacion extends \yii\db\ActiveRecord {
         } else {
             return $dataProvider;
         }
-    }        
+    } 
+    
+     /**
+     * Function consultarRegistroNoMarcacion
+     * @author  Grace Viteri <analistadesarrollo01@uteg.edu.ec>    
+     * @property  
+     * @return  
+     */
+    public function consultarRegistroNoMarcacion($arrFiltro = array(), $onlyData = false) {
+        $con = \Yii::$app->db_academico;
+        $con1 = \Yii::$app->db_asgard;
+        $estado = 1;
+        if (isset($arrFiltro) && count($arrFiltro) > 0) {
+            $str_search .= "(per.per_pri_nombre like :profesor OR ";
+            $str_search .= "per.per_seg_nombre like :profesor OR ";
+            $str_search .= "per.per_pri_apellido like :profesor OR ";
+            $str_search .= "per.per_seg_nombre like :profesor )  AND ";
+            $str_search .= "asig.asi_nombre like :materia  AND ";
+            if ($arrFiltro['unidad'] != "" && $arrFiltro['unidad'] > 0) {
+                $str_search .= " hap.uaca_id = :unidad AND ";
+            }
+            if ($arrFiltro['modalidad'] != "" && $arrFiltro['modalidad'] > 0) {
+                $str_search .= " hap.mod_id = :modalidad AND ";
+            }
+            if ($arrFiltro['f_ini'] != "" && $arrFiltro['f_fin'] != "") {
+                $str_search .= "rma.rmar_fecha_creacion >= :fec_ini AND ";
+                $str_search .= "rma.rmar_fecha_creacion <= :fec_fin AND ";
+            }
+            if ($arrFiltro['periodo'] != "" && $arrFiltro['periodo'] > 0) {
+                $str_search .= " hap.paca_id = :periodo AND ";
+            }
+        }
+        if ($onlyData == false) {
+            $periodoacademico = 'hap.paca_id as periodo, ';
+            $grupoperi = ',periodo';
+        }
+        $sql = "SELECT rmg.rmtm_fecha_transaccion as fecha, concat(per.per_pri_nombre, ' ', per.per_pri_apellido, ' ', per.per_seg_apellido) profesor,
+                       a.asi_nombre as materia, hap.hape_hora_entrada as hora_inicio, hap.hape_hora_salida as hora_salida
+                FROM " . $con->dbname . ".registro_marcacion_generada rmg
+                     inner join " . $con->dbname . ".horario_asignatura_periodo hap on rmg.hape_id = hap.hape_id
+                     inner join " . $con->dbname . ".profesor p on p.pro_id = hap.pro_id
+                     inner join " . $con1->dbname . ".persona per on per.per_id = p.per_id
+                     inner join " . $con->dbname . ".asignatura a on a.asi_id = hap.asi_id
+                WHERE rmg.paca_id = :periodo
+                       and hap.uaca_id = :unidad
+                       and hap.mod_id = :modalidad
+                       and hap.hape_estado = :estado
+                       and hap.hape_estado_logico = :estado
+                       and date_format(rmg.rmtm_fecha_transaccion, '%Y-%m-%d') <= date_format(curdate(),'%Y-%m-%d')
+                       and not exists(select null from " . $con->dbname . ".registro_marcacion rm 
+                                      where rm.hape_id = rmg.hape_id
+                                            and date_format(rmg.rmtm_fecha_transaccion,'%Y-%m-%d') = date_format(rm.rmar_fecha_creacion,'%Y-%m-%d')
+                                            and rmar_tipo = 'E')
+                ORDER BY rmg.rmtm_fecha_transaccion";
+        $comando = $con->createCommand($sql);
+        $comando->bindParam(":estado", $estado, \PDO::PARAM_STR);
+        if (isset($arrFiltro) && count($arrFiltro) > 0) {
+            $search_cond = "%" . $arrFiltro["profesor"] . "%";
+            $comando->bindParam(":profesor", $search_cond, \PDO::PARAM_STR);
+            $fecha_ini = $arrFiltro["f_ini"] . " 00:00:00";
+            $fecha_fin = $arrFiltro["f_fin"] . " 23:59:59";
+            $materia = "%" . $arrFiltro["materia"] . "%";
+            $comando->bindParam(":materia", $materia, \PDO::PARAM_STR);
+            if ($arrFiltro['unidad'] != "" && $arrFiltro['unidad'] > 0) {
+                $unidad = $arrFiltro["unidad"];
+                $comando->bindParam(":unidad", $unidad, \PDO::PARAM_INT);
+            }
+            if ($arrFiltro['modalidad'] != "" && $arrFiltro['modalidad'] > 0) {
+                $modalidad = $arrFiltro["modalidad"];
+                $comando->bindParam(":modalidad", $modalidad, \PDO::PARAM_INT);
+            }
+            if ($arrFiltro['f_ini'] != "" && $arrFiltro['f_fin'] != "") {
+                $comando->bindParam(":fec_ini", $fecha_ini, \PDO::PARAM_STR);
+                $comando->bindParam(":fec_fin", $fecha_fin, \PDO::PARAM_STR);
+            }
+            if ($arrFiltro['periodo'] != "" && $arrFiltro['periodo'] > 0) {
+                $periodo = $arrFiltro["periodo"];
+                $comando->bindParam(":periodo", $periodo, \PDO::PARAM_INT);
+            }
+        }
+        $resultData = $comando->queryAll();
+        $dataProvider = new ArrayDataProvider([
+            'key' => 'id',
+            'allModels' => $resultData,
+            'pagination' => [
+                'pageSize' => Yii::$app->params["pageSize"],
+            ],
+            'sort' => [
+                'attributes' => [
+                ],
+            ],
+        ]);
+        if ($onlyData) {
+            return $resultData;
+        } else {
+            return $dataProvider;
+        }
+    }
 }

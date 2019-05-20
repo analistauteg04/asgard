@@ -2052,4 +2052,25 @@ class PersonaGestion extends \app\modules\admision\components\CActiveRecord {
         return $rawData; //Si Existe en la Tabla
     }
 
+    /**     * **
+     * Function Existe Persona Gestion
+     * @author  Grace Viteri <analistadesarrollo01@uteg.edu.ec>
+     * @property      
+     * @return  
+     */
+    public static function existePersonaGestion($correo, $numero) {
+        //pgest_nombre,pgest_numero,pgest_correo 
+        $con = \Yii::$app->db_crm;            
+        $sql = "SELECT pges_id Ids
+                    FROM " . $con->dbname . ".persona_gestion  
+                WHERE pges_estado_logico=1 AND (pges_correo=:pges_correo OR pges_celular=:pges_celular)";
+                
+        $comando = $con->createCommand($sql);
+        $comando->bindParam(":pges_correo", $correo, \PDO::PARAM_STR);
+        $comando->bindParam(":pges_celular", $numero, \PDO::PARAM_STR);      
+        $rawData = $comando->queryScalar();
+        if ($rawData === false)        
+            return 0;
+        return $rawData; //Si Existe en la Tabla
+    }
 }

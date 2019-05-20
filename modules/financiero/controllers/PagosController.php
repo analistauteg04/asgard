@@ -400,15 +400,22 @@ class PagosController extends \app\components\CController {
                 $creadetalle = $modcargapago->insertarCargaprepago($opag_id, $fpag_id, $dcar_valor, $imagen, $dcar_revisado, $dcar_resultado, $dcar_observacion, $dcar_num_transaccion, $dcar_fecha_transaccion, $fecha_registro);
                 if ($creadetalle) {
                     //Envío de correo a colecturia.                
-                    $informacion_interesado = $modcargapago->datosBotonpago($opag_id, $empresa);
+                    \app\models\Utilities::putMessageLogFile('Orden Pago:'.$opag_id);   
+                    \app\models\Utilities::putMessageLogFile('Empresa:'.$empresa);  
+                    $informacion_interesado = $modcargapago->datosBotonpago($opag_id, $empresa);                    
                     $pri_nombre = $informacion_interesado["nombres"];
                     $pri_apellido = $informacion_interesado["apellidos"];
                     $nombres = $pri_nombre . " " . $pri_apellido;
                     $metodo = $informacion_interesado["curso"];
                     $tituloMensaje = Yii::t("interesado", "UTEG - Registration Online");
                     $asunto = Yii::t("interesado", "UTEG - Registration Online");
+                    \app\models\Utilities::putMessageLogFile('Nombres y apellidos:'.$nombres);   
+                    \app\models\Utilities::putMessageLogFile('Método:'.$metodo);  
+                    \app\models\Utilities::putMessageLogFile('Titulo:'.$tituloMensaje);  
+                    \app\models\Utilities::putMessageLogFile('Asunto:'.$asunto); 
+                    
                     $bodycolecturia = Utilities::getMailMessage("Paymentraisedcollect", array("[[nombres_completos]]" => $nombres, "[[metodo]]" => $metodo), Yii::$app->language);
-                    Utilities::sendEmail($tituloMensaje, Yii::$app->params["adminEmail"], [Yii::$app->params["colecturia"] => "Colecturia"], $asunto, $bodycolecturia);
+                    //Utilities::sendEmail($tituloMensaje, Yii::$app->params["adminEmail"], [Yii::$app->params["colecturia"] => "Colecturia"], $asunto, $bodycolecturia);
                     $exito = 1;
                 }
                 if ($exito == 1) {

@@ -1143,7 +1143,7 @@ class OrdenPago extends \app\modules\financiero\components\CActiveRecord {
                               AND per.per_estado_logico = :estado
                               AND me.mest_estado_logico = :estado";            
         }
-            
+        \app\models\Utilities::putMessageLogFile('sql:'.$sql);  
         $comando = $con->createCommand($sql);
         $comando->bindParam(":estado", $estado, \PDO::PARAM_STR);
         $comando->bindParam(":opag_id", $opag_id, \PDO::PARAM_INT);

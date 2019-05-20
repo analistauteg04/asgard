@@ -26,7 +26,7 @@ use yii\helpers\Url;
 use app\modules\admision\models\PersonaGestion;
 use app\modules\admision\models\Oportunidad;
 use app\modules\admision\models\MetodoIngreso;
-//use app\modules\financiero\models\Secuencias;
+use app\modules\financiero\models\Secuencias;
 use app\models\InscripcionAdmision;
 
 class PagosfrecuentesController extends \yii\web\Controller {
@@ -155,7 +155,7 @@ class PagosfrecuentesController extends \yii\web\Controller {
                         if ($id_actualiza){                       
                             $id_pbens= $id_pben["id"];                      
                         } else {
-                            $id_pbens=0;   //Cuando hubo error en la actualización.                        
+                            $id_pbens=0;   //Cuando hubo error en la actualización.                  
                         }
                     }
                     if ($id_pbens > 0) {
@@ -179,7 +179,7 @@ class PagosfrecuentesController extends \yii\web\Controller {
                                 $message = array(
                                     "wtmessage" => Yii::t("notificaciones", $mensaje),
                                     "title" => Yii::t('jslang', 'Success'),
-                                    "rederict" => Yii::$app->response->redirect(['/pagosfrecuentes/botonpago?docid=' . $iddoc]),
+                                    "rederict" => Yii::$app->response->redirect(['/pagosfrecuentes/botonpago?docid=' . base64_encode($iddoc)]),                                    
                                 );
                                 return Utilities::ajaxResponse('OK', 'alert', Yii::t("jslang", "Sucess"), false, $message);
                             } else {
@@ -216,14 +216,15 @@ class PagosfrecuentesController extends \yii\web\Controller {
             try {
                 $transaction = $con1->beginTransaction();
                 //OBTENER EL ID DE LA SOLICITUD DE PAGO.                
-                $doc_id = $dataGet["docid"];    
+                $doc_id = $dataGet["docid"];   
+                \app\models\Utilities::putMessageLogFile('No es null referenceID:'.$referenceID);
                 $response = $this->render('btnpago', array(
                     "referenceID" => $data["resp"]["reference"],
                     "requestID" => $data["requestID"],
                     "ordenPago" => $doc_id,
                     "response" => $data["resp"],
                 ));
-                if($data["resp"]["status"]["status"] == "APPROVED"){
+                if ($data["resp"]["status"]["status"] == "APPROVED"){
                     // MODIFICAR EN TABLA DOCUMENTO
                     $respDoc = $modDocumento->actualizarDocumento($con1, $doc_id);
                     if ($respDoc) {
@@ -253,15 +254,17 @@ class PagosfrecuentesController extends \yii\web\Controller {
                 return Utilities::ajaxResponse('NOOK', 'alert', Yii::t('jslang', 'Error'), 'true', $message);
             }
         }
-        //Secuencias::initSecuencia($con1, 1, 1, 1, 'BPA',"BOTÓN DE PAGOS DINERS");        
-        // Info de solicitud del pago.
-        $doc_id = $dataGet["$doc_id"];            
+        Secuencias::initSecuencia($con1, 1, 1, 1, 'BPA',"BOTÓN DE PAGOS DINERS");
+        // Info de solicitud del pago.        
+        $doc_id =  base64_decode($_GET['docid']);         
+        \app\models\Utilities::putMessageLogFile('nùmero documento:'.$doc_id);
         $resultado = $modDocumento->consultarDatosxId($con1, $doc_id);
         $descripcionItem = "Pagos de Varios Items";
-        $titleBox = "";//financiero::t("Pagos", "Payment Course/Career/Program: ") . $obj_sol["carrera"];
+        $titleBox = "Pagos varios";//financiero::t("Pagos", "Payment Course/Career/Program: ") . $obj_sol["carrera"];
         $totalpagar = $resultado["doc_valor"];
+        \app\models\Utilities::putMessageLogFile('total a pagar'.$resultado["doc_valor"]);
         return $this->render('btnpago', array(
-            "referenceID" => "00000001",//str_pad(Secuencias::nuevaSecuencia($con1, 1, 1, 1, 'BPA'), 8, "0", STR_PAD_LEFT),
+            "referenceID" => str_pad(Secuencias::nuevaSecuencia($con1, 1, 1, 1, 'BPA'), 8, "0", STR_PAD_LEFT),
             "ordenPago" => $doc_id,
             "nombre_cliente" => $resultado["pben_nombre"],
             "apellido_cliente" => $resultado["pben_apellido"],

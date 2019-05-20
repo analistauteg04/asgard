@@ -443,4 +443,39 @@ class MarcacionController extends \app\components\CController {
         $report->mpdf->Output('Reporte_' . date("Ymdhis") . ".pdf", ExportFile::OUTPUT_TO_DOWNLOAD);
         return;
     }
+    
+    public function actionListarnomarcadas() {
+        $mod_marcacion = new RegistroMarcacion();
+        $mod_periodo = new PeriodoAcademicoMetIngreso();
+        $periodo = $mod_periodo->consultarPeriodoAcademico();
+        $mod_modalidad = new Modalidad();
+        $mod_unidad = new UnidadAcademica();
+        $data = Yii::$app->request->get();
+        if ($data['PBgetFilter']) {
+            $arrSearch["profesor"] = $data['profesor'];
+            $arrSearch["materia"] = $data['materia'];
+            $arrSearch["unidad"] = $data['unidad'];
+            $arrSearch["modalidad"] = $data['modalidad'];
+            $arrSearch["f_ini"] = $data['f_ini'];
+            $arrSearch["f_fin"] = $data['f_fin'];
+            $arrSearch["periodo"] = $data['periodo'];
+            $arr_historico = $mod_marcacion->consultarRegistroNoMarcacion($arrSearch);
+            return $this->render('index-grid', [
+                        'model' => $arr_historico,
+            ]);
+        } else {
+            $arr_historico = $mod_marcacion->consultarRegistroNoMarcacion($arrSearch);
+        }
+        if (Yii::$app->request->isAjax) {
+            $data = Yii::$app->request->post();
+        }
+        $arr_ninteres = $mod_unidad->consultarUnidadAcademicasEmpresa(1);
+        $arr_modalidad = $mod_modalidad->consultarModalidad($arr_ninteres[0]["id"], 1);
+        return $this->render('listarnomarcadas', [
+                    'model' => $arr_historico,
+                    'arr_periodo' => ArrayHelper::map(array_merge([["id" => "0", "name" => "Todas"]], $periodo), "id", "name"),
+                    'arr_unidad' => ArrayHelper::map(array_merge([["id" => "0", "name" => Yii::t("formulario", "Grid")]], $arr_ninteres), "id", "name"),
+                    'arr_modalidad' => ArrayHelper::map(array_merge([["id" => "0", "name" => Yii::t("formulario", "Grid")]], $arr_modalidad), "id", "name"),
+        ]);
+    }
 }

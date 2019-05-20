@@ -32,6 +32,10 @@ $(document).ready(function () {
         actualizarGridHorario();
     });
     
+    $('#btn_buscarNoMarcacion').click(function () {
+        cargarNoMarcadas();
+    });
+    
 });
 
 function setComboDataselect(arr_data, element_id, texto) {
@@ -147,4 +151,20 @@ function exportPdfhorario() {
     var f_fin = $('#txt_fecha_fin').val();
     var periodo = $('#cmb_periodo option:selected').val();
     window.location.href = $('#txth_base').val() + "/academico/marcacion/exppdfhorario?pdf=1&profesor=" + profesor + "&unidad="+ unidad + '&modalidad='+ modalidad + "&f_ini=" + f_ini + "&f_fin=" + f_fin + "&periodo=" + periodo;
+}
+
+function cargarNoMarcadas() {
+    var profesor = $('#txt_buscarDataProfesor').val();
+    var materia = $('#txt_buscarDataMateria').val();
+    var unidad = $('#cmb_unidad option:selected').val();
+    var modalidad = $('#cmb_modalidad option:selected').val();
+    var f_ini = $('#txt_fecha_ini').val();
+    var f_fin = $('#txt_fecha_fin').val();
+    var periodo = $('#cmb_periodo option:selected').val();
+
+    if (!$(".blockUI").length) {
+        showLoadingPopup();
+        $('#PbNomarcacion').PbGridView('applyFilterData', {'profesor': profesor, 'materia': materia, 'unidad': unidad, 'modalidad': modalidad, 'f_ini': f_ini, 'f_fin': f_fin, 'periodo': periodo});
+        setTimeout(hideLoadingPopup, 2000);
+    }
 }

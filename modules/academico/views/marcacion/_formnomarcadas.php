@@ -56,6 +56,18 @@ use app\modules\academico\Module as academico;
         </div>
     </div>
     <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
+        <div class="form-group">            
+            <label for="cmb_unidad" class="col-sm-2 col-sm-2 col-lg-2 col-md-2 col-xs-2 control-label"><?= Yii::t("formulario", "Academic unit") ?></label>
+            <div class="col-sm-3 col-xs-3 col-md-3 col-lg-3">
+                <?= Html::dropDownList("cmb_unidad", 0,  $arr_unidad , ["class" => "form-control", "id" => "cmb_unidad"]) ?>
+            </div>
+            <label for="cmb_modalidad" class="col-sm-2 col-sm-2 col-lg-2 col-md-2 col-xs-2 control-label"><?= Yii::t("formulario", "Mode") ?></label>
+            <div class="col-sm-3 col-xs-3 col-md-3 col-lg-3">
+                <?= Html::dropDownList("cmb_modalidad", 0, $arr_modalidad, ["class" => "form-control", "id" => "cmb_modalidad"]) ?>
+            </div>      
+        </div>
+    </div>
+    <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
         <div class="form-group">
             <label for="lbl_periodo" class="col-sm-2 col-lg-2 col-md-2 col-xs-2 control-label"><?= Yii::t("formulario", "Period"); ?></label>
             <div class="col-sm-3 col-md-3 col-xs-3 col-lg-3">
@@ -66,7 +78,7 @@ use app\modules\academico\Module as academico;
     <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">  
         <div class="col-sm-8"></div>
         <div class="col-sm-2">                
-            <a id="btn_buscarMarcacion" href="javascript:" class="btn btn-primary btn-block"> <?= Yii::t("formulario", "Search") ?></a>
+            <a id="btn_buscarNoMarcacion" href="javascript:" class="btn btn-primary btn-block"> <?= Yii::t("formulario", "Search") ?></a>
         </div>
     </div>
 </div></br>
