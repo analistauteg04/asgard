@@ -20,7 +20,7 @@ admision::registerTranslations();
             [
                 'attribute' => 'profesor',
                 'header' => Yii::t("formulario", "Teacher"),
-                'value' => 'nombres',
+                'value' => 'profesor',
             ],  
             [
                 'class' => 'yii\grid\ActionColumn',
@@ -39,26 +39,16 @@ admision::registerTranslations();
                 'attribute' => 'Fecha',
                 'header' => Yii::t("formulario", "Date"),
                 'value' => 'fecha',
-            ],
-            [
-                'attribute' => 'Horaini',
-                'header' => academico::t("Academico", "Hour start date"),
-                'value' => 'hora_inicio',
-            ],
+            ],            
             [
                 'attribute' => 'Horainipon',
                 'header' => academico::t("Academico", "Hour start date") . ' ' . academico::t("Academico", "Expected"),
-                'value' => 'inicio_esperado',
-            ],
-            [
-                'attribute' => 'Horafin',
-                'header' => academico::t("Academico", "Hour end date"),
-                'value' => 'hora_salida',
-            ],
+                'value' => 'hora_inicio',
+            ],           
             [
                 'attribute' => 'Horafinpon',
                 'header' => academico::t("Academico", "Hour end date") . ' ' . academico::t("Academico", "Expected"),
-                'value' => 'salida_esperada',
+                'value' => 'hora_salida',
             ],           
         ],
     ])

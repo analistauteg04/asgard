@@ -8,7 +8,10 @@ use yii\helpers\Html;
     <form class="form-horizontal">
         <?=
         $this->render('_formnomarcadas', [
-            'arr_periodo' => $arr_periodo,            
+            'arr_periodo' => $arr_periodo,   
+            'arr_unidad' => $arr_unidad,            
+            'arr_modalidad' => $arr_modalidad,  
+            'arr_tipo' => $arr_tipo,
         ]);
         ?>
     </form>

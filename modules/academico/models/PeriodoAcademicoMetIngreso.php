@@ -621,7 +621,7 @@ class PeriodoAcademicoMetIngreso extends  \app\modules\academico\components\CAct
     public function consultarPeriodoAcademico() {
         $con = \Yii::$app->db_academico;
         $estado = 1;
-        $sql = "SELECT 
+        $sql = "SELECT
                    pera.paca_id as id,
                    ifnull(CONCAT(pera.paca_anio_academico,' (',blq.baca_nombre,'-',sem.saca_nombre,')'),pera.paca_anio_academico) as name
                 FROM 

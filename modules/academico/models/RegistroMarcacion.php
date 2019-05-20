@@ -622,51 +622,50 @@ class RegistroMarcacion extends \yii\db\ActiveRecord {
      * @property  
      * @return  
      */
-    public function consultarRegistroNoMarcacion($arrFiltro = array(), $onlyData = false) {
+    public function consultarRegistroNoMarcacion($arrFiltro = array(), $parametros, $onlyData = false) {
         $con = \Yii::$app->db_academico;
         $con1 = \Yii::$app->db_asgard;
         $estado = 1;
-        if (isset($arrFiltro) && count($arrFiltro) > 0) {
-            $str_search .= "(per.per_pri_nombre like :profesor OR ";
-            $str_search .= "per.per_seg_nombre like :profesor OR ";
-            $str_search .= "per.per_pri_apellido like :profesor OR ";
-            $str_search .= "per.per_seg_nombre like :profesor )  AND ";
-            $str_search .= "asig.asi_nombre like :materia  AND ";
-            if ($arrFiltro['unidad'] != "" && $arrFiltro['unidad'] > 0) {
-                $str_search .= " hap.uaca_id = :unidad AND ";
+        if ($parametros=='0') {
+            $str_search = " hap.uaca_id = 0 AND hap.mod_id = 0 AND ";
+            $tipo = "E";
+        } else {
+            if (isset($arrFiltro) && count($arrFiltro) > 0) {
+                $str_search .= "(per.per_pri_nombre like :profesor OR ";
+                $str_search .= "per.per_seg_nombre like :profesor OR ";
+                $str_search .= "per.per_pri_apellido like :profesor OR ";
+                $str_search .= "per.per_seg_nombre like :profesor )  AND ";
+                $str_search .= "a.asi_nombre like :materia  AND ";
+                if ($arrFiltro['unidad'] != "" && $arrFiltro['unidad'] > 0) {
+                    $str_search .= " hap.uaca_id = :unidad AND ";
+                }
+                if ($arrFiltro['modalidad'] != "" && $arrFiltro['modalidad'] > 0) {
+                    $str_search .= " hap.mod_id = :modalidad AND ";
+                }
+                if ($arrFiltro['f_ini'] != "" && $arrFiltro['f_fin'] != "") {
+                    $str_search .= "rmg.rmtm_fecha_transaccion >= :fec_ini AND ";
+                    $str_search .= "rmg.rmtm_fecha_transaccion <= :fec_fin AND ";
+                }
+                if ($arrFiltro['periodo'] != "" && $arrFiltro['periodo'] > 0) {
+                    $str_search .= " rmg.paca_id = :periodo AND ";
+                }
             }
-            if ($arrFiltro['modalidad'] != "" && $arrFiltro['modalidad'] > 0) {
-                $str_search .= " hap.mod_id = :modalidad AND ";
-            }
-            if ($arrFiltro['f_ini'] != "" && $arrFiltro['f_fin'] != "") {
-                $str_search .= "rma.rmar_fecha_creacion >= :fec_ini AND ";
-                $str_search .= "rma.rmar_fecha_creacion <= :fec_fin AND ";
-            }
-            if ($arrFiltro['periodo'] != "" && $arrFiltro['periodo'] > 0) {
-                $str_search .= " hap.paca_id = :periodo AND ";
-            }
-        }
-        if ($onlyData == false) {
-            $periodoacademico = 'hap.paca_id as periodo, ';
-            $grupoperi = ',periodo';
-        }
-        $sql = "SELECT rmg.rmtm_fecha_transaccion as fecha, concat(per.per_pri_nombre, ' ', per.per_pri_apellido, ' ', per.per_seg_apellido) profesor,
+        }    
+        $sql = "SELECT rmg.rmtm_fecha_transaccion as fecha, concat(per.per_pri_nombre, ' ', per.per_pri_apellido, ' ', ifnull(per.per_seg_apellido,' ')) profesor,
                        a.asi_nombre as materia, hap.hape_hora_entrada as hora_inicio, hap.hape_hora_salida as hora_salida
                 FROM " . $con->dbname . ".registro_marcacion_generada rmg
                      inner join " . $con->dbname . ".horario_asignatura_periodo hap on rmg.hape_id = hap.hape_id
                      inner join " . $con->dbname . ".profesor p on p.pro_id = hap.pro_id
                      inner join " . $con1->dbname . ".persona per on per.per_id = p.per_id
                      inner join " . $con->dbname . ".asignatura a on a.asi_id = hap.asi_id
-                WHERE rmg.paca_id = :periodo
-                       and hap.uaca_id = :unidad
-                       and hap.mod_id = :modalidad
-                       and hap.hape_estado = :estado
+                WHERE $str_search
+                       hap.hape_estado = :estado
                        and hap.hape_estado_logico = :estado
                        and date_format(rmg.rmtm_fecha_transaccion, '%Y-%m-%d') <= date_format(curdate(),'%Y-%m-%d')
                        and not exists(select null from " . $con->dbname . ".registro_marcacion rm 
                                       where rm.hape_id = rmg.hape_id
                                             and date_format(rmg.rmtm_fecha_transaccion,'%Y-%m-%d') = date_format(rm.rmar_fecha_creacion,'%Y-%m-%d')
-                                            and rmar_tipo = 'E')
+                                            and rmar_tipo = :tipo)
                 ORDER BY rmg.rmtm_fecha_transaccion";
         $comando = $con->createCommand($sql);
         $comando->bindParam(":estado", $estado, \PDO::PARAM_STR);
@@ -693,6 +692,13 @@ class RegistroMarcacion extends \yii\db\ActiveRecord {
                 $periodo = $arrFiltro["periodo"];
                 $comando->bindParam(":periodo", $periodo, \PDO::PARAM_INT);
             }
+            if (($arrFiltro["tipo"]) != "") {
+                $comando->bindParam(":tipo", $arrFiltro["tipo"], \PDO::PARAM_STR);            
+            } else {
+                $comando->bindParam(":tipo", $tipo, \PDO::PARAM_STR);            
+            }
+        } else {
+                $comando->bindParam(":tipo", $tipo, \PDO::PARAM_STR);            
         }
         $resultData = $comando->queryAll();
         $dataProvider = new ArrayDataProvider([

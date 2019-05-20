@@ -450,7 +450,7 @@ class MarcacionController extends \app\components\CController {
         $periodo = $mod_periodo->consultarPeriodoAcademico();
         $mod_modalidad = new Modalidad();
         $mod_unidad = new UnidadAcademica();
-        $data = Yii::$app->request->get();
+        $data = Yii::$app->request->get();        
         if ($data['PBgetFilter']) {
             $arrSearch["profesor"] = $data['profesor'];
             $arrSearch["materia"] = $data['materia'];
@@ -458,13 +458,15 @@ class MarcacionController extends \app\components\CController {
             $arrSearch["modalidad"] = $data['modalidad'];
             $arrSearch["f_ini"] = $data['f_ini'];
             $arrSearch["f_fin"] = $data['f_fin'];
-            $arrSearch["periodo"] = $data['periodo'];
-            $arr_historico = $mod_marcacion->consultarRegistroNoMarcacion($arrSearch);
-            return $this->render('index-grid', [
+            $arrSearch["periodo"] = $data['periodo'];            
+            $arrSearch["tipo"] = $data['tipo'];     
+            $arr_historico = $mod_marcacion->consultarRegistroNoMarcacion($arrSearch,'1');
+            return $this->render('_listarnomarcadas-grid', [
                         'model' => $arr_historico,
             ]);
         } else {
-            $arr_historico = $mod_marcacion->consultarRegistroNoMarcacion($arrSearch);
+            //\app\models\Utilities::putMessageLogFile('no hay filtro');
+            $arr_historico = $mod_marcacion->consultarRegistroNoMarcacion($arrSearch,'0');
         }
         if (Yii::$app->request->isAjax) {
             $data = Yii::$app->request->post();
@@ -476,6 +478,9 @@ class MarcacionController extends \app\components\CController {
                     'arr_periodo' => ArrayHelper::map(array_merge([["id" => "0", "name" => "Todas"]], $periodo), "id", "name"),
                     'arr_unidad' => ArrayHelper::map(array_merge([["id" => "0", "name" => Yii::t("formulario", "Grid")]], $arr_ninteres), "id", "name"),
                     'arr_modalidad' => ArrayHelper::map(array_merge([["id" => "0", "name" => Yii::t("formulario", "Grid")]], $arr_modalidad), "id", "name"),
+                //    'arr_tipo' => ArrayHelper::map(array_merge(["id" => "1", "name" => academico::t("Academico", "Entry")], ["id" => "2", "name" => academico::t("Academico", "Exit")]), "id", "name"),                         
+                //    'arr_tipo' => ArrayHelper::map(array("E" => academico::t("Academico", "Entry"), "S" => academico::t("Academico", "Exit")),"id", "name"),
+                    'arr_tipo' => array("E" => academico::t("Academico", "Entry"), "S" => academico::t("Academico", "Exit"))
         ]);
     }
 }
