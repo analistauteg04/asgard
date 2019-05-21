@@ -31,15 +31,21 @@ iptables -A OUTPUT -d $IP_UTEG_DES -j ACCEPT
 iptables -A INPUT  -s $IP_UTEG_OFI -j ACCEPT
 iptables -A OUTPUT -d $IP_UTEG_OFI -j ACCEPT
 
-## Se permite acceso desde la red 
+## Se permite acceso desde la red privada
 iptables -A INPUT -i $ETH1 -s $RED_PRIVADA -j ACCEPT
 iptables -A OUTPUT -o $ETH1 -d $RED_PRIVADA -j ACCEPT
 
 ## El puerto 80 y 433 de www debe estar abierto, es un servidor web.
-iptables -A INPUT  -p tcp --dport 80 -m conntrack --ctstate NEW,ESTABLISHED -j ACCEPT
-iptables -A OUTPUT -p tcp --sport 80 -m conntrack --ctstate ESTABLISHED -j ACCEPT
-iptables -A INPUT  -p tcp --dport 443 -m conntrack --ctstate NEW,ESTABLISHED -j ACCEPT
-iptables -A OUTPUT -p tcp --sport 443 -m conntrack --ctstate ESTABLISHED -j ACCEPT
+iptables -A INPUT  -p tcp --dport 80 -m state --state NEW,ESTABLISHED -j ACCEPT
+iptables -A OUTPUT -p tcp --sport 80 -m state --state ESTABLISHED -j ACCEPT
+iptables -A INPUT  -p tcp --dport 443 -m state --state NEW,ESTABLISHED -j ACCEPT
+iptables -A OUTPUT -p tcp --sport 443 -m state --state ESTABLISHED -j ACCEPT
+
+## Salida de Internet
+iptables -A OUTPUT -o $ETH0 -p tcp --dport 80 -m state --state NEW,ESTABLISHED -j ACCEPT
+iptables -A INPUT -i $ETH0 -p tcp --sport 80 -m state --state ESTABLISHED -j ACCEPT
+iptables -A OUTPUT -o $ETH0 -p tcp --dport 443 -m state --state NEW,ESTABLISHED -j ACCEPT
+iptables -A INPUT -i $ETH0 -p tcp --sport 443 -m state --state ESTABLISHED -j ACCEPT
 
 ## Permitir trafico Establecido
 iptables -A INPUT -m conntrack --ctstate ESTABLISHED,RELATED -j ACCEPT
@@ -52,9 +58,17 @@ iptables -A INPUT -m conntrack --ctstate INVALID -j DROP
 iptables -A INPUT  -p tcp --sport 587 -j ACCEPT
 iptables -A OUTPUT -p tcp --dport 587 -j ACCEPT
 
-## Se bloquea los pings entrantes al servidor y se habilita la salida
+## Se bloquea los pings entrantes al servidor
+iptables -A INPUT -p icmp --icmp-type echo-request -j DROP
+iptables -A OUTPUT -p icmp --icmp-type echo-reply -j DROP
+
+## Se Acepta los pings saliente del servidor
 iptables -A INPUT -p icmp --icmp-type echo-reply -j ACCEPT
 iptables -A OUTPUT -p icmp --icmp-type echo-request -j ACCEPT
+
+## Se acepta conecciones a DNS
+# iptables -A OUTPUT -p udp -o eth0 --dport 53 -j ACCEPT
+# iptables -A INPUT -p udp -i eth0 --sport 53 -j ACCEPT
 
 ## Se acepta DNS del proveedor
 for ip in $DNS_SERVER
@@ -71,6 +85,12 @@ iptables -A INPUT -p tcp --dport 443 -m limit --limit 25/minute --limit-burst 10
 
 ## Cerramos otros puertos que estan abiertos
 iptables -A INPUT -p udp --dport 5353 -j DROP
+
+## Logging
+iptables -N LOGGING
+iptables -A INPUT -j LOGGING
+iptables -A LOGGING -m limit --limit 2/min -j LOG --log-prefix "IPTables Packet Dropped: " --log-level 7
+iptables -A LOGGING -j DROP
 
 ## Se guarda la configuracion de Iptables
 iptables-save > /etc/sysconfig/iptables
