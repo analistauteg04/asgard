@@ -388,12 +388,12 @@ class MarcacionController extends \app\components\CController {
         );
         $mod_marcacion = new RegistroMarcacion();
         $data = Yii::$app->request->get();                 
-            $arrSearch["profesor"] = $data['profesor'];
-            $arrSearch["unidad"] = $data['unidad'];
-            $arrSearch["modalidad"] = $data['modalidad'];
-            $arrSearch["f_ini"] = $data['f_ini'];
-            $arrSearch["f_fin"] = $data['f_fin'];
-            $arrSearch["periodo"] = $data['periodo'];               
+        $arrSearch["profesor"] = $data['profesor'];
+        $arrSearch["unidad"] = $data['unidad'];
+        $arrSearch["modalidad"] = $data['modalidad'];
+        $arrSearch["f_ini"] = $data['f_ini'];
+        $arrSearch["f_fin"] = $data['f_fin'];
+        $arrSearch["periodo"] = $data['periodo'];               
         $arrData = array();
         if (empty($arrSearch)) {
             $arrData = $mod_marcacion->consultarHorarioMarcacion(array(), true);
@@ -478,9 +478,92 @@ class MarcacionController extends \app\components\CController {
                     'arr_periodo' => ArrayHelper::map(array_merge([["id" => "0", "name" => "Todas"]], $periodo), "id", "name"),
                     'arr_unidad' => ArrayHelper::map(array_merge([["id" => "0", "name" => Yii::t("formulario", "Grid")]], $arr_ninteres), "id", "name"),
                     'arr_modalidad' => ArrayHelper::map(array_merge([["id" => "0", "name" => Yii::t("formulario", "Grid")]], $arr_modalidad), "id", "name"),
-                //    'arr_tipo' => ArrayHelper::map(array_merge(["id" => "1", "name" => academico::t("Academico", "Entry")], ["id" => "2", "name" => academico::t("Academico", "Exit")]), "id", "name"),                         
-                //    'arr_tipo' => ArrayHelper::map(array("E" => academico::t("Academico", "Entry"), "S" => academico::t("Academico", "Exit")),"id", "name"),
                     'arr_tipo' => array("E" => academico::t("Academico", "Entry"), "S" => academico::t("Academico", "Exit"))
         ]);
+    }
+    
+    public function actionExpexcelnomarcadas() {
+        ini_set('memory_limit', '256M');
+        $content_type = Utilities::mimeContentType("xls");
+        $nombarch = "Report-" . date("YmdHis") . ".xls";
+        header("Content-Type: $content_type");
+        header("Content-Disposition: attachment;filename=" . $nombarch);
+        header('Cache-Control: max-age=0');
+        $colPosition = array("C", "D", "E", "F", "G", "H", "I", "J", "K", "L");
+        $arrHeader = array(
+            Yii::t("formulario", "Period"),
+            Yii::t("formulario", "Date"), 
+            Yii::t("formulario", "Teacher"),            
+            Yii::t("formulario", "Matter"),                                   
+            academico::t("Academico", "Hour start date") . ' ' . academico::t("Academico", "Expected"),            
+            academico::t("Academico", "Hour end date") . ' ' . academico::t("Academico", "Expected"),                              
+        );
+        $mod_marcacion = new RegistroMarcacion();
+        $data = Yii::$app->request->get();                 
+        $arrSearch["profesor"] = $data['profesor'];
+        $arrSearch["materia"] = $data['materia'];
+        $arrSearch["unidad"] = $data['unidad'];
+        $arrSearch["modalidad"] = $data['modalidad'];
+        $arrSearch["f_ini"] = $data['f_ini'];
+        $arrSearch["f_fin"] = $data['f_fin'];
+        $arrSearch["periodo"] = $data['periodo'];            
+        $arrSearch["tipo"] = $data['tipo'];              
+        $arrData = array();
+        if (empty($arrSearch)) {            
+            $arrData = $mod_marcacion->consultarRegistroNoMarcacion(array(), '0', true);
+        } else {
+            $arrData = $mod_marcacion->consultarRegistroNoMarcacion($arrSearch, '1', true);
+        }
+        if ($data["tipo"]=='E') {
+            $v_tipo = "Entrada";
+        } else {
+            $v_tipo = "Salida";
+        }
+        $nameReport = academico::t("Academico", "Teacher list unchecked"). " / ".$v_tipo;
+        Utilities::generarReporteXLS($nombarch, $nameReport, $arrHeader, $arrData, $colPosition);
+        exit;
+    }
+    
+    public function actionExppdfnomarcadas() {
+        $report = new ExportFile();        
+        $arrHeader = array(
+            Yii::t("formulario", "Period"),
+            Yii::t("formulario", "Date"), 
+            Yii::t("formulario", "Teacher"),            
+            Yii::t("formulario", "Matter"),                                      
+            academico::t("Academico", "Hour start date") . ' ' . academico::t("Academico", "Expected"),            
+            academico::t("Academico", "Hour end date") . ' ' . academico::t("Academico", "Expected"),                                      
+        );
+        $mod_marcacion = new RegistroMarcacion();
+        $data = Yii::$app->request->get();                 
+        $arrSearch["profesor"] = $data['profesor'];
+        $arrSearch["materia"] = $data['materia'];
+        $arrSearch["unidad"] = $data['unidad'];
+        $arrSearch["modalidad"] = $data['modalidad'];
+        $arrSearch["f_ini"] = $data['f_ini'];
+        $arrSearch["f_fin"] = $data['f_fin'];
+        $arrSearch["periodo"] = $data['periodo'];            
+        $arrSearch["tipo"] = $data['tipo'];   
+        if ($data["tipo"]=='E') {
+            $v_tipo = "Entrada";
+        } else {
+            $v_tipo = "Salida";
+        }
+        $arrData = array();
+        if (empty($arrSearch)) {
+            $arrData = $mod_marcacion->consultarRegistroNoMarcacion(array(), '0', true);
+        } else {
+            $arrData = $mod_marcacion->consultarRegistroNoMarcacion($arrSearch, '1', true);
+        }
+        $this->view->title = academico::t("Academico", "Teacher list unchecked")." / ".$v_tipo; // Titulo del reporte                
+        $report->orientation = "L"; // tipo de orientacion L => Horizontal, P => Vertical
+        $report->createReportPdf(
+                $this->render('exportpdf', [
+                    'arr_head' => $arrHeader,
+                    'arr_body' => $arrData
+                ])
+        );
+        $report->mpdf->Output('Reporte_' . date("Ymdhis") . ".pdf", ExportFile::OUTPUT_TO_DOWNLOAD);
+        return;
     }
 }

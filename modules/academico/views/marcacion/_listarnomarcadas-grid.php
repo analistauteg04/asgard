@@ -13,10 +13,15 @@ admision::registerTranslations();
     PbGridView::widget([
         'id' => 'PbNomarcacion',
         'showExport' => true,
-        'fnExportEXCEL' => "exportExcel",
-        'fnExportPDF' => "exportPdf",
+        'fnExportEXCEL' => "exportExcelNoMarcadas",
+        'fnExportPDF' => "exportPdfNoMarcadas",
         'dataProvider' => $model,
         'columns' => [
+            [
+                'attribute' => 'periodo',
+                'header' => Yii::t("formulario", "Period"),
+                'value' => 'periodo',
+            ],  
             [
                 'attribute' => 'profesor',
                 'header' => Yii::t("formulario", "Teacher"),

@@ -651,13 +651,17 @@ class RegistroMarcacion extends \yii\db\ActiveRecord {
                 }
             }
         }    
-        $sql = "SELECT rmg.rmtm_fecha_transaccion as fecha, concat(per.per_pri_nombre, ' ', per.per_pri_apellido, ' ', ifnull(per.per_seg_apellido,' ')) profesor,
+        $sql = "SELECT ifnull(CONCAT(pa.paca_anio_academico,' (',blq.baca_nombre,'-',sem.saca_nombre,')'),pa.paca_anio_academico) as periodo,
+                       rmg.rmtm_fecha_transaccion as fecha, concat(per.per_pri_nombre, ' ', per.per_pri_apellido, ' ', ifnull(per.per_seg_apellido,' ')) profesor,
                        a.asi_nombre as materia, hap.hape_hora_entrada as hora_inicio, hap.hape_hora_salida as hora_salida
                 FROM " . $con->dbname . ".registro_marcacion_generada rmg
                      inner join " . $con->dbname . ".horario_asignatura_periodo hap on rmg.hape_id = hap.hape_id
                      inner join " . $con->dbname . ".profesor p on p.pro_id = hap.pro_id
                      inner join " . $con1->dbname . ".persona per on per.per_id = p.per_id
                      inner join " . $con->dbname . ".asignatura a on a.asi_id = hap.asi_id
+                     inner join " . $con->dbname . ".periodo_academico pa on pa.paca_id = rmg.paca_id
+                     left join " . $con->dbname . ".semestre_academico sem  ON sem.saca_id = pa.saca_id
+                     left join " . $con->dbname . ".bloque_academico blq ON blq.baca_id = pa.baca_id
                 WHERE $str_search
                        hap.hape_estado = :estado
                        and hap.hape_estado_logico = :estado

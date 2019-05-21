@@ -169,3 +169,29 @@ function cargarNoMarcadas() {
         setTimeout(hideLoadingPopup, 2000);
     }
 }
+
+function exportExcelNoMarcadas() {
+    var profesor = $('#txt_buscarDataProfesor').val();
+    var materia = $('#txt_buscarDataMateria').val();
+    var unidad = $('#cmb_unidad option:selected').val();
+    var modalidad = $('#cmb_modalidad option:selected').val();
+    var f_ini = $('#txt_fecha_ini').val();
+    var f_fin = $('#txt_fecha_fin').val();
+    var periodo = $('#cmb_periodo option:selected').val();
+    var tipo = $('#cmb_tipo option:selected').val();
+
+    window.location.href = $('#txth_base').val() + "/academico/marcacion/expexcelnomarcadas?profesor=" + profesor + "&materia="+ materia + "&unidad="+ unidad + '&modalidad='+ modalidad + "&f_ini=" + f_ini + "&f_fin=" + f_fin + "&periodo=" + periodo + "&tipo=" + tipo;
+}
+
+function exportPdfNoMarcadas() {
+    var profesor = $('#txt_buscarDataProfesor').val();
+    var materia = $('#txt_buscarDataMateria').val();
+    var unidad = $('#cmb_unidad option:selected').val();
+    var modalidad = $('#cmb_modalidad option:selected').val();
+    var f_ini = $('#txt_fecha_ini').val();
+    var f_fin = $('#txt_fecha_fin').val();
+    var periodo = $('#cmb_periodo option:selected').val();
+    var tipo = $('#cmb_tipo option:selected').val();
+
+    window.location.href = $('#txth_base').val() + "/academico/marcacion/exppdfnomarcadas?pdf=1&profesor=" + profesor + "&materia="+ materia + "&unidad="+ unidad + '&modalidad='+ modalidad + "&f_ini=" + f_ini + "&f_fin=" + f_fin + "&periodo=" + periodo + "&tipo=" + tipo;
+}
