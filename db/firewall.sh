@@ -36,10 +36,17 @@ iptables -A INPUT -i $ETH1 -s $RED_PRIVADA -j ACCEPT
 iptables -A OUTPUT -o $ETH1 -d $RED_PRIVADA -j ACCEPT
 
 ## El puerto 80 y 433 de www debe estar abierto, es un servidor web.
-iptables -A INPUT  -p tcp --dport 80 -j ACCEPT
-iptables -A OUTPUT -p tcp --sport 80 -j ACCEPT
-iptables -A INPUT  -p tcp --dport 443 -j ACCEPT
-iptables -A OUTPUT -p tcp --sport 443 -j ACCEPT
+iptables -A INPUT  -p tcp --dport 80 -m conntrack --ctstate NEW,ESTABLISHED -j ACCEPT
+iptables -A OUTPUT -p tcp --sport 80 -m conntrack --ctstate ESTABLISHED -j ACCEPT
+iptables -A INPUT  -p tcp --dport 443 -m conntrack --ctstate NEW,ESTABLISHED -j ACCEPT
+iptables -A OUTPUT -p tcp --sport 443 -m conntrack --ctstate ESTABLISHED -j ACCEPT
+
+## Permitir trafico Establecido
+iptables -A INPUT -m conntrack --ctstate ESTABLISHED,RELATED -j ACCEPT
+iptables -A OUTPUT -m conntrack --ctstate ESTABLISHED -j ACCEPT
+
+## Drop paquetes invalidos
+iptables -A INPUT -m conntrack --ctstate INVALID -j DROP
 
 ## Se agrega permisos para Salida puertos mail server
 iptables -A INPUT  -p tcp --sport 587 -j ACCEPT
