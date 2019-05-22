@@ -1,6 +1,7 @@
 #!/bin/bash
 
 IP_UTEG_DES="181.39.139.67"
+IP_UTEG_DES="181.39.139.68"
 IP_UTEG_OFI="186.68.143.106"
 RED_PRIVADA="130.107.1.0/24"
 DNS_SERVER="200.93.192.161 200.93.192.148"
@@ -67,16 +68,16 @@ iptables -A INPUT -p icmp --icmp-type echo-reply -j ACCEPT
 iptables -A OUTPUT -p icmp --icmp-type echo-request -j ACCEPT
 
 ## Se acepta conecciones a DNS
-# iptables -A OUTPUT -p udp -o eth0 --dport 53 -j ACCEPT
-# iptables -A INPUT -p udp -i eth0 --sport 53 -j ACCEPT
+# iptables -A OUTPUT -p udp -o $ETH0 --dport 53 -j ACCEPT
+# iptables -A INPUT -p udp -i $ETH0 --sport 53 -j ACCEPT
 
 ## Se acepta DNS del proveedor
 for ip in $DNS_SERVER
 do
-iptables -A OUTPUT -p udp -s $IP_UTEG_DES --sport 1024:65535 -d $ip --dport 53 -m state --state NEW,ESTABLISHED -j ACCEPT
-iptables -A INPUT -p udp -s $ip --sport 53 -d $IP_UTEG_DES --dport 1024:65535 -m state --state ESTABLISHED -j ACCEPT
-iptables -A OUTPUT -p tcp -s $IP_UTEG_DES --sport 1024:65535 -d $ip --dport 53 -m state --state NEW,ESTABLISHED -j ACCEPT
-iptables -A INPUT -p tcp -s $ip --sport 53 -d $IP_UTEG_DES --dport 1024:65535 -m state --state ESTABLISHED -j ACCEPT
+iptables -A OUTPUT -p udp -s $IP_UTEG_EQU --sport 1024:65535 -d $ip --dport 53 -m state --state NEW,ESTABLISHED -j ACCEPT
+iptables -A INPUT -p udp -s $ip --sport 53 -d $IP_UTEG_EQU --dport 1024:65535 -m state --state ESTABLISHED -j ACCEPT
+iptables -A OUTPUT -p tcp -s $IP_UTEG_EQU --sport 1024:65535 -d $ip --dport 53 -m state --state NEW,ESTABLISHED -j ACCEPT
+iptables -A INPUT -p tcp -s $ip --sport 53 -d $IP_UTEG_EQU --dport 1024:65535 -m state --state ESTABLISHED -j ACCEPT
 done
 
 ## Bloquear y prevenir ataques DDoS 
