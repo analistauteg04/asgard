@@ -1,13 +1,13 @@
 #!/bin/bash
 
-IP_UTEG_DES="181.39.139.67"
-IP_UTEG_DES="181.39.139.68"
-IP_UTEG_OFI="186.68.143.106"
-RED_PRIVADA="130.107.1.0/24"
-DNS_SERVER="200.93.192.161 200.93.192.148"
-GATEWAY="181.39.139.65"
-ETH1="em1"
-ETH0="em2"
+IP_UTEG_EQU="181.39.139.67" # ip publica del equipo
+IP_UTEG_DES="181.39.139.68" # ip publica desde otra red para ingresar al servidor
+IP_UTEG_OFI="186.68.143.106" # ip publica desde otra red para ingresar al servidor
+RED_PRIVADA="130.107.1.0/24" # Red privada ligada a la segunda interfaz de red del equipo
+DNS_SERVER="200.93.192.161 200.93.192.148" # DNS de la ip publica entregado por el proveedor
+GATEWAY="181.39.139.65" # GATEWAY entregado por el proveedor
+ETH1="em1" # Interfza secundaria del servidor en la cual esta configurada la ip privada
+ETH0="em2" # Interfaz primaria del servidor en la cual esta configurada la ip publica
 
 echo "Aplicando Reglas de Firewall..."
 
