@@ -1047,10 +1047,10 @@ class PersonaGestion extends \app\modules\admision\components\CActiveRecord {
                     from " . $con->dbname . ".oportunidad as opo
                     group by opo.pges_id
                 ) AS max_opor on max_opor.pges_id=pg.pges_id
-                left JOIN " . $con->dbname . ".oportunidad opo on opo.opo_id = max_opor.opo_id                                
+                left JOIN " . $con->dbname . ".oportunidad opo on opo.opo_id = max_opor.opo_id                                          
                 left join " . $con1->dbname . ".empresa as emp on emp.emp_id=opo.emp_id
                 left JOIN " . $con2->dbname . ".unidad_academica uaca on uaca.uaca_id = opo.uaca_id
-                WHERE   
+                WHERE                           
                         pg.pges_estado = :estado
                         and pg.pges_estado_logico = :estado
                         and tp.tper_estado = :estado
@@ -1059,7 +1059,7 @@ class PersonaGestion extends \app\modules\admision\components\CActiveRecord {
                         and ec.econ_estado_logico = :estado 
                         and cc.ccan_estado = :estado 
                         and cc.ccan_estado_logico = :estado 
-                ORDER BY pg.pges_fecha_creacion desc) a ";
+                ORDER BY pg.pges_fecha_creacion asc) a ";
         if (isset($arrFiltro) && count($arrFiltro) > 0) {
             $sql .= "WHERE $str_search 
                            a.pges_codigo = a.pges_codigo";

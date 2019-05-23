@@ -652,7 +652,7 @@ class RegistroMarcacion extends \yii\db\ActiveRecord {
             }
         }    
         $sql = "SELECT ifnull(CONCAT(pa.paca_anio_academico,' (',blq.baca_nombre,'-',sem.saca_nombre,')'),pa.paca_anio_academico) as periodo,
-                       rmg.rmtm_fecha_transaccion as fecha, concat(per.per_pri_nombre, ' ', per.per_pri_apellido, ' ', ifnull(per.per_seg_apellido,' ')) profesor,
+                       date_format(rmg.rmtm_fecha_transaccion,'%Y-%m-%d') as fecha, concat(per.per_pri_nombre, ' ', per.per_pri_apellido, ' ', ifnull(per.per_seg_apellido,' ')) profesor,
                        a.asi_nombre as materia, hap.hape_hora_entrada as hora_inicio, hap.hape_hora_salida as hora_salida
                 FROM " . $con->dbname . ".registro_marcacion_generada rmg
                      inner join " . $con->dbname . ".horario_asignatura_periodo hap on rmg.hape_id = hap.hape_id
