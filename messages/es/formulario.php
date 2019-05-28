@@ -443,6 +443,7 @@ return [
     "Payments made" => "Pagos Realizados",
     "Pay order" => "Orden Pago",
     "Pay Total" => "Pago Total",
+    "Payment Total" => "Total a pagar",    
     "Peer Reviews" => "Revisiones Pares",
     "Pending Approval" => "Pendiente de Aprobación",
     "Percentage" => "Porcentaje",

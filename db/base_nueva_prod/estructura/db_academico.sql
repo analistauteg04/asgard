@@ -6,7 +6,6 @@ DROP SCHEMA IF EXISTS `db_academico`;
 CREATE SCHEMA IF NOT EXISTS `db_academico` DEFAULT CHARACTER SET utf8 ;
 USE `db_academico` ;
 
--- GRANT ALL PRIVILEGES ON `db_academico`.* TO 'uteg'@'localhost' IDENTIFIED BY 'Utegadmin2016*';
 
 -- --------------------------------------------------------
 -- 

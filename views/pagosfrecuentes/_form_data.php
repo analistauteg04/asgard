@@ -1,6 +1,5 @@
 <?php
 /* @var $this yii\web\View */
-
 use yii\helpers\Html;
 use yii\helpers\ArrayHelper;
 use kartik\file\FileInput;
@@ -9,7 +8,6 @@ use yii\helpers\Url;
 use yii\widgets\ActiveForm;
 use app\components\CFileInputAjax;
 use app\modules\financiero\Module as financiero;
-
 financiero::registerTranslations();
 ?> 
 <form class="form-horizontal">

@@ -6,7 +6,7 @@ use `db_facturacion`;
 --
 -- Volcado de datos para la tabla `orden_pago`
 --
-INSERT INTO `orden_pago` (`opag_id`, `sins_id`, `sbpa_id`, `com_id`, `opag_subtotal`, `opag_iva`, `opag_total`, `opag_valor_pagado`, `opag_fecha_generacion`, `opag_estado_pago`, `opag_fecha_pago_total`, `opag_observacion`, `opag_usu_ingreso`, `opag_usu_modifica`, `opag_estado`, `opag_fecha_creacion`, `opag_fecha_modificacion`, `opag_estado_logico`) VALUES
+INSERT INTO `orden_pago` (`opag_id`, `sins_id`, `sbpa_id`, `doc_id`, `opag_subtotal`, `opag_iva`, `opag_total`, `opag_valor_pagado`, `opag_fecha_generacion`, `opag_estado_pago`, `opag_fecha_pago_total`, `opag_observacion`, `opag_usu_ingreso`, `opag_usu_modifica`, `opag_estado`, `opag_fecha_creacion`, `opag_fecha_modificacion`, `opag_estado_logico`) VALUES
 (1, 1, NULL, NULL, 150, 0, 150, 150, '2017-10-03 13:57:02', 'S', '2017-10-07 15:17:59', NULL, 22, NULL, '1', '2017-10-03 13:57:02', '2017-10-11 16:22:45', '1'),
 (2, 2, NULL, NULL, 150, 0, 150, 150, '2017-10-05 07:34:19', 'S', '2017-10-12 11:22:27', NULL, 5, NULL, '1', '2017-10-05 07:34:19', '2017-10-12 16:22:27', '1'),
 (3, 3, NULL, NULL, 150, 0, 150, 150, '2017-10-12 13:22:51', 'S', '2017-10-14 07:14:02', NULL, 5, NULL, '1', '2017-10-12 13:22:51', '2017-11-30 03:48:09', '1'),

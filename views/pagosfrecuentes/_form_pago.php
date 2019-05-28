@@ -95,6 +95,14 @@ aspirante::registerTranslations();
                     </div>
                 </div>
             </div>    
+            <div class="col-md-6 col-sm-6 col-xs-6 col-lg-6">
+                <div class="form-group">
+                    <label for="lbl_total_factura" class="col-sm-5 col-md-5 col-xs-5 col-lg-5 control-label"><?= Yii::t("formulario", "Payment Total") ?></label>
+                    <div class="col-sm-7 col-md-7 col-xs-7 col-lg-7">
+                        <label id="lbl_total_factura" class="col-sm-5 col-md-5 col-xs-5 col-lg-5 control-label"></label>
+                    </div>
+                </div>
+            </div>
         </div>
     </div> 
     <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">   

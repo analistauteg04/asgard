@@ -23,7 +23,8 @@ var total = 0;
 $(document).ready(function () {    
     // para mostrar codigo de area
     //llenarDatosBen(obtDataBen());    
-    representarItems(obtDataList());
+    //llenarDatosFact(obtDataFact());    
+    //representarItems(obtDataList());
     var unisol = $('#cmb_unidad_solicitud').val();
     if (unisol == 1) {
         $('#divmetodocan').css('display', 'none');
@@ -280,6 +281,29 @@ function llenarDatosBen(benData){
     }
     if(benData['pais_id'].length > 0){
         $('#cmb_pais_dom').val(benData['pais_id']);
+    }
+}
+function llenarDatosFact(factData){
+    if(factData['nombre_fac'].length > 0){
+        $('#txt_nombres_fac').val(factData['nombre_fac']);
+    }
+    if(factData['apellidos_fac'].length > 0){
+        $('#txt_apellidos_fac').val(factData['apellidos_fac']);
+    }
+    if(factData['dir_fac'].length > 0){
+        $('#txt_dir_fac').val(factData['dir_fac']);
+    }
+    if(factData['telfono_fac'].length > 0){
+        $('#txt_tel_fac').val(factData['telfono_fac']);
+    }
+    if(factData['dni_fac'].length > 0){
+        $('#txt_dni_fac').val(factData['dni_fac']);
+    }
+    if(factData['correo'].length > 0){
+        $('#txt_correo_factura').val(factData['correo']);
+    }
+    if(factData['total'] > 0){
+        $('#lbl_total_factura').text("$"+factData['total']);
     }
 }
 function guardarBenPagoTemp(){
