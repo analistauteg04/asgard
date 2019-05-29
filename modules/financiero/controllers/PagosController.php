@@ -21,10 +21,8 @@ use app\modules\financiero\models\Secuencias;
 use app\modules\financiero\Module as financiero;
 use app\modules\admision\Module as admision;
 use app\modules\academico\Module as academico;
-
 admision::registerTranslations();
 academico::registerTranslations();
-
 class PagosController extends \app\components\CController {
     public function actionIndex() {
         $per_id = @Yii::$app->session->get("PB_iduser");
@@ -444,7 +442,6 @@ class PagosController extends \app\components\CController {
             return;
         }
     }
-
     public function actionListarpagoscargados() {
         $mod_pago = new OrdenPago();
 
@@ -924,8 +921,7 @@ class PagosController extends \app\components\CController {
                 $transaction = $con1->beginTransaction();
                 $sins_id = base64_decode($dataGet["sins_id"]);
                 $solInc_mod = SolicitudInscripcion::findOne($sins_id);
-                $opago_mod = OrdenPago::findOne(["sins_id" => $sins_id, "opag_estado_pago" => "P", "opag_estado" => "1", "opag_estado_logico" => "1"]);
-                
+                $opago_mod = OrdenPago::findOne(["sins_id" => $sins_id, "opag_estado_pago" => "P", "opag_estado" => "1", "opag_estado_logico" => "1"]);                
                 $response = $this->render('btnpago', array(
                     "referenceID" => $data["resp"]["reference"],
                     "requestID" => $data["requestID"],

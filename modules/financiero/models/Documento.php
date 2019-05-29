@@ -140,7 +140,6 @@ class Documento extends \yii\db\ActiveRecord
                 and sb.sbpa_estado = :estado
                 and sb.sbpa_estado_logico = :estado";   
         
-        \app\models\Utilities::putMessageLogFile('SQL:'.$sql);
         $comando = $con->createCommand($sql);
         $comando->bindParam(":estado", $estado, \PDO::PARAM_STR);
         $comando->bindParam(":doc_id", $doc_id, \PDO::PARAM_INT);

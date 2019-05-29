@@ -334,24 +334,21 @@ function guardarFacturaTemp(){
 function guardarPagos() {  
     var link = $('#txth_base').val() + "/pagosfrecuentes/savepayment";
     var arrParams = new Object();
-    var dataBenList = obtDataBen();
-    var dataFacturaList = obtDataFact();
-
-    arrParams.dataBenList = dataBenList;
-    arrParams.dataFacturaList = dataFacturaList;      
     if (total==0){        
         mensaje("No ha seleccionado productos para la factura.");
     } else {
         var dataItemList = obtDataList();
+        arrParams.dataBenList = obtDataBen();
+        arrParams.dataFacturaList = obtDataFact();      
         arrParams.dataItems = dataItemList;//itemList;                
+        sessionStorage.clear();
         if (!validateForm()) {   
             requestHttpAjax(link, arrParams, function (response) {
-                showAlert("OK", "success", response.message);
-                setTimeout(function () {
-                    //sessionStorage.removeItem('datosFamiliares');
-                    sessionStorage.clear();
-                    window.location.href = $('#txth_base').val() + "/pagosfrecuentes/index";
-                 }, 3000);
+                showAlert("OK", "success", response.message);                
+                alert(response.message.iddoc);
+                setTimeout(function () {                                        
+                    window.location.href = $('#txth_base').val() + "/pagosfrecuentes/botonpago?docid="+response.message.iddoc;                    
+                }, 3000);
             });
         }
     }

@@ -103,6 +103,7 @@ class PbVPOS extends Widget {
                             $this->updateTransactionFinished();
                         return;
                     }else if($response["status"]["status"] == "PENDING" || $response["status"]["status"] == "PENDING_VALIDATION"){
+                        //exit(json_encode($response));
                         echo $this->render('error', [
                             "reloadDB" => false,
                             "data" => json_encode($response),
@@ -133,9 +134,9 @@ class PbVPOS extends Widget {
                 }else{
 
                 }
-                if($this->type == "button")
+                if($this->type == "button"){
                     echo $this->render('button', $data);
-                else{
+                }else{
                         $data['publicAssetUrl'] = $this->publicAssetUrl;
                         $data['pbId'] = $this->type_vpos;
                         $data['termsConditions'] = $this->termsConditions;

@@ -179,7 +179,7 @@ class PagosfrecuentesController extends \yii\web\Controller {
                                 $message = array(
                                     "wtmessage" => Yii::t("notificaciones", $mensaje),
                                     "title" => Yii::t('jslang', 'Success'),
-                                    "rederict" => Yii::$app->response->redirect(['/pagosfrecuentes/botonpago?docid=' . base64_encode($iddoc)]),                                    
+                                    "iddoc" => $iddoc
                                 );
                                 return Utilities::ajaxResponse('OK', 'alert', Yii::t("jslang", "Sucess"), false, $message);
                             } else {
@@ -209,7 +209,7 @@ class PagosfrecuentesController extends \yii\web\Controller {
         $data = Yii::$app->request->post();
         $dataGet = Yii::$app->request->get();
         $con1 = \Yii::$app->db_facturacion;
-        $emp_id = 1;//$data["empresa_id"];
+        $emp_id = 1;
         $modDocumento = new Documento();    
         $referenceID = isset($data["referenceID"])?$data["referenceID"]:null;
         if(!is_null($referenceID)){
@@ -217,7 +217,6 @@ class PagosfrecuentesController extends \yii\web\Controller {
                 $transaction = $con1->beginTransaction();
                 //OBTENER EL ID DE LA SOLICITUD DE PAGO.                
                 $doc_id = $dataGet["docid"];   
-                \app\models\Utilities::putMessageLogFile('No es null referenceID:'.$referenceID);
                 $response = $this->render('btnpago', array(
                     "referenceID" => $data["resp"]["reference"],
                     "requestID" => $data["requestID"],
@@ -225,7 +224,6 @@ class PagosfrecuentesController extends \yii\web\Controller {
                     "response" => $data["resp"],
                 ));
                 if ($data["resp"]["status"]["status"] == "APPROVED"){
-                    // MODIFICAR EN TABLA DOCUMENTO
                     $respDoc = $modDocumento->actualizarDocumento($con1, $doc_id);
                     if ($respDoc) {
                         $transaction->commit();      
@@ -234,7 +232,6 @@ class PagosfrecuentesController extends \yii\web\Controller {
                             "title" => Yii::t('jslang', 'Success'),
                         );
                     } else{
-                        Utilities::putMessageLogFile("Botón Pagos: Error al actualizar pago. RefId: ". $referenceID);
                         throw new Exception('Error al actualizar pago.');
                     } 
                 }else {
@@ -246,7 +243,6 @@ class PagosfrecuentesController extends \yii\web\Controller {
                 }            
             }catch(Exception $e) {
                 $transaction->rollBack();
-                Utilities::putMessageLogFile("Botón Pagos: Error . RefId: ". $referenceID .  "Error: " . $e->getMessage());
                 $message = array(
                     "wtmessage" => Yii::t('notificaciones', 'Invalid request. Please do not repeat this request again. Contact to Administrator.'),
                     "title" => Yii::t('jslang', 'Error'),
@@ -255,14 +251,13 @@ class PagosfrecuentesController extends \yii\web\Controller {
             }
         }
         Secuencias::initSecuencia($con1, 1, 1, 1, 'BPA',"BOTÓN DE PAGOS DINERS");
-        // Info de solicitud del pago.        
-        $doc_id =  base64_decode($_GET['docid']);         
-        \app\models\Utilities::putMessageLogFile('nùmero documento:'.$doc_id);
-        $resultado = $modDocumento->consultarDatosxId($con1, $doc_id);
+        //$doc_id =  base64_decode($_GET['docid']);         
+        $doc_id =  $_GET['docid'];         
+        \app\models\Utilities::putMessageLogFile('doc_id:'.$doc_id);
+        $resultado = $modDocumento->consultarDatosxId($con1, $doc_id);                
         $descripcionItem = "Pagos de Varios Items";
-        $titleBox = "Pagos varios";//financiero::t("Pagos", "Payment Course/Career/Program: ") . $obj_sol["carrera"];
+        $titleBox = "Pagos varios";
         $totalpagar = $resultado["doc_valor"];
-        \app\models\Utilities::putMessageLogFile('total a pagar'.$resultado["doc_valor"]);
         return $this->render('btnpago', array(
             "referenceID" => str_pad(Secuencias::nuevaSecuencia($con1, 1, 1, 1, 'BPA'), 8, "0", STR_PAD_LEFT),
             "ordenPago" => $doc_id,
