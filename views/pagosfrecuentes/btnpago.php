@@ -1,5 +1,4 @@
 <?php
-
 use app\widgets\PbVPOS\PbVPOS;
 \app\models\Utilities::putMessageLogFile('op en btnpago:'.$ordenPago);
 echo PbVPOS::widget([
@@ -16,3 +15,4 @@ echo PbVPOS::widget([
     "requestID" => (is_null($requestID)?"":$requestID),
     "type" => "form",
 ]);
+?>
