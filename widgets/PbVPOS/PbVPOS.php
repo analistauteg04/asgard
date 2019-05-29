@@ -95,7 +95,6 @@ class PbVPOS extends Widget {
                 $estado = $this->existsPayment();
                 if($resp > 0 && ($estado == "" || $estado["status"] == "PENDING" || $estado["status"] == "PENDING_VALIDATION")){                    
                     $response = $this->getInfoPayment($resp);                    
-                    exit(json_encode($response));
                     if($response["status"]["status"] == "APPROVED"){                        
                         echo $this->render('error', [
                             "reloadDB" => true,
@@ -104,7 +103,6 @@ class PbVPOS extends Widget {
                             $this->updateTransactionFinished();
                         return;
                     }else if($response["status"]["status"] == "PENDING" || $response["status"]["status"] == "PENDING_VALIDATION"){
-                        exit(json_encode($response));
                         echo $this->render('error', [
                             "reloadDB" => false,
                             "data" => json_encode($response),

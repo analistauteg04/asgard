@@ -15,3 +15,4 @@ echo PbVPOS::widget([
     "requestID" => (is_null($requestID)?"":$requestID),
     "type" => "form",
 ]);
+?>
