@@ -1,5 +1,4 @@
 <?php
-
 use app\widgets\PbVPOS\PbVPOS;
 echo PbVPOS::widget([
     "id" => "VPOS",
@@ -15,3 +14,4 @@ echo PbVPOS::widget([
     "requestID" => (is_null($requestID)?"":$requestID),
     "type" => "form",
 ]);
+?>

@@ -44,7 +44,8 @@ class PbVPOS extends Widget {
     public $iva = "";
     public $expirationMin = "10";
     public $session = "";
-    public $isCheckout = false;
+    //public $isCheckout = true;
+    public $isCheckout = false;  //original
     public $returnUrl = "";
     public $locale = "es_EC";
     public $ipAddress = "127.0.0.1";
@@ -87,15 +88,15 @@ class PbVPOS extends Widget {
             $this->total <= 0){
                 echo $this->render('validaError');
                 return;
-            }
+            }            
             if($this->isCheckout === false){
                 // hay una orden de pago previa
                 $resp = $this->existsOrdenResponse();
                 $estado = $this->existsPayment();
-                if($resp > 0 && ($estado == "" || $estado["status"] == "PENDING" || $estado["status"] == "PENDING_VALIDATION")){
-                    $response = $this->getInfoPayment($resp);
-                    //Utilities::putMessageLogFile("$resp     $estado    ".json_encode($response));
-                    if($response["status"]["status"] == "APPROVED"){
+                if($resp > 0 && ($estado == "" || $estado["status"] == "PENDING" || $estado["status"] == "PENDING_VALIDATION")){                    
+                    $response = $this->getInfoPayment($resp);                    
+                    exit(json_encode($response));
+                    if($response["status"]["status"] == "APPROVED"){                        
                         echo $this->render('error', [
                             "reloadDB" => true,
                             "data" => json_encode($response),
@@ -103,7 +104,7 @@ class PbVPOS extends Widget {
                             $this->updateTransactionFinished();
                         return;
                     }else if($response["status"]["status"] == "PENDING" || $response["status"]["status"] == "PENDING_VALIDATION"){
-                        //exit(json_encode($response));
+                        exit(json_encode($response));
                         echo $this->render('error', [
                             "reloadDB" => false,
                             "data" => json_encode($response),
