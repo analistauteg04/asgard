@@ -37,6 +37,11 @@ class PagosfrecuentesController extends \yii\web\Controller {
         return parent::init();
     }
 
+    public function actionUpdate() {
+        $this->layout = '@themes/' . \Yii::$app->getView()->theme->themeName . '/layouts/basic.php';
+        return $this->render('update', array());
+    }
+
     public function actionIndex() {
         $this->layout = '@themes/' . \Yii::$app->getView()->theme->themeName . '/layouts/basic.php';
         $per_id = Yii::$app->session->get("PB_perid");
@@ -128,45 +133,47 @@ class PagosfrecuentesController extends \yii\web\Controller {
                     "resp_datos" => $resp_datos,
         ]);
     }
-    public function actionBotonpago(){
+
+    public function actionBotonpago() {
+        $this->layout = '@themes/' . \Yii::$app->getView()->theme->themeName . '/layouts/basic.php';
         $data = Yii::$app->request->post();
         $dataGet = Yii::$app->request->get();
         $con1 = \Yii::$app->db_facturacion;
         $emp_id = 1;
-        $modDocumento = new Documento();    
-        $referenceID = isset($data["referenceID"])?$data["referenceID"]:null;
-        if(!is_null($referenceID)){
+        $modDocumento = new Documento();
+        $referenceID = isset($data["referenceID"]) ? $data["referenceID"] : null;
+        if (!is_null($referenceID)) {
             try {
                 $transaction = $con1->beginTransaction();
                 //OBTENER EL ID DE LA SOLICITUD DE PAGO.                
-                $doc_id = $dataGet["docid"];   
+                $doc_id = $dataGet["docid"];
                 exit("entro con al variable referencia");
-                \app\models\Utilities::putMessageLogFile('doc_id2:'.$doc_id);
+                \app\models\Utilities::putMessageLogFile('doc_id2:' . $doc_id);
                 $response = $this->render('btnpago', array(
                     "referenceID" => $data["resp"]["reference"],
                     "requestID" => $data["requestID"],
                     "ordenPago" => $doc_id,
                     "response" => $data["resp"],
                 ));
-                if ($data["resp"]["status"]["status"] == "APPROVED"){
+                if ($data["resp"]["status"]["status"] == "APPROVED") {
                     $respDoc = $modDocumento->actualizarDocumento($con1, $doc_id);
                     if ($respDoc) {
-                        $transaction->commit();      
+                        $transaction->commit();
                         $message = array(
                             "wtmessage" => Yii::t("notificaciones", "Your information was successfully saved."),
                             "title" => Yii::t('jslang', 'Success'),
                         );
-                    } else{
+                    } else {
                         throw new Exception('Error al actualizar pago.');
-                    } 
-                }else {
+                    }
+                } else {
                     $message = array(
                         "wtmessage" => $data["resp"]["status"]["message"],
                         "title" => Yii::t('jslang', 'Error'),
                     );
                     return Utilities::ajaxResponse('NOOK', 'alert', Yii::t('jslang', 'Error'), 'true', $message);
-                }            
-            }catch(Exception $e) {
+                }
+            } catch (Exception $e) {
                 $transaction->rollBack();
                 $message = array(
                     "wtmessage" => Yii::t('notificaciones', 'Invalid request. Please do not repeat this request again. Contact to Administrator.'),
@@ -175,26 +182,23 @@ class PagosfrecuentesController extends \yii\web\Controller {
                 return Utilities::ajaxResponse('NOOK', 'alert', Yii::t('jslang', 'Error'), 'true', $message);
             }
         }
-        Secuencias::initSecuencia($con1, 1, 1, 1, 'BPA',"BOTÓN DE PAGOS DINERS");
-        $doc_id =  $_GET['docid'];         
-        \app\models\Utilities::putMessageLogFile('doc_id:'.$doc_id);
-        $resultado = $modDocumento->consultarDatosxId($con1, $doc_id);                
+        Secuencias::initSecuencia($con1, 1, 1, 1, 'BPA', "BOTÓN DE PAGOS DINERS");
+        $doc_id = $_GET['docid'];
+        \app\models\Utilities::putMessageLogFile('doc_id:' . $doc_id);
+        $resultado = $modDocumento->consultarDatosxId($con1, $doc_id);
         $descripcionItem = "Pagos de Varios Items";
         $titleBox = "Pagos varios";
         $totalpagar = $resultado["doc_valor"];
         return $this->render('btnpago', array(
-            "referenceID" => str_pad(Secuencias::nuevaSecuencia($con1, 1, 1, 1, 'BPA'), 8, "0", STR_PAD_LEFT),
-            "ordenPago" => $doc_id,
-            "nombre_cliente" => $resultado["pben_nombre"],
-            "apellido_cliente" => $resultado["pben_apellido"],
-            "descripcionItem" => $descripcionItem,
-            "titleBox" => $titleBox,
-            "email_cliente" => $resultado["doc_correo"],
-            "total" => $totalpagar,
+                    "referenceID" => str_pad(Secuencias::nuevaSecuencia($con1, 1, 1, 1, 'BPA'), 8, "0", STR_PAD_LEFT),
+                    "ordenPago" => $doc_id,
+                    "nombre_cliente" => $resultado["pben_nombre"],
+                    "apellido_cliente" => $resultado["pben_apellido"],
+                    "descripcionItem" => $descripcionItem,
+                    "titleBox" => $titleBox,
+                    "email_cliente" => $resultado["doc_correo"],
+                    "total" => $totalpagar,
         ));
-    }
-    public function actionUpdate() {
-        return $this->render('update', array());
     }
 
     public function actionSavepayment() {
