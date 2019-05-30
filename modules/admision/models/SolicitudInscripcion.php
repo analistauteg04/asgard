@@ -1240,10 +1240,12 @@ class SolicitudInscripcion extends \yii\db\ActiveRecord
                     sins.sins_usuario_preaprueba as usu_preaprueba,                    
                     case when ifnull((select opag_estado_pago
                                             from " . $con3->dbname . ".orden_pago op
-                                            where op.sins_id = sins.sins_id),'N') = 'N' then 'No generado'
+                                            where op.sins_id = sins.sins_id
+                                            and op.opag_estado = :estado and op.opag_estado_logico = :estado),'N') = 'N' then 'No generado'
                      when (select opag_estado_pago
                                from " . $con3->dbname . ".orden_pago op
-                               where op.sins_id = sins.sins_id) = 'P' then 'Pendiente' 
+                               where op.sins_id = sins.sins_id
+                                     and op.opag_estado = :estado and op.opag_estado_logico = :estado) = 'P' then 'Pendiente' 
                     else 'Pagado' end as pago,
                     ifnull((select count(*) from " . $con->dbname . ".solicitudins_documento sd 
                             where sd.sins_id = sins.sins_id and sd.sdoc_estado = :estado and sd.sdoc_estado_logico = :estado),0) as numDocumentos,
