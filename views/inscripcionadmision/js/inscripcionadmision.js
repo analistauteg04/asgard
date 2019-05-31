@@ -17,16 +17,15 @@ function habilitarSecciones() {
         $('#divCertvota').css('display', 'none');
     }
 }
-
 $(document).ready(function () {
     // para mostrar codigo de area
+    $('#btn_pago_i').css('display', 'none');    
     var unisol = $('#cmb_unidad_solicitud').val();
     if (unisol == 1) {
         $('#divmetodocan').css('display', 'none');
     } else if (unisol == 2) {
         $('#divmetodocan').css('display', 'block');
     }
-
     $('#cmb_pais_dom').change(function () {
         var link = $('#txth_base').val() + "/inscripcionadmision/index";
         var arrParams = new Object();
@@ -623,5 +622,7 @@ function dataInscripPart1(ID) {
 }
 
 function PagoDinners(solicitud) {    
-    window.location.href = $('#txth_base').val() + "/inscripcionadmision/savepagodinner?sins_id="+solicitud;                        
+    var bohre = $('#txth_base').val() + "/inscripcionadmision/savepagodinner?sins_id=" + solicitud+"&popup=1";
+    $('#btn_pago_i').attr("href", bohre);
+    $('#btn_pago_i').trigger("click");                                        
 }

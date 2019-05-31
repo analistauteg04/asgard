@@ -179,5 +179,6 @@ use yii\helpers\Html;
         <div class="col-md-2">
             <a id="sendInscripcionsolicitud" href="javascript:" class="btn btn-primary btn-block"> <?php echo "Pagar"; ?> </a>
         </div>
+        <a id="btn_pago_i" href="javascript:" class="btn btn-primary btn-block pbpopup"></a>
     </div>
 </form>
