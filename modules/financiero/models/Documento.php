@@ -106,7 +106,7 @@ class Documento extends \yii\db\ActiveRecord
         return $con->getLastInsertID();        
     }
 
-    public function actualizarDocumento($con, $doc_id) {  
+    public function actualizarDocumento($con, $doc_id,$estado_pago='N') {  
         $estado = 1;
         $fecha = date(Yii::$app->params["dateTimeByDefault"]);
         $sql = "UPDATE " . $con->dbname . ".documento
@@ -120,6 +120,7 @@ class Documento extends \yii\db\ActiveRecord
          \app\models\Utilities::putMessageLogFile('sql: ' . $sql);
         $command = $con->createCommand($sql);
         $command->bindParam(":doc_id", $doc_id, \PDO::PARAM_INT);
+        $command->bindParam(":doc_pagado", $estado_pago, \PDO::PARAM_INT);
         $command->bindParam(":fecha_pago", $fecha, \PDO::PARAM_STR);
         $command->bindParam(":estado", $estado, \PDO::PARAM_STR);      
         $response = $command->execute();

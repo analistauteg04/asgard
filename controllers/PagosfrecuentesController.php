@@ -147,7 +147,6 @@ class PagosfrecuentesController extends \yii\web\Controller {
                 $transaction = $con1->beginTransaction();
                 //OBTENER EL ID DE LA SOLICITUD DE PAGO.                
                 $doc_id = $dataGet["docid"];
-                exit("entro con al variable referencia");
                 \app\models\Utilities::putMessageLogFile('doc_id2:' . $doc_id);
                 $response = $this->render('btnpago', array(
                     "referenceID" => $data["resp"]["reference"],
@@ -156,7 +155,7 @@ class PagosfrecuentesController extends \yii\web\Controller {
                     "response" => $data["resp"],
                 ));
                 if ($data["resp"]["status"]["status"] == "APPROVED") {
-                    $respDoc = $modDocumento->actualizarDocumento($con1, $doc_id);
+                    $respDoc = $modDocumento->actualizarDocumento($con1, $doc_id,'S');
                     if ($respDoc) {
                         $transaction->commit();
                         $message = array(
