@@ -1028,9 +1028,14 @@ class PersonaGestion extends \app\modules\admision\components\CActiveRecord {
                             inner join db_asgard.usua_grol_eper uge on uge.usu_id = ba.usu_id
                             where o.pges_id = pg.pges_id                            
                             and o.opo_estado = :estado
+<<<<<<< HEAD
                             and o.opo_estado_logico = :estado
                             group by o.eopo_id) as gestion 
                         /*case when (select ifnull(count(ba.bact_id),0)
+=======
+                            and o.opo_estado_logico = :estado) as gestion */
+                        case when (select ifnull(count(ba.bact_id),0) -- anna
+>>>>>>> 10db0c5b7388b2e6fff2f71f869c398899936354
 				from db_crm.oportunidad o 
 				inner join db_crm.bitacora_actividades ba on ba.opo_id = o.opo_id
 				inner join db_asgard.usua_grol_eper uge on uge.usu_id = ba.usu_id
@@ -1928,7 +1933,7 @@ class PersonaGestion extends \app\modules\admision\components\CActiveRecord {
                         (select count(*) from " . $con->dbname . ".oportunidad o where o.pges_id = pg.pges_id and o.eopo_id in(1,2,3) and o.opo_estado = :estado and o.opo_estado_logico = :estado) as oportunidad_abiertas,
                         (select count(*) from " . $con->dbname . ".oportunidad o where o.pges_id = pg.pges_id and o.eopo_id in(4,5) and o.opo_estado = :estado and o.opo_estado_logico = :estado) as oportunidad_cerradas,
                         case when (select ifnull(count(ba.bact_id),0)
-                            from db_crm.oportunidad o 
+                            from db_crm.oportunidad o -- anna
                             inner join db_crm.bitacora_actividades ba on ba.opo_id = o.opo_id
                             inner join db_asgard.usua_grol_eper uge on uge.usu_id = ba.usu_id
                             where o.pges_id = pg.pges_id

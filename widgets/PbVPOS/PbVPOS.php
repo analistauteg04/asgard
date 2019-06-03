@@ -71,7 +71,13 @@ class PbVPOS extends Widget {
     public function run()
     {
         if($this->type_vpos == 1){
-            $this->returnUrl = Url::current([], true) . "?referenceID=" . $this->referenceID;
+            
+            $a = Url::current([], true);
+            if (strpos($a, '?') !== false) {
+                $this->returnUrl =  $a. "&referenceID=" . $this->referenceID;
+            }else{
+                $this->returnUrl =  $a. "?referenceID=" . $this->referenceID;
+            }
             $response = null;
             $data = [
                 "titleBox" => $this->titleBox,
@@ -193,8 +199,9 @@ class PbVPOS extends Widget {
                 "name" => $this->nombre_cliente,
                 "surname" => $this->apellido_cliente,
                 "email" => $this->email_cliente,
-                /*"document" => "",
-                "documentType" => "",
+                /*"document" => "", //esta informacion debe enviarse.
+                "documentType" => "", //esta informacion debe enviarse.
+                "mobile" => "",
                 "address" => [
                     "street" => "",
                     "city" => "",

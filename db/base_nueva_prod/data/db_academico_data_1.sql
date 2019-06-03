@@ -109,8 +109,8 @@ INSERT INTO `estudio_academico` (`eaca_id`, `teac_id`, `eaca_nombre`, `eaca_desc
 (20, 2, 'Gestión del Talento Humano', 'Gestion del Talento Humano', 'talento_humano', 1, NULL, '1', '2017-02-01 16:25:00', NULL, '1'),
 (21, 2, 'Dirección Estratégica en Empresas Familiares', 'Direccion Estrategica en Empresas Familiares', 'empresas_familiares', 1, NULL, '1', '2017-02-01 16:25:00', NULL, '1'),
 (22, 2, 'Gestión en Procesos Organizacionales', 'Gestion en Procesos Organizacionales', 'investigación', 1, NULL, '1', '2017-02-01 16:25:00', NULL, '1'),
-(23, 2, 'Negocios Internacionales', 'Negocios Internacionales', 'negocios_internacionales', 1, NULL, '1', '2019-02-11 18:00:00', NULL, '1');
-
+(23, 2, 'Negocios Internacionales', 'Negocios Internacionales', 'negocios_internacionales', 1, NULL, '1', '2019-02-11 18:00:00', NULL, '1'),
+(24,'2', 'Educacion', 'Educacion', 'educacion', '1', NULL,'1', '2019-05-31 18:00:00',NULL, '1');
 
 
 -- --------------------------------------------------------

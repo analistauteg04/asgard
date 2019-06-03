@@ -21,10 +21,8 @@ function habilitarSecciones() {
 var itemList = [];
 var total = 0;
 $(document).ready(function () {    
-    // para mostrar codigo de area
-    //llenarDatosBen(obtDataBen());    
-    //llenarDatosFact(obtDataFact());    
-    //representarItems(obtDataList());
+    $('#btn_pago_p').css('display', 'none');    
+    llenarDatosBen(obtDataBen());
     var unisol = $('#cmb_unidad_solicitud').val();
     if (unisol == 1) {
         $('#divmetodocan').css('display', 'none');
@@ -42,8 +40,8 @@ $(document).ready(function () {
                 $('#txt_codigoarea').val(data.area['name']);
             }
         }, true);
-    });    
-    
+    });
+
     $('#cmb_tipo_dni').change(function () {
         if ($('#cmb_tipo_dni').val() == 'PASS') {
             $('#txt_cedula').removeClass("PBvalidation");
@@ -158,7 +156,6 @@ $(document).ready(function () {
                 data = response.message;
                 setComboData(data.items, "cmb_item");
             }
-            //Precio.
             var arrParams = new Object();
             arrParams.ite_id = $('#cmb_item').val();
             arrParams.getprecio = true;
@@ -182,13 +179,13 @@ $(document).ready(function () {
             }
         }, true);
     });
-    
+
     $('#btn_AgregarItem').click(function () {
         guardarItem();
         var dataItems = obtDataList();
         representarItems(dataItems);
-    });    
-    
+    });
+
     // tabs create
     $('#paso1next').click(function () {
         guardarBenPagoTemp();
@@ -199,9 +196,10 @@ $(document).ready(function () {
         $("a[data-href='#paso2']").attr('data-toggle', 'tab');
         $("a[data-href='#paso2']").attr('href', $("a[data-href='#paso2']").attr('data-href'));
         $("a[data-href='#paso2']").trigger("click");
+        representarItems(obtDataList());
     });
     $('#paso2back').click(function () {
-        //llenarDatosBen(obtDataBen());
+        llenarDatosBen(obtDataBen());
         $("a[data-href='#paso2']").attr('data-toggle', 'none');
         $("a[data-href='#paso2']").parent().attr('class', 'disabled');
         $("a[data-href='#paso2']").attr('data-href', $("a[href='#paso2']").attr('href'));
@@ -210,7 +208,7 @@ $(document).ready(function () {
         $("a[data-href='#paso1']").attr('href', $("a[data-href='#paso1']").attr('data-href'));
         $("a[data-href='#paso1']").trigger("click");
     });
-    $('#paso2next').click(function () {        
+    $('#paso2next').click(function () {
         $("a[data-href='#paso2']").attr('data-toggle', 'none');
         $("a[data-href='#paso2']").parent().attr('class', 'disabled');
         $("a[data-href='#paso2']").attr('data-href', $("a[href='#paso2']").attr('href'));
@@ -218,6 +216,8 @@ $(document).ready(function () {
         $("a[data-href='#paso3']").attr('data-toggle', 'tab');
         $("a[data-href='#paso3']").attr('href', $("a[data-href='#paso3']").attr('data-href'));
         $("a[data-href='#paso3']").trigger("click");
+        $('#lbl_total_factura').text("$" + total);
+        llenarDatosFact(obtDataFact());
     });
     $('#paso3back').click(function () {
         $("a[data-href='#paso3']").attr('data-toggle', 'none');
@@ -226,9 +226,10 @@ $(document).ready(function () {
         $("a[data-href='#paso3']").removeAttr('href');
         $("a[data-href='#paso2']").attr('data-toggle', 'tab');
         $("a[data-href='#paso2']").attr('href', $("a[data-href='#paso2']").attr('data-href'));
-        $("a[data-href='#paso2']").trigger("click");        
-    });    
-    $('#paso3next').click(function () {        
+        $("a[data-href='#paso2']").trigger("click");
+        representarItems(obtDataList());
+    });
+    $('#paso3next').click(function () {
         guardarFacturaTemp();
         guardarPagos();
         $("a[data-href='#paso2']").attr('data-toggle', 'none');
@@ -239,7 +240,7 @@ $(document).ready(function () {
         $("a[data-href='#paso3']").attr('href', $("a[data-href='#paso3']").attr('data-href'));
         $("a[data-href='#paso3']").trigger("click");
     });
-    
+
     $('input[name=opt_tipo_DNI]:radio').change(function () {
         if ($(this).val() == 1) {//ced
             $('#txt_dni_fac').attr("data-lengthMin", "10");
@@ -258,67 +259,73 @@ $(document).ready(function () {
             $('label[for=txt_dni_fac]').text($('#txth_pas_lb').val() + "");
         }
     });
-    
+
 });
-function llenarDatosBen(benData){
-    if(benData['nombre'].length > 0){
-        $('#txt_primer_nombre').val(benData['nombre']);
-    }
-    if(benData['apellido'].length > 0){
-        $('#txt_primer_apellido').val(benData['apellido']);
-    }
-    if(benData['nombre'].length > 0){
-        $('#txt_pasaporte').val(benData['pasaporte']);
-    }
-    if(benData['correo'].length > 0){
-        $('#txt_correo').val(benData['correo']);
-    }
-    if(benData['celular'].length > 0){
-        $('#txt_celular').val(benData['celular']);
-    }
-    if(benData['cedula'].length > 0){
-        $('#txt_cedula').val(benData['cedula']);
-    }
-    if(benData['pais_id'].length > 0){
-        $('#cmb_pais_dom').val(benData['pais_id']);
-    }
-}
-function llenarDatosFact(factData){
-    if(factData['nombre_fac'].length > 0){
-        $('#txt_nombres_fac').val(factData['nombre_fac']);
-    }
-    if(factData['apellidos_fac'].length > 0){
-        $('#txt_apellidos_fac').val(factData['apellidos_fac']);
-    }
-    if(factData['dir_fac'].length > 0){
-        $('#txt_dir_fac').val(factData['dir_fac']);
-    }
-    if(factData['telfono_fac'].length > 0){
-        $('#txt_tel_fac').val(factData['telfono_fac']);
-    }
-    if(factData['dni_fac'].length > 0){
-        $('#txt_dni_fac').val(factData['dni_fac']);
-    }
-    if(factData['correo'].length > 0){
-        $('#txt_correo_factura').val(factData['correo']);
-    }
-    if(factData['total'] > 0){
-        $('#lbl_total_factura').text("$"+factData['total']);
+function llenarDatosBen(benData) {
+    var count = Object.keys(benData).length;
+    if (count > 0) {
+        if (benData['nombre'].length > 0) {
+            $('#txt_primer_nombre').val(benData['nombre']);
+        }
+        if (benData['apellido'].length > 0) {
+            $('#txt_primer_apellido').val(benData['apellido']);
+        }
+        if (benData['nombre'].length > 0) {
+            $('#txt_pasaporte').val(benData['pasaporte']);
+        }
+        if (benData['correo'].length > 0) {
+            $('#txt_correo').val(benData['correo']);
+        }
+        if (benData['celular'].length > 0) {
+            $('#txt_celular').val(benData['celular']);
+        }
+        if (benData['cedula'].length > 0) {
+            $('#txt_cedula').val(benData['cedula']);
+        }
+        if (benData['pais_id'].length > 0) {
+            $('#cmb_pais_dom').val(benData['pais_id']);
+        }
     }
 }
-function guardarBenPagoTemp(){
+function llenarDatosFact(factData) {
+    var count = Object.keys(factData).length;
+    if (count > 0) {
+        if (factData['nombre_fac'].length > 0) {
+            $('#txt_nombres_fac').val(factData['nombre_fac']);
+        }
+        if (factData['apellidos_fac'].length > 0) {
+            $('#txt_apellidos_fac').val(factData['apellidos_fac']);
+        }
+        if (factData['dir_fac'].length > 0) {
+            $('#txt_dir_fac').val(factData['dir_fac']);
+        }
+        if (factData['telfono_fac'].length > 0) {
+            $('#txt_tel_fac').val(factData['telfono_fac']);
+        }
+        if (factData['dni_fac'].length > 0) {
+            $('#txt_dni_fac').val(factData['dni_fac']);
+        }
+        if (factData['correo'].length > 0) {
+            $('#txt_correo_factura').val(factData['correo']);
+        }
+        if (factData['total'] > 0) {
+            $('#lbl_total_factura').text("$" + total);
+        }
+    }
+}
+function guardarBenPagoTemp() {
     var arrParams = new Object();
     arrParams.nombre = $('#txt_primer_nombre').val();
     arrParams.apellido = $('#txt_primer_apellido').val();
     arrParams.pasaporte = $('#txt_pasaporte').val();
     arrParams.correo = $('#txt_correo').val();
     arrParams.celular = $('#txt_celular').val();
-    arrParams.pais_id = $('#cmb_pais_dom').val();  
+    arrParams.pais_id = $('#cmb_pais_dom').val();
     arrParams.cedula = $('#txt_cedula').val();
-    sessionStorage.setItem('datosBen', JSON.stringify(arrParams));        
+    sessionStorage.setItem('datosBen', JSON.stringify(arrParams));
 }
 
-function guardarFacturaTemp(){
+function guardarFacturaTemp() {
     var arrParams = new Object();
     arrParams.nombre_fac = $('#txt_nombres_fac').val();
     arrParams.apellidos_fac = $('#txt_apellidos_fac').val();
@@ -328,26 +335,27 @@ function guardarFacturaTemp(){
     arrParams.dni_fac = $('#txt_dni_fac').val();
     arrParams.correo = $('#txt_correo').val();
     arrParams.total = total;
-    sessionStorage.setItem('datosFactura', JSON.stringify(arrParams));    
+    sessionStorage.setItem('datosFactura', JSON.stringify(arrParams));
 }
 
-function guardarPagos() {  
+function guardarPagos() {
     var link = $('#txth_base').val() + "/pagosfrecuentes/savepayment";
     var arrParams = new Object();
-    if (total==0){        
+    if (total == 0) {
         mensaje("No ha seleccionado productos para la factura.");
     } else {
         var dataItemList = obtDataList();
         arrParams.dataBenList = obtDataBen();
-        arrParams.dataFacturaList = obtDataFact();      
+        arrParams.dataFacturaList = obtDataFact();
         arrParams.dataItems = dataItemList;//itemList;                
-        sessionStorage.clear();
-        if (!validateForm()) {   
+        if (!validateForm()) {
             requestHttpAjax(link, arrParams, function (response) {
-                showAlert("OK", "success", response.message);                
-                alert(response.message.iddoc);
-                setTimeout(function () {                                        
-                    window.location.href = $('#txth_base').val() + "/pagosfrecuentes/botonpago?docid="+response.message.iddoc;                    
+                showAlert("OK", "success", response.message);
+                sessionStorage.clear();
+                setTimeout(function () {
+                    var bohre = $('#txth_base').val() + "/pagosfrecuentes/botonpago?docid=" + response.message.iddoc+"&popup=1";
+                    $('#btn_pago_p').attr("href", bohre);
+                    $('#btn_pago_p').trigger("click");                    
                 }, 3000);
             });
         }
@@ -394,11 +402,11 @@ function guardarItem() {
         modalidad_id: modalidad_id,
         modalidad: txt_modalidad,
         item: txt_item,
-        precio: txt_precio        
+        precio: txt_precio
     }
     if (!existeitem(item_id)) {
         //alert('Agrega al storage');
-        datalist.push(dataitem);        
+        datalist.push(dataitem);
         sessionStorage.setItem('datosItem', JSON.stringify(datalist));
     } else {
         var mensaje = {wtmessage: "El item ya se encuentra ingresado.", title: "Exito"};
