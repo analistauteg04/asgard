@@ -15,7 +15,6 @@ use app\models\Utilities;
 use yii\helpers\ArrayHelper;
 
 class ActividadesController extends \app\components\CController {
-
     public function actionListaractividadxoportunidad() {
         $modoportunidad = new Oportunidad();
         $pges_id = base64_decode($_GET["pges_id"]);
@@ -135,7 +134,7 @@ class ActividadesController extends \app\components\CController {
         $oportunidad_perdidad = $oport_model->consultarOportunidadPerdida();
         $unidad_acad_data = $uni_aca_model->consultarUnidadAcademicas();
         $tipo_oportunidad_data = $modTipoOportunidad->consultarOporxUnidad(1);
-        $academic_study_data = $oport_model->consultarCarreraModalidad(1, 1);
+        $academic_study_data = $oport_model->consultarCarreraModalidad(1, 1);        
         $state_oportunidad_data = $state_oportunidad_model->consultarEstadOportunidad();
         $knowledge_channel_data = $oport_model->consultarConocimientoCanal(1);
         $observacion = $oport_model->consultarObseractividad();

@@ -135,6 +135,22 @@ create table if not exists `oportunidad_perdida` (
 
 -- --------------------------------------------------------
 --
+-- Estructura de tabla `otro_estudio_academico`
+--
+create table if not exists `otro_estudio_academico` (
+ `oeac_id` bigint(20) not null auto_increment primary key,
+ `oeac_nombre` varchar(300) not null,
+ `oeac_descripcion` varchar(500) not null,
+ `uaca_id` bigint(20) not null,
+ `moda_id` bigint(20) not null,
+ `oeac_estado` varchar(1) not null,
+ `oeac_fecha_creacion` timestamp not null default current_timestamp,
+ `oeac_fecha_modificacion` timestamp null default null,
+ `oeac_estado_logico` varchar(1) not null
+);
+
+-- --------------------------------------------------------
+--
 -- Estructura de tabla `estado_cliente`
 --
 create table if not exists `estado_contacto` (
