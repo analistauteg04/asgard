@@ -104,7 +104,7 @@ aspirante::registerTranslations();
                 </div>
             </div>
         </div>
-    </div> 
+    </div>    
     <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">   
         <div class="col-md-2">
             <a id="paso3back" href="javascript:" class="btn btn-primary btn-block"><span class="glyphicon glyphicon-menu-left"></span><?= Yii::t("formulario", "Back") ?> </a>
@@ -114,5 +114,6 @@ aspirante::registerTranslations();
         <div class="col-md-2">
             <a id="paso3next" href="javascript:" class="btn btn-primary btn-block"> <?= Yii::t("formulario", "Pay") ?> <span class="glyphicon glyphicon-menu-right"></span></a>
         </div>
+        <a id="btn_pago_p" href="javascript:" class="btn btn-primary btn-block pbpopup"></a>
     </div>    
 </form>
