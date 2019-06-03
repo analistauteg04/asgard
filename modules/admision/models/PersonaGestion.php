@@ -1016,28 +1016,33 @@ class PersonaGestion extends \app\modules\admision\components\CActiveRecord {
                         pg.pges_trabajo_telefono,
                         emp.emp_id,
                         uaca.uaca_id,
-                        /* (select 
+                        (select 
                             case  count(ba.bact_id)
                                when 0 then 1 
-                               when 1 then 1
+                               when 1 and (o.eopo_id <> 3) then 1
+                               when 1 and (o.eopo_id = 3) then 2
                                when 2 then 2
                             end as bact_id 
                             from db_crm.oportunidad o 
                             inner join db_crm.bitacora_actividades ba on ba.opo_id = o.opo_id
                             inner join db_asgard.usua_grol_eper uge on uge.usu_id = ba.usu_id
-                            where o.pges_id = pg.pges_id
-                            -- and o.eopo_id in(1,2,3)
-                            -- and uge.grol_id in (1,28)
+                            where o.pges_id = pg.pges_id                            
                             and o.opo_estado = :estado
+<<<<<<< HEAD
+                            and o.opo_estado_logico = :estado
+                            group by o.eopo_id) as gestion 
+                        /*case when (select ifnull(count(ba.bact_id),0)
+=======
                             and o.opo_estado_logico = :estado) as gestion */
                         case when (select ifnull(count(ba.bact_id),0) -- anna
+>>>>>>> 10db0c5b7388b2e6fff2f71f869c398899936354
 				from db_crm.oportunidad o 
 				inner join db_crm.bitacora_actividades ba on ba.opo_id = o.opo_id
 				inner join db_asgard.usua_grol_eper uge on uge.usu_id = ba.usu_id
 				where o.pges_id = pg.pges_id
-                                and ba.eopo_id = 3 
+                                -- and ba.eopo_id = 3 
 				and o.opo_estado = :estado
-				and o.opo_estado_logico = :estado) < 1 then 1 else 2 end as gestion
+				and o.opo_estado_logico = :estado) < 1 then 1 else 2 end as gestion*/
                 FROM " . $con->dbname . ".persona_gestion pg
                 INNER JOIN " . $con->dbname . ".estado_contacto ec on ec.econ_id = pg.econ_id
                 INNER JOIN " . $con1->dbname . ".tipo_persona tp on tp.tper_id = pg.tper_id  
@@ -1935,20 +1940,20 @@ class PersonaGestion extends \app\modules\admision\components\CActiveRecord {
                             and ba.eopo_id = 3 
                             and o.opo_estado = '1'
                             and o.opo_estado_logico = '1') < 1 then 1 else 2 end as gestion
-                        /*(select 
+                        (select 
                             case  count(ba.bact_id)
                                when 0 then 1 
-                               when 1 then 1
+                               when 1 and (o.eopo_id <> 3) then 1
+                               when 1 and (o.eopo_id = 3) then 2
                                when 2 then 2
                             end as bact_id 
                             from db_crm.oportunidad o 
                             inner join db_crm.bitacora_actividades ba on ba.opo_id = o.opo_id
                             inner join db_asgard.usua_grol_eper uge on uge.usu_id = ba.usu_id
-                            where o.pges_id = pg.pges_id
-                            -- and o.eopo_id in(1,2,3)
-                            -- and uge.grol_id in (1,28)
+                            where o.pges_id = pg.pges_id                          
                             and o.opo_estado = :estado
-                            and o.opo_estado_logico = :estado) as gestion */
+                            and o.opo_estado_logico = :estado
+                            group by o.eopo_id) as gestion
                             
                 FROM " . $con->dbname . ".persona_gestion pg inner join " . $con->dbname . ".estado_contacto ec on ec.econ_id = pg.econ_id
                 INNER JOIN " . $con1->dbname . ".tipo_persona tp on tp.tper_id = pg.tper_id
