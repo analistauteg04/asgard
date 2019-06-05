@@ -359,7 +359,7 @@ class EmailController extends \app\components\CController {
                     $webs_mailchimp = new WsMailChimp();
                     if ($opcion == 'N') { // Ingreso                        
                         $conLista = $webs_mailchimp->newList($nombre_lista, $nombre_contacto, $correo_contacto, $asunto, $contacto, "es");
-                        \app\models\Utilities::putMessageLogFile('despues wsmailchimp');
+                        \app\models\Utilities::putMessageLogFile('despues wsmailchimp'.$conLista[0]);
                         if ($conLista) {
                             //Grabar en asgard                                                
                             $resp_lista = $lista->insertarLista($conLista["id"], $eaca_id, $mest_id, $emp_id, $nombre_lista, $ecor_id, $nombre_contacto, $pais, $provincia, $ciudad, $direccion1, $direccion2, $telefono, $codigo_postal, $asunto);
