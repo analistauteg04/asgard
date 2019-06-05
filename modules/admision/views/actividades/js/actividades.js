@@ -49,6 +49,9 @@ function save() {
     arrParams.descripcion = $('#txt_descripcion').val();
     if (arrParams.estado_oportunidad == 5) {
         arrParams.oportunidad_perdida = $('#cmb_lost_opportunity').val();
+        if (arrParams.oportunidad_perdida==13){
+            arrParams.otro_estudio = $('#cmb_otras_maestrias').val();
+        }
     }
     //Datos Próxima Atención
     if (arrParams.estado_oportunidad == 5 || arrParams.estado_oportunidad == 4 || arrParams.estado_oportunidad == 3) {

@@ -243,7 +243,7 @@ if (!empty($personalData['pges_cedula'])) {
                     } else {
                         ?>
                         <input type="text" class="form-control PBvalidation keyupmce" value="<?php echo $hora_proxima ?>" id="txt_hora_proxima" data-type="tiempo" data-keydown="true" placeholder="<?= Yii::t('formulario', 'HH:MM') ?>">
-                        <?php }
+                    <?php }
                     ?>
                 </div> 
             </div>                    
@@ -254,14 +254,13 @@ if (!empty($personalData['pges_cedula'])) {
             <div class="form-group">
                 <label for="cmb_state_opportunity" class="col-sm-5 col-md-5 col-xs-5 col-lg-5 control-label keyupmce"><?= Module::t("crm", "Opportunity state") ?></label>
                 <div class="col-sm-7 col-md-7 col-xs-7 col-lg-7">
-                    <?php 
-                        $eopo=0;
-                        if($actividad_oportunidad['eopo_id'] < 3){
-                            $eopo=1;                         
-                        }else{
-                            $eopo=$actividad_oportunidad['eopo_id'];                         
-                        }
-                        
+                    <?php
+                    $eopo = 0;
+                    if ($actividad_oportunidad['eopo_id'] < 3) {
+                        $eopo = 1;
+                    } else {
+                        $eopo = $actividad_oportunidad['eopo_id'];
+                    }
                     ?>
                     <?= Html::dropDownList("cmb_state_opportunity", $eopo, $arr_state_oportunidad, ["class" => "form-control", "id" => "cmb_state_opportunity", "disabled" => true]) ?>
                 </div>
@@ -282,12 +281,28 @@ if (!empty($personalData['pges_cedula'])) {
             </div>
         </div>        
     </div>  
+    <?php
+    if ($oportunidad_contacto['otro_estudio'] == 13)
+        $enable = "display: block;";
+    else
+        $enable = "display: none;";
+    ?>
+    <div class='col-md-12 col-sm-12 col-xs-12 col-lg-12' id="div_otro_estudio" style="<?php echo $enable ?>" >      
+        <div class="col-md-6 col-sm-6 col-xs-6 col-lg-6">            
+            <div class="form-group">
+                <label for="cmb_otras_maestrias" class="col-sm-5 col-md-5 col-xs-5 col-lg-5 control-label" id="lbl_descripcion"><?= Yii::t("formulario", "Other Studies") ?> </label>
+                <div class="col-sm-7 col-md-7 col-xs-7 col-lg-7">                  
+                    <?= Html::dropDownList("cmb_otras_maestrias", $oportunidad_contacto['otro_estudio'], $arr_otro_estudio, ["class" => "form-control", "id" => "cmb_otras_maestrias", "disabled" => true]) ?>                
+                </div>
+            </div>
+        </div> 
+    </div>          
     <div class='col-md-12 col-sm-12 col-xs-12 col-lg-12'>
         <div class="col-md-6 col-sm-6 col-xs-6 col-lg-6">            
             <div class="form-group">
                 <label for="txt_observacion" class="col-sm-5 col-md-5 col-xs-5 col-lg-5 control-label" id="lbl_descripcion"><?= Yii::t("formulario", "Observation") ?> </label>
                 <div class="col-sm-7 col-md-7 col-xs-7 col-lg-7">
-                     <?= Html::dropDownList("cmb_observacion", $actividad_oportunidad["oact_id"], $arr_observacion, ["class" => "form-control", "id" => "cmb_observacion"]) ?>    
+                    <?= Html::dropDownList("cmb_observacion", $actividad_oportunidad["oact_id"], $arr_observacion, ["class" => "form-control", "id" => "cmb_observacion"]) ?>    
                 </div>
             </div>
         </div>  
