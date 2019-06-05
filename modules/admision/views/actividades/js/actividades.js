@@ -23,6 +23,13 @@ $(document).ready(function () {
             $('#divoportunidad_perdida').css('display', 'none');
         }
     });
+    $('#cmb_lost_opportunity').change(function () {
+        if ($('#cmb_lost_opportunity').val() == 13 ) {
+            $('#div_otro_estudio').css('display', 'block');
+        }else{
+            $('#div_otro_estudio').css('display', 'none');
+        }
+    });
 });
 function newItem() {
     var opid = $('#txth_opid').val();
@@ -42,6 +49,9 @@ function save() {
     arrParams.descripcion = $('#txt_descripcion').val();
     if (arrParams.estado_oportunidad == 5) {
         arrParams.oportunidad_perdida = $('#cmb_lost_opportunity').val();
+        if (arrParams.oportunidad_perdida==13){
+            arrParams.otro_estudio = $('#cmb_otras_maestrias').val();
+        }
     }
     //Datos Próxima Atención
     if (arrParams.estado_oportunidad == 5 || arrParams.estado_oportunidad == 4 || arrParams.estado_oportunidad == 3) {

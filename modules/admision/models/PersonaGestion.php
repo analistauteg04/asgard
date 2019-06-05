@@ -1937,7 +1937,7 @@ class PersonaGestion extends \app\modules\admision\components\CActiveRecord {
                             and ba.eopo_id = 3 
                             and o.opo_estado = '1'
                             and o.opo_estado_logico = '1') < 1 then 1 else 2 end as gestion
-                        (select 
+                        /*(select 
                             case  count(ba.bact_id)
                                when 0 then 1 
                                when 1 and (o.eopo_id <> 3) then 1
@@ -1950,7 +1950,7 @@ class PersonaGestion extends \app\modules\admision\components\CActiveRecord {
                             where o.pges_id = pg.pges_id                          
                             and o.opo_estado = :estado
                             and o.opo_estado_logico = :estado
-                            group by o.eopo_id) as gestion
+                            group by o.eopo_id) as gestion*/
                             
                 FROM " . $con->dbname . ".persona_gestion pg inner join " . $con->dbname . ".estado_contacto ec on ec.econ_id = pg.econ_id
                 INNER JOIN " . $con1->dbname . ".tipo_persona tp on tp.tper_id = pg.tper_id

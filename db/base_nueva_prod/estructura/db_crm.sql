@@ -369,6 +369,7 @@ create table if not exists `oportunidad` (
  `ins_id` bigint(20) default null,
  `padm_id` bigint(20) default null,
  `eopo_id` bigint(20) not null,
+ `oeac_id` bigint(20) default null,
  `ccan_id_medio_contacto` bigint(20) default null,
  `opo_hora_ini_contacto` varchar(5) null default null,
  `opo_hora_fin_contacto` varchar(5) null default null,

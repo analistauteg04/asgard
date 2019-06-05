@@ -662,3 +662,23 @@ create table if not exists `horario_asignatura_periodo_tmp` (
   `hapt_hora_salida` varchar(10) null,  
   `usu_id` bigint(20) null
 );
+
+-- --------------------------------------------------------
+-- 
+-- Estructura de tabla para la tabla `otro_estudio_academico`
+-- --------------------------------------------------------
+
+CREATE TABLE `otro_estudio_academico` (
+  `oeac_id` bigint(20) NOT NULL AUTO_INCREMENT,
+  `oeac_nombre` varchar(300) NOT NULL,
+  `oeac_descripcion` varchar(500) NOT NULL,
+  `uaca_id` bigint(20) NOT NULL,
+  `mod_id` bigint(20) NOT NULL,
+  `oeac_estado` varchar(1) NOT NULL,
+  `oeac_fecha_creacion` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,
+  `oeac_fecha_modificacion` timestamp NULL DEFAULT NULL,
+  `oeac_estado_logico` varchar(1) NOT NULL,
+  PRIMARY KEY (`oeac_id`),
+  foreign key (uaca_id) references `unidad_academica`(uaca_id),
+  foreign key (mod_id) references `modalidad`(mod_id)
+);

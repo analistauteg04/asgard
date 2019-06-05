@@ -79,6 +79,7 @@ return [
     "All" => "TODOS",
     "Allocation Data" => "Datos Asignación",
     "Another language" => "Otro lenguaje",
+    "Another Master" => "Otra maestría",
     "Applicant Data" => "Datos del Solicitante:",
     "Application for Admission Process" => "Proceso Solicitud de Admisión",    
     "Record your data" => "Registra tus datos",  
@@ -650,4 +651,5 @@ return [
     "Yes" => "Si",
     "Your relative has some disability" => "Familiar con discapacidad",
     "You want to check with other data?" => "¿Desea facturar con otros datos?",
+    "Other Studies" => "Otros estudios",
 ];

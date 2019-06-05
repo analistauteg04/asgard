@@ -45,8 +45,9 @@ class ActividadesController extends \app\components\CController {
         $empresa = $empresa_mod->getAllEmpresa();
         $contactManage = $persges_mod->consultarPersonaGestion($pges_id);
         $actividad_data = $oport_model->consultarActividadById($act_id);
-        $oportunidad_perdidad = $oport_model->consultarOportunidadPerdida();
+        $oportunidad_perdidad = $oport_model->consultarOportunidadPerdida();        
         $oport_contac = $oport_model->consultarOportunidadById($opor_id);
+        $otro_estudio_data = $modestudio->consultarOtrosEstudiosAcademicos($oport_contac["uaca_id"], $oport_contac["mod_id"]);
         if ($oport_contac["empresa"] > 1) {
             $estudio = $modestudio->consultarEstudioEmpresa($oport_contac["empresa"]);
         } else {
@@ -70,6 +71,7 @@ class ActividadesController extends \app\components\CController {
                     'arr_state_oportunidad' => ArrayHelper::map($state_oportunidad_data, "id", "name"),
                     'arr_academic_study' => ArrayHelper::map($academic_study_data, "id", "name"),
                     "arr_knowledge_channel" => ArrayHelper::map($knowledge_channel_data, "id", "name"),
+                    "arr_otro_estudio" => ArrayHelper::map($otro_estudio_data, "id", "name"),
                     "tipo_dni" => array("CED" => Yii::t("formulario", "DNI Document"), "PASS" => Yii::t("formulario", "Passport")),
                     'arr_empresa' => ArrayHelper::map($empresa, "id", "value"),
                     'arr_observacion' => ArrayHelper::map($observacion, "id", "name"),
@@ -83,6 +85,7 @@ class ActividadesController extends \app\components\CController {
         $pges_id = base64_decode($_GET["pgid"]);
         $persges_mod = new PersonaGestion();
         $uni_aca_model = new UnidadAcademica();
+        $modestudio = new ModuloEstudio();
         $modTipoOportunidad = new TipoOportunidadVenta();
         $modalidad_model = new Modalidad();
         $state_oportunidad_model = new EstadoOportunidad();
@@ -90,6 +93,7 @@ class ActividadesController extends \app\components\CController {
         $empresa_mod = new Empresa();
         $empresa = $empresa_mod->getAllEmpresa();
         $oport_contac = $oport_model->consultarOportunidadById($opor_id);
+        $otro_estudio_data = $modestudio->consultarOtrosEstudiosAcademicos($oport_contac["uaca_id"], $oport_contac["mod_id"]);
         $contactManage = $persges_mod->consultarPersonaGestion($pges_id);
         $modalidad_data = $modalidad_model->consultarModalidad($oport_contac["uaca_id"], $oport_contac["empresa"]);
         $actividad_data = $oport_model->consultarActividadById($act_id);
@@ -109,6 +113,7 @@ class ActividadesController extends \app\components\CController {
                     'arr_linea_servicio' => ArrayHelper::map($unidad_acad_data, "id", "name"),
                     'arr_tipo_oportunidad' => ArrayHelper::map($tipo_oportunidad_data, "id", "name"),
                     'arr_state_oportunidad' => ArrayHelper::map($state_oportunidad_data, "id", "name"),
+                    "arr_otro_estudio" => ArrayHelper::map($otro_estudio_data, "id", "name"),
                     'arr_academic_study' => ArrayHelper::map($academic_study_data, "id", "name"),
                     "arr_knowledge_channel" => ArrayHelper::map($knowledge_channel_data, "id", "name"),
                     "tipo_dni" => array("CED" => Yii::t("formulario", "DNI Document"), "PASS" => Yii::t("formulario", "Passport")),
@@ -122,6 +127,7 @@ class ActividadesController extends \app\components\CController {
         $pges_id = base64_decode($_GET["pgid"]);
         $persges_mod = new PersonaGestion();
         $uni_aca_model = new UnidadAcademica();
+        $modestudio = new ModuloEstudio();
         $modTipoOportunidad = new TipoOportunidadVenta();
         $modalidad_model = new Modalidad();
         $state_oportunidad_model = new EstadoOportunidad();
@@ -130,13 +136,14 @@ class ActividadesController extends \app\components\CController {
         $empresa = $empresa_mod->getAllEmpresa();
         $contactManage = $persges_mod->consultarPersonaGestion($pges_id);
         $oport_contac = $oport_model->consultarOportunidadById($opor_id);
-        $modalidad_data = $modalidad_model->consultarModalidad($oport_contac["mod_id"], $oport_contac["empresa"]);
+        $modalidad_data = $modalidad_model->consultarModalidad($oport_contac["uaca_id"], $oport_contac["empresa"]);
         $oportunidad_perdidad = $oport_model->consultarOportunidadPerdida();
         $unidad_acad_data = $uni_aca_model->consultarUnidadAcademicas();
         $tipo_oportunidad_data = $modTipoOportunidad->consultarOporxUnidad(1);
         $academic_study_data = $oport_model->consultarCarreraModalidad(1, 1);        
         $state_oportunidad_data = $state_oportunidad_model->consultarEstadOportunidad();
         $knowledge_channel_data = $oport_model->consultarConocimientoCanal(1);
+        $otros_estudios_academicos = $modestudio->consultarOtrosEstudiosAcademicos($oport_contac["uaca_id"],$oport_contac["mod_id"]);
         $observacion = $oport_model->consultarObseractividad();
         return $this->render('new', [
                     'personalData' => $contactManage,
@@ -148,6 +155,7 @@ class ActividadesController extends \app\components\CController {
                     'arr_state_oportunidad' => ArrayHelper::map($state_oportunidad_data, "id", "name"),
                     'arr_academic_study' => ArrayHelper::map($academic_study_data, "id", "name"),
                     "arr_knowledge_channel" => ArrayHelper::map($knowledge_channel_data, "id", "name"),
+                    "arr_otros_estudios" => ArrayHelper::map($otros_estudios_academicos, "id", "name"),
                     "tipo_dni" => array("CED" => Yii::t("formulario", "DNI Document"), "PASS" => Yii::t("formulario", "Passport")),
                     'arr_empresa' => ArrayHelper::map($empresa, "id", "value"),
                     'arr_observacion' => ArrayHelper::map($observacion, "id", "name"),
@@ -179,10 +187,14 @@ class ActividadesController extends \app\components\CController {
                     $actividad_id = $mod_gestion->insertarActividad($opo_id, $usu_id, $padm_id, $eopo_id, $fecatiende, $observacion, $descripcion, $fecproxima);
                     if ($actividad_id) {
                         $oporper = null;
+                        $otro_estudio=null;
                         if ($eopo_id == 5) {
                             $oporper = $data['oportunidad_perdida'];
+                            if($oporper==13){
+                                $otro_estudio = $data['otro_estudio'];
+                            }
                         }
-                        $out = $mod_gestion->modificarOportunixId(null, $opo_id, null, null, null, null, null, null, null, null, null, $eopo_id, $usu_id, $oporper);
+                        $out = $mod_gestion->modificarOportunixId(null, $opo_id, null, null, null, null, null, null, null, null, null, $eopo_id, $usu_id, $oporper,$otro_estudio);
                         if ($out) {
                             $exito = 1;
                         } else {

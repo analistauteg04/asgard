@@ -52,5 +52,24 @@ class NivelInstruccion extends \yii\db\ActiveRecord {
             'nins_estado_logico' => 'Nins Estado Logico',
         ];
     }
+    
+    public static function consultarNivelInstruccion() {
+        $con = \Yii::$app->db_academico;
+        $estado = 1;
+        $sql = "    SELECT 
+                        nins_id AS id,
+                        nins_nombre AS value
+                    FROM 
+                         " . $con->dbname . ".nivel_instruccion                        
+                    WHERE                         
+                        nins_estado=:estado AND
+                        nins_estado_logico=:estado 
+                    ORDER BY nins_id ASC
+                ";
+        $comando = $con->createCommand($sql);
+        $comando->bindParam(":estado", $estado, \PDO::PARAM_STR);        
+        $resultData = $comando->queryAll();
+        return $resultData;
+    }
 
 }

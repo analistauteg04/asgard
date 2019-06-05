@@ -335,7 +335,30 @@ class Oportunidad extends \app\modules\admision\components\CActiveRecord {
             return $dataProvider;
         }
     }
+    /**
+     * Function consultar otros estudios 
+     * @author Kleber Loayza <analistadesarrollo03@uteg.edu.ec>;
+     * @param
+     * @return
+     */
+    public function consultarOtroEstudio() {
+        $con = \Yii::$app->db_crm;
+        $estado = 1;
+        $sql = "SELECT 
+                   oper.oper_id as id,
+                   oper.oper_nombre as name
+                FROM 
+                   " . $con->dbname . ".otro_estudio_academico oeac ";
+        $sql .= "  WHERE                   
+                   oper.oper_estado = :estado AND
+                   oper.oper_estado_logico = :estado
+                ORDER BY name asc";
 
+        $comando = $con->createCommand($sql);
+        $comando->bindParam(":estado", $estado, \PDO::PARAM_STR);
+        $resultData = $comando->queryAll();
+        return $resultData;
+    }
     /**
      * Function consulta los medios de conocimiento y canal. 
      * @author Giovanni Vergara <analistadesarrollo02@uteg.edu.ec>;
@@ -1548,7 +1571,7 @@ class Oportunidad extends \app\modules\admision\components\CActiveRecord {
      * @param
      * @return
      */
-    public function modificarOportunixId($emp_id, $opo_id, $mest_id, $eaca_id, $uaca_id, $mod_id, $tove_id, $tsca_id, $ccan_id, $opo_estado_cierre, $opo_fecha_ult_estado, $eopo_id, $usu_id, $oporper) {
+    public function modificarOportunixId($emp_id, $opo_id, $mest_id, $eaca_id, $uaca_id, $mod_id, $tove_id, $tsca_id, $ccan_id, $opo_estado_cierre, $opo_fecha_ult_estado, $eopo_id, $usu_id, $oporper,$otro_estudio=null) {
         $con = \Yii::$app->db_crm;
         $estado = 1;
         $fecha_modificacion = date(Yii::$app->params["dateTimeByDefault"]);
@@ -1571,6 +1594,7 @@ class Oportunidad extends \app\modules\admision\components\CActiveRecord {
                           tsca_id = ifnull(:tsca_id, tsca_id),
                           ccan_id = ifnull(:ccan_id, ccan_id),                                              
                           eopo_id = ifnull(:eopo_id, eopo_id),
+                          oeac_id = ifnull(:oeac_id, oeac_id),
                           opo_estado_cierre = ifnull(:opo_estado_cierre, opo_estado_cierre),
                           opo_fecha_ult_estado = ifnull(:opo_fecha_ult_estado, opo_fecha_ult_estado),
                           opo_fecha_modificacion = :opo_fecha_modificacion,
@@ -1590,6 +1614,7 @@ class Oportunidad extends \app\modules\admision\components\CActiveRecord {
             $comando->bindParam(":tsca_id", $tsca_id, \PDO::PARAM_INT);
             $comando->bindParam(":ccan_id", $ccan_id, \PDO::PARAM_INT);
             $comando->bindParam(":eopo_id", $eopo_id, \PDO::PARAM_INT);
+            $comando->bindParam(":oeac_id", $otro_estudio, \PDO::PARAM_INT);
             $comando->bindParam(":opo_estado_cierre", $opo_estado_cierre, \PDO::PARAM_STR);
             $comando->bindParam(":opo_fecha_ult_estado", $opo_fecha_ult_estado, \PDO::PARAM_STR);
             $comando->bindParam(":opo_fecha_modificacion", $fecha_modificacion, \PDO::PARAM_STR);
@@ -1685,7 +1710,7 @@ class Oportunidad extends \app\modules\admision\components\CActiveRecord {
                         opo.eopo_id,
                         eop.eopo_nombre as estado_oportunidad,
                         opo.oper_id as oportunidad_perdida,
-                        opo.eaca_id,                    
+                        opo.oeac_id as otro_estudio,
                         ifnull((select esa.eaca_nombre from " . $con2->dbname . ".estudio_academico esa
                         where esa.eaca_id = opo.eaca_id
                         and esa.eaca_estado = :estado
