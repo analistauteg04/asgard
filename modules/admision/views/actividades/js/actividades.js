@@ -23,6 +23,13 @@ $(document).ready(function () {
             $('#divoportunidad_perdida').css('display', 'none');
         }
     });
+    $('#cmb_lost_opportunity').change(function () {
+        if ($('#cmb_lost_opportunity').val() == 13 ) {
+            $('#div_otro_estudio').css('display', 'block');
+        }else{
+            $('#div_otro_estudio').css('display', 'none');
+        }
+    });
 });
 function newItem() {
     var opid = $('#txth_opid').val();

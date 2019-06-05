@@ -122,6 +122,7 @@ class ActividadesController extends \app\components\CController {
         $pges_id = base64_decode($_GET["pgid"]);
         $persges_mod = new PersonaGestion();
         $uni_aca_model = new UnidadAcademica();
+        $modestudio = new ModuloEstudio();
         $modTipoOportunidad = new TipoOportunidadVenta();
         $modalidad_model = new Modalidad();
         $state_oportunidad_model = new EstadoOportunidad();
@@ -130,13 +131,14 @@ class ActividadesController extends \app\components\CController {
         $empresa = $empresa_mod->getAllEmpresa();
         $contactManage = $persges_mod->consultarPersonaGestion($pges_id);
         $oport_contac = $oport_model->consultarOportunidadById($opor_id);
-        $modalidad_data = $modalidad_model->consultarModalidad($oport_contac["mod_id"], $oport_contac["empresa"]);
+        $modalidad_data = $modalidad_model->consultarModalidad($oport_contac["uaca_id"], $oport_contac["empresa"]);
         $oportunidad_perdidad = $oport_model->consultarOportunidadPerdida();
         $unidad_acad_data = $uni_aca_model->consultarUnidadAcademicas();
         $tipo_oportunidad_data = $modTipoOportunidad->consultarOporxUnidad(1);
         $academic_study_data = $oport_model->consultarCarreraModalidad(1, 1);        
         $state_oportunidad_data = $state_oportunidad_model->consultarEstadOportunidad();
         $knowledge_channel_data = $oport_model->consultarConocimientoCanal(1);
+        $otros_estudios_academicos = $modestudio->consultarOtrosEstudiosAcademicos($oport_contac["uaca_id"],$oport_contac["mod_id"]);
         $observacion = $oport_model->consultarObseractividad();
         return $this->render('new', [
                     'personalData' => $contactManage,
@@ -148,6 +150,7 @@ class ActividadesController extends \app\components\CController {
                     'arr_state_oportunidad' => ArrayHelper::map($state_oportunidad_data, "id", "name"),
                     'arr_academic_study' => ArrayHelper::map($academic_study_data, "id", "name"),
                     "arr_knowledge_channel" => ArrayHelper::map($knowledge_channel_data, "id", "name"),
+                    "arr_otros_estudios" => ArrayHelper::map($otros_estudios_academicos, "id", "name"),
                     "tipo_dni" => array("CED" => Yii::t("formulario", "DNI Document"), "PASS" => Yii::t("formulario", "Passport")),
                     'arr_empresa' => ArrayHelper::map($empresa, "id", "value"),
                     'arr_observacion' => ArrayHelper::map($observacion, "id", "name"),

@@ -142,7 +142,7 @@ class ModuloEstudio extends \app\modules\academico\components\CActiveRecord {
                     mes.mest_nombre as name
                     FROM 
                     " . $con->dbname . ".modulo_estudio_empresa mee "
-                    . "inner join " . $con->dbname . ".modulo_estudio mes on mes.mest_id = mee.mest_id
+                . "inner join " . $con->dbname . ".modulo_estudio mes on mes.mest_id = mee.mest_id
                     WHERE                     
                     emp_id = :emp_id AND
                     mes.mest_estado_logico= :estado AND
@@ -153,7 +153,38 @@ class ModuloEstudio extends \app\modules\academico\components\CActiveRecord {
 
         $comando = $con->createCommand($sql);
         $comando->bindParam(":estado", $estado, \PDO::PARAM_STR);
-        $comando->bindParam(":emp_id", $emp_id, \PDO::PARAM_INT);       
+        $comando->bindParam(":emp_id", $emp_id, \PDO::PARAM_INT);
+        $resultData = $comando->queryAll();
+        return $resultData;
+    }
+
+    /**
+     * Function obtener otros estudios academicos
+     * @author  Kleber Loayza <analistadesarrollo03@uteg.edu.ec>;
+     * @property       
+     * @return  
+     */
+    public function consultarOtrosEstudiosAcademicos($uaca_id,$mod_id) {
+        $con = \Yii::$app->db_academico;
+        $estado = 1;
+        $sql = "SELECT 
+                    oeac.oeac_id as id,
+                    oeac.oeac_descripcion as name
+                    FROM 
+                    " . $con->dbname . ".otro_estudio_academico oeac "
+                 . " inner join " . $con->dbname . ".unidad_academica as uaca on uaca.uaca_id = oeac.uaca_id"
+                 . " inner join " . $con->dbname . ".modalidad modo on modo.mod_id = oeac.mod_id 
+                    WHERE                     
+                    uaca.uaca_id = :uaca_id AND
+                    oeac.mod_id = :mod_id AND
+                    oeac.oeac_estado_logico= :estado AND
+                    oeac.oeac_estado= :estado
+                    ORDER BY name asc";
+        //exit($sql);
+        $comando = $con->createCommand($sql);
+        $comando->bindParam(":estado", $estado, \PDO::PARAM_STR);
+        $comando->bindParam(":uaca_id", $uaca_id, \PDO::PARAM_INT);
+        $comando->bindParam(":mod_id", $mod_id, \PDO::PARAM_INT);
         $resultData = $comando->queryAll();
         return $resultData;
     }
@@ -173,7 +204,7 @@ class ModuloEstudio extends \app\modules\academico\components\CActiveRecord {
                     mes.mest_descripcion as name
                     FROM 
                     " . $con->dbname . ".modulo_estudio_empresa mee "
-                    . "inner join " . $con->dbname . ".modulo_estudio mes on mes.mest_id = mee.mest_id
+                . "inner join " . $con->dbname . ".modulo_estudio mes on mes.mest_id = mee.mest_id
                     WHERE                     
                     emp_id = :emp_id AND
                     mes.mest_estado_logico= :estado AND
@@ -184,8 +215,9 @@ class ModuloEstudio extends \app\modules\academico\components\CActiveRecord {
 
         $comando = $con->createCommand($sql);
         $comando->bindParam(":estado", $estado, \PDO::PARAM_STR);
-        $comando->bindParam(":emp_id", $emp_id, \PDO::PARAM_INT);       
+        $comando->bindParam(":emp_id", $emp_id, \PDO::PARAM_INT);
         $resultData = $comando->queryAll();
         return $resultData;
     }
+
 }

@@ -54,7 +54,9 @@ INSERT INTO `oportunidad_perdida` (`oper_id`, `oper_nombre`, `oper_descripcion`,
 (8, 'Motivo personal', 'Motivo personal', '1', '1'),
 (9, 'Viaje imprevisto', 'Viaje imprevisto', '1', '1'),
 (10, 'Datos incorretos', 'Datos incorretos', '1', '1'),
-(11, 'Documento no válidos', 'Documento no válidos', '1', '1');
+(11, 'Documento no válidos', 'Documento no válidos', '1', '1'),
+(12, 'Tecnólogo', 'Tecnólogo', '1', '1'),
+(13, 'Otros Estudios', 'Otros Estudios', '1', '1');
 
 -- --------------------------------------------------------
 --
