@@ -93,11 +93,13 @@ class PersonaExterna extends \yii\db\ActiveRecord
     
     public function insertPersonaExterna($con, $data) {  
         $estado = 1;
-
+        $fecha_actual = date(Yii::$app->params["dateTimeByDefault"]);
         
         $sql = "INSERT INTO " . $con->dbname . ".persona_externa
-            (pext_nombres,pext_apellidos,pext_correo,pext_celular,pext_telefono,pext_genero,pext_edad,nins_id,pro_id,can_id,pext_estado,pext_estado_logico) VALUES
-            (:pext_nombres,:pext_apellidos,:pext_correo,:pext_celular,:pext_telefono,:pext_genero,:pext_edad,:nins_id,:pro_id,:can_id,:eve_id:estado,:estado)";
+            (pext_nombres,pext_apellidos,pext_correo,pext_celular,pext_telefono,pext_genero,pext_edad,nins_id,pro_id,can_id,eve_id,
+             pext_fecha_registro,pext_ip_registro,pext_estado,pext_estado_logico) VALUES
+            (:pext_nombres,:pext_apellidos,:pext_correo,:pext_celular,:pext_telefono,:pext_genero,:pext_edad,:nins_id,:pro_id,:can_id,:eve_id,
+             :pext_fecha_registro, TO_BASE64(:pext_ip_registro), :estado, :estado)";
         $command = $con->createCommand($sql);
         $command->bindParam(":pext_nombres",  $data[0]['pext_nombres'], \PDO::PARAM_STR);
         $command->bindParam(":pext_apellidos", $data[0]['pext_apellidos'], \PDO::PARAM_STR);
@@ -110,9 +112,12 @@ class PersonaExterna extends \yii\db\ActiveRecord
         $command->bindParam(":pro_id", $data[0]['pro_id'], \PDO::PARAM_INT);
         $command->bindParam(":can_id", $data[0]['can_id'], \PDO::PARAM_INT);        
         $command->bindParam(":eve_id", $data[0]['eve_id'], \PDO::PARAM_INT); 
-        $command->bindParam(":pben_estado", $estado, \PDO::PARAM_STR);        
+        $command->bindParam(":pext_fecha_registro", $fecha_actual, \PDO::PARAM_STR); 
+        $command->bindParam(":pext_ip_registro", $data[0]['pext_ip_registro'], \PDO::PARAM_STR); 
+        $command->bindParam(":pben_estado", $estado, \PDO::PARAM_STR);     
+        \app\models\Utilities::putMessageLogFile('sql:' . $sql);
         $command->execute();
-        return $con->getLastInsertID();        
+        return $con->getLastInsertID();
     }
     
     public function consultarEvento()

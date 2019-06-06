@@ -76,8 +76,7 @@ class Interes extends \yii\db\ActiveRecord
     public function consultarInteres()
     {
         $con = \Yii::$app->db_mailing;
-        $estado = 1;
-        $fecha_actual = date(Yii::$app->params["dateTimeByDefault"]);
+        $estado = 1;        
         $sql = "    SELECT 
                         int_id AS id,
                         int_nombre AS value

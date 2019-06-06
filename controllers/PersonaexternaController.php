@@ -62,8 +62,74 @@ class PersonaexternaController extends \yii\web\Controller {
         $mod_perext = new PersonaExterna();
         $con = \Yii::$app->db_mailing;
         $ip = \app\models\Utilities::getClientRealIP(); // ip de la maquina
-        
-        $respPersext = $mod_perext->insertPersonaExterna($con, $data);
+        \app\models\Utilities::putMessageLogFile('ip1:' .$ip);
+        if (Yii::$app->request->isAjax) {
+            \app\models\Utilities::putMessageLogFile('despues de ajax');            
+            $con = \Yii::$app->db_marketing;     
+            \app\models\Utilities::putMessageLogFile('despues de conexion');            
+            $data = Yii::$app->request->post();          
+            
+            \app\models\Utilities::putMessageLogFile('antes del arreglo');   
+            $transaction = $con->beginTransaction();
+            try {
+                \app\models\Utilities::putMessageLogFile('despues del arreglo');            
+                \app\models\Utilities::putMessageLogFile('nombres:' . $data["nombres"]);
+                \app\models\Utilities::putMessageLogFile('apellidos:' . $data["apellidos"]);
+                \app\models\Utilities::putMessageLogFile('correo:' . $data["correo"]);
+                \app\models\Utilities::putMessageLogFile('celular:' . $data["celular"]);
+                \app\models\Utilities::putMessageLogFile('telefono:' . $data["telefono"]);
+                \app\models\Utilities::putMessageLogFile('genero:' . $data["genero"]);
+                \app\models\Utilities::putMessageLogFile('edad:' . $data["edad"]);
+                \app\models\Utilities::putMessageLogFile('niv_interes:' . $data["niv_interes"]);
+                \app\models\Utilities::putMessageLogFile('pro_id:' . $data["pro_id"]);
+                \app\models\Utilities::putMessageLogFile('can_id:' . $data["can_id"]);
+                \app\models\Utilities::putMessageLogFile('eve_id:' . $data["eve_id"]);
+                \app\models\Utilities::putMessageLogFile('ip:' . $ip);
+                \app\models\Utilities::putMessageLogFile('data:' . $dataRegistro);
+                $dataRegistro = array(
+                    'pext_nombres'  => $data["nombres"],
+                    'pext_apellidos'  => $data["apellidos"], 
+                    'pext_correo'  => $data["correo"], 
+                    'pext_celular'  => $data["celular"], 
+                    'pext_telefono'  => $data["telefono"], 
+                    'pext_genero'  => $data["genero"], 
+                    'pext_edad'  => $data["edad"], 
+                    'nins_id'  => $data["niv_interes"], 
+                    'pro_id'  => $data["pro_id"], 
+                    'can_id'  => $data["can_id"], 
+                    'eve_id'  => $data["eve_id"], 
+                    'pext_ip_registro'  => $ip, 
+                );   
+                
+                $respPersext = $mod_perext->insertPersonaExterna($con, $dataRegistro);
+                if ($respPersext) {
+                    $exito = '1';
+                }
+                if ($exito==1) {
+                    $transaction->commit();
+                    $mensaje = "Se ha guardado exitosamente su registro.";
+                    $message = array(
+                        "wtmessage" => Yii::t("notificaciones", $mensaje),
+                        "title" => Yii::t('jslang', 'Success'),                        
+                    );
+                    return Utilities::ajaxResponse('OK', 'alert', Yii::t("jslang", "Sucess"), false, $message);
+                } else {
+                    $transaction->rollBack();
+                    $message = array(
+                    "wtmessage" => $ex->getMessage(), Yii::t("notificaciones", "Error al grabar."),
+                    "title" => Yii::t('jslang', 'Error'),
+                    );
+                    return Utilities::ajaxResponse('NO_OK', 'alert', Yii::t("jslang", "Error"), true, $message);
+                }
+            } catch (Exception $ex) {
+                $transaction->rollBack();
+                $message = array(
+                    "wtmessage" => $ex->getMessage(), Yii::t("notificaciones", "Error al grabar."),
+                    "title" => Yii::t('jslang', 'Error'),
+                );
+                return Utilities::ajaxResponse('NO_OK', 'alert', Yii::t("jslang", "Error"), true, $message);
+            }            
+        }
     }
 }
 
