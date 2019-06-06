@@ -61,31 +61,11 @@ class PersonaexternaController extends \yii\web\Controller {
     public function actionSave() {
         $mod_perext = new PersonaExterna();
         $con = \Yii::$app->db_mailing;
-        $ip = \app\models\Utilities::getClientRealIP(); // ip de la maquina
-        \app\models\Utilities::putMessageLogFile('ip1:' .$ip);
-        if (Yii::$app->request->isAjax) {
-            \app\models\Utilities::putMessageLogFile('despues de ajax');            
-            $con = \Yii::$app->db_marketing;     
-            \app\models\Utilities::putMessageLogFile('despues de conexion');            
-            $data = Yii::$app->request->post();          
-            
-            \app\models\Utilities::putMessageLogFile('antes del arreglo');   
+        $ip = \app\models\Utilities::getClientRealIP(); // ip de la maquina        
+        if (Yii::$app->request->isAjax) {            
+            $data = Yii::$app->request->post();                                  
             $transaction = $con->beginTransaction();
-            try {
-                \app\models\Utilities::putMessageLogFile('despues del arreglo');            
-                \app\models\Utilities::putMessageLogFile('nombres:' . $data["nombres"]);
-                \app\models\Utilities::putMessageLogFile('apellidos:' . $data["apellidos"]);
-                \app\models\Utilities::putMessageLogFile('correo:' . $data["correo"]);
-                \app\models\Utilities::putMessageLogFile('celular:' . $data["celular"]);
-                \app\models\Utilities::putMessageLogFile('telefono:' . $data["telefono"]);
-                \app\models\Utilities::putMessageLogFile('genero:' . $data["genero"]);
-                \app\models\Utilities::putMessageLogFile('edad:' . $data["edad"]);
-                \app\models\Utilities::putMessageLogFile('niv_interes:' . $data["niv_interes"]);
-                \app\models\Utilities::putMessageLogFile('pro_id:' . $data["pro_id"]);
-                \app\models\Utilities::putMessageLogFile('can_id:' . $data["can_id"]);
-                \app\models\Utilities::putMessageLogFile('eve_id:' . $data["eve_id"]);
-                \app\models\Utilities::putMessageLogFile('ip:' . $ip);
-                \app\models\Utilities::putMessageLogFile('data:' . $dataRegistro);
+            try {                
                 $dataRegistro = array(
                     'pext_nombres'  => $data["nombres"],
                     'pext_apellidos'  => $data["apellidos"], 
@@ -100,7 +80,7 @@ class PersonaexternaController extends \yii\web\Controller {
                     'eve_id'  => $data["eve_id"], 
                     'pext_ip_registro'  => $ip, 
                 );   
-                
+                \app\models\Utilities::putMessageLogFile('registro:' . $dataRegistro);     
                 $respPersext = $mod_perext->insertPersonaExterna($con, $dataRegistro);
                 if ($respPersext) {
                     $exito = '1';

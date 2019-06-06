@@ -93,29 +93,27 @@ class PersonaExterna extends \yii\db\ActiveRecord
     
     public function insertPersonaExterna($con, $data) {  
         $estado = 1;
-        $fecha_actual = date(Yii::$app->params["dateTimeByDefault"]);
-        
+        $fecha_actual = date(Yii::$app->params["dateTimeByDefault"]);        
         $sql = "INSERT INTO " . $con->dbname . ".persona_externa
             (pext_nombres,pext_apellidos,pext_correo,pext_celular,pext_telefono,pext_genero,pext_edad,nins_id,pro_id,can_id,eve_id,
              pext_fecha_registro,pext_ip_registro,pext_estado,pext_estado_logico) VALUES
             (:pext_nombres,:pext_apellidos,:pext_correo,:pext_celular,:pext_telefono,:pext_genero,:pext_edad,:nins_id,:pro_id,:can_id,:eve_id,
-             :pext_fecha_registro, TO_BASE64(:pext_ip_registro), :estado, :estado)";
+             :pext_fecha_registro, TO_BASE64(:pext_ip_registro), :pben_estado, :pben_estado)";
         $command = $con->createCommand($sql);
-        $command->bindParam(":pext_nombres",  $data[0]['pext_nombres'], \PDO::PARAM_STR);
-        $command->bindParam(":pext_apellidos", $data[0]['pext_apellidos'], \PDO::PARAM_STR);
-        $command->bindParam(":pext_correo", $data[0]['pext_correo'], \PDO::PARAM_STR);
-        $command->bindParam(":pext_celular", $data[0]['pext_celular'], \PDO::PARAM_STR);
-        $command->bindParam(":pext_telefono", $data[0]['pext_telefono'], \PDO::PARAM_STR);
-        $command->bindParam(":pext_genero", $data[0]['pext_genero'], \PDO::PARAM_STR);
-        $command->bindParam(":pext_edad", $data[0]['pext_edad'], \PDO::PARAM_INT);
-        $command->bindParam(":nins_id", $data[0]['nins_id'], \PDO::PARAM_INT);
-        $command->bindParam(":pro_id", $data[0]['pro_id'], \PDO::PARAM_INT);
-        $command->bindParam(":can_id", $data[0]['can_id'], \PDO::PARAM_INT);        
-        $command->bindParam(":eve_id", $data[0]['eve_id'], \PDO::PARAM_INT); 
+        $command->bindParam(":pext_nombres",  $data['pext_nombres'], \PDO::PARAM_STR);
+        $command->bindParam(":pext_apellidos", $data['pext_apellidos'], \PDO::PARAM_STR);
+        $command->bindParam(":pext_correo", $data['pext_correo'], \PDO::PARAM_STR);
+        $command->bindParam(":pext_celular", $data['pext_celular'], \PDO::PARAM_STR);
+        $command->bindParam(":pext_telefono", $data['pext_telefono'], \PDO::PARAM_STR);
+        $command->bindParam(":pext_genero", $data['pext_genero'], \PDO::PARAM_STR);
+        $command->bindParam(":pext_edad", $data['pext_edad'], \PDO::PARAM_INT);
+        $command->bindParam(":nins_id", $data['nins_id'], \PDO::PARAM_INT);
+        $command->bindParam(":pro_id", $data['pro_id'], \PDO::PARAM_INT);
+        $command->bindParam(":can_id", $data['can_id'], \PDO::PARAM_INT);        
+        $command->bindParam(":eve_id", $data['eve_id'], \PDO::PARAM_INT); 
         $command->bindParam(":pext_fecha_registro", $fecha_actual, \PDO::PARAM_STR); 
-        $command->bindParam(":pext_ip_registro", $data[0]['pext_ip_registro'], \PDO::PARAM_STR); 
-        $command->bindParam(":pben_estado", $estado, \PDO::PARAM_STR);     
-        \app\models\Utilities::putMessageLogFile('sql:' . $sql);
+        $command->bindParam(":pext_ip_registro", $data['pext_ip_registro'], \PDO::PARAM_STR); 
+        $command->bindParam(":pben_estado", $estado, \PDO::PARAM_STR);            
         $command->execute();
         return $con->getLastInsertID();
     }
