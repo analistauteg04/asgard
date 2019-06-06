@@ -59,6 +59,13 @@ class PersonaexternaController extends \yii\web\Controller {
                     "arr_interes" => $arr_interes,
         ]);
     }    
-
+    
+    public function actionSave() {
+        $mod_perext = new PersonaExterna();
+        $con = \Yii::$app->db_mailing;
+        $ip = \app\models\Utilities::getClientRealIP(); // ip de la maquina
+        
+        $respPersext = $mod_perext->insertPersonaExterna($con, $data);
+    }
 }
 
