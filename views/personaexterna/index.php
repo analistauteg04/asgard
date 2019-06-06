@@ -15,8 +15,17 @@
             "arr_genero" => $arr_genero,
             "arr_nivel" => $arr_nivel,
             "arr_evento" => $arr_evento,
-            "arr_interes" => $arr_interes,
             ]);
+        ?>
+    </form>
+</div>
+
+<div>
+    <form class="form-horizontal">
+        <?=
+            $this->render('intereses', [
+                "arr_interes" => $arr_interes,
+            ]);                
         ?>
     </form>
 </div>
