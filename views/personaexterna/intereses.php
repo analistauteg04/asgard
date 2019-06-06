@@ -1,5 +1,5 @@
 <?php
-/* 
+/*
  * Authors:
  * Grace Viteri <analistadesarrollo01@uteg.edu.ec> 
  * Kleber Loayza <analistadesarrollo03@uteg.edu.ec> /
@@ -13,29 +13,17 @@ use yii\helpers\Url;
     <h3><span id="lbl_Personeria"><?= Yii::t("formulario", "Interests") ?></span></h3>
 </div>
 <form class="form-horizontal" enctype="multipart/form-data" >
-    <?php 
-        for($i=0;$i<count($arr_interes);$i++){
-            if($i==0 || $i%4==0){
-                ?>
-                <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
-                <?php 
-            }
-            if($i==0 || 1){
-                ?>
-                    <div class="col-md-6 col-lg-6 col-sm-6 col-xs-6">
-                        <div class="form-group">
-                            
-                        </div>
-                    </div>        
-                <?php 
-            }
-            if($i==0 || $i%4==0){
-                ?>
+    <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">    
+    <?php
+        for ($i = 0; $i < count($arr_interes); $i++) {
+    ?>
+            <div class="col-md-3 col-lg-3 col-sm-3 col-xs-3">
+                <div class="form-group">
+                    <input type="checkbox" id="<?= "chk_" . $arr_interes[$i]['id'] ?>" data-type="alfa" data-keydown="true" placeholder="<?= $arr_interes[$i]['value'] ?>"><?php echo "   ". $arr_interes[$i]['value'] ?>
                 </div>
-                <?php 
-            }
-            
+            </div>                
+    <?php
         }
     ?>
-    
+    </div>  
 </form>

@@ -497,6 +497,7 @@ return [
     "Reference" => "Referencia",
     "Register" => "Registro",
     "Registered Records" => "Expedientes Registrados",
+    "Register of Events" => "Registro de Eventos",
     "Registration Date" => "Fecha Registro",
     "Registration Number" => "Número Registro",
     "Registration Payments for Collections" => "Registro Pagos por Colecturía",
