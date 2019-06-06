@@ -28,7 +28,7 @@ class PersonaexternaController extends \yii\web\Controller {
         return $this->render('update', array());
     }
 
-    public function actionRegistro() {
+    public function actionIndex() {
         $this->layout = '@themes/' . \Yii::$app->getView()->theme->themeName . '/layouts/basic.php';                
         if (Yii::$app->request->isAjax) {
             $data = Yii::$app->request->post();
@@ -50,7 +50,7 @@ class PersonaexternaController extends \yii\web\Controller {
         $arr_evento = $mod_perext->consultarEvento();
         
         $_SESSION['JSLANG']['Your information has not been saved. Please try again.'] = Yii::t('notificaciones', 'Your information has not been saved. Please try again.');
-        return $this->render('registro', [                    
+        return $this->render('index', [                    
                     "arr_provincia" => ArrayHelper::map($arr_prov, "id", "value"),
                     "arr_ciudad" => ArrayHelper::map($arr_ciu, "id", "value"),
                     "arr_genero" => array("1" => Yii::t("formulario", "Female"), "2" => Yii::t("formulario", "Male")),

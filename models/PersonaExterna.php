@@ -94,6 +94,7 @@ class PersonaExterna extends \yii\db\ActiveRecord
     public function insertPersonaExterna($con, $data) {  
         $estado = 1;
 
+        
         $sql = "INSERT INTO " . $con->dbname . ".persona_externa
             (pext_nombres,pext_apellidos,pext_correo,pext_celular,pext_telefono,pext_genero,pext_edad,nins_id,pro_id,can_id,pext_estado,pext_estado_logico) VALUES
             (:pext_nombres,:pext_apellidos,:pext_correo,:pext_celular,:pext_telefono,:pext_genero,:pext_edad,:nins_id,:pro_id,:can_id,:estado,:estado)";

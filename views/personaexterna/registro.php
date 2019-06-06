@@ -117,14 +117,6 @@ use yii\helpers\Url;
                 </div>
             </div>
         </div>        
-    </div>
-    <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
-        <h3><span id="lbl_Personeria"><?= Yii::t("formulario", "Interests") ?></span></h3>
-    </div>     
-    <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">   
-        <div class="col-md-6 col-lg-6 col-sm-6 col-xs-6"> 
-            <?php for ($a=0; $a<count($arr_interes); $a++) { ?>
-        </div>
-    </div> 
+    </div>    
 </form>
 
