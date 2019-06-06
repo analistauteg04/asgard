@@ -16,7 +16,6 @@ use yii\helpers\Url;
 
 
 class PersonaexternaController extends \yii\web\Controller {
-
     public function init() {
         if (!is_dir(Yii::getAlias('@bower')))
             Yii::setAlias('@bower', '@vendor/bower-asset');
@@ -47,8 +46,7 @@ class PersonaexternaController extends \yii\web\Controller {
         $mod_interes = new Interes();
         $arr_interes = $mod_interes->consultarInteres();
         $mod_perext = new PersonaExterna();
-        $arr_evento = $mod_perext->consultarEvento();
-        
+        $arr_evento = $mod_perext->consultarEvento();        
         $_SESSION['JSLANG']['Your information has not been saved. Please try again.'] = Yii::t('notificaciones', 'Your information has not been saved. Please try again.');
         return $this->render('index', [                    
                     "arr_provincia" => ArrayHelper::map($arr_prov, "id", "value"),

@@ -25,7 +25,6 @@ financiero::registerTranslations();
 crm::registerTranslations();
 
 class EmailController extends \app\components\CController {
-
     public function actionIndex() {
         $mod_lista = new Lista();
         $data = Yii::$app->request->get();
@@ -36,7 +35,7 @@ class EmailController extends \app\components\CController {
             $resp_lista = $mod_lista->consultarLista();
         }
         return $this->render('index', [
-                    'model' => $resp_lista]);
+                'model' => $resp_lista]);
     }
     public function actionCargarmailchimp() {
         if (Yii::$app->request->isAjax) {
