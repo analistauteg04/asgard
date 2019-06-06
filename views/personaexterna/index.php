@@ -14,7 +14,7 @@
             "arr_ciudad" => $arr_ciudad,
             "arr_genero" => $arr_genero,
             "arr_nivel" => $arr_nivel,
-            "arr_evento" => $arr_nivel,
+            "arr_evento" => $arr_evento,
             "arr_interes" => $arr_interes,
             ]);
         ?>
