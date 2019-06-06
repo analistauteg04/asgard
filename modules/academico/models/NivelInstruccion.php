@@ -1,13 +1,13 @@
 <?php
 
-namespace app\models;
+namespace app\modules\academico\models;
 
 use Yii;
 
 /**
  * This is the model class for table "nivel_instruccion".
  *
- * @property integer $nins_id
+ * @property int $nins_id
  * @property string $nins_nombre
  * @property string $nins_descripcion
  * @property string $nins_estado
@@ -15,33 +15,43 @@ use Yii;
  * @property string $nins_fecha_modificacion
  * @property string $nins_estado_logico
  */
-class NivelInstruccion extends \yii\db\ActiveRecord {
-
+class NivelInstruccion extends \yii\db\ActiveRecord
+{
     /**
-     * @inheritdoc
+     * {@inheritdoc}
      */
-    public static function tableName() {
-        //return 'nivel_instruccion';
-        return \Yii::$app->db_academico->dbname.'.nivel_instruccion';
+    public static function tableName()
+    {
+        return 'nivel_instruccion';
     }
 
     /**
-     * @inheritdoc
+     * @return \yii\db\Connection the database connection used by this AR class.
      */
-    public function rules() {
+    public static function getDb()
+    {
+        return Yii::$app->get('db_academico');
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function rules()
+    {
         return [
-                [['nins_estado', 'nins_estado_logico'], 'required'],
-                [['nins_fecha_creacion', 'nins_fecha_modificacion'], 'safe'],
-                [['nins_nombre'], 'string', 'max' => 250],
-                [['nins_descripcion'], 'string', 'max' => 500],
-                [['nins_estado', 'nins_estado_logico'], 'string', 'max' => 1],
+            [['nins_estado', 'nins_estado_logico'], 'required'],
+            [['nins_fecha_creacion', 'nins_fecha_modificacion'], 'safe'],
+            [['nins_nombre'], 'string', 'max' => 250],
+            [['nins_descripcion'], 'string', 'max' => 500],
+            [['nins_estado', 'nins_estado_logico'], 'string', 'max' => 1],
         ];
     }
 
     /**
-     * @inheritdoc
+     * {@inheritdoc}
      */
-    public function attributeLabels() {
+    public function attributeLabels()
+    {
         return [
             'nins_id' => 'Nins ID',
             'nins_nombre' => 'Nins Nombre',
@@ -53,7 +63,13 @@ class NivelInstruccion extends \yii\db\ActiveRecord {
         ];
     }
     
-    public static function consultarNivelInstruccion() {
+    /** Consulta de los niveles de instrucción de estudios. **
+     * Function consultarNivelInstruccion
+     * @author  Grace Viteri <analistadesarrollo01@uteg.edu.ec>
+     * @property     
+     * @return  
+     */
+    public function consultarNivelInstruccion() {
         $con = \Yii::$app->db_academico;
         $estado = 1;
         $sql = "    SELECT 
@@ -71,5 +87,4 @@ class NivelInstruccion extends \yii\db\ActiveRecord {
         $resultData = $comando->queryAll();
         return $resultData;
     }
-
 }

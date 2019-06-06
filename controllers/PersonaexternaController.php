@@ -9,7 +9,9 @@ use yii\base\Exception;
 use app\models\Pais;
 use app\models\Provincia;
 use app\models\Canton;
-use app\models\NivelInstruccion;
+use app\modules\academico\models\NivelInstruccion;
+use app\modules\marketing\models\Interes;
+use app\models\PersonaExterna;
 use yii\helpers\Url;
 
 
@@ -40,7 +42,12 @@ class PersonaexternaController extends \yii\web\Controller {
         $pais_id = 1; //Ecuador
         $arr_prov = Provincia::provinciaXPais($pais_id);
         $arr_ciu = Canton::cantonXProvincia(1);
-        $arr_nivel = NivelInstruccion::consultarNivelInstruccion();
+        $mod_nivel= new NivelInstruccion();
+        $arr_nivel = $mod_nivel->consultarNivelInstruccion();
+        $mod_interes = new Interes();
+        $arr_interes = $mod_interes->consultarInteres();
+        $mod_perext = new PersonaExterna();
+        $arr_evento = $mod_perext->consultarEvento();
         
         $_SESSION['JSLANG']['Your information has not been saved. Please try again.'] = Yii::t('notificaciones', 'Your information has not been saved. Please try again.');
         return $this->render('registro', [                    
@@ -48,6 +55,8 @@ class PersonaexternaController extends \yii\web\Controller {
                     "arr_ciudad" => ArrayHelper::map($arr_ciu, "id", "value"),
                     "arr_genero" => array("1" => Yii::t("formulario", "Female"), "2" => Yii::t("formulario", "Male")),
                     "arr_nivel" => ArrayHelper::map($arr_nivel, "id", "value"),
+                    "arr_evento" => ArrayHelper::map($arr_evento, "id", "value"), //$arr_evento
+                    "arr_interes" => $arr_interes,
         ]);
     }    
 

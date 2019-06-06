@@ -328,6 +328,7 @@ return [
     "Institutions Project" => "Instituciones Proyecto",
     "Instructional Level" => "Nivel Instrucción",
     "Interested" => "Interesado",
+    "Interests" => "Intereses",
     "Intermediate" => "Intermedio",
     "Investigation" => "Investigación",
     "Invoice data" => "Datos Factura",

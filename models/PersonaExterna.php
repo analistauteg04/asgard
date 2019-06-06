@@ -112,4 +112,24 @@ class PersonaExterna extends \yii\db\ActiveRecord
         $command->execute();
         return $con->getLastInsertID();        
     }
+    
+    public function consultarEvento()
+    {
+        $con = \Yii::$app->db_mailing;
+        $estado = 1;
+        $fecha_actual = date(Yii::$app->params["dateTimeByDefault"]);
+        $sql = "    SELECT 
+                        eve_id AS id,
+                        eve_nombres AS value
+                    FROM 
+                         " . $con->dbname . ".evento
+                    WHERE (:fecha_actual between eve_fecha_inicio and eve_fecha_fin) AND
+                        eve_estado=:estado AND
+                        eve_estado_logico=:estado";
+        $comando = $con->createCommand($sql);
+        $comando->bindParam(":estado", $estado, \PDO::PARAM_STR);       
+        $comando->bindParam(":fecha_actual", $fecha_actual, \PDO::PARAM_STR); 
+        $resultData = $comando->queryAll();
+        return $resultData;        
+    }
 }

@@ -7,7 +7,6 @@
 
 use yii\helpers\Html;
 use yii\helpers\ArrayHelper;
-use kartik\date\DatePicker;
 use yii\helpers\Url;
 
 ?>
@@ -15,6 +14,16 @@ use yii\helpers\Url;
     <h3><span id="lbl_Personeria"><?= Yii::t("formulario", "Register") ?></span></h3>
 </div>
 <form class="form-horizontal" enctype="multipart/form-data" >
+    <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
+        <div class="col-md-6 col-lg-6 col-sm-6 col-xs-6">
+            <div class="form-group">
+                <label for="cmb_evento" class="col-sm-5 control-label"><?= Yii::t("formulario", "Event Name") ?></label>
+                <div class="col-sm-7">
+                    <?= Html::dropDownList("cmb_evento", 1, $arr_evento, ["class" => "form-control", "id" => "cmb_evento", ""]) ?>
+                </div>
+            </div>
+        </div>        
+    </div>
     <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
         <div class="col-md-6 col-lg-6 col-sm-6 col-xs-6">
             <div class="form-group">
@@ -109,6 +118,13 @@ use yii\helpers\Url;
             </div>
         </div>        
     </div>
-        
+    <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
+        <h3><span id="lbl_Personeria"><?= Yii::t("formulario", "Interests") ?></span></h3>
+    </div>     
+    <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">   
+        <div class="col-md-6 col-lg-6 col-sm-6 col-xs-6"> 
+            <?php for ($a=0; $a<count($arr_interes); $a++) { ?>
+        </div>
+    </div> 
 </form>
 
