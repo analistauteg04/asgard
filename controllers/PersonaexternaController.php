@@ -61,7 +61,7 @@ class PersonaexternaController extends \yii\web\Controller {
     public function actionSave() {
         $mod_perext = new PersonaExterna();
         $con = \Yii::$app->db_mailing;
-        $ip = \app\models\Utilities::getClientRealIP(); // ip de la maquina        
+        $ip = \app\models\Utilities::getClientRealIP(); // obtiene la ip de la máquina.   
         if (Yii::$app->request->isAjax) {            
             $data = Yii::$app->request->post();                                  
             $transaction = $con->beginTransaction();
@@ -83,6 +83,9 @@ class PersonaexternaController extends \yii\web\Controller {
                 \app\models\Utilities::putMessageLogFile('registro:' . $dataRegistro);     
                 $respPersext = $mod_perext->insertPersonaExterna($con, $dataRegistro);
                 if ($respPersext) {
+                    //Verifica que existan intereses marcados.
+                    /*for ($a=0;$a<count($data);$a++){                        
+                    }*/
                     $exito = '1';
                 }
                 if ($exito==1) {

@@ -30,7 +30,43 @@ $(document).ready(function () {
         arrParams.niv_interes = $('#cmb_nivel_estudio').val();
         arrParams.pro_id = $('#cmb_provincia').val();
         arrParams.can_id = $('#cmb_ciudad').val();
-        arrParams.eve_id = $('#cmb_evento').val();                        
+        arrParams.eve_id = $('#cmb_evento').val();     
+        
+        //Verificación de los checkboxes.
+        var intereses=[];
+        var i=0;
+        alert('check:'+$("input[name=chk_1]:checked").val());
+        if ($('#chk_1').prop('checked')) { 
+            alert('Se coloca check 1');
+            intereses[i]={"interes_id":1}; 
+            i = intereses.length;            
+        }
+        if ($('#chk_2').prop('checked')) { 
+            alert('Se coloca check 2');
+            intereses[i]={"interes_id":2}; 
+            i = intereses.length;            
+        }
+        if ($('#chk_3').prop('checked')) { 
+            alert('Se coloca check 3');
+            intereses[i]={"interes_id":3}; 
+            i = intereses.length;            
+        }
+        if ($('#chk_4').prop('checked')) { 
+            alert('Se coloca check 4');
+            intereses[i]={"interes_id":4}; 
+            i = intereses.length;            
+        }
+        if ($('#chk_5').prop('checked')) { 
+            alert('Se coloca check 5');
+            intereses[i]={"interes_id":5}; 
+            i = intereses.length;            
+        }
+        if ($('#chk_6').prop('checked')) { 
+            alert('Se coloca check 6');
+            intereses[i]={"interes_id":6}; 
+            i = intereses.length;            
+        }
+        arrParams.intereses = intereses;
         if (!validateForm()) {
             requestHttpAjax(link, arrParams, function (response) {
                 showAlert(response.status, response.label, response.message);
@@ -40,10 +76,7 @@ $(document).ready(function () {
                     }, 5000);
                 }
             }, true);
-        }
-
+        }        
     });
-    
-    
-    
+            
 });

@@ -98,7 +98,7 @@ class PersonaExterna extends \yii\db\ActiveRecord
             (pext_nombres,pext_apellidos,pext_correo,pext_celular,pext_telefono,pext_genero,pext_edad,nins_id,pro_id,can_id,eve_id,
              pext_fecha_registro,pext_ip_registro,pext_estado,pext_estado_logico) VALUES
             (:pext_nombres,:pext_apellidos,:pext_correo,:pext_celular,:pext_telefono,:pext_genero,:pext_edad,:nins_id,:pro_id,:can_id,:eve_id,
-             :pext_fecha_registro, TO_BASE64(:pext_ip_registro), :pben_estado, :pben_estado)";
+             :pext_fecha_registro, TO_BASE64(:pext_ip_registro), :pext_estado, :pext_estado)";
         $command = $con->createCommand($sql);
         $command->bindParam(":pext_nombres",  $data['pext_nombres'], \PDO::PARAM_STR);
         $command->bindParam(":pext_apellidos", $data['pext_apellidos'], \PDO::PARAM_STR);
@@ -113,7 +113,7 @@ class PersonaExterna extends \yii\db\ActiveRecord
         $command->bindParam(":eve_id", $data['eve_id'], \PDO::PARAM_INT); 
         $command->bindParam(":pext_fecha_registro", $fecha_actual, \PDO::PARAM_STR); 
         $command->bindParam(":pext_ip_registro", $data['pext_ip_registro'], \PDO::PARAM_STR); 
-        $command->bindParam(":pben_estado", $estado, \PDO::PARAM_STR);            
+        $command->bindParam(":pext_estado", $estado, \PDO::PARAM_STR);            
         $command->execute();
         return $con->getLastInsertID();
     }
@@ -136,5 +136,18 @@ class PersonaExterna extends \yii\db\ActiveRecord
         $comando->bindParam(":fecha_actual", $fecha_actual, \PDO::PARAM_STR); 
         $resultData = $comando->queryAll();
         return $resultData;        
+    }
+    
+    public function insertPersonaExternaInteres($con, $data) {  
+        $estado = 1;
+        $sql = "INSERT INTO " . $con->dbname . ".persona_externa_intereses
+            (pext_id,int_id,pein_estado,pein_estado_logico) VALUES
+            (:pext_id,:int_id,:pext_correo,:pein_estado,:pein_estado)";
+        $command = $con->createCommand($sql);
+        $command->bindParam(":pext_id",  $data['pext_id'], \PDO::PARAM_INT);
+        $command->bindParam(":int_id", $data['int_id'], \PDO::PARAM_INT);        
+        $command->bindParam(":pein_estado", $estado, \PDO::PARAM_STR);            
+        $command->execute();
+        return $con->getLastInsertID();
     }
 }
