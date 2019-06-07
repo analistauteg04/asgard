@@ -251,6 +251,12 @@ function validateType(type, valor, ref) {
                 result.errorMessage = objLang.Invalid_phone_number_;
             }
             break;
+        case 'edad':
+            result.response = validarExpresion(/^((\d{1,2}))$/, valor);
+            if (!result.response) {
+                result.errorMessage = objLang.Invalid_age_number_;
+            }
+            break;
         case 'numeracion':
             result.response = validarExpresion(/^((\d{1,5}))$/, valor);
             if (!result.response) {

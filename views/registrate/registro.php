@@ -17,8 +17,8 @@ use yii\helpers\Url;
     <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
         <div class="col-md-6 col-lg-6 col-sm-6 col-xs-6">
             <div class="form-group">
-                <label for="txt_identificacion" class="col-lg-5 col-md-5 col-sm-5 col-xs-5 control-label"><?= Yii::t("formulario", "Number") ?> <span class="text-danger">*</span></label>
-                <div class="col-lg-7 col-md-7 col-sm-7 col-xs-7">
+                <label for="txt_identificacion" class="col-sm-5 col-lg-5 control-label"><?= Yii::t("formulario", "Number") ?> <span class="text-danger">*</span></label>
+                <div class="col-sm-7">
                     <input type="text" maxlength="10" class="form-control PBvalidation keyupmce" id="txt_identificacion" data-type="number" data-keydown="true" placeholder="<?= Yii::t("formulario", "National identity document") ?>">
                 </div>
             </div>
@@ -87,7 +87,7 @@ use yii\helpers\Url;
             <div class="form-group">
                 <label for="txt_edad" class="col-sm-5 control-label"><?= Yii::t("formulario", "Age") ?><span class="text-danger">*</span></label>
                 <div class="col-sm-7">
-                    <input type="text" class="form-control keyupmce" value="" id="txt_edad" data-type="numeracion_mi" data-keydown="true" placeholder="<?= Yii::t("formulario", "Age") ?>">
+                    <input type="text" class="form-control PBvalidation" value="" id="txt_edad" data-type="edad" data-keydown="true" placeholder="<?= Yii::t("formulario", "Age") ?>">
                 </div>
             </div>
         </div>   

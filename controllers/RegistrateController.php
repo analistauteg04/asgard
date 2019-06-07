@@ -87,25 +87,29 @@ class RegistrateController extends \yii\web\Controller {
                     $respPersext = $mod_perext->insertPersonaExterna($con, $dataRegistro);
                     if ($respPersext) {
                         //Verifica que existan intereses marcados.
-                        $arrIntereses = $data["intereses"];                    
-                        for ($a=0;$a<count($arrIntereses);$a++){   
-                            $intereses = 'S';
-                            $dataRegIntereses = array(
-                                'int_id'  => $arrIntereses[$a]["interes_id"],
-                                'pext_id'  => $respPersext,                             
-                            );                   
-                            $resIntereses = $mod_perext->insertPersonaExternaInteres($con, $dataRegIntereses);
-                            if (!($resIntereses)) {
-                                $exito = 0;
-                            } 
-                        }
-                        //Si hubieron marcadas de intereses.
-                        if (($intereses=='S') and ($exito!='0')) {
-                            $exito = 1;
-                        } else {
+                        $arrIntereses = $data["intereses"]; 
+                        if (empty($arrIntereses)){
                             $mensaje = "Seleccione unos de los intereses.";
                             $exito = 0;
-                        }                   
+                        } else {
+                            for ($a=0;$a<count($arrIntereses);$a++){   
+                                $intereses = 'S';
+                                $dataRegIntereses = array(
+                                    'int_id'  => $arrIntereses[$a]["interes_id"],
+                                    'pext_id'  => $respPersext,                             
+                                );                   
+                                $resIntereses = $mod_perext->insertPersonaExternaInteres($con, $dataRegIntereses);
+                                if (!($resIntereses)) {
+                                    $exito = 0;
+                                } 
+                            }
+                            //Si hubieron marcadas de intereses.
+                            if (($intereses=='S') and ($exito!='0')) {
+                                $exito = 1;
+                            } else {                                
+                                $exito = 0;
+                            }
+                        }
                     }
                 } else {                   
                     $mensaje = "Ya se encuentra registrado.";                    
@@ -120,20 +124,19 @@ class RegistrateController extends \yii\web\Controller {
                     );
                     return Utilities::ajaxResponse('OK', 'alert', Yii::t("jslang", "Sucess"), false, $message);
                 } else {                    
-                    $transaction->rollBack();                    
+                    $transaction->rollBack();   
                     $message = array(
-                    "wtmessage" => $ex->getMessage(), Yii::t("notificaciones", "Error al grabar, ya se encuentra registrado."),
-                    "title" => Yii::t('jslang', 'Error'),
-                    );          
-                    \app\models\Utilities::putMessageLogFile('mensaje:'.$mensaje); 
-                    return Utilities::ajaxResponse('NO_OK', 'alert', Yii::t("jslang", "Error"), true, $message);
+                            "wtmessage" => Yii::t("notificaciones", "Error al grabar. ".$mensaje),
+                            "title" => Yii::t('jslang', 'Error'),
+                        );                    
+                    return Utilities::ajaxResponse('NO_OK', 'alert', Yii::t("jslang", "Error"), false, $message);                                                                              
                 }
             } catch (Exception $ex) {
                 $transaction->rollBack();
                 $message = array(
                     "wtmessage" => $ex->getMessage(), Yii::t("notificaciones", "Error al grabar."),
                     "title" => Yii::t('jslang', 'Error'),
-                );                
+                );                                
                 return Utilities::ajaxResponse('NO_OK', 'alert', Yii::t("jslang", "Error"), true, $message);
             }            
         }

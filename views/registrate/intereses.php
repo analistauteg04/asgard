@@ -17,7 +17,7 @@ use yii\helpers\Url;
     <?php
         for ($i = 0; $i < count($arr_interes); $i++) {
     ?>
-            <div class="col-md-3 col-lg-3 col-sm-3 col-xs-3">
+            <div class="col-sm-3">
                 <div class="form-group">
                     <input type="checkbox" id="<?= "chk_" . $arr_interes[$i]['id'] ?>" data-type="alfa" data-keydown="true" placeholder="<?= $arr_interes[$i]['value'] ?>"><?php echo "   ". $arr_interes[$i]['value'] ?>
                 </div>
