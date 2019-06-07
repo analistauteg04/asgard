@@ -254,7 +254,7 @@ function validateType(type, valor, ref) {
         case 'edad':
             result.response = validarExpresion(/^((\d{1,2}))$/, valor);
             if (!result.response) {
-                result.errorMessage = objLang.Invalid_age_number_;
+                result.errorMessage = objLang.Invalid_age_number;
             }
             break;
         case 'numeracion':
