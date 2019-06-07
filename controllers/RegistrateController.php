@@ -15,7 +15,7 @@ use app\models\PersonaExterna;
 use yii\helpers\Url;
 
 
-class PersonaexternaController extends \yii\web\Controller {
+class RegistrateController extends \yii\web\Controller {
     public function init() {
         if (!is_dir(Yii::getAlias('@bower')))
             Yii::setAlias('@bower', '@vendor/bower-asset');
@@ -65,28 +65,51 @@ class PersonaexternaController extends \yii\web\Controller {
         if (Yii::$app->request->isAjax) {            
             $data = Yii::$app->request->post();                                  
             $transaction = $con->beginTransaction();
-            try {                
-                $dataRegistro = array(
-                    'pext_nombres'  => $data["nombres"],
-                    'pext_apellidos'  => $data["apellidos"], 
-                    'pext_correo'  => $data["correo"], 
-                    'pext_celular'  => $data["celular"], 
-                    'pext_telefono'  => $data["telefono"], 
-                    'pext_genero'  => $data["genero"], 
-                    'pext_edad'  => $data["edad"], 
-                    'nins_id'  => $data["niv_interes"], 
-                    'pro_id'  => $data["pro_id"], 
-                    'can_id'  => $data["can_id"], 
-                    'eve_id'  => $data["eve_id"], 
-                    'pext_ip_registro'  => $ip, 
-                );   
-                \app\models\Utilities::putMessageLogFile('registro:' . $dataRegistro);     
-                $respPersext = $mod_perext->insertPersonaExterna($con, $dataRegistro);
-                if ($respPersext) {
-                    //Verifica que existan intereses marcados.
-                    /*for ($a=0;$a<count($data);$a++){                        
-                    }*/
-                    $exito = '1';
+            try {  
+                $respPerexiste = $mod_perext->consultarXIdentificacion($data["identificacion"]);
+                \app\models\Utilities::putMessageLogFile('existe:'.$respPerexiste["existe"]);   
+                if (empty($respPerexiste["existe"])) {
+                    $dataRegistro = array(
+                        'pext_identificacion'  => $data["identificacion"],
+                        'pext_nombres'  => $data["nombres"],
+                        'pext_apellidos'  => $data["apellidos"], 
+                        'pext_correo'  => $data["correo"], 
+                        'pext_celular'  => $data["celular"], 
+                        'pext_telefono'  => $data["telefono"], 
+                        'pext_genero'  => $data["genero"], 
+                        'pext_edad'  => $data["edad"], 
+                        'nins_id'  => $data["niv_interes"], 
+                        'pro_id'  => $data["pro_id"], 
+                        'can_id'  => $data["can_id"], 
+                        'eve_id'  => $data["eve_id"], 
+                        'pext_ip_registro'  => $ip, 
+                    );                                   
+                    $respPersext = $mod_perext->insertPersonaExterna($con, $dataRegistro);
+                    if ($respPersext) {
+                        //Verifica que existan intereses marcados.
+                        $arrIntereses = $data["intereses"];                    
+                        for ($a=0;$a<count($arrIntereses);$a++){   
+                            $intereses = 'S';
+                            $dataRegIntereses = array(
+                                'int_id'  => $arrIntereses[$a]["interes_id"],
+                                'pext_id'  => $respPersext,                             
+                            );                   
+                            $resIntereses = $mod_perext->insertPersonaExternaInteres($con, $dataRegIntereses);
+                            if (!($resIntereses)) {
+                                $exito = 0;
+                            } 
+                        }
+                        //Si hubieron marcadas de intereses.
+                        if (($intereses=='S') and ($exito!='0')) {
+                            $exito = 1;
+                        } else {
+                            $mensaje = "Seleccione unos de los intereses.";
+                            $exito = 0;
+                        }                   
+                    }
+                } else {                   
+                    $mensaje = "Ya se encuentra registrado.";                    
+                    $exito = 0;                    
                 }
                 if ($exito==1) {
                     $transaction->commit();
@@ -96,12 +119,13 @@ class PersonaexternaController extends \yii\web\Controller {
                         "title" => Yii::t('jslang', 'Success'),                        
                     );
                     return Utilities::ajaxResponse('OK', 'alert', Yii::t("jslang", "Sucess"), false, $message);
-                } else {
-                    $transaction->rollBack();
+                } else {                    
+                    $transaction->rollBack();                    
                     $message = array(
-                    "wtmessage" => $ex->getMessage(), Yii::t("notificaciones", "Error al grabar."),
+                    "wtmessage" => $ex->getMessage(), Yii::t("notificaciones", "Error al grabar, ya se encuentra registrado."),
                     "title" => Yii::t('jslang', 'Error'),
-                    );
+                    );          
+                    \app\models\Utilities::putMessageLogFile('mensaje:'.$mensaje); 
                     return Utilities::ajaxResponse('NO_OK', 'alert', Yii::t("jslang", "Error"), true, $message);
                 }
             } catch (Exception $ex) {
@@ -109,7 +133,7 @@ class PersonaexternaController extends \yii\web\Controller {
                 $message = array(
                     "wtmessage" => $ex->getMessage(), Yii::t("notificaciones", "Error al grabar."),
                     "title" => Yii::t('jslang', 'Error'),
-                );
+                );                
                 return Utilities::ajaxResponse('NO_OK', 'alert', Yii::t("jslang", "Error"), true, $message);
             }            
         }

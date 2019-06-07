@@ -95,11 +95,12 @@ class PersonaExterna extends \yii\db\ActiveRecord
         $estado = 1;
         $fecha_actual = date(Yii::$app->params["dateTimeByDefault"]);        
         $sql = "INSERT INTO " . $con->dbname . ".persona_externa
-            (pext_nombres,pext_apellidos,pext_correo,pext_celular,pext_telefono,pext_genero,pext_edad,nins_id,pro_id,can_id,eve_id,
+            (pext_identificacion,pext_nombres,pext_apellidos,pext_correo,pext_celular,pext_telefono,pext_genero,pext_edad,nins_id,pro_id,can_id,eve_id,
              pext_fecha_registro,pext_ip_registro,pext_estado,pext_estado_logico) VALUES
-            (:pext_nombres,:pext_apellidos,:pext_correo,:pext_celular,:pext_telefono,:pext_genero,:pext_edad,:nins_id,:pro_id,:can_id,:eve_id,
+            (:pext_identificacion,:pext_nombres,:pext_apellidos,:pext_correo,:pext_celular,:pext_telefono,:pext_genero,:pext_edad,:nins_id,:pro_id,:can_id,:eve_id,
              :pext_fecha_registro, TO_BASE64(:pext_ip_registro), :pext_estado, :pext_estado)";
-        $command = $con->createCommand($sql);
+        $command = $con->createCommand($sql);        
+        $command->bindParam(":pext_identificacion",  $data['pext_identificacion'], \PDO::PARAM_STR);
         $command->bindParam(":pext_nombres",  $data['pext_nombres'], \PDO::PARAM_STR);
         $command->bindParam(":pext_apellidos", $data['pext_apellidos'], \PDO::PARAM_STR);
         $command->bindParam(":pext_correo", $data['pext_correo'], \PDO::PARAM_STR);
@@ -142,12 +143,31 @@ class PersonaExterna extends \yii\db\ActiveRecord
         $estado = 1;
         $sql = "INSERT INTO " . $con->dbname . ".persona_externa_intereses
             (pext_id,int_id,pein_estado,pein_estado_logico) VALUES
-            (:pext_id,:int_id,:pext_correo,:pein_estado,:pein_estado)";
+            (:pext_id,:int_id,:pein_estado,:pein_estado)";
         $command = $con->createCommand($sql);
         $command->bindParam(":pext_id",  $data['pext_id'], \PDO::PARAM_INT);
         $command->bindParam(":int_id", $data['int_id'], \PDO::PARAM_INT);        
-        $command->bindParam(":pein_estado", $estado, \PDO::PARAM_STR);            
+        $command->bindParam(":pein_estado", $estado, \PDO::PARAM_STR);             
         $command->execute();
         return $con->getLastInsertID();
+    }
+    
+    
+    public function consultarXIdentificacion($identificacion)
+    {
+        $con = \Yii::$app->db_mailing;
+        $estado = 1;
+        $fecha_actual = date(Yii::$app->params["dateTimeByDefault"]);
+        $sql = "    SELECT 'S' existe
+                    FROM 
+                         " . $con->dbname . ".persona_externa
+                    WHERE pext_identificacion = :identificacion AND
+                        pext_estado=:estado AND
+                        pext_estado_logico=:estado";
+        $comando = $con->createCommand($sql);
+        $comando->bindParam(":estado", $estado, \PDO::PARAM_STR);       
+        $comando->bindParam(":identificacion", $identificacion, \PDO::PARAM_STR); 
+        $resultData = $comando->queryOne();
+        return $resultData;        
     }
 }

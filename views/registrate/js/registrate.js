@@ -5,7 +5,7 @@
  */
 $(document).ready(function () {
     $('#cmb_provincia').change(function () {
-        var link = $('#txth_base').val() + "/personaexterna/index";
+        var link = $('#txth_base').val() + "/registrate/index";
         var arrParams = new Object();
         arrParams.prov_id = $(this).val();
         arrParams.getcantones = true;
@@ -18,8 +18,9 @@ $(document).ready(function () {
     });
     
     $('#registrar').click(function () {
-        var link = $('#txth_base').val() + "/personaexterna/save";
-        var arrParams = new Object();         
+        var link = $('#txth_base').val() + "/registrate/save";
+        var arrParams = new Object();   
+        arrParams.identificacion = $('#txt_identificacion').val();
         arrParams.nombres = $('#txt_nombre').val();
         arrParams.apellidos = $('#txt_apellido').val();
         arrParams.correo = $('#txt_correo').val();
@@ -34,35 +35,28 @@ $(document).ready(function () {
         
         //Verificación de los checkboxes.
         var intereses=[];
-        var i=0;
-        alert('check:'+$("input[name=chk_1]:checked").val());
-        if ($('#chk_1').prop('checked')) { 
-            alert('Se coloca check 1');
+        var i=0;        
+        if ($('#chk_1').prop('checked')) {             
             intereses[i]={"interes_id":1}; 
             i = intereses.length;            
         }
-        if ($('#chk_2').prop('checked')) { 
-            alert('Se coloca check 2');
+        if ($('#chk_2').prop('checked')) {             
             intereses[i]={"interes_id":2}; 
             i = intereses.length;            
         }
-        if ($('#chk_3').prop('checked')) { 
-            alert('Se coloca check 3');
+        if ($('#chk_3').prop('checked')) {             
             intereses[i]={"interes_id":3}; 
             i = intereses.length;            
         }
-        if ($('#chk_4').prop('checked')) { 
-            alert('Se coloca check 4');
+        if ($('#chk_4').prop('checked')) {             
             intereses[i]={"interes_id":4}; 
             i = intereses.length;            
         }
-        if ($('#chk_5').prop('checked')) { 
-            alert('Se coloca check 5');
+        if ($('#chk_5').prop('checked')) {             
             intereses[i]={"interes_id":5}; 
             i = intereses.length;            
         }
-        if ($('#chk_6').prop('checked')) { 
-            alert('Se coloca check 6');
+        if ($('#chk_6').prop('checked')) {             
             intereses[i]={"interes_id":6}; 
             i = intereses.length;            
         }
@@ -72,7 +66,7 @@ $(document).ready(function () {
                 showAlert(response.status, response.label, response.message);
                 if (!response.error) {
                     setTimeout(function () {
-                        window.location.href = $('#txth_base').val() + "/personaexterna/index";
+                        window.location.href = $('#txth_base').val() + "/registrate/index";
                     }, 5000);
                 }
             }, true);
