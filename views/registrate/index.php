@@ -14,7 +14,7 @@ use yii\helpers\Url;
 </div>
 <br/>
 <form class="form-horizontal">
-    <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12" display="none">
+    <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12" style="display:none">
         <div class="col-md-6 col-lg-6 col-sm-6 col-xs-6">
             <div class="form-group">
                 <label for="cmb_evento" class="col-sm-5 control-label"><?= Yii::t("formulario", "Event Name") ?></label>
