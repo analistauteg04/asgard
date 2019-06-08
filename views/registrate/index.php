@@ -10,11 +10,11 @@ use yii\helpers\ArrayHelper;
 use yii\helpers\Url;
 ?>
 <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
-    <h2><span id="lbl_Personeria"><?= Yii::t("formulario", "Register of Events") ?></span></h2>
+    <h2><span id="lbl_Personeria"><?= Yii::t("formulario", "Formulario de Registro") ?></span></h2>
 </div>
 <br/>
 <form class="form-horizontal">
-    <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
+    <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12" display="none">
         <div class="col-md-6 col-lg-6 col-sm-6 col-xs-6">
             <div class="form-group">
                 <label for="cmb_evento" class="col-sm-5 control-label"><?= Yii::t("formulario", "Event Name") ?></label>
