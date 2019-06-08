@@ -55,6 +55,7 @@ class RegistrateController extends \yii\web\Controller {
                     "arr_nivel" => ArrayHelper::map($arr_nivel, "id", "value"),
                     "arr_evento" => ArrayHelper::map($arr_evento, "id", "value"), //$arr_evento
                     "arr_interes" => $arr_interes,
+                    "tipos_dni" => array("CED" => Yii::t("formulario", "DNI Document"), "PASS" => Yii::t("formulario", "Passport")),
         ]);
     }    
     
@@ -68,16 +69,18 @@ class RegistrateController extends \yii\web\Controller {
             try {  
                 $respPerexiste = $mod_perext->consultarXIdentificacion($data["identificacion"]);
                 \app\models\Utilities::putMessageLogFile('existe:'.$respPerexiste["existe"]);   
-                if (empty($respPerexiste["existe"])) {
-                    $dataRegistro = array(
+                \app\models\Utilities::putMessageLogFile('tipo ident:'.$data["tipoidentifica"]);   
+                if (empty($respPerexiste["existe"])) {                    
+                    $dataRegistro = array(                        
+                        'pext_tipoidentifica'  => $data["tipoidentifica"],
                         'pext_identificacion'  => $data["identificacion"],
-                        'pext_nombres'  => $data["nombres"],
-                        'pext_apellidos'  => $data["apellidos"], 
-                        'pext_correo'  => $data["correo"], 
+                        'pext_nombres'  => ucwords(strtolower($data["nombres"])),
+                        'pext_apellidos'  => ucwords(strtolower($data["apellidos"])), 
+                        'pext_correo'  => strtolower($data["correo"]), 
                         'pext_celular'  => $data["celular"], 
                         'pext_telefono'  => $data["telefono"], 
                         'pext_genero'  => $data["genero"], 
-                        'pext_edad'  => $data["edad"], 
+                        'pext_fechanac'  => $data["fechanac"], 
                         'nins_id'  => $data["niv_interes"], 
                         'pro_id'  => $data["pro_id"], 
                         'can_id'  => $data["can_id"], 
@@ -117,7 +120,7 @@ class RegistrateController extends \yii\web\Controller {
                 }
                 if ($exito==1) {
                     $transaction->commit();
-                    $mensaje = "Se ha guardado exitosamente su registro.";
+                    $mensaje = "Se ha registrado exitosamente, un agente de Admisiones se contactará con usted.";
                     $message = array(
                         "wtmessage" => Yii::t("notificaciones", $mensaje),
                         "title" => Yii::t('jslang', 'Success'),                        

@@ -20,19 +20,23 @@ $(document).ready(function () {
     $('#registrar').click(function () {
         var link = $('#txth_base').val() + "/registrate/save";
         var arrParams = new Object();   
-        arrParams.identificacion = $('#txt_identificacion').val();
+        arrParams.tipoidentifica = $('#cmb_tipo_dni').val();
+        if ($('#cmb_tipo_dni').val()=='CED'){
+            arrParams.identificacion = $('#txt_cedula').val();
+        } else {
+            arrParams.identificacion = $('#txt_pasaporte').val();
+        }       
         arrParams.nombres = $('#txt_nombre').val();
         arrParams.apellidos = $('#txt_apellido').val();
         arrParams.correo = $('#txt_correo').val();
         arrParams.celular = $('#txt_celular').val();
         arrParams.telefono = $('#txt_telefono').val();
         arrParams.genero = $('#cmb_genero').val();
-        arrParams.edad = $('#txt_edad').val();
+        arrParams.fechanac = $('#txt_fecha_nacimiento').val();
         arrParams.niv_interes = $('#cmb_nivel_estudio').val();
         arrParams.pro_id = $('#cmb_provincia').val();
         arrParams.can_id = $('#cmb_ciudad').val();
-        arrParams.eve_id = $('#cmb_evento').val();     
-        
+        arrParams.eve_id = $('#cmb_evento').val();             
         //Verificación de los checkboxes.
         var intereses=[];
         var i=0;        
@@ -71,6 +75,21 @@ $(document).ready(function () {
                 }
             }, true);
         }        
+    });
+    
+    $('#cmb_tipo_dni').change(function () {
+        if ($('#cmb_tipo_dni').val() == 'PASS') {
+            $('#txt_cedula').removeClass("PBvalidation");
+            $('#txt_pasaporte').addClass("PBvalidation");
+            $('#Divpasaporte').show();
+            $('#Divcedula').hide();
+        } else if ($('#cmb_tipo_dni').val() == 'CED')
+        {
+            $('#txt_pasaporte').removeClass("PBvalidation");
+            $('#txt_cedula').addClass("PBvalidation");
+            $('#Divpasaporte').hide();
+            $('#Divcedula').show();
+        }
     });
             
 });

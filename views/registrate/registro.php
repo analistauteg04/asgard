@@ -8,21 +8,39 @@
 use yii\helpers\Html;
 use yii\helpers\ArrayHelper;
 use yii\helpers\Url;
-
+use kartik\date\DatePicker;
 ?>
-<div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
-    <h3><span id="lbl_Personeria"><?= Yii::t("formulario", "Data Personal") ?></span></h3>
-</div>
-<form class="form-horizontal" enctype="multipart/form-data" >  
+<form class="form-horizontal">  
     <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
-        <div class="col-md-6 col-lg-6 col-sm-6 col-xs-6">
-            <div class="form-group">
-                <label for="txt_identificacion" class="col-sm-5 col-lg-5 control-label"><?= Yii::t("formulario", "Number") ?> <span class="text-danger">*</span></label>
-                <div class="col-sm-7">
-                    <input type="text" maxlength="10" class="form-control PBvalidation keyupmce" id="txt_identificacion" data-type="number" data-keydown="true" placeholder="<?= Yii::t("formulario", "National identity document") ?>">
+        <h3><span id="lbl_Personeria"><?= Yii::t("formulario", "Data Personal") ?></span></h3>
+    </div>
+    <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
+        <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
+            <div class="col-md-6 col-sm-6 col-xs-6 col-lg-6">
+                <div class="form-group">
+                    <label for="cmb_tipo_dni" class="col-sm-5 control-label"><?= Yii::t("formulario", "DNI 1") ?> <span class="text-danger">*</span></label>
+                    <div class="col-sm-7">
+                        <?= Html::dropDownList("cmb_tipo_dni", 0, $tipos_dni, ["class" => "form-control", "id" => "cmb_tipo_dni"]) ?>
+                    </div>
                 </div>
             </div>
-        </div>        
+            <div class="col-md-6 col-sm-6 col-xs-6 col-lg-6" id="Divcedula">
+                <div class="form-group">
+                    <label for="txt_cedula" class="col-sm-5 control-label"><?= Yii::t("formulario", "Number") ?> <span class="text-danger">*</span></label>
+                    <div class="col-sm-7">
+                        <input type="text" maxlength="10" class="form-control PBvalidation keyupmce" id="txt_cedula" data-type="number" data-keydown="true" placeholder="<?= Yii::t("formulario", "National identity document") ?>">
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-6 col-sm-6 col-xs-6 col-lg-6" style="display: none;" id="Divpasaporte">
+                <div class="form-group">
+                    <label for="txt_pasaporte" class="col-sm-5 control-label"><?= Yii::t("formulario", "Number") ?> <span class="text-danger">*</span></label>
+                    <div class="col-sm-7">
+                        <input type="text" maxlength="15" class="form-control keyupmce" id="txt_pasaporte" data-type="alfanumerico" data-keydown="true" placeholder="<?= Yii::t("formulario", "Passport") ?>">
+                    </div>
+                </div>
+            </div>
+        </div>                         
     </div>
     <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
         <div class="col-md-6 col-lg-6 col-sm-6 col-xs-6">
@@ -83,14 +101,25 @@ use yii\helpers\Url;
         </div>             
     </div>        
     <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
-        <div class="col-md-6 col-lg-6 col-sm-6 col-xs-6">
+        <div class="col-lg-6 col-md-6 col-sm-6 col-xs-6">
             <div class="form-group">
-                <label for="txt_edad" class="col-sm-5 control-label"><?= Yii::t("formulario", "Age") ?><span class="text-danger">*</span></label>
+                <label for="txt_fecha_nacimiento" class="col-sm-5 control-label"><?= Yii::t("formulario", "Birth Date") ?> <span class="text-danger">*</span></label>
                 <div class="col-sm-7">
-                    <input type="text" class="form-control PBvalidation" value="" id="txt_edad" data-type="edad" data-keydown="true" placeholder="<?= Yii::t("formulario", "Age") ?>">
+                    <?=
+                    DatePicker::widget([
+                        'name' => 'txt_fecha_nacimiento',
+                        'value' => $per_fecha_nacimiento,
+                        'type' => DatePicker::TYPE_INPUT,
+                        'options' => ["class" => "form-control PBvalidation keyupmce", "id" => "txt_fecha_nacimiento", "data-type" => "fecha", "data-keydown" => "true", "placeholder" => Yii::t("formulario", "Birth Date yyyy-mm-dd")],
+                        'pluginOptions' => [
+                            'autoclose' => true,
+                            'format' => Yii::$app->params["dateByDatePicker"],
+                        ]]
+                    );
+                    ?>
                 </div>
             </div>
-        </div>   
+        </div> 
         <div class="col-md-6 col-lg-6 col-sm-6 col-xs-6">
             <div class="form-group">
                 <label for="cmb_nivel_estudio" class="col-sm-5 control-label"><?= Yii::t("formulario", "Instructional Level") ?><span class="text-danger">*</span></label>
