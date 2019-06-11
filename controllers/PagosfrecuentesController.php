@@ -155,7 +155,7 @@ class PagosfrecuentesController extends \yii\web\Controller {
                     "response" => $data["resp"],
                 ));
                 if ($data["resp"]["status"]["status"] == "APPROVED") {
-                    $respDoc = $modDocumento->actualizarDocumento($con1, $doc_id,'S');
+                    $respDoc = $modDocumento->actualizarDocumento($con1, $doc_id, 'S');
                     if ($respDoc) {
                         $transaction->commit();
                         $message = array(
@@ -272,6 +272,12 @@ class PagosfrecuentesController extends \yii\web\Controller {
                 return Utilities::ajaxResponse('NO_OK', 'alert', Yii::t("jslang", "Error"), true, $message);
             }
         }
+    }
+
+    public function actionPreguntas() {
+        $this->layout = '@themes/' . \Yii::$app->getView()->theme->themeName . '/layouts/basic.php';
+        return $this->render('preguntas', [
+        ]);
     }
 
 }
