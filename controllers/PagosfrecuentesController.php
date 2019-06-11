@@ -280,4 +280,10 @@ class PagosfrecuentesController extends \yii\web\Controller {
         ]);
     }
 
+    public function actionTerminos() {
+        $this->layout = '@themes/' . \Yii::$app->getView()->theme->themeName . '/layouts/basic.php';
+        return $this->render('terminos', [
+        ]);
+    }
+
 }
