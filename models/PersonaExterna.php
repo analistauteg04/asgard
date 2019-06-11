@@ -115,8 +115,7 @@ class PersonaExterna extends \yii\db\ActiveRecord
         $command->bindParam(":eve_id", $data['eve_id'], \PDO::PARAM_INT); 
         $command->bindParam(":pext_fecha_registro", $fecha_actual, \PDO::PARAM_STR); 
         $command->bindParam(":pext_ip_registro", $data['pext_ip_registro'], \PDO::PARAM_STR); 
-        $command->bindParam(":pext_estado", $estado, \PDO::PARAM_STR);  
-        \app\models\Utilities::putMessageLogFile('tipo ident1:'.$data["pext_tipoidentifica"]);   
+        $command->bindParam(":pext_estado", $estado, \PDO::PARAM_STR);      
         $command->execute();
         return $con->getLastInsertID();
     }

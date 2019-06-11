@@ -481,6 +481,8 @@ function guardarInscripcion(accion, paso) {
                     if (uaca_id == 2) {
                         if (id_carrera == 22) {
                             leyenda = 'El valor de la maestría: $15,500.00';
+                        } else if  (id_carrera == 24) {
+                            leyenda = 'El valor de la maestría: $4,500.00';
                         } else {
                             leyenda = 'El valor de la maestría: $11,300.00';
                         }

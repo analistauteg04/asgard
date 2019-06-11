@@ -1089,22 +1089,21 @@ class SolicitudInscripcion extends \yii\db\ActiveRecord
                     FROM " . $con2->dbname . ".item_metodo_unidad imni LEFT JOIN " . $con2->dbname . ".item_precio ipre on imni.ite_id = ipre.ite_id
                          LEFT JOIN " . $con->dbname . ".metodo_ingreso ming on ming.ming_id = imni.ming_id
                          LEFT JOIN " . $con1->dbname . ".unidad_academica ua on ua.uaca_id = imni.uaca_id                                             
-                    WHERE ifnull(imni.ming_id,0) = 0 AND 
-                          imni.uaca_id = :nint_id AND
+                    WHERE ";
+                    if ((empty($ming_id)) or ($ming_id==0))  {
+                        $sql .= "ifnull(imni.ming_id,0) = 0 AND ";
+                    } else {
+                        $sql .= "imni.ming_id = :ming_id AND ";
+                    }
+                    $sql .= "imni.uaca_id = :nint_id AND
                           imni.mod_id = :mod_id AND                         
                           ipre.ipre_estado_precio = :estado_precio AND
                           now() between ipre.ipre_fecha_inicio and ipre.ipre_fecha_fin AND
                           imni.imni_estado = :estado AND
-                          imni.imni_estado_logico = :estado AND
-                          -- ipre.ipre_estado = :estado AND
-                          -- ipre.ipre_estado_logico = :estado AND 
-                          -- ming.ming_estado = :estado AND
-                          -- ming.ming_estado_logico = :estado AND
-                          imni.ite_id  in (158,159,160,161) and
+                          imni.imni_estado_logico = :estado AND                          
+                          imni.ite_id  in (158,159,160,161,166) and
                           ua.uaca_estado = :estado AND
-                          ua.uaca_estado_logico = :estado";
-            
-                \app\models\Utilities::putMessageLogFile('sql:'.$sql);  
+                          ua.uaca_estado_logico = :estado";           
         } else {
             $sql = "
                     SELECT  imni.imni_id, 
@@ -1128,8 +1127,8 @@ class SolicitudInscripcion extends \yii\db\ActiveRecord
                           ua.uaca_estado_logico = :estado";
         }        
         $comando = $con->createCommand($sql);
-        $comando->bindParam(":estado", $estado, \PDO::PARAM_STR);
-        $comando->bindParam(":ming_id", $ming_id, \PDO::PARAM_INT);
+        $comando->bindParam(":estado", $estado, \PDO::PARAM_STR);            
+        $comando->bindParam(":ming_id", $ming_id, \PDO::PARAM_INT);   
         $comando->bindParam(":nint_id", $nint_id, \PDO::PARAM_INT);
         $comando->bindParam(":mod_id", $mod_id, \PDO::PARAM_INT);
         $comando->bindParam(":car_id", $car_id, \PDO::PARAM_INT);

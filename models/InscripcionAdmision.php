@@ -455,16 +455,15 @@ class InscripcionAdmision extends \yii\db\ActiveRecord {
                                                 //Obtener el precio de la solicitud.
                                                 if ($beca == "1") {
                                                     $precio = 0;
-                                                } else {
-                                                   
+                                                } else {                                                                                                          
                                                     $resp_precio = $solins_model->ObtenerPrecio($resp_datos['twin_metodo_ingreso'], $resp_datos['uaca_id'], $resp_datos['mod_id'], $eaca_id);
                                                     if ($resp_precio) {
-                                                        //\app\models\Utilities::putMessageLogFile('obtener precio');    
-                                                        if ($resp_datos['uaca_id'] == 2) {
+                                                        //\app\models\Utilities::putMessageLogFile('precio:'.$resp_precio['precio']);    
+                                                        /*if ($resp_datos['uaca_id'] == 2) {
                                                             $ite_id = 10;
-                                                        } else {
+                                                        } else {*/
                                                             $ite_id = $resp_precio['ite_id'];                                                            
-                                                        }
+                                                        //}
                                                         $precio = $resp_precio['precio'];
                                                     } else {
                                                         $mensaje = 'No existe registrado ningún precio para la unidad, modalidad y método de ingreso seleccionada.';
@@ -488,10 +487,10 @@ class InscripcionAdmision extends \yii\db\ActiveRecord {
                                                 $val_total = $precio - $val_descuento;                                                
                                                 $resp_opago = $mod_ordenpago->insertarOrdenpago($sins_id, null, $val_total, 0, $val_total, $estadopago, $usuario_id);                                                
                                                 if ($resp_opago) {                                                    
-                                                    //insertar desglose del pago                                    
+                                                    //insertar desglose del pago                                                         
                                                     $fecha_ini = date(Yii::$app->params["dateByDefault"]);
                                                     $resp_dpago = $mod_ordenpago->insertarDesglosepago($resp_opago, $ite_id, $val_total, 0, $val_total, $fecha_ini, null, $estadopago, $usuario_id);
-                                                    if ($resp_dpago) {                                                        
+                                                    if ($resp_dpago) {                                                          
                                                         $exito = 1;
                                                     }
                                                 }
