@@ -179,7 +179,7 @@ class InscripcionadmisionController extends \yii\web\Controller {
                     if ($foto_archivo === false)
                         throw new Exception('Error doc Foto no renombrado.');
                 }
-                if (isset($data["DATA_1"][0]["ruta_doc_certificado"]) && $data["DATA_1"][0]["ruta_doc_certificado"] != "") {
+                /*if (isset($data["DATA_1"][0]["ruta_doc_certificado"]) && $data["DATA_1"][0]["ruta_doc_certificado"] != "") {
                     $arrIm = explode(".", basename($data["DATA_1"][0]["ruta_doc_certificado"]));
                     $typeFile = strtolower($arrIm[count($arrIm) - 1]);
                     $doc_certificadoOld = Yii::$app->params["documentFolder"] . "solicitudadmision/" . $inscripcion_id . "/doc_certificado_per_" . $inscripcion_id . "." . $typeFile;
@@ -187,7 +187,7 @@ class InscripcionadmisionController extends \yii\web\Controller {
                     $data["DATA_1"][0]["ruta_doc_certificado"] = $doc_certificado;
                     if ($doc_certificado === false)
                         throw new Exception('Error doc Certificado no renombrado.');
-                }
+                }*/
                 if (isset($data["DATA_1"][0]["ruta_doc_hojavida"]) && $data["DATA_1"][0]["ruta_doc_hojavida"] != "") {
                     $arrIm = explode(".", basename($data["DATA_1"][0]["ruta_doc_hojavida"]));
                     $typeFile = strtolower($arrIm[count($arrIm) - 1]);

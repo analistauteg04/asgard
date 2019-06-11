@@ -11,7 +11,9 @@
  */
 function habilitarSecciones() {
     var pais = $('#cmb_pais_dom').val();
-    if (pais == 1) {
+    var unidad = $('#cmb_unidad_solicitud').val();
+    //if (pais == 1) {
+    if ((pais == 1) && (unidad == 1)) {
         $('#divCertvota').css('display', 'block');
     } else {
         $('#divCertvota').css('display', 'none');
@@ -68,7 +70,7 @@ $(document).ready(function () {
                 showAlert("NO_OK", "error", mensaje);
             } else {
                 if ($('#cmb_tipo_dni').val() == "CED") {
-                    if (pais == 1) {
+                    if ((pais == 1) && ($('#cmb_unidad_solicitud').val() == 1)) {
                         if ($('#txth_doc_certvota').val() == "") {
                             error++;
                             var mensaje = {wtmessage: "Debe adjuntar certificado de votación.", title: "Información"};
@@ -90,7 +92,8 @@ $(document).ready(function () {
                 }
             }
         }
-        if ($('#cmb_unidad_solicitud').val() == 2) {
+        /*Gviteri: 11/jun/2019 indicaron que no se solicite el documento (Diana López).
+         * if ($('#cmb_unidad_solicitud').val() == 2) {
             if ($('#txth_doc_certificado').val() == "") {
                 error++;
                 var mensaje = {wtmessage: "Debe adjuntar certificado de materias.", title: "Información"};
@@ -98,7 +101,7 @@ $(document).ready(function () {
             }
             //alert($('#cmb_tipo_dni').val());
 
-        }
+        }*/
         //alert(error);
         if (error == 0) {
             guardarInscripcion('Update', '2');
