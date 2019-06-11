@@ -4,16 +4,19 @@ $(document).ready(function () {
     
     $('input[name=opt_tipo_DNI]:radio').change(function () {
         if ($(this).val() == 1) {//ced
+            $('#txt_dni_fac').addClass("PBvalidation");
             $('#txt_dni_fac').attr("data-lengthMin", "10");
             $('#txt_dni_fac').attr("data-lengthMax", "10");
             $('#txt_dni_fac').attr("placeholder", $('#txth_ced_lb').val());
             $('label[for=txt_dni_fac]').text($('#txth_ced_lb').val() + "");
         } else if ($(this).val() == 2) { // ruc
+            $('#txt_dni_fac').addClass("PBvalidation");
             $('#txt_dni_fac').attr("data-lengthMin", "13");
             $('#txt_dni_fac').attr("data-lengthMax", "13");
             $('#txt_dni_fac').attr("placeholder", $('#txth_ruc_lb').val());
             $('label[for=txt_dni_fac]').text($('#txth_ruc_lb').val() + "");
         } else { // pasaporte
+            $('#txt_dni_fac').removeClass("PBvalidation");
             $('#txt_dni_fac').attr("data-lengthMin", "13");
             $('#txt_dni_fac').attr("data-lengthMax", "13");
             $('#txt_dni_fac').attr("placeholder", $('#txth_ruc_lb').val());
