@@ -83,7 +83,7 @@ PbGridView::widget([
                     } else {
                         return '<span class="glyphicon glyphicon-folder-open"></span>';
                     }
-                }
+                },                
             ],
         ],
     ],

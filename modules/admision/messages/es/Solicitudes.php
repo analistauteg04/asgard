@@ -38,5 +38,6 @@ namespace app\modules\admision\messages;
      "Total" => "Total",
      "Transaction date" => "Fecha Transacción",
      "Transaction number" => "Número Transacción",
+     "UNE Letter" => "Carta UNE",
      "Voting Certificate" => "Certificado Votación",     
  ];
