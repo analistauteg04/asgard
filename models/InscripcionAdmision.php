@@ -325,7 +325,7 @@ class InscripcionAdmision extends \yii\db\ActiveRecord {
                             if ($usuario_id == 0) {
                                 $security = new Security();
                                 $hash = $security->generateRandomString();
-                                $passencrypt = base64_encode($security->encryptByPassword($hash, 'Uteg2019'));
+                                $passencrypt = base64_encode($security->encryptByPassword($hash,$resp_datos['twin_numero']));
                                 $keys = ['per_id', 'usu_user', 'usu_sha', 'usu_password', 'usu_estado', 'usu_estado_logico'];
                                 $parametros = [$id_persona, $resp_datos['twin_correo'], $hash, $passencrypt, 1, 1];
                                 $usuario_id = $usuario->crearUsuarioTemporal($con, $parametros, $keys, 'usuario');
@@ -531,6 +531,15 @@ class InscripcionAdmision extends \yii\db\ActiveRecord {
                 //$transaction->commit();
                 //$transaction1->commit(); 
                 $transaction2->commit();
+                //Envío de correo.
+                $tituloMensaje = Yii::t("interesado", "UTEG - Registration Online");
+                $asunto = Yii::t("interesado", "UTEG - Registration Online");
+                $link = "https://www.asgard.uteg.edu.ec/asgard";               
+                $body = Utilities::getMailMessage("credentials", array("[[usuario]]" => $resp_datos['twin_nombre']." ". $resp_datos['twin_apellido'], "[[username]]" => $resp_datos['twin_correo'], "[[clave]]" => $resp_datos['twin_numero'], "[[link]]" => $link), Yii::$app->language);                                
+                Utilities::sendEmail($tituloMensaje, Yii::$app->params["adminEmail"], [$resp_datos['twin_correo'] => $resp_datos['twin_apellido'] . " " . $resp_datos['twin_nombre']], $asunto, $body);                
+                Utilities::sendEmail($tituloMensaje, Yii::$app->params["adminEmail"], [Yii::$app->params["admisiones"] => "Jefe"], $asunto, $body);                
+                Utilities::sendEmail($tituloMensaje, Yii::$app->params["adminEmail"], [Yii::$app->params["soporteEmail"] => "Soporte"], $asunto, $body); 
+                //\app\models\Utilities::putMessageLogFile('después del tercer sendMail');
                 $message = array(
                     "wtmessage" => Yii::t("formulario", "The information have been saved and the information has been sent to your email"),
                     "title" => Yii::t('jslang', 'Success'),
