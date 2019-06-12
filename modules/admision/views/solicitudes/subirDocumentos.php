@@ -173,15 +173,14 @@ if (base64_decode($_GET['uaca']) == 2) {
                 ?>
             </div>
         </div>
-    </div>
-
-    <div class="col-md-12 col-xs-12 col-sm-12 col-lg-12 doc_certvota cinteres" <?= ($txth_extranjero == "0") ? 'style="display:none;"' : "" ?> >
+    </div>    
+    <!-- <div class="col-md-12 col-xs-12 col-sm-12 col-lg-12 doc_certvota cinteres" <? ($txth_extranjero == "0" )  ? 'style="display:none;"' : "" ?> >
         <div class="form-group">
-            <label for="txth_doc_certvota" class="col-sm-4 col-md-4 col-xs-4 col-lg-4 control-label keyupmce"><?= admision::t("Solicitudes", "Voting Certificate") ?></label>
+            <label for="txth_doc_certvota" class="col-sm-4 col-md-4 col-xs-4 col-lg-4 control-label keyupmce"><? admision::t("Solicitudes", "Voting Certificate") ?></label>
             <div class="col-sm-7 col-md-7 col-xs-7 col-lg-7">
-                <?= Html::hiddenInput('txth_doc_certvota', '', ['id' => 'txth_doc_certvota']); ?>
+                <? Html::hiddenInput('txth_doc_certvota', '', ['id' => 'txth_doc_certvota']); ?>
                 <?php
-                echo CFileInputAjax::widget([
+                /*echo CFileInputAjax::widget([
                     'id' => 'txt_doc_certvota',
                     'name' => 'txt_doc_certvota',
                     'pluginLoading' => false,
@@ -227,11 +226,11 @@ if (base64_decode($_GET['uaca']) == 2) {
         //showAlert('OK', 'Success', {'wtmessage': objLang.File_uploaded_successfully__Do_you_refresh_the_web_page_, 'title': objLang.Success, 'acciones': acciones});                              
     }",
                     ],
-                ]);
+                ]);*/
                 ?>
             </div>
         </div>
-    </div>
+    </div>-->
     <div class="col-md-12 col-xs-12 col-sm-12 col-lg-12 doc_foto cinteres">
         <div class="form-group">
             <label for="txth_doc_foto" class="col-sm-4 col-md-4 col-xs-4 col-lg-4 control-label keyupmce"><?= Yii::t("formulario", "Foto") ?></label>
@@ -290,13 +289,13 @@ if (base64_decode($_GET['uaca']) == 2) {
         </div>
     </div>
     <div  id="divCertificado" style="display: <?php echo $docpos; ?>">   
-        <div class="col-md-12 col-xs-12 col-sm-12 col-lg-12 doc_certificado cinteres">
+        <!-- <div class="col-md-12 col-xs-12 col-sm-12 col-lg-12 doc_certificado cinteres">
             <div class="form-group">
-                <label for="txth_doc_certificado" class="col-sm-4 col-md-4 col-xs-4 col-lg-4 control-label keyupmce"><?= Yii::t("formulario", "Materials Certificate") ?></label>
+                <label for="txth_doc_certificado" class="col-sm-4 col-md-4 col-xs-4 col-lg-4 control-label keyupmce"><? Yii::t("formulario", "Materials Certificate") ?></label>
                 <div class="col-sm-7 col-md-7 col-xs-7 col-lg-7">
-                    <?= Html::hiddenInput('txth_doc_certificado', '', ['id' => 'txth_doc_certificado']); ?>
+                    <? Html::hiddenInput('txth_doc_certificado', '', ['id' => 'txth_doc_certificado']); ?>
                     <?php
-                    echo CFileInputAjax::widget([
+                    /*echo CFileInputAjax::widget([
                         'id' => 'txt_doc_certificado',
                         'name' => 'txt_doc_certificado',
                         'pluginLoading' => false,
@@ -342,11 +341,11 @@ if (base64_decode($_GET['uaca']) == 2) {
             //showAlert('OK', 'Success', {'wtmessage': objLang.File_uploaded_successfully__Do_you_refresh_the_web_page_, 'title': objLang.Success, 'acciones': acciones});                              
         }",
                         ],
-                    ]);
+                    ]);*/
                     ?>
                 </div>
             </div>
-        </div>
+        </div>-->
 
         <?php //Aqui voy a colocar la informacion de de la hoja de vida  ?>
         <div class="col-md-12 col-xs-12 col-sm-12 col-lg-12 doc_hoja_vida">
