@@ -23,30 +23,26 @@ if (base64_decode($_GET['uaca']) == 2) {
 }
 ?>
 <?= Html::hiddenInput('txth_idp', base64_encode($datos["per_id"]), ['id' => 'txth_idp']); ?>
-<?= Html::hiddenInput('txth_ids', base64_encode($datos["sins_id"]), ['id' => 'txth_ids']); ?>
-<?= Html::hiddenInput('txth_int_id', base64_encode($datos["int_id"]), ['id' => 'txth_int_id']); ?>
-<?= Html::hiddenInput('txth_opcion', base64_decode($_GET['opcion']), ['id' => 'txth_opcion']); ?>
-<?= Html::hiddenInput('txth_uaca', base64_decode($_GET['uaca']), ['id' => 'txth_uaca']); ?>
 
 <form class="form-horizontal" enctype="multipart/form-data" id="formsolicitud">
     <div class="col-md-12 col-xs-12 col-sm-12 col-lg-12">
         <h3><span id="lbl_solicitud"><?= Yii::t("formulario", "Upload documents") ?></span></h3>
     </div>
 
-    <div class="col-md-12 col-xs-12 col-sm-12 col-lg-12">
+    <!--<div class="col-md-12 col-xs-12 col-sm-12 col-lg-12">
         <div class="form-group">
             <label for="txt_solicitud" class="col-sm-4 col-md-4 col-xs-4 col-lg-4 control-label"><?= admision::t("Solicitudes", "Request #") ?></label>
             <div class="col-sm-7 col-md-7 col-xs-7 col-lg-7">
                 <input type="text" class="form-control" value="<?= $datos["num_solicitud"] ?>" id="txt_solicitud" disabled="true">
             </div>
         </div>
-    </div>
+    </div>-->
 
     <div class="col-md-12 col-xs-12 col-sm-12 col-lg-12">
         <div class="form-group">
             <label for="txt_nombres_completos" class="col-sm-4 col-md-4 col-xs-4 col-lg-4 control-label"><?= Yii::t("formulario", "Complete Names") ?></label>
             <div class="col-sm-7 col-md-7 col-xs-7 col-lg-7">
-                <input type="text" class="form-control" value="<?= $datos["per_apellidos"] . $datos["per_nombres"] ?>" id="txt_nombres_completos" disabled="true">
+                <input type="text" class="form-control" value="<?= $datos["per_pri_apellido"] ." " . $datos["per_pri_nombre"] ?>" id="txt_nombres_completos" disabled="true">
             </div>
         </div>
     </div>
@@ -78,7 +74,7 @@ if (base64_decode($_GET['uaca']) == 2) {
                         'browseClass' => 'btn btn-primary btn-block',
                         'browseIcon' => '<i class="fa fa-folder-open"></i> ',
                         'browseLabel' => "Subir Archivo",
-                        'uploadUrl' => Url::to(['/admision/solicitudes/saveotrosdocumentos']),
+                        'uploadUrl' => Url::to(['/academico/admitidos/saveotrosdocumentos']),
                         'maxFileSize' => Yii::$app->params["MaxFileSize"], // en Kbytes
                         'uploadExtraData' => 'javascript:function (previewId,index) {
             return {"upload_file": true, "name_file": "doc_certune"};
