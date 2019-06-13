@@ -106,7 +106,7 @@ function SaveOtrosDocumentos() {
     arrParams.persona_id = $('#txth_idp').val();    
     arrParams.arc_doc_carta = $('#txth_doc_certune').val();        
     arrParams.observa = $('#txt_observa').val();
-    
+    //alert('perId:'+arrParams.persona_id);
     if (!validateForm()) {
         requestHttpAjax(link, arrParams, function (response) {
             showAlert(response.status, response.label, response.message);

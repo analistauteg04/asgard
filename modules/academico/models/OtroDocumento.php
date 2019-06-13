@@ -74,15 +74,17 @@ class OtroDocumento extends \yii\db\ActiveRecord
     public function insertar($con,$data)
     {                 
         $estado = '1';
+        $estado_aprobacion='1';
         $sql = "INSERT INTO " . $con->dbname . ".otro_documento
-            (per_id,dadj_id,odoc_archivo,odoc_observacion,odoc_usuario_ingreso,odoc_estado,odoc_estado_logico) VALUES
-            (:per_id,:dadj_id,:odoc_archivo,:odoc_observacion,:odoc_usuario_ingreso,:odoc_estado,:odoc_estado_logico)";
+            (per_id,dadj_id,odoc_archivo,odoc_observacion,odoc_usuario_ingreso,odoc_estado_aprobacion,odoc_estado,odoc_estado_logico) VALUES
+            (:per_id,:dadj_id,:odoc_archivo,:odoc_observacion,:odoc_usuario_ingreso,:odoc_estado_aprobacion,:odoc_estado,:odoc_estado_logico)";
         $command = $con->createCommand($sql);        
         $command->bindParam(":per_id",  $data['per_id'], \PDO::PARAM_INT);
         $command->bindParam(":dadj_id",  $data['dadj_id'], \PDO::PARAM_INT);
         $command->bindParam(":odoc_archivo",  $data['odoc_archivo'], \PDO::PARAM_STR);
         $command->bindParam(":odoc_observacion", $data['odoc_observacion'], \PDO::PARAM_STR);
         $command->bindParam(":odoc_usuario_ingreso", $data['odoc_usuario_ingreso'], \PDO::PARAM_INT);       
+        $command->bindParam(":odoc_estado_aprobacion", $estado_aprobacion, \PDO::PARAM_INT);       
         $command->bindParam(":pext_estado", $estado, \PDO::PARAM_STR);      
         $command->execute();
         return $con->getLastInsertID();
