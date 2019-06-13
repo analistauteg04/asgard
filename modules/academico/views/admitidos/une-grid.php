@@ -13,7 +13,7 @@ academico::registerTranslations();
 <div>
     <?=
     PbGridView::widget([
-        'id' => 'TbG_PERSONAS',
+        'id' => 'TbG_UNE',
         //'showExport' => true,
         //'fnExportEXCEL' => "exportuneExcel",
         //'fnExportPDF' => "exportunePdf",
@@ -35,7 +35,27 @@ academico::registerTranslations();
                 'attribute' => 'Apellidos',
                 'header' => Yii::t("formulario", "Last Names"),
                 'value' => 'per_apellidos',
-            ],       
+            ],  
+            [
+                'attribute' => 'fecha',
+                'header' => Yii::t("formulario", "Date"),
+                'value' => 'fecha',
+            ],
+            [
+                'attribute' => 'estado',
+                'header' => Yii::t("formulario", "Status"),
+                'contentOptions' => ['class' => 'text-center'],
+                'headerOptions' => ['class' => 'text-center'],
+                'format' => 'html',
+                'value' => function ($model) {
+                    if ($model["odoc_estado_aprobacion"] == 1)
+                        return '<small class="label label-warning">Pendiente</small>';                    
+                    if ($model["odoc_estado_aprobacion"] == 2)                        
+                        return '<small class="label label-success">Aprobado</small>';
+                    if ($model["odoc_estado_aprobacion"] == 3)                        
+                        return '<small class="label label-danger">No Aprobado</small>';
+                },                
+            ],  
             /*[
                 'class' => 'yii\grid\ActionColumn',
                 'header' => academico::t("Academico", "Career/Program"),
@@ -49,10 +69,10 @@ academico::registerTranslations();
             [
                 'class' => 'yii\grid\ActionColumn',
                 'header' => Yii::t("formulario", "Actions"),
-                'template' => '{homologa}', //
+                'template' => '{documento}', //
                 'buttons' => [      
-                    'homologa' => function ($url, $model) {
-                        return Html::a('<span class="glyphicon glyphicon-check"></span>', Url::to(['/academico/matriculacion/newhomologacion', 'sids' => base64_encode($model['sins_id']), 'asp' => base64_encode($model['asp_id'])]), ["data-toggle" => "tooltip", "title" => "Matricular por Homologación", "data-pjax" => 0]);
+                    'documento' => function ($url, $model) {
+                        return Html::a('<span class="glyphicon glyphicon-check"></span>', Url::to(['/academico/matriculacion/documento', 'per_id' => base64_encode($model['per_id'])]), ["data-toggle" => "tooltip", "title" => "Revisar Documento", "data-pjax" => 0]);
                     },
                 ],
             ],

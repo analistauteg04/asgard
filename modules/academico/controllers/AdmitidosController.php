@@ -178,10 +178,10 @@ class AdmitidosController extends \app\components\CController {
             $arrSearch["f_fin"] = $data['f_fin'];
             $arrSearch["search"] = $data['search'];
             $arrSearch["estado"] = $data['estado'];
-            /* $mod_aspirante = Admitido::getAdmitidos($arrSearch);
-              return $this->renderPartial('une-grid', [
-              "model" => $mod_aspirante,
-              ]); */
+            $mod_une = Admitido::getUne($arrSearch);
+            return $this->renderPartial('une-grid', [
+                        "model" => $mod_une,
+            ]);
         } else {
             $mod_une = Admitido::getUne();
         }

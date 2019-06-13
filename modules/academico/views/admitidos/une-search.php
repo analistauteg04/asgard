@@ -55,9 +55,9 @@ use app\modules\academico\Module as academico;
     </div>
     <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
         <div class="form-group">            
-            <label for="cmb_unidadbus" class="col-sm-2 col-sm-2 col-lg-2 col-md-2 col-xs-2 control-label"><?= Yii::t("formulario", "Academic unit") ?></label>
+            <label for="cmb_estado" class="col-sm-2 col-sm-2 col-lg-2 col-md-2 col-xs-2 control-label"><?= Yii::t("formulario", "Academic unit") ?></label>
             <div class="col-sm-3 col-xs-3 col-md-3 col-lg-3">
-                <?= Html::dropDownList("cmb_unidadbus", 0,  ["0" => "Todos", "1" => "Pendiente", "2" => "Aprobado", "3" => "No Aprobado"], ["class" => "form-control", "id" => "cmb_unidadbus"]) ?>
+                <?= Html::dropDownList("cmb_estado", 0,  ["0" => "Todos", "1" => "Pendiente", "2" => "Aprobado", "3" => "No Aprobado"], ["class" => "form-control", "id" => "cmb_estado"]) ?>
             </div>
                
         </div>
@@ -65,7 +65,7 @@ use app\modules\academico\Module as academico;
     <div class="col-md-12 col-sm-12 col-xs-12 col-lg-12">
         <div class="col-sm-8"></div>
         <div class="col-sm-2 col-md-2 col-xs-4 col-lg-2">                
-            <a id="btn_buscarData" href="javascript:" class="btn btn-primary btn-block"> <?= Yii::t("formulario", "Search") ?></a>
+            <a id="btn_buscarUne" href="javascript:" class="btn btn-primary btn-block"> <?= Yii::t("formulario", "Search") ?></a>
         </div>
     </div>
 </div>
