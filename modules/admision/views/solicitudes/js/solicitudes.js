@@ -1298,30 +1298,3 @@ function Approve() {
         }, true);
     }
 }
-
-
-//Guarda Documento de carta de la UNE.
-/*function SaveDocumentos() {
-    var link = $('#txth_base').val() + "/admision/solicitudes/saveotrosdocumentos";
-    var arrParams = new Object();
-    arrParams.sins_id = $('#txth_ids').val();
-    arrParams.persona_id = $('#txth_idp').val();
-    arrParams.interesado_id = $('#txth_int_id').val();    
-    arrParams.arc_doc_carta = $('#txth_doc_titulo').val();    
-    arrParams.opcion = $('#txth_opcion').val();
-    arrParams.uaca_id = $('#txth_uaca').val();
-    arrParams.oserva = $('#txt_observa').val();
-    
-    if (!validateForm()) {
-        requestHttpAjax(link, arrParams, function (response) {
-            showAlert(response.status, response.label, response.message);
-            setTimeout(function () {
-                if (arrParams.opcion == 1) {
-                    window.location.href = $('#txth_base').val() + "/admision/solicitudes/listarsolicitudxinteresado?id=" + arrParams.interesado_id;
-                } else {
-                    window.location.href = $('#txth_base').val() + "/admision/solicitudes/index";
-                }
-            }, 5000);
-        }, true);
-    }
-}*/

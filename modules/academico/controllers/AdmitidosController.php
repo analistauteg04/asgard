@@ -158,5 +158,43 @@ class AdmitidosController extends \app\components\CController {
         );
         $report->mpdf->Output('Reporte_' . date("Ymdhis") . ".pdf", ExportFile::OUTPUT_TO_DOWNLOAD);
     }
+    
+    public function actionSubirotrosdocumentos() {
+        $per_id = @Yii::$app->session->get("PB_perid");
+        $modperinteresado = new Persona();
+        $datosPersona = $modperinteresado->consultaPersonaId($per_id);
+        return $this->render('subirOtrosDocumentos', [                    
+                    "datos" => $datosPersona,
+        ]);
+    }
 
+    public function actionSaveotrosdocumentos(){
+        if (Yii::$app->request->isAjax) {
+            $data = Yii::$app->request->post();            
+            $per_id = base64_decode($data['persona_id']);            
+            $observacion = ucwords(mb_strtolower($data["observa"]));
+            if ($data["upload_file"]) {
+                if (empty($_FILES)) {
+                    return json_encode(['error' => Yii::t("notificaciones", "Error to process File {file}. Try again.", ['{file}' => basename($files['name'])])]);
+                }
+                //Recibe Parámetros.
+                $files = $_FILES[key($_FILES)];
+                $arrIm = explode(".", basename($files['name']));
+                $typeFile = strtolower($arrIm[count($arrIm) - 1]);
+                $dirFileEnd = Yii::$app->params["documentFolder"] . "solicitudinscripcion/" . $per_id . "/" . $data["name_file"] . "_per_" . $per_id . "." . $typeFile;
+                $status = Utilities::moveUploadFile($files['tmp_name'], $dirFileEnd);
+                if ($status) {
+                    return true;
+                } else {
+                    return json_encode(['error' => Yii::t("notificaciones", "Error to process File {file}. Try again.", ['{file}' => basename($files['name'])])]);
+                }                
+                $carta_archivo = "";
+                if (isset($data["arc_doc_carta"]) && $data["arc_doc_carta"] != "") {
+                    $arrIm = explode(".", basename($data["arc_doc_carta"]));
+                    $typeFile = strtolower($arrIm[count($arrIm) - 1]);
+                    $carta_archivo = Yii::$app->params["documentFolder"] . "academico/" . $per_id . "/doc_certune_per_" . $per_id . "." . $typeFile;
+                }
+            }
+        }
+    }
 }

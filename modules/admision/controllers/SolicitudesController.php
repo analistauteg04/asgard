@@ -1564,14 +1564,5 @@ class SolicitudesController extends \app\components\CController {
                     "emp_id" => $emp_id,
                     "arr_item" => ArrayHelper::map(array_merge(["id" => "0", "name" => "Seleccionar"], $resp_item), "id", "name"),
         ]);
-    }
-    
-    /*public function actionSaveotrosdocumentos() {
-        $sol_id = base64_decode($_GET['id_sol']);
-        $sol_model = new SolicitudInscripcion();
-        $datosSolicitud = $sol_model->consultarInteresadoPorSol_id($sol_id);
-        return $this->render('subirOtrosDocumentos', [                    
-                    "datos" => $datosSolicitud,
-        ]);
-    }*/
+    }   
 }

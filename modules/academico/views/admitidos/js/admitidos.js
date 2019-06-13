@@ -97,3 +97,22 @@ function actualizarGrid() {
         setTimeout(hideLoadingPopup, 2000);
     }
 }
+
+
+//Guarda Documento de carta de la UNE.
+function SaveOtrosDocumentos() {
+    var link = $('#txth_base').val() + "/academico/admitidos/saveotrosdocumentos";
+    var arrParams = new Object();    
+    arrParams.persona_id = $('#txth_idp').val();    
+    arrParams.arc_doc_carta = $('#txth_doc_certune').val();        
+    arrParams.observa = $('#txt_observa').val();
+    
+    if (!validateForm()) {
+        requestHttpAjax(link, arrParams, function (response) {
+            showAlert(response.status, response.label, response.message);
+            setTimeout(function () {                
+                window.location.href = $('#txth_base').val() + "/academico/admitidos/subirotrosdocumentos";                
+            }, 5000);
+        }, true);
+    }
+}
