@@ -82,7 +82,7 @@ class DocumentoAdjuntar extends \yii\db\ActiveRecord {
 
         $sql = "UPDATE " . \Yii::$app->db_captacion->dbname . ".solicitudins_documento 
                 SET sdoc_estado = :estado 
-                WHERE sins_id = :id;";
+                WHERE sins_id = :id and dadj_id <> 7;";
 
         $comando = $con->createCommand($sql);
         $comando->bindParam(":id", $sins_id, \PDO::PARAM_INT);
