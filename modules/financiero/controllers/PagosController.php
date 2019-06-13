@@ -55,7 +55,6 @@ class PagosController extends \app\components\CController {
                     'arrEstados' => $arrEstados
         ]);
     }
-
     public function actionCargardocpagos() {
         $per_id = @Yii::$app->session->get("PB_perid");
         $ccar_id = isset($_GET['ids']) ? base64_decode($_GET['ids']) : 0; //NULL
