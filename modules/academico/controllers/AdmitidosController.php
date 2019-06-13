@@ -7,7 +7,6 @@ use app\modules\academico\models\Admitido;
 use app\modules\academico\models\EstudioAcademico;
 use yii\helpers\ArrayHelper;
 use app\models\Utilities;
-use app\modules\academico\models\DocumentoAceptacion;
 use app\modules\academico\models\Modalidad;
 use app\modules\academico\models\UnidadAcademica;
 use app\modules\admision\models\Oportunidad;
@@ -214,13 +213,10 @@ class AdmitidosController extends \app\components\CController {
                 if ($carta_archivo === FALSE)                    
                     throw new Exception('Error doc Carta UNE no renombrado.');
             }                                       
-            $mod_documento = new DocumentoAceptacion();            
-            \app\models\Utilities::putMessageLogFile('usr:'.$usr_id);  
-            $resexiste= $mod_documento->consultarXperid($per_id);
-             \app\models\Utilities::putMessageLogFile('existe:'.$resexiste["dace_estado_aprobacion"]);  
+            $mod_documento = new DocumentoAceptacion();                        
+            $resexiste= $mod_documento->consultarXperid($per_id);             
             if ($resexiste["dace_estado_aprobacion"]=='3' or empty($resexiste["dace_estado_aprobacion"]))
-                {
-                \app\models\Utilities::putMessageLogFile('Ingresa');  
+                {                
                     $datos = array(                        
                             'per_id'  => $per_id,
                             'dadj_id'  => 8,
@@ -228,19 +224,20 @@ class AdmitidosController extends \app\components\CController {
                             'dace_observacion'  => $observacion, 
                             'dace_usuario_ingreso'  => $usr_id,                         
                         );     
-                    if ($resexiste["dace_estado_aprobacion"]=='3') {
-                        $respuesta = $mod_documento->actualizar($con, $usr_id, $per_id);
-                        if ($respuesta) {
+                    if ($resexiste["dace_estado_aprobacion"]=='3') {                        
+                        $respuesta = $mod_documento->actualizar($con, $usr_id, $per_id);                        
+                        if ($respuesta) {                            
                             $ok='1';
-                        } else {
+                        } else {                            
                             $ok='0';
                         }
-                    } else {
+                    } else {                        
                         $ok='1';
                     }
-                    if ($ok=='1') {
+                    if ($ok=='1') {                        
                         $respuesta = $mod_documento->insertar($con, $datos);
                         if ($respuesta){
+                            //\app\models\Utilities::putMessageLogFile('despues de insercion');
                             $exito=1;
                         }
                     }                 

@@ -159,12 +159,13 @@ class DocumentoAceptacion extends \yii\db\ActiveRecord
                 WHERE per_id = :per_id
                       and dace_estado = :dace_estado
                       and dace_estado_logico = :dace_estado";  
-        $command = $con->createCommand($sql); 
+        $command = $con->createCommand($sql);          
         $command->bindParam(":per_id",  $per_id, \PDO::PARAM_INT);
         $command->bindParam(":usuario",  $usuario, \PDO::PARAM_INT);
         $command->bindParam(":fecha_actual",  $fecha_actual, \PDO::PARAM_STR);
         $command->bindParam(":estado_inactiva", $estado_inactiva, \PDO::PARAM_STR);        
-        $command->bindParam(":dace_estado", $estado, \PDO::PARAM_STR);      
-        $command->execute();                
+        $command->bindParam(":dace_estado", $estado, \PDO::PARAM_STR); 
+        $response = $command->execute();
+        return $response;
     }
 }
