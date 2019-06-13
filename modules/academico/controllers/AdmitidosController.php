@@ -14,8 +14,9 @@ use app\modules\academico\Module as academico;
 use app\modules\financiero\Module as financiero;
 use app\modules\admision\Module as admision;
 use app\models\ExportFile;
-use app\modules\academico\models\OtroDocumento;
+use app\modules\academico\models\DocumentoAceptacion;
 use app\models\Persona;
+use app\modules\admision\models\DocumentoAdjuntar;
 
 academico::registerTranslations();
 admision::registerTranslations();
@@ -170,6 +171,7 @@ class AdmitidosController extends \app\components\CController {
         ]);
     }
 
+
     public function actionUne() {
         $per_id = @Yii::$app->session->get("PB_perid");
         $data = Yii::$app->request->get();
@@ -204,7 +206,7 @@ class AdmitidosController extends \app\components\CController {
                 $files = $_FILES[key($_FILES)];
                 $arrIm = explode(".", basename($files['name']));
                 $typeFile = strtolower($arrIm[count($arrIm) - 1]);
-                $dirFileEnd = Yii::$app->params["documentFolder"] . "otrodocumento/" . $per_id . "/" . $data["name_file"] . "_per_" . $per_id . "." . $typeFile;
+                $dirFileEnd = Yii::$app->params["documentFolder"] . "documaceptacion/" . $per_id . "/" . $data["name_file"] . "_per_" . $per_id . "." . $typeFile;
                 $status = Utilities::moveUploadFile($files['tmp_name'], $dirFileEnd);
                 if ($status) {
                     return true;
@@ -215,39 +217,65 @@ class AdmitidosController extends \app\components\CController {
                 if (isset($data["arc_doc_carta"]) && $data["arc_doc_carta"] != "") {
                     $arrIm = explode(".", basename($data["arc_doc_carta"]));
                     $typeFile = strtolower($arrIm[count($arrIm) - 1]);
-                    $carta_archivo = Yii::$app->params["documentFolder"] . "otrodocumento/" . $per_id . "/doc_certune_per_" . $per_id . "." . $typeFile;
+                    $carta_archivo = Yii::$app->params["documentFolder"] . "documaceptacion/" . $per_id . "/doc_certune_per_" . $per_id . "." . $typeFile;
                 }
             }
         }
         $con = \Yii::$app->db_academico;
         $transaction = $con->beginTransaction();
-        $timeSt = time();
+        $timeSt = time();        
         try {
-            if (isset($data["arc_doc_carta"]) && $data["arc_doc_carta"] != "") {
-                $arrIm = explode(".", basename($data["arc_doc_carta"]));
-                $typeFile = strtolower($arrIm[count($arrIm) - 1]);
-                $carta_archivo = Yii::$app->params["documentFolder"] . "otrodocumento/" . $per_id . "/doc_certune_per_" . $per_id . "." . $typeFile;
-                $carta_archivo = DocumentoAdjuntar::addLabelTimeDocumentos($per_id, $carta_archivo, $timeSt);
-                if ($carta_archivo === FALSE)
+            if (isset($data["arc_doc_carta"]) && $data["arc_doc_carta"] != "") {                
+                $arrIm = explode(".", basename($data["arc_doc_carta"]));                
+                $typeFile = strtolower($arrIm[count($arrIm) - 1]);                
+                $carta_archivo = Yii::$app->params["documentFolder"] . "documaceptacion/" . $per_id . "/doc_certune_per_" . $per_id . "." . $typeFile;                
+                $carta_archivo = DocumentoAdjuntar::addLabelTimeDocumentos($per_id, $carta_archivo, $timeSt);                
+                if ($carta_archivo === FALSE)                    
                     throw new Exception('Error doc Carta UNE no renombrado.');
-            }
+            }                                       
+            $mod_documento = new DocumentoAceptacion();                        
+            $resexiste= $mod_documento->consultarXperid($per_id);             
+            if ($resexiste["dace_estado_aprobacion"]=='3' or empty($resexiste["dace_estado_aprobacion"]))
+                {                
+                    $datos = array(                        
+                            'per_id'  => $per_id,
+                            'dadj_id'  => 8,
+                            'dace_archivo'  => $carta_archivo,
+                            'dace_observacion'  => $observacion, 
+                            'dace_usuario_ingreso'  => $usr_id,                         
+                        );     
+                    if ($resexiste["dace_estado_aprobacion"]=='3') {                        
+                        $respuesta = $mod_documento->actualizar($con, $usr_id, $per_id);                        
+                        if ($respuesta) {                            
+                            $ok='1';
+                        } else {                            
+                            $ok='0';
+                        }
+                    } else {                        
+                        $ok='1';
+                    }
+                    if ($ok=='1') {                        
+                        $respuesta = $mod_documento->insertar($con, $datos);
+                        if ($respuesta){
+                            //\app\models\Utilities::putMessageLogFile('despues de insercion');
+                            $exito=1;
+                        }
+                    }                 
+                }  else {
+                    $mensaje="Ya tiene registrado el documento en el sistema.";
+                }
 
-            $datos = array(
-                'per_id' => $per_id,
-                'dadj_id' => 8,
-                'odoc_archivo' => $carta_archivo,
-                'odoc_observacion' => $observacion,
-                'odoc_usuario_ingreso' => $usr_id,
-            );
-            $mod_documento = new OtroDocumento();
-            $respuesta = $mod_documento->insertar($con, $datos);
-            if ($respuesta) {
-                $exito = 1;
-            }
             if ($exito) {
                 $transaction->commit();
                 $message = array(
                     "wtmessage" => Yii::t("notificaciones", "El documento ha sido grabado."),
+                    "title" => Yii::t('jslang', 'Success'),
+                );
+                return Utilities::ajaxResponse('OK', 'alert', Yii::t("jslang", "Sucess"), false, $message);
+            } else {
+                $transaction->rollback();
+                $message = array(
+                    "wtmessage" => Yii::t("notificaciones", $mensaje),
                     "title" => Yii::t('jslang', 'Success'),
                 );
                 return Utilities::ajaxResponse('OK', 'alert', Yii::t("jslang", "Sucess"), false, $message);
@@ -259,7 +287,44 @@ class AdmitidosController extends \app\components\CController {
                 "title" => Yii::t('jslang', 'Error'),
             );
             return Utilities::ajaxResponse('NO_OK', 'alert', Yii::t("jslang", "Error"), false, $message);
+        }           
+    }
+    public function actionValidarcarta() {
+        $per_ses__id = @Yii::$app->session->get("PB_perid");
+        $per_id = base64_decode($_GET["per_id"]);
+        $mod_doc_ac= new DocumentoAceptacion();
+        $resp_gruporol = $mod_doc_ac->consultaDocumentoAceptacionByPerId($per_id);
+        $gruporol = 19;# 19 o 20
+        if ($resp_cliord) {
+            $persona_pago = $resp_cliord["per_id"];
+            $sins_id = $resp_cliord["sser_id"];
+            $nombres = $resp_cliord["nombres"];
+            $apellidos = $resp_cliord["apellidos"];
+            $valortotal = $resp_cliord["valortotal"];
+            $valoraplicado = $resp_cliord["valoraplicado"];
+            $rol = $resp_cliord["rol"];
         }
+        $mod_pago = new OrdenPago();
+        $resp_pago = $mod_pago->listarPagosadmxsolicitud($gruporol, $opag_id, $persona_pago);
+        $data = null;
+        if (Yii::$app->request->isAjax) {
+            $data = Yii::$app->request->get();
+            if (isset($data["op"]) && $data["op"] == '1') {
+                
+            }
+        }
+        return $this->render('validarpcarta', [
+                    'model' => $resp_pago,
+                    'persona_pago' => $persona_pago,
+                    'sins_id' => $sins_id,
+                    'nombres' => $nombres,
+                    'apellidos' => $apellidos,
+                    'valortotal' => $valortotal,
+                    'valoraplicado' => $valoraplicado,
+                    'opag_id' => $opag_id,
+                    'rol' => $rol,
+                    'respCliente' => $resp_cliord,
+        ]);
     }
 
 }

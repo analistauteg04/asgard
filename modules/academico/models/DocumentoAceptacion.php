@@ -74,8 +74,40 @@ class DocumentoAceptacion extends \yii\db\ActiveRecord
             'dace_estado_logico' => 'Dace Estado Logico',
         ];
     }
-    
-     public function insertar($con,$data)
+
+    /**
+     * Function consultaDocumentoAceptacionByPerId()
+     * Consulta el estado del documento de aceptacion por el per id.
+     * @author  Kleber Loayza <analistadesarrollo01@uteg.edu.ec>
+     * @param   
+     * @return  
+    */
+    public function consultaDocumentoAceptacionByPerId($con,$per_id){
+        $con = \Yii::$app->db_academico;
+        $estado = 1;
+            $sql = "
+                    SELECT distinct moda.mod_id as id,
+                           moda.mod_nombre as name
+                    FROM " . $con->dbname . ".modalidad_unidad_academico mua "
+                    . "inner join " . $con->dbname . ".modalidad moda ON moda.mod_id = mua.mod_id
+                    WHERE uaca_id = :uaca_id 
+                    and emp_id =:emp_id
+                    and mua.muac_estado_logico = :estado
+                    and mua.muac_estado = :estado
+                    and moda.mod_estado_logico = :estado
+                    and moda.mod_estado = :estado
+                    ORDER BY name asc
+                    ";        
+        
+        $comando = $con->createCommand($sql);
+        $comando->bindParam(":estado", $estado, \PDO::PARAM_STR);
+        $comando->bindParam(":uaca_id", $uaca_id, \PDO::PARAM_INT);
+        $comando->bindParam(":emp_id", $emp_id, \PDO::PARAM_INT);
+        $resultData = $comando->queryAll();
+        return $resultData;
+    }
+
+    public function insertar($con,$data)
     {                 
         $estado = '1';
         $estado_aprobacion='1';
@@ -92,5 +124,48 @@ class DocumentoAceptacion extends \yii\db\ActiveRecord
         $command->bindParam(":dace_estado", $estado, \PDO::PARAM_STR);      
         $command->execute();
         return $con->getLastInsertID();
+    }
+    
+    
+    
+    public function consultarXperid($per_id)
+    {
+        $con = \Yii::$app->db_academico;
+        $estado = 1;        
+        $sql = "    SELECT dace_estado_aprobacion
+                    FROM 
+                         " . $con->dbname . ".documento_aceptacion
+                    WHERE per_id = :per_id AND
+                        dace_estado=:estado AND
+                        dace_estado_logico=:estado";
+        $comando = $con->createCommand($sql);
+        $comando->bindParam(":estado", $estado, \PDO::PARAM_STR);       
+        $comando->bindParam(":per_id", $per_id, \PDO::PARAM_INT); 
+        $resultData = $comando->queryOne();
+        return $resultData;        
+    }
+    
+    
+    public function actualizar($con, $usuario, $per_id)
+    {                 
+        $estado = '1';
+        $estado_inactiva = '0';
+        $fecha_actual = date(Yii::$app->params["dateTimeByDefault"]);        
+        $sql = "UPDATE " . $con->dbname . ".documento_aceptacion
+                SET dace_usuario_modifica = :usuario,
+                    dace_fecha_modificacion = :fecha_actual,
+                    dace_estado = :estado_inactiva,
+                    dace_estado_logico = :estado_inactiva
+                WHERE per_id = :per_id
+                      and dace_estado = :dace_estado
+                      and dace_estado_logico = :dace_estado";  
+        $command = $con->createCommand($sql);          
+        $command->bindParam(":per_id",  $per_id, \PDO::PARAM_INT);
+        $command->bindParam(":usuario",  $usuario, \PDO::PARAM_INT);
+        $command->bindParam(":fecha_actual",  $fecha_actual, \PDO::PARAM_STR);
+        $command->bindParam(":estado_inactiva", $estado_inactiva, \PDO::PARAM_STR);        
+        $command->bindParam(":dace_estado", $estado, \PDO::PARAM_STR); 
+        $response = $command->execute();
+        return $response;
     }
 }

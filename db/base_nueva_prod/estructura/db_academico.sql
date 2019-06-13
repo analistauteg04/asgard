@@ -703,3 +703,39 @@ create table if not exists db_academico.`documento_aceptacion` (
  `dace_fecha_modificacion` timestamp null default null,
  `dace_estado_logico` varchar(1) not null
 );
+
+
+-- --------------------------------------------------------
+-- 
+-- Estructura de tabla para la tabla `observaciones_documento_aceptacion`
+-- --------------------------------------------------------
+
+create table if not exists db_academico.`observaciones_documento_aceptacion` (
+ `odac_id` bigint(20) not null auto_increment primary key,
+ `odac_descripcion` varchar(500) not null, 
+ `odac_usuario_ingreso` bigint(20) null,
+ `odac_usuario_modifica` bigint(20) null,
+ `odac_estado` varchar(1) not null, 
+ `odac_fecha_creacion` timestamp not null default current_timestamp,
+ `odac_fecha_modificacion` timestamp null default null,
+ `odac_estado_logico` varchar(1) not null
+);
+
+-- --------------------------------------------------------
+-- 
+-- Estructura de tabla para la tabla `observaciones_documento_aceptacion`
+-- --------------------------------------------------------
+
+create table if not exists db_academico.`observaciones_por_documento_aceptacion` (
+ `opda_id` bigint(20) not null auto_increment primary key,
+ `odac_id` bigint(20) not null, 
+ `dace_id` bigint(20) not null, 
+ `opda_usuario_ingreso` bigint(20) null,
+ `opda_usuario_modifica` bigint(20) null,
+ `opda_estado` varchar(1) not null, 
+ `opda_fecha_creacion` timestamp not null default current_timestamp,
+ `opda_fecha_modificacion` timestamp null default null,
+ `opda_estado_logico` varchar(1) not null,
+ foreign key (odac_id) references `observaciones_documento_aceptacion`(odac_id),
+ foreign key (dace_id) references `documento_aceptacion`(dace_id)
+);
