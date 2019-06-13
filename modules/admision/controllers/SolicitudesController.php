@@ -716,12 +716,12 @@ class SolicitudesController extends \app\components\CController {
                     $typeFile = strtolower($arrIm[count($arrIm) - 1]);
                     $beca_archivo = Yii::$app->params["documentFolder"] . "solicitudinscripcion/" . $per_id . "/doc_beca_per_" . $per_id . "." . $typeFile;
                 }
-                /*$certmate_archivo = "";
-                if (isset($data["arc_doc_certmat"]) && $data["arc_doc_certmat"] != "") {
-                    $arrIm = explode(".", basename($data["arc_doc_certmat"]));
-                    $typeFile = strtolower($arrIm[count($arrIm) - 1]);
-                    $certmate_archivo = Yii::$app->params["documentFolder"] . "solicitudinscripcion/" . $per_id . "/doc_certificado_per_" . $per_id . "." . $typeFile;
-                }*/
+                /* $certmate_archivo = "";
+                  if (isset($data["arc_doc_certmat"]) && $data["arc_doc_certmat"] != "") {
+                  $arrIm = explode(".", basename($data["arc_doc_certmat"]));
+                  $typeFile = strtolower($arrIm[count($arrIm) - 1]);
+                  $certmate_archivo = Yii::$app->params["documentFolder"] . "solicitudinscripcion/" . $per_id . "/doc_certificado_per_" . $per_id . "." . $typeFile;
+                  } */
                 $curriculum_archivo = "";
                 if (isset($data["arc_doc_curri"]) && $data["arc_doc_curri"] != "") {
                     $arrIm = explode(".", basename($data["arc_doc_curri"]));
@@ -750,14 +750,14 @@ class SolicitudesController extends \app\components\CController {
                 if ($dni_archivo === FALSE)
                     throw new Exception('Error doc Dni no renombrado.');
             }
-            /*if (isset($data["arc_doc_certvota"]) && $data["arc_doc_certvota"] != "") {
-                $arrIm = explode(".", basename($data["arc_doc_certvota"]));
-                $typeFile = strtolower($arrIm[count($arrIm) - 1]);
-                $certvota_archivo = Yii::$app->params["documentFolder"] . "solicitudinscripcion/" . $per_id . "/doc_certvota_per_" . $per_id . "." . $typeFile;
-                $certvota_archivo = DocumentoAdjuntar::addLabelTimeDocumentos($sins_id, $certvota_archivo, $timeSt);
-                if ($certvota_archivo === FALSE)
-                    throw new Exception('Error doc certificado vot. no renombrado.');
-            }*/
+            /* if (isset($data["arc_doc_certvota"]) && $data["arc_doc_certvota"] != "") {
+              $arrIm = explode(".", basename($data["arc_doc_certvota"]));
+              $typeFile = strtolower($arrIm[count($arrIm) - 1]);
+              $certvota_archivo = Yii::$app->params["documentFolder"] . "solicitudinscripcion/" . $per_id . "/doc_certvota_per_" . $per_id . "." . $typeFile;
+              $certvota_archivo = DocumentoAdjuntar::addLabelTimeDocumentos($sins_id, $certvota_archivo, $timeSt);
+              if ($certvota_archivo === FALSE)
+              throw new Exception('Error doc certificado vot. no renombrado.');
+              } */
             if (isset($data["arc_doc_foto"]) && $data["arc_doc_foto"] != "") {
                 $arrIm = explode(".", basename($data["arc_doc_foto"]));
                 $typeFile = strtolower($arrIm[count($arrIm) - 1]);
@@ -774,14 +774,14 @@ class SolicitudesController extends \app\components\CController {
                 if ($beca_archivo === FALSE)
                     throw new Exception('Error doc Beca no renombrado.');
             }
-            /*if (isset($data["arc_doc_certmat"]) && $data["arc_doc_certmat"] != "") {
-                $arrIm = explode(".", basename($data["arc_doc_certmat"]));
-                $typeFile = strtolower($arrIm[count($arrIm) - 1]);
-                $certmate_archivo = Yii::$app->params["documentFolder"] . "solicitudinscripcion/" . $per_id . "/doc_certificado_per_" . $per_id . "." . $typeFile;
-                $certmate_archivo = DocumentoAdjuntar::addLabelTimeDocumentos($sins_id, $certmate_archivo, $timeSt);
-                if ($certmate_archivo === FALSE)
-                    throw new Exception('Error doc certificado materia no renombrado.');
-            }*/
+            /* if (isset($data["arc_doc_certmat"]) && $data["arc_doc_certmat"] != "") {
+              $arrIm = explode(".", basename($data["arc_doc_certmat"]));
+              $typeFile = strtolower($arrIm[count($arrIm) - 1]);
+              $certmate_archivo = Yii::$app->params["documentFolder"] . "solicitudinscripcion/" . $per_id . "/doc_certificado_per_" . $per_id . "." . $typeFile;
+              $certmate_archivo = DocumentoAdjuntar::addLabelTimeDocumentos($sins_id, $certmate_archivo, $timeSt);
+              if ($certmate_archivo === FALSE)
+              throw new Exception('Error doc certificado materia no renombrado.');
+              } */
             if (isset($data["arc_doc_curri"]) && $data["arc_doc_curri"] != "") {
                 $arrIm = explode(".", basename($data["arc_doc_curri"]));
                 $typeFile = strtolower($arrIm[count($arrIm) - 1]);
@@ -821,19 +821,19 @@ class SolicitudesController extends \app\components\CController {
                         $mod_solinsxdoc3->sdoc_estado_logico = "1";
 
                         if ($mod_solinsxdoc3->save()) {
-                            /*if ($es_extranjero == "1" or ( empty($es_extranjero))) {
-                                $mod_solinsxdoc4 = new SolicitudinsDocumento();
-                                $mod_solinsxdoc4->sins_id = $sins_id;
-                                $mod_solinsxdoc4->int_id = $interesado_id;
-                                $mod_solinsxdoc4->dadj_id = 3;
-                                $mod_solinsxdoc4->sdoc_archivo = $certvota_archivo;
-                                $mod_solinsxdoc4->sdoc_observacion = $observacion;
-                                $mod_solinsxdoc4->sdoc_estado = "1";
-                                $mod_solinsxdoc4->sdoc_estado_logico = "1";
-                                if (!$mod_solinsxdoc4->save()) {
-                                    throw new Exception('Error doc certvot no creado.');
-                                }
-                            }*/
+                            /* if ($es_extranjero == "1" or ( empty($es_extranjero))) {
+                              $mod_solinsxdoc4 = new SolicitudinsDocumento();
+                              $mod_solinsxdoc4->sins_id = $sins_id;
+                              $mod_solinsxdoc4->int_id = $interesado_id;
+                              $mod_solinsxdoc4->dadj_id = 3;
+                              $mod_solinsxdoc4->sdoc_archivo = $certvota_archivo;
+                              $mod_solinsxdoc4->sdoc_observacion = $observacion;
+                              $mod_solinsxdoc4->sdoc_estado = "1";
+                              $mod_solinsxdoc4->sdoc_estado_logico = "1";
+                              if (!$mod_solinsxdoc4->save()) {
+                              throw new Exception('Error doc certvot no creado.');
+                              }
+                              } */
                             if ($beca == "1") {
                                 $mod_solinsxdoc5 = new SolicitudinsDocumento();
                                 $mod_solinsxdoc5->sins_id = $sins_id;
@@ -849,19 +849,19 @@ class SolicitudesController extends \app\components\CController {
                             }
                             if ($uaca_id == "2") {
                                 //\app\models\Utilities::putMessageLogFile('sins_id ' . $sins_id);
-                                /*if (!empty($certmate_archivo)) {
-                                    $mod_solinsxdoc6 = new SolicitudinsDocumento();
-                                    $mod_solinsxdoc6->sins_id = $sins_id;
-                                    $mod_solinsxdoc6->int_id = $interesado_id;
-                                    $mod_solinsxdoc6->dadj_id = 6;
-                                    $mod_solinsxdoc6->sdoc_archivo = $certmate_archivo;
-                                    $mod_solinsxdoc6->sdoc_observacion = $observacion;
-                                    $mod_solinsxdoc6->sdoc_estado = "1";
-                                    $mod_solinsxdoc6->sdoc_estado_logico = "1";
-                                    if (!$mod_solinsxdoc6->save()) {
-                                        throw new Exception('Error doc certificado materia no creado.');
-                                    }
-                                }*/
+                                /* if (!empty($certmate_archivo)) {
+                                  $mod_solinsxdoc6 = new SolicitudinsDocumento();
+                                  $mod_solinsxdoc6->sins_id = $sins_id;
+                                  $mod_solinsxdoc6->int_id = $interesado_id;
+                                  $mod_solinsxdoc6->dadj_id = 6;
+                                  $mod_solinsxdoc6->sdoc_archivo = $certmate_archivo;
+                                  $mod_solinsxdoc6->sdoc_observacion = $observacion;
+                                  $mod_solinsxdoc6->sdoc_estado = "1";
+                                  $mod_solinsxdoc6->sdoc_estado_logico = "1";
+                                  if (!$mod_solinsxdoc6->save()) {
+                                  throw new Exception('Error doc certificado materia no creado.');
+                                  }
+                                  } */
                                 if (!empty($curriculum_archivo)) {
                                     $mod_solinsxdoc7 = new SolicitudinsDocumento();
                                     $mod_solinsxdoc7->sins_id = $sins_id;
@@ -954,12 +954,12 @@ class SolicitudesController extends \app\components\CController {
                     $typeFile = strtolower($arrIm[count($arrIm) - 1]);
                     $dni_archivo = Yii::$app->params["documentFolder"] . "solicitudinscripcion/" . $per_id . "/doc_dni_per_" . $per_id . "." . $typeFile;
                 }
-               /* $certvota_archivo = "";
-                if (isset($data["arc_doc_certvota"]) && $data["arc_doc_certvota"] != "") {
-                    $arrIm = explode(".", basename($data["arc_doc_certvota"]));
-                    $typeFile = strtolower($arrIm[count($arrIm) - 1]);
-                    $certvota_archivo = Yii::$app->params["documentFolder"] . "solicitudinscripcion/" . $per_id . "/doc_certvota_per_" . $per_id . "." . $typeFile;
-                }*/
+                /* $certvota_archivo = "";
+                  if (isset($data["arc_doc_certvota"]) && $data["arc_doc_certvota"] != "") {
+                  $arrIm = explode(".", basename($data["arc_doc_certvota"]));
+                  $typeFile = strtolower($arrIm[count($arrIm) - 1]);
+                  $certvota_archivo = Yii::$app->params["documentFolder"] . "solicitudinscripcion/" . $per_id . "/doc_certvota_per_" . $per_id . "." . $typeFile;
+                  } */
                 $foto_archivo = "";
                 if (isset($data["arc_doc_foto"]) && $data["arc_doc_foto"] != "") {
                     $arrIm = explode(".", basename($data["arc_doc_foto"]));
@@ -972,18 +972,18 @@ class SolicitudesController extends \app\components\CController {
                     $typeFile = strtolower($arrIm[count($arrIm) - 1]);
                     $beca_archivo = Yii::$app->params["documentFolder"] . "solicitudinscripcion/" . $per_id . "/doc_beca_per_" . $per_id . "." . $typeFile;
                 }
-                /*$certmate_archivo = "";
-                if (isset($data["arc_doc_certmat"]) && $data["arc_doc_certmat"] != "") {
-                    $arrIm = explode(".", basename($data["arc_doc_certmat"]));
-                    $typeFile = strtolower($arrIm[count($arrIm) - 1]);
-                    $certmate_archivo = Yii::$app->params["documentFolder"] . "solicitudinscripcion/" . $per_id . "/doc_certificado_per_" . $per_id . "." . $typeFile;
-                }*/
+                /* $certmate_archivo = "";
+                  if (isset($data["arc_doc_certmat"]) && $data["arc_doc_certmat"] != "") {
+                  $arrIm = explode(".", basename($data["arc_doc_certmat"]));
+                  $typeFile = strtolower($arrIm[count($arrIm) - 1]);
+                  $certmate_archivo = Yii::$app->params["documentFolder"] . "solicitudinscripcion/" . $per_id . "/doc_certificado_per_" . $per_id . "." . $typeFile;
+                  } */
                 $curriculum_archivo = "";
                 if (isset($data["arc_doc_curri"]) && $data["arc_doc_curri"] != "") {
                     $arrIm = explode(".", basename($data["arc_doc_curri"]));
                     $typeFile = strtolower($arrIm[count($arrIm) - 1]);
                     $curriculum_archivo = Yii::$app->params["documentFolder"] . "solicitudinscripcion/" . $per_id . "/doc_hojavida_per_" . $per_id . "." . $typeFile;
-                }
+                }               
             }
         }
         $con = \Yii::$app->db_captacion;
@@ -1044,7 +1044,7 @@ class SolicitudesController extends \app\components\CController {
                 $arrIm = explode(".", basename($data["arc_doc_curri"]));
                 $typeFile = strtolower($arrIm[count($arrIm) - 1]);
                 $curriculum_archivo = Yii::$app->params["documentFolder"] . "solicitudinscripcion/" . $per_id . "/doc_hojavida_per_" . $per_id . "." . $typeFile;
-                $curriculum_archivo = DocumentoAdjuntar::addLabelTimeDocumentos($sins_id, $curriculum_archivo, $timeSt);
+                $curriculum_archivo = DocumentoAdjuntar::addLabelTimeDocumentos($sins_id, $curriculum_archivo, $timeSt);                
                 if ($curriculum_archivo === FALSE)
                     throw new Exception('Error doc curriculum no renombrado.');
             }
@@ -1059,24 +1059,25 @@ class SolicitudesController extends \app\components\CController {
                         if ($mod_solinsxdoc1->insertNewDocument($sins_id, $interesado_id, 2, $dni_archivo, $observacion)) {
                             if ($mod_solinsxdoc1->insertNewDocument($sins_id, $interesado_id, 4, $foto_archivo, $observacion)) {
                                 if ($es_extranjero == "1" or ( empty($es_extranjero))) {
-                                    /*if (!$mod_solinsxdoc1->insertNewDocument($sins_id, $interesado_id, 3, $certvota_archivo, $observacion)) {
-                                        throw new Exception('Error doc certvot no creado.');
-                                    }*/
+                                    /* if (!$mod_solinsxdoc1->insertNewDocument($sins_id, $interesado_id, 3, $certvota_archivo, $observacion)) {
+                                      throw new Exception('Error doc certvot no creado.');
+                                      } */
                                     if ($beca == "1") {
                                         if (!$mod_solinsxdoc1->insertNewDocument($sins_id, $interesado_id, 5, $beca_archivo, $observacion)) {
                                             throw new Exception('Error doc beca no creado.');
                                         }
                                     }
-                                    //if ($uaca_id == "2") {
-                                        //\app\models\Utilities::putMessageLogFile('cert curr:'.$curriculum_archivo);   
+                                    if ($uaca_id == "2") {
+                                        
+                                        //\app\models\Utilities::putMessageLogFile('cert curr:' . $curriculum_archivo);
                                         //if ($mod_solinsxdoc1->insertNewDocument($sins_id, $interesado_id, 6, $certmate_archivo, $observacion)) {
-                                            //if (!$mod_solinsxdoc1->insertNewDocument($sins_id, $interesado_id, 7, $curriculum_archivo, $observacion)) {
-                                                //throw new Exception('Error doc curriculum no creado.');
-                                           // }
-                                        /*} else {
-                                            throw new Exception('Error doc certificado materia no creado.');
-                                        }*/
-                                    //}
+                                        if (!$mod_solinsxdoc1->insertNewDocument($sins_id, $interesado_id, 7, $curriculum_archivo, $observacion)) {
+                                            throw new Exception('Error doc curriculum no creado.');
+                                        }
+                                        /* } else {
+                                          throw new Exception('Error doc certificado materia no creado.');
+                                          } */
+                                    }
                                 }
                             } else {
                                 throw new Exception('Error doc foto no creado.');
@@ -1101,10 +1102,10 @@ class SolicitudesController extends \app\components\CController {
                     );
                     return Utilities::ajaxResponse('OK', 'alert', Yii::t("jslang", "Sucess"), false, $message);
                 } else {
-                    throw new Exception('Tiene que subir todos los documentos.Titulo:' . isset($data["arc_doc_titulo"]) . 'Persona:' . $per_id);
+                    throw new Exception('Tiene que subir todos los documentos.Titulo:' /*. isset($data["arc_doc_titulo"]) . 'Persona:' . $per_id*/);
                 }
             } else {
-                throw new Exception('Tiene que subir todos los documentos.Titulo:' . isset($data["arc_doc_titulo"]) . 'Persona:' . $per_id);
+                throw new Exception('Tiene que subir todos los documentos.Titulo:' /*. isset($data["arc_doc_titulo"]) . 'Persona:' . $per_id*/);
             }
         } catch (Exception $ex) {
             $transaction->rollback();
@@ -1234,7 +1235,7 @@ class SolicitudesController extends \app\components\CController {
                                                 //     Utilities::sendEmail($tituloMensaje, Yii::$app->params["adminEmail"], [$correo => $apellidos . " " . $nombres], $asunto, $body, $rutaFile);
                                                 // } else {
                                                 if ($resp_sol["nivel_interes"] != 1) {
-                                                    Utilities::sendEmail($tituloMensaje, Yii::$app->params["adminEmail"], [$correo => $apellidos . " " . $nombres], $asunto, $body/*, $rutaFile*/);
+                                                    Utilities::sendEmail($tituloMensaje, Yii::$app->params["adminEmail"], [$correo => $apellidos . " " . $nombres], $asunto, $body/* , $rutaFile */);
                                                     // }
                                                     Utilities::sendEmail($tituloMensaje, Yii::$app->params["adminEmail"], [Yii::$app->params["soporteEmail"] => "Soporte"], $asunto, $body);
                                                 }
@@ -1564,5 +1565,5 @@ class SolicitudesController extends \app\components\CController {
                     "emp_id" => $emp_id,
                     "arr_item" => ArrayHelper::map(array_merge(["id" => "0", "name" => "Seleccionar"], $resp_item), "id", "name"),
         ]);
-    }   
+    }
 }
