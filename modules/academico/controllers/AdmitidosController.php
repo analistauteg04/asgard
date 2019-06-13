@@ -7,6 +7,7 @@ use app\modules\academico\models\Admitido;
 use app\modules\academico\models\EstudioAcademico;
 use yii\helpers\ArrayHelper;
 use app\models\Utilities;
+use app\modules\academico\models\DocumentoAceptacion;
 use app\modules\academico\models\Modalidad;
 use app\modules\academico\models\UnidadAcademica;
 use app\modules\admision\models\Oportunidad;
@@ -239,7 +240,43 @@ class AdmitidosController extends \app\components\CController {
                 "title" => Yii::t('jslang', 'Error'),
             );
             return Utilities::ajaxResponse('NO_OK', 'alert', Yii::t("jslang", "Error"), false, $message);
+        }           
+    }
+    public function actionValidarcarta() {
+        $per_ses__id = @Yii::$app->session->get("PB_perid");
+        $per_id = base64_decode($_GET["per_id"]);
+        $mod_doc_ac= new DocumentoAceptacion();
+        $resp_gruporol = $mod_doc_ac->consultaDocumentoAceptacionByPerId($per_id);
+        $gruporol = 19;# 19 o 20
+        if ($resp_cliord) {
+            $persona_pago = $resp_cliord["per_id"];
+            $sins_id = $resp_cliord["sser_id"];
+            $nombres = $resp_cliord["nombres"];
+            $apellidos = $resp_cliord["apellidos"];
+            $valortotal = $resp_cliord["valortotal"];
+            $valoraplicado = $resp_cliord["valoraplicado"];
+            $rol = $resp_cliord["rol"];
         }
-           
+        $mod_pago = new OrdenPago();
+        $resp_pago = $mod_pago->listarPagosadmxsolicitud($gruporol, $opag_id, $persona_pago);
+        $data = null;
+        if (Yii::$app->request->isAjax) {
+            $data = Yii::$app->request->get();
+            if (isset($data["op"]) && $data["op"] == '1') {
+                
+            }
+        }
+        return $this->render('validarpcarta', [
+                    'model' => $resp_pago,
+                    'persona_pago' => $persona_pago,
+                    'sins_id' => $sins_id,
+                    'nombres' => $nombres,
+                    'apellidos' => $apellidos,
+                    'valortotal' => $valortotal,
+                    'valoraplicado' => $valoraplicado,
+                    'opag_id' => $opag_id,
+                    'rol' => $rol,
+                    'respCliente' => $resp_cliord,
+        ]);
     }
 }

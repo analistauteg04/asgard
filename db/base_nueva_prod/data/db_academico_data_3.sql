@@ -655,7 +655,7 @@ INSERT INTO `otro_estudio_academico` (`oeac_nombre`, `oeac_descripcion`, `uaca_i
 ('Maestría en Lenguas Extranjeras', 'Maestría en Lenguas Extranjeras', '2', '1', '1', '1'),
 ('Maestría de Medicina General', 'Maestría de Medicina General', '2', '1', '1', '1');
 
-INSERT INTO `observaciones_documento_aceptacion` (`odac_id`, `odac_descripcion`, `odac_usuario_ingreso`, `odac_estado`,`odac_fecha_creacion`,`odac_estado_logico`) VALUES
+INSERT INTO `observaciones_documento_aceptacion` (`odac_id`, `odac_descripcion`, `odac_usuario_ingreso`, `odac_fecha_creacion`,`odac_estado`,`odac_estado_logico`) VALUES
 (1,'Mal formato del documento', '1', '2019-05-19 21:20:17', '1', '1'),
 (2,'Documento borroso', '1', '2019-05-19 21:20:17', '1', '1'),
 (3,'No es la carta correspondiente', '1', '2019-05-19 21:20:17', '1', '1');
