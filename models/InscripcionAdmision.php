@@ -184,10 +184,15 @@ class InscripcionAdmision extends \yii\db\ActiveRecord {
         $search = ".$typeFile";
         $replace = "_$timeSt" . ".$typeFile";
         $newFile = str_replace($search, $replace, $file);
-        if (rename($baseFile . $file, $baseFile . $newFile)) {
+        if(file_exists($baseFile . $file)){
+            if (rename($baseFile . $file, $baseFile . $newFile)) {
+                return $newFile;
+            }
+        }
+        else{
+            \app\models\Utilities::putMessageLogFile('nombre:'.$newFile);    
             return $newFile;
         }
-        return FALSE;
     }
 
     /**

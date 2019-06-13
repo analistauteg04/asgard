@@ -18,13 +18,12 @@ use Yii;
  * @property DocNintTciudadano[] $docNintTciudadanos
  * @property SolicitudinsDocumento[] $solicitudinsDocumentos
  */
-class DocumentoAdjuntar extends \yii\db\ActiveRecord
-{
+class DocumentoAdjuntar extends \yii\db\ActiveRecord {
+
     /**
      * @inheritdoc
      */
-    public static function tableName()
-    {
+    public static function tableName() {
         //return 'documento_adjuntar';
         return \Yii::$app->db_captacion->dbname . '.documento_adjuntar';
     }
@@ -32,8 +31,7 @@ class DocumentoAdjuntar extends \yii\db\ActiveRecord
     /**
      * @inheritdoc
      */
-    public function rules()
-    {
+    public function rules() {
         return [
             [['dadj_nombre', 'dadj_descripcion', 'dadj_estado', 'dadj_estado_logico'], 'required'],
             [['dadj_fecha_creacion', 'dadj_fecha_modificacion'], 'safe'],
@@ -46,8 +44,7 @@ class DocumentoAdjuntar extends \yii\db\ActiveRecord
     /**
      * @inheritdoc
      */
-    public function attributeLabels()
-    {
+    public function attributeLabels() {
         return [
             'dadj_id' => 'Dadj ID',
             'dadj_nombre' => 'Dadj Nombre',
@@ -62,16 +59,14 @@ class DocumentoAdjuntar extends \yii\db\ActiveRecord
     /**
      * @return \yii\db\ActiveQuery
      */
-    public function getDocNintTciudadanos()
-    {
+    public function getDocNintTciudadanos() {
         return $this->hasMany(DocNintTciudadano::className(), ['dadj_id' => 'dadj_id']);
     }
 
     /**
      * @return \yii\db\ActiveQuery
      */
-    public function getSolicitudinsDocumentos()
-    {
+    public function getSolicitudinsDocumentos() {
         return $this->hasMany(SolicitudinsDocumento::className(), ['dadj_id' => 'dadj_id']);
     }
 
@@ -81,13 +76,13 @@ class DocumentoAdjuntar extends \yii\db\ActiveRecord
      * @param   int     $sins_id        Id de la solicitud
      * @return  $resultData (Retorna true si se realizo la operacion o false si fue error).
      */
-    public static function desactivarDocumentosxSolicitud($sins_id){
+    public static function desactivarDocumentosxSolicitud($sins_id) {
         $con = \Yii::$app->db_captacion;
         $estado = 0;
 
-        $sql = "UPDATE ".\Yii::$app->db_captacion->dbname.".solicitudins_documento 
+        $sql = "UPDATE " . \Yii::$app->db_captacion->dbname . ".solicitudins_documento 
                 SET sdoc_estado = :estado 
-                WHERE sins_id = :id;";
+                WHERE sins_id = :id and dadj_id <> 7;";
 
         $comando = $con->createCommand($sql);
         $comando->bindParam(":id", $sins_id, \PDO::PARAM_INT);
@@ -104,16 +99,22 @@ class DocumentoAdjuntar extends \yii\db\ActiveRecord
      * @param   int     $timeSt         Parametro a agregar al nombre del archivo
      * @return  $newFile | FALSE (Retorna el nombre del nuevo archivo o false si fue error).
      */
-    public static function addLabelTimeDocumentos($sins_id, $file, $timeSt){
+    public static function addLabelTimeDocumentos($sins_id, $file, $timeSt) {
         $arrIm = explode(".", basename($file));
         $typeFile = strtolower($arrIm[count($arrIm) - 1]);
         $baseFile = Yii::$app->basePath;
-        $search  = ".$typeFile";
+        $search = ".$typeFile";
         $replace = "_$timeSt" . ".$typeFile";
         $newFile = str_replace($search, $replace, $file);
-        if(rename($baseFile . $file, $baseFile . $newFile)){
+        if (file_exists($baseFile . $file)) {
+            if (rename($baseFile . $file, $baseFile . $newFile)) {
+                return $newFile;
+            }
+        }else{
             return $newFile;
         }
+
         return FALSE;
     }
+
 }
