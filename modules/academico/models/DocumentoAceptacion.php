@@ -74,7 +74,39 @@ class DocumentoAceptacion extends \yii\db\ActiveRecord
             'dace_estado_logico' => 'Dace Estado Logico',
         ];
     }
-    
+
+    /**
+     * Function consultaDocumentoAceptacionByPerId()
+     * Consulta el estado del documento de aceptacion por el per id.
+     * @author  Kleber Loayza <analistadesarrollo01@uteg.edu.ec>
+     * @param   
+     * @return  
+    */
+    public function consultaDocumentoAceptacionByPerId($con,$per_id){
+        $con = \Yii::$app->db_academico;
+        $estado = 1;
+            $sql = "
+                    SELECT distinct moda.mod_id as id,
+                           moda.mod_nombre as name
+                    FROM " . $con->dbname . ".modalidad_unidad_academico mua "
+                    . "inner join " . $con->dbname . ".modalidad moda ON moda.mod_id = mua.mod_id
+                    WHERE uaca_id = :uaca_id 
+                    and emp_id =:emp_id
+                    and mua.muac_estado_logico = :estado
+                    and mua.muac_estado = :estado
+                    and moda.mod_estado_logico = :estado
+                    and moda.mod_estado = :estado
+                    ORDER BY name asc
+                    ";        
+        
+        $comando = $con->createCommand($sql);
+        $comando->bindParam(":estado", $estado, \PDO::PARAM_STR);
+        $comando->bindParam(":uaca_id", $uaca_id, \PDO::PARAM_INT);
+        $comando->bindParam(":emp_id", $emp_id, \PDO::PARAM_INT);
+        $resultData = $comando->queryAll();
+        return $resultData;
+    }
+
     public function insertar($con,$data)
     {                 
         $estado = '1';
