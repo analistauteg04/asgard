@@ -52,14 +52,14 @@ class AdmitidosController extends \app\components\CController {
             if (isset($data["getmodalidad"])) {
                 $modalidad = $mod_modalidad->consultarModalidad($data["nint_id"], 1);
                 $message = array("modalidad" => $modalidad);
-                return Utilities::ajaxResponse('OK', 'alert', Yii::t('jslang', 'Success'), 'false', $message);            
+                return Utilities::ajaxResponse('OK', 'alert', Yii::t('jslang', 'Success'), 'false', $message);
             }
             if (isset($data["getcarrera"])) {
                 $carrera = $modcanal->consultarCarreraModalidad($data["unidada"], $data["moda_id"]);
                 $message = array("carrera" => $carrera);
-                return Utilities::ajaxResponse('OK', 'alert', Yii::t('jslang', 'Success'), 'false', $message);              
+                return Utilities::ajaxResponse('OK', 'alert', Yii::t('jslang', 'Success'), 'false', $message);
             }
-        }       
+        }
         $arr_ninteres = $mod_unidad->consultarUnidadAcademicasEmpresa(1);
         $arr_modalidad = $mod_modalidad->consultarModalidad($arr_ninteres[0]["id"], 1);
         $arr_carrerra1 = $modcanal->consultarCarreraModalidad($arr_ninteres[0]["id"], $arr_modalidad[0]["id"]);
@@ -157,6 +157,26 @@ class AdmitidosController extends \app\components\CController {
                 ])
         );
         $report->mpdf->Output('Reporte_' . date("Ymdhis") . ".pdf", ExportFile::OUTPUT_TO_DOWNLOAD);
+    }
+
+    public function actionUne() {
+        $per_id = @Yii::$app->session->get("PB_perid");        
+        $data = Yii::$app->request->get();
+        if ($data['PBgetFilter']) {
+            $arrSearch["f_ini"] = $data['f_ini'];
+            $arrSearch["f_fin"] = $data['f_fin'];
+            $arrSearch["search"] = $data['search'];
+            $arrSearch["estado"] = $data['estado'];            
+            /*$mod_aspirante = Admitido::getAdmitidos($arrSearch);
+            return $this->renderPartial('une-grid', [
+                        "model" => $mod_aspirante,
+            ]);*/
+        } else {
+            $mod_une = Admitido::getUne();
+        }
+        return $this->render('une', [
+                    'model' => $mod_une,                    
+        ]);
     }
 
 }

@@ -96,12 +96,12 @@ class Admitido extends \yii\db\ActiveRecord {
                 $str_search = "(a.per_pri_nombre like :search OR ";
                 $str_search .= "a.per_seg_nombre like :search OR ";
                 $str_search .= "a.per_pri_apellido like :search OR ";
-                $str_search .= "a.per_cedula like :search) AND ";    
-            }                                
-            /*if ($arrFiltro['f_ini'] != "" && $arrFiltro['f_fin'] != "") {
-                $str_search .= "a.sins_fecha_solicitud >= :fec_ini AND ";
-                $str_search .= "a.sins_fecha_solicitud <= :fec_fin AND ";
-            }*/
+                $str_search .= "a.per_cedula like :search) AND ";
+            }
+            /* if ($arrFiltro['f_ini'] != "" && $arrFiltro['f_fin'] != "") {
+              $str_search .= "a.sins_fecha_solicitud >= :fec_ini AND ";
+              $str_search .= "a.sins_fecha_solicitud <= :fec_fin AND ";
+              } */
             if ($arrFiltro['unidad'] != "" && $arrFiltro['unidad'] > 0) {
                 $str_search .= "a.uaca_id = :unidad AND ";
             }
@@ -183,21 +183,21 @@ class Admitido extends \yii\db\ActiveRecord {
                 ORDER BY SUBSTRING(sins.sins_fecha_solicitud,1,10) desc) a
                 WHERE $str_search  
                       a.sins_id = a.sins_id";
-        
+
         $comando = $con->createCommand($sql);
         $comando->bindParam(":estado", $estado, \PDO::PARAM_STR);
         $comando->bindParam(":estado_opago", $estado_opago, \PDO::PARAM_STR);
         if (isset($arrFiltro) && count($arrFiltro) > 0) {
             if ($arrFiltro['search'] != "") {
                 $search_cond = "%" . $arrFiltro["search"] . "%";
-                $comando->bindParam(":search", $search_cond, \PDO::PARAM_STR);  
+                $comando->bindParam(":search", $search_cond, \PDO::PARAM_STR);
             }
-            /*$fecha_ini = $arrFiltro["f_ini"] . " 00:00:00";
-            $fecha_fin = $arrFiltro["f_fin"] . " 23:59:59";                                        
-            if ($arrFiltro['f_ini'] != "" && $arrFiltro['f_fin'] != "") {
-                $comando->bindParam(":fec_ini", $fecha_ini, \PDO::PARAM_STR);
-                $comando->bindParam(":fec_fin", $fecha_fin, \PDO::PARAM_STR);
-            }*/
+            /* $fecha_ini = $arrFiltro["f_ini"] . " 00:00:00";
+              $fecha_fin = $arrFiltro["f_fin"] . " 23:59:59";
+              if ($arrFiltro['f_ini'] != "" && $arrFiltro['f_fin'] != "") {
+              $comando->bindParam(":fec_ini", $fecha_ini, \PDO::PARAM_STR);
+              $comando->bindParam(":fec_fin", $fecha_fin, \PDO::PARAM_STR);
+              } */
             $unidad = $arrFiltro["unidad"];
             if ($arrFiltro['unidad'] != "" && $arrFiltro['unidad'] > 0) {
                 $comando->bindParam(":unidad", $unidad, \PDO::PARAM_INT);
@@ -213,7 +213,7 @@ class Admitido extends \yii\db\ActiveRecord {
             $codigoperiodo = "%" . $arrFiltro["periodo"] . "%";
             if ($arrFiltro['periodo'] != "") {
                 $comando->bindParam(":periodo", $codigoperiodo, \PDO::PARAM_STR);
-            }             
+            }
         }
         // \app\models\Utilities::putMessageLogFile('periodo:' . $codigoperiodo);
         $resultData = $comando->queryAll();
@@ -244,7 +244,7 @@ class Admitido extends \yii\db\ActiveRecord {
      * @param     
      * @return  
      */
-    public function consultarReportAdmitidos($arrFiltro = array(), $onlyData = false) {       
+    public function consultarReportAdmitidos($arrFiltro = array(), $onlyData = false) {
         $con = \Yii::$app->db_captacion;
         $con2 = \Yii::$app->db;
         $con3 = \Yii::$app->db_academico;
@@ -258,8 +258,8 @@ class Admitido extends \yii\db\ActiveRecord {
                 $str_search = "(a.per_pri_nombre like :search OR ";
                 $str_search .= "a.per_seg_nombre like :search OR ";
                 $str_search .= "a.per_pri_apellido like :search OR ";
-                $str_search .= "a.per_cedula like :search) AND ";  
-            }                                          
+                $str_search .= "a.per_cedula like :search) AND ";
+            }
             if ($arrFiltro['unidad'] != "" && $arrFiltro['unidad'] > 0) {
                 $str_search .= "a.uaca_id = :unidad AND ";
             }
@@ -349,15 +349,15 @@ class Admitido extends \yii\db\ActiveRecord {
                     ORDER BY SUBSTRING(sins.sins_fecha_solicitud,1,10) desc) a
                 WHERE $str_search
                       a.sins_id = a.sins_id";
-        
+
         $comando = $con->createCommand($sql);
         $comando->bindParam(":estado", $estado, \PDO::PARAM_STR);
         $comando->bindParam(":estado_opago", $estado_opago, \PDO::PARAM_STR);
         if (isset($arrFiltro) && count($arrFiltro) > 0) {
-            if ($arrFiltro['search'] != "") { 
+            if ($arrFiltro['search'] != "") {
                 $search_cond = "%" . $arrFiltro["search"] . "%";
-                $comando->bindParam(":search", $search_cond, \PDO::PARAM_STR);  
-            }         
+                $comando->bindParam(":search", $search_cond, \PDO::PARAM_STR);
+            }
             $unidad = $arrFiltro["unidad"];
             if ($arrFiltro['unidad'] != "" && $arrFiltro['unidad'] > 0) {
                 $comando->bindParam(":unidad", $unidad, \PDO::PARAM_INT);
@@ -373,8 +373,8 @@ class Admitido extends \yii\db\ActiveRecord {
             $codigoperiodo = "%" . $arrFiltro["periodo"] . "%";
             if ($arrFiltro['periodo'] != "") {
                 $comando->bindParam(":periodo", $codigoperiodo, \PDO::PARAM_STR);
-            }             
-        }   
+            }
+        }
         $resultData = $comando->queryAll();
         $dataProvider = new ArrayDataProvider([
             'key' => 'id',
@@ -394,7 +394,159 @@ class Admitido extends \yii\db\ActiveRecord {
             return $resultData;
         } else {
             return $dataProvider;
-        }                        
+        }
+    }
+
+    /**
+     * Function getUne
+     * @author  Giovann <analistadesarrollo02@uteg.edu.ec>
+     * @param   
+     * @return  $resultData (información de documentos de une subidos)
+     */
+    public static function getUne($arrFiltro = array(), $onlyData = false) {
+        $con = \Yii::$app->db_captacion;
+        $con2 = \Yii::$app->db;
+        $con3 = \Yii::$app->db_academico;
+        $con1 = \Yii::$app->db_facturacion;
+        $estado = 1;
+        $columnsAdd = "";
+        $estado_opago = "S";
+
+        if (isset($arrFiltro) && count($arrFiltro) > 0) {
+            if ($arrFiltro['search'] != "") {
+                $str_search = "(a.per_pri_nombre like :search OR ";
+                $str_search .= "a.per_seg_nombre like :search OR ";
+                $str_search .= "a.per_pri_apellido like :search OR ";
+                $str_search .= "a.per_cedula like :search) AND ";
+            }
+            if ($arrFiltro['f_ini'] != "" && $arrFiltro['f_fin'] != "") {
+                $str_search .= "a.sins_fecha_solicitud >= :fec_ini AND ";
+                $str_search .= "a.sins_fecha_solicitud <= :fec_fin AND ";
+            }
+            /* if ($arrFiltro['unidad'] != "" && $arrFiltro['unidad'] > 0) {
+              $str_search .= "a.uaca_id = :unidad AND ";
+              } */
+        } else {
+            $columnsAdd = "sins.sins_id as solicitud_id,
+                    per.per_id as persona, 
+                    per.per_pri_nombre as per_pri_nombre, 
+                    per.per_seg_nombre as per_seg_nombre,
+                    per.per_pri_apellido as per_pri_apellido,
+                    per.per_seg_apellido as per_seg_apellido,";
+        }
+        $sql = "SELECT * FROM (
+                SELECT  distinct lpad(ifnull(sins.num_solicitud, sins.sins_id),9,'0') as solicitud,
+                        sins.sins_id,
+                        sins.int_id,
+                        SUBSTRING(sins.sins_fecha_solicitud,1,10) as sins_fecha_solicitud, 
+                        per.per_id as per_id,
+                        per.per_cedula as per_dni,
+                        per.per_pri_nombre as per_nombres,
+                        per.per_pri_apellido as per_apellidos,
+                        sins.ming_id, 
+                        ifnull((select min.ming_alias from " . $con->dbname . ".metodo_ingreso min where min.ming_id = sins.ming_id),'N/A') as abr_metodo,
+                        ifnull((select min.ming_nombre from " . $con->dbname . ".metodo_ingreso min where min.ming_id = sins.ming_id),'N/A') as ming_nombre,
+                        sins.eaca_id,
+                        sins.mest_id,
+                        sins.mod_id,
+                        moda.mod_nombre,
+                        uaca.uaca_nombre,
+                        sins.uaca_id,
+                        case when (ifnull(sins.eaca_id,0)=0) then
+                                (select mest_nombre from " . $con3->dbname . ".modulo_estudio me where me.mest_id = sins.mest_id and me.mest_estado = '1' and me.mest_estado_logico = '1')
+                                else
+                            (select eaca_nombre from " . $con3->dbname . ".estudio_academico ea where ea.eaca_id = sins.eaca_id and ea.eaca_estado = '1' and ea.eaca_estado_logico = '1')
+                        end as carrera,
+                        per.per_pri_nombre as per_pri_nombre, 
+                        per.per_seg_nombre as per_seg_nombre,
+                        per.per_pri_apellido as per_pri_apellido,
+                        per.per_seg_apellido as per_seg_apellido,   
+                        per.per_cedula,
+                        admi.adm_id,                                               
+                       (case when sins_beca = 1 then 'ICF' else 'No Aplica' end) as beca,
+                       ifnull((select pa.pami_codigo
+                               from " . $con3->dbname . ".matriculacion m inner join " . $con3->dbname . ".asignacion_paralelo ap on ap.mat_id = m.mat_id
+                                    inner join " . $con3->dbname . ".paralelo p on p.par_id = ap.par_id
+                                    inner join " . $con3->dbname . ".periodo_academico_met_ingreso pa on pa.pami_id = p.pami_id
+                               where m.adm_id = admi.adm_id and m.sins_id = sins.sins_id and m.mat_estado = :estado and m.mat_estado_logico = :estado
+                                and p.par_estado = :estado and p.par_estado_logico = :estado
+                                and ap.apar_estado = :estado and ap.apar_estado_logico = :estado
+                                and pa.pami_estado = :estado and pa.pami_estado_logico = :estado),'N/A') as pami_codigo,
+                        sins.emp_id
+                FROM " . $con->dbname . ".admitido admi INNER JOIN " . $con->dbname . ".solicitud_inscripcion sins on sins.sins_id = admi.sins_id                 
+                     INNER JOIN " . $con->dbname . ".interesado inte on sins.int_id = inte.int_id 
+                     INNER JOIN " . $con2->dbname . ".persona per on inte.per_id = per.per_id                     
+                     INNER JOIN " . $con3->dbname . ".modalidad moda on moda.mod_id=sins.mod_id
+                     INNER JOIN " . $con3->dbname . ".unidad_academica uaca on uaca.uaca_id=sins.uaca_id
+                     INNER JOIN " . $con1->dbname . ".orden_pago opag on opag.sins_id = sins.sins_id    
+                WHERE                          
+                       sins.rsin_id = 2 AND
+                       opag.opag_estado_pago = :estado_opago AND
+                       admi.adm_estado_logico = :estado AND
+                       admi.adm_estado = :estado AND 
+                       inte.int_estado_logico = :estado AND
+                       inte.int_estado = :estado AND     
+                       per.per_estado_logico = :estado AND
+                       per.per_estado = :estado AND
+                       sins.sins_estado = :estado AND
+                       sins.sins_estado_logico = :estado  AND
+                       opag.opag_estado = :estado AND
+                       opag.opag_estado_logico = :estado                  
+                ORDER BY SUBSTRING(sins.sins_fecha_solicitud,1,10) desc) a
+                WHERE $str_search  
+                      a.sins_id = a.sins_id";
+
+        $comando = $con->createCommand($sql);
+        $comando->bindParam(":estado", $estado, \PDO::PARAM_STR);
+        $comando->bindParam(":estado_opago", $estado_opago, \PDO::PARAM_STR);
+        if (isset($arrFiltro) && count($arrFiltro) > 0) {
+            if ($arrFiltro['search'] != "") {
+                $search_cond = "%" . $arrFiltro["search"] . "%";
+                $comando->bindParam(":search", $search_cond, \PDO::PARAM_STR);
+            }
+            $fecha_ini = $arrFiltro["f_ini"] . " 00:00:00";
+            $fecha_fin = $arrFiltro["f_fin"] . " 23:59:59";
+            if ($arrFiltro['f_ini'] != "" && $arrFiltro['f_fin'] != "") {
+                $comando->bindParam(":fec_ini", $fecha_ini, \PDO::PARAM_STR);
+                $comando->bindParam(":fec_fin", $fecha_fin, \PDO::PARAM_STR);
+            }
+            $unidad = $arrFiltro["unidad"];
+            if ($arrFiltro['unidad'] != "" && $arrFiltro['unidad'] > 0) {
+                $comando->bindParam(":unidad", $unidad, \PDO::PARAM_INT);
+            }
+            $modalidad = $arrFiltro["modalidad"];
+            if ($arrFiltro['modalidad'] != "" && $arrFiltro['modalidad'] > 0) {
+                $comando->bindParam(":modalidad", $modalidad, \PDO::PARAM_INT);
+            }
+            $carrera = $arrFiltro["carrera"];
+            if ($arrFiltro['carrera'] != "" && $arrFiltro['carrera'] > 0) {
+                $comando->bindParam(":carrera", $carrera, \PDO::PARAM_INT);
+            }
+            $codigoperiodo = "%" . $arrFiltro["periodo"] . "%";
+            if ($arrFiltro['periodo'] != "") {
+                $comando->bindParam(":periodo", $codigoperiodo, \PDO::PARAM_STR);
+            }
+        }
+        $resultData = $comando->queryAll();
+        $dataProvider = new ArrayDataProvider([
+            'key' => 'id',
+            'allModels' => $resultData,
+            'pagination' => [
+                'pageSize' => Yii::$app->params["pageSize"],
+            ],
+            'sort' => [
+                'attributes' => [
+                    'per_dni',
+                    'per_nombres',
+                    'per_apellidos',
+                ],
+            ],
+        ]);
+        if ($onlyData) {
+            return $resultData;
+        } else {
+            return $dataProvider;
+        }
     }
 
 }
