@@ -50,7 +50,6 @@ class SolicitudesController extends \app\components\CController {
             $arrSearch["unidad"] = $data['unidad'];
             $arrSearch["modalidad"] = $data['modalidad'];
             $arrSearch["carrera"] = $data['carrera'];
-
             $respSolicitud = $modSolicitud->consultarSolicitudes($arrSearch);
         } else {
             $respSolicitud = $modSolicitud->consultarSolicitudes();
