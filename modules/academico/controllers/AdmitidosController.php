@@ -14,6 +14,8 @@ use app\modules\academico\Module as academico;
 use app\modules\financiero\Module as financiero;
 use app\modules\admision\Module as admision;
 use app\models\ExportFile;
+use app\modules\academico\models\OtroDocumento;
+use app\models\Persona;
 
 academico::registerTranslations();
 admision::registerTranslations();
@@ -172,6 +174,7 @@ class AdmitidosController extends \app\components\CController {
         if (Yii::$app->request->isAjax) {
             $data = Yii::$app->request->post();            
             $per_id = base64_decode($data['persona_id']);            
+            $usr_id =  @Yii::$app->session->get("PB_iduser");         
             $observacion = ucwords(mb_strtolower($data["observa"]));
             if ($data["upload_file"]) {
                 if (empty($_FILES)) {
@@ -181,7 +184,7 @@ class AdmitidosController extends \app\components\CController {
                 $files = $_FILES[key($_FILES)];
                 $arrIm = explode(".", basename($files['name']));
                 $typeFile = strtolower($arrIm[count($arrIm) - 1]);
-                $dirFileEnd = Yii::$app->params["documentFolder"] . "solicitudinscripcion/" . $per_id . "/" . $data["name_file"] . "_per_" . $per_id . "." . $typeFile;
+                $dirFileEnd = Yii::$app->params["documentFolder"] . "otrodocumento/" . $per_id . "/" . $data["name_file"] . "_per_" . $per_id . "." . $typeFile;
                 $status = Utilities::moveUploadFile($files['tmp_name'], $dirFileEnd);
                 if ($status) {
                     return true;
@@ -192,9 +195,51 @@ class AdmitidosController extends \app\components\CController {
                 if (isset($data["arc_doc_carta"]) && $data["arc_doc_carta"] != "") {
                     $arrIm = explode(".", basename($data["arc_doc_carta"]));
                     $typeFile = strtolower($arrIm[count($arrIm) - 1]);
-                    $carta_archivo = Yii::$app->params["documentFolder"] . "academico/" . $per_id . "/doc_certune_per_" . $per_id . "." . $typeFile;
+                    $carta_archivo = Yii::$app->params["documentFolder"] . "otrodocumento/" . $per_id . "/doc_certune_per_" . $per_id . "." . $typeFile;
                 }
             }
+        }        
+        $con = \Yii::$app->db_academico;
+        $transaction = $con->beginTransaction();
+        $timeSt = time();
+        try {
+            if (isset($data["arc_doc_carta"]) && $data["arc_doc_carta"] != "") {
+                $arrIm = explode(".", basename($data["arc_doc_carta"]));
+                $typeFile = strtolower($arrIm[count($arrIm) - 1]);
+                $carta_archivo = Yii::$app->params["documentFolder"] . "otrodocumento/" . $per_id . "/doc_certune_per_" . $per_id . "." . $typeFile;
+                $carta_archivo = DocumentoAdjuntar::addLabelTimeDocumentos($per_id, $carta_archivo, $timeSt);
+                if ($carta_archivo === FALSE)
+                    throw new Exception('Error doc Carta UNE no renombrado.');
+            }
+          
+            $datos = array(                        
+                        'per_id'  => $per_id,
+                        'dadj_id'  => 8,
+                        'odoc_archivo'  => $carta_archivo,
+                        'odoc_observacion'  => $observacion, 
+                        'odoc_usuario_ingreso'  => $usr_id,                         
+                    );                                               
+            $mod_documento = new OtroDocumento();
+            $respuesta = $mod_documento->insertar($con, $datos);
+            if ($respuesta){
+                $exito=1;
+            }
+            if ($exito) {
+                $transaction->commit();
+                $message = array(
+                    "wtmessage" => Yii::t("notificaciones", "El documento ha sido grabado."),
+                    "title" => Yii::t('jslang', 'Success'),
+                );
+                return Utilities::ajaxResponse('OK', 'alert', Yii::t("jslang", "Sucess"), false, $message);
+            }
+        } catch (Exception $ex) {
+            $transaction->rollback();
+            $message = array(
+                "wtmessage" => $ex->getMessage(),
+                "title" => Yii::t('jslang', 'Error'),
+            );
+            return Utilities::ajaxResponse('NO_OK', 'alert', Yii::t("jslang", "Error"), false, $message);
         }
+           
     }
 }
