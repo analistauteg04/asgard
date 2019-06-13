@@ -42,7 +42,7 @@ if (base64_decode($_GET['uaca']) == 2) {
         <div class="form-group">
             <label for="txt_nombres_completos" class="col-sm-4 col-md-4 col-xs-4 col-lg-4 control-label"><?= Yii::t("formulario", "Complete Names") ?></label>
             <div class="col-sm-7 col-md-7 col-xs-7 col-lg-7">
-                <input type="text" class="form-control" value="<?= $datos["per_pri_apellido"] . $datos["per_pri_nombre"] ?>" id="txt_nombres_completos" disabled="true">
+                <input type="text" class="form-control" value="<?= $datos["per_pri_apellido"] ." " . $datos["per_pri_nombre"] ?>" id="txt_nombres_completos" disabled="true">
             </div>
         </div>
     </div>

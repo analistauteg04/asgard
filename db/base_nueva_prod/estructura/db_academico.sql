@@ -682,3 +682,24 @@ CREATE TABLE `otro_estudio_academico` (
   foreign key (uaca_id) references `unidad_academica`(uaca_id),
   foreign key (mod_id) references `modalidad`(mod_id)
 );
+
+-- --------------------------------------------------------
+-- 
+-- Estructura de tabla para la tabla `documento_aceptacion`
+-- --------------------------------------------------------
+
+create table if not exists db_academico.`documento_aceptacion` (
+ `dace_id` bigint(20) not null auto_increment primary key,
+ `per_id` bigint(20) not null, 
+ `dadj_id` bigint(20) not null, 
+ `dace_archivo` varchar(500) not null, 
+ `dace_observacion` varchar(500) null, 
+ `dace_fecha_maxima_aprobacion` timestamp null, 
+ `dace_estado_aprobacion` varchar(1) not null, 
+ `dace_usuario_ingreso` bigint(20) null,
+ `dace_usuario_modifica` bigint(20) null,
+ `dace_estado` varchar(1) not null, 
+ `dace_fecha_creacion` timestamp not null default current_timestamp,
+ `dace_fecha_modificacion` timestamp null default null,
+ `dace_estado_logico` varchar(1) not null
+);

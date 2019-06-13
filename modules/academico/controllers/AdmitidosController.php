@@ -173,7 +173,7 @@ class AdmitidosController extends \app\components\CController {
     public function actionSaveotrosdocumentos(){
         if (Yii::$app->request->isAjax) {
             $data = Yii::$app->request->post();            
-            $per_id = base64_decode($data['persona_id']);            
+            $per_id = @Yii::$app->session->get("PB_perid");   //base64_decode($data['persona_id']);            
             $usr_id =  @Yii::$app->session->get("PB_iduser");         
             $observacion = ucwords(mb_strtolower($data["observa"]));
             if ($data["upload_file"]) {
