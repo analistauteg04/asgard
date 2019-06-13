@@ -41,6 +41,7 @@ return [
     "List parallels" => "Listar Paralelos", 
     "List students" => "Listar estudiantes",
     "List Subscribers" => "Listar Inscritos",
+    "List UNE letters" => "Listar Carta UNE",
     "List Enrollment Method Income" => "Listar Matriculados Método Ingreso",
     "Modality" => "Modalidad",
     "Month" => "Mes",

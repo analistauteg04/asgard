@@ -3,6 +3,9 @@ $(document).ready(function () {
     $('#btn_buscarData').click(function () {
         actualizarGrid();
     });
+    $('#btn_buscarUne').click(function () {
+        actualizaruneGrid();
+    });
     /***********************************************/
     /* Filtro para busqueda en listado solicitudes */
     /***********************************************/
@@ -114,5 +117,18 @@ function SaveOtrosDocumentos() {
                 window.location.href = $('#txth_base').val() + "/academico/admitidos/subirotrosdocumentos";                
             }, 5000);
         }, true);
+    }
+}
+
+function actualizaruneGrid() {
+    var search = $('#txt_buscarData').val();
+    var f_ini = $('#txt_fecha_ini').val();
+    var f_fin = $('#txt_fecha_fin').val();  
+    var estado = $('#cmb_estado option:selected').val();    
+    //Buscar almenos una clase con el nombre para ejecutar
+    if (!$(".blockUI").length) {
+        showLoadingPopup();
+        $('#TbG_UNE').PbGridView('applyFilterData', {'f_ini': f_ini, 'f_fin': f_fin, 'search': search,  'estado': estado});
+        setTimeout(hideLoadingPopup, 2000);
     }
 }

@@ -7,7 +7,6 @@ use app\modules\academico\models\Admitido;
 use app\modules\academico\models\EstudioAcademico;
 use yii\helpers\ArrayHelper;
 use app\models\Utilities;
-use app\modules\academico\models\DocumentoAceptacion;
 use app\modules\academico\models\Modalidad;
 use app\modules\academico\models\UnidadAcademica;
 use app\modules\admision\models\Oportunidad;
@@ -56,14 +55,14 @@ class AdmitidosController extends \app\components\CController {
             if (isset($data["getmodalidad"])) {
                 $modalidad = $mod_modalidad->consultarModalidad($data["nint_id"], 1);
                 $message = array("modalidad" => $modalidad);
-                return Utilities::ajaxResponse('OK', 'alert', Yii::t('jslang', 'Success'), 'false', $message);            
+                return Utilities::ajaxResponse('OK', 'alert', Yii::t('jslang', 'Success'), 'false', $message);
             }
             if (isset($data["getcarrera"])) {
                 $carrera = $modcanal->consultarCarreraModalidad($data["unidada"], $data["moda_id"]);
                 $message = array("carrera" => $carrera);
-                return Utilities::ajaxResponse('OK', 'alert', Yii::t('jslang', 'Success'), 'false', $message);              
+                return Utilities::ajaxResponse('OK', 'alert', Yii::t('jslang', 'Success'), 'false', $message);
             }
-        }       
+        }
         $arr_ninteres = $mod_unidad->consultarUnidadAcademicasEmpresa(1);
         $arr_modalidad = $mod_modalidad->consultarModalidad($arr_ninteres[0]["id"], 1);
         $arr_carrerra1 = $modcanal->consultarCarreraModalidad($arr_ninteres[0]["id"], $arr_modalidad[0]["id"]);
@@ -162,22 +161,42 @@ class AdmitidosController extends \app\components\CController {
         );
         $report->mpdf->Output('Reporte_' . date("Ymdhis") . ".pdf", ExportFile::OUTPUT_TO_DOWNLOAD);
     }
-    
+
     public function actionSubirotrosdocumentos() {
         $per_id = @Yii::$app->session->get("PB_perid");
         $modperinteresado = new Persona();
         $datosPersona = $modperinteresado->consultaPersonaId($per_id);
-        return $this->render('subirOtrosDocumentos', [                    
+        return $this->render('subirOtrosDocumentos', [
                     "datos" => $datosPersona,
         ]);
     }
 
-    public function actionSaveotrosdocumentos(){
-          \app\models\Utilities::putMessageLogFile('saludos'); 
+
+    public function actionUne() {
+        $per_id = @Yii::$app->session->get("PB_perid");
+        $data = Yii::$app->request->get();
+        if ($data['PBgetFilter']) {
+            $arrSearch["f_ini"] = $data['f_ini'];
+            $arrSearch["f_fin"] = $data['f_fin'];
+            $arrSearch["search"] = $data['search'];
+            $arrSearch["estado"] = $data['estado'];
+            $mod_une = Admitido::getUne($arrSearch);
+            return $this->renderPartial('une-grid', [
+                        "model" => $mod_une,
+            ]);
+        } else {
+            $mod_une = Admitido::getUne();
+        }
+        return $this->render('une', [
+                    'model' => $mod_une,
+        ]);
+    }
+
+    public function actionSaveotrosdocumentos() {
         if (Yii::$app->request->isAjax) {
-            $data = Yii::$app->request->post();            
+            $data = Yii::$app->request->post();
             $per_id = @Yii::$app->session->get("PB_perid");   //base64_decode($data['persona_id']);            
-            $usr_id =  @Yii::$app->session->get("PB_iduser");         
+            $usr_id = @Yii::$app->session->get("PB_iduser");
             $observacion = ucwords(mb_strtolower($data["observa"]));
             if ($data["upload_file"]) {
                 if (empty($_FILES)) {
@@ -193,7 +212,7 @@ class AdmitidosController extends \app\components\CController {
                     return true;
                 } else {
                     return json_encode(['error' => Yii::t("notificaciones", "Error to process File {file}. Try again.", ['{file}' => basename($files['name'])])]);
-                }                
+                }
                 $carta_archivo = "";
                 if (isset($data["arc_doc_carta"]) && $data["arc_doc_carta"] != "") {
                     $arrIm = explode(".", basename($data["arc_doc_carta"]));
@@ -201,7 +220,7 @@ class AdmitidosController extends \app\components\CController {
                     $carta_archivo = Yii::$app->params["documentFolder"] . "documaceptacion/" . $per_id . "/doc_certune_per_" . $per_id . "." . $typeFile;
                 }
             }
-        }           
+        }
         $con = \Yii::$app->db_academico;
         $transaction = $con->beginTransaction();
         $timeSt = time();        
@@ -214,13 +233,10 @@ class AdmitidosController extends \app\components\CController {
                 if ($carta_archivo === FALSE)                    
                     throw new Exception('Error doc Carta UNE no renombrado.');
             }                                       
-            $mod_documento = new DocumentoAceptacion();            
-            \app\models\Utilities::putMessageLogFile('usr:'.$usr_id);  
-            $resexiste= $mod_documento->consultarXperid($per_id);
-             \app\models\Utilities::putMessageLogFile('existe:'.$resexiste["dace_estado_aprobacion"]);  
+            $mod_documento = new DocumentoAceptacion();                        
+            $resexiste= $mod_documento->consultarXperid($per_id);             
             if ($resexiste["dace_estado_aprobacion"]=='3' or empty($resexiste["dace_estado_aprobacion"]))
-                {
-                \app\models\Utilities::putMessageLogFile('Ingresa');  
+                {                
                     $datos = array(                        
                             'per_id'  => $per_id,
                             'dadj_id'  => 8,
@@ -228,26 +244,27 @@ class AdmitidosController extends \app\components\CController {
                             'dace_observacion'  => $observacion, 
                             'dace_usuario_ingreso'  => $usr_id,                         
                         );     
-                    if ($resexiste["dace_estado_aprobacion"]=='3') {
-                        $respuesta = $mod_documento->actualizar($con, $usr_id, $per_id);
-                        if ($respuesta) {
+                    if ($resexiste["dace_estado_aprobacion"]=='3') {                        
+                        $respuesta = $mod_documento->actualizar($con, $usr_id, $per_id);                        
+                        if ($respuesta) {                            
                             $ok='1';
-                        } else {
+                        } else {                            
                             $ok='0';
                         }
-                    } else {
+                    } else {                        
                         $ok='1';
                     }
-                    if ($ok=='1') {
+                    if ($ok=='1') {                        
                         $respuesta = $mod_documento->insertar($con, $datos);
                         if ($respuesta){
+                            //\app\models\Utilities::putMessageLogFile('despues de insercion');
                             $exito=1;
                         }
                     }                 
                 }  else {
                     $mensaje="Ya tiene registrado el documento en el sistema.";
                 }
-            
+
             if ($exito) {
                 $transaction->commit();
                 $message = array(
@@ -309,4 +326,5 @@ class AdmitidosController extends \app\components\CController {
                     'respCliente' => $resp_cliord,
         ]);
     }
+
 }
