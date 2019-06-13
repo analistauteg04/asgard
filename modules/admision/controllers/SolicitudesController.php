@@ -1067,16 +1067,16 @@ class SolicitudesController extends \app\components\CController {
                                             throw new Exception('Error doc beca no creado.');
                                         }
                                     }
-                                    if ($uaca_id == "2") {
-                                        //\app\models\Utilities::putMessageLogFile('cert materias:');   
+                                    //if ($uaca_id == "2") {
+                                        //\app\models\Utilities::putMessageLogFile('cert curr:'.$curriculum_archivo);   
                                         //if ($mod_solinsxdoc1->insertNewDocument($sins_id, $interesado_id, 6, $certmate_archivo, $observacion)) {
-                                            if (!$mod_solinsxdoc1->insertNewDocument($sins_id, $interesado_id, 7, $curriculum_archivo, $observacion)) {
-                                                throw new Exception('Error doc curriculum no creado.');
-                                            }
+                                            //if (!$mod_solinsxdoc1->insertNewDocument($sins_id, $interesado_id, 7, $curriculum_archivo, $observacion)) {
+                                                //throw new Exception('Error doc curriculum no creado.');
+                                           // }
                                         /*} else {
                                             throw new Exception('Error doc certificado materia no creado.');
                                         }*/
-                                    }
+                                    //}
                                 }
                             } else {
                                 throw new Exception('Error doc foto no creado.');
@@ -1566,12 +1566,12 @@ class SolicitudesController extends \app\components\CController {
         ]);
     }
     
-    public function actionSubirotrosdocumentos() {
+    /*public function actionSaveotrosdocumentos() {
         $sol_id = base64_decode($_GET['id_sol']);
         $sol_model = new SolicitudInscripcion();
         $datosSolicitud = $sol_model->consultarInteresadoPorSol_id($sol_id);
         return $this->render('subirOtrosDocumentos', [                    
                     "datos" => $datosSolicitud,
         ]);
-    }
+    }*/
 }

@@ -1301,7 +1301,7 @@ function Approve() {
 
 
 //Guarda Documento de carta de la UNE.
-function SaveDocumentos() {
+/*function SaveDocumentos() {
     var link = $('#txth_base').val() + "/admision/solicitudes/saveotrosdocumentos";
     var arrParams = new Object();
     arrParams.sins_id = $('#txth_ids').val();
@@ -1324,4 +1324,4 @@ function SaveDocumentos() {
             }, 5000);
         }, true);
     }
-}
+}*/
