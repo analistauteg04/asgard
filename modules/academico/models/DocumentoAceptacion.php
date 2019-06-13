@@ -85,17 +85,17 @@ class DocumentoAceptacion extends \yii\db\ActiveRecord
         $con = \Yii::$app->db_academico;
         $estado = 1;
             $sql = "
-                    SELECT distinct moda.mod_id as id,
-                           moda.mod_nombre as name
-                    FROM " . $con->dbname . ".modalidad_unidad_academico mua "
-                    . "inner join " . $con->dbname . ".modalidad moda ON moda.mod_id = mua.mod_id
-                    WHERE uaca_id = :uaca_id 
-                    and emp_id =:emp_id
-                    and mua.muac_estado_logico = :estado
-                    and mua.muac_estado = :estado
-                    and moda.mod_estado_logico = :estado
-                    and moda.mod_estado = :estado
-                    ORDER BY name asc
+                        SELECT distinct moda.mod_id as id,
+                               moda.mod_nombre as name
+                        FROM " . $con->dbname . ".modalidad_unidad_academico mua "
+                        . "inner join " . $con->dbname . ".modalidad moda ON moda.mod_id = mua.mod_id
+                        WHERE 
+                        per_id =:emp_id
+                        and mua.muac_estado_logico = :estado
+                        and mua.muac_estado = :estado
+                        and moda.mod_estado_logico = :estado
+                        and moda.mod_estado = :estado
+                        ORDER BY name asc
                     ";        
         
         $comando = $con->createCommand($sql);
