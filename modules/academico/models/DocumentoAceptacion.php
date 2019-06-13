@@ -86,23 +86,19 @@ class DocumentoAceptacion extends \yii\db\ActiveRecord
         $con = \Yii::$app->db_academico;
         $estado = 1;
             $sql = "
-                        SELECT distinct moda.mod_id as id,
-                               moda.mod_nombre as name
-                        FROM " . $con->dbname . ".modalidad_unidad_academico mua "
-                        . "inner join " . $con->dbname . ".modalidad moda ON moda.mod_id = mua.mod_id
-                        WHERE 
-                        per_id =:emp_id
-                        and mua.muac_estado_logico = :estado
-                        and mua.muac_estado = :estado
-                        and moda.mod_estado_logico = :estado
-                        and moda.mod_estado = :estado
-                        ORDER BY name asc
+                        select 
+                            dace.dadj_id, dace.dace_observacion, dace.dace_estado_aprobacion
+                        from
+                            db_academico.documento_aceptacion as dace
+                        where 
+                            per_id=:per_id and
+                            dace.dace_estado= :estado and
+                            dace.dace_estado_logico= :estado;
                     ";        
         
         $comando = $con->createCommand($sql);
         $comando->bindParam(":estado", $estado, \PDO::PARAM_STR);
-        $comando->bindParam(":uaca_id", $uaca_id, \PDO::PARAM_INT);
-        $comando->bindParam(":emp_id", $emp_id, \PDO::PARAM_INT);
+        $comando->bindParam(":per_id", $per_id, \PDO::PARAM_INT);
         $resultData = $comando->queryAll();
         return $resultData;
     }
