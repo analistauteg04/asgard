@@ -39,7 +39,10 @@ use yii\helpers\Html;
             <div class="tab-pane" id="paso2">
                 <form class="form-horizontal">
                     <?=
-                        $this->render('_form_tab2', ['per_id' => $per_id]);
+                        $this->render('_form_tab2', [
+                            'per_id' => $per_id,
+                            "arr_convenio_empresa" => $arr_convenio_empresa,
+                            ]);
                     ?>                  
                 </form>
             </div><!-- /.tab-pane -->

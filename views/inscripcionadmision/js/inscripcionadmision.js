@@ -28,6 +28,14 @@ $(document).ready(function () {
     } else if (unisol == 2) {
         $('#divmetodocan').css('display', 'block');
     }
+    $('#cmb_convenio_empresa').change(function () {
+        if ($('#cmb_unidad_solicitud').val()!=0) {
+            $('#divDocumAceptacion').css('display', 'block');
+        } else {
+            $('#divDocumAceptacion').css('display', 'none');
+        };        
+    });
+    
     $('#cmb_pais_dom').change(function () {
         var link = $('#txth_base').val() + "/inscripcionadmision/index";
         var arrParams = new Object();
@@ -91,6 +99,13 @@ $(document).ready(function () {
                     }
                 }
             }
+        }
+        if ($('#cmb_convenio_empresa').val() > 0) {
+            if ($('#txth_doc_aceptacion').val() == "") {
+                error++;
+                var mensaje = {wtmessage: "Debe adjuntar documento de aceptación.", title: "Información"};
+                showAlert("NO_OK", "error", mensaje);
+            }            
         }
         /*Gviteri: 11/jun/2019 indicaron que no se solicite el documento (Diana López).
          * if ($('#cmb_unidad_solicitud').val() == 2) {
@@ -621,6 +636,8 @@ function dataInscripPart1(ID) {
     objDat.ruta_doc_certificado = ($('#txth_doc_certificado').val() != '') ? $('#txth_doc_certificado').val() : '';
     objDat.twin_mensaje1 = ($("#chk_mensaje1").prop("checked")) ? '1' : '0';
     objDat.twin_mensaje2 = ($("#chk_mensaje2").prop("checked")) ? '1' : '0';
+    objDat.ruta_doc_aceptacion = ($('#txth_doc_aceptacion').val() != '') ? $('#txth_doc_aceptacion').val() : '';
+    objDat.cemp_id = $('#cmb_convenio_empresa option:selected').val();
     datArray[0] = objDat;
     sessionStorage.dataInscrip_1 = JSON.stringify(datArray);
     return datArray;

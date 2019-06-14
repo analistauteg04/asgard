@@ -32,6 +32,7 @@ use app\modules\admision\models\MetodoIngreso;
 use app\modules\financiero\models\Secuencias;
 //use app\models\Secuencias;
 use app\models\InscripcionAdmision;
+use app\modules\admision\models\ConvenioEmpresa;
 
 class InscripcionadmisionController extends \yii\web\Controller {
 
@@ -97,8 +98,10 @@ class InscripcionadmisionController extends \yii\web\Controller {
         $arr_conuteg = $mod_pergestion->consultarConociouteg();
         $arr_carrerra1 = $modcanal->consultarCarreraModalidad(1, $arr_modalidad[0]["id"]);
         $arr_metodos = $mod_metodo->consultarMetodoUnidadAca_2($arr_ninteres[0]["id"]);
+        $mod_conempresa = new ConvenioEmpresa();
+        $arr_convempresa = $mod_conempresa->consultarConvenioEmpresa();
         $_SESSION['JSLANG']['Your information has not been saved. Please try again.'] = Yii::t('notificaciones', 'Your information has not been saved. Please try again.');
-
+        
         return $this->render('index', [
                     "tipos_dni" => array("CED" => Yii::t("formulario", "DNI Document"), "PASS" => Yii::t("formulario", "Passport")),
                     "tipos_dni2" => array("CED" => Yii::t("formulario", "DNI Document1"), "PASS" => Yii::t("formulario", "Passport1")),
@@ -112,6 +115,7 @@ class InscripcionadmisionController extends \yii\web\Controller {
                     "arr_conuteg" => ArrayHelper::map($arr_conuteg, "id", "name"),
                     "arr_carrerra1" => ArrayHelper::map($arr_carrerra1, "id", "name"),
                     "arr_metodos" => ArrayHelper::map($arr_metodos, "id", "name"),
+                    "arr_convenio_empresa" => ArrayHelper::map(array_merge(["id" => "0", "name" => "Ninguna"], $arr_convempresa), "id", "name"),            
                     "resp_datos" => $resp_datos,
         ]);
     }
@@ -197,25 +201,38 @@ class InscripcionadmisionController extends \yii\web\Controller {
                     if ($doc_hojaVida === false)
                         throw new Exception('Error doc Hoja de Vida no renombrado.');
                 }
-
+                if (isset($data["DATA_1"][0]["ruta_doc_aceptacion"]) && $data["DATA_1"][0]["ruta_doc_aceptacion"] != "") {                    
+                    $arrIm = explode(".", basename($data["DATA_1"][0]["ruta_doc_aceptacion"]));                    
+                    $typeFile = strtolower($arrIm[count($arrIm) - 1]);                    
+                    $doc_aceptacionOld = Yii::$app->params["documentFolder"] . "solicitudadmision/" . $inscripcion_id . "/doc_aceptacion_per" . $inscripcion_id . "." . $typeFile;                    
+                    $doc_aceptacion = InscripcionAdmision::addLabelTimeDocumentos($inscripcion_id, $doc_aceptacionOld, $timeSt);                    
+                    $data["DATA_1"][0]["ruta_doc_aceptacion"] = $doc_aceptacion;                    
+                    if ($doc_aceptacion === false)
+                        throw new Exception('Error documento aceptación.');
+                }
                 if ($accion == "create" || $accion == "Create") {
                     //Nuevo Registro                    
                     $resul = $model->insertarInscripcion($data);
                 } else if ($accion == "Update") {
-                    //Modificar Registro
-                    $resul = $model->actualizarInscripcion($data);
+                    //Modificar Registro                    
+                    $resul = $model->actualizarInscripcion($data);                    
                     //$model->insertaOriginal($resul["ids"]);
                 } else if ($accion == "Fin") {
                     $Ids = isset($data['codigo']) ? $data['codigo'] : 0;
+                    \app\models\Utilities::putMessageLogFile('antes de insertarOriginal');
                     $resul = $model->insertaOriginal($Ids);
+                    \app\models\Utilities::putMessageLogFile('despues de insertarOriginal');
                 }
+                \app\models\Utilities::putMessageLogFile('resultado:'.$resul['status']);
                 if ($resul['status']) {
+                    \app\models\Utilities::putMessageLogFile('resultado es ok');
                     $message = array(
                         "wtmessage" => Yii::t("formulario", "The information have been saved"),
                         "title" => Yii::t('jslang', 'Success'),
                     );
                     return Utilities::ajaxResponse('OK', 'alert', Yii::t('jslang', 'Success'), 'false', $message, $resul);
                 } else {
+                    \app\models\Utilities::putMessageLogFile('resultado es NOok');
                     $message = array(
                         "wtmessage" => Yii::t("formulario", "The information have not been saved."),
                         "title" => Yii::t('jslang', 'Success'),
@@ -224,7 +241,7 @@ class InscripcionadmisionController extends \yii\web\Controller {
                 }
                 return;
             } catch (Exception $ex) {
-                //$transaction->rollback();
+                //$transaction->rollback();                
                 $message = array(
                     "wtmessage" => $ex->getMessage(),
                     "title" => Yii::t('jslang', 'Error'),

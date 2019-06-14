@@ -135,6 +135,7 @@ class InscripcionAdmision extends \yii\db\ActiveRecord {
                     mod_id=:mod_id,car_id=:car_id,twin_metodo_ingreso=:twin_metodo_ingreso,conuteg_id=:conuteg_id,ruta_doc_titulo=:ruta_doc_titulo, 
                     ruta_doc_dni=:ruta_doc_dni, ruta_doc_certvota=:ruta_doc_certvota,ruta_doc_foto=:ruta_doc_foto,
                     ruta_doc_hojavida=:ruta_doc_hojavida,ruta_doc_certificado=:ruta_doc_certificado, 
+                    ruta_doc_aceptacion=:ruta_doc_aceptacion, cemp_id=:cemp_id,
                     twin_mensaje1=:twin_mensaje1,twin_mensaje2=:twin_mensaje2,twin_fecha_modificacion=CURRENT_TIMESTAMP() 
                  WHERE twin_id =:twin_id ";
         $met_ing=0;
@@ -142,7 +143,7 @@ class InscripcionAdmision extends \yii\db\ActiveRecord {
             $met_ing=0;
         }else{
             $met_ing=$data[0]['ming_id'];
-        }
+        }                
         $command = $con->createCommand($sql);
         $command->bindParam(":twin_id", $data[0]['twin_id'], \PDO::PARAM_STR);
         $command->bindParam(":twin_nombre", $data[0]['pges_pri_nombre'], \PDO::PARAM_STR);
@@ -161,11 +162,14 @@ class InscripcionAdmision extends \yii\db\ActiveRecord {
         $command->bindParam(":ruta_doc_dni", basename($data[0]['ruta_doc_dni']), \PDO::PARAM_STR);
         $command->bindParam(":ruta_doc_certvota", basename($data[0]['ruta_doc_certvota']), \PDO::PARAM_STR);
         $command->bindParam(":ruta_doc_foto", basename($data[0]['ruta_doc_foto']), \PDO::PARAM_STR);
-        $command->bindParam(":ruta_doc_certificado", basename($data[0]['ruta_doc_certificado']), \PDO::PARAM_STR);
         $command->bindParam(":ruta_doc_hojavida", basename($data[0]['ruta_doc_hojavida']), \PDO::PARAM_STR);
+        $command->bindParam(":ruta_doc_certificado", basename($data[0]['ruta_doc_certificado']), \PDO::PARAM_STR);
+        $command->bindParam(":ruta_doc_aceptacion", basename($data[0]['ruta_doc_aceptacion']), \PDO::PARAM_STR);
+        $command->bindParam(":cemp_id", basename($data[0]['cemp_id']), \PDO::PARAM_INT);
         $command->bindParam(":twin_mensaje1", $data[0]['twin_mensaje1'], \PDO::PARAM_STR);
         $command->bindParam(":twin_mensaje2", $data[0]['twin_mensaje2'], \PDO::PARAM_STR);
         $command->execute();
+                
         return $data[0]['twin_id'];
     }
 
@@ -233,7 +237,9 @@ class InscripcionAdmision extends \yii\db\ActiveRecord {
                         ruta_doc_foto,
                         ruta_doc_certificado,                        
                         ruta_doc_hojavida,
-                        twin_dni
+                        twin_dni,
+                        ruta_doc_aceptacion,
+                        twi.cemp_id
                 FROM " . $con->dbname . ".temporal_wizard_inscripcion twi inner join db_academico.unidad_academica ua on ua.uaca_id = twi.uaca_id
                      inner join " . $con1->dbname . ".modalidad m on m.mod_id = twi.mod_id
                      inner join " . $con1->dbname . ".estudio_academico ea on ea.eaca_id = twi.car_id
@@ -380,8 +386,14 @@ class InscripcionAdmision extends \yii\db\ActiveRecord {
                                                 else{
                                                     $ming=$resp_datos['twin_metodo_ingreso'];
                                                 }
+                                            }                                            
+                                            if ($resp_datos['cemp_id']==0) {
+                                                $cemp=null;
+                                            } else {
+                                                $cemp=$resp_datos['cemp_id'];
                                             }
-                                            $sins_id = $solins_model->insertarSolicitud($interesado_id, $resp_datos['uaca_id'], $resp_datos['mod_id'], $resp_datos['twin_metodo_ingreso'], $eaca_id, null, $emp_id, $num_secuencia, $rsin_id, $sins_fechasol, $usuario_id);
+                                            $sins_id = $solins_model->insertarSolicitud($interesado_id, $resp_datos['uaca_id'], $resp_datos['mod_id'], $resp_datos['twin_metodo_ingreso'], $eaca_id, null, $emp_id, $num_secuencia, $rsin_id, $sins_fechasol, $usuario_id, $cemp);
+                                            //\app\models\Utilities::putMessageLogFile('despues de insertarSolicitud');
                                             //grabar los documentos
                                             if ($sins_id) {
                                                 if (($resp_datos['ruta_doc_titulo'] != "") || ($resp_datos['ruta_doc_dni'] != "") || ($resp_datos['ruta_doc_certvota'] != "") || ($resp_datos['ruta_doc_foto'] != "") || ($resp_datos['ruta_doc_certificado'] != "") || ($resp_datos['ruta_doc_hojavida'] != "")) {
@@ -452,6 +464,19 @@ class InscripcionAdmision extends \yii\db\ActiveRecord {
                                                         $typeFile = strtolower($arrIm[count($arrIm) - 1]);
                                                         $rutaHojaVida = Yii::$app->params["documentFolder"] . "solicitudinscripcion/" . $id_persona . "/doc_hojavida_per_" . $id_persona . "_" . $timeSt;
                                                         $resulDoc6 = $solins_model->insertarDocumentosSolic($sins_id, $interesado_id, 7, $rutaHojaVida, $usuario_id);
+                                                        /* if (!($resulDoc6)) {
+                                                          throw new Exception('Error doc Hoja de Vida no creado.');
+                                                          } */
+                                                    }
+                                                    if ($resp_datos['ruta_doc_aceptacion'] != "") {
+                                                        $arrIm = explode(".", basename($resp_datos['ruta_doc_aceptacion']));
+                                                        $arrTime = explode("_", basename($resp_datos['ruta_doc_aceptacion']));
+                                                        $timeSt = $arrTime[4];
+                                                        $typeFile = strtolower($arrIm[count($arrIm) - 1]);
+                                                        $rutaDocAceptacion = Yii::$app->params["documentFolder"] . "solicitudinscripcion/" . $id_persona . "/doc_aceptacion_per_" . $id_persona . "_" . $timeSt;
+                                                        \app\models\Utilities::putMessageLogFile('antes de insertarDocumentosSolic');
+                                                        $resulDoc7 = $solins_model->insertarDocumentosSolic($sins_id, $interesado_id, 8, $rutaDocAceptacion, $usuario_id);
+                                                        \app\models\Utilities::putMessageLogFile('despues de insertarDocumentosSolic');
                                                         /* if (!($resulDoc6)) {
                                                           throw new Exception('Error doc Hoja de Vida no creado.');
                                                           } */
