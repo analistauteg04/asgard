@@ -29,6 +29,7 @@ if (base64_decode($_GET['uaca']) == 2) {
 <?= Html::hiddenInput('txth_beca', base64_encode($beca), ['id' => 'txth_beca']); ?>
 <?= Html::hiddenInput('txth_opcion', base64_decode($_GET['opcion']), ['id' => 'txth_opcion']); ?>
 <?= Html::hiddenInput('txth_uaca', base64_decode($_GET['uaca']), ['id' => 'txth_uaca']); ?>
+<?= Html::hiddenInput('txth_cemp', $cemp_id, ['id' => 'txth_cemp']); ?>
 
 <form class="form-horizontal" enctype="multipart/form-data" id="formsolicitud">
     <div class="col-md-12 col-xs-12 col-sm-12 col-lg-12">
@@ -58,8 +59,7 @@ if (base64_decode($_GET['uaca']) == 2) {
     </div>
     <div class="col-md-12 col-xs-12 col-sm-12 col-lg-12">
         <?php echo $leyenda; ?>
-    </div>
-
+    </div>    
     <div class="col-md-12 col-xs-12 col-sm-12 col-lg-12 doc_titulo cinteres">
         <div class="form-group">
             <label for="txth_doc_titulo" class="col-sm-4 col-md-4 col-xs-4 col-lg-4 control-label keyupmce"><?= admision::t("Solicitudes", "Title") ?></label>
@@ -117,6 +117,7 @@ if (base64_decode($_GET['uaca']) == 2) {
             </div>
         </div>        
     </div>    
+
     <div class="col-md-12 col-xs-12 col-sm-12 col-lg-12 doc_dni cinteres">
         <div class="form-group">
             <label for="txth_doc_dni" class="col-sm-4 col-md-4 col-xs-4 col-lg-4 control-label keyupmce"><?= Yii::t("formulario", "Identification document") ?></label>
@@ -179,55 +180,55 @@ if (base64_decode($_GET['uaca']) == 2) {
             <label for="txth_doc_certvota" class="col-sm-4 col-md-4 col-xs-4 col-lg-4 control-label keyupmce"><? admision::t("Solicitudes", "Voting Certificate") ?></label>
             <div class="col-sm-7 col-md-7 col-xs-7 col-lg-7">
                 <? Html::hiddenInput('txth_doc_certvota', '', ['id' => 'txth_doc_certvota']); ?>
-                <?php
-                /*echo CFileInputAjax::widget([
-                    'id' => 'txt_doc_certvota',
-                    'name' => 'txt_doc_certvota',
-                    'pluginLoading' => false,
-                    'showMessage' => false,
-                    'pluginOptions' => [
-                        'showPreview' => false,
-                        'showCaption' => true,
-                        'showRemove' => true,
-                        'showUpload' => false,
-                        'showCancel' => false,
-                        'browseClass' => 'btn btn-primary btn-block',
-                        'browseIcon' => '<i class="fa fa-folder-open"></i> ',
-                        'browseLabel' => "Subir Archivo",
-                        'uploadUrl' => Url::to(['/admision/solicitudes/savedocumentos']),
-                        'maxFileSize' => Yii::$app->params["MaxFileSize"], // en Kbytes
-                        'uploadExtraData' => 'javascript:function (previewId,index) {
-            return {"upload_file": true, "name_file": "doc_certvota"};
-        }',
-                    ],
-                    'pluginEvents' => [
-                        "filebatchselected" => "function (event) {
-        $('#txth_doc_certvota').val($('#txt_doc_certvota').val());
-        $('#txt_doc_certvota').fileinput('upload');
-    }",
-                        "fileuploaderror" => "function (event, data, msg) {
-        $(this).parent().parent().children().first().addClass('hide');
-        $('#txth_doc_certvota').val('');
-        //showAlert('NO_OK', 'error', {'wtmessage': objLang.Error_to_process_File__Try_again_, 'title': objLang.Error});   
-    }",
-                        "filebatchuploadcomplete" => "function (event, files, extra) { 
-        $(this).parent().parent().children().first().addClass('hide');
-    }",
-                        "filebatchuploadsuccess" => "function (event, data, previewId, index) {
-        var form = data.form, files = data.files, extra = data.extra,
-        response = data.response, reader = data.reader;
-        $(this).parent().parent().children().first().addClass('hide');
-        var acciones = [{id: 'reloadpage', class: 'btn btn-primary', value: objLang.Accept, callback: 'reloadPage'}];
-        //showAlert('OK', 'Success', {'wtmessage': objLang.File_uploaded_successfully__Do_you_refresh_the_web_page_, 'title': objLang.Success, 'acciones': acciones});  
-    }",
-                        "fileuploaded" => "function (event, data, previewId, index) {
-        $(this).parent().parent().children().first().addClass('hide');
-        var acciones = [{id: 'reloadpage', class: 'btn btn-primary', value: objLang.Accept, callback: 'reloadPage'}];
-        //showAlert('OK', 'Success', {'wtmessage': objLang.File_uploaded_successfully__Do_you_refresh_the_web_page_, 'title': objLang.Success, 'acciones': acciones});                              
-    }",
-                    ],
-                ]);*/
-                ?>
+    <?php
+    /* echo CFileInputAjax::widget([
+      'id' => 'txt_doc_certvota',
+      'name' => 'txt_doc_certvota',
+      'pluginLoading' => false,
+      'showMessage' => false,
+      'pluginOptions' => [
+      'showPreview' => false,
+      'showCaption' => true,
+      'showRemove' => true,
+      'showUpload' => false,
+      'showCancel' => false,
+      'browseClass' => 'btn btn-primary btn-block',
+      'browseIcon' => '<i class="fa fa-folder-open"></i> ',
+      'browseLabel' => "Subir Archivo",
+      'uploadUrl' => Url::to(['/admision/solicitudes/savedocumentos']),
+      'maxFileSize' => Yii::$app->params["MaxFileSize"], // en Kbytes
+      'uploadExtraData' => 'javascript:function (previewId,index) {
+      return {"upload_file": true, "name_file": "doc_certvota"};
+      }',
+      ],
+      'pluginEvents' => [
+      "filebatchselected" => "function (event) {
+      $('#txth_doc_certvota').val($('#txt_doc_certvota').val());
+      $('#txt_doc_certvota').fileinput('upload');
+      }",
+      "fileuploaderror" => "function (event, data, msg) {
+      $(this).parent().parent().children().first().addClass('hide');
+      $('#txth_doc_certvota').val('');
+      //showAlert('NO_OK', 'error', {'wtmessage': objLang.Error_to_process_File__Try_again_, 'title': objLang.Error});
+      }",
+      "filebatchuploadcomplete" => "function (event, files, extra) {
+      $(this).parent().parent().children().first().addClass('hide');
+      }",
+      "filebatchuploadsuccess" => "function (event, data, previewId, index) {
+      var form = data.form, files = data.files, extra = data.extra,
+      response = data.response, reader = data.reader;
+      $(this).parent().parent().children().first().addClass('hide');
+      var acciones = [{id: 'reloadpage', class: 'btn btn-primary', value: objLang.Accept, callback: 'reloadPage'}];
+      //showAlert('OK', 'Success', {'wtmessage': objLang.File_uploaded_successfully__Do_you_refresh_the_web_page_, 'title': objLang.Success, 'acciones': acciones});
+      }",
+      "fileuploaded" => "function (event, data, previewId, index) {
+      $(this).parent().parent().children().first().addClass('hide');
+      var acciones = [{id: 'reloadpage', class: 'btn btn-primary', value: objLang.Accept, callback: 'reloadPage'}];
+      //showAlert('OK', 'Success', {'wtmessage': objLang.File_uploaded_successfully__Do_you_refresh_the_web_page_, 'title': objLang.Success, 'acciones': acciones});
+      }",
+      ],
+      ]); */
+    ?>
             </div>
         </div>
     </div>-->
@@ -294,55 +295,55 @@ if (base64_decode($_GET['uaca']) == 2) {
                 <label for="txth_doc_certificado" class="col-sm-4 col-md-4 col-xs-4 col-lg-4 control-label keyupmce"><? Yii::t("formulario", "Materials Certificate") ?></label>
                 <div class="col-sm-7 col-md-7 col-xs-7 col-lg-7">
                     <? Html::hiddenInput('txth_doc_certificado', '', ['id' => 'txth_doc_certificado']); ?>
-                    <?php
-                    /*echo CFileInputAjax::widget([
-                        'id' => 'txt_doc_certificado',
-                        'name' => 'txt_doc_certificado',
-                        'pluginLoading' => false,
-                        'showMessage' => false,
-                        'pluginOptions' => [
-                            'showPreview' => false,
-                            'showCaption' => true,
-                            'showRemove' => true,
-                            'showUpload' => false,
-                            'showCancel' => false,
-                            'browseClass' => 'btn btn-primary btn-block',
-                            'browseIcon' => '<i class="fa fa-folder-open"></i> ',
-                            'browseLabel' => "Subir Archivo",
-                            'uploadUrl' => Url::to(['/admision/solicitudes/savedocumentos']),
-                            'maxFileSize' => Yii::$app->params["MaxFileSize"], // en Kbytes
-                            'uploadExtraData' => 'javascript:function (previewId,index) {
-                return {"upload_file": true, "name_file": "doc_certificado", "inscripcion_id": $("#txth_twin_id").val()};
-            }',
-                        ],
-                        'pluginEvents' => [
-                            "filebatchselected" => "function (event) {
-            $('#txth_doc_certificado').val($('#txt_doc_certificado').val());
-            $('#txt_doc_certificado').fileinput('upload');
-        }",
-                            "fileuploaderror" => "function (event, data, msg) {
-            $(this).parent().parent().children().first().addClass('hide');
-            $('#txth_doc_certificado').val('');
-            //showAlert('NO_OK', 'error', {'wtmessage': objLang.Error_to_process_File__Try_again_, 'title': objLang.Error});   
-        }",
-                            "filebatchuploadcomplete" => "function (event, files, extra) { 
-            $(this).parent().parent().children().first().addClass('hide');
-        }",
-                            "filebatchuploadsuccess" => "function (event, data, previewId, index) {
-            var form = data.form, files = data.files, extra = data.extra,
-            response = data.response, reader = data.reader;
-            $(this).parent().parent().children().first().addClass('hide');
-            var acciones = [{id: 'reloadpage', class: 'btn btn-primary', value: objLang.Accept, callback: 'reloadPage'}];
-            //showAlert('OK', 'Success', {'wtmessage': objLang.File_uploaded_successfully__Do_you_refresh_the_web_page_, 'title': objLang.Success, 'acciones': acciones});  
-        }",
-                            "fileuploaded" => "function (event, data, previewId, index) {
-            $(this).parent().parent().children().first().addClass('hide');
-            var acciones = [{id: 'reloadpage', class: 'btn btn-primary', value: objLang.Accept, callback: 'reloadPage'}];
-            //showAlert('OK', 'Success', {'wtmessage': objLang.File_uploaded_successfully__Do_you_refresh_the_web_page_, 'title': objLang.Success, 'acciones': acciones});                              
-        }",
-                        ],
-                    ]);*/
-                    ?>
+        <?php
+        /* echo CFileInputAjax::widget([
+          'id' => 'txt_doc_certificado',
+          'name' => 'txt_doc_certificado',
+          'pluginLoading' => false,
+          'showMessage' => false,
+          'pluginOptions' => [
+          'showPreview' => false,
+          'showCaption' => true,
+          'showRemove' => true,
+          'showUpload' => false,
+          'showCancel' => false,
+          'browseClass' => 'btn btn-primary btn-block',
+          'browseIcon' => '<i class="fa fa-folder-open"></i> ',
+          'browseLabel' => "Subir Archivo",
+          'uploadUrl' => Url::to(['/admision/solicitudes/savedocumentos']),
+          'maxFileSize' => Yii::$app->params["MaxFileSize"], // en Kbytes
+          'uploadExtraData' => 'javascript:function (previewId,index) {
+          return {"upload_file": true, "name_file": "doc_certificado", "inscripcion_id": $("#txth_twin_id").val()};
+          }',
+          ],
+          'pluginEvents' => [
+          "filebatchselected" => "function (event) {
+          $('#txth_doc_certificado').val($('#txt_doc_certificado').val());
+          $('#txt_doc_certificado').fileinput('upload');
+          }",
+          "fileuploaderror" => "function (event, data, msg) {
+          $(this).parent().parent().children().first().addClass('hide');
+          $('#txth_doc_certificado').val('');
+          //showAlert('NO_OK', 'error', {'wtmessage': objLang.Error_to_process_File__Try_again_, 'title': objLang.Error});
+          }",
+          "filebatchuploadcomplete" => "function (event, files, extra) {
+          $(this).parent().parent().children().first().addClass('hide');
+          }",
+          "filebatchuploadsuccess" => "function (event, data, previewId, index) {
+          var form = data.form, files = data.files, extra = data.extra,
+          response = data.response, reader = data.reader;
+          $(this).parent().parent().children().first().addClass('hide');
+          var acciones = [{id: 'reloadpage', class: 'btn btn-primary', value: objLang.Accept, callback: 'reloadPage'}];
+          //showAlert('OK', 'Success', {'wtmessage': objLang.File_uploaded_successfully__Do_you_refresh_the_web_page_, 'title': objLang.Success, 'acciones': acciones});
+          }",
+          "fileuploaded" => "function (event, data, previewId, index) {
+          $(this).parent().parent().children().first().addClass('hide');
+          var acciones = [{id: 'reloadpage', class: 'btn btn-primary', value: objLang.Accept, callback: 'reloadPage'}];
+          //showAlert('OK', 'Success', {'wtmessage': objLang.File_uploaded_successfully__Do_you_refresh_the_web_page_, 'title': objLang.Success, 'acciones': acciones});
+          }",
+          ],
+          ]); */
+        ?>
                 </div>
             </div>
         </div>-->
@@ -371,42 +372,103 @@ if (base64_decode($_GET['uaca']) == 2) {
                             'uploadUrl' => Url::to(['/admision/solicitudes/savedocumentos']),
                             'maxFileSize' => Yii::$app->params["MaxFileSize"], // en Kbytes
                             'uploadExtraData' => 'javascript:function (previewId,index) {
-                return {"upload_file": true, "name_file": "doc_hojavida", "inscripcion_id": $("#txth_twin_id").val()};
-            }',
+                                return {"upload_file": true, "name_file": "doc_hojavida", "inscripcion_id": $("#txth_twin_id").val()};
+                            }',
                         ],
                         'pluginEvents' => [
                             "filebatchselected" => "function (event) {
-            $('#txth_doc_hojavida').val($('#txt_doc_hoja_vida').val());
-            $('#txt_doc_hoja_vida').fileinput('upload');
-        }",
+                                    $('#txth_doc_hojavida').val($('#txt_doc_hoja_vida').val());
+                                    $('#txt_doc_hoja_vida').fileinput('upload');
+                            }",
                             "fileuploaderror" => "function (event, data, msg) {
-            $(this).parent().parent().children().first().addClass('hide');
-            $('#txth_doc_hojavida').val('');
-            //showAlert('NO_OK', 'error', {'wtmessage': objLang.Error_to_process_File__Try_again_, 'title': objLang.Error});   
-        }",
+                                $(this).parent().parent().children().first().addClass('hide');
+                                $('#txth_doc_hojavida').val('');
+                                //showAlert('NO_OK', 'error', {'wtmessage': objLang.Error_to_process_File__Try_again_, 'title': objLang.Error});   
+                            }",
                             "filebatchuploadcomplete" => "function (event, files, extra) { 
-            $(this).parent().parent().children().first().addClass('hide');
-        }",
+                                $(this).parent().parent().children().first().addClass('hide');
+                            }",
                             "filebatchuploadsuccess" => "function (event, data, previewId, index) {
-            var form = data.form, files = data.files, extra = data.extra,
-            response = data.response, reader = data.reader;
-            $(this).parent().parent().children().first().addClass('hide');
-            var acciones = [{id: 'reloadpage', class: 'btn btn-primary', value: objLang.Accept, callback: 'reloadPage'}];
-            //showAlert('OK', 'Success', {'wtmessage': objLang.File_uploaded_successfully__Do_you_refresh_the_web_page_, 'title': objLang.Success, 'acciones': acciones});  
-        }",
+                                var form = data.form, files = data.files, extra = data.extra,
+                                response = data.response, reader = data.reader;
+                                $(this).parent().parent().children().first().addClass('hide');
+                                var acciones = [{id: 'reloadpage', class: 'btn btn-primary', value: objLang.Accept, callback: 'reloadPage'}];
+                                //showAlert('OK', 'Success', {'wtmessage': objLang.File_uploaded_successfully__Do_you_refresh_the_web_page_, 'title': objLang.Success, 'acciones': acciones});  
+                            }",
                             "fileuploaded" => "function (event, data, previewId, index) {
-            $(this).parent().parent().children().first().addClass('hide');
-            var acciones = [{id: 'reloadpage', class: 'btn btn-primary', value: objLang.Accept, callback: 'reloadPage'}];
-            //showAlert('OK', 'Success', {'wtmessage': objLang.File_uploaded_successfully__Do_you_refresh_the_web_page_, 'title': objLang.Success, 'acciones': acciones});                              
-        }",
+                                $(this).parent().parent().children().first().addClass('hide');
+                                var acciones = [{id: 'reloadpage', class: 'btn btn-primary', value: objLang.Accept, callback: 'reloadPage'}];
+                                //showAlert('OK', 'Success', {'wtmessage': objLang.File_uploaded_successfully__Do_you_refresh_the_web_page_, 'title': objLang.Success, 'acciones': acciones});                              
+                            }",
                         ],
                     ]);
                     ?>
                 </div>
             </div>
-        </div>
-        <?php //Fin de la hoja de vida  ?>        
+        </div>        
+        <?php //Fin de la hoja de vida  ?>                
     </div>
+    <?php if ($cemp_id == 1) { ?>        
+        <?php //Aqui voy a colocar la informacion de la carta de convenio  ?>
+        <div class="col-md-12 col-xs-12 col-sm-12 col-lg-12 doc_carta_convenio">
+            <div class="form-group">
+                <label for="txth_carta_convenio" class="col-sm-4 col-md-4 col-xs-4 col-lg-4 control-label keyupmce"><?= Yii::t("formulario", "Agreement Letter") ?></label>
+                <div class="col-sm-7 col-md-7 col-xs-7 col-lg-7">
+                    <?= Html::hiddenInput('txth_carta_convenio', '', ['id' => 'txth_carta_convenio']); ?>
+                    <?php
+                    echo CFileInputAjax::widget([
+                        'id' => 'txth_carta_convenio',
+                        'name' => 'txth_carta_convenio',
+                        'pluginLoading' => false,
+                        'showMessage' => false,
+                        'pluginOptions' => [
+                            'showPreview' => false,
+                            'showCaption' => true,
+                            'showRemove' => true,
+                            'showUpload' => false,
+                            'showCancel' => false,
+                            'browseClass' => 'btn btn-primary btn-block',
+                            'browseIcon' => '<i class="fa fa-folder-open"></i> ',
+                            'browseLabel' => "Subir Archivo",
+                            'uploadUrl' => Url::to(['/admision/solicitudes/savedocumentos']),
+                            'maxFileSize' => Yii::$app->params["MaxFileSize"], // en Kbytes
+                            'uploadExtraData' => 'javascript:function (previewId,index) {
+                            return {"upload_file": true, "name_file": "doc_carta_convenio"};
+                        }',
+                        ],
+                        'pluginEvents' => [
+                            "filebatchselected" => "function (event) {
+                            $('#txth_carta_convenio').val($('#txt_carta_convenio').val());
+                            $('#txt_carta_convenio').fileinput('upload');
+                        }",
+                            "fileuploaderror" => "function (event, data, msg) {
+                            $(this).parent().parent().children().first().addClass('hide');
+                            $('#txth_carta_convenio').val('');
+                            //showAlert('NO_OK', 'error', {'wtmessage': objLang.Error_to_process_File__Try_again_, 'title': objLang.Error});   
+                        }",
+                            "filebatchuploadcomplete" => "function (event, files, extra) { 
+                            $(this).parent().parent().children().first().addClass('hide');
+                        }",
+                            "filebatchuploadsuccess" => "function (event, data, previewId, index) {
+                            var form = data.form, files = data.files, extra = data.extra,
+                            response = data.response, reader = data.reader;
+                            $(this).parent().parent().children().first().addClass('hide');
+                            var acciones = [{id: 'reloadpage', class: 'btn btn-primary', value: objLang.Accept, callback: 'reloadPage'}];
+                            //showAlert('OK', 'Success', {'wtmessage': objLang.File_uploaded_successfully__Do_you_refresh_the_web_page_, 'title': objLang.Success, 'acciones': acciones});  
+                        }",
+                            "fileuploaded" => "function (event, data, previewId, index) {
+                            $(this).parent().parent().children().first().addClass('hide');
+                            var acciones = [{id: 'reloadpage', class: 'btn btn-primary', value: objLang.Accept, callback: 'reloadPage'}];
+                            //showAlert('OK', 'Success', {'wtmessage': objLang.File_uploaded_successfully__Do_you_refresh_the_web_page_, 'title': objLang.Success, 'acciones': acciones});                              
+                        }",
+                        ],
+                    ]);
+                    ?>
+                </div>
+            </div>
+        </div>    
+    <?php } ?>
+    <?php // fin de la carta de convenio ?>        
     <div class="col-md-12 col-xs-12 col-sm-12 col-lg-12">       
         <div class="form-group">
             <label for="txt_observa" class="col-sm-4 col-md-4 col-xs-4 col-lg-4 control-label keyupmce"><?= Yii::t("formulario", "Observation") ?></label>

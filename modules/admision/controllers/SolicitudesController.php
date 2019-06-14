@@ -13,6 +13,7 @@ use app\modules\admision\models\SolicitudInscripcion;
 use app\modules\admision\models\MetodoIngreso;
 use app\modules\academico\models\EstudioAcademico;
 use app\modules\academico\models\Modalidad;
+use app\modules\academico\models\DocumentoAceptacion;
 use app\modules\admision\models\Oportunidad;
 use app\modules\academico\models\ModuloEstudio;
 use app\modules\admision\models\ItemMetodoUnidad;
@@ -335,11 +336,11 @@ class SolicitudesController extends \app\components\CController {
             $dataDireccion = $data["dir_fac"];
             $dataTelefono = $data["tel_fac"];
             $convenio = $data["cemp_id"];
-            /*if ($dataConvenio == '0') {
-                $convenio = null;
-            } else {
-                $convenio = $dataConvenio;
-            }*/
+            /* if ($dataConvenio == '0') {
+              $convenio = null;
+              } else {
+              $convenio = $dataConvenio;
+              } */
             if ($marca_desc == '1' && $marca_desc == '0') {
                 $valida = 1;
             }
@@ -623,7 +624,7 @@ class SolicitudesController extends \app\components\CController {
                     "sins_id" => $datosSolicitud['sins_id'],
                     "int_id" => $datosSolicitud['int_id'],
                     "beca" => $datosSolicitud['sins_beca'],
-                    "beca" => $datosSolicitud['sins_beca'],
+                    "cemp_id" => $datosSolicitud['cemp_id'],
                     "num_solicitud" => $datosSolicitud['num_solicitud'],
                     "datos" => $datosSolicitud,
         ]);
@@ -723,6 +724,11 @@ class SolicitudesController extends \app\components\CController {
                     $foto_archivo = Yii::$app->params["documentFolder"] . "solicitudinscripcion/" . $per_id . "/doc_foto_per_" . $per_id . "." . $typeFile;
                 }
                 $beca_archivo = "";
+                if (isset($data[""]) && $data[""] != "") {
+                    $arrIm = explode(".", basename($data[""]));
+                    $typeFile = strtolower($arrIm[count($arrIm) - 1]);
+                    $foto_archivo = Yii::$app->params["documentFolder"] . "solicitudinscripcion/" . $per_id . "/doc_foto_per_" . $per_id . "." . $typeFile;
+                }
                 if (isset($data["arc_doc_beca"]) && $data["arc_doc_beca"] != "") {
                     $arrIm = explode(".", basename($data["arc_doc_beca"]));
                     $typeFile = strtolower($arrIm[count($arrIm) - 1]);
@@ -734,6 +740,13 @@ class SolicitudesController extends \app\components\CController {
                   $typeFile = strtolower($arrIm[count($arrIm) - 1]);
                   $certmate_archivo = Yii::$app->params["documentFolder"] . "solicitudinscripcion/" . $per_id . "/doc_certificado_per_" . $per_id . "." . $typeFile;
                   } */
+
+
+                if (isset($data["arc_doc_convenio"]) && $data["arc_doc_convenio"] != "") {
+                    $arrIm = explode(".", basename($data["arc_doc_convenio"]));
+                    $typeFile = strtolower($arrIm[count($arrIm) - 1]);
+                    $carta_archivo = Yii::$app->params["documentFolder"] . "solicitudinscripcion/" . $per_id . "/doc_convenio_per_" . $per_id . "." . $typeFile;
+                }
                 $curriculum_archivo = "";
                 if (isset($data["arc_doc_curri"]) && $data["arc_doc_curri"] != "") {
                     $arrIm = explode(".", basename($data["arc_doc_curri"]));
@@ -794,6 +807,14 @@ class SolicitudesController extends \app\components\CController {
               if ($certmate_archivo === FALSE)
               throw new Exception('Error doc certificado materia no renombrado.');
               } */
+            if (isset($data["arc_doc_convenio"]) && $data["arc_doc_convenio"] != "") {
+                $arrIm = explode(".", basename($data["arc_doc_convenio"]));
+                $typeFile = strtolower($arrIm[count($arrIm) - 1]);
+                $convenio_archivo = Yii::$app->params["documentFolder"] . "solicitudinscripcion/" . $per_id . "/doc_convenio_per_" . $per_id . "." . $typeFile;
+                $convenio_archivo = DocumentoAdjuntar::addLabelTimeDocumentos($sins_id, $convenio_archivo, $timeSt);
+                if ($convenio_archivo === FALSE)
+                    throw new Exception('Error doc carta convenio no renombrado.');
+            }
             if (isset($data["arc_doc_curri"]) && $data["arc_doc_curri"] != "") {
                 $arrIm = explode(".", basename($data["arc_doc_curri"]));
                 $typeFile = strtolower($arrIm[count($arrIm) - 1]);
@@ -889,6 +910,19 @@ class SolicitudesController extends \app\components\CController {
                                     $exito = 1;
                                 } else {
                                     throw new Exception('Tiene que subir curriculum.');
+                                }
+                                if (!empty($convenio_archivo)) {
+                                    $mod_solinsxdoc7 = new DocumentoAceptacion();
+                                    $mod_solinsxdoc7->sins_id = $sins_id;
+                                    $mod_solinsxdoc7->int_id = $interesado_id;
+                                    $mod_solinsxdoc7->dadj_id = 7;
+                                    $mod_solinsxdoc7->sdoc_archivo = $curriculum_archivo;
+                                    $mod_solinsxdoc7->sdoc_observacion = $observacion;
+                                    $mod_solinsxdoc7->sdoc_estado = "1";
+                                    $mod_solinsxdoc7->sdoc_estado_logico = "1";
+                                    if (!$mod_solinsxdoc7->save()) {
+                                        throw new Exception('Error doc curriculum no creado.');
+                                    }
                                 }
                             } else {
                                 $exito = 1;

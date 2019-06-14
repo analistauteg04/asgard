@@ -1,7 +1,6 @@
 
 $(document).ready(function () {
     $("#txt_precio_item").prop('disabled', false); 
-    
     $('input[name=opt_tipo_DNI]:radio').change(function () {
         if ($(this).val() == 1) {//ced
             $('#txt_dni_fac').addClass("PBvalidation");
@@ -1067,6 +1066,7 @@ function save() {
 //Guarda Documentos de solicitudes de inscripción.
 function SaveDocumentos() {
     var link = $('#txth_base').val() + "/admision/solicitudes/savedocumentos";
+    var cemp_id = $('#txth_cemp').val();
     var arrParams = new Object();
     arrParams.sins_id = $('#txth_ids').val();
     arrParams.persona_id = $('#txth_idp').val();
@@ -1082,6 +1082,9 @@ function SaveDocumentos() {
     arrParams.opcion = $('#txth_opcion').val();
     arrParams.uaca_id = $('#txth_uaca').val();
     arrParams.oserva = $('#txt_observa').val();
+    if(cemp_id==1){
+        arrParams.arc_doc_convenio = $('#txth_carta_convenio').val();    
+    }
     if ($('input[name=opt_declara_si]:checked').val() == 1) {
         arrParams.beca = 1;
     } else {

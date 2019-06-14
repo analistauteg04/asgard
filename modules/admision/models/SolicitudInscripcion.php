@@ -459,6 +459,7 @@ class Solicitudinscripcion extends \yii\db\ActiveRecord {
                     sins.uaca_id,
                     sins.mod_id,
                     sins.eaca_id,
+                    ifnull(cemp_id,0) as cemp_id,
                     uaca.uaca_nombre,                    
                     case sins.uaca_id
                      when 1 then (select eaca.eaca_nombre from " . $con1->dbname . ".estudio_academico eaca where eaca.eaca_id = sins.eaca_id)
