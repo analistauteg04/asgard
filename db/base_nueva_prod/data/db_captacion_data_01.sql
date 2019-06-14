@@ -38,7 +38,8 @@ INSERT INTO `documento_adjuntar` (`dadj_id`, `dadj_nombre`, `dadj_descripcion`, 
 (4, 'Foto', 'Foto', '1', '1'),
 (5, 'Documento Beca', 'Documento Beca', '1', '1'),
 (6, 'Certificado Materias Aprobadas', 'Certificado Materias Aprobadas', '1', '1'),
-(7, 'Hoja de Vida', 'Hoja de Vida', '1', '1');
+(7, 'Hoja de Vida', 'Hoja de Vida', '1', '1'),
+(8, 'Carta UNE','Carta UNE','1','1');
 
 -- --------------------------------------------------------
 --
@@ -148,3 +149,6 @@ INSERT INTO `solicitud_noaprobada_documento` (`sndo_id`, `snoa_id`, `dadj_id`, `
 (22, 9, 4, 'E', '1', '1'),
 (23, 10, 4, 'E', '1', '1');
 
+
+insert into db_captacion.convenio_empresa(cemp_id, cemp_nombre, cemp_estado_empresa, cemp_estado, cemp_estado_logico)
+values(1,'UNE','A','1','1');

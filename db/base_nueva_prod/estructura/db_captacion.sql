@@ -116,6 +116,20 @@ create table if not exists `res_sol_inscripcion` (
 
 -- --------------------------------------------------------
 --
+-- Estructura de tabla para la tabla `convenio_empresa` 
+--
+create table if not exists db_captacion.convenio_empresa (
+ `cemp_id` bigint(20) not null auto_increment primary key,
+ `cemp_nombre` varchar(500) not null, 
+ `cemp_estado_empresa` varchar(1) not null,  
+ `cemp_estado` varchar(1) not null, 
+ `cemp_fecha_creacion` timestamp not null default current_timestamp,
+ `cemp_fecha_modificacion` timestamp null default null,
+ `cemp_estado_logico` varchar(1) not null
+);
+
+-- --------------------------------------------------------
+--
 -- Estructura de tabla para la tabla `solicitud_inscripcion`
 -- 
 create table if not exists `solicitud_inscripcion` (
@@ -139,6 +153,7 @@ create table if not exists `solicitud_inscripcion` (
  `sins_observacion_creasolicitud` varchar(1000) null,
  `sins_observacion_revisa` varchar(1000) null,
  `sins_beca` varchar(1) null,
+ `cemp_id` bigint(20) null,
  `sins_usuario_preaprueba` bigint(20) null, 
  `sins_usuario_aprueba` bigint(20) null, 
  `sins_usuario_ingreso` bigint(20) null, 
@@ -148,7 +163,8 @@ create table if not exists `solicitud_inscripcion` (
  `sins_fecha_modificacion` timestamp null default null,
  `sins_estado_logico` varchar(1) not null,
  foreign key (int_id) references `interesado`(int_id), 
- foreign key (rsin_id) references `res_sol_inscripcion`(rsin_id)
+ foreign key (rsin_id) references `res_sol_inscripcion`(rsin_id),
+ foreign key(cemp_id) references convenio_empresa(cemp_id)
 );
 
 -- --------------------------------------------------------
@@ -461,12 +477,14 @@ create table if not exists `temporal_wizard_inscripcion` (
  `car_id` bigint(20) not null,
  `twin_metodo_ingreso` bigint(20) null,
  `conuteg_id` bigint(20) null,
+ `cemp_id` bigint(20) null,
  `ruta_doc_titulo` varchar(200) null,
  `ruta_doc_dni` varchar(200) null, 
  `ruta_doc_certvota` varchar(200) null, 
  `ruta_doc_foto` varchar(200) null, 
  `ruta_doc_certificado` varchar(200) null, 
  `ruta_doc_hojavida` varchar(200) null, 
+ `ruta_doc_aceptacion` varchar(200) null,
  `twin_mensaje1` varchar(1) null,
  `twin_mensaje2` varchar(1) null, 
  `twin_estado` varchar(1) not null,
