@@ -87,7 +87,7 @@ class DocumentoAceptacion extends \yii\db\ActiveRecord
         $estado = 1;
             $sql = "
                         select 
-                            dace.dadj_id, dace.dace_observacion, dace.dace_estado_aprobacion
+                            dace.dadj_id, dace.dace_observacion, dace.dace_estado_aprobacion, dace.dace_archivo
                         from
                             db_academico.documento_aceptacion as dace
                         where 
@@ -99,8 +99,8 @@ class DocumentoAceptacion extends \yii\db\ActiveRecord
         $comando = $con->createCommand($sql);
         $comando->bindParam(":estado", $estado, \PDO::PARAM_STR);
         $comando->bindParam(":per_id", $per_id, \PDO::PARAM_INT);
-        $resultData = $comando->queryAll();
-        return $resultData;
+        $resultRow = $comando->queryOne();
+        return $resultRow;
     }
 
     public function insertar($con,$data)

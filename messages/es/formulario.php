@@ -127,6 +127,7 @@ return [
     "CAN Period online" => "Período CAN Online",
     "Carnet Conadis" => "Carnet Conadis",
     "Carnet Number Conadis" => "Número Carnet Conadis",
+    "Agreement Letter" => "Carta Convenio",
     "CellPhone" => "Celular",
     "Centro Idiomas" => "Centro Idiomas",
     "Certificates" => "Certificado",
