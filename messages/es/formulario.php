@@ -146,6 +146,7 @@ return [
     "Collaboration Agreement" => "Convenio Colaboración",
     "Comments" => "Comentarios",
     "Company" => "Empresa",
+    "Company Agreement" => "Convenio Empresa",
     "Company/Institution" => "Empresa/Institución",
     "Company/Institution Contact" => "Contacto Empresa/Institución ",
     "Company Name" => "Nombre Empresa",

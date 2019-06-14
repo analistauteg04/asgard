@@ -134,7 +134,7 @@ $leyenda = '<div class="col-md-12 col-xs-12 col-sm-12 col-lg-12">
             </div>
         </div>        
     </div>
-    
+
     <div class="col-md-12 col-xs-12 col-sm-12 col-lg-12" id="divItem" style="display: block">        
         <div class="col-lg-6 col-md-6 col-sm-6 col-xs-6">
             <div class="form-group">
@@ -190,6 +190,16 @@ $leyenda = '<div class="col-md-12 col-xs-12 col-sm-12 col-lg-12">
             </div>
         </div>
     </div>  
+    <div class="col-md-12 col-xs-12 col-sm-12 col-lg-12">       
+        <div class="col-lg-6 col-md-6 col-sm-6 col-xs-6">
+            <div class="form-group">
+                <label for="cmb_convenio" class="col-sm-5 col-md-5 col-xs-5 col-lg-5 control-label keyupmce"><?= Yii::t("formulario", "Company Agreement") ?></label>
+                <div class="col-sm-7 col-md-7 col-xs-7 col-lg-7">
+                    <?= Html::dropDownList("cmb_convenio", 0, array_merge([Yii::t("formulario", "Select")], $arr_convenio_empresa), ["class" => "form-control", "id" => "cmb_convenio"]) ?>
+                </div>
+            </div>    
+        </div>          
+    </div> 
     <div class='col-md-12 col-sm-12 col-xs-12 col-lg-12'>
         <div class="col-md-6 col-sm-6 col-xs-6 col-lg-6">
             <div class="form-group">
@@ -265,7 +275,7 @@ $leyenda = '<div class="col-md-12 col-xs-12 col-sm-12 col-lg-12">
         </div> 
     </div> 
     <?= Html::hiddenInput('txth_ruc_lb', Yii::t("formulario", "RUC"), ['id' => 'txth_ruc_lb']); ?>
-    <?= Html::hiddenInput('txth_ced_lb', Yii::t("formulario", "DNI Document"). '/' . Yii::t("formulario", "DNI 1"), ['id' => 'txth_ced_lb']); ?>
+    <?= Html::hiddenInput('txth_ced_lb', Yii::t("formulario", "DNI Document") . '/' . Yii::t("formulario", "DNI 1"), ['id' => 'txth_ced_lb']); ?>
     <?= Html::hiddenInput('txth_pas_lb', Yii::t("formulario", "Passport"), ['id' => 'txth_pas_lb']); ?>
     <?= Html::hiddenInput('txth_extranjero', $txth_extranjero, ['id' => 'txth_extranjero']); ?>
 </form>
