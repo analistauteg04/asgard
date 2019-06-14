@@ -352,9 +352,9 @@ financiero::registerTranslations();
         <div class="col-md-12 col-sm-12 col-xs-12 col-lg-12">
             <div class="col-md-6 col-sm-6 col-xs-6 col-lg-6">
                 <div class="form-group">
-                    <label for="chk_convenio" class="col-sm-10 col-md-10 col-xs-10 col-lg-10 control-label"><?= admision::t("Solicitudes", "No cumple condiciones de aceptación en convenio") ?></label>
+                    <label for="chk_convenio" class="col-sm-10 col-md-10 col-xs-10 col-lg-10 control-label"><?= admision::t("Solicitudes", "Does not meet acceptance conditions in convent") ?></label>
                     <div class="col-sm-1 ">                     
-                        <input type="checkbox" class="" id="chk_convenio" data-type="alfa" data-keydown="true" placeholder="<?= admision::t("Solicitudes", "No cumple condiciones de aceptación en convenio") ?>">  
+                        <input type="checkbox" class="" id="chk_convenio" data-type="alfa" data-keydown="true" placeholder="<?= admision::t("Solicitudes", "Does not meet acceptance conditions in convent") ?>">  
                     </div>
                 </div>
 
