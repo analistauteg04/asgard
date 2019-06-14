@@ -91,13 +91,13 @@ $(document).ready(function () {
                             showAlert("NO_OK", "error", mensaje);
                         }
                     }
-                } else {
+                } /*else {
                     if ($('#txth_doc_hojavida').val() == "") {
                         error++;
                         var mensaje = {wtmessage: "Debe adjuntar hoja de vida.", title: "Información"};
                         showAlert("NO_OK", "error", mensaje);
                     }
-                }
+                }*/
             }
         }
         if ($('#cmb_convenio_empresa').val() > 0) {

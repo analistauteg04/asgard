@@ -279,6 +279,7 @@ class InscripcionAdmision extends \yii\db\ActiveRecord {
         $transaction1 = $con1->beginTransaction();
         $transaction2 = $con2->beginTransaction();
         try {
+            \app\models\Utilities::putMessageLogFile('comienzo de insertar original');
             //Se consulta la información grabada en la tabla temporal.
             $mod_inscripcion = new InscripcionAdmision();
             $resp_datos = $mod_inscripcion->consultarDatosInscripcion($twinIds);
@@ -391,7 +392,7 @@ class InscripcionAdmision extends \yii\db\ActiveRecord {
                                                 $cemp=null;
                                             } else {
                                                 $cemp=$resp_datos['cemp_id'];
-                                            }
+                                            }                                            
                                             $sins_id = $solins_model->insertarSolicitud($interesado_id, $resp_datos['uaca_id'], $resp_datos['mod_id'], $resp_datos['twin_metodo_ingreso'], $eaca_id, null, $emp_id, $num_secuencia, $rsin_id, $sins_fechasol, $usuario_id, $cemp);
                                             //\app\models\Utilities::putMessageLogFile('despues de insertarSolicitud');
                                             //grabar los documentos
@@ -407,7 +408,7 @@ class InscripcionAdmision extends \yii\db\ActiveRecord {
                                                     $timeSt = $arrTime[4];
                                                     $typeFile = strtolower($arrIm[count($arrIm) - 1]);
                                                     $rutaTitulo = Yii::$app->params["documentFolder"] . "solicitudinscripcion/" . $id_persona . "/doc_titulo_per_" . $id_persona . "_" . $timeSt;
-                                                    $resulDoc1 = $solins_model->insertarDocumentosSolic($sins_id, $interesado_id, 1, $rutaTitulo, $usuario_id);
+                                                    $resulDoc1 = $solins_model->insertarDocumentosSolic($sins_id, $interesado_id, 1, $rutaTitulo, $usuario_id);                                                    
                                                     /* if (!($resulDoc1)) {
                                                       throw new Exception('Error doc Titulo no creado.');
                                                       } */
@@ -418,7 +419,7 @@ class InscripcionAdmision extends \yii\db\ActiveRecord {
                                                     $timeSt = $arrTime[4];
                                                     $typeFile = strtolower($arrIm[count($arrIm) - 1]);
                                                     $rutaDni = Yii::$app->params["documentFolder"] . "solicitudinscripcion/" . $id_persona . "/doc_dni_per_" . $id_persona . "_" . $timeSt;
-                                                    $resulDoc2 = $solins_model->insertarDocumentosSolic($sins_id, $interesado_id, 2, $rutaDni, $usuario_id);
+                                                    $resulDoc2 = $solins_model->insertarDocumentosSolic($sins_id, $interesado_id, 2, $rutaDni, $usuario_id);                                                                                                        
                                                     /* if (!($resulDoc2)) {
                                                       throw new Exception('Error doc Titulo no creado.');
                                                       } */
@@ -429,7 +430,7 @@ class InscripcionAdmision extends \yii\db\ActiveRecord {
                                                     $timeSt = $arrTime[4];
                                                     $typeFile = strtolower($arrIm[count($arrIm) - 1]);
                                                     $rutaCertvota = Yii::$app->params["documentFolder"] . "solicitudinscripcion/" . $id_persona . "/doc_certvota_per_" . $id_persona . "_" . $timeSt;
-                                                    $resulDoc3 = $solins_model->insertarDocumentosSolic($sins_id, $interesado_id, 3, $rutaCertvota, $usuario_id);
+                                                    $resulDoc3 = $solins_model->insertarDocumentosSolic($sins_id, $interesado_id, 3, $rutaCertvota, $usuario_id);                                                    
                                                     /* if (!($resulDoc3)) {
                                                       throw new Exception('Error doc Cert.Votación no creado.');
                                                       } */
@@ -440,7 +441,7 @@ class InscripcionAdmision extends \yii\db\ActiveRecord {
                                                     $timeSt = $arrTime[4];
                                                     $typeFile = strtolower($arrIm[count($arrIm) - 1]);
                                                     $rutaFoto = Yii::$app->params["documentFolder"] . "solicitudinscripcion/" . $id_persona . "/doc_foto_per_" . $id_persona . "_" . $timeSt;
-                                                    $resulDoc4 = $solins_model->insertarDocumentosSolic($sins_id, $interesado_id, 4, $rutaFoto, $usuario_id);
+                                                    $resulDoc4 = $solins_model->insertarDocumentosSolic($sins_id, $interesado_id, 4, $rutaFoto, $usuario_id);                                                    
                                                     /* if (!($resulDoc4)) {
                                                       throw new Exception('Error doc Foto no creado.');
                                                       } */
@@ -452,7 +453,7 @@ class InscripcionAdmision extends \yii\db\ActiveRecord {
                                                         $timeSt = $arrTime[4];
                                                         $typeFile = strtolower($arrIm[count($arrIm) - 1]);
                                                         $rutaCertificado = Yii::$app->params["documentFolder"] . "solicitudinscripcion/" . $id_persona . "/doc_certificado_per_" . $id_persona . "_" . $timeSt;
-                                                        $resulDoc5 = $solins_model->insertarDocumentosSolic($sins_id, $interesado_id, 6, $rutaCertificado, $usuario_id);
+                                                        $resulDoc5 = $solins_model->insertarDocumentosSolic($sins_id, $interesado_id, 6, $rutaCertificado, $usuario_id);                                                        
                                                         /* if (!($resulDoc5)) {
                                                           throw new Exception('Error doc Certificado no creado.');
                                                           } */
@@ -467,19 +468,19 @@ class InscripcionAdmision extends \yii\db\ActiveRecord {
                                                         /* if (!($resulDoc6)) {
                                                           throw new Exception('Error doc Hoja de Vida no creado.');
                                                           } */
-                                                    }
-                                                    if ($resp_datos['ruta_doc_aceptacion'] != "") {
-                                                        $arrIm = explode(".", basename($resp_datos['ruta_doc_aceptacion']));
-                                                        $arrTime = explode("_", basename($resp_datos['ruta_doc_aceptacion']));
-                                                        $timeSt = $arrTime[4];
-                                                        $typeFile = strtolower($arrIm[count($arrIm) - 1]);
-                                                        $rutaDocAceptacion = Yii::$app->params["documentFolder"] . "solicitudinscripcion/" . $id_persona . "/doc_aceptacion_per_" . $id_persona . "_" . $timeSt;                                                        
-                                                        $resulDoc7 = $solins_model->insertarDocumentosSolic($sins_id, $interesado_id, 8, $rutaDocAceptacion, $usuario_id);
-                                                        //app\models\Utilities::putMessageLogFile('despues de insertarDocumentosSolic');
-                                                        /* if (!($resulDoc6)) {
-                                                          throw new Exception('Error doc Hoja de Vida no creado.');
-                                                          } */
-                                                    }
+                                                    }                                                    
+                                                }
+                                                if ($resp_datos['ruta_doc_aceptacion'] != "") {
+                                                    $arrIm = explode(".", basename($resp_datos['ruta_doc_aceptacion']));
+                                                    $arrTime = explode("_", basename($resp_datos['ruta_doc_aceptacion']));
+                                                    $timeSt = $arrTime[4];
+                                                    $typeFile = strtolower($arrIm[count($arrIm) - 1]);
+                                                    $rutaDocAceptacion = Yii::$app->params["documentFolder"] . "solicitudinscripcion/" . $id_persona . "/doc_aceptacion_per_" . $id_persona . "_" . $timeSt;                                                        
+                                                    $resulDoc7 = $solins_model->insertarDocumentosSolic($sins_id, $interesado_id, 8, $rutaDocAceptacion, $usuario_id);                                                    
+                                                    //app\models\Utilities::putMessageLogFile('despues de insertarDocumentosSolic');
+                                                    /* if (!($resulDoc6)) {
+                                                      throw new Exception('Error doc Hoja de Vida no creado.');
+                                                      } */
                                                 }
                                                 //Obtener el precio de la solicitud.
                                                 if ($beca == "1") {
