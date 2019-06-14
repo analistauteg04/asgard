@@ -1031,7 +1031,8 @@ function save() {
     arrParams.dni_fac = $('#txt_dni_fac').val();
     arrParams.observacion = $('#txt_observacion').val();
     arrParams.ite_id = $('#cmb_item').val();    
-    arrParams.precio = $('#txt_precio_item').val();    
+    arrParams.precio = $('#txt_precio_item').val();  
+    arrParams.cemp_id = $('#cmb_convenio').val();
     if ($('input[name=opt_declara_Dctosi]:checked').val() == 1) {
         arrParams.descuento_id = $('#cmb_descuento').val();
         arrParams.marcadescuento = '1';
