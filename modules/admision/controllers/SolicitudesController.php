@@ -685,6 +685,7 @@ class SolicitudesController extends \app\components\CController {
             $sins_id = base64_decode($data["sins_id"]);
             $interesado_id = base64_decode($data["interesado_id"]);
             $es_extranjero = base64_decode($data["arc_extranjero"]);
+            $cemp_id = $data["cemp_id"];
             $beca = base64_decode($data["beca"]);
             $uaca_id = $data["uaca_id"];
             $observacion = ucwords(mb_strtolower($data["oserva"]));
@@ -803,7 +804,7 @@ class SolicitudesController extends \app\components\CController {
                 if ($beca_archivo === FALSE)
                     throw new Exception('Error doc Beca no renombrado.');
             }
-            /* if (isset($data["arc_doc_certmat"]) && $data["arc_doc_certmat"] != "") {
+             /* if (isset($data["arc_doc_certmat"]) && $data["arc_doc_certmat"] != "") {
               $arrIm = explode(".", basename($data["arc_doc_certmat"]));
               $typeFile = strtolower($arrIm[count($arrIm) - 1]);
               $certmate_archivo = Yii::$app->params["documentFolder"] . "solicitudinscripcion/" . $per_id . "/doc_certificado_per_" . $per_id . "." . $typeFile;
@@ -811,13 +812,15 @@ class SolicitudesController extends \app\components\CController {
               if ($certmate_archivo === FALSE)
               throw new Exception('Error doc certificado materia no renombrado.');
               } */
-            if (isset($data["arc_doc_convenio"]) && $data["arc_doc_convenio"] != "") {
-                $arrIm = explode(".", basename($data["arc_doc_convenio"]));
-                $typeFile = strtolower($arrIm[count($arrIm) - 1]);
-                $convenio_archivo = Yii::$app->params["documentFolder"] . "solicitudinscripcion/" . $per_id . "/doc_convenio_per_" . $per_id . "." . $typeFile;
-                $convenio_archivo = DocumentoAdjuntar::addLabelTimeDocumentos($sins_id, $convenio_archivo, $timeSt);
-                if ($convenio_archivo === FALSE)
-                    throw new Exception('Error doc carta convenio no renombrado.');
+            if ($cemp_id == 1) {
+                if (isset($data["arc_doc_convenio"]) && $data["arc_doc_convenio"] != "") {
+                    $arrIm = explode(".", basename($data["arc_doc_convenio"]));
+                    $typeFile = strtolower($arrIm[count($arrIm) - 1]);
+                    $convenio_archivo = Yii::$app->params["documentFolder"] . "solicitudinscripcion/" . $per_id . "/doc_convenio_per_" . $per_id . "." . $typeFile;
+                    $convenio_archivo = DocumentoAdjuntar::addLabelTimeDocumentos($sins_id, $convenio_archivo, $timeSt);
+                    if ($convenio_archivo === FALSE)
+                        throw new Exception('Error doc carta convenio no renombrado.');
+                }
             }
             if (isset($data["arc_doc_curri"]) && $data["arc_doc_curri"] != "") {
                 $arrIm = explode(".", basename($data["arc_doc_curri"]));
@@ -826,6 +829,20 @@ class SolicitudesController extends \app\components\CController {
                 $curriculum_archivo = DocumentoAdjuntar::addLabelTimeDocumentos($sins_id, $curriculum_archivo, $timeSt);
                 if ($curriculum_archivo === FALSE)
                     throw new Exception('Error doc curriculum no renombrado.');
+            }
+            $convenio_archivo = $data["arc_doc_convenio"];
+            if (!empty($convenio_archivo) && $cemp_id == 1) {
+                $mod_solinsxdoc8 = new SolicitudinsDocumento();
+                $mod_solinsxdoc8->sins_id = $sins_id;
+                $mod_solinsxdoc8->int_id = $interesado_id;
+                $mod_solinsxdoc8->dadj_id = 8;
+                $mod_solinsxdoc8->dace_archivo = $convenio_archivo;
+                $mod_solinsxdoc8->dace_observacion = $observacion;
+                $mod_solinsxdoc8->dace_estado = "1";
+                $mod_solinsxdoc8->dace_estado_logico = "1";
+                if (!$mod_solinsxdoc8->save()) {
+                    throw new Exception('Error documento aceptacion no creado.');
+                }
             }
             if ((($uaca_id == 1) && !empty($titulo_archivo) && !empty($dni_archivo) && !empty($foto_archivo)) or ( !empty($curriculum_archivo) && !empty($titulo_archivo) && !empty($dni_archivo) && !empty($foto_archivo) && ($uaca_id == "2"))) {
                 $mod_solinsxdoc1 = new SolicitudinsDocumento();
@@ -914,19 +931,6 @@ class SolicitudesController extends \app\components\CController {
                                     $exito = 1;
                                 } else {
                                     throw new Exception('Tiene que subir curriculum.');
-                                }
-                                if (!empty($convenio_archivo)) {
-                                    $mod_solinsxdoc7 = new DocumentoAceptacion();
-                                    $mod_solinsxdoc7->sins_id = $sins_id;
-                                    $mod_solinsxdoc7->int_id = $interesado_id;
-                                    $mod_solinsxdoc7->dadj_id = 7;
-                                    $mod_solinsxdoc7->sdoc_archivo = $curriculum_archivo;
-                                    $mod_solinsxdoc7->sdoc_observacion = $observacion;
-                                    $mod_solinsxdoc7->sdoc_estado = "1";
-                                    $mod_solinsxdoc7->sdoc_estado_logico = "1";
-                                    if (!$mod_solinsxdoc7->save()) {
-                                        throw new Exception('Error doc curriculum no creado.');
-                                    }
                                 }
                             } else {
                                 $exito = 1;
@@ -1188,7 +1192,7 @@ class SolicitudesController extends \app\components\CController {
             $observarevisa = ucwords(strtolower($data["observarevisa"]));
             $cemp_id = $data["cemp_id"];
             $condicionesCerti = $data["condicioncerti"];
-            
+
             $con = \Yii::$app->db_captacion;
             $transaction = $con->beginTransaction();
             $con2 = \Yii::$app->db_facturacion;

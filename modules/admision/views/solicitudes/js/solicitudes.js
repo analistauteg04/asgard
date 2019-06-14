@@ -1090,6 +1090,7 @@ function SaveDocumentos() {
     arrParams.opcion = $('#txth_opcion').val();
     arrParams.uaca_id = $('#txth_uaca').val();
     arrParams.oserva = $('#txt_observa').val();
+    arrParams.cemp_id=cemp_id;
     if(cemp_id==1){
         arrParams.arc_doc_convenio = $('#txth_carta_convenio').val();    
     }
