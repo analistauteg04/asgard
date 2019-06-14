@@ -1061,7 +1061,7 @@ class PersonaGestion extends \app\modules\admision\components\CActiveRecord {
                         and ec.econ_estado_logico = :estado 
                         and cc.ccan_estado = :estado 
                         and cc.ccan_estado_logico = :estado 
-                ORDER BY pg.pges_fecha_creacion asc) a ";
+                ORDER BY pg.pges_fecha_creacion desc) a ";
         if (isset($arrFiltro) && count($arrFiltro) > 0) {
             $sql .= "WHERE $str_search 
                            a.pges_codigo = a.pges_codigo";

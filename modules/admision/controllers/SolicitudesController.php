@@ -129,6 +129,7 @@ class SolicitudesController extends \app\components\CController {
         $resp_arch5 = $mod_solins->Obtenerdocumentosxsolicitud($sins_id, 5);
         $resp_arch6 = $mod_solins->Obtenerdocumentosxsolicitud($sins_id, 6);
         $resp_arch7 = $mod_solins->Obtenerdocumentosxsolicitud($sins_id, 7);
+        $resp_arch8 = $mod_solins->Obtenerdocumentosxsolicitud($sins_id, 8);
 
         $observa = $mod_solins->Obtenerobservadocumentos($sins_id);
 
@@ -145,6 +146,7 @@ class SolicitudesController extends \app\components\CController {
         $resp_conddni = $mod_solins->consultarSolnoaprobada(2, $tiponacext);
         $resp_rechazo = $mod_solins->consultaSolicitudRechazada($sins_id, 'A');
         $resp_condcertv = $mod_solins->consultarSolnoaprobada(3, $tiponacext);
+        $resp_condcon = $mod_solins->consultarSolnoaprobada(8, $tiponacext);
 
         return $this->render('view', [
                     "revision" => array("2" => Yii::t("formulario", "APPROVED"), "4" => Yii::t("formulario", "Not approved")),
@@ -156,6 +158,7 @@ class SolicitudesController extends \app\components\CController {
                     "arch5" => $resp_arch5['sdoc_archivo'],
                     "arch6" => $resp_arch6['sdoc_archivo'],
                     "arch7" => $resp_arch7['sdoc_archivo'],
+                    "arch8" => $resp_arch8['sdoc_archivo'],
                     "txth_extranjero" => $nacionalidad,
                     "sins_id" => $sins_id,
                     "int_id" => $int_id,
@@ -168,6 +171,7 @@ class SolicitudesController extends \app\components\CController {
                     "arr_fecha" => $fechas,
                     "arr_certv" => $resp_condcertv,
                     "arr_observa" => $observa,
+                    "arr_condcon" => $resp_condcon,
         ]);
     }
 
@@ -1174,14 +1178,17 @@ class SolicitudesController extends \app\components\CController {
             $per_id = base64_decode($data["per_id"]);
             $condicionesTitulo = $data["condicionestitulo"];
             $condicionesDni = $data["condicionesdni"];
-            $condicionesCerti = $data["condicioncerti"];
+            $condicionesConvi = $data["condicionconvi"];
             $titulo = $data["titulo"];
             $dni = $data["dni"];
             $certivot = $data["certi"];
+            $convenio = $data["convi"];
             $emp_id = $data["empresa"];
             $rsin_id = base64_decode($data["estado_sol"]);
             $observarevisa = ucwords(strtolower($data["observarevisa"]));
-
+            $cemp_id = $data["cemp_id"];
+            $condicionesCerti = $data["condicioncerti"];
+            
             $con = \Yii::$app->db_captacion;
             $transaction = $con->beginTransaction();
             $con2 = \Yii::$app->db_facturacion;
@@ -1323,6 +1330,17 @@ class SolicitudesController extends \app\components\CController {
                                         for ($b = 0; $b < count($condicionesCerti); $b++) {
                                             $resp_rechcer = $mod_solins->Insertarsolicitudrechazada($sins_id, 3, $condicionesCerti[$b], $srec_etapa, $obs_rechazo, $respusuario['usu_id']);
                                             if ($resp_rechcer) {
+                                                $ok = "1";
+                                            } else {
+                                                $ok = "0";
+                                            }
+                                        }
+                                    }
+                                    if ($convenio == 1) {
+                                        $obs_rechazoconvenio = "No cumple condiciones de convenio.";
+                                        for ($b = 0; $b < count($condicionesConvi); $b++) {
+                                            $resp_rechcercon = $mod_solins->Insertarsolicitudrechazada($sins_id, 8, $condicionesConvi[$b], $srec_etapa, $obs_rechazoconvenio, $respusuario['usu_id']);
+                                            if ($resp_rechcercon) {
                                                 $ok = "1";
                                             } else {
                                                 $ok = "0";

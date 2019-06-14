@@ -14,6 +14,7 @@ financiero::registerTranslations();
 <?= Html::hiddenInput('txth_int_id', base64_encode($int_id), ['id' => 'txth_int_id']); ?>
 <?= Html::hiddenInput('txth_rsin_id', base64_encode($personaData["rsin_id"]), ['id' => 'txth_rsin_id']); ?>
 <?= Html::hiddenInput('txth_emp_id', base64_encode($emp_id), ['id' => 'txth_emp_id']); ?>
+<?= Html::hiddenInput('txth_cemp_id', $personaData["cemp_id"], ['id' => 'txth_cemp_id']); ?>
 
 <form class="form-horizontal" enctype="multipart/form-data" id="formsolicitud">
     <div class="col-md-12 col-sm-12 col-xs-12 col-lg-12">
@@ -172,25 +173,25 @@ financiero::registerTranslations();
         </div>        
 
         <?php //if (($txth_extranjero == "1") or ( empty($txth_extranjero))) { ?>
-            <!--<div class="col-md-6  doc_certvota cinteres">
-                <div class="form-group">
-                    <label for="txth_doc_certvota" class="col-sm-4 control-label keyupmce"><? Yii::t("formulario", "Voting Certificate") ?></label>
-                    <div class="col-sm-7 ">                
-                        <?php
-                        //echo "<a href='" . Url::to(['/site/getimage', 'route' => "$arch3"]) . "' download='" . $arch3 . "' ><span class='glyphicon glyphicon-download-alt'></span>Descargar Imagen</a>"
-                        ?>
-                    </div>
+        <!--<div class="col-md-6  doc_certvota cinteres">
+            <div class="form-group">
+                <label for="txth_doc_certvota" class="col-sm-4 control-label keyupmce"><? Yii::t("formulario", "Voting Certificate") ?></label>
+                <div class="col-sm-7 ">                
+        <?php
+        //echo "<a href='" . Url::to(['/site/getimage', 'route' => "$arch3"]) . "' download='" . $arch3 . "' ><span class='glyphicon glyphicon-download-alt'></span>Descargar Imagen</a>"
+        ?>
                 </div>
-            </div>-->
+            </div>
+        </div>-->
         <?php //} ?>
         <?php if ($personaData["uaca_id"] == 2) { ?>   
             <!-- <div class="col-md-6  doc_foto cinteres">
                 <div class="form-group">
                     <label for="txth_doc_certificado" class="col-sm-4  control-label keyupmce"><? Yii::t("formulario", "Materials Certificate") ?></label>
                     <div class="col-sm-7 ">                
-                        <?php
-                        //echo "<a href='" . Url::to(['/site/getimage', 'route' => "$arch6"]) . "' download='" . $arch6 . "' ><span class='glyphicon glyphicon-download-alt'></span>Descargar Imagen</a>"
-                        ?>
+            <?php
+            //echo "<a href='" . Url::to(['/site/getimage', 'route' => "$arch6"]) . "' download='" . $arch6 . "' ><span class='glyphicon glyphicon-download-alt'></span>Descargar Imagen</a>"
+            ?>
                     </div>
                 </div>
             </div> -->    
@@ -229,6 +230,18 @@ financiero::registerTranslations();
             </div>
         </div>
     </div> 
+    <?php if ($personaData["cemp_id"] > 0) { ?>            
+        <div class="col-md-6 col-sm-6 col-xs-6 col-lg-6  doc_foto cinteres">
+            <div class="form-group">
+                <label for="txth_doc_convenio" class="col-sm-4 control-label keyupmce"><?= Yii::t("formulario", "Company Agreement") ?></label>
+                <div class="col-sm-7 ">                
+                    <?php
+                    echo "<a href='" . Url::to(['/site/getimage', 'route' => "$arch8"]) . "' download='" . $arch8 . "' ><span class='glyphicon glyphicon-download-alt'></span>Descargar Imagen</a>"
+                    ?>
+                </div>
+            </div>
+        </div>  
+    <?php } ?>
     <div class="col-md-6 col-sm-6 col-xs-6 col-lg-6">
         <label for="txt_observa" class="col-sm-4 col-md-4 col-xs-4 col-lg-4 control-label keyupmce"><?= Yii::t("formulario", "Observation") ?></label>
         <div class="col-sm-8 col-md-8 col-xs-8 col-lg-8">                
@@ -239,31 +252,31 @@ financiero::registerTranslations();
         <h4><b><span id="lbl_solicitud"><?= admision::t("Solicitudes", "Result Review") ?></span></b></h4>
     </div> 
 
-        <div class="col-md-6 col-sm-6 col-xs-6 col-lg-6">
-            <div class="form-group">
-                <label for="cmb_revision" class="col-sm-4 col-md-4 col-xs-4 col-lg-4 control-label keyupmce"><?= Yii::t("formulario", "Result") ?></label>
-                <div class="col-sm-4 col-md-4 col-xs-4 col-lg-4">
+    <div class="col-md-6 col-sm-6 col-xs-6 col-lg-6">
+        <div class="form-group">
+            <label for="cmb_revision" class="col-sm-4 col-md-4 col-xs-4 col-lg-4 control-label keyupmce"><?= Yii::t("formulario", "Result") ?></label>
+            <div class="col-sm-4 col-md-4 col-xs-4 col-lg-4">
 
-                    <?php if ($personaData["rsin_id"] != 2) { ?> 
-                        <?= Html::dropDownList("cmb_revision", 0, $revision, ["class" => "form-control PBvalidation", "id" => "cmb_revision"]) ?> 
-                    <?php } else { ?>                
-                        <?= Html::dropDownList("cmb_revision", $personaData["rsin_id"], $revision, ["class" => "form-control PBvalidation", "id" => "cmb_revision", "disabled" => "true"]) ?> 
-                    <?php } ?>      
-
-                </div>
-            </div>
-        </div>
-        <div class="col-md-6 col-sm-6 col-xs-6 col-lg-6">
-            <label for="txt_observarevi" class="col-sm-4 col-md-4 col-xs-4 col-lg-4 control-label keyupmce"><?= Yii::t("formulario", "Observation") ?></label>
-            <div class="col-sm-8 col-md-8 col-xs-8 col-lg-8">                
                 <?php if ($personaData["rsin_id"] != 2) { ?> 
-                    <textarea  class="form-control keyupmce" id="txt_observarevi" rows="3"><?= $personaData["sins_observacion_revisa"] ?></textarea>                  
-                <?php } else { ?>  
-                    <textarea  class="form-control keyupmce" id="txt_observarevi" disabled = "true" rows="3"><?= $personaData["sins_observacion_revisa"] ?></textarea>                  
-                <?php } ?>   
+                    <?= Html::dropDownList("cmb_revision", 0, $revision, ["class" => "form-control PBvalidation", "id" => "cmb_revision"]) ?> 
+                <?php } else { ?>                
+                    <?= Html::dropDownList("cmb_revision", $personaData["rsin_id"], $revision, ["class" => "form-control PBvalidation", "id" => "cmb_revision", "disabled" => "true"]) ?> 
+                <?php } ?>      
+
             </div>
         </div>
-  
+    </div>
+    <div class="col-md-6 col-sm-6 col-xs-6 col-lg-6">
+        <label for="txt_observarevi" class="col-sm-4 col-md-4 col-xs-4 col-lg-4 control-label keyupmce"><?= Yii::t("formulario", "Observation") ?></label>
+        <div class="col-sm-8 col-md-8 col-xs-8 col-lg-8">                
+            <?php if ($personaData["rsin_id"] != 2) { ?> 
+                <textarea  class="form-control keyupmce" id="txt_observarevi" rows="3"><?= $personaData["sins_observacion_revisa"] ?></textarea>                  
+            <?php } else { ?>  
+                <textarea  class="form-control keyupmce" id="txt_observarevi" disabled = "true" rows="3"><?= $personaData["sins_observacion_revisa"] ?></textarea>                  
+            <?php } ?>   
+        </div>
+    </div>
+
     <?php //if (empty($personaData["sins_fecha_reprobacion"])) { ?> 
     <div class="col-md-12 col-sm-12 col-xs-12 col-lg-12" id="Divnoaprobado" style="display: none;"> 
         <div class="col-md-6 col-sm-6 col-xs-6 col-lg-6">
@@ -282,8 +295,7 @@ financiero::registerTranslations();
                     <input type="checkbox" class="" id="chk_documento" data-type="alfa" data-keydown="true" placeholder="<?= admision::t("Solicitudes", "Does not meet acceptance conditions on identity document") ?>">  
                 </div>
             </div>
-        </div>
-
+        </div>  
         <div class="col-md-6 col-sm-6 col-xs-6 col-lg-6" id="Divcondtitulo" style="visibility: hidden;" >
             <div class="form-group">               
                 <?php
@@ -297,8 +309,7 @@ financiero::registerTranslations();
                     </div>
                 <?php } ?>   
             </div>
-        </div>
-
+        </div>        
         <div class="col-md-6 col-sm-6 col-xs-6 col-lg-6" id="Divconddni"  style="visibility: hidden;" >
             <div class="form-group">            
                 <?php
@@ -323,57 +334,82 @@ financiero::registerTranslations();
                 </div>
                 <div class="col-md-13 col-sm-13 col-xs-13 col-lg-13" id="Divcondcerti" style="visibility: hidden;" >
                     <div class="form-group">               
-                        <?php
-                        //for ($i = 0; $i < count($arr_certv); $i++) {
-                            //$chk_concerti = "chk_concerti" . $i;
-                            ?>  
-                            <p for="<?= $chk_concerti ?>" class="col-sm-10 col-md-10 col-xs-10 col-lg-10 control-label"><?php //echo $arr_certv[$i]['name'] ?></p>
+        <?php
+        //for ($i = 0; $i < count($arr_certv); $i++) {
+        //$chk_concerti = "chk_concerti" . $i;
+        ?>  
+                            <p for="<?= $chk_concerti ?>" class="col-sm-10 col-md-10 col-xs-10 col-lg-10 control-label"><?php //echo $arr_certv[$i]['name']         ?></p>
                             <div class="col-sm-1 ">    
                                 <? Html::hiddenInput('txth_cond_certi' . $i, $arr_certv[$i]['id'], ['id' => 'txth_cond_certi' . $i]); ?>
                                 <input type="checkbox" class="" id="<? $chk_concerti ?>" data-type="alfa" data-keydown="true" placeholder="<? $arr_certv[$i]['name'] ?>">  
                             </div>
-                        <?php //} ?>   
+        <?php //} ?>   
                     </div>
                 </div>     
             </div>
         </div>  -->
-    </div>  
-
-    <?php
-    //} else {
-    if (!empty($resp_rechazo) && $personaData["rsin_id"] != 2) {
-        $obs_condicion = "";
-        ?>        
-        <?php
-        for ($r = 0; $r < count($resp_rechazo); $r++) {
-            if ($obs_condicion <> $resp_rechazo[$r]['observacion']) {
-                $obs_condicion = $resp_rechazo[$r]['observacion'];
-                if ($r == 0) {
-                    $obs_correo = $obs_correo . "<b>&nbsp;&nbsp;&nbsp;" . $obs_condicion . "</b><br/>" . "&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; No " . $resp_rechazo[$r]['condicion'] . "&nbsp;&nbsp;&nbsp;";
-                } else {
-                    $obs_correo = $obs_correo . "</br><b>&nbsp;&nbsp;&nbsp;" . $obs_condicion . "</b><br/>" . "&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; No " . $resp_rechazo[$r]['condicion'] . "&nbsp;&nbsp;&nbsp;";
-                }
-            } else {
-                $obs_correo = $obs_correo . "<br/>" . "&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; No " . $resp_rechazo[$r]['condicion'] . "&nbsp;&nbsp;&nbsp;";
-            }
-        }
-        ?>
-
+        <?php if ($personaData["cemp_id"] > 0) { ?>   
         <div class="col-md-12 col-sm-12 col-xs-12 col-lg-12">
             <div class="col-md-6 col-sm-6 col-xs-6 col-lg-6">
-                <label for="" class="col-sm-4 col-md-4 col-xs-4 col-lg-4 control-label keyupmce"><?= Yii::t("formulario", "Observations") ?></label>            
-            </div> 
-            <div style="height:30px">
+                <div class="form-group">
+                    <label for="chk_convenio" class="col-sm-10 col-md-10 col-xs-10 col-lg-10 control-label"><?= admision::t("Solicitudes", "No cumple condiciones de aceptación en convenio") ?></label>
+                    <div class="col-sm-1 ">                     
+                        <input type="checkbox" class="" id="chk_convenio" data-type="alfa" data-keydown="true" placeholder="<?= admision::t("Solicitudes", "No cumple condiciones de aceptación en convenio") ?>">  
+                    </div>
+                </div>
 
-            </div>
+                <div class="col-md-13 col-sm-13 col-xs-13 col-lg-13" id="Divcondcon"  style="visibility: hidden;" >  
+                    <div class="form-group">  
+                        <?php
+                        for ($m = 0; $m < count($arr_condcon); $m++) {
+                            $chk_condcon = "chk_condcon" . $m;
+                            ?>  
+                            <p for="<?= $chk_condcon ?>" class="col-sm-10  col-md-10 col-xs-10 col-lg-10 control-label"><?php echo $arr_condcon[$m]['name'] ?></p>
+                            <div class="col-sm-1 ">    
+                                <?= Html::hiddenInput('txth_cond_con' . $m, $arr_condcon[$m]['id'], ['id' => 'txth_cond_con' . $m]); ?>
+                                <input type="checkbox" class="" id="<?= $chk_condcon ?>" data-type="alfa" data-keydown="true" placeholder="<?= $arr_condcon[$m]['name'] ?>">  
+                            </div>
+                        <?php } ?>     
+                    </div>
+                </div> 
+            </div>  
+        </div>
+        <?php } ?> 
+        <?php
+        //} else {
+        if (!empty($resp_rechazo) && $personaData["rsin_id"] != 2) {
+            $obs_condicion = "";
+            ?>        
             <?php
-            $leyenda = '      
+            for ($r = 0; $r < count($resp_rechazo); $r++) {
+                if ($obs_condicion <> $resp_rechazo[$r]['observacion']) {
+                    $obs_condicion = $resp_rechazo[$r]['observacion'];
+                    if ($r == 0) {
+                        $obs_correo = $obs_correo . "<b>&nbsp;&nbsp;&nbsp;" . $obs_condicion . "</b><br/>" . "&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; No " . $resp_rechazo[$r]['condicion'] . "&nbsp;&nbsp;&nbsp;";
+                    } else {
+                        $obs_correo = $obs_correo . "</br><b>&nbsp;&nbsp;&nbsp;" . $obs_condicion . "</b><br/>" . "&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; No " . $resp_rechazo[$r]['condicion'] . "&nbsp;&nbsp;&nbsp;";
+                    }
+                } else {
+                    $obs_correo = $obs_correo . "<br/>" . "&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; No " . $resp_rechazo[$r]['condicion'] . "&nbsp;&nbsp;&nbsp;";
+                }
+            }
+            ?>
+
+            <div class="col-md-12 col-sm-12 col-xs-12 col-lg-12">
+                <div class="col-md-6 col-sm-6 col-xs-6 col-lg-6">
+                    <label for="" class="col-sm-4 col-md-4 col-xs-4 col-lg-4 control-label keyupmce"><?= Yii::t("formulario", "Observations") ?></label>            
+                </div> 
+                <div style="height:30px">
+
+                </div>
+                <?php
+                $leyenda = '      
           <div style = "width: 530px;" class="alert alert-info"><span style="font-weight"> </span> '
-                    . $obs_correo .
-                    '</div>';
-            echo $leyenda;
-            ?>                   
-        <?php } ?>    
-    </div> 
+                        . $obs_correo .
+                        '</div>';
+                echo $leyenda;
+                ?>                   
+            <?php } ?>    
+        </div> 
 
 </form>

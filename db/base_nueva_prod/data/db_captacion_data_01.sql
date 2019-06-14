@@ -118,7 +118,8 @@ INSERT INTO `solicitud_noaprobada` (`snoa_id`, `snoa_nombre`, `snoa_descripcion`
 (10, 'Actual', 'Actual', '1', '1'),
 (11, 'Apostillado en la parte posterior', 'Apostillado en la parte posterior', '1', '1'),
 (12, 'Escaneado a color (página de datos)', 'Escaneado a color (página de datos)', '1', '1'),
-(13, 'Escaneado a color', 'Escaneado a color', '1', '1');
+(13, 'Escaneado a color', 'Escaneado a color', '1', '1'),
+(14, 'No aprobado convenio', 'No aprobado convenio', '1', '1');
 
 -- --------------------------------------------------------
 --
@@ -147,7 +148,8 @@ INSERT INTO `solicitud_noaprobada_documento` (`sndo_id`, `snoa_id`, `dadj_id`, `
 (20, 4, 2, 'E', '1', '1'),
 (21, 8, 4, 'E', '1', '1'),
 (22, 9, 4, 'E', '1', '1'),
-(23, 10, 4, 'E', '1', '1');
+(23, 10, 4, 'E', '1', '1'),
+(24, 14, 8, 'N', '1', '1');
 
 
 insert into db_captacion.convenio_empresa(cemp_id, cemp_nombre, cemp_estado_empresa, cemp_estado, cemp_estado_logico)
