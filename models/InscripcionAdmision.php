@@ -473,10 +473,9 @@ class InscripcionAdmision extends \yii\db\ActiveRecord {
                                                         $arrTime = explode("_", basename($resp_datos['ruta_doc_aceptacion']));
                                                         $timeSt = $arrTime[4];
                                                         $typeFile = strtolower($arrIm[count($arrIm) - 1]);
-                                                        $rutaDocAceptacion = Yii::$app->params["documentFolder"] . "solicitudinscripcion/" . $id_persona . "/doc_aceptacion_per_" . $id_persona . "_" . $timeSt;
-                                                        \app\models\Utilities::putMessageLogFile('antes de insertarDocumentosSolic');
+                                                        $rutaDocAceptacion = Yii::$app->params["documentFolder"] . "solicitudinscripcion/" . $id_persona . "/doc_aceptacion_per_" . $id_persona . "_" . $timeSt;                                                        
                                                         $resulDoc7 = $solins_model->insertarDocumentosSolic($sins_id, $interesado_id, 8, $rutaDocAceptacion, $usuario_id);
-                                                        \app\models\Utilities::putMessageLogFile('despues de insertarDocumentosSolic');
+                                                        //app\models\Utilities::putMessageLogFile('despues de insertarDocumentosSolic');
                                                         /* if (!($resulDoc6)) {
                                                           throw new Exception('Error doc Hoja de Vida no creado.');
                                                           } */

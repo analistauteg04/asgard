@@ -378,7 +378,7 @@ $leyenda = '<div class="col-md-12 col-xs-12 col-sm-12 col-lg-12">
     </div>
     <div class="col-md-12 col-xs-12 col-sm-12 col-lg-12" id="divDocumAceptacion" style="display: none">
         <div class="form-group">
-            <label for="txth_doc_aceptacion" class="col-sm-3 col-md-3 col-xs-3 col-lg-3 control-label keyupmce"><?= Yii::t("formulario", "Documento Aceptación") ?></label>
+            <label for="txth_doc_aceptacion" class="col-sm-3 col-md-3 col-xs-3 col-lg-3 control-label keyupmce"><?= Yii::t("formulario", "Documento Aceptación (Carta)") ?></label>
             <div class="col-sm-9 col-md-9 col-xs-9 col-lg-9">
                 <?= Html::hiddenInput('txth_doc_aceptacion', '', ['id' => 'txth_doc_aceptacion']); ?>
                 <?php
@@ -405,7 +405,7 @@ $leyenda = '<div class="col-md-12 col-xs-12 col-sm-12 col-lg-12">
                     'pluginEvents' => [
                         "filebatchselected" => "function (event) {
         $('#txth_doc_aceptacion').val($('#txt_doc_aceptacion').val());
-        $('#txth_doc_aceptacion').fileinput('upload');
+        $('#txt_doc_aceptacion').fileinput('upload');
     }",
                         "fileuploaderror" => "function (event, data, msg) {
         $(this).parent().parent().children().first().addClass('hide');

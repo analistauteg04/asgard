@@ -1631,8 +1631,7 @@ class SolicitudInscripcion extends \yii\db\ActiveRecord
             $bsrec_sql .= ", :cemp_id";
         }
         try {
-            $sql = "INSERT INTO " . $con->dbname . ".solicitud_inscripcion ($param_sql) VALUES($bsrec_sql)";
-            \app\models\Utilities::putMessageLogFile('sql sol inscr: ' . $sql);
+            $sql = "INSERT INTO " . $con->dbname . ".solicitud_inscripcion ($param_sql) VALUES($bsrec_sql)";            
             $comando = $con->createCommand($sql);
 
             if (isset($int_id))

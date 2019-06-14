@@ -115,7 +115,7 @@ class InscripcionadmisionController extends \yii\web\Controller {
                     "arr_conuteg" => ArrayHelper::map($arr_conuteg, "id", "name"),
                     "arr_carrerra1" => ArrayHelper::map($arr_carrerra1, "id", "name"),
                     "arr_metodos" => ArrayHelper::map($arr_metodos, "id", "name"),
-                    "arr_convenio_empresa" => ArrayHelper::map(array_merge(["id" => "0", "name" => "Ninguna"], $arr_convempresa), "id", "name"),            
+                    "arr_convenio_empresa" => ArrayHelper::map(array_merge([["id" => "0", "name" => Yii::t("formulario", "Ninguna")]], $arr_convempresa), "id", "name"),                    
                     "resp_datos" => $resp_datos,
         ]);
     }
@@ -204,7 +204,7 @@ class InscripcionadmisionController extends \yii\web\Controller {
                 if (isset($data["DATA_1"][0]["ruta_doc_aceptacion"]) && $data["DATA_1"][0]["ruta_doc_aceptacion"] != "") {                    
                     $arrIm = explode(".", basename($data["DATA_1"][0]["ruta_doc_aceptacion"]));                    
                     $typeFile = strtolower($arrIm[count($arrIm) - 1]);                    
-                    $doc_aceptacionOld = Yii::$app->params["documentFolder"] . "solicitudadmision/" . $inscripcion_id . "/doc_aceptacion_per" . $inscripcion_id . "." . $typeFile;                    
+                    $doc_aceptacionOld = Yii::$app->params["documentFolder"] . "solicitudadmision/" . $inscripcion_id . "/doc_aceptacion_per_" . $inscripcion_id . "." . $typeFile;                    
                     $doc_aceptacion = InscripcionAdmision::addLabelTimeDocumentos($inscripcion_id, $doc_aceptacionOld, $timeSt);                    
                     $data["DATA_1"][0]["ruta_doc_aceptacion"] = $doc_aceptacion;                    
                     if ($doc_aceptacion === false)
@@ -218,12 +218,9 @@ class InscripcionadmisionController extends \yii\web\Controller {
                     $resul = $model->actualizarInscripcion($data);                    
                     //$model->insertaOriginal($resul["ids"]);
                 } else if ($accion == "Fin") {
-                    $Ids = isset($data['codigo']) ? $data['codigo'] : 0;
-                    \app\models\Utilities::putMessageLogFile('antes de insertarOriginal');
-                    $resul = $model->insertaOriginal($Ids);
-                    \app\models\Utilities::putMessageLogFile('despues de insertarOriginal');
-                }
-                \app\models\Utilities::putMessageLogFile('resultado:'.$resul['status']);
+                    $Ids = isset($data['codigo']) ? $data['codigo'] : 0;                    
+                    $resul = $model->insertaOriginal($Ids);                    
+                }                
                 if ($resul['status']) {
                     \app\models\Utilities::putMessageLogFile('resultado es ok');
                     $message = array(
