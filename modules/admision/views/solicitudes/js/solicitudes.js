@@ -1091,7 +1091,7 @@ function SaveDocumentos() {
     arrParams.uaca_id = $('#txth_uaca').val();
     arrParams.oserva = $('#txt_observa').val();
     arrParams.cemp_id=cemp_id;
-    if(cemp_id==1){
+    if(cemp_id>0){
         arrParams.arc_doc_convenio = $('#txth_carta_convenio').val();    
     }
     if ($('input[name=opt_declara_si]:checked').val() == 1) {
@@ -1114,19 +1114,27 @@ function SaveDocumentos() {
 }
 function UpdateDocumentos() {
     var link = $('#txth_base').val() + "/admision/solicitudes/updatedocumentos";
-    var arrParams = new Object();
+    var arrParams = new Object();    
     arrParams.sins_id = $('#txth_ids').val();
+    var cemp_id = $('#txth_cemp').val();
     arrParams.persona_id = $('#txth_idp').val();
     arrParams.interesado_id = $('#txth_int_id').val();
     arrParams.arc_extranjero = $('#txth_extranjero').val();
     arrParams.arc_doc_titulo = $('#txth_doc_titulo').val();
     arrParams.arc_doc_dni = $('#txth_doc_dni').val();
     arrParams.arc_doc_certvota = $('#txth_doc_certvota').val();
+    
     arrParams.arc_doc_foto = $('#txth_doc_foto').val();
     arrParams.arc_doc_beca = $('#txth_doc_beca').val();
     arrParams.opcion = $('#txth_opcion').val();
     arrParams.uaca_id = $('#txth_uaca').val();
     arrParams.oserva = $('#txt_observa').val();
+    
+    arrParams.cemp_id=cemp_id;
+    if(cemp_id>0){
+        arrParams.arc_doc_convenio = $('#txth_carta_convenio').val();    
+    }
+    
     if ($('input[name=opt_declara_si]:checked').val() == 1) {
         arrParams.beca = 1;
     } else {
