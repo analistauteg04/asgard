@@ -104,6 +104,7 @@ class InscripcionAdmision extends \yii\db\ActiveRecord {
         }else{
             $met_ing=$data[0]['ming_id'];
         }
+        \app\models\Utilities::putMessageLogFile('identificacion:'.$data[0]['pges_cedula']);
         $command = $con->createCommand($sql);
         $command->bindParam(":twin_nombre", $data[0]['pges_pri_nombre'], \PDO::PARAM_STR);
         $command->bindParam(":twin_apellido", $data[0]['pges_pri_apellido'], \PDO::PARAM_STR);
@@ -278,13 +279,13 @@ class InscripcionAdmision extends \yii\db\ActiveRecord {
         $transaction = $con->beginTransaction();
         $transaction1 = $con1->beginTransaction();
         $transaction2 = $con2->beginTransaction();
-        try {
-            \app\models\Utilities::putMessageLogFile('comienzo de insertar original');
+        try {            
             //Se consulta la información grabada en la tabla temporal.
-            $mod_inscripcion = new InscripcionAdmision();
-            $resp_datos = $mod_inscripcion->consultarDatosInscripcion($twinIds);
+            $mod_inscripcion = new InscripcionAdmision();            
+            $resp_datos = $mod_inscripcion->consultarDatosInscripcion($twinIds);            
             // He colocado al inicio la informacion para que cargue al principio
             if ($resp_datos) {
+                //\app\models\Utilities::putMessageLogFile('lo encontró');
                 $emp_id = 1;
                 $identificacion = '';
 
@@ -315,11 +316,11 @@ class InscripcionAdmision extends \yii\db\ActiveRecord {
                         null, null, null,
                         null, null, null,
                         null, null, null, $usuario_ingreso, 1, 1
-                    ];
+                    ];                    
                     $id_persona = $mod_persona->consultarIdPersona($resp_datos['twin_numero'], $resp_datos['twin_numero'],$resp_datos['twin_correo'],$resp_datos['twin_celular']);
                     if ($id_persona == 0) {
                         $id_persona = $mod_persona->insertarPersona($con, $parametros_per, $keys_per, 'persona');
-                    }
+                    }                    
                     if ($id_persona > 0) {
                         //Modifificaion para Mover Imagenes de temp a Persona
                         //self::movePersonFiles($twinIds,$id_persona);
@@ -392,10 +393,9 @@ class InscripcionAdmision extends \yii\db\ActiveRecord {
                                                 $cemp=null;
                                             } else {
                                                 $cemp=$resp_datos['cemp_id'];
-                                            }                                            
-                                            $sins_id = $solins_model->insertarSolicitud($interesado_id, $resp_datos['uaca_id'], $resp_datos['mod_id'], $resp_datos['twin_metodo_ingreso'], $eaca_id, null, $emp_id, $num_secuencia, $rsin_id, $sins_fechasol, $usuario_id, $cemp);
-                                            //\app\models\Utilities::putMessageLogFile('despues de insertarSolicitud');
-                                            //grabar los documentos
+                                            }                                                     
+                                            $sins_id = $solins_model->insertarSolicitud($interesado_id, $resp_datos['uaca_id'], $resp_datos['mod_id'], $resp_datos['twin_metodo_ingreso'], $eaca_id, null, $emp_id, $num_secuencia, $rsin_id, $sins_fechasol, $usuario_id, $cemp);                                            
+                                            //grabar los documentos                                            
                                             if ($sins_id) {
                                                 if (($resp_datos['ruta_doc_titulo'] != "") || ($resp_datos['ruta_doc_dni'] != "") || ($resp_datos['ruta_doc_certvota'] != "") || ($resp_datos['ruta_doc_foto'] != "") || ($resp_datos['ruta_doc_certificado'] != "") || ($resp_datos['ruta_doc_hojavida'] != "")) {
                                                     $subidaDocumentos = 1;
@@ -514,12 +514,12 @@ class InscripcionAdmision extends \yii\db\ActiveRecord {
                                                 } else {
                                                     $estadopago = 'P';
                                                 }
-                                                $val_total = $precio - $val_descuento;                                                
-                                                $resp_opago = $mod_ordenpago->insertarOrdenpago($sins_id, null, $val_total, 0, $val_total, $estadopago, $usuario_id);                                                
+                                                $val_total = $precio - $val_descuento;                                                 
+                                                $resp_opago = $mod_ordenpago->insertarOrdenpago($sins_id, null, $val_total, 0, $val_total, $estadopago, $usuario_id);                                                                                                
                                                 if ($resp_opago) {                                                    
                                                     //insertar desglose del pago                                                         
-                                                    $fecha_ini = date(Yii::$app->params["dateByDefault"]);
-                                                    $resp_dpago = $mod_ordenpago->insertarDesglosepago($resp_opago, $ite_id, $val_total, 0, $val_total, $fecha_ini, null, $estadopago, $usuario_id);
+                                                    $fecha_ini = date(Yii::$app->params["dateByDefault"]);                                                    
+                                                    $resp_dpago = $mod_ordenpago->insertarDesglosepago($resp_opago, $ite_id, $val_total, 0, $val_total, $fecha_ini, null, $estadopago, $usuario_id);                                                    
                                                     if ($resp_dpago) {                                                          
                                                         $exito = 1;
                                                     }

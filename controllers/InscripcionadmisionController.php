@@ -211,14 +211,14 @@ class InscripcionadmisionController extends \yii\web\Controller {
                         throw new Exception('Error documento aceptación.');
                 }
                 if ($accion == "create" || $accion == "Create") {
-                    //Nuevo Registro                    
+                    //Nuevo Registro                       
                     $resul = $model->insertarInscripcion($data);
                 } else if ($accion == "Update") {
                     //Modificar Registro                    
                     $resul = $model->actualizarInscripcion($data);                    
                     //$model->insertaOriginal($resul["ids"]);
                 } else if ($accion == "Fin") {
-                    $Ids = isset($data['codigo']) ? $data['codigo'] : 0;                    
+                    $Ids = isset($data['codigo']) ? $data['codigo'] : 0;                        
                     $resul = $model->insertaOriginal($Ids);                    
                 }                
                 if ($resul['status']) {

@@ -495,17 +495,19 @@ function guardarInscripcion(accion, paso) {
                     var mod_id = response.data.data.mod_id;
                     var id_carrera = response.data.data.id_carrera;
                     $('#lbl_fcur_lb').text("Fecha del curso:");
-                    $('#lbl_item_1').text("Valor Matriculacion: ");
+                    $('#lbl_item_1').text("Valor Matriculación: ");
                     if (uaca_id == 2) {
                         if (id_carrera == 22) {
                             leyenda = 'El valor de la maestría: $15,500.00';
-                        } else if  (id_carrera == 24) {
+                        } else if  ((id_carrera == 24) && ($('#cmb_convenio_empresa').val==1)) {
                             leyenda = 'El valor de la maestría: $4,500.00';
+                        } else if  ((id_carrera == 24) && ($('#cmb_convenio_empresa').val!=1)) {
+                            leyenda = 'El valor de la maestría: $5,000.00';
                         } else {
                             leyenda = 'El valor de la maestría: $11,300.00';
                         }
                         leyenda += '<br/><br/>El valor a cancelar por concepto de inscripción es: ';
-                        $('#lbl_item_1').text("Valor Matriculacion: ");
+                        $('#lbl_item_1').text("Valor Matriculación: ");
                         $('#val_item_1').text(response.data.data.precio);
                         $('#lbl_valor_pagar_tx').text(response.data.data.precio);
                         $('#lbl_fcur_tx').text("15 abril del 2019");
@@ -614,7 +616,11 @@ function dataInscripPart1(ID) {
     objDat.pges_pri_nombre = $('#txt_primer_nombre').val();
     objDat.pges_pri_apellido = $('#txt_primer_apellido').val();
     objDat.tipo_dni = $('#cmb_tipo_dni option:selected').val();
-    objDat.pges_cedula = $('#txt_cedula').val();
+    if (objDat.tipo_dni=='CED') {
+        objDat.pges_cedula = $('#txt_cedula').val();
+    } else {        
+        objDat.pges_cedula = $('#txt_pasaporte').val();
+    }    
     objDat.pges_correo = $('#txt_correo').val();
     objDat.pais = $('#cmb_pais_dom option:selected').val();
     objDat.pges_celular = $('#txt_celular').val();
