@@ -29,9 +29,9 @@ $(document).ready(function () {
         $('#divmetodocan').css('display', 'block');
     }
     $('#cmb_convenio_empresa').change(function () {
-        if ($('#cmb_unidad_solicitud').val()!=0) {
+        if ($('#cmb_convenio_empresa').val()!=0) {            
             $('#divDocumAceptacion').css('display', 'block');
-        } else {
+        } else {            
             $('#divDocumAceptacion').css('display', 'none');
         };        
     });
@@ -496,12 +496,13 @@ function guardarInscripcion(accion, paso) {
                     var id_carrera = response.data.data.id_carrera;
                     $('#lbl_fcur_lb').text("Fecha del curso:");
                     $('#lbl_item_1').text("Valor Matriculación: ");
+                    var convenio = $('#cmb_convenio_empresa').val();
                     if (uaca_id == 2) {
                         if (id_carrera == 22) {
                             leyenda = 'El valor de la maestría: $15,500.00';
-                        } else if  ((id_carrera == 24) && ($('#cmb_convenio_empresa').val==1)) {
+                        } else if  ((id_carrera == 24) && (convenio==1)) {                            
                             leyenda = 'El valor de la maestría: $4,500.00';
-                        } else if  ((id_carrera == 24) && ($('#cmb_convenio_empresa').val!=1)) {
+                        } else if  ((id_carrera == 24) && (convenio!=1)) {                            
                             leyenda = 'El valor de la maestría: $5,000.00';
                         } else {
                             leyenda = 'El valor de la maestría: $11,300.00';
