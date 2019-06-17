@@ -646,6 +646,7 @@ class SolicitudesController extends \app\components\CController {
                     "sins_id" => $datosSolicitud['sins_id'],
                     "int_id" => $datosSolicitud['int_id'],
                     "beca" => $datosSolicitud['sins_beca'],
+                    "cemp_id" => $datosSolicitud['cemp_id'],
                     "num_solicitud" => $datosSolicitud['num_solicitud'],
                     "datos" => $datosSolicitud,
         ]);
@@ -804,7 +805,7 @@ class SolicitudesController extends \app\components\CController {
                 if ($beca_archivo === FALSE)
                     throw new Exception('Error doc Beca no renombrado.');
             }
-             /* if (isset($data["arc_doc_certmat"]) && $data["arc_doc_certmat"] != "") {
+            /* if (isset($data["arc_doc_certmat"]) && $data["arc_doc_certmat"] != "") {
               $arrIm = explode(".", basename($data["arc_doc_certmat"]));
               $typeFile = strtolower($arrIm[count($arrIm) - 1]);
               $certmate_archivo = Yii::$app->params["documentFolder"] . "solicitudinscripcion/" . $per_id . "/doc_certificado_per_" . $per_id . "." . $typeFile;
@@ -975,6 +976,7 @@ class SolicitudesController extends \app\components\CController {
             }
             //$per_id = base64_decode($data['persona_id']);
             $sins_id = base64_decode($data["sins_id"]);
+            $cemp_id = $data["cemp_id"];
             $interesado_id = base64_decode($data["interesado_id"]);
             $es_extranjero = base64_decode($data["arc_extranjero"]);
             $beca = base64_decode($data["beca"]);
@@ -1024,6 +1026,16 @@ class SolicitudesController extends \app\components\CController {
                     $arrIm = explode(".", basename($data["arc_doc_beca"]));
                     $typeFile = strtolower($arrIm[count($arrIm) - 1]);
                     $beca_archivo = Yii::$app->params["documentFolder"] . "solicitudinscripcion/" . $per_id . "/doc_beca_per_" . $per_id . "." . $typeFile;
+                }
+                if (isset($data["arc_doc_convenio"]) && $data["arc_doc_convenio"] != "") {
+                    $arrIm = explode(".", basename($data["arc_doc_convenio"]));
+                    $typeFile = strtolower($arrIm[count($arrIm) - 1]);
+                    $carta_archivo = Yii::$app->params["documentFolder"] . "solicitudinscripcion/" . $per_id . "/doc_carta_convenio_per_" . $per_id . "." . $typeFile;
+                }
+                if (isset($data["arc_doc_convenio"]) && $data["arc_doc_convenio"] != "") {
+                    $arrIm = explode(".", basename($data["arc_doc_convenio"]));
+                    $typeFile = strtolower($arrIm[count($arrIm) - 1]);
+                    $carta_archivo = Yii::$app->params["documentFolder"] . "solicitudinscripcion/" . $per_id . "/doc_carta_convenio_per_" . $per_id . "." . $typeFile;
                 }
                 /* $certmate_archivo = "";
                   if (isset($data["arc_doc_certmat"]) && $data["arc_doc_certmat"] != "") {
@@ -1083,6 +1095,16 @@ class SolicitudesController extends \app\components\CController {
                 if ($beca_archivo === false)
                     throw new Exception('Error doc Beca no renombrado.');
             }
+            if ($cemp_id > 0) {
+                if (isset($data["arc_doc_convenio"]) && $data["arc_doc_convenio"] != "") {
+                    $arrIm = explode(".", basename($data["arc_doc_convenio"]));
+                    $typeFile = strtolower($arrIm[count($arrIm) - 1]);
+                    $convenio_archivo = Yii::$app->params["documentFolder"] . "solicitudinscripcion/" . $per_id . "/doc_carta_convenio_per_" . $per_id . "." . $typeFile;
+                    $convenio_archivo = DocumentoAdjuntar::addLabelTimeDocumentos($sins_id, $convenio_archivo, $timeSt);
+                    if ($convenio_archivo === FALSE)
+                        throw new Exception('Error doc carta convenio no renombrado.');
+                }
+            }
             /* if (isset($data["arc_doc_certmat"]) && $data["arc_doc_certmat"] != "") {
               $arrIm = explode(".", basename($data["arc_doc_certmat"]));
               $typeFile = strtolower($arrIm[count($arrIm) - 1]);
@@ -1093,6 +1115,16 @@ class SolicitudesController extends \app\components\CController {
               if ($certmate_archivo === FALSE)
               throw new Exception('Error doc certificado materia no renombrado.');
               } */
+            if ($cemp_id > 0) {
+                if (isset($data["arc_doc_convenio"]) && $data["arc_doc_convenio"] != "") {
+                    $arrIm = explode(".", basename($data["arc_doc_convenio"]));
+                    $typeFile = strtolower($arrIm[count($arrIm) - 1]);
+                    $convenio_archivo = Yii::$app->params["documentFolder"] . "solicitudinscripcion/" . $per_id . "/doc_carta_convenio_per_" . $per_id . "." . $typeFile;
+                    $convenio_archivo = DocumentoAdjuntar::addLabelTimeDocumentos($sins_id, $convenio_archivo, $timeSt);
+                    if ($convenio_archivo === FALSE)
+                        throw new Exception('Error doc carta convenio no renombrado.');
+                }
+            }
             if (isset($data["arc_doc_curri"]) && $data["arc_doc_curri"] != "") {
                 $arrIm = explode(".", basename($data["arc_doc_curri"]));
                 $typeFile = strtolower($arrIm[count($arrIm) - 1]);
@@ -1108,6 +1140,9 @@ class SolicitudesController extends \app\components\CController {
                         throw new Exception('Error no se reemplazo files.');
                     $mod_solinsxdoc1 = new SolicitudinsDocumento();
                     //1-Título, 2-DNI,3-Cert votación, 4-Foto, 5-Doc-Beca  
+                    if($cemp_id > 0){
+                        $mod_solinsxdoc1->insertNewDocument($sins_id, $interesado_id, 8, $convenio_archivo, $observacion);
+                    }
                     if ($mod_solinsxdoc1->insertNewDocument($sins_id, $interesado_id, 1, $titulo_archivo, $observacion)) {
                         if ($mod_solinsxdoc1->insertNewDocument($sins_id, $interesado_id, 2, $dni_archivo, $observacion)) {
                             if ($mod_solinsxdoc1->insertNewDocument($sins_id, $interesado_id, 4, $foto_archivo, $observacion)) {
@@ -1339,7 +1374,7 @@ class SolicitudesController extends \app\components\CController {
                                             }
                                         }
                                     }
-                                    if ($convenio >0) {
+                                    if ($convenio > 0) {
                                         $obs_rechazoconvenio = "No cumple condiciones de convenio.";
                                         for ($b = 0; $b < count($condicionesConvi); $b++) {
                                             $resp_rechcercon = $mod_solins->Insertarsolicitudrechazada($sins_id, 8, $condicionesConvi[$b], $srec_etapa, $obs_rechazoconvenio, $respusuario['usu_id']);
