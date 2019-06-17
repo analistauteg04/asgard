@@ -417,8 +417,8 @@ if (base64_decode($_GET['uaca']) == 2) {
                     <?= Html::hiddenInput('txth_carta_convenio', '', ['id' => 'txth_carta_convenio']); ?>
                     <?php
                     echo CFileInputAjax::widget([
-                        'id' => 'txth_carta_convenio',
-                        'name' => 'txth_carta_convenio',
+                        'id' => 'txt_carta_convenio',
+                        'name' => 'txt_carta_convenio',
                         'pluginLoading' => false,
                         'showMessage' => false,
                         'pluginOptions' => [
@@ -497,7 +497,6 @@ if (base64_decode($_GET['uaca']) == 2) {
             <div class="form-group">
                 <label for="txth_doc_beca" class="col-sm-4 col-md-4 col-xs-4 col-lg-4 control-label keyupmce"><?= admision::t("Solicitudes", "Scholarship document") ?></label>
                 <div class="col-sm-7 col-md-7 col-xs-7 col-lg-7">
-
                     <?= Html::hiddenInput('txth_doc_beca', '', ['id' => 'txth_doc_beca']); ?>
                     <?php
                     echo CFileInputAjax::widget([
