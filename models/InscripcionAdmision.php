@@ -393,7 +393,9 @@ class InscripcionAdmision extends \yii\db\ActiveRecord {
                                                 $cemp=null;
                                             } else {
                                                 $cemp=$resp_datos['cemp_id'];
-                                            }                                                     
+                                            }                      
+                                            \app\models\Utilities::putMessageLogFile('$cemp desde resp_datos:'.$resp_datos['cemp_id']);
+                                            \app\models\Utilities::putMessageLogFile('$cemp:'.$cemp);
                                             $sins_id = $solins_model->insertarSolicitud($interesado_id, $resp_datos['uaca_id'], $resp_datos['mod_id'], $resp_datos['twin_metodo_ingreso'], $eaca_id, null, $emp_id, $num_secuencia, $rsin_id, $sins_fechasol, $usuario_id, $cemp);                                            
                                             //grabar los documentos                                            
                                             if ($sins_id) {

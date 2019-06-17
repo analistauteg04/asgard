@@ -1566,7 +1566,7 @@ class Solicitudinscripcion extends \yii\db\ActiveRecord {
      * @param   
      * @return  Id del registro insertado.
      */
-    public function insertarSolicitud($int_id, $uaca_id, $mod_id, $ming_id, $eaca_id, $mest_id, $emp_id, $num_solicitud, $rsin_id, $sins_fecha_solicitud, $sins_usuario_ingreso) {
+    public function insertarSolicitud($int_id, $uaca_id, $mod_id, $ming_id, $eaca_id, $mest_id, $emp_id, $num_solicitud, $rsin_id, $sins_fecha_solicitud, $sins_usuario_ingreso, $cemp_id=null) {
         $con = \Yii::$app->db_captacion;
 
         $trans = $con->getTransaction(); // se obtiene la transacción actual.
@@ -1626,6 +1626,10 @@ class Solicitudinscripcion extends \yii\db\ActiveRecord {
             $param_sql .= ", sins_usuario_ingreso";
             $bsrec_sql .= ", :sins_usuario_ingreso";
         }
+        if (isset($cemp_id)) {
+            $param_sql .= ", cemp_id";
+            $bsrec_sql .= ", :cemp_id";
+        }
         try {
             $sql = "INSERT INTO " . $con->dbname . ".solicitud_inscripcion ($param_sql) VALUES($bsrec_sql)";            
             $comando = $con->createCommand($sql);
@@ -1662,7 +1666,15 @@ class Solicitudinscripcion extends \yii\db\ActiveRecord {
 
             if (isset($sins_usuario_ingreso))
                 $comando->bindParam(':sins_usuario_ingreso', $sins_usuario_ingreso, \PDO::PARAM_INT);
+            
+            if (isset($sins_usuario_ingreso))
+                $comando->bindParam(':sins_usuario_ingreso', $sins_usuario_ingreso, \PDO::PARAM_INT);
 
+            if (!empty($cemp_id)) {
+                if (isset($cemp_id)){
+                    $comando->bindParam(':cemp_id', $cemp_id, \PDO::PARAM_INT);
+                }
+            }
             $result = $comando->execute();
             $idtable = $con->getLastInsertID($con->dbname . '.solicitud_inscripcion');
             if ($trans !== null)
