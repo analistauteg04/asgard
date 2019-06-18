@@ -128,6 +128,20 @@ $(document).ready(function () {
         var arrParams = new Object();
         arrParams.codigo = $('#txth_twin_id').val();
         arrParams.ACCION = 'Fin';
+        arrParams.nombres_fact = $('txt_nombres_fac').val();
+        arrParams.apellidos_fact = $('txt_apellidos_fac').val();
+        arrParams.direccion_fact = $('txt_dir_fac').val();
+        arrParams.telefono_fac = $('txt_tel_fac').val();
+        var tipo_dni_fact= "";
+        if ($('opt_tipo_DNI option:selected').val()=="1") {
+            tipo_dni_fact = "CED";
+        } else if ($('opt_tipo_DNI option:selected').val()=="2") {
+            tipo_dni_fact = "RUC";
+        } else {
+            tipo_dni_fact = "PASS";
+        }
+        arrParams.tipo_dni_fac = tipo_dni_fact;
+        arrParams.dni = $('txt_dni_fac').val();    
         requestHttpAjax(link, arrParams, function (response) {
             var message = response.message;
             //console.log(response);
@@ -307,7 +321,7 @@ $(document).ready(function () {
         Requisitos();
         AparecerDocumento();
     });
-    ``
+    
     // tabs del index
     $('#paso1next').click(function () {
         $("a[data-href='#paso1']").attr('data-toggle', 'none');
@@ -479,6 +493,10 @@ function guardarInscripcion(accion, paso) {
                     $('#lbl_moda_tx').text(response.data.data.modalidad);
                     $('#lbl_carrera_tx').text(response.data.data.carrera);
                     $('#lbl_ming_tx').text(response.data.data.metodo);
+                    //Datos de facturación.
+                    $('#txt_nombres_fac').val(response.data.data.twin_nombre);
+                    $('#txt_apellidos_fac').val(response.data.data.twin_apellido);
+                    $('#txt_dni_fac').val(response.data.data.twin_numero);
                     
                     if (uaca_id == 1) {                        
                         $('#id_item_1').css('display', 'block');
@@ -645,6 +663,22 @@ function dataInscripPart1(ID) {
     objDat.twin_mensaje2 = ($("#chk_mensaje2").prop("checked")) ? '1' : '0';
     objDat.ruta_doc_aceptacion = ($('#txth_doc_aceptacion').val() != '') ? $('#txth_doc_aceptacion').val() : '';
     objDat.cemp_id = $('#cmb_convenio_empresa option:selected').val();
+    //TAB 3
+    objDat.nombres_fact = $('txt_nombres_fac').val();
+    objDat.apellidos_fact = $('txt_apellidos_fac').val();
+    objDat.direccion_fact = $('txt_dir_fac').val();
+    objDat.telefono_fac = $('txt_tel_fac').val();
+    var tipo_dni_fact= "";
+    if ($('opt_tipo_DNI option:selected').val()=="1") {
+        tipo_dni_fact = "CED";
+    } else if ($('opt_tipo_DNI option:selected').val()=="2") {
+        tipo_dni_fact = "RUC";
+    } else {
+        tipo_dni_fact = "PASS";
+    }
+    objDat.tipo_dni_fac = tipo_dni_fact;
+    objDat.dni = $('txt_dni_fac').val();
+        
     datArray[0] = objDat;
     sessionStorage.dataInscrip_1 = JSON.stringify(datArray);
     return datArray;

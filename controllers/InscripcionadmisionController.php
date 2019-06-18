@@ -125,7 +125,6 @@ class InscripcionadmisionController extends \yii\web\Controller {
             $model = new InscripcionAdmision();
             $data = Yii::$app->request->post();
             $accion = isset($data['ACCION']) ? $data['ACCION'] : "";
-
             if ($data["upload_file"]) {
                 if (empty($_FILES)) {
                     return json_encode(['error' => Yii::t("notificaciones", "Error to process File {file}. Try again.", ['{file}' => basename($files['name'])])]);
@@ -143,7 +142,6 @@ class InscripcionadmisionController extends \yii\web\Controller {
                     return json_encode(['error' => Yii::t("notificaciones", "Error to process File {file}. Try again.", ['{file}' => basename($files['name'])])]);
                 }
             }
-
             $timeSt = time();
             try {
                 $inscripcion_id = $data["DATA_1"][0]["twin_id"];
@@ -218,8 +216,16 @@ class InscripcionadmisionController extends \yii\web\Controller {
                     $resul = $model->actualizarInscripcion($data);                    
                     //$model->insertaOriginal($resul["ids"]);
                 } else if ($accion == "Fin") {
-                    $Ids = isset($data['codigo']) ? $data['codigo'] : 0;                        
-                    $resul = $model->insertaOriginal($Ids);                    
+                    $Ids = isset($data['codigo']) ? $data['codigo'] : 0;                                                         
+                    $dataRegistro = array(                        
+                        'nombres_fact'  => ucwords(strtolower($data["nombres_fact"])),
+                        'apellidos_fact'  => ucwords(strtolower($data["apellidos_fact"])),
+                        'direccion_fact'  => ucwords(strtolower($data["direccion_fact"])),
+                        'telefono_fac'  => $data["telefono_fac"], 
+                        'tipo_dni_fac'  => $data["tipo_dni_fac"], 
+                        'dni'  => $data["dni"],                         
+                    );                                         
+                    $resul = $model->insertaOriginal($Ids,$dataRegistro);                    
                 }                
                 if ($resul['status']) {
                     \app\models\Utilities::putMessageLogFile('resultado es ok');

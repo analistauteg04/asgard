@@ -136,9 +136,15 @@ class InscripcionAdmision extends \yii\db\ActiveRecord {
                     mod_id=:mod_id,car_id=:car_id,twin_metodo_ingreso=:twin_metodo_ingreso,conuteg_id=:conuteg_id,ruta_doc_titulo=:ruta_doc_titulo, 
                     ruta_doc_dni=:ruta_doc_dni, ruta_doc_certvota=:ruta_doc_certvota,ruta_doc_foto=:ruta_doc_foto,
                     ruta_doc_hojavida=:ruta_doc_hojavida,ruta_doc_certificado=:ruta_doc_certificado, 
-                    ruta_doc_aceptacion=:ruta_doc_aceptacion, cemp_id=:cemp_id,
+                    ruta_doc_aceptacion=:ruta_doc_aceptacion, cemp_id=:cemp_id, 
+                    twin_nombres_fact= :twin_nombres_fact,
+                    twin_apellidos_fact=:twin_apellidos_fact,
+                    twin_direccion_fact=:twin_direccion_fact,
+                    twin_telefono_fact=:twin_telefono_fact,
+                    twin_tipo_dni_fact=:twin_tipo_dni_fact,
+                    twin_dni_fact=:twin_dni_fact,
                     twin_mensaje1=:twin_mensaje1,twin_mensaje2=:twin_mensaje2,twin_fecha_modificacion=CURRENT_TIMESTAMP() 
-                 WHERE twin_id =:twin_id ";
+                 WHERE twin_id =:twin_id ";                
         $met_ing=0;
         if(empty($data[0]['ming_id'])){
             $met_ing=0;
@@ -168,7 +174,13 @@ class InscripcionAdmision extends \yii\db\ActiveRecord {
         $command->bindParam(":ruta_doc_aceptacion", basename($data[0]['ruta_doc_aceptacion']), \PDO::PARAM_STR);
         $command->bindParam(":cemp_id", basename($data[0]['cemp_id']), \PDO::PARAM_INT);
         $command->bindParam(":twin_mensaje1", $data[0]['twin_mensaje1'], \PDO::PARAM_STR);
-        $command->bindParam(":twin_mensaje2", $data[0]['twin_mensaje2'], \PDO::PARAM_STR);
+        $command->bindParam(":twin_mensaje2", $data[0]['twin_mensaje2'], \PDO::PARAM_STR);        
+        $command->bindParam(":twin_nombres_fact", $data[0]['twin_nombres_fact'], \PDO::PARAM_STR);
+        $command->bindParam(":twin_apellidos_fact", $data[0]['twin_apellidos_fact'], \PDO::PARAM_STR);
+        $command->bindParam(":twin_direccion_fact", $data[0]['twin_direccion_fact'], \PDO::PARAM_STR);
+        $command->bindParam(":twin_telefono_fact", $data[0]['twin_telefono_fact'], \PDO::PARAM_STR);
+        $command->bindParam(":twin_tipo_dni_fact", $data[0]['twin_tipo_dni_fact'], \PDO::PARAM_STR);
+        $command->bindParam(":twin_dni_fact", $data[0]['twin_dni_fact'], \PDO::PARAM_STR);
         $command->execute();
                 
         return $data[0]['twin_id'];
@@ -240,7 +252,13 @@ class InscripcionAdmision extends \yii\db\ActiveRecord {
                         ruta_doc_hojavida,
                         twin_dni,
                         ruta_doc_aceptacion,
-                        twi.cemp_id
+                        twi.cemp_id,
+                        twin_nombres_fact,
+                        twin_apellidos_fact,
+                        twin_direccion_fact,
+                        twin_telefono_fact,
+                        twin_tipo_dni_fact,
+                        twin_dni_fact
                 FROM " . $con->dbname . ".temporal_wizard_inscripcion twi inner join db_academico.unidad_academica ua on ua.uaca_id = twi.uaca_id
                      inner join " . $con1->dbname . ".modalidad m on m.mod_id = twi.mod_id
                      inner join " . $con1->dbname . ".estudio_academico ea on ea.eaca_id = twi.car_id
@@ -260,9 +278,7 @@ class InscripcionAdmision extends \yii\db\ActiveRecord {
                      -- imi.imni_estado = :estado AND
                      -- imi.imni_estado_logico = :estado 
                      -- AND ip.ipre_estado = :estado AND
-                     -- ip.ipre_estado_logico = :estado
-                ";
-
+                     -- ip.ipre_estado_logico = :estado";
         $comando = $con->createCommand($sql);
         $comando->bindParam(":estado", $estado, \PDO::PARAM_STR);
         $comando->bindParam(":twin_id", $twin_id, \PDO::PARAM_INT);
@@ -271,7 +287,7 @@ class InscripcionAdmision extends \yii\db\ActiveRecord {
         return $resultData;
     }
 
-    public function insertaOriginal($twinIds) {
+    public function insertaOriginal($twinIds, $dataReg) {
         $con = \Yii::$app->db_asgard;
         $con1 = \Yii::$app->db_captacion;
         $con2 = \Yii::$app->db_facturacion;
@@ -285,10 +301,7 @@ class InscripcionAdmision extends \yii\db\ActiveRecord {
             $resp_datos = $mod_inscripcion->consultarDatosInscripcion($twinIds);            
             // He colocado al inicio la informacion para que cargue al principio
             if ($resp_datos) {
-                //\app\models\Utilities::putMessageLogFile('lo encontró');
-                $emp_id = 1;
-                $identificacion = '';
-
+                \app\models\Utilities::putMessageLogFile('lo encontró');                
                 if (isset($resp_datos['twin_numero']) && strlen($resp_datos['twin_numero']) > 0) {
                     $identificacion = $resp_datos['twin_numero'];
                 } else {
@@ -317,11 +330,13 @@ class InscripcionAdmision extends \yii\db\ActiveRecord {
                         null, null, null,
                         null, null, null, $usuario_ingreso, 1, 1
                     ];                    
-                    $id_persona = $mod_persona->consultarIdPersona($resp_datos['twin_numero'], $resp_datos['twin_numero'],$resp_datos['twin_correo'],$resp_datos['twin_celular']);
+                    $id_persona = $mod_persona->consultarIdPersona($resp_datos['twin_numero'], $resp_datos['twin_numero'],$resp_datos['twin_correo'],$resp_datos['twin_celular']);                    
                     if ($id_persona == 0) {
+                        \app\models\Utilities::putMessageLogFile('después de obtener persona:'. $id_persona["per_id"]);
                         $id_persona = $mod_persona->insertarPersona($con, $parametros_per, $keys_per, 'persona');
                     }                    
                     if ($id_persona > 0) {
+                        \app\models\Utilities::putMessageLogFile('inserta persona');
                         //Modifificaion para Mover Imagenes de temp a Persona
                         //self::movePersonFiles($twinIds,$id_persona);
                         $concap = \Yii::$app->db_captacion;
@@ -394,11 +409,11 @@ class InscripcionAdmision extends \yii\db\ActiveRecord {
                                             } else {
                                                 $cemp=$resp_datos['cemp_id'];
                                             }                      
-                                            \app\models\Utilities::putMessageLogFile('$cemp desde resp_datos:'.$resp_datos['cemp_id']);
-                                            \app\models\Utilities::putMessageLogFile('$cemp:'.$cemp);
-                                            $sins_id = $solins_model->insertarSolicitud($interesado_id, $resp_datos['uaca_id'], $resp_datos['mod_id'], $resp_datos['twin_metodo_ingreso'], $eaca_id, null, $emp_id, $num_secuencia, $rsin_id, $sins_fechasol, $usuario_id, $cemp);                                            
+                                            \app\models\Utilities::putMessageLogFile('antes de insertar solicitud');                                            
+                                            $sins_id = $solins_model->insertarSolicitud($interesado_id, $resp_datos['uaca_id'], $resp_datos['mod_id'], $resp_datos['twin_metodo_ingreso'], $eaca_id, null, $emp_id, $num_secuencia, $rsin_id, $sins_fechasol, $usuario_id, $cemp);
                                             //grabar los documentos                                            
                                             if ($sins_id) {
+                                                \app\models\Utilities::putMessageLogFile('después de insertar solicitud'); 
                                                 if (($resp_datos['ruta_doc_titulo'] != "") || ($resp_datos['ruta_doc_dni'] != "") || ($resp_datos['ruta_doc_certvota'] != "") || ($resp_datos['ruta_doc_foto'] != "") || ($resp_datos['ruta_doc_certificado'] != "") || ($resp_datos['ruta_doc_hojavida'] != "")) {
                                                     $subidaDocumentos = 1;
                                                 } else {
@@ -483,14 +498,15 @@ class InscripcionAdmision extends \yii\db\ActiveRecord {
                                                     /* if (!($resulDoc6)) {
                                                       throw new Exception('Error doc Hoja de Vida no creado.');
                                                       } */
-                                                }
+                                                }                                                
                                                 //Obtener el precio de la solicitud.
+                                                \app\models\Utilities::putMessageLogFile('después de insertar documentos'); 
                                                 if ($beca == "1") {
                                                     $precio = 0;
                                                 } else {                                                                                                          
                                                     $resp_precio = $solins_model->ObtenerPrecio($resp_datos['twin_metodo_ingreso'], $resp_datos['uaca_id'], $resp_datos['mod_id'], $eaca_id);
                                                     if ($resp_precio) {
-                                                        //\app\models\Utilities::putMessageLogFile('precio:'.$resp_precio['precio']);    
+                                                        \app\models\Utilities::putMessageLogFile('después de obtener precio');                                                         
                                                         /*if ($resp_datos['uaca_id'] == 2) {
                                                             $ite_id = 10;
                                                         } else {*/
@@ -518,12 +534,19 @@ class InscripcionAdmision extends \yii\db\ActiveRecord {
                                                 }
                                                 $val_total = $precio - $val_descuento;                                                 
                                                 $resp_opago = $mod_ordenpago->insertarOrdenpago($sins_id, null, $val_total, 0, $val_total, $estadopago, $usuario_id);                                                                                                
-                                                if ($resp_opago) {                                                    
+                                                if ($resp_opago) {    
+                                                    \app\models\Utilities::putMessageLogFile('después de insertar o/p'); 
                                                     //insertar desglose del pago                                                         
                                                     $fecha_ini = date(Yii::$app->params["dateByDefault"]);                                                    
                                                     $resp_dpago = $mod_ordenpago->insertarDesglosepago($resp_opago, $ite_id, $val_total, 0, $val_total, $fecha_ini, null, $estadopago, $usuario_id);                                                    
-                                                    if ($resp_dpago) {                                                          
-                                                        $exito = 1;
+                                                    if ($resp_dpago) {  
+                                                        //Grabar datos de factura   
+                                                        \app\models\Utilities::putMessageLogFile('antes de grabar datos de factura');                                                                                                                
+                                                        $resdatosFact = $solins_model->crearDatosFacturaSolicitud($sins_id, $dataReg["nombres_fact"], $dataReg["apellidos_fact"], $dataReg["tipo_dni_fac"], $dataReg["dni"], $dataReg["direccion_fact"], $dataReg["telefono_fac"]);
+                                                        \app\models\Utilities::putMessageLogFile('después de grabar datos de factura');
+                                                        if ($resdatosFact) {
+                                                            $exito = 1;
+                                                        }                                                         
                                                     }
                                                 }
                                             }
