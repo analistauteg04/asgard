@@ -235,11 +235,10 @@ $requisitosPRP = '<div class="col-md-12 col-sm-12 col-xs-12 col-lg-12">
             </div>
         </div>
     </div>
-      <div class="col-md-12 col-xs-12 col-sm-12 col-lg-12">         
+    <div class="col-md-12 col-xs-12 col-sm-12 col-lg-12">         
         </br>
         </br>
-    </div>
-        
+    </div>        
     <div class="row"> 
         <div class="col-lg-10 col-md-10 col-sm-10 col-xs-10"></div>
 
