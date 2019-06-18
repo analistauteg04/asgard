@@ -219,8 +219,8 @@ INSERT INTO `objeto_modulo` (`omod_id`, `mod_id`, `omod_padre_id`, `omod_nombre`
 (179, 7, 151, 'Reenviar Correo', 'A', '0', '', '', '', '', '4', '1', 'fe', '1', '2019-03-08 12:30:13', NULL, '1'),
 
 (180, 7, 151, 'Guardar Correo', 'S', '0', '', '', '', 'fe_edoc/nubenotacredito/savemail', '4', '0', 'fe', '1', '2019-03-08 12:30:13', NULL, '1'),
-(181, 7, 176, 'Guardar Correo', 'A', '0', '', '', '', '', '4', '1', 'fe', '1', '2019-03-08 12:30:13', NULL, '1');
-
+(181, 7, 176, 'Guardar Correo', 'A', '0', '', '', '', '', '4', '1', 'fe', '1', '2019-03-08 12:30:13', NULL, '1'),
+(182, 7, 182, 'Historial Transacciones', 'S', '0', '', '', '', 'financiero/pagos/historialtransacciones', '1', '0', 'Fianciero', '1', '2019-03-08 12:29:20', NULL, '1');
 -- --------------------------------------------------------
 --
 -- Volcado de datos para la tabla `OBMO_ACCI`
@@ -450,7 +450,8 @@ INSERT INTO `grup_obmo` (`gmod_id`, `gru_id`, `omod_id`, `gmod_estado`,  `gmod_e
 (143, 1, 143, '1', '1'),
 (144, 1, 144, '1', '1'),
 (145, 1, 145, '1', '1'),
-(146, 1, 146, '1', '1');
+(146, 1, 146, '1', '1'),
+(147, 1, 182, '1', '1');
 
 -- --------------------------------------------------------
 --
@@ -588,4 +589,5 @@ INSERT INTO `grup_obmo_grup_rol` (`gogr_id`, `grol_id`, `gmod_id`, `gogr_estado`
 (143, 1, 143, '1', '1'),
 (144, 1, 144, '1', '1'),
 (145, 1, 145, '1', '1'),
-(146, 1, 146, '1', '1');
+(146, 1, 146, '1', '1'),
+(147, 1, 147, '1', '1');

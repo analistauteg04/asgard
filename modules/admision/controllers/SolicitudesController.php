@@ -1105,6 +1105,7 @@ class SolicitudesController extends \app\components\CController {
                         throw new Exception('Error doc carta convenio no renombrado.');
                 }
             }
+            //0996148261
             /* if (isset($data["arc_doc_certmat"]) && $data["arc_doc_certmat"] != "") {
               $arrIm = explode(".", basename($data["arc_doc_certmat"]));
               $typeFile = strtolower($arrIm[count($arrIm) - 1]);

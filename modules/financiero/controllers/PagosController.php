@@ -614,6 +614,43 @@ class PagosController extends \app\components\CController {
             }
         }
         return $this->render('listarpagosolicitud', [
+            'model' => $resp_pago,
+        ]);
+    }
+    
+    public function actionHistorialtransacciones() {
+        $per_id = Yii::$app->session->get("PB_perid");        
+        $model_interesado = new Interesado();
+        $per_ids = base64_decode($_GET['perid']);
+        $sbpa_id = base64_decode($_GET['id_sbpa']);        
+        $data = Yii::$app->request->get();
+        if ($data['PBgetFilter']) {
+            $arrSearch["f_ini"] = $data['f_ini'];
+            $arrSearch["f_fin"] = $data['f_fin'];
+            $arrSearch["search"] = $data['search'];
+            //if (empty($per_ids)) {  //vista para el interesado  
+            $rol = 1;
+            $resp_pago = $model_pag->listarSolicitud($sol_id, $per_id, null, $resp_gruporol["grol_id"], $arrSearch);
+            
+            return $this->renderPartial('_listarpagosolicitud_grid', [
+                        "model" => $resp_pago,
+            ]);
+        } else {
+            // if (empty($per_ids)) {  //vista para el interesado  
+            $rol = 1;
+            $resp_pago = $model_pag->listarSolicitud($sol_id, $per_id, null, $resp_gruporol["grol_id"]);
+          
+        }
+        //verificar rol de la persona que esta en sesión
+        //$resp_rol = $model_pag->encuentraRol($per_id);
+        //$data = null;
+        if (Yii::$app->request->isAjax) {
+            $data = Yii::$app->request->get();
+            if (isset($data["op"]) && $data["op"] == '1') {
+                
+            }
+        }
+        return $this->render('listarpagosolicitud', [
                     'model' => $resp_pago,
         ]);
     }
