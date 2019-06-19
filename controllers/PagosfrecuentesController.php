@@ -10,9 +10,7 @@ use app\models\Persona;
 use app\modules\admision\models\ItemMetodoUnidad;
 use \app\modules\admision\models\SolicitudInscripcion;
 use app\models\Pais;
-use app\modules\admision\models\Interesado;
 use app\models\Provincia;
-use app\modules\financiero\models\OrdenPago;
 use app\modules\financiero\models\PersonaBeneficiaria;
 use app\modules\financiero\models\SolicitudBotonPago;
 use app\modules\financiero\models\DetalleSolicitudBotonPago;
@@ -27,7 +25,7 @@ use app\modules\admision\models\PersonaGestion;
 use app\modules\admision\models\Oportunidad;
 use app\modules\admision\models\MetodoIngreso;
 use app\modules\financiero\models\Secuencias;
-use app\models\InscripcionAdmision;
+
 
 class PagosfrecuentesController extends \yii\web\Controller {
 
@@ -284,6 +282,15 @@ class PagosfrecuentesController extends \yii\web\Controller {
     public function actionTerminos() {
         $this->layout = '@themes/' . \Yii::$app->getView()->theme->themeName . '/layouts/basic.php';
         return $this->render('terminos', [
+        ]);
+    }
+    public function actionResumen() {
+        $sbpa_id = 1; // luego cambiar por el que venga de parametro
+        $mod_documento = new Documento();
+        $resu_resumen = $mod_documento->consultaResumen($sbpa_id);
+        $this->layout = '@themes/' . \Yii::$app->getView()->theme->themeName . '/layouts/basic.php';
+        return $this->render('resumen', [
+            "resu_resumen" => $resu_resumen,
         ]);
     }
 

@@ -148,5 +148,44 @@ class Documento extends \yii\db\ActiveRecord
     }
     public function consultarDocIdByCedulaBen($cedula = null){
         
+    }        
+    /**
+     * Function consultaResumen (Se obtiene resumen de las transacciones)
+     * @author  Giovanni Vergara <analistadesarrollo02@uteg.edu.ec>
+     * @param   $sbpa_id (id de solicitud boton de pago)     
+     */
+    public function consultaResumen($sbpa_id) {
+        $con = \Yii::$app->db_facturacion;
+        $con1 = \Yii::$app->db_financiero;
+        $estado = 1;
+        $sql = "SELECT 
+                    pben.pben_nombre as nombre_beneficiario,
+                    pben.pben_apellido as apellido_beneficiario,
+                    pben.pben_cedula as cedula_beneficiario,
+                    fdoc.doc_nombres_cliente as nombre_factura,
+                    fdoc.doc_valor as valor,
+                    sbp.sbpa_estado as estado,
+                    fdoc.doc_fecha_pago as fecha,
+                    vrep.requestid as referencia
+                FROM  " . $con->dbname . ".solicitud_boton_pago sbp
+                INNER JOIN " . $con->dbname . ".persona_beneficiaria pben on pben.pben_id = sbp.pben_id  
+                INNER JOIN " . $con->dbname . ".documento fdoc on fdoc.sbpa_id = sbp.sbpa_id
+                INNER JOIN " . $con1->dbname . ".vpos_response vrep on vrep.ordenPago = sbp.sbpa_id    
+                WHERE 
+                      sbp.sbpa_id = :sbpa_id AND                      
+                      sbp.sbpa_estado =:estado AND
+                      sbp.sbpa_estado_logico = :estado AND                       
+                      pben.pben_estado =:estado AND
+                      pben.pben_estado_logico = :estado AND
+                      fdoc.doc_estado =:estado AND
+                      fdoc.doc_estado_logico = :estado AND                      
+                      vrep.estado_logico = :estado";
+
+        $comando = $con->createCommand($sql);
+        $comando->bindParam(":estado", $estado, \PDO::PARAM_STR);
+        $comando->bindParam(":sbpa_id", $sbpa_id, \PDO::PARAM_INT);
+
+        $resultData = $comando->queryOne();
+        return $resultData;
     }
 }
