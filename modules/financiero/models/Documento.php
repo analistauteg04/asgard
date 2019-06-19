@@ -125,8 +125,7 @@ class Documento extends \yii\db\ActiveRecord
         $command->bindParam(":estado", $estado, \PDO::PARAM_STR);      
         $response = $command->execute();
         return $response;              
-    }
-    
+    }    
     public function consultarDatosxId($con, $doc_id){                
         $estado = 1;
         $sql=  "SELECT pb.pben_nombre, pb.pben_apellido, d.doc_valor, d.doc_correo
@@ -146,5 +145,8 @@ class Documento extends \yii\db\ActiveRecord
         $comando->bindParam(":doc_id", $doc_id, \PDO::PARAM_INT);
         $resultData = $comando->queryOne();        
         return $resultData;      
+    }
+    public function consultarDocIdByCedulaBen($cedula = null){
+        
     }
 }

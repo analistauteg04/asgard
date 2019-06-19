@@ -5,6 +5,7 @@ echo PbVPOS::widget([
     "id" => "VPOS",
     "referenceID" => $referenceID,
     "ordenPago" => $ordenPago,
+    "tipo_orden" => $tipo_orden,
     "descripcionItem" => $descripcionItem,
     "titleBox" => $titleBox,
     "nombre_cliente" => $nombre_cliente,

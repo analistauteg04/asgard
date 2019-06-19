@@ -147,11 +147,11 @@ class PagosfrecuentesController extends \yii\web\Controller {
                 $transaction = $con1->beginTransaction();
                 //OBTENER EL ID DE LA SOLICITUD DE PAGO.                
                 $doc_id = $dataGet["docid"];
-                \app\models\Utilities::putMessageLogFile('doc_id2:' . $doc_id);
                 $response = $this->render('btnpago', array(
                     "referenceID" => $data["resp"]["reference"],
                     "requestID" => $data["requestID"],
                     "ordenPago" => $doc_id,
+                    "tipo_orden" => 2,
                     "response" => $data["resp"],
                 ));
                 if ($data["resp"]["status"]["status"] == "APPROVED") {
@@ -191,6 +191,7 @@ class PagosfrecuentesController extends \yii\web\Controller {
         return $this->render('btnpago', array(
                     "referenceID" => str_pad(Secuencias::nuevaSecuencia($con1, 1, 1, 1, 'BPA'), 8, "0", STR_PAD_LEFT),
                     "ordenPago" => $doc_id,
+                    "tipo_orden" => 2,
                     "nombre_cliente" => $resultado["pben_nombre"],
                     "apellido_cliente" => $resultado["pben_apellido"],
                     "descripcionItem" => $descripcionItem,

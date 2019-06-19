@@ -2452,7 +2452,15 @@ class OrdenPago extends \app\modules\financiero\components\CActiveRecord {
         }
     }
 
-    
+    /**
+     * Function consultarPrecioXotroItem consulta de precio de otros items como saldos.
+     * @author  Kleber Loayza <analistadesarrollo03@uteg.edu.ec>
+     * @param   
+     * @return  
+     */
+    public function consultarOpagIdByCedula($cedula = null){
+        
+    }
     /**
      * Function consultarPrecioXotroItem consulta de precio de otros items como saldos.
      * @author  Grace Viteri <analistadesarrollo01@uteg.edu.ec>

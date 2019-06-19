@@ -32,6 +32,7 @@ class PbVPOS extends Widget {
 
     public $referenceID = "";
     public $ordenPago = "";
+    public $tipo_orden = "";
     public $requestID = "";
     public $moneda = "USD";
     public $pais = "EC";
@@ -55,7 +56,6 @@ class PbVPOS extends Widget {
     public $titleBox = ""; 
     public $producction = false;
     public $type_vpos = "1"; // 1=>Dinnes, 2=>Produbanco
-
     public $dbConection = "db_financiero";
 
     public function init()
@@ -155,7 +155,7 @@ class PbVPOS extends Widget {
 
     private function selectVPOST(){
         switch($this->type_vpos){
-            case "1":
+            case "1": # Prueba
                 $this->payment_gateway = "test.placetopay.ec";
                 if($this->producction){
                     $this->login = "";
@@ -165,8 +165,7 @@ class PbVPOS extends Widget {
                     $this->secret = "jeb3d66Sfhyml5LO";
                 }
                 break;
-            case "2":
-
+            case "2": # Produccion
                 break;
         }
     }
@@ -323,6 +322,7 @@ class PbVPOS extends Widget {
             (reference,
             descripcion,
             ordenPago,
+            tipo_orden,
             currency,
             total,
             tax,
@@ -342,6 +342,7 @@ class PbVPOS extends Widget {
             (:reference,
             :descripcion,
             :ordenPago,
+            :tipo_orden,
             :currency,
             :total,
             :tax,
@@ -361,6 +362,7 @@ class PbVPOS extends Widget {
         $comando->bindParam(":reference", $reference, \PDO::PARAM_INT);
         $comando->bindParam(":descripcion", $descripcion, \PDO::PARAM_STR);
         $comando->bindParam(":ordenPago", $this->ordenPago, \PDO::PARAM_STR);
+        $comando->bindParam(":tipo_orden", $this->tipo_orden, \PDO::PARAM_STR);
         $comando->bindParam(":currency", $currency, \PDO::PARAM_STR);
         $comando->bindParam(":total", $total, \PDO::PARAM_STR);
         $comando->bindParam(":tax", $tax, \PDO::PARAM_STR);
@@ -394,8 +396,9 @@ class PbVPOS extends Widget {
 
         $sql = "INSERT INTO " . $con->dbname . ".vpos_response 
             (reference,
-            requestId,
+            requestId,            
             ordenPago,
+            tipo_orden,
             status,
             reason,
             message,
@@ -407,6 +410,7 @@ class PbVPOS extends Widget {
             (:reference,
             :requestId,
             :ordenPago,
+            :tipo_orden,
             :status,
             :reason,
             :message,
@@ -418,6 +422,7 @@ class PbVPOS extends Widget {
         $comando->bindParam(":reference", $reference, \PDO::PARAM_INT);
         $comando->bindParam(":requestId", $requestId, \PDO::PARAM_STR);
         $comando->bindParam(":ordenPago", $this->ordenPago, \PDO::PARAM_STR);
+        $comando->bindParam(":tipo_orden", $this->tipo_orden, \PDO::PARAM_STR);
         $comando->bindParam(":status", $status, \PDO::PARAM_STR);
         $comando->bindParam(":reason", $reason, \PDO::PARAM_STR);
         $comando->bindParam(":message", $message, \PDO::PARAM_STR);
@@ -436,8 +441,7 @@ class PbVPOS extends Widget {
         $status = $params["status"]["status"];
         $reason = $params["status"]["reason"];
         $message = $params["status"]["message"];
-        $date = date("Y-m-d H:i:s", strtotime($params["status"]["date"]));
-        
+        $date = date("Y-m-d H:i:s", strtotime($params["status"]["date"]));        
         $payment_status = $params["payment"][0]["status"]["status"];
         $payment_reason = $params["payment"][0]["status"]["reason"];
         $payment_message = $params["payment"][0]["status"]["message"];
@@ -455,6 +459,7 @@ class PbVPOS extends Widget {
             (reference,
             requestId,
             ordenPago,
+            tipo_orden,
             status,
             reason,
             message,
@@ -475,6 +480,7 @@ class PbVPOS extends Widget {
             (:reference,
             :requestId,
             :ordenPago,
+            :tipo_orden,
             :status,
             :reason,
             :message,
@@ -495,6 +501,7 @@ class PbVPOS extends Widget {
         $comando->bindParam(":reference", $reference, \PDO::PARAM_INT);
         $comando->bindParam(":requestId", $requestId, \PDO::PARAM_STR);
         $comando->bindParam(":ordenPago", $this->ordenPago, \PDO::PARAM_STR);
+        $comando->bindParam(":tipo_orden", $this->tipo_orden, \PDO::PARAM_STR);
         $comando->bindParam(":status", $status, \PDO::PARAM_STR);
         $comando->bindParam(":reason", $reason, \PDO::PARAM_STR);
         $comando->bindParam(":message", $message, \PDO::PARAM_STR);
@@ -519,10 +526,12 @@ class PbVPOS extends Widget {
         $con = \Yii::$app->$conection;
         //$status = "APPROVED";
         $sql = "select i.status as status, i.reason as reason from " . $con->dbname . ".vpos_info_response i inner join " . $con->dbname . ".vpos_response r on i.ordenPago = r.ordenPago " .
-        " where r.ordenPago = :ordenPago and i.estado_logico = 1 and r.estado_logico = 1 and r.finish_transaccion = 0 and i.finish_transaccion = 0 " . 
+        " where r.ordenPago = :ordenPago and r.tipo_orden = :tipo_orden" . 
+        " and i.estado_logico = 1 and r.estado_logico = 1 and r.finish_transaccion = 0 and i.finish_transaccion = 0 " .
         " order by r.date desc";
         $comando = $con->createCommand($sql);
         $comando->bindParam(":ordenPago", $this->ordenPago, \PDO::PARAM_STR);
+        $comando->bindParam(":tipo_orden", $this->tipo_orden, \PDO::PARAM_INT);
         //$comando->bindParam(":status", $status, \PDO::PARAM_STR);
         $resultData = $comando->queryOne();
         if(is_array($resultData) && count($resultData) > 0)
@@ -534,9 +543,11 @@ class PbVPOS extends Widget {
         $conection = $this->dbConection;
         $con = \Yii::$app->$conection;
         $sql = "select * from " . $con->dbname . ".vpos_response " .
-        " where ordenPago = :ordenPago and estado_logico = 1 and finish_transaccion = 0 order by date desc";
+        " where ordenPago = :ordenPago and tipo_orden = :tipo_orden ".
+        " and estado_logico = 1 and finish_transaccion = 0 order by date desc";
         $comando = $con->createCommand($sql);
         $comando->bindParam(":ordenPago", $this->ordenPago, \PDO::PARAM_STR);
+        $comando->bindParam(":tipo_orden", $this->tipo_orden, \PDO::PARAM_INT);
         $resultData = $comando->queryOne();
         if(is_array($resultData) && count($resultData) > 0)
             return $resultData["requestId"];
@@ -550,23 +561,26 @@ class PbVPOS extends Widget {
         $date = date("Y-m-d H:i:s");
         try{
             $sql = "update " . $con->dbname . ".vpos_request set finish_transaccion = 1, fecha_modificacion = :date " .
-            " where ordenPago = :ordenPago and estado_logico = 1";
+            " where ordenPago = :ordenPago and tipo_orden = :tipo_orden and estado_logico = 1";
             $comando = $con->createCommand($sql);
             $comando->bindParam(":ordenPago", $this->ordenPago, \PDO::PARAM_STR);
+            $comando->bindParam(":tipo_orden", $this->tipo_orden, \PDO::PARAM_INT);
             $comando->bindParam(":date", $date, \PDO::PARAM_STR);
             $resultData = $comando->execute();
             if($resultData){
                 $sql = "update " . $con->dbname . ".vpos_response set finish_transaccion = 1, fecha_modificacion = :date " .
-                " where ordenPago = :ordenPago and estado_logico = 1";
+                " where ordenPago = :ordenPago and tipo_orden = :tipo_orden and estado_logico = 1";
                 $comando = $con->createCommand($sql);
                 $comando->bindParam(":ordenPago", $this->ordenPago, \PDO::PARAM_STR);
+                $comando->bindParam(":tipo_orden", $this->tipo_orden, \PDO::PARAM_INT);
                 $comando->bindParam(":date", $date, \PDO::PARAM_STR);
                 $resultData = $comando->execute();
                 if($resultData){
                     $sql = "update " . $con->dbname . ".vpos_info_response set finish_transaccion = 1, fecha_modificacion = :date " .
-                    " where ordenPago = :ordenPago and estado_logico = 1";
+                    " where ordenPago = :ordenPago and tipo_orden = :tipo_orden and estado_logico = 1";
                     $comando = $con->createCommand($sql);
                     $comando->bindParam(":ordenPago", $this->ordenPago, \PDO::PARAM_STR);
+                    $comando->bindParam(":tipo_orden", $this->tipo_orden, \PDO::PARAM_INT);
                     $comando->bindParam(":date", $date, \PDO::PARAM_STR);
                     $resultData = $comando->execute();
                     if($resultData){

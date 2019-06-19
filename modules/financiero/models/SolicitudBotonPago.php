@@ -105,4 +105,7 @@ class SolicitudBotonPago extends \yii\db\ActiveRecord
         $command->execute();
         return $con->getLastInsertID();        
     }
+    public function consultarHistoralTransacciones(){
+        
+    }
 }
