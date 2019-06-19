@@ -1347,14 +1347,14 @@ class Solicitudinscripcion extends \yii\db\ActiveRecord {
      * @param   string  $dataTelefono   Telefono de la persona a Facturar
      * @return  $resultData (Retorna true si se realizo la operacion o false si fue error).
      */
-    public function crearDatosFacturaSolicitud($sins_id, $dataNombres, $dataApellidos, $dataTipDNI, $dataDNI, $dataDireccion, $dataTelefono) {
+    public function crearDatosFacturaSolicitud($sins_id, $dataNombres, $dataApellidos, $dataTipDNI, $dataDNI, $dataDireccion, $dataTelefono, $dataCorreo=null) {
         $con = \Yii::$app->db_captacion;
         $estado = 1;
         $tipo = ((self::$arr_DNI[$dataTipDNI]) ? self::$arr_DNI[$dataTipDNI] : self::$arr_DNI["3"]);
 
         $sql = "INSERT INTO solicitud_datos_factura 
-                (sins_id, sdfa_nombres, sdfa_apellidos, sdfa_tipo_dni, sdfa_dni, sdfa_direccion, sdfa_telefono, sdfa_estado, sdfa_estado_logico) VALUES
-                (:id, :nombres, :apellidos, :tipo_dni, :dni, :direccion, :telefono, :estado, :estado);";
+                (sins_id, sdfa_nombres, sdfa_apellidos, sdfa_tipo_dni, sdfa_dni, sdfa_direccion, sdfa_telefono, sdfa_correo, sdfa_estado, sdfa_estado_logico) VALUES
+                (:id, :nombres, :apellidos, :tipo_dni, :dni, :direccion, :telefono, :correo, :estado, :estado);";
 
         $comando = $con->createCommand($sql);
         $comando->bindParam(":id", $sins_id, \PDO::PARAM_INT);
@@ -1364,6 +1364,7 @@ class Solicitudinscripcion extends \yii\db\ActiveRecord {
         $comando->bindParam(":dni", $dataDNI, \PDO::PARAM_STR);
         $comando->bindParam(":direccion", $dataDireccion, \PDO::PARAM_STR);
         $comando->bindParam(":telefono", $dataTelefono, \PDO::PARAM_STR);
+        $comando->bindParam(":correo", $dataCorreo, \PDO::PARAM_STR);
         $comando->bindParam(":estado", $estado, \PDO::PARAM_STR);
         $resultData = $comando->execute();
         return $resultData;

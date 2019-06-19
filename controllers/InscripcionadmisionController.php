@@ -223,7 +223,8 @@ class InscripcionadmisionController extends \yii\web\Controller {
                         'direccion_fact'  => ucwords(strtolower($data["direccion_fact"])),
                         'telefono_fac'  => $data["telefono_fac"], 
                         'tipo_dni_fac'  => $data["tipo_dni_fac"], 
-                        'dni'  => $data["dni"],                         
+                        'dni'  => $data["dni"],
+                        'correo' => strtolower($data["correo"]),
                     );                                         
                     $resul = $model->insertaOriginal($Ids,$dataRegistro);                    
                 }                

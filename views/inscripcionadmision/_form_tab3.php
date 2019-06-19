@@ -199,7 +199,7 @@ financiero::registerTranslations();
                     <label><input type="radio" name="opt_tipo_DNI"  value="3" ><b>&nbsp;&nbsp;<?= Yii::t("formulario", "Passport") ?></b></label>                                              
                 </div>       
             </div>
-        </div>
+        </div>        
     </div>   
         
     <div class="col-md-6 col-sm-6 col-xs-6 col-lg-6">   
@@ -226,6 +226,14 @@ financiero::registerTranslations();
                     <input type="text" class="form-control  " value="" id="txt_dni_fac" data-type="cedula" data-keydown="true" placeholder="<?= Yii::t("formulario", "DNI Document") ?>">
                 </div>
             </div>
+        </div>
+        <div class='col-md-12 col-sm-12 col-xs-12 col-lg-12'>
+            <div class="form-group">
+                <label for="txt_correo_fac" class="col-sm-2 col-md-2 col-xs-2 col-lg-2 control-label" id="lbl_correo"><?= Yii::t("formulario", "Email") ?></label>
+                <div class="col-sm-8 col-md-8 col-xs-8 col-lg-8">
+                    <input type="text" class="form-control keyupmce" value="" id="txt_correo_fac" data-type="email" placeholder="<?= Yii::t("formulario", "Email") ?>">
+                </div> 
+            </div>  
         </div>
     </div>                                          
     <!--    <div class="col-md-12 col-xs-12 col-sm-12 col-lg-12">
