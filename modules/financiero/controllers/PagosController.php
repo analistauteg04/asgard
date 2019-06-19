@@ -632,7 +632,7 @@ class PagosController extends \app\components\CController {
             $arrSearch["f_ini"] = $data['f_ini'];
             $arrSearch["f_fin"] = $data['f_fin'];
             $data_transacciones=$model_sbpag->consultarHistoralTransacciones($doc_id,$opag_id,$arrSearch);
-            return $this->renderPartial('_listarpagosolicitud_grid', [
+            return $this->renderPartial('historialtransaccion_grid', [
                         "model" => $resp_pago,
             ]);
         } else {
