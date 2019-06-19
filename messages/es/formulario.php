@@ -408,6 +408,7 @@ return [
     "Next" => "Siguiente",
     "Next Hour" => "Próxima Hora",
     "No" => "No",
+    "No. Reference" => "No Refernecia",
     "Not approved" => "No Aprobado",
     "Numeration" => "Numeración",
     "Number" => "Número",
