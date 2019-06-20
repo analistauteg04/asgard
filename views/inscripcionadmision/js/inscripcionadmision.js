@@ -55,7 +55,15 @@ $(document).ready(function () {
         } else {
             guardarInscripcion('Update', '1');
         }
-
+        //Eliminar validación de datos obligatorios.
+        alert('Eliminar campos obligatorios');
+        $('#txt_nombres_fac').removeClass("PBvalidation");
+        $('#txt_dir_fac').removeClass("PBvalidation");
+        $('#txt_apellidos_fac').removeClass("PBvalidation");
+        $('#txt_dni_fac').removeClass("PBvalidation");
+        $('#txt_pasaporte_fac').removeClass("PBvalidation");
+        $('#txt_ruc_fac').removeClass("PBvalidation");
+        $('#txt_correo_fac').removeClass("PBvalidation");
     });
     $('#sendInformacionAspirante2').click(function () {
         var error = 0;
@@ -465,6 +473,23 @@ $(document).ready(function () {
             $("#rdo_forma_pago_otros").prop("checked", true);    
         }
     });
+    
+    $('#opt_tipo_DNI').change(function () {
+        if ($('#opt_tipo_DNI').val() == 1) {
+            $('#DivcedulaFac').css('display', 'block');    
+            $('#DivpasaporteFac').css('display', 'none');     
+            $('#DivRucFac').css('display', 'none'); 
+        } else if ($('#opt_tipo_DNI').val() == 2) {
+            $('#DivpasaporteFac').css('display', 'block');       
+            $('#DivcedulaFac').css('display', 'none');    
+            $('#DivRucFac').css('display', 'none');
+        } else {
+            $('#DivRucFac').css('display', 'block'); 
+            $('#DivpasaporteFac').css('display', 'none');
+            $('#DivcedulaFac').css('display', 'none');
+        }
+    });
+    
 });
 
 //INSERTAR DATOS
@@ -617,6 +642,7 @@ function paso1next() {
     $("a[data-href='#paso2']").attr('data-toggle', 'tab');
     $("a[data-href='#paso2']").attr('href', $("a[data-href='#paso2']").attr('data-href'));
     $("a[data-href='#paso2']").trigger("click");
+    
 }
 
 function paso2next() {
@@ -627,6 +653,14 @@ function paso2next() {
     $("a[data-href='#paso3']").attr('data-toggle', 'tab');
     $("a[data-href='#paso3']").attr('href', $("a[data-href='#paso3']").attr('data-href'));
     $("a[data-href='#paso3']").trigger("click");
+    //Adicionar validación de datos obligatorios.
+    /*$('#txt_nombres_fac').addClass("PBvalidation");
+    $('#txt_dir_fac').addClass("PBvalidation");
+    $('#txt_apellidos_fac').addClass("PBvalidation");
+    $('#txt_dni_fac').addClass("PBvalidation");
+    $('#txt_pasaporte_fac').addClass("PBvalidation");
+    $('#txt_ruc_fac').addClass("PBvalidation");
+    $('#txt_correo_fac').addClass("PBvalidation");*/
 }
 
 function dataInscripPart1(ID) {
