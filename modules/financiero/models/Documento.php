@@ -164,7 +164,8 @@ class Documento extends \yii\db\ActiveRecord
                     pben.pben_cedula as cedula_beneficiario,
                     fdoc.doc_nombres_cliente as nombre_factura,
                     fdoc.doc_valor as valor,
-                    sbp.sbpa_estado as estado,
+                    fdoc.doc_cedula as cedula_factura,
+                    fdoc.doc_pagado as estado,                   
                     fdoc.doc_fecha_pago as fecha,
                     vrep.requestid as referencia
                 FROM  " . $con->dbname . ".solicitud_boton_pago sbp

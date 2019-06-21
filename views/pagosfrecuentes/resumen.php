@@ -64,7 +64,7 @@ financiero::registerTranslations();
             <div class="form-group">
                 <label for="txt_cedula_factura" class="col-sm-4 control-label" id="lbl_cedulafactura"><?= Yii::t("formulario", "DNI Document") ?></label> 
                 <div class="col-sm-8 ">
-                    <span for="txt_cedula_factura" class="col-sm-3 col-md-3 col-xs-3 col-lg-3 control-label" id="lbl_cedulafactura">9999 </span>                 
+                    <span for="txt_cedula_factura" class="col-sm-3 col-md-3 col-xs-3 col-lg-3 control-label" id="lbl_cedulafactura"><?= $resu_resumen["cedula_factura"] ?></span>                 
                 </div>
             </div>
         </div> 
