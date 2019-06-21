@@ -240,13 +240,7 @@ class InscripcionAdmision extends \yii\db\ActiveRecord {
                         ruta_doc_hojavida,
                         twin_dni,
                         ruta_doc_aceptacion,
-                        twi.cemp_id,
-                        twin_nombres_fact,
-                        twin_apellidos_fact,
-                        twin_direccion_fact,
-                        twin_telefono_fact,
-                        twin_tipo_dni_fact,
-                        twin_dni_fact
+                        twi.cemp_id                        
                 FROM " . $con->dbname . ".temporal_wizard_inscripcion twi inner join db_academico.unidad_academica ua on ua.uaca_id = twi.uaca_id
                      inner join " . $con1->dbname . ".modalidad m on m.mod_id = twi.mod_id
                      inner join " . $con1->dbname . ".estudio_academico ea on ea.eaca_id = twi.car_id
