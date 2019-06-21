@@ -136,13 +136,7 @@ class InscripcionAdmision extends \yii\db\ActiveRecord {
                     mod_id=:mod_id,car_id=:car_id,twin_metodo_ingreso=:twin_metodo_ingreso,conuteg_id=:conuteg_id,ruta_doc_titulo=:ruta_doc_titulo, 
                     ruta_doc_dni=:ruta_doc_dni, ruta_doc_certvota=:ruta_doc_certvota,ruta_doc_foto=:ruta_doc_foto,
                     ruta_doc_hojavida=:ruta_doc_hojavida,ruta_doc_certificado=:ruta_doc_certificado, 
-                    ruta_doc_aceptacion=:ruta_doc_aceptacion, cemp_id=:cemp_id, 
-                    twin_nombres_fact= :twin_nombres_fact,
-                    twin_apellidos_fact=:twin_apellidos_fact,
-                    twin_direccion_fact=:twin_direccion_fact,
-                    twin_telefono_fact=:twin_telefono_fact,
-                    twin_tipo_dni_fact=:twin_tipo_dni_fact,
-                    twin_dni_fact=:twin_dni_fact,
+                    ruta_doc_aceptacion=:ruta_doc_aceptacion, cemp_id=:cemp_id,                    
                     twin_mensaje1=:twin_mensaje1,twin_mensaje2=:twin_mensaje2,twin_fecha_modificacion=CURRENT_TIMESTAMP() 
                  WHERE twin_id =:twin_id ";                
         $met_ing=0;
@@ -174,13 +168,7 @@ class InscripcionAdmision extends \yii\db\ActiveRecord {
         $command->bindParam(":ruta_doc_aceptacion", basename($data[0]['ruta_doc_aceptacion']), \PDO::PARAM_STR);
         $command->bindParam(":cemp_id", basename($data[0]['cemp_id']), \PDO::PARAM_INT);
         $command->bindParam(":twin_mensaje1", $data[0]['twin_mensaje1'], \PDO::PARAM_STR);
-        $command->bindParam(":twin_mensaje2", $data[0]['twin_mensaje2'], \PDO::PARAM_STR);        
-        $command->bindParam(":twin_nombres_fact", $data[0]['twin_nombres_fact'], \PDO::PARAM_STR);
-        $command->bindParam(":twin_apellidos_fact", $data[0]['twin_apellidos_fact'], \PDO::PARAM_STR);
-        $command->bindParam(":twin_direccion_fact", $data[0]['twin_direccion_fact'], \PDO::PARAM_STR);
-        $command->bindParam(":twin_telefono_fact", $data[0]['twin_telefono_fact'], \PDO::PARAM_STR);
-        $command->bindParam(":twin_tipo_dni_fact", $data[0]['twin_tipo_dni_fact'], \PDO::PARAM_STR);
-        $command->bindParam(":twin_dni_fact", $data[0]['twin_dni_fact'], \PDO::PARAM_STR);
+        $command->bindParam(":twin_mensaje2", $data[0]['twin_mensaje2'], \PDO::PARAM_STR);                
         $command->execute();
                 
         return $data[0]['twin_id'];

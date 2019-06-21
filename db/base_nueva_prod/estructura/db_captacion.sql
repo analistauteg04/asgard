@@ -406,6 +406,7 @@ create table if not exists `solicitud_datos_factura` (
  `sdfa_dni` varchar(50) not null,
  `sdfa_direccion` varchar(200) not null,
  `sdfa_telefono` varchar(50) not null,
+ `sdfa_correo` varchar(80) not null,
  `sdfa_estado` varchar(1) not null,
  `sdfa_fecha_creacion` timestamp not null default current_timestamp,
  `sdfa_fecha_modificacion` timestamp null default null,
