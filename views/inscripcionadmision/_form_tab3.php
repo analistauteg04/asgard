@@ -154,9 +154,9 @@ financiero::registerTranslations();
                 <span><b><?= Yii::t("formulario", "Forma Pago: ") ?></b></span>
             </div>
             <div class="col-sm-8 col-md-8 col-xs-8 col-lg-8">
-                <!--<label> 
-                    <input type="radio" name="rdo_forma_pago_dinner" id="rdo_forma_pago_dinner" value="1" checked> Dinners<br> 
-                </label>-->
+                <label> 
+                    <input type="radio" name="rdo_forma_pago_dinner" id="rdo_forma_pago_dinner" value="1"> Dinners<br> 
+                </label>
                 <label> 
                     <input type="radio" name="rdo_forma_pago_otros" id="rdo_forma_pago_otros" value="2" checked> Stripe Payment<br>
                 </label>
@@ -176,7 +176,7 @@ financiero::registerTranslations();
     <div class="col-md-6 col-sm-6 col-xs-6 col-lg-6">                  
         <div class="col-md-12 col-sm-12 col-xs-12 col-lg-12">
             <div class="form-group">
-                <label for="txt_nombres_fac" class="col-sm-2 col-md-2 col-xs-2 col-lg-2 control-label" id="lbl_nombre1"><?= Yii::t("formulario", "Names") ?></label>
+                <label for="txt_nombres_fac" class="col-sm-2 col-md-2 col-xs-2 col-lg-2 control-label" id="lbl_nombre1"><?= Yii::t("formulario", "Names") ?><span class="text-danger">*</span></label>
                 <div class="col-sm-8 col-md-8 col-xs-8 col-lg-8">
                     <input type="text" class="form-control PBvalidation keyupmce" value="" id="txt_nombres_fac" data-type="alfa" placeholder="<?= Yii::t("formulario", "First Name") ?>">
                 </div>            
@@ -184,7 +184,7 @@ financiero::registerTranslations();
         </div>  
         <div class='col-md-12 col-sm-12 col-xs-12 col-lg-12'>
             <div class="form-group">
-                <label for="txt_dir_fac" class="col-sm-2 col-md-2 col-xs-2 col-lg-2 control-label" id="lbl_nombre1"><?= Yii::t("formulario", "Address") ?></label>
+                <label for="txt_dir_fac" class="col-sm-2 col-md-2 col-xs-2 col-lg-2 control-label" id="lbl_nombre1"><?= Yii::t("formulario", "Address") ?><span class="text-danger">*</span></label>
                 <div class="col-sm-8 col-md-8 col-xs-8 col-lg-8">
                     <input type="text" class="form-control PBvalidation keyupmce" value="" id="txt_dir_fac" data-type="alfa" placeholder="<?= Yii::t("formulario", "Address") ?>">
                 </div> 
@@ -192,7 +192,7 @@ financiero::registerTranslations();
         </div>
         <div class='col-md-12 col-sm-12 col-xs-12 col-lg-12'>  
             <div class="form-group">
-                <label for="opt_tipo_DNI" class="col-sm-2 col-md-2 col-xs-2 col-lg-2 control-label" id="lbl_nombre1"><?= Yii::t("formulario", "Type DNI") ?></label>
+                <label for="opt_tipo_DNI" class="col-sm-2 col-md-2 col-xs-2 col-lg-2 control-label" id="lbl_nombre1"><?= Yii::t("formulario", "Type DNI") ?><span class="text-danger">*</span></label>
                 <div class="col-sm-8">  
                     <label><input type="radio" name="opt_tipo_DNI"  value="1" checked>&nbsp;&nbsp;<b><?= Yii::t("formulario", "DNI Document") . '/' . Yii::t("formulario", "DNI 1") ?></b></label><br/>
                     <label><input type="radio" name="opt_tipo_DNI"  value="2" ><b>&nbsp;&nbsp;<?= Yii::t("formulario", "RUC") ?></b></label><br/>                                              
@@ -205,7 +205,7 @@ financiero::registerTranslations();
     <div class="col-md-6 col-sm-6 col-xs-6 col-lg-6">   
         <div class='col-md-12 col-sm-12 col-xs-12 col-lg-12'> 
             <div class="form-group">
-                <label for="txt_apellidos_fac" class="col-sm-2 col-md-2 col-xs-2 col-lg-2 control-label" id="lbl_apellido1"><?= Yii::t("formulario", "Last Names") ?></label>
+                <label for="txt_apellidos_fac" class="col-sm-2 col-md-2 col-xs-2 col-lg-2 control-label" id="lbl_apellido1"><?= Yii::t("formulario", "Last Names") ?><span class="text-danger">*</span></label>
                 <div class="col-sm-8 col-md-8 col-xs-8 col-lg-8">
                     <input type="text" class="form-control PBvalidation keyupmce" value="" id="txt_apellidos_fac" data-type="alfa" placeholder="<?= Yii::t("formulario", "First Name") ?>">
                 </div>
@@ -252,10 +252,10 @@ financiero::registerTranslations();
             </div>  
         </div>
     </div>                                          
-    <!--    <div class="col-md-12 col-xs-12 col-sm-12 col-lg-12">
+    <!--<div class="col-md-12 col-xs-12 col-sm-12 col-lg-12">
             <h4><b><span id="lbl_detalle2"><?= Yii::t("formulario", "Pago:") ?></span></b></h4>
             <h4><span id="lbl_detalle2"><?= Yii::t("formulario", "Pago en línea PayPal: ") ?></span><a href="http://www.uteg.edu.ec/pagos-online/">http://www.uteg.edu.ec/pagos-online/</a></h4>        
-        </div>-->
+    </div>-->
     <div class="col-md-12 col-xs-12 col-sm-12 col-lg-12">         
         </br>
         </br>

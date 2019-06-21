@@ -28,6 +28,14 @@ $(document).ready(function () {
     } else if (unisol == 2) {
         $('#divmetodocan').css('display', 'block');
     }
+    $('#txt_nombres_fac').removeClass("PBvalidation");
+    $('#txt_dir_fac').removeClass("PBvalidation");
+    $('#txt_apellidos_fac').removeClass("PBvalidation");
+    $('#txt_dni_fac').removeClass("PBvalidation");
+    $('#txt_pasaporte_fac').removeClass("PBvalidation");
+    $('#txt_ruc_fac').removeClass("PBvalidation");
+    $('#txt_correo_fac').removeClass("PBvalidation");
+        
     $('#cmb_convenio_empresa').change(function () {
         if ($('#cmb_convenio_empresa').val()!=0) {            
             $('#divDocumAceptacion').css('display', 'block');
@@ -56,15 +64,16 @@ $(document).ready(function () {
             guardarInscripcion('Update', '1');
         }
         //Eliminar validación de datos obligatorios.
-        alert('Eliminar campos obligatorios');
-        $('#txt_nombres_fac').removeClass("PBvalidation");
+        //alert('Eliminar campos obligatorios');
+        /*$('#txt_nombres_fac').removeClass("PBvalidation");
         $('#txt_dir_fac').removeClass("PBvalidation");
         $('#txt_apellidos_fac').removeClass("PBvalidation");
         $('#txt_dni_fac').removeClass("PBvalidation");
         $('#txt_pasaporte_fac').removeClass("PBvalidation");
         $('#txt_ruc_fac').removeClass("PBvalidation");
-        $('#txt_correo_fac').removeClass("PBvalidation");
+        $('#txt_correo_fac').removeClass("PBvalidation");*/
     });
+    
     $('#sendInformacionAspirante2').click(function () {
         var error = 0;
         var pais = $('#cmb_pais_dom').val();
@@ -140,6 +149,7 @@ $(document).ready(function () {
         arrParams.apellidos_fact = $('#txt_apellidos_fac').val();
         arrParams.direccion_fact = $('#txt_dir_fac').val();
         arrParams.telefono_fac = $('#txt_tel_fac').val();
+                        
         var tipo_dni_fact= "";
         if ($('#opt_tipo_DNI option:selected').val()=="1") {
             tipo_dni_fact = "CED";
@@ -340,7 +350,13 @@ $(document).ready(function () {
         $("a[data-href='#paso2']").attr('data-toggle', 'tab');
         $("a[data-href='#paso2']").attr('href', $("a[data-href='#paso2']").attr('data-href'));
         $("a[data-href='#paso2']").trigger("click");
-
+        $('#txt_nombres_fac').removeClass("PBvalidation");
+        $('#txt_dir_fac').removeClass("PBvalidation");
+        $('#txt_apellidos_fac').removeClass("PBvalidation");
+        $('#txt_dni_fac').removeClass("PBvalidation");
+        $('#txt_pasaporte_fac').removeClass("PBvalidation");
+        $('#txt_ruc_fac').removeClass("PBvalidation");
+        $('#txt_correo_fac').removeClass("PBvalidation");
     });
     $('#paso2back').click(function () {
         $("a[data-href='#paso2']").attr('data-toggle', 'none');
@@ -359,6 +375,15 @@ $(document).ready(function () {
         $("a[data-href='#paso3']").attr('data-toggle', 'tab');
         $("a[data-href='#paso3']").attr('href', $("a[data-href='#paso3']").attr('data-href'));
         $("a[data-href='#paso3']").trigger("click");
+        
+        //Adicionar validación de datos obligatorios.       
+        /*$('#txt_nombres_fac').addClass("PBvalidation");
+        $('#txt_dir_fac').addClass("PBvalidation");
+        $('#txt_apellidos_fac').addClass("PBvalidation");
+        $('#txt_dni_fac').addClass("PBvalidation");
+        $('#txt_pasaporte_fac').addClass("PBvalidation");
+        $('#txt_ruc_fac').addClass("PBvalidation");
+        $('#txt_correo_fac').addClass("PBvalidation");*/
     });
     $('#paso3back').click(function () {
         $("a[data-href='#paso3']").attr('data-toggle', 'none');
@@ -641,8 +666,7 @@ function paso1next() {
     $("a[data-href='#paso1']").removeAttr('href');
     $("a[data-href='#paso2']").attr('data-toggle', 'tab');
     $("a[data-href='#paso2']").attr('href', $("a[data-href='#paso2']").attr('data-href'));
-    $("a[data-href='#paso2']").trigger("click");
-    
+    $("a[data-href='#paso2']").trigger("click");    
 }
 
 function paso2next() {
@@ -652,15 +676,7 @@ function paso2next() {
     $("a[data-href='#paso2']").removeAttr('href');
     $("a[data-href='#paso3']").attr('data-toggle', 'tab');
     $("a[data-href='#paso3']").attr('href', $("a[data-href='#paso3']").attr('data-href'));
-    $("a[data-href='#paso3']").trigger("click");
-    //Adicionar validación de datos obligatorios.
-    /*$('#txt_nombres_fac').addClass("PBvalidation");
-    $('#txt_dir_fac').addClass("PBvalidation");
-    $('#txt_apellidos_fac').addClass("PBvalidation");
-    $('#txt_dni_fac').addClass("PBvalidation");
-    $('#txt_pasaporte_fac').addClass("PBvalidation");
-    $('#txt_ruc_fac').addClass("PBvalidation");
-    $('#txt_correo_fac').addClass("PBvalidation");*/
+    $("a[data-href='#paso3']").trigger("click");    
 }
 
 function dataInscripPart1(ID) {
