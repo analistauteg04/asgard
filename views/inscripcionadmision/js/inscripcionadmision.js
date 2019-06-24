@@ -62,16 +62,7 @@ $(document).ready(function () {
             guardarInscripcion('Create', '1');
         } else {
             guardarInscripcion('Update', '1');
-        }
-        //Eliminar validación de datos obligatorios.
-        //alert('Eliminar campos obligatorios');
-        /*$('#txt_nombres_fac').removeClass("PBvalidation");
-        $('#txt_dir_fac').removeClass("PBvalidation");
-        $('#txt_apellidos_fac').removeClass("PBvalidation");
-        $('#txt_dni_fac').removeClass("PBvalidation");
-        $('#txt_pasaporte_fac').removeClass("PBvalidation");
-        $('#txt_ruc_fac').removeClass("PBvalidation");
-        $('#txt_correo_fac').removeClass("PBvalidation");*/
+        }        
     });
     
     $('#sendInformacionAspirante2').click(function () {
@@ -154,13 +145,13 @@ $(document).ready(function () {
         if ($('#opt_tipo_DNI option:selected').val()=="1") {
             tipo_dni_fact = "CED";
         } else if ($('#opt_tipo_DNI option:selected').val()=="2") {
-            tipo_dni_fact = "RUC";
-        } else {
             tipo_dni_fact = "PASS";
+        } else {
+            tipo_dni_fact = "RUC";
         }
         arrParams.tipo_dni_fac = tipo_dni_fact;
         arrParams.dni = $('#txt_dni_fac').val();    
-        arrParams.correo = $('#txt_correo_fac').val();
+        arrParams.correo = $('#txt_correo_fac').val();             
         requestHttpAjax(link, arrParams, function (response) {
             var message = response.message;
             //console.log(response);
@@ -349,14 +340,7 @@ $(document).ready(function () {
         $("a[data-href='#paso1']").removeAttr('href');
         $("a[data-href='#paso2']").attr('data-toggle', 'tab');
         $("a[data-href='#paso2']").attr('href', $("a[data-href='#paso2']").attr('data-href'));
-        $("a[data-href='#paso2']").trigger("click");
-        $('#txt_nombres_fac').removeClass("PBvalidation");
-        $('#txt_dir_fac').removeClass("PBvalidation");
-        $('#txt_apellidos_fac').removeClass("PBvalidation");
-        $('#txt_dni_fac').removeClass("PBvalidation");
-        $('#txt_pasaporte_fac').removeClass("PBvalidation");
-        $('#txt_ruc_fac').removeClass("PBvalidation");
-        $('#txt_correo_fac').removeClass("PBvalidation");
+        $("a[data-href='#paso2']").trigger("click");        
     });
     $('#paso2back').click(function () {
         $("a[data-href='#paso2']").attr('data-toggle', 'none');
@@ -365,7 +349,7 @@ $(document).ready(function () {
         $("a[data-href='#paso2']").removeAttr('href');
         $("a[data-href='#paso1']").attr('data-toggle', 'tab');
         $("a[data-href='#paso1']").attr('href', $("a[data-href='#paso1']").attr('data-href'));
-        $("a[data-href='#paso1']").trigger("click");
+        $("a[data-href='#paso1']").trigger("click");        
     });
     $('#paso2next').click(function () {
         $("a[data-href='#paso2']").attr('data-toggle', 'none');
@@ -374,16 +358,7 @@ $(document).ready(function () {
         $("a[data-href='#paso2']").removeAttr('href');
         $("a[data-href='#paso3']").attr('data-toggle', 'tab');
         $("a[data-href='#paso3']").attr('href', $("a[data-href='#paso3']").attr('data-href'));
-        $("a[data-href='#paso3']").trigger("click");
-        
-        //Adicionar validación de datos obligatorios.       
-        /*$('#txt_nombres_fac').addClass("PBvalidation");
-        $('#txt_dir_fac').addClass("PBvalidation");
-        $('#txt_apellidos_fac').addClass("PBvalidation");
-        $('#txt_dni_fac').addClass("PBvalidation");
-        $('#txt_pasaporte_fac').addClass("PBvalidation");
-        $('#txt_ruc_fac').addClass("PBvalidation");
-        $('#txt_correo_fac').addClass("PBvalidation");*/
+        $("a[data-href='#paso3']").trigger("click");                     
     });
     $('#paso3back').click(function () {
         $("a[data-href='#paso3']").attr('data-toggle', 'none');
@@ -499,12 +474,12 @@ $(document).ready(function () {
         }
     });
     
-    $('#opt_tipo_DNI').change(function () {
-        if ($('#opt_tipo_DNI').val() == 1) {
+    $('input[name=opt_tipo_DNI]:radio').change(function () {        
+        if ($(this).val() == 1) {
             $('#DivcedulaFac').css('display', 'block');    
             $('#DivpasaporteFac').css('display', 'none');     
             $('#DivRucFac').css('display', 'none'); 
-        } else if ($('#opt_tipo_DNI').val() == 2) {
+        } else if ($(this).val() == 2) {
             $('#DivpasaporteFac').css('display', 'block');       
             $('#DivcedulaFac').css('display', 'none');    
             $('#DivRucFac').css('display', 'none');
@@ -666,7 +641,16 @@ function paso1next() {
     $("a[data-href='#paso1']").removeAttr('href');
     $("a[data-href='#paso2']").attr('data-toggle', 'tab');
     $("a[data-href='#paso2']").attr('href', $("a[data-href='#paso2']").attr('data-href'));
-    $("a[data-href='#paso2']").trigger("click");    
+    $("a[data-href='#paso2']").trigger("click");   
+    alert('paso1next function');
+    $('#txt_nombres_fac').removeClass("PBvalidation");
+    $('#txt_dir_fac').removeClass("PBvalidation");
+    $('#txt_apellidos_fac').removeClass("PBvalidation");
+    $('#txt_dni_fac').removeClass("PBvalidation");
+    $('#txt_pasaporte_fac').removeClass("PBvalidation");
+    $('#txt_ruc_fac').removeClass("PBvalidation");
+    $('#txt_correo_fac').removeClass("PBvalidation");
+    
 }
 
 function paso2next() {
@@ -676,7 +660,20 @@ function paso2next() {
     $("a[data-href='#paso2']").removeAttr('href');
     $("a[data-href='#paso3']").attr('data-toggle', 'tab');
     $("a[data-href='#paso3']").attr('href', $("a[data-href='#paso3']").attr('data-href'));
-    $("a[data-href='#paso3']").trigger("click");    
+    $("a[data-href='#paso3']").trigger("click"); 
+    alert('paso2next function');
+    //Adicionar validación de datos obligatorios en datos de factura.
+    $('#txt_nombres_fac').addClass("PBvalidation");
+    $('#txt_dir_fac').addClass("PBvalidation");
+    $('#txt_apellidos_fac').addClass("PBvalidation");
+    $('#txt_correo_fac').addClass("PBvalidation");
+    if ($('#opt_tipo_DNI option:selected').val()=="1") {
+        $('#txt_dni_fac').addClass("PBvalidation");
+    } else if ($('#opt_tipo_DNI option:selected').val()=="2") {
+        $('#txt_pasaporte_fac').addClass("PBvalidation");
+    } else {
+        $('#txt_ruc_fac').addClass("PBvalidation");
+    }    
 }
 
 function dataInscripPart1(ID) {
