@@ -195,8 +195,8 @@ financiero::registerTranslations();
                 <label for="opt_tipo_DNI" class="col-sm-2 col-md-2 col-xs-2 col-lg-2 control-label" id="lbl_nombre1"><?= Yii::t("formulario", "Type DNI") ?><span class="text-danger">*</span></label>
                 <div class="col-sm-8">  
                     <label><input type="radio" name="opt_tipo_DNI"  value="1" checked>&nbsp;&nbsp;<b><?= Yii::t("formulario", "DNI Document") . '/' . Yii::t("formulario", "DNI 1") ?></b></label><br/>
-                    <label><input type="radio" name="opt_tipo_DNI"  value="2" ><b>&nbsp;&nbsp;<?= Yii::t("formulario", "RUC") ?></b></label><br/>                                              
-                    <label><input type="radio" name="opt_tipo_DNI"  value="3" ><b>&nbsp;&nbsp;<?= Yii::t("formulario", "Passport") ?></b></label>                                              
+                    <label><input type="radio" name="opt_tipo_DNI"  value="2" ><b>&nbsp;&nbsp;<?= Yii::t("formulario", "Passport") ?></b></label><br/>                                              
+                    <label><input type="radio" name="opt_tipo_DNI"  value="3" ><b>&nbsp;&nbsp;<?= Yii::t("formulario", "RUC") ?></b></label>                                              
                 </div>       
             </div>
         </div>        
@@ -229,17 +229,17 @@ financiero::registerTranslations();
         </div>
         <div class="col-md-12 col-sm-12 col-xs-12 col-lg-12" style="display: none;" id="DivpasaporteFac">
             <div class="form-group">
-                <label for="txt_pasaporte_fac" class="col-sm-5 control-label"><?= Yii::t("formulario", "Number") ?> <span class="text-danger">*</span></label>
-                <div class="col-sm-7">
+                <label for="txt_pasaporte_fac" class="col-sm-2 col-md-2 col-xs-2 col-lg-2 control-label"><?= Yii::t("formulario", "Passport") ?> <span class="text-danger">*</span></label>
+                <div class="col-sm-8 col-md-8 col-xs-8 col-lg-8">
                     <input type="text" maxlength="15" class="form-control PBvalidation keyupmce" id="txt_pasaporte_fac" data-type="alfanumerico" data-keydown="true" placeholder="<?= Yii::t("formulario", "Passport") ?>">
                 </div>
             </div>
         </div>
         <div class="col-md-12 col-sm-12 col-xs-12 col-lg-12" style="display: none;" id="DivRucFac">
             <div class="form-group">
-                <label for="txt_ruc_fac" class="col-sm-5 control-label"><?= Yii::t("formulario", "Number") ?> <span class="text-danger">*</span></label>
-                <div class="col-sm-7">
-                    <input type="text" maxlength="15" class="form-control PBvalidation keyupmce" id="txt_ruc_fac" data-type="number" data-keydown="true" placeholder="<?= Yii::t("formulario", "Passport") ?>">
+                <label for="txt_ruc_fac" class="col-sm-2 col-md-2 col-xs-2 col-lg-2 control-label"><?= Yii::t("formulario", "RUC") ?> <span class="text-danger">*</span></label>
+                <div class="col-sm-8 col-md-8 col-xs-8 col-lg-8">
+                    <input type="text" maxlength="15" class="form-control PBvalidation keyupmce" id="txt_ruc_fac" data-type="number" data-keydown="true" placeholder="<?= Yii::t("formulario", "RUC") ?>">
                 </div>
             </div>
         </div>
