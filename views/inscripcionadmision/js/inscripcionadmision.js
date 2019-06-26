@@ -21,29 +21,22 @@ function habilitarSecciones() {
 }
 $(document).ready(function () {
     // para mostrar codigo de area
-    $('#btn_pago_i').css('display', 'none');    
+    $('#btn_pago_i').css('display', 'none');
     var unisol = $('#cmb_unidad_solicitud').val();
     if (unisol == 1) {
         $('#divmetodocan').css('display', 'none');
     } else if (unisol == 2) {
         $('#divmetodocan').css('display', 'block');
     }
-    $('#txt_nombres_fac').removeClass("PBvalidation");
-    $('#txt_dir_fac').removeClass("PBvalidation");
-    $('#txt_apellidos_fac').removeClass("PBvalidation");
-    $('#txt_dni_fac').removeClass("PBvalidation");
-    $('#txt_pasaporte_fac').removeClass("PBvalidation");
-    $('#txt_ruc_fac').removeClass("PBvalidation");
-    $('#txt_correo_fac').removeClass("PBvalidation");
-        
     $('#cmb_convenio_empresa').change(function () {
-        if ($('#cmb_convenio_empresa').val()!=0) {            
+        if ($('#cmb_convenio_empresa').val() != 0) {
             $('#divDocumAceptacion').css('display', 'block');
-        } else {            
+        } else {
             $('#divDocumAceptacion').css('display', 'none');
-        };        
+        }
+        ;
     });
-    
+
     $('#cmb_pais_dom').change(function () {
         var link = $('#txth_base').val() + "/inscripcionadmision/index";
         var arrParams = new Object();
@@ -58,79 +51,81 @@ $(document).ready(function () {
     });
     $('#sendInformacionAspirante').click(function () {
         habilitarSecciones();
-        if ($('#txth_twin_id').val() == 0) {
-            guardarInscripcion('Create', '1');
-        } else {
-            guardarInscripcion('Update', '1');
-        }        
+        paso1next();
+//        if ($('#txth_twin_id').val() == 0) {
+//            guardarInscripcion('Create', '1');
+//        } else {
+//            guardarInscripcion('Update', '1');
+//        }        
     });
-    
-    $('#sendInformacionAspirante2').click(function () {
-        var error = 0;
-        var pais = $('#cmb_pais_dom').val();
-        if ($("#chk_mensaje1").prop("checked") && $("#chk_mensaje2").prop("checked")) {
-            error = 0;
-        } else {
-            var mensaje = {wtmessage: "Debe Aceptar los términos de la Información.", title: "Exito"};
-            error++;
-            showAlert("NO_OK", "success", mensaje);
-        }
-        if ($('#txth_doc_titulo').val() == "") {
-            error++;
-            var mensaje = {wtmessage: "Debe adjuntar título.", title: "Información"};
-            showAlert("NO_OK", "error", mensaje);
-        } else {
-            if ($('#txth_doc_dni').val() == "") {
-                error++;
-                var mensaje = {wtmessage: "Debe adjuntar documento de identidad.", title: "Información"};
-                showAlert("NO_OK", "error", mensaje);
-            } else {
-                if ($('#cmb_tipo_dni').val() == "CED") {
-                    if ((pais == 1) && ($('#cmb_unidad_solicitud').val() == 1)) {
-                        if ($('#txth_doc_certvota').val() == "") {
-                            error++;
-                            var mensaje = {wtmessage: "Debe adjuntar certificado de votación.", title: "Información"};
-                            showAlert("NO_OK", "error", mensaje);
-                        }
-                    } else {
-                        if ($('#txth_doc_foto').val() == "") {
-                            error++;
-                            var mensaje = {wtmessage: "Debe adjuntar foto.", title: "Información"};
-                            showAlert("NO_OK", "error", mensaje);
-                        }
-                    }
-                } /*else {
-                    if ($('#txth_doc_hojavida').val() == "") {
-                        error++;
-                        var mensaje = {wtmessage: "Debe adjuntar hoja de vida.", title: "Información"};
-                        showAlert("NO_OK", "error", mensaje);
-                    }
-                }*/
-            }
-        }
-        if ($('#cmb_convenio_empresa').val() > 0) {
-            if ($('#txth_doc_aceptacion').val() == "") {
-                error++;
-                var mensaje = {wtmessage: "Debe adjuntar documento de aceptación.", title: "Información"};
-                showAlert("NO_OK", "error", mensaje);
-            }            
-        }
-        /*Gviteri: 11/jun/2019 indicaron que no se solicite el documento (Diana López).
-         * if ($('#cmb_unidad_solicitud').val() == 2) {
-            if ($('#txth_doc_certificado').val() == "") {
-                error++;
-                var mensaje = {wtmessage: "Debe adjuntar certificado de materias.", title: "Información"};
-                showAlert("NO_OK", "error", mensaje);
-            }
-            //alert($('#cmb_tipo_dni').val());
 
-        }*/
-        //alert(error);
-        if (error == 0) {
-            guardarInscripcion('Update', '2');
-        }
+    $('#sendInformacionAspirante2').click(function () {
+        paso2next();
+//        var error = 0;
+//        var pais = $('#cmb_pais_dom').val();
+//        if ($("#chk_mensaje1").prop("checked") && $("#chk_mensaje2").prop("checked")) {
+//            error = 0;
+//        } else {
+//            var mensaje = {wtmessage: "Debe Aceptar los términos de la Información.", title: "Exito"};
+//            error++;
+//            showAlert("NO_OK", "success", mensaje);
+//        }
+//        if ($('#txth_doc_titulo').val() == "") {
+//            error++;
+//            var mensaje = {wtmessage: "Debe adjuntar título.", title: "Información"};
+//            showAlert("NO_OK", "error", mensaje);
+//        } else {
+//            if ($('#txth_doc_dni').val() == "") {
+//                error++;
+//                var mensaje = {wtmessage: "Debe adjuntar documento de identidad.", title: "Información"};
+//                showAlert("NO_OK", "error", mensaje);
+//            } else {
+//                if ($('#cmb_tipo_dni').val() == "CED") {
+//                    if ((pais == 1) && ($('#cmb_unidad_solicitud').val() == 1)) {
+//                        if ($('#txth_doc_certvota').val() == "") {
+//                            error++;
+//                            var mensaje = {wtmessage: "Debe adjuntar certificado de votación.", title: "Información"};
+//                            showAlert("NO_OK", "error", mensaje);
+//                        }
+//                    } else {
+//                        if ($('#txth_doc_foto').val() == "") {
+//                            error++;
+//                            var mensaje = {wtmessage: "Debe adjuntar foto.", title: "Información"};
+//                            showAlert("NO_OK", "error", mensaje);
+//                        }
+//                    }
+//                } /*else {
+//                    if ($('#txth_doc_hojavida').val() == "") {
+//                        error++;
+//                        var mensaje = {wtmessage: "Debe adjuntar hoja de vida.", title: "Información"};
+//                        showAlert("NO_OK", "error", mensaje);
+//                    }
+//                }*/
+//            }
+//        }
+//        if ($('#cmb_convenio_empresa').val() > 0) {
+//            if ($('#txth_doc_aceptacion').val() == "") {
+//                error++;
+//                var mensaje = {wtmessage: "Debe adjuntar documento de aceptación.", title: "Información"};
+//                showAlert("NO_OK", "error", mensaje);
+//            }            
+//        }
+//        /*Gviteri: 11/jun/2019 indicaron que no se solicite el documento (Diana López).
+//         * if ($('#cmb_unidad_solicitud').val() == 2) {
+//            if ($('#txth_doc_certificado').val() == "") {
+//                error++;
+//                var mensaje = {wtmessage: "Debe adjuntar certificado de materias.", title: "Información"};
+//                showAlert("NO_OK", "error", mensaje);
+//            }
+//            //alert($('#cmb_tipo_dni').val());
+//
+//        }*/
+//        //alert(error);
+//        if (error == 0) {
+//            guardarInscripcion('Update', '2');
+//        }
     });
-    
+
     $('#sendInscripcionsolicitud').click(function () {
         var link = $('#txth_base').val() + "/inscripcionadmision/saveinscripciontemp";
         var arrParams = new Object();
@@ -140,111 +135,112 @@ $(document).ready(function () {
         arrParams.apellidos_fact = $('#txt_apellidos_fac').val();
         arrParams.direccion_fact = $('#txt_dir_fac').val();
         arrParams.telefono_fac = $('#txt_tel_fac').val();
-                        
-        var tipo_dni_fact= "";
-        if ($('#opt_tipo_DNI option:selected').val()=="1") {
-            tipo_dni_fact = "CED";
-        } else if ($('#opt_tipo_DNI option:selected').val()=="2") {
-            tipo_dni_fact = "PASS";
-        } else {
-            tipo_dni_fact = "RUC";
-        }
-        arrParams.tipo_dni_fac = tipo_dni_fact;
-        arrParams.dni = $('#txt_dni_fac').val();    
-        arrParams.correo = $('#txt_correo_fac').val();             
-        requestHttpAjax(link, arrParams, function (response) {
-            var message = response.message;
-            //console.log(response);
-            if (response.status == "OK") {
-                showLoadingPopup();
-                setTimeout(function () {
-                    var uaca_id = parseInt(response.data.data.uaca_id);
-                    var mod_id = parseInt(response.data.data.mod_id);
-                    var ming = parseInt(response.data.data.twin_metodo_ingreso);
-                    var sins_id = parseInt(response.data.dataext);
-                    console.log('solicitud:'+sins_id);
-                    if ($('input[name=rdo_forma_pago_dinner]:checked').val() == 1) {
-                        PagoDinners(sins_id);
-                    } else {
-                        switch (uaca_id) {
-                        case 1:
-                            switch (mod_id) {
-                                case 1: //online
-                                window.location.href = "https://www.uteg.edu.ec/pagos-grado-online/";
-                                break;
-    //                                case 1:
-    //                                    switch (ming) {
-    //                                        case 1:
-    //                                            $('#tx_paypal').attr("href", "https://www.uteg.edu.ec/pago-online-nivelacion/")
-    //                                            $('#tx_paypal').val("https://www.uteg.edu.ec/pago-online-nivelacion/");
-    //                                            window.location.href = "https://www.uteg.edu.ec/pago-online-nivelacion/";
-    //                                            break;
-    //                                        case 2:
-    //                                            $('#tx_paypal').attr("href", "https://www.uteg.edu.ec/pago-examen-online/")
-    //                                            $('#tx_paypal').val("https://www.uteg.edu.ec/pago-examen-online/");
-    //                                            window.location.href = "https://www.uteg.edu.ec/pago-examen-online/";
-    //                                            break;
-    //                                    }
-    //                                    break;
-                                case 2:// presencial
-                                    window.location.href = "https://www.uteg.edu.ec/pago-grado-presencial/";
+        if (!validateForm()) {
+            var tipo_dni_fact = "";
+            if ($('#opt_tipo_DNI option:selected').val() == "1") {
+                tipo_dni_fact = "CED";
+            } else if ($('#opt_tipo_DNI option:selected').val() == "2") {
+                tipo_dni_fact = "PASS";
+            } else {
+                tipo_dni_fact = "RUC";
+            }
+            arrParams.tipo_dni_fac = tipo_dni_fact;
+            arrParams.dni = $('#txt_dni_fac').val();
+            arrParams.correo = $('#txt_correo_fac').val();
+            requestHttpAjax(link, arrParams, function (response) {
+                var message = response.message;
+                //console.log(response);
+                if (response.status == "OK") {
+                    showLoadingPopup();
+                    setTimeout(function () {
+                        var uaca_id = parseInt(response.data.data.uaca_id);
+                        var mod_id = parseInt(response.data.data.mod_id);
+                        var ming = parseInt(response.data.data.twin_metodo_ingreso);
+                        var sins_id = parseInt(response.data.dataext);
+                        console.log('solicitud:' + sins_id);
+                        if ($('input[name=rdo_forma_pago_dinner]:checked').val() == 1) {
+                            PagoDinners(sins_id);
+                        } else {
+                            switch (uaca_id) {
+                                case 1:
+                                    switch (mod_id) {
+                                        case 1: //online
+                                            window.location.href = "https://www.uteg.edu.ec/pagos-grado-online/";
+                                            break;
+                                            //                                case 1:
+                                            //                                    switch (ming) {
+                                            //                                        case 1:
+                                            //                                            $('#tx_paypal').attr("href", "https://www.uteg.edu.ec/pago-online-nivelacion/")
+                                            //                                            $('#tx_paypal').val("https://www.uteg.edu.ec/pago-online-nivelacion/");
+                                            //                                            window.location.href = "https://www.uteg.edu.ec/pago-online-nivelacion/";
+                                            //                                            break;
+                                            //                                        case 2:
+                                            //                                            $('#tx_paypal').attr("href", "https://www.uteg.edu.ec/pago-examen-online/")
+                                            //                                            $('#tx_paypal').val("https://www.uteg.edu.ec/pago-examen-online/");
+                                            //                                            window.location.href = "https://www.uteg.edu.ec/pago-examen-online/";
+                                            //                                            break;
+                                            //                                    }
+                                            //                                    break;
+                                        case 2:// presencial
+                                            window.location.href = "https://www.uteg.edu.ec/pago-grado-presencial/";
+                                            break;
+                                            //                                    switch (ming) {
+                                            //                                        case 1:
+                                            //                                            $('#tx_paypal').attr("href", "https://www.uteg.edu.ec/pago-grado-presencial/")
+                                            //                                            $('#tx_paypal').val("https://www.uteg.edu.ec/pago-grado-presencial/");
+                                            //                                            window.location.href = "https://www.uteg.edu.ec/pago-grado-presencial/";
+                                            //                                            break;
+                                            //                                        case 2:
+                                            //                                            $('#tx_paypal').attr("href", "https://www.uteg.edu.ec/pago-examen-presencial/")
+                                            //                                            $('#tx_paypal').val("https://www.uteg.edu.ec/pago-examen-presencial/");
+                                            //                                            window.location.href = "https://www.uteg.edu.ec/pago-examen-presencial/";
+                                            //                                            break;
+                                            //                                    }
+                                            break;
+                                        case 3:// semipresencial
+                                            window.location.href = "https://www.uteg.edu.ec/pago-grado-semipresencial/";
+                                            //                                    switch (ming) {
+                                            //                                        case 1:
+                                            //                                            //alert('grado semipresencial curso');
+                                            //                                            //Todavia no hay enlace para grado semipresencial curso
+                                            //                                            break;
+                                            //                                        case 2:
+                                            //                                            //alert('grado semipresencial examen');
+                                            //                                            //Todavia no hay enlace para grado semipresencial Examen
+                                            //                                            break;
+                                            //                                    }
+                                            break;
+                                        case 4: //distancia
+                                            window.location.href = "https://www.uteg.edu.ec/pago-grado-distancia/";
+                                            //                                    switch (ming) {
+                                            //                                        case 1:
+                                            //                                            $('#tx_paypal').attr("href", "https://www.uteg.edu.ec/pago-grado-distancia/")
+                                            //                                            $('#tx_paypal').val("https://www.uteg.edu.ec/pago-grado-distancia/");
+                                            //                                            window.location.href = "https://www.uteg.edu.ec/pago-grado-distancia/";
+                                            //                                            break;
+                                            //                                        case 2:
+                                            //                                            $('#tx_paypal').attr("href", "https://www.uteg.edu.ec/pago-examen-distancia/")
+                                            //                                            $('#tx_paypal').val("https://www.uteg.edu.ec/pago-examen-distancia/");
+                                            //                                            window.location.href = "https://www.uteg.edu.ec/pago-examen-distancia/";
+                                            //                                            break;
+                                            //                                    }
+                                            break;
+                                    }
                                     break;
-    //                                    switch (ming) {
-    //                                        case 1:
-    //                                            $('#tx_paypal').attr("href", "https://www.uteg.edu.ec/pago-grado-presencial/")
-    //                                            $('#tx_paypal').val("https://www.uteg.edu.ec/pago-grado-presencial/");
-    //                                            window.location.href = "https://www.uteg.edu.ec/pago-grado-presencial/";
-    //                                            break;
-    //                                        case 2:
-    //                                            $('#tx_paypal').attr("href", "https://www.uteg.edu.ec/pago-examen-presencial/")
-    //                                            $('#tx_paypal').val("https://www.uteg.edu.ec/pago-examen-presencial/");
-    //                                            window.location.href = "https://www.uteg.edu.ec/pago-examen-presencial/";
-    //                                            break;
-    //                                    }
-                                    break;
-                                case 3:// semipresencial
-                                      window.location.href = "https://www.uteg.edu.ec/pago-grado-semipresencial/";
-    //                                    switch (ming) {
-    //                                        case 1:
-    //                                            //alert('grado semipresencial curso');
-    //                                            //Todavia no hay enlace para grado semipresencial curso
-    //                                            break;
-    //                                        case 2:
-    //                                            //alert('grado semipresencial examen');
-    //                                            //Todavia no hay enlace para grado semipresencial Examen
-    //                                            break;
-    //                                    }
-                                    break;
-                                case 4: //distancia
-                                    window.location.href = "https://www.uteg.edu.ec/pago-grado-distancia/";
-    //                                    switch (ming) {
-    //                                        case 1:
-    //                                            $('#tx_paypal').attr("href", "https://www.uteg.edu.ec/pago-grado-distancia/")
-    //                                            $('#tx_paypal').val("https://www.uteg.edu.ec/pago-grado-distancia/");
-    //                                            window.location.href = "https://www.uteg.edu.ec/pago-grado-distancia/";
-    //                                            break;
-    //                                        case 2:
-    //                                            $('#tx_paypal').attr("href", "https://www.uteg.edu.ec/pago-examen-distancia/")
-    //                                            $('#tx_paypal').val("https://www.uteg.edu.ec/pago-examen-distancia/");
-    //                                            window.location.href = "https://www.uteg.edu.ec/pago-examen-distancia/";
-    //                                            break;
-    //                                    }
+                                case 2:
+                                    $('#tx_paypal').attr("href", "https://www.uteg.edu.ec/pago-posgrado/")
+                                    $('#tx_paypal').val("https://www.uteg.edu.ec/pago-posgrado/");
+                                    window.location.href = "https://www.uteg.edu.ec/pago-posgrado/";
                                     break;
                             }
-                            break;
-                        case 2:
-                            $('#tx_paypal').attr("href", "https://www.uteg.edu.ec/pago-posgrado/")
-                            $('#tx_paypal').val("https://www.uteg.edu.ec/pago-posgrado/");
-                            window.location.href = "https://www.uteg.edu.ec/pago-posgrado/";
-                            break;
                         }
-                    }                            
-                }, 5000);
-            }
-        });     
+                    }, 5000);
+                }
+            });
+        }
     });
-    
-    
+
+
     $('#cmb_tipo_dni').change(function () {
         if ($('#cmb_tipo_dni').val() == 'PASS') {
             $('#txt_cedula').removeClass("PBvalidation");
@@ -331,7 +327,7 @@ $(document).ready(function () {
         Requisitos();
         AparecerDocumento();
     });
-    
+
     // tabs del index
     $('#paso1next').click(function () {
         $("a[data-href='#paso1']").attr('data-toggle', 'none');
@@ -340,7 +336,7 @@ $(document).ready(function () {
         $("a[data-href='#paso1']").removeAttr('href');
         $("a[data-href='#paso2']").attr('data-toggle', 'tab');
         $("a[data-href='#paso2']").attr('href', $("a[data-href='#paso2']").attr('data-href'));
-        $("a[data-href='#paso2']").trigger("click");        
+        $("a[data-href='#paso2']").trigger("click");
     });
     $('#paso2back').click(function () {
         $("a[data-href='#paso2']").attr('data-toggle', 'none');
@@ -349,8 +345,8 @@ $(document).ready(function () {
         $("a[data-href='#paso2']").removeAttr('href');
         $("a[data-href='#paso1']").attr('data-toggle', 'tab');
         $("a[data-href='#paso1']").attr('href', $("a[data-href='#paso1']").attr('data-href'));
-        $("a[data-href='#paso1']").trigger("click");    
-       
+        $("a[data-href='#paso1']").trigger("click");
+
         $('#txt_nombres_fac').removeClass("PBvalidation");
         $('#txt_dir_fac').removeClass("PBvalidation");
         $('#txt_apellidos_fac').removeClass("PBvalidation");
@@ -366,7 +362,7 @@ $(document).ready(function () {
         $("a[data-href='#paso2']").removeAttr('href');
         $("a[data-href='#paso3']").attr('data-toggle', 'tab');
         $("a[data-href='#paso3']").attr('href', $("a[data-href='#paso3']").attr('data-href'));
-        $("a[data-href='#paso3']").trigger("click");                     
+        $("a[data-href='#paso3']").trigger("click");
     });
     $('#paso3back').click(function () {
         $("a[data-href='#paso3']").attr('data-toggle', 'none');
@@ -376,7 +372,7 @@ $(document).ready(function () {
         $("a[data-href='#paso2']").attr('data-toggle', 'tab');
         $("a[data-href='#paso2']").attr('href', $("a[data-href='#paso2']").attr('data-href'));
         $("a[data-href='#paso2']").trigger("click");
-      
+
         $('#txt_nombres_fac').removeClass("PBvalidation");
         $('#txt_dir_fac').removeClass("PBvalidation");
         $('#txt_apellidos_fac').removeClass("PBvalidation");
@@ -472,13 +468,13 @@ $(document).ready(function () {
             $('#divRequisitosPRP').css('display', 'none');
         }
     }
-    
+
     //Control del div de beneficiario
     $('#rdo_forma_pago_dinner').change(function () {
         if ($('#rdo_forma_pago_dinner').val() == 1) {
-            $("#rdo_forma_pago_otros").prop("checked", "");            
+            $("#rdo_forma_pago_otros").prop("checked", "");
         } else {
-            $("#rdo_forma_pago_dinner").prop("checked", true); 
+            $("#rdo_forma_pago_dinner").prop("checked", true);
         }
     });
     //Pago por stripe.-
@@ -527,18 +523,18 @@ $(document).ready(function () {
             $('#DivBoton').css('display', 'block');
         }
     });
-    
-    $('input[name=opt_tipo_DNI]:radio').change(function () {        
+
+    $('input[name=opt_tipo_DNI]:radio').change(function () {
         if ($(this).val() == 1) {
-            $('#DivcedulaFac').css('display', 'block');    
-            $('#DivpasaporteFac').css('display', 'none');     
-            $('#DivRucFac').css('display', 'none'); 
+            $('#DivcedulaFac').css('display', 'block');
+            $('#DivpasaporteFac').css('display', 'none');
+            $('#DivRucFac').css('display', 'none');
         } else if ($(this).val() == 2) {
-            $('#DivpasaporteFac').css('display', 'block');       
-            $('#DivcedulaFac').css('display', 'none');    
+            $('#DivpasaporteFac').css('display', 'block');
+            $('#DivcedulaFac').css('display', 'none');
             $('#DivRucFac').css('display', 'none');
         } else {
-            $('#DivRucFac').css('display', 'block'); 
+            $('#DivRucFac').css('display', 'block');
             $('#DivpasaporteFac').css('display', 'none');
             $('#DivcedulaFac').css('display', 'none');
         }
@@ -547,7 +543,6 @@ $(document).ready(function () {
     $('#sendInscripcionSubirPago').click(function () {
         guardarInscripcion('UpdateDepTrans', '2');
     });
-    
 });
 
 //INSERTAR DATOS
@@ -581,8 +576,8 @@ function guardarInscripcion(accion, paso) {
                     $('#txt_nombres_fac').val(response.data.data.twin_nombre);
                     $('#txt_apellidos_fac').val(response.data.data.twin_apellido);
                     $('#txt_dni_fac').val(response.data.data.twin_numero);
-                    
-                    if (uaca_id == 1) {                        
+
+                    if (uaca_id == 1) {
                         $('#id_item_1').css('display', 'block');
                         $('#id_item_2').css('display', 'block');
                     } else if (uaca_id == 2) {
@@ -602,9 +597,9 @@ function guardarInscripcion(accion, paso) {
                     if (uaca_id == 2) {
                         if (id_carrera == 22) {
                             leyenda = 'El valor de la maestría: $15,500.00';
-                        } else if  ((id_carrera == 24) && (convenio==1)) {                            
+                        } else if ((id_carrera == 24) && (convenio == 1)) {
                             leyenda = 'El valor de la maestría: $4,500.00';
-                        } else if  ((id_carrera == 24) && (convenio!=1)) {                            
+                        } else if ((id_carrera == 24) && (convenio != 1)) {
                             leyenda = 'El valor de la maestría: $5,000.00';
                         } else {
                             leyenda = 'El valor de la maestría: $11,300.00';
@@ -699,8 +694,8 @@ function paso1next() {
     $("a[data-href='#paso1']").removeAttr('href');
     $("a[data-href='#paso2']").attr('data-toggle', 'tab');
     $("a[data-href='#paso2']").attr('href', $("a[data-href='#paso2']").attr('data-href'));
-    $("a[data-href='#paso2']").trigger("click");   
-   
+    $("a[data-href='#paso2']").trigger("click");
+
     $('#txt_nombres_fac').removeClass("PBvalidation");
     $('#txt_dir_fac').removeClass("PBvalidation");
     $('#txt_apellidos_fac').removeClass("PBvalidation");
@@ -708,7 +703,7 @@ function paso1next() {
     $('#txt_pasaporte_fac').removeClass("PBvalidation");
     $('#txt_ruc_fac').removeClass("PBvalidation");
     $('#txt_correo_fac').removeClass("PBvalidation");
-    
+
 }
 
 function paso2next() {
@@ -718,20 +713,20 @@ function paso2next() {
     $("a[data-href='#paso2']").removeAttr('href');
     $("a[data-href='#paso3']").attr('data-toggle', 'tab');
     $("a[data-href='#paso3']").attr('href', $("a[data-href='#paso3']").attr('data-href'));
-    $("a[data-href='#paso3']").trigger("click"); 
-    
+    $("a[data-href='#paso3']").trigger("click");
+
     //Adicionar validación de datos obligatorios en datos de factura.
     $('#txt_nombres_fac').addClass("PBvalidation");
     $('#txt_dir_fac').addClass("PBvalidation");
     $('#txt_apellidos_fac').addClass("PBvalidation");
     $('#txt_correo_fac').addClass("PBvalidation");
-    if ($('#opt_tipo_DNI option:selected').val()=="1") {
+    if ($('#opt_tipo_DNI option:selected').val() == "1") {
         $('#txt_dni_fac').addClass("PBvalidation");
-    } else if ($('#opt_tipo_DNI option:selected').val()=="2") {
+    } else if ($('#opt_tipo_DNI option:selected').val() == "2") {
         $('#txt_pasaporte_fac').addClass("PBvalidation");
     } else {
         $('#txt_ruc_fac').addClass("PBvalidation");
-    }    
+    }
 }
 
 function dataInscripPart1(ID) {
@@ -741,11 +736,11 @@ function dataInscripPart1(ID) {
     objDat.pges_pri_nombre = $('#txt_primer_nombre').val();
     objDat.pges_pri_apellido = $('#txt_primer_apellido').val();
     objDat.tipo_dni = $('#cmb_tipo_dni option:selected').val();
-    if (objDat.tipo_dni=='CED') {
+    if (objDat.tipo_dni == 'CED') {
         objDat.pges_cedula = $('#txt_cedula').val();
-    } else {        
+    } else {
         objDat.pges_cedula = $('#txt_pasaporte').val();
-    }    
+    }
     objDat.pges_correo = $('#txt_correo').val();
     objDat.pais = $('#cmb_pais_dom option:selected').val();
     objDat.pges_celular = $('#txt_celular').val();
@@ -768,15 +763,23 @@ function dataInscripPart1(ID) {
     objDat.twin_mensaje1 = ($("#chk_mensaje1").prop("checked")) ? '1' : '0';
     objDat.twin_mensaje2 = ($("#chk_mensaje2").prop("checked")) ? '1' : '0';
     objDat.ruta_doc_aceptacion = ($('#txth_doc_aceptacion').val() != '') ? $('#txth_doc_aceptacion').val() : '';
-    objDat.cemp_id = $('#cmb_convenio_empresa option:selected').val();       
-        
+    objDat.cemp_id = $('#cmb_convenio_empresa option:selected').val();
+
     datArray[0] = objDat;
     sessionStorage.dataInscrip_1 = JSON.stringify(datArray);
     return datArray;
 }
-
-function PagoDinners(solicitud) {    
-    var bohre = $('#txth_base').val() + "/inscripcionadmision/savepagodinner?sins_id=" + solicitud+"&popup=1";
+function camposnulos(campo) {
+    if ($(campo).val() == "")
+    {
+        $(campo).removeClass("PBvalidation");
+    } else
+    {
+        $(campo).addClass("PBvalidation");
+    }
+}
+function PagoDinners(solicitud) {
+    var bohre = $('#txth_base').val() + "/inscripcionadmision/savepagodinner?sins_id=" + solicitud + "&popup=1";
     $('#btn_pago_i').attr("href", bohre);
-    $('#btn_pago_i').trigger("click");                                        
+    $('#btn_pago_i').trigger("click");
 }

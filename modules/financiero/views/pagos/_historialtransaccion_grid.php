@@ -15,6 +15,9 @@ admision::registerTranslations();
     <?=
     PbGridView::widget([
         'id' => 'TbG_HISTORIAL_TRANSACCIONES',
+        'showExport' => true,
+        'fnExportEXCEL' => "exportExcelhis",
+        'fnExportPDF' => "exportPdfhis",
         'dataProvider' => $model,     
         'columns' =>
         [   
@@ -25,7 +28,7 @@ admision::registerTranslations();
             ],
             [
                 'attribute' => 'estudiante',
-                'header' => Module::t("crm", "Student"),
+                'header' => Yii::t("formulario", "Student"),
                 'value' => 'estudiante',
             ],
             [

@@ -19,20 +19,20 @@ use yii\helpers\Html;
             <div class="tab-pane active" id="paso1">
                 <form class="form-horizontal">
                     <?=
-                    $this->render('_form_tab1', [
-                            "tipos_dni" => $tipos_dni,
-                            "tipos_dni2" => $tipos_dni2,
-                            "txth_extranjero" => $txth_extranjero,
-                            "arr_pais_dom" => $arr_pais_dom,
-                            "arr_prov_dom" => $arr_prov_dom,
-                            "arr_ciu_dom" => $arr_ciu_dom,
-                            "arr_ninteres" => $arr_ninteres,
-                            "arr_medio" => $arr_medio,
-                            "arr_modalidad" => $arr_modalidad,
-                            "arr_conuteg" => $arr_conuteg,
-                            "arr_carrerra1" => $arr_carrerra1,
-                            "arr_metodos" => $arr_metodos,
-                    ]);
+                        $this->render('_form_tab1', [
+                                 "tipos_dni" => $tipos_dni,
+                                 "tipos_dni2" => $tipos_dni2,
+                                 "txth_extranjero" => $txth_extranjero,
+                                 "arr_pais_dom" => $arr_pais_dom,
+                                 "arr_prov_dom" => $arr_prov_dom,
+                                 "arr_ciu_dom" => $arr_ciu_dom,
+                                 "arr_ninteres" => $arr_ninteres,
+                                 "arr_medio" => $arr_medio,
+                                 "arr_modalidad" => $arr_modalidad,
+                                 "arr_conuteg" => $arr_conuteg,
+                                 "arr_carrerra1" => $arr_carrerra1,
+                                 "arr_metodos" => $arr_metodos,
+                         ]);
                     ?>
                 </form>
             </div><!-- /.tab-pane -->
@@ -42,7 +42,7 @@ use yii\helpers\Html;
                         $this->render('_form_tab2', [
                             'per_id' => $per_id,
                             "arr_convenio_empresa" => $arr_convenio_empresa,
-                            ]);
+                        ]);
                     ?>                  
                 </form>
             </div><!-- /.tab-pane -->            
