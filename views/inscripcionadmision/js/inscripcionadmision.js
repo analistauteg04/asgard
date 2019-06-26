@@ -726,15 +726,17 @@ function paso2next() {
     $('#txt_dir_fac').addClass("PBvalidation");
     $('#txt_apellidos_fac').addClass("PBvalidation");
     $('#txt_correo_fac').addClass("PBvalidation");
-    if ($('#opt_tipo_DNI option:selected').val() == "1") {
+    if ($("input[name='opt_tipo_DNI']:checked").val() == "1") {
+        alert("Entro opcion 1");
         $('#txt_dni_fac').addClass("PBvalidation");
         $('#txt_ruc_fac').removeClass("PBvalidation");
         $('#txt_pasaporte_fac').removeClass("PBvalidation");
-    } else if ($('#opt_tipo_DNI option:selected').val() == "2") {
+    } else if ($("input[name='opt_tipo_DNI']:checked").val() == "2") {
         $('#txt_pasaporte_fac').addClass("PBvalidation");
         $('#txt_ruc_fac').removeClass("PBvalidation");
         $('#txt_dni_fac').removeClass("PBvalidation");        
     } else {
+        alert("Entro opcion 3");
         $('#txt_ruc_fac').addClass("PBvalidation");
         $('#txt_pasaporte_fac').removeClass("PBvalidation");
         $('#txt_dni_fac').removeClass("PBvalidation");        
