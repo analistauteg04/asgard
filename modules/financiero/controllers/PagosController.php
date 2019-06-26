@@ -627,7 +627,7 @@ class PagosController extends \app\components\CController {
         $cedula=$data_persona['per_cedula'];
         $doc_id=$model_documento->consultarDocIdByCedulaBen($cedula);
         $opag_id=$model_ordenpago->consultarOpagIdByCedula($cedula);        
-         $data = Yii::$app->request->get();
+        $data = Yii::$app->request->get();
         if ($data['PBgetFilter']) {
             $arrSearch["f_ini"] = $data['f_ini'];
             $arrSearch["f_fin"] = $data['f_fin'];
@@ -1056,8 +1056,14 @@ class PagosController extends \app\components\CController {
             Yii::t("formulario", "Pago"),          
             Yii::t("formulario", "Status"),
         );
-        $doc_id = 1; // ESTO CAMBIAR  QUE NO ESTE CAMBIADO
-        $opag_id = 1; // ESTO CAMBIAR  QUE NO ESTE CAMBIADO                
+        $per_id = Yii::$app->session->get("PB_perid");        
+        $model_persona = new Persona();
+        $model_documento = new Documento();
+        $model_ordenpago = new OrdenPago();
+        $data_persona=$model_persona->consultaPersonaId($per_id);
+        $cedula=$data_persona['per_cedula'];
+        $doc_id=$model_documento->consultarDocIdByCedulaBen($cedula);
+        $opag_id=$model_ordenpago->consultarOpagIdByCedula($cedula);        
         $data = Yii::$app->request->get();     
         $arrSearch["f_ini"] = $data["f_ini"];
         $arrSearch["f_fin"] = $data["f_fin"];      
@@ -1084,12 +1090,17 @@ class PagosController extends \app\components\CController {
             Yii::t("formulario", "Pago"),          
             Yii::t("formulario", "Status"),
         );
-        $doc_id = 1; // ESTO CAMBIAR  QUE NO ESTE CAMBIADO
-        $opag_id = 1; // ESTO CAMBIAR  QUE NO ESTE CAMBIADO  
+        $per_id = Yii::$app->session->get("PB_perid");        
+        $model_persona = new Persona();
+        $model_documento = new Documento();
+        $model_ordenpago = new OrdenPago();
+        $data_persona=$model_persona->consultaPersonaId($per_id);
+        $cedula=$data_persona['per_cedula'];
+        $doc_id=$model_documento->consultarDocIdByCedulaBen($cedula);
+        $opag_id=$model_ordenpago->consultarOpagIdByCedula($cedula);        
         $data = Yii::$app->request->get();    
         $arrSearch["f_ini"] = $data["f_ini"];
         $arrSearch["f_fin"] = $data["f_fin"];
-
         $arrData = array();
         $model_sbpag = new SolicitudBotonPago();
         if (empty($arrSearch)) { 
@@ -1107,5 +1118,4 @@ class PagosController extends \app\components\CController {
         $report->mpdf->Output('Reporte_' . date("Ymdhis") . ".pdf", ExportFile::OUTPUT_TO_DOWNLOAD);
         return;
     }
-
 }
