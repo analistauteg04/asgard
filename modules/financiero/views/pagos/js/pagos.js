@@ -134,6 +134,9 @@ $(document).ready(function () {
     $('#btn_buscarPagoscargados').click(function () {
         actualizarGridPagosCargados();
     });
+    $('#btn_buscarDataHist').click(function () {
+        actualizarGridHistorial();
+    });
 });
 
 function divComentario(data) {
@@ -250,6 +253,16 @@ function actualizarGridPagosCargados() {
     if (!$(".blockUI").length) {
         showLoadingPopup();
         $('#TbG_Solicitudes').PbGridView('applyFilterData', {'f_ini': f_ini, 'f_fin': f_fin, 'f_estado': f_estado, 'search': search});
+        setTimeout(hideLoadingPopup, 2000);
+    }
+}
+function actualizarGridHistorial() {  
+    var f_ini = $('#txt_fecha_ini').val();
+    var f_fin = $('#txt_fecha_fin').val();
+    //Buscar almenos una clase con el nombre para ejecutar
+    if (!$(".blockUI").length) {
+        showLoadingPopup();
+        $('#TbG_HISTORIAL_TRANSACCIONES').PbGridView('applyFilterData', {'f_ini': f_ini, 'f_fin': f_fin});
         setTimeout(hideLoadingPopup, 2000);
     }
 }
@@ -433,4 +446,9 @@ function exportPdfColec() {
     var f_ini = $('#txt_fecha_ini').val();
     var f_fin = $('#txt_fecha_fin').val();
     window.location.href = $('#txth_base').val() + "/financiero/pagos/expexcelcolec?pdf=1&search=" + search + "&f_ini=" + f_ini + "&f_fin=" + f_fin;
+}
+function exportExcelhis() {  
+    var f_ini = $('#txt_fecha_ini').val();
+    var f_fin = $('#txt_fecha_fin').val();    
+    window.location.href = $('#txth_base').val() + "/financiero/pagos/expexcelhis?f_ini=" + f_ini + "&f_fin=" + f_fin;
 }

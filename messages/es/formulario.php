@@ -572,6 +572,7 @@ return [
     "Sub Carrier" => "Sub Carrera",
     "Sub Status" => "Sub Estado",
     "Subject" => "Asignatura",
+    "Student" => "Estudiante",
     "Study day" => "Jornada Estudio",
     "Study mode" => "Modalidad Estudio",
     "Summary" => "Resumen",

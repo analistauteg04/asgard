@@ -627,12 +627,13 @@ class PagosController extends \app\components\CController {
         $cedula=$data_persona['per_cedula'];
         $doc_id=$model_documento->consultarDocIdByCedulaBen($cedula);
         $opag_id=$model_ordenpago->consultarOpagIdByCedula($cedula);        
+         $data = Yii::$app->request->get();
         if ($data['PBgetFilter']) {
             $arrSearch["f_ini"] = $data['f_ini'];
             $arrSearch["f_fin"] = $data['f_fin'];
             $data_transacciones=$model_sbpag->consultarHistoralTransacciones($doc_id,$opag_id,$arrSearch);
-            return $this->renderPartial('historialtransaccion_grid', [
-                        "model" => $resp_pago,
+            return $this->renderPartial('_historialtransaccion_grid', [
+                        "model" => $data_transacciones,
             ]);
         } else {
             $data_transacciones=$model_sbpag->consultarHistoralTransacciones($doc_id,$opag_id);
@@ -1038,5 +1039,39 @@ class PagosController extends \app\components\CController {
             "total" => $totalpagar,
         ));
     }
+       /*public function actionExpexcelhis() {
+        ini_set('memory_limit', '256M');
+        $content_type = Utilities::mimeContentType("xls");
+        $nombarch = "Report-" . date("YmdHis") . ".xls";
+        header("Content-Type: $content_type");
+        header("Content-Disposition: attachment;filename=" . $nombarch);
+        header('Cache-Control: max-age=0');
+        $colPosition = array("C", "D", "E", "F", "G", "H", "I", "J");
+        $arrData = array();
+        $arrHeader = array(
+            Yii::t("formulario", "Request #"),
+            admision::t("Solicitudes", "Application date"),
+            Yii::t("formulario", "DNI 1"),
+            Yii::t("formulario", "Last Names"),
+            Yii::t("formulario", "First Names"),
+            Yii::t("formulario", "Academic unit"),
+            Yii::t("solicitud_ins", "Income Method"),
+            Yii::t("formulario", "Status"),
+        );
+        $data = Yii::$app->request->get();     
+        $arrSearch["f_ini"] = $data["f_ini"];
+        $arrSearch["f_fin"] = $data["f_fin"];
+        $arrSearch["f_estado"] = $data["f_estado"];
+        //$arrData = array();
+        $model_pag = new OrdenPago();
+        if (empty($arrSearch)) {
+            $arrData = $model_pag->listarPagoscargadosexcel(array(), true);
+        } else {
+            $arrData = $model_pag->listarPagoscargadosexcel($arrSearch, true);
+        }
+        $nameReport = financiero::t("Pagos", "List Payment");
+        Utilities::generarReporteXLS($nombarch, $nameReport, $arrHeader, $arrData, $colPosition);
+        exit;
+    }*/
 
 }
