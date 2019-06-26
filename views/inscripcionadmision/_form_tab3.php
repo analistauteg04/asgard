@@ -179,7 +179,7 @@ financiero::registerTranslations();
             <div class="form-group">
                 <label for="txt_nombres_fac" class="col-sm-2 col-md-2 col-xs-2 col-lg-2 control-label" id="lbl_nombre1"><?= Yii::t("formulario", "Names") ?><span class="text-danger">*</span></label>
                 <div class="col-sm-8 col-md-8 col-xs-8 col-lg-8">
-                    <input type="text" class="form-control PBvalidation keyupmce" value="" id="txt_nombres_fac" data-type="alfa" placeholder="<?= Yii::t("formulario", "First Name") ?>">
+                    <input type="text" class="form-control keyupmce" value="" id="txt_nombres_fac" data-type="alfa" placeholder="<?= Yii::t("formulario", "First Name") ?>">
                 </div>            
             </div>            
         </div>  
@@ -187,7 +187,7 @@ financiero::registerTranslations();
             <div class="form-group">
                 <label for="txt_dir_fac" class="col-sm-2 col-md-2 col-xs-2 col-lg-2 control-label" id="lbl_nombre1"><?= Yii::t("formulario", "Address") ?><span class="text-danger">*</span></label>
                 <div class="col-sm-8 col-md-8 col-xs-8 col-lg-8">
-                    <input type="text" class="form-control PBvalidation keyupmce" value="" id="txt_dir_fac" data-type="alfa" placeholder="<?= Yii::t("formulario", "Address") ?>">
+                    <input type="text" class="form-control keyupmce" value="" id="txt_dir_fac" data-type="alfa" placeholder="<?= Yii::t("formulario", "Address") ?>">
                 </div> 
             </div>  
         </div>
@@ -208,7 +208,7 @@ financiero::registerTranslations();
             <div class="form-group">
                 <label for="txt_apellidos_fac" class="col-sm-2 col-md-2 col-xs-2 col-lg-2 control-label" id="lbl_apellido1"><?= Yii::t("formulario", "Last Names") ?><span class="text-danger">*</span></label>
                 <div class="col-sm-8 col-md-8 col-xs-8 col-lg-8">
-                    <input type="text" class="form-control PBvalidation keyupmce" value="" id="txt_apellidos_fac" data-type="alfa" placeholder="<?= Yii::t("formulario", "First Name") ?>">
+                    <input type="text" class="form-control keyupmce" value="" id="txt_apellidos_fac" data-type="alfa" placeholder="<?= Yii::t("formulario", "First Name") ?>">
                 </div>
             </div>
         </div>
@@ -224,7 +224,7 @@ financiero::registerTranslations();
             <div class="form-group">
                 <label for="txt_dni_fac" class="col-sm-2 col-md-2 col-xs-2 col-lg-2 control-label" id="lbl_nombre1"><?= Yii::t("formulario", "DNI Document") . '/' . Yii::t("formulario", "DNI 1") ?><span class="text-danger">*</span></label>
                 <div class="col-sm-8 col-md-8 col-xs-8 col-lg-8">
-                    <input type="text" maxlength="10" class="form-control PBvalidation" value="" id="txt_dni_fac" data-type="cedula" data-keydown="true" placeholder="<?= Yii::t("formulario", "DNI Document") ?>">
+                    <input type="text" maxlength="10" class="form-control" value="" id="txt_dni_fac" data-type="cedula" data-keydown="true" placeholder="<?= Yii::t("formulario", "DNI Document") ?>">
                 </div>
             </div>
         </div>
@@ -232,7 +232,7 @@ financiero::registerTranslations();
             <div class="form-group">
                 <label for="txt_pasaporte_fac" class="col-sm-2 col-md-2 col-xs-2 col-lg-2 control-label"><?= Yii::t("formulario", "Passport") ?> <span class="text-danger">*</span></label>
                 <div class="col-sm-8 col-md-8 col-xs-8 col-lg-8">
-                    <input type="text" maxlength="15" class="form-control PBvalidation keyupmce" id="txt_pasaporte_fac" data-type="alfanumerico" data-keydown="true" placeholder="<?= Yii::t("formulario", "Passport") ?>">
+                    <input type="text" maxlength="15" class="form-control keyupmce" id="txt_pasaporte_fac" data-type="alfanumerico" data-keydown="true" placeholder="<?= Yii::t("formulario", "Passport") ?>">
                 </div>
             </div>
         </div>        
@@ -240,15 +240,15 @@ financiero::registerTranslations();
             <div class="form-group">
                 <label for="txt_ruc_fac" class="col-sm-2 col-md-2 col-xs-2 col-lg-2 control-label"><?= Yii::t("formulario", "RUC") ?> <span class="text-danger">*</span></label>
                 <div class="col-sm-8 col-md-8 col-xs-8 col-lg-8">
-                    <input type="text" maxlength="15" class="form-control PBvalidation keyupmce" id="txt_ruc_fac" data-type="number" data-keydown="true" placeholder="<?= Yii::t("formulario", "RUC") ?>">
+                    <input type="text" maxlength="15" class="form-control keyupmce" id="txt_ruc_fac" data-type="number" data-keydown="true" placeholder="<?= Yii::t("formulario", "RUC") ?>">
                 </div>
             </div>
         </div>
-        <div class='col-md-12 col-sm-12 col-xs-12 col-lg-12'>
+        <div class="col-md-12 col-sm-12 col-xs-12 col-lg-12">
             <div class="form-group">
-                <label for="txt_correo_fac" class="col-sm-5 col-md-5 col-xs-5 col-lg-5 control-label"><?= Yii::t("formulario", "Email") ?> </label>
-                <div class="col-sm-7 col-md-7 col-xs-7 col-lg-7">
-                    <input type="text" class="form-control PBvalidation keyupmce" value="" data-required="false" id="txt_correo_fac" data-type="email" data-keydown="true" placeholder="<?= Yii::t("formulario", "Email") ?>">
+                <label for="txt_correo_fac" class="col-sm-2 col-md-2 col-xs-2 col-lg-2 control-label"><?= Yii::t("formulario", "Email") ?> </label>
+                <div class="col-sm-8 col-md-8 col-xs-8 col-lg-8">
+                    <input type="text" class="form-control keyupmce" value="" data-required="false" id="txt_correo_fac" data-type="email" data-keydown="true" placeholder="<?= Yii::t("formulario", "Email") ?>">
                 </div>
             </div>
         </div>        
@@ -258,7 +258,6 @@ financiero::registerTranslations();
             <h4><span id="lbl_detalle2"><?= Yii::t("formulario", "Pago en línea PayPal: ") ?></span><a href="http://www.uteg.edu.ec/pagos-online/">http://www.uteg.edu.ec/pagos-online/</a></h4>        
     </div>-->
     <div class="col-md-12 col-xs-12 col-sm-12 col-lg-12">         
-        </br>
         </br>
     </div>
     <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">   
