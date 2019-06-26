@@ -1039,7 +1039,7 @@ class PagosController extends \app\components\CController {
             "total" => $totalpagar,
         ));
     }
-       /*public function actionExpexcelhis() {
+       public function actionExpexcelhis() {
         ini_set('memory_limit', '256M');
         $content_type = Utilities::mimeContentType("xls");
         $nombarch = "Report-" . date("YmdHis") . ".xls";
@@ -1049,29 +1049,28 @@ class PagosController extends \app\components\CController {
         $colPosition = array("C", "D", "E", "F", "G", "H", "I", "J");
         $arrData = array();
         $arrHeader = array(
-            Yii::t("formulario", "Request #"),
-            admision::t("Solicitudes", "Application date"),
-            Yii::t("formulario", "DNI 1"),
-            Yii::t("formulario", "Last Names"),
-            Yii::t("formulario", "First Names"),
-            Yii::t("formulario", "Academic unit"),
-            Yii::t("solicitud_ins", "Income Method"),
+            Yii::t("formulario", "Code"),
+            Yii::t("formulario", "Reference"),
+            Yii::t("formulario", "Student"),
+            Yii::t("formulario", "Date"),
+            Yii::t("formulario", "Pago"),          
             Yii::t("formulario", "Status"),
         );
+        $doc_id = 1;
+        $opag_id = 1;                
         $data = Yii::$app->request->get();     
         $arrSearch["f_ini"] = $data["f_ini"];
-        $arrSearch["f_fin"] = $data["f_fin"];
-        $arrSearch["f_estado"] = $data["f_estado"];
-        //$arrData = array();
-        $model_pag = new OrdenPago();
+        $arrSearch["f_fin"] = $data["f_fin"];      
+        
+        $model_sbpag = new SolicitudBotonPago();
         if (empty($arrSearch)) {
-            $arrData = $model_pag->listarPagoscargadosexcel(array(), true);
+            $arrData = $model_sbpag->consultarHistoralTransacciones($doc_id,$opag_id,array(), true);
         } else {
-            $arrData = $model_pag->listarPagoscargadosexcel($arrSearch, true);
+            $arrData = $model_sbpag->consultarHistoralTransacciones($doc_id,$opag_id,$arrSearch, true);
         }
-        $nameReport = financiero::t("Pagos", "List Payment");
+        $nameReport = financiero::t("Pagos", "Transaction History");
         Utilities::generarReporteXLS($nombarch, $nameReport, $arrHeader, $arrData, $colPosition);
         exit;
-    }*/
+    }
 
 }
