@@ -249,8 +249,7 @@ admision::registerTranslations();
                                 'uploadUrl' => Url::to(['inscripcionadmision/saveinscripciontemp']),
                                 'maxFileSize' => Yii::$app->params["MaxFileSize"], // en Kbytes
                                 'uploadExtraData' => 'javascript:function (previewId,index) {
-                                var name_pago= $("#txth_doc_pago").val();
-                    return {"upload_file": true, "name_file": name_pago};
+                                return {"upload_file": true, "name_file": "doc_pago", "inscripcion_id": $("#txth_twin_id").val()};
                 }',
                             ],
                             'pluginEvents' => [

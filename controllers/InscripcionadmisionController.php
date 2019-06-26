@@ -208,6 +208,15 @@ class InscripcionadmisionController extends \yii\web\Controller {
                     if ($doc_aceptacion === false)
                         throw new Exception('Error documento aceptación.');
                 }
+                if (isset($data["DATA_1"][0]["ruta_doc_pago"]) && $data["DATA_1"][0]["ruta_doc_pago"] != "") {                    
+                    $arrIm = explode(".", basename($data["DATA_1"][0]["ruta_doc_pago"]));                    
+                    $typeFile = strtolower($arrIm[count($arrIm) - 1]);                    
+                    $doc_pagoOld = Yii::$app->params["documentFolder"] . "solicitudadmision/" . $inscripcion_id . "/doc_pago_per_" . $inscripcion_id . "." . $typeFile;                    
+                    $doc_pago = InscripcionAdmision::addLabelTimeDocumentos($inscripcion_id, $doc_pagoOld, $timeSt);                    
+                    $data["DATA_1"][0]["ruta_doc_pago"] = $doc_pago;                    
+                    if ($doc_pago === false)
+                        throw new Exception('Error al cargar documento de pago.');
+                }
                 if ($accion == "create" || $accion == "Create") {
                     //Nuevo Registro                       
                     $resul = $model->insertarInscripcion($data);

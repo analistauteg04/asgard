@@ -764,7 +764,15 @@ function dataInscripPart1(ID) {
     objDat.twin_mensaje2 = ($("#chk_mensaje2").prop("checked")) ? '1' : '0';
     objDat.ruta_doc_aceptacion = ($('#txth_doc_aceptacion').val() != '') ? $('#txth_doc_aceptacion').val() : '';
     objDat.cemp_id = $('#cmb_convenio_empresa option:selected').val();
-
+    //TAB 3
+    objDat.ruta_doc_pago = ($('#txth_doc_pago').val() != '') ? $('#txth_doc_pago').val() : '';    
+    if ($('#rdo_forma_pago_otros option:selected').val()) {
+        objDat.forma_pago = 2;
+    } else if  ($('#rdo_forma_pago_deposito option:selected').val()) {
+        objDat.forma_pago = 3;
+    } else {
+        objDat.forma_pago = 4;
+    }
     datArray[0] = objDat;
     sessionStorage.dataInscrip_1 = JSON.stringify(datArray);
     return datArray;
