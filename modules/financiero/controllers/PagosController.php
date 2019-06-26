@@ -627,12 +627,13 @@ class PagosController extends \app\components\CController {
         $cedula=$data_persona['per_cedula'];
         $doc_id=$model_documento->consultarDocIdByCedulaBen($cedula);
         $opag_id=$model_ordenpago->consultarOpagIdByCedula($cedula);        
+         $data = Yii::$app->request->get();
         if ($data['PBgetFilter']) {
             $arrSearch["f_ini"] = $data['f_ini'];
             $arrSearch["f_fin"] = $data['f_fin'];
             $data_transacciones=$model_sbpag->consultarHistoralTransacciones($doc_id,$opag_id,$arrSearch);
-            return $this->renderPartial('historialtransaccion_grid', [
-                        "model" => $resp_pago,
+            return $this->renderPartial('_historialtransaccion_grid', [
+                        "model" => $data_transacciones,
             ]);
         } else {
             $data_transacciones=$model_sbpag->consultarHistoralTransacciones($doc_id,$opag_id);
@@ -1037,6 +1038,74 @@ class PagosController extends \app\components\CController {
             "email_cliente" => $per_mod->per_correo,
             "total" => $totalpagar,
         ));
+    }
+       public function actionExpexcelhis() {
+        ini_set('memory_limit', '256M');
+        $content_type = Utilities::mimeContentType("xls");
+        $nombarch = "Report-" . date("YmdHis") . ".xls";
+        header("Content-Type: $content_type");
+        header("Content-Disposition: attachment;filename=" . $nombarch);
+        header('Cache-Control: max-age=0');
+        $colPosition = array("C", "D", "E", "F", "G", "H", "I", "J");
+        $arrData = array();
+        $arrHeader = array(
+            Yii::t("formulario", "Code"),
+            Yii::t("formulario", "Reference"),
+            Yii::t("formulario", "Student"),
+            Yii::t("formulario", "Date"),
+            Yii::t("formulario", "Pago"),          
+            Yii::t("formulario", "Status"),
+        );
+        $doc_id = 1; // ESTO CAMBIAR  QUE NO ESTE CAMBIADO
+        $opag_id = 1; // ESTO CAMBIAR  QUE NO ESTE CAMBIADO                
+        $data = Yii::$app->request->get();     
+        $arrSearch["f_ini"] = $data["f_ini"];
+        $arrSearch["f_fin"] = $data["f_fin"];      
+        
+        $model_sbpag = new SolicitudBotonPago();
+        if (empty($arrSearch)) {
+            $arrData = $model_sbpag->consultarHistoralTransacciones($doc_id,$opag_id,array(), true);
+        } else {
+            $arrData = $model_sbpag->consultarHistoralTransacciones($doc_id,$opag_id,$arrSearch, true);
+        }
+        $nameReport = financiero::t("Pagos", "Transaction History");
+        Utilities::generarReporteXLS($nombarch, $nameReport, $arrHeader, $arrData, $colPosition);
+        exit;
+    }
+    public function actionExppdfhis() {
+        $report = new ExportFile();
+        $this->view->title = financiero::t("Pagos", "Transaction History"); // Titulo del reporte
+
+        $arrHeader = array(
+            Yii::t("formulario", "Code"),
+            Yii::t("formulario", "Reference"),
+            Yii::t("formulario", "Student"),
+            Yii::t("formulario", "Date"),
+            Yii::t("formulario", "Pago"),          
+            Yii::t("formulario", "Status"),
+        );
+        $doc_id = 1; // ESTO CAMBIAR  QUE NO ESTE CAMBIADO
+        $opag_id = 1; // ESTO CAMBIAR  QUE NO ESTE CAMBIADO  
+        $data = Yii::$app->request->get();    
+        $arrSearch["f_ini"] = $data["f_ini"];
+        $arrSearch["f_fin"] = $data["f_fin"];
+
+        $arrData = array();
+        $model_sbpag = new SolicitudBotonPago();
+        if (empty($arrSearch)) { 
+            $arrData = $model_sbpag->consultarHistoralTransacciones($doc_id,$opag_id,array(), true);
+        } else {
+            $arrData = $model_sbpag->consultarHistoralTransacciones($doc_id,$opag_id,$arrSearch, true);
+        }
+        $report->orientation = "L"; // tipo de orientacion L => Horizontal, P => Vertical
+        $report->createReportPdf(
+                $this->render('exportpdf', [
+                    'arr_head' => $arrHeader,
+                    'arr_body' => $arrData
+                ])
+        );
+        $report->mpdf->Output('Reporte_' . date("Ymdhis") . ".pdf", ExportFile::OUTPUT_TO_DOWNLOAD);
+        return;
     }
 
 }
