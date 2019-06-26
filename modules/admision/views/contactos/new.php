@@ -20,7 +20,7 @@ $fecha_actual = date("Y-m-d");
                     </label>
                     <label> 
                         <input type="radio" name="rdo_beneficio_no" id="rdo_beneficio_no" value="2" > No<br>
-                    </label>
+                    </label> 
                 </div> 
             </div>
         </div>

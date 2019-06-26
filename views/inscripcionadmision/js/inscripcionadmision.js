@@ -732,7 +732,15 @@ function dataInscripPart1(ID) {
     sessionStorage.dataInscrip_1 = JSON.stringify(datArray);
     return datArray;
 }
-
+function camposnulos(campo) {
+    if ($(campo).val() == "")
+    {
+        $(campo).removeClass("PBvalidation");
+    } else
+    {
+        $(campo).addClass("PBvalidation");
+    }
+}
 function PagoDinners(solicitud) {    
     var bohre = $('#txth_base').val() + "/inscripcionadmision/savepagodinner?sins_id=" + solicitud+"&popup=1";
     $('#btn_pago_i').attr("href", bohre);

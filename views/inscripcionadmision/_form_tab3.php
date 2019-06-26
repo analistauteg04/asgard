@@ -44,6 +44,7 @@
 
 use yii\helpers\Html;
 use app\modules\financiero\Module as financiero;
+
 financiero::registerTranslations();
 ?>
 
@@ -85,10 +86,10 @@ financiero::registerTranslations();
         </div>         
         <!--        <div id="id_met_ing" class="col-md-12 col-xs-12 col-sm-12 col-lg-12">-->
         <!--            <div class="col-md-4 col-xs-4 col-sm-4 col-lg-4">
-                        <span id="lbl_ming_lb"><b><?php //Yii::t("formulario", "Metodo ingreso: ")  ?></b></span>
+                        <span id="lbl_ming_lb"><b><?php //Yii::t("formulario", "Metodo ingreso: ")   ?></b></span>
                     </div>
                     <div class="col-md-8 col-xs-8 col-sm-8 col-lg-8">-->
-        <!--                <span id="lbl_ming_tx"><?php // "Curso Nivelacion"  ?></span>-->
+        <!--                <span id="lbl_ming_tx"><?php // "Curso Nivelacion"   ?></span>-->
         <!--            </div>-->
         <!--        </div>         -->
         <!--        <div id="id_mat_cur" class="col-md-12 col-xs-12 col-sm-12 col-lg-12">
@@ -137,7 +138,7 @@ financiero::registerTranslations();
                 <span><b><?= Yii::t("formulario", "Valor total a pagar: ") ?></b></span>
             </div>
             <div class="col-md-8 col-xs-8 col-sm-8 col-lg-8">
-                 <span id="lbl_valor_pagar_tx"></span><br/><br/>
+                <span id="lbl_valor_pagar_tx"></span><br/><br/>
                 <small><b><?= Yii::t("formulario", "**Valores están en ($) USD ") ?></b></small>
             </div>         
         </div>
@@ -201,7 +202,7 @@ financiero::registerTranslations();
             </div>
         </div>        
     </div>   
-        
+
     <div class="col-md-6 col-sm-6 col-xs-6 col-lg-6">   
         <div class='col-md-12 col-sm-12 col-xs-12 col-lg-12'> 
             <div class="form-group">
@@ -234,7 +235,7 @@ financiero::registerTranslations();
                     <input type="text" maxlength="15" class="form-control PBvalidation keyupmce" id="txt_pasaporte_fac" data-type="alfanumerico" data-keydown="true" placeholder="<?= Yii::t("formulario", "Passport") ?>">
                 </div>
             </div>
-        </div>
+        </div>        
         <div class="col-md-12 col-sm-12 col-xs-12 col-lg-12" style="display: none;" id="DivRucFac">
             <div class="form-group">
                 <label for="txt_ruc_fac" class="col-sm-2 col-md-2 col-xs-2 col-lg-2 control-label"><?= Yii::t("formulario", "RUC") ?> <span class="text-danger">*</span></label>
@@ -245,12 +246,12 @@ financiero::registerTranslations();
         </div>
         <div class='col-md-12 col-sm-12 col-xs-12 col-lg-12'>
             <div class="form-group">
-                <label for="txt_correo_fac" class="col-sm-2 col-md-2 col-xs-2 col-lg-2 control-label" id="lbl_correo"><?= Yii::t("formulario", "Email") ?><span class="text-danger">*</span></label>
-                <div class="col-sm-8 col-md-8 col-xs-8 col-lg-8">
-                    <input type="text" class="form-control PBvalidation keyupmce" value="" id="txt_correo_fac" data-type="email" placeholder="<?= Yii::t("formulario", "Email") ?>">
-                </div> 
-            </div>  
-        </div>
+                <label for="txt_correo_fac" class="col-sm-5 col-md-5 col-xs-5 col-lg-5 control-label"><?= Yii::t("formulario", "Email") ?> </label>
+                <div class="col-sm-7 col-md-7 col-xs-7 col-lg-7">
+                    <input type="text" class="form-control PBvalidation keyupmce" value="" data-required="false" id="txt_correo_fac" data-type="email" data-keydown="true" placeholder="<?= Yii::t("formulario", "Email") ?>">
+                </div>
+            </div>
+        </div>        
     </div>                                          
     <!--<div class="col-md-12 col-xs-12 col-sm-12 col-lg-12">
             <h4><b><span id="lbl_detalle2"><?= Yii::t("formulario", "Pago:") ?></span></b></h4>
