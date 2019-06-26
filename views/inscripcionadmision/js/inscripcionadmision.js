@@ -481,12 +481,50 @@ $(document).ready(function () {
             $("#rdo_forma_pago_dinner").prop("checked", true); 
         }
     });
-
+    //Pago por stripe.-
     $('#rdo_forma_pago_otros').change(function () {
         if ($('#rdo_forma_pago_otros').val() == 2) {
-            $("#rdo_forma_pago_dinner").prop("checked", "");            
+            $("#rdo_forma_pago_dinner").prop("checked", "");     
+            $("#rdo_forma_pago_deposito").prop("checked", "");    
+            $("#rdo_forma_pago_transferencia").prop("checked", "");  
+            $('#DivSubirPago').css('display', 'none');
+            $('#DivSubirPagoBtn').css('display', 'none');
+            $('#DivBoton').css('display', 'block');
         } else {
             $("#rdo_forma_pago_otros").prop("checked", true);    
+            $('#DivBoton').css('display', 'none');
+        }
+    });
+    
+    $('#rdo_forma_pago_deposito').change(function () {
+        if ($('#rdo_forma_pago_deposito').val() == 3) {
+            $('#DivSubirPago').css('display', 'block'); 
+            $('#DivSubirPagoBtn').css('display', 'block');    
+            $('#DivBoton').css('display', 'none');
+            $("#rdo_forma_pago_dinner").prop("checked", "");     
+            $("#rdo_forma_pago_otros").prop("checked", "");    
+            $("#rdo_forma_pago_transferencia").prop("checked", "");  
+        } else {
+            $('#DivSubirPago').css('display', 'none');
+            $('#DivSubirPagoBtn').css('display', 'none');             
+            $("#rdo_forma_pago_deposito").prop("checked", true);    
+            $('#DivBoton').css('display', 'block');
+        }
+    });
+    
+    $('#rdo_forma_pago_transferencia').change(function () {
+        if ($('#rdo_forma_pago_transferencia').val() == 4) {
+            $('#DivSubirPago').css('display', 'block'); 
+            $('#DivSubirPagoBtn').css('display', 'block');   
+            $('#DivBoton').css('display', 'none');
+            $("#rdo_forma_pago_dinner").prop("checked", "");     
+            $("#rdo_forma_pago_otros").prop("checked", "");    
+            $("#rdo_forma_pago_deposito").prop("checked", "");  
+        } else {
+            $('#DivSubirPago').css('display', 'none');
+            $('#DivSubirPagoBtn').css('display', 'none');  
+            $("#rdo_forma_pago_transferencia").prop("checked", true); 
+            $('#DivBoton').css('display', 'block');
         }
     });
     
@@ -504,6 +542,10 @@ $(document).ready(function () {
             $('#DivpasaporteFac').css('display', 'none');
             $('#DivcedulaFac').css('display', 'none');
         }
+    });
+    
+    $('#sendInscripcionSubirPago').click(function () {
+        guardarInscripcion('UpdateDepTrans', '2');
     });
     
 });
