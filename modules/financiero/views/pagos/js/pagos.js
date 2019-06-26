@@ -452,3 +452,8 @@ function exportExcelhis() {
     var f_fin = $('#txt_fecha_fin').val();    
     window.location.href = $('#txth_base').val() + "/financiero/pagos/expexcelhis?f_ini=" + f_ini + "&f_fin=" + f_fin;
 }
+function exportPdfhis() {   
+    var f_ini = $('#txt_fecha_ini').val();
+    var f_fin = $('#txt_fecha_fin').val();
+    window.location.href = $('#txth_base').val() + "/financiero/pagos/exppdfhis?pdf=1&f_ini=" + f_ini + "&f_fin=" + f_fin;
+}

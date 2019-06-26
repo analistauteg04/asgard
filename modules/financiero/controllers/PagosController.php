@@ -1056,8 +1056,8 @@ class PagosController extends \app\components\CController {
             Yii::t("formulario", "Pago"),          
             Yii::t("formulario", "Status"),
         );
-        $doc_id = 1;
-        $opag_id = 1;                
+        $doc_id = 1; // ESTO CAMBIAR  QUE NO ESTE CAMBIADO
+        $opag_id = 1; // ESTO CAMBIAR  QUE NO ESTE CAMBIADO                
         $data = Yii::$app->request->get();     
         $arrSearch["f_ini"] = $data["f_ini"];
         $arrSearch["f_fin"] = $data["f_fin"];      
@@ -1071,6 +1071,41 @@ class PagosController extends \app\components\CController {
         $nameReport = financiero::t("Pagos", "Transaction History");
         Utilities::generarReporteXLS($nombarch, $nameReport, $arrHeader, $arrData, $colPosition);
         exit;
+    }
+    public function actionExppdfhis() {
+        $report = new ExportFile();
+        $this->view->title = financiero::t("Pagos", "Transaction History"); // Titulo del reporte
+
+        $arrHeader = array(
+            Yii::t("formulario", "Code"),
+            Yii::t("formulario", "Reference"),
+            Yii::t("formulario", "Student"),
+            Yii::t("formulario", "Date"),
+            Yii::t("formulario", "Pago"),          
+            Yii::t("formulario", "Status"),
+        );
+        $doc_id = 1; // ESTO CAMBIAR  QUE NO ESTE CAMBIADO
+        $opag_id = 1; // ESTO CAMBIAR  QUE NO ESTE CAMBIADO  
+        $data = Yii::$app->request->get();    
+        $arrSearch["f_ini"] = $data["f_ini"];
+        $arrSearch["f_fin"] = $data["f_fin"];
+
+        $arrData = array();
+        $model_sbpag = new SolicitudBotonPago();
+        if (empty($arrSearch)) { 
+            $arrData = $model_sbpag->consultarHistoralTransacciones($doc_id,$opag_id,array(), true);
+        } else {
+            $arrData = $model_sbpag->consultarHistoralTransacciones($doc_id,$opag_id,$arrSearch, true);
+        }
+        $report->orientation = "L"; // tipo de orientacion L => Horizontal, P => Vertical
+        $report->createReportPdf(
+                $this->render('exportpdf', [
+                    'arr_head' => $arrHeader,
+                    'arr_body' => $arrData
+                ])
+        );
+        $report->mpdf->Output('Reporte_' . date("Ymdhis") . ".pdf", ExportFile::OUTPUT_TO_DOWNLOAD);
+        return;
     }
 
 }
