@@ -3,7 +3,7 @@
 namespace app\modules\financiero\models;
 
 use Yii;
-
+use yii\data\ArrayDataProvider;
 /**
  * This is the model class for table "solicitud_boton_pago".
  *
@@ -96,8 +96,7 @@ class SolicitudBotonPago extends \yii\db\ActiveRecord
         $fecha_solicitud = date(Yii::$app->params["dateTimeByDefault"]);
         $sql = "INSERT INTO " . $con->dbname . ".solicitud_boton_pago
             (pben_id, sbpa_fecha_solicitud, sbpa_estado, sbpa_estado_logico) VALUES
-            (:id_pben,:fecha_solicitud,:sbpa_estado,:sbpa_estado)";
-        
+            (:id_pben,:fecha_solicitud,:sbpa_estado,:sbpa_estado)";        
         $command = $con->createCommand($sql);        
         $command->bindParam(":id_pben", $id_pben, \PDO::PARAM_INT);
         $command->bindParam(":fecha_solicitud", $fecha_solicitud, \PDO::PARAM_STR);
@@ -105,7 +104,53 @@ class SolicitudBotonPago extends \yii\db\ActiveRecord
         $command->execute();
         return $con->getLastInsertID();        
     }
-    public function consultarHistoralTransacciones(){
-        
+    public function consultarHistoralTransacciones($doc_id,$opag_id, $arrFiltro = array(),$onlyData = false){
+        $con = \Yii::$app->db_captacion;
+        $con2 = \Yii::$app->db;
+        $con1 = \Yii::$app->db_academico;
+        $estado = 1;
+        $sql = "
+            SELECT
+                docu.doc_id as id,
+                vpre.reference as referencia,
+                concat(pben.pben_nombre,' ',pben.pben_apellido) as estudiante,
+                docu.doc_fecha_pago as fecha_pago,
+                docu.doc_valor as total_pago,
+                docu.doc_pagado as estado
+            from
+                db_facturacion.persona_beneficiaria as pben
+                join db_facturacion.solicitud_boton_pago as sbpa on pben.pben_id = sbpa.pben_id
+                join db_facturacion.documento as docu on docu.sbpa_id = sbpa.sbpa_id
+                left join db_financiero.vpos_response as vpre on vpre.ordenPago = docu.doc_id and vpre.tipo_orden = 2
+            where	
+                pben.pben_id=1
+        ";
+        $comando = $con->createCommand($sql);
+        $comando->bindParam(":estado", $estado, \PDO::PARAM_STR);
+        $comando->bindParam(":sins_id", $doc_id, \PDO::PARAM_INT);
+        $comando->bindParam(":sins_id", $opag_id, \PDO::PARAM_INT);
+        $resultData = $comando->queryAll();
+        $dataProvider = new ArrayDataProvider([
+            'key' => 'id',
+            'allModels' => $resultData,
+            'pagination' => [
+                'pageSize' => Yii::$app->params["pageSize"],
+            ],
+            'sort' => [
+                'attributes' => [
+                    'referencia',
+                    'fecha_solicitud',
+                    'estudiante',
+                    'fecha_pago',
+                    'total_pago',
+                    'estado'
+                ],
+            ],
+        ]);
+        if ($onlyData) {
+            return $resultData;
+        } else {
+            return $dataProvider;
+        }
     }
 }

@@ -271,8 +271,18 @@ $leyenda = '<div class="col-md-12 col-xs-12 col-sm-12 col-lg-12">
                         <input type="text" class="form-control PBvalidation " value="<?php echo $arr_persona['per_cedula'] ?>" id="txt_dni_fac" data-type="cedula" data-keydown="true" placeholder="<?= Yii::t("formulario", "DNI Document") ?>">
                     </div>
                 </div>
-            </div> 
+            </div>            
         </div> 
+        <div class='col-md-12 col-sm-12 col-xs-12 col-lg-12'>
+            <div class="col-md-6 col-sm-6 col-xs-6 col-lg-6">
+                <div class="form-group">
+                    <label for="txt_correo_fac" class="col-sm-5 col-md-5 col-xs-5 col-lg-5 control-label" id="txt_correo_fac"><?= Yii::t("formulario", "Email") ?><span class="text-danger">*</span></label>
+                    <div class="col-sm-7 col-md-7 col-xs-7 col-lg-7">
+                        <input type="text" class="form-control PBvalidation" value="" id="txt_correo_fac" data-type="email" data-keydown="true" placeholder="<?= Yii::t("formulario", "Email") ?>">                        
+                    </div>
+                </div>
+            </div> 
+        </div>
     </div> 
     <?= Html::hiddenInput('txth_ruc_lb', Yii::t("formulario", "RUC"), ['id' => 'txth_ruc_lb']); ?>
     <?= Html::hiddenInput('txth_ced_lb', Yii::t("formulario", "DNI Document") . '/' . Yii::t("formulario", "DNI 1"), ['id' => 'txth_ced_lb']); ?>

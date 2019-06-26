@@ -349,7 +349,15 @@ $(document).ready(function () {
         $("a[data-href='#paso2']").removeAttr('href');
         $("a[data-href='#paso1']").attr('data-toggle', 'tab');
         $("a[data-href='#paso1']").attr('href', $("a[data-href='#paso1']").attr('data-href'));
-        $("a[data-href='#paso1']").trigger("click");        
+        $("a[data-href='#paso1']").trigger("click");    
+       
+        $('#txt_nombres_fac').removeClass("PBvalidation");
+        $('#txt_dir_fac').removeClass("PBvalidation");
+        $('#txt_apellidos_fac').removeClass("PBvalidation");
+        $('#txt_dni_fac').removeClass("PBvalidation");
+        $('#txt_pasaporte_fac').removeClass("PBvalidation");
+        $('#txt_ruc_fac').removeClass("PBvalidation");
+        $('#txt_correo_fac').removeClass("PBvalidation");
     });
     $('#paso2next').click(function () {
         $("a[data-href='#paso2']").attr('data-toggle', 'none');
@@ -368,6 +376,14 @@ $(document).ready(function () {
         $("a[data-href='#paso2']").attr('data-toggle', 'tab');
         $("a[data-href='#paso2']").attr('href', $("a[data-href='#paso2']").attr('data-href'));
         $("a[data-href='#paso2']").trigger("click");
+      
+        $('#txt_nombres_fac').removeClass("PBvalidation");
+        $('#txt_dir_fac').removeClass("PBvalidation");
+        $('#txt_apellidos_fac').removeClass("PBvalidation");
+        $('#txt_dni_fac').removeClass("PBvalidation");
+        $('#txt_pasaporte_fac').removeClass("PBvalidation");
+        $('#txt_ruc_fac').removeClass("PBvalidation");
+        $('#txt_correo_fac').removeClass("PBvalidation");
     });
 
     function AparecerDocumento() {
@@ -642,7 +658,7 @@ function paso1next() {
     $("a[data-href='#paso2']").attr('data-toggle', 'tab');
     $("a[data-href='#paso2']").attr('href', $("a[data-href='#paso2']").attr('data-href'));
     $("a[data-href='#paso2']").trigger("click");   
-    alert('paso1next function');
+   
     $('#txt_nombres_fac').removeClass("PBvalidation");
     $('#txt_dir_fac').removeClass("PBvalidation");
     $('#txt_apellidos_fac').removeClass("PBvalidation");
@@ -661,7 +677,7 @@ function paso2next() {
     $("a[data-href='#paso3']").attr('data-toggle', 'tab');
     $("a[data-href='#paso3']").attr('href', $("a[data-href='#paso3']").attr('data-href'));
     $("a[data-href='#paso3']").trigger("click"); 
-    alert('paso2next function');
+    
     //Adicionar validación de datos obligatorios en datos de factura.
     $('#txt_nombres_fac').addClass("PBvalidation");
     $('#txt_dir_fac').addClass("PBvalidation");

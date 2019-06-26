@@ -616,8 +616,7 @@ class PagosController extends \app\components\CController {
         return $this->render('listarpagosolicitud', [
             'model' => $resp_pago,
         ]);
-    }
-    
+    }    
     public function actionHistorialtransacciones() {
         $per_id = Yii::$app->session->get("PB_perid");        
         $model_persona = new Persona();
