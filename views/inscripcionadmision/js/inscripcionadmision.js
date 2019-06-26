@@ -51,79 +51,77 @@ $(document).ready(function () {
     });
     $('#sendInformacionAspirante').click(function () {
         habilitarSecciones();
-        paso1next();
-//        if ($('#txth_twin_id').val() == 0) {
-//            guardarInscripcion('Create', '1');
-//        } else {
-//            guardarInscripcion('Update', '1');
-//        }        
+        if ($('#txth_twin_id').val() == 0) {
+            guardarInscripcion('Create', '1');
+        } else {
+            guardarInscripcion('Update', '1');
+        }
     });
 
     $('#sendInformacionAspirante2').click(function () {
-        paso2next();
-//        var error = 0;
-//        var pais = $('#cmb_pais_dom').val();
-//        if ($("#chk_mensaje1").prop("checked") && $("#chk_mensaje2").prop("checked")) {
-//            error = 0;
-//        } else {
-//            var mensaje = {wtmessage: "Debe Aceptar los términos de la Información.", title: "Exito"};
-//            error++;
-//            showAlert("NO_OK", "success", mensaje);
-//        }
-//        if ($('#txth_doc_titulo').val() == "") {
-//            error++;
-//            var mensaje = {wtmessage: "Debe adjuntar título.", title: "Información"};
-//            showAlert("NO_OK", "error", mensaje);
-//        } else {
-//            if ($('#txth_doc_dni').val() == "") {
-//                error++;
-//                var mensaje = {wtmessage: "Debe adjuntar documento de identidad.", title: "Información"};
-//                showAlert("NO_OK", "error", mensaje);
-//            } else {
-//                if ($('#cmb_tipo_dni').val() == "CED") {
-//                    if ((pais == 1) && ($('#cmb_unidad_solicitud').val() == 1)) {
-//                        if ($('#txth_doc_certvota').val() == "") {
-//                            error++;
-//                            var mensaje = {wtmessage: "Debe adjuntar certificado de votación.", title: "Información"};
-//                            showAlert("NO_OK", "error", mensaje);
-//                        }
-//                    } else {
-//                        if ($('#txth_doc_foto').val() == "") {
-//                            error++;
-//                            var mensaje = {wtmessage: "Debe adjuntar foto.", title: "Información"};
-//                            showAlert("NO_OK", "error", mensaje);
-//                        }
-//                    }
-//                } /*else {
-//                    if ($('#txth_doc_hojavida').val() == "") {
-//                        error++;
-//                        var mensaje = {wtmessage: "Debe adjuntar hoja de vida.", title: "Información"};
-//                        showAlert("NO_OK", "error", mensaje);
-//                    }
-//                }*/
-//            }
-//        }
-//        if ($('#cmb_convenio_empresa').val() > 0) {
-//            if ($('#txth_doc_aceptacion').val() == "") {
-//                error++;
-//                var mensaje = {wtmessage: "Debe adjuntar documento de aceptación.", title: "Información"};
-//                showAlert("NO_OK", "error", mensaje);
-//            }            
-//        }
-//        /*Gviteri: 11/jun/2019 indicaron que no se solicite el documento (Diana López).
-//         * if ($('#cmb_unidad_solicitud').val() == 2) {
-//            if ($('#txth_doc_certificado').val() == "") {
-//                error++;
-//                var mensaje = {wtmessage: "Debe adjuntar certificado de materias.", title: "Información"};
-//                showAlert("NO_OK", "error", mensaje);
-//            }
-//            //alert($('#cmb_tipo_dni').val());
-//
-//        }*/
-//        //alert(error);
-//        if (error == 0) {
-//            guardarInscripcion('Update', '2');
-//        }
+        var error = 0;
+        var pais = $('#cmb_pais_dom').val();
+        if ($("#chk_mensaje1").prop("checked") && $("#chk_mensaje2").prop("checked")) {
+            error = 0;
+        } else {
+            var mensaje = {wtmessage: "Debe Aceptar los términos de la Información.", title: "Exito"};
+            error++;
+            showAlert("NO_OK", "success", mensaje);
+        }
+        if ($('#txth_doc_titulo').val() == "") {
+            error++;
+            var mensaje = {wtmessage: "Debe adjuntar título.", title: "Información"};
+            showAlert("NO_OK", "error", mensaje);
+        } else {
+            if ($('#txth_doc_dni').val() == "") {
+                error++;
+                var mensaje = {wtmessage: "Debe adjuntar documento de identidad.", title: "Información"};
+                showAlert("NO_OK", "error", mensaje);
+            } else {
+                if ($('#cmb_tipo_dni').val() == "CED") {
+                    if ((pais == 1) && ($('#cmb_unidad_solicitud').val() == 1)) {
+                        if ($('#txth_doc_certvota').val() == "") {
+                            error++;
+                            var mensaje = {wtmessage: "Debe adjuntar certificado de votación.", title: "Información"};
+                            showAlert("NO_OK", "error", mensaje);
+                        }
+                    } else {
+                        if ($('#txth_doc_foto').val() == "") {
+                            error++;
+                            var mensaje = {wtmessage: "Debe adjuntar foto.", title: "Información"};
+                            showAlert("NO_OK", "error", mensaje);
+                        }
+                    }
+                } /*else {
+                 if ($('#txth_doc_hojavida').val() == "") {
+                 error++;
+                 var mensaje = {wtmessage: "Debe adjuntar hoja de vida.", title: "Información"};
+                 showAlert("NO_OK", "error", mensaje);
+                 }
+                 }*/
+            }
+        }
+        if ($('#cmb_convenio_empresa').val() > 0) {
+            if ($('#txth_doc_aceptacion').val() == "") {
+                error++;
+                var mensaje = {wtmessage: "Debe adjuntar documento de aceptación.", title: "Información"};
+                showAlert("NO_OK", "error", mensaje);
+            }
+        }
+        /*Gviteri: 11/jun/2019 indicaron que no se solicite el documento (Diana López).
+         * if ($('#cmb_unidad_solicitud').val() == 2) {
+         if ($('#txth_doc_certificado').val() == "") {
+         error++;
+         var mensaje = {wtmessage: "Debe adjuntar certificado de materias.", title: "Información"};
+         showAlert("NO_OK", "error", mensaje);
+         }
+         //alert($('#cmb_tipo_dni').val());
+         
+         }*/
+        //alert(error);
+        if (error == 0) {
+            guardarInscripcion('Update', '2');
+        }
     });
 
     $('#sendInscripcionsolicitud').click(function () {
@@ -135,18 +133,18 @@ $(document).ready(function () {
         arrParams.apellidos_fact = $('#txt_apellidos_fac').val();
         arrParams.direccion_fact = $('#txt_dir_fac').val();
         arrParams.telefono_fac = $('#txt_tel_fac').val();
+        var tipo_dni_fact = "";
+        if ($('#opt_tipo_DNI option:selected').val() == "1") {
+            tipo_dni_fact = "CED";
+        } else if ($('#opt_tipo_DNI option:selected').val() == "2") {
+            tipo_dni_fact = "PASS";
+        } else {
+            tipo_dni_fact = "RUC";
+        }
+        arrParams.tipo_dni_fac = tipo_dni_fact;
+        arrParams.dni = $('#txt_dni_fac').val();
+        arrParams.correo = $('#txt_correo_fac').val();
         if (!validateForm()) {
-            var tipo_dni_fact = "";
-            if ($('#opt_tipo_DNI option:selected').val() == "1") {
-                tipo_dni_fact = "CED";
-            } else if ($('#opt_tipo_DNI option:selected').val() == "2") {
-                tipo_dni_fact = "PASS";
-            } else {
-                tipo_dni_fact = "RUC";
-            }
-            arrParams.tipo_dni_fac = tipo_dni_fact;
-            arrParams.dni = $('#txt_dni_fac').val();
-            arrParams.correo = $('#txt_correo_fac').val();
             requestHttpAjax(link, arrParams, function (response) {
                 var message = response.message;
                 //console.log(response);
@@ -529,14 +527,23 @@ $(document).ready(function () {
             $('#DivcedulaFac').css('display', 'block');
             $('#DivpasaporteFac').css('display', 'none');
             $('#DivRucFac').css('display', 'none');
+            $('#txt_dni_fac').addClass("PBvalidation");
+            $('#txt_ruc_fac').removeClass("PBvalidation");
+            $('#txt_pasaporte_fac').removeClass("PBvalidation");
         } else if ($(this).val() == 2) {
             $('#DivpasaporteFac').css('display', 'block');
             $('#DivcedulaFac').css('display', 'none');
             $('#DivRucFac').css('display', 'none');
+            $('#txt_pasaporte_fac').addClass("PBvalidation");
+            $('#txt_ruc_fac').removeClass("PBvalidation");
+            $('#txt_dni_fac').removeClass("PBvalidation");
         } else {
             $('#DivRucFac').css('display', 'block');
             $('#DivpasaporteFac').css('display', 'none');
             $('#DivcedulaFac').css('display', 'none');
+            $('#txt_ruc_fac').addClass("PBvalidation");
+            $('#txt_dni_fac').removeClass("PBvalidation");
+            $('#txt_pasaporte_fac').removeClass("PBvalidation");
         }
     });
     
@@ -714,7 +721,6 @@ function paso2next() {
     $("a[data-href='#paso3']").attr('data-toggle', 'tab');
     $("a[data-href='#paso3']").attr('href', $("a[data-href='#paso3']").attr('data-href'));
     $("a[data-href='#paso3']").trigger("click");
-
     //Adicionar validación de datos obligatorios en datos de factura.
     $('#txt_nombres_fac').addClass("PBvalidation");
     $('#txt_dir_fac').addClass("PBvalidation");
@@ -722,10 +728,16 @@ function paso2next() {
     $('#txt_correo_fac').addClass("PBvalidation");
     if ($('#opt_tipo_DNI option:selected').val() == "1") {
         $('#txt_dni_fac').addClass("PBvalidation");
+        $('#txt_ruc_fac').removeClass("PBvalidation");
+        $('#txt_pasaporte_fac').removeClass("PBvalidation");
     } else if ($('#opt_tipo_DNI option:selected').val() == "2") {
         $('#txt_pasaporte_fac').addClass("PBvalidation");
+        $('#txt_ruc_fac').removeClass("PBvalidation");
+        $('#txt_dni_fac').removeClass("PBvalidation");        
     } else {
         $('#txt_ruc_fac').addClass("PBvalidation");
+        $('#txt_pasaporte_fac').removeClass("PBvalidation");
+        $('#txt_dni_fac').removeClass("PBvalidation");        
     }
 }
 
