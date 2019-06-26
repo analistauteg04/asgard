@@ -227,7 +227,9 @@ class InscripcionadmisionController extends \yii\web\Controller {
                         'correo' => strtolower($data["correo"]),
                     );                                         
                     $resul = $model->insertaOriginal($Ids,$dataRegistro);                    
-                }                
+                } else if ($accion == "UpdateDepTrans") {
+                    
+                }             
                 if ($resul['status']) {
                     \app\models\Utilities::putMessageLogFile('resultado es ok');
                     $message = array(

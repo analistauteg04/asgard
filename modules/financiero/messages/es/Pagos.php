@@ -11,6 +11,7 @@ namespace app\modules\financiero\messages;
      "Approval Payment" => "Aprobación de Pago",
      "Billing Data" => "Datos de Facturación",
      "Control Payments" => "Control de Pagos",
+     "Details of payment" => "Datos del Pago",
      "Discount" => "Descuento",
      "Item" => "Item",
      "List Payment" => "Listar pagos",

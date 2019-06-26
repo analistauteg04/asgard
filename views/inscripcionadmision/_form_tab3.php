@@ -43,9 +43,13 @@
  */
 
 use yii\helpers\Html;
+use kartik\date\DatePicker;
+use app\components\CFileInputAjax;
+use yii\helpers\Url;
 use app\modules\financiero\Module as financiero;
-
+use app\modules\admision\Module as admision;
 financiero::registerTranslations();
+admision::registerTranslations();
 ?>
 
 <form class="form-horizontal">
@@ -155,11 +159,17 @@ financiero::registerTranslations();
                 <span><b><?= Yii::t("formulario", "Forma Pago: ") ?></b></span>
             </div>
             <div class="col-sm-8 col-md-8 col-xs-8 col-lg-8">
-                <label> 
+                <!--<label> 
                     <input type="radio" name="rdo_forma_pago_dinner" id="rdo_forma_pago_dinner" value="1"> Dinners<br> 
+                </label>-->
+                <label> 
+                    <input type="radio" name="rdo_forma_pago_otros" id="rdo_forma_pago_otros" value="2" checked>Stripe Payment<br>
                 </label>
                 <label> 
-                    <input type="radio" name="rdo_forma_pago_otros" id="rdo_forma_pago_otros" value="2" checked> Stripe Payment<br>
+                    <input type="radio" name="rdo_forma_pago_deposito" id="rdo_forma_pago_deposito" value="3">Depósito<br>
+                </label>
+                <label> 
+                    <input type="radio" name="rdo_forma_pago_transferencia" id="rdo_forma_pago_transferencia" value="4">Transferencia<br>
                 </label>
             </div>                             
         </div> 
@@ -167,6 +177,126 @@ financiero::registerTranslations();
     <div class="col-md-12 col-xs-12 col-sm-12 col-lg-12">         
         </br>        
     </div>
+    <div id="DivSubirPago" style="display:none">
+        <div class="col-md-12 col-xs-12 col-sm-12 col-lg-12">
+            <div class="col-md-7 col-sm-7 col-xs-7 col-lg-7">
+                <div class="form-group">
+                    <h4><b><span id="lbl_subtitulo1"><?= financiero::t("Pagos", "Details of payment") ?></span></b></h4>
+                </div>
+            </div>   
+        </div>
+        <div class="col-md-6 col-sm-6 col-xs-6 col-lg-6">      
+            <div class='col-md-12 col-sm-12 col-xs-12 col-lg-12'>
+                <div class="form-group">
+                    <label for="txt_numtransaccion" class="col-sm-2 col-md-2 col-xs-2 col-lg-2 control-label" id="lbl_num_transaccion"><?= admision::t("Solicitudes", "Transaction number") ?><span class="text-danger">*</span></label>
+                    <div class="col-sm-8 col-md-8 col-xs-8 col-lg-8">
+                        <input type="text" class="form-control keyupmce" value="" id="txt_numtransaccion" data-type="alfa" placeholder="<?= admision::t("Solicitudes", "Transaction number") ?>">
+                    </div> 
+                </div>  
+            </div>
+            <div class='col-md-12 col-sm-12 col-xs-12 col-lg-12'>
+                <div class="form-group">
+                    <label for="txt_observacion" class="col-sm-2 col-md-2 col-xs-2 col-lg-2 control-label" id="lbl_observacion"><?= Yii::t("formulario", "Observation") ?></label>
+                    <div class="col-sm-8 col-md-8 col-xs-8 col-lg-8">
+                        <textarea  class="form-control keyupmce" id="txt_observacion" rows="3"></textarea>
+                    </div> 
+                </div>  
+            </div>
+
+        </div>
+
+        <div class="col-md-6 col-sm-6 col-xs-6 col-lg-6">                  
+            <div class="col-md-12 col-sm-12 col-xs-12 col-lg-12">
+                <div class="form-group">
+                    <label for="txt_fecha_transaccion" class="col-sm-2 col-md-2 col-xs-2 col-lg-2  control-label"><?= admision::t("Solicitudes", "Transaction date") ?><span class="text-danger">*</span></label>
+                    <div class="col-sm-8 col-md-8 col-xs-8 col-lg-8 ">
+                        <?=
+                        DatePicker::widget([
+                            'name' => 'txt_fecha_transaccion',
+                            'value' => '',                            
+                            'type' => DatePicker::TYPE_INPUT,
+                            'options' => ["class" => "form-control keyupmce", "id" => "txt_fecha_transaccion", "data-type" => "fecha", "data-keydown" => "true", "placeholder" => admision::t("Solicitudes", "Transaction date")],
+                            'pluginOptions' => [
+                                'autoclose' => true,
+                                'format' => Yii::$app->params["dateByDatePicker"],
+                            ]]
+                        );
+                        ?>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-12 col-sm-12 col-xs-12 col-lg-12">
+                <div class="form-group">
+                    <label for="txth_doc_pago" class="col-sm-2 col-md-2 col-xs-2 col-lg-2  control-label keyupmce" id="txth_doc_pago" name="txth_doc_pago"><?= Yii::t("formulario", "Attach document") ?><span class="text-danger">*</span></label>
+                    <div class="col-sm-8 col-md-8 col-xs-8 col-lg-8 ">
+                        <?= Html::hiddenInput('txth_per', $per_id, ['id' => 'txth_per']); ?>
+                        <?= Html::hiddenInput('txth_doc_pago', '', ['id' => 'txth_doc_pago']); ?>
+                        <?php
+                        echo CFileInputAjax::widget([
+                            'id' => 'txt_doc_pago',
+                            'name' => 'txt_doc_pago',                            
+                            'pluginLoading' => false,
+                            'showMessage' => false,
+                            'pluginOptions' => [
+                                'showPreview' => false,
+                                'showCaption' => true,
+                                'showRemove' => true,
+                                'showUpload' => false,
+                                'showCancel' => false,
+                                'browseClass' => 'btn btn-primary btn-block',
+                                'browseIcon' => '<i class="fa fa-folder-open"></i> ',
+                                'browseLabel' => "Subir Archivo",
+                                'uploadUrl' => Url::to(['inscripcionadmision/saveinscripciontemp']),
+                                'maxFileSize' => Yii::$app->params["MaxFileSize"], // en Kbytes
+                                'uploadExtraData' => 'javascript:function (previewId,index) {
+                                var name_pago= $("#txth_doc_pago").val();
+                    return {"upload_file": true, "name_file": name_pago};
+                }',
+                            ],
+                            'pluginEvents' => [
+                                "filebatchselected" => "function (event) {                        
+                                function d2(n) {
+                                if(n<9) return '0'+n;
+                                return n;
+                                }
+                                today = new Date();
+                                var name_pago = 'pago_' + $('#txth_per').val() + '-' + today.getFullYear() + '-' + d2(parseInt(today.getMonth()+1)) + '-' + d2(today.getDate()) + ' ' + d2(today.getHours()) + ':' + d2(today.getMinutes()) + ':' + d2(today.getSeconds());
+                                $('#txth_doc_pago').val(name_pago);    
+
+                $('#txt_doc_pago').fileinput('upload');
+                var fileSent = $('#txt_doc_pago').val();
+                var ext = fileSent.split('.');
+                $('#txth_doc_pago').val(name_pago + '.' + ext[ext.length - 1]);
+            }",
+                                "fileuploaderror" => "function (event, data, msg) {
+                $(this).parent().parent().children().first().addClass('hide');
+                $('#txth_doc_pago').val('');
+                //showAlert('NO_OK', 'error', {'wtmessage': objLang.Error_to_process_File__Try_again_, 'title': objLang.Error});   
+            }",
+                                "filebatchuploadcomplete" => "function (event, files, extra) { 
+                $(this).parent().parent().children().first().addClass('hide');
+            }",
+                                "filebatchuploadsuccess" => "function (event, data, previewId, index) {
+                var form = data.form, files = data.files, extra = data.extra,
+                response = data.response, reader = data.reader;
+                $(this).parent().parent().children().first().addClass('hide');
+                var acciones = [{id: 'reloadpage', class: 'btn btn-primary', value: objLang.Accept, callback: 'reloadPage'}];
+                //showAlert('OK', 'Success', {'wtmessage': objLang.File_uploaded_successfully__Do_you_refresh_the_web_page_, 'title': objLang.Success, 'acciones': acciones});  
+            }",
+                                "fileuploaded" => "function (event, data, previewId, index) {
+                $(this).parent().parent().children().first().addClass('hide');        
+                var acciones = [{id: 'reloadpage', class: 'btn btn-primary', value: objLang.Accept, callback: 'reloadPage'}];
+                //showAlert('OK', 'Success', {'wtmessage': objLang.File_uploaded_successfully__Do_you_refresh_the_web_page_, 'title': objLang.Success, 'acciones': acciones});                              
+            }",
+                            ],
+                        ]);
+                        ?>
+                    </div>             
+                </div>        
+            </div>                               
+        </div>   
+    </div>
+    
     <div class="col-md-12 col-xs-12 col-sm-12 col-lg-12">
         <div class="col-md-7 col-sm-7 col-xs-7 col-lg-7">
             <div class="form-group">
@@ -260,7 +390,7 @@ financiero::registerTranslations();
     <div class="col-md-12 col-xs-12 col-sm-12 col-lg-12">         
         </br>
     </div>
-    <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">   
+    <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12" id="DivBoton">   
         <div class="col-md-2">
             <a id="paso3back" href="javascript:" class="btn btn-primary btn-block"><span class="glyphicon glyphicon-menu-left"></span><?= Yii::t("formulario", "Back") ?> </a>
         </div>
@@ -269,5 +399,15 @@ financiero::registerTranslations();
             <a id="sendInscripcionsolicitud" href="javascript:" class="btn btn-primary btn-block"> <?php echo "Pagar"; ?> </a>
         </div>
         <a id="btn_pago_i" href="javascript:" class="btn btn-primary btn-block pbpopup"></a>
+    </div>
+    
+    <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12" style="display:none" id="DivSubirPagoBtn">
+        <div class="col-md-2">
+            <a id="paso3back" href="javascript:" class="btn btn-primary btn-block"><span class="glyphicon glyphicon-menu-left"></span><?= Yii::t("formulario", "Back") ?> </a>
+        </div>
+        <div class="col-lg-8 col-md-8 col-sm-8 col-xs-8"> &nbsp;</div>
+        <div class="col-md-2">
+            <a id="sendInscripcionSubirPago" href="javascript:" class="btn btn-primary btn-block"> <?php echo "Pagar"; ?> </a>
+        </div>       
     </div>
 </form>
