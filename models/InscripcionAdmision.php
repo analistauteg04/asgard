@@ -136,7 +136,7 @@ class InscripcionAdmision extends \yii\db\ActiveRecord {
                     mod_id=:mod_id,car_id=:car_id,twin_metodo_ingreso=:twin_metodo_ingreso,conuteg_id=:conuteg_id,ruta_doc_titulo=:ruta_doc_titulo, 
                     ruta_doc_dni=:ruta_doc_dni, ruta_doc_certvota=:ruta_doc_certvota,ruta_doc_foto=:ruta_doc_foto,
                     ruta_doc_hojavida=:ruta_doc_hojavida,ruta_doc_certificado=:ruta_doc_certificado, 
-                    ruta_doc_aceptacion=:ruta_doc_aceptacion, cemp_id=:cemp_id,                    
+                    ruta_doc_aceptacion=:ruta_doc_aceptacion, cemp_id=:cemp_id, ruta_doc_pago=:ruta_doc_pago, twin_tipo_pago=:forma_pago,
                     twin_mensaje1=:twin_mensaje1,twin_mensaje2=:twin_mensaje2,twin_fecha_modificacion=CURRENT_TIMESTAMP() 
                  WHERE twin_id =:twin_id ";                
         $met_ing=0;
@@ -145,6 +145,10 @@ class InscripcionAdmision extends \yii\db\ActiveRecord {
         }else{
             $met_ing=$data[0]['ming_id'];
         }                
+        \app\models\Utilities::putMessageLogFile('sqlUpdate:'.$sql);
+        \app\models\Utilities::putMessageLogFile('ruta_doc_pago:'.basename($data[0]['ruta_doc_pago']));
+        \app\models\Utilities::putMessageLogFile('ruta_doc_pago1:'.$data[0]['ruta_doc_pago']);
+        \app\models\Utilities::putMessageLogFile('forma_pago:'.$data[0]['forma_pago']);
         $command = $con->createCommand($sql);
         $command->bindParam(":twin_id", $data[0]['twin_id'], \PDO::PARAM_STR);
         $command->bindParam(":twin_nombre", $data[0]['pges_pri_nombre'], \PDO::PARAM_STR);
@@ -168,7 +172,9 @@ class InscripcionAdmision extends \yii\db\ActiveRecord {
         $command->bindParam(":ruta_doc_aceptacion", basename($data[0]['ruta_doc_aceptacion']), \PDO::PARAM_STR);
         $command->bindParam(":cemp_id", basename($data[0]['cemp_id']), \PDO::PARAM_INT);
         $command->bindParam(":twin_mensaje1", $data[0]['twin_mensaje1'], \PDO::PARAM_STR);
-        $command->bindParam(":twin_mensaje2", $data[0]['twin_mensaje2'], \PDO::PARAM_STR);                
+        $command->bindParam(":twin_mensaje2", $data[0]['twin_mensaje2'], \PDO::PARAM_STR);    
+        $command->bindParam(":ruta_doc_pago", basename($data[0]['ruta_doc_pago']), \PDO::PARAM_STR);
+        $command->bindParam(":forma_pago", $data[0]['forma_pago'], \PDO::PARAM_STR);
         $command->execute();
                 
         return $data[0]['twin_id'];
@@ -240,7 +246,9 @@ class InscripcionAdmision extends \yii\db\ActiveRecord {
                         ruta_doc_hojavida,
                         twin_dni,
                         ruta_doc_aceptacion,
-                        twi.cemp_id                        
+                        twi.cemp_id,
+                        twin_tipo_pago,
+                        ruta_doc_pago
                 FROM " . $con->dbname . ".temporal_wizard_inscripcion twi inner join db_academico.unidad_academica ua on ua.uaca_id = twi.uaca_id
                      inner join " . $con1->dbname . ".modalidad m on m.mod_id = twi.mod_id
                      inner join " . $con1->dbname . ".estudio_academico ea on ea.eaca_id = twi.car_id
@@ -315,7 +323,8 @@ class InscripcionAdmision extends \yii\db\ActiveRecord {
                     if ($id_persona == 0) {                        
                         $id_persona = $mod_persona->insertarPersona($con, $parametros_per, $keys_per, 'persona');
                     }                    
-                    if ($id_persona > 0) {                        
+                    if ($id_persona > 0) {   
+                        \app\models\Utilities::putMessageLogFile('se crea persona.');
                         //Modifificaion para Mover Imagenes de temp a Persona
                         //self::movePersonFiles($twinIds,$id_persona);
                         $concap = \Yii::$app->db_captacion;
@@ -477,7 +486,15 @@ class InscripcionAdmision extends \yii\db\ActiveRecord {
                                                     /* if (!($resulDoc6)) {
                                                       throw new Exception('Error doc Hoja de Vida no creado.');
                                                       } */
-                                                }                                                
+                                                }       
+                                                if ($resp_datos['ruta_doc_pago'] != "") {
+                                                     \app\models\Utilities::putMessageLogFile('ruta al pasar a documentos:'.$resp_datos['ruta_doc_pago']); 
+                                                    $arrIm = explode(".", basename($resp_datos['ruta_doc_pago']));
+                                                    $arrTime = explode("_", basename($resp_datos['ruta_doc_pago']));
+                                                    $timeSt = $arrTime[4];
+                                                    $typeFile = strtolower($arrIm[count($arrIm) - 1]);
+                                                    $rutaDocPago = Yii::$app->params["documentFolder"] . "documento/" . $id_persona . "/pago_" . $id_persona . "_" . $timeSt;                                                                                                          
+                                                }                 
                                                 //Obtener el precio de la solicitud.                                                
                                                 if ($beca == "1") {
                                                     $precio = 0;
@@ -515,16 +532,33 @@ class InscripcionAdmision extends \yii\db\ActiveRecord {
                                                     //insertar desglose del pago                                                         
                                                     $fecha_ini = date(Yii::$app->params["dateByDefault"]);                                                    
                                                     $resp_dpago = $mod_ordenpago->insertarDesglosepago($resp_opago, $ite_id, $val_total, 0, $val_total, $fecha_ini, null, $estadopago, $usuario_id);                                                    
-                                                    if ($resp_dpago) {  
-                                                        //Grabar datos de factura                                                           
-                                                        //\app\models\Utilities::putMessageLogFile('correo:'.$dataReg["correo"]);                                                        
-                                                        $resdatosFact = $solins_model->crearDatosFacturaSolicitud($sins_id, $dataReg["nombres_fact"], $dataReg["apellidos_fact"], 
-                                                                                        $dataReg["tipo_dni_fac"], $dataReg["dni"], 
-                                                                                        $dataReg["direccion_fact"], $dataReg["telefono_fac"],
-                                                                                        $dataReg["correo"]);                                                
-                                                        if ($resdatosFact) {
-                                                            $exito = 1;
-                                                        }                                                         
+                                                    if ($resp_dpago) {
+                                                        //Grabar documento de registro de pago por depósito o transferencia.
+                                                        if (($resp_datos['twin_tipo_pago']==3) or ($resp_datos['twin_tipo_pago']==4)) {                                                            
+                                                            if ($resp_datos['twin_tipo_pago']==3) { //depósito
+                                                                $fpag_id=5;   //depósito
+                                                            } else {
+                                                                $fpag_id=4;  //transferencia
+                                                            }                                                                                                                   
+                                                            $fecha_registro = date(Yii::$app->params["dateTimeByDefault"]);
+                                                            \app\models\Utilities::putMessageLogFile('ruta:'.$rutaDocPago);                                                             
+                                                            $creadetalle = $mod_ordenpago->insertarCargaprepago($resp_opago, $fpag_id, $val_total, $rutaDocPago, 'PE', '', $dataReg["observacion"], $dataReg["num_transaccion"], $dataReg["fecha_transaccion"], $fecha_registro);
+                                                            if ($creadetalle) {                                                                
+                                                                $detalle= 'S';
+                                                            }
+                                                        } else {
+                                                            $detalle= 'S';
+                                                        }
+                                                        //Grabar datos de factura                                                                                                                   
+                                                        if ($detalle== 'S') {
+                                                            $resdatosFact = $solins_model->crearDatosFacturaSolicitud($sins_id, $dataReg["nombres_fact"], $dataReg["apellidos_fact"], 
+                                                                                            $dataReg["tipo_dni_fac"], $dataReg["dni"], 
+                                                                                            $dataReg["direccion_fact"], $dataReg["telefono_fac"],
+                                                                                            $dataReg["correo"]);                                                
+                                                            if ($resdatosFact) {
+                                                                $exito = 1;
+                                                            } 
+                                                        }
                                                     }
                                                 }
                                             }

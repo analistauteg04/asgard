@@ -548,7 +548,43 @@ $(document).ready(function () {
     });
     
     $('#sendInscripcionSubirPago').click(function () {
-        guardarInscripcion('UpdateDepTrans', '2');
+        guardarInscripcionTemp('UpdateDepTrans');        
+        var link = $('#txth_base').val() + "/inscripcionadmision/saveinscripciontemp";
+        var arrParams = new Object();
+        arrParams.codigo = $('#txth_twin_id').val();
+        arrParams.ACCION = 'Fin';
+        arrParams.nombres_fact = $('#txt_nombres_fac').val();
+        arrParams.apellidos_fact = $('#txt_apellidos_fac').val();
+        arrParams.direccion_fact = $('#txt_dir_fac').val();
+        arrParams.telefono_fac = $('#txt_tel_fac').val();
+        var tipo_dni_fact = "";
+        if ($('#opt_tipo_DNI option:selected').val() == "1") {
+            tipo_dni_fact = "CED";
+        } else if ($('#opt_tipo_DNI option:selected').val() == "2") {
+            tipo_dni_fact = "PASS";
+        } else {
+            tipo_dni_fact = "RUC";
+        }
+        arrParams.tipo_dni_fac = tipo_dni_fact;
+        arrParams.dni = $('#txt_dni_fac').val();
+        arrParams.correo = $('#txt_correo_fac').val();
+        //Datos del pago.
+        arrParams.num_transaccion = $('#txt_numtransaccion').val();
+        arrParams.observacion = $('#txt_observacion').val();
+        arrParams.fecha_transaccion = $('#txt_fecha_transaccion').val();
+        
+        if (!validateForm()) {
+            requestHttpAjax(link, arrParams, function (response) {
+                var message = response.message;
+                //console.log(response);
+                if (response.status == "OK") {
+                    showAlert(response.status, response.label, response.message);
+                    setTimeout(function () {    
+                        parent.window.location.href = $('#txth_base').val() +"/inscripcionadmision/index";
+                    }, 2000);
+                }
+            });
+        }
     });
 });
 
@@ -559,7 +595,7 @@ function guardarInscripcion(accion, paso) {
     var arrParams = new Object();
     arrParams.DATA_1 = dataInscripPart1(ID);
     arrParams.ACCION = accion;
-    if (!validateForm()) {
+    if (!validateForm()) {       
         requestHttpAjax(link, arrParams, function (response) {
             var message = response.message;
             //console.log(response);
@@ -726,8 +762,7 @@ function paso2next() {
     $('#txt_dir_fac').addClass("PBvalidation");
     $('#txt_apellidos_fac').addClass("PBvalidation");
     $('#txt_correo_fac').addClass("PBvalidation");
-    if ($("input[name='opt_tipo_DNI']:checked").val() == "1") {
-        alert("Entro opcion 1");
+    if ($("input[name='opt_tipo_DNI']:checked").val() == "1") {        
         $('#txt_dni_fac').addClass("PBvalidation");
         $('#txt_ruc_fac').removeClass("PBvalidation");
         $('#txt_pasaporte_fac').removeClass("PBvalidation");
@@ -735,8 +770,7 @@ function paso2next() {
         $('#txt_pasaporte_fac').addClass("PBvalidation");
         $('#txt_ruc_fac').removeClass("PBvalidation");
         $('#txt_dni_fac').removeClass("PBvalidation");        
-    } else {
-        alert("Entro opcion 3");
+    } else {     
         $('#txt_ruc_fac').addClass("PBvalidation");
         $('#txt_pasaporte_fac').removeClass("PBvalidation");
         $('#txt_dni_fac').removeClass("PBvalidation");        
@@ -780,13 +814,15 @@ function dataInscripPart1(ID) {
     objDat.cemp_id = $('#cmb_convenio_empresa option:selected').val();
     //TAB 3
     objDat.ruta_doc_pago = ($('#txth_doc_pago').val() != '') ? $('#txth_doc_pago').val() : '';    
-    if ($('#rdo_forma_pago_otros option:selected').val()) {
-        objDat.forma_pago = 2;
-    } else if  ($('#rdo_forma_pago_deposito option:selected').val()) {
+    if ($("input[name='rdo_forma_pago_otros']:checked").val() == "2") {//($('#rdo_forma_pago_otros option:selected').val() == "2") {        
+        objDat.forma_pago = 2;        
+    } else if ($("input[name='rdo_forma_pago_deposito']:checked").val() == "3") { //rdo_forma_pago_deposito
         objDat.forma_pago = 3;
-    } else {
+    } else if  ($("input[name='rdo_forma_pago_transferencia']:checked").val() == "4") { //rdo_forma_pago_transferencia
         objDat.forma_pago = 4;
-    }
+    } else {
+        objDat.forma_pago = 1;
+    }  
     datArray[0] = objDat;
     sessionStorage.dataInscrip_1 = JSON.stringify(datArray);
     return datArray;
@@ -804,4 +840,20 @@ function PagoDinners(solicitud) {
     var bohre = $('#txth_base').val() + "/inscripcionadmision/savepagodinner?sins_id=" + solicitud + "&popup=1";
     $('#btn_pago_i').attr("href", bohre);
     $('#btn_pago_i').trigger("click");
+}
+
+
+function guardarInscripcionTemp(accion) {
+    var ID = (accion == "UpdateDepTrans") ? $('#txth_twin_id').val() : 0;
+    var link = $('#txth_base').val() + "/inscripcionadmision/saveinscripciontemp";
+    var arrParams = new Object();
+    arrParams.DATA_1 = dataInscripPart1(ID);
+    arrParams.ACCION = accion;
+    if (!validateForm()) {
+        requestHttpAjax(link, arrParams, function (response) {                        
+            if (response.status == "OK") {
+                return 1;
+            }
+        });
+    }
 }

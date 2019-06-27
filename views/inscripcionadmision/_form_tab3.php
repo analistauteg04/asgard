@@ -249,46 +249,36 @@ admision::registerTranslations();
                                 'uploadUrl' => Url::to(['inscripcionadmision/saveinscripciontemp']),
                                 'maxFileSize' => Yii::$app->params["MaxFileSize"], // en Kbytes
                                 'uploadExtraData' => 'javascript:function (previewId,index) {
-                                return {"upload_file": true, "name_file": "doc_pago", "inscripcion_id": $("#txth_twin_id").val()};
-                }',
-                            ],
-                            'pluginEvents' => [
-                                "filebatchselected" => "function (event) {                        
-                                function d2(n) {
-                                if(n<9) return '0'+n;
-                                return n;
-                                }
-                                today = new Date();
-                                var name_pago = 'pago_' + $('#txth_per').val() + '-' + today.getFullYear() + '-' + d2(parseInt(today.getMonth()+1)) + '-' + d2(today.getDate()) + ' ' + d2(today.getHours()) + ':' + d2(today.getMinutes()) + ':' + d2(today.getSeconds());
-                                $('#txth_doc_pago').val(name_pago);    
-
-                $('#txt_doc_pago').fileinput('upload');
-                var fileSent = $('#txt_doc_pago').val();
-                var ext = fileSent.split('.');
-                $('#txth_doc_pago').val(name_pago + '.' + ext[ext.length - 1]);
-            }",
-                                "fileuploaderror" => "function (event, data, msg) {
-                $(this).parent().parent().children().first().addClass('hide');
-                $('#txth_doc_pago').val('');
-                //showAlert('NO_OK', 'error', {'wtmessage': objLang.Error_to_process_File__Try_again_, 'title': objLang.Error});   
-            }",
-                                "filebatchuploadcomplete" => "function (event, files, extra) { 
-                $(this).parent().parent().children().first().addClass('hide');
-            }",
-                                "filebatchuploadsuccess" => "function (event, data, previewId, index) {
-                var form = data.form, files = data.files, extra = data.extra,
-                response = data.response, reader = data.reader;
-                $(this).parent().parent().children().first().addClass('hide');
-                var acciones = [{id: 'reloadpage', class: 'btn btn-primary', value: objLang.Accept, callback: 'reloadPage'}];
-                //showAlert('OK', 'Success', {'wtmessage': objLang.File_uploaded_successfully__Do_you_refresh_the_web_page_, 'title': objLang.Success, 'acciones': acciones});  
-            }",
-                                "fileuploaded" => "function (event, data, previewId, index) {
-                $(this).parent().parent().children().first().addClass('hide');        
-                var acciones = [{id: 'reloadpage', class: 'btn btn-primary', value: objLang.Accept, callback: 'reloadPage'}];
-                //showAlert('OK', 'Success', {'wtmessage': objLang.File_uploaded_successfully__Do_you_refresh_the_web_page_, 'title': objLang.Success, 'acciones': acciones});                              
-            }",
-                            ],
-                        ]);
+                            return {"upload_filepago": true, "name_file": "pago", "inscripcion_id": $("#txth_twin_id").val()};
+                        }',
+                                    ],
+                                    'pluginEvents' => [
+                                        "filebatchselected" => "function (event) {
+                        $('#txth_doc_pago').val($('#txt_doc_pago').val());
+                        $('#txt_doc_pago').fileinput('upload');
+                    }",
+                                        "fileuploaderror" => "function (event, data, msg) {
+                        $(this).parent().parent().children().first().addClass('hide');
+                        $('#txth_doc_pago').val('');
+                        //showAlert('NO_OK', 'error', {'wtmessage': objLang.Error_to_process_File__Try_again_, 'title': objLang.Error});   
+                    }",
+                                        "filebatchuploadcomplete" => "function (event, files, extra) { 
+                        $(this).parent().parent().children().first().addClass('hide');
+                    }",
+                                        "filebatchuploadsuccess" => "function (event, data, previewId, index) {
+                        var form = data.form, files = data.files, extra = data.extra,
+                        response = data.response, reader = data.reader;
+                        $(this).parent().parent().children().first().addClass('hide');
+                        var acciones = [{id: 'reloadpage', class: 'btn btn-primary', value: objLang.Accept, callback: 'reloadPage'}];
+                        //showAlert('OK', 'Success', {'wtmessage': objLang.File_uploaded_successfully__Do_you_refresh_the_web_page_, 'title': objLang.Success, 'acciones': acciones});  
+                    }",
+                                        "fileuploaded" => "function (event, data, previewId, index) {
+                        $(this).parent().parent().children().first().addClass('hide');
+                        var acciones = [{id: 'reloadpage', class: 'btn btn-primary', value: objLang.Accept, callback: 'reloadPage'}];
+                        //showAlert('OK', 'Success', {'wtmessage': objLang.File_uploaded_successfully__Do_you_refresh_the_web_page_, 'title': objLang.Success, 'acciones': acciones});                              
+                    }",
+                                    ],
+                                ]);
                         ?>
                     </div>             
                 </div>        
