@@ -2459,7 +2459,30 @@ class OrdenPago extends \app\modules\financiero\components\CActiveRecord {
      * @return  
      */
     public function consultarOpagIdByCedula($cedula = null){
-        
+        $con = \Yii::$app->db_facturacion;
+        $estado = 1;
+        $sql=  "
+                SELECT  
+                    opag.opag_id as id
+                FROM    
+                    db_facturacion.orden_pago as opag
+                    join db_captacion.solicitud_inscripcion as sins on sins.sins_id = opag.sins_id
+                    join db_captacion.interesado as inte on inte.int_id = sins.int_id
+                    join db_asgard.persona as per on per.per_id = inte.per_id
+                WHERE   
+                    per.per_cedula = :cedula and
+                    sins.sins_estado = :estado and
+                    sins.sins_estado_logico = :estado and
+                    inte.int_estado = :estado and
+                    inte.int_estado_logico =:estado and
+                    per.per_estado = :estado and
+                    per.per_estado_logico = :estado
+                ";           
+        $comando = $con->createCommand($sql);
+        $comando->bindParam(":estado", $estado, \PDO::PARAM_STR);
+        $comando->bindParam(":cedula", $cedula, \PDO::PARAM_STR);
+        $resultData = $comando->queryOne();        
+        return $resultData['id'];
     }
     /**
      * Function consultarPrecioXotroItem consulta de precio de otros items como saldos.

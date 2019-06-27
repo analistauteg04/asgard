@@ -643,7 +643,31 @@ class PagosController extends \app\components\CController {
                     'model' => $data_transacciones,
         ]);
     }
-
+    
+    public function actionHistorialtransaccionesSup() {
+        $model_persona = new Persona();
+        $model_documento = new Documento();
+        $model_sbpag = new SolicitudBotonPago();
+        $model_ordenpago = new OrdenPago();
+        $data = Yii::$app->request->get();
+        if ($data['PBgetFilter']) {            
+            $arrSearch["search"] = $data["search"];
+            $arrSearch["f_ini"] = $data['f_ini'];
+            $arrSearch["f_fin"] = $data['f_fin'];
+            $arrSearch["f_estado"] = $data["f_estado"];
+            $data_transacciones=$model_sbpag->consultarHistoralTransaccionesSup($arrSearch);
+            return $this->renderPartial('_historialtransaccion_sup_grid', [
+                        "model" => $data_transacciones,
+            ]);
+        } else {
+            $data_transacciones=$model_sbpag->consultarHistoralTransaccionesSup();
+        }        
+        $data_transacciones=$model_sbpag->consultarHistoralTransaccionesSup();
+        return $this->render('historialtransaccion_sup', [
+                    'model' => $data_transacciones,
+        ]);
+    }
+    
     public function actionUpdate() {
         
     }

@@ -147,7 +147,30 @@ class Documento extends \yii\db\ActiveRecord
         return $resultData;      
     }
     public function consultarDocIdByCedulaBen($cedula = null){
-        
+        $con = \Yii::$app->db_facturacion;
+        $estado = 1;
+        $sql=  "
+                SELECT  
+                        doc.doc_id
+                FROM    
+                        db_facturacion.documento as doc
+                        join db_facturacion.solicitud_boton_pago as sbpa on sbpa.sbpa_id = doc.sbpa_id
+                        join db_facturacion.persona_beneficiaria as pben on pben.pben_id = sbpa.pben_id
+                WHERE 
+                        pben.pben_cedula = :cedula
+                        and doc.doc_estado = :estado
+                        and doc.doc_estado_logico = :estado
+                        and pben.pben_estado = :estado
+                        and pben.pben_estado_logico = :estado
+                        and sbpa.sbpa_estado = :estado
+                        and sbpa.sbpa_estado_logico = :estado
+                
+                ";           
+        $comando = $con->createCommand($sql);
+        $comando->bindParam(":estado", $estado, \PDO::PARAM_STR);
+        $comando->bindParam(":cedula", $cedula, \PDO::PARAM_STR);
+        $resultData = $comando->queryOne();        
+        return $resultData['doc_id'];      
     }        
     /**
      * Function consultaResumen (Se obtiene resumen de las transacciones)
