@@ -104,9 +104,6 @@ class SolicitudBotonPago extends \yii\db\ActiveRecord {
         $con1 = \Yii::$app->db_financiero;
         $estado = 1;
         if (isset($arrFiltro) && count($arrFiltro) > 0) {
-            /* if ($arrFiltro['estado'] != "" && $arrFiltro['estado'] > 0) {
-              $str_search .= " pg.econ_id = :estcontacto AND ";
-              } */
             if ($arrFiltro['f_ini'] != "" && $arrFiltro['f_fin'] != "") {
                 $str_search .= "docu.doc_fecha_pago >= :fec_ini AND ";
                 $str_search .= "docu.doc_fecha_pago <= :fec_fin AND ";
@@ -137,12 +134,26 @@ class SolicitudBotonPago extends \yii\db\ActiveRecord {
                 docu.doc_estado_logico = :status AND
                 docu.doc_estado = :status AND
                 vpre.estado_logico = :status AND               
-                pben.pben_id = 1 ";  //NO DEJAR QUEMADO 
+                docu.doc_id = :doc_id 
+            UNION
+            select
+                opag.opag_id as id,
+                vpre.reference as referencia,
+                concat(pben.pben_nombre,' ',pben.pben_apellido)  as estudiante,
+                opag.doc_fecha_pago as fecha_pago,
+                opag.doc_valor as total_pago,
+                opag.doc_pagado as estado
+            from 
+                db_facturacion.orden_pago as opag
+                join db_captacion.solicitud_inscripcion as sins on sins.sins_id = opag
+            where
+                opag.
+                "; 
 
         $comando = $con->createCommand($sql);
         $comando->bindParam(":status", $estado, \PDO::PARAM_STR);
-        $comando->bindParam(":sins_id", $doc_id, \PDO::PARAM_INT);
-        $comando->bindParam(":sins_id", $opag_id, \PDO::PARAM_INT);
+        $comando->bindParam(":doc_id", $doc_id, \PDO::PARAM_INT);
+        $comando->bindParam(":opac_id", $opag_id, \PDO::PARAM_INT);
         if (isset($arrFiltro) && count($arrFiltro) > 0) {
             $fecha_ini = $arrFiltro["f_ini"] . " 00:00:00";
             $fecha_fin = $arrFiltro["f_fin"] . " 23:59:59";
@@ -150,10 +161,6 @@ class SolicitudBotonPago extends \yii\db\ActiveRecord {
                 $comando->bindParam(":fec_ini", $fecha_ini, \PDO::PARAM_STR);
                 $comando->bindParam(":fec_fin", $fecha_fin, \PDO::PARAM_STR);
             }
-            /*$estado = $arrFiltro["estado"];
-            if ($arrFiltro['estado'] != "" && $arrFiltro['estado'] > 0) {
-                $comando->bindParam(":estado", $estado, \PDO::PARAM_INT);
-            }*/
         }
         $resultData = $comando->queryAll();
         $dataProvider = new ArrayDataProvider([
