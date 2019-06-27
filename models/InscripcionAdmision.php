@@ -487,8 +487,7 @@ class InscripcionAdmision extends \yii\db\ActiveRecord {
                                                       throw new Exception('Error doc Hoja de Vida no creado.');
                                                       } */
                                                 }       
-                                                if ($resp_datos['ruta_doc_pago'] != "") {
-                                                     \app\models\Utilities::putMessageLogFile('ruta al pasar a documentos:'.$resp_datos['ruta_doc_pago']); 
+                                                if ($resp_datos['ruta_doc_pago'] != "") {                                                     
                                                     $arrIm = explode(".", basename($resp_datos['ruta_doc_pago']));
                                                     $arrTime = explode("_", basename($resp_datos['ruta_doc_pago']));
                                                     $timeSt = $arrTime[4];
@@ -614,6 +613,7 @@ class InscripcionAdmision extends \yii\db\ActiveRecord {
                 //Modifificaion para Mover Imagenes de temp a Persona
                 if ($subidaDocumentos == 1) {
                     self::movePersonFiles($twinIds, $id_persona);
+                    self::movePersonFilesPago($twinIds, $id_persona);
                 }
                 //return Utilities::ajaxResponse('OK', 'alert', Yii::t("jslang", "Sucess"), false, $message);
                 $arroout["status"] = TRUE;
@@ -660,6 +660,27 @@ class InscripcionAdmision extends \yii\db\ActiveRecord {
     public static function movePersonFiles($temp_id, $per_id) {
         $folder = Yii::$app->basePath . "/" . Yii::$app->params["documentFolder"] . "solicitudadmision/$temp_id/";
         $destinations = Yii::$app->basePath . "/" . Yii::$app->params["documentFolder"] . "solicitudinscripcion/$per_id/";
+        if (Utilities::verificarDirectorio($destinations)) {
+            $files = scandir($folder);
+            foreach ($files as $file) {
+                if (trim($file) != "." && trim($file) != "..") {
+                    $arrExt = explode(".", $file);
+                    $type = $arrExt[count($arrExt) - 1];
+                    $newFile = str_replace("_" . $temp_id . "_", "_" . $per_id . "_", $file);
+                    if (!rename($folder . $file, $destinations . $newFile)) {
+                        return false;
+                    }
+                }
+            }
+            rmdir($folder);
+        } else
+            return false;
+        return true;
+    }
+    
+    public static function movePersonFilesPago($temp_id, $per_id) {
+        $folder = Yii::$app->basePath . "/" . Yii::$app->params["documentFolder"] . "documentoadmision/$temp_id/";
+        $destinations = Yii::$app->basePath . "/" . Yii::$app->params["documentFolder"] . "documento/$per_id/";
         if (Utilities::verificarDirectorio($destinations)) {
             $files = scandir($folder);
             foreach ($files as $file) {
