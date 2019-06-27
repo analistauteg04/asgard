@@ -2463,25 +2463,26 @@ class OrdenPago extends \app\modules\financiero\components\CActiveRecord {
         $estado = 1;
         $sql=  "
                 SELECT  
-                        doc.doc_id
+                    opag.opag_id as id
                 FROM    
-                        db_facturacion.documento as doc
-                        join db_facturacion.solicitud_boton_pago as sbpa on sbpa.sbpa_id = doc.sbpa_id
-                        join db_facturacion.persona_beneficiaria as pben on pben.pben_id = sbpa.pben_id
+                    db_facturacion.orden_pago as opag
+                    join db_captacion.solicitud_inscripcion as sins on sins.sins_id = opag.sins_id
+                    join db_captacion.interesado as inte on inte.int_id = sins.int_id
+                    join db_asgard.persona as per on per.per_id = inte.per_id
                 WHERE   
-                        pben.pben_cedula = :cedula
-                        and doc.doc_estado = :estado
-                        and doc.doc_estado_logico = :estado
-                        and pben.pben_estado = :estado
-                        and pben.pben_estado_logico = :estado
-                        and sbpa.sbpa_estado = :estado
-                        and sbpa.sbpa_estado_logico = :estado                
+                    per.per_cedula = :cedula and
+                    sins.sins_estado = :estado and
+                    sins.sins_estado_logico = :estado and
+                    inte.int_estado = :estado and
+                    inte.int_estado_logico =:estado and
+                    per.per_estado = :estado and
+                    per.per_estado_logico = :estado
                 ";           
         $comando = $con->createCommand($sql);
         $comando->bindParam(":estado", $estado, \PDO::PARAM_STR);
         $comando->bindParam(":cedula", $cedula, \PDO::PARAM_STR);
         $resultData = $comando->queryOne();        
-        return $resultData;      
+        return $resultData['id'];
     }
     /**
      * Function consultarPrecioXotroItem consulta de precio de otros items como saldos.

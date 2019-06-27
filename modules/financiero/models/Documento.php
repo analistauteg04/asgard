@@ -170,7 +170,7 @@ class Documento extends \yii\db\ActiveRecord
         $comando->bindParam(":estado", $estado, \PDO::PARAM_STR);
         $comando->bindParam(":cedula", $cedula, \PDO::PARAM_STR);
         $resultData = $comando->queryOne();        
-        return $resultData;      
+        return $resultData['doc_id'];      
     }        
     /**
      * Function consultaResumen (Se obtiene resumen de las transacciones)
