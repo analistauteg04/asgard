@@ -492,7 +492,9 @@ class InscripcionAdmision extends \yii\db\ActiveRecord {
                                                     $arrTime = explode("_", basename($resp_datos['ruta_doc_pago']));
                                                     $timeSt = $arrTime[4];
                                                     $typeFile = strtolower($arrIm[count($arrIm) - 1]);
-                                                    $rutaDocPago = Yii::$app->params["documentFolder"] . "documento/" . $id_persona . "/pago_" . $id_persona . "_" . $timeSt;                                                                                                          
+                                                    $fecha = date(Yii::$app->params["dateTimeByDefault"]);                                                    
+                                                    $rutaDocPago = Yii::$app->params["documentFolder"] . "documento/" . $id_persona . "/pago_" . $id_persona . "-" . $fecha . "." . $typeFile; 
+                                                    $archivo = basename($rutaDocPago);
                                                 }                 
                                                 //Obtener el precio de la solicitud.                                                
                                                 if ($beca == "1") {
@@ -539,9 +541,8 @@ class InscripcionAdmision extends \yii\db\ActiveRecord {
                                                             } else {
                                                                 $fpag_id=4;  //transferencia
                                                             }                                                                                                                   
-                                                            $fecha_registro = date(Yii::$app->params["dateTimeByDefault"]);
-                                                            \app\models\Utilities::putMessageLogFile('ruta:'.$rutaDocPago);                                                             
-                                                            $creadetalle = $mod_ordenpago->insertarCargaprepago($resp_opago, $fpag_id, $val_total, $rutaDocPago, 'PE', '', $dataReg["observacion"], $dataReg["num_transaccion"], $dataReg["fecha_transaccion"], $fecha_registro);
+                                                            $fecha_registro = date(Yii::$app->params["dateTimeByDefault"]);                                                                                                                       
+                                                            $creadetalle = $mod_ordenpago->insertarCargaprepago($resp_opago, $fpag_id, $val_total, $archivo, 'PE', '', $dataReg["observacion"], $dataReg["num_transaccion"], $dataReg["fecha_transaccion"], $fecha_registro);
                                                             if ($creadetalle) {                                                                
                                                                 $detalle= 'S';
                                                             }

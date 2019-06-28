@@ -333,7 +333,7 @@ admision::registerTranslations();
         </div>
         <div class='col-md-12 col-sm-12 col-xs-12 col-lg-12'>  
             <div class="form-group">
-                <label for="txt_tel_fac" class="col-sm-2 col-md-2 col-xs-2 col-lg-2 control-label" id="lbl_apellido1"><?= Yii::t("formulario", "Phone") ?><span class="text-danger">*</span></label>
+                <label for="txt_tel_fac" class="col-sm-2 col-md-2 col-xs-2 col-lg-2 control-label" id="lbl_apellido1"><?= Yii::t("formulario", "Phone") ?></label>
                 <div class="col-sm-8 col-md-8 col-xs-8 col-lg-8">
                     <input type="text" class="form-control" value="" id="txt_tel_fac" data-type="number" data-keydown="true" placeholder="<?= Yii::t("formulario", "Phone") ?>">                        
                 </div>
