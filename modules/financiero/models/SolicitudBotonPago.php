@@ -99,6 +99,69 @@ class SolicitudBotonPago extends \yii\db\ActiveRecord {
         return $con->getLastInsertID();
     }
 
+    public function consultarPagoExterno($arrFiltro = array(),$onlyData = false) {
+        $con = \Yii::$app->db_facturacion;
+        $con1 = \Yii::$app->db_financiero;
+        $estado = 1;
+        if (isset($arrFiltro) && count($arrFiltro) > 0) {
+            if ($arrFiltro['f_ini'] != "" && $arrFiltro['f_fin'] != "") {
+                $str_search .= "docu.doc_fecha_pago >= :fec_ini AND ";
+                $str_search .= "docu.doc_fecha_pago <= :fec_fin AND ";
+            }
+        }
+        $sql = "
+            select
+                sbpa.sbpa_id as id,
+                vres.reference as referencia,
+                concat(pben.pben_nombre,' ',pben.pben_apellido) as estudiante,
+                docu.doc_fecha_pago as fecha_pago,
+                docu.doc_valor as total_pago,
+                docu.doc_pagado as estado
+            from
+                db_facturacion.solicitud_boton_pago as sbpa
+                join db_facturacion.persona_beneficiaria as pben on pben.pben_id = sbpa.pben_id
+                join db_facturacion.documento as docu on docu.sbpa_id = sbpa.sbpa_id
+                join db_financiero.vpos_response as vres on vres.ordenPago = docu.doc_id and vres.tipo_orden = 2
+            where
+                1=1
+            ";
+        $comando = $con->createCommand($sql);
+        $comando->bindParam(":status", $estado, \PDO::PARAM_STR);
+        $comando->bindParam(":doc_id", $doc_id, \PDO::PARAM_INT);
+        $comando->bindParam(":opag_id", $opag_id, \PDO::PARAM_INT);
+        if (isset($arrFiltro) && count($arrFiltro) > 0) {
+            $fecha_ini = $arrFiltro["f_ini"] . " 00:00:00";
+            $fecha_fin = $arrFiltro["f_fin"] . " 23:59:59";
+            if ($arrFiltro['f_ini'] != "" && $arrFiltro['f_fin'] != "") {
+                $comando->bindParam(":fec_ini", $fecha_ini, \PDO::PARAM_STR);
+                $comando->bindParam(":fec_fin", $fecha_fin, \PDO::PARAM_STR);
+            }
+        }
+        $resultData = $comando->queryAll();
+        $dataProvider = new ArrayDataProvider([
+            'key' => 'id',
+            'allModels' => $resultData,
+            'pagination' => [
+                'pageSize' => Yii::$app->params["pageSize"],
+            ],
+            'sort' => [
+                'attributes' => [
+                    'referencia',
+                    'fecha_solicitud',
+                    'estudiante',
+                    'fecha_pago',
+                    'total_pago',
+                    'estado'
+                ],
+            ],
+        ]);
+        if ($onlyData) {
+            return $resultData;
+        } else {
+            return $dataProvider;
+        }
+    }
+
     public function consultarHistoralTransacciones($doc_id, $opag_id, $arrFiltro = array(), $onlyData = false) {
         $con = \Yii::$app->db_facturacion;
         $con1 = \Yii::$app->db_financiero;
@@ -122,7 +185,7 @@ class SolicitudBotonPago extends \yii\db\ActiveRecord {
                 JOIN " . $con->dbname . ".solicitud_boton_pago as sbpa on pben.pben_id = sbpa.pben_id
                 JOIN " . $con->dbname . ".documento as docu on docu.sbpa_id = sbpa.sbpa_id
                 LEFT JOIN " . $con1->dbname . ".vpos_response as vpre on vpre.ordenPago = docu.doc_id and vpre.tipo_orden = 2
-            WHERE ";
+            WHERE 1=1";
         if (isset($arrFiltro) && count($arrFiltro) > 0) {
             if ($arrFiltro['f_ini'] != "" && $arrFiltro['f_fin'] != "") {
                 $str_search .= "docu.doc_fecha_pago >= :fec_ini AND ";
@@ -156,9 +219,9 @@ class SolicitudBotonPago extends \yii\db\ActiveRecord {
                 join db_asgard.persona as per on per.per_id = inte.int_id
                 join db_financiero.vpos_response as vpre on vpre.ordenPago = opag.opag_id and vpre.tipo_orden = 2
             where";
-            if (!empty($str_search)) {
-                $sql .= $str_search;
-            }
+        if (!empty($str_search)) {
+            $sql .= $str_search;
+        }
         $sql .= "
                     opag.opag_id= :opag_id and
                     opag.opag_estado = 1 and
@@ -169,7 +232,7 @@ class SolicitudBotonPago extends \yii\db\ActiveRecord {
                     inte.int_estado_logico = 1 and
                     per.per_estado = 1 and
                     per.per_estado_logico = 1                
-                "; 
+                ";
 
         $comando = $con->createCommand($sql);
         $comando->bindParam(":status", $estado, \PDO::PARAM_STR);

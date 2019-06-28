@@ -10,6 +10,7 @@ namespace app\modules\financiero\messages;
      "Amount Paid" => "Valor Pagado",
      "Approval Payment" => "Aprobación de Pago",
      "Billing Data" => "Datos de Facturación",
+     "Check External Payments" => "Verificar Pagos Externos",
      "Control Payments" => "Control de Pagos",
      "Details of payment" => "Datos del Pago",
      "Discount" => "Descuento",

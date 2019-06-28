@@ -644,6 +644,24 @@ class PagosController extends \app\components\CController {
         ]);
     }
     
+    public function actionVerificarpagoexterno() {
+        $model_sbpag = new SolicitudBotonPago();        
+        if ($data['PBgetFilter']) {
+            $arrSearch["f_ini"] = $data['f_ini'];
+            $arrSearch["f_fin"] = $data['f_fin'];
+            $data_pago_ext=$model_sbpag->consultarPagoExterno($arrSearch);
+            return $this->renderPartial('_verificarpagoexterno_grid', [
+                "model" => $data_transacciones,
+            ]);
+        } else {
+            
+        }   
+        $data_pago_ext=$model_sbpag->consultarPagoExterno($arrSearch);
+        return $this->render('verificarpagoexterno', [
+                    'model' => $data_pago_ext,
+        ]);
+    }
+    
     public function actionHistorialtransaccionesSup() {
         $model_persona = new Persona();
         $model_documento = new Documento();
