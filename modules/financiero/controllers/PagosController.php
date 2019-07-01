@@ -172,6 +172,53 @@ class PagosController extends \app\components\CController {
                     'valpagado' => $valpagado,
         ]);
     }
+    
+    
+    public function actionViewpagoexterno() {
+        $per_id = @Yii::$app->session->get("PB_iduser");
+        $model_interesado = new Interesado();
+        $resp_gruporol = $model_interesado->consultagruporol($per_id);
+
+        $opag_id = base64_decode($_GET["ido"]);
+        $idd = base64_decode($_GET["idd"]);
+        $val = base64_decode($_GET["valor"]);
+        $valtotal = base64_decode($_GET["valortotal"]);
+        $valpagado = base64_decode($_GET["valorpagado"]);
+
+        $mod_cliord = new OrdenPago();
+        $resp_cliord = $mod_cliord->consultarOrdenpago($resp_gruporol["grol_id"], $opag_id, $idd);
+
+        if ($resp_cliord) {
+            $sins_id = $resp_cliord["sser_id"];
+            $per_id = $resp_cliord["per_id"];
+            $nombres = $resp_cliord["nombres"];
+            $apellidos = $resp_cliord["apellidos"];
+            $valorsubido = $resp_cliord["valorsubido"];
+            $estado = $resp_cliord["estado"];
+            $observacion = $resp_cliord["observacion"];
+            $imagen = $resp_cliord["imagen"];
+            $int_id = $resp_cliord["int_id"];
+        }
+
+        return $this->render('viewpagoexterno', [
+                    "revision" => array("AP" => Yii::t("formulario", "APPROVED"), "RE" => Yii::t("formulario", "Rejected")),
+                    'opag_id' => $opag_id,
+                    'idd' => $idd,
+                    'sins_id' => $sins_id,
+                    'nombres' => $nombres,
+                    'apellidos' => $apellidos,
+                    'valor' => $valorsubido,
+                    'estado' => $estado,
+                    'observacion' => $observacion,
+                    'per_id' => $per_id,
+                    'imagen' => $imagen,
+                    'int_id' => $int_id,
+                    'cmb_observacion' => array("" => "Seleccione una opción", "Pago Ilegible" => "Pago Ilegible", "Pago Duplicado" => "Pago Duplicado", "Pago Sin Verificar" => "Pago Sin Verificar"),
+                    'val' => $val,
+                    'valtotal' => $valtotal,
+                    'valpagado' => $valpagado,
+        ]);
+    }
 
     public function actionSavepago() {
         //online que sube doc capturar asi el id de la persona 
@@ -661,7 +708,14 @@ class PagosController extends \app\components\CController {
                     'model' => $data_pago_ext,
         ]);
     }
-    
+    public function actionDetallepagoexterno(){
+        $data = Yii::$app->request->get();
+        $model_documento = new Documento();
+        $data_pago_ext=$model_documento->consultarDetalledocumentoById($data['doc_id']);
+        return $this->render('detallepagoexterno', [
+                    'model' => $data_pago_ext,
+        ]);
+    }
     public function actionHistorialtransaccionesSup() {
         $model_persona = new Persona();
         $model_documento = new Documento();

@@ -198,7 +198,7 @@ class PagosfrecuentesController extends \yii\web\Controller {
                     "total" => $totalpagar,
         ));
     }
-
+    
     public function actionSavepayment() {
         $pben_model = new PersonaBeneficiaria();
         $sbp_model = new SolicitudBotonPago();

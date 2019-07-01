@@ -33,6 +33,7 @@ namespace app\modules\admision\messages;
      "Search by Income Method" => "Buscar por Método de Ingreso",
      "Search by Income Method or Names" => "Buscar por Método de Ingreso o Nombres",
      "Search by item" => "Buscar por Item",
+     "Search by Students" => "Buscar por Estudiantes",
      "See Request" => "Ver Solicitud", 
      "State Request" => "Estado Solicitud",
      "Title" => "Título",

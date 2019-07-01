@@ -14,10 +14,10 @@ admision::registerTranslations();
 <div>
     <?=
     PbGridView::widget([
-        'id' => 'TbG_VERFICAR_PAGOS_EXTERNOS',
+        'id' => 'TbG_DETALLE_PAGOS_EXTERNOS',
         'showExport' => true,
-        'fnExportEXCEL' => "exportExcelvpex",
-        'fnExportPDF' => "exportPdfvpex",
+        'fnExportEXCEL' => "exportExceldpex",
+        'fnExportPDF' => "exportPdfdpex",
         'dataProvider' => $model,     
         'columns' =>
         [   
@@ -49,16 +49,13 @@ admision::registerTranslations();
             [
                 'class' => 'yii\grid\ActionColumn',
                 'header' => Yii::t("formulario", "Actions"),         
-                'template' => '{view} {details} {request}',           
+                'template' => '{view} {details}',           
                 'buttons' => [
                     'view' => function ($url, $model) {
                         return Html::a('<span class="glyphicon glyphicon-eye-open"></span>', Url::to(['pagos/viewpagoexterno', 'ido' => $model['id'], 'popup' => 'true']), ["data-toggle" => "tooltip", "title" => "Aprobar Pago", "data-pjax" => 0, "class" => "pbpopup"]);
                     },                   
                     'details' => function ($url, $model) {
                         return Html::a('<span class="glyphicon glyphicon-th-list"></span>', Url::to(['pagos/detallepagoexterno', 'ido' => $model['id'], 'popup' => 'true']), ["data-toggle" => "tooltip", "title" => "Detalle Pago", "data-pjax" => 0, "class" => "pbpopup"]);
-                    },                   
-                    'request' => function ($url, $model) {  
-                        return Html::a('<span class="glyphicon glyphicon-bookmark"></span>', "#", ["onclick" => "grabarInteresado(" . $model['id'] . ");", "data-toggle" => "tooltip", "title" => "Generar Solicitud", "data-pjax" => 0]);
                     },                   
                 ],
             ],

@@ -22,29 +22,26 @@ use Yii;
  *
  * @property DetalleDocumento[] $detalleDocumentos
  */
-class Documento extends \yii\db\ActiveRecord
-{
+class Documento extends \yii\db\ActiveRecord {
+
     /**
      * {@inheritdoc}
      */
-    public static function tableName()
-    {
+    public static function tableName() {
         return 'documento';
     }
 
     /**
      * @return \yii\db\Connection the database connection used by this AR class.
      */
-    public static function getDb()
-    {
+    public static function getDb() {
         return Yii::$app->get('db_facturacion');
     }
 
     /**
      * {@inheritdoc}
      */
-    public function rules()
-    {
+    public function rules() {
         return [
             [['tdoc_id', 'doc_nombres_cliente', 'doc_valor', 'doc_usuario_transaccion'], 'required'],
             [['tdoc_id', 'doc_usuario_transaccion'], 'integer'],
@@ -60,8 +57,7 @@ class Documento extends \yii\db\ActiveRecord
     /**
      * {@inheritdoc}
      */
-    public function attributeLabels()
-    {
+    public function attributeLabels() {
         return [
             'doc_id' => 'Doc ID',
             'tdoc_id' => 'Tdoc ID',
@@ -81,32 +77,33 @@ class Documento extends \yii\db\ActiveRecord
     /**
      * @return \yii\db\ActiveQuery
      */
-    public function getDetalleDocumentos()
-    {
+    public function getDetalleDocumentos() {
         return $this->hasMany(DetalleDocumento::className(), ['doc_id' => 'doc_id']);
     }
-    
-    public function insertDocumento($con,$tdoc_id,$sbpa_id,$nombres,$direccion,$telefono,$correo,$valor,$usuario) {  
-        $estado = 1;        
+
+    public function insertDocumento($con, $tdoc_id, $sbpa_id, $nombres, $direccion, $telefono, $correo, $valor, $usuario) {
+        $estado = 1;
+        $fecha = date(Yii::$app->params["dateTimeByDefault"]);
         $sql = "INSERT INTO " . $con->dbname . ".documento
-            (tdoc_id, sbpa_id, doc_nombres_cliente, doc_direccion, doc_telefono, doc_correo, doc_valor, doc_pagado, doc_usuario_transaccion,doc_estado,doc_estado_logico) VALUES
-            (:tdoc_id,:sbpa_id,:doc_nombres_cliente,:doc_direccion,:doc_telefono,:doc_correo,:doc_valor, 'N', :doc_usuario_transaccion,:doc_estado,:doc_estado)";
-                        
-        $command = $con->createCommand($sql);        
+            (tdoc_id, sbpa_id, doc_nombres_cliente, doc_direccion, doc_telefono,doc_fecha_pago, doc_correo, doc_valor, doc_pagado, doc_usuario_transaccion,doc_estado,doc_estado_logico) VALUES
+            (:tdoc_id,:sbpa_id,:doc_nombres_cliente,:doc_direccion,:doc_telefono,:fecha_pago,:doc_correo,:doc_valor, 'N', :doc_usuario_transaccion,:doc_estado,:doc_estado)";
+
+        $command = $con->createCommand($sql);
         $command->bindParam(":tdoc_id", $tdoc_id, \PDO::PARAM_INT);
         $command->bindParam(":sbpa_id", $sbpa_id, \PDO::PARAM_INT);
+        $command->bindParam(":fecha_pago", $fecha, \PDO::PARAM_STR);
         $command->bindParam(":doc_nombres_cliente", $nombres, \PDO::PARAM_STR);
         $command->bindParam(":doc_direccion", $direccion, \PDO::PARAM_STR);
         $command->bindParam(":doc_telefono", $telefono, \PDO::PARAM_STR);
         $command->bindParam(":doc_correo", $correo, \PDO::PARAM_STR);
-        $command->bindParam(":doc_valor", $valor, \PDO::PARAM_INT);        
-        $command->bindParam(":doc_usuario_transaccion", $usuario, \PDO::PARAM_STR);    
-        $command->bindParam(":doc_estado", $estado, \PDO::PARAM_STR);    
+        $command->bindParam(":doc_valor", $valor, \PDO::PARAM_INT);
+        $command->bindParam(":doc_usuario_transaccion", $usuario, \PDO::PARAM_STR);
+        $command->bindParam(":doc_estado", $estado, \PDO::PARAM_STR);
         $command->execute();
-        return $con->getLastInsertID();        
+        return $con->getLastInsertID();
     }
 
-    public function actualizarDocumento($con, $doc_id,$estado_pago='N') {  
+    public function actualizarDocumento($con, $doc_id, $estado_pago = 'N') {
         $estado = 1;
         $fecha = date(Yii::$app->params["dateTimeByDefault"]);
         $sql = "UPDATE " . $con->dbname . ".documento
@@ -116,19 +113,20 @@ class Documento extends \yii\db\ActiveRecord
                 WHERE doc_id = :doc_id
                 and doc_estado = :estado
                 and doc_estado_logico = :estado";
-                
-         \app\models\Utilities::putMessageLogFile('sql: ' . $sql);
+
+        \app\models\Utilities::putMessageLogFile('sql: ' . $sql);
         $command = $con->createCommand($sql);
         $command->bindParam(":doc_id", $doc_id, \PDO::PARAM_INT);
         $command->bindParam(":doc_pagado", $estado_pago, \PDO::PARAM_INT);
         $command->bindParam(":fecha_pago", $fecha, \PDO::PARAM_STR);
-        $command->bindParam(":estado", $estado, \PDO::PARAM_STR);      
+        $command->bindParam(":estado", $estado, \PDO::PARAM_STR);
         $response = $command->execute();
-        return $response;              
-    }    
-    public function consultarDatosxId($con, $doc_id){                
+        return $response;
+    }
+
+    public function consultarDatosxId($con, $doc_id) {
         $estado = 1;
-        $sql=  "SELECT pb.pben_nombre, pb.pben_apellido, d.doc_valor, d.doc_correo
+        $sql = "SELECT pb.pben_nombre, pb.pben_apellido, d.doc_valor, d.doc_correo
                 FROM " . $con->dbname . ".documento d inner join " . $con->dbname . ".solicitud_boton_pago sb 
                          on sb.sbpa_id = d.sbpa_id     
                      inner join " . $con->dbname . ".persona_beneficiaria pb on pb.pben_id = sb.pben_id
@@ -138,18 +136,19 @@ class Documento extends \yii\db\ActiveRecord
                 and pb.pben_estado = :estado
                 and pb.pben_estado_logico = :estado
                 and sb.sbpa_estado = :estado
-                and sb.sbpa_estado_logico = :estado";   
-        
+                and sb.sbpa_estado_logico = :estado";
+
         $comando = $con->createCommand($sql);
         $comando->bindParam(":estado", $estado, \PDO::PARAM_STR);
         $comando->bindParam(":doc_id", $doc_id, \PDO::PARAM_INT);
-        $resultData = $comando->queryOne();        
-        return $resultData;      
+        $resultData = $comando->queryOne();
+        return $resultData;
     }
-    public function consultarDocIdByCedulaBen($cedula = null){
+
+    public function consultarDocIdByCedulaBen($cedula = null) {
         $con = \Yii::$app->db_facturacion;
         $estado = 1;
-        $sql=  "
+        $sql = "
                 SELECT  
                         doc.doc_id
                 FROM    
@@ -165,13 +164,14 @@ class Documento extends \yii\db\ActiveRecord
                         and sbpa.sbpa_estado = :estado
                         and sbpa.sbpa_estado_logico = :estado
                 
-                ";           
+                ";
         $comando = $con->createCommand($sql);
         $comando->bindParam(":estado", $estado, \PDO::PARAM_STR);
         $comando->bindParam(":cedula", $cedula, \PDO::PARAM_STR);
-        $resultData = $comando->queryOne();        
-        return $resultData['doc_id'];      
-    }        
+        $resultData = $comando->queryOne();
+        return $resultData['doc_id'];
+    }
+
     /**
      * Function consultaResumen (Se obtiene resumen de las transacciones)
      * @author  Giovanni Vergara <analistadesarrollo02@uteg.edu.ec>
@@ -211,5 +211,68 @@ class Documento extends \yii\db\ActiveRecord
 
         $resultData = $comando->queryOne();
         return $resultData;
+    }
+
+    public function consultarDetalledocumentoById() {
+        $con = \Yii::$app->db_facturacion;
+        $con1 = \Yii::$app->db_financiero;
+        $estado = 1;
+        if (isset($arrFiltro) && count($arrFiltro) > 0) {
+            if ($arrFiltro['f_ini'] != "" && $arrFiltro['f_fin'] != "") {
+                $str_search .= "docu.doc_fecha_pago >= :fec_ini AND ";
+                $str_search .= "docu.doc_fecha_pago <= :fec_fin AND ";
+            }
+        }
+        $sql = "
+            select
+                sbpa.sbpa_id as id,
+                vres.reference as referencia,
+                concat(pben.pben_nombre,' ',pben.pben_apellido) as estudiante,
+                docu.doc_fecha_pago as fecha_pago,
+                docu.doc_valor as total_pago,
+                docu.doc_pagado as estado
+            from
+                db_facturacion.solicitud_boton_pago as sbpa
+                join db_facturacion.persona_beneficiaria as pben on pben.pben_id = sbpa.pben_id
+                join db_facturacion.documento as docu on docu.sbpa_id = sbpa.sbpa_id
+                join db_financiero.vpos_response as vres on vres.ordenPago = docu.doc_id and vres.tipo_orden = 2
+            where
+                1=1
+            ";
+        $comando = $con->createCommand($sql);
+        $comando->bindParam(":status", $estado, \PDO::PARAM_STR);
+        $comando->bindParam(":doc_id", $doc_id, \PDO::PARAM_INT);
+        $comando->bindParam(":opag_id", $opag_id, \PDO::PARAM_INT);
+        if (isset($arrFiltro) && count($arrFiltro) > 0) {
+            $fecha_ini = $arrFiltro["f_ini"] . " 00:00:00";
+            $fecha_fin = $arrFiltro["f_fin"] . " 23:59:59";
+            if ($arrFiltro['f_ini'] != "" && $arrFiltro['f_fin'] != "") {
+                $comando->bindParam(":fec_ini", $fecha_ini, \PDO::PARAM_STR);
+                $comando->bindParam(":fec_fin", $fecha_fin, \PDO::PARAM_STR);
+            }
+        }
+        $resultData = $comando->queryAll();
+        $dataProvider = new ArrayDataProvider([
+            'key' => 'id',
+            'allModels' => $resultData,
+            'pagination' => [
+                'pageSize' => Yii::$app->params["pageSize"],
+            ],
+            'sort' => [
+                'attributes' => [
+                    'referencia',
+                    'fecha_solicitud',
+                    'estudiante',
+                    'fecha_pago',
+                    'total_pago',
+                    'estado'
+                ],
+            ],
+        ]);
+        if ($onlyData) {
+            return $resultData;
+        } else {
+            return $dataProvider;
+        }
     }
 }

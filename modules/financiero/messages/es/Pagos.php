@@ -33,7 +33,7 @@ namespace app\modules\financiero\messages;
      "Pay Total" => "Pago Total",
      "Price" => "Precio",
      "Price with discount" => "Precio Descuento",
-     "Registration Payments for Collections" => "Registro Pagos por Colecturía",
+     "Registration Payments for Collections" => "Registro Pagos por Colecturía",     
      "Transaction Date" => "Fecha Transacción",
      "Transaction History" => "Historial de Transacciones",
      "Transaction Number" => "Número Transacción",
