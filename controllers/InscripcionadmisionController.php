@@ -231,8 +231,9 @@ class InscripcionadmisionController extends \yii\web\Controller {
                     $typeFile = strtolower($arrIm[count($arrIm) - 1]);                    
                     $fecha_registro = date(Yii::$app->params["dateTimeByDefault"]);
                     $doc_pagoOld = Yii::$app->params["documentFolder"] . "documentoadmision/" . $inscripcion_id . "/pago_". $inscripcion_id . "-" . $fecha_registro . "." . $typeFile;                     
-                    $doc_pago = InscripcionAdmision::addLabelTimeDocumentos($inscripcion_id, $doc_pagoOld, $timeSt);                    
-                    $data["DATA_1"][0]["ruta_doc_pago"] = $doc_pago;                      
+                    \app\models\Utilities::putMessageLogFile('ruta pago old:'.$doc_pagoOld);
+                    //$doc_pago = InscripcionAdmision::addLabelTimeDocumentos($inscripcion_id, $doc_pagoOld, $timeSt);                    
+                    $data["DATA_1"][0]["ruta_doc_pago"] = $doc_pagoOld;                      
                     if ($doc_pago === false)
                         throw new Exception('Error al cargar documento de pago.');
                 }                                
