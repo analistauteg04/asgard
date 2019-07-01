@@ -190,7 +190,7 @@ admision::registerTranslations();
                 <div class="form-group">
                     <label for="txt_numtransaccion" class="col-sm-2 col-md-2 col-xs-2 col-lg-2 control-label" id="lbl_num_transaccion"><?= admision::t("Solicitudes", "Transaction number") ?><span class="text-danger">*</span></label>
                     <div class="col-sm-8 col-md-8 col-xs-8 col-lg-8">
-                        <input type="text" class="form-control keyupmce" value="" id="txt_numtransaccion" data-type="alfa" placeholder="<?= admision::t("Solicitudes", "Transaction number") ?>">
+                        <input type="text" class="form-control keyupmce" value="" id="txt_numtransaccion" data-type="number" placeholder="<?= admision::t("Solicitudes", "Transaction number") ?>">
                     </div> 
                 </div>  
             </div>
@@ -298,7 +298,7 @@ admision::registerTranslations();
             <div class="form-group">
                 <label for="txt_nombres_fac" class="col-sm-2 col-md-2 col-xs-2 col-lg-2 control-label" id="lbl_nombre1"><?= Yii::t("formulario", "Names") ?><span class="text-danger">*</span></label>
                 <div class="col-sm-8 col-md-8 col-xs-8 col-lg-8">
-                    <input type="text" class="form-control keyupmce" value="" id="txt_nombres_fac" data-type="alfa" placeholder="<?= Yii::t("formulario", "First Name") ?>">
+                    <input type="text" class="form-control keyupmce" value="" id="txt_nombres_fac" data-required="true" data-type="alfa" placeholder="<?= Yii::t("formulario", "First Name") ?>">
                 </div>            
             </div>            
         </div>  
@@ -306,7 +306,7 @@ admision::registerTranslations();
             <div class="form-group">
                 <label for="txt_dir_fac" class="col-sm-2 col-md-2 col-xs-2 col-lg-2 control-label" id="lbl_nombre1"><?= Yii::t("formulario", "Address") ?><span class="text-danger">*</span></label>
                 <div class="col-sm-8 col-md-8 col-xs-8 col-lg-8">
-                    <input type="text" class="form-control keyupmce" value="" id="txt_dir_fac" data-type="alfa" placeholder="<?= Yii::t("formulario", "Address") ?>">
+                    <input type="text" class="form-control keyupmce" value="" data-required="true" id="txt_dir_fac" data-type="alfanumerico" placeholder="<?= Yii::t("formulario", "Address") ?>">
                 </div> 
             </div>  
         </div>
@@ -327,7 +327,7 @@ admision::registerTranslations();
             <div class="form-group">
                 <label for="txt_apellidos_fac" class="col-sm-2 col-md-2 col-xs-2 col-lg-2 control-label" id="lbl_apellido1"><?= Yii::t("formulario", "Last Names") ?><span class="text-danger">*</span></label>
                 <div class="col-sm-8 col-md-8 col-xs-8 col-lg-8">
-                    <input type="text" class="form-control keyupmce" value="" id="txt_apellidos_fac" data-type="alfa" placeholder="<?= Yii::t("formulario", "First Name") ?>">
+                    <input type="text" class="form-control keyupmce" value="" data-required="true" id="txt_apellidos_fac" data-type="alfa" placeholder="<?= Yii::t("formulario", "First Name") ?>">
                 </div>
             </div>
         </div>
@@ -367,7 +367,7 @@ admision::registerTranslations();
             <div class="form-group">
                 <label for="txt_correo_fac" class="col-sm-2 col-md-2 col-xs-2 col-lg-2 control-label"><?= Yii::t("formulario", "Email") ?> </label>
                 <div class="col-sm-8 col-md-8 col-xs-8 col-lg-8">
-                    <input type="text" class="form-control keyupmce" value="" data-required="false" id="txt_correo_fac" data-type="email" data-keydown="true" placeholder="<?= Yii::t("formulario", "Email") ?>">
+                    <input type="text" class="form-control keyupmce" value="" data-required="true" id="txt_correo_fac" data-type="email" data-keydown="true" placeholder="<?= Yii::t("formulario", "Email") ?>">
                 </div>
             </div>
         </div>        

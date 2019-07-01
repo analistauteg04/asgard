@@ -569,21 +569,31 @@ $(document).ready(function () {
         arrParams.dni = $('#txt_dni_fac').val();
         arrParams.correo = $('#txt_correo_fac').val();
         //Datos del pago.
+        $('#txt_numtransaccion').addClass("PBvalidation");
+        $('#txt_fecha_transaccion').addClass("PBvalidation");
+        
         arrParams.num_transaccion = $('#txt_numtransaccion').val();
         arrParams.observacion = $('#txt_observacion').val();
         arrParams.fecha_transaccion = $('#txt_fecha_transaccion').val();
-        
-        if (!validateForm()) {
-            requestHttpAjax(link, arrParams, function (response) {
-                var message = response.message;
-                //console.log(response);
-                if (response.status == "OK") {
-                    showAlert(response.status, response.label, response.message);
-                    setTimeout(function () {    
-                        parent.window.location.href = $('#txth_base').val() +"/inscripcionadmision/index";
-                    }, 2000);
-                }
-            });
+        arrParams.doc_pago = $('#txth_doc_pago').val();
+        var error = 0;
+        if ($('#txth_doc_pago').val() == "") {
+            error++;
+            var mensaje = {wtmessage: "Debe adjuntar documento de pago realizado.", title: "Información"};
+            showAlert("NO_OK", "error", mensaje);
+        } else {                        
+            if (!validateForm()) {
+                requestHttpAjax(link, arrParams, function (response) {
+                    var message = response.message;
+                    //console.log(response);
+                    if (response.status == "OK") {
+                        showAlert(response.status, response.label, response.message);
+                        setTimeout(function () {    
+                            parent.window.location.href = $('#txth_base').val() +"/inscripcionadmision/index";
+                        }, 2000);
+                    }
+                });
+            }
         }
     });
 });

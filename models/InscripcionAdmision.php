@@ -401,7 +401,7 @@ class InscripcionAdmision extends \yii\db\ActiveRecord {
                                             $sins_id = $solins_model->insertarSolicitud($interesado_id, $resp_datos['uaca_id'], $resp_datos['mod_id'], $resp_datos['twin_metodo_ingreso'], $eaca_id, null, $emp_id, $num_secuencia, $rsin_id, $sins_fechasol, $usuario_id, $cemp);
                                             //grabar los documentos                                            
                                             if ($sins_id) {
-                                                //\app\models\Utilities::putMessageLogFile('después de insertar solicitud'); 
+                                                //\app\models\Utilities::putMessageLogFile('después de insertar solicitud:'.$sins_id); 
                                                 if (($resp_datos['ruta_doc_titulo'] != "") || ($resp_datos['ruta_doc_dni'] != "") || ($resp_datos['ruta_doc_certvota'] != "") || ($resp_datos['ruta_doc_foto'] != "") || ($resp_datos['ruta_doc_certificado'] != "") || ($resp_datos['ruta_doc_hojavida'] != "")) {
                                                     $subidaDocumentos = 1;
                                                 } else {
@@ -486,8 +486,10 @@ class InscripcionAdmision extends \yii\db\ActiveRecord {
                                                     /* if (!($resulDoc6)) {
                                                       throw new Exception('Error doc Hoja de Vida no creado.');
                                                       } */
-                                                }       
-                                                if ($resp_datos['ruta_doc_pago'] != "") {                                                     
+                                                }      
+                                                \app\models\Utilities::putMessageLogFile('tiene dato de pago:'.$resp_datos['ruta_doc_pago']);
+                                                if ($resp_datos['ruta_doc_pago'] != "") {    
+                                                    \app\models\Utilities::putMessageLogFile('imagen de pago');
                                                     $arrIm = explode(".", basename($resp_datos['ruta_doc_pago']));
                                                     $arrTime = explode("_", basename($resp_datos['ruta_doc_pago']));
                                                     $timeSt = $arrTime[4];
@@ -527,9 +529,9 @@ class InscripcionAdmision extends \yii\db\ActiveRecord {
                                                 } else {
                                                     $estadopago = 'P';
                                                 }
-                                                $val_total = $precio - $val_descuento;                                                 
+                                                $val_total = $precio - $val_descuento;                                                     
                                                 $resp_opago = $mod_ordenpago->insertarOrdenpago($sins_id, null, $val_total, 0, $val_total, $estadopago, $usuario_id);                                                                                                
-                                                if ($resp_opago) {                                                        
+                                                if ($resp_opago) {                                                                                                        
                                                     //insertar desglose del pago                                                         
                                                     $fecha_ini = date(Yii::$app->params["dateByDefault"]);                                                    
                                                     $resp_dpago = $mod_ordenpago->insertarDesglosepago($resp_opago, $ite_id, $val_total, 0, $val_total, $fecha_ini, null, $estadopago, $usuario_id);                                                    
@@ -541,7 +543,7 @@ class InscripcionAdmision extends \yii\db\ActiveRecord {
                                                             } else {
                                                                 $fpag_id=4;  //transferencia
                                                             }                                                                                                                   
-                                                            $fecha_registro = date(Yii::$app->params["dateTimeByDefault"]);                                                                                                                       
+                                                            $fecha_registro = date(Yii::$app->params["dateTimeByDefault"]);                                                                  
                                                             $creadetalle = $mod_ordenpago->insertarCargaprepago($resp_opago, $fpag_id, $val_total, $archivo, 'PE', '', $dataReg["observacion"], $dataReg["num_transaccion"], $dataReg["fecha_transaccion"], $fecha_registro);
                                                             if ($creadetalle) {                                                                
                                                                 $detalle= 'S';
@@ -551,6 +553,7 @@ class InscripcionAdmision extends \yii\db\ActiveRecord {
                                                         }
                                                         //Grabar datos de factura                                                                                                                   
                                                         if ($detalle== 'S') {
+                                                            //\app\models\Utilities::putMessageLogFile('grabar datos factura');
                                                             $resdatosFact = $solins_model->crearDatosFacturaSolicitud($sins_id, $dataReg["nombres_fact"], $dataReg["apellidos_fact"], 
                                                                                             $dataReg["tipo_dni_fac"], $dataReg["dni"], 
                                                                                             $dataReg["direccion_fact"], $dataReg["telefono_fac"],
