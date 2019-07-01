@@ -43,8 +43,14 @@ admision::registerTranslations();
             ],
             [
                 'attribute' => 'Estado',
-                'header' => financiero::t("Pagos", "Payment status"),
-                'value' => 'estado',
+                'header' => financiero::t("Pagos", "Boton Payment status"),
+                'format' => 'html',
+                'value' => function ($model) {
+                    if ($model["estado"] == 1)
+                        return '<small class="label label-success">Pagado</small>';
+                    else
+                        return '<small class="label label-danger">Pendiente</small>';
+                },
             ],   
             [
                 'class' => 'yii\grid\ActionColumn',
