@@ -28,8 +28,7 @@ class DetalleDocumento extends \yii\db\ActiveRecord
     /**
      * {@inheritdoc}
      */
-    public static function tableName()
-    {
+    public static function tableName(){
         return 'detalle_documento';
     }
 
@@ -92,5 +91,28 @@ class DetalleDocumento extends \yii\db\ActiveRecord
     public function getIte()
     {
         return $this->hasOne(Item::className(), ['ite_id' => 'ite_id']);
+    }
+    /**
+     * Function getAdmitidos
+     * @author  Grace Viteri <analistadesarrollo01@uteg.edu.ec>
+     * @param   
+     * @return  $resultData 
+     */
+    public function insertarDetDocumento($con,$doc_id,$item_ids,$cantidad,$item_precio,$val_iva) {  
+        $estado = 1;
+        $total = $cantidad*$item_precio;
+        $sql = "INSERT INTO " . $con->dbname . ".detalle_documento            
+            (doc_id, ite_id, ddoc_cantidad, ddoc_precio, ddoc_valor_iva, ddoc_valor_total, ddoc_estado, ddoc_usuario_transaccion, ddoc_estado_logico) VALUES
+            (:doc_id,:ite_id,:ddoc_cantidad,:ddoc_precio,:ddoc_valor_iva,:ddoc_valor_total,:ddoc_estado,:ddoc_estado,:ddoc_estado)";
+        $command = $con->createCommand($sql);        
+        $command->bindParam(":doc_id", $doc_id, \PDO::PARAM_INT);
+        $command->bindParam(":ite_id", $item_ids, \PDO::PARAM_INT);
+        $command->bindParam(":ddoc_cantidad", $cantidad, \PDO::PARAM_INT);
+        $command->bindParam(":ddoc_precio", $item_precio, \PDO::PARAM_INT);
+        $command->bindParam(":ddoc_valor_total", $total, \PDO::PARAM_INT);
+        $command->bindParam(":ddoc_valor_iva", $val_iva, \PDO::PARAM_INT);
+        $command->bindParam(":ddoc_estado", $estado, \PDO::PARAM_STR);        
+        $command->execute();
+        return $con->getLastInsertID();        
     }
 }

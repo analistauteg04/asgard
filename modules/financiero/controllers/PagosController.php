@@ -711,7 +711,7 @@ class PagosController extends \app\components\CController {
     public function actionDetallepagoexterno(){
         $data = Yii::$app->request->get();
         $model_documento = new Documento();
-        $data_pago_ext=$model_documento->consultarDetalledocumentoById(1);
+        $data_pago_ext=$model_documento->consultarDetalledocumentoById($data['doc_id']);
         return $this->render('detallepagoexterno', [
                     'model' => $data_pago_ext,
         ]);

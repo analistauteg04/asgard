@@ -86,7 +86,7 @@ class Documento extends \yii\db\ActiveRecord {
         $fecha = date(Yii::$app->params["dateTimeByDefault"]);
         $sql = "INSERT INTO " . $con->dbname . ".documento
             (tdoc_id, sbpa_id, doc_nombres_cliente, doc_direccion, doc_telefono,doc_fecha_pago, doc_correo, doc_valor, doc_pagado, doc_usuario_transaccion,doc_estado,doc_estado_logico) VALUES
-            (:tdoc_id,:sbpa_id,:doc_nombres_cliente,:doc_direccion,:doc_telefono,:fecha_pago,:doc_correo,:doc_valor, 'N', :doc_usuario_transaccion,:doc_estado,:doc_estado)";
+            (:tdoc_id,:sbpa_id,:doc_nombres_cliente,:doc_direccion,:doc_telefono,:fecha_pago,:doc_correo,:doc_valor, 0, :doc_usuario_transaccion,:doc_estado,:doc_estado)";
 
         $command = $con->createCommand($sql);
         $command->bindParam(":tdoc_id", $tdoc_id, \PDO::PARAM_INT);
@@ -102,8 +102,7 @@ class Documento extends \yii\db\ActiveRecord {
         $command->execute();
         return $con->getLastInsertID();
     }
-
-    public function actualizarDocumento($con, $doc_id, $estado_pago = 'N') {
+    public function actualizarDocumento($con, $doc_id, $estado_pago = 0) {
         $estado = 1;
         $fecha = date(Yii::$app->params["dateTimeByDefault"]);
         $sql = "UPDATE " . $con->dbname . ".documento

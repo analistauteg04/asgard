@@ -8,7 +8,8 @@ use yii\helpers\ArrayHelper;
 use yii\base\Exception;
 use app\models\Persona;
 use app\modules\admision\models\ItemMetodoUnidad;
-use \app\modules\admision\models\SolicitudInscripcion;
+use app\modules\admision\models\SolicitudInscripcion;
+use app\modules\financiero\models\DetalleDocumento;
 use app\models\Pais;
 use app\models\Provincia;
 use app\modules\financiero\models\PersonaBeneficiaria;
@@ -25,7 +26,6 @@ use app\modules\admision\models\PersonaGestion;
 use app\modules\admision\models\Oportunidad;
 use app\modules\admision\models\MetodoIngreso;
 use app\modules\financiero\models\Secuencias;
-
 
 class PagosfrecuentesController extends \yii\web\Controller {
 
@@ -153,7 +153,7 @@ class PagosfrecuentesController extends \yii\web\Controller {
                     "response" => $data["resp"],
                 ));
                 if ($data["resp"]["status"]["status"] == "APPROVED") {
-                    $respDoc = $modDocumento->actualizarDocumento($con1, $doc_id, 'S');
+                    $respDoc = $modDocumento->actualizarDocumento($con1, $doc_id, 1);
                     if ($respDoc) {
                         $transaction->commit();
                         $message = array(
@@ -197,11 +197,13 @@ class PagosfrecuentesController extends \yii\web\Controller {
                     "email_cliente" => $resultado["doc_correo"],
                     "total" => $totalpagar,
         ));
-    }    
+    }
+
     public function actionSavepayment() {
         $pben_model = new PersonaBeneficiaria();
         $sbp_model = new SolicitudBotonPago();
         $dsbp_model = new DetalleSolicitudBotonPago();
+        $ddoc_model = new DetalleDocumento();
         $item_model = new Item();
         $doc_model = new Documento();
         if (Yii::$app->request->isAjax) {
@@ -230,17 +232,16 @@ class PagosfrecuentesController extends \yii\web\Controller {
                     if ($id_pbens > 0) {
                         $idsbp = $sbp_model->insertSolicitudBotonPago($con1, $id_pbens);
                         if ($idsbp > 0) {
-                            for ($i = 0; $i < count($item_ids); $i++) {
-                                $item_precio = $item_model->getPrecios($con1, $item_ids[$i]["item_id"]);
-                                $val_iva = 0;
-                                //\app\models\Utilities::putMessageLogFile('precio:'.$item_precio["ipre_precio"]);
-                                $id_dsbp = $dsbp_model->insertarDetSolBotPag($con1, $idsbp, $item_ids[$i]["item_id"], 1, $item_precio["ipre_precio"], $val_iva);
-                                if ($id_dsbp > 0) {
-                                    $mensaje = $mensaje . "";
-                                }
-                            }
                             $iddoc = $doc_model->insertDocumento($con1, $dataFactura["tipo_dni_fac"], $idsbp, ucwords(strtolower($dataFactura["nombre_fac"])) . ' ' . ucwords(strtolower($dataFactura["apellidos_fac"])), ucwords(strtolower($dataFactura["dir_fac"])), $dataFactura["telfono_fac"], $dataFactura["correo"], $dataFactura["total"], null);
                             if ($iddoc > 0) {
+                                for ($i = 0; $i < count($item_ids); $i++) {
+                                    $item_precio = $item_model->getPrecios($con1, $item_ids[$i]["item_id"]);
+                                    $val_iva = 0;
+                                    $id_ddoc=$ddoc_model->insertarDetDocumento($con1, $iddoc, $item_ids[$i]["item_id"], 1, $item_precio["ipre_precio"], $val_iva);
+                                    if ($id_ddoc > 0) {
+                                        $mensaje = $mensaje . "";
+                                    }
+                                }
                                 $transaction->commit();
                                 $mensaje = $mensaje . "Se ha guardado exitosamente su solicitud de pago.";
                                 $message = array(
@@ -283,13 +284,14 @@ class PagosfrecuentesController extends \yii\web\Controller {
         return $this->render('terminos', [
         ]);
     }
+
     public function actionResumen() {
         $sbpa_id = 1; // luego cambiar por el que venga de parametro
         $mod_documento = new Documento();
         $resu_resumen = $mod_documento->consultaResumen($sbpa_id);
         $this->layout = '@themes/' . \Yii::$app->getView()->theme->themeName . '/layouts/basic.php';
         return $this->render('resumen', [
-            "resu_resumen" => $resu_resumen,
+                    "resu_resumen" => $resu_resumen,
         ]);
     }
 
