@@ -3,7 +3,7 @@
 namespace app\modules\financiero\models;
 
 use Yii;
-
+use yii\data\ArrayDataProvider;
 /**
  * This is the model class for table "documento".
  *
@@ -213,44 +213,26 @@ class Documento extends \yii\db\ActiveRecord {
         return $resultData;
     }
 
-    public function consultarDetalledocumentoById() {
+    public function consultarDetalledocumentoById($doc_id,$onlyData=null) {
         $con = \Yii::$app->db_facturacion;
-        $con1 = \Yii::$app->db_financiero;
         $estado = 1;
-        if (isset($arrFiltro) && count($arrFiltro) > 0) {
-            if ($arrFiltro['f_ini'] != "" && $arrFiltro['f_fin'] != "") {
-                $str_search .= "docu.doc_fecha_pago >= :fec_ini AND ";
-                $str_search .= "docu.doc_fecha_pago <= :fec_fin AND ";
-            }
-        }
         $sql = "
             select
-                sbpa.sbpa_id as id,
-                vres.reference as referencia,
-                concat(pben.pben_nombre,' ',pben.pben_apellido) as estudiante,
-                docu.doc_fecha_pago as fecha_pago,
-                docu.doc_valor as total_pago,
-                docu.doc_pagado as estado
-            from
-                db_facturacion.solicitud_boton_pago as sbpa
-                join db_facturacion.persona_beneficiaria as pben on pben.pben_id = sbpa.pben_id
-                join db_facturacion.documento as docu on docu.sbpa_id = sbpa.sbpa_id
-                join db_financiero.vpos_response as vres on vres.ordenPago = docu.doc_id and vres.tipo_orden = 2
-            where
-                1=1
+                ite.ite_codigo as codigo,
+                ite.ite_nombre as item, 
+                ddoc.ddoc_cantidad as cantidad,
+                ddoc.ddoc_valor_iva as iva,
+                ddoc.ddoc_valor_total as total
+            from 
+                db_facturacion.detalle_documento ddoc
+                join db_facturacion.item as ite on ite.ite_id = ddoc.ite_id
+            where 
+                ddoc.doc_id=:doc_id and
+                ddoc.ddoc_estado = :status
             ";
         $comando = $con->createCommand($sql);
         $comando->bindParam(":status", $estado, \PDO::PARAM_STR);
         $comando->bindParam(":doc_id", $doc_id, \PDO::PARAM_INT);
-        $comando->bindParam(":opag_id", $opag_id, \PDO::PARAM_INT);
-        if (isset($arrFiltro) && count($arrFiltro) > 0) {
-            $fecha_ini = $arrFiltro["f_ini"] . " 00:00:00";
-            $fecha_fin = $arrFiltro["f_fin"] . " 23:59:59";
-            if ($arrFiltro['f_ini'] != "" && $arrFiltro['f_fin'] != "") {
-                $comando->bindParam(":fec_ini", $fecha_ini, \PDO::PARAM_STR);
-                $comando->bindParam(":fec_fin", $fecha_fin, \PDO::PARAM_STR);
-            }
-        }
         $resultData = $comando->queryAll();
         $dataProvider = new ArrayDataProvider([
             'key' => 'id',
@@ -260,12 +242,11 @@ class Documento extends \yii\db\ActiveRecord {
             ],
             'sort' => [
                 'attributes' => [
-                    'referencia',
-                    'fecha_solicitud',
-                    'estudiante',
-                    'fecha_pago',
-                    'total_pago',
-                    'estado'
+                    'codigo',
+                    'item',
+                    'cantidad',
+                    'iva',
+                    'total'
                 ],
             ],
         ]);

@@ -7,6 +7,7 @@ namespace app\modules\financiero\messages;
  */
  return [
      "Apply Discount" => "Aplica Descuento",
+     "Amount" => "Cantidad",
      "Amount Paid" => "Valor Pagado",
      "Approval Payment" => "Aprobación de Pago",
      "Billing Data" => "Datos de Facturación",
@@ -15,6 +16,7 @@ namespace app\modules\financiero\messages;
      "Details of payment" => "Datos del Pago",
      "Discount" => "Descuento",
      "Item" => "Item",
+     "Items Detail" => "Detalle de items",
      "List Payment" => "Listar pagos",
      "Outstanding balance" => "Saldo Pendiente",
      "Paid form" => "Forma Pago",
@@ -34,10 +36,12 @@ namespace app\modules\financiero\messages;
      "Price" => "Precio",
      "Price with discount" => "Precio Descuento",
      "Registration Payments for Collections" => "Registro Pagos por Colecturía",     
+     "Tax" =>"Impuesto",
      "Transaction Date" => "Fecha Transacción",
      "Transaction History" => "Historial de Transacciones",
      "Transaction Number" => "Número Transacción",
      "Upload Payments" => "Cargar Pagos",
+     "Value" => "Valor",
      "Way to pay" => "Forma Pago",
      
  ];

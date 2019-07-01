@@ -11,6 +11,9 @@ use app\modules\admision\Module;
 admision::registerTranslations();
 
 ?>
+<div class="col-md-12">
+    <h3><span id="lbl_Personeria"><?= financiero::t("Pagos", "Items Detail") ?></span></h3>
+</div>
 <div>
     <?=
     PbGridView::widget([
@@ -22,43 +25,30 @@ admision::registerTranslations();
         'columns' =>
         [   
             [
-                'attribute' => 'referencia',
-                'header' => Yii::t("formulario", "Reference"),
-                'value' => 'referencia',
+                'attribute' => 'codigo',
+                'header' => Yii::t("formulario", "Code"),
+                'value' => 'codigo',
             ],
             [
-                'attribute' => 'estudiante',
-                'header' => Yii::t("formulario", "Student"),
-                'value' => 'estudiante',
+                'attribute' => 'item',
+                'header' => Yii::t("formulario", "Item"),
+                'value' => 'item',
             ],
             [
-                'attribute' => 'fecha_pago',
-                'header' => Yii::t("formulario", "Date"),
-                'value' => 'fecha_pago',
+                'attribute' => 'cantidad',
+                'header' => financiero::t("Pagos", "Amount"),
+                'value' => 'cantidad',
             ],           
             [
-                'attribute' => 'total_pago',
-                'header' => Yii::t("formulario", "Valor Total"),
-                'value' => 'total_pago',
+                'attribute' => 'iva',
+                'header' => financiero::t("Pagos", "Tax"),
+                'value' => 'iva',
             ],
             [
-                'attribute' => 'Estado',
-                'header' => financiero::t("Pagos", "Payment status"),
-                'value' => 'estado',
-            ],   
-            [
-                'class' => 'yii\grid\ActionColumn',
-                'header' => Yii::t("formulario", "Actions"),         
-                'template' => '{view} {details}',           
-                'buttons' => [
-                    'view' => function ($url, $model) {
-                        return Html::a('<span class="glyphicon glyphicon-eye-open"></span>', Url::to(['pagos/viewpagoexterno', 'ido' => $model['id'], 'popup' => 'true']), ["data-toggle" => "tooltip", "title" => "Aprobar Pago", "data-pjax" => 0, "class" => "pbpopup"]);
-                    },                   
-                    'details' => function ($url, $model) {
-                        return Html::a('<span class="glyphicon glyphicon-th-list"></span>', Url::to(['pagos/detallepagoexterno', 'ido' => $model['id'], 'popup' => 'true']), ["data-toggle" => "tooltip", "title" => "Detalle Pago", "data-pjax" => 0, "class" => "pbpopup"]);
-                    },                   
-                ],
-            ],
+                'attribute' => 'total',
+                'header' => financiero::t("Pagos", "Value"),
+                'value' => 'total',
+            ],               
         ],
     ])
     ?>
