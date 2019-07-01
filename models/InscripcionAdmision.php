@@ -486,8 +486,7 @@ class InscripcionAdmision extends \yii\db\ActiveRecord {
                                                     /* if (!($resulDoc6)) {
                                                       throw new Exception('Error doc Hoja de Vida no creado.');
                                                       } */
-                                                }      
-                                                \app\models\Utilities::putMessageLogFile('tiene dato de pago:'.$resp_datos['ruta_doc_pago']);
+                                                }                                                      
                                                 if ($resp_datos['ruta_doc_pago'] != "") {    
                                                     \app\models\Utilities::putMessageLogFile('imagen de pago');
                                                     $arrIm = explode(".", basename($resp_datos['ruta_doc_pago']));
@@ -691,7 +690,7 @@ class InscripcionAdmision extends \yii\db\ActiveRecord {
                 if (trim($file) != "." && trim($file) != "..") {
                     $arrExt = explode(".", $file);
                     $type = $arrExt[count($arrExt) - 1];
-                    $newFile = str_replace("_" . $temp_id . "_", "_" . $per_id . "_", $file);
+                    $newFile = str_replace("_" . $temp_id . "-", "_" . $per_id . "-", $file);
                     if (!rename($folder . $file, $destinations . $newFile)) {
                         return false;
                     }
