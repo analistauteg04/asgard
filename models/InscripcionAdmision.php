@@ -97,14 +97,14 @@ class InscripcionAdmision extends \yii\db\ActiveRecord {
             (:twin_nombre,:twin_apellido,:twin_dni,:twin_numero,:twin_correo,:twin_pais,:twin_celular,:uaca_id, 
              :mod_id,:car_id,:twin_metodo_ingreso,:conuteg_id,:ruta_doc_titulo,:ruta_doc_dni,:ruta_doc_certvota,
              :ruta_doc_foto,:ruta_doc_certificado,:twin_mensaje1,:twin_mensaje2,1,CURRENT_TIMESTAMP(),1)";
-        
-        $met_ing=0;
-        if(empty($data[0]['ming_id'])){
-            $met_ing=0;
-        }else{
-            $met_ing=$data[0]['ming_id'];
+
+        $met_ing = 0;
+        if (empty($data[0]['ming_id'])) {
+            $met_ing = 0;
+        } else {
+            $met_ing = $data[0]['ming_id'];
         }
-        \app\models\Utilities::putMessageLogFile('identificacion:'.$data[0]['pges_cedula']);
+        \app\models\Utilities::putMessageLogFile('identificacion:' . $data[0]['pges_cedula']);
         $command = $con->createCommand($sql);
         $command->bindParam(":twin_nombre", $data[0]['pges_pri_nombre'], \PDO::PARAM_STR);
         $command->bindParam(":twin_apellido", $data[0]['pges_pri_apellido'], \PDO::PARAM_STR);
@@ -138,17 +138,17 @@ class InscripcionAdmision extends \yii\db\ActiveRecord {
                     ruta_doc_hojavida=:ruta_doc_hojavida,ruta_doc_certificado=:ruta_doc_certificado, 
                     ruta_doc_aceptacion=:ruta_doc_aceptacion, cemp_id=:cemp_id, ruta_doc_pago=:ruta_doc_pago, twin_tipo_pago=:forma_pago,
                     twin_mensaje1=:twin_mensaje1,twin_mensaje2=:twin_mensaje2,twin_fecha_modificacion=CURRENT_TIMESTAMP() 
-                 WHERE twin_id =:twin_id ";                
-        $met_ing=0;
-        if(empty($data[0]['ming_id'])){
-            $met_ing=0;
-        }else{
-            $met_ing=$data[0]['ming_id'];
-        }                
-        \app\models\Utilities::putMessageLogFile('sqlUpdate:'.$sql);
-        \app\models\Utilities::putMessageLogFile('ruta_doc_pago:'.basename($data[0]['ruta_doc_pago']));
-        \app\models\Utilities::putMessageLogFile('ruta_doc_pago1:'.$data[0]['ruta_doc_pago']);
-        \app\models\Utilities::putMessageLogFile('forma_pago:'.$data[0]['forma_pago']);
+                 WHERE twin_id =:twin_id ";
+        $met_ing = 0;
+        if (empty($data[0]['ming_id'])) {
+            $met_ing = 0;
+        } else {
+            $met_ing = $data[0]['ming_id'];
+        }
+        \app\models\Utilities::putMessageLogFile('sqlUpdate:' . $sql);
+        \app\models\Utilities::putMessageLogFile('ruta_doc_pago:' . basename($data[0]['ruta_doc_pago']));
+        \app\models\Utilities::putMessageLogFile('ruta_doc_pago1:' . $data[0]['ruta_doc_pago']);
+        \app\models\Utilities::putMessageLogFile('forma_pago:' . $data[0]['forma_pago']);
         $command = $con->createCommand($sql);
         $command->bindParam(":twin_id", $data[0]['twin_id'], \PDO::PARAM_STR);
         $command->bindParam(":twin_nombre", $data[0]['pges_pri_nombre'], \PDO::PARAM_STR);
@@ -172,11 +172,11 @@ class InscripcionAdmision extends \yii\db\ActiveRecord {
         $command->bindParam(":ruta_doc_aceptacion", basename($data[0]['ruta_doc_aceptacion']), \PDO::PARAM_STR);
         $command->bindParam(":cemp_id", basename($data[0]['cemp_id']), \PDO::PARAM_INT);
         $command->bindParam(":twin_mensaje1", $data[0]['twin_mensaje1'], \PDO::PARAM_STR);
-        $command->bindParam(":twin_mensaje2", $data[0]['twin_mensaje2'], \PDO::PARAM_STR);    
+        $command->bindParam(":twin_mensaje2", $data[0]['twin_mensaje2'], \PDO::PARAM_STR);
         $command->bindParam(":ruta_doc_pago", basename($data[0]['ruta_doc_pago']), \PDO::PARAM_STR);
         $command->bindParam(":forma_pago", $data[0]['forma_pago'], \PDO::PARAM_STR);
         $command->execute();
-                
+
         return $data[0]['twin_id'];
     }
 
@@ -195,13 +195,12 @@ class InscripcionAdmision extends \yii\db\ActiveRecord {
         $search = ".$typeFile";
         $replace = "_$timeSt" . ".$typeFile";
         $newFile = str_replace($search, $replace, $file);
-        if(file_exists($baseFile . $file)){
+        if (file_exists($baseFile . $file)) {
             if (rename($baseFile . $file, $baseFile . $newFile)) {
                 return $newFile;
             }
-        }
-        else{
-            \app\models\Utilities::putMessageLogFile('nombre:'.$newFile);    
+        } else {
+            \app\models\Utilities::putMessageLogFile('nombre:' . $newFile);
             return $newFile;
         }
     }
@@ -285,12 +284,12 @@ class InscripcionAdmision extends \yii\db\ActiveRecord {
         $transaction = $con->beginTransaction();
         $transaction1 = $con1->beginTransaction();
         $transaction2 = $con2->beginTransaction();
-        try {            
+        try {
             //Se consulta la información grabada en la tabla temporal.
-            $mod_inscripcion = new InscripcionAdmision();            
-            $resp_datos = $mod_inscripcion->consultarDatosInscripcion($twinIds);            
+            $mod_inscripcion = new InscripcionAdmision();
+            $resp_datos = $mod_inscripcion->consultarDatosInscripcion($twinIds);
             // He colocado al inicio la informacion para que cargue al principio
-            if ($resp_datos) {                
+            if ($resp_datos) {
                 if (isset($resp_datos['twin_numero']) && strlen($resp_datos['twin_numero']) > 0) {
                     $identificacion = $resp_datos['twin_numero'];
                 } else {
@@ -300,17 +299,17 @@ class InscripcionAdmision extends \yii\db\ActiveRecord {
                     $id_persona = 0;
                     $mod_persona = new Persona();
                     $keys_per = [
-                        'per_pri_nombre', 'per_seg_nombre', 'per_pri_apellido', 'per_seg_apellido', 
-                        'per_cedula', 'etn_id', 'eciv_id', 'per_genero', 'pai_id_nacimiento', 
-                        'pro_id_nacimiento', 'can_id_nacimiento', 'per_fecha_nacimiento', 
-                        'per_celular', 'per_correo', 'tsan_id', 'per_domicilio_sector', 
-                        'per_domicilio_cpri', 'per_domicilio_csec', 'per_domicilio_num', 
-                        'per_domicilio_ref', 'per_domicilio_telefono', 'pai_id_domicilio', 
-                        'pro_id_domicilio', 'can_id_domicilio', 'per_nac_ecuatoriano', 
+                        'per_pri_nombre', 'per_seg_nombre', 'per_pri_apellido', 'per_seg_apellido',
+                        'per_cedula', 'etn_id', 'eciv_id', 'per_genero', 'pai_id_nacimiento',
+                        'pro_id_nacimiento', 'can_id_nacimiento', 'per_fecha_nacimiento',
+                        'per_celular', 'per_correo', 'tsan_id', 'per_domicilio_sector',
+                        'per_domicilio_cpri', 'per_domicilio_csec', 'per_domicilio_num',
+                        'per_domicilio_ref', 'per_domicilio_telefono', 'pai_id_domicilio',
+                        'pro_id_domicilio', 'can_id_domicilio', 'per_nac_ecuatoriano',
                         'per_nacionalidad', 'per_foto', 'per_usuario_ingresa', 'per_estado', 'per_estado_logico'
                     ];
                     $parametros_per = [
-                        ucwords(strtolower($resp_datos['twin_nombre'])), null, 
+                        ucwords(strtolower($resp_datos['twin_nombre'])), null,
                         ucwords(strtolower($resp_datos['twin_apellido'])), null,
                         $resp_datos['twin_numero'], null, null, null, null, null,
                         null, null, $resp_datos['twin_celular'], $resp_datos['twin_correo'],
@@ -318,18 +317,18 @@ class InscripcionAdmision extends \yii\db\ActiveRecord {
                         null, null, null,
                         null, null, null,
                         null, null, null, $usuario_ingreso, 1, 1
-                    ];                    
-                    $id_persona = $mod_persona->consultarIdPersona($resp_datos['twin_numero'], $resp_datos['twin_numero'],$resp_datos['twin_correo'],$resp_datos['twin_celular']);                    
-                    if ($id_persona == 0) {                        
+                    ];
+                    $id_persona = $mod_persona->consultarIdPersona($resp_datos['twin_numero'], $resp_datos['twin_numero'], $resp_datos['twin_correo'], $resp_datos['twin_celular']);
+                    if ($id_persona == 0) {
                         $id_persona = $mod_persona->insertarPersona($con, $parametros_per, $keys_per, 'persona');
-                    }                    
-                    if ($id_persona > 0) {   
+                    }
+                    if ($id_persona > 0) {
                         \app\models\Utilities::putMessageLogFile('se crea persona.');
                         //Modifificaion para Mover Imagenes de temp a Persona
                         //self::movePersonFiles($twinIds,$id_persona);
                         $concap = \Yii::$app->db_captacion;
                         $mod_emp_persona = new EmpresaPersona();
-                        $emp_id = 1;                        
+                        $emp_id = 1;
                         $keys = ['emp_id', 'per_id', 'eper_estado', 'eper_estado_logico'];
                         $parametros = [$emp_id, $id_persona, 1, 1];
                         $emp_per_id = $mod_emp_persona->consultarIdEmpresaPersona($id_persona, $emp_id);
@@ -342,12 +341,12 @@ class InscripcionAdmision extends \yii\db\ActiveRecord {
                             if ($usuario_id == 0) {
                                 $security = new Security();
                                 $hash = $security->generateRandomString();
-                                $passencrypt = base64_encode($security->encryptByPassword($hash,$resp_datos['twin_numero']));
+                                $passencrypt = base64_encode($security->encryptByPassword($hash, $resp_datos['twin_numero']));
                                 $keys = ['per_id', 'usu_user', 'usu_sha', 'usu_password', 'usu_estado', 'usu_estado_logico'];
                                 $parametros = [$id_persona, $resp_datos['twin_correo'], $hash, $passencrypt, 1, 1];
                                 $usuario_id = $usuario->crearUsuarioTemporal($con, $parametros, $keys, 'usuario');
                             }
-                            if ($usuario_id > 0) {                                
+                            if ($usuario_id > 0) {
                                 $mod_us_gr_ep = new UsuaGrolEper();
                                 $grol_id = 30;
                                 $keys = ['eper_id', 'usu_id', 'grol_id', 'ugep_estado', 'ugep_estado_logico'];
@@ -363,13 +362,13 @@ class InscripcionAdmision extends \yii\db\ActiveRecord {
                                     if ($interesado_id == 0) {
                                         $interesado_id = $mod_interesado->insertarInteresado($concap, $parametros, $keys, 'interesado');
                                     }
-                                    if ($interesado_id > 0) {                                        
+                                    if ($interesado_id > 0) {
                                         $mod_inte_emp = new InteresadoEmpresa(); // se guarda con estado_interesado 1
                                         $iemp_id = $mod_inte_emp->consultaInteresadoEmpresaById($interesado_id, $emp_id);
                                         if ($iemp_id == 0) {
                                             $iemp_id = $mod_inte_emp->crearInteresadoEmpresa($interesado_id, $emp_id, $usuario_id);
                                         }
-                                        if ($iemp_id > 0) {                                            
+                                        if ($iemp_id > 0) {
                                             $eaca_id = NULL;
                                             $mest_id = NULL;
                                             if ($emp_id == 1) {//Uteg 
@@ -382,26 +381,24 @@ class InscripcionAdmision extends \yii\db\ActiveRecord {
                                             $rsin_id = 1; //Solicitud pendiente     
                                             $solins_model = new SolicitudInscripcion();
                                             //$mensaje = 'intId: ' . $interesado_id . '/uaca: ' . $pgest['unidad_academica'] . '/modalidad: ' . $pgest['modalidad'] . '/ming: ' . $pgest['ming_id'] . '/eaca: ' . $eaca_id . '/mest: ' . $mest_id . '/empresa: ' . $emp_id . '/secuencia: ' . $num_secuencia . '/rsin_id: ' . $rsin_id . '/sins_fechasol: ' . $sins_fechasol . '/usuario_id: ' . $usuario_id;
-                                            $ming=null;
-                                            if($resp_datos['uaca_id']==1){
-                                                $ming=null;
-                                            }else{
-                                                if($resp_datos['twin_metodo_ingreso']==0){
-                                                    $ming=null;
-                                                }
-                                                else{
-                                                    $ming=$resp_datos['twin_metodo_ingreso'];
-                                                }
-                                            }                                            
-                                            if ($resp_datos['cemp_id']==0) {
-                                                $cemp=null;
+                                            $ming = null;
+                                            if ($resp_datos['uaca_id'] == 1) {
+                                                $ming = null;
                                             } else {
-                                                $cemp=$resp_datos['cemp_id'];
-                                            }                                                                  
+                                                if ($resp_datos['twin_metodo_ingreso'] == 0) {
+                                                    $ming = null;
+                                                } else {
+                                                    $ming = $resp_datos['twin_metodo_ingreso'];
+                                                }
+                                            }
+                                            if ($resp_datos['cemp_id'] == 0) {
+                                                $cemp = null;
+                                            } else {
+                                                $cemp = $resp_datos['cemp_id'];
+                                            }
                                             $sins_id = $solins_model->insertarSolicitud($interesado_id, $resp_datos['uaca_id'], $resp_datos['mod_id'], $resp_datos['twin_metodo_ingreso'], $eaca_id, null, $emp_id, $num_secuencia, $rsin_id, $sins_fechasol, $usuario_id, $cemp);
                                             //grabar los documentos                                            
                                             if ($sins_id) {
-                                                //\app\models\Utilities::putMessageLogFile('después de insertar solicitud:'.$sins_id); 
                                                 if (($resp_datos['ruta_doc_titulo'] != "") || ($resp_datos['ruta_doc_dni'] != "") || ($resp_datos['ruta_doc_certvota'] != "") || ($resp_datos['ruta_doc_foto'] != "") || ($resp_datos['ruta_doc_certificado'] != "") || ($resp_datos['ruta_doc_hojavida'] != "")) {
                                                     $subidaDocumentos = 1;
                                                 } else {
@@ -413,7 +410,7 @@ class InscripcionAdmision extends \yii\db\ActiveRecord {
                                                     $timeSt = $arrTime[4];
                                                     $typeFile = strtolower($arrIm[count($arrIm) - 1]);
                                                     $rutaTitulo = Yii::$app->params["documentFolder"] . "solicitudinscripcion/" . $id_persona . "/doc_titulo_per_" . $id_persona . "_" . $timeSt;
-                                                    $resulDoc1 = $solins_model->insertarDocumentosSolic($sins_id, $interesado_id, 1, $rutaTitulo, $usuario_id);                                                    
+                                                    $resulDoc1 = $solins_model->insertarDocumentosSolic($sins_id, $interesado_id, 1, $rutaTitulo, $usuario_id);
                                                     /* if (!($resulDoc1)) {
                                                       throw new Exception('Error doc Titulo no creado.');
                                                       } */
@@ -424,7 +421,7 @@ class InscripcionAdmision extends \yii\db\ActiveRecord {
                                                     $timeSt = $arrTime[4];
                                                     $typeFile = strtolower($arrIm[count($arrIm) - 1]);
                                                     $rutaDni = Yii::$app->params["documentFolder"] . "solicitudinscripcion/" . $id_persona . "/doc_dni_per_" . $id_persona . "_" . $timeSt;
-                                                    $resulDoc2 = $solins_model->insertarDocumentosSolic($sins_id, $interesado_id, 2, $rutaDni, $usuario_id);                                                                                                        
+                                                    $resulDoc2 = $solins_model->insertarDocumentosSolic($sins_id, $interesado_id, 2, $rutaDni, $usuario_id);
                                                     /* if (!($resulDoc2)) {
                                                       throw new Exception('Error doc Titulo no creado.');
                                                       } */
@@ -435,7 +432,7 @@ class InscripcionAdmision extends \yii\db\ActiveRecord {
                                                     $timeSt = $arrTime[4];
                                                     $typeFile = strtolower($arrIm[count($arrIm) - 1]);
                                                     $rutaCertvota = Yii::$app->params["documentFolder"] . "solicitudinscripcion/" . $id_persona . "/doc_certvota_per_" . $id_persona . "_" . $timeSt;
-                                                    $resulDoc3 = $solins_model->insertarDocumentosSolic($sins_id, $interesado_id, 3, $rutaCertvota, $usuario_id);                                                    
+                                                    $resulDoc3 = $solins_model->insertarDocumentosSolic($sins_id, $interesado_id, 3, $rutaCertvota, $usuario_id);
                                                     /* if (!($resulDoc3)) {
                                                       throw new Exception('Error doc Cert.Votación no creado.');
                                                       } */
@@ -446,7 +443,7 @@ class InscripcionAdmision extends \yii\db\ActiveRecord {
                                                     $timeSt = $arrTime[4];
                                                     $typeFile = strtolower($arrIm[count($arrIm) - 1]);
                                                     $rutaFoto = Yii::$app->params["documentFolder"] . "solicitudinscripcion/" . $id_persona . "/doc_foto_per_" . $id_persona . "_" . $timeSt;
-                                                    $resulDoc4 = $solins_model->insertarDocumentosSolic($sins_id, $interesado_id, 4, $rutaFoto, $usuario_id);                                                    
+                                                    $resulDoc4 = $solins_model->insertarDocumentosSolic($sins_id, $interesado_id, 4, $rutaFoto, $usuario_id);
                                                     /* if (!($resulDoc4)) {
                                                       throw new Exception('Error doc Foto no creado.');
                                                       } */
@@ -458,7 +455,7 @@ class InscripcionAdmision extends \yii\db\ActiveRecord {
                                                         $timeSt = $arrTime[4];
                                                         $typeFile = strtolower($arrIm[count($arrIm) - 1]);
                                                         $rutaCertificado = Yii::$app->params["documentFolder"] . "solicitudinscripcion/" . $id_persona . "/doc_certificado_per_" . $id_persona . "_" . $timeSt;
-                                                        $resulDoc5 = $solins_model->insertarDocumentosSolic($sins_id, $interesado_id, 6, $rutaCertificado, $usuario_id);                                                        
+                                                        $resulDoc5 = $solins_model->insertarDocumentosSolic($sins_id, $interesado_id, 6, $rutaCertificado, $usuario_id);
                                                         /* if (!($resulDoc5)) {
                                                           throw new Exception('Error doc Certificado no creado.');
                                                           } */
@@ -473,40 +470,39 @@ class InscripcionAdmision extends \yii\db\ActiveRecord {
                                                         /* if (!($resulDoc6)) {
                                                           throw new Exception('Error doc Hoja de Vida no creado.');
                                                           } */
-                                                    }                                                    
+                                                    }
                                                 }
                                                 if ($resp_datos['ruta_doc_aceptacion'] != "") {
                                                     $arrIm = explode(".", basename($resp_datos['ruta_doc_aceptacion']));
                                                     $arrTime = explode("_", basename($resp_datos['ruta_doc_aceptacion']));
                                                     $timeSt = $arrTime[4];
                                                     $typeFile = strtolower($arrIm[count($arrIm) - 1]);
-                                                    $rutaDocAceptacion = Yii::$app->params["documentFolder"] . "solicitudinscripcion/" . $id_persona . "/doc_aceptacion_per_" . $id_persona . "_" . $timeSt;                                                        
-                                                    $resulDoc7 = $solins_model->insertarDocumentosSolic($sins_id, $interesado_id, 8, $rutaDocAceptacion, $usuario_id);                                                    
-                                                    //app\models\Utilities::putMessageLogFile('despues de insertarDocumentosSolic');
+                                                    $rutaDocAceptacion = Yii::$app->params["documentFolder"] . "solicitudinscripcion/" . $id_persona . "/doc_aceptacion_per_" . $id_persona . "_" . $timeSt;
+                                                    $resulDoc7 = $solins_model->insertarDocumentosSolic($sins_id, $interesado_id, 8, $rutaDocAceptacion, $usuario_id);
                                                     /* if (!($resulDoc6)) {
                                                       throw new Exception('Error doc Hoja de Vida no creado.');
                                                       } */
-                                                }                                                      
-                                                if ($resp_datos['ruta_doc_pago'] != "") {    
-                                                    \app\models\Utilities::putMessageLogFile('imagen de pago');
+                                                }
+                                                if ($resp_datos['ruta_doc_pago'] != "") {
                                                     $arrIm = explode(".", basename($resp_datos['ruta_doc_pago']));
-                                                    $arrTime = explode("_", basename($resp_datos['ruta_doc_pago']));
-                                                    $timeSt = $arrTime[4];
+                                                    $arrTime = explode(" ", basename($resp_datos['ruta_doc_pago']));
+                                                    $timeSt = $arrTime[1];
                                                     $typeFile = strtolower($arrIm[count($arrIm) - 1]);
-                                                    $fecha = date(Yii::$app->params["dateTimeByDefault"]);                                                    
-                                                    $rutaDocPago = Yii::$app->params["documentFolder"] . "documento/" . $id_persona . "/pago_" . $id_persona . "-" . $fecha . "." . $typeFile; 
+                                                    $fecha = date(Yii::$app->params["dateByDefault"]);
+                                                    $rutaDocPago = Yii::$app->params["documentFolder"] . "documento/" . $id_persona . "/pago_" . $id_persona . "-" . $fecha . " " . $timeSt;
                                                     $archivo = basename($rutaDocPago);
-                                                }                 
+                                                    \app\models\Utilities::putMessageLogFile('archivo al leer de temporal:' . $archivo);
+                                                }
                                                 //Obtener el precio de la solicitud.                                                
                                                 if ($beca == "1") {
                                                     $precio = 0;
-                                                } else {                                                                                                          
+                                                } else {
                                                     $resp_precio = $solins_model->ObtenerPrecio($resp_datos['twin_metodo_ingreso'], $resp_datos['uaca_id'], $resp_datos['mod_id'], $eaca_id);
-                                                    if ($resp_precio) {                                                        
-                                                        /*if ($resp_datos['uaca_id'] == 2) {
-                                                            $ite_id = 10;
-                                                        } else {*/
-                                                            $ite_id = $resp_precio['ite_id'];                                                            
+                                                    if ($resp_precio) {
+                                                        /* if ($resp_datos['uaca_id'] == 2) {
+                                                          $ite_id = 10;
+                                                          } else { */
+                                                        $ite_id = $resp_precio['ite_id'];
                                                         //}
                                                         $precio = $resp_precio['precio'];
                                                     } else {
@@ -514,52 +510,53 @@ class InscripcionAdmision extends \yii\db\ActiveRecord {
                                                     }
                                                 }
                                                 $mod_ordenpago = new OrdenPago();
-                                                $val_descuento = 0;                                                
+                                                $val_descuento = 0;
                                                 //Se verifica si seleccionó descuento.
                                                 //descuento para grado online y posgrado no tiene descuento, caso contrario es 96 dol
-                                                /*if ($resp_datos['uaca_id'] == 1) {
-                                                    if (($resp_datos['mod_id'] == 2) or ( $resp_datos['mod_id'] == 3) or ( $resp_datos['mod_id'] == 4)) {
-                                                        $val_descuento = 96;
-                                                    }
-                                                }*/
+                                                /* if ($resp_datos['uaca_id'] == 1) {
+                                                  if (($resp_datos['mod_id'] == 2) or ( $resp_datos['mod_id'] == 3) or ( $resp_datos['mod_id'] == 4)) {
+                                                  $val_descuento = 96;
+                                                  }
+                                                  } */
                                                 //Generar la orden de pago con valor correspondiente. Buscar precio para orden de pago.                                                                     
                                                 if ($precio == 0) {
                                                     $estadopago = 'S';
                                                 } else {
                                                     $estadopago = 'P';
                                                 }
-                                                $val_total = $precio - $val_descuento;                                                     
-                                                $resp_opago = $mod_ordenpago->insertarOrdenpago($sins_id, null, $val_total, 0, $val_total, $estadopago, $usuario_id);                                                                                                
-                                                if ($resp_opago) {                                                                                                        
+                                                $val_total = $precio - $val_descuento;
+                                                $resp_opago = $mod_ordenpago->insertarOrdenpago($sins_id, null, $val_total, 0, $val_total, $estadopago, $usuario_id);
+                                                if ($resp_opago) {
+                                                    \app\models\Utilities::putMessageLogFile('después grabar o/pago');
                                                     //insertar desglose del pago                                                         
-                                                    $fecha_ini = date(Yii::$app->params["dateByDefault"]);                                                    
-                                                    $resp_dpago = $mod_ordenpago->insertarDesglosepago($resp_opago, $ite_id, $val_total, 0, $val_total, $fecha_ini, null, $estadopago, $usuario_id);                                                    
+                                                    $fecha_ini = date(Yii::$app->params["dateByDefault"]);
+                                                    $resp_dpago = $mod_ordenpago->insertarDesglosepago($resp_opago, $ite_id, $val_total, 0, $val_total, $fecha_ini, null, $estadopago, $usuario_id);
                                                     if ($resp_dpago) {
+                                                        \app\models\Utilities::putMessageLogFile('después grabar desglose pago');
                                                         //Grabar documento de registro de pago por depósito o transferencia.
-                                                        if (($resp_datos['twin_tipo_pago']==3) or ($resp_datos['twin_tipo_pago']==4)) {                                                            
-                                                            if ($resp_datos['twin_tipo_pago']==3) { //depósito
-                                                                $fpag_id=5;   //depósito
+                                                        if (($resp_datos['twin_tipo_pago'] == 3) or ( $resp_datos['twin_tipo_pago'] == 4)) {
+                                                            if ($resp_datos['twin_tipo_pago'] == 3) { //depósito
+                                                                $fpag_id = 5;   //depósito
                                                             } else {
-                                                                $fpag_id=4;  //transferencia
-                                                            }                                                                                                                   
-                                                            $fecha_registro = date(Yii::$app->params["dateTimeByDefault"]);                                                                  
+                                                                $fpag_id = 4;  //transferencia
+                                                            }
+                                                            $fecha_registro = date(Yii::$app->params["dateTimeByDefault"]);
+                                                            \app\models\Utilities::putMessageLogFile('archivo:' . $archivo);
                                                             $creadetalle = $mod_ordenpago->insertarCargaprepago($resp_opago, $fpag_id, $val_total, $archivo, 'PE', '', $dataReg["observacion"], $dataReg["num_transaccion"], $dataReg["fecha_transaccion"], $fecha_registro);
-                                                            if ($creadetalle) {                                                                
-                                                                $detalle= 'S';
+                                                            if ($creadetalle) {
+                                                                \app\models\Utilities::putMessageLogFile('despues de insertar Cargar pago');
+                                                                $detalle = 'S';
                                                             }
                                                         } else {
-                                                            $detalle= 'S';
+                                                            $detalle = 'S';
                                                         }
                                                         //Grabar datos de factura                                                                                                                   
-                                                        if ($detalle== 'S') {
-                                                            //\app\models\Utilities::putMessageLogFile('grabar datos factura');
-                                                            $resdatosFact = $solins_model->crearDatosFacturaSolicitud($sins_id, $dataReg["nombres_fact"], $dataReg["apellidos_fact"], 
-                                                                                            $dataReg["tipo_dni_fac"], $dataReg["dni"], 
-                                                                                            $dataReg["direccion_fact"], $dataReg["telefono_fac"],
-                                                                                            $dataReg["correo"]);                                                
+                                                        if ($detalle == 'S') {
+                                                            \app\models\Utilities::putMessageLogFile('grabar datos factura');
+                                                            $resdatosFact = $solins_model->crearDatosFacturaSolicitud($sins_id, $dataReg["nombres_fact"], $dataReg["apellidos_fact"], $dataReg["tipo_dni_fac"], $dataReg["dni"], $dataReg["direccion_fact"], $dataReg["telefono_fac"], $dataReg["correo"]);
                                                             if ($resdatosFact) {
                                                                 $exito = 1;
-                                                            } 
+                                                            }
                                                         }
                                                     }
                                                 }
@@ -603,11 +600,11 @@ class InscripcionAdmision extends \yii\db\ActiveRecord {
                 //Envío de correo.
                 $tituloMensaje = Yii::t("interesado", "UTEG - Registration Online");
                 $asunto = Yii::t("interesado", "UTEG - Registration Online");
-                $link = "https://www.asgard.uteg.edu.ec/asgard";               
-                $body = Utilities::getMailMessage("credentials", array("[[usuario]]" => $resp_datos['twin_nombre']." ". $resp_datos['twin_apellido'], "[[username]]" => $resp_datos['twin_correo'], "[[clave]]" => $resp_datos['twin_numero'], "[[link]]" => $link), Yii::$app->language);                                
-                Utilities::sendEmail($tituloMensaje, Yii::$app->params["adminEmail"], [$resp_datos['twin_correo'] => $resp_datos['twin_apellido'] . " " . $resp_datos['twin_nombre']], $asunto, $body);                
-                Utilities::sendEmail($tituloMensaje, Yii::$app->params["adminEmail"], [Yii::$app->params["admisiones"] => "Jefe"], $asunto, $body);                
-                Utilities::sendEmail($tituloMensaje, Yii::$app->params["adminEmail"], [Yii::$app->params["soporteEmail"] => "Soporte"], $asunto, $body); 
+                $link = "https://www.asgard.uteg.edu.ec/asgard";
+                $body = Utilities::getMailMessage("credentials", array("[[usuario]]" => $resp_datos['twin_nombre'] . " " . $resp_datos['twin_apellido'], "[[username]]" => $resp_datos['twin_correo'], "[[clave]]" => $resp_datos['twin_numero'], "[[link]]" => $link), Yii::$app->language);
+                Utilities::sendEmail($tituloMensaje, Yii::$app->params["adminEmail"], [$resp_datos['twin_correo'] => $resp_datos['twin_apellido'] . " " . $resp_datos['twin_nombre']], $asunto, $body);
+                Utilities::sendEmail($tituloMensaje, Yii::$app->params["adminEmail"], [Yii::$app->params["admisiones"] => "Jefe"], $asunto, $body);
+                Utilities::sendEmail($tituloMensaje, Yii::$app->params["adminEmail"], [Yii::$app->params["soporteEmail"] => "Soporte"], $asunto, $body);
                 //\app\models\Utilities::putMessageLogFile('después del tercer sendMail');
                 $message = array(
                     "wtmessage" => Yii::t("formulario", "The information have been saved and the information has been sent to your email"),
@@ -623,7 +620,7 @@ class InscripcionAdmision extends \yii\db\ActiveRecord {
                 $arroout["error"] = null;
                 $arroout["message"] = $message;
                 $arroout["data"] = $resp_datos; //$rawData;
-                $arroout["dataext"] = $sins_id; 
+                $arroout["dataext"] = $sins_id;
                 return $arroout;
             } else {
                 //$transaction->rollback();
@@ -637,7 +634,7 @@ class InscripcionAdmision extends \yii\db\ActiveRecord {
                 $arroout["error"] = null;
                 $arroout["message"] = $message;
                 $arroout["data"] = null;
-                $arroout["dataext"] = null; 
+                $arroout["dataext"] = null;
                 return $arroout;
                 //return Utilities::ajaxResponse('NO_OK', 'alert', Yii::t("jslang", "Bad Request"), false, $message);
             }
@@ -653,7 +650,7 @@ class InscripcionAdmision extends \yii\db\ActiveRecord {
             $arroout["error"] = $ex->getCode();
             $arroout["message"] = $ex->getMessage();
             $arroout["data"] = null;
-            $arroout["dataext"] = null; 
+            $arroout["dataext"] = null;
             return $arroout;
             //return Utilities::ajaxResponse('NO_OK', 'alert', Yii::t("jslang", "Bad Request"), false, $message);
         }
@@ -665,13 +662,16 @@ class InscripcionAdmision extends \yii\db\ActiveRecord {
         $destinations = Yii::$app->basePath . "/" . Yii::$app->params["documentFolder"] . "solicitudinscripcion/$per_id/";
         if (Utilities::verificarDirectorio($destinations)) {
             $files = scandir($folder);
+            \app\models\Utilities::putMessageLogFile('al mover files:' . $files);
             foreach ($files as $file) {
                 if (trim($file) != "." && trim($file) != "..") {
                     $arrExt = explode(".", $file);
                     $type = $arrExt[count($arrExt) - 1];
                     $newFile = str_replace("_" . $temp_id . "_", "_" . $per_id . "_", $file);
-                    if (!rename($folder . $file, $destinations . $newFile)) {
-                        return false;
+                    if (file_exists($folder . $file)) {
+                        if (!rename($folder . $file, $destinations . $newFile)) {
+                            return false;
+                        }
                     }
                 }
             }
@@ -680,7 +680,7 @@ class InscripcionAdmision extends \yii\db\ActiveRecord {
             return false;
         return true;
     }
-    
+
     public static function movePersonFilesPago($temp_id, $per_id) {
         $folder = Yii::$app->basePath . "/" . Yii::$app->params["documentFolder"] . "documentoadmision/$temp_id/";
         $destinations = Yii::$app->basePath . "/" . Yii::$app->params["documentFolder"] . "documento/$per_id/";
@@ -691,9 +691,11 @@ class InscripcionAdmision extends \yii\db\ActiveRecord {
                     $arrExt = explode(".", $file);
                     $type = $arrExt[count($arrExt) - 1];
                     $newFile = str_replace("_" . $temp_id . "-", "_" . $per_id . "-", $file);
-                    if (!rename($folder . $file, $destinations . $newFile)) {
-                        return false;
-                    }
+                    if (file_exists($folder . $file)) {
+                        if (!rename($folder . $file, $destinations . $newFile)) {
+                            return false;
+                        }
+                    }                    
                 }
             }
             rmdir($folder);
