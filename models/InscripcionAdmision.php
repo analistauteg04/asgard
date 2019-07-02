@@ -144,11 +144,7 @@ class InscripcionAdmision extends \yii\db\ActiveRecord {
             $met_ing = 0;
         } else {
             $met_ing = $data[0]['ming_id'];
-        }
-        \app\models\Utilities::putMessageLogFile('sqlUpdate:' . $sql);
-        \app\models\Utilities::putMessageLogFile('ruta_doc_pago:' . basename($data[0]['ruta_doc_pago']));
-        \app\models\Utilities::putMessageLogFile('ruta_doc_pago1:' . $data[0]['ruta_doc_pago']);
-        \app\models\Utilities::putMessageLogFile('forma_pago:' . $data[0]['forma_pago']);
+        }       
         $command = $con->createCommand($sql);
         $command->bindParam(":twin_id", $data[0]['twin_id'], \PDO::PARAM_STR);
         $command->bindParam(":twin_nombre", $data[0]['pges_pri_nombre'], \PDO::PARAM_STR);
@@ -199,12 +195,27 @@ class InscripcionAdmision extends \yii\db\ActiveRecord {
             if (rename($baseFile . $file, $baseFile . $newFile)) {
                 return $newFile;
             }
-        } else {
-            \app\models\Utilities::putMessageLogFile('nombre:' . $newFile);
+        } else {            
             return $newFile;
         }
     }
-
+    
+    public static function addLabelFechaDocPagos($sins_id, $file, $FechaTime) {
+        $arrIm = explode(".", basename($file));
+        $typeFile = strtolower($arrIm[count($arrIm) - 1]);
+        $baseFile = Yii::$app->basePath;
+        $search = ".$typeFile";
+        $replace = "-$FechaTime" . ".$typeFile";
+        $newFile = str_replace($search, $replace, $file);
+        if (file_exists($baseFile . $file)) {
+            if (rename($baseFile . $file, $baseFile . $newFile)) {
+                return $newFile;
+            }
+        } else {            
+            return $newFile;
+        }
+    }
+    
     /**
      * Function consultarDatosInscripcion
      * @author  Kleber Loayza <analistadesarrollo03@uteg.edu.ec>
@@ -483,7 +494,8 @@ class InscripcionAdmision extends \yii\db\ActiveRecord {
                                                       throw new Exception('Error doc Hoja de Vida no creado.');
                                                       } */
                                                 }
-                                                if ($resp_datos['ruta_doc_pago'] != "") {
+                                                \app\models\Utilities::putMessageLogFile('de la b/d:' . $resp_datos['ruta_doc_pago']);
+                                                if ($resp_datos['ruta_doc_pago'] != "") {                                                    
                                                     $arrIm = explode(".", basename($resp_datos['ruta_doc_pago']));
                                                     $arrTime = explode(" ", basename($resp_datos['ruta_doc_pago']));
                                                     $timeSt = $arrTime[1];
@@ -531,17 +543,16 @@ class InscripcionAdmision extends \yii\db\ActiveRecord {
                                                     //insertar desglose del pago                                                         
                                                     $fecha_ini = date(Yii::$app->params["dateByDefault"]);
                                                     $resp_dpago = $mod_ordenpago->insertarDesglosepago($resp_opago, $ite_id, $val_total, 0, $val_total, $fecha_ini, null, $estadopago, $usuario_id);
-                                                    if ($resp_dpago) {
-                                                        \app\models\Utilities::putMessageLogFile('después grabar desglose pago');
+                                                    if ($resp_dpago) {                                                        
                                                         //Grabar documento de registro de pago por depósito o transferencia.
+                                                        \app\models\Utilities::putMessageLogFile('tipo pago:' . $resp_datos['twin_tipo_pago']);
                                                         if (($resp_datos['twin_tipo_pago'] == 3) or ( $resp_datos['twin_tipo_pago'] == 4)) {
                                                             if ($resp_datos['twin_tipo_pago'] == 3) { //depósito
                                                                 $fpag_id = 5;   //depósito
                                                             } else {
                                                                 $fpag_id = 4;  //transferencia
                                                             }
-                                                            $fecha_registro = date(Yii::$app->params["dateTimeByDefault"]);
-                                                            \app\models\Utilities::putMessageLogFile('archivo:' . $archivo);
+                                                            $fecha_registro = date(Yii::$app->params["dateTimeByDefault"]);                                                            
                                                             $creadetalle = $mod_ordenpago->insertarCargaprepago($resp_opago, $fpag_id, $val_total, $archivo, 'PE', '', $dataReg["observacion"], $dataReg["num_transaccion"], $dataReg["fecha_transaccion"], $fecha_registro);
                                                             if ($creadetalle) {
                                                                 \app\models\Utilities::putMessageLogFile('despues de insertar Cargar pago');
@@ -661,8 +672,7 @@ class InscripcionAdmision extends \yii\db\ActiveRecord {
         $folder = Yii::$app->basePath . "/" . Yii::$app->params["documentFolder"] . "solicitudadmision/$temp_id/";
         $destinations = Yii::$app->basePath . "/" . Yii::$app->params["documentFolder"] . "solicitudinscripcion/$per_id/";
         if (Utilities::verificarDirectorio($destinations)) {
-            $files = scandir($folder);
-            \app\models\Utilities::putMessageLogFile('al mover files:' . $files);
+            $files = scandir($folder);            
             foreach ($files as $file) {
                 if (trim($file) != "." && trim($file) != "..") {
                     $arrExt = explode(".", $file);

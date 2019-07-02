@@ -125,6 +125,7 @@ class InscripcionadmisionController extends \yii\web\Controller {
             $model = new InscripcionAdmision();
             $data = Yii::$app->request->post();
             $accion = isset($data['ACCION']) ? $data['ACCION'] : "";
+            $fecha_registro = date(Yii::$app->params["dateTimeByDefault"]);
             if ($data["upload_file"]) {
                 if (empty($_FILES)) {
                     return json_encode(['error' => Yii::t("notificaciones", "Error to process File {file}. Try again.", ['{file}' => basename($files['name'])])]);
@@ -148,11 +149,11 @@ class InscripcionadmisionController extends \yii\web\Controller {
                 }
                 //Recibe Parámetros.
                 $inscripcion_id = $data["inscripcion_id"];
-                $files = $_FILES[key($_FILES)];
+                $files = $_FILES[key($_FILES)];                
                 $arrIm = explode(".", basename($files['name']));
-                $typeFile = strtolower($arrIm[count($arrIm) - 1]);
-                $fecha_registro = date(Yii::$app->params["dateTimeByDefault"]);
+                $typeFile = strtolower($arrIm[count($arrIm) - 1]);                
                 $dirFileEnd = Yii::$app->params["documentFolder"] . "documentoadmision/" . $inscripcion_id . "/" . $data["name_file"] . "_" . $inscripcion_id . "-" . $fecha_registro . "." . $typeFile;
+                \app\models\Utilities::putMessageLogFile('upload_filepago:'.$dirFileEnd);
                 $status = Utilities::moveUploadFile($files['tmp_name'], $dirFileEnd);
                 if ($status) {
                     return true;
@@ -228,12 +229,11 @@ class InscripcionadmisionController extends \yii\web\Controller {
                 }
                 if (isset($data["DATA_1"][0]["ruta_doc_pago"]) && $data["DATA_1"][0]["ruta_doc_pago"] != "") {                      
                     $arrIm = explode(".", basename($data["DATA_1"][0]["ruta_doc_pago"]));                    
-                    $typeFile = strtolower($arrIm[count($arrIm) - 1]);                    
-                    $fecha_registro = date(Yii::$app->params["dateTimeByDefault"]);
+                    $typeFile = strtolower($arrIm[count($arrIm) - 1]);                                        
                     $doc_pagoOld = Yii::$app->params["documentFolder"] . "documentoadmision/" . $inscripcion_id . "/pago_". $inscripcion_id . "-" . $fecha_registro . "." . $typeFile;                     
                     \app\models\Utilities::putMessageLogFile('ruta pago old:'.$doc_pagoOld);
-                    //$doc_pago = InscripcionAdmision::addLabelTimeDocumentos($inscripcion_id, $doc_pagoOld, $timeSt);                    
-                    $data["DATA_1"][0]["ruta_doc_pago"] = $doc_pagoOld;                      
+                    $doc_pago = InscripcionAdmision::addLabelFechaDocPagos($inscripcion_id, $doc_pagoOld, $fecha_registro);                       
+                    $data["DATA_1"][0]["ruta_doc_pago"] = $doc_pago;                      
                     if ($doc_pago === false)
                         throw new Exception('Error al cargar documento de pago.');
                 }                                
@@ -256,7 +256,8 @@ class InscripcionadmisionController extends \yii\web\Controller {
                         'correo' => strtolower($data["correo"]),
                         'num_transaccion' => $data["num_transaccion"],
                         'observacion' => strtolower($data["observacion"]),
-                        'fecha_transaccion' => $data["fecha_transaccion"],                                              
+                        'fecha_transaccion' => $data["fecha_transaccion"],  
+                        'doc_pago' => $data["doc_pago"],  
                     );                      
                     $resul = $model->insertaOriginal($Ids,$dataRegistro);                    
                 } else if ($accion == "UpdateDepTrans") {
