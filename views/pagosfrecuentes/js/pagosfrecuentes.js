@@ -230,7 +230,7 @@ $(document).ready(function () {
         representarItems(obtDataList());
     });
     $('#paso3next').click(function () {
-        guardarFacturaTemp();
+        //guardarFacturaTemp();
         guardarPagos();
         $("a[data-href='#paso2']").attr('data-toggle', 'none');
         $("a[data-href='#paso2']").parent().attr('class', 'disabled');
@@ -339,7 +339,7 @@ function guardarFacturaTemp() {
 }
 
 function guardarPagos() {
-    var link = $('#txth_base').val() + "/pagosfrecuentes/savepayment";
+    /*var link = $('#txth_base').val() + "/pagosfrecuentes/savepayment";
     var arrParams = new Object();
     if (total == 0) {
         mensaje("No ha seleccionado productos para la factura.");
@@ -352,14 +352,15 @@ function guardarPagos() {
             requestHttpAjax(link, arrParams, function (response) {
                 showAlert("OK", "success", response.message);
                 sessionStorage.clear();
-                setTimeout(function () {
-                    var bohre = $('#txth_base').val() + "/pagosfrecuentes/botonpago?docid=" + response.message.iddoc+"&popup=1";
+                setTimeout(function () {*/
+                    //var bohre = $('#txth_base').val() + "/pagosfrecuentes/botonpago?docid=" + response.message.iddoc+"&popup=1";
+                    var bohre = $('#txth_base').val() + "/pagosfrecuentes/botonpago?docid=" + 2+"&popup=1";
                     $('#btn_pago_p').attr("href", bohre);
                     $('#btn_pago_p').trigger("click");                    
-                }, 3000);
+        /*        }, 3000);
             });
         }
-    }
+    }*/
 }
 
 function mensaje(lv_mensaje) {

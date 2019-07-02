@@ -15,10 +15,10 @@ use yii\helpers\Html;
             <li class="disabled"><a data-href="#paso2" data-toggle="none" aria-expanded="false"><img class="" src="<?= Url::home() ?>img/users/n2.png" alt="User Image">  <?= Yii::t("formulario", "Product Selection") ?></a></li>
             <li class="disabled"><a data-href="#paso3" data-toggle="none" aria-expanded="false"><img class="" src="<?= Url::home() ?>img/users/n3.png" alt="User Image">  <?= Yii::t("formulario", "Data Invoices") ?></a></li>
             <div class="tab-content col-md-12  col-xs-12 col-sm-12 col-lg-12">
-                <div class="tab-pane active" id="paso1">
+                <div class="tab-pane" id="paso1">
                     <form class="form-horizontal">
-                        <?=
-                        $this->render('_form_data', [
+                        <?php
+                      /*  $this->render('_form_data', [
                             "tipos_dni" => $tipos_dni,
                             "tipos_dni2" => $tipos_dni2,
                             "txth_extranjero" => $txth_extranjero,
@@ -34,13 +34,13 @@ use yii\helpers\Html;
                             "arr_carrerra1" => $arr_carrerra1,
                             "arr_metodos" => $arr_metodos,
                         ]);
-                        ?>
+                     */   ?>
                     </form>
                 </div><!-- /.tab-pane -->
                 <div class="tab-pane" id="paso2">
                     <form class="form-horizontal">
-                        <?=
-                        $this->render('_form_producto', [
+                        <?php
+                        /*$this->render('_form_producto', [
                             "tipos_dni" => $tipos_dni,
                             "tipos_dni2" => $tipos_dni2,
                             "txth_extranjero" => $txth_extranjero,
@@ -55,11 +55,11 @@ use yii\helpers\Html;
                             "arr_conuteg" => $arr_conuteg,
                             "arr_carrerra1" => $arr_carrerra1,
                             "arr_metodos" => $arr_metodos,
-                        ]);
+                        ]);*/
                         ?>                  
                     </form>
                 </div><!-- /.tab-pane -->
-                <div class="tab-pane" id="paso3">
+                <div class="tab-pane active" id="paso3">
                     <form class="form-horizontal">
                         <?=
                         $this->render('_form_pago', [

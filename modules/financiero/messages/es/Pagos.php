@@ -13,6 +13,7 @@ namespace app\modules\financiero\messages;
      "Billing Data" => "Datos de Facturación",
      "Boton Payment status" =>"Estado boton pago",
      "Check External Payments" => "Verificar Pagos Externos",
+     "Check Boton Payments" => "Verificar Pagos por Botón",
      "Control Payments" => "Control de Pagos",
      "Details of payment" => "Datos del Pago",
      "Discount" => "Descuento",

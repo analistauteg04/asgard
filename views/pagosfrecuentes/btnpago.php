@@ -1,4 +1,5 @@
 <?php
+use yii\helpers\Url;
 use app\widgets\PbVPOS\PbVPOS;
 \app\models\Utilities::putMessageLogFile('op en btnpago:'.$ordenPago);
 echo PbVPOS::widget([
@@ -15,5 +16,7 @@ echo PbVPOS::widget([
     "isCheckout" => (is_null($requestID)?false:true),
     "requestID" => (is_null($requestID)?"":$requestID),
     "type" => "form",
+    "termsConditions" => Url::to(['pagosfrecuentes/terminos', 'popup' => 'true']),
+    "questionsLink" => Url::to(['pagosfrecuentes/preguntas', 'popup' => 'true']),
 ]);
 ?>
