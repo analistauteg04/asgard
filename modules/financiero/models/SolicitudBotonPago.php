@@ -111,7 +111,7 @@ class SolicitudBotonPago extends \yii\db\ActiveRecord {
         $estado = 1;
         if (isset($arrFiltro) && count($arrFiltro) > 0) {
            // if ($arrFiltro['search'] != "" && $arrFiltro['search'] != "") {
-                $str_search .= "(pben.pben_nombre like :search OR ";
+                $str_search .= "and (pben.pben_nombre like :search OR ";
                 $str_search .= "pben.pben_apellido like :search ) AND ";
            // }
             if ($arrFiltro['f_ini'] != "" && $arrFiltro['f_fin'] != "") {
@@ -120,22 +120,23 @@ class SolicitudBotonPago extends \yii\db\ActiveRecord {
             }
         }
         $sql = "
-            select
-                sbpa.sbpa_id as id,
-                vres.reference as referencia,
-                concat(pben.pben_nombre,' ',pben.pben_apellido) as estudiante,
-                docu.doc_fecha_pago as fecha_pago,
-                docu.doc_valor as total_pago,
-                docu.doc_pagado as estado
-            from
-                " . $con->dbname . ".solicitud_boton_pago as sbpa
-                join " . $con->dbname . ".persona_beneficiaria as pben on pben.pben_id = sbpa.pben_id
-                join " . $con->dbname . ".documento as docu on docu.sbpa_id = sbpa.sbpa_id
-                join " . $con1->dbname . ".vpos_response as vres on vres.ordenPago = docu.doc_id and vres.tipo_orden = 2
-            where
-                $str_search
-                1=1 -- OJO ESTO ESTA QUEMADO
-            ";
+                select
+                    sbpa.sbpa_id as id,
+                    vres.reference as referencia,
+                    concat(pben.pben_nombre,' ',pben.pben_apellido) as estudiante,
+                    docu.doc_nombres_cliente as persona_factura,
+                    ifnull(docu.doc_cedula,'') as cedula_factura,
+                    docu.doc_fecha_pago as fecha_pago,
+                    docu.doc_valor as total_pago,
+                    docu.doc_pagado as estado
+                from
+                    " . $con->dbname . ".solicitud_boton_pago as sbpa
+                    join " . $con->dbname . ".persona_beneficiaria as pben on pben.pben_id = sbpa.pben_id
+                    join " . $con->dbname . ".documento as docu on docu.sbpa_id = sbpa.sbpa_id
+                    join " . $con1->dbname . ".vpos_response as vres on vres.ordenPago = docu.doc_id and vres.tipo_orden = 2
+                where 1=1
+                    $str_search
+            ";  
         $comando = $con->createCommand($sql);
         $comando->bindParam(":status", $estado, \PDO::PARAM_STR);
         //VERIFICAR SI LOS PARAMETROS $doc_id y $opag_id SE VAN USAR SINO BORRAR

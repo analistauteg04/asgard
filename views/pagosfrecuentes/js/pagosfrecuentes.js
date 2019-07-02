@@ -230,7 +230,7 @@ $(document).ready(function () {
         representarItems(obtDataList());
     });
     $('#paso3next').click(function () {
-        //guardarFacturaTemp();
+        guardarFacturaTemp();
         guardarPagos();
         $("a[data-href='#paso2']").attr('data-toggle', 'none');
         $("a[data-href='#paso2']").parent().attr('class', 'disabled');
