@@ -152,10 +152,8 @@ class InscripcionadmisionController extends \yii\web\Controller {
                 $files = $_FILES[key($_FILES)];                
                 $arrIm = explode(".", basename($files['name']));
                 $typeFile = strtolower($arrIm[count($arrIm) - 1]);                
-                $dirFileEnd = Yii::$app->params["documentFolder"] . "documentoadmision/" . $inscripcion_id . "/" . $data["name_file"] . "_" . $inscripcion_id . "-" . $fecha_registro . "." . $typeFile;
-                //$dirFileEnd = Yii::$app->params["documentFolder"] . "documentoadmision/" . $inscripcion_id . "/" . $data["name_file"] . "_" . $inscripcion_id . $typeFile;
-                \app\models\Utilities::putMessageLogFile('upload_filepago:'.$dirFileEnd);
-                $status = Utilities::moveUploadFile($files['tmp_name'], $dirFileEnd);
+                $dirFilePagoEnd = Yii::$app->params["documentFolder"] . "documentoadmision/" . $inscripcion_id . "/" . $data["name_file"] . "_" . $inscripcion_id . "." . $typeFile;                
+                $status = Utilities::moveUploadFile($files['tmp_name'], $dirFilePagoEnd);
                 if ($status) {
                     return true;
                 } else {
@@ -228,14 +226,12 @@ class InscripcionadmisionController extends \yii\web\Controller {
                     if ($doc_aceptacion === false)
                         throw new Exception('Error documento aceptación.');
                 }
-                if (isset($data["DATA_1"][0]["ruta_doc_pago"]) && $data["DATA_1"][0]["ruta_doc_pago"] != "") {                      
+                if (isset($data["DATA_1"][0]["ruta_doc_pago"]) && $data["DATA_1"][0]["ruta_doc_pago"] != "") {                    
                     $arrIm = explode(".", basename($data["DATA_1"][0]["ruta_doc_pago"]));                    
-                    $typeFile = strtolower($arrIm[count($arrIm) - 1]);                                        
-                    $doc_pagoOld = Yii::$app->params["documentFolder"] . "documentoadmision/" . $inscripcion_id . "/pago_". $inscripcion_id . "-" . $fecha_registro . "." . $typeFile;                     
-                    //$doc_pagoOld = Yii::$app->params["documentFolder"] . "documentoadmision/" . $inscripcion_id . "/pago_". $inscripcion_id . $typeFile;
-                    \app\models\Utilities::putMessageLogFile('ruta pago old:'.$doc_pagoOld);
-                    //$doc_pago = InscripcionAdmision::addLabelFechaDocPagos($inscripcion_id, $doc_pagoOld, $fecha_registro);                       
-                    $data["DATA_1"][0]["ruta_doc_pago"] = $doc_pagoOld;                      
+                    $typeFile = strtolower($arrIm[count($arrIm) - 1]);                                                            
+                    $doc_pagoOld = Yii::$app->params["documentFolder"] . "documentoadmision/" . $inscripcion_id . "/pago_". $inscripcion_id . "." . $typeFile;                                         
+                    $doc_pago = InscripcionAdmision::addLabelFechaDocPagos($inscripcion_id, $doc_pagoOld, $fecha_registro);                      
+                    $data["DATA_1"][0]["ruta_doc_pago"] = $doc_pago;                      
                     if ($doc_pagoOld === false)
                         throw new Exception('Error al cargar documento de pago.');
                 }                                
@@ -259,7 +255,8 @@ class InscripcionadmisionController extends \yii\web\Controller {
                         'num_transaccion' => $data["num_transaccion"],
                         'observacion' => strtolower($data["observacion"]),
                         'fecha_transaccion' => $data["fecha_transaccion"],  
-                        'doc_pago' => $data["doc_pago"],  
+                        'doc_pago' => $data["doc_pago"], 
+                        'forma_pago' => $data["forma_pago"], 
                     );                      
                     $resul = $model->insertaOriginal($Ids,$dataRegistro);                    
                 } else if ($accion == "UpdateDepTrans") {
