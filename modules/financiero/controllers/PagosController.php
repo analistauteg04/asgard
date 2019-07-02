@@ -693,12 +693,14 @@ class PagosController extends \app\components\CController {
     
     public function actionVerificarpagoexterno() {
         $model_sbpag = new SolicitudBotonPago();        
+        $data = Yii::$app->request->get();
         if ($data['PBgetFilter']) {
+            $arrSearch["search"] = $data['search'];
             $arrSearch["f_ini"] = $data['f_ini'];
             $arrSearch["f_fin"] = $data['f_fin'];
             $data_pago_ext=$model_sbpag->consultarPagoExterno($arrSearch);
             return $this->renderPartial('_verificarpagoexterno_grid', [
-                "model" => $data_transacciones,
+                "model" => $data_pago_ext,
             ]);
         } else {
             
@@ -1203,6 +1205,86 @@ class PagosController extends \app\components\CController {
             $arrData = $model_sbpag->consultarHistoralTransacciones($doc_id,$opag_id,array(), true);
         } else {
             $arrData = $model_sbpag->consultarHistoralTransacciones($doc_id,$opag_id,$arrSearch, true);
+        }
+        $report->orientation = "L"; // tipo de orientacion L => Horizontal, P => Vertical
+        $report->createReportPdf(
+                $this->render('exportpdf', [
+                    'arr_head' => $arrHeader,
+                    'arr_body' => $arrData
+                ])
+        );
+        $report->mpdf->Output('Reporte_' . date("Ymdhis") . ".pdf", ExportFile::OUTPUT_TO_DOWNLOAD);
+        return;
+    }
+    public function actionExpexcelpagosext() {
+        ini_set('memory_limit', '256M');
+        $content_type = Utilities::mimeContentType("xls");
+        $nombarch = "Report-" . date("YmdHis") . ".xls";
+        header("Content-Type: $content_type");
+        header("Content-Disposition: attachment;filename=" . $nombarch);
+        header('Cache-Control: max-age=0');
+        $colPosition = array("C", "D", "E", "F", "G", "H", "I", "J");
+        $arrData = array();
+        $arrHeader = array(          
+            Yii::t("formulario", "Reference"),
+            Yii::t("formulario", "Student"),
+            Yii::t("formulario", "Date"),
+            Yii::t("formulario", "Total value"),         
+            financiero::t("Pagos", "Boton Payment status"),
+        );
+        // $per_id = Yii::$app->session->get("PB_perid");        
+        //VERIFICAR SI LOS PARAMETROS $doc_id y $opag_id SE VAN USAR SINO BORRAR
+        /* $model_persona = new Persona();
+        $model_documento = new Documento();
+        $model_ordenpago = new OrdenPago();
+        $data_persona=$model_persona->consultaPersonaId($per_id);
+        $cedula=$data_persona['per_cedula'];
+        $doc_id=$model_documento->consultarDocIdByCedulaBen($cedula);
+        $opag_id=$model_ordenpago->consultarOpagIdByCedula($cedula); */     
+        $data = Yii::$app->request->get(); 
+        $arrSearch["search"] = $data['search'];
+        $arrSearch["f_ini"] = $data["f_ini"];
+        $arrSearch["f_fin"] = $data["f_fin"];      
+        
+        $model_sbpag = new SolicitudBotonPago();
+        if (empty($arrSearch)) {
+            $arrData = $model_sbpag->consultarPagoExterno(/*$doc_id,$opag_id,*/array(), true);
+        } else {
+            $arrData = $model_sbpag->consultarPagoExterno(/*$doc_id,$opag_id,*/$arrSearch, true);
+        }
+        $nameReport = financiero::t("Pagos", "Check External Payments");
+        Utilities::generarReporteXLS($nombarch, $nameReport, $arrHeader, $arrData, $colPosition);
+        exit;
+    }
+    public function actionExppdfpagosext() {
+        $report = new ExportFile();
+        $this->view->title = financiero::t("Pagos", "Check External Payments"); // Titulo del reporte
+
+        $arrHeader = array(
+            Yii::t("formulario", "Reference"),
+            Yii::t("formulario", "Student"),
+            Yii::t("formulario", "Date"),
+            Yii::t("formulario", "Total value"),         
+            financiero::t("Pagos", "Boton Payment status"),
+        );
+        // $per_id = Yii::$app->session->get("PB_perid");        
+        //VERIFICAR SI LOS PARAMETROS $doc_id y $opag_id SE VAN USAR SINO BORRAR
+        /* $model_persona = new Persona();
+        $model_documento = new Documento();
+        $model_ordenpago = new OrdenPago();
+        $data_persona=$model_persona->consultaPersonaId($per_id);
+        $cedula=$data_persona['per_cedula'];
+        $doc_id=$model_documento->consultarDocIdByCedulaBen($cedula);
+        $opag_id=$model_ordenpago->consultarOpagIdByCedula($cedula); */     
+        $data = Yii::$app->request->get(); 
+        $arrSearch["search"] = $data['search'];
+        $arrSearch["f_ini"] = $data["f_ini"];
+        $arrSearch["f_fin"] = $data["f_fin"];     
+        $model_sbpag = new SolicitudBotonPago();
+        if (empty($arrSearch)) {
+            $arrData = $model_sbpag->consultarPagoExterno(/*$doc_id,$opag_id,*/array(), true);
+        } else {
+            $arrData = $model_sbpag->consultarPagoExterno(/*$doc_id,$opag_id,*/$arrSearch, true);
         }
         $report->orientation = "L"; // tipo de orientacion L => Horizontal, P => Vertical
         $report->createReportPdf(
