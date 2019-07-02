@@ -205,10 +205,13 @@ class InscripcionAdmision extends \yii\db\ActiveRecord {
         $typeFile = strtolower($arrIm[count($arrIm) - 1]);
         $baseFile = Yii::$app->basePath;
         $search = ".$typeFile";
+        \app\models\Utilities::putMessageLogFile('search:'.$search);
         $replace = "-$FechaTime" . ".$typeFile";
+        \app\models\Utilities::putMessageLogFile('reemplazar:'.$replace);
         $newFile = str_replace($search, $replace, $file);
         if (file_exists($baseFile . $file)) {
             if (rename($baseFile . $file, $baseFile . $newFile)) {
+                \app\models\Utilities::putMessageLogFile('renombra');
                 return $newFile;
             }
         } else {            
