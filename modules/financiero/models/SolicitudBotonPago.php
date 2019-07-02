@@ -199,7 +199,7 @@ class SolicitudBotonPago extends \yii\db\ActiveRecord {
                 JOIN " . $con->dbname . ".solicitud_boton_pago as sbpa on pben.pben_id = sbpa.pben_id
                 JOIN " . $con->dbname . ".documento as docu on docu.sbpa_id = sbpa.sbpa_id
                 LEFT JOIN " . $con1->dbname . ".vpos_response as vpre on vpre.ordenPago = docu.doc_id and vpre.tipo_orden = 2
-            WHERE 1=1";
+            WHERE ";
         if (isset($arrFiltro) && count($arrFiltro) > 0) {
             if ($arrFiltro['f_ini'] != "" && $arrFiltro['f_fin'] != "") {
                 $str_search .= "docu.doc_fecha_pago >= :fec_ini AND ";
