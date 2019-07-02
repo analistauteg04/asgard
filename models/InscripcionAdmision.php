@@ -501,7 +501,9 @@ class InscripcionAdmision extends \yii\db\ActiveRecord {
                                                 if ($resp_datos['ruta_doc_pago'] != "") {                                                    
                                                     $arrIm = explode(".", basename($resp_datos['ruta_doc_pago']));
                                                     $arrTime = explode(" ", basename($resp_datos['ruta_doc_pago']));
+                                                    \app\models\Utilities::putMessageLogFile('$arrTime:' . $arrTime);
                                                     $timeSt = $arrTime[1];
+                                                    \app\models\Utilities::putMessageLogFile('$timeSt:' . $timeSt);
                                                     $typeFile = strtolower($arrIm[count($arrIm) - 1]);
                                                     $fecha = date(Yii::$app->params["dateByDefault"]);
                                                     $rutaDocPago = Yii::$app->params["documentFolder"] . "documento/" . $id_persona . "/pago_" . $id_persona . "-" . $fecha . " " . $timeSt;

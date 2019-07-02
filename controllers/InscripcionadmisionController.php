@@ -152,8 +152,8 @@ class InscripcionadmisionController extends \yii\web\Controller {
                 $files = $_FILES[key($_FILES)];                
                 $arrIm = explode(".", basename($files['name']));
                 $typeFile = strtolower($arrIm[count($arrIm) - 1]);                
-                //$dirFileEnd = Yii::$app->params["documentFolder"] . "documentoadmision/" . $inscripcion_id . "/" . $data["name_file"] . "_" . $inscripcion_id . "-" . $fecha_registro . "." . $typeFile;
-                $dirFileEnd = Yii::$app->params["documentFolder"] . "documentoadmision/" . $inscripcion_id . "/" . $data["name_file"] . "_" . $inscripcion_id . $typeFile;
+                $dirFileEnd = Yii::$app->params["documentFolder"] . "documentoadmision/" . $inscripcion_id . "/" . $data["name_file"] . "_" . $inscripcion_id . "-" . $fecha_registro . "." . $typeFile;
+                //$dirFileEnd = Yii::$app->params["documentFolder"] . "documentoadmision/" . $inscripcion_id . "/" . $data["name_file"] . "_" . $inscripcion_id . $typeFile;
                 \app\models\Utilities::putMessageLogFile('upload_filepago:'.$dirFileEnd);
                 $status = Utilities::moveUploadFile($files['tmp_name'], $dirFileEnd);
                 if ($status) {
