@@ -66,7 +66,7 @@ use app\widgets\PbVPOS\PbVPOS;
                     <label>
                       <input type="checkbox" onclick="checkTerms(this)" /> 
                       <?= PbVPOS::t("vpos", "I am agree with terms and conditions.") ?>
-                      <a href="<?= $termsConditions ?>"><?= PbVPOS::t("vpos", "Check terms and conditions here.") ?></a>
+                      <a href="<?= $termsConditions ?>" target="_blank"><?= PbVPOS::t("vpos", "Check terms and conditions here.") ?></a>
                     </label>
                   </div>
             </div>
@@ -74,7 +74,7 @@ use app\widgets\PbVPOS\PbVPOS;
             <div class="col-sm-8 col-md-8 col-xs-8 col-lg-8 ">
                 <div>
                     <label>
-                      <a href="<?= $questionsLink ?>"><?= PbVPOS::t("vpos", "Check frequently asked questions here.") ?></a>
+                      <a href="<?= $questionsLink ?>" target="_blank"><?= PbVPOS::t("vpos", "Check frequently asked questions here.") ?></a>
                     </label>
                 </div>
             </div>
