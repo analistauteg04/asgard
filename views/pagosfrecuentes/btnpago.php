@@ -16,7 +16,7 @@ echo PbVPOS::widget([
     "isCheckout" => (is_null($requestID)?false:true),
     "requestID" => (is_null($requestID)?"":$requestID),
     "type" => "form",
-    "termsConditions" => Url::to(['pagosfrecuentes/terminos', 'popup' => 'true']),
-    "questionsLink" => Url::to(['pagosfrecuentes/preguntas', 'popup' => 'true']),
+    "termsConditions" => Url::to(['pagosfrecuentes/terminos']),
+    "questionsLink" => Url::to(['pagosfrecuentes/preguntas']),
 ]);
 ?>

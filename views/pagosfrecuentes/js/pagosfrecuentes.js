@@ -354,7 +354,7 @@ function guardarPagos() {
                 sessionStorage.clear();
                 setTimeout(function () {*/
                     //var bohre = $('#txth_base').val() + "/pagosfrecuentes/botonpago?docid=" + response.message.iddoc+"&popup=1";
-                    var bohre = $('#txth_base').val() + "/pagosfrecuentes/botonpago?docid=" + 2+"&popup=1";
+                    var bohre = $('#txth_base').val() + "/pagosfrecuentes/botonpago?docid=" + 3+"&popup=1";
                     $('#btn_pago_p').attr("href", bohre);
                     $('#btn_pago_p').trigger("click");                    
         /*        }, 3000);
