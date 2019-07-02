@@ -137,6 +137,9 @@ $(document).ready(function () {
     $('#btn_buscarDataHist').click(function () {
         actualizarGridHistorial();
     });
+    $('#btn_buscarDataPagoext').click(function () {
+        actualizarGridPagoExterno();
+    });
 });
 
 function divComentario(data) {
@@ -263,6 +266,19 @@ function actualizarGridHistorial() {
     if (!$(".blockUI").length) {
         showLoadingPopup();
         $('#TbG_HISTORIAL_TRANSACCIONES').PbGridView('applyFilterData', {'f_ini': f_ini, 'f_fin': f_fin});
+        setTimeout(hideLoadingPopup, 2000);
+    }
+}
+
+function actualizarGridPagoExterno() {
+    var search = $('#txt_buscarDataPagosExternos').val();
+    var f_ini = $('#txt_fecha_ini').val();
+    var f_fin = $('#txt_fecha_fin').val();
+    //var f_estado = $('#cmb_estado').val();
+    //Buscar al menos una clase con el nombre para ejecutar
+    if (!$(".blockUI").length) {
+        showLoadingPopup();
+        $('#TbG_VERFICAR_PAGOS_EXTERNOS').PbGridView('applyFilterData', {'f_ini': f_ini, 'f_fin': f_fin/*, 'f_estado': f_estado*/, 'search': search});
         setTimeout(hideLoadingPopup, 2000);
     }
 }
@@ -456,4 +472,16 @@ function exportPdfhis() {
     var f_ini = $('#txt_fecha_ini').val();
     var f_fin = $('#txt_fecha_fin').val();
     window.location.href = $('#txth_base').val() + "/financiero/pagos/exppdfhis?pdf=1&f_ini=" + f_ini + "&f_fin=" + f_fin;
+}
+function exportExcelvpex() {
+    var search = $('#txt_buscarDataPagosExternos').val();
+    var f_ini = $('#txt_fecha_ini').val();
+    var f_fin = $('#txt_fecha_fin').val();
+    window.location.href = $('#txth_base').val() + "/financiero/pagos/expexcelpagosext?search=" + search + "&f_ini=" + f_ini + "&f_fin=" + f_fin;
+}
+function exportPdfvpex() {
+    var search = $('#txt_buscarDataPagosExternos').val();
+    var f_ini = $('#txt_fecha_ini').val();
+    var f_fin = $('#txt_fecha_fin').val();
+    window.location.href = $('#txth_base').val() + "/financiero/pagos/exppdfpagosext?pdf=1&search=" + search + "&f_ini=" + f_ini + "&f_fin=" + f_fin;
 }

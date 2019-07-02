@@ -21,7 +21,7 @@ admision::registerTranslations();
         <div class="form-group">
             <label for="txt_buscarDataPagosExternos" class="col-sm-2 col-md-2 col-xs-2 col-lg-2 control-label"><?= Yii::t("formulario", "Search") ?></label>
             <div class="col-sm-8 col-md-8 col-xs-8 col-lg-8">
-                <input type="text" class="form-control" value="" id="txt_buscarDataPago" placeholder="<?= admision::t("Solicitudes", "Search by Students")?>">
+                <input type="text" class="form-control" value="" id="txt_buscarDataPagosExternos" placeholder="<?= admision::t("Solicitudes", "Search by Students")?>">
             </div>
         </div>
     </div>
@@ -62,7 +62,7 @@ admision::registerTranslations();
     <div class="col-md-12 col-sm-12 col-xs-12 col-lg-12">
         <div class="col-sm-8 col-md-8 col-xs-8 col-lg-8"></div>
         <div class="col-sm-2 col-md-2 col-xs-4 col-lg-2">                
-            <a id="btn_buscarDataHist" href="javascript:" class="btn btn-primary btn-block"> <?= Yii::t("formulario", "Search") ?></a>
+            <a id="btn_buscarDataPagoext" href="javascript:" class="btn btn-primary btn-block"> <?= Yii::t("formulario", "Search") ?></a>
         </div>
     </div>
 </div></br>

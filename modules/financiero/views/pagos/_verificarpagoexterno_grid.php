@@ -38,7 +38,7 @@ admision::registerTranslations();
             ],           
             [
                 'attribute' => 'total_pago',
-                'header' => Yii::t("formulario", "Valor Total"),
+                'header' => Yii::t("formulario", "Total value"),
                 'value' => 'total_pago',
             ],
             [

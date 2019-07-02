@@ -99,11 +99,21 @@ class SolicitudBotonPago extends \yii\db\ActiveRecord {
         return $con->getLastInsertID();
     }
 
-    public function consultarPagoExterno($arrFiltro = array(),$onlyData = false) {
+    /**
+     * Function consultarPagoExterno (Consulta pagos externos de boton de pago)
+     * @author  Kleber Loayza <analistadesarrollo03@uteg.edu.ec>
+     * @param   
+     * @return  
+     */
+    public function consultarPagoExterno($arrFiltro = array(), $onlyData = false) {
         $con = \Yii::$app->db_facturacion;
         $con1 = \Yii::$app->db_financiero;
         $estado = 1;
         if (isset($arrFiltro) && count($arrFiltro) > 0) {
+           // if ($arrFiltro['search'] != "" && $arrFiltro['search'] != "") {
+                $str_search .= "(pben.pben_nombre like :search OR ";
+                $str_search .= "pben.pben_apellido like :search ) AND ";
+           // }
             if ($arrFiltro['f_ini'] != "" && $arrFiltro['f_fin'] != "") {
                 $str_search .= "docu.doc_fecha_pago >= :fec_ini AND ";
                 $str_search .= "docu.doc_fecha_pago <= :fec_fin AND ";
@@ -118,20 +128,24 @@ class SolicitudBotonPago extends \yii\db\ActiveRecord {
                 docu.doc_valor as total_pago,
                 docu.doc_pagado as estado
             from
-                db_facturacion.solicitud_boton_pago as sbpa
-                join db_facturacion.persona_beneficiaria as pben on pben.pben_id = sbpa.pben_id
-                join db_facturacion.documento as docu on docu.sbpa_id = sbpa.sbpa_id
-                join db_financiero.vpos_response as vres on vres.ordenPago = docu.doc_id and vres.tipo_orden = 2
+                " . $con->dbname . ".solicitud_boton_pago as sbpa
+                join " . $con->dbname . ".persona_beneficiaria as pben on pben.pben_id = sbpa.pben_id
+                join " . $con->dbname . ".documento as docu on docu.sbpa_id = sbpa.sbpa_id
+                join " . $con1->dbname . ".vpos_response as vres on vres.ordenPago = docu.doc_id and vres.tipo_orden = 2
             where
-                1=1
+                $str_search
+                1=1 -- OJO ESTO ESTA QUEMADO
             ";
         $comando = $con->createCommand($sql);
         $comando->bindParam(":status", $estado, \PDO::PARAM_STR);
-        $comando->bindParam(":doc_id", $doc_id, \PDO::PARAM_INT);
-        $comando->bindParam(":opag_id", $opag_id, \PDO::PARAM_INT);
+        //VERIFICAR SI LOS PARAMETROS $doc_id y $opag_id SE VAN USAR SINO BORRAR
+        /*$comando->bindParam(":doc_id", $doc_id, \PDO::PARAM_INT);
+        $comando->bindParam(":opag_id", $opag_id, \PDO::PARAM_INT);*/
         if (isset($arrFiltro) && count($arrFiltro) > 0) {
+            $search_cond = "%" . $arrFiltro["search"] . "%";
             $fecha_ini = $arrFiltro["f_ini"] . " 00:00:00";
             $fecha_fin = $arrFiltro["f_fin"] . " 23:59:59";
+            $comando->bindParam(":search", $search_cond, \PDO::PARAM_STR);
             if ($arrFiltro['f_ini'] != "" && $arrFiltro['f_fin'] != "") {
                 $comando->bindParam(":fec_ini", $fecha_ini, \PDO::PARAM_STR);
                 $comando->bindParam(":fec_fin", $fecha_fin, \PDO::PARAM_STR);
