@@ -576,6 +576,15 @@ $(document).ready(function () {
         arrParams.observacion = $('#txt_observacion').val();
         arrParams.fecha_transaccion = $('#txt_fecha_transaccion').val();
         arrParams.doc_pago = $('#txth_doc_pago').val();
+        if ($("input[name='rdo_forma_pago_otros']:checked").val() == "2") {//($('#rdo_forma_pago_otros option:selected').val() == "2") {        
+            arrParams.forma_pago = 2;        
+        } else if ($("input[name='rdo_forma_pago_deposito']:checked").val() == "3") { //rdo_forma_pago_deposito
+            arrParams.forma_pago = 3;
+        } else if  ($("input[name='rdo_forma_pago_transferencia']:checked").val() == "4") { //rdo_forma_pago_transferencia
+            arrParams.forma_pago = 4;
+        } else {
+            arrParams.forma_pago = 1;
+        }         
         var error = 0;
         if ($('#txth_doc_pago').val() == "") {
             error++;
