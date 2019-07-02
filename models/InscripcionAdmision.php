@@ -204,14 +204,11 @@ class InscripcionAdmision extends \yii\db\ActiveRecord {
         $arrIm = explode(".", basename($file));
         $typeFile = strtolower($arrIm[count($arrIm) - 1]);
         $baseFile = Yii::$app->basePath;
-        $search = ".$typeFile";
-        \app\models\Utilities::putMessageLogFile('search:'.$search);
-        $replace = "-$FechaTime" . ".$typeFile";
-        \app\models\Utilities::putMessageLogFile('reemplazar:'.$replace);
+        $search = ".$typeFile";        
+        $replace = "-$FechaTime" . ".$typeFile";        
         $newFile = str_replace($search, $replace, $file);
         if (file_exists($baseFile . $file)) {
-            if (rename($baseFile . $file, $baseFile . $newFile)) {
-                \app\models\Utilities::putMessageLogFile('renombra');
+            if (rename($baseFile . $file, $baseFile . $newFile)) {                
                 return $newFile;
             }
         } else {            
@@ -496,19 +493,15 @@ class InscripcionAdmision extends \yii\db\ActiveRecord {
                                                     /* if (!($resulDoc6)) {
                                                       throw new Exception('Error doc Hoja de Vida no creado.');
                                                       } */
-                                                }
-                                                \app\models\Utilities::putMessageLogFile('de la b/d:' . $resp_datos['ruta_doc_pago']);
+                                                }                                                
                                                 if ($resp_datos['ruta_doc_pago'] != "") {                                                    
                                                     $arrIm = explode(".", basename($resp_datos['ruta_doc_pago']));
-                                                    $arrTime = explode(" ", basename($resp_datos['ruta_doc_pago']));
-                                                    \app\models\Utilities::putMessageLogFile('$arrTime:' . $arrTime);
-                                                    $timeSt = $arrTime[1];
-                                                    \app\models\Utilities::putMessageLogFile('$timeSt:' . $timeSt);
+                                                    $arrTime = explode(" ", basename($resp_datos['ruta_doc_pago']));                                                    
+                                                    $timeSt = $arrTime[1];                                                    
                                                     $typeFile = strtolower($arrIm[count($arrIm) - 1]);
                                                     $fecha = date(Yii::$app->params["dateByDefault"]);
                                                     $rutaDocPago = Yii::$app->params["documentFolder"] . "documento/" . $id_persona . "/pago_" . $id_persona . "-" . $fecha . " " . $timeSt;
-                                                    $archivo = basename($rutaDocPago);
-                                                    \app\models\Utilities::putMessageLogFile('archivo al leer de temporal:' . $archivo);
+                                                    $archivo = basename($rutaDocPago);                                                    
                                                 }
                                                 //Obtener el precio de la solicitud.                                                
                                                 if ($beca == "1") {
@@ -543,16 +536,15 @@ class InscripcionAdmision extends \yii\db\ActiveRecord {
                                                 }
                                                 $val_total = $precio - $val_descuento;
                                                 $resp_opago = $mod_ordenpago->insertarOrdenpago($sins_id, null, $val_total, 0, $val_total, $estadopago, $usuario_id);
-                                                if ($resp_opago) {
-                                                    \app\models\Utilities::putMessageLogFile('después grabar o/pago');
+                                                if ($resp_opago) {                                                   
                                                     //insertar desglose del pago                                                         
                                                     $fecha_ini = date(Yii::$app->params["dateByDefault"]);
                                                     $resp_dpago = $mod_ordenpago->insertarDesglosepago($resp_opago, $ite_id, $val_total, 0, $val_total, $fecha_ini, null, $estadopago, $usuario_id);
                                                     if ($resp_dpago) {                                                        
                                                         //Grabar documento de registro de pago por depósito o transferencia.
-                                                        \app\models\Utilities::putMessageLogFile('tipo pago:' . $resp_datos['twin_tipo_pago']);
-                                                        if (($resp_datos['twin_tipo_pago'] == 3) or ( $resp_datos['twin_tipo_pago'] == 4)) {
-                                                            if ($resp_datos['twin_tipo_pago'] == 3) { //depósito
+                                                        \app\models\Utilities::putMessageLogFile('tipo pago:' . $dataReg["forma_pago"]);
+                                                        if (($dataReg["forma_pago"] == 3) or ( $dataReg["forma_pago"] == 4)) { //(($resp_datos['twin_tipo_pago'] == 3) or ( $resp_datos['twin_tipo_pago'] == 4)) {
+                                                            if ($dataReg["forma_pago"] == 3) { //depósito
                                                                 $fpag_id = 5;   //depósito
                                                             } else {
                                                                 $fpag_id = 4;  //transferencia
