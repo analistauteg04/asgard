@@ -205,10 +205,13 @@ class InscripcionAdmision extends \yii\db\ActiveRecord {
         $typeFile = strtolower($arrIm[count($arrIm) - 1]);
         $baseFile = Yii::$app->basePath;
         $search = ".$typeFile";
+        \app\models\Utilities::putMessageLogFile('search:'.$search);
         $replace = "-$FechaTime" . ".$typeFile";
+        \app\models\Utilities::putMessageLogFile('reemplazar:'.$replace);
         $newFile = str_replace($search, $replace, $file);
         if (file_exists($baseFile . $file)) {
             if (rename($baseFile . $file, $baseFile . $newFile)) {
+                \app\models\Utilities::putMessageLogFile('renombra');
                 return $newFile;
             }
         } else {            
@@ -498,7 +501,9 @@ class InscripcionAdmision extends \yii\db\ActiveRecord {
                                                 if ($resp_datos['ruta_doc_pago'] != "") {                                                    
                                                     $arrIm = explode(".", basename($resp_datos['ruta_doc_pago']));
                                                     $arrTime = explode(" ", basename($resp_datos['ruta_doc_pago']));
+                                                    \app\models\Utilities::putMessageLogFile('$arrTime:' . $arrTime);
                                                     $timeSt = $arrTime[1];
+                                                    \app\models\Utilities::putMessageLogFile('$timeSt:' . $timeSt);
                                                     $typeFile = strtolower($arrIm[count($arrIm) - 1]);
                                                     $fecha = date(Yii::$app->params["dateByDefault"]);
                                                     $rutaDocPago = Yii::$app->params["documentFolder"] . "documento/" . $id_persona . "/pago_" . $id_persona . "-" . $fecha . " " . $timeSt;

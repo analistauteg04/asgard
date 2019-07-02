@@ -154,6 +154,8 @@ class InscripcionadmisionController extends \yii\web\Controller {
                 $typeFile = strtolower($arrIm[count($arrIm) - 1]);                
                 $dirFileEnd = Yii::$app->params["documentFolder"] . "documentoadmision/" . $inscripcion_id . "/" . $data["name_file"] . "_" . $inscripcion_id . "-" . $fecha_registro . "." . $typeFile;
                 Utilities::putMessageLogFile('tmp_name:'.$files['tmp_name']);
+                //$dirFileEnd = Yii::$app->params["documentFolder"] . "documentoadmision/" . $inscripcion_id . "/" . $data["name_file"] . "_" . $inscripcion_id . $typeFile;
+                \app\models\Utilities::putMessageLogFile('upload_filepago:'.$dirFileEnd);
                 $status = Utilities::moveUploadFile($files['tmp_name'], $dirFileEnd);
                 if ($status) {
                     return true;
@@ -231,10 +233,11 @@ class InscripcionadmisionController extends \yii\web\Controller {
                     $arrIm = explode(".", basename($data["DATA_1"][0]["ruta_doc_pago"]));                    
                     $typeFile = strtolower($arrIm[count($arrIm) - 1]);                                        
                     $doc_pagoOld = Yii::$app->params["documentFolder"] . "documentoadmision/" . $inscripcion_id . "/pago_". $inscripcion_id . "-" . $fecha_registro . "." . $typeFile;                     
+                    //$doc_pagoOld = Yii::$app->params["documentFolder"] . "documentoadmision/" . $inscripcion_id . "/pago_". $inscripcion_id . $typeFile;
                     \app\models\Utilities::putMessageLogFile('ruta pago old:'.$doc_pagoOld);
-                    $doc_pago = InscripcionAdmision::addLabelFechaDocPagos($inscripcion_id, $doc_pagoOld, $fecha_registro);                       
-                    $data["DATA_1"][0]["ruta_doc_pago"] = $doc_pago;                      
-                    if ($doc_pago === false)
+                    //$doc_pago = InscripcionAdmision::addLabelFechaDocPagos($inscripcion_id, $doc_pagoOld, $fecha_registro);                       
+                    $data["DATA_1"][0]["ruta_doc_pago"] = $doc_pagoOld;                      
+                    if ($doc_pagoOld === false)
                         throw new Exception('Error al cargar documento de pago.');
                 }                                
                 if ($accion == "create" || $accion == "Create") {
