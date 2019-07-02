@@ -70,6 +70,14 @@ use app\widgets\PbVPOS\PbVPOS;
                     </label>
                   </div>
             </div>
+            <div class="col-sm-4 col-md-4 col-xs-4 col-lg-4 control-label">&nbsp;</div>
+            <div class="col-sm-8 col-md-8 col-xs-8 col-lg-8 ">
+                <div>
+                    <label>
+                      <a href="<?= $questionsLink ?>"><?= PbVPOS::t("vpos", "Check frequently asked questions here.") ?></a>
+                    </label>
+                </div>
+            </div>
         </div>     
     </div>
     <div class="col-md-12 col-sm-12 col-xs-12 col-lg-12"> 

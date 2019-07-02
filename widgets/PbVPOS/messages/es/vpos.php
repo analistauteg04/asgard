@@ -21,6 +21,7 @@ return [
     "Problems with Payment Method" => "Hay Problemas con el procesador de Pagos",
     "I am agree with terms and conditions." => "Estoy de acuerdo con los terminos y condiciones.",
     "Check terms and conditions here." => "Revisa los terminos y condiciones Aquí.",
+    "Check frequently asked questions here." => "Revisa las preguntas frecuentes Aquí.",
     "Please check your information. Names only letters and Email must be valid." => "Por favor verifique su información. Nombres deben ser solo letras y Email debe ser válido.",
     "Your payment is pending payment. Please wait a few minutes to try to update your payment." => "Su pago esta pendiente de cobro. Por favor espere unos minutos para intentar actualizar su pago.",
     "Your payment has already been executed. Click on the button to update the page." => "Su pago ya fue realizado. De click en el botón para actualizar la página.",

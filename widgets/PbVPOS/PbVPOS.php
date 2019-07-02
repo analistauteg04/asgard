@@ -52,6 +52,7 @@ class PbVPOS extends Widget {
     public $ipAddress = "127.0.0.1";
     public $publicAssetUrl = "";
     public $termsConditions = "#";
+    public $questionsLink = "#";
     public $type = "button"; // boton, form
     public $titleBox = ""; 
     public $producction = false;
@@ -145,6 +146,7 @@ class PbVPOS extends Widget {
                         $data['publicAssetUrl'] = $this->publicAssetUrl;
                         $data['pbId'] = $this->type_vpos;
                         $data['termsConditions'] = $this->termsConditions;
+                        $data['questionsLink'] = $this->questionsLink;
                         echo $this->render('form', $data);
                 }
                 //return Html::encode($this->message);
