@@ -690,7 +690,22 @@ class PagosController extends \app\components\CController {
                     'model' => $data_transacciones,
         ]);
     }
-    
+    public function actionActualizar_pago() {
+        $jsonCredential = json_decode(file_get_contents("/opt/credenciales.json"),true);                
+        $jsonCredential["gateway"];        
+        $jsonCredential["login"];        
+        $tranKey = $jsonCredential["trankey"];        
+        $firma = $json["requestId"].$json["status"]["status"].$json["status"]["date"].$tranKey;
+//        $firmaValidar = sha1($firma);
+//        if ($firmaValidar == $json["signature"]){
+//            $update = "UPDATE `peticiones` SET `request_id`='".$json["requestId"]."',`razon`='".$json["status"]["message"]."',`estado_pago`='".$json["status"]["status"]."',`fecha_pago`='".$json["status"]["date"]."' WHERE `referencia`=".$json["reference"];
+//            $link->query($update);
+//            print "El registro se ha guardado satisfactoriamente.";
+//        } else {
+//            ERROR_LOG("generas log");	
+//            print "No es respuesta emitida por PlacetoPay";
+//        }
+    }
     public function actionVerificarpagoexterno() {
         $model_sbpag = new SolicitudBotonPago();        
         $data = Yii::$app->request->get();

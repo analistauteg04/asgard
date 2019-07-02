@@ -32,6 +32,16 @@ admision::registerTranslations();
                 'value' => 'estudiante',
             ],
             [
+                'attribute' => 'cedula_factura',
+                'header' => Yii::t("formulario", "Cedula a Facturar"),
+                'value' => 'cedula_factura',
+            ],
+            [
+                'attribute' => 'persona_factura',
+                'header' => Yii::t("formulario", "Persona a Facturar"),
+                'value' => 'persona_factura',
+            ],
+            [
                 'attribute' => 'fecha_pago',
                 'header' => Yii::t("formulario", "Date"),
                 'value' => 'fecha_pago',
@@ -55,11 +65,11 @@ admision::registerTranslations();
             [
                 'class' => 'yii\grid\ActionColumn',
                 'header' => Yii::t("formulario", "Actions"),         
-                'template' => '{details} {request}',           
+                'template' => '{details} {request} {actualizar_pago}',           
                 'buttons' => [
-                    /*'view' => function ($url, $model) {
-                        return Html::a('<span class="glyphicon glyphicon-eye-open"></span>', Url::to(['pagos/viewpagoexterno', 'ido' => $model['id'], 'popup' => 'true']), ["data-toggle" => "tooltip", "title" => "Aprobar Pago", "data-pjax" => 0, "class" => "pbpopup"]);
-                    },*/                   
+                    'actualizar_pago' => function ($url, $model) {
+                        return Html::a('<span class="glyphicon glyphicon-refresh"></span>', Url::to(['pagos/actualizar_pago', 'doc_id' => $model['id']]), ["data-toggle" => "tooltip", "title" => "Actualizar Pago", "data-pjax" => 0]);
+                    },                   
                     'details' => function ($url, $model) {
                         return Html::a('<span class="glyphicon glyphicon-th-list"></span>', Url::to(['pagos/detallepagoexterno', 'doc_id' => $model['id'], 'popup' => 'true']), ["data-toggle" => "tooltip", "title" => "Detalle Pago", "data-pjax" => 0, "class" => "pbpopup"]);
                     },                   
