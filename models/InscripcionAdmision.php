@@ -493,15 +493,15 @@ class InscripcionAdmision extends \yii\db\ActiveRecord {
                                                     /* if (!($resulDoc6)) {
                                                       throw new Exception('Error doc Hoja de Vida no creado.');
                                                       } */
-                                                }                                                
+                                                }                                                         
                                                 if ($resp_datos['ruta_doc_pago'] != "") {                                                    
                                                     $arrIm = explode(".", basename($resp_datos['ruta_doc_pago']));
                                                     $arrTime = explode(" ", basename($resp_datos['ruta_doc_pago']));                                                    
-                                                    $timeSt = $arrTime[1];                                                    
+                                                    $timeSt = $arrTime[1];                                                          
                                                     $typeFile = strtolower($arrIm[count($arrIm) - 1]);
                                                     $fecha = date(Yii::$app->params["dateByDefault"]);
                                                     $rutaDocPago = Yii::$app->params["documentFolder"] . "documento/" . $id_persona . "/pago_" . $id_persona . "-" . $fecha . " " . $timeSt;
-                                                    $archivo = basename($rutaDocPago);                                                    
+                                                    $archivo = basename($rutaDocPago);                                                        
                                                 }
                                                 //Obtener el precio de la solicitud.                                                
                                                 if ($beca == "1") {
@@ -541,8 +541,7 @@ class InscripcionAdmision extends \yii\db\ActiveRecord {
                                                     $fecha_ini = date(Yii::$app->params["dateByDefault"]);
                                                     $resp_dpago = $mod_ordenpago->insertarDesglosepago($resp_opago, $ite_id, $val_total, 0, $val_total, $fecha_ini, null, $estadopago, $usuario_id);
                                                     if ($resp_dpago) {                                                        
-                                                        //Grabar documento de registro de pago por depósito o transferencia.
-                                                        \app\models\Utilities::putMessageLogFile('tipo pago:' . $dataReg["forma_pago"]);
+                                                        //Grabar documento de registro de pago por depósito o transferencia.                                                        
                                                         if (($dataReg["forma_pago"] == 3) or ( $dataReg["forma_pago"] == 4)) { //(($resp_datos['twin_tipo_pago'] == 3) or ( $resp_datos['twin_tipo_pago'] == 4)) {
                                                             if ($dataReg["forma_pago"] == 3) { //depósito
                                                                 $fpag_id = 5;   //depósito
@@ -552,15 +551,14 @@ class InscripcionAdmision extends \yii\db\ActiveRecord {
                                                             $fecha_registro = date(Yii::$app->params["dateTimeByDefault"]);                                                            
                                                             $creadetalle = $mod_ordenpago->insertarCargaprepago($resp_opago, $fpag_id, $val_total, $archivo, 'PE', '', $dataReg["observacion"], $dataReg["num_transaccion"], $dataReg["fecha_transaccion"], $fecha_registro);
                                                             if ($creadetalle) {
-                                                                \app\models\Utilities::putMessageLogFile('despues de insertar Cargar pago');
+                                                                //\app\models\Utilities::putMessageLogFile('despues de insertar Cargar pago');
                                                                 $detalle = 'S';
                                                             }
                                                         } else {
                                                             $detalle = 'S';
                                                         }
                                                         //Grabar datos de factura                                                                                                                   
-                                                        if ($detalle == 'S') {
-                                                            \app\models\Utilities::putMessageLogFile('grabar datos factura');
+                                                        if ($detalle == 'S') {                                                            
                                                             $resdatosFact = $solins_model->crearDatosFacturaSolicitud($sins_id, $dataReg["nombres_fact"], $dataReg["apellidos_fact"], $dataReg["tipo_dni_fac"], $dataReg["dni"], $dataReg["direccion_fact"], $dataReg["telefono_fac"], $dataReg["correo"]);
                                                             if ($resdatosFact) {
                                                                 $exito = 1;
