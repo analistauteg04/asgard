@@ -122,10 +122,30 @@ class Documento extends \yii\db\ActiveRecord {
         $response = $command->execute();
         return $response;
     }
-
+    
+    /**
+     * Function consultarDatosxId
+     * @author  Grace Viteri <analistadesarrollo01@uteg.edu.ec>
+     * @param   
+     * @return  $resultData 
+     */
     public function consultarDatosxId($con, $doc_id) {
         $estado = 1;
-        $sql = "SELECT pb.pben_nombre, pb.pben_apellido, d.doc_valor, d.doc_correo
+        $sql = "SELECT  d.tdoc_id,
+                        d.doc_cedula,
+                        d.doc_pasaporte,
+                        d.doc_ruc,
+                        d.doc_nombres_cliente,
+                        d.doc_telefono,
+                        d.doc_correo,
+                        d.doc_valor,
+                        d.doc_fecha_pago,
+                        pb.pben_cedula,
+                        pb.pben_celular,
+                        pb.pben_correo,
+                        pb.pben_nombre,
+                        pb.pben_apellido,
+                        sb.sbpa_id    
                 FROM " . $con->dbname . ".documento d inner join " . $con->dbname . ".solicitud_boton_pago sb 
                          on sb.sbpa_id = d.sbpa_id     
                      inner join " . $con->dbname . ".persona_beneficiaria pb on pb.pben_id = sb.pben_id

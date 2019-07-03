@@ -188,11 +188,11 @@ class InscripcionAdmision extends \yii\db\ActiveRecord {
         $arrIm = explode(".", basename($file));
         $typeFile = strtolower($arrIm[count($arrIm) - 1]);
         $baseFile = Yii::$app->basePath;
-        $search = ".$typeFile";
+        $search = ".$typeFile";        
         $replace = "_$timeSt" . ".$typeFile";
-        $newFile = str_replace($search, $replace, $file);
+        $newFile = str_replace($search, $replace, $file);        
         if (file_exists($baseFile . $file)) {
-            if (rename($baseFile . $file, $baseFile . $newFile)) {
+            if (rename($baseFile . $file, $baseFile . $newFile)) {                
                 return $newFile;
             }
         } else {            
