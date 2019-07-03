@@ -442,7 +442,19 @@ function exportExcelColec() {
     var f_fin = $('#txt_fecha_fin').val();
     window.location.href = $('#txth_base').val() + "/financiero/pagos/expexcelcolec?search=" + search + "&f_ini=" + f_ini + "&f_fin=" + f_fin;
 }
-
+function generarSolicitud(doc_id){
+    var arrParams = new Object();
+    var link = $('#txth_base').val() + "/financiero/pagos/generarsolicitud";
+    arrParams.doc_id = doc_id;    
+    if (!validateForm()) {
+        requestHttpAjax(link, arrParams, function (response) {
+            showAlert(response.status, response.label, response.message);
+            setTimeout(function () {
+                actualizarGridPagoExterno();
+            }, 3000);
+        }, true);
+    }
+}
 function exportPdf() {
     var search = $('#txt_buscarDataPago').val();
     var f_ini = $('#txt_fecha_ini').val();
