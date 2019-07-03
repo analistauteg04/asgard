@@ -1,7 +1,8 @@
 // Scripts
 $(document).on('ready', function() {
-    P.on('response', function(data) {
-        //var resp = JSON.stringify(data, null, 2);
+    P.on('response', function(data) {        
+        var resp = JSON.stringify(data, null, 2);
+        alert(resp);
         $(".btnPago").hide();
         setResponseData(data);
     });
@@ -12,7 +13,11 @@ function playOnPay(processUrl) {
     if (!$(".btnBuy").hasClass("disabled"))
         P.init(processUrl);
 }
-
+/*
+ * P.on('response', function(data) { 
+	window.href.location = ‘http://localhost/asgard/pagosfrecuentes/resumen?doc_id=7’
+});
+ */
 function returnFn() {
     parent.reloadPage();
     parent.closeIframePopup();

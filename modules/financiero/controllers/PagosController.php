@@ -127,6 +127,9 @@ class PagosController extends \app\components\CController {
                     'respCliente' => $resp_cliord,
         ]);
     }
+    public function actionGenerarsolicitud(){
+        
+    }
     public function actionViewpagacarga() {
         $per_id = @Yii::$app->session->get("PB_iduser");
         $model_interesado = new Interesado();
@@ -696,6 +699,7 @@ class PagosController extends \app\components\CController {
         $jsonCredential["login"];        
         $tranKey = $jsonCredential["trankey"];        
         $firma = $json["requestId"].$json["status"]["status"].$json["status"]["date"].$tranKey;
+        
 //        $firmaValidar = sha1($firma);
 //        if ($firmaValidar == $json["signature"]){
 //            $update = "UPDATE `peticiones` SET `request_id`='".$json["requestId"]."',`razon`='".$json["status"]["message"]."',`estado_pago`='".$json["status"]["status"]."',`fecha_pago`='".$json["status"]["date"]."' WHERE `referencia`=".$json["reference"];

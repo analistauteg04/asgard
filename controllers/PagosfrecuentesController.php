@@ -286,9 +286,11 @@ class PagosfrecuentesController extends \yii\web\Controller {
     }
 
     public function actionResumen() {
-        $sbpa_id = 1; // luego cambiar por el que venga de parametro
+        $doc_id = 1; // luego cambiar por el que venga de parametro
+        $data = Yii::$app->request->get();
+        //$doc_id = $data['doc_id'];
         $mod_documento = new Documento();
-        $resu_resumen = $mod_documento->consultaResumen($sbpa_id);
+        $resu_resumen = $mod_documento->consultaResumen($doc_id);
         $this->layout = '@themes/' . \Yii::$app->getView()->theme->themeName . '/layouts/basic.php';
         return $this->render('resumen', [
                     "resu_resumen" => $resu_resumen,
