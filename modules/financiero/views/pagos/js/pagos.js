@@ -86,7 +86,7 @@ $(document).ready(function () {
         arrParams.sins_id = $('#txth_sins').val();
         arrParams.per_id = $('#txth_perid').val();
         arrParams.banderacrea = '1';
-        arrParams.controladm = '1';       
+        arrParams.controladm = '1';
         if (parseFloat(arrParams.valor) > parseFloat(arrParams.totpago))
         {
             alert("Esta tratando de ingresar un pago mayor al valor de su servicio. " + parseFloat(arrParams.totpago));
@@ -146,25 +146,38 @@ function divComentario(data) {
     //$("#countMensaje").html(data.length);
     var option_arr = '';
     option_arr += '<div style="overflow-y: scroll;height:200px;">';
-        option_arr += '<div class="post clearfix">';
-            option_arr += '<div class="user-block">';
-                option_arr += '<span>';
-                    //option_arr += '<a href="#">'+(data[i]["Nombres"]).toUpperCase()+'</a>';
-                    //option_arr += '<a onclick="deleteComentario(\'' + data[i]['Ids'] + '\')" class="pull-right btn-box-tool" href="#"><i class="fa fa-times"></i></a>';
-                option_arr += '</span><br>';
-                //option_arr += '<span>'+(data[i]["fecha"]).toUpperCase()+'</span>';
-            option_arr += '</div>';
-            option_arr += '<p>'+(data).toUpperCase()+'</p>';
-        option_arr += '</div>';
+    option_arr += '<div class="post clearfix">';
+    option_arr += '<div class="user-block">';
+    option_arr += '<span>';
+    //option_arr += '<a href="#">'+(data[i]["Nombres"]).toUpperCase()+'</a>';
+    //option_arr += '<a onclick="deleteComentario(\'' + data[i]['Ids'] + '\')" class="pull-right btn-box-tool" href="#"><i class="fa fa-times"></i></a>';
+    option_arr += '</span><br>';
+    //option_arr += '<span>'+(data[i]["fecha"]).toUpperCase()+'</span>';
+    option_arr += '</div>';
+    option_arr += '<p>' + (data).toUpperCase() + '</p>';
+    option_arr += '</div>';
     option_arr += '</div>';
     showAlert("OK", "info", {"wtmessage": option_arr, "title": "Observaciones"});
 }
-function saveBills(){
+function saveBills() {
     //Verificamos que el Documento Ingresado sea Ingual al valor Generado
-    if($('#txth_opag_total').val()==$('#txt_rpfa_valor_documento').val()){
-         cargarFactura();
-    }else{
-         showAlert("NO_OK", "error", {"wtmessage": "Valor de factura es incorrecto", "title": "Observaciones"});
+    if ($('#txth_opag_total').val() == $('#txt_rpfa_valor_documento').val()) {
+        cargarFactura();
+    } else {
+        showAlert("NO_OK", "error", {"wtmessage": "Valor de factura es incorrecto", "title": "Observaciones"});
+    }
+}
+function actualizar_pago(doc_id) {
+    var arrParams = new Object();
+    var link = $('#txth_base').val() + "/financiero/pagos/actualizarpago";
+        arrParams.doc_id = doc_id;
+    if (!validateForm()) {
+        requestHttpAjax(link, arrParams, function (response) {
+            showAlert(response.status, response.label, response.message);
+            setTimeout(function () {
+                actualizarGridPagoExterno();
+            }, 3000);
+        }, true);
     }
 }
 function exportExcel() {
@@ -175,42 +188,42 @@ function exportExcel() {
     window.location.href = $('#txth_base').val() + "/financiero/pagos/expexcel?search=" + search + "&f_ini=" + f_ini + "&f_fin=" + f_fin + "&f_estado=" + f_estado;
 }
 
-function enviardata(){
+function enviardata() {
     var arrParams = new Object();
-        var link = $('#txth_base').val() + "/financiero/pagos/savecarga";
-        var idsol = $('#txth_idsol').val();
-        var pg = $('#txth_pg').val();
-        arrParams.idpago = $('#txth_ids').val();
-        arrParams.totpago = $('#txth_tot').val();
-        arrParams.pago = $('#txt_pago').val();
-        arrParams.documento = $('#txth_doc_titulo').val();
-        arrParams.metodopago = $('#cmb_forma_pago').val();
-        arrParams.numtransaccion = $('#txt_numtransaccion').val();
-        arrParams.fechatransaccion = $('#txt_fecha_transaccion').val();
-        arrParams.vista = $('#txth_vista').val();
-        arrParams.empresa = $('#txth_empid').val();
-        arrParams.observacion = $('#txt_observa').val();
+    var link = $('#txth_base').val() + "/financiero/pagos/savecarga";
+    var idsol = $('#txth_idsol').val();
+    var pg = $('#txth_pg').val();
+    arrParams.idpago = $('#txth_ids').val();
+    arrParams.totpago = $('#txth_tot').val();
+    arrParams.pago = $('#txt_pago').val();
+    arrParams.documento = $('#txth_doc_titulo').val();
+    arrParams.metodopago = $('#cmb_forma_pago').val();
+    arrParams.numtransaccion = $('#txt_numtransaccion').val();
+    arrParams.fechatransaccion = $('#txt_fecha_transaccion').val();
+    arrParams.vista = $('#txth_vista').val();
+    arrParams.empresa = $('#txth_empid').val();
+    arrParams.observacion = $('#txt_observa').val();
 
-        if (parseFloat(arrParams.pago) > parseFloat(arrParams.totpago))
-        {
-            alert("Está tratando de ingresar un pago mayor al valor de su servicio. $" + parseFloat(arrParams.totpago));
-        } else if (parseFloat(arrParams.pago) < parseFloat(arrParams.totpago))
-        {
-            alert("Está tratando de ingresar un pago menor al valor de su servicio. $" + parseFloat(arrParams.totpago));
-        } else {
-            if (!validateForm()) {
-                requestHttpAjax(link, arrParams, function (response) {
-                    showAlert(response.status, response.label, response.message);
-                    setTimeout(function () {
-                        if (arrParams.vista == 'adm') {
-                            parent.window.location.href = $('#txth_base').val() + "/financiero/pagos/index";
-                        } else {
-                            parent.window.location.href = $('#txth_base').val() + "/financiero/pagos/listarpagosolicitud?id_sol="+idsol;
-                        }
-                    }, 4000);
-                }, true);
-            }
+    if (parseFloat(arrParams.pago) > parseFloat(arrParams.totpago))
+    {
+        alert("Está tratando de ingresar un pago mayor al valor de su servicio. $" + parseFloat(arrParams.totpago));
+    } else if (parseFloat(arrParams.pago) < parseFloat(arrParams.totpago))
+    {
+        alert("Está tratando de ingresar un pago menor al valor de su servicio. $" + parseFloat(arrParams.totpago));
+    } else {
+        if (!validateForm()) {
+            requestHttpAjax(link, arrParams, function (response) {
+                showAlert(response.status, response.label, response.message);
+                setTimeout(function () {
+                    if (arrParams.vista == 'adm') {
+                        parent.window.location.href = $('#txth_base').val() + "/financiero/pagos/index";
+                    } else {
+                        parent.window.location.href = $('#txth_base').val() + "/financiero/pagos/listarpagosolicitud?id_sol=" + idsol;
+                    }
+                }, 4000);
+            }, true);
         }
+    }
 }
 function actualizarGrid() {
     var search = $('#txt_buscarData').val();
@@ -259,7 +272,7 @@ function actualizarGridPagosCargados() {
         setTimeout(hideLoadingPopup, 2000);
     }
 }
-function actualizarGridHistorial() {  
+function actualizarGridHistorial() {
     var f_ini = $('#txt_fecha_ini').val();
     var f_fin = $('#txt_fecha_fin').val();
     //Buscar almenos una clase con el nombre para ejecutar
@@ -413,10 +426,10 @@ function cargarFactura() {
     arrParams.procesar_file = true;
     arrParams.sins_id = $('#txt_rpfa_num_solicitud').val();//$('#txth_sins_id').val();
     arrParams.rpfa_num_solicitud = $('#txt_rpfa_num_solicitud').val();
-    arrParams.rpfa_valor_documento = $('#txt_rpfa_valor_documento').val();    
+    arrParams.rpfa_valor_documento = $('#txt_rpfa_valor_documento').val();
     arrParams.rpfa_numero_documento = $('#txt_rpfa_numero_documento').val();
     arrParams.rpfa_fecha_documento = $('#txt_rpfa_fecha_documento').val();
-    arrParams.documento = "facturas/"+$('#txth_per').val()+"/"+$('#txth_doc_titulo').val();
+    arrParams.documento = "facturas/" + $('#txth_per').val() + "/" + $('#txth_doc_titulo').val();
     //arrParams.archivo = $('#txth_doc_adj_leads2').val() + "." + $('#txth_doc_adj_leads').val().split('.').pop();
 
     if (!validateForm()) {
@@ -442,10 +455,10 @@ function exportExcelColec() {
     var f_fin = $('#txt_fecha_fin').val();
     window.location.href = $('#txth_base').val() + "/financiero/pagos/expexcelcolec?search=" + search + "&f_ini=" + f_ini + "&f_fin=" + f_fin;
 }
-function generarSolicitud(doc_id){
+function generarSolicitud(doc_id) {
     var arrParams = new Object();
     var link = $('#txth_base').val() + "/financiero/pagos/generarsolicitud";
-    arrParams.doc_id = doc_id;    
+    arrParams.doc_id = doc_id;
     if (!validateForm()) {
         requestHttpAjax(link, arrParams, function (response) {
             showAlert(response.status, response.label, response.message);
@@ -475,12 +488,12 @@ function exportPdfColec() {
     var f_fin = $('#txt_fecha_fin').val();
     window.location.href = $('#txth_base').val() + "/financiero/pagos/expexcelcolec?pdf=1&search=" + search + "&f_ini=" + f_ini + "&f_fin=" + f_fin;
 }
-function exportExcelhis() {  
+function exportExcelhis() {
     var f_ini = $('#txt_fecha_ini').val();
-    var f_fin = $('#txt_fecha_fin').val();    
+    var f_fin = $('#txt_fecha_fin').val();
     window.location.href = $('#txth_base').val() + "/financiero/pagos/expexcelhis?f_ini=" + f_ini + "&f_fin=" + f_fin;
 }
-function exportPdfhis() {   
+function exportPdfhis() {
     var f_ini = $('#txt_fecha_ini').val();
     var f_fin = $('#txt_fecha_fin').val();
     window.location.href = $('#txth_base').val() + "/financiero/pagos/exppdfhis?pdf=1&f_ini=" + f_ini + "&f_fin=" + f_fin;

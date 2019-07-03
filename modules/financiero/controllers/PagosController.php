@@ -693,7 +693,9 @@ class PagosController extends \app\components\CController {
                     'model' => $data_transacciones,
         ]);
     }
-    public function actionActualizar_pago() {
+    public function actionActualizarpago() {
+        $data = Yii::$app->request->get();
+        $doc_id['doc_id'];
         $jsonCredential = json_decode(file_get_contents("/opt/credenciales.json"),true);                
         $jsonCredential["gateway"];        
         $jsonCredential["login"];        
