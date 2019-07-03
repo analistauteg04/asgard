@@ -854,14 +854,14 @@ class PagosController extends \app\components\CController {
                     'model' => $data_transacciones,
         ]);
     }
-
     public function actionActualizar_pago() {
-        $jsonCredential = json_decode(file_get_contents("/opt/credenciales.json"), true);
-        $jsonCredential["gateway"];
-        $jsonCredential["login"];
-        $tranKey = $jsonCredential["trankey"];
-        $firma = $json["requestId"] . $json["status"]["status"] . $json["status"]["date"] . $tranKey;
-
+        $data = Yii::$app->request->get();
+        $doc_id['doc_id'];
+        $jsonCredential = json_decode(file_get_contents("/opt/credenciales.json"),true);                
+        $jsonCredential["gateway"];        
+        $jsonCredential["login"];        
+        $tranKey = $jsonCredential["trankey"];        
+        $firma = $json["requestId"].$json["status"]["status"].$json["status"]["date"].$tranKey;    
 //        $firmaValidar = sha1($firma);
 //        if ($firmaValidar == $json["signature"]){
 //            $update = "UPDATE `peticiones` SET `request_id`='".$json["requestId"]."',`razon`='".$json["status"]["message"]."',`estado_pago`='".$json["status"]["status"]."',`fecha_pago`='".$json["status"]["date"]."' WHERE `referencia`=".$json["reference"];

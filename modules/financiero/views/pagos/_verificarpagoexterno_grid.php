@@ -68,7 +68,7 @@ admision::registerTranslations();
                 'template' => '{details} {request} {actualizar_pago}',           
                 'buttons' => [
                     'actualizar_pago' => function ($url, $model) {
-                        return Html::a('<span class="glyphicon glyphicon-refresh"></span>', "#", ["onclick" => "actualizar_pago(" . $model['doc_id'] . ");", "data-toggle" => "tooltip", "title" => "Generar Solicitud", "data-pjax" => 0]);
+                        return Html::a('<span class="glyphicon glyphicon-refresh"></span>', "#", ["onclick" => "actualizar_pago(" . $model['doc_id'] . ");", "data-toggle" => "tooltip", "title" => "Actualizar Estado", "data-pjax" => 0]);
                     },                   
                     'details' => function ($url, $model) {
                         return Html::a('<span class="glyphicon glyphicon-th-list"></span>', Url::to(['pagos/detallepagoexterno', 'doc_id' => $model['id'], 'popup' => 'true']), ["data-toggle" => "tooltip", "title" => "Detalle Pago", "data-pjax" => 0, "class" => "pbpopup"]);
