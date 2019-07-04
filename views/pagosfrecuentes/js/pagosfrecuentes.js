@@ -20,8 +20,8 @@ function habilitarSecciones() {
 }
 var itemList = [];
 var total = 0;
-$(document).ready(function () {    
-    $('#btn_pago_p').css('display', 'none');    
+$(document).ready(function () {
+    $('#btn_pago_p').css('display', 'none');
     llenarDatosBen(obtDataBen());
     var unisol = $('#cmb_unidad_solicitud').val();
     if (unisol == 1) {
@@ -241,24 +241,63 @@ $(document).ready(function () {
         $("a[data-href='#paso3']").trigger("click");
     });
 
+    /*$('input[name=opt_tipo_DNI]:radio').change(function () {
+     if ($(this).val() == 1) {//ced
+     $('#txt_dni_fac').attr("data-lengthMin", "10");
+     $('#txt_dni_fac').attr("data-lengthMax", "10");
+     $('#txt_dni_fac').attr("placeholder", $('#txth_ced_lb').val());
+     $('label[for=txt_dni_fac]').text($('#txth_ced_lb').val() + "");
+     } else if ($(this).val() == 2) { // ruc
+     $('#txt_dni_fac').attr("data-lengthMin", "13");
+     $('#txt_dni_fac').attr("data-lengthMax", "13");
+     $('#txt_dni_fac').attr("placeholder", $('#txth_ruc_lb').val());
+     $('label[for=txt_dni_fac]').text($('#txth_ruc_lb').val() + "");
+     } else { // pasaporte
+     $('#txt_dni_fac').attr("data-lengthMin", "7");
+     $('#txt_dni_fac').attr("data-lengthMax", "13");
+     $('#txt_dni_fac').attr("placeholder", $('#txth_ruc_lb').val());
+     $('label[for=txt_dni_fac]').text($('#txth_pas_lb').val() + "");
+     }
+     });*/
     $('input[name=opt_tipo_DNI]:radio').change(function () {
-        if ($(this).val() == 1) {//ced
-            $('#txt_dni_fac').attr("data-lengthMin", "10");
-            $('#txt_dni_fac').attr("data-lengthMax", "10");
-            $('#txt_dni_fac').attr("placeholder", $('#txth_ced_lb').val());
-            $('label[for=txt_dni_fac]').text($('#txth_ced_lb').val() + "");
-        } else if ($(this).val() == 2) { // ruc
-            $('#txt_dni_fac').attr("data-lengthMin", "13");
-            $('#txt_dni_fac').attr("data-lengthMax", "13");
-            $('#txt_dni_fac').attr("placeholder", $('#txth_ruc_lb').val());
-            $('label[for=txt_dni_fac]').text($('#txth_ruc_lb').val() + "");
-        } else { // pasaporte
-            $('#txt_dni_fac').attr("data-lengthMin", "7");
-            $('#txt_dni_fac').attr("data-lengthMax", "13");
-            $('#txt_dni_fac').attr("placeholder", $('#txth_ruc_lb').val());
-            $('label[for=txt_dni_fac]').text($('#txth_pas_lb').val() + "");
+        if ($(this).val() == 1) {
+            $('#DivcedulaFac').css('display', 'block');
+            $('#DivpasaporteFac').css('display', 'none');
+            $('#DivRucFac').css('display', 'none');
+            $('#txt_dni_fac').addClass("PBvalidation");
+            $('#txt_ruc_fac').removeClass("PBvalidation");
+            $('#txt_pasaporte_fac').removeClass("PBvalidation");
+        } else if ($(this).val() == 2) {
+            $('#DivRucFac').css('display', 'block');
+            $('#DivpasaporteFac').css('display', 'none');
+            $('#DivcedulaFac').css('display', 'none');
+            $('#txt_ruc_fac').addClass("PBvalidation");
+            $('#txt_dni_fac').removeClass("PBvalidation");
+            $('#txt_pasaporte_fac').removeClass("PBvalidation");
+        } else {
+            $('#DivpasaporteFac').css('display', 'block');
+            $('#DivcedulaFac').css('display', 'none');
+            $('#DivRucFac').css('display', 'none');
+            $('#txt_pasaporte_fac').addClass("PBvalidation");
+            $('#txt_ruc_fac').removeClass("PBvalidation");
+            $('#txt_dni_fac').removeClass("PBvalidation");
         }
     });
+    if ($("input[name='opt_tipo_DNI']:checked").val() == "1") {
+        $('#txt_dni_fac').addClass("PBvalidation");
+        $('#txt_ruc_fac').removeClass("PBvalidation");
+        $('#txt_pasaporte_fac').removeClass("PBvalidation");
+    } else if ($("input[name='opt_tipo_DNI']:checked").val() == "2") {
+        $('#txt_ruc_fac').addClass("PBvalidation");
+        $('#txt_pasaporte_fac').removeClass("PBvalidation");
+        $('#txt_dni_fac').removeClass("PBvalidation");
+    } else {
+        $('#txt_pasaporte_fac').addClass("PBvalidation");
+        $('#txt_ruc_fac').removeClass("PBvalidation");
+        $('#txt_dni_fac').removeClass("PBvalidation");
+
+
+    }
 
 });
 function llenarDatosBen(benData) {
@@ -332,7 +371,16 @@ function guardarFacturaTemp() {
     arrParams.dir_fac = $('#txt_dir_fac').val();
     arrParams.telfono_fac = $('#txt_tel_fac').val();
     arrParams.tipo_dni_fac = $("input[name='opt_tipo_DNI']:checked").val();
-    arrParams.dni_fac = $('#txt_dni_fac').val();
+    if (arrParams.tipo_dni_fac == 1) {
+        arrParams.dni_fac = $('#txt_dni_fac').val();
+    } else if (arrParams.tipo_dni_fac == 2)
+    {
+        arrParams.dni_fac = $('#txt_ruc_fac').val();
+    } else {
+        arrParams.dni_fac = $('#txt_pasaporte_fac').val();
+    }
+
+
     arrParams.correo = $('#txt_correo').val();
     arrParams.total = total;
     sessionStorage.setItem('datosFactura', JSON.stringify(arrParams));
@@ -353,9 +401,9 @@ function guardarPagos() {
                 showAlert("OK", "success", response.message);
                 sessionStorage.clear();
                 setTimeout(function () {
-                    var bohre = $('#txth_base').val() + "/pagosfrecuentes/botonpago?docid=" + response.message.iddoc+"&popup=1";
+                    var bohre = $('#txth_base').val() + "/pagosfrecuentes/botonpago?docid=" + response.message.iddoc + "&popup=1";
                     $('#btn_pago_p').attr("href", bohre);
-                    $('#btn_pago_p').trigger("click");                    
+                    $('#btn_pago_p').trigger("click");
                 }, 3000);
             });
         }
