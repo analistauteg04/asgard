@@ -853,14 +853,17 @@ class PagosController extends \app\components\CController {
                     'model' => $data_transacciones,
         ]);
     }
-    public function actionActualizar_pago() {
+    public function actionActualizarpago() {
         $data = Yii::$app->request->get();
-        $doc_id['doc_id'];
+        $doc_id=$data['doc_id'];        
         $jsonCredential = json_decode(file_get_contents("/opt/credenciales.json"),true);                
         $jsonCredential["gateway"];        
         $jsonCredential["login"];        
         $tranKey = $jsonCredential["trankey"];        
+        $model_documento = new Documento();
+        $data_vpos=$model_documento->consultarVposByDocid();        
         $firma = $json["requestId"].$json["status"]["status"].$json["status"]["date"].$tranKey;    
+        // aqui tengo que preguntar 
 //        $firmaValidar = sha1($firma);
 //        if ($firmaValidar == $json["signature"]){
 //            $update = "UPDATE `peticiones` SET `request_id`='".$json["requestId"]."',`razon`='".$json["status"]["message"]."',`estado_pago`='".$json["status"]["status"]."',`fecha_pago`='".$json["status"]["date"]."' WHERE `referencia`=".$json["reference"];

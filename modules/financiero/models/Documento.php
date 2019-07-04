@@ -4,6 +4,7 @@ namespace app\modules\financiero\models;
 
 use Yii;
 use yii\data\ArrayDataProvider;
+
 /**
  * This is the model class for table "documento".
  *
@@ -102,6 +103,7 @@ class Documento extends \yii\db\ActiveRecord {
         $command->execute();
         return $con->getLastInsertID();
     }
+
     public function actualizarDocumento($con, $doc_id, $estado_pago = 0) {
         $estado = 1;
         $fecha = date(Yii::$app->params["dateTimeByDefault"]);
@@ -122,7 +124,7 @@ class Documento extends \yii\db\ActiveRecord {
         $response = $command->execute();
         return $response;
     }
-    
+
     /**
      * Function consultarDatosxId
      * @author  Grace Viteri <analistadesarrollo01@uteg.edu.ec>
@@ -156,6 +158,26 @@ class Documento extends \yii\db\ActiveRecord {
                 and pb.pben_estado_logico = :estado
                 and sb.sbpa_estado = :estado
                 and sb.sbpa_estado_logico = :estado";
+
+        $comando = $con->createCommand($sql);
+        $comando->bindParam(":estado", $estado, \PDO::PARAM_STR);
+        $comando->bindParam(":doc_id", $doc_id, \PDO::PARAM_INT);
+        $resultData = $comando->queryOne();
+        return $resultData;
+    }
+
+    public function consultarVposByDocid() {
+        $estado = 1;
+        $sql = "
+                SELEC   
+                    pb.pben_apellido,
+                    sb.sbpa_id    
+                FROM 
+                    db_financiero.vpos_request
+                    
+                WHERE
+                    d.doc_id = :doc_id
+                ";
 
         $comando = $con->createCommand($sql);
         $comando->bindParam(":estado", $estado, \PDO::PARAM_STR);
@@ -232,7 +254,7 @@ class Documento extends \yii\db\ActiveRecord {
         return $resultData;
     }
 
-    public function consultarDetalledocumentoById($doc_id,$onlyData=null) {
+    public function consultarDetalledocumentoById($doc_id, $onlyData = null) {
         $con = \Yii::$app->db_facturacion;
         $estado = 1;
         $sql = "
@@ -275,4 +297,5 @@ class Documento extends \yii\db\ActiveRecord {
             return $dataProvider;
         }
     }
+
 }
