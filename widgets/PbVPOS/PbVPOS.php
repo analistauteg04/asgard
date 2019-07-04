@@ -29,7 +29,6 @@ class PbVPOS extends Widget {
     protected $payment_gateway = "";
     protected $port = "443";
     protected $logTrans = __DIR__ . "/../../runtime/logs/vpos.log";
-
     public $referenceID = "";
     public $ordenPago = "";
     public $tipo_orden = "";
