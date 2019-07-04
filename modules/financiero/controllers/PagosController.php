@@ -176,108 +176,95 @@ class PagosController extends \app\components\CController {
                     ];
                     $id_persona = $mod_persona->consultarIdPersona($resp_datos['pben_cedula'], $resp_datos['pben_cedula'], $resp_datos['pben_correo'], $resp_datos['pben_celular']);
                     if ($id_persona == 0) {
-                        $id_persona = $mod_persona->insertarPersona($con, $parametros_per, $keys_per, 'persona');
-                    }
-                    if ($id_persona > 0) {
-                        \app\models\Utilities::putMessageLogFile('se crea persona.');
-                        $mod_emp_persona = new EmpresaPersona();
-                        $emp_id = 1;
-                        $keys = ['emp_id', 'per_id', 'eper_estado', 'eper_estado_logico'];
-                        $parametros = [$emp_id, $id_persona, 1, 1];
-                        $emp_per_id = $mod_emp_persona->consultarIdEmpresaPersona($id_persona, $emp_id);
-                        if ($emp_per_id == 0) {
-                            $emp_per_id = $mod_emp_persona->insertarEmpresaPersona($con, $parametros, $keys, 'empresa_persona');
-                        }
-                        if ($emp_per_id > 0) {
-                            $usuario = new Usuario();
-                            $usuario_id = $usuario->consultarIdUsuario($id_persona, $resp_datos['pben_correo']);
-                            if ($usuario_id == 0) {
-                                $security = new Security();
-                                $hash = $security->generateRandomString();
-                                $passencrypt = base64_encode($security->encryptByPassword($hash, $resp_datos['pben_cedula']));
-                                $keys = ['per_id', 'usu_user', 'usu_sha', 'usu_password', 'usu_estado', 'usu_estado_logico'];
-                                $parametros = [$id_persona, $resp_datos['pben_correo'], $hash, $passencrypt, 1, 1];
-                                $usuario_id = $usuario->crearUsuarioTemporal($con, $parametros, $keys, 'usuario');
-                            }
-                            if ($usuario_id > 0) {
-                                $mod_us_gr_ep = new UsuaGrolEper();
-                                $grol_id = 30;
-                                $keys = ['eper_id', 'usu_id', 'grol_id', 'ugep_estado', 'ugep_estado_logico'];
-                                $parametros = [$emp_per_id, $usuario_id, $grol_id, 1, 1];
-                                $us_gr_ep_id = $mod_us_gr_ep->consultarIdUsuaGrolEper($emp_per_id, $usuario_id, $grol_id);
-                                if ($us_gr_ep_id == 0)
-                                    $us_gr_ep_id = $mod_us_gr_ep->insertarUsuaGrolEper($con, $parametros, $keys, 'usua_grol_eper');
-                                if ($us_gr_ep_id > 0) {
-                                    $mod_interesado = new Interesado(); // se guarda con estado_interesado 1
-                                    $interesado_id = $mod_interesado->consultaInteresadoById($id_persona);
-                                    $keys = ['per_id', 'int_estado_interesado', 'int_usuario_ingreso', 'int_estado', 'int_estado_logico'];
-                                    $parametros = [$id_persona, 1, $usuario_id, 1, 1];
-                                    if ($interesado_id == 0) {
-                                        $interesado_id = $mod_interesado->insertarInteresado($concap, $parametros, $keys, 'interesado');
+                        $id_persona = $mod_persona->insertarPersona($con, $parametros_per, $keys_per, 'persona');                    
+                        if ($id_persona > 0) {
+                            \app\models\Utilities::putMessageLogFile('se crea persona.');
+                            $mod_emp_persona = new EmpresaPersona();
+                            $emp_id = 1;
+                            $keys = ['emp_id', 'per_id', 'eper_estado', 'eper_estado_logico'];
+                            $parametros = [$emp_id, $id_persona, 1, 1];
+                            $emp_per_id = $mod_emp_persona->consultarIdEmpresaPersona($id_persona, $emp_id);
+                            if ($emp_per_id == 0) {
+                                $emp_per_id = $mod_emp_persona->insertarEmpresaPersona($con, $parametros, $keys, 'empresa_persona');                            
+                                if ($emp_per_id > 0) {
+                                    $usuario = new Usuario();
+                                    $usuario_id = $usuario->consultarIdUsuario($id_persona, $resp_datos['pben_correo']);
+                                    if ($usuario_id == 0) {
+                                        $security = new Security();
+                                        $hash = $security->generateRandomString();
+                                        $passencrypt = base64_encode($security->encryptByPassword($hash, $resp_datos['pben_cedula']));
+                                        $keys = ['per_id', 'usu_user', 'usu_sha', 'usu_password', 'usu_estado', 'usu_estado_logico'];
+                                        $parametros = [$id_persona, $resp_datos['pben_correo'], $hash, $passencrypt, 1, 1];
+                                        $usuario_id = $usuario->crearUsuarioTemporal($con, $parametros, $keys, 'usuario');
                                     }
-                                    if ($interesado_id > 0) {
-                                        $mod_inte_emp = new InteresadoEmpresa(); // se guarda con estado_interesado 1
-                                        $iemp_id = $mod_inte_emp->consultaInteresadoEmpresaById($interesado_id, $emp_id);
-                                        if ($iemp_id == 0) {
-                                            $iemp_id = $mod_inte_emp->crearInteresadoEmpresa($interesado_id, $emp_id, $usuario_id);
+                                    if ($usuario_id > 0) {
+                                        $mod_us_gr_ep = new UsuaGrolEper();
+                                        $grol_id = 30;
+                                        $keys = ['eper_id', 'usu_id', 'grol_id', 'ugep_estado', 'ugep_estado_logico'];
+                                        $parametros = [$emp_per_id, $usuario_id, $grol_id, 1, 1];
+                                        $us_gr_ep_id = $mod_us_gr_ep->consultarIdUsuaGrolEper($emp_per_id, $usuario_id, $grol_id);
+                                        if ($us_gr_ep_id == 0){
+                                            $us_gr_ep_id = $mod_us_gr_ep->insertarUsuaGrolEper($con, $parametros, $keys, 'usua_grol_eper');
+                                            if ($us_gr_ep_id > 0) {
+                                                $mod_interesado = new Interesado(); // se guarda con estado_interesado 1
+                                                $interesado_id = $mod_interesado->consultaInteresadoById($id_persona);
+                                                $keys = ['per_id', 'int_estado_interesado', 'int_usuario_ingreso', 'int_estado', 'int_estado_logico'];
+                                                $parametros = [$id_persona, 1, $usuario_id, 1, 1];
+                                                if ($interesado_id == 0) {
+                                                    $interesado_id = $mod_interesado->insertarInteresado($concap, $parametros, $keys, 'interesado');
+                                                }
+                                                if ($interesado_id > 0) {
+                                                    $mod_inte_emp = new InteresadoEmpresa(); // se guarda con estado_interesado 1
+                                                    $iemp_id = $mod_inte_emp->consultaInteresadoEmpresaById($interesado_id, $emp_id);
+                                                    if ($iemp_id == 0) {
+                                                        $iemp_id = $mod_inte_emp->crearInteresadoEmpresa($interesado_id, $emp_id, $usuario_id);
+                                                        if ($iemp_id > 0) {
+                                                            $crea_persona = "S";
+                                                        }
+                                                    }
+                                                }
+                                            }
                                         }
-                                        if ($iemp_id > 0) {
-                                            $eaca_id = NULL;
-                                            $mest_id = NULL;
-                                            if ($emp_id == 1) {//Uteg 
-                                                $eaca_id = $resp_datos['car_id'];
-                                            } elseif ($emp_id == 2 || $emp_id == 3) {
-                                                $mest_id = $resp_datos['car_id'];
-                                            }
-                                            $num_secuencia = Secuencias::nuevaSecuencia($con, $emp_id, 1, 1, 'SOL');
-                                            $sins_fechasol = date(Yii::$app->params["dateTimeByDefault"]);
-                                            $rsin_id = 1; //Solicitud pendiente     
-                                            $solins_model = new SolicitudInscripcion();
-                                            $ming = null;
-                                            $sins_id = $solins_model->insertarSolicitud($interesado_id, $resp_datos['uaca_id'], $resp_datos['mod_id'], $ming, $eaca_id, null, $emp_id, $num_secuencia, $rsin_id, $sins_fechasol, $usuario_id, null);
-                                            if ($sins_id) {
-                                                $resp_precio = $solins_model->ObtenerPrecio($resp_datos['twin_metodo_ingreso'], $resp_datos['uaca_id'], $resp_datos['mod_id'], $eaca_id);
-                                                if ($resp_precio) {
-                                                    $ite_id = $resp_precio['ite_id'];
-                                                    $precio = $resp_precio['precio'];
-                                                } else {
-                                                    $mensaje = 'No existe registrado ningún precio para la unidad, modalidad y método de ingreso seleccionada.';
-                                                }
-                                                $mod_ordenpago = new OrdenPago();
-                                                $val_descuento = 0;
-                                                //Generar la orden de pago con valor correspondiente. Buscar precio para orden de pago.                                                                     
-                                                if ($precio == 0) {
-                                                    $estadopago = 'S';
-                                                } else {
-                                                    $estadopago = 'P';
-                                                }
-                                                $val_total = $precio - $val_descuento;
-                                                $resp_opago = $mod_ordenpago->insertarOrdenpago($sins_id, null, $val_total, 0, $val_total, $estadopago, $usuario_id);
-                                                if ($resp_opago) {
-                                                    //insertar desglose del pago                                                         
-                                                    $fecha_ini = date(Yii::$app->params["dateByDefault"]);
-                                                    $resp_dpago = $mod_ordenpago->insertarDesglosepago($resp_opago, $ite_id, $val_total, 0, $val_total, $fecha_ini, null, $estadopago, $usuario_id);
-                                                    if ($resp_dpago) {
-                                                        //Grabar documento de registro de pago por botón de pagos.                                                                                                                
-                                                        $fpag_id = 6;  //botón de pagos.                                                            
-                                                        $fecha_registro = date(Yii::$app->params["dateTimeByDefault"]);
-                                                        $creadetalle = $mod_ordenpago->insertarRegistropago($resp_dpago, $fpag_id, $resp_datos["doc_valor"], $resp_datos["doc_fecha_pago"], null, $rpag_num_transaccion, $rpag_fecha_transaccion, $rpag_observacion, "AP", $usuario_id, "RE");
-                                                        if ($creadetalle) {
-                                                            //\app\models\Utilities::putMessageLogFile('despues de insertar Cargar pago');
-                                                            $detalle = 'S';
-                                                        }
-                                                    } else {
-                                                        $detalle = 'S';
-                                                    }
-                                                    //Grabar datos de factura                                                                                                                   
-                                                    if ($detalle == 'S') {
-                                                        $resdatosFact = $solins_model->crearDatosFacturaSolicitud($sins_id, $resp_datos["doc_nombres_cliente"], $dataReg["apellidos_fact"], $resp_datos["tdoc_id"], $dataReg["dni"], $dataReg["direccion_fact"], $resp_datos["doc_telefono"], $resp_datos["doc_correo"]);
-                                                        if ($resdatosFact) {
-                                                            $exito = 1;
-                                                        }
-                                                    }
-                                                }
-                                            }
+                                    }                                
+                                }
+                            }                       
+                        }
+                    }
+                    //Cuando ya está creada la persona.-    
+                    if (($crea_persona == "S") or ($id_persona > 0)) {                                                                                                
+                        $num_secuencia = Secuencias::nuevaSecuencia($con, $emp_id, 1, 1, 'SOL');
+                        $sins_fechasol = $resp_datos["sbpa_fecha_solicitud"];
+                        $rsin_id = 2; //Solicitud aprobada     
+                        $solins_model = new SolicitudInscripcion();                                            
+                        $resp_detalle = $mod_documento->consultarDetalledocumentoById($doc_id);
+                        for ($a=0; $a<count($resp_detalle); $a++) {                                                     
+                            $sins_id = $solins_model->insertarSolicitud($interesado_id, $resp_detalle[$a]["unidad"], $resp_detalle[$a]["modalidad"], $resp_detalle[$a]["metodo"], null, null, $emp_id, $num_secuencia, $rsin_id, $sins_fechasol, $usuario_id, null);
+                            if ($sins_id) {                                                    
+                                $mod_ordenpago = new OrdenPago();                                                    
+                                //Generar la orden de pago con valor correspondiente. Buscar precio para orden de pago.                                                                                                                         
+                                $estadopago = 'P';
+                                $resp_opago = $mod_ordenpago->insertarOrdenpago($sins_id, null, $resp_detalle[$a]["total"], 0, $resp_detalle[$a]["total"], $estadopago, $usuario_id);
+                                if ($resp_opago) {
+                                    //insertar desglose del pago                                                         
+                                    $fecha_ini = date(Yii::$app->params["dateByDefault"]);
+                                    $resp_dpago = $mod_ordenpago->insertarDesglosepago($resp_opago, $resp_detalle[$a]["item"], $resp_detalle[$a]["total"], 0, $resp_detalle[$a]["total"], $fecha_ini, null, $estadopago, $usuario_id);
+                                    if ($resp_dpago) {
+                                        //Grabar documento de registro de pago por botón de pagos.                                                                                                                
+                                        $fpag_id = 6;  //botón de pagos.                                                            
+                                        $fecha_registro = date(Yii::$app->params["dateTimeByDefault"]);
+                                        $creadetalle = $mod_ordenpago->insertarRegistropago($resp_dpago, $fpag_id, $resp_detalle[$a]["total"], $resp_datos["doc_fecha_pago"], null, null, $resp_datos["doc_fecha_pago"], "Botón Pagos", "AP", $usuario_id, "RE");
+                                        if ($creadetalle) {
+                                            //\app\models\Utilities::putMessageLogFile('despues de insertar Cargar pago');
+                                            $detalle = 'S';
+                                        }
+                                    } else {
+                                        $detalle = 'S';
+                                    }
+                                    //Grabar datos de factura                                                                                                                   
+                                    if ($detalle == 'S') {
+                                        $resdatosFact = $solins_model->crearDatosFacturaSolicitud($sins_id, $resp_datos["doc_nombres_cliente"], $resp_datos["doc_nombres_cliente"], $resp_datos["tdoc_id"], $dataReg["dni"], $dataReg["direccion_fact"], $resp_datos["doc_telefono"], $resp_datos["doc_correo"]);
+                                        if ($resdatosFact) {
+                                            $exito = 1;
                                         }
                                     }
                                 }
@@ -285,10 +272,44 @@ class PagosController extends \app\components\CController {
                         }
                     }
                 }
-            }            
+            }
+            if ($exito == 1) {
+                //$transaction->commit();
+                //$transaction1->commit(); 
+                $transaction2->commit();
+                //Envío de correo.
+                $tituloMensaje = Yii::t("interesado", "UTEG - Registration Online");
+                $asunto = Yii::t("interesado", "UTEG - Registration Online");
+                $link = "https://www.asgard.uteg.edu.ec/asgard";
+                $body = Utilities::getMailMessage("credentials", array("[[usuario]]" => $resp_datos['twin_nombre'] . " " . $resp_datos['twin_apellido'], "[[username]]" => $resp_datos['twin_correo'], "[[clave]]" => $resp_datos['twin_numero'], "[[link]]" => $link), Yii::$app->language);
+                Utilities::sendEmail($tituloMensaje, Yii::$app->params["adminEmail"], [$resp_datos['twin_correo'] => $resp_datos['twin_apellido'] . " " . $resp_datos['twin_nombre']], $asunto, $body);
+                Utilities::sendEmail($tituloMensaje, Yii::$app->params["adminEmail"], [Yii::$app->params["admisiones"] => "Jefe"], $asunto, $body);
+                Utilities::sendEmail($tituloMensaje, Yii::$app->params["adminEmail"], [Yii::$app->params["soporteEmail"] => "Soporte"], $asunto, $body);                
+                $message = array(
+                    "wtmessage" => Yii::t("formulario", "The information have been saved and the information has been sent to your email"),
+                    "title" => Yii::t('jslang', 'Success'),
+                );                                
+                return Utilities::ajaxResponse('OK', 'alert', Yii::t("jslang", "Sucess"), false, $message);                
+            } else {
+                //$transaction->rollback();
+                //$transaction1->rollback();
+                $transaction2->rollback();
+                $message = array(
+                    "wtmessage" => Yii::t("formulario", "Mensaje1: " . $mensaje), //$error_message
+                    "title" => Yii::t('jslang', 'Bad Request'),
+                );
+                return Utilities::ajaxResponse('NO_OK', 'alert', Yii::t("jslang", "Bad Request"), false, $message);
+            }
         } catch (Exception $ex) {
-            
-        }
+            //$transaction->rollback();
+            //$transaction1->rollback();
+            $transaction2->rollback();
+            $message = array(
+                "wtmessage" => Yii::t("formulario", "Mensaje2: " . $mensaje), //$error_message
+                "title" => Yii::t('jslang', 'Bad Request'),
+            );
+            return Utilities::ajaxResponse('NO_OK', 'alert', Yii::t("jslang", "Bad Request"), false, $message);
+        }                    
     }
 
     public function actionViewpagacarga() {

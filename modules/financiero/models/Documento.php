@@ -145,7 +145,8 @@ class Documento extends \yii\db\ActiveRecord {
                         pb.pben_correo,
                         pb.pben_nombre,
                         pb.pben_apellido,
-                        sb.sbpa_id    
+                        sb.sbpa_id,
+                        sb.sbpa_fecha_solicitud
                 FROM " . $con->dbname . ".documento d inner join " . $con->dbname . ".solicitud_boton_pago sb 
                          on sb.sbpa_id = d.sbpa_id     
                      inner join " . $con->dbname . ".persona_beneficiaria pb on pb.pben_id = sb.pben_id
@@ -241,13 +242,19 @@ class Documento extends \yii\db\ActiveRecord {
                 ite.ite_nombre as item, 
                 ddoc.ddoc_cantidad as cantidad,
                 ddoc.ddoc_valor_iva as iva,
-                ddoc.ddoc_valor_total as total
+                ddoc.ddoc_valor_total as total,
+                imu.ming_id metodo, 
+                imu.uaca_id unidad,
+                imu.mod_id modalidad
             from 
-                db_facturacion.detalle_documento ddoc
-                join db_facturacion.item as ite on ite.ite_id = ddoc.ite_id
+                " . $con->dbname . ".detalle_documento ddoc
+                join " . $con->dbname . ".item as ite on ite.ite_id = ddoc.ite_id
+                left join " . $con->dbname . ".item_metodo_unidad imu on imu.ite_id = ddoc.ite_id
             where 
                 ddoc.doc_id=:doc_id and
-                ddoc.ddoc_estado = :status
+                ddoc.ddoc_estado = :status and
+                imu.imni_estado = :status and 
+                imu.imni_estado_logico = :status
             ";
         $comando = $con->createCommand($sql);
         $comando->bindParam(":status", $estado, \PDO::PARAM_STR);
