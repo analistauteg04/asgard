@@ -116,7 +116,7 @@
         <div id="collapse8" class="panel-collapse collapse">
             <div class="panel-body"><p align="justify">Por cada transacción aprobada a través de PlacetoPay, recibirás un comprobante del pago con la 
                     referencia de compra en la dirección de correo electrónico que indicaste al momento de pagar.  Si no lo recibes, podrás contactar 
-                    a la línea (INCLUIR EL TELÉFONO DEL COMERCIO) o al correo electrónico (INCLUIR EL CORREO ELECTRÓNICO DEL COMERCIO), para solicitar 
+                    a la línea PBX.: 04-605 2450 o al correo electrónico colecturia@uteg.edu.ec, para solicitar 
                     el reenvío del comprobante a la misma dirección de correo electrónico registrada al momento de pagar. En última instancia, 
                     puedes remitir tu solicitud a servicioposventa@placetopay.ec.</p></div>
         </div>
@@ -125,11 +125,11 @@
         <div class="panel-heading">
             <h4 class="panel-title">
                 <a data-toggle="collapse" data-parent="#accordion" href="#collapse9">
-                    9. No me llegó el producto que compré ¿qué hago? </a>
+                    9. No me llegó el coreo con usuario y contraseña ¿qué hago? </a>
             </h4>
         </div>
         <div id="collapse9" class="panel-collapse collapse">
-            <div class="panel-body"><p align="justify">Debes verificar si la transacción fue exitosa en tu extracto bancario.</p></div>
+            <div class="panel-body"><p align="justify">Debes verificar en correos no deseados, sino contactarse con el administrador del sitio.</p></div>
         </div>
     </div>
 </div>
