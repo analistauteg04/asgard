@@ -620,7 +620,6 @@ class PagosController extends \app\components\CController {
                     \app\models\Utilities::putMessageLogFile('Método:' . $metodo);
                     \app\models\Utilities::putMessageLogFile('Titulo:' . $tituloMensaje);
                     \app\models\Utilities::putMessageLogFile('Asunto:' . $asunto);
-
                     $bodycolecturia = Utilities::getMailMessage("Paymentraisedcollect", array("[[nombres_completos]]" => $nombres, "[[metodo]]" => $metodo), Yii::$app->language);
                     //Utilities::sendEmail($tituloMensaje, Yii::$app->params["adminEmail"], [Yii::$app->params["colecturia"] => "Colecturia"], $asunto, $bodycolecturia);
                     $exito = 1;
