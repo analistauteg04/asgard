@@ -23,13 +23,16 @@ use app\modules\financiero\models\Secuencias;
 use app\modules\financiero\Module as financiero;
 use app\modules\admision\Module as admision;
 use app\modules\academico\Module as academico;
+
 admision::registerTranslations();
 academico::registerTranslations();
+
 class PagosController extends \app\components\CController {
+
     public function actionIndex() {
         $per_id = @Yii::$app->session->get("PB_iduser");
         $model_interesado = new Interesado();
-        $resp_gruporol = $model_interesado->consultagruporol($per_id);                
+        $resp_gruporol = $model_interesado->consultagruporol($per_id);
         $mod_pago = new OrdenPago();
         $data = null;
         $data = Yii::$app->request->get();
@@ -57,6 +60,7 @@ class PagosController extends \app\components\CController {
                     'arrEstados' => $arrEstados
         ]);
     }
+
     public function actionCargardocpagos() {
         $per_id = @Yii::$app->session->get("PB_perid");
         $ccar_id = isset($_GET['ids']) ? base64_decode($_GET['ids']) : 0; //NULL
@@ -127,9 +131,166 @@ class PagosController extends \app\components\CController {
                     'respCliente' => $resp_cliord,
         ]);
     }
-    public function actionGenerarsolicitud(){
-        
+
+    public function actionGenerarsolicitud() {
+        $con = \Yii::$app->db_asgard;
+        $con1 = \Yii::$app->db_captacion;
+        $con2 = \Yii::$app->db_facturacion;
+        $concap = \Yii::$app->db_captacion;
+        $usuario_ingreso = @Yii::$app->session->get("PB_iduser");
+        if (Yii::$app->request->isAjax) {
+            $data = Yii::$app->request->post();
+            $doc_id = $data["doc_id"];
+        }
+        try {
+            $transaction = $con->beginTransaction();
+            $transaction1 = $con1->beginTransaction();
+            $transaction2 = $con2->beginTransaction();
+            //Se consulta la información.
+            $mod_documento = new Documento();
+            $resp_datos = $mod_documento->consultarDatosxId($con2, $doc_id);
+            if ($resp_datos) {
+                $identificacion = $resp_datos['pben_cedula'];
+                if (isset($identificacion) && strlen($identificacion) > 0) {
+                    $id_persona = 0;
+                    $mod_persona = new Persona();
+                    $keys_per = [
+                        'per_pri_nombre', 'per_seg_nombre', 'per_pri_apellido', 'per_seg_apellido',
+                        'per_cedula', 'etn_id', 'eciv_id', 'per_genero', 'pai_id_nacimiento',
+                        'pro_id_nacimiento', 'can_id_nacimiento', 'per_fecha_nacimiento',
+                        'per_celular', 'per_correo', 'tsan_id', 'per_domicilio_sector',
+                        'per_domicilio_cpri', 'per_domicilio_csec', 'per_domicilio_num',
+                        'per_domicilio_ref', 'per_domicilio_telefono', 'pai_id_domicilio',
+                        'pro_id_domicilio', 'can_id_domicilio', 'per_nac_ecuatoriano',
+                        'per_nacionalidad', 'per_foto', 'per_usuario_ingresa', 'per_estado', 'per_estado_logico'
+                    ];
+                    $parametros_per = [
+                        ucwords(strtolower($resp_datos['pben_nombre'])), null,
+                        ucwords(strtolower($resp_datos['pben_apellido'])), null,
+                        $resp_datos['pben_cedula'], null, null, null, null, null,
+                        null, null, $resp_datos['pben_celular'], $resp_datos['pben_correo'],
+                        null, null, null, null,
+                        null, null, null,
+                        null, null, null,
+                        null, null, null, $usuario_ingreso, 1, 1
+                    ];
+                    $id_persona = $mod_persona->consultarIdPersona($resp_datos['pben_cedula'], $resp_datos['pben_cedula'], $resp_datos['pben_correo'], $resp_datos['pben_celular']);
+                    if ($id_persona == 0) {
+                        $id_persona = $mod_persona->insertarPersona($con, $parametros_per, $keys_per, 'persona');
+                    }
+                    if ($id_persona > 0) {
+                        \app\models\Utilities::putMessageLogFile('se crea persona.');
+                        $mod_emp_persona = new EmpresaPersona();
+                        $emp_id = 1;
+                        $keys = ['emp_id', 'per_id', 'eper_estado', 'eper_estado_logico'];
+                        $parametros = [$emp_id, $id_persona, 1, 1];
+                        $emp_per_id = $mod_emp_persona->consultarIdEmpresaPersona($id_persona, $emp_id);
+                        if ($emp_per_id == 0) {
+                            $emp_per_id = $mod_emp_persona->insertarEmpresaPersona($con, $parametros, $keys, 'empresa_persona');
+                        }
+                        if ($emp_per_id > 0) {
+                            $usuario = new Usuario();
+                            $usuario_id = $usuario->consultarIdUsuario($id_persona, $resp_datos['pben_correo']);
+                            if ($usuario_id == 0) {
+                                $security = new Security();
+                                $hash = $security->generateRandomString();
+                                $passencrypt = base64_encode($security->encryptByPassword($hash, $resp_datos['pben_cedula']));
+                                $keys = ['per_id', 'usu_user', 'usu_sha', 'usu_password', 'usu_estado', 'usu_estado_logico'];
+                                $parametros = [$id_persona, $resp_datos['pben_correo'], $hash, $passencrypt, 1, 1];
+                                $usuario_id = $usuario->crearUsuarioTemporal($con, $parametros, $keys, 'usuario');
+                            }
+                            if ($usuario_id > 0) {
+                                $mod_us_gr_ep = new UsuaGrolEper();
+                                $grol_id = 30;
+                                $keys = ['eper_id', 'usu_id', 'grol_id', 'ugep_estado', 'ugep_estado_logico'];
+                                $parametros = [$emp_per_id, $usuario_id, $grol_id, 1, 1];
+                                $us_gr_ep_id = $mod_us_gr_ep->consultarIdUsuaGrolEper($emp_per_id, $usuario_id, $grol_id);
+                                if ($us_gr_ep_id == 0)
+                                    $us_gr_ep_id = $mod_us_gr_ep->insertarUsuaGrolEper($con, $parametros, $keys, 'usua_grol_eper');
+                                if ($us_gr_ep_id > 0) {
+                                    $mod_interesado = new Interesado(); // se guarda con estado_interesado 1
+                                    $interesado_id = $mod_interesado->consultaInteresadoById($id_persona);
+                                    $keys = ['per_id', 'int_estado_interesado', 'int_usuario_ingreso', 'int_estado', 'int_estado_logico'];
+                                    $parametros = [$id_persona, 1, $usuario_id, 1, 1];
+                                    if ($interesado_id == 0) {
+                                        $interesado_id = $mod_interesado->insertarInteresado($concap, $parametros, $keys, 'interesado');
+                                    }
+                                    if ($interesado_id > 0) {
+                                        $mod_inte_emp = new InteresadoEmpresa(); // se guarda con estado_interesado 1
+                                        $iemp_id = $mod_inte_emp->consultaInteresadoEmpresaById($interesado_id, $emp_id);
+                                        if ($iemp_id == 0) {
+                                            $iemp_id = $mod_inte_emp->crearInteresadoEmpresa($interesado_id, $emp_id, $usuario_id);
+                                        }
+                                        if ($iemp_id > 0) {
+                                            $eaca_id = NULL;
+                                            $mest_id = NULL;
+                                            if ($emp_id == 1) {//Uteg 
+                                                $eaca_id = $resp_datos['car_id'];
+                                            } elseif ($emp_id == 2 || $emp_id == 3) {
+                                                $mest_id = $resp_datos['car_id'];
+                                            }
+                                            $num_secuencia = Secuencias::nuevaSecuencia($con, $emp_id, 1, 1, 'SOL');
+                                            $sins_fechasol = date(Yii::$app->params["dateTimeByDefault"]);
+                                            $rsin_id = 1; //Solicitud pendiente     
+                                            $solins_model = new SolicitudInscripcion();
+                                            $ming = null;
+                                            $sins_id = $solins_model->insertarSolicitud($interesado_id, $resp_datos['uaca_id'], $resp_datos['mod_id'], $ming, $eaca_id, null, $emp_id, $num_secuencia, $rsin_id, $sins_fechasol, $usuario_id, null);
+                                            if ($sins_id) {
+                                                $resp_precio = $solins_model->ObtenerPrecio($resp_datos['twin_metodo_ingreso'], $resp_datos['uaca_id'], $resp_datos['mod_id'], $eaca_id);
+                                                if ($resp_precio) {
+                                                    $ite_id = $resp_precio['ite_id'];
+                                                    $precio = $resp_precio['precio'];
+                                                } else {
+                                                    $mensaje = 'No existe registrado ningún precio para la unidad, modalidad y método de ingreso seleccionada.';
+                                                }
+                                                $mod_ordenpago = new OrdenPago();
+                                                $val_descuento = 0;
+                                                //Generar la orden de pago con valor correspondiente. Buscar precio para orden de pago.                                                                     
+                                                if ($precio == 0) {
+                                                    $estadopago = 'S';
+                                                } else {
+                                                    $estadopago = 'P';
+                                                }
+                                                $val_total = $precio - $val_descuento;
+                                                $resp_opago = $mod_ordenpago->insertarOrdenpago($sins_id, null, $val_total, 0, $val_total, $estadopago, $usuario_id);
+                                                if ($resp_opago) {
+                                                    //insertar desglose del pago                                                         
+                                                    $fecha_ini = date(Yii::$app->params["dateByDefault"]);
+                                                    $resp_dpago = $mod_ordenpago->insertarDesglosepago($resp_opago, $ite_id, $val_total, 0, $val_total, $fecha_ini, null, $estadopago, $usuario_id);
+                                                    if ($resp_dpago) {
+                                                        //Grabar documento de registro de pago por botón de pagos.                                                                                                                
+                                                        $fpag_id = 6;  //botón de pagos.                                                            
+                                                        $fecha_registro = date(Yii::$app->params["dateTimeByDefault"]);
+                                                        $creadetalle = $mod_ordenpago->insertarRegistropago($resp_dpago, $fpag_id, $resp_datos["doc_valor"], $resp_datos["doc_fecha_pago"], null, $rpag_num_transaccion, $rpag_fecha_transaccion, $rpag_observacion, "AP", $usuario_id, "RE");
+                                                        if ($creadetalle) {
+                                                            //\app\models\Utilities::putMessageLogFile('despues de insertar Cargar pago');
+                                                            $detalle = 'S';
+                                                        }
+                                                    } else {
+                                                        $detalle = 'S';
+                                                    }
+                                                    //Grabar datos de factura                                                                                                                   
+                                                    if ($detalle == 'S') {
+                                                        $resdatosFact = $solins_model->crearDatosFacturaSolicitud($sins_id, $resp_datos["doc_nombres_cliente"], $dataReg["apellidos_fact"], $resp_datos["tdoc_id"], $dataReg["dni"], $dataReg["direccion_fact"], $resp_datos["doc_telefono"], $resp_datos["doc_correo"]);
+                                                        if ($resdatosFact) {
+                                                            $exito = 1;
+                                                        }
+                                                    }
+                                                }
+                                            }
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+            }            
+        } catch (Exception $ex) {
+            
+        }
     }
+
     public function actionViewpagacarga() {
         $per_id = @Yii::$app->session->get("PB_iduser");
         $model_interesado = new Interesado();
@@ -175,8 +336,7 @@ class PagosController extends \app\components\CController {
                     'valpagado' => $valpagado,
         ]);
     }
-    
-    
+
     public function actionViewpagoexterno() {
         $per_id = @Yii::$app->session->get("PB_iduser");
         $model_interesado = new Interesado();
@@ -430,7 +590,7 @@ class PagosController extends \app\components\CController {
             $ccar_total = $data["totpago"];
             $empresa = $data["empresa"];
             $dcar_observacion = ucwords(mb_strtolower($data["observacion"]));
-            
+
             if (empty($ccar_total)) {
                 $ccar_total = $data["pago"];
             }
@@ -442,25 +602,25 @@ class PagosController extends \app\components\CController {
             $transaction = $con->beginTransaction();
             try {
                 $dcar_revisado = 'PE';
-                $dcar_resultado = '';                
+                $dcar_resultado = '';
                 $fecha_registro = date(Yii::$app->params["dateTimeByDefault"]);
                 $creadetalle = $modcargapago->insertarCargaprepago($opag_id, $fpag_id, $dcar_valor, $imagen, $dcar_revisado, $dcar_resultado, $dcar_observacion, $dcar_num_transaccion, $dcar_fecha_transaccion, $fecha_registro);
                 if ($creadetalle) {
                     //Envío de correo a colecturia.                
-                    \app\models\Utilities::putMessageLogFile('Orden Pago:'.$opag_id);   
-                    \app\models\Utilities::putMessageLogFile('Empresa:'.$empresa);  
-                    $informacion_interesado = $modcargapago->datosBotonpago($opag_id, $empresa);                    
+                    \app\models\Utilities::putMessageLogFile('Orden Pago:' . $opag_id);
+                    \app\models\Utilities::putMessageLogFile('Empresa:' . $empresa);
+                    $informacion_interesado = $modcargapago->datosBotonpago($opag_id, $empresa);
                     $pri_nombre = $informacion_interesado["nombres"];
                     $pri_apellido = $informacion_interesado["apellidos"];
                     $nombres = $pri_nombre . " " . $pri_apellido;
                     $metodo = $informacion_interesado["curso"];
                     $tituloMensaje = Yii::t("interesado", "UTEG - Registration Online");
                     $asunto = Yii::t("interesado", "UTEG - Registration Online");
-                    \app\models\Utilities::putMessageLogFile('Nombres y apellidos:'.$nombres);   
-                    \app\models\Utilities::putMessageLogFile('Método:'.$metodo);  
-                    \app\models\Utilities::putMessageLogFile('Titulo:'.$tituloMensaje);  
-                    \app\models\Utilities::putMessageLogFile('Asunto:'.$asunto); 
-                    
+                    \app\models\Utilities::putMessageLogFile('Nombres y apellidos:' . $nombres);
+                    \app\models\Utilities::putMessageLogFile('Método:' . $metodo);
+                    \app\models\Utilities::putMessageLogFile('Titulo:' . $tituloMensaje);
+                    \app\models\Utilities::putMessageLogFile('Asunto:' . $asunto);
+
                     $bodycolecturia = Utilities::getMailMessage("Paymentraisedcollect", array("[[nombres_completos]]" => $nombres, "[[metodo]]" => $metodo), Yii::$app->language);
                     //Utilities::sendEmail($tituloMensaje, Yii::$app->params["adminEmail"], [Yii::$app->params["colecturia"] => "Colecturia"], $asunto, $bodycolecturia);
                     $exito = 1;
@@ -491,6 +651,7 @@ class PagosController extends \app\components\CController {
             return;
         }
     }
+
     public function actionListarpagoscargados() {
         $mod_pago = new OrdenPago();
 
@@ -628,11 +789,11 @@ class PagosController extends \app\components\CController {
     }
 
     public function actionListarpagosolicitud() {
-        $per_id = Yii::$app->session->get("PB_perid");        
+        $per_id = Yii::$app->session->get("PB_perid");
         $model_interesado = new Interesado();
-        $resp_gruporol = $model_interesado->consultagruporol($per_id);  
-        \app\models\Utilities::putMessageLogFile('rol:'.$resp_gruporol[0]);   
-        
+        $resp_gruporol = $model_interesado->consultagruporol($per_id);
+        \app\models\Utilities::putMessageLogFile('rol:' . $resp_gruporol[0]);
+
         $per_ids = base64_decode($_GET['perid']);
         $sol_id = base64_decode($_GET['id_sol']);
         $model_pag = new OrdenPago();
@@ -644,7 +805,7 @@ class PagosController extends \app\components\CController {
             //if (empty($per_ids)) {  //vista para el interesado  
             $rol = 1;
             $resp_pago = $model_pag->listarSolicitud($sol_id, $per_id, null, $resp_gruporol["grol_id"], $arrSearch);
-            
+
             return $this->renderPartial('_listarpagosolicitud_grid', [
                         "model" => $resp_pago,
             ]);
@@ -652,7 +813,6 @@ class PagosController extends \app\components\CController {
             // if (empty($per_ids)) {  //vista para el interesado  
             $rol = 1;
             $resp_pago = $model_pag->listarSolicitud($sol_id, $per_id, null, $resp_gruporol["grol_id"]);
-          
         }
         //verificar rol de la persona que esta en sesión
         //$resp_rol = $model_pag->encuentraRol($per_id);
@@ -664,44 +824,44 @@ class PagosController extends \app\components\CController {
             }
         }
         return $this->render('listarpagosolicitud', [
-            'model' => $resp_pago,
+                    'model' => $resp_pago,
         ]);
-    }    
+    }
+
     public function actionHistorialtransacciones() {
-        $per_id = Yii::$app->session->get("PB_perid");        
+        $per_id = Yii::$app->session->get("PB_perid");
         $model_persona = new Persona();
         $model_documento = new Documento();
         $model_sbpag = new SolicitudBotonPago();
         $model_ordenpago = new OrdenPago();
-        $data_persona=$model_persona->consultaPersonaId($per_id);
-        $cedula=$data_persona['per_cedula'];
-        $doc_id=$model_documento->consultarDocIdByCedulaBen($cedula);
-        $opag_id=$model_ordenpago->consultarOpagIdByCedula($cedula);        
+        $data_persona = $model_persona->consultaPersonaId($per_id);
+        $cedula = $data_persona['per_cedula'];
+        $doc_id = $model_documento->consultarDocIdByCedulaBen($cedula);
+        $opag_id = $model_ordenpago->consultarOpagIdByCedula($cedula);
         $data = Yii::$app->request->get();
         if ($data['PBgetFilter']) {
             $arrSearch["f_ini"] = $data['f_ini'];
             $arrSearch["f_fin"] = $data['f_fin'];
-            $data_transacciones=$model_sbpag->consultarHistoralTransacciones($doc_id,$opag_id,$arrSearch);
+            $data_transacciones = $model_sbpag->consultarHistoralTransacciones($doc_id, $opag_id, $arrSearch);
             return $this->renderPartial('_historialtransaccion_grid', [
                         "model" => $data_transacciones,
             ]);
         } else {
-            $data_transacciones=$model_sbpag->consultarHistoralTransacciones($doc_id,$opag_id);
-        }        
-        $data_transacciones=$model_sbpag->consultarHistoralTransacciones($doc_id,$opag_id);
+            $data_transacciones = $model_sbpag->consultarHistoralTransacciones($doc_id, $opag_id);
+        }
+        $data_transacciones = $model_sbpag->consultarHistoralTransacciones($doc_id, $opag_id);
         return $this->render('historialtransaccion', [
                     'model' => $data_transacciones,
         ]);
     }
-    public function actionActualizarpago() {
+    public function actionActualizar_pago() {
         $data = Yii::$app->request->get();
         $doc_id['doc_id'];
         $jsonCredential = json_decode(file_get_contents("/opt/credenciales.json"),true);                
         $jsonCredential["gateway"];        
         $jsonCredential["login"];        
         $tranKey = $jsonCredential["trankey"];        
-        $firma = $json["requestId"].$json["status"]["status"].$json["status"]["date"].$tranKey;
-        
+        $firma = $json["requestId"].$json["status"]["status"].$json["status"]["date"].$tranKey;    
 //        $firmaValidar = sha1($firma);
 //        if ($firmaValidar == $json["signature"]){
 //            $update = "UPDATE `peticiones` SET `request_id`='".$json["requestId"]."',`razon`='".$json["status"]["message"]."',`estado_pago`='".$json["status"]["status"]."',`fecha_pago`='".$json["status"]["date"]."' WHERE `referencia`=".$json["reference"];
@@ -712,57 +872,60 @@ class PagosController extends \app\components\CController {
 //            print "No es respuesta emitida por PlacetoPay";
 //        }
     }
+
     public function actionVerificarpagoexterno() {
-        $model_sbpag = new SolicitudBotonPago();        
+        $model_sbpag = new SolicitudBotonPago();
         $data = Yii::$app->request->get();
         if ($data['PBgetFilter']) {
             $arrSearch["search"] = $data['search'];
             $arrSearch["f_ini"] = $data['f_ini'];
             $arrSearch["f_fin"] = $data['f_fin'];
-            $data_pago_ext=$model_sbpag->consultarPagoExterno($arrSearch);
+            $data_pago_ext = $model_sbpag->consultarPagoExterno($arrSearch);
             return $this->renderPartial('_verificarpagoexterno_grid', [
-                "model" => $data_pago_ext,
+                        "model" => $data_pago_ext,
             ]);
         } else {
             
-        }   
-        $data_pago_ext=$model_sbpag->consultarPagoExterno($arrSearch);
+        }
+        $data_pago_ext = $model_sbpag->consultarPagoExterno($arrSearch);
         return $this->render('verificarpagoexterno', [
                     'model' => $data_pago_ext,
         ]);
     }
-    public function actionDetallepagoexterno(){
+
+    public function actionDetallepagoexterno() {
         $data = Yii::$app->request->get();
         $model_documento = new Documento();
-        $data_pago_ext=$model_documento->consultarDetalledocumentoById($data['doc_id']);
+        $data_pago_ext = $model_documento->consultarDetalledocumentoById($data['doc_id']);
         return $this->render('detallepagoexterno', [
                     'model' => $data_pago_ext,
         ]);
     }
+
     public function actionHistorialtransaccionesSup() {
         $model_persona = new Persona();
         $model_documento = new Documento();
         $model_sbpag = new SolicitudBotonPago();
         $model_ordenpago = new OrdenPago();
         $data = Yii::$app->request->get();
-        if ($data['PBgetFilter']) {            
+        if ($data['PBgetFilter']) {
             $arrSearch["search"] = $data["search"];
             $arrSearch["f_ini"] = $data['f_ini'];
             $arrSearch["f_fin"] = $data['f_fin'];
             $arrSearch["f_estado"] = $data["f_estado"];
-            $data_transacciones=$model_sbpag->consultarHistoralTransaccionesSup($arrSearch);
+            $data_transacciones = $model_sbpag->consultarHistoralTransaccionesSup($arrSearch);
             return $this->renderPartial('_historialtransaccion_sup_grid', [
                         "model" => $data_transacciones,
             ]);
         } else {
-            $data_transacciones=$model_sbpag->consultarHistoralTransaccionesSup();
-        }        
-        $data_transacciones=$model_sbpag->consultarHistoralTransaccionesSup();
+            $data_transacciones = $model_sbpag->consultarHistoralTransaccionesSup();
+        }
+        $data_transacciones = $model_sbpag->consultarHistoralTransaccionesSup();
         return $this->render('historialtransaccion_sup', [
                     'model' => $data_transacciones,
         ]);
     }
-    
+
     public function actionUpdate() {
         
     }
@@ -1059,13 +1222,13 @@ class PagosController extends \app\components\CController {
         $dataGet = Yii::$app->request->get();
         $con1 = \Yii::$app->db_facturacion;
         $emp_id = @Yii::$app->session->get("PB_idempresa");
-        $referenceID = isset($data["referenceID"])?$data["referenceID"]:null;
-        if(!is_null($referenceID)){
+        $referenceID = isset($data["referenceID"]) ? $data["referenceID"] : null;
+        if (!is_null($referenceID)) {
             try {
                 $transaction = $con1->beginTransaction();
                 $sins_id = base64_decode($dataGet["sins_id"]);
                 $solInc_mod = SolicitudInscripcion::findOne($sins_id);
-                $opago_mod = OrdenPago::findOne(["sins_id" => $sins_id, "opag_estado_pago" => "P", "opag_estado" => "1", "opag_estado_logico" => "1"]);                
+                $opago_mod = OrdenPago::findOne(["sins_id" => $sins_id, "opag_estado_pago" => "P", "opag_estado" => "1", "opag_estado_logico" => "1"]);
                 $response = $this->render('btnpago', array(
                     "referenceID" => $data["resp"]["reference"],
                     "requestID" => $data["requestID"],
@@ -1073,7 +1236,7 @@ class PagosController extends \app\components\CController {
                     "tipo_orden" => 1,
                     "response" => $data["resp"],
                 ));
-                if($data["resp"]["status"]["status"] == "APPROVED"){
+                if ($data["resp"]["status"]["status"] == "APPROVED") {
                     $opago_mod->opag_estado_pago = "S";
                     $opago_mod->opag_valor_pagado = $opago_mod->opag_total;
                     $opago_mod->opag_fecha_pago_total = date("Y-m-d H:i:s");
@@ -1082,14 +1245,14 @@ class PagosController extends \app\components\CController {
                     $message = array(
                         "wtmessage" => Yii::t("notificaciones", "Your information was successfully saved."),
                         "title" => Yii::t('jslang', 'Success'),
-                        //"data" => $response,
+                            //"data" => $response,
                     );
-                    if($opago_mod->save()){
+                    if ($opago_mod->save()) {
                         $dpag_mod = DesglosePago::findOne(["opag_id" => $opago_mod->opag_id, "dpag_estado_pago" => "P", "dpag_estado" => "1", "dpag_estado_logico" => "1"]);
                         $dpag_mod->dpag_estado_pago = "S";
                         $dpag_mod->dpag_usu_modifica = @Yii::$app->session->get("PB_iduser");
                         $dpag_mod->dpag_fecha_modificacion = date("Y-m-d H:i:s");
-                        if($dpag_mod->save()){
+                        if ($dpag_mod->save()) {
                             $regpag_mod = new RegistroPago();
                             $regpag_mod->dpag_id = $dpag_mod->dpag_id;
                             $regpag_mod->fpag_id = 6; // boton de pagos
@@ -1103,31 +1266,31 @@ class PagosController extends \app\components\CController {
                             $regpag_mod->rpag_codigo_autorizacion = "";
                             $regpag_mod->rpag_estado = "1";
                             $regpag_mod->rpag_estado_logico = "1";
-                            if($regpag_mod->save()){
+                            if ($regpag_mod->save()) {
                                 $transaction->commit();
                                 return Utilities::ajaxResponse('OK', 'alert', Yii::t('jslang', 'Success'), 'false', $message);
-                            }else{
-                                Utilities::putMessageLogFile("Boton Pagos: Error al crear Registro Pago. RefId: ". $referenceID . " Error: " . json_encode($regpag_mod->errors));
+                            } else {
+                                Utilities::putMessageLogFile("Boton Pagos: Error al crear Registro Pago. RefId: " . $referenceID . " Error: " . json_encode($regpag_mod->errors));
                                 throw new Exception('Error al crear Registro Pago.' . json_encode($regpag_mod->errors));
                             }
-                        }else{
-                            Utilities::putMessageLogFile("Boton Pagos: Error al actualizar Desglose Pago RefId: ". $referenceID . " Error: " . json_encode($dpag_mod->errors));
+                        } else {
+                            Utilities::putMessageLogFile("Boton Pagos: Error al actualizar Desglose Pago RefId: " . $referenceID . " Error: " . json_encode($dpag_mod->errors));
                             throw new Exception('Error al actualizar Desglose Pago.' . json_encode($dpag_mod->errors));
                         }
-                    }else{
-                        Utilities::putMessageLogFile("Boton Pagos: Error al actualizar pago. RefId: ". $referenceID . " Error: " . json_encode($opago_mod->errors));
+                    } else {
+                        Utilities::putMessageLogFile("Boton Pagos: Error al actualizar pago. RefId: " . $referenceID . " Error: " . json_encode($opago_mod->errors));
                         throw new Exception('Error al actualizar pago.' . json_encode($opago_mod->errors));
-                    } 
-                }else {
+                    }
+                } else {
                     $message = array(
                         "wtmessage" => $data["resp"]["status"]["message"],
                         "title" => Yii::t('jslang', 'Error'),
                     );
                     return Utilities::ajaxResponse('NOOK', 'alert', Yii::t('jslang', 'Error'), 'true', $message);
-                }            
-            }catch(Exception $e) {
+                }
+            } catch (Exception $e) {
                 $transaction->rollBack();
-                Utilities::putMessageLogFile("Boton Pagos: Error . RefId: ". $referenceID .  "Error: " . $e->getMessage());
+                Utilities::putMessageLogFile("Boton Pagos: Error . RefId: " . $referenceID . "Error: " . $e->getMessage());
                 $message = array(
                     "wtmessage" => Yii::t('notificaciones', 'Invalid request. Please do not repeat this request again. Contact to Administrator.'),
                     "title" => Yii::t('jslang', 'Error'),
@@ -1135,7 +1298,7 @@ class PagosController extends \app\components\CController {
                 return Utilities::ajaxResponse('NOOK', 'alert', Yii::t('jslang', 'Error'), 'true', $message);
             }
         }
-        Secuencias::initSecuencia($con1, $emp_id, 1, 1, 'BPA',"BOTON DE PAGOS DINERS");
+        Secuencias::initSecuencia($con1, $emp_id, 1, 1, 'BPA', "BOTON DE PAGOS DINERS");
         // Info de Solicitud Inscripcion
         $sins_id = base64_decode($dataGet["sins_id"]);
         $solInc_mod = SolicitudInscripcion::findOne($sins_id);
@@ -1147,18 +1310,19 @@ class PagosController extends \app\components\CController {
         $titleBox = financiero::t("Pagos", "Payment Course/Career/Program: ") . $obj_sol["carrera"];
         $totalpagar = $opago_mod->opag_total;
         return $this->render('btnpago', array(
-            "referenceID" => str_pad(Secuencias::nuevaSecuencia($con1, $emp_id, 1, 1, 'BPA'), 8, "0", STR_PAD_LEFT),
-            "ordenPago" => $opago_mod->opag_id,
-            "tipo_orden" => 1,
-            "nombre_cliente" => $per_mod->per_pri_nombre,
-            "apellido_cliente" => $per_mod->per_pri_apellido,
-            "descripcionItem" => $descripcionItem,
-            "titleBox" => $titleBox,
-            "email_cliente" => $per_mod->per_correo,
-            "total" => $totalpagar,
+                    "referenceID" => str_pad(Secuencias::nuevaSecuencia($con1, $emp_id, 1, 1, 'BPA'), 8, "0", STR_PAD_LEFT),
+                    "ordenPago" => $opago_mod->opag_id,
+                    "tipo_orden" => 1,
+                    "nombre_cliente" => $per_mod->per_pri_nombre,
+                    "apellido_cliente" => $per_mod->per_pri_apellido,
+                    "descripcionItem" => $descripcionItem,
+                    "titleBox" => $titleBox,
+                    "email_cliente" => $per_mod->per_correo,
+                    "total" => $totalpagar,
         ));
     }
-       public function actionExpexcelhis() {
+
+    public function actionExpexcelhis() {
         ini_set('memory_limit', '256M');
         $content_type = Utilities::mimeContentType("xls");
         $nombarch = "Report-" . date("YmdHis") . ".xls";
@@ -1172,31 +1336,32 @@ class PagosController extends \app\components\CController {
             Yii::t("formulario", "Reference"),
             Yii::t("formulario", "Student"),
             Yii::t("formulario", "Date"),
-            Yii::t("formulario", "Pago"),          
+            Yii::t("formulario", "Pago"),
             Yii::t("formulario", "Status"),
         );
-        $per_id = Yii::$app->session->get("PB_perid");        
+        $per_id = Yii::$app->session->get("PB_perid");
         $model_persona = new Persona();
         $model_documento = new Documento();
         $model_ordenpago = new OrdenPago();
-        $data_persona=$model_persona->consultaPersonaId($per_id);
-        $cedula=$data_persona['per_cedula'];
-        $doc_id=$model_documento->consultarDocIdByCedulaBen($cedula);
-        $opag_id=$model_ordenpago->consultarOpagIdByCedula($cedula);        
-        $data = Yii::$app->request->get();     
+        $data_persona = $model_persona->consultaPersonaId($per_id);
+        $cedula = $data_persona['per_cedula'];
+        $doc_id = $model_documento->consultarDocIdByCedulaBen($cedula);
+        $opag_id = $model_ordenpago->consultarOpagIdByCedula($cedula);
+        $data = Yii::$app->request->get();
         $arrSearch["f_ini"] = $data["f_ini"];
-        $arrSearch["f_fin"] = $data["f_fin"];      
-        
+        $arrSearch["f_fin"] = $data["f_fin"];
+
         $model_sbpag = new SolicitudBotonPago();
         if (empty($arrSearch)) {
-            $arrData = $model_sbpag->consultarHistoralTransacciones($doc_id,$opag_id,array(), true);
+            $arrData = $model_sbpag->consultarHistoralTransacciones($doc_id, $opag_id, array(), true);
         } else {
-            $arrData = $model_sbpag->consultarHistoralTransacciones($doc_id,$opag_id,$arrSearch, true);
+            $arrData = $model_sbpag->consultarHistoralTransacciones($doc_id, $opag_id, $arrSearch, true);
         }
         $nameReport = financiero::t("Pagos", "Transaction History");
         Utilities::generarReporteXLS($nombarch, $nameReport, $arrHeader, $arrData, $colPosition);
         exit;
     }
+
     public function actionExppdfhis() {
         $report = new ExportFile();
         $this->view->title = financiero::t("Pagos", "Transaction History"); // Titulo del reporte
@@ -1206,26 +1371,26 @@ class PagosController extends \app\components\CController {
             Yii::t("formulario", "Reference"),
             Yii::t("formulario", "Student"),
             Yii::t("formulario", "Date"),
-            Yii::t("formulario", "Pago"),          
+            Yii::t("formulario", "Pago"),
             Yii::t("formulario", "Status"),
         );
-        $per_id = Yii::$app->session->get("PB_perid");        
+        $per_id = Yii::$app->session->get("PB_perid");
         $model_persona = new Persona();
         $model_documento = new Documento();
         $model_ordenpago = new OrdenPago();
-        $data_persona=$model_persona->consultaPersonaId($per_id);
-        $cedula=$data_persona['per_cedula'];
-        $doc_id=$model_documento->consultarDocIdByCedulaBen($cedula);
-        $opag_id=$model_ordenpago->consultarOpagIdByCedula($cedula);        
-        $data = Yii::$app->request->get();    
+        $data_persona = $model_persona->consultaPersonaId($per_id);
+        $cedula = $data_persona['per_cedula'];
+        $doc_id = $model_documento->consultarDocIdByCedulaBen($cedula);
+        $opag_id = $model_ordenpago->consultarOpagIdByCedula($cedula);
+        $data = Yii::$app->request->get();
         $arrSearch["f_ini"] = $data["f_ini"];
         $arrSearch["f_fin"] = $data["f_fin"];
         $arrData = array();
         $model_sbpag = new SolicitudBotonPago();
-        if (empty($arrSearch)) { 
-            $arrData = $model_sbpag->consultarHistoralTransacciones($doc_id,$opag_id,array(), true);
+        if (empty($arrSearch)) {
+            $arrData = $model_sbpag->consultarHistoralTransacciones($doc_id, $opag_id, array(), true);
         } else {
-            $arrData = $model_sbpag->consultarHistoralTransacciones($doc_id,$opag_id,$arrSearch, true);
+            $arrData = $model_sbpag->consultarHistoralTransacciones($doc_id, $opag_id, $arrSearch, true);
         }
         $report->orientation = "L"; // tipo de orientacion L => Horizontal, P => Vertical
         $report->createReportPdf(
@@ -1237,6 +1402,7 @@ class PagosController extends \app\components\CController {
         $report->mpdf->Output('Reporte_' . date("Ymdhis") . ".pdf", ExportFile::OUTPUT_TO_DOWNLOAD);
         return;
     }
+
     public function actionExpexcelpagosext() {
         ini_set('memory_limit', '256M');
         $content_type = Utilities::mimeContentType("xls");
@@ -1246,37 +1412,38 @@ class PagosController extends \app\components\CController {
         header('Cache-Control: max-age=0');
         $colPosition = array("C", "D", "E", "F", "G", "H", "I", "J");
         $arrData = array();
-        $arrHeader = array(          
+        $arrHeader = array(
             Yii::t("formulario", "Reference"),
             Yii::t("formulario", "Student"),
             Yii::t("formulario", "Date"),
-            Yii::t("formulario", "Total value"),         
+            Yii::t("formulario", "Total value"),
             financiero::t("Pagos", "Boton Payment status"),
         );
         // $per_id = Yii::$app->session->get("PB_perid");        
         //VERIFICAR SI LOS PARAMETROS $doc_id y $opag_id SE VAN USAR SINO BORRAR
         /* $model_persona = new Persona();
-        $model_documento = new Documento();
-        $model_ordenpago = new OrdenPago();
-        $data_persona=$model_persona->consultaPersonaId($per_id);
-        $cedula=$data_persona['per_cedula'];
-        $doc_id=$model_documento->consultarDocIdByCedulaBen($cedula);
-        $opag_id=$model_ordenpago->consultarOpagIdByCedula($cedula); */     
-        $data = Yii::$app->request->get(); 
+          $model_documento = new Documento();
+          $model_ordenpago = new OrdenPago();
+          $data_persona=$model_persona->consultaPersonaId($per_id);
+          $cedula=$data_persona['per_cedula'];
+          $doc_id=$model_documento->consultarDocIdByCedulaBen($cedula);
+          $opag_id=$model_ordenpago->consultarOpagIdByCedula($cedula); */
+        $data = Yii::$app->request->get();
         $arrSearch["search"] = $data['search'];
         $arrSearch["f_ini"] = $data["f_ini"];
-        $arrSearch["f_fin"] = $data["f_fin"];      
-        
+        $arrSearch["f_fin"] = $data["f_fin"];
+
         $model_sbpag = new SolicitudBotonPago();
         if (empty($arrSearch)) {
-            $arrData = $model_sbpag->consultarPagoExterno(/*$doc_id,$opag_id,*/array(), true);
+            $arrData = $model_sbpag->consultarPagoExterno(/* $doc_id,$opag_id, */array(), true);
         } else {
-            $arrData = $model_sbpag->consultarPagoExterno(/*$doc_id,$opag_id,*/$arrSearch, true);
+            $arrData = $model_sbpag->consultarPagoExterno(/* $doc_id,$opag_id, */$arrSearch, true);
         }
         $nameReport = financiero::t("Pagos", "Check External Payments");
         Utilities::generarReporteXLS($nombarch, $nameReport, $arrHeader, $arrData, $colPosition);
         exit;
     }
+
     public function actionExppdfpagosext() {
         $report = new ExportFile();
         $this->view->title = financiero::t("Pagos", "Check External Payments"); // Titulo del reporte
@@ -1285,27 +1452,27 @@ class PagosController extends \app\components\CController {
             Yii::t("formulario", "Reference"),
             Yii::t("formulario", "Student"),
             Yii::t("formulario", "Date"),
-            Yii::t("formulario", "Total value"),         
+            Yii::t("formulario", "Total value"),
             financiero::t("Pagos", "Boton Payment status"),
         );
         // $per_id = Yii::$app->session->get("PB_perid");        
         //VERIFICAR SI LOS PARAMETROS $doc_id y $opag_id SE VAN USAR SINO BORRAR
         /* $model_persona = new Persona();
-        $model_documento = new Documento();
-        $model_ordenpago = new OrdenPago();
-        $data_persona=$model_persona->consultaPersonaId($per_id);
-        $cedula=$data_persona['per_cedula'];
-        $doc_id=$model_documento->consultarDocIdByCedulaBen($cedula);
-        $opag_id=$model_ordenpago->consultarOpagIdByCedula($cedula); */     
-        $data = Yii::$app->request->get(); 
+          $model_documento = new Documento();
+          $model_ordenpago = new OrdenPago();
+          $data_persona=$model_persona->consultaPersonaId($per_id);
+          $cedula=$data_persona['per_cedula'];
+          $doc_id=$model_documento->consultarDocIdByCedulaBen($cedula);
+          $opag_id=$model_ordenpago->consultarOpagIdByCedula($cedula); */
+        $data = Yii::$app->request->get();
         $arrSearch["search"] = $data['search'];
         $arrSearch["f_ini"] = $data["f_ini"];
-        $arrSearch["f_fin"] = $data["f_fin"];     
+        $arrSearch["f_fin"] = $data["f_fin"];
         $model_sbpag = new SolicitudBotonPago();
         if (empty($arrSearch)) {
-            $arrData = $model_sbpag->consultarPagoExterno(/*$doc_id,$opag_id,*/array(), true);
+            $arrData = $model_sbpag->consultarPagoExterno(/* $doc_id,$opag_id, */array(), true);
         } else {
-            $arrData = $model_sbpag->consultarPagoExterno(/*$doc_id,$opag_id,*/$arrSearch, true);
+            $arrData = $model_sbpag->consultarPagoExterno(/* $doc_id,$opag_id, */$arrSearch, true);
         }
         $report->orientation = "L"; // tipo de orientacion L => Horizontal, P => Vertical
         $report->createReportPdf(
@@ -1317,4 +1484,5 @@ class PagosController extends \app\components\CController {
         $report->mpdf->Output('Reporte_' . date("Ymdhis") . ".pdf", ExportFile::OUTPUT_TO_DOWNLOAD);
         return;
     }
+
 }
