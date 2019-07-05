@@ -389,24 +389,35 @@ function guardarFacturaTemp() {
 function guardarPagos() {
     var link = $('#txth_base').val() + "/pagosfrecuentes/savepayment";
     var arrParams = new Object();
+    total = 1;
     if (total == 0) {
         mensaje("No ha seleccionado productos para la factura.");
     } else {
         var dataItemList = obtDataList();
         arrParams.dataBenList = obtDataBen();
         arrParams.dataFacturaList = obtDataFact();
-        arrParams.dataItems = dataItemList;//itemList;                
-        if (!validateForm()) {
-            requestHttpAjax(link, arrParams, function (response) {
-                showAlert("OK", "success", response.message);
-                sessionStorage.clear();
-                setTimeout(function () {
-                    var bohre = $('#txth_base').val() + "/pagosfrecuentes/botonpago?docid=" + response.message.iddoc + "&popup=1";
-                    $('#btn_pago_p').attr("href", bohre);
-                    $('#btn_pago_p').trigger("click");
-                }, 3000);
-            });
+        arrParams.dataItems = dataItemList;
+        var len_ben = Object.keys(arrParams.dataBenList).length;
+        var len_fact = Object.keys(arrParams.dataFacturaList).length;
+        var len_item = Object.keys(arrParams.dataItems).length;
+        if (len_ben > 0 && len_fact > 0 && len_item > 0) {
+            if (!validateForm()) {
+                requestHttpAjax(link, arrParams, function (response) {
+                    showAlert("OK", "success", response.message);
+                    sessionStorage.clear();
+                    setTimeout(function () {
+                        var bohre = $('#txth_base').val() + "/pagosfrecuentes/botonpago?docid=" + response.message.iddoc + "&popup=1";
+                        $('#btn_pago_p').attr("href", bohre);
+                        $('#btn_pago_p').trigger("click");
+                    }, 3000);
+                });
+            }
+        }else{
+            sessionStorage.clear();
+            setTimeout("location.reload(true);",5);
         }
+
+
     }
 }
 
