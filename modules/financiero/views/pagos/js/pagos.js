@@ -458,12 +458,13 @@ function exportExcelColec() {
 function generarSolicitud(doc_id) {
     var arrParams = new Object();
     var link = $('#txth_base').val() + "/financiero/pagos/generarsolicitud";
-    arrParams.doc_id = doc_id;
+    arrParams.doc_id = doc_id;    
     if (!validateForm()) {
         requestHttpAjax(link, arrParams, function (response) {
             showAlert(response.status, response.label, response.message);
             setTimeout(function () {
-                actualizarGridPagoExterno();
+                //actualizarGridPagoExterno();
+                window.location.href = $('#txth_base').val() + "/financiero/pagos/verificarpagoexterno";
             }, 3000);
         }, true);
     }

@@ -148,10 +148,12 @@ class PagosController extends \app\components\CController {
             $transaction2 = $con2->beginTransaction();
             //Se consulta la información.
             $mod_documento = new Documento();
+            \app\models\Utilities::putMessageLogFile('antes de consultar');
             $resp_datos = $mod_documento->consultarDatosxId($con2, $doc_id);
             if ($resp_datos) {
                 $identificacion = $resp_datos['pben_cedula'];
                 if (isset($identificacion) && strlen($identificacion) > 0) {
+                    \app\models\Utilities::putMessageLogFile('$identificacion:'.$identificacion);
                     $id_persona = 0;
                     $mod_persona = new Persona();
                     $keys_per = [
@@ -175,9 +177,12 @@ class PagosController extends \app\components\CController {
                         null, null, null, $usuario_ingreso, 1, 1
                     ];
                     $id_persona = $mod_persona->consultarIdPersona($resp_datos['pben_cedula'], $resp_datos['pben_cedula'], $resp_datos['pben_correo'], $resp_datos['pben_celular']);
+                    \app\models\Utilities::putMessageLogFile('$id_persona:'.$id_persona);
                     if ($id_persona == 0) {
-                        $id_persona = $mod_persona->insertarPersona($con, $parametros_per, $keys_per, 'persona');                    
-                        if ($id_persona > 0) {
+                        \app\models\Utilities::putMessageLogFile('persona');
+                        $id_persona = $mod_persona->insertarPersona($con, $parametros_per, $keys_per, 'persona');  
+                        \app\models\Utilities::putMessageLogFile('despues de crear persona:'.$id_persona);
+                        if ($id_persona) {
                             \app\models\Utilities::putMessageLogFile('se crea persona.');
                             $mod_emp_persona = new EmpresaPersona();
                             $emp_id = 1;
@@ -231,13 +236,15 @@ class PagosController extends \app\components\CController {
                         }
                     }
                     //Cuando ya está creada la persona.-    
-                    if (($crea_persona == "S") or ($id_persona > 0)) {                                                                                                
+                    if (($crea_persona == "S") or ($id_persona > 0)) {   
+                        \app\models\Utilities::putMessageLogFile('después de crear persona.');
                         $num_secuencia = Secuencias::nuevaSecuencia($con, $emp_id, 1, 1, 'SOL');
                         $sins_fechasol = $resp_datos["sbpa_fecha_solicitud"];
                         $rsin_id = 2; //Solicitud aprobada     
                         $solins_model = new SolicitudInscripcion();                                            
                         $resp_detalle = $mod_documento->consultarDetalledocumentoById($doc_id);
-                        for ($a=0; $a<count($resp_detalle); $a++) {                                                     
+                        for ($a=0; $a<count($resp_detalle); $a++) {    
+                            \app\models\Utilities::putMessageLogFile('insertar solicitud.');
                             $sins_id = $solins_model->insertarSolicitud($interesado_id, $resp_detalle[$a]["unidad"], $resp_detalle[$a]["modalidad"], $resp_detalle[$a]["metodo"], null, null, $emp_id, $num_secuencia, $rsin_id, $sins_fechasol, $usuario_id, null);
                             if ($sins_id) {                                                    
                                 $mod_ordenpago = new OrdenPago();                                                    

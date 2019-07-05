@@ -128,7 +128,8 @@ class SolicitudBotonPago extends \yii\db\ActiveRecord {
                     ifnull(docu.doc_cedula,'') as cedula_factura,
                     docu.doc_fecha_pago as fecha_pago,
                     docu.doc_valor as total_pago,
-                    docu.doc_pagado as estado
+                    docu.doc_pagado as estado,
+                    docu.doc_id
                 from
                     " . $con->dbname . ".solicitud_boton_pago as sbpa
                     join " . $con->dbname . ".persona_beneficiaria as pben on pben.pben_id = sbpa.pben_id
