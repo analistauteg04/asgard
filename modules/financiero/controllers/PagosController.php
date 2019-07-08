@@ -23,6 +23,9 @@ use app\modules\financiero\models\Secuencias;
 use app\modules\financiero\Module as financiero;
 use app\modules\admision\Module as admision;
 use app\modules\academico\Module as academico;
+use app\models\EmpresaPersona;
+use app\models\UsuaGrolEper;
+use app\modules\admision\models\InteresadoEmpresa;
 
 admision::registerTranslations();
 academico::registerTranslations();
@@ -147,6 +150,7 @@ class PagosController extends \app\components\CController {
             $transaction1 = $con1->beginTransaction();
             $transaction2 = $con2->beginTransaction();
             //Se consulta la información.
+            $emp_id = 1;
             $mod_documento = new Documento();
             \app\models\Utilities::putMessageLogFile('antes de consultar');
             $resp_datos = $mod_documento->consultarDatosxId($con2, $doc_id);
@@ -184,14 +188,15 @@ class PagosController extends \app\components\CController {
                         \app\models\Utilities::putMessageLogFile('despues de crear persona:'.$id_persona);
                         if ($id_persona) {
                             \app\models\Utilities::putMessageLogFile('se crea persona.');
-                            $mod_emp_persona = new EmpresaPersona();
-                            $emp_id = 1;
+                            $mod_emp_persona = new EmpresaPersona();                            
                             $keys = ['emp_id', 'per_id', 'eper_estado', 'eper_estado_logico'];
                             $parametros = [$emp_id, $id_persona, 1, 1];
                             $emp_per_id = $mod_emp_persona->consultarIdEmpresaPersona($id_persona, $emp_id);
+                            \app\models\Utilities::putMessageLogFile('id_empresa_persona:'.$emp_per_id);
                             if ($emp_per_id == 0) {
                                 $emp_per_id = $mod_emp_persona->insertarEmpresaPersona($con, $parametros, $keys, 'empresa_persona');                            
                                 if ($emp_per_id > 0) {
+                                    \app\models\Utilities::putMessageLogFile('se crea empresa persona.');
                                     $usuario = new Usuario();
                                     $usuario_id = $usuario->consultarIdUsuario($id_persona, $resp_datos['pben_correo']);
                                     if ($usuario_id == 0) {
@@ -203,6 +208,7 @@ class PagosController extends \app\components\CController {
                                         $usuario_id = $usuario->crearUsuarioTemporal($con, $parametros, $keys, 'usuario');
                                     }
                                     if ($usuario_id > 0) {
+                                        \app\models\Utilities::putMessageLogFile('se crea usuario.');
                                         $mod_us_gr_ep = new UsuaGrolEper();
                                         $grol_id = 30;
                                         $keys = ['eper_id', 'usu_id', 'grol_id', 'ugep_estado', 'ugep_estado_logico'];
@@ -211,6 +217,7 @@ class PagosController extends \app\components\CController {
                                         if ($us_gr_ep_id == 0){
                                             $us_gr_ep_id = $mod_us_gr_ep->insertarUsuaGrolEper($con, $parametros, $keys, 'usua_grol_eper');
                                             if ($us_gr_ep_id > 0) {
+                                                \app\models\Utilities::putMessageLogFile('se crea usuario persona.');
                                                 $mod_interesado = new Interesado(); // se guarda con estado_interesado 1
                                                 $interesado_id = $mod_interesado->consultaInteresadoById($id_persona);
                                                 $keys = ['per_id', 'int_estado_interesado', 'int_usuario_ingreso', 'int_estado', 'int_estado_logico'];
@@ -219,6 +226,7 @@ class PagosController extends \app\components\CController {
                                                     $interesado_id = $mod_interesado->insertarInteresado($concap, $parametros, $keys, 'interesado');
                                                 }
                                                 if ($interesado_id > 0) {
+                                                    \app\models\Utilities::putMessageLogFile('se crea interesado.');
                                                     $mod_inte_emp = new InteresadoEmpresa(); // se guarda con estado_interesado 1
                                                     $iemp_id = $mod_inte_emp->consultaInteresadoEmpresaById($interesado_id, $emp_id);
                                                     if ($iemp_id == 0) {
@@ -237,8 +245,8 @@ class PagosController extends \app\components\CController {
                     }
                     //Cuando ya está creada la persona.-    
                     if (($crea_persona == "S") or ($id_persona > 0)) {   
-                        \app\models\Utilities::putMessageLogFile('después de crear persona.');
-                        $num_secuencia = Secuencias::nuevaSecuencia($con, $emp_id, 1, 1, 'SOL');
+                        \app\models\Utilities::putMessageLogFile('después de crear persona y demas tablas.');
+                        $num_secuencia = Secuencias::nuevaSecuencia($con1, $emp_id, 1, 1, 'SOL');
                         $sins_fechasol = $resp_datos["sbpa_fecha_solicitud"];
                         $rsin_id = 2; //Solicitud aprobada     
                         $solins_model = new SolicitudInscripcion();                                            
