@@ -68,7 +68,7 @@ create table if not exists `estandar` (
 --
 -- Estructura de tabla para la tabla `documento_repositorio`
 --
-create table if not exists `detalle_documento_repositorio`(
+create table if not exists `documento_repositorio`(
 `dre_id` bigint(20) not null auto_increment primary key,
 `est_id` bigint(20) not null,
 `dre_tipo` bigint(20) null, -- 1 publico , 2 -- privado
