@@ -44,6 +44,11 @@
 
 return [
     "Address1" => "Dirección1",
-    
-    
+    "Attach document" => "Adjuntar Documento",
+    "Component" => "Componente",
+    "Document date" => "Fecha Documento",
+    "Document Loaded" => "Documentos Cragados",
+    "Evidence Repository" => "Repositorio Evidencia",
+    "Function" => "Función",
+    "Standar" => "Estándar",
 ];

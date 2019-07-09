@@ -24,5 +24,10 @@ class RepositorioController extends \app\components\CController {
         return $this->render('index', [
                // 'model' => $resp_lista
                ]);
-    }    
+    }  
+    public function actionCargar() {    
+        return $this->render('cargar', [
+              
+               ]);
+    }  
 }
