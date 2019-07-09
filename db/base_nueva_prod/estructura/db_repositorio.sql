@@ -10,55 +10,58 @@ GRANT ALL PRIVILEGES ON `db_repositorio`.* TO 'uteg'@'localhost' IDENTIFIED BY '
 
 -- --------------------------------------------------------
 -- 
--- Estructura de tabla para la tabla `categoria_repositorio`
+-- Estructura de tabla para la tabla `funcion`
 -- 
-create table if not exists `categoria_repositorio` (
-  `crep_id` bigint(20) not null auto_increment primary key,  
-  `crep_codificacion` varchar(100) not null,
-  `crep_nombre` varchar(300) not null,
-  `crep_descripcion` varchar(500) not null,  
-  `crep_usuario_ingreso` bigint(20) not null,
-  `crep_usuario_modifica` bigint(20)  null,  
-  `crep_estado` varchar(1) not null,
-  `crep_fecha_creacion` timestamp not null default current_timestamp,
-  `crep_fecha_modificacion` timestamp null default null,
-  `crep_estado_logico` varchar(1) not null
+create table if not exists `funcion` (
+  `fun_id` bigint(20) not null auto_increment primary key,  
+  `fun_codificacion` varchar(100) null,
+  `fun_nombre` varchar(300) not null,
+  `fun_descripcion` varchar(500) not null,  
+  `fun_usuario_ingreso` bigint(20) not null,
+  `fun_usuario_modifica` bigint(20)  null,  
+  `fun_estado` varchar(1) not null,
+  `fun_fecha_creacion` timestamp not null default current_timestamp,
+  `fun_fecha_modificacion` timestamp null default null,
+  `fun_estado_logico` varchar(1) not null
 );
 
 -- --------------------------------------------------------
 -- 
--- Estructura de tabla para la tabla `nivel_repositorio`
+-- Estructura de tabla para la tabla `componente`
 -- 
-create table if not exists `nivel_repositorio` (
-  `nrep_id` bigint(20) not null auto_increment primary key,
-  `nrep_codificacion` varchar(100) not null,  
-  `nrep_nombre` varchar(300) not null,
-  `nrep_descripcion` varchar(500) not null,
-  `nrep_usuario_ingreso` bigint(20) not null,
-  `nrep_usuario_modifica` bigint(20)  null,  
-  `nrep_estado` varchar(1) not null,
-  `nrep_fecha_creacion` timestamp not null default current_timestamp,
-  `nrep_fecha_modificacion` timestamp null default null,
-  `nrep_estado_logico` varchar(1) not null  
+create table if not exists `componente` (
+  `com_id` bigint(20) not null auto_increment primary key,
+  `com_codificacion` varchar(100) null,  
+  `com_nombre` varchar(300) not null,
+  `com_descripcion` varchar(500) not null,
+  `com_usuario_ingreso` bigint(20) not null,
+  `com_usuario_modifica` bigint(20)  null,  
+  `com_estado` varchar(1) not null,
+  `com_fecha_creacion` timestamp not null default current_timestamp,
+  `com_fecha_modificacion` timestamp null default null,
+  `com_estado_logico` varchar(1) not null  
 );
 
 -- --------------------------------------------------------
 -- 
--- Estructura de tabla para la tabla `categoria_nivel`
+-- Estructura de tabla para la tabla `estandar`
 -- 
-create table if not exists `categoria_nivel` (
-  `cniv_id` bigint(20) not null auto_increment primary key,
-  `crep_id` bigint(20) not null, 
-  `nrep_id` bigint(20) not null, 
-  `cniv_usuario_ingreso` bigint(20) not null,
-  `cniv_usuario_modifica` bigint(20)  null,  
-  `cniv_estado` varchar(1) not null,
-  `cniv_fecha_creacion` timestamp not null default current_timestamp,
-  `cniv_fecha_modificacion` timestamp null default null,
-  `cniv_estado_logico` varchar(1) not null,
+create table if not exists `estandar` (
+  `est_id` bigint(20) not null auto_increment primary key,
+  `com_id` bigint(20) null, 
+  `fun_id` bigint(20) not null,
+  `est_codificacion` varchar(100) null, 
+  `est_nombre` varchar(300) not null,
+  `est_descripcion` varchar(500) not null,
+  `est_usuario_ingreso` bigint(20) not null,
+  `est_usuario_modifica` bigint(20)  null,  
+  `est_estado` varchar(1) not null,
+  `est_fecha_creacion` timestamp not null default current_timestamp,
+  `est_fecha_modificacion` timestamp null default null,
+  `est_estado_logico` varchar(1) not null,
 
-  foreign key (crep_id) references `categoria_repositorio`(crep_id),
-  foreign key (nrep_id) references `nivel_repositorio`(nrep_id)
+  foreign key (com_id) references `componente`(com_id),
+  foreign key (fun_id) references `funcion`(fun_id)
 );
 
 -- --------------------------------------------------------
@@ -67,16 +70,17 @@ create table if not exists `categoria_nivel` (
 --
 create table if not exists `detalle_documento_repositorio`(
 `dre_id` bigint(20) not null auto_increment primary key,
-`cniv_id` bigint(20) not null,
+`est_id` bigint(20) not null,
 `dre_tipo` bigint(20) null, -- 1 publico , 2 -- privado
 `dre_codificacion` varchar(100) not null,
+`dre_ruta` varchar(200) not null,
 `dre_imagen` varchar(100) not null,
-`dre_tamaño` varchar(10) null,
 `dre_usu_modifica` bigint(20) null,
 `dre_estado` varchar(1) not null,
+`dre_fecha_archivo` timestamp null default null,
 `dre_fecha_creacion` timestamp not null default current_timestamp,
 `dre_fecha_modificacion` timestamp null default null,
 `dre_estado_logico` varchar(1) not null,
 
-foreign key (cniv_id) references `categoria_nivel`(cniv_id)
+foreign key (est_id) references `estandar`(est_id)
 );
