@@ -6,15 +6,18 @@
  */
 use app\widgets\PbVPOS\PbVPOS;
 ?>
-<form class="form-horizontal" enctype="multipart/form-data" >
-    <div class="col-md-9 col-sm-8 col-xs-8 col-lg-9">
-        <div class="form-group">
-            <h3 class="box-title"><span id="lbl_Personeria"><?= $titleBox ?></span></h3>                 
-        </div>
+<div class="col-md-9 col-sm-8 col-xs-8 col-lg-9">
+    <div class="form-group">
+        <h3 class="box-title"><span id="lbl_Personeria"><?= $titleBox ?></span></h3>                 
     </div>
-    <div class="col-md-3 col-sm-4 col-xs-4 col-lg-3">
-        <img class='logo_pv' src='<?= $publicAssetUrl . "/img/logo_pv".$pbId.".svg" ?>' />
-    </div>
+</div>
+<div class="col-md-3 col-sm-4 col-xs-4 col-lg-3">
+    <img class='logo_pv' src='<?= $publicAssetUrl . "/img/logo_pv".$pbId.".svg" ?>' />
+</div>
+<br />
+<br />
+<br />
+<form class="form-horizontal form-vpos" enctype="multipart/form-data" >
     <div class="col-md-12 col-sm-12 col-xs-12 col-lg-12">
         <div class="form-group">
             <label for="frmFirstName" class="col-sm-4 col-md-4 col-xs-4 col-lg-4 control-label"><?= PbVPOS::t("vpos", "First Name") ?></label>
@@ -92,4 +95,41 @@ use app\widgets\PbVPOS\PbVPOS;
         </div>    
     </div>
 </form>
+<div class="vpos-resumen rsp_hide">
+    <p class="lead"><?= PbVPOS::t("vpos", "Summary of the Transaction.") ?></p>
+    <div class="table-responsive">
+    <table class="table">
+        <tbody>
+            <tr>
+                <th style="width:50%"><?= PbVPOS::t("vpos", "First Name") ?>:</th>
+                <td><?= $nombre_cliente ?></td>
+            </tr>
+            <tr>
+                <th><?= PbVPOS::t("vpos", "Last Name") ?>:</th>
+                <td><?= $apellido_cliente ?></td>
+            </tr>
+            <tr>
+                <th><?= PbVPOS::t("vpos", "Email") ?>:</th>
+                <td><?= $email_cliente ?></td>
+            </tr>
+            <tr>
+                <th><?= PbVPOS::t("vpos", "Reference Payment") ?>:</th>
+                <td><?= $referenceID ?></td>
+            </tr>
+            <tr>
+                <th><?= PbVPOS::t("vpos", "Amount") ?>:</th>
+                <td>$<?= $total ?></td>
+            </tr>
+            <tr>
+                <th><?= PbVPOS::t("vpos", "Status") ?>:</th>
+                <td id="status_id"></td>
+            </tr>
+            <tr>
+                <th><?= PbVPOS::t("vpos", "Status Response") ?>:</th>
+                <td id="status_rsp"></td>
+            </tr>
+        </tbody>
+        </table>
+    </div>
+</div>
 <div id="lightbox-response"></div>

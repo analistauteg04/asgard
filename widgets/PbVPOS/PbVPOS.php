@@ -157,13 +157,15 @@ class PbVPOS extends Widget {
     private function selectVPOST(){
         switch($this->type_vpos){
             case "1": # Prueba
-                $this->payment_gateway = "test.placetopay.ec";
+                $jsonCredential = json_decode(file_get_contents("/opt/vpos.json", true),true);
                 if($this->producction){
-                    $this->login = "";
-                    $this->secret = "";
+                    $this->payment_gateway = $jsonCredential["gateway_prod"];
+                    $this->login  = $jsonCredential["login_prod"];
+                    $this->secret = $jsonCredential["secret_prod"];
                 }else{
-                    $this->login = "f06b5be68e988a6248b528d3a85c43e8";
-                    $this->secret = "jeb3d66Sfhyml5LO";
+                    $this->payment_gateway = $jsonCredential["gateway_test"];
+                    $this->login  = $jsonCredential["login_test"];
+                    $this->secret = $jsonCredential["secret_test"];
                 }
                 break;
             case "2": # Produccion

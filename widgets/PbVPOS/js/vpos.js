@@ -1,8 +1,7 @@
 // Scripts
 $(document).on('ready', function() {
-    P.on('response', function(data) {        
+    P.on('response', function(data) {
         var resp = JSON.stringify(data, null, 2);
-        alert(resp);
         $(".btnPago").hide();
         setResponseData(data);
     });
@@ -19,8 +18,16 @@ function playOnPay(processUrl) {
 });
  */
 function returnFn() {
-    parent.reloadPage();
-    parent.closeIframePopup();
+    //parent.reloadPage();
+    //parent.closeIframePopup();
+}
+
+function showResumen(lblAccept, label) {
+    $('#status_id').text(lblAccept);
+    $('#status_rsp').text(label);
+    $('.vpos-resumen').addClass('rsp_show');
+    $('.vpos-resumen').removeClass('rsp_hide');
+    $('.form-vpos').addClass('rsp_hide');
 }
 
 function setResponseData(data, execute) {
@@ -50,6 +57,7 @@ function setResponseData(data, execute) {
                 status = "NO_OK";
                 lblAccept = objLang.Accept;
             }
+            showResumen(data["status"]["status"], data["status"]["message"]);
             resetSession(wtmessage, label, status, callback, lblAccept);
         }, true);
     }

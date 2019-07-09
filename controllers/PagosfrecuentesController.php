@@ -160,6 +160,7 @@ class PagosfrecuentesController extends \yii\web\Controller {
                             "wtmessage" => Yii::t("notificaciones", "Your information was successfully saved."),
                             "title" => Yii::t('jslang', 'Success'),
                         );
+                        return Utilities::ajaxResponse('OK', 'alert', Yii::t('jslang', 'Success'), 'false', $message);
                     } else {
                         throw new Exception('Error al actualizar pago.');
                     }
