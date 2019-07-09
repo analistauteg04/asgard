@@ -84,4 +84,6 @@ class DocumentoRepositorio extends \yii\db\ActiveRecord
     {
         return $this->hasOne(Estandar::className(), ['est_id' => 'est_id']);
     }
+    
+    
 }

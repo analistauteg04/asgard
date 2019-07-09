@@ -43,7 +43,7 @@
  */
 
 return [
-    "Address1" => "Dirección1",
-    
-    
+    "Date file" => "Fecha Archivo",
+    "File name" => "Nombre Archivo",
+    "List Repository of Evidence" => "Listar Repositorio de Evidencias",        
 ];

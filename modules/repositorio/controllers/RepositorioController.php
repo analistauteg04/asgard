@@ -8,21 +8,23 @@ use yii\helpers\ArrayHelper;
 use app\models\Empresa;
 use app\models\ExportFile;
 use \app\models\Persona;
+use \app\modules\repositorio\models\DocumentoRepositorio;
 
-/*academico::registerTranslations();
-*/
 class RepositorioController extends \app\components\CController {
     public function actionIndex() {
-        /*$mod_lista = new Lista();
+        $mod_repositorio = new DocumentoRepositorio();
         $data = Yii::$app->request->get();
         if ($data['PBgetFilter']) {
             $arrSearch["lista"] = $data['lista'];
-            $resp_lista = $mod_lista->consultarLista($arrSearch);
+            //$resp_lista = $mod_repositorio->consultarLista($arrSearch);
         } else {
-            $resp_lista = $mod_lista->consultarLista();
-        }*/
+            //$resp_lista = $mod_repositorio->consultarLista();
+        }
         return $this->render('index', [
-               // 'model' => $resp_lista
+                'arr_categoria' => array("1" => Yii::t("formulario", "Docencia"), "2" => Yii::t("formulario", "Condiciones Institucionales")),
+                'arr_componente' => array("1" => Yii::t("formulario", "Profesorado"), "2" => Yii::t("formulario", "Estudiantado")),
+                'arr_estandar' => array("1" => Yii::t("formulario", "Estándar 1"), "2" => Yii::t("formulario", "Estándar 2")),
+                //'model' => null,
                ]);
     }    
 }
