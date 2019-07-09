@@ -21,7 +21,7 @@ INSERT INTO `componente` (`com_id`,`com_codificacion`, `com_nombre`,`com_descrip
 (1,'pro-oooo','Profesorado','Profesorado',1,null,'1','2019-07-08 12:30:00',null,'1'),
 (2,'est-oooo','Estudiantado','Dimensión',1,null,'1','2019-07-08 12:30:00',null,'1'),
 (3,'plan-oooo','Planificación Estratégica y Operativa','Planificación Estratégica y Operativa',1,null,'1','2019-07-08 12:30:00',null,'1'),
-(4,'inf-oooo','Infraestructura y Equipamineto','Infraestructura y Equipamineto',1,null,'1','2019-07-08 12:30:00',null,'1'),
+(4,'inf-oooo','Infraestructura y Equipamiento','Infraestructura y Equipamiento',1,null,'1','2019-07-08 12:30:00',null,'1'),
 (5,'bli-oooo','Bibliotecas','Bibliotecas',1,null,'1','2019-07-08 12:30:00',null,'1'),
 (6,'ges-oooo','Gestión Interna y Calidad','Gestión Interna y Calidad',1,null,'1','2019-07-08 12:30:00',null,'1'),
 (7,'bie-oooo','Bienestar Estudiantil y Universitario','Bienestar Estudiantil y Universitario',1,null,'1','2019-07-08 12:30:00',null,'1'),
