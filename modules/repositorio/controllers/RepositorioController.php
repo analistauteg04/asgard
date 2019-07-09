@@ -26,5 +26,9 @@ class RepositorioController extends \app\components\CController {
                 'arr_estandar' => array("1" => Yii::t("formulario", "Estándar 1"), "2" => Yii::t("formulario", "Estándar 2")),
                 //'model' => null,
                ]);
-    }    
+    }  
+    public function actionCargar() {    
+        return $this->render('cargar', [              
+               ]);
+    }  
 }
