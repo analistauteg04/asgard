@@ -38,8 +38,8 @@ class Secuencias extends \app\modules\financiero\components\CActiveRecord {
             if ($estab_id != NULL){$sql.=" AND estab_id=:estab_id ";}
             if ($pemis_id != NULL){$sql.=" AND pemis_id=:pemis_id ";}
             if ($secu_tipo_doc != NULL){$sql.=" AND secu_tipo_doc=:secu_tipo_doc ";}
-            $sql.=" FOR UPDATE ";
-        
+            $sql.=" FOR UPDATE ";                        
+            
             $comando = $con->createCommand($sql);
             $comando->bindParam(":emp_id", $emp_id, \PDO::PARAM_INT);
             $comando->bindParam(":estab_id", $estab_id, \PDO::PARAM_INT);

@@ -142,6 +142,7 @@ class Documento extends \yii\db\ActiveRecord {
                         d.doc_correo,
                         d.doc_valor,
                         d.doc_fecha_pago,
+                        d.doc_direccion,
                         pb.pben_cedula,
                         pb.pben_celular,
                         pb.pben_correo,
@@ -262,6 +263,7 @@ class Documento extends \yii\db\ActiveRecord {
             select
                 ite.ite_codigo as codigo,
                 ite.ite_nombre as item, 
+                ite.ite_id,
                 ddoc.ddoc_cantidad as cantidad,
                 ddoc.ddoc_valor_iva as iva,
                 ddoc.ddoc_valor_total as total,
@@ -278,6 +280,7 @@ class Documento extends \yii\db\ActiveRecord {
                 imu.imni_estado = :status and 
                 imu.imni_estado_logico = :status
             ";
+                
         $comando = $con->createCommand($sql);
         $comando->bindParam(":status", $estado, \PDO::PARAM_STR);
         $comando->bindParam(":doc_id", $doc_id, \PDO::PARAM_INT);
