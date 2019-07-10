@@ -9,10 +9,14 @@ use app\models\Empresa;
 use app\models\ExportFile;
 use \app\models\Persona;
 use \app\modules\repositorio\models\DocumentoRepositorio;
+use \app\modules\repositorio\models\Funcion;
+use \app\modules\repositorio\models\Componente;
 
 class RepositorioController extends \app\components\CController {
     public function actionIndex() {
-        $mod_repositorio = new DocumentoRepositorio();
+        $mod_repositorio = new DocumentoRepositorio();      
+        $mod_categoria = new Funcion();
+        $mod_componente = new Componente();
         $data = Yii::$app->request->get();
         if ($data['PBgetFilter']) {
             $arrSearch["lista"] = $data['lista'];
@@ -20,9 +24,11 @@ class RepositorioController extends \app\components\CController {
         } else {
             //$resp_lista = $mod_repositorio->consultarLista();
         }
+        $arr_categoria = $mod_categoria->consultarFuncion();
+        $arr_componente = $mod_componente->consultarComponente(1);
         return $this->render('index', [
-                'arr_categoria' => array("1" => Yii::t("formulario", "Docencia"), "2" => Yii::t("formulario", "Condiciones Institucionales")),
-                'arr_componente' => array("1" => Yii::t("formulario", "Profesorado"), "2" => Yii::t("formulario", "Estudiantado")),
+                'arr_categoria' => ArrayHelper::map($arr_categoria, "id", "value"), //array("1" => Yii::t("formulario", "Docencia"), "2" => Yii::t("formulario", "Condiciones Institucionales")),
+                'arr_componente' => ArrayHelper::map($arr_componente, "id", "value"), 
                 'arr_estandar' => array("1" => Yii::t("formulario", "Estándar 1"), "2" => Yii::t("formulario", "Estándar 2")),
                 //'model' => null,
                ]);
