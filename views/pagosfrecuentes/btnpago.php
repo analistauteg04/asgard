@@ -11,6 +11,8 @@ echo PbVPOS::widget([
     "titleBox" => $titleBox,
     "nombre_cliente" => $nombre_cliente,
     "apellido_cliente" => $apellido_cliente,
+    "cedula_cliente" => $cedula_cliente,
+    "tipo_documento" => $tipo_documento,
     "email_cliente" => $email_cliente,
     "total" => $total,
     "isCheckout" => (is_null($requestID)?false:true),

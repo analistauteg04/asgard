@@ -187,15 +187,32 @@ class PagosfrecuentesController extends \yii\web\Controller {
         $descripcionItem = "Pagos de Varios Items";
         $titleBox = "Pagos varios";
         $totalpagar = $resultado["doc_valor"];
+        $nombre_apellido=explode(" ",$resultado["doc_nombres_cliente"]);
+        $nombre_cliente=isset($nombre_apellido[0])?$nombre_apellido[0]:"";
+        $apellido_cliente=isset($nombre_apellido[1])?$nombre_apellido[1]:"";
+        $tipo_docu="";
+        switch ($resultado["tdoc_id"]){
+            case 1:
+                $tipo_docu="CI";
+                break;
+            case 2:
+                $tipo_docu="RUC";
+                break;
+            case 3:
+                $tipo_docu="PPN";
+                break;
+        }
+            
         return $this->render('btnpago', array(
                     "referenceID" => str_pad(Secuencias::nuevaSecuencia($con1, 1, 1, 1, 'BPA'), 8, "0", STR_PAD_LEFT),
                     "ordenPago" => $doc_id,
                     "tipo_orden" => 2,
-                    "nombre_cliente" => $resultado["pben_nombre"],
-                    "apellido_cliente" => $resultado["pben_apellido"],
-                    "descripcionItem" => $descripcionItem,
+                    "nombre_cliente" => $nombre_cliente,
+                    "apellido_cliente" => $apellido_cliente,
+                    "cedula_cliente" => $resultado["doc_cedula"],
+                    "tipo_documento" => $tipo_docu,
                     "titleBox" => $titleBox,
-                    "email_cliente" => $resultado["doc_correo"],
+                    "email_cliente" => $resultado["doc_cedula"],
                     "total" => $totalpagar,
         ));
     }
@@ -233,7 +250,7 @@ class PagosfrecuentesController extends \yii\web\Controller {
                     if ($id_pbens > 0) {
                         $idsbp = $sbp_model->insertSolicitudBotonPago($con1, $id_pbens);
                         if ($idsbp > 0) {
-                            $iddoc = $doc_model->insertDocumento($con1, $dataFactura["tipo_dni_fac"], $idsbp, ucwords(strtolower($dataFactura["nombre_fac"])) . ' ' . ucwords(strtolower($dataFactura["apellidos_fac"])), ucwords(strtolower($dataFactura["dir_fac"])), $dataFactura["telfono_fac"], $dataFactura["correo"], $dataFactura["total"], null);
+                            $iddoc = $doc_model->insertDocumento($con1, $dataFactura["tipo_dni_fac"], $dataFactura["dni_fac"], $idsbp, ucwords(strtolower($dataFactura["nombre_fac"])) . ' ' . ucwords(strtolower($dataFactura["apellidos_fac"])), ucwords(strtolower($dataFactura["dir_fac"])), $dataFactura["telfono_fac"], $dataFactura["correo"], $dataFactura["total"], null);
                             if ($iddoc > 0) {
                                 for ($i = 0; $i < count($item_ids); $i++) {
                                     $item_precio = $item_model->getPrecios($con1, $item_ids[$i]["item_id"]);

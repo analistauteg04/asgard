@@ -393,14 +393,14 @@ function guardarPagos() {
     if (total == 0) {
         mensaje("No ha seleccionado productos para la factura.");
     } else {
-        var dataItemList = obtDataList();
         arrParams.dataBenList = obtDataBen();
         arrParams.dataFacturaList = obtDataFact();
-        arrParams.dataItems = dataItemList;
+        arrParams.dataItems = obtDataList();
         var len_ben = Object.keys(arrParams.dataBenList).length;
         var len_fact = Object.keys(arrParams.dataFacturaList).length;
         var len_item = Object.keys(arrParams.dataItems).length;
         if (len_ben > 0 && len_fact > 0 && len_item > 0) {
+            alert("entro para guardar en las tablas, boton pagos");
             if (!validateForm()) {
                 requestHttpAjax(link, arrParams, function (response) {
                     showAlert("OK", "success", response.message);

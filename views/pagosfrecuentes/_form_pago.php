@@ -35,7 +35,7 @@ aspirante::registerTranslations();
                 <div class="form-group">
                     <label for="txt_nombres_fac" class="col-sm-5 col-md-5 col-xs-5 col-lg-5 control-label" id="lbl_nombre1"><?= Yii::t("formulario", "Names") ?><span class="text-danger">*</span></label>
                     <div class="col-sm-7 col-md-7 col-xs-7 col-lg-7">
-                        <input type="text" class="form-control PBvalidation keyupmce" value="" id="txt_nombres_fac" data-type="alfa" placeholder="<?= Yii::t("formulario", "Names") ?>">
+                        <input type="text" class="form-control PBvalidation keyupmce" value="" id="txt_nombres_fac" data-keydown="true" data-type="alfa" placeholder="<?= Yii::t("formulario", "Names") ?>">
                     </div>
                 </div>
             </div> 
@@ -43,7 +43,7 @@ aspirante::registerTranslations();
                 <div class="form-group">
                     <label for="txt_apellidos_fac" class="col-sm-5 col-md-5 col-xs-5 col-lg-5 control-label" id="lbl_apellido1"><?= Yii::t("formulario", "Last Names") ?><span class="text-danger">*</span></label>
                     <div class="col-sm-7 col-md-7 col-xs-7 col-lg-7">
-                        <input type="text" class="form-control PBvalidation keyupmce" value="" id="txt_apellidos_fac" data-type="alfa" placeholder="<?= Yii::t("formulario", "Last Names") ?>">
+                        <input type="text" class="form-control PBvalidation keyupmce" value="" id="txt_apellidos_fac" data-keydown="true" data-type="alfa" placeholder="<?= Yii::t("formulario", "Last Names") ?>">
                     </div>
                 </div>
             </div> 
@@ -61,7 +61,7 @@ aspirante::registerTranslations();
                 <div class="form-group">
                     <label for="txt_tel_fac" class="col-sm-5 col-md-5 col-xs-5 col-lg-5 control-label" id="lbl_apellido1"><?= Yii::t("formulario", "Phone") ?><span class="text-danger">*</span></label>
                     <div class="col-sm-7 col-md-7 col-xs-7 col-lg-7">
-                        <input type="text" class="form-control keyupmce" value="" id="txt_tel_fac" data-type="alfa" placeholder="<?= Yii::t("formulario", "Phone") ?>">
+                        <input type="text" class="form-control keyupmce" value="" id="txt_tel_fac" data-keydown="true" data-type="alfa" placeholder="<?= Yii::t("formulario", "Phone") ?>">
                     </div>
                 </div>
             </div> 

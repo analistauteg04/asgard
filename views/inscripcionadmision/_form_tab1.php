@@ -209,7 +209,7 @@ $requisitosPRP = '<div class="col-md-12 col-sm-12 col-xs-12 col-lg-12">
             </div>
         </div>
     </div> 
-    <div class="col-md-12 col-xs-12 col-sm-12 col-lg-12" id="divRequisitosCANP" style="display: none">   
+    <div class="col-md-12 col-xs-12 col-sm-12 col-lg-12" id="divRequisitosCANP" style="display: block">   
         <?php echo $requisitosCANP ?>
     </div>
     <div class="col-md-12 col-xs-12 col-sm-12 col-lg-12" id="divRequisitosCANSP" style="display: none">   

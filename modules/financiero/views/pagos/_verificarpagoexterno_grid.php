@@ -11,7 +11,7 @@ use app\modules\admision\Module;
 admision::registerTranslations();
 
 ?>
-<div>s
+<div>
     <?=
     PbGridView::widget([
         'id' => 'TbG_VERFICAR_PAGOS_EXTERNOS',

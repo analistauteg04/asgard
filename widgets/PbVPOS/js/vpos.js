@@ -57,7 +57,8 @@ function setResponseData(data, execute) {
                 status = "NO_OK";
                 lblAccept = objLang.Accept;
             }
-            showResumen(data["status"]["status"], data["status"]["message"]);
+            var label_message = (data["status"]["status"] == "APPROVED") ? "Aprobado" : "Rechazado";
+            showResumen(data["status"]["status"], label_message);
             resetSession(wtmessage, label, status, callback, lblAccept);
         }, true);
     }

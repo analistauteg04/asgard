@@ -36,6 +36,14 @@ use app\widgets\PbVPOS\PbVPOS;
     </div> 
     <div class="col-md-12 col-sm-12 col-xs-12 col-lg-12">
         <div class="form-group">
+            <label for="frmDni" class="col-sm-4 col-md-4 col-xs-4 col-lg-4 control-label"><?= PbVPOS::t("vpos", "DNI") ?></label>
+            <div class="col-sm-8 col-md-8 col-xs-8 col-lg-8 ">
+                <input type="text" class="form-control" id="frmDni" value="<?= $cedula_cliente ?>" placeholder="<?= PbVPOS::t("vpos", "DNI") ?>">          
+            </div>
+        </div>
+    </div> 
+    <div class="col-md-12 col-sm-12 col-xs-12 col-lg-12">
+        <div class="form-group">
             <label for="frmEmail" class="col-sm-4 col-md-4 col-xs-4 col-lg-4 control-label"><?= PbVPOS::t("vpos", "Email") ?></label>
             <div class="col-sm-8 col-md-8 col-xs-8 col-lg-8 ">
                 <input type="text" class="form-control" id="frmEmail" value="<?= $email_cliente ?>" placeholder="<?= PbVPOS::t("vpos", "Email") ?>">           
@@ -107,6 +115,10 @@ use app\widgets\PbVPOS\PbVPOS;
             <tr>
                 <th><?= PbVPOS::t("vpos", "Last Name") ?>:</th>
                 <td><?= $apellido_cliente ?></td>
+            </tr>
+            <tr>
+                <th><?= PbVPOS::t("vpos", "DNI") ?>:</th>
+                <td><?= $cedula_cliente ?></td>
             </tr>
             <tr>
                 <th><?= PbVPOS::t("vpos", "Email") ?>:</th>

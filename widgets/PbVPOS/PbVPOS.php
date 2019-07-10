@@ -37,6 +37,8 @@ class PbVPOS extends Widget {
     public $pais = "EC";
     public $nombre_cliente = "";
     public $apellido_cliente = "";
+    public $cedula_cliente = "";
+    public $tipo_documento = "";
     public $email_cliente = "";
     public $descripcionItem = "";
     public $subtotal = "";
@@ -83,12 +85,14 @@ class PbVPOS extends Widget {
                 "titleBox" => $this->titleBox,
                 "nombre_cliente" => $this->nombre_cliente,
                 "apellido_cliente" => $this->apellido_cliente,
+                "cedula_cliente" => $this->cedula_cliente,                
                 "email_cliente" => $this->email_cliente,
                 "total" => $this->total,
                 "referenceID" => $this->referenceID,
             ];
             if(!(Utilities::validateTypeField($this->email_cliente, "email")) || 
             !(Utilities::validateTypeField($this->nombre_cliente, "alfa")) || 
+            !(Utilities::validateTypeField($this->cedula_cliente, "number")) || 
             !(Utilities::validateTypeField($this->apellido_cliente, "alfa")) ||
             !(Utilities::validateTypeField($this->total, "dinero")) || 
             $this->total <= 0){
@@ -201,9 +205,9 @@ class PbVPOS extends Widget {
                 "name" => $this->nombre_cliente,
                 "surname" => $this->apellido_cliente,
                 "email" => $this->email_cliente,
-                /*"document" => "", //esta informacion debe enviarse.
-                "documentType" => "", //esta informacion debe enviarse.
-                "mobile" => "",
+                "document" => $this->cedula_cliente, 
+                "documentType" => $this->tipo_documento, 
+               /*"mobile" => "",
                 "address" => [
                     "street" => "",
                     "city" => "",

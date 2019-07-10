@@ -12,6 +12,7 @@
 return [
     "Buy" => "Comprar",
     "Error" => "Error",
+    "DNI" => "Cedula",
     "Notification" => "Notificación",
     "First Name" => "Nombres",
     "Last Name" => "Apellidos",
