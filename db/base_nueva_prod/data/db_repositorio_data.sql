@@ -58,12 +58,12 @@ INSERT INTO `estandar` (`est_id`,`com_id`, `fun_id`,`est_codificacion`,`est_nomb
 (14,null,3,null,'Estándar 13','Estándar 13',1,null,1,'2019-07-08 12:30:00',null,'1'),
 (15,null,3,null,'Estándar 14','Estándar 14',1,null,1,'2019-07-08 12:30:00',null,'1'),
 
-(16,3,1,4,'Estándar 15','Estándar 15',1,null,1,'2019-07-08 12:30:00',null,'1'),
-(17,4,1,4,'Estándar 16','Estándar 16',1,null,1,'2019-07-08 12:30:00',null,'1'),
-(18,5,1,4,'Estándar 17','Estándar 17',1,null,1,'2019-07-08 12:30:00',null,'1'),
-(19,6,1,4,'Estándar 18','Estándar 18',1,null,1,'2019-07-08 12:30:00',null,'1'),
-(20,7,1,4,'Estándar 19','Estándar 19',1,null,1,'2019-07-08 12:30:00',null,'1'),
-(21,8,1,4,'Estándar 20','Estándar 20',1,null,1,'2019-07-08 12:30:00',null,'1'),
+(16,3,4,null,'Estándar 15','Estándar 15',1,null,1,'2019-07-08 12:30:00',null,'1'),
+(17,4,4,null,'Estándar 16','Estándar 16',1,null,1,'2019-07-08 12:30:00',null,'1'),
+(18,5,4,null,'Estándar 17','Estándar 17',1,null,1,'2019-07-08 12:30:00',null,'1'),
+(19,6,4,null,'Estándar 18','Estándar 18',1,null,1,'2019-07-08 12:30:00',null,'1'),
+(20,7,4,null,'Estándar 19','Estándar 19',1,null,1,'2019-07-08 12:30:00',null,'1'),
+(21,8,4,null,'Estándar 20','Estándar 20',1,null,1,'2019-07-08 12:30:00',null,'1'),
 
 (22,9,5,null,'Estándar A','Estándar A',1,null,1,'2019-07-08 12:30:00',null,'1'),
 (23,10,5,null,'Estándar B','Estándar B',1,null,1,'2019-07-08 12:30:00',null,'1'),
