@@ -27,6 +27,7 @@ return [
     "End IP" => "IP Salida",
     "Entry" => "Entrada",
     "Enrolled Income Method" => "Matriculado Método Ingreso",  
+    "Enrolled Postgraduate" => "Matriculados Posgrados",
     "Exit" => "Salida",
     "Expected" => "Esperado",
     "Failed" => "Reprobadas",  

@@ -1444,14 +1444,16 @@ class Solicitudinscripcion extends \yii\db\ActiveRecord {
                                     ming.ming_estado = :estado AND
                                     ming.ming_estado_logico = :estado),'NA') as ming_nombre,
                     eac.eaca_nombre as carrera,
-                    rsol.rsin_nombre as estado,
+                    rsol.rsin_nombre as estado,                    
                     case when ifnull((select opag_estado_pago
                                             from " . $con3->dbname . ".orden_pago op
-                                            where op.sins_id = sins.sins_id),'N') = 'N' then 'No generado'
+                                            where op.sins_id = sins.sins_id
+                                            and op.opag_estado = :estado and op.opag_estado_logico = :estado),'N') = 'N' then 'No generado'
                      when (select opag_estado_pago
                                from " . $con3->dbname . ".orden_pago op
-                               where op.sins_id = sins.sins_id) = 'P' then 'Pendiente' 
-                    else 'Pagado' end as pago                
+                               where op.sins_id = sins.sins_id
+                                     and op.opag_estado = :estado and op.opag_estado_logico = :estado) = 'P' then 'Pendiente' 
+                    else 'Pagado' end as pago
                 FROM 
                     " . $con->dbname . ".solicitud_inscripcion as sins
                     INNER JOIN " . $con->dbname . ".interesado as inte on sins.int_id = inte.int_id                    
