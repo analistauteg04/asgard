@@ -379,7 +379,7 @@ function guardarFacturaTemp() {
     } else {
         arrParams.pasaporte_fac = $('#txt_pasaporte_fac').val();
     }
-    arrParams.correo = $('#txt_correo').val();
+    arrParams.doc_correo = $('#txt_correo_factura').val();
     arrParams.total = total;
     sessionStorage.setItem('datosFactura', JSON.stringify(arrParams));
 }

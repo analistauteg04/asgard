@@ -193,13 +193,13 @@ class PagosfrecuentesController extends \yii\web\Controller {
         $tipo_docu="";
         switch ($resultado["doc_tipo_dni"]){
             case 1:
-                $tipo_dni="CI";
+                $tipo_dni = "CI";
                 break;
             case 2:
-                $tipo_dni="RUC";
+                $tipo_dni = "RUC";
                 break;
             case 3:
-                $tipo_dni="PPN";
+                $tipo_dni = "PPN";
                 break;
         }            
         return $this->render('btnpago', array(
@@ -265,7 +265,7 @@ class PagosfrecuentesController extends \yii\web\Controller {
                                     break;
                             }
                             
-                            $iddoc = $doc_model->insertDocumento($con1, $tdoc_id,$dataFactura["tipo_dni_fac"], $doc_dni_val, $idsbp, ucwords(strtolower($dataFactura["nombre_fac"])) . ' ' . ucwords(strtolower($dataFactura["apellidos_fac"])), ucwords(strtolower($dataFactura["dir_fac"])), $dataFactura["telfono_fac"], $dataFactura["correo"], $dataFactura["total"], null, $doc_dni_key);
+                            $iddoc = $doc_model->insertDocumento($con1, $tdoc_id,$dataFactura["tipo_dni_fac"], $doc_dni_val, $idsbp, ucwords(strtolower($dataFactura["nombre_fac"])) . ' ' . ucwords(strtolower($dataFactura["apellidos_fac"])), ucwords(strtolower($dataFactura["dir_fac"])), $dataFactura["telfono_fac"], $dataFactura["doc_correo"], $dataFactura["total"], null, $doc_dni_key);
                             if ($iddoc > 0) {
                                 for ($i = 0; $i < count($item_ids); $i++) {
                                     $item_precio = $item_model->getPrecios($con1, $item_ids[$i]["item_id"]);
