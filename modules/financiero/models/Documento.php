@@ -77,23 +77,22 @@ class Documento extends \yii\db\ActiveRecord {
 
     /**
      * @return \yii\db\ActiveQuery
-     */
+    */
     public function getDetalleDocumentos() {
         return $this->hasMany(DetalleDocumento::className(), ['doc_id' => 'doc_id']);
     }
-
-    public function insertDocumento($con, $tdoc_id, $cedula, $sbpa_id, $nombres, $direccion, $telefono, $correo, $valor, $usuario) {
+    public function insertDocumento($con, $tdoc_id,$tipo_dni_id, $dni_numero, $sbpa_id, $nombres, $direccion, $telefono, $correo, $valor, $usuario) {
         $estado = 1;
-        $fecha = date(Yii::$app->params["dateTimeByDefault"]);
+        $fecha = date(Yii::$app->params["dateTimeByDefault"]);        
         $sql = "INSERT INTO " . $con->dbname . ".documento
-            (tdoc_id, doc_cedula,sbpa_id, doc_nombres_cliente, doc_direccion, doc_telefono,doc_fecha_pago, doc_correo, doc_valor, doc_pagado, doc_usuario_transaccion,doc_estado,doc_estado_logico) VALUES
-            (:tdoc_id,:doc_cedula,:sbpa_id,:doc_nombres_cliente,:doc_direccion,:doc_telefono,:fecha_pago,:doc_correo,:doc_valor, 0, :doc_usuario_transaccion,:doc_estado,:doc_estado)";
-
+            (tdoc_id, doc_tipo_dni,$doc_dni_key,sbpa_id, doc_nombres_cliente, doc_direccion, doc_telefono,doc_fecha_pago, doc_correo, doc_valor, doc_pagado, doc_usuario_transaccion,doc_estado,doc_estado_logico) VALUES
+            (:tdoc_id,:doc_tipo_dni,:sbpa_id,:doc_nombres_cliente,:doc_direccion,:doc_telefono,:fecha_pago,:doc_correo,:doc_valor, 0, :doc_usuario_transaccion,:doc_estado,:doc_estado)";
         $command = $con->createCommand($sql);
         $command->bindParam(":tdoc_id", $tdoc_id, \PDO::PARAM_INT);
         $command->bindParam(":sbpa_id", $sbpa_id, \PDO::PARAM_INT);
         $command->bindParam(":fecha_pago", $fecha, \PDO::PARAM_STR);
-        $command->bindParam(":doc_cedula", $cedula, \PDO::PARAM_STR);
+        $command->bindParam(":doc_tipo_dni", $tipo_dni_id, \PDO::PARAM_STR);
+        $command->bindParam($doc_dni_val, $dni_numero, \PDO::PARAM_STR);
         $command->bindParam(":doc_nombres_cliente", $nombres, \PDO::PARAM_STR);
         $command->bindParam(":doc_direccion", $direccion, \PDO::PARAM_STR);
         $command->bindParam(":doc_telefono", $telefono, \PDO::PARAM_STR);

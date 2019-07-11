@@ -201,8 +201,7 @@ class PagosfrecuentesController extends \yii\web\Controller {
             case 3:
                 $tipo_docu="PPN";
                 break;
-        }
-            
+        }            
         return $this->render('btnpago', array(
                     "referenceID" => str_pad(Secuencias::nuevaSecuencia($con1, 1, 1, 1, 'BPA'), 8, "0", STR_PAD_LEFT),
                     "ordenPago" => $doc_id,
@@ -250,7 +249,8 @@ class PagosfrecuentesController extends \yii\web\Controller {
                     if ($id_pbens > 0) {
                         $idsbp = $sbp_model->insertSolicitudBotonPago($con1, $id_pbens);
                         if ($idsbp > 0) {
-                            $iddoc = $doc_model->insertDocumento($con1, $dataFactura["tipo_dni_fac"], $dataFactura["dni_fac"], $idsbp, ucwords(strtolower($dataFactura["nombre_fac"])) . ' ' . ucwords(strtolower($dataFactura["apellidos_fac"])), ucwords(strtolower($dataFactura["dir_fac"])), $dataFactura["telfono_fac"], $dataFactura["correo"], $dataFactura["total"], null);
+                            $tdoc_id=1;
+                            $iddoc = $doc_model->insertDocumento($con1, $tdoc_id,$dataFactura["tipo_dni_fac"], $dataFactura["dni_fac"], $idsbp, ucwords(strtolower($dataFactura["nombre_fac"])) . ' ' . ucwords(strtolower($dataFactura["apellidos_fac"])), ucwords(strtolower($dataFactura["dir_fac"])), $dataFactura["telfono_fac"], $dataFactura["correo"], $dataFactura["total"], null);
                             if ($iddoc > 0) {
                                 for ($i = 0; $i < count($item_ids); $i++) {
                                     $item_precio = $item_model->getPrecios($con1, $item_ids[$i]["item_id"]);

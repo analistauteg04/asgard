@@ -375,12 +375,10 @@ function guardarFacturaTemp() {
         arrParams.dni_fac = $('#txt_dni_fac').val();
     } else if (arrParams.tipo_dni_fac == 2)
     {
-        arrParams.dni_fac = $('#txt_ruc_fac').val();
+        arrParams.ruc_fac = $('#txt_ruc_fac').val();
     } else {
-        arrParams.dni_fac = $('#txt_pasaporte_fac').val();
+        arrParams.pasaporte_fac = $('#txt_pasaporte_fac').val();
     }
-
-
     arrParams.correo = $('#txt_correo').val();
     arrParams.total = total;
     sessionStorage.setItem('datosFactura', JSON.stringify(arrParams));
