@@ -191,15 +191,15 @@ class PagosfrecuentesController extends \yii\web\Controller {
         $nombre_cliente=isset($nombre_apellido[0])?$nombre_apellido[0]:"";
         $apellido_cliente=isset($nombre_apellido[1])?$nombre_apellido[1]:"";
         $tipo_docu="";
-        switch ($resultado["tdoc_id"]){
+        switch ($resultado["doc_tipo_dni"]){
             case 1:
-                $tipo_docu="CI";
+                $tipo_dni="CI";
                 break;
             case 2:
-                $tipo_docu="RUC";
+                $tipo_dni="RUC";
                 break;
             case 3:
-                $tipo_docu="PPN";
+                $tipo_dni="PPN";
                 break;
         }            
         return $this->render('btnpago', array(
@@ -209,7 +209,7 @@ class PagosfrecuentesController extends \yii\web\Controller {
                     "nombre_cliente" => $nombre_cliente,
                     "apellido_cliente" => $apellido_cliente,
                     "cedula_cliente" => $resultado["doc_cedula"],
-                    "tipo_documento" => $tipo_docu,
+                    "tipo_documento" => $tipo_dni,
                     "titleBox" => $titleBox,
                     "email_cliente" => $resultado["doc_cedula"],
                     "total" => $totalpagar,
@@ -232,7 +232,6 @@ class PagosfrecuentesController extends \yii\web\Controller {
             $cedula = $dataBeneficiario["cedula"];
             $item_ids = $data["dataItems"];
             $transaction = $con1->beginTransaction();
-
             try {
                 if (!empty($item_ids)) {
                     $id_pben = $pben_model->getIdPerBenByCed($con1, $cedula);
@@ -250,7 +249,23 @@ class PagosfrecuentesController extends \yii\web\Controller {
                         $idsbp = $sbp_model->insertSolicitudBotonPago($con1, $id_pbens);
                         if ($idsbp > 0) {
                             $tdoc_id=1;
-                            $iddoc = $doc_model->insertDocumento($con1, $tdoc_id,$dataFactura["tipo_dni_fac"], $dataFactura["dni_fac"], $idsbp, ucwords(strtolower($dataFactura["nombre_fac"])) . ' ' . ucwords(strtolower($dataFactura["apellidos_fac"])), ucwords(strtolower($dataFactura["dir_fac"])), $dataFactura["telfono_fac"], $dataFactura["correo"], $dataFactura["total"], null);
+                            $tipo_dni_fac=$dataFactura["tipo_dni_fac"];
+                            switch ($tipo_dni_fac){
+                                case 1: 
+                                    $doc_dni_key='doc_cedula';
+                                    $doc_dni_val=$dataFactura["dni_fac"];
+                                    break;
+                                case 2: 
+                                    $doc_dni_key='doc_ruc';
+                                    $doc_dni_val=$dataFactura["ruc_fac"];
+                                    break;
+                                case 3: 
+                                    $doc_dni_key='doc_pasaporte';
+                                    $doc_dni_val=$dataFactura["pasaporte_fac"];
+                                    break;
+                            }
+                            
+                            $iddoc = $doc_model->insertDocumento($con1, $tdoc_id,$dataFactura["tipo_dni_fac"], $doc_dni_val, $idsbp, ucwords(strtolower($dataFactura["nombre_fac"])) . ' ' . ucwords(strtolower($dataFactura["apellidos_fac"])), ucwords(strtolower($dataFactura["dir_fac"])), $dataFactura["telfono_fac"], $dataFactura["correo"], $dataFactura["total"], null, $doc_dni_key);
                             if ($iddoc > 0) {
                                 for ($i = 0; $i < count($item_ids); $i++) {
                                     $item_precio = $item_model->getPrecios($con1, $item_ids[$i]["item_id"]);
