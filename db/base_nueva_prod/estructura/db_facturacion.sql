@@ -349,6 +349,7 @@ create table if not exists `documento` (
   `doc_cedula` varchar(15) null,
   `doc_pasaporte` varchar(15) null,
   `doc_ruc` varchar(15) null,
+  `doc_tipo_dni` bigint(1) null,
   `doc_nombres_cliente` varchar(250) not null,    
   `doc_direccion` varchar(500) default null,
   `doc_telefono` varchar(50) default null, 

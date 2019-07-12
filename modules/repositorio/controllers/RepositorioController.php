@@ -33,8 +33,16 @@ class RepositorioController extends \app\components\CController {
                 //'model' => null,
                ]);
     }  
-    public function actionCargar() {    
+    public function actionCargar() {
+        $mod_componente = new Componente();
+        
+        $arr_componente = $mod_componente->consultarComponente(1);
+        $arr_funcion = $mod_componente->consultarComponente(1);
+        $arr_modelos = $mod_componente->consultarComponente(1);
         return $this->render('cargar', [              
+                    'arr_componentes' => ArrayHelper::map($arr_componente, "id", "value"), 
+                    'arr_funciones' => ArrayHelper::map($arr_funcion, "id", "value"), 
+                    'arr_modelos' => ArrayHelper::map($arr_funcion, "id", "value"), 
                ]);
     }  
 }

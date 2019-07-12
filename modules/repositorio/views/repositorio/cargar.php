@@ -21,10 +21,18 @@ use app\modules\repositorio\Module as repositorio;
 <form class="form-horizontal">
     <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">        
         <div class="col-md-6 col-sm-6 col-xs-6 col-lg-6">
+            <label for="cmb_modelo" class="col-lg-5 col-md-5 col-sm-5 col-xs-5 control-label"><?= repositorio::t("repositorio", "Function") ?> <span class="text-danger">*</span></label>
+            <div class="col-lg-7 col-md-7 col-sm-7 col-xs-7">
+                <?= Html::dropDownList("cmb_modelo", 0, $arr_modelos, ["class" => "form-control", "id" => "cmb_modelo"]) ?>
+            </div>
+        </div>         
+    </div> 
+    <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">        
+        <div class="col-md-6 col-sm-6 col-xs-6 col-lg-6">
             <div class="form-group">            
                 <label for="cmb_funcion" class="col-lg-5 col-md-5 col-sm-5 col-xs-5 control-label"><?= repositorio::t("repositorio", "Function") ?> <span class="text-danger">*</span></label>
                 <div class="col-lg-7 col-md-7 col-sm-7 col-xs-7">
-                    <?= Html::dropDownList("cmb_funcion", 0, ["0" => "Seleccionar", "1" => "Función"], ["class" => "form-control", "id" => "cmb_funcion"]) ?>
+                    <?= Html::dropDownList("cmb_funcion", 0, $arr_funciones, ["class" => "form-control", "id" => "cmb_funcion"]) ?>
                 </div>
             </div>
         </div>
@@ -32,7 +40,7 @@ use app\modules\repositorio\Module as repositorio;
             <div class="form-group">            
                 <label for="cmb_componente" class="col-lg-5 col-md-5 col-sm-5 col-xs-5 control-label"><?= repositorio::t("repositorio", "Component") ?></label>
                 <div class="col-lg-7 col-md-7 col-sm-7 col-xs-7">
-                    <?= Html::dropDownList("cmb_componente", 0, ["0" => "Seleccionar", "1" => "Componente"], ["class" => "form-control", "id" => "cmb_componente"]) ?>
+                    <?= Html::dropDownList("cmb_componente", 0, $arr_componentes, ["class" => "form-control", "id" => "cmb_componente"]) ?>
                 </div>
             </div>
         </div>
@@ -42,7 +50,7 @@ use app\modules\repositorio\Module as repositorio;
             <div class="form-group">            
                 <label for="cmb_estandar" class="col-lg-5 col-md-5 col-sm-5 col-xs-5 control-label"><?= repositorio::t("repositorio", "Standar") ?> <span class="text-danger">*</span></label>
                 <div class="col-lg-7 col-md-7 col-sm-7 col-xs-7">
-                    <?= Html::dropDownList("cmb_estandar", 0, ["0" => "Seleccionar", "1" => "Estándar"], ["class" => "form-control", "id" => "cmb_estandar"]) ?>
+                    <?= Html::dropDownList("cmb_estandar", 0, $arr_estandares, ["class" => "form-control", "id" => "cmb_estandar"]) ?>
                 </div>
             </div>
         </div>
@@ -50,7 +58,7 @@ use app\modules\repositorio\Module as repositorio;
             <div class="form-group">            
                 <label for="cmb_tipo" class="col-lg-5 col-md-5 col-sm-5 col-xs-5 control-label"><?= Yii::t("formulario", "Type") ?> <span class="text-danger">*</span></label>
                 <div class="col-lg-7 col-md-7 col-sm-7 col-xs-7">
-                    <?= Html::dropDownList("cmb_tipo", 0, ["0" => "Seleccionar", "1" => "Publico", "2" => "Provado"], ["class" => "form-control", "id" => "cmb_tipo"]) ?>
+                    <?= Html::dropDownList("cmb_tipo", 0, $arr_tipo, ["class" => "form-control", "id" => "cmb_tipo"]) ?>
                 </div>
             </div>
         </div>
