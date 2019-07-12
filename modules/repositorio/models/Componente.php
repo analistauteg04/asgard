@@ -84,7 +84,7 @@ class Componente extends \yii\db\ActiveRecord
     public function consultarComponente($fun_id) {
         $con = \Yii::$app->db_repositorio;
         $estado = 1;
-        $sql = "SELECT distinct c.com_id as id, c.com_nombre as value
+        $sql = "SELECT distinct c.com_id as id, c.com_nombre as name
                 FROM " . $con->dbname . ".componente c inner join " . $con->dbname . ".estandar e on c.com_id = e.com_id
                      inner join " . $con->dbname . ".funcion f on f.fun_id = e.fun_id
                 WHERE e.fun_id = :fun_id

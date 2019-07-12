@@ -8,7 +8,7 @@ USE `db_repositorio`;
 --
 INSERT INTO `modelo` (`mod_id`,`mod_codificacion`,`mod_nombre`,`mod_descripcion`, `mod_usuario_ingreso`,`mod_usuario_modifica`, `mod_estado`,`mod_fecha_creacion`,`mod_fecha_modificacion`,`mod_estado_logico`) VALUES
 (1,null,'General','General',1,null,'1','2019-07-12 12:00:00',null,'1'),
-(2,null,'Acreditacion','Acreditacion',1,null,'1','2019-07-12 12:00:00',null,'1');
+(2,null,'Acreditación','Acreditación',1,null,'1','2019-07-12 12:00:00',null,'1');
 -- --------------------------------------------------------
 --
 -- Volcado de datos para la tabla `funcion`

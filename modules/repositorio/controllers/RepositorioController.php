@@ -11,25 +11,46 @@ use \app\models\Persona;
 use \app\modules\repositorio\models\DocumentoRepositorio;
 use \app\modules\repositorio\models\Funcion;
 use \app\modules\repositorio\models\Componente;
+use \app\modules\repositorio\models\Modelo;
+use \app\modules\repositorio\models\Estandar;
 
 class RepositorioController extends \app\components\CController {
     public function actionIndex() {
         $mod_repositorio = new DocumentoRepositorio();      
         $mod_categoria = new Funcion();
         $mod_componente = new Componente();
+        $mod_modelo = new Modelo();
+        $mod_estandar = new Estandar();
         $data = Yii::$app->request->get();
-        if ($data['PBgetFilter']) {
+        /*if ($data['PBgetFilter']) {
             $arrSearch["lista"] = $data['lista'];
             //$resp_lista = $mod_repositorio->consultarLista($arrSearch);
         } else {
             //$resp_lista = $mod_repositorio->consultarLista();
+        }*/
+        if (Yii::$app->request->isAjax) {
+            $data = Yii::$app->request->post();
+            if (isset($data["get_funciones"])) {                
+                $resp_funciones = $mod_categoria->consultarFuncion($data["mod_id"]);
+                $message = array("funciones" => $resp_funciones);
+                return Utilities::ajaxResponse('OK', 'alert', Yii::t('jslang', 'Success'), 'false', $message);
+            }
+            if (isset($data["get_componentes"])) {  
+                \app\models\Utilities::putMessageLogFile('fun_id:' . $data["fun_id"]);
+                $resp_componente = $mod_componente->consultarComponente($data["fun_id"]);
+                $message = array("componentes" => $resp_componente);
+                return Utilities::ajaxResponse('OK', 'alert', Yii::t('jslang', 'Success'), 'false', $message);
+            }             
         }
-        $arr_categoria = $mod_categoria->consultarFuncion();
+        $arr_modelo = $mod_modelo->consultarModelo();
+        $arr_categoria = $mod_categoria->consultarFuncion(2);
         $arr_componente = $mod_componente->consultarComponente(1);
+        $arr_estandar = $mod_estandar->consultarEstandar(1,1);
         return $this->render('index', [
-                'arr_categoria' => ArrayHelper::map($arr_categoria, "id", "value"), //array("1" => Yii::t("formulario", "Docencia"), "2" => Yii::t("formulario", "Condiciones Institucionales")),
-                'arr_componente' => ArrayHelper::map($arr_componente, "id", "value"), 
-                'arr_estandar' => array("1" => Yii::t("formulario", "Estándar 1"), "2" => Yii::t("formulario", "Estándar 2")),
+                'arr_modelo' => ArrayHelper::map($arr_modelo, "id", "value"), 
+                'arr_categoria' => ArrayHelper::map($arr_categoria, "id", "name"), //array("1" => Yii::t("formulario", "Docencia"), "2" => Yii::t("formulario", "Condiciones Institucionales")),
+                'arr_componente' => ArrayHelper::map($arr_componente, "id", "name"), 
+                'arr_estandar' => ArrayHelper::map($arr_estandar, "id", "value"), 
                 //'model' => null,
                ]);
     }  

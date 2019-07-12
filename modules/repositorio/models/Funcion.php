@@ -87,20 +87,21 @@ class Funcion extends \yii\db\ActiveRecord {
         return $this->hasOne(Modelo::className(), ['mod_id' => 'mod_id']);
     }
 
-    public function consultarFuncion() {
+    public function consultarFuncion($mod_id) {
         $con = \Yii::$app->db_repositorio;
         $estado = 1;
         $sql = "
-                    SELECT fun_id as id, fun_nombre as value  
+                    SELECT fun_id as id, fun_nombre as name  
                     FROM 
-                         " . $con->dbname . ".funcion                     
-                    WHERE                         
+                         " . $con->dbname . ".funcion
+                    WHERE mod_id = :mod_id AND
                         fun_estado=:estado AND
-                        fun_estado_logico=:estado                        
+                        fun_estado_logico=:estado
                     ORDER BY fun_nombre ASC
                 ";
         $comando = $con->createCommand($sql);
         $comando->bindParam(":estado", $estado, \PDO::PARAM_STR);
+        $comando->bindParam(":mod_id", $mod_id, \PDO::PARAM_INT);
         $resultData = $comando->queryAll();
         return $resultData;
     }

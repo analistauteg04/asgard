@@ -301,7 +301,7 @@ class MarcacionController extends \app\components\CController {
                 }
             }            
             if ($data["procesar_file"]) {
-                $periodo_id = $data["periodo_id"];                                                
+                $periodo_id = $data["periodo_id"];                      
                 $carga_archivo = $mod_marcacion->CargarArchivoHorario($periodo_id, $data["archivo"], $usu_id);
                 if ($carga_archivo['status']) {
                     $message = array(

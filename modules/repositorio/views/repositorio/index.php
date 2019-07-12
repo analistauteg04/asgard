@@ -11,6 +11,7 @@ use app\modules\repositorio\Module as repositorio;
     <form class="form-horizontal">
         <?=
         $this->render('index-search', [
+            'arr_modelo' => $arr_modelo,
             'arr_componente' => $arr_componente,
             'arr_categoria' => $arr_categoria,
             'arr_estandar' => $arr_estandar,      

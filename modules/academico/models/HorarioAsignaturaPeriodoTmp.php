@@ -161,8 +161,7 @@ class HorarioAsignaturaPeriodoTmp extends \yii\db\ActiveRecord
                     $fila++;                                                
                     $model = new HorarioAsignaturaPeriodoTmp();
                     //Validación de materia.  
-                    $respMateria = $model->consultarMateriaXnombre($val[1]); 
-                    \app\models\Utilities::putMessageLogFile('codigo materia:'.$respMateria["asi_id"]); 
+                    $respMateria = $model->consultarMateriaXnombre($val[1]);                     
                     if (!($respMateria)) {                           
                         $bandera= '0';
                         $mensaje = "No se encontró materia con ese nombre o se encuentra inactiva.";                                                     
@@ -184,8 +183,7 @@ class HorarioAsignaturaPeriodoTmp extends \yii\db\ActiveRecord
                     if (!($respProfesor)) {                           
                         $bandera= '0';
                         $mensaje = "No se encontró profesor o se encuentra inactivo.";                                                     
-                    }      
-                    \app\models\Utilities::putMessageLogFile('codigo materia:'.$respMateria["asi_id"]); 
+                    }                          
                     //Validación de días.
                     if (($val[7]>7) or ($val[7]<1)) {
                         $bandera= '0';
