@@ -25,102 +25,61 @@ $(document).ready(function () {
                 arrParams.get_componentes = true;
                 requestHttpAjax(link, arrParams, function (response) {
                     if (response.status == "OK") {
-                        data = response.message;
-                        alert('Ingresa');
+                        data = response.message;                        
                         setComboData(data.componentes, "cmb_componente");
-                    }
-                }, true);
-                    /*var arrParams = new Object();
-                    arrParams.nint_id = $('#cmb_ninteres').val();
-                    arrParams.getmodalidad = true;
-                    arrParams.empresa_id = $('#cmb_empresa').val();
-                    requestHttpAjax(link, arrParams, function (response) {
-                        if (response.status == "OK") {
-                            data = response.message;
-                            setComboData(data.modalidad, "cmb_modalidad");
-                            if (data.modalidad.length > 0) {
-                                var arrParams = new Object();
-                                arrParams.unidada = $('#cmb_ninteres').val();
-                                arrParams.moda_id = $('#cmb_modalidad').val();
-                                arrParams.empresa_id = $('#cmb_empresa').val();
-                                arrParams.getcarrera = true;
-                                requestHttpAjax(link, arrParams, function (response) {
-                                    if (response.status == "OK") {
-                                        data = response.message;
-                                        setComboData(data.carrera, "cmb_carrera");
-                                    }
-                                    // if ($('#cmb_ninteres').val()!=1) {
-                                    var arrParams = new Object();
-                                    arrParams.unidada = $('#cmb_ninteres').val();
-                                    arrParams.metodo = $('#cmb_metodos').val();
-                                    arrParams.moda_id = $('#cmb_modalidad').val();
-                                    arrParams.carrera_id = $('#cmb_carrera').val();
-                                    arrParams.empresa_id = $('#cmb_empresa').val();
-                                    arrParams.getitem = true;
-                                    requestHttpAjax(link, arrParams, function (response) {
-                                        if (response.status == "OK") {
-                                            data = response.message;
-                                            setComboData(data.items, "cmb_item");
-                                        }
-                                        //Precio.
-                                        var arrParams = new Object();
-                                        arrParams.ite_id = $('#cmb_item').val();
-                                        arrParams.getprecio = true;
-                                        requestHttpAjax(link, arrParams, function (response) {
-                                            if (response.status == "OK") {
-                                                data = response.message;
-                                                $('#txt_precio_item').val(data.precio);
-                                            }
-                                        }, true);
-                                        //habilita y deshabilita control de precio.
-                                        var arrParams = new Object();
-                                        arrParams.ite_id = $('#cmb_item').val();
-                                        arrParams.gethabilita = true;
-                                        requestHttpAjax(link, arrParams, function (response) {
-                                            if (response.status == "OK") {
-                                                data = response.message;
-                                                if (data.habilita == 1) {
-                                                    $("#txt_precio_item").prop('disabled', false);
-                                                } else {
-                                                    $("#txt_precio_item").prop('disabled', true);
-                                                }
-                                            }
-                                        }, true);
-                                    }, true);
-                                    //Descuentos.
-                                    var arrParams = new Object();
-                                    arrParams.unidada = $('#cmb_ninteres').val();
-                                    arrParams.moda_id = $('#cmb_modalidad').val();
-                                    arrParams.metodo = $('#cmb_metodos').val();
-                                    arrParams.empresa_id = $('#cmb_empresa').val();
-                                    arrParams.carrera_id = $('#cmb_carrera').val();
-                                    arrParams.getdescuento = true;
-                                    requestHttpAjax(link, arrParams, function (response) {
-                                        if (response.status == "OK") {
-                                            data = response.message;
-                                            setComboData(data.descuento, "cmb_descuento");
-                                        }
-                                        //Precio con descuento.
-                                        var arrParams = new Object();
-                                        arrParams.descuento_id = $('#cmb_descuento').val();
-                                        arrParams.ite_id = $('#cmb_item').val();
-                                        arrParams.getpreciodescuento = true;
-                                        requestHttpAjax(link, arrParams, function (response) {
-                                            if (response.status == "OK") {
-                                                data = response.message;
-                                                $('#txt_precio_item2').val(data.preciodescuento);
-                                            }
-                                        }, true);
-                                    }, true);
-                                    //  }
-                                }, true);
+                        var arrParams = new Object();                   
+                        arrParams.comp_id = $('#cmb_componente').val();
+                        arrParams.fun_id = $('#cmb_categoria').val();
+                        arrParams.get_estandares = true;
+                        requestHttpAjax(link, arrParams, function (response) {
+                            if (response.status == "OK") {
+                                data = response.message;                        
+                                setComboData(data.estandares, "cmb_estandar");
                             }
-                        }
-                    }, true);
-                }*/
+                        }, true);                   
+                    }
+                }, true);                 
             }
         }, true);        
     });
+    
+    $('#cmb_categoria').change(function () {
+        var link = $('#txth_base').val() + "/repositorio/repositorio/index";
+        var arrParams = new Object();                       
+        arrParams.fun_id = $('#cmb_categoria').val();
+        arrParams.get_componentes = true;
+        requestHttpAjax(link, arrParams, function (response) {
+            if (response.status == "OK") {
+                data = response.message;                
+                setComboData(data.componentes, "cmb_componente");
+                var arrParams = new Object();                   
+                arrParams.comp_id = $('#cmb_componente').val();
+                arrParams.fun_id = $('#cmb_categoria').val();
+                arrParams.get_estandares = true;
+                requestHttpAjax(link, arrParams, function (response) {
+                    if (response.status == "OK") {
+                        data = response.message;                        
+                        setComboData(data.estandares, "cmb_estandar");
+                    }
+                }, true);      
+            }
+        }, true);                       
+    });
+    
+    $('#cmb_componente').change(function () {
+        var link = $('#txth_base').val() + "/repositorio/repositorio/index";
+        var arrParams = new Object();                       
+        arrParams.comp_id = $('#cmb_componente').val();
+        arrParams.fun_id = $('#cmb_categoria').val();
+        arrParams.get_estandares = true;
+        requestHttpAjax(link, arrParams, function (response) {
+            if (response.status == "OK") {
+                data = response.message;                
+                setComboData(data.estandares, "cmb_estandar");
+            }
+        }, true);                       
+    });
+    
 });
 
 function guardarItem() {

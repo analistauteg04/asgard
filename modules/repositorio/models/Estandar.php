@@ -113,7 +113,7 @@ class Estandar extends \yii\db\ActiveRecord
         }else {
             $com_id = $comp_id;
         }        
-        $sql = "SELECT est.est_id id, est_nombre value
+        $sql = "SELECT est.est_id id, est_nombre name
                 FROM " . $con->dbname . ".estandar est left join " . $con->dbname . ".componente c 
                     on c.com_id = est.com_id
                     inner join " . $con->dbname . ".funcion f on f.fun_id = est.fun_id
