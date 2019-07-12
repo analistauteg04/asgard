@@ -97,7 +97,7 @@ class Funcion extends \yii\db\ActiveRecord {
                     WHERE mod_id = :mod_id AND
                         fun_estado=:estado AND
                         fun_estado_logico=:estado
-                    ORDER BY fun_nombre ASC
+                    ORDER BY fun_id ASC
                 ";
         $comando = $con->createCommand($sql);
         $comando->bindParam(":estado", $estado, \PDO::PARAM_STR);

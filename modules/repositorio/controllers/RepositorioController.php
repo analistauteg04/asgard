@@ -37,9 +37,14 @@ class RepositorioController extends \app\components\CController {
                 return Utilities::ajaxResponse('OK', 'alert', Yii::t('jslang', 'Success'), 'false', $message);
             }
             if (isset($data["get_componentes"])) {  
-                \app\models\Utilities::putMessageLogFile('fun_id:' . $data["fun_id"]);
+                //\app\models\Utilities::putMessageLogFile('fun_id:' . $data["fun_id"]);
                 $resp_componente = $mod_componente->consultarComponente($data["fun_id"]);
                 $message = array("componentes" => $resp_componente);
+                return Utilities::ajaxResponse('OK', 'alert', Yii::t('jslang', 'Success'), 'false', $message);
+            }             
+            if (isset($data["get_estandares"])) {                  
+                $resp_estandares = $mod_estandar->consultarEstandar($data["fun_id"], $data["comp_id"]);
+                $message = array("estandares" => $resp_estandares);
                 return Utilities::ajaxResponse('OK', 'alert', Yii::t('jslang', 'Success'), 'false', $message);
             }             
         }
@@ -52,7 +57,7 @@ class RepositorioController extends \app\components\CController {
                 'arr_modelo' => ArrayHelper::map($arr_modelo, "id", "value"), 
                 'arr_categoria' => ArrayHelper::map($arr_categoria, "id", "name"), //array("1" => Yii::t("formulario", "Docencia"), "2" => Yii::t("formulario", "Condiciones Institucionales")),
                 'arr_componente' => ArrayHelper::map($arr_componente, "id", "name"), 
-                'arr_estandar' => ArrayHelper::map($arr_estandar, "id", "value"),                 
+                'arr_estandar' => ArrayHelper::map($arr_estandar, "id", "name"), 
                 //'model' => null,
                ]);
     }  
