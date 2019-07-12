@@ -54,4 +54,5 @@ return [
     "Evidence Repository" => "Repositorio Evidencia",
     "Function" => "Función",
     "Standar" => "Estándar",
+    "Model" => "Modelo",
 ];
