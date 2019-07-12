@@ -8,6 +8,7 @@ use Yii;
  * This is the model class for table "funcion".
  *
  * @property int $fun_id
+ * @property int $mod_id
  * @property string $fun_codificacion
  * @property string $fun_nombre
  * @property string $fun_descripcion
@@ -19,48 +20,47 @@ use Yii;
  * @property string $fun_estado_logico
  *
  * @property Estandar[] $estandars
+ * @property Modelo $mod
  */
-class Funcion extends \yii\db\ActiveRecord
-{
+class Funcion extends \yii\db\ActiveRecord {
+
     /**
      * {@inheritdoc}
      */
-    public static function tableName()
-    {
+    public static function tableName() {
         return 'funcion';
     }
 
     /**
      * @return \yii\db\Connection the database connection used by this AR class.
      */
-    public static function getDb()
-    {
+    public static function getDb() {
         return Yii::$app->get('db_repositorio');
     }
 
     /**
      * {@inheritdoc}
      */
-    public function rules()
-    {
+    public function rules() {
         return [
-            [['fun_nombre', 'fun_descripcion', 'fun_usuario_ingreso', 'fun_estado', 'fun_estado_logico'], 'required'],
-            [['fun_usuario_ingreso', 'fun_usuario_modifica'], 'integer'],
+            [['mod_id', 'fun_nombre', 'fun_descripcion', 'fun_usuario_ingreso', 'fun_estado', 'fun_estado_logico'], 'required'],
+            [['mod_id', 'fun_usuario_ingreso', 'fun_usuario_modifica'], 'integer'],
             [['fun_fecha_creacion', 'fun_fecha_modificacion'], 'safe'],
             [['fun_codificacion'], 'string', 'max' => 100],
             [['fun_nombre'], 'string', 'max' => 300],
             [['fun_descripcion'], 'string', 'max' => 500],
             [['fun_estado', 'fun_estado_logico'], 'string', 'max' => 1],
+            [['mod_id'], 'exist', 'skipOnError' => true, 'targetClass' => Modelo::className(), 'targetAttribute' => ['mod_id' => 'mod_id']],
         ];
     }
 
     /**
      * {@inheritdoc}
      */
-    public function attributeLabels()
-    {
+    public function attributeLabels() {
         return [
             'fun_id' => 'Fun ID',
+            'mod_id' => 'Mod ID',
             'fun_codificacion' => 'Fun Codificacion',
             'fun_nombre' => 'Fun Nombre',
             'fun_descripcion' => 'Fun Descripcion',
@@ -76,11 +76,17 @@ class Funcion extends \yii\db\ActiveRecord
     /**
      * @return \yii\db\ActiveQuery
      */
-    public function getEstandars()
-    {
+    public function getEstandars() {
         return $this->hasMany(Estandar::className(), ['fun_id' => 'fun_id']);
     }
-    
+
+    /**
+     * @return \yii\db\ActiveQuery
+     */
+    public function getMod() {
+        return $this->hasOne(Modelo::className(), ['mod_id' => 'mod_id']);
+    }
+
     public function consultarFuncion() {
         $con = \Yii::$app->db_repositorio;
         $estado = 1;
@@ -94,8 +100,9 @@ class Funcion extends \yii\db\ActiveRecord
                     ORDER BY fun_nombre ASC
                 ";
         $comando = $con->createCommand($sql);
-        $comando->bindParam(":estado", $estado, \PDO::PARAM_STR);        
+        $comando->bindParam(":estado", $estado, \PDO::PARAM_STR);
         $resultData = $comando->queryAll();
         return $resultData;
     }
+
 }

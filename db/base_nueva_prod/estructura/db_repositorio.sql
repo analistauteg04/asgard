@@ -10,10 +10,29 @@ GRANT ALL PRIVILEGES ON `db_repositorio`.* TO 'uteg'@'localhost' IDENTIFIED BY '
 
 -- --------------------------------------------------------
 -- 
+-- Estructura de tabla para la tabla `modelo`
+-- 
+create table if not exists `modelo` (
+  `mod_id` bigint(20) not null auto_increment primary key,  
+  `mod_codificacion` varchar(100) null,
+  `mod_nombre` varchar(300) not null,
+  `mod_descripcion` varchar(500) not null,  
+  `mod_usuario_ingreso` bigint(20) not null,
+  `mod_usuario_modifica` bigint(20)  null,  
+  `mod_estado` varchar(1) not null,
+  `mod_fecha_creacion` timestamp not null default current_timestamp,
+  `mod_fecha_modificacion` timestamp null default null,
+  `mod_estado_logico` varchar(1) not null
+);
+
+
+-- --------------------------------------------------------
+-- 
 -- Estructura de tabla para la tabla `funcion`
 -- 
 create table if not exists `funcion` (
-  `fun_id` bigint(20) not null auto_increment primary key,  
+  `fun_id` bigint(20) not null auto_increment primary key,
+  `mod_id` bigint(20) not null,  
   `fun_codificacion` varchar(100) null,
   `fun_nombre` varchar(300) not null,
   `fun_descripcion` varchar(500) not null,  
@@ -22,7 +41,10 @@ create table if not exists `funcion` (
   `fun_estado` varchar(1) not null,
   `fun_fecha_creacion` timestamp not null default current_timestamp,
   `fun_fecha_modificacion` timestamp null default null,
-  `fun_estado_logico` varchar(1) not null
+  `fun_estado_logico` varchar(1) not null,
+
+  foreign key (mod_id) references `modelo`(mod_id)
+  
 );
 
 -- --------------------------------------------------------

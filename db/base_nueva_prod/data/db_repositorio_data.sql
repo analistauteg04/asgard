@@ -4,18 +4,24 @@
 USE `db_repositorio`;
 -- --------------------------------------------------------
 --
--- Volcado de datos para la tabla `funcion	`
+-- Volcado de datos para la tabla `modelo`
 --
-INSERT INTO `funcion` (`fun_id`, `fun_codificacion`,`fun_nombre`,`fun_descripcion`,`fun_usuario_ingreso`,`fun_usuario_modifica`,`fun_estado`,`fun_fecha_creacion`,`fun_fecha_modificacion`,`fun_estado_logico`) VALUES
-(1,'doc-oooo','Docencia','Docencia',1,null,'1','2019-07-08 12:30:00',null,'1'),
-(2,'inv-oooo','Investigación','Investigación',1,null,'1','2019-07-08 12:30:00',null,'1'),
-(3,'vin-oooo','Vinculación con la Sociedad','Vinculación con la Sociedad',1,null,'1','2019-07-08 12:30:00',null,'1'),
-(4,'con-oooo','Condiciones Institucionales','Condiciones Institucionales',1,null,'1','2019-07-08 12:30:00',null,'1'),
-(5,'ele-oooo','Elementos Proyectivos','Elementos Proyectivos',1,null,'1','2019-07-08 12:30:00',null,'1');
+INSERT INTO `modelo` (`mod_id`,`mod_codificacion`,`mod_nombre`,`mod_descripcion`, `mod_usuario_ingreso`,`mod_usuario_modifica`, `mod_estado`,`mod_fecha_creacion`,`mod_fecha_modificacion`,`mod_estado_logico`) VALUES
+(1,null,'General','General',1,null,'1','2019-07-12 12:00:00',null,'1');
+-- --------------------------------------------------------
+--
+-- Volcado de datos para la tabla `funcion`
+--
+INSERT INTO `funcion` (`fun_id`,`mod_id`,`fun_codificacion`,`fun_nombre`,`fun_descripcion`,`fun_usuario_ingreso`,`fun_usuario_modifica`,`fun_estado`,`fun_fecha_creacion`,`fun_fecha_modificacion`,`fun_estado_logico`) VALUES
+(1,1,'doc-oooo','Docencia','Docencia',1,null,'1','2019-07-08 12:30:00',null,'1'),
+(2,1,'inv-oooo','Investigación','Investigación',1,null,'1','2019-07-08 12:30:00',null,'1'),
+(3,1,'vin-oooo','Vinculación con la Sociedad','Vinculación con la Sociedad',1,null,'1','2019-07-08 12:30:00',null,'1'),
+(4,1,'con-oooo','Condiciones Institucionales','Condiciones Institucionales',1,null,'1','2019-07-08 12:30:00',null,'1'),
+(5,1,'ele-oooo','Elementos Proyectivos','Elementos Proyectivos',1,null,'1','2019-07-08 12:30:00',null,'1');
 
 -- --------------------------------------------------------
 --
--- Volcado de datos para la tabla `componente	`
+-- Volcado de datos para la tabla `componente`
 --
 INSERT INTO `componente` (`com_id`,`com_codificacion`, `com_nombre`,`com_descripcion`,`com_usuario_ingreso`,`com_usuario_modifica`,`com_estado`,`com_fecha_creacion`,`com_fecha_modificacion`,`com_estado_logico`) VALUES
 (1,'pro-oooo','Profesorado','Profesorado',1,null,'1','2019-07-08 12:30:00',null,'1'),
@@ -36,7 +42,7 @@ INSERT INTO `componente` (`com_id`,`com_codificacion`, `com_nombre`,`com_descrip
 
 -- --------------------------------------------------------
 --
--- Volcado de datos para la tabla `estandar	`
+-- Volcado de datos para la tabla `estandar`
 --
 INSERT INTO `estandar` (`est_id`,`com_id`, `fun_id`,`est_codificacion`,`est_nombre`,`est_descripcion`,`est_usuario_ingreso`,`est_usuario_modifica`, `est_estado`,`est_fecha_creacion`,`est_fecha_modificacion`,`est_estado_logico`) VALUES
 (1,1,1,null,'Estándar 1','Estándar 1',1,null,1,'2019-07-08 12:30:00',null,'1'),
