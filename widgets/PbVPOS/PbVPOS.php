@@ -64,6 +64,9 @@ class PbVPOS extends Widget {
     {
         parent::init();
         $this->selectVPOST();
+        $_SESSION['JSLANG']['APPROVED'] = PbVPOS::t("vpos", "APPROVED");
+        $_SESSION['JSLANG']['REJECTED'] = PbVPOS::t("vpos", "REJECTED");
+        $_SESSION['JSLANG']['PENDING'] = PbVPOS::t("vpos", "PENDING");
         if($this->type_vpos == 1)
             $this->generateAuthetication();
         $this->registerClientScript();

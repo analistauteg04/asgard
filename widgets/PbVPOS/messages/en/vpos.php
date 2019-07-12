@@ -10,8 +10,12 @@
   Author     : Diana Lopez
  */
 return [
+    "APPROVED" => "APPROVED",
+    "REJECTED" => "REJECTED",
+    "PENDING" => "PENDING",
     "Buy" => "Buy",
     "Error" => "Error",
+    "DNI" => "DNI",
     "Notification" => "Notification",
     "First Name" => "First Name",
     "Last Name" => "Last Name",

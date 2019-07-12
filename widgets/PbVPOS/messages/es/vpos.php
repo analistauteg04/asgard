@@ -10,6 +10,9 @@
   Author     : Diana Lopez
  */
 return [
+    "APPROVED" => "APROVADO",
+    "REJECTED" => "RECHAZADO",
+    "PENDING" => "PENDIENTE",
     "Buy" => "Comprar",
     "Error" => "Error",
     "DNI" => "Cedula",
