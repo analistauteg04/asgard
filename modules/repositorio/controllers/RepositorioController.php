@@ -14,6 +14,7 @@ use \app\modules\repositorio\models\Componente;
 use \app\modules\repositorio\models\Modelo;
 use \app\modules\repositorio\models\Estandar;
 
+
 class RepositorioController extends \app\components\CController {
     public function actionIndex() {
         $mod_repositorio = new DocumentoRepositorio();      
@@ -54,8 +55,18 @@ class RepositorioController extends \app\components\CController {
                 //'model' => null,
                ]);
     }  
-    public function actionCargar() {    
+    public function actionCargar() {
+        $mod_componente = new Componente();        
+        $mod_estandard = new Estandard();
+        $arr_componente = $mod_componente->consultarComponente(1);
+        $arr_funcion = $mod_componente->consultarComponente(1);
+        $arr_modelo = $mod_componente->consultarComponente(1);
+        $arr_estandar = $mod_estandar->consultarComponente(1);
         return $this->render('cargar', [              
-               ]);
+                    'arr_componentes' => ArrayHelper::map($arr_componente, "id", "value"), 
+                    'arr_funciones' => ArrayHelper::map($arr_funcion, "id", "value"), 
+                    'arr_modelos' => ArrayHelper::map($arr_modelo, "id", "value"), 
+                    'arr_estandares' => ArrayHelper::map($arr_estandar, "id", "value"), 
+        ]);
     }  
 }
