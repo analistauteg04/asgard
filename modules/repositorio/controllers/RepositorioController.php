@@ -61,6 +61,14 @@ class RepositorioController extends \app\components\CController {
         $mod_modelo = new Modelo();
         $mod_estandar = new Estandar();
         $mod_funcion = new Funcion();
+        
+        if (Yii::$app->request->isAjax) {
+            $data = Yii::$app->request->post();
+            if (isset($data["get_funciones"])) {                
+                
+            }
+        }
+        
         $arr_componente = $mod_componente->consultarComponente(1);
         $arr_funcion = $mod_funcion->consultarFuncion(2);
         $arr_modelo = $mod_modelo->consultarModelo();
