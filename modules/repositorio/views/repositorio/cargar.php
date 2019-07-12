@@ -20,7 +20,7 @@ use app\modules\repositorio\Module as repositorio;
 </div>
 <form class="form-horizontal">
     <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">        
-        <div class="col-md-6 col-sm-6 col-xs-6 col-lg-6">
+        <div class="col-md-6 col-sm-6 col-xs-6 col-lg-6"> 
             <label for="cmb_modelo" class="col-lg-5 col-md-5 col-sm-5 col-xs-5 control-label"><?= repositorio::t("repositorio", "Model") ?> <span class="text-danger">*</span></label>
             <div class="col-lg-7 col-md-7 col-sm-7 col-xs-7">
                 <?= Html::dropDownList("cmb_modelo", 1, $arr_modelos, ["class" => "form-control", "id" => "cmb_modelo"]) ?>
