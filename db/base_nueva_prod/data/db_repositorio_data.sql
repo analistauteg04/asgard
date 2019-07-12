@@ -7,17 +7,18 @@ USE `db_repositorio`;
 -- Volcado de datos para la tabla `modelo`
 --
 INSERT INTO `modelo` (`mod_id`,`mod_codificacion`,`mod_nombre`,`mod_descripcion`, `mod_usuario_ingreso`,`mod_usuario_modifica`, `mod_estado`,`mod_fecha_creacion`,`mod_fecha_modificacion`,`mod_estado_logico`) VALUES
-(1,null,'General','General',1,null,'1','2019-07-12 12:00:00',null,'1');
+(1,null,'General','General',1,null,'1','2019-07-12 12:00:00',null,'1'),
+(2,null,'Acreditacion','Acreditacion',1,null,'1','2019-07-12 12:00:00',null,'1');
 -- --------------------------------------------------------
 --
 -- Volcado de datos para la tabla `funcion`
 --
 INSERT INTO `funcion` (`fun_id`,`mod_id`,`fun_codificacion`,`fun_nombre`,`fun_descripcion`,`fun_usuario_ingreso`,`fun_usuario_modifica`,`fun_estado`,`fun_fecha_creacion`,`fun_fecha_modificacion`,`fun_estado_logico`) VALUES
-(1,1,'doc-oooo','Docencia','Docencia',1,null,'1','2019-07-08 12:30:00',null,'1'),
-(2,1,'inv-oooo','Investigación','Investigación',1,null,'1','2019-07-08 12:30:00',null,'1'),
-(3,1,'vin-oooo','Vinculación con la Sociedad','Vinculación con la Sociedad',1,null,'1','2019-07-08 12:30:00',null,'1'),
-(4,1,'con-oooo','Condiciones Institucionales','Condiciones Institucionales',1,null,'1','2019-07-08 12:30:00',null,'1'),
-(5,1,'ele-oooo','Elementos Proyectivos','Elementos Proyectivos',1,null,'1','2019-07-08 12:30:00',null,'1');
+(1,2,'doc-oooo','Docencia','Docencia',1,null,'1','2019-07-08 12:30:00',null,'1'),
+(2,2,'inv-oooo','Investigacion','Investigacion',1,null,'1','2019-07-08 12:30:00',null,'1'),
+(3,2,'vin-oooo','Vinculacion con la Sociedad','Vinculacion con la Sociedad',1,null,'1','2019-07-08 12:30:00',null,'1'),
+(4,2,'con-oooo','Condiciones Institucionales','Condiciones Institucionales',1,null,'1','2019-07-08 12:30:00',null,'1'),
+(5,2,'ele-oooo','Elementos Proyectivos','Elementos Proyectivos',1,null,'1','2019-07-08 12:30:00',null,'1');
 
 -- --------------------------------------------------------
 --
@@ -25,20 +26,20 @@ INSERT INTO `funcion` (`fun_id`,`mod_id`,`fun_codificacion`,`fun_nombre`,`fun_de
 --
 INSERT INTO `componente` (`com_id`,`com_codificacion`, `com_nombre`,`com_descripcion`,`com_usuario_ingreso`,`com_usuario_modifica`,`com_estado`,`com_fecha_creacion`,`com_fecha_modificacion`,`com_estado_logico`) VALUES
 (1,'pro-oooo','Profesorado','Profesorado',1,null,'1','2019-07-08 12:30:00',null,'1'),
-(2,'est-oooo','Estudiantado','Dimensión',1,null,'1','2019-07-08 12:30:00',null,'1'),
-(3,'plan-oooo','Planificación Estratégica y Operativa','Planificación Estratégica y Operativa',1,null,'1','2019-07-08 12:30:00',null,'1'),
+(2,'est-oooo','Estudiantado','Estudiantado',1,null,'1','2019-07-08 12:30:00',null,'1'),
+(3,'plan-oooo','Planificacion Estrategica y Operativa','Planificacion Estrategica y Operativa',1,null,'1','2019-07-08 12:30:00',null,'1'),
 (4,'inf-oooo','Infraestructura y Equipamiento','Infraestructura y Equipamiento',1,null,'1','2019-07-08 12:30:00',null,'1'),
 (5,'bli-oooo','Bibliotecas','Bibliotecas',1,null,'1','2019-07-08 12:30:00',null,'1'),
-(6,'ges-oooo','Gestión Interna y Calidad','Gestión Interna y Calidad',1,null,'1','2019-07-08 12:30:00',null,'1'),
+(6,'ges-oooo','Gestion Interna y Calidad','Gestion Interna y Calidad',1,null,'1','2019-07-08 12:30:00',null,'1'),
 (7,'bie-oooo','Bienestar Estudiantil y Universitario','Bienestar Estudiantil y Universitario',1,null,'1','2019-07-08 12:30:00',null,'1'),
 (8,'igu-oooo','Igualdad de Oportunidades','Igualdad de Oportunidades',1,null,'1','2019-07-08 12:30:00',null,'1'),
-(9,'art-oooo','Articulación y sinergias entre funciones sustantivas y entre disciplinas','Articulación y sinergias entre funciones sustantivas y entre disciplinas',1,null,'1','2019-07-08 12:30:00',null,'1'),
+(9,'art-oooo','Articulacion y sinergias entre funciones sustantivas y entre disciplinas','Articulacion y sinergias entre funciones sustantivas y entre disciplinas',1,null,'1','2019-07-08 12:30:00',null,'1'),
 (10,'uso-oooo','Uso social del conocimiento','Uso social del conocimiento',1,null,'1','2019-07-08 12:30:00',null,'1'),
-(11,'inn-oooo','Innovación','Innovación',1,null,'1','2019-07-08 12:30:00',null,'1'),
-(12,'int-oooo','Internacionalización','Internacionalización',1,null,'1','2019-07-08 12:30:00',null,'1'),
+(11,'inn-oooo','Innovacion','Innovacion',1,null,'1','2019-07-08 12:30:00',null,'1'),
+(12,'int-oooo','Internacionalizacion','Internacionalizacion',1,null,'1','2019-07-08 12:30:00',null,'1'),
 (13,'bie-oooo','Bienestar universitario','Bienestar universitario',1,null,'1','2019-07-08 12:30:00',null,'1'),
-(14,'inc-oooo','Inclusión y equidad','Inclusión y equidad',1,null,'1','2019-07-08 12:30:00',null,'1'),
-(15,'ine-oooo','Interculturalidad, integración de la diversidad y diálogo de saberes','Interculturalidad, integración de la diversidad y diálogo de saberes',1,null,'1','2019-07-08 12:30:00',null,'1');
+(14,'inc-oooo','Inclusion y equidad','Inclusion y equidad',1,null,'1','2019-07-08 12:30:00',null,'1'),
+(15,'ine-oooo','Interculturalidad, integracion de la diversidad y dialogo de saberes','Interculturalidad, integracion de la diversidad y dialogo de saberes',1,null,'1','2019-07-08 12:30:00',null,'1');
 
 -- --------------------------------------------------------
 --
