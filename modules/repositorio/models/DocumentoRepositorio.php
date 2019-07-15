@@ -98,13 +98,19 @@ class DocumentoRepositorio extends \yii\db\ActiveRecord
         if (isset($arrFiltro) && count($arrFiltro) > 0) {
             if ($arrFiltro['est_id'] != "") {
                 $str_search = "and est_id = :est_id ";
+            }
+            if ($arrFiltro['search'] != "") {
+                $str_search = "and dre_imagen like :archivo ";                
+            }
+            if ($arrFiltro['f_ini'] != "" && $arrFiltro['f_fin'] != "") {
+                $str_search .= "and dre_fecha_archivo >= :fec_ini and ";
+                $str_search .= "dre_fecha_archivo <= :fec_fin ";
             }            
         }
         $sql = "SELECT 	dre_imagen, case when dre_tipo='1' then 'Público' else 'Privado' end tipo,  
                         dre_descripcion, dre_fecha_archivo, dre_fecha_creacion, dre_ruta
                 FROM " . $con->dbname . ".documento_repositorio dr
-                WHERE 
-                      dre_estado = :estado
+                WHERE dre_estado = :estado
                       and dre_estado_logico = :estado ";              
         if (!empty($str_search)) {
             $sql .= " $str_search  
@@ -116,9 +122,19 @@ class DocumentoRepositorio extends \yii\db\ActiveRecord
         $comando->bindParam(":estado", $estado, \PDO::PARAM_STR);
         if (isset($arrFiltro) && count($arrFiltro) > 0) {
             $est_id = $arrFiltro["est_id"];
+            $archivo = "%" . $arrFiltro["search"] . "%";   
+            $fecha_ini = $arrFiltro["f_ini"];
+            $fecha_fin = $arrFiltro["f_fin"];
             if ($arrFiltro['est_id'] != "") {
                 $comando->bindParam(":est_id", $est_id, \PDO::PARAM_INT);
-            }                    
+            }
+            if ($arrFiltro['search'] != "") {
+                $comando->bindParam(":archivo", $archivo, \PDO::PARAM_STR);
+            } 
+            if ($arrFiltro['f_ini'] != "" && $arrFiltro['f_fin'] != "") {
+                $comando->bindParam(":fec_ini", $fecha_ini, \PDO::PARAM_STR);
+                $comando->bindParam(":fec_fin", $fecha_fin, \PDO::PARAM_STR);
+            }
         }
         $resultData = $comando->queryAll();
         $dataProvider = new ArrayDataProvider([

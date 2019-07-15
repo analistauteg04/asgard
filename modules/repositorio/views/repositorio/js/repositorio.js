@@ -222,7 +222,7 @@ function actualizarGrid() {
     //Buscar almenos una clase con el nombre para ejecutar
     if (!$(".blockUI").length) {
         showLoadingPopup();
-        $('#Tbg_Listar').PbGridView('applyFilterData', {'f_ini': f_ini, 'f_fin': f_fin, 'search': search, 'mod_id': modelo, 'cat_id': categoria, 'comp_id': componente, 'est_id': estandar,});
+        $('#Tbg_Listar').PbGridView('applyFilterData', {'f_ini': f_ini, 'f_fin': f_fin, 'search': search, 'mod_id': modelo, 'cat_id': categoria, 'comp_id': componente, 'est_id': estandar});
         setTimeout(hideLoadingPopup, 2000);
     }
 }
