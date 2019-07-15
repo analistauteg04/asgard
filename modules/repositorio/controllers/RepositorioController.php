@@ -22,9 +22,14 @@ class RepositorioController extends \app\components\CController {
         $mod_modelo = new Modelo();
         $mod_estandar = new Estandar();
         $data = Yii::$app->request->get();
-        
         if ($data['PBgetFilter']) {
-            $arrSearch["lista"] = $data['lista'];
+            $arrSearch["est_id"] = $data['est_id'];
+            $arrSearch["f_ini"] = $data['f_ini'];
+            $arrSearch["f_fin"] = $data['f_fin'];
+            $arrSearch["search"] = $data['search'];
+            $arrSearch["mod_id"] = $data['mod_id'];
+            $arrSearch["cat_id"] = $data['cat_id'];
+            $arrSearch["comp_id"] = $data['comp_id'];            
             $resp_listado = $mod_repositorio->consultarDocumentos($arrSearch);
         } else {
             $resp_listado = $mod_repositorio->consultarDocumentos();
@@ -52,7 +57,7 @@ class RepositorioController extends \app\components\CController {
         $arr_categoria = $mod_categoria->consultarFuncion(2);
         $arr_componente = $mod_componente->consultarComponente(1);
         $arr_estandar = $mod_estandar->consultarEstandar(1,1);
-        
+        //ArrayHelper::map(array_merge([["id" => "0", "name" => "Todas"]], $estado_contacto), "id", "name"),
         return $this->render('index', [
                 'arr_modelo' => ArrayHelper::map($arr_modelo, "id", "value"), 
                 'arr_categoria' => ArrayHelper::map($arr_categoria, "id", "name"), //array("1" => Yii::t("formulario", "Docencia"), "2" => Yii::t("formulario", "Condiciones Institucionales")),
