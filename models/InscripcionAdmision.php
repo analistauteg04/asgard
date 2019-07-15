@@ -618,7 +618,9 @@ class InscripcionAdmision extends \yii\db\ActiveRecord {
                 );
                 //Modifificaion para Mover Imagenes de temp a Persona
                 if ($subidaDocumentos == 1) {
-                    self::movePersonFiles($twinIds, $id_persona);
+                    self::movePersonFiles($twinIds, $id_persona);                    
+                }
+                if (($dataReg["forma_pago"] == 3) or ( $dataReg["forma_pago"] == 4)) { 
                     self::movePersonFilesPago($twinIds, $id_persona);
                 }
                 //return Utilities::ajaxResponse('OK', 'alert', Yii::t("jslang", "Sucess"), false, $message);

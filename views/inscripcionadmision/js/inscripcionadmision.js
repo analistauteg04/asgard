@@ -147,15 +147,14 @@ $(document).ready(function () {
         if (!validateForm()) {
             requestHttpAjax(link, arrParams, function (response) {
                 var message = response.message;
-                //console.log(response);
+                console.log('despues de grabar');
                 if (response.status == "OK") {
-                    showLoadingPopup();
+                    //showLoadingPopup();
                     setTimeout(function () {
                         var uaca_id = parseInt(response.data.data.uaca_id);
                         var mod_id = parseInt(response.data.data.mod_id);
                         var ming = parseInt(response.data.data.twin_metodo_ingreso);
-                        var sins_id = parseInt(response.data.dataext);
-                        console.log('solicitud:' + sins_id);
+                        var sins_id = parseInt(response.data.dataext);                                               
                         if ($('input[name=rdo_forma_pago_dinner]:checked').val() == 1) {
                             PagoDinners(sins_id);
                         } else {
