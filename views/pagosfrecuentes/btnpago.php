@@ -1,7 +1,6 @@
 <?php
 use yii\helpers\Url;
 use app\widgets\PbVPOS\PbVPOS;
-\app\models\Utilities::putMessageLogFile('op en btnpago:'.$ordenPago);
 echo PbVPOS::widget([
     "id" => "VPOS",
     "referenceID" => $referenceID,

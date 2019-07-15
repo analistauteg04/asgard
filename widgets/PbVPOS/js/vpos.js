@@ -18,8 +18,12 @@ function playOnPay(processUrl) {
 });
  */
 function returnFn() {
-    //parent.reloadPage();
-    //parent.closeIframePopup();
+    //parent.reloadFn();
+}
+
+function reloadFn() {
+    parent.reloadPage();
+    parent.closeIframePopup();
 }
 
 function showResumen(lblAccept, label) {
@@ -45,6 +49,12 @@ function setResponseData(data, execute) {
         arrParams.resp = resp;
         arrParams.requestID = (data["requestId"]) ? data["requestId"] : data["requestID"];
         arrParams.referenceID = (data["reference"]) ? data["reference"] : data["payment"]["0"]["reference"];
+        if (link.indexOf('?') > -1 && link.indexOf('referenceID') == -1) {
+            link += '&referenceID=' + arrParams.referenceID;
+        } else if (link.indexOf('referenceID') == -1) {
+            link += '?referenceID=' + arrParams.referenceID;
+        }
+
         requestHttpAjax(link, arrParams, function(response) {
             var wtmessage = data["status"]["message"];
             var label = (data["status"]["status"] == "APPROVED") ? objLang.Success : objLang.Error;
@@ -58,8 +68,8 @@ function setResponseData(data, execute) {
                 lblAccept = objLang.Accept;
             }
             var label_message = (data["status"]["status"] == "APPROVED") ?
-                objLang.APPROVED : ((data["status"]["status"] == "REJECTED") ? objLang.REJECTED : objLang.PENDING);
-            showResumen(data["status"]["status"], label_message);
+                VPOS_VAR.APPROVED : ((data["status"]["status"] == "REJECTED") ? VPOS_VAR.REJECTED : VPOS_VAR.PENDING);
+            showResumen(label_message, wtmessage);
             resetSession(wtmessage, label, status, callback, lblAccept);
         }, true);
     }

@@ -14,7 +14,7 @@ use yii\helpers\Html;
     <?= PbVPOS::t("vpos", "Your payment has already been executed. Click on the button to update the page.") ?>
 </div>
 <div class="input-group margin btnPago">
-    <button type="button" class="btn btn-block btn-success" onclick="returnFn()"><?= PbVPOS::t("vpos", "Reload") ?></button>
+    <button type="button" class="btn btn-block btn-success" onclick="reloadFn()"><?= PbVPOS::t("vpos", "Reload") ?></button>
 </div>
 <?= Html::hiddenInput('vpos_execute_data', $data, ["id" => "vpos_execute_data"]) ?>
 <?= Html::hiddenInput('vpos_execute', "1", ["id" => "vpos_execute"]) ?>
@@ -25,7 +25,7 @@ use yii\helpers\Html;
     <?= PbVPOS::t("vpos", "Your payment is pending payment. Please wait a few minutes to try to update your payment.") ?>
 </div>
 <div class="input-group margin btnPago">
-    <button type="button" class="btn btn-block btn-success" onclick="returnFn()"><?= PbVPOS::t("vpos", "Reload") ?></button>
+    <button type="button" class="btn btn-block btn-success" onclick="reloadFn()"><?= PbVPOS::t("vpos", "Reload") ?></button>
 </div>
 <?= Html::hiddenInput('vpos_execute_data', $data, ["id" => "vpos_execute_data"]) ?>
 <?= Html::hiddenInput('vpos_execute', "2", ["id" => "vpos_execute"]) ?>

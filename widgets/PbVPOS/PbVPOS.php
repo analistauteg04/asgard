@@ -16,7 +16,6 @@ use app\models\Http;
 use yii\helpers\Url;
 use app\widgets\PbVPOS\assets\VPOSAsset;
 use app\models\Utilities;
-use app\models\Utilities as AppUtilities;
 use PhpOffice\PhpSpreadsheet\Chart\Exception;
 
 class PbVPOS extends Widget {
@@ -64,9 +63,6 @@ class PbVPOS extends Widget {
     {
         parent::init();
         $this->selectVPOST();
-        $_SESSION['JSLANG']['APPROVED'] = PbVPOS::t("vpos", "APPROVED");
-        $_SESSION['JSLANG']['REJECTED'] = PbVPOS::t("vpos", "REJECTED");
-        $_SESSION['JSLANG']['PENDING'] = PbVPOS::t("vpos", "PENDING");
         if($this->type_vpos == 1)
             $this->generateAuthetication();
         $this->registerClientScript();
@@ -84,24 +80,7 @@ class PbVPOS extends Widget {
                 $this->returnUrl =  $a. "?referenceID=" . $this->referenceID;
             }
             $response = null;
-            $data = [
-                "titleBox" => $this->titleBox,
-                "nombre_cliente" => $this->nombre_cliente,
-                "apellido_cliente" => $this->apellido_cliente,
-                "cedula_cliente" => $this->cedula_cliente,                
-                "email_cliente" => $this->email_cliente,
-                "total" => $this->total,
-                "referenceID" => $this->referenceID,
-            ];
-            if(!(Utilities::validateTypeField($this->email_cliente, "email")) || 
-            !(Utilities::validateTypeField($this->nombre_cliente, "alfa")) || 
-            !(Utilities::validateTypeField($this->cedula_cliente, "number")) || 
-            !(Utilities::validateTypeField($this->apellido_cliente, "alfa")) ||
-            !(Utilities::validateTypeField($this->total, "dinero")) || 
-            $this->total <= 0){
-                echo $this->render('validaError');
-                return;
-            }            
+                 
             if($this->isCheckout === false){
                 // hay una orden de pago previa
                 $resp = $this->existsOrdenResponse();
@@ -135,7 +114,25 @@ class PbVPOS extends Widget {
                 }
                 return $response;
             }
-            
+            $data = [
+                "titleBox" => $this->titleBox,
+                "nombre_cliente" => $this->nombre_cliente,
+                "apellido_cliente" => $this->apellido_cliente,
+                "cedula_cliente" => $this->cedula_cliente,                
+                "email_cliente" => $this->email_cliente,
+                "total" => $this->total,
+                "referenceID" => $this->referenceID,
+            ];
+            if(!(Utilities::validateTypeField($this->email_cliente, "email")) || 
+            !(Utilities::validateTypeField($this->nombre_cliente, "alfa")) || 
+            !(Utilities::validateTypeField($this->cedula_cliente, "number")) || 
+            !(Utilities::validateTypeField($this->apellido_cliente, "alfa")) ||
+            !(Utilities::validateTypeField($this->total, "dinero")) || 
+            $this->total <= 0){
+                echo $this->render('validaError');
+                return;
+            }       
+
             if($response["status"]["status"] != "OK"){
                 echo $this->render('error');
             }else{

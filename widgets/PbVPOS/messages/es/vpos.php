@@ -10,7 +10,7 @@
   Author     : Diana Lopez
  */
 return [
-    "APPROVED" => "APROVADO",
+    "APPROVED" => "APROBADO",
     "REJECTED" => "RECHAZADO",
     "PENDING" => "PENDIENTE",
     "Buy" => "Comprar",
