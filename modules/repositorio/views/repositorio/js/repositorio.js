@@ -19,14 +19,14 @@ $(document).ready(function () {
         requestHttpAjax(link, arrParams, function (response) {
             if (response.status == "OK") {
                 data = response.message;
-                setComboData(data.funciones, "cmb_categoria");
+                setComboDataselect(data.funciones, "cmb_categoria", "Todos");
                 var arrParams = new Object();                   
                 arrParams.fun_id = $('#cmb_categoria').val();
                 arrParams.get_componentes = true;
                 requestHttpAjax(link, arrParams, function (response) {
                     if (response.status == "OK") {
                         data = response.message;                        
-                        setComboData(data.componentes, "cmb_componente");
+                        setComboDataselect(data.componentes, "cmb_componente", "Todos");
                         var arrParams = new Object();                   
                         arrParams.comp_id = $('#cmb_componente').val();
                         arrParams.fun_id = $('#cmb_categoria').val();
@@ -34,7 +34,7 @@ $(document).ready(function () {
                         requestHttpAjax(link, arrParams, function (response) {
                             if (response.status == "OK") {
                                 data = response.message;                        
-                                setComboData(data.estandares, "cmb_estandar");
+                                setComboDataselect(data.estandares, "cmb_estandar", "Todos");
                             }
                         }, true);                   
                     }
@@ -83,7 +83,7 @@ $(document).ready(function () {
         requestHttpAjax(link, arrParams, function (response) {
             if (response.status == "OK") {
                 data = response.message;                
-                setComboData(data.componentes, "cmb_componente");
+                setComboDataselect(data.componentes, "cmb_componente", "Todos");
                 var arrParams = new Object();                   
                 arrParams.comp_id = $('#cmb_componente').val();
                 arrParams.fun_id = $('#cmb_categoria').val();
@@ -91,7 +91,7 @@ $(document).ready(function () {
                 requestHttpAjax(link, arrParams, function (response) {
                     if (response.status == "OK") {
                         data = response.message;                        
-                        setComboData(data.estandares, "cmb_estandar");
+                        setComboDataselect(data.estandares, "cmb_estandar", "Todos");
                     }
                 }, true);      
             }
@@ -130,7 +130,7 @@ $(document).ready(function () {
         requestHttpAjax(link, arrParams, function (response) {
             if (response.status == "OK") {
                 data = response.message;                
-                setComboData(data.estandares, "cmb_estandar");
+                setComboDataselect(data.estandares, "cmb_estandar", "Todos");
             }
         }, true);     
     });    
@@ -225,4 +225,16 @@ function actualizarGrid() {
         $('#Tbg_Listar').PbGridView('applyFilterData', {'f_ini': f_ini, 'f_fin': f_fin, 'search': search, 'mod_id': modelo, 'cat_id': categoria, 'comp_id': componente, 'est_id': estandar});
         setTimeout(hideLoadingPopup, 2000);
     }
+}
+
+function setComboDataselect(arr_data, element_id, texto) {
+    var option_arr = "";
+    option_arr += "<option value= '0'>" + texto + "</option>";
+    for (var i = 0; i < arr_data.length; i++) {
+        var id = arr_data[i].id;
+        var value = arr_data[i].name;
+
+        option_arr += "<option value='" + id + "'>" + value + "</option>";
+    }
+    $("#" + element_id).html(option_arr);
 }

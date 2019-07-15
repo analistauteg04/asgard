@@ -57,14 +57,12 @@ class RepositorioController extends \app\components\CController {
         $arr_modelo = $mod_modelo->consultarModelo();
         $arr_categoria = $mod_categoria->consultarFuncion(2);
         $arr_componente = $mod_componente->consultarComponente(1);
-        $arr_estandar = $mod_estandar->consultarEstandar(1, 1);
-        $arr_estandar = $mod_estandar->consultarEstandar(1,1);
-        //ArrayHelper::map(array_merge([["id" => "0", "name" => "Todas"]], $estado_contacto), "id", "name"),
+        $arr_estandar = $mod_estandar->consultarEstandar(1, 1);                
         return $this->render('index', [
-                    'arr_modelo' => ArrayHelper::map($arr_modelo, "id", "value"),
-                    'arr_categoria' => ArrayHelper::map($arr_categoria, "id", "name"), //array("1" => Yii::t("formulario", "Docencia"), "2" => Yii::t("formulario", "Condiciones Institucionales")),
-                    'arr_componente' => ArrayHelper::map($arr_componente, "id", "name"),
-                    'arr_estandar' => ArrayHelper::map($arr_estandar, "id", "name"),
+                    'arr_modelo' => ArrayHelper::map(array_merge([["id"=> "0", "value" => "Todos"]],$arr_modelo), "id", "value"),
+                    'arr_categoria' => ArrayHelper::map(array_merge([["id"=> "0", "name" => "Todos"]],$arr_categoria), "id", "name"), //array("1" => Yii::t("formulario", "Docencia"), "2" => Yii::t("formulario", "Condiciones Institucionales")),
+                    'arr_componente' => ArrayHelper::map(array_merge([["id"=> "0", "name" => "Todos"]],$arr_componente), "id", "name"),
+                    'arr_estandar' => ArrayHelper::map(array_merge([["id"=> "0", "name" => "Todos"]],$arr_estandar), "id", "name"),
                     'model' => $resp_listado,
         ]);
     }

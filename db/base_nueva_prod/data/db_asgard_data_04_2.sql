@@ -13,8 +13,8 @@ INSERT INTO `modulo` (`mod_id`, `apl_id`, `mod_nombre`, `mod_tipo`, `mod_dir_ima
 (4, 1, 'Académico', 'Academico', 'glyphicon glyphicon-cog', 'academico/admitidos/index', 4, 'menu', '1', '1', '2018-09-18 05:06:58', NULL, '1'),
 (5, 1, 'Reportes', 'Academico', 'glyphicon glyphicon-cog', 'academico/admitidos/index', 5, 'menu', '1', '1', '2018-09-18 05:06:58', NULL, '1'),
 (6, 1, 'Marketing', 'Marketing', 'glyphicon glyphicon-envelope', 'academico/admitidos/index', 6, 'menu', '1', '1', '2018-09-18 05:06:58', NULL, '1'),
-(7, 1, 'Facturación Electrónica', 'Facturación Electrónica', 'glyphicon glyphicon-cog', 'fe_edoc/nubefactura/index', 7, 'fe', '1', '1', '2019-02-18 14:54:42', NULL, '1');
-
+(7, 1, 'Facturación Electrónica', 'Facturación Electrónica', 'glyphicon glyphicon-cog', 'fe_edoc/nubefactura/index', 7, 'fe', '1', '1', '2019-02-18 14:54:42', NULL, '1'),
+(8, 1, 'Repositorio', 'Repositorio', 'glyphicon glyphicon-cog', 'repositorio/repositorio/index', 7, 'menu', '1', '1', '2019-07-15 20:02:38', NULL, '1');
 
 --
 -- Volcado de datos para la tabla `objeto_modulo`
@@ -221,7 +221,12 @@ INSERT INTO `objeto_modulo` (`omod_id`, `mod_id`, `omod_padre_id`, `omod_nombre`
 (180, 7, 151, 'Guardar Correo', 'S', '0', '', '', '', 'fe_edoc/nubenotacredito/savemail', '4', '0', 'fe', '1', '2019-03-08 12:30:13', NULL, '1'),
 (181, 7, 176, 'Guardar Correo', 'A', '0', '', '', '', '', '4', '1', 'fe', '1', '2019-03-08 12:30:13', NULL, '1'),
 (182, 7, 182, 'Historial Transacciones', 'S', '0', '', '', '', 'financiero/pagos/historialtransacciones', '1', '0', 'Fianciero', '1', '2019-03-08 12:29:20', NULL, '1'),
-(183, 7, 183, 'Verificar Pagos Externos', 'S', '0', '', '', '', 'financiero/pagos/verificarpagoexterno', '1', '0', 'Fianciero', '1', '2019-03-08 12:29:20', NULL, '1');
+(183, 7, 183, 'Verificar Pagos Externos', 'S', '0', '', '', '', 'financiero/pagos/verificarpagoexterno', '1', '0', 'Fianciero', '1', '2019-03-08 12:29:20', NULL, '1'),
+
+(184, 8, 184, 'Listar Repositorio', 'P', '0', '', '', '', 'repositorio/repositorio/index', 1, '1', 'repositorio', '1', '2019-07-15 20:04:38', NULL, '1'),
+(185, 8, 185, 'Repositorio Evidencia', 'P', '0', '', '', '', 'repositorio/repositorio/cargar', 2, '1', 'repositorio', '1', '2019-07-15 20:06:11', NULL, '1'),
+(186, 8, 185, 'Grabar Evidencias', 'A', '0', '', '', '', 'repositorio/repositorio/index', 1, '1', 'repositorio', '1', '2019-07-15 20:13:07', NULL, '1');
+
 -- --------------------------------------------------------
 --
 -- Volcado de datos para la tabla `OBMO_ACCI`
@@ -312,7 +317,9 @@ INSERT INTO `obmo_acci` (`oacc_id`, `omod_id`, `acc_id`, `oacc_tipo_boton`, `oac
 (82, 175, 27, '1', '', 'fun_EnviarAnular', '1', '2019-03-08 12:29:20', NULL, '1'),
 (83, 177, 25, '1', '', 'fun_UpdateMail', '1', '2019-03-08 12:29:20', NULL, '1'),
 (84, 179, 26, '1', '', 'fun_EnviarCorreo', '1', '2019-03-08 12:30:13', NULL, '1'),
-(85, 181, 4, '1', '', 'fun_CambiaMail', '1', '2019-03-08 11:49:38', NULL, '1');
+(85, 181, 4, '1', '', 'fun_CambiaMail', '1', '2019-03-08 11:49:38', NULL, '1'),
+
+(86, 186, 4, '1', '', 'saveEvidencia()', '1', '2019-07-15 20:13:07', NULL, '1');
 
 
 -- --------------------------------------------------------
