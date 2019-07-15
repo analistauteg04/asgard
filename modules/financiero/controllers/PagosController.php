@@ -916,23 +916,16 @@ class PagosController extends \app\components\CController {
     public function actionActualizarpago() {
         $data = Yii::$app->request->get();
         $doc_id=$data['doc_id'];        
-        $jsonCredential = json_decode(file_get_contents("/opt/credenciales.json"),true);                
-        $jsonCredential["gateway"];        
-        $jsonCredential["login"];        
-        $tranKey = $jsonCredential["trankey"];        
         $model_documento = new Documento();
-        $data_vpos=$model_documento->consultarVposByDocid();        
-        $firma = $json["requestId"].$json["status"]["status"].$json["status"]["date"].$tranKey;    
-        // aqui tengo que preguntar 
-//        $firmaValidar = sha1($firma);
-//        if ($firmaValidar == $json["signature"]){
-//            $update = "UPDATE `peticiones` SET `request_id`='".$json["requestId"]."',`razon`='".$json["status"]["message"]."',`estado_pago`='".$json["status"]["status"]."',`fecha_pago`='".$json["status"]["date"]."' WHERE `referencia`=".$json["reference"];
-//            $link->query($update);
-//            print "El registro se ha guardado satisfactoriamente.";
-//        } else {
-//            ERROR_LOG("generas log");	
-//            print "No es respuesta emitida por PlacetoPay";
-//        }
+        $data_vpos=$model_documento->consultarVposByDocid($doc_id);        
+        $response = $this->render('btnpago', array(
+            "referenceID" => $data_vpos["reference"],
+            "requestID" => $data_vpos["requestID"],
+            "ordenPago" => $doc_id,
+            "tipo_orden" => 2,
+            "response" => $data_vpos["resp"]
+        ));
+        
     }
 
     public function actionVerificarpagoexterno() {

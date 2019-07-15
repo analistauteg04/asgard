@@ -169,17 +169,18 @@ class Documento extends \yii\db\ActiveRecord {
         return $resultData;
     }
 
-    public function consultarVposByDocid() {
+    public function consultarVposByDocid($doc_id) {
         $estado = 1;
         $sql = "
-                SELEC   
-                    pb.pben_apellido,
-                    sb.sbpa_id    
+                SELECt   
+                        vreq.reference,
+                        vres.requestId as requestID,
+                        json_response as resp
                 FROM 
-                    db_financiero.vpos_request
-                    
+                        db_financiero.vpos_request as vreq
+                        join db_financiero.vpos_response as vres on vres.ordenPago = 1 and vres.tipo_orden = 2
                 WHERE
-                    d.doc_id = :doc_id
+                        vreq.ordenPago = :doc_id and vreq.tipo_orden = 2
                 ";
 
         $comando = $con->createCommand($sql);
