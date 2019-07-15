@@ -1,7 +1,7 @@
 <?php
 
 namespace app\modules\repositorio\models;
-
+use yii\data\ArrayDataProvider;
 use Yii;
 
 /**
@@ -87,7 +87,7 @@ class DocumentoRepositorio extends \yii\db\ActiveRecord
     
     
      /**
-     * Function consultarOportunHist consultar historial de las oportunidades por Id. 
+     * Function consultarDocumentos consultar documentos
      * @author Grace Viteri <analistadesarrollo01@uteg.edu.ec>;
      * @param 
      * @return
@@ -97,19 +97,29 @@ class DocumentoRepositorio extends \yii\db\ActiveRecord
         $estado = 1;
         if (isset($arrFiltro) && count($arrFiltro) > 0) {
             if ($arrFiltro['est_id'] != "") {
-                $str_search = "est_id :interesado AND ";
+                $str_search = "and est_id = :est_id ";
             }            
         }
-        $sql = "SELECT 	dre_imagen, dre_tipo, 
-                        dre_descripcion, dre_fecha_archivo, dre_fecha_creacion 
+        $sql = "SELECT 	dre_imagen, case when dre_tipo='1' then 'Público' else 'Privado' end tipo,  
+                        dre_descripcion, dre_fecha_archivo, dre_fecha_creacion, dre_ruta
                 FROM " . $con->dbname . ".documento_repositorio dr
-                WHERE est_id = :est_id
-                      and dre_estado = :estado
-                      and dre_estado_logico = :estado";               
+                WHERE 
+                      dre_estado = :estado
+                      and dre_estado_logico = :estado ";              
+        if (!empty($str_search)) {
+            $sql .= " $str_search  
+                    ORDER BY dre_fecha_creacion desc ";
+        } else {
+            $sql .= " ORDER BY dre_fecha_creacion desc";
+        }
         $comando = $con->createCommand($sql);
-        $comando->bindParam(":est_id", $est_id, \PDO::PARAM_INT);
         $comando->bindParam(":estado", $estado, \PDO::PARAM_STR);
-
+        if (isset($arrFiltro) && count($arrFiltro) > 0) {
+            $est_id = $arrFiltro["est_id"];
+            if ($arrFiltro['est_id'] != "") {
+                $comando->bindParam(":est_id", $est_id, \PDO::PARAM_INT);
+            }                    
+        }
         $resultData = $comando->queryAll();
         $dataProvider = new ArrayDataProvider([
             'key' => 'id',

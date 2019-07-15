@@ -13,46 +13,46 @@ use app\modules\repositorio\Module as repositorio;
 ?>
 <?=
 PbGridView::widget([
-    'dataProvider' => new yii\data\ArrayDataProvider(array()),
+    //'dataProvider' => new yii\data\ArrayDataProvider(array()),
     'id' => 'Tbg_Listar',
     'showExport' => true,
     'fnExportEXCEL' => "exportExcel",
     'fnExportPDF' => "exportPdf",
-    //'dataProvider' => $model,
+    'dataProvider' => $model,
     'columns' =>
     [
         [
             'attribute' => 'Nombre Archivo',
             'header' => repositorio::t("repositorio", "File name"),
-            'value' => 'num_solicitud',
+            'value' => 'dre_imagen',
         ],
         [
             'attribute' => 'Tipo',
             'header' => Yii::t("formulario", "Type"),
-            'value' => 'fecha_solicitud',
+            'value' => 'tipo',
         ],
         [
             'attribute' => 'Descripción',
             'header' => Yii::t("formulario", "Description"),
-            'value' => 'per_dni',
+            'value' => 'dre_descripcion',
         ],
         [
             'attribute' => 'Fecha Archivo',
             'header' => repositorio::t("repositorio", "Date file"),
-            'value' => 'per_pri_nombre',
+            'value' => 'dre_fecha_archivo',
         ],
         [
             'attribute' => 'Fecha Creación',
             'header' => Yii::t("formulario", "Registration Date"),
-            'value' => 'per_pri_apellido',
+            'value' => 'dre_fecha_creacion',
         ],                       
         [
             'class' => 'yii\grid\ActionColumn',
             'header' => Yii::t("formulario", "Actions"),
             'template' => '{view}',
             'buttons' => [
-                'view' => function ($url, $model) {
-                    return Html::a('<span class="glyphicon glyphicon-download-alt"></span>', Url::to(['/repositorio/repositorio/view', 'ids' => base64_encode($model['sins_id']), 'int' => base64_encode($model['int_id']), 'perid' => base64_encode($model['persona']), 'empid' => base64_encode($model['emp_id'])]), ["data-toggle" => "tooltip", "title" => "Descargar", "data-pjax" => 0]);
+                'view' => function ($url, $model) {                    
+                    return Html::a('<span class="glyphicon glyphicon-download-alt"></span>', Url::to(['/site/getimage', 'route' => '/uploads' . $model['dre_ruta']]), ["download" => $model['dre_imagen'], "data-toggle" => "tooltip", "title" => "Descargar Evidencia", "data-pjax" => 0]);
                 },                
             ],
         ],

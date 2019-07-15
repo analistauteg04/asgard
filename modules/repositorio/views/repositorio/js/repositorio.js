@@ -147,7 +147,11 @@ $(document).ready(function () {
                 setComboData(data.estandares, "cmb_estandar");
             }
         }, true);                       
-    });    
+    });
+    
+    $('#btn_buscarData').click(function () {
+        actualizarGrid();
+    });
 });
 
 function guardarItem() {
@@ -205,4 +209,20 @@ function representarItems(dataItems) {
     html += "</tbody>";
     html += "    </table>" + "</div>";
     $("#dataListItem").html(html);
+}
+
+function actualizarGrid() {
+    var search = $('#txt_buscarData').val();
+    var f_ini = $('#txt_fecha_ini').val();
+    var f_fin = $('#txt_fecha_fin').val();
+    var modelo = $('#cmb_modelo').val();
+    var categoria = $('#cmb_categoria').val(); 
+    var componente = $('#cmb_componente').val(); 
+    var estandar = $('#cmb_estandar').val(); 
+    //Buscar almenos una clase con el nombre para ejecutar
+    if (!$(".blockUI").length) {
+        showLoadingPopup();
+        $('#Tbg_Listar').PbGridView('applyFilterData', {'f_ini': f_ini, 'f_fin': f_fin, 'search': search, 'mod_id': modelo, 'cat_id': categoria, 'comp_id': componente, 'est_id': estandar,});
+        setTimeout(hideLoadingPopup, 2000);
+    }
 }

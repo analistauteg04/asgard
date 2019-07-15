@@ -14,7 +14,6 @@ use \app\modules\repositorio\models\Componente;
 use \app\modules\repositorio\models\Modelo;
 use \app\modules\repositorio\models\Estandar;
 
-
 class RepositorioController extends \app\components\CController {
     public function actionIndex() {
         $mod_repositorio = new DocumentoRepositorio();      
@@ -23,12 +22,13 @@ class RepositorioController extends \app\components\CController {
         $mod_modelo = new Modelo();
         $mod_estandar = new Estandar();
         $data = Yii::$app->request->get();
-        /*if ($data['PBgetFilter']) {
+        
+        if ($data['PBgetFilter']) {
             $arrSearch["lista"] = $data['lista'];
-            //$resp_lista = $mod_repositorio->consultarLista($arrSearch);
+            $resp_listado = $mod_repositorio->consultarDocumentos($arrSearch);
         } else {
-            //$resp_lista = $mod_repositorio->consultarLista();
-        }*/
+            $resp_listado = $mod_repositorio->consultarDocumentos();
+        }
         if (Yii::$app->request->isAjax) {
             $data = Yii::$app->request->post();
             if (isset($data["get_funciones"])) {                
@@ -58,7 +58,7 @@ class RepositorioController extends \app\components\CController {
                 'arr_categoria' => ArrayHelper::map($arr_categoria, "id", "name"), //array("1" => Yii::t("formulario", "Docencia"), "2" => Yii::t("formulario", "Condiciones Institucionales")),
                 'arr_componente' => ArrayHelper::map($arr_componente, "id", "name"), 
                 'arr_estandar' => ArrayHelper::map($arr_estandar, "id", "name"), 
-                //'model' => null,
+                'model' => $resp_listado,
                ]);
     }  
     public function actionCargar() {
