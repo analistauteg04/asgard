@@ -46,27 +46,27 @@ $(document).ready(function () {
     $('#cmb_modelo_evi').change(function () {
         var link = $('#txth_base').val() + "/repositorio/repositorio/index";
         var arrParams = new Object();
-        arrParams.mod_id = $('#cmb_modelo').val();
+        arrParams.mod_id = $('#cmb_modelo_evi').val();
         arrParams.get_funciones = true;
         requestHttpAjax(link, arrParams, function (response) {
             if (response.status == "OK") {
                 data = response.message;
-                setComboData(data.funciones, "cmb_categoria");
+                setComboData(data.funciones, "cmb_funcion_evi");
                 var arrParams = new Object();                   
-                arrParams.fun_id = $('#cmb_categoria').val();
+                arrParams.fun_id = $('#cmb_funcion_evi').val();
                 arrParams.get_componentes = true;
                 requestHttpAjax(link, arrParams, function (response) {
                     if (response.status == "OK") {
                         data = response.message;                        
-                        setComboData(data.componentes, "cmb_componente");
+                        setComboData(data.componentes, "cmb_componente_evi");
                         var arrParams = new Object();                   
-                        arrParams.comp_id = $('#cmb_componente').val();
-                        arrParams.fun_id = $('#cmb_categoria').val();
+                        arrParams.comp_id = $('#cmb_componente_evi').val();
+                        arrParams.fun_id = $('#cmb_funcion_evi').val();
                         arrParams.get_estandares = true;
                         requestHttpAjax(link, arrParams, function (response) {
                             if (response.status == "OK") {
                                 data = response.message;                        
-                                setComboData(data.estandares, "cmb_estandar");
+                                setComboData(data.estandares, "cmb_estandar_evi");
                             }
                         }, true);                   
                     }
@@ -74,77 +74,40 @@ $(document).ready(function () {
             }
         }, true);        
     });    
-    
-    $('#cmb_categoria').change(function () {
-        var link = $('#txth_base').val() + "/repositorio/repositorio/index";
-        var arrParams = new Object();                       
-        arrParams.fun_id = $('#cmb_categoria').val();
-        arrParams.get_componentes = true;
-        requestHttpAjax(link, arrParams, function (response) {
-            if (response.status == "OK") {
-                data = response.message;                
-                setComboDataselect(data.componentes, "cmb_componente", "Todos");
-                var arrParams = new Object();                   
-                arrParams.comp_id = $('#cmb_componente').val();
-                arrParams.fun_id = $('#cmb_categoria').val();
-                arrParams.get_estandares = true;
-                requestHttpAjax(link, arrParams, function (response) {
-                    if (response.status == "OK") {
-                        data = response.message;                        
-                        setComboDataselect(data.estandares, "cmb_estandar", "Todos");
-                    }
-                }, true);      
-            }
-        }, true);                       
-    });
-    
+        
     $('#cmb_funcion_evi').change(function () {
         var link = $('#txth_base').val() + "/repositorio/repositorio/index";
         var arrParams = new Object();                       
-        arrParams.fun_id = $('#cmb_categoria').val();
+        arrParams.fun_id = $('#cmb_funcion_evi').val();
         arrParams.get_componentes = true;
         requestHttpAjax(link, arrParams, function (response) {
             if (response.status == "OK") {
                 data = response.message;                
-                setComboData(data.componentes, "cmb_componente");
+                setComboData(data.componentes, "cmb_componente_evi");
                 var arrParams = new Object();                   
-                arrParams.comp_id = $('#cmb_componente').val();
-                arrParams.fun_id = $('#cmb_categoria').val();
+                arrParams.comp_id = $('#cmb_componente_evi').val();
+                arrParams.fun_id = $('#cmb_funcion_evi').val();
                 arrParams.get_estandares = true;
                 requestHttpAjax(link, arrParams, function (response) {
                     if (response.status == "OK") {
                         data = response.message;                        
-                        setComboData(data.estandares, "cmb_estandar");
+                        setComboData(data.estandares, "cmb_estandar_evi");
                     }
                 }, true);      
             }
         }, true);                       
     });
-    
-    $('#cmb_componente').change(function () {
-        var link = $('#txth_base').val() + "/repositorio/repositorio/index";
-        var arrParams = new Object();                       
-        arrParams.comp_id = $('#cmb_componente').val();
-        arrParams.fun_id = $('#cmb_categoria').val();
-        arrParams.get_estandares = true;
-        requestHttpAjax(link, arrParams, function (response) {
-            if (response.status == "OK") {
-                data = response.message;                
-                setComboDataselect(data.estandares, "cmb_estandar", "Todos");
-            }
-        }, true);     
-    });    
-    
+            
     $('#cmb_componente_evi').change(function () {
         var link = $('#txth_base').val() + "/repositorio/repositorio/index";
         var arrParams = new Object();                       
-        arrParams.comp_id = $('#cmb_componente').val();
-        arrParams.fun_id = $('#cmb_categoria').val();
+        arrParams.comp_id = $('#cmb_componente_evi').val();
+        arrParams.fun_id = $('#cmb_funcion_evi').val();
         arrParams.get_estandares = true;
         requestHttpAjax(link, arrParams, function (response) {
             if (response.status == "OK") {
                 data = response.message;                
-                setComboData(data.estandares, "cmb_estandar");
+                setComboData(data.estandares, "cmb_estandar_evi");
             }
         }, true);                       
     });
@@ -155,9 +118,9 @@ $(document).ready(function () {
 });
 
 function guardarItem() {
-    var funcion_id = $('#cmb_funcion').val();
-    var componente_id = $('#cmb_componente').val();
-    var estandar_id = $('#cmb_estandar option:selected').html();
+    var funcion_id = $('#cmb_funcion_evi').val();
+    var componente_id = $('#cmb_componente_evi').val();
+    var estandar_id = $('#cmb_estandar_evi option:selected').html();
     var tipo_id = $('#cmb_tipo').val();
     var nombre_imagen = $('#txth_docarchivo').val();
     var fecha_archivo = $('#txt_fecha_documento').val();
