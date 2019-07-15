@@ -43,6 +43,44 @@ $(document).ready(function () {
         }, true);        
     });
     
+    $('#cmb_categoria').change(function () {
+        var link = $('#txth_base').val() + "/repositorio/repositorio/index";
+        var arrParams = new Object();                       
+        arrParams.fun_id = $('#cmb_categoria').val();
+        arrParams.get_componentes = true;
+        requestHttpAjax(link, arrParams, function (response) {
+            if (response.status == "OK") {
+                data = response.message;                
+                setComboDataselect(data.componentes, "cmb_componente", "Todos");
+                var arrParams = new Object();                   
+                arrParams.comp_id = $('#cmb_componente').val();
+                arrParams.fun_id = $('#cmb_categoria').val();
+                arrParams.get_estandares = true;
+                requestHttpAjax(link, arrParams, function (response) {
+                    if (response.status == "OK") {
+                        data = response.message;                        
+                        setComboDataselect(data.estandares, "cmb_estandar", "Todos");
+                    }
+                }, true);      
+            }
+        }, true);                       
+    });
+    
+    $('#cmb_componente').change(function () {
+        var link = $('#txth_base').val() + "/repositorio/repositorio/index";
+        var arrParams = new Object();                       
+        arrParams.comp_id = $('#cmb_componente').val();
+        arrParams.fun_id = $('#cmb_categoria').val();
+        arrParams.get_estandares = true;
+        requestHttpAjax(link, arrParams, function (response) {
+            if (response.status == "OK") {
+                data = response.message;                
+                setComboDataselect(data.estandares, "cmb_estandar", "Todos");
+            }
+        }, true);                       
+    });
+    
+    
     $('#cmb_modelo_evi').change(function () {
         var link = $('#txth_base').val() + "/repositorio/repositorio/index";
         var arrParams = new Object();

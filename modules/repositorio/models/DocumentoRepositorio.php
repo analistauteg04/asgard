@@ -96,25 +96,25 @@ class DocumentoRepositorio extends \yii\db\ActiveRecord
         $con = \Yii::$app->db_repositorio;        
         $estado = 1;
         if (isset($arrFiltro) && count($arrFiltro) > 0) {
-            if (($arrFiltro['est_id'] != "") or ($arrFiltro['est_id'] > 0)) {
-                $str_search = "and est_id = :est_id ";
+            if (($arrFiltro['est_id'] != "") && ($arrFiltro['est_id'] > 0)) {
+                $str_search = "and dr.est_id = :est_id ";
             }
             if ($arrFiltro['search'] != "") {
-                $str_search = "and dre_imagen like :archivo ";                
+                $str_search .= "and dr.dre_imagen like :archivo ";                
             }
             if ($arrFiltro['f_ini'] != "" && $arrFiltro['f_fin'] != "") {
-                $str_search .= "and dre_fecha_archivo >= :fec_ini and ";
-                $str_search .= "dre_fecha_archivo <= :fec_fin ";
+                $str_search .= "and dr.dre_fecha_archivo >= :fec_ini and ";
+                $str_search .= "dr.dre_fecha_archivo <= :fec_fin ";
             }            
-            if (($arrFiltro['mod_id'] != "") or ($arrFiltro['mod_id'] > 0)){
-                $str_search = "and f.mod_id = :mod_id ";
+            if (($arrFiltro['mod_id'] != "") && ($arrFiltro['mod_id'] > 0)){
+                $str_search .= "and f.mod_id = :mod_id ";
             }
-            if (($arrFiltro['cat_id'] != "") or ($arrFiltro['cat_id'] > 0)){
-                $str_search = "and f.fun_id = :fun_id ";
+            if (($arrFiltro['cat_id'] != "") && ($arrFiltro['cat_id'] > 0)){
+                $str_search .= "and e.fun_id = :fun_id ";
             }
-           /* if (($arrFiltro['comp_id'] != "") or ($arrFiltro['comp_id'] > 0)){
-                $str_search = "and f.fun_id = :fun_id ";
-            }*/
+            if (($arrFiltro['comp_id'] != "") && ($arrFiltro['comp_id'] > 0)){
+                $str_search .= "and e.com_id = :comp_id ";
+            }
         }
         $sql = "SELECT	dre_imagen, case when dre_tipo='1' then 'Público' else 'Privado' end tipo,  
                         dre_descripcion, dre_fecha_archivo, dre_fecha_creacion, dre_ruta
@@ -138,6 +138,7 @@ class DocumentoRepositorio extends \yii\db\ActiveRecord
             $fecha_fin = $arrFiltro["f_fin"];
             $mod_id = $arrFiltro["mod_id"];
             $fun_id = $arrFiltro["cat_id"];
+            $comp_id = $arrFiltro["comp_id"];
             if (($arrFiltro['est_id'] != "") or ($arrFiltro['est_id'] > 0)) {
                 $comando->bindParam(":est_id", $est_id, \PDO::PARAM_INT);
             }
@@ -148,11 +149,14 @@ class DocumentoRepositorio extends \yii\db\ActiveRecord
                 $comando->bindParam(":fec_ini", $fecha_ini, \PDO::PARAM_STR);
                 $comando->bindParam(":fec_fin", $fecha_fin, \PDO::PARAM_STR);
             }
-            if (($arrFiltro['mod_id'] != "") or ($arrFiltro['mod_id'] > 0)){
+            if (($arrFiltro['mod_id'] != "") && ($arrFiltro['mod_id'] > 0)){
                 $comando->bindParam(":mod_id", $mod_id, \PDO::PARAM_INT);
             }
-            if (($arrFiltro['cat_id'] != "") or ($arrFiltro['cat_id'] > 0)){
+            if (($arrFiltro['cat_id'] != "") && ($arrFiltro['cat_id'] > 0)){
                 $comando->bindParam(":fun_id", $fun_id, \PDO::PARAM_INT);
+            }
+            if (($arrFiltro['comp_id'] != "") && ($arrFiltro['comp_id'] > 0)){
+                $comando->bindParam(":comp_id", $comp_id, \PDO::PARAM_INT);
             }
         }
         $resultData = $comando->queryAll();
