@@ -77,5 +77,7 @@ class RepositorioController extends \app\components\CController {
             'arr_estandares' => ArrayHelper::map($arr_estandar, "id", "value"), 
             'arr_tipos' => array("1" => Yii::t("formulario", "Private"), "2" => Yii::t("formulario", "Public")),
         ]);
-    }  
+    } 
+    
+    
 }

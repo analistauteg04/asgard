@@ -77,9 +77,8 @@ $(document).ready(function () {
                 data = response.message;                
                 setComboData(data.estandares, "cmb_estandar");
             }
-        }, true);                       
-    });
-    
+        }, true);     
+    });    
 });
 
 function guardarItem() {
