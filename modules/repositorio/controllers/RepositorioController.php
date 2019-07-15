@@ -66,15 +66,21 @@ class RepositorioController extends \app\components\CController {
         $mod_modelo = new Modelo();
         $mod_estandar = new Estandar();
         $mod_funcion = new Funcion();
+        if (Yii::$app->request->isAjax) {
+            $data = Yii::$app->request->post();
+            if (isset($data["get_funciones"])) {                
+                
+            }
+        }
         $arr_componente = $mod_componente->consultarComponente(1);
         $arr_funcion = $mod_funcion->consultarFuncion(2);
         $arr_modelo = $mod_modelo->consultarModelo();
         $arr_estandar = $mod_estandar->consultarEstandar(1,1);
         return $this->render('cargar', [              
-            'arr_componentes' => ArrayHelper::map($arr_componente, "id", "value"), 
-            'arr_funciones' => ArrayHelper::map($arr_funcion, "id", "value"), 
+            'arr_componentes' => ArrayHelper::map($arr_componente, "id", "name"), 
+            'arr_funciones' => ArrayHelper::map($arr_funcion, "id", "name"), 
             'arr_modelos' => ArrayHelper::map($arr_modelo, "id", "value"), 
-            'arr_estandares' => ArrayHelper::map($arr_estandar, "id", "value"), 
+            'arr_estandares' => ArrayHelper::map($arr_estandar, "id", "name"), 
             'arr_tipos' => array("1" => Yii::t("formulario", "Private"), "2" => Yii::t("formulario", "Public")),
         ]);
     } 

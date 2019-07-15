@@ -20,17 +20,19 @@ use app\modules\repositorio\Module as repositorio;
 </div>
 <form class="form-horizontal">
     <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">        
-        <div class="col-md-6 col-sm-6 col-xs-6 col-lg-6">
-            <label for="cmb_modelo" class="col-lg-5 col-md-5 col-sm-5 col-xs-5 control-label"><?= repositorio::t("repositorio", "Model") ?> <span class="text-danger">*</span></label>
-            <div class="col-lg-7 col-md-7 col-sm-7 col-xs-7">
-                <?= Html::dropDownList("cmb_modelo", 1, $arr_modelos, ["class" => "form-control", "id" => "cmb_modelo"]) ?>
-            </div>
-        </div>         
+        <div class="col-md-6 col-sm-6 col-xs-6 col-lg-6"> 
+            <div class="form-group"> 
+                <label for="cmb_modelo_evi" class="col-lg-5 col-md-5 col-sm-5 col-xs-5 control-label"><?= repositorio::t("repositorio", "Model") ?> <span class="text-danger">*</span></label>
+                <div class="col-lg-7 col-md-7 col-sm-7 col-xs-7">
+                    <?= Html::dropDownList("cmb_modelo_evi", 1, $arr_modelos, ["class" => "form-control", "id" => "cmb_modelo_evi"]) ?>
+                </div>
+            </div>   
+        </div>
         <div class="col-md-6 col-sm-6 col-xs-6 col-lg-6">
             <div class="form-group">            
-                <label for="cmb_funcion" class="col-lg-5 col-md-5 col-sm-5 col-xs-5 control-label"><?= repositorio::t("repositorio", "Function") ?> <span class="text-danger">*</span></label>
+                <label for="cmb_funcion_evi" class="col-lg-5 col-md-5 col-sm-5 col-xs-5 control-label"><?= repositorio::t("repositorio", "Function") ?> <span class="text-danger">*</span></label>
                 <div class="col-lg-7 col-md-7 col-sm-7 col-xs-7">
-                    <?= Html::dropDownList("cmb_funcion", 1, $arr_funciones, ["class" => "form-control", "id" => "cmb_funcion"]) ?>
+                    <?= Html::dropDownList("cmb_funcion_evi", 1, $arr_funciones, ["class" => "form-control", "id" => "cmb_funcion_evi"]) ?>
                 </div>
             </div>
         </div>
@@ -38,17 +40,17 @@ use app\modules\repositorio\Module as repositorio;
     <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">        
         <div class="col-md-6 col-sm-6 col-xs-6 col-lg-6">
             <div class="form-group">            
-                <label for="cmb_componente" class="col-lg-5 col-md-5 col-sm-5 col-xs-5 control-label"><?= repositorio::t("repositorio", "Component") ?></label>
+                <label for="cmb_componente_evi" class="col-lg-5 col-md-5 col-sm-5 col-xs-5 control-label"><?= repositorio::t("repositorio", "Component") ?></label>
                 <div class="col-lg-7 col-md-7 col-sm-7 col-xs-7">
-                    <?= Html::dropDownList("cmb_componente", 1, $arr_componentes, ["class" => "form-control", "id" => "cmb_componente"]) ?>
+                    <?= Html::dropDownList("cmb_componente_evi", 1, $arr_componentes, ["class" => "form-control", "id" => "cmb_componente_evi"]) ?>
                 </div>
             </div>
         </div>
         <div class="col-md-6 col-sm-6 col-xs-6 col-lg-6">
             <div class="form-group">            
-                <label for="cmb_estandar" class="col-lg-5 col-md-5 col-sm-5 col-xs-5 control-label"><?= repositorio::t("repositorio", "Standar") ?> <span class="text-danger">*</span></label>
+                <label for="cmb_estandar_evi" class="col-lg-5 col-md-5 col-sm-5 col-xs-5 control-label"><?= repositorio::t("repositorio", "Standar") ?> <span class="text-danger">*</span></label>
                 <div class="col-lg-7 col-md-7 col-sm-7 col-xs-7">
-                    <?= Html::dropDownList("cmb_estandar", 1, $arr_estandares, ["class" => "form-control", "id" => "cmb_estandar"]) ?>
+                    <?= Html::dropDownList("cmb_estandar_evi", 1, $arr_estandares, ["class" => "form-control", "id" => "cmb_estandar_evi"]) ?>
                 </div>
             </div>
         </div>
@@ -56,9 +58,9 @@ use app\modules\repositorio\Module as repositorio;
     <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">        
         <div class="col-md-6 col-sm-6 col-xs-6 col-lg-6">
             <div class="form-group">            
-                <label for="cmb_tipo" class="col-lg-5 col-md-5 col-sm-5 col-xs-5 control-label"><?= Yii::t("formulario", "Type") ?> <span class="text-danger">*</span></label>
+                <label for="cmb_tipo_evi" class="col-lg-5 col-md-5 col-sm-5 col-xs-5 control-label"><?= Yii::t("formulario", "Type") ?> <span class="text-danger">*</span></label>
                 <div class="col-lg-7 col-md-7 col-sm-7 col-xs-7">
-                    <?= Html::dropDownList("cmb_tipo", 1, $arr_tipos, ["class" => "form-control", "id" => "cmb_tipo"]) ?>
+                    <?= Html::dropDownList("cmb_tipo_evi", 1, $arr_tipos, ["class" => "form-control", "id" => "cmb_tipo_evi"]) ?>
                 </div>
             </div>
         </div>
@@ -136,14 +138,14 @@ use app\modules\repositorio\Module as repositorio;
         </div>
         <div class="col-md-6 col-sm-6 col-xs-6 col-lg-6">
             <div class="form-group">            
-                <label for="txt_fecha_documento" class="col-lg-5 col-md-5 col-sm-5 col-xs-5 control-label"><?= repositorio::t("repositorio", "Document date") ?> <span class="text-danger">*</span></label>
+                <label for="txt_fecha_documento_evi" class="col-lg-5 col-md-5 col-sm-5 col-xs-5 control-label"><?= repositorio::t("repositorio", "Document date") ?> <span class="text-danger">*</span></label>
                 <div class="col-lg-7 col-md-7 col-sm-7 col-xs-7">
                     <?=
                     DatePicker::widget([
-                        'name' => 'txt_fecha_documento',
+                        'name' => 'txt_fecha_documento_evi',
                         'value' => '',
                         'type' => DatePicker::TYPE_INPUT,
-                        'options' => ["class" => "form-control", "id" => "txt_fecha_documento", "placeholder" => repositorio::t("repositorio", "Document date")],
+                        'options' => ["class" => "form-control", "id" => "txt_fecha_documento_evi", "placeholder" => repositorio::t("repositorio", "Document date")],
                         'pluginOptions' => [
                             'autoclose' => true,
                             'format' => Yii::$app->params["dateByDatePicker"],
@@ -157,7 +159,7 @@ use app\modules\repositorio\Module as repositorio;
     <div class="col-md-12 col-xs-12 col-sm-12 col-lg-12">       
         <div class="col-md-6 col-sm-6 col-xs-6 col-lg-6">
             <div class="form-group">
-                <label for="txt_descripcion" class="col-sm-5 col-md-5 col-xs-5 col-lg-5 control-label keyupmce"><?= Yii::t("formulario", "Description") ?></label>
+                <label for="txt_descripcion_evi" class="col-sm-5 col-md-5 col-xs-5 col-lg-5 control-label keyupmce"><?= Yii::t("formulario", "Description") ?></label>
                 <div class="col-sm-7 col-md-7 col-xs-7 col-lg-7">                
                     <textarea  class="form-control keyupmce" id="txt_descripcion" rows="3"></textarea>                  
                 </div>

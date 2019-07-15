@@ -26,6 +26,7 @@ use app\modules\admision\models\PersonaGestion;
 use app\modules\admision\models\Oportunidad;
 use app\modules\admision\models\MetodoIngreso;
 use app\modules\financiero\models\Secuencias;
+use app\widgets\PbVPOS\PbVPOS;
 
 class PagosfrecuentesController extends \yii\web\Controller {
 
@@ -182,7 +183,7 @@ class PagosfrecuentesController extends \yii\web\Controller {
         }
         Secuencias::initSecuencia($con1, 1, 1, 1, 'BPA', "BOTÓN DE PAGOS DINERS");
         $doc_id = $_GET['docid'];
-        \app\models\Utilities::putMessageLogFile('doc_id:' . $doc_id);
+
         $resultado = $modDocumento->consultarDatosxId($con1, $doc_id);
         $descripcionItem = "Pagos de Varios Items";
         $titleBox = "Pagos varios";
@@ -211,7 +212,7 @@ class PagosfrecuentesController extends \yii\web\Controller {
                     "cedula_cliente" => $resultado["doc_cedula"],
                     "tipo_documento" => $tipo_dni,
                     "titleBox" => $titleBox,
-                    "email_cliente" => $resultado["doc_cedula"],
+                    "email_cliente" => $resultado["doc_correo"],
                     "total" => $totalpagar,
         ));
     }

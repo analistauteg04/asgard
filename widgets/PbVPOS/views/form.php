@@ -145,3 +145,9 @@ use app\widgets\PbVPOS\PbVPOS;
     </div>
 </div>
 <div id="lightbox-response"></div>
+<script>
+var VPOS_VAR = new Object();
+VPOS_VAR.APPROVED = "<?= PbVPOS::t("vpos", "APPROVED") ?>";
+VPOS_VAR.REJECTED = "<?= PbVPOS::t("vpos", "REJECTED") ?>";
+VPOS_VAR.PENDING  = "<?= PbVPOS::t("vpos", "PENDING") ?>";
+</script>
