@@ -401,16 +401,13 @@ class PagosController extends \app\components\CController {
         $per_id = @Yii::$app->session->get("PB_iduser");
         $model_interesado = new Interesado();
         $resp_gruporol = $model_interesado->consultagruporol($per_id);
-
         $opag_id = base64_decode($_GET["ido"]);
         $idd = base64_decode($_GET["idd"]);
         $val = base64_decode($_GET["valor"]);
         $valtotal = base64_decode($_GET["valortotal"]);
         $valpagado = base64_decode($_GET["valorpagado"]);
-
         $mod_cliord = new OrdenPago();
         $resp_cliord = $mod_cliord->consultarOrdenpago($resp_gruporol["grol_id"], $opag_id, $idd);
-
         if ($resp_cliord) {
             $sins_id = $resp_cliord["sser_id"];
             $per_id = $resp_cliord["per_id"];
@@ -895,20 +892,19 @@ class PagosController extends \app\components\CController {
         $model_ordenpago = new OrdenPago();
         $data_persona = $model_persona->consultaPersonaId($per_id);
         $cedula = $data_persona['per_cedula'];
-        $doc_id = $model_documento->consultarDocIdByCedulaBen($cedula);
         $opag_id = $model_ordenpago->consultarOpagIdByCedula($cedula);
         $data = Yii::$app->request->get();
         if ($data['PBgetFilter']) {
             $arrSearch["f_ini"] = $data['f_ini'];
             $arrSearch["f_fin"] = $data['f_fin'];
-            $data_transacciones = $model_sbpag->consultarHistoralTransacciones($doc_id, $opag_id, $arrSearch);
+            $data_transacciones = $model_sbpag->consultarHistoralTransacciones($opag_id, $arrSearch);
             return $this->renderPartial('_historialtransaccion_grid', [
                         "model" => $data_transacciones,
             ]);
         } else {
-            $data_transacciones = $model_sbpag->consultarHistoralTransacciones($doc_id, $opag_id);
+            $data_transacciones = $model_sbpag->consultarHistoralTransacciones($opag_id);
         }
-        $data_transacciones = $model_sbpag->consultarHistoralTransacciones($doc_id, $opag_id);
+        $data_transacciones = $model_sbpag->consultarHistoralTransacciones($opag_id);
         return $this->render('historialtransaccion', [
                     'model' => $data_transacciones,
         ]);

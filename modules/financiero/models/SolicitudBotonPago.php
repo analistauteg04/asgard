@@ -178,50 +178,18 @@ class SolicitudBotonPago extends \yii\db\ActiveRecord {
         }
     }
 
-    public function consultarHistoralTransacciones($doc_id, $opag_id, $arrFiltro = array(), $onlyData = false) {
+    public function consultarHistoralTransacciones($opag_id, $arrFiltro = array(), $onlyData = false) {
         $con = \Yii::$app->db_facturacion;
         $con1 = \Yii::$app->db_financiero;
         $estado = 1;
         if (isset($arrFiltro) && count($arrFiltro) > 0) {
             if ($arrFiltro['f_ini'] != "" && $arrFiltro['f_fin'] != "") {
-                $str_search .= "docu.doc_fecha_pago >= :fec_ini AND ";
-                $str_search .= "docu.doc_fecha_pago <= :fec_fin AND ";
+                $str_search .= "opag.opag_fecha_pago_total >= :fec_ini AND ";
+                $str_search .= "opag.opag_fecha_pago_total <= :fec_fin AND ";
             }
         }
-        $sql = "
-            SELECT
-                docu.doc_id as id,
-                vpre.reference as referencia,
-                concat(pben.pben_nombre,' ',pben.pben_apellido) as estudiante,
-                docu.doc_fecha_pago as fecha_pago,
-                docu.doc_valor as total_pago,
-                docu.doc_pagado as estado
-            FROM
-                " . $con->dbname . ".persona_beneficiaria as pben
-                JOIN " . $con->dbname . ".solicitud_boton_pago as sbpa on pben.pben_id = sbpa.pben_id
-                JOIN " . $con->dbname . ".documento as docu on docu.sbpa_id = sbpa.sbpa_id
-                LEFT JOIN " . $con1->dbname . ".vpos_response as vpre on vpre.ordenPago = docu.doc_id and vpre.tipo_orden = 2
-            WHERE ";
-        if (isset($arrFiltro) && count($arrFiltro) > 0) {
-            if ($arrFiltro['f_ini'] != "" && $arrFiltro['f_fin'] != "") {
-                $str_search .= "docu.doc_fecha_pago >= :fec_ini AND ";
-                $str_search .= "docu.doc_fecha_pago <= :fec_fin AND ";
-            }
-        }
-        if (!empty($str_search)) {
-            $sql .= $str_search;
-        }
-        $sql .= " 
-                pben.pben_estado_logico = :status AND
-                pben.pben_estado = :status AND
-                sbpa.sbpa_estado_logico = :status AND
-                sbpa.sbpa_estado = :status AND
-                docu.doc_estado_logico = :status AND
-                docu.doc_estado = :status AND
-                vpre.estado_logico = :status AND               
-                docu.doc_id = :doc_id 
-            UNION
-            select
+        $sql = " 
+             select
                 opag.opag_id as id,
                 vpre.reference as referencia,
                 concat(per.per_pri_nombre,' ',per.per_pri_apellido)  as estudiante,
@@ -252,7 +220,6 @@ class SolicitudBotonPago extends \yii\db\ActiveRecord {
 
         $comando = $con->createCommand($sql);
         $comando->bindParam(":status", $estado, \PDO::PARAM_STR);
-        $comando->bindParam(":doc_id", $doc_id, \PDO::PARAM_INT);
         $comando->bindParam(":opag_id", $opag_id, \PDO::PARAM_INT);
         if (isset($arrFiltro) && count($arrFiltro) > 0) {
             $fecha_ini = $arrFiltro["f_ini"] . " 00:00:00";
@@ -272,7 +239,6 @@ class SolicitudBotonPago extends \yii\db\ActiveRecord {
             'sort' => [
                 'attributes' => [
                     'referencia',
-                    'fecha_solicitud',
                     'estudiante',
                     'fecha_pago',
                     'total_pago',
