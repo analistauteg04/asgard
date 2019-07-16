@@ -117,8 +117,11 @@ class DocumentoRepositorio extends \yii\db\ActiveRecord
             }
         }
         $sql = "SELECT	dre_imagen, case when dre_tipo='1' then 'Público' else 'Privado' end tipo,  
-                        dre_descripcion, dre_fecha_archivo, dre_fecha_creacion, dre_ruta
-                FROM " . $con->dbname . ".documento_repositorio dr inner join " . $con->dbname . ".estandar e on e.est_id = dr.est_id
+                        dre_descripcion, dre_fecha_archivo, dre_fecha_creacion ";
+        if ($onlyData==false) {
+            $sql .= ", dre_ruta ";
+        } 
+        $sql .= "FROM " . $con->dbname . ".documento_repositorio dr inner join " . $con->dbname . ".estandar e on e.est_id = dr.est_id
                     left join " . $con->dbname . ".componente c on c.com_id = e.com_id
                     inner join " . $con->dbname . ".funcion f on f.fun_id = e.fun_id
                 WHERE dre_estado = :estado

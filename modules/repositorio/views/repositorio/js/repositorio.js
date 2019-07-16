@@ -494,3 +494,25 @@ function saveEvidencia(){
         }, true);
     }
 }
+
+function exportExcel() {
+    var search = $('#txt_buscarData').val();
+    var f_ini = $('#txt_fecha_ini').val();
+    var f_fin = $('#txt_fecha_fin').val();
+    var modelo = $('#cmb_modelo').val();
+    var categoria = $('#cmb_categoria').val(); 
+    var componente = $('#cmb_componente').val(); 
+    var estandar = $('#cmb_estandar').val(); 
+    window.location.href = $('#txth_base').val() + "/repositorio/repositorio/expexcel?search=" + search + "&f_ini=" + f_ini + "&f_fin=" + f_fin + "&mod_id=" + modelo + "&cat_id=" + categoria + "&comp_id=" + componente + "&est_id=" + estandar;
+}
+
+function exportPdf() {
+    var search = $('#txt_buscarData').val();
+    var f_ini = $('#txt_fecha_ini').val();
+    var f_fin = $('#txt_fecha_fin').val();
+    var modelo = $('#cmb_modelo').val();
+    var categoria = $('#cmb_categoria').val(); 
+    var componente = $('#cmb_componente').val(); 
+    var estandar = $('#cmb_estandar').val(); 
+    window.location.href = $('#txth_base').val() + "/repositorio/repositorio/exppdf?pdf=1&search=" + search + "&f_ini=" + f_ini + "&f_fin=" + f_fin + "&mod_id=" + modelo + "&cat_id=" + categoria + "&comp_id=" + componente + "&est_id=" + estandar;
+}
