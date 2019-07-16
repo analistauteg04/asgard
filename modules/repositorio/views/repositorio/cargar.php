@@ -24,7 +24,7 @@ use app\modules\repositorio\Module as repositorio;
             <div class="form-group"> 
                 <label for="cmb_modelo_evi" class="col-lg-5 col-md-5 col-sm-5 col-xs-5 control-label"><?= repositorio::t("repositorio", "Model") ?> <span class="text-danger">*</span></label>
                 <div class="col-lg-7 col-md-7 col-sm-7 col-xs-7">
-                    <?= Html::dropDownList("cmb_modelo_evi", 1, $arr_modelos, ["class" => "form-control", "id" => "cmb_modelo_evi"]) ?>
+                    <?= Html::dropDownList("cmb_modelo_evi", 0,array_merge([Yii::t("formulario", "Select")],$arr_modelos) , ["class" => "form-control", "id" => "cmb_modelo_evi"]) ?>
                 </div>
             </div>   
         </div>
@@ -32,7 +32,7 @@ use app\modules\repositorio\Module as repositorio;
             <div class="form-group">            
                 <label for="cmb_funcion_evi" class="col-lg-5 col-md-5 col-sm-5 col-xs-5 control-label"><?= repositorio::t("repositorio", "Function") ?> <span class="text-danger">*</span></label>
                 <div class="col-lg-7 col-md-7 col-sm-7 col-xs-7">
-                    <?= Html::dropDownList("cmb_funcion_evi", 1, $arr_funciones, ["class" => "form-control", "id" => "cmb_funcion_evi"]) ?>
+                    <?= Html::dropDownList("cmb_funcion_evi", 0,array_merge([Yii::t("formulario", "Select")],$arr_funciones) , ["class" => "form-control", "id" => "cmb_funcion_evi"]) ?>
                 </div>
             </div>
         </div>
@@ -50,7 +50,7 @@ use app\modules\repositorio\Module as repositorio;
             <div class="form-group">            
                 <label for="cmb_estandar_evi" class="col-lg-5 col-md-5 col-sm-5 col-xs-5 control-label"><?= repositorio::t("repositorio", "Standar") ?> <span class="text-danger">*</span></label>
                 <div class="col-lg-7 col-md-7 col-sm-7 col-xs-7">
-                    <?= Html::dropDownList("cmb_estandar_evi", 1, $arr_estandares, ["class" => "form-control", "id" => "cmb_estandar_evi"]) ?>
+                    <?= Html::dropDownList("cmb_estandar_evi", 0,array_merge([Yii::t("formulario", "Select")],$arr_estandares) , ["class" => "form-control", "id" => "cmb_estandar_evi"]) ?>
                 </div>
             </div>
         </div>
@@ -60,7 +60,7 @@ use app\modules\repositorio\Module as repositorio;
             <div class="form-group">            
                 <label for="cmb_tipo_evi" class="col-lg-5 col-md-5 col-sm-5 col-xs-5 control-label"><?= Yii::t("formulario", "Type") ?> <span class="text-danger">*</span></label>
                 <div class="col-lg-7 col-md-7 col-sm-7 col-xs-7">
-                    <?= Html::dropDownList("cmb_tipo_evi", 1, $arr_tipos, ["class" => "form-control", "id" => "cmb_tipo_evi"]) ?>
+                    <?= Html::dropDownList("cmb_tipo_evi", 0,array_merge([Yii::t("formulario", "Select")],$arr_tipos) , ["class" => "form-control", "id" => "cmb_tipo_evi"]) ?>
                 </div>
             </div>
         </div>
@@ -181,6 +181,33 @@ use app\modules\repositorio\Module as repositorio;
     <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
         <h3><span id="lbl_cargado"><?= repositorio::t("repositorio", "Document Loaded") ?></span></h3>
     </div>
-    <div id = "dataListItem"></div>
+<!--    <div id = "dataListItem"></div>-->
+    <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
+        <div class="form-group">
+            <div class="box-body table-responsive no-padding">
+                <table  id="TbG_Data" class="table table-hover">
+                    <thead>
+                        <tr>
+                            <th style="display:none; border:none;"><?= Yii::t("formulario", "Indice") ?></th>
+                            <th style="display:none; border:none;"><?= Yii::t("formulario", "Ids") ?></th>
+                            <th><?= Yii::t("formulario", "Modelo") ?></th>
+                            <th><?= Yii::t("formulario", "Función") ?></th>
+                            <th><?= Yii::t("formulario", "Componente") ?></th>                            
+                            <th style="display:none; border:none;"></th>
+                            <th><?= Yii::t("formulario", "Estandar") ?></th> 
+                            <th style="display:none; border:none;"></th>
+                            <th><?= Yii::t("formulario", "Tipo") ?></th> 
+                            <th><?= Yii::t("formulario", "Imagen") ?></th> 
+                            <th><?= Yii::t("formulario", "Fecha") ?></th> 
+                            <th></th>
+                        </tr>
+                    </thead>
+                    <tbody>
+
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
 </form>
 

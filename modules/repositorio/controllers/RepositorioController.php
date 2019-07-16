@@ -13,6 +13,7 @@ use \app\modules\repositorio\models\Funcion;
 use \app\modules\repositorio\models\Componente;
 use \app\modules\repositorio\models\Modelo;
 use \app\modules\repositorio\models\Estandar;
+use app\modules\repositorio\Module as repositorio;
 
 class RepositorioController extends \app\components\CController {
 
@@ -107,6 +108,105 @@ class RepositorioController extends \app\components\CController {
                     'arr_estandares' => ArrayHelper::map($arr_estandar, "id", "name"),
                     'arr_tipos' => array("1" => Yii::t("formulario", "Private"), "2" => Yii::t("formulario", "Public")),
         ]);
+    }
+    
+    public function actionSaveevidencia() {
+        if (Yii::$app->request->isAjax) {
+            $model = new Medico();
+            $data = Yii::$app->request->post();
+            $accion = isset($data['ACCION']) ? $data['ACCION'] : "";
+            if ($accion == "Create") {
+                //Nuevo Registro
+                $resul = $model->insertarMedicos($data);
+            }else if($accion == "Update"){
+                //Modificar Registro
+                //$resul = $model->actualizarMedicos($data);                
+            }
+            if ($resul['status']) {
+                $message = ["info" => Yii::t('exception', '<strong>Well done!</strong> your information was successfully saved.')];
+                echo Utilities::ajaxResponse('OK', 'alert', Yii::t('jslang', 'Success'), 'false', $message,$resul);
+            }else{
+                $message = ["info" => Yii::t('exception', 'The above error occurred while the Web server was processing your request.')];
+                echo Utilities::ajaxResponse('NO_OK', 'alert', Yii::t('jslang', 'Error'), 'false', $message);
+            }
+            return;
+        }   
+    }
+    
+    public function actionExpexcel() {
+        ini_set('memory_limit', '256M');
+        $content_type = Utilities::mimeContentType("xls");
+        $nombarch = "Report-" . date("YmdHis") . ".xls";
+        header("Content-Type: $content_type");
+        header("Content-Disposition: attachment;filename=" . $nombarch);
+        header('Cache-Control: max-age=0');
+        $colPosition = array("C", "D", "E", "F", "G", "H", "I", "J");
+
+        $arrHeader = array(
+            repositorio::t("repositorio", "File name"),
+            Yii::t("formulario", "Type"),
+            Yii::t("formulario", "Description"),            
+            repositorio::t("repositorio", "Date file"),
+            Yii::t("formulario", "Registration Date"),
+        );
+        $data = Yii::$app->request->get();
+        $arrSearch["est_id"] = $data['est_id'];
+        $arrSearch["f_ini"] = $data['f_ini'];
+        $arrSearch["f_fin"] = $data['f_fin'];
+        $arrSearch["search"] = $data['search'];
+        $arrSearch["mod_id"] = $data['mod_id'];
+        $arrSearch["cat_id"] = $data['cat_id'];
+        $arrSearch["comp_id"] = $data['comp_id'];   
+
+        $mod_repositorio = new DocumentoRepositorio();
+        $arrData = array();
+        if (empty($arrSearch)) {
+            $arrData = $mod_repositorio->consultarDocumentos(array(), true);
+        } else {
+            $arrData = $mod_repositorio->consultarDocumentos($arrSearch, true);            
+        }
+        $nameReport = repositorio::t("repositorio", "List Repository of Evidence");
+        Utilities::generarReporteXLS($nombarch, $nameReport, $arrHeader, $arrData, $colPosition);
+        exit;
+    }
+    
+    
+    public function actionExppdf() {
+        $report = new ExportFile();
+        $this->view->title = repositorio::t("repositorio", "List Repository of Evidence"); // Titulo del reporte
+
+        $mod_repositorio = new DocumentoRepositorio();
+        $data = Yii::$app->request->get();
+        $arr_body = array();
+        $arrSearch["est_id"] = $data['est_id'];
+        $arrSearch["f_ini"] = $data['f_ini'];
+        $arrSearch["f_fin"] = $data['f_fin'];
+        $arrSearch["search"] = $data['search'];
+        $arrSearch["mod_id"] = $data['mod_id'];
+        $arrSearch["cat_id"] = $data['cat_id'];
+        $arrSearch["comp_id"] = $data['comp_id'];   
+        
+        $arr_head = array(
+            repositorio::t("repositorio", "File name"),
+            Yii::t("formulario", "Type"),
+            Yii::t("formulario", "Description"),
+            repositorio::t("repositorio", "Date file"),
+            Yii::t("formulario", "Registration Date"),            
+        );
+        if (empty($arrSearch)) {
+            $arr_body = $mod_repositorio->consultarDocumentos(array(), true);
+        } else {
+            $arr_body = $mod_repositorio->consultarDocumentos($arrSearch, true);
+        }
+        $report->orientation = "L"; // tipo de orientacion L => Horizontal, P => Vertical
+        $report->createReportPdf(
+                $this->render('exportpdf', [
+                    'arr_head' => $arr_head,
+                    'arr_body' => $arr_body
+                ])
+        );
+        $report->mpdf->Output('Reporte_' . date("Ymdhis") . ".pdf", ExportFile::OUTPUT_TO_DOWNLOAD);
+        return;
     }
 
 }
