@@ -122,19 +122,18 @@ class PagosController extends \app\components\CController {
             }
         }
         return $this->render('validarpagocarga', [
-                    'model' => $resp_pago,
-                    'persona_pago' => $persona_pago,
-                    'sins_id' => $sins_id,
-                    'nombres' => $nombres,
-                    'apellidos' => $apellidos,
-                    'valortotal' => $valortotal,
-                    'valoraplicado' => $valoraplicado,
-                    'opag_id' => $opag_id,
-                    'rol' => $rol,
-                    'respCliente' => $resp_cliord,
+            'model' => $resp_pago,
+            'persona_pago' => $persona_pago,
+            'sins_id' => $sins_id,
+            'nombres' => $nombres,
+            'apellidos' => $apellidos,
+            'valortotal' => $valortotal,
+            'valoraplicado' => $valoraplicado,
+            'opag_id' => $opag_id,
+            'rol' => $rol,
+            'respCliente' => $resp_cliord,
         ]);
     }
-
     public function actionGenerarsolicitud() {
         $con = \Yii::$app->db_asgard;
         $con1 = \Yii::$app->db_captacion;
