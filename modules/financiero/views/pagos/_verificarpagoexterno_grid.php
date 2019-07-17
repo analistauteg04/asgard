@@ -56,8 +56,10 @@ admision::registerTranslations();
                 'header' => financiero::t("Pagos", "Boton Payment status"),
                 'format' => 'html',
                 'value' => function ($model) {
-                    if ($model["estado"] == 1)
-                        return '<small class="label label-success">Pagado</small>';
+                    if (($model["sbpa_op"]>0))
+                        return '<small class="label label-primary">Generado</small>';
+                    elseif ($model["estado"] == 1)
+                        return '<small class="label label-success">Pagado</small>';                        
                     else
                         return '<small class="label label-danger">Pendiente</small>';
                 },
@@ -68,13 +70,21 @@ admision::registerTranslations();
                 'template' => '{details} {request} {actualizar_pago}',           
                 'buttons' => [
                     'actualizar_pago' => function ($url, $model) {
-                        return Html::a('<span class="glyphicon glyphicon-refresh"></span>', "#", ["onclick" => "actualizar_pago(" . $model['doc_id'] . ");", "data-toggle" => "tooltip", "title" => "Actualizar Estado", "data-pjax" => 0]);
+                        if ($model["estado"]==0) {
+                            return Html::a('<span class="glyphicon glyphicon-refresh"></span>', "#", ["onclick" => "actualizar_pago(" . $model['doc_id'] . ");", "data-toggle" => "tooltip", "title" => "Actualizar Estado", "data-pjax" => 0]);
+                        } else {
+                            return '<span class="glyphicon glyphicon-refresh"></span>';
+                        }
                     },                   
                     'details' => function ($url, $model) {
                         return Html::a('<span class="glyphicon glyphicon-th-list"></span>', Url::to(['pagos/detallepagoexterno', 'doc_id' => $model['id'], 'popup' => 'true']), ["data-toggle" => "tooltip", "title" => "Detalle Pago", "data-pjax" => 0, "class" => "pbpopup"]);
                     },                   
                     'request' => function ($url, $model) {  
-                        return Html::a('<span class="glyphicon glyphicon-bookmark"></span>', "#", ["onclick" => "generarSolicitud(" . $model['doc_id'] . ");", "data-toggle" => "tooltip", "title" => "Generar Solicitud", "data-pjax" => 0]);
+                        if (($model["estado"]==1) && ($model["sbpa_op"]==0)) {  //Cuando está pagado se genera solicitud y o/pago.
+                            return Html::a('<span class="glyphicon glyphicon-bookmark"></span>', "#", ["onclick" => "generarSolicitud(" . $model['doc_id'] . ");", "data-toggle" => "tooltip", "title" => "Generar Solicitud", "data-pjax" => 0]);
+                        } else {
+                             return '<span class="glyphicon glyphicon-bookmark"></span>';
+                        }
                     },                   
                 ],
             ],

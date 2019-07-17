@@ -247,8 +247,10 @@ class PagosfrecuentesController extends \yii\web\Controller {
                         }
                     }
                     if ($id_pbens > 0) {
+                        \app\models\Utilities::putMessageLogFile('después de crear o actualizar beneficiario');
                         $idsbp = $sbp_model->insertSolicitudBotonPago($con1, $id_pbens);
                         if ($idsbp > 0) {
+                            \app\models\Utilities::putMessageLogFile('después de crear solicitud');
                             $tdoc_id=1;
                             $tipo_dni_fac=$dataFactura["tipo_dni_fac"];
                             switch ($tipo_dni_fac){
@@ -270,10 +272,11 @@ class PagosfrecuentesController extends \yii\web\Controller {
                             if ($iddoc > 0) {
                                 for ($i = 0; $i < count($item_ids); $i++) {
                                     $item_precio = $item_model->getPrecios($con1, $item_ids[$i]["item_id"]);
-                                    $val_iva = 0;
+                                    $val_iva = 0;                                                                        
                                     $id_ddoc=$ddoc_model->insertarDetDocumento($con1, $iddoc, $item_ids[$i]["item_id"], 1, $item_precio["ipre_precio"], $val_iva);
                                     if ($id_ddoc > 0) {
                                         $mensaje = $mensaje . "";
+                                        \app\models\Utilities::putMessageLogFile('despues de insertar documento');
                                     }
                                 }
                                 $transaction->commit();

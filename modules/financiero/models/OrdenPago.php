@@ -1576,8 +1576,8 @@ class OrdenPago extends \app\modules\financiero\components\CActiveRecord {
         }
 
         if (isset($sgen_id)) {
-            $param_sql .= ", sgen_id";
-            $bopago_sql .= ", :sgen_id";
+            $param_sql .= ", sbpa_id";
+            $bopago_sql .= ", :sbpa_id";
         }
 
         if (isset($fecha_generacion)) {
@@ -1617,6 +1617,7 @@ class OrdenPago extends \app\modules\financiero\components\CActiveRecord {
 
         try {
             $sql = "INSERT INTO " . $con->dbname . ".orden_pago ($param_sql) VALUES($bopago_sql)";
+            \app\models\Utilities::putMessageLogFile('insert o/p:'.$sql);
             $comando = $con->createCommand($sql);
 
             if (!empty($sins_id)) {
@@ -1626,7 +1627,7 @@ class OrdenPago extends \app\modules\financiero\components\CActiveRecord {
 
             if (!empty($sgen_id)) {
                 if (isset($sgen_id))
-                    $comando->bindParam(':sgen_id', $sgen_id, \PDO::PARAM_INT);
+                    $comando->bindParam(':sbpa_id', $sgen_id, \PDO::PARAM_INT);
             }
 
             if (isset($fecha_generacion))

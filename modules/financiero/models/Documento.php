@@ -87,6 +87,7 @@ class Documento extends \yii\db\ActiveRecord {
         $sql = "INSERT INTO " . $con->dbname . ".documento
             (tdoc_id,  doc_tipo_dni, $doc_dni_key,  sbpa_id, doc_nombres_cliente, doc_direccion, doc_telefono,doc_fecha_pago, doc_correo, doc_valor, doc_pagado, doc_usuario_transaccion,doc_estado,doc_estado_logico) VALUES
             (:tdoc_id,:doc_tipo_dni, :$doc_dni_key, :sbpa_id,:doc_nombres_cliente,:doc_direccion,:doc_telefono,:fecha_pago,:doc_correo,:doc_valor, 0, :doc_usuario_transaccion,:doc_estado,:doc_estado)";
+        \app\models\Utilities::putMessageLogFile('insert documento:'.$sql);   
         $command = $con->createCommand($sql);
         $command->bindParam(":tdoc_id", $tdoc_id, \PDO::PARAM_INT);
         $command->bindParam(":sbpa_id", $sbpa_id, \PDO::PARAM_INT);
@@ -150,7 +151,8 @@ class Documento extends \yii\db\ActiveRecord {
                         pb.pben_nombre,
                         pb.pben_apellido,
                         sb.sbpa_id,
-                        sb.sbpa_fecha_solicitud
+                        sb.sbpa_fecha_solicitud,
+                        d.doc_pagado
                 FROM " . $con->dbname . ".documento d inner join " . $con->dbname . ".solicitud_boton_pago sb 
                          on sb.sbpa_id = d.sbpa_id     
                      inner join " . $con->dbname . ".persona_beneficiaria pb on pb.pben_id = sb.pben_id

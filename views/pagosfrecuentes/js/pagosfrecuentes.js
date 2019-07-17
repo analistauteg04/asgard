@@ -403,11 +403,11 @@ function guardarPagos() {
                 requestHttpAjax(link, arrParams, function (response) {
                     showAlert("OK", "success", response.message);
                     sessionStorage.clear();
-                    /*setTimeout(function () {
+                    setTimeout(function () {
                         var bohre = $('#txth_base').val() + "/pagosfrecuentes/botonpago?docid=" + response.message.iddoc + "&popup=1";
                         $('#btn_pago_p').attr("href", bohre);
                         $('#btn_pago_p').trigger("click");
-                    }, 3000);*/ //descomentar cuando termine de guardar bien
+                    }, 3000); //descomentar cuando termine de guardar bien
                 });
             }
         }else{
