@@ -24,7 +24,12 @@ use app\modules\repositorio\Module as repositorio;
             <div class="form-group"> 
                 <label for="cmb_modelo_evi" class="col-lg-5 col-md-5 col-sm-5 col-xs-5 control-label"><?= repositorio::t("repositorio", "Model") ?> <span class="text-danger">*</span></label>
                 <div class="col-lg-7 col-md-7 col-sm-7 col-xs-7">
-                    <?= Html::dropDownList("cmb_modelo_evi", 0,array_merge([Yii::t("formulario", "Select")],$arr_modelos) , ["class" => "form-control", "id" => "cmb_modelo_evi"]) ?>
+                    <?php //Html::dropDownList("cmb_modelo_evi", 1,array_merge($arr_modelos) , ["class" => "form-control", "id" => "cmb_modelo_evi"]) ?>
+                    <?=
+                        Html::dropDownList(
+                                "cmb_modelo_evi", 0, ['0' => Yii::t('formulario', 'Select')] + $arr_modelos, ["class" => "form-control", "id" => "cmb_modelo_evi"]
+                        )
+                        ?>
                 </div>
             </div>   
         </div>
@@ -32,7 +37,7 @@ use app\modules\repositorio\Module as repositorio;
             <div class="form-group">            
                 <label for="cmb_funcion_evi" class="col-lg-5 col-md-5 col-sm-5 col-xs-5 control-label"><?= repositorio::t("repositorio", "Function") ?> <span class="text-danger">*</span></label>
                 <div class="col-lg-7 col-md-7 col-sm-7 col-xs-7">
-                    <?= Html::dropDownList("cmb_funcion_evi", 0,array_merge([Yii::t("formulario", "Select")],$arr_funciones) , ["class" => "form-control", "id" => "cmb_funcion_evi"]) ?>
+                    <?= Html::dropDownList("cmb_funcion_evi", 0, ['0' => Yii::t('formulario', 'Select')] +$arr_funciones , ["class" => "form-control", "id" => "cmb_funcion_evi"]) ?>
                 </div>
             </div>
         </div>
@@ -42,7 +47,7 @@ use app\modules\repositorio\Module as repositorio;
             <div class="form-group">            
                 <label for="cmb_componente_evi" class="col-lg-5 col-md-5 col-sm-5 col-xs-5 control-label"><?= repositorio::t("repositorio", "Component") ?></label>
                 <div class="col-lg-7 col-md-7 col-sm-7 col-xs-7">
-                    <?= Html::dropDownList("cmb_componente_evi", 1, $arr_componentes, ["class" => "form-control", "id" => "cmb_componente_evi"]) ?>
+                    <?= Html::dropDownList("cmb_componente_evi", 0, ['0' => Yii::t('formulario', 'Select')] +$arr_componentes, ["class" => "form-control", "id" => "cmb_componente_evi"]) ?>
                 </div>
             </div>
         </div>
@@ -50,7 +55,7 @@ use app\modules\repositorio\Module as repositorio;
             <div class="form-group">            
                 <label for="cmb_estandar_evi" class="col-lg-5 col-md-5 col-sm-5 col-xs-5 control-label"><?= repositorio::t("repositorio", "Standar") ?> <span class="text-danger">*</span></label>
                 <div class="col-lg-7 col-md-7 col-sm-7 col-xs-7">
-                    <?= Html::dropDownList("cmb_estandar_evi", 0,array_merge([Yii::t("formulario", "Select")],$arr_estandares) , ["class" => "form-control", "id" => "cmb_estandar_evi"]) ?>
+                    <?= Html::dropDownList("cmb_estandar_evi", 0, ['0' => Yii::t('formulario', 'Select')] +$arr_estandares , ["class" => "form-control", "id" => "cmb_estandar_evi"]) ?>
                 </div>
             </div>
         </div>
@@ -60,7 +65,7 @@ use app\modules\repositorio\Module as repositorio;
             <div class="form-group">            
                 <label for="cmb_tipo_evi" class="col-lg-5 col-md-5 col-sm-5 col-xs-5 control-label"><?= Yii::t("formulario", "Type") ?> <span class="text-danger">*</span></label>
                 <div class="col-lg-7 col-md-7 col-sm-7 col-xs-7">
-                    <?= Html::dropDownList("cmb_tipo_evi", 0,array_merge([Yii::t("formulario", "Select")],$arr_tipos) , ["class" => "form-control", "id" => "cmb_tipo_evi"]) ?>
+                    <?= Html::dropDownList("cmb_tipo_evi", 0, ['0' => Yii::t('formulario', 'Select')] +$arr_tipos , ["class" => "form-control", "id" => "cmb_tipo_evi"]) ?>
                 </div>
             </div>
         </div>
