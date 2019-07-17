@@ -4,9 +4,7 @@
  * and open the template in the editor.
  */
 $(document).ready(function () {
-
     recargarGridItem();
-
 
     $('#btn_AgregarItem').click(function () {
         agregarItems('new')
@@ -250,8 +248,8 @@ function agregarItems(opAccion) {
     var tGrid = 'TbG_Data';
     var nombre = $('#cmb_estandar_evi option:selected').text();
     //Verifica que tenga nombre producto y tenga foto
-    //if ($('#txt_prod_nombre').val() != "" && $('#txth_producto_foto').val() != "") {
-    if (true) {
+    if ($('#cmb_modelo_evi').val() != 0 && $('#cmb_funcion_evi').val() != 0 && $('#txth_docarchivo').val() != ""
+           && $('#cmb_estandar_evi').val() != 0 && $('#cmb_tipo_evi').val() != 0 && $('#txt_fecha_documento_evi').val() != "") {
         var valor = $('#cmb_estandar_evi option:selected').text();
         if (opAccion != "edit") {
             //*********   AGREGAR ITEMS *********
@@ -294,25 +292,6 @@ function agregarItems(opAccion) {
     }
 }
 
-/*CREATE TABLE `documento_repositorio` (
-  `dre_id` bigint(20) NOT NULL AUTO_INCREMENT,
-  `est_id` bigint(20) NOT NULL,
-  `dre_tipo` bigint(20) DEFAULT NULL,
-  `dre_codificacion` varchar(100) NOT NULL,
-  `dre_ruta` varchar(200) NOT NULL,
-  `dre_imagen` varchar(100) NOT NULL,
-  `dre_descripcion` varchar(1000) DEFAULT NULL,
-  `dre_usu_modifica` bigint(20) DEFAULT NULL,
-  `dre_estado` varchar(1) NOT NULL,
-  `dre_fecha_archivo` timestamp NULL DEFAULT NULL,
-  `dre_fecha_creacion` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,
-  `dre_fecha_modificacion` timestamp NULL DEFAULT NULL,
-  `dre_estado_logico` varchar(1) NOT NULL,
-  PRIMARY KEY (`dre_id`),
-  KEY `est_id` (`est_id`),
-  CONSTRAINT `documento_repositorio_ibfk_1` FOREIGN KEY (`est_id`) REFERENCES `estandar` (`est_id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8;*/
-
 
 function objProducto(indice) {
     var rowGrid = new Object();
@@ -329,8 +308,8 @@ function objProducto(indice) {
     rowGrid.tipo_evi = $('#cmb_tipo_evi option:selected').text();
     
     rowGrid.dre_codificacion = '';
-    rowGrid.dre_ruta = $('#txt_doc_archivo').val();
-    rowGrid.dre_imagen = $('#txt_doc_archivo').val();
+    rowGrid.dre_ruta = $('#txth_doc_archivo_ruta').val();
+    rowGrid.dre_imagen = $('#txth_doc_archivo').val();//$('#txt_doc_archivo').val();
     rowGrid.dre_descripcion = $('#txt_descripcion').val();
     rowGrid.dre_fecha_archivo = $('#txt_fecha_documento_evi').val();
     rowGrid.dre_estado = 1;
@@ -436,8 +415,13 @@ function objItemUpdate(i,Grid) {
 }
 
 function limpiarDetalle() {
-    //$('#txt_prod_nombre').val("");
-    //$('#txt_detalle_uso').val("");
+    $('#txt_fecha_documento_evi').val("");
+    $('#txt_descripcion').val("");   
+    
+    $('#txth_doc_archivo').val('');
+    $('#txth_doc_archivo_ruta').val(''); 
+    $('#txt_doc_archivo').fileinput('clear');
+    //$('#txt_doc_archivo').fileinput('refresh');
     
     //Quita los Alertas
     //removeIco('#txt_prod_nombre');
@@ -446,7 +430,7 @@ function limpiarDetalle() {
     //$('#txth_producto_foto').val("");
     //$('#txt_producto_foto').val("");
     //$('#txt_producto_foto').fileinput('enable');
-    //$('#txt_producto_foto').fileinput('refresh');
+    
 }
 
 function codigoExiste(value, property, lista) {
@@ -470,28 +454,34 @@ function findAndRemove(array, property, value) {
 }
 
 
-function saveEvidencia(){
-    alert('Guardar');
-    var medID = (accion == "Update") ? $('#txth_med_id').val() : 0;
-    var perID = (accion == "Update") ? $('#txth_per_id').val() : 0;
-    //var link = $('#txth_base').val() + "/medico/savemedico";
-    var link = $('#txth_base').val() + "/repositorio/repositorio/index";
+function saveEvidencia() {
+    //var medID = (accion == "Update") ? $('#txth_med_id').val() : 0;
+    var accion = "Create";
+    var link = $('#txth_base').val() + "/repositorio/repositorio/evidencia";
     var arrParams = new Object();
-    arrParams.DATA = dataPersona(medID,perID);
-    arrParams.ACCION = accion;
-    var validation = validateForm();
-    if (!validation) {
-        requestHttpAjax(link, arrParams, function (response) {
-            var message = response.message;
-            if (response.status == "OK") {
-                showAlert(response.status, response.type, {"wtmessage": message.info, "title": response.label});
-                //limpiarDatos();
-                //var renderurl = $('#txth_base').val() + "/mceformulariotemp/index";
-                //window.location = renderurl;
-            } else {
-                showAlert(response.status, response.type, {"wtmessage": message.info, "title": response.label});
-            }
-        }, true);
+    if (sessionStorage.dts_datosItem) {
+        var arr_Grid = JSON.parse(sessionStorage.dts_datosItem);
+        if (arr_Grid.length > 0) {
+            arrParams.DATA = sessionStorage.dts_datosItem
+            arrParams.ACCION = accion;
+            requestHttpAjax(link, arrParams, function (response) {
+                var message = response.message;
+                if (response.status == "OK") {
+                    showAlert(response.status, response.type, {"wtmessage": message.info, "title": response.label});
+                    //limpiarDatos();
+                    //sessionStorage.removeItem('dts_datosItem')
+                    //var renderurl = $('#txth_base').val() + "/mceformulariotemp/index";
+                    //window.location = renderurl;
+                } else {
+                    showAlert(response.status, response.type, {"wtmessage": message.info, "title": response.label});
+                }
+            }, true);
+        } else {
+            //arrParams.DATA = new Array();
+            showAlert('NO_OK', 'error', {"wtmessage": "No Existe datos ", "title":'Información'});
+        }
+    }else{
+        showAlert('NO_OK', 'error', {"wtmessage": "No Existe datos ", "title":'Información'});
     }
 }
 

@@ -182,29 +182,14 @@ class DocumentoRepositorio extends \yii\db\ActiveRecord
     }
     
     /* INSERTAR DATOS */
-    public function insertarMedicos($data) {
+    public function insertarDataDocumentos($data) {
         $arroout = array();
-        $con = \Yii::$app->db;
+        $con = \Yii::$app->db_repositorio;        
         $trans = $con->beginTransaction();
         try {
+            //$per_id = @Yii::$app->session->get("PB_perid");    
             $data = isset($data['DATA']) ? $data['DATA'] : array();
-            Persona::insertarDataPerfil($con, $data);
-            $per_id=$con->getLastInsertID();//IDS de la Persona            
-            Persona::insertarDataPerfilDatoAdicional($con, $data, $per_id);
-            $this->insertarDataMedico($con, $data, $per_id);
-            $med_id=$con->getLastInsertID();
-            Especialidad::insertarDataEspecialidad($con, $data[0]['especialidades'], $med_id);
-            Empresa::insertarDataEmpresa($con, $data[0]['emp_id'], $med_id); 
-            
-            //Inserta Datos de Usuario
-            $password=Utilities::generarCodigoKey(8);//Passw Generado Automaticamente
-            $linkActiva=Usuario::crearLinkActivacion();
-            Usuario::insertarDataUser($con, $data[0]['per_correo'], $password, $per_id,$linkActiva); 
-            $usu_id=$con->getLastInsertID();//IDS de la Persona
-            Rol::saveEmpresaRol($con, $usu_id, $data[0]['emp_id'], $this->rolDefault);
-            //###############################
-            
-            Utilities::insertarLogs($con, $med_id, 'medico', 'Insert -> Med_id');
+            $this->insertarDocumentos($con,json_decode($data));
             $trans->commit();
             $con->close();
             //RETORNA DATOS 
@@ -212,17 +197,7 @@ class DocumentoRepositorio extends \yii\db\ActiveRecord
             $arroout["status"]= true;
             //$arroout["secuencial"]= $doc_numero;
             
-            //Enviar correo electronico para activacion de cuenta
-                $nombres = $data[0]['per_nombre'];
-                $tituloMensaje = Yii::t("register","Successful Registration");
-                $asunto = Yii::t("register", "User Register") . " " . Yii::$app->params["siteName"];
-                $body = Utilities::getMailMessage("registerPaciente", array("[[user]]" => $nombres, "[[username]]" => $data[0]['per_correo'],"[[clave]]" => $password, "[[link_verification]]" => $linkActiva), Yii::$app->language);
-                Utilities::sendEmail($tituloMensaje, Yii::$app->params["adminEmail"], 
-                                    [$data[0]['per_correo'] => $data[0]['per_nombre'] . " " . $data[0]['per_apellido']],
-                                    [],//Bcc
-                                    $asunto, $body);
-            //Find Datos Mail
-            
+                       
             return $arroout;
         } catch (\Exception $e) {
             $trans->rollBack();
@@ -233,24 +208,33 @@ class DocumentoRepositorio extends \yii\db\ActiveRecord
         }
     }
     
-     public static function insertarDataPerfil($con,$data) { 
-        //Datos de Perfil
-        $sql = "INSERT INTO " . $con->dbname . ".persona
-        (per_ced_ruc,per_nombre,per_apellido,per_genero,per_fecha_nacimiento,per_estado_civil,per_correo,per_tipo_sangre,per_foto,per_estado_activo,per_est_log)VALUES
-        (:per_ced_ruc,:per_nombre,:per_apellido,:per_genero,:per_fecha_nacimiento,:per_estado_civil,:per_correo,:per_tipo_sangre,:per_foto,1,1 ); ";
-        $command = $con->createCommand($sql);
-        //$command->bindParam(":per_id", $data[0]['per_id'], \PDO::PARAM_INT);//Id Comparacion
-        $command->bindParam(":per_nombre", $data[0]['per_nombre'], \PDO::PARAM_STR);
-        $command->bindParam(":per_apellido", $data[0]['per_apellido'], \PDO::PARAM_STR);
-        $command->bindParam(":per_ced_ruc", $data[0]['per_ced_ruc'], \PDO::PARAM_STR);        
-        $command->bindParam(":per_genero", $data[0]['per_genero'], \PDO::PARAM_STR);
-        $command->bindParam(":per_fecha_nacimiento", $data[0]['per_fecha_nacimiento'], \PDO::PARAM_STR);
-        $command->bindParam(":per_estado_civil", $data[0]['per_estado_civil'], \PDO::PARAM_STR);
-        $command->bindParam(":per_correo", $data[0]['per_correo'], \PDO::PARAM_STR);
-        $command->bindParam(":per_tipo_sangre", $data[0]['per_tipo_sangre'], \PDO::PARAM_STR);
-        $command->bindParam(":per_foto", $data[0]['per_foto'], \PDO::PARAM_STR);
-        $command->execute();
+    private function insertarDocumentos($con,$dts) {
+        //dre_id
+        $usu_id = @Yii::$app->session->get("PB_iduser");
+        for ($i = 0; $i < sizeof($dts); $i++) {
+            $sql = "INSERT INTO " . $con->dbname . ".documento_repositorio
+                    (est_id,dre_tipo,dre_codificacion,dre_ruta,dre_imagen,dre_descripcion,
+                        dre_usu_modifica,dre_estado,dre_fecha_archivo,dre_estado_logico)VALUES
+                    (:est_id,:dre_tipo,:dre_codificacion,:dre_ruta,:dre_imagen,:dre_descripcion,
+                        :dre_usu_modifica,:dre_estado,:dre_fecha_archivo,:dre_estado_logico)";
+            $command = $con->createCommand($sql);
+            $command->bindParam(":est_id", $dts[$i]->est_id, \PDO::PARAM_INT);
+            $command->bindParam(":dre_tipo", $dts[$i]->dre_tipo, \PDO::PARAM_INT);
+            $command->bindParam(":dre_codificacion", $dts[$i]->dre_codificacion, \PDO::PARAM_STR);
+            $command->bindParam(":dre_ruta", $dts[$i]->dre_ruta, \PDO::PARAM_STR);
+            $command->bindParam(":dre_imagen", $dts[$i]->dre_imagen, \PDO::PARAM_STR);
+            $command->bindParam(":dre_descripcion", $dts[$i]->dre_descripcion, \PDO::PARAM_STR);
+            $command->bindParam(":dre_usu_modifica", $usu_id, \PDO::PARAM_INT);
+            $command->bindParam(":dre_estado", $dts[$i]->dre_estado, \PDO::PARAM_INT);
+            $command->bindParam(":dre_fecha_archivo", $dts[$i]->dre_fecha_archivo, \PDO::PARAM_STR);            
+            $command->bindParam(":dre_estado_logico", $dts[$i]->dre_estado_logico, \PDO::PARAM_INT);
+            //$command->bindParam(":per_nombre", $data[0]['per_nombre'], \PDO::PARAM_STR);
+            $command->execute();
+        }
+        
     }
+    
+    
     
     
     
