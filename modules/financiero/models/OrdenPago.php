@@ -1550,7 +1550,7 @@ class OrdenPago extends \app\modules\financiero\components\CActiveRecord {
      * @param   
      * @return  
      */
-    public function insertarOrdenpago($sins_id, $sgen_id, $opag_subtotal, $opag_iva, $opag_total, $opag_estado_pago, $usuario_ingreso) {
+    public function insertarOrdenpago($sins_id, $sgen_id, $opag_subtotal, $opag_iva, $opag_total, $opag_estado_pago, $usuario_ingreso, $opag_fecha_pago_total = null) {
         $con = \Yii::$app->db_facturacion;
 
         $trans = $con->getTransaction(); // se obtiene la transacción actual
@@ -1614,6 +1614,10 @@ class OrdenPago extends \app\modules\financiero\components\CActiveRecord {
             $param_sql .= ", opag_usu_ingreso";
             $bopago_sql .= ", :opag_usu_ingreso";
         }
+        if (isset($opag_fecha_pago_total)) {
+            $param_sql .= ", opag_fecha_pago_total";
+            $bopago_sql .= ", :opag_fecha_pago_total";
+        }        
 
         try {
             $sql = "INSERT INTO " . $con->dbname . ".orden_pago ($param_sql) VALUES($bopago_sql)";
@@ -1650,6 +1654,8 @@ class OrdenPago extends \app\modules\financiero\components\CActiveRecord {
 
             if (isset($usuario_ingreso))
                 $comando->bindParam(':opag_usu_ingreso', $usuario_ingreso, \PDO::PARAM_INT);
+            if (isset($opag_fecha_pago_total))
+                $comando->bindParam(':opag_fecha_pago_total', $opag_fecha_pago_total, \PDO::PARAM_STR);
 
             $result = $comando->execute();
             if ($trans !== null)

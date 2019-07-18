@@ -195,20 +195,11 @@ class SolicitudBotonPago extends \yii\db\ActiveRecord {
                 db_facturacion.orden_pago as opag
                 join db_captacion.solicitud_inscripcion as sins on sins.sins_id = opag.sins_id
                 join db_captacion.interesado as inte on inte.int_id = sins.int_id
-                join db_asgard.persona as per on per.per_id = inte.int_id
+                join db_asgard.persona as per on per.per_id = inte.per_id
                 join db_financiero.vpos_response as vpre on vpre.ordenPago = opag.opag_id and vpre.tipo_orden = 1
+                where
+                per.per_id = :per_id
             ";
-        $sql .= "
-                    per.per_id= :per_id and                    
-                    opag.opag_estado = :status and
-                    opag.opag_estado_logico = :status and
-                    sins.sins_estado = :status and
-                    sins.sins_estado_logico = :status and
-                    inte.int_estado = :status and
-                    inte.int_estado_logico = :status and
-                    per.per_estado = :status and
-                    per.per_estado_logico = :status                
-                ";
         $sql .= " union ";
         $sql .= " 
              select
@@ -222,9 +213,11 @@ class SolicitudBotonPago extends \yii\db\ActiveRecord {
                 db_facturacion.orden_pago as opag
                 join db_captacion.solicitud_inscripcion as sins on sins.sins_id = opag.sins_id
                 join db_captacion.interesado as inte on inte.int_id = sins.int_id
-                join db_asgard.persona as per on per.per_id = inte.int_id
+                join db_asgard.persona as per on per.per_id = inte.per_id
                 join db_facturacion.documento as doc on doc.sbpa_id = opag.sbpa_id
                 join db_financiero.vpos_response as vpre on vpre.ordenPago = doc.doc_id and vpre.tipo_orden = 2
+                where
+                per.per_id = :per_id
                 ";
         $comando = $con->createCommand($sql);
         $comando->bindParam(":status", $estado, \PDO::PARAM_STR);
