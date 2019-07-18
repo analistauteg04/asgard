@@ -468,7 +468,7 @@ function saveEvidencia() {
                 var message = response.message;
                 if (response.status == "OK") {
                     showAlert(response.status, response.type, {"wtmessage": message.info, "title": response.label});
-                    limpiarDatos();
+                    limpiarDetalle();
                     sessionStorage.removeItem('dts_datosItem')
                     //var renderurl = $('#txth_base').val() + "/repositorio/reposritorio/index";
                     //window.location = renderurl;
