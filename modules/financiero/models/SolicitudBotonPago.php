@@ -183,12 +183,6 @@ class SolicitudBotonPago extends \yii\db\ActiveRecord {
         $con = \Yii::$app->db_facturacion;
         $con1 = \Yii::$app->db_financiero;
         $estado = 1;
-        if (isset($arrFiltro) && count($arrFiltro) > 0) {
-            if ($arrFiltro['f_ini'] != "" && $arrFiltro['f_fin'] != "") {
-                $str_search .= "opag.opag_fecha_pago_total >= :fec_ini AND ";
-                $str_search .= "opag.opag_fecha_pago_total <= :fec_fin AND ";
-            }
-        }
         $sql = " 
              select
                 opag.opag_id as id,
@@ -203,10 +197,7 @@ class SolicitudBotonPago extends \yii\db\ActiveRecord {
                 join db_captacion.interesado as inte on inte.int_id = sins.int_id
                 join db_asgard.persona as per on per.per_id = inte.int_id
                 join db_financiero.vpos_response as vpre on vpre.ordenPago = opag.opag_id and vpre.tipo_orden = 1
-            where ";
-        if (!empty($str_search)) {
-            $sql .= $str_search;
-        }
+            ";
         $sql .= "
                     per.per_id= :per_id and                    
                     opag.opag_estado = 1 and
@@ -232,35 +223,12 @@ class SolicitudBotonPago extends \yii\db\ActiveRecord {
                 join db_captacion.solicitud_inscripcion as sins on sins.sins_id = opag.sins_id
                 join db_captacion.interesado as inte on inte.int_id = sins.int_id
                 join db_asgard.persona as per on per.per_id = inte.int_id
-                join db_facturacion.documento as doc on doc.spba_id = opag.spba_id
+                join db_facturacion.documento as doc on doc.sbpa_id = opag.sbpa_id
                 join db_financiero.vpos_response as vpre on vpre.ordenPago = doc.doc_id and vpre.tipo_orden = 2
-            where ";
-        if (!empty($str_search)) {
-            $sql .= $str_search;
-        }
-        $sql .= "
-                    per.per_id= :per_id and
-                    opag.sbpa_id > 0 and
-                    opag.opag_estado = 1 and
-                    opag.opag_estado_logico = 1 and
-                    sins.sins_estado = 1 and
-                    sins.sins_estado_logico = 1 and
-                    inte.int_estado = 1 and
-                    inte.int_estado_logico = 1 and
-                    per.per_estado = 1 and
-                    per.per_estado_logico = 1                
-                ";
+            ";
         $comando = $con->createCommand($sql);
         $comando->bindParam(":status", $estado, \PDO::PARAM_STR);
         $comando->bindParam(":per_id", $per_id, \PDO::PARAM_INT);
-        if (isset($arrFiltro) && count($arrFiltro) > 0) {
-            $fecha_ini = $arrFiltro["f_ini"] . " 00:00:00";
-            $fecha_fin = $arrFiltro["f_fin"] . " 23:59:59";
-            if ($arrFiltro['f_ini'] != "" && $arrFiltro['f_fin'] != "") {
-                $comando->bindParam(":fec_ini", $fecha_ini, \PDO::PARAM_STR);
-                $comando->bindParam(":fec_fin", $fecha_fin, \PDO::PARAM_STR);
-            }
-        }
         $resultData = $comando->queryAll();
         $dataProvider = new ArrayDataProvider([
             'key' => 'id',

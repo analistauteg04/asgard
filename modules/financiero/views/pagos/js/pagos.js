@@ -10,13 +10,11 @@ $(document).ready(function () {
     $('#btn_enviar').click(function () {
         var arrParams = new Object();
         var link = $('#txth_base').val() + "/financiero/pagos/savepago";
-
         arrParams.opag_id = $('#txth_ids').val();
         arrParams.estado_revision = $('#cmb_revision').val();
         arrParams.valor = $('#txth_val').val();
         arrParams.valorpagado = $('#txth_valp').val();
         arrParams.valortotal = $('#txth_valt').val();
-
         if ($('#cmb_revision').val() == "AP")
         {
             arrParams.observacion = "";

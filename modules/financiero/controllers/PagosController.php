@@ -890,9 +890,9 @@ class PagosController extends \app\components\CController {
                         "model" => $data_transacciones,
             ]);
         } else {
-            $data_transacciones = $model_sbpag->consultarHistoralTransacciones($opag_id);
+            $data_transacciones = $model_sbpag->consultarHistoralTransacciones($per_id);
         }
-        $data_transacciones = $model_sbpag->consultarHistoralTransacciones($opag_id);
+        $data_transacciones = $model_sbpag->consultarHistoralTransacciones($per_id);
         return $this->render('historialtransaccion', [
                     'model' => $data_transacciones,
         ]);
