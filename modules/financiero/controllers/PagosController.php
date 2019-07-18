@@ -879,7 +879,7 @@ class PagosController extends \app\components\CController {
     }
 
     public function actionHistorialtransacciones() {
-        $per_id = Yii::$app->session->get("PB_perid");
+        $per_id = @Yii::$app->session->get("PB_perid");
         $model_sbpag = new SolicitudBotonPago();
         $data = Yii::$app->request->get();
         if ($data['PBgetFilter']) {
@@ -890,9 +890,10 @@ class PagosController extends \app\components\CController {
                         "model" => $data_transacciones,
             ]);
         } else {
-            $data_transacciones = $model_sbpag->consultarHistoralTransacciones($opag_id);
+            $data_transacciones = $model_sbpag->consultarHistoralTransacciones($per_id);
         }
-        $data_transacciones = $model_sbpag->consultarHistoralTransacciones($opag_id);
+        \app\models\Utilities::putMessageLogFile('rol:' . $resp_gruporol[0]);
+        $data_transacciones = $model_sbpag->consultarHistoralTransacciones($per_id);
         return $this->render('historialtransaccion', [
                     'model' => $data_transacciones,
         ]);

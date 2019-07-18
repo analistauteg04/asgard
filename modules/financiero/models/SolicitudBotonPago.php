@@ -190,7 +190,7 @@ class SolicitudBotonPago extends \yii\db\ActiveRecord {
             }
         }
         $sql = " 
-             select
+             selectx
                 opag.opag_id as id,
                 vpre.reference as referencia,
                 concat(per.per_pri_nombre,' ',per.per_pri_apellido)  as estudiante,
@@ -209,17 +209,17 @@ class SolicitudBotonPago extends \yii\db\ActiveRecord {
         }
         $sql .= "
                     per.per_id= :per_id and                    
-                    opag.opag_estado = 1 and
-                    opag.opag_estado_logico = 1 and
-                    sins.sins_estado = 1 and
-                    sins.sins_estado_logico = 1 and
-                    inte.int_estado = 1 and
-                    inte.int_estado_logico = 1 and
-                    per.per_estado = 1 and
-                    per.per_estado_logico = 1                
+                    opag.opag_estado = :status and
+                    opag.opag_estado_logico = :status and
+                    sins.sins_estado = :status and
+                    sins.sins_estado_logico = :status and
+                    inte.int_estado = :status and
+                    inte.int_estado_logico = :status and
+                    per.per_estado = :status and
+                    per.per_estado_logico = :status                
                 ";
         $sql .= " union ";
-        $sql = " 
+        $sql .= " 
              select
                 opag.opag_id as id,
                 vpre.reference as referencia,
@@ -232,7 +232,7 @@ class SolicitudBotonPago extends \yii\db\ActiveRecord {
                 join db_captacion.solicitud_inscripcion as sins on sins.sins_id = opag.sins_id
                 join db_captacion.interesado as inte on inte.int_id = sins.int_id
                 join db_asgard.persona as per on per.per_id = inte.int_id
-                join db_facturacion.documento as doc on doc.spba_id = opag.spba_id
+                join db_facturacion.documento as doc on doc.sbpa_id = opag.sbpa_id
                 join db_financiero.vpos_response as vpre on vpre.ordenPago = doc.doc_id and vpre.tipo_orden = 2
             where ";
         if (!empty($str_search)) {
@@ -241,14 +241,14 @@ class SolicitudBotonPago extends \yii\db\ActiveRecord {
         $sql .= "
                     per.per_id= :per_id and
                     opag.sbpa_id > 0 and
-                    opag.opag_estado = 1 and
-                    opag.opag_estado_logico = 1 and
-                    sins.sins_estado = 1 and
-                    sins.sins_estado_logico = 1 and
-                    inte.int_estado = 1 and
-                    inte.int_estado_logico = 1 and
-                    per.per_estado = 1 and
-                    per.per_estado_logico = 1                
+                    opag.opag_estado = :status and
+                    opag.opag_estado_logico = :status and
+                    sins.sins_estado = :status and
+                    sins.sins_estado_logico = :status and
+                    inte.int_estado = :status and
+                    inte.int_estado_logico = :status and
+                    per.per_estado = :status and
+                    per.per_estado_logico = :status                
                 ";
         $comando = $con->createCommand($sql);
         $comando->bindParam(":status", $estado, \PDO::PARAM_STR);
