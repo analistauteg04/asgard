@@ -902,13 +902,25 @@ class PagosController extends \app\components\CController {
         $doc_id=$data['doc_id'];        
         $model_documento = new Documento();
         $data_vpos=$model_documento->consultarVposByDocid($doc_id);        
-        $response = $this->render('btnpago', array(
-            "referenceID" => $data_vpos["reference"],
-            "requestID" => $data_vpos["requestID"],
-            "ordenPago" => $doc_id,
-            "tipo_orden" => 2,
-            "response" => $data_vpos["resp"]
+        return $this->render('btnpago', array(
+                    "referenceID" => $data_vpos["reference"],
+                    "ordenPago" => $doc_id,
+                    "tipo_orden" => 2,
+                    "nombre_cliente" => $nombre_cliente,
+                    "apellido_cliente" => $apellido_cliente,
+                    "cedula_cliente" => $resultado["doc_cedula"],
+                    "tipo_documento" => $tipo_dni,
+                    "titleBox" => $titleBox,
+                    "email_cliente" => $resultado["doc_correo"],
+                    "total" => $totalpagar,
         ));
+//        $response = $this->render('btnpago', array(
+//            "referenceID" => $data_vpos["reference"],
+//            "requestID" => $data_vpos["requestID"],
+//            "ordenPago" => $doc_id,
+//            "tipo_orden" => 2,
+//            "response" => $data_vpos["resp"]
+//        ));
         
     }
 
