@@ -233,7 +233,7 @@ class RepositorioController extends \app\components\CController {
                 $ext = explode('.', basename($filenames)); //Extension del Archivo
                 $folder_path = $_SERVER['DOCUMENT_ROOT'] . Url::base() . Yii::$app->params["repositorioFolder"]; 
                 //$folder_path = Yii::$app->params["repositorioFolder"]; 
-                $folder_path .= $per_id.$modelo . $funcion . $componente . $estandar . $tipo;      
+                $folder_path .= $modelo . $funcion . $componente . $estandar;      
                         
                //Utilities::putMessageLogFile($folder_path);
                 
@@ -242,7 +242,7 @@ class RepositorioController extends \app\components\CController {
                     //chmod($folder_path, 0777); 
                 }
                 
-                //$nombre = $nombre . "." . array_pop($ext); //Si Es producto Se guarda con el nombre original
+                //$nombre = $nombre . "." . array_pop($ext); //Si Es producto Se guarda con el nombre original esto SE DESCOMENTA Y PONEN EN VARIABLE NOMBRE COMO SE VA LLAMAR
                 $nombre = uniqid() . "." . array_pop($ext); //Si Es producto Se guarda con el nombre original
                 $target = $folder_path . DIRECTORY_SEPARATOR . $nombre;
                 

@@ -223,7 +223,7 @@ class DocumentoRepositorio extends \yii\db\ActiveRecord
             $command->bindParam(":dre_codificacion", $dts[$i]->dre_codificacion, \PDO::PARAM_STR);
             $command->bindParam(":dre_ruta", $dts[$i]->dre_ruta, \PDO::PARAM_STR);
             $command->bindParam(":dre_imagen", $dts[$i]->dre_imagen, \PDO::PARAM_STR);
-            $command->bindParam(":dre_descripcion", $dts[$i]->dre_descripcion, \PDO::PARAM_STR);
+            $command->bindParam(":dre_descripcion", ucwords(strtolower($dts[$i]->dre_descripcion)), \PDO::PARAM_STR);
             $command->bindParam(":dre_usu_modifica", $usu_id, \PDO::PARAM_INT);
             $command->bindParam(":dre_estado", $dts[$i]->dre_estado, \PDO::PARAM_INT);
             $command->bindParam(":dre_fecha_archivo", $dts[$i]->dre_fecha_archivo, \PDO::PARAM_STR);            
