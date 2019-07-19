@@ -151,8 +151,7 @@ class PagosController extends \app\components\CController {
             $transaction2 = $con2->beginTransaction();
             //Se consulta la información.
             $emp_id = 1;
-            $mod_documento = new Documento();
-            \app\models\Utilities::putMessageLogFile('antes de consultar');
+            $mod_documento = new Documento();            
             $resp_datos = $mod_documento->consultarDatosxId($con2, $doc_id);
             if ($resp_datos["doc_pagado"] == 1) {
                 $identificacion = $resp_datos['pben_cedula'];
@@ -180,13 +179,11 @@ class PagosController extends \app\components\CController {
                         null, null, null, $usuario_ingreso, 1, 1
                     ];
                     $id_persona = $mod_persona->consultarIdPersona($resp_datos['pben_cedula'], $resp_datos['pben_cedula'], $resp_datos['pben_correo'], $resp_datos['pben_celular']);
-                    \app\models\Utilities::putMessageLogFile('$id_persona:' . $id_persona);
-                    if ($id_persona == 0) {
-                        \app\models\Utilities::putMessageLogFile('persona');
-                        $id_persona = $mod_persona->insertarPersona($con, $parametros_per, $keys_per, 'persona');
-                        \app\models\Utilities::putMessageLogFile('despues de crear persona:' . $id_persona);
-                        if ($id_persona) {
-                            $mod_emp_persona = new EmpresaPersona();
+                    if ($id_persona == 0) {                        
+                        $id_persona = $mod_persona->insertarPersona($con, $parametros_per, $keys_per, 'persona');  
+                        \app\models\Utilities::putMessageLogFile('despues de crear persona:'.$id_persona);
+                        if ($id_persona) {                            
+                            $mod_emp_persona = new EmpresaPersona();                            
                             $keys = ['emp_id', 'per_id', 'eper_estado', 'eper_estado_logico'];
                             $parametros = [$emp_id, $id_persona, 1, 1];
                             $emp_per_id = $mod_emp_persona->consultarIdEmpresaPersona($id_persona, $emp_id);
@@ -259,8 +256,8 @@ class PagosController extends \app\components\CController {
                                         \app\models\Utilities::putMessageLogFile('despues insertar sol.');
                                         $mod_ordenpago = new OrdenPago();
                                         //Generar la orden de pago con valor correspondiente. Buscar precio para orden de pago.                                                                                                                         
-                                        $estadopago = 'P';
-                                        $resp_opago = $mod_ordenpago->insertarOrdenpago($sins_id, $resp_datos["sbpa_id"], $resp_detalle[$a]["total"], 0, $resp_detalle[$a]["total"], $estadopago, $usuario_id);
+                                        $estadopago = 'S';                                              
+                                        $resp_opago = $mod_ordenpago->insertarOrdenpago($sins_id, $resp_datos["sbpa_id"], $resp_detalle[$a]["total"], 0, $resp_detalle[$a]["total"], $estadopago, $usuario_id, $resp_datos["doc_fecha_pago"], $resp_detalle[$a]["total"]);
                                         if ($resp_opago) {
                                             \app\models\Utilities::putMessageLogFile('despues insertar o/p.');
                                             //insertar desglose del pago                                                         

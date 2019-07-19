@@ -91,14 +91,14 @@ $(document).ready(function () {
         requestHttpAjax(link, arrParams, function (response) {
             if (response.status == "OK") {
                 data = response.message;
-                setComboData(data.funciones, "cmb_funcion_evi");
+                setComboDataselect(data.funciones, "cmb_funcion_evi","Seleccionar");
                 var arrParams = new Object();
                 arrParams.fun_id = $('#cmb_funcion_evi').val();
                 arrParams.get_componentes = true;
                 requestHttpAjax(link, arrParams, function (response) {
                     if (response.status == "OK") {
                         data = response.message;
-                        setComboData(data.componentes, "cmb_componente_evi");
+                        setComboDataselect(data.componentes, "cmb_componente_evi","Seleccionar");
                         var arrParams = new Object();
                         arrParams.comp_id = $('#cmb_componente_evi').val();
                         arrParams.fun_id = $('#cmb_funcion_evi').val();
@@ -106,7 +106,7 @@ $(document).ready(function () {
                         requestHttpAjax(link, arrParams, function (response) {
                             if (response.status == "OK") {
                                 data = response.message;
-                                setComboData(data.estandares, "cmb_estandar_evi");
+                                setComboDataselect(data.estandares, "cmb_estandar_evi", "Seleccionar");
                             }
                         }, true);
                     }
@@ -123,7 +123,7 @@ $(document).ready(function () {
         requestHttpAjax(link, arrParams, function (response) {
             if (response.status == "OK") {
                 data = response.message;
-                setComboData(data.componentes, "cmb_componente_evi");
+                setComboDataselect(data.componentes, "cmb_componente_evi","Seleccionar");
                 var arrParams = new Object();
                 arrParams.comp_id = $('#cmb_componente_evi').val();
                 arrParams.fun_id = $('#cmb_funcion_evi').val();
@@ -131,7 +131,7 @@ $(document).ready(function () {
                 requestHttpAjax(link, arrParams, function (response) {
                     if (response.status == "OK") {
                         data = response.message;
-                        setComboData(data.estandares, "cmb_estandar_evi");
+                        setComboDataselect(data.estandares, "cmb_estandar_evi","Seleccionar");
                     }
                 }, true);
             }
@@ -147,7 +147,7 @@ $(document).ready(function () {
         requestHttpAjax(link, arrParams, function (response) {
             if (response.status == "OK") {
                 data = response.message;
-                setComboData(data.estandares, "cmb_estandar_evi");
+                setComboDataselect(data.estandares, "cmb_estandar_evi","Seleccionar");
             }
         }, true);
     });
@@ -297,10 +297,13 @@ function objProducto(indice) {
     var rowGrid = new Object();
     rowGrid.indice = indice;
     rowGrid.dre_id = 0;
-
+    rowGrid.componente_evi = "";
+            
     rowGrid.modelo_evi = $('#cmb_modelo_evi option:selected').text();
     rowGrid.funcion_evi = $('#cmb_funcion_evi option:selected').text();
-    rowGrid.componente_evi = $('#cmb_componente_evi option:selected').text();
+    if($('#cmb_componente_evi option:selected').text() != "Seleccionar"){
+        rowGrid.componente_evi = $('#cmb_componente_evi option:selected').text();
+    }    
 
     rowGrid.est_id = $('#cmb_estandar_evi').val();
     rowGrid.estandar_evi = $('#cmb_estandar_evi option:selected').text();
@@ -473,7 +476,7 @@ function saveEvidencia() {
                     //var renderurl = $('#txth_base').val() + "/repositorio/reposritorio/index";
                     //window.location = renderurl;
                     setTimeout(function () {
-                        parent.window.location.href = $('#txth_base').val() + "/repositorio/reposritorio/index";
+                        parent.window.location.href = $('#txth_base').val() + "/repositorio/repositorio/index";
                     }, 2000);
                 } else {
                     showAlert(response.status, response.type, {"wtmessage": message.info, "title": response.label});

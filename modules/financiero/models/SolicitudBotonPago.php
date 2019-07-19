@@ -189,46 +189,77 @@ class SolicitudBotonPago extends \yii\db\ActiveRecord {
     public function consultarHistoralTransacciones($per_id, $arrFiltro = array(), $onlyData = false) {
         $con = \Yii::$app->db_facturacion;
         $con1 = \Yii::$app->db_financiero;
+        $con2 = \Yii::$app->db_captacion;
+        $con3 = \Yii::$app->db_asgard;
         $estado = 1;
+        if (isset($arrFiltro) && count($arrFiltro) > 0) {            
+            if ($arrFiltro['f_ini'] != "" && $arrFiltro['f_fin'] != "") {
+                $str_search .= "opag.opag_fecha_pago_total >= :fec_ini AND ";
+                $str_search .= "opag.opag_fecha_pago_total <= :fec_fin AND ";
+            }
+        }        
         $sql = " 
-             select
-                opag.opag_id as id,
+            SELECT                
                 vpre.reference as referencia,
                 concat(per.per_pri_nombre,' ',per.per_pri_apellido)  as estudiante,
                 opag.opag_fecha_pago_total as fecha_pago,
                 opag.opag_valor_pagado as total_pago,
-                opag.opag_estado_pago as estado
-            from 
-                db_facturacion.orden_pago as opag
-                join db_captacion.solicitud_inscripcion as sins on sins.sins_id = opag.sins_id
-                join db_captacion.interesado as inte on inte.int_id = sins.int_id
-                join db_asgard.persona as per on per.per_id = inte.per_id
-                join db_financiero.vpos_response as vpre on vpre.ordenPago = opag.opag_id and vpre.tipo_orden = 1
-                where
-                per.per_id = :per_id
+                case when opag.opag_estado_pago = 'S' then 'Pagado' else 'Pendiente' end as estado
+            FROM 
+                " . $con->dbname . ".orden_pago as opag
+                join " . $con2->dbname . ".solicitud_inscripcion as sins on sins.sins_id = opag.sins_id
+                join " . $con2->dbname . ".interesado as inte on inte.int_id = sins.int_id
+                join " . $con3->dbname . ".persona as per on per.per_id = inte.per_id
+                join " . $con1->dbname . ".vpos_response as vpre on vpre.ordenPago = opag.opag_id and vpre.tipo_orden = 1
+            WHERE  $str_search
+                per.per_id = :per_id and 
+                opag.opag_estado = :status and
+                opag.opag_estado_logico = :status and
+                sins.sins_estado = :status and
+                sins.sins_estado_logico = :status and
+                inte.int_estado = :status and
+                inte.int_estado_logico = :status and
+                per.per_estado = :status and
+                per.per_estado_logico = :status
             ";
-        $sql .= " union ";
+        $sql .= " UNION ";
         $sql .= " 
-             select
-                opag.opag_id as id,
+            SELECT                
                 vpre.reference as referencia,
                 concat(per.per_pri_nombre,' ',per.per_pri_apellido)  as estudiante,
                 opag.opag_fecha_pago_total as fecha_pago,
                 opag.opag_valor_pagado as total_pago,
-                opag.opag_estado_pago as estado
-            from 
-                db_facturacion.orden_pago as opag
-                join db_captacion.solicitud_inscripcion as sins on sins.sins_id = opag.sins_id
-                join db_captacion.interesado as inte on inte.int_id = sins.int_id
-                join db_asgard.persona as per on per.per_id = inte.per_id
-                join db_facturacion.documento as doc on doc.sbpa_id = opag.sbpa_id
-                join db_financiero.vpos_response as vpre on vpre.ordenPago = doc.doc_id and vpre.tipo_orden = 2
-                where
-                per.per_id = :per_id
+                case when doc.doc_pagado = 1 then 'Pagado' else 'Pendiente' end as estado
+            FROM " . $con3->dbname . ".persona per inner join db_captacion.interesado inte on per.per_id = inte.per_id
+                inner join " . $con2->dbname . ".solicitud_inscripcion as sins on inte.int_id = sins.int_id
+                inner join " . $con->dbname . ".orden_pago as opag on sins.sins_id = opag.sins_id
+                inner join " . $con->dbname . ".documento as doc on doc.sbpa_id = opag.sbpa_id
+                inner join " . $con1->dbname . ".vpos_response as vpre on vpre.ordenPago = doc.doc_id and vpre.tipo_orden = 2
+            WHERE $str_search
+                per.per_id= :per_id and
+                opag.sbpa_id > 0 and
+                per.per_estado = :status and
+                per.per_estado_logico = :status and
+                inte.int_estado = :status  and
+                inte.int_estado_logico = :status  and
+                sins.sins_estado = :status  and
+                sins.sins_estado_logico = :status  and
+                opag.opag_estado = :status  and
+                opag.opag_estado_logico = :status  and
+                doc.doc_estado = :status  and
+                doc.doc_estado_logico = :status 
                 ";
         $comando = $con->createCommand($sql);
         $comando->bindParam(":status", $estado, \PDO::PARAM_STR);
         $comando->bindParam(":per_id", $per_id, \PDO::PARAM_INT);
+        $fecha_ini = $arrFiltro["f_ini"] . " 00:00:00";
+        $fecha_fin = $arrFiltro["f_fin"] . " 23:59:59";
+        if (isset($arrFiltro) && count($arrFiltro) > 0) {
+            if ($arrFiltro['f_ini'] != "" && $arrFiltro['f_fin'] != "") {
+                $comando->bindParam(":fec_ini", $fecha_ini, \PDO::PARAM_STR);
+                $comando->bindParam(":fec_fin", $fecha_fin, \PDO::PARAM_STR);
+            }
+        }
         $resultData = $comando->queryAll();
         $dataProvider = new ArrayDataProvider([
             'key' => 'id',
