@@ -199,20 +199,24 @@ class SolicitudBotonPago extends \yii\db\ActiveRecord {
             }
         }        
         $sql = " 
-            SELECT                
-                vpre.reference as referencia,
+            SELECT              
+                vres.reference as referencia,
                 concat(per.per_pri_nombre,' ',per.per_pri_apellido)  as estudiante,
                 opag.opag_fecha_pago_total as fecha_pago,
                 opag.opag_valor_pagado as total_pago,
-                case when opag.opag_estado_pago = 'S' then 'Pagado' else 'Pendiente' end as estado
-            FROM 
-                " . $con->dbname . ".orden_pago as opag
+                vire.status as estado
+            FROM " . $con->dbname . ".orden_pago as opag
                 join " . $con2->dbname . ".solicitud_inscripcion as sins on sins.sins_id = opag.sins_id
                 join " . $con2->dbname . ".interesado as inte on inte.int_id = sins.int_id
-                join " . $con3->dbname . ".persona as per on per.per_id = inte.per_id
-                join " . $con1->dbname . ".vpos_response as vpre on vpre.ordenPago = opag.opag_id and vpre.tipo_orden = 1
-            WHERE  $str_search
-                per.per_id = :per_id and 
+                join " . $con3->dbname . ".persona as per on per.per_id = inte.per_id	    
+                join " . $con1->dbname . ".vpos_response as vres on vres.ordenPago = opag.opag_id and vres.tipo_orden = 1
+                left join (select max(vire.id) as id, vire.ordenPago, vire.tipo_orden 
+                        from " . $con1->dbname . ".vpos_info_response as vire                    
+                        group by vire.ordenPago,vire.tipo_orden) as vpos_info_modf 
+                        on (vpos_info_modf.ordenPago=opag.opag_id) and (vpos_info_modf.tipo_orden=1)
+                join " . $con1->dbname . ".vpos_info_response as vire on vire.id = vpos_info_modf.id
+            WHERE $str_search
+                per.per_id = :per_id and
                 opag.opag_estado = :status and
                 opag.opag_estado_logico = :status and
                 sins.sins_estado = :status and
@@ -225,16 +229,21 @@ class SolicitudBotonPago extends \yii\db\ActiveRecord {
         $sql .= " UNION ";
         $sql .= " 
             SELECT                
-                vpre.reference as referencia,
+                vres.reference as referencia,
                 concat(per.per_pri_nombre,' ',per.per_pri_apellido)  as estudiante,
                 opag.opag_fecha_pago_total as fecha_pago,
                 opag.opag_valor_pagado as total_pago,
-                case when doc.doc_pagado = 1 then 'Pagado' else 'Pendiente' end as estado
+                vire.status as estado
             FROM " . $con3->dbname . ".persona per inner join db_captacion.interesado inte on per.per_id = inte.per_id
                 inner join " . $con2->dbname . ".solicitud_inscripcion as sins on inte.int_id = sins.int_id
                 inner join " . $con->dbname . ".orden_pago as opag on sins.sins_id = opag.sins_id
                 inner join " . $con->dbname . ".documento as doc on doc.sbpa_id = opag.sbpa_id
-                inner join " . $con1->dbname . ".vpos_response as vpre on vpre.ordenPago = doc.doc_id and vpre.tipo_orden = 2
+                join " . $con1->dbname . ".vpos_response as vres on vres.ordenPago = doc.doc_id and vres.tipo_orden = 2
+                left join (select max(vire.id) as id, vire.ordenPago, vire.tipo_orden 
+                                   from " . $con1->dbname . ".vpos_info_response as vire                    
+                           group by vire.ordenPago,vire.tipo_orden) as vpos_info_modf 
+                           on (vpos_info_modf.ordenPago=doc.doc_id) and (vpos_info_modf.tipo_orden=2)
+                join db_financiero.vpos_info_response as vire on vire.id = vpos_info_modf.id
             WHERE $str_search
                 per.per_id= :per_id and
                 opag.sbpa_id > 0 and
