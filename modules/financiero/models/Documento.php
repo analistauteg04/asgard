@@ -172,7 +172,7 @@ class Documento extends \yii\db\ActiveRecord {
         return $resultData;
     }
 
-    public function consultarEstadoByCedula($cedula) {
+    public function consultarEstadoByCedula($cedula,$cedula_fact) {
         $con = \Yii::$app->db_financiero;
         
         $sql = "
@@ -184,11 +184,13 @@ class Documento extends \yii\db\ActiveRecord {
                     join db_facturacion.documento as doc on doc.sbpa_id = sbpa.sbpa_id
                     join db_financiero.vpos_info_response as vire on vire.ordenPago = doc.doc_id and vire.tipo_orden = 2 
                 WHERE
-                    pben.pben_cedula = :cedula
+                    pben.pben_cedula = :cedula and
+                    doc.doc_cedula = :cedula_fact
                 ";
         
         $comando = $con->createCommand($sql);
         $comando->bindParam(":cedula", $cedula, \PDO::PARAM_STR);
+        $comando->bindParam(":cedula_fact", $cedula_fact, \PDO::PARAM_STR);
         $resultData = $comando->queryOne();
         return $resultData['estado'];
     }

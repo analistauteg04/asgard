@@ -231,10 +231,11 @@ class PagosfrecuentesController extends \yii\web\Controller {
             $dataBeneficiario = $data["dataBenList"];
             $dataFactura = $data["dataFacturaList"];
             $cedula = $dataBeneficiario["cedula"];
+            $cedulafact = $dataFactura["dni_fac"];
             $item_ids = $data["dataItems"];
             $transaction = $con1->beginTransaction();
-            $estado_pago = $doc_model->consultarEstadoByCedula($cedula); 
-            if ($estado_pago == 'PENDING' || $estado_pago == 'PENDING') { 
+            $estado_pago = $doc_model->consultarEstadoByCedula($cedula,$cedulafact); 
+            if ($estado_pago == 'PENDING' || $estado_pago == 'FAILED' || $estado_pago == 'PENDING_VALIDATION' || $estado_pago == 'PARTIAL_EXPIRED' || $estado_pago == 'APPROVED_PARTIAL') { 
                 $mensaje = "Estimado ".$dataFactura['nombre_fac']." ".$dataFactura['apellidos_fac'].":<br/>";
                 $mensaje = $mensaje . "Tiene una transaccion en estado pendiente, comunicarse con el departamento de colecturia (+59346052450 ext: 122) para mayor informacion.";
                 $message = array(
