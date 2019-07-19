@@ -166,9 +166,10 @@ function saveBills() {
     }
 }
 function actualizar_pago(doc_id) {
+    alert(doc_id);
     var arrParams = new Object();
     var link = $('#txth_base').val() + "/financiero/pagos/actualizarpago";
-        arrParams.doc_id = doc_id;
+        arrParams.doc_idd = doc_id;
     if (!validateForm()) {
         requestHttpAjax(link, arrParams, function (response) {
             showAlert(response.status, response.label, response.message);

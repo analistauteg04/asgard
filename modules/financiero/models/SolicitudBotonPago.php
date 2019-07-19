@@ -122,20 +122,27 @@ class SolicitudBotonPago extends \yii\db\ActiveRecord {
         $sql = "
                 select distinct
                     sbpa.sbpa_id as id,
-                    vres.reference as referencia,
+                    vres.requestId as referencia,
                     concat(pben.pben_nombre,' ',pben.pben_apellido) as estudiante,
                     docu.doc_nombres_cliente as persona_factura,
                     ifnull(docu.doc_cedula,'') as cedula_factura,
                     docu.doc_fecha_pago as fecha_pago,
                     docu.doc_valor as total_pago,
-                    docu.doc_pagado as estado,                   
+                    vire.status as estado,
                     docu.doc_id, ifnull(op.sbpa_id,0) as sbpa_op
                 from
                     " . $con->dbname . ".solicitud_boton_pago as sbpa
                     join " . $con->dbname . ".persona_beneficiaria as pben on pben.pben_id = sbpa.pben_id
                     join " . $con->dbname . ".documento as docu on docu.sbpa_id = sbpa.sbpa_id
                     join " . $con1->dbname . ".vpos_response as vres on vres.ordenPago = docu.doc_id and vres.tipo_orden = 2
-                    left join " . $con->dbname . ".orden_pago op on op.sbpa_id = sbpa.sbpa_id
+                    left join
+                    (
+                        select max(vire.id) as id,vire.ordenPago,vire.tipo_orden 
+                        from db_financiero.vpos_info_response as vire                    
+                        group by vire.ordenPago,vire.tipo_orden
+                    ) as vpos_info_modf on vpos_info_modf.ordenPago=docu.doc_id and vpos_info_modf.tipo_orden=2
+                    join db_financiero.vpos_info_response as vire on vire.id = vpos_info_modf.id
+                    left join " . $con->dbname . ".orden_pago op on op.sbpa_id = sbpa.sbpa_id and vire.tipo_orden=2
                 where 1=1
                     $str_search
             ";

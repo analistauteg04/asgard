@@ -173,6 +173,7 @@ class Documento extends \yii\db\ActiveRecord {
 
     public function consultarVposByDocid($doc_id) {
         $estado = 1;
+        $con = \Yii::$app->db_financiero;
         $sql = "
                 SELECt   
                         vreq.reference,
@@ -180,13 +181,14 @@ class Documento extends \yii\db\ActiveRecord {
                         json_response as resp
                 FROM 
                         db_financiero.vpos_request as vreq
-                        join db_financiero.vpos_response as vres on vres.ordenPago = 1 and vres.tipo_orden = 2
+                        join db_financiero.vpos_response as vres on vres.ordenPago = :doc_id and vres.tipo_orden = 2
                 WHERE
                         vreq.ordenPago = :doc_id and vreq.tipo_orden = 2
+                        
                 ";
 
         $comando = $con->createCommand($sql);
-        $comando->bindParam(":estado", $estado, \PDO::PARAM_STR);
+        //$comando->bindParam(":estado", $estado, \PDO::PARAM_STR);
         $comando->bindParam(":doc_id", $doc_id, \PDO::PARAM_INT);
         $resultData = $comando->queryOne();
         return $resultData;
