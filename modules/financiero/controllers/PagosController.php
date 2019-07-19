@@ -411,7 +411,6 @@ class PagosController extends \app\components\CController {
             $imagen = $resp_cliord["imagen"];
             $int_id = $resp_cliord["int_id"];
         }
-
         return $this->render('viewpagoexterno', [
                     "revision" => array("AP" => Yii::t("formulario", "APPROVED"), "RE" => Yii::t("formulario", "Rejected")),
                     'opag_id' => $opag_id,

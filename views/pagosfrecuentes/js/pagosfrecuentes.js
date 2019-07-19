@@ -401,18 +401,24 @@ function guardarPagos() {
             alert("entro para guardar en las tablas, boton pagos");
             if (!validateForm()) {
                 requestHttpAjax(link, arrParams, function (response) {
-                    showAlert("OK", "success", response.message);
-                    sessionStorage.clear();
-                    setTimeout(function () {
-                        var bohre = $('#txth_base').val() + "/pagosfrecuentes/botonpago?docid=" + response.message.iddoc + "&popup=1";
-                        $('#btn_pago_p').attr("href", bohre);
-                        $('#btn_pago_p').trigger("click");
-                    }, 3000); //descomentar cuando termine de guardar bien
+                    if (response.message.estado == 1) {
+                        showAlert("OK", "success", response.message);
+                        sessionStorage.clear();
+                        setTimeout(function () {
+                            var bohre = $('#txth_base').val() + "/pagosfrecuentes/botonpago?docid=" + response.message.iddoc + "&popup=1";
+                            $('#btn_pago_p').attr("href", bohre);
+                            $('#btn_pago_p').trigger("click");
+                        }, 3000); //descomentar cuando termine de guardar bien
+                    }else{
+                        showAlert("No_OK", "error", response.message);
+                        sessionStorage.clear();
+                        window.location.href = $('#txth_base').val() + "/pagosfrecuentes/index";
+                    }
                 });
             }
-        }else{
+        } else {
             sessionStorage.clear();
-            setTimeout("location.reload(true);",5);
+            setTimeout("location.reload(true);", 5);
         }
     }
 }
