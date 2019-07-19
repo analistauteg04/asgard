@@ -142,6 +142,10 @@ use app\widgets\PbVPOS\PbVPOS;
             </tr>
         </tbody>
         </table>
+        <br/>
+        <?= PbVPOS::t("vpos", "Within 48 you can verify the payment of this transaction, where you will be sent an email with the link to the asgard system, in the financial module, transaction history option.") ?>
+        <br/>
+        <?= PbVPOS::t("vpos","In the mail will be the credentials to send to the system.");?>
     </div>
 </div>
 <div id="lightbox-response"></div>

@@ -34,4 +34,6 @@ return [
     "Status" => "Estado",
     "Your payment is pending payment. Please wait a few minutes to try to update your payment." => "Su pago esta pendiente de cobro. Por favor espere unos minutos para intentar actualizar su pago.",
     "Your payment has already been executed. Click on the button to update the page." => "Su pago ya fue realizado. De click en el botón para actualizar la página.",
+    "Within 48 you can verify the payment of this transaction, where you will be sent an email with the link to the asgard system, in the financial module, transaction history option."=>"Dentro de 48 puede verificar el pago de esta transaccion, donde se le enviara un correo con el enlace al sistema asgard, en el modulo  financiero, opcion Historial de transacciones.",
+    "In the mail will be the credentials to send to the system." => "En el correo estara las credenciales para enviar al sistema.",
 ];

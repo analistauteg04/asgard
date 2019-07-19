@@ -419,6 +419,7 @@ function guardarPagos() {
         } else {
             sessionStorage.clear();
             setTimeout("location.reload(true);", 5);
+            window.location.href = $('#txth_base').val() + "/pagosfrecuentes/index";
         }
     }
 }

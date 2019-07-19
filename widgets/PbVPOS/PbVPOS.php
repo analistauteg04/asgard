@@ -152,12 +152,11 @@ class PbVPOS extends Widget {
                         $data['questionsLink'] = $this->questionsLink;
                         echo $this->render('form', $data);
                 }
-                //return Html::encode($this->message);
             }
         }
         
     }
-
+    
     private function selectVPOST(){
         switch($this->type_vpos){
             case "1": # Prueba
