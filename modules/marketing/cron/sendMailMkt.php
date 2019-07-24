@@ -1,5 +1,4 @@
 <?php
-
 $logFile = dirname(__FILE__) . "/../../../runtime/logs/pb.log";
 $dataDB = include_once(dirname(__FILE__) . "/../config/mod.php");
 //include_once("../../../webservices/WsMailChimp.php");

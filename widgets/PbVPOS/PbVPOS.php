@@ -19,7 +19,7 @@ use app\models\Utilities;
 use PhpOffice\PhpSpreadsheet\Chart\Exception;
 
 class PbVPOS extends Widget {
-
+    
     private static $widget_name = "PbVPOS";
     protected $login = "";
     protected $secret = "";
@@ -737,9 +737,7 @@ class PbVPOS extends Widget {
         }
         return $fileMap;
     }
-
     public static function t($category, $message, $params = [], $language = null) {
         return Yii::t('widgets/' . self::$widget_name . '/' . $category, $message, $params, $language);
     }
-
 }
