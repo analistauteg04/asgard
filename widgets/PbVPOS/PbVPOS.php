@@ -9,7 +9,9 @@
  */
 
 namespace app\widgets\PbVPOS;
+#namespace app\commands;
 
+use app;
 use Yii;
 use yii\base\Widget;
 use app\models\Http;
@@ -684,7 +686,7 @@ class PbVPOS extends Widget {
     public function registerClientScript() {
         $view = $this->getView();
         $assetVPOS = VPOSAsset::register($view);
-        $this->publicAssetUrl = $assetVPOS->baseUrl;
+        $this->publicAssetUrl = $assetVPOS->baseUrl;        
         //$view->registerJs($script, View::POS_END, $id);
         /*
           $view->registerJsFile(

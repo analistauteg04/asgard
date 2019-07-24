@@ -1,28 +1,19 @@
 <?php
 
-define('YII_DEBUG') OR define('YII_DEBUG',true);
-define('YII_ENV') OR define('YII_ENV','dev');
-
-#require(__DIR__ . '/../../../vendor/autoload.php');
-require(__DIR__ . '/../../../vendor/yiisoft/yii2/Yii.php');
-
 $logFile = dirname(__FILE__) . "/../../../runtime/logs/pb.log";
 $dataDB = include_once(dirname(__FILE__) . "/../config/mod.php");
 
 $dbname = $dataDB["financiero"]["db_facturacion"]["dbname"];
 $dbuser = $dataDB["financiero"]["db_facturacion"]["username"];
 $dbpass = $dataDB["financiero"]["db_facturacion"]["password"];
+
 $dbserver = "127.0.0.1";//$dataDB["marketing"]["db_mailing"]["dbserver"];
 $dbport = 3306;
 $dsn = "mysql:host=$dbserver;dbname=$dbname;port=$dbport";
 spl_autoload_register('my_autoloader');
-use app\widgets\PbVPOS\PbVPOS;
 
-echo PbVPOS::widget([
-            "id" => "VPOS",
-            "iscron" => true,            
-            "type" => "form",
-]);
+getPagosPendientes();
+
 function putMessageLogFile($message)
 {
     global $logFile;
@@ -33,6 +24,27 @@ function putMessageLogFile($message)
         file_put_contents($logFile, $message, LOCK_EX);
     } else {
         file_put_contents($logFile, $message, FILE_APPEND | LOCK_EX);
+    }
+}
+function getPagosPendientes() {
+    GLOBAL $dsn, $dbuser, $dbpass, $dbname;
+    
+    $pdo = new \PDO($dsn, $dbuser, $dbpass);    
+    $sql = "
+                    select vres.reference,vres.requestId,vres.ordenPago,vres.tipo_orden
+                    from db_financiero.vpos_response as vres
+                    left join db_financiero.vpos_info_response as vire on vire.ordenPago = vres.ordenPago and vire.tipo_orden = vres.tipo_orden
+                    where ifnull(vire.id,0) = 0 and
+                    vire.estado_logico= :estado_logico and
+                    vres.estado_logico = :estado_logico
+                ";
+    $cmd = $pdo->prepare($sql);
+    $cmd->execute();
+    $rows = $cmd->fetchAll(\PDO::FETCH_ASSOC);        
+    if (count($rows) > 0) {
+        for ($i = 0; $i < count($rows); $i++) {
+            
+        }
     }
 }
 function my_autoloader($class)
