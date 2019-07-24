@@ -1,7 +1,14 @@
 <?php
 
+define('YII_DEBUG') OR define('YII_DEBUG',true);
+define('YII_ENV') OR define('YII_ENV','dev');
+
+#require(__DIR__ . '/../../../vendor/autoload.php');
+require(__DIR__ . '/../../../vendor/yiisoft/yii2/Yii.php');
+
 $logFile = dirname(__FILE__) . "/../../../runtime/logs/pb.log";
 $dataDB = include_once(dirname(__FILE__) . "/../config/mod.php");
+
 $dbname = $dataDB["financiero"]["db_facturacion"]["dbname"];
 $dbuser = $dataDB["financiero"]["db_facturacion"]["username"];
 $dbpass = $dataDB["financiero"]["db_facturacion"]["password"];
@@ -11,7 +18,6 @@ $dsn = "mysql:host=$dbserver;dbname=$dbname;port=$dbport";
 spl_autoload_register('my_autoloader');
 use app\widgets\PbVPOS\PbVPOS;
 
-//echo json_encode($ws1->getAllTemplates());
 echo PbVPOS::widget([
             "id" => "VPOS",
             "iscron" => true,            
