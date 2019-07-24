@@ -260,14 +260,14 @@ function agregarItems(opAccion) {
                 var size = arr_Grid.length;
                 if (size > 0) {
                     //Varios Items
-                    if (codigoExiste(nombre, 'estandar_evi', sessionStorage.dts_datosItem)) {//Verifico si el Codigo Existe  para no Dejar ingresar Repetidos
+                    //if (codigoExiste(nombre, 'estandar_evi', sessionStorage.dts_datosItem)) {//Verifico si el Codigo Existe  para no Dejar ingresar Repetidos
                         arr_Grid[size] = objProducto(size);
                         sessionStorage.dts_datosItem = JSON.stringify(arr_Grid);
                         addVariosItem(tGrid, arr_Grid, -1);
                         limpiarDetalle();
-                    } else {
-                        showAlert('NO_OK', 'error', {"wtmessage": "Item ya existe en su lista", "title": 'Información'});
-                    }
+                    //} else {
+                    //    showAlert('NO_OK', 'error', {"wtmessage": "Item ya existe en su lista", "title": 'Información'});
+                    //}
                 } else {
                     /*Agrego a la Sesion*/
                     //Primer Items                   
