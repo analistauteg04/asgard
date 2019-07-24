@@ -18,6 +18,9 @@ use app\modules\repositorio\Module as repositorio;
 <div class="col-md-12">    
     <h3><span id="lbl_Personeria"><?= repositorio::t("repositorio", "Evidence Repository") ?></span>
 </div>
+<div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
+    <p class="text-danger"> <?= Yii::t("formulario", "Fields with * are required") ?> </p>        
+</div>
 <form class="form-horizontal">
     <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">        
         <div class="col-md-6 col-sm-6 col-xs-6 col-lg-6"> 
