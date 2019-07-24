@@ -214,9 +214,9 @@ class DocumentoRepositorio extends \yii\db\ActiveRecord
         for ($i = 0; $i < sizeof($dts); $i++) {
             $sql = "INSERT INTO " . $con->dbname . ".documento_repositorio
                     (est_id,dre_tipo,dre_codificacion,dre_ruta,dre_imagen,dre_descripcion,
-                        dre_usu_modifica,dre_estado,dre_fecha_archivo,dre_estado_logico)VALUES
+                        dre_usu_ingresa,dre_estado,dre_fecha_archivo,dre_estado_logico)VALUES
                     (:est_id,:dre_tipo,:dre_codificacion,:dre_ruta,:dre_imagen,:dre_descripcion,
-                        :dre_usu_modifica,:dre_estado,:dre_fecha_archivo,:dre_estado_logico)";
+                        :dre_usu_ingresa,:dre_estado,:dre_fecha_archivo,:dre_estado_logico)";
             $command = $con->createCommand($sql);
             $command->bindParam(":est_id", $dts[$i]->est_id, \PDO::PARAM_INT);
             $command->bindParam(":dre_tipo", $dts[$i]->dre_tipo, \PDO::PARAM_INT);
@@ -224,7 +224,7 @@ class DocumentoRepositorio extends \yii\db\ActiveRecord
             $command->bindParam(":dre_ruta", $dts[$i]->dre_ruta, \PDO::PARAM_STR);
             $command->bindParam(":dre_imagen", $dts[$i]->dre_imagen, \PDO::PARAM_STR);
             $command->bindParam(":dre_descripcion", ucwords(strtolower($dts[$i]->dre_descripcion)), \PDO::PARAM_STR);
-            $command->bindParam(":dre_usu_modifica", $usu_id, \PDO::PARAM_INT);
+            $command->bindParam(":dre_usu_ingresa", $usu_id, \PDO::PARAM_INT);
             $command->bindParam(":dre_estado", $dts[$i]->dre_estado, \PDO::PARAM_INT);
             $command->bindParam(":dre_fecha_archivo", $dts[$i]->dre_fecha_archivo, \PDO::PARAM_STR);            
             $command->bindParam(":dre_estado_logico", $dts[$i]->dre_estado_logico, \PDO::PARAM_INT);

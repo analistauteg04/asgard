@@ -99,6 +99,7 @@ create table if not exists `documento_repositorio`(
 `dre_ruta` varchar(200) not null,
 `dre_imagen` varchar(100) not null,
 `dre_descripcion` varchar(1000) null,
+`dre_usu_ingresa` bigint(20) not null,
 `dre_usu_modifica` bigint(20) null,
 `dre_estado` varchar(1) not null,
 `dre_fecha_archivo` timestamp null default null,
