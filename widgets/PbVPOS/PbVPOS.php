@@ -71,6 +71,7 @@ class PbVPOS extends Widget {
     }
 
     public function run() {
+        $this->putMessageLogFile("Entro al widget");
         if ($this->type_vpos == 1) {
             $a = Url::current([], true);
             if (strpos($a, '?') !== false) {
@@ -79,10 +80,10 @@ class PbVPOS extends Widget {
                 $this->returnUrl = $a . "?referenceID=" . $this->referenceID;
             }
             $response = null;
-            if ($this->$iscron === false) {
+            if ($this->iscron === true) {
                 $pagos_pendientes = $this->getPagosPendientes();
                 for ($i = 0; $i < count($pagos_pendientes); $i++) {
-                    $response = getInfoPayment($pagos_pendientes['']);
+                    $response = getInfoPayment($pagos_pendientes['requestId']);
                     if ($response["status"]["status"] == "APPROVED") {
                         echo $this->render('error', [
                             "reloadDB" => true,
