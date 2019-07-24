@@ -1,1 +1,1 @@
-*/5 * * * * root /usr/bin/php /var/www/html/asgard/modules/marketing/cron/sendMailMkt.php
+*/5 * * * * root /usr/bin/php /var/www/html/asgard/modules/financiero/cron/getPendingPayment.php

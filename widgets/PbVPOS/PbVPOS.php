@@ -81,6 +81,7 @@ class PbVPOS extends Widget {
             }
             $response = null;
             if ($this->iscron === true) {
+                $this->putMessageLogFile("Entro al cron");
                 $pagos_pendientes = $this->getPagosPendientes();
                 for ($i = 0; $i < count($pagos_pendientes); $i++) {
                     $response = getInfoPayment($pagos_pendientes['requestId']);
@@ -90,18 +91,17 @@ class PbVPOS extends Widget {
                             "data" => json_encode($response),
                         ]);
                         $this->updateTransactionFinished();
-                        return;
                     } else if ($response["status"]["status"] == "PENDING" || $response["status"]["status"] == "PENDING_VALIDATION") {
                         echo $this->render('error', [
                             "reloadDB" => false,
                             "data" => json_encode($response),
                         ]);
-                        return;
                     } else if ($response["status"]["status"] == "REJECTED") {
                         $this->updateTransactionFinished();
                     }
                     sleep(2);
                 }
+                return;
             } else {
                 if ($this->isCheckout === false) {
                     // hay una orden de pago previa

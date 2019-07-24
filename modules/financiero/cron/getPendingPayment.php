@@ -11,7 +11,6 @@ $dsn = "mysql:host=$dbserver;dbname=$dbname;port=$dbport";
 spl_autoload_register('my_autoloader');
 use app\widgets\PbVPOS\PbVPOS;
 
-//echo json_encode($ws1->getAllTemplates());
 echo PbVPOS::widget([
             "id" => "VPOS",
             "iscron" => true,            
