@@ -52,7 +52,7 @@ PbGridView::widget([
             'template' => '{view}',
             'buttons' => [
                 'view' => function ($url, $model) {                    
-                    return Html::a('<span class="glyphicon glyphicon-download-alt"></span>', Url::to(['/site/getimage', 'route' => '/uploads' . $model['dre_ruta']]), ["download" => $model['dre_imagen'], "data-toggle" => "tooltip", "title" => "Descargar Evidencia", "data-pjax" => 0]);
+                    return Html::a('<span class="glyphicon glyphicon-download-alt"></span>', Url::to(['/site/getimage', 'route' => '/uploads' . $model['dre_ruta'].$model['dre_imagen']]), ["download" => $model['dre_imagen'], "data-toggle" => "tooltip", "title" => "Descargar Evidencia", "data-pjax" => 0]);
                 },                
             ],
         ],
