@@ -72,7 +72,6 @@ class PbVPOS extends Widget {
 
     public function run() {
         if ($this->type_vpos == 1) {
-
             $a = Url::current([], true);
             if (strpos($a, '?') !== false) {
                 $this->returnUrl = $a . "&referenceID=" . $this->referenceID;
@@ -100,6 +99,7 @@ class PbVPOS extends Widget {
                     } else if ($response["status"]["status"] == "REJECTED") {
                         $this->updateTransactionFinished();
                     }
+                    sleep(2);
                 }
             } else {
                 if ($this->isCheckout === false) {
