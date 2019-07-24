@@ -261,5 +261,51 @@ class RepositorioController extends \app\components\CController {
             }
         }
     }
+    public function actionEliminar() {
+       // $ids = base64_decode($_GET['ids']);
+        $usu_id = @Yii::$app->session->get("PB_iduser");
+        $data = Yii::$app->request->post();        
+        if (Yii::$app->request->isAjax) {
+            $ids = $data["ids"];
+            //\app\models\Utilities::putMessageLogFile('ids:' . $ids); 
+            $con = \Yii::$app->db_repositorio;
+            $transaction = $con->beginTransaction();               
+            try {
+                $mod_repositorio = new DocumentoRepositorio();
+                $resp_buscar = $mod_repositorio->consultarXdocumentoid($ids);
+                if ($resp_buscar) {                    
+                    $ruta_archivo= $resp_buscar["dre_ruta"].$resp_buscar["dre_imagen"];
+                    //Eliminar lógicamente el registro y físicamente el archivo.
+                    $resp_actualiza = $mod_repositorio->modificarXdocumentoid($ids,$usu_id);
+                    if ($resp_actualiza) {              
+                        unlink($ruta_archivo);                        
+                        $exito = 1;
+                    }
+                }                
+                if ($exito) {
+                    $transaction->commit();                            
+                    $message = array(
+                        "wtmessage" => Yii::t("notificaciones", "Archivo y registro ha sido eliminado."),
+                        "title" => Yii::t('jslang', 'Success'),
+                    );
+                    return \app\models\Utilities::ajaxResponse('OK', 'alert', Yii::t("jslang", "Sucess"), false, $message);
+                } else {                            
+                    $transaction->rollback();                                                
+                    $message = array(
+                        "wtmessage" => Yii::t("notificaciones", "Error al eliminar."), "title" =>
+                        Yii::t('jslang', 'Success'),
+                    );                    
+                    return \app\models\Utilities::ajaxResponse('NO_OK', 'alert', Yii::t("jslang", "Sucess"), false, $message);
+                }
+            } catch (Exception $ex) {
+                $transaction->rollback();                                                
+                $message = array(
+                    "wtmessage" => Yii::t("notificaciones", "Error al eliminar."), "title" =>
+                    Yii::t('jslang', 'Success'),
+                );                    
+                return \app\models\Utilities::ajaxResponse('NO_OK', 'alert', Yii::t("jslang", "Sucess"), false, $message);
+            }            
+        }
+    }
 
 }

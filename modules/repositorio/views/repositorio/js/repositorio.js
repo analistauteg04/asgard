@@ -512,3 +512,36 @@ function exportPdf() {
     var estandar = $('#cmb_estandar').val();
     window.location.href = $('#txth_base').val() + "/repositorio/repositorio/exppdf?pdf=1&search=" + search + "&f_ini=" + f_ini + "&f_fin=" + f_fin + "&mod_id=" + modelo + "&cat_id=" + categoria + "&comp_id=" + componente + "&est_id=" + estandar;
 }
+
+function borrarRegistro(id) {
+    var link = $('#txth_base').val() + "/repositorio/repositorio/eliminar";
+    var arrParams = new Object();
+    arrParams.ids = id;    
+    if (!validateForm()) {
+        requestHttpAjax(link, arrParams, function (response) {
+            showAlert(response.status, response.label, response.message);
+            if (!response.error) {
+                setTimeout(function () {
+                    window.location.href = $('#txth_base').val() + "/repositorio/repositorio/index";
+                }, 2000);
+            }
+        }, true);
+    }
+}
+
+function removerArchivo(ids) {   
+    var mensj = "¿Seguro desea eliminar el archivo?";
+    var messagePB = new Object();
+    messagePB.wtmessage = mensj;
+    messagePB.title = "Eliminar";
+    var objAccept = new Object();
+    objAccept.id = "btnid2del";
+    objAccept.class = "btn-primary";
+    objAccept.value = "Aceptar";
+    objAccept.callback = 'borrarRegistro';
+    var params = new Array(ids, 0);
+    objAccept.paramCallback = params;
+    messagePB.acciones = new Array();
+    messagePB.acciones[0] = objAccept;
+    showAlert("warning", "warning", messagePB);
+}

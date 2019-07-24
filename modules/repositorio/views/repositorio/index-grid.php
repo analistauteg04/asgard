@@ -49,11 +49,17 @@ PbGridView::widget([
         [
             'class' => 'yii\grid\ActionColumn',
             'header' => Yii::t("formulario", "Actions"),
-            'template' => '{view}',
+            'template' => '{view} {borrar}',
             'buttons' => [
                 'view' => function ($url, $model) {                    
-                    return Html::a('<span class="glyphicon glyphicon-download-alt"></span>', Url::to(['/site/getimage', 'route' => '/uploads' . $model['dre_ruta']]), ["download" => $model['dre_imagen'], "data-toggle" => "tooltip", "title" => "Descargar Evidencia", "data-pjax" => 0]);
-                },                
+                    //return Html::a('<span class="glyphicon glyphicon-download-alt"></span>', Url::to(['/site/getimage', 'route' => $model['dre_ruta'].$model['dre_imagen']]), ["download" => $model['dre_imagen'], "data-toggle" => "tooltip", "title" => "Descargar Evidencia", "data-pjax" => 0]);
+                    return Html::a('<span class="glyphicon glyphicon-download-alt"></span>', $model['dre_ruta'].$model['dre_imagen'], ["download" => $model['dre_imagen'], "data-toggle" => "tooltip", "title" => "Descargar Evidencia", "data-pjax" => 0]);
+                }, 
+                'borrar' => function ($url, $model) {                                                           
+                    //return Html::a('<span class="glyphicon glyphicon-remove"></span>', Url::to(['/repositorio/repositorio/eliminar', 'ids' => base64_encode($model['dre_id'])]), ["data-toggle" => "tooltip", "title" => "Eliminar Archivo", "data-pjax" => 0]);
+                    return Html::a('<span class="glyphicon glyphicon-remove"></span>', "#", ['onclick' => "removerArchivo(" . $model['dre_id'] . ");", "data-toggle" => "tooltip", "title" => "Eliminar Archivo", "data-pjax" => 0]);
+                    
+                },                                                 
             ],
         ],
     ],

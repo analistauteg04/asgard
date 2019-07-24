@@ -116,10 +116,10 @@ class DocumentoRepositorio extends \yii\db\ActiveRecord
                 $str_search .= "and e.com_id = :comp_id ";
             }
         }
-        $sql = "SELECT	dre_imagen, case when dre_tipo='1' then 'Público' else 'Privado' end tipo,  
+        $sql = "SELECT dre_imagen, case when dre_tipo='1' then 'Privado' else 'Público' end tipo,  
                         dre_descripcion, dre_fecha_archivo, dre_fecha_creacion ";
         if ($onlyData==false) {
-            $sql .= ", dre_ruta ";
+            $sql .= ", dre_ruta, dre_id ";
         } 
         $sql .= "FROM " . $con->dbname . ".documento_repositorio dr inner join " . $con->dbname . ".estandar e on e.est_id = dr.est_id
                     left join " . $con->dbname . ".componente c on c.com_id = e.com_id
@@ -233,9 +233,42 @@ class DocumentoRepositorio extends \yii\db\ActiveRecord
         }
         
     }
+        
+    public function consultarXdocumentoid($ids){        
+        $con = \Yii::$app->db_repositorio;        
+        $estado = 1;
+        $sql = "SELECT 
+                    dre_id, dre_ruta, dre_imagen                       
+                FROM " . $con->dbname . ".documento_repositorio dr                                        
+                WHERE dre_id = :dre_id AND  
+                    dre_estado_logico=:estado AND 
+                    dre_estado=:estado";        
+        $comando = $con->createCommand($sql);
+        $comando->bindParam(":estado", $estado, \PDO::PARAM_STR);        
+        $comando->bindParam(":dre_id", $ids, \PDO::PARAM_INT);        
+        $resultData = $comando->queryOne();
+        return $resultData;          
+    }
     
-    
-    
-    
+    public function modificarXdocumentoid($ids, $usu_id){        
+        $con = \Yii::$app->db_repositorio;        
+        $estado = 1;
+        $fecha_modificacion = date(Yii::$app->params["dateTimeByDefault"]);
+        $sql = "UPDATE " . $con->dbname . ".documento_repositorio
+                SET dre_estado = '0',
+                    dre_estado_logico = '0',
+                    dre_fecha_modificacion = :fecha,
+                    dre_usu_modifica = :usu_id
+                WHERE dre_id = :dre_id AND              
+                    dre_estado_logico=:estado AND 
+                    dre_estado=:estado";        
+        $comando = $con->createCommand($sql);
+        $comando->bindParam(":estado", $estado, \PDO::PARAM_STR);    
+        $comando->bindParam(":dre_id", $ids, \PDO::PARAM_INT);
+        $comando->bindParam(":fecha", $fecha_modificacion, \PDO::PARAM_STR);
+        $comando->bindParam(":usu_id", $usu_id, \PDO::PARAM_INT);
+        $response = $comando->execute();
+        return $response;       
+    }
     
 }
