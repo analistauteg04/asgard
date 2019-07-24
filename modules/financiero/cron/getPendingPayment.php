@@ -3,10 +3,8 @@
 define('YII_DEBUG') OR define('YII_DEBUG',true);
 define('YII_ENV') OR define('YII_ENV','dev');
 
-require(__DIR__ . '/../../../vendor/autoload.php');
+#require(__DIR__ . '/../../../vendor/autoload.php');
 require(__DIR__ . '/../../../vendor/yiisoft/yii2/Yii.php');
-
-
 
 $logFile = dirname(__FILE__) . "/../../../runtime/logs/pb.log";
 $dataDB = include_once(dirname(__FILE__) . "/../config/mod.php");
