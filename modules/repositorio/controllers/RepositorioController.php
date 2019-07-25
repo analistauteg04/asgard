@@ -4,6 +4,7 @@ namespace app\modules\repositorio\controllers;
 
 use Yii;
 use yii\helpers\Url;
+use yii\helpers\Html;
 use app\models\Utilities;
 use yii\helpers\ArrayHelper;
 use app\models\Empresa;
@@ -232,14 +233,15 @@ class RepositorioController extends \app\components\CController {
 
                 $filenames = $files['name']; //Nombre Archivo
                 $ext = explode('.', basename($filenames)); //Extension del Archivo
-                $folder_path = $_SERVER['DOCUMENT_ROOT'] . Url::base() . Yii::$app->params["repositorioFolder"];
-                //$folder_path = Yii::$app->params["repositorioFolder"];                 
+                //$folder_path = $_SERVER['DOCUMENT_ROOT'] . Url::base() . Yii::$app->params["repositorioFolder"];
+                $folder_path = Yii::$app->params["repositorioFolder"];                 
                 $folder_path .= $modelo . $funcion . $componente . $estandar;
 
                 //Utilities::putMessageLogFile($folder_path);
 
                 if (!file_exists($folder_path)) {
                     mkdir($folder_path, 0777, true); //Se Crea la carpeta
+                    chmod(dirname($folder_path), 0777);
                     //chmod($folder_path, 0777); 
                 }
 
@@ -248,7 +250,8 @@ class RepositorioController extends \app\components\CController {
                 $target = $folder_path . DIRECTORY_SEPARATOR . $nombre;
 
                 //$status = Utilities::moveUploadFile($files['tmp_name'], $dirFileEnd);                
-                $status = move_uploaded_file($files['tmp_name'], $target);
+                //$status = move_uploaded_file($files['tmp_name'], $target);
+                $status = copy($files['tmp_name'], $target);
                 if ($status) {
                     //return true;
                     $arroout["status"] = true;
@@ -306,6 +309,55 @@ class RepositorioController extends \app\components\CController {
                 return \app\models\Utilities::ajaxResponse('NO_OK', 'alert', Yii::t("jslang", "Sucess"), false, $message);
             }            
         }
+    }
+    
+    public function actionDownloadfile($ids) { 
+        $mod_repositorio = new DocumentoRepositorio();
+        $ids = isset($_GET['ids']) ? base64_decode($_GET['ids']) : NULL;
+        $data=$mod_repositorio->consultarXdocumentoid($ids);        
+        if (!$this->downloadFile($data["dre_ruta"], 
+                Html::encode($data["dre_imagen"]), 
+                [ "jpg", "png","pdf", "mp3", "mp4","gz", "rar", "zip"])) {           
+            //Mensaje flash para mostrar el error
+        }
+        return $this->render("download");
+    }
+    
+    private function downloadFile($dir, $file, $extensions = []) {
+        //Si el directorio existe
+        //if (is_dir($dir)) {            
+        //Ruta absoluta del archivo
+        $path = $dir . $file;
+        //Si el archivo existe
+        //if (is_file($path)) {
+        //Obtener información del archivo
+        $file_info = pathinfo($path);
+        //Obtener la extensión del archivo
+        $extension = $file_info["extension"];        
+        if (is_array($extensions)) {
+            //Si el argumento $extensions es un array
+            //Comprobar las extensiones permitidas
+            foreach ($extensions as $e) {
+                //Si la extension es correcta
+                if ($e === $extension) {
+                    //Procedemos a descargar el archivo
+                    // Definir headers
+                    //$size = filesize($path);
+                    header("Content-Type: application/force-download");
+                    header("Content-Disposition: attachment; filename=$file");
+                    header("Content-Transfer-Encoding: binary");
+                    //header("Content-Length: " . $size);
+                    // Descargar archivo
+                    readfile($path);
+                    //Correcto
+                    return true;
+                }
+            }
+        }
+        //}
+        //}
+        //Ha ocurrido un error al descargar el archivo
+        return false;
     }
 
 }

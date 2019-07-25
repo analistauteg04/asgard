@@ -39,7 +39,7 @@ return [
     'pageSize' => 20,
     'userWebServer' => getenv('APACHE_RUN_USER'),
     'documentFolder' => '/uploads/',
-    'repositorioFolder' => '/uploads/',
+    'repositorioFolder' => '/opt/files/',
     'imgFolder' => '/site/getimage/?route=/uploads/',
     'FileExtensions' => ['jpg', 'png', 'pdf'],
     'MaxFileSize' => 20480, //Tamaño 1 MB

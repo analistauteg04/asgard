@@ -102,12 +102,12 @@ class Utilities {
             chmod(dirname(Yii::$app->params["logfile"]), 0777);
             touch(Yii::$app->params["logfile"]);
         }
-        if(filesize(Yii::$app->params["logfile"]) >= Yii::$app->params["MaxFileLogSize"]){
+        /*if(filesize(Yii::$app->params["logfile"]) >= Yii::$app->params["MaxFileLogSize"]){
             $newName = str_replace(".log", "-" . date("YmdHis") . ".log", Yii::$app->params["logfile"]);
             rename(Yii::$app->params["logfile"], $newName);
             touch(Yii::$app->params["logfile"]);
         }
-        //se escribe en el fichero
+        //se escribe en el fichero*/
         file_put_contents(Yii::$app->params["logfile"], $message, FILE_APPEND | LOCK_EX);
     }
 

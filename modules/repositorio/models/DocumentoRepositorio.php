@@ -250,6 +250,8 @@ class DocumentoRepositorio extends \yii\db\ActiveRecord
         return $resultData;          
     }
     
+   
+    
     public function modificarXdocumentoid($ids, $usu_id){        
         $con = \Yii::$app->db_repositorio;        
         $estado = 1;
@@ -270,5 +272,7 @@ class DocumentoRepositorio extends \yii\db\ActiveRecord
         $response = $comando->execute();
         return $response;       
     }
+    
+    
     
 }
