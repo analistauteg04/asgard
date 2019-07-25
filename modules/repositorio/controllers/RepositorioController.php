@@ -359,5 +359,59 @@ class RepositorioController extends \app\components\CController {
         //Ha ocurrido un error al descargar el archivo
         return false;
     }
-
+       
+    public function actionDownloadvisor($ids) { 
+        $mod_repositorio = new DocumentoRepositorio();
+        $ids = isset($_GET['ids']) ? base64_decode($_GET['ids']) : NULL;
+        $data=$mod_repositorio->consultarXdocumentoid($ids);        
+        if (!$this->abrirFile($data["dre_ruta"], 
+                Html::encode($data["dre_imagen"]), 
+                [ "jpg", "png","pdf", "mp3", "mp4","gz", "rar", "zip"])) {           
+            //Mensaje flash para mostrar el error
+        }
+        $archivo = $data["dre_ruta"].$data["dre_imagen"];
+        return $this->render("visor", [
+                    'imagen' => $archivo,
+                    ]
+            );
+    }
+    
+    private function abrirFile($dir, $file, $extensions = []) {
+        //Si el directorio existe
+        //if (is_dir($dir)) {            
+        //Ruta absoluta del archivo
+        $path = $dir . $file;
+        //Si el archivo existe
+        //if (is_file($path)) {
+        //Obtener información del archivo
+        $file_info = pathinfo($path);
+        //Obtener la extensión del archivo
+        $extension = $file_info["extension"];        
+        if (is_array($extensions)) {
+            //Si el argumento $extensions es un array
+            //Comprobar las extensiones permitidas
+            foreach ($extensions as $e) {
+                //Si la extension es correcta
+                if ($e === $extension) {
+                    //Procedemos a descargar el archivo
+                    // Definir headers
+                    //$size = filesize($path);
+                    header("Content-Type: application/force-download");
+                    header("Content-Disposition: attachment; filename=$file");
+                    header("Content-Transfer-Encoding: binary");
+                    //header("Content-Length: " . $size);
+                    // Descargar archivo
+                    fopen($path, "R");                    
+                            
+                    //Correcto
+                    return true;
+                }
+            }
+        }
+        //}
+        //}
+        //Ha ocurrido un error al descargar el archivo
+        return false;
+    }
+    
 }
