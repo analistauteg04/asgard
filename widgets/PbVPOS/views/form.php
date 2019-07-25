@@ -136,10 +136,6 @@ use app\widgets\PbVPOS\PbVPOS;
                 <th><?= PbVPOS::t("vpos", "Status") ?>:</th>
                 <td id="status_id"></td>
             </tr>
-            <tr>
-                <th><?= PbVPOS::t("vpos", "Status Response") ?>:</th>
-                <td id="status_rsp"></td>
-            </tr>
         </tbody>
         </table>
         <br/>
