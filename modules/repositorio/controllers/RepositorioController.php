@@ -245,8 +245,8 @@ class RepositorioController extends \app\components\CController {
                     //chmod($folder_path, 0777); 
                 }
 
-                //$nombre = $nombre . "." . array_pop($ext); //Si Es producto Se guarda con el nombre original esto SE DESCOMENTA Y PONEN EN VARIABLE NOMBRE COMO SE VA LLAMAR
-                $nombre = uniqid() . "." . array_pop($ext); //Si Es producto Se guarda con el nombre original
+                $nombre = $filenames /*. "." . array_pop($ext)*/; //Si Es producto Se guarda con el nombre original esto SE DESCOMENTA Y PONEN EN VARIABLE NOMBRE COMO SE VA LLAMAR
+                //$nombre = uniqid() . "." . array_pop($ext); //Si Es producto Se guarda con el nombre original
                 $target = $folder_path . DIRECTORY_SEPARATOR . $nombre;
 
                 //$status = Utilities::moveUploadFile($files['tmp_name'], $dirFileEnd);                
