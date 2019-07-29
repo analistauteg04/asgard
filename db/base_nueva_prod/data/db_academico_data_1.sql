@@ -316,7 +316,7 @@ INSERT INTO `modulo_estudio` (`mest_id`, `uaca_id`, `mod_id`, `mest_codigo`, `me
 -- NUEVOS DE SMART 23/07/2019
 (147, 3, 2, 'SM147-EIEM01', 'Emprendimiento e Inovación Empresarial', 'Emprendimiento e Inovación Empresarial', 'emprendimiento_inovacion', 1, NULL, '1', '2019-07-23 11:11:11', NULL, '1'),
 (148, 3, 2, 'SM148-MEON01', 'Marketing para Emprendedores Online', 'Marketing para Emprendedores Online', 'marketing_emprendedores', 1, NULL, '1', '2019-07-23 11:11:11', NULL, '1'),
-(149, 3, 2, 'SM149-OESO01', 'Organización Eventos Socielas', 'Organización Eventos Socielas', 'organizacion_eventos', 1, NULL, '1', '2019-07-23 11:11:11', NULL, '1'),
+(149, 3, 2, 'SM149-OESO01', 'Organización Eventos Sociales', 'Organización Eventos Sociales', 'organizacion_eventos', 1, NULL, '1', '2019-07-23 11:11:11', NULL, '1'),
 (150, 3, 2, 'SM150-CMON01', 'Community Manager Online', 'Community Manager Online', 'community_manager', 1, NULL, '1', '2019-07-23 11:11:11', NULL, '1'),
 (151, 3, 2, 'SM151-TERC01', 'Taller de Estrategias de Recuperación de Cartera', 'Taller de Estrategias de Recuperación de Cartera', 'taller_estrategia', 1, NULL, '1', '2019-07-23 11:11:11', NULL, '1');
 

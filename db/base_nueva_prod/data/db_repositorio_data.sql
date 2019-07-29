@@ -18,7 +18,10 @@ INSERT INTO `funcion` (`fun_id`,`mod_id`,`fun_codificacion`,`fun_nombre`,`fun_de
 (2,2,'inv-oooo','Investigacion','Investigacion',1,null,'1','2019-07-08 12:30:00',null,'1'),
 (3,2,'vin-oooo','Vinculacion con la Sociedad','Vinculacion con la Sociedad',1,null,'1','2019-07-08 12:30:00',null,'1'),
 (4,2,'con-oooo','Condiciones Institucionales','Condiciones Institucionales',1,null,'1','2019-07-08 12:30:00',null,'1'),
-(5,2,'ele-oooo','Elementos Proyectivos','Elementos Proyectivos',1,null,'1','2019-07-08 12:30:00',null,'1');
+(5,2,'ele-oooo','Elementos Proyectivos','Elementos Proyectivos',1,null,'1','2019-07-08 12:30:00',null,'1'),
+-- Para modelo general
+(6,1,'for-oooo','Formatos','Formatos',1,null,'1','2019-07-29 12:30:00',null,'1'),
+(7,1,'ele-oooo','Normativas','Normativas',1,null,'1','2019-07-29 12:30:00',null,'1');
 
 -- --------------------------------------------------------
 --
@@ -78,4 +81,14 @@ INSERT INTO `estandar` (`est_id`,`com_id`, `fun_id`,`est_codificacion`,`est_nomb
 (25,12,5,null,'Estandar D','Estandar D',1,null,1,'2019-07-08 12:30:00',null,'1'),
 (26,13,5,null,'Estandar E','Estandar E',1,null,1,'2019-07-08 12:30:00',null,'1'),
 (27,14,5,null,'Estandar F','Estandar F',1,null,1,'2019-07-08 12:30:00',null,'1'),
-(28,15,5,null,'Estandar F','Estandar F',1,null,1,'2019-07-08 12:30:00',null,'1');
+(28,15,5,null,'Estandar F','Estandar F',1,null,1,'2019-07-08 12:30:00',null,'1'),
+
+-- -- Para modelo general 
+(29,null,6,null,'Evaluacion Institucional','Evaluacion Institucional',1,null,1,'2019-07-29 12:30:00',null,'1'),
+(30,null,6,null,'Varios','Varios',1,null,1,'2019-07-29 12:30:00',null,'1'),
+(31,null,7,null,'Estatuto','Estatuto',1,null,1,'2019-07-29 12:30:00',null,'1'),
+(32,null,7,null,'Reglamentos','Reglamentos',1,null,1,'2019-07-29 12:30:00',null,'1'),
+(33,null,7,null,'Politicas','Politicas',1,null,1,'2019-07-29 12:30:00',null,'1'),
+(34,null,7,null,'Procesos','Procesos',1,null,1,'2019-07-29 12:30:00',null,'1'),
+(35,null,7,null,'Manuales','Manuales',1,null,1,'2019-07-29 12:30:00',null,'1'),
+(36,null,7,null,'Instructivos','Instructuvos',1,null,1,'2019-07-29 12:30:00',null,'1');
