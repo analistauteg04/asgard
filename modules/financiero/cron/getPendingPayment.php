@@ -17,8 +17,7 @@ spl_autoload_register('my_autoloader');
 
 getPagosPendientes();
 
-function putMessageLogFile($message)
-{
+function putMessageLogFile($message){
     global $logFile;
     if (is_array($message))
         $message = json_encode($message);
@@ -33,7 +32,7 @@ function getPagosPendientes() {
     GLOBAL $dsn, $dbuser, $dbpass, $dbname;
     $pdo = new \PDO($dsn, $dbuser, $dbpass);    
     $sql = "
-                select vres.reference,vres.requestId,vres.ordenPago,vres.tipo_orden
+                select vres.reference as ref,vres.requestId,vres.ordenPago,vres.tipo_orden
                 from db_financiero.vpos_response as vres
                 left join db_financiero.vpos_info_response as vire on vire.ordenPago = vres.ordenPago and vire.tipo_orden = vres.tipo_orden
                 where (ifnull(vire.id,0) = 0 or vire.status = 'PENDING')
@@ -50,29 +49,28 @@ function getPagosPendientes() {
     }
 }
 function getInfoPayment($requestId){
-    GLOBAL $ipAddress,$seed,$nounce;
-    $WS_URI = "redirection/api/session/" . $requestID;
+    GLOBAL $ipAddress,$seed,$nounce,$port;
+    $WS_URI = "redirection/api/session/" . $requestId;
     $credenciales=selectVPOST(1);
-    putMessageLogFile($credenciales);
     $params = [
         "auth" => [
-            "login" => $credenciales['login'],
+            "login" => $credenciales[1]['login'],
             "seed" => $seed,
             "nonce" => $nounce,
-            "tranKey" => $credenciales['secret'],
+            "tranKey" => $credenciales[2]['secret'],
         ],
         "ipAddress" => $ipAddress,
         #"userAgent" => $_SERVER['HTTP_USER_AGENT'],
         "userAgent" => "",
     ];
-    putMessageLogFile("Params Info Request: Uri ->". $credenciales['gateway'].":$this->port/$WS_URI  -  Params -> " . json_encode($params));
-    $response = Http::connect($this->payment_gateway, $this->port, http::HTTPS)
+    //putMessageLogFile("Params Info Request: Uri ->". $credenciales[0]['gateway'].":$port/$WS_URI  -  Params -> " . json_encode($params));
+    $response = Http::connect($credenciales[0]['gateway'], $port, http::HTTPS)
             ->setHeaders(array('Content-Type: application/json', 'Accept: application/json'))
             //->setCredentials($user, $apiKey)
             ->doPost($WS_URI, json_encode($params));
     $arr_response = json_decode($response, true);
-    $this->putMessageLogFile("Params Info Response: Uri -> $this->payment_gateway:$this->port/$WS_URI  -  Params -> " . json_encode($arr_response));
-    $this->saveInfoResponseDB($arr_response);
+    $this->putMessageLogFile("Params Info Response: Uri -> ".$credenciales[0]['gateway'].":".$port."./".$WS_URI."  -  Params -> " . json_encode($arr_response));
+    //$this->saveInfoResponseDB($arr_response);
     return $arr_response;
 }
 function selectVPOST($type_vpos) {       
