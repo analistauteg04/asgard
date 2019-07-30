@@ -1,6 +1,6 @@
 <?php
-
 $logFile = dirname(__FILE__) . "/../../../runtime/logs/pb.log";
+$http = include_once(dirname(__FILE__) . "/../../fe_edoc/clientWS/libs/http.php");
 $dataDB = include_once(dirname(__FILE__) . "/../config/mod.php");
 $payment_gateway = "";
 $dbname = $dataDB["financiero"]["db_facturacion"]["dbname"];
@@ -12,6 +12,7 @@ $ipAddress = "127.0.0.1";
 $dbport = 3306;
 $seed="";
 $nounce="";
+$transKey="";
 $dsn = "mysql:host=$dbserver;dbname=$dbname;port=$dbport";
 spl_autoload_register('my_autoloader');
 
@@ -49,15 +50,27 @@ function getPagosPendientes() {
     }
 }
 function getInfoPayment($requestId){
-    GLOBAL $ipAddress,$seed,$nounce,$port;
-    $WS_URI = "redirection/api/session/" . $requestId;
+    GLOBAL $ipAddress,$seed,$nounce,$port,$transKey;
+    $seed=date('c');
+    
+    $nonce = "";
+    if (function_exists('random_bytes')) {
+        $nonce = bin2hex(random_bytes(16));
+    } elseif (function_exists('openssl_random_pseudo_bytes')) {
+        $nonce = bin2hex(openssl_random_pseudo_bytes(16));
+    } else {
+        $nonce = mt_rand();
+    }
     $credenciales=selectVPOST(1);
+    $nounce = base64_encode($nonce);
+    $transKey = base64_encode(sha1($nonce . $seed . $credenciales[2]['secret'], true));    
+    $WS_URI = "redirection/api/session/" . $requestId;    
     $params = [
         "auth" => [
             "login" => $credenciales[1]['login'],
             "seed" => $seed,
             "nonce" => $nounce,
-            "tranKey" => $credenciales[2]['secret'],
+            "tranKey" => $transKey,
         ],
         "ipAddress" => $ipAddress,
         #"userAgent" => $_SERVER['HTTP_USER_AGENT'],
@@ -69,9 +82,11 @@ function getInfoPayment($requestId){
             //->setCredentials($user, $apiKey)
             ->doPost($WS_URI, json_encode($params));
     $arr_response = json_decode($response, true);
-    $this->putMessageLogFile("Params Info Response: Uri -> ".$credenciales[0]['gateway'].":".$port."./".$WS_URI."  -  Params -> " . json_encode($arr_response));
-    //$this->saveInfoResponseDB($arr_response);
+    saveInfoResponseDB($arr_response);
     return $arr_response;
+}
+function saveInfoResponseDB(){
+    
 }
 function selectVPOST($type_vpos) {       
     $credenciales = array();

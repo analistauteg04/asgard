@@ -253,8 +253,8 @@ class PbVPOS extends Widget {
                 "email" => $this->email_cliente,
                 "document" => $this->cedula_cliente,
                 "documentType" => $this->tipo_documento,
-            /* "mobile" => "",
-              "address" => [
+                "mobile" => "",
+            /*  "address" => [
               "street" => "",
               "city" => "",
               "country" => "",
