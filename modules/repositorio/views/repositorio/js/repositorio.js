@@ -99,7 +99,7 @@ $(document).ready(function () {
                     if (response.status == "OK") {
                         data = response.message;
                         setComboDataselect(data.componentes, "cmb_componente_evi","Seleccionar");
-                        var arrParams = new Object();
+                        var arrParams = new Object();                        
                         arrParams.comp_id = $('#cmb_componente_evi').val();
                         arrParams.fun_id = $('#cmb_funcion_evi').val();
                         arrParams.get_estandares = true;
@@ -125,6 +125,12 @@ $(document).ready(function () {
                 data = response.message;
                 setComboDataselect(data.componentes, "cmb_componente_evi","Seleccionar");
                 var arrParams = new Object();
+                if (data.componentes.length > 0) {
+                            $('#Divcomponente').show();
+                        }
+                        else{
+                            $('#Divcomponente').hide();
+                        }
                 arrParams.comp_id = $('#cmb_componente_evi').val();
                 arrParams.fun_id = $('#cmb_funcion_evi').val();
                 arrParams.get_estandares = true;
