@@ -42,7 +42,7 @@ return [
     'repositorioFolder' => '/opt/files/',
     'imgFolder' => '/site/getimage/?route=/uploads/',
     'FileExtensions' => ['jpg', 'png', 'pdf'],
-    'MaxFileSize' => 20480, //Tamaño 1 MB
+    'MaxFileSize' => 360000, //Tamaño 1 MB
     'MaxFileLogSize' => 50000000, // 50000000 bytes -> 50 MB
     'timeRecursive' => '2', // segundos
     'numRecursive' => '3',
