@@ -11,9 +11,9 @@ RewriteCond %{REQUEST_FILENAME} !-d
 RewriteRule . index.php
 
 # Variables de php a modificar
-php_value upload_max_filesize 20M
-# php_value post_max_size 10M
+php_value upload_max_filesize 80M
+php_value post_max_size 80M
 # -- reportes error_reporting = E_ALL & ~E_NOTICE & ~E_STRICT
 # php_value error_reporting 30711
 php_value memory_limit 256M
-php_value max_execution_time 1800
+php_value max_execution_time 3600
