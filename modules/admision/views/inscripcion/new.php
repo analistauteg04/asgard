@@ -14,6 +14,11 @@ use yii\jui\AutoComplete;
 use yii\web\JsExpression;
 use app\models\Utilities;
 use app\modules\repositorio\Module as repositorio;
+use app\modules\academico\Module as academico;
+use app\modules\financiero\Module as financiero;
+academico::registerTranslations();
+financiero::registerTranslations();
+
 ?>
 <div class="col-md-12">    
     <h3><span id="lbl_Personeria"><?= repositorio::t("repositorio", "Registro de inscritos a Maestrías") ?></span>
@@ -30,7 +35,7 @@ use app\modules\repositorio\Module as repositorio;
             <div class="form-group">            
                 <label for="cmb_tipo_documento" class="col-lg-5 col-md-5 col-sm-5 col-xs-5 control-label"><?= repositorio::t("repositorio", "Tipo Documento") ?> <span class="text-danger">*</span></label>
                 <div class="col-lg-7 col-md-7 col-sm-7 col-xs-7">
-                    <?= Html::dropDownList("cmb_tipo_documento", 0, ['0' => Yii::t('formulario', 'Select')] + $arr_estandares, ["class" => "form-control", "id" => "cmb_tipo_documento"]) ?>
+                    <?= Html::dropDownList("cmb_tipo_documento", 0, ['0' => Yii::t('formulario', 'Select')], ["class" => "form-control", "id" => "cmb_tipo_documento"]) ?>
                 </div>
             </div>
         </div>
@@ -84,7 +89,7 @@ use app\modules\repositorio\Module as repositorio;
             <div class="form-group">            
                 <label for="cmb_pais" class="col-lg-5 col-md-5 col-sm-5 col-xs-5 control-label"><?= repositorio::t("repositorio", "Pais") ?></label>
                 <div class="col-lg-7 col-md-7 col-sm-7 col-xs-7">
-                    <?= Html::dropDownList("cmb_pais", 0, ['0' => Yii::t('formulario', 'Select')] + $arr_componentes, ["class" => "form-control", "id" => "cmb_pais"]) ?>
+                    <?= Html::dropDownList("cmb_pais", 0, ['0' => Yii::t('formulario', 'Select')], ["class" => "form-control", "id" => "cmb_pais"]) ?>
                 </div>
             </div>
         </div>
@@ -92,7 +97,7 @@ use app\modules\repositorio\Module as repositorio;
             <div class="form-group">            
                 <label for="cmb_provincia" class="col-lg-5 col-md-5 col-sm-5 col-xs-5 control-label"><?= repositorio::t("repositorio", "Provincia") ?> <span class="text-danger">*</span></label>
                 <div class="col-lg-7 col-md-7 col-sm-7 col-xs-7">
-                    <?= Html::dropDownList("cmb_provincia", 0, ['0' => Yii::t('formulario', 'Select')] + $arr_estandares, ["class" => "form-control", "id" => "cmb_provincia"]) ?>
+                    <?= Html::dropDownList("cmb_provincia", 0, ['0' => Yii::t('formulario', 'Select')], ["class" => "form-control", "id" => "cmb_provincia"]) ?>
                 </div>
             </div>
         </div>
@@ -102,7 +107,7 @@ use app\modules\repositorio\Module as repositorio;
             <div class="form-group">            
                 <label for="cmb_canton" class="col-lg-5 col-md-5 col-sm-5 col-xs-5 control-label"><?= repositorio::t("repositorio", "Cantón") ?> <span class="text-danger">*</span></label>
                 <div class="col-lg-7 col-md-7 col-sm-7 col-xs-7">
-                    <?= Html::dropDownList("cmb_canton", 0, ['0' => Yii::t('formulario', 'Select')] + $arr_estandares, ["class" => "form-control", "id" => "cmb_canton"]) ?>
+                    <?= Html::dropDownList("cmb_canton", 0, ['0' => Yii::t('formulario', 'Select')], ["class" => "form-control", "id" => "cmb_canton"]) ?>
                 </div>
             </div>
         </div>         
@@ -118,7 +123,7 @@ use app\modules\repositorio\Module as repositorio;
                 <div class="col-lg-7 col-md-7 col-sm-7 col-xs-7">
                     <?php //Html::dropDownList("cmb_modelo_evi", 1,array_merge($arr_modelos) , ["class" => "form-control", "id" => "cmb_modelo_evi"]) ?>
                     <?=
-                    Html::dropDownList("cmb_tipo_convenio", 0, ['0' => Yii::t('formulario', 'No convenio')] + $arr_modelos, ["class" => "form-control", "id" => "cmb_tipo_convenio"])
+                    Html::dropDownList("cmb_tipo_convenio", 0, ['0' => Yii::t('formulario', 'No convenio')] + $arr_convenio_empresa, ["class" => "form-control", "id" => "cmb_tipo_convenio"])
                     ?>
                 </div>
             </div>   
@@ -127,7 +132,7 @@ use app\modules\repositorio\Module as repositorio;
             <div class="form-group">            
                 <label for="cmb_grupo_introductorio" class="col-lg-5 col-md-5 col-sm-5 col-xs-5 control-label"><?= repositorio::t("repositorio", "Grupo Introductorio") ?> <span class="text-danger">*</span></label>
                 <div class="col-lg-7 col-md-7 col-sm-7 col-xs-7">
-                    <?= Html::dropDownList("cmb_grupo_introductorio", 0, ['0' => Yii::t('formulario', 'Select')] + $arr_funciones, ["class" => "form-control", "id" => "cmb_grupo_introductorio"]) ?>
+                    <?= Html::dropDownList("cmb_grupo_introductorio", 0, ['0' => Yii::t('formulario', 'Select')], ["class" => "form-control", "id" => "cmb_grupo_introductorio"]) ?>
                 </div>
             </div>
         </div>
@@ -137,7 +142,7 @@ use app\modules\repositorio\Module as repositorio;
             <div class="form-group">            
                 <label for="cmb_cumple_requisito" class="col-lg-5 col-md-5 col-sm-5 col-xs-5 control-label"><?= repositorio::t("repositorio", "Cumple Requisito") ?> <span class="text-danger">*</span></label>
                 <div class="col-lg-7 col-md-7 col-sm-7 col-xs-7">
-                    <?= Html::dropDownList("cmb_cumple_requisito", 0, ['0' => Yii::t('formulario', 'Select')] + $arr_estandares, ["class" => "form-control", "id" => "cmb_cumple_requisito"]) ?>
+                    <?= Html::dropDownList("cmb_cumple_requisito", 0, ['0' => Yii::t('formulario', 'Select')], ["class" => "form-control", "id" => "cmb_cumple_requisito"]) ?>
                 </div>
             </div>
         </div>  
@@ -145,7 +150,7 @@ use app\modules\repositorio\Module as repositorio;
             <div class="form-group">
                 <label for="cmb_agente" class="col-sm-5 col-md-5 col-xs-5 col-lg-5 control-label" id="lbl_nombre1"><?= financiero::t("Pagos", "Agente") ?></label>
                 <div class="col-lg-7 col-md-7 col-sm-7 col-xs-7">
-                    <?= Html::dropDownList("cmb_agente", 0, ['0' => Yii::t('formulario', 'Select')] + $arr_estandares, ["class" => "form-control", "id" => "cmb_agente"]) ?>
+                    <?= Html::dropDownList("cmb_agente", 0, ['0' => Yii::t('formulario', 'Select')], ["class" => "form-control", "id" => "cmb_agente"]) ?>
                 </div>
             </div>
         </div> 
@@ -226,7 +231,7 @@ use app\modules\repositorio\Module as repositorio;
             <div class="form-group">            
                 <label for="cmb_metodo_pago" class="col-lg-5 col-md-5 col-sm-5 col-xs-5 control-label"><?= repositorio::t("repositorio", "Método Pago") ?> <span class="text-danger">*</span></label>
                 <div class="col-lg-7 col-md-7 col-sm-7 col-xs-7">
-                    <?= Html::dropDownList("cmb_metodo_pago", 0, ['0' => Yii::t('formulario', 'Select')] + $arr_estandares, ["class" => "form-control", "id" => "cmb_metodo_pago"]) ?>
+                    <?= Html::dropDownList("cmb_metodo_pago", 0, ['0' => Yii::t('formulario', 'Select')], ["class" => "form-control", "id" => "cmb_metodo_pago"]) ?>
                 </div>
             </div>
         </div>  
@@ -236,7 +241,7 @@ use app\modules\repositorio\Module as repositorio;
             <div class="form-group">
                 <label for="cmb_estado_pago" class="col-sm-5 col-md-5 col-xs-5 col-lg-5 control-label" id="lbl_nombre1"><?= financiero::t("Pagos", "Estado Pago") ?></label>
                 <div class="col-lg-7 col-md-7 col-sm-7 col-xs-7">
-                    <?= Html::dropDownList("cmb_estado_pago", 0, ['0' => Yii::t('formulario', 'Select')] + $arr_estandares, ["class" => "form-control", "id" => "cmb_estado_pago"]) ?>
+                    <?= Html::dropDownList("cmb_estado_pago", 0, ['0' => Yii::t('formulario', 'Select')], ["class" => "form-control", "id" => "cmb_estado_pago"]) ?>
                 </div>
             </div>
         </div> 
