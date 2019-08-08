@@ -234,8 +234,11 @@ class PagosfrecuentesController extends \yii\web\Controller {
             $cedulafact = $dataFactura["dni_fac"];
             $item_ids = $data["dataItems"];
             $transaction = $con1->beginTransaction();
+            \app\models\Utilities::putMessageLogFile('antes de ingresar a validación.');
             $estado_pago = $doc_model->consultarEstadoByCedula($cedula,$cedulafact); 
             if ($estado_pago == 'PENDING' || $estado_pago == 'FAILED' || $estado_pago == 'PENDING_VALIDATION' || $estado_pago == 'PARTIAL_EXPIRED' || $estado_pago == 'APPROVED_PARTIAL') { 
+                \app\models\Utilities::putMessageLogFile('ingresa cuando existe pago pendiente o ha fallado');
+                $transaction->rollBack();
                 $mensaje = "Estimado ".$dataFactura['nombre_fac']." ".$dataFactura['apellidos_fac'].":<br/>";
                 $mensaje = $mensaje . "Tiene una transaccion en estado pendiente, comunicarse con el departamento de colecturia (+59346052450 ext: 122) para mayor informacion.";
                 $message = array(
@@ -243,7 +246,8 @@ class PagosfrecuentesController extends \yii\web\Controller {
                     "title" => Yii::t('jslang', 'Success'),
                     "iddoc" => 0,
                     "estado" => 0,
-                );
+                );                
+                \app\models\Utilities::putMessageLogFile('mensaje:'.$mensaje);
                 return Utilities::ajaxResponse('OK', 'alert', Yii::t("jslang", "Sucess"), false, $message);
             } else {
                 try {
