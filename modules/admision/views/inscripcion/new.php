@@ -28,7 +28,7 @@ financiero::registerTranslations();
 </div>
 <form class="form-horizontal">
     <div class="col-md-12">    
-        <h4><span id="lbl_Datos_Pago"><?= repositorio::t("repositorio", "Datos del Inscrito") ?></span> </h4>
+        <h4><span id="lbl_datos_inscrito"><?= repositorio::t("repositorio", "Datos del Inscrito") ?></span> </h4>
     </div>
     <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">                
         <div class="col-md-6 col-sm-6 col-xs-6 col-lg-6">
@@ -89,7 +89,7 @@ financiero::registerTranslations();
             <div class="form-group">            
                 <label for="cmb_pais" class="col-lg-5 col-md-5 col-sm-5 col-xs-5 control-label"><?= repositorio::t("repositorio", "Pais") ?><span class="text-danger">*</span></label>
                 <div class="col-lg-7 col-md-7 col-sm-7 col-xs-7">
-                    <?= Html::dropDownList("cmb_pais", 0, ['0' => Yii::t('formulario', 'Select')]+ $arr_pais_dom, ["class" => "form-control", "id" => "cmb_pais"]) ?>
+                    <?= Html::dropDownList("cmb_pais", 1, ['0' => Yii::t('formulario', 'Select')]+ $arr_pais_dom, ["class" => "form-control", "id" => "cmb_pais", "disabled" => "true"]) ?>
                 </div>
             </div>
         </div>
