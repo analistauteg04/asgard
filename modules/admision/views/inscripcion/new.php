@@ -41,9 +41,9 @@ financiero::registerTranslations();
         </div>
         <div class="col-md-6 col-sm-6 col-xs-6 col-lg-6">
             <div class="form-group">
-                <label for="txt_documento" class="col-sm-5 col-md-5 col-xs-5 col-lg-5 control-label" id="lbl_nombre1"><?= financiero::t("Pagos", "Documento") ?><span class="text-danger">*</span></label>
+                <label for="txt_documento" class="col-sm-5 col-md-5 col-xs-5 col-lg-5 control-label" id="lbl_documento"><?= financiero::t("Pagos", "Documento") ?><span class="text-danger">*</span></label>
                 <div class="col-sm-7 col-md-7 col-xs-7 col-lg-7">
-                    <input type="text" class="form-control keyupmce" value="" id="txt_cedula" data-type="alfa" placeholder="<?= Yii::t("formulario", "DNI Document") ?>">
+                    <input type="text" class="form-control keyupmce" value="" id="txt_documento" data-type="alfa" placeholder="<?= Yii::t("formulario", "DNI Document") ?>">
                 </div>
             </div>
         </div>                 
@@ -59,7 +59,7 @@ financiero::registerTranslations();
         </div> 
         <div class="col-md-6 col-sm-6 col-xs-6 col-lg-6">
             <div class="form-group">
-                <label for="txt_nombres2" class="col-sm-5 col-md-5 col-xs-5 col-lg-5 control-label" id="lbl_nombre1"><?= financiero::t("Pagos", "Segundo Nombre") ?></label>
+                <label for="txt_nombres2" class="col-sm-5 col-md-5 col-xs-5 col-lg-5 control-label" id="lbl_nombre2"><?= financiero::t("Pagos", "Segundo Nombre") ?></label>
                 <div class="col-sm-7 col-md-7 col-xs-7 col-lg-7">
                     <input type="text" class="form-control keyupmce" value="" id="txt_nombres2" data-type="alfa" placeholder="<?= Yii::t("formulario", "Segundo Nombre") ?>">
                 </div>
@@ -69,7 +69,7 @@ financiero::registerTranslations();
     <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">                         
         <div class="col-md-6 col-sm-6 col-xs-6 col-lg-6">
             <div class="form-group">
-                <label for="txt_apellidos1" class="col-sm-5 col-md-5 col-xs-5 col-lg-5 control-label" id="lbl_nombre1"><?= financiero::t("Pagos", "Primer Apellido") ?><span class="text-danger">*</span></label>
+                <label for="txt_apellidos1" class="col-sm-5 col-md-5 col-xs-5 col-lg-5 control-label" id="lbl_apellido1"><?= financiero::t("Pagos", "Primer Apellido") ?><span class="text-danger">*</span></label>
                 <div class="col-sm-7 col-md-7 col-xs-7 col-lg-7">
                     <input type="text" class="form-control keyupmce" value="" id="txt_apellidos1" data-type="alfa" placeholder="<?= Yii::t("formulario", "Primer Apellido") ?>">
                 </div>
@@ -77,7 +77,7 @@ financiero::registerTranslations();
         </div> 
         <div class="col-md-6 col-sm-6 col-xs-6 col-lg-6">
             <div class="form-group">
-                <label for="txt_apellidos2" class="col-sm-5 col-md-5 col-xs-5 col-lg-5 control-label" id="lbl_nombre1"><?= financiero::t("Pagos", "Segundo Apellido") ?></label>
+                <label for="txt_apellidos2" class="col-sm-5 col-md-5 col-xs-5 col-lg-5 control-label" id="lbl_apellido2"><?= financiero::t("Pagos", "Segundo Apellido") ?></label>
                 <div class="col-sm-7 col-md-7 col-xs-7 col-lg-7">
                     <input type="text" class="form-control keyupmce" value="" id="txt_apellidos2" data-type="alfa" placeholder="<?= Yii::t("formulario", "Segundo Apellido") ?>">
                 </div>
@@ -276,9 +276,9 @@ financiero::registerTranslations();
                 <table  id="TbG_Data" class="table table-hover">
                     <thead>
                         <tr>
-                            <th><?= Yii::t("formulario", "Num. Documento") ?></th>
+                            <th><?= Yii::t("formulario", "Documento") ?></th>
                             <th><?= Yii::t("formulario", "Nombre") ?></th>
-                            <th><?= Yii::t("formulario", "Apellidos") ?></th>
+                            <th><?= Yii::t("formulario", "Apellido") ?></th>
                             <th><?= Yii::t("formulario", "Provincia") ?></th>
                             <th><?= Yii::t("formulario", "Cantón") ?></th>                            
                             <th style="display:none; border:none;"></th>
