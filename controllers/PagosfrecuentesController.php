@@ -211,6 +211,7 @@ class PagosfrecuentesController extends \yii\web\Controller {
                     "apellido_cliente" => $apellido_cliente,
                     "cedula_cliente" => $resultado["doc_cedula"],
                     "tipo_documento" => $tipo_dni,
+                    "mobile_number" => $resultado["telfono_fac"],
                     "titleBox" => $titleBox,
                     "email_cliente" => $resultado["doc_correo"],
                     "total" => $totalpagar,

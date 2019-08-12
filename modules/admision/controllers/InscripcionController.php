@@ -21,6 +21,21 @@ financiero::registerTranslations();
 
 class InscripcionController extends \app\components\CController {
 
+    public function actionIndex() {
+        $model = new InscritoMaestria();
+        if (Yii::$app->request->isAjax) {
+            $data = Yii::$app->request->get();
+            if (isset($data["search"])) {
+                return $this->renderPartial('index-grid', [
+                            "model" => $model->getAllInscritosGrid($data["search"], $data["txt_fecha_ini"], $data["txt_fecha_fin"], true)
+                ]);
+            }
+        }
+        return $this->render('index', [
+                    'model' => $model->getAllInscritosGrid(NULL, NULL, NULL, true)
+        ]);
+    }
+
     public function actionNew() {
         $mod_conempresa = new ConvenioEmpresa();
         $mod_fpago = new FormaPago();

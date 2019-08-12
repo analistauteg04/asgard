@@ -313,4 +313,84 @@ class InscritoMaestria extends \yii\db\ActiveRecord {
         }
     }
 
+    function getAllInscritosGrid($search = NULL, $date_ini = NULL, $date_end= NULL, $dataProvider = false){
+        //$iduser    = Yii::$app->session->get('PB_iduser', FALSE);
+        //$idempresa = Yii::$app->session->get('PB_idempresa', FALSE);
+        $search_cond = "%".$search."%";
+        $str_search = "";
+        if(isset($search) && $search != ""){
+            $str_search .= "(im.imae_primer_nombre like :search OR ";
+            $str_search .= "im.imae_segundo_nombre like :search OR ";
+            $str_search .= "im.imae_primer_apellido like :search OR ";
+            $str_search .= "im.imae_segundo_apellido like :search OR ";
+            $str_search .= "pr.pro_nombre like :search OR ";
+            $str_search .= "pa.can_nombre like :search OR ";
+            $str_search .= "im.imae_agente like :search) AND ";
+        }
+        if(isset($date_ini) && $date_ini != ""){
+            $str_search .= "im.imae_fecha_inscripcion >= $date_ini AND ";
+        }
+        if(isset($date_end) && $date_end != ""){
+            $str_search .= "im.imae_fecha_inscripcion <= $date_end AND ";
+        }
+        $con = \Yii::$app->db_crm;
+        $trans = $con->getTransaction();
+        if ($trans !== null) {
+            $trans = null;
+        } else {
+            $trans = $con->beginTransaction();
+        }
+        $sql = "SELECT 
+                    imae_id,
+                    im.cemp_id,
+                    im.gint_id,
+                    gi.gint_nombre AS grupoIntroductorio,
+                    ce.cemp_id AS convenio,
+                    im.imae_tipo_documento AS dni,
+                    im.imae_primer_nombre + ' ' + im.imae_segundo_nombre + ' ' + im.imae_primer_apellido + ' ' im.imae_segundo_apellido as nombres,
+                    pa.pai_nombre AS pais,
+                    pr.pro_nombre AS provincia,
+                    pa.can_nombre AS canton,
+                    
+                    im.imae_fecha_inscripcion AS fecha_inscripcion,
+                    im.imae_fecha_pago AS fecha_pago,
+                    '".Yii::$app->params["currency"]."' + im.imae_pago_inscripcion AS pago_inscripcion,
+                    '".Yii::$app->params["currency"]."' + im.imae_valor_maestria AS valor_maestria,
+                    fp.fpag_nombre AS forma_pago,
+                    im.imae_agente AS agente,
+                    im.imae_estado_pago AS estado_pago
+                FROM 
+                    ".$con->dbname . ".inscrito_maestria AS im 
+                    INNER JOIN ".Yii::$app->db->dbname.".pais AS pa ON pa.pai_id = im.pai_id
+                    INNER JOIN ".Yii::$app->db->dbname.".provincia AS pr ON pr.pro_id = im.pro_id
+                    INNER JOIN ".Yii::$app->db->dbname.".canton AS ca ON ca.can_id = im.can_id
+                    INNER JOIN ".Yii::$app->db_facturacion->dbname.".forma_pago AS fp ON fp.fpag_id = im.fpag_id
+                    INNER JOIN ".$con->dbname.".grupo_introductorio AS gi ON gi.gint_id = im.gint_id
+                    INNER LEFT JOIN ".Yii::$app->db_captacion->dbname.".convenio_empresa AS ce ON ce.cemp_id = im.cemp_id
+                WHERE 
+                    $str_search
+                    im.imae_estado=1 AND
+                    im.imae_estado_logico=1 
+                ORDER BY im.imae_fecha_inscripcion DESC;";
+        $comando = Yii::$app->db->createCommand($sql);
+        if(isset($search)){
+            $comando->bindParam(":search",$search_cond, \PDO::PARAM_STR);
+        }
+        $res = $comando->queryAll();
+        if($dataProvider){
+            $dataProvider = new ArrayDataProvider([
+                'key' => 'imae_id',
+                'allModels' => $res,
+                'pagination' => [
+                    'pageSize' => Yii::$app->params["pageSize"],
+                ],
+                'sort' => [
+                    'attributes' => ['pais', 'provincia', 'canton', 'fecha_inscripcion', 'agente', 'estado_pago', 'forma_pago'],
+                ],
+            ]);
+            return $dataProvider;
+        }
+        return $res;
+    }
+
 }

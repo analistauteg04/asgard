@@ -42,6 +42,7 @@ class PbVPOS extends Widget {
     public $cedula_cliente = "";
     public $tipo_documento = "";
     public $email_cliente = "";
+    public $mobile_number = "";
     public $descripcionItem = "";
     public $subtotal = "";
     public $total = "";
@@ -73,7 +74,6 @@ class PbVPOS extends Widget {
     }
 
     public function run() {
-        $this->putMessageLogFile("Entro al widget");
         if ($this->type_vpos == 1) {
             $a = Url::current([], true);
             if (strpos($a, '?') !== false) {
@@ -144,6 +144,7 @@ class PbVPOS extends Widget {
                     "apellido_cliente" => $this->apellido_cliente,
                     "cedula_cliente" => $this->cedula_cliente,
                     "email_cliente" => $this->email_cliente,
+                    "mobile_number" => $this->mobile_number,
                     "total" => $this->total,
                     "referenceID" => $this->referenceID,
                 ];
@@ -253,7 +254,7 @@ class PbVPOS extends Widget {
                 "email" => $this->email_cliente,
                 "document" => $this->cedula_cliente,
                 "documentType" => $this->tipo_documento,
-                "mobile" => "",
+                "mobile" => $this->mobile_number,
             /*  "address" => [
               "street" => "",
               "city" => "",

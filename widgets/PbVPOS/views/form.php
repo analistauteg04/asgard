@@ -138,10 +138,12 @@ use app\widgets\PbVPOS\PbVPOS;
             </tr>
         </tbody>
         </table>
-        <br/>
-        <?= PbVPOS::t("vpos", "Within 48 you can verify the payment of this transaction, where you will be sent an email with the link to the asgard system, in the financial module, transaction history option.") ?>
-        <br/>
-        <?= PbVPOS::t("vpos","In the mail will be the credentials to send to the system.");?>
+        <div id="legTransOk">
+            <br/>
+            <?= PbVPOS::t("vpos", "Within 48 you can verify the payment of this transaction, where you will be sent an email with the link to the asgard system, in the financial module, transaction history option.") ?>
+            <br/>
+            <?= PbVPOS::t("vpos","In the mail will be the credentials to send to the system.");?>
+        </div>
     </div>
 </div>
 <div id="lightbox-response"></div>
@@ -150,4 +152,7 @@ var VPOS_VAR = new Object();
 VPOS_VAR.APPROVED = "<?= PbVPOS::t("vpos", "APPROVED") ?>";
 VPOS_VAR.REJECTED = "<?= PbVPOS::t("vpos", "REJECTED") ?>";
 VPOS_VAR.PENDING  = "<?= PbVPOS::t("vpos", "PENDING") ?>";
+VPOS_VAR.MSJ_OK  = "<?= PbVPOS::t("vpos", "The transaction has been succesfully.") ?>";
+VPOS_VAR.MSJ_REJ = "<?= PbVPOS::t("vpos", "The transaction has been rejected.") ?>";
+VPOS_VAR.MSJ_PEN = "<?= PbVPOS::t("vpos", "The transaction is pending to approve. You will receive an email with the final transaction status. Do not try another transaction while the previous one is processed.") ?>";
 </script>
