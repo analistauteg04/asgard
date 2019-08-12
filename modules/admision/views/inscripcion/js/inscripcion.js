@@ -1,5 +1,31 @@
 $(document).ready(function () {
     recargarGridItem();
+    
+    $('#cmb_pais').change(function () {
+        var link = $('#txth_base').val() + "/admision/inscripcion/new";
+        var arrParams = new Object();
+        arrParams.pai_id = $(this).val();
+        arrParams.getprovincias = true;
+        arrParams.getarea = true;
+        requestHttpAjax(link, arrParams, function (response) {
+            if (response.status == "OK") {
+                data = response.message;
+                setComboDataselect(data.provincias, "cmb_provincia", "Seleccionar");
+                var arrParams = new Object();
+                if (data.provincias.length > 0) {
+                    arrParams.prov_id = data.provincias[0].id;
+                    arrParams.getcantones = true;
+                    requestHttpAjax(link, arrParams, function (response) {
+                        if (response.status == "OK") {
+                            data = response.message;
+                            setComboDataselect(data.cantones, "cmb_canton", "Seleccionar");
+                        }
+                    }, true);
+                }
+
+            }
+        }, true);       
+    });
     $('#cmb_provincia').change(function () {
         var link = $('#txth_base').val() + "/admision/inscripcion/new";
         var arrParams = new Object();
@@ -8,7 +34,7 @@ $(document).ready(function () {
         requestHttpAjax(link, arrParams, function (response) {           
             if (response.status == "OK") {                
                 data = response.message;                
-                setComboData(data.cantones, "cmb_canton");
+                setComboDataselect(data.cantones, "cmb_canton", "Seleccionar");
             }
         }, true);
     });
@@ -16,6 +42,18 @@ $(document).ready(function () {
         agregarItems('new')       
     });
 });
+
+function setComboDataselect(arr_data, element_id, texto) {
+    var option_arr = "";
+    option_arr += "<option value= '0'>" + texto + "</option>";
+    for (var i = 0; i < arr_data.length; i++) {
+        var id = arr_data[i].id;
+        var value = arr_data[i].name;
+
+        option_arr += "<option value='" + id + "'>" + value + "</option>";
+    }
+    $("#" + element_id).html(option_arr);
+}
 
 function agregarItems(opAccion) {
     var tGrid = 'TbG_Data';    

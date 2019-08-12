@@ -15,7 +15,7 @@ use Yii;
 use yii\helpers\Url;
 use yii\base\Exception;
 use yii\helpers\ArrayHelper;
-
+use app\models\Utilities;
 academico::registerTranslations();
 financiero::registerTranslations();
 
@@ -32,8 +32,7 @@ class InscripcionController extends \app\components\CController {
                 $message = array("provincias" => $provincias);
                 return Utilities::ajaxResponse('OK', 'alert', Yii::t('jslang', 'Success'), 'false', $message);
             }
-            if (isset($data["getcantones"])) {
-                \app\models\Utilities::putMessageLogFile('prov_id:'.$data['prov_id']);   
+            if (isset($data["getcantones"])) {               
                 $cantones = Canton::find()->select("can_id AS id, can_nombre AS name")->where(["can_estado_logico" => "1", "can_estado" => "1", "pro_id" => $data['prov_id']])->asArray()->all();
                 $message = array("cantones" => $cantones);
                 return Utilities::ajaxResponse('OK', 'alert', Yii::t('jslang', 'Success'), 'false', $message);

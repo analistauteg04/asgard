@@ -178,8 +178,8 @@ financiero::registerTranslations();
         <div class="col-md-6 col-sm-6 col-xs-6 col-lg-6">
             <div class="form-group">
                 <label for="txt_revision" class="col-sm-5 col-md-5 col-xs-5 col-lg-5 control-label" id="lbl_nombre1"><?= financiero::t("Pagos", "Revisión") ?></label>
-                <div class="col-sm-7 col-md-7 col-xs-7 col-lg-7">
-                    <input type="text" class="form-control keyupmce" value="" id="txt_revision" data-type="alfa" placeholder="<?= Yii::t("formulario", "Revisión") ?>">
+                <div class="col-sm-7 col-md-7 col-xs-7 col-lg-7">                    
+                    <textarea  class="form-control keyupmce" rows="5" id="txt_revision"></textarea>
                 </div>
             </div>
         </div> 
@@ -249,7 +249,7 @@ financiero::registerTranslations();
             <div class="form-group">            
                 <label for="txt_convenio_listo" class="col-lg-5 col-md-5 col-sm-5 col-xs-5 control-label"><?= repositorio::t("repositorio", "Convenio Listo") ?> </label>
                 <div class="col-lg-7 col-md-7 col-sm-7 col-xs-7">
-                    <input type="text" class="form-control keyupmce" value="" id="txt_convenio_listo" data-type="alfa" placeholder="<?= Yii::t("formulario", "Convenio Listo") ?>">
+                    <textarea  class="form-control keyupmce" rows="5" id="txt_convenio_listo"></textarea>
                 </div>
             </div>
         </div>   
