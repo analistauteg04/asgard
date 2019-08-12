@@ -232,92 +232,70 @@ class InscritoMaestria extends \yii\db\ActiveRecord {
                 \app\models\Utilities::putMessageLogFile('$cemp_id:'.$cemp_id);  
             }
             if (isset($gint_id)) {
-                $comando->bindParam(':gint_id', $gint_id, \PDO::PARAM_INT);
-                \app\models\Utilities::putMessageLogFile('$gint_id:'.$gint_id);  
+                $comando->bindParam(':gint_id', $gint_id, \PDO::PARAM_INT);  
             }
             if (isset($pai_id)) {
                 $comando->bindParam(':pai_id', $pai_id, \PDO::PARAM_INT);
-                \app\models\Utilities::putMessageLogFile('$pai_id:'.$pai_id);  
             }
             if (isset($pro_id)) {
                 $comando->bindParam(':pro_id', $pro_id, \PDO::PARAM_INT);
-                \app\models\Utilities::putMessageLogFile('$pro_id:'.$pro_id);  
             }
             if (isset($can_id)) {
                 $comando->bindParam(':can_id', $can_id, \PDO::PARAM_INT);
-                \app\models\Utilities::putMessageLogFile('$can_id:'.$can_id);  
             }
             if (!empty((isset($imae_tipo_documento)))) {
                 $comando->bindParam(':imae_tipo_documento', $imae_tipo_documento, \PDO::PARAM_STR);
-                \app\models\Utilities::putMessageLogFile('$imae_tipo_documento:'.$imae_tipo_documento);  
             }
             if (isset($imae_documento)) {
                 $comando->bindParam(':imae_documento', $imae_documento, \PDO::PARAM_STR);
-                \app\models\Utilities::putMessageLogFile('$imae_documento:'.$imae_documento);  
             }
             if (!empty((isset($imae_primer_nombre)))) {
-                $comando->bindParam(':imae_primer_nombre', $imae_primer_nombre, \PDO::PARAM_STR);
-                \app\models\Utilities::putMessageLogFile('$imae_primer_nombre:'.$imae_primer_nombre);  
+                $comando->bindParam(':imae_primer_nombre', ucwords(strtolower($imae_primer_nombre)), \PDO::PARAM_STR);
             }
             if (!empty((isset($imae_segundo_nombre)))) {
-                $comando->bindParam(':imae_segundo_nombre', $imae_segundo_nombre, \PDO::PARAM_STR);
-                \app\models\Utilities::putMessageLogFile('$imae_segundo_nombre:'.$imae_segundo_nombre);  
+                $comando->bindParam(':imae_segundo_nombre', ucwords(strtolower($imae_segundo_nombre)), \PDO::PARAM_STR);
             }
             if (!empty((isset($imae_primer_apellido)))) {
-                $comando->bindParam(':imae_primer_apellido', $imae_primer_apellido, \PDO::PARAM_STR);
-                \app\models\Utilities::putMessageLogFile('$imae_primer_apellido:'.$imae_primer_apellido);  
+                $comando->bindParam(':imae_primer_apellido', ucwords(strtolower($imae_primer_apellido)), \PDO::PARAM_STR);
             }
             if (!empty((isset($imae_segundo_apellido)))) {
-                $comando->bindParam(':imae_segundo_apellido', $imae_segundo_apellido, \PDO::PARAM_STR);
-                \app\models\Utilities::putMessageLogFile('$imae_segundo_apellido:'.$imae_segundo_apellido);  
+                $comando->bindParam(':imae_segundo_apellido', ucwords(strtolower($imae_segundo_apellido)), \PDO::PARAM_STR);
             }            
             if (!empty((isset($imae_revisar_urgente)))) {
-                $comando->bindParam(':imae_revisar_urgente', $imae_revisar_urgente, \PDO::PARAM_STR);
-                \app\models\Utilities::putMessageLogFile('$imae_revisar_urgente:'.$imae_revisar_urgente);  
+                $comando->bindParam(':imae_revisar_urgente', ucwords(strtolower($imae_revisar_urgente)), \PDO::PARAM_STR);
             }
             if (!empty((isset($imae_cumple_requisito)))) {
                 $comando->bindParam(':imae_cumple_requisito', $imae_cumple_requisito, \PDO::PARAM_STR);
-                \app\models\Utilities::putMessageLogFile('$imae_cumple_requisito:'.$imae_cumple_requisito);  
             }
             if (!empty((isset($imae_agente)))) {
                 $comando->bindParam(':imae_agente', $imae_agente, \PDO::PARAM_STR);
-                \app\models\Utilities::putMessageLogFile('$imae_agente:'.$imae_agente);  
             }
             if (!empty((isset($imae_fecha_inscripcion)))) {
                 $comando->bindParam(':imae_fecha_inscripcion', $imae_fecha_inscripcion, \PDO::PARAM_STR);
-                \app\models\Utilities::putMessageLogFile('$imae_fecha_inscripcion:'.$imae_fecha_inscripcion);  
             }
             if (!empty((isset($imae_fecha_pago)))) {
                 $comando->bindParam(':imae_fecha_pago', $imae_fecha_pago, \PDO::PARAM_STR);
-                \app\models\Utilities::putMessageLogFile('$imae_fecha_pago:'.$imae_fecha_pago);  
             }
             if (!empty((isset($imae_pago_inscripcion)))) {
                 $comando->bindParam(':imae_pago_inscripcion', $imae_pago_inscripcion, \PDO::PARAM_STR);
-                \app\models\Utilities::putMessageLogFile('$imae_pago_inscripcion:'.$imae_pago_inscripcion);  
             }
             if (!empty((isset($imae_valor_maestria)))) {
-                $comando->bindParam(':imae_valor_maestria', $imae_valor_maestria, \PDO::PARAM_STR);
-                \app\models\Utilities::putMessageLogFile('$imae_valor_maestria:'.$imae_valor_maestria);  
+                $comando->bindParam(':imae_valor_maestria', $imae_valor_maestria, \PDO::PARAM_STR);           
             }           
             if (!empty((isset($fpag_id)))) {
-                $comando->bindParam(':fpag_id', $fpag_id, \PDO::PARAM_INT);
-                \app\models\Utilities::putMessageLogFile('$fpag_id:'.$fpag_id);  
+                $comando->bindParam(':fpag_id', $fpag_id, \PDO::PARAM_INT);           
             }
             if (!empty((isset($imae_estado_pago)))) {
-                $comando->bindParam(':imae_estado_pago', $imae_estado_pago, \PDO::PARAM_STR);
-                \app\models\Utilities::putMessageLogFile('$imae_estado_pago:'.$imae_estado_pago);  
+                $comando->bindParam(':imae_estado_pago', $imae_estado_pago, \PDO::PARAM_STR);              
             }
             if (!empty((isset($imae_convenios)))) {
-                $comando->bindParam(':imae_convenios', $imae_convenios, \PDO::PARAM_STR);
-                \app\models\Utilities::putMessageLogFile('$imae_convenios:'.$imae_convenios);  
+                $comando->bindParam(':imae_convenios', ucwords(strtolower($imae_convenios)), \PDO::PARAM_STR);              
             }
             if (!empty((isset($imae_usuario)))) {
-                $comando->bindParam(':imae_usuario', $imae_usuario, \PDO::PARAM_INT);
-                \app\models\Utilities::putMessageLogFile('$imae_usuario:'.$imae_usuario);  
+                $comando->bindParam(':imae_usuario', $imae_usuario, \PDO::PARAM_INT);               
             }
              if (!empty((isset($imae_fecha_creacion)))) {
-                $comando->bindParam(':imae_fecha_creacion', $imae_fecha_creacion, \PDO::PARAM_STR);
-                \app\models\Utilities::putMessageLogFile('$imae_fecha_creacion:'.$imae_fecha_creacion);  
+                $comando->bindParam(':imae_fecha_creacion', $imae_fecha_creacion, \PDO::PARAM_STR);               
             }
             $result = $comando->execute();            
             return $con->getLastInsertID($con->dbname . '.inscrito_maestria');
