@@ -502,6 +502,9 @@ create table if not exists db_crm.`inscrito_maestria` (
  `pai_id` bigint(20) default null,
  `pro_id` bigint(20) default null,
  `can_id` bigint(20) default null,
+ `uaca_id` bigint(20)  not null,
+ `mod_id` bigint(20)  not null,
+ `eaca_id` bigint(20)  not null, 
  `imae_tipo_documento` varchar(2) null, /* '1': cedula, '2': ruc, '3': pasaporte */
  `imae_documento` varchar(50) default null,
  `imae_primer_nombre` varchar(100) not null,

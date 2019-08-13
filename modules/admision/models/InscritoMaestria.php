@@ -121,7 +121,7 @@ class InscritoMaestria extends \yii\db\ActiveRecord {
      * @param
      * @return
      */
-    public function insertarInscritoMaestria($cemp_id, $gint_id, $pai_id, $pro_id, $can_id, $imae_tipo_documento, $imae_documento, $imae_primer_nombre, $imae_segundo_nombre, $imae_primer_apellido, $imae_segundo_apellido, $imae_revisar_urgente, $imae_cumple_requisito, $imae_agente, $imae_fecha_inscripcion, $imae_fecha_pago, $imae_pago_inscripcion, $imae_valor_maestria, $fpag_id, $imae_estado_pago, $imae_convenios, $imae_usuario, $imae_fecha_creacion) {
+    public function insertarInscritoMaestria($cemp_id, $gint_id, $pai_id, $pro_id, $can_id, $uaca_id, $mod_id, $eaca_id, $imae_tipo_documento, $imae_documento, $imae_primer_nombre, $imae_segundo_nombre, $imae_primer_apellido, $imae_segundo_apellido, $imae_revisar_urgente, $imae_cumple_requisito, $imae_agente, $imae_fecha_inscripcion, $imae_fecha_pago, $imae_pago_inscripcion, $imae_valor_maestria, $fpag_id, $imae_estado_pago, $imae_convenios, $imae_usuario, $imae_fecha_creacion) {
         $con = \Yii::$app->db_crm;
          
         $param_sql = "imae_estado";
@@ -149,6 +149,18 @@ class InscritoMaestria extends \yii\db\ActiveRecord {
         if (isset($can_id)) {
             $param_sql .= ", can_id";
             $bdet_sql .= ", :can_id";
+        }
+        if (isset($uaca_id)) {
+            $param_sql .= ", uaca_id";
+            $bdet_sql .= ", :uaca_id";
+        }
+        if (isset($mod_id)) {
+            $param_sql .= ", mod_id";
+            $bdet_sql .= ", :mod_id";
+        }
+        if (isset($eaca_id)) {
+            $param_sql .= ", eaca_id";
+            $bdet_sql .= ", :eaca_id";
         }
         if (!empty((isset($imae_tipo_documento)))) { 
             $param_sql .= ", imae_tipo_documento";
@@ -242,6 +254,15 @@ class InscritoMaestria extends \yii\db\ActiveRecord {
             }
             if (isset($can_id)) {
                 $comando->bindParam(':can_id', $can_id, \PDO::PARAM_INT);
+            }
+             if (isset($uaca_id)) {
+                $comando->bindParam(':uaca_id', $uaca_id, \PDO::PARAM_INT);
+            }
+             if (isset($mod_id)) {
+                $comando->bindParam(':mod_id', $mod_id, \PDO::PARAM_INT);
+            }
+             if (isset($eaca_id)) {
+                $comando->bindParam(':eaca_id', $eaca_id, \PDO::PARAM_INT);
             }
             if (!empty((isset($imae_tipo_documento)))) {
                 $comando->bindParam(':imae_tipo_documento', $imae_tipo_documento, \PDO::PARAM_STR);
