@@ -1,5 +1,5 @@
 <?php
-/* 
+/*
  * Authors:
  * Grace Viteri <analistadesarrollo01@uteg.edu.ec> 
  * Kleber Loayza <analistadesarrollo03@uteg.edu.ec> /
@@ -14,33 +14,31 @@ use kartik\date\DatePicker;
     <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
         <h3><span id="lbl_Personeria"><?= Yii::t("formulario", "Data Personal") ?></span></h3>
     </div>
-    <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
-        <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
-            <div class="col-md-6 col-sm-6 col-xs-6 col-lg-6">
-                <div class="form-group">
-                    <label for="cmb_tipo_dni" class="col-sm-5 control-label"><?= Yii::t("formulario", "DNI 1") ?> <span class="text-danger">*</span></label>
-                    <div class="col-sm-7">
-                        <?= Html::dropDownList("cmb_tipo_dni", 0, $tipos_dni, ["class" => "form-control", "id" => "cmb_tipo_dni"]) ?>
-                    </div>
+    <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">  
+        <div class="col-md-6 col-sm-6 col-xs-6 col-lg-6">
+            <div class="form-group">
+                <label for="cmb_tipo_dni" class="col-sm-5 control-label"><?= Yii::t("formulario", "DNI 1") ?> <span class="text-danger">*</span></label>
+                <div class="col-sm-7">
+                    <?= Html::dropDownList("cmb_tipo_dni", 0, $tipos_dni, ["class" => "form-control", "id" => "cmb_tipo_dni"]) ?>
                 </div>
             </div>
-            <div class="col-md-6 col-sm-6 col-xs-6 col-lg-6" id="Divcedula">
-                <div class="form-group">
-                    <label for="txt_cedula" class="col-sm-5 control-label"><?= Yii::t("formulario", "Number") ?> <span class="text-danger">*</span></label>
-                    <div class="col-sm-7">
-                        <input type="text" maxlength="10" class="form-control PBvalidation keyupmce" id="txt_cedula" data-type="number" data-keydown="true" placeholder="<?= Yii::t("formulario", "National identity document") ?>">
-                    </div>
+        </div>
+        <div class="col-md-6 col-sm-6 col-xs-6 col-lg-6" id="Divcedula">
+            <div class="form-group">
+                <label for="txt_cedula" class="col-sm-5 control-label"><?= Yii::t("formulario", "Number") ?> <span class="text-danger">*</span></label>
+                <div class="col-sm-7">
+                    <input type="text" maxlength="10" class="form-control PBvalidation keyupmce" id="txt_cedula" data-type="number" data-keydown="true" placeholder="<?= Yii::t("formulario", "National identity document") ?>">
                 </div>
             </div>
-            <div class="col-md-6 col-sm-6 col-xs-6 col-lg-6" style="display: none;" id="Divpasaporte">
-                <div class="form-group">
-                    <label for="txt_pasaporte" class="col-sm-5 control-label"><?= Yii::t("formulario", "Number") ?> <span class="text-danger">*</span></label>
-                    <div class="col-sm-7">
-                        <input type="text" maxlength="15" class="form-control keyupmce" id="txt_pasaporte" data-type="alfanumerico" data-keydown="true" placeholder="<?= Yii::t("formulario", "Passport") ?>">
-                    </div>
+        </div>
+        <div class="col-md-6 col-sm-6 col-xs-6 col-lg-6" style="display: none;" id="Divpasaporte">
+            <div class="form-group">
+                <label for="txt_pasaporte" class="col-sm-5 control-label"><?= Yii::t("formulario", "Number") ?> <span class="text-danger">*</span></label>
+                <div class="col-sm-7">
+                    <input type="text" maxlength="15" class="form-control keyupmce" id="txt_pasaporte" data-type="alfanumerico" data-keydown="true" placeholder="<?= Yii::t("formulario", "Passport") ?>">
                 </div>
             </div>
-        </div>                         
+        </div>                      
     </div>
     <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
         <div class="col-md-6 col-lg-6 col-sm-6 col-xs-6">
@@ -73,9 +71,7 @@ use kartik\date\DatePicker;
             <div class="form-group">
                 <label for="txt_celular" class="col-sm-5 control-label"><?= Yii::t("formulario", "CellPhone") ?><span class="text-danger">*</span></label>
                 <div class="col-sm-7">
-                    <div class="input-group">
-                        <input type="text" class="form-control PBvalidation" value="" id="txt_celular" data-type="celular_sin" data-keydown="true" placeholder="<?= Yii::t("formulario", "CellPhone") ?>">
-                    </div>
+                    <input type="text" class="form-control PBvalidation" value="" id="txt_celular" data-type="celular_sin" data-keydown="true" placeholder="<?= Yii::t("formulario", "CellPhone") ?>">
                 </div>
             </div>
         </div>        
@@ -83,12 +79,10 @@ use kartik\date\DatePicker;
     <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12"> 
         <div class="col-md-6 col-lg-6 col-sm-6 col-xs-6">
             <div class="form-group">
-                    <label for="txt_telefono" class="col-sm-5 control-label"><?= Yii::t("formulario", "Phone") ?></label>
-                    <div class="col-sm-7">
-                        <div class="input-group">
-                            <input type="text" class="form-control PBvalidation" value="" id="txt_telefono" data-type="telefono_sin" data-keydown="true" placeholder="<?= Yii::t("formulario", "Phone") ?>">
-                        </div>
-                    </div>
+                <label for="txt_telefono" class="col-sm-5 control-label"><?= Yii::t("formulario", "Phone") ?></label>
+                <div class="col-sm-7">                        
+                    <input type="text" class="form-control" value="" id="txt_telefono" data-type="telefono_sin" data-keydown="true" placeholder="<?= Yii::t("formulario", "Phone") ?>">
+                </div>
             </div>
         </div>
         <div class="col-md-6 col-lg-6 col-sm-6 col-xs-6">
@@ -146,6 +140,16 @@ use kartik\date\DatePicker;
                 </div>
             </div>
         </div>        
-    </div>        
+    </div>  
+    <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">   
+        <div class="col-md-6 col-lg-6 col-sm-6 col-xs-6" style="display: none">
+            <div class="form-group" >
+                <label for="cmb_evento" class="col-sm-5 control-label"><?= Yii::t("formulario", "Evento") ?><span class="text-danger">*</span></label>
+                <div class="col-sm-7">
+                    <?= Html::dropDownList("cmb_evento", 0, $arr_evento, ["class" => "form-control", "id" => "cmb_evento"]) ?>
+                </div>
+            </div>
+        </div>
+    </div> 
 </form>
 
