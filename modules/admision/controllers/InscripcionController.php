@@ -11,6 +11,9 @@ use app\models\Canton;
 use app\modules\financiero\models\FormaPago;
 use app\modules\admision\models\GrupoIntroductorio;
 use app\modules\admision\models\InscritoMaestria;
+use app\modules\academico\models\Modalidad;
+use app\modules\academico\models\UnidadAcademica;
+use app\modules\admision\models\Oportunidad;
 use Yii;
 use yii\helpers\Url;
 use yii\base\Exception;
@@ -24,7 +27,10 @@ class InscripcionController extends \app\components\CController {
     public function actionNew() {
         $mod_conempresa = new ConvenioEmpresa();
         $mod_fpago = new FormaPago();
-        $mod_grupo = new GrupoIntroductorio();
+        $mod_grupo = new GrupoIntroductorio();        
+        $mod_unidad = new UnidadAcademica();
+        $mod_modalidad = new Modalidad();
+        $modcanal = new Oportunidad();
         if (Yii::$app->request->isAjax) {
             $data = Yii::$app->request->post();
             if (isset($data["getprovincias"])) {
@@ -36,6 +42,18 @@ class InscripcionController extends \app\components\CController {
                 $cantones = Canton::find()->select("can_id AS id, can_nombre AS name")->where(["can_estado_logico" => "1", "can_estado" => "1", "pro_id" => $data['prov_id']])->asArray()->all();
                 $message = array("cantones" => $cantones);
                 return Utilities::ajaxResponse('OK', 'alert', Yii::t('jslang', 'Success'), 'false', $message);
+            }            
+            if (isset($data["getmodalidad"])) {
+                $modalidad = $mod_modalidad->consultarModalidad($data["unidad"], 1);
+                $message = array("modalidad" => $modalidad);
+                return Utilities::ajaxResponse('OK', 'alert', Yii::t('jslang', 'Success'), 'false', $message);                
+            }
+            if (isset($data["getcarrera"])) {
+                //if ($data["empresa_id"] == 1) {
+                    $carrera = $modcanal->consultarCarreraModalidad($data["unidad"], $data["moda_id"]);
+                //} 
+                $message = array("carrera" => $carrera);
+                return Utilities::ajaxResponse('OK', 'alert', Yii::t('jslang', 'Success'), 'false', $message);
             }
         }
         $arr_pais_dom = Pais::find()->select("pai_id AS id, pai_nombre AS value")->where(["pai_estado_logico" => "1", "pai_estado" => "1"])->asArray()->all();
@@ -45,6 +63,9 @@ class InscripcionController extends \app\components\CController {
         $arr_convempresa = $mod_conempresa->consultarConvenioEmpresa();
         $arr_forma_pago = $mod_fpago->consultarFormaPago();
         $arr_grupo = $mod_grupo->consultarGrupoIntroductorio();
+        $arr_unidad = $mod_unidad->consultarUnidadAcademicasEmpresa(1);
+        $arr_modalidad = $mod_modalidad->consultarModalidad(2, 1);
+        $arr_carrera = $modcanal->consultarCarreraModalidad(2, 1);
         return $this->render('new', [
                     //"arr_item" => ArrayHelper::map(array_merge(["id" => "0", "name" => "Seleccionar"], $resp_item), "id", "name"), //ArrayHelper::map($resp_item, "id", "name"),                   
                     "arr_convenio_empresa" => ArrayHelper::map($arr_convempresa, "id", "name"),
@@ -57,6 +78,9 @@ class InscripcionController extends \app\components\CController {
                     "arr_agente" => array("1" => Yii::t("formulario", "Aabad"), "2" => Yii::t("formulario", "Caguilar"), "3" => Yii::t("formulario", "Cmacias"), "4" => Yii::t("formulario", "Ebayona"), "5" => Yii::t("formulario", "Jmora"), "6" => Yii::t("formulario", "Sholguin")),
                     "arr_forma_pago" => ArrayHelper::map($arr_forma_pago, "id", "value"),
                     "arr_grupo" => ArrayHelper::map($arr_grupo, "id", "value"),
+                    "arr_unidad" => ArrayHelper::map($arr_unidad, "id", "name"),
+                    "arr_carrera" => ArrayHelper::map($arr_carrera, "id", "name"),
+                    "arr_modalidad" => ArrayHelper::map($arr_modalidad, "id", "name"),
         ]);
     }
 

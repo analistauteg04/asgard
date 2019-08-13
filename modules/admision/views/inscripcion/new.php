@@ -118,7 +118,33 @@ crm::registerTranslations();
     <div class="col-md-12">    
         <h4><span id="lbl_Datos_Inscripcion"><?= crm::t("crm", "Registration Data") ?></span> </h4>
     </div>    
-    <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">        
+    <div class='col-md-12 col-sm-12 col-xs-12 col-lg-12'>
+        <div class="col-lg-6 col-md-6 col-sm-6 col-xs-6">
+            <div class="form-group">
+                <label for="cmb_unidad" class="col-sm-5 col-md-5 col-xs-5 col-lg-5 control-label"><?= academico::t("Academico", "Academic unit") ?></label>
+                <div class="col-sm-7 col-md-7 col-xs-7 col-lg-7">
+                    <?= Html::dropDownList("cmb_unidad", 2, ['0' => Yii::t('formulario', 'Select')] + $arr_unidad, ["class" => "form-control", "id" => "cmb_unidad", "disabled" => "true"]) ?>
+                </div>
+            </div>  
+        </div>
+        <div class="col-lg-6 col-md-6 col-sm-6 col-xs-6" id="divModalidad">
+            <div class="form-group">
+                <label for="cmb_modalidad" class="col-sm-5 col-md-5 col-xs-5 col-lg-5 control-label"><?= academico::t("Academico", "Modality") ?></label>
+                <div class="col-sm-7 col-md-7 col-xs-7 col-lg-7">
+                    <?= Html::dropDownList("cmb_modalidad", 0, ['0' => Yii::t('formulario', 'Select')] + $arr_modalidad, ["class" => "form-control", "id" => "cmb_modalidad"]) ?>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="col-md-12 col-xs-12 col-sm-12 col-lg-12" >
+        <div class="col-lg-6 col-md-6 col-sm-6 col-xs-6">
+            <div class="form-group">
+                <label for="cmb_carrera" id="lbl_carrera" class="col-sm-5 col-md-5 col-xs-5 col-lg-5 control-label keyupmce"><?= academico::t("Academico", "Career/Program") ?></label>
+                <div class="col-sm-7 col-md-7 col-xs-7 col-lg-7">
+                    <?= Html::dropDownList("cmb_carrera", 0, ['0' => Yii::t('formulario', 'Select')] + $arr_carrera, ["class" => "form-control", "id" => "cmb_carrera"]) ?>
+                </div>
+            </div>            
+        </div>
         <div class="col-md-6 col-sm-6 col-xs-6 col-lg-6"> 
             <div class="form-group"> 
                 <label for="cmb_tipo_convenio" class="col-lg-5 col-md-5 col-sm-5 col-xs-5 control-label"><?= Yii::t("formulario", "Company Agreement") ?> <span class="text-danger">*</span></label>
@@ -126,7 +152,9 @@ crm::registerTranslations();
                     <?= Html::dropDownList("cmb_tipo_convenio", 0, ['0' => Yii::t('formulario', 'No convenio')] + $arr_convenio_empresa, ["class" => "form-control", "id" => "cmb_tipo_convenio"])?>
                 </div>
             </div>   
-        </div>
+        </div>       
+    </div>
+    <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">                
         <div class="col-md-6 col-sm-6 col-xs-6 col-lg-6">
             <div class="form-group">            
                 <label for="cmb_grupo_introductorio" class="col-lg-5 col-md-5 col-sm-5 col-xs-5 control-label"><?= crm::t("crm", "Introductory Group") ?> <span class="text-danger">*</span></label>
@@ -135,8 +163,6 @@ crm::registerTranslations();
                 </div>
             </div>
         </div>
-    </div> 
-    <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">                 
         <div class="col-md-6 col-sm-6 col-xs-6 col-lg-6">
             <div class="form-group">            
                 <label for="cmb_cumple_requisito" class="col-lg-5 col-md-5 col-sm-5 col-xs-5 control-label"><?= crm::t("crm", "Meets Requirement") ?> <span class="text-danger">*</span></label>
@@ -145,6 +171,8 @@ crm::registerTranslations();
                 </div>
             </div>
         </div>  
+    </div> 
+    <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">                         
         <div class="col-md-6 col-sm-6 col-xs-6 col-lg-6">
             <div class="form-group">
                 <label for="cmb_agente" class="col-sm-5 col-md-5 col-xs-5 col-lg-5 control-label" id="lbl_nombre1"><?= Yii::t("formulario", "Executive") ?><span class="text-danger">*</span></label>
@@ -153,8 +181,6 @@ crm::registerTranslations();
                 </div>
             </div>
         </div> 
-    </div> 
-    <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">    
         <div class="col-md-6 col-sm-6 col-xs-6 col-lg-6">
             <div class="form-group">            
                 <label for="txt_fecha_inscripcion" class="col-lg-5 col-md-5 col-sm-5 col-xs-5 control-label"><?= crm::t("crm", "Registration Date") ?> <span class="text-danger">*</span></label>
@@ -174,6 +200,8 @@ crm::registerTranslations();
                 </div>
             </div>
         </div> 
+    </div> 
+    <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">            
         <div class="col-md-6 col-sm-6 col-xs-6 col-lg-6">
             <div class="form-group">
                 <label for="txt_revision" class="col-sm-5 col-md-5 col-xs-5 col-lg-5 control-label" id="lbl_nombre1"><?= crm::t("crm", "Revision") ?></label>
@@ -279,7 +307,8 @@ crm::registerTranslations();
                             <th><?= Yii::t("formulario", "Name") ?></th>
                             <th><?= Yii::t("formulario", "Last Name1") ?></th>
                             <th><?= Yii::t("formulario", "State") ?></th>
-                            <th><?= Yii::t("formulario", "City") ?></th>                            
+                            <th><?= Yii::t("formulario", "City") ?></th>  
+                            <th><?= academico::t("Academico", "Career/Program") ?></th>  
                             <th style="display:none; border:none;"></th>
                             <th><?= Yii::t("formulario", "Company Agreement") ?></th> 
                             <th style="display:none; border:none;"></th>

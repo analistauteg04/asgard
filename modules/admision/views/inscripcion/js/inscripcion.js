@@ -41,6 +41,46 @@ $(document).ready(function () {
     $('#btn_AgregarItem').click(function () {
         agregarItems('new')       
     });
+    
+    $('#cmb_unidad').change(function () {
+        var link = $('#txth_base').val() + "/admision/inscripcion/new";
+        var arrParams = new Object();
+        arrParams.unidad = $(this).val();        
+        arrParams.carrera_id = $('#cmb_carrera').val();
+        arrParams.getmodalidad = true;
+        requestHttpAjax(link, arrParams, function (response) {
+            if (response.status == "OK") {
+                data = response.message;
+                setComboData(data.modalidad, "cmb_modalidad");
+                var arrParams = new Object();
+                if (data.modalidad.length > 0) {
+                    arrParams.unidad = $('#cmb_unidad').val();
+                    arrParams.moda_id = $('#cmb_modalidad').val();                    
+                    arrParams.getcarrera = true;
+                    requestHttpAjax(link, arrParams, function (response) {
+                        if (response.status == "OK") {
+                            data = response.message;
+                            setComboData(data.carrera, "cmb_carrera");
+                        }                        
+                    }, true);
+                }
+            }
+        }, true);        
+    });
+
+    $('#cmb_modalidad').change(function () {
+        var link = $('#txth_base').val() + "/admision/inscripcion/new";
+        var arrParams = new Object();
+        arrParams.unidad = $('#cmb_unidad').val();
+        arrParams.moda_id = $(this).val();        
+        arrParams.getcarrera = true;        
+        requestHttpAjax(link, arrParams, function (response) {
+            if (response.status == "OK") {
+                data = response.message;
+                setComboData(data.carrera, "cmb_carrera");
+            }   
+        }, true);
+    });
 });
 
 function setComboDataselect(arr_data, element_id, texto) {
@@ -63,7 +103,7 @@ function agregarItems(opAccion) {
             && $('#cmb_canton').val() != 0 && $('#cmb_grupo_introductorio').val() != 0
             && $('#cmb_cumple_requisito').val() != 0 && $('#cmb_agente').val() != 0 && $('#txt_fecha_inscripcion').val() != ""
             && $('#txt_pago_inscripcion').val() != "" && $('#txt_pago_total').val() != "" && $('#txt_fecha_pago').val() != ""
-            && $('#cmb_metodo_pago').val() != 0 && $('#cmb_estado_pago').val() != 0) {        
+            && $('#cmb_metodo_pago').val() != 0 && $('#cmb_estado_pago').val() != 0 && $('#cmb_modalidad').val() != 0 && $('#cmb_carrera').val() != 0) {        
         if (opAccion == "new") {
             //*********   AGREGAR ITEMS *********
             var arr_Grid = new Array();
@@ -126,6 +166,7 @@ function retornaFila(c, Grid, TbGtable, op) {
     strFila += '<td>' + Grid[c]['provincia'] + '</td>';
     strFila += '<td style="display:none; border:none;">' + Grid[c]['can_id'] + '</td>';
     strFila += '<td>' + Grid[c]['canton'] + '</td>';
+    strFila += '<td>' + Grid[c]['carrera'] + '</td>';
     strFila += '<td style="display:none; border:none;">' + Grid[c]['cemp_id'] + '</td>';
     strFila += '<td>' + Grid[c]['tipo_convenio'] + '</td>';
     strFila += '<td style="display:none; border:none;">' + Grid[c]['gint_id'] + '</td>';
@@ -185,6 +226,7 @@ function objRegistro(indice) {
     rowGrid.agente = $('#cmb_agente option:selected').text();
     rowGrid.metodo_pago = $('#cmb_metodo_pago option:selected').text();
     rowGrid.estado_pago = $('#cmb_estado_pago option:selected').text();
+    rowGrid.carrera = $('#cmb_carrera option:selected').text();
            
     rowGrid.imae_tipo_documento = $('#cmb_tipo_documento').val();
     rowGrid.pai_id = $('#cmb_pais').val();
@@ -196,7 +238,10 @@ function objRegistro(indice) {
     rowGrid.imae_agente = $('#cmb_agente').val();
     rowGrid.fpag_id = $('#cmb_metodo_pago').val();
     rowGrid.imae_estado_pago = $('#cmb_estado_pago').val();
-    
+    rowGrid.uaca_id = $('#cmb_unidad').val();
+    rowGrid.mod_id = $('#cmb_modalidad').val();
+    rowGrid.eaca_id = $('#cmb_carrera').val();
+        
     rowGrid.imae_documento = $('#txt_documento').val();
     rowGrid.imae_primer_nombre =  $('#txt_nombres1').val();
     rowGrid.imae_segundo_nombre = $('#txt_nombres2').val();
