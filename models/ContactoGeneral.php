@@ -258,5 +258,27 @@ class ContactoGeneral extends \yii\db\ActiveRecord {
             return FALSE;
         }
     }
+    
+    /**
+     * Function to get array 
+     * @author  Giovanni Vergara <analistadesarrollo02@uteg.edu.ec>
+     * @param   string  $username    
+     * @return  mixed   $res        New array 
+     */
+    public static function getAgenteInscrito() {
+        $con = \Yii::$app->db_general;
+        $estado = 1;
+        
+        $sql = "SELECT aima_id as id,
+                       aima_nombre as value 
+                From " . $con->dbname . ".agente_inscrito_maestria 
+                WHERE aima_estado_logico = :estado AND 
+                aima_estado = :estado 
+                ORDER BY id asc";
+        
+        $comando = $con->createCommand($sql);
+        $comando->bindParam(":estado", $estado, \PDO::PARAM_STR);
+        return $comando->queryAll();
+    }
 
 }

@@ -177,7 +177,7 @@ crm::registerTranslations();
             <div class="form-group">
                 <label for="cmb_agente" class="col-sm-5 col-md-5 col-xs-5 col-lg-5 control-label" id="lbl_nombre1"><?= Yii::t("formulario", "Executive") ?><span class="text-danger">*</span></label>
                 <div class="col-lg-7 col-md-7 col-sm-7 col-xs-7">
-                    <?= Html::dropDownList("cmb_agente", 0, ['0' => Yii::t('formulario', 'Select')] + $arr_agente, ["class" => "form-control", "id" => "cmb_agente"]) ?>
+                    <?= Html::dropDownList("cmb_agente", 0, $arr_agente, ["class" => "form-control", "id" => "cmb_agente"]) ?>
                 </div>
             </div>
         </div> 

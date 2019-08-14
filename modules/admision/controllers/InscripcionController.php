@@ -1,7 +1,7 @@
 <?php
 
 namespace app\modules\admision\controllers;
-
+use app\models\ContactoGeneral;
 use app\modules\admision\models\ConvenioEmpresa;
 use app\modules\academico\Module as academico;
 use app\modules\financiero\Module as financiero;
@@ -31,6 +31,7 @@ class InscripcionController extends \app\components\CController {
         $mod_unidad = new UnidadAcademica();
         $mod_modalidad = new Modalidad();
         $modcanal = new Oportunidad();
+        $modgeneral = new ContactoGeneral();
         if (Yii::$app->request->isAjax) {
             $data = Yii::$app->request->post();
             if (isset($data["getprovincias"])) {
@@ -66,6 +67,7 @@ class InscripcionController extends \app\components\CController {
         $arr_unidad = $mod_unidad->consultarUnidadAcademicasEmpresa(1);
         $arr_modalidad = $mod_modalidad->consultarModalidad(2, 1);
         $arr_carrera = $modcanal->consultarCarreraModalidad(2, 1);
+        $arr_agente = $modgeneral->getAgenteInscrito();
         return $this->render('new', [
                     //"arr_item" => ArrayHelper::map(array_merge(["id" => "0", "name" => "Seleccionar"], $resp_item), "id", "name"), //ArrayHelper::map($resp_item, "id", "name"),                   
                     "arr_convenio_empresa" => ArrayHelper::map($arr_convempresa, "id", "name"),
@@ -75,12 +77,13 @@ class InscripcionController extends \app\components\CController {
                     "arr_tipos_dni" => array("1" => Yii::t("formulario", "DNI Document"), "2" => Yii::t("formulario", "RUC"), "3" => Yii::t("formulario", "Passport")),
                     "arr_cumple_requisito" => array("1" => Yii::t("formulario", "Si"), "2" => Yii::t("formulario", "No")),
                     "arr_estado_pago" => array("1" => Yii::t("formulario", "Pagado"), "2" => Yii::t("formulario", "No Pagado"), "3" => Yii::t("formulario", "Pagado Totalidad Maestria")),
-                    "arr_agente" => array("1" => Yii::t("formulario", "Aabad"), "2" => Yii::t("formulario", "Caguilar"), "3" => Yii::t("formulario", "Cmacias"), "4" => Yii::t("formulario", "Ebayona"), "5" => Yii::t("formulario", "Jmora"), "6" => Yii::t("formulario", "Sholguin")),
+                    //"arr_agente" => array("1" => Yii::t("formulario", "Aabad"), "2" => Yii::t("formulario", "Caguilar"), "3" => Yii::t("formulario", "Cmacias"), "4" => Yii::t("formulario", "Ebayona"), "5" => Yii::t("formulario", "Jmora"), "6" => Yii::t("formulario", "Sholguin")),
                     "arr_forma_pago" => ArrayHelper::map($arr_forma_pago, "id", "value"),
                     "arr_grupo" => ArrayHelper::map($arr_grupo, "id", "value"),
                     "arr_unidad" => ArrayHelper::map($arr_unidad, "id", "name"),
                     "arr_carrera" => ArrayHelper::map($arr_carrera, "id", "name"),
                     "arr_modalidad" => ArrayHelper::map($arr_modalidad, "id", "name"),
+                    "arr_agente" => ArrayHelper::map(array_merge([["id" => "0", "value" => "Seleccionar"]], $arr_agente), "id", "value"),
         ]);
     }
 

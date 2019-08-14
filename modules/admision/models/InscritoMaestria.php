@@ -289,7 +289,7 @@ class InscritoMaestria extends \yii\db\ActiveRecord {
                 $comando->bindParam(':imae_cumple_requisito', $imae_cumple_requisito, \PDO::PARAM_STR);
             }
             if (!empty((isset($imae_agente)))) {
-                $comando->bindParam(':imae_agente', $imae_agente, \PDO::PARAM_STR);
+                $comando->bindParam(':imae_agente', $imae_agente, \PDO::PARAM_INT);
             }
             if (!empty((isset($imae_fecha_inscripcion)))) {
                 $comando->bindParam(':imae_fecha_inscripcion', $imae_fecha_inscripcion, \PDO::PARAM_STR);

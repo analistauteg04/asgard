@@ -513,7 +513,7 @@ create table if not exists db_crm.`inscrito_maestria` (
  `imae_segundo_apellido` varchar(100) null,  
  `imae_revisar_urgente` varchar(100) null,  
  `imae_cumple_requisito` varchar(2) null, /* '1': Si, '2': No */
- `imae_agente` varchar(100) null,
+ `imae_agente` bigint(20) null,
  `imae_fecha_inscripcion` varchar(20) null, 
  `imae_fecha_pago` varchar(20) null, 
  `imae_pago_inscripcion` double default null,    
