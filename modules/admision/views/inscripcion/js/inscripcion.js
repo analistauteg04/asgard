@@ -51,7 +51,7 @@ $(document).ready(function () {
         requestHttpAjax(link, arrParams, function (response) {
             if (response.status == "OK") {
                 data = response.message;
-                setComboData(data.modalidad, "cmb_modalidad");
+                setComboDataselect(data.modalidad, "cmb_modalidad", "Seleccionar");
                 var arrParams = new Object();
                 if (data.modalidad.length > 0) {
                     arrParams.unidad = $('#cmb_unidad').val();
@@ -60,7 +60,7 @@ $(document).ready(function () {
                     requestHttpAjax(link, arrParams, function (response) {
                         if (response.status == "OK") {
                             data = response.message;
-                            setComboData(data.carrera, "cmb_carrera");
+                            setComboDataselect(data.carrera, "cmb_carrera", "Seleccionar");
                         }                        
                     }, true);
                 }
@@ -77,7 +77,7 @@ $(document).ready(function () {
         requestHttpAjax(link, arrParams, function (response) {
             if (response.status == "OK") {
                 data = response.message;
-                setComboData(data.carrera, "cmb_carrera");
+                setComboDataselect(data.carrera, "cmb_carrera", "Seleccionar");
             }   
         }, true);
     });
