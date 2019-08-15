@@ -502,6 +502,9 @@ create table if not exists db_crm.`inscrito_maestria` (
  `pai_id` bigint(20) default null,
  `pro_id` bigint(20) default null,
  `can_id` bigint(20) default null,
+ `uaca_id` bigint(20)  not null,
+ `mod_id` bigint(20)  not null,
+ `eaca_id` bigint(20)  not null, 
  `imae_tipo_documento` varchar(2) null, /* '1': cedula, '2': ruc, '3': pasaporte */
  `imae_documento` varchar(50) default null,
  `imae_primer_nombre` varchar(100) not null,
@@ -510,7 +513,7 @@ create table if not exists db_crm.`inscrito_maestria` (
  `imae_segundo_apellido` varchar(100) null,  
  `imae_revisar_urgente` varchar(100) null,  
  `imae_cumple_requisito` varchar(2) null, /* '1': Si, '2': No */
- `imae_agente` varchar(100) null,
+ `imae_agente` bigint(20) null,
  `imae_fecha_inscripcion` varchar(20) null, 
  `imae_fecha_pago` varchar(20) null, 
  `imae_pago_inscripcion` double default null,    

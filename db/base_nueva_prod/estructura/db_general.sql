@@ -471,3 +471,18 @@ create table if not exists `mes` (
   `mes_fecha_modificacion` timestamp null default null,
   `mes_estado_logico` varchar(1) not null  
 );
+
+-- --------------------------------------------------------
+-- Estructura de tabla para la tabla `agente_inscrito_maestria` 
+-- --------------------------------------------------------
+create table if not exists `agente_inscrito_maestria` (
+ `aima_id` bigint(20) not null auto_increment primary key,
+ `aima_nombre` varchar(100) not null,  
+ `aima_descripcion` varchar(500) not null,
+ `aima_usuario_ingresa` bigint(20) not null,
+ `aima_usuario_modif` bigint(20) default null,
+ `aima_estado` varchar(1) not null, 
+ `aima_fecha_creacion` timestamp not null default current_timestamp,
+ `aima_fecha_modificacion` timestamp null default null,
+ `aima_estado_logico` varchar(1) not null
+);
