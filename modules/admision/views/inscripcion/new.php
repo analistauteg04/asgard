@@ -112,9 +112,63 @@ crm::registerTranslations();
                     <?= Html::dropDownList("cmb_canton", 0, ['0' => Yii::t('formulario', 'Select')] + $arr_ciu_dom, ["class" => "form-control", "id" => "cmb_canton"]) ?>
                 </div>
             </div>
-        </div>         
+        </div>   
+        <div class="col-md-6 col-sm-6 col-xs-6 col-lg-6">
+            <div class="form-group">            
+                <label for="txt_matricula" class="col-sm-5 col-md-5 col-xs-5 col-lg-5 control-label" id="lbl_apellido2"><?= crm::t("crm", "Enrollment") ?></label>
+                <div class="col-sm-7 col-md-7 col-xs-7 col-lg-7">
+                    <input type="text" class="form-control keyupmce" value="" id="txt_matricula" data-type="alfa" placeholder="<?= crm::t("crm", "Enrollment") ?>">
+                </div>
+            </div>
+        </div>           
     </div> 
-
+    <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">        
+        <div class="col-md-6 col-sm-6 col-xs-6 col-lg-6">
+            <div class="form-group">            
+                <label for="txt_titulo" class="col-sm-5 col-md-5 col-xs-5 col-lg-5 control-label" id="lbl_titulo"><?= crm::t("crm", "Title") ?></label>
+                <div class="col-sm-7 col-md-7 col-xs-7 col-lg-7">
+                    <input type="text" class="form-control keyupmce" value="" id="txt_titulo" data-type="alfa" placeholder="<?= crm::t("crm", "Title") ?>">
+                </div>
+            </div>
+        </div>   
+        <div class="col-md-6 col-sm-6 col-xs-6 col-lg-6">
+            <div class="form-group">            
+                <label for="cmb_institucion" class="col-lg-5 col-md-5 col-sm-5 col-xs-5 control-label"><?= crm::t("crm", "Institution") ?> </label>
+                <div class="col-lg-7 col-md-7 col-sm-7 col-xs-7">
+                    <?= Html::dropDownList("cmb_institucion", 0, ['0' => Yii::t('formulario', 'Select')] + $arr_institucion, ["class" => "form-control", "id" => "cmb_institucion"]) ?>
+                </div>
+            </div>
+        </div>           
+    </div> 
+    <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">        
+        <div class="col-md-6 col-sm-6 col-xs-6 col-lg-6">
+            <div class="form-group">            
+                <label for="txt_correo" class="col-sm-5 col-md-5 col-xs-5 col-lg-5 control-label" id="lbl_correo"><?= Yii::t("formulario", "Email") ?></label>
+                <div class="col-sm-7 col-md-7 col-xs-7 col-lg-7">
+                    <input type="text" class="form-control keyupmce" value="" id="txt_correo" data-type="email" placeholder="<?= Yii::t("formulario", "Email") ?>">
+                </div>
+            </div>
+        </div>   
+        <div class="col-md-6 col-sm-6 col-xs-6 col-lg-6">
+            <div class="form-group">            
+                <label for="txt_celular" class="col-sm-5 col-md-5 col-xs-5 col-lg-5 control-label" id="lbl_celular"><?= Yii::t("formulario", "CellPhone") ?></label>
+                <div class="col-sm-7 col-md-7 col-xs-7 col-lg-7">
+                    <input type="text" class="form-control keyupmce" value="" id="txt_celular" data-type="celular_sin" placeholder="<?= Yii::t("formulario", "CellPhone") ?>">
+                </div>
+            </div>
+        </div>           
+    </div> 
+    <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">        
+        <div class="col-md-6 col-sm-6 col-xs-6 col-lg-6">
+            <div class="form-group">            
+                <label for="txt_telefono" class="col-sm-5 col-md-5 col-xs-5 col-lg-5 control-label" id="lbl_telefono"><?= Yii::t("formulario", "Phone") ?></label>
+                <div class="col-sm-7 col-md-7 col-xs-7 col-lg-7">
+                    <input type="text" class="form-control keyupmce" value="" id="txt_telefono" data-type="telefono_sin" placeholder="<?= Yii::t("formulario", "Phone") ?>">
+                </div>
+            </div>
+        </div>               
+    </div> 
+    
     <div class="col-md-12">    
         <h4><span id="lbl_Datos_Inscripcion"><?= crm::t("crm", "Registration Data") ?></span> </h4>
     </div>    

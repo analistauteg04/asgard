@@ -16,6 +16,7 @@ use app\modules\admision\models\InscritoMaestria;
 use app\modules\academico\models\Modalidad;
 use app\modules\academico\models\UnidadAcademica;
 use app\modules\admision\models\Oportunidad;
+use app\modules\admision\models\Institucion;
 use Yii;
 use yii\helpers\Url;
 use yii\base\Exception;
@@ -51,6 +52,7 @@ class InscripcionController extends \app\components\CController {
         $mod_modalidad = new Modalidad();
         $modcanal = new Oportunidad();
         $modgeneral = new ContactoGeneral();
+        $modinstitucion = new Institucion();
         if (Yii::$app->request->isAjax) {
             $data = Yii::$app->request->post();
             if (isset($data["getprovincias"])) {
@@ -87,6 +89,8 @@ class InscripcionController extends \app\components\CController {
         $arr_modalidad = $mod_modalidad->consultarModalidad(2, 1);
         $arr_carrera = $modcanal->consultarCarreraModalidad(2, 1);
         $arr_agente = $modgeneral->getAgenteInscrito();
+        $arr_institucion = $modinstitucion->consultarInstituciones($pais_id);
+        
         return $this->render('new', [
                     //"arr_item" => ArrayHelper::map(array_merge(["id" => "0", "name" => "Seleccionar"], $resp_item), "id", "name"), //ArrayHelper::map($resp_item, "id", "name"),                   
                     "arr_convenio_empresa" => ArrayHelper::map($arr_convempresa, "id", "name"),
@@ -103,6 +107,7 @@ class InscripcionController extends \app\components\CController {
                     "arr_carrera" => ArrayHelper::map($arr_carrera, "id", "name"),
                     "arr_modalidad" => ArrayHelper::map($arr_modalidad, "id", "name"),
                     "arr_agente" => ArrayHelper::map(array_merge([["id" => "0", "value" => "Seleccionar"]], $arr_agente), "id", "value"),
+                    "arr_institucion" => ArrayHelper::map($arr_institucion, "id", "name"),
         ]);
     }
 
@@ -118,7 +123,15 @@ class InscripcionController extends \app\components\CController {
             try {                
                 if (!empty($items)) {                    
                     for ($i = 0; $i < count($items); $i++) {                                                
-                        $item_ingreso = $mod_inscrito->insertarInscritoMaestria($items[$i]->cemp_id, $items[$i]->gint_id, $items[$i]->pai_id, $items[$i]->pro_id, $items[$i]->can_id, $items[$i]->uaca_id, $items[$i]->mod_id, $items[$i]->eaca_id, $items[$i]->imae_tipo_documento, $items[$i]->imae_documento, $items[$i]->imae_primer_nombre, $items[$i]->imae_segundo_nombre, $items[$i]->imae_primer_apellido, $items[$i]->imae_segundo_apellido, $items[$i]->imae_revisar_urgente, $items[$i]->imae_cumple_requisito, $items[$i]->imae_agente, $items[$i]->imae_fecha_inscripcion, $items[$i]->imae_fecha_pago, $items[$i]->imae_pago_inscripcion, $items[$i]->imae_valor_maestria, $items[$i]->fpag_id, $items[$i]->imae_estado_pago, $items[$i]->imae_convenios, $user_id, $fecha_ingreso);
+                        $item_ingreso = $mod_inscrito->insertarInscritoMaestria($items[$i]->cemp_id, $items[$i]->gint_id, $items[$i]->pai_id, 
+                                            $items[$i]->pro_id, $items[$i]->can_id, $items[$i]->uaca_id, $items[$i]->mod_id, $items[$i]->eaca_id, 
+                                            $items[$i]->imae_tipo_documento, $items[$i]->imae_documento, $items[$i]->imae_primer_nombre, 
+                                            $items[$i]->imae_segundo_nombre, $items[$i]->imae_primer_apellido, $items[$i]->imae_segundo_apellido, 
+                                            $items[$i]->imae_revisar_urgente, $items[$i]->imae_cumple_requisito, $items[$i]->imae_agente, 
+                                            $items[$i]->imae_fecha_inscripcion, $items[$i]->imae_fecha_pago, $items[$i]->imae_pago_inscripcion, 
+                                            $items[$i]->imae_valor_maestria, $items[$i]->fpag_id, $items[$i]->imae_estado_pago, $items[$i]->imae_convenios, 
+                                            $items[$i]->imae_matricula, $items[$i]->imae_titulo, $items[$i]->ins_id, $items[$i]->imae_correo,
+                                            $items[$i]->imae_celular, $items[$i]->imae_convencional, $user_id, $fecha_ingreso);
                         if ($item_ingreso > 0) {
                             $exito = 1;                                                
                         } else {

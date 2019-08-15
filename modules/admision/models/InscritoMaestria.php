@@ -122,7 +122,12 @@ class InscritoMaestria extends \yii\db\ActiveRecord {
      * @param
      * @return
      */
-    public function insertarInscritoMaestria($cemp_id, $gint_id, $pai_id, $pro_id, $can_id, $uaca_id, $mod_id, $eaca_id, $imae_tipo_documento, $imae_documento, $imae_primer_nombre, $imae_segundo_nombre, $imae_primer_apellido, $imae_segundo_apellido, $imae_revisar_urgente, $imae_cumple_requisito, $imae_agente, $imae_fecha_inscripcion, $imae_fecha_pago, $imae_pago_inscripcion, $imae_valor_maestria, $fpag_id, $imae_estado_pago, $imae_convenios, $imae_usuario, $imae_fecha_creacion) {
+    public function insertarInscritoMaestria($cemp_id, $gint_id, $pai_id, $pro_id, $can_id, $uaca_id, $mod_id, $eaca_id, $imae_tipo_documento, 
+                                $imae_documento, $imae_primer_nombre, $imae_segundo_nombre, $imae_primer_apellido, $imae_segundo_apellido, 
+                                $imae_revisar_urgente, $imae_cumple_requisito, $imae_agente, $imae_fecha_inscripcion, $imae_fecha_pago, 
+                                $imae_pago_inscripcion, $imae_valor_maestria, $fpag_id, $imae_estado_pago, $imae_convenios, 
+                                $imae_matricula, $imae_titulo, $ins_id, $imae_correo, $imae_celular, $imae_convencional, 
+                                $imae_usuario, $imae_fecha_creacion) {
         $con = \Yii::$app->db_crm;
          
         $param_sql = "imae_estado";
@@ -227,6 +232,30 @@ class InscritoMaestria extends \yii\db\ActiveRecord {
             $param_sql .= ", imae_convenios";
             $bdet_sql .= ", :imae_convenios";
         }
+        if (!empty((isset($imae_matricula)))) {
+            $param_sql .= ", imae_matricula";
+            $bdet_sql .= ", :imae_matricula";
+        }
+        if (!empty((isset($imae_titulo)))) {
+            $param_sql .= ", imae_titulo";
+            $bdet_sql .= ", :imae_titulo";
+        }
+        if (!empty((isset($ins_id)))) {
+            $param_sql .= ", ins_id";
+            $bdet_sql .= ", :ins_id";
+        }
+        if (!empty((isset($imae_correo)))) {
+            $param_sql .= ", imae_correo";
+            $bdet_sql .= ", :imae_correo";
+        }
+        if (!empty((isset($imae_celular)))) {
+            $param_sql .= ", imae_celular";
+            $bdet_sql .= ", :imae_celular";
+        }
+        if (!empty((isset($imae_convencional)))) {
+            $param_sql .= ", imae_convencional";
+            $bdet_sql .= ", :imae_convencional";
+        }
         if (isset($imae_usuario)) {
             $param_sql .= ", imae_usuario";
             $bdet_sql .= ", :imae_usuario";
@@ -313,10 +342,28 @@ class InscritoMaestria extends \yii\db\ActiveRecord {
             if (!empty((isset($imae_convenios)))) {
                 $comando->bindParam(':imae_convenios', ucwords(strtolower($imae_convenios)), \PDO::PARAM_STR);              
             }
+            if (!empty((isset($imae_matricula)))) {
+                $comando->bindParam(':imae_matricula', $imae_matricula, \PDO::PARAM_STR);              
+            }
+            if (!empty((isset($imae_titulo)))) {
+                $comando->bindParam(':imae_titulo', ucwords(strtolower($imae_titulo)), \PDO::PARAM_STR);              
+            }
+            if (!empty((isset($ins_id)))) {
+                $comando->bindParam(':ins_id', $ins_id, \PDO::PARAM_INT);              
+            }
+            if (!empty((isset($imae_correo)))) {
+                $comando->bindParam(':imae_correo', $imae_correo, \PDO::PARAM_STR);              
+            }
+            if (!empty((isset($imae_celular)))) {
+                $comando->bindParam(':imae_celular', $imae_celular, \PDO::PARAM_STR);              
+            }
+            if (!empty((isset($imae_convencional)))) {
+                $comando->bindParam(':imae_convencional', $imae_convencional, \PDO::PARAM_STR);              
+            }
             if (!empty((isset($imae_usuario)))) {
                 $comando->bindParam(':imae_usuario', $imae_usuario, \PDO::PARAM_INT);               
             }
-             if (!empty((isset($imae_fecha_creacion)))) {
+            if (!empty((isset($imae_fecha_creacion)))) {
                 $comando->bindParam(':imae_fecha_creacion', $imae_fecha_creacion, \PDO::PARAM_STR);               
             }
             $result = $comando->execute();            

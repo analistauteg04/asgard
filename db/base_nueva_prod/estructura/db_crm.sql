@@ -521,6 +521,12 @@ create table if not exists db_crm.`inscrito_maestria` (
  `fpag_id` bigint(20) null,
  `imae_estado_pago` varchar(2) null,  /* '1':Pagado, '2': No Pagado, '3': Pagado Totalidad Maestria */
  `imae_convenios` varchar(100) null, 
+ `imae_matricula` varchar(15) null,
+ `imae_titulo` varchar(500) null,
+ `ins_id` bigint(20) null,
+ `imae_correo` varchar(50) null,
+ `imae_celular` varchar(50) null,
+ `imae_convencional` varchar(50) null, 
  `imae_usuario` bigint(20) not null,
  `imae_usuario_modif` bigint(20) default null,
  `imae_estado` varchar(1) not null,

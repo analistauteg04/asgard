@@ -508,7 +508,7 @@ INSERT INTO `grupo_introductorio` ( `gint_id`, `gint_nombre`, `gint_descripcion`
 --
 -- Volcado de datos para la tabla `inscrito_maestria`
 --
-
+/*
 INSERT INTO `inscrito_maestria` (`imae_id`, `cemp_id`, `gint_id`, `pai_id`, `pro_id`, `can_id`, `uaca_id`, `mod_id`, `eaca_id`, `imae_tipo_documento`, `imae_documento`, `imae_primer_nombre`, `imae_segundo_nombre`, `imae_primer_apellido`, `imae_segundo_apellido`, `imae_revisar_urgente`, `imae_cumple_requisito`, `imae_agente`, `imae_fecha_inscripcion`, `imae_fecha_pago`, `imae_pago_inscripcion`, `imae_valor_maestria`, `fpag_id`, `imae_estado_pago`, `imae_convenios`, `imae_usuario`, `imae_usuario_modif`, `imae_estado`, `imae_fecha_creacion`, `imae_fecha_modificacion`, `imae_estado_logico`) VALUES
 (1, NULL, 1, 1, 1, 3, 2, 1, 24, '1', '0103800942', 'Oswaldo', 'Rafael', 'Galarza', 'Guachichullca', '', '1', 5, '2019-06-05', '2019-06-05', 250, 4500, 1, '1', 'OK', 1, NULL, '1', '2019-08-12 03:35:15', NULL, '1'),
 (2, NULL, 1, 1, 10, 87, 2, 1, 24, '1', '0930130927', 'Diana', 'Maria', 'Paladines', 'Mise', '', '1', 5, '2019-06-07', '2019-06-07', 250, 4500, 1, '3', 'OK', 1, NULL, '1', '2019-08-12 03:35:15', NULL, '1'),
@@ -1249,3 +1249,4 @@ INSERT INTO `inscrito_maestria` (`imae_id`, `cemp_id`, `gint_id`, `pai_id`, `pro
 (734, 1, 3, 1, 12, 114, 2, 1, 24, '1', '', '(UNE)Kendru', 'Edrulfo', 'Marìn', 'Quiroz', '', '1', 6, '', '', 0, 0, 0, NULL, '', 1, NULL, '1', '2019-08-12 03:36:47', NULL, '1'),
 (735, 1, 2, 1, 10, 97, 2, 1, 24, '1', '0914244819', 'Lucrecia', 'Sobeida', 'Valero', 'Casquete', '', '1', 1, '2019-08-07', '2019-08-07', 250, 4500, 5, NULL, '', 1, NULL, '1', '2019-08-12 03:36:47', NULL, '1'),
 (736, NULL, 3, 1, 7, 65, 2, 1, 24, '1', '0704396472', 'Salazar', 'Sanchez', 'Edwin', 'Andrés', '', '1', 2, '2019-08-07', '2019-08-07', 250, 5000, 4, NULL, '', 1, NULL, '1', '2019-08-12 03:36:47', NULL, '1');
+*/

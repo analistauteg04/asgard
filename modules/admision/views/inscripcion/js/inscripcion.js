@@ -227,6 +227,7 @@ function objRegistro(indice) {
     rowGrid.metodo_pago = $('#cmb_metodo_pago option:selected').text();
     rowGrid.estado_pago = $('#cmb_estado_pago option:selected').text();
     rowGrid.carrera = $('#cmb_carrera option:selected').text();
+    rowGrid.institucion = $('#cmb_institucion option:selected').text();
 
     rowGrid.imae_tipo_documento = $('#cmb_tipo_documento').val();
     rowGrid.pai_id = $('#cmb_pais').val();
@@ -241,6 +242,7 @@ function objRegistro(indice) {
     rowGrid.uaca_id = $('#cmb_unidad').val();
     rowGrid.mod_id = $('#cmb_modalidad').val();
     rowGrid.eaca_id = $('#cmb_carrera').val();
+    rowGrid.ins_id = $('#cmb_institucion').val();
 
     rowGrid.imae_documento = $('#txt_documento').val();
     rowGrid.imae_primer_nombre = $('#txt_nombres1').val();
@@ -252,7 +254,12 @@ function objRegistro(indice) {
     rowGrid.imae_pago_inscripcion = $('#txt_pago_inscripcion').val();
     rowGrid.imae_valor_maestria = $('#txt_pago_total').val();
     rowGrid.imae_fecha_pago = $('#txt_fecha_pago').val();
-    rowGrid.imae_convenios = $('#txt_convenio_listo').val();
+    rowGrid.imae_convenios = $('#txt_convenio_listo').val();                                           
+    rowGrid.imae_matricula = $('#txt_matricula').val();
+    rowGrid.imae_titulo = $('#txt_titulo').val();    
+    rowGrid.imae_correo = $('#txt_correo').val();
+    rowGrid.imae_celular = $('#txt_celular').val();
+    rowGrid.imae_convencional = $('#txt_telefono').val();    
     //rowGrid.pro_otros = ($("#chk_otros").prop("checked")) ? 1 : 0;
     rowGrid.accion = "new";
     return rowGrid;
