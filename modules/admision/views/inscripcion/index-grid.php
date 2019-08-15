@@ -7,6 +7,7 @@ use app\models\Utilities;
 use app\modules\repositorio\Module as repositorio;
 use app\modules\academico\Module as academico;
 use app\modules\financiero\Module as financiero;
+repositorio::registerTranslations();
 academico::registerTranslations();
 financiero::registerTranslations();
 ?>
@@ -38,14 +39,11 @@ financiero::registerTranslations();
                 'value' => 'dni',
             ],
             [
-                'attribute' => 'nombres',
+                'attribute' => 'pri_apellido',
                 'header' => Yii::t("formulario", "Names"),
-                'value' => 'nombres',
-            ],
-            [
-                'attribute' => 'pais',
-                'header' => repositorio::t("repositorio", "Pais"),
-                'value' => 'pais',
+                'value' => function($data){
+                    return ucwords(strtolower($data['pri_nombre'] . " " . $data['seg_nombre'] . " " . $data['pri_apellido'] . " " . $data['seg_apellido']));
+                },
             ],
             [
                 'attribute' => 'provincia',
@@ -70,12 +68,16 @@ financiero::registerTranslations();
             [
                 'attribute' => 'pago_inscripcion',
                 'header' => financiero::t("Pagos", "Pago Inscripción"),
-                'value' => 'pago_inscripcion',
+                'value' => function($data){
+                    return Yii::$app->params["currency"] . $data['pago_inscripcion'];
+                },
             ],
             [
                 'attribute' => 'valor_maestria',
                 'header' => financiero::t("Pagos", "Pago Total"),
-                'value' => 'valor_maestria',
+                'value' => function($data){
+                    return Yii::$app->params["currency"] . $data['valor_maestria'];
+                },
             ],
             [
                 'attribute' => 'forma_pago',
@@ -92,12 +94,19 @@ financiero::registerTranslations();
                 'contentOptions' => ['class' => 'text-center'],
                 'headerOptions' => ['class' => 'text-center'],
                 'format' => 'html',
-                'header' => Yii::t("rol", "Status Role"),
+                'header' => Yii::t("formulario", "Payment Status"),
                 'value' => function($data){
-                    if($data["estado_pago"] == "1")
-                        return '<small class="label label-success">'.Yii::t("rol", "Role Enabled").'</small>';
-                    else
-                        return '<small class="label label-danger">'.Yii::t("rol", "Role Disabled").'</small>';
+                    $arr_estado = array("1" => Yii::t("formulario", "Pagado"), "2" => Yii::t("formulario", "No Pagado"), "3" => Yii::t("formulario", "Pagado Totalidad Maestria"));
+                    switch($data["estado_pago"]){
+                        case 1:
+                            return '<small class="label label-success">'.$arr_estado[1].'</small>';
+                        case 2:
+                            return '<small class="label label-danger">'.$arr_estado[2].'</small>';
+                        case 3:
+                            return '<small class="label label-success">'.$arr_estado[3].'</small>';
+                        default:
+                            return '<small class="label label-danger">'.$arr_estado[2].'</small>';
+                    }
                 },
             ],
         ],

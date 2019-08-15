@@ -443,6 +443,7 @@ return [
     "Payments" => "Pagos",
     "Payments charged by Student" => "Pagos Cargados por Estudiante",
     "Payment control" => "Control de Pagos",
+    "Payment date" => "Fecha de Pago",
     "Payment files" => "Archivos Pago",
     "Payment Form" => "Formulario de Pago",
     "Payment Registration" => "Registro de Pagos",

@@ -554,6 +554,62 @@ class Utilities {
         }
 
     }
+
+    public static function writeReporteXLS($uriFile, $nombarch, $arrHeader, $arrData, $colPosition = array(), $typeExp = "Xlsx"){
+        if(count($colPosition) == 0){
+            $colPosition = array("A","B","C","D","E","F","G","H","I","J","K","L","M","N","O","P","Q","R","S","T","U");
+        }
+        if(count($arrData) == 0){
+            echo Yii::t("reporte","No Reports");
+            return;
+        }
+        if(count($arrHeader) == 0){
+            echo Yii::t("reporte","No Reports");
+            return;
+        }
+        $negrita = array(
+            'font' => array(
+                'bold' => true,
+            ),
+        );
+        try{
+            $objPHPExcel = IOFactory::load($uriFile);
+
+            $objPHPExcel->getProperties()->setCreator(Yii::$app->session->get("PB_nombres"))
+                    ->setLastModifiedBy(Yii::$app->session->get("PB_nombres"))
+                    ->setTitle("Office 2007 XLSX")
+                    ->setSubject("Office 2007 XLSX $nombarch")
+                    ->setDescription("$nombarch for Office 2007 XLSX, generated using PHP classes.")
+                    ->setKeywords("office 2007 openxml php")
+                    ->setCategory("$nombarch result file");
+
+            //$worksheet = $objPHPExcel->getSheet(1);
+            $worksheet = $objPHPExcel->getSheetByName('DATA');
+
+            for($i=0; $i<count($arrHeader); $i++){
+                $j = 1;
+                $worksheet->getStyle($colPosition[$i] . $j)->getFont()->setBold(True);
+                $worksheet->setCellValue($colPosition[$i] . $j, $arrHeader[$i]);
+            }
+            $i = 1;
+            //$i = 1;
+            foreach($arrData as $key => $value){
+                $k = 0;
+                $j = $i + 1;
+                foreach($value as $key2 => $value2){
+                    $worksheet->setCellValue($colPosition[$k] . $j, $value2);
+                    $k++;
+                }
+                $i++;
+            }
+
+            $objWriter = IOFactory::createWriter($objPHPExcel, $typeExp);
+            $objWriter->save('php://output');   
+        }catch(Exception $e){
+            echo Yii::t("reporte","Error to export Excel");
+        }
+    }
+    
     
     public static function zipFiles($nombreZip, $arr_files = array()){
         $zip = new \ZipArchive();

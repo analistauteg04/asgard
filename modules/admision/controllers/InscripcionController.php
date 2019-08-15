@@ -5,6 +5,8 @@ use app\models\ContactoGeneral;
 use app\modules\admision\models\ConvenioEmpresa;
 use app\modules\academico\Module as academico;
 use app\modules\financiero\Module as financiero;
+use app\modules\repositorio\Module as repositorio;
+use app\modules\admision\Module as crm;
 use app\models\Pais;
 use app\models\Provincia;
 use app\models\Canton;
@@ -19,8 +21,10 @@ use yii\helpers\Url;
 use yii\base\Exception;
 use yii\helpers\ArrayHelper;
 use app\models\Utilities;
+repositorio::registerTranslations();
 academico::registerTranslations();
 financiero::registerTranslations();
+crm::registerTranslations();
 
 class InscripcionController extends \app\components\CController {
 
@@ -154,5 +158,53 @@ class InscripcionController extends \app\components\CController {
             }
         }
     }
+
+    public function actionExpexcel() {
+        ini_set('memory_limit', '256M');
+        $content_type = Utilities::mimeContentType("xls");
+        $nombarch = "Report-" . date("YmdHis") . ".xls";
+        header("Content-Type: $content_type");
+        header("Content-Disposition: attachment;filename=" . $nombarch);
+        header('Cache-Control: max-age=0');
+        $uriFile = dirname(__DIR__) . "/views/inscripcion/files/template_inscritos_maestria.xlsx";
+        $colPosition = array("A", "B", "C", "D", "E", "F", "G", "H", "I", "J", "K", "L", "M", "N", "O", "P", "Q", "R", "S", "T");
+        
+        $arrHeader = array(
+            "ID",
+            strtoupper(repositorio::t("repositorio", "Tipo Convenio")),
+            strtoupper(repositorio::t("repositorio", "Grupo Introductorio")),
+            strtoupper(repositorio::t("repositorio", "Provincia")),                        
+            strtoupper(repositorio::t("repositorio", "Cantón")),
+            strtoupper(financiero::t("Pagos", "Documento")),
+            strtoupper(Yii::t("formulario", "First Name")),
+            strtoupper(Yii::t("formulario", "Middle Name")),
+            strtoupper(Yii::t("formulario", "Last Name")),
+            strtoupper(Yii::t("formulario", "Last Second Name")),
+            strtoupper(crm::t("crm", "Revision")),
+            strtoupper(crm::t("crm", "Meets Requirement")),
+            strtoupper(Yii::t("formulario", "Executive")),
+            strtoupper(crm::t("crm", "Registration Date")),
+            strtoupper(Yii::t("formulario", "Payment date")),
+            strtoupper(crm::t("crm", "Payment Registration")),
+            strtoupper(Yii::t("formulario", "Pay Total")),
+            strtoupper(crm::t("crm", "Payment Method")),
+            strtoupper(Yii::t("formulario", "Payment Status")),
+            strtoupper(crm::t("crm", "Ready Agreement")));            
+        
+        $mod_inscrito = new InscritoMaestria();
+        $data = Yii::$app->request->get();
+        $arrSearch["search"] = $data['search'];
+        $arrSearch["f_ini"] = $data['f_ini'];
+        $arrSearch["f_end"] = $data['f_end'];
+        $arrData = array();
+        if (empty($arrSearch)) {
+            $arrData = $mod_inscrito->getAllInscritosGrid(NULL, NULL, NULL, false);
+        } else {
+            $arrData = $mod_inscrito->getAllInscritosGrid($data["search"], $data["txt_fecha_ini"], $data["txt_fecha_fin"], false);                   
+        }                                      
+        Utilities::writeReporteXLS($uriFile, $nombarch, $arrHeader, $arrData, $colPosition);
+        exit;              
+    }
+    
 
 }

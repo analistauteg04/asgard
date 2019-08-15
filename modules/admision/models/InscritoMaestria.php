@@ -3,6 +3,7 @@
 namespace app\modules\admision\models;
 
 use Yii;
+use yii\data\ArrayDataProvider;
 
 /**
  * This is the model class for table "inscrito_maestria".
@@ -340,10 +341,10 @@ class InscritoMaestria extends \yii\db\ActiveRecord {
             $str_search .= "im.imae_agente like :search) AND ";
         }
         if(isset($date_ini) && $date_ini != ""){
-            $str_search .= "im.imae_fecha_inscripcion >= $date_ini AND ";
+            $str_search .= "im.imae_fecha_inscripcion >= :dateini AND ";
         }
         if(isset($date_end) && $date_end != ""){
-            $str_search .= "im.imae_fecha_inscripcion <= $date_end AND ";
+            $str_search .= "im.imae_fecha_inscripcion <= :dateend AND ";
         }
         $con = \Yii::$app->db_crm;
         $trans = $con->getTransaction();
@@ -353,24 +354,26 @@ class InscritoMaestria extends \yii\db\ActiveRecord {
             $trans = $con->beginTransaction();
         }
         $sql = "SELECT 
-                    imae_id,
-                    im.cemp_id,
-                    im.gint_id,
+                    imae_id AS id,
+                    ce.cemp_nombre AS convenio,
                     gi.gint_nombre AS grupoIntroductorio,
-                    ce.cemp_id AS convenio,
-                    im.imae_tipo_documento AS dni,
-                    im.imae_primer_nombre + ' ' + im.imae_segundo_nombre + ' ' + im.imae_primer_apellido + ' ' im.imae_segundo_apellido as nombres,
-                    pa.pai_nombre AS pais,
                     pr.pro_nombre AS provincia,
-                    pa.can_nombre AS canton,
-                    
+                    ca.can_nombre AS canton,
+                    im.imae_documento AS dni,
+                    im.imae_primer_nombre AS pri_nombre,
+                    im.imae_segundo_nombre AS seg_nombre,
+                    im.imae_primer_apellido AS pri_apellido,
+                    im.imae_segundo_apellido AS seg_apellido,
+                    im.imae_revisar_urgente AS revision,
+                    im.imae_cumple_requisito AS requisito,
+                    ai.aima_nombre AS agente,
                     im.imae_fecha_inscripcion AS fecha_inscripcion,
                     im.imae_fecha_pago AS fecha_pago,
-                    '".Yii::$app->params["currency"]."' + im.imae_pago_inscripcion AS pago_inscripcion,
-                    '".Yii::$app->params["currency"]."' + im.imae_valor_maestria AS valor_maestria,
+                    im.imae_pago_inscripcion AS pago_inscripcion,
+                    im.imae_valor_maestria AS valor_maestria,
                     fp.fpag_nombre AS forma_pago,
-                    im.imae_agente AS agente,
-                    im.imae_estado_pago AS estado_pago
+                    im.imae_estado_pago AS estado_pago,
+                    im.imae_convenios AS acuerdos
                 FROM 
                     ".$con->dbname . ".inscrito_maestria AS im 
                     INNER JOIN ".Yii::$app->db->dbname.".pais AS pa ON pa.pai_id = im.pai_id
@@ -378,15 +381,22 @@ class InscritoMaestria extends \yii\db\ActiveRecord {
                     INNER JOIN ".Yii::$app->db->dbname.".canton AS ca ON ca.can_id = im.can_id
                     INNER JOIN ".Yii::$app->db_facturacion->dbname.".forma_pago AS fp ON fp.fpag_id = im.fpag_id
                     INNER JOIN ".$con->dbname.".grupo_introductorio AS gi ON gi.gint_id = im.gint_id
-                    INNER LEFT JOIN ".Yii::$app->db_captacion->dbname.".convenio_empresa AS ce ON ce.cemp_id = im.cemp_id
+                    INNER JOIN ".Yii::$app->db_general->dbname . ".agente_inscrito_maestria AS ai ON ai.aima_id = im.imae_agente
+                    LEFT JOIN ".Yii::$app->db_captacion->dbname.".convenio_empresa AS ce ON ce.cemp_id = im.cemp_id
                 WHERE 
                     $str_search
                     im.imae_estado=1 AND
                     im.imae_estado_logico=1 
                 ORDER BY im.imae_fecha_inscripcion DESC;";
         $comando = Yii::$app->db->createCommand($sql);
-        if(isset($search)){
+        if(isset($search) && $search != ""){
             $comando->bindParam(":search",$search_cond, \PDO::PARAM_STR);
+        }
+        if(isset($date_ini) && $date_ini != ""){
+            $comando->bindParam(":dateini",$date_ini, \PDO::PARAM_STR);
+        }
+        if(isset($date_end) && $date_end != ""){
+            $comando->bindParam(":dateend",$date_end, \PDO::PARAM_STR);
         }
         $res = $comando->queryAll();
         if($dataProvider){
