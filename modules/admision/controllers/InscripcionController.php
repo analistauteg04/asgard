@@ -1,6 +1,7 @@
 <?php
 
 namespace app\modules\admision\controllers;
+
 use app\models\ContactoGeneral;
 use app\modules\admision\models\ConvenioEmpresa;
 use app\modules\academico\Module as academico;
@@ -22,6 +23,7 @@ use yii\helpers\Url;
 use yii\base\Exception;
 use yii\helpers\ArrayHelper;
 use app\models\Utilities;
+
 repositorio::registerTranslations();
 academico::registerTranslations();
 financiero::registerTranslations();
@@ -47,7 +49,7 @@ class InscripcionController extends \app\components\CController {
     public function actionNew() {
         $mod_conempresa = new ConvenioEmpresa();
         $mod_fpago = new FormaPago();
-        $mod_grupo = new GrupoIntroductorio();        
+        $mod_grupo = new GrupoIntroductorio();
         $mod_unidad = new UnidadAcademica();
         $mod_modalidad = new Modalidad();
         $modcanal = new Oportunidad();
@@ -60,19 +62,19 @@ class InscripcionController extends \app\components\CController {
                 $message = array("provincias" => $provincias);
                 return Utilities::ajaxResponse('OK', 'alert', Yii::t('jslang', 'Success'), 'false', $message);
             }
-            if (isset($data["getcantones"])) {               
+            if (isset($data["getcantones"])) {
                 $cantones = Canton::find()->select("can_id AS id, can_nombre AS name")->where(["can_estado_logico" => "1", "can_estado" => "1", "pro_id" => $data['prov_id']])->asArray()->all();
                 $message = array("cantones" => $cantones);
                 return Utilities::ajaxResponse('OK', 'alert', Yii::t('jslang', 'Success'), 'false', $message);
-            }            
+            }
             if (isset($data["getmodalidad"])) {
                 $modalidad = $mod_modalidad->consultarModalidad($data["unidad"], 1);
                 $message = array("modalidad" => $modalidad);
-                return Utilities::ajaxResponse('OK', 'alert', Yii::t('jslang', 'Success'), 'false', $message);                
+                return Utilities::ajaxResponse('OK', 'alert', Yii::t('jslang', 'Success'), 'false', $message);
             }
             if (isset($data["getcarrera"])) {
                 //if ($data["empresa_id"] == 1) {
-                    $carrera = $modcanal->consultarCarreraModalidad($data["unidad"], $data["moda_id"]);
+                $carrera = $modcanal->consultarCarreraModalidad($data["unidad"], $data["moda_id"]);
                 //} 
                 $message = array("carrera" => $carrera);
                 return Utilities::ajaxResponse('OK', 'alert', Yii::t('jslang', 'Success'), 'false', $message);
@@ -90,7 +92,7 @@ class InscripcionController extends \app\components\CController {
         $arr_carrera = $modcanal->consultarCarreraModalidad(2, 1);
         $arr_agente = $modgeneral->getAgenteInscrito();
         $arr_institucion = $modinstitucion->consultarInstituciones($pais_id);
-        
+
         return $this->render('new', [
                     //"arr_item" => ArrayHelper::map(array_merge(["id" => "0", "name" => "Seleccionar"], $resp_item), "id", "name"), //ArrayHelper::map($resp_item, "id", "name"),                   
                     "arr_convenio_empresa" => ArrayHelper::map($arr_convempresa, "id", "name"),
@@ -117,23 +119,15 @@ class InscripcionController extends \app\components\CController {
         $fecha_ingreso = date(Yii::$app->params["dateTimeByDefault"]);
         if (Yii::$app->request->isAjax) {
             $con = \Yii::$app->db_crm;
-            $data = Yii::$app->request->post(); 
+            $data = Yii::$app->request->post();
             $items = json_decode($data["dataItems"]); // variable que toma todo lo del grid
             $transaction = $con->beginTransaction();
-            try {                
-                if (!empty($items)) {                    
-                    for ($i = 0; $i < count($items); $i++) {                                                
-                        $item_ingreso = $mod_inscrito->insertarInscritoMaestria($items[$i]->cemp_id, $items[$i]->gint_id, $items[$i]->pai_id, 
-                                            $items[$i]->pro_id, $items[$i]->can_id, $items[$i]->uaca_id, $items[$i]->mod_id, $items[$i]->eaca_id, 
-                                            $items[$i]->imae_tipo_documento, $items[$i]->imae_documento, $items[$i]->imae_primer_nombre, 
-                                            $items[$i]->imae_segundo_nombre, $items[$i]->imae_primer_apellido, $items[$i]->imae_segundo_apellido, 
-                                            $items[$i]->imae_revisar_urgente, $items[$i]->imae_cumple_requisito, $items[$i]->imae_agente, 
-                                            $items[$i]->imae_fecha_inscripcion, $items[$i]->imae_fecha_pago, $items[$i]->imae_pago_inscripcion, 
-                                            $items[$i]->imae_valor_maestria, $items[$i]->fpag_id, $items[$i]->imae_estado_pago, $items[$i]->imae_convenios, 
-                                            $items[$i]->imae_matricula, $items[$i]->imae_titulo, $items[$i]->ins_id, $items[$i]->imae_correo,
-                                            $items[$i]->imae_celular, $items[$i]->imae_convencional, $user_id, $fecha_ingreso);
+            try {
+                if (!empty($items)) {
+                    for ($i = 0; $i < count($items); $i++) {
+                        $item_ingreso = $mod_inscrito->insertarInscritoMaestria($items[$i]->cemp_id, $items[$i]->gint_id, $items[$i]->pai_id, $items[$i]->pro_id, $items[$i]->can_id, $items[$i]->uaca_id, $items[$i]->mod_id, $items[$i]->eaca_id, $items[$i]->imae_tipo_documento, $items[$i]->imae_documento, $items[$i]->imae_primer_nombre, $items[$i]->imae_segundo_nombre, $items[$i]->imae_primer_apellido, $items[$i]->imae_segundo_apellido, $items[$i]->imae_revisar_urgente, $items[$i]->imae_cumple_requisito, $items[$i]->imae_agente, $items[$i]->imae_fecha_inscripcion, $items[$i]->imae_fecha_pago, $items[$i]->imae_pago_inscripcion, $items[$i]->imae_valor_maestria, $items[$i]->fpag_id, $items[$i]->imae_estado_pago, $items[$i]->imae_convenios, $items[$i]->imae_matricula, $items[$i]->imae_titulo, $items[$i]->ins_id, $items[$i]->imae_correo, $items[$i]->imae_celular, $items[$i]->imae_convencional, $user_id, $fecha_ingreso);
                         if ($item_ingreso > 0) {
-                            $exito = 1;                                                
+                            $exito = 1;
                         } else {
                             $exito = 0;
                         }
@@ -142,24 +136,23 @@ class InscripcionController extends \app\components\CController {
                     $mensaje = "No ha ingresado ningún item al grid.";
                 }
                 if ($exito) {
-                    \app\models\Utilities::putMessageLogFile('ingresa por exito:'.$exito);                             
+                    \app\models\Utilities::putMessageLogFile('ingresa por exito:' . $exito);
                     $transaction->commit();
                     $mensaje = "Se ha guardado exitosamente sus registros.";
                     $message = array(
                         "wtmessage" => Yii::t("notificaciones", $mensaje),
-                        "title" => Yii::t('jslang', 'Success'),                        
+                        "title" => Yii::t('jslang', 'Success'),
                     );
                     return Utilities::ajaxResponse('OK', 'alert', Yii::t("jslang", "Sucess"), false, $message);
                 } else {
-                    \app\models\Utilities::putMessageLogFile('ingresa por no exito:'.$exito); 
+                    \app\models\Utilities::putMessageLogFile('ingresa por no exito:' . $exito);
                     $transaction->rollBack();
                     $message = array(
                         "wtmessage" => $ex->getMessage(), Yii::t("notificaciones", $mensaje),
-                        "title" => Yii::t('jslang', 'Error'),                        
+                        "title" => Yii::t('jslang', 'Error'),
                     );
                     return Utilities::ajaxResponse('NO_OK', 'alert', Yii::t("jslang", "Error"), true, $message);
                 }
-                
             } catch (Exception $ex) {
                 $transaction->rollBack();
                 $message = array(
@@ -181,12 +174,12 @@ class InscripcionController extends \app\components\CController {
         header('Cache-Control: max-age=0');
         $uriFile = dirname(__DIR__) . "/views/inscripcion/files/template_inscritos_maestria.xlsx";
         $colPosition = array("A", "B", "C", "D", "E", "F", "G", "H", "I", "J", "K", "L", "M", "N", "O", "P", "Q", "R", "S", "T");
-        
+
         $arrHeader = array(
             "ID",
             strtoupper(repositorio::t("repositorio", "Tipo Convenio")),
             strtoupper(repositorio::t("repositorio", "Grupo Introductorio")),
-            strtoupper(repositorio::t("repositorio", "Provincia")),                        
+            strtoupper(repositorio::t("repositorio", "Provincia")),
             strtoupper(repositorio::t("repositorio", "Cantón")),
             strtoupper(financiero::t("Pagos", "Documento")),
             strtoupper(Yii::t("formulario", "First Name")),
@@ -202,8 +195,8 @@ class InscripcionController extends \app\components\CController {
             strtoupper(Yii::t("formulario", "Pay Total")),
             strtoupper(crm::t("crm", "Payment Method")),
             strtoupper(Yii::t("formulario", "Payment Status")),
-            strtoupper(crm::t("crm", "Ready Agreement")));            
-        
+            strtoupper(crm::t("crm", "Ready Agreement")));
+
         $mod_inscrito = new InscritoMaestria();
         $data = Yii::$app->request->get();
         $arrSearch["search"] = $data['search'];
@@ -213,13 +206,13 @@ class InscripcionController extends \app\components\CController {
         if (empty($arrSearch)) {
             $arrData = $mod_inscrito->getAllInscritosGrid(NULL, NULL, NULL, false);
         } else {
-            $arrData = $mod_inscrito->getAllInscritosGrid($data["search"], $data["txt_fecha_ini"], $data["txt_fecha_fin"], false);                   
-        }                                      
+            $arrData = $mod_inscrito->getAllInscritosGrid($data["search"], $data["txt_fecha_ini"], $data["txt_fecha_fin"], false);
+        }
         Utilities::writeReporteXLS($uriFile, $nombarch, $arrHeader, $arrData, $colPosition);
-        exit;              
+        exit;
     }
-    
-       public function actionDelete() {  
+
+    public function actionDelete() {
         $user_id = @Yii::$app->session->get("PB_iduser");
         $model_inscrito = new InscritoMaestria();
         if (Yii::$app->request->isAjax) {
@@ -227,8 +220,8 @@ class InscripcionController extends \app\components\CController {
             $reg_id = $data["reg_id"];
             $con = \Yii::$app->db_crm;
             $transaction = $con->beginTransaction();
-            try {  
-                $registro = $model_inscrito->deleteRegistroInscrito($reg_id, $user_id);             
+            try {
+                $registro = $model_inscrito->deleteRegistroInscrito($reg_id, $user_id);
                 if ($registro) {
                     //Eliminar en registro                                        
                     $transaction->commit();
@@ -255,6 +248,72 @@ class InscripcionController extends \app\components\CController {
             }
         }
     }
-    
+
+    public function actionView() {
+        $imae_id = base64_decode($_GET["codigo"]);
+        $mod_inscrito = new InscritoMaestria();
+        $mod_conempresa = new ConvenioEmpresa();
+        $mod_fpago = new FormaPago();
+        $mod_grupo = new GrupoIntroductorio();
+        $mod_unidad = new UnidadAcademica();
+        $mod_modalidad = new Modalidad();
+        $modcanal = new Oportunidad();
+        $modgeneral = new ContactoGeneral();
+        $modinstitucion = new Institucion();
+        if (Yii::$app->request->isAjax) {
+            $data = Yii::$app->request->post();
+            if (isset($data["getprovincias"])) {
+                $provincias = Provincia::find()->select("pro_id AS id, pro_nombre AS name")->where(["pro_estado_logico" => "1", "pro_estado" => "1", "pai_id" => $data['pai_id']])->asArray()->all();
+                $message = array("provincias" => $provincias);
+                return Utilities::ajaxResponse('OK', 'alert', Yii::t('jslang', 'Success'), 'false', $message);
+            }
+            if (isset($data["getcantones"])) {
+                $cantones = Canton::find()->select("can_id AS id, can_nombre AS name")->where(["can_estado_logico" => "1", "can_estado" => "1", "pro_id" => $data['prov_id']])->asArray()->all();
+                $message = array("cantones" => $cantones);
+                return Utilities::ajaxResponse('OK', 'alert', Yii::t('jslang', 'Success'), 'false', $message);
+            }
+            if (isset($data["getmodalidad"])) {
+                $modalidad = $mod_modalidad->consultarModalidad($data["unidad"], 1);
+                $message = array("modalidad" => $modalidad);
+                return Utilities::ajaxResponse('OK', 'alert', Yii::t('jslang', 'Success'), 'false', $message);
+            }
+            if (isset($data["getcarrera"])) {               
+                $carrera = $modcanal->consultarCarreraModalidad($data["unidad"], $data["moda_id"]);
+                $message = array("carrera" => $carrera);
+                return Utilities::ajaxResponse('OK', 'alert', Yii::t('jslang', 'Success'), 'false', $message);
+            }
+        }
+        $arr_pais_dom = Pais::find()->select("pai_id AS id, pai_nombre AS value")->where(["pai_estado_logico" => "1", "pai_estado" => "1"])->asArray()->all();
+        $arr_consinscrito = $mod_inscrito->consultarInscritoMaestria($imae_id);
+        $pais_id = 1; //Ecuador
+        $arr_prov_dom = Provincia::provinciaXPais($pais_id);   
+        $arr_ciu_dom = Canton::cantonXProvincia($arr_consinscrito['provincia']);
+        $arr_convempresa = $mod_conempresa->consultarConvenioEmpresa();
+        $arr_forma_pago = $mod_fpago->consultarFormaPago();
+        $arr_grupo = $mod_grupo->consultarGrupoIntroductorio();
+        $arr_unidad = $mod_unidad->consultarUnidadAcademicasEmpresa(1);
+        $arr_modalidad = $mod_modalidad->consultarModalidad($arr_consinscrito['unidad'], 1);
+        $arr_carrera = $modcanal->consultarCarreraModalidad($arr_consinscrito['unidad'], $arr_consinscrito['modalidad']);
+        $arr_agente = $modgeneral->getAgenteInscrito();
+        $arr_institucion = $modinstitucion->consultarInstituciones($pais_id);
+        
+        return $this->render('view', [
+                    "arr_convenio_empresa" => ArrayHelper::map($arr_convempresa, "id", "name"),
+                    "arr_pais_dom" => ArrayHelper::map($arr_pais_dom, "id", "value"),
+                    "arr_prov_dom" => ArrayHelper::map($arr_prov_dom, "id", "value"),
+                    "arr_ciu_dom" => ArrayHelper::map($arr_ciu_dom, "id", "value"),
+                    "arr_tipos_dni" => array("1" => Yii::t("formulario", "DNI Document"), "2" => Yii::t("formulario", "RUC"), "3" => Yii::t("formulario", "Passport")),
+                    "arr_cumple_requisito" => array("1" => Yii::t("formulario", "Si"), "2" => Yii::t("formulario", "No")),
+                    "arr_estado_pago" => array("1" => Yii::t("formulario", "Pagado"), "2" => Yii::t("formulario", "No Pagado"), "3" => Yii::t("formulario", "Pagado Totalidad Maestria")),
+                    "arr_forma_pago" => ArrayHelper::map($arr_forma_pago, "id", "value"),
+                    "arr_grupo" => ArrayHelper::map($arr_grupo, "id", "value"),
+                    "arr_unidad" => ArrayHelper::map($arr_unidad, "id", "name"),
+                    "arr_carrera" => ArrayHelper::map($arr_carrera, "id", "name"),
+                    "arr_modalidad" => ArrayHelper::map($arr_modalidad, "id", "name"),
+                    "arr_agente" => ArrayHelper::map(array_merge([["id" => "0", "value" => "Seleccionar"]], $arr_agente), "id", "value"),
+                    "arr_institucion" => ArrayHelper::map($arr_institucion, "id", "name"),
+                    "arr_consinscrito" => $arr_consinscrito,
+        ]);
+    }
 
 }

@@ -111,11 +111,11 @@ financiero::registerTranslations();
                          [
                 'class' => 'yii\grid\ActionColumn',
                 'header' => Yii::t("formulario", "Actions"), //{update} 
-                'template' => '{delete}', //    
+                'template' => '{view} {delete}', //    
                 'buttons' => [
-                    /*'view' => function ($url, $model) {
-                        return Html::a('<span class="glyphicon glyphicon-eye-open"></span>', Url::to(['contactos/view', 'codigo' => base64_encode($model["pestion_id"]), 'tper' => base64_encode($model["tipo_persona"])]), ["data-toggle" => "tooltip", "title" => "Ver Contacto", "data-pjax" => 0]);
-                    },*/
+                    'view' => function ($url, $model) {
+                        return Html::a('<span class="glyphicon glyphicon-eye-open"></span>', Url::to(['inscripcion/view', 'codigo' => base64_encode($model['id'])]), ["data-toggle" => "tooltip", "title" => "Ver Registro", "data-pjax" => 0]);
+                    },
                     'delete' => function ($url, $model) {                    
                     return Html::a('<span class="glyphicon glyphicon-trash"></span>', "#", ['onclick' => "eliminarRegistro(" . $model['id'] . ");", "data-toggle" => "tooltip", "title" => "Eliminar Registro", "data-pjax" => 0]);                    
                 }, 
