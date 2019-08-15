@@ -12,7 +12,6 @@ academico::registerTranslations();
 financiero::registerTranslations();
 ?>
 
-
 <?=
     PbGridView::widget([
         'id' => 'grid_inscr_list',
@@ -108,6 +107,20 @@ financiero::registerTranslations();
                             return '<small class="label label-danger">'.$arr_estado[2].'</small>';
                     }
                 },
+            ],
+                         [
+                'class' => 'yii\grid\ActionColumn',
+                'header' => Yii::t("formulario", "Actions"), //{update} 
+                'template' => '{delete}', //    
+                'buttons' => [
+                    /*'view' => function ($url, $model) {
+                        return Html::a('<span class="glyphicon glyphicon-eye-open"></span>', Url::to(['contactos/view', 'codigo' => base64_encode($model["pestion_id"]), 'tper' => base64_encode($model["tipo_persona"])]), ["data-toggle" => "tooltip", "title" => "Ver Contacto", "data-pjax" => 0]);
+                    },*/
+                    'delete' => function ($url, $model) {                    
+                    return Html::a('<span class="glyphicon glyphicon-trash"></span>', "#", ['onclick' => "eliminarRegistro(" . $model['id'] . ");", "data-toggle" => "tooltip", "title" => "Eliminar Registro", "data-pjax" => 0]);                    
+                }, 
+                
+                ],
             ],
         ],
     ])

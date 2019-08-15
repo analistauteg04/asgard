@@ -347,3 +347,36 @@ function exportExcel() {
     var f_fin = $('#txt_fecha_fin').val();
     window.location.href = $('#txth_base').val() + "/admision/inscripcion/expexcel?search=" + search + "&fecha_ini=" + f_ini + "&fecha_fin=" + f_fin;
 }
+
+function eliminarRegistro(id) {
+    var mensj = "¿Seguro desea eliminar registro?";
+    var messagePB = new Object();
+    messagePB.wtmessage = mensj;
+    messagePB.title = "Eliminar";
+    var objAccept = new Object();
+    objAccept.id = "btnid2del";
+    objAccept.class = "btn-primary";
+    objAccept.value = "Aceptar";
+    objAccept.callback = 'borrarRegistro';
+    var params = new Array(id, 0);
+    objAccept.paramCallback = params;
+    messagePB.acciones = new Array();
+    messagePB.acciones[0] = objAccept;
+    showAlert("warning", "warning", messagePB);
+}
+
+function borrarRegistro(id, temp) {
+    var link = $('#txth_base').val() + "/admision/inscripcion/delete";
+    var arrParams = new Object();
+    arrParams.reg_id = id;
+    if (!validateForm()) {
+        requestHttpAjax(link, arrParams, function (response) {
+            showAlert(response.status, response.label, response.message);
+            if (!response.error) {
+                setTimeout(function () {
+                    window.location.href = $('#txth_base').val() + "/admision/inscripcion/index";
+                }, 3000);
+            }
+        }, true);
+    }
+}
