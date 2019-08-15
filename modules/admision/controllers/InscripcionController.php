@@ -206,5 +206,42 @@ class InscripcionController extends \app\components\CController {
         exit;              
     }
     
+       public function actionDelete() {  
+        $user_id = @Yii::$app->session->get("PB_iduser");
+        $model_inscrito = new InscritoMaestria();
+        if (Yii::$app->request->isAjax) {
+            $data = Yii::$app->request->post();
+            $reg_id = $data["reg_id"];
+            $con = \Yii::$app->db_crm;
+            $transaction = $con->beginTransaction();
+            try {  
+                $registro = $model_inscrito->deleteRegistroInscrito($reg_id, $user_id);             
+                if ($registro) {
+                    //Eliminar en registro                                        
+                    $transaction->commit();
+                    $message = array(
+                        "wtmessage" => Yii::t("notificaciones", "Se ha eliminado el registro."),
+                        "title" => Yii::t('jslang', 'Success'),
+                    );
+                    return Utilities::ajaxResponse('OK', 'alert', Yii::t("jslang", "Sucess"), false, $message);
+                } else {
+                    $transaction->rollback();
+                    $message = array(
+                        "wtmessage" => Yii::t("notificaciones", "Error al eliminar el registro. "),
+                        "title" => Yii::t('jslang', 'Error'),
+                    );
+                    return Utilities::ajaxResponse('NO_OK', 'alert', Yii::t("jslang", "Error"), false, $message);
+                }
+            } catch (Exception $ex) {
+                $transaction->rollback();
+                $message = array(
+                    "wtmessage" => Yii::t("notificaciones", "Error al eliminar el registro. "),
+                    "title" => Yii::t('jslang', 'Success'),
+                );
+                return Utilities::ajaxResponse('NO_OK', 'alert', Yii::t("jslang", "Error"), false, $message);
+            }
+        }
+    }
+    
 
 }

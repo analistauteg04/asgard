@@ -414,5 +414,47 @@ class InscritoMaestria extends \yii\db\ActiveRecord {
         }
         return $res;
     }
+    
+    /**
+     * Function eliminar logica registro de inscrito maestriar, cambia el estado a 0
+     * @author  Giovanni Vergara <analistadesarrollo02@uteg.edu.ec>
+     * @property 
+     * @return  
+     */
+    public function deleteRegistroInscrito($imae_id, $imae_usuario_modif) {
+        $con = \Yii::$app->db_crm;
+        $estado = 1;
+        $estado_cambio = 0;
+        $fecha_modificacion = date(Yii::$app->params["dateTimeByDefault"]);
+        if ($trans !== null) {
+            $trans = null; // si existe la transacción entonces no se crea una
+        } else {
+            $trans = $con->beginTransaction(); // si no existe la transacción entonces se crea una
+        }
+        try {
+            $comando = $con->createCommand
+                    ("  
+                      UPDATE " . $con->dbname . ".inscrito_maestria                      
+                      SET imae_estado = :estado_cambio, 
+                          imae_estado_logico = :estado_cambio,
+                          imae_usuario_modif = :imae_usuario_modif,
+                          imae_fecha_modificacion = :fecha_modificacion
+                      WHERE imae_id = :imae_id ");
+
+            $comando->bindParam(":estado", $estado, \PDO::PARAM_STR);
+            $comando->bindParam(":estado_cambio", $estado_cambio, \PDO::PARAM_STR);            
+            $comando->bindParam(":imae_id", $imae_id, \PDO::PARAM_INT);
+            $comando->bindParam(":imae_usuario_modif", $imae_usuario_modif, \PDO::PARAM_INT); 
+            $comando->bindParam(":fecha_modificacion", $fecha_modificacion, \PDO::PARAM_STR);
+            $response = $comando->execute();
+            if ($trans !== null)
+                $trans->commit();
+            return $response;
+        } catch (Exception $ex) {
+            if ($trans !== null)
+                $trans->rollback();
+            return FALSE;
+        }
+    }
 
 }
