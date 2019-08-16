@@ -21,8 +21,8 @@ use app\modules\admision\Module as crm;
 academico::registerTranslations();
 financiero::registerTranslations();
 crm::registerTranslations();
-
 ?>
+<?= Html::hiddenInput('txth_imae_id', base64_decode($_GET["codigo"]), ['id' => 'txth_imae_id']); ?>
 <div class="col-md-12">    
     <h3><span id="lbl_Personeria"><?= crm::t("crm", "Register Magisters") ?></span>
 </div>
@@ -167,9 +167,16 @@ crm::registerTranslations();
                     <input type="text" class="form-control keyupmce" value="<?= $arr_consinscrito['telefono'] ?>" id="txt_telefono" ata-type="telefono_sin" placeholder="<?= Yii::t("formulario", "Phone") ?>">
                 </div>
             </div>
-        </div>               
-    </div> 
-    
+        </div> 
+        <div class="col-md-6 col-sm-6 col-xs-6 col-lg-6">
+            <div class="form-group">            
+                <label for="txt_ocupacion" class="col-sm-5 col-md-5 col-xs-5 col-lg-5 control-label" id="lbl_ocupacion"><?= crm::t("crm", "Occupation") ?></label>
+                <div class="col-sm-7 col-md-7 col-xs-7 col-lg-7">
+                    <input type="text" class="form-control keyupmce" value="<?= $arr_consinscrito['ocupacion'] ?>" id="txt_ocupacion" data-type="alfa" placeholder="<?= crm::t("crm", "Occupation") ?>">
+                </div>
+            </div>
+        </div> 
+    </div>     
     <div class="col-md-12">    
         <h4><span id="lbl_Datos_Inscripcion"><?= crm::t("crm", "Registration Data") ?></span> </h4>
     </div>    
@@ -204,7 +211,7 @@ crm::registerTranslations();
             <div class="form-group"> 
                 <label for="cmb_tipo_convenio" class="col-lg-5 col-md-5 col-sm-5 col-xs-5 control-label"><?= Yii::t("formulario", "Company Agreement") ?> <span class="text-danger">*</span></label>
                 <div class="col-lg-7 col-md-7 col-sm-7 col-xs-7">
-                    <?= Html::dropDownList("cmb_tipo_convenio", $arr_consinscrito['convenio_empresa'], ['0' => Yii::t('formulario', 'No convenio')] + $arr_convenio_empresa, ["class" => "form-control", "id" => "cmb_tipo_convenio"])?>
+                    <?= Html::dropDownList("cmb_tipo_convenio", $arr_consinscrito['convenio_empresa'], ['0' => Yii::t('formulario', 'No convenio')] + $arr_convenio_empresa, ["class" => "form-control", "id" => "cmb_tipo_convenio"]) ?>
                 </div>
             </div>   
         </div>       
@@ -243,7 +250,7 @@ crm::registerTranslations();
                     <?=
                     DatePicker::widget([
                         'name' => 'txt_fecha_inscripcion',
-                        'value' => '',                        
+                        'value' => '',
                         'type' => DatePicker::TYPE_INPUT,
                         'options' => ["class" => "form-control", "id" => "txt_fecha_inscripcion", "placeholder" => crm::t("crm", "Registration Date")],
                         'pluginOptions' => [
@@ -297,12 +304,12 @@ crm::registerTranslations();
                     <?=
                     DatePicker::widget([
                         'name' => 'txt_fecha_pago',
-                        'value' => '',                       
+                        'value' => $arr_consinscrito['fecha_pago'],
                         'type' => DatePicker::TYPE_INPUT,
                         'options' => ["class" => "form-control", "id" => "txt_fecha_pago", "placeholder" => Yii::t("formulario", "Date")],
                         'pluginOptions' => [
-                            'autoclose' => true,
-                            'format' => Yii::$app->params["dateByDatePicker"],
+                        'autoclose' => true,
+                        'format' => Yii::$app->params["dateByDatePicker"],
                         ]]
                     );
                     ?>

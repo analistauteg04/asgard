@@ -393,11 +393,11 @@ class InscripcionController extends \app\components\CController {
     }
 
     public function actionUpdate() {
-        $user_id = @Yii::$app->session->get("PB_iduser");
-        $imae_id = base64_decode($_GET["codigo"]);
+        $user_id = @Yii::$app->session->get("PB_iduser");        
         $mod_inscrito = new InscritoMaestria();
         if (Yii::$app->request->isAjax) {
             $data = Yii::$app->request->post();
+            $imae_id = $data["imae_id"];
             $cemp = $data["convenio"]; 
             $gint_id = $data["grupo_introductorio"];  
             $pai_id = $data["pais"];  
@@ -427,24 +427,24 @@ class InscripcionController extends \app\components\CController {
             $ins_id = $data["institucion"];  
             $imae_correo = ucwords(strtolower($data["correo"]));  
             $imae_celular = $data["celular"];  
-            $imae_convencional = $data["convencional"];              
+            $imae_convencional = $data["convencional"];  
+            $imae_ocupacion = $data["ocupacion"];             
             $con = \Yii::$app->db_crm;
             $transaction = $con->beginTransaction();
-            try {
-                $mod_pergestion = new PersonaGestion();
+            try {                
                 $keys_act = [
-                    'cemp', 'gint_id', 'pai_id', 'pro_id', 'can_id', 'uaca_id', 'mod_id', 'eaca_id', 'imae_tipo_documento'
-                    , 'imae_documento', 'imae_pri_nombre', 'imae_segundo_nombre', 'imae_pri_apellido', 'imae_segundo_apellido'
+                    'cemp_id', 'gint_id', 'pai_id', 'pro_id', 'can_id', 'uaca_id', 'mod_id', 'eaca_id', 'imae_tipo_documento'
+                    , 'imae_documento', 'imae_primer_nombre', 'imae_segundo_nombre', 'imae_primer_apellido', 'imae_segundo_apellido'
                     , 'imae_revisar_urgente', 'imae_cumple_requisito', 'imae_agente', 'imae_fecha_inscripcion', 'imae_fecha_pago'
                     , 'imae_pago_inscripcion', 'imae_valor_maestria', 'fpag_id', 'imae_estado_pago', 'imae_convenios', 'imae_matricula'
-                    , 'imae_titulo', 'ins_id', 'imae_correo', 'imae_celular', 'imae_convencional', 'imae_usuario_modif'
+                    , 'imae_titulo', 'ins_id', 'imae_correo', 'imae_celular', 'imae_convencional', 'imae_ocupacion', 'imae_usuario_modif'
                 ];
                 $values_act = [
                     $cemp, $gint_id, $pai_id, $pro_id, $can_id, $uaca_id, $mod_id, $eaca_id, $imae_tipo_documento
                     , $imae_documento, $imae_pri_nombre, $imae_segundo_nombre, $imae_pri_apellido, $imae_segundo_apellido
                     , $imae_revisar_urgente, $imae_cumple_requisito, $imae_agente, $imae_fecha_inscripcion, $imae_fecha_pago
                     , $imae_pago_inscripcion, $imae_valor_maestria, $fpag_id, $imae_estado_pago, $imae_convenios, $imae_matricula
-                    , $imae_titulo, $ins_id, $imae_correo, $imae_celular, $imae_convencional, $user_id
+                    , $imae_titulo, $ins_id, $imae_correo, $imae_celular, $imae_convencional, $imae_ocupacion, $user_id
                 ];
                 $respModifica = $mod_inscrito->actualizarInscritoMaestria($con, $imae_id, $values_act, $keys_act, 'inscrito_maestria');
                 if ($respModifica) {

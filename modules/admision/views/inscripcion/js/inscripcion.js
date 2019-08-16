@@ -317,7 +317,7 @@ function saveInscripcion() {
                 limpiarDetalle();
                 sessionStorage.removeItem('dts_datosItem')
                 setTimeout(function() {
-                    parent.window.location.href = $('#txth_base').val() + "/admision/inscripcion/new";
+                    parent.window.location.href = $('#txth_base').val() + "/admision/inscripcion/index";
                 }, 2000);
             }, true);
         } else {
@@ -394,4 +394,52 @@ function edit() {
     var codigo = $('#txth_imae_id').val();
     //var tper_id = $('#txth_tper_id').val();
     window.location.href = $('#txth_base').val() + "/admision/inscripcion/edit?codigo=" + codigo /*+ "&tper_id=" + tper_id*/;
+}
+
+function update() {
+    var link = $('#txth_base').val() + "/admision/inscripcion/update";
+    var arrParams = new Object(); 
+    arrParams.imae_id = $('#txth_imae_id').val();
+    arrParams.convenio = $('#cmb_tipo_convenio').val();
+    arrParams.grupo_introductorio = $('#cmb_grupo_introductorio').val();
+    arrParams.pais = $('#cmb_pais').val();
+    arrParams.provincia = $('#cmb_provincia').val();
+    arrParams.canton = $('#cmb_canton').val();
+    arrParams.unidad = $('#cmb_unidad').val();
+    arrParams.modalidad = $('#cmb_modalidad').val();
+    arrParams.carrera = $('#cmb_carrera').val();
+    arrParams.tipo_documento = $('#cmb_tipo_documento').val();
+    arrParams.documento = $('#txt_documento').val();
+    arrParams.primer_nombre = $('#txt_nombres1').val();
+    arrParams.segundo_nombre = $('#txt_nombres2').val();
+    arrParams.primer_apellido = $('#txt_apellidos1').val();
+    arrParams.segundo_apellido = $('#txt_apellidos2').val();
+    arrParams.revisar_urgente = $('#txt_revision').val();
+    arrParams.cumple_requisito = $('#cmb_cumple_requisito').val();
+    arrParams.agente = $('#cmb_agente').val();
+    arrParams.fecha_inscripcion = $('#txt_fecha_inscripcion').val();
+    arrParams.fecha_pago = $('#txt_fecha_pago').val();
+    arrParams.pago_inscripcion = $('#txt_pago_inscripcion').val();
+    arrParams.valor_maestria = $('#txt_pago_total').val();
+    arrParams.forma_pago = $('#cmb_metodo_pago').val();
+    arrParams.estado_pago = $('#cmb_estado_pago').val();
+    arrParams.convenios = $('#txt_convenio_listo').val();
+    arrParams.matricula = $('#txt_matricula').val();
+    arrParams.titulo = $('#txt_titulo').val();
+    arrParams.institucion = $('#cmb_institucion').val();
+    arrParams.correo = $('#txt_correo').val();
+    arrParams.celular = $('#txt_celular').val();
+    arrParams.convencional = $('#txt_telefono').val();
+    arrParams.ocupacion = $('#txt_ocupacion').val();
+    
+    if (!validateForm()) {
+        requestHttpAjax(link, arrParams, function (response) {
+            showAlert(response.status, response.label, response.message);
+            if (response.status){
+                setTimeout(function () {
+                    window.location.href = $('#txth_base').val() + "/admision/inscripcion/index";
+                }, 3000);
+            }
+        }, true);
+    }
 }

@@ -346,7 +346,7 @@ class InscritoMaestria extends \yii\db\ActiveRecord {
                 $comando->bindParam(':imae_convenios', ucwords(strtolower($imae_convenios)), \PDO::PARAM_STR);
             }
             if (!empty((isset($imae_matricula)))) {
-                $comando->bindParam(':imae_matricula', $imae_matricula, \PDO::PARAM_STR);
+                $comando->bindParam(':imae_matricula', ucwords(strtolower($imae_matricula)), \PDO::PARAM_STR);
             }
             if (!empty((isset($imae_titulo)))) {
                 $comando->bindParam(':imae_titulo', ucwords(strtolower($imae_titulo)), \PDO::PARAM_STR);
@@ -355,7 +355,7 @@ class InscritoMaestria extends \yii\db\ActiveRecord {
                 $comando->bindParam(':ins_id', $ins_id, \PDO::PARAM_INT);
             }
             if (!empty((isset($imae_correo)))) {
-                $comando->bindParam(':imae_correo', $imae_correo, \PDO::PARAM_STR);
+                $comando->bindParam(':imae_correo', ucwords(strtolower($imae_correo)), \PDO::PARAM_STR);
             }
             if (!empty((isset($imae_celular)))) {
                 $comando->bindParam(':imae_celular', $imae_celular, \PDO::PARAM_STR);
@@ -364,7 +364,7 @@ class InscritoMaestria extends \yii\db\ActiveRecord {
                 $comando->bindParam(':imae_convencional', $imae_convencional, \PDO::PARAM_STR);
             }
             if (!empty((isset($imae_ocupacion)))) {
-                $comando->bindParam(':imae_ocupacion', $imae_ocupacion, \PDO::PARAM_STR);
+                $comando->bindParam(':imae_ocupacion', ucwords(strtolower($imae_ocupacion)), \PDO::PARAM_STR);
             }
             if (!empty((isset($imae_usuario)))) {
                 $comando->bindParam(':imae_usuario', $imae_usuario, \PDO::PARAM_INT);
@@ -536,6 +536,7 @@ class InscritoMaestria extends \yii\db\ActiveRecord {
                         imae_correo as correo,
                         imae_celular as celular,
                         imae_convencional as telefono,
+                        imae_ocupacion as ocupacion,
                         uaca_id as unidad,
                         mod_id as modalidad,
                         eaca_id as carrera,
@@ -582,6 +583,7 @@ class InscritoMaestria extends \yii\db\ActiveRecord {
             $sql = "UPDATE " . $con->dbname . '.' . $name_table .
                     " SET $params_sql" .
                     " WHERE imae_id = $id";
+            \app\models\Utilities::putMessageLogFile('update unsc maes: ' . $sql);
             $comando = $con->createCommand($sql);
             $result = $comando->execute();
             if ($trans !== null) {
