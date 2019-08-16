@@ -74,6 +74,7 @@ return [
     "No Opportunity" =>"# Oportunidad",    
     "Number of opportunities" => "Núm. Op.",
     "Number Document" => "Número Documento",
+    "Occupation" => "Ocupación",
     "Opportunity state"=> 'Estado Oportunidad',
     "Opportunity type"=> 'Tipo Oportunidad',
     "Opportunity Data"=> 'Datos de la Oportunidad',

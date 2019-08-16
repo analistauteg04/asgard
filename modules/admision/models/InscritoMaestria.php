@@ -126,7 +126,7 @@ class InscritoMaestria extends \yii\db\ActiveRecord {
                                 $imae_documento, $imae_primer_nombre, $imae_segundo_nombre, $imae_primer_apellido, $imae_segundo_apellido, 
                                 $imae_revisar_urgente, $imae_cumple_requisito, $imae_agente, $imae_fecha_inscripcion, $imae_fecha_pago, 
                                 $imae_pago_inscripcion, $imae_valor_maestria, $fpag_id, $imae_estado_pago, $imae_convenios, 
-                                $imae_matricula, $imae_titulo, $ins_id, $imae_correo, $imae_celular, $imae_convencional, 
+                                $imae_matricula, $imae_titulo, $ins_id, $imae_correo, $imae_celular, $imae_convencional, $imae_ocupacion,
                                 $imae_usuario, $imae_fecha_creacion) {
         $con = \Yii::$app->db_crm;
          
@@ -255,6 +255,10 @@ class InscritoMaestria extends \yii\db\ActiveRecord {
         if (!empty((isset($imae_convencional)))) {
             $param_sql .= ", imae_convencional";
             $bdet_sql .= ", :imae_convencional";
+        }
+        if (!empty((isset($imae_ocupacion)))) {
+            $param_sql .= ", imae_ocupacion";
+            $bdet_sql .= ", :imae_ocupacion";
         }
         if (isset($imae_usuario)) {
             $param_sql .= ", imae_usuario";

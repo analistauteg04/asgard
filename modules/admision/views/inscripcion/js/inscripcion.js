@@ -199,6 +199,11 @@ function limpiarDetalle() {
     $('#txt_pago_total').val("");
     $('#txt_fecha_pago').val("");
     $('#txt_convenio_listo').val("");
+    $('#txt_matricula').val("");
+    $('#txt_titulo').val("");    
+    $('#txt_correo').val("");
+    $('#txt_celular').val("");
+    $('#txt_telefono').val(""); 
 
     $('#cmb_tipo_documento').val(0);
     $('#cmb_pais').val(1);
@@ -210,6 +215,7 @@ function limpiarDetalle() {
     $('#cmb_agente').val(0);
     $('#cmb_metodo_pago').val(0);
     $('#cmb_estado_pago').val(0);
+    $('#cmb_institucion').val(0);
 }
 
 function objRegistro(indice) {
@@ -260,6 +266,7 @@ function objRegistro(indice) {
     rowGrid.imae_correo = $('#txt_correo').val();
     rowGrid.imae_celular = $('#txt_celular').val();
     rowGrid.imae_convencional = $('#txt_telefono').val();    
+    rowGrid.imae_ocupacion = $('#txt_ocupacion').val();   
     //rowGrid.pro_otros = ($("#chk_otros").prop("checked")) ? 1 : 0;
     rowGrid.accion = "new";
     return rowGrid;

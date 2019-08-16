@@ -131,7 +131,7 @@ class InscripcionController extends \app\components\CController {
                                             $items[$i]->imae_fecha_inscripcion, $items[$i]->imae_fecha_pago, $items[$i]->imae_pago_inscripcion, 
                                             $items[$i]->imae_valor_maestria, $items[$i]->fpag_id, $items[$i]->imae_estado_pago, $items[$i]->imae_convenios, 
                                             $items[$i]->imae_matricula, $items[$i]->imae_titulo, $items[$i]->ins_id, $items[$i]->imae_correo,
-                                            $items[$i]->imae_celular, $items[$i]->imae_convencional, $user_id, $fecha_ingreso);
+                                            $items[$i]->imae_celular, $items[$i]->imae_convencional, $items[$i]->imae_ocupacion, $user_id, $fecha_ingreso);
                         if ($item_ingreso > 0) {
                             $exito = 1;                                                
                         } else {
