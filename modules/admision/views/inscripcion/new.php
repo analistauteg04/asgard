@@ -166,11 +166,19 @@ crm::registerTranslations();
                     <input type="text" class="form-control keyupmce" value="" id="txt_telefono" data-type="telefono_sin" placeholder="<?= Yii::t("formulario", "Phone") ?>">
                 </div>
             </div>
-        </div>               
+        </div> 
+        <div class="col-md-6 col-sm-6 col-xs-6 col-lg-6">
+            <div class="form-group">            
+                <label for="txt_ocupacion" class="col-sm-5 col-md-5 col-xs-5 col-lg-5 control-label" id="lbl_ocupacion"><?= crm::t("crm", "Occupation") ?></label>
+                <div class="col-sm-7 col-md-7 col-xs-7 col-lg-7">
+                    <input type="text" class="form-control keyupmce" value="" id="txt_ocupacion" data-type="alfa" placeholder="<?= crm::t("crm", "Occupation") ?>">
+                </div>
+            </div>
+        </div> 
     </div> 
     
     <div class="col-md-12">    
-        <h4><span id="lbl_Datos_Inscripcion"><?= crm::t("crm", "Registration Data") ?></span> </h4>
+        <h4><span id="lbl_Datos_Inscripcion"><?= crm::t("crm", "Registration Data") ?></span></h4>
     </div>    
     <div class='col-md-12 col-sm-12 col-xs-12 col-lg-12'>
         <div class="col-lg-6 col-md-6 col-sm-6 col-xs-6">

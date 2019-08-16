@@ -122,7 +122,12 @@ class InscritoMaestria extends \yii\db\ActiveRecord {
      * @param
      * @return
      */
-    public function insertarInscritoMaestria($cemp_id, $gint_id, $pai_id, $pro_id, $can_id, $uaca_id, $mod_id, $eaca_id, $imae_tipo_documento, $imae_documento, $imae_primer_nombre, $imae_segundo_nombre, $imae_primer_apellido, $imae_segundo_apellido, $imae_revisar_urgente, $imae_cumple_requisito, $imae_agente, $imae_fecha_inscripcion, $imae_fecha_pago, $imae_pago_inscripcion, $imae_valor_maestria, $fpag_id, $imae_estado_pago, $imae_convenios, $imae_matricula, $imae_titulo, $ins_id, $imae_correo, $imae_celular, $imae_convencional, $imae_usuario, $imae_fecha_creacion) {
+    public function insertarInscritoMaestria($cemp_id, $gint_id, $pai_id, $pro_id, $can_id, $uaca_id, $mod_id, $eaca_id, $imae_tipo_documento, 
+                                $imae_documento, $imae_primer_nombre, $imae_segundo_nombre, $imae_primer_apellido, $imae_segundo_apellido, 
+                                $imae_revisar_urgente, $imae_cumple_requisito, $imae_agente, $imae_fecha_inscripcion, $imae_fecha_pago, 
+                                $imae_pago_inscripcion, $imae_valor_maestria, $fpag_id, $imae_estado_pago, $imae_convenios, 
+                                $imae_matricula, $imae_titulo, $ins_id, $imae_correo, $imae_celular, $imae_convencional, $imae_ocupacion,
+                                $imae_usuario, $imae_fecha_creacion) {
         $con = \Yii::$app->db_crm;
 
         $param_sql = "imae_estado";
@@ -251,6 +256,10 @@ class InscritoMaestria extends \yii\db\ActiveRecord {
             $param_sql .= ", imae_convencional";
             $bdet_sql .= ", :imae_convencional";
         }
+        if (!empty((isset($imae_ocupacion)))) {
+            $param_sql .= ", imae_ocupacion";
+            $bdet_sql .= ", :imae_ocupacion";
+        }
         if (isset($imae_usuario)) {
             $param_sql .= ", imae_usuario";
             $bdet_sql .= ", :imae_usuario";
@@ -259,7 +268,6 @@ class InscritoMaestria extends \yii\db\ActiveRecord {
             $param_sql .= ", imae_fecha_creacion";
             $bdet_sql .= ", :imae_fecha_creacion";
         }
-
         try {
             $sql = "INSERT INTO " . $con->dbname . ".inscrito_maestria ($param_sql) VALUES($bdet_sql)";
 
@@ -354,6 +362,9 @@ class InscritoMaestria extends \yii\db\ActiveRecord {
             }
             if (!empty((isset($imae_convencional)))) {
                 $comando->bindParam(':imae_convencional', $imae_convencional, \PDO::PARAM_STR);
+            }
+            if (!empty((isset($imae_ocupacion)))) {
+                $comando->bindParam(':imae_ocupacion', $imae_ocupacion, \PDO::PARAM_STR);
             }
             if (!empty((isset($imae_usuario)))) {
                 $comando->bindParam(':imae_usuario', $imae_usuario, \PDO::PARAM_INT);

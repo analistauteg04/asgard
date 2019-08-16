@@ -527,6 +527,7 @@ create table if not exists db_crm.`inscrito_maestria` (
  `imae_correo` varchar(50) null,
  `imae_celular` varchar(50) null,
  `imae_convencional` varchar(50) null, 
+ `imae_ocupacion` varchar(100) null, 
  `imae_usuario` bigint(20) not null,
  `imae_usuario_modif` bigint(20) default null,
  `imae_estado` varchar(1) not null,

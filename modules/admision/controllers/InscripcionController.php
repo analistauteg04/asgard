@@ -120,12 +120,20 @@ class InscripcionController extends \app\components\CController {
         if (Yii::$app->request->isAjax) {
             $con = \Yii::$app->db_crm;
             $data = Yii::$app->request->post();
-            $items = json_decode($data["dataItems"]); // variable que toma todo lo del grid
+            $items = json_decode($data["dataItems"]); // variable que toma todo lo del grid.-
             $transaction = $con->beginTransaction();
-            try {
-                if (!empty($items)) {
-                    for ($i = 0; $i < count($items); $i++) {
-                        $item_ingreso = $mod_inscrito->insertarInscritoMaestria($items[$i]->cemp_id, $items[$i]->gint_id, $items[$i]->pai_id, $items[$i]->pro_id, $items[$i]->can_id, $items[$i]->uaca_id, $items[$i]->mod_id, $items[$i]->eaca_id, $items[$i]->imae_tipo_documento, $items[$i]->imae_documento, $items[$i]->imae_primer_nombre, $items[$i]->imae_segundo_nombre, $items[$i]->imae_primer_apellido, $items[$i]->imae_segundo_apellido, $items[$i]->imae_revisar_urgente, $items[$i]->imae_cumple_requisito, $items[$i]->imae_agente, $items[$i]->imae_fecha_inscripcion, $items[$i]->imae_fecha_pago, $items[$i]->imae_pago_inscripcion, $items[$i]->imae_valor_maestria, $items[$i]->fpag_id, $items[$i]->imae_estado_pago, $items[$i]->imae_convenios, $items[$i]->imae_matricula, $items[$i]->imae_titulo, $items[$i]->ins_id, $items[$i]->imae_correo, $items[$i]->imae_celular, $items[$i]->imae_convencional, $user_id, $fecha_ingreso);
+            try {                
+                if (!empty($items)) {                    
+                    for ($i = 0; $i < count($items); $i++) {                                                
+                        $item_ingreso = $mod_inscrito->insertarInscritoMaestria($items[$i]->cemp_id, $items[$i]->gint_id, $items[$i]->pai_id, 
+                                        $items[$i]->pro_id, $items[$i]->can_id, $items[$i]->uaca_id, $items[$i]->mod_id, $items[$i]->eaca_id, 
+                                        $items[$i]->imae_tipo_documento, $items[$i]->imae_documento, $items[$i]->imae_primer_nombre, 
+                                        $items[$i]->imae_segundo_nombre, $items[$i]->imae_primer_apellido, $items[$i]->imae_segundo_apellido, 
+                                        $items[$i]->imae_revisar_urgente, $items[$i]->imae_cumple_requisito, $items[$i]->imae_agente, 
+                                        $items[$i]->imae_fecha_inscripcion, $items[$i]->imae_fecha_pago, $items[$i]->imae_pago_inscripcion, 
+                                        $items[$i]->imae_valor_maestria, $items[$i]->fpag_id, $items[$i]->imae_estado_pago, $items[$i]->imae_convenios, 
+                                        $items[$i]->imae_matricula, $items[$i]->imae_titulo, $items[$i]->ins_id, $items[$i]->imae_correo,
+                                        $items[$i]->imae_celular, $items[$i]->imae_convencional, $items[$i]->imae_ocupacion, $user_id, $fecha_ingreso);            
                         if ($item_ingreso > 0) {
                             $exito = 1;
                         } else {
