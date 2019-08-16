@@ -277,7 +277,7 @@ class InscripcionController extends \app\components\CController {
                 $message = array("modalidad" => $modalidad);
                 return Utilities::ajaxResponse('OK', 'alert', Yii::t('jslang', 'Success'), 'false', $message);
             }
-            if (isset($data["getcarrera"])) {               
+            if (isset($data["getcarrera"])) {
                 $carrera = $modcanal->consultarCarreraModalidad($data["unidad"], $data["moda_id"]);
                 $message = array("carrera" => $carrera);
                 return Utilities::ajaxResponse('OK', 'alert', Yii::t('jslang', 'Success'), 'false', $message);
@@ -286,7 +286,7 @@ class InscripcionController extends \app\components\CController {
         $arr_pais_dom = Pais::find()->select("pai_id AS id, pai_nombre AS value")->where(["pai_estado_logico" => "1", "pai_estado" => "1"])->asArray()->all();
         $arr_consinscrito = $mod_inscrito->consultarInscritoMaestria($imae_id);
         $pais_id = 1; //Ecuador
-        $arr_prov_dom = Provincia::provinciaXPais($pais_id);   
+        $arr_prov_dom = Provincia::provinciaXPais($pais_id);
         $arr_ciu_dom = Canton::cantonXProvincia($arr_consinscrito['provincia']);
         $arr_convempresa = $mod_conempresa->consultarConvenioEmpresa();
         $arr_forma_pago = $mod_fpago->consultarFormaPago();
@@ -296,7 +296,7 @@ class InscripcionController extends \app\components\CController {
         $arr_carrera = $modcanal->consultarCarreraModalidad($arr_consinscrito['unidad'], $arr_consinscrito['modalidad']);
         $arr_agente = $modgeneral->getAgenteInscrito();
         $arr_institucion = $modinstitucion->consultarInstituciones($pais_id);
-        
+
         return $this->render('view', [
                     "arr_convenio_empresa" => ArrayHelper::map($arr_convempresa, "id", "name"),
                     "arr_pais_dom" => ArrayHelper::map($arr_pais_dom, "id", "value"),
@@ -313,7 +313,160 @@ class InscripcionController extends \app\components\CController {
                     "arr_agente" => ArrayHelper::map(array_merge([["id" => "0", "value" => "Seleccionar"]], $arr_agente), "id", "value"),
                     "arr_institucion" => ArrayHelper::map($arr_institucion, "id", "name"),
                     "arr_consinscrito" => $arr_consinscrito,
+                    "imae_id" => $imae_id,
         ]);
+    }
+
+    public function actionEdit() {
+        $imae_id = base64_decode($_GET["codigo"]);
+        $mod_inscrito = new InscritoMaestria();
+        $mod_conempresa = new ConvenioEmpresa();
+        $mod_fpago = new FormaPago();
+        $mod_grupo = new GrupoIntroductorio();
+        $mod_unidad = new UnidadAcademica();
+        $mod_modalidad = new Modalidad();
+        $modcanal = new Oportunidad();
+        $modgeneral = new ContactoGeneral();
+        $modinstitucion = new Institucion();
+        if (Yii::$app->request->isAjax) {
+            $data = Yii::$app->request->post();
+            if (isset($data["getprovincias"])) {
+                $provincias = Provincia::find()->select("pro_id AS id, pro_nombre AS name")->where(["pro_estado_logico" => "1", "pro_estado" => "1", "pai_id" => $data['pai_id']])->asArray()->all();
+                $message = array("provincias" => $provincias);
+                return Utilities::ajaxResponse('OK', 'alert', Yii::t('jslang', 'Success'), 'false', $message);
+            }
+            if (isset($data["getcantones"])) {
+                $cantones = Canton::find()->select("can_id AS id, can_nombre AS name")->where(["can_estado_logico" => "1", "can_estado" => "1", "pro_id" => $data['prov_id']])->asArray()->all();
+                $message = array("cantones" => $cantones);
+                return Utilities::ajaxResponse('OK', 'alert', Yii::t('jslang', 'Success'), 'false', $message);
+            }
+            if (isset($data["getmodalidad"])) {
+                $modalidad = $mod_modalidad->consultarModalidad($data["unidad"], 1);
+                $message = array("modalidad" => $modalidad);
+                return Utilities::ajaxResponse('OK', 'alert', Yii::t('jslang', 'Success'), 'false', $message);
+            }
+            if (isset($data["getcarrera"])) {
+                $carrera = $modcanal->consultarCarreraModalidad($data["unidad"], $data["moda_id"]);
+                $message = array("carrera" => $carrera);
+                return Utilities::ajaxResponse('OK', 'alert', Yii::t('jslang', 'Success'), 'false', $message);
+            }
+        }
+        $arr_pais_dom = Pais::find()->select("pai_id AS id, pai_nombre AS value")->where(["pai_estado_logico" => "1", "pai_estado" => "1"])->asArray()->all();
+        $arr_consinscrito = $mod_inscrito->consultarInscritoMaestria($imae_id);
+        $pais_id = 1; //Ecuador
+        $arr_prov_dom = Provincia::provinciaXPais($pais_id);
+        $arr_ciu_dom = Canton::cantonXProvincia($arr_consinscrito['provincia']);
+        $arr_convempresa = $mod_conempresa->consultarConvenioEmpresa();
+        $arr_forma_pago = $mod_fpago->consultarFormaPago();
+        $arr_grupo = $mod_grupo->consultarGrupoIntroductorio();
+        $arr_unidad = $mod_unidad->consultarUnidadAcademicasEmpresa(1);
+        $arr_modalidad = $mod_modalidad->consultarModalidad($arr_consinscrito['unidad'], 1);
+        $arr_carrera = $modcanal->consultarCarreraModalidad($arr_consinscrito['unidad'], $arr_consinscrito['modalidad']);
+        $arr_agente = $modgeneral->getAgenteInscrito();
+        $arr_institucion = $modinstitucion->consultarInstituciones($pais_id);
+
+        return $this->render('edit', [
+                    "arr_convenio_empresa" => ArrayHelper::map($arr_convempresa, "id", "name"),
+                    "arr_pais_dom" => ArrayHelper::map($arr_pais_dom, "id", "value"),
+                    "arr_prov_dom" => ArrayHelper::map($arr_prov_dom, "id", "value"),
+                    "arr_ciu_dom" => ArrayHelper::map($arr_ciu_dom, "id", "value"),
+                    "arr_tipos_dni" => array("1" => Yii::t("formulario", "DNI Document"), "2" => Yii::t("formulario", "RUC"), "3" => Yii::t("formulario", "Passport")),
+                    "arr_cumple_requisito" => array("1" => Yii::t("formulario", "Si"), "2" => Yii::t("formulario", "No")),
+                    "arr_estado_pago" => array("1" => Yii::t("formulario", "Pagado"), "2" => Yii::t("formulario", "No Pagado"), "3" => Yii::t("formulario", "Pagado Totalidad Maestria")),
+                    "arr_forma_pago" => ArrayHelper::map($arr_forma_pago, "id", "value"),
+                    "arr_grupo" => ArrayHelper::map($arr_grupo, "id", "value"),
+                    "arr_unidad" => ArrayHelper::map($arr_unidad, "id", "name"),
+                    "arr_carrera" => ArrayHelper::map($arr_carrera, "id", "name"),
+                    "arr_modalidad" => ArrayHelper::map($arr_modalidad, "id", "name"),
+                    "arr_agente" => ArrayHelper::map(array_merge([["id" => "0", "value" => "Seleccionar"]], $arr_agente), "id", "value"),
+                    "arr_institucion" => ArrayHelper::map($arr_institucion, "id", "name"),
+                    "arr_consinscrito" => $arr_consinscrito,
+        ]);
+    }
+
+    public function actionUpdate() {
+        $user_id = @Yii::$app->session->get("PB_iduser");
+        $imae_id = base64_decode($_GET["codigo"]);
+        $mod_inscrito = new InscritoMaestria();
+        if (Yii::$app->request->isAjax) {
+            $data = Yii::$app->request->post();
+            $cemp = $data["convenio"]; 
+            $gint_id = $data["grupo_introductorio"];  
+            $pai_id = $data["pais"];  
+            $pro_id = $data["provincia"];  
+            $can_id = $data["canton"];  
+            $uaca_id = $data["unidad"];  
+            $mod_id = $data["modalidad"];  
+            $eaca_id = $data["carrera"];  
+            $imae_tipo_documento = $data["tipo_documento"];  
+            $imae_documento = $data["documento"];  
+            $imae_pri_nombre = ucwords(strtolower($data["primer_nombre"]));  
+            $imae_segundo_nombre = ucwords(strtolower($data["segundo_nombre"]));  
+            $imae_pri_apellido = ucwords(strtolower($data["primer_apellido"]));  
+            $imae_segundo_apellido = ucwords(strtolower($data["segundo_apellido"]));  
+            $imae_revisar_urgente = ucwords(strtolower($data["revisar_urgente"]));  
+            $imae_cumple_requisito = $data["cumple_requisito"];  
+            $imae_agente = $data["agente"];  
+            $imae_fecha_inscripcion = $data["fecha_inscripcion"];  
+            $imae_fecha_pago = $data["fecha_pago"];  
+            $imae_pago_inscripcion = $data["pago_inscripcion"];  
+            $imae_valor_maestria = $data["valor_maestria"];  
+            $fpag_id = $data["forma_pago"];  
+            $imae_estado_pago = $data["estado_pago"];  
+            $imae_convenios = ucwords(strtolower($data["convenios"]));  
+            $imae_matricula = $data["matricula"];  
+            $imae_titulo = ucwords(strtolower($data["titulo"]));  
+            $ins_id = $data["institucion"];  
+            $imae_correo = ucwords(strtolower($data["correo"]));  
+            $imae_celular = $data["celular"];  
+            $imae_convencional = $data["convencional"];              
+            $con = \Yii::$app->db_crm;
+            $transaction = $con->beginTransaction();
+            try {
+                $mod_pergestion = new PersonaGestion();
+                $keys_act = [
+                    'cemp', 'gint_id', 'pai_id', 'pro_id', 'can_id', 'uaca_id', 'mod_id', 'eaca_id', 'imae_tipo_documento'
+                    , 'imae_documento', 'imae_pri_nombre', 'imae_segundo_nombre', 'imae_pri_apellido', 'imae_segundo_apellido'
+                    , 'imae_revisar_urgente', 'imae_cumple_requisito', 'imae_agente', 'imae_fecha_inscripcion', 'imae_fecha_pago'
+                    , 'imae_pago_inscripcion', 'imae_valor_maestria', 'fpag_id', 'imae_estado_pago', 'imae_convenios', 'imae_matricula'
+                    , 'imae_titulo', 'ins_id', 'imae_correo', 'imae_celular', 'imae_convencional', 'imae_usuario_modif'
+                ];
+                $values_act = [
+                    $cemp, $gint_id, $pai_id, $pro_id, $can_id, $uaca_id, $mod_id, $eaca_id, $imae_tipo_documento
+                    , $imae_documento, $imae_pri_nombre, $imae_segundo_nombre, $imae_pri_apellido, $imae_segundo_apellido
+                    , $imae_revisar_urgente, $imae_cumple_requisito, $imae_agente, $imae_fecha_inscripcion, $imae_fecha_pago
+                    , $imae_pago_inscripcion, $imae_valor_maestria, $fpag_id, $imae_estado_pago, $imae_convenios, $imae_matricula
+                    , $imae_titulo, $ins_id, $imae_correo, $imae_celular, $imae_convencional, $user_id
+                ];
+                $respModifica = $mod_inscrito->actualizarInscritoMaestria($con, $imae_id, $values_act, $keys_act, 'inscrito_maestria');
+                if ($respModifica) {
+                    $exito = 1;
+                }
+                if ($exito) {
+                    $transaction->commit();
+                    $message = array(
+                        "wtmessage" => Yii::t("notificaciones", "La infomación ha sido actualizada."),
+                        "title" => Yii::t('jslang', 'Success'),
+                    );
+                    return Utilities::ajaxResponse('OK', 'alert', Yii::t("jslang", "Sucess"), false, $message);
+                } else {
+                    $transaction->rollback();
+                    $message = array(
+                        "wtmessage" => Yii::t("notificaciones", "Error al grabar."),
+                        "title" => Yii::t('jslang', 'Success'),
+                    );
+                    return Utilities::ajaxResponse('NO_OK', 'alert', Yii::t("jslang", "Sucess"), false, $message);
+                }
+            } catch (Exception $ex) {
+                $transaction->rollback();
+                $message = array(
+                    "wtmessage" => Yii::t("notificaciones", "Error al grabar."),
+                    "title" => Yii::t('jslang', 'Success'),
+                );
+                return Utilities::ajaxResponse('NO_OK', 'alert', Yii::t("jslang", "Sucess"), false, $message);
+            }
+            return;
+        }
     }
 
 }

@@ -551,5 +551,41 @@ class InscritoMaestria extends \yii\db\ActiveRecord {
         $resultData = $comando->queryOne();
         return $resultData;
     }
+    
+    /**
+     * Function modifica un inscritos maestria
+     * @author  Giovanni Vergara <analistadesarrollo02@uteg.edu.ec>
+     * @property integer $userid
+     * @return  
+     */
+    public function actualizarInscritoMaestria($con, $id, $parameters, $keys, $name_table) {
+        $trans = $con->getTransaction();
+        $params_sql = "";
+        for ($i = 0; $i < (count($parameters) - 1); $i++) {
+            if (isset($parameters[$i])) {
+                $params_sql .= $keys[$i] . " = '" . $parameters[$i] . "',";
+            }
+        }
+        $params_sql .= $keys[count($parameters) - 1] . " = '" . $parameters[count($parameters) - 1] . "'";
+        try {
+            $sql = "UPDATE " . $con->dbname . '.' . $name_table .
+                    " SET $params_sql" .
+                    " WHERE imae_id = $id";
+            $comando = $con->createCommand($sql);
+            $result = $comando->execute();
+            if ($trans !== null) {
+                return true;
+            } else {
+                $transaction->commit();
+                return true;
+            }
+        } catch (Exception $ex) {
+            if ($trans !== null) {
+                $trans->rollback();
+            }
+            return 0;
+        }
+    }
+    
 
 }

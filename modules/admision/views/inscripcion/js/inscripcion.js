@@ -380,3 +380,8 @@ function borrarRegistro(id, temp) {
         }, true);
     }
 }
+function edit() {
+    var codigo = $('#txth_imae_id').val();
+    //var tper_id = $('#txth_tper_id').val();
+    window.location.href = $('#txth_base').val() + "/admision/inscripcion/edit?codigo=" + codigo /*+ "&tper_id=" + tper_id*/;
+}
