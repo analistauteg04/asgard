@@ -204,6 +204,7 @@ function limpiarDetalle() {
     $('#txt_correo').val("");
     $('#txt_celular').val("");
     $('#txt_telefono').val(""); 
+    $('#txt_ocupacion').val(""); 
 
     $('#cmb_tipo_documento').val(0);
     $('#cmb_pais').val(1);
@@ -216,6 +217,8 @@ function limpiarDetalle() {
     $('#cmb_metodo_pago').val(0);
     $('#cmb_estado_pago').val(0);
     $('#cmb_institucion').val(0);
+    $('#cmb_modalidad').val(0);
+    $('#cmb_carrera').val(0);
 }
 
 function objRegistro(indice) {

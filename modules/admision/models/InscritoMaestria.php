@@ -363,6 +363,9 @@ class InscritoMaestria extends \yii\db\ActiveRecord {
             if (!empty((isset($imae_convencional)))) {
                 $comando->bindParam(':imae_convencional', $imae_convencional, \PDO::PARAM_STR);
             }
+            if (!empty((isset($imae_ocupacion)))) {
+                $comando->bindParam(':imae_ocupacion', $imae_ocupacion, \PDO::PARAM_STR);
+            }
             if (!empty((isset($imae_usuario)))) {
                 $comando->bindParam(':imae_usuario', $imae_usuario, \PDO::PARAM_INT);
             }

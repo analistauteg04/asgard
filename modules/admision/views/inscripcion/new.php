@@ -171,7 +171,7 @@ crm::registerTranslations();
             <div class="form-group">            
                 <label for="txt_ocupacion" class="col-sm-5 col-md-5 col-xs-5 col-lg-5 control-label" id="lbl_ocupacion"><?= crm::t("crm", "Occupation") ?></label>
                 <div class="col-sm-7 col-md-7 col-xs-7 col-lg-7">
-                    <input type="text" class="form-control keyupmce" value="" id="txt_ocupacion" data-type="telefono_sin" placeholder="<?= crm::t("crm", "Occupation") ?>">
+                    <input type="text" class="form-control keyupmce" value="" id="txt_ocupacion" data-type="alfa" placeholder="<?= crm::t("crm", "Occupation") ?>">
                 </div>
             </div>
         </div> 
