@@ -14,7 +14,7 @@ academico::registerTranslations();
 <div>        
     <?=
     PbGridView::widget([
-        'id' => 'PbMarcacion',
+        'id' => 'PbMarcacionhistorico',
         'showExport' => true,
         'fnExportEXCEL' => "exportExcel",
         'fnExportPDF' => "exportPdf",
@@ -47,22 +47,12 @@ academico::registerTranslations();
                 'attribute' => 'Horaini',
                 'header' => academico::t("Academico", "Hour start date"),
                 'value' => 'hora_inicio',
-            ],
-            [
-                'attribute' => 'Horainipon',
-                'header' => academico::t("Academico", "Hour start date") . ' ' . academico::t("Academico", "Expected"),
-                'value' => 'inicio_esperado',
-            ],
+            ],            
             [
                 'attribute' => 'Horafin',
                 'header' => academico::t("Academico", "Hour end date"),
                 'value' => 'hora_salida',
-            ],
-            [
-                'attribute' => 'Horafinpon',
-                'header' => academico::t("Academico", "Hour end date") . ' ' . academico::t("Academico", "Expected"),
-                'value' => 'salida_esperada',
-            ],            
+            ],                       
         ],
     ])
     ?>

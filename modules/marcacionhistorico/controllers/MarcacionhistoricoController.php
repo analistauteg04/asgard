@@ -13,13 +13,14 @@ use app\modules\admision\Module as admision;
 use app\modules\academico\Module as academico;
 use app\modules\academico\models\Modalidad;
 use app\modules\academico\models\UnidadAcademica;
+use app\modules\marcacionhistorico\models\RegistroMarcacionHistorial;
 
 admision::registerTranslations();
 
 class MarcacionhistoricoController extends \app\components\CController {
 
     public function actionIndex() {
-        $mod_marcacion = new RegistroMarcacion();
+        $mod_marcacion = new RegistroMarcacionHistorial();
         $mod_periodo = new PeriodoAcademicoMetIngreso();
         $periodo = $mod_periodo->consultarPeriodoAcademico();
         $data = Yii::$app->request->get();
@@ -29,12 +30,12 @@ class MarcacionhistoricoController extends \app\components\CController {
             $arrSearch["f_ini"] = $data['f_ini'];
             $arrSearch["f_fin"] = $data['f_fin'];
             $arrSearch["periodo"] = $data['periodo'];
-            $arr_historico = $mod_marcacion->consultarRegistroMarcacion($arrSearch);
+            $arr_historico = $mod_marcacion->consultarMarcacionHistorica($arrSearch);
             return $this->render('index-grid', [
                         'model' => $arr_historico,
             ]);
         } else {
-            $arr_historico = $mod_marcacion->consultarRegistroMarcacion($arrSearch);
+            $arr_historico = $mod_marcacion->consultarMarcacionHistorica($arrSearch);
         }
         if (Yii::$app->request->isAjax) {
             $data = Yii::$app->request->post();
