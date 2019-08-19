@@ -19,6 +19,7 @@ use PhpOffice\PhpSpreadsheet\Style\Color;
 use PhpOffice\PhpSpreadsheet\Worksheet\PageSetup;
 use PhpOffice\PhpSpreadsheet\IOFactory;
 use PhpOffice\PhpSpreadsheet\Style\Border;
+use Svrnm\ExcelDataTables\ExcelDataTable;
 
 
 
@@ -573,6 +574,7 @@ class Utilities {
             ),
         );
         try{
+
             $objPHPExcel = IOFactory::load($uriFile);
 
             $objPHPExcel->getProperties()->setCreator(Yii::$app->session->get("PB_nombres"))
@@ -605,6 +607,20 @@ class Utilities {
 
             $objWriter = IOFactory::createWriter($objPHPExcel, $typeExp);
             $objWriter->save('php://output');   
+            
+
+            /*
+            $dataTable = new ExcelDataTable();
+            $data = array();
+            for($i=0; $i<count($arrData); $i++){
+                $j=0;
+                foreach($arrData[$i] as $key => $value){
+                    $data[$i][$arrHeader[$j]] = $value;
+                    $j++;
+                }
+            }
+            $dataTable->setSheetName('Data');
+            return $dataTable->showHeaders()->addRows($data)->fillXLSX($uriFile);//attachToFile($uriFile, $out, false);*/
         }catch(Exception $e){
             echo Yii::t("reporte","Error to export Excel");
         }
