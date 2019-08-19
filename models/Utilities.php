@@ -620,7 +620,8 @@ class Utilities {
                 }
             }
             $dataTable->setSheetName('Data');
-            return $dataTable->showHeaders()->addRows($data)->fillXLSX($uriFile);//attachToFile($uriFile, $out, false);*/
+            return $dataTable->showHeaders()->addRows($data)->fillXLSX($uriFile);//attachToFile($uriFile, $out, false);
+            */
         }catch(Exception $e){
             echo Yii::t("reporte","Error to export Excel");
         }
