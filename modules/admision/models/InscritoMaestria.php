@@ -390,8 +390,8 @@ class InscritoMaestria extends \yii\db\ActiveRecord {
             $str_search .= "im.imae_primer_apellido like :search OR ";
             $str_search .= "im.imae_segundo_apellido like :search OR ";
             $str_search .= "pr.pro_nombre like :search OR ";
-            $str_search .= "pa.can_nombre like :search OR ";
-            $str_search .= "im.imae_agente like :search) AND ";
+            $str_search .= "ca.can_nombre like :search OR ";
+            $str_search .= "ai.aima_nombre like :search) AND ";
         }
         if (isset($date_ini) && $date_ini != "") {
             $str_search .= "im.imae_fecha_inscripcion >= :dateini AND ";
@@ -440,7 +440,7 @@ class InscritoMaestria extends \yii\db\ActiveRecord {
                     $str_search
                     im.imae_estado=1 AND
                     im.imae_estado_logico=1 
-                ORDER BY im.imae_fecha_inscripcion DESC;";
+                ORDER BY im.imae_fecha_inscripcion DESC, im.imae_primer_apellido DESC;";
         $comando = Yii::$app->db->createCommand($sql);
         if (isset($search) && $search != "") {
             $comando->bindParam(":search", $search_cond, \PDO::PARAM_STR);

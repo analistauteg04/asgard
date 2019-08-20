@@ -9,7 +9,12 @@ use app\models\Utilities;
 use yii\data\ArrayDataProvider;
 use yii\helpers\ArrayHelper;
 use app\modules\admision\Module as admision;
-
+use app\modules\repositorio\Module as repositorio;
+use app\modules\academico\Module as academico;
+use app\modules\financiero\Module as financiero;
+repositorio::registerTranslations();
+academico::registerTranslations();
+financiero::registerTranslations();
 admision::registerTranslations();
 ?>
 <form class="form-horizontal">
@@ -18,7 +23,7 @@ admision::registerTranslations();
             <div class="form-group">
                 <label for="txt_buscarData" class="col-sm-2 col-md-2 col-xs-2 col-lg-2 control-label"><?= Yii::t("formulario", "Search") ?></label>
                 <div class="col-sm-8 col-md-8 col-xs-8 col-lg-8">
-                    <input type="text" class="form-control" value="" id="txt_buscarData" placeholder="<?= admision::t("Solicitudes", "Search by item") ?>">
+                    <input type="text" class="form-control" value="" id="txt_buscarData" placeholder="<?= admision::t("Solicitudes", "Search by item") ?>: <?= repositorio::t("repositorio", "Cantón") ?>, <?= repositorio::t("repositorio", "Provincia") ?>, <?= financiero::t("Pagos", "Agente") ?>, <?= Yii::t("formulario", "Names") ?> ">
                 </div>
             </div>
         </div>

@@ -181,7 +181,6 @@ class InscripcionController extends \app\components\CController {
         header("Content-Disposition: attachment;filename=" . $nombarch);
         header('Cache-Control: max-age=0');
         $uriFile = dirname(__DIR__) . "/views/inscripcion/files/template_inscritos_maestria.xlsx";
-        $colPosition = array("A", "B", "C", "D", "E", "F", "G", "H", "I", "J", "K", "L", "M", "N", "O", "P", "Q", "R", "S", "T");
 
         $arrHeader = array(
             "ID",
@@ -208,16 +207,16 @@ class InscripcionController extends \app\components\CController {
         $mod_inscrito = new InscritoMaestria();
         $data = Yii::$app->request->get();
         $arrSearch["search"] = $data['search'];
-        $arrSearch["f_ini"] = $data['f_ini'];
-        $arrSearch["f_end"] = $data['f_end'];
+        $arrSearch["f_ini"] = $data['fecha_ini'];
+        $arrSearch["f_end"] = $data['fecha_end'];
         $arrData = array();
         if (empty($arrSearch)) {
             $arrData = $mod_inscrito->getAllInscritosGrid(NULL, NULL, NULL, false);
         } else {
-            $arrData = $mod_inscrito->getAllInscritosGrid($data["search"], $data["txt_fecha_ini"], $data["txt_fecha_fin"], false);
+            $arrData = $mod_inscrito->getAllInscritosGrid($arrSearch["search"], $arrSearch["f_ini"], $arrSearch["f_end"], false);
         }
-        Utilities::writeReporteXLS($uriFile, $nombarch, $arrHeader, $arrData, $colPosition);
-        exit;
+        $sheetName = "DATA";
+        return Utilities::writeReporteXLS($uriFile, $arrHeader, $arrData, $sheetName);
     }
 
     public function actionDelete() {
