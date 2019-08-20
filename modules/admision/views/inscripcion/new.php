@@ -13,7 +13,7 @@ use yii\widgets\DetailView;
 use yii\jui\AutoComplete;
 use yii\web\JsExpression;
 use app\models\Utilities;
-use app\modules\repositorio\Module as repositorio;
+// use app\modules\repositorio\Module as repositorio;
 use app\modules\academico\Module as academico;
 use app\modules\financiero\Module as financiero;
 use app\modules\admision\Module as crm;
@@ -357,7 +357,7 @@ crm::registerTranslations();
     </div> 
     <br/>
     <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
-        <h3><span id="lbl_cargado"><?= repositorio::t("repositorio", "Inscripciones registradas") ?></span></h3>
+        <h3><span id="lbl_cargado"><?= Yii::t("formulario", "Inscripciones registradas") ?></span></h3>
     </div>    
     <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
         <div class="form-group">

@@ -4,10 +4,10 @@ use yii\helpers\Html;
 use yii\helpers\Url;
 use app\widgets\PbGridView\PbGridView;
 use app\models\Utilities;
-use app\modules\repositorio\Module as repositorio;
+// use app\modules\repositorio\Module as repositorio;
 use app\modules\academico\Module as academico;
 use app\modules\financiero\Module as financiero;
-repositorio::registerTranslations();
+// repositorio::registerTranslations();
 academico::registerTranslations();
 financiero::registerTranslations();
 ?>
@@ -24,12 +24,12 @@ financiero::registerTranslations();
             ['class' => 'yii\grid\SerialColumn', 'options' => ['width' => '10']],
             [
                 'attribute' => 'grupoIntroductorio',
-                'header' => repositorio::t("repositorio", "Grupo Introductorio"),
+                'header' => Yii::t("formulario", "Grupo Introductorio"),
                 'value' => 'grupoIntroductorio',
             ],
             [
                 'attribute' => 'convenio',
-                'header' => repositorio::t("repositorio", "Tipo Convenio"),
+                'header' => Yii::t("formulario", "Tipo Convenio"),
                 'value' => 'convenio',
             ],
             [
@@ -46,22 +46,22 @@ financiero::registerTranslations();
             ],
             [
                 'attribute' => 'provincia',
-                'header' => repositorio::t("repositorio", "Provincia"),
+                'header' => Yii::t("formualario", "State"),
                 'value' => 'provincia',
             ],
             [
                 'attribute' => 'canton',
-                'header' => repositorio::t("repositorio", "Cantón"),
+                'header' => Yii::t("formulario", "City"),
                 'value' => 'canton',
             ],
             [
                 'attribute' => 'fecha_inscripcion',
-                'header' => repositorio::t("repositorio", "Fecha inscripción"),
+                'header' => Yii::t("formulario", "Fecha inscripción"),
                 'value' => 'fecha_inscripcion',
             ],
             [
                 'attribute' => 'fecha_pago',
-                'header' => repositorio::t("repositorio", "Fecha pago"),
+                'header' => Yii::t("formulario", "Fecha pago"),
                 'value' => 'fecha_pago',
             ],
             [
@@ -80,7 +80,7 @@ financiero::registerTranslations();
             ],
             [
                 'attribute' => 'forma_pago',
-                'header' => repositorio::t("repositorio", "Método Pago"),
+                'header' => Yii::t("formulario", "Método Pago"),
                 'value' => 'forma_pago',
             ],
             [
