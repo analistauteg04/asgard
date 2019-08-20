@@ -153,4 +153,5 @@ INSERT INTO `solicitud_noaprobada_documento` (`sndo_id`, `snoa_id`, `dadj_id`, `
 
 
 insert into db_captacion.convenio_empresa(cemp_id, cemp_nombre, cemp_estado_empresa, cemp_estado, cemp_estado_logico)
-values(1,'UNE','A','1','1');
+values(1,'UNE','A','1','1'),
+(2, 'COMIL', 'A', '1', '1');

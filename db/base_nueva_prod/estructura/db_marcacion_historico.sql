@@ -5,7 +5,7 @@
 DROP SCHEMA IF EXISTS `db_marcacion_historico`;
 CREATE SCHEMA IF NOT EXISTS `db_marcacion_historico` DEFAULT CHARACTER SET utf8 ;
 
- GRANT ALL PRIVILEGES ON `db_marcacion_historico`.* TO 'uteg'@'localhost' IDENTIFIED BY 'Utegadmin2016*'; -- Ubuntu
+GRANT ALL PRIVILEGES ON `db_marcacion_historico`.* TO 'uteg'@'localhost' IDENTIFIED BY 'Utegadmin2016*'; -- Ubuntu
 -- GRANT ALL PRIVILEGES ON `db_marcacion_historico`.* TO 'uteg'@'localhost';  -- centos
 
 USE `db_marcacion_historico` ;
@@ -27,9 +27,7 @@ create table if not exists `periodo_academico_historial` (
   `pahi_estado` varchar(1) not null,
   `pahi_fecha_creacion` timestamp not null default current_timestamp,
   `pahi_fecha_modificacion` timestamp null default null,
-  `pahi_estado_logico` varchar(1) not null
-  -- foreign key (saca_id) references `semestre_academico`(saca_id),
-  -- foreign key (baca_id) references `bloque_academico`(baca_id)
+  `pahi_estado_logico` varchar(1) not null  
 );
 
 -- --------------------------------------------------------
@@ -51,11 +49,7 @@ create table if not exists `horario_asignatura_periodo_historial` (
   `haph_fecha_creacion` timestamp not null default current_timestamp,
   `haph_fecha_modificacion` timestamp null default null,
   `haph_estado_logico` varchar(1) not null,
-  -- foreign key (asi_id) references `asignatura`(asi_id),
-  foreign key (pahi_id) references `periodo_academico_historial`(pahi_id)
-  /*foreign key (pro_id) references `profesor`(pro_id),
-  foreign key (uaca_id) references `unidad_academica`(uaca_id),
-  foreign key (mod_id) references `modalidad`(mod_id)*/
+  foreign key (pahi_id) references `periodo_academico_historial`(pahi_id)  
 );
 
 -- --------------------------------------------------------
