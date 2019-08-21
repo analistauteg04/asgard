@@ -408,7 +408,7 @@ class InscritoMaestria extends \yii\db\ActiveRecord {
         }
         $sql = "SELECT 
                     imae_id AS id,
-                    ce.cemp_nombre AS convenio,
+                    ifnull (ce.cemp_nombre, ' ') AS convenio,
                     gi.gint_nombre AS grupoIntroductorio,
                     pr.pro_nombre AS provincia,
                     ca.can_nombre AS canton,

@@ -46,7 +46,7 @@ financiero::registerTranslations();
             ],
             [
                 'attribute' => 'provincia',
-                'header' => Yii::t("formualario", "State"),
+                'header' => Yii::t("formulario", "Provincia"),
                 'value' => 'provincia',
             ],
             [
