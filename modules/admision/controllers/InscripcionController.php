@@ -6,7 +6,7 @@ use app\models\ContactoGeneral;
 use app\modules\admision\models\ConvenioEmpresa;
 use app\modules\academico\Module as academico;
 use app\modules\financiero\Module as financiero;
-//use app\modules\repositorio\Module as repositorio;
+use app\modules\repositorio\Module as repositorio;
 use app\modules\admision\Module as crm;
 use app\models\Pais;
 use app\models\Provincia;
@@ -24,7 +24,7 @@ use yii\base\Exception;
 use yii\helpers\ArrayHelper;
 use app\models\Utilities;
 
-//repositorio::registerTranslations();
+repositorio::registerTranslations();
 academico::registerTranslations();
 financiero::registerTranslations();
 crm::registerTranslations();
@@ -184,10 +184,10 @@ class InscripcionController extends \app\components\CController {
 
         $arrHeader = array(
             "ID",
-            strtoupper(Yii::t("formulario", "Tipo Convenio")),
-            strtoupper(Yii::t("formulario", "Grupo Introductorio")),
-            strtoupper(Yii::t("formulario", "State")),
-            strtoupper(Yii::t("formulario", "City")),
+            strtoupper(repositorio::t("repositorio", "Tipo Convenio")),
+            strtoupper(repositorio::t("repositorio", "Grupo Introductorio")),
+            strtoupper(repositorio::t("repositorio", "Provincia")),
+            strtoupper(repositorio::t("repositorio", "Cantón")),
             strtoupper(financiero::t("Pagos", "Documento")),
             strtoupper(Yii::t("formulario", "First Name")),
             strtoupper(Yii::t("formulario", "Middle Name")),
