@@ -250,7 +250,7 @@ crm::registerTranslations();
                     <?=
                     DatePicker::widget([
                         'name' => 'txt_fecha_inscripcion',
-                        'value' => '',
+                        'value' => $arr_consinscrito['fecha_inscripcion'],
                         'type' => DatePicker::TYPE_INPUT,
                         'options' => ["class" => "form-control", "id" => "txt_fecha_inscripcion", "placeholder" => crm::t("crm", "Registration Date")],
                         'pluginOptions' => [
