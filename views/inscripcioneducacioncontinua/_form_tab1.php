@@ -9,99 +9,6 @@ use yii\helpers\Url;
 use yii\widgets\ActiveForm;
 use app\components\CFileInputAjax;
 
-
-// CAN: GRADO
-$requisitosCANP = ' <div class="col-md-12 col-sm-12 col-xs-12 col-lg-12">
-                    <div class="form-group">
-                        <div class="col-sm-3 col-md-3 col-xs-3 col-lg-3">
-                        </div>
-                        <div class="col-sm-9 col-md-9 col-xs-9 col-lg-9">
-                            <div style = "width: 410px;" class="well"><span style="font-weight: bold">Fecha curso de nivelación del 21 de enero al 01 de marzo del 2019. Deberás cargar en el siguiente paso estos documentos: <br></span>
-                                Cédula de identidad o pasaporte. <br>
-                                Certificado de votación (ecuatorianos). <br>
-                                Título de bachiller notarizado. <br>
-                                Foto Actual. <br>
-                            </div>
-                        </div>
-                    </div>
-                </div>'; 
-
-$requisitosCANSP = ' <div class="col-md-12 col-sm-12 col-xs-12 col-lg-12">
-                    <div class="form-group">
-                        <div class="col-sm-3 col-md-3 col-xs-3 col-lg-3">
-                        </div>
-                        <div class="col-sm-9 col-md-9 col-xs-9 col-lg-9">
-                            <div style = "width: 410px;" class="well"><span style="font-weight: bold">Fecha curso de nivelación del 14 de enero al 01 de marzo del 2019. Deberás cargar en el siguiente paso estos documentos: <br></span>
-                                Cédula de identidad o pasaporte. <br>
-                                Certificado de votación (ecuatorianos). <br>
-                                Título de bachiller notarizado. <br>
-                                Foto Actual. <br>
-                            </div>
-                        </div>
-                    </div>
-                </div>'; 
-
-$requisitosCANAD = '<div class="col-md-12 col-sm-12 col-xs-12 col-lg-12">
-                    <div class="form-group">
-                        <div class="col-sm-3 col-md-3 col-xs-3 col-lg-3">
-                        </div>
-                        <div class="col-sm-9 col-md-9 col-xs-9 col-lg-9">
-                            <div style = "width: 410px;" class="well"><span style="font-weight: bold">Fecha curso de nivelación del 26 de enero al 09 de marzo del 2019. Deberás cargar en el siguiente paso estos documentos: <br></span>
-                                Cédula de identidad o pasaporte. <br>
-                                Certificado de votación (ecuatorianos). <br>
-                                Título de bachiller notarizado. <br>
-                                Foto Actual. <br>
-                            </div>
-                        </div>
-                    </div>
-                </div>'; 
-
-$requisitosCANO = ' <div class="col-md-12 col-sm-12 col-xs-12 col-lg-12">
-                    <div class="form-group">
-                        <div class="col-sm-3 col-md-3 col-xs-3 col-lg-3">
-                        </div>
-                        <div class="col-sm-9 col-md-9 col-xs-9 col-lg-9">
-                            <div style = "width: 410px;" class="well"><span style="font-weight: bold">Fecha curso de nivelación el 11 de febrero al 22 de marzo del 2019. Deberás cargar en el siguiente paso estos documentos: <br> </span>
-                                Cédula de identidad o pasaporte. <br>
-                                Certificado de votación (ecuatorianos). <br>
-                                Título de bachiller notarizado. <br>
-                                Foto Actual. <br>
-                            </div>
-                        </div>
-                    </div>
-                </div>'; 
-
-// EXAMEN: GRADO
-$requisitosEXA = ' <div class="col-md-12 col-sm-12 col-xs-12 col-lg-12">
-                    <div class="form-group">
-                        <div class="col-sm-3 col-md-3 col-xs-3 col-lg-3">
-                        </div>
-                        <div class="col-sm-9 col-md-9 col-xs-9 col-lg-9">
-                            <div style = "width: 410px;" class="well"><span style="font-weight: bold">Al inscribirte al examen de admisión, tendrás acceso al Campus Virtual UTEG para prepararte. A partir de la fecha de registro tendrás quince (15) días para rendir las pruebas de manera online. Deberás cargar en el siguiente paso estos documentos: <br></span>                                                              
-                                Cédula de identidad o pasaporte. <br>
-                                Certificado de votación (ecuatorianos). <br>
-                                Título de Bachiller notarizado. <br>
-                                Foto actual. <br>
-                            </div>
-                        </div>
-                    </div>
-                </div>'; 
-//Posgrado
-$requisitosPRP = '<div class="col-md-12 col-sm-12 col-xs-12 col-lg-12">
-                    <div class="form-group">
-                        <div class="col-sm-3 col-md-3 col-xs-3 col-lg-3">
-                        </div>
-                        <div class="col-sm-9 col-md-9 col-xs-9 col-lg-9">
-                            <div style = "width: 410px;" class="well"><span style="font-weight: bold">Fecha del taller introductorio: 13 de julio del 2019. Deberás cargar en el siguiente paso estos documentos:<br></span>
-                                    Cédula de identidad o pasaporte <br>                                    
-                                    Título de tercer nivel notarizado. <br>                                    
-                                    Hoja de vida.   <br>
-                                    Foto actual.    <br>
-                            </div>
-                        </div>
-                    </div>
-                  </div>'; 
-
 ?>
 <form class="form-horizontal">
     <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
@@ -195,7 +102,7 @@ $requisitosPRP = '<div class="col-md-12 col-sm-12 col-xs-12 col-lg-12">
     </div>
     <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
         <div class="form-group">            
-            <label for="cmb_carrera_solicitud" class="col-lg-3 col-md-3 col-sm-3 col-xs-3 control-label"><?= Yii::t("academico", "Career") . ' /Programa' ?> <span class="text-danger">*</span></label>
+            <label for="cmb_carrera_solicitud" class="col-lg-3 col-md-3 col-sm-3 col-xs-3 control-label"><?= Yii::t("formulario", "Course") ?> <span class="text-danger">*</span></label>
             <div class="col-lg-9 col-md-9 col-sm-9 col-xs-9">
                 <?= Html::dropDownList("cmb_carrera_solicitud", 0, $arr_carrerra1, ["class" => "form-control", "id" => "cmb_carrera_solicitud"]) ?>
             </div>
@@ -208,25 +115,7 @@ $requisitosPRP = '<div class="col-md-12 col-sm-12 col-xs-12 col-lg-12">
                 <?= Html::dropDownList("cmb_metodo_solicitud", 0, array_merge([Yii::t("formulario", "Select")], $arr_metodos), ["class" => "form-control", "id" => "cmb_metodo_solicitud"]) ?>
             </div>
         </div>
-    </div> 
-    <div class="col-md-12 col-xs-12 col-sm-12 col-lg-12" id="divRequisitosCANP" style="display: block">   
-        <?php echo $requisitosCANP ?>
-    </div>
-    <div class="col-md-12 col-xs-12 col-sm-12 col-lg-12" id="divRequisitosCANSP" style="display: none">   
-        <?php echo $requisitosCANSP ?>
-    </div>
-    <div class="col-md-12 col-xs-12 col-sm-12 col-lg-12" id="divRequisitosCANAD" style="display: none">   
-        <?php echo $requisitosCANAD ?>
-    </div>
-    <div class="col-md-12 col-xs-12 col-sm-12 col-lg-12" id="divRequisitosCANO" style="display: none">   
-        <?php echo $requisitosCANO ?>
-    </div>    
-    <div class="col-md-12 col-xs-12 col-sm-12 col-lg-12" id="divRequisitosEXA" style="display: none">   
-        <?php echo $requisitosEXA ?>
-    </div>    
-    <div class="col-md-12 col-xs-12 col-sm-12 col-lg-12" id="divRequisitosPRP" style="display: none">   
-        <?php echo $requisitosPRP ?>
-    </div>    
+    </div>  
     <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
         <div class="form-group">            
             <label for="cmb_conuteg" class="col-lg-3 col-md-3 col-sm-3 col-xs-3 control-label"><?= Yii::t("formulario", "Knowledge how about UTEG") ?> <span class="text-danger">*</span></label>

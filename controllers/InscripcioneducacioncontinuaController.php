@@ -7,32 +7,21 @@ use app\models\Utilities;
 use yii\helpers\ArrayHelper;
 use yii\base\Exception;
 use app\models\Persona;
-use app\models\EmpresaPersona;
 use \app\modules\admision\models\SolicitudInscripcion;
 use app\models\Pais;
 use app\modules\admision\models\Interesado;
-use app\modules\admision\models\InteresadoEmpresa;
-use app\models\Usuario;
-use yii\base\Security;
-use app\models\UsuaGrolEper;
 use app\models\Provincia;
 use app\modules\financiero\models\OrdenPago;
-use app\modules\financiero\models\DetalleDescuentoItem;
 use app\models\Canton;
 use app\models\MedioPublicitario;
 use app\modules\academico\models\Modalidad;
 use app\modules\academico\models\UnidadAcademica;
-use yii\helpers\Url;
 use app\modules\admision\models\PersonaGestion;
 use app\modules\admision\models\Oportunidad;
-use app\models\Empresa;
-use app\modules\admision\models\TipoOportunidadVenta;
-use app\modules\admision\models\EstadoContacto;
 use app\modules\admision\models\MetodoIngreso;
-use app\modules\financiero\models\Secuencias;
-//use app\models\Secuencias;
 use app\models\InscripcionAdmision;
 use app\modules\admision\models\ConvenioEmpresa;
+use app\modules\academico\models\ModuloEstudio;
 
 class InscripcioneducacioncontinuaController extends \yii\web\Controller {
 
@@ -52,6 +41,7 @@ class InscripcioneducacioncontinuaController extends \yii\web\Controller {
         $modcanal = new Oportunidad();
         $mod_metodo = new MetodoIngreso();
         $mod_inscripcion = new InscripcionAdmision();
+        $modestudio = new ModuloEstudio();
 
         if (Yii::$app->request->isAjax) {
             $data = Yii::$app->request->post();
@@ -78,7 +68,7 @@ class InscripcioneducacioncontinuaController extends \yii\web\Controller {
                 return Utilities::ajaxResponse('OK', 'alert', Yii::t('jslang', 'Success'), 'false', $message);
             }
             if (isset($data["getcarrera"])) {
-                $carrera = $modcanal->consultarCarreraModalidad($data["unidada"], $data["moda_id"]);
+                $carrera = $modcanal->consultarCursoModalidad($data["unidada"], $data["moda_id"], 3);
                 $message = array("carrera" => $carrera);
                 return Utilities::ajaxResponse('OK', 'alert', Yii::t('jslang', 'Success'), 'false', $message);
             }
@@ -93,10 +83,10 @@ class InscripcioneducacioncontinuaController extends \yii\web\Controller {
         $arr_prov_dom = Provincia::provinciaXPais($pais_id);
         $arr_ciu_dom = Canton::cantonXProvincia($arr_prov_dom[0]["id"]);
         $arr_medio = MedioPublicitario::find()->select("mpub_id AS id, mpub_nombre AS value")->where(["mpub_estado_logico" => "1", "mpub_estado" => "1"])->asArray()->all();
-        $arr_ninteres = $mod_unidad->consultarUnidadAcademicasEmpresa(1);
-        $arr_modalidad = $mod_modalidad->consultarModalidad(1, 1);
+        $arr_ninteres = $mod_unidad->consultarUnidadAcademicasEmpresa(3);
+        $arr_modalidad = $mod_modalidad->consultarModalidad($arr_ninteres[0]["id"], 3);
         $arr_conuteg = $mod_pergestion->consultarConociouteg();
-        $arr_carrerra1 = $modcanal->consultarCarreraModalidad(1, $arr_modalidad[0]["id"]);
+        $arr_carrerra1 = $modestudio->consultarCursoModalidad($arr_ninteres[0]["id"], $arr_modalidad[0]["id"], 3);
         $arr_metodos = $mod_metodo->consultarMetodoUnidadAca_2($arr_ninteres[0]["id"]);
         $mod_conempresa = new ConvenioEmpresa();
         $arr_convempresa = $mod_conempresa->consultarConvenioEmpresa();

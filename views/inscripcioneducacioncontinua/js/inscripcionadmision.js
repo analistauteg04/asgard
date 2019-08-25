@@ -38,7 +38,7 @@ $(document).ready(function () {
     });
 
     $('#cmb_pais_dom').change(function () {
-        var link = $('#txth_base').val() + "/inscripcionadmision/index";
+        var link = $('#txth_base').val() + "/inscripcioneducacioncontinua/index";
         var arrParams = new Object();
         arrParams.codarea = $(this).val();
         arrParams.getarea = true;
@@ -125,7 +125,7 @@ $(document).ready(function () {
     });
 
     $('#sendInscripcionsolicitud').click(function () {
-        var link = $('#txth_base').val() + "/inscripcionadmision/saveinscripciontemp";
+        var link = $('#txth_base').val() + "/inscripcioneducacioncontinua/saveinscripciontemp";
         var arrParams = new Object();
         arrParams.codigo = $('#txth_twin_id').val();
         arrParams.ACCION = 'Fin';
@@ -254,19 +254,7 @@ $(document).ready(function () {
     });
 
     $('#cmb_unidad_solicitud').change(function () {
-        var unisol = $('#cmb_unidad_solicitud').val();
-        if (unisol == 1) {
-            $('#divmetodocan').css('display', 'none');
-            $('#divRequisitosCANP').css('display', 'none');
-            $('#divRequisitosCANSP').css('display', 'none');
-            $('#divRequisitosCANAD').css('display', 'none');
-            $('#divRequisitosCANO').css('display', 'none');
-            $('#divRequisitosEXA').css('display', 'none');
-            $('#divRequisitosPRP').css('display', 'none');
-        } else if (unisol == 2) {
-            $('#divmetodocan').css('display', 'block');
-        }
-        var link = $('#txth_base').val() + "/inscripcionadmision/index";
+                var link = $('#txth_base').val() + "/inscripcioneducacioncontinua/index";
         var arrParams = new Object();
         arrParams.nint_id = $(this).val();
         arrParams.getmodalidad = true;
@@ -306,7 +294,7 @@ $(document).ready(function () {
     });
 
     $('#cmb_modalidad_solicitud').change(function () {
-        var link = $('#txth_base').val() + "/inscripcionadmision/index";
+        var link = $('#txth_base').val() + "/inscripcioneducacioncontinua/index";
         var arrParams = new Object();
         arrParams.unidada = $('#cmb_unidad_solicitud').val();
         arrParams.moda_id = $(this).val();
@@ -397,51 +385,6 @@ $(document).ready(function () {
                 $('#divRequisitosCANAD').css('display', 'none');
                 $('#divRequisitosEXA').css('display', 'none');
                 $('#divRequisitosPRP').css('display', 'none');
-                //Método: CAN
-//                if ($('#cmb_metodo_solicitud').val() == 1) {
-//                //Online
-//                if ($('#cmb_modalidad_solicitud').val() == 1) {
-//                    $('#divRequisitosCANO').css('display', 'block');
-//                    $('#divRequisitosCANP').css('display', 'none');
-//                    $('#divRequisitosCANSP').css('display', 'none');
-//                    $('#divRequisitosCANAD').css('display', 'none');
-//                    $('#divRequisitosEXA').css('display', 'none');
-//                    $('#divRequisitosPRP').css('display', 'none');
-//                } else {  //Presencial
-//                    if ($('#cmb_modalidad_solicitud').val() == 2) {
-//                        $('#divRequisitosCANP').css('display', 'block');
-//                        $('#divRequisitosCANO').css('display', 'none');
-//                        $('#divRequisitosCANSP').css('display', 'none');
-//                        $('#divRequisitosCANAD').css('display', 'none');
-//                        $('#divRequisitosEXA').css('display', 'none');
-//                        $('#divRequisitosPRP').css('display', 'none');
-//                    } else {   //Semipresencial
-//                        if ($('#cmb_modalidad_solicitud').val() == 3) {
-//                            $('#divRequisitosCANSP').css('display', 'block');
-//                            $('#divRequisitosCANO').css('display', 'none');
-//                            $('#divRequisitosCANP').css('display', 'none');
-//                            $('#divRequisitosCANAD').css('display', 'none');
-//                            $('#divRequisitosEXA').css('display', 'none');
-//                            $('#divRequisitosPRP').css('display', 'none');
-//                        } else {  // distancia
-//                            $('#divRequisitosCANAD').css('display', 'block');
-//                            $('#divRequisitosCANO').css('display', 'none');
-//                            $('#divRequisitosCANP').css('display', 'none');
-//                            $('#divRequisitosCANSP').css('display', 'none');
-//                            $('#divRequisitosEXA').css('display', 'none');
-//                            $('#divRequisitosPRP').css('display', 'none');
-//                        }
-//                    }
-//                }
-//            } else {  //examen
-//                //Online                    
-//                $('#divRequisitosEXA').css('display', 'block');
-//                $('#divRequisitosCANO').css('display', 'none');
-//                $('#divRequisitosCANP').css('display', 'none');
-//                $('#divRequisitosCANSP').css('display', 'none');
-//                $('#divRequisitosCANAD').css('display', 'none');
-//                $('#divRequisitosPRP').css('display', 'none');
-//            }
             } else {  //Posgrado  Semipresencial
                 if (($('#cmb_modalidad_solicitud').val() == 3) || ($('#cmb_modalidad_solicitud').val() == 2)) {
                     //Taller introductorio            
@@ -548,7 +491,7 @@ $(document).ready(function () {
     
     $('#sendInscripcionSubirPago').click(function () {
         guardarInscripcionTemp('UpdateDepTrans');        
-        var link = $('#txth_base').val() + "/inscripcionadmision/saveinscripciontemp";
+        var link = $('#txth_base').val() + "/inscripcioneducacioncontinua/saveinscripciontemp";
         var arrParams = new Object();
         arrParams.codigo = $('#txth_twin_id').val();
         arrParams.ACCION = 'Fin';
@@ -597,7 +540,7 @@ $(document).ready(function () {
                     if (response.status == "OK") {
                         showAlert(response.status, response.label, response.message);
                         setTimeout(function () {    
-                            parent.window.location.href = $('#txth_base').val() +"/inscripcionadmision/index";
+                            parent.window.location.href = $('#txth_base').val() +"/inscripcioneducacioncontinua/index";
                         }, 2000);
                     }
                 });
@@ -609,7 +552,7 @@ $(document).ready(function () {
 //INSERTAR DATOS
 function guardarInscripcion(accion, paso) {
     var ID = (accion == "Update") ? $('#txth_twin_id').val() : 0;
-    var link = $('#txth_base').val() + "/inscripcionadmision/saveinscripciontemp";
+    var link = $('#txth_base').val() + "/inscripcioneducacioncontinua/saveinscripciontemp";
     var arrParams = new Object();
     arrParams.DATA_1 = dataInscripPart1(ID);
     arrParams.ACCION = accion;
@@ -855,7 +798,7 @@ function camposnulos(campo) {
     }
 }
 function PagoDinners(solicitud) {
-    var bohre = $('#txth_base').val() + "/inscripcionadmision/savepagodinner?sins_id=" + solicitud + "&popup=1";
+    var bohre = $('#txth_base').val() + "/inscripcioneducacioncontinua/savepagodinner?sins_id=" + solicitud + "&popup=1";
     $('#btn_pago_i').attr("href", bohre);
     $('#btn_pago_i').trigger("click");
 }
@@ -863,7 +806,7 @@ function PagoDinners(solicitud) {
 
 function guardarInscripcionTemp(accion) {
     var ID = (accion == "UpdateDepTrans") ? $('#txth_twin_id').val() : 0;
-    var link = $('#txth_base').val() + "/inscripcionadmision/saveinscripciontemp";
+    var link = $('#txth_base').val() + "/inscripcioneducacioncontinua/saveinscripciontemp";
     var arrParams = new Object();
     arrParams.DATA_1 = dataInscripPart1(ID);
     arrParams.ACCION = accion;
