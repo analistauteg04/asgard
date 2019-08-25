@@ -26,64 +26,7 @@ $leyenda = '<div class="col-md-12 col-xs-12 col-sm-12 col-lg-12">
                 <?= Html::dropDownList("cmb_convenio_empresa", 0, $arr_convenio_empresa, ["class" => "form-control", "id" => "cmb_convenio_empresa"]) ?>
             </div>
         </div>
-    </div>
-    <div class="col-md-12 col-xs-12 col-sm-12 col-lg-12 doc_titulo cinteres">
-        <div class="form-group">
-            <label for="txth_doc_titulo" class="col-sm-3 col-md-3 col-xs-3 col-lg-3 control-label keyupmce"><?= Yii::t("formulario", "Title") ?></label>
-            <div class="col-sm-9 col-md-9 col-xs-9 col-lg-9">
-                <?= Html::hiddenInput('txth_doc_titulo', '', ['id' => 'txth_doc_titulo']); ?>
-                <?php
-                echo CFileInputAjax::widget([
-                    'id' => 'txt_doc_titulo',
-                    'name' => 'txt_doc_titulo',
-                    'pluginLoading' => false,
-                    'showMessage' => false,
-                    'pluginOptions' => [
-                        'showPreview' => false,
-                        'showCaption' => true,
-                        'showRemove' => true,
-                        'showUpload' => false,
-                        'showCancel' => false,
-                        'browseClass' => 'btn btn-primary btn-block',
-                        'browseIcon' => '<i class="fa fa-folder-open"></i> ',
-                        'browseLabel' => "Subir Archivo",
-                        'uploadUrl' => Url::to(['/inscripcionadmision/saveinscripciontemp']),
-                        'maxFileSize' => Yii::$app->params["MaxFileSize"], // en Kbytes
-                        'uploadExtraData' => 'javascript:function (previewId,index) {
-            return {"upload_file": true, "name_file": "doc_titulo", "inscripcion_id": $("#txth_twin_id").val()};
-        }',
-                    ],
-                    'pluginEvents' => [
-                        "filebatchselected" => "function (event) {
-        $('#txth_doc_titulo').val($('#txt_doc_titulo').val());
-        $('#txt_doc_titulo').fileinput('upload');
-    }",
-                        "fileuploaderror" => "function (event, data, msg) {
-        $(this).parent().parent().children().first().addClass('hide');
-        $('#txth_doc_titulo').val('');
-        //showAlert('NO_OK', 'error', {'wtmessage': objLang.Error_to_process_File__Try_again_, 'title': objLang.Error});   
-    }",
-                        "filebatchuploadcomplete" => "function (event, files, extra) { 
-        $(this).parent().parent().children().first().addClass('hide');
-    }",
-                        "filebatchuploadsuccess" => "function (event, data, previewId, index) {
-        var form = data.form, files = data.files, extra = data.extra,
-        response = data.response, reader = data.reader;
-        $(this).parent().parent().children().first().addClass('hide');
-        var acciones = [{id: 'reloadpage', class: 'btn btn-primary', value: objLang.Accept, callback: 'reloadPage'}];
-        //showAlert('OK', 'Success', {'wtmessage': objLang.File_uploaded_successfully__Do_you_refresh_the_web_page_, 'title': objLang.Success, 'acciones': acciones});  
-    }",
-                        "fileuploaded" => "function (event, data, previewId, index) {
-        $(this).parent().parent().children().first().addClass('hide');
-        var acciones = [{id: 'reloadpage', class: 'btn btn-primary', value: objLang.Accept, callback: 'reloadPage'}];
-        //showAlert('OK', 'Success', {'wtmessage': objLang.File_uploaded_successfully__Do_you_refresh_the_web_page_, 'title': objLang.Success, 'acciones': acciones});                              
-    }",
-                    ],
-                ]);
-                ?>
-            </div>
-        </div>        
-    </div>    
+    </div>     
     <div class="col-md-12 col-xs-12 col-sm-12 col-lg-12 doc_dni cinteres">
         <div class="form-group">
             <label for="txth_doc_dni" class="col-sm-3 col-md-3 col-xs-3 col-lg-3 control-label keyupmce"><?= Yii::t("formulario", "Identification document") ?></label>
@@ -104,7 +47,7 @@ $leyenda = '<div class="col-md-12 col-xs-12 col-sm-12 col-lg-12">
                         'browseClass' => 'btn btn-primary btn-block',
                         'browseIcon' => '<i class="fa fa-folder-open"></i> ',
                         'browseLabel' => "Subir Archivo",
-                        'uploadUrl' => Url::to(['/inscripcionadmision/saveinscripciontemp']),
+                        'uploadUrl' => Url::to(['/inscripcioneducacioncontinua/saveinscripciontemp']),
                         'maxFileSize' => Yii::$app->params["MaxFileSize"], // en Kbytes
                         'uploadExtraData' => 'javascript:function (previewId,index) {
             return {"upload_file": true, "name_file": "doc_dni", "inscripcion_id": $("#txth_twin_id").val()};
@@ -142,15 +85,15 @@ $leyenda = '<div class="col-md-12 col-xs-12 col-sm-12 col-lg-12">
         </div>
     </div>
 
-    <div class="col-md-12 col-xs-12 col-sm-12 col-lg-12" id="divCertvota" style="display: block">
+    <div class="col-md-12 col-xs-12 col-sm-12 col-lg-12" id="divFormulario" style="display: none">
         <div class="form-group">
-            <label for="txth_doc_certvota" class="col-sm-3 col-md-3 col-xs-3 col-lg-3 control-label keyupmce"><?= Yii::t("formulario", "Voting Certificate") ?></label>
+            <label for="txth_doc_formulario" class="col-sm-3 col-md-3 col-xs-3 col-lg-3 control-label keyupmce"><?= Yii::t("formulario", "Formulario Inscripción") ?></label>
             <div class="col-sm-9 col-md-9 col-xs-9 col-lg-9">
-                <?= Html::hiddenInput('txth_doc_certvota', '', ['id' => 'txth_doc_certvota']); ?>
+                <?= Html::hiddenInput('txth_doc_formulario', '', ['id' => 'txth_doc_formulario']); ?>
                 <?php
                 echo CFileInputAjax::widget([
-                    'id' => 'txt_doc_certvota',
-                    'name' => 'txt_doc_certvota',
+                    'id' => 'txt_doc_formulario',
+                    'name' => 'txt_doc_formulario',
                     'pluginLoading' => false,
                     'showMessage' => false,
                     'pluginOptions' => [
@@ -162,20 +105,20 @@ $leyenda = '<div class="col-md-12 col-xs-12 col-sm-12 col-lg-12">
                         'browseClass' => 'btn btn-primary btn-block',
                         'browseIcon' => '<i class="fa fa-folder-open"></i> ',
                         'browseLabel' => "Subir Archivo",
-                        'uploadUrl' => Url::to(['/inscripcionadmision/saveinscripciontemp']),
+                        'uploadUrl' => Url::to(['/inscripcioneducacioncontinua/saveinscripciontemp']),
                         'maxFileSize' => Yii::$app->params["MaxFileSize"], // en Kbytes
                         'uploadExtraData' => 'javascript:function (previewId,index) {
-            return {"upload_file": true, "name_file": "doc_certvota", "inscripcion_id": $("#txth_twin_id").val()};
+            return {"upload_file": true, "name_file": "doc_formulario", "inscripcion_id": $("#txth_twin_id").val()};
         }',
                     ],
                     'pluginEvents' => [
                         "filebatchselected" => "function (event) {
-        $('#txth_doc_certvota').val($('#txt_doc_certvota').val());
-        $('#txt_doc_certvota').fileinput('upload');
+        $('#txth_doc_formulario').val($('#txt_doc_formulario').val());
+        $('#txt_doc_formulario').fileinput('upload');
     }",
                         "fileuploaderror" => "function (event, data, msg) {
         $(this).parent().parent().children().first().addClass('hide');
-        $('#txth_doc_certvota').val('');
+        $('#txth_doc_formulario').val('');
         //showAlert('NO_OK', 'error', {'wtmessage': objLang.Error_to_process_File__Try_again_, 'title': objLang.Error});   
     }",
                         "filebatchuploadcomplete" => "function (event, files, extra) { 
@@ -198,241 +141,7 @@ $leyenda = '<div class="col-md-12 col-xs-12 col-sm-12 col-lg-12">
                 ?>
             </div>
         </div>
-    </div>
-    <div class="col-md-12 col-xs-12 col-sm-12 col-lg-12 doc_foto cinteres">
-        <div class="form-group">
-            <label for="txth_doc_foto" class="col-sm-3 col-md-3 col-xs-3 col-lg-3 control-label keyupmce"><?= Yii::t("formulario", "Foto") ?></label>
-            <div class="col-sm-9 col-md-9 col-xs-9 col-lg-9">
-                <?= Html::hiddenInput('txth_doc_foto', '', ['id' => 'txth_doc_foto']); ?>
-                <?php
-                echo CFileInputAjax::widget([
-                    'id' => 'txt_doc_foto',
-                    'name' => 'txt_doc_foto',
-                    'pluginLoading' => false,
-                    'showMessage' => false,
-                    'pluginOptions' => [
-                        'showPreview' => false,
-                        'showCaption' => true,
-                        'showRemove' => true,
-                        'showUpload' => false,
-                        'showCancel' => false,
-                        'browseClass' => 'btn btn-primary btn-block',
-                        'browseIcon' => '<i class="fa fa-folder-open"></i> ',
-                        'browseLabel' => "Subir Archivo",
-                        'uploadUrl' => Url::to(['/inscripcionadmision/saveinscripciontemp']),
-                        'maxFileSize' => Yii::$app->params["MaxFileSize"], // en Kbytes
-                        'uploadExtraData' => 'javascript:function (previewId,index) {
-            return {"upload_file": true, "name_file": "doc_foto", "inscripcion_id": $("#txth_twin_id").val()};
-        }',
-                    ],
-                    'pluginEvents' => [
-                        "filebatchselected" => "function (event) {
-        $('#txth_doc_foto').val($('#txt_doc_foto').val());
-        $('#txt_doc_foto').fileinput('upload');
-    }",
-                        "fileuploaderror" => "function (event, data, msg) {
-        $(this).parent().parent().children().first().addClass('hide');
-        $('#txth_doc_adj_disi').val('');
-        //showAlert('NO_OK', 'error', {'wtmessage': objLang.Error_to_process_File__Try_again_, 'title': objLang.Error});   
-    }",
-                        "filebatchuploadcomplete" => "function (event, files, extra) { 
-        $(this).parent().parent().children().first().addClass('hide');
-    }",
-                        "filebatchuploadsuccess" => "function (event, data, previewId, index) {
-        var form = data.form, files = data.files, extra = data.extra,
-        response = data.response, reader = data.reader;
-        $(this).parent().parent().children().first().addClass('hide');
-        var acciones = [{id: 'reloadpage', class: 'btn btn-primary', value: objLang.Accept, callback: 'reloadPage'}];
-        //showAlert('OK', 'Success', {'wtmessage': objLang.File_uploaded_successfully__Do_you_refresh_the_web_page_, 'title': objLang.Success, 'acciones': acciones});  
-    }",
-                        "fileuploaded" => "function (event, data, previewId, index) {
-        $(this).parent().parent().children().first().addClass('hide');
-        var acciones = [{id: 'reloadpage', class: 'btn btn-primary', value: objLang.Accept, callback: 'reloadPage'}];
-        //showAlert('OK', 'Success', {'wtmessage': objLang.File_uploaded_successfully__Do_you_refresh_the_web_page_, 'title': objLang.Success, 'acciones': acciones});                              
-    }",
-                    ],
-                ]);
-                ?>
-            </div>
-        </div>
-    </div>
-    <div  id="divCertificado" style="display: none">   
-        <!--<div class="col-md-12 col-xs-12 col-sm-12 col-lg-12 doc_certificado cinteres">
-            <div class="form-group">
-                <label for="txth_doc_certificado" class="col-sm-3 col-md-3 col-xs-3 col-lg-3 control-label keyupmce"><?= Yii::t("formulario", "Materials Certificate") ?></label>
-                <div class="col-sm-9 col-md-9 col-xs-9 col-lg-9">
-                    <?= Html::hiddenInput('txth_doc_certificado', '', ['id' => 'txth_doc_certificado']); ?>
-                    <?php
-                    echo CFileInputAjax::widget([
-                        'id' => 'txt_doc_certificado',
-                        'name' => 'txt_doc_certificado',
-                        'pluginLoading' => false,
-                        'showMessage' => false,
-                        'pluginOptions' => [
-                            'showPreview' => false,
-                            'showCaption' => true,
-                            'showRemove' => true,
-                            'showUpload' => false,
-                            'showCancel' => false,
-                            'browseClass' => 'btn btn-primary btn-block',
-                            'browseIcon' => '<i class="fa fa-folder-open"></i> ',
-                            'browseLabel' => "Subir Archivo",
-                            'uploadUrl' => Url::to(['/inscripcionadmision/saveinscripciontemp']),
-                            'maxFileSize' => Yii::$app->params["MaxFileSize"], // en Kbytes
-                            'uploadExtraData' => 'javascript:function (previewId,index) {
-                return {"upload_file": true, "name_file": "doc_certificado", "inscripcion_id": $("#txth_twin_id").val()};
-            }',
-                        ],
-                        'pluginEvents' => [
-                            "filebatchselected" => "function (event) {
-            $('#txth_doc_certificado').val($('#txt_doc_certificado').val());
-            $('#txt_doc_certificado').fileinput('upload');
-        }",
-                            "fileuploaderror" => "function (event, data, msg) {
-            $(this).parent().parent().children().first().addClass('hide');
-            $('#txth_doc_certificado').val('');
-            //showAlert('NO_OK', 'error', {'wtmessage': objLang.Error_to_process_File__Try_again_, 'title': objLang.Error});   
-        }",
-                            "filebatchuploadcomplete" => "function (event, files, extra) { 
-            $(this).parent().parent().children().first().addClass('hide');
-        }",
-                            "filebatchuploadsuccess" => "function (event, data, previewId, index) {
-            var form = data.form, files = data.files, extra = data.extra,
-            response = data.response, reader = data.reader;
-            $(this).parent().parent().children().first().addClass('hide');
-            var acciones = [{id: 'reloadpage', class: 'btn btn-primary', value: objLang.Accept, callback: 'reloadPage'}];
-            //showAlert('OK', 'Success', {'wtmessage': objLang.File_uploaded_successfully__Do_you_refresh_the_web_page_, 'title': objLang.Success, 'acciones': acciones});  
-        }",
-                            "fileuploaded" => "function (event, data, previewId, index) {
-            $(this).parent().parent().children().first().addClass('hide');
-            var acciones = [{id: 'reloadpage', class: 'btn btn-primary', value: objLang.Accept, callback: 'reloadPage'}];
-            //showAlert('OK', 'Success', {'wtmessage': objLang.File_uploaded_successfully__Do_you_refresh_the_web_page_, 'title': objLang.Success, 'acciones': acciones});                              
-        }",
-                        ],
-                    ]);
-                    ?>
-                </div>
-            </div>
-        </div>-->
-    
-        <?php //Aqui voy a colocar la informacion de de la hoja de vida  ?>
-        <div class="col-md-12 col-xs-12 col-sm-12 col-lg-12 doc_hoja_vida">
-            <div class="form-group">
-                <label for="txth_doc_hojavida" class="col-sm-3 col-md-3 col-xs-3 col-lg-3 control-label keyupmce"><?= Yii::t("formulario", "Curriculum") ?></label>
-                <div class="col-sm-9 col-md-9 col-xs-9 col-lg-9">
-                    <?= Html::hiddenInput('txth_doc_hojavida', '', ['id' => 'txth_doc_hojavida']); ?>
-                    <?php
-                    echo CFileInputAjax::widget([
-                        'id' => 'txt_doc_hoja_vida',
-                        'name' => 'txt_doc_hoja_vida',
-                        'pluginLoading' => false,
-                        'showMessage' => false,
-                        'pluginOptions' => [
-                            'showPreview' => false,
-                            'showCaption' => true,
-                            'showRemove' => true,
-                            'showUpload' => false,
-                            'showCancel' => false,
-                            'browseClass' => 'btn btn-primary btn-block',
-                            'browseIcon' => '<i class="fa fa-folder-open"></i> ',
-                            'browseLabel' => "Subir Archivo",
-                            'uploadUrl' => Url::to(['/inscripcionadmision/saveinscripciontemp']),
-                            'maxFileSize' => Yii::$app->params["MaxFileSize"], // en Kbytes
-                            'uploadExtraData' => 'javascript:function (previewId,index) {
-                return {"upload_file": true, "name_file": "doc_hojavida", "inscripcion_id": $("#txth_twin_id").val()};
-            }',
-                        ],
-                        'pluginEvents' => [
-                            "filebatchselected" => "function (event) {
-            $('#txth_doc_hojavida').val($('#txt_doc_hoja_vida').val());
-            $('#txt_doc_hoja_vida').fileinput('upload');
-        }",
-                            "fileuploaderror" => "function (event, data, msg) {
-            $(this).parent().parent().children().first().addClass('hide');
-            $('#txth_doc_hojavida').val('');
-            //showAlert('NO_OK', 'error', {'wtmessage': objLang.Error_to_process_File__Try_again_, 'title': objLang.Error});   
-        }",
-                            "filebatchuploadcomplete" => "function (event, files, extra) { 
-            $(this).parent().parent().children().first().addClass('hide');
-        }",
-                            "filebatchuploadsuccess" => "function (event, data, previewId, index) {
-            var form = data.form, files = data.files, extra = data.extra,
-            response = data.response, reader = data.reader;
-            $(this).parent().parent().children().first().addClass('hide');
-            var acciones = [{id: 'reloadpage', class: 'btn btn-primary', value: objLang.Accept, callback: 'reloadPage'}];
-            //showAlert('OK', 'Success', {'wtmessage': objLang.File_uploaded_successfully__Do_you_refresh_the_web_page_, 'title': objLang.Success, 'acciones': acciones});  
-        }",
-                            "fileuploaded" => "function (event, data, previewId, index) {
-            $(this).parent().parent().children().first().addClass('hide');
-            var acciones = [{id: 'reloadpage', class: 'btn btn-primary', value: objLang.Accept, callback: 'reloadPage'}];
-            //showAlert('OK', 'Success', {'wtmessage': objLang.File_uploaded_successfully__Do_you_refresh_the_web_page_, 'title': objLang.Success, 'acciones': acciones});                              
-        }",
-                        ],
-                    ]);
-                    ?>
-                </div>
-            </div>
-        </div>
-        <?php //Fin de la hoja de vida  ?>
-
-    </div>
-    <div class="col-md-12 col-xs-12 col-sm-12 col-lg-12" id="divDocumAceptacion" style="display: none">
-        <div class="form-group">
-            <label for="txth_doc_aceptacion" class="col-sm-3 col-md-3 col-xs-3 col-lg-3 control-label keyupmce"><?= Yii::t("formulario", "Documento Aceptación (Carta)") ?></label>
-            <div class="col-sm-9 col-md-9 col-xs-9 col-lg-9">
-                <?= Html::hiddenInput('txth_doc_aceptacion', '', ['id' => 'txth_doc_aceptacion']); ?>
-                <?php
-                echo CFileInputAjax::widget([
-                    'id' => 'txt_doc_aceptacion',
-                    'name' => 'txt_doc_aceptacion',
-                    'pluginLoading' => false,
-                    'showMessage' => false,
-                    'pluginOptions' => [
-                        'showPreview' => false,
-                        'showCaption' => true,
-                        'showRemove' => true,
-                        'showUpload' => false,
-                        'showCancel' => false,
-                        'browseClass' => 'btn btn-primary btn-block',
-                        'browseIcon' => '<i class="fa fa-folder-open"></i> ',
-                        'browseLabel' => "Subir Archivo",
-                        'uploadUrl' => Url::to(['/inscripcionadmision/saveinscripciontemp']),
-                        'maxFileSize' => Yii::$app->params["MaxFileSize"], // en Kbytes
-                        'uploadExtraData' => 'javascript:function (previewId,index) {
-            return {"upload_file": true, "name_file": "doc_aceptacion", "inscripcion_id": $("#txth_twin_id").val()};
-        }',
-                    ],
-                    'pluginEvents' => [
-                        "filebatchselected" => "function (event) {
-        $('#txth_doc_aceptacion').val($('#txt_doc_aceptacion').val());
-        $('#txt_doc_aceptacion').fileinput('upload');
-    }",
-                        "fileuploaderror" => "function (event, data, msg) {
-        $(this).parent().parent().children().first().addClass('hide');
-        $('#txth_doc_aceptacion').val('');
-        //showAlert('NO_OK', 'error', {'wtmessage': objLang.Error_to_process_File__Try_again_, 'title': objLang.Error});   
-    }",
-                        "filebatchuploadcomplete" => "function (event, files, extra) { 
-        $(this).parent().parent().children().first().addClass('hide');
-    }",
-                        "filebatchuploadsuccess" => "function (event, data, previewId, index) {
-        var form = data.form, files = data.files, extra = data.extra,
-        response = data.response, reader = data.reader;
-        $(this).parent().parent().children().first().addClass('hide');
-        var acciones = [{id: 'reloadpage', class: 'btn btn-primary', value: objLang.Accept, callback: 'reloadPage'}];
-        //showAlert('OK', 'Success', {'wtmessage': objLang.File_uploaded_successfully__Do_you_refresh_the_web_page_, 'title': objLang.Success, 'acciones': acciones});  
-    }",
-                        "fileuploaded" => "function (event, data, previewId, index) {
-        $(this).parent().parent().children().first().addClass('hide');
-        var acciones = [{id: 'reloadpage', class: 'btn btn-primary', value: objLang.Accept, callback: 'reloadPage'}];
-        //showAlert('OK', 'Success', {'wtmessage': objLang.File_uploaded_successfully__Do_you_refresh_the_web_page_, 'title': objLang.Success, 'acciones': acciones});                              
-    }",
-                    ],
-                ]);
-                ?>
-            </div>
-        </div>
-    </div>
+    </div>    
     <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
         <div class="form-group">                        
             <div class="col-lg-3 col-md-3 col-sm-3 col-xs-3" style="text-align: right;">

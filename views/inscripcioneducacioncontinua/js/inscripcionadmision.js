@@ -92,13 +92,7 @@ $(document).ready(function () {
                             showAlert("NO_OK", "error", mensaje);
                         }
                     }
-                } /*else {
-                 if ($('#txth_doc_hojavida').val() == "") {
-                 error++;
-                 var mensaje = {wtmessage: "Debe adjuntar hoja de vida.", title: "Información"};
-                 showAlert("NO_OK", "error", mensaje);
-                 }
-                 }*/
+                } 
             }
         }
         if ($('#cmb_convenio_empresa').val() > 0) {
@@ -107,18 +101,7 @@ $(document).ready(function () {
                 var mensaje = {wtmessage: "Debe adjuntar documento de aceptación.", title: "Información"};
                 showAlert("NO_OK", "error", mensaje);
             }
-        }
-        /*Gviteri: 11/jun/2019 indicaron que no se solicite el documento (Diana López).
-         * if ($('#cmb_unidad_solicitud').val() == 2) {
-         if ($('#txth_doc_certificado').val() == "") {
-         error++;
-         var mensaje = {wtmessage: "Debe adjuntar certificado de materias.", title: "Información"};
-         showAlert("NO_OK", "error", mensaje);
-         }
-         //alert($('#cmb_tipo_dni').val());
-         
-         }*/
-        //alert(error);
+        }        
         if (error == 0) {
             guardarInscripcion('Update', '2');
         }
