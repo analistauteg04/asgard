@@ -159,6 +159,7 @@ class InscripcioneducacioncontinuaController extends \yii\web\Controller {
                     $dni_archivoOld = Yii::$app->params["documentFolder"] . "solicitudadmision/" . $inscripcion_id . "/doc_dni_per_" . $inscripcion_id . "." . $typeFile;
                     $dni_archivo = InscripcionAdmision::addLabelTimeDocumentos($inscripcion_id, $dni_archivoOld, $timeSt);
                     $data["DATA_1"][0]["ruta_doc_dni"] = $dni_archivo;
+                    $data['opcion'] = 2;
                     if ($dni_archivo === false)
                         throw new Exception('Error doc Dni no renombrado.');
                 }                

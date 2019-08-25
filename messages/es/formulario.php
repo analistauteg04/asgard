@@ -505,6 +505,7 @@ return [
     "Registered Records" => "Expedientes Registrados",
     "Register of Events" => "Registro de Eventos",
     "Registration Date" => "Fecha Registro",
+    "Registration Form" => "Formulario Inscripción",
     "Registration Number" => "Número Registro",
     "Registration Payments for Collections" => "Registro Pagos por Colecturía",
     "Rejected" => "Rechazado",

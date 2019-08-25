@@ -37,7 +37,11 @@ class InscripcionAdmision extends \yii\db\ActiveRecord {
         $trans = $con->beginTransaction();
         try {
             $twin_id = $this->insertarDataInscripcion($con, $data["DATA_1"]);
-            $data = $this->consultarDatosInscripcion($twin_id);
+            if (empty($data['opcion'])) {
+                $data = $this->consultarDatosInscripcion($twin_id);
+            } else {
+                $data = $this->consultarDatosInscripcionContinua($twin_id);
+            }
             $trans->commit();
             //RETORNA DATOS 
             $arroout["status"] = TRUE;
@@ -63,7 +67,11 @@ class InscripcionAdmision extends \yii\db\ActiveRecord {
         $trans = $con->beginTransaction();
         try {
             $twin_id = $this->updateDataInscripcion($con, $data["DATA_1"]);
-            $data = $this->consultarDatosInscripcion($twin_id);
+            if (empty($data['opcion'])) {
+                $data = $this->consultarDatosInscripcion($twin_id);
+            } else {
+                $data = $this->consultarDatosInscripcionContinua($twin_id);
+            }
             $trans->commit();
             $arroout["status"] = TRUE;
             $arroout["error"] = null;
@@ -341,10 +349,9 @@ class InscripcionAdmision extends \yii\db\ActiveRecord {
                         $mod_emp_persona = new EmpresaPersona();
                         if (!empty($dataReg["empresa"])) {
                             $emp_id = $dataReg["empresa"];
-                        }
-                        else{
+                        } else {
                             $emp_id = 1;
-                        }                        
+                        }
                         $keys = ['emp_id', 'per_id', 'eper_estado', 'eper_estado_logico'];
                         $parametros = [$emp_id, $id_persona, 1, 1];
                         $emp_per_id = $mod_emp_persona->consultarIdEmpresaPersona($id_persona, $emp_id);
@@ -714,6 +721,74 @@ class InscripcionAdmision extends \yii\db\ActiveRecord {
         } else
             return false;
         return true;
+    }
+
+    /**
+     * Function consultarDatosInscripcionContinua
+     * @author  Grace Viteri <analistadesarrollo01@uteg.edu.ec>
+     * @param   
+     * @return  $resultData (Obtiene los datos de inscripción y el precio de la solicitud.)
+     */
+    public function consultarDatosInscripcionContinua($twin_id) {
+        $con = \Yii::$app->db_captacion;
+        $con2 = \Yii::$app->db_facturacion;
+        $con1 = \Yii::$app->db_academico;
+        $estado = 1;
+        $estado_precio = 'A';
+
+        $sql = "
+                SELECT  ua.uaca_nombre unidad, 
+                        m.mod_nombre modalidad,
+                        mest.mest_nombre carrera,
+                        mest.mest_id as id_carrera,                        
+                        ip.ipre_precio as precio,
+                        twin_nombre,
+                        twin_apellido,
+                        twin_numero,
+                        twin_correo,
+                        twin_pais,
+                        twin_celular,
+                        twi.uaca_id,
+                        twi.mod_id,
+                        twi.car_id,
+                        twin_metodo_ingreso,
+                        conuteg_id,
+                        ruta_doc_titulo,
+                        ruta_doc_dni,                        
+                        ruta_doc_certvota,
+                        ruta_doc_foto,
+                        ruta_doc_certificado,                        
+                        ruta_doc_hojavida,
+                        twin_dni,
+                        ruta_doc_aceptacion,
+                        twi.cemp_id,
+                        twin_tipo_pago,
+                        ruta_doc_pago
+                FROM  " . $con->dbname . ".temporal_wizard_inscripcion twi inner join " . $con1->dbname . ".unidad_academica ua on ua.uaca_id = twi.uaca_id
+                     inner join " . $con1->dbname . ".modalidad m on m.mod_id = twi.mod_id
+                     inner join " . $con1->dbname . ".modulo_estudio mest on mest.mest_id = twi.car_id                     
+                     left join " . $con2->dbname . ".item_metodo_unidad imi on (imi.uaca_id = twi.uaca_id and imi.mod_id = twi.mod_id and imi.mest_id = twi.car_id)
+                     left join  " . $con2->dbname . ".item_precio ip on ip.ite_id = imi.ite_id
+                     left join  " . $con2->dbname . ".descuento_item as ditem on ditem.ite_id=imi.ite_id
+                     left join  " . $con2->dbname . ".detalle_descuento_item as ddit on ddit.dite_id=ditem.dite_id
+                WHERE twi.twin_id = :twin_id and                     
+                     ip.ipre_estado_precio = 'A' AND
+                     ua.uaca_estado = :estado AND
+                     ua.uaca_estado_logico = :estado AND
+                     m.mod_estado = :estado AND
+                     m.mod_estado_logico = :estado AND
+                     mest.mest_estado = :estado AND
+                     mest.mest_estado_logico = :estado AND
+                     imi.imni_estado = :estado AND
+                     imi.imni_estado_logico = :estado AND
+                     ip.ipre_estado = :estado AND
+                     ip.ipre_estado_logico = '1'";
+        $comando = $con->createCommand($sql);
+        $comando->bindParam(":estado", $estado, \PDO::PARAM_STR);
+        $comando->bindParam(":twin_id", $twin_id, \PDO::PARAM_INT);
+        $comando->bindParam(":estado_precio", $estado_precio, \PDO::PARAM_STR);
+        $resultData = $comando->queryOne();
+        return $resultData;
     }
 
 }
