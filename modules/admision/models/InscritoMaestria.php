@@ -379,7 +379,7 @@ class InscritoMaestria extends \yii\db\ActiveRecord {
         }
     }
 
-    function getAllInscritosGrid($search = NULL, $date_ini = NULL, $date_end = NULL, $dataProvider = false) {
+    function getAllInscritosGrid($search = NULL, $date_ini = NULL, $date_end = NULL, $agente = NULL, $tipo_convenio = NULL, $grupo = NULL, $dataProvider = false) {
         //$iduser    = Yii::$app->session->get('PB_iduser', FALSE);
         //$idempresa = Yii::$app->session->get('PB_idempresa', FALSE);
         $search_cond = "%" . $search . "%";
@@ -398,6 +398,15 @@ class InscritoMaestria extends \yii\db\ActiveRecord {
         }
         if (isset($date_end) && $date_end != "") {
             $str_search .= "im.imae_fecha_inscripcion <= :dateend AND ";
+        }
+        if (isset($grupo) && $grupo > 0){
+            $str_search .= "im.gint_id = :grupo AND ";
+        }
+        if (isset($agente) && $agente > 0){
+            $str_search .= "im.imae_agente = :agente AND ";
+        }
+        if (isset($tipo_convenio) && $tipo_convenio >= 0){
+            $str_search .= "im.cemp_id = :convenio AND ";
         }
         $con = \Yii::$app->db_crm;
         $trans = $con->getTransaction();
@@ -450,6 +459,15 @@ class InscritoMaestria extends \yii\db\ActiveRecord {
         }
         if (isset($date_end) && $date_end != "") {
             $comando->bindParam(":dateend", $date_end, \PDO::PARAM_STR);
+        }
+        if (isset($grupo) && $grupo > 0){
+            $comando->bindParam(":grupo", $grupo, \PDO::PARAM_INT);
+        }
+        if (isset($agente) && $agente > 0){
+            $comando->bindParam(":agente", $agente, \PDO::PARAM_INT);
+        }
+        if (isset($tipo_convenio) && $tipo_convenio >= 0){
+            $comando->bindParam(":convenio", $tipo_convenio, \PDO::PARAM_INT);
         }
         $res = $comando->queryAll();
         if ($dataProvider) {

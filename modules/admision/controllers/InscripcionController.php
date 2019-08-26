@@ -37,12 +37,28 @@ class InscripcionController extends \app\components\CController {
             $data = Yii::$app->request->get();
             if (isset($data["search"])) {
                 return $this->renderPartial('index-grid', [
-                            "model" => $model->getAllInscritosGrid($data["search"], $data["txt_fecha_ini"], $data["txt_fecha_fin"], true)
+                            "model" => $model->getAllInscritosGrid(
+                                $data["search"], 
+                                $data["txt_fecha_ini"],
+                                $data["txt_fecha_fin"], 
+                                $data["cmb_agente"], 
+                                $data["cmb_tipo_convenio"], 
+                                $data["cmb_grupo_introductorio"], 
+                                true)
                 ]);
             }
         }
+        $modgeneral = new ContactoGeneral();
+        $mod_grupo = new GrupoIntroductorio();
+        $mod_conempresa = new ConvenioEmpresa();
+        $arr_agente = $modgeneral->getAgenteInscrito();
+        $arr_grupo = $mod_grupo->consultarGrupoIntroductorio();
+        $arr_convempresa = $mod_conempresa->consultarConvenioEmpresa();
         return $this->render('index', [
-                    'model' => $model->getAllInscritosGrid(NULL, NULL, NULL, true)
+                    'model' => $model->getAllInscritosGrid(NULL, NULL, NULL, NULL, NULL, NULL, true),
+                    "arr_agente" => ArrayHelper::map(array_merge([["id" => "0", "value" => "Seleccionar"]], $arr_agente), "id", "value"),
+                    "arr_convenio_empresa" => ArrayHelper::map($arr_convempresa, "id", "name"),
+                    "arr_grupo" => ArrayHelper::map($arr_grupo, "id", "value"),
         ]);
     }
 
@@ -207,13 +223,22 @@ class InscripcionController extends \app\components\CController {
         $mod_inscrito = new InscritoMaestria();
         $data = Yii::$app->request->get();
         $arrSearch["search"] = $data['search'];
-        $arrSearch["f_ini"] = $data['fecha_ini'];
-        $arrSearch["f_end"] = $data['fecha_end'];
+        $arrSearch["f_ini"]  = $data['fecha_ini'];
+        $arrSearch["f_end"]  = $data['fecha_end'];
+        $arrSearch["agente"] = $data["agente"];
+        $arrSearch["convenio"] = $data["convenio"];
+        $arrSearch["grupo"]    = $data["grupo"];
         $arrData = array();
         if (empty($arrSearch)) {
-            $arrData = $mod_inscrito->getAllInscritosGrid(NULL, NULL, NULL, false);
+            $arrData = $mod_inscrito->getAllInscritosGrid(NULL, NULL, NULL, NULL, NULL, NULL, false);
         } else {
-            $arrData = $mod_inscrito->getAllInscritosGrid($arrSearch["search"], $arrSearch["f_ini"], $arrSearch["f_end"], false);
+            $arrData = $mod_inscrito->getAllInscritosGrid($arrSearch["search"], 
+                                                        $arrSearch["f_ini"],
+                                                        $arrSearch["f_end"], 
+                                                        $arrSearch["agente"], 
+                                                        $arrSearch["convenio"], 
+                                                        $arrSearch["grupo"], 
+                                                        false);
         }
         $sheetName = "DATA";
         return Utilities::writeReporteXLS($uriFile, $arrHeader, $arrData, $sheetName);

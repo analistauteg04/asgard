@@ -200,11 +200,11 @@ function limpiarDetalle() {
     $('#txt_fecha_pago').val("");
     $('#txt_convenio_listo').val("");
     $('#txt_matricula').val("");
-    $('#txt_titulo').val("");    
+    $('#txt_titulo').val("");
     $('#txt_correo').val("");
     $('#txt_celular').val("");
-    $('#txt_telefono').val(""); 
-    $('#txt_ocupacion').val(""); 
+    $('#txt_telefono').val("");
+    $('#txt_ocupacion').val("");
 
     $('#cmb_tipo_documento').val(0);
     $('#cmb_pais').val(1);
@@ -263,13 +263,13 @@ function objRegistro(indice) {
     rowGrid.imae_pago_inscripcion = $('#txt_pago_inscripcion').val();
     rowGrid.imae_valor_maestria = $('#txt_pago_total').val();
     rowGrid.imae_fecha_pago = $('#txt_fecha_pago').val();
-    rowGrid.imae_convenios = $('#txt_convenio_listo').val();                                           
+    rowGrid.imae_convenios = $('#txt_convenio_listo').val();
     rowGrid.imae_matricula = $('#txt_matricula').val();
-    rowGrid.imae_titulo = $('#txt_titulo').val();    
+    rowGrid.imae_titulo = $('#txt_titulo').val();
     rowGrid.imae_correo = $('#txt_correo').val();
     rowGrid.imae_celular = $('#txt_celular').val();
-    rowGrid.imae_convencional = $('#txt_telefono').val();    
-    rowGrid.imae_ocupacion = $('#txt_ocupacion').val();   
+    rowGrid.imae_convencional = $('#txt_telefono').val();
+    rowGrid.imae_ocupacion = $('#txt_ocupacion').val();
     //rowGrid.pro_otros = ($("#chk_otros").prop("checked")) ? 1 : 0;
     rowGrid.accion = "new";
     return rowGrid;
@@ -348,6 +348,9 @@ function searchModules() {
     arrParams.search = $("#txt_buscarData").val();
     arrParams.txt_fecha_ini = $("#txt_fecha_ini").val();
     arrParams.txt_fecha_fin = $("#txt_fecha_fin").val();
+    arrParams.cmb_agente = $("#cmb_agente").val();
+    arrParams.cmb_tipo_convenio = $("#cmb_tipo_convenio").val();
+    arrParams.cmb_grupo_introductorio = $("#cmb_grupo_introductorio").val();
     $("#grid_inscr_list").PbGridView("applyFilterData", arrParams);
 }
 
@@ -355,7 +358,13 @@ function exportExcel() {
     var search = $('#txt_buscarData').val();
     var f_ini = $('#txt_fecha_ini').val();
     var f_fin = $('#txt_fecha_fin').val();
-    window.location.href = $('#txth_base').val() + "/admision/inscripcion/expexcel?search=" + search + "&fecha_ini=" + f_ini + "&fecha_fin=" + f_fin;
+    var agente = $("#cmb_agente").val();
+    var convenio = $("#cmb_tipo_convenio").val();
+    var grupo = $("#cmb_grupo_introductorio").val();
+    window.location.href = $('#txth_base').val() + "/admision/inscripcion/expexcel?search=" + search +
+        "&fecha_ini=" + f_ini + "&fecha_fin=" + f_fin +
+        "&agente" + agente + "&convenio=" + convenio +
+        "&grupo" + grupo;
 }
 
 function eliminarRegistro(id) {
@@ -380,25 +389,26 @@ function borrarRegistro(id, temp) {
     var arrParams = new Object();
     arrParams.reg_id = id;
     if (!validateForm()) {
-        requestHttpAjax(link, arrParams, function (response) {
+        requestHttpAjax(link, arrParams, function(response) {
             showAlert(response.status, response.label, response.message);
             if (!response.error) {
-                setTimeout(function () {
+                setTimeout(function() {
                     window.location.href = $('#txth_base').val() + "/admision/inscripcion/index";
                 }, 3000);
             }
         }, true);
     }
 }
+
 function edit() {
     var codigo = $('#txth_imae_id').val();
     //var tper_id = $('#txth_tper_id').val();
-    window.location.href = $('#txth_base').val() + "/admision/inscripcion/edit?codigo=" + codigo /*+ "&tper_id=" + tper_id*/;
+    window.location.href = $('#txth_base').val() + "/admision/inscripcion/edit?codigo=" + codigo /*+ "&tper_id=" + tper_id*/ ;
 }
 
 function update() {
     var link = $('#txth_base').val() + "/admision/inscripcion/update";
-    var arrParams = new Object(); 
+    var arrParams = new Object();
     arrParams.imae_id = $('#txth_imae_id').val();
     arrParams.convenio = $('#cmb_tipo_convenio').val();
     arrParams.grupo_introductorio = $('#cmb_grupo_introductorio').val();
@@ -431,12 +441,12 @@ function update() {
     arrParams.celular = $('#txt_celular').val();
     arrParams.convencional = $('#txt_telefono').val();
     arrParams.ocupacion = $('#txt_ocupacion').val();
-    
+
     if (!validateForm()) {
-        requestHttpAjax(link, arrParams, function (response) {
+        requestHttpAjax(link, arrParams, function(response) {
             showAlert(response.status, response.label, response.message);
-            if (response.status){
-                setTimeout(function () {
+            if (response.status) {
+                setTimeout(function() {
                     window.location.href = $('#txth_base').val() + "/admision/inscripcion/index";
                 }, 3000);
             }
