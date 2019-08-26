@@ -306,7 +306,11 @@ class InscripcionAdmision extends \yii\db\ActiveRecord {
         try {
             //Se consulta la información grabada en la tabla temporal.
             $mod_inscripcion = new InscripcionAdmision();
-            $resp_datos = $mod_inscripcion->consultarDatosInscripcion($twinIds);
+            if (empty($dataReg["empresa"])) {
+                $resp_datos = $mod_inscripcion->consultarDatosInscripcion($twinIds);
+            } else {
+                $resp_datos = $mod_inscripcion->consultarDatosInscripcionContinua($twinIds);
+            }
             // He colocado al inicio la informacion para que cargue al principio
             if ($resp_datos) {
                 if (isset($resp_datos['twin_numero']) && strlen($resp_datos['twin_numero']) > 0) {
