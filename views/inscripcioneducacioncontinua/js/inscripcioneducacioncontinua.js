@@ -118,13 +118,13 @@ $(document).ready(function () {
                         if ($('input[name=rdo_forma_pago_dinner]:checked').val() == 1) {
                             PagoDinners(sins_id);
                         } else {
-                            if (uaca_id==3) {                                
+                            if (uaca_id==3) {                                    
                                     switch (mod_id) {
                                         case 1: //online
-                                            window.location.href = "https://www.uteg.edu.ec/pagos-grado-online/";
+                                            window.location.href = "https://www.uteg.edu.ec/pagos-educacion-continua/";
                                             break;                                            
                                         case 2:// presencial
-                                            window.location.href = "https://www.uteg.edu.ec/pago-grado-presencial/";                                                                                        
+                                            window.location.href = "";                                                                                        
                                             break;                                        
                                     }                                                                 
                             }
