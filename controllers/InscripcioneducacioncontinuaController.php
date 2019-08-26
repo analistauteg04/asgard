@@ -7,32 +7,21 @@ use app\models\Utilities;
 use yii\helpers\ArrayHelper;
 use yii\base\Exception;
 use app\models\Persona;
-use app\models\EmpresaPersona;
 use \app\modules\admision\models\SolicitudInscripcion;
 use app\models\Pais;
 use app\modules\admision\models\Interesado;
-use app\modules\admision\models\InteresadoEmpresa;
-use app\models\Usuario;
-use yii\base\Security;
-use app\models\UsuaGrolEper;
 use app\models\Provincia;
 use app\modules\financiero\models\OrdenPago;
-use app\modules\financiero\models\DetalleDescuentoItem;
 use app\models\Canton;
 use app\models\MedioPublicitario;
 use app\modules\academico\models\Modalidad;
 use app\modules\academico\models\UnidadAcademica;
-use yii\helpers\Url;
 use app\modules\admision\models\PersonaGestion;
 use app\modules\admision\models\Oportunidad;
-use app\models\Empresa;
-use app\modules\admision\models\TipoOportunidadVenta;
-use app\modules\admision\models\EstadoContacto;
 use app\modules\admision\models\MetodoIngreso;
-use app\modules\financiero\models\Secuencias;
-//use app\models\Secuencias;
 use app\models\InscripcionAdmision;
 use app\modules\admision\models\ConvenioEmpresa;
+use app\modules\academico\models\ModuloEstudio;
 
 class InscripcioneducacioncontinuaController extends \yii\web\Controller {
 
@@ -52,6 +41,7 @@ class InscripcioneducacioncontinuaController extends \yii\web\Controller {
         $modcanal = new Oportunidad();
         $mod_metodo = new MetodoIngreso();
         $mod_inscripcion = new InscripcionAdmision();
+        $modestudio = new ModuloEstudio();
 
         if (Yii::$app->request->isAjax) {
             $data = Yii::$app->request->post();
@@ -78,7 +68,7 @@ class InscripcioneducacioncontinuaController extends \yii\web\Controller {
                 return Utilities::ajaxResponse('OK', 'alert', Yii::t('jslang', 'Success'), 'false', $message);
             }
             if (isset($data["getcarrera"])) {
-                $carrera = $modcanal->consultarCarreraModalidad($data["unidada"], $data["moda_id"]);
+                $carrera = $modcanal->consultarCursoModalidad($data["unidada"], $data["moda_id"], 3);
                 $message = array("carrera" => $carrera);
                 return Utilities::ajaxResponse('OK', 'alert', Yii::t('jslang', 'Success'), 'false', $message);
             }
@@ -93,10 +83,10 @@ class InscripcioneducacioncontinuaController extends \yii\web\Controller {
         $arr_prov_dom = Provincia::provinciaXPais($pais_id);
         $arr_ciu_dom = Canton::cantonXProvincia($arr_prov_dom[0]["id"]);
         $arr_medio = MedioPublicitario::find()->select("mpub_id AS id, mpub_nombre AS value")->where(["mpub_estado_logico" => "1", "mpub_estado" => "1"])->asArray()->all();
-        $arr_ninteres = $mod_unidad->consultarUnidadAcademicasEmpresa(1);
-        $arr_modalidad = $mod_modalidad->consultarModalidad(1, 1);
+        $arr_ninteres = $mod_unidad->consultarUnidadAcademicasEmpresa(3);
+        $arr_modalidad = $mod_modalidad->consultarModalidad($arr_ninteres[0]["id"], 3);
         $arr_conuteg = $mod_pergestion->consultarConociouteg();
-        $arr_carrerra1 = $modcanal->consultarCarreraModalidad(1, $arr_modalidad[0]["id"]);
+        $arr_carrerra1 = $modestudio->consultarCursoModalidad($arr_ninteres[0]["id"], $arr_modalidad[0]["id"], 3);
         $arr_metodos = $mod_metodo->consultarMetodoUnidadAca_2($arr_ninteres[0]["id"]);
         $mod_conempresa = new ConvenioEmpresa();
         $arr_convempresa = $mod_conempresa->consultarConvenioEmpresa();
@@ -162,79 +152,17 @@ class InscripcioneducacioncontinuaController extends \yii\web\Controller {
             }
             $timeSt = time();
             try {
-                $inscripcion_id = $data["DATA_1"][0]["twin_id"];
-                if (isset($data["DATA_1"][0]["ruta_doc_titulo"]) && $data["DATA_1"][0]["ruta_doc_titulo"] != "") {
-                    $arrIm = explode(".", basename($data["DATA_1"][0]["ruta_doc_titulo"]));
-                    $typeFile = strtolower($arrIm[count($arrIm) - 1]);
-                    $titulo_archivoOld = Yii::$app->params["documentFolder"] . "solicitudadmision/" . $inscripcion_id . "/doc_titulo_per_" . $inscripcion_id . "." . $typeFile;
-                    $titulo_archivo = InscripcionAdmision::addLabelTimeDocumentos($inscripcion_id, $titulo_archivoOld, $timeSt);
-                    $data["DATA_1"][0]["ruta_doc_titulo"] = $titulo_archivo;
-                    if ($titulo_archivo === false)
-                        throw new Exception('Error doc Titulo no renombrado.');
-                }
+                $inscripcion_id = $data["DATA_1"][0]["twin_id"];                
                 if (isset($data["DATA_1"][0]["ruta_doc_dni"]) && $data["DATA_1"][0]["ruta_doc_dni"] != "") {
                     $arrIm = explode(".", basename($data["DATA_1"][0]["ruta_doc_dni"]));
                     $typeFile = strtolower($arrIm[count($arrIm) - 1]);
                     $dni_archivoOld = Yii::$app->params["documentFolder"] . "solicitudadmision/" . $inscripcion_id . "/doc_dni_per_" . $inscripcion_id . "." . $typeFile;
                     $dni_archivo = InscripcionAdmision::addLabelTimeDocumentos($inscripcion_id, $dni_archivoOld, $timeSt);
                     $data["DATA_1"][0]["ruta_doc_dni"] = $dni_archivo;
+                    $data['opcion'] = 2;
                     if ($dni_archivo === false)
                         throw new Exception('Error doc Dni no renombrado.');
-                }
-                if (isset($data["DATA_1"][0]["ruta_doc_certvota"]) && $data["DATA_1"][0]["ruta_doc_certvota"] != "") {
-                    $arrIm = explode(".", basename($data["DATA_1"][0]["ruta_doc_certvota"]));
-                    $typeFile = strtolower($arrIm[count($arrIm) - 1]);
-                    $certvota_archivoOld = Yii::$app->params["documentFolder"] . "solicitudadmision/" . $inscripcion_id . "/doc_certvota_per_" . $inscripcion_id . "." . $typeFile;
-                    $certvota_archivo = InscripcionAdmision::addLabelTimeDocumentos($inscripcion_id, $certvota_archivoOld, $timeSt);
-                    $data["DATA_1"][0]["ruta_doc_certvota"] = $certvota_archivo;
-                    if ($certvota_archivo === false)
-                        throw new Exception('Error doc certificado vot. no renombrado.');
-                }
-                if (isset($data["DATA_1"][0]["ruta_doc_foto"]) && $data["DATA_1"][0]["ruta_doc_foto"] != "") {
-                    $arrIm = explode(".", basename($data["DATA_1"][0]["ruta_doc_foto"]));
-                    $typeFile = strtolower($arrIm[count($arrIm) - 1]);
-                    $foto_archivoOld = Yii::$app->params["documentFolder"] . "solicitudadmision/" . $inscripcion_id . "/doc_foto_per_" . $inscripcion_id . "." . $typeFile;
-                    $foto_archivo = InscripcionAdmision::addLabelTimeDocumentos($inscripcion_id, $foto_archivoOld, $timeSt);
-                    $data["DATA_1"][0]["ruta_doc_foto"] = $foto_archivo;
-                    if ($foto_archivo === false)
-                        throw new Exception('Error doc Foto no renombrado.');
-                }
-                /*if (isset($data["DATA_1"][0]["ruta_doc_certificado"]) && $data["DATA_1"][0]["ruta_doc_certificado"] != "") {
-                    $arrIm = explode(".", basename($data["DATA_1"][0]["ruta_doc_certificado"]));
-                    $typeFile = strtolower($arrIm[count($arrIm) - 1]);
-                    $doc_certificadoOld = Yii::$app->params["documentFolder"] . "solicitudadmision/" . $inscripcion_id . "/doc_certificado_per_" . $inscripcion_id . "." . $typeFile;
-                    $doc_certificado = InscripcionAdmision::addLabelTimeDocumentos($inscripcion_id, $doc_certificadoOld, $timeSt);
-                    $data["DATA_1"][0]["ruta_doc_certificado"] = $doc_certificado;
-                    if ($doc_certificado === false)
-                        throw new Exception('Error doc Certificado no renombrado.');
-                }*/
-                if (isset($data["DATA_1"][0]["ruta_doc_hojavida"]) && $data["DATA_1"][0]["ruta_doc_hojavida"] != "") {
-                    $arrIm = explode(".", basename($data["DATA_1"][0]["ruta_doc_hojavida"]));
-                    $typeFile = strtolower($arrIm[count($arrIm) - 1]);
-                    $doc_hojaVidaOld = Yii::$app->params["documentFolder"] . "solicitudadmision/" . $inscripcion_id . "/doc_hojavida_per_" . $inscripcion_id . "." . $typeFile;
-                    $doc_hojaVida = InscripcionAdmision::addLabelTimeDocumentos($inscripcion_id, $doc_hojaVidaOld, $timeSt);
-                    $data["DATA_1"][0]["ruta_doc_hojavida"] = $doc_hojaVida;
-                    if ($doc_hojaVida === false)
-                        throw new Exception('Error doc Hoja de Vida no renombrado.');
-                }
-                if (isset($data["DATA_1"][0]["ruta_doc_aceptacion"]) && $data["DATA_1"][0]["ruta_doc_aceptacion"] != "") {                    
-                    $arrIm = explode(".", basename($data["DATA_1"][0]["ruta_doc_aceptacion"]));                    
-                    $typeFile = strtolower($arrIm[count($arrIm) - 1]);                    
-                    $doc_aceptacionOld = Yii::$app->params["documentFolder"] . "solicitudadmision/" . $inscripcion_id . "/doc_aceptacion_per_" . $inscripcion_id . "." . $typeFile;                    
-                    $doc_aceptacion = InscripcionAdmision::addLabelTimeDocumentos($inscripcion_id, $doc_aceptacionOld, $timeSt);                    
-                    $data["DATA_1"][0]["ruta_doc_aceptacion"] = $doc_aceptacion;                    
-                    if ($doc_aceptacion === false)
-                        throw new Exception('Error documento aceptación.');
-                }
-                if (isset($data["DATA_1"][0]["ruta_doc_pago"]) && $data["DATA_1"][0]["ruta_doc_pago"] != "") {                    
-                    $arrIm = explode(".", basename($data["DATA_1"][0]["ruta_doc_pago"]));                    
-                    $typeFile = strtolower($arrIm[count($arrIm) - 1]);                                                            
-                    $doc_pagoOld = Yii::$app->params["documentFolder"] . "documentoadmision/" . $inscripcion_id . "/pago_". $inscripcion_id . "." . $typeFile;                                         
-                    $doc_pago = InscripcionAdmision::addLabelFechaDocPagos($inscripcion_id, $doc_pagoOld, $fecha_registro);                      
-                    $data["DATA_1"][0]["ruta_doc_pago"] = $doc_pago;                      
-                    if ($doc_pagoOld === false)
-                        throw new Exception('Error al cargar documento de pago.');
-                }                                
+                }                
                 if ($accion == "create" || $accion == "Create") {
                     //Nuevo Registro                        
                     $resul = $model->insertarInscripcion($data);
@@ -257,6 +185,7 @@ class InscripcioneducacioncontinuaController extends \yii\web\Controller {
                         'fecha_transaccion' => $data["fecha_transaccion"],  
                         'doc_pago' => $data["doc_pago"], 
                         'forma_pago' => $data["forma_pago"], 
+                        'empresa' => 3,
                     );                      
                     $resul = $model->insertaOriginal($Ids,$dataRegistro);                    
                 } else if ($accion == "UpdateDepTrans") {
