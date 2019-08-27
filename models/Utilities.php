@@ -683,4 +683,32 @@ class Utilities {
         }
         return false;
     }
+    
+    public static function Meses() {
+        return [
+            //'0' => Yii::t("formulario", "-Select-"),
+            '1' => Yii::t("perfil", "Enero"),
+            '2' => Yii::t("perfil", "Febrero"),
+            '3' => Yii::t("perfil", "Marzo"),
+            '4' => Yii::t("perfil", "Abril"),
+            '5' => Yii::t("perfil", "Mayo"),
+            '6' => Yii::t("perfil", "Junio"),
+            '7' => Yii::t("perfil", "Julio"),
+            '8' => Yii::t("perfil", "Agosto"),
+            '9' => Yii::t("perfil", "Septiembre"),
+            '10' => Yii::t("perfil", "Octubre"),
+            '11' => Yii::t("perfil", "Noviembre"),
+            '12' => Yii::t("perfil", "Diciembre"),
+        ];
+    }
+    public static function Anio() {
+        return [
+            //'0' => Yii::t("formulario", "-Select-"),
+            //'2018' => Yii::t("perfil", "2018"),
+            '2019' => Yii::t("perfil", "2019"),
+            '2020' => Yii::t("perfil", "2020"),
+            '2021' => Yii::t("perfil", "2021"),
+          
+        ];
+    }
 }

@@ -3,7 +3,11 @@
 $(document).ready(function () {
 //    $('#btn_buscarActividad').click(function () {
 //        buscarActividades();
-//    });    
+//    }); 
+
+    $('#btn_buscarData').click(function () {
+        buscarInscriptos();
+    });
     
     
 });
@@ -29,4 +33,11 @@ function pendingApplicants(){
 }
 function payApplicants(){
     buscarActividades("4");//Reporte de Oportunidad x Proxima Oportunidad
+}
+
+function buscarInscriptos() {
+    var anio = $('#cmb_anio').val();
+    //var f_estado = '';//$('#cmb_estado').val();
+    //Buscar al menos una clase con el nombre para ejecutar
+    window.location.href = $('#txth_base').val() + "/reportes/expexcelinscriptos?anio="+anio;
 }
