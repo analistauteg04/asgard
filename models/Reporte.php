@@ -237,14 +237,12 @@ class Reporte extends \yii\db\ActiveRecord {
     public function consultarInscriptos($anio) {
         $con = \Yii::$app->db_crm; 
         $con1 = \Yii::$app->db_captacion;
-        /*$sql = "SELECT COUNT(*) ESTUDIANTE,cemp_id,imae_fecha_pago,MONTH(imae_fecha_pago) MES
-                    FROM " . $con->dbname . ".inscrito_maestria
-                        WHERE imae_estado=1 AND imae_estado_logico=1 AND YEAR(imae_fecha_pago)=:anio
-                    GROUP BY cemp_id,MONTH(imae_fecha_pago);";*/
-        
-        $sql = "SELECT COUNT(*) CANT,A.cemp_id,B.cemp_nombre,A.imae_fecha_pago,MONTH(A.imae_fecha_pago) MES
-                    FROM " . $con->dbname . ".inscrito_maestria A
-			INNER JOIN  " . $con1->dbname . ".convenio_empresa B ON B.cemp_id=A.cemp_id
+       
+        //INNER JOIN  " . $con1->dbname . ".convenio_empresa B ON B.cemp_id=A.cemp_id
+        $sql = "SELECT COUNT(*) CANT,A.cemp_id,
+                IFNULL((SELECT IFNULL(B.cemp_nombre,'NO')  FROM " . $con1->dbname . ".convenio_empresa B WHERE B.cemp_estado=1 AND B.cemp_estado_logico=1 AND B.cemp_id=A.cemp_id),'NO CONVENIO') cemp_nombre,
+                A.imae_fecha_pago,MONTH(A.imae_fecha_pago) MES
+                    FROM " . $con->dbname . ".inscrito_maestria A			
                 WHERE A.imae_estado=1 AND A.imae_estado_logico=1 AND YEAR(A.imae_fecha_pago)=:anio
                     GROUP BY A.cemp_id,MONTH(A.imae_fecha_pago) ORDER BY MONTH(A.imae_fecha_pago),A.cemp_id ASC;";
         

@@ -82,7 +82,7 @@ class ReportesController extends CController {
         exit;
     }
     
-     public function actionInscriptos() {    
+    public function actionInscriptos() {    
         return $this->render('inscriptos',[
             //'arr_empresa' => ArrayHelper::map(array_merge([["id" => "0", "value" => "Todas"]], $empresa), "id", "value"),
         ]);
@@ -90,6 +90,8 @@ class ReportesController extends CController {
     public function actionExpexcelinscriptos(){
         $objDat= new Reporte();
         $arrHeader = array();
+        $TotEst = array();
+        $EmpCol = array();
         $arrDataNew = array();
         $anio= $_GET["anio"];
         $arrData=$objDat->consultarInscriptos($anio);
@@ -99,37 +101,42 @@ class ReportesController extends CController {
         //Obtener datos de cabercera
         $arrHeader[]="Venta x Mes";
         $arrHeader[]="Estudiantes";
+        //$arrHeader[]="No Convenio";
         for($i=0; $i<count($arrData); $i++){            
-            //Utilities::putMessageLogFile($arrData[$i]['cemp_nombre']);
             if($arrData[$i]['cemp_nombre']!=$aux){
-                $arrHeader[]=$arrData[$i]['cemp_nombre'];
-                $aux=$arrData[$i]['cemp_nombre'];
+                $columna=$arrData[$i]['cemp_nombre'];
+                if(!$this->existeColumna($columna, $arrHeader)){
+                    $arrHeader[]=$columna;
+                }                
+                $aux=$columna;
             }         
         }
+        //Utilities::putMessageLogFile($arrHeader);
         //Crear Cuerpo de Datos
-        $numMes=-1;
-        for($i=0; $i<12; $i++){  
-            $arrDataNew[$i]['Mes']= $this->retornaMes($i+1);
-            $arrDataNew[$i]['Estudiante']=0;
-            if($i!=$numMes){//Recorre los meses
-                //Revisar los datos 
-                for($j=0; $j<count($arrData); $j++){      
-                    if($arrData[$j]['MES']=$i+1){
-                        $conEmp=$arrData[$j]['cemp_id'];
-                        $arrDataNew[$i][$conEmp]=$arrData[$j]['CANT'];
+        $aux="";
+        for($i=0; $i<count($arrData); $i++){  
+            if($arrData[$i]['cemp_nombre']!=$aux){
+                $conEmp=$arrData[$i]['cemp_nombre'];//FIjar la columna
+                if(!$this->existeColumna($conEmp, $EmpCol)){
+                    $EmpCol[]=$conEmp;
+                    for($j=0; $j<12; $j++){//Recorrer el nuevo Array
+                        $arrDataNew[$j]['Mes']=$this->retornaMes($j+1);
+                        $arrDataNew[$j]['Total']=0;
+                        //$arrDataNew[$j]['NO_CON']=0;
+                        $cant=$this->numEstudiantes($conEmp, $j+1, $arrData);
+                        $arrDataNew[$j][$conEmp]=$cant;
+                        $TotEst[$j]+=$cant;
                     }
-                }
-                $numMes=$i;
+                }                
+                $aux=$conEmp; 
             }
+            
+        }
+        //Actualiza Totales
+        for($j=0; $j<12; $j++){
+            $arrDataNew[$j]['Total']=$TotEst[$j];
         }
         
-        
-        Utilities::putMessageLogFile($arrDataNew);
-        
-        
-        
-     
-         
         ini_set('memory_limit', '256M');
         $content_type = Utilities::mimeContentType("xls");        
         header("Content-Type: $content_type");
@@ -137,11 +144,33 @@ class ReportesController extends CController {
         header('Cache-Control: max-age=0');               
         $nameReport = yii::t("formulario", "Application Reports");
         $colPosition = array("C", "D", "E", "F", "G", "H", "I", "J", "K", "L","M", "N", "O", "P", "Q", "R", "S", "T", "U", "V", "W", "X", "Y", "Z");
-        Utilities::generarReporteXLS($nombarch, $nameReport, $arrHeader, $arrData, $colPosition);
+        Utilities::generarReporteXLS($nombarch, $nameReport, $arrHeader, $arrDataNew, $colPosition);
         exit;
        
     }
     
+    private function existeColumna($columna,$arrHeader) {
+        for($i=0; $i<count($arrHeader); $i++){
+            //Utilities::putMessageLogFile($arrHeader[$i]);
+            if($arrHeader[$i]==$columna){
+               return true; 
+            }
+        }
+        return false;
+    }
+    private function numEstudiantes($Empresa,$Mes,$arrData) {
+        $valor =0;
+        for($i=0; $i<count($arrData); $i++){
+            if($arrData[$i]['MES']==$Mes && $arrData[$i]['cemp_nombre']==$Empresa){
+               return $arrData[$i]['CANT'];
+            }
+        }
+        return $valor;
+    }
+       
+            
+
+
     private function retornaMes($number){
         $valor = "";
         switch ($number){
