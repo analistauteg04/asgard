@@ -82,9 +82,17 @@ class ReportesController extends CController {
         exit;
     }
     
-    public function actionInscriptos() {    
+    public function actionInscriptos() {  
+        $arrAnio = array();
+        $objDat= new Reporte();
+        $anio=$objDat->getAllAnios();
+        for($i=0; $i<count($anio); $i++){
+            $arrAnio[$i]['id']=$i;
+            $arrAnio[$i]['value']=$anio[$i]['anio'];
+        }
+        //Utilities::putMessageLogFile($arrAnio);
         return $this->render('inscriptos',[
-            //'arr_empresa' => ArrayHelper::map(array_merge([["id" => "0", "value" => "Todas"]], $empresa), "id", "value"),
+            'arr_anio' => ArrayHelper::map(array_merge($arrAnio), "id", "value"),
         ]);
     }
     public function actionExpexcelinscriptos(){
@@ -94,14 +102,15 @@ class ReportesController extends CController {
         $EmpCol = array();
         $arrDataNew = array();
         $anio= $_GET["anio"];
+
         $arrData=$objDat->consultarInscriptos($anio);
+        //$arrCabData=$objDat->getAllConvenioEmpresa();
         $nombarch = "Inscriptos-" . date("YmdHis").".xls";
-        //Utilities::putMessageLogFile($arrData);
+        //Utilities::putMessageLogFile($arrCabData);
         $aux="";
         //Obtener datos de cabercera
         $arrHeader[]="Venta x Mes";
         $arrHeader[]="Estudiantes";
-        //$arrHeader[]="No Convenio";
         for($i=0; $i<count($arrData); $i++){            
             if($arrData[$i]['cemp_nombre']!=$aux){
                 $columna=$arrData[$i]['cemp_nombre'];
@@ -116,26 +125,37 @@ class ReportesController extends CController {
         $aux="";
         for($i=0; $i<count($arrData); $i++){  
             if($arrData[$i]['cemp_nombre']!=$aux){
+                $sumCol=0;
                 $conEmp=$arrData[$i]['cemp_nombre'];//FIjar la columna
-                if(!$this->existeColumna($conEmp, $EmpCol)){
+                if(!$this->existeColumna($conEmp, $EmpCol)){                    
                     $EmpCol[]=$conEmp;
                     for($j=0; $j<12; $j++){//Recorrer el nuevo Array
                         $arrDataNew[$j]['Mes']=$this->retornaMes($j+1);
                         $arrDataNew[$j]['Total']=0;
-                        //$arrDataNew[$j]['NO_CON']=0;
                         $cant=$this->numEstudiantes($conEmp, $j+1, $arrData);
                         $arrDataNew[$j][$conEmp]=$cant;
                         $TotEst[$j]+=$cant;
+                        $sumCol+=$cant;
                     }
+                    $arrDataNew[12]['Mes']='TOTALES';
+                    $arrDataNew[12]['Total']=0;
+                    $arrDataNew[12][$conEmp]=$sumCol;
+                    
                 }                
                 $aux=$conEmp; 
+                
             }
             
         }
+        
         //Actualiza Totales
+        $sumCol=0;
         for($j=0; $j<12; $j++){
             $arrDataNew[$j]['Total']=$TotEst[$j];
+            $sumCol+=$TotEst[$j];
         }
+        $arrDataNew[12]['Total']=$sumCol;
+        
         
         ini_set('memory_limit', '256M');
         $content_type = Utilities::mimeContentType("xls");        

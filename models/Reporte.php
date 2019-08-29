@@ -254,7 +254,25 @@ class Reporte extends \yii\db\ActiveRecord {
     
     public function getAllConvenios() {
         $con = \Yii::$app->db_crm;
-        $sql = "SELECT emp_id as id,emp_razon_social as value from db_asgard.empresa WHERE emp_estado_logico=1 AND emp_estado=1 ORDER BY id asc";  
+        $sql = "SELECT emp_id as id,emp_razon_social as value from " . $con->dbname . ".empresa WHERE emp_estado_logico=1 AND emp_estado=1 ORDER BY id asc";  
+        $comando = $con->createCommand($sql);
+        return $comando->queryAll();
+    }
+    
+    
+    
+    public function getAllAnios() {
+        $con = \Yii::$app->db_crm;
+        $sql = "SELECT DISTINCT(YEAR(imae_fecha_inscripcion)) anio
+                    FROM " . $con->dbname . ".inscrito_maestria where imae_estado=1 and imae_estado_logico=1;";  
+        $comando = $con->createCommand($sql);
+        return $comando->queryAll();
+    }
+    
+    public function getAllConvenioEmpresa() {
+        $con = \Yii::$app->db_captacion;
+        $sql = "SELECT B.cemp_nombre  FROM " . $con->dbname . ".convenio_empresa B "
+                . " WHERE B.cemp_estado=1 AND B.cemp_estado_logico=1 "; 
         $comando = $con->createCommand($sql);
         return $comando->queryAll();
     }

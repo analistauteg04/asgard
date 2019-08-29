@@ -701,14 +701,5 @@ class Utilities {
             '12' => Yii::t("perfil", "Diciembre"),
         ];
     }
-    public static function Anio() {
-        return [
-            //'0' => Yii::t("formulario", "-Select-"),
-            //'2018' => Yii::t("perfil", "2018"),
-            '2019' => Yii::t("perfil", "2019"),
-            '2020' => Yii::t("perfil", "2020"),
-            '2021' => Yii::t("perfil", "2021"),
-          
-        ];
-    }
+    
 }

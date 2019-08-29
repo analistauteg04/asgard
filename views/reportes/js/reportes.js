@@ -36,7 +36,7 @@ function payApplicants(){
 }
 
 function buscarInscriptos() {
-    var anio = $('#cmb_anio').val();
+    var anio = $('#cmb_anio option:selected').text(); 
     //var f_estado = '';//$('#cmb_estado').val();
     //Buscar al menos una clase con el nombre para ejecutar
     window.location.href = $('#txth_base').val() + "/reportes/expexcelinscriptos?anio="+anio;

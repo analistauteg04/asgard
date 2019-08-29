@@ -19,8 +19,7 @@ $leyenda = '<div class="col-md-12 col-xs-12 col-sm-12 col-lg-12">
     <form class="form-horizontal">
         <?=
         $this->render('_form_BuscarInscriptos', [   
-            //'arrEstados' => $arrEstados
-            'arr_empresa' => $arr_empresa,
+            'arr_anio' => $arr_anio,
             ]);
         ?>
     </form>
