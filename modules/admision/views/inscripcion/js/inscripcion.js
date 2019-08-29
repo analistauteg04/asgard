@@ -1,3 +1,4 @@
+var limitRows = 50;
 $(document).ready(function() {
     recargarGridItem();
 
@@ -119,6 +120,10 @@ function agregarItems(opAccion) {
                         /*Agrego a la Sesion*/
                         arr_Grid = JSON.parse(sessionStorage.dts_datosItem);
                         var size = arr_Grid.length;
+                        if (size > limitRows) {
+                            showAlert('NO_OK', 'error', { "wtmessage": "Solo puede subir hasta " + size + " registros. Guarde primero y luego continue con el proceso.", "title": 'Información' });
+                            return;
+                        }
                         if (size > 0) {
                             //if (codigoExiste(nombre, 'estandar_evi', sessionStorage.dts_datosItem)) {//Verifico si el Codigo Existe  para no Dejar ingresar Repetidos
                             arr_Grid[size] = objRegistro(size);
