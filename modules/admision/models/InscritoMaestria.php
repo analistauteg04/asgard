@@ -391,6 +391,7 @@ class InscritoMaestria extends \yii\db\ActiveRecord {
             $str_search .= "im.imae_segundo_apellido like :search OR ";
             $str_search .= "pr.pro_nombre like :search OR ";
             $str_search .= "ca.can_nombre like :search OR ";
+            $str_search .= "im.imae_documento like :search OR ";
             $str_search .= "ai.aima_nombre like :search) AND ";
         }
         if (isset($date_ini) && $date_ini != "") {

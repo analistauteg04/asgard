@@ -453,3 +453,7 @@ function update() {
         }, true);
     }
 }
+
+function generarAspirante(id) {
+
+}

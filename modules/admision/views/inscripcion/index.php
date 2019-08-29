@@ -25,7 +25,7 @@ crm::registerTranslations();
             <div class="form-group">
                 <label for="txt_buscarData" class="col-sm-2 col-md-2 col-xs-2 col-lg-2 control-label"><?= Yii::t("formulario", "Search") ?></label>
                 <div class="col-sm-8 col-md-8 col-xs-8 col-lg-8">
-                    <input type="text" class="form-control" value="" id="txt_buscarData" placeholder="<?= admision::t("Solicitudes", "Search by item") ?>: <?= repositorio::t("repositorio", "Cantón") ?>, <?= repositorio::t("repositorio", "Provincia") ?>, <?= Yii::t("formulario", "Names") ?> ">
+                    <input type="text" class="form-control" value="" id="txt_buscarData" placeholder="<?= admision::t("Solicitudes", "Search by item") ?>: <?= repositorio::t("repositorio", "Cantón") ?>, <?= repositorio::t("repositorio", "Provincia") ?>, <?= Yii::t("formulario", "Names") ?>, <?= financiero::t("Pagos", "Documento") ?> ">
                 </div>
             </div>
         </div>

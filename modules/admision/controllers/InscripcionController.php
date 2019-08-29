@@ -501,4 +501,26 @@ class InscripcionController extends \app\components\CController {
         }
     }
 
+    public function actionNewaspirante(){
+
+        // verificar si ya es aspirante
+
+        // verificar si existe como contacto
+
+        // crear una actividad
+
+        // crear una oportunidad
+
+        // generar Interesado - Aspirante
+        
+        $mod_pergestion = new PersonaGestion();
+        $mod_gestion = new Oportunidad();
+        if (!empty($celular) || !empty($correo) || !empty($telefono) || !empty($celular2)) {
+            $cons_persona = $mod_pergestion->consultarDatosExiste($celular, $correo, $telefono, $celular2, null, null);
+            if ($cons_persona["registro"] > 0) {
+                $busqueda = 1;
+            }
+        }
+    }
+
 }
