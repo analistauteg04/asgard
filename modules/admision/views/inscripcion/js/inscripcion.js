@@ -105,37 +105,50 @@ function agregarItems(opAccion) {
         $('#txt_pago_inscripcion').val() != "" && $('#txt_pago_total').val() != "" && $('#txt_fecha_pago').val() != "" &&
         $('#cmb_metodo_pago').val() != 0 && $('#cmb_estado_pago').val() != 0 && $('#cmb_modalidad').val() != 0 && $('#cmb_carrera').val() != 0) {
         if (opAccion == "new") {
-            //*********   AGREGAR ITEMS *********
-            var arr_Grid = new Array();
-            if (sessionStorage.dts_datosItem) {
-                /*Agrego a la Sesion*/
-                arr_Grid = JSON.parse(sessionStorage.dts_datosItem);
-                var size = arr_Grid.length;
-                if (size > 0) {
-                    //if (codigoExiste(nombre, 'estandar_evi', sessionStorage.dts_datosItem)) {//Verifico si el Codigo Existe  para no Dejar ingresar Repetidos
-                    arr_Grid[size] = objRegistro(size);
-                    sessionStorage.dts_datosItem = JSON.stringify(arr_Grid);
-                    addVariosItem(tGrid, arr_Grid, -1);
-                    limpiarDetalle();
-                    //} else {
-                    //    showAlert('NO_OK', 'error', {"wtmessage": "Item ya existe en su lista", "title": 'Información'});
-                    //}
+            //verificar si ya existe documento en el grid y en la base de datos
+            var documento = $('#txt_documento').val();
+            var link = $('#txth_base').val() + "/admision/inscripcion/new";
+            var arrParams = new Object();
+            arrParams.dni = documento;
+            arrParams.existDni = true;
+            requestHttpAjax(link, arrParams, function(response) {
+                if (response.status == "OK" && response.message.existe == false) {
+                    //*********   AGREGAR ITEMS *********
+                    var arr_Grid = new Array();
+                    if (sessionStorage.dts_datosItem) {
+                        /*Agrego a la Sesion*/
+                        arr_Grid = JSON.parse(sessionStorage.dts_datosItem);
+                        var size = arr_Grid.length;
+                        if (size > 0) {
+                            //if (codigoExiste(nombre, 'estandar_evi', sessionStorage.dts_datosItem)) {//Verifico si el Codigo Existe  para no Dejar ingresar Repetidos
+                            arr_Grid[size] = objRegistro(size);
+                            sessionStorage.dts_datosItem = JSON.stringify(arr_Grid);
+                            addVariosItem(tGrid, arr_Grid, -1);
+                            limpiarDetalle();
+                            //} else {
+                            //    showAlert('NO_OK', 'error', {"wtmessage": "Item ya existe en su lista", "title": 'Información'});
+                            //}
+                        } else {
+                            /*Agrego a la Sesion*/
+                            //Primer Items                   
+                            arr_Grid[0] = objRegistro(0);
+                            sessionStorage.dts_datosItem = JSON.stringify(arr_Grid);
+                            addPrimerItem(tGrid, arr_Grid, 0);
+                            limpiarDetalle();
+                        }
+                    } else {
+                        //No existe la Session
+                        //Primer Items
+                        arr_Grid[0] = objRegistro(0);
+                        sessionStorage.dts_datosItem = JSON.stringify(arr_Grid);
+                        addPrimerItem(tGrid, arr_Grid, 0);
+                        limpiarDetalle();
+                    }
                 } else {
-                    /*Agrego a la Sesion*/
-                    //Primer Items                   
-                    arr_Grid[0] = objRegistro(0);
-                    sessionStorage.dts_datosItem = JSON.stringify(arr_Grid);
-                    addPrimerItem(tGrid, arr_Grid, 0);
-                    limpiarDetalle();
+                    showAlert('NO_OK', 'error', { "wtmessage": "Persona ya existe en la base de datos.", "title": 'Información' });
                 }
-            } else {
-                //No existe la Session
-                //Primer Items
-                arr_Grid[0] = objRegistro(0);
-                sessionStorage.dts_datosItem = JSON.stringify(arr_Grid);
-                addPrimerItem(tGrid, arr_Grid, 0);
-                limpiarDetalle();
-            }
+            }, true);
+
         } else {
             //data edicion
         }

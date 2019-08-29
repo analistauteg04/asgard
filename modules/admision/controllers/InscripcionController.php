@@ -73,6 +73,14 @@ class InscripcionController extends \app\components\CController {
         $modinstitucion = new Institucion();
         if (Yii::$app->request->isAjax) {
             $data = Yii::$app->request->post();
+            if (isset($data["existDni"])) {
+                $model = InscritoMaestria::findOne(['imae_documento' => $data["dni"], 'imae_estado' => 1]);
+                $result = false;
+                if (isset($model->imae_id))
+                    $result = true;
+                $message = array("existe" => $result);
+                return Utilities::ajaxResponse('OK', 'alert', Yii::t('jslang', 'Success'), 'false', $message);
+            }
             if (isset($data["getprovincias"])) {
                 $provincias = Provincia::find()->select("pro_id AS id, pro_nombre AS name")->where(["pro_estado_logico" => "1", "pro_estado" => "1", "pai_id" => $data['pai_id']])->asArray()->all();
                 $message = array("provincias" => $provincias);
