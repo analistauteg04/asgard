@@ -50,43 +50,33 @@ $leyenda = '<div class="col-md-12 col-xs-12 col-sm-12 col-lg-12">
                             'browseClass' => 'btn btn-primary btn-block',
                             'browseIcon' => '<i class="fa fa-folder-open"></i> ',
                             'browseLabel' => "Subir Archivo",
+                            //'uploadUrl' => Url::to(['marcacionhistorico/cargarmarcaciones']),
                             'uploadUrl' => Url::to(['/marcacionhistorico/marcacionhistorico/cargarmarcaciones']), // CABIAR RUTA QUE ES
                             'maxFileSize' => Yii::$app->params["MaxFileSize"], // en Kbytes
                             'uploadExtraData' => 'javascript:function (previewId,index) {
-                                    var name_doc= $("#txt_doc_archivo").val();
-                                    var modelo=$("#cmb_modelo_evi option:selected").text();
-                                    var funcion=$("#cmb_funcion_evi option:selected").text();
-                                    var componente=$("#cmb_componente_evi option:selected").text();
-                                    var estandar=$("#cmb_estandar_evi option:selected").text();
-                                    var tipo=$("#cmb_tipo_evi option:selected").text();
-                                    
+                                    var name_doc= $("#txt_doc_archivo").val();                                    
+                                    //var tipo=$("#cmb_tipo_evi option:selected").text();
+                                    var tipo=1;
+                                    alert("enia");
                                     return {"upload_file": true, 
                                             "name_file": name_doc,
-                                            "modelo": modelo,
-                                            "funcion": funcion,
-                                            "componente": componente,
-                                            "estandar": estandar,
                                             "tipo": tipo};
                                     
                             }',
                         ],
                         'pluginEvents' => [
                             "filebatchselected" => "function (event) { 
-                                    function d2(n) {
-                                        if(n<9) return '0'+n;
-                                        return n;
-                                    }
-                                    today = new Date();
-                                    var name_pago = 'pago_' + $('#txth_per').val() + '-' + today.getFullYear() + '-' + d2(parseInt(today.getMonth()+1)) + '-' + d2(today.getDate()) + ' ' + d2(today.getHours()) + ':' + d2(today.getMinutes()) + ':' + d2(today.getSeconds());
-                                    //$('#txth_docarchivo').val(name_pago);
                                     
-                                    if($('#cmb_modelo_evi').val() != 0 && $('#cmb_funcion_evi').val() != 0 && $('#txth_docarchivo').val() != ''
-                                        && $('#cmb_estandar_evi').val() != 0 && $('#cmb_tipo_evi').val() != 0 && $('#txt_fecha_documento_evi').val() != ''){
+                                    //$('#txth_docarchivo').val(nameFile);                                    
+                                    //if($($('#txth_docarchivo').val() != ''){
+                                    var nameFile=$('#txt_doc_archivo').val(); 
+                                    if(nameFile != ''){
+                                    alert('entrfalsea');
                                         $('#txt_doc_archivo').fileinput('upload');
                                     }else{
                                         showAlert('NO_OK', 'error', {'wtmessage': 'No Existe datos Selecionados ', 'title':'Información'});
-                                        $('#txt_doc_archivo').fileinput('clear');
-                                        $('#txt_doc_archivo').fileinput('refresh');
+                                        $('#txt_falsedoc_archivo').fileinput('clear');
+                                        $('#txt_doc_archivo').falsefileinput('refresh');
                                     }
         
                                     
@@ -115,10 +105,10 @@ $leyenda = '<div class="col-md-12 col-xs-12 col-sm-12 col-lg-12">
                                 response = data.response
                                 $('#txth_doc_archivo').val('');
                                 $('#txth_doc_archivo_ruta').val('');
-                                if(response.status){
-                                    $('#txth_doc_archivo').val(response.nombre);
-                                    $('#txth_doc_archivo_ruta').val(response.ruta);
-                                }
+                                //if(response.status){
+                                //    $('#txth_doc_archivo').val(response.nombre);
+                                //    $('#txth_doc_archivo_ruta').val(response.ruta);
+                                //}
                                 $(this).parent().parent().children().first().addClass('hide');                                 
                                 var acciones = [{id: 'reloadpage', class: 'btn btn-primary', value: objLang.Accept, callback: 'reloadPage'}];
                                 //showAlert('OK', 'Success', {'wtmessage': objLang.File_uploaded_successfully__Do_you_refresh_the_web_page_, 'title': objLang.Success, 'acciones': acciones});                              
