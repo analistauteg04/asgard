@@ -5,6 +5,7 @@ use yii\helpers\Url;
 use kartik\date\DatePicker;
 use yii\helpers\ArrayHelper;
 use app\components\CFileInputAjax;
+use kartik\file\FileInput;
 
 $per_id = @Yii::$app->session->get("PB_perid");
 
@@ -45,7 +46,7 @@ $leyenda = '<div class="col-md-12 col-xs-12 col-sm-12 col-lg-12">
                             'showPreview' => false,
                             'showCaption' => true,
                             'showRemove' => true,
-                            'showUpload' => false,
+                            'showUpload' => true,
                             'showCancel' => false,
                             'browseClass' => 'btn btn-primary btn-block',
                             'browseIcon' => '<i class="fa fa-folder-open"></i> ',
@@ -57,7 +58,6 @@ $leyenda = '<div class="col-md-12 col-xs-12 col-sm-12 col-lg-12">
                                     var name_doc= $("#txt_doc_archivo").val();                                    
                                     //var tipo=$("#cmb_tipo_evi option:selected").text();
                                     var tipo=1;
-                                    alert("enia");
                                     return {"upload_file": true, 
                                             "name_file": name_doc,
                                             "tipo": tipo};
@@ -71,7 +71,6 @@ $leyenda = '<div class="col-md-12 col-xs-12 col-sm-12 col-lg-12">
                                     //if($($('#txth_docarchivo').val() != ''){
                                     var nameFile=$('#txt_doc_archivo').val(); 
                                     if(nameFile != ''){
-                                    alert('entrfalsea');
                                         $('#txt_doc_archivo').fileinput('upload');
                                     }else{
                                         showAlert('NO_OK', 'error', {'wtmessage': 'No Existe datos Selecionados ', 'title':'Información'});
@@ -121,6 +120,5 @@ $leyenda = '<div class="col-md-12 col-xs-12 col-sm-12 col-lg-12">
         </div>
         
     </div> 
-    
 </form>
 

@@ -88,7 +88,6 @@ class CFileInputAjax extends FileInput{
         }else{
             $this->_encOptions = empty($this->pluginOptions) ? '' : Json::htmlEncode($this->pluginOptions);
         }
-        //$this->_encOptions = empty($this->pluginOptions) ? '' : Json::htmlEncode($this->pluginOptions);
         $this->_hashVar = $name . '_' . (($this->namevarjs != "")?($this->namevarjs):(hash('crc32', $this->_encOptions)));
         $this->options['data-krajee-' . $name] = $this->_hashVar;
     }
