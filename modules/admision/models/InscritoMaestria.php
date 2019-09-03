@@ -427,6 +427,8 @@ class InscritoMaestria extends \yii\db\ActiveRecord {
                     im.imae_segundo_nombre AS seg_nombre,
                     im.imae_primer_apellido AS pri_apellido,
                     im.imae_segundo_apellido AS seg_apellido,
+                    im.imae_correo AS correo,
+                    im.imae_celular AS celular,
                     im.imae_revisar_urgente AS revision,
                     im.imae_cumple_requisito AS requisito,
                     ai.aima_nombre AS agente,

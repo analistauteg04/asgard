@@ -217,6 +217,8 @@ class InscripcionController extends \app\components\CController {
             strtoupper(Yii::t("formulario", "Middle Name")),
             strtoupper(Yii::t("formulario", "Last Name")),
             strtoupper(Yii::t("formulario", "Last Second Name")),
+            strtoupper(Yii::t("formulario", "Email")),
+            strtoupper(Yii::t("formulario", "CellPhone")),
             strtoupper(crm::t("crm", "Revision")),
             strtoupper(crm::t("crm", "Meets Requirement")),
             strtoupper(Yii::t("formulario", "Executive")),
