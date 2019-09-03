@@ -7,7 +7,7 @@ CREATE SCHEMA IF NOT EXISTS `db_repositorio` DEFAULT CHARACTER SET utf8 ;
 USE `db_repositorio` ;
 
 -- GRANT ALL PRIVILEGES ON `db_repositorio`.* TO 'uteg'@'localhost' IDENTIFIED BY 'Utegadmin2016*'; -- Ubuntu
-GRANT ALL PRIVILEGES ON `db_repositorio`.* TO 'uteg'@'localhost';  -- centos
+-- GRANT ALL PRIVILEGES ON `db_repositorio`.* TO 'uteg'@'localhost';  -- centos
 
 -- --------------------------------------------------------
 -- 

@@ -5,7 +5,7 @@
 DROP SCHEMA IF EXISTS `db_marcacion_historico`;
 CREATE SCHEMA IF NOT EXISTS `db_marcacion_historico` DEFAULT CHARACTER SET utf8 ;
 
-GRANT ALL PRIVILEGES ON `db_marcacion_historico`.* TO 'uteg'@'localhost' IDENTIFIED BY 'Utegadmin2016*'; -- Ubuntu
+-- GRANT ALL PRIVILEGES ON `db_marcacion_historico`.* TO 'uteg'@'localhost' IDENTIFIED BY 'Utegadmin2016*'; -- Ubuntu
 -- GRANT ALL PRIVILEGES ON `db_marcacion_historico`.* TO 'uteg'@'localhost';  -- centos
 
 USE `db_marcacion_historico` ;
