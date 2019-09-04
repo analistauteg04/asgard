@@ -55,12 +55,10 @@ $leyenda = '<div class="col-md-12 col-xs-12 col-sm-12 col-lg-12">
                             'uploadUrl' => Url::to(['/marcacionhistorico/marcacionhistorico/cargarmarcaciones']), // CABIAR RUTA QUE ES
                             'maxFileSize' => Yii::$app->params["MaxFileSize"], // en Kbytes
                             'uploadExtraData' => 'javascript:function (previewId,index) {
-                                    var name_doc= $("#txt_doc_archivo").val();                                    
-                                    //var tipo=$("#cmb_tipo_evi option:selected").text();
-                                    var tipo=1;
+                                    //var name_doc= $("#txt_doc_archivo").val();                                    
+                                    var name_doc="macaciones-' . $per_id . '-' . time() . '";
                                     return {"upload_file": true, 
-                                            "name_file": name_doc,
-                                            "tipo": tipo};
+                                            "name_file": name_doc};
                                     
                             }',
                         ],

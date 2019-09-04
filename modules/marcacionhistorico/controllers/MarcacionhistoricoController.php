@@ -48,31 +48,38 @@ class MarcacionhistoricoController extends \app\components\CController {
     
     public function actionCargarmarcaciones() {
         $per_id = @Yii::$app->session->get("PB_perid");
-        Utilities::putMessageLogFile("llego 1");
         //$mod_gestion = new Oportunidad();
         if (Yii::$app->request->isAjax) {
-            Utilities::putMessageLogFile("llego 2");
-            /*$data = Yii::$app->request->post();
+            $data = Yii::$app->request->post();
             if ($data["upload_file"]) {
                 if (empty($_FILES)) {
                     return json_encode(['error' => Yii::t("notificaciones", "Error to process File {file}. Try again.", ['{file}' => basename($files['name'])])]);
                 }
                 //Recibe Parámetros
                 $files = $_FILES[key($_FILES)];
+                //$filenames = $files['name']; //Nombre Archivo
+                
                 $arrIm = explode(".", basename($files['name']));
                 $typeFile = strtolower($arrIm[count($arrIm) - 1]);
+                $filenames = $data["name_file"] . "." . $typeFile;
+                $folder_path = Yii::$app->params["documentFolder"]. "marcacion/";  
+                //Utilities::putMessageLogFile($folder_path);
                 if ($typeFile == 'xlsx' || $typeFile == 'csv' || $typeFile == 'xls') {
-                    $dirFileEnd = Yii::$app->params["documentFolder"] . "leads/" . $data["name_file"] . "." . $typeFile;
+                    $dirFileEnd = $folder_path.$filenames;
                     Utilities::putMessageLogFile($dirFileEnd);
                     $status = Utilities::moveUploadFile($files['tmp_name'], $dirFileEnd);
                     if ($status) {
-                        return true;
+                        //return true;
+                        $arroout["status"] = true;
+                        $arroout["ruta"] = $folder_path;
+                        $arroout["nombre"] = $filenames;
+                        return json_encode($arroout);
                     } else {
                         return json_encode(['error' => Yii::t("notificaciones", "Error to process File {file}. Try again.", ['{file}' => basename($files['name'])])]);
                     }
                 }
-            }*/
-            /*if ($data["procesar_file"]) {
+            }
+            if ($data["procesar_file"]) {
                 $carga_archivo = $mod_gestion->CargarArchivo($data["archivo"], $data["emp_id"], $data["tipo_proceso"]);
                 if ($carga_archivo['status']) {
                     $message = array(
@@ -88,7 +95,7 @@ class MarcacionhistoricoController extends \app\components\CController {
                     return Utilities::ajaxResponse('NO_OK', 'alert', Yii::t("jslang", "Error"), true, $message);
                 }
                 return;
-            }*/
+            }
         } else {
             return $this->render('cargarmarcaciones', []);
         }

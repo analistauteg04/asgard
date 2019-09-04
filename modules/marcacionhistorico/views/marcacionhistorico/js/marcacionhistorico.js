@@ -195,3 +195,19 @@ function exportPdfNoMarcadas() {
 
     window.location.href = $('#txth_base').val() + "/academico/marcacion/exppdfnomarcadas?pdf=1&profesor=" + profesor + "&materia="+ materia + "&unidad="+ unidad + '&modalidad='+ modalidad + "&f_ini=" + f_ini + "&f_fin=" + f_fin + "&periodo=" + periodo + "&tipo=" + tipo;
 }
+
+function cargarMarcacion() {
+    var arrParams = new Object();
+    var link = $('#txth_base').val() + "/marcacionhistorico/marcacionhistorico/cargarmarcaciones";
+    arrParams.procesar_file = true;
+    arrParams.archivo = $('#txth_doc_adj_leads2').val() + "." + $('#txth_doc_adj_leads').val().split('.').pop();
+
+    if (!validateForm()) {
+        requestHttpAjax(link, arrParams, function (response) {
+            showAlert(response.status, response.label, response.message);
+            setTimeout(function () {
+                window.location.href = $('#txth_base').val() + "/admision/contactos/index";
+            }, 3000);
+        }, true);
+    }
+}
