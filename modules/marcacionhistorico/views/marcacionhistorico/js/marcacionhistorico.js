@@ -75,12 +75,12 @@ function actualizarGridMarcacion() {
     var materia = $('#txt_buscarDataMateria').val();
     var f_ini = $('#txt_fecha_ini').val();
     var f_fin = $('#txt_fecha_fin').val();
-    var periodo = $('#cmb_periodo option:selected').val();
+    //var periodo = $('#cmb_periodo option:selected').val();
 
     //Buscar almenos una clase con el nombre para ejecutar
     if (!$(".blockUI").length) {
         showLoadingPopup();
-        $('#PbMarcacion').PbGridView('applyFilterData', {'profesor': profesor, 'materia': materia, 'f_ini': f_ini, 'f_fin': f_fin, 'periodo': periodo});
+        $('#PbMarcacionhistorico').PbGridView('applyFilterData', {'profesor': profesor, 'materia': materia, 'f_ini': f_ini, 'f_fin': f_fin/*, 'periodo': periodo*/});
         setTimeout(hideLoadingPopup, 2000);
     }
 }
@@ -112,101 +112,6 @@ function cargarHorario() {
             showAlert(response.status, response.label, response.message);
             setTimeout(function () {
                 window.location.href = $('#txth_base').val() + "/academico/marcacion/index";
-            }, 3000);
-        }, true);
-    }
-}
-
-function actualizarGridHorario() {
-    var profesor = $('#txt_buscarDataProfesor').val();
-    var unidad = $('#cmb_unidad option:selected').val();
-    var modalidad = $('#cmb_modalidad option:selected').val();
-    var f_ini = $('#txt_fecha_ini').val();
-    var f_fin = $('#txt_fecha_fin').val();
-    var periodo = $('#cmb_periodo option:selected').val();
-
-    //Buscar almenos una clase con el nombre para ejecutar
-    if (!$(".blockUI").length) {
-        showLoadingPopup();
-        $('#PbHorario').PbGridView('applyFilterData', {'profesor': profesor, 'unidad': unidad, 'modalidad': modalidad, 'f_ini': f_ini, 'f_fin': f_fin, 'periodo': periodo});
-        setTimeout(hideLoadingPopup, 2000);
-    }
-}
-
-function exportExcelhorario() {
-    var profesor = $('#txt_buscarDataProfesor').val();   
-    var unidad = $('#cmb_unidad option:selected').val();
-    var modalidad = $('#cmb_modalidad option:selected').val();
-    var f_ini = $('#txt_fecha_ini').val();
-    var f_fin = $('#txt_fecha_fin').val();
-    var periodo = $('#cmb_periodo option:selected').val();
-    window.location.href = $('#txth_base').val() + "/academico/marcacion/expexcelhorario?profesor=" + profesor + "&unidad="+ unidad + '&modalidad='+ modalidad + "&f_ini=" + f_ini + "&f_fin=" + f_fin + "&periodo=" + periodo;
-}
-
-function exportPdfhorario() {
-    var profesor = $('#txt_buscarDataProfesor').val();   
-    var unidad = $('#cmb_unidad option:selected').val();
-    var modalidad = $('#cmb_modalidad option:selected').val();
-    var f_ini = $('#txt_fecha_ini').val();
-    var f_fin = $('#txt_fecha_fin').val();
-    var periodo = $('#cmb_periodo option:selected').val();
-    window.location.href = $('#txth_base').val() + "/academico/marcacion/exppdfhorario?pdf=1&profesor=" + profesor + "&unidad="+ unidad + '&modalidad='+ modalidad + "&f_ini=" + f_ini + "&f_fin=" + f_fin + "&periodo=" + periodo;
-}
-
-function cargarNoMarcadas() {
-    var profesor = $('#txt_buscarDataProfesor').val();
-    var materia = $('#txt_buscarDataMateria').val();
-    var unidad = $('#cmb_unidad option:selected').val();
-    var modalidad = $('#cmb_modalidad option:selected').val();
-    var f_ini = $('#txt_fecha_ini').val();
-    var f_fin = $('#txt_fecha_fin').val();
-    var periodo = $('#cmb_periodo option:selected').val();
-    var tipo = $('#cmb_tipo option:selected').val();
-
-    if (!$(".blockUI").length) {
-        showLoadingPopup();
-        $('#PbNomarcacion').PbGridView('applyFilterData', {'profesor': profesor, 'materia': materia, 'unidad': unidad, 'modalidad': modalidad, 'f_ini': f_ini, 'f_fin': f_fin, 'periodo': periodo, 'tipo': tipo});
-        setTimeout(hideLoadingPopup, 2000);
-    }
-}
-
-function exportExcelNoMarcadas() {
-    var profesor = $('#txt_buscarDataProfesor').val();
-    var materia = $('#txt_buscarDataMateria').val();
-    var unidad = $('#cmb_unidad option:selected').val();
-    var modalidad = $('#cmb_modalidad option:selected').val();
-    var f_ini = $('#txt_fecha_ini').val();
-    var f_fin = $('#txt_fecha_fin').val();
-    var periodo = $('#cmb_periodo option:selected').val();
-    var tipo = $('#cmb_tipo option:selected').val();
-
-    window.location.href = $('#txth_base').val() + "/academico/marcacion/expexcelnomarcadas?profesor=" + profesor + "&materia="+ materia + "&unidad="+ unidad + '&modalidad='+ modalidad + "&f_ini=" + f_ini + "&f_fin=" + f_fin + "&periodo=" + periodo + "&tipo=" + tipo;
-}
-
-function exportPdfNoMarcadas() {
-    var profesor = $('#txt_buscarDataProfesor').val();
-    var materia = $('#txt_buscarDataMateria').val();
-    var unidad = $('#cmb_unidad option:selected').val();
-    var modalidad = $('#cmb_modalidad option:selected').val();
-    var f_ini = $('#txt_fecha_ini').val();
-    var f_fin = $('#txt_fecha_fin').val();
-    var periodo = $('#cmb_periodo option:selected').val();
-    var tipo = $('#cmb_tipo option:selected').val();
-
-    window.location.href = $('#txth_base').val() + "/academico/marcacion/exppdfnomarcadas?pdf=1&profesor=" + profesor + "&materia="+ materia + "&unidad="+ unidad + '&modalidad='+ modalidad + "&f_ini=" + f_ini + "&f_fin=" + f_fin + "&periodo=" + periodo + "&tipo=" + tipo;
-}
-
-function cargarMarcacion() {
-    var arrParams = new Object();
-    var link = $('#txth_base').val() + "/marcacionhistorico/marcacionhistorico/cargarmarcaciones";
-    arrParams.procesar_file = true;
-    arrParams.archivo = $('#txth_doc_adj_leads2').val() + "." + $('#txth_doc_adj_leads').val().split('.').pop();
-
-    if (!validateForm()) {
-        requestHttpAjax(link, arrParams, function (response) {
-            showAlert(response.status, response.label, response.message);
-            setTimeout(function () {
-                window.location.href = $('#txth_base').val() + "/admision/contactos/index";
             }, 3000);
         }, true);
     }

@@ -97,9 +97,9 @@ class RegistroMarcacionHistorial extends \yii\db\ActiveRecord
                 $str_search .= "rmh.rmhi_fecha_creacion >= :fec_ini AND ";
                 $str_search .= "rmh.rmhi_fecha_creacion <= :fec_fin AND ";
             }
-            if ($arrFiltro['periodo'] != "" && $arrFiltro['periodo'] > 0) {
+            /*if ($arrFiltro['periodo'] != "" && $arrFiltro['periodo'] > 0) {
                 $str_search .= " hap.paca_id = :periodo AND ";
-            }
+            }*/
         }
         if ($onlyData == false) {
              $periodoacademico = ', rmh.haph_id as periodo ';           
@@ -146,10 +146,10 @@ class RegistroMarcacionHistorial extends \yii\db\ActiveRecord
                 $comando->bindParam(":fec_ini", $fecha_ini, \PDO::PARAM_STR);
                 $comando->bindParam(":fec_fin", $fecha_fin, \PDO::PARAM_STR);
             }
-            if ($arrFiltro['periodo'] != "" && $arrFiltro['periodo'] > 0) {
+            /*if ($arrFiltro['periodo'] != "" && $arrFiltro['periodo'] > 0) {
                 $periodo = $arrFiltro["periodo"];
                 $comando->bindParam(":periodo", $periodo, \PDO::PARAM_INT);
-            }
+            }*/
         }
         $resultData = $comando->queryAll();
         $dataProvider = new ArrayDataProvider([

@@ -29,7 +29,7 @@ class MarcacionhistoricoController extends \app\components\CController {
             $arrSearch["materia"] = $data['materia'];
             $arrSearch["f_ini"] = $data['f_ini'];
             $arrSearch["f_fin"] = $data['f_fin'];
-            $arrSearch["periodo"] = $data['periodo'];
+            //$arrSearch["periodo"] = $data['periodo'];
             $arr_historico = $mod_marcacion->consultarMarcacionHistorica($arrSearch);
             return $this->render('index-grid', [
                         'model' => $arr_historico,
