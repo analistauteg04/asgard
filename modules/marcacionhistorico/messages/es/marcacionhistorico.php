@@ -44,24 +44,6 @@
  */
 
 return [
-    "Address1" => "Dirección1",
-    "Address2" => "Dirección2",
-    "Contact Email" => "Email Contacto",
-    "Days Schedule" => "Días Programar",    
-    "Edit List" => "Editar Lista",
-    "List" => "Lista",
-    "List Subscriber Allocation" => "Lista Asignación de Suscritores",
-    "Name Contact" => "Nombre Contacto",
-    "New List" => "Lista Nueva",
-    "No Subscribers" => "No Suscritos",
-    "No. Subscribers in Mailchimp" => "Suscrip. Mailchimp",
-    "Malichimp" => "Malichimp",
-    "Programtion" => "Programación",
-    "Shipping Time" => "Hora Envío",
-    "Subject" => "Asunto",
-    "Subscribers" => "Suscritos",
-    "Subscriber Allocation" => "Asignación de Suscriptores",
-    "Subscriber number" => "Número suscriptores",
-    "Template" => "Plantilla",
+    "List Bearings History" => "Listado Marcaciones Históricos",
     
 ];

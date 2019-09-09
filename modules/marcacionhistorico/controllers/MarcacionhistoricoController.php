@@ -14,8 +14,11 @@ use app\modules\academico\Module as academico;
 use app\modules\academico\models\Modalidad;
 use app\modules\academico\models\UnidadAcademica;
 use app\modules\marcacionhistorico\models\RegistroMarcacionHistorial;
+use app\modules\marcacionhistorico\Module as marcacion;
 
 admision::registerTranslations();
+marcacion::registerTranslations();
+academico::registerTranslations();
 
 class MarcacionhistoricoController extends \app\components\CController {
 
@@ -41,11 +44,11 @@ class MarcacionhistoricoController extends \app\components\CController {
             $data = Yii::$app->request->post();
         }
         return $this->render('index', [
-                   'model' => $arr_historico,
+                    'model' => $arr_historico,
                     'arr_periodo' => ArrayHelper::map(array_merge([["id" => "0", "name" => "Todas"]], $periodo), "id", "name"),
         ]);
-    } 
-    
+    }
+
     public function actionCargarmarcaciones() {
         $per_id = @Yii::$app->session->get("PB_perid");
         //$mod_gestion = new Oportunidad();
@@ -58,14 +61,14 @@ class MarcacionhistoricoController extends \app\components\CController {
                 //Recibe Parámetros
                 $files = $_FILES[key($_FILES)];
                 //$filenames = $files['name']; //Nombre Archivo
-                
+
                 $arrIm = explode(".", basename($files['name']));
                 $typeFile = strtolower($arrIm[count($arrIm) - 1]);
                 $filenames = $data["name_file"] . "." . $typeFile;
-                $folder_path = Yii::$app->params["documentFolder"]. "marcacion/";  
+                $folder_path = Yii::$app->params["documentFolder"] . "marcacion/";
                 //Utilities::putMessageLogFile($folder_path);
                 if ($typeFile == 'xlsx' || $typeFile == 'csv' || $typeFile == 'xls') {
-                    $dirFileEnd = $folder_path.$filenames;
+                    $dirFileEnd = $folder_path . $filenames;
                     Utilities::putMessageLogFile($dirFileEnd);
                     $status = Utilities::moveUploadFile($files['tmp_name'], $dirFileEnd);
                     if ($status) {
@@ -102,5 +105,78 @@ class MarcacionhistoricoController extends \app\components\CController {
         //return $this->render('cargarmarcaciones', []);
     }
 
+    public function actionExpexcel() {
+        ini_set('memory_limit', '256M');
+        $content_type = Utilities::mimeContentType("xls");
+        $nombarch = "Report-" . date("YmdHis") . ".xls";
+        header("Content-Type: $content_type");
+        header("Content-Disposition: attachment;filename=" . $nombarch);
+        header('Cache-Control: max-age=0');
+        $colPosition = array("C", "D", "E", "F", "G", "H");
+        $arrHeader = array(
+            Yii::t("formulario", "Code"),
+            Yii::t("formulario", "Teacher"),
+            Yii::t("formulario", "Matter"),
+            Yii::t("formulario", "Date"),
+            academico::t("Academico", "Hour start date"),
+            academico::t("Academico", "Hour end date")
+        );
+        $mod_marcacion = new RegistroMarcacionHistorial();
+        $data = Yii::$app->request->get();
+        $arrSearch["profesor"] = $data['profesor'];
+        $arrSearch["materia"] = $data['materia'];
+        $arrSearch["f_ini"] = $data['f_ini'];
+        $arrSearch["f_fin"] = $data['f_fin'];
+        //$arrSearch["periodo"] = $data['periodo'];
+        $arrData = array();
+        if (empty($arrSearch)) {
+            $arrData = $mod_marcacion->consultarMarcacionHistorica(array(), true);
+        } else {
+            $arrData = $mod_marcacion->consultarMarcacionHistorica($arrSearch, true);
+        }
+        $nameReport = marcacion::t("Academico", "List Bearings History");
+        Utilities::generarReporteXLS($nombarch, $nameReport, $arrHeader, $arrData, $colPosition);
+        exit;
+    }
+
+    public function actionExppdf() {
+        $report = new ExportFile();
+        $this->view->title = academico::t("Academico", "List Bearings"); // Titulo del reporte
+
+        $mod_marcacion = new RegistroMarcacionHistorial();
+        $data = Yii::$app->request->get();
+        $arr_body = array();
+
+        $arrSearch["profesor"] = $data['profesor'];
+        $arrSearch["materia"] = $data['materia'];
+        $arrSearch["f_ini"] = $data['f_ini'];
+        $arrSearch["f_fin"] = $data['f_fin'];
+        //$arrSearch["periodo"] = $data['periodo'];
+
+        $arr_head = array(
+           Yii::t("formulario", "Code"),
+            Yii::t("formulario", "Teacher"),
+            Yii::t("formulario", "Matter"),
+            Yii::t("formulario", "Date"),
+            academico::t("Academico", "Hour start date"),
+            academico::t("Academico", "Hour end date")
+        );
+
+        if (empty($arrSearch)) {
+            $arr_body = $mod_marcacion->consultarMarcacionHistorica(array(), true);
+        } else {
+            $arr_body = $mod_marcacion->consultarMarcacionHistorica($arrSearch, true);
+        }
+
+        $report->orientation = "L"; // tipo de orientacion L => Horizontal, P => Vertical
+        $report->createReportPdf(
+                $this->render('exportpdf', [
+                    'arr_head' => $arr_head,
+                    'arr_body' => $arr_body
+                ])
+        );
+        $report->mpdf->Output('Reporte_' . date("Ymdhis") . ".pdf", ExportFile::OUTPUT_TO_DOWNLOAD);
+        return;
+    }
 
 }
