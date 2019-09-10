@@ -1550,7 +1550,7 @@ class OrdenPago extends \app\modules\financiero\components\CActiveRecord {
      * @param   
      * @return  
      */
-    public function insertarOrdenpago($sins_id, $sgen_id, $opag_subtotal, $opag_iva, $opag_total, $opag_estado_pago, $usuario_ingreso) {
+    public function insertarOrdenpago($sins_id, $sgen_id, $opag_subtotal, $opag_iva, $opag_total, $opag_estado_pago, $usuario_ingreso, $opag_fecha_pago_total = null, $valor_pago_total = null) {
         $con = \Yii::$app->db_facturacion;
 
         $trans = $con->getTransaction(); // se obtiene la transacción actual
@@ -1561,7 +1561,11 @@ class OrdenPago extends \app\modules\financiero\components\CActiveRecord {
         }
 
         $fecha_generacion = date(Yii::$app->params["dateTimeByDefault"]);
-        $valor_pagado = 0;
+        if (empty($valor_pago_total)) {
+            $valor_pagado = 0;
+        } else {
+            $valor_pagado = $valor_pago_total;
+        }        
 
         $param_sql = "opag_estado_logico";
         $bopago_sql = "1";
@@ -1576,8 +1580,8 @@ class OrdenPago extends \app\modules\financiero\components\CActiveRecord {
         }
 
         if (isset($sgen_id)) {
-            $param_sql .= ", sgen_id";
-            $bopago_sql .= ", :sgen_id";
+            $param_sql .= ", sbpa_id";
+            $bopago_sql .= ", :sbpa_id";
         }
 
         if (isset($fecha_generacion)) {
@@ -1614,9 +1618,14 @@ class OrdenPago extends \app\modules\financiero\components\CActiveRecord {
             $param_sql .= ", opag_usu_ingreso";
             $bopago_sql .= ", :opag_usu_ingreso";
         }
+        if (isset($opag_fecha_pago_total)) {
+            $param_sql .= ", opag_fecha_pago_total";
+            $bopago_sql .= ", :opag_fecha_pago_total";
+        }        
 
         try {
             $sql = "INSERT INTO " . $con->dbname . ".orden_pago ($param_sql) VALUES($bopago_sql)";
+            \app\models\Utilities::putMessageLogFile('insert o/p:'.$sql);
             $comando = $con->createCommand($sql);
 
             if (!empty($sins_id)) {
@@ -1626,7 +1635,7 @@ class OrdenPago extends \app\modules\financiero\components\CActiveRecord {
 
             if (!empty($sgen_id)) {
                 if (isset($sgen_id))
-                    $comando->bindParam(':sgen_id', $sgen_id, \PDO::PARAM_INT);
+                    $comando->bindParam(':sbpa_id', $sgen_id, \PDO::PARAM_INT);
             }
 
             if (isset($fecha_generacion))
@@ -1649,7 +1658,11 @@ class OrdenPago extends \app\modules\financiero\components\CActiveRecord {
 
             if (isset($usuario_ingreso))
                 $comando->bindParam(':opag_usu_ingreso', $usuario_ingreso, \PDO::PARAM_INT);
-
+            
+            if (!empty($opag_fecha_pago_total)) {
+                if (isset($opag_fecha_pago_total))
+                    $comando->bindParam(':opag_fecha_pago_total', $opag_fecha_pago_total, \PDO::PARAM_STR);
+            }
             $result = $comando->execute();
             if ($trans !== null)
                 $trans->commit();

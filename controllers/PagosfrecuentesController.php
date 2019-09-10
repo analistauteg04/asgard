@@ -188,11 +188,11 @@ class PagosfrecuentesController extends \yii\web\Controller {
         $descripcionItem = "Pagos de Varios Items";
         $titleBox = "Pagos varios";
         $totalpagar = $resultado["doc_valor"];
-        $nombre_apellido=explode(" ",$resultado["doc_nombres_cliente"]);
-        $nombre_cliente=isset($nombre_apellido[0])?$nombre_apellido[0]:"";
-        $apellido_cliente=isset($nombre_apellido[1])?$nombre_apellido[1]:"";
-        $tipo_docu="";
-        switch ($resultado["doc_tipo_dni"]){
+        $nombre_apellido = explode(" ", $resultado["doc_nombres_cliente"]);
+        $nombre_cliente = isset($nombre_apellido[0]) ? $nombre_apellido[0] : "";
+        $apellido_cliente = isset($nombre_apellido[1]) ? $nombre_apellido[1] : "";
+        $tipo_docu = "";
+        switch ($resultado["doc_tipo_dni"]) {
             case 1:
                 $tipo_dni = "CI";
                 break;
@@ -202,7 +202,7 @@ class PagosfrecuentesController extends \yii\web\Controller {
             case 3:
                 $tipo_dni = "PPN";
                 break;
-        }            
+        }
         return $this->render('btnpago', array(
                     "referenceID" => str_pad(Secuencias::nuevaSecuencia($con1, 1, 1, 1, 'BPA'), 8, "0", STR_PAD_LEFT),
                     "ordenPago" => $doc_id,
@@ -211,6 +211,7 @@ class PagosfrecuentesController extends \yii\web\Controller {
                     "apellido_cliente" => $apellido_cliente,
                     "cedula_cliente" => $resultado["doc_cedula"],
                     "tipo_documento" => $tipo_dni,
+                    "mobile_number" => $resultado["telfono_fac"],
                     "titleBox" => $titleBox,
                     "email_cliente" => $resultado["doc_correo"],
                     "total" => $totalpagar,
@@ -231,78 +232,100 @@ class PagosfrecuentesController extends \yii\web\Controller {
             $dataBeneficiario = $data["dataBenList"];
             $dataFactura = $data["dataFacturaList"];
             $cedula = $dataBeneficiario["cedula"];
+            $cedulafact = $dataFactura["dni_fac"];
             $item_ids = $data["dataItems"];
             $transaction = $con1->beginTransaction();
-            try {
-                if (!empty($item_ids)) {
-                    $id_pben = $pben_model->getIdPerBenByCed($con1, $cedula);
-                    if (empty($id_pben)) {
-                        $id_pbens = $pben_model->insertPersonaBeneficia($con1, $cedula, ucwords(strtolower($dataBeneficiario["nombre"])), ucwords(strtolower($dataBeneficiario["apellido"])), $dataBeneficiario["correo"], $dataBeneficiario["celular"]);
-                    } else {
-                        $id_actualiza = $pben_model->actualizarPersonaBeneficia($con1, $cedula, ucwords(strtolower($dataBeneficiario["nombre"])), ucwords(strtolower($dataBeneficiario["apellido"])), $dataBeneficiario["correo"], $dataBeneficiario["celular"]);
-                        if ($id_actualiza) {
-                            $id_pbens = $id_pben["id"];
-                        } else {
-                            $id_pbens = 0;   //Cuando hubo error en la actualización.                  
-                        }
-                    }
-                    if ($id_pbens > 0) {
-                        $idsbp = $sbp_model->insertSolicitudBotonPago($con1, $id_pbens);
-                        if ($idsbp > 0) {
-                            $tdoc_id=1;
-                            $tipo_dni_fac=$dataFactura["tipo_dni_fac"];
-                            switch ($tipo_dni_fac){
-                                case 1: 
-                                    $doc_dni_key='doc_cedula';
-                                    $doc_dni_val=$dataFactura["dni_fac"];
-                                    break;
-                                case 2: 
-                                    $doc_dni_key='doc_ruc';
-                                    $doc_dni_val=$dataFactura["ruc_fac"];
-                                    break;
-                                case 3: 
-                                    $doc_dni_key='doc_pasaporte';
-                                    $doc_dni_val=$dataFactura["pasaporte_fac"];
-                                    break;
-                            }
-                            
-                            $iddoc = $doc_model->insertDocumento($con1, $tdoc_id,$dataFactura["tipo_dni_fac"], $doc_dni_val, $idsbp, ucwords(strtolower($dataFactura["nombre_fac"])) . ' ' . ucwords(strtolower($dataFactura["apellidos_fac"])), ucwords(strtolower($dataFactura["dir_fac"])), $dataFactura["telfono_fac"], $dataFactura["doc_correo"], $dataFactura["total"], null, $doc_dni_key);
-                            if ($iddoc > 0) {
-                                for ($i = 0; $i < count($item_ids); $i++) {
-                                    $item_precio = $item_model->getPrecios($con1, $item_ids[$i]["item_id"]);
-                                    $val_iva = 0;
-                                    $id_ddoc=$ddoc_model->insertarDetDocumento($con1, $iddoc, $item_ids[$i]["item_id"], 1, $item_precio["ipre_precio"], $val_iva);
-                                    if ($id_ddoc > 0) {
-                                        $mensaje = $mensaje . "";
-                                    }
-                                }
-                                $transaction->commit();
-                                $mensaje = $mensaje . "Se ha guardado exitosamente su solicitud de pago.";
-                                $message = array(
-                                    "wtmessage" => Yii::t("notificaciones", $mensaje),
-                                    "title" => Yii::t('jslang', 'Success'),
-                                    "iddoc" => $iddoc
-                                );
-                                return Utilities::ajaxResponse('OK', 'alert', Yii::t("jslang", "Sucess"), false, $message);
-                            } else {
-                                $mensaje = $mensaje . "No se ha guardado el documento de factura";
-                            }
-                        } else {
-                            $mensaje = $mensaje . "No se ha guardado la solicitud del pago";
-                        }
-                    } else {
-                        $mensaje = $mensaje . "No se ha guardado el beneficiario";
-                    }
-                } else {
-                    $mensaje = $mensaje . "No se ha seleccionado ningún item a facturar.";
-                }
-            } catch (Exception $ex) {
+            \app\models\Utilities::putMessageLogFile('antes de ingresar a validación.');
+            $estado_pago = $doc_model->consultarEstadoByCedula($cedula,$cedulafact); 
+            if ($estado_pago == 'PENDING' || $estado_pago == 'FAILED' || $estado_pago == 'PENDING_VALIDATION' || $estado_pago == 'PARTIAL_EXPIRED' || $estado_pago == 'APPROVED_PARTIAL') { 
+                \app\models\Utilities::putMessageLogFile('ingresa cuando existe pago pendiente o ha fallado');
                 $transaction->rollBack();
+                $mensaje = "Estimado ".$dataFactura['nombre_fac']." ".$dataFactura['apellidos_fac'].":<br/>";
+                $mensaje = $mensaje . "Tiene una transaccion en estado pendiente, comunicarse con el departamento de colecturia (+59346052450 ext: 122) para mayor informacion.";
                 $message = array(
-                    "wtmessage" => $ex->getMessage(), Yii::t("notificaciones", "Error al grabar."),
-                    "title" => Yii::t('jslang', 'Error'),
-                );
-                return Utilities::ajaxResponse('NO_OK', 'alert', Yii::t("jslang", "Error"), true, $message);
+                    "wtmessage" => Yii::t("notificaciones", $mensaje),
+                    "title" => Yii::t('jslang', 'Success'),
+                    "iddoc" => 0,
+                    "estado" => 0,
+                );                
+                \app\models\Utilities::putMessageLogFile('mensaje:'.$mensaje);
+                return Utilities::ajaxResponse('OK', 'alert', Yii::t("jslang", "Sucess"), false, $message);
+            } else {
+                try {
+                    if (!empty($item_ids)) {
+                        $id_pben = $pben_model->getIdPerBenByCed($con1, $cedula);
+                        if (empty($id_pben)) {
+                            $id_pbens = $pben_model->insertPersonaBeneficia($con1, $cedula, ucwords(strtolower($dataBeneficiario["nombre"])), ucwords(strtolower($dataBeneficiario["apellido"])), $dataBeneficiario["correo"], $dataBeneficiario["celular"]);
+                        } else {
+                            $id_actualiza = $pben_model->actualizarPersonaBeneficia($con1, $cedula, ucwords(strtolower($dataBeneficiario["nombre"])), ucwords(strtolower($dataBeneficiario["apellido"])), $dataBeneficiario["correo"], $dataBeneficiario["celular"]);
+                            if ($id_actualiza) {
+                                $id_pbens = $id_pben["id"];
+                            } else {
+                                $id_pbens = 0;   //Cuando hubo error en la actualización.                  
+                            }
+                        }
+                        if ($id_pbens > 0) {
+                            \app\models\Utilities::putMessageLogFile('después de crear o actualizar beneficiario');
+                            $idsbp = $sbp_model->insertSolicitudBotonPago($con1, $id_pbens);
+                            if ($idsbp > 0) {
+                                \app\models\Utilities::putMessageLogFile('después de crear solicitud');
+                                $tdoc_id = 1;
+                                $tipo_dni_fac = $dataFactura["tipo_dni_fac"];
+                                switch ($tipo_dni_fac) {
+                                    case 1:
+                                        $doc_dni_key = 'doc_cedula';
+                                        $doc_dni_val = $dataFactura["dni_fac"];
+                                        break;
+                                    case 2:
+                                        $doc_dni_key = 'doc_ruc';
+                                        $doc_dni_val = $dataFactura["ruc_fac"];
+                                        break;
+                                    case 3:
+                                        $doc_dni_key = 'doc_pasaporte';
+                                        $doc_dni_val = $dataFactura["pasaporte_fac"];
+                                        break;
+                                }
+                                $iddoc = $doc_model->insertDocumento($con1, $tdoc_id, $dataFactura["tipo_dni_fac"], $doc_dni_val, $idsbp, ucwords(strtolower($dataFactura["nombre_fac"])) . ' ' . ucwords(strtolower($dataFactura["apellidos_fac"])), ucwords(strtolower($dataFactura["dir_fac"])), $dataFactura["telfono_fac"], $dataFactura["doc_correo"], $dataFactura["total"], null, $doc_dni_key);
+                                if ($iddoc > 0) {
+                                    for ($i = 0; $i < count($item_ids); $i++) {
+                                        $item_precio = $item_model->getPrecios($con1, $item_ids[$i]["item_id"]);
+                                        $val_iva = 0;
+                                        $id_ddoc = $ddoc_model->insertarDetDocumento($con1, $iddoc, $item_ids[$i]["item_id"], 1, $item_precio["ipre_precio"], $val_iva);
+                                        if ($id_ddoc > 0) {
+                                            $mensaje = $mensaje . "";
+                                            \app\models\Utilities::putMessageLogFile('despues de insertar documento');
+                                        }
+                                    }
+                                    $transaction->commit();
+                                    $mensaje = $mensaje . "Se ha guardado exitosamente su solicitud de pago.";
+                                    $message = array(
+                                        "wtmessage" => Yii::t("notificaciones", $mensaje),
+                                        "title" => Yii::t('jslang', 'Success'),
+                                        "iddoc" => $iddoc,
+                                        "estado" => 1,
+                                    );
+                                    return Utilities::ajaxResponse('OK', 'alert', Yii::t("jslang", "Sucess"), false, $message);
+                                } else {
+                                    $mensaje = $mensaje . "No se ha guardado el documento de factura";
+                                }
+                            } else {
+                                $mensaje = $mensaje . "No se ha guardado la solicitud del pago";
+                            }
+                        } else {
+                            $mensaje = $mensaje . "No se ha guardado el beneficiario";
+                        }
+                    } else {
+                        $mensaje = $mensaje . "No se ha seleccionado ningún item a facturar.";
+                    }
+                } catch (Exception $ex) {
+                    $transaction->rollBack();
+                    $message = array(
+                        "wtmessage" => $ex->getMessage(), Yii::t("notificaciones", "Error al grabar."),
+                        "title" => Yii::t('jslang', 'Error'),
+                        "estado" => 0,
+                    );
+                    return Utilities::ajaxResponse('NO_OK', 'alert', Yii::t("jslang", "Error"), true, $message);
+                }
             }
         }
     }

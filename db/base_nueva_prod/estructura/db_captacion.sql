@@ -538,3 +538,4 @@ create table if not exists `temporal_wizard_reprobados` (
  `twre_fecha_modificacion` timestamp null default null,
  `twre_estado_logico` varchar(1) not null
 );
+

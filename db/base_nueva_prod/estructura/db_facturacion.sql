@@ -372,7 +372,8 @@ create table if not exists `documento` (
 create table if not exists `detalle_documento` (
   `ddoc_id` bigint(20) not null auto_increment primary key,  
   `doc_id` bigint(20) not null,  
-  `ite_id` bigint(20) not null,
+  `ite_id` bigint(20) not null,  
+  -- `sins_id` bigint(20) null,
   `ddoc_cantidad` int not null,    
   `ddoc_precio` double not null,   
   `ddoc_valor_iva` double not null, 

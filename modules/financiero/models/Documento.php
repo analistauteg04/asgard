@@ -77,16 +77,18 @@ class Documento extends \yii\db\ActiveRecord {
 
     /**
      * @return \yii\db\ActiveQuery
-    */
+     */
     public function getDetalleDocumentos() {
         return $this->hasMany(DetalleDocumento::className(), ['doc_id' => 'doc_id']);
     }
-    public function insertDocumento($con, $tdoc_id,$tipo_dni_id, $doc_dni_val, $sbpa_id, $nombres, $direccion, $telefono, $correo, $valor, $usuario, $doc_dni_key) {
+
+    public function insertDocumento($con, $tdoc_id, $tipo_dni_id, $doc_dni_val, $sbpa_id, $nombres, $direccion, $telefono, $correo, $valor, $usuario, $doc_dni_key) {
         $estado = 1;
-        $fecha = date(Yii::$app->params["dateTimeByDefault"]);        
+        $fecha = date(Yii::$app->params["dateTimeByDefault"]);
         $sql = "INSERT INTO " . $con->dbname . ".documento
             (tdoc_id,  doc_tipo_dni, $doc_dni_key,  sbpa_id, doc_nombres_cliente, doc_direccion, doc_telefono,doc_fecha_pago, doc_correo, doc_valor, doc_pagado, doc_usuario_transaccion,doc_estado,doc_estado_logico) VALUES
             (:tdoc_id,:doc_tipo_dni, :$doc_dni_key, :sbpa_id,:doc_nombres_cliente,:doc_direccion,:doc_telefono,:fecha_pago,:doc_correo,:doc_valor, 0, :doc_usuario_transaccion,:doc_estado,:doc_estado)";
+        \app\models\Utilities::putMessageLogFile('insert documento:' . $sql);
         $command = $con->createCommand($sql);
         $command->bindParam(":tdoc_id", $tdoc_id, \PDO::PARAM_INT);
         $command->bindParam(":sbpa_id", $sbpa_id, \PDO::PARAM_INT);
@@ -150,7 +152,8 @@ class Documento extends \yii\db\ActiveRecord {
                         pb.pben_nombre,
                         pb.pben_apellido,
                         sb.sbpa_id,
-                        sb.sbpa_fecha_solicitud
+                        sb.sbpa_fecha_solicitud,
+                        d.doc_pagado
                 FROM " . $con->dbname . ".documento d inner join " . $con->dbname . ".solicitud_boton_pago sb 
                          on sb.sbpa_id = d.sbpa_id     
                      inner join " . $con->dbname . ".persona_beneficiaria pb on pb.pben_id = sb.pben_id
@@ -169,21 +172,47 @@ class Documento extends \yii\db\ActiveRecord {
         return $resultData;
     }
 
-    public function consultarVposByDocid() {
-        $estado = 1;
+    public function consultarEstadoByCedula($cedula,$cedula_fact) {
+        $con = \Yii::$app->db_financiero;
+        
         $sql = "
-                SELEC   
-                    pb.pben_apellido,
-                    sb.sbpa_id    
+                SELECT
+                    vire.status as estado
                 FROM 
-                    db_financiero.vpos_request
-                    
+                    db_facturacion.persona_beneficiaria as pben
+                    join db_facturacion.solicitud_boton_pago as sbpa on sbpa.pben_id =  pben.pben_id
+                    join db_facturacion.documento as doc on doc.sbpa_id = sbpa.sbpa_id
+                    join db_financiero.vpos_info_response as vire on vire.ordenPago = doc.doc_id and vire.tipo_orden = 2 
                 WHERE
-                    d.doc_id = :doc_id
+                    pben.pben_cedula = :cedula and
+                    doc.doc_cedula = :cedula_fact
+                ";
+        
+        $comando = $con->createCommand($sql);
+        $comando->bindParam(":cedula", $cedula, \PDO::PARAM_STR);
+        $comando->bindParam(":cedula_fact", $cedula_fact, \PDO::PARAM_STR);
+        $resultData = $comando->queryOne();
+        return $resultData['estado'];
+    }
+
+    public function consultarVposByDocid($doc_id) {
+        $estado = 1;
+        $con = \Yii::$app->db_financiero;
+        $sql = "
+                SELECt   
+                        vreq.reference,
+                        vres.requestId as requestID,
+                        json_response as resp
+                FROM 
+                        db_financiero.vpos_request as vreq
+                        join db_financiero.vpos_response as vres on vres.ordenPago = :doc_id and vres.tipo_orden = 2
+                WHERE
+                        vreq.ordenPago = :doc_id and vreq.tipo_orden = 2
+                        
                 ";
 
         $comando = $con->createCommand($sql);
-        $comando->bindParam(":estado", $estado, \PDO::PARAM_STR);
+        //$comando->bindParam(":estado", $estado, \PDO::PARAM_STR);
         $comando->bindParam(":doc_id", $doc_id, \PDO::PARAM_INT);
         $resultData = $comando->queryOne();
         return $resultData;
@@ -281,7 +310,7 @@ class Documento extends \yii\db\ActiveRecord {
                 imu.imni_estado = :status and 
                 imu.imni_estado_logico = :status
             ";
-                
+
         $comando = $con->createCommand($sql);
         $comando->bindParam(":status", $estado, \PDO::PARAM_STR);
         $comando->bindParam(":doc_id", $doc_id, \PDO::PARAM_INT);

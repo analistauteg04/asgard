@@ -96,4 +96,25 @@ class FormaPago extends \app\modules\financiero\components\CActiveRecord
     {
         return $this->hasMany(RegistroPagoFactura::className(), ['fpag_id' => 'fpag_id']);
     }
+    
+    
+     /**
+     * Function formas de pago
+     * @author Grace Viteri <analistadesarrollo01@uteg.edu.ec>
+     * @param
+     * @return
+     */
+    public function consultarFormaPago() {
+        $con = \Yii::$app->db_facturacion;
+        $estado = 1;
+        $sql = "SELECT fp.fpag_id AS id, fp.fpag_nombre AS value  
+                FROM " . $con->dbname . ".forma_pago fp 
+                WHERE  fp.fpag_estado_logico = :estado AND
+                       fp.fpag_estado = :estado ";                       
+        $comando = $con->createCommand($sql);
+        $comando->bindParam(":estado", $estado, \PDO::PARAM_STR);
+        $resultData = $comando->queryall();
+        return $resultData;
+    }
+
 }

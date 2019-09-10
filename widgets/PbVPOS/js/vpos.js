@@ -26,7 +26,11 @@ function reloadFn() {
     parent.closeIframePopup();
 }
 
-function showResumen(lblAccept, label) {
+function showResumen(lblAccept, label, status) {
+    if (status == "OK")
+        $('#legTransOk').show();
+    else
+        $('#legTransOk').hide();
     $('#status_id').text(lblAccept);
     $('#status_rsp').text(label);
     $('.vpos-resumen').addClass('rsp_show');
@@ -69,8 +73,10 @@ function setResponseData(data, execute) {
             }
             var label_message = (data["status"]["status"] == "APPROVED") ?
                 VPOS_VAR.APPROVED : ((data["status"]["status"] == "REJECTED") ? VPOS_VAR.REJECTED : VPOS_VAR.PENDING);
-            showResumen(label_message, wtmessage);
-            resetSession(wtmessage, label, status, callback, lblAccept);
+            var msg_alert = (data["status"]["status"] == "APPROVED") ?
+                VPOS_VAR.MSJ_OK : ((data["status"]["status"] == "REJECTED") ? VPOS_VAR.MSJ_REJ : VPOS_VAR.MSJ_PEN);
+            showResumen(label_message, wtmessage, status);
+            resetSession(msg_alert, label, status, callback, lblAccept);
         }, true);
     }
 }

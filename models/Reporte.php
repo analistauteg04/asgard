@@ -233,5 +233,48 @@ class Reporte extends \yii\db\ActiveRecord {
         $resultData = $comando->queryAll();
         return $resultData;
     }
+    
+    public function consultarInscriptos($anio) {
+        $con = \Yii::$app->db_crm; 
+        $con1 = \Yii::$app->db_captacion;
+       
+        //INNER JOIN  " . $con1->dbname . ".convenio_empresa B ON B.cemp_id=A.cemp_id
+        $sql = "SELECT COUNT(*) CANT,A.cemp_id,
+                IFNULL((SELECT IFNULL(B.cemp_nombre,'NO')  FROM " . $con1->dbname . ".convenio_empresa B WHERE B.cemp_estado=1 AND B.cemp_estado_logico=1 AND B.cemp_id=A.cemp_id),'NO CONVENIO') cemp_nombre,
+                A.imae_fecha_pago,MONTH(A.imae_fecha_pago) MES
+                    FROM " . $con->dbname . ".inscrito_maestria A			
+                WHERE A.imae_estado=1 AND A.imae_estado_logico=1 AND YEAR(A.imae_fecha_pago)=:anio
+                    GROUP BY A.cemp_id,MONTH(A.imae_fecha_pago) ORDER BY MONTH(A.imae_fecha_pago),A.cemp_id ASC;";
+        
+        $comando = $con->createCommand($sql);
+        //Utilities::putMessageLogFile($sql);
+        $comando->bindParam(":anio", $anio, \PDO::PARAM_STR);
+        return $comando->queryAll();
+    }
+    
+    public function getAllConvenios() {
+        $con = \Yii::$app->db_crm;
+        $sql = "SELECT emp_id as id,emp_razon_social as value from " . $con->dbname . ".empresa WHERE emp_estado_logico=1 AND emp_estado=1 ORDER BY id asc";  
+        $comando = $con->createCommand($sql);
+        return $comando->queryAll();
+    }
+    
+    
+    
+    public function getAllAnios() {
+        $con = \Yii::$app->db_crm;
+        $sql = "SELECT DISTINCT(YEAR(imae_fecha_inscripcion)) anio
+                    FROM " . $con->dbname . ".inscrito_maestria where imae_estado=1 and imae_estado_logico=1;";  
+        $comando = $con->createCommand($sql);
+        return $comando->queryAll();
+    }
+    
+    public function getAllConvenioEmpresa() {
+        $con = \Yii::$app->db_captacion;
+        $sql = "SELECT B.cemp_nombre  FROM " . $con->dbname . ".convenio_empresa B "
+                . " WHERE B.cemp_estado=1 AND B.cemp_estado_logico=1 "; 
+        $comando = $con->createCommand($sql);
+        return $comando->queryAll();
+    }
 
 }

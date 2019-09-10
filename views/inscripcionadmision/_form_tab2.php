@@ -19,7 +19,7 @@ $leyenda = '<div class="col-md-12 col-xs-12 col-sm-12 col-lg-12">
     <div class="col-md-12 col-xs-12 col-sm-12 col-lg-12">
         <?php echo $leyenda; ?>
     </div>
-    <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
+    <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12" id="convenio" style="display: none">
         <div class="form-group">
             <label for="cmb_convenio_empresa" class="col-lg-3 col-md-3 col-sm-3 col-xs-3 control-label keyupmce"><?= Yii::t("formulario", "Empresa Convenio") ?> <span class="text-danger">*</span></label>
             <div class="col-lg-9 col-md-9 col-sm-9 col-xs-9">

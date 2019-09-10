@@ -237,15 +237,14 @@ class Http
         if(!is_null($this->_user)){
            curl_setopt($s, CURLOPT_USERPWD, $this->_user.':'.$this->_pass);
         }
-
         switch ($type) {
             case self::DELETE:
                 curl_setopt($s, CURLOPT_URL, $url . '?' . http_build_query($params));
                 curl_setopt($s, CURLOPT_CUSTOMREQUEST, self::DELETE);
                 break;
             case self::POST:
-                curl_setopt($s, CURLOPT_URL, $url);
-                curl_setopt($s, CURLOPT_POST, true);
+                curl_setopt($s, CURLOPT_URL, $url);                
+                curl_setopt($s, CURLOPT_POST, true); 
                 curl_setopt($s, CURLOPT_POSTFIELDS, $params);
                 break;
             case self::GET:

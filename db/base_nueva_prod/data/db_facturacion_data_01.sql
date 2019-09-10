@@ -794,13 +794,15 @@ insert into `item_metodo_unidad` (`imni_id`, `ite_id`, `ming_id`, `uaca_id`, `mo
 -- Volcado de datos para la tabla `forma_pago` 
 --
 insert into `forma_pago` (`fpag_id`,  `fpag_nombre`, `fpag_descripcion`, `fpag_distintivo`, `fpag_usu_ingreso`, `fpag_estado`, `fpag_estado_logico`) values
-(1,'Tarjeta de Credito', 'Tarjeta de Credito', '1', 1, '1','1'),
+(1,'Tarjeta de Crédito', 'Tarjeta de Crédito', '1', 1, '1','1'),
 (2,'Efectivo', 'Efectivo', '1', 1, '1','1'),
 (3,'Cheque', 'Cheque', '1', 1, '1','1'),
 (4,'Transferencia', 'Transferencia', '2', 1, '1','1'),
 (5,'Depósito', 'Depósito', '2', 1, '1','1'),
 (6,'Botón de Pagos', 'Botón de Pagos', '3', 1, '1','1'),
-(7,'Pago en Línea', 'Pago en Línea', '1', 1, '1','1');
+(7,'Pago en Línea', 'Pago en Línea', '1', 1, '1','1'),
+(8,'Efectivo y Tarjeta de Crédito', 'Efectivo y Tarjeta de Crédito', '4', 1, '1','1'),
+(9,'Tarjeta de Crédito y Cheque', 'Tarjeta de Crédito y Cheque', '4', 1, '1','1');
 
 -- --------------------------------------------------------
 --

@@ -7,7 +7,7 @@ CREATE SCHEMA IF NOT EXISTS `db_repositorio` DEFAULT CHARACTER SET utf8 ;
 USE `db_repositorio` ;
 
 -- GRANT ALL PRIVILEGES ON `db_repositorio`.* TO 'uteg'@'localhost' IDENTIFIED BY 'Utegadmin2016*'; -- Ubuntu
-GRANT ALL PRIVILEGES ON `db_repositorio`.* TO 'uteg'@'localhost';  -- centos
+-- GRANT ALL PRIVILEGES ON `db_repositorio`.* TO 'uteg'@'localhost';  -- centos
 
 -- --------------------------------------------------------
 -- 
@@ -99,6 +99,7 @@ create table if not exists `documento_repositorio`(
 `dre_ruta` varchar(200) not null,
 `dre_imagen` varchar(100) not null,
 `dre_descripcion` varchar(1000) null,
+`dre_usu_ingresa` bigint(20) not null,
 `dre_usu_modifica` bigint(20) null,
 `dre_estado` varchar(1) not null,
 `dre_fecha_archivo` timestamp null default null,

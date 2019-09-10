@@ -20,7 +20,7 @@ function habilitarSecciones() {
 }
 var itemList = [];
 var total = 0;
-$(document).ready(function () {
+$(document).ready(function() {
     $('#btn_pago_p').css('display', 'none');
     llenarDatosBen(obtDataBen());
     var unisol = $('#cmb_unidad_solicitud').val();
@@ -29,12 +29,12 @@ $(document).ready(function () {
     } else if (unisol == 2) {
         $('#divmetodocan').css('display', 'block');
     }
-    $('#cmb_pais_dom').change(function () {
+    $('#cmb_pais_dom').change(function() {
         var link = $('#txth_base').val() + "/inscripcionadmision/index";
         var arrParams = new Object();
         arrParams.codarea = $(this).val();
         arrParams.getarea = true;
-        requestHttpAjax(link, arrParams, function (response) {
+        requestHttpAjax(link, arrParams, function(response) {
             if (response.status == "OK") {
                 data = response.message;
                 $('#txt_codigoarea').val(data.area['name']);
@@ -42,21 +42,20 @@ $(document).ready(function () {
         }, true);
     });
 
-    $('#cmb_tipo_dni').change(function () {
+    $('#cmb_tipo_dni').change(function() {
         if ($('#cmb_tipo_dni').val() == 'PASS') {
             $('#txt_cedula').removeClass("PBvalidation");
             $('#txt_pasaporte').addClass("PBvalidation");
             $('#Divpasaporte').show();
             $('#Divcedula').hide();
-        } else if ($('#cmb_tipo_dni').val() == 'CED')
-        {
+        } else if ($('#cmb_tipo_dni').val() == 'CED') {
             $('#txt_pasaporte').removeClass("PBvalidation");
             $('#txt_cedula').addClass("PBvalidation");
             $('#Divpasaporte').hide();
             $('#Divcedula').show();
         }
     });
-    $('#cmb_unidad_solicitud').change(function () {
+    $('#cmb_unidad_solicitud').change(function() {
         var unisol = $('#cmb_unidad_solicitud').val();
         if (unisol == 1) {
             $('#divmetodocan').css('display', 'none');
@@ -73,7 +72,7 @@ $(document).ready(function () {
         var arrParams = new Object();
         arrParams.nint_id = $(this).val();
         arrParams.getmodalidad = true;
-        requestHttpAjax(link, arrParams, function (response) {
+        requestHttpAjax(link, arrParams, function(response) {
             if (response.status == "OK") {
                 data = response.message;
                 setComboData(data.modalidad, "cmb_modalidad_solicitud");
@@ -84,7 +83,7 @@ $(document).ready(function () {
                         arrParams.nint_id = $('#cmb_unidad_solicitud').val();
                         arrParams.metodo = $('#cmb_metodo_solicitud').val();
                         arrParams.getmetodo = true;
-                        requestHttpAjax(link, arrParams, function (response) {
+                        requestHttpAjax(link, arrParams, function(response) {
                             if (response.status == "OK") {
                                 data = response.message;
                                 setComboData(data.metodos, "cmb_metodo_solicitud");
@@ -95,7 +94,7 @@ $(document).ready(function () {
                                 arrParams.moda_id = $('#cmb_modalidad_solicitud').val();
                                 arrParams.empresa_id = 1; // se coloca 1, porque solo se trabaja con uteg
                                 arrParams.getitem = true;
-                                requestHttpAjax(link, arrParams, function (response) {
+                                requestHttpAjax(link, arrParams, function(response) {
                                     if (response.status == "OK") {
                                         data = response.message;
                                         setComboData(data.items, "cmb_item");
@@ -104,7 +103,7 @@ $(document).ready(function () {
                                     var arrParams = new Object();
                                     arrParams.ite_id = $('#cmb_item').val();
                                     arrParams.getprecio = true;
-                                    requestHttpAjax(link, arrParams, function (response) {
+                                    requestHttpAjax(link, arrParams, function(response) {
                                         if (response.status == "OK") {
                                             data = response.message;
                                             $('#txt_precio_item').val(data.precio);
@@ -121,7 +120,7 @@ $(document).ready(function () {
                         arrParams.moda_id = $('#cmb_modalidad_solicitud').val();
                         arrParams.empresa_id = 1; // se coloca 1, porque solo se trabaja con uteg
                         arrParams.getitem = true;
-                        requestHttpAjax(link, arrParams, function (response) {
+                        requestHttpAjax(link, arrParams, function(response) {
                             if (response.status == "OK") {
                                 data = response.message;
                                 setComboData(data.items, "cmb_item");
@@ -130,7 +129,7 @@ $(document).ready(function () {
                             var arrParams = new Object();
                             arrParams.ite_id = $('#cmb_item').val();
                             arrParams.getprecio = true;
-                            requestHttpAjax(link, arrParams, function (response) {
+                            requestHttpAjax(link, arrParams, function(response) {
                                 if (response.status == "OK") {
                                     data = response.message;
                                     $('#txt_precio_item').val(data.precio);
@@ -142,7 +141,7 @@ $(document).ready(function () {
             }
         }, true);
     });
-    $('#cmb_modalidad_solicitud').change(function () {
+    $('#cmb_modalidad_solicitud').change(function() {
         var link = $('#txth_base').val() + "/pagosfrecuentes/index";
         var arrParams = new Object();
         arrParams.unidada = $('#cmb_unidad_solicitud').val();
@@ -151,7 +150,7 @@ $(document).ready(function () {
         arrParams.carrera_id = $('#cmb_carrera_solicitud').val();
         arrParams.empresa_id = 1; // se coloca 1, porque solo se trabaja con uteg
         arrParams.getitem = true;
-        requestHttpAjax(link, arrParams, function (response) {
+        requestHttpAjax(link, arrParams, function(response) {
             if (response.status == "OK") {
                 data = response.message;
                 setComboData(data.items, "cmb_item");
@@ -159,7 +158,7 @@ $(document).ready(function () {
             var arrParams = new Object();
             arrParams.ite_id = $('#cmb_item').val();
             arrParams.getprecio = true;
-            requestHttpAjax(link, arrParams, function (response) {
+            requestHttpAjax(link, arrParams, function(response) {
                 if (response.status == "OK") {
                     data = response.message;
                     $('#txt_precio_item').val(data.precio);
@@ -167,12 +166,12 @@ $(document).ready(function () {
             }, true);
         }, true);
     });
-    $('#cmb_item').change(function () {
+    $('#cmb_item').change(function() {
         var link = $('#txth_base').val() + "/pagosfrecuentes/index";
         var arrParams = new Object();
         arrParams.ite_id = $('#cmb_item').val();
         arrParams.getprecio = true;
-        requestHttpAjax(link, arrParams, function (response) {
+        requestHttpAjax(link, arrParams, function(response) {
             if (response.status == "OK") {
                 data = response.message;
                 $('#txt_precio_item').val(data.precio);
@@ -180,14 +179,14 @@ $(document).ready(function () {
         }, true);
     });
 
-    $('#btn_AgregarItem').click(function () {
+    $('#btn_AgregarItem').click(function() {
         guardarItem();
         var dataItems = obtDataList();
         representarItems(dataItems);
     });
 
     // tabs create
-    $('#paso1next').click(function () {
+    $('#paso1next').click(function() {
         guardarBenPagoTemp();
         $("a[data-href='#paso1']").attr('data-toggle', 'none');
         $("a[data-href='#paso1']").parent().attr('class', 'disabled');
@@ -198,7 +197,7 @@ $(document).ready(function () {
         $("a[data-href='#paso2']").trigger("click");
         representarItems(obtDataList());
     });
-    $('#paso2back').click(function () {
+    $('#paso2back').click(function() {
         llenarDatosBen(obtDataBen());
         $("a[data-href='#paso2']").attr('data-toggle', 'none');
         $("a[data-href='#paso2']").parent().attr('class', 'disabled');
@@ -208,7 +207,7 @@ $(document).ready(function () {
         $("a[data-href='#paso1']").attr('href', $("a[data-href='#paso1']").attr('data-href'));
         $("a[data-href='#paso1']").trigger("click");
     });
-    $('#paso2next').click(function () {
+    $('#paso2next').click(function() {
         $("a[data-href='#paso2']").attr('data-toggle', 'none');
         $("a[data-href='#paso2']").parent().attr('class', 'disabled');
         $("a[data-href='#paso2']").attr('data-href', $("a[href='#paso2']").attr('href'));
@@ -219,7 +218,7 @@ $(document).ready(function () {
         $('#lbl_total_factura').text("$" + total);
         llenarDatosFact(obtDataFact());
     });
-    $('#paso3back').click(function () {
+    $('#paso3back').click(function() {
         $("a[data-href='#paso3']").attr('data-toggle', 'none');
         $("a[data-href='#paso3']").parent().attr('class', 'disabled');
         $("a[data-href='#paso3']").attr('data-href', $("a[href='#paso3']").attr('href'));
@@ -229,7 +228,7 @@ $(document).ready(function () {
         $("a[data-href='#paso2']").trigger("click");
         representarItems(obtDataList());
     });
-    $('#paso3next').click(function () {
+    $('#paso3next').click(function() {
         guardarFacturaTemp();
         guardarPagos();
         $("a[data-href='#paso2']").attr('data-toggle', 'none');
@@ -259,7 +258,7 @@ $(document).ready(function () {
      $('label[for=txt_dni_fac]').text($('#txth_pas_lb').val() + "");
      }
      });*/
-    $('input[name=opt_tipo_DNI]:radio').change(function () {
+    $('input[name=opt_tipo_DNI]:radio').change(function() {
         if ($(this).val() == 1) {
             $('#DivcedulaFac').css('display', 'block');
             $('#DivpasaporteFac').css('display', 'none');
@@ -300,6 +299,7 @@ $(document).ready(function () {
     }
 
 });
+
 function llenarDatosBen(benData) {
     var count = Object.keys(benData).length;
     if (count > 0) {
@@ -326,6 +326,7 @@ function llenarDatosBen(benData) {
         }
     }
 }
+
 function llenarDatosFact(factData) {
     var count = Object.keys(factData).length;
     if (count > 0) {
@@ -352,6 +353,7 @@ function llenarDatosFact(factData) {
         }
     }
 }
+
 function guardarBenPagoTemp() {
     var arrParams = new Object();
     arrParams.nombre = $('#txt_primer_nombre').val();
@@ -373,8 +375,7 @@ function guardarFacturaTemp() {
     arrParams.tipo_dni_fac = $("input[name='opt_tipo_DNI']:checked").val();
     if (arrParams.tipo_dni_fac == 1) {
         arrParams.dni_fac = $('#txt_dni_fac').val();
-    } else if (arrParams.tipo_dni_fac == 2)
-    {
+    } else if (arrParams.tipo_dni_fac == 2) {
         arrParams.ruc_fac = $('#txt_ruc_fac').val();
     } else {
         arrParams.pasaporte_fac = $('#txt_pasaporte_fac').val();
@@ -398,24 +399,28 @@ function guardarPagos() {
         var len_fact = Object.keys(arrParams.dataFacturaList).length;
         var len_item = Object.keys(arrParams.dataItems).length;
         if (len_ben > 0 && len_fact > 0 && len_item > 0) {
-            alert("entro para guardar en las tablas, boton pagos");
             if (!validateForm()) {
-                requestHttpAjax(link, arrParams, function (response) {
-                    showAlert("OK", "success", response.message);
-                    sessionStorage.clear();
-                    setTimeout(function () {
-                        var bohre = $('#txth_base').val() + "/pagosfrecuentes/botonpago?docid=" + response.message.iddoc + "&popup=1";
-                        $('#btn_pago_p').attr("href", bohre);
-                        $('#btn_pago_p').trigger("click");
-                    }, 3000);
-                });
+                requestHttpAjax(link, arrParams, function(response) {
+                    if (response.message.estado == 1) {
+                        showAlert("OK", "success", response.message);
+                        sessionStorage.clear();
+                        setTimeout(function() {
+                            var bohre = $('#txth_base').val() + "/pagosfrecuentes/botonpago?docid=" + response.message.iddoc + "&popup=1";
+                            $('#btn_pago_p').attr("href", bohre);
+                            $('#btn_pago_p').trigger("click");
+                        }, 3000); //descomentar cuando termine de guardar bien
+                    } else {
+                        showAlert("No_OK", "error", response.message);
+                        sessionStorage.clear();
+                        window.location.href = $('#txth_base').val() + "/pagosfrecuentes/index";
+                    }
+                }, true);
             }
-        }else{
+        } else {
             sessionStorage.clear();
-            setTimeout("location.reload(true);",5);
+            setTimeout("location.reload(true);", 5);
+            window.location.href = $('#txth_base').val() + "/pagosfrecuentes/index";
         }
-
-
     }
 }
 
@@ -443,6 +448,7 @@ function getItemsIds() {
     }
     return JSON.stringify(newList);
 }
+
 function guardarItem() {
     var unidad_id = $('#cmb_unidad_solicitud').val();
     var unidad_txt = $('#cmb_unidad_solicitud option:selected').html();
@@ -466,10 +472,11 @@ function guardarItem() {
         datalist.push(dataitem);
         sessionStorage.setItem('datosItem', JSON.stringify(datalist));
     } else {
-        var mensaje = {wtmessage: "El item ya se encuentra ingresado.", title: "Exito"};
+        var mensaje = { wtmessage: "El item ya se encuentra ingresado.", title: "Exito" };
         showAlert("OK", "success", mensaje);
     }
 }
+
 function existeitem(item_id) {
     var lstcurrent = obtDataList();
     for (i = 0; i < lstcurrent.length; i++) {
@@ -479,6 +486,7 @@ function existeitem(item_id) {
     }
     return false;
 }
+
 function obtDataList() {
     var storedListItems = sessionStorage.getItem('datosItem');
     if (storedListItems === null) {
@@ -488,6 +496,7 @@ function obtDataList() {
     }
     return itemList;
 }
+
 function obtDataBen() {
     var storedListBen = sessionStorage.getItem('datosBen');
     if (storedListBen === null) {
@@ -497,6 +506,7 @@ function obtDataBen() {
     }
     return benList;
 }
+
 function obtDataFact() {
     var storedListFact = sessionStorage.getItem('datosFactura');
     if (storedListFact === null) {
@@ -506,12 +516,13 @@ function obtDataFact() {
     }
     return factList;
 }
+
 function representarItems(dataItems) {
     $("#dataListItem").html("");
     html = " <div class='grid-view'>" +
-            "<table class='table table-striped table-bordered dataTable'>" +
-            "<tbody>" +
-            "  <tr><th>Unidad Academica</th> <th>Modalidad</th> <th>Item</th> <th>Precio</th></tr>";
+        "<table class='table table-striped table-bordered dataTable'>" +
+        "<tbody>" +
+        "  <tr><th>Unidad Academica</th> <th>Modalidad</th> <th>Item</th> <th>Precio</th></tr>";
     total = 0;
     for (i = 0; i < dataItems.length; i++) {
         html += "<tr><td>" + dataItems[i]['unidad'] + "</td> <td>" + dataItems[i]['modalidad'] + "</td> <td>" + dataItems[i]['item'] + "</td> <td>$" + dataItems[i]['precio'] + "</td><td><button type='button' class='btn btn-link' onclick='eliminaritem(" + dataItems[i]['item_id'] + ")'> <span class='glyphicon glyphicon-remove'></span> </button></td></tr>";
@@ -522,6 +533,7 @@ function representarItems(dataItems) {
     html += "    </table>" + "</div>";
     $("#dataListItem").html(html);
 }
+
 function eliminaritem(indice) {
     var tmp = JSON.parse(sessionStorage.getItem('datosItem'));
     var newArr = [];
@@ -533,6 +545,7 @@ function eliminaritem(indice) {
     sessionStorage.setItem('datosItem', JSON.stringify(newArr));
     representarItems(obtDataList());
 }
+
 function sleep(milliseconds) {
     var start = new Date().getTime();
     for (var i = 0; i < 1e7; i++) {
@@ -541,17 +554,17 @@ function sleep(milliseconds) {
         }
     }
 }
+
 function PagoDinners(solicitud) {
     var link = $('#txth_base').val() + "/pagosfrecuentes/savepagodinner";
     var arrParams = new Object();
     arrParams.sins_id = solicitud;
     alert('solicitud-proc:PagoDinner:' + solicitud);
-    requestHttpAjax(link, arrParams, function (response) {
+    requestHttpAjax(link, arrParams, function(response) {
         var message = response.message;
         if (response.status == "OK") {
             showLoadingPopup();
-            setTimeout(function () {
-            }, 1000);
+            setTimeout(function() {}, 1000);
         }
     });
 }

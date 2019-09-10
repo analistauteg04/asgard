@@ -44,7 +44,19 @@ admision::registerTranslations();
             [
                 'attribute' => 'Estado',
                 'header' => financiero::t("Pagos", "Payment status"),
-                'value' => 'estado',
+                'format' => 'html',
+                'value' => function ($model) {
+                    if ($model["estado"] == 'APPROVED')
+                        return '<small class="label label-success">Pagado</small>';                        
+                    elseif ($model["estado"] == 'REJECTED')
+                        return '<small class="label label-danger">Rechazado</small>';
+                    elseif ($model["estado"] == 'PENDING')
+                        return '<small class="label label-warning">Pendiente</small>';
+                    elseif ($model["estado"] == 'FAILED')
+                        return '<small class="label label-default">Fallido</small>';                    
+                    else
+                        return '<small class="label label-info">"En espera</small>';                    
+                },
             ],            
         ],
     ])

@@ -473,3 +473,67 @@ create table if not exists db_crm.`bitacora_actividades_noprocesadas` (
  `bano_novedad` varchar(1000) null,
  `bano_fecha_creacion` timestamp not null default current_timestamp
 );
+
+-- --------------------------------------------------------
+--
+-- Estructura de tabla `grupo_introductotio`
+--
+create table if not exists db_crm.`grupo_introductorio` (
+ `gint_id` bigint(20) not null auto_increment primary key,
+ `gint_nombre` varchar(250) default null,
+ `gint_descripcion` varchar(500) default null,
+ `gint_estado` varchar(1) not null,
+ `gint_usuario` bigint(20) not null,
+ `gint_usuario_modif` bigint(20) default null,
+ `gint_fecha_creacion` timestamp not null default current_timestamp,
+ `gint_fecha_modificacion` timestamp null default null,
+ `gint_estado_logico` varchar(1) not null
+);
+
+
+-- ---------------------------------------------------------
+--
+-- Estructura de tabla `inscrito_maestria`
+--
+create table if not exists db_crm.`inscrito_maestria` (
+ `imae_id` bigint(20) not null auto_increment primary key,
+ `cemp_id` bigint(20) null, 
+ `gint_id` bigint(20) not null,
+ `pai_id` bigint(20) default null,
+ `pro_id` bigint(20) default null,
+ `can_id` bigint(20) default null,
+ `uaca_id` bigint(20)  not null,
+ `mod_id` bigint(20)  not null,
+ `eaca_id` bigint(20)  not null, 
+ `imae_tipo_documento` varchar(2) null, /* '1': cedula, '2': ruc, '3': pasaporte */
+ `imae_documento` varchar(50) default null,
+ `imae_primer_nombre` varchar(100) not null,
+ `imae_segundo_nombre` varchar(100) null,
+ `imae_primer_apellido` varchar(100) not null,
+ `imae_segundo_apellido` varchar(100) null,  
+ `imae_revisar_urgente` varchar(100) null,  
+ `imae_cumple_requisito` varchar(2) null, /* '1': Si, '2': No */
+ `imae_agente` bigint(20) null,
+ `imae_fecha_inscripcion` varchar(20) null, 
+ `imae_fecha_pago` varchar(20) null, 
+ `imae_pago_inscripcion` double default null,    
+ `imae_valor_maestria` double default null,    
+ `fpag_id` bigint(20) null,
+ `imae_estado_pago` varchar(2) null,  /* '1':Pagado, '2': No Pagado, '3': Pagado Totalidad Maestria */
+ `imae_convenios` varchar(100) null, 
+ `imae_matricula` varchar(15) null,
+ `imae_titulo` varchar(500) null,
+ `ins_id` bigint(20) null,
+ `imae_correo` varchar(50) null,
+ `imae_celular` varchar(50) null,
+ `imae_convencional` varchar(50) null, 
+ `imae_ocupacion` varchar(100) null, 
+ `imae_usuario` bigint(20) not null,
+ `imae_usuario_modif` bigint(20) default null,
+ `imae_estado` varchar(1) not null,
+ `imae_fecha_creacion` timestamp not null default current_timestamp,
+ `imae_fecha_modificacion` timestamp null default null,
+ `imae_estado_logico` varchar(1) not null, 
+ 
+  foreign key (gint_id) references `grupo_introductorio`(gint_id)     
+);

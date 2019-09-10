@@ -12,6 +12,7 @@ INSERT INTO `persona_correo_institucional` (`pcin_id`, `per_id`, `pcin_correo`, 
 (2,  5, 'Coordinacionadmisiones@uteg.edu.ec', '1', '2018-03-14 14:59:40', null, '1'),
 (3, 22, 'Aalcivar@uteg.edu.ec', '1', '2018-04-06 16:43:44', '2018-04-06 16:43:44', '1'),
 (4, 27, 'Ahernandez@uteg.edu.ec',  '1', '2018-04-09 09:34:26', null,  '1');
+
 -- --------------------------------------------------------
 --
 -- Volcado de datos para la tabla `tipo_contacto_general`
@@ -1827,3 +1828,17 @@ INSERT INTO `dia` (`dia_id`, `dia_nombre`,`dia_descripcion`, `dia_usuario_ingres
 (5, 'Viernes', 'Viernes', 1, '1', '1'),
 (6, 'Sábado', 'Sábado', 1, '1', '1'),
 (7, 'Domingo', 'Domingo', 1, '1', '1');
+
+-- --------------------------------------------------------
+--
+-- Volcado de datos para la tabla `tipo_contacto_general`
+-- --------------------------------------------------------
+INSERT INTO `agente_inscrito_maestria` (`aima_id`, `aima_nombre`, `aima_descripcion`, `aima_usuario_ingresa`, `aima_estado`, `aima_estado_logico`) VALUES
+(1, 'Aabad', 'Aabad', 1, '1', '1'),
+(2, 'Caguilar', 'Caguilar', 1, '1', '1'),
+(3, 'Cmacias', 'Cmacias', 1, '1', '1'),
+(4, 'Ebayona', 'Ebayona', 1, '1', '1'),
+(5, 'Jmora', 'Jmora', 1, '1', '1'),
+(6, 'Sholguin', 'Sholguin', 1, '1', '1');
+
+

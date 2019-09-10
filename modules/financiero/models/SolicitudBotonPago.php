@@ -110,39 +110,47 @@ class SolicitudBotonPago extends \yii\db\ActiveRecord {
         $con1 = \Yii::$app->db_financiero;
         $estado = 1;
         if (isset($arrFiltro) && count($arrFiltro) > 0) {
-           // if ($arrFiltro['search'] != "" && $arrFiltro['search'] != "") {
-                $str_search .= "and (pben.pben_nombre like :search OR ";
-                $str_search .= "pben.pben_apellido like :search ) AND ";
-           // }
+            // if ($arrFiltro['search'] != "" && $arrFiltro['search'] != "") {
+            $str_search .= "and (pben.pben_nombre like :search OR ";
+            $str_search .= "pben.pben_apellido like :search ) AND ";
+            // }
             if ($arrFiltro['f_ini'] != "" && $arrFiltro['f_fin'] != "") {
                 $str_search .= "docu.doc_fecha_pago >= :fec_ini AND ";
                 $str_search .= "docu.doc_fecha_pago <= :fec_fin AND ";
             }
         }
         $sql = "
-                select
+                select distinct
                     sbpa.sbpa_id as id,
-                    vres.reference as referencia,
+                    vres.requestId as referencia,
                     concat(pben.pben_nombre,' ',pben.pben_apellido) as estudiante,
                     docu.doc_nombres_cliente as persona_factura,
                     ifnull(docu.doc_cedula,'') as cedula_factura,
                     docu.doc_fecha_pago as fecha_pago,
                     docu.doc_valor as total_pago,
-                    docu.doc_pagado as estado,
-                    docu.doc_id
+                    vire.status as estado,
+                    docu.doc_id, ifnull(op.sbpa_id,0) as sbpa_op
                 from
                     " . $con->dbname . ".solicitud_boton_pago as sbpa
                     join " . $con->dbname . ".persona_beneficiaria as pben on pben.pben_id = sbpa.pben_id
                     join " . $con->dbname . ".documento as docu on docu.sbpa_id = sbpa.sbpa_id
                     join " . $con1->dbname . ".vpos_response as vres on vres.ordenPago = docu.doc_id and vres.tipo_orden = 2
+                    left join
+                    (
+                        select max(vire.id) as id,vire.ordenPago,vire.tipo_orden 
+                        from db_financiero.vpos_info_response as vire                    
+                        group by vire.ordenPago,vire.tipo_orden
+                    ) as vpos_info_modf on vpos_info_modf.ordenPago=docu.doc_id and vpos_info_modf.tipo_orden=2
+                    join db_financiero.vpos_info_response as vire on vire.id = vpos_info_modf.id
+                    left join " . $con->dbname . ".orden_pago op on op.sbpa_id = sbpa.sbpa_id and vire.tipo_orden=2
                 where 1=1
                     $str_search
-            ";  
+            ";
         $comando = $con->createCommand($sql);
         $comando->bindParam(":status", $estado, \PDO::PARAM_STR);
         //VERIFICAR SI LOS PARAMETROS $doc_id y $opag_id SE VAN USAR SINO BORRAR
-        /*$comando->bindParam(":doc_id", $doc_id, \PDO::PARAM_INT);
-        $comando->bindParam(":opag_id", $opag_id, \PDO::PARAM_INT);*/
+        /* $comando->bindParam(":doc_id", $doc_id, \PDO::PARAM_INT);
+          $comando->bindParam(":opag_id", $opag_id, \PDO::PARAM_INT); */
         if (isset($arrFiltro) && count($arrFiltro) > 0) {
             $search_cond = "%" . $arrFiltro["search"] . "%";
             $fecha_ini = $arrFiltro["f_ini"] . " 00:00:00";
@@ -178,85 +186,84 @@ class SolicitudBotonPago extends \yii\db\ActiveRecord {
         }
     }
 
-    public function consultarHistoralTransacciones($doc_id, $opag_id, $arrFiltro = array(), $onlyData = false) {
+    public function consultarHistoralTransacciones($per_id, $arrFiltro = array(), $onlyData = false) {
         $con = \Yii::$app->db_facturacion;
         $con1 = \Yii::$app->db_financiero;
+        $con2 = \Yii::$app->db_captacion;
+        $con3 = \Yii::$app->db_asgard;
         $estado = 1;
-        if (isset($arrFiltro) && count($arrFiltro) > 0) {
+        if (isset($arrFiltro) && count($arrFiltro) > 0) {            
             if ($arrFiltro['f_ini'] != "" && $arrFiltro['f_fin'] != "") {
-                $str_search .= "docu.doc_fecha_pago >= :fec_ini AND ";
-                $str_search .= "docu.doc_fecha_pago <= :fec_fin AND ";
+                $str_search .= "opag.opag_fecha_pago_total >= :fec_ini AND ";
+                $str_search .= "opag.opag_fecha_pago_total <= :fec_fin AND ";
             }
-        }
-        $sql = "
-            SELECT
-                docu.doc_id as id,
-                vpre.reference as referencia,
-                concat(pben.pben_nombre,' ',pben.pben_apellido) as estudiante,
-                docu.doc_fecha_pago as fecha_pago,
-                docu.doc_valor as total_pago,
-                docu.doc_pagado as estado
-            FROM
-                " . $con->dbname . ".persona_beneficiaria as pben
-                JOIN " . $con->dbname . ".solicitud_boton_pago as sbpa on pben.pben_id = sbpa.pben_id
-                JOIN " . $con->dbname . ".documento as docu on docu.sbpa_id = sbpa.sbpa_id
-                LEFT JOIN " . $con1->dbname . ".vpos_response as vpre on vpre.ordenPago = docu.doc_id and vpre.tipo_orden = 2
-            WHERE ";
-        if (isset($arrFiltro) && count($arrFiltro) > 0) {
-            if ($arrFiltro['f_ini'] != "" && $arrFiltro['f_fin'] != "") {
-                $str_search .= "docu.doc_fecha_pago >= :fec_ini AND ";
-                $str_search .= "docu.doc_fecha_pago <= :fec_fin AND ";
-            }
-        }
-        if (!empty($str_search)) {
-            $sql .= $str_search;
-        }
-        $sql .= " 
-                pben.pben_estado_logico = :status AND
-                pben.pben_estado = :status AND
-                sbpa.sbpa_estado_logico = :status AND
-                sbpa.sbpa_estado = :status AND
-                docu.doc_estado_logico = :status AND
-                docu.doc_estado = :status AND
-                vpre.estado_logico = :status AND               
-                docu.doc_id = :doc_id 
-            UNION
-            select
-                opag.opag_id as id,
-                vpre.reference as referencia,
+        }        
+        $sql = " 
+            SELECT              
+                vres.reference as referencia,
                 concat(per.per_pri_nombre,' ',per.per_pri_apellido)  as estudiante,
                 opag.opag_fecha_pago_total as fecha_pago,
                 opag.opag_valor_pagado as total_pago,
-                opag.opag_estado_pago as estado
-            from 
-                db_facturacion.orden_pago as opag
-                join db_captacion.solicitud_inscripcion as sins on sins.sins_id = opag.sins_id
-                join db_captacion.interesado as inte on inte.int_id = sins.int_id
-                join db_asgard.persona as per on per.per_id = inte.int_id
-                join db_financiero.vpos_response as vpre on vpre.ordenPago = opag.opag_id and vpre.tipo_orden = 2
-            where";
-        if (!empty($str_search)) {
-            $sql .= $str_search;
-        }
-        $sql .= "
-                    opag.opag_id= :opag_id and
-                    opag.opag_estado = 1 and
-                    opag.opag_estado_logico = 1 and
-                    sins.sins_estado = 1 and
-                    sins.sins_estado_logico = 1 and
-                    inte.int_estado = 1 and
-                    inte.int_estado_logico = 1 and
-                    per.per_estado = 1 and
-                    per.per_estado_logico = 1                
+                vire.status as estado
+            FROM " . $con->dbname . ".orden_pago as opag
+                join " . $con2->dbname . ".solicitud_inscripcion as sins on sins.sins_id = opag.sins_id
+                join " . $con2->dbname . ".interesado as inte on inte.int_id = sins.int_id
+                join " . $con3->dbname . ".persona as per on per.per_id = inte.per_id	    
+                join " . $con1->dbname . ".vpos_response as vres on vres.ordenPago = opag.opag_id and vres.tipo_orden = 1
+                left join (select max(vire.id) as id, vire.ordenPago, vire.tipo_orden 
+                        from " . $con1->dbname . ".vpos_info_response as vire                    
+                        group by vire.ordenPago,vire.tipo_orden) as vpos_info_modf 
+                        on (vpos_info_modf.ordenPago=opag.opag_id) and (vpos_info_modf.tipo_orden=1)
+                join " . $con1->dbname . ".vpos_info_response as vire on vire.id = vpos_info_modf.id
+            WHERE $str_search
+                per.per_id = :per_id and
+                opag.opag_estado = :status and
+                opag.opag_estado_logico = :status and
+                sins.sins_estado = :status and
+                sins.sins_estado_logico = :status and
+                inte.int_estado = :status and
+                inte.int_estado_logico = :status and
+                per.per_estado = :status and
+                per.per_estado_logico = :status
+            ";
+        $sql .= " UNION ";
+        $sql .= " 
+            SELECT                
+                vres.reference as referencia,
+                concat(per.per_pri_nombre,' ',per.per_pri_apellido)  as estudiante,
+                opag.opag_fecha_pago_total as fecha_pago,
+                opag.opag_valor_pagado as total_pago,
+                vire.status as estado
+            FROM " . $con3->dbname . ".persona per inner join db_captacion.interesado inte on per.per_id = inte.per_id
+                inner join " . $con2->dbname . ".solicitud_inscripcion as sins on inte.int_id = sins.int_id
+                inner join " . $con->dbname . ".orden_pago as opag on sins.sins_id = opag.sins_id
+                inner join " . $con->dbname . ".documento as doc on doc.sbpa_id = opag.sbpa_id
+                join " . $con1->dbname . ".vpos_response as vres on vres.ordenPago = doc.doc_id and vres.tipo_orden = 2
+                left join (select max(vire.id) as id, vire.ordenPago, vire.tipo_orden 
+                                   from " . $con1->dbname . ".vpos_info_response as vire                    
+                           group by vire.ordenPago,vire.tipo_orden) as vpos_info_modf 
+                           on (vpos_info_modf.ordenPago=doc.doc_id) and (vpos_info_modf.tipo_orden=2)
+                join db_financiero.vpos_info_response as vire on vire.id = vpos_info_modf.id
+            WHERE $str_search
+                per.per_id= :per_id and
+                opag.sbpa_id > 0 and
+                per.per_estado = :status and
+                per.per_estado_logico = :status and
+                inte.int_estado = :status  and
+                inte.int_estado_logico = :status  and
+                sins.sins_estado = :status  and
+                sins.sins_estado_logico = :status  and
+                opag.opag_estado = :status  and
+                opag.opag_estado_logico = :status  and
+                doc.doc_estado = :status  and
+                doc.doc_estado_logico = :status 
                 ";
-
         $comando = $con->createCommand($sql);
         $comando->bindParam(":status", $estado, \PDO::PARAM_STR);
-        $comando->bindParam(":doc_id", $doc_id, \PDO::PARAM_INT);
-        $comando->bindParam(":opag_id", $opag_id, \PDO::PARAM_INT);
+        $comando->bindParam(":per_id", $per_id, \PDO::PARAM_INT);
+        $fecha_ini = $arrFiltro["f_ini"] . " 00:00:00";
+        $fecha_fin = $arrFiltro["f_fin"] . " 23:59:59";
         if (isset($arrFiltro) && count($arrFiltro) > 0) {
-            $fecha_ini = $arrFiltro["f_ini"] . " 00:00:00";
-            $fecha_fin = $arrFiltro["f_fin"] . " 23:59:59";
             if ($arrFiltro['f_ini'] != "" && $arrFiltro['f_fin'] != "") {
                 $comando->bindParam(":fec_ini", $fecha_ini, \PDO::PARAM_STR);
                 $comando->bindParam(":fec_fin", $fecha_fin, \PDO::PARAM_STR);
@@ -272,7 +279,6 @@ class SolicitudBotonPago extends \yii\db\ActiveRecord {
             'sort' => [
                 'attributes' => [
                     'referencia',
-                    'fecha_solicitud',
                     'estudiante',
                     'fecha_pago',
                     'total_pago',

@@ -1016,7 +1016,8 @@ class PersonaGestion extends \app\modules\admision\components\CActiveRecord {
                         pg.pges_trabajo_telefono,
                         emp.emp_id,
                         uaca.uaca_id,
-                        /*(select 
+                        /*
+                        (select 
                             case  count(ba.bact_id)
                                when 0 then 1 
                                when 1 and (ba.eopo_id <> 3) then 1
@@ -1031,7 +1032,8 @@ class PersonaGestion extends \app\modules\admision\components\CActiveRecord {
                             and o.opo_estado_logico = :estado
                             and ba.bact_estado = :estado
                             and ba.bact_estado_logico = :estado
-                            group by ba.eopo_id) as gestion */
+                            group by ba.eopo_id) as gestion 
+                        */
                         case when (select ifnull(count(ba.bact_id),0)
 				from db_crm.oportunidad o 
 				inner join db_crm.bitacora_actividades ba on ba.opo_id = o.opo_id
@@ -1061,12 +1063,12 @@ class PersonaGestion extends \app\modules\admision\components\CActiveRecord {
                         and ec.econ_estado_logico = :estado 
                         and cc.ccan_estado = :estado 
                         and cc.ccan_estado_logico = :estado 
-                ORDER BY pg.pges_fecha_creacion desc) a ";
+                ) a ";
         if (isset($arrFiltro) && count($arrFiltro) > 0) {
             $sql .= "WHERE $str_search 
                            a.pges_codigo = a.pges_codigo";
         }
-
+        $sql .= " ORDER BY a.pges_fecha_creacion desc";
         $comando = $con->createCommand($sql);
         $comando->bindParam(":estado", $estado, \PDO::PARAM_STR);
 

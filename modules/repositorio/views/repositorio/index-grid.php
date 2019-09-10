@@ -49,11 +49,17 @@ PbGridView::widget([
         [
             'class' => 'yii\grid\ActionColumn',
             'header' => Yii::t("formulario", "Actions"),
-            'template' => '{view}',
+            'template' => '{view} {borrar} {visor}',
             'buttons' => [
-                'view' => function ($url, $model) {                    
-                    return Html::a('<span class="glyphicon glyphicon-download-alt"></span>', Url::to(['/site/getimage', 'route' => '/uploads' . $model['dre_ruta']]), ["download" => $model['dre_imagen'], "data-toggle" => "tooltip", "title" => "Descargar Evidencia", "data-pjax" => 0]);
-                },                
+                'view' => function ($url, $model) {                                        
+                    return Html::a('<span class="glyphicon glyphicon-download-alt"></span>', Url::to(['repositorio/downloadfile', 'ids' => base64_encode($model['dre_id'])]), ["data-toggle" => "tooltip", "title" => "Descargar Evidencia", "data-pjax" => 0]);                   
+                }, 
+                'borrar' => function ($url, $model) {                                                                               
+                    return Html::a('<span class="glyphicon glyphicon-remove"></span>', "#", ['onclick' => "removerArchivo(" . $model['dre_id'] . ");", "data-toggle" => "tooltip", "title" => "Eliminar Archivo", "data-pjax" => 0]);                    
+                },                                                 
+                'visor' => function ($url, $model) {                                                                               
+                   // return Html::a('<span class="glyphicon glyphicon-eye-open"></span>', Url::to(['repositorio/downloadvisor', 'ids' => base64_encode($model['dre_id']), "popup"=>"true"]), ["data-toggle" => "tooltip", "title" => "Ver Archivo", "data-pjax" => 0, "class" => "pbpopup"]);
+                },                                                 
             ],
         ],
     ],

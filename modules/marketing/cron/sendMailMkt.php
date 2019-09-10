@@ -1,5 +1,4 @@
 <?php
-
 $logFile = dirname(__FILE__) . "/../../../runtime/logs/pb.log";
 $dataDB = include_once(dirname(__FILE__) . "/../config/mod.php");
 //include_once("../../../webservices/WsMailChimp.php");
@@ -45,6 +44,7 @@ function getCampaignOnTime($webServer)
         $endTime = date('H:i', strtotime("+2 minutes", strtotime(date("Y-m-d H:i:s"))));
         $pdo = new \PDO($dsn, $dbuser, $dbpass);
         $pdo->setAttribute(\PDO::ATTR_ERRMODE, \PDO::ERRMODE_EXCEPTION);
+        
         $sql = "SELECT l.lis_nombre_principal, l.lis_asunto, l.lis_codigo, l.lis_nombre, p.pla_id as temp_id, ec.ecor_correo, l.lis_id " .
         "FROM db_mailing.programacion AS p " .
         "INNER JOIN db_mailing.dia_programacion AS dp ON p.pro_id = dp.pro_id " .

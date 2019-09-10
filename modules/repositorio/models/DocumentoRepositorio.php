@@ -96,29 +96,32 @@ class DocumentoRepositorio extends \yii\db\ActiveRecord
         $con = \Yii::$app->db_repositorio;        
         $estado = 1;
         if (isset($arrFiltro) && count($arrFiltro) > 0) {
-            if (($arrFiltro['est_id'] != "") or ($arrFiltro['est_id'] > 0)) {
-                $str_search = "and est_id = :est_id ";
+            if (($arrFiltro['est_id'] != "") && ($arrFiltro['est_id'] > 0)) {
+                $str_search = "and dr.est_id = :est_id ";
             }
             if ($arrFiltro['search'] != "") {
-                $str_search = "and dre_imagen like :archivo ";                
+                $str_search .= "and dr.dre_imagen like :archivo ";                
             }
             if ($arrFiltro['f_ini'] != "" && $arrFiltro['f_fin'] != "") {
-                $str_search .= "and dre_fecha_archivo >= :fec_ini and ";
-                $str_search .= "dre_fecha_archivo <= :fec_fin ";
+                $str_search .= "and dr.dre_fecha_archivo >= :fec_ini and ";
+                $str_search .= "dr.dre_fecha_archivo <= :fec_fin ";
             }            
-            if (($arrFiltro['mod_id'] != "") or ($arrFiltro['mod_id'] > 0)){
-                $str_search = "and f.mod_id = :mod_id ";
+            if (($arrFiltro['mod_id'] != "") && ($arrFiltro['mod_id'] > 0)){
+                $str_search .= "and f.mod_id = :mod_id ";
             }
-            if (($arrFiltro['cat_id'] != "") or ($arrFiltro['cat_id'] > 0)){
-                $str_search = "and f.fun_id = :fun_id ";
+            if (($arrFiltro['cat_id'] != "") && ($arrFiltro['cat_id'] > 0)){
+                $str_search .= "and e.fun_id = :fun_id ";
             }
-           /* if (($arrFiltro['comp_id'] != "") or ($arrFiltro['comp_id'] > 0)){
-                $str_search = "and f.fun_id = :fun_id ";
-            }*/
+            if (($arrFiltro['comp_id'] != "") && ($arrFiltro['comp_id'] > 0)){
+                $str_search .= "and e.com_id = :comp_id ";
+            }
         }
-        $sql = "SELECT	dre_imagen, case when dre_tipo='1' then 'Público' else 'Privado' end tipo,  
-                        dre_descripcion, dre_fecha_archivo, dre_fecha_creacion, dre_ruta
-                FROM " . $con->dbname . ".documento_repositorio dr inner join " . $con->dbname . ".estandar e on e.est_id = dr.est_id
+        $sql = "SELECT dre_imagen, case when dre_tipo='1' then 'Privado' else 'Público' end tipo,  
+                        dre_descripcion, dre_fecha_archivo, dre_fecha_creacion ";
+        if ($onlyData==false) {
+            $sql .= ", dre_ruta, dre_id ";
+        } 
+        $sql .= "FROM " . $con->dbname . ".documento_repositorio dr inner join " . $con->dbname . ".estandar e on e.est_id = dr.est_id
                     left join " . $con->dbname . ".componente c on c.com_id = e.com_id
                     inner join " . $con->dbname . ".funcion f on f.fun_id = e.fun_id
                 WHERE dre_estado = :estado
@@ -138,6 +141,7 @@ class DocumentoRepositorio extends \yii\db\ActiveRecord
             $fecha_fin = $arrFiltro["f_fin"];
             $mod_id = $arrFiltro["mod_id"];
             $fun_id = $arrFiltro["cat_id"];
+            $comp_id = $arrFiltro["comp_id"];
             if (($arrFiltro['est_id'] != "") or ($arrFiltro['est_id'] > 0)) {
                 $comando->bindParam(":est_id", $est_id, \PDO::PARAM_INT);
             }
@@ -148,11 +152,14 @@ class DocumentoRepositorio extends \yii\db\ActiveRecord
                 $comando->bindParam(":fec_ini", $fecha_ini, \PDO::PARAM_STR);
                 $comando->bindParam(":fec_fin", $fecha_fin, \PDO::PARAM_STR);
             }
-            if (($arrFiltro['mod_id'] != "") or ($arrFiltro['mod_id'] > 0)){
+            if (($arrFiltro['mod_id'] != "") && ($arrFiltro['mod_id'] > 0)){
                 $comando->bindParam(":mod_id", $mod_id, \PDO::PARAM_INT);
             }
-            if (($arrFiltro['cat_id'] != "") or ($arrFiltro['cat_id'] > 0)){
+            if (($arrFiltro['cat_id'] != "") && ($arrFiltro['cat_id'] > 0)){
                 $comando->bindParam(":fun_id", $fun_id, \PDO::PARAM_INT);
+            }
+            if (($arrFiltro['comp_id'] != "") && ($arrFiltro['comp_id'] > 0)){
+                $comando->bindParam(":comp_id", $comp_id, \PDO::PARAM_INT);
             }
         }
         $resultData = $comando->queryAll();
@@ -173,6 +180,99 @@ class DocumentoRepositorio extends \yii\db\ActiveRecord
             return $dataProvider;
         }
     }
+    
+    /* INSERTAR DATOS */
+    public function insertarDataDocumentos($data) {
+        $arroout = array();
+        $con = \Yii::$app->db_repositorio;        
+        $trans = $con->beginTransaction();
+        try {
+            //$per_id = @Yii::$app->session->get("PB_perid");    
+            $data = isset($data['DATA']) ? $data['DATA'] : array();
+            $this->insertarDocumentos($con,json_decode($data));
+            $trans->commit();
+            $con->close();
+            //RETORNA DATOS 
+            //$arroout["ids"]= $ftem_id;
+            $arroout["status"]= true;
+            //$arroout["secuencial"]= $doc_numero;
+            
+                       
+            return $arroout;
+        } catch (\Exception $e) {
+            $trans->rollBack();
+            $con->close();
+            //throw $e;
+            $arroout["status"]= false;
+            return $arroout;
+        }
+    }
+    
+    private function insertarDocumentos($con,$dts) {
+        //dre_id
+        $usu_id = @Yii::$app->session->get("PB_iduser");
+        for ($i = 0; $i < sizeof($dts); $i++) {
+            $sql = "INSERT INTO " . $con->dbname . ".documento_repositorio
+                    (est_id,dre_tipo,dre_codificacion,dre_ruta,dre_imagen,dre_descripcion,
+                        dre_usu_ingresa,dre_estado,dre_fecha_archivo,dre_estado_logico)VALUES
+                    (:est_id,:dre_tipo,:dre_codificacion,:dre_ruta,:dre_imagen,:dre_descripcion,
+                        :dre_usu_ingresa,:dre_estado,:dre_fecha_archivo,:dre_estado_logico)";
+            $command = $con->createCommand($sql);
+            $command->bindParam(":est_id", $dts[$i]->est_id, \PDO::PARAM_INT);
+            $command->bindParam(":dre_tipo", $dts[$i]->dre_tipo, \PDO::PARAM_INT);
+            $command->bindParam(":dre_codificacion", $dts[$i]->dre_codificacion, \PDO::PARAM_STR);
+            $command->bindParam(":dre_ruta", $dts[$i]->dre_ruta, \PDO::PARAM_STR);
+            $command->bindParam(":dre_imagen", $dts[$i]->dre_imagen, \PDO::PARAM_STR);
+            $command->bindParam(":dre_descripcion", ucwords(strtolower($dts[$i]->dre_descripcion)), \PDO::PARAM_STR);
+            $command->bindParam(":dre_usu_ingresa", $usu_id, \PDO::PARAM_INT);
+            $command->bindParam(":dre_estado", $dts[$i]->dre_estado, \PDO::PARAM_INT);
+            $command->bindParam(":dre_fecha_archivo", $dts[$i]->dre_fecha_archivo, \PDO::PARAM_STR);            
+            $command->bindParam(":dre_estado_logico", $dts[$i]->dre_estado_logico, \PDO::PARAM_INT);
+            //$command->bindParam(":per_nombre", $data[0]['per_nombre'], \PDO::PARAM_STR);
+            $command->execute();
+        }
+        
+    }
+        
+    public function consultarXdocumentoid($ids){        
+        $con = \Yii::$app->db_repositorio;        
+        $estado = 1;
+        $sql = "SELECT 
+                    dre_id, dre_ruta, dre_imagen                       
+                FROM " . $con->dbname . ".documento_repositorio dr                                        
+                WHERE dre_id = :dre_id AND  
+                    dre_estado_logico=:estado AND 
+                    dre_estado=:estado";        
+        $comando = $con->createCommand($sql);
+        $comando->bindParam(":estado", $estado, \PDO::PARAM_STR);        
+        $comando->bindParam(":dre_id", $ids, \PDO::PARAM_INT);        
+        $resultData = $comando->queryOne();
+        return $resultData;          
+    }
+    
+   
+    
+    public function modificarXdocumentoid($ids, $usu_id){        
+        $con = \Yii::$app->db_repositorio;        
+        $estado = 1;
+        $fecha_modificacion = date(Yii::$app->params["dateTimeByDefault"]);
+        $sql = "UPDATE " . $con->dbname . ".documento_repositorio
+                SET dre_estado = '0',
+                    dre_estado_logico = '0',
+                    dre_fecha_modificacion = :fecha,
+                    dre_usu_modifica = :usu_id
+                WHERE dre_id = :dre_id AND              
+                    dre_estado_logico=:estado AND 
+                    dre_estado=:estado";        
+        $comando = $con->createCommand($sql);
+        $comando->bindParam(":estado", $estado, \PDO::PARAM_STR);    
+        $comando->bindParam(":dre_id", $ids, \PDO::PARAM_INT);
+        $comando->bindParam(":fecha", $fecha_modificacion, \PDO::PARAM_STR);
+        $comando->bindParam(":usu_id", $usu_id, \PDO::PARAM_INT);
+        $response = $comando->execute();
+        return $response;       
+    }
+    
     
     
 }

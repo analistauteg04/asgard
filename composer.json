@@ -19,7 +19,7 @@
         "yiisoft/yii2-jui": "*",
         "yiisoft/yii2-bootstrap": "~2.0.0",
         "yiisoft/yii2-swiftmailer": "~2.0.0",
-		"fxp/composer-asset-plugin": "~1.4.4",
+        "fxp/composer-asset-plugin": "~1.4.4",
         "mpdf/mpdf": "*",
         "phpoffice/phpspreadsheet": "*",
         "bower-asset/font-awesome": "*",
@@ -32,7 +32,8 @@
         "odaialali/yii2-toastr": "1.0b",
         "kartik-v/yii2-widget-fileinput": "*",
         "kartik-v/yii2-widget-datepicker": "*",
-        "himiklab/yii2-recaptcha-widget": "*"
+        "himiklab/yii2-recaptcha-widget": "*",
+        "svrnm/exceldatatables": "*"
     },
     "require-dev": {
         "yiisoft/yii2-debug": "~2.0.0",
@@ -55,27 +56,23 @@
     },
     "extra": {
         "yii\\composer\\Installer::postCreateProject": {
-            "setPermission": [
-                {
-                    "runtime": "0777",
-                    "web/assets": "0777",
-                    "yii": "0755"
-                }
-            ],
+            "setPermission": [{
+                "runtime": "0777",
+                "web/assets": "0777",
+                "yii": "0755"
+            }],
             "generateCookieValidationKey": [
                 "config/web.php"
             ]
         },
-		"yii\\composer\\Installer::postInstall": {
+        "yii\\composer\\Installer::postInstall": {
             "generateCookieValidationKey": [
                 "config/web.php"
             ]
         }
     },
-	"repositories": [
-        {
-            "type": "composer",
-            "url": "https://asset-packagist.org"
-        }
-    ]
+    "repositories": [{
+        "type": "composer",
+        "url": "https://asset-packagist.org"
+    }]
 }

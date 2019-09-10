@@ -19,6 +19,7 @@ use PhpOffice\PhpSpreadsheet\Style\Color;
 use PhpOffice\PhpSpreadsheet\Worksheet\PageSetup;
 use PhpOffice\PhpSpreadsheet\IOFactory;
 use PhpOffice\PhpSpreadsheet\Style\Border;
+use Svrnm\ExcelDataTables\ExcelDataTable;
 
 
 
@@ -102,12 +103,12 @@ class Utilities {
             chmod(dirname(Yii::$app->params["logfile"]), 0777);
             touch(Yii::$app->params["logfile"]);
         }
-        if(filesize(Yii::$app->params["logfile"]) >= Yii::$app->params["MaxFileLogSize"]){
+        /*if(filesize(Yii::$app->params["logfile"]) >= Yii::$app->params["MaxFileLogSize"]){
             $newName = str_replace(".log", "-" . date("YmdHis") . ".log", Yii::$app->params["logfile"]);
             rename(Yii::$app->params["logfile"], $newName);
             touch(Yii::$app->params["logfile"]);
         }
-        //se escribe en el fichero
+        //se escribe en el fichero*/
         file_put_contents(Yii::$app->params["logfile"], $message, FILE_APPEND | LOCK_EX);
     }
 
@@ -554,6 +555,36 @@ class Utilities {
         }
 
     }
+
+    public static function writeReporteXLS($uriFile, $arrHeader, $arrData, $sheetName = "DATA"){
+        if(count($arrData) == 0){
+            echo Yii::t("reporte","No Reports");
+            return;
+        }
+        if(count($arrHeader) == 0){
+            echo Yii::t("reporte","No Reports");
+            return;
+        }
+        try{
+            
+            $dataTable = new ExcelDataTable();
+            $data = array();
+            for($i=0; $i<count($arrData); $i++){
+                $j=0;
+                foreach($arrData[$i] as $key => $value){
+                    $data[$i][$arrHeader[$j]] = $value;
+                    $j++;
+                }
+            }
+            $dataTable->setSheetName($sheetName);
+            $dataTable->showHeaders()->addRows($data);
+            return $dataTable->fillXLSX($uriFile);//attachToFile($uriFile, $out, false);
+            
+        }catch(Exception $e){
+            echo Yii::t("reporte","Error to export Excel");
+        }
+    }
+    
     
     public static function zipFiles($nombreZip, $arr_files = array()){
         $zip = new \ZipArchive();
@@ -652,4 +683,23 @@ class Utilities {
         }
         return false;
     }
+    
+    public static function Meses() {
+        return [
+            //'0' => Yii::t("formulario", "-Select-"),
+            '1' => Yii::t("perfil", "Enero"),
+            '2' => Yii::t("perfil", "Febrero"),
+            '3' => Yii::t("perfil", "Marzo"),
+            '4' => Yii::t("perfil", "Abril"),
+            '5' => Yii::t("perfil", "Mayo"),
+            '6' => Yii::t("perfil", "Junio"),
+            '7' => Yii::t("perfil", "Julio"),
+            '8' => Yii::t("perfil", "Agosto"),
+            '9' => Yii::t("perfil", "Septiembre"),
+            '10' => Yii::t("perfil", "Octubre"),
+            '11' => Yii::t("perfil", "Noviembre"),
+            '12' => Yii::t("perfil", "Diciembre"),
+        ];
+    }
+    
 }
