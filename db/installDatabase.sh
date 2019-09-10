@@ -134,6 +134,19 @@ if [ $UPDB -eq 1 ] || [ $FAC -eq 1 ]; then
     mysql -uroot -p${ROOT_PASS} -e "GRANT ALL PRIVILEGES ON db_facturacion.* TO '${USER}'@'localhost';"
 fi
 
+# DATABASE REPOSITORIO
+if [ $UPDB -ne 1 ]; then
+    echo -n "Desea Instalar la Base de datos Repositorio YES (1) o NO (2):"
+    read -s REP
+    echo $REP
+fi
+if [ $UPDB -eq 1 ] || [ $REP -eq 1 ]; then
+    echo "SUBIENDO db_repositorio......"
+    mysql -u${USER} -p${PASS} < $CURRENT_DIR/base_nueva_prod/estructura/db_repositorio.sql
+    mysql -u${USER} -p${PASS} < $CURRENT_DIR/base_nueva_prod/data/db_repositorio_data.sql
+    mysql -uroot -p${ROOT_PASS} -e "GRANT ALL PRIVILEGES ON db_repositorio.* TO '${USER}'@'localhost';"
+fi
+
 # FLUSH PRIVILEGES
 echo "Aplicando Permisos......"
 mysql -uroot -p${ROOT_PASS} -e "FLUSH PRIVILEGES;"
