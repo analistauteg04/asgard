@@ -62,7 +62,7 @@ function cargarArchivo() {
         requestHttpAjax(link, arrParams, function (response) {
             showAlert(response.status, response.label, response.message);
             setTimeout(function () {
-                window.location.href = $('#txth_base').val() + "/admision/contactos/index";
+               // window.location.href = $('#txth_base').val() + "/admision/contactos/index";
             }, 3000);
         }, true);
     }

@@ -50,6 +50,7 @@ class MarcacionhistoricoController extends \app\components\CController {
     }
 
     public function actionCargarmarcaciones() {
+        ini_set('memory_limit', '256M');
         $per_id = @Yii::$app->session->get("PB_perid");
         $mod_registro = new RegistroMarcacionHistorial();
         if (Yii::$app->request->isAjax) {
@@ -84,6 +85,7 @@ class MarcacionhistoricoController extends \app\components\CController {
             }
             if ($data["procesar_file"]) {
                 //$carga_archivo = $mod_registro->CargarArchivo($data["nombre"], $data["ruta"]);
+               
                 $carga_archivo = $mod_registro->uploadFile($data["nombre"], $data["ruta"]);
                 if ($carga_archivo['status']) {
                     $message = array(

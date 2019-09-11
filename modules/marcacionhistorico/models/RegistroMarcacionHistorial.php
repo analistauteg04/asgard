@@ -197,7 +197,8 @@ class RegistroMarcacionHistorial extends \yii\db\ActiveRecord
     
     public function uploadFile($fname, $file) {
         $filaError = 0;
-        $chk_ext = explode(".", $file);
+        $file=Yii::$app->basePath .$file.$fname;
+        $chk_ext = explode(".", $fname);
         $con = \Yii::$app->db_marcacion_historico;
         $trans = $con->getTransaction(); // se obtiene la transacción actual
         if ($trans !== null) {
@@ -270,7 +271,7 @@ class RegistroMarcacionHistorial extends \yii\db\ActiveRecord
                 //$sheetData = $objPHPExcel->getActiveSheet()->toArray(null, true, true, true);
                 foreach ($objPHPExcel->getWorksheetIterator() as $worksheet) {
                     $worksheetTitle = $worksheet->getTitle();
-                    $highestRow = $worksheet->getHighestRow(); // e.g. 10 
+                    $highestRow = 6;//$worksheet->getHighestRow(); // e.g. 10 
                     $highestColumn = $worksheet->getHighestDataColumn(); // e.g 'F'
                     $highestColumnIndex = \PhpOffice\PhpSpreadsheet\Cell\Coordinate::columnIndexFromString($highestColumn);
                     //lectura del Archivo XLS filas y Columnas
@@ -286,8 +287,7 @@ class RegistroMarcacionHistorial extends \yii\db\ActiveRecord
                 //$this->deletetablaTemp($con);            
                 $filaError = 1;
                 foreach ($dataArr as $val) {
-                    $filaError++;
-                    
+                    $filaError++;                    
                     $haph_id = $this->InsertarHistorial($con, $val);
                     //if ($haph_id > 0) {
                     if (!$haph_id) {//Si no devuelve nada no inserto datos
@@ -337,21 +337,22 @@ class RegistroMarcacionHistorial extends \yii\db\ActiveRecord
     
     private function InsertarHistorial($con, $dataInfo) {
         $idsData=0;
+        \app\models\Utilities::putMessageLogFile($dataInfo[1]);
         $sql = "INSERT INTO " . $con->dbname . ".horario_asignatura_periodo_historial
             (asi_id,pahi_id,pro_id,uaca_id,mod_id,dia_id,haph_fecha_clase,haph_hora_entrada,
              haph_hora_salida,haph_estado,haph_fecha_creacion,haph_estado_logico)VALUES
             (:asi_id,:pahi_id,:pro_id,:uaca_id,:mod_id,:dia_id,:haph_fecha_clase,:haph_hora_entrada,
              :haph_hora_salida,1, CURRENT_TIMESTAMP(),1);";
         $comando = $con->createCommand($sql);
-        $comando->bindParam(":asi_id", $dataInfo[6], \PDO::PARAM_INT);
-        $comando->bindParam(":pahi_id", $dataInfo[6], \PDO::PARAM_INT);
-        $comando->bindParam(":pro_id", $dataInfo[6], \PDO::PARAM_INT);
-        $comando->bindParam(":uaca_id", $dataInfo[6], \PDO::PARAM_INT);
-        $comando->bindParam(":mod_id", $dataInfo[6], \PDO::PARAM_INT);
-        $comando->bindParam(":dia_id", $dataInfo[6], \PDO::PARAM_INT);
-        $comando->bindParam(":haph_fecha_clase", $dataInfo[6], \PDO::PARAM_STR);
-        $comando->bindParam(":haph_hora_entrada", $dataInfo[6], \PDO::PARAM_STR);
-        $comando->bindParam(":haph_hora_salida", $dataInfo[6], \PDO::PARAM_STR);
+        $comando->bindParam(":asi_id", intval($dataInfo[1]), \PDO::PARAM_INT);
+        $comando->bindParam(":pahi_id", intval($dataInfo[2]), \PDO::PARAM_INT);
+        $comando->bindParam(":pro_id", intval($dataInfo[3]), \PDO::PARAM_INT);
+        $comando->bindParam(":uaca_id", intval($dataInfo[4]), \PDO::PARAM_INT);
+        $comando->bindParam(":mod_id", intval($dataInfo[5]), \PDO::PARAM_INT);
+        $comando->bindParam(":dia_id", intval($dataInfo[6]), \PDO::PARAM_INT);
+        $comando->bindParam(":haph_fecha_clase", $dataInfo[7], \PDO::PARAM_STR);
+        $comando->bindParam(":haph_hora_entrada", $dataInfo[8], \PDO::PARAM_STR);
+        $comando->bindParam(":haph_hora_salida", $dataInfo[9], \PDO::PARAM_STR);
         $comando->execute();
         return $con->getLastInsertID();
     }
