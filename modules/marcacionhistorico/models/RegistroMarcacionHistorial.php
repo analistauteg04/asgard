@@ -217,6 +217,7 @@ class RegistroMarcacionHistorial extends \yii\db\ActiveRecord
                     $filaError++;
                     if ($cont != 0) {
                         $haph_id=$this->InsertarHistorial($con,$data);
+                        $rmhi_id = $this->InsertarMarcacion($con, $val,$haph_id);
                         //if ($haph_id > 0) {
                         if (!$haph_id) {//Si no devuelve nada no inserto datos
                             $arroout["status"] = FALSE;
@@ -225,24 +226,7 @@ class RegistroMarcacionHistorial extends \yii\db\ActiveRecord
                             $arroout["data"] = null;
                             throw new Exception('Error, Item no almacenado');                            
                         }
-                        /*$model = new PersonaGestionTmp(); //isset
-                        $model->pgest_carr_nombre = ($emp_id == "1") ? EstudioAcademico::consultarIdsEstudioAca($data[0]) : EstudioAcademico::consultarIdsModEstudio($emp_id, $data[0]); //"$data[0]";
-                        $model->pgest_contacto = PersonaGestionTmp::consultarIdsConocimientoCanal($data[1]); //"$data[1]";
-                        $model->pgest_horario = "$data[2]";
-                        $model->pgest_unidad_academica = UnidadAcademica::consultarIdsUnid_Academica($data[3]); //"$data[3]";
-                        $model->pgest_modalidad = Modalidad::consultarIdsModalidad($data[4]); //"$data[4]";
-                        $model->pgest_nombre = "$data[5]";
-                        $model->pgest_numero = "$data[6]";
-                        $model->pgest_correo = "$data[7]";
-                        $model->pgest_comentario = "$data[8]";
-
-                        if (!$model->save()) {
-                            $arroout["status"] = FALSE;
-                            $arroout["error"] = null;
-                            $arroout["message"] = " Error en la Fila => N°$filaError Nombre => $data[5]";
-                            $arroout["data"] = null;
-                            throw new Exception('Error, Item no almacenado');
-                        }*/
+                        
                     }
                     $cont++;
                 }
@@ -271,7 +255,7 @@ class RegistroMarcacionHistorial extends \yii\db\ActiveRecord
                 //$sheetData = $objPHPExcel->getActiveSheet()->toArray(null, true, true, true);
                 foreach ($objPHPExcel->getWorksheetIterator() as $worksheet) {
                     $worksheetTitle = $worksheet->getTitle();
-                    $highestRow = 6;//$worksheet->getHighestRow(); // e.g. 10 
+                    $highestRow = $worksheet->getHighestRow(); // e.g. 10 
                     $highestColumn = $worksheet->getHighestDataColumn(); // e.g 'F'
                     $highestColumnIndex = \PhpOffice\PhpSpreadsheet\Cell\Coordinate::columnIndexFromString($highestColumn);
                     //lectura del Archivo XLS filas y Columnas
@@ -289,16 +273,15 @@ class RegistroMarcacionHistorial extends \yii\db\ActiveRecord
                 foreach ($dataArr as $val) {
                     $filaError++;                    
                     $haph_id = $this->InsertarHistorial($con, $val);
+                    $rmhi_id = $this->InsertarMarcacion($con, $val,$haph_id);
                     //if ($haph_id > 0) {
                     if (!$haph_id) {//Si no devuelve nada no inserto datos
                         $arroout["status"] = FALSE;
                         $arroout["error"] = null;
                         $arroout["message"] = " Error en la Fila => N°$filaError Nombre => $val[3]";
                         $arroout["data"] = null;
-                        throw new Exception('Error, Item no almacenado');
+                        //throw new Exception('Error, Item no almacenado');
                     }
-
-                    
                 }
                 if ($trans !== null)
                     $trans->commit();                    
@@ -319,13 +302,15 @@ class RegistroMarcacionHistorial extends \yii\db\ActiveRecord
         }
     }
     
-    private function InsertarHistorial($con, $dataInfo) {
-        
+    private function InsertarHistorial($con, $dataInfo) {       
         $idsData=0;
-        \app\models\Utilities::putMessageLogFile($dataInfo[3]);
         $IdsPro=$this->consultarIdDocente($dataInfo[3]);
-        $IdsPro=($IdsPro!=0)?$IdsPro:0;        
-        $asi_id=$this->consultarIdAsignatura($dataInfo[1]);        
+        $IdsPro=($IdsPro!=0)?$IdsPro: 0;        
+        $asi_id=$this->consultarIdAsignatura($dataInfo[1]); 
+        
+        if ($IdsPro==0 || $asi_id==0){//Verifica que existan los IDS
+            return false;
+        }
         
         $sql = "INSERT INTO " . $con->dbname . ".horario_asignatura_periodo_historial
             (asi_id,pahi_id,pro_id,uaca_id,mod_id,dia_id,haph_fecha_clase,haph_hora_entrada,
@@ -344,6 +329,22 @@ class RegistroMarcacionHistorial extends \yii\db\ActiveRecord
         $comando->bindParam(":haph_hora_salida", $dataInfo[10], \PDO::PARAM_STR);
         $comando->execute();
         return $con->getLastInsertID();
+    }
+    
+    private function InsertarMarcacion($con, $dataInfo,$haph_id) {       
+        //rmhi_id
+        $fhora_entrada=$dataInfo[8]." ". $dataInfo[9];
+        $fhora_salida=$dataInfo[8]." ". $dataInfo[10];
+        $sql = "INSERT INTO " . $con->dbname . ".registro_marcacion_historial
+              (haph_id,rmhi_fecha_hora_entrada,rmhi_fecha_hora_salida,rmhi_estado,rmhi_fecha_creacion,rmhi_estado_logico)VALUES
+              (:haph_id,:rmhi_fecha_hora_entrada,:rmhi_fecha_hora_salida,1,CURRENT_TIMESTAMP(),1);";
+
+        $comando = $con->createCommand($sql);
+        $comando->bindParam(":haph_id", $haph_id, \PDO::PARAM_INT);
+        $comando->bindParam(":rmhi_fecha_hora_entrada", $fhora_entrada, \PDO::PARAM_STR);
+        $comando->bindParam(":rmhi_fecha_hora_salida", $fhora_salida, \PDO::PARAM_STR);
+        $comando->execute();
+        //return $con->getLastInsertID();
     }
     
     private function consultarIdDocente($Cedula) {

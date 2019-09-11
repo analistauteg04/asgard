@@ -70,7 +70,7 @@ class MarcacionhistoricoController extends \app\components\CController {
                 //Utilities::putMessageLogFile($folder_path);
                 if ($typeFile == 'xlsx' || $typeFile == 'csv' || $typeFile == 'xls') {
                     $dirFileEnd = $folder_path . $filenames;
-                    Utilities::putMessageLogFile($dirFileEnd);
+                    //Utilities::putMessageLogFile($dirFileEnd);
                     $status = Utilities::moveUploadFile($files['tmp_name'], $dirFileEnd);
                     if ($status) {
                         //return true;
