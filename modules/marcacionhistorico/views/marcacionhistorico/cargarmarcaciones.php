@@ -102,10 +102,10 @@ $leyenda = '<div class="col-md-12 col-xs-12 col-sm-12 col-lg-12">
                                 response = data.response
                                 $('#txth_doc_archivo').val('');
                                 $('#txth_doc_archivo_ruta').val('');
-                                //if(response.status){
-                                //    $('#txth_doc_archivo').val(response.nombre);
-                                //    $('#txth_doc_archivo_ruta').val(response.ruta);
-                                //}
+                                if(response.status){
+                                    $('#txth_doc_archivo').val(response.nombre);
+                                    $('#txth_doc_archivo_ruta').val(response.ruta);
+                                }
                                 $(this).parent().parent().children().first().addClass('hide');                                 
                                 var acciones = [{id: 'reloadpage', class: 'btn btn-primary', value: objLang.Accept, callback: 'reloadPage'}];
                                 //showAlert('OK', 'Success', {'wtmessage': objLang.File_uploaded_successfully__Do_you_refresh_the_web_page_, 'title': objLang.Success, 'acciones': acciones});                              
@@ -117,6 +117,15 @@ $leyenda = '<div class="col-md-12 col-xs-12 col-sm-12 col-lg-12">
             </div>
         </div>
         
+    </div> 
+    <div class='col-md-12 col-sm-12 col-xs-12 col-lg-12'> 
+        <div class="col-md-6 col-sm-6 col-xs-6 col-lg-6"></div>
+        <div class="col-md-6 col-sm-6 col-xs-6 col-lg-6">
+            <div class='col-md-7 col-xs-7 col-lg-7 col-sm-7'></div>
+            <div class='col-md-3 col-xs-3 col-lg-3 col-sm-3'>         
+                <p> <a id="btn_CargarArchivo" href="javascript:" class="btn btn-primary btn-block"> <?= Yii::t("formulario", "Add") ?></a></p>
+            </div>
+        </div>        
     </div> 
 </form>
 

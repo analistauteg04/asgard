@@ -51,7 +51,7 @@ class MarcacionhistoricoController extends \app\components\CController {
 
     public function actionCargarmarcaciones() {
         $per_id = @Yii::$app->session->get("PB_perid");
-        //$mod_gestion = new Oportunidad();
+        $mod_registro = new RegistroMarcacionHistorial();
         if (Yii::$app->request->isAjax) {
             $data = Yii::$app->request->post();
             if ($data["upload_file"]) {
@@ -83,7 +83,8 @@ class MarcacionhistoricoController extends \app\components\CController {
                 }
             }
             if ($data["procesar_file"]) {
-                $carga_archivo = $mod_gestion->CargarArchivo($data["archivo"], $data["emp_id"], $data["tipo_proceso"]);
+                //$carga_archivo = $mod_registro->CargarArchivo($data["nombre"], $data["ruta"]);
+                $carga_archivo = $mod_registro->uploadFile($data["nombre"], $data["ruta"]);
                 if ($carga_archivo['status']) {
                     $message = array(
                         "wtmessage" => Yii::t("notificaciones", "Archivo procesado correctamente." . $carga_archivo['data']),

@@ -169,4 +169,191 @@ class RegistroMarcacionHistorial extends \yii\db\ActiveRecord
             return $dataProvider;
         }
     }
+    
+    
+    /**
+     * Function carga archivo csv a base de datos
+     * @author Giovanni Vergara <analistadesarrollo02@uteg.edu.ec>;
+     * @param
+     * @return
+     */
+    public function CargarArchivo($fname, $ruta) {
+        //if ($tipoProceso == "LEADS") {
+            //$path = Yii::$app->basePath . Yii::$app->params['documentFolder'] . "leads/" . $fname;
+            $path = $ruta.$fname;
+            //return $mod_pergestion->insertarDtosPersonaGestion($emp_id, $tipoProceso);
+            $carga_archivo = $this->uploadFile($fname, $path);
+            return $carga_archivo;
+            if ($carga_archivo['status']) {                
+                return $mod_pergestion->insertarDtosPersonaGestion($emp_id, $tipoProceso);
+            } else {
+                return $carga_archivo;
+            }
+        //} else {
+            //PROCESO PARA SUBIR EN LOTES LEADS COLOMBIA
+            //return $mod_pergestion->insertarDtosPersonaGestionLotes($emp_id, $tipoProceso);
+        //}
+    }
+    
+    public function uploadFile($fname, $file) {
+        $filaError = 0;
+        $chk_ext = explode(".", $file);
+        $con = \Yii::$app->db_marcacion_historico;
+        $trans = $con->getTransaction(); // se obtiene la transacción actual
+        if ($trans !== null) {
+            $trans = null; // si existe la transacción entonces no se crea una
+        } else {
+            $trans = $con->beginTransaction(); // si no existe la transacción entonces se crea una
+        }        
+        if (strtolower(end($chk_ext)) == "csv") {
+            //si es correcto, entonces damos permisos de lectura para subir                  
+            try {
+                $handle = fopen($file, "r");
+                $cont = 0;
+                //$this->deletetablaTemp($con);
+
+                while (($data = fgetcsv($handle, ",")) !== FALSE) {
+                    $filaError++;
+                    if ($cont != 0) {
+                        $haph_id=$this->InsertarHistorial($con,$data);
+                        //if ($haph_id > 0) {
+                        if (!$haph_id) {//Si no devuelve nada no inserto datos
+                            $arroout["status"] = FALSE;
+                            $arroout["error"] = null;
+                            $arroout["message"] = " Error en la Fila => N°$filaError Nombre => $data[5]";
+                            $arroout["data"] = null;
+                            throw new Exception('Error, Item no almacenado');                            
+                        }
+                        /*$model = new PersonaGestionTmp(); //isset
+                        $model->pgest_carr_nombre = ($emp_id == "1") ? EstudioAcademico::consultarIdsEstudioAca($data[0]) : EstudioAcademico::consultarIdsModEstudio($emp_id, $data[0]); //"$data[0]";
+                        $model->pgest_contacto = PersonaGestionTmp::consultarIdsConocimientoCanal($data[1]); //"$data[1]";
+                        $model->pgest_horario = "$data[2]";
+                        $model->pgest_unidad_academica = UnidadAcademica::consultarIdsUnid_Academica($data[3]); //"$data[3]";
+                        $model->pgest_modalidad = Modalidad::consultarIdsModalidad($data[4]); //"$data[4]";
+                        $model->pgest_nombre = "$data[5]";
+                        $model->pgest_numero = "$data[6]";
+                        $model->pgest_correo = "$data[7]";
+                        $model->pgest_comentario = "$data[8]";
+
+                        if (!$model->save()) {
+                            $arroout["status"] = FALSE;
+                            $arroout["error"] = null;
+                            $arroout["message"] = " Error en la Fila => N°$filaError Nombre => $data[5]";
+                            $arroout["data"] = null;
+                            throw new Exception('Error, Item no almacenado');
+                        }*/
+                    }
+                    $cont++;
+                }
+                fclose($handle);
+                if ($trans !== null)
+                    $trans->commit();
+
+                $arroout["status"] = TRUE;
+                $arroout["error"] = null;
+                $arroout["message"] = null;
+                $arroout["data"] = null;
+                //return true;
+                return $arroout;
+            } catch (Exception $ex) {
+                fclose($handle);
+                if ($trans !== null)
+                    $trans->rollback();
+                //return false;
+                return $arroout;
+            }
+        }else if (strtolower(end($chk_ext)) == "xls" || strtolower(end($chk_ext)) == "xlsx") {
+            //Create new PHPExcel object            
+            $objPHPExcel = \PhpOffice\PhpSpreadsheet\IOFactory::load($file);
+            $dataArr = array();    
+            try {
+                //$sheetData = $objPHPExcel->getActiveSheet()->toArray(null, true, true, true);
+                foreach ($objPHPExcel->getWorksheetIterator() as $worksheet) {
+                    $worksheetTitle = $worksheet->getTitle();
+                    $highestRow = $worksheet->getHighestRow(); // e.g. 10 
+                    $highestColumn = $worksheet->getHighestDataColumn(); // e.g 'F'
+                    $highestColumnIndex = \PhpOffice\PhpSpreadsheet\Cell\Coordinate::columnIndexFromString($highestColumn);
+                    //lectura del Archivo XLS filas y Columnas
+                    for ($row = 1; $row <= $highestRow; ++$row) {
+                        for ($col = 0; $col <= $highestColumnIndex; ++$col) {
+                            $cell = $worksheet->getCellByColumnAndRow($col, $row);
+                            $val = $cell->getValue();
+                            $dataArr[$row][$col] = $val;
+                        }
+                    }
+                    unset($dataArr[1]); // Se elimina la cabecera de titulos del file
+                }
+                //$this->deletetablaTemp($con);            
+                $filaError = 1;
+                foreach ($dataArr as $val) {
+                    $filaError++;
+                    
+                    $haph_id = $this->InsertarHistorial($con, $val);
+                    //if ($haph_id > 0) {
+                    if (!$haph_id) {//Si no devuelve nada no inserto datos
+                        $arroout["status"] = FALSE;
+                        $arroout["error"] = null;
+                        $arroout["message"] = " Error en la Fila => N°$filaError Nombre => $val[5]";
+                        $arroout["data"] = null;
+                        throw new Exception('Error, Item no almacenado');
+                    }
+
+                    /*$model = new PersonaGestionTmp();
+                    $model->pgest_carr_nombre = ($emp_id == "1") ? EstudioAcademico::consultarIdsEstudioAca($val[1]) : EstudioAcademico::consultarIdsModEstudio($emp_id, $val[1]);
+                    $model->pgest_contacto = PersonaGestionTmp::consultarIdsConocimientoCanal($val[2]); //"$val[2]";
+                    $model->pgest_horario = "$val[3]";
+                    $model->pgest_unidad_academica = UnidadAcademica::consultarIdsUnid_Academica($val[4]);
+                    $model->pgest_modalidad = Modalidad::consultarIdsModalidad($val[5]);
+                    $model->pgest_nombre = "$val[6]";
+                    $model->pgest_numero = "$val[7]";
+                    $model->pgest_correo = "$val[8]";
+                    $model->pgest_comentario = "$val[9]";                    
+                    if (!$model->save()) {
+                        $arroout["status"] = FALSE;
+                        $arroout["error"] = null;
+                        $arroout["message"] = " Error en la Fila => N°$filaError Nombre => $val[6]";
+                        $arroout["data"] = null;
+                        throw new Exception('Error, Item no almacenado');
+                    }*/
+                }
+                if ($trans !== null)
+                    $trans->commit();                    
+                    
+                $arroout["status"] = TRUE;
+                $arroout["error"] = null;
+                $arroout["message"] = null;
+                $arroout["data"] = null;
+                //return true;
+                return $arroout;
+            } catch (Exception $ex) {
+                if ($trans !== null)
+                    $trans->rollback();
+                    \app\models\Utilities::putMessageLogFile('Error en la Fila => N° ' .$filaError .' Nombre =>'. $val[6]); 
+                //return false;
+                return $arroout;                
+            }
+        }
+    }
+    
+    private function InsertarHistorial($con, $dataInfo) {
+        $idsData=0;
+        $sql = "INSERT INTO " . $con->dbname . ".horario_asignatura_periodo_historial
+            (asi_id,pahi_id,pro_id,uaca_id,mod_id,dia_id,haph_fecha_clase,haph_hora_entrada,
+             haph_hora_salida,haph_estado,haph_fecha_creacion,haph_estado_logico)VALUES
+            (:asi_id,:pahi_id,:pro_id,:uaca_id,:mod_id,:dia_id,:haph_fecha_clase,:haph_hora_entrada,
+             :haph_hora_salida,1, CURRENT_TIMESTAMP(),1);";
+        $comando = $con->createCommand($sql);
+        $comando->bindParam(":asi_id", $dataInfo[6], \PDO::PARAM_INT);
+        $comando->bindParam(":pahi_id", $dataInfo[6], \PDO::PARAM_INT);
+        $comando->bindParam(":pro_id", $dataInfo[6], \PDO::PARAM_INT);
+        $comando->bindParam(":uaca_id", $dataInfo[6], \PDO::PARAM_INT);
+        $comando->bindParam(":mod_id", $dataInfo[6], \PDO::PARAM_INT);
+        $comando->bindParam(":dia_id", $dataInfo[6], \PDO::PARAM_INT);
+        $comando->bindParam(":haph_fecha_clase", $dataInfo[6], \PDO::PARAM_STR);
+        $comando->bindParam(":haph_hora_entrada", $dataInfo[6], \PDO::PARAM_STR);
+        $comando->bindParam(":haph_hora_salida", $dataInfo[6], \PDO::PARAM_STR);
+        $comando->execute();
+        return $con->getLastInsertID();
+    }
+
 }

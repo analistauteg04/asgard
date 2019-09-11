@@ -3,6 +3,10 @@ $(document).ready(function () {
         actualizarGridMarcacion();
     });   
     
+    $('#btn_CargarArchivo').click(function () {
+        cargarArchivo();
+    });   
+    
 });
 
 function setComboDataselect(arr_data, element_id, texto) {
@@ -46,4 +50,20 @@ function exportPdf() {
     var f_fin = $('#txt_fecha_fin').val();
     //var periodo = $('#cmb_periodo option:selected').val();
     window.location.href = $('#txth_base').val() + "/marcacionhistorico/marcacionhistorico/exppdf?pdf=1&profesor=" + profesor + "&materia=" + materia + "&f_ini=" + f_ini + "&f_fin=" + f_fin /*+ "&periodo=" + periodo*/;
+}
+
+function cargarArchivo() {
+    var arrParams = new Object();
+    var link = $('#txth_base').val() + "/marcacionhistorico/marcacionhistorico/cargarmarcaciones";
+    arrParams.procesar_file = true;   
+    arrParams.nombre = $('#txth_doc_archivo').val() 
+    arrParams.ruta = $('#txth_doc_archivo_ruta').val() 
+    if (!validateForm()) {
+        requestHttpAjax(link, arrParams, function (response) {
+            showAlert(response.status, response.label, response.message);
+            setTimeout(function () {
+                window.location.href = $('#txth_base').val() + "/admision/contactos/index";
+            }, 3000);
+        }, true);
+    }
 }
