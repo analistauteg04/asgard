@@ -221,7 +221,7 @@ class RegistroMarcacionHistorial extends \yii\db\ActiveRecord
                         if (!$haph_id) {//Si no devuelve nada no inserto datos
                             $arroout["status"] = FALSE;
                             $arroout["error"] = null;
-                            $arroout["message"] = " Error en la Fila => N°$filaError Nombre => $data[5]";
+                            $arroout["message"] = " Error en la Fila => N°$filaError Nombre => $data[3]";
                             $arroout["data"] = null;
                             throw new Exception('Error, Item no almacenado');                            
                         }
@@ -293,28 +293,12 @@ class RegistroMarcacionHistorial extends \yii\db\ActiveRecord
                     if (!$haph_id) {//Si no devuelve nada no inserto datos
                         $arroout["status"] = FALSE;
                         $arroout["error"] = null;
-                        $arroout["message"] = " Error en la Fila => N°$filaError Nombre => $val[5]";
+                        $arroout["message"] = " Error en la Fila => N°$filaError Nombre => $val[3]";
                         $arroout["data"] = null;
                         throw new Exception('Error, Item no almacenado');
                     }
 
-                    /*$model = new PersonaGestionTmp();
-                    $model->pgest_carr_nombre = ($emp_id == "1") ? EstudioAcademico::consultarIdsEstudioAca($val[1]) : EstudioAcademico::consultarIdsModEstudio($emp_id, $val[1]);
-                    $model->pgest_contacto = PersonaGestionTmp::consultarIdsConocimientoCanal($val[2]); //"$val[2]";
-                    $model->pgest_horario = "$val[3]";
-                    $model->pgest_unidad_academica = UnidadAcademica::consultarIdsUnid_Academica($val[4]);
-                    $model->pgest_modalidad = Modalidad::consultarIdsModalidad($val[5]);
-                    $model->pgest_nombre = "$val[6]";
-                    $model->pgest_numero = "$val[7]";
-                    $model->pgest_correo = "$val[8]";
-                    $model->pgest_comentario = "$val[9]";                    
-                    if (!$model->save()) {
-                        $arroout["status"] = FALSE;
-                        $arroout["error"] = null;
-                        $arroout["message"] = " Error en la Fila => N°$filaError Nombre => $val[6]";
-                        $arroout["data"] = null;
-                        throw new Exception('Error, Item no almacenado');
-                    }*/
+                    
                 }
                 if ($trans !== null)
                     $trans->commit();                    
@@ -336,25 +320,63 @@ class RegistroMarcacionHistorial extends \yii\db\ActiveRecord
     }
     
     private function InsertarHistorial($con, $dataInfo) {
+        
         $idsData=0;
-        \app\models\Utilities::putMessageLogFile($dataInfo[1]);
+        \app\models\Utilities::putMessageLogFile($dataInfo[3]);
+        $IdsPro=$this->consultarIdDocente($dataInfo[3]);
+        $IdsPro=($IdsPro!=0)?$IdsPro:0;        
+        $asi_id=$this->consultarIdAsignatura($dataInfo[1]);        
+        
         $sql = "INSERT INTO " . $con->dbname . ".horario_asignatura_periodo_historial
             (asi_id,pahi_id,pro_id,uaca_id,mod_id,dia_id,haph_fecha_clase,haph_hora_entrada,
              haph_hora_salida,haph_estado,haph_fecha_creacion,haph_estado_logico)VALUES
             (:asi_id,:pahi_id,:pro_id,:uaca_id,:mod_id,:dia_id,:haph_fecha_clase,:haph_hora_entrada,
              :haph_hora_salida,1, CURRENT_TIMESTAMP(),1);";
         $comando = $con->createCommand($sql);
-        $comando->bindParam(":asi_id", intval($dataInfo[1]), \PDO::PARAM_INT);
+        $comando->bindParam(":asi_id", $asi_id, \PDO::PARAM_INT);
         $comando->bindParam(":pahi_id", intval($dataInfo[2]), \PDO::PARAM_INT);
-        $comando->bindParam(":pro_id", intval($dataInfo[3]), \PDO::PARAM_INT);
-        $comando->bindParam(":uaca_id", intval($dataInfo[4]), \PDO::PARAM_INT);
-        $comando->bindParam(":mod_id", intval($dataInfo[5]), \PDO::PARAM_INT);
-        $comando->bindParam(":dia_id", intval($dataInfo[6]), \PDO::PARAM_INT);
-        $comando->bindParam(":haph_fecha_clase", $dataInfo[7], \PDO::PARAM_STR);
-        $comando->bindParam(":haph_hora_entrada", $dataInfo[8], \PDO::PARAM_STR);
-        $comando->bindParam(":haph_hora_salida", $dataInfo[9], \PDO::PARAM_STR);
+        $comando->bindParam(":pro_id", $IdsPro, \PDO::PARAM_INT);
+        $comando->bindParam(":uaca_id", intval($dataInfo[5]), \PDO::PARAM_INT);
+        $comando->bindParam(":mod_id", intval($dataInfo[6]), \PDO::PARAM_INT);
+        $comando->bindParam(":dia_id", intval($dataInfo[7]), \PDO::PARAM_INT);
+        $comando->bindParam(":haph_fecha_clase", $dataInfo[8], \PDO::PARAM_STR);
+        $comando->bindParam(":haph_hora_entrada", $dataInfo[9], \PDO::PARAM_STR);
+        $comando->bindParam(":haph_hora_salida", $dataInfo[10], \PDO::PARAM_STR);
         $comando->execute();
         return $con->getLastInsertID();
     }
+    
+    private function consultarIdDocente($Cedula) {
+        $con = \Yii::$app->db_academico;  
+        $con1 = \Yii::$app->db_asgard;        
+        $sql = "SELECT pro_id Ids FROM " . $con->dbname . ".profesor
+                    WHERE  pro_estado=1 AND pro_estado_logico=1
+                    AND per_id=(SELECT per_id FROM " . $con1->dbname . ".persona "
+                                 . " WHERE per_cedula=:per_cedula);";
+        
+        $comando = $con->createCommand($sql);
+        $comando->bindParam(":per_cedula", $Cedula, \PDO::PARAM_STR);
+        //return $comando->queryAll();
+        $rawData=$comando->queryScalar();
+        if ($rawData === false)
+            return 0; //en caso de que existe problema o no retorne nada tiene 1 por defecto 
+        return $rawData;
+    }  
+    
+    private function consultarIdAsignatura($nombre) {
+        $con = \Yii::$app->db_academico; 
+        $sql = "SELECT asi_id FROM " . $con->dbname . ".asignatura "
+                . "WHERE asi_estado=1 AND asi_estado_logico=1 AND asi_nombre=:asi_nombre; ";
+
+        $comando = $con->createCommand($sql);
+        $comando->bindParam(":asi_nombre", $nombre, \PDO::PARAM_STR);
+        //return $comando->queryAll();
+        $rawData=$comando->queryScalar();
+        if ($rawData === false)
+            return 0; //en caso de que existe problema o no retorne nada tiene 1 por defecto 
+        return $rawData;
+    }  
+    
+   
 
 }

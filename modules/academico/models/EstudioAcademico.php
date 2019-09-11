@@ -272,6 +272,7 @@ class EstudioAcademico extends \app\modules\admision\components\CActiveRecord
      * @property integer car_id      
      * @return  
      */
+
     public static function consultarIdsEstudioAca($TextAlias) {
         $con = \Yii::$app->db_academico;        
         $sql = "SELECT eaca_id Ids 
