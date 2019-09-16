@@ -486,7 +486,7 @@ class RegistroMarcacionHistorial extends \yii\db\ActiveRecord
         $con = \Yii::$app->db_marcacion_historico;       
         $sql = "SELECT haph_id 	FROM " . $con->dbname . ".horario_asignatura_periodo_historial
                         WHERE asi_id=:asi_id AND pro_id=:pro_id AND uaca_id=:uaca_id 
-                        AND mod_id=:mod_id AND dia_id=6;";
+                        AND mod_id=:mod_id AND dia_id=:dia_id ;";
         
         $comando = $con->createCommand($sql);
         $comando->bindParam(":asi_id", $dataInfo[1], \PDO::PARAM_STR);
