@@ -195,7 +195,7 @@ class RegistroMarcacionHistorial extends \yii\db\ActiveRecord
         //}
     }
     
-    public function uploadFile($fname, $file) {
+    public function uploadFileHorario($fname, $file) {
         $filaError = 0;
         $file=Yii::$app->basePath .$file.$fname;
         $chk_ext = explode(".", $fname);
@@ -211,13 +211,11 @@ class RegistroMarcacionHistorial extends \yii\db\ActiveRecord
             try {
                 $handle = fopen($file, "r");
                 $cont = 0;
-                //$this->deletetablaTemp($con);
-
                 while (($data = fgetcsv($handle, ",")) !== FALSE) {
                     $filaError++;
                     if ($cont != 0) {
                         $haph_id=$this->InsertarHistorial($con,$data);
-                        $rmhi_id = $this->InsertarMarcacion($con, $val,$haph_id);
+                        //$rmhi_id = $this->InsertarMarcacion($con, $val,$haph_id);
                         //if ($haph_id > 0) {
                         if (!$haph_id) {//Si no devuelve nada no inserto datos
                             $arroout["status"] = FALSE;
@@ -273,7 +271,7 @@ class RegistroMarcacionHistorial extends \yii\db\ActiveRecord
                 foreach ($dataArr as $val) {
                     $filaError++;                    
                     $haph_id = $this->InsertarHistorial($con, $val);
-                    $rmhi_id = $this->InsertarMarcacion($con, $val,$haph_id);
+                    //$rmhi_id = $this->InsertarMarcacion($con, $val,$haph_id);
                     //if ($haph_id > 0) {
                     if (!$haph_id) {//Si no devuelve nada no inserto datos
                         $arroout["status"] = FALSE;
@@ -333,8 +331,8 @@ class RegistroMarcacionHistorial extends \yii\db\ActiveRecord
     
     private function InsertarMarcacion($con, $dataInfo,$haph_id) {       
         //rmhi_id
-        $fhora_entrada=$dataInfo[8]." ". $dataInfo[9];
-        $fhora_salida=$dataInfo[8]." ". $dataInfo[10];
+        $fhora_entrada=$dataInfo[6];
+        $fhora_salida=$dataInfo[7];
         $sql = "INSERT INTO " . $con->dbname . ".registro_marcacion_historial
               (haph_id,rmhi_fecha_hora_entrada,rmhi_fecha_hora_salida,rmhi_estado,rmhi_fecha_creacion,rmhi_estado_logico)VALUES
               (:haph_id,:rmhi_fecha_hora_entrada,:rmhi_fecha_hora_salida,1,CURRENT_TIMESTAMP(),1);";
@@ -371,6 +369,132 @@ class RegistroMarcacionHistorial extends \yii\db\ActiveRecord
 
         $comando = $con->createCommand($sql);
         $comando->bindParam(":asi_nombre", $nombre, \PDO::PARAM_STR);
+        //return $comando->queryAll();
+        $rawData=$comando->queryScalar();
+        if ($rawData === false)
+            return 0; //en caso de que existe problema o no retorne nada tiene 1 por defecto 
+        return $rawData;
+    } 
+    
+    public function uploadFileMarcacion($fname, $file) {
+        $filaError = 0;
+        $file=Yii::$app->basePath .$file.$fname;
+        $chk_ext = explode(".", $fname);
+        $con = \Yii::$app->db_marcacion_historico;
+        $trans = $con->getTransaction(); // se obtiene la transacción actual
+        if ($trans !== null) {
+            $trans = null; // si existe la transacción entonces no se crea una
+        } else {
+            $trans = $con->beginTransaction(); // si no existe la transacción entonces se crea una
+        }        
+        if (strtolower(end($chk_ext)) == "csv") {
+            //si es correcto, entonces damos permisos de lectura para subir                  
+            try {
+                $handle = fopen($file, "r");
+                $cont = 0;
+                while (($data = fgetcsv($handle, ",")) !== FALSE) {
+                    $filaError++;
+                    if ($cont != 0) {
+                        //$haph_id=$this->InsertarHistorial($con,$data);
+                        $rmhi_id = $this->InsertarMarcacion($con, $val,$haph_id);
+                        //if ($haph_id > 0) {
+                        if (!$haph_id) {//Si no devuelve nada no inserto datos
+                            $arroout["status"] = FALSE;
+                            $arroout["error"] = null;
+                            $arroout["message"] = " Error en la Fila => N°$filaError Nombre => $data[3]";
+                            $arroout["data"] = null;
+                            throw new Exception('Error, Item no almacenado');                            
+                        }
+                        
+                    }
+                    $cont++;
+                }
+                fclose($handle);
+                if ($trans !== null)
+                    $trans->commit();
+
+                $arroout["status"] = TRUE;
+                $arroout["error"] = null;
+                $arroout["message"] = null;
+                $arroout["data"] = null;
+                //return true;
+                return $arroout;
+            } catch (Exception $ex) {
+                fclose($handle);
+                if ($trans !== null)
+                    $trans->rollback();
+                //return false;
+                return $arroout;
+            }
+        }else if (strtolower(end($chk_ext)) == "xls" || strtolower(end($chk_ext)) == "xlsx") {
+            //Create new PHPExcel object            
+            $objPHPExcel = \PhpOffice\PhpSpreadsheet\IOFactory::load($file);
+            $dataArr = array();    
+            try {
+                //$sheetData = $objPHPExcel->getActiveSheet()->toArray(null, true, true, true);
+                foreach ($objPHPExcel->getWorksheetIterator() as $worksheet) {
+                    $worksheetTitle = $worksheet->getTitle();
+                    $highestRow = $worksheet->getHighestRow(); // e.g. 10 
+                    $highestColumn = $worksheet->getHighestDataColumn(); // e.g 'F'
+                    $highestColumnIndex = \PhpOffice\PhpSpreadsheet\Cell\Coordinate::columnIndexFromString($highestColumn);
+                    //lectura del Archivo XLS filas y Columnas
+                    for ($row = 1; $row <= $highestRow; ++$row) {
+                        for ($col = 0; $col <= $highestColumnIndex; ++$col) {
+                            $cell = $worksheet->getCellByColumnAndRow($col, $row);
+                            $val = $cell->getValue();
+                            $dataArr[$row][$col] = $val;
+                        }
+                    }
+                    unset($dataArr[1]); // Se elimina la cabecera de titulos del file
+                }
+                //$this->deletetablaTemp($con);            
+                $filaError = 1;
+                foreach ($dataArr as $val) {
+                    $filaError++;                   
+                    $haph_id=$this->consultarIdHorario($val);                    
+                    if ($haph_id > 0) {
+                        $rmhi_id = $this->InsertarMarcacion($con, $val,$haph_id);
+                    }else{                    
+                        $arroout["status"] = FALSE;
+                        $arroout["error"] = null;
+                        $arroout["message"] = " Error en la Fila => N°$filaError Nombre => $val[1]";
+                        $arroout["data"] = null;
+                        //throw new Exception('Error, Item no almacenado');
+                    }
+                }
+                if ($trans !== null)
+                    $trans->commit();                    
+                    
+                $arroout["status"] = TRUE;
+                $arroout["error"] = null;
+                $arroout["message"] = null;
+                $arroout["data"] = null;
+                //return true;
+                return $arroout;
+            } catch (Exception $ex) {
+                if ($trans !== null)
+                    $trans->rollback();
+                    \app\models\Utilities::putMessageLogFile('Error en la Fila => N° ' .$filaError .' Nombre =>'. $val[6]); 
+                //return false;
+                return $arroout;                
+            }
+        }
+    }
+    
+    
+    private function consultarIdHorario($dataInfo) {
+        $con = \Yii::$app->db_marcacion_historico;       
+        $sql = "SELECT haph_id 	FROM " . $con->dbname . ".horario_asignatura_periodo_historial
+                        WHERE asi_id=:asi_id AND pro_id=:pro_id AND uaca_id=:uaca_id 
+                        AND mod_id=:mod_id AND dia_id=6;";
+        
+        $comando = $con->createCommand($sql);
+        $comando->bindParam(":asi_id", $dataInfo[1], \PDO::PARAM_STR);
+        $comando->bindParam(":pro_id", $dataInfo[2], \PDO::PARAM_STR);
+        $comando->bindParam(":uaca_id", $dataInfo[3], \PDO::PARAM_STR);
+        $comando->bindParam(":mod_id", $dataInfo[4], \PDO::PARAM_STR);
+        $comando->bindParam(":dia_id", $dataInfo[5], \PDO::PARAM_STR);
+        
         //return $comando->queryAll();
         $rawData=$comando->queryScalar();
         if ($rawData === false)
