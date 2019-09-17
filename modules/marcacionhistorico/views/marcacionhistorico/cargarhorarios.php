@@ -50,7 +50,7 @@ $leyenda = '<div class="col-md-12 col-xs-12 col-sm-12 col-lg-12">
                             'showCancel' => false,
                             'browseClass' => 'btn btn-primary btn-block',
                             'browseIcon' => '<i class="fa fa-folder-open"></i> ',
-                            'browseLabel' => "Subir Archivo",
+                            //'browseLabel' => "Subir Archivo",
                             //'uploadUrl' => Url::to(['marcacionhistorico/cargarmarcaciones']),
                             'uploadUrl' => Url::to(['/marcacionhistorico/marcacionhistorico/cargarhorarios']), // CABIAR RUTA QUE ES
                             'maxFileSize' => Yii::$app->params["MaxFileSize"], // en Kbytes
@@ -121,7 +121,7 @@ $leyenda = '<div class="col-md-12 col-xs-12 col-sm-12 col-lg-12">
         <div class="col-md-6 col-sm-6 col-xs-6 col-lg-6">
             <div class='col-md-7 col-xs-7 col-lg-7 col-sm-7'></div>
             <div class='col-md-3 col-xs-3 col-lg-3 col-sm-3'>         
-                <p> <a id="btn_CargarArchivo" href="javascript:" class="btn btn-primary btn-block"> <?= Yii::t("formulario", "Add") ?></a></p>
+                <p> <a id="btn_CargarHorario" href="javascript:" class="btn btn-primary btn-block"> <?= Yii::t("formulario", "Add") ?></a></p>
             </div>
         </div>        
     </div> 

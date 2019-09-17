@@ -197,6 +197,9 @@ class RegistroMarcacionHistorial extends \yii\db\ActiveRecord
     
     public function uploadFileHorario($fname, $file) {
         $filaError = 0;
+        $contError = 0;
+        $rawData = ''; //array();
+        $mensError = '';
         $ExisIds=0;
         $file=Yii::$app->basePath .$file.$fname;
         $chk_ext = explode(".", $fname);
@@ -273,36 +276,54 @@ class RegistroMarcacionHistorial extends \yii\db\ActiveRecord
                 foreach ($dataArr as $val) {
                     $haph_id=0;
                     $filaError++;
-                    $ExisIds=$this->consultarIdHorario($val);
+                    $ExisIds=$this->ExisteHorario($val);
                     if($ExisIds==0){//NO existe 
-                         $haph_id = $this->InsertarHistorialHorario($con, $val);
+                        $haph_id = $this->InsertarHistorialHorario($con, $val);
+                        if (!$haph_id) {
+                            $contError++;
+                            $mensError .= 'Profesor: '.$val[4].' - Linea: '.$filaError.' - NO INGRESADO <br/>'; 
+                        }
+                    }else{
+                        $contError++;
+                        $mensError .= 'Profesor: '.$val[4].' - Linea: '.$filaError.' - YA EXISTE <br/>';
                     }
                    
-                    //$rmhi_id = $this->InsertarMarcacion($con, $val,$haph_id);
-                    if ($haph_id > 0) {
+                    
+                    /*if ($haph_id > 0) {
                     //if (!$haph_id) {//Si no devuelve nada no inserto datos
                         $arroout["status"] = FALSE;
                         $arroout["error"] = null;
                         $arroout["message"] = " Error en la Fila => N°$filaError Nombre => $val[3]";
                         $arroout["data"] = null;
                         //throw new Exception('Error, Item no almacenado');
-                    }
+                    }*/
                 }
                 if ($trans !== null)
-                    $trans->commit();                    
+                    $trans->commit();
+                
+                if ($contError > 0) {
+                    $rawData = '<br/> Resumen de información No ingresada: <br/>';
+                    $rawData .= $mensError;
+                    $rawData .= 'TOTAL: ' . $contError . ' <br/>';
+                }
                     
                 $arroout["status"] = TRUE;
                 $arroout["error"] = null;
                 $arroout["message"] = null;
-                $arroout["data"] = null;
+                $arroout["data"] = $rawData;
                 //return true;
                 return $arroout;
             } catch (Exception $ex) {
+                fclose($handle);
                 if ($trans !== null)
                     $trans->rollback();
-                    \app\models\Utilities::putMessageLogFile('Error en la Fila => N° ' .$filaError .' Nombre =>'. $val[6]); 
+                    //\app\models\Utilities::putMessageLogFile('Error en la Fila => N° ' .$filaError .' Nombre =>'. $val[6]); 
                 //return false;
-                return $arroout;                
+                $arroout["status"] = FALSE;
+                $arroout["error"] = $ex->getCode();
+                $arroout["message"] = $ex->getMessage();
+                $arroout["data"] = $rawData;
+                return $arroout;              
             }
         }
     }
@@ -510,17 +531,24 @@ class RegistroMarcacionHistorial extends \yii\db\ActiveRecord
     }  
     
     private function ExisteHorario($dataInfo) {
+        $IdsPro=$this->consultarIdDocente($dataInfo[3]);
+        $IdsPro=($IdsPro!=0)?$IdsPro: 0;        
+        $asi_id=$this->consultarIdAsignatura($dataInfo[1]); 
+        
+        /*if ($IdsPro==0 || $asi_id==0){//Verifica que existan los IDS
+            return false;
+        }*/
         $con = \Yii::$app->db_marcacion_historico;       
         $sql = "SELECT haph_id 	FROM " . $con->dbname . ".horario_asignatura_periodo_historial
                         WHERE asi_id=:asi_id AND pro_id=:pro_id AND uaca_id=:uaca_id 
                         AND mod_id=:mod_id AND dia_id=:dia_id ;";
         
         $comando = $con->createCommand($sql);
-        $comando->bindParam(":asi_id", $dataInfo[1], \PDO::PARAM_STR);
-        $comando->bindParam(":pro_id", $dataInfo[2], \PDO::PARAM_STR);
-        $comando->bindParam(":uaca_id", $dataInfo[3], \PDO::PARAM_STR);
-        $comando->bindParam(":mod_id", $dataInfo[4], \PDO::PARAM_STR);
-        $comando->bindParam(":dia_id", $dataInfo[5], \PDO::PARAM_STR);
+        $comando->bindParam(":asi_id", $asi_id, \PDO::PARAM_STR);
+        $comando->bindParam(":pro_id", $IdsPro, \PDO::PARAM_STR);
+        $comando->bindParam(":uaca_id", $dataInfo[5], \PDO::PARAM_STR);
+        $comando->bindParam(":mod_id", $dataInfo[6], \PDO::PARAM_STR);
+        $comando->bindParam(":dia_id", $dataInfo[7], \PDO::PARAM_STR);
         
         //return $comando->queryAll();
         $rawData=$comando->queryScalar();

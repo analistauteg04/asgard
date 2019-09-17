@@ -3,10 +3,10 @@ $(document).ready(function () {
         actualizarGridMarcacion();
     });   
     
-    $('#btn_CargarArchivo').click(function () {
+    $('#btn_CargarMarcacion').click(function () {
         cargarMarcacines();//Marcaciones
     });  
-    $('#btn_CargarArchivo').click(function () {
+    $('#btn_CargarHorario').click(function () {
         cargarHorarios();//Horarios
     });  
     
@@ -65,7 +65,7 @@ function cargarMarcacines() {
         requestHttpAjax(link, arrParams, function (response) {
             showAlert(response.status, response.label, response.message);
             setTimeout(function () {
-               // window.location.href = $('#txth_base').val() + "/admision/contactos/index";
+               window.location.href = $('#txth_base').val() + "/marcacionhistorico/marcacionhistorico/index";
             }, 3000);
         }, true);
     }
@@ -81,7 +81,7 @@ function cargarHorarios() {
         requestHttpAjax(link, arrParams, function (response) {
             showAlert(response.status, response.label, response.message);
             setTimeout(function () {
-               // window.location.href = $('#txth_base').val() + "/admision/contactos/index";
+                window.location.href = $('#txth_base').val() + "/marcacionhistorico/marcacionhistorico/index";
             }, 3000);
         }, true);
     }
