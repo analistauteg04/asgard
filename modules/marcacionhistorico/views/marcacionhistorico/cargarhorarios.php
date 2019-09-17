@@ -18,7 +18,7 @@ $leyenda = '<div class="col-md-12 col-xs-12 col-sm-12 col-lg-12">
           </div>';
 ?>
 <div class="col-md-12">    
-    <h3><span id="lbl_titulo"><?= Yii::t("formulario", "Carga Historial Marcaciones") ?></span><br/>    
+    <h3><span id="lbl_titulo"><?= Yii::t("formulario", "Carga Historial Horarios") ?></span><br/>    
 </div>
 <div class="col-md-12">    
     <br/>    
@@ -52,11 +52,11 @@ $leyenda = '<div class="col-md-12 col-xs-12 col-sm-12 col-lg-12">
                             'browseIcon' => '<i class="fa fa-folder-open"></i> ',
                             'browseLabel' => "Subir Archivo",
                             //'uploadUrl' => Url::to(['marcacionhistorico/cargarmarcaciones']),
-                            'uploadUrl' => Url::to(['/marcacionhistorico/marcacionhistorico/cargarmarcaciones']), // CABIAR RUTA QUE ES
+                            'uploadUrl' => Url::to(['/marcacionhistorico/marcacionhistorico/cargarhorarios']), // CABIAR RUTA QUE ES
                             'maxFileSize' => Yii::$app->params["MaxFileSize"], // en Kbytes
                             'uploadExtraData' => 'javascript:function (previewId,index) {
                                     //var name_doc= $("#txt_doc_archivo").val();                                    
-                                    var name_doc="macaciones_' . $per_id . '_' . time() . '";
+                                    var name_doc="horarios_' . $per_id . '_' . time() . '";
                                     return {"upload_file": true, 
                                             "name_file": name_doc};
                                     
