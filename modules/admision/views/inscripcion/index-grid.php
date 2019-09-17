@@ -7,6 +7,7 @@ use app\models\Utilities;
 use app\modules\repositorio\Module as repositorio;
 use app\modules\academico\Module as academico;
 use app\modules\financiero\Module as financiero;
+use \app\models\Persona;
 repositorio::registerTranslations();
 academico::registerTranslations();
 financiero::registerTranslations();
@@ -111,14 +112,23 @@ financiero::registerTranslations();
                          [
                 'class' => 'yii\grid\ActionColumn',
                 'header' => Yii::t("formulario", "Actions"), //{update} 
-                'template' => '{view} {delete}', //    
+                'template' => '{view} {delete} {usuario}', //    
                 'buttons' => [
                     'view' => function ($url, $model) {
                         return Html::a('<span class="glyphicon glyphicon-eye-open"></span>', Url::to(['inscripcion/view', 'codigo' => base64_encode($model['id'])]), ["data-toggle" => "tooltip", "title" => "Ver Registro", "data-pjax" => 0]);
                     },
                     'delete' => function ($url, $model) {                    
-                    return Html::a('<span class="glyphicon glyphicon-trash"></span>', "#", ['onclick' => "eliminarRegistro(" . $model['id'] . ");", "data-toggle" => "tooltip", "title" => "Eliminar Registro", "data-pjax" => 0]);                    
+                        return Html::a('<span class="glyphicon glyphicon-trash"></span>', "#", ['onclick' => "eliminarRegistro(" . $model['id'] . ");", "data-toggle" => "tooltip", "title" => "Eliminar Registro", "data-pjax" => 0]);                    
                     }, 
+                    'usuario' => function ($url, $model) {
+                        $mod_per = new Persona();
+                        $pre_id = $mod_per->ConsultaRegistroExiste($model['correo'], $model['identificacion'], $model['pasaporte']);                                                
+                        if ($pre_id['existen'] == 0) {
+                            return Html::a('<span class="glyphicon glyphicon-user"></span>', "#", ["onclick" => "generarSolicitud(" . $model['id'] . ");", "data-toggle" => "tooltip", "title" => "Generar Solicitud", "data-pjax" => 0]);
+                        } else {
+                            return "<span class = 'glyphicon glyphicon-user' data-toggle = 'tooltip' title ='Usuario Existente'  data-pjax = 0></span>";
+                        }                                                        
+                    },
                     /*'interested' => function ($url, $model) {
                         $mod_per = new Persona();
                         $pre_id = $mod_per->ConsultaRegistroExiste(null, $model['identificacion'], $model['pasaporte']);

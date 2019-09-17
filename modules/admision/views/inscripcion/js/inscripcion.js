@@ -472,6 +472,17 @@ function update() {
     }
 }
 
-function generarAspirante(id) {
-
+function generarSolicitud(id) {
+    var arrParams = new Object();
+    var link = $('#txth_base').val() + "/admision/inscripcion/generarsolicitud";
+    arrParams.id = id;    
+    if (!validateForm()) {
+        requestHttpAjax(link, arrParams, function (response) {
+            showAlert(response.status, response.label, response.message);
+            setTimeout(function () {
+                //actualizarGridPagoExterno();
+                window.location.href = $('#txth_base').val() + "/admision/inscripcion/index";
+            }, 3000);
+        }, true);
+    }
 }

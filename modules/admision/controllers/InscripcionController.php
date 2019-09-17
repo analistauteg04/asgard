@@ -532,5 +532,214 @@ class InscripcionController extends \app\components\CController {
             }
         }
     }
+    
+    public function actionGenerarsolicitud() {
+        $con = \Yii::$app->db_asgard;
+        $con1 = \Yii::$app->db_captacion;
+        $con2 = \Yii::$app->db_facturacion;
+        $con3 = \Yii::$app->db_captacion;
+        $con4 = \Yii::$app->db_crm;
+        $usuario_ingreso = @Yii::$app->session->get("PB_iduser");
+        if (Yii::$app->request->isAjax) {
+            $data = Yii::$app->request->post();
+            $id = $data["id"];
+        }
+        try {
+            /* $transaction = $con->beginTransaction();
+              $transaction1 = $con1->beginTransaction(); */
+            $transaction2 = $con2->beginTransaction();
+            //Se consulta la información.
+            $emp_id = 1;
+            $mod_inscripcion = new InscritoMaestria();            
+            $resp_datos = $mod_inscripcion->consultarInscritoMaestria($id);
+            if ($resp_datos) {  //Si se encontró
+                $identificacion = $resp_datos['documento'];
+                if (isset($identificacion) && strlen($identificacion) > 0) {
+                    \app\models\Utilities::putMessageLogFile('$identificacion:' . $identificacion);
+                    $mod_persona = new Persona();
+                    $keys_per = [
+                        'per_pri_nombre', 'per_seg_nombre', 'per_pri_apellido', 'per_seg_apellido',
+                        'per_cedula', 'etn_id', 'eciv_id', 'per_genero', 'pai_id_nacimiento',
+                        'pro_id_nacimiento', 'can_id_nacimiento', 'per_fecha_nacimiento',
+                        'per_celular', 'per_correo', 'tsan_id', 'per_domicilio_sector',
+                        'per_domicilio_cpri', 'per_domicilio_csec', 'per_domicilio_num',
+                        'per_domicilio_ref', 'per_domicilio_telefono', 'pai_id_domicilio',
+                        'pro_id_domicilio', 'can_id_domicilio', 'per_nac_ecuatoriano',
+                        'per_nacionalidad', 'per_foto', 'per_usuario_ingresa', 'per_estado', 'per_estado_logico'
+                    ];                    
+                    $parametros_per = [
+                        ucwords(strtolower($resp_datos['nombre'])), null,
+                        ucwords(strtolower($resp_datos['apellido'])), null,
+                        $resp_datos['documento'], null, null, null, null, null,
+                        null, null, $resp_datos['celular'], $resp_datos['correo'],
+                        null, null, null, null,
+                        null, null, null,
+                        null, null, null,
+                        null, null, null, $usuario_ingreso, 1, 1
+                    ];
+                    $id_persona = $mod_persona->consultarIdPersona($resp_datos['documento'], $resp_datos['documento'], $resp_datos['pben_correo'], $resp_datos['celular']);
+                    if ($id_persona == 0) {                        
+                        $id_persona = $mod_persona->insertarPersona($con, $parametros_per, $keys_per, 'persona');  
+                        \app\models\Utilities::putMessageLogFile('despues de crear persona:'.$id_persona);
+                        if ($id_persona) {                            
+                            $mod_emp_persona = new EmpresaPersona();                            
+                            $keys = ['emp_id', 'per_id', 'eper_estado', 'eper_estado_logico'];
+                            $parametros = [$emp_id, $id_persona, 1, 1];
+                            $emp_per_id = $mod_emp_persona->consultarIdEmpresaPersona($id_persona, $emp_id);
+                            if ($emp_per_id == 0) {
+                                $emp_per_id = $mod_emp_persona->insertarEmpresaPersona($con, $parametros, $keys, 'empresa_persona');
+                                if ($emp_per_id > 0) {
+                                    \app\models\Utilities::putMessageLogFile('se crea empresa persona.');
+                                    $usuario = new Usuario();
+                                    $usuario_id = $usuario->consultarIdUsuario($id_persona, $resp_datos['correo']);
+                                    if ($usuario_id == 0) {
+                                        $security = new Security();
+                                        $hash = $security->generateRandomString();
+                                        $passencrypt = base64_encode($security->encryptByPassword($hash, $resp_datos['documento']));
+                                        $keys = ['per_id', 'usu_user', 'usu_sha', 'usu_password', 'usu_estado', 'usu_estado_logico'];
+                                        $parametros = [$id_persona, $resp_datos['correo'], $hash, $passencrypt, 1, 1];
+                                        $usuario_id = $usuario->crearUsuarioTemporal($con, $parametros, $keys, 'usuario');
+                                    }
+                                    if ($usuario_id > 0) {
+                                        \app\models\Utilities::putMessageLogFile('se crea usuario.');
+                                        $mod_us_gr_ep = new UsuaGrolEper();
+                                        $grol_id = 30;
+                                        $keys = ['eper_id', 'usu_id', 'grol_id', 'ugep_estado', 'ugep_estado_logico'];
+                                        $parametros = [$emp_per_id, $usuario_id, $grol_id, 1, 1];
+                                        $us_gr_ep_id = $mod_us_gr_ep->consultarIdUsuaGrolEper($emp_per_id, $usuario_id, $grol_id);
+                                        if ($us_gr_ep_id == 0) {
+                                            $us_gr_ep_id = $mod_us_gr_ep->insertarUsuaGrolEper($con, $parametros, $keys, 'usua_grol_eper');
+                                            if ($us_gr_ep_id > 0) {
+                                                \app\models\Utilities::putMessageLogFile('se crea usuario persona.');
+                                                $mod_interesado = new Interesado(); // se guarda con estado_interesado 1
+                                                $interesado_id = $mod_interesado->consultaInteresadoById($id_persona);
+                                                $keys = ['per_id', 'int_estado_interesado', 'int_usuario_ingreso', 'int_estado', 'int_estado_logico'];
+                                                $parametros = [$id_persona, 1, $usuario_id, 1, 1];
+                                                if ($interesado_id == 0) {
+                                                    $interesado_id = $mod_interesado->insertarInteresado($con3, $parametros, $keys, 'interesado');
+                                                }
+                                                if ($interesado_id > 0) {
+                                                    \app\models\Utilities::putMessageLogFile('se crea interesado.');
+                                                    $mod_inte_emp = new InteresadoEmpresa(); // se guarda con estado_interesado 1
+                                                    $iemp_id = $mod_inte_emp->consultaInteresadoEmpresaById($interesado_id, $emp_id);
+                                                    if ($iemp_id == 0) {
+                                                        $iemp_id = $mod_inte_emp->crearInteresadoEmpresa($interesado_id, $emp_id, $usuario_id);
+                                                        if ($iemp_id > 0) {
+                                                            $crea_persona = "S";
+                                                        }
+                                                    }
+                                                }
+                                            }
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    }
+                    //Cuando ya está creada la persona.-    
+                    if (($crea_persona == "S") or ( $id_persona > 0)) {
+                        $sins_fechasol = $resp_datos["sbpa_fecha_solicitud"];
+                        $rsin_id = 2; //Solicitud aprobada  
+                        $usuario = new Usuario();
+                        $usuario_id = $usuario->consultarIdUsuario($id_persona, $resp_datos['pben_correo']);
+                        $solins_model = new SolicitudInscripcion();
+                        $resp_detalle = $mod_documento->consultarDetalledocumentoById($doc_id, 1);
+                        if ($resp_detalle) {
+                            $mod_interesado = new Interesado();
+                            $res_Interesado = $mod_interesado->getInteresadoxIdPersona($id_persona);
+                            if ($res_Interesado) {
+                                for ($a = 0; $a < count($resp_detalle); $a++) {
+                                    $num_secuencia = Secuencias::nuevaSecuencia($con2, $emp_id, 1, 1, 'SOL');
+                                    $sins_id = $solins_model->insertarSolicitud($res_Interesado, $resp_detalle[$a]["unidad"], $resp_detalle[$a]["modalidad"], $resp_detalle[$a]["metodo"], null, null, $emp_id, $num_secuencia, $rsin_id, $sins_fechasol, $usuario_id, null);
+                                    if ($sins_id) {
+                                        \app\models\Utilities::putMessageLogFile('despues insertar sol.');
+                                        $mod_ordenpago = new OrdenPago();
+                                        //Generar la orden de pago con valor correspondiente. Buscar precio para orden de pago.                                                                                                                         
+                                        $estadopago = 'S';                                              
+                                        $resp_opago = $mod_ordenpago->insertarOrdenpago($sins_id, $resp_datos["sbpa_id"], $resp_detalle[$a]["total"], 0, $resp_detalle[$a]["total"], $estadopago, $usuario_id, $resp_datos["doc_fecha_pago"], $resp_detalle[$a]["total"]);
+                                        if ($resp_opago) {
+                                            \app\models\Utilities::putMessageLogFile('despues insertar o/p.');
+                                            //insertar desglose del pago                                                         
+                                            $fecha_ini = date(Yii::$app->params["dateByDefault"]);
+                                            $resp_dpago = $mod_ordenpago->insertarDesglosepago($resp_opago, $resp_detalle[$a]["ite_id"], $resp_detalle[$a]["total"], 0, $resp_detalle[$a]["total"], $fecha_ini, null, $estadopago, $usuario_id);
+                                            if ($resp_dpago) {
+                                                \app\models\Utilities::putMessageLogFile('despues insertar desg/p.');
+                                                //Grabar documento de registro de pago por botón de pagos.                                                                                                                
+                                                $fpag_id = 6;  //botón de pagos.                                                                                                            
+                                                $num_transaccion = 1;
+                                                $creadetalle = $mod_ordenpago->insertarRegistropago($resp_dpago, $fpag_id, $resp_detalle[$a]["total"], $resp_datos["doc_fecha_pago"], null, $num_transaccion, $resp_datos["doc_fecha_pago"], "Botón Pagos", "AP", $usuario_id, "RE");
+                                                if ($creadetalle) {
+                                                    \app\models\Utilities::putMessageLogFile('despues de insertar registro pago');
+                                                    $detalle = 'S';
+                                                }
+                                            } else {
+                                                $detalle = 'S';
+                                            }
+                                            //Grabar datos de factura                                                                                                                   
+                                            if ($detalle == 'S') {
+                                                if ($resp_datos["tdoc_id"] == 1) {
+                                                    $num_ident = $resp_datos["doc_cedula"];
+                                                    $tipo_ide = "CED";
+                                                } elseif ($resp_datos["tdoc_id"] == 2) {
+                                                    $num_ident = $resp_datos["doc_pasaporte"];
+                                                    $tipo_ide = "PAS";
+                                                } else {
+                                                    $num_ident = $resp_datos["doc_ruc"];
+                                                    $tipo_ide = "RUC";
+                                                }
+                                                $resdatosFact = $solins_model->crearDatosFacturaSolicitud($sins_id, $resp_datos["doc_nombres_cliente"], $resp_datos["doc_nombres_cliente"], $tipo_ide, $num_ident, $resp_datos["doc_direccion"], $resp_datos["doc_telefono"], $resp_datos["doc_correo"]);
+                                                if ($resdatosFact) {
+                                                    \app\models\Utilities::putMessageLogFile('despues de insertar datos factura');
+                                                    $exito = 1;
+                                                }
+                                            }
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+            } else {
+                $mensaje = "El pago se encuentra en estado pendiente en botón de pagos.";
+            }
+            if ($exito == 1) {
+                //$transaction->commit();
+                //$transaction1->commit(); 
+                $transaction2->commit();
+                //Envío de correo.
+                $tituloMensaje = Yii::t("interesado", "UTEG - Registration Online");
+                $asunto = Yii::t("interesado", "UTEG - Registration Online");
+                $link = "https://www.asgard.uteg.edu.ec/asgard";
+                $body = Utilities::getMailMessage("credentials", array("[[usuario]]" => $resp_datos['pben_nombre'] . " " . $resp_datos['pben_apellido'], "[[username]]" => $resp_datos['pben_correo'], "[[clave]]" => $resp_datos['pben_cedula'], "[[link]]" => $link), Yii::$app->language);
+                Utilities::sendEmail($tituloMensaje, Yii::$app->params["adminEmail"], [$resp_datos['pben_correo'] => $resp_datos['pben_apellido'] . " " . $resp_datos['pben_nombre']], $asunto, $body);
+                Utilities::sendEmail($tituloMensaje, Yii::$app->params["adminEmail"], [Yii::$app->params["admisiones"] => "Jefe"], $asunto, $body);
+                Utilities::sendEmail($tituloMensaje, Yii::$app->params["adminEmail"], [Yii::$app->params["soporteEmail"] => "Soporte"], $asunto, $body);
+                $message = array(
+                    "wtmessage" => Yii::t("formulario", "The information have been saved and the information has been sent to your email"),
+                    "title" => Yii::t('jslang', 'Success'),
+                );
+                return Utilities::ajaxResponse('OK', 'alert', Yii::t("jslang", "Sucess"), false, $message);
+            } else {
+                /* $transaction->rollback();
+                  $transaction1->rollback(); */
+                $transaction2->rollback();
+                $message = array(
+                    "wtmessage" => Yii::t("formulario", "Mensaje1: " . $mensaje), //$error_message
+                    "title" => Yii::t('jslang', 'Bad Request'),
+                );
+                return Utilities::ajaxResponse('NO_OK', 'alert', Yii::t("jslang", "Bad Request"), false, $message);
+            }
+        } catch (Exception $ex) {
+            /* $transaction->rollback();
+              $transaction1->rollback(); */
+            $transaction2->rollback();
+            $message = array(
+                "wtmessage" => Yii::t("formulario", "Mensaje2: " . $mensaje), //$error_message
+                "title" => Yii::t('jslang', 'Bad Request'),
+            );
+            return Utilities::ajaxResponse('NO_OK', 'alert', Yii::t("jslang", "Bad Request"), false, $message);
+        }
+    }
 
 }
