@@ -197,6 +197,7 @@ class RegistroMarcacionHistorial extends \yii\db\ActiveRecord
     
     public function uploadFileHorario($fname, $file) {
         $filaError = 0;
+        $ExisIds=0;
         $file=Yii::$app->basePath .$file.$fname;
         $chk_ext = explode(".", $fname);
         $con = \Yii::$app->db_marcacion_historico;
@@ -268,12 +269,18 @@ class RegistroMarcacionHistorial extends \yii\db\ActiveRecord
                 }
                 //$this->deletetablaTemp($con);            
                 $filaError = 1;
+                
                 foreach ($dataArr as $val) {
-                    $filaError++;                    
-                    $haph_id = $this->InsertarHistorialHorario($con, $val);
+                    $haph_id=0;
+                    $filaError++;
+                    $ExisIds=$this->consultarIdHorario($val);
+                    if($ExisIds==0){//NO existe 
+                         $haph_id = $this->InsertarHistorialHorario($con, $val);
+                    }
+                   
                     //$rmhi_id = $this->InsertarMarcacion($con, $val,$haph_id);
-                    //if ($haph_id > 0) {
-                    if (!$haph_id) {//Si no devuelve nada no inserto datos
+                    if ($haph_id > 0) {
+                    //if (!$haph_id) {//Si no devuelve nada no inserto datos
                         $arroout["status"] = FALSE;
                         $arroout["error"] = null;
                         $arroout["message"] = " Error en la Fila => N°$filaError Nombre => $val[3]";
@@ -502,6 +509,25 @@ class RegistroMarcacionHistorial extends \yii\db\ActiveRecord
         return $rawData;
     }  
     
+    private function ExisteHorario($dataInfo) {
+        $con = \Yii::$app->db_marcacion_historico;       
+        $sql = "SELECT haph_id 	FROM " . $con->dbname . ".horario_asignatura_periodo_historial
+                        WHERE asi_id=:asi_id AND pro_id=:pro_id AND uaca_id=:uaca_id 
+                        AND mod_id=:mod_id AND dia_id=:dia_id ;";
+        
+        $comando = $con->createCommand($sql);
+        $comando->bindParam(":asi_id", $dataInfo[1], \PDO::PARAM_STR);
+        $comando->bindParam(":pro_id", $dataInfo[2], \PDO::PARAM_STR);
+        $comando->bindParam(":uaca_id", $dataInfo[3], \PDO::PARAM_STR);
+        $comando->bindParam(":mod_id", $dataInfo[4], \PDO::PARAM_STR);
+        $comando->bindParam(":dia_id", $dataInfo[5], \PDO::PARAM_STR);
+        
+        //return $comando->queryAll();
+        $rawData=$comando->queryScalar();
+        if ($rawData === false)
+            return 0; //en caso de que existe problema o no retorne nada tiene 1 por defecto 
+        return $rawData;
+    }  
    
 
 }
