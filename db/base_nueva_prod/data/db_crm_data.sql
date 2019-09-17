@@ -502,7 +502,8 @@ INSERT INTO `grupo_introductorio` ( `gint_id`, `gint_nombre`, `gint_descripcion`
 (1,'G1-3 Agosto','G1 - 3 Agosto','1',1,null,'2019-08-08 11:40:00',null,'1'),
 (2,'G2-7 Septiembre','G2-7 Septiembre','1',1,null,'2019-08-08 11:40:00',null,'1'),
 (3,'G2-8 Septiembre','G2-8 Septiembre','1',1,null,'2019-08-08 11:40:00',null,'1'),
-(4,'Pendiente','Pendiente','1',1,null,'2019-08-08 11:40:00',null,'1');
+(4,'Pendiente','Pendiente','1',1,null,'2019-08-08 11:40:00',null,'1'),
+(5,'G3-Octubre','G3-Octubre','1',1,null,'2019-08-08 11:40:00',null,'1');
 
 
 --
