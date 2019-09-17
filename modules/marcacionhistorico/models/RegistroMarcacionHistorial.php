@@ -270,7 +270,7 @@ class RegistroMarcacionHistorial extends \yii\db\ActiveRecord
                 $filaError = 1;
                 foreach ($dataArr as $val) {
                     $filaError++;                    
-                    $haph_id = $this->InsertarHistorial($con, $val);
+                    $haph_id = $this->InsertarHistorialHorario($con, $val);
                     //$rmhi_id = $this->InsertarMarcacion($con, $val,$haph_id);
                     //if ($haph_id > 0) {
                     if (!$haph_id) {//Si no devuelve nada no inserto datos
@@ -300,7 +300,7 @@ class RegistroMarcacionHistorial extends \yii\db\ActiveRecord
         }
     }
     
-    private function InsertarHistorial($con, $dataInfo) {       
+    private function InsertarHistorialHorario($con, $dataInfo) {       
         $idsData=0;
         $IdsPro=$this->consultarIdDocente($dataInfo[3]);
         $IdsPro=($IdsPro!=0)?$IdsPro: 0;        
