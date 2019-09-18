@@ -171,29 +171,7 @@ class RegistroMarcacionHistorial extends \yii\db\ActiveRecord
     }
     
     
-    /**
-     * Function carga archivo csv a base de datos
-     * @author Giovanni Vergara <analistadesarrollo02@uteg.edu.ec>;
-     * @param
-     * @return
-     */
-    public function CargarArchivo($fname, $ruta) {
-        //if ($tipoProceso == "LEADS") {
-            //$path = Yii::$app->basePath . Yii::$app->params['documentFolder'] . "leads/" . $fname;
-            $path = $ruta.$fname;
-            //return $mod_pergestion->insertarDtosPersonaGestion($emp_id, $tipoProceso);
-            $carga_archivo = $this->uploadFile($fname, $path);
-            return $carga_archivo;
-            if ($carga_archivo['status']) {                
-                return $mod_pergestion->insertarDtosPersonaGestion($emp_id, $tipoProceso);
-            } else {
-                return $carga_archivo;
-            }
-        //} else {
-            //PROCESO PARA SUBIR EN LOTES LEADS COLOMBIA
-            //return $mod_pergestion->insertarDtosPersonaGestionLotes($emp_id, $tipoProceso);
-        //}
-    }
+    
     
     public function uploadFileHorario($fname, $file) {
         $filaError = 0;
@@ -216,30 +194,35 @@ class RegistroMarcacionHistorial extends \yii\db\ActiveRecord
                 $handle = fopen($file, "r");
                 $cont = 0;
                 while (($data = fgetcsv($handle, ",")) !== FALSE) {
+                    
+                    $haph_id=0;
                     $filaError++;
-                    if ($cont != 0) {
-                        $haph_id=$this->InsertarHistorial($con,$data);
-                        //$rmhi_id = $this->InsertarMarcacion($con, $val,$haph_id);
-                        //if ($haph_id > 0) {
-                        if (!$haph_id) {//Si no devuelve nada no inserto datos
-                            $arroout["status"] = FALSE;
-                            $arroout["error"] = null;
-                            $arroout["message"] = " Error en la Fila => N°$filaError Nombre => $data[3]";
-                            $arroout["data"] = null;
-                            throw new Exception('Error, Item no almacenado');                            
+                    $ExisIds=$this->ExisteHorario($data);
+                    if($ExisIds==0){//NO existe 
+                        $haph_id = $this->InsertarHistorialHorario($con, $data);
+                        if (!$haph_id) {
+                            $contError++;
+                            $mensError .= 'Profesor: '.$data[4].' - Linea: '.$filaError.' - NO INGRESADO <br/>'; 
                         }
-                        
+                    }else{
+                        $contError++;
+                        $mensError .= 'Profesor: '.$data[4].' - Linea: '.$filaError.' - YA EXISTE <br/>';
                     }
-                    $cont++;
                 }
                 fclose($handle);
                 if ($trans !== null)
                     $trans->commit();
 
+                if ($contError > 0) {
+                    $rawData = '<br/> Resumen de información No ingresada: <br/>';
+                    $rawData .= $mensError;
+                    $rawData .= 'TOTAL: ' . $contError . ' <br/>';
+                }
+                    
                 $arroout["status"] = TRUE;
                 $arroout["error"] = null;
                 $arroout["message"] = null;
-                $arroout["data"] = null;
+                $arroout["data"] = $rawData;
                 //return true;
                 return $arroout;
             } catch (Exception $ex) {
@@ -269,8 +252,7 @@ class RegistroMarcacionHistorial extends \yii\db\ActiveRecord
                         }
                     }
                     unset($dataArr[1]); // Se elimina la cabecera de titulos del file
-                }
-                //$this->deletetablaTemp($con);            
+                }           
                 $filaError = 1;
                 
                 foreach ($dataArr as $val) {
@@ -287,16 +269,6 @@ class RegistroMarcacionHistorial extends \yii\db\ActiveRecord
                         $contError++;
                         $mensError .= 'Profesor: '.$val[4].' - Linea: '.$filaError.' - YA EXISTE <br/>';
                     }
-                   
-                    
-                    /*if ($haph_id > 0) {
-                    //if (!$haph_id) {//Si no devuelve nada no inserto datos
-                        $arroout["status"] = FALSE;
-                        $arroout["error"] = null;
-                        $arroout["message"] = " Error en la Fila => N°$filaError Nombre => $val[3]";
-                        $arroout["data"] = null;
-                        //throw new Exception('Error, Item no almacenado');
-                    }*/
                 }
                 if ($trans !== null)
                     $trans->commit();
@@ -370,7 +342,7 @@ class RegistroMarcacionHistorial extends \yii\db\ActiveRecord
         $comando->bindParam(":rmhi_fecha_hora_entrada", $fhora_entrada, \PDO::PARAM_STR);
         $comando->bindParam(":rmhi_fecha_hora_salida", $fhora_salida, \PDO::PARAM_STR);
         $comando->execute();
-        //return $con->getLastInsertID();
+        return $con->getLastInsertID();
     }
     
     private function consultarIdDocente($Cedula) {
@@ -406,6 +378,9 @@ class RegistroMarcacionHistorial extends \yii\db\ActiveRecord
     
     public function uploadFileMarcacion($fname, $file) {
         $filaError = 0;
+        $contError = 0;
+        $rawData = ''; //array();
+        $mensError = '';
         $file=Yii::$app->basePath .$file.$fname;
         $chk_ext = explode(".", $fname);
         $con = \Yii::$app->db_marcacion_historico;
@@ -421,20 +396,29 @@ class RegistroMarcacionHistorial extends \yii\db\ActiveRecord
                 $handle = fopen($file, "r");
                 $cont = 0;
                 while (($data = fgetcsv($handle, ",")) !== FALSE) {
-                    $filaError++;
-                    if ($cont != 0) {
-                        //$haph_id=$this->InsertarHistorial($con,$data);
-                        $rmhi_id = $this->InsertarMarcacion($con, $val,$haph_id);
-                        //if ($haph_id > 0) {
-                        if (!$haph_id) {//Si no devuelve nada no inserto datos
-                            $arroout["status"] = FALSE;
-                            $arroout["error"] = null;
-                            $arroout["message"] = " Error en la Fila => N°$filaError Nombre => $data[3]";
-                            $arroout["data"] = null;
-                            throw new Exception('Error, Item no almacenado');                            
+                    
+                    $filaError++;                   
+                    $haph_id=$this->consultarIdHorario($data);                    
+                    if ($haph_id > 0) {
+                        if($this->ExisteMarcacion($haph_id)>0){//YA existe marcacion
+                            $contError++;
+                            $mensError .= 'Asignatura: '.$data[1].' - Linea: '.$filaError.' - MARCACIÓN YA INGRESADA <br/>'; 
+                        }else{
+                            //NO EXISTE MARCACION Y INSERTA
+                            $rmhi_id = $this->InsertarMarcacion($con, $data,$haph_id);
+                            if (!$rmhi_id) {
+                                $contError++;
+                                $mensError .= 'Asignatura: '.$data[1].' - Linea: '.$filaError.' - MARCACIÓN NO INGRESADA <br/>'; 
+                            }
+                            
                         }
                         
+                    }else{                    
+                        $contError++;
+                        $mensError .= 'Profesor: '.$data[1].' - Linea: '.$filaError.' - NO EXISTE HORARIO <br/>';
+                        //throw new Exception('Error, Item no almacenado');
                     }
+
                     $cont++;
                 }
                 fclose($handle);
@@ -475,35 +459,56 @@ class RegistroMarcacionHistorial extends \yii\db\ActiveRecord
                     }
                     unset($dataArr[1]); // Se elimina la cabecera de titulos del file
                 }
-                //$this->deletetablaTemp($con);            
+               
                 $filaError = 1;
                 foreach ($dataArr as $val) {
                     $filaError++;                   
                     $haph_id=$this->consultarIdHorario($val);                    
                     if ($haph_id > 0) {
-                        $rmhi_id = $this->InsertarMarcacion($con, $val,$haph_id);
+                        if($this->ExisteMarcacion($haph_id)>0){//YA existe marcacion
+                            $contError++;
+                            $mensError .= 'Asignatura: '.$val[1].' - Linea: '.$filaError.' - MARCACIÓN YA INGRESADA <br/>'; 
+                        }else{
+                            //NO EXISTE MARCACION Y INSERTA
+                            $rmhi_id = $this->InsertarMarcacion($con, $val,$haph_id);
+                            if (!$rmhi_id) {
+                                $contError++;
+                                $mensError .= 'Asignatura: '.$val[1].' - Linea: '.$filaError.' - MARCACIÓN NO INGRESADA <br/>'; 
+                            }
+                            
+                        }
+                        
                     }else{                    
-                        $arroout["status"] = FALSE;
-                        $arroout["error"] = null;
-                        $arroout["message"] = " Error en la Fila => N°$filaError Nombre => $val[1]";
-                        $arroout["data"] = null;
+                        $contError++;
+                        $mensError .= 'Profesor: '.$val[1].' - Linea: '.$filaError.' - NO EXISTE HORARIO <br/>';
                         //throw new Exception('Error, Item no almacenado');
                     }
                 }
                 if ($trans !== null)
-                    $trans->commit();                    
+                    $trans->commit(); 
+                
+                if ($contError > 0) {
+                    $rawData = '<br/> Resumen de información No ingresada: <br/>';
+                    $rawData .= $mensError;
+                    $rawData .= 'TOTAL: ' . $contError . ' <br/>';
+                }
                     
                 $arroout["status"] = TRUE;
                 $arroout["error"] = null;
                 $arroout["message"] = null;
-                $arroout["data"] = null;
+                $arroout["data"] = $rawData;
+
                 //return true;
                 return $arroout;
             } catch (Exception $ex) {
                 if ($trans !== null)
                     $trans->rollback();
-                    \app\models\Utilities::putMessageLogFile('Error en la Fila => N° ' .$filaError .' Nombre =>'. $val[6]); 
+                //\app\models\Utilities::putMessageLogFile('Error en la Fila => N° ' .$filaError .' Nombre =>'. $val[6]); 
                 //return false;
+                $arroout["status"] = FALSE;
+                $arroout["error"] = $ex->getCode();
+                $arroout["message"] = $ex->getMessage();
+                $arroout["data"] = $rawData;    
                 return $arroout;                
             }
         }
@@ -534,10 +539,7 @@ class RegistroMarcacionHistorial extends \yii\db\ActiveRecord
         $IdsPro=$this->consultarIdDocente($dataInfo[3]);
         $IdsPro=($IdsPro!=0)?$IdsPro: 0;        
         $asi_id=$this->consultarIdAsignatura($dataInfo[1]); 
-        
-        /*if ($IdsPro==0 || $asi_id==0){//Verifica que existan los IDS
-            return false;
-        }*/
+
         $con = \Yii::$app->db_marcacion_historico;       
         $sql = "SELECT haph_id 	FROM " . $con->dbname . ".horario_asignatura_periodo_historial
                         WHERE asi_id=:asi_id AND pro_id=:pro_id AND uaca_id=:uaca_id 
@@ -555,7 +557,20 @@ class RegistroMarcacionHistorial extends \yii\db\ActiveRecord
         if ($rawData === false)
             return 0; //en caso de que existe problema o no retorne nada tiene 1 por defecto 
         return $rawData;
-    }  
+    } 
+    
+    private function ExisteMarcacion($Ids) {
+        $con = \Yii::$app->db_marcacion_historico;  
+        $sql = "SELECT haph_id FROM " . $con->dbname . ".registro_marcacion_historial
+                    WHERE rmhi_estado=1 AND rmhi_estado_logico=1 AND haph_id=:haph_id;";
+        $comando = $con->createCommand($sql);
+        $comando->bindParam(":haph_id", $Ids, \PDO::PARAM_INT);
+        //return $comando->queryAll();
+        $rawData=$comando->queryScalar();
+        if ($rawData === false)
+            return 0; //en caso de que existe problema o no retorne nada tiene 1 por defecto 
+        return $rawData;
+    } 
    
 
 }
