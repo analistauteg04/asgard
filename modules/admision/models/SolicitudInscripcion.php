@@ -1896,5 +1896,32 @@ class Solicitudinscripcion extends \yii\db\ActiveRecord {
         $resultData = $comando->queryOne();
         return $resultData;
     }
+    
+    /**
+     * Function ConsultarXUnidadModalPrecio
+     * @author  Grace Viteri <analistadesarrollo01@uteg.edu.ec>
+     * @param   
+     * @return  $resultData (Precio del item)
+     */
+    public function ConsultarXUnidadModalPrecio($uaca_id, $mod_id) {
+        $con = \Yii::$app->db_facturacion;
+        $estado = 1;
+        $sql = "SELECT ip.ipre_precio precio_ins, ip.ite_id
+                FROM db_facturacion.item_parametro im inner join " . $con->dbname . ".item_precio ip on ip.ite_id = im.ipar_ite_inscripcion
+                WHERE im.uaca_id = :uaca_id AND
+                      im.mod_id = :mod_id AND       
+                      ip.ipre_estado_precio = 'A' AND
+                      (now() between ip.ipre_fecha_inicio and ifnull(ip.ipre_fecha_fin,now())) AND
+                      im.ipar_estado = :estado AND
+                      im.ipar_estado_logico = :estado AND
+                      ip.ipre_estado = :estado AND
+                      ip.ipre_estado_logico = :estado";
 
+        $comando = $con->createCommand($sql);
+        $comando->bindParam(":estado", $estado, \PDO::PARAM_STR);
+        $comando->bindParam(":uaca_id", $uaca_id, \PDO::PARAM_INT);
+        $comando->bindParam(":mod_id", $mod_id, \PDO::PARAM_INT);
+        $resultData = $comando->queryOne();
+        return $resultData;
+    }
 }

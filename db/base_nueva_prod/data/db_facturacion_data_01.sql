@@ -997,6 +997,13 @@ insert into db_facturacion.`item_parametro` (`ipar_id`, `uaca_id`, `mod_id`, `ip
 (3, 1, 3, 156, 160, '1', '1'),
 (4, 1, 4, 157, 161, '1', '1');
 
+-- Posgrado - Inscripción
+insert into db_facturacion.item_parametro 
+(`ipar_id`, `uaca_id`, `mod_id`, `ipar_ite_inscripcion`, `ipar_ite_matriculacion`, `ipar_estado`,  `ipar_estado_logico`) 
+values (5, 2, 1, 170, null, '1', '1'),
+(6, 2, 2, 10, null, '1', '1'),
+(7, 2, 3, 10, null, '1', '1');
+
 -- --------------------------------------------------------
 --
 -- Volcado de datos para la tabla `otros_item_metodo_nivel` 

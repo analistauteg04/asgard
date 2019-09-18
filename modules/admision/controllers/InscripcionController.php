@@ -23,6 +23,17 @@ use yii\helpers\Url;
 use yii\base\Exception;
 use yii\helpers\ArrayHelper;
 use app\models\Utilities;
+use app\models\Persona;
+use app\models\EmpresaPersona;
+use app\models\UsuaGrolEper;
+use app\models\Usuario;
+use app\modules\financiero\models\OrdenPago;
+use app\modules\financiero\models\DesglosePago;
+use app\modules\admision\models\SolicitudInscripcion;
+use app\modules\admision\models\Interesado;
+use app\modules\financiero\models\Secuencias;
+use app\modules\admision\models\InteresadoEmpresa;
+use yii\base\Security;
 
 repositorio::registerTranslations();
 academico::registerTranslations();
@@ -568,10 +579,10 @@ class InscripcionController extends \app\components\CController {
                         'per_nacionalidad', 'per_foto', 'per_usuario_ingresa', 'per_estado', 'per_estado_logico'
                     ];                    
                     $parametros_per = [
-                        ucwords(strtolower($resp_datos['nombre'])), null,
-                        ucwords(strtolower($resp_datos['apellido'])), null,
-                        $resp_datos['documento'], null, null, null, null, null,
-                        null, null, $resp_datos['celular'], $resp_datos['correo'],
+                        ucwords(strtolower($resp_datos['nombre'])), ucwords(strtolower($resp_datos['sgo_nombre'])),
+                        ucwords(strtolower($resp_datos['apellido'])), ucwords(strtolower($resp_datos['sgoapellido'])),
+                        $resp_datos['documento'], null, null, null, $resp_datos['pais'], $resp_datos['provincia'],
+                        $resp_datos['canton'], null, $resp_datos['celular'], strtolower($resp_datos['correo']),
                         null, null, null, null,
                         null, null, null,
                         null, null, null,
@@ -591,13 +602,13 @@ class InscripcionController extends \app\components\CController {
                                 if ($emp_per_id > 0) {
                                     \app\models\Utilities::putMessageLogFile('se crea empresa persona.');
                                     $usuario = new Usuario();
-                                    $usuario_id = $usuario->consultarIdUsuario($id_persona, $resp_datos['correo']);
+                                    $usuario_id = $usuario->consultarIdUsuario($id_persona, strtolower($resp_datos['correo']));
                                     if ($usuario_id == 0) {
                                         $security = new Security();
                                         $hash = $security->generateRandomString();
                                         $passencrypt = base64_encode($security->encryptByPassword($hash, $resp_datos['documento']));
                                         $keys = ['per_id', 'usu_user', 'usu_sha', 'usu_password', 'usu_estado', 'usu_estado_logico'];
-                                        $parametros = [$id_persona, $resp_datos['correo'], $hash, $passencrypt, 1, 1];
+                                        $parametros = [$id_persona, strtolower($resp_datos['correo']), $hash, $passencrypt, 1, 1];
                                         $usuario_id = $usuario->crearUsuarioTemporal($con, $parametros, $keys, 'usuario');
                                     }
                                     if ($usuario_id > 0) {
@@ -638,70 +649,55 @@ class InscripcionController extends \app\components\CController {
                     }
                     //Cuando ya está creada la persona.-    
                     if (($crea_persona == "S") or ( $id_persona > 0)) {
-                        $sins_fechasol = $resp_datos["sbpa_fecha_solicitud"];
-                        $rsin_id = 2; //Solicitud aprobada  
+                        $sins_fechasol = $resp_datos["fecha_inscripcion"];
+                        $rsin_id = 1; //Solicitud pendiente  
                         $usuario = new Usuario();
-                        $usuario_id = $usuario->consultarIdUsuario($id_persona, $resp_datos['pben_correo']);
+                        $usuario_id = $usuario->consultarIdUsuario($id_persona, strtolower($resp_datos['correo']));
                         $solins_model = new SolicitudInscripcion();
-                        $resp_detalle = $mod_documento->consultarDetalledocumentoById($doc_id, 1);
+                        $resp_detalle = $solins_model->ConsultarXUnidadModalPrecio($resp_datos['unidad'], $resp_datos['modalidad']);
                         if ($resp_detalle) {
                             $mod_interesado = new Interesado();
                             $res_Interesado = $mod_interesado->getInteresadoxIdPersona($id_persona);
-                            if ($res_Interesado) {
-                                for ($a = 0; $a < count($resp_detalle); $a++) {
-                                    $num_secuencia = Secuencias::nuevaSecuencia($con2, $emp_id, 1, 1, 'SOL');
-                                    $sins_id = $solins_model->insertarSolicitud($res_Interesado, $resp_detalle[$a]["unidad"], $resp_detalle[$a]["modalidad"], $resp_detalle[$a]["metodo"], null, null, $emp_id, $num_secuencia, $rsin_id, $sins_fechasol, $usuario_id, null);
-                                    if ($sins_id) {
-                                        \app\models\Utilities::putMessageLogFile('despues insertar sol.');
-                                        $mod_ordenpago = new OrdenPago();
-                                        //Generar la orden de pago con valor correspondiente. Buscar precio para orden de pago.                                                                                                                         
-                                        $estadopago = 'S';                                              
-                                        $resp_opago = $mod_ordenpago->insertarOrdenpago($sins_id, $resp_datos["sbpa_id"], $resp_detalle[$a]["total"], 0, $resp_detalle[$a]["total"], $estadopago, $usuario_id, $resp_datos["doc_fecha_pago"], $resp_detalle[$a]["total"]);
-                                        if ($resp_opago) {
-                                            \app\models\Utilities::putMessageLogFile('despues insertar o/p.');
-                                            //insertar desglose del pago                                                         
-                                            $fecha_ini = date(Yii::$app->params["dateByDefault"]);
-                                            $resp_dpago = $mod_ordenpago->insertarDesglosepago($resp_opago, $resp_detalle[$a]["ite_id"], $resp_detalle[$a]["total"], 0, $resp_detalle[$a]["total"], $fecha_ini, null, $estadopago, $usuario_id);
-                                            if ($resp_dpago) {
-                                                \app\models\Utilities::putMessageLogFile('despues insertar desg/p.');
-                                                //Grabar documento de registro de pago por botón de pagos.                                                                                                                
-                                                $fpag_id = 6;  //botón de pagos.                                                                                                            
-                                                $num_transaccion = 1;
-                                                $creadetalle = $mod_ordenpago->insertarRegistropago($resp_dpago, $fpag_id, $resp_detalle[$a]["total"], $resp_datos["doc_fecha_pago"], null, $num_transaccion, $resp_datos["doc_fecha_pago"], "Botón Pagos", "AP", $usuario_id, "RE");
-                                                if ($creadetalle) {
-                                                    \app\models\Utilities::putMessageLogFile('despues de insertar registro pago');
-                                                    $detalle = 'S';
-                                                }
-                                            } else {
-                                                $detalle = 'S';
+                            if ($res_Interesado) {                                
+                                $num_secuencia = Secuencias::nuevaSecuencia($con2, $emp_id, 1, 1, 'SOL');
+                                $sins_id = $solins_model->insertarSolicitud($res_Interesado, $resp_datos['unidad'], $resp_datos['modalidad'], 4, $resp_datos['carrera'], null, $emp_id, $num_secuencia, $rsin_id, $sins_fechasol, $usuario_id, $resp_datos['convenio_empresa']);
+                                if ($sins_id) {
+                                    \app\models\Utilities::putMessageLogFile('despues insertar sol.');
+                                    $mod_ordenpago = new OrdenPago();
+                                    //Generar la orden de pago con valor correspondiente. Buscar precio para orden de pago.                                                                                                                         
+                                    $estadopago = 'P';                                              
+                                    $resp_opago = $mod_ordenpago->insertarOrdenpago($sins_id, null, $resp_detalle["precio_ins"], 0, $resp_detalle["precio_ins"], $estadopago, $usuario_id, null, null);
+                                    if ($resp_opago) {
+                                        \app\models\Utilities::putMessageLogFile('despues insertar o/p.');
+                                        //insertar desglose del pago                                                         
+                                        $fecha_ini = date(Yii::$app->params["dateByDefault"]);
+                                        $resp_dpago = $mod_ordenpago->insertarDesglosepago($resp_opago, $resp_detalle["ite_id"], $resp_detalle["precio_ins"], 0, $resp_detalle["precio_ins"], $fecha_ini, null, $estadopago, $usuario_id);
+                                        if ($resp_dpago) {
+                                            $detalle = 'S';
+                                        }
+                                        //Grabar datos de factura                                                                                                                   
+                                        if ($detalle == 'S') {
+                                            if ($resp_datos["tipo_documento"] == 1) {                                                
+                                                $tipo_ide = "CED";
+                                            } elseif ($resp_datos["tdoc_id"] == 2) {                                                
+                                                $tipo_ide = "RUC";
+                                            } else {                                                
+                                                $tipo_ide = "PAS";
                                             }
-                                            //Grabar datos de factura                                                                                                                   
-                                            if ($detalle == 'S') {
-                                                if ($resp_datos["tdoc_id"] == 1) {
-                                                    $num_ident = $resp_datos["doc_cedula"];
-                                                    $tipo_ide = "CED";
-                                                } elseif ($resp_datos["tdoc_id"] == 2) {
-                                                    $num_ident = $resp_datos["doc_pasaporte"];
-                                                    $tipo_ide = "PAS";
-                                                } else {
-                                                    $num_ident = $resp_datos["doc_ruc"];
-                                                    $tipo_ide = "RUC";
-                                                }
-                                                $resdatosFact = $solins_model->crearDatosFacturaSolicitud($sins_id, $resp_datos["doc_nombres_cliente"], $resp_datos["doc_nombres_cliente"], $tipo_ide, $num_ident, $resp_datos["doc_direccion"], $resp_datos["doc_telefono"], $resp_datos["doc_correo"]);
-                                                if ($resdatosFact) {
-                                                    \app\models\Utilities::putMessageLogFile('despues de insertar datos factura');
-                                                    $exito = 1;
-                                                }
+                                            $resdatosFact = $solins_model->crearDatosFacturaSolicitud($sins_id, $resp_datos["nombre"], $resp_datos["apellido"], $tipo_ide, $resp_datos["documento"], "N/A", $resp_datos["telefono"], strtolower($resp_datos["correo"]));
+                                            if ($resdatosFact) {
+                                                \app\models\Utilities::putMessageLogFile('despues de insertar datos factura');
+                                                $exito = 1;
                                             }
                                         }
                                     }
-                                }
+                                }                                
                             }
                         }
                     }
                 }
             } else {
-                $mensaje = "El pago se encuentra en estado pendiente en botón de pagos.";
+                $mensaje = "No existen datos de inscripción.";
             }
             if ($exito == 1) {
                 //$transaction->commit();
@@ -711,8 +707,8 @@ class InscripcionController extends \app\components\CController {
                 $tituloMensaje = Yii::t("interesado", "UTEG - Registration Online");
                 $asunto = Yii::t("interesado", "UTEG - Registration Online");
                 $link = "https://www.asgard.uteg.edu.ec/asgard";
-                $body = Utilities::getMailMessage("credentials", array("[[usuario]]" => $resp_datos['pben_nombre'] . " " . $resp_datos['pben_apellido'], "[[username]]" => $resp_datos['pben_correo'], "[[clave]]" => $resp_datos['pben_cedula'], "[[link]]" => $link), Yii::$app->language);
-                Utilities::sendEmail($tituloMensaje, Yii::$app->params["adminEmail"], [$resp_datos['pben_correo'] => $resp_datos['pben_apellido'] . " " . $resp_datos['pben_nombre']], $asunto, $body);
+                $body = Utilities::getMailMessage("credentials", array("[[usuario]]" => $resp_datos['nombre'] . " " . $resp_datos['apellido'], "[[username]]" => strtolower($resp_datos['correo']), "[[clave]]" => $resp_datos['documento'], "[[link]]" => $link), Yii::$app->language);
+                Utilities::sendEmail($tituloMensaje, Yii::$app->params["adminEmail"], [strtolower($resp_datos['correo']) => $resp_datos['apellido'] . " " . $resp_datos['nombre']], $asunto, $body);
                 Utilities::sendEmail($tituloMensaje, Yii::$app->params["adminEmail"], [Yii::$app->params["admisiones"] => "Jefe"], $asunto, $body);
                 Utilities::sendEmail($tituloMensaje, Yii::$app->params["adminEmail"], [Yii::$app->params["soporteEmail"] => "Soporte"], $asunto, $body);
                 $message = array(
