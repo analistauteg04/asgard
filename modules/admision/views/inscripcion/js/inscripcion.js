@@ -104,7 +104,8 @@ function agregarItems(opAccion) {
         $('#cmb_canton').val() != 0 && $('#cmb_grupo_introductorio').val() != 0 &&
         $('#cmb_cumple_requisito').val() != 0 && $('#cmb_agente').val() != 0 && $('#txt_fecha_inscripcion').val() != "" &&
         $('#txt_pago_inscripcion').val() != "" && $('#txt_pago_total').val() != "" && $('#txt_fecha_pago').val() != "" &&
-        $('#cmb_metodo_pago').val() != 0 && $('#cmb_estado_pago').val() != 0 && $('#cmb_modalidad').val() != 0 && $('#cmb_carrera').val() != 0) {
+        $('#cmb_metodo_pago').val() != 0 && $('#cmb_estado_pago').val() != 0 && $('#cmb_modalidad').val() != 0 && $('#cmb_carrera').val() != 0
+        && $('#txt_correo').val() != "") {
         if (opAccion == "new") {
             //verificar si ya existe documento en el grid y en la base de datos
             var documento = $('#txt_documento').val();

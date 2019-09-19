@@ -470,7 +470,7 @@ class InscripcionController extends \app\components\CController {
             $imae_matricula = $data["matricula"];  
             $imae_titulo = ucwords(strtolower($data["titulo"]));  
             $ins_id = $data["institucion"];  
-            $imae_correo = ucwords(strtolower($data["correo"]));  
+            $imae_correo = strtolower($data["correo"]);  
             $imae_celular = $data["celular"];  
             $imae_convencional = $data["convencional"];  
             $imae_ocupacion = $data["ocupacion"];             

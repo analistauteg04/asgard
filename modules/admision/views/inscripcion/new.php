@@ -133,7 +133,7 @@ crm::registerTranslations();
         </div>   
         <div class="col-md-6 col-sm-6 col-xs-6 col-lg-6">
             <div class="form-group">            
-                <label for="cmb_institucion" class="col-lg-5 col-md-5 col-sm-5 col-xs-5 control-label"><?= crm::t("crm", "Institution") ?> </label>
+                <label for="cmb_institucion" class="col-lg-5 col-md-5 col-sm-5 col-xs-5 control-label"><?= crm::t("crm", "Institution") ?></label>
                 <div class="col-lg-7 col-md-7 col-sm-7 col-xs-7">
                     <?= Html::dropDownList("cmb_institucion", 0, ['0' => Yii::t('formulario', 'Select')] + $arr_institucion, ["class" => "form-control", "id" => "cmb_institucion"]) ?>
                 </div>
@@ -143,9 +143,9 @@ crm::registerTranslations();
     <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">        
         <div class="col-md-6 col-sm-6 col-xs-6 col-lg-6">
             <div class="form-group">            
-                <label for="txt_correo" class="col-sm-5 col-md-5 col-xs-5 col-lg-5 control-label" id="lbl_correo"><?= Yii::t("formulario", "Email") ?></label>
+                <label for="txt_correo" class="col-sm-5 col-md-5 col-xs-5 col-lg-5 control-label" id="lbl_correo"><?= Yii::t("formulario", "Email") ?><span class="text-danger">*</span></label>
                 <div class="col-sm-7 col-md-7 col-xs-7 col-lg-7">
-                    <input type="text" class="form-control keyupmce" value="" id="txt_correo" data-type="email" placeholder="<?= Yii::t("formulario", "Email") ?>">
+                    <input type="text" class="form-control PBvalidation" value="" id="txt_correo" data-type="email" data-keydown="true" placeholder="<?= Yii::t("formulario", "Email") ?>">
                 </div>
             </div>
         </div>   
