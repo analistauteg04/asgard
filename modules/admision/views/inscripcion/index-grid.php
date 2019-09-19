@@ -122,7 +122,7 @@ financiero::registerTranslations();
                     }, 
                     'usuario' => function ($url, $model) {
                         $mod_per = new Persona();
-                        $pre_id = $mod_per->ConsultaRegistroExiste($model['correo'], $model['identificacion'], $model['pasaporte']);                                                
+                        $pre_id = $mod_per->ConsultaRegistroExiste($model['correo'], $model['dni'], $model['dni']);                                                
                         if ($pre_id['existen'] == 0) {
                             return Html::a('<span class="glyphicon glyphicon-user"></span>', "#", ["onclick" => "generarSolicitud(" . $model['id'] . ");", "data-toggle" => "tooltip", "title" => "Generar Solicitud", "data-pjax" => 0]);
                         } else {
