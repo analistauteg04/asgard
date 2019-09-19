@@ -89,7 +89,7 @@ financiero::registerTranslations();
                 'header' => financiero::t("Pagos", "Agente"),
                 'value' => 'agente',
             ],
-            [
+            /*[
                 'attribute' => 'estado_pago',
                 'contentOptions' => ['class' => 'text-center'],
                 'headerOptions' => ['class' => 'text-center'],
@@ -108,7 +108,7 @@ financiero::registerTranslations();
                             return '<small class="label label-danger">'.$arr_estado[2].'</small>';
                     }
                 },
-            ],
+            ],*/
                          [
                 'class' => 'yii\grid\ActionColumn',
                 'header' => Yii::t("formulario", "Actions"), //{update} 
