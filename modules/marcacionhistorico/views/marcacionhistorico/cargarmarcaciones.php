@@ -45,8 +45,8 @@ $leyenda = '<div class="col-md-12 col-xs-12 col-sm-12 col-lg-12">
                         'pluginOptions' => [
                             'showPreview' => false,
                             'showCaption' => true,
-                            'showRemove' => true,
-                            'showUpload' => true,
+                            'showRemove' => false,
+                            'showUpload' => false,
                             'showCancel' => false,
                             'browseClass' => 'btn btn-primary btn-block',
                             'browseIcon' => '<i class="fa fa-folder-open"></i> ',
