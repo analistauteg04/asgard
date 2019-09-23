@@ -3,6 +3,7 @@
 namespace app\modules\piensaecuador\models;
 
 use Yii;
+use \yii\data\ArrayDataProvider;
 
 /**
  * This is the model class for table "persona_externa".
@@ -40,7 +41,7 @@ class PersonaExterna extends \yii\db\ActiveRecord
      */
     public static function getDb()
     {
-        return Yii::$app->get('db_mailing');
+        return Yii::$app->get('db_externo');
     }
 
     /**
@@ -122,7 +123,7 @@ class PersonaExterna extends \yii\db\ActiveRecord
     
     public function consultarEvento()
     {
-        $con = \Yii::$app->db_mailing;
+        $con = \Yii::$app->db_externo;
         $estado = 1;
         $fecha_actual = date(Yii::$app->params["dateTimeByDefault"]);
         $sql = "    SELECT 
@@ -156,7 +157,7 @@ class PersonaExterna extends \yii\db\ActiveRecord
     
     public function consultarXIdentificacion($identificacion)
     {
-        $con = \Yii::$app->db_mailing;
+        $con = \Yii::$app->db_externo;
         $estado = 1;
         $fecha_actual = date(Yii::$app->params["dateTimeByDefault"]);
         $sql = "    SELECT 'S' existe
@@ -170,5 +171,86 @@ class PersonaExterna extends \yii\db\ActiveRecord
         $comando->bindParam(":identificacion", $identificacion, \PDO::PARAM_STR); 
         $resultData = $comando->queryOne();
         return $resultData;        
+    }
+
+    public function getAllPersonaExtGrid($search = NULL, $dataProvider = false){
+        $iduser = Yii::$app->session->get('PB_iduser', FALSE);
+        $con = \Yii::$app->db_externo;
+        $con2 = \Yii::$app->db;
+        $search_cond = "%".$search."%";
+        $str_search = "";
+        if(isset($search)){
+            $str_search  = "(a.pext_nombres like :search OR ";
+            $str_search .= "a.pext_apellidos like :search OR ";
+            $str_search .= "a.pext_identificacion like :search OR ";
+            $str_search .= "a.pext_correo like :search) AND ";
+        }
+        $sql = "SELECT 
+                    a.pext_id as id,
+                    a.pext_nombres as Nombres,
+                    a.pext_apellidos as Apellidos,
+                    a.pext_identificacion as Dni,
+                    a.pext_correo as Correo,
+                    a.pext_celular as Celular,
+                    a.pext_telefono as Telefono,
+                    a.pext_genero as Genero,
+                    a.pext_fecha_nacimiento as FechaNacimiento,
+                    a.pext_edad as Edad,
+                    a.pext_estado as Estado,
+                    a.pext_fecha_registro as FechaRegistro,
+                    a.nins_id as NivelInteresId,
+                    a.pro_id as ProvinciaId,
+                    p.pro_nombre as Provincia,
+                    a.can_id as CantonId,
+                    c.can_nombre as Canton,
+                    a.eve_id as EventoId,
+                    e.eve_nombres as Evento
+                FROM 
+                " . $con->dbname . ".persona_externa AS a 
+                    INNER JOIN " . $con2->dbname . ".provincia AS p ON p.pro_id = a.pro_id
+                    INNER JOIN " . $con2->dbname . ".canton AS c ON c.can_id = a.can_id
+                    INNER JOIN " . $con->dbname . ".evento AS e ON e.eve_id = a.eve_id
+                WHERE 
+                    $str_search
+                    a.pext_estado=1 AND
+                    a.pext_estado_logico=1 
+                ORDER BY a.pext_id;";
+        $comando = Yii::$app->db->createCommand($sql);
+        if(isset($search)){
+            $comando->bindParam(":search",$search_cond, \PDO::PARAM_STR);
+        }
+        $res = $comando->queryAll();
+        if($dataProvider){
+            $dataProvider = new ArrayDataProvider([
+                'key' => 'pext_id',
+                'allModels' => $res,
+                'pagination' => [
+                    'pageSize' => Yii::$app->params["pageSize"],
+                ],
+                'sort' => [
+                    'attributes' => ['Nombres', 'Apellidos', 'Dni', 'Correo', 'FechaRegistro'],
+                ],
+            ]);
+            return $dataProvider;
+        }
+        return $res;
+    }
+
+    public function getPersonaExtInteres($pext_id){
+        $con = \Yii::$app->db_externo;
+        $estado = 1;
+        $fecha_actual = date(Yii::$app->params["dateTimeByDefault"]);
+        $sql = "    SELECT i.int_nombre AS interes
+                    FROM 
+                         " . $con->dbname . ".persona_externa_intereses AS pi 
+                         INNER JOIN " . $con->dbname . ".interes AS i ON pi.ins_id = i.ins_id
+                    WHERE pi.pext_id = :id AND
+                        pein_estado=:estado AND
+                        pein_estado_logico=:estado";
+        $comando = $con->createCommand($sql);
+        $comando->bindParam(":estado", 1, \PDO::PARAM_STR);       
+        $comando->bindParam(":id", $pext_id, \PDO::PARAM_INT); 
+        $resultData = $comando->queryOne();
+        return $resultData;     
     }
 }

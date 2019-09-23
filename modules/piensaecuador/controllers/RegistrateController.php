@@ -11,7 +11,7 @@ use app\models\Provincia;
 use app\models\Canton;
 use app\modules\academico\models\NivelInstruccion;
 use app\modules\marketing\models\Interes;
-use app\models\PersonaExterna;
+use app\modules\piensaecuador\models\PersonaExterna;
 use yii\helpers\Url;
 
 
@@ -22,13 +22,7 @@ class RegistrateController extends \yii\web\Controller {
         return parent::init();
     }
 
-    public function actionUpdate() {
-        $this->layout = '@themes/' . \Yii::$app->getView()->theme->themeName . '/layouts/basic.php';
-        return $this->render('update', array());
-    }
-
     public function actionIndex() {
-        $this->layout = '@themes/' . \Yii::$app->getView()->theme->themeName . '/layouts/basic.php';                
         if (Yii::$app->request->isAjax) {
             $data = Yii::$app->request->post();
             if (isset($data["getcantones"])) {
@@ -57,11 +51,16 @@ class RegistrateController extends \yii\web\Controller {
                     "arr_interes" => $arr_interes,
                     "tipos_dni" => array("CED" => Yii::t("formulario", "DNI Document"), "PASS" => Yii::t("formulario", "Passport")),
         ]);
-    }    
+    }  
+
+    public function actionUpdate() {
+        $this->layout = '@themes/' . \Yii::$app->getView()->theme->themeName . '/layouts/basic.php';
+        return $this->render('update', array());
+    }  
     
     public function actionSave() {
         $mod_perext = new PersonaExterna();
-        $con = \Yii::$app->db_mailing;
+        $con = \Yii::$app->db_externo;
         $ip = \app\models\Utilities::getClientRealIP(); // obtiene la ip de la máquina.   
         if (Yii::$app->request->isAjax) {            
             $data = Yii::$app->request->post();                                  
@@ -129,7 +128,7 @@ class RegistrateController extends \yii\web\Controller {
                 } else {                    
                     $transaction->rollBack();   
                     $message = array(
-                            "wtmessage" => Yii::t("notificaciones", "Error al grabar. ".$mensaje),
+                            "wtmessage" => Yii::t("notificaciones", "Error al grabar ".$mensaje),
                             "title" => Yii::t('jslang', 'Error'),
                         );                    
                     return Utilities::ajaxResponse('NO_OK', 'alert', Yii::t("jslang", "Error"), false, $message);                                                                              

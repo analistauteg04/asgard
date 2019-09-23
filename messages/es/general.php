@@ -49,4 +49,9 @@ return [
     "Widow" => "Widow Viudo",
     "Divorced" => "Divorciado",
     "Civil Union" => "Unión de hecho",
+    "Status" => "Estado",
+    "Enabled" => "Habilitado",
+    "Disabled" => "Deshabilitado",
+    "State" => "Provincia",
+    "City" => "Canton",
 ];
