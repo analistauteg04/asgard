@@ -46,11 +46,11 @@ $leyenda = '<div class="col-md-12 col-xs-12 col-sm-12 col-lg-12">
                             'showPreview' => false,
                             'showCaption' => true,
                             'showRemove' => true,
-                            'showUpload' => true,
+                            'showUpload' => false,
                             'showCancel' => false,
                             'browseClass' => 'btn btn-primary btn-block',
                             'browseIcon' => '<i class="fa fa-folder-open"></i> ',
-                            //'browseLabel' => "Subir Archivo",
+                            'browseLabel' => "Subir Archivo",
                             //'uploadUrl' => Url::to(['marcacionhistorico/cargarmarcaciones']),
                             'uploadUrl' => Url::to(['/marcacionhistorico/marcacionhistorico/cargarhorarios']), // CABIAR RUTA QUE ES
                             'maxFileSize' => Yii::$app->params["MaxFileSize"], // en Kbytes
