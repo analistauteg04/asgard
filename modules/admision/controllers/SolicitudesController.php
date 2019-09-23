@@ -559,7 +559,8 @@ class SolicitudesController extends \app\components\CController {
                             $rutaFile = array($file1);
                         }
                     }
-                    if ($resp_sol["nivel_interes"] == 1) {
+                    //SE COMENTA NO ENVIE CORREO EN SOLICITUD DE INSCRIPCION
+                    /*if ($resp_sol["nivel_interes"] == 1) {
                         $tituloMensaje = Yii::t("interesado", "UTEG - Registration Online");
                         $asunto = Yii::t("interesado", "UTEG - Registration Online");
                         $body = Utilities::getMailMessage("Applicantrecord", array("[[nombre]]" => $nombres, "[[apellido]]" => $apellidos, "[[modalidad]]" => $modalidad, "[[link]]" => $link), Yii::$app->language);
@@ -583,7 +584,7 @@ class SolicitudesController extends \app\components\CController {
                         Utilities::sendEmail($tituloMensaje, Yii::$app->params["adminEmail"], [Yii::$app->params["soporteEmail"] => "Soporte"], $asunto, $body);
                         Utilities::sendEmail($tituloMensaje, Yii::$app->params["adminEmail"], [Yii::$app->params["soporteEmail"] => "Soporte"], $asunto, $bodyadmision);
                         Utilities::sendEmail($tituloMensaje, Yii::$app->params["adminEmail"], [Yii::$app->params["colecturia"] => "Colecturia"], $asunto, $bodycolecturia);
-                    }
+                    }*/
                 }
 
                 //$num_secuencia;secuencia que se debe retornar

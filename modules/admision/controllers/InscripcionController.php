@@ -703,15 +703,15 @@ class InscripcionController extends \app\components\CController {
                 //$transaction->commit();
                 //$transaction1->commit(); 
                 $transaction2->commit();
-                //Envío de correo.
-                $tituloMensaje = Yii::t("interesado", "UTEG - Registration Online");
+                //Envío de correo. COMENTARLO PARA QUE NO SE ENVIE
+               /* $tituloMensaje = Yii::t("interesado", "UTEG - Registration Online");
                 $asunto = Yii::t("interesado", "UTEG - Registration Online");
                 $link = "https://www.asgard.uteg.edu.ec/asgard";
                 $body = Utilities::getMailMessage("credentials", array("[[usuario]]" => $resp_datos['nombre'] . " " . $resp_datos['apellido'], "[[username]]" => strtolower($resp_datos['correo']), "[[clave]]" => $resp_datos['documento'], "[[link]]" => $link), Yii::$app->language);
                 Utilities::sendEmail($tituloMensaje, Yii::$app->params["adminEmail"], [strtolower($resp_datos['correo']) => $resp_datos['apellido'] . " " . $resp_datos['nombre']], $asunto, $body);
                 Utilities::sendEmail($tituloMensaje, Yii::$app->params["adminEmail"], [Yii::$app->params["admisiones"] => "Jefe"], $asunto, $body);
                 Utilities::sendEmail($tituloMensaje, Yii::$app->params["adminEmail"], [Yii::$app->params["soporteEmail"] => "Soporte"], $asunto, $body);
-                $message = array(
+               */ $message = array(
                     "wtmessage" => Yii::t("formulario", "The information have been saved and the information has been sent to your email"),
                     "title" => Yii::t('jslang', 'Success'),
                 );

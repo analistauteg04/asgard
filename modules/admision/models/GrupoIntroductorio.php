@@ -91,7 +91,8 @@ class GrupoIntroductorio extends \app\modules\admision\components\CActiveRecord
         $sql = "SELECT gint_id id, gint_nombre value
                 FROM " . $con->dbname . ".grupo_introductorio 
                 WHERE gint_estado = :estado 
-                      and gint_estado_logico = :estado";                       
+                      and gint_estado_logico = :estado
+                ORDER BY gint_nombre ASC";                       
         $comando = $con->createCommand($sql);
         $comando->bindParam(":estado", $estado, \PDO::PARAM_STR);
         $resultData = $comando->queryall();
