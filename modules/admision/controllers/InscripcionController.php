@@ -34,6 +34,7 @@ use app\modules\admision\models\Interesado;
 use app\modules\financiero\models\Secuencias;
 use app\modules\admision\models\InteresadoEmpresa;
 use yii\base\Security;
+use app\modules\admision\models\PersonaGestion;
 
 repositorio::registerTranslations();
 academico::registerTranslations();
@@ -564,8 +565,70 @@ class InscripcionController extends \app\components\CController {
             $mod_inscripcion = new InscritoMaestria();            
             $resp_datos = $mod_inscripcion->consultarInscritoMaestria($id);
             if ($resp_datos) {  //Si se encontró
-                $identificacion = $resp_datos['documento'];
-                if (isset($identificacion) && strlen($identificacion) > 0) {
+                $identificacion = $resp_datos['documento'];                
+                //Registro de Contacto.
+                $mod_pergestion = new PersonaGestion();
+                if (!empty($resp_datos["celular"]) || !empty($resp_datos["correo"]) || !empty($resp_datos["telefono"])) {
+                    $cons_persona = $mod_pergestion->consultarDatosExiste($resp_datos["celular"], $resp_datos["correo"], $resp_datos["telefono"], $resp_datos["celular"], null, null);
+                    if ($cons_persona["registro"] > 0) {
+                        $busqueda = 1;
+                    }
+                }
+                if ($busqueda == 0) {
+                    \app\models\Utilities::putMessageLogFile('busqueda:' . $busqueda);
+                    //Obtener el número máximo de persona_gestion.                    
+                    $resp_consulta = $mod_pergestion->consultarMaxPergest();
+                    $tipo_persona = 1;
+                    $conoce_uteg = null;
+                    $per_nac_ecuatoriano = 1;
+                    $medio = 6; //whatsapp
+                    $empresa = 1;
+                    $cedula = null;
+                    $ruc = null;
+                    $pasaporte = null;
+                    if ($resp_datos["tipo_documento"] == 1) {
+                        $cedula = $resp_datos["documento"];
+                    } else if ($resp_datos["tipo_documento"] == 2) {
+                        $ruc = $resp_datos["documento"];
+                    } else {
+                        $pasaporte = $resp_datos["documento"];
+                    }
+                    $resp_persona = $mod_pergestion->insertarPersonaGestion($resp_consulta["maximo"], $tipo_persona, $conoce_uteg, $resp_datos["carrera"], $resp_datos["nombre"], $resp_datos["sgo_nombre"], $resp_datos["apellido"], $resp_datos["sgoapellido"], $cedula, $ruc, $pasaporte, null, null, null, null, $resp_datos["pais"], $resp_datos["provincia"], $resp_datos["canton"], $per_nac_ecuatoriano, null, $resp_datos["celular"], $resp_datos["correo"], null, null, null, null, null, null, null, $resp_datos["telefono"], null, null, null, null, null, null, null, null, null, null, null, 1, $medio, $empresa, null, null, null, null, null, $usuario_ingreso);
+                    if ($resp_persona) {                        
+                        //Registro de oportunidad.
+                        $mod_gestion = new Oportunidad();
+                        $nombreoportunidad = $mod_gestion->consultarNombreOportunidad($empresa, null, $resp_datos["carrera"], $resp_datos["unidad"], $resp_datos["modalidad"], 1);
+                        if (!$nombreoportunidad) {
+                            $gcrm_codigo = $mod_gestion->consultarUltimoCodcrm();                            
+                            $codportunidad = 1 + $gcrm_codigo;
+                            $fecha_registro = date(Yii::$app->params["dateTimeByDefault"]);     
+                            //Verificar código de empleado.                                                        
+                            $canal_conocimiento = 6; //Whatsapp
+                            $tipo_oportunidad = 5; //Ingreso al propedeutico
+                            $subcarrera = 0; //Ninguno
+                            $estado_oportunidad = 3; //Genera aspirante
+                            $padm_id = null;
+                            $res_gestion = $mod_gestion->insertarOportunidad($codportunidad, $empresa, $resp_persona, null, $resp_datos["carrera"], $resp_datos["unidad"], $resp_datos["modalidad"], $tipo_oportunidad, $subcarrera, $canal_conocimiento, $estado_oportunidad, null, null,  $fecha_registro, $padm_id, $usuario_ingreso);
+                            if ($res_gestion) {
+                                $opo_id = $res_gestion;
+                                //$padm_id = $agente['padm_id'];
+                                $eopo_id = $estado_oportunidad; // En curso por defecto
+                                $bact_fecha_registro = $fecha_registro;
+                                $bact_fecha_proxima_atencion = null;                                    
+                                $oact_id = 1;
+                                $bact_descripcion = "";
+                                $res_actividad = $mod_gestion->insertarActividad($opo_id, $usuario_ingreso, $padm_id, $eopo_id, $bact_fecha_registro, $oact_id, $bact_descripcion, $bact_fecha_proxima_atencion);
+                                if ($res_actividad) {
+                                    $crm = '1';
+                                }
+                            }                                                       
+                        }
+                    }
+                } else {
+                    $crm = '1';
+                }
+                //Registro de personas
+                if (isset($identificacion) && strlen($identificacion) > 0 && $crm == '1')  {
                     \app\models\Utilities::putMessageLogFile('$identificacion:' . $identificacion);
                     $mod_persona = new Persona();
                     $keys_per = [
@@ -648,7 +711,7 @@ class InscripcionController extends \app\components\CController {
                         }
                     }
                     //Cuando ya está creada la persona.-    
-                    if (($crea_persona == "S") or ( $id_persona > 0)) {
+                    if (($crea_persona == "S") or ($id_persona > 0)) {
                         $sins_fechasol = $resp_datos["fecha_inscripcion"];
                         $rsin_id = 1; //Solicitud pendiente  
                         $usuario = new Usuario();
@@ -698,7 +761,7 @@ class InscripcionController extends \app\components\CController {
                 }
             } else {
                 $mensaje = "No existen datos de inscripción.";
-            }
+            }            
             if ($exito == 1) {
                 //$transaction->commit();
                 //$transaction1->commit(); 

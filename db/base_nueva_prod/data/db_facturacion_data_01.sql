@@ -1012,4 +1012,3 @@ insert into `otros_item_metodo_nivel` (`oimn_id`, `ite_id`, `ming_id`, `uaca_id`
 (1, 162, null, 1, 2, 1, '1', '1'),
 (2, 163, null, 1, 3, 1, '1', '1'),
 (3, 164, null, 1, 4, 1, '1', '1');
-
