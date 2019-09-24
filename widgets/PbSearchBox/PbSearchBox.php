@@ -62,7 +62,7 @@ class PbSearchBox extends Widget {
         switch ($this->type) {
             case "searchBox":
                 return Html::textInput($this->boxId, $this->boxValue, array_merge($htmlOptions, $actions)) .
-                        Html::tag('span', Html::buttonInput($this->placeHolder, ['id' => $this->boxId . "_btn", 'class' => $this->classBox . ' btn btn-primary btn-flat', "Onclick" => $this->callbackListSource . "(" . $parSource . ")"]), ["class" => "input-group-btn"]);
+                        Html::tag('span', Html::buttonInput((($this->boxLabel != "")?$this->boxLabel:$this->placeHolder), ['id' => $this->boxId . "_btn", 'class' => $this->classBox . ' btn btn-primary btn-flat', "Onclick" => $this->callbackListSource . "(" . $parSource . ")"]), ["class" => "input-group-btn"]);
                 break;
             case "searchBoxList":
                 return AutoComplete::widget([

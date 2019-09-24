@@ -17,6 +17,7 @@ use app\widgets\PbSearchBox\PbSearchBox;
             PbSearchBox::widget([
                 'boxId' => 'boxgrid',
                 'type' => 'searchBox',
+                'boxLabel' => Yii::t("accion","Search"),
                 'placeHolder' => Yii::t("accion","Search").": ".Yii::t("formulario", "Names").", ".Yii::t("formulario", 'Last Names').", ".Yii::t("formulario", "Dni").", ".Yii::t("perfil", 'Email'),
                 'controller' => '',
                 'callbackListSource' => 'searchModules',

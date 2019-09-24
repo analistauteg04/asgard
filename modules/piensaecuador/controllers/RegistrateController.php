@@ -6,7 +6,6 @@ use Yii;
 use app\models\Utilities;
 use yii\helpers\ArrayHelper;
 use yii\base\Exception;
-use app\models\Pais;
 use app\models\Provincia;
 use app\models\Canton;
 use app\modules\academico\models\NivelInstruccion;
@@ -31,7 +30,8 @@ class RegistrateController extends \yii\web\Controller {
                 echo Utilities::ajaxResponse('OK', 'alert', Yii::t('jslang', 'Success'), 'false', $message);
                 return;
             }           
-        }        
+        }
+        $this->layout = '@themes/' . \Yii::$app->getView()->theme->themeName . '/layouts/basic.php';
         $pais_id = 1; //Ecuador
         $arr_prov = Provincia::provinciaXPais($pais_id);
         $arr_ciu = Canton::cantonXProvincia(1);
@@ -40,7 +40,7 @@ class RegistrateController extends \yii\web\Controller {
         $mod_interes = new Interes();
         $arr_interes = $mod_interes->consultarInteres();
         $mod_perext = new PersonaExterna();
-        $arr_evento = $mod_perext->consultarEvento();        
+        $arr_evento = $mod_perext->consultarEvento();  
         $_SESSION['JSLANG']['Your information has not been saved. Please try again.'] = Yii::t('notificaciones', 'Your information has not been saved. Please try again.');
         return $this->render('index', [                    
                     "arr_provincia" => ArrayHelper::map($arr_prov, "id", "value"),

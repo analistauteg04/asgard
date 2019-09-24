@@ -3,14 +3,7 @@
 namespace app\modules\piensaecuador\controllers;
 
 use Yii;
-use app\models\Utilities;
-use yii\helpers\ArrayHelper;
-use yii\base\Exception;
-use app\models\Pais;
-use app\models\Provincia;
-use app\models\Canton;
 use app\modules\piensaecuador\models\PersonaExterna;
-use yii\helpers\Url;
 
 
 class RegistroController extends \app\components\CController {
