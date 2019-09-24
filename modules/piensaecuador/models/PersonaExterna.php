@@ -243,14 +243,14 @@ class PersonaExterna extends \yii\db\ActiveRecord
         $sql = "    SELECT i.int_nombre AS interes
                     FROM 
                          " . $con->dbname . ".persona_externa_intereses AS pi 
-                         INNER JOIN " . $con->dbname . ".interes AS i ON pi.ins_id = i.ins_id
+                         INNER JOIN " . $con->dbname . ".interes AS i ON pi.int_id = i.int_id
                     WHERE pi.pext_id = :id AND
                         pein_estado=:estado AND
                         pein_estado_logico=:estado";
         $comando = $con->createCommand($sql);
-        $comando->bindParam(":estado", 1, \PDO::PARAM_STR);       
+        $comando->bindParam(":estado", $estado, \PDO::PARAM_STR);       
         $comando->bindParam(":id", $pext_id, \PDO::PARAM_INT); 
-        $resultData = $comando->queryOne();
+        $resultData = $comando->queryAll();
         return $resultData;     
     }
 }

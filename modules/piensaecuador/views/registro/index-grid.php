@@ -3,7 +3,10 @@
 use yii\helpers\Html;
 use yii\helpers\Url;
 use app\widgets\PbGridView\PbGridView;
+use app\modules\piensaecuador\models\PersonaExterna;
 use app\models\Utilities;
+use app\modules\piensaecuador\Module as piensaecuador;
+piensaecuador::registerTranslations();
 ?>
 
 <?=
@@ -71,14 +74,26 @@ use app\models\Utilities;
                 'header' => 'Evento',
                 'value' => 'Evento',
             ],*/
-            /*[
+            [
                 'attribute' => 'NivelInteres',
-                'header' => Yii::t("general", 'City'),
-                'value' => 'Canton',
-            ],*/
+                'header' => piensaecuador::t("interes", 'Activity'),
+                'value' => function($data){
+                    $model = new PersonaExterna();
+                    $queryData = $model->getPersonaExtInteres($data["id"]);
+                    $result = "";
+                    $cont = 0;
+                    foreach($queryData as $key => $value){
+                        $result .= $value['interes'];
+                        $cont++;
+                        if(count($queryData) > $cont)
+                            $result .= " | ";
+                    }
+                    return $result;
+                },
+            ],
             [
                 'attribute' => 'FechaRegistro',
-                'header' => 'Fecha Registro',
+                'header' => piensaecuador::t("interes",'Registry Date'),
                 'value' => 'FechaRegistro',
             ],
             [
