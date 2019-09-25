@@ -121,7 +121,7 @@ $leyenda = '<div class="col-md-12 col-xs-12 col-sm-12 col-lg-12">
         <div class="col-md-6 col-sm-6 col-xs-6 col-lg-6">
             <div class='col-md-7 col-xs-7 col-lg-7 col-sm-7'></div>
             <div class='col-md-3 col-xs-3 col-lg-3 col-sm-3'>         
-                <p> <a id="btn_CargarMarcacion" href="javascript:" class="btn btn-primary btn-block"> <?= Yii::t("formulario", "Add") ?></a></p>
+                <p> <a id="btn_CargarMarcacion" href="javascript:" class="btn btn-primary btn-block"> <?= Yii::t("formulario", "Save") ?></a></p>
             </div>
         </div>        
     </div> 
