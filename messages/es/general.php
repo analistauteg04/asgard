@@ -53,5 +53,5 @@ return [
     "Enabled" => "Habilitado",
     "Disabled" => "Deshabilitado",
     "State" => "Provincia",
-    "City" => "Canton",
+    "City" => "Cantón",
 ];

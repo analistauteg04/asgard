@@ -44,6 +44,6 @@
  */
 
 return [    
-    "Activity" => 'Interes',
+    "Activity" => 'Interés',
     "Registry Date" => 'Fecha Registro',
 ];

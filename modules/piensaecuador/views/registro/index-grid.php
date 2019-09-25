@@ -52,7 +52,10 @@ piensaecuador::registerTranslations();
             [
                 'attribute' => 'Genero',
                 'header' => Yii::t("perfil", 'Sex'),
-                'value' => 'Genero',
+                'value' => function($data){
+                    $arr_genero = array("1" => Yii::t("formulario", "Female"), "2" => Yii::t("formulario", "Male"));
+                    return $arr_genero[$data['Genero']];
+                },
             ],
             [
                 'attribute' => 'FechaNacimiento',
