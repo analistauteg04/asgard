@@ -950,6 +950,7 @@ class Interesado extends \app\modules\admision\components\CActiveRecord {
                     per.per_estado_logico=:estado AND 
                     per.per_estado=:estado AND
                     per.per_id =:per_id";
+        \app\models\Utilities::putMessageLogFile('sql:'.$sql);
         $comando = $con->createCommand($sql);
         $comando->bindParam(":estado", $estado, \PDO::PARAM_STR);
         $comando->bindParam(":per_id", $per_id, \PDO::PARAM_INT);

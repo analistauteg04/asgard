@@ -795,7 +795,7 @@ class PersonaGestion extends \app\modules\admision\components\CActiveRecord {
      * @param
      * @return
      */
-    public function consultarDatosExiste($pges_celular, $pges_correo, $pges_domicilio_telefono, $pges_domicilio_celular2, $pges_cedula, $pges_pasaporte) {
+    public function consultarDatosExiste($pges_celular, $pges_correo, $pges_domicilio_telefono, $pges_domicilio_celular2, $pges_cedula, $pges_pasaporte, $opcion = null) {
         $con = \Yii::$app->db_crm;
         $estado = 1;
 
@@ -828,10 +828,14 @@ class PersonaGestion extends \app\modules\admision\components\CActiveRecord {
 
             $filtro .= " OR pges_pasaporte = :pges_pasaporte";
         }
-
-        $sql = "SELECT                    
-                    count(*) as registro                   
-                FROM 
+        if (empty($opcion)) {                        
+            $sql = "SELECT                    
+                    count(*) as registro ";
+        } else {
+            $sql = "SELECT                    
+                      pges_id as registro ";
+        }
+        $sql .= "FROM 
                    " . $con->dbname . ".persona_gestion "
                 . "WHERE ";
         if (!empty($filtro)) {
@@ -841,6 +845,7 @@ class PersonaGestion extends \app\modules\admision\components\CActiveRecord {
         }
         $sql .= "pges_estado_logico = :estado AND
                  pges_estado = :estado";
+        \app\models\Utilities::putMessageLogFile('sql:' . $sql);
         $comando = $con->createCommand($sql);
         $comando->bindParam(":estado", $estado, \PDO::PARAM_STR);
         if (!empty(($pges_celular))) {

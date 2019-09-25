@@ -1916,7 +1916,7 @@ class Solicitudinscripcion extends \yii\db\ActiveRecord {
                       im.ipar_estado_logico = :estado AND
                       ip.ipre_estado = :estado AND
                       ip.ipre_estado_logico = :estado";
-
+\app\models\Utilities::putMessageLogFile('$sql precio:'.$sql);
         $comando = $con->createCommand($sql);
         $comando->bindParam(":estado", $estado, \PDO::PARAM_STR);
         $comando->bindParam(":uaca_id", $uaca_id, \PDO::PARAM_INT);

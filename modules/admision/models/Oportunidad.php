@@ -933,7 +933,7 @@ class Oportunidad extends \app\modules\admision\components\CActiveRecord {
         try {
             $sql = "INSERT INTO " . $con->dbname . ".oportunidad ($param_sql) VALUES($bdet_sql)";
             $comando = $con->createCommand($sql);
-
+                    
             if (isset($opo_codigo)) {
                 $comando->bindParam(':opo_codigo', $opo_codigo, \PDO::PARAM_STR);
             }
@@ -1257,7 +1257,15 @@ class Oportunidad extends \app\modules\admision\components\CActiveRecord {
         try {
             $sql = "INSERT INTO " . $con->dbname . ".bitacora_actividades ($param_sql) VALUES($bdet_sql)";
             $comando = $con->createCommand($sql);
-
+            \app\models\Utilities::putMessageLogFile('sql actividad:'.$sql);  
+            \app\models\Utilities::putMessageLogFile('oportunidad:'.$opo_id);  
+            \app\models\Utilities::putMessageLogFile('usuario:'.$usu_id);  
+            \app\models\Utilities::putMessageLogFile('$padm_id:'.$padm_id);  
+            \app\models\Utilities::putMessageLogFile('$eopo_id:'.$eopo_id);  
+            \app\models\Utilities::putMessageLogFile('$bact_fecha_registro:'.$bact_fecha_registro);  
+            \app\models\Utilities::putMessageLogFile('$oact_id:'.$oact_id);  
+            \app\models\Utilities::putMessageLogFile('$bact_descripcion:'.$bact_descripcion);  
+            \app\models\Utilities::putMessageLogFile('$bact_fecha_proxima_atencion:'.$bact_fecha_proxima_atencion);              
             if (isset($opo_id)) {
                 $comando->bindParam(':opo_id', $opo_id, \PDO::PARAM_INT);
             }
@@ -1874,6 +1882,7 @@ class Oportunidad extends \app\modules\admision\components\CActiveRecord {
                    opo.opo_estado = :estado AND
                    opo.opo_estado_logico = :estado";
 
+        \app\models\Utilities::putMessageLogFile('sql oportunidad:'.$sql);                        
         $comando = $con->createCommand($sql);
         $comando->bindParam(":estado", $estado, \PDO::PARAM_STR);
         $comando->bindParam(":emp_id", $emp_id, \PDO::PARAM_INT);
@@ -2171,8 +2180,40 @@ class Oportunidad extends \app\modules\admision\components\CActiveRecord {
             return $mod_pergestion->insertarDtosPersonaGestion($emp_id, $tipoProceso);
         } else {
             return $carga_archivo;
-        }
+        }        
+    }
+    
+    /**
+     * Function consulta id de oportunidad por carrera, unidad, modalidad y empresa
+     * @author Grace Viteri <analistadesarrollo01@uteg.edu.ec>;
+     * @param
+     * @return
+     */
+    public function consultarOportunidadxUnidModCarrera($emp_id, $uaca_id, $mod_id, $eaca_id) {
+        $con = \Yii::$app->db_crm;
+        $estado = 1;
         
+        $sql = "SELECT                    
+                    opo_id                    
+                FROM 
+                   " . $con->dbname . ".oportunidad opo                
+                WHERE  opo.emp_id = :emp_id AND
+                   opo.eaca_id = :eaca_id AND
+                   opo.uaca_id = :uaca_id AND
+                   opo.mod_id = :mod_id AND 
+                   opo.eopo_id in (1,3) AND
+                   opo.opo_estado = :estado AND
+                   opo.opo_estado_logico = :estado";
+
+        \app\models\Utilities::putMessageLogFile('sql oportunidad:'.$sql);                        
+        $comando = $con->createCommand($sql);
+        $comando->bindParam(":estado", $estado, \PDO::PARAM_STR);
+        $comando->bindParam(":emp_id", $emp_id, \PDO::PARAM_INT);        
+        $comando->bindParam(":eaca_id", $eaca_id, \PDO::PARAM_INT);       
+        $comando->bindParam(":uaca_id", $uaca_id, \PDO::PARAM_INT);
+        $comando->bindParam(":mod_id", $mod_id, \PDO::PARAM_INT);    
+        $resultData = $comando->queryOne();
+        return $resultData;
     }
 }
 

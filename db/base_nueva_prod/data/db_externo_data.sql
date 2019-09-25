@@ -11,6 +11,6 @@ INSERT INTO db_externo.`interes` (`int_id`,`int_descripcion`, `int_nombre`,`int_
 (6,'Viajar','Viajar','1','1');
 
  INSERT INTO db_externo.`evento` (`eve_id`,`eve_nombres`, `eve_fecha_inicio`,`eve_fecha_fin`,`eve_estado`,`eve_estado_logico`) VALUES
- ('1','Evento Marketing Maestría Educación','2019-06-08 00:00:00','2019-06-08 23:59:59','1','1');
+ ('1','Feria Ecuador','2019-09-24 00:00:00','2021-12-31 23:59:59','1','1');
 
 
