@@ -1636,7 +1636,7 @@ class Solicitudinscripcion extends \yii\db\ActiveRecord {
         try {
             $sql = "INSERT INTO " . $con->dbname . ".solicitud_inscripcion ($param_sql) VALUES($bsrec_sql)";            
             $comando = $con->createCommand($sql);
-
+        
             if (isset($int_id))
                 $comando->bindParam(':int_id', $int_id, \PDO::PARAM_INT);
 

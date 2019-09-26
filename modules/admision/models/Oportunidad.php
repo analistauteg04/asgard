@@ -984,13 +984,14 @@ class Oportunidad extends \app\modules\admision\components\CActiveRecord {
             }
 
             $result = $comando->execute();
+            $idtable= $con->getLastInsertID($con->dbname . '.oportunidad');
             if ($trans !== null)
                 $trans->commit();
-            return $con->getLastInsertID($con->dbname . '.oportunidad');
+            return $idtable;
         } catch (Exception $ex) {
             if ($trans !== null)
                 $trans->rollback();
-            return FALSE;
+            return 0;
         }
     }
 
@@ -1257,15 +1258,7 @@ class Oportunidad extends \app\modules\admision\components\CActiveRecord {
         try {
             $sql = "INSERT INTO " . $con->dbname . ".bitacora_actividades ($param_sql) VALUES($bdet_sql)";
             $comando = $con->createCommand($sql);
-            \app\models\Utilities::putMessageLogFile('sql actividad:'.$sql);  
-            \app\models\Utilities::putMessageLogFile('oportunidad:'.$opo_id);  
-            \app\models\Utilities::putMessageLogFile('usuario:'.$usu_id);  
-            \app\models\Utilities::putMessageLogFile('$padm_id:'.$padm_id);  
-            \app\models\Utilities::putMessageLogFile('$eopo_id:'.$eopo_id);  
-            \app\models\Utilities::putMessageLogFile('$bact_fecha_registro:'.$bact_fecha_registro);  
-            \app\models\Utilities::putMessageLogFile('$oact_id:'.$oact_id);  
-            \app\models\Utilities::putMessageLogFile('$bact_descripcion:'.$bact_descripcion);  
-            \app\models\Utilities::putMessageLogFile('$bact_fecha_proxima_atencion:'.$bact_fecha_proxima_atencion);              
+            
             if (isset($opo_id)) {
                 $comando->bindParam(':opo_id', $opo_id, \PDO::PARAM_INT);
             }
@@ -1291,15 +1284,14 @@ class Oportunidad extends \app\modules\admision\components\CActiveRecord {
                 $comando->bindParam(':bact_fecha_proxima_atencion', $bact_fecha_proxima_atencion, \PDO::PARAM_STR);
             }
             $result = $comando->execute();
+            $idtable = $con->getLastInsertID($con->dbname . '.bitacora_actividades');
             if ($trans !== null)
-                $trans->commit();
-            \app\models\Utilities::putMessageLogFile('al hacer commit');
-            return $con->getLastInsertID($con->dbname . '.bitacora_actividades');
+                $trans->commit();            
+            return $idtable;
         } catch (Exception $ex) {
             if ($trans !== null)
-                $trans->rollback();
-            \app\models\Utilities::putMessageLogFile('al hacer rollback');
-            return FALSE;
+                $trans->rollback();            
+            return 0;
         }
     }
 

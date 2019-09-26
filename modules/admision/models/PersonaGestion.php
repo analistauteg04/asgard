@@ -670,13 +670,14 @@ class PersonaGestion extends \app\modules\admision\components\CActiveRecord {
             }
 
             $result = $comando->execute();
+            $idtable = $con->getLastInsertID($con->dbname . '.persona_gestion');
             if ($trans !== null)
                 $trans->commit();
-            return $con->getLastInsertID($con->dbname . '.persona_gestion');
+            return $idtable;
         } catch (Exception $ex) {
             if ($trans !== null)
                 $trans->rollback();
-            return FALSE;
+            return 0;
         }
     }
 
