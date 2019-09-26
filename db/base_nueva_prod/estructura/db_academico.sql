@@ -739,3 +739,69 @@ create table if not exists db_academico.`observaciones_por_documento_aceptacion`
  foreign key (odac_id) references `observaciones_documento_aceptacion`(odac_id),
  foreign key (dace_id) references `documento_aceptacion`(dace_id)
 );
+
+-- --------------------------------------------------------
+-- 
+-- Estructura de tabla para la tabla `promocion_programa`
+-- --------------------------------------------------------
+create table if not exists `promocion_programa` (
+ `ppro_id` bigint(20) not null auto_increment primary key,
+ `ppro_anio` varchar(4) not null, 
+ `ppro_mes` varchar(02) not null, 
+ `ppro_codigo` varchar(20) not null,
+ `uaca_id` bigint(20) not null,
+ `mod_id` bigint(20) not null,
+ `eaca_id` bigint(20) not null,
+ `ppro_num_paralelo` integer(2) not null,
+ `ppro_cupo` integer(3) not null,
+ `ppro_usuario_ingresa` bigint(20) null,
+ `ppro_estado` varchar(1) not null, 
+ `ppro_fecha_creacion` timestamp not null default current_timestamp,
+ `ppro_usuario_modifica` bigint(20) null,
+ `ppro_fecha_modificacion` timestamp null default null,
+ `ppro_estado_logico` varchar(1) not null,
+ foreign key (uaca_id) references `unidad_academica`(uaca_id),
+ foreign key (mod_id) references `modalidad`(mod_id),
+ foreign key (eaca_id) references `estudio_academico`(eaca_id)
+);
+
+-- --------------------------------------------------------
+-- 
+-- Estructura de tabla para la tabla `paralelo_promocion_programa`
+-- --------------------------------------------------------
+create table if not exists `paralelo_promocion_programa` (
+ `pppr_id` bigint(20) not null auto_increment primary key,
+ `ppro_id` bigint(20) not null, 
+ `pppr_cupo` integer(3) not null, 
+ `pppr_cupo_actual` integer(3) null,  
+ `pppr_usuario_ingresa` bigint(20) null,
+ `pppr_estado` varchar(1) not null, 
+ `pppr_fecha_creacion` timestamp not null default current_timestamp,
+ `pppr_usuario_modifica` bigint(20) null,
+ `pppr_fecha_modificacion` timestamp null default null,
+ `pppr_estado_logico` varchar(1) not null,
+ foreign key (ppro_id) references `promocion_programa`(ppro_id) 
+);
+
+
+-- --------------------------------------------------------
+-- 
+-- Estructura de tabla para la tabla `matriculacion_programa_inscrito`
+-- --------------------------------------------------------
+create table if not exists `matriculacion_programa_inscrito` (
+ `mpin_id` bigint(20) not null auto_increment primary key,
+ `ppro_id` bigint(20) not null, 
+ `adm_id` bigint(20) not null, 
+ `est_id` bigint(20) null,  
+ `mpin_fecha_matriculacion` timestamp not null,
+ `mpin_ficha` varchar(1) null, -- 'S', 'N'  
+ `mpin_fecha_registro_ficha` timestamp null,
+ `mpin_usuario_ingresa` bigint(20) null,
+ `mpin_estado` varchar(1) not null, 
+ `mpin_fecha_creacion` timestamp not null default current_timestamp,
+ `mpin_usuario_modifica` bigint(20) null,
+ `mpin_fecha_modificacion` timestamp null default null,
+ `mpin_estado_logico` varchar(1) not null,
+ foreign key (ppro_id) references `promocion_programa`(ppro_id),
+ foreign key (est_id) references `estudiante`(est_id)
+);
