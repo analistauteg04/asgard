@@ -54,11 +54,22 @@ if (!empty($per_pasaporte)) {
 } else {
     $tipodoc = "CED";
 }
+if (base64_decode($_GET['mat']) > 0) {
+    ?>
+    <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
+        <h3><span id="lbl_Personeria"><?= Yii::t("formulario", "Data Personal").' '. Yii::t("formulario", "Enrolled")?></span></h3>
+    </div>
+    <?php
+} else {
+    ?>
+    <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
+        <h3><span id="lbl_Personeria"><?= Yii::t("formulario", "Data Personal").' '. Yii::t("formulario", "Aspirants")?></span></h3>
+    </div>
+    <?php
+}
 ?>
-<div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
-    <h3><span id="lbl_Personeria"><?= Yii::t("formulario", "Datos Personales - Aspirante") ?></span></h3>
-</div>
 <?= Html::hiddenInput('txth_ids', $respPerinteresado['per_id'], ['id' => 'txth_ids']); ?>
+<?= Html::hiddenInput('txth_mat', base64_decode($_GET['mat']), ['id' => 'txth_mat']); ?>
 <form class="form-horizontal" enctype="multipart/form-data" >
     <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
         <div class="col-md-6 col-lg-6 col-sm-6 col-xs-6">

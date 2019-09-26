@@ -157,7 +157,7 @@ $(document).ready(function () {
 function guardarFichaAspirante() {
     var arrParams = new Object();
     var link = $('#txth_base').val() + "/academico/ficha/guardarficha";
-    arrParams.persona_id = $('#txth_ids').val();
+    arrParams.persona_id = $('#txth_ids').val(); 
     arrParams.pnombre_persona = $('#txt_primer_nombre').val();
     arrParams.snombre_persona = $('#txt_segundo_nombre').val();
     arrParams.papellido_persona = $('#txt_primer_apellido').val();
@@ -197,8 +197,12 @@ function guardarFichaAspirante() {
     if (!validateForm()) {
         requestHttpAjax(link, arrParams, function (response) {
             showAlert(response.status, response.label, response.message);
-            setTimeout(function () {
-              window.location.href = $('#txth_base').val() + "/admision/interesados/index";
+            setTimeout(function () {              
+                if ($('#txth_mat').val()) {
+                    window.location.href = $('#txth_base').val() + "/academico/admitidos/matriculado";
+                } else {
+                    window.location.href = $('#txth_base').val() + "/admision/interesados/index";
+                }
             }, 3000);
         }, true);
     }
