@@ -72,9 +72,9 @@ use app\modules\academico\Module as academico;
                 <?= Html::dropDownList("cmb_carreramat", 0, $arr_carrerra1, ["class" => "form-control", "id" => "cmb_carreramat"]) ?>
             </div>        
            
-            <label for="txt_periodomat" class="col-sm-2 col-sm-2 col-lg-2 col-md-2 col-xs-2 control-label"><?= academico::t("Academico", "Period") ?></label>
+            <label for="txt_periodomat" class="col-sm-2 col-sm-2 col-lg-2 col-md-2 col-xs-2 control-label"><?= academico::t("Academico", "Promotion") ?></label>
             <div class="col-sm-3 col-xs-3 col-md-3 col-lg-3">
-                <input type="text" class="form-control" value="" id="txt_periodomat" placeholder="<?= academico::t("Academico", "Period") ?>">
+                <input type="text" class="form-control" value="" id="txt_periodomat" placeholder="<?= academico::t("Academico", "Promotion") ?>">
             </div>
         </div>
     </div>

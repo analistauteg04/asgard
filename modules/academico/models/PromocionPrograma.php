@@ -204,5 +204,29 @@ class PromocionPrograma extends \yii\db\ActiveRecord {
             return $dataProvider;
         }
     }
+    
+    
+    /**
+     * Function consulta las promociones por programa. 
+     * @author Grace Viteri <analistadesarrollo01@uteg.edu.ec>;
+     * @param
+     * @return
+     */
+    public function consultarPromocionxPrograma($eaca_id) {
+        $con = \Yii::$app->db_academico;
+        $estado = 1;
+        $sql = "SELECT ppro_id id, ppro_codigo name                 
+                FROM 
+                " . $con->dbname . ".promocion_programa  pp 
+                WHERE eaca_id = :eaca_id AND
+                   pp.ppro_estado = :estado AND
+                   pp.ppro_estado_logico = :estado";
+
+        $comando = $con->createCommand($sql);
+        $comando->bindParam(":estado", $estado, \PDO::PARAM_STR);
+        $comando->bindParam(":eaca_id", $eaca_id, \PDO::PARAM_INT);
+        $resultData = $comando->queryAll();
+        return $resultData;
+    }
 
 }

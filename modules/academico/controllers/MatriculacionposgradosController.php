@@ -10,7 +10,9 @@ use app\models\Utilities;
 use app\modules\academico\models\Modalidad;
 use app\modules\academico\models\UnidadAcademica;
 use app\modules\academico\models\PromocionPrograma;
+use app\modules\academico\models\ParaleloPromocionPrograma;
 use app\modules\admision\models\Oportunidad;
+use app\modules\admision\models\SolicitudInscripcion;
 use app\modules\academico\Module as academico;
 use app\modules\financiero\Module as financiero;
 use app\modules\admision\Module as admision;
@@ -67,6 +69,30 @@ class MatriculacionposgradosController extends \app\components\CController {
                     'arr_unidad' => ArrayHelper::map(array_merge([["id" => "0", "name" => Yii::t("formulario", "Grid")]], $arr_unidad), "id", "name"),
                     'arr_modalidad' => ArrayHelper::map(array_merge([["id" => "0", "name" => Yii::t("formulario", "Grid")]], $arr_modalidad), "id", "name"),
                     'arr_programa1' => ArrayHelper::map(array_merge([["id" => "0", "name" => Yii::t("formulario", "Grid")]], $arr_programa1), "id", "name"),
+        ]);
+    }
+    
+    public function actionNew() {
+        $sins_id = base64_decode($_GET['sids']);        
+        $mod_solins = new SolicitudInscripcion();
+        $mod_promocion = new PromocionPrograma();
+        $mod_paralelo = new ParaleloPromocionPrograma();
+               
+        if (Yii::$app->request->isAjax) {
+            $data = Yii::$app->request->post();
+            if (isset($data["getparalelos"])) {                                               
+                $resp_Paralelos = $mod_paralelo->consultarParalelosxPrograma($data["promocion_id"]);
+                $message = array("paralelos" => $resp_Paralelos);               
+                return Utilities::ajaxResponse('OK', 'alert', Yii::t('jslang', 'Success'), 'false', $message);               
+            }           
+        }               
+        $personaData = $mod_solins->consultarInteresadoPorSol_id($sins_id);
+        $resp_programas = $mod_promocion->consultarPromocionxPrograma($personaData["eaca_id"]);
+        $arr_Paralelos = $mod_paralelo->consultarParalelosxPrograma(0);
+        return $this->render('new', [
+                    'personalData' => $personaData,            
+                    'arr_promocion' => ArrayHelper::map(array_merge([["id" => "0", "name" => "Seleccionar"]],$resp_programas),"id","name"), 
+                    'arr_paralelo' => ArrayHelper::map(array_merge(["id" => "0", "name" => "Seleccionar"],$arr_Paralelos),"id","name"), 
         ]);
     }
 

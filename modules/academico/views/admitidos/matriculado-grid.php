@@ -55,12 +55,7 @@ academico::registerTranslations();
                 'attribute' => 'modalidad',
                 'header' => admision::t("Solicitudes", "Modalidad"),
                 'value' => 'mod_nombre',
-            ],
-            /* [
-              'attribute' => 'unidad_academica',
-              'header' => admision::t("Solicitudes", "U. Académica."),
-              'value' => 'uaca_nombre',
-              ], */
+            ],            
             [
                 'class' => 'yii\grid\ActionColumn',
                 'header' => academico::t("Academico", "Career/Program"),
@@ -72,20 +67,28 @@ academico::registerTranslations();
                 ],
             ],
             [
-                'attribute' => 'beca',
-                'header' => admision::t("Solicitudes", "Scholarship"),
+                'attribute' => 'estado',
+                'header' => Yii::t("formulario", "Status"),
                 'value' => 'beca',
             ],
             [
-                'attribute' => 'periodo',
-                'header' => academico::t("Academico", "Period"),
+                'attribute' => 'contrato',
+                'header' => academico::t("Academico", "Contract"),
+                'value' => 'beca',
+            ],
+            [
+                'attribute' => 'promocion',
+                'header' => academico::t("Academico", "Promotion"),
                 'value' => 'pami_codigo',
             ],
             [
                 'class' => 'yii\grid\ActionColumn',
                 'header' => Yii::t("formulario", "Actions"),
-                'template' => '{solicitudes} {ficha}', //
+                'template' => '{matricula} {ficha}', //
                 'buttons' => [
+                    'matricula' => function ($url, $model) {
+                        return Html::a('<span class="glyphicon glyphicon-list-alt"></span>', Url::to(['/academico/matriculacionposgrados/new', 'sids' => base64_encode($model['sins_id']), 'adm' => base64_encode($model['adm_id'])]), ["data-toggle" => "tooltip", "title" => "Matriculación", "data-pjax" => 0]);
+                    },
                     'ficha' => function ($url, $model) {
                         return Html::a('<span class="glyphicon glyphicon-user"></span>', Url::to(['/academico/ficha/update',  'mat' => base64_encode(1), 'perid' => base64_encode($model['per_id'])]), ["data-toggle" => "tooltip", "title" => "Ficha Matriculado", "data-pjax" => 0]);
                     },

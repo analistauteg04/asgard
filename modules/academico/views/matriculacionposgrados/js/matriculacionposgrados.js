@@ -43,7 +43,21 @@ $(document).ready(function () {
                 setComboDataselect(data.programa, "cmb_programabus", "Todos");
             }
         }, true);
-    });    
+    });
+    
+    $('#cmb_programa').change(function () {
+        var link = $('#txth_base').val() + "/academico/matriculacionposgrados/new";
+        var arrParams = new Object();
+        arrParams.promocion_id = $(this).val();
+        arrParams.getparalelos = true;                  
+        requestHttpAjax(link, arrParams, function (response) {             
+            if (response.status == "OK") {                                
+                data = response.message;
+                setComboData(data.paralelos, "cmb_paralelo");
+                
+            }
+        }, true);
+    });
 });
 
 function setComboDataselect(arr_data, element_id, texto) {

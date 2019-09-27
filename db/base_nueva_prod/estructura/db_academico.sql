@@ -774,6 +774,7 @@ create table if not exists `paralelo_promocion_programa` (
  `ppro_id` bigint(20) not null, 
  `pppr_cupo` integer(3) not null, 
  `pppr_cupo_actual` integer(3) null,  
+ `pppr_descripcion` varchar(100) null,  
  `pppr_usuario_ingresa` bigint(20) null,
  `pppr_estado` varchar(1) not null, 
  `pppr_fecha_creacion` timestamp not null default current_timestamp,
