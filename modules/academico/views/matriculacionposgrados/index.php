@@ -14,15 +14,14 @@ use app\modules\academico\Module as academico;
             'arr_programa1' => $arr_programa1,
             'arr_unidad' => $arr_unidad,
             'arr_modalidad' => $arr_modalidad
-            ]);
+        ]);
         ?>
     </form>
 </div>
-<div>
-    <!--
-    <?
+<div>    
+    <?=
     $this->render('index-grid', [
         'model' => $model,
         'url' => $url]);
-    ?>-->
+    ?>
 </div>

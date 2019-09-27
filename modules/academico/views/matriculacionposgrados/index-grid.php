@@ -13,7 +13,7 @@ academico::registerTranslations();
 <div>
     <?=
     PbGridView::widget([
-        'id' => 'TbG_PERSONAS',
+        'id' => 'TbG_PROGRMA',
         'showExport' => true,
         'fnExportEXCEL' => "exportExcel",
         'fnExportPDF' => "exportPdf",
@@ -22,34 +22,24 @@ academico::registerTranslations();
         'columns' =>
         [
             [
-                'attribute' => 'solicitud',
-                'header' => admision::t("Solicitudes", "Request #"),
+                'attribute' => 'codigo',
+                'header' => Yii::t("formulario", "Code"),
                 'value' => 'solicitud',
-            ],         
+            ],
             [
-                'attribute' => 'DNI',
-                'header' => Yii::t("formulario", "DNI 1"),
+                'attribute' => 'anio',
+                'header' => Yii::t("formulario", "Year"),
                 'value' => 'per_dni',
             ],
             [
-                'attribute' => 'Nombres',
-                'header' => Yii::t("formulario", "First Names"),
+                'attribute' => 'mes',
+                'header' => Yii::t("formulario", "Month"),
                 'value' => 'per_nombres',
             ],
             [
-                'attribute' => 'Apellidos',
-                'header' => Yii::t("formulario", "Last Names"),
-                'value' => 'per_apellidos',
-            ],
-            [
-                'class' => 'yii\grid\ActionColumn',
-                'header' => admision::t("Solicitudes", "Income Method"),
-                'template' => '{view}',
-                'buttons' => [
-                    'view' => function ($url, $model) {
-                        return Html::a('<span>' . $model['abr_metodo'] . '</span>', Url::to(['#']), ["data-toggle" => "tooltip", "title" => $model['ming_nombre']]);
-                    },
-                ],
+                'attribute' => 'unidad_academica',
+                'header' => admision::t("Solicitudes", "U. Académica."),
+                'value' => 'uaca_nombre',
             ],
             [
                 'attribute' => 'modalidad',
@@ -57,47 +47,30 @@ academico::registerTranslations();
                 'value' => 'mod_nombre',
             ],
             [
-                'attribute' => 'unidad_academica',
-                'header' => admision::t("Solicitudes", "U. Académica."),
-                'value' => 'uaca_nombre',
-            ],              
-            [
                 'class' => 'yii\grid\ActionColumn',
-                'header' => academico::t("Academico", "Career/Program"),
+                'header' => Yii::t("formulario", "Program"),
                 'template' => '{view}',
                 'buttons' => [
                     'view' => function ($url, $model) {
-                        return Html::a('<span>' . substr($model['carrera'], 0,10)  . '..</span>', Url::to(['#']), ["data-toggle" => "tooltip", "title" => $model['carrera']]);
+                        return Html::a('<span>' . substr($model['carrera'], 0, 15) . '..</span>', Url::to(['#']), ["data-toggle" => "tooltip", "title" => $model['carrera']]);
                     },
-                ],               
+                ],
             ],
             [
-                'attribute' => 'beca',
-                'header' => admision::t("Solicitudes", "Scholarship"),
-                'value' => 'beca',
-            ],
-            [
-                'attribute' => 'periodo',
-                'header' => academico::t("Academico", "Period"),
-                'value' => 'pami_codigo',
+                'attribute' => 'paralelo',
+                'header' => academico::t("Academico", "Parallel"),
+                'value' => 'per_apellidos',
             ],
             [
                 'class' => 'yii\grid\ActionColumn',
                 'header' => Yii::t("formulario", "Actions"),
-                'template' => '{view} {matricula} {homologa}', //
+                'template' => '{view} {paralelo}', //        
                 'buttons' => [
                     'view' => function ($url, $model) {
-                        return Html::a('<span class="glyphicon glyphicon-th-list"></span>', Url::to(['/admision/solicitudes/view', 'ids' => base64_encode($model['sins_id']), 'int' => base64_encode($model['int_id']), 'perid' => base64_encode($model['per_id'])]), ["data-toggle" => "tooltip", "title" => "Ver Solicitud", "data-pjax" => 0]);
+                        return Html::a('<span class="glyphicon glyphicon-list-alt"></span>', Url::to(['/academico/matriculacionposgrados/index', 'ids' => base64_encode($model['sins_id'])]), ["data-toggle" => "tooltip", "title" => "Ver Programación", "data-pjax" => 0]);
                     },
-                    'matricula' => function ($url, $model) {
-                        if (($model["pami_codigo"] == 'N/A') && ($model["emp_id"] == 1)) {
-                            return Html::a('<span class="glyphicon glyphicon-list-alt"></span>', Url::to(['/academico/matriculacion/newmetodoingreso', 'sids' => base64_encode($model['sins_id']), 'adm' => base64_encode($model['adm_id'])]), ["data-toggle" => "tooltip", "title" => "Matricular por Método Ingreso", "data-pjax" => 0]);
-                        } else {
-                            return '<span class="glyphicon glyphicon-th-list"></span>';
-                        }
-                    },
-                    'homologa' => function ($url, $model) {
-                        return Html::a('<span class="glyphicon glyphicon-check"></span>', Url::to(['/academico/matriculacion/newhomologacion', 'sids' => base64_encode($model['sins_id']), 'asp' => base64_encode($model['asp_id'])]), ["data-toggle" => "tooltip", "title" => "Matricular por Homologación", "data-pjax" => 0]);
+                    'paralelo' => function ($url, $model) {
+                        return Html::a('<span class="glyphicon glyphicon-list"></span>', Url::to(['/academico/matriculacionposgrados/index', 'ids' => base64_encode($model['sins_id'])]), ["data-toggle" => "tooltip", "title" => "Ver Paralelos", "data-pjax" => 0]);
                     },
                 ],
             ],

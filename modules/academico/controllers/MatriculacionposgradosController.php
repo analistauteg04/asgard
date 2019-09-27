@@ -9,14 +9,12 @@ use yii\helpers\ArrayHelper;
 use app\models\Utilities;
 use app\modules\academico\models\Modalidad;
 use app\modules\academico\models\UnidadAcademica;
+use app\modules\academico\models\PromocionPrograma;
 use app\modules\admision\models\Oportunidad;
 use app\modules\academico\Module as academico;
 use app\modules\financiero\Module as financiero;
 use app\modules\admision\Module as admision;
-use app\models\ExportFile;
-use app\modules\academico\models\DocumentoAceptacion;
-use app\models\Persona;
-use app\modules\admision\models\DocumentoAdjuntar;
+
 
 academico::registerTranslations();
 admision::registerTranslations();
@@ -36,12 +34,12 @@ class MatriculacionposgradosController extends \app\components\CController {
             $arrSearch["unidad"] = $data['unidad'];
             $arrSearch["modalidad"] = $data['modalidad'];
             $arrSearch["programa"] = $data['programa'];         
-            $mod_promocion = Admitido::getAdmitidos($arrSearch);
+            $mod_promocion = PromocionPrograma::getPromocion($arrSearch);
             return $this->renderPartial('index-grid', [
                         "model" => $mod_promocion,
             ]);
         } else {
-            $mod_promocion = Admitido::getAdmitidos();
+            $mod_promocion = PromocionPrograma::getPromocion();
         }
         if (Yii::$app->request->isAjax) {
             $data = Yii::$app->request->post();
