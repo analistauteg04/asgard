@@ -137,8 +137,9 @@ class InteresadosController extends \app\components\CController
                                                 "identificacion" => isset($pgest['pges_cedula']) ? $pgest['pges_cedula'] : $pgest['pges_pasaporte'],
                                                 "link_asgard" => $link,
                                             );
+                                            /* GVG 27/09/2019 solicitado por Admisiones - Diana Lòpez
                                             $outemail = $mod_interesado->enviarCorreoBienvenida($email_info);
-                                            /*if ($outemail == 0) {
+                                            if ($outemail == 0) {
                                                 $error_message .= Yii::t("formulario", "The email hasn't been sent");
                                                 $error++;
                                             }*/
