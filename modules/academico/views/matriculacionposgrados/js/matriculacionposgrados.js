@@ -81,18 +81,14 @@ function exportPdf() {
 }*/
 
 function actualizarGrid() {
-    var search = $('#txt_buscarData').val();
-    var f_ini = $('#txt_fecha_ini').val();
-    var f_fin = $('#txt_fecha_fin').val();
-    var codigocan = $('#txt_buscarCodigo').val();
+    var search = $('#txt_buscarData').val();  
     var unidad = $('#cmb_unidadbus option:selected').val();
     var modalidad = $('#cmb_modalidadbus option:selected').val();
-    var carrera = $('#cmb_carrerabus option:selected').val();
-    var periodo = $('#txt_periodo').val();
+    var programa = $('#cmb_programabus option:selected').val();   
     //Buscar almenos una clase con el nombre para ejecutar
     if (!$(".blockUI").length) {
         showLoadingPopup();
-        $('#TbG_PERSONAS').PbGridView('applyFilterData', {'f_ini': f_ini, 'f_fin': f_fin, 'search': search, 'codigocan': codigocan, 'unidad': unidad, 'modalidad': modalidad, 'carrera': carrera, 'periodo': periodo});
+        $('#TbG_PROGRAMA').PbGridView('applyFilterData', {'search': search, 'unidad': unidad, 'modalidad': modalidad, 'programa': programa});
         setTimeout(hideLoadingPopup, 2000);
     }
 }

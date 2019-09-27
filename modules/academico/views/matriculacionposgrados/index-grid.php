@@ -52,7 +52,7 @@ academico::registerTranslations();
                 'template' => '{view}',
                 'buttons' => [
                     'view' => function ($url, $model) {
-                        return Html::a('<span>' . substr($model['programa'], 0, 15) . '..</span>', Url::to(['#']), ["data-toggle" => "tooltip", "title" => $model['programa']]);
+                        return Html::a('<span>' . substr($model['programa'], 0, 15) . '...</span>', Url::to(['#']), ["data-toggle" => "tooltip", "title" => $model['programa']]);
                     },
                 ],
             ],
