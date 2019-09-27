@@ -2181,7 +2181,7 @@ class Oportunidad extends \app\modules\admision\components\CActiveRecord {
      * @param
      * @return
      */
-    public function consultarOportunidadxUnidModCarrera($emp_id, $uaca_id, $mod_id, $eaca_id) {
+    public function consultarOportunidadxUnidModCarrera($emp_id, $uaca_id, $mod_id, $eaca_id, $pges_id) {
         $con = \Yii::$app->db_crm;
         $estado = 1;
         
@@ -2194,6 +2194,7 @@ class Oportunidad extends \app\modules\admision\components\CActiveRecord {
                    opo.uaca_id = :uaca_id AND
                    opo.mod_id = :mod_id AND 
                    opo.eopo_id in (1,3) AND
+                   opo.pges_id = :pges_id AND
                    opo.opo_estado = :estado AND
                    opo.opo_estado_logico = :estado";
 
@@ -2204,6 +2205,7 @@ class Oportunidad extends \app\modules\admision\components\CActiveRecord {
         $comando->bindParam(":eaca_id", $eaca_id, \PDO::PARAM_INT);       
         $comando->bindParam(":uaca_id", $uaca_id, \PDO::PARAM_INT);
         $comando->bindParam(":mod_id", $mod_id, \PDO::PARAM_INT);    
+        $comando->bindParam(":pges_id", $pges_id, \PDO::PARAM_INT);    
         $resultData = $comando->queryOne();
         return $resultData;
     }

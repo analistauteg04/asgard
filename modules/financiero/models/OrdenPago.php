@@ -1624,8 +1624,7 @@ class OrdenPago extends \app\modules\financiero\components\CActiveRecord {
         }        
 
         try {
-            $sql = "INSERT INTO " . $con->dbname . ".orden_pago ($param_sql) VALUES($bopago_sql)";
-            \app\models\Utilities::putMessageLogFile('insert o/p:'.$sql);
+            $sql = "INSERT INTO " . $con->dbname . ".orden_pago ($param_sql) VALUES($bopago_sql)";            
             $comando = $con->createCommand($sql);
 
             if (!empty($sins_id)) {
