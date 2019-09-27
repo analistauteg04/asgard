@@ -3,6 +3,7 @@
 namespace app\modules\academico\controllers;
 
 use Yii;
+use app\models\ExportFile;
 use app\modules\academico\models\Admitido;
 use app\modules\academico\models\EstudioAcademico;
 use yii\helpers\ArrayHelper;
@@ -68,6 +69,82 @@ class MatriculacionposgradosController extends \app\components\CController {
                     'arr_modalidad' => ArrayHelper::map(array_merge([["id" => "0", "name" => Yii::t("formulario", "Grid")]], $arr_modalidad), "id", "name"),
                     'arr_programa1' => ArrayHelper::map(array_merge([["id" => "0", "name" => Yii::t("formulario", "Grid")]], $arr_programa1), "id", "name"),
         ]);
+    }
+    
+    public function actionExpexcel() {
+        ini_set('memory_limit', '256M');
+        $content_type = Utilities::mimeContentType("xls");
+        $nombarch = "Report-" . date("YmdHis") . ".xls";
+        header("Content-Type: $content_type");
+        header("Content-Disposition: attachment;filename=" . $nombarch);
+        header('Cache-Control: max-age=0');
+        $colPosition = array("C", "D", "E", "F", "G", "H", "I");
+        $arrHeader = array(
+            Yii::t("formulario", "Code"),
+            Yii::t("formulario", "Year"),
+            Yii::t("formulario", "Month"),
+            academico::t("Academico", "Aca. Uni."),
+            academico::t("Academico", "Modality"),
+            Yii::t("formulario", "Program"),
+            academico::t("Academico", "Parallel")           
+        );
+        $data = Yii::$app->request->get();
+        $arrSearch = array();
+        if (count($data) > 0) {            
+            $arrSearch["search"] = $data['search'];
+            $arrSearch["unidad"] = $data['unidad'];
+            $arrSearch["modalidad"] = $data['modalidad'];
+            $arrSearch["programa"] = $data['programa'];           
+        }
+        $arrData = array();
+         $promocion = new PromocionPrograma();
+        if (count($arrSearch) > 0) {
+            $arrData = $promocion->getPromocion($arrSearch, true);
+        } else {
+            $arrData = $promocion->getPromocion(array(), true);
+        }
+        \app\models\Utilities::putMessageLogFile($arrData);
+        $nameReport = Yii::t("formulario", "Promotion Program");
+        Utilities::generarReporteXLS($nombarch, $nameReport, $arrHeader, $arrData, $colPosition);
+        exit;
+    }
+
+    public function actionExppdf() {
+        $report = new ExportFile();
+        $this->view->title = Yii::t("formulario", "Promotion Program");  // Titulo del reporte
+        $arrHeader = array(
+            Yii::t("formulario", "Code"),
+            Yii::t("formulario", "Year"),
+            Yii::t("formulario", "Month"),
+            academico::t("Academico", "Aca. Uni."),
+            academico::t("Academico", "Modality"),
+            Yii::t("formulario", "Program"),
+            academico::t("Academico", "Parallel"),            
+        );
+        $data = Yii::$app->request->get();
+        $arrSearch = array();
+        if (count($data) > 0) {
+            $arrSearch["search"] = $data['search'];
+            $arrSearch["unidad"] = $data['unidad'];
+            $arrSearch["modalidad"] = $data['modalidad'];
+            $arrSearch["programa"] = $data['programa'];         
+        }
+        $arrData = array();
+        $promocion = new PromocionPrograma();
+        
+        if (count($arrSearch) > 0) {
+            $arrData = $promocion->getPromocion($arrSearch, true);
+        } else {
+            $arrData = $promocion->getPromocion(array(), true);
+        }
+        $report->orientation = "L"; // tipo de orientacion L => Horizontal, P => Vertical                                
+        $report->createReportPdf(
+                $this->render('exportpdf', [
+                    'arr_head' => $arrHeader,
+                    'arr_body' => $arrData
+                ])
+        );
+        $report->mpdf->Output('Reporte_' . date("Ymdhis") . ".pdf", ExportFile::OUTPUT_TO_DOWNLOAD);
     }
 
 }

@@ -38,12 +38,12 @@ academico::registerTranslations();
             ],
             [
                 'attribute' => 'unidad_academica',
-                'header' => admision::t("Solicitudes", "U. Académica."),
+                'header' => academico::t("Academico", "Aca. Uni."),
                 'value' => 'unidad',
             ],
             [
                 'attribute' => 'modalidad',
-                'header' => admision::t("Solicitudes", "Modalidad"),
+                'header' => academico::t("Academico", "Modality"),
                 'value' => 'modalidad',
             ],
             [
