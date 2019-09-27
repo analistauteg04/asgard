@@ -13,7 +13,7 @@ academico::registerTranslations();
 <div>
     <?=
     PbGridView::widget([
-        'id' => 'TbG_PROGRMA',
+        'id' => 'TbG_PROGRAMA',
         'showExport' => true,
         'fnExportEXCEL' => "exportExcel",
         'fnExportPDF' => "exportPdf",
@@ -24,27 +24,27 @@ academico::registerTranslations();
             [
                 'attribute' => 'codigo',
                 'header' => Yii::t("formulario", "Code"),
-                'value' => 'solicitud',
+                'value' => 'codigo',
             ],
             [
                 'attribute' => 'anio',
                 'header' => Yii::t("formulario", "Year"),
-                'value' => 'per_dni',
+                'value' => 'anio',
             ],
             [
                 'attribute' => 'mes',
                 'header' => Yii::t("formulario", "Month"),
-                'value' => 'per_nombres',
+                'value' => 'mes',
             ],
             [
                 'attribute' => 'unidad_academica',
                 'header' => admision::t("Solicitudes", "U. Académica."),
-                'value' => 'uaca_nombre',
+                'value' => 'unidad',
             ],
             [
                 'attribute' => 'modalidad',
                 'header' => admision::t("Solicitudes", "Modalidad"),
-                'value' => 'mod_nombre',
+                'value' => 'modalidad',
             ],
             [
                 'class' => 'yii\grid\ActionColumn',
@@ -52,14 +52,14 @@ academico::registerTranslations();
                 'template' => '{view}',
                 'buttons' => [
                     'view' => function ($url, $model) {
-                        return Html::a('<span>' . substr($model['carrera'], 0, 15) . '..</span>', Url::to(['#']), ["data-toggle" => "tooltip", "title" => $model['carrera']]);
+                        return Html::a('<span>' . substr($model['programa'], 0, 15) . '..</span>', Url::to(['#']), ["data-toggle" => "tooltip", "title" => $model['programa']]);
                     },
                 ],
             ],
             [
                 'attribute' => 'paralelo',
                 'header' => academico::t("Academico", "Parallel"),
-                'value' => 'per_apellidos',
+                'value' => 'paralelo',
             ],
             [
                 'class' => 'yii\grid\ActionColumn',

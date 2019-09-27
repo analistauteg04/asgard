@@ -129,13 +129,10 @@ class PromocionPrograma extends \yii\db\ActiveRecord {
      * @return  $resultData (información del aspirante)
      */
     public static function getPromocion($arrFiltro = array(), $onlyData = false) {
-        $con = \Yii::$app->db_captacion;
-        $con2 = \Yii::$app->db;
-        $con3 = \Yii::$app->db_academico;
-        $con1 = \Yii::$app->db_facturacion;
+        $con = \Yii::$app->db;
+        $con1 = \Yii::$app->db_academico;    
         $estado = 1;
-        $columnsAdd = "";
-        $estado_opago = "S";
+        $columnsAdd = "";    
 
         if (isset($arrFiltro) && count($arrFiltro) > 0) {
             if ($arrFiltro['search'] != "") {
@@ -153,79 +150,21 @@ class PromocionPrograma extends \yii\db\ActiveRecord {
             if ($arrFiltro['programa'] != "" && $arrFiltro['programa'] > 0) {
                 $str_search .= "a.eaca_id = :carrera AND ";
             }            
-        } else {
-            $columnsAdd = "sins.sins_id as solicitud_id,
-                    per.per_id as persona, 
-                    per.per_pri_nombre as per_pri_nombre, 
-                    per.per_seg_nombre as per_seg_nombre,
-                    per.per_pri_apellido as per_pri_apellido,
-                    per.per_seg_apellido as per_seg_apellido,";
-        }
-        $sql = "SELECT * FROM (
-                SELECT  distinct lpad(ifnull(sins.num_solicitud, sins.sins_id),9,'0') as solicitud,
-                        sins.sins_id,
-                        sins.int_id,
-                        SUBSTRING(sins.sins_fecha_solicitud,1,10) as sins_fecha_solicitud, 
-                        per.per_id as per_id,
-                        per.per_cedula as per_dni,
-                        per.per_pri_nombre as per_nombres,
-                        per.per_pri_apellido as per_apellidos,
-                        sins.ming_id, 
-                        ifnull((select min.ming_alias from " . $con->dbname . ".metodo_ingreso min where min.ming_id = sins.ming_id),'N/A') as abr_metodo,
-                        ifnull((select min.ming_nombre from " . $con->dbname . ".metodo_ingreso min where min.ming_id = sins.ming_id),'N/A') as ming_nombre,
-                        sins.eaca_id,
-                        sins.mest_id,
-                        sins.mod_id,
-                        moda.mod_nombre,
-                        uaca.uaca_nombre,
-                        sins.uaca_id,
-                        case when (ifnull(sins.eaca_id,0)=0) then
-                                (select mest_nombre from " . $con3->dbname . ".modulo_estudio me where me.mest_id = sins.mest_id and me.mest_estado = '1' and me.mest_estado_logico = '1')
-                                else
-                            (select eaca_nombre from " . $con3->dbname . ".estudio_academico ea where ea.eaca_id = sins.eaca_id and ea.eaca_estado = '1' and ea.eaca_estado_logico = '1')
-                        end as carrera,
-                        per.per_pri_nombre as per_pri_nombre, 
-                        per.per_seg_nombre as per_seg_nombre,
-                        per.per_pri_apellido as per_pri_apellido,
-                        per.per_seg_apellido as per_seg_apellido,   
-                        per.per_cedula,
-                        admi.adm_id,                                               
-                       (case when sins_beca = 1 then 'ICF' else 'No Aplica' end) as beca,
-                       ifnull((select pa.pami_codigo
-                               from " . $con3->dbname . ".matriculacion m inner join " . $con3->dbname . ".asignacion_paralelo ap on ap.mat_id = m.mat_id
-                                    inner join " . $con3->dbname . ".paralelo p on p.par_id = ap.par_id
-                                    inner join " . $con3->dbname . ".periodo_academico_met_ingreso pa on pa.pami_id = p.pami_id
-                               where m.adm_id = admi.adm_id and m.sins_id = sins.sins_id and m.mat_estado = :estado and m.mat_estado_logico = :estado
-                                and p.par_estado = :estado and p.par_estado_logico = :estado
-                                and ap.apar_estado = :estado and ap.apar_estado_logico = :estado
-                                and pa.pami_estado = :estado and pa.pami_estado_logico = :estado),'N/A') as pami_codigo,
-                        sins.emp_id
-                FROM " . $con->dbname . ".admitido admi INNER JOIN " . $con->dbname . ".solicitud_inscripcion sins on sins.sins_id = admi.sins_id                 
-                     INNER JOIN " . $con->dbname . ".interesado inte on sins.int_id = inte.int_id 
-                     INNER JOIN " . $con2->dbname . ".persona per on inte.per_id = per.per_id                     
-                     INNER JOIN " . $con3->dbname . ".modalidad moda on moda.mod_id=sins.mod_id
-                     INNER JOIN " . $con3->dbname . ".unidad_academica uaca on uaca.uaca_id=sins.uaca_id
-                     INNER JOIN " . $con1->dbname . ".orden_pago opag on opag.sins_id = sins.sins_id    
-                WHERE                          
-                       sins.rsin_id = 2 AND
-                       opag.opag_estado_pago = :estado_opago AND
-                       admi.adm_estado_logico = :estado AND
-                       admi.adm_estado = :estado AND 
-                       inte.int_estado_logico = :estado AND
-                       inte.int_estado = :estado AND     
-                       per.per_estado_logico = :estado AND
-                       per.per_estado = :estado AND
-                       sins.sins_estado = :estado AND
-                       sins.sins_estado_logico = :estado  AND
-                       opag.opag_estado = :estado AND
-                       opag.opag_estado_logico = :estado                  
-                ORDER BY SUBSTRING(sins.sins_fecha_solicitud,1,10) desc) a
-                WHERE $str_search  
-                      a.sins_id = a.sins_id";
+        } 
+        $sql = "SELECT 
+                    ppr.ppro_codigo as codigo,
+                    ppr.ppro_anio as anio,
+                    ppr.ppro_mes as mes,
+                    ppr.uaca_id as unidad,
+                    ppr.mod_id as modalidad,
+                    ppr.eaca_id	as programa,
+                    ppr.ppro_num_paralelo as paralelo
+                FROM " . $con1->dbname . ".promocion_programa ppr
+                WHERE ppr.ppro_estado = :estado AND
+                ppr.ppro_estado_logico = :estado";
 
         $comando = $con->createCommand($sql);
-        $comando->bindParam(":estado", $estado, \PDO::PARAM_STR);
-        $comando->bindParam(":estado_opago", $estado_opago, \PDO::PARAM_STR);
+        $comando->bindParam(":estado", $estado, \PDO::PARAM_STR);     
         if (isset($arrFiltro) && count($arrFiltro) > 0) {
             if ($arrFiltro['search'] != "") {
                 $search_cond = "%" . $arrFiltro["search"] . "%";

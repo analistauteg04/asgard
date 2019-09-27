@@ -538,7 +538,7 @@ return [
     "Scholarship document" => "Documento Beca",
     "Search by ballot, or Company Name" => "Buscar por Dni, Nombre o Razon Social",
     "Search by Code or year" => "Buscar por código o año",
-    "Search by Code or course" => "Buscar por código o paralelo",
+    "Search by Code" => "Buscar por código",
     "Search by Email" => "Buscar por Correo",
     "Search by request, or Description" => "Buscar por Solicitud, Descripción",
     "Search by Request, Surname, Payment Order Status" => "Buscar por Solicitud, Apellidos, Estado de Orden de Pago",
