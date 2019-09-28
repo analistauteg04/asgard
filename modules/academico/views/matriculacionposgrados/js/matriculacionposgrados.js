@@ -71,42 +71,31 @@ function setComboDataselect(arr_data, element_id, texto) {
     }
     $("#" + element_id).html(option_arr);
 }
-
-/*function exportExcel() {
-    var search = $('#txt_buscarData').val();
-    var f_ini = $('#txt_fecha_ini').val();
-    var f_fin = $('#txt_fecha_fin').val();
-    var unidad = $('#cmb_unidadbus option:selected').val();
-    var modalidad = $('#cmb_modalidadbus option:selected').val();
-    var carrera = $('#cmb_carrerabus option:selected').val();
-    var periodo = $('#txt_periodo').val();
-    window.location.href = $('#txth_base').val() + "/academico/admitidos/expexcel?search=" + search + "&fecha_ini=" + f_ini + "&fecha_fin=" + f_fin+ "&unidad=" + unidad + "&modalidad=" + modalidad + "&carrera=" + carrera + "&periodo=" + periodo;
-}
-
-function exportPdf() {
-    var search = $('#txt_buscarData').val();
-    var f_ini = $('#txt_fecha_ini').val();
-    var f_fin = $('#txt_fecha_fin').val();
-    var unidad = $('#cmb_unidadbus option:selected').val();
-    var modalidad = $('#cmb_modalidadbus option:selected').val();
-    var carrera = $('#cmb_carrerabus option:selected').val();
-    var periodo = $('#txt_periodo').val();
-    window.location.href = $('#txth_base').val() + "/academico/admitidos/exppdf?pdf=1&search=" + search + "&fecha_ini=" + f_ini + "&fecha_fin=" + f_fin + "&unidad=" + unidad + "&modalidad=" + modalidad + "&carrera=" + carrera + "&periodo=" + periodo;
-}*/
-
 function actualizarGrid() {
     var search = $('#txt_buscarData').val();
-    var f_ini = $('#txt_fecha_ini').val();
-    var f_fin = $('#txt_fecha_fin').val();
-    var codigocan = $('#txt_buscarCodigo').val();
     var unidad = $('#cmb_unidadbus option:selected').val();
     var modalidad = $('#cmb_modalidadbus option:selected').val();
-    var carrera = $('#cmb_carrerabus option:selected').val();
-    var periodo = $('#txt_periodo').val();
+    var programa = $('#cmb_programabus option:selected').val();
     //Buscar almenos una clase con el nombre para ejecutar
     if (!$(".blockUI").length) {
         showLoadingPopup();
-        $('#TbG_PERSONAS').PbGridView('applyFilterData', {'f_ini': f_ini, 'f_fin': f_fin, 'search': search, 'codigocan': codigocan, 'unidad': unidad, 'modalidad': modalidad, 'carrera': carrera, 'periodo': periodo});
+        $('#TbG_PROGRAMA').PbGridView('applyFilterData', {'search': search, 'unidad': unidad, 'modalidad': modalidad, 'programa': programa});
         setTimeout(hideLoadingPopup, 2000);
     }
+}
+
+function exportExcel() {
+    var search = $('#txt_buscarData').val();
+    var unidad = $('#cmb_unidadbus option:selected').val();
+    var modalidad = $('#cmb_modalidadbus option:selected').val();
+    var programa = $('#cmb_programabus option:selected').val(); 
+    window.location.href = $('#txth_base').val() + "/academico/matriculacionposgrados/expexcel?search=" + search + "&unidad=" + unidad + "&modalidad=" + modalidad + "&programa=" + programa;
+}
+
+function exportPdf() {
+    var search = $('#txt_buscarData').val();  
+    var unidad = $('#cmb_unidadbus option:selected').val();
+    var modalidad = $('#cmb_modalidadbus option:selected').val();
+    var programa = $('#cmb_programabus option:selected').val();
+    window.location.href = $('#txth_base').val() + "/academico/matriculacionposgrados/exppdf?pdf=1&search=" + search + "&unidad=" + unidad + "&modalidad=" + modalidad + "&programa=" + programa;
 }

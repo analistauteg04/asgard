@@ -136,32 +136,53 @@ class PromocionPrograma extends \yii\db\ActiveRecord {
 
         if (isset($arrFiltro) && count($arrFiltro) > 0) {
             if ($arrFiltro['search'] != "") {
-                $str_search = "(a.per_pri_nombre like :search OR ";
-                $str_search .= "a.per_seg_nombre like :search OR ";
-                $str_search .= "a.per_pri_apellido like :search OR ";
-                $str_search .= "a.per_cedula like :search) AND ";
+                $str_search .= "ppr.ppro_codigo like :search AND ";
             }
             if ($arrFiltro['unidad'] != "" && $arrFiltro['unidad'] > 0) {
-                $str_search .= "a.uaca_id = :unidad AND ";
+                $str_search .= "ppr.uaca_id = :unidad AND ";
             }
             if ($arrFiltro['modalidad'] != "" && $arrFiltro['modalidad'] > 0) {
-                $str_search .= "a.mod_id = :modalidad AND ";
+                $str_search .= "ppr.mod_id = :modalidad AND ";
             }
             if ($arrFiltro['programa'] != "" && $arrFiltro['programa'] > 0) {
-                $str_search .= "a.eaca_id = :carrera AND ";
+                $str_search .= "ppr.eaca_id = :programa AND ";
             }            
         } 
         $sql = "SELECT 
                     ppr.ppro_codigo as codigo,
                     ppr.ppro_anio as anio,
-                    ppr.ppro_mes as mes,
-                    ppr.uaca_id as unidad,
-                    ppr.mod_id as modalidad,
-                    ppr.eaca_id	as programa,
+                    CASE ppro_mes
+                        WHEN  1 THEN 'Enero'
+                        WHEN  2 THEN 'Febrero'
+                        WHEN  3 THEN 'Marzo'
+                        WHEN  4 THEN 'Abril'
+                        WHEN  5 THEN 'Mayo'
+                        WHEN  6 THEN 'Junio'
+                        WHEN  7 THEN 'Julio'
+                        WHEN  8 THEN 'Agosto'
+                        WHEN  9 THEN 'Septiembre'
+                        WHEN  10 THEN 'Octubre'
+                        WHEN  11 THEN 'Noviembre'
+                        WHEN  12 THEN 'Diciembre' 
+                        ELSE ' ' END as mes,
+                    uaca.uaca_nombre as unidad,
+                    moda.mod_nombre as modalidad,
+                    ea.eaca_nombre as programa,
                     ppr.ppro_num_paralelo as paralelo
                 FROM " . $con1->dbname . ".promocion_programa ppr
-                WHERE ppr.ppro_estado = :estado AND
-                ppr.ppro_estado_logico = :estado";
+                    INNER JOIN " . $con1->dbname . ".unidad_academica uaca on uaca.uaca_id = ppr.uaca_id
+                    INNER JOIN " . $con1->dbname . ".modalidad moda on moda.mod_id = ppr.mod_id
+                    INNER JOIN " . $con1->dbname . ".estudio_academico ea on ea.eaca_id = ppr.eaca_id
+                WHERE 
+                $str_search
+                ppr.ppro_estado = :estado AND
+                ppr.ppro_estado_logico = :estado AND                 
+                uaca.uaca_estado = :estado AND
+                uaca.uaca_estado_logico = :estado AND                
+                moda.mod_estado = :estado AND
+                moda.mod_estado_logico = :estado AND                
+                ea.eaca_estado = :estado AND
+                ea.eaca_estado_logico = :estado";
 
         $comando = $con->createCommand($sql);
         $comando->bindParam(":estado", $estado, \PDO::PARAM_STR);     
@@ -192,9 +213,8 @@ class PromocionPrograma extends \yii\db\ActiveRecord {
             ],
             'sort' => [
                 'attributes' => [
-                    'per_dni',
-                    'per_nombres',
-                    'per_apellidos',
+                    'ppr.ppro_codigo',
+                    ' ppr.ppro_anio',
                 ],
             ],
         ]);
