@@ -12,7 +12,7 @@ piensaecuador::registerTranslations();
 <?=
     PbGridView::widget([
         'id' => 'grid_personaext_list',
-        'showExport' => false,
+        'showExport' => true,
         'fnExportEXCEL' => "exportExcel",
         'fnExportPDF' => "exportPdf",
         'dataProvider' => $model,
@@ -53,8 +53,10 @@ piensaecuador::registerTranslations();
                 'attribute' => 'Genero',
                 'header' => Yii::t("perfil", 'Sex'),
                 'value' => function($data){
-                    $arr_genero = array("1" => Yii::t("formulario", "Female"), "2" => Yii::t("formulario", "Male"));
-                    return $arr_genero[$data['Genero']];
+                    //$arr_genero = array("1" => Yii::t("formulario", "Female"), "2" => Yii::t("formulario", "Male"));
+                    //$arr_genero = array("F" => Yii::t("formulario", "Female"), "M" => Yii::t("formulario", "Male"));
+                    return $data['Genero'];
+                    //return $arr_genero[$data['Genero']];
                 },
             ],
             [
@@ -72,16 +74,21 @@ piensaecuador::registerTranslations();
                 'header' => Yii::t("general", 'City'),
                 'value' => 'Canton',
             ],
-            /*[
+            [
                 'attribute' => 'Evento',
-                'header' => 'Evento',
+                'header' => piensaecuador::t("interes", 'Event'),
                 'value' => 'Evento',
-            ],*/
+            ],
+            [
+                'attribute' => 'NivelInstruccion',
+                'header' => piensaecuador::t("interes", 'Instruction Level'),
+                'value' => 'NivelInstruccion',
+            ],
             [
                 'attribute' => 'NivelInteres',
                 'header' => piensaecuador::t("interes", 'Activity'),
-                'value' => function($data){
-                    $model = new PersonaExterna();
+                'value' => function($data) use ($dataInteres) {
+                    /*$model = new PersonaExterna();
                     $queryData = $model->getPersonaExtInteres($data["id"]);
                     $result = "";
                     $cont = 0;
@@ -91,7 +98,20 @@ piensaecuador::registerTranslations();
                         if(count($queryData) > $cont)
                             $result .= " | ";
                     }
-                    return $result;
+                    return $result;*/
+                    $pext_id = $data['id'];
+                    $keys = array_keys(array_column($dataInteres, 'id'), $pext_id);
+                    
+                    $cont = 0;
+                    $newValue = "";
+                    foreach($keys as $key2 => $value2){
+                        $id = $value2;
+                        $newValue .= $dataInteres[$id]['interes'];
+                        $cont++;
+                        if(count($keys) > $cont)
+                            $newValue .= " | ";
+                    }
+                    return $newValue;
                 },
             ],
             [
@@ -106,7 +126,7 @@ piensaecuador::registerTranslations();
                 'format' => 'html',
                 'header' => Yii::t("general", "Status"),
                 'value' => function($data){
-                    if($data["Estado"] == "1")
+                    if($data["Estado"] == Yii::t("general", "Enabled"))
                         return '<small class="label label-success">'.Yii::t("general", "Enabled").'</small>';
                     else
                         return '<small class="label label-danger">'.Yii::t("general", "Disabled").'</small>';

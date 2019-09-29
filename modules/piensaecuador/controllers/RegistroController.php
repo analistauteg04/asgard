@@ -17,12 +17,14 @@ class RegistroController extends \app\components\CController {
             $data = Yii::$app->request->get();
             if (isset($data["search"])) {
                 return $this->renderPartial('index-grid', [
-                    "model" => $model->getAllPersonaExtGrid($data["search"], true)
+                    "model" => $model->getAllPersonaExtGrid($data["search"], true),
+                    'dataInteres' => $model->getAllInteresByPersona(NULL)
                 ]);
             }
         }
         return $this->render('index', [
-            'model' => $model->getAllPersonaExtGrid(NULL, true)
+            'model' => $model->getAllPersonaExtGrid(NULL, true),
+            'dataInteres' => $model->getAllInteresByPersona(NULL)
         ]);
     }
 
@@ -33,8 +35,9 @@ class RegistroController extends \app\components\CController {
         header("Content-Type: $content_type");
         header("Content-Disposition: attachment;filename=" . $nombarch);
         header('Cache-Control: max-age=0');
-        $colPosition = array("C", "D", "E", "F", "G", "H", "I", "J", "K", "L", "M", "N");
+        $colPosition = array("C", "D", "E", "F", "G", "H", "I", "J", "K", "L", "M", "N", "O", "P", "Q", "R");
         $arrHeader = array(
+            'Id',
             Yii::t("formulario", "Names"),
             Yii::t("formulario", 'Last Names'),
             Yii::t("formulario", "Dni"),
@@ -45,67 +48,94 @@ class RegistroController extends \app\components\CController {
             Yii::t("perfil", 'Birth Date'),
             Yii::t("general", 'State'),
             Yii::t("general", 'City'),
+            piensaecuador::t("interes", 'Event'),
+            piensaecuador::t("interes", 'Instruction Level'),
             piensaecuador::t("interes", 'Activity'),
-            piensaecuador::t("interes",'Registry Date')
+            piensaecuador::t("interes",'Registry Date'),
+            Yii::t("general", "Status")
         );
-        $modPersonaGestion = new PersonaGestion();
+        $model = new PersonaExterna();
         $data = Yii::$app->request->get();
-        $arrSearch["search"] = $data['search'];        
-        $arrSearch["f_ini"] =  $data['f_ini'];
-        $arrSearch["f_fin"] =  $data['f_fin'];
-        $arrSearch["medio"] =  $data['medio'];
-        $arrSearch["agente"] = $data['agente'];
-        $arrSearch["correo"] = $data['correo'];
-        $arrSearch["telefono"] = $data['telefono'];
-        $arrSearch["empresa"] = $data['empresa'];
-        $arrSearch["unidad"] = $data['unidad'];
-        $arrSearch["gestion"] = $data['gestion'];
-        $arrData = array();
+        $arrData = $queryData = array();
+        $arrSearch["search"] = $data['search'];
         if (empty($arrSearch)) {
-            $arrData = $modPersonaGestion->consultarReportContactos(array(), true);
+            $arrData = $model->getAllPersonaExtGrid(NULL, false);
+            $queryData = $model->getAllInteresByPersona(NULL);
         } else {
-            $arrData = $modPersonaGestion->consultarReportContactos($arrSearch, true);
+            $arrData = $model->getAllPersonaExtGrid($data["search"], false);
+            $queryData = $model->getAllInteresByPersona($data["search"]);
         }
-        $nameReport = admision::t("crm", "Contacts");
+        
+        foreach($arrData as $key => $value){
+            $pext_id = $value['id'];
+            $keys = array_keys(array_column($queryData, 'id'), $pext_id);
+            
+            $cont = 0;
+            $newValue = "";
+            foreach($keys as $key2 => $value2){
+                $id = $value2;
+                $newValue .= $queryData[$id]['interes'];
+                $cont++;
+                if(count($keys) > $cont)
+                    $newValue .= " | ";
+            }
+            $arrData[$key]['NivelInteresId'] = $newValue;
+        }
+
+        $nameReport = piensaecuador::t("interes", "Registries");
         Utilities::generarReporteXLS($nombarch, $nameReport, $arrHeader, $arrData, $colPosition);
         exit;
     }
 
     public function actionExppdf() {
         $report = new ExportFile();
-        $this->view->title = admision::t("crm", "Contacts"); // Titulo del reporte
+        $model = new PersonaExterna();
+        $this->view->title = piensaecuador::t("interes", "Registries"); // Titulo del reporte
         $arrHeader = array(
-            Yii::t("crm", "Contact"),
-            Yii::t("formulario", "Country"),
-            Yii::t("formulario", "Email"),
-            Yii::t("formulario", "CellPhone"),
-            Yii::t("formulario", "Phone"),
-            Yii::t("formulario", "Date"),
-            Yii::t("formulario", "Academic unit"),
-            admision::t("crm", "Channel"),
-            Yii::t("formulario", "User login"),
-            Yii::t("formulario", "Open Opportunities"),
-            Yii::t("formulario", "Close Opportunities"),
-            Yii::t("formulario", "Management State")
+            'Id',
+            Yii::t("formulario", "Names"),
+            Yii::t("formulario", 'Last Names'),
+            Yii::t("formulario", "Dni"),
+            Yii::t("perfil", 'Email'),
+            Yii::t("perfil", 'CellPhone'),
+            Yii::t("perfil", 'Phone'),
+            Yii::t("perfil", 'Sex'),
+            Yii::t("perfil", 'Birth Date'),
+            Yii::t("general", 'State'),
+            Yii::t("general", 'City'),
+            piensaecuador::t("interes", 'Event'),
+            piensaecuador::t("interes", 'Instruction Level'),
+            piensaecuador::t("interes", 'Activity'),
+            piensaecuador::t("interes",'Registry Date'),
+            Yii::t("general", "Status")
         );
-        $modPersonaGestion = new PersonaGestion();
         $data = Yii::$app->request->get();
+        $arrData = $queryData = array();
         $arrSearch["search"] = $data['search'];
-        $arrSearch["medio"] = $data['medio'];
-        $arrSearch["f_ini"] = $data['f_ini'];
-        $arrSearch["f_fin"] = $data['f_fin'];
-        $arrSearch["agente"] = $data['agente'];
-        $arrSearch["correo"] = $data['correo'];
-        $arrSearch["telefono"] = $data['telefono'];
-        $arrSearch["empresa"] = $data['empresa'];
-        $arrSearch["unidad"] = $data['unidad'];
-        $arrSearch["gestion"] = $data['gestion'];
-        $arrData = array();
         if (empty($arrSearch)) {
-            $arrData = $modPersonaGestion->consultarReportContactos(array(), true);
+            $arrData = $model->getAllPersonaExtGrid(NULL, false);
+            $queryData = $model->getAllInteresByPersona(NULL);
         } else {
-            $arrData = $modPersonaGestion->consultarReportContactos($arrSearch, true);
+            $arrData = $model->getAllPersonaExtGrid($data["search"], false);
+            $queryData = $model->getAllInteresByPersona($data["search"]);
         }
+
+        foreach($arrData as $key => $value){
+            $pext_id = $value['id'];
+            $keys = array_keys(array_column($queryData, 'id'), $pext_id);
+            
+            $cont = 0;
+            $newValue = "";
+            foreach($keys as $key2 => $value2){
+                $id = $value2;
+                $newValue .= $queryData[$id]['interes'];
+                $cont++;
+                if(count($keys) > $cont)
+                    $newValue .= " | ";
+            }
+            $arrData[$key]['NivelInteresId'] = $newValue;
+        }
+
         $report->orientation = "L"; // tipo de orientacion L => Horizontal, P => Vertical                                
         $report->createReportPdf(
                 $this->render('exportpdf', [

@@ -46,4 +46,7 @@
 return [    
     "Activity" => 'Interés',
     "Registry Date" => 'Fecha Registro',
+    'Registries' => 'Registros',
+    'Event' => 'Evento',
+    'Instruction Level' => 'Instrucción',
 ];

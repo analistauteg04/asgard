@@ -28,5 +28,5 @@ use app\widgets\PbSearchBox\PbSearchBox;
 </div>
 <br />
 <?=
-    $this->render('index-grid', ['model' => $model,]);
+    $this->render('index-grid', ['model' => $model, 'dataInteres' => $dataInteres]);
 ?>

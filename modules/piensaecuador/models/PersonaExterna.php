@@ -176,6 +176,7 @@ class PersonaExterna extends \yii\db\ActiveRecord
     public function getAllPersonaExtGrid($search = NULL, $dataProvider = false){
         $iduser = Yii::$app->session->get('PB_iduser', FALSE);
         $con = \Yii::$app->db_externo;
+        $con3 = \Yii::$app->db_academico;
         $con2 = \Yii::$app->db;
         $search_cond = "%".$search."%";
         $str_search = "";
@@ -193,23 +194,30 @@ class PersonaExterna extends \yii\db\ActiveRecord
                     a.pext_correo as Correo,
                     a.pext_celular as Celular,
                     a.pext_telefono as Telefono,
-                    a.pext_genero as Genero,
+                    IF(a.pext_genero=1,'".
+                        Yii::t("formulario", "Female")."','".
+                        Yii::t("formulario", "Male")."') as Genero,
                     a.pext_fecha_nacimiento as FechaNacimiento,
-                    a.pext_edad as Edad,
-                    a.pext_estado as Estado,
-                    a.pext_fecha_registro as FechaRegistro,
-                    a.nins_id as NivelInteresId,
-                    a.pro_id as ProvinciaId,
+                    -- a.pext_edad as Edad,
+                    -- a.pro_id as ProvinciaId,
                     p.pro_nombre as Provincia,
-                    a.can_id as CantonId,
+                    -- a.can_id as CantonId,
                     c.can_nombre as Canton,
-                    a.eve_id as EventoId,
-                    e.eve_nombres as Evento
+                    -- a.eve_id as EventoId,
+                    e.eve_nombres as Evento,
+                    -- a.nins_id as NivelInstruccion,
+                    ni.nins_nombre as NivelInstruccion,
+                    '' as NivelInteresId,
+                    a.pext_fecha_registro as FechaRegistro,
+                    IF(a.pext_estado=1,'".
+                        Yii::t("general", "Enabled")."','".
+                        Yii::t("general", "Disabled")."') as Estado
                 FROM 
                 " . $con->dbname . ".persona_externa AS a 
                     INNER JOIN " . $con2->dbname . ".provincia AS p ON p.pro_id = a.pro_id
                     INNER JOIN " . $con2->dbname . ".canton AS c ON c.can_id = a.can_id
                     INNER JOIN " . $con->dbname . ".evento AS e ON e.eve_id = a.eve_id
+                    INNER JOIN " . $con3->dbname . ".nivel_instruccion AS ni ON ni.nins_id = a.nins_id
                 WHERE 
                     $str_search
                     a.pext_estado=1 AND
@@ -250,6 +258,35 @@ class PersonaExterna extends \yii\db\ActiveRecord
         $comando = $con->createCommand($sql);
         $comando->bindParam(":estado", $estado, \PDO::PARAM_STR);       
         $comando->bindParam(":id", $pext_id, \PDO::PARAM_INT); 
+        $resultData = $comando->queryAll();
+        return $resultData;     
+    }
+
+    public function getAllInteresByPersona($search = NULL){
+        $con = \Yii::$app->db_externo;
+        $search_cond = "%".$search."%";
+        $str_search = "";
+        if(isset($search)){
+            $str_search  = "(a.pext_nombres like :search OR ";
+            $str_search .= "a.pext_apellidos like :search OR ";
+            $str_search .= "a.pext_identificacion like :search OR ";
+            $str_search .= "a.pext_correo like :search) AND ";
+        }
+        $estado = 1;
+        $sql = "    SELECT a.pext_id AS id, i.int_nombre AS interes
+                    FROM 
+                         " . $con->dbname . ".persona_externa_intereses AS pi 
+                         INNER JOIN " . $con->dbname . ".interes AS i ON pi.int_id = i.int_id
+                         INNER JOIN " . $con->dbname . ".persona_externa AS a ON a.pext_id = pi.pext_id
+                    WHERE
+                        $str_search 
+                        pein_estado=:estado AND
+                        pein_estado_logico=:estado";
+        $comando = $con->createCommand($sql);
+        $comando->bindParam(":estado", $estado, \PDO::PARAM_STR);     
+        if(isset($search)){
+            $comando->bindParam(":search",$search_cond, \PDO::PARAM_STR);
+        }  
         $resultData = $comando->queryAll();
         return $resultData;     
     }
