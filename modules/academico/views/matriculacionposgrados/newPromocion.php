@@ -42,7 +42,7 @@ aspirante::registerTranslations();
             <div class="form-group">
                 <label for="txt_unidad" class="col-sm-4 control-label" id="lbl_unidad"><?= academico::t("Academico", "Academic unit") ?></label>
                 <div class="col-sm-8">
-                    <?= Html::dropDownList("cmb_unidad", 2, $arr_unidad, ["class" => "form-control", "id" => "cmb_unidad", "disabled" =>"true" ]) ?>
+                    <?= Html::dropDownList("cmb_unidad", 2, $arr_unidad, ["class" => "form-control", "id" => "cmb_unidad", "disabled" => "true"]) ?>
                 </div>
             </div>
         </div>  
@@ -83,4 +83,10 @@ aspirante::registerTranslations();
             </div>
         </div>
     </div>   
+    <div class="col-md-12 col-sm-12 col-xs-12 col-lg-12">
+        <div class="col-sm-8"></div>
+        <div class="col-sm-2 col-md-2 col-xs-4 col-lg-2">                
+            <a id="btn_grabar" href="javascript:" class="btn btn-primary btn-block"> <?= Yii::t("formulario", "Save") ?></a>
+        </div>
+    </div>
 </form>

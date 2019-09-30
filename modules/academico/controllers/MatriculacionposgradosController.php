@@ -207,4 +207,68 @@ class MatriculacionposgradosController extends \app\components\CController {
         ]);
     }
 
+    public function actionSavepromocion() {
+        $usu_id = @Yii::$app->session->get("PB_iduser");
+        if (Yii::$app->request->isAjax) {
+            $data = Yii::$app->request->post();
+            $anio = $data["anio"];
+            $mes = $data["mes"];
+            $unidad = $data["unidad"];
+            $modalidad = $data["modalidad"];
+            $programa = $data["programa"];
+            $paralelo = $data["paralelo"];
+            $cupo = $data["cupo"];
+            $codigo = 'MA' . $anio . $mes; //AQUI TOMAR LAS 2 PRIMERAS LETRA DEL NOMBRE DEL PROGRAMA EN VEZ DE MA
+            $con = \Yii::$app->db_academico;
+            $transaction = $con->beginTransaction();
+            try {
+                //$promocion = new PromocionPrograma();
+                //Verificar que no tenga una matrícula.
+                $mod_Matriculacion = new PromocionPrograma();
+                $resp_consPromocion = $mod_Matriculacion->consultarPromocion($anio, $mes, $unidad, $modalidad, $programa);
+                if (!$resp_consPromocion) {
+                    $fecha = date(Yii::$app->params["dateTimeByDefault"]);
+                    //Buscar el código de planificación académica según el periodo, unidad, modalidad y carrera.
+                    $resp_promocion = $mod_Matriculacion->insertarPromocion($anio, $mes, $codigo, $unidad, $modalidad, $programa, $paralelo, $cupo, $usu_id, $fecha);
+                    if ($resp_promocion) {
+                        for ($i = 0; $i < $paralelo; $i++) {
+                            $resp_paralelo = $mod_Matriculacion->insertarParalelo($resp_promocion, $cupo, $cupo, $usu_id, $fecha);
+                        }
+                        if ($resp_paralelo) {
+                            $exito = '1';
+                        }
+                    }
+                } else {
+                    $mensaje = "¡Ya existe programación con ese información.!";
+                }
+                if ($exito) {
+                    $transaction->commit();
+                    $message = array(
+                        "wtmessage" => Yii::t("notificaciones", "La información ha sido grabada."),
+                        "title" => Yii::t('jslang', 'Success'),
+                    );
+                    return \app\models\Utilities::ajaxResponse('OK', 'alert', Yii::t("jslang", "Sucess"), false, $message);
+                } else {
+                    $transaction->rollback();
+                    if (empty($message)) {
+                        $message = array
+                            (
+                            "wtmessage" => Yii::t("notificaciones", "Error al grabar. " . $mensaje), "title" =>
+                            Yii::t('jslang', 'Success'),
+                        );
+                    }
+                    return \app\models\Utilities::ajaxResponse('NO_OK', 'alert', Yii::t("jslang", "Sucess"), false, $message);
+                }
+            } catch (Exception $ex) {
+                $transaction->rollback();
+                $message = array(
+                    "wtmessage" => Yii::t("notificaciones", "Error al grabar." . $mensaje),
+                    "title" => Yii::t('jslang', 'Success'),
+                );
+                return \app\models\Utilities::ajaxResponse('NO_OK', 'alert', Yii::t("jslang", "Sucess"), false, $message);
+            }
+            return;
+        }
+    }
+
 }

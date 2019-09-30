@@ -3,6 +3,9 @@ $(document).ready(function () {
     $('#btn_buscarData').click(function () {
         actualizarGrid();
     });
+    $('#btn_grabar').click(function () {
+        grabarPromocion();
+    });
     /*****************************************************/
     /* Filtro para busqueda en index Promoción Programa */
     /***************************************************/
@@ -43,8 +46,8 @@ $(document).ready(function () {
                 setComboDataselect(data.programa, "cmb_programabus", "Todos");
             }
         }, true);
-    });    
-  
+    });
+
     /*****************************************************/
     /* Filtro en crear Promoción Programa */
     /***************************************************/
@@ -116,18 +119,43 @@ function exportExcel() {
     var search = $('#txt_buscarData').val();
     var unidad = $('#cmb_unidadbus option:selected').val();
     var modalidad = $('#cmb_modalidadbus option:selected').val();
-    var programa = $('#cmb_programabus option:selected').val(); 
+    var programa = $('#cmb_programabus option:selected').val();
     window.location.href = $('#txth_base').val() + "/academico/matriculacionposgrados/expexcel?search=" + search + "&unidad=" + unidad + "&modalidad=" + modalidad + "&programa=" + programa;
 }
 
 function exportPdf() {
-    var search = $('#txt_buscarData').val();  
+    var search = $('#txt_buscarData').val();
     var unidad = $('#cmb_unidadbus option:selected').val();
     var modalidad = $('#cmb_modalidadbus option:selected').val();
     var programa = $('#cmb_programabus option:selected').val();
     window.location.href = $('#txth_base').val() + "/academico/matriculacionposgrados/exppdf?pdf=1&search=" + search + "&unidad=" + unidad + "&modalidad=" + modalidad + "&programa=" + programa;
 }
 
-function newPrograma() {    
+function newPrograma() {
     window.location.href = $('#txth_base').val() + "/academico/matriculacionposgrados/newpromocion";
+}
+
+function grabarPromocion() {
+    var link = $('#txth_base').val() + "/academico/matriculacionposgrados/savepromocion";
+    var arrParams = new Object();
+ 
+    arrParams.anio = $('#txt_anio').val();  
+    arrParams.mes = $('#cmb_mes').val();
+    arrParams.unidad = $('#cmb_unidad').val();
+    arrParams.modalidad = $('#cmb_modalidad').val();
+    arrParams.programa = $('#cmb_programa').val();   
+    arrParams.paralelo = $('#txt_paralelo').val();
+    arrParams.cupo = $('#txt_cupo').val();
+    if (!validateForm()) {
+        requestHttpAjax(link, arrParams, function (response) {
+            showAlert(response.status, response.label, response.message);
+            if (!response.error) {
+                setTimeout(function () {
+                    window.location.href = $('#txth_base').val() + "/academico/matriculacionposgrados/index";
+                }, 5000);
+            }
+
+
+        }, true);
+    }
 }

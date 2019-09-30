@@ -130,9 +130,9 @@ class PromocionPrograma extends \yii\db\ActiveRecord {
      */
     public static function getPromocion($arrFiltro = array(), $onlyData = false) {
         $con = \Yii::$app->db;
-        $con1 = \Yii::$app->db_academico;    
+        $con1 = \Yii::$app->db_academico;
         $estado = 1;
-        $columnsAdd = "";    
+        $columnsAdd = "";
 
         if (isset($arrFiltro) && count($arrFiltro) > 0) {
             if ($arrFiltro['search'] != "") {
@@ -146,8 +146,8 @@ class PromocionPrograma extends \yii\db\ActiveRecord {
             }
             if ($arrFiltro['programa'] != "" && $arrFiltro['programa'] > 0) {
                 $str_search .= "ppr.eaca_id = :programa AND ";
-            }            
-        } 
+            }
+        }
         $sql = "SELECT 
                     ppr.ppro_codigo as codigo,
                     ppr.ppro_anio as anio,
@@ -185,7 +185,7 @@ class PromocionPrograma extends \yii\db\ActiveRecord {
                 ea.eaca_estado_logico = :estado";
 
         $comando = $con->createCommand($sql);
-        $comando->bindParam(":estado", $estado, \PDO::PARAM_STR);     
+        $comando->bindParam(":estado", $estado, \PDO::PARAM_STR);
         if (isset($arrFiltro) && count($arrFiltro) > 0) {
             if ($arrFiltro['search'] != "") {
                 $search_cond = "%" . $arrFiltro["search"] . "%";
@@ -202,7 +202,7 @@ class PromocionPrograma extends \yii\db\ActiveRecord {
             $programa = $arrFiltro["programa"];
             if ($arrFiltro['programa'] != "" && $arrFiltro['programa'] > 0) {
                 $comando->bindParam(":programa", $programa, \PDO::PARAM_INT);
-            }            
+            }
         }
         $resultData = $comando->queryAll();
         $dataProvider = new ArrayDataProvider([
@@ -224,8 +224,7 @@ class PromocionPrograma extends \yii\db\ActiveRecord {
             return $dataProvider;
         }
     }
-    
-    
+
     /**
      * Function consulta las promociones por programa. 
      * @author Grace Viteri <analistadesarrollo01@uteg.edu.ec>;
@@ -247,6 +246,221 @@ class PromocionPrograma extends \yii\db\ActiveRecord {
         $comando->bindParam(":eaca_id", $eaca_id, \PDO::PARAM_INT);
         $resultData = $comando->queryAll();
         return $resultData;
+    }
+
+    /**
+     * Function consultar si existe ya el programa con los mismo datos antes de guardar
+     * @author  Giovanni Vergara <analistadesarrollo02@uteg.edu.ec>
+     * @param   
+     * @return  $resultData (Retornar el código de promocion).
+     */
+    public function consultarPromocion($ppro_anio, $ppro_mes, $uaca_id, $mod_id, $eaca_id) {
+        $con = \Yii::$app->db_academico;
+        $estado = 1;
+
+        $sql = "SELECT ppro_id 
+                   FROM " . $con->dbname . ".promocion_programa 
+                   WHERE ppro_anio = :ppro_anio 
+                        AND ppro_mes = :ppro_mes 
+                        AND uaca_id = :uaca_id
+                        AND mod_id = :mod_id 
+                        AND eaca_id = :eaca_id 
+                        AND ppro_estado = :estado
+                        AND ppro_estado_logico = :estado";
+
+        $comando = $con->createCommand($sql);
+        $comando->bindParam(":estado", $estado, \PDO::PARAM_STR);
+        $comando->bindParam(":ppro_anio", $ppro_anio, \PDO::PARAM_INT);
+        $comando->bindParam(":ppro_mes", $ppro_mes, \PDO::PARAM_INT);
+        $comando->bindParam(":uaca_id", $uaca_id, \PDO::PARAM_INT);
+        $comando->bindParam(":mod_id", $mod_id, \PDO::PARAM_INT);
+        $comando->bindParam(":eaca_id", $eaca_id, \PDO::PARAM_INT);
+        $resultData = $comando->queryOne();
+        return $resultData;
+    }
+
+    /**
+     * Function guardar promocion
+     * @author  Giovanni Vergara <analistadesarrollo02@uteg.edu.ec>
+     * @param   
+     * @return  $resultData (Retornar el código de promocion).
+     */
+    public function insertarPromocion($ppro_anio, $ppro_mes, $ppro_codigo, $uaca_id, $mod_id, $eaca_id, $ppro_num_paralelo, $ppro_cupo, $ppro_usuario_ingresa, $ppro_fecha_creacion) {
+
+        $con = \Yii::$app->db_academico;
+        $trans = $con->getTransaction(); // se obtiene la transacción actual
+        if ($trans !== null) {
+            $trans = null; // si existe la transacción entonces no se crea una
+        } else {
+            $trans = $con->beginTransaction(); // si no existe la transacción entonces se crea una
+        }
+        $param_sql = "ppro_estado_logico";
+        $bsol_sql = "1";
+
+        $param_sql .= ", ppro_estado";
+        $bsol_sql .= ", 1";
+        if (isset($ppro_anio)) {
+            $param_sql .= ", ppro_anio";
+            $bsol_sql .= ", :ppro_anio";
+        }
+
+        if (isset($ppro_mes)) {
+            $param_sql .= ", ppro_mes";
+            $bsol_sql .= ", :ppro_mes";
+        }
+
+        if (isset($ppro_codigo)) {
+            $param_sql .= ", ppro_codigo";
+            $bsol_sql .= ", :ppro_codigo";
+        }
+
+        if (isset($uaca_id)) {
+            $param_sql .= ", uaca_id";
+            $bsol_sql .= ", :uaca_id";
+        }
+
+        if (isset($mod_id)) {
+            $param_sql .= ", mod_id";
+            $bsol_sql .= ", :mod_id";
+        }
+        if (isset($eaca_id)) {
+            $param_sql .= ", eaca_id";
+            $bsol_sql .= ", :eaca_id";
+        }
+        if (isset($ppro_num_paralelo)) {
+            $param_sql .= ", ppro_num_paralelo";
+            $bsol_sql .= ", :ppro_num_paralelo";
+        }
+        if (isset($ppro_cupo)) {
+            $param_sql .= ", ppro_cupo";
+            $bsol_sql .= ", :ppro_cupo";
+        }
+        if (isset($ppro_usuario_ingresa)) {
+            $param_sql .= ", ppro_usuario_ingresa";
+            $bsol_sql .= ", :ppro_usuario_ingresa";
+        }
+        if (isset($ppro_fecha_creacion)) {
+            $param_sql .= ", ppro_fecha_creacion";
+            $bsol_sql .= ", :ppro_fecha_creacion";
+        }
+
+        try {
+            $sql = "INSERT INTO " . $con->dbname . ".promocion_programa ($param_sql) VALUES($bsol_sql)";
+            $comando = $con->createCommand($sql);
+
+            if (isset($ppro_anio))
+                $comando->bindParam(':ppro_anio', $ppro_anio, \PDO::PARAM_INT);
+
+            if (isset($ppro_mes))
+                $comando->bindParam(':ppro_mes', $ppro_mes, \PDO::PARAM_INT);
+
+            if (isset($ppro_codigo))
+                $comando->bindParam(':ppro_codigo', $ppro_codigo, \PDO::PARAM_STR);
+
+            if (isset($uaca_id))
+                $comando->bindParam(':uaca_id', $uaca_id, \PDO::PARAM_INT);
+
+            if (isset($mod_id))
+                $comando->bindParam(':mod_id', $mod_id, \PDO::PARAM_INT);
+
+            if (isset($uaca_id))
+                $comando->bindParam(':uaca_id', $uaca_id, \PDO::PARAM_INT);
+
+            if (isset($eaca_id))
+                $comando->bindParam(':eaca_id', $eaca_id, \PDO::PARAM_INT);
+
+            if (isset($ppro_num_paralelo))
+                $comando->bindParam(':ppro_num_paralelo', $ppro_num_paralelo, \PDO::PARAM_INT);
+
+            if (isset($ppro_cupo))
+                $comando->bindParam(':ppro_cupo', $ppro_cupo, \PDO::PARAM_INT);
+
+            if (isset($ppro_usuario_ingresa))
+                $comando->bindParam(':ppro_usuario_ingresa', $ppro_usuario_ingresa, \PDO::PARAM_INT);
+
+            if (isset($ppro_fecha_creacion))
+                $comando->bindParam(':ppro_fecha_creacion', $ppro_fecha_creacion, \PDO::PARAM_STR);
+
+            $result = $comando->execute();
+            if ($trans !== null)
+                $trans->commit();
+            return $con->getLastInsertID($con->dbname . '.promocion_programa');
+        } catch (Exception $ex) {
+            if ($trans !== null)
+                $trans->rollback();
+            return FALSE;
+        }
+    }
+
+    /**
+     * Function guardar paralelo
+     * @author  Giovanni Vergara <analistadesarrollo02@uteg.edu.ec>
+     * @param   
+     * @return  $resultData (Retornar el código de paralelo).
+     */
+    public function insertarParalelo($ppro_id, $pppr_cupo, $pppr_cupo_actual, $pppr_usuario_ingresa, $pppr_fecha_creacion) {
+
+        $con = \Yii::$app->db_academico;
+        $trans = $con->getTransaction(); // se obtiene la transacción actual
+        if ($trans !== null) {
+            $trans = null; // si existe la transacción entonces no se crea una
+        } else {
+            $trans = $con->beginTransaction(); // si no existe la transacción entonces se crea una
+        }
+        $param_sql = "pppr_estado_logico";
+        $bsol_sql = "1";
+
+        $param_sql .= ", pppr_estado";
+        $bsol_sql .= ", 1";
+        if (isset($ppro_id)) {
+            $param_sql .= ", ppro_id";
+            $bsol_sql .= ", :ppro_id";
+        }
+        if (isset($pppr_cupo)) {
+            $param_sql .= ", pppr_cupo";
+            $bsol_sql .= ", :pppr_cupo";
+        }
+        if (isset($pppr_cupo_actual)) {
+            $param_sql .= ", pppr_cupo_actual";
+            $bsol_sql .= ", :pppr_cupo_actual";
+        }
+        if (isset($pppr_usuario_ingresa)) {
+            $param_sql .= ", pppr_usuario_ingresa";
+            $bsol_sql .= ", :pppr_usuario_ingresa";
+        }
+        if (isset($pppr_fecha_creacion)) {
+            $param_sql .= ", pppr_fecha_creacion";
+            $bsol_sql .= ", :pppr_fecha_creacion";
+        }
+
+        try {
+            $sql = "INSERT INTO " . $con->dbname . ".paralelo_promocion_programa ($param_sql) VALUES($bsol_sql)";
+            $comando = $con->createCommand($sql);
+
+            if (isset($ppro_id))
+                $comando->bindParam(':ppro_id', $ppro_id, \PDO::PARAM_INT);
+
+            if (isset($pppr_cupo))
+                $comando->bindParam(':pppr_cupo', $pppr_cupo, \PDO::PARAM_INT);
+
+            if (isset($pppr_cupo_actual))
+                $comando->bindParam(':pppr_cupo_actual', $pppr_cupo_actual, \PDO::PARAM_INT);
+
+            if (isset($pppr_usuario_ingresa))
+                $comando->bindParam(':pppr_usuario_ingresa', $pppr_usuario_ingresa, \PDO::PARAM_INT);
+
+            if (isset($pppr_fecha_creacion))
+                $comando->bindParam(':pppr_fecha_creacion', $pppr_fecha_creacion, \PDO::PARAM_STR);
+
+            $result = $comando->execute();
+            if ($trans !== null)
+                $trans->commit();
+            return $con->getLastInsertID($con->dbname . '.paralelo_promocion_programa');
+        } catch (Exception $ex) {
+            if ($trans !== null)
+                $trans->rollback();
+            return FALSE;
+        }
     }
 
 }
