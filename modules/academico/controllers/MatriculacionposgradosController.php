@@ -18,7 +18,6 @@ use app\modules\academico\Module as academico;
 use app\modules\financiero\Module as financiero;
 use app\modules\admision\Module as admision;
 
-
 academico::registerTranslations();
 admision::registerTranslations();
 financiero::registerTranslations();
@@ -33,10 +32,10 @@ class MatriculacionposgradosController extends \app\components\CController {
         $modcanal = new Oportunidad();
         $data = Yii::$app->request->get();
         if ($data['PBgetFilter']) {
-            $arrSearch["search"] = $data['search'];           
+            $arrSearch["search"] = $data['search'];
             $arrSearch["unidad"] = $data['unidad'];
             $arrSearch["modalidad"] = $data['modalidad'];
-            $arrSearch["programa"] = $data['programa'];         
+            $arrSearch["programa"] = $data['programa'];
             $mod_promocion = PromocionPrograma::getPromocion($arrSearch);
             return $this->renderPartial('index-grid', [
                         "model" => $mod_promocion,
@@ -72,31 +71,31 @@ class MatriculacionposgradosController extends \app\components\CController {
                     'arr_programa1' => ArrayHelper::map(array_merge([["id" => "0", "name" => Yii::t("formulario", "Grid")]], $arr_programa1), "id", "name"),
         ]);
     }
-    
+
     public function actionNew() {
-        $sins_id = base64_decode($_GET['sids']);        
+        $sins_id = base64_decode($_GET['sids']);
         $mod_solins = new SolicitudInscripcion();
         $mod_promocion = new PromocionPrograma();
         $mod_paralelo = new ParaleloPromocionPrograma();
-               
+
         if (Yii::$app->request->isAjax) {
             $data = Yii::$app->request->post();
-            if (isset($data["getparalelos"])) {                                               
+            if (isset($data["getparalelos"])) {
                 $resp_Paralelos = $mod_paralelo->consultarParalelosxPrograma($data["promocion_id"]);
-                $message = array("paralelos" => $resp_Paralelos);               
-                return Utilities::ajaxResponse('OK', 'alert', Yii::t('jslang', 'Success'), 'false', $message);               
-            }           
-        }               
+                $message = array("paralelos" => $resp_Paralelos);
+                return Utilities::ajaxResponse('OK', 'alert', Yii::t('jslang', 'Success'), 'false', $message);
+            }
+        }
         $personaData = $mod_solins->consultarInteresadoPorSol_id($sins_id);
         $resp_programas = $mod_promocion->consultarPromocionxPrograma($personaData["eaca_id"]);
         $arr_Paralelos = $mod_paralelo->consultarParalelosxPrograma(0);
         return $this->render('new', [
-                    'personalData' => $personaData,            
-                    'arr_promocion' => ArrayHelper::map(array_merge([["id" => "0", "name" => "Seleccionar"]],$resp_programas),"id","name"), 
-                    'arr_paralelo' => ArrayHelper::map(array_merge(["id" => "0", "name" => "Seleccionar"],$arr_Paralelos),"id","name"), 
+                    'personalData' => $personaData,
+                    'arr_promocion' => ArrayHelper::map(array_merge([["id" => "0", "name" => "Seleccionar"]], $resp_programas), "id", "name"),
+                    'arr_paralelo' => ArrayHelper::map(array_merge(["id" => "0", "name" => "Seleccionar"], $arr_Paralelos), "id", "name"),
         ]);
     }
-    
+
     public function actionExpexcel() {
         ini_set('memory_limit', '256M');
         $content_type = Utilities::mimeContentType("xls");
@@ -112,18 +111,18 @@ class MatriculacionposgradosController extends \app\components\CController {
             academico::t("Academico", "Aca. Uni."),
             academico::t("Academico", "Modality"),
             Yii::t("formulario", "Program"),
-            academico::t("Academico", "Parallel")           
+            academico::t("Academico", "Parallel")
         );
         $data = Yii::$app->request->get();
         $arrSearch = array();
-        if (count($data) > 0) {            
+        if (count($data) > 0) {
             $arrSearch["search"] = $data['search'];
             $arrSearch["unidad"] = $data['unidad'];
             $arrSearch["modalidad"] = $data['modalidad'];
-            $arrSearch["programa"] = $data['programa'];           
+            $arrSearch["programa"] = $data['programa'];
         }
         $arrData = array();
-         $promocion = new PromocionPrograma();
+        $promocion = new PromocionPrograma();
         if (count($arrSearch) > 0) {
             $arrData = $promocion->getPromocion($arrSearch, true);
         } else {
@@ -145,7 +144,7 @@ class MatriculacionposgradosController extends \app\components\CController {
             academico::t("Academico", "Aca. Uni."),
             academico::t("Academico", "Modality"),
             Yii::t("formulario", "Program"),
-            academico::t("Academico", "Parallel"),            
+            academico::t("Academico", "Parallel"),
         );
         $data = Yii::$app->request->get();
         $arrSearch = array();
@@ -153,11 +152,11 @@ class MatriculacionposgradosController extends \app\components\CController {
             $arrSearch["search"] = $data['search'];
             $arrSearch["unidad"] = $data['unidad'];
             $arrSearch["modalidad"] = $data['modalidad'];
-            $arrSearch["programa"] = $data['programa'];         
+            $arrSearch["programa"] = $data['programa'];
         }
         $arrData = array();
         $promocion = new PromocionPrograma();
-        
+
         if (count($arrSearch) > 0) {
             $arrData = $promocion->getPromocion($arrSearch, true);
         } else {
@@ -171,6 +170,41 @@ class MatriculacionposgradosController extends \app\components\CController {
                 ])
         );
         $report->mpdf->Output('Reporte_' . date("Ymdhis") . ".pdf", ExportFile::OUTPUT_TO_DOWNLOAD);
+    }
+
+    public function actionNewpromocion() {
+        $mod_programa = new EstudioAcademico();
+        $mod_modalidad = new Modalidad();
+        $mod_unidad = new UnidadAcademica();
+        $modcanal = new Oportunidad();
+        $data = Yii::$app->request->get();
+        if (Yii::$app->request->isAjax) {
+            $data = Yii::$app->request->post();
+            if (isset($data["getmodalidad"])) {
+                $modalidad = $mod_modalidad->consultarModalidad($data["uni_id"], 1);
+                $message = array("modalidad" => $modalidad);
+                return Utilities::ajaxResponse('OK', 'alert', Yii::t('jslang', 'Success'), 'false', $message);
+            }
+            if (isset($data["getprograma"])) {
+                $programa = $modcanal->consultarCarreraModalidad($data["unidada"], $data["moda_id"]);
+                $message = array("programa" => $programa);
+                return Utilities::ajaxResponse('OK', 'alert', Yii::t('jslang', 'Success'), 'false', $message);
+            }
+        }
+        $arr_unidad = $mod_unidad->consultarUnidadAcademicasEmpresa(1);
+        $arr_modalidad = $mod_modalidad->consultarModalidad($arr_unidad[1]["id"], 1);
+        $arr_programa1 = $modcanal->consultarCarreraModalidad($arr_unidad[1]["id"], $arr_modalidad[0]["id"]);
+        $arrProgramas = ArrayHelper::map(array_merge([["id" => "0", "value" => Yii::t("formulario", "Grid")]], $mod_programa->consultarCarrera()), "id", "value");
+        return $this->render('newPromocion', [
+                    "mes" => array("0" => Yii::t("formulario", "Select"), "1" => Yii::t("academico", "January"), "2" => Yii::t("academico", "Febrary"), "3" => Yii::t("academico", "March"),
+                        "4" => Yii::t("academico", "April"), "5" => Yii::t("academico", "May"), "6" => Yii::t("academico", "June"),
+                        "7" => Yii::t("academico", "July"), "8" => Yii::t("academico", "August"), "9" => Yii::t("academico", "September"),
+                        "10" => Yii::t("academico", "October"), "11" => Yii::t("academico", "November"), "12" => Yii::t("academico", "December")),
+                    "arrProgramas" => $arrProgramas,
+                    "arr_unidad" => ArrayHelper::map(array_merge([["id" => "0", "name" => Yii::t("formulario", "Select")]], $arr_unidad), "id", "name"),
+                    "arr_modalidad" => ArrayHelper::map(array_merge([["id" => "0", "name" => Yii::t("formulario", "Select")]], $arr_modalidad), "id", "name"),
+                    "arr_programa1" => ArrayHelper::map(array_merge([["id" => "0", "name" => Yii::t("formulario", "Select")]], $arr_programa1), "id", "name"),
+        ]);
     }
 
 }
