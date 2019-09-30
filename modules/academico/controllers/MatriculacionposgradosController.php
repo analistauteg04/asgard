@@ -218,7 +218,7 @@ class MatriculacionposgradosController extends \app\components\CController {
             $programa = $data["programa"];
             $paralelo = $data["paralelo"];
             $cupo = $data["cupo"];
-            $codigo = 'MA' . $anio . $mes; //AQUI TOMAR LAS 2 PRIMERAS LETRA DEL NOMBRE DEL PROGRAMA EN VEZ DE MA
+            $codigo = strtoupper(substr($data["nombreprograma"], 0, 3)) . $anio . $mes; 
             $con = \Yii::$app->db_academico;
             $transaction = $con->beginTransaction();
             try {

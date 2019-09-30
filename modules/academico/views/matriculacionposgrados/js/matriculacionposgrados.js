@@ -146,6 +146,8 @@ function grabarPromocion() {
     arrParams.programa = $('#cmb_programa').val();   
     arrParams.paralelo = $('#txt_paralelo').val();
     arrParams.cupo = $('#txt_cupo').val();
+    arrParams.nombreprograma = $("#cmb_programa option:selected").text();
+    //alert( 'asas' +  $("#cmb_programa option:selected").text());
     if (!validateForm()) {
         requestHttpAjax(link, arrParams, function (response) {
             showAlert(response.status, response.label, response.message);
