@@ -24,6 +24,7 @@ return [
     "Contract" => "Contrato",
     "Create period income method" => "Crear Período Método Ingreso",  
     "Create Promotion Program" => "Crear Promoción Programa",
+    "Data Promotion Program" => "Datos Promoción Programa",
     "Day" => "Día",
     "Dial type" => "Tipo marcación",
     "End IP" => "IP Salida",

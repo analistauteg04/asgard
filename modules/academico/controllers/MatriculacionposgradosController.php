@@ -218,7 +218,7 @@ class MatriculacionposgradosController extends \app\components\CController {
             $programa = $data["programa"];
             $paralelo = $data["paralelo"];
             $cupo = $data["cupo"];
-            $codigo = strtoupper(substr($data["nombreprograma"], 0, 3)) . $anio . $mes; 
+            $codigo = strtoupper(substr($data["nombreprograma"], 0, 3)) . $anio . $mes;
             $con = \Yii::$app->db_academico;
             $transaction = $con->beginTransaction();
             try {
@@ -269,6 +269,47 @@ class MatriculacionposgradosController extends \app\components\CController {
             }
             return;
         }
+    }
+
+    public function actionViewpromocion() {
+        $mod_programa = new EstudioAcademico();
+        $mod_modalidad = new Modalidad();
+        $mod_unidad = new UnidadAcademica();
+        $modcanal = new Oportunidad();
+        $promocion_id = base64_decode($_GET["ids"]);
+        $mod_programa = new PromocionPrograma();
+        $data = Yii::$app->request->get();
+        if (Yii::$app->request->isAjax) {
+            $data = Yii::$app->request->post();
+            if (isset($data["getmodalidad"])) {
+                $modalidad = $mod_modalidad->consultarModalidad($data["uni_id"], 1);
+                $message = array("modalidad" => $modalidad);
+                return Utilities::ajaxResponse('OK', 'alert', Yii::t('jslang', 'Success'), 'false', $message);
+            }
+            if (isset($data["getprograma"])) {
+                $programa = $modcanal->consultarCarreraModalidad($data["unidada"], $data["moda_id"]);
+                $message = array("programa" => $programa);
+                return Utilities::ajaxResponse('OK', 'alert', Yii::t('jslang', 'Success'), 'false', $message);
+            }
+        }
+        // consultar datos de la promocion programa enviando promicion_id de parametro ESTO TOCA HACER
+        // $resp_consPromocion = $mod_Matriculacion->consultarPromocionxid($promocion_id); //CREAR LA FUNCION
+        // tomar parametros consulta especifica enviar a la vista y mostrar  
+        $arr_unidad = $mod_unidad->consultarUnidadAcademicasEmpresa(1);
+        $arr_modalidad = $mod_modalidad->consultarModalidad($arr_unidad[1]["id"], 1);
+        $arr_programa1 = $modcanal->consultarCarreraModalidad($arr_unidad[1]["id"], $arr_modalidad[0]["id"]);
+        $arrProgramas = ArrayHelper::map(array_merge([["id" => "0", "value" => Yii::t("formulario", "Grid")]], $mod_programa->consultarCarrera()), "id", "value");
+
+        return $this->render('viewPromocion', [                       
+                         "mes" => array("0" => Yii::t("formulario", "Select"), "1" => Yii::t("academico", "January"), "2" => Yii::t("academico", "Febrary"), "3" => Yii::t("academico", "March"),
+                          "4" => Yii::t("academico", "April"), "5" => Yii::t("academico", "May"), "6" => Yii::t("academico", "June"),
+                          "7" => Yii::t("academico", "July"), "8" => Yii::t("academico", "August"), "9" => Yii::t("academico", "September"),
+                          "10" => Yii::t("academico", "October"), "11" => Yii::t("academico", "November"), "12" => Yii::t("academico", "December")),
+                          "arrProgramas" => $arrProgramas,
+                          "arr_unidad" => ArrayHelper::map(array_merge([["id" => "0", "name" => Yii::t("formulario", "Select")]], $arr_unidad), "id", "name"),
+                          "arr_modalidad" => ArrayHelper::map(array_merge([["id" => "0", "name" => Yii::t("formulario", "Select")]], $arr_modalidad), "id", "name"),
+                          "arr_programa1" => ArrayHelper::map(array_merge([["id" => "0", "name" => Yii::t("formulario", "Select")]], $arr_programa1), "id", "name"), 
+        ]);
     }
 
 }

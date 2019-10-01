@@ -146,10 +146,14 @@ class PromocionPrograma extends \yii\db\ActiveRecord {
             }
             if ($arrFiltro['programa'] != "" && $arrFiltro['programa'] > 0) {
                 $str_search .= "ppr.eaca_id = :programa AND ";
-            }
+            }            
         }
-        $sql = "SELECT 
-                    ppr.ppro_codigo as codigo,
+        if ($onlyData == false) {
+                $columnsAdd = "ppr.ppro_id as id, ";
+            }
+        $sql =  " SELECT "; 
+        $sql .=   $columnsAdd;
+        $sql .= " ppr.ppro_codigo as codigo,
                     ppr.ppro_anio as anio,
                     CASE ppro_mes
                         WHEN  1 THEN 'Enero'

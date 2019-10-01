@@ -5,7 +5,6 @@ use yii\helpers\Url;
 use app\widgets\PbGridView\PbGridView;
 use app\modules\academico\Module as academico;
 use app\modules\admision\Module as admision;
-
 admision::registerTranslations();
 academico::registerTranslations();
 ?>
@@ -67,10 +66,10 @@ academico::registerTranslations();
                 'template' => '{view} {paralelo}', //        
                 'buttons' => [
                     'view' => function ($url, $model) {
-                        return Html::a('<span class="glyphicon glyphicon-list-alt"></span>', Url::to(['/academico/matriculacionposgrados/index', 'ids' => base64_encode($model['sins_id'])]), ["data-toggle" => "tooltip", "title" => "Ver Programación", "data-pjax" => 0]);
+                        return Html::a('<span class="glyphicon glyphicon-list-alt"></span>', Url::to(['/academico/matriculacionposgrados/viewpromocion', 'ids' => base64_encode($model['id'])]), ["data-toggle" => "tooltip", "title" => "Ver Programación", "data-pjax" => 0]);
                     },
                     'paralelo' => function ($url, $model) {
-                        return Html::a('<span class="glyphicon glyphicon-list"></span>', Url::to(['/academico/matriculacionposgrados/index', 'ids' => base64_encode($model['sins_id'])]), ["data-toggle" => "tooltip", "title" => "Ver Paralelos", "data-pjax" => 0]);
+                        return Html::a('<span class="glyphicon glyphicon-list"></span>', Url::to(['/academico/matriculacionposgrados/index', 'ids' => base64_encode($model['id'])]), ["data-toggle" => "tooltip", "title" => "Ver Paralelos", "data-pjax" => 0]);
                     },
                 ],
             ],
