@@ -25,7 +25,7 @@ aspirante::registerTranslations();
             <div class="form-group">
                 <label for="txt_anio" class="col-sm-4 control-label" id="lbl_anio"><?= academico::t("Academico", "Year") ?><span class="text-danger">*</span></label>
                 <div class="col-sm-8">
-                    <input type="text" class="form-control PBvalidation" value="" id="txt_anio" data-type="graduacion" data-keydown="true" disabled="tue" placeholder="<?= Yii::t("academico", "Year") ?>">
+                    <input type="text" class="form-control PBvalidation" value="<?= $data_promo['ppro_anio'] ?>" id="txt_anio" data-type="graduacion" data-keydown="true" disabled="tue" placeholder="<?= Yii::t("academico", "Year") ?>">
                 </div>
             </div>
         </div>  
@@ -33,7 +33,7 @@ aspirante::registerTranslations();
             <div class="form-group">
                 <label for="txt_mes" class="col-sm-4 control-label" id="lbl_mes"><?= academico::t("Academico", "Month") ?><span class="text-danger">*</span></label>
                 <div class="col-sm-8">
-                    <?= Html::dropDownList("cmb_mes", 0, $mes, ["class" => "form-control", "id" => "cmb_mes", "disabled" => "tue"]) ?>
+                    <?= Html::dropDownList("cmb_mes", $data_promo['ppro_mes'], $mes, ["class" => "form-control", "id" => "cmb_mes", "disabled" => "tue"]) ?>
                 </div>
             </div>
         </div>  
@@ -43,7 +43,7 @@ aspirante::registerTranslations();
             <div class="form-group">
                 <label for="txt_unidad" class="col-sm-4 control-label" id="lbl_unidad"><?= academico::t("Academico", "Academic unit") ?></label>
                 <div class="col-sm-8">
-                    <?= Html::dropDownList("cmb_unidad", 2, $arr_unidad, ["class" => "form-control", "id" => "cmb_unidad", "disabled" => "true"]) ?>
+                    <?= Html::dropDownList("cmb_unidad", $data_promo['uaca_id'], $arr_unidad, ["class" => "form-control", "id" => "cmb_unidad", "disabled" => "true"]) ?>
                 </div>
             </div>
         </div>  
@@ -51,7 +51,7 @@ aspirante::registerTranslations();
             <div class="form-group">
                 <label for="txt_modalidad" class="col-sm-4 control-label" id="lbl_modalidad"><?= academico::t("Academico", "Modality") ?><span class="text-danger">*</span></label>
                 <div class="col-sm-8">
-                    <?= Html::dropDownList("cmb_modalidad", 0, $arr_modalidad, ["class" => "form-control", "id" => "cmb_modalidad", "disabled" => "tue"]) ?>
+                    <?= Html::dropDownList("cmb_modalidad", $data_promo['mod_id'], $arr_modalidad, ["class" => "form-control", "id" => "cmb_modalidad", "disabled" => "tue"]) ?>
                 </div>
             </div>
         </div>  
@@ -61,7 +61,7 @@ aspirante::registerTranslations();
             <div class="form-group">
                 <label for="txt_programa" class="col-sm-4 control-label" id="lbl_programa"><?= Yii::t("formulario", "Program") ?><span class="text-danger">*</span></label>
                 <div class="col-sm-8">
-                    <?= Html::dropDownList("cmb_programa", 0, $arr_programa1, ["class" => "form-control", "id" => "cmb_programa", "disabled" => "tue"]) ?>
+                    <?= Html::dropDownList("cmb_programa", $data_promo['eaca_id'], $arrProgramas, ["class" => "form-control", "id" => "cmb_programa", "disabled" => "tue"]) ?>
                 </div>
             </div>
         </div> 
@@ -69,7 +69,7 @@ aspirante::registerTranslations();
             <div class="form-group">
                 <label for="txt_paralelo" class="col-sm-4 control-label" id="lbl_paralelo"><?= academico::t("Academico", "Parallel") ?><span class="text-danger">*</span></label>
                 <div class="col-sm-8">
-                    <input type="text" class="form-control PBvalidation" value="" id="txt_paralelo" data-type="number" data-keydown="true" disabled = "true" placeholder="<?= Yii::t("academico", "Parallel") ?>">
+                    <input type="text" class="form-control PBvalidation" value="<?= $data_promo['ppro_num_paralelo'] ?>" id="txt_paralelo" data-type="number" data-keydown="true" disabled = "true" placeholder="<?= Yii::t("academico", "Parallel") ?>">
                 </div>
             </div>
         </div>
@@ -79,7 +79,7 @@ aspirante::registerTranslations();
             <div class="form-group">
                 <label for="txt_cupo" class="col-sm-4 control-label" id="lbl_cupo"><?= academico::t("Academico", "Quota") ?><span class="text-danger">*</span></label>
                 <div class="col-sm-8">
-                    <input type="text" class="form-control PBvalidation" value="" id="txt_cupo" data-type="number" data-keydown="true" disabled = "true" placeholder="<?= Yii::t("academico", "Quota") ?>">
+                    <input type="text" class="form-control PBvalidation" value="<?= $data_promo['ppro_cupo'] ?>" id="txt_cupo" data-type="number" data-keydown="true" disabled = "true" placeholder="<?= Yii::t("academico", "Quota") ?>">
                 </div>
             </div>
         </div>

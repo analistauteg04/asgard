@@ -277,7 +277,7 @@ class MatriculacionposgradosController extends \app\components\CController {
         $mod_unidad = new UnidadAcademica();
         $modcanal = new Oportunidad();
         $promocion_id = base64_decode($_GET["ids"]);
-        $mod_programa = new PromocionPrograma();
+        $mod_promocion = new PromocionPrograma();
         $data = Yii::$app->request->get();
         if (Yii::$app->request->isAjax) {
             $data = Yii::$app->request->post();
@@ -293,8 +293,7 @@ class MatriculacionposgradosController extends \app\components\CController {
             }
         }
         // consultar datos de la promocion programa enviando promicion_id de parametro ESTO TOCA HACER
-        // $resp_consPromocion = $mod_Matriculacion->consultarPromocionxid($promocion_id); //CREAR LA FUNCION
-        // tomar parametros consulta especifica enviar a la vista y mostrar  
+        $resp_consPromocion = $mod_promocion->consultarPromocionxid($promocion_id); 
         $arr_unidad = $mod_unidad->consultarUnidadAcademicasEmpresa(1);
         $arr_modalidad = $mod_modalidad->consultarModalidad($arr_unidad[1]["id"], 1);
         $arr_programa1 = $modcanal->consultarCarreraModalidad($arr_unidad[1]["id"], $arr_modalidad[0]["id"]);
@@ -309,6 +308,7 @@ class MatriculacionposgradosController extends \app\components\CController {
                           "arr_unidad" => ArrayHelper::map(array_merge([["id" => "0", "name" => Yii::t("formulario", "Select")]], $arr_unidad), "id", "name"),
                           "arr_modalidad" => ArrayHelper::map(array_merge([["id" => "0", "name" => Yii::t("formulario", "Select")]], $arr_modalidad), "id", "name"),
                           "arr_programa1" => ArrayHelper::map(array_merge([["id" => "0", "name" => Yii::t("formulario", "Select")]], $arr_programa1), "id", "name"), 
+                          "data_promo"=> $resp_consPromocion,
         ]);
     }
 

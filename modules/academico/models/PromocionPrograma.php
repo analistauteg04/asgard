@@ -467,5 +467,36 @@ class PromocionPrograma extends \yii\db\ActiveRecord {
             return FALSE;
         }
     }
+    
+    /**
+     * Function Consultar datos de promocion programa.
+     * @author  Giovanni Vergara <analistadesarrollo02@uteg.edu.ec>;
+     * @property       
+     * @return  
+     */
+    public function consultarPromocionxid($ppro_id) {
+        $con = \Yii::$app->db_academico;
+        $estado = 1;
+
+        $sql = "SELECT 	ppro_id,
+                        ppro_anio,
+                        ppro_mes,
+                        uaca_id,
+                        mod_id,
+                        eaca_id,
+                        ppro_num_paralelo,
+                        ppro_cupo
+                FROM " . $con->dbname . ".promocion_programa 
+                WHERE   ppro_id = :ppro_id
+                        AND ppro_estado = :estado
+                        AND ppro_estado_logico = :estado";
+
+        $comando = $con->createCommand($sql);
+        $comando->bindParam(":estado", $estado, \PDO::PARAM_STR);
+        $comando->bindParam(":ppro_id", $ppro_id, \PDO::PARAM_INT);
+        $resultData = $comando->queryOne();
+        return $resultData;
+    }
+
 
 }
