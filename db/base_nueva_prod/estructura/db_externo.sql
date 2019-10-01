@@ -25,10 +25,24 @@ create table if not exists evento (
 
 -- --------------------------------------------------------
 -- 
+-- Estructura de tabla para la tabla `ocupacion`
+-- --------------------------------------------------------
+ create table if not exists ocupacion (
+ `ocu_id` bigint(20) not null auto_increment primary key,
+ `ocu_nombre` varchar(200) not null,
+ `ocu_descripcion` varchar(200) not null,
+ `ocu_estado` varchar(1) not null,
+ `ocu_fecha_creacion` timestamp not null default current_timestamp,
+ `ocu_fecha_modificacion` timestamp null default null,
+ `ocu_estado_logico` varchar(1) not null
+ );
+
+-- --------------------------------------------------------
+-- 
 -- Estructura de tabla para la tabla `persona_externa`
 -- --------------------------------------------------------
 create table if not exists persona_externa (
- `pext_id` bigint(20) not null auto_increment primary key,
+ `pext_id` bigint(20) not null auto_increment primary key, 
  `pext_nombres` varchar(60) not null, 
  `pext_apellidos` varchar(60) not null, 
  `pext_identificacion` varchar(15) not null,
@@ -43,13 +57,15 @@ create table if not exists persona_externa (
  `pro_id` bigint(20) not null,  
  `can_id` bigint(20) not null,  
  `eve_id` bigint(20) not null,  
+ `ocu_id` bigint(20)  null, 
  `pext_estado` varchar(1) not null,
  `pext_fecha_registro` timestamp not null,
- `pext_ip_registro` varchar(50) not null,
+ `pext_ip_registro` varchar(50) null,
  `pext_fecha_creacion` timestamp not null default current_timestamp,
  `pext_fecha_modificacion` timestamp null default null,
  `pext_estado_logico` varchar(1) not null,
- foreign key (eve_id) references `evento`(eve_id)
+ foreign key (eve_id) references `evento`(eve_id),
+ foreign key (ocu_id) references `ocupacion`(ocu_id)
  );
  
 -- --------------------------------------------------------

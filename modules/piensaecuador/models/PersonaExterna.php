@@ -204,7 +204,7 @@ class PersonaExterna extends \yii\db\ActiveRecord
                     -- a.can_id as CantonId,
                     c.can_nombre as Canton,
                     -- a.eve_id as EventoId,
-                    e.eve_nombres as Evento,
+                    -- e.eve_nombres as Evento,
                     -- a.nins_id as NivelInstruccion,
                     ni.nins_nombre as NivelInstruccion,
                     '' as NivelInteresId,

@@ -49,7 +49,7 @@ piensaecuador::registerTranslations();
                 'header' => Yii::t("perfil", 'Phone'),
                 'value' => 'Telefono',
             ],
-            [
+            /*[
                 'attribute' => 'Genero',
                 'header' => Yii::t("perfil", 'Sex'),
                 'value' => function($data){
@@ -63,7 +63,7 @@ piensaecuador::registerTranslations();
                 'attribute' => 'FechaNacimiento',
                 'header' => Yii::t("perfil", 'Birth Date'),
                 'value' => 'FechaNacimiento',
-            ],
+            ],*/
             [
                 'attribute' => 'Provincia',
                 'header' => Yii::t("general", 'State'),
@@ -73,12 +73,7 @@ piensaecuador::registerTranslations();
                 'attribute' => 'Canton',
                 'header' => Yii::t("general", 'City'),
                 'value' => 'Canton',
-            ],
-            [
-                'attribute' => 'Evento',
-                'header' => piensaecuador::t("interes", 'Event'),
-                'value' => 'Evento',
-            ],
+            ],            
             [
                 'attribute' => 'NivelInstruccion',
                 'header' => piensaecuador::t("interes", 'Instruction Level'),
