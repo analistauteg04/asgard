@@ -182,7 +182,8 @@ class PromocionPrograma extends \yii\db\ActiveRecord {
                 moda.mod_estado = :estado AND
                 moda.mod_estado_logico = :estado AND                
                 ea.eaca_estado = :estado AND
-                ea.eaca_estado_logico = :estado";
+                ea.eaca_estado_logico = :estado
+                ORDER BY ppro_fecha_creacion DESC ";
 
         $comando = $con->createCommand($sql);
         $comando->bindParam(":estado", $estado, \PDO::PARAM_STR);

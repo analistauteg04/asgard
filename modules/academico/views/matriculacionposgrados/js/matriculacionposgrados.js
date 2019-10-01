@@ -138,26 +138,31 @@ function newPrograma() {
 function grabarPromocion() {
     var link = $('#txth_base').val() + "/academico/matriculacionposgrados/savepromocion";
     var arrParams = new Object();
- 
-    arrParams.anio = $('#txt_anio').val();  
+
+    arrParams.anio = $('#txt_anio').val();
     arrParams.mes = $('#cmb_mes').val();
     arrParams.unidad = $('#cmb_unidad').val();
     arrParams.modalidad = $('#cmb_modalidad').val();
-    arrParams.programa = $('#cmb_programa').val();   
+    arrParams.programa = $('#cmb_programa').val();
     arrParams.paralelo = $('#txt_paralelo').val();
     arrParams.cupo = $('#txt_cupo').val();
     arrParams.nombreprograma = $("#cmb_programa option:selected").text();
-    //alert( 'asas' +  $("#cmb_programa option:selected").text());
-    if (!validateForm()) {
-        requestHttpAjax(link, arrParams, function (response) {
-            showAlert(response.status, response.label, response.message);
-            if (!response.error) {
-                setTimeout(function () {
-                    window.location.href = $('#txth_base').val() + "/academico/matriculacionposgrados/index";
-                }, 5000);
-            }
+    if (arrParams.mes == 0 || arrParams.modalidad == 0 || arrParams.programa == 0)
+    {
+        showAlert('NO_OK', 'error', {"wtmessage": "Debe seleccionar opciones de las listas.", "title": 'Error'});
+    } else
+    {
+        if (!validateForm()) {
+            requestHttpAjax(link, arrParams, function (response) {
+                showAlert(response.status, response.label, response.message);
+                if (!response.error) {
+                    setTimeout(function () {
+                        window.location.href = $('#txth_base').val() + "/academico/matriculacionposgrados/index";
+                    }, 5000);
+                }
 
 
-        }, true);
+            }, true);
+        }
     }
 }
