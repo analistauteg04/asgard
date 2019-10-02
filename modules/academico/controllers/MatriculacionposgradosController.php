@@ -418,4 +418,16 @@ class MatriculacionposgradosController extends \app\components\CController {
         }
     }
 
+    public function actionIndexparalelo() {
+        $promocion_id = base64_decode($_GET["ids"]);
+        $mod_promocion = new PromocionPrograma();
+        $mod_paralelo = new ParaleloPromocionPrograma();
+        $resp_consPromocion = $mod_promocion->consultarPromocionxid($promocion_id);
+        $mod_paral = ParaleloPromocionPrograma::getParalelos($promocion_id);
+        return $this->render('indexParalelo', [
+            'model' => $mod_paral,
+            "data_promo" => $resp_consPromocion,
+        ]);
+    }
+
 }

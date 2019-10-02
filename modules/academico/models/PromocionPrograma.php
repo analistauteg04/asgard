@@ -478,18 +478,45 @@ class PromocionPrograma extends \yii\db\ActiveRecord {
         $con = \Yii::$app->db_academico;
         $estado = 1;
 
-        $sql = "SELECT 	ppro_id,
-                        ppro_anio,
-                        ppro_mes,
-                        uaca_id,
-                        mod_id,
-                        eaca_id,
-                        ppro_num_paralelo,
-                        ppro_cupo
-                FROM " . $con->dbname . ".promocion_programa 
-                WHERE   ppro_id = :ppro_id
-                        AND ppro_estado = :estado
-                        AND ppro_estado_logico = :estado";
+        $sql = "SELECT 	ppro.ppro_id as ppro_id,
+                        ppro.ppro_codigo as ppro_codigo,
+                        ppro.ppro_anio as ppro_anio,
+                        ppro.ppro_mes as ppro_mes,
+                        ppro.uaca_id as uaca_id,
+                        ppro.mod_id as mod_id,
+                        ppro.eaca_id as eaca_id,
+                        ppro.ppro_num_paralelo as ppro_num_paralelo,
+                        ppro.ppro_cupo as ppro_cupo,
+                        uaca.uaca_nombre as uaca_nombre,
+                        moda.mod_nombre as mod_nombre,
+                        eaca.eaca_nombre as eaca_nombre,
+                        CASE ppro_mes
+                            WHEN  1 THEN 'Enero'
+                            WHEN  2 THEN 'Febrero'
+                            WHEN  3 THEN 'Marzo'
+                            WHEN  4 THEN 'Abril'
+                            WHEN  5 THEN 'Mayo'
+                            WHEN  6 THEN 'Junio'
+                            WHEN  7 THEN 'Julio'
+                            WHEN  8 THEN 'Agosto'
+                            WHEN  9 THEN 'Septiembre'
+                            WHEN  10 THEN 'Octubre'
+                            WHEN  11 THEN 'Noviembre'
+                            WHEN  12 THEN 'Diciembre' 
+                        ELSE ' ' END as nombre_mes
+                FROM " . $con->dbname . ".promocion_programa ppro
+                    INNER JOIN " . $con->dbname . ".unidad_academica uaca ON uaca.uaca_id =  ppro.uaca_id
+                    INNER JOIN " . $con->dbname . ".modalidad moda ON moda.mod_id =  ppro.mod_id
+                    INNER JOIN " . $con->dbname . ".estudio_academico eaca ON eaca.eaca_id =  ppro.eaca_id
+                WHERE   ppro.ppro_id = :ppro_id
+                        AND ppro.ppro_estado = :estado
+                        AND ppro.ppro_estado_logico = :estado
+                        AND uaca.uaca_estado = :estado
+                        AND uaca.uaca_estado_logico = :estado        
+                        AND moda.mod_estado = :estado
+                        AND moda.mod_estado_logico = :estado        
+                        AND eaca.eaca_estado = :estado
+                        AND eaca.eaca_estado_logico = :estado";
 
         $comando = $con->createCommand($sql);
         $comando->bindParam(":estado", $estado, \PDO::PARAM_STR);

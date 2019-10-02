@@ -56,6 +56,7 @@ return [
     "Promotion" => "Promoción",
     "Quota" => "Cupo",
     "Quota Assigned" => "Cupo Asignado",
+    "Quota Available" => "Cupo Disponible",
     "Registered" => "Matriculado",
     "Registration by Homologation" => "Matriculación por Homologación",
     "Search DNI" => "Buscar DNI",

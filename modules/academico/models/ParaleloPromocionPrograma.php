@@ -1,7 +1,7 @@
 <?php
 
 namespace app\modules\academico\models;
-
+use yii\data\ArrayDataProvider;
 use Yii;
 
 /**
@@ -100,5 +100,54 @@ class ParaleloPromocionPrograma extends \yii\db\ActiveRecord
         $comando->bindParam(":promo_id", $promo_id, \PDO::PARAM_INT);
         $resultData = $comando->queryAll();
         return $resultData;
+    }
+    
+        /**
+     * Function getPromocion
+     * @author  Giovanni Vergara <analistadesarrollo02@uteg.edu.ec>
+     * @param   
+     * @return  $resultData (información del aspirante)
+     */
+    public static function getParalelos($ppro_id) {
+        $con = \Yii::$app->db;
+        $con1 = \Yii::$app->db_academico;
+        $estado = 1;        
+
+        $sql = " SELECT        
+                    ppp.pppr_id as pppr_id,
+                    ppp.ppro_id as ppro_id,                    
+                    ppp.pppr_cupo as pppr_cupo,
+                    ppp.pppr_cupo_actual as pppr_cupo_actual,
+                    ppp.pppr_fecha_creacion as pppr_fecha_creacion
+                    
+                FROM " . $con1->dbname . ".paralelo_promocion_programa ppp                   
+                WHERE 
+                ppp.ppro_id = :ppro_id AND
+                ppp.pppr_estado = :estado AND
+                ppp.pppr_estado_logico = :estado 
+                ORDER BY ppp.pppr_fecha_creacion DESC ";
+
+        $comando = $con->createCommand($sql);
+        $comando->bindParam(":estado", $estado, \PDO::PARAM_STR);
+        $comando->bindParam(":ppro_id", $ppro_id, \PDO::PARAM_INT);
+        $resultData = $comando->queryAll();
+        $dataProvider = new ArrayDataProvider([
+            'key' => 'id',
+            'allModels' => $resultData,
+            'pagination' => [
+                'pageSize' => Yii::$app->params["pageSize"],
+            ],
+            'sort' => [
+                'attributes' => [
+                    'ppr.ppro_codigo',
+                    ' ppr.ppro_anio',
+                ],
+            ],
+        ]);
+        if ($onlyData) {
+            return $resultData;
+        } else {
+            return $dataProvider;
+        }
     }
 }
