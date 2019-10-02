@@ -35,7 +35,7 @@ class RegistroController extends \app\components\CController {
         header("Content-Type: $content_type");
         header("Content-Disposition: attachment;filename=" . $nombarch);
         header('Cache-Control: max-age=0');
-        $colPosition = array("C", "D", "E", "F", "G", "H", "I", "J", "K", "L", "M", "N", "O", "P", "Q", "R");
+        $colPosition = array("C", "D", "E", "F", "G", "H", "I", "J", "K", "L", "M", "N", "O", "P", "Q", "R","S");
         $arrHeader = array(
             'Id',
             Yii::t("formulario", "Names"),
@@ -51,6 +51,7 @@ class RegistroController extends \app\components\CController {
             //piensaecuador::t("interes", 'Event'),
             piensaecuador::t("interes", 'Instruction Level'),
             piensaecuador::t("interes", 'Activity'),
+            piensaecuador::t("interes", 'Occupation'),
             piensaecuador::t("interes",'Registry Date'),
             Yii::t("general", "Status")
         );
@@ -106,6 +107,7 @@ class RegistroController extends \app\components\CController {
             piensaecuador::t("interes", 'Event'),
             piensaecuador::t("interes", 'Instruction Level'),
             piensaecuador::t("interes", 'Activity'),
+            piensaecuador::t("interes", 'Occupation'),
             piensaecuador::t("interes",'Registry Date'),
             Yii::t("general", "Status")
         );

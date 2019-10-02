@@ -210,6 +210,7 @@ class PersonaExterna extends \yii\db\ActiveRecord
                     -- a.nins_id as NivelInstruccion,
                     ni.nins_nombre as NivelInstruccion,
                     '' as NivelInteresId,
+                    o.ocu_nombre as Ocupacion,
                     a.pext_fecha_registro as FechaRegistro,
                     IF(a.pext_estado=1,'".
                         Yii::t("general", "Enabled")."','".
@@ -220,6 +221,7 @@ class PersonaExterna extends \yii\db\ActiveRecord
                     INNER JOIN " . $con2->dbname . ".canton AS c ON c.can_id = a.can_id
                     INNER JOIN " . $con->dbname . ".evento AS e ON e.eve_id = a.eve_id
                     INNER JOIN " . $con3->dbname . ".nivel_instruccion AS ni ON ni.nins_id = a.nins_id
+                    INNER JOIN " . $con->dbname . ".ocupacion AS o ON o.ocu_id = a.ocu_id
                 WHERE 
                     $str_search
                     a.pext_estado=1 AND
