@@ -104,7 +104,7 @@ class RegistroController extends \app\components\CController {
             Yii::t("perfil", 'Birth Date'),
             Yii::t("general", 'State'),
             Yii::t("general", 'City'),
-            piensaecuador::t("interes", 'Event'),
+            //piensaecuador::t("interes", 'Event'),
             piensaecuador::t("interes", 'Instruction Level'),
             piensaecuador::t("interes", 'Activity'),
             piensaecuador::t("interes", 'Occupation'),
