@@ -168,8 +168,8 @@ function grabarPromocion() {
             }, true);
         }
     }
-    
-    
+
+
 }
 
 function grabarPromocion() {
@@ -202,21 +202,19 @@ function grabarPromocion() {
             }, true);
         }
     }
-    
-    
+
+
 }
 // PARA MODIFICAR CONTINUAR CON ESTO
 function modificarPromocion() {
-    alert ('AQUI SE LLAMA A UPDATE... ');
-/*  var link = $('#txth_base').val() + "/academico/matriculacionposgrados/updatepromocion";
+    var link = $('#txth_base').val() + "/academico/matriculacionposgrados/updatepromocion";
     var arrParams = new Object();
+    arrParams.progid = $('#txth_progid').val();
     arrParams.anio = $('#txt_anio').val();
     arrParams.mes = $('#cmb_mes').val();
     arrParams.unidad = $('#cmb_unidad').val();
     arrParams.modalidad = $('#cmb_modalidad').val();
-    arrParams.programa = $('#cmb_programa').val();
-    arrParams.paralelo = $('#txt_paralelo').val();
-    arrParams.cupo = $('#txt_cupo').val();
+    arrParams.programa = $('#cmb_programa').val();    
     arrParams.nombreprograma = $("#cmb_programa option:selected").text();
     if (arrParams.mes == 0 || arrParams.modalidad == 0 || arrParams.programa == 0)
     {
@@ -235,5 +233,5 @@ function modificarPromocion() {
 
             }, true);
         }
-    } */ 
+    }
 }

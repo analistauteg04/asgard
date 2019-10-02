@@ -13,7 +13,7 @@ academico::registerTranslations();
 financiero::registerTranslations();
 aspirante::registerTranslations();
 ?>
-
+<?= Html::hiddenInput('txth_progid', base64_decode($_GET["ids"]), ['id' => 'txth_progid']); ?>
 <div class="col-md-12">    
     <h3><span id="lbl_titulo"><?= academico::t("Academico", "Data Promotion Program") ?></span><br/>    
 </div>
@@ -34,7 +34,7 @@ aspirante::registerTranslations();
             <div class="form-group">
                 <label for="txt_mes" class="col-sm-4 control-label" id="lbl_mes"><?= academico::t("Academico", "Month") ?><span class="text-danger">*</span></label>
                 <div class="col-sm-8">
-<?= Html::dropDownList("cmb_mes", $data_promo['ppro_mes'], $mes, ["class" => "form-control", "id" => "cmb_mes"]) ?>
+                    <?= Html::dropDownList("cmb_mes", $data_promo['ppro_mes'], $mes, ["class" => "form-control", "id" => "cmb_mes"]) ?>
                 </div>
             </div>
         </div>  
@@ -44,7 +44,7 @@ aspirante::registerTranslations();
             <div class="form-group">
                 <label for="txt_unidad" class="col-sm-4 control-label" id="lbl_unidad"><?= academico::t("Academico", "Academic unit") ?></label>
                 <div class="col-sm-8">
-<?= Html::dropDownList("cmb_unidad", $data_promo['uaca_id'], $arr_unidad, ["class" => "form-control", "id" => "cmb_unidad", "disabled" => "tue"]) ?>
+                    <?= Html::dropDownList("cmb_unidad", $data_promo['uaca_id'], $arr_unidad, ["class" => "form-control", "id" => "cmb_unidad", "disabled" => "tue"]) ?>
                 </div>
             </div>
         </div>  
@@ -52,7 +52,7 @@ aspirante::registerTranslations();
             <div class="form-group">
                 <label for="txt_modalidad" class="col-sm-4 control-label" id="lbl_modalidad"><?= academico::t("Academico", "Modality") ?><span class="text-danger">*</span></label>
                 <div class="col-sm-8">
-<?= Html::dropDownList("cmb_modalidad", $data_promo['mod_id'], $arr_modalidad, ["class" => "form-control", "id" => "cmb_modalidad"]) ?>
+                    <?= Html::dropDownList("cmb_modalidad", $data_promo['mod_id'], $arr_modalidad, ["class" => "form-control", "id" => "cmb_modalidad"]) ?>
                 </div>
             </div>
         </div>  
@@ -62,7 +62,7 @@ aspirante::registerTranslations();
             <div class="form-group">
                 <label for="txt_programa" class="col-sm-4 control-label" id="lbl_programa"><?= Yii::t("formulario", "Program") ?><span class="text-danger">*</span></label>
                 <div class="col-sm-8">
-<?= Html::dropDownList("cmb_programa", $data_promo['eaca_id'], $arr_programa1, ["class" => "form-control", "id" => "cmb_programa"]) ?>
+                    <?= Html::dropDownList("cmb_programa", $data_promo['eaca_id'], $arr_programa1, ["class" => "form-control", "id" => "cmb_programa"]) ?>
                 </div>
             </div>
         </div> 
@@ -70,7 +70,7 @@ aspirante::registerTranslations();
             <div class="form-group">
                 <label for="txt_paralelo" class="col-sm-4 control-label" id="lbl_paralelo"><?= academico::t("Academico", "Parallel") ?><span class="text-danger">*</span></label>
                 <div class="col-sm-8">
-                    <input type="text" class="form-control PBvalidation" value="<?= $data_promo['ppro_num_paralelo'] ?>" id="txt_paralelo" data-type="number" data-keydown="true" placeholder="<?= Yii::t("academico", "Parallel") ?>">
+                    <input type="text" class="form-control PBvalidation" value="<?= $data_promo['ppro_num_paralelo'] ?>" id="txt_paralelo" disabled ="true" data-type="number" data-keydown="true" placeholder="<?= Yii::t("academico", "Parallel") ?>">
                 </div>
             </div>
         </div>
@@ -80,7 +80,7 @@ aspirante::registerTranslations();
             <div class="form-group">
                 <label for="txt_cupo" class="col-sm-4 control-label" id="lbl_cupo"><?= academico::t("Academico", "Quota") ?><span class="text-danger">*</span></label>
                 <div class="col-sm-8">
-                    <input type="text" class="form-control PBvalidation" value="<?= $data_promo['ppro_cupo'] ?>" id="txt_cupo" data-type="number" data-keydown="true" placeholder="<?= Yii::t("academico", "Quota") ?>">
+                    <input type="text" class="form-control PBvalidation" value="<?= $data_promo['ppro_cupo'] ?>" id="txt_cupo" disabled ="true" data-type="number" data-keydown="true" placeholder="<?= Yii::t("academico", "Quota") ?>">
                 </div>
             </div>
         </div>

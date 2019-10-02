@@ -218,7 +218,10 @@ class MatriculacionposgradosController extends \app\components\CController {
             $programa = $data["programa"];
             $paralelo = $data["paralelo"];
             $cupo = $data["cupo"];
-            $codigo = strtoupper(substr($data["nombreprograma"], 0, 3)) . $anio . $mes;
+            if ($mes > 0 && $mes < 10) {
+                $meses = '0' . $mes;
+            }
+            $codigo = strtoupper(substr($data["nombreprograma"], 0, 3)) . $anio . $meses;
             $con = \Yii::$app->db_academico;
             $transaction = $con->beginTransaction();
             try {
@@ -291,31 +294,32 @@ class MatriculacionposgradosController extends \app\components\CController {
                 $message = array("programa" => $programa);
                 return Utilities::ajaxResponse('OK', 'alert', Yii::t('jslang', 'Success'), 'false', $message);
             }
-        }      
-        $resp_consPromocion = $mod_promocion->consultarPromocionxid($promocion_id); 
+        }
+        $resp_consPromocion = $mod_promocion->consultarPromocionxid($promocion_id);
         $arr_unidad = $mod_unidad->consultarUnidadAcademicasEmpresa(1);
         $arr_modalidad = $mod_modalidad->consultarModalidad($arr_unidad[1]["id"], 1);
         $arr_programa1 = $modcanal->consultarCarreraModalidad($arr_unidad[1]["id"], $arr_modalidad[0]["id"]);
         $arrProgramas = ArrayHelper::map(array_merge([["id" => "0", "value" => Yii::t("formulario", "Grid")]], $mod_programa->consultarCarrera()), "id", "value");
 
-        return $this->render('viewPromocion', [                       
-                         "mes" => array("0" => Yii::t("formulario", "Select"), "1" => Yii::t("academico", "January"), "2" => Yii::t("academico", "Febrary"), "3" => Yii::t("academico", "March"),
-                          "4" => Yii::t("academico", "April"), "5" => Yii::t("academico", "May"), "6" => Yii::t("academico", "June"),
-                          "7" => Yii::t("academico", "July"), "8" => Yii::t("academico", "August"), "9" => Yii::t("academico", "September"),
-                          "10" => Yii::t("academico", "October"), "11" => Yii::t("academico", "November"), "12" => Yii::t("academico", "December")),
-                          "arrProgramas" => $arrProgramas,
-                          "arr_unidad" => ArrayHelper::map(array_merge([["id" => "0", "name" => Yii::t("formulario", "Select")]], $arr_unidad), "id", "name"),
-                          "arr_modalidad" => ArrayHelper::map(array_merge([["id" => "0", "name" => Yii::t("formulario", "Select")]], $arr_modalidad), "id", "name"),
-                          "arr_programa1" => ArrayHelper::map(array_merge([["id" => "0", "name" => Yii::t("formulario", "Select")]], $arr_programa1), "id", "name"), 
-                          "data_promo"=> $resp_consPromocion,
+        return $this->render('viewPromocion', [
+                    "mes" => array("0" => Yii::t("formulario", "Select"), "1" => Yii::t("academico", "January"), "2" => Yii::t("academico", "Febrary"), "3" => Yii::t("academico", "March"),
+                        "4" => Yii::t("academico", "April"), "5" => Yii::t("academico", "May"), "6" => Yii::t("academico", "June"),
+                        "7" => Yii::t("academico", "July"), "8" => Yii::t("academico", "August"), "9" => Yii::t("academico", "September"),
+                        "10" => Yii::t("academico", "October"), "11" => Yii::t("academico", "November"), "12" => Yii::t("academico", "December")),
+                    "arrProgramas" => $arrProgramas,
+                    "arr_unidad" => ArrayHelper::map(array_merge([["id" => "0", "name" => Yii::t("formulario", "Select")]], $arr_unidad), "id", "name"),
+                    "arr_modalidad" => ArrayHelper::map(array_merge([["id" => "0", "name" => Yii::t("formulario", "Select")]], $arr_modalidad), "id", "name"),
+                    "arr_programa1" => ArrayHelper::map(array_merge([["id" => "0", "name" => Yii::t("formulario", "Select")]], $arr_programa1), "id", "name"),
+                    "data_promo" => $resp_consPromocion,
         ]);
     }
+
     public function actionEditpromocion() {
         $mod_programa = new EstudioAcademico();
         $mod_modalidad = new Modalidad();
         $mod_unidad = new UnidadAcademica();
         $modcanal = new Oportunidad();
-        $promocion_id = 3; //base64_decode($_GET["ids"]); //TOMAR BIEN ESTE PARAMETRO PARA LA CONSULTA NO DEJARLO QUEMADO //MTE%3D
+        $promocion_id = base64_decode($_GET["ids"]);
         $mod_promocion = new PromocionPrograma();
         $data = Yii::$app->request->get();
         if (Yii::$app->request->isAjax) {
@@ -330,27 +334,88 @@ class MatriculacionposgradosController extends \app\components\CController {
                 $message = array("programa" => $programa);
                 return Utilities::ajaxResponse('OK', 'alert', Yii::t('jslang', 'Success'), 'false', $message);
             }
-        }   
-        $resp_consPromocion = $mod_promocion->consultarPromocionxid($promocion_id); 
+        }
+        $resp_consPromocion = $mod_promocion->consultarPromocionxid($promocion_id);
         $arr_unidad = $mod_unidad->consultarUnidadAcademicasEmpresa(1);
         $arr_modalidad = $mod_modalidad->consultarModalidad($resp_consPromocion['uaca_id'], 1);
         $arr_programa1 = $modcanal->consultarCarreraModalidad($resp_consPromocion['uaca_id'], $resp_consPromocion['mod_id']);
         $arrProgramas = ArrayHelper::map(array_merge([["id" => "0", "value" => Yii::t("formulario", "Grid")]], $mod_programa->consultarCarrera()), "id", "value");
 
-        return $this->render('editPromocion', [                       
-                         "mes" => array("0" => Yii::t("formulario", "Select"), "1" => Yii::t("academico", "January"), "2" => Yii::t("academico", "Febrary"), "3" => Yii::t("academico", "March"),
-                          "4" => Yii::t("academico", "April"), "5" => Yii::t("academico", "May"), "6" => Yii::t("academico", "June"),
-                          "7" => Yii::t("academico", "July"), "8" => Yii::t("academico", "August"), "9" => Yii::t("academico", "September"),
-                          "10" => Yii::t("academico", "October"), "11" => Yii::t("academico", "November"), "12" => Yii::t("academico", "December")),
-                          "arrProgramas" => $arrProgramas,
-                          "arr_unidad" => ArrayHelper::map(array_merge([["id" => "0", "name" => Yii::t("formulario", "Select")]], $arr_unidad), "id", "name"),
-                          "arr_modalidad" => ArrayHelper::map(array_merge([["id" => "0", "name" => Yii::t("formulario", "Select")]], $arr_modalidad), "id", "name"),
-                          "arr_programa1" => ArrayHelper::map(array_merge([["id" => "0", "name" => Yii::t("formulario", "Select")]], $arr_programa1), "id", "name"), 
-                          "data_promo"=> $resp_consPromocion,
+        return $this->render('editPromocion', [
+                    "mes" => array("0" => Yii::t("formulario", "Select"), "1" => Yii::t("academico", "January"), "2" => Yii::t("academico", "Febrary"), "3" => Yii::t("academico", "March"),
+                        "4" => Yii::t("academico", "April"), "5" => Yii::t("academico", "May"), "6" => Yii::t("academico", "June"),
+                        "7" => Yii::t("academico", "July"), "8" => Yii::t("academico", "August"), "9" => Yii::t("academico", "September"),
+                        "10" => Yii::t("academico", "October"), "11" => Yii::t("academico", "November"), "12" => Yii::t("academico", "December")),
+                    "arrProgramas" => $arrProgramas,
+                    "arr_unidad" => ArrayHelper::map(array_merge([["id" => "0", "name" => Yii::t("formulario", "Select")]], $arr_unidad), "id", "name"),
+                    "arr_modalidad" => ArrayHelper::map(array_merge([["id" => "0", "name" => Yii::t("formulario", "Select")]], $arr_modalidad), "id", "name"),
+                    "arr_programa1" => ArrayHelper::map(array_merge([["id" => "0", "name" => Yii::t("formulario", "Select")]], $arr_programa1), "id", "name"),
+                    "data_promo" => $resp_consPromocion,
         ]);
     }
-    // TOCA HACER EL UPDATE DE PROMOCION
+
     public function actionUpdatepromocion() {
-        
+        $usu_id = @Yii::$app->session->get("PB_iduser");
+        $fecha_modifica = date(Yii::$app->params["dateTimeByDefault"]);
+        if (Yii::$app->request->isAjax) {
+            $data = Yii::$app->request->post();
+            $programa_id = $data["progid"];
+            $anio = $data["anio"];
+            $mes = $data["mes"];
+            $unidad = $data["unidad"];
+            $modalidad = $data["modalidad"];
+            $programa = $data["programa"];
+            if ($mes > 0 && $mes < 10) {
+                $meses = '0' . $mes;
+            }
+            $codigo = strtoupper(substr($data["nombreprograma"], 0, 3)) . $anio . $meses;
+            $con = \Yii::$app->db_academico;
+            $transaction = $con->beginTransaction();
+            try {
+                $mod_programa = new PromocionPrograma();
+
+                $keys_act = [
+                    'ppro_anio', 'ppro_mes', 'ppro_codigo', 'uaca_id', 'mod_id'
+                    , 'eaca_id', 'ppro_usuario_modifica', 'ppro_fecha_modificacion'
+                ];
+                $values_act = [
+                    $anio, $mes, $codigo, $unidad, $modalidad,
+                    $programa, $usu_id, $fecha_modifica
+                ];
+                $resp_consPromocion = $mod_programa->consultarPromocion($anio, $mes, $unidad, $modalidad, $programa);
+                if (!$resp_consPromocion) {
+                    $respPrograma = $mod_programa->actualizarPromocion($con, $programa_id, $values_act, $keys_act, 'promocion_programa');
+                } else {
+                    $mensaje = "¡Ya existe programación con ese información.!";
+                }
+                if ($respPrograma) {
+                    $exito = 1;
+                }
+                if ($exito) {
+                    $transaction->commit();
+                    $message = array(
+                        "wtmessage" => Yii::t("notificaciones", "La infomación ha sido actualizada."),
+                        "title" => Yii::t('jslang', 'Success'),
+                    );
+                    return Utilities::ajaxResponse('OK', 'alert', Yii::t("jslang", "Sucess"), false, $message);
+                } else {
+                    $transaction->rollback();
+                    $message = array(
+                        "wtmessage" => Yii::t("notificaciones", "Error al grabar." . $mensaje),
+                        "title" => Yii::t('jslang', 'Success'),
+                    );
+                    return Utilities::ajaxResponse('NO_OK', 'alert', Yii::t("jslang", "Sucess"), false, $message);
+                }
+            } catch (Exception $ex) {
+                $transaction->rollback();
+                $message = array(
+                    "wtmessage" => Yii::t("notificaciones", "Error al grabar."),
+                    "title" => Yii::t('jslang', 'Success'),
+                );
+                return Utilities::ajaxResponse('NO_OK', 'alert', Yii::t("jslang", "Sucess"), false, $message);
+            }
+            return;
+        }
     }
+
 }

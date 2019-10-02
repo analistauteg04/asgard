@@ -146,13 +146,13 @@ class PromocionPrograma extends \yii\db\ActiveRecord {
             }
             if ($arrFiltro['programa'] != "" && $arrFiltro['programa'] > 0) {
                 $str_search .= "ppr.eaca_id = :programa AND ";
-            }            
+            }
         }
         if ($onlyData == false) {
-                $columnsAdd = "ppr.ppro_id as id, ";
-            }
-        $sql =  " SELECT "; 
-        $sql .=   $columnsAdd;
+            $columnsAdd = "ppr.ppro_id as id, ";
+        }
+        $sql = " SELECT ";
+        $sql .= $columnsAdd;
         $sql .= " ppr.ppro_codigo as codigo,
                     ppr.ppro_anio as anio,
                     CASE ppro_mes
@@ -467,7 +467,7 @@ class PromocionPrograma extends \yii\db\ActiveRecord {
             return FALSE;
         }
     }
-    
+
     /**
      * Function Consultar datos de promocion programa.
      * @author  Giovanni Vergara <analistadesarrollo02@uteg.edu.ec>;
@@ -498,5 +498,39 @@ class PromocionPrograma extends \yii\db\ActiveRecord {
         return $resultData;
     }
 
+    /**
+     * Function actualizar promocion
+     * @author  Giovanni Vergara <analistadesarrollo02@uteg.edu.ec>
+     * @property integer $ppro_id
+     * @return  
+     */
+    public function actualizarPromocion($con, $id, $parameters, $keys, $name_table) {
+        $trans = $con->getTransaction();
+        $params_sql = "";
+        for ($i = 0; $i < (count($parameters) - 1); $i++) {
+            if (isset($parameters[$i])) {
+                $params_sql .= $keys[$i] . " = '" . $parameters[$i] . "',";
+            }
+        }
+        $params_sql .= $keys[count($parameters) - 1] . " = '" . $parameters[count($parameters) - 1] . "'";
+        try {
+            $sql = "UPDATE " . $con->dbname . '.' . $name_table .
+                    " SET $params_sql" .
+                    " WHERE ppro_id=$id";
+            $comando = $con->createCommand($sql);
+            $result = $comando->execute();
+            if ($trans !== null) {
+                return true;
+            } else {
+                $transaction->commit();
+                return true;
+            }
+        } catch (Exception $ex) {
+            if ($trans !== null) {
+                $trans->rollback();
+            }
+            return 0;
+        }
+    }
 
 }
