@@ -51,7 +51,7 @@ class PersonaExterna extends \yii\db\ActiveRecord
     {
         return [
             [['pext_nombres', 'pext_apellidos', 'pext_correo', 'pext_celular', 'pext_genero', 'pext_edad', 'nins_id', 'pro_id', 'can_id', 'pext_estado', 'pext_estado_logico'], 'required'],
-            [['pext_edad', 'nins_id', 'pro_id', 'can_id'], 'integer'],
+            [['pext_edad', 'nins_id', 'pro_id', 'can_id', 'ocu_id'], 'integer'],
             [['pext_fecha_creacion', 'pext_fecha_modificacion'], 'safe'],
             [['pext_nombres', 'pext_apellidos'], 'string', 'max' => 60],
             [['pext_correo'], 'string', 'max' => 50],
@@ -77,6 +77,7 @@ class PersonaExterna extends \yii\db\ActiveRecord
             'nins_id' => 'Nins ID',
             'pro_id' => 'Pro ID',
             'can_id' => 'Can ID',
+            'ocu_id' => 'Ocu ID',
             'pext_estado' => 'Pext Estado',
             'pext_fecha_creacion' => 'Pext Fecha Creacion',
             'pext_fecha_modificacion' => 'Pext Fecha Modificacion',
@@ -97,9 +98,9 @@ class PersonaExterna extends \yii\db\ActiveRecord
         $fecha_actual = date(Yii::$app->params["dateTimeByDefault"]);        
         $sql = "INSERT INTO " . $con->dbname . ".persona_externa
             (pext_tipo_dni,pext_identificacion,pext_nombres,pext_apellidos,pext_correo,pext_celular,pext_telefono,pext_genero,pext_fecha_nacimiento,
-             nins_id,pro_id,can_id,eve_id,pext_fecha_registro,pext_ip_registro,pext_estado,pext_estado_logico) VALUES
+             nins_id,ocu_id,pro_id,can_id,eve_id,pext_fecha_registro,pext_ip_registro,pext_estado,pext_estado_logico) VALUES
             (:pext_tipo_dni,:pext_identificacion,:pext_nombres,:pext_apellidos,:pext_correo,:pext_celular,:pext_telefono,:pext_genero,:pext_fecha_nacimiento,:nins_id,
-             :pro_id,:can_id,:eve_id,:pext_fecha_registro, TO_BASE64(:pext_ip_registro), :pext_estado, :pext_estado)";
+             :ocu_id,:pro_id,:can_id,:eve_id,:pext_fecha_registro, TO_BASE64(:pext_ip_registro), :pext_estado, :pext_estado)";
         $command = $con->createCommand($sql);        
         $command->bindParam(":pext_tipo_dni",  $data['pext_tipoidentifica'], \PDO::PARAM_STR);
         $command->bindParam(":pext_identificacion",  $data['pext_identificacion'], \PDO::PARAM_STR);
@@ -112,7 +113,8 @@ class PersonaExterna extends \yii\db\ActiveRecord
         $command->bindParam(":pext_fecha_nacimiento", $data['pext_fechanac'], \PDO::PARAM_STR);
         $command->bindParam(":nins_id", $data['nins_id'], \PDO::PARAM_INT);
         $command->bindParam(":pro_id", $data['pro_id'], \PDO::PARAM_INT);
-        $command->bindParam(":can_id", $data['can_id'], \PDO::PARAM_INT);        
+        $command->bindParam(":can_id", $data['can_id'], \PDO::PARAM_INT);    
+        $command->bindParam(":ocu_id", $data['ocu_id'], \PDO::PARAM_INT);        
         $command->bindParam(":eve_id", $data['eve_id'], \PDO::PARAM_INT); 
         $command->bindParam(":pext_fecha_registro", $fecha_actual, \PDO::PARAM_STR); 
         $command->bindParam(":pext_ip_registro", $data['pext_ip_registro'], \PDO::PARAM_STR); 

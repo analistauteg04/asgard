@@ -49,4 +49,5 @@ return [
     'Registries' => 'Registros',
     'Event' => 'Evento',
     'Instruction Level' => 'Instrucción',
+    'Occupation' => 'Ocupación',
 ];

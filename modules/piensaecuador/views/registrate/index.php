@@ -36,6 +36,7 @@ use yii\helpers\Url;
             "arr_nivel" => $arr_nivel,
             "arr_evento" => $arr_evento,
             "tipos_dni" => $tipos_dni,
+            "arr_ocupaciones" => $arr_ocupaciones,
         ]);
         ?>
     </form>

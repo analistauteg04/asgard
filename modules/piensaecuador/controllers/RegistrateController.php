@@ -11,6 +11,7 @@ use app\models\Canton;
 use app\modules\academico\models\NivelInstruccion;
 use app\modules\marketing\models\Interes;
 use app\modules\piensaecuador\models\PersonaExterna;
+use app\modules\piensaecuador\models\Ocupacion;
 use yii\helpers\Url;
 
 
@@ -29,7 +30,13 @@ class RegistrateController extends \yii\web\Controller {
                 $message = array("cantones" => $cantones);
                 echo Utilities::ajaxResponse('OK', 'alert', Yii::t('jslang', 'Success'), 'false', $message);
                 return;
-            }           
+            }
+            if (isset($data["getocupaciones"])) {
+                $ocupaciones = Ocupacion::find()->select("ocu_id AS id, ocu_nombre AS name")->where(["ocu_estado_logico" => "1", "ocu_estado" => "1"])->asArray()->all();
+                $message = array("ocupaciones" => $ocupaciones);
+                echo Utilities::ajaxResponse('OK', 'alert', Yii::t('jslang', 'Success'), 'false', $message);
+                return;
+            }         
         }
         $this->layout = '@themes/' . \Yii::$app->getView()->theme->themeName . '/layouts/basic.php';
         $pais_id = 1; //Ecuador
@@ -41,6 +48,8 @@ class RegistrateController extends \yii\web\Controller {
         $arr_interes = $mod_interes->consultarInteres();
         $mod_perext = new PersonaExterna();
         $arr_evento = $mod_perext->consultarEvento();  
+        $mod_ocupaciones = new Ocupacion();
+        $arr_ocupaciones = $mod_ocupaciones->consultarOcupaciones();
         $_SESSION['JSLANG']['Your information has not been saved. Please try again.'] = Yii::t('notificaciones', 'Your information has not been saved. Please try again.');
         return $this->render('index', [                    
                     "arr_provincia" => ArrayHelper::map($arr_prov, "id", "value"),
@@ -49,6 +58,7 @@ class RegistrateController extends \yii\web\Controller {
                     "arr_nivel" => ArrayHelper::map($arr_nivel, "id", "value"),
                     "arr_evento" => ArrayHelper::map($arr_evento, "id", "value"), //$arr_evento
                     "arr_interes" => $arr_interes,
+                    "arr_ocupaciones" => ArrayHelper::map($arr_ocupaciones, "id", "value"),
                     "tipos_dni" => array("CED" => Yii::t("formulario", "DNI Document"), "PASS" => Yii::t("formulario", "Passport")),
         ]);
     }  
@@ -84,6 +94,7 @@ class RegistrateController extends \yii\web\Controller {
                         'pro_id'  => $data["pro_id"], 
                         'can_id'  => $data["can_id"], 
                         'eve_id'  => $data["eve_id"], 
+                        'ocu_id'  => $data["ocu_id"], 
                         'pext_ip_registro'  => $ip, 
                     );                                   
                     $respPersext = $mod_perext->insertPersonaExterna($con, $dataRegistro);

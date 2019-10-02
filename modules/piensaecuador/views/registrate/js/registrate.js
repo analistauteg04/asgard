@@ -17,6 +17,19 @@ $(document).ready(function() {
         }, true);
     });
 
+    $('#cmb_ocupacion').change(function() {
+        var link = $('#txth_base').val() + "/piensaecuador/registrate/index";
+        var arrParams = new Object();
+        arrParams.ocu_id = $(this).val();
+        arrParams.getocupaciones = true;
+        requestHttpAjax(link, arrParams, function(response) {
+            if (response.status == "OK") {
+                data = response.message;
+                setComboData(data.ocupaciones, "cmb_ocupacion");
+            }
+        }, true);
+    });
+
     $('#registrar').click(function() {
         var link = $('#txth_base').val() + "/piensaecuador/registrate/save";
         var arrParams = new Object();
@@ -36,6 +49,7 @@ $(document).ready(function() {
         arrParams.niv_interes = $('#cmb_nivel_estudio').val();
         arrParams.pro_id = $('#cmb_provincia').val();
         arrParams.can_id = $('#cmb_ciudad').val();
+        arrParams.ocu_id = $('#cmb_ocupacion').val();
         arrParams.eve_id = $('#cmb_evento').val();
         //Verificación de los checkboxes.
         var intereses = [];

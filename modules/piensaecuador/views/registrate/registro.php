@@ -9,6 +9,8 @@ use yii\helpers\Html;
 use yii\helpers\ArrayHelper;
 use yii\helpers\Url;
 use kartik\date\DatePicker;
+use app\modules\piensaecuador\Module as piensaecuador;
+piensaecuador::registerTranslations();
 ?>
 <form class="form-horizontal">  
     <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
@@ -150,5 +152,13 @@ use kartik\date\DatePicker;
                 </div>
             </div>
         </div>
+        <div class="col-md-6 col-lg-6 col-sm-6 col-xs-6">
+            <div class="form-group">
+                <label for="cmb_ocupacion" class="col-sm-5 control-label"><?= Yii::t("interes", "Occupation") ?><span class="text-danger">*</span></label>
+                <div class="col-sm-7">
+                    <?= Html::dropDownList("cmb_ocupacion", 0, $arr_ocupaciones, ["class" => "form-control ocu_combo", "id" => "cmb_ocupacion"]) ?>
+                </div>
+            </div>
+        </div>  
     </div> 
 </form>
