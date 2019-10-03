@@ -154,7 +154,7 @@ piensaecuador::registerTranslations();
         </div>
         <div class="col-md-6 col-lg-6 col-sm-6 col-xs-6">
             <div class="form-group">
-                <label for="cmb_ocupacion" class="col-sm-5 control-label"><?= Yii::t("interes", "Occupation") ?><span class="text-danger">*</span></label>
+                <label for="cmb_ocupacion" class="col-sm-5 control-label"><?= piensaecuador::t("interes", "Occupation") ?><span class="text-danger">*</span></label>
                 <div class="col-sm-7">
                     <?= Html::dropDownList("cmb_ocupacion", 0, $arr_ocupaciones, ["class" => "form-control ocu_combo", "id" => "cmb_ocupacion"]) ?>
                 </div>
