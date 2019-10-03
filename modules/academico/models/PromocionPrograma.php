@@ -560,4 +560,46 @@ class PromocionPrograma extends \yii\db\ActiveRecord {
         }
     }
 
+    /**
+     * Function modifica numeros de paralelo en promocion.
+     * @author  Giovanni Vergara <analistadesarrollo02@uteg.edu.ec>;     *          
+     * @param
+     * @return
+     */
+    public function actualizarPromocionparalelo($ppro_id, $ppro_num_paralelo, $ppro_usuario_modifica) {
+        $con = \Yii::$app->db_academico;
+        $estado = 1;
+        $fecha_modificacion = date(Yii::$app->params["dateTimeByDefault"]);
+        if ($trans !== null) {
+            $trans = null; // si existe la transacción entonces no se crea una
+        } else {
+            $trans = $con->beginTransaction(); // si no existe la transacción entonces se crea una
+        }
+
+        try {
+            $comando = $con->createCommand
+                    ("UPDATE " . $con->dbname . ".promocion_programa		       
+                      SET ppro_num_paralelo = :ppro_num_paralelo - 1,                       
+                          ppro_fecha_modificacion = :ppro_fecha_modificacion,
+                          ppro_usuario_modifica = :ppro_usuario_modifica
+                      WHERE ppro_id = :ppro_id AND                        
+                            ppro_estado = :estado AND
+                            ppro_estado_logico = :estado");
+
+            $comando->bindParam(":estado", $estado, \PDO::PARAM_STR);
+            $comando->bindParam(":ppro_fecha_modificacion", $fecha_modificacion, \PDO::PARAM_STR);
+            $comando->bindParam(":ppro_usuario_modifica", $ppro_usuario_modifica, \PDO::PARAM_INT);
+            $comando->bindParam(":ppro_id", $ppro_id, \PDO::PARAM_INT);
+            $comando->bindParam(":ppro_num_paralelo", $ppro_num_paralelo, \PDO::PARAM_INT);
+            $response = $comando->execute();
+            if ($trans !== null)
+                $trans->commit();
+            return $response;
+        } catch (Exception $ex) {
+            if ($trans !== null)
+                $trans->rollback();
+            return FALSE;
+        }
+    }
+
 }

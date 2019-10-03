@@ -235,3 +235,37 @@ function modificarPromocion() {
         }
     }
 }
+
+function eliminarParalelo(id,ids) {
+    var mensj = "¿Seguro desea eliminar paralelo?";
+    var messagePB = new Object();
+    messagePB.wtmessage = mensj;
+    messagePB.title = "Eliminar";
+    var objAccept = new Object();
+    objAccept.id = "btnid2del";
+    objAccept.class = "btn-primary";
+    objAccept.value = "Aceptar";
+    objAccept.callback = 'borrarParalelo';
+    var params = new Array(id, ids);
+    objAccept.paramCallback = params;
+    messagePB.acciones = new Array();
+    messagePB.acciones[0] = objAccept;
+    showAlert("warning", "warning", messagePB);
+}
+
+function borrarParalelo(id, temp) {
+    var link = $('#txth_base').val() + "/academico/matriculacionposgrados/deleteparalelo";  
+    var arrParams = new Object();
+    arrParams.par_id = id;
+    arrParams.pro_id = temp;
+    if (!validateForm()) {
+        requestHttpAjax(link, arrParams, function(response) {
+            showAlert(response.status, response.label, response.message);
+            if (!response.error) {
+                setTimeout(function() {
+                    window.location.href = $('#txth_base').val() + "/academico/matriculacionposgrados/indexparalelo?ids="+ btoa(temp);
+                }, 3000);
+            }
+        }, true);
+    }
+}

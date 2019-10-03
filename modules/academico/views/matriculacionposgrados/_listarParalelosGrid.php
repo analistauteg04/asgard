@@ -39,11 +39,14 @@ academico::registerTranslations();
             [
                 'class' => 'yii\grid\ActionColumn',
                 'header' => Yii::t("formulario", "Actions"),
-                'template' => '{view} {paralelo}', //        
+                'template' => '{view} {delete}', //        
                 'buttons' => [
                     'view' => function ($url, $model) {
-                        return Html::a('<span class="glyphicon glyphicon-list-alt"></span>', Url::to(['/academico/matriculacionposgrados/viewparalelo', 'parid' => base64_encode($model['pppr_id'])]), ["data-toggle" => "tooltip", "title" => "Ver Paralelo", "data-pjax" => 0]);
-                    },                  
+                        return Html::a('<span class="glyphicon glyphicon-list-alt"></span>', Url::to(['/academico/matriculacionposgrados/viewparalelo', 'parid' => base64_encode($model['pppr_id'])]), ["data-toggle" => "tooltip", "title" => "Modificar Paralelo", "data-pjax" => 0]);
+                    }, 
+                    'delete' => function ($url, $model) {
+                        return Html::a('<span class="glyphicon glyphicon-trash"></span>', "#", ['onclick' => "eliminarParalelo(" . $model['pppr_id'] . "," . $model['ppro_id'] .");", "data-toggle" => "tooltip", "title" => "Eliminar Paralelo", "data-pjax" => 0]);
+                    }, 
                 ],
             ],
         ],

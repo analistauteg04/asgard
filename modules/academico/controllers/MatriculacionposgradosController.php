@@ -425,9 +425,70 @@ class MatriculacionposgradosController extends \app\components\CController {
         $resp_consPromocion = $mod_promocion->consultarPromocionxid($promocion_id);
         $mod_paral = ParaleloPromocionPrograma::getParalelos($promocion_id);
         return $this->render('indexParalelo', [
-            'model' => $mod_paral,
-            "data_promo" => $resp_consPromocion,
+                    'model' => $mod_paral,
+                    "data_promo" => $resp_consPromocion,
         ]);
+    }
+
+    public function actionDeleteparalelo() {
+        $user_id = @Yii::$app->session->get("PB_iduser");
+        $mod_paralelo = new ParaleloPromocionPrograma();
+        $mod_promocion = new PromocionPrograma();
+        if (Yii::$app->request->isAjax) {
+            $data = Yii::$app->request->post();
+            $par_id = $data["par_id"];
+            $promocion_id = $data["pro_id"];
+            $con = \Yii::$app->db_academico;
+            $transaction = $con->beginTransaction();
+            try {
+                //Eliminar en registro
+                $registro = $mod_paralelo->deleteParelelo($par_id, $user_id);
+                if ($registro) {
+                    //Consultar el numero de paralelos en promocion
+                    $resp_consPromocion = $mod_promocion->consultarPromocionxid($promocion_id);
+                    //Actualizar el numero de paralelos activos en promocion
+                    if ($resp_consPromocion['ppro_num_paralelo'] > 0) {
+                        $resp_ModPromocion = $mod_promocion->actualizarPromocionparalelo($promocion_id, $resp_consPromocion['ppro_num_paralelo'], $user_id);
+                        if ($registro) {
+                            $transaction->commit();
+                            $message = array(
+                                "wtmessage" => Yii::t("notificaciones", "Se ha eliminado el paralelo."),
+                                "title" => Yii::t('jslang', 'Success'),
+                            );
+                            return Utilities::ajaxResponse('OK', 'alert', Yii::t("jslang", "Sucess"), false, $message);
+                        } else {
+                            $transaction->rollback();
+                            $message = array(
+                                "wtmessage" => Yii::t("notificaciones", "Error al eliminar el paralelo. "),
+                                "title" => Yii::t('jslang', 'Error'),
+                            );
+                            return Utilities::ajaxResponse('NO_OK', 'alert', Yii::t("jslang", "Error"), false, $message);
+                        }
+                    } else {
+                        $transaction->rollback();
+                        $message = array(
+                            "wtmessage" => Yii::t("notificaciones", "Error al eliminar el paralelo. "),
+                            "title" => Yii::t('jslang', 'Error'),
+                        );
+                        return Utilities::ajaxResponse('NO_OK', 'alert', Yii::t("jslang", "Error"), false, $message);
+                    }
+                } else {
+                    $transaction->rollback();
+                    $message = array(
+                        "wtmessage" => Yii::t("notificaciones", "Error al eliminar el paralelo. "),
+                        "title" => Yii::t('jslang', 'Error'),
+                    );
+                    return Utilities::ajaxResponse('NO_OK', 'alert', Yii::t("jslang", "Error"), false, $message);
+                }
+            } catch (Exception $ex) {
+                $transaction->rollback();
+                $message = array(
+                    "wtmessage" => Yii::t("notificaciones", "Error al eliminar el paralelo. "),
+                    "title" => Yii::t('jslang', 'Success'),
+                );
+                return Utilities::ajaxResponse('NO_OK', 'alert', Yii::t("jslang", "Error"), false, $message);
+            }
+        }
     }
 
 }
