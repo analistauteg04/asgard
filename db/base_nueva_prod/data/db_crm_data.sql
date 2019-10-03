@@ -498,12 +498,13 @@ INSERT INTO `observacion_actividades` (`oact_id`, `oact_nombre`, `oact_descripci
 --
 -- Volcado de datos para la tabla `grupo_introductorio`
 --
-INSERT INTO `grupo_introductorio` ( `gint_id`, `gint_nombre`, `gint_descripcion`, `gint_estado`, `gint_usuario`, `gint_usuario_modif`, `gint_fecha_creacion`, `gint_fecha_modificacion`, `gint_estado_logico`) VALUES
-(1,'G1-3 Agosto','G1 - 3 Agosto','1',1,null,'2019-08-08 11:40:00',null,'1'),
-(2,'G2-7 Septiembre','G2-7 Septiembre','1',1,null,'2019-08-08 11:40:00',null,'1'),
-(3,'G2-8 Septiembre','G2-8 Septiembre','1',1,null,'2019-08-08 11:40:00',null,'1'),
-(4,'Pendiente','Pendiente','1',1,null,'2019-08-08 11:40:00',null,'1'),
-(5,'G3-Octubre','G3-Octubre','1',1,null,'2019-08-08 11:40:00',null,'1');
+INSERT INTO `grupo_introductorio` (`gint_id`, `gint_nombre`, `gint_descripcion`, `gint_estado`, `gint_usuario`, `gint_usuario_modif`, `gint_fecha_creacion`, `gint_fecha_modificacion`, `gint_estado_logico`) VALUES
+(1, 'G1-3 Agosto', 'G1 - 3 Agosto', '1', 1, NULL, '2019-08-08 16:40:00', NULL, '1'),
+(2, 'G2-7 Septiembre', 'G2-7 Septiembre', '0', 1, NULL, '2019-08-08 16:40:00', NULL, '0'),
+(3, 'G2-8 Septiembre', 'G2-8 Septiembre', '1', 1, NULL, '2019-08-08 16:40:00', NULL, '1'),
+(4, 'Pendiente', 'Pendiente', '1', 1, NULL, '2019-08-08 16:40:00', NULL, '1'),
+(5, 'G3-Octubre', 'G3-Octubre', '1', 1, NULL, '2019-09-12 21:10:00', NULL, '1'),
+(6, 'Otras Maestrías', 'Otras Maestrías', '1', 1, NULL, '2019-09-23 15:36:00', '0000-00-00 00:00:00', '1');
 
 
 --

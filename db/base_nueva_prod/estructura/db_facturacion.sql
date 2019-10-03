@@ -599,3 +599,48 @@ create table if not exists `pagos_contrato_programa` (
   `pcpr_fecha_modificacion` timestamp null default null,
   `pcpr_estado_logico` varchar(1) not null  
 );
+
+-- -------------------------------------------------------------
+--
+-- Estructura de tabla para la tabla `rubro_pago_docencia`
+-- -------------------------------------------------------------
+create table if not exists `rubro_pago_docencia` (
+  `rpdo_id` bigint(20) not null primary key,  
+  `uaca_id`  bigint(20) not null,  
+  `mod_id` bigint(20) not null,  
+  `rpdo_tipo_titulo` varchar(1) not null, /* 'M' Maestría, 'D' Doctorado */
+  `rpdo_tarifa_hora` double not null,
+  `rpdo_usu_ingreso` bigint(20) not null,
+  `rpdo_usu_modifica` bigint(20) null,
+  `rpdo_estado` varchar(1) not null,
+  `rpdo_fecha_creacion` timestamp not null default current_timestamp,
+  `rpdo_fecha_modificacion` timestamp null default null,
+  `rpdo_estado_logico` varchar(1) not null  
+);
+
+-- -------------------------------------------------------------
+--
+-- Estructura de tabla para la tabla `factura_docente`
+-- -------------------------------------------------------------
+create table if not exists `factura_docente` (
+  `fdoc_id` bigint(20) not null primary key,
+  `daca_id`  bigint(20) not null,
+  `pro_id`  bigint(20) not null,  
+  `rpdo_id` bigint(20) not null,
+  `fdoc_archivo` varchar(100) not null,
+  `fdoc_valor_factura` double not null,
+  `fdoc_valor_pagado` double not null,
+  `fdoc_fecha_registro` timestamp null default null,
+  `fdoc_fecha_aprueba_rechaza` timestamp null default null,
+  `fdoc_fecha_pago` timestamp null default null,
+  `fdoc_estado_factura` varchar(1) not null,  /* '1' Pendiente, '2' Aprobada, '3' Rechazada, '4' Pagada */
+  `fdoc_observacion_factura` varchar(1) null, 
+  `fdoc_usu_ingreso` bigint(20) not null,
+  `fdoc_usu_aprueba_rechaza` bigint(20) null,
+  `fdoc_usu_pago` bigint(20) null,
+  `fdoc_estado` varchar(1) not null,
+  `fdoc_fecha_creacion` timestamp not null default current_timestamp,
+  `fdoc_fecha_modificacion` timestamp null default null,
+  `fdoc_estado_logico` varchar(1) not null,
+   foreign key (rpdo_id) references `rubro_pago_docencia`(rpdo_id)
+);
