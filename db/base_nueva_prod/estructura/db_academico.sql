@@ -71,7 +71,7 @@ create table if not exists `tipo_institucion_aca` (
 
 -- --------------------------------------------------------
 -- Estructura de tabla para la tabla `tipo_estudio_academico`
--- 1.- Carrera, 2.- Programa, 3.- Diplomado
+-- 1.- Carrera, 2.- Programa
 create table if not exists `tipo_estudio_academico` (
   `teac_id` bigint(20) not null auto_increment primary key, 
   `teac_nombre` varchar(300) not null,

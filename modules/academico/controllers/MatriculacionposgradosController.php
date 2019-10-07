@@ -448,22 +448,31 @@ class MatriculacionposgradosController extends \app\components\CController {
                     $resp_consPromocion = $mod_promocion->consultarPromocionxid($promocion_id);
                     //Actualizar el numero de paralelos activos en promocion
                     if ($resp_consPromocion['ppro_num_paralelo'] > 0) {
-                        $resp_ModPromocion = $mod_promocion->actualizarPromocionparalelo($promocion_id, $resp_consPromocion['ppro_num_paralelo'], $user_id);
-                        if ($registro) {
-                            $transaction->commit();
-                            $message = array(
-                                "wtmessage" => Yii::t("notificaciones", "Se ha eliminado el paralelo."),
-                                "title" => Yii::t('jslang', 'Success'),
-                            );
-                            return Utilities::ajaxResponse('OK', 'alert', Yii::t("jslang", "Sucess"), false, $message);
-                        } else {
+                        //if ($resp_consPromocion['ppro_num_paralelo'] == $resp_consPromocion['ppro_cupo']) { //VALIDAR QUE SI YA HA DESMINUIDO EL CUPO NO DEJAR ELIMINAR EL CURSO
+                            $resp_ModPromocion = $mod_promocion->actualizarPromocionparalelo($promocion_id, $resp_consPromocion['ppro_num_paralelo'], $user_id);
+                            if ($resp_ModPromocion) {
+                                $transaction->commit();
+                                $message = array(
+                                    "wtmessage" => Yii::t("notificaciones", "Se ha eliminado el paralelo."),
+                                    "title" => Yii::t('jslang', 'Success'),
+                                );
+                                return Utilities::ajaxResponse('OK', 'alert', Yii::t("jslang", "Sucess"), false, $message);
+                            } else {
+                                $transaction->rollback();
+                                $message = array(
+                                    "wtmessage" => Yii::t("notificaciones", "Error al eliminar el paralelo. "),
+                                    "title" => Yii::t('jslang', 'Error'),
+                                );
+                                return Utilities::ajaxResponse('NO_OK', 'alert', Yii::t("jslang", "Error"), false, $message);
+                            }
+                        /*} else {
                             $transaction->rollback();
                             $message = array(
-                                "wtmessage" => Yii::t("notificaciones", "Error al eliminar el paralelo. "),
+                                "wtmessage" => Yii::t("notificaciones", "No se puede eliminar paralelo, ye tiene cupos utilizados. "),
                                 "title" => Yii::t('jslang', 'Error'),
                             );
                             return Utilities::ajaxResponse('NO_OK', 'alert', Yii::t("jslang", "Error"), false, $message);
-                        }
+                        }*/
                     } else {
                         $transaction->rollback();
                         $message = array(
