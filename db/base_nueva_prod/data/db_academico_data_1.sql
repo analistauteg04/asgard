@@ -7,11 +7,10 @@ USE `db_academico`;
 -- Volcado de datos para la tabla `nivel_instruccion`
 --
 INSERT INTO `nivel_instruccion` (`nins_id`,`nins_nombre`, `nins_descripcion`,`nins_estado`,`nins_estado_logico`) VALUES
-(1,'Sin estudios ','Sin estudios ','1','1'),
-(2,'Primarios','Primarios','1','1'),
-(3,'Secundarios','Secundarios','1','1'),
-(4,'Tercer Nivel','Tercer Nivel','1','1'),
-(5,'Cuarto Nivel','Cuarto Nivel','1','1');
+(1,'Primarios','Primarios','1','1'),
+(2,'Secundarios','Secundarios','1','1'),
+(3,'Tercer Nivel','Tercer Nivel','1','1'),
+(4,'Cuarto Nivel','Cuarto Nivel','1','1');
 
 -- --------------------------------------------------------
 --
@@ -34,7 +33,7 @@ INSERT INTO `nivel_instruccion` (`nins_id`,`nins_nombre`, `nins_descripcion`,`ni
 -- Volcado de datos para la tabla `tipo_institucion_aca`
 --
 INSERT INTO `tipo_institucion_aca` (`tiac_id`,`tiac_nombre`, `tiac_descripcion`,`tiac_estado`,`tiac_estado_logico`) VALUES
-(1,'Pública','Pública','1','1'),
+(1,'Fiscal','Fiscal','1','1'),
 (2,'Privada','Privada','1','1'),
 (3,'Fiscomisional','Fiscomisional','1','1');
 
@@ -44,23 +43,18 @@ INSERT INTO `tipo_institucion_aca` (`tiac_id`,`tiac_nombre`, `tiac_descripcion`,
 --
 INSERT INTO `tipo_estudio_academico` (`teac_id`, `teac_nombre`, `teac_descripcion`, `teac_usuario_ingreso`, `teac_estado`, `teac_estado_logico`) VALUES
 (1,'Carrera','Carrera',1,'1','1'),
-(2,'Programa','Programa',1,'1','1'),
-(3,'Diplomado','Diplomado',1,'1','1');
+(2,'Programa','Programa',1,'1','1');
+-- (3,'Diplomado','Diplomado',1,'1','1');
 
     -- --------------------------------------------------------
 --
 -- Volcado de datos para la tabla `unidad_academica` 
 -- 
 INSERT INTO `unidad_academica` (`uaca_id`, `uaca_nombre`, `uaca_descripcion`, `uaca_usuario_ingreso`, `uaca_inscripcion`, `uaca_estado`, `uaca_estado_logico`) VALUES
-(1, 'Grado', 'Grado', 1, '1', '1', '1'),
-(2, 'Posgrado', 'Posgrado', 1, '1', '1', '1'),
-(3, 'Educación Continua', 'Educación Continua', 1, '0', '1', '1'),
-(4, 'Centro de Idiomas', 'Centro de Idiomas', 1, '0', '1', '1'),
-(5, 'Diplomado', 'Diplomado', 1, '0', '1', '1'),
-(6, 'Curso Nivelación', 'Curso Nivelación', 1, '0', '1', '1'),
-(7, 'Micromasters', 'Micromasters', 1, '0', '1', '1'),
-(8, 'Ulive', 'Ulive', 1, '0', '1', '1'),
-(9, 'Uwork', 'Uwork', 1, '0', '1', '1');
+(1, 'Grado', 'Grado', 1, '1', '1', '1'),  
+(2, 'Posgrado', 'Posgrado', 1, '1', '1', '1'), 
+(3, 'Educación Continua', 'Educación Continua', 1, '0', '1', '1'), 
+(4, 'Centro de Idiomas', 'Centro de Idiomas', 1, '0', '1', '1'); 
 
 -- --------------------------------------------------------
 --
@@ -84,7 +78,7 @@ INSERT INTO `unidad_estudio` (`uest_id`,`uest_nombre`,`uest_descripcion`,`uest_u
 
 -- --------------------------------------------------------
 --
--- Volcado de datos para la tabla `tipo_estudio_academico`
+-- Volcado de datos para la tabla `estudio_academico`
 --
 INSERT INTO `estudio_academico` (`eaca_id`, `teac_id`, `eaca_nombre`, `eaca_descripcion`, `eaca_alias`, `eaca_usuario_ingreso`, `eaca_usuario_modifica`, `eaca_estado`, `eaca_fecha_creacion`, `eaca_fecha_modificacion`, `eaca_estado_logico`) VALUES
 (1, 1, 'Licenciatura en Comercio Exterior', 'Licenciatura en Comercio Exterior', 'licenciatura_en_comercio_exterior', 1, NULL, '1', '2017-02-01 16:25:00', NULL, '1'),
@@ -190,7 +184,7 @@ INSERT INTO `modulo_estudio` (`mest_id`, `uaca_id`, `mod_id`, `mest_codigo`, `me
 (24, 3, 2, 'SM24-HAPE01', 'Programa para docentes: Habilidades pedagógicas', 'Programa para docentes Habilidades pedagogicas', 'programa_para_docentes:_habilidades _pedagógicas', 1, NULL, '0', '2017-02-01 15:15:00', NULL, '1'),
 (25, 3, 2, 'SM25-PPTH01', 'Promoción programa talento humano', 'Promocion programa talento humano', 'promoción_programa_talento_humano', 1, NULL, '0', '2017-02-01 15:15:00', NULL, '1'),
 (26, 3, 2, 'SM26-PPPD01', 'Promoción programa para docentes', 'Promocion programa para docentes', 'promoción_programa para_docentes', 1, NULL, '0', '2017-02-01 15:15:00', NULL, '1'),
-(27,7,1, 'UL58-AGCG01', 'Alta Gerencia y control de gestión', 'Alta Gerencia y control de gestion', 'alta_gerencia_y_control_de_gestion', 1, NULL, '1', '2018-12-10 12:15:48', NULL, '1'),
+/*(27,7,1, 'UL58-AGCG01', 'Alta Gerencia y control de gestión', 'Alta Gerencia y control de gestion', 'alta_gerencia_y_control_de_gestion', 1, NULL, '1', '2018-12-10 12:15:48', NULL, '1'),
 (28,7,1, 'UL59-CMNN01', 'Culture Management: nuevas formas de hacer negocios', 'Culture Management nuevas formas de hacer negocios.', 'culture_management_nuevas_formas_de_hacer_negocios', 1, NULL, '1', '2018-12-10 12:15:48', NULL, '1'),
 (29,7,1, 'UL60-TICI01', 'Turismo inteligente y competitividad internacional', 'Turismo inteligente y competitividad internacional', 'turismo_inteligente_y_competitividad_internacional', 1, NULL, '1', '2018-12-10 12:15:48', NULL, '1'),
 (30,7,1, 'UL61-GTBCI01', 'Gestión del talento humano basado en competencias', 'Gestion del talento humano basado en competencias', 'gestion_del_talento_humano_basado_en_competencias', 1, NULL, '1', '2018-12-10 12:15:48', NULL, '1'),
@@ -312,14 +306,14 @@ INSERT INTO `modulo_estudio` (`mest_id`, `uaca_id`, `mod_id`, `mest_codigo`, `me
 (144, 9, 1, 'UL181BPPR-01', 'Bootstrap para principiantes', 'Bootstrap para principiantes', 'bootstrap_para_principiantes', 1, NULL, '1', '2018-12-10 12:15:48', NULL, '1'),
 (145, 3, 2, 'SM145-ANLA01', 'Actualización Normativa Laboral', 'Actualización Normativa Laboral', 'actualización_normativa_laboral', 1, NULL, '1', '2019-03-26 12:15:48', NULL, '1'),
 (146, 3, 2, 'SM146-SSOC01', 'Seguridad y Salud Ocupacional', 'Seguridad y Salud Ocupacional', 'seguridad_salud', 1, NULL, '1', '2019-03-26 12:15:48', NULL, '1'),
-
+*/
 -- NUEVOS DE SMART 23/07/2019
-(147, 3, 2, 'SM147-EIEM01', 'Emprendimiento e Inovación Empresarial', 'Emprendimiento e Inovación Empresarial', 'emprendimiento_inovacion', 1, NULL, '1', '2019-07-23 11:11:11', NULL, '1'),
-(148, 3, 2, 'SM148-MEON01', 'Marketing para Emprendedores Online', 'Marketing para Emprendedores Online', 'marketing_emprendedores', 1, NULL, '1', '2019-07-23 11:11:11', NULL, '1'),
-(149, 3, 2, 'SM149-OESO01', 'Organización Eventos Sociales', 'Organización Eventos Sociales', 'organizacion_eventos', 1, NULL, '1', '2019-07-23 11:11:11', NULL, '1'),
-(150, 3, 2, 'SM150-CMON01', 'Community Manager Online', 'Community Manager Online', 'community_manager', 1, NULL, '1', '2019-07-23 11:11:11', NULL, '1'),
-(151, 3, 2, 'SM151-TERC01', 'Taller de Estrategias de Recuperación de Cartera', 'Taller de Estrategias de Recuperación de Cartera', 'taller_estrategia', 1, NULL, '1', '2019-07-23 11:11:11', NULL, '1'),
-(152, 3, 1, 'SM147-PFDP01', 'Programa de Formación en Didáctica y Pedagogía para Directivos y Docentes del Magisterio', 'Programa de Formación en Didáctica y Pedagogía para Directivos y Docentes del Magisterio', 'programa_formacion_didactica', 1, NULL, '1', '2019-08-06 16:00:00', NULL, '1');
+(27, 3, 2, 'SM147-EIEM01', 'Emprendimiento e Inovación Empresarial', 'Emprendimiento e Inovación Empresarial', 'emprendimiento_inovacion', 1, NULL, '1', '2019-07-23 11:11:11', NULL, '1'),
+(28, 3, 2, 'SM148-MEON01', 'Marketing para Emprendedores Online', 'Marketing para Emprendedores Online', 'marketing_emprendedores', 1, NULL, '1', '2019-07-23 11:11:11', NULL, '1'),
+(29, 3, 2, 'SM149-OESO01', 'Organización Eventos Sociales', 'Organización Eventos Sociales', 'organizacion_eventos', 1, NULL, '1', '2019-07-23 11:11:11', NULL, '1'),
+(30, 3, 2, 'SM150-CMON01', 'Community Manager Online', 'Community Manager Online', 'community_manager', 1, NULL, '1', '2019-07-23 11:11:11', NULL, '1'),
+(31, 3, 2, 'SM151-TERC01', 'Taller de Estrategias de Recuperación de Cartera', 'Taller de Estrategias de Recuperación de Cartera', 'taller_estrategia', 1, NULL, '1', '2019-07-23 11:11:11', NULL, '1'),
+(32, 3, 1, 'SM147-PFDP01', 'Programa de Formación en Didáctica y Pedagogía para Directivos y Docentes del Magisterio', 'Programa de Formación en Didáctica y Pedagogía para Directivos y Docentes del Magisterio', 'programa_formacion_didactica', 1, NULL, '1', '2019-08-06 16:00:00', NULL, '1');
 
 
 -- --------------------------------------------------------
@@ -366,7 +360,7 @@ INSERT INTO `modulo_estudio_empresa` (`meem_id`, `mest_id`, `emp_id`, `meem_fech
 (25, 25, 3, '2018-09-01 05:00:00', '2018-12-31 05:00:00', 1, NULL, '1', '1', '2018-09-01 23:30:00', NULL, '1'),
 (26, 26, 3, '2018-09-01 05:00:00', '2018-12-31 05:00:00', 1, NULL, '1', '1', '2018-09-01 23:30:00', NULL, '1'),
 
-(27, 27, 2, '2018-09-01 05:00:00', '2018-12-31 05:00:00', 1, NULL, '1', '1', '2018-12-10 13:30:00', NULL, '1'),
+/* (27, 27, 2, '2018-09-01 05:00:00', '2018-12-31 05:00:00', 1, NULL, '1', '1', '2018-12-10 13:30:00', NULL, '1'), --DESDE AQUI
 (28, 28, 2, '2018-09-01 05:00:00', '2018-12-31 05:00:00', 1, NULL, '1', '1', '2018-12-10 13:30:00', NULL, '1'),
 (29, 29, 2, '2018-09-01 05:00:00', '2018-12-31 05:00:00', 1, NULL, '1', '1', '2018-12-10 13:30:00', NULL, '1'),
 (30, 30, 2, '2018-09-01 05:00:00', '2018-12-31 05:00:00', 1, NULL, '1', '1', '2018-12-10 13:30:00', NULL, '1'),
@@ -489,16 +483,16 @@ INSERT INTO `modulo_estudio_empresa` (`meem_id`, `mest_id`, `emp_id`, `meem_fech
 (144, 144, 2, '2018-09-01 05:00:00', '2018-12-31 05:00:00', 1, NULL, '1', '1', '2018-12-10 13:30:00', NULL, '1'),
 
 (145, 145, 3, '2019-03-26 15:30:00', '2019-12-31 23:59:59', 1, NULL, '1', '1', '2019-03-26 15:30:00', NULL, '1'),
-(146, 146, 3, '2019-03-26 15:30:00', '2019-12-31 23:59:59', 1, NULL, '1', '1', '2019-03-26 15:30:00', NULL, '1'),
+(146, 146, 3, '2019-03-26 15:30:00', '2019-12-31 23:59:59', 1, NULL, '1', '1', '2019-03-26 15:30:00', NULL, '1'), */
 
 -- NUEVOS SMART DE 147 AL 151 23/07/2019
 
-(147, 147, 3, '2019-07-23 11:30:00', '2019-12-31 23:59:59', 1, NULL, '1', '1', '2019-07-23 11:30:00', NULL, '1'),
-(148, 148, 3, '2019-07-23 11:30:00', '2019-12-31 23:59:59', 1, NULL, '1', '1', '2019-07-23 11:30:00', NULL, '1'),
-(149, 149, 3, '2019-07-23 11:30:00', '2019-12-31 23:59:59', 1, NULL, '1', '1', '2019-07-23 11:30:00', NULL, '1'),
-(150, 150, 3, '2019-07-23 11:30:00', '2019-12-31 23:59:59', 1, NULL, '1', '1', '2019-07-23 11:30:00', NULL, '1'),
-(151, 151, 3, '2019-07-23 11:30:00', '2019-12-31 23:59:59', 1, NULL, '1', '1', '2019-07-23 11:30:00', NULL, '1'),
-(152, 152, 3, '2019-08-06 16:00:00', '2019-08-07 04:59:59', 1, NULL, '1', '1', '2019-08-06 16:00:00', NULL, '1');
+(27, 27, 3, '2019-07-23 11:30:00', '2019-12-31 23:59:59', 1, NULL, '1', '1', '2019-07-23 11:30:00', NULL, '1'),
+(28, 28, 3, '2019-07-23 11:30:00', '2019-12-31 23:59:59', 1, NULL, '1', '1', '2019-07-23 11:30:00', NULL, '1'),
+(29, 29, 3, '2019-07-23 11:30:00', '2019-12-31 23:59:59', 1, NULL, '1', '1', '2019-07-23 11:30:00', NULL, '1'),
+(30, 30, 3, '2019-07-23 11:30:00', '2019-12-31 23:59:59', 1, NULL, '1', '1', '2019-07-23 11:30:00', NULL, '1'),
+(31, 31, 3, '2019-07-23 11:30:00', '2019-12-31 23:59:59', 1, NULL, '1', '1', '2019-07-23 11:30:00', NULL, '1'),
+(32, 32, 3, '2019-08-06 16:00:00', '2019-08-07 04:59:59', 1, NULL, '1', '1', '2019-08-06 16:00:00', NULL, '1');
 
 -- --------------------------------------------------------
 --
@@ -881,15 +875,15 @@ INSERT INTO `modalidad_unidad_academico` (`muac_id`, `uaca_id`, `mod_id`, `emp_i
 (8, 3, 1, 3, 1, NULL, '0', '2018-09-29 18:35:00', NULL, '0'),
 (9, 3, 2, 3, 1, NULL, '1', '2018-09-29 18:35:00', NULL, '1'),
 (10, 3, 1, 2, 1, NULL, '0', '2017-02-01 19:35:00', NULL, '1'),
-(11, 5, 1, 2, 1, NULL, '0', '2017-02-01 19:35:00', NULL, '1'),
-(12, 1, 1, 2, 1, NULL, '0', '2017-02-01 19:35:00', NULL, '1'),
-(13, 2, 1, 2, 1, NULL, '0', '2018-10-01 18:35:00', NULL, '1'),
-(14, 2, 2, 1, 1, NULL, '1', '2018-10-19 20:30:00', NULL, '1'),
-(15, 7, 1, 2, 1, NULL, '1', '2018-12-10 15:55:00', NULL, '1'),
-(16, 8, 2, 2, 1, NULL, '1', '2018-12-10 15:55:00', NULL, '1'),
-(17, 9, 1, 2, 1, NULL, '1', '2018-12-10 15:55:00', NULL, '1'),
-(18, 2, 1, 1, 1, NULL, '1', '2019-05-31 22:43:00', NULL, '1'),
-(19, 3, 1, 3, 1, NULL, '1', '2019-08-06 16:00:00', NULL, '1');
+-- (11, 5, 1, 2, 1, NULL, '0', '2017-02-01 19:35:00', NULL, '1'), -- NO
+(11, 1, 1, 2, 1, NULL, '0', '2017-02-01 19:35:00', NULL, '1'),
+(12, 2, 1, 2, 1, NULL, '0', '2018-10-01 18:35:00', NULL, '1'),
+(13, 2, 2, 1, 1, NULL, '1', '2018-10-19 20:30:00', NULL, '1'),
+-- (15, 7, 1, 2, 1, NULL, '1', '2018-12-10 15:55:00', NULL, '1'), --NO
+-- (16, 8, 2, 2, 1, NULL, '1', '2018-12-10 15:55:00', NULL, '1'), -- NO
+-- (17, 9, 1, 2, 1, NULL, '1', '2018-12-10 15:55:00', NULL, '1'), -- NO
+(14, 2, 1, 1, 1, NULL, '1', '2019-05-31 22:43:00', NULL, '1'),
+(15, 3, 1, 3, 1, NULL, '1', '2019-08-06 16:00:00', NULL, '1');
 
 
 INSERT INTO `estudio_academico_area_conocimiento` (`eaac_id`, `eaca_id`, `mest_id`, `acon_id`, `eaac_estado`, `eaac_fecha_creacion`, `eaac_fecha_modificacion`, `eaac_estado_logico`) VALUES
