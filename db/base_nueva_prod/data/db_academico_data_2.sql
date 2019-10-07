@@ -7,40 +7,28 @@ USE `db_academico`;
 --
 -- Volcado de datos para la tabla `semestre`
 -- 
-INSERT INTO `semestre_academico` (`saca_id`, `saca_nombre`, `saca_descripcion`, `saca_fecha_registro`, `saca_usuario_ingreso`, `saca_usuario_modifica`, `saca_estado`, `saca_estado_logico`) VALUES 
-(1, 'Abril - Agosto', 'Abril - Agosto', NULL, '1', '1', '1', '1'),
-(2, 'Octubre - Febrero', 'Octubre - Febrero', NULL, '1', '1', '1', '1');
+INSERT INTO `semestre_academico` (`saca_id`, `saca_nombre`, `saca_descripcion`, `saca_anio`, `saca_fecha_registro`, `saca_usuario_ingreso`, `saca_usuario_modifica`, `saca_estado`, `saca_estado_logico`) VALUES 
+(1, 'Abril - Agosto', 'Abril - Agosto', 2019, NULL, '1', '1', '1', '1'),
+(2, 'Octubre - Febrero', 'Octubre - Febrero', 2019, NULL, '1', '1', '1', '1');
 
 -- -- ------------------------ ------------------------------
 --
 -- Volcado de datos para la tabla `bloque`
 --
-INSERT INTO `bloque_academico` (`baca_id`,`baca_nombre`, `baca_descripcion`, `baca_usuario_ingreso`, `baca_estado`, `baca_estado_logico`) VALUES 
-(1, 'B1', 'Abril - Junio', 1, '1', '1'),
-(2, 'B2', 'Julio - Agosto', 1,  '1', '1'),
-(3, 'B2', 'Enero - Febrero', 1, '1', '1'),
-(4, 'B1', 'Octubre - Diciembre', 1, '1', '1'),
-(5, 'Enero', 'Enero', 1, '1', '1'),
-(6, 'Febrero', 'Febrero', 1, '1', '1'),
-(7, 'Marzo', 'Marzo', 1, '1', '1'),
-(8, 'Abril', 'Abril', 1, '1', '1'),
-(9, 'Mayo', 'Mayo', 1, '1', '1'),
-(10, 'Junio', 'Junio', 1, '1', '1'),
-(11, 'Julio', 'Julio', 1, '1', '1'),
-(12, 'Agosto', 'Agosto', 1, '1', '1'),
-(13, 'Septiembre', 'Septiembre', 1, '1', '1'),
-(14, 'Octubre', 'Octubre', 1, '1', '1'),
-(15, 'Noviembre', 'Noviembre', 1, '1', '1'),
-(16, 'Diciembre', 'Diciembre', 1, '1', '1');
+INSERT INTO `bloque_academico` (`baca_id`,`baca_nombre`, `baca_descripcion`, `baca_anio`, `baca_usuario_ingreso`, `baca_estado`, `baca_estado_logico`) VALUES 
+(1, 'B1', 'Abril - Junio', 2019, 1, '1', '1'),
+(2, 'B2', 'Julio - Agosto', 2019, 1,  '1', '1'),
+(3, 'B2', 'Enero - Febrero', 2019, 1, '1', '1'),
+(4, 'B1', 'Octubre - Diciembre', 2019, 1, '1', '1');
 
 -- ------------------------ ------------------------------
 --
 -- Volcado de datos para la tabla `periodo_academico`
 --
 
-INSERT INTO `periodo_academico` (`paca_id`, `saca_id`, `baca_id`, `paca_anio_academico`, `paca_activo`, `paca_fecha_inicio`, `paca_fecha_fin`, `paca_usuario_ingreso`, `paca_usuario_modifica`, `paca_estado`, `paca_fecha_creacion`, `paca_fecha_modificacion`, `paca_estado_logico`) VALUES
-(1, 1, 1, '2019', 'I', '2019-04-13 04:00:00', '2019-06-30 03:59:59', 1, NULL, '1', '2019-04-11 20:03:41', NULL, '1'),
-(2, 1, 2, '2019', 'A', '2019-07-08 05:00:00', '2019-09-22 04:59:59', 1, NULL, '1', '2019-07-08 16:00:26', NULL, '1');
+INSERT INTO `periodo_academico` (`paca_id`, `saca_id`, `baca_id`, `paca_activo`, `paca_fecha_inicio`, `paca_fecha_fin`, `paca_usuario_ingreso`, `paca_usuario_modifica`, `paca_estado`, `paca_fecha_creacion`, `paca_fecha_modificacion`, `paca_estado_logico`) VALUES
+(1, 1, 1,  'I', '2019-04-13 04:00:00', '2019-06-30 03:59:59', 1, NULL, '1', '2019-04-11 20:03:41', NULL, '1'),
+(2, 1, 2,  'A', '2019-07-08 05:00:00', '2019-09-22 04:59:59', 1, NULL, '1', '2019-07-08 16:00:26', NULL, '1');
 
 
 -- --------------------------------------------------------
@@ -153,33 +141,34 @@ INSERT INTO `profesor` (`pro_id`, `per_id`, `pro_usuario_ingreso`, `pro_usuario_
 (103, 137, 1, NULL, '1', '2019-07-11 20:32:03', NULL, '1');
 
 
-INSERT INTO `malla_academica` (`maca_id`,`eaca_id`,`uaca_id`,`mod_id`, `maca_tipo`, `maca_nombre`,`maca_fecha_vigencia_inicio`,`maca_fecha_vigencia_fin`,`maca_usuario_ingreso`,`maca_estado`,`maca_estado_logico`) VALUES 
+/*
+INSERT INTO `malla_academica` (`maca_id`,`meun_id` `maca_tipo`, `maca_nombre`,`maca_fecha_vigencia_inicio`,`maca_fecha_vigencia_fin`,`maca_usuario_ingreso`,`maca_estado`,`maca_estado_logico`) VALUES 
 -- Online 
-(1,1,1,1,'1','Curso de Admisión y Nivelación - Licenciatura en Comercio Exterior - Online','2018-07-01','2018-09-30',1,1,1),
-(2,2,1,1,'1','Curso de Admisión y Nivelación - Economía - Online','2018-07-01','2018-09-30',1,1,1),
-(3,3,1,1,'1','Curso de Admisión y Nivelación - Licenciatura en Finanzas - Online','2018-07-01','2018-09-30',1,1,1),
-(4,4,1,1,'1','Curso de Admisión y Nivelación - Licenciatura en Mercadotecnia - Online','2018-07-01','2018-09-30',1,1,1),
-(5,5,1,1,'1','Curso de Admisión y Nivelación - Licenciatura en Turismo - Online','2018-07-01','2018-09-30',1,1,1),
-(6,6,1,1,'1','Curso de Admisión y Nivelación - Licenciatura en Administración de Empresas - Online','2018-07-01','2018-09-30',1,1,1),
+(1,1,'1','Curso de Admisión y Nivelación - Licenciatura en Comercio Exterior - Online','2018-07-01','2018-09-30',1,1,1),
+(2,2,'1','Curso de Admisión y Nivelación - Economía - Online','2018-07-01','2018-09-30',1,1,1),
+(3,3,'1','Curso de Admisión y Nivelación - Licenciatura en Finanzas - Online','2018-07-01','2018-09-30',1,1,1),
+(4,4,'1','Curso de Admisión y Nivelación - Licenciatura en Mercadotecnia - Online','2018-07-01','2018-09-30',1,1,1),
+(5,5,'1','Curso de Admisión y Nivelación - Licenciatura en Turismo - Online','2018-07-01','2018-09-30',1,1,1),
+(6,6,'1','Curso de Admisión y Nivelación - Licenciatura en Administración de Empresas - Online','2018-07-01','2018-09-30',1,1,1),
 
 -- Presencial
 
-(7,11,1,2,'1','Curso de Admisión y Nivelación - Ingenieria en Logística y Transporte - Presencial','2018-07-01','2018-09-30',1,1,1),
+(7,7, '1','Curso de Admisión y Nivelación - Ingenieria en Logística y Transporte - Presencial','2018-07-01','2018-09-30',1,1,1),
 (8,8,1,2,'1','Curso de Admisión y Nivelación - Ingenieria en Telecomunicaciones - Presencial' ,'2018-07-01','2018-09-30',1,1,1),
-(9,7,1,2,'1','Curso de Admisión y Nivelación - Ingenieria en Software - Presencial','2018-07-01','2018-09-30',1,1,1),
+(9,9,1,2,'1','Curso de Admisión y Nivelación - Ingenieria en Software - Presencial','2018-07-01','2018-09-30',1,1,1),
 (10,10,1,2,'1','Curso de Admisión y Nivelación - Ingenieria en Tecnologias de la Información - Presencial','2018-07-01','2018-09-30',1,1,1),
-(11,1,1,2,'1','Curso de Admisión y Nivelación - Licenciatura en Comercio Exterior - Presencial','2018-07-01','2018-09-30',1,1,1),
-(12,5,1,2,'1','Curso de Admisión y Nivelación - Licenciatura en Turismo - Presencial','2018-07-01','2018-09-30',1,1,1),
-(13,3,1,2,'1','Curso de Admisión y Nivelación - Licenciatura en Finanza - Presencials','2018-07-01','2018-09-30',1,1,1),
-(14,9,1,2,'1','Curso de Admisión y Nivelación - Licenciatura en Contabilidad y Auditoria - Presencial','2018-07-01','2018-09-30',1,1,1),
-(15,13,1,2,'1','Curso de Admisión y Nivelación - Licenciatura en Gestión y Talento Humano - Presencial','2018-07-01','2018-09-30',1,1,1),
-(16,6,1,2,'1','Curso de Admisión y Nivelación - Licenciatura en Administracion de Empresas - Presencial','2018-07-01','2018-09-30',1,1,1),
-(17,4,1,2,'1','Curso de Admisión y Nivelación - Licenciatura en Mercadotecnia - Presencial','2018-07-01','2018-09-30',1,1,1),
-(18,14,1,2,'1','Curso de Admisión y Nivelación - Licenciatura en Administración Portuaria y Aduanera - Presencial','2018-07-01','2018-09-30',1,1,1),
+(11,11,1,2,'1','Curso de Admisión y Nivelación - Licenciatura en Comercio Exterior - Presencial','2018-07-01','2018-09-30',1,1,1),
+(12,12,1,2,'1','Curso de Admisión y Nivelación - Licenciatura en Turismo - Presencial','2018-07-01','2018-09-30',1,1,1),
+(13,13,1,2,'1','Curso de Admisión y Nivelación - Licenciatura en Finanza - Presencials','2018-07-01','2018-09-30',1,1,1),
+(14,14,1,2,'1','Curso de Admisión y Nivelación - Licenciatura en Contabilidad y Auditoria - Presencial','2018-07-01','2018-09-30',1,1,1),
+(15,15,1,2,'1','Curso de Admisión y Nivelación - Licenciatura en Gestión y Talento Humano - Presencial','2018-07-01','2018-09-30',1,1,1),
+(16,16,1,2,'1','Curso de Admisión y Nivelación - Licenciatura en Administracion de Empresas - Presencial','2018-07-01','2018-09-30',1,1,1),
+(17,17,1,2,'1','Curso de Admisión y Nivelación - Licenciatura en Mercadotecnia - Presencial','2018-07-01','2018-09-30',1,1,1),
+(18,18,1,2,'1','Curso de Admisión y Nivelación - Licenciatura en Administración Portuaria y Aduanera - Presencial','2018-07-01','2018-09-30',1,1,1),
 
 -- Semi-Presencial
 
-(19,12,1,3,'1','Curso de Admisión y Nivelación - Licenciatura en Comunicación - Semi - Presencial','2018-07-01','2018-09-30',1,1,1),
+(19,20,1,3,'1','Curso de Admisión y Nivelación - Licenciatura en Comunicación - Semi - Presencial','2018-07-01','2018-09-30',1,1,1),
 (20,15,2,3,'1','Curso de Admisión y Nivelación - Administración de Empresas - Semi - Presencial','2018-07-01','2018-09-30',1,1,1),
 (21,16,2,3,'1','Curso de Admisión y Nivelación - Finanzas - Semi - Presencial','2018-07-01','2018-09-30',1,1,1),
 (22,17,2,3,'1','Curso de Admisión y Nivelación - Marketing - Semi - Presencial','2018-07-01','2018-09-30',1,1,1),
@@ -461,6 +450,7 @@ INSERT INTO `malla_academica_detalle` (`made_id`,`maca_id`,`asi_id`,`uest_id`,`n
 (163,33,3,1,1,6,'',1,1,1),
 (164,33,4,1,1,6,'',1,1,1),
 (165,33,5,1,1,6,'',1,1,1);
+*/
 
 INSERT INTO `distributivo_horario` (`dhor_id`,`dia_id`,`dhor_hora_inicio`,`dhor_hora_fin`, `dhor_descripcion`, `dhor_usuario_ingreso`, `dhor_estado`,`dhor_estado_logico`) VALUES 
 (1,1,'07:00','13:00','Matutino',1,1,1),

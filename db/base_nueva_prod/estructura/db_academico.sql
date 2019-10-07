@@ -233,10 +233,8 @@ create table if not exists `formacion_malla_academica` (
 
 create table if not exists `malla_academica` (
   `maca_id` bigint(20) not null auto_increment primary key, 
-  `eaca_id` bigint(20) not null,
-  `uaca_id` bigint(20) not null, 
-  `mod_id` bigint(20) not null,
-  `maca_tipo` varchar(1) null,  -- 1= método de ingreso, 2 = carrera. 
+  `meun_id` bigint(20) not null,  
+  `maca_tipo` varchar(1) null,  -- 1= método de ingreso, 2 = carrera.
   `maca_codigo` varchar(50) null,  
   `maca_nombre` varchar(300) not null,
   `maca_fecha_vigencia_inicio` timestamp null default null,
@@ -247,9 +245,7 @@ create table if not exists `malla_academica` (
   `maca_fecha_creacion` timestamp not null default current_timestamp,
   `maca_fecha_modificacion` timestamp null default null,
   `maca_estado_logico` varchar(1) not null,
-  foreign key (eaca_id) references `estudio_academico`(eaca_id),
-  foreign key (uaca_id) references `unidad_academica`(uaca_id),
-  foreign key (mod_id) references `modalidad`(mod_id)  
+  foreign key (meun_id) references `modalidad_estudio_unidad`(meun_id)  
 );
 
 -- --------------------------------------------------------
@@ -264,6 +260,8 @@ create table if not exists `malla_academica_detalle` (
   `nest_id` bigint(20) not null,
   `fmac_id` bigint(20) not null,
   `made_codigo_asignatura` varchar(300) not null,
+  `made_hora` integer(04) not null,
+  `made_credito` integer(2) not null,
   `made_usuario_ingreso` bigint(20) not null,
   `made_usuario_modifica` bigint(20)  null,
   `made_estado` varchar(1) not null,
@@ -274,8 +272,7 @@ create table if not exists `malla_academica_detalle` (
   foreign key (asi_id) references `asignatura`(asi_id),
   foreign key (uest_id) references `unidad_estudio`(uest_id),
   foreign key (nest_id) references `nivel_estudio`(nest_id),
-  foreign key (fmac_id) references `formacion_malla_academica`(fmac_id)
-  
+  foreign key (fmac_id) references `formacion_malla_academica`(fmac_id)  
 );
 
 -- --------------------------------------------------------
@@ -307,8 +304,9 @@ create table if not exists `modulo_estudio` (
 --
 create table if not exists `semestre_academico` (
   `saca_id` bigint(20) not null auto_increment primary key, 
-  `saca_nombre` varchar(300) not null, 
+  `saca_nombre` varchar(300) not null,   
   `saca_descripcion` varchar(300) not null,
+  `saca_anio` integer(4) not null,
   `saca_fecha_registro` timestamp null default null, 
   `saca_usuario_ingreso` bigint(20) not null,
   `saca_usuario_modifica` bigint(20)  null,
@@ -324,8 +322,9 @@ create table if not exists `semestre_academico` (
 -- 
 create table if not exists `bloque_academico` (
   `baca_id` bigint(20) not null auto_increment primary key, 
-  `baca_nombre` varchar(300) not null, 
+  `baca_nombre` varchar(300) not null,   
   `baca_descripcion` varchar(300) not null,
+  `baca_anio` integer(4) not null,
   `baca_usuario_ingreso` bigint(20) not null,
   `baca_usuario_modifica` bigint(20)  null,
   `baca_estado` varchar(1) not null,
@@ -342,10 +341,7 @@ create table if not exists `bloque_academico` (
 create table if not exists `periodo_academico` (
   `paca_id` bigint(20) not null auto_increment primary key, 
   `saca_id` bigint(20) null,
-  `baca_id` bigint(20) null,
-  `paca_anio_academico` varchar(50) not null,
-  `uaca_id` bigint(20) null,
-  `mod_id` bigint(20) null,
+  `baca_id` bigint(20) null,  
   `paca_activo` varchar(1) not null,
   `paca_fecha_inicio` timestamp null default null,
   `paca_fecha_fin` timestamp null default null,
@@ -356,31 +352,7 @@ create table if not exists `periodo_academico` (
   `paca_fecha_modificacion` timestamp null default null,
   `paca_estado_logico` varchar(1) not null,
   foreign key (saca_id) references `semestre_academico`(saca_id),
-  foreign key (baca_id) references `bloque_academico`(baca_id),
-  foreign key (uaca_id) REFERENCES `unidad_academica`(uaca_id),
-  foreign key (mod_id) REFERENCES `modalidad`(mod_id)
-);
-
--- --------------------------------------------------------
--- 
--- Estructura de tabla para la tabla `periodo_academico_met_ingreso`
--- 
-create table if not exists `periodo_academico_met_ingreso` (
-  `pami_id` bigint(20) not null auto_increment primary key,
-  `pami_anio` bigint(20) null,
-  `pami_mes` bigint(20) null,
-  `uaca_id` bigint(20) not null,
-  `mod_id` bigint(20) not null,
-  `ming_id` bigint(20) not null,
-  `pami_fecha_inicio` timestamp null,
-  `pami_fecha_fin` timestamp null,
-  `pami_codigo` varchar(10) not null,
-  `pami_usuario_ingreso` bigint(20) not null,
-  `pami_usuario_modifica` bigint(20)  null,
-  `pami_estado` varchar(1) not null,
-  `pami_fecha_creacion` timestamp not null default current_timestamp,
-  `pami_fecha_modificacion` timestamp null default null,
-  `pami_estado_logico` varchar(1) not null
+  foreign key (baca_id) references `bloque_academico`(baca_id)
 );
 
 -- --------------------------------------------------------
@@ -444,10 +416,8 @@ create table if not exists `planificacion_estudio_academico` (
   `peac_id` bigint(20) not null auto_increment primary key, 
   `uaca_id` bigint(20) not null,
   `mod_id` bigint(20) not null,
-  `paca_id` bigint(20) null,
-  `pami_id` bigint(20) null,
-  `ppro_id` bigint(20) null,
-  `maca_id` bigint(20) not null,
+  `paca_id` bigint(20) null,  
+  `ppro_id` bigint(20) null,  
   `made_id` bigint(20) null,
   `peac_usuario_ingreso` bigint(20) not null,
   `peac_usuario_modifica` bigint(20)  null,
@@ -458,8 +428,7 @@ create table if not exists `planificacion_estudio_academico` (
   foreign key (uaca_id) references `unidad_academica`(uaca_id),
   foreign key (mod_id) references `modalidad`(mod_id),
   foreign key (paca_id) references `periodo_academico`(paca_id),
-  foreign key (maca_id) references `malla_academica`(maca_id),
-  foreign key (pami_id) references `periodo_academico_met_ingreso`(pami_id),
+  foreign key (maca_id) references `malla_academica`(maca_id),  
   foreign key (ppro_id) REFERENCES `promocion_programa`(ppro_id)
 );
 
@@ -488,8 +457,7 @@ create table if not exists `distributivo_horario` (
 -- 
 create table if not exists `paralelo` (
   `par_id` bigint(20) not null auto_increment primary key, 
-  `paca_id` bigint(20)  null,
-  `pami_id` bigint(20)  null,
+  `paca_id` bigint(20)  null,  
   `peac_id` bigint(20)  null,
   `par_nombre` varchar(300) not null,
   `par_descripcion` varchar(500) not null,
@@ -500,8 +468,7 @@ create table if not exists `paralelo` (
   `par_fecha_creacion` timestamp not null default current_timestamp,
   `par_fecha_modificacion` timestamp null default null,
   `par_estado_logico` varchar(1) not null,
-  foreign key (paca_id) references `periodo_academico`(paca_id),
-  foreign key (pami_id) references `periodo_academico_met_ingreso`(pami_id),
+  foreign key (paca_id) references `periodo_academico`(paca_id)
   foreign key (peac_id) REFERENCES `planificacion_estudio_academico`(peac_id)
 );
 
@@ -597,49 +564,9 @@ create table if not exists `asignacion_paralelo` (
 
 -- --------------------------------------------------------
 -- 
--- Estructura de tabla para la tabla `modulo_estudio_empresa`
--- 
-create table if not exists `modulo_estudio_empresa` (
-  `meem_id` bigint(20) not null auto_increment primary key, 
-  `mest_id` bigint(20) null,
-  `emp_id` bigint(20) null,
-  `meem_fecha_inicio` timestamp null default null,
-  `meem_fecha_fin` timestamp null default null,
-  `meem_usuario_ingreso` bigint(20) not null,
-  `meem_usuario_modifica` bigint(20)  null,  
-  `meem_estado_gestion` varchar(1) not null,  
-  `meem_estado` varchar(1) not null,
-  `meem_fecha_creacion` timestamp not null default current_timestamp,
-  `meem_fecha_modificacion` timestamp null default null,
-  `meem_estado_logico` varchar(1) not null,   
-  foreign key (mest_id) references `modulo_estudio`(mest_id)
-);
-
+-- Estructura de tabla para la tabla `estudio_acad_area_con`
 -- --------------------------------------------------------
--- 
--- Estructura de tabla para la tabla `modalidad_unidad_academico`
-
-create table if not exists `modalidad_unidad_academico` (
-  `muac_id` bigint(20) not null auto_increment primary key,
-  `uaca_id` bigint(20) not null,
-  `mod_id` bigint(20) not null,
-  `emp_id` bigint(20) not null,
-  `muac_usuario_ingreso` bigint(20) not null,
-  `muac_usuario_modifica` bigint(20)  null,  
-  `muac_estado` varchar(1) not null,
-  `muac_fecha_creacion` timestamp not null default current_timestamp,
-  `muac_fecha_modificacion` timestamp null default null,
-  `muac_estado_logico` varchar(1) not null,
-  foreign key (uaca_id) references `unidad_academica`(uaca_id),
-  foreign key (mod_id) references `modalidad`(mod_id)
-);
-
-
--- --------------------------------------------------------
--- 
--- Estructura de tabla para la tabla `estudio_academico_area_conocimiento`
--- --------------------------------------------------------
-create table if not exists `estudio_academico_area_conocimiento` (
+create table if not exists `estudio_acad_area_con` (
   `eaac_id` bigint(20) not null auto_increment primary key,   
   `eaca_id` bigint(20) null,
   `mest_id` bigint(20) null,
@@ -662,8 +589,7 @@ create table if not exists `horario_asignatura_periodo` (
   `hape_id` bigint(20) not null auto_increment primary key,   
   `asi_id` bigint(20) not null,
   `paca_id` bigint(20) null,
-  `ppro_id` bigint(20) null,
-  `pami_id` bigint(20) null,
+  `ppro_id` bigint(20) null,  
   `daca_id` bigint(20) null,
   `pro_id` bigint(20) not null,
   `uaca_id` bigint(20) not null,
@@ -682,8 +608,7 @@ create table if not exists `horario_asignatura_periodo` (
   foreign key (uaca_id) references `unidad_academica`(uaca_id),
   foreign key (mod_id) references `modalidad`(mod_id),
   foreign key (daca_id) REFERENCES `distributivo_academico`(daca_id),
-  foreign key (ppro_id) REFERENCES `promocion_programa`(ppro_id),
-  foreign key (pami_id) REFERENCES `periodo_academico_met_ingreso`(pami_id)
+  foreign key (ppro_id) REFERENCES `promocion_programa`(ppro_id)
 );
 
 -- --------------------------------------------------------
