@@ -438,17 +438,21 @@ class MatriculacionposgradosController extends \app\components\CController {
             $data = Yii::$app->request->post();
             $par_id = $data["par_id"];
             $promocion_id = $data["pro_id"];
+            $paralelo = $data["par_id"];
             $con = \Yii::$app->db_academico;
             $transaction = $con->beginTransaction();
+            //Consultar el numero de paralelos en promocion            
+            $resp_consParalelo = $mod_paralelo->getParalelosxids($paralelo, $promocion_id);
             try {
-                //Eliminar en registro
-                $registro = $mod_paralelo->deleteParelelo($par_id, $user_id);
-                if ($registro) {
-                    //Consultar el numero de paralelos en promocion
-                    $resp_consPromocion = $mod_promocion->consultarPromocionxid($promocion_id);
-                    //Actualizar el numero de paralelos activos en promocion
-                    if ($resp_consPromocion['ppro_num_paralelo'] > 0) {
-                        //if ($resp_consPromocion['ppro_num_paralelo'] == $resp_consPromocion['ppro_cupo']) { //VALIDAR QUE SI YA HA DESMINUIDO EL CUPO NO DEJAR ELIMINAR EL CURSO
+                //VALIDAR QUE SI YA HA DESMINUIDO EL CUPO NO DEJAR ELIMINAR EL CURSO
+                // si pppr_cupo == pppr_cupo_actual or ppro_cupo == pppr_cupo_actual                
+                if ($resp_consParalelo['pppr_cupo_actual'] == $resp_consParalelo['pppr_cupo']) {
+                    //Eliminar en registro
+                    $registro = $mod_paralelo->deleteParelelo($par_id, $user_id);
+                    if ($registro) {
+                        //Actualizar el numero de paralelos activos en promocion
+                        $resp_consPromocion = $mod_promocion->consultarPromocionxid($promocion_id);
+                        if ($resp_consPromocion['ppro_num_paralelo'] > 0) {
                             $resp_ModPromocion = $mod_promocion->actualizarPromocionparalelo($promocion_id, $resp_consPromocion['ppro_num_paralelo'], $user_id);
                             if ($resp_ModPromocion) {
                                 $transaction->commit();
@@ -465,14 +469,14 @@ class MatriculacionposgradosController extends \app\components\CController {
                                 );
                                 return Utilities::ajaxResponse('NO_OK', 'alert', Yii::t("jslang", "Error"), false, $message);
                             }
-                        /*} else {
+                        } else {
                             $transaction->rollback();
                             $message = array(
-                                "wtmessage" => Yii::t("notificaciones", "No se puede eliminar paralelo, ye tiene cupos utilizados. "),
+                                "wtmessage" => Yii::t("notificaciones", "Error al eliminar el paralelo. "),
                                 "title" => Yii::t('jslang', 'Error'),
                             );
                             return Utilities::ajaxResponse('NO_OK', 'alert', Yii::t("jslang", "Error"), false, $message);
-                        }*/
+                        }
                     } else {
                         $transaction->rollback();
                         $message = array(
@@ -484,7 +488,7 @@ class MatriculacionposgradosController extends \app\components\CController {
                 } else {
                     $transaction->rollback();
                     $message = array(
-                        "wtmessage" => Yii::t("notificaciones", "Error al eliminar el paralelo. "),
+                        "wtmessage" => Yii::t("notificaciones", "No se puede eliminar paralelo, ye tiene cupos utilizados. "),
                         "title" => Yii::t('jslang', 'Error'),
                     );
                     return Utilities::ajaxResponse('NO_OK', 'alert', Yii::t("jslang", "Error"), false, $message);
