@@ -141,8 +141,7 @@ INSERT INTO `profesor` (`pro_id`, `per_id`, `pro_usuario_ingreso`, `pro_usuario_
 (103, 137, 1, NULL, '1', '2019-07-11 20:32:03', NULL, '1');
 
 
-
-INSERT INTO `malla_academica` (`maca_id`,`meun_id` `maca_tipo`, `maca_nombre`,`maca_fecha_vigencia_inicio`,`maca_fecha_vigencia_fin`,`maca_usuario_ingreso`,`maca_estado`,`maca_estado_logico`) VALUES 
+INSERT INTO `malla_academica` (`maca_id`,`meun_id`, `maca_tipo`, `maca_nombre`,`maca_fecha_vigencia_inicio`,`maca_fecha_vigencia_fin`,`maca_usuario_ingreso`,`maca_estado`,`maca_estado_logico`) VALUES 
 -- Online 
 (1,1,'1','Curso de Admisión y Nivelación - Licenciatura en Comercio Exterior - Online','2018-07-01','2018-09-30',1,1,1),
 (2,2,'1','Curso de Admisión y Nivelación - Economía - Online','2018-07-01','2018-09-30',1,1,1),

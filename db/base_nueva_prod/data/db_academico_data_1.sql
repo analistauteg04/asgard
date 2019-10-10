@@ -570,38 +570,7 @@ INSERT INTO `asignatura` (`asi_id`, `scon_id`, `asi_nombre`, `asi_descripcion`, 
 (311, 1, 'Upper-Intermediate 1', 'Upper-Intermediate 1', 1, NULL, '1', '2019-07-11 18:30:00', NULL, '1'),
 (312, 1, 'Estrategia de Oferta de Productos y Servicios', 'Estrategia de Oferta de Productos y Servicios', 1, NULL, '1', '2019-08-13 18:40:00', NULL, '1');
 
-<<<<<<< HEAD
 INSERT INTO `estudio_acad_area_con` (`eaac_id`, `eaca_id`, `mest_id`, `acon_id`, `eaac_estado`, `eaac_fecha_creacion`, `eaac_fecha_modificacion`, `eaac_estado_logico`) VALUES
-=======
-
--- --------------------------------------------------------
---
--- Volcado de datos para la tabla `modalidad_unidad_academico`
---
-INSERT INTO `modalidad_unidad_academico` (`muac_id`, `uaca_id`, `mod_id`, `emp_id`, `muac_usuario_ingreso`, `muac_usuario_modifica`, `muac_estado`, `muac_fecha_creacion`, `muac_fecha_modificacion`, `muac_estado_logico`) VALUES
-(1, 1, 1, 1, 1, NULL, '1', '2018-09-17 18:35:00', NULL, '1'),
-(2, 1, 2, 1, 1, NULL, '1', '2018-09-17 18:35:00', NULL, '1'),
-(3, 1, 3, 1, 1, NULL, '1', '2018-09-17 18:35:00', NULL, '1'),
-(4, 1, 4, 1, 1, NULL, '1', '2018-09-17 18:35:00', NULL, '1'),
-(5, 2, 3, 1, 1, NULL, '1', '2018-09-17 18:35:00', NULL, '1'),
-(6, 3, 1, 1, 1, NULL, '0', '2017-02-01 19:35:00', NULL, '0'),
-(7, 3, 2, 1, 1, NULL, '0', '2017-02-01 19:35:00', NULL, '0'),
-(8, 3, 1, 3, 1, NULL, '0', '2018-09-29 18:35:00', NULL, '0'),
-(9, 3, 2, 3, 1, NULL, '1', '2018-09-29 18:35:00', NULL, '1'),
-(10, 3, 1, 2, 1, NULL, '0', '2017-02-01 19:35:00', NULL, '1'),
--- (11, 5, 1, 2, 1, NULL, '0', '2017-02-01 19:35:00', NULL, '1'), -- NO
-(11, 1, 1, 2, 1, NULL, '0', '2017-02-01 19:35:00', NULL, '1'),
-(12, 2, 1, 2, 1, NULL, '0', '2018-10-01 18:35:00', NULL, '1'),
-(13, 2, 2, 1, 1, NULL, '1', '2018-10-19 20:30:00', NULL, '1'),
--- (15, 7, 1, 2, 1, NULL, '1', '2018-12-10 15:55:00', NULL, '1'), --NO
--- (16, 8, 2, 2, 1, NULL, '1', '2018-12-10 15:55:00', NULL, '1'), -- NO
--- (17, 9, 1, 2, 1, NULL, '1', '2018-12-10 15:55:00', NULL, '1'), -- NO
-(14, 2, 1, 1, 1, NULL, '1', '2019-05-31 22:43:00', NULL, '1'),
-(15, 3, 1, 3, 1, NULL, '1', '2019-08-06 16:00:00', NULL, '1');
-
-
-INSERT INTO `estudio_academico_area_conocimiento` (`eaac_id`, `eaca_id`, `mest_id`, `acon_id`, `eaac_estado`, `eaac_fecha_creacion`, `eaac_fecha_modificacion`, `eaac_estado_logico`) VALUES
->>>>>>> 0ec39f5653ab90b393fad6a95fc6c635eadb0124
 (1, 1, NULL, 4, '1', '2019-01-16 06:22:45', NULL, '1'),
 (2, 2, NULL, 4, '1', '2019-01-16 06:22:45', NULL, '1'),
 (3, 3, NULL, 4, '1', '2019-01-16 06:22:45', NULL, '1'),
