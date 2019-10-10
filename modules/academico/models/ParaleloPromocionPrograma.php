@@ -108,7 +108,7 @@ class ParaleloPromocionPrograma extends \yii\db\ActiveRecord
      * @param   
      * @return  $resultData (información del aspirante)
      */
-    public static function getParalelos($ppro_id) {
+    public static function getParalelos($ppro_id, $onlyData = false) {
         $con = \Yii::$app->db;
         $con1 = \Yii::$app->db_academico;
         $estado = 1;        
@@ -191,5 +191,34 @@ class ParaleloPromocionPrograma extends \yii\db\ActiveRecord
                 $trans->rollback();
             return FALSE;
         }
+    }
+    
+    /**
+     * Function Consultar datos de paralelo promocion segun id de paralelo y id de promocion.
+     * @author  Giovanni Vergara <analistadesarrollo02@uteg.edu.ec>;
+     * @property       
+     * @return  
+     */
+    public function getParalelosxids($pppr_id, $ppro_id) {
+        $con = \Yii::$app->db_academico;
+        $estado = 1;
+
+        $sql = "SELECT 	
+                        pppr.pppr_cupo as pppr_cupo,
+                        pppr.pppr_cupo_actual as pppr_cupo_actual,
+                        pppr.pppr_fecha_creacion as pppr_fecha_creacion
+                        
+                FROM " . $con->dbname . ".paralelo_promocion_programa pppr                    
+                WHERE   pppr.pppr_id = :pppr_id
+                        AND pppr.ppro_id = :ppro_id
+                        AND pppr.pppr_estado = :estado
+                        AND pppr.pppr_estado_logico = :estado ";
+
+        $comando = $con->createCommand($sql);
+        $comando->bindParam(":estado", $estado, \PDO::PARAM_STR);
+        $comando->bindParam(":pppr_id", $pppr_id, \PDO::PARAM_INT);
+        $comando->bindParam(":ppro_id", $ppro_id, \PDO::PARAM_INT);
+        $resultData = $comando->queryOne();
+        return $resultData;
     }
 }
