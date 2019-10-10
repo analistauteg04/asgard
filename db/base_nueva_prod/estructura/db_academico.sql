@@ -711,7 +711,6 @@ CREATE TABLE `otro_estudio_academico` (
 -- 
 -- Estructura de tabla para la tabla `documento_aceptacion`
 -- --------------------------------------------------------
-
 create table if not exists `documento_aceptacion` (
  `dace_id` bigint(20) not null auto_increment primary key,
  `per_id` bigint(20) not null, 
@@ -728,12 +727,10 @@ create table if not exists `documento_aceptacion` (
  `dace_estado_logico` varchar(1) not null
 );
 
-
 -- --------------------------------------------------------
 -- 
 -- Estructura de tabla para la tabla `observaciones_documento_aceptacion`
 -- --------------------------------------------------------
-
 create table if not exists `observaciones_documento_aceptacion` (
  `odac_id` bigint(20) not null auto_increment primary key,
  `odac_descripcion` varchar(500) not null, 
@@ -749,7 +746,6 @@ create table if not exists `observaciones_documento_aceptacion` (
 -- 
 -- Estructura de tabla para la tabla `observaciones_documento_aceptacion`
 -- --------------------------------------------------------
-
 create table if not exists `observaciones_por_documento_aceptacion` (
  `opda_id` bigint(20) not null auto_increment primary key,
  `odac_id` bigint(20) not null, 
