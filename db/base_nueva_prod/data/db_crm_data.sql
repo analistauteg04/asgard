@@ -464,7 +464,7 @@ INSERT INTO `personal_nivel_modalidad` (`pnmo_id`, `padm_id`, `uaca_id`, `mod_id
 (74, 14, 3, 2, 3, '1', '1'),
 (75, 15, 3, 2, 3, '1', '1'),
 (76, 16, 3, 2, 3, '1', '1'),
-(76, 17, 3, 2, 3, '1', '1');
+(77, 17, 3, 2, 3, '1', '1');
 
 -- --------------------------------------------------------
 --
@@ -503,7 +503,7 @@ INSERT INTO `grupo_introductorio` (`gint_id`, `gint_nombre`, `gint_descripcion`,
 (3, 'G2-8 Septiembre', 'G2-8 Septiembre', '1', 1, NULL, '2019-08-08 16:40:00', NULL, '1'),
 (4, 'Pendiente', 'Pendiente', '1', 1, NULL, '2019-08-08 16:40:00', NULL, '1'),
 (5, 'G3-Octubre', 'G3-Octubre', '1', 1, NULL, '2019-09-12 21:10:00', NULL, '1'),
-(6, 'Otras Maestrías', 'Otras Maestrías', '1', 1, NULL, '2019-09-23 15:36:00', '0000-00-00 00:00:00', '1');
+(6, 'Otras Maestrías', 'Otras Maestrías', '1', 1, NULL, '2019-09-23 15:36:00', NULL, '1');
 
 
 --
