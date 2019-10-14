@@ -333,7 +333,6 @@ create table if not exists `bloque_academico` (
   `baca_estado_logico` varchar(1) not null  
 );
 
-
 -- --------------------------------------------------------
 -- 
 -- Estructura de tabla para la tabla `periodo_academico`
@@ -780,3 +779,17 @@ create table if not exists `matriculacion_programa_inscrito` (
  `mpin_estado_logico` varchar(1) not null,
  foreign key (ppro_id) references `promocion_programa`(ppro_id)
 );
+
+-- --------------------------------------------------------
+-- 
+-- Estructura de tabla para la tabla `registro_marcacion_generada` 
+-- --------------------------------------------------------
+create table if not exists registro_marcacion_generada (
+  `rmtm_id` bigint(20) not null auto_increment primary key,
+  `hape_id` bigint(20) not null,
+  `paca_id` bigint(20) not null,
+  `uaca_id` bigint(20) not null,
+  `mod_id` bigint(20)  null,    
+  `rmtm_fecha_transaccion` timestamp null default null 
+);
+               
