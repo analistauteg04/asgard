@@ -115,7 +115,7 @@ class RegistroMarcacion extends \yii\db\ActiveRecord {
                     hap.mod_id as modalidad,
                     asig.asi_nombre as materia,
                     hap.pro_id as profesor,
-                    ifnull(CONCAT(paca.paca_anio_academico,' (',blq.baca_nombre,'-',sem.saca_nombre,')'),paca.paca_anio_academico) as periodo,
+                    ifnull(CONCAT(sem.saca_anio,' (',blq.baca_nombre,'-',sem.saca_nombre,')'),sem.saca_anio) as periodo,
                     ifnull((SELECT DATE_FORMAT(marc.rmar_fecha_hora_entrada, '%H:%i:%s')
                             FROM db_academico.registro_marcacion marc
                             WHERE marc.pro_id = prof.pro_id 
@@ -338,6 +338,7 @@ class RegistroMarcacion extends \yii\db\ActiveRecord {
         }
         $sql = "
                SELECT
+                    $periodoacademico
                     CONCAT(ifnull(per.per_pri_nombre,' '), ' ', ifnull(per.per_pri_apellido,' ')) as nombres,
                     asig.asi_nombre as materia,
                     DATE_FORMAT(rma.rmar_fecha_creacion, '%Y-%m-%d') as fecha,
@@ -347,12 +348,10 @@ class RegistroMarcacion extends \yii\db\ActiveRecord {
                             FROM db_academico.registro_marcacion marc
                             WHERE marc.pro_id = rma.pro_id AND marc.hape_id = rma.hape_id AND marc.rmar_tipo = 'S' and marc.rmar_idingreso = rma.rmar_id),'') as hora_salida,
                     hap.hape_hora_salida as salida_esperada,
-                    FROM_BASE64(rma.rmar_direccion_ip) as ip,
+                    FROM_BASE64(rma.rmar_direccion_ip) as ip,                    
                     ifnull((SELECT FROM_BASE64(marc.rmar_direccion_ip)
                             FROM db_academico.registro_marcacion marc
-                            WHERE marc.pro_id = rma.pro_id AND marc.hape_id = rma.hape_id AND marc.rmar_tipo = 'S' and marc.rmar_idingreso = rma.rmar_id),'') as ip_salida,
-                    $periodoacademico
-                    peri.paca_anio_academico                    
+                            WHERE marc.pro_id = rma.pro_id AND marc.hape_id = rma.hape_id AND marc.rmar_tipo = 'S' and marc.rmar_idingreso = rma.rmar_id),'') as ip_salida
                     FROM " . $con->dbname . ".registro_marcacion rma
                     INNER JOIN " . $con->dbname . ".horario_asignatura_periodo hap on hap.hape_id = rma.hape_id
                     INNER JOIN " . $con->dbname . ".asignatura asig on asig.asi_id = hap.asi_id
@@ -553,8 +552,8 @@ class RegistroMarcacion extends \yii\db\ActiveRecord {
         }
         $sql = "SELECT 	concat(p.per_pri_nombre,' ', p.per_pri_apellido, ' ', ifnull(p.per_seg_apellido,'')) as profesor,  
                         case when (pera.saca_id > 0) and (pera.baca_id > 0) then 
-                            ifnull(CONCAT(pera.paca_anio_academico,' (',blq.baca_nombre,'-',sem.saca_nombre,')'),pera.paca_anio_academico)
-                            else pera.paca_anio_academico end as periodo,
+                           ifnull(CONCAT(sem.saca_anio,' (',blq.baca_nombre,'-',sem.saca_nombre,')'),sem.saca_anio)
+                            else sem.saca_anio end as periodo,
                         a.asi_descripcion as materia, ua.uaca_descripcion as unidad, 
                         m.mod_descripcion as modalidad, ifnull(hap.hape_fecha_clase,'N/A') as fecha_clase, 
                         d.dia_descripcion, hap.hape_hora_entrada, hap.hape_hora_salida

@@ -623,7 +623,7 @@ class PeriodoAcademicoMetIngreso extends  \app\modules\academico\components\CAct
         $estado = 1;
         $sql = "SELECT
                    pera.paca_id as id,
-                   ifnull(CONCAT(pera.paca_anio_academico,' (',blq.baca_nombre,'-',sem.saca_nombre,')'),pera.paca_anio_academico) as name
+                   ifnull(CONCAT(sem.saca_anio,' (',blq.baca_nombre,'-',sem.saca_nombre,')'),sem.saca_anio) as name
                 FROM 
                    " . $con->dbname . ".periodo_academico pera "
                 . "LEFT JOIN " . $con->dbname . ".semestre_academico sem  ON sem.saca_id = pera.saca_id "
