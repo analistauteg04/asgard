@@ -99,7 +99,7 @@ class UnidadAcademica extends \app\modules\academico\components\CActiveRecord {
                     WHERE   
                         unia.uaca_estado_logico=:estado AND 
                         unia.uaca_estado=:estado
-                    ORDER BY name asc
+                    ORDER BY 2 asc
                ";
         $comando = $con->createCommand($sql);
         $comando->bindParam(":estado", $estado, \PDO::PARAM_STR);
@@ -121,13 +121,12 @@ class UnidadAcademica extends \app\modules\academico\components\CActiveRecord {
         }
             
         $sql = "
-                    SELECT 
-                        distinct una.uaca_id as id, una.uaca_nombre as name
-                        FROM db_academico.modalidad_unidad_academico mua
-                        Inner JOIN db_academico.unidad_academica una on una.uaca_id = mua.uaca_id 
+                    SELECT distinct una.uaca_id as id, una.uaca_nombre as name
+                        FROM db_academico.modalidad_estudio_unidad meu
+                             inner JOIN db_academico.unidad_academica una on una.uaca_id = meu.uaca_id               
                     where $condicion
-                        mua.muac_estado = :estado AND
-                        mua.muac_estado_logico = :estado AND
+                        meu.meun_estado = :estado AND
+                        meu.meun_estado_logico = :estado AND
                         una.uaca_estado = :estado AND
                         una.uaca_estado_logico = :estado
                     ORDER BY id asc ;

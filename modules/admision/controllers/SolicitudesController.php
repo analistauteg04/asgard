@@ -203,27 +203,31 @@ class SolicitudesController extends \app\components\CController {
         if (Yii::$app->request->isAjax) {
             $data = Yii::$app->request->post();
             if (isset($data["getuacademias"])) {
-                $data_u_acad = $mod_unidad->consultarUnidadAcademicasEmpresa($data["empresa_id"]);
+                //$data_u_acad = $mod_unidad->consultarUnidadAcademicasEmpresa($data["empresa_id"]);
+                $data_u_acad->consultarUnidadAcademicas();
                 $message = array("unidad_academica" => $data_u_acad);
                 return Utilities::ajaxResponse('OK', 'alert', Yii::t('jslang', 'Success'), 'false', $message);
             }
             if (isset($data["getmodalidad"])) {
-                $modalidad = $mod_modalidad->consultarModalidad($data["nint_id"], $data["empresa_id"]);
+                if ($data["nint_id"]==1 or $data["nint_id"]==2) {
+                $modalidad = $mod_modalidad->consultarModalidad($data["nint_id"], $data["empresa_id"]);                
+                } else {
+                    $modalidad = $modestudio->consultarModalidadModestudio();                    
+                }
                 $message = array("modalidad" => $modalidad);
-                return Utilities::ajaxResponse('OK', 'alert', Yii::t('jslang', 'Success'), 'false', $message);
-                return;
+                return Utilities::ajaxResponse('OK', 'alert', Yii::t('jslang', 'Success'), 'false', $message);                
             }
-            if (isset($data["getmetodo"])) {
-                $metodos = $mod_metodo->consultarMetodoIngNivelInt($data['nint_id']);
+            if (isset($data["getmetodo"])) {                
+                $metodos = $mod_metodo->consultarMetodoIngNivelInt($data['nint_id']);                
                 $message = array("metodos" => $metodos);
                 return Utilities::ajaxResponse('OK', 'alert', Yii::t('jslang', 'Success'), 'false', $message);
-                return;
+                
             }
             if (isset($data["getcarrera"])) {
-                if ($data["empresa_id"] == 1) {
-                    $carrera = $modcanal->consultarCarreraModalidad($data["unidada"], $data["moda_id"]);
+                if ($data["unidada"] ==1 or $data["unidada"] ==2) {
+                    $carrera = $modcanal->consultarCarreraModalidad($data["unidada"], $data["moda_id"]);                    
                 } else {
-                    $carrera = $modestudio->consultarCursoModalidad($data["unidada"], $data["moda_id"], $data["empresa_id"]); // tomar id de impresa
+                    $carrera = $modestudio->consultarCursoModalidad($data["unidada"], $data["moda_id"]);
                 }
                 $message = array("carrera" => $carrera);
                 return Utilities::ajaxResponse('OK', 'alert', Yii::t('jslang', 'Success'), 'false', $message);
@@ -284,7 +288,7 @@ class SolicitudesController extends \app\components\CController {
                 return Utilities::ajaxResponse('OK', 'alert', Yii::t('jslang', 'Success'), 'false', $message);
             }
         }
-        $arr_unidadac = $mod_unidad->consultarUnidadAcademicasEmpresa($emp_id);
+        $arr_unidadac = $mod_unidad->consultarUnidadAcademicas();
         $arr_modalidad = $mod_modalidad->consultarModalidad(1, 1);
         $arr_metodos = $mod_metodo->consultarMetodoIngNivelInt($arr_unidadac[0]["id"]);
         $arr_carrera = $modcanal->consultarCarreraModalidad(1, 1);
@@ -340,6 +344,7 @@ class SolicitudesController extends \app\components\CController {
             $dataDireccion = $data["dir_fac"];
             $dataTelefono = $data["tel_fac"];
             $convenio = $data["cemp_id"];
+            $correo_datafact = $data["correo_fac"];
             /* if ($dataConvenio == '0') {
               $convenio = null;
               } else {
@@ -452,7 +457,7 @@ class SolicitudesController extends \app\components\CController {
                     if ($subirDocumentos == 0) {
                         $mod_solins->save();
                         $id_sins = $mod_solins->sins_id;
-                        if (!$mod_solins->crearDatosFacturaSolicitud($id_sins, ucwords(strtolower($dataNombres)), ucwords(strtolower($dataApellidos)), $dataTipDNI, $dataDNI, ucwords(strtolower($dataDireccion)), $dataTelefono)) {
+                        if (!$mod_solins->crearDatosFacturaSolicitud($id_sins, ucwords(strtolower($dataNombres)), ucwords(strtolower($dataApellidos)), $dataTipDNI, $dataDNI, ucwords(strtolower($dataDireccion)), $dataTelefono, $correo_datafact)) {
                             throw new Exception('Problemas al registrar Datos a Facturar.');
                         }
                     }

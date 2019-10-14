@@ -178,8 +178,8 @@ class OportunidadesController extends \app\components\CController {
         $modalidad_model = new Modalidad();
         $modestudio = new ModuloEstudio();
         $modTipoOportunidad = new TipoOportunidadVenta();
-        $state_oportunidad_model = new EstadoOportunidad();
-        $unidad_acad_data = $uni_aca_model->consultarUnidadAcademicasEmpresa($emp_id);
+        $state_oportunidad_model = new EstadoOportunidad();        
+        $unidad_acad_data = $uni_aca_model->consultarUnidadAcademicas();        
         $modalidad_data = $modalidad_model->consultarModalidad($unidad_acad_data[0]["id"], $emp_id);
         $modcanal = new Oportunidad();
         $tipo_oportunidad_data = $modTipoOportunidad->consultarOporxUnidad($unidad_acad_data[0]["id"]);
@@ -191,15 +191,20 @@ class OportunidadesController extends \app\components\CController {
         $empresa = $empresa_mod->getAllEmpresa();
         if (Yii::$app->request->isAjax) {
             $data = Yii::$app->request->post();
-            if (isset($data["getuacademias"])) {
-                $data_u_acad = $uni_aca_model->consultarUnidadAcademicasEmpresa($data["empresa_id"]);
+            if (isset($data["getuacademias"])) {                
+                //$data_u_acad = $uni_aca_model->consultarUnidadAcademicasEmpresa($data["empresa_id"]);
+                $data_u_acad = $uni_aca_model->consultarUnidadAcademicas();
                 $message = array("unidad_academica" => $data_u_acad);
-                return Utilities::ajaxResponse('OK', 'alert', Yii::t('jslang', 'Success'), 'false', $message);
+                return Utilities::ajaxResponse('OK', 'alert', Yii::t('jslang', 'Success'), 'false', $message);                
             }
             if (isset($data["getmodalidad"])) {
-                $modalidad = $modalidad_model->consultarModalidad($data["nint_id"], $data["empresa_id"]);
+                if (($data["nint_id"]==1) or ($data["nint_id"]==2)){
+                    $modalidad = $modalidad_model->consultarModalidad($data["nint_id"], $data["empresa_id"]);                    
+                } else {
+                    $modalidad = $modestudio->consultarModalidadModestudio();                    
+                }
                 $message = array("modalidad" => $modalidad);
-                return Utilities::ajaxResponse('OK', 'alert', Yii::t('jslang', 'Success'), 'false', $message);
+                return Utilities::ajaxResponse('OK', 'alert', Yii::t('jslang', 'Success'), 'false', $message);                                
             }
             if (isset($data["getoportunidad"])) {
                 $oportunidad = $modTipoOportunidad->consultarOporxUnidad($data["unidada"]);
@@ -217,12 +222,11 @@ class OportunidadesController extends \app\components\CController {
                 return Utilities::ajaxResponse('OK', 'alert', Yii::t('jslang', 'Success'), 'false', $message);
             }
             if (isset($data["getcarrera"])) {
-                if ($data["empresa_id"] == 1) {
+                if (($data["unidada"] ==1) or ($data["unidada"] ==2)) {
                     $carrera = $modcanal->consultarCarreraModalidad($data["unidada"], $data["moda_id"]);
                 } else {
-                    $carrera = $modestudio->consultarCursoModalidad($data["unidada"], $data["moda_id"], $data["empresa_id"] ); // tomar id de impresa
+                    $carrera = $modestudio->consultarCursoModalidad($data["unidada"], $data["moda_id"] ); // tomar id de impresa
                 }
-
                 $message = array("carrera" => $carrera);
                 return Utilities::ajaxResponse('OK', 'alert', Yii::t('jslang', 'Success'), 'false', $message);
             }

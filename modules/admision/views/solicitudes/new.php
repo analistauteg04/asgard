@@ -87,7 +87,7 @@ $leyenda = '<div class="col-md-12 col-xs-12 col-sm-12 col-lg-12">
             <div class="form-group">
                 <label for="cmb_empresa" class="col-sm-5 col-md-5 col-xs-5 col-lg-5 control-label keyupmce"><?= Yii::t("formulario", "Company") ?></label>
                 <div class="col-sm-7 col-md-7 col-xs-7 col-lg-7">
-                    <?= Html::dropDownList("cmb_empresa", $emp_id, $arr_empresa, ["class" => "form-control", "id" => "cmb_empresa",]) ?>
+                    <?= Html::dropDownList("cmb_empresa", $emp_id, $arr_empresa, ["class" => "form-control", "id" => "cmb_empresa", "disabled" => "true"]) ?>
                 </div>
             </div>
         </div>           

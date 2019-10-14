@@ -94,12 +94,12 @@ class Modalidad extends \app\modules\academico\components\CActiveRecord {
         $estado = 1;
             $sql = "SELECT distinct moda.mod_id as id,
                            moda.mod_nombre as name
-                    FROM " . $con->dbname . ".modalidad_unidad_academico mua "
-                    . "inner join " . $con->dbname . ".modalidad moda ON moda.mod_id = mua.mod_id
+                    FROM " . $con->dbname . ".modalidad_estudio_unidad meu "
+                    . "inner join " . $con->dbname . ".modalidad moda ON moda.mod_id = meu.mod_id
                     WHERE uaca_id = :uaca_id 
                     and emp_id =:emp_id
-                    and mua.muac_estado_logico = :estado
-                    and mua.muac_estado = :estado
+                    and meu.meun_estado_logico = :estado
+                    and meu.meun_estado = :estado
                     and moda.mod_estado_logico = :estado
                     and moda.mod_estado = :estado
                     ORDER BY name asc";        
