@@ -49,11 +49,12 @@ PbGridView::widget([
             'header' => Yii::t("formulario", "DNI 1"),
             'value' => 'per_cedula',
         ],
-        [
+        // ESTE PERIODO PIDE AL GUARDAR PILAS REVISAR ESO
+        /*[
             'attribute' => 'periodo',
             'header' => academico::t("Academico", "Period"),
             'value' => 'pami_codigo',
-        ],
+        ],*/
         /*[
             'class' => 'yii\grid\ActionColumn',
             'header' => Yii::t("formulario", "Email"),

@@ -132,16 +132,7 @@ class MatriculadosReprobado extends \yii\db\ActiveRecord {
                                 else
                             (select eaca_nombre from " . $con3->dbname . ".estudio_academico ea where ea.eaca_id = sins.eaca_id and ea.eaca_estado = '1' and ea.eaca_estado_logico = '1')
                         end as carrera,                             
-                       (case when sins_beca = 1 then 'ICF' else 'No Aplica' end) as beca,
-                       ifnull((select 'SI' existe from " . $con3->dbname . ".matriculacion m where m.adm_id = admi.adm_id and m.sins_id = sins.sins_id and m.mat_estado = :estado and m.mat_estado_logico = :estado),'NO') as matriculado,
-                       ifnull((select pa.pami_codigo
-                               from " . $con3->dbname . ".matriculacion m inner join " . $con3->dbname . ".asignacion_paralelo ap on ap.mat_id = m.mat_id
-                                    inner join " . $con3->dbname . ".paralelo p on p.par_id = ap.par_id
-                                    inner join " . $con3->dbname . ".periodo_academico_met_ingreso pa on pa.pami_id = p.pami_id
-                               where m.adm_id = admi.adm_id and m.sins_id = sins.sins_id and m.mat_estado = :estado and m.mat_estado_logico = :estado
-                                and p.par_estado = :estado and p.par_estado_logico = :estado
-                                and ap.apar_estado = :estado and ap.apar_estado_logico = :estado
-                                and pa.pami_estado = :estado and pa.pami_estado_logico = :estado),'N/A') as pami_codigo  
+                       (case when sins_beca = 1 then 'ICF' else 'No Aplica' end) as beca                       
                 FROM " . $con->dbname . ".admitido admi INNER JOIN " . $con->dbname . ".interesado inte on inte.int_id = admi.int_id                     
                      INNER JOIN " . $con2->dbname . ".persona per on inte.per_id = per.per_id
                      INNER JOIN " . $con->dbname . ".solicitud_inscripcion sins on sins.int_id = inte.int_id                                          
@@ -310,6 +301,7 @@ class MatriculadosReprobado extends \yii\db\ActiveRecord {
      * @return  $resultData (información del matriculado no aprobado)
      */
     public function consultarMateriasPorUnidadModalidadCarrera($uaca_id, $moda_id, $car_id, $mes, $anio) {
+        //DETERMINAR COMO SE VA A ENVIAR AHORA LA UNIDAD, MODALIDAD Y CARRERA
         $con = \Yii::$app->db_captacion;
         $con2 = \Yii::$app->db;
         $con3 = \Yii::$app->db_academico;
@@ -319,18 +311,18 @@ class MatriculadosReprobado extends \yii\db\ActiveRecord {
             $str_filtro = 'asig.asi_id < 4 and ';
         }
         $sql = " 
-                select 
+                SELECT 
                     asig.asi_id as id,
                     asig.asi_descripcion
-                from 
+                FROM 
                     " . $con3->dbname . ".malla_academica as maca
-                    join " . $con3->dbname . ".malla_academica_detalle as made on made.maca_id=maca.maca_id
-                    join " . $con3->dbname . ".asignatura as asig on asig.asi_id=made.asi_id
-                where 
+                    JOIN " . $con3->dbname . ".malla_academica_detalle as made on made.maca_id=maca.maca_id
+                    JOIN " . $con3->dbname . ".asignatura as asig on asig.asi_id=made.asi_id
+                WHERE 
                     $str_filtro
-                    maca.uaca_id=:uaca_id and
+                    /* maca.uaca_id=:uaca_id and
                     maca.eaca_id=:car_id and
-                    maca.mod_id=:moda_id and 
+                    maca.mod_id=:moda_id and */
                     maca.maca_estado =:estado and 
                     maca.maca_estado_logico =:estado and
                     made.made_estado =:estado and 
@@ -340,8 +332,7 @@ class MatriculadosReprobado extends \yii\db\ActiveRecord {
         $comando->bindParam(":estado", $estado, \PDO::PARAM_STR);
         $comando->bindParam(":uaca_id", $uaca_id, \PDO::PARAM_INT);
         $comando->bindParam(":moda_id", $moda_id, \PDO::PARAM_INT);
-        $comando->bindParam(":car_id", $car_id, \PDO::PARAM_INT);
-        $comando->bindParam(":peri", $peri, \PDO::PARAM_INT);
+        $comando->bindParam(":car_id", $car_id, \PDO::PARAM_INT);   
         $resultData = $comando->queryAll();
         $dataProvider = new ArrayDataProvider([
             'key' => 'id',
