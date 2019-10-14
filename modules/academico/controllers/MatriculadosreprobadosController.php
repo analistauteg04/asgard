@@ -566,7 +566,7 @@ class MatriculadosreprobadosController extends \app\components\CController {
         header("Content-Type: $content_type");
         header("Content-Disposition: attachment;filename=" . $nombarch);
         header('Cache-Control: max-age=0');
-        $colPosition = array("C", "D", "E", "F", "G", "H", "I", "J", "K", "L", "M", "N", "O", "P");
+        $colPosition = array("C", "D", "E", "F", "G", "H", "I", "J", "K", "L", "M", "N", "O");
         $arrHeader = array(
             Yii::t("formulario", "DNI 1"),
             Yii::t("formulario", "First Names"),
@@ -576,8 +576,7 @@ class MatriculadosreprobadosController extends \app\components\CController {
             Yii::t("formulario", "Email"),
             Yii::t("formulario", "CellPhone"),
             Yii::t("formulario", "Academic unit"),
-            Yii::t("formulario", "Mode"),
-            academico::t("Academico", "Month Process"),
+            Yii::t("formulario", "Mode"),        
             academico::t("Academico", "Career/Program"),
             admision::t("Solicitudes", "Income Method"),
             Yii::t("formulario", "Subject"),
@@ -615,8 +614,7 @@ class MatriculadosreprobadosController extends \app\components\CController {
             Yii::t("formulario", "Email"),
             Yii::t("formulario", "CellPhone"),
             Yii::t("formulario", "Academic unit"),
-            Yii::t("formulario", "Mode"),
-            academico::t("Academico", "Month Process"),
+            Yii::t("formulario", "Mode"),          
             academico::t("Academico", "Career/Program"),
             admision::t("Solicitudes", "Income Method"),
             Yii::t("formulario", "Subject"),

@@ -82,7 +82,7 @@ class AdmitidosController extends \app\components\CController {
         header("Content-Type: $content_type");
         header("Content-Disposition: attachment;filename=" . $nombarch);
         header('Cache-Control: max-age=0');
-        $colPosition = array("C", "D", "E", "F", "G", "H", "I", "J", "K", "L");
+        $colPosition = array("C", "D", "E", "F", "G", "H", "I", "J", "K");
         $arrHeader = array(
             admision::t("Solicitudes", "Request #"),
             admision::t("Solicitudes", "Application date"), //ingles
@@ -91,8 +91,7 @@ class AdmitidosController extends \app\components\CController {
             Yii::t("formulario", "Last Names"),
             academico::t("Academico", "Income Method"), //ingles
             academico::t("Academico", "Career/Program"),
-            admision::t("Solicitudes", "Scholarship"),
-            academico::t("Academico", "Period")
+            admision::t("Solicitudes", "Scholarship")
         );
         $data = Yii::$app->request->get();
         $arrSearch = array();
@@ -129,8 +128,7 @@ class AdmitidosController extends \app\components\CController {
             Yii::t("formulario", "Last Names"),
             academico::t("Academico", "Income Method"), //ingles
             academico::t("Academico", "Career/Program"),
-            admision::t("Solicitudes", "Scholarship"),
-            academico::t("Academico", "Period")
+            admision::t("Solicitudes", "Scholarship")
         );
         $data = Yii::$app->request->get();
         $arrSearch = array();
@@ -354,7 +352,7 @@ class AdmitidosController extends \app\components\CController {
         header("Content-Type: $content_type");
         header("Content-Disposition: attachment;filename=" . $nombarch);
         header('Cache-Control: max-age=0');
-        $colPosition = array("C", "D", "E", "F", "G", "H", "I", "J", "K", "L");
+        $colPosition = array("C", "D", "E", "F", "G", "H", "I", "J", "K");
         $arrHeader = array(
             admision::t("Solicitudes", "Request #"),
             admision::t("Solicitudes", "Application date"), //ingles
@@ -363,8 +361,7 @@ class AdmitidosController extends \app\components\CController {
             Yii::t("formulario", "Last Names"),
             academico::t("Academico", "Income Method"), //ingles
             academico::t("Academico", "Career/Program"),
-            admision::t("Solicitudes", "Scholarship"),
-            academico::t("Academico", "Period")
+            admision::t("Solicitudes", "Scholarship")
         );
         $data = Yii::$app->request->get();
         $arrSearch = array();
@@ -401,8 +398,7 @@ class AdmitidosController extends \app\components\CController {
             Yii::t("formulario", "Last Names"),
             academico::t("Academico", "Income Method"), //ingles
             academico::t("Academico", "Career/Program"),
-            admision::t("Solicitudes", "Scholarship"),
-            academico::t("Academico", "Period")
+            admision::t("Solicitudes", "Scholarship")
         );
         $data = Yii::$app->request->get();
         $arrSearch = array();

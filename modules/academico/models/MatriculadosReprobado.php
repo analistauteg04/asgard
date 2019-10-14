@@ -234,22 +234,7 @@ class MatriculadosReprobado extends \yii\db\ActiveRecord {
                                (select mest_nombre from " . $con3->dbname . ".modulo_estudio me where me.mest_id = sins.mest_id and me.mest_estado = '1' and me.mest_estado_logico = '1')
                                 else
                            (select eaca_nombre from " . $con3->dbname . ".estudio_academico ea where ea.eaca_id = mre.eaca_id and ea.eaca_estado = '1' and ea.eaca_estado_logico = '1')
-                    end as carrera,
-                    -- MONTHNAME(CONCAT('00','-',ami.mes_id_academico,'-','0000')) as mes_id_academico               
-                    case pami_mes 
-                        when 1 then 'Enero' 
-                        when 2 then 'Febrero'
-                        when 3 then 'Marzo'
-                        when 4 then 'Abril' 
-                        when 5 then 'Mayo'
-                        when 6 then 'Junio'
-                        when 7 then 'Julio' 
-                        when 8 then 'Agosto'
-                        when 9 then 'Septiembre'
-                        when 10 then 'Octubre' 
-                        when 11 then 'Noviembre'
-                        when 12 then 'Diciembre'
-                 end as mes_id_academico,
+                    end as carrera,               
                     ifnull((select count(*) from " . $con->dbname . ".materias_matriculados_reprobado mmr where mmr.mre_id = mre.mre_id and mmr.mmr_estado_materia = 1),' ') as aprobada,
                     ifnull((SELECT GROUP_CONCAT(CONCAT(asi.asi_nombre, IF(mmr.mmr_estado_materia =1,'',''))  SEPARATOR ', ') as asignatura_apro 
                             FROM db_captacion.materias_matriculados_reprobado mmr
@@ -268,8 +253,7 @@ class MatriculadosReprobado extends \yii\db\ActiveRecord {
                      INNER JOIN " . $con->dbname . ".admitido adm ON adm.adm_id = mre.adm_id
                      INNER JOIN " . $con->dbname . ".interesado inte on inte.int_id = adm.int_id                     
                      INNER JOIN " . $con2->dbname . ".persona per on inte.per_id = per.per_id 
-                     INNER JOIN " . $con->dbname . ".solicitud_inscripcion sins on sins.int_id = inte.int_id 
-                     INNER JOIN " . $con3->dbname . ".periodo_academico_met_ingreso ami on ami.pami_id = mre.pami_id
+                     INNER JOIN " . $con->dbname . ".solicitud_inscripcion sins on sins.int_id = inte.int_id                     
                 WHERE  
                        $str_search   
                        adm.adm_estado_logico = :estado AND
@@ -277,9 +261,7 @@ class MatriculadosReprobado extends \yii\db\ActiveRecord {
                        inte.int_estado_logico = :estado AND
                        inte.int_estado = :estado AND     
                        per.per_estado_logico = :estado AND
-                       per.per_estado = :estado AND
-                       ami.pami_estado = :estado AND
-                       ami.pami_estado_logico = :estado AND
+                       per.per_estado = :estado AND                       
                        mre.mre_estado = :estado AND
                        mre.mre_estado_logico = :estado
                 ORDER BY mre.mre_fecha_creacion desc";
@@ -427,20 +409,6 @@ class MatriculadosReprobado extends \yii\db\ActiveRecord {
                     per.per_celular,
                     ifnull((select uaca.uaca_nombre from " . $con3->dbname . ".unidad_academica uaca where uaca.uaca_id = mre.uaca_id),'N/A') as uaca_nombre,
                     ifnull((select moda.mod_nombre from " . $con3->dbname . ".modalidad moda where moda.mod_id = mre.mod_id),'N/A') as mod_nombre, 
-                    case pami_mes 
-                        when 1 then 'Enero' 
-                        when 2 then 'Febrero'
-                        when 3 then 'Marzo'
-                        when 4 then 'Abril' 
-                        when 5 then 'Mayo'
-                        when 6 then 'Junio'
-                        when 7 then 'Julio' 
-                        when 8 then 'Agosto'
-                        when 9 then 'Septiembre'
-                        when 10 then 'Octubre' 
-                        when 11 then 'Noviembre'
-                        when 12 then 'Diciembre'
-                    end as mes_id_academico, 
                     case when (ifnull(sins.eaca_id,0)=0) then
                                (select mest_nombre from " . $con3->dbname . ".modulo_estudio me where me.mest_id = sins.mest_id and me.mest_estado = '1' and me.mest_estado_logico = '1')
                                 else
@@ -459,8 +427,7 @@ class MatriculadosReprobado extends \yii\db\ActiveRecord {
                      INNER JOIN " . $con->dbname . ".admitido adm ON adm.adm_id = mre.adm_id
                      INNER JOIN " . $con->dbname . ".interesado inte on inte.int_id = adm.int_id                     
                      INNER JOIN " . $con2->dbname . ".persona per on inte.per_id = per.per_id 
-                     INNER JOIN " . $con->dbname . ".solicitud_inscripcion sins on sins.int_id = inte.int_id 
-                     INNER JOIN " . $con3->dbname . ".periodo_academico_met_ingreso ami on ami.pami_id = mre.pami_id
+                     INNER JOIN " . $con->dbname . ".solicitud_inscripcion sins on sins.int_id = inte.int_id                    
                 WHERE  
                        $str_search   
                        adm.adm_estado_logico = :estado AND
@@ -468,9 +435,7 @@ class MatriculadosReprobado extends \yii\db\ActiveRecord {
                        inte.int_estado_logico = :estado AND
                        inte.int_estado = :estado AND     
                        per.per_estado_logico = :estado AND
-                       per.per_estado = :estado AND
-                       ami.pami_estado = :estado AND
-                       ami.pami_estado_logico = :estado AND
+                       per.per_estado = :estado AND                       
                        mre.mre_estado = :estado AND
                        mre.mre_estado_logico = :estado
                 ORDER BY mre.mre_fecha_creacion desc";

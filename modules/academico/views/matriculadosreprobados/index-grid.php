@@ -51,11 +51,6 @@ academico::registerTranslations();
                 'value' => 'mod_nombre',
             ],
             [
-                'attribute' => 'mes',
-                'header' => Yii::t("formulario", "Month"),
-                'value' => 'mes_id_academico',
-            ],
-            [
                 'class' => 'yii\grid\ActionColumn',
                 'header' => academico::t("Academico", "Career/Program"),
                 'template' => '{view}',
@@ -79,14 +74,14 @@ academico::registerTranslations();
                         return Html::a('<span>' . $model['abr_metodo'] . '</span>', Url::to(['#']), ["data-toggle" => "tooltip", "title" => $model['ming_nombre']]);
                     },
                 ],
-            ],            
+            ],
             [
                 'class' => 'yii\grid\ActionColumn',
                 'header' => academico::t("Academico", "Approved"),
                 'template' => '{view}',
                 'buttons' => [
                     'view' => function ($url, $model) {
-                        if ($model['aprobada'] > 0 ) {
+                        if ($model['aprobada'] > 0) {
                             $texto = $model['aprobada'];
                         } else {
                             $texto = '0';
@@ -94,14 +89,14 @@ academico::registerTranslations();
                         return Html::a('<span>' . $texto . '</span>', Url::to(['#']), ["data-toggle" => "tooltip", "title" => $model['asignatura_apro']]);
                     },
                 ],
-            ],    
+            ],
             [
                 'class' => 'yii\grid\ActionColumn',
                 'header' => academico::t("Academico", "Failed"),
                 'template' => '{view}',
                 'buttons' => [
                     'view' => function ($url, $model) {
-                        if ($model['reprobada'] > 0 ) {
+                        if ($model['reprobada'] > 0) {
                             $texto = $model['reprobada'];
                         } else {
                             $texto = '0';
@@ -114,14 +109,7 @@ academico::registerTranslations();
                 'attribute' => 'estado',
                 'header' => Yii::t("formulario", "Status"),
                 'value' => 'estado_matriculado',
-            ],                
-            /*[
-                'class' => 'yii\grid\ActionColumn',
-                'header' => Yii::t("formulario", "Actions"),
-                'template' => '{view}',
-                'buttons' => [
-                ],
-            ],*/
+            ],
         ],
     ])
     ?>
