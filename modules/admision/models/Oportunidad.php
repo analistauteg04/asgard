@@ -1720,6 +1720,7 @@ class Oportunidad extends \app\modules\admision\components\CActiveRecord {
                         where mest.mest_id = opo.mest_id
                         and mest.mest_estado = :estado
                         and mest.mest_estado_logico = :estado),'') as moestudio,
+                        opo.eaca_id,
                         opo.ccan_id,
                         opo.opo_id,                                       
                         opo.tsca_id as subcarera_id,                       
