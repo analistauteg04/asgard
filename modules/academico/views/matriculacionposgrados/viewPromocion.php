@@ -12,7 +12,7 @@ academico::registerTranslations();
 financiero::registerTranslations();
 aspirante::registerTranslations();
 ?>
-
+<?= Html::hiddenInput('txth_progid', $_GET["ids"], ['id' => 'txth_progid']); ?>
 <div class="col-md-12">    
     <h3><span id="lbl_titulo"><?= academico::t("Academico", "Data Promotion Program") ?></span><br/>    
 </div>

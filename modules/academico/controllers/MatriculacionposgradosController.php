@@ -242,7 +242,7 @@ class MatriculacionposgradosController extends \app\components\CController {
                         }
                     }
                 } else {
-                    $mensaje = "¡Ya existe programación con ese información.!";
+                    $mensaje = "¡Ya existe promoción con ese información.!";
                 }
                 if ($exito) {
                     $transaction->commit();

@@ -269,3 +269,8 @@ function borrarParalelo(id, temp) {
         }, true);
     }
 }
+
+function edit() {
+    var codigo = $('#txth_progid').val();
+    window.location.href = $('#txth_base').val() + "/academico/matriculacionposgrados/editpromocion?ids=" + codigo;
+}
