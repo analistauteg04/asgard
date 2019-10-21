@@ -602,4 +602,6 @@ class PromocionPrograma extends \yii\db\ActiveRecord {
         }
     }
 
+    
+
 }

@@ -9,6 +9,9 @@ $(document).ready(function () {
     $('#btn_modificar').click(function () {
         modificarPromocion();
     });
+    $('#btn_enviar').click(function () {
+        modificarParalelo();
+    });
     /*****************************************************/
     /* Filtro para busqueda en index Promoción Programa */
     /***************************************************/
@@ -205,7 +208,7 @@ function grabarPromocion() {
 
 
 }
-// PARA MODIFICAR CONTINUAR CON ESTO
+
 function modificarPromocion() {
     var link = $('#txth_base').val() + "/academico/matriculacionposgrados/updatepromocion";
     var arrParams = new Object();
@@ -214,7 +217,7 @@ function modificarPromocion() {
     arrParams.mes = $('#cmb_mes').val();
     arrParams.unidad = $('#cmb_unidad').val();
     arrParams.modalidad = $('#cmb_modalidad').val();
-    arrParams.programa = $('#cmb_programa').val();    
+    arrParams.programa = $('#cmb_programa').val();
     arrParams.nombreprograma = $("#cmb_programa option:selected").text();
     if (arrParams.mes == 0 || arrParams.modalidad == 0 || arrParams.programa == 0)
     {
@@ -236,7 +239,7 @@ function modificarPromocion() {
     }
 }
 
-function eliminarParalelo(id,ids) {
+function eliminarParalelo(id, ids) {
     var mensj = "¿Seguro desea eliminar paralelo?";
     var messagePB = new Object();
     messagePB.wtmessage = mensj;
@@ -254,16 +257,16 @@ function eliminarParalelo(id,ids) {
 }
 
 function borrarParalelo(id, temp) {
-    var link = $('#txth_base').val() + "/academico/matriculacionposgrados/deleteparalelo";  
+    var link = $('#txth_base').val() + "/academico/matriculacionposgrados/deleteparalelo";
     var arrParams = new Object();
     arrParams.par_id = id;
     arrParams.pro_id = temp;
     if (!validateForm()) {
-        requestHttpAjax(link, arrParams, function(response) {
+        requestHttpAjax(link, arrParams, function (response) {
             showAlert(response.status, response.label, response.message);
             if (!response.error) {
-                setTimeout(function() {
-                    window.location.href = $('#txth_base').val() + "/academico/matriculacionposgrados/indexparalelo?ids="+ btoa(temp);
+                setTimeout(function () {
+                    window.location.href = $('#txth_base').val() + "/academico/matriculacionposgrados/indexparalelo?ids=" + btoa(temp);
                 }, 3000);
             }
         }, true);
@@ -273,4 +276,32 @@ function borrarParalelo(id, temp) {
 function edit() {
     var codigo = $('#txth_progid').val();
     window.location.href = $('#txth_base').val() + "/academico/matriculacionposgrados/editpromocion?ids=" + codigo;
+}
+
+function modificarParalelo() {
+    var link = $('#txth_base').val() + "/academico/matriculacionposgrados/updateparalelo";
+    var arrParams = new Object();
+    arrParams.paraid = $('#txth_parid').val();
+    arrParams.progid = $('#txth_proid').val();
+    arrParams.cupo = $('#txt_cupo').val();
+    arrParams.cupoanterior = $('#txth_cupoviejo').val();
+    if (arrParams.cupo >= arrParams.cupoanterior){
+        arrParams.disponible = parseInt( $('#txt_cupodisponible').val()) + (parseInt(arrParams.cupo) - (arrParams.cupoanterior));
+    } 
+    else{
+       arrParams.disponible = parseInt( $('#txt_cupodisponible').val()) - (parseInt(arrParams.cupoanterior) - (arrParams.cupo)); 
+    }
+    //alert ('este valor nuevo disponible'+ arrParams.disponible);    
+    if (!validateForm()) {
+        requestHttpAjax(link, arrParams, function (response) {
+            showAlert(response.status, response.label, response.message);
+            if (!response.error) {
+                setTimeout(function () {
+                    parent.location.href = $('#txth_base').val() + "/academico/matriculacionposgrados/indexparalelo?ids="+ btoa(arrParams.progid);                     
+                }, 3000);
+            }
+
+
+        }, true);
+    }
 }

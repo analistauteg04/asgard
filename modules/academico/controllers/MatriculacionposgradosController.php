@@ -426,7 +426,7 @@ class MatriculacionposgradosController extends \app\components\CController {
         $mod_paral = ParaleloPromocionPrograma::getParalelos($promocion_id);
         return $this->render('indexParalelo', [
                     'model' => $mod_paral,
-                    "data_promo" => $resp_consPromocion,
+                    'data_promo' => $resp_consPromocion,
         ]);
     }
 
@@ -501,6 +501,68 @@ class MatriculacionposgradosController extends \app\components\CController {
                 );
                 return Utilities::ajaxResponse('NO_OK', 'alert', Yii::t("jslang", "Error"), false, $message);
             }
+        }
+    }
+
+    public function actionEditparalelo() {
+        $paralelo_id = base64_decode($_GET["parid"]);
+        $promocion_id = base64_decode($_GET["proid"]);
+        $mod_paralelo = new ParaleloPromocionPrograma();
+        $resp_consParalelo = $mod_paralelo->getParalelosxids($paralelo_id, $promocion_id);
+
+        return $this->render('editParalelo', [
+                    'cons_paralelo' => $resp_consParalelo,
+        ]);
+    }
+
+    public function actionUpdateparalelo() {
+        $usu_id = @Yii::$app->session->get("PB_iduser");
+        $fecha_modifica = date(Yii::$app->params["dateTimeByDefault"]);
+        if (Yii::$app->request->isAjax) {
+            $data = Yii::$app->request->post();
+            $programa_id = $data["progid"];
+            $paralelo_id = $data["paraid"];
+            $cupo = $data["cupo"];
+            $disponible = $data["disponible"];
+            $con = \Yii::$app->db_academico;
+            $transaction = $con->beginTransaction();
+            try {
+                $mod_paraprograma = new ParaleloPromocionPrograma();
+
+                $keys_act = [
+                    'pppr_cupo', 'pppr_cupo_actual', 'pppr_usuario_modifica', 'pppr_fecha_modificacion'
+                ];
+                $values_act = [
+                    $cupo, $disponible, $usu_id, $fecha_modifica
+                ];
+                $respParaprograma = $mod_paraprograma->actualizarParalelo($con, $programa_id, $paralelo_id, $values_act, $keys_act, 'paralelo_promocion_programa');
+                if ($respParaprograma) {
+                    $exito = 1;
+                }
+                if ($exito) {
+                    $transaction->commit();
+                    $message = array(
+                        "wtmessage" => Yii::t("notificaciones", "La infomación ha sido actualizada."),
+                        "title" => Yii::t('jslang', 'Success'),
+                    );
+                    return Utilities::ajaxResponse('OK', 'alert', Yii::t("jslang", "Sucess"), false, $message);
+                } else {
+                    $transaction->rollback();
+                    $message = array(
+                        "wtmessage" => Yii::t("notificaciones", "Error al grabar." . $mensaje),
+                        "title" => Yii::t('jslang', 'Success'),
+                    );
+                    return Utilities::ajaxResponse('NO_OK', 'alert', Yii::t("jslang", "Sucess"), false, $message);
+                }
+            } catch (Exception $ex) {
+                $transaction->rollback();
+                $message = array(
+                    "wtmessage" => Yii::t("notificaciones", "Error al grabar."),
+                    "title" => Yii::t('jslang', 'Success'),
+                );
+                return Utilities::ajaxResponse('NO_OK', 'alert', Yii::t("jslang", "Sucess"), false, $message);
+            }
+            return;
         }
     }
 

@@ -1,6 +1,7 @@
 <?php
 
 namespace app\modules\academico\models;
+
 use yii\data\ArrayDataProvider;
 use Yii;
 
@@ -20,29 +21,26 @@ use Yii;
  *
  * @property PromocionPrograma $ppro
  */
-class ParaleloPromocionPrograma extends \yii\db\ActiveRecord
-{
+class ParaleloPromocionPrograma extends \yii\db\ActiveRecord {
+
     /**
      * {@inheritdoc}
      */
-    public static function tableName()
-    {
+    public static function tableName() {
         return 'paralelo_promocion_programa';
     }
 
     /**
      * @return \yii\db\Connection the database connection used by this AR class.
      */
-    public static function getDb()
-    {
+    public static function getDb() {
         return Yii::$app->get('db_academico');
     }
 
     /**
      * {@inheritdoc}
      */
-    public function rules()
-    {
+    public function rules() {
         return [
             [['ppro_id', 'pppr_cupo', 'pppr_estado', 'pppr_estado_logico'], 'required'],
             [['ppro_id', 'pppr_cupo', 'pppr_cupo_actual', 'pppr_usuario_ingresa', 'pppr_usuario_modifica'], 'integer'],
@@ -55,8 +53,7 @@ class ParaleloPromocionPrograma extends \yii\db\ActiveRecord
     /**
      * {@inheritdoc}
      */
-    public function attributeLabels()
-    {
+    public function attributeLabels() {
         return [
             'pppr_id' => 'Pppr ID',
             'ppro_id' => 'Ppro ID',
@@ -74,11 +71,10 @@ class ParaleloPromocionPrograma extends \yii\db\ActiveRecord
     /**
      * @return \yii\db\ActiveQuery
      */
-    public function getPpro()
-    {
+    public function getPpro() {
         return $this->hasOne(PromocionPrograma::className(), ['ppro_id' => 'ppro_id']);
     }
-    
+
     /**
      * Function consulta los paralelos por programa. 
      * @author Grace Viteri <analistadesarrollo01@uteg.edu.ec>;
@@ -101,8 +97,8 @@ class ParaleloPromocionPrograma extends \yii\db\ActiveRecord
         $resultData = $comando->queryAll();
         return $resultData;
     }
-    
-        /**
+
+    /**
      * Function getPromocion
      * @author  Giovanni Vergara <analistadesarrollo02@uteg.edu.ec>
      * @param   
@@ -111,7 +107,7 @@ class ParaleloPromocionPrograma extends \yii\db\ActiveRecord
     public static function getParalelos($ppro_id, $onlyData = false) {
         $con = \Yii::$app->db;
         $con1 = \Yii::$app->db_academico;
-        $estado = 1;        
+        $estado = 1;
 
         $sql = " SELECT        
                     ppp.pppr_id as pppr_id,
@@ -150,7 +146,7 @@ class ParaleloPromocionPrograma extends \yii\db\ActiveRecord
             return $dataProvider;
         }
     }
-    
+
     /**
      * Function eliminar el paralelo de posgrados, cambia el estado a 0
      * @author  Giovanni Vergara <analistadesarrollo02@uteg.edu.ec>
@@ -192,7 +188,7 @@ class ParaleloPromocionPrograma extends \yii\db\ActiveRecord
             return FALSE;
         }
     }
-    
+
     /**
      * Function Consultar datos de paralelo promocion segun id de paralelo y id de promocion.
      * @author  Giovanni Vergara <analistadesarrollo02@uteg.edu.ec>;
@@ -221,4 +217,40 @@ class ParaleloPromocionPrograma extends \yii\db\ActiveRecord
         $resultData = $comando->queryOne();
         return $resultData;
     }
+
+    /**
+     * Function actualizar cupo de paralelos x promocion
+     * @author  Giovanni Vergara <analistadesarrollo02@uteg.edu.ec>
+     * @property integer 
+     * @return  
+     */
+    public function actualizarParalelo($con, $ppro_id, $pppr_id, $parameters, $keys, $name_table) {
+        $trans = $con->getTransaction();
+        $params_sql = "";
+        for ($i = 0; $i < (count($parameters) - 1); $i++) {
+            if (isset($parameters[$i])) {
+                $params_sql .= $keys[$i] . " = '" . $parameters[$i] . "',";
+            }
+        }
+        $params_sql .= $keys[count($parameters) - 1] . " = '" . $parameters[count($parameters) - 1] . "'";
+        try {
+            $sql = "UPDATE " . $con->dbname . '.' . $name_table .
+                    " SET $params_sql" .
+                    " WHERE pppr_id=$pppr_id AND ppro_id= $ppro_id";
+            $comando = $con->createCommand($sql);
+            $result = $comando->execute();
+            if ($trans !== null) {
+                return true;
+            } else {
+                $transaction->commit();
+                return true;
+            }
+        } catch (Exception $ex) {
+            if ($trans !== null) {
+                $trans->rollback();
+            }
+            return 0;
+        }
+    }
+
 }
