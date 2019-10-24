@@ -1,11 +1,11 @@
 <?php
 
 use yii\helpers\Html;
-use app\modules\academico\Module as academico;
+use app\modules\financiero\Module as financiero;
 ?>
 <?= Html::hiddenInput('txth_ids', '', ['id' => 'txth_ids']); ?>
 <div class="col-md-12">
-    <h3><span id="lbl_Personeria"><?= academico::t("Academico", "Enrolled Postgraduate") ?></span></h3>
+    <h3><span id="lbl_Personeria"><?= financiero::t("Pagos", "Payment Contract") ?></span></h3>
 </div>
 <div>
     <form class="form-horizontal">
