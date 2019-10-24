@@ -43,6 +43,7 @@ namespace app\modules\financiero\messages;
      "Transaction Date" => "Fecha Transacción",
      "Transaction History" => "Historial de Transacciones",
      "Transaction Number" => "Número Transacción",
+     "Upload Contract" => "Cargar Contrato",
      "Upload Payments" => "Cargar Pagos",
      "Value" => "Valor",
      "Way to pay" => "Forma Pago",

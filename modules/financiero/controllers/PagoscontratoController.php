@@ -10,6 +10,7 @@ use app\models\Utilities;
 use app\modules\academico\models\Modalidad;
 use app\modules\academico\models\UnidadAcademica;
 use app\modules\admision\models\Oportunidad;
+use app\modules\admision\models\ConvenioEmpresa;
 use app\modules\academico\Module as academico;
 use app\modules\financiero\Module as financiero;
 use app\modules\admision\Module as admision;
@@ -181,16 +182,16 @@ class PagoscontratoController extends \app\components\CController {
       );
       return Utilities::ajaxResponse('NO_OK', 'alert', Yii::t("jslang", "Error"), false, $message);
       }
-      }
-      public function actionValidarcarta() {
-      $per_ses__id = @Yii::$app->session->get("PB_perid");
-      $per_id = base64_decode($_GET["per_id"]);
-      $mod_doc_ac= new DocumentoAceptacion();
-      $respDocAcep = $mod_doc_ac->consultaDocumentoAceptacionByPerId($per_id);
-      return $this->render('validarcarta', [
-      'docAcept' => $respDocAcep,
-      ]);
       } */
+
+    public function actionCargarcontrato() {        
+       /* $per_id = base64_decode($_GET["per_id"]);*/
+        $mod_conempresa = new ConvenioEmpresa();
+        $arr_convempresa = $mod_conempresa->consultarConvenioEmpresa();
+        return $this->render('cargarcontrato', [
+                  'arr_convenio_empresa' => ArrayHelper::map($arr_convempresa, "id", "name")
+        ]);
+    }
 
     public function actionExpexcel() {
         ini_set('memory_limit', '256M');

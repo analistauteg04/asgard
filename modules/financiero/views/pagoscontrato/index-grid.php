@@ -77,7 +77,7 @@ academico::registerTranslations();
                 'template' => '{subir}', //
                 'buttons' => [
                     'subir' => function ($url, $model) {
-                        return Html::a('<span class="glyphicon glyphicon-download-alt"></span>', Url::to(['/financiero/pagoscontrato/cargarcontrato', 'sids' => base64_encode($model['sins_id']), 'adm' => base64_encode($model['adm_id'])]), ["data-toggle" => "tooltip", "title" => "Subir Contrato", "data-pjax" => 0]);
+                        return Html::a('<span class="glyphicon glyphicon-download-alt"></span>', Url::to(['/financiero/pagoscontrato/cargarcontrato', 'sids' => base64_encode($model['sins_id']), 'adm_id' => base64_encode($model['adm_id'])]), ["data-toggle" => "tooltip", "title" => "Subir Contrato", "data-pjax" => 0]);
                     },                    
                 ],
             ],
