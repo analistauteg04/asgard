@@ -115,7 +115,8 @@ class RegistroMarcacion extends \yii\db\ActiveRecord {
                     hap.mod_id as modalidad,
                     asig.asi_nombre as materia,
                     hap.pro_id as profesor,
-                    ifnull(CONCAT(sem.saca_anio,' (',blq.baca_nombre,'-',sem.saca_nombre,')'),sem.saca_anio) as periodo,
+                    -- ifnull(CONCAT(sem.saca_anio,' (',blq.baca_nombre,'-',sem.saca_nombre,')'),sem.saca_anio) as periodo,
+                    ifnull(CONCAT(paca.paca_anio_academico,' (',blq.baca_nombre,'-',sem.saca_nombre,')'),paca.paca_anio_academico) as periodo,
                     ifnull((SELECT DATE_FORMAT(marc.rmar_fecha_hora_entrada, '%H:%i:%s')
                             FROM db_academico.registro_marcacion marc
                             WHERE marc.pro_id = prof.pro_id 
@@ -432,7 +433,7 @@ class RegistroMarcacion extends \yii\db\ActiveRecord {
                     WHERE
                         date_format(hap.hape_fecha_clase, '%Y-%m-%d') = date_format(:fecha,'%Y-%m-%d') AND
                         prof.per_id = :per_id AND
-                        ((hap.uaca_id = 1 && hap.mod_id = 4) OR  (hap.uaca_id = 2) OR (hap.uaca_id = 1 && hap.mod_id = 1)) AND
+                        ((hap.uaca_id = 1 && hap.mod_id = 4) OR  (hap.uaca_id = 2) OR (hap.uaca_id = 1 && hap.mod_id = 1) or (hap.uaca_id = 1 && hap.mod_id = 3)) AND
                         hap.hape_estado = :estado AND
                         hap.hape_estado_logico = :estado  AND
                         prof.pro_estado = :estado AND
@@ -488,12 +489,14 @@ class RegistroMarcacion extends \yii\db\ActiveRecord {
     public function CargarArchivoHorario($periodo_id, $fname, $usu_id) {                
         $mod_horarioTemp = new HorarioAsignaturaPeriodoTmp();             
         $mod_horario = new HorarioAsignaturaPeriodo();       
-        $path = Yii::$app->basePath . Yii::$app->params['documentFolder'] . "horario/" . $fname;       
+        $path = Yii::$app->basePath . Yii::$app->params['documentFolder'] . "horario/" . $fname;  
+        \app\models\Utilities::putMessageLogFile('antes de uploadFile');
         $carga_archivo = $mod_horarioTemp->uploadFile($periodo_id, $usu_id, $path);        
-        if ($carga_archivo['status']) {                              
+        if ($carga_archivo['status']) {
+            \app\models\Utilities::putMessageLogFile('después de validación');
             $data = $mod_horarioTemp->consultarHorarioTemp($usu_id);                           
             $cont = 0;
-            for ($i = 0; $i < sizeof($data); $i++) {   
+            for ($i = 0; $i < sizeof($data); $i++) {
                 if (!empty($data[$i]["hapt_fecha_clase"])) {
                     $fecha = $data[$i]["hapt_fecha_clase"];                            
                 }                   
@@ -501,6 +504,7 @@ class RegistroMarcacion extends \yii\db\ActiveRecord {
                 //Modificar estado de la oportunidad.                                        
                 $cont++;
             }      
+            \app\models\Utilities::putMessageLogFile('al finalizar carga de archivo horario');
             $arroout["status"] = TRUE;
             $arroout["error"] = null;
             $arroout["message"] = "Se ha procesado $cont registros.";
