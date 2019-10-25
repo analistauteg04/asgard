@@ -260,7 +260,7 @@ class Admitido extends \yii\db\ActiveRecord {
             }
             if ($arrFiltro['carrera'] != "" && $arrFiltro['carrera'] > 0) {
                 $str_search .= "a.eaca_id = :carrera AND ";
-            }            
+            }
         } else {
             $columnsAdd = "sins.sins_id as solicitud_id,
                     per.per_id as persona, 
@@ -348,7 +348,7 @@ class Admitido extends \yii\db\ActiveRecord {
             $carrera = $arrFiltro["carrera"];
             if ($arrFiltro['carrera'] != "" && $arrFiltro['carrera'] > 0) {
                 $comando->bindParam(":carrera", $carrera, \PDO::PARAM_INT);
-            }            
+            }
         }
         $resultData = $comando->queryAll();
         $dataProvider = new ArrayDataProvider([
@@ -506,7 +506,7 @@ class Admitido extends \yii\db\ActiveRecord {
             }
             if ($arrFiltro['carrera'] != "" && $arrFiltro['carrera'] > 0) {
                 $str_search .= "a.eaca_id = :carrera AND ";
-            }            
+            }
         } else {
             $columnsAdd = "sins.sins_id as solicitud_id,
                     per.per_id as persona, 
@@ -545,8 +545,9 @@ class Admitido extends \yii\db\ActiveRecord {
                         per.per_cedula,
                         admi.adm_id,                                               
                        (case when sins_beca = 1 then 'ICF' else 'No Aplica' end) as beca,                       
-                        sins.emp_id
-                FROM " . $con->dbname . ".admitido admi INNER JOIN " . $con->dbname . ".solicitud_inscripcion sins on sins.sins_id = admi.sins_id                 
+                        sins.emp_id,
+                        (select count(*) from " . $con1->dbname . ".pagos_contrato_programa pcp where pcp.adm_id = admi.adm_id and pcp.pcpr_estado = :estado and pcp.pcpr_estado_logico = :estado) as documento
+                   FROM " . $con->dbname . ".admitido admi INNER JOIN " . $con->dbname . ".solicitud_inscripcion sins on sins.sins_id = admi.sins_id                 
                      INNER JOIN " . $con->dbname . ".interesado inte on sins.int_id = inte.int_id 
                      INNER JOIN " . $con2->dbname . ".persona per on inte.per_id = per.per_id                     
                      INNER JOIN " . $con3->dbname . ".modalidad moda on moda.mod_id=sins.mod_id
@@ -594,8 +595,8 @@ class Admitido extends \yii\db\ActiveRecord {
             $carrera = $arrFiltro["carrera"];
             if ($arrFiltro['carrera'] != "" && $arrFiltro['carrera'] > 0) {
                 $comando->bindParam(":carrera", $carrera, \PDO::PARAM_INT);
-            }            
-        }       
+            }
+        }
         $resultData = $comando->queryAll();
         $dataProvider = new ArrayDataProvider([
             'key' => 'id',

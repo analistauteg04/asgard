@@ -588,7 +588,7 @@ create table if not exists `otros_item_metodo_nivel` (
 -- Estructura de tabla para la tabla `pagos_contrato_programa`
 -- -------------------------------------------------------------
 create table if not exists `pagos_contrato_programa` (
-  `pcpr_id` bigint(20) not null primary key,  
+  `pcpr_id` bigint(20) not null auto_increment primary key,  
   `adm_id`  bigint(20) not null,  
   `cemp_id` bigint(20) null,  
   `pcpr_archivo` varchar(100) not null,  

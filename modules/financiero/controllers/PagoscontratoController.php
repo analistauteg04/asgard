@@ -11,14 +11,12 @@ use app\modules\academico\models\Modalidad;
 use app\modules\academico\models\UnidadAcademica;
 use app\modules\admision\models\Oportunidad;
 use app\modules\admision\models\ConvenioEmpresa;
+use app\modules\financiero\models\PagosContratoPrograma;
 use app\modules\academico\Module as academico;
 use app\modules\financiero\Module as financiero;
 use app\modules\admision\Module as admision;
 use app\models\ExportFile;
-
-/* use app\modules\academico\models\DocumentoAceptacion;
-  use app\models\Persona;
-  use app\modules\admision\models\DocumentoAdjuntar; */
+use app\models\InscripcionAdmision;
 
 academico::registerTranslations();
 admision::registerTranslations();
@@ -76,121 +74,102 @@ class PagoscontratoController extends \app\components\CController {
         ]);
     }
 
-    /*
-      public function actionSubirotrosdocumentos() {
-      $per_id = @Yii::$app->session->get("PB_perid");
-      $modperinteresado = new Persona();
-      $datosPersona = $modperinteresado->consultaPersonaId($per_id);
-      return $this->render('subirOtrosDocumentos', [
-      "datos" => $datosPersona,
-      ]);
-      }
-
-      public function actionSaveotrosdocumentos() {
-      if (Yii::$app->request->isAjax) {
-      $data = Yii::$app->request->post();
-      $per_id = @Yii::$app->session->get("PB_perid");   //base64_decode($data['persona_id']);
-      $usr_id = @Yii::$app->session->get("PB_iduser");
-      $observacion = ucwords(mb_strtolower($data["observa"]));
-      if ($data["upload_file"]) {
-      if (empty($_FILES)) {
-      return json_encode(['error' => Yii::t("notificaciones", "Error to process File {file}. Try again.", ['{file}' => basename($files['name'])])]);
-      }
-      //Recibe Parámetros.
-      $files = $_FILES[key($_FILES)];
-      $arrIm = explode(".", basename($files['name']));
-      $typeFile = strtolower($arrIm[count($arrIm) - 1]);
-      $dirFileEnd = Yii::$app->params["documentFolder"] . "documaceptacion/" . $per_id . "/" . $data["name_file"] . "_per_" . $per_id . "." . $typeFile;
-      $status = Utilities::moveUploadFile($files['tmp_name'], $dirFileEnd);
-      if ($status) {
-      return true;
-      } else {
-      return json_encode(['error' => Yii::t("notificaciones", "Error to process File {file}. Try again.", ['{file}' => basename($files['name'])])]);
-      }
-      $carta_archivo = "";
-      if (isset($data["arc_doc_carta"]) && $data["arc_doc_carta"] != "") {
-      $arrIm = explode(".", basename($data["arc_doc_carta"]));
-      $typeFile = strtolower($arrIm[count($arrIm) - 1]);
-      $carta_archivo = Yii::$app->params["documentFolder"] . "documaceptacion/" . $per_id . "/doc_certune_per_" . $per_id . "." . $typeFile;
-      }
-      }
-      }
-      $con = \Yii::$app->db_academico;
-      $transaction = $con->beginTransaction();
-      $timeSt = time();
-      try {
-      if (isset($data["arc_doc_carta"]) && $data["arc_doc_carta"] != "") {
-      $arrIm = explode(".", basename($data["arc_doc_carta"]));
-      $typeFile = strtolower($arrIm[count($arrIm) - 1]);
-      $carta_archivo = Yii::$app->params["documentFolder"] . "documaceptacion/" . $per_id . "/doc_certune_per_" . $per_id . "." . $typeFile;
-      $carta_archivo = DocumentoAdjuntar::addLabelTimeDocumentos($per_id, $carta_archivo, $timeSt);
-      if ($carta_archivo === FALSE)
-      throw new Exception('Error doc Carta UNE no renombrado.');
-      }
-      $mod_documento = new DocumentoAceptacion();
-      $resexiste= $mod_documento->consultarXperid($per_id);
-      if ($resexiste["dace_estado_aprobacion"]=='3' or empty($resexiste["dace_estado_aprobacion"]))
-      {
-      $datos = array(
-      'per_id'  => $per_id,
-      'dadj_id'  => 8,
-      'dace_archivo'  => $carta_archivo,
-      'dace_observacion'  => $observacion,
-      'dace_usuario_ingreso'  => $usr_id,
-      );
-      if ($resexiste["dace_estado_aprobacion"]=='3') {
-      $respuesta = $mod_documento->actualizar($con, $usr_id, $per_id);
-      if ($respuesta) {
-      $ok='1';
-      } else {
-      $ok='0';
-      }
-      } else {
-      $ok='1';
-      }
-      if ($ok=='1') {
-      $respuesta = $mod_documento->insertar($con, $datos);
-      if ($respuesta){
-      //\app\models\Utilities::putMessageLogFile('despues de insercion');
-      $exito=1;
-      }
-      }
-      }  else {
-      $mensaje="Ya tiene registrado el documento en el sistema.";
-      }
-
-      if ($exito) {
-      $transaction->commit();
-      $message = array(
-      "wtmessage" => Yii::t("notificaciones", "El documento ha sido grabado."),
-      "title" => Yii::t('jslang', 'Success'),
-      );
-      return Utilities::ajaxResponse('OK', 'alert', Yii::t("jslang", "Sucess"), false, $message);
-      } else {
-      $transaction->rollback();
-      $message = array(
-      "wtmessage" => Yii::t("notificaciones", $mensaje),
-      "title" => Yii::t('jslang', 'Success'),
-      );
-      return Utilities::ajaxResponse('OK', 'alert', Yii::t("jslang", "Sucess"), false, $message);
-      }
-      } catch (Exception $ex) {
-      $transaction->rollback();
-      $message = array(
-      "wtmessage" => $ex->getMessage(),
-      "title" => Yii::t('jslang', 'Error'),
-      );
-      return Utilities::ajaxResponse('NO_OK', 'alert', Yii::t("jslang", "Error"), false, $message);
-      }
-      } */
-
-    public function actionCargarcontrato() {        
-       /* $per_id = base64_decode($_GET["per_id"]);*/
+    public function actionCargarcontrato() {
+        $adm_id = base64_decode($_GET['adm_id']);
         $mod_conempresa = new ConvenioEmpresa();
+        $mod_datosadmitido = new PagosContratoPrograma();
         $arr_convempresa = $mod_conempresa->consultarConvenioEmpresa();
+        $arr_datoadmitido = $mod_datosadmitido->consultarDatosadmitido($adm_id);
         return $this->render('cargarcontrato', [
-                  'arr_convenio_empresa' => ArrayHelper::map($arr_convempresa, "id", "name")
+                    'arr_convenio_empresa' => ArrayHelper::map($arr_convempresa, "id", "name"),
+                    'arr_datoadmitido' => $arr_datoadmitido
         ]);
+    }
+
+    public function actionSavecontrato() {
+        $mod_documento = new PagosContratoPrograma();
+        $per_id = base64_decode($_SESSION['peradmitido']);
+        if (Yii::$app->request->isAjax) {
+            $data = Yii::$app->request->post();
+            $usr_id = @Yii::$app->session->get("PB_iduser");
+            $adm_id = $data["adm_id"];
+            $convenio = $data["convenio"];
+            if ($data["upload_file"]) {
+                if (empty($_FILES)) {
+                    return json_encode(['error' => Yii::t("notificaciones", "Error to process File {file}. Try again.", ['{file}' => basename($files['name'])])]);
+                }
+                //Recibe Parámetros.
+                $files = $_FILES[key($_FILES)];
+                $arrIm = explode(".", basename($files['name']));
+                $typeFile = strtolower($arrIm[count($arrIm) - 1]);
+                \app\models\Utilities::putMessageLogFile('per..... ' . $per_id);
+                $dirFileEnd = Yii::$app->params["documentFolder"] . "contratos/" . $per_id . "/" . $data["name_file"] . "." . $typeFile;
+                $status = Utilities::moveUploadFile($files['tmp_name'], $dirFileEnd);
+                if ($status) {
+                    return true;
+                } else {
+                    return json_encode(['error' => Yii::t("notificaciones", "Error to process File {file}. Try again.", ['{file}' => basename($files['name'])])]);
+                }
+                $contrato_archivo = "";
+                if (isset($data["arc_doc_contrato"]) && $data["arc_doc_contrato"] != "") {
+                    $arrIm = explode(".", basename($data["arc_doc_contrato"]));
+                    $typeFile = strtolower($arrIm[count($arrIm) - 1]);
+                    $contrato_archivo = Yii::$app->params["documentFolder"] . "contratos/" . $per_id . "/pagocontrato." . $typeFile;
+                }
+            }
+        }
+        $con = \Yii::$app->db_facturacion;
+        $transaction = $con->beginTransaction();
+        //$timeSt = time();
+        $timeSt = date(Yii::$app->params["dateByDefault"]);
+        try {
+            if (isset($data["arc_doc_contrato"]) && $data["arc_doc_contrato"] != "") {
+                $arrIm = explode(".", basename($data["arc_doc_contrato"]));
+                $typeFile = strtolower($arrIm[count($arrIm) - 1]);
+                $contrato_archivo = Yii::$app->params["documentFolder"] . "contratos/" . $per_id . "/pagocontrato." . $typeFile;
+                $contrato_archivo = InscripcionAdmision::addLabelFechaDocPagos($per_id, $contrato_archivo, $timeSt);
+                if ($contrato_archivo === FALSE)
+                    throw new Exception('Error doc Contrato no renombrado.');
+            }
+            /* $mod_documento = new DocumentoAceptacion();
+              $resexiste = $mod_documento->consultarXperid($per_id);
+              if ($resexiste["dace_estado_aprobacion"] == '3' or empty($resexiste["dace_estado_aprobacion"])) { */
+            $datos = array(
+                //'per_id' => $per_id,
+                'adm_id' => $adm_id,
+                'cemp_id' => $convenio,
+                'pcpr_archivo' => $contrato_archivo,
+                'pcpr_usu_ingreso' => $usr_id,
+            );
+
+            $respuesta = $mod_documento->insertarcontrato($con, $datos);
+            if ($respuesta) {
+                $exito = 1;
+            }
+
+            if ($exito) {
+                $transaction->commit();
+                $message = array(
+                    "wtmessage" => Yii::t("notificaciones", "El documento ha sido grabado."),
+                    "title" => Yii::t('jslang', 'Success'),
+                );
+                return Utilities::ajaxResponse('OK', 'alert', Yii::t("jslang", "Sucess"), false, $message);
+            } else {
+                $transaction->rollback();
+                $message = array(
+                    "wtmessage" => Yii::t("notificaciones", 'Error'),
+                    "title" => Yii::t('jslang', 'Success'),
+                );
+                return Utilities::ajaxResponse('OK', 'alert', Yii::t("jslang", "Sucess"), false, $message);
+            }
+        } catch (Exception $ex) {
+            $transaction->rollback();
+            $message = array(
+                "wtmessage" => $ex->getMessage(),
+                "title" => Yii::t('jslang', 'Error'),
+            );
+            return Utilities::ajaxResponse('NO_OK', 'alert', Yii::t("jslang", "Error"), false, $message);
+        }
     }
 
     public function actionExpexcel() {

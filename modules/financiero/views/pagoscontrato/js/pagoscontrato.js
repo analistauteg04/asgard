@@ -3,6 +3,10 @@ $(document).ready(function () {
     $('#btn_buscarDatamat').click(function () {
         actualizarGrid();
     });
+    
+    $('#btn_guardarcontrato').click(function () {
+        SaveContrato();
+    });
     /***********************************************/
     /* Filtro para busqueda                        */
     /***********************************************/
@@ -96,20 +100,20 @@ function exportPdf() {
     window.location.href = $('#txth_base').val() + "/financiero/pagoscontrato/exppdf?pdf=1&search=" + search + "&fecha_ini=" + f_ini + "&fecha_fin=" + f_fin + "&unidad=" + unidad + "&modalidad=" + modalidad + "&carrera=" + carrera + "&periodo=" + periodo;
 }
 
-//Guarda Documento de carta de la UNE.
-/*function SaveOtrosDocumentos() {
-    var link = $('#txth_base').val() + "/academico/admitidos/saveotrosdocumentos";
+//Guarda Documento de contrato.
+function SaveContrato() {
+    var link = $('#txth_base').val() + "/financiero/pagoscontrato/savecontrato";
     var arrParams = new Object();    
-    arrParams.persona_id = $('#txth_idp').val();    
-    arrParams.arc_doc_carta = $('#txth_doc_certune').val();        
-    arrParams.observa = $('#txt_observa').val();
-    //alert('perId:'+arrParams.persona_id);
+    arrParams.persona_id = $('#txth_per').val();   
+    arrParams.adm_id = $('#txth_admid').val(); 
+    arrParams.arc_doc_contrato = $('#txth_doc_contrato').val();        
+    arrParams.convenio = $('#cmb_convenio option:selected').val(); 
     if (!validateForm()) {
         requestHttpAjax(link, arrParams, function (response) {
             showAlert(response.status, response.label, response.message);
             setTimeout(function () {                
-                window.location.href = $('#txth_base').val() + "/academico/admitidos/subirotrosdocumentos";                
+                window.location.href = $('#txth_base').val() + "/financiero/pagoscontrato/index";                
             }, 5000);
         }, true);
     }
-}*/
+}

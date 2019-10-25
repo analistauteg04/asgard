@@ -12,6 +12,8 @@ use yii\web\JsExpression;
 use app\models\Utilities;
 use app\modules\financiero\Module as financiero;
 use app\modules\admision\Module as admision;
+session_start();
+$_SESSION['peradmitido'] = $_GET['per_id'];
 ?>
 <?= Html::hiddenInput('txth_sids', base64_decode($_GET['sids']), ['id' => 'txth_sids']); ?>
 <?= Html::hiddenInput('txth_admid', base64_decode($_GET['adm_id']), ['id' => 'txth_admid']); ?>
@@ -29,13 +31,13 @@ use app\modules\admision\Module as admision;
     <div class="col-lg-6 col-md-6 col-sm-6 col-xs-6">
         <div class="form-group">
             <label for="txt_solicitud" class="col-sm-3 col-md-3 col-xs-3 col-lg-3 control-label"><?= admision::t("Solicitudes", "Request #") ?></label> 
-            <span for="txt_solicitud" class="col-sm-8 col-md-8 col-xs-8 col-lg-8  control-label"><?= $personalData['pges_correo'] ?> </span> 
+            <span for="txt_solicitud" class="col-sm-8 col-md-8 col-xs-8 col-lg-8  control-label"><?= $arr_datoadmitido['solicitud'] ?> </span> 
         </div>
     </div>
     <div class="col-lg-6 col-md-6 col-sm-6 col-xs-6">
         <div class="form-group">
             <label for="txt_dni" class="col-sm-3 col-md-3 col-xs-3 col-lg-3 control-label"><?= Yii::t("formulario", "DNI Document") ?></label> 
-            <span for="txt_dni" class="col-sm-8 col-md-8 col-xs-8 col-lg-8  control-label"><?= $personalData['pais'] ?> </span> 
+            <span for="txt_dni" class="col-sm-8 col-md-8 col-xs-8 col-lg-8  control-label"><?= $arr_datoadmitido['per_cedula'] ?> </span> 
         </div>
     </div>
 </div>
@@ -43,13 +45,13 @@ use app\modules\admision\Module as admision;
     <div class="col-md-6 col-sm-6 col-xs-6 col-lg-6">
         <div class="form-group">
             <label for="txt_nombre" class="col-sm-3 col-md-3 col-xs-3 col-lg-3 control-label" id="lbl_nombre"><?= Yii::t("formulario", "Names") ?></label>
-            <span for="txt_nombre" class="col-sm-3 col-md-3 col-xs-3 col-lg-3 control-label" id="lbl_nombre"><?= $personalData['pges_pri_nombre'] . " " . $personalData['pges_seg_nombre'] ?> </span> 
+            <span for="txt_nombre" class="col-sm-3 col-md-3 col-xs-3 col-lg-3 control-label" id="lbl_nombre"><?= $arr_datoadmitido['per_pri_nombre'] . " " . $personalData['per_seg_nombre'] ?> </span> 
         </div>
     </div> 
     <div class="col-md-6 col-sm-6 col-xs-6 col-lg-6">
         <div class="form-group">
             <label for="txt_apellido" class="col-sm-3 col-md-3 col-xs-3 col-lg-3 control-label" id="lbl_apellido"><?= Yii::t("formulario", "Last Names") ?></label>
-            <span for="txt_apellido" class="col-sm-3 col-md-3 col-xs-3 col-lg-3 control-label" id="lbl_apellido"><?= $personalData['pges_pri_apellido'] . " " . $personalData['pges_seg_apellido'] ?> </span> 
+            <span for="txt_apellido" class="col-sm-3 col-md-3 col-xs-3 col-lg-3 control-label" id="lbl_apellido"><?= $arr_datoadmitido['per_pri_apellido'] . " " . $personalData['per_seg_apellido'] ?> </span> 
         </div>
     </div> 
 </div>
@@ -69,7 +71,7 @@ use app\modules\admision\Module as admision;
         <div class="form-group">
             <label for="txth_doc_contrato" class="col-sm-2 col-md-2 col-xs-2 col-lg-2  control-label keyupmce" id="txth_doc_titulo" name="txth_doc_contrato"><?= Yii::t("formulario", "Attach document") ?></label>
             <div class="col-sm-5 col-md-5 col-xs-5 col-lg-5 ">
-                <?= Html::hiddenInput('txth_per', $per_id, ['id' => 'txth_per']); // CONSEGUIR EL PER_ID DEL ADMITIDO?> 
+                <?= Html::hiddenInput('txth_per', $arr_datoadmitido['per_id'], ['id' => 'txth_per']); // CONSEGUIR EL PER_ID DEL ADMITIDO?> 
                 <?= Html::hiddenInput('txth_doc_contrato', '', ['id' => 'txth_doc_contrato']); ?>
                 <?php
                 echo CFileInputAjax::widget([
@@ -87,7 +89,7 @@ use app\modules\admision\Module as admision;
                         'browseClass' => 'btn btn-primary btn-block',
                         'browseIcon' => '<i class="fa fa-folder-open"></i> ',
                         'browseLabel' => "Subir Archivo",
-                        'uploadUrl' => Url::to(['pagoscontrato/savecontratos']),
+                        'uploadUrl' => Url::to(['pagoscontrato/savecontrato']),
                         'maxFileSize' => Yii::$app->params["MaxFileSize"], // en Kbytes
                         'uploadExtraData' => 'javascript:function (previewId,index) {
                         var name_pagocontrato= $("#txth_doc_contrato").val();
@@ -101,8 +103,8 @@ use app\modules\admision\Module as admision;
                         return n;
                         }
                         today = new Date();
-                        var name_pagocontrato = 'pagocontrato_' + $('#txth_per').val() + '-' + today.getFullYear() + '-' + d2(parseInt(today.getMonth()+1)) + '-' + d2(today.getDate()) + ' ' + d2(today.getHours()) + ':' + d2(today.getMinutes()) + ':' + d2(today.getSeconds());
-                        $('#txth_doc_titulo').val(name_pago);    
+                        var name_pagocontrato = 'pagocontrato_' + $('#txth_per').val() + '-' + today.getFullYear() + '-' + d2(parseInt(today.getMonth()+1)) + '-' + d2(today.getDate());
+                        $('#txth_doc_contrato').val(name_pagocontrato);    
         
         $('#txt_doc_contrato').fileinput('upload');
         var fileSent = $('#txt_doc_contrato').val();
@@ -135,4 +137,11 @@ use app\modules\admision\Module as admision;
             </div>             
         </div>        
     </div> 
+    <div class="row"> 
+        <div class="col-lg-9 col-md-9 col-sm-9 col-xs-9"></div>
+
+        <div class="col-lg-3 col-md-3 col-sm-3 col-xs-3">
+            <a id="btn_guardarcontrato" href="javascript:" class="btn btn-primary btn-block"> <?= Yii::t("formulario", "Save") ?> </a>
+        </div>
+    </div>
 </form>
