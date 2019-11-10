@@ -173,6 +173,19 @@ if [ $UPDB -eq 1 ] || [ $REP -eq 1 ]; then
     mysql -uroot -p${ROOT_PASS} -e "GRANT ALL PRIVILEGES ON db_externo.* TO '${USER}'@'localhost';"
 fi
 
+# DATABASE GESTION DOCUMENTAL
+if [ $UPDB -ne 1 ]; then
+    echo -n "Desea Instalar la Base de datos Documental YES (1) o NO (2):"
+    read -s REP
+    echo $REP
+fi
+if [ $UPDB -eq 1 ] || [ $REP -eq 1 ]; then
+    echo "SUBIENDO db_documental......"
+    mysql -u${USER} -p${PASS} < $CURRENT_DIR/base_nueva_prod/estructura/db_documental.sql
+    mysql -u${USER} -p${PASS} < $CURRENT_DIR/base_nueva_prod/data/db_documental_data_1.sql
+    mysql -uroot -p${ROOT_PASS} -e "GRANT ALL PRIVILEGES ON db_documental.* TO '${USER}'@'localhost';"
+fi
+
 # FLUSH PRIVILEGES
 
 echo "Aplicando Permisos......"
