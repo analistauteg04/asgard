@@ -9,7 +9,7 @@ USE `db_documental`;
 
 CREATE TABLE `departamento` (
     `dep_id` bigint(20) not null auto_increment primary key,
-    `dep_cod` varchar(5) NOT NULL DEFAULT '',
+    `dep_cod` varchar(20) NOT NULL DEFAULT '',
     `dep_nombre` varchar(200) NOT NULL,
     `dep_estado` varchar(1) not null,
     `dep_usuario_ingreso` bigint(20) null,
