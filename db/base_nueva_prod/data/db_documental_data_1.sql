@@ -3,7 +3,7 @@
 --
 USE `db_documental`;
 
-INSERT INTO `departamento` (`dep_id`,`dep_cod`, `dep_nombre`,`dep_estado`,`dep_estado_logico`) VALUES
+INSERT INTO `departamento` (`dep_id`,`dep_nombre`,`dep_cod`,`dep_estado`,`dep_estado_logico`) VALUES
 (1,'Administrativo','ADM','1','1'),
 (2,'Admisiones','ADS','1','1'),
 (3,'Archivo','ARC','1','1'),
@@ -33,7 +33,7 @@ INSERT INTO `departamento` (`dep_id`,`dep_cod`, `dep_nombre`,`dep_estado`,`dep_e
 (27,'Vinculación sociedad','VS','1','1'),
 (28,'Vicerrectorado','VIC','1','1');
 
-INSERT INTO `clase` (`cla_id`,`cla_cod`, `cla_nombre`,`cla_estado`,`cla_estado_logico`) VALUES
+INSERT INTO `clase` (`cla_id`,`cla_nombre`,`cla_cod`,`cla_estado`,`cla_estado_logico`) VALUES
 (1, 'Gestión Estratégica Desarrollo Institucional','A','1','1'),
 (2, 'Gestión de la Imagen Institucional','B','1','1'),
 (3, 'Gestión del Soporte Académico y Estudiantil','C','1','1'),
@@ -98,7 +98,7 @@ INSERT INTO `serie` (`ser_id`,`cla_id`,`ser_nombre`,`ser_cod`,`ser_estado`,`ser_
 (46,14,'Gestión de la Seguridad del entorno universitario','001',1,1),
 (47,14,'Servicio general','002',1,1);
 
-INSERT INTO `subserie` (`sub_id`,`ser_id`,`sub_nombre`,`sub_cod`,`sub_cod_total`,`sub_estado`,`sub_estado_logico`) VALUES
+INSERT INTO `subserie` (`sub_id`,`ser_id`,`sub_cod`,`sub_cod_total`,`sub_nombre`,`sub_estado`,`sub_estado_logico`) VALUES
 (1,1,'001','A-001-001','',1,1),
 (2,2,'001','A-002-001','',1,1),
 (3,3,'001','A-003-001','',1,1),
