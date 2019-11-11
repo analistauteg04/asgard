@@ -63,7 +63,7 @@ CREATE TABLE `documento` (
     `cla_id` bigint(20) not null,
     `ser_id` bigint(20) not null,
     `sub_id` bigint(20) not null,
-    `doc_uni_departamento` varchar(50) NOT NULL,
+    `doc_uni_departamento` varchar(150) NOT NULL,
     `doc_macroproceso` varchar(150) NOT NULL,
     `doc_proceso` varchar(150) NOT NULL,
     `doc_secuencia` varchar(20) NOT NULL DEFAULT '',

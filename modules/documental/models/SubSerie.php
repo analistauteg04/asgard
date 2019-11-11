@@ -77,12 +77,12 @@ class SubSerie extends \yii\db\ActiveRecord {
      * @return \yii\db\ActiveQuery
      */    
 
-    public static function obtenerIdSubSerieByNombreSer($sub_nombre, $ser_id) {
+    public static function obtenerIdSubSerieByNombreSer($sub_cod, $ser_id) {
         $con = \Yii::$app->db_documental;        
         $sql = "
                 SELECT *
                 FROM subserie
-                WHERE sub_nombre='$sub_nombre'
+                WHERE sub_cod='$sub_cod'
                 AND ser_id=$ser_id";
         $comando = $con->createCommand($sql);
         $resultData = $comando->queryOne();

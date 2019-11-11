@@ -176,7 +176,7 @@ class Documento extends \yii\db\ActiveRecord {
                     do.doc_tipo_informacion as TipoInfo,
                     do.doc_observaciones as Observaciones,
                     do.doc_estado_documento as Estado,
-                    CONCAT(cla.cla_nombre,'-',ser.ser_cod,'-',sub.sub_cod) as Codigo 
+                    CONCAT(cla.cla_cod,'-',ser.ser_cod,'-',sub.sub_cod,'-',doc_secuencia) as Codigo 
                 FROM 
                     documento as do
                     inner join clase as cla on cla.cla_id = do.cla_id
@@ -238,7 +238,7 @@ class Documento extends \yii\db\ActiveRecord {
                     ser.ser_cod as Serie,
                     sub.sub_cod as Subserie,
                     do.doc_secuencia as Secuencia,
-                    CONCAT(cla.cla_nombre,'-',ser.ser_cod,'-',sub.sub_cod) as CodigoArchivo,
+                    CONCAT(cla.cla_cod,'-',ser.ser_cod,'-',sub.sub_cod,'-',doc_secuencia) as CodigoArchivo,
                     do.doc_cod_documento as Codigo,
                     do.doc_fecha_produccion as FechaProduccion,
                     do.doc_pro_documental as ProDocumental,
