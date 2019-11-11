@@ -385,14 +385,32 @@ class Documento extends \yii\db\ActiveRecord {
                         $cla_id;
                         $ser_id;
                         $sub_id;
+
+                        $length_codigo = 3;
     
                         $cla_id = Clase::obtenerIdClasebyNombre($val[4]);
                         if(!is_null($cla_id)) {
                             // array_push($array_clase, $cla_id);
-                            $ser_id = Serie::obtenerIdSerieByCodCla($val[5], $cla_id);
-                            if(!is_null($ser_id)){
-                                // array_push($array_serie, $ser_id);
-                                $sub_id = SubSerie::obtenerIdSubSerieByNombreSer($val[6], $ser_id);
+                            $ser_cod_str = "";
+                            if(is_string($val[5])) {
+                                $ser_cod_str = str_pad($val[5], $length_codigo, "0", STR_PAD_LEFT);
+                            } else {
+                                $ser_cod_str = str_pad(strval($val[5]), $length_codigo, "0", STR_PAD_LEFT);
+                            }
+                            /* print(strlen($val[5]));
+                            print($ser_cod_str); */
+                            /*print(gettype($ser_cod_str)); */
+                            $ser_id = Serie::obtenerIdSerieByCodCla($ser_cod_str, $cla_id);                            
+                            if(!is_null($ser_id)){                                
+                                $sub_cod_str = "";
+                                if(is_string($val[6])) {
+                                    $sub_cod_str = str_pad($val[6], $length_codigo, "0", STR_PAD_LEFT);
+                                } else {
+                                    $sub_cod_str = str_pad(strval($val[6]), $length_codigo, "0", STR_PAD_LEFT);
+                                }
+                                /* print($sub_cod_str . "\n"); */
+                                // array_push($array_serie, $ser_id);                                
+                                $sub_id = SubSerie::obtenerIdSubSerieByNombreSer($sub_cod_str, $ser_id);
                                 if(is_null($sub_id)) {
                                     $bandera = '0';
                                     $mensaje = "SubSerie no encontrada.";
@@ -408,7 +426,7 @@ class Documento extends \yii\db\ActiveRecord {
                         if($bandera == '0') {
                             $arroout["status"] = FALSE;
                             $arroout["error"] = null;
-                            $arroout["message"] = "Bandera Error en la Fila => N°$fila Unidad Departamento => $val[1] . $mensaje";
+                            $arroout["message"] = "Error en la Fila => N°$fila Unidad Departamento => $val[1] . $mensaje";
                             $arroout["data"] = null;
                             return $arroout;
                         } else {
@@ -552,7 +570,13 @@ class Documento extends \yii\db\ActiveRecord {
         if(is_null($val[7])) {
             $model_documento->doc_secuencia = '';
         } else {
-            $model_documento->doc_secuencia = $val[7];
+            $doc_sec_str = "";
+            if(is_string($val[7])) {
+                $doc_sec_str = str_pad($val[7], 3, "0", STR_PAD_LEFT);
+            } else {
+                $doc_sec_str = str_pad(strval($val[7]), 3, "0", STR_PAD_LEFT);
+            }            
+            $model_documento->doc_secuencia = $doc_sec_str;
         }
         if(is_null($val[9])) {
             $model_documento->doc_cod_documento = '';
@@ -634,12 +658,12 @@ class Documento extends \yii\db\ActiveRecord {
         if(is_null($val[20])) {
             $model_documento->doc_plaz_central = '';
         } else {
-            $model_documento->doc_plaz_central = $val[20];
+            $model_documento->doc_plaz_central = strval($val[20]);
         }
         if(is_null($val[21])) {
             $model_documento->doc_plaz_intermedio = '';
         } else {
-            $model_documento->doc_plaz_intermedio = $val[21];
+            $model_documento->doc_plaz_intermedio = strval($val[21]);
         }
         if(is_null($val[22])) {
             $model_documento->doc_base_legal = '';
