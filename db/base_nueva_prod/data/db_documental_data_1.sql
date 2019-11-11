@@ -31,7 +31,8 @@ INSERT INTO `departamento` (`dep_id`,`dep_nombre`,`dep_cod`,`dep_estado`,`dep_es
 (25,'Sistemas','SIS','1','1'),
 (26,'Talento humano','TAH','1','1'),
 (27,'Vinculación sociedad','VS','1','1'),
-(28,'Vicerrectorado','VIC','1','1');
+(28,'Vicerrectorado','VIC','1','1'),
+(29,'Sistemas','SIS','1','1');
 
 INSERT INTO `clase` (`cla_id`,`cla_nombre`,`cla_cod`,`cla_estado`,`cla_estado_logico`) VALUES
 (1, 'Gestión Estratégica Desarrollo Institucional','A','1','1'),
