@@ -22,6 +22,7 @@ class MarcacionController extends \app\components\CController {
         $mod_marcacion = new RegistroMarcacion();
         $per_id = @Yii::$app->session->get("PB_perid");
         $dia = date("w", strtotime(date("Y-m-d")));
+        \app\models\Utilities::putMessageLogFile('dia:'.$dia);        
         $fecha_consulta = '';
         $fecha_compara = date(Yii::$app->params["dateByDefault"]);
         $cons_distancia = $mod_marcacion->consultarFechaDistancia($fecha_compara, $per_id);
