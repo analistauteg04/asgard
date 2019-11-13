@@ -71,12 +71,12 @@ class Clase extends \yii\db\ActiveRecord {
      * @return \yii\db\ActiveQuery
      */
     
-    public static function obtenerIdClasebyNombre($nombre) {
+    public static function obtenerIdClasebyNombre($cod) {
         $con = \Yii::$app->db_documental;        
         $sql = "
                 SELECT *
                 FROM clase
-                WHERE cla_nombre='$nombre'";
+                WHERE cla_cod='$cod'";
         $comando = $con->createCommand($sql);
         $resultData = $comando->queryOne();
         if(empty($resultData['cla_id'])){
