@@ -1097,7 +1097,7 @@ create table if not exists `tipo_evaluacion` (
 
 -- --------------------------------------------------------
 --
--- Estructura de tabla para la tabla `evaluacion_docente`
+-- Estructura de tabla para la tabla `resumen_evaluacion_docente`
 --
 create table if not exists `resumen_evaluacion_docente` (
  `redo_id` bigint(20) not null auto_increment primary key,
@@ -1118,18 +1118,19 @@ create table if not exists `resumen_evaluacion_docente` (
 
 -- --------------------------------------------------------
 --
--- Estructura de tabla para la tabla `resultado_evaluacion`
+-- Estructura de tabla para la tabla `resumen_resultado_evaluacion`
 --
-create table if not exists `resultado_evaluacion` (
- `reva_id` bigint(20) not null auto_increment primary key,
+create table if not exists `resumen_resultado_evaluacion` (
+ `rreva_id` bigint(20) not null auto_increment primary key,
  `pro_id` bigint(20) not null,
  `saca_id` bigint(20) not null,
- `reva_total_hora` integer(5) null,
- `reva_total_evaluacion` integer(5) null,
- `reva_estado` varchar(1) not null,
- `reva_fecha_creacion` timestamp not null default current_timestamp,
- `reva_fecha_modificacion` timestamp null default null,
- `reva_estado_logico` varchar(1) not null,
+ `rreva_evaluacion_completa` varchar(1) not null, -- 1 completa o 0 incompleta
+ `rreva_total_hora` integer(5) null,
+ `rreva_total_evaluacion` integer(5) null,
+ `rreva_estado` varchar(1) not null,
+ `rreva_fecha_creacion` timestamp not null default current_timestamp,
+ `rreva_fecha_modificacion` timestamp null default null,
+ `rreva_estado_logico` varchar(1) not null,
  foreign key (saca_id) references `semestre_academico`(saca_id),
  foreign key (pro_id) references `profesor`(pro_id)
 );
