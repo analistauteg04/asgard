@@ -621,24 +621,6 @@ create table if not exists `profesor_coordinacion` (
 );
 
 -- --------------------------------------------------------
--- Estructura de tabla para la tabla `profesor_evaluacion`
--- 
-create table if not exists `profesor_evaluacion` (
-  `peva_id` bigint(20) not null auto_increment primary key,
-  `pro_id` bigint(20) not null,
-  `peva_periodo` varchar(100) not null,
-  `peva_institucion` varchar(100) not null,
-  `peva_evaluacion` varchar(100) not null,
-  `peva_usuario_ingreso` bigint(20) not null,
-  `peva_usuario_modifica` bigint(20)  null,
-  `peva_estado` varchar(1) not null,
-  `peva_fecha_creacion` timestamp not null default current_timestamp,
-  `peva_fecha_modificacion` timestamp null default null,
-  `peva_estado_logico` varchar(1) not null,
-  foreign key (pro_id) references `profesor`(pro_id)
-);
-
--- --------------------------------------------------------
 -- Estructura de tabla para la tabla `profesor_referencia`
 -- 
 create table if not exists `profesor_referencia` (
