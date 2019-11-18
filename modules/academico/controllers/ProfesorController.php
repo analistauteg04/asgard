@@ -16,8 +16,11 @@ use app\models\GrupRol;
 use app\models\Canton;
 use app\modules\academico\models\Profesor;
 use yii\helpers\ArrayHelper;
+use yii\data\ArrayDataProvider;
 use app\models\Utilities;
 use yii\base\Exception;
+use app\modules\Academico\Module as Academico;
+Academico::registerTranslations();
 
 class ProfesorController extends \app\components\CController {
 
@@ -251,7 +254,7 @@ class ProfesorController extends \app\components\CController {
         ]);
             
          //gru_id=13 -> Docente
-        $grup_id = 13;
+        $gru_id = 13;
         $rol_id = 17;
 
          $arr_grupos = Grupo::findAll(["gru_id"=>13, "gru_estado" => 1, "gru_estado_logico" => 1]);
@@ -280,18 +283,63 @@ class ProfesorController extends \app\components\CController {
              'rol_id' => $rol_id
              ]);
 
+        
+        $NewFormTab4 = $this->renderPartial('NewFormTab4',[
+            'model' => new ArrayDataProvider(array()),
+        ]);
+
         $items = [
             [
-                'label'=>'Inf. Básica',
+                'label'=> Academico::t('profesor','Basic Info.'),
                 'content'=>$NewFormTab1,
                 'active'=>true
             ],
             [
-                'label'=>'Inf. Domicilio',
+                'label'=> Academico::t('profesor','Address Info.'),
                 'content'=>$NewFormTab2,
             ],
             [
-                'label'=>'Inf. Cuenta',
+                'label'=> Academico::t('profesor','Instruction Level'),
+                'content'=>$NewFormTab4,
+            ],
+            [
+                'label'=> Academico::t('profesor','Professional Expirence'),
+                'content'=>'',
+            ],
+            [
+                'label'=> Academico::t('profesor','Languages'),
+                'content'=>'',
+            ],
+            [
+                'label'=> Academico::t('profesor','Research'),
+                'content'=>'',
+            ],
+            [
+                'label'=> Academico::t('profesor','Training'),
+                'content'=>'',
+            ],
+            [
+                'label'=> Academico::t('profesor','Conferences'),
+                'content'=>'',
+            ],
+            [
+                'label'=> Academico::t('profesor','Publishing'),
+                'content'=>'',
+            ],
+            [
+                'label'=> Academico::t('profesor','Thesis Direction'),
+                'content'=>'',
+            ],
+            [
+                'label'=> Academico::t('profesor','Performance Evaluation'),
+                'content'=>'',
+            ],
+            [
+                'label'=> Academico::t('profesor','References'),
+                'content'=>'',
+            ],
+            [
+                'label'=> Academico::t('profesor','Account Info'),
                 'content'=>$NewFormTab3,
             ]
             

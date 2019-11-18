@@ -12,11 +12,11 @@ use kartik\tabs\TabsX;
 ?>
 
 <div class="row">
-    <div class="col-md-6">
+    <div class="col-md-12">
         <?= 
             TabsX::widget([
                 'items'=>$items,
-                'position'=>TabsX::POS_ABOVE,
+                'position'=>TabsX::POS_LEFT,
                 'encodeLabels'=>false
             ]);
         ?>

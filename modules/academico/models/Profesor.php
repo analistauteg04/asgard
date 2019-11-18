@@ -50,6 +50,8 @@ class Profesor extends \yii\db\ActiveRecord {
         return 'profesor';
     }
 
+
+
     /**
      * @return \yii\db\Connection the database connection used by this AR class.
      */
@@ -65,6 +67,7 @@ class Profesor extends \yii\db\ActiveRecord {
             [['per_id', 'pro_estado','pro_estado_logico'], 'required'],            
             [['pro_fecha_creacion','pro_fecha_modificacion'], 'safe'],            
             [['pro_estado_logico','pro_estado'], 'string', 'max' => 1],
+            [['pro_fecha_contratacion','pro_fecha_terminacion'], 'string', 'max' => 20],
             [['per_id'], 'exist', 'skipOnError' => true, 'targetClass' => Persona::className(), 'targetAttribute' => ['per_id' => 'per_id']],
         ];
     }

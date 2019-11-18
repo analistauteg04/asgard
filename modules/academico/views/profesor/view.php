@@ -16,7 +16,7 @@ use kartik\tabs\TabsX;
         <?= 
             TabsX::widget([
                 'items'=>$items,
-                'position'=>TabsX::POS_ABOVE,
+                'position'=>TabsX::POS_LEFT,
                 'encodeLabels'=>false
             ]);
         ?>
