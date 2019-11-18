@@ -144,7 +144,7 @@ create table if not exists `estudio_academico` (
 create table if not exists `asignatura` (
   `asi_id` bigint(20) not null auto_increment primary key, 
   `scon_id` bigint(20) not null,
-  `uaca_id` bigint(20) not null ,
+  `uaca_id` bigint(20) not null,
   `asi_nombre` varchar(300) not null,
   `asi_descripcion` varchar(500) not null, 
   `asi_usuario_ingreso` bigint(20) not null,
@@ -392,6 +392,7 @@ create table if not exists `profesor` (
   `ddoc_id` bigint(20) not null,   
   `pro_fecha_contratacion` timestamp null default null,
   `pro_fecha_terminacion` timestamp null default null,
+  `pro_declarado` varchar(1) not null,
   `pro_usuario_ingreso` bigint(20) not null,
   `pro_usuario_modifica` bigint(20)  null,
   `pro_estado` varchar(1) not null,
@@ -624,11 +625,11 @@ create table if not exists `profesor_referencia` (
 --
 create table if not exists `docente_estudios` (
  `dest_id` bigint(20) not null auto_increment primary key,
- `ddes_observacion` text default null,
- `ddes_estado` varchar(1) not null,
- `ddes_fecha_creacion` timestamp not null default current_timestamp,
- `ddes_fecha_modificacion` timestamp null default null,
- `ddes_estado_logico` varchar(1) not null
+ `dest_observacion` text default null,
+ `dest_estado` varchar(1) not null,
+ `dest_fecha_creacion` timestamp not null default current_timestamp,
+ `dest_fecha_modificacion` timestamp null default null,
+ `dest_estado_logico` varchar(1) not null
 );
 
 
@@ -1044,22 +1045,20 @@ create table if not exists registro_marcacion_generada (
 );
 
 
-
-
 -- --------------------------------------------------------
 --
 -- Estructura de tabla para la tabla `distributivo`
 --
 create table if not exists `distributivo` (
- `dist_id` bigint(20) not null auto_increment primary key,
+ `dis_id` bigint(20) not null auto_increment primary key,
  `pro_id` bigint(20) not null,
  `asi_id` bigint(20) not null,
- `sac_id` bigint(20) not null,
- `dist_estado` varchar(1) not null,
- `dist_fecha_creacion` timestamp not null default current_timestamp,
- `dist_fecha_modificacion` timestamp null default null,
- `dist_estado_logico` varchar(1) not null,
- foreign key (sac_id) references `semestre_academico`(sac_id),
+ `saca_id` bigint(20) not null,
+ `dis_estado` varchar(1) not null,
+ `dis_fecha_creacion` timestamp not null default current_timestamp,
+ `dis_fecha_modificacion` timestamp null default null,
+ `dis_estado_logico` varchar(1) not null,
+ foreign key (saca_id) references `semestre_academico`(saca_id),
  foreign key (pro_id) references `profesor`(pro_id),
  foreign key (asi_id) references `asignatura`(asi_id) 
 );
@@ -1084,7 +1083,7 @@ create table if not exists `tipo_evaluacion` (
 create table if not exists `evaluacion_docente` (
  `edoc_id` bigint(20) not null auto_increment primary key,
  `pro_id` bigint(20) not null,
- `sac_id` bigint(20) not null,
+ `saca_id` bigint(20) not null,
  `teva_id` bigint(20) not null,
  `edoc_cant_horas` integer(5) null,
  `edoc_puntaje_evaluacion` integer(5) null,
@@ -1092,7 +1091,7 @@ create table if not exists `evaluacion_docente` (
  `edoc_fecha_creacion` timestamp not null default current_timestamp,
  `edoc_fecha_modificacion` timestamp null default null,
  `edoc_estado_logico` varchar(1) not null,
- foreign key (sac_id) references `semestre_academico`(sac_id),
+ foreign key (saca_id) references `semestre_academico`(saca_id),
  foreign key (pro_id) references `profesor`(pro_id),
  foreign key (teva_id) references `tipo_evaluacion`(teva_id)
 );
@@ -1105,14 +1104,14 @@ create table if not exists `evaluacion_docente` (
 create table if not exists `resultado_evaluacion` (
  `reva_id` bigint(20) not null auto_increment primary key,
  `pro_id` bigint(20) not null,
- `sac_id` bigint(20) not null,
+ `saca_id` bigint(20) not null,
  `reva_total_hora` integer(5) null,
  `reva_total_evaluacion` integer(5) null,
  `reva_estado` varchar(1) not null,
  `reva_fecha_creacion` timestamp not null default current_timestamp,
  `reva_fecha_modificacion` timestamp null default null,
  `reva_estado_logico` varchar(1) not null,
- foreign key (sac_id) references `semestre_academico`(sac_id),
+ foreign key (saca_id) references `semestre_academico`(saca_id),
  foreign key (pro_id) references `profesor`(pro_id)
 );
 
