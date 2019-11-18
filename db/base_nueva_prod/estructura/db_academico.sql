@@ -144,6 +144,7 @@ create table if not exists `estudio_academico` (
 create table if not exists `asignatura` (
   `asi_id` bigint(20) not null auto_increment primary key, 
   `scon_id` bigint(20) not null,
+  `uaca_id` bigint(20) not null ,
   `asi_nombre` varchar(300) not null,
   `asi_descripcion` varchar(500) not null, 
   `asi_usuario_ingreso` bigint(20) not null,
@@ -152,9 +153,9 @@ create table if not exists `asignatura` (
   `asi_fecha_creacion` timestamp not null default current_timestamp,
   `asi_fecha_modificacion` timestamp null default null,
   `asi_estado_logico` varchar(1) not null,
-  foreign key (scon_id) references `subarea_conocimiento`(scon_id)
+  foreign key (scon_id) references `subarea_conocimiento`(scon_id),
+  foreign key (uaca_id) references `unidad_academica`(uaca_id)
 );
-
 
 -- --------------------------------------------------------
 --
@@ -369,18 +370,49 @@ create table if not exists `estudiante` (
 );
 
 -- --------------------------------------------------------
+--
+-- Estructura de tabla para la tabla `dedicacion_docente`
+--
+create table if not exists `dedicacion_docente` (
+ `ddoc_id` bigint(20) not null auto_increment primary key,
+ `ddoc_tipo` varchar(1) default null,
+ `ddoc_estado` varchar(1) not null,
+ `ddoc_fecha_creacion` timestamp not null default current_timestamp,
+ `ddoc_fecha_modificacion` timestamp null default null,
+ `ddoc_estado_logico` varchar(1) not null
+);
+
+-- --------------------------------------------------------
 -- Estructura de tabla para la tabla `profesor`
 -- 
 create table if not exists `profesor` (
   `pro_id` bigint(20) not null auto_increment primary key,
-  `per_id` bigint(20) not null,    
+  `per_id` bigint(20) not null, 
+  `ddoc_id` bigint(20) not null,   
   `pro_usuario_ingreso` bigint(20) not null,
   `pro_usuario_modifica` bigint(20)  null,
+  `prof_fecha_contratacion` timestamp null default null,
+  `prof_fecha_terminacion` timestamp null default null,
   `pro_estado` varchar(1) not null,
   `pro_fecha_creacion` timestamp not null default current_timestamp,
   `pro_fecha_modificacion` timestamp null default null,
-  `pro_estado_logico` varchar(1) not null
+  `pro_estado_logico` varchar(1) not null,
+  foreign key (ddoc_id) references `dedicacion_docente`(ddoc_id)
 );
+
+-- --------------------------------------------------------
+--
+-- Estructura de tabla para la tabla `docente_estudios`
+--
+create table if not exists `docente_estudios` (
+ `dest_id` bigint(20) not null auto_increment primary key,
+ `ddes_observacion` text default null,
+ `ddes_estado` varchar(1) not null,
+ `ddes_fecha_creacion` timestamp not null default current_timestamp,
+ `ddes_fecha_modificacion` timestamp null default null,
+ `ddes_estado_logico` varchar(1) not null
+);
+
 
 -- --------------------------------------------------------
 -- 
@@ -792,4 +824,125 @@ create table if not exists registro_marcacion_generada (
   `mod_id` bigint(20)  null,    
   `rmtm_fecha_transaccion` timestamp null default null 
 );
-               
+
+
+
+
+-- --------------------------------------------------------
+--
+-- Estructura de tabla para la tabla `semestre_academico`
+--
+create table if not exists `semestre_academico` (
+ `sac_id` bigint(20) not null auto_increment primary key,
+ `sac_nombre` varchar(150) default null,
+ `sac_anio` varchar(4) default null,
+ `sac_estado` varchar(1) not null,
+ `sac_fecha_creacion` timestamp not null default current_timestamp,
+ `sac_fecha_modificacion` timestamp null default null,
+ `sac_estado_logico` varchar(1) not null
+);
+
+
+-- --------------------------------------------------------
+--
+-- Estructura de tabla para la tabla `bloque_academico`
+--
+create table if not exists `bloque_academico` (
+ `bac_id` bigint(20) not null auto_increment primary key,
+ `bac_nombre` varchar(150) default null,
+ `bac_descripcion` text null default null,
+ `bac_anio` varchar(4) default null,
+ `bac_estado` varchar(1) not null,
+ `bac_fecha_creacion` timestamp not null default current_timestamp,
+ `bac_fecha_modificacion` timestamp null default null,
+ `bac_estado_logico` varchar(1) not null
+);
+
+-- --------------------------------------------------------
+--
+-- Estructura de tabla para la tabla `peridodo_academico`
+--
+create table if not exists `periodo_academico` (
+ `pac_id` bigint(20) not null auto_increment primary key,
+ `sac_id` bigint(20) not null,
+ `bac_id` bigint(20) not null,
+ `pac_fecha_inicio` date default null,
+ `pac_fecha_fin` date default null,
+ `pac_estado` varchar(1) not null,
+ `pac_fecha_creacion` timestamp not null default current_timestamp,
+ `pac_fecha_modificacion` timestamp null default null,
+ `pac_estado_logico` varchar(1) not null,
+ foreign key (sac_id) references `semestre_academico`(sac_id),
+ foreign key (bac_id) references `bloque_academico`(bac_id) 
+);
+
+-- --------------------------------------------------------
+--
+-- Estructura de tabla para la tabla `distributivo`
+--
+create table if not exists `distributivo` (
+ `dist_id` bigint(20) not null auto_increment primary key,
+ `pro_id` bigint(20) not null,
+ `asi_id` bigint(20) not null,
+ `sac_id` bigint(20) not null,
+ `dist_estado` varchar(1) not null,
+ `dist_fecha_creacion` timestamp not null default current_timestamp,
+ `dist_fecha_modificacion` timestamp null default null,
+ `dist_estado_logico` varchar(1) not null,
+ foreign key (sac_id) references `semestre_academico`(sac_id),
+ foreign key (pro_id) references `profesor`(pro_id),
+ foreign key (asi_id) references `asignatura`(asi_id) 
+);
+
+-- --------------------------------------------------------
+--
+-- Estructura de tabla para la tabla `tipo_evaluacion`
+--
+create table if not exists `tipo_evaluacion` (
+ `teva_id` bigint(20) not null auto_increment primary key,
+ `teva_nombre` varchar(250) default null,
+ `teva_estado` varchar(1) not null,
+ `teva_fecha_creacion` timestamp not null default current_timestamp,
+ `teva_fecha_modificacion` timestamp null default null,
+ `teva_estado_logico` varchar(1) not null
+);
+
+-- --------------------------------------------------------
+--
+-- Estructura de tabla para la tabla `evaluacion_docente`
+--
+create table if not exists `evaluacion_docente` (
+ `edoc_id` bigint(20) not null auto_increment primary key,
+ `pro_id` bigint(20) not null,
+ `sac_id` bigint(20) not null,
+ `teva_id` bigint(20) not null,
+ `edoc_cant_horas` integer(5) null,
+ `edoc_puntaje_evaluacion` integer(5) null,
+ `edoc_estado` varchar(1) not null,
+ `edoc_fecha_creacion` timestamp not null default current_timestamp,
+ `edoc_fecha_modificacion` timestamp null default null,
+ `edoc_estado_logico` varchar(1) not null,
+ foreign key (sac_id) references `semestre_academico`(sac_id),
+ foreign key (pro_id) references `profesor`(pro_id),
+ foreign key (teva_id) references `tipo_evaluacion`(teva_id)
+);
+
+
+-- --------------------------------------------------------
+--
+-- Estructura de tabla para la tabla `resultado_evaluacion`
+--
+create table if not exists `resultado_evaluacion` (
+ `reva_id` bigint(20) not null auto_increment primary key,
+ `pro_id` bigint(20) not null,
+ `sac_id` bigint(20) not null,
+ `reva_total_hora` integer(5) null,
+ `reva_total_evaluacion` integer(5) null,
+ `reva_estado` varchar(1) not null,
+ `reva_fecha_creacion` timestamp not null default current_timestamp,
+ `reva_fecha_modificacion` timestamp null default null,
+ `reva_estado_logico` varchar(1) not null,
+ foreign key (sac_id) references `semestre_academico`(sac_id),
+ foreign key (pro_id) references `profesor`(pro_id)
+);
+
