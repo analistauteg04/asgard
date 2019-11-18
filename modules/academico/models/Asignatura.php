@@ -1,8 +1,9 @@
 <?php
 
 namespace app\modules\academico\models;
-
 use Yii;
+use \yii\data\ActiveDataProvider;
+use \yii\data\ArrayDataProvider;
 
 /**
  * This is the model class for table "asignatura".
