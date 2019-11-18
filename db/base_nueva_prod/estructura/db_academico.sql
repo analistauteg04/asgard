@@ -396,10 +396,7 @@ create table if not exists `profesor` (
   `ddoc_id` bigint(20) not null,   
   `pro_fecha_contratacion` timestamp null default null,
   `pro_fecha_terminacion` timestamp null default null,
-<<<<<<< HEAD
   `pro_declarado` varchar(1) not null,
-=======
->>>>>>> ff91f3e2d212e1fc038a22c8ba3c02f54d6c7cfa
   `pro_usuario_ingreso` bigint(20) not null,
   `pro_usuario_modifica` bigint(20)  null,
   `pro_estado` varchar(1) not null,
@@ -567,7 +564,6 @@ create table if not exists `profesor_publicacion` (
   `ppub_fecha_modificacion` timestamp null default null,
   `ppub_estado_logico` varchar(1) not null,
   foreign key (pro_id) references `profesor`(pro_id)
-<<<<<<< HEAD
 );
 
 -- --------------------------------------------------------
