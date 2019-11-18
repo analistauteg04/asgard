@@ -360,6 +360,7 @@ create table if not exists `periodo_academico` (
 create table if not exists `estudiante` (
   `est_id` bigint(20) not null auto_increment primary key,
   `per_id` bigint(20) not null,    
+  `est_matricula` varchar(20) not null,    
   `est_usuario_ingreso` bigint(20) not null,
   `est_usuario_modifica` bigint(20)  null,
   `est_estado` varchar(1) not null,
