@@ -1099,17 +1099,17 @@ create table if not exists `tipo_evaluacion` (
 --
 -- Estructura de tabla para la tabla `evaluacion_docente`
 --
-create table if not exists `evaluacion_docente` (
- `edoc_id` bigint(20) not null auto_increment primary key,
+create table if not exists `resumen_evaluacion_docente` (
+ `redo_id` bigint(20) not null auto_increment primary key,
  `pro_id` bigint(20) not null,
  `saca_id` bigint(20) not null,
  `teva_id` bigint(20) not null,
- `edoc_cant_horas` integer(5) null,
- `edoc_puntaje_evaluacion` integer(5) null,
- `edoc_estado` varchar(1) not null,
- `edoc_fecha_creacion` timestamp not null default current_timestamp,
- `edoc_fecha_modificacion` timestamp null default null,
- `edoc_estado_logico` varchar(1) not null,
+ `redo_cant_horas` integer(5) null,
+ `redo_puntaje_evaluacion` integer(5) null,
+ `redo_estado` varchar(1) not null,
+ `redo_fecha_creacion` timestamp not null default current_timestamp,
+ `redo_fecha_modificacion` timestamp null default null,
+ `redo_estado_logico` varchar(1) not null,
  foreign key (saca_id) references `semestre_academico`(saca_id),
  foreign key (pro_id) references `profesor`(pro_id),
  foreign key (teva_id) references `tipo_evaluacion`(teva_id)
