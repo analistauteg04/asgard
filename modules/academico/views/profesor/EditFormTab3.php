@@ -22,7 +22,7 @@ Academico::registerTranslations();
         <label for="frm_clave" class="col-sm-3 control-label"><?= Academico::t("profesor", "Password") ?></label>
         <div class="col-sm-9">
             <div class="input-group">
-                <?= Html::passwordInput("frm_clave", $usuario_model->usu_password, ["class" => "form-control PBvalidation", "data-type" => "all", "id" => "frm_clave","placeholder" => Yii::t("login", "Password") ]) ?>
+                <?= Html::passwordInput("frm_clave", "", ["class" => "form-control PBvalidation", "data-type" => "all", "data-required" => "false", "id" => "frm_clave","placeholder" => Yii::t("login", "Password") ]) ?>
                 <?= Html::tag('span', Html::button(Html::tag("i", "", ['class' => 'glyphicon glyphicon-eye-open']), ['id' => "view_pass_btn", 'class' => 'btn btn-primary btn-flat',]), ["class" => "input-group-btn", "data-toggle" => "tooltip", "data-placement" => "top", "title" => Yii::t("accion", "View")]) ?>
                 <?= Html::tag('span', Html::button(Html::tag("i", "", ['class' => 'fa fa-fw fa-key']), ['id' => "generate_btn", 'class' => 'btn btn-primary btn-flat',]), ["class" => "input-group-btn", "data-toggle" => "tooltip", "data-placement" => "top", "title" => Yii::t("passreset", "Generate")]) ?>
             </div>

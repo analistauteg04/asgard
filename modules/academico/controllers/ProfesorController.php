@@ -316,6 +316,10 @@ class ProfesorController extends \app\components\CController {
                 $ruc = $data["ruc"];
                 $pasaporte = $data["pasaporte"];
                 $correo = $data["correo"];
+                $nacionalidad = $data["nacionalidad"];
+                $celular = $data["celular"];
+                $phone = $data["phone"];
+                $fecha_nacimiento = $data["fecha_nacimiento"];
 
                 /**
                  * Inf. Domicilio
@@ -373,6 +377,11 @@ class ProfesorController extends \app\components\CController {
                     $persona_model->per_pri_apellido = $pri_apellido;
                     $persona_model->per_seg_apellido = $seg_apellido;
                     $persona_model->per_cedula = $cedula;
+                    $persona_model->per_nacionalidad = $nacionalidad;
+                    $persona_model->per_domicilio_telefono = $phone;
+                    $persona_model->per_celular = $celular;
+                    $persona_model->per_fecha_nacimiento = $fecha_nacimiento;
+
                     if($ruc!=""){
                         $persona_model->per_ruc = $ruc;
                     }
@@ -401,7 +410,9 @@ class ProfesorController extends \app\components\CController {
                         $usuario_model = new Usuario();
                         $usuario_model->per_id = $per_id_existente;
                         $usuario_model->usu_user = $usuario;
-                        $usuario_model->usu_password = $clave;
+                        $usuario_model->generateAuthKey();
+                        $usuario_model->setPassword($clave);
+
                         $usuario_model->usu_estado = '1';
                         $usuario_model->usu_estado_logico = '1';
                         $usuario_model->save();
@@ -446,6 +457,10 @@ class ProfesorController extends \app\components\CController {
                         $persona_model->per_pasaporte = $pasaporte;
                     }
                     $persona_model->per_correo = $correo;
+                    $persona_model->per_nacionalidad = $nacionalidad;
+                    $persona_model->per_celular = $celular;
+                    $persona_model->per_domicilio_telefono = $phone;
+                    $persona_model->per_fecha_nacimiento = $fecha_nacimiento;
                     $persona_model->pai_id_domicilio = $pai_id_domicilio;
                     $persona_model->pro_id_domicilio = $pro_id_domicilio;
                     $persona_model->can_id_domicilio = $can_id_domicilio;
@@ -468,7 +483,8 @@ class ProfesorController extends \app\components\CController {
                         $usuario_model = new Usuario();
                         $usuario_model->per_id = $per_id;
                         $usuario_model->usu_user = $usuario;
-                        $usuario_model->usu_password = $clave;
+                        $usuario_model->generateAuthKey();
+                        $usuario_model->setPassword($clave);
                         $usuario_model->usu_estado = '1';
                         $usuario_model->usu_estado_logico = '1';
                         $usuario_model->save();
@@ -523,6 +539,10 @@ class ProfesorController extends \app\components\CController {
                 $ruc = $data["ruc"];
                 $pasaporte = $data["pasaporte"];
                 $correo = $data["correo"];
+                $nacionalidad = $data["nacionalidad"];
+                $celular = $data["celular"];
+                $phone = $data["phone"];
+                $fecha_nacimiento = $data["fecha_nacimiento"];
 
                 /**
                  * Inf. Domicilio
@@ -560,6 +580,10 @@ class ProfesorController extends \app\components\CController {
                     $persona_model->per_pasaporte = $pasaporte;
                 }
                 $persona_model->per_correo = $correo;
+                $persona_model->per_nacionalidad = $nacionalidad;
+                $persona_model->per_celular = $celular;
+                $persona_model->per_domicilio_telefono = $phone;
+                $persona_model->per_fecha_nacimiento = $fecha_nacimiento;
                 $persona_model->pai_id_domicilio = $pai_id_domicilio;
                 $persona_model->pro_id_domicilio = $pro_id_domicilio;
                 $persona_model->can_id_domicilio = $can_id_domicilio;
@@ -575,22 +599,24 @@ class ProfesorController extends \app\components\CController {
                 );
 
                 if ($persona_model->save()) {
-                    $usuario_model = Usuario::findOne(["per_id" => $per_id]);                    
-                    $usuario_model->usu_user = $usuario;
-                    $usuario_model->usu_password = $clave;                    
-                    $usuario_model->save();                    
-
-                    $empresa_persona_model = EmpresaPersona::findOne(["per_id" => $per_id]);
-                    $empresa_persona_model->emp_id = $emp_id;
-                    $empresa_persona_model->save();                    
-                    
+                    $usuario_model = Usuario::findOne(["per_id" => $per_id]);
+                    if($clave != "") {           
+                        $usuario_model->usu_user = $usuario;
+                        $usuario_model->generateAuthKey();
+                        $usuario_model->setPassword($clave);
+                    }
+                    if($usuario_model->save()){
+                        $empresa_persona_model = EmpresaPersona::findOne(["per_id" => $per_id]);
+                        $empresa_persona_model->emp_id = $emp_id;
+                        $empresa_persona_model->save();        
+                    }
                     return Utilities::ajaxResponse('OK', 'alert', Yii::t('jslang', 'Success'), 'false', $message);
                 } else {
                     throw new Exception('Error SubModulo no creado.');
                 }
             } catch (Exception $ex) {
                 $message = array(
-                    "wtmessage" => Yii::t('notificaciones', 'Your information has not been saved. Please try again.'),
+                    "wtmessage" => Yii::t('notificaciones', 'Your information has not been saved. Please try again.'.$ex->getMessage()),
                     "title" => Yii::t('jslang', 'Error'),
                 );
                 return Utilities::ajaxResponse('NOOK', 'alert', Yii::t('jslang', 'Error'), 'true', $message);

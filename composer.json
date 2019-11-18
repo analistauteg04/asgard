@@ -32,6 +32,8 @@
         "odaialali/yii2-toastr": "1.0b",
         "kartik-v/yii2-widget-fileinput": "*",
         "kartik-v/yii2-widget-datepicker": "*",
+        "kartik-v/yii2-widget-datetimepicker": "dev-master",
+        "kartik-v/yii2-tabs-x": "dev-master",
         "himiklab/yii2-recaptcha-widget": "*",
         "svrnm/exceldatatables": "*"
     },

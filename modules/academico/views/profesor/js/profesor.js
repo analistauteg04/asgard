@@ -1,38 +1,38 @@
 $(document).ready(function() {
-    $("#cmb_pais").change(function(){
+    $("#cmb_pais").change(function() {
         var link = $('#txth_base').val() + "/academico/profesor/new";
         var arrParams = new Object();
         arrParams.pai_id = $("#cmb_pais").val();
         console.log(arrParams);
-        requestHttpAjax(link, arrParams, function (response) {
-            if(response.status == "OK")
+        requestHttpAjax(link, arrParams, function(response) {
+            if (response.status == "OK")
                 console.log(response.message);
-                setComboData(response.message['arr_pro'],"cmb_provincia");
-                setComboData(response.message['arr_can'],"cmb_canton");
-              //  setComboData(response.message,"cmb_canton");
+            setComboData(response.message['arr_pro'], "cmb_provincia");
+            setComboData(response.message['arr_can'], "cmb_canton");
+            //  setComboData(response.message,"cmb_canton");
         }, true);
     });
 
-    $("#cmb_provincia").change(function(){
+    $("#cmb_provincia").change(function() {
         var link = $('#txth_base').val() + "/academico/profesor/new";
         var arrParams = new Object();
         arrParams.pro_id = $("#cmb_provincia").val();
         console.log(arrParams);
-        requestHttpAjax(link, arrParams, function (response) {
-            if(response.status == "OK")                
-                setComboData(response.message,"cmb_canton");              
+        requestHttpAjax(link, arrParams, function(response) {
+            if (response.status == "OK")
+                setComboData(response.message, "cmb_canton");
         }, true);
     });
-    $('#view_pass_btn').click(function(){
-        if($('#frm_clave').attr("type") == "text"){
-            $('#frm_clave').attr("type","password");
+    $('#view_pass_btn').click(function() {
+        if ($('#frm_clave').attr("type") == "text") {
+            $('#frm_clave').attr("type", "password");
             $('#view_pass_btn > i').attr("class", "glyphicon glyphicon-eye-open");
-        }else{
-            $('#frm_clave').attr("type","text");
+        } else {
+            $('#frm_clave').attr("type", "text");
             $('#view_pass_btn > i').attr("class", "glyphicon glyphicon-eye-close");
         }
     });
-    $("#generate_btn").click(function(){
+    $("#generate_btn").click(function() {
         console.log("entra");
         var newpass = generatePasswordSemi();
         $('#frm_clave').val(newpass);
@@ -99,6 +99,10 @@ function update() {
     arrParams.calle_sec = $('#txt_calle_sec').val();
     arrParams.numeracion = $('#txt_numeracion').val();
     arrParams.referencia = $('#txt_referencia').val();
+    arrParams.nacionalidad = $('#txt_nacionalidad').val();
+    arrParams.celular = $('#txt_cel').val();
+    arrParams.phone = $('#txt_phone').val();
+    arrParams.fecha_nacimiento = $('#txt_fecha_nacimiento').val();
 
     arrParams.usuario = $('#txt_usuario').val();
     arrParams.clave = $('#frm_clave').val();
@@ -133,6 +137,10 @@ function save() {
     arrParams.calle_sec = $('#txt_calle_sec').val();
     arrParams.numeracion = $('#txt_numeracion').val();
     arrParams.referencia = $('#txt_referencia').val();
+    arrParams.nacionalidad = $('#txt_nacionalidad').val();
+    arrParams.celular = $('#txt_cel').val();
+    arrParams.phone = $('#txt_phone').val();
+    arrParams.fecha_nacimiento = $('#txt_fecha_nacimiento').val();
 
     arrParams.usuario = $('#txt_usuario').val();
     arrParams.clave = $('#frm_clave').val();
