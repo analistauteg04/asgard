@@ -71,6 +71,7 @@ return [
     'Male' => 'Masculino',
     'Marital Status' => 'Estado Civil',
     'Married' => 'Casado',
+    'Nationality' => 'Nacionalidad',
     'Parish' => 'Parroquia',
     'Passport' => 'Pasaporte',
     'Phone' => 'Teléfono',
