@@ -144,7 +144,11 @@ create table if not exists `estudio_academico` (
 create table if not exists `asignatura` (
   `asi_id` bigint(20) not null auto_increment primary key, 
   `scon_id` bigint(20) not null,
+<<<<<<< HEAD
   `uaca_id` bigint(20) not null,
+=======
+  `uaca_id` bigint(20) not null ,
+>>>>>>> ff91f3e2d212e1fc038a22c8ba3c02f54d6c7cfa
   `asi_nombre` varchar(300) not null,
   `asi_descripcion` varchar(500) not null, 
   `asi_usuario_ingreso` bigint(20) not null,
@@ -392,7 +396,10 @@ create table if not exists `profesor` (
   `ddoc_id` bigint(20) not null,   
   `pro_fecha_contratacion` timestamp null default null,
   `pro_fecha_terminacion` timestamp null default null,
+<<<<<<< HEAD
   `pro_declarado` varchar(1) not null,
+=======
+>>>>>>> ff91f3e2d212e1fc038a22c8ba3c02f54d6c7cfa
   `pro_usuario_ingreso` bigint(20) not null,
   `pro_usuario_modifica` bigint(20)  null,
   `pro_estado` varchar(1) not null,
@@ -560,6 +567,7 @@ create table if not exists `profesor_publicacion` (
   `ppub_fecha_modificacion` timestamp null default null,
   `ppub_estado_logico` varchar(1) not null,
   foreign key (pro_id) references `profesor`(pro_id)
+<<<<<<< HEAD
 );
 
 -- --------------------------------------------------------
@@ -601,6 +609,49 @@ create table if not exists `profesor_evaluacion` (
 );
 
 -- --------------------------------------------------------
+=======
+);
+
+-- --------------------------------------------------------
+-- Estructura de tabla para la tabla `profesor_coordinacion`
+-- 
+create table if not exists `profesor_coordinacion` (
+  `pcoo_id` bigint(20) not null auto_increment primary key,
+  `pro_id` bigint(20) not null,
+  `pcoo_alumno` varchar(100) not null,
+  `pcoo_programa` varchar(100) not null,
+  `pcoo_academico` varchar(100) not null,
+  `pcoo_institucion` varchar(200) not null,
+  `pcoo_anio` varchar(4) not null,
+  `pcoo_usuario_ingreso` bigint(20) not null,
+  `pcoo_usuario_modifica` bigint(20)  null,
+  `pcoo_estado` varchar(1) not null,
+  `pcoo_fecha_creacion` timestamp not null default current_timestamp,
+  `pcoo_fecha_modificacion` timestamp null default null,
+  `pcoo_estado_logico` varchar(1) not null,
+  foreign key (pro_id) references `profesor`(pro_id)
+);
+
+-- --------------------------------------------------------
+-- Estructura de tabla para la tabla `profesor_evaluacion`
+-- 
+create table if not exists `profesor_evaluacion` (
+  `peva_id` bigint(20) not null auto_increment primary key,
+  `pro_id` bigint(20) not null,
+  `peva_periodo` varchar(100) not null,
+  `peva_institucion` varchar(100) not null,
+  `peva_evaluacion` varchar(100) not null,
+  `peva_usuario_ingreso` bigint(20) not null,
+  `peva_usuario_modifica` bigint(20)  null,
+  `peva_estado` varchar(1) not null,
+  `peva_fecha_creacion` timestamp not null default current_timestamp,
+  `peva_fecha_modificacion` timestamp null default null,
+  `peva_estado_logico` varchar(1) not null,
+  foreign key (pro_id) references `profesor`(pro_id)
+);
+
+-- --------------------------------------------------------
+>>>>>>> ff91f3e2d212e1fc038a22c8ba3c02f54d6c7cfa
 -- Estructura de tabla para la tabla `profesor_referencia`
 -- 
 create table if not exists `profesor_referencia` (
@@ -625,11 +676,19 @@ create table if not exists `profesor_referencia` (
 --
 create table if not exists `docente_estudios` (
  `dest_id` bigint(20) not null auto_increment primary key,
+<<<<<<< HEAD
  `dest_observacion` text default null,
  `dest_estado` varchar(1) not null,
  `dest_fecha_creacion` timestamp not null default current_timestamp,
  `dest_fecha_modificacion` timestamp null default null,
  `dest_estado_logico` varchar(1) not null
+=======
+ `ddes_observacion` text default null,
+ `ddes_estado` varchar(1) not null,
+ `ddes_fecha_creacion` timestamp not null default current_timestamp,
+ `ddes_fecha_modificacion` timestamp null default null,
+ `ddes_estado_logico` varchar(1) not null
+>>>>>>> ff91f3e2d212e1fc038a22c8ba3c02f54d6c7cfa
 );
 
 
@@ -1045,11 +1104,17 @@ create table if not exists registro_marcacion_generada (
 );
 
 
+<<<<<<< HEAD
+=======
+
+
+>>>>>>> ff91f3e2d212e1fc038a22c8ba3c02f54d6c7cfa
 -- --------------------------------------------------------
 --
 -- Estructura de tabla para la tabla `distributivo`
 --
 create table if not exists `distributivo` (
+<<<<<<< HEAD
  `dis_id` bigint(20) not null auto_increment primary key,
  `pro_id` bigint(20) not null,
  `asi_id` bigint(20) not null,
@@ -1059,6 +1124,17 @@ create table if not exists `distributivo` (
  `dis_fecha_modificacion` timestamp null default null,
  `dis_estado_logico` varchar(1) not null,
  foreign key (saca_id) references `semestre_academico`(saca_id),
+=======
+ `dist_id` bigint(20) not null auto_increment primary key,
+ `pro_id` bigint(20) not null,
+ `asi_id` bigint(20) not null,
+ `sac_id` bigint(20) not null,
+ `dist_estado` varchar(1) not null,
+ `dist_fecha_creacion` timestamp not null default current_timestamp,
+ `dist_fecha_modificacion` timestamp null default null,
+ `dist_estado_logico` varchar(1) not null,
+ foreign key (sac_id) references `semestre_academico`(sac_id),
+>>>>>>> ff91f3e2d212e1fc038a22c8ba3c02f54d6c7cfa
  foreign key (pro_id) references `profesor`(pro_id),
  foreign key (asi_id) references `asignatura`(asi_id) 
 );
@@ -1083,7 +1159,11 @@ create table if not exists `tipo_evaluacion` (
 create table if not exists `evaluacion_docente` (
  `edoc_id` bigint(20) not null auto_increment primary key,
  `pro_id` bigint(20) not null,
+<<<<<<< HEAD
  `saca_id` bigint(20) not null,
+=======
+ `sac_id` bigint(20) not null,
+>>>>>>> ff91f3e2d212e1fc038a22c8ba3c02f54d6c7cfa
  `teva_id` bigint(20) not null,
  `edoc_cant_horas` integer(5) null,
  `edoc_puntaje_evaluacion` integer(5) null,
@@ -1091,7 +1171,11 @@ create table if not exists `evaluacion_docente` (
  `edoc_fecha_creacion` timestamp not null default current_timestamp,
  `edoc_fecha_modificacion` timestamp null default null,
  `edoc_estado_logico` varchar(1) not null,
+<<<<<<< HEAD
  foreign key (saca_id) references `semestre_academico`(saca_id),
+=======
+ foreign key (sac_id) references `semestre_academico`(sac_id),
+>>>>>>> ff91f3e2d212e1fc038a22c8ba3c02f54d6c7cfa
  foreign key (pro_id) references `profesor`(pro_id),
  foreign key (teva_id) references `tipo_evaluacion`(teva_id)
 );
@@ -1104,14 +1188,22 @@ create table if not exists `evaluacion_docente` (
 create table if not exists `resultado_evaluacion` (
  `reva_id` bigint(20) not null auto_increment primary key,
  `pro_id` bigint(20) not null,
+<<<<<<< HEAD
  `saca_id` bigint(20) not null,
+=======
+ `sac_id` bigint(20) not null,
+>>>>>>> ff91f3e2d212e1fc038a22c8ba3c02f54d6c7cfa
  `reva_total_hora` integer(5) null,
  `reva_total_evaluacion` integer(5) null,
  `reva_estado` varchar(1) not null,
  `reva_fecha_creacion` timestamp not null default current_timestamp,
  `reva_fecha_modificacion` timestamp null default null,
  `reva_estado_logico` varchar(1) not null,
+<<<<<<< HEAD
  foreign key (saca_id) references `semestre_academico`(saca_id),
+=======
+ foreign key (sac_id) references `semestre_academico`(sac_id),
+>>>>>>> ff91f3e2d212e1fc038a22c8ba3c02f54d6c7cfa
  foreign key (pro_id) references `profesor`(pro_id)
 );
 
