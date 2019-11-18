@@ -33,7 +33,7 @@ INSERT INTO `periodo_academico` (`paca_id`, `saca_id`, `baca_id`, `paca_activo`,
 --
 -- Volcado de datos para la tabla `dedicacion_docente`
 --
-INSERT INTO `dedicacion_docente` (`ddoc_id`, `ddoc_tipo`, `ddoc_estado`, `ddoc_fecha_creacion`, `ddoc_fecha_modificacion`, `ddoc_estado_logico`) VALUES
+INSERT INTO `dedicacion_docente` (`ddoc_id`, `ddoc_nombre`, `ddoc_estado`, `ddoc_fecha_creacion`, `ddoc_fecha_modificacion`, `ddoc_estado_logico`) VALUES
 (1, 'Tiempo Completo', '1', '2019-11-18 12:03:06',NULL, '1'),
 (2, 'Timepo Parcial', '1', '2019-11-18 12:036:06',NULL, '1');
 

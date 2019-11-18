@@ -376,7 +376,7 @@ create table if not exists `estudiante` (
 --
 create table if not exists `dedicacion_docente` (
  `ddoc_id` bigint(20) not null auto_increment primary key,
- `ddoc_tipo` varchar(1) default null,
+ `ddoc_nombre` varchar(100) default null,
  `ddoc_estado` varchar(1) not null,
  `ddoc_fecha_creacion` timestamp not null default current_timestamp,
  `ddoc_fecha_modificacion` timestamp null default null,
