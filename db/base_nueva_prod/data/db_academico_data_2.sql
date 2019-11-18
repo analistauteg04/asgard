@@ -25,7 +25,6 @@ INSERT INTO `bloque_academico` (`baca_id`,`baca_nombre`, `baca_descripcion`, `ba
 --
 -- Volcado de datos para la tabla `periodo_academico`
 --
-
 INSERT INTO `periodo_academico` (`paca_id`, `saca_id`, `baca_id`, `paca_activo`, `paca_fecha_inicio`, `paca_fecha_fin`, `paca_usuario_ingreso`, `paca_usuario_modifica`, `paca_estado`, `paca_fecha_creacion`, `paca_fecha_modificacion`, `paca_estado_logico`) VALUES
 (1, 1, 1,  'I', '2019-04-13 04:00:00', '2019-06-30 03:59:59', 1, NULL, '1', '2019-04-11 20:03:41', NULL, '1'),
 (2, 1, 2,  'A', '2019-07-08 05:00:00', '2019-09-22 04:59:59', 1, NULL, '1', '2019-07-08 16:00:26', NULL, '1');
