@@ -232,7 +232,8 @@ class ResumenEvaluacionDocente extends \yii\db\ActiveRecord
                    " . $con->dbname . ".semestre_academico saca ";               
         $sql .= "  WHERE 
                    saca.saca_estado = :estado AND
-                   saca.saca_estado_logico = :estado";
+                   saca.saca_estado_logico = :estado
+                   ORDER BY name ASC";
 
         $comando = $con->createCommand($sql);
         $comando->bindParam(":estado", $estado, \PDO::PARAM_STR);
