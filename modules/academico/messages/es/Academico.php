@@ -67,6 +67,8 @@ return [
     "Search by Matter" => "Buscar por Materia",
     "Schedule" => "Horario",
     "Start IP" => "IP Inicio",
+    "Total Evaluation" => "Total Evaluación",
+    "Total Hours" => "Total Horas",
     "Total Quota" => "Total Cupo",
     "Teacher" => "Docente",
     "Teacher Dialing" => "Marcación Profesor",    

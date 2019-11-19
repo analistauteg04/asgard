@@ -12,8 +12,8 @@ use Yii;
  * @property int $pro_id
  * @property int $saca_id
  * @property int $teva_id
- * @property int $redo_cant_horas
- * @property int $redo_puntaje_evaluacion
+ * @property double $redo_cant_horas
+ * @property double $redo_puntaje_evaluacion
  * @property string $redo_estado
  * @property string $redo_fecha_creacion
  * @property string $redo_fecha_modificacion
@@ -48,7 +48,8 @@ class ResumenEvaluacionDocente extends \yii\db\ActiveRecord
     {
         return [
             [['pro_id', 'saca_id', 'teva_id', 'redo_estado', 'redo_estado_logico'], 'required'],
-            [['pro_id', 'saca_id', 'teva_id', 'redo_cant_horas', 'redo_puntaje_evaluacion'], 'integer'],
+            [['pro_id', 'saca_id', 'teva_id'], 'integer'],
+            [['redo_cant_horas', 'redo_puntaje_evaluacion'], 'number'],
             [['redo_fecha_creacion', 'redo_fecha_modificacion'], 'safe'],
             [['redo_estado', 'redo_estado_logico'], 'string', 'max' => 1],
             [['saca_id'], 'exist', 'skipOnError' => true, 'targetClass' => SemestreAcademico::className(), 'targetAttribute' => ['saca_id' => 'saca_id']],
@@ -98,5 +99,29 @@ class ResumenEvaluacionDocente extends \yii\db\ActiveRecord
     public function getTeva()
     {
         return $this->hasOne(TipoEvaluacion::className(), ['teva_id' => 'teva_id']);
+    }
+    
+        /**
+     * Function consulta los tipod de evaluacion a docentes. 
+     * @author Giovanni Vergara <analistadesarrollo02@uteg.edu.ec>;
+     * @param
+     * @return
+     */
+    public function consultarTipoEvaluacion() {
+        $con = \Yii::$app->db_academico;
+        $estado = 1;
+        $sql = "SELECT
+                   teva_id as id,
+                   teva_nombre as name
+                FROM 
+                   " . $con->dbname . ".tipo_evaluacion 
+                WHERE 
+                   teva_estado = :estado AND
+                   teva_estado_logico = :estado";
+
+        $comando = $con->createCommand($sql);
+        $comando->bindParam(":estado", $estado, \PDO::PARAM_STR);
+        $resultData = $comando->queryAll();
+        return $resultData;
     }
 }
