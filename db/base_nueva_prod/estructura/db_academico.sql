@@ -388,18 +388,15 @@ create table if not exists `dedicacion_docente` (
 -- 
 create table if not exists `profesor` (
   `pro_id` bigint(20) not null auto_increment primary key,
-  `per_id` bigint(20) not null, 
-  `ddoc_id` bigint(20) not null, 
+  `per_id` bigint(20) not null,   
   `pro_fecha_contratacion` timestamp null default null,
-  `pro_fecha_terminacion` timestamp null default null,
-  `pro_declarado` varchar(1) not null,
+  `pro_fecha_terminacion` timestamp null default null,  
   `pro_usuario_ingreso` bigint(20) not null,
   `pro_usuario_modifica` bigint(20)  null,
   `pro_estado` varchar(1) not null,
   `pro_fecha_creacion` timestamp not null default current_timestamp,
   `pro_fecha_modificacion` timestamp null default null,
-  `pro_estado_logico` varchar(1) not null,
-  foreign key (ddoc_id) references `dedicacion_docente`(ddoc_id)
+  `pro_estado_logico` varchar(1) not null
 );
 
 -- --------------------------------------------------------
@@ -1073,13 +1070,16 @@ create table if not exists `distributivo` (
  `pro_id` bigint(20) not null,
  `asi_id` bigint(20) not null,
  `saca_id` bigint(20) not null,
+ `ddoc_id` bigint(20) not null,
+ `dis_declarado` varchar(1) not null,
  `dis_estado` varchar(1) not null,
  `dis_fecha_creacion` timestamp not null default current_timestamp,
  `dis_fecha_modificacion` timestamp null default null,
  `dis_estado_logico` varchar(1) not null,
  foreign key (saca_id) references `semestre_academico`(saca_id),
  foreign key (pro_id) references `profesor`(pro_id),
- foreign key (asi_id) references `asignatura`(asi_id) 
+ foreign key (asi_id) references `asignatura`(asi_id),
+ foreign key (ddoc_id) references `dedicacion_docente`(ddoc_id)
 );
 
 -- --------------------------------------------------------
