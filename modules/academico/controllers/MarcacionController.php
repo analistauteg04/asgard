@@ -326,8 +326,7 @@ class MarcacionController extends \app\components\CController {
             ]);
         }
     }
-    
-    
+        
     public function actionListarhorario() {
         $mod_marcacion = new RegistroMarcacion();
         $mod_periodo = new PeriodoAcademicoMetIngreso();

@@ -27,7 +27,9 @@ return [
     "Data Parallel" => "Datos Paralelo",
     "Data Promotion Program" => "Datos Promoción Programa",    
     "Day" => "Día",
+    "Dedication" => "Dedicación",
     "Dial type" => "Tipo marcación",
+    "Distributive List" => "Listar Distributivo",
     "End IP" => "IP Salida",
     "Entry" => "Entrada",
     "Enrolled Income Method" => "Matriculado Método Ingreso",  
@@ -36,6 +38,7 @@ return [
     "Exit" => "Salida",
     "Expected" => "Esperado",
     "Failed" => "Reprobadas",  
+    "Fourth level title" => "Título cuarto nivel",
     "He enrolled in the same career that applied the income" => "Se matriculó en la misma carrera que aplicó el ingreso",
     "Hour start date" => "Hora inicio",
     "Hour end date" => "Hora fin",
@@ -65,6 +68,7 @@ return [
     "Search DNI" => "Buscar DNI",
     "Search by Matter" => "Buscar por Materia",
     "Schedule" => "Horario",
+<<<<<<< HEAD
     "Start IP" => "IP Inicio",    
     "Teacher" => "Profesor",
     "Teacher Dialing" => "Marcación Profesor",    
@@ -73,6 +77,16 @@ return [
     "Total Hours" => "Total Horas",
     "Total Quota" => "Total Cupo",
     "Type Evaluation | Hours | Evaluation" => "Tipo Evaluación | Horas | Evaluación" ,
+=======
+    "Start IP" => "IP Inicio",
+    "Total Evaluation" => "Total Evaluación",
+    "Total Hours" => "Total Horas",
+    "Total Quota" => "Total Cupo",
+    "Teacher" => "Docente",
+    "Teacher Dialing" => "Marcación Profesor",    
+    "Teacher list unchecked" => "Listado profesores sin marcar",
+    "Third level title" => "Título tercer nivel",
+>>>>>>> c773d7939fb91c5aa2e159a69f0f3d923787b482
     "Update period income method" => "Actualizar Período Método Ingreso",
     "Year" => "Año",
 ];
