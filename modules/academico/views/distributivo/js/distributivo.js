@@ -1,26 +1,29 @@
 $(document).ready(function () {
-    $('#cmb_unidad').change(function () {
-        var link = $('#txth_base').val() + "/academico/distributivo/index";        
-        var arrParams = new Object();        
-        arrParams.uaca_id = $(this).val();            
-        arrParams.getmodalidad = true;
-        requestHttpAjax(link, arrParams, function (response) {
-            if (response.status == "OK") {                
-                data = response.message;
-                setComboDataselect(data.modalidad, "cmb_modalidad", "Todos");              
-            }
-        }, true);
-    });
+    $('#btn_buscarData').click(function () {
+        actualizarGrid();
+    });        
 });
 
-function setComboDataselect(arr_data, element_id, texto) {
-    var option_arr = "";
-    option_arr += "<option value= '0'>" + texto + "</option>";
-    for (var i = 0; i < arr_data.length; i++) {
-        var id = arr_data[i].id;
-        var value = arr_data[i].name;
-
-        option_arr += "<option value='" + id + "'>" + value + "</option>";
+function actualizarGrid() {
+    var search = $('#txt_buscarData').val();    
+    var unidad = $('#cmb_unidad option:selected').val();
+    var semestre = $('#cmb_semestre option:selected').val();   
+    //Buscar almenos una clase con el nombre para ejecutar
+    if (!$(".blockUI").length) {
+        showLoadingPopup();
+        $('#Tbg_Distributivo').PbGridView('applyFilterData', {'search': search, 'unidad': unidad, 'semestre': semestre});
+        setTimeout(hideLoadingPopup, 2000);
     }
-    $("#" + element_id).html(option_arr);
+}
+function exportExcel() {
+    var search = $('#txt_buscarData').val();       
+    var unidad = $('#cmb_unidad option:selected').val();
+    var semestre = $('#cmb_semestre option:selected').val();   
+    window.location.href = $('#txth_base').val() + "/academico/distributivo/expexcel?search=" + search + "&unidad=" + unidad + "&semestre=" + semestre;
+}
+function exportPdf() {
+    var search = $('#txt_buscarDataPersona').val();    
+    var unidad = $('#cmb_unidad option:selected').val();
+    var semestre = $('#cmb_semestre option:selected').val();   
+    window.location.href = $('#txth_base').val() + "/academico/distributivo/exppdf?pdf=1&search=" + search  + "&unidad=" + unidad + "&semestre=" + semestre;
 }

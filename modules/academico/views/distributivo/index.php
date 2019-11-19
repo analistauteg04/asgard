@@ -12,7 +12,7 @@ use app\modules\academico\Module as academico;
         <?=
         $this->render('index-search', [ 
             'arr_unidad' => $mod_unidad,
-            'arr_modalidad' => $mod_modalidad,
+            'arr_semestre' => $mod_semestre,
             ]);
         ?>
     </form>

@@ -31,7 +31,7 @@ academico::registerTranslations();
                 'header' => academico::t("Academico", "Teacher"),
                 'value' => 'docente',
             ],                     
-            [
+            /*[
                 'attribute' => 'título_tercer',
                 'header' => academico::t("Academico", "Third level title"),
                 'value' => 'titulo_tercer',
@@ -40,7 +40,7 @@ academico::registerTranslations();
                 'attribute' => 'título_cuarto',
                 'header' => academico::t("Academico", "Fourth level title"),
                 'value' => 'titulo_cuarto',
-            ],            
+            ],  */          
             [
                 'attribute' => 'dedicacion',
                 'header' => academico::t("Academico", "Dedication"),
@@ -55,7 +55,12 @@ academico::registerTranslations();
                 'attribute' => 'asignatura',
                 'header' => Yii::t("formulario", "Subject"),
                 'value' => 'asignatura',
-            ],              
+            ],  
+            [
+                'attribute' => 'semestre',
+                'header' => Yii::t("formulario", "Semester"),
+                'value' => 'semestre',
+            ],            
             /*[
                 'class' => 'yii\grid\ActionColumn',
                 'header' => academico::t("Academico", "Career/Program"),
