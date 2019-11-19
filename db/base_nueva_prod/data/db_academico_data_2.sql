@@ -9,7 +9,11 @@ USE `db_academico`;
 -- 
 INSERT INTO `semestre_academico` (`saca_id`, `saca_nombre`, `saca_descripcion`, `saca_anio`, `saca_fecha_registro`, `saca_usuario_ingreso`, `saca_usuario_modifica`, `saca_estado`, `saca_estado_logico`) VALUES 
 (1, 'Abril - Agosto', 'Abril - Agosto', 2019, NULL, '1', '1', '1', '1'),
-(2, 'Octubre - Febrero', 'Octubre - Febrero', 2019, NULL, '1', '1', '1', '1');
+(2, 'Octubre - Febrero', 'Octubre - Febrero', 2019, NULL, '1', '1', '1', '1'),
+(3, 'Abril - Agosto', 'Abril - Agosto', 2017, NULL, '1', '1', '1', '1'),
+(4, 'Octubre - Febrero', 'Octubre - Febrero', 2018, NULL, '1', '1', '1', '1'),
+(5, 'Abril - Agosto', 'Abril - Agosto', 2018, NULL, '1', '1', '1', '1'),
+(6, 'Octubre - Febrero', 'Octubre - Febrero', 2020, NULL, '1', '1', '1', '1');
 
 -- -- ------------------------ ------------------------------
 --
