@@ -1125,8 +1125,8 @@ create table if not exists `resumen_resultado_evaluacion` (
  `pro_id` bigint(20) not null,
  `saca_id` bigint(20) not null,
  `rreva_evaluacion_completa` varchar(1) not null, -- 1 completa o 0 incompleta
- `rreva_total_hora` integer(5) null,
- `rreva_total_evaluacion` integer(5) null,
+ `rreva_total_hora` double default null,
+ `rreva_total_evaluacion` double default null,
  `rreva_estado` varchar(1) not null,
  `rreva_fecha_creacion` timestamp not null default current_timestamp,
  `rreva_fecha_modificacion` timestamp null default null,

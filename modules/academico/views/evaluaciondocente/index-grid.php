@@ -11,7 +11,7 @@ admision::registerTranslations();
 ?>
 <?= Html::hiddenInput('txth_ids', '', ['id' => 'txth_ids']); ?>
 <div>        
-   <!--<?
+   <?=
     PbGridView::widget([
         'id' => 'PbEvaluacionDocente',
         'showExport' => true,
@@ -22,27 +22,27 @@ admision::registerTranslations();
             [
                 'attribute' => 'profesor',
                 'header' => Yii::t("formulario", "Teacher"),
-                'value' => 'nombres',
+                'value' => 'profesor',
             ],     
             [
-                'attribute' => 'tipoevaluacion',
-                'header' => Yii::t("formulario", "Evaluation Type"),
-                'value' => 'tipo_evaluacion',
+                'attribute' => 'semestre',
+                'header' => Yii::t("formulario", "Semester"),
+                'value' => 'semestre_nombre',
+            ],           
+            [
+                'attribute' => 'valores',
+                'header' => academico::t("Academico", "Type Evaluation | Hours | Evaluation"),
+                'value' => 'valores',
             ],
             [
-                'attribute' => 'horas',
-                'header' => Yii::t("formulario", "Hours"),
-                'value' => 'horas',
-            ],
-            [
-                'attribute' => 'evaluacion',
-                'header' => Yii::t("formulario", "Evaluation"),
-                'value' => 'evaluacion',
+                'attribute' => 'completa',
+                'header' => academico::t("Academico", "Evaluation Completed"),
+                'value' => 'evaluacion_completa',
             ],
             [
                 'attribute' => 'totalhora',
                 'header' => academico::t("Academico", "Total Hours"),
-                'value' => 'total_horas',
+                'value' => 'total_hora',
             ],
             [
                 'attribute' => 'totalevaluacion',
@@ -51,5 +51,5 @@ admision::registerTranslations();
             ],            
         ],
     ])
-    ?>-->
+    ?>
 </div>   

@@ -8,7 +8,7 @@ use yii\helpers\Html;
     <form class="form-horizontal">
         <?=
         $this->render('_formIndex', [
-            'arr_periodo' => $arr_periodo, 
+            'arr_semetre' => $arr_semetre, 
             'arr_tipoevaluacion' => $arr_tipoevaluacion, 
         ]);
         ?>
@@ -17,7 +17,7 @@ use yii\helpers\Html;
 <div>
     <?=
     $this->render('index-grid', [
-        //'model' => $model,
+        'model' => $model,
     ]);
     ?>
 </div>

@@ -19,9 +19,9 @@ use app\modules\academico\Module as academico;
             <div class="col-sm-3 col-md-3 col-xs-3 col-lg-3">
                 <?= Html::dropDownList("cmb_tipoevaluacion", 0, $arr_tipoevaluacion, ["class" => "form-control", "id" => "cmb_tipoevaluacion"]) ?>
             </div>   
-            <label for="lbl_periodo" class="col-sm-2 col-lg-2 col-md-2 col-xs-2 control-label"><?= Yii::t("formulario", "Period"); ?></label>
+            <label for="lbl_semestre" class="col-sm-2 col-lg-2 col-md-2 col-xs-2 control-label"><?= Yii::t("formulario", "Semester"); ?></label>
             <div class="col-sm-3 col-md-3 col-xs-3 col-lg-3">
-                <?= Html::dropDownList("cmb_periodo", 0, $arr_periodo, ["class" => "form-control", "id" => "cmb_periodo"]) ?>
+                <?= Html::dropDownList("cmb_semestre", 0, $arr_semetre, ["class" => "form-control", "id" => "cmb_semestre"]) ?>
             </div>                  
         </div>
     </div>    

@@ -124,4 +124,119 @@ class ResumenEvaluacionDocente extends \yii\db\ActiveRecord
         $resultData = $comando->queryAll();
         return $resultData;
     }
+    
+    /**
+     * Function consultarResumenEvaluacion
+     * @author  Giovanni Vergara <analistadesarrollo02@uteg.edu.ec>    
+     * @property  
+     * @return  
+     */
+    public function consultarResumenEvaluacion($arrFiltro = array(), $onlyData = false) {
+        $con = \Yii::$app->db_academico;
+        $con1 = \Yii::$app->db_asgard;
+        $estado = 1;
+        if (isset($arrFiltro) && count($arrFiltro) > 0) {
+            $str_search .= "(per.per_pri_nombre like :profesor OR ";
+            $str_search .= "per.per_seg_nombre like :profesor OR ";
+            $str_search .= "per.per_pri_apellido like :profesor OR ";
+            $str_search .= "per.per_seg_nombre like :profesor )  AND ";       
+            
+            if ($arrFiltro['tipo_evaluacion'] != "" && $arrFiltro['tipo_evaluacion'] > 0) {
+                $str_search .= " red.teva_id = :tipo_evaluacion AND ";
+            }
+            
+            if ($arrFiltro['semestre'] != "" && $arrFiltro['semestre'] > 0) {
+                $str_search .= " red.saca_id = :semestre AND ";
+            }
+        }     
+        $sql = "
+               SELECT 
+                        -- GROUP_CONCAT(distinct(red.pro_id)) as profesor_id, 
+                        -- GROUP_CONCAT(distinct(red.saca_id)) as semestre, 
+                        CONCAT(per.per_pri_nombre, ' ', per.per_pri_apellido) as profesor,
+                        CONCAT(sea.saca_nombre, ' ', sea.saca_anio) as semestre_nombre,
+                        GROUP_CONCAT(CASE
+                            WHEN red.teva_id = 1 THEN 'Docencia'
+                            WHEN red.teva_id = 2 THEN 'Investigación'
+                            WHEN red.teva_id = 3 THEN 'Dirección y Gestión Académica'
+                            END, ' | ', redo_cant_horas,' | ', redo_puntaje_evaluacion, ' ') as valores,
+                            rre.rreva_evaluacion_completa as evaluacion_completa,
+                            rre.rreva_total_hora as total_hora,
+                            rre.rreva_total_evaluacion as total_evaluacion
+                        FROM " . $con->dbname . ".resumen_evaluacion_docente red
+                        INNER JOIN " . $con->dbname . ".resumen_resultado_evaluacion rre ON rre.pro_id = red.pro_id and  rre.saca_id = red.saca_id
+                        INNER JOIN " . $con->dbname . ".semestre_academico sea ON sea.saca_id = red.saca_id
+                        INNER JOIN " . $con->dbname . ".profesor profe ON profe.pro_id = red.pro_id
+                        INNER JOIN " . $con1->dbname . ".persona per ON per.per_id = profe.per_id
+                    WHERE $str_search
+                        red.redo_estado = :estado AND
+                        red.redo_estado_logico = :estado AND
+                        rre.rreva_estado = :estado AND
+                        rre.rreva_estado_logico = :estado AND
+                        sea.saca_estado = :estado AND
+                        sea.saca_estado_logico = :estado AND
+                        profe.pro_estado = :estado AND
+                        profe.pro_estado_logico = :estado AND
+                        per.per_estado = :estado AND
+                        per.per_estado_logico = :estado 
+                        group by red.pro_id, red.saca_id
+               ";
+        $comando = $con->createCommand($sql);
+        $comando->bindParam(":estado", $estado, \PDO::PARAM_STR);
+        if (isset($arrFiltro) && count($arrFiltro) > 0) {
+            $search_cond = "%" . $arrFiltro["profesor"] . "%";
+            $comando->bindParam(":profesor", $search_cond, \PDO::PARAM_STR);            
+            
+            if ($arrFiltro['tipo_evaluacion'] != "" && $arrFiltro['tipo_evaluacion'] > 0) {
+                $tipo_evaluacion = $arrFiltro["tipo_evaluacion"];
+                $comando->bindParam(":tipo_evaluacion", $tipo_evaluacion, \PDO::PARAM_INT);
+            }
+            
+            if ($arrFiltro['semestre'] != "" && $arrFiltro['semestre'] > 0) {
+                $semestre = $arrFiltro["semestre"];
+                $comando->bindParam(":semestre", $semestre, \PDO::PARAM_INT);
+            }
+        }
+        $resultData = $comando->queryAll();
+        $dataProvider = new ArrayDataProvider([
+            'key' => 'id',
+            'allModels' => $resultData,
+            'pagination' => [
+                'pageSize' => Yii::$app->params["pageSize"],
+            ],
+            'sort' => [
+                'attributes' => [
+                ],
+            ],
+        ]);
+        if ($onlyData) {
+            return $resultData;
+        } else {
+            return $dataProvider;
+        }
+    }
+    
+    /**
+     * Function consulta los semestres. 
+     * @author Giovanni Vergara <analistadesarrollo02@uteg.edu.ec>;
+     * @param
+     * @return
+     */
+    public function consultarSemestre() {
+        $con = \Yii::$app->db_academico;
+        $estado = 1;
+        $sql = "SELECT
+                   saca.saca_id as id,
+                   CONCAT(saca.saca_nombre,' ',saca.saca_anio) as name
+                FROM 
+                   " . $con->dbname . ".semestre_academico saca ";               
+        $sql .= "  WHERE 
+                   saca.saca_estado = :estado AND
+                   saca.saca_estado_logico = :estado";
+
+        $comando = $con->createCommand($sql);
+        $comando->bindParam(":estado", $estado, \PDO::PARAM_STR);
+        $resultData = $comando->queryAll();
+        return $resultData;
+    }
 }
