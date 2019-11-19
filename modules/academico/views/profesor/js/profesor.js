@@ -175,3 +175,12 @@ function deleteItem(per_id) {
         }, 1000);
     }, true);
 }
+
+function addInstruccion() {
+    var elementId = new Object();
+    data
+    label
+    btnactions
+    trmessage
+    addItemGridContent(elementId);
+}

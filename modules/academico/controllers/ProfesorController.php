@@ -18,6 +18,7 @@ use app\modules\academico\models\Profesor;
 use yii\helpers\ArrayHelper;
 use yii\data\ArrayDataProvider;
 use app\models\Utilities;
+use app\modules\academico\models\NivelInstruccion;
 use yii\base\Exception;
 use app\modules\Academico\Module as Academico;
 Academico::registerTranslations();
@@ -283,9 +284,10 @@ class ProfesorController extends \app\components\CController {
              'rol_id' => $rol_id
              ]);
 
-        
+        $arr_inst_level = NivelInstruccion::findAll(["nins_estado" => 1, "nins_estado_logico" => 1]);;
         $NewFormTab4 = $this->renderPartial('NewFormTab4',[
             'model' => new ArrayDataProvider(array()),
+            'arr_inst_level' => (empty(ArrayHelper::map($arr_inst_level, "nins_id", "nins_nombre"))) ? array(Academico::t("profesor", "-- Select Instruction Level --")) : (ArrayHelper::map($arr_inst_level, "nins_id", "nins_nombre")),
         ]);
 
         $items = [

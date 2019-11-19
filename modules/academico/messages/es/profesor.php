@@ -40,6 +40,7 @@
  */
 
 return [
+    'Add' => 'Agregar',
     'First Name' => 'Primer Nombre',
     'Second Name' => 'Segundo Nombre',
     'First Surname' => 'Primer Apellido',
@@ -81,4 +82,5 @@ return [
     'Career' => 'Especialización',
     'Degree' => 'Titulo',
     'Senescyt Registry' => 'Registro Senescyt',
+    "-- Select Instruction Level --" => "-- Seleccione un Nivel Instrucción --",
 ];

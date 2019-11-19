@@ -23,3 +23,8 @@ use kartik\tabs\TabsX;
     </div>
 </div>
 <br />
+<?php
+$this->registerJs(
+    "loadSessionCampos('grid_empresas', '', '');",
+    $this::POS_END);
+?>

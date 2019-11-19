@@ -40,6 +40,7 @@
  */
 
 return [
+    'Add' => 'Add',
     'First Name' => 'First Name',
     'Second Name' => 'Second Name',
     'First Surname' => 'First Surname',
@@ -81,4 +82,5 @@ return [
     'Career' => 'Career',
     'Degree' => 'Degree',
     'Senescyt Registry' => 'Senescyt Registry',
+    "-- Select Instruction Level --" => "-- Select Instruction Level --",
 ];
