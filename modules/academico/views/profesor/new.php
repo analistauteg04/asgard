@@ -25,6 +25,11 @@ use kartik\tabs\TabsX;
 <br />
 <?php
 $this->registerJs(
-    "loadSessionCampos('grid_empresas', '', '');",
+    "loadSessionCampos('grid_instruccion_list', '', '');
+    loadSessionCampos('grid_docencia_list', '', '');
+    loadSessionCampos('grid_experiencia_list', '', '');
+    loadSessionCampos('grid_idioma_list', '', '');
+    loadSessionCampos('grid_investigacion_list', '', '');
+    loadSessionCampos('grid_evento_list', '', '');",
     $this::POS_END);
 ?>

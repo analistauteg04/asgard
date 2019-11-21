@@ -11,7 +11,7 @@ use Yii;
  * @property int $pro_id
  * @property string $pedo_fecha_inicio
  * @property string $pedo_fecha_fin
- * @property string $pedo_institucion
+ * @property int $ins_id
  * @property string $pedo_denominacion
  * @property string $pedo_asignaturas
  * @property int $pedo_usuario_ingreso
@@ -47,10 +47,10 @@ class ProfesorExpDoc extends \yii\db\ActiveRecord
     public function rules()
     {
         return [
-            [['pro_id', 'pedo_institucion', 'pedo_denominacion', 'pedo_asignaturas', 'pedo_usuario_ingreso', 'pedo_estado', 'pedo_estado_logico'], 'required'],
+            [['pro_id', 'ins_id', 'pedo_denominacion', 'pedo_asignaturas', 'pedo_usuario_ingreso', 'pedo_estado', 'pedo_estado_logico'], 'required'],
             [['pro_id', 'pedo_usuario_ingreso', 'pedo_usuario_modifica'], 'integer'],
             [['pedo_fecha_inicio', 'pedo_fecha_fin', 'pedo_fecha_creacion', 'pedo_fecha_modificacion'], 'safe'],
-            [['pedo_institucion', 'pedo_asignaturas'], 'string', 'max' => 200],
+            [['pedo_asignaturas'], 'string', 'max' => 200],
             [['pedo_denominacion'], 'string', 'max' => 100],
             [['pedo_estado', 'pedo_estado_logico'], 'string', 'max' => 1],
             [['pro_id'], 'exist', 'skipOnError' => true, 'targetClass' => Profesor::className(), 'targetAttribute' => ['pro_id' => 'pro_id']],
@@ -67,7 +67,7 @@ class ProfesorExpDoc extends \yii\db\ActiveRecord
             'pro_id' => 'Pro ID',
             'pedo_fecha_inicio' => 'Pedo Fecha Inicio',
             'pedo_fecha_fin' => 'Pedo Fecha Fin',
-            'pedo_institucion' => 'Pedo Institucion',
+            'ins_id' => 'Pedo Institucion',
             'pedo_denominacion' => 'Pedo Denominacion',
             'pedo_asignaturas' => 'Pedo Asignaturas',
             'pedo_usuario_ingreso' => 'Pedo Usuario Ingreso',
@@ -85,5 +85,43 @@ class ProfesorExpDoc extends \yii\db\ActiveRecord
     public function getPro()
     {
         return $this->hasOne(Profesor::className(), ['pro_id' => 'pro_id']);
+    }
+
+    public function getInstituciones($search = NULL, $dataProvider = false){
+        $iduser = Yii::$app->session->get('PB_iduser', FALSE);
+        $search_cond = "%".$search."%";
+        $str_search = "";
+        if(isset($search)){
+            $str_search = "(ins_nombre like :search AND ";
+        }
+        $sql = "SELECT
+                    ins_id AS id,
+                    ins_nombre AS nombre
+                FROM
+                    institucion
+                WHERE
+                    $str_search
+                    ins_estado_logico = 1
+                    AND ins_estado_logico = 1
+                ORDER BY ins_id;";
+        $comando = Yii::$app->db_general->createCommand($sql);
+        if(isset($search)){
+            $comando->bindParam(":search",$search_cond, \PDO::PARAM_STR);
+        }
+        $res = $comando->queryAll();
+        if($dataProvider){
+            $dataProvider = new ArrayDataProvider([
+                'key' => 'ins_id',
+                'allModels' => $res,
+                'pagination' => [
+                    'pageSize' => Yii::$app->params["pageSize"],
+                ],
+                'sort' => [
+                    'attributes' => ['nombre'],
+                ],
+            ]);
+            return $dataProvider;
+        }
+        return $res;
     }
 }

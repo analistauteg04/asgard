@@ -79,4 +79,16 @@ class ProfesorCapacitacion extends \yii\db\ActiveRecord
     {
         return $this->hasOne(Profesor::className(), ['pro_id' => 'pro_id']);
     }
+
+    public function getItems(){
+        $arr_data = [
+            0 => ['id' => 1, 'nombre' => 'Curso'],
+            1 => ['id' => 2, 'nombre' => 'Seminario'],
+            2 => ['id' => 3, 'nombre' => 'Taller'],
+            3 => ['id' => 4, 'nombre' => 'Congreso'],
+            4 => ['id' => 5, 'nombre' => 'Encuentro'],
+            5 => ['id' => 6, 'nombre' => 'Otro'],
+        ];
+        return $arr_data;
+    }
 }

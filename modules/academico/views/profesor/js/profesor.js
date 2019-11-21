@@ -176,11 +176,476 @@ function deleteItem(per_id) {
     }, true);
 }
 
+function fillDataAlert() {
+    var type = "alert";
+    var label = "error";
+    var status = "NO_OK";
+    var messagew = {};
+    messagew = {
+        "wtmessage": objLang.Must_be_Fill_all_information_in_fields_with_label___,
+        "title": objLang.Error,
+        "acciones": [{
+            "id": "btnalert",
+            "class": "btn-primary clclass praclose",
+            "value": objLang.Accept
+        }],
+    };
+    showResponse(type, status, label, messagew);
+}
+
+/**  INSTRUCCION  **/
 function addInstruccion() {
-    var elementId = new Object();
-    data
-    label
-    btnactions
-    trmessage
-    addItemGridContent(elementId);
+    var inst_level_id = $("#cmb_instr_level").val();
+    var inst_level_name = $("#cmb_instr_level :selected").text();
+    var institucion = $("#txt_institucion").val();
+    var career = $("#txt_career").val();
+    var degree = $("#txt_degree").val();
+    var senescyt = $("#txt_senescyt").val();
+
+    if (institucion == "" || career == "" || degree == "" || senescyt == "") {
+        fillDataAlert();
+        return;
+    }
+
+    var tb_item = new Array();
+    var tb_item2 = new Array();
+    var tb_acc = new Array();
+    tb_item[0] = 0;
+    tb_item[1] = inst_level_id;
+    tb_item[2] = institucion;
+    tb_item[3] = career;
+    tb_item[4] = degree;
+    tb_item[5] = senescyt;
+    tb_item2[0] = 0;
+    tb_item2[1] = inst_level_name;
+    tb_item2[2] = institucion;
+    tb_item2[3] = career;
+    tb_item2[4] = degree;
+    tb_item2[5] = senescyt;
+    //tb_acc[0] = {id: "borr", href: "", onclick:"", title: "Ver", class: "", tipo_accion: "view"};
+    tb_acc[0] = { id: "deleteN", href: "", onclick: "javascript:removeItemInstitucion(this)", title: objLang.Delete, class: "", tipo_accion: "delete" };
+    var arrData = JSON.parse(sessionStorage.grid_instruccion_list);
+
+    if (arrData.data) {
+        var item = arrData.data;
+        tb_item[0] = item.length;
+        item.push(tb_item);
+        arrData.data = item;
+    } else {
+        var item = new Array();
+        tb_item[0] = 0;
+        item[0] = tb_item;
+        arrData.data = item;
+    }
+    if (arrData.label) {
+        var item2 = arrData.label;
+        tb_item2[0] = item2.length + 1;
+        item2.push(tb_item2);
+        arrData.label = item2;
+    } else {
+        var item2 = new Array();
+        tb_item2[0] = 1;
+        item2[0] = tb_item2;
+        arrData.label = item2;
+    }
+    if (arrData.btnactions) {
+        var item3 = arrData.btnactions;
+        tb_acc[0].onclik = "javascript:removeItemInstitucion(this)";
+        item3[item3.length] = tb_acc;
+        arrData.btnactions = item3;
+        // colocar codigo aqui para agregar acciones
+    } else {
+        var item3 = new Array();
+        item3[0] = tb_acc;
+        arrData.btnactions = item3;
+        // colocar codigo aqui para agregar acciones
+    }
+    sessionStorage.grid_instruccion_list = JSON.stringify(arrData);
+    addItemGridContent("grid_instruccion_list");
+}
+
+function removeItemInstitucion(ref) {
+    var indice = $(ref).parent().parent().attr("data-key")
+    removeItemGridContent("grid_instruccion_list", indice);
+}
+
+/**  EXPERIENCIA DOCENTE  **/
+function addDocencia() {
+    var inst_id = $("#cmb_doc_institucion").val();
+    var inst_name = $("#cmb_doc_institucion :selected").text();
+    var from = $("#txt_doc_from").val();
+    var to = $("#txt_doc_to").val();
+    var denominacion = $("#txt_denominacion").val();
+    var materias = $("#txt_subjects").val();
+
+    if (from == "" || to == "" || denominacion == "" || materias == "") {
+        fillDataAlert();
+        return;
+    }
+
+    var tb_item = new Array();
+    var tb_item2 = new Array();
+    var tb_acc = new Array();
+    tb_item[0] = 0;
+    tb_item[1] = inst_id;
+    tb_item[2] = from;
+    tb_item[3] = to;
+    tb_item[4] = denominacion;
+    tb_item[5] = materias;
+    tb_item2[0] = 0;
+    tb_item2[1] = inst_name;
+    tb_item2[2] = from;
+    tb_item2[3] = to;
+    tb_item2[4] = denominacion;
+    tb_item2[5] = materias;
+    //tb_acc[0] = {id: "borr", href: "", onclick:"", title: "Ver", class: "", tipo_accion: "view"};
+    tb_acc[0] = { id: "deleteN", href: "", onclick: "javascript:removeItemDocencia(this)", title: objLang.Delete, class: "", tipo_accion: "delete" };
+    var arrData = JSON.parse(sessionStorage.grid_docencia_list);
+
+    if (arrData.data) {
+        var item = arrData.data;
+        tb_item[0] = item.length;
+        item.push(tb_item);
+        arrData.data = item;
+    } else {
+        var item = new Array();
+        tb_item[0] = 0;
+        item[0] = tb_item;
+        arrData.data = item;
+    }
+    if (arrData.label) {
+        var item2 = arrData.label;
+        tb_item2[0] = item2.length + 1;
+        item2.push(tb_item2);
+        arrData.label = item2;
+    } else {
+        var item2 = new Array();
+        tb_item2[0] = 1;
+        item2[0] = tb_item2;
+        arrData.label = item2;
+    }
+    if (arrData.btnactions) {
+        var item3 = arrData.btnactions;
+        tb_acc[0].onclik = "javascript:removeItemDocencia(this)";
+        item3[item3.length] = tb_acc;
+        arrData.btnactions = item3;
+        // colocar codigo aqui para agregar acciones
+    } else {
+        var item3 = new Array();
+        item3[0] = tb_acc;
+        arrData.btnactions = item3;
+        // colocar codigo aqui para agregar acciones
+    }
+    sessionStorage.grid_docencia_list = JSON.stringify(arrData);
+    addItemGridContent("grid_docencia_list");
+}
+
+function removeItemDocencia(ref) {
+    var indice = $(ref).parent().parent().attr("data-key")
+    removeItemGridContent("grid_docencia_list", indice);
+}
+
+/** EXPERIENCIA PROFESIONAL **/
+function addExperiencia() {
+    var company = $("#txt_pro_empresa").val();
+    var from = $("#txt_pro_from").val();
+    var to = $("#txt_pro_to").val();
+    var denominacion = $("#txt_pro_denominacion").val();
+    var funciones = $("#txt_pro_funciones").val();
+
+    if (from == "" || to == "" || denominacion == "" || funciones == "" || company == "") {
+        fillDataAlert();
+        return;
+    }
+
+    var tb_item = new Array();
+    var tb_item2 = new Array();
+    var tb_acc = new Array();
+    tb_item[0] = 0;
+    tb_item[1] = company;
+    tb_item[2] = from;
+    tb_item[3] = to;
+    tb_item[4] = denominacion;
+    tb_item[5] = funciones;
+    tb_item2[0] = 0;
+    tb_item2[1] = company;
+    tb_item2[2] = from;
+    tb_item2[3] = to;
+    tb_item2[4] = denominacion;
+    tb_item2[5] = funciones;
+    //tb_acc[0] = {id: "borr", href: "", onclick:"", title: "Ver", class: "", tipo_accion: "view"};
+    tb_acc[0] = { id: "deleteN", href: "", onclick: "javascript:removeItemExperiencia(this)", title: objLang.Delete, class: "", tipo_accion: "delete" };
+    var arrData = JSON.parse(sessionStorage.grid_experiencia_list);
+
+    if (arrData.data) {
+        var item = arrData.data;
+        tb_item[0] = item.length;
+        item.push(tb_item);
+        arrData.data = item;
+    } else {
+        var item = new Array();
+        tb_item[0] = 0;
+        item[0] = tb_item;
+        arrData.data = item;
+    }
+    if (arrData.label) {
+        var item2 = arrData.label;
+        tb_item2[0] = item2.length + 1;
+        item2.push(tb_item2);
+        arrData.label = item2;
+    } else {
+        var item2 = new Array();
+        tb_item2[0] = 1;
+        item2[0] = tb_item2;
+        arrData.label = item2;
+    }
+    if (arrData.btnactions) {
+        var item3 = arrData.btnactions;
+        tb_acc[0].onclik = "javascript:removeItemExperiencia(this)";
+        item3[item3.length] = tb_acc;
+        arrData.btnactions = item3;
+        // colocar codigo aqui para agregar acciones
+    } else {
+        var item3 = new Array();
+        item3[0] = tb_acc;
+        arrData.btnactions = item3;
+        // colocar codigo aqui para agregar acciones
+    }
+    sessionStorage.grid_experiencia_list = JSON.stringify(arrData);
+    addItemGridContent("grid_experiencia_list");
+}
+
+function removeItemExperiencia(ref) {
+    var indice = $(ref).parent().parent().attr("data-key")
+    removeItemGridContent("grid_experiencia_list", indice);
+}
+
+/** IDIOMAS **/
+function addIdioma() {
+    var idio_id = $("#cmb_idiomas").val();
+    var idio_name = $("#cmb_idiomas :selected").text();
+    var escrito = $("#txt_idio_escrito").val();
+    var oral = $("#txt_idio_oral").val();
+    var certificado = $("#txt_idio_certificado").val();
+    var institucion = $("#txt_idio_institucion").val();
+
+    if (escrito == "" || oral == "" || certificado == "" || institucion == "") {
+        fillDataAlert();
+        return;
+    }
+
+    var tb_item = new Array();
+    var tb_item2 = new Array();
+    var tb_acc = new Array();
+    tb_item[0] = 0;
+    tb_item[1] = idio_id;
+    tb_item[2] = escrito;
+    tb_item[3] = oral;
+    tb_item[4] = certificado;
+    tb_item[5] = institucion;
+    tb_item2[0] = 0;
+    tb_item2[1] = idio_name;
+    tb_item2[2] = escrito;
+    tb_item2[3] = oral;
+    tb_item2[4] = certificado;
+    tb_item2[5] = institucion;
+    //tb_acc[0] = {id: "borr", href: "", onclick:"", title: "Ver", class: "", tipo_accion: "view"};
+    tb_acc[0] = { id: "deleteN", href: "", onclick: "javascript:removeItemIdioma(this)", title: objLang.Delete, class: "", tipo_accion: "delete" };
+    var arrData = JSON.parse(sessionStorage.grid_idioma_list);
+
+    if (arrData.data) {
+        var item = arrData.data;
+        tb_item[0] = item.length;
+        item.push(tb_item);
+        arrData.data = item;
+    } else {
+        var item = new Array();
+        tb_item[0] = 0;
+        item[0] = tb_item;
+        arrData.data = item;
+    }
+    if (arrData.label) {
+        var item2 = arrData.label;
+        tb_item2[0] = item2.length + 1;
+        item2.push(tb_item2);
+        arrData.label = item2;
+    } else {
+        var item2 = new Array();
+        tb_item2[0] = 1;
+        item2[0] = tb_item2;
+        arrData.label = item2;
+    }
+    if (arrData.btnactions) {
+        var item3 = arrData.btnactions;
+        tb_acc[0].onclik = "javascript:removeItemIdioma(this)";
+        item3[item3.length] = tb_acc;
+        arrData.btnactions = item3;
+        // colocar codigo aqui para agregar acciones
+    } else {
+        var item3 = new Array();
+        item3[0] = tb_acc;
+        arrData.btnactions = item3;
+        // colocar codigo aqui para agregar acciones
+    }
+    sessionStorage.grid_idioma_list = JSON.stringify(arrData);
+    addItemGridContent("grid_idioma_list");
+}
+
+function removeItemIdioma(ref) {
+    var indice = $(ref).parent().parent().attr("data-key")
+    removeItemGridContent("grid_idioma_list", indice);
+}
+
+/** INVESTIGACION **/
+function addInvestigacion() {
+    var denominancion = $("#txt_re_denominacion").val();
+    var ambito = $("#txt_re_ambit").val();
+    var responsabilidad = $("#txt_re_respon").val();
+    var entidad = $("#txt_re_reali").val();
+    var anio = $("#txt_re_year").val();
+    var duracion = $("#txt_re_duration").val();
+
+    if (denominancion == "" || ambito == "" || responsabilidad == "" || entidad == "" || anio == "" || duracion == "") {
+        fillDataAlert();
+        return;
+    }
+
+    var tb_item = new Array();
+    var tb_item2 = new Array();
+    var tb_acc = new Array();
+    tb_item[0] = 0;
+    tb_item[1] = denominancion;
+    tb_item[2] = ambito;
+    tb_item[3] = responsabilidad;
+    tb_item[4] = entidad;
+    tb_item[5] = anio;
+    tb_item[6] = duracion;
+    tb_item2[0] = 0;
+    tb_item2[1] = denominancion;
+    tb_item2[2] = ambito;
+    tb_item2[3] = responsabilidad;
+    tb_item2[4] = entidad;
+    tb_item2[5] = anio;
+    tb_item2[6] = duracion;
+    //tb_acc[0] = {id: "borr", href: "", onclick:"", title: "Ver", class: "", tipo_accion: "view"};
+    tb_acc[0] = { id: "deleteN", href: "", onclick: "javascript:removeItemInvestigacion(this)", title: objLang.Delete, class: "", tipo_accion: "delete" };
+    var arrData = JSON.parse(sessionStorage.grid_investigacion_list);
+
+    if (arrData.data) {
+        var item = arrData.data;
+        tb_item[0] = item.length;
+        item.push(tb_item);
+        arrData.data = item;
+    } else {
+        var item = new Array();
+        tb_item[0] = 0;
+        item[0] = tb_item;
+        arrData.data = item;
+    }
+    if (arrData.label) {
+        var item2 = arrData.label;
+        tb_item2[0] = item2.length + 1;
+        item2.push(tb_item2);
+        arrData.label = item2;
+    } else {
+        var item2 = new Array();
+        tb_item2[0] = 1;
+        item2[0] = tb_item2;
+        arrData.label = item2;
+    }
+    if (arrData.btnactions) {
+        var item3 = arrData.btnactions;
+        tb_acc[0].onclik = "javascript:removeItemInvestigacion(this)";
+        item3[item3.length] = tb_acc;
+        arrData.btnactions = item3;
+        // colocar codigo aqui para agregar acciones
+    } else {
+        var item3 = new Array();
+        item3[0] = tb_acc;
+        arrData.btnactions = item3;
+        // colocar codigo aqui para agregar acciones
+    }
+    sessionStorage.grid_investigacion_list = JSON.stringify(arrData);
+    addItemGridContent("grid_investigacion_list");
+}
+
+function removeItemInvestigacion(ref) {
+    var indice = $(ref).parent().parent().attr("data-key")
+    removeItemGridContent("grid_investigacion_list", indice);
+}
+
+/** EVENTO **/
+function addEvento() {
+    var tipo_id = $("#cmb_cap_tipo").val();
+    var tipo_name = $("#cmb_cap_tipo :selected").text();
+    var nombre = $("#txt_cap_nombre").val();
+    var instiucion = $("#txt_cap_institucion").val();
+    var anio = $("#txt_cap_anio").val();
+    var duracion = $("#txt_cap_duration").val();
+
+    if (nombre == "" || instiucion == "" || anio == "" || duracion == "") {
+        fillDataAlert();
+        return;
+    }
+
+    var tb_item = new Array();
+    var tb_item2 = new Array();
+    var tb_acc = new Array();
+    tb_item[0] = 0;
+    tb_item[1] = tipo_id;
+    tb_item[2] = nombre;
+    tb_item[3] = instiucion;
+    tb_item[4] = anio;
+    tb_item[5] = duracion;
+    tb_item2[0] = 0;
+    tb_item2[1] = tipo_name;
+    tb_item2[2] = nombre;
+    tb_item2[3] = instiucion;
+    tb_item2[4] = anio;
+    tb_item2[5] = duracion;
+    //tb_acc[0] = {id: "borr", href: "", onclick:"", title: "Ver", class: "", tipo_accion: "view"};
+    tb_acc[0] = { id: "deleteN", href: "", onclick: "javascript:removeItemEvento(this)", title: objLang.Delete, class: "", tipo_accion: "delete" };
+    var arrData = JSON.parse(sessionStorage.grid_evento_list);
+
+    if (arrData.data) {
+        var item = arrData.data;
+        tb_item[0] = item.length;
+        item.push(tb_item);
+        arrData.data = item;
+    } else {
+        var item = new Array();
+        tb_item[0] = 0;
+        item[0] = tb_item;
+        arrData.data = item;
+    }
+    if (arrData.label) {
+        var item2 = arrData.label;
+        tb_item2[0] = item2.length + 1;
+        item2.push(tb_item2);
+        arrData.label = item2;
+    } else {
+        var item2 = new Array();
+        tb_item2[0] = 1;
+        item2[0] = tb_item2;
+        arrData.label = item2;
+    }
+    if (arrData.btnactions) {
+        var item3 = arrData.btnactions;
+        tb_acc[0].onclik = "javascript:removeItemEvento(this)";
+        item3[item3.length] = tb_acc;
+        arrData.btnactions = item3;
+        // colocar codigo aqui para agregar acciones
+    } else {
+        var item3 = new Array();
+        item3[0] = tb_acc;
+        arrData.btnactions = item3;
+        // colocar codigo aqui para agregar acciones
+    }
+    sessionStorage.grid_evento_list = JSON.stringify(arrData);
+    addItemGridContent("grid_evento_list");
+}
+
+function removeItemEvento(ref) {
+    var indice = $(ref).parent().parent().attr("data-key")
+    removeItemGridContent("grid_evento_list", indice);
 }

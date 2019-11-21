@@ -15,6 +15,9 @@ use app\models\Rol;
 use app\models\GrupRol;
 use app\models\Canton;
 use app\modules\academico\models\Profesor;
+use app\modules\academico\models\ProfesorExpDoc;
+use app\modules\academico\models\ProfesorIdiomas;
+use app\modules\academico\models\ProfesorCapacitacion;
 use yii\helpers\ArrayHelper;
 use yii\data\ArrayDataProvider;
 use app\models\Utilities;
@@ -207,6 +210,9 @@ class ProfesorController extends \app\components\CController {
     }
 
     public function actionNew() {
+
+        $_SESSION['JSLANG']['Must be Fill all information in fields with label *.'] = Academico::t("profesor", "Must be Fill all information in fields with label *.");
+
         $NewFormTab1 = $this->renderPartial('NewFormTab1');
         
         $arr_pais = Pais::findAll(["pai_estado" => 1, "pai_estado_logico" => 1]);        
@@ -290,6 +296,32 @@ class ProfesorController extends \app\components\CController {
             'arr_inst_level' => (empty(ArrayHelper::map($arr_inst_level, "nins_id", "nins_nombre"))) ? array(Academico::t("profesor", "-- Select Instruction Level --")) : (ArrayHelper::map($arr_inst_level, "nins_id", "nins_nombre")),
         ]);
 
+        $proExpDoc = new ProfesorExpDoc();
+        $arr_profExDoc = $proExpDoc->getInstituciones();
+        $NewFormTab5 = $this->renderPartial('NewFormTab5',[
+            'model' => new ArrayDataProvider(array()),
+            'arr_inst' => (empty(ArrayHelper::map($arr_profExDoc, "id", "nombre"))) ? array(Academico::t("profesor", "-- Select Instruction Level --")) : (ArrayHelper::map($arr_profExDoc, "id", "nombre")),
+        ]);
+        $NewFormTab6 = $this->renderPartial('NewFormTab6',[
+            'model' => new ArrayDataProvider(array()),
+        ]);
+        $proIdiomas = new ProfesorIdiomas();
+        $arr_profIdi = $proIdiomas->getIdiomas();
+        $NewFormTab7 = $this->renderPartial('NewFormTab7',[
+            'model' => new ArrayDataProvider(array()),
+            'arr_languages' => (empty(ArrayHelper::map($arr_profIdi, "id", "nombre"))) ? array(Academico::t("profesor", "-- Select Language --")) : (ArrayHelper::map($arr_profIdi, "id", "nombre")),
+        ]);
+        $NewFormTab8 = $this->renderPartial('NewFormTab8',[
+            'model' => new ArrayDataProvider(array()),
+        ]);
+        $proCap = new ProfesorCapacitacion();
+        $arr_capItems = $proCap->getItems();
+        $NewFormTab9 = $this->renderPartial('NewFormTab9',[
+            'model' => new ArrayDataProvider(array()),
+            'arr_items' => (empty(ArrayHelper::map($arr_capItems, "id", "nombre"))) ? array(Academico::t("profesor", "-- Select Item --")) : (ArrayHelper::map($arr_capItems, "id", "nombre")),
+        ]);
+
+
         $items = [
             [
                 'label'=> Academico::t('profesor','Basic Info.'),
@@ -305,20 +337,24 @@ class ProfesorController extends \app\components\CController {
                 'content'=>$NewFormTab4,
             ],
             [
+                'label'=> Academico::t('profesor','Teaching Experience'),
+                'content'=>$NewFormTab5,
+            ],
+            [
                 'label'=> Academico::t('profesor','Professional Expirence'),
-                'content'=>'',
+                'content'=>$NewFormTab6,
             ],
             [
                 'label'=> Academico::t('profesor','Languages'),
-                'content'=>'',
+                'content'=>$NewFormTab7,
             ],
             [
                 'label'=> Academico::t('profesor','Research'),
-                'content'=>'',
+                'content'=>$NewFormTab8,
             ],
             [
                 'label'=> Academico::t('profesor','Training'),
-                'content'=>'',
+                'content'=>$NewFormTab9,
             ],
             [
                 'label'=> Academico::t('profesor','Conferences'),
