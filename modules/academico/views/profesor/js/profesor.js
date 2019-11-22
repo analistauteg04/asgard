@@ -239,12 +239,12 @@ function addInstruccion() {
     }
     if (arrData.label) {
         var item2 = arrData.label;
-        tb_item2[0] = item2.length + 1;
+        tb_item2[0] = item2.length;
         item2.push(tb_item2);
         arrData.label = item2;
     } else {
         var item2 = new Array();
-        tb_item2[0] = 1;
+        tb_item2[0] = 0;
         item2[0] = tb_item2;
         arrData.label = item2;
     }
@@ -315,12 +315,12 @@ function addDocencia() {
     }
     if (arrData.label) {
         var item2 = arrData.label;
-        tb_item2[0] = item2.length + 1;
+        tb_item2[0] = item2.length;
         item2.push(tb_item2);
         arrData.label = item2;
     } else {
         var item2 = new Array();
-        tb_item2[0] = 1;
+        tb_item2[0] = 0;
         item2[0] = tb_item2;
         arrData.label = item2;
     }
@@ -390,12 +390,12 @@ function addExperiencia() {
     }
     if (arrData.label) {
         var item2 = arrData.label;
-        tb_item2[0] = item2.length + 1;
+        tb_item2[0] = item2.length;
         item2.push(tb_item2);
         arrData.label = item2;
     } else {
         var item2 = new Array();
-        tb_item2[0] = 1;
+        tb_item2[0] = 0;
         item2[0] = tb_item2;
         arrData.label = item2;
     }
@@ -466,12 +466,12 @@ function addIdioma() {
     }
     if (arrData.label) {
         var item2 = arrData.label;
-        tb_item2[0] = item2.length + 1;
+        tb_item2[0] = item2.length;
         item2.push(tb_item2);
         arrData.label = item2;
     } else {
         var item2 = new Array();
-        tb_item2[0] = 1;
+        tb_item2[0] = 0;
         item2[0] = tb_item2;
         arrData.label = item2;
     }
@@ -544,12 +544,12 @@ function addInvestigacion() {
     }
     if (arrData.label) {
         var item2 = arrData.label;
-        tb_item2[0] = item2.length + 1;
+        tb_item2[0] = item2.length;
         item2.push(tb_item2);
         arrData.label = item2;
     } else {
         var item2 = new Array();
-        tb_item2[0] = 1;
+        tb_item2[0] = 0;
         item2[0] = tb_item2;
         arrData.label = item2;
     }
@@ -620,12 +620,12 @@ function addEvento() {
     }
     if (arrData.label) {
         var item2 = arrData.label;
-        tb_item2[0] = item2.length + 1;
+        tb_item2[0] = item2.length;
         item2.push(tb_item2);
         arrData.label = item2;
     } else {
         var item2 = new Array();
-        tb_item2[0] = 1;
+        tb_item2[0] = 0;
         item2[0] = tb_item2;
         arrData.label = item2;
     }
@@ -648,4 +648,227 @@ function addEvento() {
 function removeItemEvento(ref) {
     var indice = $(ref).parent().parent().attr("data-key")
     removeItemGridContent("grid_evento_list", indice);
+}
+
+/** CONFERENCIA **/
+function addConferencia() {
+    var evento = $("#txt_con_evento").val();
+    var instiucion = $("#txt_con_insti").val();
+    var anio = $("#txt_con_year").val();
+    var ponencia = $("#txt_con_ponencia").val();
+
+    if (evento == "" || instiucion == "" || anio == "" || ponencia == "") {
+        fillDataAlert();
+        return;
+    }
+
+    var tb_item = new Array();
+    var tb_item2 = new Array();
+    var tb_acc = new Array();
+    tb_item[0] = 0;
+    tb_item[1] = evento;
+    tb_item[2] = instiucion;
+    tb_item[3] = anio;
+    tb_item[4] = ponencia;
+    tb_item2[0] = 0;
+    tb_item2[1] = evento;
+    tb_item2[2] = instiucion;
+    tb_item2[3] = anio;
+    tb_item2[4] = ponencia;
+    //tb_acc[0] = {id: "borr", href: "", onclick:"", title: "Ver", class: "", tipo_accion: "view"};
+    tb_acc[0] = { id: "deleteN", href: "", onclick: "javascript:removeItemConferencia(this)", title: objLang.Delete, class: "", tipo_accion: "delete" };
+    var arrData = JSON.parse(sessionStorage.grid_conferencia_list);
+
+    if (arrData.data) {
+        var item = arrData.data;
+        tb_item[0] = item.length;
+        item.push(tb_item);
+        arrData.data = item;
+    } else {
+        var item = new Array();
+        tb_item[0] = 0;
+        item[0] = tb_item;
+        arrData.data = item;
+    }
+    if (arrData.label) {
+        var item2 = arrData.label;
+        tb_item2[0] = item2.length;
+        item2.push(tb_item2);
+        arrData.label = item2;
+    } else {
+        var item2 = new Array();
+        tb_item2[0] = 0;
+        item2[0] = tb_item2;
+        arrData.label = item2;
+    }
+    if (arrData.btnactions) {
+        var item3 = arrData.btnactions;
+        tb_acc[0].onclik = "javascript:removeItemConferencia(this)";
+        item3[item3.length] = tb_acc;
+        arrData.btnactions = item3;
+        // colocar codigo aqui para agregar acciones
+    } else {
+        var item3 = new Array();
+        item3[0] = tb_acc;
+        arrData.btnactions = item3;
+        // colocar codigo aqui para agregar acciones
+    }
+    sessionStorage.grid_conferencia_list = JSON.stringify(arrData);
+    addItemGridContent("grid_conferencia_list");
+}
+
+function removeItemConferencia(ref) {
+    var indice = $(ref).parent().parent().attr("data-key")
+    removeItemGridContent("grid_conferencia_list", indice);
+}
+
+/** PUBLICACION **/
+function addPublicacion() {
+    var produccion = $("#txt_pub_produccion").val();
+    var titulo = $("#txt_pub_titulo").val();
+    var editorial = $("#txt_pub_editorial").val();
+    var isbn = $("#txt_pub_isbn").val();
+    var autoria = $("#txt_pub_autoria").val();
+
+    if (produccion == "" || titulo == "" || editorial == "" || isbn == "" || autoria == "") {
+        fillDataAlert();
+        return;
+    }
+
+    var tb_item = new Array();
+    var tb_item2 = new Array();
+    var tb_acc = new Array();
+    tb_item[0] = 0;
+    tb_item[1] = produccion;
+    tb_item[2] = titulo;
+    tb_item[3] = editorial;
+    tb_item[4] = isbn;
+    tb_item[5] = autoria;
+    tb_item2[0] = 0;
+    tb_item2[1] = produccion;
+    tb_item2[2] = titulo;
+    tb_item2[3] = editorial;
+    tb_item2[4] = isbn;
+    tb_item2[5] = autoria;
+    //tb_acc[0] = {id: "borr", href: "", onclick:"", title: "Ver", class: "", tipo_accion: "view"};
+    tb_acc[0] = { id: "deleteN", href: "", onclick: "javascript:removeItemPublicacion(this)", title: objLang.Delete, class: "", tipo_accion: "delete" };
+    var arrData = JSON.parse(sessionStorage.grid_publicacion_list);
+
+    if (arrData.data) {
+        var item = arrData.data;
+        tb_item[0] = item.length;
+        item.push(tb_item);
+        arrData.data = item;
+    } else {
+        var item = new Array();
+        tb_item[0] = 0;
+        item[0] = tb_item;
+        arrData.data = item;
+    }
+    if (arrData.label) {
+        var item2 = arrData.label;
+        tb_item2[0] = item2.length;
+        item2.push(tb_item2);
+        arrData.label = item2;
+    } else {
+        var item2 = new Array();
+        tb_item2[0] = 0;
+        item2[0] = tb_item2;
+        arrData.label = item2;
+    }
+    if (arrData.btnactions) {
+        var item3 = arrData.btnactions;
+        tb_acc[0].onclik = "javascript:removeItemPublicacion(this)";
+        item3[item3.length] = tb_acc;
+        arrData.btnactions = item3;
+        // colocar codigo aqui para agregar acciones
+    } else {
+        var item3 = new Array();
+        item3[0] = tb_acc;
+        arrData.btnactions = item3;
+        // colocar codigo aqui para agregar acciones
+    }
+    sessionStorage.grid_publicacion_list = JSON.stringify(arrData);
+    addItemGridContent("grid_publicacion_list");
+}
+
+function removeItemPublicacion(ref) {
+    var indice = $(ref).parent().parent().attr("data-key")
+    removeItemGridContent("grid_publicacion_list", indice);
+}
+
+/** COORDINACION **/
+function addCoordinacion() {
+    var inst_id = $("#cmb_cor_institucion").val();
+    var inst_name = $("#cmb_cor_institucion :selected").text();
+    var alumno = $("#txt_cor_alumno").val();
+    var programa = $("#txt_cor_programa").val();
+    var academico = $("#txt_cor_academico").val();
+    var anio = $("#txt_cor_anio").val();
+
+    if (alumno == "" || programa == "" || academico == "" || anio == "") {
+        fillDataAlert();
+        return;
+    }
+
+    var tb_item = new Array();
+    var tb_item2 = new Array();
+    var tb_acc = new Array();
+    tb_item[0] = 0;
+    tb_item[1] = inst_id;
+    tb_item[2] = alumno;
+    tb_item[3] = programa;
+    tb_item[4] = academico;
+    tb_item[5] = anio;
+    tb_item2[0] = 0;
+    tb_item2[1] = inst_name;
+    tb_item2[2] = alumno;
+    tb_item2[3] = programa;
+    tb_item2[4] = academico;
+    tb_item2[5] = anio;
+    //tb_acc[0] = {id: "borr", href: "", onclick:"", title: "Ver", class: "", tipo_accion: "view"};
+    tb_acc[0] = { id: "deleteN", href: "", onclick: "javascript:removeItemCoordinacion(this)", title: objLang.Delete, class: "", tipo_accion: "delete" };
+    var arrData = JSON.parse(sessionStorage.grid_coordinacion_list);
+
+    if (arrData.data) {
+        var item = arrData.data;
+        tb_item[0] = item.length;
+        item.push(tb_item);
+        arrData.data = item;
+    } else {
+        var item = new Array();
+        tb_item[0] = 0;
+        item[0] = tb_item;
+        arrData.data = item;
+    }
+    if (arrData.label) {
+        var item2 = arrData.label;
+        tb_item2[0] = item2.length;
+        item2.push(tb_item2);
+        arrData.label = item2;
+    } else {
+        var item2 = new Array();
+        tb_item2[0] = 0;
+        item2[0] = tb_item2;
+        arrData.label = item2;
+    }
+    if (arrData.btnactions) {
+        var item3 = arrData.btnactions;
+        tb_acc[0].onclik = "javascript:removeItemCoordinacion(this)";
+        item3[item3.length] = tb_acc;
+        arrData.btnactions = item3;
+        // colocar codigo aqui para agregar acciones
+    } else {
+        var item3 = new Array();
+        item3[0] = tb_acc;
+        arrData.btnactions = item3;
+        // colocar codigo aqui para agregar acciones
+    }
+    sessionStorage.grid_coordinacion_list = JSON.stringify(arrData);
+    addItemGridContent("grid_coordinacion_list");
+}
+
+function removeItemCoordinacion(ref) {
+    var indice = $(ref).parent().parent().attr("data-key")
+    removeItemGridContent("grid_coordinacion_list", indice);
 }

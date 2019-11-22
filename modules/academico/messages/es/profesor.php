@@ -105,4 +105,12 @@ return [
     '-- Select Item --' => '-- Seleccione un Item --',
     'Name of Event' => 'Nombre del Evento',
     'Type Event' => 'Tipo de Evento',
+    'Presentation' => 'Ponencia',
+    'Type Production' => 'Tipo de Producción',
+    'Title' => 'Titulo',
+    'Editorial' => 'Editorial',
+    'Author' => 'Autor',
+    'Student Name' => 'Nombre del Estudiante',
+    'Academic Program' => 'Programa Académico',
+    'Year of Approval' => 'Año de Aprobación',
 ];

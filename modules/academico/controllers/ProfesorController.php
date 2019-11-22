@@ -321,6 +321,18 @@ class ProfesorController extends \app\components\CController {
             'arr_items' => (empty(ArrayHelper::map($arr_capItems, "id", "nombre"))) ? array(Academico::t("profesor", "-- Select Item --")) : (ArrayHelper::map($arr_capItems, "id", "nombre")),
         ]);
 
+        $NewFormTab10 = $this->renderPartial('NewFormTab10',[
+            'model' => new ArrayDataProvider(array()),
+        ]);
+
+        $NewFormTab11 = $this->renderPartial('NewFormTab11',[
+            'model' => new ArrayDataProvider(array()),
+        ]);
+
+        $NewFormTab12 = $this->renderPartial('NewFormTab12',[
+            'model' => new ArrayDataProvider(array()),
+            'arr_inst' => (empty(ArrayHelper::map($arr_profExDoc, "id", "nombre"))) ? array(Academico::t("profesor", "-- Select Instruction Level --")) : (ArrayHelper::map($arr_profExDoc, "id", "nombre")),
+        ]);
 
         $items = [
             [
@@ -358,15 +370,15 @@ class ProfesorController extends \app\components\CController {
             ],
             [
                 'label'=> Academico::t('profesor','Conferences'),
-                'content'=>'',
+                'content'=>$NewFormTab10,
             ],
             [
                 'label'=> Academico::t('profesor','Publishing'),
-                'content'=>'',
+                'content'=>$NewFormTab11,
             ],
             [
                 'label'=> Academico::t('profesor','Thesis Direction'),
-                'content'=>'',
+                'content'=>$NewFormTab12,
             ],
             [
                 'label'=> Academico::t('profesor','Performance Evaluation'),

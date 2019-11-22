@@ -105,4 +105,12 @@ return [
     '-- Select Item --' => '-- Select Item --',
     'Name of Event' => 'Name of Event',
     'Type Event' => 'Type Event',
+    'Presentation' => 'Presentation',
+    'Type Production' => 'Type Production',
+    'Title' => 'Title',
+    'Editorial' => 'Editorial',
+    'Author' => 'Author',
+    'Student Name' => 'Student Name',
+    'Academic Program' => 'Academic Program',
+    'Year of Approval' => 'Year of Approval',
 ];
