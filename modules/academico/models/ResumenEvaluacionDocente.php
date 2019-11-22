@@ -133,8 +133,8 @@ class ResumenEvaluacionDocente extends \yii\db\ActiveRecord
      * @return  
      */
     public function consultarResumenEvaluacion($arrFiltro = array(), $onlyData = false) {
-        $con1 = \Yii::$app->db;
         $con = \Yii::$app->db_academico;
+        $con1 = \Yii::$app->db_asgard;
         $estado = 1;
         if (isset($arrFiltro) && count($arrFiltro) > 0) {
             $str_search .= "(per.per_pri_nombre like :profesor OR ";
@@ -149,9 +149,11 @@ class ResumenEvaluacionDocente extends \yii\db\ActiveRecord
             if ($arrFiltro['semestre'] != "" && $arrFiltro['semestre'] > 0) {
                 $str_search .= " red.saca_id = :semestre AND ";
             }
-        } 
-        $sql = "SELECT 
-                    
+        }     
+        $sql = "
+               SELECT 
+                        -- GROUP_CONCAT(distinct(red.pro_id)) as profesor_id, 
+                        -- GROUP_CONCAT(distinct(red.saca_id)) as semestre, 
                         CONCAT(per.per_pri_nombre, ' ', per.per_pri_apellido) as profesor,
                         CONCAT(sea.saca_nombre, ' ', sea.saca_anio) as semestre_nombre,
                         GROUP_CONCAT(CASE
@@ -178,10 +180,10 @@ class ResumenEvaluacionDocente extends \yii\db\ActiveRecord
                         profe.pro_estado_logico = :estado AND
                         per.per_estado = :estado AND
                         per.per_estado_logico = :estado 
-                        group by red.pro_id, red.saca_id";
+                        group by red.pro_id, red.saca_id
+               ";
         $comando = $con->createCommand($sql);
         $comando->bindParam(":estado", $estado, \PDO::PARAM_STR);
-
         if (isset($arrFiltro) && count($arrFiltro) > 0) {
             $search_cond = "%" . $arrFiltro["profesor"] . "%";
             $comando->bindParam(":profesor", $search_cond, \PDO::PARAM_STR);            
@@ -196,7 +198,6 @@ class ResumenEvaluacionDocente extends \yii\db\ActiveRecord
                 $comando->bindParam(":semestre", $semestre, \PDO::PARAM_INT);
             }
         }
-
         $resultData = $comando->queryAll();
         $dataProvider = new ArrayDataProvider([
             'key' => 'id',
@@ -205,10 +206,10 @@ class ResumenEvaluacionDocente extends \yii\db\ActiveRecord
                 'pageSize' => Yii::$app->params["pageSize"],
             ],
             'sort' => [
-                'attributes' => [],
+                'attributes' => [
+                ],
             ],
         ]);
-
         if ($onlyData) {
             return $resultData;
         } else {
