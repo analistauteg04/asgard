@@ -769,7 +769,8 @@ class SolicitudesController extends \app\components\CController {
         }
         $con = \Yii::$app->db_captacion;
         $transaction = $con->beginTransaction();
-        $timeSt = time();
+        //$timeSt = time();
+        $timeSt = date(Yii::$app->params["dateByDefault"]);
         try {
             if (isset($data["arc_doc_titulo"]) && $data["arc_doc_titulo"] != "") {
                 $arrIm = explode(".", basename($data["arc_doc_titulo"]));
@@ -1059,7 +1060,8 @@ class SolicitudesController extends \app\components\CController {
         }
         $con = \Yii::$app->db_captacion;
         $transaction = $con->beginTransaction();
-        $timeSt = time();
+        //$timeSt = time();
+        $timeSt = date(Yii::$app->params["dateByDefault"]);
         try {
             if (isset($data["arc_doc_titulo"]) && $data["arc_doc_titulo"] != "") {
                 $arrIm = explode(".", basename($data["arc_doc_titulo"]));

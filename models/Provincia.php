@@ -102,7 +102,7 @@ class Provincia extends \yii\db\ActiveRecord {
                    " . $con->dbname . ".provincia as pro
                    INNER JOIN " . $con->dbname . ".pais as pai on pai.pai_id=pro.pai_id
                 WHERE 
-                   pro.pai_id=:id_provincia AND
+                   pro.pai_id=:id_pais AND
                    pai.pai_estado=:estado AND
                    pai.pai_estado_logico=:estado AND
                    pro.pro_estado=:estado AND
@@ -110,7 +110,7 @@ class Provincia extends \yii\db\ActiveRecord {
                 ORDER BY pro_nombre ASC";
         $comando = $con->createCommand($sql);
         $comando->bindParam(":estado", $estado, \PDO::PARAM_STR);
-        $comando->bindParam(":id_pais", $id_provincia, \PDO::PARAM_INT);
+        $comando->bindParam(":id_pais", $id_pai, \PDO::PARAM_INT);
         $resultData = $comando->queryAll();
         return $resultData;
     }
