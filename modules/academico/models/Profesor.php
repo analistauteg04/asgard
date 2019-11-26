@@ -9,10 +9,8 @@ use Yii;
  *
  * @property int $pro_id
  * @property int $per_id
- * @property int $ddoc_id
  * @property string $pro_fecha_contratacion
  * @property string $pro_fecha_terminacion
- * @property string $pro_declarado
  * @property int $pro_usuario_ingreso
  * @property int $pro_usuario_modifica
  * @property string $pro_estado
@@ -64,10 +62,9 @@ class Profesor extends \yii\db\ActiveRecord
     {
         return [
             [['per_id', 'pro_usuario_ingreso', 'pro_estado', 'pro_estado_logico'], 'required'],
-            [['per_id', 'ddoc_id', 'pro_usuario_ingreso', 'pro_usuario_modifica'], 'integer'],
+            [['per_id', 'pro_usuario_ingreso', 'pro_usuario_modifica'], 'integer'],
             [['pro_fecha_contratacion', 'pro_fecha_terminacion', 'pro_fecha_creacion', 'pro_fecha_modificacion'], 'safe'],
-            [['pro_declarado', 'pro_estado', 'pro_estado_logico'], 'string', 'max' => 1],
-            [['ddoc_id'], 'exist', 'skipOnError' => true, 'targetClass' => DedicacionDocente::className(), 'targetAttribute' => ['ddoc_id' => 'ddoc_id']],
+            [['pro_estado', 'pro_estado_logico'], 'string', 'max' => 1],
         ];
     }
 
@@ -79,10 +76,8 @@ class Profesor extends \yii\db\ActiveRecord
         return [
             'pro_id' => 'Pro ID',
             'per_id' => 'Per ID',
-            'ddoc_id' => 'Ddoc ID',
             'pro_fecha_contratacion' => 'Pro Fecha Contratacion',
             'pro_fecha_terminacion' => 'Pro Fecha Terminacion',
-            'pro_declarado' => 'Pro Declarado',
             'pro_usuario_ingreso' => 'Pro Usuario Ingreso',
             'pro_usuario_modifica' => 'Pro Usuario Modifica',
             'pro_estado' => 'Pro Estado',
@@ -122,14 +117,6 @@ class Profesor extends \yii\db\ActiveRecord
     public function getHorarioAsignaturaPeriodos()
     {
         return $this->hasMany(HorarioAsignaturaPeriodo::className(), ['pro_id' => 'pro_id']);
-    }
-
-    /**
-     * @return \yii\db\ActiveQuery
-     */
-    public function getDdoc()
-    {
-        return $this->hasOne(DedicacionDocente::className(), ['ddoc_id' => 'ddoc_id']);
     }
 
     /**
