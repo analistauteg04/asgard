@@ -466,6 +466,7 @@ create table if not exists `profesor_exp_prof` (
 create table if not exists `profesor_idiomas` (
   `pidi_id` bigint(20) not null auto_increment primary key,
   `pro_id` bigint(20) not null,
+  `idi_id` bigint(20) not null,
   `pidi_nivel_escrito` varchar(200) not null,
   `pidi_nivel_oral` varchar(100) not null,
   `pidi_certificado` varchar(200) not null,

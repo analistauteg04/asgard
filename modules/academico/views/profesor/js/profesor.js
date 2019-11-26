@@ -148,6 +148,19 @@ function save() {
     arrParams.rol_id = $('#cmb_rol').val();
     arrParams.emp_id = $('#cmb_empresa').val();
 
+    /** Session Storages **/
+    arrParams.grid_instruccion_list = (JSON.parse(sessionStorage.grid_instruccion_list)).data;
+    arrParams.grid_docencia_list = (JSON.parse(sessionStorage.grid_docencia_list)).data;
+    arrParams.grid_experiencia_list = (JSON.parse(sessionStorage.grid_experiencia_list)).data;
+    arrParams.grid_idioma_list = (JSON.parse(sessionStorage.grid_idioma_list)).data;
+    arrParams.grid_investigacion_list = (JSON.parse(sessionStorage.grid_investigacion_list)).data;
+    arrParams.grid_evento_list = (JSON.parse(sessionStorage.grid_evento_list)).data;
+    arrParams.grid_conferencia_list = (JSON.parse(sessionStorage.grid_conferencia_list)).data;
+    arrParams.grid_publicacion_list = (JSON.parse(sessionStorage.grid_publicacion_list)).data;
+    arrParams.grid_coordinacion_list = (JSON.parse(sessionStorage.grid_coordinacion_list)).data;
+    arrParams.grid_evaluacion_list = (JSON.parse(sessionStorage.grid_evaluacion_list)).data;
+    arrParams.grid_referencia_list = (JSON.parse(sessionStorage.grid_referencia_list)).data;
+
     console.log(arrParams);
     if (!validateForm()) {
         console.log(arrParams);
@@ -815,16 +828,16 @@ function addCoordinacion() {
     var tb_item2 = new Array();
     var tb_acc = new Array();
     tb_item[0] = 0;
-    tb_item[1] = inst_id;
-    tb_item[2] = alumno;
-    tb_item[3] = programa;
-    tb_item[4] = academico;
+    tb_item[1] = alumno;
+    tb_item[2] = programa;
+    tb_item[3] = academico;
+    tb_item[4] = inst_id;
     tb_item[5] = anio;
     tb_item2[0] = 0;
-    tb_item2[1] = inst_name;
-    tb_item2[2] = alumno;
-    tb_item2[3] = programa;
-    tb_item2[4] = academico;
+    tb_item2[1] = alumno;
+    tb_item2[2] = programa;
+    tb_item2[3] = academico;
+    tb_item2[4] = inst_name;
     tb_item2[5] = anio;
     //tb_acc[0] = {id: "borr", href: "", onclick:"", title: "Ver", class: "", tipo_accion: "view"};
     tb_acc[0] = { id: "deleteN", href: "", onclick: "javascript:removeItemCoordinacion(this)", title: objLang.Delete, class: "", tipo_accion: "delete" };
@@ -871,4 +884,145 @@ function addCoordinacion() {
 function removeItemCoordinacion(ref) {
     var indice = $(ref).parent().parent().attr("data-key")
     removeItemGridContent("grid_coordinacion_list", indice);
+}
+
+/** EVALUACION **/
+function addEvaluacion() {
+    var periodo = $("#txt_eva_periodo").val();
+    var institucion = $("#txt_eva_institucion").val();
+    var evaluacion = $("#txt_eva_evaluacion").val();
+
+    if (periodo == "" || institucion == "" || evaluacion == "") {
+        fillDataAlert();
+        return;
+    }
+
+    var tb_item = new Array();
+    var tb_item2 = new Array();
+    var tb_acc = new Array();
+    tb_item[0] = 0;
+    tb_item[1] = periodo;
+    tb_item[2] = institucion;
+    tb_item[3] = evaluacion;
+    tb_item2[0] = 0;
+    tb_item2[1] = periodo;
+    tb_item2[2] = institucion;
+    tb_item2[3] = evaluacion;
+    //tb_acc[0] = {id: "borr", href: "", onclick:"", title: "Ver", class: "", tipo_accion: "view"};
+    tb_acc[0] = { id: "deleteN", href: "", onclick: "javascript:removeItemEvaluacion(this)", title: objLang.Delete, class: "", tipo_accion: "delete" };
+    var arrData = JSON.parse(sessionStorage.grid_evaluacion_list);
+
+    if (arrData.data) {
+        var item = arrData.data;
+        tb_item[0] = item.length;
+        item.push(tb_item);
+        arrData.data = item;
+    } else {
+        var item = new Array();
+        tb_item[0] = 0;
+        item[0] = tb_item;
+        arrData.data = item;
+    }
+    if (arrData.label) {
+        var item2 = arrData.label;
+        tb_item2[0] = item2.length;
+        item2.push(tb_item2);
+        arrData.label = item2;
+    } else {
+        var item2 = new Array();
+        tb_item2[0] = 0;
+        item2[0] = tb_item2;
+        arrData.label = item2;
+    }
+    if (arrData.btnactions) {
+        var item3 = arrData.btnactions;
+        tb_acc[0].onclik = "javascript:removeItemEvaluacion(this)";
+        item3[item3.length] = tb_acc;
+        arrData.btnactions = item3;
+        // colocar codigo aqui para agregar acciones
+    } else {
+        var item3 = new Array();
+        item3[0] = tb_acc;
+        arrData.btnactions = item3;
+        // colocar codigo aqui para agregar acciones
+    }
+    sessionStorage.grid_evaluacion_list = JSON.stringify(arrData);
+    addItemGridContent("grid_evaluacion_list");
+}
+
+function removeItemEvaluacion(ref) {
+    var indice = $(ref).parent().parent().attr("data-key")
+    removeItemGridContent("grid_evaluacion_list", indice);
+}
+
+/** REFERENCIA **/
+function addReferencia() {
+    var nombre = $("#txt_ref_nombre").val();
+    var cargo = $("#txt_ref_cargo").val();
+    var company = $("#txt_ref_company").val();
+    var numero = $("#txt_ref_numero").val();
+
+    if (nombre == "" || cargo == "" || company == "" || numero == "") {
+        fillDataAlert();
+        return;
+    }
+
+    var tb_item = new Array();
+    var tb_item2 = new Array();
+    var tb_acc = new Array();
+    tb_item[0] = 0;
+    tb_item[1] = nombre;
+    tb_item[2] = cargo;
+    tb_item[3] = company;
+    tb_item[4] = numero;
+    tb_item2[0] = 0;
+    tb_item2[1] = nombre;
+    tb_item2[2] = cargo;
+    tb_item2[3] = company;
+    tb_item2[4] = numero;
+    //tb_acc[0] = {id: "borr", href: "", onclick:"", title: "Ver", class: "", tipo_accion: "view"};
+    tb_acc[0] = { id: "deleteN", href: "", onclick: "javascript:removeItemReferencia(this)", title: objLang.Delete, class: "", tipo_accion: "delete" };
+    var arrData = JSON.parse(sessionStorage.grid_referencia_list);
+
+    if (arrData.data) {
+        var item = arrData.data;
+        tb_item[0] = item.length;
+        item.push(tb_item);
+        arrData.data = item;
+    } else {
+        var item = new Array();
+        tb_item[0] = 0;
+        item[0] = tb_item;
+        arrData.data = item;
+    }
+    if (arrData.label) {
+        var item2 = arrData.label;
+        tb_item2[0] = item2.length;
+        item2.push(tb_item2);
+        arrData.label = item2;
+    } else {
+        var item2 = new Array();
+        tb_item2[0] = 0;
+        item2[0] = tb_item2;
+        arrData.label = item2;
+    }
+    if (arrData.btnactions) {
+        var item3 = arrData.btnactions;
+        tb_acc[0].onclik = "javascript:removeItemReferencia(this)";
+        item3[item3.length] = tb_acc;
+        arrData.btnactions = item3;
+        // colocar codigo aqui para agregar acciones
+    } else {
+        var item3 = new Array();
+        item3[0] = tb_acc;
+        arrData.btnactions = item3;
+        // colocar codigo aqui para agregar acciones
+    }
+    sessionStorage.grid_referencia_list = JSON.stringify(arrData);
+    addItemGridContent("grid_referencia_list");
+}
+
+function removeItemReferencia(ref) {
+    var indice = $(ref).parent().parent().attr("data-key")
+    removeItemGridContent("grid_referencia_list", indice);
 }

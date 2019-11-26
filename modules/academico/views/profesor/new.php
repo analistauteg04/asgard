@@ -33,6 +33,8 @@ $this->registerJs(
     loadSessionCampos('grid_evento_list', '', '');
     loadSessionCampos('grid_conferencia_list', '', '');
     loadSessionCampos('grid_publicacion_list', '', '');
-    loadSessionCampos('grid_coordinacion_list', '', '');",
+    loadSessionCampos('grid_coordinacion_list', '', '');
+    loadSessionCampos('grid_evaluacion_list', '', '');
+    loadSessionCampos('grid_referencia_list', '', '');",
     $this::POS_END);
 ?>

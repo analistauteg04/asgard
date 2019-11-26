@@ -22,7 +22,7 @@ Academico::registerTranslations();
                     'name' => 'txt_doc_from',
                     'value' => '',
                     'type' => DatePicker::TYPE_INPUT,
-                    'options' => ["class" => "form-control PBvalidation keyupmce", "id" => "txt_doc_from", "data-type" => "fecha", "data-keydown" => "true", "placeholder" => "yyyy-mm-dd" ],
+                    'options' => ["class" => "form-control PBvalidations keyupmce", "id" => "txt_doc_from", "data-type" => "fecha", "data-keydown" => "true", "placeholder" => "yyyy-mm-dd" ],
                     'pluginOptions' => [
                         'autoclose' => true,
                         'format' => Yii::$app->params["dateByDatePicker"],
@@ -39,7 +39,7 @@ Academico::registerTranslations();
                     'name' => 'txt_doc_to',
                     'value' => '',
                     'type' => DatePicker::TYPE_INPUT,
-                    'options' => ["class" => "form-control PBvalidation keyupmce", "id" => "txt_doc_to", "data-type" => "fecha", "data-keydown" => "true", "placeholder" => "yyyy-mm-dd" ],
+                    'options' => ["class" => "form-control PBvalidations keyupmce", "id" => "txt_doc_to", "data-type" => "fecha", "data-keydown" => "true", "placeholder" => "yyyy-mm-dd" ],
                     'pluginOptions' => [
                         'autoclose' => true,
                         'format' => Yii::$app->params["dateByDatePicker"],
@@ -85,6 +85,11 @@ Academico::registerTranslations();
         'columns' => [
             ['class' => 'yii\grid\SerialColumn', 'options' => ['width' => '10']],
             [
+                'attribute' => 'Institucion',
+                'header' => Academico::t("profesor", "Institution"),
+                'value' => 'Institucion',
+            ],
+            [
                 'attribute' => 'Desde',
                 'header' => Academico::t("profesor", "From") ,
                 'value' => 'Desde',
@@ -93,11 +98,6 @@ Academico::registerTranslations();
                 'attribute' => 'Hasta',
                 'header' => Academico::t("profesor", "To"),
                 'value' => 'Hasta',
-            ],
-            [
-                'attribute' => 'Institucion',
-                'header' => Academico::t("profesor", "Institution"),
-                'value' => 'Institucion',
             ],
             [
                 'attribute' => 'Denominacion',

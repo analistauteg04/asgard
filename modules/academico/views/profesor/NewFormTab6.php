@@ -85,6 +85,11 @@ Academico::registerTranslations();
         'columns' => [
             ['class' => 'yii\grid\SerialColumn', 'options' => ['width' => '10']],
             [
+                'attribute' => 'Institucion',
+                'header' => Academico::t("profesor", "Company / Organization"),
+                'value' => 'Institucion',
+            ],
+            [
                 'attribute' => 'Desde',
                 'header' => Academico::t("profesor", "From") ,
                 'value' => 'Desde',
@@ -93,11 +98,6 @@ Academico::registerTranslations();
                 'attribute' => 'Hasta',
                 'header' => Academico::t("profesor", "To"),
                 'value' => 'Hasta',
-            ],
-            [
-                'attribute' => 'Institucion',
-                'header' => Academico::t("profesor", "Company / Organization"),
-                'value' => 'Institucion',
             ],
             [
                 'attribute' => 'Denominacion',

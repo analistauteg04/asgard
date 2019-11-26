@@ -113,4 +113,10 @@ return [
     'Student Name' => 'Nombre del Estudiante',
     'Academic Program' => 'Programa Académico',
     'Year of Approval' => 'Año de Aprobación',
+    'Evaluation Period' => 'Período de Evaluación',
+    'Evaluating Institution' => 'Institución Evaluadora',
+    'Evaluation Obtained' => 'Evaluación Obtenida',
+    'Contact Name' => 'Nombre del Contacto',
+    'Position' => 'Cargo / Relación',
+    'Contact Number' => 'Número de Contacto',
 ];

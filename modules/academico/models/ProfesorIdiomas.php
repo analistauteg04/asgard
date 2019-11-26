@@ -9,6 +9,7 @@ use Yii;
  *
  * @property int $pidi_id
  * @property int $pro_id
+ * @property int $idi_id
  * @property string $pidi_nivel_escrito
  * @property string $pidi_nivel_oral
  * @property string $pidi_certificado
@@ -46,8 +47,8 @@ class ProfesorIdiomas extends \yii\db\ActiveRecord
     public function rules()
     {
         return [
-            [['pro_id', 'pidi_nivel_escrito', 'pidi_nivel_oral', 'pidi_certificado', 'pidi_institucion', 'pidi_usuario_ingreso', 'pidi_estado', 'pidi_estado_logico'], 'required'],
-            [['pro_id', 'pidi_usuario_ingreso', 'pidi_usuario_modifica'], 'integer'],
+            [['pro_id', 'idi_id', 'pidi_nivel_escrito', 'pidi_nivel_oral', 'pidi_certificado', 'pidi_institucion', 'pidi_usuario_ingreso', 'pidi_estado', 'pidi_estado_logico'], 'required'],
+            [['pro_id', 'idi_id', 'pidi_usuario_ingreso', 'pidi_usuario_modifica'], 'integer'],
             [['pidi_fecha_creacion', 'pidi_fecha_modificacion'], 'safe'],
             [['pidi_nivel_escrito', 'pidi_certificado', 'pidi_institucion'], 'string', 'max' => 200],
             [['pidi_nivel_oral'], 'string', 'max' => 100],
@@ -64,6 +65,7 @@ class ProfesorIdiomas extends \yii\db\ActiveRecord
         return [
             'pidi_id' => 'Pidi ID',
             'pro_id' => 'Pro ID',
+            'idi_id' => 'Idi ID',
             'pidi_nivel_escrito' => 'Pidi Nivel Escrito',
             'pidi_nivel_oral' => 'Pidi Nivel Oral',
             'pidi_certificado' => 'Pidi Certificado',

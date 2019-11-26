@@ -16,8 +16,16 @@ use app\models\GrupRol;
 use app\models\Canton;
 use app\modules\academico\models\Profesor;
 use app\modules\academico\models\ProfesorExpDoc;
+use app\modules\academico\models\ProfesorExpProf;
 use app\modules\academico\models\ProfesorIdiomas;
 use app\modules\academico\models\ProfesorCapacitacion;
+use app\modules\academico\models\ProfesorConferencia;
+use app\modules\academico\models\ProfesorCoordinacion;
+use app\modules\academico\models\ProfesorEvaluacion;
+use app\modules\academico\models\ProfesorInstruccion;
+use app\modules\academico\models\ProfesorInvestigacion;
+use app\modules\academico\models\ProfesorPublicacion;
+use app\modules\academico\models\ProfesorReferencia;
 use yii\helpers\ArrayHelper;
 use yii\data\ArrayDataProvider;
 use app\models\Utilities;
@@ -334,6 +342,14 @@ class ProfesorController extends \app\components\CController {
             'arr_inst' => (empty(ArrayHelper::map($arr_profExDoc, "id", "nombre"))) ? array(Academico::t("profesor", "-- Select Instruction Level --")) : (ArrayHelper::map($arr_profExDoc, "id", "nombre")),
         ]);
 
+        $NewFormTab13 = $this->renderPartial('NewFormTab13',[
+            'model' => new ArrayDataProvider(array()),
+        ]);
+
+        $NewFormTab14 = $this->renderPartial('NewFormTab14',[
+            'model' => new ArrayDataProvider(array()),
+        ]);
+
         $items = [
             [
                 'label'=> Academico::t('profesor','Basic Info.'),
@@ -382,11 +398,11 @@ class ProfesorController extends \app\components\CController {
             ],
             [
                 'label'=> Academico::t('profesor','Performance Evaluation'),
-                'content'=>'',
+                'content'=>$NewFormTab13,
             ],
             [
                 'label'=> Academico::t('profesor','References'),
-                'content'=>'',
+                'content'=>$NewFormTab14,
             ],
             [
                 'label'=> Academico::t('profesor','Account Info'),
@@ -401,6 +417,7 @@ class ProfesorController extends \app\components\CController {
     public function actionSave() {
         if (Yii::$app->request->isAjax) {
             $data = Yii::$app->request->post();
+            $user_ingresa = Yii::$app->session->get("PB_iduser");
             try {
 
                 /**
@@ -441,6 +458,21 @@ class ProfesorController extends \app\components\CController {
                 $gru_id = $data["gru_id"];
                 $rol_id = $data["rol_id"];
                 $emp_id = $data["emp_id"];
+
+                /**
+                 * Inf. Session Storages
+                 */
+                $arr_instuccion = $data["grid_instruccion_list"];
+                $arr_docencia = $data["grid_docencia_list"];
+                $arr_experiencia = $data["grid_experiencia_list"];
+                $arr_idioma = $data["grid_idioma_list"];
+                $arr_investigacion = $data["grid_investigacion_list"];
+                $arr_evento = $data["grid_evento_list"];
+                $arr_conferencia = $data["grid_conferencia_list"];
+                $arr_publicacion = $data["grid_publicacion_list"];
+                $arr_coordinacion = $data["grid_coordinacion_list"];
+                $arr_evaluacion = $data["grid_evaluacion_list"];
+                $arr_referencia = $data["grid_referencia_list"];
 
                 $message = array(
                     "wtmessage" => Yii::t("notificaciones", "Your information was successfully saved."),
@@ -503,6 +535,7 @@ class ProfesorController extends \app\components\CController {
                         $profesor_model->per_id = $per_id_existente;
                         $profesor_model->pro_estado = '1';
                         $profesor_model->pro_estado_logico = '1';
+                        $profesor_model->pro_usuario_ingreso = $user_ingresa;
                         $profesor_model->save();
 
                         $usuario_model = new Usuario();
@@ -531,6 +564,158 @@ class ProfesorController extends \app\components\CController {
                         $usua_grol_eper_model->ugep_estado = '1';
                         $usua_grol_eper_model->ugep_estado_logico = '1';
                         $usua_grol_eper_model->save();
+
+                        /** Se agregan Informacion de Expediente **/
+                        
+                        foreach($arr_instuccion as $key0 => $value0){
+                            $instruccion_model = new ProfesorInstruccion();
+                            $instruccion_model->nins_id = $value0[1];
+                            $instruccion_model->pins_institucion = $value0[2];
+                            $instruccion_model->pins_especializacion = $value0[3];
+                            $instruccion_model->pins_titulo = $value0[4];
+                            $instruccion_model->pins_senescyt = $value0[5];
+                            $instruccion_model->pro_id = $profesor_model->pro_id;
+                            $instruccion_model->pins_estado = '1';
+                            $instruccion_model->pins_estado_logico = '1';
+                            $instruccion_model->pins_usuario_ingreso = $user_ingresa;
+                            $instruccion_model->save();
+                        }
+
+                        foreach($arr_docencia as $key1 => $value1){
+                            $docencia_model = new ProfesorExpDoc();
+                            $docencia_model->ins_id = $value1[1];
+                            $docencia_model->pedo_fecha_inicio = $value1[2];
+                            $docencia_model->pedo_fecha_fin = $value1[3];
+                            $docencia_model->pedo_denominacion = $value1[4];
+                            $docencia_model->pedo_asignaturas = $value1[5];
+                            $docencia_model->pro_id = $profesor_model->pro_id;
+                            $docencia_model->pedo_estado = '1';
+                            $docencia_model->pedo_estado_logico = '1';
+                            $docencia_model->pedo_usuario_ingreso = $user_ingresa;
+                            $docencia_model->save();
+                        }
+
+                        foreach($arr_experiencia as $key2 => $value2){
+                            $experiencia_model = new ProfesorExpProf();
+                            $experiencia_model->pepr_organizacion = $value2[1];
+                            $experiencia_model->pepr_fecha_inicio = $value2[2];
+                            $experiencia_model->pepr_fecha_fin = $value2[3];
+                            $experiencia_model->pepr_denominacion = $value2[4];
+                            $experiencia_model->pepr_funciones = $value2[5];
+                            $experiencia_model->pro_id = $profesor_model->pro_id;
+                            $experiencia_model->pepr_estado = '1';
+                            $experiencia_model->pepr_estado_logico = '1';
+                            $experiencia_model->pepr_usuario_ingreso = $user_ingresa;
+                            $experiencia_model->save();
+                        }
+
+                        foreach($arr_idioma as $key3 => $value3){
+                            $idiomas_model = new ProfesorIdiomas();
+                            $idiomas_model->idi_id = $value3[1];
+                            $idiomas_model->pidi_nivel_escrito = $value3[2];
+                            $idiomas_model->pidi_nivel_oral = $value3[3];
+                            $idiomas_model->pidi_certificado = $value3[4];
+                            $idiomas_model->pidi_institucion = $value3[5];
+                            $idiomas_model->pro_id = $profesor_model->pro_id;
+                            $idiomas_model->pidi_estado = '1';
+                            $idiomas_model->pidi_estado_logico = '1';
+                            $idiomas_model->pidi_usuario_ingreso = $user_ingresa;
+                            $idiomas_model->save();
+                        }
+
+                        foreach($arr_investigacion as $key4 => $value4){
+                            $investigacion_model = new ProfesorInvestigacion();
+                            $investigacion_model->pinv_proyecto = $value4[1];
+                            $investigacion_model->pinv_ambito = $value4[2];
+                            $investigacion_model->pinv_responsabilidad = $value4[3];
+                            $investigacion_model->pinv_entidad = $value4[4];
+                            $investigacion_model->pinv_anio = $value4[5];
+                            $investigacion_model->pinv_duracion = $value4[6];
+                            $investigacion_model->pro_id = $profesor_model->pro_id;
+                            $investigacion_model->pinv_estado = '1';
+                            $investigacion_model->pinv_estado_logico = '1';
+                            $investigacion_model->pinv_usuario_ingreso = $user_ingresa;
+                            $investigacion_model->save();
+                        }
+
+                        foreach($arr_evento as $key5 => $value5){
+                            $capacitacion_model = new ProfesorCapacitacion();
+                            $capacitacion_model->pcap_evento = $value5[1];
+                            $capacitacion_model->pcap_institucion = $value5[2];
+                            $capacitacion_model->pcap_anio = $value5[3];
+                            $capacitacion_model->pcap_duracion = $value5[4];
+                            $capacitacion_model->pro_id = $profesor_model->pro_id;
+                            $capacitacion_model->pcap_estado = '1';
+                            $capacitacion_model->pcap_estado_logico = '1';
+                            $capacitacion_model->pcap_usuario_ingreso = $user_ingresa;
+                            $capacitacion_model->save();
+                        }
+
+                        foreach($arr_conferencia as $key6 => $value6){
+                            $capacitacion_model = new ProfesorConferencia();
+                            $capacitacion_model->pcon_evento = $value6[1];
+                            $capacitacion_model->pcon_institucion = $value6[2];
+                            $capacitacion_model->pcon_anio = $value6[3];
+                            $capacitacion_model->pcon_ponencia = $value6[4];
+                            $capacitacion_model->pro_id = $profesor_model->pro_id;
+                            $capacitacion_model->pcon_estado = '1';
+                            $capacitacion_model->pcon_estado_logico = '1';
+                            $capacitacion_model->pcon_usuario_ingreso = $user_ingresa;
+                            $capacitacion_model->save();
+                        }
+
+                        foreach($arr_coordinacion as $key7 => $value7){
+                            $coordinacion_model = new ProfesorCoordinacion();
+                            $coordinacion_model->pcoo_alumno = $value7[1];
+                            $coordinacion_model->pcoo_programa = $value7[2];
+                            $coordinacion_model->pcoo_academico = $value7[3];
+                            $coordinacion_model->pcoo_institucion = $value7[4];
+                            $coordinacion_model->pcoo_anio = $value7[5];
+                            $coordinacion_model->pro_id = $profesor_model->pro_id;
+                            $coordinacion_model->pcoo_estado = '1';
+                            $coordinacion_model->pcoo_estado_logico = '1';
+                            $coordinacion_model->pcoo_usuario_ingreso = $user_ingresa;
+                            $coordinacion_model->save();
+                        }
+                        
+                        foreach($arr_evaluacion as $key8 => $value8){
+                            $evaluacion_model = new ProfesorEvaluacion();
+                            $evaluacion_model->peva_periodo = $value8[1];
+                            $evaluacion_model->peva_institucion = $value8[2];
+                            $evaluacion_model->peva_evaluacion = $value8[3];
+                            $evaluacion_model->pro_id = $profesor_model->pro_id;
+                            $evaluacion_model->peva_estado = '1';
+                            $evaluacion_model->peva_estado_logico = '1';
+                            $evaluacion_model->peva_usuario_ingreso = $user_ingresa;
+                            $evaluacion_model->save();
+                        }
+
+                        foreach($arr_publicacion as $key9 => $value9){
+                            $publicacion_model = new ProfesorPublicacion();
+                            $publicacion_model->ppub_produccion = $value9[1];
+                            $publicacion_model->ppub_titulo = $value9[2];
+                            $publicacion_model->ppub_editorial = $value9[3];
+                            $publicacion_model->ppub_isbn = $value9[4];
+                            $publicacion_model->ppub_autoria = $value9[5];
+                            $publicacion_model->pro_id = $profesor_model->pro_id;
+                            $publicacion_model->ppub_estado = '1';
+                            $publicacion_model->ppub_estado_logico = '1';
+                            $publicacion_model->ppub_usuario_ingreso = $user_ingresa;
+                            $publicacion_model->save();
+                        }
+
+                        foreach($arr_referencia as $key10 => $value10){
+                            $referencia_model = new ProfesorReferencia();
+                            $referencia_model->pref_contacto = $value10[1];
+                            $referencia_model->pref_relacion_cargo = $value10[2];
+                            $referencia_model->pref_organizacion = $value10[3];
+                            $referencia_model->pref_numero = $value10[4];
+                            $referencia_model->pro_id = $profesor_model->pro_id;
+                            $referencia_model->pref_estado = '1';
+                            $referencia_model->pref_estado_logico = '1';
+                            $referencia_model->pref_usuario_ingreso = $user_ingresa;
+                            $referencia_model->save();
+                        }
 
                         return Utilities::ajaxResponse('OK', 'alert', Yii::t('jslang', 'Success'), 'false', $message);
                     } else {
@@ -576,6 +761,7 @@ class ProfesorController extends \app\components\CController {
                         $profesor_model->per_id = $per_id;
                         $profesor_model->pro_estado = '1';
                         $profesor_model->pro_estado_logico = '1';
+                        $profesor_model->pro_usuario_ingreso = $user_ingresa;
                         $profesor_model->save();
 
                         $usuario_model = new Usuario();
@@ -603,6 +789,158 @@ class ProfesorController extends \app\components\CController {
                         $usua_grol_eper_model->ugep_estado = '1';
                         $usua_grol_eper_model->ugep_estado_logico = '1';
                         $usua_grol_eper_model->save();
+
+                        /** Se agregan Informacion de Expediente **/
+                        
+                        foreach($arr_instuccion as $key0 => $value0){
+                            $instruccion_model = new ProfesorInstruccion();
+                            $instruccion_model->nins_id = $value0[1];
+                            $instruccion_model->pins_institucion = $value0[2];
+                            $instruccion_model->pins_especializacion = $value0[3];
+                            $instruccion_model->pins_titulo = $value0[4];
+                            $instruccion_model->pins_senescyt = $value0[5];
+                            $instruccion_model->pro_id = $profesor_model->pro_id;
+                            $instruccion_model->pins_estado = '1';
+                            $instruccion_model->pins_estado_logico = '1';
+                            $instruccion_model->pins_usuario_ingreso = $user_ingresa;
+                            $instruccion_model->save();
+                        }
+
+                        foreach($arr_docencia as $key1 => $value1){
+                            $docencia_model = new ProfesorExpDoc();
+                            $docencia_model->ins_id = $value1[1];
+                            $docencia_model->pedo_fecha_inicio = $value1[2];
+                            $docencia_model->pedo_fecha_fin = $value1[3];
+                            $docencia_model->pedo_denominacion = $value1[4];
+                            $docencia_model->pedo_asignaturas = $value1[5];
+                            $docencia_model->pro_id = $profesor_model->pro_id;
+                            $docencia_model->pedo_estado = '1';
+                            $docencia_model->pedo_estado_logico = '1';
+                            $docencia_model->pedo_usuario_ingreso = $user_ingresa;
+                            $docencia_model->save();
+                        }
+
+                        foreach($arr_experiencia as $key2 => $value2){
+                            $experiencia_model = new ProfesorExpProf();
+                            $experiencia_model->pepr_organizacion = $value2[1];
+                            $experiencia_model->pepr_fecha_inicio = $value2[2];
+                            $experiencia_model->pepr_fecha_fin = $value2[3];
+                            $experiencia_model->pepr_denominacion = $value2[4];
+                            $experiencia_model->pepr_funciones = $value2[5];
+                            $experiencia_model->pro_id = $profesor_model->pro_id;
+                            $experiencia_model->pepr_estado = '1';
+                            $experiencia_model->pepr_estado_logico = '1';
+                            $experiencia_model->pepr_usuario_ingreso = $user_ingresa;
+                            $experiencia_model->save();
+                        }
+
+                        foreach($arr_idioma as $key3 => $value3){
+                            $idiomas_model = new ProfesorIdiomas();
+                            $idiomas_model->idi_id = $value3[1];
+                            $idiomas_model->pidi_nivel_escrito = $value3[2];
+                            $idiomas_model->pidi_nivel_oral = $value3[3];
+                            $idiomas_model->pidi_certificado = $value3[4];
+                            $idiomas_model->pidi_institucion = $value3[5];
+                            $idiomas_model->pro_id = $profesor_model->pro_id;
+                            $idiomas_model->pidi_estado = '1';
+                            $idiomas_model->pidi_estado_logico = '1';
+                            $idiomas_model->pidi_usuario_ingreso = $user_ingresa;
+                            $idiomas_model->save();
+                        }
+
+                        foreach($arr_investigacion as $key4 => $value4){
+                            $investigacion_model = new ProfesorInvestigacion();
+                            $investigacion_model->pinv_proyecto = $value4[1];
+                            $investigacion_model->pinv_ambito = $value4[2];
+                            $investigacion_model->pinv_responsabilidad = $value4[3];
+                            $investigacion_model->pinv_entidad = $value4[4];
+                            $investigacion_model->pinv_anio = $value4[5];
+                            $investigacion_model->pinv_duracion = $value4[6];
+                            $investigacion_model->pro_id = $profesor_model->pro_id;
+                            $investigacion_model->pinv_estado = '1';
+                            $investigacion_model->pinv_estado_logico = '1';
+                            $investigacion_model->pinv_usuario_ingreso = $user_ingresa;
+                            $investigacion_model->save();
+                        }
+
+                        foreach($arr_evento as $key5 => $value5){
+                            $capacitacion_model = new ProfesorCapacitacion();
+                            $capacitacion_model->pcap_evento = $value5[1];
+                            $capacitacion_model->pcap_institucion = $value5[2];
+                            $capacitacion_model->pcap_anio = $value5[3];
+                            $capacitacion_model->pcap_duracion = $value5[4];
+                            $capacitacion_model->pro_id = $profesor_model->pro_id;
+                            $capacitacion_model->pcap_estado = '1';
+                            $capacitacion_model->pcap_estado_logico = '1';
+                            $capacitacion_model->pcap_usuario_ingreso = $user_ingresa;
+                            $capacitacion_model->save();
+                        }
+
+                        foreach($arr_conferencia as $key6 => $value6){
+                            $capacitacion_model = new ProfesorConferencia();
+                            $capacitacion_model->pcon_evento = $value6[1];
+                            $capacitacion_model->pcon_institucion = $value6[2];
+                            $capacitacion_model->pcon_anio = $value6[3];
+                            $capacitacion_model->pcon_ponencia = $value6[4];
+                            $capacitacion_model->pro_id = $profesor_model->pro_id;
+                            $capacitacion_model->pcon_estado = '1';
+                            $capacitacion_model->pcon_estado_logico = '1';
+                            $capacitacion_model->pcon_usuario_ingreso = $user_ingresa;
+                            $capacitacion_model->save();
+                        }
+
+                        foreach($arr_coordinacion as $key7 => $value7){
+                            $coordinacion_model = new ProfesorCoordinacion();
+                            $coordinacion_model->pcoo_alumno = $value7[1];
+                            $coordinacion_model->pcoo_programa = $value7[2];
+                            $coordinacion_model->pcoo_academico = $value7[3];
+                            $coordinacion_model->pcoo_institucion = $value7[4];
+                            $coordinacion_model->pcoo_anio = $value7[5];
+                            $coordinacion_model->pro_id = $profesor_model->pro_id;
+                            $coordinacion_model->pcoo_estado = '1';
+                            $coordinacion_model->pcoo_estado_logico = '1';
+                            $coordinacion_model->pcoo_usuario_ingreso = $user_ingresa;
+                            $coordinacion_model->save();
+                        }
+                        
+                        foreach($arr_evaluacion as $key8 => $value8){
+                            $evaluacion_model = new ProfesorEvaluacion();
+                            $evaluacion_model->peva_periodo = $value8[1];
+                            $evaluacion_model->peva_institucion = $value8[2];
+                            $evaluacion_model->peva_evaluacion = $value8[3];
+                            $evaluacion_model->pro_id = $profesor_model->pro_id;
+                            $evaluacion_model->peva_estado = '1';
+                            $evaluacion_model->peva_estado_logico = '1';
+                            $evaluacion_model->peva_usuario_ingreso = $user_ingresa;
+                            $evaluacion_model->save();
+                        }
+
+                        foreach($arr_publicacion as $key9 => $value9){
+                            $publicacion_model = new ProfesorPublicacion();
+                            $publicacion_model->ppub_produccion = $value9[1];
+                            $publicacion_model->ppub_titulo = $value9[2];
+                            $publicacion_model->ppub_editorial = $value9[3];
+                            $publicacion_model->ppub_isbn = $value9[4];
+                            $publicacion_model->ppub_autoria = $value9[5];
+                            $publicacion_model->pro_id = $profesor_model->pro_id;
+                            $publicacion_model->ppub_estado = '1';
+                            $publicacion_model->ppub_estado_logico = '1';
+                            $publicacion_model->ppub_usuario_ingreso = $user_ingresa;
+                            $publicacion_model->save();
+                        }
+
+                        foreach($arr_referencia as $key10 => $value10){
+                            $referencia_model = new ProfesorReferencia();
+                            $referencia_model->pref_contacto = $value10[1];
+                            $referencia_model->pref_relacion_cargo = $value10[2];
+                            $referencia_model->pref_organizacion = $value10[3];
+                            $referencia_model->pref_numero = $value10[4];
+                            $referencia_model->pro_id = $profesor_model->pro_id;
+                            $referencia_model->pref_estado = '1';
+                            $referencia_model->pref_estado_logico = '1';
+                            $referencia_model->pref_usuario_ingreso = $user_ingresa;
+                            $referencia_model->save();
+                        }
 
                         return Utilities::ajaxResponse('OK', 'alert', Yii::t('jslang', 'Success'), 'false', $message);
                     } else {

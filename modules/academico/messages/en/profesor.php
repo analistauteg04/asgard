@@ -113,4 +113,10 @@ return [
     'Student Name' => 'Student Name',
     'Academic Program' => 'Academic Program',
     'Year of Approval' => 'Year of Approval',
+    'Evaluation Period' => 'Evaluation Period',
+    'Evaluating Institution' => 'Evaluating Institution',
+    'Evaluation Obtained' => 'Evaluation Obtained',
+    'Contact Name' => 'Contact Name',
+    'Position' => 'Position',
+    'Contact Number' => 'Contact Number',
 ];

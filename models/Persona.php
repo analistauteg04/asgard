@@ -912,4 +912,51 @@ class Persona extends \yii\db\ActiveRecord {
         return $rawData;
     }
 
+        /**
+     * Funcion para verificar si una persona existe, no esta y si eliminada por cedula, pasaporte o ruc
+     * @author Emilio Moran 
+     */
+
+    public static function VerificarPersonaExiste($cedula = null , $pasaporte = null, $ruc = null) {
+        $con = \Yii::$app->db_asgard;
+        $estado = 1;
+        $sql = "
+                SELECT per_id, per_estado, per_estado_logico
+                FROM persona as per           
+                WHERE 
+                    (
+                        (per_cedula='$cedula' or per_pasaporte='$pasaporte' or per_ruc='$ruc')                        
+                    )";
+        $comando = $con->createCommand($sql);
+        $resultData = $comando->queryOne();
+        if (empty($resultData['per_id'])){        
+            return -1; //No se encuentra registrado
+        } else if($resultData['per_estado_logico']=='0') {
+            return 0;
+        } else {
+            return 1;
+        }
+    }
+
+    /**
+     * Funcion para obtener el per_id de una persona existente eliminada o no por cedula, pasaporte o ruc
+     * @author Emilio Moran 
+     */
+
+    public static function ObtenerPersonabyCedulaPasaporteRuc($cedula = null , $pasaporte = null, $ruc = null) {
+        $con = \Yii::$app->db_asgard;
+        $estado = 1;
+        $sql = "
+                SELECT per_id
+                FROM persona as per           
+                WHERE 
+                    (
+                        (per_cedula='$cedula' or per_pasaporte='$pasaporte' or per_ruc='$ruc')                        
+                    )";
+        $comando = $con->createCommand($sql);
+        $resultData = $comando->queryOne();
+        return $resultData['per_id'];
+    }
+
+
 }

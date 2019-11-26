@@ -69,7 +69,7 @@ Academico::registerTranslations();
             ],
             [
                 'attribute' => 'NivelEscrito',
-                'header' => Academico::t("profesor", "Oral Level"),
+                'header' => Academico::t("profesor", "Written Level"),
                 'value' => 'NivelEscrito',
             ],
             [
