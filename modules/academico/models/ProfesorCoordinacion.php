@@ -32,6 +32,7 @@ class ProfesorCoordinacion extends \yii\db\ActiveRecord
     {
         return 'profesor_coordinacion';
     }
+    
 
     /**
      * @return \yii\db\Connection the database connection used by this AR class.

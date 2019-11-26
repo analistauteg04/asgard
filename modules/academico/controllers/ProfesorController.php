@@ -640,10 +640,11 @@ class ProfesorController extends \app\components\CController {
 
                         foreach($arr_evento as $key5 => $value5){
                             $capacitacion_model = new ProfesorCapacitacion();
-                            $capacitacion_model->pcap_evento = $value5[1];
-                            $capacitacion_model->pcap_institucion = $value5[2];
-                            $capacitacion_model->pcap_anio = $value5[3];
-                            $capacitacion_model->pcap_duracion = $value5[4];
+                            $capacitacion_model->pcap_tipo = $value5[1];
+                            $capacitacion_model->pcap_evento = $value5[2];
+                            $capacitacion_model->pcap_institucion = $value5[3];
+                            $capacitacion_model->pcap_anio = $value5[4];
+                            $capacitacion_model->pcap_duracion = $value5[5];
                             $capacitacion_model->pro_id = $profesor_model->pro_id;
                             $capacitacion_model->pcap_estado = '1';
                             $capacitacion_model->pcap_estado_logico = '1';
@@ -865,10 +866,11 @@ class ProfesorController extends \app\components\CController {
 
                         foreach($arr_evento as $key5 => $value5){
                             $capacitacion_model = new ProfesorCapacitacion();
-                            $capacitacion_model->pcap_evento = $value5[1];
-                            $capacitacion_model->pcap_institucion = $value5[2];
-                            $capacitacion_model->pcap_anio = $value5[3];
-                            $capacitacion_model->pcap_duracion = $value5[4];
+                            $capacitacion_model->pcap_tipo = $value5[1];
+                            $capacitacion_model->pcap_evento = $value5[2];
+                            $capacitacion_model->pcap_institucion = $value5[3];
+                            $capacitacion_model->pcap_anio = $value5[4];
+                            $capacitacion_model->pcap_duracion = $value5[5];
                             $capacitacion_model->pro_id = $profesor_model->pro_id;
                             $capacitacion_model->pcap_estado = '1';
                             $capacitacion_model->pcap_estado_logico = '1';
@@ -949,7 +951,7 @@ class ProfesorController extends \app\components\CController {
                 }                
             } catch (Exception $ex) {
                 $message = array(
-                    "wtmessage" => Yii::t('notificaciones', 'Your information has not been saved. Please try again.'),
+                    "wtmessage" => Yii::t('notificaciones', 'Your information has not been saved. Please try again.' . $ex->getMessage()),
                     "title" => Yii::t('jslang', 'Error'),
                 );
                 return Utilities::ajaxResponse('NOOK', 'alert', Yii::t('jslang', 'Error'), 'true', $message);

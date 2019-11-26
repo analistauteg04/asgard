@@ -63,7 +63,7 @@ class Profesor extends \yii\db\ActiveRecord
     public function rules()
     {
         return [
-            [['per_id', 'ddoc_id', 'pro_declarado', 'pro_usuario_ingreso', 'pro_estado', 'pro_estado_logico'], 'required'],
+            [['per_id', 'pro_usuario_ingreso', 'pro_estado', 'pro_estado_logico'], 'required'],
             [['per_id', 'ddoc_id', 'pro_usuario_ingreso', 'pro_usuario_modifica'], 'integer'],
             [['pro_fecha_contratacion', 'pro_fecha_terminacion', 'pro_fecha_creacion', 'pro_fecha_modificacion'], 'safe'],
             [['pro_declarado', 'pro_estado', 'pro_estado_logico'], 'string', 'max' => 1],
