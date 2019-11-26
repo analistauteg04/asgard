@@ -48,7 +48,7 @@ class ProfesorInstruccion extends \yii\db\ActiveRecord
     public function rules()
     {
         return [
-            [['pro_id', 'nins_id', 'pins_institucion', 'pins_especializacion', 'pins_titulo', 'pins_senescyt', 'pins_usuario_ingreso', 'pins_estado', 'pins_estado_logico'], 'required'],
+            [['pro_id', 'nins_id', 'pins_titulo', 'pins_usuario_ingreso', 'pins_estado', 'pins_estado_logico'], 'required'],
             [['pro_id', 'nins_id', 'pins_usuario_ingreso', 'pins_usuario_modifica'], 'integer'],
             [['pins_fecha_creacion', 'pins_fecha_modificacion'], 'safe'],
             [['pins_institucion', 'pins_especializacion'], 'string', 'max' => 150],
