@@ -1068,7 +1068,8 @@ create table if not exists registro_marcacion_generada (
 create table if not exists `distributivo` (
  `dis_id` bigint(20) not null auto_increment primary key,
  `pro_id` bigint(20) not null,
- `asi_id` bigint(20) not null,
+ `asi_id` bigint(20) not null, 
+ `dis_descripcion` varchar(100) null,
  `saca_id` bigint(20) not null,
  `ddoc_id` bigint(20) not null,
  `dis_declarado` varchar(1) not null,

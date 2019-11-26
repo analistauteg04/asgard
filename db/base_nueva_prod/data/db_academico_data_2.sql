@@ -39,7 +39,8 @@ INSERT INTO `periodo_academico` (`paca_id`, `saca_id`, `baca_id`, `paca_activo`,
 --
 INSERT INTO `dedicacion_docente` (`ddoc_id`, `ddoc_nombre`, `ddoc_estado`, `ddoc_fecha_creacion`, `ddoc_fecha_modificacion`, `ddoc_estado_logico`) VALUES
 (1, 'Tiempo Completo', '1', '2019-11-18 12:03:06',NULL, '1'),
-(2, 'Timepo Parcial', '1', '2019-11-18 12:036:06',NULL, '1');
+(2, 'Tiempo Parcial', '1', '2019-11-18 12:036:06',NULL, '1'),
+(3, 'Medio Tiempo', '1', '2019-11-18 12:036:06',NULL, '1');
 
 -- --------------------------------------------------------
 --
@@ -430,7 +431,3 @@ INSERT INTO `otro_estudio_academico` (`oeac_id`, `oeac_nombre`, `oeac_descripcio
 (22, 'Maestría en Dirección de Proyectos', 'Maestría en Dirección de Proyectos', 2, 1, '1', '2019-06-05 19:43:11', NULL, '1'),
 (23, 'Maestría en Lenguas Extranjeras', 'Maestría en Lenguas Extranjeras', 2, 1, '1', '2019-06-05 19:43:11', NULL, '1'),
 (24, 'Maestría de Medicina General', 'Maestría de Medicina General', 2, 1, '1', '2019-06-05 19:43:11', NULL, '1');
-
-   
-
-
