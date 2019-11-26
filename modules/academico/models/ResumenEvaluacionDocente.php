@@ -5,6 +5,7 @@ namespace app\modules\academico\models;
 use yii\data\ArrayDataProvider;
 use Yii;
 
+
 /**
  * This is the model class for table "resumen_evaluacion_docente".
  *
@@ -101,7 +102,7 @@ class ResumenEvaluacionDocente extends \yii\db\ActiveRecord
         return $this->hasOne(TipoEvaluacion::className(), ['teva_id' => 'teva_id']);
     }
     
-        /**
+    /**
      * Function consulta los tipod de evaluacion a docentes. 
      * @author Giovanni Vergara <analistadesarrollo02@uteg.edu.ec>;
      * @param
@@ -159,10 +160,10 @@ class ResumenEvaluacionDocente extends \yii\db\ActiveRecord
                             WHEN red.teva_id = 1 THEN 'Docencia'
                             WHEN red.teva_id = 2 THEN 'Investigación'
                             WHEN red.teva_id = 3 THEN 'Dirección y Gestión Académica'
-                            END, ' | ', redo_cant_horas,' | ', redo_puntaje_evaluacion, ' ') as valores,
+                            END, ' | ', redo_cant_horas,' | ', redo_puntaje_evaluacion, ' ') as valores ,
                             rre.rreva_evaluacion_completa as evaluacion_completa,
                             rre.rreva_total_hora as total_hora,
-                            rre.rreva_total_evaluacion as total_evaluacion
+                            rre.rreva_total_evaluacion as total_evaluacion 
                         FROM " . $con->dbname . ".resumen_evaluacion_docente red
                         INNER JOIN " . $con->dbname . ".resumen_resultado_evaluacion rre ON rre.pro_id = red.pro_id and  rre.saca_id = red.saca_id
                         INNER JOIN " . $con->dbname . ".semestre_academico sea ON sea.saca_id = red.saca_id

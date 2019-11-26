@@ -426,9 +426,9 @@ create table if not exists `profesor_instruccion` (
 create table if not exists `profesor_exp_doc` (
   `pedo_id` bigint(20) not null auto_increment primary key,
   `pro_id` bigint(20) not null,
+  `ins_id` bigint(20) not null,
   `pedo_fecha_inicio` timestamp null default null,
   `pedo_fecha_fin` timestamp null default null,
-  `pedo_institucion` varchar(200) not null,
   `pedo_denominacion` varchar(100) not null,
   `pedo_asignaturas` varchar(200) not null,
   `pedo_usuario_ingreso` bigint(20) not null,

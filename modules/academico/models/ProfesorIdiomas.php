@@ -84,4 +84,42 @@ class ProfesorIdiomas extends \yii\db\ActiveRecord
     {
         return $this->hasOne(Profesor::className(), ['pro_id' => 'pro_id']);
     }
+
+    public function getIdiomas($search = NULL, $dataProvider = false){
+        $iduser = Yii::$app->session->get('PB_iduser', FALSE);
+        $search_cond = "%".$search."%";
+        $str_search = "";
+        if(isset($search)){
+            $str_search = "(idi_nombre like :search AND ";
+        }
+        $sql = "SELECT
+                    idi_id AS id,
+                    idi_nombre AS nombre
+                FROM
+                    idioma
+                WHERE
+                    $str_search
+                    idi_estado_logico = 1
+                    AND idi_estado_logico = 1
+                ORDER BY idi_id;";
+        $comando = Yii::$app->db_general->createCommand($sql);
+        if(isset($search)){
+            $comando->bindParam(":search",$search_cond, \PDO::PARAM_STR);
+        }
+        $res = $comando->queryAll();
+        if($dataProvider){
+            $dataProvider = new ArrayDataProvider([
+                'key' => 'idi_id',
+                'allModels' => $res,
+                'pagination' => [
+                    'pageSize' => Yii::$app->params["pageSize"],
+                ],
+                'sort' => [
+                    'attributes' => ['nombre'],
+                ],
+            ]);
+            return $dataProvider;
+        }
+        return $res;
+    }
 }

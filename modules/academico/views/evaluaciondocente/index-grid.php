@@ -48,7 +48,7 @@ admision::registerTranslations();
                 'attribute' => 'totalevaluacion',
                 'header' => academico::t("Academico", "Total Evaluation"),
                 'value' => 'total_evaluacion',
-            ],            
+            ],          
         ],
     ])
     ?>
