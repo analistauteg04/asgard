@@ -388,9 +388,7 @@ create table if not exists `dedicacion_docente` (
 -- 
 create table if not exists `profesor` (
   `pro_id` bigint(20) not null auto_increment primary key,
-  `per_id` bigint(20) not null,   
-  `ddoc_id` bigint(20) null,  
-  `pro_declarado` varchar(1) null,
+  `per_id` bigint(20) not null,
   `pro_fecha_contratacion` timestamp null default null,
   `pro_fecha_terminacion` timestamp null default null,  
   `pro_usuario_ingreso` bigint(20) not null,
