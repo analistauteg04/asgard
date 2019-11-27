@@ -60,6 +60,11 @@ academico::registerTranslations();
                 'attribute' => 'semestre',
                 'header' => Yii::t("formulario", "Semester"),
                 'value' => 'semestre',
+            ],
+            [
+                'attribute' => 'descripcion',
+                'header' => Yii::t("formulario", "Description"),
+                'value' => 'dis_descripcion',
             ],            
             /*[
                 'class' => 'yii\grid\ActionColumn',

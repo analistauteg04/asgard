@@ -57,6 +57,7 @@ class DistributivoController extends \app\components\CController {
             academico::t("Academico", "Dedication"),
             Yii::t("formulario", "Academic unit"),
             Yii::t("formulario", "Subject"),
+            Yii::t("formulario", "Description"),
             Yii::t("formulario", "Semester"),            
         );
         $distributivo_model = new Distributivo();        
@@ -85,6 +86,7 @@ class DistributivoController extends \app\components\CController {
             academico::t("Academico", "Dedication"),
             Yii::t("formulario", "Academic unit"),
             Yii::t("formulario", "Subject"),
+            Yii::t("formulario", "Description"),
             Yii::t("formulario", "Semester"),
         );
         $distributivo_model = new Distributivo();        

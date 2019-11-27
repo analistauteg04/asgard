@@ -135,12 +135,13 @@ class Distributivo extends \yii\db\ActiveRecord
                         ua.uaca_nombre as unidad,
                         dd.ddoc_nombre as dedicacion,
                         d.saca_id,
-                        concat(sa.saca_nombre,sa.saca_anio) as semestre
+                        concat(sa.saca_nombre,sa.saca_anio) as semestre,
+                        d.dis_descripcion
                 FROM ". $con->dbname . ".distributivo d inner join ". $con->dbname . ".profesor p on p.pro_id = d.pro_id
                 inner join ". $con1->dbname . ".persona per on per.per_id = p.per_id
                 inner join ". $con->dbname . ".asignatura a on a.asi_id = d.asi_id
                 inner join ". $con->dbname . ".unidad_academica ua on ua.uaca_id = a.uaca_id 
-                inner join ". $con->dbname . ".dedicacion_docente dd on dd.ddoc_id = p.ddoc_id 
+                inner join ". $con->dbname . ".dedicacion_docente dd on dd.ddoc_id = d.ddoc_id 
                 inner join ". $con->dbname . ".semestre_academico sa on sa.saca_id = d.saca_id
                 WHERE $str_search
                       d.dis_estado = '1'
@@ -218,7 +219,8 @@ class Distributivo extends \yii\db\ActiveRecord
                         dd.ddoc_nombre as dedicacion,                        
                         ua.uaca_nombre as unidad,
                         a.asi_nombre as asignatura,                                                
-                        concat(sa.saca_nombre,' ',sa.saca_anio) as semestre
+                        concat(sa.saca_nombre,' ',sa.saca_anio) as semestre,
+                        d.dis_descripcion
                 FROM ". $con->dbname . ".distributivo d inner join ". $con->dbname . ".profesor p on p.pro_id = d.pro_id
                 inner join ". $con1->dbname . ".persona per on per.per_id = p.per_id
                 inner join ". $con->dbname . ".asignatura a on a.asi_id = d.asi_id
