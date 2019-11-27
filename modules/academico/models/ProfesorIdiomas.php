@@ -3,6 +3,7 @@
 namespace app\modules\academico\models;
 
 use Yii;
+use yii\data\ArrayDataProvider;
 
 /**
  * This is the model class for table "profesor_idiomas".
@@ -123,5 +124,40 @@ class ProfesorIdiomas extends \yii\db\ActiveRecord
             return $dataProvider;
         }
         return $res;
+    }
+
+    function getAllIdiomasGrid($pro_id){
+        $con_academico = \Yii::$app->db_academico;
+        $con_general = \Yii::$app->db_general;
+        $sql = "SELECT 
+                    p.pidi_id as Ids,
+                    pro.pro_id,
+                    pro.per_id,
+                    i.idi_id,
+                    p.pidi_nivel_escrito as NivelEscrito,
+                    p.pidi_nivel_oral as NivelOral,
+                    p.pidi_certificado as Certificado, 
+                    p.pidi_institucion as Institucion, 
+                    i.idi_nombre as Languages
+                FROM " . $con_academico->dbname . ".profesor AS pro
+                inner JOIN " . $con_academico->dbname . ".profesor_idiomas as p on pro.pro_id = p.pro_id
+                inner JOIN " . $con_general->dbname . ".idioma as i on p.idi_id = i.idi_id
+                WHERE pro.pro_estado_logico = 1 and pro.pro_estado = 1 and p.pidi_estado_logico = 1 
+                and p.pidi_estado = 1 and pro.pro_id =:proId";
+        $comando = $con_academico->createCommand($sql);
+        $comando->bindParam(':proId', $pro_id, \PDO::PARAM_INT);
+        $res = $comando->queryAll();
+        $dataProvider = new ArrayDataProvider([
+            'key' => 'Ids',
+            'allModels' => $res,
+            'pagination' => [
+                'pageSize' => Yii::$app->params["pageSize"],
+            ],
+            'sort' => [
+                'attributes' => ['NivelEscrito', 'NivelOral',"Certificado","Institucion","Languages"],
+            ],
+        ]);
+
+        return $dataProvider;
     }
 }

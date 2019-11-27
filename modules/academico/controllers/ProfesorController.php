@@ -111,20 +111,128 @@ class ProfesorController extends \app\components\CController {
                 'rol_id' => $rol_id,
                 'usuario_model' => $usuario_model,
                 'empresa_persona_model' => $empresa_persona_model,
-                ]);
+            ]);
+
+            $profesor_model = Profesor::findOne(['per_id' => $persona_model->per_id]);
+            $arr_inst_level = NivelInstruccion::findAll(["nins_estado" => 1, "nins_estado_logico" => 1]);
+            $instruccion_model = new ProfesorInstruccion();
+            
+            $ViewFormTab4 = $this->renderPartial('ViewFormTab4',[
+                //'model' => new ArrayDataProvider(array()),
+                'model' => $instruccion_model->getAllInstruccionGrid($profesor_model->pro_id),
+                'arr_inst_level' => (empty(ArrayHelper::map($arr_inst_level, "nins_id", "nins_nombre"))) ? array(Academico::t("profesor", "-- Select Instruction Level --")) : (ArrayHelper::map($arr_inst_level, "nins_id", "nins_nombre")),
+            ]);
+            
+            $proExpDoc = new ProfesorExpDoc();
+            $arr_profExDoc = $proExpDoc->getInstituciones();
+            $ViewFormTab5 = $this->renderPartial('ViewFormTab5',[
+                'model' => $proExpDoc->getAllExperienciaGrid($profesor_model->pro_id),
+                'arr_inst' => (empty(ArrayHelper::map($arr_profExDoc, "id", "nombre"))) ? array(Academico::t("profesor", "-- Select Instruction Level --")) : (ArrayHelper::map($arr_profExDoc, "id", "nombre")),
+            ]);
+            $proExpPro = new ProfesorExpProf();
+            $ViewFormTab6 = $this->renderPartial('ViewFormTab6',[
+                'model' => $proExpPro->getAllExperienciaGrid($profesor_model->pro_id),
+            ]);
+
+            $proIdiomas = new ProfesorIdiomas();
+            $arr_profIdi = $proIdiomas->getIdiomas();
+            $ViewFormTab7 = $this->renderPartial('ViewFormTab7',[
+                'model' => $proIdiomas->getAllIdiomasGrid($profesor_model->pro_id),
+                'arr_languages' => (empty(ArrayHelper::map($arr_profIdi, "id", "nombre"))) ? array(Academico::t("profesor", "-- Select Language --")) : (ArrayHelper::map($arr_profIdi, "id", "nombre")),
+            ]);
+            $proInvestigacion = new ProfesorInvestigacion();
+            $ViewFormTab8 = $this->renderPartial('ViewFormTab8',[
+                'model' => $proInvestigacion->getAllInvestigacionGrid($profesor_model->pro_id),
+            ]);
+            $proCap = new ProfesorCapacitacion();
+            $arr_capItems = $proCap->getItems();
+            $ViewFormTab9 = $this->renderPartial('ViewFormTab9',[
+                'model' => $proCap->getAllCapacitacionGrid($profesor_model->pro_id),
+                'arr_items' => (empty(ArrayHelper::map($arr_capItems, "id", "nombre"))) ? array(Academico::t("profesor", "-- Select Item --")) : (ArrayHelper::map($arr_capItems, "id", "nombre")),
+            ]);
+    
+            $proConf = new ProfesorConferencia();
+            $ViewFormTab10 = $this->renderPartial('ViewFormTab10',[
+                'model' => $proConf->getAllConferenciaGrid($profesor_model->pro_id),
+            ]);
+    
+            $proPub = new ProfesorPublicacion();
+            $ViewFormTab11 = $this->renderPartial('ViewFormTab11',[
+                'model' => $proPub->getAllPublicacionGrid($profesor_model->pro_id),
+            ]);
+    
+            $proCoor = new ProfesorCoordinacion();
+            $ViewFormTab12 = $this->renderPartial('ViewFormTab12',[
+                'model' => $proCoor->getAllCoordinacionGrid($profesor_model->pro_id),
+                'arr_inst' => (empty(ArrayHelper::map($arr_profExDoc, "id", "nombre"))) ? array(Academico::t("profesor", "-- Select Instruction Level --")) : (ArrayHelper::map($arr_profExDoc, "id", "nombre")),
+            ]);
+    
+            $proEva = new ProfesorEvaluacion();
+            $ViewFormTab13 = $this->renderPartial('ViewFormTab13',[
+                'model' => $proEva->getAllEvaluacionGrid($profesor_model->pro_id),
+            ]);
+    
+            $proRef = new ProfesorReferencia();
+            $ViewFormTab14 = $this->renderPartial('ViewFormTab14',[
+                'model' => $proRef->getAllReferenciaGrid($profesor_model->pro_id),
+            ]);
 
             $items = [
                 [
-                    'label'=>'Inf. Básica',
+                    'label'=>Academico::t('profesor','Basic Info.'),
                     'content'=>$ViewFormTab1,
                     'active'=>true
                 ],
                 [
-                    'label'=>'Inf. Domicilio',
+                    'label'=>Academico::t('profesor','Address Info.'),
                     'content'=>$ViewFormTab2,
                 ],
                 [
-                    'label'=>'Inf. Cuenta',
+                    'label'=> Academico::t('profesor','Instruction Level'),
+                    'content'=>$ViewFormTab4,
+                ],
+                [
+                    'label'=> Academico::t('profesor','Teaching Experience'),
+                    'content'=>$ViewFormTab5,
+                ],
+                [
+                    'label'=> Academico::t('profesor','Professional Expirence'),
+                    'content'=>$ViewFormTab6,
+                ],
+                [
+                    'label'=> Academico::t('profesor','Languages'),
+                    'content'=>$ViewFormTab7,
+                ],
+                [
+                    'label'=> Academico::t('profesor','Research'),
+                    'content'=>$ViewFormTab8,
+                ],
+                [
+                    'label'=> Academico::t('profesor','Training'),
+                    'content'=>$ViewFormTab9,
+                ],
+                [
+                    'label'=> Academico::t('profesor','Conferences'),
+                    'content'=>$ViewFormTab10,
+                ],
+                [
+                    'label'=> Academico::t('profesor','Publishing'),
+                    'content'=>$ViewFormTab11,
+                ],
+                [
+                    'label'=> Academico::t('profesor','Thesis Direction'),
+                    'content'=>$ViewFormTab12,
+                ],
+                [
+                    'label'=> Academico::t('profesor','Performance Evaluation'),
+                    'content'=>$ViewFormTab13,
+                ],
+                [
+                    'label'=> Academico::t('profesor','References'),
+                    'content'=>$ViewFormTab14,
+                ],
+                [
+                    'label'=>Academico::t('profesor','Account Info'),
                     'content'=>$ViewFormTab3,
                 ]
                     
@@ -198,16 +306,16 @@ class ProfesorController extends \app\components\CController {
 
             $items = [
                 [
-                    'label'=>'Inf. Básica',
+                    'label'=>Academico::t('profesor','Basic Info.'),
                     'content'=>$EditFormTab1,
                     'active'=>true
                 ],
                 [
-                    'label'=>'Inf. Domicilio',
+                    'label'=>Academico::t('profesor','Address Info.'),
                     'content'=>$EditFormTab2,
                 ],
                 [
-                    'label'=>'Inf. Cuenta',
+                    'label'=>Academico::t('profesor','Account Info'),
                     'content'=>$EditFormTab3,
                 ]
                     

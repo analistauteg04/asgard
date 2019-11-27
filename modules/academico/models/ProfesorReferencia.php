@@ -3,6 +3,7 @@
 namespace app\modules\academico\models;
 
 use Yii;
+use yii\data\ArrayDataProvider;
 
 /**
  * This is the model class for table "profesor_referencia".
@@ -82,5 +83,36 @@ class ProfesorReferencia extends \yii\db\ActiveRecord
     public function getPro()
     {
         return $this->hasOne(Profesor::className(), ['pro_id' => 'pro_id']);
+    }
+
+    function getAllReferenciaGrid($pro_id){
+        $con_academico = \Yii::$app->db_academico;
+        $sql = "SELECT 
+                    p.pref_id as Ids,
+                    pro.pro_id,
+                    pro.per_id,
+                    p.pref_contacto as Nombre,
+                    p.pref_relacion_cargo as Cargo,
+                    p.pref_organizacion as Organizacion, 
+                    p.pref_numero as Numero
+                FROM " . $con_academico->dbname . ".profesor AS pro
+                inner JOIN " . $con_academico->dbname . ".profesor_referencia as p on pro.pro_id = p.pro_id
+                WHERE pro.pro_estado_logico = 1 and pro.pro_estado = 1 and p.pref_estado_logico = 1 
+                and p.pref_estado = 1 and pro.pro_id =:proId";
+        $comando = $con_academico->createCommand($sql);
+        $comando->bindParam(':proId', $pro_id, \PDO::PARAM_INT);
+        $res = $comando->queryAll();
+        $dataProvider = new ArrayDataProvider([
+            'key' => 'Ids',
+            'allModels' => $res,
+            'pagination' => [
+                'pageSize' => Yii::$app->params["pageSize"],
+            ],
+            'sort' => [
+                'attributes' => ['Nombre', 'Cargo',"Organizacion","Numero"],
+            ],
+        ]);
+
+        return $dataProvider;
     }
 }

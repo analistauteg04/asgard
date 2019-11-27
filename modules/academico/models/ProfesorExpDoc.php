@@ -3,6 +3,7 @@
 namespace app\modules\academico\models;
 
 use Yii;
+use yii\data\ArrayDataProvider;
 
 /**
  * This is the model class for table "profesor_exp_doc".
@@ -123,5 +124,40 @@ class ProfesorExpDoc extends \yii\db\ActiveRecord
             return $dataProvider;
         }
         return $res;
+    }
+
+    function getAllExperienciaGrid($pro_id){
+        $con_academico = \Yii::$app->db_academico;
+        $con_general = \Yii::$app->db_general;
+        $sql = "SELECT 
+                    p.pedo_id as Ids,
+                    pro.pro_id,
+                    pro.per_id,
+                    n.ins_id,
+                    p.pedo_fecha_inicio as Desde,
+                    p.pedo_fecha_fin as Hasta,
+                    p.pedo_denominacion as Denominacion, 
+                    p.pedo_asignaturas as Materias, 
+                    n.ins_nombre as Institucion
+                FROM " . $con_academico->dbname . ".profesor AS pro
+                inner JOIN " . $con_academico->dbname . ".profesor_exp_doc as p on pro.pro_id = p.pro_id
+                inner JOIN " . $con_general->dbname . ".institucion as n on n.ins_id = p.ins_id
+                WHERE pro.pro_estado_logico = 1 and pro.pro_estado = 1 and p.pedo_estado_logico = 1 
+                and p.pedo_estado = 1 and pro.pro_id =:proId";
+        $comando = $con_academico->createCommand($sql);
+        $comando->bindParam(':proId', $pro_id, \PDO::PARAM_INT);
+        $res = $comando->queryAll();
+        $dataProvider = new ArrayDataProvider([
+            'key' => 'Ids',
+            'allModels' => $res,
+            'pagination' => [
+                'pageSize' => Yii::$app->params["pageSize"],
+            ],
+            'sort' => [
+                'attributes' => ['Desde', 'Hasta',"Denominacion","Materias","Institucion"],
+            ],
+        ]);
+
+        return $dataProvider;
     }
 }

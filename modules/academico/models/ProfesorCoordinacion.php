@@ -3,6 +3,7 @@
 namespace app\modules\academico\models;
 
 use Yii;
+use yii\data\ArrayDataProvider;
 
 /**
  * This is the model class for table "profesor_coordinacion".
@@ -87,5 +88,40 @@ class ProfesorCoordinacion extends \yii\db\ActiveRecord
     public function getPro()
     {
         return $this->hasOne(Profesor::className(), ['pro_id' => 'pro_id']);
+    }
+
+    function getAllCoordinacionGrid($pro_id){
+        $con_academico = \Yii::$app->db_academico;
+        $con_general = \Yii::$app->db_general;
+        $sql = "SELECT 
+                    p.pcoo_id as Ids,
+                    pro.pro_id,
+                    pro.per_id,
+                    p.pcoo_institucion,
+                    p.pcoo_alumno as Estudiante,
+                    p.pcoo_programa as Programa,
+                    p.pcoo_academico as Academico, 
+                    n.ins_nombre as Institucion, 
+                    p.pcoo_anio as Anio
+                FROM " . $con_academico->dbname . ".profesor AS pro
+                inner JOIN " . $con_academico->dbname . ".profesor_coordinacion as p on pro.pro_id = p.pro_id
+                inner JOIN " . $con_general->dbname . ".institucion as n on n.ins_id = p.pcoo_institucion
+                WHERE pro.pro_estado_logico = 1 and pro.pro_estado = 1 and p.pcoo_estado_logico = 1 
+                and p.pcoo_estado = 1 and pro.pro_id =:proId";
+        $comando = $con_academico->createCommand($sql);
+        $comando->bindParam(':proId', $pro_id, \PDO::PARAM_INT);
+        $res = $comando->queryAll();
+        $dataProvider = new ArrayDataProvider([
+            'key' => 'Ids',
+            'allModels' => $res,
+            'pagination' => [
+                'pageSize' => Yii::$app->params["pageSize"],
+            ],
+            'sort' => [
+                'attributes' => ['Estudiante', 'Programa',"Academico","Anio","Institucion"],
+            ],
+        ]);
+
+        return $dataProvider;
     }
 }

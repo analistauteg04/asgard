@@ -3,6 +3,7 @@
 namespace app\modules\academico\models;
 
 use Yii;
+use yii\data\ArrayDataProvider;
 
 /**
  * This is the model class for table "profesor_publicacion".
@@ -86,5 +87,37 @@ class ProfesorPublicacion extends \yii\db\ActiveRecord
     public function getPro()
     {
         return $this->hasOne(Profesor::className(), ['pro_id' => 'pro_id']);
+    }
+
+    function getAllPublicacionGrid($pro_id){
+        $con_academico = \Yii::$app->db_academico;
+        $sql = "SELECT 
+                    p.ppub_id as Ids,
+                    pro.pro_id,
+                    pro.per_id,
+                    p.ppub_produccion as TipoProduccion,
+                    p.ppub_titulo as Titulo,
+                    p.ppub_editorial as Editorial, 
+                    p.ppub_isbn as ISBN, 
+                    p.ppub_autoria as Autor
+                FROM " . $con_academico->dbname . ".profesor AS pro
+                inner JOIN " . $con_academico->dbname . ".profesor_publicacion as p on pro.pro_id = p.pro_id
+                WHERE pro.pro_estado_logico = 1 and pro.pro_estado = 1 and p.ppub_estado_logico = 1 
+                and p.ppub_estado = 1 and pro.pro_id =:proId";
+        $comando = $con_academico->createCommand($sql);
+        $comando->bindParam(':proId', $pro_id, \PDO::PARAM_INT);
+        $res = $comando->queryAll();
+        $dataProvider = new ArrayDataProvider([
+            'key' => 'Ids',
+            'allModels' => $res,
+            'pagination' => [
+                'pageSize' => Yii::$app->params["pageSize"],
+            ],
+            'sort' => [
+                'attributes' => ['TipoProduccion', 'Titulo',"Editorial","ISBN","Autor"],
+            ],
+        ]);
+
+        return $dataProvider;
     }
 }
