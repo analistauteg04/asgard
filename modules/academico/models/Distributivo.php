@@ -225,7 +225,7 @@ class Distributivo extends \yii\db\ActiveRecord
                 inner join ". $con1->dbname . ".persona per on per.per_id = p.per_id
                 inner join ". $con->dbname . ".asignatura a on a.asi_id = d.asi_id
                 inner join ". $con->dbname . ".unidad_academica ua on ua.uaca_id = a.uaca_id 
-                inner join ". $con->dbname . ".dedicacion_docente dd on dd.ddoc_id = p.ddoc_id 
+                inner join ". $con->dbname . ".dedicacion_docente dd on dd.ddoc_id = d.ddoc_id 
                 inner join ". $con->dbname . ".semestre_academico sa on sa.saca_id = d.saca_id
                 WHERE $str_search
                       d.dis_estado = '1'
