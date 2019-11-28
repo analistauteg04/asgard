@@ -102,7 +102,7 @@ class ProfesorCapacitacion extends \yii\db\ActiveRecord
     }
 
 
-    function getAllCapacitacionGrid($pro_id){
+    function getAllCapacitacionGrid($pro_id, $onlyData=false){
         $con_academico = \Yii::$app->db_academico;
         $sql = "SELECT 
                     p.pcap_id as Ids,
@@ -120,6 +120,7 @@ class ProfesorCapacitacion extends \yii\db\ActiveRecord
         $comando = $con_academico->createCommand($sql);
         $comando->bindParam(':proId', $pro_id, \PDO::PARAM_INT);
         $res = $comando->queryAll();
+        if($onlyData)   return $res;
         $dataProvider = new ArrayDataProvider([
             'key' => 'Ids',
             'allModels' => $res,

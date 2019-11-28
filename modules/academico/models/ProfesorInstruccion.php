@@ -99,14 +99,14 @@ class ProfesorInstruccion extends \yii\db\ActiveRecord
         return $this->hasOne(NivelInstruccion::className(), ['nins_id' => 'nins_id']);
     }
 
-    function getAllInstruccionGrid($pro_id){
+    function getAllInstruccionGrid($pro_id, $onlyData=false){
         $con_academico = \Yii::$app->db_academico;
 
         $sql = "SELECT 
                     pins.pins_id as Ids,
                     pro.pro_id,
                     pro.per_id,
-                    nins.nins_id,
+                    nins.nins_id as nins_id,
                     nins.nins_nombre as Instruccion,
                     pins.pins_institucion as NombreInstitucion,
                     pins.pins_especializacion as Especializacion, 
@@ -120,6 +120,9 @@ class ProfesorInstruccion extends \yii\db\ActiveRecord
         $comando = $con_academico->createCommand($sql);
         $comando->bindParam(':proId', $pro_id, \PDO::PARAM_INT);
         $res = $comando->queryAll();
+
+        if($onlyData)   return $res;
+
         $dataProvider = new ArrayDataProvider([
             'key' => 'Ids',
             'allModels' => $res,
@@ -132,5 +135,45 @@ class ProfesorInstruccion extends \yii\db\ActiveRecord
         ]);
 
         return $dataProvider;
+    }
+
+    function getDataToStorage($pro_id){
+        $data = $this->getAllInstruccionGrid($pro_id, true);
+
+        $arrData = array();
+        $arrLabel = array();
+        $btnactions = array();
+
+        foreach($data as $key => $value){
+            $arrData[] = [ 
+                $value['Ids'], 
+                $value['nins_id'], 
+                $value['NombreInstitucion'], 
+                $value['Especializacion'], 
+                $value['Titulo'], 
+                $value['Registro'], 
+            ];
+        }
+        foreach($data as $key => $value){
+            $arrLabel[] = [ 
+                $value['Ids'], 
+                $value['Instruccion'], 
+                $value['NombreInstitucion'], 
+                $value['Especializacion'], 
+                $value['Titulo'], 
+                $value['Registro'], 
+            ];
+        }
+        foreach($data as $key => $value){
+            $btnactions[] = [ 
+                "id" => "deleteN".$value['Ids'],
+                "class" => "",
+                "href" => "",
+                "onclick" => "javascript:removeItemInstitucion(this)",
+                "tipo_accion" => "delete",
+                "title" => Yii::t("accion","Delete")
+            ];
+        }
+        return [$arrData, $arrLabel, $btnactions];
     }
 }

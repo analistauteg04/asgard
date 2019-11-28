@@ -337,7 +337,12 @@ class ProfesorController extends \app\components\CController {
                 ]
                     
             ];        
-            return $this->render('edit', ['items'=>$items, 'persona_model' => $persona_model]);
+            
+            return $this->render('edit', [
+                'items'=>$items, 
+                'persona_model' => $persona_model,
+                'storage_instruccion' => $instruccion_model->getDataToStorage($profesor_model->pro_id, true),
+                ]);
         }
         return $this->redirect('index');
     }

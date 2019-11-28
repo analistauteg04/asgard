@@ -25,16 +25,16 @@ use kartik\tabs\TabsX;
 <br />
 <?php
 $this->registerJs(
-    "loadSessionCampos('grid_instruccion_list', '', '');
-    loadSessionCampos('grid_docencia_list', '', '');
-    loadSessionCampos('grid_experiencia_list', '', '');
-    loadSessionCampos('grid_idioma_list', '', '');
-    loadSessionCampos('grid_investigacion_list', '', '');
-    loadSessionCampos('grid_evento_list', '', '');
-    loadSessionCampos('grid_conferencia_list', '', '');
-    loadSessionCampos('grid_publicacion_list', '', '');
-    loadSessionCampos('grid_coordinacion_list', '', '');
-    loadSessionCampos('grid_evaluacion_list', '', '');
-    loadSessionCampos('grid_referencia_list', '', '');",
+    "loadSessionCampos('grid_instruccion_list', '', '', '');
+    loadSessionCampos('grid_docencia_list', '', '', '');
+    loadSessionCampos('grid_experiencia_list', '', '', '');
+    loadSessionCampos('grid_idioma_list', '', '', '');
+    loadSessionCampos('grid_investigacion_list', '', '', '');
+    loadSessionCampos('grid_evento_list', '', '', '');
+    loadSessionCampos('grid_conferencia_list', '', '', '');
+    loadSessionCampos('grid_publicacion_list', '', '', '');
+    loadSessionCampos('grid_coordinacion_list', '', '', '');
+    loadSessionCampos('grid_evaluacion_list', '', '', '');
+    loadSessionCampos('grid_referencia_list', '', '', '');",
     $this::POS_END);
 ?>

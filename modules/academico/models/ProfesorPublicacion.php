@@ -89,7 +89,7 @@ class ProfesorPublicacion extends \yii\db\ActiveRecord
         return $this->hasOne(Profesor::className(), ['pro_id' => 'pro_id']);
     }
 
-    function getAllPublicacionGrid($pro_id){
+    function getAllPublicacionGrid($pro_id, $onlyData=false){
         $con_academico = \Yii::$app->db_academico;
         $sql = "SELECT 
                     p.ppub_id as Ids,
@@ -107,6 +107,7 @@ class ProfesorPublicacion extends \yii\db\ActiveRecord
         $comando = $con_academico->createCommand($sql);
         $comando->bindParam(':proId', $pro_id, \PDO::PARAM_INT);
         $res = $comando->queryAll();
+        if($onlyData)   return $res;
         $dataProvider = new ArrayDataProvider([
             'key' => 'Ids',
             'allModels' => $res,

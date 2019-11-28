@@ -861,10 +861,12 @@ function removeItemGridContent(elementId, indice, callback) {
     if (callback) callback();
 }
 
-function loadSessionCampos(elementId, data, btnactions) {
+function loadSessionCampos(elementId, data, btnactions, label) {
     sessionStorage.removeItem(elementId);
+    label = label || '';
     var arrData = new Object();
     arrData.data = data;
+    arrData.label = label;
     arrData.btnactions = btnactions;
     sessionStorage[elementId] = JSON.stringify(arrData);
     var sizetheadtb = $('#' + elementId + ' >table >thead >tr >th').length;

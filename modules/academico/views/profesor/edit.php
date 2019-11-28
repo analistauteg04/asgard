@@ -25,17 +25,18 @@ use kartik\tabs\TabsX;
 <input type="hidden" id="frm_per_id" value="<?= $persona_model->per_id ?>">
 <input type="hidden" id="frm_pro_id" value="<?= $pro_id ?>">
 <?php
+
 $this->registerJs(
-    "loadSessionCampos('grid_instruccion_list', '', '');
-    loadSessionCampos('grid_docencia_list', '', '');
-    loadSessionCampos('grid_experiencia_list', '', '');
-    loadSessionCampos('grid_idioma_list', '', '');
-    loadSessionCampos('grid_investigacion_list', '', '');
-    loadSessionCampos('grid_evento_list', '', '');
-    loadSessionCampos('grid_conferencia_list', '', '');
-    loadSessionCampos('grid_publicacion_list', '', '');
-    loadSessionCampos('grid_coordinacion_list', '', '');
-    loadSessionCampos('grid_evaluacion_list', '', '');
-    loadSessionCampos('grid_referencia_list', '', '');",
+    "loadSessionCampos('grid_instruccion_list', ".json_encode($storage_instruccion[0]).", ".json_encode($storage_instruccion[2]).", ".json_encode($storage_instruccion[1]).");
+    loadSessionCampos('grid_docencia_list', '', '', '');
+    loadSessionCampos('grid_experiencia_list', '', '', '');
+    loadSessionCampos('grid_idioma_list', '', '', '');
+    loadSessionCampos('grid_investigacion_list', '', '', '');
+    loadSessionCampos('grid_evento_list', '', '', '');
+    loadSessionCampos('grid_conferencia_list', '', '', '');
+    loadSessionCampos('grid_publicacion_list', '', '', '');
+    loadSessionCampos('grid_coordinacion_list', '', '', '');
+    loadSessionCampos('grid_evaluacion_list', '', '', '');
+    loadSessionCampos('grid_referencia_list', '', '', '');",
     $this::POS_END);
 ?>

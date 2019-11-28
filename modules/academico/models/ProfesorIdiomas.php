@@ -126,7 +126,7 @@ class ProfesorIdiomas extends \yii\db\ActiveRecord
         return $res;
     }
 
-    function getAllIdiomasGrid($pro_id){
+    function getAllIdiomasGrid($pro_id, $onlyData=false){
         $con_academico = \Yii::$app->db_academico;
         $con_general = \Yii::$app->db_general;
         $sql = "SELECT 
@@ -147,6 +147,7 @@ class ProfesorIdiomas extends \yii\db\ActiveRecord
         $comando = $con_academico->createCommand($sql);
         $comando->bindParam(':proId', $pro_id, \PDO::PARAM_INT);
         $res = $comando->queryAll();
+        if($onlyData)   return $res;
         $dataProvider = new ArrayDataProvider([
             'key' => 'Ids',
             'allModels' => $res,

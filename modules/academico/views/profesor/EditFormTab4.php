@@ -61,6 +61,7 @@ Academico::registerTranslations();
         //'fnExportPDF' => "exportPdf",
         'dataProvider' => $model,
         'pajax' => true,
+        'summary' => false,
         'columns' => [
             ['class' => 'yii\grid\SerialColumn', 'options' => ['width' => '10']],
             [
