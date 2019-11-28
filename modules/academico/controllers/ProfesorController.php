@@ -237,7 +237,7 @@ class ProfesorController extends \app\components\CController {
                 ]
                     
             ];        
-            return $this->render('view', ['items'=>$items, 'persona_model' => $persona_model]);
+            return $this->render('view', ['items'=>$items, 'persona_model' => $persona_model, 'pro_id' => $profesor_model->pro_id]);
         }
         return $this->redirect('index');
     }
@@ -304,6 +304,16 @@ class ProfesorController extends \app\components\CController {
                 'empresa_persona_model' => $empresa_persona_model,
                 ]);
 
+            $profesor_model = Profesor::findOne(['per_id' => $persona_model->per_id]);
+            $arr_inst_level = NivelInstruccion::findAll(["nins_estado" => 1, "nins_estado_logico" => 1]);
+            $instruccion_model = new ProfesorInstruccion();
+            
+            $EditFormTab4 = $this->renderPartial('EditFormTab4',[
+                //'model' => new ArrayDataProvider(array()),
+                'model' => $instruccion_model->getAllInstruccionGrid($profesor_model->pro_id),
+                'arr_inst_level' => (empty(ArrayHelper::map($arr_inst_level, "nins_id", "nins_nombre"))) ? array(Academico::t("profesor", "-- Select Instruction Level --")) : (ArrayHelper::map($arr_inst_level, "nins_id", "nins_nombre")),
+            ]);
+
             $items = [
                 [
                     'label'=>Academico::t('profesor','Basic Info.'),
@@ -314,6 +324,13 @@ class ProfesorController extends \app\components\CController {
                     'label'=>Academico::t('profesor','Address Info.'),
                     'content'=>$EditFormTab2,
                 ],
+                [
+                    'label'=> Academico::t('profesor','Instruction Level'),
+                    'content'=>$EditFormTab4,
+                ],
+
+
+
                 [
                     'label'=>Academico::t('profesor','Account Info'),
                     'content'=>$EditFormTab3,

@@ -74,7 +74,7 @@ function searchModules(idbox, idgrid) {
 }
 
 function edit() {
-    var link = $('#txth_base').val() + "/academico/profesor/edit" + "?id=" + $("#frm_asi_id").val();
+    var link = $('#txth_base').val() + "/academico/profesor/edit" + "?id=" + $("#frm_per_id").val();
     window.location = link;
 }
 
@@ -109,6 +109,10 @@ function update() {
     arrParams.gru_id = $('#cmb_grupo').val();
     arrParams.rol_id = $('#cmb_rol').val();
     arrParams.emp_id = $('#cmb_empresa').val();
+
+    /** Session Storages **/
+
+
     if (!validateForm()) {
         console.log(arrParams);
         requestHttpAjax(link, arrParams, function(response) {
@@ -161,7 +165,6 @@ function save() {
     arrParams.grid_evaluacion_list = (JSON.parse(sessionStorage.grid_evaluacion_list)).data;
     arrParams.grid_referencia_list = (JSON.parse(sessionStorage.grid_referencia_list)).data;
 
-    console.log(arrParams);
     if (!validateForm()) {
         console.log(arrParams);
         requestHttpAjax(link, arrParams, function(response) {
