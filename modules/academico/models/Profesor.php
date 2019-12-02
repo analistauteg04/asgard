@@ -233,7 +233,7 @@ class Profesor extends \yii\db\ActiveRecord
 
         if (isset($search)) {
             $str_search = "(pe.per_pri_nombre like :search OR ";
-            $str_search .= "pe.per_pri_apellido like :search) AND";
+            $str_search .= "pe.per_pri_apellido like :search) OR pe.per_id=:Id AND ";
         }
 
         $sql = "SELECT pro.pro_id, pe.per_id,
@@ -250,6 +250,7 @@ class Profesor extends \yii\db\ActiveRecord
         $comando = $con_academico->createCommand($sql);
         if(isset($search)){
             $comando->bindParam(":search",$search_cond, \PDO::PARAM_STR);
+            $comando->bindParam(":Id",$search, \PDO::PARAM_STR);
         }
         $res = $comando->queryAll();
         $dataProvider = new ArrayDataProvider([

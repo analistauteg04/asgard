@@ -38,27 +38,55 @@ class ProfesorController extends \app\components\CController {
 
     public function actionIndex() {
         $pro_model = new profesor();
+        /* Validacion de acceso a vistas por usuario */
+        $user_ingresa = Yii::$app->session->get("PB_iduser");
+        $user_usermane =  Yii::$app->session->get("PB_username");
+        $user_perId =  Yii::$app->session->get("PB_perid");
+        $grupo_model = new Grupo();
+        $search = NULL;
+        $arr_grupos = $grupo_model->getAllGruposByUser($user_usermane);
+        if(!in_array(['id' => '1'], $arr_grupos))
+            $search = $user_perId;
+
         if (Yii::$app->request->isAjax) {
             $data = Yii::$app->request->get();
+            $search = $data["search"];
+            if(!in_array(['id' => '1'], $arr_grupos))
+                $search = $user_perId;
+            $model = $pro_model->getAllProfesorGrid($search, true);
             if (isset($data["search"])) {
                 return $this->renderPartial('index-grid', [
-                            "model" => $pro_model->getAllProfesorGrid($data["search"], true)
+                            "model" => $model
                 ]);
             }
         }
+
+        $model = $pro_model->getAllProfesorGrid($search, true);
         return $this->render('index', [
-                    'model' => $pro_model->getAllProfesorGrid(NULL, true)
+                    'model' => $model
         ]);
     }
     
     public function actionView() {        
         $data = Yii::$app->request->get();
         if (isset($data['id'])) {
+
             $id = $data['id'];
 
             $persona_model = Persona::findOne($id);
             $usuario_model = Usuario::findOne(["per_id" => $id, "usu_estado" => '1', "usu_estado_logico" => '1']);
             $empresa_persona_model = EmpresaPersona::findOne(["per_id" => $id, "eper_estado" => '1', "eper_estado_logico" => '1']);
+
+            /* Validacion de acceso a vistas por usuario */
+            $user_ingresa = Yii::$app->session->get("PB_iduser");
+            $user_usermane =  Yii::$app->session->get("PB_username");
+            $user_perId =  Yii::$app->session->get("PB_perid");
+            $grupo_model = new Grupo();
+            $arr_grupos = $grupo_model->getAllGruposByUser($user_usermane);
+            if($id != $user_perId){
+                if(!in_array(['id' => '1'], $arr_grupos))
+                    return $this->redirect(['profesor/index']);
+            }
 
             /**
              * Inf. Basica
@@ -239,7 +267,7 @@ class ProfesorController extends \app\components\CController {
             ];        
             return $this->render('view', ['items'=>$items, 'persona_model' => $persona_model, 'pro_id' => $profesor_model->pro_id]);
         }
-        return $this->redirect('index');
+        return $this->redirect(['profesor/index']);
     }
 
     public function actionEdit() {
@@ -250,6 +278,17 @@ class ProfesorController extends \app\components\CController {
             $persona_model = Persona::findOne($id);            
             $usuario_model = Usuario::findOne(["per_id" => $id, "usu_estado" => '1', "usu_estado_logico" => '1']);
             $empresa_persona_model = EmpresaPersona::findOne(["per_id" => $id, "eper_estado" => '1', "eper_estado_logico" => '1']);
+
+            /* Validacion de acceso a vistas por usuario */
+            $user_ingresa = Yii::$app->session->get("PB_iduser");
+            $user_usermane =  Yii::$app->session->get("PB_username");
+            $user_perId =  Yii::$app->session->get("PB_perid");
+            $grupo_model = new Grupo();
+            $arr_grupos = $grupo_model->getAllGruposByUser($user_usermane);
+            if($id != $user_perId){
+                if(!in_array(['id' => '1'], $arr_grupos))
+                    return $this->redirect(['profesor/index']);
+            }
 
             /**
              * Inf. Basica
@@ -449,7 +488,7 @@ class ProfesorController extends \app\components\CController {
                 'storage_referencia' => $proRef->getDataToStorage($profesor_model->pro_id, true),
                 ]);
         }
-        return $this->redirect('index');
+        return $this->redirect(['profesor/index']);
     }
 
     public function actionNew() {
@@ -1201,6 +1240,17 @@ class ProfesorController extends \app\components\CController {
                 $user_ingresa = Yii::$app->session->get("PB_iduser");
                 $per_id = $data["per_id"];
 
+                /* Validacion de acceso a vistas por usuario */
+                $user_ingresa = Yii::$app->session->get("PB_iduser");
+                $user_usermane =  Yii::$app->session->get("PB_username");
+                $user_perId =  Yii::$app->session->get("PB_perid");
+                $grupo_model = new Grupo();
+                $arr_grupos = $grupo_model->getAllGruposByUser($user_usermane);
+                if($per_id != $user_perId){
+                    if(!in_array(['id' => '1'], $arr_grupos))
+                        return $this->redirect(['profesor/index']);
+                }
+
                 /**
                  * Inf. Basica
                  */            
@@ -1485,6 +1535,16 @@ class ProfesorController extends \app\components\CController {
                 $per_id = $data["per_id"];
                 $persona_model = Persona::findOne($per_id);
                 $persona_model->per_estado_logico = '0';
+
+                /* Validacion de acceso a vistas por usuario */
+                $user_ingresa = Yii::$app->session->get("PB_iduser");
+                $user_usermane =  Yii::$app->session->get("PB_username");
+                $user_perId =  Yii::$app->session->get("PB_perid");
+                $grupo_model = new Grupo();
+                $arr_grupos = $grupo_model->getAllGruposByUser($user_usermane);
+                if(!in_array(['id' => '1'], $arr_grupos))
+                    return $this->redirect(['profesor/index']);
+
                 $message = array(
                     "wtmessage" => Yii::t("notificaciones", "Your information was successfully saved."),
                     "title" => Yii::t('jslang', 'Success'),
