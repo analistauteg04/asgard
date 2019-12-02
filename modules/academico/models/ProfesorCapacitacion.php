@@ -89,7 +89,7 @@ class ProfesorCapacitacion extends \yii\db\ActiveRecord
         return $this->hasOne(Profesor::className(), ['pro_id' => 'pro_id']);
     }
 
-    public function getItems(){
+    public function getItems($format=false){
         $arr_data = [
             0 => ['id' => 1, 'nombre' => 'Curso'],
             1 => ['id' => 2, 'nombre' => 'Seminario'],
@@ -98,6 +98,16 @@ class ProfesorCapacitacion extends \yii\db\ActiveRecord
             4 => ['id' => 5, 'nombre' => 'Encuentro'],
             5 => ['id' => 6, 'nombre' => 'Otro'],
         ];
+        if($format){
+            $arr_data = [
+                1 => 'Curso',
+                2 => 'Seminario',
+                3 => 'Taller',
+                4 => 'Congreso',
+                5 => 'Encuentro',
+                6 => 'Otro',
+            ];
+        }
         return $arr_data;
     }
 
@@ -133,5 +143,69 @@ class ProfesorCapacitacion extends \yii\db\ActiveRecord
         ]);
 
         return $dataProvider;
+    }
+
+    function getDataToStorage($pro_id){
+        $data = $this->getAllCapacitacionGrid($pro_id, true);
+
+        $arrData = array();
+        $arrLabel = array();
+        $btnactions = array();
+
+        $eventosId = $this->getItems(true);
+
+        foreach($data as $key => $value){
+            $arrData[] = [ 
+                $value['Ids'], 
+                $value['Evento'], 
+                $value['Institucion'], 
+                $value['Anio'], 
+                $value['Tipo'], 
+                $value['Duracion'], 
+            ];
+        }
+        foreach($data as $key => $value){
+            $arrLabel[] = [ 
+                $value['Ids'], 
+                $value['Evento'], 
+                $value['Institucion'], 
+                $value['Anio'], 
+                $eventosId[$value['Tipo']], 
+                $value['Duracion'], 
+            ];
+        }
+        foreach($data as $key => $value){
+            $btnactions[] = [[ 
+                "id" => "deleteN".$value['Ids'],
+                "class" => "",
+                "href" => "",
+                "onclick" => "javascript:removeItemEvento(this)",
+                "tipo_accion" => "delete",
+                "title" => Yii::t("accion","Delete")
+            ]];
+        }
+        return [$arrData, $arrLabel, $btnactions];
+    }
+
+    public static function deleteAllInfo($pro_id){
+        $con_academico = \Yii::$app->db_academico;
+        $trans = $con_academico->beginTransaction();
+        try{
+            $sql = "UPDATE " . $con_academico->dbname . ".profesor_capacitacion 
+                SET pcap_estado_logico=0, pcap_estado=0 
+                WHERE pro_id=:proId";
+
+            $comando = $con_academico->createCommand($sql);
+            $comando->bindParam(':proId', $pro_id, \PDO::PARAM_INT);
+            $res = $comando->execute();
+            if($res){
+                $trans->commit();
+                return true;
+            }else
+                throw new \Exception('Error');
+        }catch(\Exception $e){
+            $trans->rollBack();
+            return false;
+        }
     }
 }

@@ -117,4 +117,65 @@ class ProfesorConferencia extends \yii\db\ActiveRecord
 
         return $dataProvider;
     }
+
+    function getDataToStorage($pro_id){
+        $data = $this->getAllConferenciaGrid($pro_id, true);
+
+        $arrData = array();
+        $arrLabel = array();
+        $btnactions = array();
+
+        foreach($data as $key => $value){
+            $arrData[] = [ 
+                $value['Ids'], 
+                $value['Evento'], 
+                $value['Institucion'], 
+                $value['Anio'], 
+                $value['Ponencia'], 
+            ];
+        }
+        foreach($data as $key => $value){
+            $arrLabel[] = [ 
+                $value['Ids'], 
+                $value['Evento'], 
+                $value['Institucion'], 
+                $value['Anio'], 
+                $value['Ponencia'], 
+            ];
+        }
+        foreach($data as $key => $value){
+            $btnactions[] = [[
+                "id" => "deleteN".$value['Ids'],
+                "class" => "",
+                "href" => "",
+                "onclick" => "javascript:removeItemConferencia(this)",
+                "tipo_accion" => "delete",
+                "title" => Yii::t("accion","Delete")
+            ]];
+        }
+        return [$arrData, $arrLabel, $btnactions];
+    }
+
+    public static function deleteAllInfo($pro_id){
+        $con_academico = \Yii::$app->db_academico;
+        $trans = $con_academico->beginTransaction();
+        try{
+            $sql = "UPDATE " . $con_academico->dbname . ".profesor_conferencia 
+                SET pcon_estado_logico=0, pcon_estado=0 
+                WHERE pro_id=:proId";
+
+            $comando = $con_academico->createCommand($sql);
+            $comando->bindParam(':proId', $pro_id, \PDO::PARAM_INT);
+            $res = $comando->execute();
+            if($res){
+                $trans->commit();
+                return true;
+            }else
+                throw new \Exception('Error');
+        }catch(\Exception $e){
+            $trans->rollBack();
+            return false;
+        }
+    }
+
 }

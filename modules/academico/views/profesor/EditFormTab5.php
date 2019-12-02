@@ -9,6 +9,7 @@ use yii\helpers\Url;
 use yii\widgets\ActiveForm;
 use app\components\CFileInputAjax;
 use app\widgets\PbGridView\PbGridView;
+use app\models\Utilities;
 use app\modules\Academico\Module as Academico;
 Academico::registerTranslations();
 ?>
@@ -93,12 +94,16 @@ Academico::registerTranslations();
             [
                 'attribute' => 'Desde',
                 'header' => Academico::t("profesor", "From") ,
-                'value' => 'Desde',
+                'value' => function($value){
+                    return date(Yii::$app->params["dateByDefault"], strtotime($value['Desde']));
+                }
             ],
             [
                 'attribute' => 'Hasta',
                 'header' => Academico::t("profesor", "To"),
-                'value' => 'Hasta',
+                'value' => function($value){
+                    return date(Yii::$app->params["dateByDefault"], strtotime($value['Hasta']));
+                }
             ],
             [
                 'attribute' => 'Denominacion',
@@ -115,10 +120,10 @@ Academico::registerTranslations();
                 //'header' => 'Action',
                 'contentOptions' => ['style' => 'text-align: center;'],
                 'headerOptions' => ['width' => '60'],
-                'template' => '{view} {delete}',
+                'template' => '{delete}',
                 'buttons' => [
                     'delete' => function ($url, $model) {
-                         return Html::a('<span class="'.Utilities::getIcon('remove').'"></span>', null, ['href' => 'javascript:confirmDelete(\'deleteItem\',[\'' . $model['per_id'] . '\']);', "data-toggle" => "tooltip", "title" => Yii::t("accion","Delete")]);
+                         return Html::a('<span class="'.Utilities::getIcon('remove').'"></span>', null, ['href' => 'javascript:', 'onclick' => 'javascript:removeItemDocencia(this);', "data-toggle" => "tooltip", "title" => Yii::t("accion","Delete")]);
                     },
                 ],
             ],

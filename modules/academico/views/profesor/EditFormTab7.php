@@ -9,6 +9,7 @@ use yii\helpers\Url;
 use yii\widgets\ActiveForm;
 use app\components\CFileInputAjax;
 use app\widgets\PbGridView\PbGridView;
+use app\models\Utilities;
 use app\modules\Academico\Module as Academico;
 Academico::registerTranslations();
 ?>
@@ -93,10 +94,10 @@ Academico::registerTranslations();
                 //'header' => 'Action',
                 'contentOptions' => ['style' => 'text-align: center;'],
                 'headerOptions' => ['width' => '60'],
-                'template' => '{view} {delete}',
+                'template' => '{delete}',
                 'buttons' => [
                     'delete' => function ($url, $model) {
-                         return Html::a('<span class="'.Utilities::getIcon('remove').'"></span>', null, ['href' => 'javascript:confirmDelete(\'deleteItem\',[\'' . $model['per_id'] . '\']);', "data-toggle" => "tooltip", "title" => Yii::t("accion","Delete")]);
+                         return Html::a('<span class="'.Utilities::getIcon('remove').'"></span>', null, ['href' => 'javascript:', 'onclick' => 'javascript:removeItemIdioma(this);', "data-toggle" => "tooltip", "title" => Yii::t("accion","Delete")]);
                     },
                 ],
             ],

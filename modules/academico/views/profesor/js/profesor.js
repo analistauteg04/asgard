@@ -111,6 +111,17 @@ function update() {
     arrParams.emp_id = $('#cmb_empresa').val();
 
     /** Session Storages **/
+    arrParams.grid_instruccion_list = (JSON.parse(sessionStorage.grid_instruccion_list)).data;
+    arrParams.grid_docencia_list = (JSON.parse(sessionStorage.grid_docencia_list)).data;
+    arrParams.grid_experiencia_list = (JSON.parse(sessionStorage.grid_experiencia_list)).data;
+    arrParams.grid_idioma_list = (JSON.parse(sessionStorage.grid_idioma_list)).data;
+    arrParams.grid_investigacion_list = (JSON.parse(sessionStorage.grid_investigacion_list)).data;
+    arrParams.grid_evento_list = (JSON.parse(sessionStorage.grid_evento_list)).data;
+    arrParams.grid_conferencia_list = (JSON.parse(sessionStorage.grid_conferencia_list)).data;
+    arrParams.grid_publicacion_list = (JSON.parse(sessionStorage.grid_publicacion_list)).data;
+    arrParams.grid_coordinacion_list = (JSON.parse(sessionStorage.grid_coordinacion_list)).data;
+    arrParams.grid_evaluacion_list = (JSON.parse(sessionStorage.grid_evaluacion_list)).data;
+    arrParams.grid_referencia_list = (JSON.parse(sessionStorage.grid_referencia_list)).data;
 
 
     if (!validateForm()) {
@@ -278,6 +289,12 @@ function addInstruccion() {
     }
     sessionStorage.grid_instruccion_list = JSON.stringify(arrData);
     addItemGridContent("grid_instruccion_list");
+
+    $("#cmb_instr_level").val('');
+    $("#txt_institucion").val('');
+    $("#txt_career").val('');
+    $("#txt_degree").val('');
+    $("#txt_senescyt").val('');
 }
 
 function removeItemInstitucion(ref) {
@@ -354,6 +371,12 @@ function addDocencia() {
     }
     sessionStorage.grid_docencia_list = JSON.stringify(arrData);
     addItemGridContent("grid_docencia_list");
+
+    $("#cmb_doc_institucion").val('');
+    $("#txt_doc_from").val('');
+    $("#txt_doc_to").val('');
+    $("#txt_denominacion").val('');
+    $("#txt_subjects").val('');
 }
 
 function removeItemDocencia(ref) {
@@ -429,6 +452,12 @@ function addExperiencia() {
     }
     sessionStorage.grid_experiencia_list = JSON.stringify(arrData);
     addItemGridContent("grid_experiencia_list");
+
+    $("#txt_pro_empresa").val('');
+    $("#txt_pro_from").val('');
+    $("#txt_pro_to").val('');
+    $("#txt_pro_denominacion").val('');
+    $("#txt_pro_funciones").val('');
 }
 
 function removeItemExperiencia(ref) {
@@ -505,6 +534,12 @@ function addIdioma() {
     }
     sessionStorage.grid_idioma_list = JSON.stringify(arrData);
     addItemGridContent("grid_idioma_list");
+
+    $("#cmb_idiomas").val('');
+    $("#txt_idio_escrito").val('');
+    $("#txt_idio_oral").val('');
+    $("#txt_idio_certificado").val('');
+    $("#txt_idio_institucion").val('');
 }
 
 function removeItemIdioma(ref) {
@@ -583,6 +618,13 @@ function addInvestigacion() {
     }
     sessionStorage.grid_investigacion_list = JSON.stringify(arrData);
     addItemGridContent("grid_investigacion_list");
+
+    $("#txt_re_denominacion").val('');
+    $("#txt_re_ambit").val('');
+    $("#txt_re_respon").val('');
+    $("#txt_re_reali").val('');
+    $("#txt_re_year").val('');
+    $("#txt_re_duration").val('');
 }
 
 function removeItemInvestigacion(ref) {
@@ -608,16 +650,16 @@ function addEvento() {
     var tb_item2 = new Array();
     var tb_acc = new Array();
     tb_item[0] = 0;
-    tb_item[1] = tipo_id;
-    tb_item[2] = nombre;
-    tb_item[3] = instiucion;
-    tb_item[4] = anio;
+    tb_item[1] = nombre;
+    tb_item[2] = instiucion;
+    tb_item[3] = anio;
+    tb_item[4] = tipo_id;
     tb_item[5] = duracion;
     tb_item2[0] = 0;
-    tb_item2[1] = tipo_name;
-    tb_item2[2] = nombre;
-    tb_item2[3] = instiucion;
-    tb_item2[4] = anio;
+    tb_item2[1] = nombre;
+    tb_item2[2] = instiucion;
+    tb_item2[3] = anio;
+    tb_item2[4] = tipo_name;
     tb_item2[5] = duracion;
     //tb_acc[0] = {id: "borr", href: "", onclick:"", title: "Ver", class: "", tipo_accion: "view"};
     tb_acc[0] = { id: "deleteN", href: "", onclick: "javascript:removeItemEvento(this)", title: objLang.Delete, class: "", tipo_accion: "delete" };
@@ -659,6 +701,12 @@ function addEvento() {
     }
     sessionStorage.grid_evento_list = JSON.stringify(arrData);
     addItemGridContent("grid_evento_list");
+
+    $("#cmb_cap_tipo").val('');
+    $("#txt_cap_nombre").val('');
+    $("#txt_cap_institucion").val('');
+    $("#txt_cap_anio").val('');
+    $("#txt_cap_duration").val('');
 }
 
 function removeItemEvento(ref) {
@@ -731,6 +779,11 @@ function addConferencia() {
     }
     sessionStorage.grid_conferencia_list = JSON.stringify(arrData);
     addItemGridContent("grid_conferencia_list");
+
+    $("#txt_con_evento").val('');
+    $("#txt_con_insti").val('');
+    $("#txt_con_year").val('');
+    $("#txt_con_ponencia").val('');
 }
 
 function removeItemConferencia(ref) {
@@ -806,6 +859,12 @@ function addPublicacion() {
     }
     sessionStorage.grid_publicacion_list = JSON.stringify(arrData);
     addItemGridContent("grid_publicacion_list");
+
+    $("#txt_pub_produccion").val('');
+    $("#txt_pub_titulo").val('');
+    $("#txt_pub_editorial").val('');
+    $("#txt_pub_isbn").val('');
+    $("#txt_pub_autoria").val('');
 }
 
 function removeItemPublicacion(ref) {
@@ -882,6 +941,11 @@ function addCoordinacion() {
     }
     sessionStorage.grid_coordinacion_list = JSON.stringify(arrData);
     addItemGridContent("grid_coordinacion_list");
+
+    $("#txt_cor_alumno").val('');
+    $("#txt_cor_programa").val('');
+    $("#txt_cor_academico").val('');
+    $("#txt_cor_anio").val('');
 }
 
 function removeItemCoordinacion(ref) {
@@ -951,6 +1015,9 @@ function addEvaluacion() {
     }
     sessionStorage.grid_evaluacion_list = JSON.stringify(arrData);
     addItemGridContent("grid_evaluacion_list");
+    $("#txt_eva_periodo").val('');
+    $("#txt_eva_institucion").val('');
+    $("#txt_eva_evaluacion").val('');
 }
 
 function removeItemEvaluacion(ref) {
@@ -1023,6 +1090,11 @@ function addReferencia() {
     }
     sessionStorage.grid_referencia_list = JSON.stringify(arrData);
     addItemGridContent("grid_referencia_list");
+
+    $("#txt_ref_nombre").val('');
+    $("#txt_ref_cargo").val('');
+    $("#txt_ref_company").val('');
+    $("#txt_ref_numero").val('');
 }
 
 function removeItemReferencia(ref) {

@@ -133,7 +133,7 @@ class ProfesorIdiomas extends \yii\db\ActiveRecord
                     p.pidi_id as Ids,
                     pro.pro_id,
                     pro.per_id,
-                    i.idi_id,
+                    i.idi_id as idi_id,
                     p.pidi_nivel_escrito as NivelEscrito,
                     p.pidi_nivel_oral as NivelOral,
                     p.pidi_certificado as Certificado, 
@@ -160,5 +160,67 @@ class ProfesorIdiomas extends \yii\db\ActiveRecord
         ]);
 
         return $dataProvider;
+    }
+
+    function getDataToStorage($pro_id){
+        $data = $this->getAllIdiomasGrid($pro_id, true);
+
+        $arrData = array();
+        $arrLabel = array();
+        $btnactions = array();
+
+        foreach($data as $key => $value){
+            $arrData[] = [ 
+                $value['Ids'], 
+                $value['idi_id'], 
+                $value['NivelEscrito'], 
+                $value['NivelOral'], 
+                $value['Certificado'], 
+                $value['Institucion'], 
+            ];
+        }
+        foreach($data as $key => $value){
+            $arrLabel[] = [ 
+                $value['Ids'], 
+                $value['Languages'], 
+                $value['NivelEscrito'], 
+                $value['NivelOral'], 
+                $value['Certificado'], 
+                $value['Institucion'], 
+            ];
+        }
+        foreach($data as $key => $value){
+            $btnactions[] = [[
+                "id" => "deleteN".$value['Ids'],
+                "class" => "",
+                "href" => "",
+                "onclick" => "javascript:removeItemIdioma(this)",
+                "tipo_accion" => "delete",
+                "title" => Yii::t("accion","Delete")
+            ]];
+        }
+        return [$arrData, $arrLabel, $btnactions];
+    }
+
+    public static function deleteAllInfo($pro_id){
+        $con_academico = \Yii::$app->db_academico;
+        $trans = $con_academico->beginTransaction();
+        try{
+            $sql = "UPDATE " . $con_academico->dbname . ".profesor_idiomas 
+                SET pidi_estado_logico=0, pidi_estado=0 
+                WHERE pro_id=:proId";
+
+            $comando = $con_academico->createCommand($sql);
+            $comando->bindParam(':proId', $pro_id, \PDO::PARAM_INT);
+            $res = $comando->execute();
+            if($res){
+                $trans->commit();
+                return true;
+            }else
+                throw new \Exception('Error');
+        }catch(\Exception $e){
+            $trans->rollBack();
+            return false;
+        }
     }
 }

@@ -133,7 +133,7 @@ class ProfesorExpDoc extends \yii\db\ActiveRecord
                     p.pedo_id as Ids,
                     pro.pro_id,
                     pro.per_id,
-                    n.ins_id,
+                    n.ins_id  as ins_id,
                     p.pedo_fecha_inicio as Desde,
                     p.pedo_fecha_fin as Hasta,
                     p.pedo_denominacion as Denominacion, 
@@ -160,5 +160,67 @@ class ProfesorExpDoc extends \yii\db\ActiveRecord
         ]);
 
         return $dataProvider;
+    }
+
+    function getDataToStorage($pro_id){
+        $data = $this->getAllExperienciaGrid($pro_id, true);
+
+        $arrData = array();
+        $arrLabel = array();
+        $btnactions = array();
+
+        foreach($data as $key => $value){
+            $arrData[] = [ 
+                $value['Ids'], 
+                $value['ins_id'], 
+                date('Y-m-d', strtotime($value['Desde'])), 
+                date('Y-m-d', strtotime($value['Hasta'])), 
+                $value['Denominacion'], 
+                $value['Materias'], 
+            ];
+        }
+        foreach($data as $key => $value){
+            $arrLabel[] = [ 
+                $value['Ids'], 
+                $value['Institucion'], 
+                date('Y-m-d', strtotime($value['Desde'])), 
+                date('Y-m-d', strtotime($value['Hasta'])), 
+                $value['Denominacion'], 
+                $value['Materias'], 
+            ];
+        }
+        foreach($data as $key => $value){
+            $btnactions[] = [[ 
+                "id" => "deleteN".$value['Ids'],
+                "class" => "",
+                "href" => "",
+                "onclick" => "javascript:removeItemDocencia(this)",
+                "tipo_accion" => "delete",
+                "title" => Yii::t("accion","Delete")
+            ]];
+        }
+        return [$arrData, $arrLabel, $btnactions];
+    }
+
+    public static function deleteAllInfo($pro_id){
+        $con_academico = \Yii::$app->db_academico;
+        $trans = $con_academico->beginTransaction();
+        try{
+            $sql = "UPDATE " . $con_academico->dbname . ".profesor_exp_doc 
+                SET pedo_estado_logico=0, pedo_estado=0 
+                WHERE pro_id=:proId";
+
+            $comando = $con_academico->createCommand($sql);
+            $comando->bindParam(':proId', $pro_id, \PDO::PARAM_INT);
+            $res = $comando->execute();
+            if($res){
+                $trans->commit();
+                return true;
+            }else
+                throw new \Exception('Error');
+        }catch(\Exception $e){
+            $trans->rollBack();
+            return false;
+        }
     }
 }

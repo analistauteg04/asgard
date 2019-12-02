@@ -796,8 +796,11 @@ function addItemGridContent(elementId) {
             $('#' + elementId + ' >table >tbody').html(arr_data.trmessage);
         else {
             var trmessage = "<tr>";
-            var colspan = $('#' + elementId + ' >table >thead > tr > td').length;
-            trmessage += "<td colspan='" + colspan + "'>" + objLang.No_data_found + "</td></tr>";
+            var colspan = $('#' + elementId + ' >table >thead > tr > th').length;
+            trmessage += "<td colspan='" + colspan + "'>" + objLang.No_data_found_ + "</td></tr>";
+            $('#' + elementId + ' >table >tbody').html(trmessage);
+            arr_data.trmessage = trmessage;
+            sessionStorage[elementId] = JSON.stringify(arr_data);
         }
     }
 }
@@ -868,6 +871,7 @@ function loadSessionCampos(elementId, data, btnactions, label) {
     arrData.data = data;
     arrData.label = label;
     arrData.btnactions = btnactions;
+    arrData.trmessage = '';
     sessionStorage[elementId] = JSON.stringify(arrData);
     var sizetheadtb = $('#' + elementId + ' >table >thead >tr >th').length;
     var sizetbodytb = $('#' + elementId + ' >table >tbody >tr >td').length;
