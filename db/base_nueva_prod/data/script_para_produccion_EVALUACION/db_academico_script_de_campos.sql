@@ -9,6 +9,53 @@ use db_academico;
 
 -- --------------------------------------------------------
 -- 
+-- Estructura de tabla para la tabla `promocion_programa`
+-- --------------------------------------------------------
+create table if not exists `promocion_programa` (
+ `ppro_id` bigint(20) not null auto_increment primary key,
+ `ppro_anio` varchar(4) not null, 
+ `ppro_mes` varchar(02) not null, 
+ `ppro_codigo` varchar(20) not null,
+ `uaca_id` bigint(20) not null,
+ `mod_id` bigint(20) not null,
+ `eaca_id` bigint(20) not null,
+ `ppro_num_paralelo` integer(2) not null,
+ `ppro_cupo` integer(3) not null,
+ `ppro_usuario_ingresa` bigint(20) null,
+ `ppro_estado` varchar(1) not null, 
+ `ppro_fecha_creacion` timestamp not null default current_timestamp,
+ `ppro_usuario_modifica` bigint(20) null,
+ `ppro_fecha_modificacion` timestamp null default null,
+ `ppro_estado_logico` varchar(1) not null,
+ foreign key (uaca_id) references `unidad_academica`(uaca_id),
+ foreign key (mod_id) references `modalidad`(mod_id),
+ foreign key (eaca_id) references `estudio_academico`(eaca_id)
+);
+
+-- --------------------------------------------------------
+-- 
+-- Estructura de tabla para la tabla `planificacion_academica_malla`
+-- 
+create table if not exists `planificacion_academica_malla` (
+  `pama_id` bigint(20) not null auto_increment primary key,   
+  `paca_id` bigint(20) null,  
+  `ppro_id` bigint(20) null,  
+  `maca_id` bigint(20) not null,  
+  `pama_fecha_registro` timestamp null default null,
+  `pama_usuario_ingreso` bigint(20) not null,
+  `pama_usuario_modifica` bigint(20)  null,
+  `pama_estado` varchar(1) not null,
+  `pama_fecha_creacion` timestamp not null default current_timestamp,
+  `pama_fecha_modificacion` timestamp null default null,
+  `pama_estado_logico` varchar(1) not null,
+  foreign key (paca_id) references `periodo_academico`(paca_id),
+  foreign key (ppro_id) references `promocion_programa`(ppro_id),
+  foreign key (maca_id) references `malla_academica`(maca_id)  
+);
+
+
+-- --------------------------------------------------------
+-- 
 -- Estructura de tabla para la tabla `matriculacion`
 -- 
 
@@ -25,7 +72,8 @@ ADD COLUMN `pama_id` bigint(20) AFTER `mat_id`;
 
 -- crea foreing key
 
-ALTER TABLE `matriculacion` ADD FOREIGN KEY (pama_id) REFERENCES `planificacion_academica_malla`(pama_id);
+ALTER TABLE db_academico.`matriculacion` ADD FOREIGN KEY (pama_id) 
+REFERENCES `planificacion_academica_malla`(pama_id);
 
 
 -- ----------------------------------------------
@@ -254,6 +302,9 @@ ALTER TABLE `malla_academica_detalle` ADD FOREIGN KEY (uest_id) REFERENCES `unid
 ALTER TABLE `malla_academica_detalle` ADD FOREIGN KEY (nest_id) REFERENCES `nivel_estudio`(nest_id);
 ALTER TABLE `malla_academica_detalle` ADD FOREIGN KEY (fmac_id) REFERENCES `formacion_malla_academica`(fmac_id);
 
+ALTER TABLE `db_academico`.`malla_academica_detalle` 
+AUTO_INCREMENT = 1 ;
+
 -- ----------------------------------------------
 -- --------------------------------------------------------
 -- 
@@ -296,6 +347,11 @@ INSERT INTO `semestre_academico` (`saca_id`, `saca_nombre`, `saca_descripcion`, 
 (5, 'Abril - Agosto', 'Abril - Agosto', 2018, NULL, '1', '1', '1', '1'),
 (6, 'Octubre - Febrero', 'Octubre - Febrero', 2020, NULL, '1', '1', '1', '1');
 
+-- ingresa anio a los id 1 y 2 
+
+update db_academico.`semestre_academico` 
+set saca_anio = '2019' where saca_id > 0 and saca_id < 3
+
 -- --------------------------------------------------------------------
 -- 
 -- tabla `bloque_academico`
@@ -304,6 +360,11 @@ INSERT INTO `semestre_academico` (`saca_id`, `saca_nombre`, `saca_descripcion`, 
 ALTER TABLE db_academico.`bloque_academico`
 ADD COLUMN `baca_anio` integer(4) AFTER `baca_descripcion`;
 
+update db_academico.`bloque_academico`
+set baca_anio = '2019' where baca_id > 0 and baca_id < 5
+
+-- VERIFICAR SI SE DEBE BORRAR LOS ID DEL 5 AL 16 Y VOLVER A PONER EL SECUENCIAL 
+-- ****OJO*** de la tabla bloque_academico
 
 -- ---------------------------------------------------------------------
 -- 
@@ -343,8 +404,8 @@ INSERT INTO `dedicacion_docente` (`ddoc_id`, `ddoc_nombre`, `ddoc_estado`, `ddoc
 -- crear 2 campos
 
 ALTER TABLE db_academico.`profesor`
-ADD COLUMN `pro_fecha_contratacion` timestamp AFTER `per_id`,
-ADD COLUMN `pro_fecha_terminacion` timestamp AFTER `pro_fecha_contratacion`;
+ADD COLUMN `pro_fecha_contratacion` timestamp NULL AFTER `per_id`,
+ADD COLUMN `pro_fecha_terminacion` timestamp NULL AFTER `pro_fecha_contratacion`;
 
 
 
@@ -579,31 +640,6 @@ create table if not exists `docente_estudios` (
  `dest_estado_logico` varchar(1) not null 
 );
 
--- --------------------------------------------------------
--- 
--- Estructura de tabla para la tabla `promocion_programa`
--- --------------------------------------------------------
-create table if not exists `promocion_programa` (
- `ppro_id` bigint(20) not null auto_increment primary key,
- `ppro_anio` varchar(4) not null, 
- `ppro_mes` varchar(02) not null, 
- `ppro_codigo` varchar(20) not null,
- `uaca_id` bigint(20) not null,
- `mod_id` bigint(20) not null,
- `eaca_id` bigint(20) not null,
- `ppro_num_paralelo` integer(2) not null,
- `ppro_cupo` integer(3) not null,
- `ppro_usuario_ingresa` bigint(20) null,
- `ppro_estado` varchar(1) not null, 
- `ppro_fecha_creacion` timestamp not null default current_timestamp,
- `ppro_usuario_modifica` bigint(20) null,
- `ppro_fecha_modificacion` timestamp null default null,
- `ppro_estado_logico` varchar(1) not null,
- foreign key (uaca_id) references `unidad_academica`(uaca_id),
- foreign key (mod_id) references `modalidad`(mod_id),
- foreign key (eaca_id) references `estudio_academico`(eaca_id)
-);
-
 -- -----------------------------------------------------------------
 -- 
 -- Estructura de tabla para la tabla `paralelo_promocion_programa`
@@ -621,27 +657,6 @@ create table if not exists `paralelo_promocion_programa` (
  `pppr_fecha_modificacion` timestamp null default null,
  `pppr_estado_logico` varchar(1) not null,
  foreign key (ppro_id) references `promocion_programa`(ppro_id) 
-);
-
--- --------------------------------------------------------
--- 
--- Estructura de tabla para la tabla `planificacion_academica_malla`
--- 
-create table if not exists `planificacion_academica_malla` (
-  `pama_id` bigint(20) not null auto_increment primary key,   
-  `paca_id` bigint(20) null,  
-  `ppro_id` bigint(20) null,  
-  `maca_id` bigint(20) not null,  
-  `pama_fecha_registro` timestamp null default null,
-  `pama_usuario_ingreso` bigint(20) not null,
-  `pama_usuario_modifica` bigint(20)  null,
-  `pama_estado` varchar(1) not null,
-  `pama_fecha_creacion` timestamp not null default current_timestamp,
-  `pama_fecha_modificacion` timestamp null default null,
-  `pama_estado_logico` varchar(1) not null,
-  foreign key (paca_id) references `periodo_academico`(paca_id),
-  foreign key (ppro_id) references `promocion_programa`(ppro_id),
-  foreign key (maca_id) references `malla_academica`(maca_id)  
 );
 
 -- ----------------------------------------------------------------
@@ -682,7 +697,6 @@ create table if not exists `paralelo_planificacion` (
   foreign key (pppr_id) references `paralelo_promocion_programa`(pppr_id)
 );
 
--- AL INICIO SE BORRAR distributivo_academico QUE ESTA EN PRODUCCION, SE DEBE REEMPLAZAR POR ESTA NUEVA
 -- --------------------------------------------------------
 -- 
 -- Estructura de tabla para la tabla `distributivo_academico`
@@ -961,7 +975,7 @@ DROP TABLE asignacion_paralelo;
 
 -- -------------------------------
 -- BORRAR estudio_academico_area_conocimiento
-DROP TABLE estudio_academico_area_conocimiento;
+DROP TABLE estudio_academico_area_conocimiento; -- PORQUE PREGUNTAR
 
 -- ------------------------------------------------------------
 -- BORRAR modalidad_unidad_academico
@@ -971,7 +985,7 @@ DROP TABLE modalidad_unidad_academico;
 -- ----------------------------------------------
 
 -- BORRAR modulo_estudio_empresa
-DROP TABLE modulo_estudio_empresa;
+DROP TABLE modulo_estudio_empresa;	-- PORQUE PREGUNTAR
 
 -- ----------------------------------------------
 -- BORRAR paralelo
@@ -979,6 +993,373 @@ DROP TABLE paralelo;
 
 -- BORRAR periodo_academico_met_ingreso
 DROP TABLE periodo_academico_met_ingreso;
+
+--- BORRAR foreing key  HORARIO_ASIGNATURA_PERIODO
+ALTER TABLE `db_academico`.`horario_asignatura_periodo` 
+DROP FOREIGN KEY `horario_asignatura_periodo_ibfk_5`,
+DROP FOREIGN KEY `horario_asignatura_periodo_ibfk_4`,
+DROP FOREIGN KEY `horario_asignatura_periodo_ibfk_3`,
+DROP FOREIGN KEY `horario_asignatura_periodo_ibfk_2`,
+DROP FOREIGN KEY `horario_asignatura_periodo_ibfk_1`;
+ALTER TABLE `db_academico`.`horario_asignatura_periodo` 
+DROP INDEX `mod_id` ,
+DROP INDEX `uaca_id` ,
+DROP INDEX `pro_id` ,
+DROP INDEX `paca_id` ,
+DROP INDEX `asi_id` ;
+
+-- BORRAR DATA ASIGNATURA
+DELETE FROM `db_academico`.`asignatura` WHERE `asi_id`='1';
+DELETE FROM `db_academico`.`asignatura` WHERE `asi_id`='2';
+DELETE FROM `db_academico`.`asignatura` WHERE `asi_id`='3';
+DELETE FROM `db_academico`.`asignatura` WHERE `asi_id`='4';
+DELETE FROM `db_academico`.`asignatura` WHERE `asi_id`='5';
+DELETE FROM `db_academico`.`asignatura` WHERE `asi_id`='6';
+DELETE FROM `db_academico`.`asignatura` WHERE `asi_id`='7';
+DELETE FROM `db_academico`.`asignatura` WHERE `asi_id`='8';
+DELETE FROM `db_academico`.`asignatura` WHERE `asi_id`='9';
+DELETE FROM `db_academico`.`asignatura` WHERE `asi_id`='10';
+DELETE FROM `db_academico`.`asignatura` WHERE `asi_id`='11';
+DELETE FROM `db_academico`.`asignatura` WHERE `asi_id`='12';
+DELETE FROM `db_academico`.`asignatura` WHERE `asi_id`='13';
+DELETE FROM `db_academico`.`asignatura` WHERE `asi_id`='14';
+DELETE FROM `db_academico`.`asignatura` WHERE `asi_id`='15';
+DELETE FROM `db_academico`.`asignatura` WHERE `asi_id`='16';
+DELETE FROM `db_academico`.`asignatura` WHERE `asi_id`='17';
+DELETE FROM `db_academico`.`asignatura` WHERE `asi_id`='18';
+DELETE FROM `db_academico`.`asignatura` WHERE `asi_id`='19';
+DELETE FROM `db_academico`.`asignatura` WHERE `asi_id`='20';
+DELETE FROM `db_academico`.`asignatura` WHERE `asi_id`='21';
+DELETE FROM `db_academico`.`asignatura` WHERE `asi_id`='22';
+DELETE FROM `db_academico`.`asignatura` WHERE `asi_id`='23';
+DELETE FROM `db_academico`.`asignatura` WHERE `asi_id`='24';
+DELETE FROM `db_academico`.`asignatura` WHERE `asi_id`='25';
+DELETE FROM `db_academico`.`asignatura` WHERE `asi_id`='26';
+DELETE FROM `db_academico`.`asignatura` WHERE `asi_id`='27';
+DELETE FROM `db_academico`.`asignatura` WHERE `asi_id`='28';
+DELETE FROM `db_academico`.`asignatura` WHERE `asi_id`='29';
+DELETE FROM `db_academico`.`asignatura` WHERE `asi_id`='30';
+DELETE FROM `db_academico`.`asignatura` WHERE `asi_id`='31';
+DELETE FROM `db_academico`.`asignatura` WHERE `asi_id`='32';
+DELETE FROM `db_academico`.`asignatura` WHERE `asi_id`='33';
+DELETE FROM `db_academico`.`asignatura` WHERE `asi_id`='34';
+DELETE FROM `db_academico`.`asignatura` WHERE `asi_id`='35';
+DELETE FROM `db_academico`.`asignatura` WHERE `asi_id`='36';
+DELETE FROM `db_academico`.`asignatura` WHERE `asi_id`='37';
+DELETE FROM `db_academico`.`asignatura` WHERE `asi_id`='38';
+DELETE FROM `db_academico`.`asignatura` WHERE `asi_id`='39';
+DELETE FROM `db_academico`.`asignatura` WHERE `asi_id`='40';
+DELETE FROM `db_academico`.`asignatura` WHERE `asi_id`='41';
+DELETE FROM `db_academico`.`asignatura` WHERE `asi_id`='42';
+DELETE FROM `db_academico`.`asignatura` WHERE `asi_id`='43';
+DELETE FROM `db_academico`.`asignatura` WHERE `asi_id`='44';
+DELETE FROM `db_academico`.`asignatura` WHERE `asi_id`='45';
+DELETE FROM `db_academico`.`asignatura` WHERE `asi_id`='46';
+DELETE FROM `db_academico`.`asignatura` WHERE `asi_id`='47';
+DELETE FROM `db_academico`.`asignatura` WHERE `asi_id`='48';
+DELETE FROM `db_academico`.`asignatura` WHERE `asi_id`='49';
+DELETE FROM `db_academico`.`asignatura` WHERE `asi_id`='50';
+DELETE FROM `db_academico`.`asignatura` WHERE `asi_id`='51';
+DELETE FROM `db_academico`.`asignatura` WHERE `asi_id`='52';
+DELETE FROM `db_academico`.`asignatura` WHERE `asi_id`='53';
+DELETE FROM `db_academico`.`asignatura` WHERE `asi_id`='54';
+DELETE FROM `db_academico`.`asignatura` WHERE `asi_id`='55';
+DELETE FROM `db_academico`.`asignatura` WHERE `asi_id`='56';
+DELETE FROM `db_academico`.`asignatura` WHERE `asi_id`='57';
+DELETE FROM `db_academico`.`asignatura` WHERE `asi_id`='58';
+DELETE FROM `db_academico`.`asignatura` WHERE `asi_id`='59';
+DELETE FROM `db_academico`.`asignatura` WHERE `asi_id`='60';
+DELETE FROM `db_academico`.`asignatura` WHERE `asi_id`='61';
+DELETE FROM `db_academico`.`asignatura` WHERE `asi_id`='62';
+DELETE FROM `db_academico`.`asignatura` WHERE `asi_id`='63';
+DELETE FROM `db_academico`.`asignatura` WHERE `asi_id`='64';
+DELETE FROM `db_academico`.`asignatura` WHERE `asi_id`='65';
+DELETE FROM `db_academico`.`asignatura` WHERE `asi_id`='66';
+DELETE FROM `db_academico`.`asignatura` WHERE `asi_id`='67';
+DELETE FROM `db_academico`.`asignatura` WHERE `asi_id`='68';
+DELETE FROM `db_academico`.`asignatura` WHERE `asi_id`='69';
+DELETE FROM `db_academico`.`asignatura` WHERE `asi_id`='70';
+DELETE FROM `db_academico`.`asignatura` WHERE `asi_id`='71';
+DELETE FROM `db_academico`.`asignatura` WHERE `asi_id`='72';
+DELETE FROM `db_academico`.`asignatura` WHERE `asi_id`='73';
+DELETE FROM `db_academico`.`asignatura` WHERE `asi_id`='74';
+DELETE FROM `db_academico`.`asignatura` WHERE `asi_id`='75';
+DELETE FROM `db_academico`.`asignatura` WHERE `asi_id`='76';
+DELETE FROM `db_academico`.`asignatura` WHERE `asi_id`='77';
+DELETE FROM `db_academico`.`asignatura` WHERE `asi_id`='78';
+DELETE FROM `db_academico`.`asignatura` WHERE `asi_id`='79';
+DELETE FROM `db_academico`.`asignatura` WHERE `asi_id`='80';
+DELETE FROM `db_academico`.`asignatura` WHERE `asi_id`='81';
+DELETE FROM `db_academico`.`asignatura` WHERE `asi_id`='82';
+DELETE FROM `db_academico`.`asignatura` WHERE `asi_id`='83';
+DELETE FROM `db_academico`.`asignatura` WHERE `asi_id`='84';
+DELETE FROM `db_academico`.`asignatura` WHERE `asi_id`='85';
+DELETE FROM `db_academico`.`asignatura` WHERE `asi_id`='86';
+DELETE FROM `db_academico`.`asignatura` WHERE `asi_id`='87';
+DELETE FROM `db_academico`.`asignatura` WHERE `asi_id`='88';
+DELETE FROM `db_academico`.`asignatura` WHERE `asi_id`='89';
+DELETE FROM `db_academico`.`asignatura` WHERE `asi_id`='90';
+DELETE FROM `db_academico`.`asignatura` WHERE `asi_id`='91';
+DELETE FROM `db_academico`.`asignatura` WHERE `asi_id`='92';
+DELETE FROM `db_academico`.`asignatura` WHERE `asi_id`='93';
+DELETE FROM `db_academico`.`asignatura` WHERE `asi_id`='94';
+DELETE FROM `db_academico`.`asignatura` WHERE `asi_id`='95';
+DELETE FROM `db_academico`.`asignatura` WHERE `asi_id`='96';
+DELETE FROM `db_academico`.`asignatura` WHERE `asi_id`='97';
+DELETE FROM `db_academico`.`asignatura` WHERE `asi_id`='98';
+DELETE FROM `db_academico`.`asignatura` WHERE `asi_id`='99';
+DELETE FROM `db_academico`.`asignatura` WHERE `asi_id`='100';
+DELETE FROM `db_academico`.`asignatura` WHERE `asi_id`='101';
+DELETE FROM `db_academico`.`asignatura` WHERE `asi_id`='102';
+DELETE FROM `db_academico`.`asignatura` WHERE `asi_id`='103';
+DELETE FROM `db_academico`.`asignatura` WHERE `asi_id`='104';
+DELETE FROM `db_academico`.`asignatura` WHERE `asi_id`='105';
+DELETE FROM `db_academico`.`asignatura` WHERE `asi_id`='106';
+DELETE FROM `db_academico`.`asignatura` WHERE `asi_id`='107';
+DELETE FROM `db_academico`.`asignatura` WHERE `asi_id`='108';
+DELETE FROM `db_academico`.`asignatura` WHERE `asi_id`='109';
+DELETE FROM `db_academico`.`asignatura` WHERE `asi_id`='110';
+DELETE FROM `db_academico`.`asignatura` WHERE `asi_id`='111';
+DELETE FROM `db_academico`.`asignatura` WHERE `asi_id`='112';
+DELETE FROM `db_academico`.`asignatura` WHERE `asi_id`='113';
+DELETE FROM `db_academico`.`asignatura` WHERE `asi_id`='114';
+DELETE FROM `db_academico`.`asignatura` WHERE `asi_id`='115';
+DELETE FROM `db_academico`.`asignatura` WHERE `asi_id`='116';
+DELETE FROM `db_academico`.`asignatura` WHERE `asi_id`='117';
+DELETE FROM `db_academico`.`asignatura` WHERE `asi_id`='118';
+DELETE FROM `db_academico`.`asignatura` WHERE `asi_id`='119';
+DELETE FROM `db_academico`.`asignatura` WHERE `asi_id`='120';
+DELETE FROM `db_academico`.`asignatura` WHERE `asi_id`='121';
+DELETE FROM `db_academico`.`asignatura` WHERE `asi_id`='122';
+DELETE FROM `db_academico`.`asignatura` WHERE `asi_id`='123';
+DELETE FROM `db_academico`.`asignatura` WHERE `asi_id`='124';
+DELETE FROM `db_academico`.`asignatura` WHERE `asi_id`='125';
+DELETE FROM `db_academico`.`asignatura` WHERE `asi_id`='126';
+DELETE FROM `db_academico`.`asignatura` WHERE `asi_id`='127';
+DELETE FROM `db_academico`.`asignatura` WHERE `asi_id`='128';
+DELETE FROM `db_academico`.`asignatura` WHERE `asi_id`='129';
+DELETE FROM `db_academico`.`asignatura` WHERE `asi_id`='130';
+DELETE FROM `db_academico`.`asignatura` WHERE `asi_id`='131';
+DELETE FROM `db_academico`.`asignatura` WHERE `asi_id`='132';
+DELETE FROM `db_academico`.`asignatura` WHERE `asi_id`='133';
+DELETE FROM `db_academico`.`asignatura` WHERE `asi_id`='134';
+DELETE FROM `db_academico`.`asignatura` WHERE `asi_id`='135';
+DELETE FROM `db_academico`.`asignatura` WHERE `asi_id`='136';
+DELETE FROM `db_academico`.`asignatura` WHERE `asi_id`='137';
+DELETE FROM `db_academico`.`asignatura` WHERE `asi_id`='138';
+DELETE FROM `db_academico`.`asignatura` WHERE `asi_id`='139';
+DELETE FROM `db_academico`.`asignatura` WHERE `asi_id`='140';
+DELETE FROM `db_academico`.`asignatura` WHERE `asi_id`='141';
+DELETE FROM `db_academico`.`asignatura` WHERE `asi_id`='142';
+DELETE FROM `db_academico`.`asignatura` WHERE `asi_id`='143';
+DELETE FROM `db_academico`.`asignatura` WHERE `asi_id`='144';
+DELETE FROM `db_academico`.`asignatura` WHERE `asi_id`='145';
+DELETE FROM `db_academico`.`asignatura` WHERE `asi_id`='146';
+DELETE FROM `db_academico`.`asignatura` WHERE `asi_id`='147';
+DELETE FROM `db_academico`.`asignatura` WHERE `asi_id`='148';
+DELETE FROM `db_academico`.`asignatura` WHERE `asi_id`='149';
+DELETE FROM `db_academico`.`asignatura` WHERE `asi_id`='150';
+DELETE FROM `db_academico`.`asignatura` WHERE `asi_id`='151';
+DELETE FROM `db_academico`.`asignatura` WHERE `asi_id`='152';
+DELETE FROM `db_academico`.`asignatura` WHERE `asi_id`='153';
+DELETE FROM `db_academico`.`asignatura` WHERE `asi_id`='154';
+DELETE FROM `db_academico`.`asignatura` WHERE `asi_id`='155';
+DELETE FROM `db_academico`.`asignatura` WHERE `asi_id`='156';
+DELETE FROM `db_academico`.`asignatura` WHERE `asi_id`='157';
+DELETE FROM `db_academico`.`asignatura` WHERE `asi_id`='158';
+DELETE FROM `db_academico`.`asignatura` WHERE `asi_id`='159';
+DELETE FROM `db_academico`.`asignatura` WHERE `asi_id`='160';
+DELETE FROM `db_academico`.`asignatura` WHERE `asi_id`='161';
+DELETE FROM `db_academico`.`asignatura` WHERE `asi_id`='162';
+DELETE FROM `db_academico`.`asignatura` WHERE `asi_id`='163';
+DELETE FROM `db_academico`.`asignatura` WHERE `asi_id`='164';
+DELETE FROM `db_academico`.`asignatura` WHERE `asi_id`='165';
+DELETE FROM `db_academico`.`asignatura` WHERE `asi_id`='166';
+DELETE FROM `db_academico`.`asignatura` WHERE `asi_id`='167';
+DELETE FROM `db_academico`.`asignatura` WHERE `asi_id`='168';
+DELETE FROM `db_academico`.`asignatura` WHERE `asi_id`='169';
+DELETE FROM `db_academico`.`asignatura` WHERE `asi_id`='170';
+DELETE FROM `db_academico`.`asignatura` WHERE `asi_id`='171';
+DELETE FROM `db_academico`.`asignatura` WHERE `asi_id`='172';
+DELETE FROM `db_academico`.`asignatura` WHERE `asi_id`='173';
+DELETE FROM `db_academico`.`asignatura` WHERE `asi_id`='174';
+DELETE FROM `db_academico`.`asignatura` WHERE `asi_id`='175';
+DELETE FROM `db_academico`.`asignatura` WHERE `asi_id`='176';
+DELETE FROM `db_academico`.`asignatura` WHERE `asi_id`='177';
+DELETE FROM `db_academico`.`asignatura` WHERE `asi_id`='178';
+DELETE FROM `db_academico`.`asignatura` WHERE `asi_id`='179';
+DELETE FROM `db_academico`.`asignatura` WHERE `asi_id`='180';
+DELETE FROM `db_academico`.`asignatura` WHERE `asi_id`='181';
+DELETE FROM `db_academico`.`asignatura` WHERE `asi_id`='182';
+DELETE FROM `db_academico`.`asignatura` WHERE `asi_id`='183';
+DELETE FROM `db_academico`.`asignatura` WHERE `asi_id`='184';
+DELETE FROM `db_academico`.`asignatura` WHERE `asi_id`='185';
+DELETE FROM `db_academico`.`asignatura` WHERE `asi_id`='186';
+DELETE FROM `db_academico`.`asignatura` WHERE `asi_id`='187';
+DELETE FROM `db_academico`.`asignatura` WHERE `asi_id`='188';
+DELETE FROM `db_academico`.`asignatura` WHERE `asi_id`='189';
+DELETE FROM `db_academico`.`asignatura` WHERE `asi_id`='190';
+DELETE FROM `db_academico`.`asignatura` WHERE `asi_id`='191';
+DELETE FROM `db_academico`.`asignatura` WHERE `asi_id`='192';
+DELETE FROM `db_academico`.`asignatura` WHERE `asi_id`='193';
+DELETE FROM `db_academico`.`asignatura` WHERE `asi_id`='194';
+DELETE FROM `db_academico`.`asignatura` WHERE `asi_id`='195';
+DELETE FROM `db_academico`.`asignatura` WHERE `asi_id`='196';
+DELETE FROM `db_academico`.`asignatura` WHERE `asi_id`='197';
+DELETE FROM `db_academico`.`asignatura` WHERE `asi_id`='198';
+DELETE FROM `db_academico`.`asignatura` WHERE `asi_id`='199';
+DELETE FROM `db_academico`.`asignatura` WHERE `asi_id`='200';
+DELETE FROM `db_academico`.`asignatura` WHERE `asi_id`='201';
+DELETE FROM `db_academico`.`asignatura` WHERE `asi_id`='202';
+DELETE FROM `db_academico`.`asignatura` WHERE `asi_id`='203';
+DELETE FROM `db_academico`.`asignatura` WHERE `asi_id`='204';
+DELETE FROM `db_academico`.`asignatura` WHERE `asi_id`='205';
+DELETE FROM `db_academico`.`asignatura` WHERE `asi_id`='206';
+DELETE FROM `db_academico`.`asignatura` WHERE `asi_id`='207';
+DELETE FROM `db_academico`.`asignatura` WHERE `asi_id`='208';
+DELETE FROM `db_academico`.`asignatura` WHERE `asi_id`='209';
+DELETE FROM `db_academico`.`asignatura` WHERE `asi_id`='210';
+DELETE FROM `db_academico`.`asignatura` WHERE `asi_id`='211';
+DELETE FROM `db_academico`.`asignatura` WHERE `asi_id`='212';
+DELETE FROM `db_academico`.`asignatura` WHERE `asi_id`='213';
+DELETE FROM `db_academico`.`asignatura` WHERE `asi_id`='214';
+DELETE FROM `db_academico`.`asignatura` WHERE `asi_id`='215';
+DELETE FROM `db_academico`.`asignatura` WHERE `asi_id`='216';
+DELETE FROM `db_academico`.`asignatura` WHERE `asi_id`='217';
+DELETE FROM `db_academico`.`asignatura` WHERE `asi_id`='218';
+DELETE FROM `db_academico`.`asignatura` WHERE `asi_id`='219';
+DELETE FROM `db_academico`.`asignatura` WHERE `asi_id`='220';
+DELETE FROM `db_academico`.`asignatura` WHERE `asi_id`='221';
+DELETE FROM `db_academico`.`asignatura` WHERE `asi_id`='222';
+DELETE FROM `db_academico`.`asignatura` WHERE `asi_id`='223';
+DELETE FROM `db_academico`.`asignatura` WHERE `asi_id`='224';
+DELETE FROM `db_academico`.`asignatura` WHERE `asi_id`='225';
+DELETE FROM `db_academico`.`asignatura` WHERE `asi_id`='226';
+DELETE FROM `db_academico`.`asignatura` WHERE `asi_id`='227';
+DELETE FROM `db_academico`.`asignatura` WHERE `asi_id`='228';
+DELETE FROM `db_academico`.`asignatura` WHERE `asi_id`='229';
+DELETE FROM `db_academico`.`asignatura` WHERE `asi_id`='230';
+DELETE FROM `db_academico`.`asignatura` WHERE `asi_id`='231';
+DELETE FROM `db_academico`.`asignatura` WHERE `asi_id`='232';
+DELETE FROM `db_academico`.`asignatura` WHERE `asi_id`='233';
+DELETE FROM `db_academico`.`asignatura` WHERE `asi_id`='234';
+DELETE FROM `db_academico`.`asignatura` WHERE `asi_id`='235';
+DELETE FROM `db_academico`.`asignatura` WHERE `asi_id`='236';
+DELETE FROM `db_academico`.`asignatura` WHERE `asi_id`='237';
+DELETE FROM `db_academico`.`asignatura` WHERE `asi_id`='238';
+DELETE FROM `db_academico`.`asignatura` WHERE `asi_id`='239';
+DELETE FROM `db_academico`.`asignatura` WHERE `asi_id`='240';
+DELETE FROM `db_academico`.`asignatura` WHERE `asi_id`='241';
+DELETE FROM `db_academico`.`asignatura` WHERE `asi_id`='242';
+DELETE FROM `db_academico`.`asignatura` WHERE `asi_id`='243';
+DELETE FROM `db_academico`.`asignatura` WHERE `asi_id`='244';
+DELETE FROM `db_academico`.`asignatura` WHERE `asi_id`='245';
+DELETE FROM `db_academico`.`asignatura` WHERE `asi_id`='246';
+DELETE FROM `db_academico`.`asignatura` WHERE `asi_id`='247';
+DELETE FROM `db_academico`.`asignatura` WHERE `asi_id`='248';
+DELETE FROM `db_academico`.`asignatura` WHERE `asi_id`='249';
+DELETE FROM `db_academico`.`asignatura` WHERE `asi_id`='250';
+DELETE FROM `db_academico`.`asignatura` WHERE `asi_id`='251';
+DELETE FROM `db_academico`.`asignatura` WHERE `asi_id`='252';
+DELETE FROM `db_academico`.`asignatura` WHERE `asi_id`='253';
+DELETE FROM `db_academico`.`asignatura` WHERE `asi_id`='254';
+DELETE FROM `db_academico`.`asignatura` WHERE `asi_id`='255';
+DELETE FROM `db_academico`.`asignatura` WHERE `asi_id`='256';
+DELETE FROM `db_academico`.`asignatura` WHERE `asi_id`='257';
+DELETE FROM `db_academico`.`asignatura` WHERE `asi_id`='258';
+DELETE FROM `db_academico`.`asignatura` WHERE `asi_id`='259';
+DELETE FROM `db_academico`.`asignatura` WHERE `asi_id`='260';
+DELETE FROM `db_academico`.`asignatura` WHERE `asi_id`='261';
+DELETE FROM `db_academico`.`asignatura` WHERE `asi_id`='262';
+DELETE FROM `db_academico`.`asignatura` WHERE `asi_id`='263';
+DELETE FROM `db_academico`.`asignatura` WHERE `asi_id`='264';
+DELETE FROM `db_academico`.`asignatura` WHERE `asi_id`='265';
+DELETE FROM `db_academico`.`asignatura` WHERE `asi_id`='266';
+DELETE FROM `db_academico`.`asignatura` WHERE `asi_id`='267';
+DELETE FROM `db_academico`.`asignatura` WHERE `asi_id`='268';
+DELETE FROM `db_academico`.`asignatura` WHERE `asi_id`='269';
+DELETE FROM `db_academico`.`asignatura` WHERE `asi_id`='270';
+DELETE FROM `db_academico`.`asignatura` WHERE `asi_id`='271';
+DELETE FROM `db_academico`.`asignatura` WHERE `asi_id`='272';
+DELETE FROM `db_academico`.`asignatura` WHERE `asi_id`='273';
+DELETE FROM `db_academico`.`asignatura` WHERE `asi_id`='274';
+DELETE FROM `db_academico`.`asignatura` WHERE `asi_id`='275';
+DELETE FROM `db_academico`.`asignatura` WHERE `asi_id`='276';
+DELETE FROM `db_academico`.`asignatura` WHERE `asi_id`='277';
+DELETE FROM `db_academico`.`asignatura` WHERE `asi_id`='278';
+DELETE FROM `db_academico`.`asignatura` WHERE `asi_id`='279';
+DELETE FROM `db_academico`.`asignatura` WHERE `asi_id`='280';
+DELETE FROM `db_academico`.`asignatura` WHERE `asi_id`='281';
+DELETE FROM `db_academico`.`asignatura` WHERE `asi_id`='282';
+DELETE FROM `db_academico`.`asignatura` WHERE `asi_id`='283';
+DELETE FROM `db_academico`.`asignatura` WHERE `asi_id`='284';
+DELETE FROM `db_academico`.`asignatura` WHERE `asi_id`='285';
+DELETE FROM `db_academico`.`asignatura` WHERE `asi_id`='286';
+DELETE FROM `db_academico`.`asignatura` WHERE `asi_id`='287';
+DELETE FROM `db_academico`.`asignatura` WHERE `asi_id`='288';
+DELETE FROM `db_academico`.`asignatura` WHERE `asi_id`='289';
+DELETE FROM `db_academico`.`asignatura` WHERE `asi_id`='290';
+DELETE FROM `db_academico`.`asignatura` WHERE `asi_id`='291';
+DELETE FROM `db_academico`.`asignatura` WHERE `asi_id`='292';
+DELETE FROM `db_academico`.`asignatura` WHERE `asi_id`='293';
+DELETE FROM `db_academico`.`asignatura` WHERE `asi_id`='294';
+DELETE FROM `db_academico`.`asignatura` WHERE `asi_id`='295';
+DELETE FROM `db_academico`.`asignatura` WHERE `asi_id`='296';
+DELETE FROM `db_academico`.`asignatura` WHERE `asi_id`='297';
+DELETE FROM `db_academico`.`asignatura` WHERE `asi_id`='298';
+DELETE FROM `db_academico`.`asignatura` WHERE `asi_id`='299';
+DELETE FROM `db_academico`.`asignatura` WHERE `asi_id`='300';
+DELETE FROM `db_academico`.`asignatura` WHERE `asi_id`='301';
+DELETE FROM `db_academico`.`asignatura` WHERE `asi_id`='302';
+DELETE FROM `db_academico`.`asignatura` WHERE `asi_id`='303';
+DELETE FROM `db_academico`.`asignatura` WHERE `asi_id`='304';
+DELETE FROM `db_academico`.`asignatura` WHERE `asi_id`='305';
+DELETE FROM `db_academico`.`asignatura` WHERE `asi_id`='306';
+DELETE FROM `db_academico`.`asignatura` WHERE `asi_id`='307';
+DELETE FROM `db_academico`.`asignatura` WHERE `asi_id`='308';
+DELETE FROM `db_academico`.`asignatura` WHERE `asi_id`='309';
+DELETE FROM `db_academico`.`asignatura` WHERE `asi_id`='310';
+DELETE FROM `db_academico`.`asignatura` WHERE `asi_id`='311';
+DELETE FROM `db_academico`.`asignatura` WHERE `asi_id`='312';
+DELETE FROM `db_academico`.`asignatura` WHERE `asi_id`='313';
+DELETE FROM `db_academico`.`asignatura` WHERE `asi_id`='314';
+DELETE FROM `db_academico`.`asignatura` WHERE `asi_id`='315';
+DELETE FROM `db_academico`.`asignatura` WHERE `asi_id`='316';
+DELETE FROM `db_academico`.`asignatura` WHERE `asi_id`='317';
+DELETE FROM `db_academico`.`asignatura` WHERE `asi_id`='318';
+DELETE FROM `db_academico`.`asignatura` WHERE `asi_id`='319';
+DELETE FROM `db_academico`.`asignatura` WHERE `asi_id`='320';
+DELETE FROM `db_academico`.`asignatura` WHERE `asi_id`='321';
+DELETE FROM `db_academico`.`asignatura` WHERE `asi_id`='322';
+DELETE FROM `db_academico`.`asignatura` WHERE `asi_id`='323';
+DELETE FROM `db_academico`.`asignatura` WHERE `asi_id`='324';
+DELETE FROM `db_academico`.`asignatura` WHERE `asi_id`='325';
+DELETE FROM `db_academico`.`asignatura` WHERE `asi_id`='326';
+DELETE FROM `db_academico`.`asignatura` WHERE `asi_id`='327';
+DELETE FROM `db_academico`.`asignatura` WHERE `asi_id`='328';
+DELETE FROM `db_academico`.`asignatura` WHERE `asi_id`='329';
+DELETE FROM `db_academico`.`asignatura` WHERE `asi_id`='330';
+DELETE FROM `db_academico`.`asignatura` WHERE `asi_id`='331';
+DELETE FROM `db_academico`.`asignatura` WHERE `asi_id`='332';
+DELETE FROM `db_academico`.`asignatura` WHERE `asi_id`='333';
+DELETE FROM `db_academico`.`asignatura` WHERE `asi_id`='334';
+DELETE FROM `db_academico`.`asignatura` WHERE `asi_id`='335';
+
+-- AGREGAR COLUMNA
+ALTER TABLE db_academico.`asignatura`
+ADD COLUMN `uaca_id` bigint(20) AFTER `scon_id`;  
+
+-- AGREGAR FORWING KEY
+ALTER TABLE db_academico.`asignatura` ADD FOREIGN KEY (uaca_id) 
+REFERENCES `unidad_academica`(uaca_id);
+
+
+-- ------------------------------------------------------
+
+-- QUE SE VA A HACER CON LAS TABLAS REGISTRO DE MARCACION Y REGISTRO MARCACION GENERADA
+-- SOLO SE ESCONDE LA LLAMADA DEL MENU
+
+
 
 
 

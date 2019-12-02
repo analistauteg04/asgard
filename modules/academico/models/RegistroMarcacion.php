@@ -116,7 +116,7 @@ class RegistroMarcacion extends \yii\db\ActiveRecord {
                     asig.asi_nombre as materia,
                     hap.pro_id as profesor,
                     -- ifnull(CONCAT(sem.saca_anio,' (',blq.baca_nombre,'-',sem.saca_nombre,')'),sem.saca_anio) as periodo,
-                    ifnull(CONCAT(paca.paca_anio_academico,' (',blq.baca_nombre,'-',sem.saca_nombre,')'),paca.paca_anio_academico) as periodo,
+                    -- ifnull(CONCAT(paca.paca_anio_academico,' (',blq.baca_nombre,'-',sem.saca_nombre,')'),paca.paca_anio_academico) as periodo,
                     ifnull((SELECT DATE_FORMAT(marc.rmar_fecha_hora_entrada, '%H:%i:%s')
                             FROM db_academico.registro_marcacion marc
                             WHERE marc.pro_id = prof.pro_id 
