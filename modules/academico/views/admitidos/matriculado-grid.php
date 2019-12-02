@@ -76,11 +76,11 @@ academico::registerTranslations();
                 'header' => academico::t("Academico", "Contract"),
                 'value' => 'beca',
             ],
-            [
+            /*[
                 'attribute' => 'promocion',
                 'header' => academico::t("Academico", "Promotion"),
                 'value' => 'pami_codigo',
-            ],
+            ],*/
             [
                 'class' => 'yii\grid\ActionColumn',
                 'header' => Yii::t("formulario", "Actions"),
