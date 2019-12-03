@@ -16,7 +16,7 @@ academico::registerTranslations();
         'id' => 'Tbg_Distributivo',
         'showExport' => true,
         'fnExportEXCEL' => "exportExcel",
-        'fnExportPDF' => "exportPdf",
+        //'fnExportPDF' => "exportPdf",
         'dataProvider' => $model,
         //'pajax' => false,
         'columns' =>

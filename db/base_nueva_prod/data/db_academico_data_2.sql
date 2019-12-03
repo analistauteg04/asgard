@@ -25,6 +25,12 @@ INSERT INTO `bloque_academico` (`baca_id`,`baca_nombre`, `baca_descripcion`, `ba
 (3, 'B2', 'Enero - Febrero', 2019, 1, '1', '1'),
 (4, 'B1', 'Octubre - Diciembre', 2019, 1, '1', '1');
 
+INSERT INTO db_academico.`bloque_academico` (`baca_id`,`baca_nombre`, `baca_descripcion`, `baca_anio`, `baca_usuario_ingreso`, `baca_estado`, `baca_estado_logico`) VALUES 
+(5, 'B1', 'Abril - Junio', 2017, 1, '1', '1'),
+(6, 'B1', 'Octubre - Diciembre', 2017, 1, '1', '1'),
+(7, 'B1', 'Abril - Junio', 2018, 1, '1', '1'),
+(8, 'B1', 'Octubre - Diciembre', 2018, 1, '1', '1');
+
 -- ------------------------ ------------------------------
 --
 -- Volcado de datos para la tabla `periodo_academico`
@@ -32,6 +38,11 @@ INSERT INTO `bloque_academico` (`baca_id`,`baca_nombre`, `baca_descripcion`, `ba
 INSERT INTO `periodo_academico` (`paca_id`, `saca_id`, `baca_id`, `paca_activo`, `paca_fecha_inicio`, `paca_fecha_fin`, `paca_usuario_ingreso`, `paca_usuario_modifica`, `paca_estado`, `paca_fecha_creacion`, `paca_fecha_modificacion`, `paca_estado_logico`) VALUES
 (1, 1, 1,  'I', '2019-04-13 04:00:00', '2019-06-30 03:59:59', 1, NULL, '1', '2019-04-11 20:03:41', NULL, '1'),
 (2, 1, 2,  'A', '2019-07-08 05:00:00', '2019-09-22 04:59:59', 1, NULL, '1', '2019-07-08 16:00:26', NULL, '1');
+
+INSERT INTO db_academico.`periodo_academico` (`paca_id`, `saca_id`, `baca_id`, `paca_activo`, `paca_fecha_inicio`, `paca_fecha_fin`, `paca_usuario_ingreso`, `paca_usuario_modifica`, `paca_estado`, `paca_fecha_creacion`, `paca_estado_logico`) VALUES
+(4, 3, 5,  'I', '2017-04-01 00:00:00', '2017-08-31 23:59:59', 1, NULL, '1', '2019-07-01 08:00:26', '1'),
+(5, 4, 6,  'I', '2017-10-01 00:00:00', '2018-02-28 23:59:59', 1, NULL, '1', '2019-07-01 08:00:26', '1'),
+(6, 5, 7,  'I', '2018-04-01 00:00:00', '2018-08-31 23:59:59', 1, NULL, '1', '2019-07-01 08:00:26', '1');
 
 -- --------------------------------------------------------
 --
