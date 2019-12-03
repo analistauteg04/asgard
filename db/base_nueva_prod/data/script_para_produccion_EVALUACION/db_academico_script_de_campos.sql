@@ -364,7 +364,22 @@ update db_academico.`bloque_academico`
 set baca_anio = '2019' where baca_id > 0 and baca_id < 5
 
 -- VERIFICAR SI SE DEBE BORRAR LOS ID DEL 5 AL 16 Y VOLVER A PONER EL SECUENCIAL 
--- ****OJO*** de la tabla bloque_academico
+DELETE FROM `db_academico`.`bloque_academico` WHERE `baca_id`='5';
+DELETE FROM `db_academico`.`bloque_academico` WHERE `baca_id`='6';
+DELETE FROM `db_academico`.`bloque_academico` WHERE `baca_id`='7';
+DELETE FROM `db_academico`.`bloque_academico` WHERE `baca_id`='8';
+DELETE FROM `db_academico`.`bloque_academico` WHERE `baca_id`='9';
+DELETE FROM `db_academico`.`bloque_academico` WHERE `baca_id`='10';
+DELETE FROM `db_academico`.`bloque_academico` WHERE `baca_id`='11';
+DELETE FROM `db_academico`.`bloque_academico` WHERE `baca_id`='12';
+DELETE FROM `db_academico`.`bloque_academico` WHERE `baca_id`='13';
+DELETE FROM `db_academico`.`bloque_academico` WHERE `baca_id`='14';
+DELETE FROM `db_academico`.`bloque_academico` WHERE `baca_id`='15';
+DELETE FROM `db_academico`.`bloque_academico` WHERE `baca_id`='16';
+
+ALTER TABLE `db_academico`.`bloque_academico` 
+AUTO_INCREMENT = 5 ;
+
 
 -- ---------------------------------------------------------------------
 -- 
@@ -739,7 +754,7 @@ ALTER TABLE `distributivo_horario` ADD FOREIGN KEY (ppla_id) REFERENCES `paralel
 -- --------------------------------------------------------
 -- 
 -- Estructura de tabla para la tabla `distributivo_horario_det`
--- 
+
 create table if not exists `distributivo_horario_det` (
   `dhde_id` bigint(20) not null auto_increment primary key,   
   `dhor_id` bigint(20) not null,
@@ -973,9 +988,10 @@ DROP INDEX `par_id` ;
 -- BORRAR ASIGNACION PARALELO
 DROP TABLE asignacion_paralelo;
 
--- -------------------------------
--- BORRAR estudio_academico_area_conocimiento
-DROP TABLE estudio_academico_area_conocimiento; -- PORQUE PREGUNTAR
+
+ALTER TABLE `db_academico`.`estudio_academico_area_conocimiento` 
+RENAME TO  `db_academico`.`estudio_acad_area_con` ;
+
 
 -- ------------------------------------------------------------
 -- BORRAR modalidad_unidad_academico
@@ -985,7 +1001,7 @@ DROP TABLE modalidad_unidad_academico;
 -- ----------------------------------------------
 
 -- BORRAR modulo_estudio_empresa
-DROP TABLE modulo_estudio_empresa;	-- PORQUE PREGUNTAR
+DROP TABLE modulo_estudio_empresa;	
 
 -- ----------------------------------------------
 -- BORRAR paralelo
