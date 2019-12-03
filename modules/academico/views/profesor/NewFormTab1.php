@@ -11,7 +11,7 @@ use app\components\CFileInputAjax;
 use app\modules\Academico\Module as Academico;
 Academico::registerTranslations();
 ?>
-<form class="form-horizontal">
+<form class="form-horizontal" enctype="multipart/form-data" >
     <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
         <div class="form-group">
             <label for="txt_primer_nombre" class="col-lg-3 col-md-3 col-sm-3 col-xs-3 control-label"><?= Academico::t("profesor", "First Name") ?></label>
@@ -118,5 +118,62 @@ Academico::registerTranslations();
                 ?>  
             </div>
         </div>
+    </div>
+    <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
+        <div class="form-group">           
+        <label for="txth_doc_cv" class="col-lg-3 col-md-3 col-sm-3 col-xs-3 control-label"><?= Academico::t("profesor", "CV")  ?> <span class="text-danger">*</span></label>                    
+            <div class="col-lg-9 col-md-9 col-sm-9 col-xs-9">
+                <?= Html::hiddenInput('txth_doc_cv', $per_foto, ['id' => 'txth_doc_cv']); ?>
+                <?= Html::hiddenInput('txth_doc_cv2', $per_foto, ['id' => 'txth_doc_cv2']); ?>
+                <?php
+                echo CFileInputAjax::widget([
+                    'id' => 'txt_doc_cv',
+                    'name' => 'txt_doc_cv',                    
+                    'pluginLoading' => false,
+                    'showMessage' => false,
+                    'pluginOptions' => [
+                        'showPreview' => false,
+                        'showCaption' => true,
+                        'showRemove' => true,
+                        'showUpload' => false,
+                        'showCancel' => false,
+                        'browseClass' => 'btn btn-primary btn-block',
+                        'browseIcon' => '<i class="fa fa-folder-open"></i> ',
+                        'browseLabel' => "Subir CV",
+                        'uploadUrl' => Url::to(['/academico/profesor/new']),
+                        'maxFileSize' => Yii::$app->params["MaxFileSize"], // en Kbytes
+                        'uploadExtraData' => 'javascript:function (previewId,index) {
+                            return {"upload_file": true, "name_file": "op_documento-' . @Yii::$app->session->get("PB_iduser") . '-' . time() . '"};
+                        }',
+                    ],
+                    'options' => ['accept' => 'application/pdf'],
+                    'pluginEvents' => [
+                        "filebatchselected" => "function (event) {
+                            $('#txth_doc_cv2').val('op_documento-" . @Yii::$app->session->get("PB_iduser") . '-' . time() . "');
+                            $('#txth_doc_cv').val($('#txth_doc_cv').val());
+                            $('#txt_doc_cv').fileinput('upload');
+                        }",
+                        "fileuploaderror" => "function (event, data, msg) {
+                            $(this).parent().parent().children().first().addClass('hide');
+                            $('#txth_doc_cv').val('');        
+                        }",
+                        "filebatchuploadcomplete" => "function (event, files, extra) { 
+                            $(this).parent().parent().children().first().addClass('hide');
+                        }",
+                        "filebatchuploadsuccess" => "function (event, data, previewId, index) {
+                            var form = data.form, files = data.files, extra = data.extra,
+                            response = data.response, reader = data.reader;
+                            $(this).parent().parent().children().first().addClass('hide');
+                            var acciones = [{id: 'reloadpage', class: 'btn btn-primary', value: objLang.Accept, callback: 'reloadPage'}];       
+                        }",
+                        "fileuploaded" => "function (event, data, previewId, index) {
+                            $(this).parent().parent().children().first().addClass('hide');
+                            var acciones = [{id: 'reloadpage', class: 'btn btn-primary', value: objLang.Accept, callback: 'reloadPage'}];                           
+                        }",
+                    ],
+                ]);
+                ?>
+            </div>
+        </div>            
     </div>
 </form>

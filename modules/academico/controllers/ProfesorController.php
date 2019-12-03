@@ -275,6 +275,51 @@ class ProfesorController extends \app\components\CController {
         if (isset($data['id'])) {
             $id = $data['id'];
 
+            if (Yii::$app->request->isAjax) {
+                if (isset($data["pai_id"])) {
+                    $model = new Provincia();
+                    $arr_pro = $model->provinciabyPais($data["pai_id"]);
+                    
+                    list($firstpro) = $arr_pro;
+    
+                    $arr_can  = Canton::find()
+                        ->select(["can_id as id", "can_nombre as name"])            
+                        ->andWhere(["can_estado" => 1, "can_estado_logico" => 1,
+                        "pro_id" => $firstpro['id']])->asArray()->all();
+    
+                    return Utilities::ajaxResponse('OK', 'alert', Yii::t('jslang', 'Success'), 'false', ['arr_pro'=>$arr_pro, 'arr_can'=>$arr_can]);
+                }else if(isset($data["pro_id"])){
+                    $arr_can  = Canton::find()
+                        ->select(["can_id as id", "can_nombre as name"])            
+                        ->andWhere(["can_estado" => 1, "can_estado_logico" => 1,
+                        "pro_id" => $data["pro_id"]])->asArray()->all();
+    
+                    return Utilities::ajaxResponse('OK', 'alert', Yii::t('jslang', 'Success'), 'false', $arr_can);
+                }
+    
+                if ($data["upload_file"]) {
+                    if (empty($_FILES)) {
+                        return json_encode(['error' => Yii::t("notificaciones", "Error to process File ". "CV" .". Try again.")]);
+                    }
+                    //Recibe Parámetros
+                    $files = $_FILES[key($_FILES)];
+                    $arrIm = explode(".", basename($files['name']));
+                    $typeFile = strtolower($arrIm[count($arrIm) - 1]);
+                    if ($typeFile == 'pdf') {
+                        $dirFileEnd = Yii::$app->params["documentFolder"] . "expediente/" . $data["name_file"] . "." . $typeFile;
+                        $status = Utilities::moveUploadFile($files['tmp_name'], $dirFileEnd);
+                        if ($status) {
+                            return true;                        
+                        } else {
+                            return json_encode(['error' => Yii::t("notificaciones", "Error to process File ". basename($files['name']) .". Try again.")]);
+                        }
+                    } else {                    
+                        return json_encode(['error' => Yii::t("notificaciones", "Error to process File ". basename($files['name']) .". Try again.")]);
+                    }
+                }
+            }
+
+
             $persona_model = Persona::findOne($id);            
             $usuario_model = Usuario::findOne(["per_id" => $id, "usu_estado" => '1', "usu_estado_logico" => '1']);
             $empresa_persona_model = EmpresaPersona::findOne(["per_id" => $id, "eper_estado" => '1', "eper_estado_logico" => '1']);
@@ -519,13 +564,34 @@ class ProfesorController extends \app\components\CController {
                     "pro_id" => $firstpro['id']])->asArray()->all();
 
                 return Utilities::ajaxResponse('OK', 'alert', Yii::t('jslang', 'Success'), 'false', ['arr_pro'=>$arr_pro, 'arr_can'=>$arr_can]);
-            }else{
+            }else if(isset($data["pro_id"])){
                 $arr_can  = Canton::find()
                     ->select(["can_id as id", "can_nombre as name"])            
                     ->andWhere(["can_estado" => 1, "can_estado_logico" => 1,
                     "pro_id" => $data["pro_id"]])->asArray()->all();
 
                 return Utilities::ajaxResponse('OK', 'alert', Yii::t('jslang', 'Success'), 'false', $arr_can);
+            }
+
+            if ($data["upload_file"]) {
+                if (empty($_FILES)) {
+                    return json_encode(['error' => Yii::t("notificaciones", "Error to process File ". "CV" .". Try again.")]);
+                }
+                //Recibe Parámetros
+                $files = $_FILES[key($_FILES)];
+                $arrIm = explode(".", basename($files['name']));
+                $typeFile = strtolower($arrIm[count($arrIm) - 1]);
+                if ($typeFile == 'pdf') {
+                    $dirFileEnd = Yii::$app->params["documentFolder"] . "expediente/" . $data["name_file"] . "." . $typeFile;
+                    $status = Utilities::moveUploadFile($files['tmp_name'], $dirFileEnd);
+                    if ($status) {
+                        return true;                        
+                    } else {
+                        return json_encode(['error' => Yii::t("notificaciones", "Error to process File ". basename($files['name']) .". Try again.")]);
+                    }
+                } else {                    
+                    return json_encode(['error' => Yii::t("notificaciones", "Error to process File ". basename($files['name']) .". Try again.")]);
+                }
             }
         }
 
@@ -1580,4 +1646,5 @@ class ProfesorController extends \app\components\CController {
             }
         }
     }
+
 }

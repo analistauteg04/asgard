@@ -119,4 +119,5 @@ return [
     'Contact Name' => 'Nombre del Contacto',
     'Position' => 'Cargo / Relación',
     'Contact Number' => 'Número de Contacto',
+    'CV' => 'CV',
 ];

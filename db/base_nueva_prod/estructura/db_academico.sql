@@ -391,6 +391,7 @@ create table if not exists `profesor` (
   `per_id` bigint(20) not null,
   `pro_fecha_contratacion` timestamp null default null,
   `pro_fecha_terminacion` timestamp null default null,  
+  `pro_cv` varchar(255) null,
   `pro_usuario_ingreso` bigint(20) not null,
   `pro_usuario_modifica` bigint(20)  null,
   `pro_estado` varchar(1) not null,
