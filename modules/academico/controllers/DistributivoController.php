@@ -121,7 +121,7 @@ class DistributivoController extends \app\components\CController {
             $arrSearch["tipo"] = $data['tipo'];      
             $arrSearch["semestre"] = $data['semestre'];
             $model = $distributivo_model->consultarCargaHoraria($arrSearch);
-            return $this->render('index-grid', [
+            return $this->render('carga_horaria-grid', [
                         "model" => $model,
             ]);
         } else {
@@ -134,6 +134,43 @@ class DistributivoController extends \app\components\CController {
                    'mod_semestre' => ArrayHelper::map(array_merge([["id" => "0", "name" => Yii::t("formulario", "Grid")]], $arr_semestre), "id", "name"),
                    'model' => $distributivo_model->consultarCargaHoraria(),
         ]);
+    }
+    
+     public function actionExpexcelhoras() {
+        ini_set('memory_limit', '256M');
+        $content_type = Utilities::mimeContentType("xls");
+        $nombarch = "Report-" . date("YmdHis") . ".xls";
+        header("Content-Type: $content_type");
+        header("Content-Disposition: attachment;filename=" . $nombarch);
+        header('Cache-Control: max-age=0');
+        $colPosition = array("C", "D", "E", "F", "G", "H", "I", "J", "K", "L", "M", "N");
+        $arrHeader = array(
+            Yii::t("formulario", "DNI 1"),
+            academico::t("Academico", "Teacher"),
+            Yii::t("formulario", "Semester"),
+            academico::t("Academico", "Teaching"),
+            academico::t("Academico", "Tutorial"),
+            academico::t("Academico", "Investigation"),
+            academico::t("Academico", "Bonding"),
+            academico::t("Academico", "Administrative"),
+            academico::t("Academico", "Other activities"),
+            academico::t("Academico", "Total Hours")
+        );
+        $distributivo_model = new Distributivo();        
+        $data = Yii::$app->request->get();
+        $arrSearch["search"] = $data['search'];                
+        $arrSearch["tipo"] = $data['tipo'];
+        $arrSearch["semestre"] = $data['semestre'];
+        $arrData = array();
+        if ($arrSearch["tipo"] ==0 and $arrSearch["semestre"] ==0 and (empty($arrSearch["search"]))) {
+            \app\models\Utilities::putMessageLogFile('arrSearch vacío');
+            $arrData = $distributivo_model->consultarCargaHorariaReporte(array());
+        } else {            
+            $arrData = $distributivo_model->consultarCargaHorariaReporte($arrSearch);
+        }        
+        $nameReport = academico::t("Academico", "Workload");
+        Utilities::generarReporteXLS($nombarch, $nameReport, $arrHeader, $arrData, $colPosition);
+        exit;
     }
 }
 

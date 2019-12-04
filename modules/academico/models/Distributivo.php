@@ -282,7 +282,7 @@ class Distributivo extends \yii\db\ActiveRecord
             $str_search .= "per.per_cedula like :search) AND ";
                         
             if ($arrFiltro['tipo'] != "" && $arrFiltro['tipo'] > 0) {
-                $str_search .= " d.tdis_id = :tipo AND ";
+                $str_search .= " d.tdis_id = :tipo AND d.dcho_horas > 0 AND ";
             }
             if ($arrFiltro['semestre'] != "" && $arrFiltro['semestre'] > 0) {
                 $str_search .= "d.saca_id = :semestre AND ";
@@ -332,8 +332,8 @@ class Distributivo extends \yii\db\ActiveRecord
             $search_cond = "%" . $arrFiltro["search"] . "%";
             $comando->bindParam(":search", $search_cond, \PDO::PARAM_STR);            
             if ($arrFiltro['tipo'] != "" && $arrFiltro['tipo'] > 0) {
-                $search_uni = $arrFiltro["tipo"];
-                $comando->bindParam(":tipo", $search_uni, \PDO::PARAM_INT);
+                $search_tipo = $arrFiltro["tipo"];
+                $comando->bindParam(":tipo", $search_tipo, \PDO::PARAM_INT);
             }
             if ($arrFiltro['semestre'] != "" && $arrFiltro['semestre'] > 0) {
                 $search_semestre = $arrFiltro["semestre"];
@@ -353,4 +353,79 @@ class Distributivo extends \yii\db\ActiveRecord
         ]);        
         return $dataProvider;        
     }  
+    
+     /**
+     * Function Obtiene información de carga horaria.
+     * @author Grace Viteri <analistadesarrollo01@uteg.edu.ec>;
+     * @param
+     * @return
+     */
+    public function consultarCargaHorariaReporte($arrFiltro = array()) {
+        $con = \Yii::$app->db_academico;
+        $con1 = \Yii::$app->db_asgard;
+        $estado = 1;
+        
+        if (isset($arrFiltro) && count($arrFiltro) > 0) {
+            $str_search .= "(per.per_pri_nombre like :search OR ";
+            $str_search .= "per.per_seg_nombre like :search OR ";
+            $str_search .= "per.per_pri_apellido like :search OR ";
+            $str_search .= "per.per_seg_apellido like :search OR ";
+            $str_search .= "per.per_cedula like :search) AND ";
+                        
+            if ($arrFiltro['tipo'] != "" && $arrFiltro['tipo'] > 0) {
+                $str_search .= " d.tdis_id = :tipo AND d.dcho_horas > 0 AND ";
+            }
+            if ($arrFiltro['semestre'] != "" && $arrFiltro['semestre'] > 0) {
+                $str_search .= "d.saca_id = :semestre AND ";
+            }        
+        }        
+        $sql = "SELECT  per.per_cedula,                        
+                        concat(per.per_pri_nombre,' ', per.per_pri_apellido) as docente,                        
+                        CONCAT(sa.saca_nombre,' ',sa.saca_anio) as semestre,                        
+                        GROUP_CONCAT(CASE
+                            WHEN d.tdis_id = 1 THEN dcho_horas end) as docencia,
+						GROUP_CONCAT(CASE
+                            WHEN d.tdis_id = 2 THEN dcho_horas end) as tutoria,
+						GROUP_CONCAT(CASE
+                            WHEN d.tdis_id = 3 THEN dcho_horas end) as investigacion,
+						GROUP_CONCAT(CASE
+                            WHEN d.tdis_id = 4 THEN dcho_horas end) as vinculacion,
+						GROUP_CONCAT(CASE
+                            WHEN d.tdis_id = 5 THEN dcho_horas end) as administrativa,
+						GROUP_CONCAT(CASE
+                            WHEN d.tdis_id = 6 THEN dcho_horas end) as otras,
+						sum(dcho_horas) as total
+                FROM ". $con->dbname . ".distributivo_carga_horaria d
+                inner join ". $con->dbname . ".profesor p on p.pro_id = d.pro_id
+                inner join ". $con1->dbname . ".persona per on per.per_id = p.per_id						
+                inner join ". $con->dbname . ".semestre_academico sa on sa.saca_id = d.saca_id
+                inner join ". $con->dbname . ".tipo_distributivo t on t.tdis_id = d.tdis_id
+                WHERE $str_search					  
+                      d.dcho_estado = '1'
+                      and d.dcho_estado_logico = '1'
+                      and p.pro_estado = '1'
+                      and p.pro_estado_logico = '1'
+                      and per.per_estado = '1'
+                      and per.per_estado_logico = '1'                      
+                      and sa.saca_estado = '1'
+                      and sa.saca_estado_logico = '1'
+                ORDER BY d.dcho_id desc";                 
+        
+        $comando = $con->createCommand($sql);
+        $comando->bindParam(":estado", $estado, \PDO::PARAM_STR);
+        if (isset($arrFiltro) && count($arrFiltro) > 0) {
+            $search_cond = "%" . $arrFiltro["search"] . "%";
+            $comando->bindParam(":search", $search_cond, \PDO::PARAM_STR);            
+            if ($arrFiltro['tipo'] != "" && $arrFiltro['tipo'] > 0) {
+                $search_tipo = $arrFiltro["tipo"];
+                $comando->bindParam(":tipo", $search_tipo, \PDO::PARAM_INT);
+            }
+            if ($arrFiltro['semestre'] != "" && $arrFiltro['semestre'] > 0) {
+                $search_semestre = $arrFiltro["semestre"];
+                $comando->bindParam(":semestre", $search_semestre, \PDO::PARAM_INT);
+            }
+        }
+        $resultData = $comando->queryAll();
+        return $resultData;
+    } 
 }

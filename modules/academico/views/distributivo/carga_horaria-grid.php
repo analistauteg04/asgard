@@ -15,7 +15,7 @@ academico::registerTranslations();
     PbGridView::widget([
         'id' => 'Tbg_CargaHoraria',
         'showExport' => true,
-        'fnExportEXCEL' => "exportExcelCargaH",
+        'fnExportEXCEL' => "exportExcelHoras",
         //'fnExportPDF' => "exportPdf",
         'dataProvider' => $model,
         //'pajax' => false,
