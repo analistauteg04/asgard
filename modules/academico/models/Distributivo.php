@@ -326,7 +326,7 @@ class Distributivo extends \yii\db\ActiveRecord
                       and per.per_estado_logico = '1'                      
                       and sa.saca_estado = '1'
                       and sa.saca_estado_logico = '1'
-                ORDER BY d.dcho_id desc";                 
+                GROUP BY d.pro_id, d.saca_id, d.tdis_id";                 
         
         $comando = $con->createCommand($sql);
         $comando->bindParam(":estado", $estado, \PDO::PARAM_STR);
