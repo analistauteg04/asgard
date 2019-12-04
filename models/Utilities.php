@@ -272,6 +272,9 @@ class Utilities {
             case 'remove':
                 $cssIcon = "glyphicon glyphicon-remove";
                 break;
+            case 'download':
+                $cssIcon = "glyphicon glyphicon-save";
+                break;
         }
         return $cssIcon;
     }

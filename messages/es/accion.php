@@ -48,6 +48,7 @@ return [
     "Clear" => "Limpiar",
     "Create" => "Crear",
     "Delete" => "Eliminar",
+    "Download" => "Descargar",
     "Export" => "Exportar",
     "Import" => "Importat",
     "Next" => "Siguiente",

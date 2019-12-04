@@ -36,6 +36,8 @@ Academico::registerTranslations();
 
 class ProfesorController extends \app\components\CController {
 
+    public $folder_cv = 'expediente';
+
     public function actionIndex() {
         $pro_model = new profesor();
         /* Validacion de acceso a vistas por usuario */
@@ -775,6 +777,7 @@ class ProfesorController extends \app\components\CController {
                 $celular = $data["celular"];
                 $phone = $data["phone"];
                 $fecha_nacimiento = $data["fecha_nacimiento"];
+                $cv = $data['cv'];
 
                 /**
                  * Inf. Domicilio
@@ -876,6 +879,7 @@ class ProfesorController extends \app\components\CController {
                         $profesor_model->pro_estado = '1';
                         $profesor_model->pro_estado_logico = '1';
                         $profesor_model->pro_usuario_ingreso = $user_ingresa;
+                        $profesor_model->pro_cv = $this->folder_cv.'/'.$cv;
                         $profesor_model->save();
 
                         $usuario_model = new Usuario();
@@ -1332,6 +1336,7 @@ class ProfesorController extends \app\components\CController {
                 $celular = $data["celular"];
                 $phone = $data["phone"];
                 $fecha_nacimiento = $data["fecha_nacimiento"];
+                $cv = $data['cv'];
 
                 /**
                  * Inf. Domicilio
@@ -1417,7 +1422,10 @@ class ProfesorController extends \app\components\CController {
 
                     /** Se agregan Informacion de Expediente **/
                     $profesor_model = Profesor::findOne(["per_id" => $per_id]);
-
+                    if($cv != ""){
+                        $profesor_model->pro_cv = $this->folder_cv.'/'.$cv;
+                        $profesor_model->save();
+                    }
                     ProfesorInstruccion::deleteAllInfo($profesor_model->pro_id);
                     foreach($arr_instuccion as $key0 => $value0){
                         $instruccion_model = new ProfesorInstruccion();

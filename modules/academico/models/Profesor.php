@@ -65,6 +65,7 @@ class Profesor extends \yii\db\ActiveRecord
             [['per_id', 'pro_usuario_ingreso', 'pro_estado', 'pro_estado_logico'], 'required'],
             [['per_id', 'pro_usuario_ingreso', 'pro_usuario_modifica'], 'integer'],
             [['pro_fecha_contratacion', 'pro_fecha_terminacion', 'pro_fecha_creacion', 'pro_fecha_modificacion'], 'safe'],
+            [['pro_cv'], 'string', 'max' => 255],
             [['pro_estado', 'pro_estado_logico'], 'string', 'max' => 1],
         ];
     }
@@ -77,6 +78,7 @@ class Profesor extends \yii\db\ActiveRecord
         return [
             'pro_id' => 'Pro ID',
             'per_id' => 'Per ID',
+            'pro_cv' => 'pro_cv',
             'pro_fecha_contratacion' => 'Pro Fecha Contratacion',
             'pro_fecha_terminacion' => 'Pro Fecha Terminacion',
             'pro_usuario_ingreso' => 'Pro Usuario Ingreso',
@@ -243,7 +245,8 @@ class Profesor extends \yii\db\ActiveRecord
                     pe.per_seg_apellido as SegundoApellido, 
                     pe.per_celular as Celular, 
                     pe.per_correo as Correo, 
-                    pe.per_cedula as Cedula
+                    pe.per_cedula as Cedula,
+                    pro.pro_cv as Cv
                 FROM " . $con_academico->dbname . ".profesor AS pro
                 inner JOIN " . $con_asgard->dbname . ".persona as pe on pro.per_id = pe.per_id
                 WHERE $str_search pro.pro_estado_logico = 1 and pe.per_estado_logico = 1";
