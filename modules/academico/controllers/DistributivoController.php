@@ -109,5 +109,30 @@ class DistributivoController extends \app\components\CController {
         );
         $report->mpdf->Output('Reporte_' . date("Ymdhis") . ".pdf", ExportFile::OUTPUT_TO_DOWNLOAD);
     }   
+    
+    public function actionCarga_horaria() {
+        $distributivo_model = new Distributivo();
+        $mod_semestre = new SemestreAcademico();
+        $mod_tipo = new TipoDistributivo();
+        $data = Yii::$app->request->get();
+        if ($data['PBgetFilter']) {
+            $arrSearch["search"] = $data['search'];                        
+            $arrSearch["tipo"] = $data['tipo'];      
+            $arrSearch["semestre"] = $data['semestre'];
+            $model = $distributivo_model->consultarCargaHoraria($arrSearch);
+            return $this->render('index-grid', [
+                        "model" => $model,
+            ]);
+        } else {
+            $model = $distributivo_model->consultarCargaHoraria();
+        }        
+        $arr_tipo = $mod_tipo->consultarTipoDistributivo();
+        $arr_semestre = $mod_semestre->consultarSemestres();
+        return $this->render('carga_horaria', [
+                   'mod_tipo' => ArrayHelper::map(array_merge([["id" => "0", "name" => Yii::t("formulario", "Grid")]], $arr_tipo), "id", "name"),
+                   'mod_semestre' => ArrayHelper::map(array_merge([["id" => "0", "name" => Yii::t("formulario", "Grid")]], $arr_semestre), "id", "name"),
+                   'model' => $distributivo_model->consultarCargaHoraria(),
+        ]);
+    }
 }
 

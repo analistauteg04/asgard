@@ -1138,3 +1138,34 @@ create table if not exists `resumen_resultado_evaluacion` (
  foreign key (pro_id) references `profesor`(pro_id)
 );
 
+-- --------------------------------------------------------
+--
+-- Estructura de tabla para la tabla `tipo_distributivo`
+--
+create table if not exists `tipo_distributivo` (
+ `tdis_id` bigint(20) not null auto_increment primary key,
+ `tdis_nombre` varchar(250) default null,
+ `tdis_estado` varchar(1) not null,
+ `tdis_fecha_creacion` timestamp not null default current_timestamp,
+ `tdis_fecha_modificacion` timestamp null default null,
+ `tdis_estado_logico` varchar(1) not null
+);
+
+-- --------------------------------------------------------
+--
+-- Estructura de tabla para la tabla `distributivo_carga_horaria`
+--
+create table if not exists `distributivo_carga_horaria` (
+ `dcho_id` bigint(20) not null auto_increment primary key,
+ `pro_id` bigint(20) not null,
+ `tdis_id` bigint(20) not null, 
+ `saca_id` bigint(20) not null, 
+ `dcho_horas` int default null,
+ `dcho_estado` varchar(1) not null,
+ `dcho_fecha_creacion` timestamp not null default current_timestamp,
+ `dcho_fecha_modificacion` timestamp null default null,
+ `dcho_estado_logico` varchar(1) not null,
+ foreign key (saca_id) references `semestre_academico`(saca_id),
+ foreign key (pro_id) references `profesor`(pro_id),
+ foreign key (tdis_id) references `tipo_distributivo`(tdis_id) 
+);
