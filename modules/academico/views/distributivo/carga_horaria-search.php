@@ -25,13 +25,11 @@ use app\modules\academico\Module as academico;
             <div class="col-sm-3 col-xs-3 col-md-3 col-lg-3">
                 <?= Html::dropDownList("cmb_semestre", 0, $arr_semestre, ["class" => "form-control", "id" => "cmb_semestre"]) ?>
             </div>      
-        </div>
-        <div class="form-group">                        
             <label for="cmb_tipo" class="col-sm-2 col-sm-2 col-lg-2 col-md-2 col-xs-2 control-label"><?= academico::t("Academico", "Distributive Type") ?></label>
             <div class="col-sm-3 col-xs-3 col-md-3 col-lg-3">
                 <?= Html::dropDownList("cmb_tipo", 0, $arr_tipo, ["class" => "form-control", "id" => "cmb_tipo"]) ?>
-            </div>      
-        </div>
+            </div>              
+        </div>                    
     </div>    
     <div class="col-md-12 col-sm-12 col-xs-12 col-lg-12">
         <div class="col-sm-8"></div>

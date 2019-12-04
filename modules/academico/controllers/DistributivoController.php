@@ -7,6 +7,7 @@ use app\modules\academico\models\Asignatura;
 use app\modules\academico\models\Distributivo;
 use app\modules\academico\models\SemestreAcademico;
 use app\modules\academico\models\UnidadAcademica;
+use app\modules\academico\models\TipoDistributivo;
 use yii\helpers\ArrayHelper;
 use app\models\Utilities;
 use app\modules\academico\Module as academico;

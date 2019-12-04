@@ -32,45 +32,46 @@ academico::registerTranslations();
                 'value' => 'docente',
             ],    
             [
+                'attribute' => 'semestre',
+                'header' => Yii::t("formulario", "Semester"),
+                'value' => 'semestre',
+            ],    
+            [
                 'attribute' => 'Docencia',
                 'header' => academico::t("Academico", "Teaching"),
                 'value' => 'docencia',
             ], 
             [
                 'attribute' => 'Tutoria',
-                'header' => Yii::t("Academico", "Tutorial"),
+                'header' => academico::t("Academico", "Tutorial"),
                 'value' => 'tutoria',
             ], 
             [
                 'attribute' => 'Investigación',
-                'header' => Yii::t("Academico", "Investigation"),
+                'header' => academico::t("Academico", "Investigation"),
                 'value' => 'investigacion',
             ], 
             [
                 'attribute' => 'Vinculación',
-                'header' => Yii::t("Academico", "Vinculación"),
+                'header' => academico::t("Academico", "Bonding"),
                 'value' => 'vinculacion',
             ], 
             [
                 'attribute' => 'Administrativa',
-                'header' => Yii::t("Academico", "Administrative"),
-                'value' => 'administrativa',
-            ], 
-            [
-                'attribute' => 'Otras Actividades',
-                'header' => Yii::t("Academico", "Administrative"),
-                'value' => 'otras',
-            ],
-            [
-                'attribute' => 'Administrativa',
-                'header' => Yii::t("Academico", "Other activities"),
+                'header' => academico::t("Academico", "Administrative"),
                 'value' => 'administrativa',
             ],            
             [
-                'attribute' => 'semestre',
-                'header' => Yii::t("formulario", "Semester"),
-                'value' => 'semestre',
-            ],             
+                'attribute' => 'Administrativa',
+                'header' => academico::t("Academico", "Other activities"),
+                'value' => 'otras',
+            ],    
+            [
+                'attribute' => 'Administrativa',
+                'header' => academico::t("Academico", "Total Hours"),
+                'value' => 'total',
+            ],      
+                    
             /*[
                 'class' => 'yii\grid\ActionColumn',
                 'header' => academico::t("Academico", "Career/Program"),
