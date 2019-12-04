@@ -180,6 +180,7 @@ class OrdenPago extends \app\modules\financiero\components\CActiveRecord {
                      INNER JOIN " . $con2->dbname . ".orden_pago opag on sins.sins_id = opag.sins_id
                 WHERE 
                       $str_search
+                      ( sins.rsin_id <> 4 and opag_estado_pago = 'P') AND
                       sins.sins_estado = :estado AND
                       sins.sins_estado_logico = :estado AND
                       uaca.uaca_estado = :estado AND
@@ -2405,6 +2406,7 @@ class OrdenPago extends \app\modules\financiero\components\CActiveRecord {
                      INNER JOIN " . $con2->dbname . ".orden_pago opag on sins.sins_id = opag.sins_id
                 WHERE 
                       $str_search
+                      ( sins.rsin_id <> 4 and opag_estado_pago = 'P') AND
                       sins.sins_estado = :estado AND
                       sins.sins_estado_logico = :estado AND
                       uaca.uaca_estado = :estado AND
