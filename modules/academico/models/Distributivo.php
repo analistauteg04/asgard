@@ -289,27 +289,29 @@ class Distributivo extends \yii\db\ActiveRecord
             }        
         }        
         $sql = "SELECT  p.pro_id,
-                        per.per_cedula,
+                        ifnull(per.per_cedula,'') as per_cedula,
                         per.per_pri_nombre,
                         per.per_seg_nombre,
                         per.per_pri_apellido,
                         per.per_seg_apellido,
-                        concat(per.per_pri_nombre,' ', per.per_pri_apellido) as docente,
+                        ifnull(concat(per.per_pri_nombre,' ', per.per_pri_apellido),'') as docente,
                         d.saca_id,
-                        CONCAT(sa.saca_nombre,' ',sa.saca_anio) as semestre,                        
-                        GROUP_CONCAT(CASE
-                            WHEN d.tdis_id = 1 THEN dcho_horas end) as docencia,
-						GROUP_CONCAT(CASE
-                            WHEN d.tdis_id = 2 THEN dcho_horas end) as tutoria,
-						GROUP_CONCAT(CASE
-                            WHEN d.tdis_id = 3 THEN dcho_horas end) as investigacion,
-						GROUP_CONCAT(CASE
-                            WHEN d.tdis_id = 4 THEN dcho_horas end) as vinculacion,
-						GROUP_CONCAT(CASE
-                            WHEN d.tdis_id = 5 THEN dcho_horas end) as administrativa,
-						GROUP_CONCAT(CASE
-                            WHEN d.tdis_id = 6 THEN dcho_horas end) as otras,
-						sum(dcho_horas) as total
+                        (case when d.saca_id > 0 then
+                            CONCAT(sa.saca_nombre,' ',sa.saca_anio)
+                            else '' end) as semestre,
+                        ifnull(GROUP_CONCAT(CASE
+                            WHEN d.tdis_id = 1 THEN dcho_horas end),'') as docencia,
+                        ifnull(GROUP_CONCAT(CASE
+                            WHEN d.tdis_id = 2 THEN dcho_horas end),'') as tutoria,
+			ifnull(GROUP_CONCAT(CASE
+                            WHEN d.tdis_id = 3 THEN dcho_horas end),'') as investigacion,
+			ifnull(GROUP_CONCAT(CASE
+                            WHEN d.tdis_id = 4 THEN dcho_horas end),'') as vinculacion,
+			ifnull(GROUP_CONCAT(CASE
+                            WHEN d.tdis_id = 5 THEN dcho_horas end),'') as administrativa,
+			ifnull(GROUP_CONCAT(CASE
+                            WHEN d.tdis_id = 6 THEN dcho_horas end),'') as otras,
+                        ifnull(SUM(dcho_horas),'') as total
                 FROM ". $con->dbname . ".distributivo_carga_horaria d
                 inner join ". $con->dbname . ".profesor p on p.pro_id = d.pro_id
                 inner join ". $con1->dbname . ".persona per on per.per_id = p.per_id						
@@ -380,21 +382,23 @@ class Distributivo extends \yii\db\ActiveRecord
             }        
         }        
         $sql = "SELECT  per.per_cedula,                        
-                        concat(per.per_pri_nombre,' ', per.per_pri_apellido) as docente,                        
-                        CONCAT(sa.saca_nombre,' ',sa.saca_anio) as semestre,                        
-                        GROUP_CONCAT(CASE
-                            WHEN d.tdis_id = 1 THEN dcho_horas end) as docencia,
-						GROUP_CONCAT(CASE
-                            WHEN d.tdis_id = 2 THEN dcho_horas end) as tutoria,
-						GROUP_CONCAT(CASE
-                            WHEN d.tdis_id = 3 THEN dcho_horas end) as investigacion,
-						GROUP_CONCAT(CASE
-                            WHEN d.tdis_id = 4 THEN dcho_horas end) as vinculacion,
-						GROUP_CONCAT(CASE
-                            WHEN d.tdis_id = 5 THEN dcho_horas end) as administrativa,
-						GROUP_CONCAT(CASE
-                            WHEN d.tdis_id = 6 THEN dcho_horas end) as otras,
-						sum(dcho_horas) as total
+                        IFNULL(concat(per.per_pri_nombre,' ', per.per_pri_apellido),'') as docente,                        
+                        (CASE WHEN d.saca_id > 0 then
+                            CONCAT(sa.saca_nombre,' ',sa.saca_anio)
+                            else '' END) as semestre,
+                        IFNULL(GROUP_CONCAT(CASE
+                            WHEN d.tdis_id = 1 THEN dcho_horas end),'') as docencia,
+			IFNULL(GROUP_CONCAT(CASE
+                            WHEN d.tdis_id = 2 THEN dcho_horas end),'') as tutoria,
+			IFNULL(GROUP_CONCAT(CASE
+                            WHEN d.tdis_id = 3 THEN dcho_horas end),'') as investigacion,
+			IFNULL(GROUP_CONCAT(CASE
+                            WHEN d.tdis_id = 4 THEN dcho_horas end),'') as vinculacion,
+			IFNULL(GROUP_CONCAT(CASE
+                            WHEN d.tdis_id = 5 THEN dcho_horas end),'') as administrativa,
+			IFNULL(GROUP_CONCAT(CASE
+                            WHEN d.tdis_id = 6 THEN dcho_horas end),'') as otras,
+			SUM(dcho_horas) as total
                 FROM ". $con->dbname . ".distributivo_carga_horaria d
                 inner join ". $con->dbname . ".profesor p on p.pro_id = d.pro_id
                 inner join ". $con1->dbname . ".persona per on per.per_id = p.per_id						
