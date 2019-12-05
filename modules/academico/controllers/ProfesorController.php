@@ -1655,4 +1655,33 @@ class ProfesorController extends \app\components\CController {
         }
     }
 
+    public function actionDownload($route) {
+        $grupo = new Grupo();
+        if (Yii::$app->session->get('PB_isuser')) {
+            $route = str_replace("../", "", $route);
+            if (preg_match("/^".$this->folder_cv."\//", $route)) {
+                $url_image = Yii::$app->basePath . "/uploads/" .$route;
+                $arrIm = explode(".", $url_image);
+                $typeImage = $arrIm[count($arrIm) - 1];
+                if (file_exists($url_image)) {
+                    if (strtolower($typeImage) == "pdf") {
+                        header('Pragma: public');
+                        header('Expires: 0');
+                        header('Cache-Control: must-revalidate, post-check=0, pre-check=0');
+                        header('Cache-Control: private', false);
+                        header("Content-type: application/pdf");
+
+                        header('Content-Disposition: attachment; filename="cv_'. time() . '.pdf";');
+                        header('Content-Transfer-Encoding: binary');
+                        header('Content-Length: ' . filesize($url_image));
+                        readfile($url_image);
+                        //return file_get_contents($url_image);
+                    }
+                    
+                }
+            }
+        }
+        exit();
+    }
+
 }

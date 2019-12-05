@@ -22,7 +22,7 @@ Academico::registerTranslations();
                     'name' => 'txt_pro_from',
                     'value' => '',
                     'type' => DatePicker::TYPE_INPUT,
-                    'options' => ["class" => "form-control PBvalidation keyupmce", "id" => "txt_pro_from", "data-type" => "fecha", "data-keydown" => "true", "placeholder" => "yyyy-mm-dd" ],
+                    'options' => ["class" => "form-control PBvalidations keyupmce", "id" => "txt_pro_from", "data-type" => "fecha", "data-keydown" => "true", "placeholder" => "yyyy-mm-dd" ],
                     'pluginOptions' => [
                         'autoclose' => true,
                         'format' => Yii::$app->params["dateByDatePicker"],
@@ -39,7 +39,7 @@ Academico::registerTranslations();
                     'name' => 'txt_pro_to',
                     'value' => '',
                     'type' => DatePicker::TYPE_INPUT,
-                    'options' => ["class" => "form-control PBvalidation keyupmce", "id" => "txt_pro_to", "data-type" => "fecha", "data-keydown" => "true", "placeholder" => "yyyy-mm-dd" ],
+                    'options' => ["class" => "form-control PBvalidations keyupmce", "id" => "txt_pro_to", "data-type" => "fecha", "data-keydown" => "true", "placeholder" => "yyyy-mm-dd" ],
                     'pluginOptions' => [
                         'autoclose' => true,
                         'format' => Yii::$app->params["dateByDatePicker"],

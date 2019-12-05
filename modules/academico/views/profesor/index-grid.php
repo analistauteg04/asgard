@@ -56,7 +56,8 @@ academico::registerTranslations();
                          return Html::a('<span class="'.Utilities::getIcon('remove').'"></span>', null, ['href' => 'javascript:confirmDelete(\'deleteItem\',[\'' . $model['per_id'] . '\']);', "data-toggle" => "tooltip", "title" => Yii::t("accion","Delete")]);
                     },
                     'download' => function ($url, $model) {
-                        return Html::a('<span class="'.Utilities::getIcon('download').'"></span>', Url::to(['/site/getimage?route=', 'route' => $model['Cv']]), ["data-toggle" => "tooltip", "title" => Yii::t("accion","Download")]);
+                        if($model['Cv'] != "")
+                            return Html::a('<span class="'.Utilities::getIcon('download').'"></span>', Url::to(['profesor/download', 'route' => $model['Cv']]), ["data-toggle" => "tooltip", "title" => Yii::t("accion","Download"),'target' => '_blank']);
                    },
                 ],
             ],

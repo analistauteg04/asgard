@@ -109,7 +109,7 @@ function update() {
     arrParams.gru_id = $('#cmb_grupo').val();
     arrParams.rol_id = $('#cmb_rol').val();
     arrParams.emp_id = $('#cmb_empresa').val();
-    arrParams.cv = $('#txth_doc_cv2').val();
+    arrParams.cv = $('#txth_doc_cv2').val() + ".pdf";
 
     /** Session Storages **/
     arrParams.grid_instruccion_list = (JSON.parse(sessionStorage.grid_instruccion_list)).data;
@@ -163,7 +163,7 @@ function save() {
     arrParams.gru_id = $('#cmb_grupo').val();
     arrParams.rol_id = $('#cmb_rol').val();
     arrParams.emp_id = $('#cmb_empresa').val();
-    arrParams.cv = $('#txth_doc_cv2').val();
+    arrParams.cv = $('#txth_doc_cv2').val() + ".pdf";
 
     /** Session Storages **/
     arrParams.grid_instruccion_list = (JSON.parse(sessionStorage.grid_instruccion_list)).data;
