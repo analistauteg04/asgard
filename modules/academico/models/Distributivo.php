@@ -318,15 +318,15 @@ class Distributivo extends \yii\db\ActiveRecord
                 inner join ". $con->dbname . ".semestre_academico sa on sa.saca_id = d.saca_id
                 inner join ". $con->dbname . ".tipo_distributivo t on t.tdis_id = d.tdis_id
                 WHERE $str_search					  
-                      d.dcho_estado = '1'
-                      and d.dcho_estado_logico = '1'
-                      and p.pro_estado = '1'
-                      and p.pro_estado_logico = '1'
-                      and per.per_estado = '1'
-                      and per.per_estado_logico = '1'                      
-                      and sa.saca_estado = '1'
-                      and sa.saca_estado_logico = '1'
-                GROUP BY d.pro_id, d.saca_id, d.tdis_id";                 
+                      d.dcho_estado = :estado
+                      and d.dcho_estado_logico = :estado
+                      and p.pro_estado = :estado
+                      and p.pro_estado_logico = :estado
+                      and per.per_estado = :estado
+                      and per.per_estado_logico = :estado                      
+                      and sa.saca_estado = :estado
+                      and sa.saca_estado_logico = :estado
+                GROUP BY  d.saca_id, d.pro_id";                 
         
         $comando = $con->createCommand($sql);
         $comando->bindParam(":estado", $estado, \PDO::PARAM_STR);
@@ -405,15 +405,15 @@ class Distributivo extends \yii\db\ActiveRecord
                 inner join ". $con->dbname . ".semestre_academico sa on sa.saca_id = d.saca_id
                 inner join ". $con->dbname . ".tipo_distributivo t on t.tdis_id = d.tdis_id
                 WHERE $str_search					  
-                      d.dcho_estado = '1'
-                      and d.dcho_estado_logico = '1'
-                      and p.pro_estado = '1'
-                      and p.pro_estado_logico = '1'
-                      and per.per_estado = '1'
-                      and per.per_estado_logico = '1'                      
-                      and sa.saca_estado = '1'
-                      and sa.saca_estado_logico = '1'
-                ORDER BY d.dcho_id desc";                 
+                      d.dcho_estado = :estado
+                      and d.dcho_estado_logico = :estado
+                      and p.pro_estado = :estado
+                      and p.pro_estado_logico = :estado
+                      and per.per_estado = :estado
+                      and per.per_estado_logico = :estado                      
+                      and sa.saca_estado = :estado
+                      and sa.saca_estado_logico = :estado
+                GROUP BY  d.saca_id, d.pro_id";                 
         
         $comando = $con->createCommand($sql);
         $comando->bindParam(":estado", $estado, \PDO::PARAM_STR);
