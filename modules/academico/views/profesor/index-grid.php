@@ -46,8 +46,8 @@ academico::registerTranslations();
                 'class' => 'yii\grid\ActionColumn',
                 //'header' => 'Action',
                 'contentOptions' => ['style' => 'text-align: center;'],
-                'headerOptions' => ['width' => '60'],
-                'template' => '{view} {delete} {download}',
+                'headerOptions' => ['width' => '90'],
+                'template' => '{view} {delete} {download} {pdf}',
                 'buttons' => [
                     'view' => function ($url, $model) {
                         return Html::a('<span class="'.Utilities::getIcon('view').'"></span>', Url::to(['profesor/view', 'id' => $model['per_id']]), ["data-toggle" => "tooltip", "title" => Yii::t("accion","View")]);
@@ -57,8 +57,12 @@ academico::registerTranslations();
                     },
                     'download' => function ($url, $model) {
                         if($model['Cv'] != "")
-                            return Html::a('<span class="'.Utilities::getIcon('download').'"></span>', Url::to(['profesor/download', 'route' => $model['Cv']]), ["data-toggle" => "tooltip", "title" => Yii::t("accion","Download"),'target' => '_blank']);
+                            return Html::a('<span class="'.Utilities::getIcon('download').'"></span>', 'javascript:', ["data-toggle" => "tooltip", "title" => Yii::t("accion","Download"), 'data-href' => Url::to(['profesor/download', 'route' => $model['Cv']]), 'onclick' => 'downloadPdf(this)']);
                    },
+                   'pdf'=> function ($url, $model) {
+                        if($model['Cv'] != "")
+                            return Html::a('<span class="'.Utilities::getIcon('info').'"></span>', 'javascript:', ["data-toggle" => "tooltip", "title" => Yii::t("accion","View Document"), 'data-href' => Url::to(['profesor/download', 'route' => $model['Cv']]), 'onclick' => 'viewPdf(this)']);
+                    },
                 ],
             ],
         ],

@@ -82,5 +82,6 @@ return [
     "Inscribed pending" => "Inscritos Pendientes",
     "Schedule shipping"=> "Programacion Envio",
     "Suscribe all"=> "Suscribir Todos",
-    "Upload Mailchimp"=> "Cargar a Mailchimp"    
+    "Upload Mailchimp"=> "Cargar a Mailchimp",
+    "View Document" => "Ver Documento",
 ];

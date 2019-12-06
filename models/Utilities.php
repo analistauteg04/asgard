@@ -275,6 +275,9 @@ class Utilities {
             case 'download':
                 $cssIcon = "glyphicon glyphicon-save";
                 break;
+            case 'info':
+                $cssIcon = "glyphicon glyphicon-info-sign";
+                break;
         }
         return $cssIcon;
     }

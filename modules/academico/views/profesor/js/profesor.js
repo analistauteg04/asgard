@@ -1103,3 +1103,20 @@ function removeItemReferencia(ref) {
     var indice = $(ref).parent().parent().attr("data-key")
     removeItemGridContent("grid_referencia_list", indice);
 }
+
+function downloadPdf(ref) {
+    var href = $(ref).attr('data-href');
+    document.location.href = href;
+}
+
+function viewPdf(ref) {
+    var href = $(ref).attr('data-href');
+    var status = "OK";
+    var label = objLang.Success;
+    var message = new Object();
+    message.title = "Ver Documento";
+    message.wtmessage = "<embed src='" + href + "' width='500' height='375' type='application/pdf'>";
+    message.acciones = null;
+    message.closeaction = null;
+    showAlert(status, label, message);
+}

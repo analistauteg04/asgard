@@ -14,7 +14,7 @@ use app\modules\Academico\Module as Academico;
 Academico::registerTranslations();
 ?>
 
-<form class="form-horizontal">
+<form class="form-horizontal" enctype="multipart/form-data" >
     <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
         <div class="form-group">
             <label for="txt_primer_nombre" class="col-lg-3 col-md-3 col-xs-3 col-sm-3 control-label"><?= Academico::t("profesor", "First Name") ?></label>
