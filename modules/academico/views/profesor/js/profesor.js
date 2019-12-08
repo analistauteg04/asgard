@@ -64,6 +64,11 @@ $(document).ready(function() {
             $("#frm_asi_status").val("1");
         }
     });
+
+    $('#txt_correo').keyup(function() {
+        $('#txt_usuario').val($(this).val());
+    });
+
 });
 
 function searchModules(idbox, idgrid) {
@@ -126,8 +131,16 @@ function update() {
 
 
     if (!validateForm()) {
-        console.log(arrParams);
+        //console.log(arrParams);
         requestHttpAjax(link, arrParams, function(response) {
+            var btnacciones = new Array();
+            var accion1 = new Object();
+            accion1.id = "btnid1";
+            accion1.class = "clclass";
+            accion1.value = "Aceptar";
+            accion1.callback = "backtoList";
+            btnacciones[0] = accion1;
+            response.message.acciones = btnacciones;
             showAlert(response.status, response.label, response.message);
         }, true);
     }
@@ -179,7 +192,7 @@ function save() {
     arrParams.grid_referencia_list = (JSON.parse(sessionStorage.grid_referencia_list)).data;
 
     if (!validateForm()) {
-        console.log(arrParams);
+        //console.log(arrParams);
         requestHttpAjax(link, arrParams, function(response) {
             console.log(response.message);
             showAlert(response.status, response.label, response.message);
@@ -313,7 +326,7 @@ function addDocencia() {
     var denominacion = $("#txt_denominacion").val();
     var materias = $("#txt_subjects").val();
 
-    if (from == "" || to == "" || denominacion == "" || materias == "") {
+    if (from == "" || denominacion == "" || materias == "") {
         fillDataAlert();
         return;
     }
@@ -394,7 +407,7 @@ function addExperiencia() {
     var denominacion = $("#txt_pro_denominacion").val();
     var funciones = $("#txt_pro_funciones").val();
 
-    if (from == "" || to == "" || denominacion == "" || funciones == "" || company == "") {
+    if (from == "" || denominacion == "" || funciones == "" || company == "") {
         fillDataAlert();
         return;
     }
@@ -1107,6 +1120,11 @@ function removeItemReferencia(ref) {
 function downloadPdf(ref) {
     var href = $(ref).attr('data-href');
     document.location.href = href;
+}
+
+function backtoList() {
+    var link = $('#txth_base').val() + "/academico/profesor/index";
+    window.location = link;
 }
 
 function viewPdf(ref) {

@@ -14,7 +14,7 @@ Academico::registerTranslations();
 <form class="form-horizontal" enctype="multipart/form-data" >
     <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
         <div class="form-group">
-            <label for="txt_primer_nombre" class="col-lg-3 col-md-3 col-sm-3 col-xs-3 control-label"><?= Academico::t("profesor", "First Name") ?></label>
+            <label for="txt_primer_nombre" class="col-lg-3 col-md-3 col-sm-3 col-xs-3 control-label"><?= Academico::t("profesor", "First Name") ?><span class="text-danger">*</span></label>
             <div class="col-lg-9 col-md-9 col-sm-9 col-xs-9">
                 <input type="text" class="form-control PBvalidation" id="txt_primer_nombre" data-type="alfa" placeholder="<?= Academico::t("profesor", "First Name") ?>">
             </div>
@@ -24,13 +24,13 @@ Academico::registerTranslations();
         <div class="form-group">
             <label for="txt_segundo_nombre" class="col-lg-3 col-md-3 col-sm-3 col-xs-3 control-label"><?= Academico::t("profesor", "Second Name") ?></label>
             <div class="col-lg-9 col-md-9 col-sm-9 col-xs-9">
-                <input type="text" class="form-control PBvalidation" id="txt_segundo_nombre" data-type="alfa" placeholder="<?= Academico::t("profesor", "Second Name") ?>">
+                <input type="text" class="form-control PBvalidations " id="txt_segundo_nombre" data-type="alfa" placeholder="<?= Academico::t("profesor", "Second Name") ?>">
             </div>
         </div>
     </div>
     <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
         <div class="form-group">
-            <label for="txt_primer_apellido" class="col-lg-3 col-md-3 col-sm-3 col-xs-3 control-label"><?= Academico::t("profesor", "First Surname") ?></label>
+            <label for="txt_primer_apellido" class="col-lg-3 col-md-3 col-sm-3 col-xs-3 control-label"><?= Academico::t("profesor", "First Surname") ?><span class="text-danger">*</span></label>
             <div class="col-lg-9 col-md-9 col-sm-9 col-xs-9">
                 <input type="text" class="form-control PBvalidation" id="txt_primer_apellido" data-type="alfa" placeholder="<?= Academico::t("profesor", "First Surname") ?>">
             </div>
@@ -40,13 +40,13 @@ Academico::registerTranslations();
         <div class="form-group">
             <label for="txt_segundo_apellido" class="col-lg-3 col-md-3 col-sm-3 col-xs-3 control-label"><?= Academico::t("profesor", "Second Surname") ?></label>
             <div class="col-lg-9 col-md-9 col-sm-9 col-xs-9">
-                <input type="text" class="form-control PBvalidation " id="txt_segundo_apellido" data-type="alfa" placeholder="<?= Academico::t("profesor", "Second Surname") ?>">
+                <input type="text" class="form-control PBvalidations " id="txt_segundo_apellido" data-type="alfa" placeholder="<?= Academico::t("profesor", "Second Surname") ?>">
             </div>
         </div>
     </div>
     <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
         <div class="form-group">
-            <label for="txt_cedula" class="col-lg-3 col-md-3 col-sm-3 col-xs-3 control-label"><?= Academico::t("profesor", "Identification Card") ?></label>
+            <label for="txt_cedula" class="col-lg-3 col-md-3 col-sm-3 col-xs-3 control-label"><?= Academico::t("profesor", "Identification Card") ?><span class="text-danger">*</span></label>
             <div class="col-lg-9 col-md-9 col-sm-9 col-xs-9">
                 <input type="text" class="form-control PBvalidation " id="txt_cedula" data-type="cedula"  placeholder="<?= Academico::t("profesor", "Identification Card") ?>">
             </div>
@@ -78,7 +78,7 @@ Academico::registerTranslations();
     </div>
     <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
         <div class="form-group">
-            <label for="txt_correo" class="col-lg-3 col-md-3 col-sm-3 col-xs-3 control-label"><?= Academico::t("profesor", "Mail") ?></label>
+            <label for="txt_correo" class="col-lg-3 col-md-3 col-sm-3 col-xs-3 control-label"><?= Academico::t("profesor", "Mail") ?><span class="text-danger">*</span></label>
             <div class="col-lg-9 col-md-9 col-sm-9 col-xs-9">
                 <input type="text" class="form-control PBvalidation" id="txt_correo" data-type="email" placeholder="<?= Academico::t("profesor", "Mail") ?>">
             </div>

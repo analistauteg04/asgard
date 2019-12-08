@@ -38,7 +38,11 @@ Academico::registerTranslations();
             [
                 'attribute' => 'Hasta',
                 'header' => Academico::t("profesor", "To"),
-                'value' => 'Hasta',
+                'value' => function($value){
+                    if(isset($value['Hasta']) && $value['Hasta'] != "" )
+                        return date(Yii::$app->params["dateByDefault"], strtotime($value['Hasta']));
+                    return "";
+                }
             ],
             [
                 'attribute' => 'Denominacion',

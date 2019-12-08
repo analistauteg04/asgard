@@ -31,16 +31,31 @@ academico::registerTranslations();
             [
                 'attribute' => 'Celular',
                 'header' => Academico::t("profesor", "Mobile"),
-                'value' => 'Celular',
+                'value' => function($data){
+                    if(isset($data['Celular'])){
+                        return $data['Celular'];
+                    }
+                    return "";
+                },
             ],
             [
                 'attribute' => 'Correo',
                 'header' => Academico::t("profesor", "Mail"),
-                'value' => 'Correo',
+                'value' => function($data){
+                    if(isset($data['Correo'])){
+                        return $data['Correo'];
+                    }
+                    return "";
+                },
             ], [
                 'attribute' => 'Cedula',
                 'header' => Academico::t("profesor", "Identification Card"),
-                'value' => 'Cedula',
+                'value' => function($data){
+                    if(isset($data['Cedula'])){
+                        return $data['Cedula'];
+                    }
+                    return "";
+                },
             ],
             [
                 'class' => 'yii\grid\ActionColumn',
@@ -60,7 +75,7 @@ academico::registerTranslations();
                             return Html::a('<span class="'.Utilities::getIcon('download').'"></span>', 'javascript:', ["data-toggle" => "tooltip", "title" => Yii::t("accion","Download"), 'data-href' => Url::to(['profesor/download', 'route' => $model['Cv']]), 'onclick' => 'downloadPdf(this)']);
                    },
                    'pdf'=> function ($url, $model) {
-                        if($model['Cv'] != "")
+                        if(isset($model['Cv']) && $model['Cv'] != "")
                             return Html::a('<span class="'.Utilities::getIcon('info').'"></span>', 'javascript:', ["data-toggle" => "tooltip", "title" => Yii::t("accion","View Document"), 'data-href' => Url::to(['profesor/download', 'route' => $model['Cv']]), 'onclick' => 'viewPdf(this)']);
                     },
                 ],

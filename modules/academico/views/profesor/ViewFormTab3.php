@@ -14,7 +14,7 @@ use app\components\CFileInputAjax;
         <div class="form-group">
             <label for="frm_usu_user" class="col-lg-3 col-md-3 col-xs-3 col-sm-3 control-label"><?= Yii::t("login", "Username") ?></label>
             <div class="col-lg-9 col-md-9 col-xs-9 col-sm-9">
-                <input type="text" class="form-control PBvalidation" id="frm_usu_user" value="<?= $usuario_model->usu_user ?>" data-type="alfa" disabled="disabled" placeholder="<?= Yii::t("profesor", "User Name")  ?>">
+                <input type="text" class="form-control PBvalidation" id="frm_usu_user" readonly="readonly" value="<?= $usuario_model->usu_user ?>" data-type="alfa" disabled="disabled" placeholder="<?= Yii::t("profesor", "User Name")  ?>">
             </div>
         </div>
     </div>

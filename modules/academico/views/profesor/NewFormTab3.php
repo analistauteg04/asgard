@@ -16,7 +16,7 @@ Academico::registerTranslations();
         <div class="form-group">
             <label for="txt_usuario" class="col-lg-3 col-md-3 col-sm-3 col-xs-3 control-label"><?= Academico::t("profesor", "User Name") ?> <span class="text-danger">*</span></label>
             <div class="col-lg-9 col-md-9 col-sm-9 col-xs-9">
-                <input type="text" class="form-control PBvalidation" id="txt_usuario" data-type="all" placeholder="<?= Academico::t("login", "Username") ?>">
+                <input type="text" class="form-control PBvalidation" id="txt_usuario" readonly="readonly" data-type="all" placeholder="<?= Academico::t("login", "Username") ?>">
             </div>
         </div>
     </div>

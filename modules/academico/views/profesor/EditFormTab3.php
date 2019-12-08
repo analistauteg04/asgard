@@ -16,7 +16,7 @@ Academico::registerTranslations();
         <div class="form-group">
             <label for="txt_usuario" class="col-lg-3 col-md-3 col-xs-3 col-sm-3 control-label"><?= Academico::t("profesor", "User Name") ?></label>
             <div class="col-lg-9 col-md-9 col-xs-9 col-sm-9">
-                <input type="text" class="form-control PBvalidation" id="txt_usuario" value="<?= $usuario_model->usu_user ?>" data-type="all"  placeholder="<?= Yii::t("profesor", "User Name")  ?>">
+                <input type="text" class="form-control PBvalidation" id="txt_usuario" readonly="readonly" value="<?= $email ?>" data-type="all"  placeholder="<?= Yii::t("profesor", "User Name")  ?>">
             </div>
         </div>    
     </div>

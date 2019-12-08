@@ -323,14 +323,12 @@ class ProfesorController extends \app\components\CController {
     
                     return Utilities::ajaxResponse('OK', 'alert', Yii::t('jslang', 'Success'), 'false', $arr_can);
                 }
-    
-                
             }
-
 
             $persona_model = Persona::findOne($id);            
             $usuario_model = Usuario::findOne(["per_id" => $id, "usu_estado" => '1', "usu_estado_logico" => '1']);
             $empresa_persona_model = EmpresaPersona::findOne(["per_id" => $id, "eper_estado" => '1', "eper_estado_logico" => '1']);
+            $email = (isset($persona_model->per_correo) && $persona_model->per_correo != "")?($persona_model->per_correo):($usuario_model->usu_user);
 
             /* Validacion de acceso a vistas por usuario */
             $user_ingresa = Yii::$app->session->get("PB_iduser");
@@ -349,6 +347,7 @@ class ProfesorController extends \app\components\CController {
 
             $EditFormTab1 = $this->renderPartial('EditFormTab1', [
                 'persona_model' => $persona_model,
+                'email' => $email,
             ]);
 
             /**
@@ -394,6 +393,7 @@ class ProfesorController extends \app\components\CController {
                 'rol_id' => $rol_id,
                 'usuario_model' => $usuario_model,
                 'empresa_persona_model' => $empresa_persona_model,
+                'email' => $email,
                 ]);
 
             $profesor_model = Profesor::findOne(['per_id' => $persona_model->per_id]);
@@ -811,17 +811,17 @@ class ProfesorController extends \app\components\CController {
                 /**
                  * Inf. Session Storages
                  */
-                $arr_instuccion = $data["grid_instruccion_list"];
-                $arr_docencia = $data["grid_docencia_list"];
-                $arr_experiencia = $data["grid_experiencia_list"];
-                $arr_idioma = $data["grid_idioma_list"];
-                $arr_investigacion = $data["grid_investigacion_list"];
-                $arr_evento = $data["grid_evento_list"];
-                $arr_conferencia = $data["grid_conferencia_list"];
-                $arr_publicacion = $data["grid_publicacion_list"];
-                $arr_coordinacion = $data["grid_coordinacion_list"];
-                $arr_evaluacion = $data["grid_evaluacion_list"];
-                $arr_referencia = $data["grid_referencia_list"];
+                $arr_instuccion = (isset($data["grid_instruccion_list"]) && $data["grid_instruccion_list"] !="")?$data["grid_instruccion_list"]:NULL;
+                $arr_docencia = (isset($data["grid_docencia_list"]) && $data["grid_docencia_list"] !="")?$data["grid_docencia_list"]:NULL;
+                $arr_experiencia = (isset($data["grid_experiencia_list"]) && $data["grid_experiencia_list"] !="")?$data["grid_experiencia_list"]:NULL;
+                $arr_idioma = (isset($data["grid_idioma_list"]) && $data["grid_idioma_list"] !="")?$data["grid_idioma_list"]:NULL;
+                $arr_investigacion = (isset($data["grid_investigacion_list"]) && $data["grid_investigacion_list"] !="")?$data["grid_investigacion_list"]:NULL;
+                $arr_evento = (isset($data["grid_evento_list"]) && $data["grid_evento_list"] !="")?$data["grid_evento_list"]:NULL;
+                $arr_conferencia = (isset($data["grid_conferencia_list"]) && $data["grid_conferencia_list"] !="")?$data["grid_conferencia_list"]:NULL;
+                $arr_publicacion = (isset($data["grid_publicacion_list"]) && $data["grid_publicacion_list"] !="")?$data["grid_publicacion_list"]:NULL;
+                $arr_coordinacion = (isset($data["grid_coordinacion_list"]) && $data["grid_coordinacion_list"] !="")?$data["grid_coordinacion_list"]:NULL;
+                $arr_evaluacion = (isset($data["grid_evaluacion_list"]) && $data["grid_evaluacion_list"] !="")?$data["grid_evaluacion_list"]:NULL;
+                $arr_referencia = (isset($data["grid_referencia_list"]) && $data["grid_referencia_list"] !="")?$data["grid_referencia_list"]:NULL;
 
                 $message = array(
                     "wtmessage" => Yii::t("notificaciones", "Your information was successfully saved."),
@@ -885,7 +885,11 @@ class ProfesorController extends \app\components\CController {
                         $profesor_model->pro_estado = '1';
                         $profesor_model->pro_estado_logico = '1';
                         $profesor_model->pro_usuario_ingreso = $user_ingresa;
-                        $profesor_model->pro_cv = $this->folder_cv.'/'.$cv;
+                        $arr_file = explode($cv, '.pdf');
+                        if(isset($arr_file[0]) && $arr_file[0] != ""){
+                            $profesor_model->pro_cv = $this->folder_cv.'/'.$cv;
+                        }
+
                         $profesor_model->save();
 
                         $usuario_model = new Usuario();
@@ -1123,6 +1127,10 @@ class ProfesorController extends \app\components\CController {
                         $profesor_model->pro_estado = '1';
                         $profesor_model->pro_estado_logico = '1';
                         $profesor_model->pro_usuario_ingreso = $user_ingresa;
+                        $arr_file = explode($cv, '.pdf');
+                        if(isset($arr_file[0]) && $arr_file[0] != ""){
+                            $profesor_model->pro_cv = $this->folder_cv.'/'.$cv;
+                        }
                         $profesor_model->save();
 
                         $usuario_model = new Usuario();
@@ -1418,17 +1426,17 @@ class ProfesorController extends \app\components\CController {
                 /**
                  * Inf. Session Storages
                  */
-                $arr_instuccion = $data["grid_instruccion_list"];
-                $arr_docencia = $data["grid_docencia_list"];
-                $arr_experiencia = $data["grid_experiencia_list"];
-                $arr_idioma = $data["grid_idioma_list"];
-                $arr_investigacion = $data["grid_investigacion_list"];
-                $arr_evento = $data["grid_evento_list"];
-                $arr_conferencia = $data["grid_conferencia_list"];
-                $arr_publicacion = $data["grid_publicacion_list"];
-                $arr_coordinacion = $data["grid_coordinacion_list"];
-                $arr_evaluacion = $data["grid_evaluacion_list"];
-                $arr_referencia = $data["grid_referencia_list"];
+                $arr_instuccion = (isset($data["grid_instruccion_list"]) && $data["grid_instruccion_list"] !="")?$data["grid_instruccion_list"]:NULL;
+                $arr_docencia = (isset($data["grid_docencia_list"]) && $data["grid_docencia_list"] !="")?$data["grid_docencia_list"]:NULL;
+                $arr_experiencia = (isset($data["grid_experiencia_list"]) && $data["grid_experiencia_list"] !="")?$data["grid_experiencia_list"]:NULL;
+                $arr_idioma = (isset($data["grid_idioma_list"]) && $data["grid_idioma_list"] !="")?$data["grid_idioma_list"]:NULL;
+                $arr_investigacion = (isset($data["grid_investigacion_list"]) && $data["grid_investigacion_list"] !="")?$data["grid_investigacion_list"]:NULL;
+                $arr_evento = (isset($data["grid_evento_list"]) && $data["grid_evento_list"] !="")?$data["grid_evento_list"]:NULL;
+                $arr_conferencia = (isset($data["grid_conferencia_list"]) && $data["grid_conferencia_list"] !="")?$data["grid_conferencia_list"]:NULL;
+                $arr_publicacion = (isset($data["grid_publicacion_list"]) && $data["grid_publicacion_list"] !="")?$data["grid_publicacion_list"]:NULL;
+                $arr_coordinacion = (isset($data["grid_coordinacion_list"]) && $data["grid_coordinacion_list"] !="")?$data["grid_coordinacion_list"]:NULL;
+                $arr_evaluacion = (isset($data["grid_evaluacion_list"]) && $data["grid_evaluacion_list"] !="")?$data["grid_evaluacion_list"]:NULL;
+                $arr_referencia = (isset($data["grid_referencia_list"]) && $data["grid_referencia_list"] !="")?$data["grid_referencia_list"]:NULL;
                 
                 $message = array(
                     "wtmessage" => Yii::t("notificaciones", "Your information was successfully saved."),
@@ -1450,7 +1458,8 @@ class ProfesorController extends \app\components\CController {
 
                     /** Se agregan Informacion de Expediente **/
                     $profesor_model = Profesor::findOne(["per_id" => $per_id]);
-                    if($cv != ""){
+                    $arr_file = explode($cv, '.pdf');
+                    if(isset($arr_file[0]) && $arr_file[0] != ""){
                         $profesor_model->pro_cv = $this->folder_cv.'/'.$cv;
                         $profesor_model->save();
                     }

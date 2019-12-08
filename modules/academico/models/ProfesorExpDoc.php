@@ -174,7 +174,7 @@ class ProfesorExpDoc extends \yii\db\ActiveRecord
                 $value['Ids'], 
                 $value['ins_id'], 
                 date('Y-m-d', strtotime($value['Desde'])), 
-                date('Y-m-d', strtotime($value['Hasta'])), 
+                (isset($value['Hasta']) && $value['Hasta'] != "")?date('Y-m-d', strtotime($value['Hasta'])):"", 
                 $value['Denominacion'], 
                 $value['Materias'], 
             ];
@@ -184,7 +184,7 @@ class ProfesorExpDoc extends \yii\db\ActiveRecord
                 $value['Ids'], 
                 $value['Institucion'], 
                 date('Y-m-d', strtotime($value['Desde'])), 
-                date('Y-m-d', strtotime($value['Hasta'])), 
+                (isset($value['Hasta']) && $value['Hasta'] != "")?date('Y-m-d', strtotime($value['Hasta'])):"", 
                 $value['Denominacion'], 
                 $value['Materias'], 
             ];
