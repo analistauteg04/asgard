@@ -51,7 +51,7 @@ Academico::registerTranslations();
         <div class="form-group">
             <label for="txt_cedula" class="col-lg-3 col-md-3 col-xs-3 col-sm-3 control-label"><?= Academico::t("profesor", "Identification Card") ?><span class="text-danger">*</span></label>
             <div class="col-lg-9 col-md-9 col-xs-9 col-sm-9">
-                <input type="text" class="form-control PBvalidation" id="txt_cedula" value="<?= $persona_model->per_cedula ?>" data-type="cedula"  placeholder="<?= Academico::t("profesor", "Identification Card")  ?>">
+                <input type="text" class="form-control PBvalidation" id="txt_cedula" value="<?= $persona_model->per_cedula ?>" data-type=""  placeholder="<?= Academico::t("profesor", "Identification Card")  ?>">
             </div>
         </div>
     </div>
@@ -83,7 +83,7 @@ Academico::registerTranslations();
         <div class="form-group">
             <label for="txt_correo" class="col-sm-3 control-label"><?= Academico::t("profesor", "Mail") ?><span class="text-danger">*</span></label>
             <div class="col-lg-9 col-md-9 col-xs-9 col-sm-9">
-                <input type="text" class="form-control PBvalidation" id="txt_correo" value="<?= $email ?>" data-type="email"  placeholder="<?= Academico::t("profesor", "Mail")  ?>">
+                <input type="text" class="form-control PBvalidation" id="txt_correo" value="<?= $email ?>" data-type="email"  disabled="true" placeholder="<?= Academico::t("profesor", "Mail")  ?>">
             </div>
         </div> 
     </div>
