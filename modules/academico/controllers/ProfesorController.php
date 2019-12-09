@@ -887,7 +887,10 @@ class ProfesorController extends \app\components\CController {
                         $profesor_model->pro_usuario_ingreso = $user_ingresa;
                         $arr_file = explode($cv, '.pdf');
                         if(isset($arr_file[0]) && $arr_file[0] != ""){
-                            $profesor_model->pro_cv = $this->folder_cv.'/'.$cv;
+                            $oldFile = $this->folder_cv.'/' . $cv;
+                            $profesor_model->pro_cv = $this->folder_cv.'/'. $per_id_existente . "_" . $cv;
+                            $urlBase = Yii::$app->basePath . Yii::$app->params["documentFolder"];
+                            rename($urlBase . $oldFile, $urlBase . $profesor_model->pro_cv);
                         }
 
                         $profesor_model->save();
@@ -1129,7 +1132,10 @@ class ProfesorController extends \app\components\CController {
                         $profesor_model->pro_usuario_ingreso = $user_ingresa;
                         $arr_file = explode($cv, '.pdf');
                         if(isset($arr_file[0]) && $arr_file[0] != ""){
-                            $profesor_model->pro_cv = $this->folder_cv.'/'.$cv;
+                            $oldFile = $this->folder_cv.'/' . $cv;
+                            $profesor_model->pro_cv = $this->folder_cv.'/'. $persona_model->per_id . "_" . $cv;
+                            $urlBase = Yii::$app->basePath . Yii::$app->params["documentFolder"];
+                            rename($urlBase . $oldFile, $urlBase . $profesor_model->pro_cv);
                         }
                         $profesor_model->save();
 
@@ -1460,9 +1466,13 @@ class ProfesorController extends \app\components\CController {
                     $profesor_model = Profesor::findOne(["per_id" => $per_id]);
                     $arr_file = explode($cv, '.pdf');
                     if(isset($arr_file[0]) && $arr_file[0] != ""){
-                        $profesor_model->pro_cv = $this->folder_cv.'/'.$cv;
+                        $oldFile = $this->folder_cv.'/' . $cv;
+                        $profesor_model->pro_cv = $this->folder_cv.'/'. $persona_model->per_id . "_" . $cv;
+                        $urlBase = Yii::$app->basePath . Yii::$app->params["documentFolder"];
+                        rename($urlBase . $oldFile, $urlBase . $profesor_model->pro_cv);
                         $profesor_model->save();
                     }
+
                     ProfesorInstruccion::deleteAllInfo($profesor_model->pro_id);
                     if(isset($arr_instuccion))
                         foreach($arr_instuccion as $key0 => $value0){
@@ -1703,7 +1713,7 @@ class ProfesorController extends \app\components\CController {
         }
     }
 
-    public function actionDownload($route) {
+    public function actionDownload($route, $type) {
         $grupo = new Grupo();
         if (Yii::$app->session->get('PB_isuser')) {
             $route = str_replace("../", "", $route);
@@ -1718,8 +1728,11 @@ class ProfesorController extends \app\components\CController {
                         header('Cache-Control: must-revalidate, post-check=0, pre-check=0');
                         header('Cache-Control: private', false);
                         header("Content-type: application/pdf");
-
-                        header('Content-Disposition: attachment; filename="cv_'. time() . '.pdf";');
+                        if($type == "view"){
+                            header('Content-Disposition: inline; filename="cv_'. time() . '.pdf";');
+                        }else {
+                            header('Content-Disposition: attachment; filename="cv_'. time() . '.pdf";');
+                        }
                         header('Content-Transfer-Encoding: binary');
                         header('Content-Length: ' . filesize($url_image));
                         readfile($url_image);

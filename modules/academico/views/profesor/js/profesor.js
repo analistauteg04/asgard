@@ -1133,7 +1133,7 @@ function viewPdf(ref) {
     var label = objLang.Success;
     var message = new Object();
     message.title = "Ver Documento";
-    message.wtmessage = "<embed src='" + href + "' width='500' height='375' type='application/pdf'>";
+    message.wtmessage = "<embed src='" + href + "' width='570' height='375' type='application/pdf'>";
     message.acciones = null;
     message.closeaction = null;
     showAlert(status, label, message);
