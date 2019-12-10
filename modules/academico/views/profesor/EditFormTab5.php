@@ -89,7 +89,11 @@ Academico::registerTranslations();
             [
                 'attribute' => 'Institucion',
                 'header' => Academico::t("profesor", "Institution"),
-                'value' => 'Institucion',
+                'value' => function($value){
+                    if(isset($value['Institucion']) && $value['Institucion'] != "" )
+                        return $value['Institucion'];
+                    return "";
+                }
             ],
             [
                 'attribute' => 'Desde',
@@ -110,12 +114,20 @@ Academico::registerTranslations();
             [
                 'attribute' => 'Denominacion',
                 'header' => Academico::t("profesor", "Denomination"),
-                'value' => 'Denominacion',
+                'value' => function($value){
+                    if(isset($value['Denominacion']) && $value['Denominacion'] != "" )
+                        return $value['Denominacion'];
+                    return "";
+                }
             ], 
             [
                 'attribute' => 'Materias',
                 'header' => Academico::t("profesor", "Subjects"),
-                'value' => 'Materias',
+                'value' => function($value){
+                    if(isset($value['Materias']) && $value['Materias'] != "" )
+                        return $value['Materias'];
+                    return "";
+                }
             ],
             [
                 'class' => 'yii\grid\ActionColumn',

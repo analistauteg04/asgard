@@ -249,7 +249,8 @@ class Profesor extends \yii\db\ActiveRecord
                     pro.pro_cv as Cv
                 FROM " . $con_academico->dbname . ".profesor AS pro
                 inner JOIN " . $con_asgard->dbname . ".persona as pe on pro.per_id = pe.per_id
-                WHERE $str_search pro.pro_estado_logico = 1 and pe.per_estado_logico = 1";
+                inner JOIN " . $con_asgard->dbname . ".distributivo as di on di.pro_id = pro.pro_id
+                WHERE $str_search pro.pro_estado_logico = 1 and pe.per_estado_logico = 1 and di.dis_declarado = 'S'";
         $comando = $con_academico->createCommand($sql);
         if(isset($search)){
             $comando->bindParam(":search",$search_cond, \PDO::PARAM_STR);

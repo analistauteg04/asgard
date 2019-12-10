@@ -9,6 +9,7 @@ use yii\helpers\Url;
 use yii\widgets\ActiveForm;
 use app\components\CFileInputAjax;
 use app\widgets\PbGridView\PbGridView;
+use app\models\Utilities;
 use app\modules\Academico\Module as Academico;
 Academico::registerTranslations();
 ?>
@@ -28,27 +29,47 @@ Academico::registerTranslations();
             [
                 'attribute' => 'TipoProduccion',
                 'header' => Academico::t("profesor", "Type Production") ,
-                'value' => 'TipoProduccion',
+                'value' => function($value){
+                    if(isset($value['TipoProduccion']) && $value['TipoProduccion'] != "" )
+                        return $value['TipoProduccion'];
+                    return "";
+                }
             ],
             [
                 'attribute' => 'Titulo',
                 'header' => Academico::t("profesor", "Title"),
-                'value' => 'Titulo',
+                'value' => function($value){
+                    if(isset($value['Titulo']) && $value['Titulo'] != "" )
+                        return $value['Titulo'];
+                    return "";
+                }
             ],
             [
                 'attribute' => 'Editorial',
                 'header' => Academico::t("profesor", "Editorial"),
-                'value' => 'Editorial',
+                'value' => function($value){
+                    if(isset($value['Editorial']) && $value['Editorial'] != "" )
+                        return $value['Editorial'];
+                    return "";
+                }
             ],
             [
                 'attribute' => 'ISBN',
                 'header' => 'ISBN/ISSN',
-                'value' => 'ISBN',
+                'value' => function($value){
+                    if(isset($value['ISBN']) && $value['ISBN'] != "" )
+                        return $value['ISBN'];
+                    return "";
+                }
             ],
             [
                 'attribute' => 'Autor',
                 'header' => Academico::t("profesor", "Author"),
-                'value' => 'Autor',
+                'value' => function($value){
+                    if(isset($value['Autor']) && $value['Autor'] != "" )
+                        return $value['Autor'];
+                    return "";
+                }
             ],
             [
                 'class' => 'yii\grid\ActionColumn',

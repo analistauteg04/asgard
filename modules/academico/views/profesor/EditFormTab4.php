@@ -67,27 +67,47 @@ Academico::registerTranslations();
             [
                 'attribute' => 'Instruccion',
                 'header' => Academico::t("profesor", "Instruction Level"),
-                'value' => 'Instruccion',
+                'value' => function($value){
+                    if(isset($value['Instruccion']) && $value['Instruccion'] != "" )
+                        return $value['Instruccion'];
+                    return "";
+                }
             ],
             [
                 'attribute' => 'NombreInstitucion',
                 'header' => Academico::t("profesor", "Institution"),
-                'value' => 'NombreInstitucion',
+                'value' => function($value){
+                    if(isset($value['NombreInstitucion']) && $value['NombreInstitucion'] != "" )
+                        return $value['NombreInstitucion'];
+                    return "";
+                }
             ],
             [
                 'attribute' => 'Especializacion',
                 'header' => Academico::t("profesor", "Career"),
-                'value' => 'Especializacion',
+                'value' => function($value){
+                    if(isset($value['Especializacion']) && $value['Especializacion'] != "" )
+                        return $value['Especializacion'];
+                    return "";
+                }
             ],
             [
                 'attribute' => 'Titulo',
                 'header' => Academico::t("profesor", "Degree"),
-                'value' => 'Titulo',
+                'value' => function($value){
+                    if(isset($value['Titulo']) && $value['Titulo'] != "" )
+                        return $value['Titulo'];
+                    return "";
+                }
             ], 
             [
                 'attribute' => 'Registro',
                 'header' => Academico::t("profesor", "Senescyt Registry"),
-                'value' => 'Registro',
+                'value' => function($value){
+                    if(isset($value['Registro']) && $value['Registro'] != "" )
+                        return $value['Registro'];
+                    return "";
+                }
             ],
             [
                 'class' => 'yii\grid\ActionColumn',

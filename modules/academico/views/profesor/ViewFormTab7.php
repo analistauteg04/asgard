@@ -9,6 +9,7 @@ use yii\helpers\Url;
 use yii\widgets\ActiveForm;
 use app\components\CFileInputAjax;
 use app\widgets\PbGridView\PbGridView;
+use app\models\Utilities;
 use app\modules\Academico\Module as Academico;
 Academico::registerTranslations();
 ?>
@@ -28,27 +29,47 @@ Academico::registerTranslations();
             [
                 'attribute' => 'Languages',
                 'header' => Academico::t("profesor", "Languages"),
-                'value' => 'Languages',
+                'value' => function($value){
+                    if(isset($value['Languages']) && $value['Languages'] != "" )
+                        return $value['Languages'];
+                    return "";
+                }
             ],
             [
                 'attribute' => 'NivelEscrito',
                 'header' => Academico::t("profesor", "Written Level"),
-                'value' => 'NivelEscrito',
+                'value' => function($value){
+                    if(isset($value['NivelEscrito']) && $value['NivelEscrito'] != "" )
+                        return $value['NivelEscrito'];
+                    return "";
+                }
             ],
             [
                 'attribute' => 'NivelOral',
                 'header' => Academico::t("profesor", "Oral Level"),
-                'value' => 'NivelOral',
+                'value' => function($value){
+                    if(isset($value['NivelOral']) && $value['NivelOral'] != "" )
+                        return $value['NivelOral'];
+                    return "";
+                }
             ],
             [
                 'attribute' => 'Certificado',
                 'header' => Academico::t("profesor", "Certificate of Sufficiency"),
-                'value' => 'Certificado',
+                'value' => function($value){
+                    if(isset($value['Certificado']) && $value['Certificado'] != "" )
+                        return $value['Certificado'];
+                    return "";
+                }
             ], 
             [
                 'attribute' => 'Institucion',
                 'header' => Academico::t("profesor", "Institution"),
-                'value' => 'Institucion',
+                'value' => function($value){
+                    if(isset($value['Institucion']) && $value['Institucion'] != "" )
+                        return $value['Institucion'];
+                    return "";
+                }
             ],
             [
                 'class' => 'yii\grid\ActionColumn',

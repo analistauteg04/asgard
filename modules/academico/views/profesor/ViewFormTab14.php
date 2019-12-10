@@ -9,6 +9,7 @@ use yii\helpers\Url;
 use yii\widgets\ActiveForm;
 use app\components\CFileInputAjax;
 use app\widgets\PbGridView\PbGridView;
+use app\models\Utilities;
 use app\modules\Academico\Module as Academico;
 Academico::registerTranslations();
 ?>
@@ -28,22 +29,38 @@ Academico::registerTranslations();
             [
                 'attribute' => 'Nombre',
                 'header' => Academico::t("profesor", "Contact Name") ,
-                'value' => 'Nombre',
+                'value' => function($value){
+                    if(isset($value['Nombre']) && $value['Nombre'] != "" )
+                        return $value['Nombre'];
+                    return "";
+                }
             ],
             [
                 'attribute' => 'Cargo',
                 'header' => Academico::t("profesor", "Position"),
-                'value' => 'Cargo',
+                'value' => function($value){
+                    if(isset($value['Cargo']) && $value['Cargo'] != "" )
+                        return $value['Cargo'];
+                    return "";
+                }
             ],
             [
                 'attribute' => 'Organizacion',
                 'header' => Academico::t("profesor", "Company / Organization"),
-                'value' => 'Organizacion',
+                'value' => function($value){
+                    if(isset($value['Organizacion']) && $value['Organizacion'] != "" )
+                        return $value['Organizacion'];
+                    return "";
+                }
             ],
             [
                 'attribute' => 'Numero',
                 'header' => Academico::t("profesor", "Contact Number"),
-                'value' => 'Numero',
+                'value' => function($value){
+                    if(isset($value['Numero']) && $value['Numero'] != "" )
+                        return $value['Numero'];
+                    return "";
+                }
             ],
             [
                 'class' => 'yii\grid\ActionColumn',
