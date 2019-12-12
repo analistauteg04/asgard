@@ -238,7 +238,7 @@ class Profesor extends \yii\db\ActiveRecord
             $str_search .= "pe.per_pri_apellido like :search) OR pe.per_id=:Id AND ";
         }
 
-        $sql = "SELECT pro.pro_id, pe.per_id,
+        $sql = "SELECT distinct(pro.pro_id), pe.per_id,
                     pe.per_pri_nombre as PrimerNombre,
                     pe.per_seg_nombre as SegundoNombre, 
                     pe.per_pri_apellido as PrimerApellido, 
@@ -249,7 +249,7 @@ class Profesor extends \yii\db\ActiveRecord
                     pro.pro_cv as Cv
                 FROM " . $con_academico->dbname . ".profesor AS pro
                 inner JOIN " . $con_asgard->dbname . ".persona as pe on pro.per_id = pe.per_id
-                inner JOIN " . $con_asgard->dbname . ".distributivo as di on di.pro_id = pro.pro_id
+                inner JOIN " . $con_academico->dbname . ".distributivo as di on di.pro_id = pro.pro_id
                 WHERE $str_search pro.pro_estado_logico = 1 and pe.per_estado_logico = 1 and di.dis_declarado = 'S'";
         $comando = $con_academico->createCommand($sql);
         if(isset($search)){
