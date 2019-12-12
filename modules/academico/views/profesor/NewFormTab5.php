@@ -9,6 +9,7 @@ use yii\helpers\Url;
 use yii\widgets\ActiveForm;
 use app\components\CFileInputAjax;
 use app\widgets\PbGridView\PbGridView;
+use app\models\Utilities;
 use app\modules\Academico\Module as Academico;
 Academico::registerTranslations();
 ?>
@@ -32,7 +33,7 @@ Academico::registerTranslations();
             </div>
         </div>
         <div class="form-group">
-            <label for="txt_doc_to" class="col-lg-3 col-md-3 col-sm-3 col-xs-3 control-label"><?= Academico::t("profesor", "To") ?> <span class="text-danger">*</span></label>
+            <label for="txt_doc_to" class="col-lg-3 col-md-3 col-sm-3 col-xs-3 control-label"><?= Academico::t("profesor", "To") ?> </label>
             <div class="col-lg-6 col-md-9 col-sm-9 col-xs-9">
                 <?=
                 DatePicker::widget([

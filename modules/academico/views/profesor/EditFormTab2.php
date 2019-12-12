@@ -38,7 +38,7 @@ Academico::registerTranslations();
     </div>
     <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
         <div class="form-group">
-            <label for="txt_sector" class="col-lg-3 col-md-3 col-xs-3 col-sm-3 control-label"><?= Academico::t("profesor", "Sector") ?></label>
+            <label for="txt_sector" class="col-lg-3 col-md-3 col-xs-3 col-sm-3 control-label"><?= Academico::t("profesor", "Sector") ?><span class="text-danger">*</span></label>
             <div class="col-lg-9 col-md-9 col-xs-9 col-sm-9">
                 <input type="text" class="form-control PBvalidation" id="txt_sector" value="<?= $persona_model->per_domicilio_sector ?>" data-type="all"  placeholder="<?= Academico::t("profesor", "Sector")  ?>">
             </div>
@@ -46,7 +46,7 @@ Academico::registerTranslations();
     </div>
     <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
         <div class="form-group">
-            <label for="txt_calle_pri" class="col-lg-3 col-md-3 col-xs-3 col-sm-3 control-label"><?= Academico::t("profesor", "Primary Street") ?></label>
+            <label for="txt_calle_pri" class="col-lg-3 col-md-3 col-xs-3 col-sm-3 control-label"><?= Academico::t("profesor", "Primary Street") ?><span class="text-danger">*</span></label>
             <div class="col-lg-9 col-md-9 col-xs-9 col-sm-9">
                 <input type="text" class="form-control PBvalidation" id="txt_calle_pri" value="<?= $persona_model->per_domicilio_cpri ?>" data-type="all"  placeholder="<?= Academico::t("profesor", "Primary Street")  ?>">
             </div>
@@ -54,7 +54,7 @@ Academico::registerTranslations();
     </div>
     <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
         <div class="form-group">
-            <label for="txt_calle_sec" class="col-lg-3 col-md-3 col-xs-3 col-sm-3 control-label"><?= Academico::t("profesor", "Secondary Street") ?></label>
+            <label for="txt_calle_sec" class="col-lg-3 col-md-3 col-xs-3 col-sm-3 control-label"><?= Academico::t("profesor", "Secondary Street") ?><span class="text-danger">*</span></label>
             <div class="col-lg-9 col-md-9 col-xs-9 col-sm-9">
                 <input type="text" class="form-control PBvalidation" id="txt_calle_sec" value="<?= $persona_model->per_domicilio_csec ?>" data-type="all"  placeholder="<?= Academico::t("profesor", "Secondary Street")  ?>">
             </div>
@@ -62,7 +62,7 @@ Academico::registerTranslations();
     </div>
     <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
         <div class="form-group">
-            <label for="txt_numeracion" class="col-lg-3 col-md-3 col-xs-3 col-sm-3 control-label"><?= Academico::t("profesor", "Numeration") ?></label>
+            <label for="txt_numeracion" class="col-lg-3 col-md-3 col-xs-3 col-sm-3 control-label"><?= Academico::t("profesor", "Numeration") ?><span class="text-danger">*</span></label>
             <div class="col-lg-9 col-md-9 col-xs-9 col-sm-9">
                 <input type="text" class="form-control PBvalidation" id="txt_numeracion" value="<?= $persona_model->per_domicilio_num ?>" data-type="all"  placeholder="<?= Academico::t("profesor", "Numeration")  ?>">
             </div>
@@ -70,7 +70,7 @@ Academico::registerTranslations();
     </div>
     <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
         <div class="form-group">
-            <label for="txt_referencia" class="col-lg-3 col-md-3 col-xs-3 col-sm-3 control-label"><?= Academico::t("profesor", "Reference") ?></label>
+            <label for="txt_referencia" class="col-lg-3 col-md-3 col-xs-3 col-sm-3 control-label"><?= Academico::t("profesor", "Reference") ?><span class="text-danger">*</span></label>
             <div class="col-lg-9 col-md-9 col-xs-9 col-sm-9">
                 <input type="text" class="form-control PBvalidation" id="txt_referencia" value="<?= $persona_model->per_domicilio_ref ?>" data-type="all"  placeholder="<?= Academico::t("profesor", "Reference")  ?>">
             </div>

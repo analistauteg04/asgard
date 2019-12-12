@@ -10,6 +10,7 @@ use yii\widgets\ActiveForm;
 use app\components\CFileInputAjax;
 use app\widgets\PbGridView\PbGridView;
 use app\modules\Academico\Module as Academico;
+use app\models\Utilities;
 Academico::registerTranslations();
 ?>
 <form class="form-horizontal">
@@ -28,27 +29,45 @@ Academico::registerTranslations();
             [
                 'attribute' => 'Institucion',
                 'header' => Academico::t("profesor", "Institution"),
-                'value' => 'Institucion',
+                'value' => function($value){
+                    if(isset($value['Institucion']) && $value['Institucion'] != "" )
+                        return $value['Institucion'];
+                    return "";
+                }
             ],
             [
                 'attribute' => 'Desde',
                 'header' => Academico::t("profesor", "From") ,
-                'value' => 'Desde',
+                'value' => function($value){
+                    return date(Yii::$app->params["dateByDefault"], strtotime($value['Desde']));
+                }
             ],
             [
                 'attribute' => 'Hasta',
                 'header' => Academico::t("profesor", "To"),
-                'value' => 'Hasta',
+                'value' => function($value){
+                    if(isset($value['Hasta']) && $value['Hasta'] != "" )
+                        return date(Yii::$app->params["dateByDefault"], strtotime($value['Hasta']));
+                    return "";
+                }
             ],
             [
                 'attribute' => 'Denominacion',
                 'header' => Academico::t("profesor", "Denomination"),
-                'value' => 'Denominacion',
+                'value' => function($value){
+                    if(isset($value['Denominacion']) && $value['Denominacion'] != "" )
+                        return $value['Denominacion'];
+                    return "";
+                }
             ], 
             [
                 'attribute' => 'Materias',
                 'header' => Academico::t("profesor", "Subjects"),
-                'value' => 'Materias',
+                'value' => function($value){
+                    if(isset($value['Materias']) && $value['Materias'] != "" )
+                        return $value['Materias'];
+                    return "";
+                }
             ],
             [
                 'class' => 'yii\grid\ActionColumn',

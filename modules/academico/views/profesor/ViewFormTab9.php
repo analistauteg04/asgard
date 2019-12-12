@@ -10,6 +10,7 @@ use yii\widgets\ActiveForm;
 use app\components\CFileInputAjax;
 use app\modules\academico\models\ProfesorCapacitacion;
 use app\widgets\PbGridView\PbGridView;
+use app\models\Utilities;
 use app\modules\Academico\Module as Academico;
 Academico::registerTranslations();
 ?>
@@ -29,32 +30,47 @@ Academico::registerTranslations();
             [
                 'attribute' => 'Evento',
                 'header' => Academico::t("profesor", "Name of Event") ,
-                'value' => 'Evento',
+                'value' => function($value){
+                    if(isset($value['Evento']) && $value['Evento'] != "" )
+                        return $value['Evento'];
+                    return "";
+                }
             ],
             [
                 'attribute' => 'Institucion',
                 'header' => Academico::t("profesor", "Institution"),
-                'value' => 'Institucion',
+                'value' => function($value){
+                    if(isset($value['Institucion']) && $value['Institucion'] != "" )
+                        return $value['Institucion'];
+                    return "";
+                }
             ],
             [
                 'attribute' => 'Anio',
                 'header' => Academico::t("profesor", "Year"),
-                'value' => 'Anio',
+                'value' => function($value){
+                    if(isset($value['Anio']) && $value['Anio'] != "" )
+                        return $value['Anio'];
+                    return "";
+                }
             ],
             [
                 'attribute' => 'Tipo',
                 'header' => Academico::t("profesor", "Type Event"),
-                'value' => function ($value){
+                'value' => function($value){
                     $proCap = new ProfesorCapacitacion();
-                    $arr_capItems = $proCap->getItems();
-                    $item = $value['Tipo'] - 1;
-                    return $arr_capItems[$item]['nombre'];
+                    $arr_capItems = $proCap->getItems(true); 
+                    return $arr_capItems[$value['Tipo']];
                 },
             ],
             [
                 'attribute' => 'Duracion',
                 'header' => Academico::t("profesor", "Time Duration"),
-                'value' => 'Duracion',
+                'value' => function($value){
+                    if(isset($value['Duracion']) && $value['Duracion'] != "" )
+                        return $value['Duracion'];
+                    return "";
+                }
             ],
             [
                 'class' => 'yii\grid\ActionColumn',

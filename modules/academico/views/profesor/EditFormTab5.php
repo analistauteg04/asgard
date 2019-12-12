@@ -33,7 +33,7 @@ Academico::registerTranslations();
             </div>
         </div>
         <div class="form-group">
-            <label for="txt_doc_to" class="col-lg-3 col-md-3 col-sm-3 col-xs-3 control-label"><?= Academico::t("profesor", "To") ?> <span class="text-danger">*</span></label>
+            <label for="txt_doc_to" class="col-lg-3 col-md-3 col-sm-3 col-xs-3 control-label"><?= Academico::t("profesor", "To") ?> </label>
             <div class="col-lg-6 col-md-9 col-sm-9 col-xs-9">
                 <?=
                 DatePicker::widget([
@@ -89,7 +89,11 @@ Academico::registerTranslations();
             [
                 'attribute' => 'Institucion',
                 'header' => Academico::t("profesor", "Institution"),
-                'value' => 'Institucion',
+                'value' => function($value){
+                    if(isset($value['Institucion']) && $value['Institucion'] != "" )
+                        return $value['Institucion'];
+                    return "";
+                }
             ],
             [
                 'attribute' => 'Desde',
@@ -102,18 +106,28 @@ Academico::registerTranslations();
                 'attribute' => 'Hasta',
                 'header' => Academico::t("profesor", "To"),
                 'value' => function($value){
-                    return date(Yii::$app->params["dateByDefault"], strtotime($value['Hasta']));
+                    if(isset($value['Hasta']) && $value['Hasta'] != "" )
+                        return date(Yii::$app->params["dateByDefault"], strtotime($value['Hasta']));
+                    return "";
                 }
             ],
             [
                 'attribute' => 'Denominacion',
                 'header' => Academico::t("profesor", "Denomination"),
-                'value' => 'Denominacion',
+                'value' => function($value){
+                    if(isset($value['Denominacion']) && $value['Denominacion'] != "" )
+                        return $value['Denominacion'];
+                    return "";
+                }
             ], 
             [
                 'attribute' => 'Materias',
                 'header' => Academico::t("profesor", "Subjects"),
-                'value' => 'Materias',
+                'value' => function($value){
+                    if(isset($value['Materias']) && $value['Materias'] != "" )
+                        return $value['Materias'];
+                    return "";
+                }
             ],
             [
                 'class' => 'yii\grid\ActionColumn',

@@ -68,17 +68,29 @@ Academico::registerTranslations();
             [
                 'attribute' => 'Evento',
                 'header' => Academico::t("profesor", "Name of Event") ,
-                'value' => 'Evento',
+                'value' => function($value){
+                    if(isset($value['Evento']) && $value['Evento'] != "" )
+                        return $value['Evento'];
+                    return "";
+                }
             ],
             [
                 'attribute' => 'Institucion',
                 'header' => Academico::t("profesor", "Institution"),
-                'value' => 'Institucion',
+                'value' => function($value){
+                    if(isset($value['Institucion']) && $value['Institucion'] != "" )
+                        return $value['Institucion'];
+                    return "";
+                }
             ],
             [
                 'attribute' => 'Anio',
                 'header' => Academico::t("profesor", "Year"),
-                'value' => 'Anio',
+                'value' => function($value){
+                    if(isset($value['Anio']) && $value['Anio'] != "" )
+                        return $value['Anio'];
+                    return "";
+                }
             ],
             [
                 'attribute' => 'Tipo',
@@ -92,7 +104,11 @@ Academico::registerTranslations();
             [
                 'attribute' => 'Duracion',
                 'header' => Academico::t("profesor", "Time Duration"),
-                'value' => 'Duracion',
+                'value' => function($value){
+                    if(isset($value['Duracion']) && $value['Duracion'] != "" )
+                        return $value['Duracion'];
+                    return "";
+                }
             ],
             [
                 'class' => 'yii\grid\ActionColumn',

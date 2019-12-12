@@ -73,32 +73,56 @@ Academico::registerTranslations();
             [
                 'attribute' => 'Denominancion',
                 'header' => Academico::t("profesor", "Project Denomination") ,
-                'value' => 'Denominancion',
+                'value' => function($value){
+                    if(isset($value['Denominancion']) && $value['Denominancion'] != "" )
+                        return $value['Denominancion'];
+                    return "";
+                }
             ],
             [
                 'attribute' => 'Ambito',
                 'header' => Academico::t("profesor", "Ambit"),
-                'value' => 'Ambito',
+                'value' => function($value){
+                    if(isset($value['Ambito']) && $value['Ambito'] != "" )
+                        return $value['Ambito'];
+                    return "";
+                }
             ],
             [
                 'attribute' => 'Resposabilidad',
                 'header' => Academico::t("profesor", "Resposability"),
-                'value' => 'Resposabilidad',
+                'value' => function($value){
+                    if(isset($value['Resposabilidad']) && $value['Resposabilidad'] != "" )
+                        return $value['Resposabilidad'];
+                    return "";
+                }
             ],
             [
                 'attribute' => 'Entidad',
                 'header' => Academico::t("profesor", "Realization Entity"),
-                'value' => 'Entidad',
+                'value' => function($value){
+                    if(isset($value['Entidad']) && $value['Entidad'] != "" )
+                        return $value['Entidad'];
+                    return "";
+                }
             ], 
             [
                 'attribute' => 'Anio',
                 'header' => Academico::t("profesor", "Year"),
-                'value' => 'Anio',
+                'value' => function($value){
+                    if(isset($value['Anio']) && $value['Anio'] != "" )
+                        return $value['Anio'];
+                    return "";
+                }
             ],
             [
                 'attribute' => 'Duracion',
                 'header' => Academico::t("profesor", "Time Duration"),
-                'value' => 'Duracion',
+                'value' => function($value){
+                    if(isset($value['Duracion']) && $value['Duracion'] != "" )
+                        return $value['Duracion'];
+                    return "";
+                }
             ],
             [
                 'class' => 'yii\grid\ActionColumn',

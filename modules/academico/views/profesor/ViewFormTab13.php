@@ -9,6 +9,7 @@ use yii\helpers\Url;
 use yii\widgets\ActiveForm;
 use app\components\CFileInputAjax;
 use app\widgets\PbGridView\PbGridView;
+use app\models\Utilities;
 use app\modules\Academico\Module as Academico;
 Academico::registerTranslations();
 ?>
@@ -28,17 +29,29 @@ Academico::registerTranslations();
             [
                 'attribute' => 'Periodo',
                 'header' => Academico::t("profesor", "Evaluation Period") ,
-                'value' => 'Periodo',
+                'value' => function($value){
+                    if(isset($value['Periodo']) && $value['Periodo'] != "" )
+                        return $value['Periodo'];
+                    return "";
+                }
             ],
             [
                 'attribute' => 'Institucion',
                 'header' => Academico::t("profesor", "Evaluating Institution"),
-                'value' => 'Institucion',
+                'value' => function($value){
+                    if(isset($value['Institucion']) && $value['Institucion'] != "" )
+                        return $value['Institucion'];
+                    return "";
+                }
             ],
             [
                 'attribute' => 'Evaluacion',
                 'header' => Academico::t("profesor", "Evaluation Obtained"),
-                'value' => 'Evaluacion',
+                'value' => function($value){
+                    if(isset($value['Evaluacion']) && $value['Evaluacion'] != "" )
+                        return $value['Evaluacion'];
+                    return "";
+                }
             ],
             [
                 'class' => 'yii\grid\ActionColumn',

@@ -67,27 +67,47 @@ Academico::registerTranslations();
             [
                 'attribute' => 'Estudiante',
                 'header' => Academico::t("profesor", "Student Name") ,
-                'value' => 'Estudiante',
+                'value' => function($value){
+                    if(isset($value['Estudiante']) && $value['Estudiante'] != "" )
+                        return $value['Estudiante'];
+                    return "";
+                }
             ],
             [
                 'attribute' => 'Programa',
                 'header' => Academico::t("profesor", "Academic Program"),
-                'value' => 'Programa',
+                'value' => function($value){
+                    if(isset($value['Programa']) && $value['Programa'] != "" )
+                        return $value['Programa'];
+                    return "";
+                }
             ],
             [
                 'attribute' => 'Academico',
                 'header' => Academico::t("profesor", "Academic Program"),
-                'value' => 'Academico',
+                'value' => function($value){
+                    if(isset($value['Academico']) && $value['Academico'] != "" )
+                        return $value['Academico'];
+                    return "";
+                }
             ],
             [
                 'attribute' => 'Institucion',
                 'header' => Academico::t("profesor", "Institution"),
-                'value' => 'Institucion',
+                'value' => function($value){
+                    if(isset($value['Institucion']) && $value['Institucion'] != "" )
+                        return $value['Institucion'];
+                    return "";
+                }
             ],
             [
                 'attribute' => 'Anio',
                 'header' => Academico::t("profesor", "Year of Approval"),
-                'value' => 'Anio',
+                'value' => function($value){
+                    if(isset($value['Anio']) && $value['Anio'] != "" )
+                        return $value['Anio'];
+                    return "";
+                }
             ],
             [
                 'class' => 'yii\grid\ActionColumn',
