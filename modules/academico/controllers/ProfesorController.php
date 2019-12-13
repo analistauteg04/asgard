@@ -46,15 +46,16 @@ class ProfesorController extends \app\components\CController {
         $user_perId =  Yii::$app->session->get("PB_perid");
         $grupo_model = new Grupo();
         $search = NULL;
+        //$grupPerm = array(1,15);
         $arr_grupos = $grupo_model->getAllGruposByUser($user_usermane);
-        if(!in_array(['id' => '1','15'], $arr_grupos))
-            $search = $user_perId;
-
+        //if(!in_array($arr_grupos, $grupPerm)){
+        if(!in_array(['id' => '1'], $arr_grupos))
+            $search = $user_perId;        
         if (Yii::$app->request->isAjax) {
             $data = Yii::$app->request->get();
             $search = $data["search"];
-            if(!in_array(['id' => '1'], $arr_grupos))
-                $search = $user_perId;
+            if(!in_array(['id' => '1'], $arr_grupos))            
+                $search = $user_perId;            
             $model = $pro_model->getAllProfesorGrid($search, true);
             if (isset($data["search"])) {
                 return $this->renderPartial('index-grid', [
@@ -62,7 +63,6 @@ class ProfesorController extends \app\components\CController {
                 ]);
             }
         }
-
         $model = $pro_model->getAllProfesorGrid($search, true);
         return $this->render('index', [
                     'model' => $model
