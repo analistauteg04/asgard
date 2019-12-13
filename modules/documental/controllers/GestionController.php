@@ -57,6 +57,7 @@ class GestionController extends \app\components\CController {
             }
 
             if ($data["procesar_file"]) {
+                ini_set('memory_limit', '256M');
                 $model_documento = new Documento();
                 try {
                     $carga_archivo = $model_documento->processFile($data["archivo"]);
