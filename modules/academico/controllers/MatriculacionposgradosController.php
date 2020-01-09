@@ -92,7 +92,7 @@ class MatriculacionposgradosController extends \app\components\CController {
         return $this->render('new', [
                     'personalData' => $personaData,
                     'arr_promocion' => ArrayHelper::map(array_merge([["id" => "0", "name" => "Seleccionar"]], $resp_programas), "id", "name"),
-                    'arr_paralelo' => ArrayHelper::map(array_merge(["id" => "0", "name" => "Seleccionar"], $arr_Paralelos), "id", "name"),
+                    'arr_paralelo' => ArrayHelper::map(array_merge([["id" => "0", "name" => "Seleccionar"]], $arr_Paralelos), "id", "name"),
         ]);
     }
 
