@@ -164,7 +164,7 @@ class HorarioAsignaturaPeriodoTmp extends \yii\db\ActiveRecord
                     $model = new HorarioAsignaturaPeriodoTmp();
                     //Validación de materia.  
                      \app\models\Utilities::putMessageLogFile('Materia Excel:'.$val[1]);
-                    $respMateria = $model->consultarMateriaXnombre($val[1]); 
+                    $respMateria = $model->consultarMateriaXnombre($val[1], $val[5]); 
                     $mensaje = "";
                     if (!($respMateria)) {                           
                         $bandera= '0';
@@ -247,12 +247,13 @@ class HorarioAsignaturaPeriodoTmp extends \yii\db\ActiveRecord
     }
     
     
-    public function consultarMateriaXnombre($nombre) {
+    public function consultarMateriaXnombre($nombre, $unidad) {
         $con = \Yii::$app->db_academico;
         $estado = 1;
         $sql = "SELECT asi_id 
                 FROM " . $con->dbname . ".asignatura a
                 WHERE asi_nombre = :nombre
+                and uaca_id = :unidad
                 and asi_estado = :estado
                 and asi_estado_logico = :estado";      
         \app\models\Utilities::putMessageLogFile('sql:'.$sql);
@@ -260,6 +261,7 @@ class HorarioAsignaturaPeriodoTmp extends \yii\db\ActiveRecord
         $comando = $con->createCommand($sql);
         $comando->bindParam(":estado", $estado, \PDO::PARAM_STR);
         $comando->bindParam(":nombre", $nombre, \PDO::PARAM_STR);        
+        $comando->bindParam(":unidad", $unidad, \PDO::PARAM_INT);        
         $resultData = $comando->queryOne();
         return $resultData;
     }
