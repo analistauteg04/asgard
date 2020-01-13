@@ -1,9 +1,9 @@
 <?php
 
 namespace app\modules\academico\models;
+
 use app\modules\academico\models\HorarioAsignaturaPeriodoTmp;
 use app\modules\academico\models\HorarioAsignaturaPeriodo;
-
 use Yii;
 use yii\data\ArrayDataProvider;
 
@@ -115,13 +115,13 @@ class RegistroMarcacion extends \yii\db\ActiveRecord {
                     hap.mod_id as modalidad,
                     asig.asi_nombre as materia,
                     hap.pro_id as profesor,
-                    -- ifnull(CONCAT(sem.saca_anio,' (',blq.baca_nombre,'-',sem.saca_nombre,')'),sem.saca_anio) as periodo,
+                    ifnull(CONCAT(sem.saca_anio,' (',blq.baca_nombre,'-',sem.saca_nombre,')'),sem.saca_anio) as periodo,
                     -- ifnull(CONCAT(paca.paca_anio_academico,' (',blq.baca_nombre,'-',sem.saca_nombre,')'),paca.paca_anio_academico) as periodo,
                     ifnull((SELECT DATE_FORMAT(marc.rmar_fecha_hora_entrada, '%H:%i:%s')
                             FROM db_academico.registro_marcacion marc
                             WHERE marc.pro_id = prof.pro_id 
                             AND marc.hape_id = hap.hape_id 
-                            AND marc.rmar_tipo = 'E'
+                            -- AND marc.rmar_tipo = 'E'
                             AND SUBSTRING(marc.rmar_fecha_hora_entrada,1,10) = DATE_FORMAT(now(), '%Y-%m-%d')),'') as inicio,
                     ifnull((SELECT DATE_FORMAT(marc.rmar_fecha_hora_salida, '%H:%i:%s')
                             FROM db_academico.registro_marcacion marc
@@ -185,25 +185,29 @@ class RegistroMarcacion extends \yii\db\ActiveRecord {
         $con = \Yii::$app->db_academico;
         $estado = 1;
         $fecha_registro = "%" . $fecha . "%";
+        if ($rmar_tipo == 'E') {
+            $dato = 'rmar_fecha_hora_entrada';
+        } else {
+            $dato = 'rmar_fecha_hora_salida';
+        }
         $sql = "
-                    SELECT count(*) as marcacion
+                    SELECT $dato as marcacion
                     FROM 
                         " . $con->dbname . ".registro_marcacion rem                    
                     WHERE
                         rem.hape_id= :hape_id AND
                         rem.pro_id= :profesor AND
-                        date_format(rem.rmar_fecha_creacion, '%Y-%m-%d') = :fecha AND
-                        rem.rmar_tipo = :rmar_tipo AND
+                        date_format(rem.rmar_fecha_creacion, '%Y-%m-%d') = :fecha AND                        
                         rem.rmar_estado = :estado AND
                         rem.rmar_estado_logico = :estado";
-        
+
         $comando = $con->createCommand($sql);
         $comando->bindParam(":estado", $estado, \PDO::PARAM_STR);
         $comando->bindParam(":hape_id", $hape_id, \PDO::PARAM_INT);
         $comando->bindParam(":profesor", $profesor, \PDO::PARAM_INT);
         $comando->bindParam(":fecha", $fecha, \PDO::PARAM_STR);
-        $comando->bindParam(":rmar_tipo", $rmar_tipo, \PDO::PARAM_STR);               
-        
+        $comando->bindParam(":rmar_tipo", $rmar_tipo, \PDO::PARAM_STR);
+
         $resultData = $comando->queryOne();
         return $resultData;
     }
@@ -486,39 +490,39 @@ class RegistroMarcacion extends \yii\db\ActiveRecord {
      * @param
      * @return
      */
-    public function CargarArchivoHorario($periodo_id, $fname, $usu_id) {                
-        $mod_horarioTemp = new HorarioAsignaturaPeriodoTmp();             
-        $mod_horario = new HorarioAsignaturaPeriodo();       
-        $path = Yii::$app->basePath . Yii::$app->params['documentFolder'] . "horario/" . $fname;  
+    public function CargarArchivoHorario($periodo_id, $fname, $usu_id) {
+        $mod_horarioTemp = new HorarioAsignaturaPeriodoTmp();
+        $mod_horario = new HorarioAsignaturaPeriodo();
+        $path = Yii::$app->basePath . Yii::$app->params['documentFolder'] . "horario/" . $fname;
         \app\models\Utilities::putMessageLogFile('antes de uploadFile');
-        $carga_archivo = $mod_horarioTemp->uploadFile($periodo_id, $usu_id, $path);        
+        $carga_archivo = $mod_horarioTemp->uploadFile($periodo_id, $usu_id, $path);
         if ($carga_archivo['status']) {
             \app\models\Utilities::putMessageLogFile('después de validación');
-            $data = $mod_horarioTemp->consultarHorarioTemp($usu_id);                           
+            $data = $mod_horarioTemp->consultarHorarioTemp($usu_id);
             $cont = 0;
             for ($i = 0; $i < sizeof($data); $i++) {
                 if (!empty($data[$i]["hapt_fecha_clase"])) {
-                    $fecha = $data[$i]["hapt_fecha_clase"];                            
-                }                   
-                $resultado = $mod_horario->insertarHorario($data[$i]["asi_id"], $data[$i]["paca_id"], $data[$i]["pro_id"], $data[$i]["uaca_id"], $data[$i]["mod_id"], $data[$i]["dia_id"], $data[$i]["hapt_fecha_clase"], $data[$i]["hapt_hora_entrada"], $data[$i]["hapt_hora_salida"]); 
+                    $fecha = $data[$i]["hapt_fecha_clase"];
+                }
+                $resultado = $mod_horario->insertarHorario($data[$i]["asi_id"], $data[$i]["paca_id"], $data[$i]["pro_id"], $data[$i]["uaca_id"], $data[$i]["mod_id"], $data[$i]["dia_id"], $data[$i]["hapt_fecha_clase"], $data[$i]["hapt_hora_entrada"], $data[$i]["hapt_hora_salida"]);
                 //Modificar estado de la oportunidad.                                        
                 $cont++;
-            }      
+            }
             \app\models\Utilities::putMessageLogFile('al finalizar carga de archivo horario');
             $arroout["status"] = TRUE;
             $arroout["error"] = null;
             $arroout["message"] = "Se ha procesado $cont registros.";
-            $arroout["data"] = null;            
+            $arroout["data"] = null;
             return $arroout;
-        } else {            
+        } else {
             $arroout["status"] = FALSE;
             $arroout["error"] = null;
             $arroout["message"] = $carga_archivo['message'];
             $arroout["data"] = null;
             return $arroout;
-        }       
+        }
     }
-    
+
     /**
      * Function consultarHorarioMarcacion
      * @author  Grace Viteri <analistadesarrollo01@uteg.edu.ec>    
@@ -532,11 +536,11 @@ class RegistroMarcacion extends \yii\db\ActiveRecord {
         $estado = 1;
         if (isset($arrFiltro) && count($arrFiltro) > 0) {
             if ($arrFiltro['profesor'] != "") {
-                $str_search .= "(p.per_pri_nombre like :profesor OR ";                
-                $str_search .= "p.per_seg_nombre like :profesor OR ";                
+                $str_search .= "(p.per_pri_nombre like :profesor OR ";
+                $str_search .= "p.per_seg_nombre like :profesor OR ";
                 $str_search .= "p.per_pri_apellido like :profesor OR ";
                 $str_search .= "p.per_seg_apellido like :profesor OR ";
-                $str_search .= "p.per_cedula like :profesor ) AND ";            
+                $str_search .= "p.per_cedula like :profesor ) AND ";
             }
             if ($arrFiltro['periodo'] != "" && $arrFiltro['periodo'] > 0) {
                 $str_search .= " hap.paca_id = :periodo AND ";
@@ -573,13 +577,13 @@ class RegistroMarcacion extends \yii\db\ActiveRecord {
                         left join " . $con->dbname . ".bloque_academico blq ON blq.baca_id = pera.baca_id
                 WHERE   $str_search
                         hap.hape_estado = :estado
-                        and hap.hape_estado_logico = :estado";        
+                        and hap.hape_estado_logico = :estado";
         $comando = $con->createCommand($sql);
         $comando->bindParam(":estado", $estado, \PDO::PARAM_STR);
         if (isset($arrFiltro) && count($arrFiltro) > 0) {
             if ($arrFiltro['profesor'] != "") {
                 $search_cond = "%" . $arrFiltro["profesor"] . "%";
-                $comando->bindParam(":profesor", $search_cond, \PDO::PARAM_STR); 
+                $comando->bindParam(":profesor", $search_cond, \PDO::PARAM_STR);
             }
             if ($arrFiltro['periodo'] != "" && $arrFiltro['periodo'] > 0) {
                 $periodo = $arrFiltro["periodo"];
@@ -617,9 +621,9 @@ class RegistroMarcacion extends \yii\db\ActiveRecord {
         } else {
             return $dataProvider;
         }
-    } 
-    
-     /**
+    }
+
+    /**
      * Function consultarRegistroNoMarcacion
      * @author  Grace Viteri <analistadesarrollo01@uteg.edu.ec>    
      * @property  
@@ -629,7 +633,7 @@ class RegistroMarcacion extends \yii\db\ActiveRecord {
         $con = \Yii::$app->db_academico;
         $con1 = \Yii::$app->db_asgard;
         $estado = 1;
-        if ($parametros=='0') {
+        if ($parametros == '0') {
             $str_search = " hap.uaca_id = 0 AND hap.mod_id = 0 AND ";
             $tipo = "E";
         } else {
@@ -653,7 +657,7 @@ class RegistroMarcacion extends \yii\db\ActiveRecord {
                     $str_search .= " rmg.paca_id = :periodo AND ";
                 }
             }
-        }    
+        }
         $sql = "SELECT ifnull(CONCAT(blq.baca_anio,' (',blq.baca_nombre,'-',sem.saca_nombre,')'),blq.baca_anio) as periodo,
                        date_format(rmg.rmtm_fecha_transaccion,'%Y-%m-%d') as fecha, concat(per.per_pri_nombre, ' ', per.per_pri_apellido, ' ', ifnull(per.per_seg_apellido,' ')) profesor,
                        a.asi_nombre as materia, hap.hape_hora_entrada as hora_inicio, hap.hape_hora_salida as hora_salida
@@ -700,12 +704,12 @@ class RegistroMarcacion extends \yii\db\ActiveRecord {
                 $comando->bindParam(":periodo", $periodo, \PDO::PARAM_INT);
             }
             if (($arrFiltro["tipo"]) != "") {
-                $comando->bindParam(":tipo", $arrFiltro["tipo"], \PDO::PARAM_STR);            
+                $comando->bindParam(":tipo", $arrFiltro["tipo"], \PDO::PARAM_STR);
             } else {
-                $comando->bindParam(":tipo", $tipo, \PDO::PARAM_STR);            
+                $comando->bindParam(":tipo", $tipo, \PDO::PARAM_STR);
             }
         } else {
-                $comando->bindParam(":tipo", $tipo, \PDO::PARAM_STR);            
+            $comando->bindParam(":tipo", $tipo, \PDO::PARAM_STR);
         }
         $resultData = $comando->queryAll();
         $dataProvider = new ArrayDataProvider([
@@ -725,4 +729,106 @@ class RegistroMarcacion extends \yii\db\ActiveRecord {
             return $dataProvider;
         }
     }
+
+    /**
+     * Function insertarMarcacion crea marcacion.
+     * @author  Giovanni Vergara <analistadesarrollo02@uteg.edu.ec>;
+     * @param
+     * @return
+     */
+    public function insertarMarcacionsalida($rmar_tipo, $pro_id, $hape_id, $rmar_fecha_hora_salida, $rmar_direccion_ipsalida, $rmar_idingreso) {
+        $con = \Yii::$app->db_academico;
+        $rmar_fecha_modificacion = date(Yii::$app->params["dateTimeByDefault"]);
+        $estado = 1;
+        $trans = $con->getTransaction(); // se obtiene la transacción actual
+        if ($trans !== null) {
+            $trans = null; // si existe la transacción entonces no se crea una
+        } else {
+            $trans = $con->beginTransaction(); // si no existe la transacción entonces se crea una
+        }
+
+        try {
+            $comando = $con->createCommand
+                    ("UPDATE " . $con->dbname . ".registro_marcacion		       
+                      SET rmar_tipo = :rmar_tipo,
+                        rmar_fecha_hora_salida = :rmar_fecha_hora_salida,
+                        rmar_fecha_modificacion = :rmar_fecha_modificacion
+                      WHERE 
+                        usu_id = :rmar_idingreso AND                        
+                        rmar_tipo = 'E' AND
+                        hape_id = :hape_id AND
+                        pro_id = :pro_id AND
+                        rmar_estado = :estado AND
+                        rmar_estado_logico = :estado");
+
+            if (isset($rmar_tipo)) {
+                $comando->bindParam(':rmar_tipo', $rmar_tipo, \PDO::PARAM_STR);
+            }
+            if (isset($pro_id)) {
+                $comando->bindParam(':pro_id', $pro_id, \PDO::PARAM_INT);
+            }
+            if (isset($hape_id)) {
+                $comando->bindParam(':hape_id', $hape_id, \PDO::PARAM_INT);
+            }
+            if (isset($rmar_fecha_hora_salida)) {
+                $comando->bindParam(':rmar_fecha_hora_salida', $rmar_fecha_hora_salida, \PDO::PARAM_STR);
+            }
+            if (isset($rmar_direccion_ipsalida)) {
+                $comando->bindParam(':rmar_direccion_ipsalida', $rmar_direccion_ipsalida, \PDO::PARAM_STR);
+            }
+            if (!empty((isset($rmar_fecha_modificacion)))) {
+                $comando->bindParam(':rmar_fecha_modificacion', $rmar_fecha_modificacion, \PDO::PARAM_STR);
+            }
+            if (!empty((isset($rmar_idingreso)))) {
+                $comando->bindParam(':rmar_idingreso', $rmar_idingreso, \PDO::PARAM_INT);
+            }
+            $comando->bindParam(":estado", $estado, \PDO::PARAM_STR);
+            $result = $comando->execute();
+            if ($trans !== null)
+                $trans->commit();
+            return $con->getLastInsertID($con->dbname . '.registro_marcacion');
+        } catch (Exception $ex) {
+            if ($trans !== null)
+                $trans->rollback();
+            return FALSE;
+        }
+    }
+
+    /**
+     * Function insertarMarcacionid.
+     * @author  Giovanni Vergara <analistadesarrollo02@uteg.edu.ec>;
+     * @param
+     * @return
+     */
+    public function insertarMarcacionid($resp_marca) {
+        $con = \Yii::$app->db_academico;
+        $estado = 1;
+        $trans = $con->getTransaction(); // se obtiene la transacción actual
+        if ($trans !== null) {
+            $trans = null; // si existe la transacción entonces no se crea una
+        } else {
+            $trans = $con->beginTransaction(); // si no existe la transacción entonces se crea una
+        }
+
+        try {
+            $comando = $con->createCommand
+                    ("UPDATE " . $con->dbname . ".registro_marcacion		       
+                      SET rmar_idingreso = :resp_marca                        
+                      WHERE                     
+                        rmar_id = :resp_marca AND
+                        rmar_estado = :estado AND
+                        rmar_estado_logico = :estado");
+            $comando->bindParam(':resp_marca', $resp_marca, \PDO::PARAM_INT);
+            $comando->bindParam(":estado", $estado, \PDO::PARAM_STR);
+            $result = $comando->execute();
+            if ($trans !== null)
+                $trans->commit();
+            return $con->getLastInsertID($con->dbname . '.registro_marcacion');
+        } catch (Exception $ex) {
+            if ($trans !== null)
+                $trans->rollback();
+            return FALSE;
+        }
+    }
+
 }
