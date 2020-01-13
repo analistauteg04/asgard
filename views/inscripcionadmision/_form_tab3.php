@@ -159,9 +159,9 @@ admision::registerTranslations();
                 <span><b><?= Yii::t("formulario", "Forma Pago: ") ?></b></span>
             </div>
             <div class="col-sm-8 col-md-8 col-xs-8 col-lg-8">
-                <!--<label> 
+                <label> 
                     <input type="radio" name="rdo_forma_pago_dinner" id="rdo_forma_pago_dinner" value="1"> Dinners<br> 
-                </label>-->
+                </label>
                 <label> 
                     <input type="radio" name="rdo_forma_pago_otros" id="rdo_forma_pago_otros" value="2" checked>Stripe Payment<br>
                 </label>
