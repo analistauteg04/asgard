@@ -114,7 +114,7 @@ class Institucion extends \yii\db\ActiveRecord
                     i.ins_nombre as name                   
                 FROM 
                    " . $con->dbname . ".institucion i
-                WHERE i.pai_id = :pai_id AND
+                WHERE (i.pai_id = 1 OR i.pai_id = 11) AND 
                       i.ins_estado = :estado AND
                       i.ins_estado_logico = :estado
                 ORDER BY 2 asc  ";
