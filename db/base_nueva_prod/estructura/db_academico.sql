@@ -929,6 +929,7 @@ create table if not exists `registro_marcacion` (
   `rmar_fecha_hora_entrada` timestamp null,    
   `rmar_fecha_hora_salida` timestamp null,  
   `rmar_direccion_ip` varchar(20) not null,
+  `rmar_direccion_ipsalida` varchar(20) null,
   `usu_id` bigint(20) not null,
   `rmar_idingreso`  bigint(20) null,
   `rmar_estado` varchar(1) not null,

@@ -3,12 +3,12 @@
 IP_UTEG_EQU="181.39.139.68" # ip publica del equipo
 IP_UTEG_PRO="181.39.139.67" # ip publica desde otra red para ingresar al servidor
 IP_UTEG_OFI="186.68.143.106" # ip publica desde otra red para ingresar al servidor
-RED_PRIVADA="130.107.2.0/24" # Red privada ligada a la segunda interfaz de red del equipo
+RED_PRIVADA="130.107.1.0/24" # Red privada ligada a la segunda interfaz de red del equipo
 DNS_SERVER="200.93.192.161 200.93.192.148" # DNS de la ip publica entregado por el proveedor
 GATEWAY="181.39.139.65" # GATEWAY entregado por el proveedor
-ETH1="ens2" # Interfza secundaria del servidor en la cual esta configurada la ip privada
-ETH0="eno1" # Interfaz primaria del servidor en la cual esta configurada la ip publica
-
+ETH1="ens1" # Interfza secundaria del servidor en la cual esta configurada la ip privada
+ETH0="eno2" # Interfaz primaria del servidor en la cual esta configurada la ip publica
+IP_DEV="191.99.93.78"
 echo "Aplicando Reglas de Firewall..."
 
 ## FLUSH de reglas
@@ -31,6 +31,8 @@ iptables -A INPUT  -s $IP_UTEG_PRO -j ACCEPT
 iptables -A OUTPUT -d $IP_UTEG_PRO -j ACCEPT
 iptables -A INPUT  -s $IP_UTEG_OFI -j ACCEPT
 iptables -A OUTPUT -d $IP_UTEG_OFI -j ACCEPT
+iptables -A INPUT  -s $IP_DEV -j ACCEPT
+iptables -A OUTPUT -d $IP_DEV -j ACCEPT
 
 ## Se permite acceso desde la red privada
 iptables -A INPUT -i $ETH1 -s $RED_PRIVADA -j ACCEPT
@@ -39,6 +41,8 @@ iptables -A OUTPUT -o $ETH1 -d $RED_PRIVADA -j ACCEPT
 ## El puerto 80 y 433 de www debe estar abierto, es un servidor web.
 iptables -A INPUT  -p tcp --dport 80 -m state --state NEW,ESTABLISHED -j ACCEPT
 iptables -A OUTPUT -p tcp --sport 80 -m state --state ESTABLISHED -j ACCEPT
+iptables -A INPUT  -p tcp --dport 8080 -m state --state NEW,ESTABLISHED -j ACCEPT
+iptables -A OUTPUT -p tcp --sport 8080 -m state --state ESTABLISHED -j ACCEPT
 iptables -A INPUT  -p tcp --dport 443 -m state --state NEW,ESTABLISHED -j ACCEPT
 iptables -A OUTPUT -p tcp --sport 443 -m state --state ESTABLISHED -j ACCEPT
 
