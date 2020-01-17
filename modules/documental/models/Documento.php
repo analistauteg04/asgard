@@ -8,7 +8,6 @@ use \yii\data\ArrayDataProvider;
 use app\modules\documental\models\Clase;
 use app\modules\documental\models\Serie;
 use app\modules\documental\models\SubSerie;
-
 use yii\base\Exception;
 use yii\helpers\VarDumper;
 
@@ -51,30 +50,25 @@ use yii\helpers\VarDumper;
  * @property string $doc_estado_logico
  *
  */
-
 class Documento extends \yii\db\ActiveRecord {
 
     /**
      * Arreglos de variables
      */
-
     public $array_tipo_informacion = array(
         "0" => "Solo Digital",
         "1" => "Solo Físico",
         "2" => "Digital y Físico",
     );
-
     public $array_clasificacion_informacion = array(
         "0" => "Confidencial",
-        "1" => "Pública",        
+        "1" => "Pública",
     );
-
     public $array_tipo_informacion_publica = array(
         "0" => "Interna",
         "1" => "Externa",
         "2" => "No aplica",
     );
-
     public $array_estado_documento = array(
         "0" => "Deteriorado",
         "1" => "Páginas Amarillas",
@@ -105,12 +99,12 @@ class Documento extends \yii\db\ActiveRecord {
         return [
             [['doc_estado_logico'], 'required'],
             [['doc_fecha_creacion', 'doc_fecha_modificacion'], 'safe'],
-            [['doc_uni_departamento','doc_estado_documento','doc_plaz_gestion','doc_plaz_central','doc_plaz_intermedio','doc_base_legal',
-            'doc_disp_eliminacion','doc_disp_conservacion','doc_tec_muestreo','doc_tec_conservacion','doc_cons_gestion','doc_cons_central','doc_cod_lomo'], 'string', 'max' => 50],
-            [['doc_ubicacion','doc_observaciones','doc_pro_documental','doc_desc_informacion'], 'string', 'max' => 200],
-            [['doc_tipo_informacion','doc_clasificacion','doc_info_publica'], 'string', 'max' => 100],
-            [['doc_macroproceso','doc_proceso'], 'string', 'max' => 150],
-            [['doc_secuencia','doc_cod_documento','doc_fecha_produccion'], 'string', 'max' => 20],
+            [['doc_uni_departamento', 'doc_estado_documento', 'doc_plaz_gestion', 'doc_plaz_central', 'doc_plaz_intermedio', 'doc_base_legal',
+            'doc_disp_eliminacion', 'doc_disp_conservacion', 'doc_tec_muestreo', 'doc_tec_conservacion', 'doc_cons_gestion', 'doc_cons_central', 'doc_cod_lomo'], 'string', 'max' => 50],
+            [['doc_ubicacion', 'doc_observaciones', 'doc_pro_documental', 'doc_desc_informacion'], 'string', 'max' => 200],
+            [['doc_tipo_informacion', 'doc_clasificacion', 'doc_info_publica'], 'string', 'max' => 100],
+            [['doc_macroproceso', 'doc_proceso'], 'string', 'max' => 150],
+            [['doc_secuencia', 'doc_cod_documento', 'doc_fecha_produccion'], 'string', 'max' => 20],
             [['doc_estado_logico'], 'string', 'max' => 1],
         ];
     }
@@ -160,13 +154,12 @@ class Documento extends \yii\db\ActiveRecord {
     /**
      * @return \yii\db\ActiveQuery
      */
-    
-    public function getAllDocumentosGrid($search = NULL, $dataProvider = false){
+    public function getAllDocumentosGrid($search = NULL, $dataProvider = false) {
         $iduser = Yii::$app->session->get('PB_iduser', FALSE);
-        $search_cond = "%".$search."%";
+        $search_cond = "%" . $search . "%";
         $str_search = "";
-        if(isset($search)){
-            $str_search  = "(do.doc_uni_departamento like :search OR ";
+        if (isset($search)) {
+            $str_search = "(do.doc_uni_departamento like :search OR ";
             $str_search .= "do.doc_proceso like :search) AND ";
         }
         $sql = "SELECT 
@@ -190,23 +183,23 @@ class Documento extends \yii\db\ActiveRecord {
                     sub.sub_estado_logico=1
                     ORDER BY do.doc_id;";
         $comando = Yii::$app->db_documental->createCommand($sql);
-        if(isset($search)){
-            $comando->bindParam(":search",$search_cond, \PDO::PARAM_STR);
+        if (isset($search)) {
+            $comando->bindParam(":search", $search_cond, \PDO::PARAM_STR);
         }
         $res = $comando->queryAll();
-        foreach($res as $key=>$valor) {
-            foreach($valor as $key2=>$valor2) {
-                if(strcasecmp($key2, "TipoInfo")==0) {
+        foreach ($res as $key => $valor) {
+            foreach ($valor as $key2 => $valor2) {
+                if (strcasecmp($key2, "TipoInfo") == 0) {
                     $res[$key][$key2] = $this->getValueTipoInformacionByKey($valor2);
                 }
 
-                if(strcasecmp($key2, "Estado")==0) {
+                if (strcasecmp($key2, "Estado") == 0) {
                     $res[$key][$key2] = $this->getValueEstadoDocumentoByKey($valor2);
                 }
             }
         }
 
-        if($dataProvider){
+        if ($dataProvider) {
             $dataProvider = new ArrayDataProvider([
                 'key' => 'doc_id',
                 'allModels' => $res,
@@ -214,7 +207,7 @@ class Documento extends \yii\db\ActiveRecord {
                     'pageSize' => Yii::$app->params["pageSize"],
                 ],
                 'sort' => [
-                    'attributes' => ['Departamento', 'Proceso', 'Codigo', 'TipoInfo','Observaciones','Estado'],
+                    'attributes' => ['Departamento', 'Proceso', 'Codigo', 'TipoInfo', 'Observaciones', 'Estado'],
                 ],
             ]);
             return $dataProvider;
@@ -222,12 +215,12 @@ class Documento extends \yii\db\ActiveRecord {
         return $res;
     }
 
-    public function getDataToExcel($search){        
+    public function getDataToExcel($search) {
         $iduser = Yii::$app->session->get('PB_iduser', FALSE);
-        $search_cond = "%".$search."%";
+        $search_cond = "%" . $search . "%";
         $str_search = "";
-        if(isset($search)){
-            $str_search  = "(do.doc_uni_departamento like :search OR ";
+        if (isset($search)) {
+            $str_search = "(do.doc_uni_departamento like :search OR ";
             $str_search .= "do.doc_proceso like :search) AND ";
         }
         $sql = "SELECT    /* tomar todos en orden segun el excel */
@@ -272,48 +265,48 @@ class Documento extends \yii\db\ActiveRecord {
                     sub.sub_estado_logico=1
                     ORDER BY do.doc_id;";
         $comando = Yii::$app->db_documental->createCommand($sql);
-        if(isset($search)){
-            $comando->bindParam(":search",$search_cond, \PDO::PARAM_STR);
+        if (isset($search)) {
+            $comando->bindParam(":search", $search_cond, \PDO::PARAM_STR);
         }
         $res = $comando->queryAll();
 
-        foreach($res as $key=>$valor) {
-            foreach($valor as $key2=>$valor2) {
-                if(strcasecmp($key2, "TipoInfo")==0) {
+        foreach ($res as $key => $valor) {
+            foreach ($valor as $key2 => $valor2) {
+                if (strcasecmp($key2, "TipoInfo") == 0) {
                     $res[$key][$key2] = $this->getValueTipoInformacionByKey($valor2);
                 }
 
-                if(strcasecmp($key2, "EstadoDocumento")==0) {
+                if (strcasecmp($key2, "EstadoDocumento") == 0) {
                     $res[$key][$key2] = $this->getValueEstadoDocumentoByKey($valor2);
                 }
 
-                if(strcasecmp($key2, "InformacionPublica")==0) {
+                if (strcasecmp($key2, "InformacionPublica") == 0) {
                     $res[$key][$key2] = $this->getValueTipoInformacionPublicaByKey($valor2);
                 }
 
-                if(strcasecmp($key2, "Clasificacion")==0) {
+                if (strcasecmp($key2, "Clasificacion") == 0) {
                     $res[$key][$key2] = $this->getValueClasificacionInformacionByKey($valor2);
                 }
             }
         }
         /* if($dataProvider){
-            $dataProvider = new ArrayDataProvider([
-                'key' => 'doc_id',
-                'allModels' => $res,
-                'pagination' => [
-                    'pageSize' => Yii::$app->params["pageSize"],
-                ],
-                'sort' => [
-                    'attributes' => ['Departamento', 'Proceso', 'Codigo', 'TipoInfo','Observaciones','Estado'],
-                ],
-            ]);
-            return $dataProvider;
-        } */
+          $dataProvider = new ArrayDataProvider([
+          'key' => 'doc_id',
+          'allModels' => $res,
+          'pagination' => [
+          'pageSize' => Yii::$app->params["pageSize"],
+          ],
+          'sort' => [
+          'attributes' => ['Departamento', 'Proceso', 'Codigo', 'TipoInfo','Observaciones','Estado'],
+          ],
+          ]);
+          return $dataProvider;
+          } */
         return $res;
     }
 
     public function processFile($fname) {
-        $file = Yii::$app->basePath . Yii::$app->params['documentFolder'] . "documento/" . $fname;        
+        $file = Yii::$app->basePath . Yii::$app->params['documentFolder'] . "documento/" . $fname;
         $fila = 0;
         $chk_ext = explode(".", $file);
         $con = \Yii::$app->db_documental;
@@ -323,7 +316,7 @@ class Documento extends \yii\db\ActiveRecord {
         } else {
             $trans = $con->beginTransaction(); // si no existe la transacción entonces se crea una
         }
-        if(strtolower(end($chk_ext)) == "xls" || strtolower(end($chk_ext)) == "xlsx") {
+        if (strtolower(end($chk_ext)) == "xls" || strtolower(end($chk_ext)) == "xlsx") {
             //Creacion de PHPExcel object
             try {
                 $objPHPExcel = \PhpOffice\PhpSpreadsheet\IOFactory::load($file);
@@ -332,98 +325,105 @@ class Documento extends \yii\db\ActiveRecord {
                 $array_serie = array();
                 $validacion = false;
                 $row_global = 0;
-            
-                foreach($objPHPExcel->getWorksheetIterator() as $worksheet) {                    
+
+                foreach ($objPHPExcel->getWorksheetIterator() as $worksheet) {
                     $worksheetTitle = $worksheet->getTitle();
                     $highestRow = $worksheet->getHighestRow(); // e.g. 10 
                     $highestColumn = $worksheet->getHighestDataColumn(); // e.g 'F'                    
                     $highestColumnIndex = \PhpOffice\PhpSpreadsheet\Cell\Coordinate::columnIndexFromString($highestColumn);
                     /* print('######');
-                    print($worksheetTitle);
-                    print(";");
-                    print($highestRow);
-                    print(";");
-                    print($highestColumn);
-                    print(";");
-                    print($highestColumnIndex);                    
-                    print('######'); */
+                      print($worksheetTitle);
+                      print(";");
+                      print($highestRow);
+                      print(";");
+                      print($highestColumn);
+                      print(";");
+                      print($highestColumnIndex);
+                      print('######'); */
                     //lectura del Archivo XLS filas y Columnas
                     for ($row = 3; $row <= $highestRow; ++$row) {
                         $row_global = $row_global + 1;
                         for ($col = 0; $col <= $highestColumnIndex; ++$col) {
                             $cell = $worksheet->getCellByColumnAndRow($col, $row);
-                            if(\PhpOffice\PhpSpreadsheet\Shared\Date::isDateTime($cell)) {                                
+                            if (\PhpOffice\PhpSpreadsheet\Shared\Date::isDateTime($cell)) {
                                 $date = \PhpOffice\PhpSpreadsheet\Shared\Date::excelToDateTimeObject($cell->getValue());
                                 $val = $date->format('m-d-Y');
-                            }else {
+                            } else {
                                 $val = $cell->getValue();
-                            }                            
+                            }
                             $dataArr[$row_global][$col] = $val;
-                        }                        
+                        }
                     }
                     /* unset($dataArr[1], $dataArr[2]);                     */
                 }
 
                 /* print($row_global . "\n");
-                print(sizeof($dataArr) . "\n");
-                print_r($dataArr); */
+                  print(sizeof($dataArr) . "\n");
+                  print_r($dataArr); */
 
-                $fila = 1; 
+                $fila = 1;
                 $bandera = '1';
                 $mensaje = "";
 
                 $cont = 0;
-                
-                foreach($dataArr as $val) {
+
+                foreach ($dataArr as $val) {
                     /* print("#");
-                    print(gettype($val[1]));                    
-                    print("#"); */
-                    if(!is_null($val[1]) || $val[1]!=''){
+                      print(gettype($val[1]));
+                      print("#"); */
+                    if (!is_null($val[1]) || $val[1] != '') {
 
                         $fila++;
-                    
+
                         $cla_id;
                         $ser_id;
                         $sub_id;
 
                         $length_codigo = 3;
-    
-                        $cla_id = Clase::obtenerIdClasebyNombre($val[4]);
-                        if(!is_null($cla_id)) {
+                        \app\models\Utilities::putMessageLogFile('clasexcel ' . $val[5]);
+                        $cla_id = Clase::obtenerIdClasebyNombre($val[5]);
+                        \app\models\Utilities::putMessageLogFile('claseid ' . $cla_id);
+                        if (!is_null($cla_id)) {
                             // array_push($array_clase, $cla_id);
                             $ser_cod_str = "";
-                            if(is_string($val[5])) {
-                                $ser_cod_str = str_pad($val[5], $length_codigo, "0", STR_PAD_LEFT);
+                            if (is_string($val[6])) {
+                                $ser_cod_str = str_pad($val[6], $length_codigo, "0", STR_PAD_LEFT);
                             } else {
-                                $ser_cod_str = str_pad(strval($val[5]), $length_codigo, "0", STR_PAD_LEFT);
+                                $ser_cod_str = str_pad(strval($val[6]), $length_codigo, "0", STR_PAD_LEFT);
                             }
                             /* print(strlen($val[5]));
-                            print($ser_cod_str); */
-                            /*print(gettype($ser_cod_str)); */
-                            $ser_id = Serie::obtenerIdSerieByCodCla($ser_cod_str, $cla_id);                            
-                            if(!is_null($ser_id)){                                
+                              print($ser_cod_str); */
+                            /* print(gettype($ser_cod_str)); */
+                            \app\models\Utilities::putMessageLogFile('ser_cod_str ' . $ser_cod_str);
+                            $ser_id = Serie::obtenerIdSerieByCodCla($ser_cod_str, $cla_id);
+                            if (!is_null($ser_id)) {
                                 $sub_cod_str = "";
-                                if(is_string($val[6])) {
-                                    $sub_cod_str = str_pad($val[6], $length_codigo, "0", STR_PAD_LEFT);
+                                if (is_string($val[7])) {
+                                    $sub_cod_str = str_pad($val[7], $length_codigo, "0", STR_PAD_LEFT);
                                 } else {
-                                    $sub_cod_str = str_pad(strval($val[6]), $length_codigo, "0", STR_PAD_LEFT);
+                                    $sub_cod_str = str_pad(strval($val[7]), $length_codigo, "0", STR_PAD_LEFT);
                                 }
                                 /* print($sub_cod_str . "\n"); */
-                                // array_push($array_serie, $ser_id);                                
+                                // array_push($array_serie, $ser_id);   
+                                \app\models\Utilities::putMessageLogFile('ser_id ' . $ser_id);
                                 $sub_id = SubSerie::obtenerIdSubSerieByNombreSer($sub_cod_str, $ser_id);
-                                if(is_null($sub_id)) {
+                                \app\models\Utilities::putMessageLogFile('sub_id ' . $sub_id);
+                                if (is_null($sub_id)) {
+                                    \app\models\Utilities::putMessageLogFile('subserie ' . $fila);
                                     $bandera = '0';
                                     $mensaje = "SubSerie no encontrada.";
-                                }                            
+                                }
                             } else {
+                                \app\models\Utilities::putMessageLogFile('serie ' . $fila);
                                 $bandera = '0';
                                 $mensaje = "Serie no encontrada.";
-                            }                        
+                            }
                         } else {
+                            \app\models\Utilities::putMessageLogFile('clase ' . $fila);
                             $bandera = '0';
                             $mensaje = "Clase no encontrada.";
                         }
-                        if($bandera == '0') {
+                        if ($bandera == '0') {
                             $arroout["status"] = FALSE;
                             $arroout["error"] = null;
                             $arroout["message"] = "Error en la Fila => N°$fila Unidad Departamento => $val[1] . $mensaje";
@@ -431,20 +431,20 @@ class Documento extends \yii\db\ActiveRecord {
                             return $arroout;
                         } else {
                             $save_documento = $this->saveDocumentoDB($cla_id, $ser_id, $sub_id, $val);
-                            if(!$save_documento) {
+                            if (!$save_documento) {
                                 $arroout["status"] = FALSE;
                                 $arroout["error"] = null;
                                 $arroout["message"] = "Error al guardar el registro de la Fila => N°$fila Unidad Departamento => $val[1]";
                                 $arroout["data"] = null;
                                 $arroout["validate"] = $val;
-                                \app\models\Utilities::putMessageLogFile('error fila '.$fila);                                
+                                \app\models\Utilities::putMessageLogFile('error fila ' . $fila);
                                 return $arroout;
                             }
                         }
                     }
                 }
-                if ($trans !== null)                    
-                    $trans->commit();                  
+                if ($trans !== null)
+                    $trans->commit();
                 // print_r($dataArr);
                 $arroout["status"] = TRUE;
                 $arroout["error"] = null;
@@ -455,10 +455,10 @@ class Documento extends \yii\db\ActiveRecord {
             } catch (\Exception $ex) {
                 if ($trans !== null)
                     $trans->rollback();
-                    $arroout["status"] = FALSE;
-                    $arroout["error"] = null;
-                    $arroout["message"] = null;
-                    $arroout["data"] = null;                    
+                $arroout["status"] = FALSE;
+                $arroout["error"] = null;
+                $arroout["message"] = null;
+                $arroout["data"] = null;
                 return $arroout;
             }
         }
@@ -466,8 +466,8 @@ class Documento extends \yii\db\ActiveRecord {
 
     public function getKeyTipoInformacionByValue($value) {
         $key_same = NULL;
-        foreach($this->array_tipo_informacion as $key=>$valor) {            
-            if(strcasecmp($value, $valor)==0) {
+        foreach ($this->array_tipo_informacion as $key => $valor) {
+            if (strcasecmp($value, $valor) == 0) {
                 $key_same = $key;
             }
         }
@@ -475,10 +475,10 @@ class Documento extends \yii\db\ActiveRecord {
         return $key_same;
     }
 
-    public function getValueTipoInformacionByKey($key_param) {        
+    public function getValueTipoInformacionByKey($key_param) {
         $value_same = NULL;
-        foreach($this->array_tipo_informacion as $key=>$valor) {
-            if(strcasecmp($key, $key_param)==0) {
+        foreach ($this->array_tipo_informacion as $key => $valor) {
+            if (strcasecmp($key, $key_param) == 0) {
                 $value_same = $valor;
             }
         }
@@ -487,8 +487,8 @@ class Documento extends \yii\db\ActiveRecord {
 
     public function getKeyClasificacionInformacionByValue($value) {
         $key_same = NULL;
-        foreach($this->array_clasificacion_informacion as $key=>$valor) {            
-            if(strcasecmp($value, $valor)==0) {
+        foreach ($this->array_clasificacion_informacion as $key => $valor) {
+            if (strcasecmp($value, $valor) == 0) {
                 $key_same = $key;
             }
         }
@@ -497,8 +497,8 @@ class Documento extends \yii\db\ActiveRecord {
 
     public function getValueClasificacionInformacionByKey($key_param) {
         $value_same = NULL;
-        foreach($this->array_clasificacion_informacion as $key=>$valor) {            
-            if(strcasecmp($key, $key_param)==0) {
+        foreach ($this->array_clasificacion_informacion as $key => $valor) {
+            if (strcasecmp($key, $key_param) == 0) {
                 $value_same = $valor;
             }
         }
@@ -507,8 +507,8 @@ class Documento extends \yii\db\ActiveRecord {
 
     public function getKeyTipoInformacionPublicaByValue($value) {
         $key_same = NULL;
-        foreach($this->array_tipo_informacion_publica as $key=>$valor) {            
-            if(strcasecmp($value, $valor)==0) {
+        foreach ($this->array_tipo_informacion_publica as $key => $valor) {
+            if (strcasecmp($value, $valor) == 0) {
                 $key_same = $key;
             }
         }
@@ -517,8 +517,8 @@ class Documento extends \yii\db\ActiveRecord {
 
     public function getValueTipoInformacionPublicaByKey($key_param) {
         $value_same = NULL;
-        foreach($this->array_tipo_informacion_publica as $key=>$valor) {            
-            if(strcasecmp($key, $key_param)==0) {
+        foreach ($this->array_tipo_informacion_publica as $key => $valor) {
+            if (strcasecmp($key, $key_param) == 0) {
                 $value_same = $valor;
             }
         }
@@ -527,8 +527,8 @@ class Documento extends \yii\db\ActiveRecord {
 
     public function getKeyEstadoDocumentoByValue($value) {
         $key_same = NULL;
-        foreach($this->array_estado_documento as $key=>$valor) {            
-            if(strcasecmp($value, $valor)==0) {
+        foreach ($this->array_estado_documento as $key => $valor) {
+            if (strcasecmp($value, $valor) == 0) {
                 $key_same = $key;
             }
         }
@@ -537,8 +537,8 @@ class Documento extends \yii\db\ActiveRecord {
 
     public function getValueEstadoDocumentoByKey($key_param) {
         $value_same = NULL;
-        foreach($this->array_estado_documento as $key=>$valor) {            
-            if(strcasecmp($key, $key_param)==0) {
+        foreach ($this->array_estado_documento as $key => $valor) {
+            if (strcasecmp($key, $key_param) == 0) {
                 $value_same = $valor;
             }
         }
@@ -547,173 +547,174 @@ class Documento extends \yii\db\ActiveRecord {
 
     public function saveDocumentoDB($cla_id, $ser_id, $sub_id, $val) {
         // try {
-            /* print_r($val); */            
-            /* print("$$");
-            print($val[10]);
-            print(gettype($val[10]));
-            print("$$"); */
+        /* print_r($val); */
+        /* print("$$");
+          print($val[10]);
+          print(gettype($val[10]));
+          print("$$"); */
         $model_documento = new Documento();
         $model_documento->cla_id = $cla_id;
         $model_documento->ser_id = $ser_id;
         $model_documento->sub_id = $sub_id;
         $model_documento->doc_uni_departamento = $val[1];
-        if(is_null($val[2])) {
+        if (is_null($val[2])) {
             $model_documento->doc_macroproceso = '';
         } else {
             $model_documento->doc_macroproceso = $val[2];
         }
-        if(is_null($val[3])) {
+        if (is_null($val[3])) {
             $model_documento->doc_proceso = '';
         } else {
             $model_documento->doc_proceso = $val[3];
         }
-        if(is_null($val[7])) {
+        if (is_null($val[8])) {
             $model_documento->doc_secuencia = '';
         } else {
             $doc_sec_str = "";
-            if(is_string($val[7])) {
-                $doc_sec_str = str_pad($val[7], 3, "0", STR_PAD_LEFT);
+            if (is_string($val[8])) {
+                $doc_sec_str = str_pad($val[8], 3, "0", STR_PAD_LEFT);
             } else {
-                $doc_sec_str = str_pad(strval($val[7]), 3, "0", STR_PAD_LEFT);
-            }            
+                $doc_sec_str = str_pad(strval($val[8]), 3, "0", STR_PAD_LEFT);
+            }
             $model_documento->doc_secuencia = $doc_sec_str;
         }
-        if(is_null($val[9])) {
-            $model_documento->doc_cod_documento = '';
+        if (is_null($val[10])) {
+                $model_documento->doc_cod_documento = '';
         } else {
-            $model_documento->doc_cod_documento = $val[9];
+            $model_documento->doc_cod_documento = $val[10];
         }
-        if(is_null($val[10])) {
+        if (is_null($val[11])) {
             // timestamp
             $model_documento->doc_fecha_produccion = '';
         } else {
-            $model_documento->doc_fecha_produccion = $val[10];
+            $model_documento->doc_fecha_produccion = $val[11];
         }
-        if(is_null($val[11])) {
+        if (is_null($val[12])) {
             $model_documento->doc_pro_documental = '';
         } else {
-            $model_documento->doc_pro_documental = $val[11];
+            $model_documento->doc_pro_documental = $val[12];
         }
-        if(is_null($val[12])) {
+        if (is_null($val[13])) {
             $model_documento->doc_desc_informacion = '';
         } else {
-            $model_documento->doc_desc_informacion = $val[12];
+            $model_documento->doc_desc_informacion = $val[13];
         }
-        if(is_null($val[13])) {
+        if (is_null($val[14])) {
             $model_documento->doc_tipo_informacion = '';
-        } else {                
-            $tipo_informacion = $this->getKeyTipoInformacionByValue($val[13]);                
-            if(!is_null($tipo_informacion)){
-                $model_documento->doc_tipo_informacion = strval($tipo_informacion);                    
-            }else {
+        } else {
+            $tipo_informacion = $this->getKeyTipoInformacionByValue($val[14]);
+            if (!is_null($tipo_informacion)) {
+                $model_documento->doc_tipo_informacion = strval($tipo_informacion);
+            } else {
                 $model_documento->doc_tipo_informacion = '';
             }
         }
-        if(is_null($val[14])) {
+        if (is_null($val[15])) {
             $model_documento->doc_ubicacion = '';
         } else {
-            $model_documento->doc_ubicacion = $val[14];
+            $model_documento->doc_ubicacion = $val[15];
         }
-        if(is_null($val[15])) {
+        if (is_null($val[16])) {
             $model_documento->doc_clasificacion = '';
         } else {
-            $clasificacion_informacion = $this->getKeyClasificacionInformacionByValue($val[15]);
-            if(!is_null($clasificacion_informacion)){
+            $clasificacion_informacion = $this->getKeyClasificacionInformacionByValue($val[16]);
+            if (!is_null($clasificacion_informacion)) {
                 $model_documento->doc_clasificacion = strval($clasificacion_informacion);
-            }else {
+            } else {
                 $model_documento->doc_clasificacion = '';
             }
         }
-        if(is_null($val[16])) {
+        if (is_null($val[17])) {
             $model_documento->doc_info_publica = '';
         } else {
-            $tipo_informacion_publica = $this->getKeyTipoInformacionPublicaByValue($val[16]);
-            if(!is_null($tipo_informacion_publica)){
+            $tipo_informacion_publica = $this->getKeyTipoInformacionPublicaByValue($val[17]);
+            if (!is_null($tipo_informacion_publica)) {
                 $model_documento->doc_info_publica = strval($tipo_informacion_publica);
-            }else {
+            } else {
                 $model_documento->doc_info_publica = '';
             }
         }
-        if(is_null($val[17])) {
+        if (is_null($val[18])) {
             $model_documento->doc_estado_documento = '';
         } else {
-            $estado_documento = $this->getKeyEstadoDocumentoByValue($val[17]);
-            if(!is_null($estado_documento)){
+            $estado_documento = $this->getKeyEstadoDocumentoByValue($val[18]);
+            if (!is_null($estado_documento)) {
                 $model_documento->doc_estado_documento = strval($estado_documento);
-            }else {
+            } else {
                 $model_documento->doc_estado_documento = '';
-            }                
+            }
         }
-        if(is_null($val[18])) {
+        if (is_null($val[19])) {
             $model_documento->doc_observaciones = '';
         } else {
-            $model_documento->doc_observaciones = $val[18];
+            $model_documento->doc_observaciones = $val[19];
         }
-        if(is_null($val[19])) {
+        if (is_null($val[20])) {
             // douuubleee
             $model_documento->doc_plaz_gestion = '';
         } else {
-            $model_documento->doc_plaz_gestion = strval($val[19]);
+            $model_documento->doc_plaz_gestion = strval($val[20]);
         }
-        if(is_null($val[20])) {
+        if (is_null($val[21])) {
             $model_documento->doc_plaz_central = '';
         } else {
-            $model_documento->doc_plaz_central = strval($val[20]);
+            $model_documento->doc_plaz_central = strval($val[21]);
         }
-        if(is_null($val[21])) {
+        if (is_null($val[22])) {
             $model_documento->doc_plaz_intermedio = '';
         } else {
-            $model_documento->doc_plaz_intermedio = strval($val[21]);
+            $model_documento->doc_plaz_intermedio = strval($val[22]);
         }
-        if(is_null($val[22])) {
+        if (is_null($val[23])) {
             $model_documento->doc_base_legal = '';
         } else {
-            $model_documento->doc_base_legal = $val[22];
+            $model_documento->doc_base_legal = $val[23];
         }
-        if(is_null($val[23])) {
+        if (is_null($val[24])) {
             $model_documento->doc_disp_eliminacion = '';
         } else {
-            $model_documento->doc_disp_eliminacion = $val[23];
+            $model_documento->doc_disp_eliminacion = $val[24];
         }
-        if(is_null($val[24])) {
+        if (is_null($val[25])) {
             $model_documento->doc_disp_conservacion = '';
         } else {
-            $model_documento->doc_disp_conservacion = $val[24];
+            $model_documento->doc_disp_conservacion = $val[25];
         }
-        if(is_null($val[25])) {
+        /*if (is_null($val[26])) {
             $model_documento->doc_tec_muestreo = '';
         } else {
-            $model_documento->doc_tec_muestreo = $val[25];
+            $model_documento->doc_tec_muestreo = $val[26];
         }
-        if(is_null($val[26])) {
+        if (is_null($val[27])) {
             $model_documento->doc_tec_conservacion = '';
         } else {
-            $model_documento->doc_tec_conservacion = $val[26];
+            $model_documento->doc_tec_conservacion = $val[27];
         }
-        if(is_null($val[27])) {
+        if (is_null($val[28])) {
             $model_documento->doc_cons_gestion = '';
         } else {
-            $model_documento->doc_cons_gestion = $val[27];
+            $model_documento->doc_cons_gestion = $val[28];
         }
-        if(is_null($val[28])) {
+        if (is_null($val[29])) {
             $model_documento->doc_cons_central = '';
         } else {
-            $model_documento->doc_cons_central = $val[28];
+            $model_documento->doc_cons_central = $val[29];
         }
-        if(is_null($val[29])) {
+        if (is_null($val[30])) {
             $model_documento->doc_cod_lomo = '';
         } else {
-            $model_documento->doc_cod_lomo = $val[29];
-        }
+            $model_documento->doc_cod_lomo = $val[30];
+        }*/
 
-        $model_documento->doc_estado_logico = '1';
-
+         $model_documento->doc_estado_logico = '1';         
+                      
         return $model_documento->save();
-            /* return $model_documento->save(); */
+        /* return $model_documento->save(); */
 
-            /* return TRUE; */
+        /* return TRUE; */
         // } catch (\Exception $ex) {
         //     return FALSE;
         // }
     }
+
 }
