@@ -344,13 +344,12 @@ class RegistroMarcacion extends \yii\db\ActiveRecord {
         $sql = 
         "SELECT $periodoacademico
                 CONCAT(ifnull(per.per_pri_nombre,' '), ' ', ifnull(per.per_pri_apellido,' ')) as nombres,
-		asig.asi_nombre as materia,
-		h.pro_id, h.asi_id, 
-		h.uaca_id, h.mod_id, 
+		asig.asi_nombre as materia,		
                 date_format(r.rmtm_fecha_transaccion,'%Y-%m-%d') as fecha,
-                h.hape_hora_entrada as inicio_esperado, h.hape_hora_salida as salida_esperada,
                 ifnull(date_format(m.rmar_fecha_hora_entrada, '%H:%i:%s'),'') hora_inicio, 
+                h.hape_hora_entrada as inicio_esperado,
                 ifnull(date_format(m.rmar_fecha_hora_salida, '%H:%i:%s'),'') hora_salida,
+                h.hape_hora_salida as salida_esperada,                                
                 ifnull(FROM_BASE64(m.rmar_direccion_ip),'') as ip,
                 ifnull(FROM_BASE64(m.rmar_direccion_ipsalida),'') as ip_salida,
                 ifnull(m.rmar_tipo, 'N') as tipo
@@ -364,7 +363,7 @@ class RegistroMarcacion extends \yii\db\ActiveRecord {
         WHERE $str_search              
               ((date_format(r.rmtm_fecha_transaccion, '%Y-%m-%d') <= date_format(curdate(),'%Y-%m-%d')
                   and date_format(r.rmtm_fecha_transaccion, '%Y-%m-%d') between peri.paca_fecha_inicio and peri.paca_fecha_fin))
-        ORDER BY 8,9";
+        ORDER BY 4 desc, 5 asc";
         
         $comando = $con->createCommand($sql);
         $comando->bindParam(":estado", $estado, \PDO::PARAM_STR);

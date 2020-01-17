@@ -209,7 +209,7 @@ class MarcacionController extends \app\components\CController {
             academico::t("Academico", "Hour end date") . ' ' . academico::t("Academico", "Expected"),
             academico::t("Academico", "Start IP"),
             academico::t("Academico", "End IP"),
-            Yii::t("formulario", "Period"),
+            Yii::t("formulario", "Status"),
             ""
         );
         $mod_marcacion = new RegistroMarcacion();
