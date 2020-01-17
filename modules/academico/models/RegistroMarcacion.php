@@ -330,8 +330,8 @@ class RegistroMarcacion extends \yii\db\ActiveRecord {
             $str_search .= "asig.asi_nombre like :materia  AND ";
 
             if ($arrFiltro['f_ini'] != "" && $arrFiltro['f_fin'] != "") {
-                $str_search .= "m.rmar_fecha_creacion >= :fec_ini AND ";
-                $str_search .= "m.rmar_fecha_creacion <= :fec_fin AND ";
+                $str_search .= "r.rmtm_fecha_transaccion >= :fec_ini AND ";
+                $str_search .= "r.rmtm_fecha_transaccion <= :fec_fin AND ";
             }
             if ($arrFiltro['periodo'] != "" && $arrFiltro['periodo'] > 0) {
                 $str_search .= " h.paca_id = :periodo AND ";
@@ -349,22 +349,21 @@ class RegistroMarcacion extends \yii\db\ActiveRecord {
 		h.uaca_id, h.mod_id, 
                 date_format(r.rmtm_fecha_transaccion,'%Y-%m-%d') as fecha,
                 h.hape_hora_entrada as inicio_esperado, h.hape_hora_salida as salida_esperada,
-                date_format(m.rmar_fecha_hora_entrada, '%H:%i:%s') hora_inicio, 
-                date_format(m.rmar_fecha_hora_salida, '%H:%i:%s') hora_salida,
-                FROM_BASE64(m.rmar_direccion_ip) as ip,
-                FROM_BASE64(m.rmar_direccion_ipsalida) as ip_salida
-        FROM db_academico.registro_marcacion_generada r left join db_academico.registro_marcacion m
+                ifnull(date_format(m.rmar_fecha_hora_entrada, '%H:%i:%s'),'') hora_inicio, 
+                ifnull(date_format(m.rmar_fecha_hora_salida, '%H:%i:%s'),'') hora_salida,
+                ifnull(FROM_BASE64(m.rmar_direccion_ip),'') as ip,
+                ifnull(FROM_BASE64(m.rmar_direccion_ipsalida),'') as ip_salida,
+                ifnull(m.rmar_tipo, 'N') as tipo
+        FROM " . $con->dbname . ".registro_marcacion_generada r left join db_academico.registro_marcacion m
                 on (r.hape_id = m.hape_id and date_format(r.rmtm_fecha_transaccion,'%Y-%m-%d') = date_format(m.rmar_fecha_hora_entrada,'%Y-%m-%d'))
             INNER JOIN " . $con->dbname . ".horario_asignatura_periodo h on h.hape_id = r.hape_id
             INNER JOIN " . $con->dbname . ".asignatura asig on asig.asi_id = h.asi_id
                 INNER JOIN " . $con->dbname . ".profesor profe on profe.pro_id = h.pro_id
                 INNER JOIN " . $con1->dbname . ".persona per on per.per_id = profe.per_id
                 INNER JOIN " . $con->dbname . ".periodo_academico peri on peri.paca_id = h.paca_id
-        WHERE $str_search
-              r.paca_id = 7 
-              and ((date_format(r.rmtm_fecha_transaccion, '%Y-%m-%d') <= date_format(curdate(),'%Y-%m-%d')
-                  and date_format(curdate(),'%Y-%m-%d') between peri.paca_fecha_inicio and peri.paca_fecha_fin) or 
-                (date_format(curdate(),'%Y-%m-%d')>peri.paca_fecha_fin))
+        WHERE $str_search              
+              ((date_format(r.rmtm_fecha_transaccion, '%Y-%m-%d') <= date_format(curdate(),'%Y-%m-%d')
+                  and date_format(r.rmtm_fecha_transaccion, '%Y-%m-%d') between peri.paca_fecha_inicio and peri.paca_fecha_fin))
         ORDER BY 8,9";
         
         $comando = $con->createCommand($sql);

@@ -53,8 +53,9 @@ class MarcacionController extends \app\components\CController {
             return $this->render('index-grid', [
                         'model' => $arr_historico,
             ]);
-        } else {
-            $arrSearch["periodo"] = $periodo['id'];
+        } else {            
+            $arrSearch["periodo"] = $periodo[0]["id"];
+            \app\models\Utilities::putMessageLogFile('periodo:' . $arrSearch["periodo"]);
             $arr_historico = $mod_marcacion->consultarRegistroMarcacion($arrSearch);
         }
         if (Yii::$app->request->isAjax) {
