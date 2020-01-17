@@ -330,56 +330,43 @@ class RegistroMarcacion extends \yii\db\ActiveRecord {
             $str_search .= "asig.asi_nombre like :materia  AND ";
 
             if ($arrFiltro['f_ini'] != "" && $arrFiltro['f_fin'] != "") {
-                $str_search .= "rma.rmar_fecha_creacion >= :fec_ini AND ";
-                $str_search .= "rma.rmar_fecha_creacion <= :fec_fin AND ";
+                $str_search .= "m.rmar_fecha_creacion >= :fec_ini AND ";
+                $str_search .= "m.rmar_fecha_creacion <= :fec_fin AND ";
             }
             if ($arrFiltro['periodo'] != "" && $arrFiltro['periodo'] > 0) {
-                $str_search .= " hap.paca_id = :periodo AND ";
+                $str_search .= " h.paca_id = :periodo AND ";
             }
         }
         if ($onlyData == false) {
-            $periodoacademico = 'hap.paca_id as periodo, ';
+            $periodoacademico = 'h.paca_id as periodo, ';
             $grupoperi = ',periodo';
         }
-        $sql = "
-               SELECT
-                    $periodoacademico
-                    CONCAT(ifnull(per.per_pri_nombre,' '), ' ', ifnull(per.per_pri_apellido,' ')) as nombres,
-                    asig.asi_nombre as materia,
-                    DATE_FORMAT(rma.rmar_fecha_creacion, '%Y-%m-%d') as fecha,
-                    DATE_FORMAT(rma.rmar_fecha_hora_entrada, '%H:%i:%s') as hora_inicio,
-                    hap.hape_hora_entrada as inicio_esperado,
-                    ifnull((SELECT DATE_FORMAT(marc.rmar_fecha_hora_salida, '%H:%i:%s') 
-                            FROM db_academico.registro_marcacion marc
-                            WHERE marc.pro_id = rma.pro_id AND marc.hape_id = rma.hape_id AND marc.rmar_tipo = 'S' and marc.rmar_idingreso = rma.rmar_id),'') as hora_salida,
-                    hap.hape_hora_salida as salida_esperada,
-                    FROM_BASE64(rma.rmar_direccion_ip) as ip,                    
-                    ifnull((SELECT FROM_BASE64(marc.rmar_direccion_ip)
-                            FROM db_academico.registro_marcacion marc
-                            WHERE marc.pro_id = rma.pro_id AND marc.hape_id = rma.hape_id AND marc.rmar_tipo = 'S' and marc.rmar_idingreso = rma.rmar_id),'') as ip_salida
-                    FROM " . $con->dbname . ".registro_marcacion rma
-                    INNER JOIN " . $con->dbname . ".horario_asignatura_periodo hap on hap.hape_id = rma.hape_id
-                    INNER JOIN " . $con->dbname . ".asignatura asig on asig.asi_id = hap.asi_id
-                    INNER JOIN " . $con->dbname . ".profesor profe on profe.pro_id = rma.pro_id 
-                    INNER JOIN " . $con1->dbname . ".persona per on per.per_id = profe.per_id
-                    INNER JOIN " . $con->dbname . ".periodo_academico peri on peri.paca_id = hap.paca_id
-                    WHERE $str_search
-                    rma.rmar_estado = :estado AND
-                    rma.rmar_estado_logico = :estado AND
-                    hap.hape_estado = :estado AND
-                    hap.hape_estado_logico = :estado AND
-                    asig.asi_estado = :estado AND
-                    asig.asi_estado_logico = :estado AND
-                    profe.pro_estado = :estado AND
-                    profe.pro_estado_logico = :estado AND
-                    per.per_estado = :estado AND
-                    per.per_estado_logico = :estado AND
-                    peri.paca_estado = :estado AND
-                    peri.paca_estado_logico = :estado AND
-                    peri.paca_activo = 'A'
-                    GROUP BY nombres,materia,fecha, rma.hape_id
-                    ORDER BY fecha DESC
-               ";
+        $sql = 
+        "SELECT $periodoacademico
+                CONCAT(ifnull(per.per_pri_nombre,' '), ' ', ifnull(per.per_pri_apellido,' ')) as nombres,
+		asig.asi_nombre as materia,
+		h.pro_id, h.asi_id, 
+		h.uaca_id, h.mod_id, 
+                date_format(r.rmtm_fecha_transaccion,'%Y-%m-%d') as fecha,
+                h.hape_hora_entrada as inicio_esperado, h.hape_hora_salida as salida_esperada,
+                date_format(m.rmar_fecha_hora_entrada, '%H:%i:%s') hora_inicio, 
+                date_format(m.rmar_fecha_hora_salida, '%H:%i:%s') hora_salida,
+                FROM_BASE64(m.rmar_direccion_ip) as ip,
+                FROM_BASE64(m.rmar_direccion_ipsalida) as ip_salida
+        FROM db_academico.registro_marcacion_generada r left join db_academico.registro_marcacion m
+                on (r.hape_id = m.hape_id and date_format(r.rmtm_fecha_transaccion,'%Y-%m-%d') = date_format(m.rmar_fecha_hora_entrada,'%Y-%m-%d'))
+            INNER JOIN " . $con->dbname . ".horario_asignatura_periodo h on h.hape_id = r.hape_id
+            INNER JOIN " . $con->dbname . ".asignatura asig on asig.asi_id = h.asi_id
+                INNER JOIN " . $con->dbname . ".profesor profe on profe.pro_id = h.pro_id
+                INNER JOIN " . $con1->dbname . ".persona per on per.per_id = profe.per_id
+                INNER JOIN " . $con->dbname . ".periodo_academico peri on peri.paca_id = h.paca_id
+        WHERE $str_search
+              r.paca_id = 7 
+              and ((date_format(r.rmtm_fecha_transaccion, '%Y-%m-%d') <= date_format(curdate(),'%Y-%m-%d')
+                  and date_format(curdate(),'%Y-%m-%d') between peri.paca_fecha_inicio and peri.paca_fecha_fin) or 
+                (date_format(curdate(),'%Y-%m-%d')>peri.paca_fecha_fin))
+        ORDER BY 8,9";
+        
         $comando = $con->createCommand($sql);
         $comando->bindParam(":estado", $estado, \PDO::PARAM_STR);
         if (isset($arrFiltro) && count($arrFiltro) > 0) {
