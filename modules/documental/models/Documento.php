@@ -705,6 +705,33 @@ class Documento extends \yii\db\ActiveRecord {
         } else {
             $model_documento->doc_cod_lomo = $val[30];
         }*/
+        
+      /*  \app\models\Utilities::putMessageLogFile('1 ' . $val[1]);
+          \app\models\Utilities::putMessageLogFile('2 ' . $val[2]);
+            \app\models\Utilities::putMessageLogFile('3 ' . $val[3]);
+              \app\models\Utilities::putMessageLogFile('4 ' . $val[4]);
+                \app\models\Utilities::putMessageLogFile('5 ' . $val[5]);
+                  \app\models\Utilities::putMessageLogFile('6 ' . $val[6]);
+                    \app\models\Utilities::putMessageLogFile('7 ' . $val[7]);
+                      \app\models\Utilities::putMessageLogFile('8 ' . $val[8]);
+                        \app\models\Utilities::putMessageLogFile('9 ' . $val[9]);
+                          \app\models\Utilities::putMessageLogFile('10 ' . $val[10]);
+        \app\models\Utilities::putMessageLogFile('11 ' . $val[11]);
+          \app\models\Utilities::putMessageLogFile('12 ' . $val[12]);
+            \app\models\Utilities::putMessageLogFile('13 ' . $val[13]);
+              \app\models\Utilities::putMessageLogFile('14 ' . $val[14]);
+                \app\models\Utilities::putMessageLogFile('15 ' . $val[15]);
+                  \app\models\Utilities::putMessageLogFile('16 ' . $val[16]);
+                    \app\models\Utilities::putMessageLogFile('17 ' . $val[17]);
+                      \app\models\Utilities::putMessageLogFile('18 ' . $val[18]);
+                        \app\models\Utilities::putMessageLogFile('19 ' . $val[19]);
+                          \app\models\Utilities::putMessageLogFile('20 ' . $val[20]);
+                          
+        \app\models\Utilities::putMessageLogFile('21 ' . $val[21]);
+          \app\models\Utilities::putMessageLogFile('22 ' . $val[22]);
+            \app\models\Utilities::putMessageLogFile('23 ' . $val[23]);
+              \app\models\Utilities::putMessageLogFile('24 ' . $val[24]);
+                \app\models\Utilities::putMessageLogFile('25 ' . $val[25]);     */            
 
          $model_documento->doc_estado_logico = '1';         
                       
