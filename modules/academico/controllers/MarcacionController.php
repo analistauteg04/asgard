@@ -49,6 +49,7 @@ class MarcacionController extends \app\components\CController {
             $arrSearch["f_ini"] = $data['f_ini'];
             $arrSearch["f_fin"] = $data['f_fin'];
             $arrSearch["periodo"] = $data['periodo'];
+            $arrSearch["estado"] = $data['estado'];
             $arr_historico = $mod_marcacion->consultarRegistroMarcacion($arrSearch);
             return $this->render('index-grid', [
                         'model' => $arr_historico,
@@ -60,8 +61,9 @@ class MarcacionController extends \app\components\CController {
         }
         if (Yii::$app->request->isAjax) {
             $data = Yii::$app->request->post();
-        }
+        }        
         return $this->render('index', [
+                    'arr_estado' => array("0" => Yii::t("formulario", "Todas"), "N" => Yii::t("formulario", "Sin Marcar"), "E" => Yii::t("formulario", "Sin Salida"), "S" => Yii::t("formulario", "Marcadas")),
                     'model' => $arr_historico,
                     'arr_periodo' => ArrayHelper::map(array_merge([["id" => "0", "name" => "Todas"]], $periodo), "id", "name"),
         ]);
@@ -219,6 +221,7 @@ class MarcacionController extends \app\components\CController {
         $arrSearch["f_ini"] = $data['f_ini'];
         $arrSearch["f_fin"] = $data['f_fin'];
         $arrSearch["periodo"] = $data['periodo'];
+        $arrSearch["estado"] = $data['estado'];
         $arrData = array();
         if (empty($arrSearch)) {
             $arrData = $mod_marcacion->consultarRegistroMarcacion(array(), true);
