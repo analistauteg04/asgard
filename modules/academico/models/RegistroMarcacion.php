@@ -336,6 +336,9 @@ class RegistroMarcacion extends \yii\db\ActiveRecord {
             if ($arrFiltro['periodo'] != "" && $arrFiltro['periodo'] > 0) {
                 $str_search .= " h.paca_id = :periodo AND ";
             }
+            if ($arrFiltro['estado'] != "0") {
+                $str_search .= " ifnull(m.rmar_tipo,'N') = :estadoM AND ";
+            }
         }
         if ($onlyData == false) {
             $periodoacademico = 'h.paca_id as periodo, ';
@@ -352,7 +355,10 @@ class RegistroMarcacion extends \yii\db\ActiveRecord {
                 h.hape_hora_salida as salida_esperada,                                
                 ifnull(FROM_BASE64(m.rmar_direccion_ip),'') as ip,
                 ifnull(FROM_BASE64(m.rmar_direccion_ipsalida),'') as ip_salida,
-                ifnull(m.rmar_tipo, 'N') as tipo
+                case when (ifnull(m.rmar_tipo, 'N')) = 'N' then 'Sin Marcar'
+                     when (ifnull(m.rmar_tipo, 'N')) = 'E' then 'Sin Salida'
+                     else 'Marcada' end as tipo
+                -- ifnull(m.rmar_tipo, 'N') as tipo
         FROM " . $con->dbname . ".registro_marcacion_generada r left join db_academico.registro_marcacion m
                 on (r.hape_id = m.hape_id and date_format(r.rmtm_fecha_transaccion,'%Y-%m-%d') = date_format(m.rmar_fecha_hora_entrada,'%Y-%m-%d'))
             INNER JOIN " . $con->dbname . ".horario_asignatura_periodo h on h.hape_id = r.hape_id
@@ -366,7 +372,7 @@ class RegistroMarcacion extends \yii\db\ActiveRecord {
         ORDER BY 4 desc, 5 asc";
         
         $comando = $con->createCommand($sql);
-        $comando->bindParam(":estado", $estado, \PDO::PARAM_STR);
+        //$comando->bindParam(":estado", $estado, \PDO::PARAM_STR);
         if (isset($arrFiltro) && count($arrFiltro) > 0) {
             $search_cond = "%" . $arrFiltro["profesor"] . "%";
             $comando->bindParam(":profesor", $search_cond, \PDO::PARAM_STR);
@@ -382,6 +388,10 @@ class RegistroMarcacion extends \yii\db\ActiveRecord {
             if ($arrFiltro['periodo'] != "" && $arrFiltro['periodo'] > 0) {
                 $periodo = $arrFiltro["periodo"];
                 $comando->bindParam(":periodo", $periodo, \PDO::PARAM_INT);
+            }
+            if ($arrFiltro['estado'] != "0") {
+                $estadoM = $arrFiltro["estado"];
+                $comando->bindParam(":estadoM", $estadoM, \PDO::PARAM_STR);
             }
         }
         $resultData = $comando->queryAll();
