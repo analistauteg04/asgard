@@ -53,7 +53,7 @@ class MarcacionController extends \app\components\CController {
             return $this->render('index-grid', [
                         'model' => $arr_historico,
             ]);
-        } else {            
+        } else {
             $arrSearch["periodo"] = $periodo[0]["id"];
             \app\models\Utilities::putMessageLogFile('periodo:' . $arrSearch["periodo"]);
             $arr_historico = $mod_marcacion->consultarRegistroMarcacion($arrSearch);
@@ -140,8 +140,8 @@ class MarcacionController extends \app\components\CController {
                         if ($minutosfinales >= -10 && $minutosfinales <= 30) { // SOLO PUEDE MARCAR SALIDA DE A LA HORA DE LA SALIDA Y HASTA 30 MINUTOS DESPUES
                             $cons_marcainicio = $mod_marcacion->consultarMarcacionExiste($hape_id, $profesor, $fecha, 'E');
                             if (!empty($cons_marcainicio["marcacion"])) {
-                                $rmar_idingreso = $mod_marcacion->consultarmIdMarcacion('E', $profesor, $hape_id, $fecha);
-                                $resp_marcasa = $mod_marcacion->insertarMarcacionsalida($accion, $profesor, $hape_id, $hora_fin, $ip, $usuario, $rmar_idingreso["rmar_id"]);
+                                $rmar_identrada = $mod_marcacion->consultarmIdMarcacion('E', $profesor, $hape_id, $fecha);                       
+                                $resp_marcasa = $mod_marcacion->insertarMarcacionsalida($accion, $profesor, $hape_id, $hora_fin, $ip, $rmar_identrada["rmar_id"]);
                                 $exito = 1;
                             } else {
                                 $exito = 0;
