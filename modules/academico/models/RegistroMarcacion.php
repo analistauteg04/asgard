@@ -748,7 +748,7 @@ class RegistroMarcacion extends \yii\db\ActiveRecord {
                       SET rmar_tipo = :rmar_tipo,
                         rmar_fecha_hora_salida = :rmar_fecha_hora_salida,
                         rmar_fecha_modificacion = :rmar_fecha_modificacion,
-                        rmar_direccion_ipsalida = :rmar_direccion_ipsalida
+                        rmar_direccion_ipsalida = TO_BASE64(:rmar_direccion_ipsalida)
                       WHERE 
                         rmar_id = :rmar_idingreso AND                        
                         rmar_tipo = 'E' AND
