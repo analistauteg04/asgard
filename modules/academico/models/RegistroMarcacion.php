@@ -356,8 +356,7 @@ class RegistroMarcacion extends \yii\db\ActiveRecord {
                 ifnull(FROM_BASE64(m.rmar_direccion_ipsalida),'') as ip_salida,
                 case when (ifnull(m.rmar_tipo, 'N')) = 'N' then 'Sin Marcar'
                      when (ifnull(m.rmar_tipo, 'N')) = 'E' then 'Sin Salida'
-                     else 'Marcada' end as tipo
-                -- ifnull(m.rmar_tipo, 'N') as tipo
+                     else 'Marcada' end as tipo              
         FROM " . $con->dbname . ".registro_marcacion_generada r left join db_academico.registro_marcacion m
                 on (r.hape_id = m.hape_id and date_format(r.rmtm_fecha_transaccion,'%Y-%m-%d') = date_format(m.rmar_fecha_hora_entrada,'%Y-%m-%d'))
             INNER JOIN " . $con->dbname . ".horario_asignatura_periodo h on h.hape_id = r.hape_id
