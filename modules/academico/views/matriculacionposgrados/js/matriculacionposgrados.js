@@ -95,7 +95,26 @@ $(document).ready(function () {
             }
         }, true);
     });
+
+    /*****************************************************/
+    /* Filtro en crear Promoción Programa */
+    /***************************************************/
+
+    $('#cmb_promocion').change(function () {
+        var link = $('#txth_base').val() + "/academico/matriculacionposgrados/new";
+        var arrParams = new Object();
+        arrParams.promocion_id = $(this).val();
+        arrParams.getparalelos = true;
+        requestHttpAjax(link, arrParams, function (response) {
+            if (response.status == "OK") {
+                data = response.message;
+                setComboDataselect(data.paralelos, "cmb_paralelo", "Seleccionar");
+            }
+        }, true);
+    });
 });
+
+
 
 function setComboDataselect(arr_data, element_id, texto) {
     var option_arr = "";
@@ -285,11 +304,10 @@ function modificarParalelo() {
     arrParams.progid = $('#txth_proid').val();
     arrParams.cupo = $('#txt_cupo').val();
     arrParams.cupoanterior = $('#txth_cupoviejo').val();
-    if (arrParams.cupo >= arrParams.cupoanterior){
-        arrParams.disponible = parseInt( $('#txt_cupodisponible').val()) + (parseInt(arrParams.cupo) - (arrParams.cupoanterior));
-    } 
-    else{
-       arrParams.disponible = parseInt( $('#txt_cupodisponible').val()) - (parseInt(arrParams.cupoanterior) - (arrParams.cupo)); 
+    if (arrParams.cupo >= arrParams.cupoanterior) {
+        arrParams.disponible = parseInt($('#txt_cupodisponible').val()) + (parseInt(arrParams.cupo) - (arrParams.cupoanterior));
+    } else {
+        arrParams.disponible = parseInt($('#txt_cupodisponible').val()) - (parseInt(arrParams.cupoanterior) - (arrParams.cupo));
     }
     //alert ('este valor nuevo disponible'+ arrParams.disponible);    
     if (!validateForm()) {
@@ -297,7 +315,7 @@ function modificarParalelo() {
             showAlert(response.status, response.label, response.message);
             if (!response.error) {
                 setTimeout(function () {
-                    parent.location.href = $('#txth_base').val() + "/academico/matriculacionposgrados/indexparalelo?ids="+ btoa(arrParams.progid);                     
+                    parent.location.href = $('#txth_base').val() + "/academico/matriculacionposgrados/indexparalelo?ids=" + btoa(arrParams.progid);
                 }, 3000);
             }
 

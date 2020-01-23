@@ -403,7 +403,7 @@ class PromocionPrograma extends \yii\db\ActiveRecord {
      * @param   
      * @return  $resultData (Retornar el código de paralelo).
      */
-    public function insertarParalelo($ppro_id, $pppr_cupo, $pppr_cupo_actual, $pppr_usuario_ingresa, $pppr_fecha_creacion) {
+    public function insertarParalelo($ppro_id, $pppr_cupo, $pppr_cupo_actual, $pppr_descripcion, $pppr_usuario_ingresa, $pppr_fecha_creacion) {
 
         $con = \Yii::$app->db_academico;
         $trans = $con->getTransaction(); // se obtiene la transacción actual
@@ -429,6 +429,10 @@ class PromocionPrograma extends \yii\db\ActiveRecord {
             $param_sql .= ", pppr_cupo_actual";
             $bsol_sql .= ", :pppr_cupo_actual";
         }
+        if (isset($pppr_descripcion)) {
+            $param_sql .= ", pppr_descripcion";
+            $bsol_sql .= ", :pppr_descripcion";
+        }
         if (isset($pppr_usuario_ingresa)) {
             $param_sql .= ", pppr_usuario_ingresa";
             $bsol_sql .= ", :pppr_usuario_ingresa";
@@ -450,6 +454,9 @@ class PromocionPrograma extends \yii\db\ActiveRecord {
 
             if (isset($pppr_cupo_actual))
                 $comando->bindParam(':pppr_cupo_actual', $pppr_cupo_actual, \PDO::PARAM_INT);
+            
+            if (isset($pppr_descripcion))
+                $comando->bindParam(':pppr_descripcion', $pppr_descripcion, \PDO::PARAM_STR);
 
             if (isset($pppr_usuario_ingresa))
                 $comando->bindParam(':pppr_usuario_ingresa', $pppr_usuario_ingresa, \PDO::PARAM_INT);

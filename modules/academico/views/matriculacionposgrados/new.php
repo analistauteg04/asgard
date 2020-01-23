@@ -89,7 +89,7 @@ $tipodoc = 'Cédula';
             <div class="form-group">
                 <label for="txt_promocion" class="col-sm-5 col-md-5 col-xs-5 col-lg-5 control-label" id="lbl_promocion"><?= academico::t("Academico", "Promotion") ?>: </label>
                 <div class="col-sm-7 col-md-7 col-xs-7 col-lg-7">                    
-                    <?= Html::dropDownList("cmb_programa", "0", $arr_promocion, ["class" => "form-control", "id" => "cmb_programa"]) ?>
+                    <?= Html::dropDownList("cmb_promocion", "0", $arr_promocion, ["class" => "form-control", "id" => "cmb_promocion"]) ?>
                 </div>
             </div>
         </div>

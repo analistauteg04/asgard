@@ -234,8 +234,9 @@ class MatriculacionposgradosController extends \app\components\CController {
                     //Buscar el código de planificación académica según el periodo, unidad, modalidad y carrera.
                     $resp_promocion = $mod_Matriculacion->insertarPromocion($anio, $mes, $codigo, $unidad, $modalidad, $programa, $paralelo, $cupo, $usu_id, $fecha);
                     if ($resp_promocion) {
-                        for ($i = 0; $i < $paralelo; $i++) {
-                            $resp_paralelo = $mod_Matriculacion->insertarParalelo($resp_promocion, $cupo, $cupo, $usu_id, $fecha);
+                        for ($i = 1; $i <= $paralelo; $i++) {
+                            $descripcion = strtoupper(substr($data["nombreprograma"], 0, 3)) .'-Paralelo '. $i;
+                            $resp_paralelo = $mod_Matriculacion->insertarParalelo($resp_promocion, $cupo, $cupo, $descripcion, $usu_id, $fecha);
                         }
                         if ($resp_paralelo) {
                             $exito = '1';

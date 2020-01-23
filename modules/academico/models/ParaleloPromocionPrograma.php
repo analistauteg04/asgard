@@ -87,7 +87,7 @@ class ParaleloPromocionPrograma extends \yii\db\ActiveRecord {
         $sql = "SELECT pppr_id id, pppr_descripcion name                 
                 FROM 
                 " . $con->dbname . ".paralelo_promocion_programa  ppp 
-                WHERE /*ppro_id = :promo_id AND*/
+                WHERE ppro_id = :promo_id AND
                    pppr_estado = :estado AND
                    pppr_estado_logico = :estado";
 

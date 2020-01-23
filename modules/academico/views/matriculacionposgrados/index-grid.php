@@ -15,7 +15,7 @@ academico::registerTranslations();
         'id' => 'TbG_PROGRAMA',
         'showExport' => true,
         'fnExportEXCEL' => "exportExcel",
-        'fnExportPDF' => "exportPdf",
+        //'fnExportPDF' => "exportPdf",
         'dataProvider' => $model,
         //'pajax' => false,
         'columns' =>
