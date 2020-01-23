@@ -344,8 +344,7 @@ class RegistroMarcacion extends \yii\db\ActiveRecord {
             $periodoacademico = 'h.paca_id as periodo, ';
             $grupoperi = ',periodo';
         }
-        $sql = 
-        "SELECT $periodoacademico
+        $sql = "SELECT $periodoacademico
                 CONCAT(ifnull(per.per_pri_nombre,' '), ' ', ifnull(per.per_pri_apellido,' ')) as nombres,
 		asig.asi_nombre as materia,		
                 date_format(r.rmtm_fecha_transaccion,'%Y-%m-%d') as fecha,
@@ -369,7 +368,7 @@ class RegistroMarcacion extends \yii\db\ActiveRecord {
               ((date_format(r.rmtm_fecha_transaccion, '%Y-%m-%d') <= date_format(curdate(),'%Y-%m-%d')
                   and date_format(r.rmtm_fecha_transaccion, '%Y-%m-%d') between peri.paca_fecha_inicio and peri.paca_fecha_fin))
         ORDER BY 4 desc, 5 asc";
-        
+
         $comando = $con->createCommand($sql);
         //$comando->bindParam(":estado", $estado, \PDO::PARAM_STR);
         if (isset($arrFiltro) && count($arrFiltro) > 0) {
@@ -454,6 +453,7 @@ class RegistroMarcacion extends \yii\db\ActiveRecord {
     public function consultarmIdMarcacion($rmar_tipo, $pro_id, $hape_id, $fecha) {
         $con = \Yii::$app->db_academico;
         $estado = 1;
+        
         $sql = "
                     SELECT
                         rmar_id
@@ -474,7 +474,7 @@ class RegistroMarcacion extends \yii\db\ActiveRecord {
         $comando->bindParam(":fecha", $fecha, \PDO::PARAM_STR);
         $comando->bindParam(":estado", $estado, \PDO::PARAM_STR);
 
-        $resultData = $comando->queryOne();
+        $resultData = $comando->queryOne();       
         return $resultData;
     }
 
@@ -730,7 +730,7 @@ class RegistroMarcacion extends \yii\db\ActiveRecord {
      * @param
      * @return
      */
-    public function insertarMarcacionsalida($rmar_tipo, $pro_id, $hape_id, $rmar_fecha_hora_salida, $rmar_direccion_ipsalida, $rmar_idingreso) {
+    public function insertarMarcacionsalida($rmar_tipo, $pro_id, $hape_id, $rmar_fecha_hora_salida, $rmar_direccion_ipsalida, $rmar_idingreso) {        
         $con = \Yii::$app->db_academico;
         $rmar_fecha_modificacion = date(Yii::$app->params["dateTimeByDefault"]);
         $estado = 1;
@@ -746,9 +746,10 @@ class RegistroMarcacion extends \yii\db\ActiveRecord {
                     ("UPDATE " . $con->dbname . ".registro_marcacion		       
                       SET rmar_tipo = :rmar_tipo,
                         rmar_fecha_hora_salida = :rmar_fecha_hora_salida,
-                        rmar_fecha_modificacion = :rmar_fecha_modificacion
+                        rmar_fecha_modificacion = :rmar_fecha_modificacion,
+                        rmar_direccion_ipsalida = TO_BASE64(:rmar_direccion_ipsalida)
                       WHERE 
-                        usu_id = :rmar_idingreso AND                        
+                        rmar_id = :rmar_idingreso AND                        
                         rmar_tipo = 'E' AND
                         hape_id = :hape_id AND
                         pro_id = :pro_id AND
