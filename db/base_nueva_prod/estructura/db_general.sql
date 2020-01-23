@@ -486,3 +486,50 @@ create table if not exists `agente_inscrito_maestria` (
  `aima_fecha_modificacion` timestamp null default null,
  `aima_estado_logico` varchar(1) not null
 );
+
+
+-- --------------------------------------------------------
+--
+-- Estructura de tabla para la tabla `edificio`
+--
+create table if not exists `edificio` (
+ `edi_id` bigint(20) not null auto_increment primary key,    
+ `edi_descripcion` varchar(200) not null, 
+ `edi_estado` varchar(1) not null,
+ `edi_fecha_creacion` timestamp not null default current_timestamp,
+ `edi_fecha_modificacion` timestamp null default null,
+ `edi_estado_logico` varchar(1) not null
+ );
+
+-- --------------------------------------------------------
+--
+-- Estructura de tabla para la tabla `departamento`
+--
+CREATE TABLE `departamento` (
+    `dep_id` bigint(20) not null auto_increment primary key,    
+    `dep_nombre` varchar(200) not null,
+    `dep_estado` varchar(1) not null,
+    `dep_usuario_ingreso` bigint(20) null,
+    `dep_usuario_modifica` bigint(20) null,
+    `dep_fecha_creacion` timestamp not null default current_timestamp,
+    `dep_fecha_modificacion` timestamp null default null,
+    `dep_estado_logico` varchar(1) not null
+)
+
+-- --------------------------------------------------------
+--
+-- Estructura de tabla para la tabla `area`
+--
+create table if not exists `area` (
+ `are_id` bigint(20) not null auto_increment primary key,   
+ `dep_id` bigint(20) not null,   
+ `edi_id` bigint(20) not null, 
+ `are_cod` varchar(20) null,
+ `are_descripcion` varchar(200) not null, 
+ `are_estado` varchar(1) not null,
+ `are_fecha_creacion` timestamp not null default current_timestamp,
+ `are_fecha_modificacion` timestamp null default null,
+ `are_estado_logico` varchar(1) not null,
+ foreign key (edi_id) references `edificio`(edi_id),
+ foreign key (dep_id) references `departamento`(dep_id)
+ );
