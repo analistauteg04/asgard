@@ -505,7 +505,7 @@ create table if not exists `edificio` (
 --
 -- Estructura de tabla para la tabla `departamento`
 --
-CREATE TABLE `departamento` (
+CREATE TABLE if not exists `departamento` (
     `dep_id` bigint(20) not null auto_increment primary key,    
     `dep_nombre` varchar(200) not null,
     `dep_estado` varchar(1) not null,
@@ -514,7 +514,7 @@ CREATE TABLE `departamento` (
     `dep_fecha_creacion` timestamp not null default current_timestamp,
     `dep_fecha_modificacion` timestamp null default null,
     `dep_estado_logico` varchar(1) not null
-)
+);
 
 -- --------------------------------------------------------
 --

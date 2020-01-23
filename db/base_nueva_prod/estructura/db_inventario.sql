@@ -34,6 +34,33 @@ create table if not exists `categoria` (
  foreign key (tbie_id) references `tipo_bien`(tbie_id)
  );
 
+-- --------------------------------------------------------
+--
+-- Estructura de tabla para la tabla `empresa_inventario`
+--
+create table if not exists `empresa_inventario` (
+ `einv_id` bigint(20) not null auto_increment primary key,    
+ `einv_descripcion` varchar(200) not null, 
+ `einv_estado` varchar(1) not null,
+ `einv_fecha_creacion` timestamp not null default current_timestamp,
+ `einv_fecha_modificacion` timestamp null default null,
+ `einv_estado_logico` varchar(1) not null
+ );
+
+-- --------------------------------------------------------
+--
+-- Estructura de tabla para la tabla `custodio`
+--
+create table if not exists `custodio` (
+ `cus_id` bigint(20) not null auto_increment primary key,    
+ `cus_identificacion` varchar(15) not null, 
+ `cus_nombres` varchar(50) not null, 
+ `cus_apellidos` varchar(50) not null, 
+ `cus_estado` varchar(1) not null,
+ `cus_fecha_creacion` timestamp not null default current_timestamp,
+ `cus_fecha_modificacion` timestamp null default null,
+ `cus_estado_logico` varchar(1) not null
+ );
 
 -- --------------------------------------------------------
 --
@@ -41,11 +68,13 @@ create table if not exists `categoria` (
 --
 create table if not exists `activo_fijo` (
  `afij_id` bigint(20) not null auto_increment primary key,
+ `einv_id` bigint(20) not null, 
  `are_id` bigint(20) not null,
  `cat_id` bigint(20) not null,
+ `cus_id` bigint(20) not null,
  `afij_secuencia` integer not null,
- `afij_codigo` varchar(50) not null, 
- `afij_descripcion` varchar(200) not null,
+ `afij_codigo` varchar(50) not null,  
+ `afij_descripcion` varchar(1000) not null,
  `afij_marca` varchar(100) null,
  `afij_modelo` varchar(100) null,
  `afij_num_serie` varchar(100) null, 
@@ -59,6 +88,7 @@ create table if not exists `activo_fijo` (
  `afij_fecha_creacion` timestamp not null default current_timestamp,
  `afij_fecha_modificacion` timestamp null default null,
  `afij_estado_logico` varchar(1) not null,
- foreign key (are_id) references `area`(are_id),
- foreign key (cat_id) references `categoria`(cat_id)
+ foreign key (cat_id) references `categoria`(cat_id),
+ foreign key (einv_id) references `empresa_inventario`(einv_id),
+ foreign key (cus_id) references `custodio`(cus_id)
  );
