@@ -17,7 +17,7 @@ use yii\helpers\ArrayHelper;
             </div>                        
         </div>
     </div>    
-    <div class="col-md-12 col-xs-12 col-lg-12 col-sm-12">
+    <!--<div class="col-md-12 col-xs-12 col-lg-12 col-sm-12">
         <div class="form-group">
             <label for="cmb_empresa" class="col-sm-2 col-sm-2 col-lg-2 col-md-2 col-xs-2 control-label"><?= Yii::t("formulario", "Modelo") ?></label>
             <div class="col-sm-3 col-xs-3 col-md-3 col-lg-3">
@@ -28,7 +28,7 @@ use yii\helpers\ArrayHelper;
                 <?= Html::dropDownList("cmb_tipo_bien", 0, $arr_tipo_bien, ["class" => "form-control PBvalidation", "id" => "cmb_tipo_bien"]) ?>                                    
             </div>                
         </div>
-    </div>    
+    </div>    -->
     <div class="col-md-12 col-xs-12 col-lg-12 col-sm-12">
         <div class="col-sm-8 col-md-8 col-xs-8 col-lg-8 "></div>
         <div class="col-sm-2 col-md-2 col-xs-4 col-lg-2">                

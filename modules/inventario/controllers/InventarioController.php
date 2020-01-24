@@ -1,38 +1,27 @@
 <?php
 
-namespace app\modules\repositorio\controllers;
+namespace app\modules\inventario\controllers;
 
 use Yii;
 use yii\helpers\Url;
 use yii\helpers\Html;
 use app\models\Utilities;
 use yii\helpers\ArrayHelper;
-use app\models\Empresa;
 use app\models\ExportFile;
-use \app\models\Persona;
-use \app\modules\repositorio\models\DocumentoRepositorio;
-use \app\modules\repositorio\models\Funcion;
-use \app\modules\repositorio\models\Componente;
-use \app\modules\repositorio\models\Modelo;
-use \app\modules\repositorio\models\Estandar;
-use app\modules\repositorio\Module as repositorio;
+use app\modules\inventario\models\ActivoFijo;
 
 class InventarioController extends \app\components\CController {
 
     public function actionIndex() {
-        $mod_repositorio = new DocumentoRepositorio();
-        $mod_categoria = new Funcion();
-        $mod_componente = new Componente();
-        $mod_modelo = new Modelo();
-        $mod_estandar = new Estandar();
+        $mod_inventario = new ActivoFijo();                
         $data = Yii::$app->request->get();
         if ($data['PBgetFilter']) {                       
             $arrSearch["search"] = $data['search'];
             $arrSearch["emp_id"] = $data['emp_id'];
             $arrSearch["tipo_bien"] = $data['tipo_bien'];            
-            $resp_listado = $mod_repositorio->consultarDocumentos($arrSearch);
+            $resp_listado = $mod_inventario->consultarInventario($arrSearch);
         } else {
-            $resp_listado = $mod_repositorio->consultarDocumentos();
+            $resp_listado = $mod_inventario->consultarInventario();
         }
         if (Yii::$app->request->isAjax) {
             $data = Yii::$app->request->post();
@@ -42,11 +31,11 @@ class InventarioController extends \app\components\CController {
                 return Utilities::ajaxResponse('OK', 'alert', Yii::t('jslang', 'Success'), 'false', $message);
             }    */       
         }
-        $arr_modelo = $mod_modelo->consultarModelo();
-        $arr_categoria = $mod_categoria->consultarFuncion(2);        
+        /*$arr_modelo = $mod_modelo->consultarModelo();
+        $arr_categoria = $mod_categoria->consultarFuncion(2);        */
         return $this->render('index', [
-                    'arr_modelo' => ArrayHelper::map(array_merge([["id" => "0", "value" => "Todos"]], $arr_modelo), "id", "value"),
-                    'arr_categoria' => ArrayHelper::map(array_merge([["id" => "0", "name" => "Todos"]], $arr_categoria), "id", "name"), //array("1" => Yii::t("formulario", "Docencia"), "2" => Yii::t("formulario", "Condiciones Institucionales")),                    
+                   /* 'arr_modelo' => ArrayHelper::map(array_merge([["id" => "0", "value" => "Todos"]], $arr_modelo), "id", "value"),
+                    'arr_categoria' => ArrayHelper::map(array_merge([["id" => "0", "name" => "Todos"]], $arr_categoria), "id", "name"), //array("1" => Yii::t("formulario", "Docencia"), "2" => Yii::t("formulario", "Condiciones Institucionales")),  */
                     'model' => $resp_listado,
         ]);
     }

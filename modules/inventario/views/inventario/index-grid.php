@@ -24,42 +24,42 @@ PbGridView::widget([
         [
             'attribute' => 'Empresa',
             'header' => repositorio::t("repositorio", "Empresa"),
-            'value' => 'dre_imagen',
+            'value' => 'empresa',
         ],
         [
             'attribute' => 'Area',
             'header' => Yii::t("formulario", "Area"),
-            'value' => 'tipo',
+            'value' => 'area',
         ],
         [
             'attribute' => 'Categoría',
             'header' => Yii::t("formulario", "Categoría"),
-            'value' => 'dre_descripcion',
+            'value' => 'categoria',
         ],
         [
             'attribute' => 'Código',
             'header' => repositorio::t("repositorio", "Código"),
-            'value' => 'dre_fecha_archivo',
+            'value' => 'afij_codigo',
         ],
         [
             'attribute' => 'Marca',
             'header' => Yii::t("formulario", "Marca"),
-            'value' => 'dre_fecha_creacion',
+            'value' => 'afij_marca',
         ],  
         [
             'attribute' => 'Modelo',
             'header' => Yii::t("formulario", "Modelo"),
-            'value' => 'dre_fecha_creacion',
+            'value' => 'afij_modelo',
         ],  
         [
             'attribute' => 'Serie',
             'header' => Yii::t("formulario", "Serie"),
-            'value' => 'dre_fecha_creacion',
+            'value' => 'afij_num_serie',
         ],  
         [
             'attribute' => 'Cantidad',
             'header' => Yii::t("formulario", "Cantidad"),
-            'value' => 'dre_fecha_creacion',
+            'value' => 'afij_cantidad',
         ],  
        /* [
             'class' => 'yii\grid\ActionColumn',
