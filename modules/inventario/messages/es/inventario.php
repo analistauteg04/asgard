@@ -43,5 +43,13 @@
  */
 
 return [
-    "Date file" => "Fecha Archivo",    
+    "Brand" => "Marca",
+    "Category" => "Categoría",
+    "Code" => "Código",
+    "Custodian" => "Custodio",
+    "Department" => "Departamento",
+    "Quantity" => "Cantidad",
+    "Search by Code and Custodian" => "Buscar por Código, Custodio",
+    "Type Good" => "Tipo Bien",    
+    "Work area" => "Área",
 ];

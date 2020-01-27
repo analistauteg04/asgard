@@ -140,8 +140,10 @@ class ActivoFijo extends \yii\db\ActiveRecord
             }*/
         }
         $sql = "SELECT 	af.afij_codigo, af.afij_custodio, 
-                        af.afij_marca, af.afij_modelo,
-                        af.afij_num_serie, af.afij_cantidad,
+                        ifnull(af.afij_marca,'') as afij_marca, 
+                        ifnull(af.afij_modelo, '') as afij_modelo,
+                        ifnull(af.afij_num_serie,'') as afij_num_serie, 
+                        ifnull(af.afij_cantidad,0) as afij_cantidad,
                         ei.einv_descripcion as empresa,
                         a.are_descripcion as area, 
                         d.dep_nombre as departamento,
@@ -191,4 +193,6 @@ class ActivoFijo extends \yii\db\ActiveRecord
             return $dataProvider;
         }
     }
+    
+    
 }

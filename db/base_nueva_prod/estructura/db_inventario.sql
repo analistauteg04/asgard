@@ -21,7 +21,7 @@ create table if not exists `tipo_bien` (
 
 -- --------------------------------------------------------
 --
--- Estructura de tabla para la tabla `tipo_bien`
+-- Estructura de tabla para la tabla `categoria`
 --
 create table if not exists `categoria` (
  `cat_id` bigint(20) not null auto_increment primary key,    

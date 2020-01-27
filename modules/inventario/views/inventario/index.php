@@ -8,8 +8,11 @@ use yii\helpers\Html;
     <form class="form-horizontal">
         <?=
         $this->render('index-search', [
-            /*'arr_empresa' => $arr_empresa,
-            'arr_tipo_bien' => $arr_tipo_bien,  */          
+            'arr_empresa' => $arr_empresa,
+            'arr_tipo_bien' => $arr_tipo_bien,
+            'arr_categoria' => $arr_categoria,
+            'arr_departamento' => $arr_departamento,
+            'arr_area' => $arr_area,
              ]);             
         ?>
     </form>

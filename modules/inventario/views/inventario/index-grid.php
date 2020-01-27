@@ -9,7 +9,7 @@
 use yii\helpers\Html;
 use yii\helpers\Url;
 use app\widgets\PbGridView\PbGridView;
-use app\modules\repositorio\Module as repositorio;
+use app\modules\inventario\Module as inventario;
 ?>
 <?=
 PbGridView::widget([
@@ -23,42 +23,37 @@ PbGridView::widget([
     [
         [
             'attribute' => 'Empresa',
-            'header' => repositorio::t("repositorio", "Empresa"),
+            'header' => Yii::t("formulario", "Company"),
             'value' => 'empresa',
         ],
         [
             'attribute' => 'Area',
-            'header' => Yii::t("formulario", "Area"),
+            'header' => inventario::t("inventario", "Work area"),
             'value' => 'area',
         ],
         [
             'attribute' => 'Categoría',
-            'header' => Yii::t("formulario", "Categoría"),
+            'header' => inventario::t("inventario", "Category"),
             'value' => 'categoria',
         ],
         [
             'attribute' => 'Código',
-            'header' => repositorio::t("repositorio", "Código"),
+            'header' => inventario::t("inventario", "Code"),
             'value' => 'afij_codigo',
         ],
         [
             'attribute' => 'Marca',
-            'header' => Yii::t("formulario", "Marca"),
+            'header' => inventario::t("inventario", "Brand"),
             'value' => 'afij_marca',
         ],  
         [
-            'attribute' => 'Modelo',
-            'header' => Yii::t("formulario", "Modelo"),
-            'value' => 'afij_modelo',
-        ],  
-        [
-            'attribute' => 'Serie',
-            'header' => Yii::t("formulario", "Serie"),
-            'value' => 'afij_num_serie',
-        ],  
+            'attribute' => 'Custodio',
+            'header' => inventario::t("inventario", "Custodian"),
+            'value' => 'afij_custodio',
+        ],         
         [
             'attribute' => 'Cantidad',
-            'header' => Yii::t("formulario", "Cantidad"),
+            'header' => inventario::t("inventario", "Quantity"),
             'value' => 'afij_cantidad',
         ],  
        /* [

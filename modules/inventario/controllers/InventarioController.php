@@ -9,11 +9,21 @@ use app\models\Utilities;
 use yii\helpers\ArrayHelper;
 use app\models\ExportFile;
 use app\modules\inventario\models\ActivoFijo;
+use app\modules\inventario\models\EmpresaInventario;
+use app\modules\inventario\models\TipoBien;
+use app\modules\inventario\models\Categoria;
+use app\models\Departamento;
+use app\models\Area;
 
 class InventarioController extends \app\components\CController {
 
     public function actionIndex() {
-        $mod_inventario = new ActivoFijo();                
+        $mod_inventario = new ActivoFijo();   
+        $mod_empinv = new EmpresaInventario();
+        $mod_tipobien = new TipoBien();
+        $mod_categoria = new Categoria();
+        $mod_departamento = new Departamento();
+        $mod_area = new Area();
         $data = Yii::$app->request->get();
         if ($data['PBgetFilter']) {                       
             $arrSearch["search"] = $data['search'];
@@ -31,11 +41,17 @@ class InventarioController extends \app\components\CController {
                 return Utilities::ajaxResponse('OK', 'alert', Yii::t('jslang', 'Success'), 'false', $message);
             }    */       
         }
-        /*$arr_modelo = $mod_modelo->consultarModelo();
-        $arr_categoria = $mod_categoria->consultarFuncion(2);        */
+        $arr_empresa_inv = $mod_empinv->consultarEmpresaInv();
+        $arr_tipo_bien = $mod_tipobien->consultarTipoBien();        
+        $arr_categoria = $mod_categoria->consultarCategoria(1);
+        $arr_departamento = $mod_departamento->consultarDepartamento(1);
+        $arr_area = $mod_area->consultarAreas(1,1);
         return $this->render('index', [
-                   /* 'arr_modelo' => ArrayHelper::map(array_merge([["id" => "0", "value" => "Todos"]], $arr_modelo), "id", "value"),
-                    'arr_categoria' => ArrayHelper::map(array_merge([["id" => "0", "name" => "Todos"]], $arr_categoria), "id", "name"), //array("1" => Yii::t("formulario", "Docencia"), "2" => Yii::t("formulario", "Condiciones Institucionales")),  */
+                    'arr_empresa' => ArrayHelper::map(array_merge([["id" => "0", "name" => "Todos"]], $arr_empresa_inv), "id", "name"),
+                    'arr_tipo_bien' => ArrayHelper::map(array_merge([["id" => "0", "name" => "Todos"]], $arr_tipo_bien), "id", "name"),
+                    'arr_categoria' => ArrayHelper::map(array_merge([["id" => "0", "name" => "Todos"]], $arr_categoria), "id", "name"),
+                    'arr_departamento' => ArrayHelper::map(array_merge([["id" => "0", "name" => "Todos"]], $arr_departamento), "id", "name"),
+                    'arr_area' => ArrayHelper::map(array_merge([["id" => "0", "name" => "Todos"]], $arr_area), "id", "name"),
                     'model' => $resp_listado,
         ]);
     }
