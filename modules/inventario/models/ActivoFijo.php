@@ -1,6 +1,7 @@
 <?php
 
 namespace app\modules\inventario\models;
+use yii\data\ArrayDataProvider;
 
 use Yii;
 

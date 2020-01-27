@@ -1,6 +1,6 @@
 <?php
-return ['repositorio' => [
-            'class' => 'app\modules\repositorio\Module',
+return ['inventario' => [
+            'class' => 'app\modules\inventario\Module',
             'db_inventario' => [
                 'class' => 'app\components\CConnection',
                 'dsn' => 'mysql:host=localhost;dbname=db_inventario',

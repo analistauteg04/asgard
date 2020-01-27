@@ -1,11 +1,11 @@
 <?php
-namespace app\modules\repositorio;
+namespace app\modules\inventario;
 
 use Yii;
 
 class Module extends \yii\base\Module
 {
-    public $db_repositorio;    // se debe colocar el identificador de la base que se define en el archivo de modulos: mod.php
+    public $db_inventario;    // se debe colocar el identificador de la base que se define en el archivo de modulos: mod.php
     public $class;  // se debe colocar el la clase de la conexion de la base que se define en el archivo de modulos: mod.php
     public $controllerNamespace = 'app\modules\inventario\controllers';
     private static $module_name = 'inventario';

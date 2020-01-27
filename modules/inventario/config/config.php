@@ -5,7 +5,7 @@ $arr_conf = [
         'urlManager' => [
             'class' => 'yii\web\UrlManager',
             'rules' => [
-                '<module:repositorio>/<controller:\w+>/<action:\w+>/<id:\w+>' => '<module>/<controller>/<action>',
+                '<module:inventario>/<controller:\w+>/<action:\w+>/<id:\w+>' => '<module>/<controller>/<action>',
             ]
         ],
     ],
