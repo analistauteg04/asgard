@@ -103,12 +103,26 @@ $(document).ready(function () {
     $('#cmb_promocion').change(function () {
         var link = $('#txth_base').val() + "/academico/matriculacionposgrados/new";
         var arrParams = new Object();
+        $('#txt_cupodisponible').val('');
         arrParams.promocion_id = $(this).val();
         arrParams.getparalelos = true;
         requestHttpAjax(link, arrParams, function (response) {
             if (response.status == "OK") {
                 data = response.message;
-                setComboDataselect(data.paralelos, "cmb_paralelo", "Seleccionar");
+                setComboDataselect(data.paralelos, "cmb_paralelo", "Seleccionar");                
+            }
+        }, true);
+    });
+    
+    $('#cmb_paralelo').change(function () {
+        var link = $('#txth_base').val() + "/academico/matriculacionposgrados/new";
+        var arrParams = new Object();
+        arrParams.cupo_id = $(this).val();
+        arrParams.getcupo = true;
+        requestHttpAjax(link, arrParams, function (response) {
+            if (response.status == "OK") {
+                data = response.message;
+                $('#txt_cupodisponible').val(data.cupo);
             }
         }, true);
     });

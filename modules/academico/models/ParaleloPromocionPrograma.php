@@ -252,5 +252,27 @@ class ParaleloPromocionPrograma extends \yii\db\ActiveRecord {
             return 0;
         }
     }
+    
+    /**
+     * Function ObtenerCupodisponible
+     * @author  Giovanni Vergara <analistadesarrollo02@uteg.edu.ec>
+     * @param   
+     * @return  $resultData (Cupo disponible paralelo)
+     */
+    public function ObtenerCupodisponible($pppr_id) {
+        $con = \Yii::$app->db_academico;
+        $estado = 1;
+        $sql = "SELECT pppr_cupo_actual cupo 
+                FROM " . $con->dbname . ".paralelo_promocion_programa 
+                WHERE pppr_id = :pppr_id                   
+                    and pppr_estado = :estado
+                    and pppr_estado_logico = :estado";
+
+        $comando = $con->createCommand($sql);
+        $comando->bindParam(":estado", $estado, \PDO::PARAM_STR);
+        $comando->bindParam(":pppr_id", $pppr_id, \PDO::PARAM_INT);
+        $resultData = $comando->queryOne();
+        return $resultData;
+    }
 
 }

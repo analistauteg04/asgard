@@ -85,6 +85,11 @@ class MatriculacionposgradosController extends \app\components\CController {
                 $message = array("paralelos" => $resp_Paralelos);
                 return Utilities::ajaxResponse('OK', 'alert', Yii::t('jslang', 'Success'), 'false', $message);
             }
+            if (isset($data["getcupo"])) {
+                $resp_cupo = $mod_paralelo->ObtenerCupodisponible($data["cupo_id"]);
+                $message = array("cupo" => $resp_cupo["cupo"]);
+                return Utilities::ajaxResponse('OK', 'alert', Yii::t('jslang', 'Success'), 'false', $message);
+            }
         }
         $personaData = $mod_solins->consultarInteresadoPorSol_id($sins_id);
         $resp_programas = $mod_promocion->consultarPromocionxPrograma($personaData["eaca_id"]);
