@@ -12,6 +12,9 @@ $(document).ready(function () {
     $('#btn_enviar').click(function () {
         modificarParalelo();
     });
+     $('#btn_matricular').click(function () {
+        grabarMatriculacion();
+    });
     /*****************************************************/
     /* Filtro para busqueda en index Promoción Programa */
     /***************************************************/
@@ -336,4 +339,35 @@ function modificarParalelo() {
 
         }, true);
     }
+}
+
+function grabarMatriculacion() {
+    var link = $('#txth_base').val() + "/academico/matriculacionposgrados/savematriculacion";
+    var arrParams = new Object();
+
+    arrParams.cupodisponible = $('#txt_cupodisponible').val();
+    arrParams.matricula = $('#txt_matricula').val();
+    arrParams.promocion = $('#cmb_promocion').val();
+    arrParams.paralelo = $('#cmb_paralelo').val();
+    //arrParams.nombreprograma = $("#cmb_programa option:selected").text();
+    if (arrParams.promocion == 0 || arrParams.paralelo == 0)
+    {
+        showAlert('NO_OK', 'error', {"wtmessage": "Debe seleccionar opciones de las listas.", "title": 'Error'});
+    } else
+    {
+        if (!validateForm()) {
+            requestHttpAjax(link, arrParams, function (response) {
+                showAlert(response.status, response.label, response.message);
+                if (!response.error) {
+                    setTimeout(function () {
+                        window.location.href = $('#txth_base').val() + "/academico/admitidos/matriculado";
+                    }, 5000);
+                }
+
+
+            }, true);
+        }
+    }
+
+
 }

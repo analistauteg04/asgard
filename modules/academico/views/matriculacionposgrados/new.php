@@ -87,7 +87,7 @@ $tipodoc = 'Cédula';
         <div class='col-md-12 col-sm-12 col-xs-12 col-lg-12'>
             <div class="col-md-6 col-sm-6 col-xs-6 col-lg-6">
                 <div class="form-group">
-                    <label for="txt_promocion" class="col-sm-5 col-md-5 col-xs-5 col-lg-5 control-label" id="lbl_promocion"><?= academico::t("Academico", "Promotion") ?>: </label>
+                    <label for="txt_promocion" class="col-sm-5 col-md-5 col-xs-5 col-lg-5 control-label" id="lbl_promocion"><?= academico::t("Academico", "Promotion") ?><span class="text-danger">*</span></label>
                     <div class="col-sm-7 col-md-7 col-xs-7 col-lg-7">                    
                         <?= Html::dropDownList("cmb_promocion", "0", $arr_promocion, ["class" => "form-control", "id" => "cmb_promocion"]) ?>
                     </div>
@@ -95,7 +95,7 @@ $tipodoc = 'Cédula';
             </div>
             <div class="col-md-6 col-sm-6 col-xs-6 col-lg-6">
                 <div class="form-group">
-                    <label for="txt_paralelo" class="col-sm-5 control-label" id="lbl_periodo"><?= academico::t("Academico", "Parallel") ?>:</label>
+                    <label for="txt_paralelo" class="col-sm-5 control-label" id="lbl_periodo"><?= academico::t("Academico", "Parallel") ?><span class="text-danger">*</span></label>
                     <div class="col-sm-7">
                         <?= Html::dropDownList("cmb_paralelo", "0", $arr_paralelo, ["class" => "form-control", "id" => "cmb_paralelo"]) ?>
                     </div>
@@ -105,7 +105,7 @@ $tipodoc = 'Cédula';
         <div class='col-md-12 col-sm-12 col-xs-12 col-lg-12'>
             <div class="col-md-6 col-sm-6 col-xs-6 col-lg-6">
                 <div class="form-group">
-                    <label for="txt_cupodisponible" class="col-sm-5 col-md-5 col-xs-5 col-lg-5 control-label" id="lbl_solicitudes"><?= academico::t("Academico", "Quota Available") ?>:</label>
+                    <label for="txt_cupodisponible" class="col-sm-5 col-md-5 col-xs-5 col-lg-5 control-label" id="lbl_solicitudes"><?= academico::t("Academico", "Quota Available") ?><span class="text-danger">*</span></label>
                     <div class="col-sm-7 col-md-7 col-xs-7 col-lg-7">
                         <input type="text" class="form-control keyupmce" value="" id="txt_cupodisponible" data-type="number" disabled="true">
                     </div>
@@ -113,12 +113,18 @@ $tipodoc = 'Cédula';
             </div> 
             <div class="col-md-6 col-sm-6 col-xs-6 col-lg-6">
                 <div class="form-group">
-                    <label for="txt_matricula" class="col-sm-5 col-md-5 col-xs-5 col-lg-5 control-label" id="lbl_dni"><?= academico::t("Academico", "Enrollment Number") ?>: </label>
+                    <label for="txt_matricula" class="col-sm-5 col-md-5 col-xs-5 col-lg-5 control-label" id="lbl_dni"><?= academico::t("Academico", "Enrollment Number") ?> <span class="text-danger">*</span></label>
                     <div class="col-sm-7 col-md-7 col-xs-7 col-lg-7">
-                        <input type="text" class="form-control keyupmce" value="" id="txt_matricula" data-type="number">
+                        <input type="text" class="form-control PBvalidation keyupmce" value="" id="txt_matricula" data-type="number">
                     </div>
                 </div>
             </div> 
+        </div>
+    </div>
+    <div class="col-md-12 col-sm-12 col-xs-12 col-lg-12">
+        <div class="col-sm-8"></div>
+        <div class="col-sm-2 col-md-2 col-xs-4 col-lg-2">                
+            <a id="btn_matricular" href="javascript:" class="btn btn-primary btn-block"> <?= Yii::t("formulario", "Save") ?></a>
         </div>
     </div>
 </form>
