@@ -87,7 +87,7 @@ academico::registerTranslations();
                 'template' => '{matricula} {ficha}', //
                 'buttons' => [
                     'matricula' => function ($url, $model) {
-                        return Html::a('<span class="glyphicon glyphicon-list-alt"></span>', Url::to(['/academico/matriculacionposgrados/new', 'sids' => base64_encode($model['sins_id']), 'adm' => base64_encode($model['adm_id'])]), ["data-toggle" => "tooltip", "title" => "Matriculación", "data-pjax" => 0]);
+                        return Html::a('<span class="glyphicon glyphicon-list-alt"></span>', Url::to(['/academico/matriculacionposgrados/new', 'sids' => base64_encode($model['sins_id']), 'adm' => base64_encode($model['adm_id']), 'perid' => base64_encode($model['per_id'])]), ["data-toggle" => "tooltip", "title" => "Matriculación", "data-pjax" => 0]);
                     },
                     'ficha' => function ($url, $model) {
                         return Html::a('<span class="glyphicon glyphicon-user"></span>', Url::to(['/academico/ficha/update',  'mat' => base64_encode(1), 'perid' => base64_encode($model['per_id'])]), ["data-toggle" => "tooltip", "title" => "Ficha Matriculado", "data-pjax" => 0]);

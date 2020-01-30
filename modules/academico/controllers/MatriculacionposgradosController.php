@@ -12,6 +12,7 @@ use app\modules\academico\models\Modalidad;
 use app\modules\academico\models\UnidadAcademica;
 use app\modules\academico\models\PromocionPrograma;
 use app\modules\academico\models\ParaleloPromocionPrograma;
+use app\modules\academico\models\Estudiante;
 use app\modules\admision\models\Oportunidad;
 use app\modules\admision\models\SolicitudInscripcion;
 use app\modules\academico\Module as academico;
@@ -571,5 +572,68 @@ class MatriculacionposgradosController extends \app\components\CController {
             return;
         }
     }
+    
+ public function actionSavemattriculacion() {
+        $usu_id = @Yii::$app->session->get("PB_iduser");
+        if (Yii::$app->request->isAjax) {
+            $data = Yii::$app->request->post();
+            $per_id = $data["personaid"];
+            $adm_id = $data["admitidoid"];
+            $matricula = $data["matricula"];           
+            $promocion = $data["promocion"];
+            $paralelo = $data["paralelo"];
+            $cupo = $data["cupo"];
+            
+            $con = \Yii::$app->db_academico;
+            $transaction = $con->beginTransaction();
+            try {              
+                // verificar cupo actual del paralelo si es mayor a 0 continuar
+                $mod_Matriculacion = new Estudiante();
+                $resp_cupoparalelo = $mod_Matriculacion->getParalelosxids($paralelo, $promocion);
+               if ($resp_cupoparalelo["pppr_cupo_actual"] > 0) {
+                    $fecha = date(Yii::$app->params["dateTimeByDefault"]);
+                    // grabar tabla estudiantes
+                    $resp_estudiante = $mod_Matriculacion->insertarEstudiante();
+                    if ($resp_estudiante) {
+                        /*for ($i = 1; $i <= $paralelo; $i++) {
+                            $descripcion = strtoupper(substr($data["nombreprograma"], 0, 3)) .'-Paralelo '. $i;
+                            $resp_paralelo = $mod_Matriculacion->insertarParalelo($resp_promocion, $cupo, $cupo, $descripcion, $usu_id, $fecha);
+                        }
+                        if ($resp_paralelo) {
+                            $exito = '1';
+                        }*/
+                    }
+                } else {
+                    $mensaje = "¡No hay cupo para este paralelo.!";
+                }
+                if ($exito) {
+                    $transaction->commit();
+                    $message = array(
+                        "wtmessage" => Yii::t("notificaciones", "La información ha sido grabada."),
+                        "title" => Yii::t('jslang', 'Success'),
+                    );
+                    return \app\models\Utilities::ajaxResponse('OK', 'alert', Yii::t("jslang", "Sucess"), false, $message);
+                } else {
+                    $transaction->rollback();
+                    if (empty($message)) {
+                        $message = array
+                            (
+                            "wtmessage" => Yii::t("notificaciones", "Error al grabar. " . $mensaje), "title" =>
+                            Yii::t('jslang', 'Success'),
+                        );
+                    }
+                    return \app\models\Utilities::ajaxResponse('NO_OK', 'alert', Yii::t("jslang", "Sucess"), false, $message);
+                }
+            } catch (Exception $ex) {
+                $transaction->rollback();
+                $message = array(
+                    "wtmessage" => Yii::t("notificaciones", "Error al grabar." . $mensaje),
+                    "title" => Yii::t('jslang', 'Success'),
+                );
+                return \app\models\Utilities::ajaxResponse('NO_OK', 'alert', Yii::t("jslang", "Sucess"), false, $message);
+            }
+            return;
+        }
+    }    
 
 }

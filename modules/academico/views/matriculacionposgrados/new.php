@@ -12,6 +12,8 @@ $tipodoc = 'Cédula';
 ?>
 <?= Html::hiddenInput('txth_sins_id', base64_encode($personalData["sins_id"]), ['id' => 'txth_sins_id']); ?>
 <?= Html::hiddenInput('txth_adm_id', $_GET['adm'], ['id' => 'txth_adm_id']); ?>
+<?= Html::hiddenInput('txth_per_id', $_GET['perid'], ['id' => 'txth_per_id']); ?>
+
 <form class="form-horizontal">
     <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
         <h3><span id="lbl_index"><?= 'Matriculación' ?></span></h3>

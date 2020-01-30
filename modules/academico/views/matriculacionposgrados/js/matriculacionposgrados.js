@@ -12,7 +12,7 @@ $(document).ready(function () {
     $('#btn_enviar').click(function () {
         modificarParalelo();
     });
-     $('#btn_matricular').click(function () {
+    $('#btn_matricular').click(function () {
         grabarMatriculacion();
     });
     /*****************************************************/
@@ -112,11 +112,11 @@ $(document).ready(function () {
         requestHttpAjax(link, arrParams, function (response) {
             if (response.status == "OK") {
                 data = response.message;
-                setComboDataselect(data.paralelos, "cmb_paralelo", "Seleccionar");                
+                setComboDataselect(data.paralelos, "cmb_paralelo", "Seleccionar");
             }
         }, true);
     });
-    
+
     $('#cmb_paralelo').change(function () {
         var link = $('#txth_base').val() + "/academico/matriculacionposgrados/new";
         var arrParams = new Object();
@@ -207,8 +207,6 @@ function grabarPromocion() {
             }, true);
         }
     }
-
-
 }
 
 function grabarPromocion() {
@@ -344,7 +342,8 @@ function modificarParalelo() {
 function grabarMatriculacion() {
     var link = $('#txth_base').val() + "/academico/matriculacionposgrados/savematriculacion";
     var arrParams = new Object();
-
+    arrParams.personaid = $('#txth_per_id').val();
+    arrParams.admitidoid = $('#txth_adm_id').val();
     arrParams.cupodisponible = $('#txt_cupodisponible').val();
     arrParams.matricula = $('#txt_matricula').val();
     arrParams.promocion = $('#cmb_promocion').val();
@@ -353,6 +352,8 @@ function grabarMatriculacion() {
     if (arrParams.promocion == 0 || arrParams.paralelo == 0)
     {
         showAlert('NO_OK', 'error', {"wtmessage": "Debe seleccionar opciones de las listas.", "title": 'Error'});
+    } else if (arrParams.cupodisponible == 0) {
+        showAlert('NO_OK', 'error', {"wtmessage": "No hay cupo disponible para este paralelo.", "title": 'Error'});
     } else
     {
         if (!validateForm()) {
