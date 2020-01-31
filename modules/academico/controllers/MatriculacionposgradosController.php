@@ -241,7 +241,7 @@ class MatriculacionposgradosController extends \app\components\CController {
                     $resp_promocion = $mod_Matriculacion->insertarPromocion($anio, $mes, $codigo, $unidad, $modalidad, $programa, $paralelo, $cupo, $usu_id, $fecha);
                     if ($resp_promocion) {
                         for ($i = 1; $i <= $paralelo; $i++) {
-                            $descripcion = strtoupper(substr($data["nombreprograma"], 0, 3)) .'-Paralelo '. $i;
+                            $descripcion = strtoupper(substr($data["nombreprograma"], 0, 3)) . '-Paralelo ' . $i;
                             $resp_paralelo = $mod_Matriculacion->insertarParalelo($resp_promocion, $cupo, $cupo, $descripcion, $usu_id, $fecha);
                         }
                         if ($resp_paralelo) {
@@ -572,39 +572,49 @@ class MatriculacionposgradosController extends \app\components\CController {
             return;
         }
     }
-    
- public function actionSavemattriculacion() {
+
+    public function actionSavematriculacion() {
         $usu_id = @Yii::$app->session->get("PB_iduser");
         if (Yii::$app->request->isAjax) {
             $data = Yii::$app->request->post();
-            $per_id = $data["personaid"];
-            $adm_id = $data["admitidoid"];
-            $matricula = $data["matricula"];           
+            $per_id = base64_decode($data["personaid"]);
+            $adm_id = base64_decode($data["admitidoid"]);
+            $matricula = $data["matricula"];
             $promocion = $data["promocion"];
             $paralelo = $data["paralelo"];
             $cupo = $data["cupo"];
-            
+
             $con = \Yii::$app->db_academico;
             $transaction = $con->beginTransaction();
-            try {              
+            try {
                 // verificar cupo actual del paralelo si es mayor a 0 continuar
-                $mod_Matriculacion = new Estudiante();
-                $resp_cupoparalelo = $mod_Matriculacion->getParalelosxids($paralelo, $promocion);
-               if ($resp_cupoparalelo["pppr_cupo_actual"] > 0) {
-                    $fecha = date(Yii::$app->params["dateTimeByDefault"]);
-                    // grabar tabla estudiantes
-                    $resp_estudiante = $mod_Matriculacion->insertarEstudiante();
-                    if ($resp_estudiante) {
-                        /*for ($i = 1; $i <= $paralelo; $i++) {
-                            $descripcion = strtoupper(substr($data["nombreprograma"], 0, 3)) .'-Paralelo '. $i;
-                            $resp_paralelo = $mod_Matriculacion->insertarParalelo($resp_promocion, $cupo, $cupo, $descripcion, $usu_id, $fecha);
+                $mod_Estudiante = new Estudiante();
+                $mod_paralelo = new ParaleloPromocionPrograma();
+                // consultar si el estudiante no ha sido creado antes segun su perid
+                $resp_estudiante = $mod_Estudiante->getEstudiantexids($per_id);
+                if ($resp_estudiante["total"] == 0) {
+                    $resp_cupoparalelo = $mod_paralelo->getParalelosxids($paralelo, $promocion);
+                    // \app\models\Utilities::putMessageLogFile('cupo disponible' . $resp_cupoparalelo["pppr_cupo_actual"]);
+                    if ($resp_cupoparalelo["pppr_cupo_actual"] > 0) {
+                        $fecha = date(Yii::$app->params["dateTimeByDefault"]);
+                        // grabar tabla estudiantes
+                        $resp_estudiante = $mod_Estudiante->insertarEstudiante($per_id, $usu_id, null, null, $fecha);
+                        if ($resp_estudiante) {
+                            // grabar en matriculacion_programa_inscrito
+                            $resp_matricula_inscrito = $mod_paralelo->insertarMatriculainscrito($promocion, $adm_id, $resp_estudiante, $fecha, $usu_id, $fecha);
+                            if ($resp_matricula_inscrito) {
+                                // actualizar en paralelo_promocion_programa el cupo
+                                $resp_actualiza_cupo = $mod_paralelo->actualizarCupoparalelo($paralelo, $promocion, $usu_id);
+                                if ($resp_actualiza_cupo) {
+                                    $exito = 1;
+                                }
+                            }
                         }
-                        if ($resp_paralelo) {
-                            $exito = '1';
-                        }*/
+                    } else {
+                        $mensaje = "¡No hay cupo para este paralelo.!";
                     }
                 } else {
-                    $mensaje = "¡No hay cupo para este paralelo.!";
+                    $mensaje = "¡El estudiante ya esta registra en un paralelo.!";
                 }
                 if ($exito) {
                     $transaction->commit();
@@ -618,7 +628,7 @@ class MatriculacionposgradosController extends \app\components\CController {
                     if (empty($message)) {
                         $message = array
                             (
-                            "wtmessage" => Yii::t("notificaciones", "Error al grabar. " . $mensaje), "title" =>
+                            "wtmessage" => Yii::t("notificaciones", "Error al grabar1. " . $mensaje), "title" =>
                             Yii::t('jslang', 'Success'),
                         );
                     }
@@ -627,13 +637,13 @@ class MatriculacionposgradosController extends \app\components\CController {
             } catch (Exception $ex) {
                 $transaction->rollback();
                 $message = array(
-                    "wtmessage" => Yii::t("notificaciones", "Error al grabar." . $mensaje),
+                    "wtmessage" => Yii::t("notificaciones", "Error al grabar2." . $mensaje),
                     "title" => Yii::t('jslang', 'Success'),
                 );
                 return \app\models\Utilities::ajaxResponse('NO_OK', 'alert', Yii::t("jslang", "Sucess"), false, $message);
             }
             return;
         }
-    }    
+    }
 
 }

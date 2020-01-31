@@ -454,7 +454,7 @@ class PromocionPrograma extends \yii\db\ActiveRecord {
 
             if (isset($pppr_cupo_actual))
                 $comando->bindParam(':pppr_cupo_actual', $pppr_cupo_actual, \PDO::PARAM_INT);
-            
+
             if (isset($pppr_descripcion))
                 $comando->bindParam(':pppr_descripcion', $pppr_descripcion, \PDO::PARAM_STR);
 
@@ -608,7 +608,5 @@ class PromocionPrograma extends \yii\db\ActiveRecord {
             return FALSE;
         }
     }
-
-    
 
 }

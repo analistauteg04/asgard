@@ -252,7 +252,7 @@ class ParaleloPromocionPrograma extends \yii\db\ActiveRecord {
             return 0;
         }
     }
-    
+
     /**
      * Function ObtenerCupodisponible
      * @author  Giovanni Vergara <analistadesarrollo02@uteg.edu.ec>
@@ -273,6 +273,137 @@ class ParaleloPromocionPrograma extends \yii\db\ActiveRecord {
         $comando->bindParam(":pppr_id", $pppr_id, \PDO::PARAM_INT);
         $resultData = $comando->queryOne();
         return $resultData;
+    }
+
+    /**
+     * Function guardar matriculacion inscrito
+     * @author  Giovanni Vergara <analistadesarrollo02@uteg.edu.ec>
+     * @param   
+     * @return  $resultData (Retornar el código de matriculacion inscrito).
+     */
+    public function insertarMatriculainscrito($ppro_id, $adm_id, $est_id, $mpin_fecha_registro_ficha, $mpin_usuario_ingresa, $mpin_fecha_creacion) {
+
+        $con = \Yii::$app->db_academico;
+        $trans = $con->getTransaction(); // se obtiene la transacción actual
+        if ($trans !== null) {
+            $trans = null; // si existe la transacción entonces no se crea una
+        } else {
+            $trans = $con->beginTransaction(); // si no existe la transacción entonces se crea una
+        }
+        $param_sql = "mpin_estado_logico";
+        $bsol_sql = "1";
+
+        $param_sql .= ", mpin_estado";
+        $bsol_sql .= ", 1";
+        if (isset($ppro_id)) {
+            $param_sql .= ", ppro_id";
+            $bsol_sql .= ", :ppro_id";
+        }
+
+        if (isset($adm_id)) {
+            $param_sql .= ", adm_id";
+            $bsol_sql .= ", :adm_id";
+        }
+
+        if (isset($est_id)) {
+            $param_sql .= ", est_id";
+            $bsol_sql .= ", :est_id";
+        }
+
+        if (isset($mpin_fecha_registro_ficha)) {
+            $param_sql .= ", mpin_fecha_registro_ficha";
+            $bsol_sql .= ", :mpin_fecha_registro_ficha";
+        }
+
+        if (isset($mpin_usuario_ingresa)) {
+            $param_sql .= ", mpin_usuario_ingresa";
+            $bsol_sql .= ", :mpin_usuario_ingresa";
+        }
+
+        if (isset($mpin_fecha_creacion)) {
+            $param_sql .= ", mpin_fecha_creacion";
+            $bsol_sql .= ", :mpin_fecha_creacion";
+        }
+
+        try {
+            $sql = "INSERT INTO " . $con->dbname . ".matriculacion_programa_inscrito ($param_sql) VALUES($bsol_sql)";
+            $comando = $con->createCommand($sql);
+
+            if (isset($ppro_id)) {
+                $comando->bindParam(':ppro_id', $ppro_id, \PDO::PARAM_INT);
+            }
+
+            if (isset($adm_id)) {
+                $comando->bindParam(':adm_id', $adm_id, \PDO::PARAM_INT);
+            }
+
+            if (isset($est_id)) {
+                $comando->bindParam(':est_id', $est_id, \PDO::PARAM_INT);
+            }
+
+            if (isset($mpin_fecha_registro_ficha)) {
+                $comando->bindParam(':mpin_fecha_registro_ficha', $mpin_fecha_registro_ficha, \PDO::PARAM_STR);
+            }
+
+            if (isset($mpin_usuario_ingresa)) {
+                $comando->bindParam(':mpin_usuario_ingresa', $mpin_usuario_ingresa, \PDO::PARAM_INT);
+            }
+
+            if (isset($mpin_fecha_creacion)) {
+                $comando->bindParam(':mpin_fecha_creacion', $mpin_fecha_creacion, \PDO::PARAM_STR);
+            }
+            $result = $comando->execute();
+            if ($trans !== null)
+                $trans->commit();
+            return $con->getLastInsertID($con->dbname . '.matriculacion_programa_inscrito');
+        } catch (Exception $ex) {
+            if ($trans !== null)
+                $trans->rollback();
+            return FALSE;
+        }
+    }
+
+    /**
+     * Function actualiza cupo actual del paralelo.
+     * @author  Giovanni Vergara <analistadesarrollo02@uteg.edu.ec>;     *          
+     * @param
+     * @return
+     */
+    public function actualizarCupoparalelo($pppr_id, $ppro_id, $pppr_usuario_modifica) {
+        $con = \Yii::$app->db_academico;
+        $estado = 1;
+        $fecha_modificacion = date(Yii::$app->params["dateTimeByDefault"]);
+        if ($trans !== null) {
+            $trans = null; // si existe la transacción entonces no se crea una
+        } else {
+            $trans = $con->beginTransaction(); // si no existe la transacción entonces se crea una
+        }
+
+        try {
+            $comando = $con->createCommand
+                    ("UPDATE " . $con->dbname . ".paralelo_promocion_programa		       
+                      SET pppr_cupo_actual = pppr_cupo_actual - 1,                       
+                          pppr_fecha_modificacion = :pppr_fecha_modificacion,
+                          pppr_usuario_modifica = :pppr_usuario_modifica
+                      WHERE pppr_id = :pppr_id AND
+                            ppro_id = :ppro_id AND
+                            pppr_estado = :estado AND
+                            pppr_estado_logico = :estado");
+
+            $comando->bindParam(":estado", $estado, \PDO::PARAM_STR);
+            $comando->bindParam(":pppr_fecha_modificacion", $fecha_modificacion, \PDO::PARAM_STR);
+            $comando->bindParam(":pppr_usuario_modifica", $pppr_usuario_modifica, \PDO::PARAM_INT);
+            $comando->bindParam(":pppr_id", $pppr_id, \PDO::PARAM_INT);
+            $comando->bindParam(":ppro_id", $ppro_id, \PDO::PARAM_INT);            
+            $response = $comando->execute();
+            if ($trans !== null)
+                $trans->commit();
+            return $response;
+        } catch (Exception $ex) {
+            if ($trans !== null)
+                $trans->rollback();
+            return FALSE;
+        }
     }
 
 }
