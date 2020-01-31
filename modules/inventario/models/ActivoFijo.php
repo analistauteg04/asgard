@@ -139,8 +139,7 @@ class ActivoFijo extends \yii\db\ActiveRecord
                 $str_search .= "and e.com_id = :comp_id ";
             }*/
         }
-        $sql = "SELECT 	af.afij_codigo, af.afij_custodio, 
-                        ifnull(af.afij_marca,'') as afij_marca, 
+        $sql = "SELECT 	af.afij_codigo, af.afij_custodio,                         
                         ifnull(af.afij_modelo, '') as afij_modelo,
                         ifnull(af.afij_num_serie,'') as afij_num_serie, 
                         ifnull(af.afij_cantidad,0) as afij_cantidad,

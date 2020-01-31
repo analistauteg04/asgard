@@ -49,12 +49,28 @@ create table if not exists `empresa_inventario` (
 
 -- --------------------------------------------------------
 --
+-- Estructura de tabla para la tabla `espacio_departamento`
+--
+create table if not exists `espacio_departamento` (
+ `edep_id` bigint(20) not null auto_increment primary key,  
+ `dep_id` bigint(20) not null,
+ `edi_id` bigint(20) not null,
+ `edep_descripcion` varchar(200) not null, 
+ `edep_estado` varchar(1) not null,
+ `edep_fecha_creacion` timestamp not null default current_timestamp,
+ `edep_fecha_modificacion` timestamp null default null,
+ `edep_estado_logico` varchar(1) not null
+ );
+
+-- --------------------------------------------------------
+--
 -- Estructura de tabla para la tabla `activo_fijo`
 --
 create table if not exists `activo_fijo` (
  `afij_id` bigint(20) not null auto_increment primary key,
  `einv_id` bigint(20) not null, 
- `are_id` bigint(20) not null,
+ `are_id` bigint(20) null,
+ `edep_id` bigint(20) null,
  `cat_id` bigint(20) not null,
  `afij_secuencia` integer not null,
  `afij_codigo` varchar(50) not null,  
@@ -74,5 +90,6 @@ create table if not exists `activo_fijo` (
  `afij_fecha_modificacion` timestamp null default null,
  `afij_estado_logico` varchar(1) not null,
  foreign key (cat_id) references `categoria`(cat_id),
- foreign key (einv_id) references `empresa_inventario`(einv_id)
+ foreign key (einv_id) references `empresa_inventario`(einv_id),
+ foreign key (edep_id) references `espacio_departamento`(edep_id)
  );

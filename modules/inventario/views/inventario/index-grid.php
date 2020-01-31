@@ -40,12 +40,7 @@ PbGridView::widget([
             'attribute' => 'Código',
             'header' => inventario::t("inventario", "Code"),
             'value' => 'afij_codigo',
-        ],
-        [
-            'attribute' => 'Marca',
-            'header' => inventario::t("inventario", "Brand"),
-            'value' => 'afij_marca',
-        ],  
+        ],        
         [
             'attribute' => 'Custodio',
             'header' => inventario::t("inventario", "Custodian"),
