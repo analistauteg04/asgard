@@ -124,20 +124,26 @@ class ActivoFijo extends \yii\db\ActiveRecord
      */
     public function consultarInventario($arrFiltro = array(), $onlyData = false) {
         $con = \Yii::$app->db_inventario;        
+        $con1 = \Yii::$app->db_general;        
         $estado = 1;
-        if (isset($arrFiltro) && count($arrFiltro) > 0) {
-            /*if (($arrFiltro['est_id'] != "") && ($arrFiltro['est_id'] > 0)) {
-                $str_search = "and dr.est_id = :est_id ";
+        $str_search = "";   
+        if (isset($arrFiltro) && count($arrFiltro) > 0) {                            
+            if ($arrFiltro['search'] != "") {
+                $str_search = " (af.afij_codigo like :codigo  
+                                or af.afij_custodio like :codigo) AND ";
             }            
-            if (($arrFiltro['mod_id'] != "") && ($arrFiltro['mod_id'] > 0)){
-                $str_search .= "and f.mod_id = :mod_id ";
+            if (($arrFiltro['tipobien_id'] != "") && ($arrFiltro['tipobien_id'] > 0)){
+                $str_search .= "c.tbie_id = :tipobien_id AND ";
             }
-            if (($arrFiltro['cat_id'] != "") && ($arrFiltro['cat_id'] > 0)){
-                $str_search .= "and e.fun_id = :fun_id ";
+            if (($arrFiltro['categoria_id'] != "") && ($arrFiltro['categoria_id'] > 0)){
+                $str_search .= "af.cat_id = :categoria_id AND ";
             }
-            if (($arrFiltro['comp_id'] != "") && ($arrFiltro['comp_id'] > 0)){
-                $str_search .= "and e.com_id = :comp_id ";
-            }*/
+            if (($arrFiltro['departamento_id'] != "") && ($arrFiltro['departamento_id'] > 0)){
+                $str_search .= "d.dep_id = :departamento_id AND ";
+            }
+            if (($arrFiltro['area_id'] != "") && ($arrFiltro['area_id'] > 0)){
+                $str_search .= "af.are_id = :area_id AND ";
+            }
         }
         $sql = "SELECT 	af.afij_codigo, af.afij_custodio,                         
                         ifnull(af.afij_modelo, '') as afij_modelo,
@@ -147,32 +153,40 @@ class ActivoFijo extends \yii\db\ActiveRecord
                         a.are_descripcion as area, 
                         d.dep_nombre as departamento,
                         c.cat_descripcion as categoria
-                FROM db_inventario.activo_fijo af inner join db_inventario.empresa_inventario ei on af.einv_id = ei.einv_id
-                     inner join db_general.area a on a.are_id = af.are_id
-                     inner join db_general.departamento d on d.dep_id = a.dep_id
-                     inner join db_inventario.categoria c on c.cat_id = af.cat_id
-                WHERE afij_estado = :estado and afij_estado_logico = :estado
+                FROM " . $con->dbname . ".activo_fijo af 
+                     inner join " . $con->dbname . ".empresa_inventario ei on af.einv_id = ei.einv_id
+                     left join " . $con1->dbname . ".area a on a.are_id = af.are_id
+                     left join " . $con->dbname . ".espacio_departamento ed on ed.edep_id = af.edep_id
+                     inner join " . $con->dbname . ".categoria c on c.cat_id = af.cat_id
+                     inner join " . $con1->dbname . ".departamento d on (d.dep_id = a.dep_id or d.dep_id = ed.dep_id)
+                WHERE $str_search
+                      afij_estado = :estado and 
+                      afij_estado_logico = :estado
                 ORDER BY 1";        
                        
         $comando = $con->createCommand($sql);
         $comando->bindParam(":estado", $estado, \PDO::PARAM_STR);
         if (isset($arrFiltro) && count($arrFiltro) > 0) {           
-            $archivo = "%" . $arrFiltro["search"] . "%";               
-            /*$mod_id = $arrFiltro["mod_id"];
-            $fun_id = $arrFiltro["cat_id"];
-            $comp_id = $arrFiltro["comp_id"];*/            
+            $codigo = "%" . $arrFiltro["search"] . "%";              
+            $tipobien_id = $arrFiltro["tipobien_id"];
+            $categoria_id = $arrFiltro["categoria_id"];
+            $departamento_id = $arrFiltro["departamento_id"];
+            $area_id = $arrFiltro["area_id"];
             if ($arrFiltro['search'] != "") {
-                $comando->bindParam(":archivo", $archivo, \PDO::PARAM_STR);
+                $comando->bindParam(":codigo", $codigo, \PDO::PARAM_STR);
             }             
-            /*if (($arrFiltro['mod_id'] != "") && ($arrFiltro['mod_id'] > 0)){
-                $comando->bindParam(":mod_id", $mod_id, \PDO::PARAM_INT);
+            if (($arrFiltro['tipobien_id'] != "") && ($arrFiltro['tipobien_id'] > 0)){
+                $comando->bindParam(":tipobien_id", $tipobien_id, \PDO::PARAM_INT);
             }
-            if (($arrFiltro['cat_id'] != "") && ($arrFiltro['cat_id'] > 0)){
-                $comando->bindParam(":fun_id", $fun_id, \PDO::PARAM_INT);
+            if (($arrFiltro['categoria_id'] != "") && ($arrFiltro['categoria_id'] > 0)){
+                $comando->bindParam(":categoria_id", $categoria_id, \PDO::PARAM_INT);
             }
-            if (($arrFiltro['comp_id'] != "") && ($arrFiltro['comp_id'] > 0)){
-                $comando->bindParam(":comp_id", $comp_id, \PDO::PARAM_INT);
-            }*/
+            if (($arrFiltro['departamento_id'] != "") && ($arrFiltro['departamento_id'] > 0)){
+                $comando->bindParam(":departamento_id", $departamento_id, \PDO::PARAM_INT);
+            }
+            if (($arrFiltro['area_id'] != "") && ($arrFiltro['area_id'] > 0)){
+                $comando->bindParam(":area_id", $area_id, \PDO::PARAM_INT);
+            }
         }
         $resultData = $comando->queryAll();
         $dataProvider = new ArrayDataProvider([
@@ -191,7 +205,5 @@ class ActivoFijo extends \yii\db\ActiveRecord
         } else {
             return $dataProvider;
         }
-    }
-    
-    
+    }        
 }

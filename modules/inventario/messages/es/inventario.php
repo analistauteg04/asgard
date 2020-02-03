@@ -50,6 +50,7 @@ return [
     "Department" => "Departamento",
     "Quantity" => "Cantidad",
     "Search by Code and Custodian" => "Buscar por Código, Custodio",
-    "Type Good" => "Tipo Bien",    
+    "Type Good" => "Tipo Bien",  
+    "UTEG Inventory List" => "Listado de inventario UTEG",
     "Work area" => "Área",
 ];

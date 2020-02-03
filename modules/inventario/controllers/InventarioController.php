@@ -8,6 +8,7 @@ use yii\helpers\Html;
 use app\models\Utilities;
 use yii\helpers\ArrayHelper;
 use app\models\ExportFile;
+use yii\base\Exception;
 use app\modules\inventario\models\ActivoFijo;
 use app\modules\inventario\models\EmpresaInventario;
 use app\modules\inventario\models\TipoBien;
@@ -25,22 +26,32 @@ class InventarioController extends \app\components\CController {
         $mod_departamento = new Departamento();
         $mod_area = new Area();
         $data = Yii::$app->request->get();
-        if ($data['PBgetFilter']) {                       
-            $arrSearch["search"] = $data['search'];
-            $arrSearch["emp_id"] = $data['emp_id'];
-            $arrSearch["tipo_bien"] = $data['tipo_bien'];            
+                
+        if ($data['PBgetFilter']) {              
+            $arrSearch["search"] = $data['codigo'];
+            $arrSearch["tipobien_id"] = $data['tipo_bien'];
+            $arrSearch["categoria_id"] = $data['categoria'];            
+            $arrSearch["departamento_id"] = $data['departamento'];            
+            $arrSearch["area_id"] = $data['area'];            
             $resp_listado = $mod_inventario->consultarInventario($arrSearch);
         } else {
             $resp_listado = $mod_inventario->consultarInventario();
-        }
+        }       
+        \app\models\Utilities::putMessageLogFile('antes de un ajax:');
         if (Yii::$app->request->isAjax) {
-            $data = Yii::$app->request->post();
-            /*if (isset($data["get_funciones"])) {
-                $resp_funciones = $mod_categoria->consultarFuncion($data["mod_id"]);
-                $message = array("funciones" => $resp_funciones);
+            \app\models\Utilities::putMessageLogFile('se produce un ajax:');   
+            $data = Yii::$app->request->post();            
+            if (isset($data["get_categoria"])) {
+                $resp_categoria = $mod_categoria->consultarCategoria($data["tipobien_id"]);
+                $message = array("categorias" => $resp_categoria);
                 return Utilities::ajaxResponse('OK', 'alert', Yii::t('jslang', 'Success'), 'false', $message);
-            }    */       
-        }
+            }
+            if (isset($data["get_area"])) {
+                $resp_areas = $mod_departamento->consultarDepartamento($data["dpto_id"]);
+                $message = array("areas" => $resp_areas);
+                return Utilities::ajaxResponse('OK', 'alert', Yii::t('jslang', 'Success'), 'false', $message);
+            }
+        }    
         $arr_empresa_inv = $mod_empinv->consultarEmpresaInv();
         $arr_tipo_bien = $mod_tipobien->consultarTipoBien();        
         $arr_categoria = $mod_categoria->consultarCategoria(1);
@@ -66,59 +77,55 @@ class InventarioController extends \app\components\CController {
         $colPosition = array("C", "D", "E", "F", "G", "H", "I", "J");
 
         $arrHeader = array(
-            repositorio::t("repositorio", "File name"),
-            Yii::t("formulario", "Type"),
-            Yii::t("formulario", "Description"),
-            repositorio::t("repositorio", "Date file"),
-            Yii::t("formulario", "Registration Date"),
+            inventario::t("inventario", "Work area"),
+            inventario::t("inventario", "Category"),
+            inventario::t("inventario", "Code"),
+            inventario::t("inventario", "Custodian"),
+            inventario::t("inventario", "Quantity"),
         );
         $data = Yii::$app->request->get();
-        $arrSearch["est_id"] = $data['est_id'];
-        $arrSearch["f_ini"] = $data['f_ini'];
-        $arrSearch["f_fin"] = $data['f_fin'];
-        $arrSearch["search"] = $data['search'];
-        $arrSearch["mod_id"] = $data['mod_id'];
-        $arrSearch["cat_id"] = $data['cat_id'];
-        $arrSearch["comp_id"] = $data['comp_id'];
+        $arrSearch["search"] = $data['codigo'];
+        $arrSearch["tipobien_id"] = $data['tipo_bien'];
+        $arrSearch["categoria_id"] = $data['categoria'];            
+        $arrSearch["departamento_id"] = $data['departamento'];            
+        $arrSearch["area_id"] = $data['area'];  
 
-        $mod_repositorio = new DocumentoRepositorio();
+        $mod_inventario = new ActivoFijo();  
         $arrData = array();
         if (empty($arrSearch)) {
-            $arrData = $mod_repositorio->consultarDocumentos(array(), true);
+            $arrData = $mod_inventario->consultarInventario(array(), true);            
         } else {
-            $arrData = $mod_repositorio->consultarDocumentos($arrSearch, true);
+            $arrData = $mod_inventario->consultarInventario($arrSearch, true);            
         }
-        $nameReport = repositorio::t("repositorio", "List Repository of Evidence");
+        $nameReport = inventario::t("inventario", "UTEG Inventory List");
         Utilities::generarReporteXLS($nombarch, $nameReport, $arrHeader, $arrData, $colPosition);
         exit;
     }
 
     public function actionExppdf() {
         $report = new ExportFile();
-        $this->view->title = repositorio::t("repositorio", "List Repository of Evidence"); // Titulo del reporte
+        $this->view->title = inventario::t("inventario", "UTEG Inventory List"); // Titulo del reporte
 
-        $mod_repositorio = new DocumentoRepositorio();
+        $mod_inventario = new ActivoFijo();  
         $data = Yii::$app->request->get();
         $arr_body = array();
-        $arrSearch["est_id"] = $data['est_id'];
-        $arrSearch["f_ini"] = $data['f_ini'];
-        $arrSearch["f_fin"] = $data['f_fin'];
-        $arrSearch["search"] = $data['search'];
-        $arrSearch["mod_id"] = $data['mod_id'];
-        $arrSearch["cat_id"] = $data['cat_id'];
-        $arrSearch["comp_id"] = $data['comp_id'];
+        $arrSearch["search"] = $data['codigo'];
+        $arrSearch["tipobien_id"] = $data['tipo_bien'];
+        $arrSearch["categoria_id"] = $data['categoria'];            
+        $arrSearch["departamento_id"] = $data['departamento'];            
+        $arrSearch["area_id"] = $data['area']; 
 
         $arr_head = array(
-            repositorio::t("repositorio", "File name"),
-            Yii::t("formulario", "Type"),
-            Yii::t("formulario", "Description"),
-            repositorio::t("repositorio", "Date file"),
-            Yii::t("formulario", "Registration Date"),
+            inventario::t("inventario", "Work area"),
+            inventario::t("inventario", "Category"),
+            inventario::t("inventario", "Code"),
+            inventario::t("inventario", "Custodian"),
+            inventario::t("inventario", "Quantity"),
         );
         if (empty($arrSearch)) {
-            $arr_body = $mod_repositorio->consultarDocumentos(array(), true);
+            $arr_body = $mod_inventario->consultarInventario(array(), true);
         } else {
-            $arr_body = $mod_repositorio->consultarDocumentos($arrSearch, true);
+            $arr_body = $mod_inventario->consultarInventario($arrSearch, true);
         }
         $report->orientation = "L"; // tipo de orientacion L => Horizontal, P => Vertical
         $report->createReportPdf(

@@ -20,21 +20,26 @@ PbGridView::widget([
     'fnExportPDF' => "exportPdf",
     'dataProvider' => $model,
     'columns' =>
-    [
-        [
-            'attribute' => 'Empresa',
-            'header' => Yii::t("formulario", "Company"),
-            'value' => 'empresa',
-        ],
+    [       
         [
             'attribute' => 'Area',
             'header' => inventario::t("inventario", "Work area"),
             'value' => 'area',
         ],
         [
-            'attribute' => 'Categoría',
+            'class' => 'yii\grid\ActionColumn',
             'header' => inventario::t("inventario", "Category"),
-            'value' => 'categoria',
+            'template' => '{view}',            
+            'buttons' => [
+                    'view' => function ($url, $model) {
+                        if ($model['categoria'] != '') {
+                            $texto = substr($model['categoria'], 0, 10) . '...';
+                        } else {
+                            $texto = '';
+                        }
+                        return Html::a('<span>' . $texto . '</span>', Url::to(['#']), ["data-toggle" => "tooltip", "title" => $model['categoria']]);
+                    },
+                ],
         ],
         [
             'attribute' => 'Código',
