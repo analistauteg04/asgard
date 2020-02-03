@@ -1,25 +1,14 @@
-/* 
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
-$(document).ready(function () {    
-    $('#btn_buscarData').click(function () {
-        llenarGrid();       
-    });
-    
+
+$(document).ready(function () {
     $('#cmb_tipo_bien').change(function () {
         var link = $('#txth_base').val() + "/inventario/inventario/index";
-        var arrParams = new Object();
-         alert('Saludos');
+        var arrParams = new Object();        
         arrParams.tipobien_id = $(this).val();
-        arrParams.get_categoria = true;
-        alert('Antes');
+        arrParams.getcategoria = true;      
         requestHttpAjax(link, arrParams, function (response) {
-            if (response.status == "OK") {
-                data = response.message;
-                setComboData(data.categorias, "cmb_categoria");
-                //setComboDataselect(data.estandares, "cmb_estandar_evi","Seleccionar");
+            if (response.status == "OK") {                
+                data = response.message;                
+                setComboDataselect(data.categorias, "cmb_categoria","Todos");
             }
         }, true);
     });   
@@ -28,18 +17,31 @@ $(document).ready(function () {
         var link = $('#txth_base').val() + "/inventario/inventario/index";
         var arrParams = new Object();        
         arrParams.dpto_id = $(this).val();
-        arrParams.get_area = true;
-        alert('areas');
+        arrParams.getarea = true;     
         requestHttpAjax(link, arrParams, function (response) {
             if (response.status == "OK") {
-                data = response.message;
-                setComboData(data.areas, "cmb_area");
-                //setComboDataselect(data.estandares, "cmb_estandar_evi","Seleccionar");
+                data = response.message;                
+                setComboDataselect(data.areas, "cmb_area","Todos");
             }
         }, true);
-    });   
+    });
     
+    $('#btn_buscarDataInv').click(function () {          
+        llenarGrid();       
+    });            
 });
+
+function setComboDataselect(arr_data, element_id, texto) {
+    var option_arr = "";
+    option_arr += "<option value= '0'>" + texto + "</option>";
+    for (var i = 0; i < arr_data.length; i++) {
+        var id = arr_data[i].id;
+        var value = arr_data[i].name;
+
+        option_arr += "<option value='" + id + "'>" + value + "</option>";
+    }
+    $("#" + element_id).html(option_arr);
+}
 
 function llenarGrid() {
     var codigo = $('#txt_buscarData').val();

@@ -20,7 +20,12 @@ PbGridView::widget([
     'fnExportPDF' => "exportPdf",
     'dataProvider' => $model,
     'columns' =>
-    [       
+    [   
+        [
+            'attribute' => 'Departamento',
+            'header' => inventario::t("inventario", "Department"),
+            'value' => 'departamento',
+        ],
         [
             'attribute' => 'Area',
             'header' => inventario::t("inventario", "Work area"),
@@ -33,7 +38,7 @@ PbGridView::widget([
             'buttons' => [
                     'view' => function ($url, $model) {
                         if ($model['categoria'] != '') {
-                            $texto = substr($model['categoria'], 0, 10) . '...';
+                            $texto = substr($model['categoria'], 0, 20) . '...';
                         } else {
                             $texto = '';
                         }

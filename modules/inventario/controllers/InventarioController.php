@@ -15,6 +15,7 @@ use app\modules\inventario\models\TipoBien;
 use app\modules\inventario\models\Categoria;
 use app\models\Departamento;
 use app\models\Area;
+use app\modules\inventario\Module as inventario;
 
 class InventarioController extends \app\components\CController {
 
@@ -36,18 +37,17 @@ class InventarioController extends \app\components\CController {
             $resp_listado = $mod_inventario->consultarInventario($arrSearch);
         } else {
             $resp_listado = $mod_inventario->consultarInventario();
-        }       
-        \app\models\Utilities::putMessageLogFile('antes de un ajax:');
-        if (Yii::$app->request->isAjax) {
-            \app\models\Utilities::putMessageLogFile('se produce un ajax:');   
+        }               
+        if (Yii::$app->request->isAjax) {          
             $data = Yii::$app->request->post();            
-            if (isset($data["get_categoria"])) {
+            if (isset($data["getcategoria"])) {
                 $resp_categoria = $mod_categoria->consultarCategoria($data["tipobien_id"]);
                 $message = array("categorias" => $resp_categoria);
                 return Utilities::ajaxResponse('OK', 'alert', Yii::t('jslang', 'Success'), 'false', $message);
             }
-            if (isset($data["get_area"])) {
-                $resp_areas = $mod_departamento->consultarDepartamento($data["dpto_id"]);
+            if (isset($data["getarea"])) {
+                \app\models\Utilities::putMessageLogFile('dpto:'.$data["dpto_id"]);   
+                $resp_areas = $mod_area->consultarAreas($data["dpto_id"],1);
                 $message = array("areas" => $resp_areas);
                 return Utilities::ajaxResponse('OK', 'alert', Yii::t('jslang', 'Success'), 'false', $message);
             }
@@ -74,17 +74,30 @@ class InventarioController extends \app\components\CController {
         header("Content-Type: $content_type");
         header("Content-Disposition: attachment;filename=" . $nombarch);
         header('Cache-Control: max-age=0');
-        $colPosition = array("C", "D", "E", "F", "G", "H", "I", "J");
-
+        $colPosition = array("C", "D", "E", "F", "G", "H", "I", "J", "K", "L", "M", "N", "O", "P", "Q", "R", "S", "T");
+                     
         $arrHeader = array(
-            inventario::t("inventario", "Work area"),
-            inventario::t("inventario", "Category"),
             inventario::t("inventario", "Code"),
+            inventario::t("inventario", "Department"),
+            inventario::t("inventario", "Work area"),
+            inventario::t("inventario", "Space"),
+            inventario::t("inventario", "Edificio"),
             inventario::t("inventario", "Custodian"),
+            inventario::t("inventario", "Type Good"),
+            inventario::t("inventario", "Category"),
+            inventario::t("inventario", "Sequential"),            
             inventario::t("inventario", "Quantity"),
+            Yii::t("formulario", "Description"),
+            inventario::t("inventario", "Brand"),
+            inventario::t("inventario", "Model"),
+            inventario::t("inventario", "Serie"),
+            inventario::t("inventario", "RAM"),
+            inventario::t("inventario", "Disk HDD"),
+            inventario::t("inventario", "Disk SDD"),
+            inventario::t("inventario", "Processor"),
         );
         $data = Yii::$app->request->get();
-        $arrSearch["search"] = $data['codigo'];
+        $arrSearch["search"] = $data['search'];
         $arrSearch["tipobien_id"] = $data['tipo_bien'];
         $arrSearch["categoria_id"] = $data['categoria'];            
         $arrSearch["departamento_id"] = $data['departamento'];            
@@ -93,9 +106,9 @@ class InventarioController extends \app\components\CController {
         $mod_inventario = new ActivoFijo();  
         $arrData = array();
         if (empty($arrSearch)) {
-            $arrData = $mod_inventario->consultarInventario(array(), true);            
+            $arrData = $mod_inventario->consultarInventarioExcel(array(), true);            
         } else {
-            $arrData = $mod_inventario->consultarInventario($arrSearch, true);            
+            $arrData = $mod_inventario->consultarInventarioExcel($arrSearch, true);            
         }
         $nameReport = inventario::t("inventario", "UTEG Inventory List");
         Utilities::generarReporteXLS($nombarch, $nameReport, $arrHeader, $arrData, $colPosition);
@@ -106,16 +119,17 @@ class InventarioController extends \app\components\CController {
         $report = new ExportFile();
         $this->view->title = inventario::t("inventario", "UTEG Inventory List"); // Titulo del reporte
 
-        $mod_inventario = new ActivoFijo();  
+        $mod_inventario = new ActivoFijo(); 
         $data = Yii::$app->request->get();
         $arr_body = array();
-        $arrSearch["search"] = $data['codigo'];
+        $arrSearch["search"] = $data['search'];
         $arrSearch["tipobien_id"] = $data['tipo_bien'];
         $arrSearch["categoria_id"] = $data['categoria'];            
         $arrSearch["departamento_id"] = $data['departamento'];            
         $arrSearch["area_id"] = $data['area']; 
 
         $arr_head = array(
+            inventario::t("inventario", "Department"),
             inventario::t("inventario", "Work area"),
             inventario::t("inventario", "Category"),
             inventario::t("inventario", "Code"),
